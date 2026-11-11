@@ -2373,25 +2373,25 @@
 00154e00	Gap__Gfx__igClut__vfunc_12	match	-
 00154e40	FUN_00154e40	match	-
 00154ea0	Gap__Gfx__igClut__vfunc_23	match	-
-00154f30	FUN_00154f30	match	DEFERRED duplicate 0x3d9bd0 __dt__29igSmartPointer<11DW4VC_100_2>Fv 128B (compared under the profile of its retail unit)
+00154f30	FUN_00154f30	match	-
 00155130	Gap__Gfx__igExternalImageEntry__vfunc_44	match	-
 001551f0	FUN_001551f0	match	-
 001552f0	Gap__Gfx__igExternalImageEntry__vfunc_11	match	-
 00155330	Gap__Gfx__igGenericCapabilityManager__vfunc_23	match	-
-00155340	FUN_00155340	match	DEFERRED duplicate 0x25a230 __dt__32igSmartPointer<14FieldTypeEntry>Fv 128B (compared under the profile of its retail unit)
+00155340	FUN_00155340	match	-
 00155490	FUN_00155490	match	-
-001554a0	FUN_001554a0	match	DEFERRED duplicate 0x25a230 __dt__20igSmartPointer<3Ref>Fv 128B (compared under the profile of its retail unit)
+001554a0	FUN_001554a0	match	-
 00155b80	igObject_GetMetaObject_Virtual	match	-
 00155c00	FUN_00155c00	match	-
 00155db0	FUN_00155db0	match	-
-00155f10	FUN_00155f10	match	DEFERRED duplicate 0x25a230 __dt__22igSmartPointer<5Entry>Fv 128B (compared under the profile of its retail unit)
-001560b0	FUN_001560b0	match	DEFERRED duplicate 0x25a230 __dt__28igSmartPointer<10KeyedEntry>Fv 128B (compared under the profile of its retail unit)
+00155f10	FUN_00155f10	match	-
+001560b0	FUN_001560b0	match	-
 001562b0	FUN_001562b0	match	-
 001562c0	FUN_001562c0	match	-
 001562d0	FUN_001562d0	match	-
 00156300	FUN_00156300	match	-
 00156340	FUN_00156340	match	-
-001566c0	FUN_001566c0	match	DEFERRED duplicate 0x25a230 __dt__18igSmartPointer<1T>Fv 128B (compared under the profile of its retail unit)
+001566c0	FUN_001566c0	match	-
 00156ae0	FUN_00156ae0	match	-
 00156b20	FUN_00156b20	match	-
 00157140	FUN_00157140	match	-
@@ -2405,7 +2405,7 @@
 00158670	FUN_00158670	match	-
 00158cc0	FUN_00158cc0	match	-
 00158f40	FUN_00158f40	match	-
-00158f50	FUN_00158f50	match	DEFERRED duplicate 0x25a230 __dt__24igSmartPointer<7VStream>Fv 128B (compared under the profile of its retail unit)
+00158f50	FUN_00158f50	match	-
 001592a0	FUN_001592a0	match	-
 001592b0	FUN_001592b0	match	-
 001592c0	FUN_001592c0	match	-
@@ -2511,7 +2511,7 @@
 0015ec70	FUN_0015ec70	match	-
 0015ecc0	FUN_0015ecc0	match	-
 0015ece0	FUN_0015ece0	match	-
-0015ed00	FUN_0015ed00	match	DEFERRED duplicate 0x25a230 __dt__18igSmartPointer<1V>Fv 128B (compared under the profile of its retail unit)
+0015ed00	FUN_0015ed00	match	-
 0015efc0	FUN_0015efc0	match	-
 0015f010	FUN_0015f010	match	-
 0015f060	FUN_0015f060	match	-
@@ -2584,7 +2584,7 @@
 00164ca0	FUN_00164ca0	match	-
 00164cd0	FUN_00164cd0	match	-
 00164d50	FUN_00164d50	match	-
-00164d60	FUN_00164d60	match	jump table 0x4df070: 11 entries, 44 bytes, matches retail
+00164d60	FUN_00164d60	match	-
 00164f50	FUN_00164f50	match	-
 00165a80	FUN_00165a80	match	-
 00165bb0	FUN_00165bb0	match	-
@@ -2606,7 +2606,7 @@
 00166c80	FUN_00166c80	match	-
 00166c90	FUN_00166c90	match	-
 00166d40	FUN_00166d40	match	-
-00166de0	FUN_00166de0	match	DEFERRED duplicate 0x25a230 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+00166de0	FUN_00166de0	match	-
 00166f90	FUN_00166f90	match	-
 00166fa0	FUN_00166fa0	match	-
 00166fb0	FUN_00166fb0	match	-
@@ -2642,7 +2642,7 @@
 00168400	FUN_00168400	match	-
 00168420	FUN_00168420	match	-
 00168480	FUN_00168480	match	-
-00168570	FUN_00168570	match	jump table 0x4df2d0: 13 entries, 52 bytes, matches retail
+00168570	FUN_00168570	match	-
 001690d0	FUN_001690d0	match	-
 00169260	FUN_00169260	match	-
 00169480	Gap__Gfx__igPsx2VisualContext__vfunc_46	match	-
@@ -2704,8 +2704,8 @@
 0016cdd0	FUN_0016cdd0	match	-
 0016cde0	FUN_0016cde0	match	-
 0016cdf0	Gap__Gfx__igPsx2DisableExt__vfunc_29	match	-
-0016ce00	Gap__Gfx__igPsx2DisableExt__vfunc_30	match	jump table 0x4df520: 13 entries, 52 bytes, matches retail
-0016ce90	Gap__Gfx__igPsx2DisableExt__vfunc_31	match	jump table 0x4df560: 13 entries, 52 bytes, matches retail
+0016ce00	Gap__Gfx__igPsx2DisableExt__vfunc_30	match	-
+0016ce90	Gap__Gfx__igPsx2DisableExt__vfunc_31	match	-
 0016cf20	Gap__Gfx__igPsx2VisualContext__vfunc_65	match	-
 0016cfb0	Gap__Gfx__igPsx2VisualContext__vfunc_66	match	-
 0016d010	Gap__Gfx__igPsx2VisualContext__vfunc_67	match	-
@@ -2736,7 +2736,7 @@
 0016e3e0	Gap__Gfx__igPsx2Image__vfunc_42	match	-
 0016e660	Gap__Gfx__igPsx2Image__vfunc_39	match	-
 0016e8f0	Gap__Gfx__igPsx2Image__vfunc_40	match	-
-0016eab0	Gap__Gfx__igPsx2Image__vfunc_41	match	DEFERRED duplicate 0x25a230 __dt__32igSmartPointer<14ConvertedImage>Fv 128B (compared under the profile of its retail unit)
+0016eab0	Gap__Gfx__igPsx2Image__vfunc_41	match	-
 0016ece0	Gap__Gfx__igPsx2Image__vfunc_44	match	-
 0016eea0	Gap__Gfx__igPsx2Image__vfunc_37	match	-
 0016ef60	Gap__Gfx__igPsx2ImageConvert__vfunc_25	match	-
@@ -2775,7 +2775,7 @@
 0016fe50	Gap__Gfx__igPsx2MultiTextureExt__vfunc_30	match	-
 0016fe80	Gap__Gfx__igPsx2MultiTextureExt__vfunc_31	match	-
 0016fe90	Gap__Gfx__igPsx2MultiTextureExt__vfunc_32	match	-
-0016fea0	FUN_0016fea0	match	jump table 0x4df600: 12 entries, 48 bytes, matches retail
+0016fea0	FUN_0016fea0	match	-
 001700e0	Gap__Gfx__igPsx2ScissorExt__vfunc_29	match	-
 001700f0	Gap__Gfx__igPsx2ScissorExt__vfunc_30	match	-
 001701a0	Gap__Gfx__igPsx2ScissorExt__vfunc_31	match	-
@@ -2819,7 +2819,7 @@
 00171cd0	Gap__Gfx__igPsx2VisualContext__vfunc_112	match	-
 001720d0	FUN_001720d0	match	-
 00172100	Gap__Gfx__igPsx2VisualContext__vfunc_110	match	-
-00172130	Gap__Gfx__igPsx2VisualContext__vfunc_100	match	jump table 0x4df650: 6 entries, 24 bytes, matches retail
+00172130	Gap__Gfx__igPsx2VisualContext__vfunc_100	match	-
 00172220	Gap__Gfx__igPsx2VisualContext__vfunc_101	match	-
 00172230	Gap__Gfx__igPsx2VisualContext__vfunc_115	match	-
 00172300	Gap__Gfx__igPsx2VisualContext__vfunc_116	match	-
@@ -2881,7 +2881,7 @@
 00174e90	Gap__Gfx__igPsx2VisualContext__vfunc_160	match	-
 00174ea0	Gap__Gfx__igPsx2VisualContext__vfunc_161	match	-
 00174ed0	Gap__Gfx__igPsx2VisualContext__vfunc_162	match	-
-00174ee0	Gap__Gfx__igPsx2VisualContext__vfunc_163	match	jump table 0x4df670: 8 entries, 32 bytes, matches retail
+00174ee0	Gap__Gfx__igPsx2VisualContext__vfunc_163	match	-
 00174f90	Gap__Gfx__igPsx2VisualContext__vfunc_164	match	-
 00174fa0	Gap__Gfx__igPsx2VisualContext__vfunc_165	match	-
 00174fb0	Gap__Gfx__igPsx2VisualContext__vfunc_166	match	-
@@ -3021,7 +3021,7 @@
 0017d8f0	Gap__Gfx__igPsx2VertexArray1_1__vfunc_52	match	-
 0017d910	Gap__Gfx__igPsx2VertexArray1_1__vfunc_57	match	-
 0017da20	Gap__Gfx__igPsx2VertexArray1_1__vfunc_58	match	-
-0017da90	Gap__Gfx__igPsx2VertexArray1_1__vfunc_27	match	jump table 0x4e0820: 10 entries, 40 bytes, matches retail
+0017da90	Gap__Gfx__igPsx2VertexArray1_1__vfunc_27	match	-
 0017dd20	Gap__Gfx__igPsx2VertexArray1_1__vfunc_28	match	-
 0017dd30	Gap__Gfx__igPsx2VertexArray1_1__vfunc_19	match	-
 0017dde0	Gap__Gfx__igPsx2VertexArray1_1__vfunc_20	match	-
@@ -3029,7 +3029,7 @@
 0017e590	FUN_0017e590	match	-
 0017e980	FUN_0017e980	match	-
 0017eb90	FUN_0017eb90	match	-
-0017f2b0	Gap__Gfx__igPsx2VertexArray2__vfunc_23	match	DEFERRED duplicate 0x25a230 __dt__19igSmartPointer<2Rc>Fv 128B (compared under the profile of its retail unit)
+0017f2b0	Gap__Gfx__igPsx2VertexArray2__vfunc_23	match	-
 0017f560	Gap__Gfx__igPsx2VertexArray2__vfunc_12	match	-
 0017f570	Gap__Gfx__igPsx2VertexArray2__vfunc_24	match	-
 0017f5a0	FUN_0017f5a0	match	-
@@ -3037,13 +3037,13 @@
 0017f6c0	Gap__Gfx__igPsx2VertexStream__vfunc_17	match	-
 0017fd70	Gap__Gfx__igPsx2VisualContext__vfunc_147	match	-
 0017fd80	FUN_0017fd80	match	-
-0017fe50	Gap__Gfx__igPsx2VertexStream__vfunc_24	match	DEFERRED duplicate 0x130140 __dt__20igSmartPointer<3Obj>Fv 128B (compared under the profile of its retail unit)
+0017fe50	Gap__Gfx__igPsx2VertexStream__vfunc_24	match	-
 0017ff60	Gap__Gfx__igPsx2VertexStream__vfunc_27	match	-
 00180010	Gap__Gfx__igVertexStream__vfunc_23	match	-
 00180020	FUN_00180020	match	-
 00180030	Gap__Gfx__igPsx2VisualContext__vfunc_197	match	-
 00180060	FUN_00180060	match	-
-001805a0	FUN_001805a0	match	DEFERRED duplicate 0x25a230 __dt__31igSmartPointer<13BuildResource>Fv 128B (compared under the profile of its retail unit)
+001805a0	FUN_001805a0	match	-
 00180bb0	Gap__Gfx__igPsx2VertexStream__vfunc_22	match	-
 00180bc0	Gap__Gfx__igVertexStream__vfunc_25	match	-
 00180bd0	Gap__Gfx__igPsx2VertexArray2__vfunc_22	match	-

@@ -6007,7 +6007,7 @@
       "address": 1380016,
       "name": "ObjectRef_Destruct_00150eb0",
       "size": 128,
-      "source": "src/engine/igPsx2VisualContextMeta.cpp",
+      "source": "src/engine/gfx/GfxLibrary.cpp",
       "direct": [
         {
           "site": 1380088,
@@ -6028,7 +6028,7 @@
       "address": 1399680,
       "name": "igObject_GetMetaObject_Virtual",
       "size": 12,
-      "source": "src/engine/object-base-accessors.c",
+      "source": "src/engine/gfx/GfxLibrary.cpp",
       "direct": [],
       "indirect": []
     },

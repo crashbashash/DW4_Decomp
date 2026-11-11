@@ -603,7 +603,7 @@
   "igVertexArray": 16,
   "igVertexArray1_1": 22,
   "igVertexArray2": 8,
-  "igVertexArray2Helper": 33,
+  "igVertexArray2Helper": 28,
   "igVertexBlendStateAttr": 1,
   "igVertexData": 8,
   "igVertexStream": 6,
@@ -639,22 +639,22 @@
    "total": 3043
   },
   "engine": {
-   "files": 2200,
-   "offset_casts": 1865,
-   "other_members": 5547,
-   "recovered": 3497,
-   "recovered_pct": 23.48,
-   "synthetic": 3984,
-   "total": 14893
+   "files": 1821,
+   "offset_casts": 2244,
+   "other_members": 6610,
+   "recovered": 3950,
+   "recovered_pct": 22.95,
+   "synthetic": 4408,
+   "total": 17212
   },
   "game": {
    "files": 1589,
    "offset_casts": 58,
    "other_members": 286,
-   "recovered": 2547,
-   "recovered_pct": 85.16,
+   "recovered": 2544,
+   "recovered_pct": 85.14,
    "synthetic": 100,
-   "total": 2991
+   "total": 2988
   },
   "libgcc": {
    "files": 7,
@@ -729,19 +729,19 @@
    "total": 3776
   },
   "unmatched": {
-   "files": 9605,
-   "offset_casts": 4501,
-   "other_members": 10538,
-   "recovered": 20089,
-   "recovered_pct": 49.07,
-   "synthetic": 5814,
-   "total": 40942
+   "files": 8969,
+   "offset_casts": 4122,
+   "other_members": 9507,
+   "recovered": 19634,
+   "recovered_pct": 50.79,
+   "synthetic": 5391,
+   "total": 38654
   }
  },
  "note": "Baseline for tools/typed_coverage.py --check. The gate is on the *count* of recovered accesses, never on the percentage: the m2c loop keeps adding matched (and so untyped) C, so the ratio can fall while the count only grows. Update it deliberately with --update-baseline and commit, so every change in coverage is a reviewed diff.",
  "offset_casts": 6480,
- "recovered": 26147,
- "synthetic": 10342,
- "total": 66729,
+ "recovered": 26142,
+ "synthetic": 10343,
+ "total": 66757,
  "typeable": 359
 }
