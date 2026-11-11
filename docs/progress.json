@@ -92,8 +92,8 @@
     "functions": 0
    },
    "match": {
-    "bytes": 2780060,
-    "functions": 19448
+    "bytes": 2772408,
+    "functions": 19445
    },
    "mismatch": {
     "bytes": 0,
@@ -104,8 +104,8 @@
     "functions": 0
    },
    "unapproved": {
-    "bytes": 47092,
-    "functions": 58
+    "bytes": 54744,
+    "functions": 61
    }
   },
   "code_only_by_exc": {
@@ -128,12 +128,12 @@
   },
   "foreign_orphan_bytes": 32,
   "fully_matched": {
-   "bytes": 2785416,
-   "functions": 19532
+   "bytes": 2777764,
+   "functions": 19529
   },
   "fully_verified": {
-   "bytes": 2780060,
-   "functions": 19448
+   "bytes": 2772408,
+   "functions": 19445
   },
   "recorded": true,
   "source": "data/check-categories.tsv",
@@ -142,8 +142,8 @@
  "code_bytes": {
   "asm_body": 0,
   "assembly": 5356,
-  "fully_matched": 2785416,
-  "fully_verified": 2780060,
+  "fully_matched": 2777764,
+  "fully_verified": 2772408,
   "functions_asm_body": 0,
   "functions_assembly": 84,
   "matched": 2837504,
@@ -174,7 +174,7 @@
    },
    "code_only.bytes": {
     "reason": null,
-    "value": 9952
+    "value": 9728
    },
    "code_only.differ.bytes": {
     "reason": null,
@@ -194,15 +194,15 @@
    },
    "code_only.functions": {
     "reason": null,
-    "value": 10
+    "value": 9
    },
    "code_only.missing.bytes": {
     "reason": null,
-    "value": 4144
+    "value": 3920
    },
    "code_only.missing.functions": {
     "reason": null,
-    "value": 8
+    "value": 7
    },
    "code_only.other.bytes": {
     "reason": null,
@@ -222,15 +222,15 @@
    },
    "foreign_profile.bytes": {
     "reason": null,
-    "value": 776
+    "value": 624
    },
    "foreign_profile.functions": {
     "reason": null,
-    "value": 18
+    "value": 12
    },
    "fun_dat_refs": {
     "reason": null,
-    "value": 87000
+    "value": 82609
    },
    "inline_asm.other": {
     "reason": null,
@@ -250,7 +250,7 @@
    },
    "m2c_idiom.units": {
     "reason": null,
-    "value": 5964
+    "value": 4519
    },
    "mismatch.bytes": {
     "reason": null,
@@ -278,11 +278,11 @@
    },
    "profile_split.bytes": {
     "reason": null,
-    "value": 43892
+    "value": 42396
    },
    "profile_split.units": {
     "reason": null,
-    "value": 13
+    "value": 12
    },
    "raw_casts.reflected": {
     "reason": null,
@@ -290,31 +290,31 @@
    },
    "struct.a": {
     "reason": null,
-    "value": 134
+    "value": 116
    },
    "struct.b": {
     "reason": null,
-    "value": 157
+    "value": 135
    },
    "struct.c": {
     "reason": null,
-    "value": 285
+    "value": 284
    },
    "unapproved.bytes": {
-    "reason": null,
-    "value": 50908
+    "reason": "include expansion lets the approval check see a volatile in src/game/beNDMWGameRam_CollectNearbyNonzeroHp.inc that the including file hid: FUN_003fab90, ObjectRef_Destruct_003fc670 and beNDMWGameRam_CollectNearbyNonzeroHp move to unapproved until respelled",
+    "value": 54744
    },
    "unapproved.functions": {
     "reason": null,
-    "value": 80
+    "value": 61
    },
    "unmatched.bytes": {
     "reason": null,
-    "value": 693344
+    "value": 632648
    },
    "unmatched.functions": {
-    "reason": "356 functions without source joined the symbol table: the unsymbolled code below the VU1 microcode now has symbols (rule 6 and reviewed start rows)",
-    "value": 1208
+    "reason": null,
+    "value": 961
    }
   },
   "counters": {
@@ -352,15 +352,15 @@
    "struct.a": 116,
    "struct.b": 135,
    "struct.c": 284,
-   "unapproved.bytes": 47092,
-   "unapproved.functions": 58,
+   "unapproved.bytes": 54744,
+   "unapproved.functions": 61,
    "unmatched.bytes": 632648,
    "unmatched.functions": 961
   }
  },
  "functions": {
-  "fully_matched": 19532,
-  "fully_verified": 19448,
+  "fully_matched": 19529,
+  "fully_verified": 19445,
   "matched": 19527,
   "named": 9704,
   "named_semantic": 2027,
@@ -455,8 +455,8 @@
   "bytes": 393620,
   "failing": {
    "addresses": {
-    "bytes": 2274920,
-    "functions": 14245
+    "bytes": 2267268,
+    "functions": 14242
    },
    "fields": {
     "bytes": 784660,
@@ -467,16 +467,16 @@
     "functions": 5723
    },
    "name": {
-    "bytes": 1872108,
-    "functions": 13777
+    "bytes": 1865236,
+    "functions": 13776
    },
    "placed": {
-    "bytes": 1621428,
-    "functions": 9607
+    "bytes": 1613776,
+    "functions": 9604
    },
    "references": {
-    "bytes": 2094752,
-    "functions": 11116
+    "bytes": 2087100,
+    "functions": 11113
    },
    "types": {
     "bytes": 891228,
@@ -488,7 +488,7 @@
    }
   },
   "functions": 2335,
-  "matched_functions": 19532
+  "matched_functions": 19529
  },
  "regions": [
   {
@@ -623,10 +623,10 @@
  "typed": {
   "error": null,
   "offset_casts": 6480,
-  "pct": 39.16,
-  "recovered": 26119,
+  "pct": 39.18,
+  "recovered": 26147,
   "synthetic": 10342,
-  "total": 66694,
+  "total": 66729,
   "typeable": 359,
   "typeable_pct": 0.54
  }
