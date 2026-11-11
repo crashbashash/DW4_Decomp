@@ -1839,11 +1839,11 @@
 00147a50	Gap__igPsx2Controller__vfunc_11	match	-
 00147a80	Gap__igPsx2Controller__vfunc_12	match	-
 00147ad0	Gap__igPsx2Controller__vfunc_31	match	-
-00147b00	Gap__igPsx2Controller__vfunc_23	match	jump table 0x4d6fa0: 7 entries, 28 bytes, matches retail
+00147b00	Gap__igPsx2Controller__vfunc_23	match	-
 00147f60	Gap__igPsx2Controller__vfunc_37	match	-
-00147ff0	FUN_00147ff0	match	jump table 0x4d6fc0: 11 entries, 44 bytes, matches retail
-001480a0	FUN_001480a0	match	jump table 0x4d6ff0: 12 entries, 48 bytes, matches retail
-001485c0	Gap__igPsx2ControllerManager__vfunc_24	match	DEFERRED duplicate 0x25a230 __dt__34igSmartPointer<16igPsx2Controller>Fv 128B (compared under the profile of its retail unit)
+00147ff0	FUN_00147ff0	match	-
+001480a0	FUN_001480a0	match	-
+001485c0	Gap__igPsx2ControllerManager__vfunc_24	match	-
 001489a0	FUN_001489a0	match	-
 00148a20	Gap__igPsx2Controller__vfunc_36	match	-
 00148aa0	Gap__igPsx2Controller__vfunc_33	match	-
