@@ -27,7 +27,7 @@ Run commands from the repository root. Game data and toolchains are never commit
 | libgcc | 11 KB | 100.0 % | 100.0 % |
 | Metrowerks runtime | 10 KB | 34.7 % | 1.5 % |
 | Static initialisers | 10 KB | 41.5 % | 0.0 % |
-| **Total** | **3394 KB** | **80.0 %** | **11.3 %** |
+| **Total** | **3394 KB** | **80.1 %** | **11.3 %** |
 
 The full figures and the verification debt are in [PROGRESS.md](PROGRESS.md).
 <!-- progress:end -->
