@@ -5999,7 +5999,7 @@
       "address": 1324832,
       "name": "igDataList_GetPublishedMetaObject",
       "size": 12,
-      "source": "src/engine/AudioLibrary.cpp",
+      "source": "src/engine/audio/AudioLibrary.cpp",
       "direct": [],
       "indirect": []
     },
@@ -6254,7 +6254,7 @@
       "address": 1994032,
       "name": "FUN_001e6d30",
       "size": 80,
-      "source": "src/engine/DataPumpLibrary.cpp",
+      "source": "src/engine/datapump/DataPumpLibrary.cpp",
       "direct": [
         {
           "site": 1994060,
@@ -6804,7 +6804,7 @@
       "address": 2322304,
       "name": "FUN_00236f80",
       "size": 144,
-      "source": "src/engine/InsightLibrary.cpp",
+      "source": "src/engine/insight/InsightLibrary.cpp",
       "direct": [],
       "indirect": [
         {
