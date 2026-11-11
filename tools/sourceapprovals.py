@@ -18,6 +18,7 @@ source under src/third_party/ is out of scope, as it is for tools/inline_asm.py.
   python3 tools/sourceapprovals.py --stale    # rows whose function no longer uses what they approve
 """
 import argparse
+import srctext
 import os
 import re
 import sys
@@ -215,8 +216,7 @@ def _file_scope_statements(text, kept):
 
 
 def _read(path):
-    with open(path, errors="surrogateescape") as fh:
-        return fh.read()
+    return srctext.read(path, errors="surrogateescape")
 
 
 def _header(path):

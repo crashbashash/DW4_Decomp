@@ -381,8 +381,47 @@ def object_text(obj):
     return object_section(obj, ".text")
 
 
+# A whole-file unit's object holds one .text section per function, and the measuring tools ask for
+# each function's relocations and symbols in turn: reading the object once per question made a
+# library-sized unit quadratic. The answers depend only on the file, so each is kept per path,
+# modification time and size; a recompile changes the key.
+_READELF_CACHE = {}
+_HEADER_CACHE = {}
+
+
+def _file_key(path):
+    st = os.stat(path)
+    return (os.path.realpath(path), st.st_mtime_ns, st.st_size)
+
+
+def _readelf(flag, obj):
+    try:
+        key = (flag,) + _file_key(obj)
+    except OSError:
+        key = None
+    out = _READELF_CACHE.get(key) if key else None
+    if out is None:
+        if len(_READELF_CACHE) > 64:
+            _READELF_CACHE.clear()
+        out = subprocess.run(["mipsel-linux-gnu-readelf", flag, obj],
+                             capture_output=True, text=True).stdout
+        if key:
+            _READELF_CACHE[key] = out
+    return out
+
+
 def elf_section_headers(path):
     """Indexed (name, ELF32 section-header tuple) records, preserving duplicates."""
+    key = _file_key(path)
+    rows = _HEADER_CACHE.get(key)
+    if rows is None:
+        if len(_HEADER_CACHE) > 64:
+            _HEADER_CACHE.clear()
+        rows = _HEADER_CACHE[key] = _elf_section_headers(path)
+    return list(rows)
+
+
+def _elf_section_headers(path):
     with open(path, "rb") as fh:
         data = fh.read()
     if data[:6] != b"\x7fELF\x01\x01":
@@ -424,8 +463,7 @@ def object_syms(obj):
     symbol's defining section (see `object_section_base`).
     """
     secs, syms = {}, {}
-    out = subprocess.run(["mipsel-linux-gnu-readelf", "-SW", obj],
-                         capture_output=True, text=True).stdout
+    out = _readelf("-SW", obj)
     for ln in out.splitlines():
         f = ln.replace("[", " ").replace("]", " ").split()
         if len(f) >= 3 and f[0].isdigit():
@@ -433,8 +471,7 @@ def object_syms(obj):
                 secs[int(f[0])] = f[1]      # "5 .rodata PROGBITS ..." -> index 5
             except ValueError:
                 pass
-    out = subprocess.run(["mipsel-linux-gnu-readelf", "-sW", obj],
-                         capture_output=True, text=True).stdout
+    out = _readelf("-sW", obj)
     for ln in out.splitlines():
         f = ln.split()
         if len(f) < 8 or not f[0].rstrip(":").isdigit():
@@ -525,8 +562,7 @@ def object_relocs(obj, target_section=None):
     # sh_info, not its repeated .rel.text name or offsets, identifies its owner.
     targets = ({header[4]: header[7] for _, header in elf_section_headers(obj)
                 if header[1] in (4, 9)} if target_section is not None else None)
-    out = subprocess.run(["mipsel-linux-gnu-readelf", "-rW", obj],
-                         capture_output=True, text=True).stdout
+    out = _readelf("-rW", obj)
     rows, cur = [], None
     for ln in out.splitlines():
         if ln.startswith("Relocation section"):

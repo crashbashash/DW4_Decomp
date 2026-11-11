@@ -21,6 +21,7 @@ import itertools
 import os
 import re
 import asmsources
+import srctext
 import unitobjects
 
 _EXTS = (".c", ".cpp", asmsources.EXT)
@@ -235,7 +236,9 @@ def scan(src_dir="src", symbols="config/SLUS-20836/symbols.txt", unit_objects=No
                 # only an owner-approved hand-written routine may be assembly (tools/asmsources.py)
                 found = [(name, 0, 0) for name in asmsources.approved_definitions(path)]
             else:
-                found = definitions(open(path).read())
+                # a unity-built library unit is only includes of its fragments: read what the
+                # compiler sees
+                found = definitions(srctext.read(path))
             for name, _s, _e in found:
                 # A stock file can hold a definition its build compiles out (pngrutil.c's WinCE
                 # strtod). Its unit row names what it really defines, so such a name stays with

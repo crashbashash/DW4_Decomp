@@ -18256,10 +18256,10 @@
 003fa2c0	FUN_003fa2c0	match	exception index 0x553b2c: matches retail (packed)
 003fa3b0	FUN_003fa3b0	match	exception index 0x553b38: matches retail (table 0x544f94 8 bytes)
 003fa850	FUN_003fa850	match	exception index 0x553b44: matches retail (table 0x544f9c 8 bytes)
-003fab90	FUN_003fab90	match	DEFERRED duplicate 0x150eb0 __dt__13NearbyListRefFv 128B (compared under the profile of its retail unit)
-003fc670	ObjectRef_Destruct_003fc670	match	DEFERRED duplicate 0x150eb0 __dt__13NearbyListRefFv 128B (compared under the profile of its retail unit)
+003fab90	FUN_003fab90	unapproved	unapproved: 1 volatile without an approval row
+003fc670	ObjectRef_Destruct_003fc670	unapproved	unapproved: 1 volatile without an approval row
 003fc6f0	beNDMWGameRam_FindTechniqueRow	match	exception index 0x553b68: matches retail (packed)
-003fc780	beNDMWGameRam_CollectNearbyNonzeroHp	match	DEFERRED duplicate 0x150eb0 __dt__13NearbyListRefFv 128B (compared under the profile of its retail unit)
+003fc780	beNDMWGameRam_CollectNearbyNonzeroHp	unapproved	unapproved: 1 volatile without an approval row
 003fca10	Gap__Bec__beNDMWGameRam__vfunc_34	match	DEFERRED duplicate 0x1363f0 __dt__14RecoveryRef<0>Fv 128B (compared under the profile of its retail unit)
 00406da0	FUN_00406da0	match	-
 00406db0	FUN_00406db0	match	-

@@ -35,6 +35,7 @@ Usage:
 """
 
 import argparse
+import srctext
 import collections
 import glob
 import json
@@ -321,7 +322,7 @@ def measure(reflection="data/reflection.json", src="src"):
         # Comments and literals are blanked first: a `p->field` in prose, or in a format
         # string, is not an access.
         try:
-            text = strip_comments_and_strings(open(path, errors="replace").read())
+            text = strip_comments_and_strings(srctext.read(path, errors="replace"))
         except FileNotFoundError:        # removed between the walk and the read
             continue
         folder = os.path.relpath(path, src).split(os.sep)[0]

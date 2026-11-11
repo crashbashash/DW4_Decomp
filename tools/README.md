@@ -16,6 +16,7 @@ Run everything from the repository root. The Makefile calls the build tools; the
 | [`split.py`](split.py) | lay out the retail code and emit one assembly unit per function |
 | [`buildcache.py`](buildcache.py) | a content-addressed result cache for tools/check.py and tools/linkgen.py |
 | [`units.py`](units.py) | resolve a symbol to its definition in a multi-function source file |
+| [`srctext.py`](srctext.py) | read a source as the compiler sees it, with a unity-built unit's `#include "src/..."` fragments expanded |
 | [`asmsources.py`](asmsources.py) | the owner-approved hand-written `.S` sources in `src/` (`config/assembly-sources.tsv`); refuses any other |
 | [`srctree.py`](srctree.py) | resolve a filename to its path when `src/` is not flat |
 | [`jumptables.py`](jumptables.py) | find the switches' jump tables and record them in a config file |
@@ -66,6 +67,7 @@ Run everything from the repository root. The Makefile calls the build tools; the
 | [`perm_fixed.py`](perm_fixed.py) | permute the drafts that only became compilable after the compile-repair pass (`autofix.py`) |
 | [`permuter_one.py`](permuter_one.py) | turn one function into a decomp-permuter project and run it |
 | [`perm_refine.py`](perm_refine.py) | search a permuter project in rounds that build on each other, merge the small changes of near-best outputs, and refuse candidates that lose the target's calls or stores |
+| [`cxx_sweep.py`](cxx_sweep.py) | search honest respellings of one C or C++ function (declaration order, scopes, statement order, loop tests, temporaries, loop forms, inline helpers), scored by the oracle standalone or inside a whole-file unit; refuses dead code, new `&x`, `volatile`, `asm` and byte-forcing casts |
 | [`restore_dropped_args.py`](restore_dropped_args.py) | recover m2c's dropped/gap call parameters (M7 near-miss tier) |
 | [`retype_struct_member.py`](retype_struct_member.py) | bank the near-miss tier's mechanical source shapes |
 | [`scan_near.py`](scan_near.py) | compile every unmatched build/m2c draft, record its instruction diff |
@@ -89,7 +91,7 @@ Run everything from the repository root. The Makefile calls the build tools; the
 
 ## Tests
 
-`test_regions.py`, `test_debt_readability.py`, `test_function_extents.py`, `test_multiple_jump_tables.py`, `test_permuter_paths.py`, `test_perm_refine.py`, `test_build_options.py`, `test_definitions.py`, `test_asm_body_counting.py`, `test_asmsources.py`, `test_target_asm.py`, `test_whole_file_units.py`, `test_unitcompilers.py`, `test_unitobject_metadata.py`, `test_unitobjects.py`, `test_verify_relocations.py`
+`test_regions.py`, `test_debt_readability.py`, `test_function_extents.py`, `test_multiple_jump_tables.py`, `test_permuter_paths.py`, `test_perm_refine.py`, `test_build_options.py`, `test_definitions.py`, `test_asm_body_counting.py`, `test_asmsources.py`, `test_target_asm.py`, `test_whole_file_units.py`, `test_srctext.py`, `test_verify_cache.py`, `test_cxx_sweep.py`, `test_unitcompilers.py`, `test_unitobject_metadata.py`, `test_unitobjects.py`, `test_verify_relocations.py`
 
 ## Subfolders
 

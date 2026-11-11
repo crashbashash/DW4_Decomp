@@ -500,6 +500,7 @@ def debt_struct_counts():
         src, inc = os.path.join(ROOT, "src"), os.path.join(ROOT, "include", "dw4")
         files = sorted(glob.glob(os.path.join(src, "**", "*.c"), recursive=True)
                        + glob.glob(os.path.join(src, "**", "*.cpp"), recursive=True)
+                       + glob.glob(os.path.join(src, "**", "*.inc"), recursive=True)
                        + [f for f in glob.glob(os.path.join(inc, "**", "*"), recursive=True) if os.path.isfile(f)])
         files = [f for f in files if "/asmbody/" not in f and not os.path.basename(f).startswith("dw4u_")
                  and os.path.abspath(f) != os.path.abspath(os.path.join(inc, "reflected.h"))]
@@ -554,7 +555,7 @@ def opt_pragmas():
     for root, _dirs, files in os.walk(os.path.join(ROOT, "src")):
         for f in files:
             # a build's temporary copies (`dw4u_*`) come and go while it runs
-            if f.endswith((".c", ".cpp", ".h")) and not f.startswith("dw4u_"):
+            if f.endswith((".c", ".cpp", ".h", ".inc")) and not f.startswith("dw4u_"):
                 try:
                     n += len(OPT_PRAGMA_RE.findall(open(os.path.join(root, f), errors="replace").read()))
                 except FileNotFoundError:

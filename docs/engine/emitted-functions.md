@@ -177,6 +177,15 @@ row over the library's range, its members in retail order. Two things argue agai
 that matches only under another profile, and two equal float literals read from two different
 addresses, since MWCC merges equal literals within one unit.
 
+Such a unit is written as the original most likely was, a unity build: `src/engine/<library>/<Library>.cpp`
+holds only `#include` lines, the library header with the shared declarations first, then one `.inc`
+fragment per class run in retail order, named after the class (`<Class>_tail.inc` when a class's code
+resumes later; `LibraryFront.inc` for the latch and register list, `InlineTail.inc` for the trailing
+getter run). The includes are repository-relative (`#include "src/engine/<library>/<Class>.inc"`),
+since MWCC searches its working directory, not the including file's. The compiler sees the same text a
+single file would give, so the object is identical; tools that read definitions from source go through
+`tools/srctext.py`, which expands those includes, and the fragments are never scanned on their own.
+
 A C++ file's object names are mangled while `symbols.txt` keeps the plain names its source
 and callers use, so `emitted` and `externals` carry the mangled names and `symbol` gives the owner's.
 Two stock files may each keep a `static` of one name: the row that places the name says which is the
