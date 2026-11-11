@@ -9,8 +9,10 @@ cleanup/persistence run at `2ffc10..2fff90`, concrete reference assignment and
 construction/destruction/reset, shared zero/clear helpers, construct-flag and
 metadata count/index getters.
 
-Eight reference-field bodies (748 bytes)
-are consolidated in [ref-field-lifecycle.cpp](../../src/engine/ref-field-lifecycle.cpp),
+Eight reference-field bodies (748 bytes): the object-reference assign, size, construct,
+destruct and slot-34 bodies are in [igObjectRefMetaField.cpp](../../src/engine/igObjectRefMetaField.cpp),
+and the plain reference zero, clear and construct-test bodies in
+[ref-field-lifecycle.cpp](../../src/engine/ref-field-lifecycle.cpp), both
 using reflected receiver fields and explicitly documented header/virtual-slot ABI
 views. The metadata count and
 index getters, in [igMetaObject.cpp](../../src/engine/igMetaObject.cpp), are 36 bytes.

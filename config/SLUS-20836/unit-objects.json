@@ -5659,14 +5659,6 @@
       "__dl__FPv": "0x00100610"
     }
   },
-  "0x002d7f10": {
-    "duplicates": {
-      "__dt__33igSmartPointer<15igVirtualObject>Fv": "0x0025a230"
-    },
-    "externals": {
-      "__dl__FPv": "0x00100610"
-    }
-  },
   "0x002da010": {
     "duplicates": {
       "__dt__36igSmartPointer<18ConfigPlatformText>Fv": "0x0025a230"
@@ -5917,14 +5909,6 @@
       "__dl__FPv": "0x00100610"
     }
   },
-  "0x002d8d00": {
-    "duplicates": {
-      "__dt__18igSmartPointer<1R>Fv": "0x0025a230"
-    },
-    "externals": {
-      "__dl__FPv": "0x00100610"
-    }
-  },
   "0x002eeae0": {
     "duplicates": {
       "__dt__20igSmartPointer<3Tbl>Fv": "0x0025a230"
@@ -6007,14 +5991,6 @@
       "__dl__FPv": "0x00100610"
     }
   },
-  "0x002d8460": {
-    "duplicates": {
-      "__dt__18igSmartPointer<1R>Fv": "0x00130140"
-    },
-    "externals": {
-      "__dl__FPv": "0x00100610"
-    }
-  },
   "0x002dcc60": {
     "stripped": [
       "__dt__10ScopedLockFv"
@@ -6079,22 +6055,6 @@
   "0x001554a0": {
     "duplicates": {
       "__dt__20igSmartPointer<3Ref>Fv": "0x0025a230"
-    },
-    "externals": {
-      "__dl__FPv": "0x00100610"
-    }
-  },
-  "0x002d8a80": {
-    "duplicates": {
-      "__dt__18igSmartPointer<1E>Fv": "0x0025a230"
-    },
-    "externals": {
-      "__dl__FPv": "0x00100610"
-    }
-  },
-  "0x002d87b0": {
-    "duplicates": {
-      "__dt__33igSmartPointer<15FieldLinkRecord>Fv": "0x0025a230"
     },
     "externals": {
       "__dl__FPv": "0x00100610"
@@ -11870,6 +11830,236 @@
       "g_igViewerRenderer_metaObject": "0x0058c940",
       "igRenderer_GetPublishedMetaObject": "0x00231010",
       "igViewerRenderer_className": "0x0051ef40"
+    }
+  },
+  "0x00303320": {
+    "whole_file": true,
+    "emitted": {
+      "igObjectRefMetaField_InitDefaults": "0x00303350",
+      "igObjectRefMetaField_Assign": "0x00303390",
+      "Gap__Core__igObjectRefMetaField__vfunc_24": "0x00303440",
+      "igObjectRefMetaField_GetTypeSize": "0x00303450",
+      "FUN_00303460": "0x00303460",
+      "Gap__Core__igObjectRefMetaField__vfunc_51": "0x003034e0",
+      "igObjectRefMetaField_ConstructValue": "0x00303540",
+      "igObjectRefMetaField_DestructValue": "0x00303620",
+      "Gap__Core__igObjectRefMetaField__vfunc_34": "0x00303680",
+      "Gap__Core__igObjectRefMetaField__vfunc_28": "0x00303700",
+      "Gap__Core__igObjectRefMetaField__vfunc_30": "0x00303730",
+      "Gap__Core__igObjectRefMetaField__vfunc_37": "0x00303740",
+      "Gap__Core__igObjectRefMetaField__vfunc_36": "0x00303750",
+      "Gap__Core__igObjectRefMetaField__vfunc_38": "0x00303880",
+      "Gap__Core__igObjectRefMetaField__vfunc_39": "0x00303980",
+      "Gap__Core__igObjectRefMetaField__vfunc_41": "0x003039b0",
+      "Gap__Core__igObjectRefMetaField__vfunc_42": "0x00303a40",
+      "Gap__Core__igObjectRefMetaField__vfunc_44": "0x00303a80",
+      "Gap__Core__igObjectRefMetaField__vfunc_45": "0x00303aa0",
+      "Gap__Core__igObjectRefMetaField__vfunc_46": "0x00303b00",
+      "Gap__Core__igObjectRefMetaField__vfunc_47": "0x00303b60",
+      "igObjectRefMetaField_Construct": "0x00303bc0",
+      "igObjectRefMetaField_Init": "0x00303c10",
+      "FUN_00303c60": "0x00303c60",
+      "Gap__Core__igObjectRefMetaField__vfunc_02": "0x00303cc0"
+    },
+    "data": {
+      "DAT_004faef0": "0x004faef0",
+      "g_igObjectRefMetaField_vtable": "0x00532c80"
+    }
+  },
+  "0x002d78e0": {
+    "whole_file": true,
+    "emitted": {
+      "Gap__Core__igDirEntry__vfunc_27": "0x002d7990",
+      "Gap__Core__igDirEntry__vfunc_28": "0x002d79a0",
+      "Gap__Core__igDirEntry__vfunc_26": "0x002d79b0",
+      "Gap__Core__igDirEntry__vfunc_42": "0x002d79c0",
+      "Gap__Core__igDirEntry__vfunc_29": "0x002d79d0",
+      "Gap__Core__igDirEntry__vfunc_30": "0x002d79e0",
+      "Gap__Core__igDirEntry__vfunc_41": "0x002d79f0",
+      "Gap__Core__igDirEntry__vfunc_40": "0x002d7a00",
+      "Gap__Core__igDirEntry__vfunc_38": "0x002d7a10",
+      "Gap__Core__igDirEntry__vfunc_39": "0x002d7a20",
+      "Gap__Core__igDirEntry__vfunc_35": "0x002d7a30",
+      "Gap__Core__igDirEntry__vfunc_36": "0x002d7a40",
+      "Gap__Core__igDirEntry__vfunc_37": "0x002d7a50",
+      "Gap__Core__igDirEntry__vfunc_33": "0x002d7a60",
+      "Gap__Core__igDirEntry__vfunc_34": "0x002d7a70",
+      "Gap__Core__igDirEntry__vfunc_32": "0x002d7a80",
+      "Gap__Core__igDirEntry__vfunc_31": "0x002d7a90",
+      "Gap__Core__igDirEntry__vfunc_11": "0x002d7aa0",
+      "Gap__Core__igDirEntry__vfunc_23": "0x002d7ad0",
+      "Gap__Core__igDirEntry__vfunc_24": "0x002d7ae0",
+      "Gap__Core__igDirEntry__vfunc_25": "0x002d7af0",
+      "FUN_002d7b00": "0x002d7b00",
+      "Gap__Core__igDirectory__vfunc_12": "0x002d7b60",
+      "FUN_002d7c50": "0x002d7c50",
+      "thunk_FUN_002d7e90": "0x002d7d50",
+      "FUN_002d7d60": "0x002d7d60",
+      "FUN_002d7da0": "0x002d7da0",
+      "FUN_002d7e90": "0x002d7e90",
+      "FUN_002d7f10": "0x002d7f10",
+      "FUN_002d81f0": "0x002d81f0",
+      "FUN_002d8230": "0x002d8230",
+      "FUN_002d8310": "0x002d8310",
+      "igDirectory_FindInfoByName": "0x002d8350",
+      "FUN_002d8370": "0x002d8370",
+      "FUN_002d83b0": "0x002d83b0",
+      "FUN_002d8460": "0x002d8460",
+      "FUN_002d8520": "0x002d8520",
+      "FUN_002d8620": "0x002d8620",
+      "FUN_002d86b0": "0x002d86b0",
+      "FUN_002d87b0": "0x002d87b0",
+      "FUN_002d8a80": "0x002d8a80",
+      "FUN_002d8d00": "0x002d8d00",
+      "Gap__Core__igDirEntry__vfunc_22": "0x002d8e60",
+      "FUN_002d8e70": "0x002d8e70",
+      "FUN_002d8eb0": "0x002d8eb0",
+      "FUN_002d8f10": "0x002d8f10",
+      "FUN_002d8f20": "0x002d8f20",
+      "FUN_002d8fe0": "0x002d8fe0",
+      "Gap__Core__igDirectory__vfunc_25": "0x002d9080",
+      "FUN_002d9120": "0x002d9120",
+      "FUN_002d9130": "0x002d9130",
+      "FUN_002d91c0": "0x002d91c0",
+      "FUN_002d9330": "0x002d9330"
+    },
+    "data": {
+      "DAT_004fb410": "0x004fb410",
+      "DAT_00585b20": "0x00585b20",
+      "DAT_00585b70": "0x00585b70",
+      "DAT_00585be0": "0x00585be0",
+      "DAT_00586140": "0x00586140",
+      "DAT_00586710": "0x00586710",
+      "DAT_00586730": "0x00586730",
+      "DAT_00586f20": "0x00586f20"
+    },
+    "stripped": [
+      "__dt__22igSmartPointer<5E8a80>Fv",
+      "__dt__22igSmartPointer<5R8460>Fv",
+      "__dt__22igSmartPointer<5R8d00>Fv",
+      "__dt__33igSmartPointer<15FieldLinkRecord>Fv",
+      "__dt__33igSmartPointer<15igVirtualObject>Fv"
+    ],
+    "externals": {
+      "FUN_002f04f0": "0x002f04f0",
+      "FUN_002f88d0": "0x002f88d0",
+      "FUN_002f8920": "0x002f8920",
+      "FUN_002fb8d0": "0x002fb8d0",
+      "FUN_00301000": "0x00301000"
+    },
+    "symbol": "FUN_002d78e0"
+  },
+  "0x001493e0": {
+    "whole_file": true,
+    "emitted": {
+      "FUN_00149440": "0x00149440",
+      "FUN_001494a0": "0x001494a0",
+      "FUN_00149500": "0x00149500",
+      "FUN_00149560": "0x00149560",
+      "FUN_001495c0": "0x001495c0",
+      "FUN_00149620": "0x00149620",
+      "FUN_00149680": "0x00149680",
+      "FUN_001496e0": "0x001496e0",
+      "FUN_00149740": "0x00149740",
+      "FUN_001497a0": "0x001497a0",
+      "FUN_00149800": "0x00149800",
+      "FUN_00149860": "0x00149860",
+      "FUN_001498c0": "0x001498c0",
+      "FUN_00149920": "0x00149920",
+      "FUN_00149980": "0x00149980",
+      "FUN_001499e0": "0x001499e0",
+      "FUN_00149a40": "0x00149a40",
+      "FUN_00149aa0": "0x00149aa0",
+      "FUN_00149b00": "0x00149b00",
+      "FUN_00149b60": "0x00149b60",
+      "FUN_00149bc0": "0x00149bc0"
+    },
+    "data": {
+      "DAT_00487768": "0x00487768",
+      "DAT_00487770": "0x00487770",
+      "DAT_00487778": "0x00487778",
+      "DAT_00487780": "0x00487780",
+      "DAT_00487790": "0x00487790",
+      "DAT_004877b0": "0x004877b0",
+      "DAT_004877d0": "0x004877d0",
+      "DAT_004877f0": "0x004877f0",
+      "DAT_00487810": "0x00487810",
+      "DAT_00487820": "0x00487820",
+      "DAT_00487830": "0x00487830",
+      "DAT_00487840": "0x00487840",
+      "DAT_00487850": "0x00487850",
+      "DAT_00487858": "0x00487858",
+      "DAT_00487860": "0x00487860",
+      "DAT_00487868": "0x00487868",
+      "DAT_00487870": "0x00487870",
+      "DAT_00487890": "0x00487890",
+      "DAT_004878b0": "0x004878b0",
+      "DAT_004878e0": "0x004878e0",
+      "DAT_00487910": "0x00487910",
+      "DAT_00487930": "0x00487930",
+      "DAT_00487950": "0x00487950",
+      "DAT_00487970": "0x00487970",
+      "DAT_00487990": "0x00487990",
+      "DAT_004879a0": "0x004879a0",
+      "DAT_004879b0": "0x004879b0",
+      "DAT_004879d0": "0x004879d0",
+      "DAT_004879f0": "0x004879f0",
+      "DAT_00487a00": "0x00487a00",
+      "DAT_00487a10": "0x00487a10",
+      "DAT_00487a30": "0x00487a30",
+      "DAT_00487a50": "0x00487a50",
+      "DAT_00487b40": "0x00487b40",
+      "DAT_00487c30": "0x00487c30",
+      "DAT_00487c40": "0x00487c40",
+      "DAT_00487c50": "0x00487c50",
+      "DAT_00487c70": "0x00487c70",
+      "DAT_00487c88": "0x00487c88",
+      "DAT_00487c98": "0x00487c98",
+      "DAT_00487cb0": "0x00487cb0",
+      "DAT_00487fc0": "0x00487fc0",
+      "DAT_004d70e0": "0x004d70e0",
+      "DAT_004d7150": "0x004d7150",
+      "DAT_004d72a0": "0x004d72a0",
+      "DAT_004d73d0": "0x004d73d0",
+      "DAT_004d7450": "0x004d7450",
+      "DAT_004d74c0": "0x004d74c0",
+      "DAT_004d7520": "0x004d7520",
+      "DAT_004d7580": "0x004d7580",
+      "DAT_004d76a0": "0x004d76a0",
+      "DAT_004d78d0": "0x004d78d0",
+      "DAT_004d7a50": "0x004d7a50",
+      "DAT_004d7b60": "0x004d7b60",
+      "DAT_004d7c20": "0x004d7c20",
+      "DAT_004d7cf0": "0x004d7cf0",
+      "DAT_004d7db0": "0x004d7db0",
+      "DAT_004d7ed0": "0x004d7ed0",
+      "DAT_004d8870": "0x004d8870",
+      "DAT_004d88f0": "0x004d88f0",
+      "DAT_004d89d0": "0x004d89d0",
+      "DAT_004d8a70": "0x004d8a70",
+      "DAT_004db0b0": "0x004db0b0",
+      "DAT_00554b1c": "0x00554b1c",
+      "DAT_0055f828": "0x0055f828",
+      "DAT_0055f830": "0x0055f830",
+      "DAT_0055f838": "0x0055f838",
+      "DAT_0055f840": "0x0055f840",
+      "DAT_0055f848": "0x0055f848",
+      "DAT_0055f850": "0x0055f850",
+      "DAT_0055f858": "0x0055f858",
+      "DAT_0055f860": "0x0055f860",
+      "DAT_0055f868": "0x0055f868",
+      "DAT_0055f870": "0x0055f870",
+      "DAT_0055f878": "0x0055f878",
+      "DAT_0055f880": "0x0055f880",
+      "DAT_0055f888": "0x0055f888",
+      "DAT_0055f890": "0x0055f890",
+      "DAT_0055f898": "0x0055f898",
+      "DAT_0055f8a0": "0x0055f8a0",
+      "DAT_0055f8a8": "0x0055f8a8",
+      "DAT_0055f8b0": "0x0055f8b0",
+      "DAT_0055f8b8": "0x0055f8b8",
+      "DAT_0055f8c0": "0x0055f8c0",
+      "DAT_0055f8c8": "0x0055f8c8"
     }
   }
 }

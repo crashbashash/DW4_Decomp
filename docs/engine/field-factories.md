@@ -8,11 +8,14 @@ post-construction default hooks. Header initialization at `2fef20` (76 bytes) op
 
 Among them are `igMetaField_Init` (252),
 `igObject_ConstructHeader` (140) and `igObject_AllocateRawStorage` (112).
-Nine constructor/initializer bodies are folded into
+The constructor/initializer pairs of the reference, string and unsigned-int fields are in
 [field-descriptor-constructors.c](../../src/engine/field-descriptor-constructors.c)
-with recovered receiver fields and explicit forwarded receivers. Three factories
-and two default hooks are folded into
-[field-descriptor-factories.cpp](../../src/engine/field-descriptor-factories.cpp).
+with recovered receiver fields and explicit forwarded receivers; the int and object-reference
+pairs are in their classes' whole files, [igIntMetaField.cpp](../../src/engine/igIntMetaField.cpp)
+and [igObjectRefMetaField.cpp](../../src/engine/igObjectRefMetaField.cpp). The three factories
+and the string default hook are in
+[field-descriptor-factories.cpp](../../src/engine/field-descriptor-factories.cpp); the
+object-reference default hook is in its class file.
 Virtual classes there are ABI projections and must not be instantiated.
 
 ## Factory modes and original table

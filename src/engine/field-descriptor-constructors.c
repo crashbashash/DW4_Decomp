@@ -19,25 +19,6 @@ extern int g_igRefMetaField_vtable[4];
 extern int g_igObjectRefMetaField_vtable[4];
 extern int g_igStringMetaField_vtable[4];
 extern int g_igUnsignedIntMetaField_vtable[4];
-void *igObjectRefMetaField_Construct(igObjectRefMetaField *self) {
-    igRefMetaField_Construct((igRefMetaField *)self);
-    self->_vtable = (int)g_igObjectRefMetaField_vtable;
-    self->_poolName = 0;
-    if (self) {
-        igObjectRefMetaField_Init(self);
-    }
-    return self;
-}
-
-void *igObjectRefMetaField_Init(igObjectRefMetaField *self) {
-    igRefMetaField_Init((igRefMetaField *)self);
-    self->_vtable = (int)g_igObjectRefMetaField_vtable;
-    self->_poolName = 0;
-    self->_refCounted = 1;
-    self->_metaObject = 0;
-    return self;
-}
-
 void *igRefMetaField_Construct(igRefMetaField *self) {
     igMetaField_Construct((igMetaField *)self);
     self->_vtable = (int)g_igRefMetaField_vtable;

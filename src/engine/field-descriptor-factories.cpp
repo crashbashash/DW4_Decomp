@@ -86,14 +86,6 @@ void **igIntMetaField_Create(int allocator) {
     }
     return field;
 }
-
-/* Post-construction defaults: run the base hook, then the default setter (vfunc_33) with a null
- * source. */
-void igObjectRefMetaField_InitDefaults(void **self) {
-    Gap__Core__igObject__vfunc_09(self);
-    ((igObjectSlot33 *)self)->vfunc_33(0);
-}
-
 /* Post-construction defaults; same two steps. */
 void igStringMetaField_InitDefaults(void **self) {
     Gap__Core__igObject__vfunc_09(self);

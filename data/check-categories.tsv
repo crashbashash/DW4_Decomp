@@ -11308,20 +11308,20 @@
 002d7d60	FUN_002d7d60	match	-
 002d7da0	FUN_002d7da0	match	-
 002d7e90	FUN_002d7e90	match	-
-002d7f10	FUN_002d7f10	match	DEFERRED duplicate 0x25a230 __dt__33igSmartPointer<15igVirtualObject>Fv 128B (compared under the profile of its retail unit)
+002d7f10	FUN_002d7f10	match	-
 002d81f0	FUN_002d81f0	match	-
 002d8230	FUN_002d8230	match	-
 002d8310	FUN_002d8310	match	-
 002d8350	igDirectory_FindInfoByName	match	-
 002d8370	FUN_002d8370	match	-
 002d83b0	FUN_002d83b0	match	-
-002d8460	FUN_002d8460	match	DEFERRED duplicate 0x130140 __dt__18igSmartPointer<1R>Fv 128B (compared under the profile of its retail unit)
+002d8460	FUN_002d8460	match	-
 002d8520	FUN_002d8520	match	-
 002d8620	FUN_002d8620	match	-
 002d86b0	FUN_002d86b0	match	-
-002d87b0	FUN_002d87b0	match	DEFERRED duplicate 0x25a230 __dt__33igSmartPointer<15FieldLinkRecord>Fv 128B (compared under the profile of its retail unit)
-002d8a80	FUN_002d8a80	match	DEFERRED duplicate 0x25a230 __dt__18igSmartPointer<1E>Fv 128B (compared under the profile of its retail unit)
-002d8d00	FUN_002d8d00	match	DEFERRED duplicate 0x25a230 __dt__18igSmartPointer<1R>Fv 128B (compared under the profile of its retail unit)
+002d87b0	FUN_002d87b0	match	-
+002d8a80	FUN_002d8a80	match	-
+002d8d00	FUN_002d8d00	match	-
 002d8e60	Gap__Core__igDirEntry__vfunc_22	match	-
 002d8e70	FUN_002d8e70	match	-
 002d8eb0	FUN_002d8eb0	match	-

@@ -16653,7 +16653,7 @@
       "address": 3158928,
       "name": "igObjectRefMetaField_Assign",
       "size": 168,
-      "source": "src/engine/ref-field-lifecycle.cpp",
+      "source": "src/engine/igObjectRefMetaField.cpp",
       "direct": [
         {
           "site": 3159052,
@@ -16668,7 +16668,7 @@
       "address": 3159120,
       "name": "igObjectRefMetaField_GetTypeSize",
       "size": 8,
-      "source": "src/engine/ref-field-lifecycle.cpp",
+      "source": "src/engine/igObjectRefMetaField.cpp",
       "direct": [],
       "indirect": []
     },
@@ -16676,7 +16676,7 @@
       "address": 3159360,
       "name": "igObjectRefMetaField_ConstructValue",
       "size": 220,
-      "source": "src/engine/ref-field-lifecycle.cpp",
+      "source": "src/engine/igObjectRefMetaField.cpp",
       "direct": [
         {
           "site": 3159416,
@@ -16721,7 +16721,7 @@
       "address": 3159584,
       "name": "igObjectRefMetaField_DestructValue",
       "size": 92,
-      "source": "src/engine/ref-field-lifecycle.cpp",
+      "source": "src/engine/igObjectRefMetaField.cpp",
       "direct": [
         {
           "site": 3159656,
@@ -16736,7 +16736,7 @@
       "address": 3159680,
       "name": "Gap__Core__igObjectRefMetaField__vfunc_34",
       "size": 124,
-      "source": "src/engine/ref-field-lifecycle.cpp",
+      "source": "src/engine/igObjectRefMetaField.cpp",
       "direct": [
         {
           "site": 3159764,
@@ -16757,7 +16757,7 @@
       "address": 3161024,
       "name": "igObjectRefMetaField_Construct",
       "size": 68,
-      "source": "src/engine/field-descriptor-constructors.c",
+      "source": "src/engine/igObjectRefMetaField.cpp",
       "direct": [
         {
           "site": 3161036,
@@ -16778,7 +16778,7 @@
       "address": 3161104,
       "name": "igObjectRefMetaField_Init",
       "size": 68,
-      "source": "src/engine/field-descriptor-constructors.c",
+      "source": "src/engine/igObjectRefMetaField.cpp",
       "direct": [
         {
           "site": 3161116,
