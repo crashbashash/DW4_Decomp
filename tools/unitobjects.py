@@ -136,7 +136,21 @@ def load(path=None):
 
 
 def group_for(va, path=None):
-    return next((group for group in load(path) if va in group.addresses), None)
+    groups = load(path)
+    held = _ADDRESS_INDEX.get(id(groups))
+    if held is None or held[0] is not groups:
+        index = {}
+        for group in groups:
+            for address in group.addresses:
+                index.setdefault(address, group)
+        held = _ADDRESS_INDEX[id(groups)] = (groups, index)
+    return held[1].get(va)
+
+
+# {id(groups): (groups, {address: the first group placing it})} for each table `load` returned:
+# `group_for` is asked once per function. Keyed by the loaded tuple, so clearing `load`'s cache
+# (the tests do) reads the new table.
+_ADDRESS_INDEX = {}
 
 
 @lru_cache(maxsize=8)

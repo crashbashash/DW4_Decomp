@@ -387,11 +387,21 @@ def object_text(obj):
 # modification time and size; a recompile changes the key.
 _READELF_CACHE = {}
 _HEADER_CACHE = {}
+_TABLE_CACHE = {}
 
 
 def _file_key(path):
     st = os.stat(path)
-    return (os.path.realpath(path), st.st_mtime_ns, st.st_size)
+    return (os.path.realpath(path), st.st_mtime_ns, st.st_size, st.st_ino, st.st_ctime_ns)
+
+
+def _forget(path):
+    """Drop every cached answer about `path`: the tools rewrite an object in place, and a rewrite
+    that keeps the size can land inside one tick of the file system's clock."""
+    real = os.path.realpath(path)
+    for cache in (_READELF_CACHE, _HEADER_CACHE, _TABLE_CACHE):
+        for key in [k for k in list(cache) if real in k[:2]]:
+            cache.pop(key, None)
 
 
 def _readelf(flag, obj):
@@ -433,6 +443,237 @@ def _elf_section_headers(path):
     return [(names[row[0]:names.find(b"\0", row[0])].decode("latin1"), row) for row in rows]
 
 
+# ---- the object's tables, read in Python ------------------------------------------------
+# `object_syms` and `object_relocs` used to parse `readelf -sW`/`-rW` (and `-SW`) output. The
+# reader below decodes the same ELF32 tables and lays each entry out as the tokens readelf prints
+# for it, which then go through the very parse the text took, so every quirk of that parse is kept
+# (a symbol size above 99999 prints in hex and is refused, a processor-specific binding is three
+# tokens, a RELA addend's hex digits are read as decimal). Anything whose printed form is not
+# certain here (a name readelf would escape or that holds a blank, a visibility with extra bits, a
+# special section index, a relocation without a symbol, a type outside TYPES) makes the caller ask
+# readelf itself, so the answers are readelf's, byte for byte.
+
+class _AskReadelf(Exception):
+    """The Python reader cannot be sure how readelf prints this object."""
+
+
+_SYMBOL_TYPES = {0: "NOTYPE", 1: "OBJECT", 2: "FUNC", 3: "SECTION", 4: "FILE", 5: "COMMON", 6: "TLS"}
+_SYMBOL_BINDINGS = {0: ["LOCAL"], 1: ["GLOBAL"], 2: ["WEAK"],
+                    13: ["<processor", "specific>:", "13"], 14: ["<processor", "specific>:", "14"],
+                    15: ["<processor", "specific>:", "15"]}
+_VISIBILITIES = ("DEFAULT", "INTERNAL", "HIDDEN", "PROTECTED")
+_RELOCATION_NAMES = {R_32: "R_MIPS_32", R_26: "R_MIPS_26", R_HI16: "R_MIPS_HI16", R_LO16: "R_MIPS_LO16",
+                     R_GPREL16: "R_MIPS_GPREL16", R_LITERAL: "R_MIPS_LITERAL"}
+_PRINTABLE = re.compile(r"^[!-~]+$")
+
+
+def _printed(name):
+    """`name` as one readelf token, or _AskReadelf when readelf would escape or split it."""
+    if not _PRINTABLE.match(name) or "'" in name or "+" in name:
+        raise _AskReadelf(name)
+    return name
+
+
+class _ElfTables:
+    """The symbol and relocation tables of one ELF32 little-endian relocatable object."""
+
+    def __init__(self, data):
+        if data[:6] != b"\x7fELF\x01\x01":
+            raise _AskReadelf("not ELF32 little-endian")
+        shoff, = struct.unpack_from("<I", data, 0x20)
+        entsize, count, strings = struct.unpack_from("<HHH", data, 0x2e)
+        if not shoff or not count or entsize != 40 or strings >= count:
+            raise _AskReadelf("section header table")
+        self.data = data
+        self.rows = [struct.unpack_from("<10I", data, shoff + i * entsize) for i in range(count)]
+        table = self.rows[strings]
+        self.shstr = data[table[4]:table[4] + table[5]]
+        self.names = [self._string(self.shstr, row[0]) for row in self.rows]
+        if any(row[1] in (11, 18, 19) for row in self.rows):    # DYNSYM, SYMTAB_SHNDX, RELR
+            raise _AskReadelf("dynamic or extended tables")
+        self._symbols = {}
+
+    @staticmethod
+    def _string(table, offset):
+        if offset >= len(table):
+            raise _AskReadelf("string offset")
+        end = table.find(b"\0", offset)
+        if end < 0:
+            raise _AskReadelf("unterminated string")
+        return table[offset:end].decode("latin1")
+
+    def symbols(self, index):
+        """[(name as readelf prints it, value, size, info, other, shndx)] of symbol table `index`."""
+        if index not in self._symbols:
+            if not 0 < index < len(self.rows) or self.rows[index][1] != 2:
+                raise _AskReadelf("symbol table link")
+            row = self.rows[index]
+            if row[9] != 16 or row[5] % 16 or not 0 < row[6] < len(self.rows) or self.rows[row[6]][1] != 3:
+                raise _AskReadelf("symbol table shape")
+            strtab = self.rows[row[6]]
+            strings = self.data[strtab[4]:strtab[4] + strtab[5]]
+            out = []
+            for at in range(row[4], row[4] + row[5], 16):
+                st_name, value, size, info, other, shndx = struct.unpack_from("<IIIBBH", self.data, at)
+                if st_name:
+                    name = _printed(self._string(strings, st_name))
+                elif info & 15 == 3 and shndx < len(self.rows):
+                    name = _printed(self.names[shndx]) if self.names[shndx] else None
+                elif info & 15 == 3:
+                    name = None
+                else:
+                    name = ""
+                out.append((name, value, size, info, other, shndx))
+            self._symbols[index] = out
+        return self._symbols[index]
+
+    def section_names(self):
+        """{index: name} exactly as `object_syms` read it from `readelf -SW`."""
+        secs = {}
+        for index, (name, row) in enumerate(zip(self.names, self.rows)):
+            if name:
+                printed = _printed(name)
+                if "[" in printed or "]" in printed:
+                    raise _AskReadelf(name)
+            elif row[1] == 0:
+                printed = "NULL"      # the unnamed null header: the first word after its index is its type
+            else:
+                raise _AskReadelf("unnamed section")
+            secs[index] = printed
+        return secs
+
+    def symbol_table(self):
+        """{name: (ndx, value, size)} exactly as `object_syms` read it from `readelf -sW`."""
+        tables = [i for i, row in enumerate(self.rows) if row[1] == 2]
+        if len(tables) != 1:
+            raise _AskReadelf("symbol table count")
+        syms = {}
+        for number, (name, value, size, info, other, shndx) in enumerate(self.symbols(tables[0])):
+            kind, binding = _SYMBOL_TYPES.get(info & 15), _SYMBOL_BINDINGS.get(info >> 4)
+            if name is None or kind is None or binding is None or other & ~3:
+                raise _AskReadelf("symbol %d" % number)
+            if shndx == 0:
+                ndx = "UND"
+            elif shndx == 0xfff1:
+                ndx = "ABS"
+            elif shndx == 0xfff2:
+                ndx = "COM"
+            elif shndx < len(self.rows):
+                ndx = "%d" % shndx
+            else:
+                raise _AskReadelf("symbol %d section index" % number)
+            f = ["%d:" % number, "%08x" % value, "%d" % size if size <= 99999 else "%#x" % size, kind,
+                 *binding, _VISIBILITIES[other & 3], ndx] + ([name] if name else [])
+            # the parse `object_syms` applies to each line of readelf's table
+            if len(f) < 8 or not f[0].rstrip(":").isdigit():
+                continue
+            try:
+                section = int(f[-2])
+            except ValueError:
+                section = f[-2]
+            syms[f[-1]] = (section, int(f[1], 16), int(f[2], 10))
+        return syms
+
+    def relocation_sections(self):
+        """[(section name, sh_offset, [(offset, type, symbol name, addend) or (offset, None, ...)])] for
+        every relocation section readelf lists, in its order; an entry whose type is not in TYPES has
+        type None, so the caller can let readelf name it."""
+        if hasattr(self, "_sections"):
+            return self._sections
+        out = []
+        for index, row in enumerate(self.rows):
+            if row[1] not in (4, 9) or not row[5]:
+                continue
+            rela = row[1] == 4
+            width = 12 if rela else 8
+            if row[5] % width:
+                raise _AskReadelf("relocation section size")
+            symbols = self.symbols(row[6])
+            entries = []
+            for at in range(row[4], row[4] + row[5], width):
+                offset, info = struct.unpack_from("<II", self.data, at)
+                symbol = info >> 8
+                if not symbol and not rela and (info & 0xff == 0 or info & 0xff in _RELOCATION_NAMES):
+                    # readelf prints a REL entry without a symbol as offset, info and type only, a
+                    # line too short for the parse (fold_literals clears a folded entry so)
+                    continue
+                if not 0 < symbol < len(symbols):
+                    raise _AskReadelf("relocation without a symbol")
+                name = symbols[symbol][0]
+                if name is None:
+                    raise _AskReadelf("section symbol name")
+                name = name or "<null>"
+                addend = 0
+                if rela:
+                    value, = struct.unpack_from("<i", self.data, at + 8)
+                    # readelf prints `+ <hex>`; the text parse read those digits as decimal, and
+                    # a hex letter or a `-` left the addend 0
+                    digits = "%x" % value
+                    addend = int(digits) if value >= 0 and digits.isdigit() else 0
+                kind = _RELOCATION_NAMES.get(info & 0xff)
+                entries.append((offset, TYPES[kind] if kind in TYPES else None, name, addend))
+            out.append((_printed(self.names[index]), row[4], entries))
+        self._sections = out
+        return out
+
+    def object_syms(self):
+        if not hasattr(self, "_object_syms"):
+            self._object_syms = (self.symbol_table(), self.section_names())
+        return self._object_syms
+
+    def relocations(self, target_section=None):
+        """`object_relocs(obj, target_section)`, answered from the tables; _AskReadelf when an
+        entry's type is outside TYPES, so readelf's own name for it reaches the refusal."""
+        if not hasattr(self, "_relocations"):
+            self._relocations = {}
+        if target_section not in self._relocations:
+            targets = ({row[4]: row[7] for row in self.rows if row[1] in (4, 9)}
+                       if target_section is not None else None)
+            rows = []
+            for name, offset, entries in self.relocation_sections():
+                if targets is not None and targets.get(offset) != target_section:
+                    continue
+                m = re.match(r"\.rel(?:a)?(.*)$", name)
+                if m is None:
+                    continue
+                for entry in entries:
+                    if entry[1] is None:
+                        raise _AskReadelf("relocation type")
+                    rows.append((m.group(1),) + entry)
+            self._relocations[target_section] = rows
+        return list(self._relocations[target_section])
+
+
+def _elf_tables(obj):
+    """The parsed tables of `obj`, cached like the readelf output; None when readelf must answer."""
+    try:
+        key = _file_key(obj)
+    except OSError:
+        return None
+    tables = _TABLE_CACHE.get(key)
+    if tables is None:
+        if len(_TABLE_CACHE) > 256:
+            _TABLE_CACHE.clear()
+        try:
+            with open(obj, "rb") as fh:
+                tables = _ElfTables(fh.read())
+        except (_AskReadelf, struct.error):
+            tables = False
+        _TABLE_CACHE[key] = tables
+    return tables or None
+
+
+def _from_tables(obj, what):
+    """`what(tables)` for `obj`, or None when only readelf can answer exactly."""
+    tables = _elf_tables(obj)
+    if tables is None:
+        return None
+    try:
+        return what(tables)
+    except (_AskReadelf, struct.error):
+        return None
+
+
 def object_section(obj, sname, index=None):
     """Raw bytes of a section in a relocatable object (b"" if absent).
 
@@ -462,6 +703,14 @@ def object_syms(obj):
     relocates the dispatcher against it, so resolving that relocation needs the
     symbol's defining section (see `object_section_base`).
     """
+    tables = _from_tables(obj, lambda t: t.object_syms())
+    if tables is not None:
+        return dict(tables[0]), dict(tables[1])
+    return _object_syms_readelf(obj)
+
+
+def _object_syms_readelf(obj):
+    """`object_syms` from readelf's own output, for an object the Python reader cannot vouch for."""
     secs, syms = {}, {}
     out = _readelf("-SW", obj)
     for ln in out.splitlines():
@@ -540,6 +789,7 @@ def rename_object_sections(obj, names):
     data.extend(strings)
     with open(obj, "wb") as fh:
         fh.write(data)
+    _forget(obj)
 
 
 def object_sym(obj, name):
@@ -558,10 +808,19 @@ def object_relocs(obj, target_section=None):
     is relocated by its own `.rel.rodata` against the function symbol, so a caller
     that only looked at `.rel.text` would never see those.
     """
+    rows = _from_tables(obj, lambda t: t.relocations(target_section))
+    if rows is not None:
+        return rows
     # MWCC emits one section named .text per function. The relocation section's
     # sh_info, not its repeated .rel.text name or offsets, identifies its owner.
     targets = ({header[4]: header[7] for _, header in elf_section_headers(obj)
                 if header[1] in (4, 9)} if target_section is not None else None)
+    return _object_relocs_readelf(obj, target_section, targets)
+
+
+def _object_relocs_readelf(obj, target_section, targets):
+    """`object_relocs` from readelf's own output; `targets` maps a relocation section's file offset
+    to the section it patches (None when `target_section` is None)."""
     out = _readelf("-rW", obj)
     rows, cur = [], None
     for ln in out.splitlines():
@@ -877,6 +1136,7 @@ def fold_literals(obj, bodies, img, gp):
         struct.pack_into("<I", data, at + 4, 0)
     with open(obj, "wb") as fh:
         fh.write(data)
+    _forget(obj)
     return sorted(literal_sections), []
 
 
@@ -1087,7 +1347,7 @@ def duplicate_tables(group, jumptables):
 
 
 def verify_emitted_object(obj, group, elf, symbols, gp_override=None, verbose=False,
-                          requested=None, jumptables=None, deferred=()):
+                          requested=None, jumptables=None, deferred=(), requested_lines=None):
     """Verify every explicitly owned body before any per-function extraction.
 
     Code sections must be exactly the owner, its placed emitted members and its
@@ -1104,6 +1364,9 @@ def verify_emitted_object(obj, group, elf, symbols, gp_override=None, verbose=Fa
     their presence as a complete section is required here. `verify_emitted_unit`
     then compiles the same source with that unit's own profile and compares them
     there; nothing is skipped without such a second, exact comparison.
+
+    ``requested_lines``, a list, gets an entry when the report shows a body's words, the one
+    part of the report `requested` changes.
     """
     by_name, by_va = load_symbols(symbols)
     headers = elf_section_headers(obj)
@@ -1249,6 +1512,8 @@ def verify_emitted_object(obj, group, elf, symbols, gp_override=None, verbose=Fa
             for at in range(0, size, 4):
                 got, want = patched[at:at + 4], retail[at:at + 4]
                 if verbose or got != want:
+                    if requested_lines is not None:
+                        requested_lines.append(address)
                     if address == requested:
                         prefix = "   " + ("  " if got == want else "!!")
                     else:
@@ -1373,7 +1638,7 @@ def duplicate_profiles(group, profile, unit_flags=None, unit_compilers=None, uni
 
 def verify_emitted_unit(obj, group, elf, symbols, profile, recompile,
                         gp_override=None, verbose=False, requested=None, jumptables=None,
-                        unit_flags=None, unit_compilers=None, units=None):
+                        unit_flags=None, unit_compilers=None, units=None, requested_lines=None):
     """`verify_emitted_object` plus the exact comparison of profile-deferred duplicates.
 
     `profile` is the unitprofiles.Profile `obj` was compiled with.
@@ -1388,7 +1653,8 @@ def verify_emitted_unit(obj, group, elf, symbols, profile, recompile,
         return False, f"emitted object rejected: {error}", None
     deferred = {name for names in profiles.values() for name in names}
     good, report, records = verify_emitted_object(obj, group, elf, symbols, gp_override, verbose,
-                                                  requested, jumptables, deferred=deferred)
+                                                  requested, jumptables, deferred=deferred,
+                                                  requested_lines=requested_lines)
     if not records and not good and not report.startswith("DIFFER"):
         return good, report, records
     by_name, by_va = load_symbols(symbols)
@@ -1507,6 +1773,7 @@ def isolate_emitted_body(obj, requested, records, group, symbols):
                 struct.pack_into("<H", data, offset + 14, 0)  # SHN_UNDEF
     with open(obj, "wb") as output:
         output.write(data)
+    _forget(obj)
     # The selected member's exception record and table are kept when verify_emitted_object
     # found them equal to retail (renamed by retail address so linkgen can pin them there,
     # like a standalone unit's); every other copy is discarded and retail's bytes stay.
@@ -1543,6 +1810,7 @@ def isolate_emitted_body(obj, requested, records, group, symbols):
         if old != new:
             arguments += ["--redefine-sym", f"{old}={new}"]
     subprocess.run(arguments + [obj], check=True, capture_output=True)
+    _forget(obj)
     final_headers = elf_section_headers(obj)
     allocated = [name for name, h in final_headers if h[2] & 2 and h[5]]
     if any(name not in (".text", ".rodata") and name not in kept.values() and name not in LITERAL_SECTIONS
@@ -1611,6 +1879,7 @@ def verify_one(va, source, flags=FLAGS_DEFAULT, elf=ELF_DEFAULT,
     except ValueError as error:
         return False, f"compile failed: {error}"
     retail = va_bytes(img, va, size)
+    own_tables = jumptables is None
     if jumptables is None:
         jumptables = load_jumptables(jumptables_path(symbols))
     tabs = sorted(jumptables.get(va, []))
@@ -1620,23 +1889,16 @@ def verify_one(va, source, flags=FLAGS_DEFAULT, elf=ELF_DEFAULT,
         """Compile `source` under `profile` and verify it -> (ok, report)."""
         profile = unitprofiles.for_source(profile, source, flags, mwcc)
         cmd_flags = unitprofiles.command_flags(profile)
-        obj = os.path.join(cc.scratch_dir(), "cand_%s.o" % TMP_TAG())
-        if os.path.exists(obj):
-            os.remove(obj)
-        r = subprocess.run(cc.compile_argv(wibo, profile.compiler, cmd_flags, source, obj),
-                           capture_output=True, text=True, env=env)
-        if not os.path.exists(obj):
-            return False, "compile failed: " + compile_error(r.stdout + r.stderr)
         if group:
-            def recompile(twin_compiler, twin_flags, out):
-                subprocess.run(cc.compile_argv(wibo, twin_compiler, twin_flags, source, out),
-                               capture_output=True, text=True, env=env)
-                return os.path.exists(out)
-
-            good, report, _ = verify_emitted_unit(
-                obj, group, elf, symbols, profile, recompile, gp_override, verbose, va,
-                jumptables, unit_flags, unit_compilers, units)
-            return good, report
+            # Every member of a compiler unit compiles the same source and verifies the same
+            # bodies; only the lines showing a body's words name the member asked about.
+            key = (_source_key(source), profile, cmd_flags, group, elf, symbols, gp_override, wibo,
+                   os.path.realpath(env["MWCIncludes"]), jumptables_path(symbols), unit_flags,
+                   unit_compilers, units, unit_objects) if own_tables and not verbose else None
+            return _unit_result(key, lambda: attempt_unit(profile, cmd_flags))
+        obj = compile_candidate(profile, cmd_flags)
+        if not isinstance(obj, str):
+            return obj
         # what the head line shows of the profile: the flags when they are not the caller's
         # defaults, the compiler when it is not the caller's
         notes = []
@@ -1652,6 +1914,35 @@ def verify_one(va, source, flags=FLAGS_DEFAULT, elf=ELF_DEFAULT,
             # An unsupported relocation type or a malformed object: a failure with its
             # reason, never a silent skip (and never an exception that aborts a sweep).
             return False, f"DIFFER 0x{va:06x} {name} {size}B: {error}"
+
+    def compile_candidate(profile, cmd_flags):
+        """The object path, or the (False, report) of a failed compile."""
+        obj = os.path.join(cc.scratch_dir(), "cand_%s.o" % TMP_TAG())
+        if os.path.exists(obj):
+            os.remove(obj)
+        _forget(obj)
+        r = subprocess.run(cc.compile_argv(wibo, profile.compiler, cmd_flags, source, obj),
+                           capture_output=True, text=True, env=env)
+        if not os.path.exists(obj):
+            return False, "compile failed: " + compile_error(r.stdout + r.stderr)
+        return obj
+
+    def attempt_unit(profile, cmd_flags):
+        """-> (ok, report, whether the report holds for every member of the unit)."""
+        obj = compile_candidate(profile, cmd_flags)
+        if not isinstance(obj, str):
+            return obj + (cc.scratch_dir() not in obj[1] and "cand_" not in obj[1],)
+
+        def recompile(twin_compiler, twin_flags, out):
+            subprocess.run(cc.compile_argv(wibo, twin_compiler, twin_flags, source, out),
+                           capture_output=True, text=True, env=env)
+            return os.path.exists(out)
+
+        requested_lines = []
+        good, report, _ = verify_emitted_unit(
+            obj, group, elf, symbols, profile, recompile, gp_override, verbose, va,
+            jumptables, unit_flags, unit_compilers, units, requested_lines=requested_lines)
+        return good, report, not requested_lines and cc.scratch_dir() not in report and obj not in report
 
     ok, report = attempt(resolution.profile)
     if resolution.override is not None and not code_reproduced(report):
@@ -1670,6 +1961,36 @@ def verify_one(va, source, flags=FLAGS_DEFAULT, elf=ELF_DEFAULT,
         report = (head + " override=redundant\n   per-function row(s) repeat the unit profile; delete them"
                   + ("\n" + rest if rest else ""))
     return ok, report
+
+
+# One verification per compiler unit and run: {key: (ok, report)}, and a lock per key so the members
+# a thread pool takes up together wait for the first instead of each compiling the unit again.
+_UNIT_RESULTS = {}
+_UNIT_LOCKS = {}
+_UNIT_LOCKS_GUARD = threading.Lock()
+_NOT_SHARED = object()
+
+
+def _source_key(source):
+    """What a compile of `source` depends on that can differ between two calls of one run."""
+    st = os.stat(source)
+    return (os.path.realpath(source), st.st_mtime_ns, st.st_size, st.st_ino)
+
+
+def _unit_result(key, compute):
+    """`compute()` -> (ok, report, shared) once per `key`; a result is reused only when `shared`
+    says it does not depend on the member asked about. A None key is never reused."""
+    if key is None or _UNIT_RESULTS.get(key) is _NOT_SHARED:
+        return compute()[:2]
+    with _UNIT_LOCKS_GUARD:
+        lock = _UNIT_LOCKS.setdefault(key, threading.Lock())
+    with lock:
+        hit = _UNIT_RESULTS.get(key)
+        if hit is not None and hit is not _NOT_SHARED:
+            return hit
+        ok, report, shared = compute()
+        _UNIT_RESULTS[key] = (ok, report) if shared else _NOT_SHARED
+        return ok, report
 
 
 def foreign_profile_report(report_over, report_unit, resolution):

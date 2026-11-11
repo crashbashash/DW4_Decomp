@@ -17,6 +17,7 @@ This is deliberately a text transform, not a C parser: the code being split is
 machine-generated and regular, and the compiler remains the authority on whether
 the result is valid.
 """
+import functools
 import itertools
 import os
 import re
@@ -133,6 +134,18 @@ def _kr_head(clean, starts, brace):
 
 
 def definitions(text):
+    """-> [(name, start, end)] top-level function definitions, in file order (see `_definitions`).
+
+    Kept per text: every member of a multi-function file asks for the same file's definitions."""
+    return list(_cached_definitions(text))
+
+
+@functools.lru_cache(maxsize=32)
+def _cached_definitions(text):
+    return tuple(_definitions(text))
+
+
+def _definitions(text):
     """-> [(name, start, end)] top-level function definitions, in file order.
 
     A top-level `{` opens a definition when the text since the previous top-level

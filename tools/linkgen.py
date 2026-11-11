@@ -361,6 +361,44 @@ def main(argv=None):
         return placement, ""
 
     retail_image, retail_gp = verify.read_elf(a.elf), reginfo_gp(a.elf)
+    unit_objects_built = {}
+    unit_locks = {}
+    unit_locks_guard = threading.Lock()
+
+    def verify_unit(group, profile, compiler, cflags, csrc_path, env):
+        """Compile a compiler unit and verify every body -> (object or None, report, records)."""
+        built_at = os.path.join(cc.scratch_dir(), "unit_%s_%08x_%d.o" % (TMP_TAG(), group.owner,
+                                                                          len(unit_objects_built)))
+        subprocess.run(cc.compile_argv(os.environ.get("DW4_WIBO", os.path.join(ROOT, "local", "wibo")),
+                                       compiler, cflags, csrc_path, built_at),
+                       capture_output=True, text=True, env=env, check=False)
+        if not os.path.exists(built_at):
+            return None, None, None
+
+        def recompile(twin_compiler, twin_flags, out):
+            subprocess.run(cc.compile_argv(os.environ.get("DW4_WIBO",
+                                                          os.path.join(ROOT, "local", "wibo")),
+                                           twin_compiler, twin_flags, csrc_path, out),
+                           capture_output=True, text=True, env=env)
+            return os.path.exists(out)
+
+        good, report, records_ = verify.verify_emitted_unit(
+            built_at, group, a.elf, a.symbols, profile, recompile,
+            unit_flags=a.unit_flags, unit_compilers=a.unit_compilers, units=a.units)
+        if records_ is None:
+            os.remove(built_at)
+        return built_at, report, records_
+
+    def unit_object(key, compute):
+        """`compute()` once per `key` (None: every call computes)."""
+        if key is None:
+            return compute()
+        with unit_locks_guard:
+            lock = unit_locks.setdefault(key, threading.Lock())
+        with lock:
+            if key not in unit_objects_built:
+                unit_objects_built[key] = compute()
+            return unit_objects_built[key]
 
     def build_one(u):
         va, sz, kind, name, extra = u
@@ -415,38 +453,36 @@ def main(argv=None):
                 return va, {"obj": obj, "undef": hit["undef"], "use_c": True,
                             "tables": {int(k): v for k, v in hit["tables"].items()},
                             "exceptions": hit.get("exceptions", {})}
-        subprocess.run(cc.compile_argv(os.environ.get("DW4_WIBO",
-                                                      os.path.join(ROOT, "local", "wibo")),
-                                       compiler, cflags, csrc_path, stage),
-                       capture_output=True, text=True, env=env, check=False)
-        if tmp and not group:
-            os.remove(tmp)
-        if not os.path.exists(stage):
-            if tmp:
-                os.remove(tmp)
-            return va, {"fatal": f"compile failed for {name}"}
         if group:
-            def recompile(twin_compiler, twin_flags, out):
-                subprocess.run(cc.compile_argv(os.environ.get("DW4_WIBO",
-                                                              os.path.join(ROOT, "local", "wibo")),
-                                               twin_compiler, twin_flags, csrc_path, out),
-                               capture_output=True, text=True, env=env)
-                return os.path.exists(out)
-
+            # Every member of a compiler unit compiles the same source and verifies the same
+            # bodies (no member is singled out here): a whole-file unit does that once, and each
+            # member then takes its own copy of the verified object.
+            unit_key = None if tmp else (verify._source_key(csrc_path), compiler, cflags, group, profile)
             try:
-                # The split sibling source is still needed to build the
-                # profile-deferred duplicates; remove it once they are checked.
-                good, report, records_ = verify.verify_emitted_unit(
-                    stage, group, a.elf, a.symbols, profile, recompile,
-                    unit_flags=a.unit_flags, unit_compilers=a.unit_compilers, units=a.units)
+                verified, report, records_ = unit_object(unit_key, lambda: verify_unit(
+                    group, profile, compiler, cflags, csrc_path, env))
             finally:
                 if tmp:
                     os.remove(tmp)
-            head = report.partition("\n")[0]
+            if verified is None:
+                return va, {"fatal": f"compile failed for {name}"}
             if records_ is None:
                 # bodies, jump tables or a declared row differ: the unit cannot be linked honestly
-                os.remove(stage)
                 return va, {"fatal": report}
+            shutil.copyfile(verified, stage)
+            if unit_key is None:
+                os.remove(verified)
+            head = report.partition("\n")[0]
+        else:
+            subprocess.run(cc.compile_argv(os.environ.get("DW4_WIBO",
+                                                          os.path.join(ROOT, "local", "wibo")),
+                                           compiler, cflags, csrc_path, stage),
+                           capture_output=True, text=True, env=env, check=False)
+            if tmp:
+                os.remove(tmp)
+            if not os.path.exists(stage):
+                return va, {"fatal": f"compile failed for {name}"}
+        if group:
             found = re.search(r"\bexc=(missing|extra|differ)\b", head)
             if found:
                 # bodies and tables exact, some retail exception metadata not reproduced:
