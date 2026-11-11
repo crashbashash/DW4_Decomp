@@ -48,8 +48,8 @@ Matching proves the bytes; it does not make the source readable. A matched funct
 | --- | ---: | ---: |
 | the function has a recovered name, not `FUN_<address>` or a numbered virtual slot | 13,762 | 1,869,556 |
 | no name holds an address: not the function's own, nor any function, variable or type it uses | 14,211 | 2,268,776 |
-| the types it uses have real names, not a placeholder such as `S`, `Obj`, `Info176` or `DW4VC_232_2` | 3,424 | 896,960 |
-| it sits in its class or module file, not `src/unmatched/` | 10,494 | 1,718,924 |
+| the types it uses have real names, not a placeholder such as `S`, `Obj`, `Info176` or `DW4VC_232_2` | 3,419 | 896,152 |
+| it sits in its class or module file, not `src/unmatched/` | 10,424 | 1,712,204 |
 | what it calls and reads is named: no `FUN_`/`DAT_` references | 11,109 | 2,093,060 |
 | no decompiler leftovers: `temp_*`, `var_*`, `argN`, stack-offset locals such as `sp5C` | 5,704 | 1,244,644 |
 | fields are reached through named struct members: no `fNN`/`unkNN` members, no cast of a pointer plus an offset | 3,424 | 784,536 |
@@ -87,9 +87,9 @@ The debt ratchet ([`docs/engine/debt-ratchet.md`](docs/engine/debt-ratchet.md)):
 | `struct.a` | 134 | 118 | -16 | struct-report groups: same view name, clashing layouts across units (scripts/check_struct_conflicts.py) |
 | `struct.b` | 157 | 156 | -1 | struct-report groups: receiver view disagrees with the reflected class |
 | `struct.c` | 285 | 285 | 0 | struct-report groups: offset-named member whose number is not its offset |
-| `m2c_idiom.units` | 5,964 | 4,988 | -976 | source files (asm bodies excluded) still carrying m2c idioms: `temp_*`, `var_*` or `argN` |
+| `m2c_idiom.units` | 5,964 | 4,927 | -1037 | source files (asm bodies excluded) still carrying m2c idioms: `temp_*`, `var_*` or `argN` |
 | `raw_casts.reflected` | 359 | 359 | 0 | raw offset casts on a named receiver where reflection names the field (tools/typed_coverage.py `typeable`) |
-| `fun_dat_refs` | 87,000 | 84,083 | -2917 | FUN_/DAT_-named references in matched units' code (comments and strings excluded, definitions subtracted) |
+| `fun_dat_refs` | 87,000 | 83,998 | -3002 | FUN_/DAT_-named references in matched units' code (comments and strings excluded, definitions subtracted) |
 | `foreign_profile.functions` | 18 | 12 | -6 | code bytes match only under a provisional per-function override that differs from the unit's profile in config/SLUS-20836/units.tsv (data/check-categories.tsv) |
 | `foreign_profile.bytes` | 776 | 624 | -152 | bytes of those |
 | `unapproved.functions` | 80 | 58 | -22 | code bytes match, but the source uses inline `asm` or `volatile` with no owner approval (config/source-approvals.tsv) |
