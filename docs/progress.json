@@ -334,24 +334,24 @@
    "compile.functions": 0,
    "foreign_profile.bytes": 624,
    "foreign_profile.functions": 12,
-   "fun_dat_refs": 79121,
+   "fun_dat_refs": 73768,
    "inline_asm.other": 0,
    "inventory.unsymbolised_bytes": 1020,
    "inventory_gap.bytes": 0,
    "inventory_gap.functions": 0,
-   "m2c_idiom.units": 4512,
+   "m2c_idiom.units": 4061,
    "mismatch.bytes": 0,
    "mismatch.functions": 0,
    "name_defect.bytes": 0,
    "name_defect.functions": 0,
    "opt_pragma.statements": 11,
    "orphan.bytes": 32,
-   "profile_split.bytes": 42396,
-   "profile_split.units": 12,
+   "profile_split.bytes": 41852,
+   "profile_split.units": 11,
    "raw_casts.reflected": 359,
-   "struct.a": 112,
-   "struct.b": 135,
-   "struct.c": 253,
+   "struct.a": 105,
+   "struct.b": 130,
+   "struct.c": 220,
    "unapproved.bytes": 47092,
    "unapproved.functions": 58,
    "unmatched.bytes": 632648,
@@ -452,42 +452,42 @@
   "vtables": 478
  },
  "readable": {
-  "bytes": 437420,
+  "bytes": 465604,
   "failing": {
    "addresses": {
-    "bytes": 2211032,
-    "functions": 13756
+    "bytes": 2134904,
+    "functions": 13370
    },
    "fields": {
-    "bytes": 746220,
-    "functions": 3185
+    "bytes": 662716,
+    "functions": 2789
    },
    "idioms": {
-    "bytes": 1177068,
-    "functions": 5284
+    "bytes": 1060820,
+    "functions": 4696
    },
    "name": {
     "bytes": 1872108,
     "functions": 13777
    },
    "placed": {
-    "bytes": 1621428,
-    "functions": 9607
+    "bytes": 1533324,
+    "functions": 8971
    },
    "references": {
-    "bytes": 1991052,
-    "functions": 10333
+    "bytes": 1838560,
+    "functions": 9600
    },
    "types": {
-    "bytes": 851388,
-    "functions": 3146
+    "bytes": 758644,
+    "functions": 2828
    },
    "virtuals": {
-    "bytes": 376456,
-    "functions": 1209
+    "bytes": 319040,
+    "functions": 1044
    }
   },
-  "functions": 2628,
+  "functions": 2813,
   "matched_functions": 19532
  },
  "regions": [
@@ -623,10 +623,10 @@
  "typed": {
   "error": null,
   "offset_casts": 6480,
-  "pct": 39.18,
-  "recovered": 26147,
-  "synthetic": 10342,
-  "total": 66729,
+  "pct": 39.16,
+  "recovered": 26142,
+  "synthetic": 10343,
+  "total": 66757,
   "typeable": 359,
   "typeable_pct": 0.54
  }
