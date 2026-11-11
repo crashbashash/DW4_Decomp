@@ -5,7 +5,7 @@ nine bodies / **304 bytes**: the setter
 at 2d0560 (**152 bytes**) and the eight following methods. With factory2cd170
 these are ten bodies /464 bytes. They make up the binding/accounting block, not the alias allocator.
 
-The [setter](../../src/engine/alias-pool-controls.cpp) uses a narrow ABI
+The setter, in [igAliasMemoryPool.cpp](../../src/engine/igAliasMemoryPool.cpp), uses a narrow ABI
 view to preserve the original byte load/store and virtual slot376 dispatch. The
 view must not be instantiated. C mode selected v0 for the indirect call, whereas
 the original C++ virtual dispatch uses t9; explicit width and the virtual-call
@@ -59,7 +59,7 @@ The status word is read from retail data, not assigned an invented enum value.
 ## Evidence and verification
 
 ```sh
-python3 tools/verify.py 0x2d0560 src/engine/alias-pool-controls.cpp
+python3 tools/check.py --function 0x2d0550 --cand src/engine/igAliasMemoryPool.cpp
 make check
 make typed-check
 make link

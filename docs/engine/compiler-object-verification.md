@@ -6,7 +6,7 @@ These are measured properties of MWCCPS2
 ## Exact alias-pool tail calls
 
 Seven virtual wrappers are in
-[`alias-pool-tail.cpp`](../../src/engine/alias-pool-tail.cpp):
+[`igAliasMemoryPool.cpp`](../../src/engine/igAliasMemoryPool.cpp):
 
 | Entry | Bytes | Operation |
 | --- | ---: | --- |
@@ -30,8 +30,8 @@ No object is instantiated and no assembly encodings are inserted into C. The
 default and explicit argument movements, halfword alignment, full -1 sentinel
 and virtual tail transfer are verified instruction-for-instruction.
 
-All54 bodies /4,160 bytes of the alias runtime match; the740-byte backend is
-`src/unmatched/igAliasMemoryPool_ManageAllocation.cpp`. The exception setting alone
+The54 bodies /4,160 bytes of the alias runtime, the740-byte backend among them, are one
+whole file, `src/engine/igAliasMemoryPool.cpp`. The exception setting alone
 does not solve the larger bodies, and these seven matches do not establish an
 exception configuration for every retail compilation unit.
 

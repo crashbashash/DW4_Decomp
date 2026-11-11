@@ -11067,7 +11067,7 @@
       "address": 2950496,
       "name": "igAliasMemoryPool_AssignAlias",
       "size": 152,
-      "source": "src/engine/alias-pool-controls.cpp",
+      "source": "src/engine/igAliasMemoryPool.cpp",
       "direct": [
         {
           "site": 2950580,
@@ -11088,7 +11088,7 @@
       "address": 2950656,
       "name": "Gap__Core__igAliasMemoryPool__vfunc_30",
       "size": 32,
-      "source": "src/engine/alias-pool-controls.c",
+      "source": "src/engine/igAliasMemoryPool.cpp",
       "direct": [],
       "indirect": []
     },
@@ -11096,7 +11096,7 @@
       "address": 2950688,
       "name": "Gap__Core__igAliasMemoryPool__vfunc_31",
       "size": 24,
-      "source": "src/engine/alias-pool-controls.c",
+      "source": "src/engine/igAliasMemoryPool.cpp",
       "direct": [],
       "indirect": []
     },
@@ -11104,7 +11104,7 @@
       "address": 2950720,
       "name": "Gap__Core__igAliasMemoryPool__vfunc_32",
       "size": 48,
-      "source": "src/engine/alias-pool-controls.cpp",
+      "source": "src/engine/igAliasMemoryPool.cpp",
       "direct": [],
       "indirect": [
         {
@@ -11118,7 +11118,7 @@
       "address": 2950768,
       "name": "Gap__Core__igAliasMemoryPool__vfunc_33",
       "size": 8,
-      "source": "src/engine/alias-pool-controls.c",
+      "source": "src/engine/igAliasMemoryPool.cpp",
       "direct": [],
       "indirect": []
     },
@@ -11126,7 +11126,7 @@
       "address": 2950784,
       "name": "Gap__Core__igAliasMemoryPool__vfunc_26",
       "size": 8,
-      "source": "src/engine/alias-pool-controls.c",
+      "source": "src/engine/igAliasMemoryPool.cpp",
       "direct": [],
       "indirect": []
     },
@@ -11134,7 +11134,7 @@
       "address": 2950800,
       "name": "Gap__Core__igAliasMemoryPool__vfunc_24",
       "size": 16,
-      "source": "src/engine/alias-pool-controls.c",
+      "source": "src/engine/igAliasMemoryPool.cpp",
       "direct": [],
       "indirect": []
     },
@@ -11142,7 +11142,7 @@
       "address": 2950816,
       "name": "Gap__Core__igAliasMemoryPool__vfunc_25",
       "size": 8,
-      "source": "src/engine/alias-pool-controls.c",
+      "source": "src/engine/igAliasMemoryPool.cpp",
       "direct": [],
       "indirect": []
     },
@@ -11150,7 +11150,7 @@
       "address": 2950832,
       "name": "Gap__Core__igAliasMemoryPool__vfunc_29",
       "size": 8,
-      "source": "src/engine/alias-pool-controls.c",
+      "source": "src/engine/igAliasMemoryPool.cpp",
       "direct": [],
       "indirect": []
     },
@@ -11158,7 +11158,7 @@
       "address": 2950848,
       "name": "Gap__Core__igAliasMemoryPool__vfunc_34",
       "size": 484,
-      "source": "src/unmatched/Gap__Core__igAliasMemoryPool__vfunc_34.cpp",
+      "source": "src/engine/igAliasMemoryPool.cpp",
       "direct": [
         {
           "site": 2950960,
@@ -11219,7 +11219,7 @@
       "address": 2951344,
       "name": "Gap__Core__igAliasMemoryPool__vfunc_35",
       "size": 16,
-      "source": "src/engine/Gap__Core__igAliasMemoryPool__vfunc_35.c",
+      "source": "src/engine/igAliasMemoryPool.cpp",
       "direct": [],
       "indirect": []
     },
@@ -11227,7 +11227,7 @@
       "address": 2951360,
       "name": "Gap__Core__igAliasMemoryPool__vfunc_36",
       "size": 8,
-      "source": "src/engine/Gap__Core__igAliasMemoryPool__vfunc_36.c",
+      "source": "src/engine/igAliasMemoryPool.cpp",
       "direct": [],
       "indirect": []
     },
@@ -11235,7 +11235,7 @@
       "address": 2951376,
       "name": "Gap__Core__igAliasMemoryPool__vfunc_41",
       "size": 20,
-      "source": "src/engine/Gap__Core__igAliasMemoryPool__vfunc_41.c",
+      "source": "src/engine/igAliasMemoryPool.cpp",
       "direct": [],
       "indirect": []
     },
@@ -11243,7 +11243,7 @@
       "address": 2951408,
       "name": "Gap__Core__igAliasMemoryPool__vfunc_42",
       "size": 8,
-      "source": "src/engine/Gap__Core__igAliasMemoryPool__vfunc_42.c",
+      "source": "src/engine/igAliasMemoryPool.cpp",
       "direct": [],
       "indirect": []
     },
@@ -11251,7 +11251,7 @@
       "address": 2951424,
       "name": "Gap__Core__igAliasMemoryPool__vfunc_37",
       "size": 20,
-      "source": "src/engine/Gap__Core__igAliasMemoryPool__vfunc_37.c",
+      "source": "src/engine/igAliasMemoryPool.cpp",
       "direct": [],
       "indirect": []
     },
@@ -11259,7 +11259,7 @@
       "address": 2951456,
       "name": "Gap__Core__igAliasMemoryPool__vfunc_38",
       "size": 8,
-      "source": "src/engine/Gap__Core__igAliasMemoryPool__vfunc_38.c",
+      "source": "src/engine/igAliasMemoryPool.cpp",
       "direct": [],
       "indirect": []
     },
@@ -11267,7 +11267,7 @@
       "address": 2951472,
       "name": "Gap__Core__igAliasMemoryPool__vfunc_39",
       "size": 20,
-      "source": "src/engine/Gap__Core__igAliasMemoryPool__vfunc_39.c",
+      "source": "src/engine/igAliasMemoryPool.cpp",
       "direct": [],
       "indirect": []
     },
@@ -11275,7 +11275,7 @@
       "address": 2951504,
       "name": "Gap__Core__igAliasMemoryPool__vfunc_40",
       "size": 8,
-      "source": "src/engine/Gap__Core__igAliasMemoryPool__vfunc_40.c",
+      "source": "src/engine/igAliasMemoryPool.cpp",
       "direct": [],
       "indirect": []
     },
@@ -11283,7 +11283,7 @@
       "address": 2951520,
       "name": "Gap__Core__igAliasMemoryPool__vfunc_45",
       "size": 48,
-      "source": "src/engine/Gap__Core__igAliasMemoryPool__vfunc_45.c",
+      "source": "src/engine/igAliasMemoryPool.cpp",
       "direct": [
         {
           "site": 2951536,
@@ -11298,7 +11298,7 @@
       "address": 2951568,
       "name": "Gap__Core__igAliasMemoryPool__vfunc_46",
       "size": 16,
-      "source": "src/unmatched/Gap__Core__igAliasMemoryPool__vfunc_46.c",
+      "source": "src/engine/igAliasMemoryPool.cpp",
       "direct": [],
       "indirect": []
     },
@@ -11306,7 +11306,7 @@
       "address": 2951584,
       "name": "Gap__Core__igAliasMemoryPool__vfunc_47",
       "size": 8,
-      "source": "src/engine/Gap__Core__igAliasMemoryPool__vfunc_47.c",
+      "source": "src/engine/igAliasMemoryPool.cpp",
       "direct": [],
       "indirect": []
     },
@@ -11314,7 +11314,7 @@
       "address": 2951600,
       "name": "Gap__Core__igAliasMemoryPool__vfunc_48",
       "size": 8,
-      "source": "src/engine/Gap__Core__igAliasMemoryPool__vfunc_48.c",
+      "source": "src/engine/igAliasMemoryPool.cpp",
       "direct": [],
       "indirect": []
     },
@@ -11322,7 +11322,7 @@
       "address": 2951616,
       "name": "Gap__Core__igAliasMemoryPool__vfunc_101",
       "size": 8,
-      "source": "src/engine/Gap__Core__igAliasMemoryPool__vfunc_101.c",
+      "source": "src/engine/igAliasMemoryPool.cpp",
       "direct": [],
       "indirect": []
     },
@@ -11330,7 +11330,7 @@
       "address": 2951632,
       "name": "Gap__Core__igAliasMemoryPool__vfunc_102",
       "size": 8,
-      "source": "src/engine/Gap__Core__igAliasMemoryPool__vfunc_102.c",
+      "source": "src/engine/igAliasMemoryPool.cpp",
       "direct": [],
       "indirect": []
     },
@@ -11338,7 +11338,7 @@
       "address": 2951648,
       "name": "Gap__Core__igAliasMemoryPool__vfunc_49",
       "size": 16,
-      "source": "src/unmatched/Gap__Core__igAliasMemoryPool__vfunc_49.c",
+      "source": "src/engine/igAliasMemoryPool.cpp",
       "direct": [],
       "indirect": []
     },
@@ -11346,7 +11346,7 @@
       "address": 2951664,
       "name": "Gap__Core__igAliasMemoryPool__vfunc_53",
       "size": 20,
-      "source": "src/engine/alias-pool-tail.cpp",
+      "source": "src/engine/igAliasMemoryPool.cpp",
       "direct": [],
       "indirect": [
         {
@@ -11360,7 +11360,7 @@
       "address": 2951696,
       "name": "igAliasMemoryPool_Lock",
       "size": 52,
-      "source": "src/engine/igAliasMemoryPool_Lock.cpp",
+      "source": "src/engine/igAliasMemoryPool.cpp",
       "direct": [],
       "indirect": [
         {
@@ -11374,7 +11374,7 @@
       "address": 2951760,
       "name": "igAliasMemoryPool_Unlock",
       "size": 48,
-      "source": "src/engine/igAliasMemoryPool_Unlock.cpp",
+      "source": "src/engine/igAliasMemoryPool.cpp",
       "direct": [],
       "indirect": [
         {
@@ -11388,7 +11388,7 @@
       "address": 2951808,
       "name": "igAliasMemoryPool_UnlockAndReturn",
       "size": 64,
-      "source": "src/engine/igAliasMemoryPool_UnlockAndReturn.cpp",
+      "source": "src/engine/igAliasMemoryPool.cpp",
       "direct": [],
       "indirect": [
         {
@@ -11402,7 +11402,7 @@
       "address": 2951872,
       "name": "Gap__Core__igAliasMemoryPool__vfunc_54",
       "size": 28,
-      "source": "src/engine/alias-pool-tail.cpp",
+      "source": "src/engine/igAliasMemoryPool.cpp",
       "direct": [],
       "indirect": [
         {
@@ -11416,7 +11416,7 @@
       "address": 2951904,
       "name": "Gap__Core__igAliasMemoryPool__vfunc_55",
       "size": 32,
-      "source": "src/engine/alias-pool-tail.cpp",
+      "source": "src/engine/igAliasMemoryPool.cpp",
       "direct": [],
       "indirect": [
         {
@@ -11430,7 +11430,7 @@
       "address": 2951936,
       "name": "Gap__Core__igAliasMemoryPool__vfunc_56",
       "size": 104,
-      "source": "src/unmatched/Gap__Core__igAliasMemoryPool__vfunc_56.cpp",
+      "source": "src/engine/igAliasMemoryPool.cpp",
       "direct": [
         {
           "site": 2952008,
@@ -11451,7 +11451,7 @@
       "address": 2952048,
       "name": "Gap__Core__igAliasMemoryPool__vfunc_57",
       "size": 100,
-      "source": "src/unmatched/Gap__Core__igAliasMemoryPool__vfunc_57.cpp",
+      "source": "src/engine/igAliasMemoryPool.cpp",
       "direct": [
         {
           "site": 2952116,
@@ -11472,7 +11472,7 @@
       "address": 2952160,
       "name": "Gap__Core__igAliasMemoryPool__vfunc_58",
       "size": 20,
-      "source": "src/engine/alias-pool-tail.cpp",
+      "source": "src/engine/igAliasMemoryPool.cpp",
       "direct": [],
       "indirect": [
         {
@@ -11486,7 +11486,7 @@
       "address": 2952192,
       "name": "Gap__Core__igAliasMemoryPool__vfunc_59",
       "size": 16,
-      "source": "src/engine/alias-pool-tail.cpp",
+      "source": "src/engine/igAliasMemoryPool.cpp",
       "direct": [],
       "indirect": [
         {
@@ -11500,7 +11500,7 @@
       "address": 2952208,
       "name": "Gap__Core__igAliasMemoryPool__vfunc_65",
       "size": 188,
-      "source": "src/engine/Gap__Core__igAliasMemoryPool__vfunc_65.cpp",
+      "source": "src/engine/igAliasMemoryPool.cpp",
       "direct": [],
       "indirect": [
         {
@@ -11529,7 +11529,7 @@
       "address": 2952400,
       "name": "Gap__Core__igAliasMemoryPool__vfunc_62",
       "size": 64,
-      "source": "src/engine/Gap__Core__igAliasMemoryPool__vfunc_62.cpp",
+      "source": "src/engine/igAliasMemoryPool.cpp",
       "direct": [],
       "indirect": [
         {
@@ -11543,7 +11543,7 @@
       "address": 2952464,
       "name": "Gap__Core__igAliasMemoryPool__vfunc_63",
       "size": 64,
-      "source": "src/engine/Gap__Core__igAliasMemoryPool__vfunc_63.cpp",
+      "source": "src/engine/igAliasMemoryPool.cpp",
       "direct": [],
       "indirect": [
         {
@@ -11557,7 +11557,7 @@
       "address": 2952528,
       "name": "Gap__Core__igAliasMemoryPool__vfunc_64",
       "size": 48,
-      "source": "src/engine/Gap__Core__igAliasMemoryPool__vfunc_64.cpp",
+      "source": "src/engine/igAliasMemoryPool.cpp",
       "direct": [],
       "indirect": [
         {
@@ -11571,7 +11571,7 @@
       "address": 2952576,
       "name": "igAliasMemoryPool_Free",
       "size": 24,
-      "source": "src/engine/alias-pool-tail.cpp",
+      "source": "src/engine/igAliasMemoryPool.cpp",
       "direct": [],
       "indirect": [
         {
@@ -11585,7 +11585,7 @@
       "address": 2952608,
       "name": "igAliasMemoryPool_OwnsAllocation",
       "size": 140,
-      "source": "src/unmatched/igAliasMemoryPool_OwnsAllocation.cpp",
+      "source": "src/engine/igAliasMemoryPool.cpp",
       "direct": [
         {
           "site": 2952676,
@@ -11606,7 +11606,7 @@
       "address": 2952752,
       "name": "igAliasMemoryPool_GetAllocationSize",
       "size": 20,
-      "source": "src/engine/alias-pool-tail.cpp",
+      "source": "src/engine/igAliasMemoryPool.cpp",
       "direct": [],
       "indirect": [
         {
@@ -11620,7 +11620,7 @@
       "address": 2952784,
       "name": "igAliasMemoryPool_PrintStatistics",
       "size": 456,
-      "source": "src/unmatched/igAliasMemoryPool_PrintStatistics.cpp",
+      "source": "src/engine/igAliasMemoryPool.cpp",
       "direct": [
         {
           "site": 2952848,
@@ -11700,7 +11700,7 @@
       "address": 2953248,
       "name": "igAliasMemoryPool_GetEventTracker",
       "size": 8,
-      "source": "src/engine/igAliasMemoryPool_GetEventTracker.c",
+      "source": "src/engine/igAliasMemoryPool.cpp",
       "direct": [],
       "indirect": []
     },
@@ -11708,7 +11708,7 @@
       "address": 2953264,
       "name": "igAliasMemoryPool_SetEventTracker",
       "size": 116,
-      "source": "src/engine/igAliasMemoryPool_SetEventTracker.c",
+      "source": "src/engine/igAliasMemoryPool.cpp",
       "direct": [
         {
           "site": 2953348,
@@ -11723,7 +11723,7 @@
       "address": 2953392,
       "name": "igAliasMemoryPool_Dump",
       "size": 312,
-      "source": "src/unmatched/igAliasMemoryPool_Dump.cpp",
+      "source": "src/engine/igAliasMemoryPool.cpp",
       "direct": [
         {
           "site": 2953416,
@@ -11796,7 +11796,7 @@
       "address": 2953712,
       "name": "igAliasMemoryPool_GetPoolIndex",
       "size": 8,
-      "source": "src/engine/igAliasMemoryPool_GetPoolIndex.c",
+      "source": "src/engine/igAliasMemoryPool.cpp",
       "direct": [],
       "indirect": []
     },
@@ -11804,7 +11804,7 @@
       "address": 2953728,
       "name": "igAliasMemoryPool_SetPoolIndex",
       "size": 8,
-      "source": "src/engine/igAliasMemoryPool_SetPoolIndex.c",
+      "source": "src/engine/igAliasMemoryPool.cpp",
       "direct": [],
       "indirect": []
     },
@@ -11812,7 +11812,7 @@
       "address": 2953744,
       "name": "igAliasMemoryPool_ManageAllocation",
       "size": 740,
-      "source": "src/unmatched/igAliasMemoryPool_ManageAllocation.cpp",
+      "source": "src/engine/igAliasMemoryPool.cpp",
       "direct": [
         {
           "site": 2953792,
@@ -11903,7 +11903,7 @@
       "address": 2954496,
       "name": "igAliasMemoryPool_Initialize",
       "size": 64,
-      "source": "src/engine/igAliasMemoryPool_Initialize.c",
+      "source": "src/engine/igAliasMemoryPool.cpp",
       "direct": [
         {
           "site": 2954508,
@@ -11918,7 +11918,7 @@
       "address": 2954560,
       "name": "igAliasMemoryPool_Construct",
       "size": 76,
-      "source": "src/engine/igAliasMemoryPool_Construct.c",
+      "source": "src/engine/igAliasMemoryPool.cpp",
       "direct": [
         {
           "site": 2954572,
@@ -11939,7 +11939,7 @@
       "address": 2954704,
       "name": "Gap__Core__igAliasMemoryPool__vfunc_02",
       "size": 108,
-      "source": "src/engine/alias-pool-destruction.cpp",
+      "source": "src/engine/igAliasMemoryPool.cpp",
       "direct": [
         {
           "site": 2954764,

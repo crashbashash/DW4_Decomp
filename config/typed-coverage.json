@@ -436,7 +436,7 @@
   "igGuiComponentModel": 4,
   "igGuiSystem": 6,
   "igGuiSystemModel": 10,
-  "igIGBFile": 49,
+  "igIGBFile": 45,
   "igImage": 19,
   "igInfo": 2,
   "igInfoList": 28,
@@ -566,7 +566,7 @@
   "igStringMetaField": 64,
   "igStringObj": 20,
   "igStringObjList": 2,
-  "igStringRefList": 57,
+  "igStringRefList": 58,
   "igStructMetaField": 11,
   "igSwitch": 1,
   "igSymbolTable": 4,
@@ -638,13 +638,13 @@
    "total": 3043
   },
   "engine": {
-   "files": 3152,
-   "offset_casts": 938,
-   "other_members": 3738,
-   "recovered": 2132,
-   "recovered_pct": 23.57,
-   "synthetic": 2236,
-   "total": 9044
+   "files": 3116,
+   "offset_casts": 984,
+   "other_members": 4206,
+   "recovered": 2179,
+   "recovered_pct": 20.77,
+   "synthetic": 3121,
+   "total": 10490
   },
   "game": {
    "files": 1590,
@@ -728,19 +728,19 @@
    "total": 3776
   },
   "unmatched": {
-   "files": 11125,
-   "offset_casts": 5420,
-   "other_members": 12328,
-   "recovered": 21373,
-   "recovered_pct": 45.84,
-   "synthetic": 7509,
-   "total": 46630
+   "files": 10981,
+   "offset_casts": 5374,
+   "other_members": 11901,
+   "recovered": 21323,
+   "recovered_pct": 47.14,
+   "synthetic": 6640,
+   "total": 45238
   }
  },
  "note": "Baseline for tools/typed_coverage.py --check. The gate is on the *count* of recovered accesses, never on the percentage: the m2c loop keeps adding matched (and so untyped) C, so the ratio can fall while the count only grows. Update it deliberately with --update-baseline and commit, so every change in coverage is a reviewed diff.",
  "offset_casts": 6468,
- "recovered": 26061,
- "synthetic": 10276,
- "total": 66508,
+ "recovered": 26058,
+ "synthetic": 10292,
+ "total": 66562,
  "typeable": 359
 }

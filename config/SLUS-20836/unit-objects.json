@@ -457,15 +457,6 @@
       "__dl__FPv": "0x00100610"
     }
   },
-  "0x002d10b0": {
-    "emitted": {},
-    "duplicates": {
-      "__dt__18igSmartPointer<1V>Fv": "0x0038c410"
-    },
-    "externals": {
-      "__dl__FPv": "0x00100610"
-    }
-  },
   "0x003d4390": {
     "emitted": {},
     "duplicates": {
@@ -5174,62 +5165,6 @@
       "__dl__FPv": "0x00100610"
     }
   },
-  "0x002e8670": {
-    "emitted": {},
-    "duplicates": {
-      "__dt__3RefFv": "0x00130140"
-    },
-    "externals": {
-      "__dl__FPv": "0x00100610"
-    }
-  },
-  "0x002e9ce0": {
-    "emitted": {},
-    "duplicates": {
-      "__dt__3RefFv": "0x00130140"
-    },
-    "externals": {
-      "__dl__FPv": "0x00100610"
-    }
-  },
-  "0x002e4a40": {
-    "emitted": {},
-    "duplicates": {
-      "__dt__3RefFv": "0x00130140"
-    },
-    "externals": {
-      "__dl__FPv": "0x00100610"
-    }
-  },
-  "0x002e42d0": {
-    "emitted": {},
-    "duplicates": {
-      "__dt__3RefFv": "0x00130140"
-    },
-    "externals": {
-      "__dl__FPv": "0x00100610"
-    }
-  },
-  "0x002e82a0": {
-    "emitted": {},
-    "duplicates": {
-      "__dt__3RefFv": "0x00130140"
-    },
-    "externals": {
-      "__dl__FPv": "0x00100610"
-    },
-    "stripped": [
-      "__dt__14TypeListHolderFv"
-    ]
-  },
-  "0x002e3a60": {
-    "emitted": {},
-    "duplicates": {},
-    "externals": {},
-    "stripped": [
-      "__dt__12StreamHolderFv"
-    ]
-  },
   "0x002e18f0": {
     "emitted": {},
     "duplicates": {},
@@ -5278,15 +5213,6 @@
     "emitted": {},
     "duplicates": {
       "__dt__15FolderObjectRefFv": "0x00130140"
-    },
-    "externals": {
-      "__dl__FPv": "0x00100610"
-    }
-  },
-  "0x0032a280": {
-    "emitted": {},
-    "duplicates": {
-      "__dt__13DumpObjectRefFv": "0x00130140"
     },
     "externals": {
       "__dl__FPv": "0x00100610"
@@ -5709,15 +5635,6 @@
       "__dl__FPv": "0x00100610"
     }
   },
-  "0x00234d70": {
-    "duplicates": {
-      "__dt__9StringRefFv": "0x00130720",
-      "__dt__36igSmartPointer<18InternedStringList>Fv": "0x0025a230"
-    },
-    "externals": {
-      "__dl__FPv": "0x00100610"
-    }
-  },
   "0x00236140": {
     "duplicates": {
       "__dt__29igSmartPointer<11NamedObject>Fv": "0x0025a230"
@@ -5840,14 +5757,6 @@
       "__dl__FPv": "0x00100610"
     }
   },
-  "0x002d06c0": {
-    "duplicates": {
-      "__dt__21igSmartPointer<4Lock>Fv": "0x0025a230"
-    },
-    "externals": {
-      "__dl__FPv": "0x00100610"
-    }
-  },
   "0x002d9540": {
     "duplicates": {
       "__dt__11PropertyRefFv": "0x0025a230"
@@ -5891,14 +5800,6 @@
   "0x0032d220": {
     "duplicates": {
       "__dt__18igSmartPointer<1O>Fv": "0x0025a230"
-    },
-    "externals": {
-      "__dl__FPv": "0x00100610"
-    }
-  },
-  "0x002e7100": {
-    "duplicates": {
-      "__dt__18igSmartPointer<1T>Fv": "0x0025a230"
     },
     "externals": {
       "__dl__FPv": "0x00100610"
@@ -6234,14 +6135,6 @@
   "0x002d87b0": {
     "duplicates": {
       "__dt__33igSmartPointer<15FieldLinkRecord>Fv": "0x0025a230"
-    },
-    "externals": {
-      "__dl__FPv": "0x00100610"
-    }
-  },
-  "0x00235370": {
-    "duplicates": {
-      "__dt__9StringRefFv": "0x00130720"
     },
     "externals": {
       "__dl__FPv": "0x00100610"
@@ -6745,14 +6638,6 @@
       "__dl__FPv": "0x00100610"
     }
   },
-  "0x002e7390": {
-    "duplicates": {
-      "__dt__31igSmartPointer<13SectionObject>Fv": "0x0025a230"
-    },
-    "externals": {
-      "__dl__FPv": "0x00100610"
-    }
-  },
   "0x0023b430": {
     "duplicates": {
       "__dt__33igSmartPointer<15igCollisionCell>Fv": "0x0025a230"
@@ -6780,24 +6665,6 @@
   "0x00301130": {
     "duplicates": {
       "__dt__26igSmartPointer<9EntryList>Fv": "0x0025a230"
-    },
-    "externals": {
-      "__dl__FPv": "0x00100610"
-    }
-  },
-  "0x002e79a0": {
-    "duplicates": {
-      "__dt__31igSmartPointer<13SectionObject>Fv": "0x0025a230"
-    },
-    "externals": {
-      "__dl__FPv": "0x00100610"
-    }
-  },
-  "0x00234ee0": {
-    "duplicates": {
-      "__dt__9StringRefFv": "0x00130720",
-      "__dt__36igSmartPointer<18InternedStringList>Fv": "0x0025a230",
-      "__dt__28igSmartPointer<10TextBuffer>Fv": "0x0025a2b0"
     },
     "externals": {
       "__dl__FPv": "0x00100610"
@@ -10698,5 +10565,498 @@
       "__dt__19igSmartPointer<2Ob>Fv"
     ],
     "symbol": "Gap__Core__igPageMemoryPool__vfunc_02"
+  },
+  "0x00328e00": {
+    "whole_file": true,
+    "emitted": {
+      "FUN_00328e50": "0x00328e50",
+      "FUN_00328ed0": "0x00328ed0",
+      "FUN_00328f20": "0x00328f20",
+      "FUN_00328f70": "0x00328f70",
+      "FUN_00328f80": "0x00328f80",
+      "FUN_00328f90": "0x00328f90",
+      "FUN_00329000": "0x00329000",
+      "FUN_00329010": "0x00329010",
+      "FUN_00329030": "0x00329030",
+      "FUN_00329070": "0x00329070",
+      "FUN_00329170": "0x00329170",
+      "FUN_00329180": "0x00329180",
+      "FUN_00329190": "0x00329190",
+      "FUN_003291a0": "0x003291a0",
+      "FUN_00329280": "0x00329280",
+      "FUN_00329460": "0x00329460",
+      "FUN_00329540": "0x00329540",
+      "FUN_00329570": "0x00329570",
+      "FUN_00329590": "0x00329590",
+      "FUN_003295a0": "0x003295a0",
+      "FUN_003295b0": "0x003295b0",
+      "FUN_003295c0": "0x003295c0",
+      "FUN_003295d0": "0x003295d0",
+      "FUN_003296d0": "0x003296d0",
+      "FUN_003296e0": "0x003296e0",
+      "FUN_00329860": "0x00329860",
+      "FUN_00329980": "0x00329980",
+      "FUN_00329b00": "0x00329b00",
+      "FUN_00329b10": "0x00329b10",
+      "FUN_00329b20": "0x00329b20",
+      "FUN_00329b40": "0x00329b40",
+      "FUN_00329b60": "0x00329b60",
+      "FUN_00329ca0": "0x00329ca0",
+      "FUN_00329e70": "0x00329e70",
+      "FUN_0032a100": "0x0032a100",
+      "FUN_0032a130": "0x0032a130",
+      "FUN_0032a180": "0x0032a180",
+      "FUN_0032a1b0": "0x0032a1b0",
+      "FUN_0032a1e0": "0x0032a1e0",
+      "FUN_0032a220": "0x0032a220",
+      "FUN_0032a260": "0x0032a260",
+      "FUN_0032a280": "0x0032a280",
+      "FUN_0032a5f0": "0x0032a5f0",
+      "FUN_0032a600": "0x0032a600",
+      "FUN_0032a900": "0x0032a900",
+      "FUN_0032ab90": "0x0032ab90",
+      "FUN_0032aba0": "0x0032aba0",
+      "FUN_0032abb0": "0x0032abb0",
+      "FUN_0032ac40": "0x0032ac40",
+      "FUN_0032ac50": "0x0032ac50",
+      "FUN_0032ac60": "0x0032ac60",
+      "FUN_0032ac70": "0x0032ac70",
+      "FUN_0032aca0": "0x0032aca0",
+      "FUN_0032ace0": "0x0032ace0",
+      "FUN_0032ad50": "0x0032ad50",
+      "FUN_0032ae00": "0x0032ae00",
+      "FUN_0032ae70": "0x0032ae70",
+      "FUN_0032aea0": "0x0032aea0"
+    },
+    "data": {
+      "DAT_004f7910": "0x004f7910",
+      "DAT_004f95c8": "0x004f95c8",
+      "DAT_004fac08": "0x004fac08",
+      "DAT_004fb410": "0x004fb410",
+      "DAT_004fb418": "0x004fb418",
+      "DAT_004ff590": "0x004ff590",
+      "DAT_004ff5c0": "0x004ff5c0",
+      "DAT_004ff5c8": "0x004ff5c8",
+      "DAT_004ff5e0": "0x004ff5e0",
+      "DAT_004ff600": "0x004ff600",
+      "DAT_004ff630": "0x004ff630",
+      "DAT_004ff660": "0x004ff660",
+      "DAT_004ff690": "0x004ff690",
+      "DAT_004ff6c0": "0x004ff6c0",
+      "DAT_004ff6f0": "0x004ff6f0",
+      "DAT_004ff720": "0x004ff720",
+      "DAT_004ff750": "0x004ff750",
+      "DAT_004ff780": "0x004ff780",
+      "DAT_004ff7b0": "0x004ff7b0",
+      "DAT_004ff7e0": "0x004ff7e0",
+      "DAT_004ff810": "0x004ff810",
+      "DAT_004ff840": "0x004ff840",
+      "DAT_004ff870": "0x004ff870",
+      "DAT_004ff8a0": "0x004ff8a0",
+      "DAT_004ff8d0": "0x004ff8d0",
+      "DAT_004ff900": "0x004ff900",
+      "DAT_004ff930": "0x004ff930",
+      "DAT_004ff960": "0x004ff960",
+      "DAT_004ff990": "0x004ff990",
+      "DAT_004ff9c0": "0x004ff9c0",
+      "DAT_004ff9f0": "0x004ff9f0",
+      "DAT_004ffa00": "0x004ffa00",
+      "DAT_004ffa10": "0x004ffa10",
+      "DAT_004ffa30": "0x004ffa30",
+      "DAT_004ffa38": "0x004ffa38",
+      "DAT_004ffa40": "0x004ffa40",
+      "DAT_004ffa50": "0x004ffa50",
+      "DAT_004ffa60": "0x004ffa60",
+      "DAT_004ffa88": "0x004ffa88",
+      "DAT_004ffa98": "0x004ffa98",
+      "DAT_004ffaa0": "0x004ffaa0",
+      "DAT_004ffab0": "0x004ffab0",
+      "DAT_004ffad0": "0x004ffad0",
+      "DAT_004ffaf0": "0x004ffaf0",
+      "DAT_004ffb08": "0x004ffb08",
+      "DAT_004ffb18": "0x004ffb18",
+      "DAT_004ffb28": "0x004ffb28",
+      "DAT_004ffb38": "0x004ffb38",
+      "DAT_004ffb48": "0x004ffb48",
+      "DAT_004ffb60": "0x004ffb60",
+      "DAT_00587030": "0x00587030",
+      "DAT_00587220": "0x00587220",
+      "DAT_00587328": "0x00587328",
+      "g_rangeEnd": "0x00587320",
+      "g_rangeStart": "0x004c2610",
+      "g_vtable": "0x0052dd30"
+    },
+    "stripped": [
+      "__dt__13DumpObjectRefFv"
+    ],
+    "externals": {
+      "FUN_002d6680": "0x002d6680"
+    },
+    "symbol": "FUN_00328e00"
+  },
+  "0x0032aed0": {
+    "whole_file": true,
+    "emitted": {
+      "thunk_Gap__Core__igCallStackTracer__vfunc_25": "0x0032af40",
+      "Gap__Core__igPsx2CallStackTracer__vfunc_31": "0x0032af50"
+    },
+    "data": {
+      "DAT_004c2618": "0x004c2618",
+      "DAT_004c2620": "0x004c2620"
+    }
+  },
+  "0x00233a90": {
+    "whole_file": true,
+    "emitted": {
+      "igFlushRenderer_GetVTable": "0x00233ae0",
+      "FUN_00233b80": "0x00233b80",
+      "igFlushRenderer_Register": "0x00233b90",
+      "thunk_igFlushRenderer_GetMetaObject": "0x00233c00"
+    },
+    "data": {
+      "DAT_0052ca80": "0x0052ca80",
+      "DAT_0052d060": "0x0052d060",
+      "DAT_00586dc8": "0x00586dc8",
+      "g_igFlushRenderer_metaObject": "0x0056dc48",
+      "igFlushRenderer_className": "0x004e87b0",
+      "igRenderer_GetPublishedMetaObject": "0x00231010"
+    },
+    "symbol": "igFlushRenderer_GetMetaObject"
+  },
+  "0x00233c10": {
+    "whole_file": true,
+    "emitted": {
+      "FUN_002342b0": "0x002342b0",
+      "FUN_002342e0": "0x002342e0",
+      "FUN_00234300": "0x00234300",
+      "FUN_00234350": "0x00234350",
+      "FUN_002343d0": "0x002343d0",
+      "FUN_00234470": "0x00234470",
+      "FUN_00234510": "0x00234510",
+      "FUN_00234560": "0x00234560",
+      "FUN_002345b0": "0x002345b0",
+      "FUN_002346c0": "0x002346c0",
+      "FUN_00234770": "0x00234770",
+      "thunk_FUN_00234510": "0x00234800",
+      "FUN_00234810": "0x00234810",
+      "FUN_00234860": "0x00234860",
+      "FUN_002348b0": "0x002348b0",
+      "FUN_00234900": "0x00234900",
+      "FUN_00234b90": "0x00234b90",
+      "FUN_00234ca0": "0x00234ca0",
+      "FUN_00234d70": "0x00234d70",
+      "FUN_00235370": "0x00235370"
+    },
+    "data": {
+      "@196": "0x005548c8",
+      "@197": "0x00554948",
+      "@198": "0x00554968",
+      "DAT_004e95d0": "0x004e95d0",
+      "DAT_004e95f8": "0x004e95f8",
+      "DAT_004e9600": "0x004e9600",
+      "DAT_004e9610": "0x004e9610",
+      "DAT_004e9630": "0x004e9630",
+      "DAT_004e9650": "0x004e9650",
+      "DAT_004e9680": "0x004e9680",
+      "DAT_004e96b0": "0x004e96b0",
+      "DAT_004e96c0": "0x004e96c0",
+      "DAT_004e96e0": "0x004e96e0",
+      "DAT_0056dc50": "0x0056dc50",
+      "DAT_00586f20": "0x00586f20",
+      "DAT_00587028": "0x00587028",
+      "DAT_00587060": "0x00587060",
+      "GPR_00554c14": "0x00554c14",
+      "allocateVisualContextInScratchpad": "0x004e9560",
+      "allocate_visual_context_from_scrat": "0x004e9590",
+      "alphaBits": "0x004e9240",
+      "alphaTest": "0x004e8fa0",
+      "alphaTestReference": "0x004e9020",
+      "autoHeadLight": "0x004e8c30",
+      "autoPlanes": "0x004e8ac8",
+      "autoSceneLights": "0x004e8be0",
+      "autoSelectCamera": "0x004e8a40",
+      "backfaceCullingMode": "0x004e8f10",
+      "benchmark": "0x004e9408",
+      "benchmarkFrames": "0x004e94b0",
+      "benchmarkSkipFrames": "0x004e9450",
+      "clearColor": "0x004e8e50",
+      "colorBits": "0x004e9200",
+      "columnStatistics": "0x004e9500",
+      "dashdash": "0x004e9710",
+      "depthBits": "0x004e9280",
+      "enableMayaControls": "0x004e93c0",
+      "enable_head_light_if_not_automatic": "0x004e8cf0",
+      "enables_or_disable_maya_controls": "0x004e93e0",
+      "enables_or_disable_the_benchmark_m": "0x004e9420",
+      "farPlane": "0x004e8b48",
+      "find_automatically_near_and_far_cl": "0x004e8ae0",
+      "forceAlphaTest": "0x004e8fd0",
+      "forceBackfaceCulling": "0x004e8f50",
+      "forceWireframe": "0x004e8ec0",
+      "force_alpha_test_on_all_geometries": "0x004e8ff0",
+      "force_back_face_culling_on_all_geo": "0x004e8f70",
+      "force_wireframe_on_all_geometries": "0x004e8ee0",
+      "g_vec3Zero": "0x004e1058",
+      "g_vec4Zero": "0x004e1170",
+      "halfBuffer": "0x004e9100",
+      "headLightAmbient": "0x004e8e00",
+      "headLightDiffuse": "0x004e8d60",
+      "headLightSpecular": "0x004e8db0",
+      "height": "0x004e9188",
+      "help": "0x004e9700",
+      "help_prints_this_message": "0x004e8870",
+      "hfov": "0x004e8a90",
+      "if_set_reports_requested_and_actua": "0x004e9320",
+      "invalidNormalsPrecision": "0x004e89f0",
+      "invalidStoredNormalsColor": "0x004e8960",
+      "maximumFrameRate": "0x004e9060",
+      "n": "0x004e9708",
+      "n_number_loads_n_instances_of_the_": "0x004e8820",
+      "nearPlane": "0x004e8b10",
+      "nologo_removes_the_logo_display": "0x004e8890",
+      "normalsColor": "0x004e8930",
+      "optimizeTextures": "0x004e90c0",
+      "output_statistics_to_console_in_co": "0x004e9520",
+      "palVideoMode": "0x004e9130",
+      "possible_options_are": "0x004e8850",
+      "reportVideoFormat": "0x004e9300",
+      "scaledNormalsColor": "0x004e89b0",
+      "select_the_first_camera_if_any_in_": "0x004e8a60",
+      "sets_alpha_buffer_bits_1_means_def": "0x004e9250",
+      "sets_alpha_test_reference_value": "0x004e9040",
+      "sets_alpha_test_state": "0x004e8fb0",
+      "sets_automatic_usage_of_head_light": "0x004e8c50",
+      "sets_automatic_usage_of_scene_ligh": "0x004e8c00",
+      "sets_back_face_culling_mode": "0x004e8f30",
+      "sets_color_buffer_bits_1_means_def": "0x004e9210",
+      "sets_depth_buffer_bits_1_means_def": "0x004e9290",
+      "sets_initial_gui_visibility": "0x004e93a0",
+      "sets_pal_video_mode": "0x004e9150",
+      "sets_psx2_half_buffer_mode": "0x004e9110",
+      "sets_stencil_buffer_bits_1_means_d": "0x004e92d0",
+      "sets_the_ambient_color_for_the_hea": "0x004e8e20",
+      "sets_the_clear_color": "0x004e8e60",
+      "sets_the_default_far_clipping_plan": "0x004e8b60",
+      "sets_the_default_near_clipping_pla": "0x004e8b20",
+      "sets_the_default_up_vector_0_0_0_m": "0x004e8ba0",
+      "sets_the_diffuse_color_for_the_hea": "0x004e8d80",
+      "sets_the_horizontal_field_of_view": "0x004e8aa0",
+      "sets_the_maximum_frame_rate_0_mean": "0x004e9080",
+      "sets_the_non_normalized_stored_nor": "0x004e8980",
+      "sets_the_normals_color": "0x004e8940",
+      "sets_the_number_of_frames_to_bench": "0x004e94d0",
+      "sets_the_number_of_frames_to_skip_": "0x004e9470",
+      "sets_the_precision_on_the_normals_": "0x004e8a10",
+      "sets_the_scaled_normals_color": "0x004e89d0",
+      "sets_the_specular_color_for_the_he": "0x004e8dd0",
+      "sets_the_swap_interval_0_means_no_": "0x004e91d0",
+      "sets_wireframe_mode": "0x004e8ea0",
+      "share_textures_at_load_time": "0x004e90e0",
+      "showBbox": "0x004e88b8",
+      "showLogo": "0x004e9358",
+      "showNormals": "0x004e88f8",
+      "showUi": "0x004e9388",
+      "show_bounding_box_on_selected_obje": "0x004e88d0",
+      "show_normals_on_selected_object": "0x004e8910",
+      "shows_alchemy_logo": "0x004e9370",
+      "stencilBits": "0x004e92c0",
+      "swapInterval": "0x004e91c0",
+      "unrecognized": "0x004e9720",
+      "upVector": "0x004e8b88",
+      "usage_s_option1_option2_n_number_f": "0x004e87c0",
+      "useHeadLight": "0x004e8cd0",
+      "useHeadLightSpecular": "0x004e8d20",
+      "useSceneLights": "0x004e8c80",
+      "use_scene_lights_if_not_automatic": "0x004e8ca0",
+      "use_specular_head_light": "0x004e8d40",
+      "viewer_window_height": "0x004e91a0",
+      "viewer_window_width": "0x004e9170",
+      "width": "0x004e9168",
+      "wireframeMode": "0x004e8e80"
+    },
+    "stripped": [
+      "__dt__36igSmartPointer<18InternedStringList>Fv",
+      "__dt__9StringRefFv"
+    ],
+    "symbol": "FUN_00233c10"
+  },
+  "0x002e3a10": {
+    "whole_file": true,
+    "emitted": {
+      "FUN_002e3a60": "0x002e3a60",
+      "FUN_002e3cb0": "0x002e3cb0",
+      "FUN_002e3d30": "0x002e3d30",
+      "FUN_002e3e30": "0x002e3e30",
+      "FUN_002e3f50": "0x002e3f50",
+      "FUN_002e4090": "0x002e4090",
+      "FUN_002e4120": "0x002e4120",
+      "FUN_002e4240": "0x002e4240",
+      "FUN_002e42d0": "0x002e42d0",
+      "FUN_002e47f0": "0x002e47f0",
+      "FUN_002e4a40": "0x002e4a40",
+      "FUN_002e4c90": "0x002e4c90",
+      "FUN_002e4e60": "0x002e4e60",
+      "FUN_002e5110": "0x002e5110",
+      "FUN_002e53f0": "0x002e53f0",
+      "FUN_002e54e0": "0x002e54e0",
+      "FUN_002e5590": "0x002e5590",
+      "FUN_002e56f0": "0x002e56f0",
+      "FUN_002e5950": "0x002e5950",
+      "FUN_002e5990": "0x002e5990",
+      "FUN_002e5ac0": "0x002e5ac0",
+      "Gap__Core__igIGBFile__vfunc_28": "0x002e5b20",
+      "FUN_002e5f70": "0x002e5f70",
+      "igIGBFile_ReadHeader": "0x002e6090",
+      "FUN_002e6330": "0x002e6330",
+      "FUN_002e6f50": "0x002e6f50",
+      "FUN_002e7000": "0x002e7000",
+      "FUN_002e7030": "0x002e7030",
+      "igIGBFile_ReadObject": "0x002e7100",
+      "igIGBFile_ReadObjectSection": "0x002e7390",
+      "FUN_002e7640": "0x002e7640",
+      "FUN_002e78b0": "0x002e78b0",
+      "igIGBFile_ReadObjectSectionOld": "0x002e79a0",
+      "Gap__Core__igIGBFile__vfunc_27": "0x002e7dd0",
+      "Gap__Core__igIGBFile__vfunc_26": "0x002e7e00",
+      "FUN_002e7ed0": "0x002e7ed0",
+      "FUN_002e7f20": "0x002e7f20",
+      "Gap__Core__igIGBFile__vfunc_13": "0x002e8170",
+      "FUN_002e82a0": "0x002e82a0",
+      "FUN_002e8670": "0x002e8670",
+      "FUN_002e8880": "0x002e8880",
+      "FUN_002e8a10": "0x002e8a10",
+      "FUN_002e8a40": "0x002e8a40",
+      "Gap__Core__igIGBFile__vfunc_04": "0x002e8c40",
+      "FUN_002e8d40": "0x002e8d40",
+      "FUN_002e8e50": "0x002e8e50",
+      "FUN_002e91e0": "0x002e91e0",
+      "FUN_002e9470": "0x002e9470",
+      "FUN_002e94b0": "0x002e94b0",
+      "FUN_002e9560": "0x002e9560",
+      "igIGBFile_ReadFile": "0x002e95e0",
+      "Gap__Core__igIGBFile__vfunc_32": "0x002e9c30",
+      "Gap__Core__igIGBFile__vfunc_30": "0x002e9c70",
+      "Gap__Core__igIGBFile__vfunc_31": "0x002e9ce0",
+      "Gap__Core__igIGBFile__vfunc_34": "0x002e9e50",
+      "igIGBFile_GetSectionBuffer": "0x002e9f30",
+      "Gap__Core__igIGBFile__vfunc_33": "0x002ea040"
+    },
+    "data": {
+      "DAT_004c2130": "0x004c2130",
+      "DAT_004c2138": "0x004c2138",
+      "DAT_004c2140": "0x004c2140",
+      "DAT_004c22f0": "0x004c22f0",
+      "DAT_004f7910": "0x004f7910",
+      "DAT_004f9a80": "0x004f9a80",
+      "DAT_004f9ac8": "0x004f9ac8",
+      "DAT_004f9ad8": "0x004f9ad8",
+      "DAT_004f9af0": "0x004f9af0",
+      "DAT_004f9b90": "0x004f9b90",
+      "DAT_004fb410": "0x004fb410",
+      "DAT_004fb418": "0x004fb418",
+      "DAT_00585b70": "0x00585b70",
+      "DAT_00586140": "0x00586140",
+      "DAT_00586280": "0x00586280",
+      "DAT_00586710": "0x00586710",
+      "DAT_00586730": "0x00586730",
+      "DAT_00586dc8": "0x00586dc8",
+      "DAT_00586dd0": "0x00586dd0",
+      "DAT_00586e20": "0x00586e20",
+      "DAT_00586f20": "0x00586f20",
+      "DAT_00587198": "0x00587198",
+      "DAT_005871d8": "0x005871d8",
+      "D_004fb418": "0x004fb418",
+      "GPR_00554c04": "0x00554c04",
+      "GPR_00554c08": "0x00554c08",
+      "GPR_00554c0c": "0x00554c0c",
+      "g_useOwnerAllocator": "0x00554c14"
+    },
+    "stripped": [
+      "__dt__12StreamHolderFv",
+      "__dt__14TypeListHolderFv",
+      "__dt__20igSmartPointer<3T30>Fv",
+      "__dt__31igSmartPointer<13SectionObject>Fv",
+      "__dt__5Ref10Fv",
+      "__dt__5Ref12Fv",
+      "__dt__5Ref40Fv",
+      "__dt__5Ref41Fv",
+      "__dt__5Ref55Fv"
+    ],
+    "symbol": "FUN_002e3a10"
+  },
+  "0x002d0550": {
+    "whole_file": true,
+    "emitted": {
+      "igAliasMemoryPool_AssignAlias": "0x002d0560",
+      "Gap__Core__igAliasMemoryPool__vfunc_30": "0x002d0600",
+      "Gap__Core__igAliasMemoryPool__vfunc_31": "0x002d0620",
+      "Gap__Core__igAliasMemoryPool__vfunc_32": "0x002d0640",
+      "Gap__Core__igAliasMemoryPool__vfunc_33": "0x002d0670",
+      "Gap__Core__igAliasMemoryPool__vfunc_26": "0x002d0680",
+      "Gap__Core__igAliasMemoryPool__vfunc_24": "0x002d0690",
+      "Gap__Core__igAliasMemoryPool__vfunc_25": "0x002d06a0",
+      "Gap__Core__igAliasMemoryPool__vfunc_29": "0x002d06b0",
+      "Gap__Core__igAliasMemoryPool__vfunc_34": "0x002d06c0",
+      "Gap__Core__igAliasMemoryPool__vfunc_35": "0x002d08b0",
+      "Gap__Core__igAliasMemoryPool__vfunc_36": "0x002d08c0",
+      "Gap__Core__igAliasMemoryPool__vfunc_41": "0x002d08d0",
+      "Gap__Core__igAliasMemoryPool__vfunc_42": "0x002d08f0",
+      "Gap__Core__igAliasMemoryPool__vfunc_37": "0x002d0900",
+      "Gap__Core__igAliasMemoryPool__vfunc_38": "0x002d0920",
+      "Gap__Core__igAliasMemoryPool__vfunc_39": "0x002d0930",
+      "Gap__Core__igAliasMemoryPool__vfunc_40": "0x002d0950",
+      "Gap__Core__igAliasMemoryPool__vfunc_45": "0x002d0960",
+      "Gap__Core__igAliasMemoryPool__vfunc_46": "0x002d0990",
+      "Gap__Core__igAliasMemoryPool__vfunc_47": "0x002d09a0",
+      "Gap__Core__igAliasMemoryPool__vfunc_48": "0x002d09b0",
+      "Gap__Core__igAliasMemoryPool__vfunc_101": "0x002d09c0",
+      "Gap__Core__igAliasMemoryPool__vfunc_102": "0x002d09d0",
+      "Gap__Core__igAliasMemoryPool__vfunc_49": "0x002d09e0",
+      "Gap__Core__igAliasMemoryPool__vfunc_53": "0x002d09f0",
+      "igAliasMemoryPool_Lock": "0x002d0a10",
+      "igAliasMemoryPool_Unlock": "0x002d0a50",
+      "igAliasMemoryPool_UnlockAndReturn": "0x002d0a80",
+      "Gap__Core__igAliasMemoryPool__vfunc_54": "0x002d0ac0",
+      "Gap__Core__igAliasMemoryPool__vfunc_55": "0x002d0ae0",
+      "Gap__Core__igAliasMemoryPool__vfunc_56": "0x002d0b00",
+      "Gap__Core__igAliasMemoryPool__vfunc_57": "0x002d0b70",
+      "Gap__Core__igAliasMemoryPool__vfunc_58": "0x002d0be0",
+      "Gap__Core__igAliasMemoryPool__vfunc_59": "0x002d0c00",
+      "Gap__Core__igAliasMemoryPool__vfunc_65": "0x002d0c10",
+      "Gap__Core__igAliasMemoryPool__vfunc_62": "0x002d0cd0",
+      "Gap__Core__igAliasMemoryPool__vfunc_63": "0x002d0d10",
+      "Gap__Core__igAliasMemoryPool__vfunc_64": "0x002d0d50",
+      "igAliasMemoryPool_Free": "0x002d0d80",
+      "igAliasMemoryPool_OwnsAllocation": "0x002d0da0",
+      "igAliasMemoryPool_GetAllocationSize": "0x002d0e30",
+      "igAliasMemoryPool_PrintStatistics": "0x002d0e50",
+      "igAliasMemoryPool_GetEventTracker": "0x002d1020",
+      "igAliasMemoryPool_SetEventTracker": "0x002d1030",
+      "igAliasMemoryPool_Dump": "0x002d10b0",
+      "igAliasMemoryPool_GetPoolIndex": "0x002d11f0",
+      "igAliasMemoryPool_SetPoolIndex": "0x002d1200",
+      "igAliasMemoryPool_ManageAllocation": "0x002d1210",
+      "igAliasMemoryPool_Initialize": "0x002d1500",
+      "igAliasMemoryPool_Construct": "0x002d1540",
+      "igAliasMemoryPool_CopyConstruct": "0x002d1590",
+      "Gap__Core__igAliasMemoryPool__vfunc_02": "0x002d15d0"
+    },
+    "data": {
+      "DAT_004f90b0": "0x004f90b0",
+      "DAT_004f90b8": "0x004f90b8",
+      "DAT_004f90c0": "0x004f90c0",
+      "DAT_004f92b0": "0x004f92b0",
+      "DAT_004f92f0": "0x004f92f0",
+      "DAT_004fb410": "0x004fb410",
+      "DAT_004fb418": "0x004fb418",
+      "g_allocatorFailureStatus": "0x004fb418",
+      "g_igAliasMemoryPool_vtable": "0x005313a0",
+      "g_statusSucceeded": "0x004fb410"
+    },
+    "stripped": [
+      "__dt__18igSmartPointer<1V>Fv",
+      "__dt__21igSmartPointer<4Lock>Fv"
+    ],
+    "symbol": "Gap__Core__igAliasMemoryPool__vfunc_99"
   }
 }

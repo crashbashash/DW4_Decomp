@@ -62,7 +62,7 @@ invokes Initialize on a non-null receiver. Base construction, complete cloning a
 metadata/default initialization are outside this run.
 
 Teardown15d0 releases the alias reference without clearing180, invokes current
-receiver392, then base teardown2f0030. The [exact teardown](../../src/engine/alias-pool-destruction.cpp)
+receiver392, then base teardown2f0030. The teardown, in [igAliasMemoryPool.cpp](../../src/engine/igAliasMemoryPool.cpp),
 uses the low23-bit reference lifetime and genuine C++ virtual dispatch. The
 lock/tracker cleanup of parent392 is not established here.
 
@@ -130,8 +130,5 @@ make link
 make typed-check
 ```
 
-The typed backend740 is
-`src/unmatched/igAliasMemoryPool_ManageAllocation.cpp`, lock484 is
-`src/unmatched/Gap__Core__igAliasMemoryPool__vfunc_34.cpp`, and the diagnostic bodies are
-`src/unmatched/igAliasMemoryPool_PrintStatistics.cpp` and
-`src/unmatched/igAliasMemoryPool_Dump.cpp`.
+The typed backend740, lock484 and the diagnostic bodies (statistics and dump) are in the class's
+whole file, [igAliasMemoryPool.cpp](../../src/engine/igAliasMemoryPool.cpp).
