@@ -258,12 +258,14 @@ class ForeignProfileCategory(Fixture):
         self.digest = hashlib.sha256(self.mwcc.read_bytes()).hexdigest()
         self.source = self.root / "cand.c"
         self.source.write_text(SOURCE)
+        self.ungrouped = self.root / "unit-objects.json"
+        self.ungrouped.write_text("{}")
         self.repo_compiler = [("default", os.path.relpath(self.mwcc, ROOT), self.digest)]
 
     def check(self):
         return verify.verify_one(VA, str(self.source), symbols=str(ROOT / "config" / "SLUS-20836" / "symbols.txt"),
                                  units=str(self.units), unit_flags=str(self.flags),
-                                 unit_compilers=str(self.compilers))
+                                 unit_compilers=str(self.compilers), unit_objects=str(self.ungrouped))
 
     def test_override_only_match_is_foreign_profile(self):
         self.write_units(["0x002fe460\t0x002fe470\tfixture\tdefault\t-O0 -Iinclude\toff\t-\t\n"], self.repo_compiler)

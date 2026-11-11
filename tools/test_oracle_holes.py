@@ -295,7 +295,11 @@ class Counterexamples(unittest.TestCase):
         with tempfile.TemporaryDirectory(prefix="dw4-oracle-") as td:
             path = Path(td) / "cand.c"
             path.write_text(source)
-            return verify.verify_one(VA, str(path), symbols=str(ROOT / "config/SLUS-20836/symbols.txt"))
+            # the fixture is verified alone: the live table folds this address into a library unit
+            ungrouped = Path(td) / "unit-objects.json"
+            ungrouped.write_text("{}")
+            return verify.verify_one(VA, str(path), symbols=str(ROOT / "config/SLUS-20836/symbols.txt"),
+                                     unit_objects=str(ungrouped))
 
     def verify_literal(self, source):
         with tempfile.TemporaryDirectory(prefix="dw4-oracle-") as td:

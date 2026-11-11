@@ -9,6 +9,26 @@ import unittest
 from unittest.mock import patch
 import verify
 
+# The alias-pool constructor as it matches at -O3 on its own: a real retail body whose
+# object holds a second .text section once a body is put before it.
+ALIAS_POOL_CONSTRUCT = """#include "dw4/reflected.h"
+int igAliasMemoryPool_Initialize();
+int FUN_002effb0();
+extern int g_igAliasMemoryPool_vtable[4];
+void *igAliasMemoryPool_Construct(igAliasMemoryPool *self) {
+    FUN_002effb0();
+    self->_vtable = (int)(&g_igAliasMemoryPool_vtable[0]);
+    self->_allocationLock = 0;
+    self->_eventTracker = 0;
+    self->_aliasedMemoryPool = 0;
+    if (self != 0) {
+        igAliasMemoryPool_Initialize(self);
+    }
+    return self;
+}
+"""
+
+
 class RelocationOrder(unittest.TestCase):
     def test_symbol_value_is_hex_but_size_is_decimal(self):
         with patch.object(verify.subprocess,'run') as run:
@@ -59,7 +79,7 @@ class RelocationOrder(unittest.TestCase):
         required=(Path(verify.WIBO_DEFAULT),Path(verify.MWCC_DEFAULT),Path(verify.ELF_DEFAULT))
         if not all(p.exists() for p in required) or not shutil.which('mipsel-linux-gnu-ld'):
             self.skipTest('private retail compiler/ELF or GNU linker unavailable')
-        source=(root/'src/engine/igAliasMemoryPool_Construct.c').read_text()
+        source=ALIAS_POOL_CONSTRUCT
         # This unknown relocation belongs only to the preceding body. It must
         # never be applied to the constructor's first instruction.
         source='extern void UnknownBeforeTarget(void);\nvoid OtherBody(void){UnknownBeforeTarget();}\n'+source
@@ -73,7 +93,8 @@ class RelocationOrder(unittest.TestCase):
             headers=verify.elf_section_headers(str(obj))
             self.assertGreater(len([1 for section,h in headers if section=='.text' and h[5]]),1)
             self.assertEqual(off,0) # MWCC repeats the section name, each at offset0.
-            ok,report=verify.verify_one(va,str(path),symbols=str(root/'config/SLUS-20836/symbols.txt'),verbose=True)
+            ungrouped=td/'unit-objects.json';ungrouped.write_text('{}') # the fixture is verified alone, outside its library unit
+            ok,report=verify.verify_one(va,str(path),symbols=str(root/'config/SLUS-20836/symbols.txt'),verbose=True,unit_objects=str(ungrouped))
             self.assertFalse(ok,report)
             self.assertIn('per-function linking requires an isolated body',report)
             self.assertNotIn('!![',report)
