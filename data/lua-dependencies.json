@@ -12930,7 +12930,7 @@
       "address": 3080240,
       "name": "Gap__Core__igObject__vfunc_00",
       "size": 8,
-      "source": "src/engine/igObject.c",
+      "source": "src/engine/igObjectVirtuals.c",
       "direct": [
         {
           "site": 3080240,
@@ -14574,7 +14574,7 @@
       "address": 3129232,
       "name": "igMetaField_Construct",
       "size": 68,
-      "source": "src/engine/field-descriptor-constructors.c",
+      "source": "src/engine/igMetaField.cpp",
       "direct": [
         {
           "site": 3129244,
@@ -14595,7 +14595,7 @@
       "address": 3129312,
       "name": "igMetaField_Init",
       "size": 252,
-      "source": "src/engine/metadata-field-init.c",
+      "source": "src/engine/igMetaField.cpp",
       "direct": [
         {
           "site": 3129328,
@@ -14634,7 +14634,7 @@
       "address": 3129568,
       "name": "igMetaField_CopyConstruct",
       "size": 300,
-      "source": "src/engine/metadata-descriptor-copy.c",
+      "source": "src/engine/igMetaField.cpp",
       "direct": [
         {
           "site": 3129588,
@@ -14667,7 +14667,7 @@
       "address": 3130048,
       "name": "igMetaField_Configure",
       "size": 232,
-      "source": "src/engine/metadata-field-values.c",
+      "source": "src/engine/igMetaField.cpp",
       "direct": [
         {
           "site": 3130124,
@@ -14712,7 +14712,7 @@
       "address": 3130288,
       "name": "igMetaField_EnsureDefaultStorage",
       "size": 144,
-      "source": "src/engine/reflection-builders.cpp",
+      "source": "src/engine/igMetaField.cpp",
       "direct": [
         {
           "site": 3130344,
@@ -14751,7 +14751,7 @@
       "address": 3130512,
       "name": "igMetaField_SetFieldName",
       "size": 112,
-      "source": "src/engine/metadata-field-values.c",
+      "source": "src/engine/igMetaField.cpp",
       "direct": [
         {
           "site": 3130588,
@@ -14766,7 +14766,7 @@
       "address": 3130624,
       "name": "igMetaField_Reset",
       "size": 124,
-      "source": "src/engine/string-field-dispatch.cpp",
+      "source": "src/engine/igMetaField.cpp",
       "direct": [],
       "indirect": [
         {
@@ -14790,7 +14790,7 @@
       "address": 3130928,
       "name": "igMetaField_FinalizeDescriptor",
       "size": 128,
-      "source": "src/engine/reflection-builders.cpp",
+      "source": "src/engine/igMetaField.cpp",
       "direct": [],
       "indirect": [
         {
@@ -14814,7 +14814,7 @@
       "address": 3131616,
       "name": "igMetaField_CopyByTechnique",
       "size": 188,
-      "source": "src/unmatched/igMetaField_CopyByTechnique.cpp",
+      "source": "src/engine/igMetaField.cpp",
       "direct": [],
       "indirect": [
         {
@@ -14848,7 +14848,7 @@
       "address": 3131808,
       "name": "igMetaField_ShallowCopy",
       "size": 8,
-      "source": "src/unmatched/igMetaField_ShallowCopy.c",
+      "source": "src/engine/igMetaField.cpp",
       "direct": [
         {
           "site": 3131808,
@@ -14863,7 +14863,7 @@
       "address": 3131824,
       "name": "igMetaField_DeepCopy",
       "size": 8,
-      "source": "src/unmatched/igMetaField_DeepCopy.c",
+      "source": "src/engine/igMetaField.cpp",
       "direct": [
         {
           "site": 3131824,
@@ -14878,7 +14878,7 @@
       "address": 3131840,
       "name": "igMetaField_ConstructCopy",
       "size": 8,
-      "source": "src/unmatched/igMetaField_ConstructCopy.c",
+      "source": "src/engine/igMetaField.cpp",
       "direct": [
         {
           "site": 3131840,
@@ -15521,7 +15521,7 @@
       "address": 3141408,
       "name": "igObject_InitHeader",
       "size": 76,
-      "source": "src/unmatched/igObject_InitHeader.c",
+      "source": "src/engine/igObject.cpp",
       "direct": [],
       "indirect": []
     },
@@ -15529,7 +15529,7 @@
       "address": 3141488,
       "name": "igObject_CopyConstructHeader",
       "size": 160,
-      "source": "src/unmatched/igObject_CopyConstructHeader.c",
+      "source": "src/engine/igObject.cpp",
       "direct": [
         {
           "site": 3141528,
@@ -15562,7 +15562,7 @@
       "address": 3141648,
       "name": "igObject_ConstructHeader",
       "size": 140,
-      "source": "src/engine/object-header-construct.cpp",
+      "source": "src/engine/igObject.cpp",
       "direct": [
         {
           "site": 3141680,
@@ -15595,7 +15595,7 @@
       "address": 3141792,
       "name": "Gap__Core__igObject__vfunc_00__002ff0a0",
       "size": 8,
-      "source": "src/engine/igObject.c",
+      "source": "src/engine/igObject.cpp",
       "direct": [],
       "indirect": []
     },
@@ -15603,7 +15603,7 @@
       "address": 3142096,
       "name": "igObject_Construct",
       "size": 276,
-      "source": "src/unmatched/igObject_Construct.cpp",
+      "source": "src/engine/igObject.cpp",
       "direct": [
         {
           "site": 3142188,
@@ -15669,7 +15669,7 @@
       "address": 3142752,
       "name": "igObject_CreateEmptyInitCallbacks",
       "size": 60,
-      "source": "src/engine/object-empty-callbacks.c",
+      "source": "src/engine/igObject.cpp",
       "direct": [
         {
           "site": 3142764,
@@ -15696,7 +15696,7 @@
       "address": 3142816,
       "name": "igObject_GetNoParentMetaObject",
       "size": 8,
-      "source": "src/engine/object-base-accessors.c",
+      "source": "src/engine/igObject.cpp",
       "direct": [],
       "indirect": []
     },
@@ -15704,7 +15704,7 @@
       "address": 3142832,
       "name": "igObject_GetVTable",
       "size": 48,
-      "source": "src/unmatched/igObject_GetVTable.c",
+      "source": "src/engine/igObject.cpp",
       "direct": [
         {
           "site": 3142840,
@@ -15719,7 +15719,7 @@
       "address": 3142896,
       "name": "igObject_Register",
       "size": 100,
-      "source": "src/engine/igObject_Register.c",
+      "source": "src/engine/igObject.cpp",
       "direct": [
         {
           "site": 3142976,
@@ -15734,7 +15734,7 @@
       "address": 3143008,
       "name": "igObject_GetMetaObject",
       "size": 12,
-      "source": "src/engine/object-base-accessors.c",
+      "source": "src/engine/igObject.cpp",
       "direct": [],
       "indirect": []
     },
@@ -15742,7 +15742,7 @@
       "address": 3143024,
       "name": "igObject_InitFields",
       "size": 540,
-      "source": "src/unmatched/igObject_InitFields.c",
+      "source": "src/engine/igObject.cpp",
       "direct": [
         {
           "site": 3143040,
@@ -15859,7 +15859,7 @@
       "address": 3143568,
       "name": "igObject_AllocateRawStorage",
       "size": 112,
-      "source": "src/engine/object-raw-allocation.cpp",
+      "source": "src/engine/igObject.cpp",
       "direct": [
         {
           "site": 3143600,
@@ -15886,7 +15886,7 @@
       "address": 3143680,
       "name": "igObject_AllocateRawStorageDefault",
       "size": 8,
-      "source": "src/engine/igObject_AllocateRawStorageDefault.c",
+      "source": "src/engine/igObject.cpp",
       "direct": [
         {
           "site": 3143680,
@@ -15901,7 +15901,7 @@
       "address": 3143696,
       "name": "thunk_FUN_002ed460__002ff810",
       "size": 8,
-      "source": "src/unmatched/thunk_FUN_002ed460__002ff810.c",
+      "source": "src/engine/igObject.cpp",
       "direct": [
         {
           "site": 3143696,
@@ -15916,7 +15916,7 @@
       "address": 3143712,
       "name": "igObject_Destroy",
       "size": 268,
-      "source": "src/engine/igObject_Destroy.cpp",
+      "source": "src/engine/igObject.cpp",
       "direct": [
         {
           "site": 3143804,
@@ -16003,7 +16003,7 @@
       "address": 3143984,
       "name": "igObject_ZeroFields",
       "size": 200,
-      "source": "src/unmatched/igObject_ZeroFields.cpp",
+      "source": "src/engine/igObject.cpp",
       "direct": [],
       "indirect": [
         {
@@ -16022,7 +16022,7 @@
       "address": 3144192,
       "name": "igObject_ConstructFields",
       "size": 164,
-      "source": "src/unmatched/igObject_ConstructFields.cpp",
+      "source": "src/engine/igObject.cpp",
       "direct": [],
       "indirect": [
         {
@@ -16046,7 +16046,7 @@
       "address": 3144528,
       "name": "igObject_ResetUnconstructedFields",
       "size": 188,
-      "source": "src/unmatched/igObject_ResetUnconstructedFields.cpp",
+      "source": "src/engine/igObject.cpp",
       "direct": [
         {
           "site": 3144640,
@@ -16077,7 +16077,7 @@
       "address": 3144720,
       "name": "igObject_DestructFieldValues",
       "size": 160,
-      "source": "src/unmatched/igObject_DestructFieldValues.cpp",
+      "source": "src/engine/igObject.cpp",
       "direct": [],
       "indirect": [
         {
@@ -16101,7 +16101,7 @@
       "address": 3144880,
       "name": "igObject_ClearFieldValues",
       "size": 144,
-      "source": "src/unmatched/igObject_ClearFieldValues.cpp",
+      "source": "src/engine/igObject.cpp",
       "direct": [],
       "indirect": [
         {
@@ -16120,7 +16120,7 @@
       "address": 3146896,
       "name": "FUN_00300490",
       "size": 364,
-      "source": "src/unmatched/FUN_00300490.cpp",
+      "source": "src/engine/igObject.cpp",
       "direct": [
         {
           "site": 3146992,
@@ -16210,7 +16210,7 @@
       "address": 3147264,
       "name": "FUN_00300600",
       "size": 152,
-      "source": "src/unmatched/FUN_00300600.cpp",
+      "source": "src/engine/igObject.cpp",
       "direct": [
         {
           "site": 3147324,
@@ -16237,7 +16237,7 @@
       "address": 3147424,
       "name": "FUN_003006a0",
       "size": 208,
-      "source": "src/unmatched/FUN_003006a0.cpp",
+      "source": "src/engine/igObject.cpp",
       "direct": [
         {
           "site": 3147520,
@@ -16279,7 +16279,7 @@
       "address": 3147632,
       "name": "FUN_00300770",
       "size": 172,
-      "source": "src/unmatched/FUN_00300770.cpp",
+      "source": "src/engine/igObject.cpp",
       "direct": [
         {
           "site": 3147692,
@@ -16311,7 +16311,7 @@
       "address": 3148544,
       "name": "igObject_VisitFields",
       "size": 256,
-      "source": "src/engine/object-visitor.cpp",
+      "source": "src/engine/igObject.cpp",
       "direct": [
         {
           "site": 3148656,
@@ -16352,7 +16352,7 @@
       "address": 3148800,
       "name": "FUN_00300c00",
       "size": 92,
-      "source": "src/unmatched/FUN_00300c00.c",
+      "source": "src/engine/igObject.cpp",
       "direct": [
         {
           "site": 3148840,
@@ -16379,7 +16379,7 @@
       "address": 3148896,
       "name": "igObject_CloneViaMetadata",
       "size": 112,
-      "source": "src/engine/igObject_CloneViaMetadata.cpp",
+      "source": "src/engine/igObject.cpp",
       "direct": [
         {
           "site": 3148940,
@@ -16412,7 +16412,7 @@
       "address": 3149008,
       "name": "igObject_IsKindOf",
       "size": 84,
-      "source": "src/engine/igObject_IsKindOf.cpp",
+      "source": "src/engine/igObject.cpp",
       "direct": [],
       "indirect": [
         {
@@ -16426,7 +16426,7 @@
       "address": 3149104,
       "name": "igObject_GetAllocationBase",
       "size": 52,
-      "source": "src/engine/object-allocation-base.cpp",
+      "source": "src/engine/igObject.cpp",
       "direct": [],
       "indirect": [
         {
@@ -16440,7 +16440,7 @@
       "address": 3149168,
       "name": "igObject_AllocateStorage",
       "size": 56,
-      "source": "src/engine/object-storage-dispatch.cpp",
+      "source": "src/engine/igObject.cpp",
       "direct": [
         {
           "site": 3149180,
@@ -16461,7 +16461,7 @@
       "address": 3149312,
       "name": "FUN_00300e00",
       "size": 72,
-      "source": "src/engine/object-storage-dispatch.cpp",
+      "source": "src/engine/igObject.cpp",
       "direct": [
         {
           "site": 3149332,
@@ -16482,7 +16482,7 @@
       "address": 3149392,
       "name": "FUN_00300e50",
       "size": 72,
-      "source": "src/engine/object-storage-dispatch.cpp",
+      "source": "src/engine/igObject.cpp",
       "direct": [
         {
           "site": 3149412,
@@ -16503,7 +16503,7 @@
       "address": 3149568,
       "name": "igObject_FreeStorage",
       "size": 68,
-      "source": "src/engine/object-storage-dispatch.cpp",
+      "source": "src/engine/igObject.cpp",
       "direct": [
         {
           "site": 3149592,
@@ -16524,7 +16524,7 @@
       "address": 3149648,
       "name": "FUN_00300f50",
       "size": 68,
-      "source": "src/engine/object-storage-dispatch.cpp",
+      "source": "src/engine/igObject.cpp",
       "direct": [
         {
           "site": 3149672,
@@ -16545,7 +16545,7 @@
       "address": 3149824,
       "name": "igObject_GetAllocator",
       "size": 8,
-      "source": "src/engine/igObject_GetAllocator.c",
+      "source": "src/engine/igObject.cpp",
       "direct": [
         {
           "site": 3149824,
@@ -24025,7 +24025,7 @@
       "address": 3638288,
       "name": "Gap__Core__igObject__vfunc_34",
       "size": 8,
-      "source": "src/engine/igObject.c",
+      "source": "src/engine/igObjectVirtuals.c",
       "direct": [],
       "indirect": []
     },

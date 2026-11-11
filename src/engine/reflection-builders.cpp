@@ -20,28 +20,6 @@ extern "C" void igMetaField_FinalizeDescriptor(igMetaField *);
 class FieldSizeDispatchView { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual int GetTypeSize(); };
 
 class FieldBuildDispatchView { public: virtual void r0(); virtual void r1(); virtual void r2(); virtual void r3(); virtual void r4(); virtual void r5(); virtual void r6(); virtual void r7(); virtual void r8(); virtual void r9(); virtual void r10(); virtual void r11(); virtual void r12(); virtual void r13(); virtual void r14(); virtual void r15(); virtual void r16(); virtual void r17(); virtual void r18(); virtual void r19(); virtual void r20(); virtual void *TypeInfo(); virtual void r96(); virtual int TypeSize(); virtual void r104(); virtual void r108(); virtual void r112(); virtual void r116(); virtual void r120(); virtual void r124(); virtual void r128(); virtual void r132(); virtual void r136(); virtual void SetDefault(void *); };
-
-extern "C" void igMetaField_EnsureDefaultStorage(igMetaField *field){
-    field->_size=(unsigned short)((FieldSizeDispatchView *)field)->GetTypeSize();
-    if(field->_default==0)field->_default=(int)FUN_00300e00(field,field->_size,1);
-    else {
-        int size=field->_size;
-        if(Memory_GetBufferSize((void *)field->_default)<size){
-            igObject_FreeStorage(field,(void *)field->_default);
-            field->_default=(int)FUN_00300e00(field,field->_size,1);
-        }
-    }
-}
-
-extern "C" void igMetaField_FinalizeDescriptor(igMetaField *field){
-    void *type=((FieldBuildDispatchView *)field)->TypeInfo();
-    if(type!=0)field->_typeIndex=*(short *)((char *)type+18);
-    else field->_typeIndex=-1;
-    field->_size=(unsigned short)((FieldBuildDispatchView *)field)->TypeSize();
-    ((FieldBuildDispatchView *)field)->SetDefault(0);
-    if(field->_externalEnumStorage!=0)*(int *)field->_externalEnumStorage=(int)field;
-}
-
 extern "C" void igMetaObject_InheritFromBase(igMetaObject *meta,igMetaObject *parent){
     if(parent!=0){
         if(parent->_children==0)parent->_children=(int)FUN_002c29c0(Memory_GetAllocatorBySelector(*(int *)0x587040));

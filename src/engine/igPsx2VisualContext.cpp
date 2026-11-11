@@ -20,9 +20,22 @@ void *FUN_00165cf0(void *self);
 int FUN_00165d10(void *self);
 int FUN_00165bb0(void *self);
 int FUN_00164f50();
-int FUN_00169260(void *self, int option);
-int FUN_0016c650(void *self, int option);
+void FUN_0016c650(igPsx2VisualContext *self, int option);
 int FUN_00170510(void *self, int option);
+int FUN_00165cc0(void *self);
+int FUN_00177010(...);
+int FUN_001e96d0(...);
+int FUN_001e9740(...);
+int FUN_001ee270(...);
+int FUN_001ee3f0(...);
+int FUN_001ee730(...);
+int FUN_001ee750(...);
+int FUN_001eeda0(int);
+int FUN_002caa70(int);
+int FUN_002d96f0(...);
+void *FUN_002ed240(int, int);
+void *FUN_002ed450(void *, int, int);
+int List_Resize(...);
 int FUN_001788e0(void *self, int option);
 int FUN_0017a540(void *self, int option);
 int FUN_0017a2b0(int format);
@@ -68,10 +81,147 @@ void FUN_0016b1d0(OB1d0 *arg0, int arg1);
 
 extern int DAT_0048a4e0[4];
 extern int DAT_0048a4ec[4];
+extern int DAT_0048a4f0[4];
 extern int DAT_0048acd0[];
+extern int DAT_004df350[4];
 extern int DAT_004df370[4];
 extern void *DAT_00586dc8[4];
 extern int DAT_00586f20[4];
+extern int DAT_004df508[4];
+extern int DAT_004df510[4];
+extern int DAT_004df518[4];
+
+struct P { unsigned short f0; unsigned short f2; unsigned short f4; char p6[2]; int *f8; short *f12; int f16; };
+class Buf860 { public: virtual void b0(); virtual void b1(); virtual void b2(); virtual void b3(); virtual void b4(); virtual void b5(); virtual void b6(); virtual void b7(); virtual void b8(); virtual void b9(); virtual void b10(); virtual void b11(); virtual void b12(); virtual void b13(); virtual void b14(); virtual void b15(); virtual void b16(); virtual void b17(); virtual void b18(); virtual void b19(); virtual void b20(); virtual void b21(); virtual void b22(); virtual void b23(); virtual void b24(); virtual void b25(); virtual void b26(); virtual void b27(); virtual void b28(); virtual void b29(); virtual void b30(); virtual void b31(); virtual void b32(); virtual void b33(); virtual void b34(); virtual void b35(); virtual void b36(); virtual void b37(); virtual void b38(); virtual void b39(); virtual void b40(); virtual void b41(); virtual void b42(); virtual void b43(); virtual void b44(); virtual void b45(); virtual void b46(); virtual void b47(); virtual void b48(); virtual void b49(); virtual void b50(); virtual void b51(); virtual void b52(); virtual void b53(); virtual short *vB(int n, int sz); virtual int vA(int n, int sz, int al); };
+class VM { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void d32(); virtual void d33(); virtual void d34(); virtual void d35(); virtual void d36(); virtual void d37(); virtual void d38(); virtual void d39(); virtual void d40(); virtual void d41(); virtual void d42(); virtual void d43(); virtual void d44(); virtual void d45(); virtual void d46(); virtual void d47(); virtual void d48(); virtual void d49(); virtual void d50(); virtual void d51(); virtual void d52(); virtual void d53(); virtual void d54(); virtual void d55(); virtual void* v232(void*,int); };
+struct Arg0d0 { char pad[868]; P *f868; int f872; };
+void FUN_001690d0(Arg0d0 *arg0) {
+    int sp5C;
+    int i;
+    P *p;
+    int n;
+    int v;
+    int *old;
+    int *s3;
+    Buf860 *b;
+    sp5C = 4;
+    thunk_FUN_003065f0(*(int *)((char *)(DAT_00586dc8[0]) + 56), 4, &DAT_004df350[0], &sp5C, 4, 0);
+    p = (P *)Memory_AllocateBufferDirect(20, FUN_00165d10(arg0));
+    if (p != 0) {
+        n = sp5C;
+        p->f8 = 0;
+        if (DAT_00586f20[0] == 0) {
+            v = FUN_002eb010(16);
+            if (v != 0) {
+                v = StringPool_Construct(v);
+            }
+            DAT_00586f20[0] = v;
+        }
+        s3 = StringPool_Intern(DAT_00586f20[0], &DAT_004df350[0]);
+        old = p->f8;
+        if (old != 0) {
+            int *a1 = old - 2;
+            int v0 = old[-1] - 1;
+            old[-1] = v0;
+            if (v0 == 0) {
+                StringChunk_ReleaseHeader(*a1, a1);
+            }
+        }
+        p->f8 = s3;
+        if (n == 0) {
+            n = 1;
+        }
+        b = (Buf860 *)Memory_FindBufferOwner(p);
+        p->f16 = b->vA(n, 48, 16);
+        p->f12 = b->vB(n, 2);
+        i = 0;
+        p->f2 = n;
+        p->f0 = n;
+        p->f4 = n;
+        while (i < n) {
+            p->f12[i] = i;
+            i = i + 1;
+        }
+    }
+    arg0->f868 = p;
+    arg0->f872 = -1;
+}
+
+struct T260 { unsigned short f0; unsigned short f2; unsigned short f4; short pad2; int f8; unsigned short *f12; int f16;
+    bool Chk(int s0) {
+        int a2, a1;
+        if (s0 < f0 && s0 >= 0) {
+            a1 = f4;
+            for (a2 = 0; a2 < a1; a2++) {
+                if (s0 == f12[a2]) return false;
+            }
+            return true;
+        }
+        return false;
+    }
+    void Add(int s0) {
+        if (s0 < f0 && s0 >= 0) {
+            if (f4 >= f2) {
+                VM *o = (VM *)Memory_FindBufferOwner(this);
+                f2 = f2 + 8;
+                f12 = (unsigned short *)o->v232(f12, f2 * 2);
+            }
+            f12[f4] = s0;
+            f4 = f4 + 1;
+        }
+    }
+};
+/* matching construct: _pBufList is a 4-byte reference field; the cast gives the typed T260 view (no layout effect) */
+void FUN_00169260(igPsx2VisualContext *arg0, int arg1) {
+    int s0, s2, v, old;
+    int *hd;
+    T260 *t;
+    s0 = ((T260 *)arg0->_pBufList)->f0 - 1;
+    for (; s0 > -1; s0--) {
+        if (((T260 *)arg0->_pBufList)->Chk(s0)) {
+            ((T260 *)arg0->_pBufList)->Add(s0);
+        }
+    }
+    if (arg1 == 0) {
+        t = ((T260 *)arg0->_pBufList);
+        if (t != 0) {
+            if (DAT_00586f20[0] == 0) {
+                v = FUN_002eb010(16);
+                if (v != 0) {
+                    v = StringPool_Construct(v);
+                }
+                DAT_00586f20[0] = v;
+            }
+            s2 = (int)StringPool_Intern(DAT_00586f20[0], 0);
+            old = t->f8;
+            if (old != 0) {
+                hd = (int *)(old - 8);
+                v = *(int *)(old - 4) - 1;
+                *(int *)(old - 4) = v;
+                if (v == 0) {
+                    StringChunk_ReleaseHeader(*hd, hd);
+                }
+            }
+            t->f8 = s2;
+            Memory_FreeBuffer(t->f16);
+            Memory_FreeBuffer((int)t->f12);
+            if (&t->f8 != 0) {
+                old = t->f8;
+                if (old != 0) {
+                    hd = (int *)(old - 8);
+                    v = *(int *)(old - 4) - 1;
+                    *(int *)(old - 4) = v;
+                    if (v == 0) {
+                        StringChunk_ReleaseHeader(*hd, hd);
+                    }
+                }
+            }
+            FUN_002ed5c0(t);
+        }
+        arg0->_pBufList = 0;
+    }
+    arg0->_currentBuf = -1;
+}
 
 struct Ent46 { int f0; int f4; int f8; int f12; int f16; int f20; float f24; int f28; int f32; int f36; int f40; int f44; };
 struct Pool46 { unsigned short f0; unsigned short f2; unsigned short f4; char p6[6]; unsigned short *f12; Ent46 *f16; };
@@ -641,8 +791,6 @@ void FUN_0016a800(S0 *arg0) {
     arg0->f14 = 0;
 }
 
-struct P { unsigned short f0; unsigned short f2; unsigned short f4; char p6[2]; int *f8; short *f12; int f16; };
-class Buf860 { public: virtual void b0(); virtual void b1(); virtual void b2(); virtual void b3(); virtual void b4(); virtual void b5(); virtual void b6(); virtual void b7(); virtual void b8(); virtual void b9(); virtual void b10(); virtual void b11(); virtual void b12(); virtual void b13(); virtual void b14(); virtual void b15(); virtual void b16(); virtual void b17(); virtual void b18(); virtual void b19(); virtual void b20(); virtual void b21(); virtual void b22(); virtual void b23(); virtual void b24(); virtual void b25(); virtual void b26(); virtual void b27(); virtual void b28(); virtual void b29(); virtual void b30(); virtual void b31(); virtual void b32(); virtual void b33(); virtual void b34(); virtual void b35(); virtual void b36(); virtual void b37(); virtual void b38(); virtual void b39(); virtual void b40(); virtual void b41(); virtual void b42(); virtual void b43(); virtual void b44(); virtual void b45(); virtual void b46(); virtual void b47(); virtual void b48(); virtual void b49(); virtual void b50(); virtual void b51(); virtual void b52(); virtual void b53(); virtual short *vB(int n, int sz); virtual int vA(int n, int sz, int al); };
 struct Arg { char pad[328]; P *f328; char pad2[12]; int f344; };
 void FUN_0016a860(Arg *arg0) {
     int sp5C;
@@ -1002,11 +1150,11 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_10(S10 *arg0) {
         Memory_FreeBuffer(temp_a0);
         arg0->f50 = 0;
     }
-    FUN_00169260(arg0, 0);
+    FUN_00169260((igPsx2VisualContext *)arg0, 0);
     FUN_0017a540(arg0, 0);
     FUN_0016a9f0((igPsx2VisualContext *)arg0, 0);
     FUN_00170510(arg0, 0);
-    FUN_0016c650(arg0, 0);
+    FUN_0016c650((igPsx2VisualContext *)arg0, 0);
     FUN_001788e0(arg0, 0);
     if (arg0->f142 != 0) {
         FUN_001edf20();
@@ -1082,6 +1230,247 @@ int Gap__Gfx__igPsx2VisualContext__vfunc_37(igPsx2VisualContext *context, unsign
     default:
         return 0;
     }
+}
+
+/* The loop test is `s0 > -1` for the slti/beqz. */
+class VO650 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void d32(); virtual void d33(); virtual void d34(); virtual void d35(); virtual void d36(); virtual void d37(); virtual void d38(); virtual void d39(); virtual void d40(); virtual void d41(); virtual void d42(); virtual void d43(); virtual void d44(); virtual void d45(); virtual void d46(); virtual void d47(); virtual void d48(); virtual void d49(); virtual void d50(); virtual void d51(); virtual void d52(); virtual void d53(); virtual void d54(); virtual void d55(); virtual void d56(); virtual void d57(); virtual void d58(); virtual void d59(); virtual void d60(); virtual void d61(); virtual void d62(); virtual void d63(); virtual void d64(); virtual void d65(); virtual void d66(); virtual void d67(); virtual void d68(); virtual void d69(); virtual void d70(); virtual void d71(); virtual void d72(); virtual void d73(); virtual void d74(); virtual void d75(); virtual void d76(); virtual void d77(); virtual void d78(); virtual void d79(); virtual void d80(); virtual void d81(); virtual void d82(); virtual void d83(); virtual void d84(); virtual void d85(); virtual void d86(); virtual void d87(); virtual void d88(); virtual void d89(); virtual void d90(); virtual void d91(); virtual void d92(); virtual void d93(); virtual void d94(); virtual void d95(); virtual void d96(); virtual void d97(); virtual void d98(); virtual void d99(); virtual void d100(); virtual void d101(); virtual void d102(); virtual void d103(); virtual void d104(); virtual void d105(); virtual void d106(); virtual void d107(); virtual void d108(); virtual void d109(); virtual void d110(); virtual void d111(); virtual void d112(); virtual void d113(); virtual void d114(); virtual void d115(); virtual void d116(); virtual void d117(); virtual void d118(); virtual void d119(); virtual void d120(); virtual void d121(); virtual void d122(); virtual void d123(); virtual void d124(); virtual void d125(); virtual void d126(); virtual void d127(); virtual void d128(); virtual void d129(); virtual void d130(); virtual void d131(); virtual void d132(); virtual void d133(); virtual void d134(); virtual void d135(); virtual void d136(); virtual void d137(); virtual void d138(); virtual void d139(); virtual void d140(); virtual void d141(); virtual void d142(); virtual void d143(); virtual void d144(); virtual void d145(); virtual void d146(); virtual void d147(); virtual void d148(); virtual void d149(); virtual void d150(); virtual void d151(); virtual void d152(); virtual void d153(); virtual void d154(); virtual void d155(); virtual void d156(); virtual void d157(); virtual void d158(); virtual void d159(); virtual void d160(); virtual void d161(); virtual void d162(); virtual void d163(); virtual void d164(); virtual void d165(); virtual void d166(); virtual void d167(); virtual void d168(); virtual void d169(); virtual void d170(); virtual void d171(); virtual void d172(); virtual void d173(); virtual void d174(); virtual void d175(); virtual void d176(); virtual void d177(); virtual void d178(); virtual void d179(); virtual void d180(); virtual void d181(); virtual void d182(); virtual void d183(); virtual void d184(); virtual void d185(); virtual void d186(); virtual void d187(); virtual void d188(); virtual void d189(); virtual void d190(); virtual void v772(int); };
+struct T650 { unsigned short f0; short pad; int f4; int f8; int f12; int f16; };
+/* matching construct: dummy-virtual view so ->v772() dispatches through vtable slot 193 of the context */
+void FUN_0016c650(igPsx2VisualContext *arg0, int arg1) {
+    int s0, s2, v, old;
+    int *hd;
+    T650 *t;
+    s0 = ((T650 *)arg0->_pDLists)->f0 - 1;
+    for (; s0 > -1; s0--) {
+        ((VO650 *)arg0)->v772(s0);
+    }
+    if (arg1 == 0) {
+        t = (T650 *)arg0->_pDLists;
+        if (t != 0) {
+            if (DAT_00586f20[0] == 0) {
+                v = FUN_002eb010(16);
+                if (v != 0) {
+                    v = StringPool_Construct(v);
+                }
+                DAT_00586f20[0] = v;
+            }
+            s2 = (int)StringPool_Intern(DAT_00586f20[0], 0);
+            old = t->f8;
+            if (old != 0) {
+                hd = (int *)(old - 8);
+                v = *(int *)(old - 4) - 1;
+                *(int *)(old - 4) = v;
+                if (v == 0) {
+                    StringChunk_ReleaseHeader(*hd, hd);
+                }
+            }
+            t->f8 = s2;
+            Memory_FreeBuffer(t->f16);
+            Memory_FreeBuffer(t->f12);
+            if (&t->f8 != 0) {
+                old = t->f8;
+                if (old != 0) {
+                    hd = (int *)(old - 8);
+                    v = *(int *)(old - 4) - 1;
+                    *(int *)(old - 4) = v;
+                    if (v == 0) {
+                        StringChunk_ReleaseHeader(*hd, hd);
+                    }
+                }
+            }
+            FUN_002ed5c0(t);
+        }
+        arg0->_pDLists = 0;
+    }
+}
+
+struct Ent192 { int *list; };
+struct Nd192 { int a; int b; Nd192() { a = 0; b = 0; } static void *operator new(unsigned sz, int owner) { return FUN_002ed240(sz, owner); } };
+struct T192 { unsigned short f0; unsigned short f2; unsigned short f4; short pad; int pad8; unsigned short *f12; Ent192 **f16; };
+struct O192 { int w[240]; T192 *f960; char pad[4]; char f968; };
+int Gap__Gfx__igPsx2VisualContext__vfunc_192(O192 *arg0) {
+    int a1;
+    T192 *s1 = arg0->f960;
+    int s0;
+    if (s1->f4 <= 0) {
+        s1->f16 = (Ent192 **)FUN_002ed450(s1->f16, (s1->f0 + 4) * 4, 16);
+        memset(s1->f0 + s1->f16, 0, 16);
+        if (s1->f2 < 4) {
+            VM *o = (VM *)Memory_FindBufferOwner(s1);
+            s1->f12 = (unsigned short *)o->v232(s1->f12, 8);
+            s1->f2 = 4;
+        }
+        a1 = 0;
+        do {
+            int t = s1->f0; t = t + a1; s1->f12[a1] = t;
+            a1++;
+        } while (a1 < 4);
+        s1->f4 = 4;
+        s1->f0 = s1->f0 + 4;
+    }
+    s0 = s1->f12[s1->f4 - 1];
+    s1->f4 = s1->f4 - 1;
+    {
+        Nd192 *n = new (FUN_00165cc0(arg0)) Nd192;
+        int v = FUN_002caa70(FUN_00165cc0(arg0));
+        arg0->f960->f16[s0] = (Ent192 *)n;
+        n->a = v;
+    }
+    arg0->f968 = 0;
+    return s0;
+}
+
+struct Rc193 { int w0; unsigned refs; int count; int cap; int *data; };
+struct Ent193 { Rc193 *list; };
+struct T193 { unsigned short f0; unsigned short f2; unsigned short f4; short pad; int pad8; unsigned short *f12; Ent193 **f16;
+    bool Chk(int s0) {
+        int a2, a1;
+        if (s0 < f0 && s0 >= 0) {
+            a1 = f4;
+            for (a2 = 0; a2 < a1; a2++) {
+                if (s0 == f12[a2]) return false;
+            }
+            return true;
+        }
+        return false;
+    }
+    void Add(int s0) {
+        if (s0 < f0 && s0 >= 0) {
+            if (f4 >= f2) {
+                VM *o = (VM *)Memory_FindBufferOwner(this);
+                f2 = f2 + 8;
+                f12 = (unsigned short *)o->v232(f12, f2 * 2);
+            }
+            f12[f4] = s0;
+            f4 = f4 + 1;
+        }
+    }
+};
+struct O193 { int w[240]; T193 *f960; };
+void Gap__Gfx__igPsx2VisualContext__vfunc_193(O193 *arg0, int arg1) {
+    T193 *a3;
+    int s0;
+    Rc193 *s2;
+    int s1;
+    bool ok;
+    int a2, a1;
+    a3 = arg0->f960;
+    if (arg1 < a3->f0) {
+        ok = false;
+        if (arg1 >= 0) {
+            a1 = a3->f4;
+            for (a2 = 0; a2 < a1; a2++) {
+                if (arg1 == a3->f12[a2]) {
+                    ok = false;
+                    goto done;
+                }
+            }
+            ok = true;
+        }
+    } else {
+        ok = false;
+    }
+done:
+    if (ok & 0xFF) {
+        s0 = arg1 * 4;
+        s2 = a3->f16[arg1]->list;
+        for (s1 = 0; s1 < s2->count; s1++) {
+            FUN_001eeda0(s2->data[s1]);
+        }
+        --s2->refs;
+        if ((s2->refs & 0x7fffff) == 0) {
+            igObject_Destroy(s2);
+        }
+        FUN_002ed5c0(arg0->f960->f16[arg1]);
+        arg0->f960->Add(arg1);
+    }
+}
+
+void Gap__Gfx__igPsx2VisualContext__vfunc_194(void *arg0, int arg1) {
+    *(int *)((char *)(arg0) + 964) = arg1;
+    if (*(int *)((char *)(arg0) + 72) < 0x10) {
+        FUN_001e9740(0, 0x10);
+    }
+}
+
+int Gap__Gfx__igPsx2VisualContext__vfunc_195(void *arg0) {
+    int temp_a1;
+    temp_a1 = *(int *)((char *)(arg0) + 72);
+    if (temp_a1 > 0) {
+        FUN_001e9740(*(int *)((char *)(arg0) + 84), temp_a1);
+    }
+    *(int *)((char *)(arg0) + 964) = -1;
+    return *(unsigned char *)((char *)(arg0) + 968) == 0;
+}
+
+struct L196 { char p[8]; int n; char q[4]; int *a; };
+struct T196 { char p[16]; struct L196 ***tab; };
+int Gap__Gfx__igPsx2VisualContext__vfunc_196(igPsx2VisualContext *arg0, int arg1) {
+    struct L196 *temp_s4;
+    int temp_v0;
+    int var_s2;
+    int var_s1;
+    int temp_v0_2;
+
+    temp_s4 = *((struct T196 *)arg0->_pDLists)->tab[arg1];
+    if (temp_s4->n > 0) {
+        temp_v0 = FUN_00177010(arg0, 0, 0, temp_s4->a[0], arg1);
+        if ((temp_v0 == 1) || (temp_v0 == 3)) {
+            return 0;
+        }
+        var_s2 = 0;
+        if (temp_v0 == 2) {
+            var_s2 = FUN_001ee730(temp_s4->a[0]);
+        }
+        for (var_s1 = 0; var_s1 < temp_s4->n; var_s1 += 1) {
+            temp_v0_2 = FUN_001ee730(temp_s4->a[var_s1]);
+            if ((temp_v0 == 2) && (var_s2 != temp_v0_2)) {
+                FUN_001e96d0(temp_v0_2, temp_v0_2);
+            }
+            FUN_001ee750(temp_s4->a[var_s1]);
+        }
+    }
+    return 1;
+}
+
+void FUN_0016cc50(int a0, int a1)
+{
+    *(int *)((char *)a0 + 1400) = a1;
+}
+
+typedef struct IntList { int _vtable; int _refCount; int _count; int _capacity; int *_data; } IntList;
+static inline int count_of(const IntList *list) { return list->_count; }
+void FUN_0016cc60(char *arg0) {
+    int idx;
+    IntList *list;
+    int top;
+    int value;
+    idx = *(int *)(arg0 + 964);
+    if (idx >= 0) {
+        list = **(IntList ***)(*(int *)(*(int *)(arg0 + 960) + 16) + idx * 4);
+        value = FUN_001ee270(*(int *)((char *)DAT_0048a4f0 + *(int *)(arg0 + 1400) * 4));
+        top = count_of(list);
+        if (top < list->_capacity) {
+            list->_count = list->_count + 1;
+        } else {
+            List_Resize(list, top + 1, 4);
+        }
+        list->_data[top] = value;
+    }
+}
+
+void FUN_0016cd10(void *arg0) {
+    if (*(int *)((char *)arg0 + 964) >= 0) {
+        FUN_001ee3f0();
+    }
+}
+
+void Gap__Gfx__igPsx2VisualContext__vfunc_27(int dummy0, int arg1) {
+    FUN_002d96f0(arg1, 1, &DAT_004df508[0]);
+    FUN_002d96f0(arg1, 2, &DAT_004df510[0]);
+    FUN_002d96f0(arg1, 3, &DAT_004df518[0]);
+    FUN_002d96f0(arg1, 4, &DAT_004df508[0]);
+    FUN_002d96f0(arg1, 5, &DAT_004df510[0]);
 }
 
 }

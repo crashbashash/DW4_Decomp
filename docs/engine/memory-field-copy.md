@@ -78,7 +78,7 @@ header-field count. Each row reloads the field-list data pointer. The callback
 receives object/field/context; exactly1 skips that field, while other results invoke
 field slot168 with field/object/callback/context. The field receiver is captured
 before the callback. Its 256-byte body is in
-[object-visitor.cpp](../../src/engine/object-visitor.cpp).
+[igObject.cpp](../../src/engine/igObject.cpp).
 
 ## Remaining boundaries
 

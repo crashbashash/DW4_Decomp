@@ -4,8 +4,7 @@ This page covers **13 complete bodies / 1,144 code bytes**: ten bootstrap,
 publication and descriptor-attachment bodies, plus the unsigned descriptor
 factory/constructor/initializer.
 Vtable lookup (48) is in
-[igObject_GetVTable.c](../../src/unmatched/igObject_GetVTable.c) and manual field initialization (540) in
-[igObject_InitFields.c](../../src/unmatched/igObject_InitFields.c).
+[igObject.cpp](../../src/engine/igObject.cpp), with manual field initialization (540).
 
 Five small functions total **104 bytes**: empty initializer callbacks 60,
 registration forwarding 12, and three leaf callbacks totaling 32.

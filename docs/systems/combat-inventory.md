@@ -85,7 +85,7 @@ their own recovery. Source presence does not substitute for `make check`.
 | `0x002d6790` | `List_Resize` | 120 | [src/unmatched/List_Resize.c](../../src/unmatched/List_Resize.c) |
 | `0x002eaf60` | `StringPool_Intern` | 172 | [src/unmatched/StringPool_Intern.c](../../src/unmatched/StringPool_Intern.c) |
 | `0x002fba30` | `igMetaEnum_GetValueByName` | 260 | [src/unmatched/igMetaEnum_GetValueByName.c](../../src/unmatched/igMetaEnum_GetValueByName.c) |
-| `0x00301000` | `igObject_GetAllocator` | 8 | [src/engine/igObject_GetAllocator.c](../../src/engine/igObject_GetAllocator.c) |
+| `0x00301000` | `igObject_GetAllocator` | 8 | [src/engine/igObject.cpp](../../src/engine/igObject.cpp) |
 | `0x0033e9c0` | `ObjectRef_Destruct_0033e9c0` | 128 | [src/engine/ObjectRef_Destruct_0033e9c0.cpp](../../src/engine/ObjectRef_Destruct_0033e9c0.cpp) |
 | `0x0038d860` | `beMessenger_SelectReceivers` | 2036 | [src/unmatched/beMessenger_SelectReceivers.cpp](../../src/unmatched/beMessenger_SelectReceivers.cpp) |
 | `0x0038e060` | `beMessenger_DispatchSelected` | 1228 | [src/unmatched/beMessenger_DispatchSelected.cpp](../../src/unmatched/beMessenger_DispatchSelected.cpp) |

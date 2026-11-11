@@ -4,8 +4,8 @@ This page covers **32 complete bodies / 1,168 code bytes**: the contiguous
 seven-body memory value/lifetime run, generic scalar defaults/no-ops and the exact
 metadata/trim/base hooks used by Work and its lists. Five memory bodies total 788 bytes: construction 200,
 destruction 88, add-reference 164, release-reference 200 and default reset 136.
-The two scalar default-copy bodies (24 each) are in `src/unmatched/igMetaField_SetToDefault.c`
-and `src/unmatched/igMetaField_CopyDefaultToValue.c`.
+The two scalar default-copy bodies (24 each) are in the field class's whole file,
+[igMetaField.cpp](../../src/engine/igMetaField.cpp).
 
 ## Memory-reference construction and default dispatch
 

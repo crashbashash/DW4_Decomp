@@ -11936,7 +11936,7 @@
 002fd200	FUN_002fd200	match	-
 002fd230	igMetaField_IsConstruct	match	-
 002fd240	igMetaField_GetMangledName	match	-
-002fd320	Gap__Core__igMetaFieldInfo__vfunc_23	match	DEFERRED duplicate 0x130140 __dt__18igSmartPointer<1X>Fv 128B (compared under the profile of its retail unit)
+002fd320	Gap__Core__igMetaFieldInfo__vfunc_23	match	-
 002fd480	igMetaField_FindByName	match	-
 002fd610	FUN_002fd610	match	DEFERRED duplicate 0x25a230 __dt__25igSmartPointer<8Instance>Fv 128B (compared under the profile of its retail unit)
 002fd6e0	FUN_002fd6e0	match	DEFERRED duplicate 0x25a230 __dt__10CreatedRefFv 128B (compared under the profile of its retail unit)
@@ -12048,7 +12048,7 @@
 00300f50	FUN_00300f50	match	-
 00300fa0	igObject_DuplicateString	match	-
 00301000	igObject_GetAllocator	match	-
-00301010	FUN_00301010	match	DEFERRED duplicate 0x25a230 __dt__18igSmartPointer<1X>Fv 128B (compared under the profile of its retail unit)
+00301010	FUN_00301010	match	-
 003010f0	Gap__Core__igObjectDirEntry__vfunc_12	match	-
 00301130	Gap__Core__igObjectDirEntry__vfunc_26	match	DEFERRED duplicate 0x25a230 __dt__26igSmartPointer<9EntryList>Fv 128B (compared under the profile of its retail unit)
 00301520	Gap__Core__igObjectDirEntry__vfunc_22	match	-

@@ -36,7 +36,7 @@ destructor classes make the rewrite change codegen. The retail code reads the co
 as unsigned (`lwu` where the value is widened to 64 bits) in others, so the field is unsigned and signed sites read it
 through `(int)`.
 
-`igObject_InitHeader` (`0x2fef20`, `src/unmatched/igObject_InitHeader.c`) writes the vtable reference at +0, then sets the
+`igObject_InitHeader` (`0x2fef20`, `src/engine/igObject.cpp`) writes the vtable reference at +0, then sets the
 23-bit count to 1, clears the flag bit and zeroes the top byte (retail result: vtable `0x52f0f0`, header word 1).
 
 ## Rules the edits follow

@@ -36,17 +36,6 @@ void *igIntMetaField_Init(igMetaField *self) {
     self->_vtable = (int)g_igIntMetaField_vtable;
     return self;
 }
-
-void *igMetaField_Construct(igMetaField *self) {
-    igObject_ConstructHeader(self);
-    self->_vtable = (int)g_igMetaField_vtable;
-    self->_fieldName = 0;
-    if (self) {
-        igMetaField_Init(self);
-    }
-    return self;
-}
-
 void *igObjectRefMetaField_Construct(igObjectRefMetaField *self) {
     igRefMetaField_Construct((igRefMetaField *)self);
     self->_vtable = (int)g_igObjectRefMetaField_vtable;

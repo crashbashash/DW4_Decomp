@@ -4,6 +4,8 @@
 
 #include "dw4/reflected.h"
 extern int g_beModelCtrlInfo_metaObject[4];
+int Gap__Core__igObject__vfunc_00__002ff0a0();
+int Gap__Core__igObject__vfunc_08__002ff0f0();
 
 /* Default slot 21: constant 4. */
 int Gap__Core__igObject__vfunc_21(void)
@@ -33,102 +35,6 @@ int Gap__Core__igObject__vfunc_00()
 {
     return Gap__Core__igObject__vfunc_00__002ff0a0();
 }
-
-void Gap__Core__igObject__vfunc_00__002ff0a0(void)
-{
-}
-
-/* Slot 1 default: empty. */
-void Gap__Core__igObject__vfunc_01(void)
-{
-}
-
-/* Slot 2 default: empty. */
-void Gap__Core__igObject__vfunc_02(void)
-{
-}
-
-/* Slot 3 default: empty. */
-void Gap__Core__igObject__vfunc_03(void)
-{
-}
-
-/* Slot 7 default: empty. */
-void Gap__Core__igObject__vfunc_07(void)
-{
-}
-
-void Gap__Core__igObject__vfunc_08__002ff0f0(void)
-{
-}
-
-/* Slot 4 default: empty. */
-void Gap__Core__igObject__vfunc_04(void)
-{
-}
-
-/* Slot 5 default: always 1. */
-int Gap__Core__igObject__vfunc_05(void)
-{
-    return 1;
-}
-
-/* Slot 6 default: always 1. */
-int Gap__Core__igObject__vfunc_06(void)
-{
-    return 1;
-}
-
-/* Slot 11 default: empty. */
-void Gap__Core__igObject__vfunc_11(void)
-{
-}
-
-/* Slot 9 default: empty. */
-void Gap__Core__igObject__vfunc_09(void)
-{
-}
-
-/* Slot 10 default: empty. */
-void Gap__Core__igObject__vfunc_10(void)
-{
-}
-
-/* Slot 12 default: empty. */
-void Gap__Core__igObject__vfunc_12(void)
-{
-}
-
-/* Slot 13 default: empty. */
-void Gap__Core__igObject__vfunc_13(void)
-{
-}
-
-/* Slot 15 default: empty. */
-void Gap__Core__igObject__vfunc_15(void)
-{
-}
-
-/* Slot 14 default: empty. */
-void Gap__Core__igObject__vfunc_14(void)
-{
-}
-
-/* Slot 16 default: empty. */
-void Gap__Core__igObject__vfunc_16(void)
-{
-}
-
-/* Slot 17 default: empty. */
-void Gap__Core__igObject__vfunc_17(void)
-{
-}
-
-/* Slot 18 default: empty. */
-void Gap__Core__igObject__vfunc_18(void)
-{
-}
-
 /* Slot 28 default: empty. */
 void Gap__Core__igObject__vfunc_28(void)
 {

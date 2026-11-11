@@ -3,8 +3,8 @@
 Eighteen complete bodies / 1,752 code bytes. They cover the three
 factory kinds referenced by Work's original field table, their constructor and
 initializer chains, object header construction, raw allocation and the two concrete
-post-construction default hooks. Header initialization at `2fef20` (76 bytes) is
-`src/unmatched/igObject_InitHeader.c`.
+post-construction default hooks. Header initialization at `2fef20` (76 bytes) opens
+[igObject.cpp](../../src/engine/igObject.cpp), the object class's whole file.
 
 Among them are `igMetaField_Init` (252),
 `igObject_ConstructHeader` (140) and `igObject_AllocateRawStorage` (112).
