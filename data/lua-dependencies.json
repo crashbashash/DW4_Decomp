@@ -14893,7 +14893,7 @@
       "address": 3135424,
       "name": "igMetaObject_Construct",
       "size": 84,
-      "source": "src/engine/metadata-object-lifecycle.c",
+      "source": "src/engine/igMetaObject.cpp",
       "direct": [
         {
           "site": 3135436,
@@ -14920,7 +14920,7 @@
       "address": 3135520,
       "name": "igMetaObject_Init",
       "size": 284,
-      "source": "src/engine/metadata-object-init.c",
+      "source": "src/engine/igMetaObject.cpp",
       "direct": [
         {
           "site": 3135536,
@@ -14959,7 +14959,7 @@
       "address": 3136064,
       "name": "igMetaObject_CreateInstance",
       "size": 244,
-      "source": "src/unmatched/igMetaObject_CreateInstance.cpp",
+      "source": "src/engine/igMetaObject.cpp",
       "direct": [
         {
           "site": 3136184,
@@ -15003,7 +15003,7 @@
       "address": 3136592,
       "name": "igMetaObject_InheritFromBase",
       "size": 208,
-      "source": "src/engine/reflection-builders.cpp",
+      "source": "src/engine/igMetaObject.cpp",
       "direct": [
         {
           "site": 3136640,
@@ -15042,7 +15042,7 @@
       "address": 3136944,
       "name": "igMetaObject_SetName",
       "size": 148,
-      "source": "src/engine/metadata-object-name.c",
+      "source": "src/engine/igMetaObject.cpp",
       "direct": [
         {
           "site": 3136980,
@@ -15075,7 +15075,7 @@
       "address": 3137104,
       "name": "igMetaObject_AppendField",
       "size": 8,
-      "source": "src/engine/metadata-field-values.c",
+      "source": "src/engine/igMetaObject.cpp",
       "direct": [
         {
           "site": 3137104,
@@ -15090,7 +15090,7 @@
       "address": 3137120,
       "name": "igMetaObject_FinalizeAndAppendField",
       "size": 64,
-      "source": "src/engine/igMetaObject_FinalizeAndAppendField.c",
+      "source": "src/engine/igMetaObject.cpp",
       "direct": [
         {
           "site": 3137144,
@@ -15111,7 +15111,7 @@
       "address": 3137184,
       "name": "igMetaObject_FinalizeAndReplaceField",
       "size": 80,
-      "source": "src/engine/metadata-replace-field.c",
+      "source": "src/engine/igMetaObject.cpp",
       "direct": [
         {
           "site": 3137216,
@@ -15132,7 +15132,7 @@
       "address": 3137280,
       "name": "igMetaObject_GetFieldAt",
       "size": 24,
-      "source": "src/engine/igMetaObject_GetFieldAt.c",
+      "source": "src/engine/igMetaObject.cpp",
       "direct": [],
       "indirect": []
     },
@@ -15140,7 +15140,7 @@
       "address": 3137312,
       "name": "igMetaObject_FindFieldByName",
       "size": 20,
-      "source": "src/engine/metadata-find-by-name.c",
+      "source": "src/engine/igMetaObject.cpp",
       "direct": [
         {
           "site": 3137324,
@@ -15155,7 +15155,7 @@
       "address": 3137344,
       "name": "igMetaObject_CreateFields",
       "size": 184,
-      "source": "src/unmatched/igMetaObject_CreateFields.cpp",
+      "source": "src/engine/igMetaObject.cpp",
       "direct": [
         {
           "site": 3137392,
@@ -15188,7 +15188,7 @@
       "address": 3137536,
       "name": "igMetaObject_NameFields",
       "size": 208,
-      "source": "src/unmatched/igMetaObject_NameFields.cpp",
+      "source": "src/engine/igMetaObject.cpp",
       "direct": [
         {
           "site": 3137592,
@@ -15215,7 +15215,7 @@
       "address": 3137744,
       "name": "igMetaObject_FinalizeFieldLayout",
       "size": 444,
-      "source": "src/unmatched/igMetaObject_FinalizeFieldLayout.cpp",
+      "source": "src/engine/igMetaObject.cpp",
       "direct": [
         {
           "site": 3137788,
@@ -15260,7 +15260,7 @@
       "address": 3138656,
       "name": "igObjectSystem_FindMetaByNameDefault",
       "size": 16,
-      "source": "src/engine/allocator-meta-lookup.c",
+      "source": "src/engine/igMetaObject.cpp",
       "direct": [
         {
           "site": 3138664,
@@ -15275,7 +15275,7 @@
       "address": 3138672,
       "name": "igMetaObject_GetFieldCount",
       "size": 12,
-      "source": "src/engine/igMetaObject_GetFieldCount.c",
+      "source": "src/engine/igMetaObject.cpp",
       "direct": [],
       "indirect": []
     },
@@ -15283,7 +15283,7 @@
       "address": 3139488,
       "name": "igMetaObject_AssignTypeId",
       "size": 108,
-      "source": "src/engine/metadata-object-lifecycle.c",
+      "source": "src/engine/igMetaObject.cpp",
       "direct": [
         {
           "site": 3139516,
@@ -15310,7 +15310,7 @@
       "address": 3139600,
       "name": "FUN_002fe810",
       "size": 284,
-      "source": "src/unmatched/FUN_002fe810.cpp",
+      "source": "src/engine/igMetaObject.cpp",
       "direct": [
         {
           "site": 3139688,
@@ -15337,7 +15337,7 @@
       "address": 3139904,
       "name": "igMetaObject_RunStaticInit",
       "size": 120,
-      "source": "src/unmatched/igMetaObject_RunStaticInit.cpp",
+      "source": "src/engine/igMetaObject.cpp",
       "direct": [
         {
           "site": 3139992,

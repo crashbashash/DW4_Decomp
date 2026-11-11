@@ -12,8 +12,8 @@ metadata count/index getters.
 Eight reference-field bodies (748 bytes)
 are consolidated in [ref-field-lifecycle.cpp](../../src/engine/ref-field-lifecycle.cpp),
 using reflected receiver fields and explicitly documented header/virtual-slot ABI
-views. The [metadata count](../../src/engine/igMetaObject_GetFieldCount.c) and
-[index](../../src/engine/igMetaObject_GetFieldAt.c) getters are 36 bytes.
+views. The metadata count and
+index getters, in [igMetaObject.cpp](../../src/engine/igMetaObject.cpp), are 36 bytes.
 The four generic cleanup/persistence bodies, `2ffc10`, `2ffcb0`, `2ffd40` and
 `igObject_WritePersistentFields` (`2ffe10`, 384 bytes), are in one-function files
 under `src/unmatched/`.

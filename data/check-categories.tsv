@@ -11938,8 +11938,8 @@
 002fd240	igMetaField_GetMangledName	match	-
 002fd320	Gap__Core__igMetaFieldInfo__vfunc_23	match	-
 002fd480	igMetaField_FindByName	match	-
-002fd610	FUN_002fd610	match	DEFERRED duplicate 0x25a230 __dt__25igSmartPointer<8Instance>Fv 128B (compared under the profile of its retail unit)
-002fd6e0	FUN_002fd6e0	match	DEFERRED duplicate 0x25a230 __dt__10CreatedRefFv 128B (compared under the profile of its retail unit)
+002fd610	FUN_002fd610	match	-
+002fd6e0	FUN_002fd6e0	match	-
 002fd7c0	igMetaObject_Construct	match	-
 002fd820	igMetaObject_Init	match	-
 002fd940	igMetaObject_CopyConstruct	match	-
@@ -12665,6 +12665,7 @@
 00327b00	Gap__Core__igStackMemoryPool__vfunc_57	match	-
 00327bb0	Gap__Core__igStackMemoryPool__vfunc_58	match	-
 00327c70	Gap__Core__igStackMemoryPool__vfunc_59	match	-
+00327d40	Gap__Core__igStackMemoryPool__vfunc_62	match	-
 00327ed0	Gap__Core__igStackMemoryPool__vfunc_63	match	-
 003280e0	Gap__Core__igStackMemoryPool__vfunc_84	match	-
 00328170	Gap__Core__igStackMemoryPool__vfunc_85	match	-

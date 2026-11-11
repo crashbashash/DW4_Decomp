@@ -10,7 +10,7 @@ wrappers (336), default creation (48), instance registration (180), the
 static initializer runner (120), full object destruction (268) and
 field zeroing `2ff930` (200). Sources are one-function files under `src/unmatched/`,
 [beMessengerFactories.cpp](../../src/game/beMessengerFactories.cpp),
-[igMetaObjectCreation.cpp](../../src/engine/igMetaObjectCreation.cpp), and the
+[igMetaObject.cpp](../../src/engine/igMetaObject.cpp), and the
 the object class file, [igObject.cpp](../../src/engine/igObject.cpp).
 Explicit allocator/return signatures preserve the retail bytes.
 
