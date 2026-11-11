@@ -156,14 +156,18 @@ class Tables(unittest.TestCase):
         self.assertEqual(len(rows), 6)
         self.same_as_readelf(path)
 
-    def test_rela_addend_digits_are_read_as_the_text_parse_read_them(self):
+    def test_rela_addends_are_signed_hex(self):
+        addends = [0x10, -8, 0x1c, 0, -0x80000000, 0x7fffffff]
         path = self.write(build_object([TEXT], [NULL_SYMBOL, ("x", 0, 0, 0x10, 0, 0)], {1: [
-            (0, verify.R_HI16, 1, 0x10), (4, verify.R_LO16, 1, -8), (8, verify.R_26, 1, 0x1c),
-            (12, verify.R_32, 1, 0)]}, rela=True))
+            (4 * i, kind, 1, addend) for i, (kind, addend) in enumerate(zip(
+                [verify.R_HI16, verify.R_LO16, verify.R_26, verify.R_32, verify.R_32, verify.R_32], addends))]},
+            rela=True))
         with self.readelf_never_runs():
             rows = verify.object_relocs(path)
-        self.assertEqual([r[4] for r in rows], [10, 0, 0, 0])
+        self.assertEqual([r[4] for r in rows], addends)
         self.assertEqual({r[0] for r in rows}, {".text"})
+        if READELF:
+            self.assertEqual([r[4] for r in verify._object_relocs_readelf(path, None, None)], addends)
         self.same_as_readelf(path)
 
     def test_an_unknown_type_is_refused_in_readelfs_words(self):

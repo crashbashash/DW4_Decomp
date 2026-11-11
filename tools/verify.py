@@ -449,7 +449,7 @@ def _elf_section_headers(path):
 # reader below decodes the same ELF32 tables and lays each entry out as the tokens readelf prints
 # for it, which then go through the very parse the text took, so every quirk of that parse is kept
 # (a symbol size above 99999 prints in hex and is refused, a processor-specific binding is three
-# tokens, a RELA addend's hex digits are read as decimal). Anything whose printed form is not
+# tokens). Anything whose printed form is not
 # certain here (a name readelf would escape or that holds a blank, a visibility with extra bits, a
 # special section index, a relocation without a symbol, a type outside TYPES) makes the caller ask
 # readelf itself, so the answers are readelf's, byte for byte.
@@ -606,11 +606,8 @@ class _ElfTables:
                 name = name or "<null>"
                 addend = 0
                 if rela:
-                    value, = struct.unpack_from("<i", self.data, at + 8)
-                    # readelf prints `+ <hex>`; the text parse read those digits as decimal, and
-                    # a hex letter or a `-` left the addend 0
-                    digits = "%x" % value
-                    addend = int(digits) if value >= 0 and digits.isdigit() else 0
+                    # readelf prints the signed addend as `+ <hex>` or `- <hex>`
+                    addend, = struct.unpack_from("<i", self.data, at + 8)
                 kind = _RELOCATION_NAMES.get(info & 0xff)
                 entries.append((offset, TYPES[kind] if kind in TYPES else None, name, addend))
             out.append((_printed(self.names[index]), row[4], entries))
@@ -824,11 +821,12 @@ def _object_relocs_readelf(obj, target_section, targets):
     """`object_relocs` from readelf's own output; `targets` maps a relocation section's file offset
     to the section it patches (None when `target_section` is None)."""
     out = _readelf("-rW", obj)
-    rows, cur = [], None
+    rows, cur, rela = [], None, False
     for ln in out.splitlines():
         if ln.startswith("Relocation section"):
-            m = re.search(r"'\.rel(?:a)?([^']*)'", ln)
-            cur = m.group(1) if m else None
+            m = re.search(r"'\.rel(a?)([^']*)'", ln)
+            cur = m.group(2) if m else None
+            rela = bool(m and m.group(1))
             if targets is not None:
                 at = re.search(r"at offset 0x([0-9a-fA-F]+)", ln)
                 if at is None or targets.get(int(at[1], 16)) != target_section:
@@ -846,9 +844,10 @@ def _object_relocs_readelf(obj, target_section, targets):
             raise ValueError(f"unsupported relocation type {tname} against {name!r} "
                              f"at +0x{int(f[0], 16):x} in .rel{cur}")
         addend = 0
-        m = re.search(r"\+\s*(\d+)\s*$", ln)
+        m = re.search(r"\s([+-])\s+([0-9a-f]+)$", ln.rstrip()) if rela else None
         if m:
-            addend = int(m.group(1))
+            # a RELA entry ends in its signed addend, printed in hex: `x + 1c`, `x - 8`
+            addend = int(m.group(2), 16) * (-1 if m.group(1) == "-" else 1)
         rows.append((cur, int(f[0], 16), TYPES[tname], name, addend))
     # Preserve ELF relocation order. MWCC can place a loop's HI16 at a higher
     # address than its paired LO16; sorting by offset destroys that pairing.
