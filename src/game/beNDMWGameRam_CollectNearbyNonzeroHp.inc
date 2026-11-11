@@ -3,7 +3,8 @@
 #include "dw4/reflected.h"
 struct Vec3 { float x,y,z; };
 struct Mat44 { float m[16]; };
-struct IntList { int vtable_word, reference_word; volatile int count; int capacity; int *data; };
+struct IntList { int vtable_word, reference_word; int count; int capacity; int *data;
+    int getCount() const { return count; } };
 /* Squared radius of the query: members closer than 30 units to the centre qualify. */
 #define NEARBY_RADIUS_SQUARED 900.0f
 /* Low 23 bits of igObject::_refCount hold the count. */
@@ -93,7 +94,7 @@ extern "C" IntListRef beNDMWGameRam_CollectNearbyNonzeroHp(beNDMWGameRam *self,c
                 beMessenger_DispatchSelected(self->_messenger,GETHP);
                 if(beMessenger_GetInt(self->_messenger,0)) {
                     list=result.value;
-                    append_index=list->count;
+                    append_index=list->getCount();
                     if(append_index<list->capacity) ++list->count;
                     else List_Resize(list,append_index+1,4);
                     list->data[append_index]=member_id;

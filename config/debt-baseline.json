@@ -34,11 +34,8 @@
   "struct.a": 116,
   "struct.b": 135,
   "struct.c": 284,
-  "unapproved.bytes": {
-   "reason": "include expansion lets the approval check see a volatile in src/game/beNDMWGameRam_CollectNearbyNonzeroHp.inc that the including file hid: FUN_003fab90, ObjectRef_Destruct_003fc670 and beNDMWGameRam_CollectNearbyNonzeroHp move to unapproved until respelled",
-   "value": 54744
-  },
-  "unapproved.functions": 61,
+  "unapproved.bytes": 47092,
+  "unapproved.functions": 58,
   "unmatched.bytes": 632648,
   "unmatched.functions": 961
  },
