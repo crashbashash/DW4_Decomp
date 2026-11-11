@@ -47,9 +47,9 @@ Matching proves the bytes; it does not make the source readable. A matched funct
 | A matched function is readable when | matched functions failing it | code bytes |
 | --- | ---: | ---: |
 | the function has a recovered name, not `FUN_<address>` or a numbered virtual slot | 13,762 | 1,869,556 |
-| no name holds an address: not the function's own, nor any function, variable or type it uses | 14,211 | 2,268,776 |
-| the types it uses have real names, not a placeholder such as `S`, `Obj`, `Info176` or `DW4VC_232_2` | 3,419 | 896,152 |
-| it sits in its class or module file, not `src/unmatched/` | 10,424 | 1,712,204 |
+| no name holds an address: not the function's own, nor any function, variable or type it uses | 14,212 | 2,268,844 |
+| the types it uses have real names, not a placeholder such as `S`, `Obj`, `Info176` or `DW4VC_232_2` | 3,406 | 894,992 |
+| it sits in its class or module file, not `src/unmatched/` | 10,143 | 1,682,196 |
 | what it calls and reads is named: no `FUN_`/`DAT_` references | 11,109 | 2,093,060 |
 | no decompiler leftovers: `temp_*`, `var_*`, `argN`, stack-offset locals such as `sp5C` | 5,704 | 1,244,644 |
 | fields are reached through named struct members: no `fNN`/`unkNN` members, no cast of a pointer plus an offset | 3,424 | 784,536 |
@@ -84,12 +84,12 @@ The debt ratchet ([`docs/engine/debt-ratchet.md`](docs/engine/debt-ratchet.md)):
 | `inline_asm.other` | 0 | 0 | 0 | `asm` statements other than `sync` and `ei` without an owner's approval row for each function they reach (tools/inline_asm.py) |
 | `unmatched.functions` | 1,208 | 976 | -232 | functions in the layout with no definition in src/ — increase recorded: 356 functions without source joined the symbol table: the unsymbolled code below the VU1 microcode now has symbols (rule 6 and reviewed start rows) |
 | `unmatched.bytes` | 693,344 | 635,200 | -58144 | bytes of those |
-| `struct.a` | 134 | 118 | -16 | struct-report groups: same view name, clashing layouts across units (scripts/check_struct_conflicts.py) |
-| `struct.b` | 157 | 156 | -1 | struct-report groups: receiver view disagrees with the reflected class |
-| `struct.c` | 285 | 285 | 0 | struct-report groups: offset-named member whose number is not its offset |
-| `m2c_idiom.units` | 5,964 | 4,927 | -1037 | source files (asm bodies excluded) still carrying m2c idioms: `temp_*`, `var_*` or `argN` |
+| `struct.a` | 134 | 117 | -17 | struct-report groups: same view name, clashing layouts across units (scripts/check_struct_conflicts.py) |
+| `struct.b` | 157 | 147 | -10 | struct-report groups: receiver view disagrees with the reflected class |
+| `struct.c` | 285 | 284 | -1 | struct-report groups: offset-named member whose number is not its offset |
+| `m2c_idiom.units` | 5,964 | 4,817 | -1147 | source files (asm bodies excluded) still carrying m2c idioms: `temp_*`, `var_*` or `argN` |
 | `raw_casts.reflected` | 359 | 359 | 0 | raw offset casts on a named receiver where reflection names the field (tools/typed_coverage.py `typeable`) |
-| `fun_dat_refs` | 87,000 | 83,998 | -3002 | FUN_/DAT_-named references in matched units' code (comments and strings excluded, definitions subtracted) |
+| `fun_dat_refs` | 87,000 | 83,487 | -3513 | FUN_/DAT_-named references in matched units' code (comments and strings excluded, definitions subtracted) |
 | `foreign_profile.functions` | 18 | 12 | -6 | code bytes match only under a provisional per-function override that differs from the unit's profile in config/SLUS-20836/units.tsv (data/check-categories.tsv) |
 | `foreign_profile.bytes` | 776 | 624 | -152 | bytes of those |
 | `unapproved.functions` | 80 | 58 | -22 | code bytes match, but the source uses inline `asm` or `volatile` with no owner approval (config/source-approvals.tsv) |
@@ -179,7 +179,7 @@ The section in 16 equal parts. `0x00100000` is the start of everything.
 | reflection fields with offset and type | 3,680 |
 | switch jump tables recovered | 209 tables, 4,147 entries, in 172 functions |
 | Lua chunks decompiled | 5,291 |
-| field accesses using a **recovered** type (not an offset cast) | 26,066 of 66,592 (39.14 %) |
+| field accesses using a **recovered** type (not an offset cast) | 26,066 of 66,599 (39.14 %) |
 | functions in the retail split (`asm/`, generated) | 20,572 |
 
 ## How these numbers are produced
