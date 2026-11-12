@@ -31004,6 +31004,26 @@
     },
     "symbol": "FUN_003b04e0"
   },
+  "0x003a3850": {
+    "whole_file": true,
+    "emitted": {
+      "FUN_003a3900": "0x003a3900",
+      "Gap__Bec__ParticleTimer__vfunc_11": "0x003a3940",
+      "FUN_003a3960": "0x003a3960",
+      "Gap__Bec__ParticleArray__vfunc_11": "0x003a3bb0",
+      "Gap__Bec__ParticleArray__vfunc_38": "0x003a3bf0",
+      "Gap__Bec__ParticleArray__vfunc_20": "0x003a4910",
+      "Gap__Bec__ParticleTimer__vfunc_20": "0x003a4920"
+    },
+    "data": {
+      "DAT_00561d78": "0x00561d78",
+      "DAT_00562640": "0x00562640",
+      "DAT_0058a0a0": "0x0058a0a0",
+      "g_ParticleArray_metaObject": "0x0058a040",
+      "g_ParticleTimer_metaObject": "0x0058a0a0"
+    },
+    "symbol": "FUN_003a3850"
+  },
   "0x003a2130": {
     "whole_file": true,
     "emitted": {
