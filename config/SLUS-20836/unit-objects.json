@@ -19278,6 +19278,7 @@
       "Gap__Sg__igShaderFactory__vfunc_24": "0x001d8a30",
       "Gap__Sg__igShaderFactory__vfunc_25": "0x001d8a60",
       "Gap__Sg__igShaderFactory__vfunc_26": "0x001d8aa0",
+      "FUN_001d8ab0": "0x001d8ab0",
       "FUN_001d8b90": "0x001d8b90",
       "Gap__Sg__igShaderInfo__vfunc_23": "0x001d8c10",
       "Gap__Sg__igShaderInfo__vfunc_24": "0x001d8cf0",
@@ -20853,14 +20854,6 @@
     "duplicates": {
       "__dt__20igSmartPointer<3Obj>Fv": "0x0025a230",
       "__dt__9StringRefFv": "0x00130720"
-    },
-    "externals": {
-      "__dl__FPv": "0x00100610"
-    }
-  },
-  "0x001d8ab0": {
-    "duplicates": {
-      "__dt__25igSmartPointer<8igObject>Fv": "0x00130140"
     },
     "externals": {
       "__dl__FPv": "0x00100610"

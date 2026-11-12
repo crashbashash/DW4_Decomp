@@ -699,22 +699,11 @@ void FUN_00308770(void) {
     ((int *)&DAT_004c22d8)[0] = 5;
 }
 
-int FUN_003087a0(struct R_3087a0 **arg0, void *arg1, int arg2) {
-    struct R_3087a0 *t;
-
-    if (strcmp(arg2, &DAT_004fb390[0]) == 0) {
-        *arg0 = (struct R_3087a0 *)FUN_00308a90((O_308a90 *)arg1);
-        t = *arg0;
-        if (t != 0) {
-            t->rc = t->rc + 1;
-        }
-        return;
+igSmartPointer<igObject> FUN_003087a0(void *directory, int name) {
+    if (strcmp(name, &DAT_004fb390[0]) == 0) {
+        return igSmartPointer<igObject>((igObject *)FUN_00308a90((O_308a90 *)directory), kRetainReference);
     }
-    *arg0 = (struct R_3087a0 *)igProperty_FindByName((struct L_3022c0 *)(*(int *)((char *)arg1 + 16)), (struct P_3022c0 *)DAT_00586670[0], arg2);
-    t = *arg0;
-    if (t != 0) {
-        t->rc = t->rc + 1;
-    }
+    return igSmartPointer<igObject>((igObject *)igProperty_FindByName((struct L_3022c0 *)(*(int *)((char *)directory + 16)), (struct P_3022c0 *)DAT_00586670[0], name), kRetainReference);
 }
 
 int FUN_00308850(int *p, int extra1)

@@ -9428,11 +9428,7 @@ typedef struct Root_3085c0 { char pad[56]; void *cur; } Root_3085c0;
 extern "C" char GPR_00554c30;
 extern "C" int DAT_004fb390[4];
 extern "C" int DAT_00586670[4];
-struct R_3087a0 {
-    int pad;
-    int rc;
-};
-extern "C" int FUN_003087a0(struct R_3087a0 **arg0, void *arg1, int arg2);
+extern "C" igSmartPointer<igObject> FUN_003087a0(void *directory, int name);
 struct Obj_308860 : public igObject { };
 struct List_308860 { int pad0; int pad1; int count; int cap; int *data; };
 struct MemberRef {

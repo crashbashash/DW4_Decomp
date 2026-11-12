@@ -53,7 +53,6 @@ void Gap__Core__igResource__vfunc_12(T_308f00 *arg0) {
 
 void *FUN_003092f0(Item_3092f0 *arg0, int arg1) {
     Mem_3092f0 sp5C;
-    Obj_3092f0 *sp58;
     R4_3092f0 sp54;
     Obj_3092f0 *r;
     int v;
@@ -64,12 +63,7 @@ void *FUN_003092f0(Item_3092f0 *arg0, int arg1) {
     Out_3092f0 *o;
     void *res;
     Obj_3092f0 *t;
-    FUN_003087a0((R_3087a0 **)&sp58, (void *)arg0, arg1);
-    r = sp58;
-    if (r != 0) {
-        r->refs = r->refs - 1;
-        if (((unsigned long long)(long long)sp58->refs & 0x7fffffULL) == 0) igObject_Destroy(sp58);
-    }
+    r = (Obj_3092f0 *)FUN_003087a0(arg0, arg1).p;
     if (r != 0) {
         FUN_002d9130((int *)r);
         return r;
@@ -142,47 +136,24 @@ P_309640 *FUN_00309640(P_309640 *arg0, P_309640 *arg1) {
 }
 
 void FUN_00309750(W_309750 *arg0, int arg1) {
-    S1_309750 *sp3C;
-    int temp_v0;
-    bool var_s1;
-    S1_309750 *temp_a0;
-    S1_309750 *t;
-
-    FUN_003087a0((R_3087a0 **)&sp3C, (void *)arg0, arg1);
-    t = sp3C;
-    if (t == 0) {
-        if (t != 0) {
-            t->f4 = (int)((int) (t->f4 - 1));
-            if (((unsigned long long) ((long long) t->f4 << 0x29) >> 0x29) == 0) {
-                igObject_Destroy(t);
-            }
-        }
-    } else {
-        var_s1 = 0;
-        if (t == arg0->f12) {
-            var_s1 = 1;
-        }
-        if (t->f32 == 0) {
-            t->f32 = (S1_309750 *)arg0;
-        }
-        temp_v0 = FUN_002d91c0((RefCountedHandle *)sp3C);
-        if (var_s1 && (temp_v0 <= 0)) {
-            temp_a0 = arg0->f12;
-            if (temp_a0 != 0) {
-                temp_a0->f4 = (int)((int) (temp_a0->f4 - 1));
-                if (((unsigned long long) ((long long) temp_a0->f4 << 0x29) >> 0x29) == 0) {
-                    igObject_Destroy(temp_a0);
-                }
-            }
-            arg0->f12 = 0;
-        }
-        t = sp3C;
-        if (t != 0) {
-            t->f4 = (int)((int) (t->f4 - 1));
-            if (((unsigned long long) ((long long) t->f4 << 0x29) >> 0x29) == 0) {
-                igObject_Destroy(t);
-            }
-        }
+    igSmartPointer<igObject> found = FUN_003087a0(arg0, arg1);
+    S1_309750 *entry = (S1_309750 *)found.p;
+    bool current;
+    int remaining;
+    if (entry == 0) {
+        return;
+    }
+    current = false;
+    if (entry == arg0->f12) {
+        current = true;
+    }
+    if (entry->f32 == 0) {
+        entry->f32 = (S1_309750 *)arg0;
+    }
+    remaining = FUN_002d91c0((RefCountedHandle *)found.get()); /* matching construct: manual — get() rather than .p keeps the release from re-reading found */
+    if (current && remaining <= 0) {
+        igRelease((igObject *)arg0->f12);
+        arg0->f12 = 0;
     }
 }
 
