@@ -19,7 +19,7 @@ The existing12-byte beDataBase metadata getter is preserved separately.
 | 3a9580 | String storage lookup with empty-string fallback | 88 |
 | 3a95e0 | Record count from the first nonempty column family | 296 |
 
-Source is in [beDataBase.c](../../src/game/beDataBase.cpp) and the
+Source is in [beDBManager.cpp](../../src/game/beDBManager.cpp) and the
 [item C](../../src/game/beNDMWItemBaseDatabase.cpp)/
 [C++ dispatch](../../src/game/beNDMWItemBaseDatabase.cpp) units. The module has290
 non-padding words and two zero padding words.

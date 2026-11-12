@@ -927,7 +927,7 @@
       "address": "0x003a9220",
       "name": "igProperty_GetRecord",
       "size": 36,
-      "source": "src/engine/property.cpp",
+      "source": "src/game/beDBManager.cpp",
       "sites": [
         "0x003fdf68",
         "0x003fdf7c",
@@ -1007,7 +1007,7 @@
       "address": "0x003a9250",
       "name": "FUN_003a9250",
       "size": 36,
-      "source": "src/unmatched/FUN_003a9250.cpp",
+      "source": "src/game/beDBManager.cpp",
       "sites": [
         "0x003fdf90",
         "0x003fe618",
@@ -1041,7 +1041,7 @@
       "address": "0x003a9280",
       "name": "igProperty_GetRecordByte",
       "size": 36,
-      "source": "src/engine/property.cpp",
+      "source": "src/game/beDBManager.cpp",
       "sites": [
         "0x003ff7b0"
       ]
@@ -1050,7 +1050,7 @@
       "address": "0x003a92e0",
       "name": "FUN_003a92e0",
       "size": 36,
-      "source": "src/unmatched/FUN_003a92e0.cpp",
+      "source": "src/game/beDBManager.cpp",
       "sites": [
         "0x003ff69c",
         "0x003ffaf0",
@@ -1076,7 +1076,7 @@
       "address": "0x003a9460",
       "name": "beDataBase_GetRecordInt",
       "size": 216,
-      "source": "src/game/beDataBase.cpp",
+      "source": "src/game/beDBManager.cpp",
       "sites": [
         "0x003fe02c",
         "0x003fe39c",
@@ -1188,7 +1188,7 @@
       "address": "0x003a9580",
       "name": "beDataBase_GetRecordString",
       "size": 88,
-      "source": "src/game/beDataBase.cpp",
+      "source": "src/game/beDBManager.cpp",
       "sites": [
         "0x003fe284",
         "0x003feae4",

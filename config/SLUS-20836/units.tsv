@@ -642,10 +642,7 @@
 0x003a56b0	0x003a59cc	bec_beStaticInfoCtl	b52	-O4,p -sdatathreshold 2 -inline level=8 -Iinclude	on	-	whole file
 0x003a59d0	0x003a694c	bec_beTargetObj	b52	-O4,p -sdatathreshold 2 -inline level=8 -Iinclude	on	-	whole file
 0x003a6950	0x003a921c	bec_beMovie	b52	-O4,p -sdatathreshold 2 -inline level=8 -Iinclude	on	-	whole file
-0x003a9220	0x003a9364	igProperty_3a9220	b52	-O4,p -sdatathreshold 2 -inline level=8 -Iinclude	on	-	class run of 4 labeled members, 3 unlabeled functions inside; exceptions on: 7/7 functions have retail index records; default -O3 -Iinclude reproduces 7/7 members
-0x003a9370	0x003a9394	unlabeled_3a9370	b52	-O4,p -sdatathreshold 2 -inline level=8 -Iinclude	on	-	unlabeled run, no boundary evidence: cut where the retail exception evidence or the pins change; exceptions on: 1/1 functions have retail index records; default -O3 -Iinclude reproduces 1/1 members
-0x003a93a0	0x003a9708	beDataBase_3a93a0	b52	-O4,p -sdatathreshold 2 -inline level=8 -Iinclude	on	-	class run of 5 labeled members; exceptions on: 4/5 functions have retail index records; default -O3 -Iinclude reproduces 5/5 members
-0x003a9710	0x003a980c	beDBManager_3a9710	b52	-O4,p -sdatathreshold 2 -inline level=8 -Iinclude	on	-	class run of 6 labeled members; exceptions on: 3/6 functions have retail index records; combat -O3,p -Iinclude reproduces 6/6 members
+0x003a9220	0x003a980c	bec_beDBManager	b52	-O4,p -sdatathreshold 2 -inline level=8 -Iinclude	on	-	whole file
 0x003a9810	0x003a98d0	unlabeled_3a9810	b52	-O4,p -sdatathreshold 2 -inline level=8 -Iinclude	on	-	unlabeled run, no boundary evidence: cut where the retail exception evidence or the pins change; exceptions on: 2/2 functions have retail index records; default -O3 -Iinclude reproduces 2/2 members
 0x003a98d0	0x003a9990	unlabeled_3a98d0	b52	-O4,p -sdatathreshold 2 -inline level=8 -Iinclude	on	-	unlabeled run, no boundary evidence: cut where the retail exception evidence or the pins change; exceptions on: 1/1 functions have retail index records; combat -O3,p -Iinclude reproduces 1/1 members
 0x003a9990	0x003a99ec	unlabeled_3a9990	b52	-O4,p -sdatathreshold 2 -inline level=8 -Iinclude	on	-	unlabeled run, no boundary evidence: cut where the retail exception evidence or the pins change; exceptions on: 1/1 functions have retail index records; default -O3 -Iinclude reproduces 1/1 members

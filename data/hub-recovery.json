@@ -25583,7 +25583,7 @@
       "address": 3838496,
       "name": "igProperty_GetRecord",
       "size": 36,
-      "source": "src/engine/property.cpp",
+      "source": "src/game/beDBManager.cpp",
       "direct": [
         {
           "site": 3838512,
@@ -25598,7 +25598,7 @@
       "address": 3838544,
       "name": "FUN_003a9250",
       "size": 36,
-      "source": "src/unmatched/FUN_003a9250.cpp",
+      "source": "src/game/beDBManager.cpp",
       "direct": [
         {
           "site": 3838560,
@@ -25613,7 +25613,7 @@
       "address": 3838592,
       "name": "igProperty_GetRecordByte",
       "size": 36,
-      "source": "src/engine/property.cpp",
+      "source": "src/game/beDBManager.cpp",
       "direct": [
         {
           "site": 3838608,
@@ -25628,7 +25628,7 @@
       "address": 3838640,
       "name": "igProperty_GetRecordArray",
       "size": 36,
-      "source": "src/engine/property.cpp",
+      "source": "src/game/beDBManager.cpp",
       "direct": [
         {
           "site": 3838656,
@@ -25643,7 +25643,7 @@
       "address": 3838688,
       "name": "FUN_003a92e0",
       "size": 36,
-      "source": "src/unmatched/FUN_003a92e0.cpp",
+      "source": "src/game/beDBManager.cpp",
       "direct": [
         {
           "site": 3838704,
@@ -25658,7 +25658,7 @@
       "address": 3838736,
       "name": "FUN_003a9310",
       "size": 36,
-      "source": "src/unmatched/FUN_003a9310.cpp",
+      "source": "src/game/beDBManager.cpp",
       "direct": [
         {
           "site": 3838752,

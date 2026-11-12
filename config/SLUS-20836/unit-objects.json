@@ -30920,6 +30920,37 @@
     },
     "symbol": "FUN_003b04e0"
   },
+  "0x003a9220": {
+    "whole_file": true,
+    "emitted": {
+      "FUN_003a9250": "0x003a9250",
+      "igProperty_GetRecordByte": "0x003a9280",
+      "igProperty_GetRecordArray": "0x003a92b0",
+      "FUN_003a92e0": "0x003a92e0",
+      "FUN_003a9310": "0x003a9310",
+      "igProperty_GetRecordFolder": "0x003a9340",
+      "FUN_003a9370": "0x003a9370",
+      "beDataBase_FindRecordValueIndex": "0x003a93a0",
+      "beDataBase_GetRecordInt": "0x003a9460",
+      "beDataBase_GetRecordBool": "0x003a9540",
+      "beDataBase_GetRecordString": "0x003a9580",
+      "beDataBase_GetRecordCount": "0x003a95e0",
+      "Gap__Bec__beDBManager__vfunc_32": "0x003a9710",
+      "Gap__Bec__beDBManager__vfunc_30": "0x003a9720",
+      "Gap__Bec__beDBManager__vfunc_29": "0x003a9730",
+      "Gap__Bec__beDBManager__vfunc_31": "0x003a9760",
+      "Gap__Bec__beDBManager__vfunc_33": "0x003a9780",
+      "Gap__Bec__beDBManager__vfunc_20": "0x003a9800"
+    },
+    "data": {
+      "DAT_005102a0": "0x005102a0",
+      "emptyString": "0x004e0858",
+      "g_beDBManagerInfo_metaObject": "0x00589938",
+      "g_beDBManager_metaObject": "0x00589958",
+      "g_propertyNameField": "0x00585be0"
+    },
+    "symbol": "igProperty_GetRecord"
+  },
   "0x003a6950": {
     "whole_file": true,
     "emitted": {
