@@ -346,7 +346,7 @@
    "name_defect.functions": 0,
    "opt_pragma.statements": 7,
    "orphan.bytes": 32,
-   "profile_split.bytes": 39168,
+   "profile_split.bytes": 38852,
    "profile_split.units": 9,
    "raw_casts.reflected": 363,
    "struct.a": 81,
@@ -624,9 +624,9 @@
   "error": null,
   "offset_casts": 6505,
   "pct": 38.96,
-  "recovered": 26210,
+  "recovered": 26209,
   "synthetic": 10388,
-  "total": 67273,
+  "total": 67263,
   "typeable": 363,
   "typeable_pct": 0.54
  }
