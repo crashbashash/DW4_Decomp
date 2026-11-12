@@ -5944,6 +5944,9 @@ extern "C" int Gap__Sg__igTransformSequence1_5__vfunc_59(igTransformSequence1_5 
 extern "C" void Gap__Sg__igTransformSequence1_5__vfunc_58(TransformSequenceView *s, unsigned char channels);
 extern "C" void Gap__Sg__igTransformSequence1_5__vfunc_61(T_1de9c0 *t, int idx, int ch, V_1de9c0 *p, V_1de9c0 *q);
 extern "C" int Gap__Sg__igTransformSequence1_5__vfunc_48(igTransformSequence1_5 *self, int index);
+extern "C" void FUN_001deb50(igTransformSequence1_5 *self, float *out, int from, int to, float t);
+extern "C" void FUN_001def90(igTransformSequence1_5 *self, float *out, int from, int to, float t);
+extern "C" void FUN_001930f0(float *out, float *p1, float *p2, float *p3, float *p4, float t);
 extern "C" void FUN_001df1d0(A_1df1d0 *arg0, long long arg1, int *arg2, int *arg3, float *arg4);
 extern "C" long long Gap__Sg__igTransformSequence1_5__vfunc_31(O_1df6e0 *o);
 extern "C" long long Gap__Sg__igTransformSequence1_5__vfunc_32(V_1df740 *arg0);

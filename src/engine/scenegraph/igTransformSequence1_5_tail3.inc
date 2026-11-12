@@ -320,6 +320,47 @@ int Gap__Sg__igTransformSequence1_5__vfunc_48(igTransformSequence1_5 *self, int 
     return 0;
 }
 
+void FUN_001deb50(igTransformSequence1_5 *self, float *out, int from, int to, float t) {
+    unsigned char method = self->_interpolationMethod[0];
+    if (method == 0) {
+        float *key = (float *)(((igVec3fList *)self->_xlateList)->_data + from * 12);
+        out[0] = key[0];
+        out[1] = key[1];
+        out[2] = key[2];
+        return;
+    }
+    if (method == 1) {
+        int keys = ((igVec3fList *)self->_xlateList)->_data;
+        FUN_00192f00(out, t, (void *)(keys + from * 12), (void *)(keys + to * 12));
+        return;
+    }
+    FUN_001930f0(out, (float *)(((igVec3fList *)self->_xlateList)->_data + from * 12),
+                 (float *)(((igDataList *)self->_interpolationDataTranslation)->_data + from * 24),
+                 (float *)(((igDataList *)self->_interpolationDataTranslation)->_data + (from * 2 + 1) * 12),
+                 (float *)(((igVec3fList *)self->_xlateList)->_data + to * 12), t);
+}
+
+void FUN_001def90(igTransformSequence1_5 *self, float *out, int from, int to, float t) {
+    unsigned char method = self->_interpolationMethod[1];
+    if (method == 0) {
+        float *key = (float *)(((igQuaternionfList *)self->_quatList)->_data + from * 16);
+        out[0] = key[0];
+        out[1] = key[1];
+        out[2] = key[2];
+        out[3] = key[3];
+        return;
+    }
+    if (method == 3) {
+        int keys = ((igQuaternionfList *)self->_quatList)->_data;
+        FUN_00192ab0(out, t, (void *)(keys + from * 16), (void *)(keys + to * 16));
+        return;
+    }
+    {
+        int keys = ((igQuaternionfList *)self->_quatList)->_data;
+        FUN_00192cc0(out, t, (void *)(keys + from * 16), (void *)(keys + to * 16));
+    }
+}
+
 void FUN_001df1d0(A_1df1d0 *arg0, long long arg1, int *arg2, int *arg3, float *arg4) {
     float a = (float)(unsigned int)(arg1 >> 18);
     float b = (float)(unsigned int)(*arg0->b->p >> 18);
