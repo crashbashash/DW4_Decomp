@@ -1,37 +1,49 @@
+#include "dw4/reflected.h"
 #include "dw4/igSmartPointer.h"
-extern "C" {
-int igMatrix44f_SetIdentity(...);
-void FUN_00191670(void *, void *, float);
-void *FUN_0034c040(...);
-int FUN_0034c5d0();
-void Matrix44_TranslateLocal(void *, void *);
-int Memory_GetAllocatorBySelector(...);
-int beMessenger_AppendBool(int, unsigned char);
-int beMessenger_AppendString(...);
-int beMessenger_GetBool(int, int);
-int beMessenger_GetInt(int, int);
-void beMessenger_GetMatrix(void *, int, int);
-void *beMessenger_GetObject(int, int);
-int beMessenger_GetString(int, int);
-int beMessenger_GetStringCount(int);
-void beMessenger_GetVec3(void *, int, int);
-int beMessenger_GetVec3Count(int);
-unsigned int beMessenger_ResolveEnumValue(int, int, void *);
-int beMessenger_SendNamed(...);
-int igObject_GetAllocator(...);
-extern float DAT_004e1058[4];
-extern float DAT_004e105c[4];
-extern float DAT_004e1060[4];
-extern int DAT_004e1078[4];
-extern int DAT_004e1088[4];
-extern int DAT_004e1098[4];
-extern int DAT_0050f638[4];
-extern int DAT_0050f648[4];
-extern int DAT_0050f658[4];
-extern int DAT_0050f668[4];
-extern int DAT_00587110[4];
-extern unsigned char GPR_00554c14;
-}
+
+extern "C" void FUN_001dc8d0(int);
+extern "C" void igObject_Destroy(void *);
+extern "C" int Gap__Bec__beParticleCtrl2__vfunc_30(void);
+extern "C" int Gap__Bec__beParticleCtrl2__vfunc_20(void);
+extern "C" int igMatrix44f_SetIdentity(...);
+extern "C" void FUN_00191670(void *, void *, float);
+extern "C" void *FUN_0034c040(...);
+extern "C" int FUN_0034c5d0(...);
+extern "C" void Matrix44_TranslateLocal(void *, void *);
+extern "C" int Memory_GetAllocatorBySelector(...);
+extern "C" int beMessenger_AppendBool(int, unsigned char);
+extern "C" int beMessenger_AppendString(...);
+extern "C" int beMessenger_GetBool(int, int);
+extern "C" int beMessenger_GetInt(int, int);
+extern "C" void beMessenger_GetMatrix(void *, int, int);
+extern "C" void *beMessenger_GetObject(int, int);
+extern "C" int beMessenger_GetString(int, int);
+extern "C" int beMessenger_GetStringCount(int);
+extern "C" void beMessenger_GetVec3(void *, int, int);
+extern "C" int beMessenger_GetVec3Count(int);
+extern "C" unsigned int beMessenger_ResolveEnumValue(int, int, void *);
+extern "C" int beMessenger_SendNamed(...);
+extern "C" int igObject_GetAllocator(...);
+extern "C" void Gap__Bec__beParticleCtrl2__vfunc_32(beParticleCtrl2 *arg0);
+extern "C" int g_beParticleCtrl2Info_metaObject[4];
+extern "C" int g_beParticleCtrl2_metaObject[4];
+typedef struct NameHolder { char pad[8]; int *f8; } NameHolder;
+typedef struct RamInfoArg { char pad[8]; int f8; NameHolder *fc; char pad2[4]; unsigned char f14; char pad3[31]; igObject *f34; } RamInfoArg;
+extern "C" int beMessenger_RegisterReceiver(int, RamInfoArg *, int *, int *, int);
+extern "C" int DAT_004e0858[4];
+extern "C" int DAT_0050f638[4];
+extern "C" void Gap__Bec__beParticleCtrl2__vfunc_29(beParticleCtrl2 *arg0, RamInfoArg *arg1);
+extern "C" float DAT_004e1058[4];
+extern "C" float DAT_004e105c[4];
+extern "C" float DAT_004e1060[4];
+extern "C" int DAT_004e1078[4];
+extern "C" int DAT_004e1088[4];
+extern "C" int DAT_004e1098[4];
+extern "C" int DAT_0050f648[4];
+extern "C" int DAT_0050f658[4];
+extern "C" int DAT_0050f668[4];
+extern "C" int DAT_00587110[4];
+extern "C" unsigned char GPR_00554c14;
 struct Rel { static inline void go(igObject *object) {
     if (object) {
         --object->_refCount;
@@ -108,7 +120,78 @@ struct Mtx {
     virtual void d34();
     virtual void put(void *);
 };
-extern "C" int Gap__Bec__beParticleCtrl2__vfunc_34(beParticleCtrl2 *arg0, beParticleCtrl2InfoRam *arg1, beMessengerWork *arg2) {
+extern "C" int Gap__Bec__beParticleCtrl2__vfunc_34(beParticleCtrl2 *arg0, beParticleCtrl2InfoRam *arg1, beMessengerWork *arg2);
+
+void Gap__Bec__beParticleCtrl2__vfunc_32(beParticleCtrl2 *arg0) {
+    int n1;
+    int i;
+    int n2;
+    int j;
+    beParticleCtrl2InfoRam *it;
+    beParticleCtrl2Info *g;
+    int o1;
+    int o2;
+    igObject *r;
+    n1 = ((igObjectList *)arg0->_infoList)->_count;
+    i = 0;
+    if (0 < n1) {
+        o1 = 0;
+        do {
+            g = *(beParticleCtrl2Info **)((char *)((igObjectList *)arg0->_infoList)->_data + o1);
+            FUN_001dc8d0(g->_mainSwitch);
+            FUN_001dc8d0(g->_subSwitch);
+            n2 = ((igObjectList *)g->_ramList)->_count;
+            j = 0;
+            if (0 < n2) {
+                o2 = 0;
+                do {
+                    it = *(beParticleCtrl2InfoRam **)((char *)((igObjectList *)g->_ramList)->_data + o2);
+                    it->_isRun = 0;
+                    r = (igObject *)it->_work;
+                    if (r != 0) {
+                        --r->_refCount;
+                        if (((unsigned long long)(long long)r->_refCount & 0x7fffffULL) == 0) {
+                            igObject_Destroy((void *)r);
+                        }
+                    }
+                    it->_work = 0;
+                    j++;
+                    o2 += 4;
+                    ((ParticleTimer *)it->_particleTimer)->_timeRunning = 0;
+                } while (j < n2);
+            }
+            i++;
+            o1 += 4;
+        } while (i < n1);
+    }
+}
+
+int Gap__Bec__beParticleCtrl2__vfunc_30(void)
+{
+    return g_beParticleCtrl2Info_metaObject[0];
+}
+
+void Gap__Bec__beParticleCtrl2__vfunc_29(beParticleCtrl2 *arg0, RamInfoArg *arg1) {
+    int *var_a3;
+    int t0;
+    igObject *temp_a0;
+
+    t0 = arg1->f8;
+    var_a3 = arg1->fc->f8;
+    var_a3 = (var_a3 != 0) ? var_a3 : (int *)(&DAT_004e0858[0]);
+    beMessenger_RegisterReceiver(arg0->_messenger, arg1, &DAT_0050f638[0], var_a3, t0);
+    arg1->f14 = 0;
+    temp_a0 = arg1->f34;
+    if (temp_a0 != 0) {
+        temp_a0->_refCount = (int)temp_a0->_refCount - 1;
+        if (((unsigned long long) ((long long) (int)temp_a0->_refCount << 0x29) >> 0x29) == 0) {
+            igObject_Destroy((void *)temp_a0);
+        }
+    }
+    arg1->f34 = 0;
+}
+
+int Gap__Bec__beParticleCtrl2__vfunc_34(beParticleCtrl2 *arg0, beParticleCtrl2InfoRam *arg1, beMessengerWork *arg2) {
     switch (beMessenger_ResolveEnumValue(arg0->_messenger, FUN_0034c5d0(), (void *)arg2->_message)) {
     case 0:
         if (beMessenger_GetStringCount(arg0->_messenger) != 0) {
@@ -211,4 +294,9 @@ extern "C" int Gap__Bec__beParticleCtrl2__vfunc_34(beParticleCtrl2 *arg0, bePart
         break;
     }
     return 1;
+}
+
+int Gap__Bec__beParticleCtrl2__vfunc_20(void)
+{
+    return g_beParticleCtrl2_metaObject[0];
 }

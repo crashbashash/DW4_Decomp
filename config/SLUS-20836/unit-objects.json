@@ -1149,19 +1149,6 @@
       "__dl__FPv": "0x00100610"
     }
   },
-  "0x0039bca0": {
-    "duplicates": {
-      "__dt__41igSmartPointer<23beParticleCtrl2InfoWork>Fv": "0x0034be40"
-    },
-    "exceptions": {
-      "index": "0x0054f200",
-      "table": "0x00543cd4",
-      "table_size": "0x000014"
-    },
-    "externals": {
-      "__dl__FPv": "0x00100610"
-    }
-  },
   "0x0039cbf0": {
     "duplicates": {
       "__dt__25igSmartPointer<8igObject>Fv": "0x0033e9c0"
@@ -31057,6 +31044,40 @@
       "__dt__9StringRefFv": "0x00130720"
     },
     "symbol": "FUN_003b04e0"
+  },
+  "0x0039b880": {
+    "whole_file": true,
+    "emitted": {
+      "Gap__Bec__beParticleCtrl2__vfunc_30": "0x0039bbf0",
+      "Gap__Bec__beParticleCtrl2__vfunc_29": "0x0039bc00",
+      "Gap__Bec__beParticleCtrl2__vfunc_34": "0x0039bca0",
+      "Gap__Bec__beParticleCtrl2__vfunc_20": "0x0039c150"
+    },
+    "data": {
+      "@219": "0x0050f670",
+      "DAT_004e0858": "0x004e0858",
+      "DAT_004e1058": "0x004e1058",
+      "DAT_004e105c": "0x004e105c",
+      "DAT_004e1060": "0x004e1060",
+      "DAT_004e1078": "0x004e1078",
+      "DAT_004e1088": "0x004e1088",
+      "DAT_004e1098": "0x004e1098",
+      "DAT_0050f638": "0x0050f638",
+      "DAT_0050f648": "0x0050f648",
+      "DAT_0050f658": "0x0050f658",
+      "DAT_0050f668": "0x0050f668",
+      "DAT_00587110": "0x00587110",
+      "GPR_00554c14": "0x00554c14",
+      "g_beParticleCtrl2Info_metaObject": "0x005884e0",
+      "g_beParticleCtrl2_metaObject": "0x00588510"
+    },
+    "duplicates": {
+      "__dt__41igSmartPointer<23beParticleCtrl2InfoWork>Fv": "0x0034be40"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    },
+    "symbol": "Gap__Bec__beParticleCtrl2__vfunc_32"
   },
   "0x0039b2e0": {
     "whole_file": true,
