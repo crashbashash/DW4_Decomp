@@ -37,6 +37,7 @@ int FUN_00262540(int adxf);               /* file size in sectors */
 int FUN_00262678(int adxf);               /* status */
 
 void Gap__Core__igObject__vfunc_01(igObject *self);
+void Gap__Core__igObject__vfunc_07(igObject *self);
 void Gap__Core__igObject__vfunc_08__002ff0f0(igObject *self);
 void Gap__Core__igObject__vfunc_11(igObject *self);
 void *igObject_GetAllocator(igObject *self);
@@ -108,6 +109,18 @@ void Gap__igAdxFile__vfunc_11(igAdxFile *self)
     self->_bBufferFilled = 0;
     self->_iBufferPos = 0;
     self->_adxf = 0;
+}
+
+void Gap__igAdxFile__vfunc_07(igAdxFile *self)
+{
+    Gap__Core__igObject__vfunc_07(self);
+    igMetaObject_CountInstances(((igAdxFileVirtuals *)self)->vfunc_20(), 1);
+    self->_pBuffer = (int)FUN_002ed2b0(self->_iBufferSize, 0x40, igObject_GetAllocator(self));
+    /* matching construct: hand search — the failed-allocation return folds into the epilogue, leaving the reload of
+       _pBuffer; the GameCube build keeps the same compare with no branch after it */
+    if (self->_pBuffer == 0) {
+        return;
+    }
 }
 
 int Gap__igAdxFile__vfunc_20(void)
