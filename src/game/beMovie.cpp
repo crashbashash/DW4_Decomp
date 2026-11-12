@@ -11,11 +11,11 @@ extern "C" int Memory_GetAllocatorBySelector(...);
 extern "C" void igObject_Destroy(void *);
 extern "C" int igObject_GetAllocator(...);
 extern "C" int FUN_00332290(int, int);
-extern "C" int FUN_00332340(int, unsigned char);
-extern "C" void FUN_00332430(...);
-extern "C" int FUN_00281bb8(int, int, int);
+extern "C" int FUN_00332340(int);
+extern "C" void FUN_00332430(int, int);
+extern "C" int FUN_00281bb8(int, unsigned char, int);
 extern "C" unsigned int FUN_00332490(void *, bool);
-extern "C" void FUN_00332370(...);
+extern "C" void FUN_00332370(int, int);
 extern "C" int FUN_003323a0(int);
 extern "C" int FUN_00332460(int, int, bool);
 extern "C" void FUN_003a73b0(void *arg0, int arg1);
@@ -62,6 +62,15 @@ extern "C" int FUN_003a6c00(S *arg0, int arg1);
 struct DispatchTarget;
 extern "C" int FUN_00332160(DispatchTarget *, int, int);
 extern "C" int FUN_003a6c80(beCriAudio *self, int arg1, int arg2);
+extern "C" int DAT_00510060[4];
+extern "C" int DAT_00510080[4];
+extern "C" int DAT_005100a0[4];
+extern "C" char DAT_005100c0[], DAT_005100e0[], DAT_00510100[];
+extern "C" int FUN_003a6ce0(beCriAudio *o, int id, long long value);
+extern "C" void FUN_003a6e00(beCriAudio *s);
+extern "C" int FUN_003a7300(void *arg0);
+extern "C" void FUN_003a74b0(void *arg0);
+
 extern "C" char DAT_00510120[];
 extern "C" char DAT_00510140[];
 extern "C" char DAT_00510170[];
@@ -301,7 +310,7 @@ int FUN_003a6c00(S *arg0, int arg1) {
     if (t != 0) {
         if (arg0->f16 == 1) b = 1;
     }
-    if (b) { FUN_00332340(t, b); return FUN_00332290(arg0->f8, arg1); }
+    if (b) { FUN_00332340(t); return FUN_00332290(arg0->f8, arg1); }
     return 0;
 }
 
@@ -316,6 +325,51 @@ int FUN_003a6c80(beCriAudio *self, int arg1, int arg2) {
         return r;
     }
     return 0;
+}
+
+int FUN_003a6ce0(beCriAudio *o, int id, long long value) {
+    int ok = o->_sndf != 0;
+    if (ok) ok = o->_audioType == 3;
+    if (ok) {
+        if (id < 1 || id > 255) { FUN_003a7580(o, id, DAT_00510060); return 0; }
+        if (FUN_00281bb8(1, id, (int)value)) { FUN_003a7580(o, id, DAT_00510080); return 0; }
+        if (FUN_00281bb8(2, id, 0)) { FUN_003a7580(o, id, DAT_005100a0); return 0; }
+        ((beCriSndf *)o->_sndf)->_req = id;
+        ((beCriSndf *)o->_sndf)->_seq = value;
+        ((beCriSndf *)o->_sndf)->_isPlaying = 0;
+        return 1;
+    }
+    return 0;
+}
+
+void FUN_003a6e00(beCriAudio *s) {
+    if (H::A(s)) {
+        int n = ((beCriSndf *)s->_sndf)->_req;
+        if (n != 0) {
+            if (n <= 0 || n > 255) {
+                FUN_003a7580(s, n, DAT_005100c0);
+            } else {
+                int r = FUN_00281bb8(7, n & 0xFF, 0);
+                if (r < 0) {
+                    FUN_003a7580(s, r, DAT_005100e0);
+                    return;
+                }
+                if (r > 0) {
+                    r = FUN_00281bb8(3, ((beCriSndf *)s->_sndf)->_req & 0xFF, 0);
+                    if (r < 0) FUN_003a7580(s, r, DAT_00510100);
+                }
+                ((beCriSndf *)s->_sndf)->_req = 0;
+                ((beCriSndf *)s->_sndf)->_seq = 0;
+            }
+        }
+    } else {
+        bool b = H::B(s);
+        if (b || H::C(s)) {
+            FUN_00332430(s->_adxt, -999);
+            FUN_00332370(s->_adxt, 1);
+            FUN_00332340(s->_adxt);
+        }
+    }
 }
 
 void FUN_003a6f70(beCriAudio *s, int a1) {
@@ -336,7 +390,7 @@ void FUN_003a6f70(beCriAudio *s, int a1) {
         }
     } else {
         bool b = H::B(s);
-        if (b || H::C(s)) FUN_00332430((void *)s->_adxt, a1);
+        if (b || H::C(s)) FUN_00332430(s->_adxt, a1);
     }
 }
 
@@ -380,6 +434,19 @@ void FUN_003a7260(beCriAudio *s, unsigned char a1) {
     }
 }
 
+int FUN_003a7300(void *arg0) {
+    O_3a73b0 *o = (O_3a73b0 *)arg0;
+    bool b;
+    if (o->A()) {
+        return 0;
+    }
+    b = o->B();
+    if (b || o->C()) {
+        return FUN_003323a0(o->_adxt);
+    }
+    return 0;
+}
+
 void FUN_003a73b0(void *arg0, int arg1) {
     O_3a73b0 *o = (O_3a73b0 *)arg0;
     bool b;
@@ -406,6 +473,23 @@ void FUN_003a73b0(void *arg0, int arg1) {
                 FUN_00332370(o->_adxt, 1);
             }
         } else {
+            o->_errVolume = -999;
+        }
+    }
+}
+
+void FUN_003a74b0(void *arg0) {
+    O_3a73b0 *o = (O_3a73b0 *)arg0;
+    bool b;
+    if (o->A()) {
+        o->_errVolume = -999;
+        return;
+    }
+    b = o->B();
+    if (b || o->C()) {
+        if (o->_errVolume != -999) {
+            FUN_00332430(o->_adxt, o->_errVolume);
+            FUN_00332370(o->_adxt, 0);
             o->_errVolume = -999;
         }
     }
