@@ -145,7 +145,7 @@ struct P {
 };
 struct S {
   int f0; float f4; float f8; P *f12; int f16; int f20; int f24; int f28; float f32; float f36;
-  EnbayaMaskRun run; int f48; EnbayaReader reader; EnbayaDeltaReader delta; EnbayaMaskReader mask; int f116, f120, f124, f128, f132, f136, f140, f144, f148, f152, f156, f160, f164; unsigned char f168; char f169; char f170; unsigned char f171;
+  EnbayaMaskRun run; int f48; EnbayaReader reader; EnbayaDeltaReader delta; EnbayaMaskReader mask; int f116, f120, f124, f128, f132, f136, f140, f144, f148, f152, f156, f160, f164; unsigned char f168; unsigned char f169; char f170; unsigned char f171;
 };
 extern "C" void FUN_0027ef50(S *s, P *p, unsigned char c)
 {
@@ -250,6 +250,122 @@ EnbayaSlot *FUN_0027f3b0(EnbayaContext *ctx, int group) {
         return &ctx->groups[group].slots[ctx->slot ^ 1];
     }
     return &ctx->local[group].slots[ctx->slot ^ 1];
+}
+
+void FUN_0027f410(S *s, int count, float scale, int forward, float time) {
+    int cur;
+    int prev;
+    s->f169 ^= 1;
+    if (forward) {
+        cur = s->f169;
+        prev = !s->f169;
+    } else {
+        prev = s->f169;
+        cur = !s->f169;
+    }
+    /* VU0 macro-mode code: lqc2/sqc2, the vector multiply-adds, vrsqrt and the I register loaded through
+     * ctc2 $vi21 have no C spelling, and no MWCC version or builtin emits COP2 macro instructions. */
+    __asm__ (
+        "lw $4, 16($4)\n"
+        "sll %0, %0, 5\n"
+        "sll %1, %1, 5\n"
+        "lqc2 $vf1, 64($4)\n"
+        "lqc2 $vf2, 80($4)\n"
+        "add %0, %0, $0\n"
+        "add %0, $4, %0\n"
+        "add $8, %1, $0\n"
+        "add $8, $4, $8\n"
+        "mfc1 $3, $f13\n"
+        "nop\n"
+        "ctc2 $3, $vi21\n"
+        "lqc2 $vf3, 0($8)\n"
+        "lqc2 $vf4, 16($8)\n"
+        "vmuli.w $vf6, $vf0, I\n"
+        "mfc1 $3, $f12\n"
+        "nop\n"
+        "ctc2 $3, $vi21\n"
+        "vaddax.xyzw ACC, $vf3, $vf0x\n"
+        "vmaddi.xyzw $vf5, $vf1, I\n"
+        "vaddax.xyzw ACC, $vf4, $vf0x\n"
+        "vmaddi.xyz $vf6, $vf2, I\n"
+        "vmul.xyzw $vf7, $vf5, $vf5\n"
+        "vaddw.z $vf7, $vf7, $vf7w\n"
+        "vaddz.y $vf7, $vf7, $vf7z\n"
+        "vaddy.x $vf8, $vf7, $vf7y\n"
+        "1:\n"
+        "vrsqrt Q, $vf0w, $vf8x\n"
+        "lqc2 $vf1, 160($4)\n"
+        "lqc2 $vf2, 176($4)\n"
+        "lqc2 $vf3, 96($8)\n"
+        "lqc2 $vf4, 112($8)\n"
+        "sqc2 $vf6, 16(%0)\n"
+        "vmulw.xyzw $vf12, $vf5, $vf0w\n"
+        "vaddax.xyzw ACC, $vf3, $vf0x\n"
+        "vmaddi.xyzw $vf5, $vf1, I\n"
+        "vaddax.xyzw ACC, $vf4, $vf0x\n"
+        "vmaddi.xyz $vf6, $vf2, I\n"
+        "vmul.xyzw $vf7, $vf5, $vf5\n"
+        "vaddw.z $vf7, $vf7, $vf7w\n"
+        "vaddz.y $vf7, $vf7, $vf7z\n"
+        "vaddy.x $vf8, $vf7, $vf7y\n"
+        "vmulq.xyzw $vf9, $vf12, Q\n"
+        "addiu $5, $5, -1\n"
+        "addiu $4, $4, 96\n"
+        "addiu $8, $8, 96\n"
+        "sqc2 $vf9, 0(%0)\n"
+        "addiu %0, %0, 96\n"
+        "bnez $5, 1b\n"
+        : : "r"(cur), "r"(prev));
+}
+
+void FUN_0027f510(S *s, int count, int keys, float scale) {
+    /* VU0 macro-mode code: lqc2/sqc2, the vector multiply-adds, vrsqrt and the I register loaded through
+     * ctc2 $vi21 have no C spelling, and no MWCC version or builtin emits COP2 macro instructions. */
+    __asm__ (
+        "lw $8, 16($4)\n"
+        "daddu $7, $6, $0\n"
+        "lqc2 $vf1, 64($8)\n"
+        "lqc2 $vf2, 80($8)\n"
+        "lb $6, 0($7)\n"
+        "addiu $7, $7, 1\n"
+        "vmulx.xyzw $vf11, $vf0, $vf0x\n"
+        "mfc1 $3, $f12\n"
+        "nop\n"
+        "ctc2 $3, $vi21\n"
+        "vmuli.xyzw $vf5, $vf1, I\n"
+        "vmuli.xyz $vf6, $vf2, I\n"
+        "vmul.xyzw $vf7, $vf5, $vf5\n"
+        "vaddw.z $vf7, $vf7, $vf7w\n"
+        "vaddz.y $vf7, $vf7, $vf7z\n"
+        "vaddy.x $vf8, $vf7, $vf7y\n"
+        "vmulx.w $vf6, $vf0, $vf0x\n"
+        "1:\n"
+        "vrsqrt Q, $vf0w, $vf8x\n"
+        "sqc2 $vf6, 16($8)\n"
+        "sqc2 $vf6, 48($8)\n"
+        "lqc2 $vf1, 160($8)\n"
+        "lqc2 $vf2, 176($8)\n"
+        "vmulw.xyzw $vf12, $vf5, $vf0w\n"
+        "vmuli.xyzw $vf5, $vf1, I\n"
+        "vmuli.xyz $vf6, $vf2, I\n"
+        "vmul.xyzw $vf7, $vf5, $vf5\n"
+        "vaddw.z $vf7, $vf7, $vf7w\n"
+        "vaddz.y $vf7, $vf7, $vf7z\n"
+        "vaddy.x $vf8, $vf7, $vf7y\n"
+        "vmulx.w $vf6, $vf0, $vf0x\n"
+        "vmulq.xyzw $vf9, $vf12, Q\n"
+        "addiu $5, $5, -1\n"
+        "sqc2 $vf11, 64($8)\n"
+        "sqc2 $vf11, 80($8)\n"
+        "sb $6, 92($8)\n"
+        "lb $6, 0($7)\n"
+        "addiu $7, $7, 1\n"
+        "sqc2 $vf9, 0($8)\n"
+        "sqc2 $vf9, 32($8)\n"
+        "addiu $8, $8, 96\n"
+        "bnez $5, 1b\n"
+        "nop\n");
+    s->f169 = 0;
 }
 
 void FUN_0027fb50(EnbayaTrack *track, int count, EnbayaReader *reader);

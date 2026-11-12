@@ -382,6 +382,26 @@ and `ei`, each written `__asm__ volatile`. `sync` and `ei` need no row; the row 
 * The keyword marks no datum, so there is no strip test of a load; what it changes is the compile of the
   function, and only it reproduces the retail code.
 
+### enbaya-vu0-macro
+
+The two key-blending functions of the Enbaya animation decoder in `src/engine/enbaya.cpp`, an MWCC file, each
+hold one GCC-style `__asm__` statement of VU0 macro-mode code.
+
+* The instructions are coprocessor-2 macro operations: `lqc2`/`sqc2`, `vaddax`/`vmaddi` blends, `vmul` and the
+  `vadd` broadcasts of a squared length, `vrsqrt` and `vmulq`, with the I register loaded through `mfc1`, `nop`,
+  `ctc2 $vi21`. No MWCC version in `local/mwcps2` emits a COP2 macro instruction from C: their 193 `__I_`
+  instruction builtins stop at `cfc2`/`ctc2` with immediate operands, and a float multiply-add loop compiled
+  under `#pragma opt_vectorize_loops on` gives none.
+  CodeWarrior's *Targeting PlayStation 2* (R3.04) gives GCC-style inline assembly, with the `j` constraint for
+  VU0 registers, as the way to write VU0 code, and states that its inline assembler has no intrinsic functions.
+* The functions are C around the statement, not `asm` functions: one first toggles the slot byte at +169 and
+  computes the two slot indices with the compiler's `sltu`, `xori`, `andi` form of `!` and a filled branch delay
+  slot, and passes them in as operands; the other ends with the store that clears the slot byte, which the
+  compiler moves into the `jr ra` delay slot.
+* The statements read the arguments in their argument registers and use fixed scratch registers, as hand-written
+  PS2 code does. The inline assembler works in reorder mode, so the loop branch is written last and the
+  assembler fills its delay slot, as retail has it.
+
 ## Open questions
 
 * **The stack slot `volatile` stands in for.** Some inlined list searches take a value that retail stores
