@@ -250,12 +250,18 @@ whose frameless sibling calls 2.96 cannot produce
 ([the `sd` prologue](sd-prologue.md)).
 
 **3.0b52 with `-sdatathreshold 2` builds most of the game.** Alchemy is `-O4,s`, and the Metrowerks
-runtime, `main`, AdxMovie, Viewer, Ndmw and Bec are `-O4,p`. Bec and Ndmw also take `-inline level=8`:
+runtime, `main`, AdxMovie, Viewer, Ndmw and Bec are `-O4,p`. Bec and Ndmw also take `-inline level=8,bottomup`:
 holder destructors inside inlined helpers are expanded in retail, which needs an inline depth of at
 least 2, and every Bec and Ndmw function that matched without it still matches at depth 8 (depth 2
 breaks four `GetVTable` functions). The `inline_depth` pragmas written before were standing in for
-it, and 13 of them went. The runtime, `main`, AdxMovie and Viewer match the same with or without it,
-so their setting is undetermined. 4,810 of the 4,840 MWCC units are on
+it, and 13 of them went. `bottomup` explains the largest functions: in bottom-up mode MWCC stops expanding
+the calls inside an inlined body once the caller's size passes `inline_max_total_size` (10000 by default,
+counted in expression nodes after inlining, so an inline accessor counts more than the field it reads). Such
+a function gets the depth-1 shape everywhere: each holder destructor is expanded at the site and the release
+it calls stays out of line, while the small out-of-line copies of the same destructors expand it. Top-down
+inlining has no such limit. In bottom-up mode an inline helper whose own inline callees would take it past
+`inline_max_size` is expanded with those callees left as calls. The runtime, `main`,
+AdxMovie and Viewer match the same with or without `level=8`, so their setting is undetermined. 4,810 of the 4,840 MWCC units are on
 b52, 13 of them at `-O3` or `-O3,p` because their members pass only there. Viewer starts at `0x4583f0`, not at
 its registrar: four out-of-line holder destructors come first, called only from Viewer and matching
 only Viewer's `-O4,p`. At the other library boundaries such copies also sit just before the next
@@ -318,16 +324,23 @@ way, with `operator!=` as a member. 132 source files use that constant and may h
 * **The remaining units.** Some units sit off their library's profile (`profile_split.units`): MWCC
   units on 3.0, 3.0.3 or combat, b52 units at the wrong optimisation level, and Sony units still on
   2.96 because a member is spelled for it or for an MWCC stand-in. Each holds a member that still differs
-  under its library's profile. The 42 KB script dispatcher is on
-  the Ndmw profile with `#pragma inline_depth(1)`: retail calls `RecoveryTarget::release` and
-  `RecoveryString::release` out of line from it while its own copies of the `RecoveryRef` destructors
-  have them inlined, which is what a depth of 1 gives; no source form found gives both. A unit holding the retail copy of a shared inline
+  under its library's profile. A unit holding the retail copy of a shared inline
   destructor also needs every other unit's copy of it to match under the new profile: the copy at
   `0x130140` is in the Attrs library unit, and the movie renderer's exception table refers to it, so
   the movie unit's own copy was most likely discarded at link time in favour of the Attrs one;
   `tools/check.py` compares that copy under the Attrs profile.
   `tools/roll_profile.py` lists the members. Respelling for b52 moved the rest: most members differed
   only in register order, because b52 gives the first-declared local the higher register.
+* **A frame-slot helper under bottom-up inlining.** `0x42e330` places two of its three string holders below
+  the function's own locals through a static inline helper struct whose members take the loop variables by
+  reference. Under `bottomup` that helper passes `inline_max_size`, so the string intern and release it holds
+  stay calls. The function matches only under top-down `-inline level=8`, so it keeps a provisional
+  `unit-flags.tsv` row, is `foreign-profile` and is held out of the shop unit, which is `provisional`.
+  Written without the struct it does not match under `bottomup`. A helper taking the list index, its byte
+  offset and the interned token is fully inlined with retail's frame slots, but retail keeps the incoming
+  object in `s2` and the row counter in `s4` and this spelling swaps them, which no declaration order of the
+  locals reaches. Holders in the loop body swap two frame slots, and list-store helpers taking the holders as
+  expression temporaries colour the registers differently. The original spelling is open.
 * **Why an `asm { nop }` stood in.** An empty true arm before `else { x = 0; }` was an inlined cast: `static inline void *cast(void *o) { if (o != 0 && igObject_IsKindOf(o, meta) != 0) { return o; } return 0; }`, with the meta read inside it.
 * **`-O3` or `-O4`.** Neither level fits every function. Some functions pass only at `-O4` and others
   only at `-O3`, in spite of

@@ -110,7 +110,7 @@ make link
 
 The messenger file `38bee0..38f960` builds under b52 `-O3,p -sdatathreshold 2 -Iinclude` with
 exceptions on, the clear functions `38ca40..38cff0` included. Under the Bec profile
-(`-O4,p -sdatathreshold 2 -inline level=8`) `38d860` and `38e8f0` choose other registers for the
+(`-O4,p -sdatathreshold 2 -inline level=8,bottomup`) `38d860` and `38e8f0` choose other registers for the
 inlined list-insert temporary, and `38e8f0` also schedules the delay multiply and assigns its two
 saved references differently.
 

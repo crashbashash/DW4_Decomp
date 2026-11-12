@@ -321,8 +321,9 @@ Further holder shapes:
   its end and gets no unwind range.
 - Nested holder chains take one holder per scope, built at the use site.
 - A holder inside an inline helper has its destructor expanded only at an inline depth of 2 or more.
-  Bec and Ndmw build with `-inline level=8`, so there it needs nothing extra; the locals of an inlined
-  helper take the frame slots below the function's own locals and temporaries.
+  Bec and Ndmw build with `-inline level=8,bottomup`, so there it needs nothing extra, except in a function
+  past the bottom-up size limit ([build profiles](build-profiles.md)), where only the helper itself is
+  expanded; the locals of an inlined helper take the frame slots below the function's own locals and temporaries.
 - Volatile holder members reproduce a store-then-reload.
 
 ## One reference holder

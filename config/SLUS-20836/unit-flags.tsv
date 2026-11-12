@@ -12,4 +12,5 @@
 0x0028dbd0	-O3 -Iinclude -Cpp_exceptions on	provisional	unit cri-sofdec_28d6e8 profile ee-gcc -O2 -G0 -Iinclude exceptions off does not reproduce it
 0x0029b088	-O3 -Iinclude -Cpp_exceptions on	provisional	unit cri-sofdec_29a428 profile ee-gcc -O2 -G0 exceptions off does not reproduce it
 0x002a0928	-O3 -Iinclude -Cpp_exceptions on	provisional	unit cri-sofdec_29e960 profile ee-gcc -O2 -G0 -Iinclude exceptions off does not reproduce it
+0x0042e330	-O4,p -sdatathreshold 2 -inline level=8 -Iinclude	provisional	unit ndmw_beNDMWShopCtrl00 profile b52 -O4,p -sdatathreshold 2 -inline level=8,bottomup -Iinclude exceptions on does not reproduce it
 0x004831a0	-O3 -Iinclude -Cpp_exceptions on	provisional	unit sony-kernel_4820d0 profile ee-gcc -O2 -G0 -Iinclude exceptions off does not reproduce it
