@@ -23,7 +23,7 @@ calls; the whole run provides the surrounding reference/list contract.
 | `0x003e9160` | 188 | [Retained list-slot replacement](../../src/game/beNDMWLoadIntf2.cpp) |
 | `0x003e92b0` | 124 | [Assign from reference storage](../../src/game/beNDMWLoadIntf2.cpp) |
 | `0x003e9370` | 56 | [Allocator selection](../../src/game/beNDMWLoadIntf2.cpp) |
-| `0x00406e60` | 124 | [Assign from an object pointer](../../src/engine/ObjectRef_AssignObject_00406e60.cpp) |
+| `0x00406e60` | 124 | [Assign from an object pointer](../../src/game/beNDMWGameRam.cpp) |
 
 The generated names describe decoded operations. Address suffixes distinguish
 the recovered bodies while their original template and type spellings remain

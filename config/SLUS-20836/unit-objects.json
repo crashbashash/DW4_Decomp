@@ -1,17 +1,4 @@
 {
-  "0x003fab90": {
-    "emitted": {
-      "__dt__10IntListRefFv": "0x003fc670",
-      "beNDMWGameRam_CollectNearbyNonzeroHp": "0x003fc780"
-    },
-    "externals": {
-      "__dl__FPv": "0x00100610"
-    },
-    "duplicates": {
-      "__dt__13NearbyListRefFv": "0x00150eb0",
-      "__dt__9StringRefFv": "0x00130720"
-    }
-  },
   "0x0038d860": {
     "emitted": {
       "__dt__3RefFv": "0x0038c410"
@@ -80,19 +67,6 @@
       "index": "0x005547d4",
       "table": "0x00546f78",
       "table_size": "0x00001c"
-    },
-    "externals": {
-      "__dl__FPv": "0x00100610"
-    }
-  },
-  "0x003f8990": {
-    "duplicates": {
-      "__dt__14RecoveryRef<1>Fv": "0x003d9d50"
-    },
-    "exceptions": {
-      "index": "0x00553a90",
-      "table": "0x00544f34",
-      "table_size": "0x000014"
     },
     "externals": {
       "__dl__FPv": "0x00100610"
@@ -317,19 +291,6 @@
       "__dt__10ConfirmRefFv": "0x00411080",
       "__dt__9ResultRefFv": "0x00428710",
       "__dt__25igSmartPointer<8igObject>Fv": "0x00411100"
-    },
-    "externals": {
-      "__dl__FPv": "0x00100610"
-    }
-  },
-  "0x003f96e0": {
-    "duplicates": {
-      "__dt__30igSmartPointer<12beUnicodeObj>Fv": "0x003832d0"
-    },
-    "exceptions": {
-      "index": "0x00553ac0",
-      "table": "0x00544f6c",
-      "table_size": "0x000010"
     },
     "externals": {
       "__dl__FPv": "0x00100610"
@@ -969,74 +930,6 @@
     },
     "symbol": "FUN_003f5410"
   },
-  "0x003f7310": {
-    "duplicates": {
-      "__dt__7ItemRefFv": "0x003b9ba0",
-      "__dt__25igSmartPointer<8igObject>Fv": "0x003ba350"
-    },
-    "exceptions": {
-      "index": "0x00553a18",
-      "table": "0x00544ec8",
-      "table_size": "0x000020"
-    },
-    "externals": {
-      "__dl__FPv": "0x00100610"
-    }
-  },
-  "0x003f77b0": {
-    "duplicates": {
-      "__dt__21PlayerDataListListRefFv": "0x003c9ef0",
-      "__dt__25igSmartPointer<8igObject>Fv": "0x003ba350"
-    },
-    "exceptions": {
-      "index": "0x00553a24",
-      "table": "0x00544ee8",
-      "table_size": "0x000018"
-    },
-    "externals": {
-      "__dl__FPv": "0x00100610"
-    }
-  },
-  "0x003f7e40": {
-    "duplicates": {
-      "__dt__6RamRefFv": "0x003f7fd0",
-      "__dt__35igSmartPointer<17beNDMWGameRamInfo>Fv": "0x003f8050"
-    },
-    "exceptions": {
-      "index": "0x00553a48",
-      "table": "0x00544f00",
-      "table_size": "0x00001c"
-    },
-    "externals": {
-      "__dl__FPv": "0x00100610"
-    }
-  },
-  "0x003f80e0": {
-    "duplicates": {
-      "__dt__9StringRefFv": "0x00130720"
-    },
-    "exceptions": {
-      "index": "0x00553a6c",
-      "table": "0x00544f1c",
-      "table_size": "0x000010"
-    },
-    "externals": {
-      "__dl__FPv": "0x00100610"
-    }
-  },
-  "0x003f8c90": {
-    "duplicates": {
-      "__dt__9StringRefFv": "0x00130720"
-    },
-    "exceptions": {
-      "index": "0x00553a9c",
-      "table": "0x00544f48",
-      "table_size": "0x00001c"
-    },
-    "externals": {
-      "__dl__FPv": "0x00100610"
-    }
-  },
   "0x00411180": {
     "duplicates": {
       "__dt__9ObjectRefFv": "0x003c1520"
@@ -1669,6 +1562,7 @@
     }
   },
   "0x003f6620": {
+    "whole_file": true,
     "emitted": {
       "__dt__36igSmartPointer<18beDataObjFloatList>Fv": "0x003f6f90",
       "__dt__37igSmartPointer<19beDataObjObjectList>Fv": "0x003f7010",
@@ -1676,20 +1570,225 @@
       "__dt__33igSmartPointer<15beDataObjString>Fv": "0x003f7110",
       "__dt__35igSmartPointer<17beDataObjBoolList>Fv": "0x003f7190",
       "__dt__31igSmartPointer<13beDataObjBool>Fv": "0x003f7210",
-      "__dt__34igSmartPointer<16beDataObjIntList>Fv": "0x003f7290"
+      "__dt__34igSmartPointer<16beDataObjIntList>Fv": "0x003f7290",
+      "FUN_003f7310": "0x003f7310",
+      "Gap__Bec__beNDMWGameRam__vfunc_23": "0x003f77b0",
+      "Gap__Bec__beNDMWGameRam__vfunc_24": "0x003f7980",
+      "Gap__Bec__beNDMWGameRam__vfunc_32": "0x003f7c50",
+      "Gap__Bec__beNDMWGameRam__vfunc_25": "0x003f7e40",
+      "__dt__6RamRefFv": "0x003f7fd0",
+      "__dt__35igSmartPointer<17beNDMWGameRamInfo>Fv": "0x003f8050",
+      "Gap__Bec__beNDMWGameRam__vfunc_31": "0x003f80d0",
+      "FUN_003f80e0": "0x003f80e0",
+      "FUN_003f82a0": "0x003f82a0",
+      "FUN_003f8760": "0x003f8760",
+      "FUN_003f8990": "0x003f8990",
+      "FUN_003f8c90": "0x003f8c90",
+      "FUN_003f93c0": "0x003f93c0",
+      "FUN_003f9570": "0x003f9570",
+      "FUN_003f96e0": "0x003f96e0",
+      "FUN_003f99f0": "0x003f99f0",
+      "FUN_003f9bb0": "0x003f9bb0",
+      "FUN_003f9c80": "0x003f9c80",
+      "FUN_003f9e20": "0x003f9e20",
+      "FUN_003f9f80": "0x003f9f80",
+      "FUN_003fa040": "0x003fa040",
+      "FUN_003fa120": "0x003fa120",
+      "FUN_003fa1e0": "0x003fa1e0",
+      "FUN_003fa2c0": "0x003fa2c0",
+      "FUN_003fa3b0": "0x003fa3b0",
+      "FUN_003fa850": "0x003fa850",
+      "FUN_003fab90": "0x003fab90",
+      "__dt__10IntListRefFv": "0x003fc670",
+      "beNDMWGameRam_FindTechniqueRow": "0x003fc6f0",
+      "beNDMWGameRam_CollectNearbyNonzeroHp": "0x003fc780",
+      "FUN_00406da0": "0x00406da0",
+      "FUN_00406db0": "0x00406db0",
+      "FUN_00406dc0": "0x00406dc0",
+      "FUN_00406dd0": "0x00406dd0",
+      "FUN_00406df0": "0x00406df0",
+      "FUN_00406e00": "0x00406e00",
+      "FUN_00406e10": "0x00406e10",
+      "FUN_00406e40": "0x00406e40",
+      "FUN_00406e50": "0x00406e50",
+      "ObjectRef_AssignObject_00406e60": "0x00406e60",
+      "FUN_00406ee0": "0x00406ee0",
+      "FUN_00406ef0": "0x00406ef0",
+      "FUN_00406f00": "0x00406f00",
+      "FUN_00406f10": "0x00406f10",
+      "FUN_00406f20": "0x00406f20",
+      "FUN_00406f40": "0x00406f40",
+      "FUN_00406f50": "0x00406f50",
+      "FUN_00406f60": "0x00406f60",
+      "FUN_00406f70": "0x00406f70",
+      "FUN_00406f80": "0x00406f80",
+      "FUN_00406f90": "0x00406f90",
+      "FUN_00406fa0": "0x00406fa0",
+      "StringPool_GetInstance": "0x00406fe0",
+      "FUN_00407030": "0x00407030",
+      "FUN_00407040": "0x00407040",
+      "FUN_00407050": "0x00407050",
+      "Gap__Bec__beNDMWGameRam__vfunc_20": "0x00407060",
+      "Gap__Bec__beNDMWGameRam__vfunc_30": "0x00407070"
+    },
+    "data": {
+      "@789": "0x00518b90",
+      "BASE_EXP": "0x00518b40",
+      "BASE_LEVEL": "0x00518b30",
+      "BASE_SKILL": "0x00518b50",
+      "BASE_UPCNT": "0x00518b60",
+      "DAT_004ced40": "0x004ced40",
+      "DAT_004cedf0": "0x004cedf0",
+      "DAT_004cf100": "0x004cf100",
+      "DAT_004cf110": "0x004cf110",
+      "DAT_004cf118": "0x004cf118",
+      "DAT_004cf120": "0x004cf120",
+      "DAT_004cf130": "0x004cf130",
+      "DAT_004cf160": "0x004cf160",
+      "DAT_004cf190": "0x004cf190",
+      "DAT_004cf1c0": "0x004cf1c0",
+      "DAT_004cf1f0": "0x004cf1f0",
+      "DAT_004cf220": "0x004cf220",
+      "DAT_004cf250": "0x004cf250",
+      "DAT_004cf270": "0x004cf270",
+      "DAT_004cf290": "0x004cf290",
+      "DAT_004cf2b0": "0x004cf2b0",
+      "DAT_004cf2d0": "0x004cf2d0",
+      "DAT_004cf350": "0x004cf350",
+      "DAT_00518760": "0x00518760",
+      "DAT_00518798": "0x00518798",
+      "DAT_005187a0": "0x005187a0",
+      "DAT_005187b0": "0x005187b0",
+      "DAT_00518828": "0x00518828",
+      "DAT_00518848": "0x00518848",
+      "DAT_00518858": "0x00518858",
+      "DAT_00518860": "0x00518860",
+      "DAT_00518868": "0x00518868",
+      "DAT_00518870": "0x00518870",
+      "DAT_00518880": "0x00518880",
+      "DAT_00518888": "0x00518888",
+      "DAT_00518890": "0x00518890",
+      "DAT_00518898": "0x00518898",
+      "DAT_005188a0": "0x005188a0",
+      "DAT_005188a8": "0x005188a8",
+      "DAT_005188b0": "0x005188b0",
+      "DAT_005188b8": "0x005188b8",
+      "DAT_005188c0": "0x005188c0",
+      "DAT_005188d0": "0x005188d0",
+      "DAT_005188d8": "0x005188d8",
+      "DAT_005188e8": "0x005188e8",
+      "DAT_005188f8": "0x005188f8",
+      "DAT_00518908": "0x00518908",
+      "DAT_00518918": "0x00518918",
+      "DAT_00518928": "0x00518928",
+      "DAT_00518938": "0x00518938",
+      "DAT_00518940": "0x00518940",
+      "DAT_00518950": "0x00518950",
+      "DAT_00518960": "0x00518960",
+      "DAT_00518970": "0x00518970",
+      "DAT_00518980": "0x00518980",
+      "DAT_00518990": "0x00518990",
+      "DAT_005189a0": "0x005189a0",
+      "DAT_005189b0": "0x005189b0",
+      "DAT_005189c0": "0x005189c0",
+      "DAT_005189d0": "0x005189d0",
+      "DAT_005189e0": "0x005189e0",
+      "DAT_005189f0": "0x005189f0",
+      "DAT_00518a00": "0x00518a00",
+      "DAT_00518a08": "0x00518a08",
+      "DAT_00518a10": "0x00518a10",
+      "DAT_00518a20": "0x00518a20",
+      "DAT_00518a30": "0x00518a30",
+      "DAT_00518a40": "0x00518a40",
+      "DAT_00518a50": "0x00518a50",
+      "DAT_00518a88": "0x00518a88",
+      "DAT_00518aa0": "0x00518aa0",
+      "DAT_00518ab0": "0x00518ab0",
+      "DAT_00518ac0": "0x00518ac0",
+      "DAT_00518ad0": "0x00518ad0",
+      "DAT_00518ae0": "0x00518ae0",
+      "DAT_00518ae8": "0x00518ae8",
+      "DAT_00518b00": "0x00518b00",
+      "DAT_00518b10": "0x00518b10",
+      "DAT_00518b20": "0x00518b20",
+      "DAT_00518b30": "0x00518b30",
+      "DAT_00518b40": "0x00518b40",
+      "DAT_00518b50": "0x00518b50",
+      "DAT_00518b60": "0x00518b60",
+      "DAT_00518b70": "0x00518b70",
+      "DAT_00518b78": "0x00518b78",
+      "DAT_00518bb8": "0x00518bb8",
+      "DAT_00518bc0": "0x00518bc0",
+      "DAT_00518bc8": "0x00518bc8",
+      "DAT_00518c08": "0x00518c08",
+      "DAT_00518c10": "0x00518c10",
+      "DAT_00518c18": "0x00518c18",
+      "DAT_00518c88": "0x00518c88",
+      "DAT_00518c98": "0x00518c98",
+      "DAT_00518ca0": "0x00518ca0",
+      "DAT_00518cb0": "0x00518cb0",
+      "DAT_00518cb8": "0x00518cb8",
+      "DAT_00518fc8": "0x00518fc8",
+      "DAT_00518fd0": "0x00518fd0",
+      "DAT_00518fd8": "0x00518fd8",
+      "DAT_00518fe8": "0x00518fe8",
+      "DAT_00518ff0": "0x00518ff0",
+      "DAT_00519000": "0x00519000",
+      "DAT_00519010": "0x00519010",
+      "DAT_00519018": "0x00519018",
+      "DAT_00519420": "0x00519420",
+      "DAT_00519430": "0x00519430",
+      "DAT_00519438": "0x00519438",
+      "DAT_00519448": "0x00519448",
+      "DAT_00519458": "0x00519458",
+      "DAT_00519460": "0x00519460",
+      "DAT_00586f20": "0x00586f20",
+      "DAT_00587108": "0x00587108",
+      "DAT_00587110": "0x00587110",
+      "DAT_00589678": "0x00589678",
+      "DIGIMONNO_2": "0x00518848",
+      "EXP": "0x00518880",
+      "GETHP": "0x00519040",
+      "GETMATRIX": "0x00519030",
+      "GPR_005549e4": "0x005549e4",
+      "GPR_005549e8": "0x005549e8",
+      "GPR_005549ec": "0x005549ec",
+      "GPR_00554c14": "0x00554c14",
+      "HP": "0x00518890",
+      "LEVEL_2": "0x00518858",
+      "METERCTRL": "0x00518c28",
+      "MHP": "0x00518898",
+      "MMP": "0x005188a8",
+      "MP": "0x005188a0",
+      "NUMBERCTRL": "0x00518c50",
+      "SETPERCENT": "0x00518c40",
+      "SETVALUE": "0x00518c68",
+      "SKILL": "0x00518860",
+      "UPCNT": "0x00518868",
+      "WAZALIST": "0x00518928",
+      "g_beNDMWGameRam_metaObject": "0x0058c0a0",
+      "g_defaultAllocatorSelector": "0x00587110",
+      "g_stringPool": "0x00586f20",
+      "hpmt": "0x00518c38",
+      "hpnm": "0x00518c60",
+      "mpmt": "0x00518c78",
+      "mpnm": "0x00518c80"
     },
     "duplicates": {
-      "__dt__9StringRefFv": "0x00130720",
-      "__dt__30igSmartPointer<12beDataObjInt>Fv": "0x00350b10"
+      "__dt__13NearbyListRefFv": "0x00150eb0",
+      "__dt__14RecoveryRef<1>Fv": "0x003d9d50",
+      "__dt__21PlayerDataListListRefFv": "0x003c9ef0",
+      "__dt__25igSmartPointer<8igObject>Fv": "0x003ba350",
+      "__dt__30igSmartPointer<12beDataObjInt>Fv": "0x00350b10",
+      "__dt__30igSmartPointer<12beUnicodeObj>Fv": "0x003832d0",
+      "__dt__7ItemRefFv": "0x003b9ba0",
+      "__dt__9StringRefFv": "0x00130720"
     },
     "externals": {
+      "FUN_003a9340": "0x003a9340",
       "__dl__FPv": "0x00100610"
     },
-    "exceptions": {
-      "index": "0x005539b8",
-      "table": "0x00544e60",
-      "table_size": "0x68"
-    }
+    "symbol": "FUN_003f6620"
   },
   "0x00407aa0": {
     "emitted": {

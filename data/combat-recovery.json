@@ -1382,7 +1382,7 @@
       "address": "0x003f8760",
       "name": "FUN_003f8760",
       "size": 548,
-      "source": "src/game/beNDMWGameRam_SaveBase.cpp",
+      "source": "src/game/beNDMWGameRam.cpp",
       "sites": [
         "0x003ff68c",
         "0x003ffa84"
@@ -1392,7 +1392,7 @@
       "address": "0x003f9c80",
       "name": "FUN_003f9c80",
       "size": 408,
-      "source": "src/game/beNDMWGameRam_VitalsDelta.cpp",
+      "source": "src/game/beNDMWGameRam.cpp",
       "sites": [
         "0x003fef9c",
         "0x004053f0",
@@ -1403,7 +1403,7 @@
       "address": "0x003f9e20",
       "name": "FUN_003f9e20",
       "size": 344,
-      "source": "src/game/beNDMWGameRam_VitalsDelta.cpp",
+      "source": "src/game/beNDMWGameRam.cpp",
       "sites": [
         "0x003feff0"
       ]
@@ -1412,7 +1412,7 @@
       "address": "0x003fab90",
       "name": "FUN_003fab90",
       "size": 6872,
-      "source": "src/unmatched/FUN_003fab90.cpp",
+      "source": "src/game/beNDMWGameRam.cpp",
       "sites": [
         "0x003ff680",
         "0x003ffa78",
@@ -1426,7 +1426,7 @@
       "address": "0x003fc6f0",
       "name": "beNDMWGameRam_FindTechniqueRow",
       "size": 132,
-      "source": "src/game/beNDMWGameRam_FindTechniqueRow.cpp",
+      "source": "src/game/beNDMWGameRam.cpp",
       "sites": [
         "0x003fe21c",
         "0x003fe864",
@@ -1456,7 +1456,7 @@
       "address": "0x003fc780",
       "name": "beNDMWGameRam_CollectNearbyNonzeroHp",
       "size": 652,
-      "source": "src/unmatched/FUN_003fab90.cpp",
+      "source": "src/game/beNDMWGameRam.cpp",
       "sites": [
         "0x0040546c",
         "0x004057ec",
@@ -1470,7 +1470,7 @@
       "address": "0x00406dc0",
       "name": "FUN_00406dc0",
       "size": 8,
-      "source": "src/unmatched/FUN_00406dc0.c",
+      "source": "src/game/beNDMWGameRam.cpp",
       "sites": [
         "0x00405da0",
         "0x0040640c",
@@ -1481,7 +1481,7 @@
       "address": "0x00406dd0",
       "name": "FUN_00406dd0",
       "size": 20,
-      "source": "src/unmatched/FUN_00406dd0.c",
+      "source": "src/game/beNDMWGameRam.cpp",
       "sites": [
         "0x004031b0"
       ]
@@ -1490,7 +1490,7 @@
       "address": "0x00406df0",
       "name": "FUN_00406df0",
       "size": 8,
-      "source": "src/unmatched/FUN_00406df0.c",
+      "source": "src/game/beNDMWGameRam.cpp",
       "sites": [
         "0x00403198"
       ]
@@ -1499,7 +1499,7 @@
       "address": "0x00406e00",
       "name": "FUN_00406e00",
       "size": 8,
-      "source": "src/unmatched/FUN_00406e00.c",
+      "source": "src/game/beNDMWGameRam.cpp",
       "sites": [
         "0x00403190"
       ]
@@ -1508,7 +1508,7 @@
       "address": "0x00406e10",
       "name": "FUN_00406e10",
       "size": 48,
-      "source": "src/unmatched/FUN_00406e10.cpp",
+      "source": "src/game/beNDMWGameRam.cpp",
       "sites": [
         "0x0040314c"
       ]
@@ -1517,7 +1517,7 @@
       "address": "0x00406e40",
       "name": "FUN_00406e40",
       "size": 8,
-      "source": "src/unmatched/FUN_00406e40.c",
+      "source": "src/game/beNDMWGameRam.cpp",
       "sites": [
         "0x003ff63c",
         "0x00404540",
@@ -1530,7 +1530,7 @@
       "address": "0x00406e50",
       "name": "FUN_00406e50",
       "size": 8,
-      "source": "src/unmatched/FUN_00406e50.c",
+      "source": "src/game/beNDMWGameRam.cpp",
       "sites": [
         "0x003fe06c",
         "0x003fe1b8",
@@ -1567,7 +1567,7 @@
       "address": "0x00406e60",
       "name": "ObjectRef_AssignObject_00406e60",
       "size": 124,
-      "source": "src/engine/ObjectRef_AssignObject_00406e60.cpp",
+      "source": "src/game/beNDMWGameRam.cpp",
       "sites": [
         "0x003fe00c",
         "0x003fe268",
@@ -1690,7 +1690,7 @@
       "address": "0x00406ee0",
       "name": "FUN_00406ee0",
       "size": 8,
-      "source": "src/unmatched/FUN_00406ee0.c",
+      "source": "src/game/beNDMWGameRam.cpp",
       "sites": [
         "0x003fdfc8",
         "0x003fe018",
@@ -1928,7 +1928,7 @@
       "address": "0x00406ef0",
       "name": "FUN_00406ef0",
       "size": 8,
-      "source": "src/unmatched/FUN_00406ef0.c",
+      "source": "src/game/beNDMWGameRam.cpp",
       "sites": [
         "0x003fdf98",
         "0x003fe038",
@@ -1967,7 +1967,7 @@
       "address": "0x00406fa0",
       "name": "FUN_00406fa0",
       "size": 60,
-      "source": "src/unmatched/FUN_00406fa0.cpp",
+      "source": "src/game/beNDMWGameRam.cpp",
       "sites": [
         "0x004003a0",
         "0x00401320",
@@ -1982,7 +1982,7 @@
       "address": "0x00406fe0",
       "name": "StringPool_GetInstance",
       "size": 76,
-      "source": "src/engine/StringPool_GetInstance.cpp",
+      "source": "src/game/beNDMWGameRam.cpp",
       "sites": [
         "0x003fde50",
         "0x003fff10",
@@ -1997,7 +1997,7 @@
       "address": "0x00407030",
       "name": "FUN_00407030",
       "size": 8,
-      "source": "src/unmatched/FUN_00407030.c",
+      "source": "src/game/beNDMWGameRam.cpp",
       "sites": [
         "0x003fdf48",
         "0x003fe160",
@@ -2032,7 +2032,7 @@
       "address": "0x00407040",
       "name": "FUN_00407040",
       "size": 8,
-      "source": "src/unmatched/FUN_00407040.c",
+      "source": "src/game/beNDMWGameRam.cpp",
       "sites": [
         "0x003ff768"
       ]
@@ -2041,7 +2041,7 @@
       "address": "0x00407050",
       "name": "FUN_00407050",
       "size": 8,
-      "source": "src/unmatched/FUN_00407050.c",
+      "source": "src/game/beNDMWGameRam.cpp",
       "sites": [
         "0x003fde70",
         "0x003ff6a4",

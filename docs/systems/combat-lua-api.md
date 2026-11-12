@@ -65,7 +65,7 @@ interior zeros, and every relocation must match; close sizes are insufficient.
 retail section.
 
 The callback's post-module string-pool accessor is 76 bytes of
-C at [`StringPool_GetInstance`](../../src/engine/StringPool_GetInstance.cpp).
+C at [`StringPool_GetInstance`](../../src/game/beNDMWGameRam.cpp).
 It lazily allocates 16 bytes and calls `StringPool_Construct`; failed
 allocation leaves the cache null so a later call retries. The semantic name is
 generated with the other combat dependency names. Neither that helper nor the

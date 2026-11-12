@@ -21,10 +21,10 @@ original source.
 | `0x0038f150`..`0x0038f8f0` | 908 | `beMessenger_AppendBool/Int/Float/Vec3/Matrix/String`, `GetString` (7 bodies) | `src/game/beMessengerArgs.cpp` |
 | `0x0038e060` | 1228 | `beMessenger_DispatchSelected` (+ emitted holder destructor `0x0038e530`, 128) | `src/unmatched/beMessenger_DispatchSelected.cpp` |
 | `0x0038e8f0` | 932 | `beMessenger_EnqueueSelected` (+ emitted destructors `0x0038c390` and `0x00357a90`, 128 each) | `src/unmatched/beMessenger_EnqueueSelected.cpp` |
-| `0x003fab90` | 6872 | player stat recompute (derived stats, WAZALIST rebuild, rates); owns the `0x003fc670` destructor and the `0x003fc780` query | `src/unmatched/FUN_003fab90.cpp` |
-| `0x003f8760` | 548 | current-to-BASE save preparation (mirror of `FUN_003f82a0`) | `src/game/beNDMWGameRam_SaveBase.cpp` |
-| `0x003f9c80` | 408 | HP gauge update (delta or absolute, clamp to [0, MHP], `hpmt`/`hpnm`) | `src/game/beNDMWGameRam_VitalsDelta.cpp` |
-| `0x003f9e20` | 344 | MP gauge update (`mpmt`/`mpnm`) | `src/game/beNDMWGameRam_VitalsDelta.cpp` |
+| `0x003fab90` | 6872 | player stat recompute (derived stats, WAZALIST rebuild, rates); owns the `0x003fc670` destructor and the `0x003fc780` query | `src/game/beNDMWGameRam.cpp` |
+| `0x003f8760` | 548 | current-to-BASE save preparation (mirror of `FUN_003f82a0`) | `src/game/beNDMWGameRam.cpp` |
+| `0x003f9c80` | 408 | HP gauge update (delta or absolute, clamp to [0, MHP], `hpmt`/`hpnm`) | `src/game/beNDMWGameRam.cpp` |
+| `0x003f9e20` | 344 | MP gauge update (`mpmt`/`mpnm`) | `src/game/beNDMWGameRam.cpp` |
 | `0x00447b00` | 56 | list slot nonzero test | `src/unmatched/FUN_00447b00.cpp` |
 | `0x00447b40` | 88 | list slot store from `DAT_004cfe80` | `src/unmatched/FUN_00447b40.cpp` |
 

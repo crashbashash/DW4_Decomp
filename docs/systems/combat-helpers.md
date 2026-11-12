@@ -2,10 +2,10 @@
 
 The three complete immediate helper bodies are
 **912 code bytes** at `0x003fc670`, `0x003fc6f0` and `0x003fc780`.
-The 132-byte [technique-row lookup](../../src/game/beNDMWGameRam_FindTechniqueRow.cpp)
+The 132-byte [technique-row lookup](../../src/game/beNDMWGameRam.cpp)
 is C; the 652-byte query and 128-byte deleting destructor share one
 [C++ compiler unit](../../src/game/beNDMWGameRam_CollectNearbyNonzeroHp.inc), compiled together with the
-[player stat recompute](../../src/unmatched/FUN_003fab90.cpp).
+[player stat recompute](../../src/game/beNDMWGameRam.cpp).
 
 The separate FightCom metadata builder and BLT attribute accessor are
 140 bytes; see the
