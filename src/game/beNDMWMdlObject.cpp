@@ -1,31 +1,32 @@
 #include "dw4/igSmartPointer.h"
-extern "C" {
-int FUN_002eb010(...);
-void *FUN_00350020(...);
-void *beBaseInfoDataList_Create(...);
-int FUN_00396740(...);
-int Memory_GetAllocatorBySelector(int);
-int StringChunk_ReleaseHeader(...);
-int StringPool_Construct(...);
-void *StringPool_Intern(...);
-int beMessenger_GetInt(...);
-int beMessenger_GetIntCount(...);
-int beMessenger_GetString(...);
-int igObject_GetAllocator(...);
-void *igProperty_FindByName(...);
-extern int DAT_00515f50[4];
-extern int DAT_00585be0[4];
-extern int DAT_00586f20[4];
-extern int DAT_00587110[4];
-extern unsigned char GPR_00554c14;
-}
+
+extern "C" int strcmp(int, int *);
+extern "C" int Gap__Bec__beNDMWMdlObject__vfunc_35(int dummy0, int arg1);
+extern "C" void Gap__Bec__beNDMWMdlObject__vfunc_37(void);
+extern "C" int Gap__Bec__beNDMWMdlObject__vfunc_20(void);
+extern "C" int FUN_002eb010(...);
+extern "C" void *FUN_00350020(...);
+extern "C" void *beBaseInfoDataList_Create(...);
+extern "C" int FUN_00396740(...);
+extern "C" int Memory_GetAllocatorBySelector(int);
+extern "C" int StringChunk_ReleaseHeader(...);
+extern "C" int StringPool_Construct(...);
+extern "C" void *StringPool_Intern(...);
+extern "C" int beMessenger_GetInt(...);
+extern "C" int beMessenger_GetIntCount(...);
+extern "C" int beMessenger_GetString(...);
+extern "C" int igObject_GetAllocator(...);
+extern "C" void *igProperty_FindByName(...);
+extern "C" int DAT_00515f40[4];
+extern "C" int g_beNDMWMdlObject_metaObject[4];
+extern "C" int DAT_00515f50[4];
+extern "C" int DAT_00585be0[4];
+extern "C" int DAT_00586f20[4];
+extern "C" int DAT_00587110[4];
+extern "C" unsigned char GPR_00554c14;
 /* Property record: reference at +20. */
 struct OneProperty { char pad[20]; igObject *f20; };
-
 struct RefRelease { static inline void go(igObject *o) { igObject *t = o; if (t != 0) { --t->_refCount; if ((t->_refCount & 0x7fffff) == 0) igObject_Destroy(t); } } };
-
-
-
 /* Owning stack reference to the new map info work; released on scope exit. */
 class InfoWorkRef {
 public:
@@ -41,7 +42,17 @@ struct DataListSlot { static inline void setDataList(beBaseInfoRam *ram, const i
 }
 static inline void adopt(beBaseInfoRam *ram, igObject *created) { igSmartPointer<igObject> list(created); setDataList(ram, list); }
 };
-extern "C" void Gap__Bec__beNDMWMdlObject__vfunc_36(beNDMWMdlObject *arg0, beBaseInfoRam *arg1) {
+extern "C" void Gap__Bec__beNDMWMdlObject__vfunc_36(beNDMWMdlObject *arg0, beBaseInfoRam *arg1);
+
+int Gap__Bec__beNDMWMdlObject__vfunc_35(int dummy0, int arg1) {
+    return strcmp(arg1, &DAT_00515f40[0]) == 0;
+}
+
+void Gap__Bec__beNDMWMdlObject__vfunc_37(void)
+{
+}
+
+void Gap__Bec__beNDMWMdlObject__vfunc_36(beNDMWMdlObject *arg0, beBaseInfoRam *arg1) {
     if (arg1->_dataList == 0) {
         int a = igObject_GetAllocator(arg1);
         int al = GPR_00554c14 != 0 ? a : Memory_GetAllocatorBySelector(DAT_00587110[0]);
@@ -81,4 +92,9 @@ extern "C" void Gap__Bec__beNDMWMdlObject__vfunc_36(beNDMWMdlObject *arg0, beBas
         }
     }
     FUN_00396740(arg0, arg1);
+}
+
+int Gap__Bec__beNDMWMdlObject__vfunc_20(void)
+{
+    return g_beNDMWMdlObject_metaObject[0];
 }
