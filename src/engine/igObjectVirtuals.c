@@ -14,16 +14,6 @@ int Gap__Core__igObject__vfunc_34(void) {
     return 0;
 }
 
-/* Slot 22 default: empty. */
-void Gap__Core__igObject__vfunc_22(void)
-{
-}
-
-/* Slot 24 default: empty. */
-void Gap__Core__igObject__vfunc_24(void)
-{
-}
-
 /* Slot 30 default: first word of the beModelCtrlInfo MetaObject record. */
 int Gap__Core__igObject__vfunc_30(void)
 {
