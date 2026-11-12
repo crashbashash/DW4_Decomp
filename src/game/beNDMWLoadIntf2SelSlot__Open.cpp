@@ -25,43 +25,37 @@ extern int DAT_005171d0[4];
 extern int DAT_005171e0[4];
 typedef struct V3 { float x, y, z; } V3;
 typedef struct Own { char p[28]; V3 pos; } Own;
-typedef struct Mk { char p[8]; unsigned char made; } Mk;
-typedef struct ML { char p[16]; Mk **arr; } ML;
-typedef struct MQ { char p0[15]; unsigned char b15; char p1[28]; ML *list; } MQ;
-typedef struct CI { char p[52]; MQ *q; } CI;
+/* _commonIntf -> _mcUtilCtrl -> _slot is the memory-card slot list; _isConnect is the per-slot card-present flag. */
+#define MC_UTIL(owner) ((beNDMWMcUtilCtrl *)(owner)->_mcUtilCtrl)
+#define MC_SLOTS(owner) ((beNDMWMcSlotList *)MC_UTIL(owner)->_slot)
+#define MC_SLOT(list, i) (((beNDMWMcSlot **)(list)->_data)[i])
 
 unsigned char beNDMWLoadIntf2SelSlot__Open(beNDMWLoadIntf2SelSlot *self, int mark) {
     float va[3], vb[3], vc[3], vd[3], ve[3], vf[3];
     float v0a[3], v0b[3], v0c[3], v0d[3], v0e[3], v0f[3];
-    CI *ci;
+    beNDMWLoadCtrl2CommonIntf *ci;
     Own *o;
     TE *tb2;
     TE *tbl;
     int i;
     int j;
-    ML *ml;
+    beNDMWMcSlotList *ml;
     int to;
     if (self->_st0 != 0) {
         return 0;
     }
-    ci = (CI *)self->_commonIntf;
+    ci = (beNDMWLoadCtrl2CommonIntf *)self->_commonIntf;
+    /* matching construct: variant search — the 'case 0:' label (its compare folds away) gives the default block a
+       second edge, so the phase switch materialises its own compare constants */
     switch (self->_kindHard) {
-    case 1:
-    case 2:
-        break;
+    case 0:
     default:
-        /* kind 0 once ran an empty counted loop here; the dead loop survives as a CFG join so the _st1 dispatch rematerialises its compare constants */
-        switch (self->_kindHard) {
-        case 0:
-            for (i = 0; i < 1; i++) {
-            }
-        }
         switch (self->_st1) {
         case 0:
             if (mark != -1) {
                 self->_selPoint = mark;
             }
-            if (ci->q->b15 == 0) {
+            if (MC_UTIL(ci)->_isMtap == 0) {
                 o = (Own *)self->_comMdlCtrl; va[0] = o->pos.x; va[1] = o->pos.y; va[2] = o->pos.z;
                 beNDMWLoadIntf2ComMdlCtrl__StartAt(self->_comMdlCtrl, self->_ramNo, DAT_00517118, DAT_00517128, va, 1);
                 self->_mode = 0;
@@ -84,7 +78,7 @@ unsigned char beNDMWLoadIntf2SelSlot__Open(beNDMWLoadIntf2SelSlot *self, int mar
                     o = (Own *)self->_comMdlCtrl; vd[0] = o->pos.x; vd[1] = o->pos.y; vd[2] = o->pos.z;
                     beNDMWLoadIntf2ComMdlCtrl__StartAt(self->_comMdlCtrl, self->_ramNo, DAT_00517160, tbl[self->_selPoint].name, vd, 1);
                     for (i = 0; i < 2; i++) {
-                        if (ci->q->list->arr[tbl[i].mark]->made == 1) {
+                        if (MC_SLOT(MC_SLOTS(ci), tbl[i].mark)->_isConnect == 1) {
                             switch (i) {
                             case 0:
                                 if (!(beNDMWLoadIntf2ComMdlCtrl__IsRunning(self->_comMdlCtrl, self->_ramNo * 2, DAT_00517170) & 0xFF)) {
@@ -115,8 +109,8 @@ unsigned char beNDMWLoadIntf2SelSlot__Open(beNDMWLoadIntf2SelSlot *self, int mar
                         beNDMWLoadIntf2TextOrder_PublishIdLines(to, (self->_ramNo << 16) | 0x1101, 0);
                         break;
                     }
-                    ml = ci->q->list;
-                    if (ml->arr[tbl[self->_selPoint].mark]->made != 1) {
+                    ml = MC_SLOTS(ci);
+                    if (MC_SLOT(ml, tbl[self->_selPoint].mark)->_isConnect != 1) {
                         self->_mcStat = 0;
                         beNDMWLoadIntf2TextOrder_PublishIdLines(to, (self->_ramNo << 16) | 0x102E, 0);
                     } else {
@@ -131,7 +125,7 @@ unsigned char beNDMWLoadIntf2SelSlot__Open(beNDMWLoadIntf2SelSlot *self, int mar
                     o = (Own *)self->_comMdlCtrl; v0a[0] = o->pos.x; v0a[1] = o->pos.y; v0a[2] = o->pos.z;
                     beNDMWLoadIntf2ComMdlCtrl__StartAt(self->_comMdlCtrl, self->_ramNo, DAT_00517160, tb2[self->_selPoint].name, v0a, 1);
                     for (j = 0; j < 5; j++) {
-                        if (ci->q->list->arr[tb2[j].mark]->made == 1) {
+                        if (MC_SLOT(MC_SLOTS(ci), tb2[j].mark)->_isConnect == 1) {
                             switch (j) {
                             case 0:
                                 if (!(beNDMWLoadIntf2ComMdlCtrl__IsRunning(self->_comMdlCtrl, self->_ramNo * 5, DAT_005171a0) & 0xFF)) {
@@ -195,8 +189,8 @@ unsigned char beNDMWLoadIntf2SelSlot__Open(beNDMWLoadIntf2SelSlot *self, int mar
                         beNDMWLoadIntf2TextOrder_PublishIdLines(to, (self->_ramNo << 16) | 0x1101, 0);
                         break;
                     }
-                    ml = ci->q->list;
-                    if (ml->arr[tb2[self->_selPoint].mark]->made != 1) {
+                    ml = MC_SLOTS(ci);
+                    if (MC_SLOT(ml, tb2[self->_selPoint].mark)->_isConnect != 1) {
                         self->_mcStat = 0;
                         beNDMWLoadIntf2TextOrder_PublishIdLines(to, (self->_ramNo << 16) | 0x102E, 0);
                     } else {
@@ -219,7 +213,11 @@ unsigned char beNDMWLoadIntf2SelSlot__Open(beNDMWLoadIntf2SelSlot *self, int mar
             }
             break;
         }
-        }
+        break;
+    case 1:
+    case 2:
+        break;
+    }
     return self->_isOpen;
 }
 }

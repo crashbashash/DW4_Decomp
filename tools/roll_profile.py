@@ -8,6 +8,7 @@ every emitted copy under that unit's profile. Overrides of the moved functions g
 
   python3 tools/roll_profile.py --regions bec,ndmw --flags "-O4,p -sdatathreshold 2 -Iinclude"
   python3 tools/roll_profile.py --regions bec,ndmw --flags "..." --apply
+  python3 tools/roll_profile.py --regions bec --units 0x38ca40 --flags "..." --apply   # only those units
 """
 import argparse
 import bisect
@@ -82,9 +83,12 @@ def main():
     parser.add_argument("--flags", required=True)
     parser.add_argument("--compiler", default="b52", help="an @compiler id of units.tsv")
     parser.add_argument("--jobs", type=int, default=os.cpu_count())
+    parser.add_argument("--units", default="",
+                        help="comma-separated unit start addresses: move only these units of the regions")
     parser.add_argument("--apply", action="store_true")
     args = parser.parse_args()
     wanted = set(args.regions.split(","))
+    only = {int(x, 16) for x in args.units.split(",") if x}
     units = rows()
     starts = [unit[0] for unit in units]
     holders = duplicate_holders()
@@ -92,7 +96,7 @@ def main():
     for index, (start, end, _label, unit_compiler, flags, _exceptions) in enumerate(units):
         region = regions.of(start)
         # GCC units roll only onto a GCC compiler and MWCC units only onto MWCC
-        if (region.id in wanted and regions.of(end - 1) is region
+        if (region.id in wanted and regions.of(end - 1) is region and (not only or start in only)
                 and unit_compiler.startswith("ee-gcc") == args.compiler.startswith("ee-gcc")
                 and (unit_compiler, flags) != (args.compiler, args.flags)
                 and "-lang" not in flags and not any(start <= held < end for held in holders)):

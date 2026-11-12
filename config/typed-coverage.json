@@ -171,7 +171,7 @@
   "beNDMWLoadIntf2MakeChr": 27,
   "beNDMWLoadIntf2MesWin": 129,
   "beNDMWLoadIntf2NameSel": 80,
-  "beNDMWLoadIntf2SelSlot": 590,
+  "beNDMWLoadIntf2SelSlot": 589,
   "beNDMWLoadIntf2TextOrder": 80,
   "beNDMWLoadSavePlWork": 449,
   "beNDMWLoadSavePlWorkList": 33,
@@ -643,20 +643,20 @@
   "engine": {
    "files": 209,
    "offset_casts": 3895,
-   "other_members": 10453,
+   "other_members": 10455,
    "recovered": 5810,
-   "recovered_pct": 21.35,
-   "synthetic": 7051,
-   "total": 27209
+   "recovered_pct": 21.34,
+   "synthetic": 7062,
+   "total": 27222
   },
   "game": {
    "files": 1587,
    "offset_casts": 58,
-   "other_members": 286,
-   "recovered": 2540,
-   "recovered_pct": 85.12,
+   "other_members": 277,
+   "recovered": 2539,
+   "recovered_pct": 85.37,
    "synthetic": 100,
-   "total": 2984
+   "total": 2974
   },
   "libgcc": {
    "files": 7,
@@ -742,8 +742,8 @@
  },
  "note": "Baseline for tools/typed_coverage.py --check. The gate is on the *count* of recovered accesses, never on the percentage: the m2c loop keeps adding matched (and so untyped) C, so the ratio can fall while the count only grows. Update it deliberately with --update-baseline and commit, so every change in coverage is a reviewed diff.",
  "offset_casts": 6505,
- "recovered": 26210,
- "synthetic": 10377,
- "total": 67260,
+ "recovered": 26209,
+ "synthetic": 10388,
+ "total": 67263,
  "typeable": 363
 }

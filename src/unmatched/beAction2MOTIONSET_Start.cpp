@@ -19,7 +19,7 @@ int beAction2MOTIONSET_Start(beAction2 *arg0, beAction2InfoRam *arg1, beAction2M
     if (name != 0) nameOrEmpty = name; else nameOrEmpty = (int)DAT_004e0858;
     igAnimation *res = (igAnimation *)igProperty_FindByName(names, DAT_00585be0[0], nameOrEmpty);
     igAnimationCombiner *anim = ((igAnimationCombiner **)((igAnimationCombinerList *)((igAnimationDatabase *)info->_animationDatabase)->_combinerList)->_data)[arg1->_ramNo];
-    long long biasOld;
+    long biasOld; /* matching construct: decomp-permuter (found on beAction2MOTIONSET_Update) — the saved time bias is a `long` (igLong, 64-bit under mwccps2), not `long long` */
     float zero = 0.0f;
     float blend;
     long long hokanTicks;
