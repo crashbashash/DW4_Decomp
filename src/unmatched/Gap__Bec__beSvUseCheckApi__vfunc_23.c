@@ -1,5 +1,0 @@
-#include "dw4/reflected.h"
-void Gap__Bec__beSvUseCheckApi__vfunc_23(beSvUseCheckApi *arg0, beSvDeliver *arg1) {
-    arg1->_result = (int)((int) arg0->_result);
-    arg1->_isEndOperat = 1;
-}
