@@ -16,19 +16,23 @@ recovered. The packs carry serialised `igLightAttr` records, but those are proto
 | --- | --- | --- |
 | `FUN_001fb0e0` | 900 | the **program selector**: tests the capability bits of the current VU1 program record, chooses a lit or unlit path |
 | `p2lighting` `0x001fb710` | 980 | the **lit** path: emits the light constant block and returns the advanced cursor |
-| `FUN_001fb470` | 660 | the **unlit** path: emits 4 lights' direction/diffuse words (also used from `FUN_001fbaf0`) |
+| `p2WriteDirectionalLights` | 660 | the **unlit** path: writes the first four directional lights' directions as x, y and z rows, plus three rows of half vectors toward a viewer on +z when specular lighting is on (also used from `FUN_001fbaf0`) |
 | `FUN_001fbaf0` | 484 | the tail `p2lighting` calls when the `0x56AFAE` mode is on; appends a 48-byte block and an optional 16-byte record |
 | `FUN_001f9430` | 6684 | the per-frame light updater (calls `FUN_001fb0e0`); also the ambient accumulation in `0x1f9f20` |
 | `FUN_001f8b50` | 2260 | the light-state refresh: fills the index tables `0x56AF30`/`0x56AF38`, the count `0x56AF94` and the enable flags from the pointer table `0x56AF40` |
 | `FUN_001f8490` | 660 | initialises the light-type → program-index table at `0x56AE50` (`0,1,…,10,12,13,20,…,127`) |
-| `FUN_001f8a30` / `FUN_001f8ae0` | 108 / 108 | register a light descriptor into `0x56AF40` / `0x56AF60` at a caller-supplied index |
-| `FUN_001f8aa0` | 60 | copies 16 bytes into `0x56AEE0`, the block `p2lighting` emits as record 3 |
+| `p2SetLight` / `p2SetMaterial` | 108 / 108 | store a light into `p2Lights` (`0x56AF40`) or the material into `p2Materials` (`0x56AF60`) at a caller-supplied slot |
+| `p2SetLightingColor` | 60 | copies a 16-byte colour (the visual context passes its material's `+0x58` vector) into `0x56AEE0`, the block `p2lighting` emits as record 3 |
+| `p2EnableLight` / `p2DisableLight` | 156 / 156 | switch a slot's light on or off, keeping the active-light counts; disabling also empties the slot |
+| `p2EnableLighting` / `p2DisableLighting` | 72 / 100 | the lighting case of the renderer's enable switch `FUN_001e7930`; disabling also drops the normal-array bits from the vertex-array mask |
+| `p2InitLighting` | 148 | empties the light and material slots and turns lighting off (called from the renderer's initialisation) |
+| `p2InvertMatrix` / `p2AdjointMatrix` | 96 / 640 | the light-matrix inverse `p2lighting` uses: the adjoint scaled by one over the value `p2AdjointMatrix` returns |
 
 `FUN_001fb0e0` reads the current program record's flags through `0x562C70 + 4*(*(0x569330))` (the
 runtime program table, the same flags decoded in [VU1 microcode](vu1-microcode.md)) and branches on four bits: `0x1000`
 (texgen), `0x100000` (scale), `0x200000`, and the mode global `0x56AED0` (1 or 5). It then copies
 the program's 48-byte record into the transfer descriptor's cursor, appends either `p2lighting`'s
-block (lit) or `FUN_001fb470`'s (unlit), and hands the cursor on. That is the whole "lighting" step:
+block (lit) or `p2WriteDirectionalLights`'s (unlit), and hands the cursor on. That is the whole "lighting" step:
 `p2lighting` never touches a register, it only writes a constant buffer.
 
 ## The record stream
@@ -41,13 +45,17 @@ order:
 | 0 | 16 | `{state[48..59] (vec3), lightCount}` | always; the ambient pass accumulates into it |
 | 1 | 16 | `state[0..15]` | always |
 | 2 | 16 | `state[16..31]` | always |
-| 3 | 16 | `0x56AEE0` (set by `FUN_001f8aa0`) | always |
+| 3 | 16 | `0x56AEE0` (set by `p2SetLightingColor`) | always |
 | A | 16 | `{L[0x50..0x5b] (vec3), state[64]}` | per light, only when `flag == 0` |
 | B | 16 | `L[0x70..0x7f]`, or the same vector transformed by the light matrix and divided by `w` with `.w = 1.0` | per light |
 | C | 16 | `L[0x10..0x1f]` | per light, only when `flag == 0` |
 | D | 16 | `L[0x20..0x2f]`, with `.w` replaced by `L[0x54]` when `flag != 0` (unchanged `L[0x2c]` when `flag == 0`) | per light, always |
 
-`state` is `*(void **)0x56AF60` (table slot 0). `L` is the light descriptor for this iteration:
+`state` is `p2Materials[0]` (`*(void **)0x56AF60`), the visual context's current material: ambient
+at `+0`, diffuse `+16`, specular `+32`, emission `+48`, shininess `+64`, flags `+68`, its slot at `+80`
+(the layout `Gap__Gfx__igPsx2VisualContext__vfunc_112` fills from an `igMaterialAttr`). So record 0
+carries the emission, records 1 and 2 the ambient and diffuse colours, and record A's `w` the
+shininess. `L` is the light descriptor for this iteration:
 `idx = ((uint8_t *)0x56AF38)[i]`, `L = ((void **)0x56AF40)[idx]`; a NULL `L` is skipped. The loop
 runs `i = 0 .. lightCount-1`, where **`lightCount = *(int *)0x56AF94`** and is also the fourth word
 of record 0. Before the loop, when `*(uint8_t *)0x56AFAE` is on and `(texgen == 0 || mode51)`:
@@ -60,10 +68,12 @@ for i in 0 .. *(int*)0x56AF00 - 1:
 
 so record 0 is `state[48]` plus a weighted sum of the lights' `+0x10` vectors. The light **matrix**
 is `0x56AFD0` (a 4×4, identity in every state observed); when it is needed (`scale == 0 && bit21 &&
-count != 0`) `p2lighting` calls `FUN_001fc2b0(0x56AFD0, sp+160)` to copy/scale it, and uses it to
-homogeneous-transform `L[0x70]` (divide by `w`, then normalize through `0x0020e060`). When it is not,
-record B is the plain `L[0x70]`. Finally, if `0x56AFAE` is set, it calls
-`FUN_001fbaf0(&cursor, mode51)` to append the unlit tail.
+count != 0`) `p2lighting` calls `p2InvertMatrix(0x56AFD0, sp+160)` to invert it, and uses the inverse to
+homogeneous-transform `L[0x70]` (divide by `w`, then normalize through `0x0020e060`). The divisor
+`p2AdjointMatrix` returns is `m[0]·adj[0] − m[1]·adj[4] + m[2]·adj[8] − m[3]·adj[12]`, which is the
+determinant only when `m[1]·adj[4] + m[3]·adj[12] = 0` (for instance when `m[1]` and `m[3]` are zero,
+as in the identity). When the matrix is not needed, record B is the plain `L[0x70]`. Finally, if
+`0x56AFAE` is set, it calls `FUN_001fbaf0(&cursor, mode51)` to append the unlit tail.
 
 ### What the records are, semantically
 
@@ -81,7 +91,7 @@ per-material multipass suffixes. `igLightAttr` is the serialised light
 
 Three of the emitted records land on those offsets: record C on `+0x10` (`_lightId` + `_position`),
 record D on `+0x20` (`_ambient`), record B on `+0x70` (`_shininess` + `_cachedPosition`), and
-`FUN_001fb470` reads the descriptor at `+0x60..0x68` (the serialised `_cutoff`/`_attenuation` slots)
+`p2WriteDirectionalLights` reads the descriptor at `+0x60..0x68` (the serialised `_cutoff`/`_attenuation` slots)
 as a **direction**.
 
 That last point is the honest limit of the mapping: **the runtime descriptor is not the serialised
@@ -119,21 +129,25 @@ so the records are prototypes, not the running values.
 
 ## The runtime globals
 
-| address | type | role |
-| --- | --- | --- |
-| `0x56AF00` | int | count of the ambient-pass table (`0x56AF30`) |
-| `0x56AF30` | u8[8] | ambient-pass indices into the pointer table |
-| `0x56AF38` | u8[8] | per-light-pass indices into the pointer table |
-| `0x56AF40` | void*[8] | the registered light descriptors |
-| `0x56AF60` | void*[8] | the registered lighting-state descriptors; slot 0 is `p2lighting`'s `state` |
-| `0x56AF94` | int | **the light count**: the loop bound and record 0's `w` |
-| `0x56AF9C` | int | enables the extra `+0x30/+0x40/+0x50` words in the unlit path |
-| `0x56AFA0/…/A8` | int | per-class light counts (`FUN_001f8b50`) |
-| `0x56AFAC`…`B0` | bool | mode flags; `0x56AFAE` gates the ambient pass and the `FUN_001fbaf0` tail |
-| `0x56AFD0` | mat4 | the **light matrix** (identity in every state observed) |
-| `0x56AEE0` | 16 B | the global block emitted as record 3 (`FUN_001f8aa0`) |
-| `0x56AED0` | int | lighting mode 1/5 |
-| `0x56AE50` | u8[?] | light-type → program-index table (`FUN_001f8490`) |
+| address | name | type | role |
+| --- | --- | --- | --- |
+| `0x56AF00` | `p2DirectionalLightCount` | int | count of the directional-light table (`0x56AF30`) |
+| `0x56AF30` | `p2DirectionalLights` | u8[8] | slots of the active type-0 lights, at most four; the ambient pass and `p2WriteDirectionalLights` read them |
+| `0x56AF38` | | u8[8] | slots of the active type-1 and type-2 lights (the per-light pass) |
+| `0x56AF40` | `p2Lights` | void*[8] | the light in each slot |
+| `0x56AF60` | `p2Materials` | void*[2] | the material in each slot; slot 0 is `p2lighting`'s `state` |
+| `0x56AEF0` / `0x56AEF8` | `p2ActiveLightCount` / `p2ActivePointLightCount` | int | lights switched on, and those of type 1 |
+| `0x56AF94` | | int | **the light count**: the loop bound and record 0's `w` |
+| `0x56AF9C` | `p2LightSpecular` | int | enables the three half-vector rows (`+0x30/+0x40/+0x50`) in the unlit path |
+| `0x56AFA0/…/A8` | | int | per-class light counts (`FUN_001f8b50`) |
+| `0x56AFAC`…`B0` | | bool | mode flags; `0x56AFAE` gates the ambient pass and the `FUN_001fbaf0` tail |
+| `0x56AFD0` | `p2LightMatrix` | mat4 | the **light matrix** (identity in every state observed) |
+| `0x56AEE0` | `p2LightingColor` | 16 B | the colour emitted as record 3 (`p2SetLightingColor`) |
+| `0x56AED0` | `p2LightingMode` | int | lighting mode 1/5 (`p2SetLightingMode`) |
+| `0x56AE50` | | u8[?] | light-type → program-index table (`FUN_001f8490`) |
+| `0x554BC0` | `p2LightingEnabled` | bool | lighting on (`p2EnableLighting`) |
+| `0x554BC4` | `p2LightsNeedTransform` | bool | set by `FUN_001f9430`; the unlit path then rotates the lights (object-space programs) or raises `p2LightCalcPending` |
+| `0x491270` | `p2LightsChanged` | int | any light, material or mode changed; the refresh rebuilds the tables |
 
 Measured from an offline RAM dump (stag0102 loaded): `0x56AF00 = 2`,
 `0x56AF94 = 0`, `0x56AF60 = 0x006e9820`, `0x56AFD0` is the identity, and `0x56AF40` is **all NULL**.
@@ -150,12 +164,12 @@ stag0001 values; the generalisation and the event model are unconfirmed):
    normalise(-src_dir x getMatrix(1))`, the source direction times the model-view top. The `igLightAttr` itself keeps its authored
    `_direction`; nothing on the EE accumulates. In the practice stage the descriptor reads `(0, 0.98499, 0.17261)` while the attribute
    still holds `(0.3214, -0.866, 0.383)`.
-2. **Upload.** `FUN_001fb0e0` -> `FUN_001fb470` writes the raw `+0x60` vectors transposed as three quadwords (x row, y row, z row for
+2. **Upload.** `FUN_001fb0e0` -> `p2WriteDirectionalLights` writes the raw `+0x60` vectors transposed as three quadwords (x row, y row, z row for
    four lights) in a VIF UNPACK to VU1 address `0x5a`.
 3. **Pending flag.** `FUN_001fbce0` is the single hardware matrix upload (type 0 model-view, 3 projection, 4 texture, 5, 2); every
-   type leaves through `0x1fc010..0x1fc018` with `DAT_0056b5f8 = 1`. Only the model-view type also calls `FUN_001fb0e0(-1)`, which
-   re-emits a **fresh** light block (returning early when `DAT_00491478 & 4` is set).
-4. **Draw submit.** `FUN_001ee750` (clones `FUN_001f47c0`, `FUN_001f64a0`, `FUN_001fe390`) tests `DAT_0056b5f8 == 1`; if set it appends
+   type leaves through `0x1fc010..0x1fc018` with `p2LightCalcPending` (`0x56B5F8`) `= 1`. Only the model-view type also calls `FUN_001fb0e0(-1)`, which
+   re-emits a **fresh** light block (returning early when `p2DirtyFlags & 4`, the lighting-dirty bit, is set).
+4. **Draw submit.** `FUN_001ee750` (clones `FUN_001f47c0`, `FUN_001f64a0`, `FUN_001fe390`) tests `p2LightCalcPending == 1`; if set it appends
    a 32-byte record (VIF `6001002b`, one word `DAT_0056b604` = `0x3a` to VU1 `mem[43]`), clears `DAT_0056afc8` and the flag. The flag
    is a boolean consumed by the next draw: two uploads before one draw count once.
 5. **VU1.** `EXECUTE_RENDERLIST` reads `mem[43]`, zeroes it and jumps to `0x3a` (the `EXECUTE_PRE_PATH` chain that runs the `CALC_*`
@@ -186,9 +200,9 @@ practice stage with stag0001's BG02 overlay pattern has been found.
 
 **Not established (unconfirmed):** a second retail dump with k > 0 (the three practice-stage dumps are the only constant dim additive draws in
 about 1,300 parsed dumps; the Main Lobby frames contain no lit k > 0 mesh, so they neither confirm nor contradict the hub half);
-which events re-emit a fresh block in the draw-begin path `FUN_001f9430` (`DAT_00491478` bit 2 and the lighting-dirty state); whether
+which events re-emit a fresh block in the draw-begin path `FUN_001f9430` (`p2DirtyFlags` bit 2 and the lighting-dirty state); whether
 leaving a texture-matrix transform uploads on its own (the stream shows only the entry uploads plus one restore on leaving the scope);
-the `sel`/object-space program variants (`FUN_001fb470` transforms the lights on the EE there), the `p2lighting` path and positional
+the `sel`/object-space program variants (`p2WriteDirectionalLights` transforms the lights on the EE there), the `p2lighting` path and positional
 or spot lights; a rotating or scaled ancestor, where `(V3 . R)^k` is an extrapolation; and a hidden switch branch (a draw skipped
 skips its upload).
 
@@ -197,7 +211,7 @@ skips its upload).
 * **The running light values.** They are written into the runtime descriptors from the scene at
   load/update time; the pack records are prototypes whose colours differ from the live rig, the
   savestates are empty of them, and VU1 data memory is too dense in float patterns to identify them by shape. What is needed is
-  a breakpoint/readback **while the light list is non-empty** (`FUN_001f8a30`/`FUN_001f8ae0` fill
+  a breakpoint/readback **while the light list is non-empty** (`p2SetLight`/`p2SetMaterial` fill
   `0x56AF40`/`0x56AF60`), or a `--statefile` taken mid-render.
 * **The runtime descriptor's class.** It is a 160-byte bss structure, not the reflected
   `igLightAttr`; the reflection layout is used only as the semantic vocabulary.

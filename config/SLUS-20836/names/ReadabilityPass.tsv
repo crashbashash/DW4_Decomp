@@ -256,3 +256,15 @@
 0x001f0730	p2ShutdownDmaChannels	engine
 0x001f0930	p2WaitDmaCondition	engine
 0x001f0960	p2StoreImage	engine
+0x001f8790	p2InitLighting	engine
+0x001f8830	p2EnableLight	engine
+0x001f88d0	p2DisableLight	engine
+0x001f8970	p2EnableLighting	engine
+0x001f89c0	p2DisableLighting	engine
+0x001f8a30	p2SetLight	engine
+0x001f8aa0	p2SetLightingColor	engine
+0x001f8ae0	p2SetMaterial	engine
+0x001fb0a0	p2SetLightingMode	engine
+0x001fb470	p2WriteDirectionalLights	engine
+0x001fc030	p2AdjointMatrix	engine
+0x001fc2b0	p2InvertMatrix	engine

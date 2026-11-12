@@ -5639,35 +5639,6 @@
       "DAT_0056ba20": "0x0056ba20"
     }
   },
-  "0x001f8830": {
-    "whole_file": true,
-    "emitted": {
-      "FUN_001f88d0": "0x001f88d0",
-      "FUN_001f8970": "0x001f8970",
-      "FUN_001f89c0": "0x001f89c0",
-      "FUN_001f8a30": "0x001f8a30",
-      "FUN_001f8aa0": "0x001f8aa0",
-      "FUN_001f8ae0": "0x001f8ae0",
-      "FUN_001fb0a0": "0x001fb0a0"
-    },
-    "data": {
-      "DAT_00491270": "0x00491270",
-      "DAT_00491478": "0x00491478",
-      "DAT_00554bc0": "0x00554bc0",
-      "DAT_0056aed0": "0x0056aed0",
-      "DAT_0056aee0": "0x0056aee0",
-      "DAT_0056aef0": "0x0056aef0",
-      "DAT_0056aef8": "0x0056aef8",
-      "DAT_0056af08": "0x0056af08",
-      "DAT_0056af10": "0x0056af10",
-      "DAT_0056af18": "0x0056af18",
-      "DAT_0056af20": "0x0056af20",
-      "DAT_0056af28": "0x0056af28",
-      "DAT_0056af40": "0x0056af40",
-      "DAT_0056af60": "0x0056af60",
-      "DAT_0056b478": "0x0056b478"
-    }
-  },
   "0x001f6f50": {
     "whole_file": true,
     "emitted": {
@@ -34929,6 +34900,50 @@
       "p2PredicateNames": "0x005691d0",
       "p2PreviousFinishFuncDone": "0x0056bf38",
       "p2StoreImagePending": "0x00554bbc"
+    }
+  },
+  "0x001f8790": {
+    "whole_file": true,
+    "emitted": {
+      "p2EnableLight": "0x001f8830",
+      "p2DisableLight": "0x001f88d0",
+      "p2EnableLighting": "0x001f8970",
+      "p2DisableLighting": "0x001f89c0",
+      "p2SetLight": "0x001f8a30",
+      "p2SetLightingColor": "0x001f8aa0",
+      "p2SetMaterial": "0x001f8ae0",
+      "p2SetLightingMode": "0x001fb0a0",
+      "p2WriteDirectionalLights": "0x001fb470",
+      "p2AdjointMatrix": "0x001fc030",
+      "p2InvertMatrix": "0x001fc2b0"
+    },
+    "data": {
+      "p2ActiveLightCount": "0x0056aef0",
+      "p2ActivePointLightCount": "0x0056aef8",
+      "p2CurrentProgram": "0x00569330",
+      "p2DirectionalLightCount": "0x0056af00",
+      "p2DirectionalLights": "0x0056af30",
+      "p2DirtyFlags": "0x00491478",
+      "p2LightCalcPending": "0x0056b5f8",
+      "p2LightMatrix": "0x0056afd0",
+      "p2LightSpecular": "0x0056af9c",
+      "p2LightingColor": "0x0056aee0",
+      "p2LightingEnabled": "0x00554bc0",
+      "p2LightingMode": "0x0056aed0",
+      "p2LightingProgramBits": "0x0056b488",
+      "p2Lights": "0x0056af40",
+      "p2LightsChanged": "0x00491270",
+      "p2LightsNeedTransform": "0x00554bc4",
+      "p2Materials": "0x0056af60",
+      "p2NormalArrayMask": "0x0056af70",
+      "p2NormalArraySource": "0x0056af68",
+      "p2ProgramFlags": "0x00562c70",
+      "p2StatLightSets": "0x0056af20",
+      "p2StatLightSwitches": "0x0056af28",
+      "p2StatLightingModeSets": "0x0056af18",
+      "p2StatLightingSwitches": "0x0056af08",
+      "p2StatMaterialSets": "0x0056af10",
+      "p2VertexArrayMask": "0x0056b478"
     }
   }
 }

@@ -174,13 +174,13 @@ int Gap__Gfx__igPsx2VisualContext__vfunc_79(Obj_1709d0 *arg0, int arg1, int arg2
                 *(Ent **)((int)DAT_00560858[0] + off) = e;
                 e->f148 = 1;
                 FUN_00171690(arg0, e);
-                FUN_001f8830(i);
+                p2EnableLight(i);
                 return 1;
             }
         }
         return 0;
     }
-    FUN_001f88d0(e->f144, arg1, arg2, m);
+    p2DisableLight(e->f144, arg1, arg2, m);
     e->f148 = 0;
     *(int *)((int)DAT_00560858[0] + e->f144 * 4) = -1;
     return 1;
@@ -435,7 +435,7 @@ float Gap__Gfx__igPsx2VisualContext__vfunc_93(void *arg0, int arg1) {
 
 void FUN_00171690(void *arg0, void *arg1) {
     if (*(unsigned char *)((char *)(arg1) + 148) != 0) {
-        FUN_001f8a30(*(int *)((char *)(arg1) + 144));
+        p2SetLight(*(int *)((char *)(arg1) + 144));
     }
 }
 
@@ -683,27 +683,27 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_100(igPsx2VisualContext *self, unsigne
     switch (mode) {
     case 0:
         FUN_001e7500(12);
-        FUN_001fb0a0(0);
+        p2SetLightingMode(0);
         return;
     case 1:
         FUN_001e74b0(12);
-        FUN_001fb0a0(1);
+        p2SetLightingMode(1);
         break;
     case 2:
         FUN_001e74b0(12);
-        FUN_001fb0a0(4);
+        p2SetLightingMode(4);
         break;
     case 3:
         FUN_001e74b0(12);
-        FUN_001fb0a0(5);
+        p2SetLightingMode(5);
         break;
     case 4:
         FUN_001e74b0(12);
-        FUN_001fb0a0(3);
+        p2SetLightingMode(3);
         break;
     case 5:
         FUN_001e74b0(12);
-        FUN_001fb0a0(2);
+        p2SetLightingMode(2);
         break;
     }
 }
@@ -731,7 +731,7 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_115(struct H_172230 *arg0, float *arg1
     o->v[1] = arg1[1];
     o->v[2] = arg1[2];
     o->v[3] = arg1[3];
-    FUN_001f8aa0(arg1);
+    p2SetLightingColor(arg1);
 }
 
 void Gap__Gfx__igPsx2VisualContext__vfunc_116(igPsx2VisualContext *arg0, void *arg1) {
@@ -745,8 +745,8 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_116(igPsx2VisualContext *arg0, void *a
 }
 
 void FUN_00172330(void *arg0, void *arg1) {
-    FUN_001f8ae0(*(int *)((char *)arg1 + 80));
-    FUN_001f8aa0(*(int *)((char *)arg0 + 1344) + 0x58);
+    p2SetMaterial(*(int *)((char *)arg1 + 80));
+    p2SetLightingColor(*(int *)((char *)arg0 + 1344) + 0x58);
 }
 
 void Gap__Gfx__igPsx2VisualContext__vfunc_199(Obj_172370 *o, int k, int n) {
@@ -1208,10 +1208,10 @@ void FUN_00174510(struct R_174510 *arg0, int arg1, int arg2, int arg3, int arg4,
     } else {
         j = 0;
     }
-    DAT_00569330[0] = n;
+    p2CurrentProgram[0] = n;
     DAT_0056ad80[0] = (StageState *)((int *)DAT_00569340 + j * 112);
     FUN_00174640((int)arg0, n);
-    DAT_00569330[0] = 0;
+    p2CurrentProgram[0] = 0;
     DAT_0056ad80[0] = DAT_00569340;
 }
 

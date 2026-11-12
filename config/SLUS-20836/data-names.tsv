@@ -2597,6 +2597,8 @@
 0x0048dbe0	g_igDataPump_callbackList	callback-list
 0x00490cc0	p2DmaPacketCount	recovered-global
 0x00490d00	p2DmaWaitSemaParam	recovered-global
+0x00491270	p2LightsChanged	recovered-global
+0x00491478	p2DirtyFlags	recovered-global
 0x00497bb0	g_igOptInterface_callbackList	callback-list
 0x00497c00	g_igOptBase_callbackList	callback-list
 0x00497c30	g_igMessageInterface_callbackList	callback-list
@@ -2685,6 +2687,8 @@
 0x004a52b0	adxm_lock_saved_prio	recovered-global
 0x004a52b4	adxm_lock_thid	recovered-global
 0x004a52b8	adxm_main_init_prio	recovered-global
+0x004a8eb0	adxpd_odd_block_error	recovered-global
+0x004a8eb8	adxpd_obj	recovered-global
 0x004a9278	cvfs_build	recovered-global
 0x004a927c	cvfs_errfn	recovered-global
 0x004a9280	cvfs_errobj	recovered-global
@@ -4733,6 +4737,8 @@
 0x00554b80	g_SceneGraphLibrary_registered	recovered-global
 0x00554bb4	g_DataPumpLibrary_registered	recovered-global
 0x00554bbc	p2StoreImagePending	recovered-global
+0x00554bc0	p2LightingEnabled	recovered-global
+0x00554bc4	p2LightsNeedTransform	recovered-global
 0x00554bc8	g_BaseLibrary_registered	recovered-global
 0x00554bcc	g_InsightLibrary_registered	recovered-global
 0x00554bd4	g_SceneSearchLibrary_registered	recovered-global
@@ -4748,6 +4754,7 @@
 0x00554e70	g_commonSettingsValid	recovered-global
 0x00554e74	g_GuiLibrary_registered	recovered-global
 0x00554e78	g_ViewerLibrary_registered	recovered-global
+0x0055c870	_gp	recovered-global
 0x0055ebc0	g_igVisualContextAttrDefaultManager_metaObject	class-handle
 0x0055ebd0	g_igVisualAttribute_metaObject	class-handle
 0x0055ebd8	g_igViewportAttr_metaObject	class-handle
@@ -5065,6 +5072,7 @@
 0x00562c10	g_igDataPumpInfo_metaObject	class-handle
 0x00562c20	g_igDataPump_metaObject	class-handle
 0x00562c50	g_igBoolObject_metaObject	class-handle
+0x00562c70	p2ProgramFlags	recovered-global
 0x00568ed0	p2BlockedSema	recovered-global
 0x00568f00	p2DmaCurrentPacket	recovered-global
 0x00568f30	p2DmaLastPacket	recovered-global
@@ -5079,6 +5087,27 @@
 0x005691b8	p2DmaPredicatePool	recovered-global
 0x005691c0	p2DmaCompletionPool	recovered-global
 0x005691d0	p2PredicateNames	recovered-global
+0x00569330	p2CurrentProgram	recovered-global
+0x0056aed0	p2LightingMode	recovered-global
+0x0056aee0	p2LightingColor	recovered-global
+0x0056aef0	p2ActiveLightCount	recovered-global
+0x0056aef8	p2ActivePointLightCount	recovered-global
+0x0056af00	p2DirectionalLightCount	recovered-global
+0x0056af08	p2StatLightingSwitches	recovered-global
+0x0056af10	p2StatMaterialSets	recovered-global
+0x0056af18	p2StatLightingModeSets	recovered-global
+0x0056af20	p2StatLightSets	recovered-global
+0x0056af28	p2StatLightSwitches	recovered-global
+0x0056af30	p2DirectionalLights	recovered-global
+0x0056af40	p2Lights	recovered-global
+0x0056af60	p2Materials	recovered-global
+0x0056af68	p2NormalArraySource	recovered-global
+0x0056af70	p2NormalArrayMask	recovered-global
+0x0056af9c	p2LightSpecular	recovered-global
+0x0056afd0	p2LightMatrix	recovered-global
+0x0056b478	p2VertexArrayMask	recovered-global
+0x0056b488	p2LightingProgramBits	recovered-global
+0x0056b5f8	p2LightCalcPending	recovered-global
 0x0056bf38	p2PreviousFinishFuncDone	recovered-global
 0x0056c15c	p2DmaWaitTime	recovered-global
 0x0056d670	p2DmaWatchFlags	recovered-global
@@ -5142,7 +5171,6 @@
 0x0056de10	g_igLuaState_metaObject	class-handle
 0x0056de28	g_igLuaGlue_metaObject	class-handle
 0x0056df48	g_luaInitResult	recovered-global
-0x0055c870	_gp	recovered-global
 0x0056dfb0	adxm_vsync_frame_cb	recovered-global
 0x0056dfb8	adxm_mwidle_sleep_cb	recovered-global
 0x0056e0e0	cvfs_handles	recovered-global
@@ -5915,5 +5943,3 @@
 0x0058ce60	g_igActorManager_metaObject	class-handle
 0x0058ceb8	g_igActorManagerParams_metaObject	class-handle
 0x0058d244	errno	recovered-global
-0x004a8eb0	adxpd_odd_block_error	recovered-global
-0x004a8eb8	adxpd_obj	recovered-global

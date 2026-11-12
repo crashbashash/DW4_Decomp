@@ -3,7 +3,7 @@ extern int FUN_001fffb0();
 extern int FUN_00200980();
 extern int FUN_00201a90();
 extern int FUN_00204ea0();
-extern int DAT_00491478[4];
+extern int p2DirtyFlags[4];
 extern int DAT_00568e50[4];
 extern int DAT_0056b3b0[4];
 extern int DAT_0056b3b4[4];
@@ -21,13 +21,13 @@ extern long long DAT_0056b5d8[4];
 extern long long DAT_0056b5e0[4];
 extern long long DAT_0056b5e8[4];
 extern long long DAT_0056b5f0[4];
-extern int DAT_0056b5f8[4];
+extern int p2LightCalcPending[4];
 extern int DAT_0056b608[4];
 extern int DAT_0056ba00[16];
 extern int DAT_0056ba20[4];
 struct P { long long m0; long long m8; int p16; struct P *next; int sh; int count; int tab[1]; };
 struct E { int w0; int w4; };
-extern long long DAT_0056b478[4];
+extern long long p2VertexArrayMask[4];
 extern int DAT_00562da0[16];
 extern int DAT_0056b490[4];
 int FUN_001eadf0();
@@ -132,7 +132,7 @@ extern int DAT_0056b590[4];
 extern int * DAT_0056b594[4];
 extern int DAT_0056b600[4];
 extern int DAT_0056b604[4];
-extern unsigned int DAT_00562c70[4];
+extern unsigned int p2ProgramFlags[4];
 extern int DAT_0056b058[4];
 extern int DAT_0056b4f8[4];
 extern int DAT_0056b530[4];
@@ -145,7 +145,7 @@ void FUN_001ff3b0(int arg0) {
     int s;
     int f;
     int n, a;
-    s = DAT_00491478[0] & arg0;
+    s = p2DirtyFlags[0] & arg0;
     if (s != 0) {
         DAT_0056b5a8[0] += 1;
     }
@@ -153,20 +153,20 @@ void FUN_001ff3b0(int arg0) {
         if (s & 4) {
             DAT_0056b5c0[0] += 1;
             FUN_001f8b50();
-            s = DAT_00491478[0] & arg0;
+            s = p2DirtyFlags[0] & arg0;
         }
         if (s & 0x193) {
             DAT_0056b608[0] = FUN_00204ea0();
-            s = DAT_00491478[0] & arg0;
+            s = p2DirtyFlags[0] & arg0;
             if (DAT_0056b608[0] == 0 || (DAT_0056b608[0] == 1 && (s & 0x100))) {
                 if (s & 0x10) {
                     FUN_001fffb0(DAT_0056b608[0]);
                     s |= 0x80;
-                    DAT_00491478[0] |= 0x80;
+                    p2DirtyFlags[0] |= 0x80;
                 }
                 if (s & 1) {
                     FUN_00200980();
-                    s = DAT_00491478[0] & arg0;
+                    s = p2DirtyFlags[0] & arg0;
                 }
                 if (s & 2) {
                     if (DAT_00568e50[0] == 0) {
@@ -194,9 +194,9 @@ void FUN_001ff3b0(int arg0) {
                         DAT_0056ba00[n] = DAT_0056b448[0];
                         DAT_0056ba20[0] = n + 1;
                         if (DAT_0056ba20[0] > 1) {
-                            DAT_0056b5f8[0] = 1;
+                            p2LightCalcPending[0] = 1;
                         } else {
-                            DAT_0056b5f8[0] = 0;
+                            p2LightCalcPending[0] = 0;
                         }
                     }
                 }
@@ -235,7 +235,7 @@ void p2SubmitDmaPacket();
 extern int DAT_00491480;
 extern int DAT_00490d38;
 extern int DAT_00569308;
-extern int DAT_00569330;
+extern int p2CurrentProgram;
 extern char *DAT_0056ad80;
 extern unsigned int DAT_004914f0, DAT_004914f4, DAT_004914f8, DAT_004914fc;
 extern VifCode DAT_00491500;
@@ -286,7 +286,7 @@ void FUN_001ffcf0(void) {
         prim = remap(prim);
         texPrim = 5;
     }
-    flag = (DAT_00562c70[DAT_00569330] >> 23) & 1;
+    flag = (p2ProgramFlags[p2CurrentProgram] >> 23) & 1;
     DAT_00491500.imm = 24;
     if (DAT_0056b490[0] & 0x100) {
         tag = &DAT_00491520;
@@ -339,8 +339,8 @@ int FUN_00200830(struct P *p, long long *out) {
     struct E *e;
     for (; p != 0; p = p->next) {
         m = p->m0;
-        if (m == (m & DAT_0056b478[0])) {
-            if (!(p->m8 & DAT_0056b478[0])) {
+        if (m == (m & p2VertexArrayMask[0])) {
+            if (!(p->m8 & p2VertexArrayMask[0])) {
                 for (i = 0; i < 32; i++) {
                     if (m & (1LL << i)) break;
                 }
@@ -723,22 +723,22 @@ int FUN_00202e20(int arg0) {
     if (DAT_0056b058[0] < arg0) {
         return 0;
     }
-    temp_a2 = ((unsigned int) DAT_00562c70[0] >> 6) & 1;
-    temp_a1 = ((unsigned int) DAT_00562c70[0] >> 0xF) & 3;
+    temp_a2 = ((unsigned int) p2ProgramFlags[0] >> 6) & 1;
+    temp_a1 = ((unsigned int) p2ProgramFlags[0] >> 0xF) & 3;
     if (arg0 == 1) {
-        if (DAT_0056b478[0] & 0x400) {
+        if (p2VertexArrayMask[0] & 0x400) {
             return FUN_001eadf0(DAT_0056b0f0[DAT_0056b4f8[0]], temp_a1, temp_a2);
         }
         goto block_6;
     }
 block_6:
-    if ((arg0 == 1) && (DAT_0056b478[0] & 0x10000)) {
+    if ((arg0 == 1) && (p2VertexArrayMask[0] & 0x10000)) {
         return FUN_001eadf0(DAT_0056b260[DAT_0056b530[0]], temp_a1, temp_a2);
     }
     if ((temp_a2 != 0) || (temp_a1 != 0)) {
         return FUN_001eadf0(DAT_0056b2d0[DAT_0056b550[0]], temp_a1, temp_a2);
     }
-    if (DAT_0056b478[0] & 0x210400) {
+    if (p2VertexArrayMask[0] & 0x210400) {
         var_v0 = FUN_001eadf0(DAT_0056b330[DAT_0056b568[0]], temp_a1, temp_a2);
     }
     return var_v0;

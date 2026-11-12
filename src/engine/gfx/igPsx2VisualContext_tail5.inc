@@ -872,14 +872,14 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_117(struct TextureStateView117 *arg0, 
     } else {
         j = 0;
     }
-    DAT_00569330[0] = n;
+    p2CurrentProgram[0] = n;
     DAT_0056ad80[0] = &DAT_00569340[j];
     if (arg2 != 0) {
         FUN_001e74b0(1, n);
     } else {
         FUN_001e7500(1, n);
     }
-    DAT_00569330[0] = 0;
+    p2CurrentProgram[0] = 0;
     DAT_0056ad80[0] = DAT_00569340;
 }
 
@@ -1342,8 +1342,8 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_148(VisualContextSlots *arg0, int arg1
     }
     arg0->slot[arg1] = arg2;
     a3 = arg1 > 1 ? arg1 - 1 : 0;
-DAT_00569330[0] = arg1; DAT_0056ad80[0] = &DAT_00569340[a3]; FUN_00208f70(DAT_0048acf0[arg2]);
-    DAT_00569330[0] = 0;
+p2CurrentProgram[0] = arg1; DAT_0056ad80[0] = &DAT_00569340[a3]; FUN_00208f70(DAT_0048acf0[arg2]);
+    p2CurrentProgram[0] = 0;
     DAT_0056ad80[0] = DAT_00569340;
 }
 
@@ -1371,11 +1371,11 @@ void FUN_0017c8a0(igPsx2VisualContext *context, int stage, int function, unsigne
     } else {
         j = 0;
     }
-    DAT_00569330[0] = n;
+    p2CurrentProgram[0] = n;
     DAT_0056ad80[0] = &DAT_00569340[j];
     context->_bTextureColorComponent = colorComponent;
     FUN_00209090(DAT_0048acf0[function], colorComponent);
-    DAT_00569330[0] = 0;
+    p2CurrentProgram[0] = 0;
     DAT_0056ad80[0] = DAT_00569340;
 }
 
@@ -1401,7 +1401,7 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_150(struct TextureStageView150 *p, int
     } else {
         i = 0;
     }
-    DAT_00569330[0] = n;
+    p2CurrentProgram[0] = n;
     DAT_0056ad80[0] = &DAT_00569340[i];
     switch (x) {
     case 0:
@@ -1424,7 +1424,7 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_150(struct TextureStageView150 *p, int
         FUN_00208170(2);
         break;
     }
-    DAT_00569330[0] = 0;
+    p2CurrentProgram[0] = 0;
     DAT_0056ad80[0] = &DAT_00569340[0];
 }
 

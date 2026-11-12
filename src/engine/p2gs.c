@@ -25,11 +25,11 @@ extern long long DAT_00569288[4];
 extern long long DAT_00569290[4];
 extern long long DAT_00569298[4];
 extern long long DAT_005692a0[4];
-extern long long DAT_0056af08[4];
-extern long long DAT_0056af10[4];
-extern long long DAT_0056af18[4];
-extern long long DAT_0056af20[4];
-extern long long DAT_0056af28[4];
+extern long long p2StatLightingSwitches[4];
+extern long long p2StatMaterialSets[4];
+extern long long p2StatLightingModeSets[4];
+extern long long p2StatLightSets[4];
+extern long long p2StatLightSwitches[4];
 extern long long DAT_0056b5a8[4];
 extern long long DAT_0056b5b0[4];
 extern long long DAT_0056b5b8[4];
@@ -125,7 +125,7 @@ typedef union GifQuad {
     unsigned __int128 q;
 } GifQuad;
 
-extern int DAT_00569330;
+extern int p2CurrentProgram;
 extern int DAT_0056ae40;
 extern VifCode DAT_0056aeb8;
 extern DmaTag DAT_00490f90;
@@ -169,7 +169,7 @@ enum GsPrivRegister {
 #define GS_BUSDIR   (*(long long *)0x12001040)
 #define GS_SIGLBLID (*(long long *)0x12001080)
 extern int DAT_00491278[4];
-extern int DAT_00491478[4];
+extern int p2DirtyFlags[4];
 
 void FUN_001f6f50(void *arg0) {
     int sp2C;
@@ -198,11 +198,11 @@ void FUN_001f6f50(void *arg0) {
     *(long long *)((char *)arg0 + 112) = DAT_0056b5e0[0];
     *(long long *)((char *)arg0 + 120) = DAT_0056b5e8[0];
     *(long long *)((char *)arg0 + 128) = DAT_0056b5f0[0];
-    *(long long *)((char *)arg0 + 136) = DAT_0056af08[0];
-    *(long long *)((char *)arg0 + 144) = DAT_0056af10[0];
-    *(long long *)((char *)arg0 + 152) = DAT_0056af18[0];
-    *(long long *)((char *)arg0 + 160) = DAT_0056af20[0];
-    *(long long *)((char *)arg0 + 168) = DAT_0056af28[0];
+    *(long long *)((char *)arg0 + 136) = p2StatLightingSwitches[0];
+    *(long long *)((char *)arg0 + 144) = p2StatMaterialSets[0];
+    *(long long *)((char *)arg0 + 152) = p2StatLightingModeSets[0];
+    *(long long *)((char *)arg0 + 160) = p2StatLightSets[0];
+    *(long long *)((char *)arg0 + 168) = p2StatLightSwitches[0];
     *(long long *)((char *)arg0 + 176) = DAT_00569298[0];
     *(long long *)((char *)arg0 + 184) = DAT_005692a0[0];
     *(long long *)((char *)arg0 + 192) = DAT_00562cc0[0];
@@ -376,7 +376,7 @@ void FUN_001f76c0(int arg0) {
 void FUN_001f76f0(int count, int *regs) {
     int n;
 
-    if (DAT_00569330 == 0) {
+    if (p2CurrentProgram == 0) {
         DAT_0056aeb8.f.immediate = FUN_001eadf0(DAT_0056ae40);
         for (; count > 0; count -= n, regs += n) {
             int i;
@@ -609,6 +609,6 @@ int FUN_001f8740(void)
 
 void FUN_001f8750(int arg0) {
     DAT_00491278[0] = arg0;
-    DAT_00491478[0] |= 0x84;
-    DAT_0056af18[0] += 1;
+    p2DirtyFlags[0] |= 0x84;
+    p2StatLightingModeSets[0] += 1;
 }
