@@ -183,8 +183,11 @@ def build_inputs_sha(elf, symbols, unit_objects=None, extra_files=()):
         "include", tree_sha(os.path.join(ROOT, "include")),
         "src-headers", tree_sha(os.path.join(ROOT, "src"), skip_ext=NOT_HEADERS),
         "compilers", tree_sha(os.path.join(ROOT, "local", "mwcps2")),
-        # the Sony EE GCC the pinned library units compile with (tools/eegcc_compile.py): the whole tree, like mwcps2
+        # the Sony EE GCCs the pinned library units compile with (tools/eegcc_compile.py), each with its own
+        # assembler: the whole trees, like mwcps2
         "ee-gcc", tree_sha(os.path.join(ROOT, "local", "ee-gcc2.96")),
+        "ee-gcc-2.9", tree_sha(os.path.join(ROOT, "local", "ee-gcc2.9-991111-01")),
+        "ee-gcc-2.9-as210", tree_sha(os.path.join(ROOT, "local", "ee-gcc2.9-991111-01-as210")),
         "wibo", file_sha(os.path.join(ROOT, "local", "wibo")),
     ]
     # the profile tables (units.tsv, the per-function compiler and flag overrides, unit-objects) are NOT hashed whole: adding a

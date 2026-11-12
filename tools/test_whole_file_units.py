@@ -9,6 +9,7 @@ import tempfile
 import unittest
 
 import cc
+import eegcc_compile
 import exceptions
 import unitobjects
 import unitprofiles
@@ -634,6 +635,101 @@ class SharedStatics(unittest.TestCase):
     def test_real_clash_still_refused(self):
         with self.assertRaisesRegex(ValueError, "already defined"):
             self.scan({}, "00100000 000010 a_owner\n00100010 000010 shared\n")
+
+
+class BssData(unittest.TestCase):
+    """A file's own `.bss` statics: one `@bss` data row, compared with the zeros retail's loader fills."""
+    OWNER, MEMBER, DATA = 0x180000, 0x180100, 0x190000
+    COMPILER = os.path.join(verify.ROOT, "local", "ee-gcc2.9-991111-01", "bin", "ee-gcc")
+    SOURCE = ("static int state[4];\n"
+              "static int other[2];\n"
+              "int fixture_read(void) { return state[2] + other[1]; }\n"
+              "int fixture_write(int v) { state[1] = v; return 0; }\n")
+
+    def setUp(self):
+        if not Path(self.COMPILER).exists():
+            self.skipTest("private compiler unavailable")
+        if not shutil.which("mipsel-linux-gnu-ld"):
+            self.skipTest("GNU MIPS tools unavailable")
+        temp = tempfile.TemporaryDirectory(prefix="dw4-whole-file-bss-")
+        self.addCleanup(temp.cleanup)
+        self.root = Path(temp.name)
+        source, self.obj = self.root / "fixture.c", self.root / "fixture.o"
+        source.write_text(self.SOURCE)
+        self.assertEqual(eegcc_compile.main([self.COMPILER, "-O2", "-G0", "-ffunction-sections",
+                                             str(source), str(self.obj)]), 0)
+        syms, _ = verify.object_syms(str(self.obj))
+        self.assertEqual(syms["@bss"][1], 0)
+        # Link the object with GNU ld, without the verifier, for the bytes retail would hold.
+        placed = {"fixture_read": self.OWNER, "fixture_write": self.MEMBER, "@bss": self.DATA}
+        linked = self.root / "linked.o"
+        shutil.copyfile(self.obj, linked)
+        names = {syms[name][0]: f".place{syms[name][0]}" for name in placed}
+        verify.rename_object_sections(str(linked), names)
+        script = self.root / "fixture.ld"
+        rows = [f".out{syms[name][0]} 0x{address:x} : {{ *({names[syms[name][0]]}) }}"
+                for name, address in placed.items()]
+        script.write_text("SECTIONS {\n" + "\n".join(rows) + "\n/DISCARD/ : { *(.mdebug) *(.reginfo) } }\n")
+        out = self.root / "fixture.out"
+        subprocess.run(["mipsel-linux-gnu-ld", "--no-warn-mismatch", "-T", str(script), str(linked),
+                        "-o", str(out)], check=True, capture_output=True)
+        filesz = 0x180200 - verify.VADDR_BASE
+        image = bytearray([0xa5]) * (filesz + verify.FILE_BASE)
+        for name in ("fixture_read", "fixture_write"):
+            body = verify.object_section(str(out), f".out{syms[name][0]}")
+            start = placed[name] - verify.VADDR_BASE + verify.FILE_BASE
+            image[start:start + len(body)] = body
+        image[:6] = b"\x7fELF\x01\x01"
+        # one loaded segment: the code from the file, then zeros up to its memory size (the `.bss`)
+        struct.pack_into("<I", image, 0x1c, 0x34)
+        struct.pack_into("<8I", image, 0x34, 1, verify.FILE_BASE, verify.VADDR_BASE, verify.VADDR_BASE,
+                         filesz, self.DATA + 0x100 - verify.VADDR_BASE, 7, 0x80)
+        struct.pack_into("<HH", image, 0x2a, 32, 1)
+        reginfo = len(image)
+        image.extend(struct.pack("<6I", 0, 0, 0, 0, 0, 0x210000))
+        strings = b"\0.shstrtab\0.reginfo\0"
+        strings_at = len(image)
+        image.extend(strings)
+        image.extend(b"\0" * (-len(image) % 4))
+        shoff = len(image)
+        image.extend(bytes(40))
+        image.extend(struct.pack("<10I", 1, 3, 0, 0, strings_at, len(strings), 0, 0, 1, 0))
+        image.extend(struct.pack("<10I", 11, 0x70000006, 0, 0, reginfo, 24, 0, 0, 4, 0))
+        struct.pack_into("<I", image, 0x20, shoff)
+        struct.pack_into("<HHH", image, 0x2e, 40, 3, 1)
+        self.image = self.root / "fixture.elf"
+        self.image.write_bytes(image)
+        self.symbols = self.root / "symbols.txt"
+        self.symbols.write_text(f"{self.OWNER:08x} {syms['fixture_read'][2]:06x} fixture_read\n"
+                                f"{self.MEMBER:08x} {syms['fixture_write'][2]:06x} fixture_write\n")
+        self.registry = self.root / "objects.json"
+
+    def verify(self, data):
+        self.registry.write_text(json.dumps({hex(self.OWNER): {
+            "whole_file": True, "emitted": {"fixture_write": hex(self.MEMBER)}, "data": {"@bss": hex(data)}}}))
+        group = unitobjects.group_for(self.OWNER, self.registry)
+        return verify.verify_emitted_object(str(self.obj), group, str(self.image), str(self.symbols), jumptables={})
+
+    def test_a_nobits_section_reads_as_zeros(self):
+        syms, _ = verify.object_syms(str(self.obj))
+        section = syms["@bss"][0]
+        size = verify.elf_section_headers(str(self.obj))[section][1][5]
+        self.assertEqual(verify.object_section(str(self.obj), ".bss", section), bytes(size))
+
+    def test_loaded_bytes_fill_zeros_past_the_file(self):
+        image = self.image.read_bytes()
+        self.assertEqual(verify.loaded_bytes(image, 0x1801fe, 4), image[0x8027e:0x80280] + bytes(2))
+        self.assertEqual(verify.loaded_bytes(image, self.DATA + 0xfc, 8), bytes(4))
+
+    def test_statics_at_their_retail_address_match(self):
+        ok, report, _records = self.verify(self.DATA)
+        self.assertTrue(ok, report)
+        self.assertIn(f"MATCH data .bss 0x{self.DATA:x}", report)
+
+    def test_statics_over_file_bytes_differ(self):
+        ok, report, _records = self.verify(self.OWNER + 0x80)
+        self.assertFalse(ok)
+        self.assertIn(f"DIFFER data .bss 0x{self.OWNER + 0x80:x}", report)
 
 
 if __name__ == "__main__":

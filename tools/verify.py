@@ -264,6 +264,20 @@ def va_bytes(img, va, n):
     return img[va - VADDR_BASE + FILE_BASE:va - VADDR_BASE + FILE_BASE + n]
 
 
+def loaded_bytes(img, va, n):
+    """The `n` bytes at `va` as the loader lays out the image: a segment's file bytes, then the
+    zeros it fills up to its memory size (where `.bss` lives). Short where no segment covers it."""
+    phoff, = struct.unpack_from("<I", img, 0x1C)
+    phentsize, phnum = struct.unpack_from("<HH", img, 0x2A)
+    for k in range(phnum):
+        p_type, offset, vaddr, _paddr, filesz, memsz = struct.unpack_from("<6I", img, phoff + k * phentsize)
+        if p_type == 1 and vaddr <= va < vaddr + memsz:
+            start, end = va - vaddr, min(va + n, vaddr + memsz) - vaddr
+            filed = img[offset + min(start, filesz):offset + min(end, filesz)]
+            return filed + bytes(end - start - len(filed))
+    return b""
+
+
 def load_symbols(path):
     """config/SLUS-20836/symbols.txt -> {name: (va, size)} plus {(va): name}. Cached per path.
 
@@ -673,7 +687,8 @@ def _from_tables(obj, what):
 
 
 def object_section(obj, sname, index=None):
-    """Raw bytes of a section in a relocatable object (b"" if absent).
+    """Raw bytes of a section in a relocatable object (b"" if absent); a `.bss` (SHT_NOBITS)
+    section holds no file bytes and reads as the zeros it allocates.
 
     A `switch` puts its jump table in `.rodata`, so `.rodata` has to be read and
     compared too — checking only `.text` would call a switch function matched while
@@ -683,6 +698,8 @@ def object_section(obj, sname, index=None):
         name, header = elf_section_headers(obj)[index]
         if name != sname:
             raise ValueError("section index/name mismatch")
+        if header[1] == 8:                         # SHT_NOBITS
+            return bytes(header[5])
         with open(obj, "rb") as fh:
             fh.seek(header[4])
             return fh.read(header[5])
@@ -1535,11 +1552,13 @@ def verify_emitted_object(obj, group, elf, symbols, gp_override=None, verbose=Fa
                     reports.append(f"{prefix}[{at // 4}] retail {want[::-1].hex()} ours {got[::-1].hex()}")
 
     def compare_data(label, section, kind, address, length, pad=0):
-        """Relocated object data against retail bytes; `pad` zero bytes may follow."""
+        """Relocated object data against retail bytes; `pad` zero bytes may follow. A `.bss`
+        section is compared with the zeros the retail loader fills past its segment's file bytes."""
         raw = object_section(obj, kind, section)
         relocations = object_relocs(obj, target_section=section)
         patched, _, unresolved = apply_relocs(raw, relocations, resolver(), gp)
-        retail = va_bytes(image, address, length + pad)
+        nobits = headers[section][1][1] == 8
+        retail = (loaded_bytes if nobits else va_bytes)(image, address, length + pad)
         good = (patched is not None and not unresolved and len(raw) == length
                 and patched == retail[:length] and not any(retail[length:]))
         reports.append(f"{'MATCH' if good else 'DIFFER'} {label} 0x{address:x} {length}B")

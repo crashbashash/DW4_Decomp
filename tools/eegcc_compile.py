@@ -131,7 +131,7 @@ def retarget_section_relocs(path):
     section index: the function symbol at offset zero names it again. A data section's references
     go to the `@<section>` symbol separate_text_sections adds, a name the whole-file rows and the
     link can rename (a section symbol cannot be). ELF32, little endian, REL relocations (the addend
-    stays in the instruction)."""
+    stays in the instruction): the 2.96 `ee-as` and both 2.9-ee assemblers write REL."""
     with open(path, "r+b") as fh:
         data = bytearray(fh.read())
         shoff, = struct.unpack_from("<I", data, 0x20)
