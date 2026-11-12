@@ -5952,6 +5952,7 @@ extern "C" long long Gap__Sg__igTransformSequence1_5__vfunc_31(O_1df6e0 *o);
 extern "C" long long Gap__Sg__igTransformSequence1_5__vfunc_32(V_1df740 *arg0);
 extern "C" void Gap__Sg__igTransformSequence1_5__vfunc_27(IgForwardTarget *o, int a, int b, int c);
 extern "C" void Gap__Sg__igTransformSequence1_5__vfunc_25(IgForwardTarget_1dfd60 *o, int a, int b);
+extern "C" bool Gap__Sg__igTransformSequence1_5__vfunc_29(igTransformSequence1_5 *o);
 extern "C" void FUN_001e02e0(int arg0);
 extern "C" void FUN_001e02f0(int arg0, int arg1);
 extern "C" void Gap__Sg__igTraversal__vfunc_09(A_1e0380 *arg0, int arg1);

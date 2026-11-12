@@ -386,3 +386,17 @@ void Gap__Sg__igTransformSequence1_5__vfunc_27(IgForwardTarget *o, int a, int b,
 
 void Gap__Sg__igTransformSequence1_5__vfunc_25(IgForwardTarget_1dfd60 *o, int a, int b) { o->slot24(a, b, (char *)o + 40, 0); }
 
+
+static inline bool centerOfRotationIsSet(const igTransformSequence1_5 *o) {
+    return o->_centerOfRotation[0] != DAT_004e1058[0] || o->_centerOfRotation[1] != DAT_004e105c[0] || o->_centerOfRotation[2] != DAT_004e1060[0];
+}
+
+bool Gap__Sg__igTransformSequence1_5__vfunc_29(igTransformSequence1_5 *o) {
+    if (centerOfRotationIsSet(o)) {
+        return false;
+    }
+    if (o->_interpolationDataTranslation != 0 || o->_interpolationDataRotation != 0 || o->_interpolationDataScale != 0) {
+        return false;
+    }
+    return true;
+}
