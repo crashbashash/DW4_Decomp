@@ -105,12 +105,18 @@ def main():
     handles = {va: name for va, (name, rule) in rows.items() if rule == "class-handle"}
     files = renamed = 0
     for mod in mods:
-        d = os.path.join(ROOT, "src", mod)
-        for f in sorted(os.listdir(d)):
-            path = os.path.join(d, f)
+        # a module folder holds library subfolders (src/engine/attrs/) and their headers and
+        # `.inc` fragments, which declare and read the same data
+        paths = sorted(os.path.join(root, f)
+                       for root, _, names in os.walk(os.path.join(ROOT, "src", mod))
+                       for f in names if f.endswith((".c", ".cpp", ".h", ".inc")))
+        for path in paths:
             old = open(path).read()
-            new, n = rewrite(old, rows, f.endswith(".cpp"))
-            if a.literals and not f.endswith(".cpp"):
+            # only a C unit turns a callback's data declaration into a function declaration: a
+            # header or fragment may be included by C++ and keeps its data declaration
+            is_c = path.endswith(".c")
+            new, n = rewrite(old, rows, not is_c)
+            if a.literals and is_c:
                 new, extra = name_literals(new, handles)
                 n += extra
             if new != old:
