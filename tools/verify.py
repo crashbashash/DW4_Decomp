@@ -1813,7 +1813,9 @@ def isolate_emitted_body(obj, requested, records, group, symbols, source=None):
         if table_section is not None:
             kept[table_section] = ".exception.dw4_%08x" % table_at
     dup_tables = set()
-    if group.duplicates:
+    # a whole-file unit's switch tables are `data` rows (removed with the data sections above), not
+    # tables of its owner: only a function group pairs its .rodata with jumptables.txt here
+    if group.duplicates and not group.whole_file:
         jumptables = load_jumptables(jumptables_path(symbols))
         owned = sorted(jumptables.get(group.owner, []) + duplicate_tables(group, jumptables))
         dup_addresses = set(duplicate_tables(group, jumptables))

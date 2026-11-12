@@ -52,8 +52,12 @@ class CompilerSelectionTests(unittest.TestCase):
                     self.select()
 
     def test_verifier_reports_requirement_failure_before_compiling(self):
-        self.write_table(f"0x374cc0 compiler.exe {'0' * 64}\n")
-        ok, report = verify.verify_one(0x374cc0, "absent-source.c",
+        # a function outside every unit-objects group: a group member compiles its owner's whole file
+        import unitobjects
+        _, by_va = unitobjects.names()
+        address = next(va for va in sorted(by_va) if unitobjects.group_for(va) is None)
+        self.write_table(f"0x{address:x} compiler.exe {'0' * 64}\n")
+        ok, report = verify.verify_one(address, "absent-source.c",
                                       unit_compilers=str(self.table))
         self.assertFalse(ok)
         self.assertIn("compile failed: required compiler", report)
