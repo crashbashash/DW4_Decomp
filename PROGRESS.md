@@ -82,23 +82,23 @@ The debt ratchet ([`docs/engine/debt-ratchet.md`](docs/engine/debt-ratchet.md)):
 | `asm_body.functions` | 0 | 0 | 0 | functions kept as an `asm` body (content classification) |
 | `asm_body.bytes` | 0 | 0 | 0 | bytes of those |
 | `inline_asm.other` | 0 | 0 | 0 | `asm` statements other than `sync` and `ei` without an owner's approval row for each function they reach (tools/inline_asm.py) |
-| `unmatched.functions` | 955 | 951 | -4 | functions in the layout with no definition in src/ |
-| `unmatched.bytes` | 632,488 | 629,360 | -3128 | bytes of those |
-| `struct.a` | 83 | 81 | -2 | struct-report groups: same view name, clashing layouts across units (scripts/check_struct_conflicts.py) |
-| `struct.b` | 100 | 98 | -2 | struct-report groups: receiver view disagrees with the reflected class |
-| `struct.c` | 171 | 165 | -6 | struct-report groups: offset-named member whose number is not its offset |
-| `m2c_idiom.units` | 2,483 | 2,386 | -97 | source files (asm bodies excluded) still carrying m2c idioms: `temp_*`, `var_*` or `argN` |
+| `unmatched.functions` | 951 | 951 | 0 | functions in the layout with no definition in src/ |
+| `unmatched.bytes` | 629,360 | 629,360 | 0 | bytes of those |
+| `struct.a` | 81 | 81 | 0 | struct-report groups: same view name, clashing layouts across units (scripts/check_struct_conflicts.py) |
+| `struct.b` | 98 | 98 | 0 | struct-report groups: receiver view disagrees with the reflected class |
+| `struct.c` | 165 | 165 | 0 | struct-report groups: offset-named member whose number is not its offset |
+| `m2c_idiom.units` | 2,386 | 2,386 | 0 | source files (asm bodies excluded) still carrying m2c idioms: `temp_*`, `var_*` or `argN` |
 | `raw_casts.reflected` | 363 | 363 | 0 | raw offset casts on a named receiver where reflection names the field (tools/typed_coverage.py `typeable`) |
-| `fun_dat_refs` | 57,659 | 56,842 | -817 | FUN_/DAT_-named references in matched units' code (comments and strings excluded, definitions subtracted) |
+| `fun_dat_refs` | 56,842 | 56,842 | 0 | FUN_/DAT_-named references in matched units' code (comments and strings excluded, definitions subtracted) |
 | `foreign_profile.functions` | 10 | 10 | 0 | code bytes match only under a provisional per-function override that differs from the unit's profile in config/SLUS-20836/units.tsv (data/check-categories.tsv) |
 | `foreign_profile.bytes` | 288 | 288 | 0 | bytes of those |
 | `unapproved.functions` | 58 | 58 | 0 | code bytes match, but the source uses inline `asm` or `volatile` with no owner approval (config/source-approvals.tsv) |
 | `unapproved.bytes` | 47,092 | 47,092 | 0 | bytes of those |
 | `orphan.bytes` | 32 | 32 | 0 | exception-metadata orphan bytes: code-only `extra` + `differ` bytes, plus foreign-profile units whose override emits metadata retail lacks |
 | `inventory.unsymbolised_bytes` | 1,020 | 1,020 | 0 | instruction-shaped bytes in layout `data` units that no symbol owns (data/inventory-scan.tsv, scripts/inventory_scan.py) |
-| `profile_split.units` | 9 | 9 | 0 | units whose compiler, optimisation level, -sdatathreshold or -inline setting differs from their library's main profile (config/SLUS-20836/units.tsv; a library was one build) |
-| `profile_split.bytes` | 39,168 | 38,852 | -316 | bytes of those |
-| `opt_pragma.statements` | 8 | 7 | -1 | optimiser pragmas in src/ (`opt_*`, `optimize_for_size`, `inline_depth`, ...): a flag change written in the source |
+| `profile_split.units` | 7 | 7 | 0 | units whose compiler, optimisation level, -sdatathreshold or -inline setting differs from their library's main profile (config/SLUS-20836/units.tsv; a library was one build) |
+| `profile_split.bytes` | 23,612 | 23,612 | 0 | bytes of those |
+| `opt_pragma.statements` | 7 | 7 | 0 | optimiser pragmas in src/ (`opt_*`, `optimize_for_size`, `inline_depth`, ...): a flag change written in the source |
 
 ## The data half
 

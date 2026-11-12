@@ -230,7 +230,7 @@
    },
    "fun_dat_refs": {
     "reason": null,
-    "value": 57659
+    "value": 56842
    },
    "inline_asm.other": {
     "reason": null,
@@ -250,7 +250,7 @@
    },
    "m2c_idiom.units": {
     "reason": null,
-    "value": 2483
+    "value": 2386
    },
    "mismatch.bytes": {
     "reason": null,
@@ -270,7 +270,7 @@
    },
    "opt_pragma.statements": {
     "reason": null,
-    "value": 8
+    "value": 7
    },
    "orphan.bytes": {
     "reason": null,
@@ -278,11 +278,11 @@
    },
    "profile_split.bytes": {
     "reason": null,
-    "value": 39168
+    "value": 23612
    },
    "profile_split.units": {
     "reason": null,
-    "value": 9
+    "value": 7
    },
    "raw_casts.reflected": {
     "reason": null,
@@ -290,15 +290,15 @@
    },
    "struct.a": {
     "reason": null,
-    "value": 83
+    "value": 81
    },
    "struct.b": {
     "reason": null,
-    "value": 100
+    "value": 98
    },
    "struct.c": {
     "reason": null,
-    "value": 171
+    "value": 165
    },
    "unapproved.bytes": {
     "reason": null,
@@ -310,11 +310,11 @@
    },
    "unmatched.bytes": {
     "reason": null,
-    "value": 632488
+    "value": 629360
    },
    "unmatched.functions": {
     "reason": null,
-    "value": 955
+    "value": 951
    }
   },
   "counters": {
@@ -346,8 +346,8 @@
    "name_defect.functions": 0,
    "opt_pragma.statements": 7,
    "orphan.bytes": 32,
-   "profile_split.bytes": 38852,
-   "profile_split.units": 9,
+   "profile_split.bytes": 23612,
+   "profile_split.units": 7,
    "raw_casts.reflected": 363,
    "struct.a": 81,
    "struct.b": 98,
