@@ -1101,20 +1101,6 @@
       "__dl__FPv": "0x00100610"
     }
   },
-  "0x0038a6e0": {
-    "duplicates": {
-      "__dt__9ReaderRefFv": "0x0038ab70",
-      "__dt__25igSmartPointer<8igObject>Fv": "0x0038abf0"
-    },
-    "exceptions": {
-      "index": "0x0054eb4c",
-      "table": "0x00543854",
-      "table_size": "0x000034"
-    },
-    "externals": {
-      "__dl__FPv": "0x00100610"
-    }
-  },
   "0x0038d560": {
     "duplicates": {
       "__dt__9StringRefFv": "0x00130720",
@@ -31235,6 +31221,27 @@
       "__dt__9StringRefFv": "0x00130720"
     },
     "symbol": "FUN_003b04e0"
+  },
+  "0x0038a660": {
+    "whole_file": true,
+    "emitted": {
+      "Gap__Bec__beLuaState__vfunc_21": "0x0038a6c0",
+      "Gap__Bec__beLuaState__vfunc_22": "0x0038a6e0",
+      "__dt__9ReaderRefFv": "0x0038ab70",
+      "__dt__25igSmartPointer<8igObject>Fv": "0x0038abf0",
+      "Gap__Bec__beLuaState__vfunc_23": "0x0038ac70",
+      "Gap__Bec__beLuaState__vfunc_20": "0x0038ac90"
+    },
+    "data": {
+      "DAT_0050ecc8": "0x0050ecc8",
+      "DAT_00587110": "0x00587110",
+      "GPR_00554c14": "0x00554c14",
+      "g_beLuaState_metaObject": "0x005891b0"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    },
+    "symbol": "Gap__Bec__beLuaState__vfunc_08"
   },
   "0x00389b90": {
     "whole_file": true,
