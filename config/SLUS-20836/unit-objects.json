@@ -645,6 +645,7 @@
       "beNDMWWindow_PresentModelAtOrigin": "0x003f5f00",
       "beNDMWWindow_SendModelSequence": "0x003f5f40",
       "beNDMWWindow_PlayQueuedModelClose": "0x003f5f80",
+      "beNDMWWindow_PollCloseComplete": "0x003f6090",
       "beNDMWWindow_RequestChildrenClose": "0x003f6350",
       "beNDMWWindow_BindContext": "0x003f63c0",
       "beNDMWWindow_UpdateTree": "0x003f6490"

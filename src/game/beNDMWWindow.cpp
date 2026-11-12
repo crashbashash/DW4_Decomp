@@ -90,6 +90,8 @@ extern "C" char D_00518738[];
 extern "C" void beNDMWWindow_PresentModelAtOrigin(beNDMWWindow *self,const char *model,int id,const char *sequence,const char *close);
 extern "C" void beNDMWWindow_SendModelSequence(beNDMWWindow *self,int model,int id,int sequence);
 extern "C" void beNDMWWindow_PlayQueuedModelClose(beNDMWWindow *w);
+extern "C" int beMessenger_GetBoolCount(int);
+extern "C" int beNDMWWindow_PollCloseComplete(beNDMWWindow *self);
 extern "C" void beNDMWWindow_RequestChildrenClose(beNDMWWindow *arg0);
 extern "C" int DAT_00588518[4];
 extern "C" int DAT_00588f38[4];
@@ -249,6 +251,35 @@ void beNDMWWindow_PlayQueuedModelClose(beNDMWWindow *w) {
             off += 4;
         } while (i < n);
     }
+}
+
+int beNDMWWindow_PollCloseComplete(beNDMWWindow *self) {
+    int *sp1;
+    int *sp2;
+    int *a1;
+    int c;
+    int i;
+    int v;
+    int n;
+    int *t1;
+    int *t2;
+    n = ((igStringRefList *)self->_modelCloseInfoNameList)->_count;
+    for (i = 0; i < n; i++) {
+        StringList_CopyRetained(&sp1, (igStringRefList *)self->_modelCloseInfoNameList, i);
+        /* matching construct: cxx_sweep — the token copy moved into the release test */
+        if ((t1 = sp1)) { a1 = t1 - 2; c = t1[-1] - 1; t1[-1] = c; if (c == 0) StringChunk_ReleaseHeader(*a1, a1); }
+        v = ((int *)((igStringRefList *)self->_modelCloseRamNoList)->_data)[i];
+        StringList_CopyRetained(&sp2, (igStringRefList *)self->_modelCloseSeqNameList, i);
+        t2 = sp2;
+        if (t2) { a1 = t2 - 2; c = t2[-1] - 1; t2[-1] = c; if (c == 0) StringChunk_ReleaseHeader(*a1, a1); }
+        beMessenger_SendNamed(self->_messenger, DAT_00518738, t1, v, DAT_00518748);
+        if (beMessenger_GetBoolCount(self->_messenger) > 0 && beMessenger_GetBool(self->_messenger, 0)) return 0;
+    }
+    if (((igStringRefList *)self->_subWindow)->_count) return 0;
+    Clr::ClearList((igStringRefList *)self->_modelCloseInfoNameList);
+    ((igStringRefList *)self->_modelCloseRamNoList)->_count = 0;
+    Clr::ClearList((igStringRefList *)self->_modelCloseSeqNameList);
+    return 1;
 }
 
 void beNDMWWindow_RequestChildrenClose(beNDMWWindow *arg0) {
