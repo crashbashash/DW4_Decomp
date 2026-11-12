@@ -140,7 +140,7 @@ extern "C" void Gap__Bec__beCri__vfunc_27(beCri *arg0);
 extern "C" int DAT_004e0858[4];
 extern "C" void FUN_003a7590(beCriVolume *, int, float, float, float);
 extern "C" long long FUN_0037c2c0(beCri *self, igObjectList *table, beSoundData *ev);
-extern "C" int FUN_0037c130(beCri *, int, int);
+extern "C" int FUN_0037c130(beCri *self, unsigned char kind, short priority);
 extern "C" int FUN_003a6c80(beCriAudio *, void *, int);
 extern "C" int FUN_003a6ce0(beCriAudio *, int, int);
 extern "C" int FUN_0030ba20(igNamedObject *);
@@ -606,6 +606,45 @@ void Gap__Bec__beCri__vfunc_27(beCri *arg0) {
         ObjectList_RemoveFirstRetained(&sp8C, ((igObjectList *)arg0->_hdSEs), arg0->_hdBGM, 0);
         ObjectList_RemoveFirstRetained(&sp88, ((igObjectList *)arg0->_hdSEs), arg0->_hdENV, 0);
     }
+}
+
+int FUN_0037c130(beCri *self, unsigned char kind, short priority) {
+    beCriHandle *handle; /* matching construct: declaration-order search — the handle and its audio declared before the lists */
+    beCriAudio *audio;
+    beCriHandleList *handles;
+    beCriHandleList *list;
+    beCriHandle *candidate;
+    beCriAudio *candidateAudio;
+    long long bestID;
+    short bestPriority;
+    int best;
+    int i;
+    handles = (beCriHandleList *)self->_hdSEs;
+    for (i = 0, list = handles; i < list->_count; i++) {
+        handle = ((beCriHandle **)list->_data)[i];
+        audio = (beCriAudio *)handle->_audio;
+        if (!(kind == 1 && audio->_adxt == 0) && !(kind == 0 && audio->_sndf == 0)) {
+            if (handle->_playID == 0) return i;
+        }
+        /* matching construct: hand search — the list re-read from self each iteration keeps the element address unreduced */
+        list = (beCriHandleList *)self->_hdSEs;
+    }
+    bestID = self->_request;
+    bestPriority = 0x7fff;
+    for (i = 0, list = handles; i < list->_count; i++) {
+        candidate = ((beCriHandle **)list->_data)[i];
+        candidateAudio = (beCriAudio *)candidate->_audio;
+        if (!(kind == 1 && candidateAudio->_adxt == 0) && !(kind == 0 && candidateAudio->_sndf == 0)) {
+            if (candidate->_priority <= priority && candidate->_playID < bestID && candidate->_priority <= bestPriority) {
+                bestID = candidate->_playID;
+                bestPriority = candidate->_priority;
+                best = i;
+            }
+        }
+        list = (beCriHandleList *)self->_hdSEs; /* matching construct: hand search — re-read as in the first scan */
+    }
+    if (best != -1) FUN_0037caf0(self, ((beCriHandle **)handles->_data)[best]);
+    return best;
 }
 
 long long FUN_0037c2c0(beCri *self, igObjectList *table, beSoundData *ev) {
