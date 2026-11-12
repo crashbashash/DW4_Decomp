@@ -47,7 +47,7 @@ int beLightCtrl_GetVTable(void) {
             }
         }
     }
-    u.w[0] = (int)(&DAT_00524950[0]);
+    u.w[0] = (int)(&g_igNamedObject_vtable[0]);
     if (q1 != 0) {
         tv1 = *(int **)q1;
         if (tv1 != 0) {

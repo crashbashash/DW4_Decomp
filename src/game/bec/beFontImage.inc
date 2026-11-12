@@ -55,7 +55,7 @@ O_361a20 *FUN_00361a20(O_361a20 *arg0, short arg1) {
             }
         }
         if (arg0 != 0) {
-            arg0->vt = &DAT_00524950[0];
+            arg0->vt = &g_igNamedObject_vtable[0];
             if (&arg0->str != 0) {
                 temp_v1 = arg0->str;
                 if (temp_v1 != 0) {
@@ -115,7 +115,7 @@ O_361b00 *FUN_00361b00(O_361b00 *arg0, short arg1) {
                 }
             }
             if (arg0 != 0) {
-                arg0->vt = &DAT_00524950[0];
+                arg0->vt = &g_igNamedObject_vtable[0];
                 if (&arg0->str != 0) {
                     temp_v1 = arg0->str;
                     if (temp_v1 != 0) {

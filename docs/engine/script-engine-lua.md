@@ -45,6 +45,42 @@ Error handlers: `igLuaState::runString()/runFile()/runBuffer() failed - reason %
 with reason codes `LUA_ERRRUN`, `LUA_ERRFILE`, `LUA_ERRSYNTAX`, `LUA_ERRMEM`,
 `LUA_ERRERR` (0x004ea9c8–0x004eaa08).
 
+## Source files of the binding library
+The Alchemy Lua binding library (`0x23c440`–`0x246d28`, before stock Lua's `lapi.c`) was compiled one
+file at a time, not as one translation unit: two runs of inline methods close files in the middle of
+it, where a library-sized unit would have one run at its end.
+
+- **The library front**, `src/engine/lua/LuaRegistration.cpp` (`0x23c440`–`0x23c858`): the
+  `LuaLibrary` registration latch, igLuaState's and igLuaGlue's metadata (meta-object getters, vtable
+  readers, registrars, igLuaState's two reflected fields `_luaState` and `_memPool`), then igLuaGlue's
+  inline methods. igLuaGlue has no virtual function out of line, so its vtable and inline methods are
+  emitted here; two of them only call the glue's start-up and shutdown in the binding code.
+- **The binding code** (`0x23c860`–`0x24683c`) ends with igLuaState's out-of-line methods and its
+  slot-22 getter, which igLuaState's vtable is emitted with. Some of its functions have no source yet.
+- **The last file**, `src/engine/lua/LuaRuntime.cpp` (`0x246840`–`0x246d28`): the thread-local
+  table's internals and the game's `lua_dofile`.
+
+No retail call crosses either cut with the register knowledge a `static` callee compiled earlier in
+the same file gives its caller ([emitted functions](emitted-functions.md#whole-file-units)).
+
+### Thread-local values
+The binding keeps values per thread, such as the Lua state its start-up stores, in a hash table of
+24-byte entries: the key (the current thread's object xored with the slot number), the bucket chain's
+next and previous entries, the slot, the value and the thread. The thread comes from the thread
+manager. A key's bucket is `(bucketCount - 1) & (key ^ (key >> shift))`. The bucket array is
+allocated on the first insertion, 16 buckets, and freed when the last entry goes. An insertion resizes
+the table before it links the entry, a removal after it unlinks one: the table doubles when it holds
+more entries than buckets and halves, down to 16 buckets, when it holds fewer than half. A lookup
+raises a busy count while it walks a chain; a resize does nothing while the count is raised, and the
+lookup resizes afterwards if the number of entries changed meanwhile.
+
+### `lua_dofile`
+The game replaced Lua's `lua_dofile`, which reads through stdio, with one that reads through an
+Alchemy `igFile` opened `"rb"`: it seeks to the end for the size, allocates the buffer with
+`luaM_realloc`, reads the file whole and runs it with `lua_dobuffer` under the file's name. It returns
+`LUA_ERRFILE` when the open fails and `LUA_ERRMEM` when the buffer cannot be allocated. `luaB_dofile`
+and `igLuaState`'s `runFile` call it; the retail linker dropped stock `ldo.c`'s copy.
+
 ## The native-function binding
 Scripts call C++ through an object called **`be`** (e.g. `be:SYSgetPlayerLevel()`).
 The 116 exposed functions are bound through four parallel tables.
@@ -311,3 +347,12 @@ OP_LFORLOOP, OP_CLOSURE`.
 - Object controllers invoked with action keys: `MODELCTRL` (`GENERATE`,
   `SETGENERATEPOS`), `PLAYERPOINT` (`GETGENERATEPOS`), `STAGECTL` (`NEXTSTAGE`),
   `NUMBERCTRL`, `FIGHTCALC`.
+
+## Open questions
+- The thread-local table's names (`ThreadLocalTable_*`, `g_threadLocal*`) describe what it does; no
+  string or symbol names it.
+- `LuaGlue_Initialize` and `LuaGlue_Shutdown` are named from what they do (build the array-type
+  conversions and run the registered start-up hooks; undo them). igLuaGlue's virtual slots that call
+  them have no recovered names.
+- Whether the binding code is one file or several is untested. No class's slot-22 getter sits inside
+  it before igLuaState's at its end; its other two- and three-word bodies are field accessors.

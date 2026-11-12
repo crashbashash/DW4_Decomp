@@ -29,7 +29,7 @@ int be_GetVTable(void) {
     r = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
     obj.vt = &DAT_00539f10[0];
     obj.releaseRef();
-    obj.vt = &DAT_00524950[0];
+    obj.vt = &g_igNamedObject_vtable[0];
     obj.releaseStr();
     return r;
 }

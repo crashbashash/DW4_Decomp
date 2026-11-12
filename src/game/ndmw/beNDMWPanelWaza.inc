@@ -45,7 +45,7 @@ int beNDMWPanelWaza_GetVTable(void) {
             }
         }
     }
-    u.vt = (int)&DAT_00524950[0];
+    u.vt = (int)&g_igNamedObject_vtable[0];
     if (p38 != 0) {
         v1 = *(int **)p38;
         if (v1 != 0) {

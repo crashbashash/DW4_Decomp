@@ -62,7 +62,7 @@ void *FUN_00195970(struct T_195970 *arg0, long long arg1) {
             }
         }
         if (arg0 != 0) {
-            arg0->vt = &DAT_00524950[0];
+            arg0->vt = &g_igNamedObject_vtable[0];
             if (&arg0->f8 != 0) {
                 char *p = arg0->f8;
                 if (p != 0) {
@@ -118,7 +118,7 @@ void *FUN_00195a90(struct T_195a90 *arg0, long long arg1) {
                 }
             }
             if (arg0 != 0) {
-                arg0->vt = &DAT_00524950[0];
+                arg0->vt = &g_igNamedObject_vtable[0];
                 if (&arg0->f8 != 0) {
                     char *p = arg0->f8;
                     if (p != 0) {

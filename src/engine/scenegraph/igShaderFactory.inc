@@ -58,7 +58,7 @@ int igShaderFactory_GetVTable(void) {
             }
         }
     }
-    u.vt = (int)&DAT_00524950[0];
+    u.vt = (int)&g_igNamedObject_vtable[0];
     if (q2 != 0) {
         temp_v1 = *(int **)q2;
         if (temp_v1 != 0) {
@@ -98,7 +98,7 @@ void *FUN_00199330(struct T_199330 *arg0, long long arg1) {
             }
         }
         if (arg0 != 0) {
-            arg0->vt = &DAT_00524950[0];
+            arg0->vt = &g_igNamedObject_vtable[0];
             if (&arg0->f8 != 0) {
                 char *p = arg0->f8;
                 if (p != 0) {

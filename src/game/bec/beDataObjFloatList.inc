@@ -38,7 +38,7 @@ int beDataObjFloatList_GetVTable(void) {
             }
         }
     }
-    u.w[0] = (int)(&DAT_00524950[0]);
+    u.w[0] = (int)(&g_igNamedObject_vtable[0]);
     if (q38 != 0) {
         c = (char *)*q38;
         if (c != 0) {

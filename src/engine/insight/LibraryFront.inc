@@ -43,7 +43,7 @@ void *FUN_00231030(struct S *arg0, short arg1) {
     if (arg0 != 0) {
         arg0->f0 = &DAT_0052cf80[0];
         if (arg0 != 0) {
-            arg0->f0 = &DAT_00524950[0];
+            arg0->f0 = &g_igNamedObject_vtable[0];
             if (&arg0->f8) {
                 p = arg0->f8;
                 if (p != 0) {

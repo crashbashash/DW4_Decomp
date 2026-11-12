@@ -216,7 +216,7 @@ extern "C" igMetaObject *g_igDataPumpInfo_metaObject[4];
 extern "C" igMetaObject *FUN_001e5690(void);
 extern "C" igMetaObject *igDataPumpInfo_GetMetaObject(void);
 extern "C" int StringChunk_ReleaseHeader(int, int *);
-extern "C" int DAT_00524950[4];
+extern "C" int g_igNamedObject_vtable[4];
 extern "C" int DAT_0052ba10[4];
 struct Obj_1e5730 {
     int *vt; int w0; int *r1; int w2; int w3; T *r4; int w5; int w6;

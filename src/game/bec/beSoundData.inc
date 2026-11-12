@@ -14,12 +14,12 @@ int beSoundData_GetVTable(void) {
     int tc1;
 
     igObject_InitHeader(u.b);
-    u.w[0] = (int)(&DAT_00524950[0]);
+    u.w[0] = (int)(&g_igNamedObject_vtable[0]);
     q1 = &u.b[8];
     *(int *)q1 = 0;
     u.w[0] = (int)(&DAT_005392f0[0]);
     temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.w[0] = (int)(&DAT_00524950[0]);
+    u.w[0] = (int)(&g_igNamedObject_vtable[0]);
     if (q1 != 0) {
         tv1 = *(int **)q1;
         if (tv1 != 0) {
@@ -42,7 +42,7 @@ struct W_344030 *FUN_00344030(struct W_344030 *arg0, short arg1) {
     if (arg0 != 0) {
         arg0->vt = &DAT_00539350[0];
         if (arg0 != 0) {
-            arg0->vt = &DAT_00524950[0];
+            arg0->vt = &g_igNamedObject_vtable[0];
             if (&arg0->name != 0) {
                 temp_v1 = arg0->name;
                 if (temp_v1 != 0) {

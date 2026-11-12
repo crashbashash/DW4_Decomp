@@ -2639,6 +2639,12 @@
 0x00498590	g_igCollisionCell_callbackList	callback-list
 0x00498618	g_igBoundingSphereMaker_callbackList	callback-list
 0x00498640	g_igLuaState_callbackList	callback-list
+0x00498648	g_igLuaState_fieldConstructors	recovered-global
+0x00498650	g_igLuaState_fieldNames	recovered-global
+0x00498658	g_igLuaState_fieldDescriptors	recovered-global
+0x00498660	g_igLuaState_fieldOffsets	recovered-global
+0x00498718	g_threadLocalBucketShift	recovered-global
+0x00498720	g_threadLocalBucketCount	recovered-global
 0x0049d984	adxm_setup_count	recovered-global
 0x0049d988	adxm_usridle_mode	recovered-global
 0x0049d990	adxm_tprm	recovered-global
@@ -4712,6 +4718,9 @@
 0x0051f9b0	igBoundingBoxRenderer_className	class-name
 0x0051f9e8	igActorManager_className	class-name
 0x0051fa70	igActorManagerParams_className	class-name
+0x00524950	g_igNamedObject_vtable	recovered-global
+0x0052d540	g_igLuaGlue_vtable	recovered-global
+0x0052d660	g_igLuaState_vtable	recovered-global
 0x0052dd30	g_vtable	recovered-global
 0x0052ec50	g_igRefMetaField_vtable	recovered-global
 0x0052f0f0	g_igObject_vtable	recovered-global
@@ -5171,6 +5180,9 @@
 0x0056de10	g_igLuaState_metaObject	class-handle
 0x0056de28	g_igLuaGlue_metaObject	class-handle
 0x0056df48	g_luaInitResult	recovered-global
+0x0056df60	g_threadLocalCount	recovered-global
+0x0056df68	g_threadLocalBuckets	recovered-global
+0x0056df70	g_threadLocalTableBusy	recovered-global
 0x0056dfb0	adxm_vsync_frame_cb	recovered-global
 0x0056dfb8	adxm_mwidle_sleep_cb	recovered-global
 0x0056e0e0	cvfs_handles	recovered-global

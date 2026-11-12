@@ -21,10 +21,10 @@ int igMemoryFileEntry_GetVTable(void) {
     igObject_InitHeader((ObjectHeader *)u.b);
     ps = &u.b[8];
     *(int *)ps = 0;
-    u.vt = (int)&DAT_00524950[0];
+    u.vt = (int)&g_igNamedObject_vtable[0];
     u.vt = (int)&DAT_00532910[0];
     s0 = *(int *)&u.b[*(int *)((char *)(((void * *)g_objectSystem)[0]) + 916)];
-    u.vt = (int)&DAT_00524950[0];
+    u.vt = (int)&g_igNamedObject_vtable[0];
     if (ps != 0) {
         v1 = *(int **)ps;
         if (v1 != 0) {

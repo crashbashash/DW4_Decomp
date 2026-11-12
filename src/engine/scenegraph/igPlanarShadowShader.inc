@@ -150,7 +150,7 @@ int *FUN_0019c370(int *p)
 void *FUN_0019c380(void *arg0) {
     igAttrSet *self = (igAttrSet *)arg0;
     igObject_InitHeader();
-    self->_vtable = (int)(&DAT_00524950[0]);
+    self->_vtable = (int)(&g_igNamedObject_vtable[0]);
     self->_name = 0;
     self->_vtable = (int)(&DAT_00528a90[0]);
     self->_bound = 0;

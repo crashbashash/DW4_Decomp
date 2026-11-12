@@ -2727,7 +2727,7 @@ extern "C" int DAT_004f63a8[4];
 extern "C" int DAT_00585ae8[4];
 extern "C" igMetaObject *g_igPluginRepository_metaObject[4];
 extern "C" igMetaObject *igPluginRepository_GetMetaObject(void);
-extern "C" int DAT_00524950[4];
+extern "C" int g_igNamedObject_vtable[4];
 extern "C" int DAT_00532de0[4];
 union U_2bc9c0 { int vt; char b[32]; };
 extern "C" char igPluginRepository_className[];

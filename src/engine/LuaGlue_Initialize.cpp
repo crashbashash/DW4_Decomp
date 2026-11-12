@@ -92,7 +92,7 @@ int FUN_00243c80(...);
 int FUN_002442e0(...);
 
 }
-extern "C" void FUN_00243d00(void) {
+extern "C" void LuaGlue_Initialize(void) {
     Ctx *temp_v0;
     void *temp_a0;
     void *temp_a0_2;

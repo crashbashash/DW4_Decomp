@@ -28,7 +28,7 @@ int beTextureCtrlData_GetVTable(void) {
             }
         }
     }
-    *(int **)&obj._vtable = &DAT_00524950[0];
+    *(int **)&obj._vtable = &g_igNamedObject_vtable[0];
     if (&obj._name != 0) {
         o = (char *)obj._name;
         if (o != 0) {

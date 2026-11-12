@@ -17,7 +17,7 @@ int beSeInfoData_GetVTable(void) {
     r = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
     obj.vt = &DAT_00538f40[0];
     obj.rel16();
-    obj.vt = &DAT_00524950[0];
+    obj.vt = &g_igNamedObject_vtable[0];
     obj.rel8();
     return r;
 }

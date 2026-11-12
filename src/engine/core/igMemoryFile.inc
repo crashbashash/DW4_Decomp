@@ -56,7 +56,7 @@ void *FUN_002c0790(igFile *arg0, short arg1) {
             }
         }
         if (arg0 != 0) {
-            arg0->_vtable = (int)&DAT_00524950[0];
+            arg0->_vtable = (int)&g_igNamedObject_vtable[0];
             if (&arg0->_name) {
                 p = (void *)arg0->_name;
                 if (p != 0) {

@@ -50,7 +50,7 @@ extern "C" igMetaObject *g_igCollisionInfo_metaObject[4];
 extern "C" igMetaObject *igCollisionInfo_GetMetaObject(void);
 typedef struct S_ref { char pad4[4]; int f4; } S_ref;
 extern "C" int StringChunk_ReleaseHeader(...);
-extern "C" int DAT_00524950[4];
+extern "C" int g_igNamedObject_vtable[4];
 extern "C" int DAT_0052d4d0[4];
 union U { int vt; char b[32]; };
 extern "C" int igCollisionInfo_GetVTable(void);

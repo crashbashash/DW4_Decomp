@@ -143,7 +143,7 @@ extern "C" int igMatrix44f_SetIdentity(...);
 extern "C" int DAT_0052b7d0[4];
 typedef struct S_temp_a0_1958f0 { char pad4[4]; int f4; } S_temp_a0_1958f0;
 extern "C" int StringChunk_ReleaseHeader(...);
-extern "C" int DAT_00524950[4];
+extern "C" int g_igNamedObject_vtable[4];
 extern "C" int DAT_00528a90[4];
 struct Rc { int vt; int rc; };
 struct T_195970 { int *vt; int w4; char *f8; struct Rc *f12; struct Rc *f16; };

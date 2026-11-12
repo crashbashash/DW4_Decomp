@@ -26,7 +26,7 @@ extern "C" igMetaObject *g_igMessage_metaObject[4];
 extern "C" igMetaObject *FUN_00231020(void);
 extern "C" int StringChunk_ReleaseHeader(...);
 extern "C" int DAT_0052cf80[4];
-extern "C" int DAT_00524950[4];
+extern "C" int g_igNamedObject_vtable[4];
 extern "C" void *FUN_00231030(struct S *arg0, short arg1);
 extern "C" igMetaObject *g_igInfoManager_metaObject[4];
 extern "C" igMetaObject *FUN_002310d0(void);

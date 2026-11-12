@@ -30,7 +30,7 @@ int igPsx2Thread_GetVTable(void) {
             }
         }
     }
-    u.vt = (int)&DAT_00524950[0];
+    u.vt = (int)&g_igNamedObject_vtable[0];
     if (p0 != 0) {
         o = *(char **)p0;
         if (o != 0) {

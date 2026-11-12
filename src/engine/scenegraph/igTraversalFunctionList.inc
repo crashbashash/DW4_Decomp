@@ -239,7 +239,7 @@ int FUN_0019ace0(int a0)
 
 void *FUN_0019acf0(igGroup *arg0) {
     igObject_InitHeader();
-    arg0->_vtable = (int)(&DAT_00524950[0]);
+    arg0->_vtable = (int)(&g_igNamedObject_vtable[0]);
     arg0->_name = 0;
     arg0->_vtable = (int)(&DAT_00528a90[0]);
     arg0->_bound = 0;

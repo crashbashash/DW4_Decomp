@@ -19,11 +19,11 @@ int beDataObjBool_GetVTable(void) {
     int c;
 
     igObject_InitHeader(&o);
-    o.vt = DAT_00524950;
+    o.vt = g_igNamedObject_vtable;
     o.str = 0;
     o.vt = DAT_005352f0;
     r = *(int *)((char *)&o + *(int *)(((char * *)g_objectSystem)[0] + 916));
-    o.vt = DAT_00524950;
+    o.vt = g_igNamedObject_vtable;
     if (&o.str != 0) {
         s = o.str;
         if (s != 0) {

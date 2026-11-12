@@ -1344,7 +1344,7 @@ extern "C" const char beNDMWTitle2Info_className[];
 extern "C" igMetaObject *g_beNDMWTitle2Option_metaObject[4];
 typedef struct S_ref { char pad4[4]; int f4; } S_ref;
 union U_3b22e0 { int vt; char b[64]; };
-extern "C" int DAT_00524950[4];
+extern "C" int g_igNamedObject_vtable[4];
 extern "C" int DAT_0053dcf0[4];
 struct igMetaObject_3b2390;
 extern "C" igMetaObject_3b2390 * beBaseInfoData_GetPublishedMetaObject(...);

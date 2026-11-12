@@ -120,7 +120,7 @@ int *FUN_001ab490(int *p)
 
 void *FUN_001ab4a0(igEnvironmentMapShader2 *arg0) {
     igObject_InitHeader();
-    arg0->_vtable = (int)(&DAT_00524950[0]);
+    arg0->_vtable = (int)(&g_igNamedObject_vtable[0]);
     arg0->_name = 0;
     arg0->_vtable = (int)(&DAT_00528a90[0]);
     arg0->_bound = 0;

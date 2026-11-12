@@ -44,7 +44,7 @@ Obj_14a910 *FUN_0014a910(Obj_14a910 *arg0, short arg1) {
         arg0->rel(&arg0->m16);
         arg0->rel(&arg0->m12);
         if (arg0) {
-            arg0->vt = &DAT_00524950[0];
+            arg0->vt = &g_igNamedObject_vtable[0];
             arg0->relS(&arg0->m8);
         }
         if (arg1 > 0) {

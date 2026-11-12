@@ -88,7 +88,7 @@ void *FUN_0019b040(igSceneInfo *arg0, short arg1) {
         if (arg0 != 0) {
             arg0->_vtable = (int)  &DAT_0052fde0[0];
             if (arg0 != 0) {
-                arg0->_vtable = (int)  &DAT_00524950[0];
+                arg0->_vtable = (int)  &g_igNamedObject_vtable[0];
                 if (&arg0->_name) {
                     p = (igObject *)arg0->_name;
                     if (p != 0) {

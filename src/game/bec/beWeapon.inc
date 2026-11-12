@@ -72,7 +72,7 @@ O_33f5e0 *FUN_0033f5e0(O_33f5e0 *arg0, short arg1) {
         if (arg0 != 0) {
             arg0->vt = &DAT_0052cf80[0];
             if (arg0 != 0) {
-                arg0->vt = &DAT_00524950[0];
+                arg0->vt = &g_igNamedObject_vtable[0];
                 if (&arg0->str != 0) {
                     temp_v1 = arg0->str;
                     if (temp_v1 != 0) {

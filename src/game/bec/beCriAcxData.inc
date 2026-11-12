@@ -15,12 +15,12 @@ int beCriAcxData_GetVTable(void) {
     char *q0;
 
     igObject_InitHeader(u.b);
-    u.vt = (int)&DAT_00524950[0];
+    u.vt = (int)&g_igNamedObject_vtable[0];
     q0 = &u.b[8];
     *(int *)q0 = 0;
     u.vt = (int)&DAT_00534d70[0];
     temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.vt = (int)&DAT_00524950[0];
+    u.vt = (int)&g_igNamedObject_vtable[0];
     if (q0 != 0) {
         temp_v1 = *(int **)q0;
         if (temp_v1 != 0) {

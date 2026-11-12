@@ -60,7 +60,7 @@ int igVertexStream_GetVTable(void) {
             }
         }
     }
-    u.vt = (int)(&DAT_00524950[0]);
+    u.vt = (int)(&g_igNamedObject_vtable[0]);
     if (q0 != 0) {
         temp_v1 = *q0;
         if (temp_v1 != 0) {

@@ -13,7 +13,7 @@ int igObject_Destroy();
 typedef struct R { int w0; int rc; } R;
 extern R * DAT_0056de30[4];
 extern R * DAT_0056de38[4];
-void FUN_002443c0(void) {
+void LuaGlue_Shutdown(void) {
     int sp20[4];
     R *t;
     int temp_s0;

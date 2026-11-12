@@ -1343,7 +1343,7 @@ extern "C" void **FUN_0035b8c0(void **arg0, short arg1);
 extern "C" void FUN_0035b9c0(void);
 extern "C" void *beLua_Register(void);
 extern "C" void beLua_GetMetaObject(void);
-extern "C" int FUN_0023c6c0(void);
+extern "C" int igLuaGlue_GetOrCreateMetaObject(void);
 extern "C" void beLua_InitFields(void);
 extern "C" igMetaObject *FUN_0035bb70(void);
 extern "C" void *FUN_0035bbc0(void);
@@ -2561,7 +2561,7 @@ extern "C" igMetaObject *g_beWeaponInfo_metaObject[4];
 struct Obj { int *vt; int f4; int f8; int fC; int f10; int f14; int f18; int f1C; int f20; int f24; int f28; int f2C; };
 extern "C" int DAT_00539d50[4];
 extern "C" igObject **FUN_0033ec00(igObject **arg0, short arg1);
-extern "C" int DAT_00524950[4];
+extern "C" int g_igNamedObject_vtable[4];
 extern "C" int DAT_0052fde0[4];
 extern "C" int DAT_00539dc0[4];
 struct R_33ec80 { int w0; int rc; };
@@ -4443,7 +4443,7 @@ extern "C" int DAT_004c6210[4];
 extern "C" igMetaObject *g_beLuaState_metaObject[4];
 struct T_35ab00 { int word0; int references; };
 extern "C" int DAT_0053aa60[4];
-extern "C" int DAT_0052d660[4];
+extern "C" int g_igLuaState_vtable[4];
 struct Obj_35ab00 {
     int *vt; int w0; int *r1; int w1; T_35ab00 *r2;
     inline void rel1() {

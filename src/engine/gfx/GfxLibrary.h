@@ -220,7 +220,7 @@ extern "C" void FUN_0014a4d0(int arg0);
 extern "C" igMetaObject *g_igVertexArray2Helper_metaObject[4];
 extern "C" igMetaObject *igVertexArray2Helper_GetMetaObject(void);
 extern "C" int StringChunk_ReleaseHeader(...);
-extern "C" int DAT_00524950[4];
+extern "C" int g_igNamedObject_vtable[4];
 extern "C" int DAT_005262a0[4];
 struct Obj_14a560 {
     int *vt; char p4[4]; char *m8; T *m12; 

@@ -28,10 +28,10 @@ int igNamedObject_GetVTable(void) {
 
     igObject_InitHeader((ObjectHeader *)u.b);
     ps = (int *)&u.b[8];
-    u.vt = (int)&DAT_00524950[0];
+    u.vt = (int)&g_igNamedObject_vtable[0];
     *ps = 0;
     temp_s0 = *(int *)&u.b[*(int *)((char *)(((void * *)g_objectSystem)[0]) + 916)];
-    u.vt = (int)&DAT_00524950[0];
+    u.vt = (int)&g_igNamedObject_vtable[0];
     if (ps != 0) {
         temp_v1 = (int *)*ps;
         if (temp_v1 != 0) {

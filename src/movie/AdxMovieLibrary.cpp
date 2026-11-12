@@ -207,7 +207,7 @@ extern "C" char g_igAdxAfsFileList_callbackList[];
 extern "C" igMetaObject *g_igAdxAfsFile_metaObject[4];
 typedef struct S_ref { char pad4[4]; int f4; } S_ref;
 union U_3347f0 { int vt; char b[32]; };
-extern "C" int DAT_00524950[4];
+extern "C" int g_igNamedObject_vtable[4];
 extern "C" int DAT_00533b40[4];
 extern "C" int DAT_00533ba0[4];
 struct igMetaObject_3348f0;
@@ -564,7 +564,7 @@ int igAdxAfsFile_GetVTable(void) {
             }
         }
     }
-    u.vt = (int)&DAT_00524950[0];
+    u.vt = (int)&g_igNamedObject_vtable[0];
     if (q1 != 0) {
         temp_v1 = *(int **)q1;
         if (temp_v1 != 0) {
@@ -699,7 +699,7 @@ int igFileName_GetVTable(void) {
             }
         }
     }
-    u.vt = (int)&DAT_00524950[0];
+    u.vt = (int)&g_igNamedObject_vtable[0];
     if (p0 != 0) {
         o = *(char **)p0;
         if (o != 0) {
@@ -996,10 +996,10 @@ int igMovieCodec_GetVTable(void) {
     igObject_InitHeader(u.b);
     ps = &u.b[8];
     *(int *)ps = 0;
-    u.vt = (int)&DAT_00524950[0];
+    u.vt = (int)&g_igNamedObject_vtable[0];
     u.vt = (int)&DAT_00533d60[0];
     s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.vt = (int)&DAT_00524950[0];
+    u.vt = (int)&g_igNamedObject_vtable[0];
     if (ps != 0) {
         v1 = *(int **)ps;
         if (v1 != 0) {
@@ -1022,7 +1022,7 @@ O *FUN_00335700(O *arg0, long long arg1) {
     if (arg0 != 0) {
         arg0->vt = (int)(&DAT_00533d60[0]);
         if (arg0 != 0) {
-            arg0->vt = (int)(&DAT_00524950[0]);
+            arg0->vt = (int)(&g_igNamedObject_vtable[0]);
             if (&arg0->f8 != 0) {
                 temp_v1 = (void *)(arg0->f8);
                 if (temp_v1 != 0) {

@@ -18,12 +18,12 @@ int beNDMWLoadIntf2ChrDataSel_GetVTable(void) {
     int tc1;
 
     igObject_InitHeader(u.b);
-    u.w[0] = (int)(&DAT_00524950[0]);
+    u.w[0] = (int)(&g_igNamedObject_vtable[0]);
     q1 = &u.b[8];
     *(int *)q1 = 0;
     u.w[0] = (int)(&DAT_0053d1e0[0]);
     temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.w[0] = (int)(&DAT_00524950[0]);
+    u.w[0] = (int)(&g_igNamedObject_vtable[0]);
     if (q1 != 0) {
         tv1 = *(int **)q1;
         if (tv1 != 0) {

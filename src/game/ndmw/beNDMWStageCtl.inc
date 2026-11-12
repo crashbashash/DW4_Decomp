@@ -40,7 +40,7 @@ int beNDMWStageCtl_GetVTable(void) {
             if ((((unsigned long long)((long long)a->references << 0x29)) >> 0x29) == 0) igObject_Destroy(a);
         }
     }
-    o.vt = DAT_00524950;
+    o.vt = g_igNamedObject_vtable;
     if (&o.str != 0) {
         s = o.str;
         if (s != 0) {

@@ -17,10 +17,10 @@ int igPsx2Semaphore_GetVTable(void) {
     igObject_InitHeader((struct ObjectHeader *)&o);
     q = &o.s;
     *q = 0;
-    o.vt = &DAT_00524950[0];
+    o.vt = &g_igNamedObject_vtable[0];
     o.vt = &DAT_0052d970[0];
     temp_s0 = *(int *)((char *)&o + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
-    o.vt = &DAT_00524950[0];
+    o.vt = &g_igNamedObject_vtable[0];
     if (q != 0) {
         temp_v1 = *q;
         if (temp_v1 != 0) {

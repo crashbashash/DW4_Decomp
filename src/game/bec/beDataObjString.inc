@@ -42,7 +42,7 @@ int beDataObjString_GetVTable(void) {
             }
         }
     }
-    obj._vtable = (int)(&DAT_00524950[0]);
+    obj._vtable = (int)(&g_igNamedObject_vtable[0]);
     if (q2 != 0) {
         temp_v1_2 = (void *)*q2;
         if (temp_v1_2 != 0) {

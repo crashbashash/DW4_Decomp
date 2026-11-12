@@ -3225,14 +3225,6 @@
       "__dl__FPv": "0x00100610"
     }
   },
-  "0x00246b30": {
-    "duplicates": {
-      "__dt__28igSmartPointer<10ScriptFile>Fv": "0x0025a230"
-    },
-    "externals": {
-      "__dl__FPv": "0x00100610"
-    }
-  },
   "0x00246130": {
     "emitted": {},
     "stripped": [
@@ -35011,5 +35003,69 @@
       "p2VifRowCommand": "0x00490e88",
       "p2VuBuffers": "0x00491490"
     }
+  },
+  "0x0023c440": {
+    "whole_file": true,
+    "emitted": {
+      "igLuaState_GetMetaObject": "0x0023c460",
+      "igLuaState_GetVTable": "0x0023c4b0",
+      "igLuaState_EnsureRegistered": "0x0023c590",
+      "igLuaState_Register": "0x0023c5a0",
+      "thunk_igLuaState_GetMetaObject": "0x0023c620",
+      "igLuaState_InitFields": "0x0023c630",
+      "igLuaGlue_GetOrCreateMetaObject": "0x0023c6c0",
+      "igLuaGlue_GetMetaObject": "0x0023c710",
+      "igLuaGlue_GetVTable": "0x0023c760",
+      "igLuaGlue_EnsureRegistered": "0x0023c7a0",
+      "igLuaGlue_Register": "0x0023c7b0",
+      "thunk_igLuaGlue_GetMetaObject": "0x0023c820",
+      "Gap__Lua__igLuaGlue__vfunc_22": "0x0023c830",
+      "Gap__Lua__igLuaGlue__vfunc_09": "0x0023c840",
+      "Gap__Lua__igLuaGlue__vfunc_10": "0x0023c850"
+    },
+    "data": {
+      "g_LuaLibrary_registered": "0x00554bdc",
+      "g_igLuaGlue_metaObject": "0x0056de28",
+      "g_igLuaGlue_vtable": "0x0052d540",
+      "g_igLuaState_callbackList": "0x00498640",
+      "g_igLuaState_fieldConstructors": "0x00498648",
+      "g_igLuaState_fieldDescriptors": "0x00498658",
+      "g_igLuaState_fieldNames": "0x00498650",
+      "g_igLuaState_fieldOffsets": "0x00498660",
+      "g_igLuaState_metaObject": "0x0056de10",
+      "g_igLuaState_vtable": "0x0052d660",
+      "g_igNamedObject_vtable": "0x00524950",
+      "g_metadataAllocatorKey": "0x00587040",
+      "g_objectSystem": "0x00586dc8",
+      "igLuaGlue_className": "0x004ea1b0",
+      "igLuaState_className": "0x004ea180",
+      "igNamedObject_GetPublishedMetaObject": "0x0014a6e0"
+    },
+    "symbol": "LuaLibrary_MarkRegistered"
+  },
+  "0x00246840": {
+    "whole_file": true,
+    "emitted": {
+      "ThreadLocalTable_Link": "0x002468a0",
+      "ThreadLocalTable_Resize": "0x002468e0",
+      "ThreadLocalTable_Remove": "0x00246a90",
+      "lua_dofile__FP9lua_StatePCc": "0x00246b30"
+    },
+    "data": {
+      "@213": "0x004eaab0",
+      "g_threadLocalBucketCount": "0x00498720",
+      "g_threadLocalBucketShift": "0x00498718",
+      "g_threadLocalBuckets": "0x0056df68",
+      "g_threadLocalCount": "0x0056df60",
+      "g_threadLocalTableBusy": "0x0056df70"
+    },
+    "stripped": [
+      "__dt__28igSmartPointer<10igFileView>Fv"
+    ],
+    "externals": {
+      "luaM_realloc__FP9lua_StatePvUi": "0x00250200",
+      "lua_dobuffer__FP9lua_StatePCcUiPCc": "0x0024cb40"
+    },
+    "symbol": "ThreadLocalTable_Insert"
   }
 }

@@ -374,7 +374,7 @@ extern "C" igMetaObject *g_igViewerDataPumpManager_metaObject[4];
 extern "C" void *igViewerDataPumpManager_GetMetaObject(void);
 typedef struct S_ref { char pad4[4]; int f4; } S_ref;
 union U_45bec0 { int vt; int w[8]; void *p[8]; char b[32]; };
-extern "C" int DAT_00524950[4];
+extern "C" int g_igNamedObject_vtable[4];
 extern "C" int DAT_00542310[4];
 extern "C" int igViewerDataPumpManager_GetVTable(void);
 extern "C" void FUN_0045bfa0(void);

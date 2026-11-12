@@ -33,7 +33,7 @@ int igMemoryPoolContextInfo_GetVTable(void) {
             }
         }
     }
-    obj.vt = &DAT_00524950[0];
+    obj.vt = &g_igNamedObject_vtable[0];
     if (&obj.w2 != 0) {
         o = obj.w2;
         if (o != 0) {

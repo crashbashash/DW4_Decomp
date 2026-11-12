@@ -74,7 +74,7 @@ void *FUN_0033ec80(struct S_33ec80 *arg0, short arg1) {
         if (arg0 != 0) {
             arg0->f0 = &DAT_0052fde0[0];
             if (arg0 != 0) {
-                arg0->f0 = &DAT_00524950[0];
+                arg0->f0 = &g_igNamedObject_vtable[0];
                 if (&arg0->f8) {
                     h = arg0->f8;
                     if (h != 0) {

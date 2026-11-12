@@ -12,12 +12,12 @@ int beCriSfpData_GetVTable(void) {
     int temp_v0;
 
     igObject_InitHeader(u.b);
-    u.vt = (int)&DAT_00524950[0];
+    u.vt = (int)&g_igNamedObject_vtable[0];
     q1 = &u.b[8];
     *(int *)q1 = 0;
     u.vt = (int)&DAT_00535030[0];
     temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.vt = (int)&DAT_00524950[0];
+    u.vt = (int)&g_igNamedObject_vtable[0];
     if (q1 != 0) {
         temp_v1 = *(int **)q1;
         if (temp_v1 != 0) {

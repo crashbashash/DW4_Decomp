@@ -33,7 +33,7 @@ void *FUN_0014f4e0(struct S *arg0, short arg1) {
     if (arg0 != 0) {
         arg0->f0 = &DAT_00530900[0];
         if (arg0 != 0) {
-            arg0->f0 = &DAT_00524950[0];
+            arg0->f0 = &g_igNamedObject_vtable[0];
             if (&arg0->f8) {
                 p = arg0->f8;
                 if (p != 0) {
@@ -63,7 +63,7 @@ W_14f580 *FUN_0014f580(W_14f580 *t, short flag)
         if (t != 0) {
             t->vt = DAT_00530900;
             if (t != 0) {
-                t->vt = DAT_00524950;
+                t->vt = g_igNamedObject_vtable;
                 t->s8.~Str();
             }
         }

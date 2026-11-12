@@ -19,10 +19,10 @@ int beModelCtrlMSGBOX_GetVTable(void) {
     igObject_InitHeader(u.b);
     q1 = &u.b[8];
     *(int *)q1 = 0;
-    u.w[0] = (int)(&DAT_00524950[0]);
+    u.w[0] = (int)(&g_igNamedObject_vtable[0]);
     u.w[0] = (int)(&DAT_005374d0[0]);
     temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.w[0] = (int)(&DAT_00524950[0]);
+    u.w[0] = (int)(&g_igNamedObject_vtable[0]);
     if (q1 != 0) {
         tv1 = *(int **)q1;
         if (tv1 != 0) {

@@ -114,7 +114,7 @@ void beLua_InitFields(void) {
     temp_s1_3 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 2));
     ((igObjectRefMetaField *)temp_s1_3)->_metaObject = (int)FUN_0035aa60();
     temp_s1_4 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 3));
-    ((igObjectRefMetaField *)temp_s1_4)->_metaObject = FUN_0023c6c0();
+    ((igObjectRefMetaField *)temp_s1_4)->_metaObject = igLuaGlue_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s1_4)->_construct = 1;
     igMetaObject_NameFields(temp_s0, &DAT_004c6310[0], &DAT_004c6320[0], &DAT_004c6330[0], temp_s2);
 }

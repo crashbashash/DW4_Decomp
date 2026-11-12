@@ -48,7 +48,7 @@ int beModelCtrlMOVERL_GetVTable(void) {
             }
         }
     }
-    u.vt = (int)&DAT_00524950[0];
+    u.vt = (int)&g_igNamedObject_vtable[0];
     if (p48 != 0) {
         v1 = *(int **)p48;
         if (v1 != 0) {

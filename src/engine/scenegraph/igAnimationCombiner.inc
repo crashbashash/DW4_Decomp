@@ -44,7 +44,7 @@ void *FUN_001a8620(struct S_1a8620 *arg0, short arg1) {
             }
         }
         if (arg0 != 0) {
-            arg0->f0 = &DAT_00524950[0];
+            arg0->f0 = &g_igNamedObject_vtable[0];
             if (&arg0->f8) {
                 hp = arg0->f8;
                 if (hp != 0) {

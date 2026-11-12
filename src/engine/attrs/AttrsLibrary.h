@@ -218,7 +218,7 @@ extern "C" void igTextureMatrixAttr_InitFields(void);
 extern "C" void **FUN_00131aa0(void **arg0, short arg1);
 extern "C" int thunk_FUN_002ed460__002ff810(...);
 extern "C" int DAT_0052fde0[4];
-extern "C" int DAT_00524950[4];
+extern "C" int g_igNamedObject_vtable[4];
 struct S {
     void *f0;
     char pad[4];

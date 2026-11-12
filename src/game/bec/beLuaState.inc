@@ -23,14 +23,14 @@ int beLuaState_GetVTable(void) {
     int r;
 
     igObject_InitHeader(&obj);
-    obj.vt = &DAT_0052d660[0];
+    obj.vt = &g_igLuaState_vtable[0];
     obj.r1 = 0;
     obj.r2 = 0;
     obj.vt = &DAT_0053aa60[0];
     r = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
-    obj.vt = &DAT_0052d660[0];
+    obj.vt = &g_igLuaState_vtable[0];
     obj.rel2();
-    obj.vt = &DAT_00524950[0];
+    obj.vt = &g_igNamedObject_vtable[0];
     obj.rel1();
     return r;
 }
