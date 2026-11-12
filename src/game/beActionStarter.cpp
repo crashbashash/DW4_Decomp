@@ -1,20 +1,26 @@
-/* The flag is declared before the loop
- * index. Compiled as C++ for the real virtual call (20 dummy slots). */
 #include "dw4/reflected.h"
-extern "C" {
-void beMessenger_AppendBool(int, unsigned char);
-void beMessenger_AppendFloat(int, float);
-void beMessenger_AppendString(int, int *);
-void beMessenger_AppendVec3(int, float *);
-void beMessenger_DispatchSelected(int, int *);
-void beMessenger_SelectReceivers(int, int *, int, int);
-void beMessenger_SetRunCheck(int, unsigned char);
-extern int DAT_004e0858[4];
-extern int DAT_0050e128[4];
-extern int DAT_0050e138[4];
-extern int DAT_00589e48[4];
-int Gap__Bec__beActionStarter__vfunc_34(beActionStarter *arg0, beActionStarterInfoRam *arg1, int *arg2);
-}
+
+extern "C" void Gap__Bec__beActionStarter__vfunc_32(void);
+extern "C" int Gap__Bec__beActionStarter__vfunc_30(void);
+extern "C" void Gap__Bec__beActionStarter__vfunc_31(void);
+extern "C" int Gap__Bec__beActionStarter__vfunc_20(void);
+extern "C" void beMessenger_RegisterReceiver(int, int, char *, int, int);
+extern "C" void beMessenger_AppendBool(int, unsigned char);
+extern "C" void beMessenger_AppendFloat(int, float);
+extern "C" void beMessenger_AppendString(int, int *);
+extern "C" void beMessenger_AppendVec3(int, float *);
+extern "C" void beMessenger_DispatchSelected(int, int *);
+extern "C" void beMessenger_SelectReceivers(int, int *, int, int);
+extern "C" void beMessenger_SetRunCheck(int, unsigned char);
+extern "C" int Gap__Core__igObject__vfunc_33(void);
+extern "C" int g_beActionStarterInfo_metaObject[4];
+extern "C" int g_beActionStarter_metaObject[4];
+extern "C" char DAT_0050e110[];
+extern "C" void Gap__Bec__beActionStarter__vfunc_29(beActionStarter * p0, int p1, char * p2, int p3, int p4);
+extern "C" int DAT_004e0858[4];
+extern "C" int DAT_0050e128[4];
+extern "C" int DAT_0050e138[4];
+extern "C" int DAT_00589e48[4];
 /* matching construct: dummy-virtual class (20 slots) so getKind() compiles to the retail jalr; the element data is read through beActionStarterData2 below. */
 struct ActionStarterDataVTable {
     virtual void d0();
@@ -39,6 +45,26 @@ struct ActionStarterDataVTable {
     virtual void d19();
     virtual int getKind();
  };
+extern "C" int Gap__Bec__beActionStarter__vfunc_34(beActionStarter *arg0, beActionStarterInfoRam *arg1, int *arg2);
+
+void Gap__Bec__beActionStarter__vfunc_32(void)
+{
+}
+
+void Gap__Bec__beActionStarter__vfunc_29(beActionStarter * p0, int p1, char * p2, int p3, int p4)
+{
+    beMessenger_RegisterReceiver(p0->_messenger, p1, DAT_0050e110, 0, -1);
+}
+
+int Gap__Bec__beActionStarter__vfunc_30(void)
+{
+    return g_beActionStarterInfo_metaObject[0];
+}
+
+void Gap__Bec__beActionStarter__vfunc_31(void)
+{
+}
+
 int Gap__Bec__beActionStarter__vfunc_34(beActionStarter *arg0, beActionStarterInfoRam *arg1, int *arg2) {
     float vA[3];
     float vB[3];
@@ -109,3 +135,14 @@ int Gap__Bec__beActionStarter__vfunc_34(beActionStarter *arg0, beActionStarterIn
     }
     return 1;
 }
+
+int Gap__Bec__beActionStarter__vfunc_20(void)
+{
+    return g_beActionStarter_metaObject[0];
+}
+
+/* Slot 33 default: always 0. */
+int Gap__Core__igObject__vfunc_33(void) {
+    return 0;
+}
+

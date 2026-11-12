@@ -14,11 +14,6 @@ int Gap__Core__igObject__vfunc_34(void) {
     return 0;
 }
 
-/* Slot 33 default: always 0. */
-int Gap__Core__igObject__vfunc_33(void) {
-    return 0;
-}
-
 /* Slot 22 default: empty. */
 void Gap__Core__igObject__vfunc_22(void)
 {
