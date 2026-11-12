@@ -13395,24 +13395,24 @@
 00338f40	Gap__igMovieCodec__vfunc_28	match	-
 00338f50	Gap__igMovieCodec__vfunc_29	match	-
 00338f60	Gap__igMovieCodec__vfunc_20	match	-
-00338f70	FUN_00338f70	match	-
-003390d0	Gap__igMovieManager__vfunc_21	match	-
-003390e0	Gap__igMovieManager__vfunc_22	match	exception index 0x547b44: matches retail (packed)
+00338f70	FUN_00338f70	match	DEFERRED duplicate 0x130140 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
+003390d0	Gap__igMovieManager__vfunc_21	match	DEFERRED duplicate 0x130140 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
+003390e0	Gap__igMovieManager__vfunc_22	match	DEFERRED duplicate 0x130140 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
 00339110	FUN_00339110	match	DEFERRED duplicate 0x130140 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
-00339200	FUN_00339200	match	exception index 0x547b5c: matches retail (packed)
-00339280	Gap__igMovieManager__vfunc_23	match	-
-00339290	Gap__igMovieManager__vfunc_24	match	-
-003392a0	Gap__igMovieManager__vfunc_25	match	-
-00339eb0	Gap__igMovieManager__vfunc_26	match	exception index 0x547b80: matches retail (packed)
-0033bbc0	Gap__igMovieManager__vfunc_27	match	-
-0033bbd0	FUN_0033bbd0	match	exception index 0x547b98: matches retail (packed)
-0033bc60	Gap__igMovieManager__vfunc_30	match	exception index 0x547ba4: matches retail (packed)
+00339200	FUN_00339200	match	DEFERRED duplicate 0x130140 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
+00339280	Gap__igMovieManager__vfunc_23	match	DEFERRED duplicate 0x130140 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
+00339290	Gap__igMovieManager__vfunc_24	match	DEFERRED duplicate 0x130140 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
+003392a0	Gap__igMovieManager__vfunc_25	match	DEFERRED duplicate 0x130140 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
+00339eb0	Gap__igMovieManager__vfunc_26	match	DEFERRED duplicate 0x130140 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
+0033bbc0	Gap__igMovieManager__vfunc_27	match	DEFERRED duplicate 0x130140 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
+0033bbd0	FUN_0033bbd0	match	DEFERRED duplicate 0x130140 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
+0033bc60	Gap__igMovieManager__vfunc_30	match	DEFERRED duplicate 0x130140 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
 0033bd30	igMovieRenderer_InitializeDrawing	match	DEFERRED duplicate 0x130140 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
-0033bdf0	Gap__igMovieRenderer__vfunc_23	match	-
-0033be00	Gap__igMovieRenderer__vfunc_24	match	exception index 0x547bbc: matches retail (packed)
-0033be20	Gap__igMovieRenderer__vfunc_22	match	exception index 0x547bc8: matches retail (packed)
-0033be40	Gap__igMovieRenderer__vfunc_20	match	-
-0033be50	Gap__igMovieManager__vfunc_20	match	-
+0033bdf0	Gap__igMovieRenderer__vfunc_23	match	DEFERRED duplicate 0x130140 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
+0033be00	Gap__igMovieRenderer__vfunc_24	match	DEFERRED duplicate 0x130140 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
+0033be20	Gap__igMovieRenderer__vfunc_22	match	DEFERRED duplicate 0x130140 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
+0033be40	Gap__igMovieRenderer__vfunc_20	match	DEFERRED duplicate 0x130140 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
+0033be50	Gap__igMovieManager__vfunc_20	match	DEFERRED duplicate 0x130140 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
 0033be60	Gap__igMoviePlugin__vfunc_21	match	-
 0033bf10	Gap__igMoviePlugin__vfunc_22	match	-
 0033bf40	Gap__igMoviePlugin__vfunc_20	match	-
