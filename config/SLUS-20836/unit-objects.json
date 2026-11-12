@@ -682,15 +682,6 @@
       "__dl__FPv": "0x00100610"
     }
   },
-  "0x00389ff0": {
-    "emitted": {},
-    "duplicates": {
-      "__dt__9LuaStrRefFv": "0x00130720"
-    },
-    "externals": {
-      "__dl__FPv": "0x00100610"
-    }
-  },
   "0x003ee6d0": {
     "duplicates": {
       "__dt__23igSmartPointer<6StrObj>Fv": "0x0033e9c0"
@@ -31244,6 +31235,41 @@
       "__dt__9StringRefFv": "0x00130720"
     },
     "symbol": "FUN_003b04e0"
+  },
+  "0x00389b90": {
+    "whole_file": true,
+    "emitted": {
+      "FUN_00389fb0": "0x00389fb0",
+      "beLua__RunNamedChunk": "0x00389ff0",
+      "FUN_0038a2d0": "0x0038a2d0",
+      "Gap__Bec__beLua__vfunc_21": "0x0038a360",
+      "Gap__Bec__beLua__vfunc_22": "0x0038a380",
+      "Gap__Bec__beLua__vfunc_23": "0x0038a3a0",
+      "Gap__Bec__beLua__vfunc_24": "0x0038a410",
+      "Gap__Bec__beLua__vfunc_25": "0x0038a420",
+      "Gap__Bec__beLua__vfunc_26": "0x0038a490",
+      "Gap__Bec__beLua__vfunc_27": "0x0038a640",
+      "Gap__Bec__beLua__vfunc_20": "0x0038a650"
+    },
+    "data": {
+      "DAT_004e0858": "0x004e0858",
+      "DAT_0050ec80": "0x0050ec80",
+      "DAT_0050ec88": "0x0050ec88",
+      "DAT_00562640": "0x00562640",
+      "DAT_00586f20": "0x00586f20",
+      "DAT_00587110": "0x00587110",
+      "DAT_00587d08": "0x00587d08",
+      "DAT_005891c0": "0x005891c0",
+      "GPR_00554c14": "0x00554c14",
+      "g_beLua_metaObject": "0x00589208"
+    },
+    "duplicates": {
+      "__dt__9LuaStrRefFv": "0x00130720"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    },
+    "symbol": "FUN_00389b90"
   },
   "0x00389080": {
     "whole_file": true,

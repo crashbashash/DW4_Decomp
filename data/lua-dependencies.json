@@ -24480,7 +24480,7 @@
       "address": 3710960,
       "name": "beLua__RunNamedChunk",
       "size": 732,
-      "source": "src/game/beLua__RunNamedChunk.cpp",
+      "source": "src/game/beLua.cpp",
       "direct": [
         {
           "site": 3711044,
