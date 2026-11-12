@@ -419,14 +419,6 @@
       "__dl__FPv": "0x00100610"
     }
   },
-  "0x003ee6d0": {
-    "duplicates": {
-      "__dt__23igSmartPointer<6StrObj>Fv": "0x0033e9c0"
-    },
-    "externals": {
-      "__dl__FPv": "0x00100610"
-    }
-  },
   "0x0042eb80": {
     "duplicates": {
       "__dt__12SubWindowRefFv": "0x0042d350",
@@ -500,20 +492,6 @@
       "index": "0x005542f4",
       "table": "0x0054658c",
       "table_size": "0x000010"
-    },
-    "externals": {
-      "__dl__FPv": "0x00100610"
-    }
-  },
-  "0x003ed650": {
-    "duplicates": {
-      "__dt__11DegiDataRefFv": "0x003e9010",
-      "__dt__13SlotPlayerRefFv": "0x003edba0"
-    },
-    "exceptions": {
-      "index": "0x0055376c",
-      "table": "0x00544bdc",
-      "table_size": "0x000034"
     },
     "externals": {
       "__dl__FPv": "0x00100610"
@@ -957,34 +935,6 @@
       "index": "0x0054f0ec",
       "table": "0x00543c8c",
       "table_size": "0x000010"
-    },
-    "externals": {
-      "__dl__FPv": "0x00100610"
-    }
-  },
-  "0x003f0ed0": {
-    "emitted": {
-      "__dt__10SlotRef<0>Fv": "0x003f11f0",
-      "__dt__10SlotRef<1>Fv": "0x003f1170",
-      "__dt__10SlotRef<2>Fv": "0x003f10f0"
-    },
-    "exceptions": {
-      "index": "0x00553808",
-      "table": "0x00544cd0",
-      "table_size": "0x000024"
-    },
-    "externals": {
-      "__dl__FPv": "0x00100610"
-    }
-  },
-  "0x003f1a80": {
-    "duplicates": {
-      "__dt__22igSmartPointer<5S_ref>Fv": "0x0033e9c0"
-    },
-    "exceptions": {
-      "index": "0x00553880",
-      "table": "0x00544cf4",
-      "table_size": "0x00001c"
     },
     "externals": {
       "__dl__FPv": "0x00100610"
@@ -1705,21 +1655,6 @@
       "table_size": "0x3c"
     }
   },
-  "0x003ef5d0": {
-    "emitted": {},
-    "duplicates": {
-      "__dt__8ChunkRefFv": "0x003832d0",
-      "__dt__7ItemRefFv": "0x001363f0"
-    },
-    "externals": {
-      "__dl__FPv": "0x00100610"
-    },
-    "exceptions": {
-      "index": "0x005537e4",
-      "table": "0x00544c5c",
-      "table_size": "0x6c"
-    }
-  },
   "0x004415b0": {
     "emitted": {
       "__dt__8ItemRefCFv": "0x00441f10",
@@ -1764,20 +1699,6 @@
       "index": "0x005539b8",
       "table": "0x00544e60",
       "table_size": "0x68"
-    }
-  },
-  "0x003f2490": {
-    "emitted": {
-      "__dt__11CtrlDataRefFv": "0x003f2cc0",
-      "__dt__13CommonIntfRefFv": "0x003f2c40",
-      "__dt__11FlagWorkRefFv": "0x003f2bc0"
-    },
-    "duplicates": {
-      "__dt__11DegiDataRefFv": "0x003e9010",
-      "__dt__25igSmartPointer<8igObject>Fv": "0x0033e9c0"
-    },
-    "externals": {
-      "__dl__FPv": "0x00100610"
     }
   },
   "0x00407aa0": {
@@ -30530,6 +30451,203 @@
       "__dt__9StringRefFv": "0x00130720"
     },
     "symbol": "FUN_003b04e0"
+  },
+  "0x003eba10": {
+    "whole_file": true,
+    "emitted": {
+      "TextOrder_PublishLine": "0x003ebce0",
+      "TextOrder_ConfigureFont": "0x003ebd70",
+      "TextOrder_ClearFont": "0x003ebdc0",
+      "beNDMWLoadIntf2TextOrder_PublishIdLines": "0x003ebe00",
+      "TextOrder_PublishLineListOnly": "0x003ec050",
+      "FUN_003ec120": "0x003ec120",
+      "beNDMWLoadIntf2MesWin__Update": "0x003ec450",
+      "FUN_003eca00": "0x003eca00",
+      "beNDMWLoadIntf2MesWin__RequestOpen": "0x003eca70",
+      "beNDMWLoadIntf2MesWin__RequestClose": "0x003ecaa0",
+      "FUN_003ecad0": "0x003ecad0",
+      "FUN_003ecae0": "0x003ecae0",
+      "FUN_003ecb00": "0x003ecb00",
+      "FUN_003ecb20": "0x003ecb20",
+      "beNDMWLoadIntf2MesWin__GetIsCtrl": "0x003ecb70",
+      "FUN_003ecb80": "0x003ecb80",
+      "beNDMWLoadIntf2MesWin__RequestMesErase": "0x003ecb90",
+      "FUN_003ecba0": "0x003ecba0",
+      "beNDMWLoadIntf2MesWin__EndSystemMessage": "0x003ecbc0",
+      "FUN_003ecc60": "0x003ecc60",
+      "FUN_003ecdc0": "0x003ecdc0",
+      "FUN_003ed050": "0x003ed050",
+      "FUN_003ed2e0": "0x003ed2e0",
+      "beNDMWLoadCtrl2CommonIntf__StepReadMedia": "0x003ed650",
+      "__dt__13SlotPlayerRefFv": "0x003edba0",
+      "FUN_003edc20": "0x003edc20",
+      "beNDMWLoadCtrl2CommonIntf__StepFormatMemoryCard": "0x003edf60",
+      "FUN_003ee190": "0x003ee190",
+      "FUN_003ee250": "0x003ee250",
+      "beNDMWLoadCtrl2CommonIntf__RemoveAccessPlayer": "0x003ee320",
+      "FUN_003ee490": "0x003ee490",
+      "beNDMWDegiData__UpdateFieldsFromData": "0x003ee4d0",
+      "FUN_003ee690": "0x003ee690",
+      "beNDMWDegiData__LoadFromProperties": "0x003ee6d0",
+      "beNDMWDegiData__StoreToProperties": "0x003ef5d0",
+      "FUN_003f0d60": "0x003f0d60",
+      "FUN_003f0e30": "0x003f0e30",
+      "FUN_003f0ed0": "0x003f0ed0",
+      "__dt__10SlotRef<2>Fv": "0x003f10f0",
+      "__dt__10SlotRef<1>Fv": "0x003f1170",
+      "__dt__10SlotRef<0>Fv": "0x003f11f0",
+      "FUN_003f1270": "0x003f1270",
+      "FUN_003f12f0": "0x003f12f0",
+      "FUN_003f1380": "0x003f1380",
+      "FUN_003f13d0": "0x003f13d0",
+      "FUN_003f1460": "0x003f1460",
+      "FUN_003f1490": "0x003f1490",
+      "Gap__Bec__beNDMWLoadCtrl2__vfunc_32": "0x003f19e0",
+      "Gap__Bec__beNDMWLoadCtrl2__vfunc_31": "0x003f1a80",
+      "Gap__Bec__beNDMWLoadCtrl2__vfunc_30": "0x003f2450",
+      "Gap__Bec__beNDMWLoadCtrl2__vfunc_29": "0x003f2460",
+      "Gap__Bec__beNDMWLoadCtrl2__vfunc_34": "0x003f2490",
+      "__dt__11FlagWorkRefFv": "0x003f2bc0",
+      "__dt__13CommonIntfRefFv": "0x003f2c40",
+      "__dt__11CtrlDataRefFv": "0x003f2cc0",
+      "Gap__Bec__beNDMWLoadCtrl2__vfunc_20": "0x003f2d40"
+    },
+    "data": {
+      "@3032": "0x00518110",
+      "DAT_004cda40": "0x004cda40",
+      "DAT_004cda44": "0x004cda44",
+      "DAT_004cda48": "0x004cda48",
+      "DAT_004ceb30": "0x004ceb30",
+      "DAT_005176a0": "0x005176a0",
+      "DAT_005176b0": "0x005176b0",
+      "DAT_005179b0": "0x005179b0",
+      "DAT_005179b8": "0x005179b8",
+      "DAT_005179c0": "0x005179c0",
+      "DAT_005179c8": "0x005179c8",
+      "DAT_005179d0": "0x005179d0",
+      "DAT_005179d8": "0x005179d8",
+      "DAT_005179e8": "0x005179e8",
+      "DAT_005179f8": "0x005179f8",
+      "DAT_00517a00": "0x00517a00",
+      "DAT_00517a08": "0x00517a08",
+      "DAT_00517a10": "0x00517a10",
+      "DAT_00517a18": "0x00517a18",
+      "DAT_00517a28": "0x00517a28",
+      "DAT_00517a38": "0x00517a38",
+      "DAT_00517a48": "0x00517a48",
+      "DAT_00517a60": "0x00517a60",
+      "DAT_00517a70": "0x00517a70",
+      "DAT_00517a80": "0x00517a80",
+      "DAT_00517a90": "0x00517a90",
+      "DAT_00517aa0": "0x00517aa0",
+      "DAT_00517ab0": "0x00517ab0",
+      "DAT_00517ac0": "0x00517ac0",
+      "DAT_00517ad0": "0x00517ad0",
+      "DAT_00517ae0": "0x00517ae0",
+      "DAT_00517af0": "0x00517af0",
+      "DAT_00517af8": "0x00517af8",
+      "DAT_00517e38": "0x00517e38",
+      "DAT_00517e48": "0x00517e48",
+      "DAT_00517e58": "0x00517e58",
+      "DAT_00517e60": "0x00517e60",
+      "DAT_00517e68": "0x00517e68",
+      "DAT_00517e70": "0x00517e70",
+      "DAT_00517e78": "0x00517e78",
+      "DAT_00517e80": "0x00517e80",
+      "DAT_00517e88": "0x00517e88",
+      "DAT_00517e90": "0x00517e90",
+      "DAT_00517ea0": "0x00517ea0",
+      "DAT_00517eb0": "0x00517eb0",
+      "DAT_00517eb8": "0x00517eb8",
+      "DAT_00517ec0": "0x00517ec0",
+      "DAT_00517ed0": "0x00517ed0",
+      "DAT_00517ee0": "0x00517ee0",
+      "DAT_00517ef0": "0x00517ef0",
+      "DAT_00517f00": "0x00517f00",
+      "DAT_00517f08": "0x00517f08",
+      "DAT_00517f18": "0x00517f18",
+      "DAT_00517f28": "0x00517f28",
+      "DAT_00517f38": "0x00517f38",
+      "DAT_00517f48": "0x00517f48",
+      "DAT_00517f50": "0x00517f50",
+      "DAT_00517f60": "0x00517f60",
+      "DAT_00517f70": "0x00517f70",
+      "DAT_00517f80": "0x00517f80",
+      "DAT_00517f90": "0x00517f90",
+      "DAT_00517fa0": "0x00517fa0",
+      "DAT_00517fb0": "0x00517fb0",
+      "DAT_00517fc0": "0x00517fc0",
+      "DAT_00517fd0": "0x00517fd0",
+      "DAT_00517fe0": "0x00517fe0",
+      "DAT_00517ff0": "0x00517ff0",
+      "DAT_00517ff8": "0x00517ff8",
+      "DAT_00518000": "0x00518000",
+      "DAT_00518010": "0x00518010",
+      "DAT_00518030": "0x00518030",
+      "DAT_00518048": "0x00518048",
+      "DAT_00518060": "0x00518060",
+      "DAT_00518080": "0x00518080",
+      "DAT_005180a0": "0x005180a0",
+      "DAT_005180c0": "0x005180c0",
+      "DAT_005180e0": "0x005180e0",
+      "DAT_005180f0": "0x005180f0",
+      "DAT_005180f8": "0x005180f8",
+      "DAT_00518130": "0x00518130",
+      "DAT_00518138": "0x00518138",
+      "DAT_00518148": "0x00518148",
+      "DAT_00518158": "0x00518158",
+      "DAT_00518160": "0x00518160",
+      "DAT_00518170": "0x00518170",
+      "DAT_00518178": "0x00518178",
+      "DAT_00518188": "0x00518188",
+      "DAT_00518198": "0x00518198",
+      "DAT_005181a8": "0x005181a8",
+      "DAT_005181b8": "0x005181b8",
+      "DAT_005181c8": "0x005181c8",
+      "DAT_005181d0": "0x005181d0",
+      "DAT_005181e0": "0x005181e0",
+      "DAT_005181e8": "0x005181e8",
+      "DAT_005181f8": "0x005181f8",
+      "DAT_00518208": "0x00518208",
+      "DAT_00518218": "0x00518218",
+      "DAT_00518220": "0x00518220",
+      "DAT_00518230": "0x00518230",
+      "DAT_00518240": "0x00518240",
+      "DAT_00518250": "0x00518250",
+      "DAT_00518260": "0x00518260",
+      "DAT_00518270": "0x00518270",
+      "DAT_00518280": "0x00518280",
+      "DAT_005182a0": "0x005182a0",
+      "DAT_005182b0": "0x005182b0",
+      "DAT_00585be0": "0x00585be0",
+      "DAT_00586f20": "0x00586f20",
+      "DAT_00587108": "0x00587108",
+      "DAT_00587110": "0x00587110",
+      "DAT_00587d08": "0x00587d08",
+      "DAT_00589208": "0x00589208",
+      "DAT_00589678": "0x00589678",
+      "DAT_0058a1e0": "0x0058a1e0",
+      "DAT_0058a220": "0x0058a220",
+      "GPR_00554c14": "0x00554c14",
+      "LOADCTRL2": "0x00518290",
+      "g_beNDMWLoadCtrl2Info_metaObject": "0x0058baf0",
+      "g_beNDMWLoadCtrl2_metaObject": "0x0058bef0",
+      "g_bePadManager_metaObject": "0x00588518"
+    },
+    "duplicates": {
+      "__dt__11DegiDataRefFv": "0x003e9010",
+      "__dt__25igSmartPointer<8igObject>Fv": "0x0033e9c0",
+      "__dt__7ItemRefFv": "0x001363f0",
+      "__dt__8ChunkRefFv": "0x003832d0"
+    },
+    "stripped": [
+      "__dt__23igSmartPointer<6StrObj>Fv"
+    ],
+    "externals": {
+      "FUN_002ff820": "0x002ff820",
+      "__dl__FPv": "0x00100610"
+    },
+    "symbol": "TextOrder_Configure"
   },
   "0x003d9de0": {
     "whole_file": true,

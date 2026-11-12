@@ -332,12 +332,12 @@ screens' text lines (`beNDMWLoadIntf2TextOrder`).
 
 | Entry | Bytes | Symbol / source | Contract |
 |---|---:|---|---|
-| `0x003eba10` | 708 | `TextOrder_Configure`, `src/game/TextOrder_Configure.cpp` | optional ALIGN, optional colour, TEXTSET, SWITCH SET, in order |
-| `0x003ebce0` | 136 | `TextOrder_PublishLine`, `src/game/TextOrder_PublishLine.cpp` | publish one line: `0x38d860(ctx,0x5179b0,0,-1)`, then `0x38f830(ctx,name)`, `0x38f830(ctx,font)`, `0x38f830(ctx,0x517a10)`, `0x38e060(ctx,0x517a08)`; `ctx = owner+0x10` |
-| `0x003ebd70` | 72 | `TextOrder_ConfigureFont`, `src/game/TextOrder_ConfigureFont.cpp` | resolve the font from set/index, then configure (seven original arguments) |
-| `0x003ebdc0` | 60 | `TextOrder_ClearFont`, `src/game/TextOrder_ClearFont.cpp` | resolve the font from set/index, then SWITCH CLR |
-| `0x003ebe00` | 588 | `beNDMWLoadIntf2TextOrder_PublishIdLines`, `src/game/beNDMWLoadIntf2TextOrder_PublishIdLines.cpp` | scan the id table, publish the id's line list, latch `0x0058a220`/`0x0058a1e0` from the entry's 2nd word, fire `0x389ff0` with `0x517a28` (id&0xf000 ∈ {0x1000,0x2000,0x3000}) or `0x517a18` (0), and when `flag==1` and the entry carries bit 20 latch the **next** entry's 2nd word into `0x58a220` and repeat the animation dispatch |
-| `0x003ec050` | 196 | `TextOrder_PublishLineListOnly`, `src/game/TextOrder_PublishLineListOnly.cpp` | close variant: publish the id's line list only (no globals, no animation) |
+| `0x003eba10` | 708 | `TextOrder_Configure`, `src/game/beNDMWLoadCtrl2.cpp` | optional ALIGN, optional colour, TEXTSET, SWITCH SET, in order |
+| `0x003ebce0` | 136 | `TextOrder_PublishLine`, `src/game/beNDMWLoadCtrl2.cpp` | publish one line: `0x38d860(ctx,0x5179b0,0,-1)`, then `0x38f830(ctx,name)`, `0x38f830(ctx,font)`, `0x38f830(ctx,0x517a10)`, `0x38e060(ctx,0x517a08)`; `ctx = owner+0x10` |
+| `0x003ebd70` | 72 | `TextOrder_ConfigureFont`, `src/game/beNDMWLoadCtrl2.cpp` | resolve the font from set/index, then configure (seven original arguments) |
+| `0x003ebdc0` | 60 | `TextOrder_ClearFont`, `src/game/beNDMWLoadCtrl2.cpp` | resolve the font from set/index, then SWITCH CLR |
+| `0x003ebe00` | 588 | `beNDMWLoadIntf2TextOrder_PublishIdLines`, `src/game/beNDMWLoadCtrl2.cpp` | scan the id table, publish the id's line list, latch `0x0058a220`/`0x0058a1e0` from the entry's 2nd word, fire `0x389ff0` with `0x517a28` (id&0xf000 ∈ {0x1000,0x2000,0x3000}) or `0x517a18` (0), and when `flag==1` and the entry carries bit 20 latch the **next** entry's 2nd word into `0x58a220` and repeat the animation dispatch |
+| `0x003ec050` | 196 | `TextOrder_PublishLineListOnly`, `src/game/beNDMWLoadCtrl2.cpp` | close variant: publish the id's line list only (no globals, no animation) |
 
 - A control id is `(mode << 16) | token`; it is matched against the low 20 bits
   of the words in the id table at `0x004cda40` (stride `0xc`: `{u32 id; u32
@@ -372,7 +372,7 @@ The two CommMdlCtrl queue queries and the confirm selection.
 |---|---:|---|---|
 | `0x003e4280` | 20 | `beNDMWLoadIntf2ComMdlCtrl__IsOpenQueueEmpty`, `src/game/beNDMWLoadIntf2.cpp` | `CommMdlCtrl(a0)._openDataList(+0x14).count(+8) <= 0` (an `igObjectList`: `+8` count, `+0x10` data) |
 | `0x003e44d0` | 20 | `beNDMWLoadIntf2ComMdlCtrl__IsCloseQueueEmpty`, `src/game/beNDMWLoadIntf2.cpp` | the same predicate on `_closeDataList(+0x18)` |
-| `0x003ee190` | 184 | `FUN_003ee190`, `src/unmatched/FUN_003ee190.c` | over the four per-player `beNDMWLoadSavePlWork` records of `COMMONINTF._flagWork` (`+0x28 → +0x10 → [i*4]`): arm rows 0–3 (`_sysStat0` `+0x24` = 1, `+0x28`/`+0x2c`/`+0x30` = 0, `_isCtrl` `+0xf` = 0, `_sysCount0` `+8` = `0x3c`), then clear the selected row (`+0x24` = 0, `+0xf` = 1, `+8` = 0) |
+| `0x003ee190` | 184 | `FUN_003ee190`, `src/game/beNDMWLoadCtrl2.cpp` | over the four per-player `beNDMWLoadSavePlWork` records of `COMMONINTF._flagWork` (`+0x28 → +0x10 → [i*4]`): arm rows 0–3 (`_sysStat0` `+0x24` = 1, `+0x28`/`+0x2c`/`+0x30` = 0, `_isCtrl` `+0xf` = 0, `_sysCount0` `+8` = `0x3c`), then clear the selected row (`+0x24` = 0, `+0xf` = 1, `+8` = 0) |
 
 `0x3e4280`/`0x3e44d0` are called with the `COMMDLCTRL` record; `0x3ee190` is
 called with the `COMMONINTF` record. The queues these predicates read are filled
@@ -430,11 +430,11 @@ reads the reflected receivers listed under
 | `0x003db780` | 2,052 | `beNDMWLoadIntf2DataSelIntf__UpdateSelection`, `src/game/beNDMWLoadIntf2.cpp` | data selection; reads the `bePadData` words |
 | `0x003dbf90` | 844 | `FUN_003dbf90`, `src/game/beNDMWLoadIntf2.cpp` | |
 | `0x003dcab0` | 428 | `FUN_003dcab0`, `src/game/beNDMWLoadIntf2.cpp` | |
-| `0x003ed050` | 644 | `FUN_003ed050`, `src/unmatched/FUN_003ed050.cpp` | |
-| `0x003ed2e0` | 872 | `FUN_003ed2e0`, `src/unmatched/FUN_003ed2e0.cpp` | |
-| `0x003edc20` | 828 | `FUN_003edc20`, `src/unmatched/FUN_003edc20.cpp` | |
-| `0x003edf60` | 556 | `beNDMWLoadCtrl2CommonIntf__StepFormatMemoryCard`, `src/game/beNDMWLoadCtrl2CommonIntf__StepFormatMemoryCard.cpp` | sets `_isFormatRun`: the card-format step |
-| `0x003ee6d0` | 2,824 | `beNDMWDegiData__LoadFromProperties`, `src/game/beNDMWDegiData__LoadFromProperties.cpp` | the property loader: takes a `beNDMWDegiData` record and fills the block at its `_data` field (`+28`) |
+| `0x003ed050` | 644 | `FUN_003ed050`, `src/game/beNDMWLoadCtrl2.cpp` | |
+| `0x003ed2e0` | 872 | `FUN_003ed2e0`, `src/game/beNDMWLoadCtrl2.cpp` | |
+| `0x003edc20` | 828 | `FUN_003edc20`, `src/game/beNDMWLoadCtrl2.cpp` | |
+| `0x003edf60` | 556 | `beNDMWLoadCtrl2CommonIntf__StepFormatMemoryCard`, `src/game/beNDMWLoadCtrl2.cpp` | sets `_isFormatRun`: the card-format step |
+| `0x003ee6d0` | 2,824 | `beNDMWDegiData__LoadFromProperties`, `src/game/beNDMWLoadCtrl2.cpp` | the property loader: takes a `beNDMWDegiData` record and fills the block at its `_data` field (`+28`) |
 
 The other helpers of the master update in this range:
 `0x003ec120` (`FUN_003ec120`, `src/unmatched/`), `0x003ec450`
