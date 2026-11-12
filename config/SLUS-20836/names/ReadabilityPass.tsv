@@ -71,6 +71,8 @@
 0x001fb470	p2WriteDirectionalLights	engine
 0x001fc030	p2AdjointMatrix	engine
 0x001fc2b0	p2InvertMatrix	engine
+0x00236ab0	igInsightCore_AddManager	engine
+0x00236b10	igInsightCore_RemoveManager	engine
 0x00237030	igInsightCore_AddInfo	engine
 0x0023c590	igLuaState_EnsureRegistered	engine
 0x0023c6c0	igLuaGlue_GetOrCreateMetaObject	engine

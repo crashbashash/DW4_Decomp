@@ -6403,8 +6403,8 @@
       "FUN_00236140": "0x00236140",
       "FUN_00236260": "0x00236260",
       "Gap__Insight__igWindowResizeEventReceiver__vfunc_32": "0x002369e0",
-      "FUN_00236ab0": "0x00236ab0",
-      "FUN_00236b10": "0x00236b10",
+      "igInsightCore_AddManager": "0x00236ab0",
+      "igInsightCore_RemoveManager": "0x00236b10",
       "FUN_00236be0": "0x00236be0",
       "FUN_00236c40": "0x00236c40",
       "FUN_00236ca0": "0x00236ca0",
@@ -30935,8 +30935,8 @@
       "Gap__Bec__libNdmwRuntimePlugin__vfunc_20": "0x003cd4a0"
     },
     "data": {
-      "DAT_00587108": "0x00587108",
-      "GPR_00554c14": "0x00554c14",
+      "g_ndmwAllocatorSelector": "0x00587108",
+      "g_useOwnerAllocator": "0x00554c14",
       "g_libNdmwRuntimePlugin_metaObject": "0x0058a8f8"
     },
     "symbol": "Gap__Bec__libNdmwRuntimePlugin__vfunc_21"
@@ -31404,8 +31404,8 @@
       "Gap__Bec__libBecRuntimePlugin__vfunc_20": "0x003a3840"
     },
     "data": {
-      "DAT_00587108": "0x00587108",
-      "GPR_00554c14": "0x00554c14",
+      "g_ndmwAllocatorSelector": "0x00587108",
+      "g_useOwnerAllocator": "0x00554c14",
       "g_libBecRuntimePlugin_metaObject": "0x005878e0"
     },
     "symbol": "Gap__Bec__libBecRuntimePlugin__vfunc_21"

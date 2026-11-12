@@ -10,7 +10,7 @@ int FUN_002370c0(...);
 
 int FUN_00100610(...);
 
-extern "C" int FUN_00236b10(void *, void *);
+extern "C" int igInsightCore_RemoveManager(void *, void *);
 
 int FUN_00236f30(...);
 
@@ -117,7 +117,7 @@ igObject *FUN_0045be30(int);
 igObject *FUN_0045dbe0(int);
 int FUN_00237020(...);
 int FUN_00236ee0(...);
-int FUN_00236ab0(...);
+int igInsightCore_AddManager(...);
 int FUN_002eb010(...);
 int StringPool_Construct(...);
 void *StringPool_Intern(...);
@@ -188,18 +188,18 @@ ViewerSetup::ViewerSetup(igObject *w)
             FUN_00237020(core.p, logo.p, overlays.p);
             FUN_00236ee0(core.p, logo.p);
         }
-        FUN_00236ab0(core.p, sceneInfo.p);
-        FUN_00236ab0(core.p, dataPump.p);
+        igInsightCore_AddManager(core.p, sceneInfo.p);
+        igInsightCore_AddManager(core.p, dataPump.p);
         igNamedObject_SetName(actors.p, "Actor manager");
-        FUN_00236ab0(core.p, actors.p);
+        igInsightCore_AddManager(core.p, actors.p);
     }
 }
 
 ViewerSetup::~ViewerSetup() {
     if (window.p != 0) {
-        FUN_00236b10(core.p, dataPump.p);
-        FUN_00236b10(core.p, actors.p);
-        FUN_00236b10(core.p, sceneInfo.p);
+        igInsightCore_RemoveManager(core.p, dataPump.p);
+        igInsightCore_RemoveManager(core.p, actors.p);
+        igInsightCore_RemoveManager(core.p, sceneInfo.p);
         if (showLogo != 0) {
             FUN_00236f30(core.p, logo.p);
         }

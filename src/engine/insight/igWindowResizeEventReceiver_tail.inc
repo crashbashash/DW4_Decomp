@@ -14,7 +14,7 @@ int Gap__Insight__igWindowResizeEventReceiver__vfunc_32(Receiver *self, int widt
     return 0;
 }
 
-void FUN_00236ab0(void *arg0, void *arg1) {
+void igInsightCore_AddManager(void *arg0, void *arg1) {
     if (FUN_00236b70() == 0) {
         FUN_002d6f50(*(int *)((char *)(arg0) + 8), arg1, 0);
         *(int *)((char *)(arg1) + 12) = (int)(arg0);
@@ -22,7 +22,7 @@ void FUN_00236ab0(void *arg0, void *arg1) {
     }
 }
 
-void FUN_00236b10(void *arg0, void *arg1) {
+void igInsightCore_RemoveManager(void *arg0, void *arg1) {
     int sp3C;
 
     if (FUN_00236b70() != 0) {

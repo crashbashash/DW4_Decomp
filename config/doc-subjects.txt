@@ -32,6 +32,7 @@ docs/engine/platform-boundary.md
 docs/engine/reflection-metadata.md
 docs/engine/registry-bootstrap.md
 docs/engine/rtti-and-vtables.md
+docs/engine/runtime-plugins.md
 docs/engine/selectctrl.md
 docs/engine/shop-selectors.md
 docs/engine/sound-format.md
