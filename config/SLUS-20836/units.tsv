@@ -529,14 +529,7 @@
 0x0038bee0	0x0038f95c	bec_beMessenger	b52	-O3,p -sdatathreshold 2 -Iinclude	on	-	whole file
 0x0038f960	0x003902ec	bec_beMeterCtrl	b52	-O4,p -sdatathreshold 2 -inline level=8 -Iinclude	on	-	whole file
 0x003902f0	0x00398e4c	bec_beModelCtrl	b52	-O4,p -sdatathreshold 2 -inline level=8 -Iinclude	on	-	whole file
-0x00398e50	0x00398ef0	unlabeled_398e50	b52	-O4,p -sdatathreshold 2 -inline level=8 -Iinclude	on	-	unlabeled run, no boundary evidence: cut where the retail exception evidence or the pins change; exceptions on: 2/2 functions have retail index records; default -O3 -Iinclude reproduces 1/1 members
-0x00398ef0	0x00399398	unlabeled_398ef0	b52	-O4,p -sdatathreshold 2 -inline level=8 -Iinclude	on	-	unlabeled run, no boundary evidence: cut where the retail exception evidence or the pins change; exceptions on: 1/1 functions have retail index records; combat -O3,p -Iinclude reproduces 1/1 members
-0x003993a0	0x003993d4	unlabeled_3993a0	b52	-O4,p -sdatathreshold 2 -inline level=8 -Iinclude	on	-	unlabeled run, no boundary evidence: cut where the retail exception evidence or the pins change; exceptions on: 1/1 functions have retail index records; default -O3 -Iinclude reproduces 1/1 members
-0x003993e0	0x0039993c	beModelCtrlSCHitBox_3993e0	b52	-O3,p -sdatathreshold 2 -Iinclude	on	-	class run of 2 labeled members; exceptions on: 2/2 functions have retail index records; combat -O3,p -Iinclude reproduces 2/2 members
-0x00399940	0x00399c44	beModelCtrlSCEffect_399940	b52	-O4,p -sdatathreshold 2 -inline level=8 -Iinclude	on	-	class run of 2 labeled members; exceptions on: 2/2 functions have retail index records; combat -O3,p -Iinclude reproduces 2/2 members
-0x00399c50	0x0039a90c	beModelCtrlSCSound_399c50	b52	-O4,p -sdatathreshold 2 -inline level=8 -Iinclude	on	-	class run of 3 labeled members, 10 unlabeled functions inside; exceptions on: 12/13 functions have retail index records; combat -O3,p -Iinclude reproduces 13/13 members
-0x0039a910	0x0039a91c	beModelCtrlSCEffect_39a910	b52	-O4,p -sdatathreshold 2 -inline level=8 -Iinclude	off	-	class run of 1 labeled members; exceptions undetermined (every function is a frameless leaf, which carries no record either way): off; default -O3 -Iinclude reproduces 1/1 members
-0x0039a920	0x0039a92c	beModelCtrlSCHitBox_39a920	b52	-O4,p -sdatathreshold 2 -inline level=8 -Iinclude	off	-	class run of 1 labeled members; exceptions undetermined (every function is a frameless leaf, which carries no record either way): off; default -O3 -Iinclude reproduces 1/1 members
+0x00398e50	0x0039a930	bec_beModelCtrlSC	b52	-O4,p -sdatathreshold 2 -inline level=8 -Iinclude	on	-	whole file
 0x0039a930	0x0039b2dc	bec_bePadData	b52	-O4,p -sdatathreshold 2 -inline level=8 -Iinclude	on	-	whole file
 0x0039b2e0	0x0039b87c	bec_bePadManager	b52	-O4,p -sdatathreshold 2 -inline level=8 -Iinclude	on	-	whole file
 0x0039b880	0x0039c15c	bec_beParticleCtrl2	b52	-O4,p -sdatathreshold 2 -inline level=8 -Iinclude	on	-	whole file

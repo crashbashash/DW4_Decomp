@@ -1,4 +1,17 @@
 {
+  "0x00396740": {
+    "duplicates": {
+      "__dt__25igSmartPointer<8igObject>Fv": "0x0033e9c0"
+    },
+    "exceptions": {
+      "index": "0x0054efcc",
+      "table": "0x00543b74",
+      "table_size": "0x000010"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
   "0x003fca10": {
     "emitted": {},
     "duplicates": {
@@ -81,16 +94,6 @@
       "__dt__5RP<2>Fv": "0x00414420",
       "__dt__5RP<3>Fv": "0x0041a380",
       "__dt__5RP<4>Fv": "0x003b90a0"
-    },
-    "externals": {
-      "__dl__FPv": "0x00100610"
-    }
-  },
-  "0x003993e0": {
-    "emitted": {},
-    "duplicates": {
-      "__dt__3RefFv": "0x00198190",
-      "__dt__25igSmartPointer<8igObject>Fv": "0x0033e9c0"
     },
     "externals": {
       "__dl__FPv": "0x00100610"
@@ -689,58 +692,6 @@
     "exceptions": {
       "index": "0x0054efcc",
       "table": "0x00543b74",
-      "table_size": "0x000010"
-    },
-    "externals": {
-      "__dl__FPv": "0x00100610"
-    }
-  },
-  "0x00399940": {
-    "duplicates": {
-      "__dt__25igSmartPointer<8igObject>Fv": "0x0033e9c0"
-    },
-    "exceptions": {
-      "index": "0x0054f05c",
-      "table": "0x00543c48",
-      "table_size": "0x000010"
-    },
-    "externals": {
-      "__dl__FPv": "0x00100610"
-    }
-  },
-  "0x0039a250": {
-    "duplicates": {
-      "__dt__37igSmartPointer<19beModelCtrlSCEffect>Fv": "0x0039a480"
-    },
-    "exceptions": {
-      "index": "0x0054f0bc",
-      "table": "0x00543c68",
-      "table_size": "0x000014"
-    },
-    "externals": {
-      "__dl__FPv": "0x00100610"
-    }
-  },
-  "0x0039a500": {
-    "duplicates": {
-      "__dt__18igSmartPointer<1R>Fv": "0x0039a6d0"
-    },
-    "exceptions": {
-      "index": "0x0054f0d4",
-      "table": "0x00543c7c",
-      "table_size": "0x000010"
-    },
-    "externals": {
-      "__dl__FPv": "0x00100610"
-    }
-  },
-  "0x0039a750": {
-    "duplicates": {
-      "__dt__36igSmartPointer<18beModelCtrlSCSound>Fv": "0x0039a880"
-    },
-    "exceptions": {
-      "index": "0x0054f0ec",
-      "table": "0x00543c8c",
       "table_size": "0x000010"
     },
     "externals": {
@@ -33503,6 +33454,71 @@
       "__dl__FPv": "0x00100610"
     },
     "symbol": "FUN_00338f70"
+  },
+  "0x00398e50": {
+    "whole_file": true,
+    "emitted": {
+      "FUN_00398e80": "0x00398e80",
+      "FUN_00398ef0": "0x00398ef0",
+      "FUN_003993a0": "0x003993a0",
+      "Gap__Bec__beModelCtrlSCHitBox__vfunc_21": "0x003993e0",
+      "Gap__Bec__beModelCtrlSCHitBox__vfunc_22": "0x003998f0",
+      "Gap__Bec__beModelCtrlSCEffect__vfunc_21": "0x00399940",
+      "Gap__Bec__beModelCtrlSCEffect__vfunc_23": "0x00399bf0",
+      "Gap__Bec__beModelCtrlSCSound__vfunc_21": "0x00399c50",
+      "Gap__Bec__beModelCtrlSCSound__vfunc_23": "0x00399d10",
+      "FUN_00399d90": "0x00399d90",
+      "FUN_00399e20": "0x00399e20",
+      "FUN_00399f20": "0x00399f20",
+      "FUN_0039a130": "0x0039a130",
+      "FUN_0039a250": "0x0039a250",
+      "__dt__37igSmartPointer<19beModelCtrlSCEffect>Fv": "0x0039a480",
+      "FUN_0039a500": "0x0039a500",
+      "__dt__18igSmartPointer<1R>Fv": "0x0039a6d0",
+      "FUN_0039a750": "0x0039a750",
+      "__dt__36igSmartPointer<18beModelCtrlSCSound>Fv": "0x0039a880",
+      "Gap__Bec__beModelCtrlSCSound__vfunc_20": "0x0039a900",
+      "Gap__Bec__beModelCtrlSCEffect__vfunc_20": "0x0039a910",
+      "Gap__Bec__beModelCtrlSCHitBox__vfunc_20": "0x0039a920"
+    },
+    "data": {
+      "@910": "0x0050f4d0",
+      "DAT_004e0858": "0x004e0858",
+      "DAT_0050f410": "0x0050f410",
+      "DAT_0050f420": "0x0050f420",
+      "DAT_0050f430": "0x0050f430",
+      "DAT_0050f440": "0x0050f440",
+      "DAT_0050f450": "0x0050f450",
+      "DAT_0050f460": "0x0050f460",
+      "DAT_0050f468": "0x0050f468",
+      "DAT_0050f478": "0x0050f478",
+      "DAT_0050f488": "0x0050f488",
+      "DAT_0050f498": "0x0050f498",
+      "DAT_0050f4a0": "0x0050f4a0",
+      "DAT_0050f4a8": "0x0050f4a8",
+      "DAT_0050f4b0": "0x0050f4b0",
+      "DAT_0050f4b8": "0x0050f4b8",
+      "DAT_0055efe8": "0x0055efe8",
+      "DAT_00562640": "0x00562640",
+      "DAT_00585be0": "0x00585be0",
+      "DAT_00586f20": "0x00586f20",
+      "DAT_00587110": "0x00587110",
+      "DAT_00588800": "0x00588800",
+      "DAT_0058a540": "0x0058a540",
+      "GPR_00554c14": "0x00554c14",
+      "GPR_00554e54": "0x00554e54",
+      "g_beModelCtrlSCEffect_metaObject": "0x00588800",
+      "g_beModelCtrlSCHitBox_metaObject": "0x005887c8",
+      "g_beModelCtrlSCSound_metaObject": "0x005887b0"
+    },
+    "duplicates": {
+      "__dt__25igSmartPointer<8igObject>Fv": "0x0033e9c0",
+      "__dt__3RefFv": "0x00198190"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    },
+    "symbol": "FUN_00398e50"
   },
   "0x00375e00": {
     "whole_file": true,
