@@ -633,30 +633,6 @@
       "__dl__FPv": "0x00100610"
     }
   },
-  "0x00393c80": {
-    "emitted": {},
-    "duplicates": {
-      "__dt__3RPBFv": "0x001c6460",
-      "__dt__9StringRefFv": "0x00130720",
-      "__dt__25igSmartPointer<8igObject>Fv": "0x00150eb0"
-    },
-    "externals": {
-      "__dl__FPv": "0x00100610"
-    }
-  },
-  "0x00396740": {
-    "duplicates": {
-      "__dt__25igSmartPointer<8igObject>Fv": "0x0033e9c0"
-    },
-    "exceptions": {
-      "index": "0x0054efcc",
-      "table": "0x00543b74",
-      "table_size": "0x000010"
-    },
-    "externals": {
-      "__dl__FPv": "0x00100610"
-    }
-  },
   "0x003f5410": {
     "whole_file": true,
     "emitted": {
@@ -31903,6 +31879,7 @@
       "FUN_00390f80": "0x00390f80",
       "FUN_00391a10": "0x00391a10",
       "Gap__Core__igObject__vfunc_38": "0x00391b40",
+      "FUN_00391cf0": "0x00391cf0",
       "FUN_00391fe0": "0x00391fe0",
       "FUN_00392050": "0x00392050",
       "FUN_003921a0": "0x003921a0",
@@ -31910,12 +31887,14 @@
       "Gap__Bec__beModelCtrlInfoRideOn3__vfunc_21": "0x00392240",
       "FUN_003926d0": "0x003926d0",
       "FUN_00392be0": "0x00392be0",
+      "FUN_00392d20": "0x00392d20",
       "FUN_00392d90": "0x00392d90",
       "FUN_00392e10": "0x00392e10",
       "FUN_00392fa0": "0x00392fa0",
       "FUN_00393260": "0x00393260",
       "__dt__7MoveRefFv": "0x00393aa0",
       "FUN_00393b20": "0x00393b20",
+      "FUN_00393c80": "0x00393c80",
       "FUN_003943c0": "0x003943c0",
       "FUN_00394400": "0x00394400",
       "FUN_00394640": "0x00394640",
@@ -31951,9 +31930,11 @@
       "Gap__Bec__beModelCtrl__vfunc_20": "0x00398e40"
     },
     "data": {
-      "@1189": "0x0050f080",
-      "@1249": "0x0050f0a0",
-      "@4145": "0x0050f240",
+      "@1289": "0x0050f080",
+      "@1361": "0x0050f0a0",
+      "@4737": "0x0050f240",
+      "DAT_004c8fa8": "0x004c8fa8",
+      "DAT_004c8fb0": "0x004c8fb0",
       "DAT_004c8fb8": "0x004c8fb8",
       "DAT_004e0858": "0x004e0858",
       "DAT_004e0ef0": "0x004e0ef0",
@@ -32084,8 +32065,10 @@
       "g_vec3Zero": "0x004e1058"
     },
     "duplicates": {
+      "__dt__12LabelListRefFv": "0x001c6460",
       "__dt__24igSmartPointer<7igAABox>Fv": "0x00198190",
       "__dt__25igSmartPointer<8igObject>Fv": "0x0033e9c0",
+      "__dt__26igSmartPointer<9igIntList>Fv": "0x00150eb0",
       "__dt__9ObjRef<0>Fv": "0x00350c10",
       "__dt__9ObjRef<1>Fv": "0x00350e10",
       "__dt__9ObjRef<5>Fv": "0x0034c1b0",
@@ -32093,6 +32076,7 @@
       "__dt__9StringRefFv": "0x00130720"
     },
     "externals": {
+      "FUN_001ca620": "0x001ca620",
       "__dl__FPv": "0x00100610"
     },
     "symbol": "FUN_003902f0"

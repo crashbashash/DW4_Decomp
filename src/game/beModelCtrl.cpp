@@ -60,7 +60,8 @@ extern "C" float atan2f(float, float);
 extern "C" int FUN_00192f50(...);
 extern "C" void * StringPool_Intern(...);
 extern "C" int beMessenger_GetObjectCount(...);
-extern "C" int FUN_00393c80(...);
+struct beModelCtrlInfoWork;
+extern "C" void FUN_00393c80(int a0, int a1, beModelCtrlInfoWork *a2, int name, int val);
 extern "C" int sprintf(...);
 extern "C" int beLua__RunNamedChunk(...);
 extern "C" int FUN_003a8580(...);
@@ -72,7 +73,9 @@ extern "C" int igMatrix44f_SetIdentity(...);
 extern "C" int FUN_001904f0(...);
 extern "C" int FUN_001906d0(...);
 extern "C" int FUN_00191f30(...);
-extern "C" int FUN_00391cf0(...);
+class KeyCtrlOwner;
+struct beModelCtrlInfoWork;
+extern "C" void FUN_00391cf0(KeyCtrlOwner *self, int arg1, int arg2, beModelCtrlInfoWork *s);
 extern "C" int FUN_00399e20(...);
 extern "C" int beMessenger_AppendString(...);
 extern "C" int beMessenger_DispatchSelected(...);
@@ -1019,6 +1022,81 @@ void Gap__Core__igObject__vfunc_38(int arg0, beBaseInfoRam *arg1) {
     }
 }
 
+class KeyCtrlOwner { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void d32(); virtual void v35(int, char *); virtual void d34(); virtual void d35(); virtual void d36(); virtual void d37(); virtual void v40(int); };
+struct KeyEventName { static inline void rel(char *p) {
+    if (p != 0) {
+        int *h = (int *)(p - 8);
+        int r = *(int *)(p - 4) - 1;
+        *(int *)(p - 4) = r;
+        if (r == 0) StringChunk_ReleaseHeader(*h, h);
+    }
+} };
+void FUN_00391cf0(KeyCtrlOwner *self, int arg1, int arg2, beModelCtrlInfoWork *s)
+{
+    if (s->_isOnCtrl != 0) self->v40(arg2);
+    if (strcmp((void *)s->_keyEventName, &DAT_0050efe8[0]) == 0) {
+        switch (s->_ctrlSt0) {
+        case 1: {
+            int mode = s->_ctrlSt1;
+            int a0 = ((int *)((beModelCtrlMoveObjectList *)s->_moveObjectList)->_data)[2];
+            switch (mode) {
+            case 0:
+                if (s->_keyInput != 0) {
+                    FUN_00392d20((beModelCtrlMoveObject *)a0, 0, ((float *)((igFloatList *)s->_pdMoveDataList)->_data)[2], ((float *)((igFloatList *)s->_pdMoveDataList)->_data)[3], 0.0f);
+                    s->_ctrlSt1 = 1;
+                } else {
+                    FUN_00392d20((beModelCtrlMoveObject *)a0, 2, ((float *)((igFloatList *)s->_pdMoveDataList)->_data)[0], ((float *)((igFloatList *)s->_pdMoveDataList)->_data)[1], 0.0f);
+                    s->_ctrlSt1 = 2;
+                }
+                break;
+            case 1:
+                if (s->_keyInput == 0) {
+                    FUN_00392d20((beModelCtrlMoveObject *)a0, 2, ((float *)((igFloatList *)s->_pdMoveDataList)->_data)[0], ((float *)((igFloatList *)s->_pdMoveDataList)->_data)[1], 0.0f);
+                    s->_ctrlSt1 = 2;
+                }
+                break;
+            case 2:
+                if (s->_keyInput == 1) {
+                    FUN_00392d20((beModelCtrlMoveObject *)a0, 0, ((float *)((igFloatList *)s->_pdMoveDataList)->_data)[2], ((float *)((igFloatList *)s->_pdMoveDataList)->_data)[3], 0.0f);
+                    s->_ctrlSt1 = 1;
+                }
+                break;
+            }
+            break;
+        }
+        case 2:
+            if (s->_keyInput == 1) {
+                char *n;
+                if (DAT_00586f20[0] == 0) {
+                    int p = FUN_002eb010(16);
+                    if (p != 0) p = StringPool_Construct(p);
+                    DAT_00586f20[0] = p;
+                }
+                n = (char *)StringPool_Intern(DAT_00586f20[0], &DAT_0050ef88[0]);
+                KeyEventName::rel((char *)s->_keyEventName);
+                s->_keyEventName = (int)n;
+            }
+            break;
+        case 3:
+            if (s->_keyInput == 0) {
+                char *n;
+                if (DAT_00586f20[0] == 0) {
+                    int p = FUN_002eb010(16);
+                    if (p != 0) p = StringPool_Construct(p);
+                    DAT_00586f20[0] = p;
+                }
+                n = (char *)StringPool_Intern(DAT_00586f20[0], &DAT_0050eff0[0]);
+                KeyEventName::rel((char *)s->_keyEventName);
+                s->_keyEventName = (int)n;
+            }
+            break;
+        }
+    }
+    if (strcmp((void *)s->_keyEventName, &DAT_0050efe8[0]) != 0 && strcmp((void *)s->_keyEventName, (void *)s->_seqCodeName) != 0) {
+        self->v35(arg2, (char *)s->_keyEventName);
+    }
+}
+
 int FUN_00391fe0(beModelCtrl *arg0, beModelCtrlInfo *arg1, beBaseInfoRam *arg2, beModelCtrlACTION *arg3) {
     int var_a2;
     int var_a4;
@@ -1276,6 +1354,23 @@ unsigned char FUN_00392be0(int unused0, int unused1, beModelCtrlInfoWork *owner,
     default:
         return 1;
     }
+}
+
+void FUN_00392d20(beModelCtrlMoveObject *arg0, int arg1, float fparg0, float fparg1, float fparg2) {
+    arg0->_mode = arg1;
+    arg0->_value = fparg0;
+    arg0->_acc = fparg0 / ((fparg1 * fparg1) / 2.0f);
+    arg0->_endTime = fparg2;
+    arg0->_isSeqStop = 0;
+    switch (arg1) {
+    case 4:
+        arg0->_speed = fparg0;
+        break;
+    case 5:
+        arg0->_speed = -fparg0;
+        break;
+    }
+    arg0->_isRun = 1;
 }
 
 void FUN_00392d90(beModelCtrlMoveObject *s) {
@@ -1600,10 +1695,211 @@ int FUN_00393b20(int a0, int a1, A2 *arg2, A3 *arg3) {
     return 1;
 }
 
+extern "C" void *FUN_002b90e0(int);
+extern "C" void *FUN_002caa70(int);
+extern "C" int FUN_001ca620(igStringRefList *, StringRef *);
+extern "C" int DAT_004c8fa8[4];
+extern "C" int DAT_004c8fb0[4];
+static inline int intListCount(const igIntList *list) { return list->_count; }
+/* Holder of the label lists created on first use; the table names its own out-of-line destructor copy. */
+struct LabelListRef { igObject *p; LabelListRef() { p = 0; } ~LabelListRef() { igObject *o = p; if (o != 0) { o->_refCount = o->_refCount - 1; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } } };
+
+void FUN_00393c80(int a0, int a1, beModelCtrlInfoWork *a2, int name, int val) {
+    igStringRefList *l36, *l40;
+    igIntList *l44;
+    int al0, al, v, idx, c, n, k;
+    igObject *o, *s0;
+    int *hd, *slot;
+    int s, old;
+
+    l36 = (igStringRefList *)a2->_labelSeqList;
+    l40 = (igStringRefList *)a2->_labelNameList;
+    l44 = (igIntList *)a2->_labelOffsetList;
+    if (l36 == 0) {
+        LabelListRef sp9C;
+        igSmartPointer<igIntList> sp98;
+        al0 = igObject_GetAllocator(a0);
+        if (GPR_00554c14 != 0) {
+            al = al0;
+        } else {
+            al = Memory_GetAllocatorBySelector(DAT_00587110[0]);
+        }
+        o = sp9C.p;
+        if (o != 0) {
+            o->_refCount = o->_refCount - 1;
+            if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o);
+        }
+        sp9C.p = (igObject *)FUN_002b90e0(al);
+        s0 = sp9C.p;
+        if (s0 != 0) s0->_refCount = s0->_refCount + 1;
+        o = (igObject *)a2->_labelSeqList;
+        if (o != 0) {
+            o->_refCount = o->_refCount - 1;
+            if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o);
+        }
+        a2->_labelSeqList = (int)s0;
+        l36 = (igStringRefList *)sp9C.p;
+
+        al0 = igObject_GetAllocator(a0);
+        if (GPR_00554c14 != 0) {
+            al = al0;
+        } else {
+            al = Memory_GetAllocatorBySelector(DAT_00587110[0]);
+        }
+        o = sp9C.p;
+        if (o != 0) {
+            o->_refCount = o->_refCount - 1;
+            if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o);
+        }
+        sp9C.p = (igObject *)FUN_002b90e0(al);
+        s0 = sp9C.p;
+        if (s0 != 0) s0->_refCount = s0->_refCount + 1;
+        o = (igObject *)a2->_labelNameList;
+        if (o != 0) {
+            o->_refCount = o->_refCount - 1;
+            if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o);
+        }
+        a2->_labelNameList = (int)s0;
+        l40 = (igStringRefList *)sp9C.p;
+
+        al0 = igObject_GetAllocator(a0);
+        if (GPR_00554c14 != 0) {
+            al = al0;
+        } else {
+            al = Memory_GetAllocatorBySelector(DAT_00587110[0]);
+        }
+        o = sp98.p;
+        if (o != 0) {
+            o->_refCount = o->_refCount - 1;
+            if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o);
+        }
+        sp98.p = (igIntList *)FUN_002caa70(al);
+        s0 = sp98.p;
+        if (s0 != 0) s0->_refCount = s0->_refCount + 1;
+        o = (igObject *)a2->_labelOffsetList;
+        if (o != 0) {
+            o->_refCount = o->_refCount - 1;
+            if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o);
+        }
+        a2->_labelOffsetList = (int)s0;
+        l44 = (igIntList *)sp98.p;
+    }
+    if (name == 0) {
+        v = 0;
+    } else {
+        if (DAT_00586f20[0] == 0) {
+            c = FUN_002eb010(16);
+            if (c != 0) c = StringPool_Construct(c);
+            DAT_00586f20[0] = c;
+        }
+        v = (int)StringPool_Intern(DAT_00586f20[0], name);
+    }
+    {
+        StringRef sp94((char *)v);
+        idx = FUN_001cafc0((int)l36, &sp94, 0);
+    }
+    if (idx != -1) {
+        if (name == 0) {
+            v = 0;
+        } else {
+            if (DAT_00586f20[0] == 0) {
+                c = FUN_002eb010(16);
+                if (c != 0) c = StringPool_Construct(c);
+                DAT_00586f20[0] = c;
+            }
+            v = (int)StringPool_Intern(DAT_00586f20[0], name);
+        }
+        {
+        StringRef sp90((char *)v);
+        n = l36->_count;
+        if (n != 0 && idx >= 0 && idx < n) {
+            slot = &((int *)l36->_data)[idx];
+            s = (int)sp90.p;
+            if (s != 0) *(int *)(s - 4) = *(int *)(s - 4) + 1;
+            old = *slot;
+            if (old != 0) {
+                hd = (int *)(old - 8);
+                c = *(int *)(old - 4) - 1;
+                *(int *)(old - 4) = c;
+                if (c == 0) StringChunk_ReleaseHeader(*hd, hd);
+            }
+            *slot = (int)sp90.p;
+        }
+        }
+        if (val == 0) {
+            v = 0;
+        } else {
+            if (DAT_00586f20[0] == 0) {
+                c = FUN_002eb010(16);
+                if (c != 0) c = StringPool_Construct(c);
+                DAT_00586f20[0] = c;
+            }
+            v = (int)StringPool_Intern(DAT_00586f20[0], val);
+        }
+        {
+        StringRef sp8C((char *)v);
+        n = l40->_count;
+        if (n != 0 && idx >= 0 && idx < n) {
+            slot = &((int *)l40->_data)[idx];
+            s = (int)sp8C.p;
+            if (s != 0) *(int *)(s - 4) = *(int *)(s - 4) + 1;
+            old = *slot;
+            if (old != 0) {
+                hd = (int *)(old - 8);
+                c = *(int *)(old - 4) - 1;
+                *(int *)(old - 4) = c;
+                if (c == 0) StringChunk_ReleaseHeader(*hd, hd);
+            }
+            *slot = (int)sp8C.p;
+        }
+        }
+        n = l44->_count;
+        if (n != 0 && idx >= 0 && idx < n) {
+            ((int *)l44->_data)[idx] = DAT_004c8fa8[0];
+        }
+    } else {
+        if (name == 0) {
+            v = 0;
+        } else {
+            if (DAT_00586f20[0] == 0) {
+                c = FUN_002eb010(16);
+                if (c != 0) c = StringPool_Construct(c);
+                DAT_00586f20[0] = c;
+            }
+            v = (int)StringPool_Intern(DAT_00586f20[0], name);
+        }
+        {
+            StringRef sp88((char *)v);
+            FUN_001ca620(l36, &sp88);
+        }
+        if (val == 0) {
+            v = 0;
+        } else {
+            if (DAT_00586f20[0] == 0) {
+                c = FUN_002eb010(16);
+                if (c != 0) c = StringPool_Construct(c);
+                DAT_00586f20[0] = c;
+            }
+            v = (int)StringPool_Intern(DAT_00586f20[0], val);
+        }
+        {
+            StringRef sp84((char *)v);
+            FUN_001ca620(l40, &sp84);
+        }
+        k = intListCount(l44);
+        if (k < l44->_capacity) {
+            l44->_count = l44->_count + 1;
+        } else {
+            List_Resize(l44, k + 1, 4);
+        }
+        ((int *)l44->_data)[k] = DAT_004c8fb0[0];
+    }
+}
+
 int FUN_003943c0(int arg0, int arg1, int arg2, beModelCtrlLABELCTRL *arg3) {
     int *p = (int *)arg3->_name;
     p = p != 0 ? p : &DAT_004e0858[0];
-    FUN_00393c80(arg0, arg1, arg2, arg3->_seqName, p);
+    FUN_00393c80(arg0, arg1, (beModelCtrlInfoWork *)arg2, arg3->_seqName, (int)p);
     return 1;
 }
 
@@ -2107,7 +2403,7 @@ void Gap__Core__igObject__vfunc_31(beModelCtrl *arg0, beBaseInfoRam *arg1) {
         }
         q->_keyEventName = t;
         if (q->_ctrlSt0 != 0) {
-            FUN_00391cf0((VO *)arg0, s2, (int)arg1, q);
+            FUN_00391cf0((KeyCtrlOwner *)arg0, s2, (int)arg1, q);
         } else if (q->_aI != 0) {
             FUN_003a8580(arg1, &DAT_0050ef68[0]);
         }
@@ -2545,7 +2841,7 @@ int Gap__Bec__beModelCtrl__vfunc_33(beModelCtrl *self, beBaseInfoRam *ent, const
     case 7:
         if (ent->_isRun != 0 && d != 0) {
             const char *s1 = beMessenger_GetString(M, 0);
-            FUN_00393c80(self, ent, d, s1, beMessenger_GetString(M, 1));
+            FUN_00393c80((int)self, (int)ent, d, (int)s1, (int)beMessenger_GetString(M, 1));
         }
         return 1;
     case 14:
