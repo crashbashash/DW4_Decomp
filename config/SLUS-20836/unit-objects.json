@@ -12,6 +12,45 @@
       "__dl__FPv": "0x00100610"
     }
   },
+  "0x003e4750": {
+    "emitted": {},
+    "duplicates": {
+      "__dt__14RecoveryRef<0>Fv": "0x003e9010",
+      "__dt__14RecoveryRef<1>Fv": "0x003832d0",
+      "release__14RecoveryTargetFP14RecoveryTarget": "0x003e9110"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610",
+      "__ct__17RecoveryCopiedRefFRC8DW4Sret4": "0x003e9330",
+      "__dt__17RecoveryCopiedRefFv": "0x0033e9c0",
+      "__ct__8LoadVec3FRC8LoadVec3": "0x003e9220"
+    },
+    "exceptions": {
+      "index": "0x005535b0",
+      "table": "0x00544890",
+      "table_size": "0xc0"
+    }
+  },
+  "0x003e9430": {
+    "emitted": {},
+    "duplicates": {
+      "__dt__11CtrlDataRefFv": "0x003eb980",
+      "__dt__11ItemListRefFv": "0x003eb900",
+      "__dt__9ComMdlRefFv": "0x003eb880",
+      "__dt__12TextOrderRefFv": "0x003eb800",
+      "__dt__10SelSlotRefFv": "0x003eb780",
+      "__dt__10NameSelRefFv": "0x003eb700",
+      "__dt__9MesWinRefFv": "0x003eb680",
+      "__dt__12DegiStateRefFv": "0x003eb600",
+      "__dt__11StatDataRefFv": "0x003eb580",
+      "__dt__10DataSelRefFv": "0x003eb500",
+      "__dt__10DiffSelRefFv": "0x003eb480",
+      "__dt__19igSmartPointer<2Rc>Fv": "0x0033e9c0"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
   "0x003fca10": {
     "emitted": {},
     "duplicates": {
@@ -459,26 +498,6 @@
       "__dl__FPv": "0x00100610"
     }
   },
-  "0x003e9430": {
-    "emitted": {},
-    "duplicates": {
-      "__dt__11CtrlDataRefFv": "0x003eb980",
-      "__dt__11ItemListRefFv": "0x003eb900",
-      "__dt__9ComMdlRefFv": "0x003eb880",
-      "__dt__12TextOrderRefFv": "0x003eb800",
-      "__dt__10SelSlotRefFv": "0x003eb780",
-      "__dt__10NameSelRefFv": "0x003eb700",
-      "__dt__9MesWinRefFv": "0x003eb680",
-      "__dt__12DegiStateRefFv": "0x003eb600",
-      "__dt__11StatDataRefFv": "0x003eb580",
-      "__dt__10DataSelRefFv": "0x003eb500",
-      "__dt__10DiffSelRefFv": "0x003eb480",
-      "__dt__19igSmartPointer<2Rc>Fv": "0x0033e9c0"
-    },
-    "externals": {
-      "__dl__FPv": "0x00100610"
-    }
-  },
   "0x004081a0": {
     "emitted": {},
     "duplicates": {
@@ -623,25 +642,6 @@
     },
     "externals": {
       "__dl__FPv": "0x00100610"
-    }
-  },
-  "0x003e4750": {
-    "emitted": {},
-    "duplicates": {
-      "__dt__14RecoveryRef<0>Fv": "0x003e9010",
-      "__dt__14RecoveryRef<1>Fv": "0x003832d0",
-      "release__14RecoveryTargetFP14RecoveryTarget": "0x003e9110"
-    },
-    "externals": {
-      "__dl__FPv": "0x00100610",
-      "__ct__17RecoveryCopiedRefFRC8DW4Sret4": "0x003e9330",
-      "__dt__17RecoveryCopiedRefFv": "0x0033e9c0",
-      "__ct__8LoadVec3FRC8LoadVec3": "0x003e9220"
-    },
-    "exceptions": {
-      "index": "0x005535b0",
-      "table": "0x00544890",
-      "table_size": "0xc0"
     }
   },
   "0x00396740": {
@@ -30491,6 +30491,7 @@
       "FUN_003de7a0": "0x003de7a0",
       "FUN_003de990": "0x003de990",
       "beNDMWLoadIntf2NameSel__SetAnswer": "0x003def70",
+      "beNDMWLoadIntf2NameSel__Update": "0x003def80",
       "FUN_003e0b80": "0x003e0b80",
       "beNDMWLoadIntf2SelSlot__Init": "0x003e0bb0",
       "beNDMWLoadIntf2SelSlot__Open": "0x003e0c40",
@@ -30544,6 +30545,8 @@
       "Gap__Bec__beNDMWLoadIntf2__vfunc_20": "0x003eba00"
     },
     "data": {
+      "@2111": "0x005170a0",
+      "@2112": "0x00517080",
       "@775": "0x00516e50",
       "DAT_004cc830": "0x004cc830",
       "DAT_004cc840": "0x004cc840",
@@ -30579,6 +30582,7 @@
       "DAT_00516da0": "0x00516da0",
       "DAT_00516db0": "0x00516db0",
       "DAT_00516dc8": "0x00516dc8",
+      "DAT_00516dd8": "0x00516dd8",
       "DAT_00516e18": "0x00516e18",
       "DAT_00516e28": "0x00516e28",
       "DAT_00516e48": "0x00516e48",
@@ -30596,6 +30600,23 @@
       "DAT_00516f20": "0x00516f20",
       "DAT_00516f30": "0x00516f30",
       "DAT_00516f40": "0x00516f40",
+      "DAT_00516f50": "0x00516f50",
+      "DAT_00516f60": "0x00516f60",
+      "DAT_00516f70": "0x00516f70",
+      "DAT_00516f80": "0x00516f80",
+      "DAT_00516f98": "0x00516f98",
+      "DAT_00516fb0": "0x00516fb0",
+      "DAT_00516fd0": "0x00516fd0",
+      "DAT_00516fe8": "0x00516fe8",
+      "DAT_00516ff8": "0x00516ff8",
+      "DAT_00517008": "0x00517008",
+      "DAT_00517018": "0x00517018",
+      "DAT_00517028": "0x00517028",
+      "DAT_00517030": "0x00517030",
+      "DAT_00517040": "0x00517040",
+      "DAT_00517050": "0x00517050",
+      "DAT_00517060": "0x00517060",
+      "DAT_00517070": "0x00517070",
       "DAT_00517118": "0x00517118",
       "DAT_00517128": "0x00517128",
       "DAT_00517138": "0x00517138",

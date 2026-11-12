@@ -406,7 +406,7 @@ The `beNDMWLoadIntf2NameSel` functions.
 | `0x003de7a0` | 492 | `FUN_003de7a0`, `src/game/beNDMWLoadIntf2.cpp` | `CHRSELFONT11` fonts 0..4: the five keys from `_yokoPoint` (wrapping) |
 | `0x003de990` | 1,492 | `FUN_003de990`, `src/game/beNDMWLoadIntf2.cpp` | the name cells, `CHRSELFONT12` (6, lang 0) or `CHRSELFONT13` (8): a typed code in colour 0, the live preview in colour 1, the rest cleared |
 | `0x003def70` | 16 | `beNDMWLoadIntf2NameSel__SetAnswer`, `src/game/beNDMWLoadIntf2.cpp` | the Yes/No answer: `_isNameOK` = a1, `_isAnswer` = 1 |
-| `0x003def80` | 7,168 | `beNDMWLoadIntf2NameSel__Update`, `src/game/beNDMWLoadIntf2NameSel__Update.cpp` | open (face window `SQ_<species>OPEN`, seven windows `SQ_OPEN`, cursor `SQ_NAMESL0n`), typing (left/right/up/down, Cross `SQ_NAMEON0n`, Circle `SQ_NAMECANCEL`, START), question (`_isQuestion` until `_isAnswer`), close; returns `_isEnd` |
+| `0x003def80` | 7,168 | `beNDMWLoadIntf2NameSel__Update`, `src/game/beNDMWLoadIntf2.cpp` | open (face window `SQ_<species>OPEN`, seven windows `SQ_OPEN`, cursor `SQ_NAMESL0n`), typing (left/right/up/down, Cross `SQ_NAMEON0n`, Circle `SQ_NAMECANCEL`, START), question (`_isQuestion` until `_isAnswer`), close; returns `_isEnd` |
 
 `0x003de260` ends with four stores of zero to `+84`, `+96`, `+92` and `+88`
 (`_st0`, `_st3`, `_st2`, `_st1`; the last sits in the delay slot of the return
