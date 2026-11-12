@@ -40389,7 +40389,7 @@
       "address": 4488208,
       "name": "beNDMWItemBase_GetRecordInt",
       "size": 72,
-      "source": "src/game/beNDMWItemBaseDatabase.cpp",
+      "source": "src/game/beNDMWItemBase.cpp",
       "direct": [
         {
           "site": 4488252,
@@ -40410,7 +40410,7 @@
       "address": 4488368,
       "name": "beNDMWItemBase_GetRecordString",
       "size": 72,
-      "source": "src/game/beNDMWItemBaseDatabase.cpp",
+      "source": "src/game/beNDMWItemBase.cpp",
       "direct": [
         {
           "site": 4488412,
@@ -40439,7 +40439,7 @@
       "address": 4489376,
       "name": "FUN_004480a0",
       "size": 236,
-      "source": "src/unmatched/FUN_004480a0.cpp",
+      "source": "src/game/beNDMWItemBase.cpp",
       "direct": [],
       "indirect": [
         {
@@ -40458,7 +40458,7 @@
       "address": 4489616,
       "name": "FUN_00448190",
       "size": 272,
-      "source": "src/unmatched/FUN_00448190.cpp",
+      "source": "src/game/beNDMWItemBase.cpp",
       "direct": [],
       "indirect": [
         {
@@ -40472,7 +40472,7 @@
       "address": 4489920,
       "name": "FUN_004482c0",
       "size": 24,
-      "source": "src/unmatched/FUN_004482c0.c",
+      "source": "src/game/beNDMWItemBase.cpp",
       "direct": [],
       "indirect": []
     },
@@ -40480,7 +40480,7 @@
       "address": 4489952,
       "name": "FUN_004482e0",
       "size": 116,
-      "source": "src/unmatched/FUN_004482e0.cpp",
+      "source": "src/game/beNDMWItemBase.cpp",
       "direct": [
         {
           "site": 4489996,
@@ -40507,7 +40507,7 @@
       "address": 4490256,
       "name": "FUN_00448410",
       "size": 28,
-      "source": "src/unmatched/FUN_00448410.c",
+      "source": "src/game/beNDMWItemBase.cpp",
       "direct": [],
       "indirect": []
     },
@@ -40515,7 +40515,7 @@
       "address": 4490288,
       "name": "FUN_00448430",
       "size": 116,
-      "source": "src/unmatched/FUN_00448430.cpp",
+      "source": "src/game/beNDMWItemBase.cpp",
       "direct": [
         {
           "site": 4490332,
@@ -40542,7 +40542,7 @@
       "address": 4490592,
       "name": "FUN_00448560",
       "size": 24,
-      "source": "src/unmatched/FUN_00448560.c",
+      "source": "src/game/beNDMWItemBase.cpp",
       "direct": [],
       "indirect": []
     },
@@ -40550,7 +40550,7 @@
       "address": 4490624,
       "name": "FUN_00448580",
       "size": 72,
-      "source": "src/unmatched/FUN_00448580.cpp",
+      "source": "src/game/beNDMWItemBase.cpp",
       "direct": [
         {
           "site": 4490652,
@@ -40571,7 +40571,7 @@
       "address": 4490848,
       "name": "FUN_00448660",
       "size": 20,
-      "source": "src/unmatched/FUN_00448660.c",
+      "source": "src/game/beNDMWItemBase.cpp",
       "direct": [],
       "indirect": []
     }

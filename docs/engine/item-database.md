@@ -20,8 +20,8 @@ The existing12-byte beDataBase metadata getter is preserved separately.
 | 3a95e0 | Record count from the first nonempty column family | 296 |
 
 Source is in [beDBManager.cpp](../../src/game/beDBManager.cpp) and the
-[item C](../../src/game/beNDMWItemBaseDatabase.cpp)/
-[C++ dispatch](../../src/game/beNDMWItemBaseDatabase.cpp) units. The module has290
+[item C](../../src/game/beNDMWItemBase.cpp)/
+[C++ dispatch](../../src/game/beNDMWItemBase.cpp) units. The module has290
 non-padding words and two zero padding words.
 
 ## Item and virtual-selector contract
