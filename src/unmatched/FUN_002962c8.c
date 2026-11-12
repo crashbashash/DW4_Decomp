@@ -1,5 +1,5 @@
-int FUN_00265330();
+int ADXM_ExecVsyncFrame();
 
 void FUN_002962c8(void) {
-    FUN_00265330();
+    ADXM_ExecVsyncFrame();
 }

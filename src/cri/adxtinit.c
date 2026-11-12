@@ -81,7 +81,7 @@ int FUN_00277898();
 int FUN_0027ec10();
 int FUN_00265c30();
 int FUN_002777d0();
-int FUN_002648e8();
+int ADXM_IsSetupThrd();
 int FUN_0027e748();
 int FUN_0027e600();
 int FUN_0026c798();
@@ -146,7 +146,7 @@ void FUN_002632c0(void)
         FUN_00265c30(FUN_002631d8, 0);
         FUN_002777d0(FUN_002631f0, 0);
         memset(DAT_0049c8f8, 0, 3136);
-        if (FUN_002648e8() == 1 && DAT_0049c8e4 == 1) {
+        if (ADXM_IsSetupThrd() == 1 && DAT_0049c8e4 == 1) {
             FUN_0027e748(2, 1, FUN_00263280, 0);
             DAT_0049c8ec = FUN_0027e600(4, FUN_002632a0, 0);
             DAT_0049c8e0 = FUN_0027e600(5, FUN_00263230, 0);

@@ -34,90 +34,96 @@ typedef struct AdxmCallback {
     void *arg;
 } AdxmCallback;
 
+/* Thread priorities and the two user-thread stacks, as ADXM_SetupThrdEx takes them. */
+typedef struct AdxmThreadPrmEx {
+    int lockPrio;
+    int safePrio;
+    int usrVsyncPrio;
+    int vsyncPrio;
+    int fsPrio;
+    int mainPrio;
+    int mwIdlePrio;
+    int usrIdlePrio;
+    void *usrVsyncStack;
+    int usrVsyncStackSize;
+    void *usrIdleStack;
+    int usrIdleStackSize;
+} AdxmThreadPrmEx;
+
+/* The priorities ADXM_SetupThrd takes. */
 typedef struct AdxmThreadPrm {
-    int lockPriority;
-    int serverPriority;
-    int vsyncPriority;
-    int f12;
-    int f16;
-    int userPriority;
-    int f24;
-    int idlePriority;
-    void *vsyncStack;
-    int vsyncStackSize;
-    void *idleStack;
-    int idleStackSize;
+    int lockPrio;
+    int safePrio;
+    int vsyncPrio;
+    int fsPrio;
+    int mainPrio;
+    int mwIdlePrio;
 } AdxmThreadPrm;
 
-typedef struct Rec_2653c8 {
-    int a;
-    int b;
-    int c;
-    int d;
-} Rec_2653c8;
-typedef struct Desc_2653c8 {
-    int a;
-    int b;
-    int first;
-    int next;
-    int d;
-    int kind;
-} Desc_2653c8;
+/* The priorities ADXPS2_SetupThrd takes; the FS and MW-idle ones are derived from them. */
+typedef struct Adxps2ThreadPrm {
+    int lockPrio;
+    int safePrio;
+    int vsyncPrio;
+    int mainPrio;
+} Adxps2ThreadPrm;
 
-extern int DAT_0049d988;
-extern int DAT_0049d984;
-extern AdxmThreadPrm DAT_0049d990;
-extern int DAT_0049d9c0;
-extern volatile int DAT_0049d9c4;
-extern int DAT_0049d9c8;
-extern volatile int DAT_0049d9d0;
-extern volatile int DAT_0049d9d4;
-extern volatile int DAT_0049d9d8;
-extern volatile int DAT_0049d9cc;
-extern volatile int DAT_0049d9dc;
-extern volatile long long DAT_0049d9e8;
-extern long long DAT_0049d9e0;
-extern volatile long long DAT_0049d9f0;
-extern volatile long long DAT_0049d9f8;
-extern volatile long long DAT_0049da00;
-extern volatile long long DAT_0049da08;
-extern volatile int DAT_0049da18;
-extern volatile int DAT_0049da1c;
-extern volatile int DAT_0049da20;
-extern volatile int DAT_0049da24;
-extern volatile int DAT_0049da28;
-extern volatile int DAT_0049da2c;
-extern volatile int DAT_0049da30;
-extern volatile long long DAT_0049da38;
-extern volatile long long DAT_0049da40;
-extern volatile long long DAT_0049da48;
-extern volatile long long DAT_0049da50;
-extern volatile long long DAT_0049da58;
-extern volatile long long DAT_0049da60;
-extern volatile long long DAT_0049da68;
-extern volatile long long DAT_0049da70;
-extern volatile long long DAT_0049da78;
-extern volatile long long DAT_0049da80;
-extern volatile long long DAT_0049da88;
-extern volatile long long DAT_0049da90;
-extern int DAT_0049da98;
-extern unsigned short DAT_0049daa4;
-extern volatile int DAT_0049daa8;
-extern char DAT_0049dab0[];
-extern char DAT_0049e2b0[];
-extern char DAT_0049f2b0[];
-extern char DAT_004a02b0[];
-extern char DAT_004a12b0[];
-extern char DAT_004a32b0[];
-extern int DAT_004a52b0;
-extern int DAT_004a52b4;
-extern int DAT_004a52b8;
-extern char DAT_004ee2d0[];
-extern char DAT_004ee300[];
-extern char DAT_004ee340[];
-extern char DAT_0055c870[];
-extern AdxmCallback DAT_0056dfb0;
-extern AdxmCallback DAT_0056dfb8;
+#define ADXPS2_MWIDLE_PRIO 25
+
+extern int adxm_usridle_mode;
+extern int adxm_setup_count;
+extern AdxmThreadPrmEx adxm_tprm;
+extern int adxm_lock_level;
+extern volatile int adxm_border_request;
+extern int adxm_vsync_busy;
+extern volatile int adxm_fs_busy;
+extern volatile int adxm_mwidle_busy;
+extern volatile int adxm_usridle_busy;
+extern volatile int adxm_usrvsync_busy;
+extern volatile int adxm_vsync_waiting;
+extern volatile long long adxm_usrvsync_count;
+extern long long adxm_safe_loop_count;
+extern volatile long long adxm_vsync_count;
+extern volatile long long adxm_fs_count;
+extern volatile long long adxm_mwidle_count;
+extern volatile long long adxm_usridle_count;
+extern volatile int adxm_safe_thid;
+extern volatile int adxm_usrvsync_thid;
+extern volatile int adxm_vsync_thid;
+extern volatile int adxm_fs_thid;
+extern volatile int adxm_main_thid;
+extern volatile int adxm_mwidle_thid;
+extern volatile int adxm_usridle_thid;
+extern volatile long long adxm_safe_exit_request;
+extern volatile long long adxm_safe_exited;
+extern volatile long long adxm_usrvsync_exit_request;
+extern volatile long long adxm_usrvsync_exited;
+extern volatile long long adxm_vsync_exit_request;
+extern volatile long long adxm_vsync_exited;
+extern volatile long long adxm_fs_exit_request;
+extern volatile long long adxm_fs_exited;
+extern volatile long long adxm_mwidle_exit_request;
+extern volatile long long adxm_mwidle_exited;
+extern volatile long long adxm_usridle_exit_request;
+extern volatile long long adxm_usridle_exited;
+extern int adxps2_server_busy;
+extern unsigned short adxm_fs_bgcolor;
+extern volatile int adxm_mwidle_slept;
+extern char adxm_safe_stack[];
+extern char adxm_usrvsync_stack[];
+extern char adxm_vsync_stack[];
+extern char adxm_fs_stack[];
+extern char adxm_mwidle_stack[];
+extern char adxm_usridle_stack[];
+extern int adxm_lock_saved_prio;
+extern int adxm_lock_thid;
+extern int adxm_main_init_prio;
+extern char text_1060102_Internal_Error_adxm_goto[];
+extern char ADXM_UsrVsyncThread_Stack_pointe[];
+extern char ADXM_UsrIdleThread_Stack_pointer[];
+extern char _gp[];
+extern AdxmCallback adxm_vsync_frame_cb;
+extern AdxmCallback adxm_mwidle_sleep_cb;
 
 int GetThreadId(void);
 int ChangeThreadPriority(int threadId, int priority);
@@ -152,188 +158,188 @@ int FUN_0026cbd8();
 int FUN_00262950();
 void FUN_002659a0(const char *format, ...);
 
-void FUN_00264300(int threadId);
-int FUN_00264368(int threadId);
-int FUN_002643d0(int threadId);
-void FUN_00264350(void);
-int FUN_00264808(void);
-void FUN_00265838(void);
-void FUN_00265808(void);
-int FUN_002650a8();
-int FUN_00264910(Desc_2653c8 *desc);
-void FUN_00264c58(void);
-void FUN_00264d28(void);
-void FUN_00264df8(void);
-void FUN_00264f98(void);
+void adxm_wakeup_thrd(int threadId);
+int adxm_resume_thrd(int threadId);
+int adxm_suspend_thrd(int threadId);
+void adxm_sleep_thrd(void);
+int adxm_is_usridle_mode(void);
+void adxm_call_mwidle_sleep_cb(void);
+void adxm_call_vsync_frame_cb(void);
+int adxm_exec_vint();
+int ADXM_SetupThrd(AdxmThreadPrm *tprm);
+void adxm_delete_mwidle_thrd(void);
+void adxm_delete_vsync_thrd(void);
+void adxm_delete_fs_thrd(void);
+void adxm_delete_safe_thrd(void);
 
-void FUN_00263b80(void) {
+void adxm_lock(void) {
     int threadId;
-    if (DAT_0049d9c0 == 0) {
+    if (adxm_lock_level == 0) {
         threadId = GetThreadId();
-        DAT_004a52b0 = ChangeThreadPriority(threadId, DAT_0049d990.lockPriority);
-        DAT_004a52b4 = threadId;
-        FUN_00264368(DAT_0049da18);
-        DAT_0049da18; /* matching construct: retail re-reads the thread id after the call (dead load) */
+        adxm_lock_saved_prio = ChangeThreadPriority(threadId, adxm_tprm.lockPrio);
+        adxm_lock_thid = threadId;
+        adxm_resume_thrd(adxm_safe_thid);
+        adxm_safe_thid; /* matching construct: retail re-reads the thread id after the call (dead load) */
     }
-    DAT_0049d9c0++;
+    adxm_lock_level++;
 }
 
-void FUN_00263c08(void) {
-    if (--DAT_0049d9c0 == 0) {
-        FUN_002643d0(DAT_0049da18);
-        DAT_0049da18; /* matching construct: retail re-reads the thread id after the call (dead load) */
-        ChangeThreadPriority(GetThreadId(), DAT_004a52b0);
+void adxm_unlock(void) {
+    if (--adxm_lock_level == 0) {
+        adxm_suspend_thrd(adxm_safe_thid);
+        adxm_safe_thid; /* matching construct: retail re-reads the thread id after the call (dead load) */
+        ChangeThreadPriority(GetThreadId(), adxm_lock_saved_prio);
     }
-    if (DAT_0049d9c0 < 0) {
-        DAT_0049d9c0 = 0;
+    if (adxm_lock_level < 0) {
+        adxm_lock_level = 0;
     }
 }
 
-void FUN_00263c78(int thid, int prio)
+void adxm_goto_svr_border(int threadId, int priority)
 {
     int i;
-    if (thid == 0) {
+    if (threadId == 0) {
         return;
     }
-    DAT_0049d9c4 = 1;
-    ChangeThreadPriority(thid, DAT_0049d990.lockPriority);
+    adxm_border_request = 1;
+    ChangeThreadPriority(threadId, adxm_tprm.lockPrio);
     for (i = 0; ; i++) {
-        FUN_00264300(thid);
-        FUN_00264368(thid);
-        if (DAT_0049d9c4 == 0) {
+        adxm_wakeup_thrd(threadId);
+        adxm_resume_thrd(threadId);
+        if (adxm_border_request == 0) {
             break;
         }
-        if (i > 0x0BEBC1FF) {
-            FUN_0027e398(DAT_004ee2d0);
+        if (i > 199999999) {
+            FUN_0027e398(text_1060102_Internal_Error_adxm_goto);
             break;
         }
     }
-    ChangeThreadPriority(thid, prio);
+    ChangeThreadPriority(threadId, priority);
 }
 
-void FUN_00263d60(void) {
-    FUN_00263c78(DAT_0049da2c, DAT_0049d990.f24);
+void adxm_goto_mwidle_border(void) {
+    adxm_goto_svr_border(adxm_mwidle_thid, adxm_tprm.mwIdlePrio);
 }
 
-void FUN_00263d88(void) {
-    FUN_00263c78(DAT_0049da30, DAT_0049d990.idlePriority);
+void adxm_goto_usridle_border(void) {
+    adxm_goto_svr_border(adxm_usridle_thid, adxm_tprm.usrIdlePrio);
 }
 
-void FUN_00263db0(void) {
-    DAT_0049d9e0 += 1;
+void adxm_safe_count_up(void) {
+    adxm_safe_loop_count += 1;
 }
 
-void FUN_00263dc8(void) {
-    while (DAT_0049da38 == 0) {
-        FUN_00263db0();
+void adxm_safe_thrd(void) {
+    while (adxm_safe_exit_request == 0) {
+        adxm_safe_count_up();
     }
-    DAT_0049da40 = 1;
+    adxm_safe_exited = 1;
     ExitDeleteThread();
 }
 
-void FUN_00263e20(void) {
-    while (DAT_0049da48 == 0) {
-        DAT_0049d9e8++;
-        DAT_0049d9cc = 1;
+void adxm_usrvsync_thrd(void) {
+    while (adxm_usrvsync_exit_request == 0) {
+        adxm_usrvsync_count++;
+        adxm_usrvsync_busy = 1;
         FUN_0027ea98();
-        DAT_0049d9cc = 0;
-        FUN_00264350();
+        adxm_usrvsync_busy = 0;
+        adxm_sleep_thrd();
     }
-    DAT_0049da50 = 1;
+    adxm_usrvsync_exited = 1;
     ExitDeleteThread();
 }
 
-void FUN_00263eb8(void)
+void adxm_vsync_thrd(void)
 {
-    while (DAT_0049da58 == 0) {
-        DAT_0049d9f0++;
-        FUN_002643d0(DAT_0049da2c);
-        if (DAT_0049daa8 == 0) {
-            FUN_00265838();
+    while (adxm_vsync_exit_request == 0) {
+        adxm_vsync_count++;
+        adxm_suspend_thrd(adxm_mwidle_thid);
+        if (adxm_mwidle_slept == 0) {
+            adxm_call_mwidle_sleep_cb();
         }
-        DAT_0049daa8 = 0;
-        if (FUN_00264808() == 1) {
-            FUN_002643d0(DAT_0049da30);
+        adxm_mwidle_slept = 0;
+        if (adxm_is_usridle_mode() == 1) {
+            adxm_suspend_thrd(adxm_usridle_thid);
         }
-        FUN_00265288();
-        DAT_0049d9c8 = 1;
+        adxm_wakeup_vsync_waiter();
+        adxm_vsync_busy = 1;
         FUN_0027eab0();
-        DAT_0049d9c8 = 0;
-        FUN_00264350();
+        adxm_vsync_busy = 0;
+        adxm_sleep_thrd();
     }
-    DAT_0049da60 = 1;
+    adxm_vsync_exited = 1;
     ExitDeleteThread();
 }
 
-void FUN_00263fc0(void)
+void adxm_fs_thrd(void)
 {
-    while (DAT_0049da68 == 0) {
-        DAT_0049d9f8++;
-        DAT_0049d9d0 = 1;
-        if (DAT_0049daa4 != 0) {
-            *(volatile unsigned long long *)0x120000E0 = DAT_0049daa4;
+    while (adxm_fs_exit_request == 0) {
+        adxm_fs_count++;
+        adxm_fs_busy = 1;
+        if (adxm_fs_bgcolor != 0) {
+            *(volatile unsigned long long *)0x120000E0 = adxm_fs_bgcolor;
         }
         FUN_0027eae0();
-        if (DAT_0049daa4 != 0) {
+        if (adxm_fs_bgcolor != 0) {
             *(volatile unsigned long long *)0x120000E0 = 0;
         }
-        DAT_0049d9d0 = 0;
-        FUN_00264350();
+        adxm_fs_busy = 0;
+        adxm_sleep_thrd();
     }
-    DAT_0049da70 = 1;
+    adxm_fs_exited = 1;
     ExitDeleteThread();
 }
 
-void FUN_002640a0(void)
+void adxm_mwidle_thrd(void)
 {
     int busy;
-    while (DAT_0049da78 == 0) {
-        DAT_0049da00++;
-        DAT_0049d9d4 = 1;
+    while (adxm_mwidle_exit_request == 0) {
+        adxm_mwidle_count++;
+        adxm_mwidle_busy = 1;
         busy = FUN_0027eb10();
-        DAT_0049d9d4 = 0;
-        if (DAT_0049d9c4 == 1) {
-            DAT_0049d9c4 = 0;
-            FUN_00264350();
+        adxm_mwidle_busy = 0;
+        if (adxm_border_request == 1) {
+            adxm_border_request = 0;
+            adxm_sleep_thrd();
         }
         if (busy == 0) {
-            if (FUN_00264808() == 1) {
-                if (FUN_00264368(DAT_0049da30) == DAT_0049da30) {
-                    FUN_00264300(DAT_0049da30);
+            if (adxm_is_usridle_mode() == 1) {
+                if (adxm_resume_thrd(adxm_usridle_thid) == adxm_usridle_thid) {
+                    adxm_wakeup_thrd(adxm_usridle_thid);
                 }
             }
-            if (DAT_0049d9c4 != 1) {
-                FUN_00265838();
-                DAT_0049daa8 = 1;
+            if (adxm_border_request != 1) {
+                adxm_call_mwidle_sleep_cb();
+                adxm_mwidle_slept = 1;
             }
-            FUN_00264350();
+            adxm_sleep_thrd();
         }
     }
-    DAT_0049da80 = 1;
+    adxm_mwidle_exited = 1;
     ExitDeleteThread();
 }
 
-void FUN_002641d8(void)
+void adxm_usridle_thrd(void)
 {
     int busy;
-    while (DAT_0049da88 == 0) {
-        DAT_0049da08++;
-        DAT_0049d9d8 = 1;
+    while (adxm_usridle_exit_request == 0) {
+        adxm_usridle_count++;
+        adxm_usridle_busy = 1;
         busy = FUN_0027eb28();
-        DAT_0049d9d8 = 0;
-        if (DAT_0049d9c4 == 1) {
-            DAT_0049d9c4 = 0;
-            FUN_00264350();
+        adxm_usridle_busy = 0;
+        if (adxm_border_request == 1) {
+            adxm_border_request = 0;
+            adxm_sleep_thrd();
         }
         if (busy == 0) {
-            FUN_00264350();
+            adxm_sleep_thrd();
         }
     }
-    DAT_0049da90 = 1;
+    adxm_usridle_exited = 1;
     ExitDeleteThread();
 }
 
-void FUN_002642b0(int threadId) {
+void adxm_iwakeup_thrd(int threadId) {
     ThreadStatus status;
     if (threadId != 0) {
         iReferThreadStatus(threadId, &status);
@@ -343,7 +349,7 @@ void FUN_002642b0(int threadId) {
     }
 }
 
-void FUN_00264300(int threadId) {
+void adxm_wakeup_thrd(int threadId) {
     ThreadStatus status;
     if (threadId != 0) {
         ReferThreadStatus(threadId, &status);
@@ -353,11 +359,11 @@ void FUN_00264300(int threadId) {
     }
 }
 
-void FUN_00264350(void) {
+void adxm_sleep_thrd(void) {
     SleepThread();
 }
 
-int FUN_00264368(int threadId) {
+int adxm_resume_thrd(int threadId) {
     ThreadStatus status;
     int result = 0;
     if (threadId != 0) {
@@ -369,7 +375,7 @@ int FUN_00264368(int threadId) {
     return result;
 }
 
-int FUN_002643d0(int threadId) {
+int adxm_suspend_thrd(int threadId) {
     ThreadStatus status;
     int result = 0;
     if (threadId != 0) {
@@ -381,133 +387,133 @@ int FUN_002643d0(int threadId) {
     return result;
 }
 
-void FUN_00264430(void) {
+void adxm_create_safe_thrd(void) {
     ThreadParam param;
-    param.entry = FUN_00263dc8;
-    param.stack = DAT_0049dab0;
+    param.entry = adxm_safe_thrd;
+    param.stack = adxm_safe_stack;
     param.stackSize = 2048;
-    param.initialPriority = DAT_004a52b8;
-    param.globalPointer = DAT_0055c870;
-    DAT_0049da18 = CreateThread(&param);
-    DAT_0049da18; /* matching construct: retail re-reads the thread id after each use (dead load) */
-    _StartThread(DAT_0049da18, 0);
-    if (DAT_0049da18 != 0) {
-        FUN_002643d0(DAT_0049da18);
-        DAT_0049da18; /* matching construct: dead re-read, as above */
+    param.initialPriority = adxm_main_init_prio;
+    param.globalPointer = _gp;
+    adxm_safe_thid = CreateThread(&param);
+    adxm_safe_thid; /* matching construct: retail re-reads the thread id after each use (dead load) */
+    _StartThread(adxm_safe_thid, 0);
+    if (adxm_safe_thid != 0) {
+        adxm_suspend_thrd(adxm_safe_thid);
+        adxm_safe_thid; /* matching construct: dead re-read, as above */
     }
-    ChangeThreadPriority(DAT_0049da18, DAT_0049d990.serverPriority);
+    ChangeThreadPriority(adxm_safe_thid, adxm_tprm.safePrio);
 }
 
-void FUN_002644d8(void *stack, int stackSize) {
+void adxm_create_usrvsync_thrd(void *stack, int stackSize) {
     ThreadParam param;
-    param.entry = FUN_00263e20;
+    param.entry = adxm_usrvsync_thrd;
     if (stack == 0) {
-        param.stack = DAT_0049e2b0;
+        param.stack = adxm_usrvsync_stack;
         param.stackSize = 4096;
     } else {
         param.stack = stack;
         param.stackSize = stackSize;
-        FUN_002659a0(DAT_004ee300, stack, stackSize);
+        FUN_002659a0(ADXM_UsrVsyncThread_Stack_pointe, stack, stackSize);
     }
-    param.initialPriority = DAT_004a52b8;
-    param.globalPointer = DAT_0055c870;
-    DAT_0049da1c = CreateThread(&param);
-    DAT_0049da1c; /* matching construct: retail re-reads the thread id after each use (dead load) */
-    _StartThread(DAT_0049da1c, 0);
-    ChangeThreadPriority(DAT_0049da1c, DAT_0049d990.vsyncPriority);
+    param.initialPriority = adxm_main_init_prio;
+    param.globalPointer = _gp;
+    adxm_usrvsync_thid = CreateThread(&param);
+    adxm_usrvsync_thid; /* matching construct: retail re-reads the thread id after each use (dead load) */
+    _StartThread(adxm_usrvsync_thid, 0);
+    ChangeThreadPriority(adxm_usrvsync_thid, adxm_tprm.usrVsyncPrio);
 }
 
-void FUN_00264590(void) {
+void adxm_create_vsync_thrd(void) {
     ThreadParam param;
-    param.entry = FUN_00263eb8;
-    param.stack = DAT_0049f2b0;
+    param.entry = adxm_vsync_thrd;
+    param.stack = adxm_vsync_stack;
     param.stackSize = 4096;
-    param.initialPriority = DAT_004a52b8;
-    param.globalPointer = DAT_0055c870;
-    DAT_0049da20 = CreateThread(&param);
-    DAT_0049da20; /* matching construct: retail re-reads the thread id after each use (dead load) */
-    _StartThread(DAT_0049da20, 0);
-    ChangeThreadPriority(DAT_0049da20, DAT_0049d990.f12);
+    param.initialPriority = adxm_main_init_prio;
+    param.globalPointer = _gp;
+    adxm_vsync_thid = CreateThread(&param);
+    adxm_vsync_thid; /* matching construct: retail re-reads the thread id after each use (dead load) */
+    _StartThread(adxm_vsync_thid, 0);
+    ChangeThreadPriority(adxm_vsync_thid, adxm_tprm.vsyncPrio);
 }
 
-void FUN_00264618(void) {
+void adxm_create_fs_thrd(void) {
     ThreadParam param;
-    param.entry = FUN_00263fc0;
-    param.stack = DAT_004a02b0;
+    param.entry = adxm_fs_thrd;
+    param.stack = adxm_fs_stack;
     param.stackSize = 4096;
-    param.initialPriority = DAT_004a52b8;
-    param.globalPointer = DAT_0055c870;
-    DAT_0049da24 = CreateThread(&param);
-    DAT_0049da24; /* matching construct: retail re-reads the thread id after each use (dead load) */
-    _StartThread(DAT_0049da24, 0);
-    ChangeThreadPriority(DAT_0049da24, DAT_0049d990.f16);
+    param.initialPriority = adxm_main_init_prio;
+    param.globalPointer = _gp;
+    adxm_fs_thid = CreateThread(&param);
+    adxm_fs_thid; /* matching construct: retail re-reads the thread id after each use (dead load) */
+    _StartThread(adxm_fs_thid, 0);
+    ChangeThreadPriority(adxm_fs_thid, adxm_tprm.fsPrio);
 }
 
-void FUN_002646a0(void) {
+void adxm_create_mwidle_thrd(void) {
     ThreadParam param;
-    param.entry = FUN_002640a0;
-    param.stack = DAT_004a12b0;
+    param.entry = adxm_mwidle_thrd;
+    param.stack = adxm_mwidle_stack;
     param.stackSize = 8192;
-    param.initialPriority = DAT_004a52b8;
-    param.globalPointer = DAT_0055c870;
-    DAT_0049da2c = CreateThread(&param);
-    DAT_0049da2c; /* matching construct: retail re-reads the thread id after each use (dead load) */
-    _StartThread(DAT_0049da2c, 0);
-    ChangeThreadPriority(DAT_0049da2c, DAT_0049d990.f24);
-    FUN_002643d0(DAT_0049da2c);
-    DAT_0049da2c; /* matching construct: dead re-read, as above */
+    param.initialPriority = adxm_main_init_prio;
+    param.globalPointer = _gp;
+    adxm_mwidle_thid = CreateThread(&param);
+    adxm_mwidle_thid; /* matching construct: retail re-reads the thread id after each use (dead load) */
+    _StartThread(adxm_mwidle_thid, 0);
+    ChangeThreadPriority(adxm_mwidle_thid, adxm_tprm.mwIdlePrio);
+    adxm_suspend_thrd(adxm_mwidle_thid);
+    adxm_mwidle_thid; /* matching construct: dead re-read, as above */
 }
 
-void FUN_00264738(void *stack, int stackSize) {
+void adxm_create_usridle_thrd(void *stack, int stackSize) {
     ThreadParam param;
-    param.entry = FUN_002641d8;
+    param.entry = adxm_usridle_thrd;
     if (stack == 0) {
-        param.stack = DAT_004a32b0;
+        param.stack = adxm_usridle_stack;
         param.stackSize = 8192;
     } else {
         param.stack = stack;
         param.stackSize = stackSize;
-        FUN_002659a0(DAT_004ee340, stack, stackSize);
+        FUN_002659a0(ADXM_UsrIdleThread_Stack_pointer, stack, stackSize);
     }
-    param.initialPriority = DAT_004a52b8;
-    param.globalPointer = DAT_0055c870;
-    DAT_0049da30 = CreateThread(&param);
-    DAT_0049da30; /* matching construct: retail re-reads the thread id after each use (dead load) */
-    _StartThread(DAT_0049da30, 0);
-    ChangeThreadPriority(DAT_0049da30, DAT_0049d990.idlePriority);
-    FUN_002643d0(DAT_0049da30);
-    DAT_0049da2c; /* matching construct: retail re-reads the other thread's id here (dead load) */
+    param.initialPriority = adxm_main_init_prio;
+    param.globalPointer = _gp;
+    adxm_usridle_thid = CreateThread(&param);
+    adxm_usridle_thid; /* matching construct: retail re-reads the thread id after each use (dead load) */
+    _StartThread(adxm_usridle_thid, 0);
+    ChangeThreadPriority(adxm_usridle_thid, adxm_tprm.usrIdlePrio);
+    adxm_suspend_thrd(adxm_usridle_thid);
+    adxm_mwidle_thid; /* matching construct: retail re-reads the other thread's id here (dead load) */
 }
 
-int FUN_00264808(void) {
-    return DAT_0049d988;
+int adxm_is_usridle_mode(void) {
+    return adxm_usridle_mode;
 }
 
-void FUN_00264818(void) {
+void ADXM_ExecSvrUsrVsync(void) {
     FUN_0027ea98();
 }
 
-void FUN_00264830(void) {
+void ADXM_ExecSvrVsync(void) {
     FUN_0027eab0();
 }
 
-void FUN_00264848(void) {
+void ADXM_ExecSvrFs(void) {
     FUN_0027eae0();
 }
 
-void FUN_00264860(void) {
+void ADXM_ExecSvrMain(void) {
     FUN_0027eaf8();
 }
 
-void FUN_00264878(void) {
+void ADXM_ExecSvrMwIdle(void) {
     FUN_0027eb10();
 }
 
-void FUN_00264890(void) {
+void ADXM_ExecSvrUsrIdle(void) {
     FUN_0027eb28();
 }
 
-int FUN_002648a8(void) {
+int ADXM_ExecSvrAll(void) {
     FUN_0027ea98();
     FUN_0027eab0();
     FUN_0027eaf8();
@@ -516,264 +522,264 @@ int FUN_002648a8(void) {
     return 0;
 }
 
-int FUN_002648e8(void) {
-    return DAT_0049d984 != 0;
+int ADXM_IsSetupThrd(void) {
+    return adxm_setup_count != 0;
 }
 
-void FUN_002648f8(void) {
+void ADXM_SetCbErr(void) {
     FUN_0027e8a0();
 }
 
-void FUN_00264aa0(void) {
-    DAT_0049da38 = 1;
-    DAT_0049da48 = 1;
-    DAT_0049da58 = 1;
-    DAT_0049da68 = 1;
-    DAT_0049da78 = 1;
-    DAT_0049da88 = 1;
+void adxm_request_thrd_exit(void) {
+    adxm_safe_exit_request = 1;
+    adxm_usrvsync_exit_request = 1;
+    adxm_vsync_exit_request = 1;
+    adxm_fs_exit_request = 1;
+    adxm_mwidle_exit_request = 1;
+    adxm_usridle_exit_request = 1;
 }
 
-void FUN_00264af0(void) {
-    if (--DAT_0049d984 == 0) {
-        FUN_00264aa0();
-        FUN_00264c58();
-        FUN_00264df8();
-        FUN_00264d28();
-        FUN_00264f98();
-        ChangeThreadPriority(DAT_0049da28, DAT_004a52b8);
+void ADXM_ShutdownThrd(void) {
+    if (--adxm_setup_count == 0) {
+        adxm_request_thrd_exit();
+        adxm_delete_mwidle_thrd();
+        adxm_delete_fs_thrd();
+        adxm_delete_vsync_thrd();
+        adxm_delete_safe_thrd();
+        ChangeThreadPriority(adxm_main_thid, adxm_main_init_prio);
         FUN_0027e8e0(0, 0);
         FUN_0027e8f8(0, 0);
         FUN_0027ec50();
     }
 }
 
-void FUN_00264b88(void) {
-    while (DAT_0049da90 == 0) {
-        DAT_0049da88 = 1;
-        ChangeThreadPriority(DAT_0049da30, 1);
-        WakeupThread(DAT_0049da30);
-        FUN_00264368(DAT_0049da30);
+void adxm_delete_usridle_thrd(void) {
+    while (adxm_usridle_exited == 0) {
+        adxm_usridle_exit_request = 1;
+        ChangeThreadPriority(adxm_usridle_thid, 1);
+        WakeupThread(adxm_usridle_thid);
+        adxm_resume_thrd(adxm_usridle_thid);
     }
-    DAT_0049da90 = 0;
-    DAT_0049da88 = 0;
-    DAT_0049da30 = 0;
+    adxm_usridle_exited = 0;
+    adxm_usridle_exit_request = 0;
+    adxm_usridle_thid = 0;
 }
 
-void FUN_00264c58(void) {
-    while (DAT_0049da80 == 0) {
-        DAT_0049da78 = 1;
-        ChangeThreadPriority(DAT_0049da2c, 1);
-        WakeupThread(DAT_0049da2c);
-        FUN_00264368(DAT_0049da2c);
+void adxm_delete_mwidle_thrd(void) {
+    while (adxm_mwidle_exited == 0) {
+        adxm_mwidle_exit_request = 1;
+        ChangeThreadPriority(adxm_mwidle_thid, 1);
+        WakeupThread(adxm_mwidle_thid);
+        adxm_resume_thrd(adxm_mwidle_thid);
     }
-    DAT_0049da80 = 0;
-    DAT_0049da78 = 0;
-    DAT_0049da2c = 0;
+    adxm_mwidle_exited = 0;
+    adxm_mwidle_exit_request = 0;
+    adxm_mwidle_thid = 0;
 }
 
-void FUN_00264d28(void) {
-    while (DAT_0049da60 == 0) {
-        DAT_0049da58 = 1;
-        ChangeThreadPriority(DAT_0049da20, 1);
-        WakeupThread(DAT_0049da20);
-        FUN_00264368(DAT_0049da20);
+void adxm_delete_vsync_thrd(void) {
+    while (adxm_vsync_exited == 0) {
+        adxm_vsync_exit_request = 1;
+        ChangeThreadPriority(adxm_vsync_thid, 1);
+        WakeupThread(adxm_vsync_thid);
+        adxm_resume_thrd(adxm_vsync_thid);
     }
-    DAT_0049da60 = 0;
-    DAT_0049da58 = 0;
-    DAT_0049da20 = 0;
+    adxm_vsync_exited = 0;
+    adxm_vsync_exit_request = 0;
+    adxm_vsync_thid = 0;
 }
 
-void FUN_00264df8(void) {
-    while (DAT_0049da70 == 0) {
-        DAT_0049da68 = 1;
-        ChangeThreadPriority(DAT_0049da24, 1);
-        WakeupThread(DAT_0049da24);
-        FUN_00264368(DAT_0049da24);
+void adxm_delete_fs_thrd(void) {
+    while (adxm_fs_exited == 0) {
+        adxm_fs_exit_request = 1;
+        ChangeThreadPriority(adxm_fs_thid, 1);
+        WakeupThread(adxm_fs_thid);
+        adxm_resume_thrd(adxm_fs_thid);
     }
-    DAT_0049da70 = 0;
-    DAT_0049da68 = 0;
-    DAT_0049da24 = 0;
+    adxm_fs_exited = 0;
+    adxm_fs_exit_request = 0;
+    adxm_fs_thid = 0;
 }
 
-void FUN_00264ec8(void) {
-    while (DAT_0049da50 == 0) {
-        DAT_0049da48 = 1;
-        ChangeThreadPriority(DAT_0049da1c, 1);
-        WakeupThread(DAT_0049da1c);
-        FUN_00264368(DAT_0049da1c);
+void adxm_delete_usrvsync_thrd(void) {
+    while (adxm_usrvsync_exited == 0) {
+        adxm_usrvsync_exit_request = 1;
+        ChangeThreadPriority(adxm_usrvsync_thid, 1);
+        WakeupThread(adxm_usrvsync_thid);
+        adxm_resume_thrd(adxm_usrvsync_thid);
     }
-    DAT_0049da50 = 0;
-    DAT_0049da48 = 0;
-    DAT_0049da1c = 0;
+    adxm_usrvsync_exited = 0;
+    adxm_usrvsync_exit_request = 0;
+    adxm_usrvsync_thid = 0;
 }
 
-void FUN_00264f98(void) {
-    while (DAT_0049da40 == 0) {
-        DAT_0049da38 = 1;
-        ChangeThreadPriority(DAT_0049da18, 1);
-        WakeupThread(DAT_0049da18);
-        FUN_00264368(DAT_0049da18);
+void adxm_delete_safe_thrd(void) {
+    while (adxm_safe_exited == 0) {
+        adxm_safe_exit_request = 1;
+        ChangeThreadPriority(adxm_safe_thid, 1);
+        WakeupThread(adxm_safe_thid);
+        adxm_resume_thrd(adxm_safe_thid);
     }
-    DAT_0049da40 = 0;
-    DAT_0049da38 = 0;
-    DAT_0049da18 = 0;
+    adxm_safe_exited = 0;
+    adxm_safe_exit_request = 0;
+    adxm_safe_thid = 0;
 }
 
-void FUN_00265068(void) {
+void ADXM_Lock(void) {
     FUN_0027e1c0();
 }
 
-void FUN_00265080(void) {
+void ADXM_Unlock(void) {
     FUN_0027e1d8();
 }
 
-int FUN_00265098(void) {
-    return DAT_0049d9c0;
+int ADXM_GetLockLevel(void) {
+    return adxm_lock_level;
 }
 
-void FUN_002651d0(void) {
-    FUN_002650a8();
+void ADXM_ExecVint(void) {
+    adxm_exec_vint();
 }
 
-void FUN_002651e8(void) {
+void ADXM_ExecMain(void) {
     FUN_0027eaf8();
 }
 
-void FUN_00265200(void) {
-    if (FUN_00264368(DAT_0049da2c) == DAT_0049da2c) {
-        FUN_00264300(DAT_0049da2c);
+void adxm_wakeup_idle_thrds(void) {
+    if (adxm_resume_thrd(adxm_mwidle_thid) == adxm_mwidle_thid) {
+        adxm_wakeup_thrd(adxm_mwidle_thid);
     }
-    if (FUN_00264808() == 1 && FUN_00264368(DAT_0049da30) == DAT_0049da30) {
-        FUN_00264300(DAT_0049da30);
+    if (adxm_is_usridle_mode() == 1 && adxm_resume_thrd(adxm_usridle_thid) == adxm_usridle_thid) {
+        adxm_wakeup_thrd(adxm_usridle_thid);
     }
 }
 
-void FUN_00265288(void) {
+void adxm_wakeup_vsync_waiter(void) {
     ThreadStatus info;
-    if (DAT_0049d9dc == 1) {
-        ReferThreadStatus(DAT_0049da28, &info);
+    if (adxm_vsync_waiting == 1) {
+        ReferThreadStatus(adxm_main_thid, &info);
         if (info.status == THREAD_WAITING || info.status == THREAD_WAIT_SUSPENDED) {
-            if (WakeupThread(DAT_0049da28) == DAT_0049da28) {
-                DAT_0049d9dc = 0;
+            if (WakeupThread(adxm_main_thid) == adxm_main_thid) {
+                adxm_vsync_waiting = 0;
             }
         }
     }
 }
 
-void FUN_00265308(void) {
-    DAT_0049d9dc = 1;
-    FUN_00264350();
+void ADXM_WaitVsync(void) {
+    adxm_vsync_waiting = 1;
+    adxm_sleep_thrd();
 }
 
-void FUN_00265330(void) {
+void ADXM_ExecVsyncFrame(void) {
     FUN_0027ed80();
-    FUN_00265200();
-    FUN_00265808();
-    FUN_00265308();
+    adxm_wakeup_idle_thrds();
+    adxm_call_vsync_frame_cb();
+    ADXM_WaitVsync();
     FUN_0027edb0();
 }
 
-void FUN_00265368(void) {
-    FUN_00265330();
+void ADXPS2_ExecVsyncFrame(void) {
+    ADXM_ExecVsyncFrame();
 }
 
-int FUN_00265380(void) {
-    if (DAT_0049da98 == 0) {
-        DAT_0049da98 = 1;
+int ADXPS2_ExecServer(void) {
+    if (adxps2_server_busy == 0) {
+        adxps2_server_busy = 1;
         FUN_0026cbd8();
         FUN_00262950();
-        DAT_0049da98 = 0;
+        adxps2_server_busy = 0;
     }
     return 0;
 }
 
-void FUN_002653c8(Rec_2653c8 *src) {
-    Desc_2653c8 desc;
-    Desc_2653c8 *p;
-    if (src != 0) {
-        /* matching construct: permuter — the copy of src->d is written first */
-        desc.d = src->d;
-        desc.a = src->a;
-        desc.b = src->b;
-        desc.first = src->c;
-        desc.next = desc.first + 1;
-        desc.kind = 25;
-        p = &desc;
+void ADXPS2_SetupThrd(Adxps2ThreadPrm *prm) {
+    AdxmThreadPrm tprm;
+    AdxmThreadPrm *tprmp;
+    if (prm != 0) {
+        /* matching construct: permuter — the copy of the main priority is written first */
+        tprm.mainPrio = prm->mainPrio;
+        tprm.lockPrio = prm->lockPrio;
+        tprm.safePrio = prm->safePrio;
+        tprm.vsyncPrio = prm->vsyncPrio;
+        tprm.fsPrio = tprm.vsyncPrio + 1;
+        tprm.mwIdlePrio = ADXPS2_MWIDLE_PRIO;
+        tprmp = &tprm;
     } else {
-        p = 0;
+        tprmp = 0;
     }
-    FUN_00264910(p);
+    ADXM_SetupThrd(tprmp);
 }
 
-void FUN_00265428(void) {
-    FUN_00264af0();
+void ADXPS2_ShutdownThrd(void) {
+    ADXM_ShutdownThrd();
 }
 
-void FUN_00265440(void) {
-    FUN_00265068();
-    if (DAT_0049da98 == 0) {
-        DAT_0049da98 = 1;
-        FUN_00265080();
+void ADXPS2_ExecServerLocked(void) {
+    ADXM_Lock();
+    if (adxps2_server_busy == 0) {
+        adxps2_server_busy = 1;
+        ADXM_Unlock();
         FUN_0026cbd8();
         FUN_00262950();
-        DAT_0049da98 = 0;
+        adxps2_server_busy = 0;
     } else {
-        FUN_00265080();
+        ADXM_Unlock();
     }
 }
 
-void FUN_002654a8(void) {
+void ADXPS2_Lock(void) {
     FUN_0027e1c0();
 }
 
-void FUN_002654c0(void) {
+void ADXPS2_Unlock(void) {
     FUN_0027e1d8();
 }
 
-void FUN_002656c8(void) {
-    if (--DAT_0049d984 == 0) {
-        FUN_00264aa0();
-        FUN_00264b88();
-        FUN_00264c58();
-        FUN_00264df8();
-        FUN_00264d28();
-        FUN_00264ec8();
-        FUN_00264f98();
-        ChangeThreadPriority(DAT_0049da28, DAT_004a52b8);
+void ADXM_ShutdownThrdEx(void) {
+    if (--adxm_setup_count == 0) {
+        adxm_request_thrd_exit();
+        adxm_delete_usridle_thrd();
+        adxm_delete_mwidle_thrd();
+        adxm_delete_fs_thrd();
+        adxm_delete_vsync_thrd();
+        adxm_delete_usrvsync_thrd();
+        adxm_delete_safe_thrd();
+        ChangeThreadPriority(adxm_main_thid, adxm_main_init_prio);
         FUN_0027e8e0(0, 0);
         FUN_0027e8f8(0, 0);
-        DAT_0049d988 = 0;
+        adxm_usridle_mode = 0;
         FUN_0027ec50();
     }
 }
 
-void FUN_00265778(int arg0, int arg1) {
-    FUN_0027e748(1, 0, arg0, arg1);
+void ADXM_SetCbUsrVsync(int func, int object) {
+    FUN_0027e748(1, 0, func, object);
 }
 
-void FUN_002657a0(int arg0, int arg1) {
-    FUN_0027e748(7, 0, arg0, arg1);
+void ADXM_SetCbUsrIdle(int func, int object) {
+    FUN_0027e748(7, 0, func, object);
 }
 
-void FUN_002657c8(void) {
+void ADXM_GotoUsrIdleBorder(void) {
     FUN_0027e860(7);
 }
 
-void FUN_002657e0(void (*func0)(void *), void *arg0, void (*func1)(void *), void *arg1) {
-    DAT_0056dfb0.func = func0;
-    DAT_0056dfb0.arg = arg0;
-    DAT_0056dfb8.func = func1;
-    DAT_0056dfb8.arg = arg1;
+void ADXM_SetCbVsyncFrame(void (*func0)(void *), void *arg0, void (*func1)(void *), void *arg1) {
+    adxm_vsync_frame_cb.func = func0;
+    adxm_vsync_frame_cb.arg = arg0;
+    adxm_mwidle_sleep_cb.func = func1;
+    adxm_mwidle_sleep_cb.arg = arg1;
 }
 
-void FUN_00265808(void) {
-    if (DAT_0056dfb0.func != 0) {
-        DAT_0056dfb0.func(DAT_0056dfb0.arg);
+void adxm_call_vsync_frame_cb(void) {
+    if (adxm_vsync_frame_cb.func != 0) {
+        adxm_vsync_frame_cb.func(adxm_vsync_frame_cb.arg);
     }
 }
 
-void FUN_00265838(void) {
-    if (DAT_0056dfb8.func != 0) {
-        DAT_0056dfb8.func(DAT_0056dfb8.arg);
+void adxm_call_mwidle_sleep_cb(void) {
+    if (adxm_mwidle_sleep_cb.func != 0) {
+        adxm_mwidle_sleep_cb.func(adxm_mwidle_sleep_cb.arg);
     }
 }

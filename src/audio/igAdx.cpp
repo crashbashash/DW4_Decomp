@@ -24,7 +24,7 @@ extern "C" int Memory_GetAllocatorByName(...);
 extern "C" int igObject_Destroy(...);
 extern "C" void FUN_003324c0(void);
 extern "C" int FUN_0010b9c0(int);
-extern "C" int FUN_00264af0(...);
+extern "C" int ADXM_ShutdownThrd(...);
 extern "C" int FUN_00280d20(...);
 extern "C" int FUN_00294df8(...);
 extern "C" int RemoveIntcHandler(int, int);
@@ -46,7 +46,7 @@ extern "C" int strcpy(...);
 extern "C" void FUN_003327c0(int arg0);
 extern "C" void FUN_00332810(int arg0);
 extern "C" int AddIntcHandler(int, int (*)(), int);
-extern "C" int FUN_002651d0(void);
+extern "C" int ADXM_ExecVint(void);
 extern "C" int FUN_0010ba28(int);
 extern "C" int sceSifInitRpc(int);
 extern "C" int sceSifInitIopHeap(...);
@@ -65,13 +65,13 @@ extern "C" int strcmp(...);
 extern "C" int FUN_00332860(void);
 extern "C" int FUN_00332c40(void);
 extern "C" int FUN_002632c0(...);
-extern "C" int FUN_002648f8(void (*)(void), int);
-extern "C" int FUN_00264910(int);
+extern "C" int ADXM_SetCbErr(void (*)(void), int);
+extern "C" int ADXM_SetupThrd(int);
 extern "C" int FUN_00280d48(...);
 extern "C" int FUN_00332c50(int arg0);
-extern "C" void FUN_00265330(void);
+extern "C" void ADXM_ExecVsyncFrame(void);
 extern "C" void FUN_00332cd0(void);
-extern "C" int FUN_002651e8(...);
+extern "C" int ADXM_ExecMain(...);
 extern "C" int FUN_00282038(...);
 extern "C" void FUN_00332cf0(int);
 extern "C" void *FUN_002b90e0(int);
@@ -391,7 +391,7 @@ void FUN_00332530(void) {
         Memory_FreeBufferWithAllocator(DAT_005873b8[0], temp_s0);
         DAT_005873b8[0] = 0;
     }
-    FUN_00264af0();
+    ADXM_ShutdownThrd();
 }
 
 void Gap__igAdx__vfunc_01(void)
@@ -537,7 +537,7 @@ int FUN_00332860(void) {
         }
     }
     FUN_0010b9c0(2);
-    DAT_005873c0[0] = AddIntcHandler(2, &FUN_002651d0, 0);
+    DAT_005873c0[0] = AddIntcHandler(2, &ADXM_ExecVint, 0);
     FUN_0010ba28(2);
     GPR_00554de8 = 1;
     return 1;
@@ -555,8 +555,8 @@ int FUN_00332c50(int arg0) {
     if ((var_s0 != 0) && (arg0 != 0)) {
         var_s0 = FUN_00332c40() & 0xFF;
     }
-    FUN_00264910(0);
-    FUN_002648f8(FUN_003327b0, 0);
+    ADXM_SetupThrd(0);
+    ADXM_SetCbErr(FUN_003327b0, 0);
     FUN_002632c0();
     FUN_00280d48();
     return var_s0;
@@ -564,11 +564,11 @@ int FUN_00332c50(int arg0) {
 
 void FUN_00332cd0(void)
 {
-    FUN_00265330();
+    ADXM_ExecVsyncFrame();
 }
 
 void FUN_00332cf0(int) {
-    FUN_002651e8();
+    ADXM_ExecMain();
     FUN_00282038();
 }
 

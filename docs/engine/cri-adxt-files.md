@@ -25,5 +25,16 @@ with Sony EE GCC 2.96 at `-O2 -G0` (their rows in `units.tsv` and `unit-objects.
   [ADXT tick count](source-approvals.md#adxt-ready-count)); the stream file reads the count plain.
 - ADXPS2 declares its thread words `volatile` at file scope. The functions that use them either have owner
   approval ([source approvals](source-approvals.md#adxm-thread-ids)) or stay `unapproved`; its init and V-sync
-  functions (`0x264910`, `0x2650a8`, `0x2654d8`) need words `volatile` that matched functions read plain, so
-  they have no source and link from the retail image.
+  functions (`ADXM_SetupThrd`, `adxm_exec_vint`, `ADXM_SetupThrdEx`) need words `volatile` that matched functions
+  read plain, so they have no source and link from the retail image.
+- ADXPS2's names: `adxm_goto_svr_border` is named by its own internal-error message, and the user V-sync and
+  user idle threads by the messages that print their stacks. The other threads are named from the server
+  type each runs through SVM (`0x27e910`): 1 user V-sync, 2 V-sync (woken from the V-blank handler
+  `ADXM_ExecVint`, it releases `ADXM_WaitVsync`), 4 FS, 5 main (run by the caller through `ADXM_ExecMain`),
+  6 MW idle and 7 user idle (each with a border callback registered with SVM), plus the safe thread
+  `adxm_lock` resumes while the lock is held. "FS" for type 4 and "main" for type 5 are guesses; that
+  thread 4's loop sets the GS background colour from `adxm_fs_bgcolor` only says it is a debug aid.
+  The `ADXPS2_*` and `ADXM_*` API spellings follow CRI's convention; none of them survives as a string.
+- The SVM functions ADXPS2 calls (`0x27e1c0` lock, `0x27e1d8` unlock, `0x27e398` error, `0x27e748`
+  `SVM_SetCbSvrId`, the per-type servers `0x27ea98` to `0x27eb28`) and ADXT's servers (`0x26cbd8`, `0x262950`)
+  keep their placeholder names until the SVM and ADXT units are named.

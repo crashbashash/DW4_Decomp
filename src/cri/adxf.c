@@ -111,7 +111,7 @@ void FUN_0010b918(void *start, void *last);
 void FUN_0025f2d0(void);
 void FUN_0025f2e8(void);
 void FUN_002607e8(const char *message);
-void FUN_002651e8(void);
+void ADXM_ExecMain(void);
 void *FUN_00269f50(int a, int size);
 void FUN_00269f98(void *stm);
 void FUN_0026a068(void *stm, const char *fname, void *dir, int ofst, int nsct);
@@ -228,7 +228,7 @@ int FUN_00260d68(int ptid, const char *fname, void *dir, AdxfPtInfo *ptinfo) {
             result = -1;
             break;
         }
-        FUN_002651e8();
+        ADXM_ExecMain();
         FUN_00260cd0();
     }
     return result;

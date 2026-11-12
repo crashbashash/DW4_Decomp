@@ -1,11 +1,11 @@
-/* In mode 1 (FUN_002648e8) returns FUN_0029aa98(arg), otherwise 0. */
-extern int FUN_002648e8(void);
+/* In mode 1 (ADXM_IsSetupThrd) returns FUN_0029aa98(arg), otherwise 0. */
+extern int ADXM_IsSetupThrd(void);
 extern int FUN_0029aa98(void *arg);
 
 int FUN_0029a948(void *arg) {
     int result = 0;
 
-    if (FUN_002648e8() == 1) {
+    if (ADXM_IsSetupThrd() == 1) {
         result = FUN_0029aa98(arg);
     }
     return result;

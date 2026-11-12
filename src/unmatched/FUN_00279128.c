@@ -1,5 +1,5 @@
-int FUN_00265068();
-int FUN_00265080();
+int ADXM_Lock();
+int ADXM_Unlock();
 int FUN_0026bc60();
 int FUN_00278738();
 int FUN_002788c8();
@@ -14,9 +14,9 @@ void FUN_00279128(void *arg0) {
         return;
     }
     FUN_0026bc60();
-    FUN_00265068();
+    ADXM_Lock();
     FUN_002788c8(temp_s0);
     *(int *)((char *)(temp_s1) + 232) = 0;
     FUN_00278738(0);
-    FUN_00265080();
+    ADXM_Unlock();
 }
