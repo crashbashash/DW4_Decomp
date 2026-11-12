@@ -82,8 +82,18 @@ Paths here are repository-relative, and commands run from the repository root.
 
 Read [naming](docs/engine/naming.md), [asm-body matches](docs/engine/asm-body-matches.md) and
 [matched and readable](#matched-and-readable) before module work. Byte matching and readability are
-**separate jobs**: a function lands once it matches, in whatever form it matched, and a later pass can
-make it read well. Either can be done alone.
+**separate conditions**: a bulk first draft lands once it matches, in whatever form it matched, and a later
+pass can make it read well. Two kinds of work take both together:
+
+- **A function that resists matching is understood before it is searched.** When the obvious spellings
+  fail, read the function and its unit first: real types from `include/dw4/reflected.h`, what each value
+  is for, names from evidence, the same virtual slot in sibling classes, and the GameCube and Xbox builds.
+  Only then run a permuter or a variant search. A spelling whose only reason is the bytes (a temporary
+  that holds a stack slot, a one-element array that holds a register, a directive that ends a scheduling
+  block, a class shaped to dodge the inliner) needs a reason in the code's own terms before it is proposed.
+- **A landing includes the readability pass on what it touches.** Folding functions into a whole-file unit,
+  or joining held-out functions to one, makes the touched code readable in the same change: the unit is
+  the scope, with one header and one set of types.
 
 - **One translation unit, one profile.** Every method of a class, and every function of a folded unit,
   verifies under the same compiler and flags. A per-function row that disagrees with its siblings is
@@ -133,7 +143,7 @@ is `foreign-profile` debt, not a match, and one using inline `asm` or `volatile`
 is `unapproved` debt. That is all a match needs: decompiler output, `FUN_` names and
 raw casts can land as they are.
 
-**Readable** is a separate pass over matched code, measured by the README's Readable column. A function
+**Readable** is the second condition, measured by the README's Readable column. A function
 is readable when all of these hold:
 
 1. It sits in its module translation unit (`src/<module>/<Class or topic>.c|.cpp`), in retail address order.
