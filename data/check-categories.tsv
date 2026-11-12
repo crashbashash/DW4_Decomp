@@ -16243,7 +16243,7 @@
 0038b080	FUN_0038b080	match	exception index 0x54eb94: matches retail (table 0x543888 8 bytes)
 0038bdf0	Gap__Bec__beMatCtrl__vfunc_34	match	jump table 0x50eda0: 6 entries, 24 bytes, matches retail
 0038bed0	Gap__Bec__beMatCtrl__vfunc_20	match	-
-0038bee0	beMessenger_InitializeMemory	match	-
+0038bee0	beMessenger_InitializeMemory	match	DEFERRED duplicate 0x357a90 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
 0038c390	FUN_0038c390	match	-
 0038c410	FUN_0038c410	match	-
 0038c490	beMessenger_ResetMemory	match	exception index 0x54ebdc: matches retail (packed)
@@ -16273,8 +16273,8 @@
 0038eca0	beMessenger_SendDelayedNamed	match	exception index 0x54ece4: matches retail (packed)
 0038ecf0	beMessenger_SendDelayedGroup	match	exception index 0x54ecf0: matches retail (packed)
 0038ed50	beMessenger_PrepareDelayedGroup	match	exception index 0x54ecfc: matches retail (packed)
-0038ed70	beMessenger_PushArgContext	match	-
-0038ef50	beMessenger_PopArgContext	match	-
+0038ed70	beMessenger_PushArgContext	match	DEFERRED duplicate 0x357a90 __dt__9ObjectRefFv 128B (compared under the profile of its retail unit)
+0038ef50	beMessenger_PopArgContext	match	DEFERRED duplicate 0x357a90 __dt__9ObjectRefFv 128B (compared under the profile of its retail unit)
 0038f0e0	beMessenger_SetRunCheck	match	-
 0038f0f0	beMessenger_GetBoolCount	match	-
 0038f100	beMessenger_ResizeBool	match	exception index 0x54ed20: matches retail (packed)
@@ -18121,7 +18121,7 @@
 003e4030	beNDMWLoadIntf2ComMdlCtrl__Play	match	-
 003e4210	beNDMWLoadIntf2ComMdlCtrl__IsSequence	match	exception index 0x553574: matches retail (packed)
 003e4280	beNDMWLoadIntf2ComMdlCtrl__IsOpenQueueEmpty	match	-
-003e42a0	beNDMWLoadIntf2ComMdlCtrl__Close	match	DEFERRED duplicate 0x3e3d80 __dt__39igSmartPointer<21beLoadIntf2ComMdlData>Fv 128B (compared under the profile of its retail unit)
+003e42a0	beNDMWLoadIntf2ComMdlCtrl__Close	match	-
 003e4480	beNDMWLoadIntf2ComMdlCtrl__IsRunning	match	exception index 0x55358c: matches retail (packed)
 003e44d0	beNDMWLoadIntf2ComMdlCtrl__IsCloseQueueEmpty	match	-
 003e44f0	beNDMWLoadIntf2ComMdlCtrl__Poll	match	exception index 0x553598: matches retail (packed)
