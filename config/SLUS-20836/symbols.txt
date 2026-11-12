@@ -19147,7 +19147,7 @@
 003f5320 000024 Gap__Bec__beNDMWTitle2__vfunc_29 Gap::Bec::beNDMWTitle2::vfunc_29
 003f5350 0000a8 Gap__Bec__beNDMWTitle2__vfunc_34 Gap::Bec::beNDMWTitle2::vfunc_34
 003f5400 00000c Gap__Bec__beNDMWTitle2__vfunc_20 Gap::Bec::beNDMWTitle2::vfunc_20
-003f5410 000248 FUN_003f5410
+003f5410 000248 beNDMWWindow_QueueText
 003f5660 000070 FUN_003f5660
 003f56d0 000248 FUN_003f56d0
 003f5920 000090 beNDMWWindow_RunMessageScript
@@ -19362,17 +19362,17 @@
 004233c0 00000c Gap__Bec__beNDMWStatusCtrlEquip__vfunc_20 Gap::Bec::beNDMWStatusCtrlEquip::vfunc_20
 004233d0 00000c Gap__Bec__beNDMWStatusCtrl00__vfunc_20 Gap::Bec::beNDMWStatusCtrl00::vfunc_20
 004233e0 00000c Gap__Bec__beNDMWListCtrl__vfunc_20 Gap::Bec::beNDMWListCtrl::vfunc_20
-004233f0 000304 Gap__Bec__beNDMWWindowSelect__vfunc_21 Gap::Bec::beNDMWWindowSelect::vfunc_21
+004233f0 000304 beNDMWWindowSelect_Update
 00423700 000054 beNDMWWindowSelect_CanRequestFO2TOP
-00423760 000488 Gap__Bec__beNDMWStatusSelect00__vfunc_22 Gap::Bec::beNDMWStatusSelect00::vfunc_22
-00423bf0 000308 Gap__Bec__beNDMWStatusSelect01__vfunc_22 Gap::Bec::beNDMWStatusSelect01::vfunc_22
-00423f00 000164 Gap__Bec__beNDMWStatusSelectE0__vfunc_22 Gap::Bec::beNDMWStatusSelectE0::vfunc_22
-00424070 00009c Gap__Bec__beNDMWStatusSelectE1__vfunc_22 Gap::Bec::beNDMWStatusSelectE1::vfunc_22
-00424110 00000c Gap__Bec__beNDMWStatusSelectE1__vfunc_20 Gap::Bec::beNDMWStatusSelectE1::vfunc_20
-00424120 00000c Gap__Bec__beNDMWStatusSelectE0__vfunc_20 Gap::Bec::beNDMWStatusSelectE0::vfunc_20
-00424130 00000c Gap__Bec__beNDMWStatusSelect01__vfunc_20 Gap::Bec::beNDMWStatusSelect01::vfunc_20
-00424140 00000c Gap__Bec__beNDMWStatusSelect00__vfunc_20 Gap::Bec::beNDMWStatusSelect00::vfunc_20
-00424150 00000c Gap__Bec__beNDMWWindowSelect__vfunc_20 Gap::Bec::beNDMWWindowSelect::vfunc_20
+00423760 000488 beNDMWStatusSelect00_Setup
+00423bf0 000308 beNDMWStatusSelect01_Setup
+00423f00 000164 beNDMWStatusSelectE0_Setup
+00424070 00009c beNDMWStatusSelectE1_Setup
+00424110 00000c beNDMWStatusSelectE1_GetMeta
+00424120 00000c beNDMWStatusSelectE0_GetMeta
+00424130 00000c beNDMWStatusSelect01_GetMeta
+00424140 00000c beNDMWStatusSelect00_GetMeta
+00424150 00000c beNDMWWindowSelect_GetMeta
 00424160 0000d0 Gap__Bec__beNDMWWindowTitle__vfunc_21 Gap::Bec::beNDMWWindowTitle::vfunc_21
 00424230 000064 Gap__Bec__beNDMWStatusTitle00__vfunc_22 Gap::Bec::beNDMWStatusTitle00::vfunc_22
 004242a0 001190 Gap__Bec__beNDMWStatusTitle01__vfunc_22 Gap::Bec::beNDMWStatusTitle01::vfunc_22

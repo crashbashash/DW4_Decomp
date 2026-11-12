@@ -27,7 +27,7 @@ extern "C" void * StringPool_Construct(...);
 extern "C" const char * StringPool_Intern(...);
 extern "C" int beNDMWWindow_RunMessageScript(...);
 extern "C" int beNDMWWindow_PresentModelAtOrigin(...);
-extern "C" int FUN_003f5410(...);
+extern "C" int beNDMWWindow_QueueText(...);
 extern "C" int beMessenger_AppendBool(...);
 extern "C" int beMessenger_AppendInt(...);
 extern "C" int beMessenger_DispatchSelected(...);
@@ -348,14 +348,14 @@ void Gap__Bec__beNDMWShopSelect11__vfunc_22(beNDMWShopSelect11 *arg0) {
     { int tok = StringRefHelpers::intern(&DAT_0051c620[0]); StringList_AppendRetained(arg0->_textCloseTypeList, StringRef(tok)); }
     { int tok = StringRefHelpers::intern(&DAT_0051c648[0]); StringList_AppendRetained(arg0->_textCloseNameList, StringRef(tok)); }
     beNDMWWindow_RunMessageScript(arg0, &DAT_0051c4a0[0], 0x44F);
-    FUN_003f5410(arg0, &DAT_0051c650[0], &DAT_0051c498[0], &DAT_0051c660[0], &DAT_0051c668[0]);
-    FUN_003f5410(arg0, &DAT_0051c650[0], &DAT_0051c4c0[0], &DAT_0051c660[0], &DAT_0051c668[0]);
-    FUN_003f5410(arg0, &DAT_0051c650[0], &DAT_0051c4c8[0], &DAT_0051c660[0], &DAT_0051c668[0]);
-    FUN_003f5410(arg0, &DAT_0051c650[0], &DAT_0051c630[0], &DAT_0051c660[0], &DAT_0051c668[0]);
-    FUN_003f5410(arg0, &DAT_0051c650[0], &DAT_0051c638[0], &DAT_0051c660[0], &DAT_0051c668[0]);
-    FUN_003f5410(arg0, &DAT_0051c650[0], &DAT_0051c640[0], &DAT_0051c660[0], &DAT_0051c668[0]);
-    FUN_003f5410(arg0, &DAT_0051c650[0], &DAT_0051c648[0], &DAT_0051c660[0], &DAT_0051c668[0]);
-    FUN_003f5410(arg0, &DAT_0051c488[0], &DAT_0051c498[0], &DAT_0051c660[0], &DAT_0051c540[0]);
+    beNDMWWindow_QueueText(arg0, &DAT_0051c650[0], &DAT_0051c498[0], &DAT_0051c660[0], &DAT_0051c668[0]);
+    beNDMWWindow_QueueText(arg0, &DAT_0051c650[0], &DAT_0051c4c0[0], &DAT_0051c660[0], &DAT_0051c668[0]);
+    beNDMWWindow_QueueText(arg0, &DAT_0051c650[0], &DAT_0051c4c8[0], &DAT_0051c660[0], &DAT_0051c668[0]);
+    beNDMWWindow_QueueText(arg0, &DAT_0051c650[0], &DAT_0051c630[0], &DAT_0051c660[0], &DAT_0051c668[0]);
+    beNDMWWindow_QueueText(arg0, &DAT_0051c650[0], &DAT_0051c638[0], &DAT_0051c660[0], &DAT_0051c668[0]);
+    beNDMWWindow_QueueText(arg0, &DAT_0051c650[0], &DAT_0051c640[0], &DAT_0051c660[0], &DAT_0051c668[0]);
+    beNDMWWindow_QueueText(arg0, &DAT_0051c650[0], &DAT_0051c648[0], &DAT_0051c660[0], &DAT_0051c668[0]);
+    beNDMWWindow_QueueText(arg0, &DAT_0051c488[0], &DAT_0051c498[0], &DAT_0051c660[0], &DAT_0051c540[0]);
     beMessenger_SelectGroup(arg0->_messenger, &DAT_0051c500[0]);
     beMessenger_AppendInt(arg0->_messenger, arg0->_playerNo);
     beMessenger_AppendBool(arg0->_messenger, 0);
@@ -667,8 +667,8 @@ void Gap__Bec__beNDMWShopSelectA0__vfunc_22(beNDMWShopSelectA0 *arg0) {
     { int tok = StringRefHelpers::intern(&DAT_0051c818[0]); StringList_AppendRetained(arg0->_textCloseTypeList, StringRef(tok)); }
     { int tok = StringRefHelpers::intern(&DAT_0051c4c0[0]); StringList_AppendRetained(arg0->_textCloseNameList, StringRef(tok)); }
     beNDMWWindow_RunMessageScript(arg0, &DAT_0051c4a0[0], 0x7D1);
-    FUN_003f5410(arg0, &DAT_0051c828[0], &DAT_0051c498[0], &DAT_0051c660[0], &DAT_0051c730[0]);
-    FUN_003f5410(arg0, &DAT_0051c828[0], &DAT_0051c4c0[0], &DAT_0051c660[0], &DAT_0051c730[0]);
+    beNDMWWindow_QueueText(arg0, &DAT_0051c828[0], &DAT_0051c498[0], &DAT_0051c660[0], &DAT_0051c730[0]);
+    beNDMWWindow_QueueText(arg0, &DAT_0051c828[0], &DAT_0051c4c0[0], &DAT_0051c660[0], &DAT_0051c730[0]);
     if (g_stringPool[0] == 0) {
         pool = ((int)FUN_002eb010(16));
         if (pool)

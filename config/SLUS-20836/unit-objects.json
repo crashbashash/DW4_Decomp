@@ -565,7 +565,7 @@
     "externals": {
       "__dl__FPv": "0x00100610"
     },
-    "symbol": "FUN_003f5410"
+    "symbol": "beNDMWWindow_QueueText"
   },
   "0x0043d1d0": {
     "whole_file": true,
@@ -29707,15 +29707,15 @@
     "whole_file": true,
     "emitted": {
       "beNDMWWindowSelect_CanRequestFO2TOP": "0x00423700",
-      "Gap__Bec__beNDMWStatusSelect00__vfunc_22": "0x00423760",
-      "Gap__Bec__beNDMWStatusSelect01__vfunc_22": "0x00423bf0",
-      "Gap__Bec__beNDMWStatusSelectE0__vfunc_22": "0x00423f00",
-      "Gap__Bec__beNDMWStatusSelectE1__vfunc_22": "0x00424070",
-      "Gap__Bec__beNDMWStatusSelectE1__vfunc_20": "0x00424110",
-      "Gap__Bec__beNDMWStatusSelectE0__vfunc_20": "0x00424120",
-      "Gap__Bec__beNDMWStatusSelect01__vfunc_20": "0x00424130",
-      "Gap__Bec__beNDMWStatusSelect00__vfunc_20": "0x00424140",
-      "Gap__Bec__beNDMWWindowSelect__vfunc_20": "0x00424150"
+      "beNDMWStatusSelect00_Setup": "0x00423760",
+      "beNDMWStatusSelect01_Setup": "0x00423bf0",
+      "beNDMWStatusSelectE0_Setup": "0x00423f00",
+      "beNDMWStatusSelectE1_Setup": "0x00424070",
+      "beNDMWStatusSelectE1_GetMeta": "0x00424110",
+      "beNDMWStatusSelectE0_GetMeta": "0x00424120",
+      "beNDMWStatusSelect01_GetMeta": "0x00424130",
+      "beNDMWStatusSelect00_GetMeta": "0x00424140",
+      "beNDMWWindowSelect_GetMeta": "0x00424150"
     },
     "data": {
       "DAT_0051a918": "0x0051a918",
@@ -29758,7 +29758,7 @@
     "externals": {
       "__dl__FPv": "0x00100610"
     },
-    "symbol": "Gap__Bec__beNDMWWindowSelect__vfunc_21"
+    "symbol": "beNDMWWindowSelect_Update"
   },
   "0x00408100": {
     "whole_file": true,

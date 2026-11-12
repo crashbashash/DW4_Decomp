@@ -51,7 +51,7 @@ public:
     ~StringRef() { if (p) { int *h = (int *)p - 2; int r = ((int *)p)[-1] - 1; ((int *)p)[-1] = r; if (r == 0) StringChunk_ReleaseHeader(*h, h); } }
 };
 extern "C" int StringList_AppendRetained(int, StringRef *);
-extern "C" void FUN_003f5410(beNDMWWindow *arg0, int *arg1, int *arg2, int *arg3, int *arg4);
+extern "C" void beNDMWWindow_QueueText(beNDMWWindow *arg0, int *arg1, int *arg2, int *arg3, int *arg4);
 extern "C" int DAT_00518728[4];
 extern "C" void FUN_003f56d0(beNDMWWindow *arg0, const char *arg1, const char *arg2, int *arg3, const char *arg4);
 extern "C" int g_beLua_metaObject[4];
@@ -100,7 +100,7 @@ extern "C" void beNDMWWindow_BindContext(beNDMWWindow *arg0, igObject *arg1, int
 struct WinView { virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void f21(); };
 extern "C" void beNDMWWindow_UpdateTree(beNDMWWindow *w);
 
-void FUN_003f5410(beNDMWWindow *arg0, int *arg1, int *arg2, int *arg3, int *arg4) {
+void beNDMWWindow_QueueText(beNDMWWindow *arg0, int *arg1, int *arg2, int *arg3, int *arg4) {
     beMessenger_SelectReceivers(arg0->_messenger, TEXTCTL_2, 0, -1);
     beMessenger_AppendString(arg0->_messenger, arg1);
     beMessenger_AppendString(arg0->_messenger, arg2);
@@ -123,7 +123,7 @@ void FUN_003f5410(beNDMWWindow *arg0, int *arg1, int *arg2, int *arg3, int *arg4
 void FUN_003f5660(int arg0, int arg1, int arg2, int arg3, int arg4) {
     int sp50[4];
     sprintf(sp50, &DAT_00518728[0], arg3);
-    FUN_003f5410((beNDMWWindow *)arg0, (int *)arg1, (int *)arg2, sp50, (int *)arg4);
+    beNDMWWindow_QueueText((beNDMWWindow *)arg0, (int *)arg1, (int *)arg2, sp50, (int *)arg4);
 }
 
 void FUN_003f56d0(beNDMWWindow *arg0, const char *arg1, const char *arg2, int *arg3, const char *arg4) {

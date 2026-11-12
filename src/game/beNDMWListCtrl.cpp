@@ -163,7 +163,7 @@ extern "C" void *FUN_003b56f0(void *);
 extern "C" void *FUN_003b92b0(void *);
 extern "C" void *FUN_003ba030(void *);
 extern "C" void *FUN_003bace0(void *);
-extern "C" int FUN_003f5410(...);
+extern "C" int beNDMWWindow_QueueText(...);
 extern "C" void * Memory_GetAllocatorBySelector(...);
 extern "C" int ObjectList_AppendRetained(...);
 extern "C" int beMessenger_AppendString(...);
@@ -1061,7 +1061,7 @@ void Gap__Bec__beNDMWStatusCtrl00__vfunc_21(beNDMWStatusCtrl00 *self) {
                         lst = self->_subWindow;
                         ObjectList_AppendRetained(lst, w5.p);
                         ((beNDMWStatusSelect00 *)w5.p)->_startPoint = self->_statusMenu;
-                        FUN_003f5410(w5.p, &DAT_00519b50[0], DAT_004cf670[0], &DAT_00519b60[0], &DAT_00519b68[0]);
+                        beNDMWWindow_QueueText(w5.p, &DAT_00519b50[0], DAT_004cf670[0], &DAT_00519b60[0], &DAT_00519b68[0]);
                     }
                     self->_nowProcKazu = ((igObjectList *)self->_subWindow)->_count;
                     self->_st2 = self->_st2 + 1;
@@ -1213,7 +1213,7 @@ void Gap__Bec__beNDMWStatusCtrlEquip__vfunc_21(beNDMWStatusCtrlEquip *self)
                 beNDMWWindow_BindContext(h.p, self, self->_insight, self->_playerNo, 31);
                 ObjectList_AppendRetained((beNDMWWindowList *)self->_subWindow, h.p);
                 ((beNDMWStatusSelect01 *)h.p)->_startPoint = self->_equipMenu;
-                FUN_003f5410(h.p, DAT_00519b50, DAT_004cf670[0], DAT_00519b60, DAT_00519b68);
+                beNDMWWindow_QueueText(h.p, DAT_00519b50, DAT_004cf670[0], DAT_00519b60, DAT_00519b68);
                 }
                 self->_nowProcKazu = ((beNDMWWindowList *)self->_subWindow)->_count;
                 self->_st2 = self->_st2 + 1;
@@ -1670,18 +1670,18 @@ void FUN_004115c0(int *arg0, int arg1) {
 }
 
 void FUN_00411750(int *arg0) {
-    FUN_003f5410(arg0, &DAT_00519b50[0], &DAT_00519d98[0], &DAT_00519b60[0], &DAT_00519b68[0]);
-    FUN_003f5410(arg0, &DAT_00519da0[0], DAT_004cf670[0], &DAT_00519b60[0], &DAT_00519b68[0]);
-    FUN_003f5410(arg0, &DAT_00519da0[0], ((int * *)DAT_004cf674)[0], &DAT_00519b60[0], &DAT_00519b68[0]);
-    FUN_003f5410(arg0, &DAT_00519db0[0], &DAT_005199e0[0], &DAT_00519b60[0], &DAT_00519b68[0]);
-    FUN_003f5410(arg0, &DAT_00519db0[0], &DAT_005199e8[0], &DAT_00519b60[0], &DAT_00519b68[0]);
-    FUN_003f5410(arg0, &DAT_00519db0[0], &DAT_005199f0[0], &DAT_00519b60[0], &DAT_00519b68[0]);
-    FUN_003f5410(arg0, &DAT_00519db0[0], &DAT_00519d98[0], &DAT_00519b60[0], &DAT_00519b68[0]);
-    FUN_003f5410(arg0, &DAT_00519db0[0], &((int *)DAT_00519dc0)[0], &DAT_00519b60[0], &DAT_00519b68[0]);
-    FUN_003f5410(arg0, &DAT_00519db0[0], &((int *)DAT_00519dc8)[0], &DAT_00519b60[0], &DAT_00519b68[0]);
-    FUN_003f5410(arg0, &DAT_00519db0[0], &((int *)DAT_00519dd0)[0], &DAT_00519b60[0], &DAT_00519b68[0]);
-    FUN_003f5410(arg0, &DAT_00519db0[0], &((int *)DAT_00519dd8)[0], &DAT_00519b60[0], &DAT_00519b68[0]);
-    FUN_003f5410(arg0, &DAT_00519b50[0], &DAT_00519d98[0], &DAT_00519b60[0], &DAT_00519b68[0]);
+    beNDMWWindow_QueueText(arg0, &DAT_00519b50[0], &DAT_00519d98[0], &DAT_00519b60[0], &DAT_00519b68[0]);
+    beNDMWWindow_QueueText(arg0, &DAT_00519da0[0], DAT_004cf670[0], &DAT_00519b60[0], &DAT_00519b68[0]);
+    beNDMWWindow_QueueText(arg0, &DAT_00519da0[0], ((int * *)DAT_004cf674)[0], &DAT_00519b60[0], &DAT_00519b68[0]);
+    beNDMWWindow_QueueText(arg0, &DAT_00519db0[0], &DAT_005199e0[0], &DAT_00519b60[0], &DAT_00519b68[0]);
+    beNDMWWindow_QueueText(arg0, &DAT_00519db0[0], &DAT_005199e8[0], &DAT_00519b60[0], &DAT_00519b68[0]);
+    beNDMWWindow_QueueText(arg0, &DAT_00519db0[0], &DAT_005199f0[0], &DAT_00519b60[0], &DAT_00519b68[0]);
+    beNDMWWindow_QueueText(arg0, &DAT_00519db0[0], &DAT_00519d98[0], &DAT_00519b60[0], &DAT_00519b68[0]);
+    beNDMWWindow_QueueText(arg0, &DAT_00519db0[0], &((int *)DAT_00519dc0)[0], &DAT_00519b60[0], &DAT_00519b68[0]);
+    beNDMWWindow_QueueText(arg0, &DAT_00519db0[0], &((int *)DAT_00519dc8)[0], &DAT_00519b60[0], &DAT_00519b68[0]);
+    beNDMWWindow_QueueText(arg0, &DAT_00519db0[0], &((int *)DAT_00519dd0)[0], &DAT_00519b60[0], &DAT_00519b68[0]);
+    beNDMWWindow_QueueText(arg0, &DAT_00519db0[0], &((int *)DAT_00519dd8)[0], &DAT_00519b60[0], &DAT_00519b68[0]);
+    beNDMWWindow_QueueText(arg0, &DAT_00519b50[0], &DAT_00519d98[0], &DAT_00519b60[0], &DAT_00519b68[0]);
 }
 
 void beNDMWStatus_AssignEquipment(StatusPanel *self, ItemList *slotList, int slot, int equipIdx) {
@@ -2335,8 +2335,8 @@ void Gap__Bec__beNDMWStatusPowerSocket__vfunc_35(beNDMWStatusPowerSocket *arg0) 
     beNDMWWindow_BindContext(win.p, arg0, arg0->_insight, arg0->_playerNo, 0);
     ObjectList_AppendRetained((unsigned int)arg0->_subWindow, win.p);
     win.p->_selectMax = 2;
-    FUN_003f5410(win.p, &DAT_00519b50[0], &DAT_005199e0[0], &DAT_00519b60[0], &DAT_00519b68[0]);
-    FUN_003f5410(win.p, &DAT_00519b50[0], &DAT_005199e8[0], &DAT_00519b60[0], &DAT_00519b68[0]);
+    beNDMWWindow_QueueText(win.p, &DAT_00519b50[0], &DAT_005199e0[0], &DAT_00519b60[0], &DAT_00519b68[0]);
+    beNDMWWindow_QueueText(win.p, &DAT_00519b50[0], &DAT_005199e8[0], &DAT_00519b60[0], &DAT_00519b68[0]);
     a = ((int)igObject_GetAllocator(arg0));
     a = GPR_00554c14 ? a : ((int)Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]));
     igSmartPointer<igBoolList> decide((igBoolList *)FUN_002cb0d0(a));
@@ -2864,8 +2864,8 @@ void Gap__Bec__beNDMWStatusMainSlot__vfunc_35(beNDMWStatusMainSlot *arg0) {
     beNDMWWindow_BindContext(win.p, arg0, arg0->_insight, arg0->_playerNo, 0);
     ObjectList_AppendRetained((unsigned int)arg0->_subWindow, win.p);
     win.p->_selectMax = 2;
-    FUN_003f5410(win.p, &DAT_00519b50[0], &DAT_005199e0[0], &DAT_00519b60[0], &DAT_00519b68[0]);
-    FUN_003f5410(win.p, &DAT_00519b50[0], &DAT_005199e8[0], &DAT_00519b60[0], &DAT_00519b68[0]);
+    beNDMWWindow_QueueText(win.p, &DAT_00519b50[0], &DAT_005199e0[0], &DAT_00519b60[0], &DAT_00519b68[0]);
+    beNDMWWindow_QueueText(win.p, &DAT_00519b50[0], &DAT_005199e8[0], &DAT_00519b60[0], &DAT_00519b68[0]);
     a = ((int)igObject_GetAllocator(arg0));
     a = GPR_00554c14 ? a : ((int)Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]));
     igSmartPointer<igBoolList> decide((igBoolList *)FUN_002cb0d0(a));
@@ -3329,25 +3329,25 @@ void Gap__Bec__beNDMWStatusCtrlD0__vfunc_21(beNDMWStatusCtrlD0 *self)
         i = 0;
         fp = &DAT_004cf670[0];
         do {
-            FUN_003f5410(self, &DAT_0051a060[0], *fp, &DAT_00519b60[0], &DAT_00519b68[0]);
+            beNDMWWindow_QueueText(self, &DAT_0051a060[0], *fp, &DAT_00519b60[0], &DAT_00519b68[0]);
             i += 1;
             fp += 1;
         } while (i < 12);
         i = 0;
         fp = &DAT_004cf670[0];
         do {
-            FUN_003f5410(self, &DAT_0051a070[0], *fp, &DAT_00519b60[0], &DAT_0051a080[0]);
+            beNDMWWindow_QueueText(self, &DAT_0051a070[0], *fp, &DAT_00519b60[0], &DAT_0051a080[0]);
             i += 1;
             fp += 1;
         } while (i < 12);
         if (self->_isBankFolder != 0) {
-            FUN_003f5410(self, &DAT_0051a088[0], DAT_004cf670[0], &DAT_00519b60[0], &DAT_0051a080[0]);
-            FUN_003f5410(self, &DAT_0051a088[0], ((char * *)DAT_004cf674)[0], &DAT_00519b60[0], &DAT_0051a080[0]);
+            beNDMWWindow_QueueText(self, &DAT_0051a088[0], DAT_004cf670[0], &DAT_00519b60[0], &DAT_0051a080[0]);
+            beNDMWWindow_QueueText(self, &DAT_0051a088[0], ((char * *)DAT_004cf674)[0], &DAT_00519b60[0], &DAT_0051a080[0]);
         } else {
-            FUN_003f5410(self, &DAT_0051a098[0], DAT_004cf670[0], &DAT_00519b60[0], &DAT_0051a080[0]);
-            FUN_003f5410(self, &DAT_0051a098[0], ((char * *)DAT_004cf674)[0], &DAT_00519b60[0], &DAT_0051a080[0]);
+            beNDMWWindow_QueueText(self, &DAT_0051a098[0], DAT_004cf670[0], &DAT_00519b60[0], &DAT_0051a080[0]);
+            beNDMWWindow_QueueText(self, &DAT_0051a098[0], ((char * *)DAT_004cf674)[0], &DAT_00519b60[0], &DAT_0051a080[0]);
         }
-        FUN_003f5410(self, &DAT_00519b50[0], DAT_004cf670[0], &DAT_00519b60[0], &DAT_00519b68[0]);
+        beNDMWWindow_QueueText(self, &DAT_00519b50[0], DAT_004cf670[0], &DAT_00519b60[0], &DAT_00519b68[0]);
         GET_ALLOC(alloc)
         {
         igSmartPointer<beNDMWStatusSelectE1> win((beNDMWStatusSelectE1 *)FUN_003b51b0(alloc));
@@ -3813,7 +3813,7 @@ void Gap__Bec__beNDMWStatusCtrlFolder__vfunc_21(beNDMWStatusCtrlFolder *arg0) {
                 beNDMWWindow_BindContext(sp98.p, arg0, arg0->_insight, arg0->_playerNo, 0x3D);
                 ObjectList_AppendRetained(arg0->_subWindow, sp98.p);
                 ((beNDMWStatusSelect01 *)sp98.p)->_startPoint = arg0->_folderMenu;
-                FUN_003f5410(sp98.p, DAT_00519b50, DAT_004cf670[0], DAT_00519b60, DAT_00519b68);
+                beNDMWWindow_QueueText(sp98.p, DAT_00519b50, DAT_004cf670[0], DAT_00519b60, DAT_00519b68);
                 }
                 arg0->_nowProcKazu = ((igDataList *)arg0->_subWindow)->_count;
                 arg0->_st2 = arg0->_st2 + 1;
@@ -4059,13 +4059,13 @@ void Gap__Bec__beNDMWStatusCtrlFlag__vfunc_21(beNDMWStatusCtrlFlag *arg0) {
         k = 0;
         p = &DAT_004cf670[0];
         do {
-            FUN_003f5410(arg0, DAT_0051a060, *p, DAT_00519b60, DAT_00519b68);
+            beNDMWWindow_QueueText(arg0, DAT_0051a060, *p, DAT_00519b60, DAT_00519b68);
             k += 1;
             p += 1;
         } while (k < 12);
-        FUN_003f5410(arg0, DAT_0051a098, DAT_004cf670[0], DAT_00519b60, DAT_0051a080);
-        FUN_003f5410(arg0, DAT_0051a098, ((int * *)DAT_004cf674)[0], DAT_00519b60, DAT_0051a080);
-        FUN_003f5410(arg0, DAT_00519b50, DAT_004cf670[0], DAT_00519b60, DAT_00519b68);
+        beNDMWWindow_QueueText(arg0, DAT_0051a098, DAT_004cf670[0], DAT_00519b60, DAT_0051a080);
+        beNDMWWindow_QueueText(arg0, DAT_0051a098, ((int * *)DAT_004cf674)[0], DAT_00519b60, DAT_0051a080);
+        beNDMWWindow_QueueText(arg0, DAT_00519b50, DAT_004cf670[0], DAT_00519b60, DAT_00519b68);
         al = ((int)igObject_GetAllocator(arg0));
         al = (GPR_00554c14 != 0) ? al : ((int)Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]));
         {
@@ -4214,10 +4214,10 @@ void Gap__Bec__beNDMWStatusCtrlDisk__vfunc_21(beNDMWStatusCtrlDisk *self)
         INTERNP_APPEND_41acf0(self->_textCloseNameList, DAT_004cf670[0])
         beNDMWWindow_RunMessageScript(self, DAT_00519b90, 0x48);
         for (i = 0; i < 12; i++)
-            FUN_003f5410(self, DAT_0051a060, DAT_004cf670[i], DAT_00519b60, DAT_00519b68);
+            beNDMWWindow_QueueText(self, DAT_0051a060, DAT_004cf670[i], DAT_00519b60, DAT_00519b68);
         for (j = 0; j < 12; j++)
-            FUN_003f5410(self, ((int *)DAT_0051a170), DAT_004cf670[j], DAT_00519b60, DAT_0051a080);
-        FUN_003f5410(self, DAT_00519b50, DAT_004cf670[0], DAT_00519b60, DAT_00519b68);
+            beNDMWWindow_QueueText(self, ((int *)DAT_0051a170), DAT_004cf670[j], DAT_00519b60, DAT_0051a080);
+        beNDMWWindow_QueueText(self, DAT_00519b50, DAT_004cf670[0], DAT_00519b60, DAT_00519b68);
         NEXT_ST0()
     }
     case 1:
@@ -4280,8 +4280,8 @@ void Gap__Bec__beNDMWStatusCtrlDisk__vfunc_21(beNDMWStatusCtrlDisk *self)
                 WSETPOS(actionWin.p, 115.0f, 145.0f, 0.0f)
                 WSETI100(actionWin.p, 0)
                 beNDMWWindow_PresentModelAtOrigin(actionWin.p, DAT_0051a180, 0, ((int *)DAT_00519eb8), SQ_CLOSE_3);
-                FUN_003f5410(actionWin.p, DAT_0051a190, DAT_004cf670[0], DAT_00519b60, DAT_00519b68);
-                FUN_003f5410(actionWin.p, DAT_0051a190, DAT_004cf674[0], DAT_00519b60, DAT_00519b68);
+                beNDMWWindow_QueueText(actionWin.p, DAT_0051a190, DAT_004cf670[0], DAT_00519b60, DAT_00519b68);
+                beNDMWWindow_QueueText(actionWin.p, DAT_0051a190, DAT_004cf674[0], DAT_00519b60, DAT_00519b68);
                 }
                 SYNC_COUNT()
                 NEXT_ST2()
@@ -4462,7 +4462,7 @@ void Gap__Bec__beNDMWStatusCtrlDisk__vfunc_21(beNDMWStatusCtrlDisk *self)
                 beNDMWWindow_RunMessageScript(self, DAT_00519b90, 0x4A);
                 MSG_SELECT_INT(self->_playerNo)
                 lsx = (igObjectList *)((int *)igProperty_GetRecordFolder(beMessenger_GetObject(self->_messenger, 0), DAT_0051a150))[3];
-                FUN_003f5410(self, DAT_0051a060, DAT_005199e0, beNDMWItemBase_GetRecordString(item = (beNDMWItemBase *)((int *)lsx->_data)[self->_cursor], FUN_00236f80(self->_insight, g_beNDMWStatus_metaObject[0]), DAT_00519f28), DAT_00519b68);
+                beNDMWWindow_QueueText(self, DAT_0051a060, DAT_005199e0, beNDMWItemBase_GetRecordString(item = (beNDMWItemBase *)((int *)lsx->_data)[self->_cursor], FUN_00236f80(self->_insight, g_beNDMWStatus_metaObject[0]), DAT_00519f28), DAT_00519b68);
                 ObjectRef_Retain_003e90d0(item);
                 ObjectRef_Release_003e9110(self->_sendDisk);
                 self->_sendDisk = (int)item;
@@ -4478,15 +4478,15 @@ void Gap__Bec__beNDMWStatusCtrlDisk__vfunc_21(beNDMWStatusCtrlDisk *self)
                     }
                     bufC[0] = ((beNDMWItemDisk *)((int *)((igObjectList *)self->_diskList)->_data)[i])->_kazu + 0x30;
                     bufC[1] = 0;
-                    FUN_003f5410(self, ((int *)DAT_0051a170), names.v[i], bufC, DAT_0051a1f8);
+                    beNDMWWindow_QueueText(self, ((int *)DAT_0051a170), names.v[i], bufC, DAT_0051a1f8);
                 }
                 {
                     char bufA[2];
                     bufA[0] = ((beNDMWItemDisk *)self->_sendDisk)->_kazu + 0x30;
                     bufA[1] = 0;
-                    FUN_003f5410(self, DAT_0051a200, DAT_005199e0, bufA, DAT_0051a1f8);
+                    beNDMWWindow_QueueText(self, DAT_0051a200, DAT_005199e0, bufA, DAT_0051a1f8);
                 }
-                FUN_003f5410(self, DAT_0051a200, DAT_005199e8, DAT_0051a210, DAT_0051a1f8);
+                beNDMWWindow_QueueText(self, DAT_0051a200, DAT_005199e8, DAT_0051a210, DAT_0051a1f8);
                 NEXT_ST2()
             }
             case 3: {
@@ -4964,8 +4964,8 @@ void Gap__Bec__beNDMWStatusCtrlSendBit__vfunc_21(beNDMWStatusCtrlSendBit *p) {
         H_41de40::AddTextType(p, (const char *)DAT_0051a1d8);
         H_41de40::AddTextName(p, (const char *)DAT_005199e8);
         beNDMWWindow_RunMessageScript(p, DAT_00519b90, 0x4C);
-        FUN_003f5410(p, DAT_0051a2a8, DAT_005199e0, DAT_00519b60, DAT_0051a1f8);
-        FUN_003f5410(p, DAT_0051a2b8, DAT_005199e0, DAT_00519b60, DAT_0051a080);
+        beNDMWWindow_QueueText(p, DAT_0051a2a8, DAT_005199e0, DAT_00519b60, DAT_0051a1f8);
+        beNDMWWindow_QueueText(p, DAT_0051a2b8, DAT_005199e0, DAT_00519b60, DAT_0051a080);
         tbl = spF0.v;
         spF0 = DAT_004cf740[0];
         k = 0;
@@ -4977,9 +4977,9 @@ void Gap__Bec__beNDMWStatusCtrlSendBit__vfunc_21(beNDMWStatusCtrlSendBit *p) {
                 API(n);
                 DSP(DAT_00519ba8);
                 n = beMessenger_GetObject(p->_messenger, 0);
-                FUN_003f5410(p, DAT_0051a060, *tbl, DAT_00519b60, DAT_00519b68);
+                beNDMWWindow_QueueText(p, DAT_0051a060, *tbl, DAT_00519b60, DAT_00519b68);
                 sprintf(spA0, DAT_0051a2d0, *(int *)(((int)igProperty_GetRecord(n, DAT_0051a2c8)) + 12));
-                FUN_003f5410(p, DAT_0051a2b8, *tbl, DAT_00519b60, DAT_0051a080);
+                beNDMWWindow_QueueText(p, DAT_0051a2b8, *tbl, DAT_00519b60, DAT_0051a080);
                 k += 1;
                 i += 4;
                 tbl += 1;
@@ -5226,7 +5226,7 @@ void Gap__Bec__beNDMWStatusCtrlSkill__vfunc_21(beNDMWStatusCtrlSkill *self)
             beNDMWWindow_BindContext((int)wr.p, self, self->_insight, self->_playerNo, 91);
             ObjectList_AppendRetained(self->_subWindow, wr.p);
             ((int *)wr.p)[25] = self->_skillMenu;
-            FUN_003f5410(wr.p, DAT_00519b50, DAT_004cf670[0], DAT_00519b60, DAT_00519b68);
+            beNDMWWindow_QueueText(wr.p, DAT_00519b50, DAT_004cf670[0], DAT_00519b60, DAT_00519b68);
             
             }
             self->_nowProcKazu = SW(self->_subWindow)->_count;
@@ -5318,15 +5318,15 @@ void Gap__Bec__beNDMWStatusCtrlSkill__vfunc_21(beNDMWStatusCtrlSkill *self)
                     igObjectList *sl = SW(((beNDMWShinkaCtrl *)self->_shinkaCtrl)->_list);
                     if (self->_maxPage > 1) {
                         n = 8;
-                        FUN_003f5410(self, ((int *)DAT_0051a370), DAT_004cf670[0], DAT_00519b60, DAT_0051a1f8);
-                        FUN_003f5410(self, ((int *)DAT_0051a370), DAT_004cf674[0], DAT_00519b60, DAT_0051a1f8);
+                        beNDMWWindow_QueueText(self, ((int *)DAT_0051a370), DAT_004cf670[0], DAT_00519b60, DAT_0051a1f8);
+                        beNDMWWindow_QueueText(self, ((int *)DAT_0051a370), DAT_004cf674[0], DAT_00519b60, DAT_0051a1f8);
                     } else {
                         if (sl->_count == 0) n = 2; else n = sl->_count;
                     }
                     for (i = 0; i < n; i++) {
-                        FUN_003f5410(self, DAT_0051a060, DAT_004cf670[i], DAT_00519b60, DAT_00519b68);
-                        FUN_003f5410(self, ((int *)DAT_0051a380), DAT_004cf670[i], DAT_00519b60, DAT_00519b68);
-                        FUN_003f5410(self, ((int *)DAT_0051a390), DAT_004cf670[i], DAT_00519b60, DAT_0051a080);
+                        beNDMWWindow_QueueText(self, DAT_0051a060, DAT_004cf670[i], DAT_00519b60, DAT_00519b68);
+                        beNDMWWindow_QueueText(self, ((int *)DAT_0051a380), DAT_004cf670[i], DAT_00519b60, DAT_00519b68);
+                        beNDMWWindow_QueueText(self, ((int *)DAT_0051a390), DAT_004cf670[i], DAT_00519b60, DAT_0051a080);
                     }
                     FUN_00420230((beNDMWStatusCtrlSkill *)self, 1, 0);
                     ((int *)wr.p)[21] = n;
@@ -5350,7 +5350,7 @@ void Gap__Bec__beNDMWStatusCtrlSkill__vfunc_21(beNDMWStatusCtrlSkill *self)
                         APPSTR_C(self->_textCloseTypeList, DAT_0051a060);
                         APPSTR_V(self->_textCloseNameList, DAT_004cf670[i]);
                         sprintf(buf, DAT_0051a2d0, ((int *)recs->_data)[i]);
-                        FUN_003f5410(self, ((int *)DAT_0051a390), DAT_004cf670[i], buf, DAT_0051a080);
+                        beNDMWWindow_QueueText(self, ((int *)DAT_0051a390), DAT_004cf670[i], buf, DAT_0051a080);
                         beMessenger_SelectGroup(self->_messenger, DAT_00519c28);
                         beMessenger_AppendString(self->_messenger, DAT_0051a060);
                         beMessenger_AppendString(self->_messenger, (void *)DAT_004cf670[i]);
@@ -5380,7 +5380,7 @@ void Gap__Bec__beNDMWStatusCtrlSkill__vfunc_21(beNDMWStatusCtrlSkill *self)
                     recs = (igObjectList *)*(int *)(igProperty_GetRecordFolder(beMessenger_GetObject(self->_messenger, 0), DAT_0051a3a0) + 12);
                     ctx = FUN_00236f80(self->_insight, g_beNDMWStatus_metaObject[0]);
                     for (i = 0; i < recs->_count; i++) {
-                        FUN_003f5410(self, DAT_0051a060, DAT_004cf670[i],
+                        beNDMWWindow_QueueText(self, DAT_0051a060, DAT_004cf670[i],
                                      (void *)beNDMWItemBase_GetRecordString(((int *)recs->_data)[i], ctx, DAT_00519f28),
                                      DAT_00519b68);
                     }
@@ -5392,7 +5392,7 @@ void Gap__Bec__beNDMWStatusCtrlSkill__vfunc_21(beNDMWStatusCtrlSkill *self)
                     break;
                 }
                 }
-                FUN_003f5410(self, DAT_00519b50, DAT_004cf670[0], DAT_00519b60, DAT_00519b68);
+                beNDMWWindow_QueueText(self, DAT_00519b50, DAT_004cf670[0], DAT_00519b60, DAT_00519b68);
                 
                 }
                 self->_nowProcKazu = SW(self->_subWindow)->_count;
@@ -5888,7 +5888,7 @@ void Gap__Bec__beNDMWStatusSubMenu__vfunc_21(beNDMWStatusSubMenu *self)
                         igObjectList *dl = (igObjectList *)rec[3];
                         int cx = FUN_00236f80(self->_insight, g_beNDMWStatus_metaObject[0]);
                         item = (beNDMWItemBase *)((int *)dl->_data)[self->_selectDevice];
-                        FUN_003f5410(self, DAT_0051a060, DAT_005199e0, beNDMWItemBase_GetRecordString(item, cx, DAT_00519f28), DAT_00519b68);
+                        beNDMWWindow_QueueText(self, DAT_0051a060, DAT_005199e0, beNDMWItemBase_GetRecordString(item, cx, DAT_00519f28), DAT_00519b68);
                     }
                     FUN_00447d00(vec, item);
                     beMessenger_SelectGroup(self->_messenger, DAT_00519c28);

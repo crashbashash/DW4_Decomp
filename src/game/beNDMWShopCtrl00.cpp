@@ -145,7 +145,7 @@ extern "C" int StringPool_Construct(...);
 extern "C" char * StringPool_Intern(...);
 extern "C" int StringChunk_ReleaseHeader(...);
 extern "C" int beNDMWWindow_RunMessageScript(...);
-extern "C" int FUN_003f5410(...);
+extern "C" int beNDMWWindow_QueueText(...);
 extern "C" void * FUN_003b4d90(...);
 extern "C" void *FUN_003b4790(int);
 extern "C" void * FUN_003b4f50(...);
@@ -1034,9 +1034,9 @@ void Gap__Bec__beNDMWShopCtrl10__vfunc_21(beNDMWShopCtrl10 *self)
                         self->_st3 = 0;
                     } else {
                         int j;
-                        FUN_003f5410(w356.p, ((char *)DAT_0051b448), ((char *)DAT_0051b220), DAT_0051b458, ((char *)DAT_0051b460));
+                        beNDMWWindow_QueueText(w356.p, ((char *)DAT_0051b448), ((char *)DAT_0051b220), DAT_0051b458, ((char *)DAT_0051b460));
                         sprintf(buf, ((char *)percent_d), have - need);
-                        FUN_003f5410(w356.p, ((char *)DAT_0051b448), ((char *)DAT_0051b248), buf, ((char *)DAT_0051b460));
+                        beNDMWWindow_QueueText(w356.p, ((char *)DAT_0051b448), ((char *)DAT_0051b248), buf, ((char *)DAT_0051b460));
                         for (j = 0; j < 4; j++) {
                             APPENDSTR(((beNDMWWindow *)w356.p)->_textCloseTypeList, ((char *)DAT_0051b448))
                             { int *t = (int *)*np; APPENDSTR(((beNDMWWindow *)w356.p)->_textCloseNameList, t) }
@@ -1587,7 +1587,7 @@ void Gap__Bec__beNDMWShopCtrl40__vfunc_21(beNDMWShopCtrl40 *arg0) {
     int ic;
     switch (arg0->_st0) {
     case 0:
-        FUN_003f5410(arg0, STWINFONT29, &DAT_0051b548[0], &DAT_0051b590[0], &DAT_0051b598[0]);
+        beNDMWWindow_QueueText(arg0, STWINFONT29, &DAT_0051b548[0], &DAT_0051b590[0], &DAT_0051b598[0]);
         arg0->_st0 = arg0->_st0 + 1;
         arg0->_st3 = 0;
         arg0->_st2 = 0;
@@ -1943,12 +1943,12 @@ void Gap__Bec__beNDMWShopCtrl50__vfunc_21(beNDMWShopCtrl50 *self) {
                 i = 0;
                 fp = &((char * *)g_fontNames)[0];
                 do {
-                    FUN_003f5410(self, STWINFONT14, *fp, beDataBase_GetRecordString(obj, i, NAME_2), &DAT_0051b598[0]);
+                    beNDMWWindow_QueueText(self, STWINFONT14, *fp, beDataBase_GetRecordString(obj, i, NAME_2), &DAT_0051b598[0]);
                     FUN_003f5660(self, STWINFONT17, *fp, beDataBase_GetRecordInt(obj, i, &DAT_0051b690[0]), &DAT_0051b460[0]);
                     i += 1;
                     fp += 1;
                 } while (i < 10);
-                FUN_003f5410(self, STWINFONT29, ((char * *)g_fontNames)[0], &DAT_0051b590[0], &DAT_0051b598[0]);
+                beNDMWWindow_QueueText(self, STWINFONT29, ((char * *)g_fontNames)[0], &DAT_0051b590[0], &DAT_0051b598[0]);
                 self->_st2 = self->_st2 + 1;
                 self->_st3 = 0;
             case 1:
@@ -3380,7 +3380,7 @@ void Gap__Bec__beNDMWShopCtrlA2__vfunc_21(beNDMWShopCtrlA2 *arg0) {
                         if (ar->_count != 0 && idx >= 0 && idx < ar->_count) ((char *)ar->_data)[idx] = GPR_00554a4c;
                     }
                     if (maxv < beDataBase_GetRecordInt(db, idx, DAT_0051b9e0)) maxv = beDataBase_GetRecordInt(db, idx, DAT_0051b9e0);
-                    FUN_003f5410((beNDMWShopSelect03 *)win, DAT_0051b9e8, names1.p[i], ((void *)beDataBase_GetRecordString(db, idx, NAME_2)), DAT_0051b598);
+                    beNDMWWindow_QueueText((beNDMWShopSelect03 *)win, DAT_0051b9e8, names1.p[i], ((void *)beDataBase_GetRecordString(db, idx, NAME_2)), DAT_0051b598);
                     beNDMWWindow_PresentModelAtOrigin(win.p, ((void *)beDataBase_GetRecordString(db, idx, DAT_0051b920)), i, names2.p[i], DAT_0051b620);
                     {
                         float x, y, z;
@@ -3484,8 +3484,8 @@ void Gap__Bec__beNDMWShopCtrlEvolve__vfunc_21(beNDMWShopCtrlEvolve *self) {
                     vB[1] = 0x41C80000;
                     vB[2] = 0;
                     ((DummyVirtual *)self)->v24(vB, vA);
-                    FUN_003f5410(self, &DAT_0051ba48[0], ((char * *)g_fontNames)[0], &DAT_0051b590[0], &DAT_0051b460[0]);
-                    FUN_003f5410(self, &DAT_0051ba48[0], g_fontName1[0], &DAT_0051b590[0], &DAT_0051b460[0]);
+                    beNDMWWindow_QueueText(self, &DAT_0051ba48[0], ((char * *)g_fontNames)[0], &DAT_0051b590[0], &DAT_0051b460[0]);
+                    beNDMWWindow_QueueText(self, &DAT_0051ba48[0], g_fontName1[0], &DAT_0051b590[0], &DAT_0051b460[0]);
                 } else {
                     beNDMWWindow_PresentModelAtOrigin(self, &DAT_0051b610[0], 0, &DAT_0051ba60[0], &DAT_0051b620[0]);
                 }
@@ -3501,9 +3501,9 @@ void Gap__Bec__beNDMWShopCtrlEvolve__vfunc_21(beNDMWShopCtrlEvolve *self) {
                 int i = 0;
                 char **fp = ((char * *)g_fontNames);
                 do {
-                    FUN_003f5410(self, &DAT_0051ba80[0], *fp, &DAT_0051b590[0], &DAT_0051b598[0]);
-                    FUN_003f5410(self, &DAT_0051ba90[0], *fp, &DAT_0051b590[0], &DAT_0051b598[0]);
-                    FUN_003f5410(self, &DAT_0051baa0[0], *fp, &DAT_0051b590[0], &DAT_0051b460[0]);
+                    beNDMWWindow_QueueText(self, &DAT_0051ba80[0], *fp, &DAT_0051b590[0], &DAT_0051b598[0]);
+                    beNDMWWindow_QueueText(self, &DAT_0051ba90[0], *fp, &DAT_0051b590[0], &DAT_0051b598[0]);
+                    beNDMWWindow_QueueText(self, &DAT_0051baa0[0], *fp, &DAT_0051b590[0], &DAT_0051b460[0]);
                     i += 1;
                     fp += 1;
                 } while (i < 8);
@@ -3512,14 +3512,14 @@ void Gap__Bec__beNDMWShopCtrlEvolve__vfunc_21(beNDMWShopCtrlEvolve *self) {
                 int j = 0;
                 char **gp = DAT_004cf8d0;
                 do {
-                    FUN_003f5410(self, &DAT_0051bab0[0], gp[0], &DAT_0051b590[0], &DAT_0051b598[0]);
-                    FUN_003f5410(self, &DAT_0051bab0[0], gp[1], &DAT_0051b590[0], &DAT_0051b460[0]);
+                    beNDMWWindow_QueueText(self, &DAT_0051bab0[0], gp[0], &DAT_0051b590[0], &DAT_0051b598[0]);
+                    beNDMWWindow_QueueText(self, &DAT_0051bab0[0], gp[1], &DAT_0051b590[0], &DAT_0051b460[0]);
                     j += 1;
                     gp += 2;
                 } while (j < 16);
                 }
                 beNDMWWindow_RunMessageScript(self, &DAT_0051b3b0[0], 0x4B2);
-                FUN_003f5410(self, STWINFONT29, ((char * *)g_fontNames)[0], &DAT_0051b590[0], &DAT_0051b598[0]);
+                beNDMWWindow_QueueText(self, STWINFONT29, ((char * *)g_fontNames)[0], &DAT_0051b590[0], &DAT_0051b598[0]);
                 self->_st0 = self->_st0 + 1;
                 self->_st3 = 0;
                 self->_st2 = 0;
@@ -5305,14 +5305,14 @@ void Gap__Bec__beNDMWShopCtrlDeviceSell__vfunc_21(beNDMWShopCtrlDeviceSell *self
         {
             const char **p = g_fontNames;
             do {
-                FUN_003f5410(self, STWINFONT14, *p, DAT_0051b590, DAT_0051b598);
-                FUN_003f5410(self, STWINFONT17, *p, DAT_0051b590, DAT_0051b460);
+                beNDMWWindow_QueueText(self, STWINFONT14, *p, DAT_0051b590, DAT_0051b598);
+                beNDMWWindow_QueueText(self, STWINFONT17, *p, DAT_0051b590, DAT_0051b460);
                 i++;
                 p += 1;
             } while (i < 12);
         }
-        FUN_003f5410(self, STWINFONT30, g_fontNames[0], DAT_0051b590, DAT_0051b460);
-        FUN_003f5410(self, STWINFONT30, g_fontName1[0], DAT_0051b590, DAT_0051b460);
+        beNDMWWindow_QueueText(self, STWINFONT30, g_fontNames[0], DAT_0051b590, DAT_0051b460);
+        beNDMWWindow_QueueText(self, STWINFONT30, g_fontName1[0], DAT_0051b590, DAT_0051b460);
         self->_cursor = 0;
         self->_nowPage = 0;
         self->_st0 = self->_st0 + 1;
@@ -5337,7 +5337,7 @@ void Gap__Bec__beNDMWShopCtrlDeviceSell__vfunc_21(beNDMWShopCtrlDeviceSell *self
                     ObjectList_AppendRetained(self->_subWindow, selectWin.p);
                     { beNDMWStatusSelectE1 *w = selectWin.p; w->_offsetPos[0] = -121.0f; w->_offsetPos[1] = 128.0f; w->_offsetPos[2] = 0.0f; }
                     selectWin.p->_startPoint = self->_cursor;
-                    FUN_003f5410(selectWin.p, STWINFONT29, g_fontNames[0], DAT_0051b590, DAT_0051b598);
+                    beNDMWWindow_QueueText(selectWin.p, STWINFONT29, g_fontNames[0], DAT_0051b590, DAT_0051b598);
                     selectWin.p->_selectMax = FUN_004367c0(self);
                     {
                         igObject *d = (igObject *)self->_decideList;
@@ -5772,9 +5772,9 @@ void Gap__Bec__beNDMWShopCtrlDiskSell__vfunc_21(beNDMWShopCtrlDiskSell *self) {
         if (0 < temp_s3->_count) {
             fp = &((char * *)g_fontNames)[0];
             do {
-                FUN_003f5410(self, STWINFONT14, *fp, &DAT_0051b590[0], &DAT_0051b598[0]);
-                FUN_003f5410(self, &DAT_0051bd88[0], *fp, &DAT_0051b590[0], &DAT_0051bd98[0]);
-                FUN_003f5410(self, STWINFONT17, *fp, &DAT_0051b590[0], &DAT_0051b460[0]);
+                beNDMWWindow_QueueText(self, STWINFONT14, *fp, &DAT_0051b590[0], &DAT_0051b598[0]);
+                beNDMWWindow_QueueText(self, &DAT_0051bd88[0], *fp, &DAT_0051b590[0], &DAT_0051bd98[0]);
+                beNDMWWindow_QueueText(self, STWINFONT17, *fp, &DAT_0051b590[0], &DAT_0051b460[0]);
                 i += 1;
                 fp += 1;
             } while (i < temp_s3->_count);
@@ -5802,7 +5802,7 @@ void Gap__Bec__beNDMWShopCtrlDiskSell__vfunc_21(beNDMWShopCtrlDiskSell *self) {
                 ObjectList_AppendRetained(self->_subWindow, spBC.p);
                 { beNDMWStatusSelectE1 *w = (beNDMWStatusSelectE1 *)spBC.p; w->_offsetPos[0] = -121.0f; w->_offsetPos[1] = 128.0f; w->_offsetPos[2] = 0.0f; }
                 ((beNDMWStatusSelectE1 *)spBC.p)->_startPoint = self->_cursor;
-                FUN_003f5410(spBC.p, STWINFONT29, ((char * *)g_fontNames)[0], &DAT_0051b590[0], &DAT_0051b598[0]);
+                beNDMWWindow_QueueText(spBC.p, STWINFONT29, ((char * *)g_fontNames)[0], &DAT_0051b590[0], &DAT_0051b598[0]);
                 beMessenger_SelectGroup(self->_messenger, &DAT_0051b398[0]);
                 beMessenger_AppendInt(self->_messenger, self->_playerNo);
                 beMessenger_DispatchSelected(self->_messenger, &DAT_0051b3e8[0]);
@@ -6601,15 +6601,15 @@ void Gap__Bec__beNDMWShopCtrlXdataChip__vfunc_21(beNDMWShopCtrlXdataChip *arg0) 
         i = 0;
         p = &((int * *)g_fontNames)[0];
         do {
-            FUN_003f5410(arg0, STWINFONT14, *p, &DAT_0051b590[0], &DAT_0051b598[0]);
-            FUN_003f5410(arg0, STWINFONT17, *p, &DAT_0051b590[0], &DAT_0051b460[0]);
+            beNDMWWindow_QueueText(arg0, STWINFONT14, *p, &DAT_0051b590[0], &DAT_0051b598[0]);
+            beNDMWWindow_QueueText(arg0, STWINFONT17, *p, &DAT_0051b590[0], &DAT_0051b460[0]);
             i += 1;
             p += 1;
         } while (i < 12);
-        FUN_003f5410(arg0, STWINFONT29, ((int * *)g_fontNames)[0], &DAT_0051b590[0], &DAT_0051b598[0]);
-        FUN_003f5410(arg0, STWINFONT29, &DAT_0051b548[0], &DAT_0051b590[0], &DAT_0051b598[0]);
-        FUN_003f5410(arg0, STWINFONT30, ((int * *)g_fontNames)[0], &DAT_0051b590[0], &DAT_0051bd98[0]);
-        FUN_003f5410(arg0, STWINFONT30, ((int * *)g_fontName1)[0], &DAT_0051b590[0], &DAT_0051bd98[0]);
+        beNDMWWindow_QueueText(arg0, STWINFONT29, ((int * *)g_fontNames)[0], &DAT_0051b590[0], &DAT_0051b598[0]);
+        beNDMWWindow_QueueText(arg0, STWINFONT29, &DAT_0051b548[0], &DAT_0051b590[0], &DAT_0051b598[0]);
+        beNDMWWindow_QueueText(arg0, STWINFONT30, ((int * *)g_fontNames)[0], &DAT_0051b590[0], &DAT_0051bd98[0]);
+        beNDMWWindow_QueueText(arg0, STWINFONT30, ((int * *)g_fontName1)[0], &DAT_0051b590[0], &DAT_0051bd98[0]);
         arg0->_st0 = arg0->_st0 + 1;
         arg0->_st3 = 0;
         arg0->_st2 = 0;
@@ -6784,11 +6784,11 @@ void Gap__Bec__beNDMWShopCtrlXdataChip__vfunc_21(beNDMWShopCtrlXdataChip *arg0) 
                 ALLOC_43aae0(al)
                 igSmartPointer<beNDMWItemAbilityChip> abilityChip((beNDMWItemAbilityChip *)FUN_003c87f0(al));
                 FUN_00448660(abilityChip.p, recNo + 1);
-                FUN_003f5410(infoWin.p, STWINFONT29, ((int * *)g_fontNames)[0], ((int *)beNDMWItemBase_GetRecordString(abilityChip.p, status, NAME_2)), &DAT_0051b598[0]);
-                FUN_003f5410(infoWin.p, &DAT_0051b448[0], ((int * *)g_fontName1)[0], &DAT_0051b590[0], &DAT_0051b598[0]);
-                FUN_003f5410(infoWin.p, &DAT_0051b448[0], ((int * *)DAT_004cf8a8)[0], &DAT_0051b590[0], &DAT_0051b598[0]);
-                FUN_003f5410(infoWin.p, &DAT_0051b448[0], DAT_004cf8ac[0], &DAT_0051b590[0], &DAT_0051b598[0]);
-                FUN_003f5410(infoWin.p, STWINFONT29, ((int * *)DAT_004cf8a8)[0], &DAT_0051b590[0], &DAT_0051b598[0]);
+                beNDMWWindow_QueueText(infoWin.p, STWINFONT29, ((int * *)g_fontNames)[0], ((int *)beNDMWItemBase_GetRecordString(abilityChip.p, status, NAME_2)), &DAT_0051b598[0]);
+                beNDMWWindow_QueueText(infoWin.p, &DAT_0051b448[0], ((int * *)g_fontName1)[0], &DAT_0051b590[0], &DAT_0051b598[0]);
+                beNDMWWindow_QueueText(infoWin.p, &DAT_0051b448[0], ((int * *)DAT_004cf8a8)[0], &DAT_0051b590[0], &DAT_0051b598[0]);
+                beNDMWWindow_QueueText(infoWin.p, &DAT_0051b448[0], DAT_004cf8ac[0], &DAT_0051b590[0], &DAT_0051b598[0]);
+                beNDMWWindow_QueueText(infoWin.p, STWINFONT29, ((int * *)DAT_004cf8a8)[0], &DAT_0051b590[0], &DAT_0051b598[0]);
                 {
                 ALLOC_43aae0(al)
                 igSmartPointer<igStringRefList> statNames((igStringRefList *)FUN_002b90e0(al));
@@ -6814,7 +6814,7 @@ void Gap__Bec__beNDMWShopCtrlXdataChip__vfunc_21(beNDMWShopCtrlXdataChip *arg0) 
                         cst = beNDMWItemBase_GetRecordInt(abilityChip.p, s1i, (StringList_CopyRetained(slist, li)).p);
                         if (cst > 0) {
                             sprintf(sp90, percent_d, cst);
-                            FUN_003f5410(infoWin.p, &DAT_0051b448[0], &DAT_0051b220[0], sp90, &DAT_0051b460[0]);
+                            beNDMWWindow_QueueText(infoWin.p, &DAT_0051b448[0], &DAT_0051b220[0], sp90, &DAT_0051b460[0]);
                             if (li >= 8) li = 7;
                             {
                                 struct Q2 { unsigned __int128 a[2]; }; *(Q2 *)sp70 = *(Q2 *)&DAT_004cfaa0[0];
@@ -6830,7 +6830,7 @@ void Gap__Bec__beNDMWShopCtrlXdataChip__vfunc_21(beNDMWShopCtrlXdataChip *arg0) 
                 MSG3(&DAT_0051b398[0], &DAT_0051b3e8[0])
                 s0 = ((ChipRecord *)((int *)igProperty_GetRecord(beMessenger_GetObject(arg0->_messenger, 0), &DAT_0051b440[0])))->f12;
                 sprintf(sp90, percent_d, s0 - beNDMWItemBase_GetRecordInt(chip, status, NEXTX));
-                FUN_003f5410(infoWin.p, &DAT_0051b448[0], &DAT_0051b248[0], sp90, &DAT_0051b460[0]);
+                beNDMWWindow_QueueText(infoWin.p, &DAT_0051b448[0], &DAT_0051b248[0], sp90, &DAT_0051b460[0]);
                 }
                 arg0->_nowProcKazu = ((beNDMWWindowList *)(arg0->_subWindow))->_count;
                 arg0->_st2 = arg0->_st2 + 1;

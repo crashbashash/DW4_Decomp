@@ -76,6 +76,32 @@ second normalization. The direct logical form reproduces every84 retail bytes
 with no assembler substitutions. Its receiver fields use recovered WindowSelect
 layout; the typing metric counts one recovered access for this unit.
 
+## Status selector setups
+
+[beNDMWWindowSelect.cpp](../../src/game/beNDMWWindowSelect.cpp) also holds the four status-menu
+selectors' `Setup` overrides (the virtual that `beNDMWWindowSelect_Update` calls in state0) and the
+five classes' `GetMeta` overrides, which return the class metaobject.
+
+| Original entry | Body | Bytes |
+| --- | --- | ---: |
+| `0x00423760` | `beNDMWStatusSelect00_Setup` | 1,160 |
+| `0x00423bf0` | `beNDMWStatusSelect01_Setup` | 776 |
+| `0x00423f00` | `beNDMWStatusSelectE0_Setup` | 356 |
+| `0x00424070` | `beNDMWStatusSelectE1_Setup` | 156 |
+
+- **00** presents `i_stmenu01` with `SQ_3LINEUPOPEN`/`SQ_CLOSE`, queues `STWINFONT08` with
+  `font000`..`font002` on the text-close lists, runs `txt_status.lua` with code 15, and selects the
+  `i_stcursor02` receiver with three choices at offset (-83, 209, 0), cancel allowed.
+- **01** picks the open sequence from the entry code (31/91: `SQ_3LINEDOWNOPEN`, three choices; 61:
+  `SQ_4LINEOPEN`, four; otherwise none), presents `i_stmenu01`, queues `STWINFONT29`/`font100`
+  and `STWINFONT09` `font000`..`font003` through `beNDMWWindow_QueueText` (blank text, `LEFT`),
+  runs `txt_status.lua` for a positive entry code, and selects `i_stcursor02` at (-83, 172, 0).
+- **E0** queues `STWINFONT29` `font100`, `font000`..`font002`, runs the script for a positive entry
+  code and selects `i_stmesscr` at the origin with start point 0.
+- **E1** only selects `i_stcursor01`.
+
+All four clear `_isNoCancel`.
+
 ## One-choice message widget
 
 ShopSelect00 initializes a one-choice `i_stmessky` receiver. With a signed positive

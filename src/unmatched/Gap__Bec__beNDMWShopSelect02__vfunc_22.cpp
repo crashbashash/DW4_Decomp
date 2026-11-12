@@ -41,7 +41,7 @@ int igProperty_GetRecordByte(...);
 int igProperty_GetRecordFolder(...);
 int igProperty_GetRecord(...);
 int beDataBase_GetRecordString(...);
-int FUN_003f5410(...);
+int beNDMWWindow_QueueText(...);
 int FUN_003f56d0(...);
 int igObject_Destroy(...);
 }
@@ -146,7 +146,7 @@ void Gap__Bec__beNDMWShopSelect02__vfunc_22(beNDMWShopSelect02 *arg0) {
                 }
             }
             beMessenger_SendNamed(arg0->_messenger, &DAT_0051c548[0], &DAT_0051c558[0], 0, &DAT_0051c560[0]);
-            FUN_003f5410(arg0, &DAT_0051c588[0], (int)*p, beDataBase_GetRecordString(beMessenger_GetObject(arg0->_messenger, 0), *(int *)(igProperty_GetRecord(obj, &DAT_0051c570[0]) + 12), &DAT_0051c580[0]), &DAT_0051c540[0]);
+            beNDMWWindow_QueueText(arg0, &DAT_0051c588[0], (int)*p, beDataBase_GetRecordString(beMessenger_GetObject(arg0->_messenger, 0), *(int *)(igProperty_GetRecord(obj, &DAT_0051c570[0]) + 12), &DAT_0051c580[0]), &DAT_0051c540[0]);
             lst = (igIntList *)arg0->_playerNoList;
             i++;
             off += 4;
