@@ -1790,20 +1790,6 @@
     },
     "symbol": "FUN_003f6620"
   },
-  "0x00407aa0": {
-    "emitted": {
-      "__dt__15SaveCtrlDataRefFv": "0x00408070"
-    },
-    "duplicates": {
-      "__dt__13CommonIntfRefFv": "0x003f2c40",
-      "__dt__11DegiDataRefFv": "0x003e9010",
-      "__dt__11FlagWorkRefFv": "0x003f2bc0",
-      "__dt__25igSmartPointer<8igObject>Fv": "0x0033e9c0"
-    },
-    "externals": {
-      "__dl__FPv": "0x00100610"
-    }
-  },
   "0x0037fa30": {
     "emitted": {},
     "duplicates": {
@@ -30540,6 +30526,38 @@
       "__dt__9StringRefFv": "0x00130720"
     },
     "symbol": "FUN_003b04e0"
+  },
+  "0x00407080": {
+    "whole_file": true,
+    "emitted": {
+      "Gap__Bec__beNDMWSaveCtrl__vfunc_30": "0x00407a60",
+      "Gap__Bec__beNDMWSaveCtrl__vfunc_29": "0x00407a70",
+      "Gap__Bec__beNDMWSaveCtrl__vfunc_34": "0x00407aa0",
+      "__dt__15SaveCtrlDataRefFv": "0x00408070",
+      "Gap__Bec__beNDMWSaveCtrl__vfunc_20": "0x004080f0"
+    },
+    "data": {
+      "DAT_005194c0": "0x005194c0",
+      "DAT_005194e0": "0x005194e0",
+      "DAT_005194e8": "0x005194e8",
+      "DAT_00585be0": "0x00585be0",
+      "DAT_00587110": "0x00587110",
+      "DAT_00587d08": "0x00587d08",
+      "DAT_00588518": "0x00588518",
+      "GPR_00554c14": "0x00554c14",
+      "g_beNDMWSaveCtrlInfo_metaObject": "0x0058b180",
+      "g_beNDMWSaveCtrl_metaObject": "0x0058b1d8"
+    },
+    "duplicates": {
+      "__dt__11DegiDataRefFv": "0x003e9010",
+      "__dt__11FlagWorkRefFv": "0x003f2bc0",
+      "__dt__13CommonIntfRefFv": "0x003f2c40",
+      "__dt__25igSmartPointer<8igObject>Fv": "0x0033e9c0"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    },
+    "symbol": "Gap__Bec__beNDMWSaveCtrl__vfunc_32"
   },
   "0x003f2d50": {
     "whole_file": true,
