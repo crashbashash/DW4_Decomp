@@ -6129,9 +6129,9 @@
 00229f90	FUN_00229f90	match	-
 00229fb0	FUN_00229fb0	match	-
 0022a030	FUN_0022a030	match	-
-0022a1e0	Gap__igItemInterface__vfunc_27	match	DEFERRED duplicate 0x25a230 __dt__31igSmartPointer<13InterfaceItem>Fv 128B (compared under the profile of its retail unit)
+0022a1e0	Gap__igItemInterface__vfunc_27	match	-
 0022a740	FUN_0022a740	match	-
-0022a7b0	Gap__igItemInterface__vfunc_30	match	DEFERRED duplicate 0x25a230 __dt__25igSmartPointer<8Iterator>Fv 128B (compared under the profile of its retail unit)
+0022a7b0	Gap__igItemInterface__vfunc_30	match	-
 0022a8d0	FUN_0022a8d0	match	-
 0022a950	FUN_0022a950	match	-
 0022a9b0	FUN_0022a9b0	match	-
@@ -6149,7 +6149,7 @@
 0022b150	Gap__igListenerInterface__vfunc_13	match	-
 0022b180	Gap__igListenerBase__vfunc_28	match	-
 0022b190	Gap__igListenerBase__vfunc_27	match	-
-0022b1a0	Gap__igLockInterface__vfunc_27	match	DEFERRED duplicate 0x25a2b0 __dt__7LockRefFv 128B (compared under the profile of its retail unit)
+0022b1a0	Gap__igLockInterface__vfunc_27	match	-
 0022b3d0	Gap__igLogInterface__vfunc_24	match	-
 0022b400	Gap__igLogInterface__vfunc_27	match	-
 0022b430	Gap__Core__igInfo__vfunc_22	match	-
@@ -6158,13 +6158,13 @@
 0022b610	FUN_0022b610	match	-
 0022b820	FUN_0022b820	match	-
 0022b8a0	FUN_0022b8a0	match	-
-0022b910	FUN_0022b910	match	DEFERRED duplicate 0x25a230 __dt__18igSmartPointer<1T>Fv 128B (compared under the profile of its retail unit)
+0022b910	FUN_0022b910	match	-
 0022bac0	FUN_0022bac0	match	-
 0022bbc0	thunk_Gap__Core__igObject__vfunc_09__0022bbc0	match	-
 0022bbd0	Gap__igOptInterface__vfunc_13	match	-
 0022bc00	Gap__Core__igMetaObject__vfunc_22	match	-
 0022bc10	FUN_0022bc10	match	-
-0022c7f0	FUN_0022c7f0	match	DEFERRED duplicate 0x25a230 __dt__19igSmartPointer<2Rc>Fv 128B (compared under the profile of its retail unit)
+0022c7f0	FUN_0022c7f0	match	-
 0022c9a0	Gap__igOptInterface__vfunc_22	match	-
 0022c9b0	Gap__igOptInterface__vfunc_27	match	-
 0022c9c0	Gap__igOptInterface__vfunc_28	match	-
