@@ -8,9 +8,10 @@ why naming stalled; a whole module's worth can be done at once instead.
 
 For every overlay entry whose name differs from `config/SLUS-20836/symbols.txt`:
 
-  1. rewrite `<old>` -> `<new>` in every unit under `src/` (word-boundary, so
-     `FUN_ab` does not match inside `FUN_abcd`), which covers the definition and
-     every call site;
+  1. rewrite `<old>` -> `<new>` in every source, header and `.inc` fragment under
+     `src/` and `include/` (word-boundary, so `FUN_ab` does not match inside
+     `FUN_abcd`), which covers the definition, every declaration and every call
+     site, and in the function column of `config/source-approvals.tsv`;
   2. move the unit to `src/<module>/` (the overlay's third column);
   3. delete the stale `asm/<old>.s`;
   4. regenerate `config/SLUS-20836/symbols.txt` and `asm/` with `tools/split.py`, which also
@@ -132,17 +133,34 @@ def main(argv=None):
     word = re.compile(r"[A-Za-z_][A-Za-z0-9_]*")
     rewritten = 0
     # Filename indexing is for moves. It collapses a same-basename .c/.cpp pair,
-    # both of which can contain references (or several merged definitions).
+    # both of which can contain references (or several merged definitions). Headers and
+    # `.inc` fragments in src/ and the shared include/ tree declare and call functions too.
+    tree = os.path.dirname(os.path.abspath(a.src))
+    include = os.path.join(tree, "include")
     paths = sorted(os.path.join(root, filename)
-                   for root, _, files in os.walk(a.src)
+                   for top in (a.src, include) if os.path.isdir(top)
+                   for root, _, files in os.walk(top)
                    for filename in files
-                   if filename.endswith(srctree.EXTS + (asmsources.EXT,)) and not filename.startswith("dw4u_"))
+                   if filename.endswith(srctree.EXTS + (asmsources.EXT, ".h", ".inc"))
+                   and not filename.startswith("dw4u_"))
     for path in paths:
         text = open(path).read()
         new_text = word.sub(lambda m: sub.get(m.group(0), m.group(0)), text)
         if new_text != text:
             open(path, "w").write(new_text)
             rewritten += 1
+    # the owner's source approvals name their functions by symbol in the second column
+    approvals = os.path.join(tree, "config", "source-approvals.tsv")
+    if os.path.exists(approvals):
+        text = open(approvals).read()
+        lines = []
+        for line in text.splitlines(True):
+            cols = line.split("\t")
+            if not line.startswith("#") and len(cols) > 2 and cols[1] in sub:
+                cols[1] = sub[cols[1]]
+            lines.append("\t".join(cols))
+        if "".join(lines) != text:
+            open(approvals, "w").write("".join(lines))
     # the assembly approval table names its functions by symbol (tools/asmsources.py)
     if os.path.exists(asmsources.TABLE):
         text = open(asmsources.TABLE).read()
