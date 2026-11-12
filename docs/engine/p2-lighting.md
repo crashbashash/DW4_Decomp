@@ -169,7 +169,7 @@ stag0001 values; the generalisation and the event model are unconfirmed):
 3. **Pending flag.** `FUN_001fbce0` is the single hardware matrix upload (type 0 model-view, 3 projection, 4 texture, 5, 2); every
    type leaves through `0x1fc010..0x1fc018` with `p2LightCalcPending` (`0x56B5F8`) `= 1`. Only the model-view type also calls `FUN_001fb0e0(-1)`, which
    re-emits a **fresh** light block (returning early when `p2DirtyFlags & 4`, the lighting-dirty bit, is set).
-4. **Draw submit.** `FUN_001ee750` (clones `FUN_001f47c0`, `FUN_001f64a0`, `FUN_001fe390`) tests `p2LightCalcPending == 1`; if set it appends
+4. **Draw submit.** `FUN_001ee750` (clones `p2SubmitVertices`, `p2SubmitIndexedVertices`, `FUN_001fe390`) tests `p2LightCalcPending == 1`; if set it appends
    a 32-byte record (VIF `6001002b`, one word `DAT_0056b604` = `0x3a` to VU1 `mem[43]`), clears `DAT_0056afc8` and the flag. The flag
    is a boolean consumed by the next draw: two uploads before one draw count once.
 5. **VU1.** `EXECUTE_RENDERLIST` reads `mem[43]`, zeroes it and jumps to `0x3a` (the `EXECUTE_PRE_PATH` chain that runs the `CALC_*`

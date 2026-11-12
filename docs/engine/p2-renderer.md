@@ -155,6 +155,60 @@ rather than the running values: the runtime list reads empty at a frame boundary
 state, and the live rig's colours differ from the records. The shading *model* is the one
 above; [`vertex-shading.md`](vertex-shading.md) has the rig read from a live frame.
 
+## Vertex-array draws
+
+`src/engine/p2draw.c` (`0x1f0d10`-`0x1f6f50`) is the layer's vertex-array draw file. The visual
+context binds its arrays with `p2SetVertexArrays` (positions, normals, colours, texture coordinates
+set 0), `p2SetTexCoordArray` (any of the 16 texture-coordinate sets) and `p2SetSpriteByteArray`, then
+calls one draw per primitive. The primitive numbers are the GS `PRIM` types: points 0, lines 1, line
+strip 2, triangles 3, triangle strip 4, triangle fan 5 and sprites 6; `p2DrawIndexed*` take a
+`unsigned short` index list, and `p2DrawTriangleStrips` draws a list of strip lengths.
+
+Every draw starts the same way:
+
+* a change of primitive marks the render state dirty (`|= 9`) and counts in `p2PrimitiveChanges`;
+* whether a colour array is bound decides `p2ConstantColour`, and a change marks `|= 0x11` and counts
+  in `p2ColourModeChanges`;
+* while a display list is recorded (`p2VertexFormat & 0x20`) the format bits follow the bound arrays
+  (normals 1, colours 2, texture coordinates 4; for sprites the sprite-size kind 0x40 or 0x80 and the
+  byte array 0x100), the recording render state is rebuilt, and the submit function is
+  `p2SubmitRecordedVertices`. Otherwise the bits follow the arrays only when the current program's
+  flag bit 22 is set, a dirty render state is flushed with mask `0x1ff`, and the submit function is
+  `p2SubmitVertices`;
+* a program with flag bit 27 set gets its component scales uploaded first. They come from the
+  vertex-data fraction bits, so the bit marks fixed-point components.
+
+Each draw then hands its vertices to the submit function in batches of at most `batchVertexLimit`
+(the short at `+22` of the VU buffer layout at `0x491490`). For lines the limit is rounded down to
+an even count and for triangles to a multiple of three. Strips repeat one shared vertex (line strip)
+or two (triangle strip) at each batch boundary. Fans submit a single batch. `p2DrawIndexedSprites`
+passes the same index list to every batch. Each batch also counts in the vertex, primitive and
+indexed-vertex statistics that `0x1f6f50` copies out, and in the five counters that `p2StatMask`
+selects.
+
+`p2SubmitVertices` and `p2SubmitIndexedVertices` build the VIF packets. They write byte-vector
+components with `p2UnpackByteTriples`, `p2UnpackBytePairs` and `p2UnpackBytes`. Each of these copies
+an `UNPACK` code and a DMA-tag template from the file's own data, writes the elements, pads with
+zeros and VIF no-ops to a quadword, and writes the tag's quadword count last. The packet cursor they
+advance is also read as an address to test its alignment. Retail reads it again after every store
+through it, so the cursor is a pointer/address union rather than a plain pointer.
+
+The file's data (the `UNPACK`/tag templates from `0x490d40` to `0x490f28`, the no-op words from
+`0x4e5010` to `0x4e5100`, the state from `0x569228` to `0x56931c`) runs as one block between
+dmaChannel's and p2gs's. Within it, the templates of the three unpack writers lie between templates
+that the submit functions use, which is what puts those writers in this file.
+
+Open questions:
+
+* `p2SpriteBytes` (`0x569308`) is a byte-per-vertex array that only sprites unpack. While it is
+  bound, the render state draws sprites as triangles. Its meaning is not known; it might be a
+  rotation.
+* The meanings of the sprite-size kinds that `p2SpriteSizeMode` (`0x569220`) selects are not known.
+  Nor are those of the categories behind `p2StatMask` (`0x56bad8`, written only by display-list
+  playback) and its five counters.
+* `p2SubmitRecordedVertices` passes no index list to `p2SubmitIndexedVertices` when the display-list
+  mode is 1. What that mode means is not known.
+
 ## What the engine asks for
 
 At the seam, what the engine asks for and in what units:

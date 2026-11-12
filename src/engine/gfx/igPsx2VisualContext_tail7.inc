@@ -137,7 +137,7 @@ void FUN_0017e980(igPsx2VisualContext *h, int arg1, int arg2)
                     v += arg2 * 8;
                 }
             }
-            FUN_001f10c0(i, v);
+            p2SetTexCoordArray(i, v);
         }
     }
 }
@@ -173,58 +173,58 @@ void FUN_0017eb90(B_17eb90 *arg0, int arg1, int arg2, int arg3, int arg4, int ar
     }
     switch (arg2) {
     case 0x0:
-        FUN_001f10f0(spBC, spB8, spAC, spB4);
-        FUN_001f1120(arg3);
+        p2SetVertexArrays(spBC, spB8, spAC, spB4);
+        p2DrawPoints(arg3);
         break;
     case 0x1:
-        FUN_001f10f0(spBC, spB8, spAC, spB4);
-        FUN_001f14b0(arg3);
+        p2SetVertexArrays(spBC, spB8, spAC, spB4);
+        p2DrawLines(arg3);
         break;
     case 0x2:
-        FUN_001f10f0(spBC, spB8, spAC, spB4);
-        FUN_001f1850(arg3);
+        p2SetVertexArrays(spBC, spB8, spAC, spB4);
+        p2DrawLineStrip(arg3);
         break;
     case 0x3:
-        FUN_001f10f0(spBC, spB8, spAC, spB4);
+        p2SetVertexArrays(spBC, spB8, spAC, spB4);
         if (var_s0 == 0) {
-            FUN_001f1c00(arg3);
+            p2DrawTriangles(arg3);
         } else {
-            FUN_001f3160(arg3, var_s0 + (var_s1 * 2));
+            p2DrawIndexedTriangles(arg3, var_s0 + (var_s1 * 2));
         }
         break;
     case 0x4:
-        FUN_001f10f0(spBC, spB8, spAC, spB4);
+        p2SetVertexArrays(spBC, spB8, spAC, spB4);
         if (var_s0 == 0) {
-            FUN_001f1fe0(arg3);
+            p2DrawTriangleStrip(arg3);
         } else {
-            FUN_001f2d90(arg3, var_s0 + (var_s1 * 2));
+            p2DrawIndexedTriangleStrip(arg3, var_s0 + (var_s1 * 2));
         }
         break;
     case 0x5:
-        FUN_001f10f0(spBC, spB8, spAC, spB4);
+        p2SetVertexArrays(spBC, spB8, spAC, spB4);
         if (var_s0 == 0) {
-            FUN_001f23a0(arg3);
+            p2DrawTriangleFan(arg3);
         } else {
-            FUN_001f3550(arg3, var_s0 + (var_s1 * 2));
+            p2DrawIndexedTriangleFan(arg3, var_s0 + (var_s1 * 2));
         }
         break;
     case 0x1000:
         if (FUN_0017e590((Self_17e590 *)arg0, arg1, var_s1, &spA8, &spB0) && (temp_s7 == 0)) {
             FUN_001e74b0(0x1B);
         }
-        FUN_001f10c0(1, spB0);
-        FUN_001f10f0(spBC, spA8, spAC, spB4);
+        p2SetTexCoordArray(1, spB0);
+        p2SetVertexArrays(spBC, spA8, spAC, spB4);
         if (var_s0 == 0) {
-            FUN_001f3900(arg3);
+            p2DrawSprites(arg3);
         } else {
-            FUN_001f3d00(arg3, var_s0 + (var_s1 * 2));
+            p2DrawIndexedSprites(arg3, var_s0 + (var_s1 * 2));
         }
         break;
     case 0x2000:
         var_s3 = arg0->f948->f8 + arg5;
         for (var_s0_2 = 0; var_s0_2 < arg3; var_s0_2++) {
-            FUN_001f10f0(spBC, spB8, spAC, spB4);
-            FUN_001f1850(*var_s3);
+            p2SetVertexArrays(spBC, spB8, spAC, spB4);
+            p2DrawLineStrip(*var_s3);
             var_s1 += *var_s3;
             var_s3 += 1;
             FUN_0017df40(arg0, arg1, var_s1, &spBC, &spB8, &spAC, &spB4);
@@ -234,11 +234,11 @@ void FUN_0017eb90(B_17eb90 *arg0, int arg1, int arg2, int arg3, int arg4, int ar
     case 0x2002:
         var_s3 = arg0->f948->f8 + arg5;
         for (var_s6 = 0; var_s6 < arg3; var_s6++) {
-            FUN_001f10f0(spBC, spB8, spAC, spB4);
+            p2SetVertexArrays(spBC, spB8, spAC, spB4);
             if (var_s0 == 0) {
-                FUN_001f23a0(*var_s3);
+                p2DrawTriangleFan(*var_s3);
             } else {
-                FUN_001f3550(*var_s3, var_s0 + (var_s1 * 2));
+                p2DrawIndexedTriangleFan(*var_s3, var_s0 + (var_s1 * 2));
             }
             var_s1 += *var_s3;
             var_s3 += 1;
@@ -249,12 +249,12 @@ void FUN_0017eb90(B_17eb90 *arg0, int arg1, int arg2, int arg3, int arg4, int ar
     case 0x2001:
         var_s3 = arg0->f948->f8 + arg5;
         if (var_s0 == 0) {
-            FUN_001f10f0(spBC, spB8, spAC, spB4);
-            FUN_001f2730(arg3, var_s3);
+            p2SetVertexArrays(spBC, spB8, spAC, spB4);
+            p2DrawTriangleStrips(arg3, var_s3);
         } else {
             for (var_s6 = 0; var_s6 < arg3; var_s6++) {
-                FUN_001f10f0(spBC, spB8, spAC, spB4);
-                FUN_001f2d90(*var_s3, var_s0 + (var_s1 * 2));
+                p2SetVertexArrays(spBC, spB8, spAC, spB4);
+                p2DrawIndexedTriangleStrip(*var_s3, var_s0 + (var_s1 * 2));
                 var_s1 += *var_s3;
                 var_s3 += 1;
                 FUN_0017df40(arg0, arg1, var_s1, &spBC, &spB8, &spAC, &spB4);

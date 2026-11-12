@@ -156,14 +156,14 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_74(struct R_16d660 *arg0, int arg1, in
         switch (arg1) {
         case 0:
             for (i = 0; i < arg2; i++) {
-                FUN_0016d910(arg0, *p, arg3, sp8C, sp88, FUN_001f1850, 0);
+                FUN_0016d910(arg0, *p, arg3, sp8C, sp88, p2DrawLineStrip, 0);
                 arg3 += *p;
                 p++;
             }
             break;
         case 2:
             for (i = 0; i < arg2; i++) {
-                FUN_0016d910(arg0, *p, arg3, sp8C, sp88, FUN_001f23a0, FUN_001f3550);
+                FUN_0016d910(arg0, *p, arg3, sp8C, sp88, p2DrawTriangleFan, p2DrawIndexedTriangleFan);
                 arg3 += *p;
                 p++;
             }
@@ -172,7 +172,7 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_74(struct R_16d660 *arg0, int arg1, in
             i = 0;
             if (arg0->f944 != 0) {
                 for (; i < arg2; i++) {
-                    FUN_0016d910(arg0, *p, arg3, sp8C, sp88, FUN_001f1fe0, FUN_001f2d90);
+                    FUN_0016d910(arg0, *p, arg3, sp8C, sp88, p2DrawTriangleStrip, p2DrawIndexedTriangleStrip);
                     arg3 += *p;
                     p++;
                 }
@@ -189,8 +189,8 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_74(struct R_16d660 *arg0, int arg1, in
                 }
                 FUN_0016db20(arg0, arg3);
                 t = arg3 * 12;
-                FUN_001f10f0(sp8C + t, sp88 + t, s0, s1);
-                FUN_001f2730(arg2, p);
+                p2SetVertexArrays(sp8C + t, sp88 + t, s0, s1);
+                p2DrawTriangleStrips(arg2, p);
             }
             break;
         }
