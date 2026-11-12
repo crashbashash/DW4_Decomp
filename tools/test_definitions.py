@@ -48,5 +48,42 @@ class KAndR(unittest.TestCase):
         self.assertIn("#define DROP(x) do { (x)--; }", kept)
 
 
+class SpecialMembers(unittest.TestCase):
+    def test_constructor_with_initialisers_and_destructor_are_named_by_class(self):
+        text = ("struct Holder { Holder(int *w); ~Holder(); int *a; int *b; };\n"
+                "Holder::Holder(int *w)\n    : a(make(0)), b(w) {\n}\n"
+                "Holder::~Holder() {\n    a = 0;\n}\n"
+                "void Holder_use(Holder *h) { h->a = 0; }\n")
+        self.assertEqual(names(text), ["Holder::Holder", "Holder::~Holder", "Holder_use"])
+
+    def test_a_qualified_ordinary_member_keeps_its_own_name(self):
+        self.assertEqual(names("int Holder::count(int n) { return n; }\n"), ["count"])
+
+    def test_mangled_constructor_and_destructor_name_the_definition(self):
+        import unitobjects
+        self.assertEqual(unitobjects.special_member("__ct__11ViewerSetupFP8igObject"), "ViewerSetup::ViewerSetup")
+        self.assertEqual(unitobjects.special_member("__dt__6HolderFv"), "Holder::~Holder")
+        self.assertIsNone(unitobjects.special_member("luaA_index__FP9lua_Statei"))
+        self.assertIsNone(unitobjects.special_member("__ct__99ShortFv"))
+
+    def test_an_owner_written_as_a_constructor_gets_its_source(self):
+        import json, os, tempfile, unitobjects
+        with tempfile.TemporaryDirectory() as tmp:
+            symbols = os.path.join(tmp, "symbols.txt")
+            rows = os.path.join(tmp, "unit-objects.json")
+            with open(symbols, "w") as fh:
+                fh.write("00100000 000040 FUN_00100000\n00100040 000040 FUN_00100040\n")
+            with open(rows, "w") as fh:
+                json.dump({"0x00100000": {"whole_file": True, "symbol": "__ct__6HolderFPi",
+                                          "emitted": {"__dt__6HolderFv": "0x00100040"}}}, fh)
+            unitobjects.load.cache_clear()
+            try:
+                index = unitobjects.augment_sources({"Holder::Holder": "src/x.cpp"}, symbols, rows)
+            finally:
+                unitobjects.load.cache_clear()
+        self.assertEqual(index["FUN_00100000"], "src/x.cpp")
+        self.assertEqual(index["FUN_00100040"], "src/x.cpp")
+
+
 if __name__ == "__main__":
     unittest.main()

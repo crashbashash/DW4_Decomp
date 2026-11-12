@@ -18,6 +18,7 @@ from dataclasses import dataclass
 from functools import lru_cache
 import json
 from pathlib import Path
+import re
 
 ROOT = Path(__file__).resolve().parent.parent
 DEFAULT_PATH = "config/SLUS-20836/unit-objects.json"
@@ -187,12 +188,32 @@ def is_shared_static(name, symbols="config/SLUS-20836/symbols.txt", path=None):
     return name not in by_name or is_whole_file(name, symbols, path)
 
 
+_SPECIAL_MANGLED = re.compile(r"__(ct|dt)__(\d+)")
+
+
+def special_member(symbol):
+    """`Class::Class` / `Class::~Class` for MWCC's mangled constructor or destructor name, else None:
+    the name tools/units.py gives such a definition, since it has no plain name of its own."""
+    m = _SPECIAL_MANGLED.match(symbol or "")
+    if not m:
+        return None
+    cls = symbol[m.end():m.end() + int(m.group(2))]
+    if len(cls) != int(m.group(2)) or not re.fullmatch(r"[A-Za-z_]\w*", cls):
+        return None
+    return "%s::%s%s" % (cls, "~" if m.group(1) == "dt" else "", cls)
+
+
 def augment_sources(index, symbols="config/SLUS-20836/symbols.txt", path=None):
     _, by_va = names(str(symbols))
     for group in load(path):
         owner = by_va[group.owner][0]
         if owner not in index:
-            continue
+            # a C++ owner written as a constructor or destructor is defined under that name, and the
+            # row's `symbol` (its mangled name) says which
+            special = special_member(group.symbol)
+            if special is None or special not in index:
+                continue
+            index[owner] = index[special]
         for _, va in group.emitted:
             name = by_va[va][0]
             if index.get(name, index[owner]) != index[owner]:

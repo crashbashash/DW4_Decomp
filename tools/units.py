@@ -83,6 +83,9 @@ def _match_brace(clean, i):
     return n
 
 
+_SPECIAL_MEMBER = re.compile(r"\b([A-Za-z_]\w*)\s*::\s*(~?)\s*\1\s*\(")
+
+
 def _declarator_name(sig):
     """The function name in a definition signature, or None.
 
@@ -90,7 +93,13 @@ def _declarator_name(sig):
     pointer (`int (**arg0)()`), whose `int (` looks like a declarator.  The position
     that actually names the function is the identifier before the paren that opens
     the parameter list — the one whose matching `)` is the last thing before `{`.
+
+    An out-of-line constructor or destructor is named `Class::Class` / `Class::~Class`: its
+    member-initialiser list ends in parens of its own, and `~` is not part of an identifier.
     """
+    special = _SPECIAL_MEMBER.search(sig)
+    if special:
+        return "%s::%s%s" % (special.group(1), special.group(2), special.group(1))
     s = sig.rstrip()
     if s.endswith(")"):
         depth = 0
