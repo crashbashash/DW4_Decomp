@@ -388,7 +388,10 @@ def main(argv=None):
             # the text the compiler will see: the file itself, or the one function extracted from it
             text = open(path).read()
             owner = unitobjects.source_owner(nm, a.symbols, a.unit_objects)
-            body = text if len(units.definitions(text)) <= 1 else units.extract(text, owner)
+            # an owner the file spells as a special member (`Class::Class`) is not a definition name
+            # extract can isolate: key on the whole file, which is at least what the compiler sees
+            defined = {d[0] for d in units.definitions(text)}
+            body = text if len(defined) <= 1 or owner not in defined else units.extract(text, owner)
             key = buildcache.sha(cover_fp, nm, va, sz, body,
                                  buildcache.unit_profile_sha(va, a.flags, a.mwcc, a.unit_objects, units=a.units,
                                                              unit_flags=a.unit_flags, unit_compilers=a.unit_compilers,
