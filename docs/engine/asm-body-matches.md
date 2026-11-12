@@ -148,8 +148,8 @@ Shapes found on one function:
   function impossible in source.
   See [the clock recovery](stage-loading.md#clock-update).
 * `beNDMWLoadIntf2::vfunc_31`: the complete 18,616-byte update
-  is in `src/game/beNDMWLoadIntf2Update.cpp`, including all three
-  emitted helper duplicates, nine jump tables, exception index and sixteen cleanup
+  is in `src/game/beNDMWLoadIntf2.cpp`, including the out-of-line
+  helper copies it emits, nine jump tables, exception index and sixteen cleanup
   ranges/actions. See [the full recovery](load-intf2.md#matched-source).
 
 ### `beMatCtrl::vfunc_31`

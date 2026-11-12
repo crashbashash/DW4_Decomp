@@ -268,7 +268,7 @@ the next module down: `beNDMWLoadIntf2`.
 The title runtime is closed. A remaining controller target is the
 6,076-byte `beNDMWLogo::vfunc_31` at `0x449030`.
 The downstream 18,616-byte `beNDMWLoadIntf2` update at `0x3e4750` matches as
-[`src/game/beNDMWLoadIntf2Update.cpp`](../../src/game/beNDMWLoadIntf2Update.cpp); its message handler at `0x3e9430`
+[`src/game/beNDMWLoadIntf2.cpp`](../../src/game/beNDMWLoadIntf2.cpp); its message handler at `0x3e9430`
 has matching C++. See [asm-body matches](asm-body-matches.md)
 and [the load-interface contracts](load-intf2.md).
 

@@ -24,8 +24,8 @@ Byte sizes on this page are the function extents in
 | Start | Bytes | Symbol | Role | Source |
 |---|---:|---|---|---|
 | `0x003e46b0` | 156 | `Gap__Bec__beNDMWLoadIntf2__vfunc_32` | reference/pad wrapper: takes the pad-manager reference into `_padManager` when it is not set | `src/game/beNDMWLoadIntf2.cpp` |
-| `0x003e4750` | 18,616 | `Gap__Bec__beNDMWLoadIntf2__vfunc_31` | per-frame update (the master flow) | `src/game/beNDMWLoadIntf2Update.cpp` |
-| `0x003e9010`–`0x003e93b0` | 19 functions | see the next table | accessors / per-controller helpers | `src/engine/`, `src/game/`, `src/unmatched/` |
+| `0x003e4750` | 18,616 | `Gap__Bec__beNDMWLoadIntf2__vfunc_31` | per-frame update (the master flow) | `src/game/beNDMWLoadIntf2.cpp` |
+| `0x003e9010`–`0x003e93b0` | 19 functions | see the next table | accessors / per-controller helpers | `src/game/beNDMWLoadIntf2.cpp` |
 | `0x003e93c0` | 12 | `Gap__Bec__beNDMWLoadIntf2__vfunc_30` | MetaObject return | `src/game/beNDMWLoadIntf2.cpp` |
 | `0x003e93d0` | 88 | `Gap__Bec__beNDMWLoadIntf2__vfunc_29` | descriptor wrapper: registers the record as receiver of `LOADINTF2_ALL` and `LOADINTF2` | `src/game/beNDMWLoadIntf2.cpp` |
 | `0x003e9430` | 8,272 | `Gap__Bec__beNDMWLoadIntf2__vfunc_34` | message handler (builds the family, answers the commands) | `src/game/beNDMWLoadIntf2.cpp` |
@@ -258,21 +258,25 @@ Details of the body that are easy to get wrong:
 
 ### Matched source
 
-[`src/game/beNDMWLoadIntf2Update.cpp`](../../src/game/beNDMWLoadIntf2Update.cpp)
-is the complete body: **18,616 code bytes / 4,654 instructions**, including the
+The update sits in [`src/game/beNDMWLoadIntf2.cpp`](../../src/game/beNDMWLoadIntf2.cpp)
+between `vfunc_32` and the helpers that follow it in retail. It is the complete body:
+**18,616 code bytes / 4,654 instructions**, including the
 initial eleven context ensures, input sampling, every nested screen/card state
 and all ownership exits. The source uses reflected receivers for the common,
 control, creation, model, message, slot, name, text, status, save-selection and
 difficulty records.
 
-The canonical verifier checks the whole emitted unit, not only the main body: two
-128-byte destructor duplicates and one 68-byte release duplicate, all nine jump
-tables (78 entries / 312 bytes), exception index `0x005535b0`, and the 191-byte
+Under the unit's bottom-up inlining the update is larger than the total-size limit, so each
+inline holder is expanded at its call site while the inline calls inside it stay calls. Their
+out-of-line copies are the unit's own members right after the update: the owned-reference
+destructor at `0x003e9010`, the release at `0x003e9110` and the copied-reference constructor at
+`0x003e9330`. The name owner is an `igSmartPointer<beUnicodeObj>`, whose destructor copy
+the linker kept at `0x003832d0`. Identical code does not make the two destructors' exception
+identities interchangeable. The unit check also covers all nine jump tables
+(78 entries / 312 bytes), exception index `0x005535b0`, and the 191-byte
 table at `0x00544890` with its one padding byte. The next independent index at
 `0x0055361c` bounds that table at `0x00544950`. All sixteen cleanup ranges, stack
-homes and destructor identities match. The name owner uses `0x003832d0`; the
-other owned refs use `0x003e9010`. Their identical code does not make their
-exception identities interchangeable.
+homes and destructor identities match.
 
 What the match depends on:
 
@@ -294,7 +298,7 @@ No inline assembly or compiler modification is needed. The compiler digest and
 flags are pinned in the per-unit configuration.
 
 ```sh
-python3 tools/verify.py 0x3e4750 src/game/beNDMWLoadIntf2Update.cpp
+python3 tools/check.py --function 0x3d9de0 --cand src/game/beNDMWLoadIntf2.cpp
 ```
 
 ## Per-screen helpers
