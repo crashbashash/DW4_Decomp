@@ -31004,6 +31004,22 @@
     },
     "symbol": "FUN_003b04e0"
   },
+  "0x0039fc30": {
+    "whole_file": true,
+    "emitted": {
+      "Gap__Bec__beSwitchCtrl__vfunc_30": "0x0039fc40",
+      "Gap__Bec__beSwitchCtrl__vfunc_29": "0x0039fc50",
+      "Gap__Bec__beSwitchCtrl__vfunc_31": "0x0039fc80",
+      "Gap__Bec__beSwitchCtrl__vfunc_33": "0x0039fc90",
+      "Gap__Bec__beSwitchCtrl__vfunc_20": "0x0039fd20"
+    },
+    "data": {
+      "DAT_0050fab0": "0x0050fab0",
+      "g_beSwitchCtrlInfo_metaObject": "0x00587de0",
+      "g_beSwitchCtrl_metaObject": "0x00587df8"
+    },
+    "symbol": "Gap__Bec__beSwitchCtrl__vfunc_32"
+  },
   "0x0039e540": {
     "whole_file": true,
     "emitted": {
