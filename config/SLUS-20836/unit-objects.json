@@ -31326,6 +31326,31 @@
     },
     "symbol": "FUN_003b04e0"
   },
+  "0x0037f1b0": {
+    "whole_file": true,
+    "emitted": {
+      "Gap__Bec__beFileListInfoManager__vfunc_21": "0x0037f220",
+      "Gap__Bec__beFileListInfoManager__vfunc_22": "0x0037f240",
+      "Gap__Bec__beFileListInfoManager__vfunc_23": "0x0037f260",
+      "Gap__Bec__beFileListInfoManager__vfunc_24": "0x0037f2c0",
+      "Gap__Bec__beFileListInfoManager__vfunc_25": "0x0037f2d0",
+      "Gap__Bec__beFileListInfoManager__vfunc_26": "0x0037f3f0",
+      "FUN_003817d0": "0x003817d0",
+      "Gap__Bec__beFileListInfoManager__vfunc_20": "0x00381990"
+    },
+    "data": {
+      "DAT_0050e558": "0x0050e558",
+      "DAT_00585bc0": "0x00585bc0",
+      "DAT_00586f20": "0x00586f20",
+      "DAT_00587d08": "0x00587d08",
+      "DAT_00588f38": "0x00588f38",
+      "DAT_00589678": "0x00589678",
+      "DAT_00589760": "0x00589760",
+      "DAT_0058c790": "0x0058c790",
+      "g_beFileListInfoManager_metaObject": "0x005896f8"
+    },
+    "symbol": "FUN_0037f1b0"
+  },
   "0x0037e110": {
     "whole_file": true,
     "emitted": {
