@@ -594,8 +594,7 @@
 0x00378420	0x00378710	bec_beActionStarter	b52	-O4,p -sdatathreshold 2 -inline level=8 -Iinclude	on	-	whole file
 0x00378710	0x00378ce0	bec_beBaseInfoManager	b52	-O4,p -sdatathreshold 2 -inline level=8 -Iinclude	on	-	whole file
 0x00378ce0	0x00378d80	bec_beBkColor	b52	-O4,p -sdatathreshold 2 -inline level=8 -Iinclude	on	-	whole file
-0x00378d80	0x0037a68c	beCameraCtrl_378d80	b52	-O4,p -sdatathreshold 2 -inline level=8 -Iinclude	on	-	class run of 6 labeled members, 6 unlabeled functions inside; exceptions on: 9/12 functions have retail index records; combat -O3,p -Iinclude reproduces 11/11 members
-0x0037a690	0x0037a7a4	beCameraCtrl_37a690	b52	-O4,p -sdatathreshold 2 -inline level=8 -Iinclude	on	-	unlabeled run, no boundary evidence: cut where the retail exception evidence or the pins change; exceptions on: 1/1 functions have retail index records; combat -O3,p -Iinclude reproduces 1/1 members
+0x00378d80	0x0037a7b0	bec_beCameraCtrl	b52	-O4,p -sdatathreshold 2 -inline level=8 -Iinclude	on	-	whole file
 0x0037a7b0	0x0037aab8	beCameraMode_37a7b0	b52	-O4,p -sdatathreshold 2 -inline level=8 -Iinclude	on	-	class run of 9 labeled members; exceptions on: 3/9 functions have retail index records; combat -O3,p -Iinclude reproduces 7/7 members
 0x0037aac0	0x0037b00c	beChangePosTransform_37aac0	b52	-O4,p -sdatathreshold 2 -inline level=8 -Iinclude	on	-	class run of 4 labeled members; exceptions on: 1/4 functions have retail index records; default -O3 -Iinclude reproduces 3/3 members
 0x0037b010	0x0037b4c4	unlabeled_37b010	b52	-O4,p -sdatathreshold 2 -inline level=8 -Iinclude	on	-	unlabeled run, no boundary evidence: cut where the retail exception evidence or the pins change; exceptions on: 4/4 functions have retail index records; FUN_0037b040 (formerly an asm body) reproduces only under combat -O3,p -Iinclude; FUN_0037b460 also verifies under it
