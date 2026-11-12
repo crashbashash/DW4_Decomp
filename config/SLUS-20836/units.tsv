@@ -604,7 +604,7 @@
 0x003844a0	0x00385830	bec_beGenerater	b52	-O4,p -sdatathreshold 2 -inline level=8 -Iinclude	on	-	whole file
 0x00385830	0x00386030	bec_beHitLandDeliv	b52	-O4,p -sdatathreshold 2 -inline level=8 -Iinclude	on	-	whole file
 0x00386030	0x00389020	bec_beHitLandModel	b52	-O4,p -sdatathreshold 2 -inline level=8 -Iinclude	on	-	whole file
-0x00389020	0x0038907c	beKeyboardReceiver_389020	b52	-O4,p -sdatathreshold 2 -inline level=8 -Iinclude	on	-	class run of 4 labeled members; exceptions on: 2/4 functions have retail index records; default -O3 -Iinclude reproduces 4/4 members
+0x00389020	0x00389080	bec_beKeyboardReceiver	b52	-O4,p -sdatathreshold 2 -inline level=8 -Iinclude	on	-	whole file
 0x00389080	0x00389b8c	beLayerCtl_389080	b52	-O4,p -sdatathreshold 2 -inline level=8 -Iinclude	on	-	class run of 6 labeled members; exceptions on: 3/6 functions have retail index records; combat -O3,p -Iinclude reproduces 6/6 members
 0x00389b90	0x00389fe4	unlabeled_389b90	b52	-O4,p -sdatathreshold 2 -inline level=8 -Iinclude	on	-	unlabeled run, no boundary evidence: cut where the retail exception evidence or the pins change; exceptions on: 3/3 functions have retail index records; default -O3 -Iinclude reproduces 1/1 members
 0x00389ff0	0x0038a2cc	unlabeled_389ff0	b52	-O4,p -sdatathreshold 2 -inline level=8 -Iinclude	on	-	unlabeled run, no boundary evidence: cut where the retail exception evidence or the pins change; exceptions on: 1/1 functions have retail index records; combat -O3,p -Iinclude reproduces 1/1 members

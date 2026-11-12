@@ -31254,6 +31254,18 @@
     },
     "symbol": "FUN_003b04e0"
   },
+  "0x00389020": {
+    "whole_file": true,
+    "emitted": {
+      "Gap__Bec__beKeyboardReceiver__vfunc_08": "0x00389040",
+      "Gap__Bec__beKeyboardReceiver__vfunc_21": "0x00389060",
+      "Gap__Bec__beKeyboardReceiver__vfunc_20": "0x00389070"
+    },
+    "data": {
+      "g_beKeyboardReceiver_metaObject": "0x00589308"
+    },
+    "symbol": "Gap__Bec__beKeyboardReceiver__vfunc_07"
+  },
   "0x00386030": {
     "whole_file": true,
     "emitted": {
