@@ -260,6 +260,17 @@ class SharedRenameTargets(unittest.TestCase):
         self.assertEqual(verify.unshared_renames(renames),
                          {"@12=DAT": "DAT_004df070", "FUN_0015f430__FPviii": "FUN_0015f430", "same": "same"})
 
+    def test_shared_names_without_an_address_take_their_target_address(self):
+        renames = {"__dt__9StringRefFv": "StringRef_Destruct_00130720",
+                   "__dt__12StringRefViewFv": "StringRef_Destruct_00130720",
+                   "X0_0014d010": "DAT_0014d010", "X1_0014d010": "DAT_0014d010", "same": "same"}
+        addresses = {"__dt__9StringRefFv": 0x130720, "__dt__12StringRefViewFv": 0x130720,
+                     "X0_0014d010": 0x14d010, "X1_0014d010": 0x14d010}
+        self.assertEqual(verify.unshared_renames(renames, addresses),
+                         {"__dt__9StringRefFv": "__dt__9StringRefFv_00130720",
+                          "__dt__12StringRefViewFv": "__dt__12StringRefViewFv_00130720", "same": "same"})
+        self.assertEqual(verify.spelled_address("__dt__9StringRefFv_00130720"), 0x130720)
+
     def test_single_rename_is_kept(self):
         self.assertEqual(verify.unshared_renames({"a": "b"}), {"a": "b"})
 

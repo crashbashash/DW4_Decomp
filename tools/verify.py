@@ -1733,17 +1733,26 @@ def verify_emitted_unit(obj, group, elf, symbols, profile, recompile,
         records if (records is not None and twins_ok) else None
 
 
-def unshared_renames(renames):
+def unshared_renames(renames, addresses=None):
     """`renames` without the entries whose target several names share.
 
     A unit can reach one retail address through several local names (separately declared
-    aliases make the compiler materialise the address once per use, as retail does).
-    objcopy cannot redefine two symbols to one name, so those keep their own names: each is
-    address-bearing and resolves through `sym_address` at link, and the relocation
-    comparison reads the same map, so they are still checked.
+    aliases make the compiler materialise the address once per use, as retail does, and a
+    library unit can name one retail destructor through several holder classes). objcopy
+    cannot redefine two symbols to one name. A name that already carries its address keeps
+    its own spelling and resolves through `sym_address` at link. Any other such name (a
+    mangled destructor) is renamed to itself plus the retail address it stands for (from
+    `addresses`), which `sym_address` resolves the same way. The relocation comparison reads
+    the same map, so every one is still checked.
     """
     shared = collections.Counter(new for old, new in renames.items() if old != new)
-    return {old: new for old, new in renames.items() if old == new or shared[new] == 1}
+    out = {}
+    for old, new in renames.items():
+        if old == new or shared[new] == 1:
+            out[old] = new
+        elif addresses is not None and old in addresses and not BOOTSTRAP_NAME.search(old):
+            out[old] = "%s_%08x" % (old, addresses[old])
+    return out
 
 
 def isolate_emitted_body(obj, requested, records, group, symbols, source=None):
@@ -1823,7 +1832,9 @@ def isolate_emitted_body(obj, requested, records, group, symbols, source=None):
     renames = {name: by_va[address][0] for name, (address, _, _) in records.items()}
     renames.update({name: by_va[address][0] for name, address in group.externals})
     renames.update({name: "DAT_%08x" % address for name, address in group.data})
-    renames = unshared_renames(renames)
+    addresses = {name: address for name, (address, _, _) in records.items()}
+    addresses.update(dict(group.externals))
+    renames = unshared_renames(renames, addresses)
     for old, new in renames.items():
         if old != new:
             arguments += ["--redefine-sym", f"{old}={new}"]
