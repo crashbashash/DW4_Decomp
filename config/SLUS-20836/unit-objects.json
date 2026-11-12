@@ -30893,6 +30893,19 @@
     },
     "symbol": "FUN_003b04e0"
   },
+  "0x003cc7d0": {
+    "whole_file": true,
+    "emitted": {
+      "Gap__Bec__libNdmwRuntimePlugin__vfunc_22": "0x003cd280",
+      "Gap__Bec__libNdmwRuntimePlugin__vfunc_20": "0x003cd4a0"
+    },
+    "data": {
+      "DAT_00587108": "0x00587108",
+      "GPR_00554c14": "0x00554c14",
+      "g_libNdmwRuntimePlugin_metaObject": "0x0058a8f8"
+    },
+    "symbol": "Gap__Bec__libNdmwRuntimePlugin__vfunc_21"
+  },
   "0x003b00e0": {
     "whole_file": true,
     "emitted": {
