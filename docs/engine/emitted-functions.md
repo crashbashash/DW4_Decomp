@@ -140,8 +140,17 @@ destructor) is an `externals` row too, read from the `jal` of retail's copy. So 
 the file that only a member's exception table names, such as a base-class destructor that is
 declared but never called and appears only as a cleanup pointer. It is read from the retail table
 word and must start a retail function, and `verify` still compares the whole table with retail.
-Recovered files of both compilers are whole-file units: the CRI middleware under EE GCC in
-`src/cri/`, and game classes under MWCC, such as `src/game/`'s, in C++ with exceptions on.
+Recovered files of both compilers are whole-file units: the CRI middleware and the Sony libraries
+under EE GCC in `src/cri/` and `src/sony/`, and game classes under MWCC, such as `src/game/`'s, in
+C++ with exceptions on.
+
+An ee-gcc file that defines its own strings or statics refers to them through its section symbols.
+`tools/eegcc_compile.py` gives each non-empty data section a `@<section>` symbol (`@rodata`, `@data`,
+`@bss`), and the row's `data` gives each section's retail address. `verify` compares `.rodata` and
+`.data` byte for byte with retail, and a `.bss` with the zeros the retail loader fills past its
+segment's file bytes, so the statics' layout is proved through every reference to them. Both the 2.96
+`ee-as` and the 2.9-ee assemblers write REL relocations, so each reference's offset into the section
+is read from its instruction field. A `.rdata` directive comes out as `.rodata`.
 
 Compiling the file whole is what the original build did, and under both compilers it decides code,
 so a member can match only when the functions before it in the file are present:

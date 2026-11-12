@@ -1,0 +1,7 @@
+# Sony libmtap: the file's initialiser binds mtapman.irx's five RPC servers (0x80000901..0x80000905,
+# the ones sceMtapPortOpen .. sceMtapGetModVersion call) and reports "libmtap: bind failed" and the
+# libmtap.a/mtapman.irx version check, the SDK's sceMtapInit. The file's static no-op printf takes
+# every libmtap error message: the release build's disabled debug print.
+# <va>	<name>	<module>
+0x002252d8	debug_printf	sony/libmtap
+0x00225300	sceMtapInit	sony/libmtap

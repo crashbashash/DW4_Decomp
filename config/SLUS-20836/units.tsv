@@ -186,9 +186,7 @@
 0x00224780	0x002250d8	zlib_inftrees	combat	-O4,p -sdatathreshold 2 -lang c -I- -Isrc/third_party/libc -Isrc/third_party/zlib	off	-	whole file
 0x002250e0	0x002252a0	zlib_infutil	combat	-O4,p -sdatathreshold 2 -lang c -I- -Isrc/third_party/libc -Isrc/third_party/zlib	off	-	whole file
 0x002252a0	0x002252d8	zlib_zutil	combat	-O4,p -sdatathreshold 2 -lang c -I- -Isrc/third_party/libc -Isrc/third_party/zlib	off	-	whole file
-0x002252d8	0x00225300	sony-libmtap_2252d8	ee-gcc-2.9	-O2 -G0 -Iinclude	off	-	sony-libmtap region (regions.tsv); exceptions off: none of 14 non-leaf functions has a retail index record; 1 asm body not scored; combat -O4,p -Iinclude reproduces 13/13 members
-0x00225300	0x00225700	sony-libmtap_225300	ee-gcc-2.9	-O2 -G0 -Iinclude	off	-	sony-libmtap block 0x225300-0x225700 (docs/engine/sd-prologue.md, module-map.md) cut at module-map run 0x222e20-0x225ca8; `sd` prologues (Sony EE GCC); exceptions off: none of 5 non-leaf functions has a retail index record; no compiled C member yet; `sd` prologues: Sony EE GCC
-0x00225700	0x00225764	sony-libmtap_225700	ee-gcc-2.9	-O2 -G0 -Iinclude	off	-	sony-libmtap region (regions.tsv)
+0x002252d8	0x00225764	sony_libmtap	ee-gcc-2.9	-O2 -G0 -ffunction-sections -Iinclude	off	-	whole file
 0x00225770	0x0022e4b8	alchemy-base_BaseLibrary	b52	-O4,s -sdatathreshold 2 -Iinclude	off	-	whole file
 0x0022e4b8	0x0022f75c	libgcc_22e4b8	ee-gcc	-O2 -G0 -g -Iinclude	off	-	libgcc region (regions.tsv); `sd` prologues (Sony EE GCC); exceptions off: none of 1 non-leaf functions has a retail index record; no compiled C member yet; `sd` prologues: Sony EE GCC
 0x0022f760	0x00230c78	libgcc_22f760	ee-gcc	-O2 -G0 -g -Iinclude	off	-	libgcc region (regions.tsv); `sd` prologues (Sony EE GCC); exceptions off: none of 13 non-leaf functions has a retail index record; 18 asm bodies not scored; ee-gcc -O2 -G0 -Iinclude reproduces 1/1 members

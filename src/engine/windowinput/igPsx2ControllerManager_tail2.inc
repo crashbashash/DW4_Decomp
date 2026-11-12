@@ -48,7 +48,7 @@ void Gap__igPsx2ControllerManager__vfunc_24(igPsx2ControllerManager *arg0, int a
         if (arg0->_multitap != 0) {
             if (arg0->_loadIRXs != 0) {
                 if (FUN_0032cf50(&DAT_004d7060[0], 1, 0, 0).ok()) {
-                    FUN_00225300();
+                    sceMtapInit();
                     if (arg0->_multitap & 1) sceMtapPortOpen(0);
                     if (arg0->_multitap & 2) sceMtapPortOpen(1);
                 }

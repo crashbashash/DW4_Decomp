@@ -34855,5 +34855,20 @@
       "p2PreviousFinishFuncDone": "0x0056bf38",
       "p2StoreImagePending": "0x00554bbc"
     }
+  },
+  "0x002252d8": {
+    "whole_file": true,
+    "emitted": {
+      "sceMtapInit": "0x00225300",
+      "sceMtapPortOpen": "0x00225540",
+      "sceMtapPortClose": "0x002255b0",
+      "sceMtapGetConnection": "0x00225620",
+      "sceMtapChangeThreadPriority": "0x00225690",
+      "sceMtapGetModVersion": "0x00225700"
+    },
+    "data": {
+      "@bss": "0x0056d6c0",
+      "@rodata": "0x004e7858"
+    }
   }
 }

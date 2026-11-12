@@ -296,7 +296,7 @@ struct LoadStatus { int v; bool ok() const { return v == DAT_004fb410[0]; } };
 extern "C" int FUN_00117c78(...);
 extern "C" int scePadPortOpen(...);
 extern "C" int strncmp(...);
-extern "C" int FUN_00225300(...);
+extern "C" int sceMtapInit(...);
 extern "C" void *FUN_002b9500(...);
 extern "C" int FUN_00306770(...);
 extern "C" LoadStatus FUN_0032cf50(...);

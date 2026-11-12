@@ -36,8 +36,8 @@ after other work, unfilled delay slots, real `mult` for small constants, `lwu` z
 `__muldf3`-style libcalls. Every function of those libraries that matched under 2.96 still matches
 under it apart from a few in libmpeg and libkernl, and raw m2c drafts match under it where none match
 under 2.96. Its release keeps the assembler at `ee/bin/as`, which `tools/eegcc_compile.py` falls back
-to. One libmtap function is an empty varargs function under it. CRI, newlib and libgcc fail under
-2.9-ee and stay on 2.96, as does the kernel-mode code until it is tested further.
+to. CRI, newlib and libgcc fail under 2.9-ee and stay on 2.96, as does the kernel-mode code until it is
+tested further.
 
 ### Sony's prebuilt libraries
 
@@ -54,6 +54,26 @@ libdma 11, libmpeg 5, libipu 5, libgraph 3, libsdr 3, libmc 3). They carry the l
   2.9-ee build independently of the code shapes above.
 * A function smaller than 64 bytes is not named this way: once its relocated words are masked, short
   wrappers match unrelated code (a 28-byte HTTP function matches a game function).
+
+### libmtap is one file
+
+libmtap (`src/sony/libmtap/libmtap.c`, `0x2252d8..0x225764`) is a whole-file unit: its seven functions
+sit together, its five 40-byte `sceSifClientData` clients and the 64-byte-aligned 128-byte RPC buffer
+are one contiguous `.bss` block (`0x56d6c0..0x56d840`), and its error strings run in code order from
+`0x4e7858`. The file's first function, `debug_printf`, is an empty varargs `static` that every libmtap
+error message goes to, the release build's disabled debug print; the version-mismatch report alone
+goes to the runtime's real print routine. `sceMtapInit` binds mtapman.irx's servers
+`0x80000901..0x80000905`, one per call that follows it, and checks the module's major version is 3.
+
+* Under 2.9-ee `-ffunction-sections` leaves the code unchanged, as under 2.96. `.rdata` comes out as
+  `.rodata`, and both 2.9-ee assemblers write REL relocations.
+* The `static` clients and buffer are `.lcomm`s the assembler lays out in declaration order with the
+  buffer's 64-byte alignment, which is retail's layout, so they are the file's own `.bss` rather than
+  externs.
+* `"libmtap: bind failed\n"` is the file's first string, so it is written in each bind loop, before the
+  version check: the compiler merges the five identical `debug_printf`-and-`return 0` blocks into one, which
+  is retail's single target of the five `bltz`. Written once after a `goto`, the string moves after the
+  version messages.
 
 ## The CRI and newlib compiler
 
@@ -187,3 +207,6 @@ disabling ASLR change nothing.
   ([assembly sources](assembly-sources.md)). Which compiler first generated those files is open.
 * **The other Sony libraries' assembler.** Every matched function of libipu, libcdvd, libpad, libsdr, libmc
   and libmtap matches with either assembler, so which one built them is open.
+* **libmtap's names.** `sceMtapChangeThreadPriority`'s two arguments are named as mtapman's high and low
+  thread priorities by guess. The SIF RPC bind and call routines it uses and the print routine keep
+  their address names, shared with every other Sony library.
