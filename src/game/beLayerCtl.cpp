@@ -1,47 +1,60 @@
-/* Message handler dispatching on an enum value name read from the message: 0 builds the layer
- * switch from the layer info record, 1 sets or toggles a named layer, 2 selects one, 3 lists the
- * names, 4 looks one up and returns it. Class names below are readable labels (the layer switch is
- * an igSwitch, the group elements igGroups). */
 #include "dw4/reflected.h"
-extern "C" {
-void *FUN_001968f0(void *);
-void *FUN_0019f1d0(void *);
-int FUN_001c5d10(void *, void *);
-int FUN_001c6050(void *, void *);
-int FUN_001dc820(void *, int);
-int FUN_001dc870(void *);
-int FUN_001dc880(void *, int);
-int FUN_001dc8d0(void *);
-int FUN_001dc8e0(void *, void *);
-int FUN_001dc9a0(void *, int);
-void *FUN_00236f80(int, int);
-int FUN_0035c9e0();
-int FUN_0035ca40();
-void *Memory_GetAllocatorBySelector(int);
-int beMessenger_AppendBool(int, int);
-int beMessenger_AppendObject(int, void *);
-int beMessenger_AppendString(int, char *);
-int beMessenger_ClearObjects(int);
-char *beMessenger_GetString(int, int);
-int beMessenger_GetStringCount(int);
-unsigned int beMessenger_ResolveEnumValue(int, int, void *);
-void igNamedObject_SetName(void *, char *);
-void igObject_Destroy(void *);
-void *igObject_GetAllocator(void *);
-int strcmp(char *, char *);
-extern int DAT_004e0858[4];
-extern int DAT_0050ebd0[4];
-extern int DAT_0050ebe0[4];
-extern int DAT_0050ebf0[4];
-extern int DAT_0050ebf8[4];
-extern int DAT_0050ec08[4];
-extern int DAT_005618d8[4];
-extern int DAT_00587108[4];
-extern int DAT_00587110[4];
-extern int DAT_0058c790[4];
-extern unsigned char GPR_00554c14;
-int Gap__Bec__beLayerCtl__vfunc_34(beLayerCtl *arg0, beLayerInfoRam *arg1, beMessengerWork *arg2);
-}
+#define GROUPS(i) ((beLayerGroupList *)(i)->_groups)
+#define KIDS(g) ((igNodeList *)(g)->_childList)
+#define SWT(a) ((igSwitch *)(a)->_layerSwt)
+#define ELEM(l, i) ((igGroup *)((int *)(l)->_data)[i])
+#define NAME(n) ((n)->_name ? (char *)(n)->_name : (char *)&DAT_004e0858[0])
+#define LCOUNT(l) ((l) != 0 ? (l)->_count : 0)
+#define RELEASE(o) if (o) { --(o)->_refCount; if (((unsigned long long)((long long)(int)(o)->_refCount << 0x29) >> 0x29) == 0) igObject_Destroy(o); }
+
+extern "C" int FUN_001dc9a0(...);
+extern "C" int igObject_Destroy(...);
+extern "C" void beMessenger_RegisterReceiver(int, int, char *, int, int);
+extern "C" int Gap__Bec__beLayerCtl__vfunc_30(void);
+extern "C" void Gap__Bec__beLayerCtl__vfunc_31(void);
+extern "C" int Gap__Bec__beLayerCtl__vfunc_20(void);
+extern "C" void *FUN_001968f0(void *);
+extern "C" void *FUN_0019f1d0(void *);
+extern "C" int FUN_001c5d10(void *, void *);
+extern "C" int FUN_001c6050(void *, void *);
+extern "C" int FUN_001dc820(void *, int);
+extern "C" int FUN_001dc870(void *);
+extern "C" int FUN_001dc880(void *, int);
+extern "C" int FUN_001dc8d0(void *);
+extern "C" int FUN_001dc8e0(void *, void *);
+extern "C" void *FUN_00236f80(int, int);
+extern "C" int FUN_0035c9e0(...);
+extern "C" int FUN_0035ca40(...);
+extern "C" void *Memory_GetAllocatorBySelector(int);
+extern "C" int beMessenger_AppendBool(int, int);
+extern "C" int beMessenger_AppendObject(int, void *);
+extern "C" int beMessenger_AppendString(int, char *);
+extern "C" int beMessenger_ClearObjects(int);
+extern "C" char *beMessenger_GetString(int, int);
+extern "C" int beMessenger_GetStringCount(int);
+extern "C" unsigned int beMessenger_ResolveEnumValue(int, int, void *);
+extern "C" void igNamedObject_SetName(void *, char *);
+extern "C" void *igObject_GetAllocator(void *);
+extern "C" int strcmp(char *, char *);
+/* List-like object at +28 of the layer switch, with its count at +8. */
+typedef struct UnidentifiedCountedList { char pad[8]; int cnt; } UnidentifiedCountedList;
+typedef struct LayerSwtObject { int w0; int refs; char pad[20]; UnidentifiedCountedList *list; } LayerSwtObject;
+extern "C" void Gap__Bec__beLayerCtl__vfunc_32(beLayerCtl *arg0);
+extern "C" char DAT_0050ebc0[];
+extern "C" void Gap__Bec__beLayerCtl__vfunc_29(beLayerCtl * p0, int p1, char * p2, int p3, int p4);
+extern "C" int g_beLayerInfo_metaObject[4];
+extern "C" int g_beLayerCtl_metaObject[4];
+extern "C" int DAT_004e0858[4];
+extern "C" int DAT_0050ebd0[4];
+extern "C" int DAT_0050ebe0[4];
+extern "C" int DAT_0050ebf0[4];
+extern "C" int DAT_0050ebf8[4];
+extern "C" int DAT_0050ec08[4];
+extern "C" int DAT_005618d8[4];
+extern "C" int DAT_00587108[4];
+extern "C" int DAT_00587110[4];
+extern "C" int DAT_0058c790[4];
+extern "C" unsigned char GPR_00554c14;
 /* matching construct: dummy-virtual class so e->v22() compiles to the retail jalr through vtable slot 22 (a scene-graph node's class-id virtual) */
 class NodeVt {
 public:
@@ -61,15 +74,59 @@ struct Ref {
     }
 };
 struct InsightRec { char pad[20]; beLayerInfoRam *cur; };
+extern "C" int Gap__Bec__beLayerCtl__vfunc_34(beLayerCtl *arg0, beLayerInfoRam *arg1, beMessengerWork *arg2);
+
+void Gap__Bec__beLayerCtl__vfunc_32(beLayerCtl *arg0) {
+    int n;
+    LayerSwtObject *a0;
+    UnidentifiedCountedList *l;
+    arg0->_isOrdered = 0;
+    if (arg0->_layerSwt != 0) {
+        goto test; /* matching construct: goto/label layout reproduces the retail loop shape */
+    body:
+        FUN_001dc9a0(a0, 0);
+    test:
+        a0 = (LayerSwtObject *)arg0->_layerSwt;
+        l = a0->list;
+        if (l != 0) {
+            n = l->cnt;
+        } else {
+            n = 0;
+        }
+        if (n > 0) goto body;
+        if (a0 != 0) {
+            a0->refs = a0->refs - 1;
+            if (((unsigned long long)((long long)a0->refs << 0x29) >> 0x29) == 0) {
+                igObject_Destroy(a0);
+            }
+        }
+        arg0->_layerSwt = 0;
+    }
+}
+
+void Gap__Bec__beLayerCtl__vfunc_29(beLayerCtl * p0, int p1, char * p2, int p3, int p4)
+{
+    beMessenger_RegisterReceiver(p0->_messenger, p1, DAT_0050ebc0, 0, -1);
+}
+
+int Gap__Bec__beLayerCtl__vfunc_30(void)
+{
+    return g_beLayerInfo_metaObject[0];
+}
+
+void Gap__Bec__beLayerCtl__vfunc_31(void)
+{
+}
+
 /* The receiver's _groups is a beLayerGroupList whose elements are scene-graph groups (igGroup:
  * name from igNamedObject, _childList at +28). */
-#define GROUPS(i) ((beLayerGroupList *)(i)->_groups)
-#define KIDS(g) ((igNodeList *)(g)->_childList)
-#define SWT(a) ((igSwitch *)(a)->_layerSwt)
-#define ELEM(l, i) ((igGroup *)((int *)(l)->_data)[i])
-#define NAME(n) ((n)->_name ? (char *)(n)->_name : (char *)&DAT_004e0858[0])
-#define LCOUNT(l) ((l) != 0 ? (l)->_count : 0)
-#define RELEASE(o) if (o) { --(o)->_refCount; if (((unsigned long long)((long long)(int)(o)->_refCount << 0x29) >> 0x29) == 0) igObject_Destroy(o); }
+
+
+
+
+
+
+
 int Gap__Bec__beLayerCtl__vfunc_34(beLayerCtl *arg0, beLayerInfoRam *arg1, beMessengerWork *arg2) {
     unsigned v;
     beLayerInfo *msg = (beLayerInfo *)arg1->_parentInfo;
@@ -212,3 +269,9 @@ int Gap__Bec__beLayerCtl__vfunc_34(beLayerCtl *arg0, beLayerInfoRam *arg1, beMes
     }
     return 1;
 }
+
+int Gap__Bec__beLayerCtl__vfunc_20(void)
+{
+    return g_beLayerCtl_metaObject[0];
+}
+
