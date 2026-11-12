@@ -1,70 +1,90 @@
+#include "dw4/reflected.h"
 #include "dw4/igSmartPointer.h"
-extern "C" {
-int FUN_002eb010(...);
-void *FUN_002b90e0(...);
-int FUN_0030b3c0(...);
-int FUN_0030b5c0(...);
-int FUN_0030b8a0(...);
-int FUN_0030ba20(...);
-int FUN_0030bbf0(...);
-int FUN_00344250(...);
-void *FUN_003447c0(...);
-int FUN_0037c2c0(...);
-int FUN_0037c4c0(...);
-int FUN_0037cb80(...);
-int FUN_0037cc50(...);
-int FUN_0037cd90(...);
-int FUN_0037cf30(int, char *, float, float, float);
-int FUN_0037d160(int, int, float, float, float);
-int FUN_0037d570(...);
-int FUN_0037d780(...);
-int FUN_0037d870(...);
-int FUN_0037daf0(...);
-int FUN_0037dc60(...);
-int FUN_0037dd10(...);
-int FUN_0037e020(...);
-int FUN_0039fb60(...);
-void *Memory_GetAllocatorBySelector(...);
-int ObjectList_AppendRetained(...);
-int StringChunk_ReleaseHeader(...);
-int StringPool_Construct(...);
-char *StringPool_Intern(...);
-int beMessenger_AppendBool(...);
-int beMessenger_AppendInt(...);
-int beMessenger_AppendLong(...);
-int beMessenger_AppendString(...);
-int beMessenger_EnqueueSelected(...);
-float beMessenger_GetFloat(...);
-int beMessenger_GetFloatCount(...);
-int beMessenger_GetInt(...);
-int beMessenger_GetLong(...);
-int beMessenger_GetLongCount(...);
-int beMessenger_GetObject(...);
-int beMessenger_GetObjectCount(...);
-char *beMessenger_GetString(...);
-int beMessenger_GetStringCount(...);
-int beMessenger_PrepareDelayedGroup(...);
-unsigned int beMessenger_ResolveEnumValue(...);
-int beMessenger_SendGroup(...);
-void *igObject_GetAllocator(...);
-int strcmp(...);
-extern char DAT_004e0858[];
-extern char *DAT_004c22f0[];
-extern int DAT_0050f9a0[4];
-extern int DAT_0050f9b0[4];
-extern int DAT_0050f9c0[4];
-extern int DAT_0050f9e0[4];
-extern int DAT_0050f9e8[4];
-extern int DAT_0050f9f0[4];
-extern int DAT_0050f9f8[4];
-extern int DAT_00586f20[4];
-extern int DAT_00587110[4];
-extern unsigned char GPR_00554c14;
-int Gap__Bec__beSound__vfunc_34(beSound *self, beBaseInfoRam *arg1, struct Arg2 *arg2);
-}
+
+extern "C" int List_Reserve(...);
+extern "C" void igObject_Destroy(void *);
+extern "C" int FUN_002eb010(...);
+extern "C" int strcmp(...);
+extern "C" int FUN_0037e020(...);
+extern "C" int StringChunk_ReleaseHeader(...);
+extern "C" int StringPool_Construct(...);
+extern "C" char * StringPool_Intern(...);
+extern "C" int Gap__Bec__beSound__vfunc_30(void);
+extern "C" int Gap__Bec__beSound__vfunc_20(void);
+extern "C" int beMessenger_SendGroup(...);
+extern "C" int beMessenger_GetObjectCount(...);
+extern "C" int List_RemoveWordAt(...);
+extern "C" int FUN_0037dc60(...);
+extern "C" int ObjectList_RemoveFirstRetained(...);
+extern "C" void *FUN_002b90e0(...);
+extern "C" int FUN_0030b3c0(...);
+extern "C" int FUN_0030b5c0(...);
+extern "C" int FUN_0030b8a0(...);
+extern "C" int FUN_0030ba20(...);
+extern "C" int FUN_0030bbf0(...);
+extern "C" int FUN_00344250(...);
+extern "C" void *FUN_003447c0(...);
+extern "C" int FUN_0037c2c0(...);
+extern "C" int FUN_0037c4c0(...);
+extern "C" int FUN_0037cb80(...);
+extern "C" int FUN_0037cc50(...);
+extern "C" int FUN_0037cd90(...);
+extern "C" int FUN_0037cf30(int, char *, float, float, float);
+extern "C" int FUN_0037d160(int, int, float, float, float);
+extern "C" int FUN_0037d570(...);
+extern "C" int FUN_0037d780(...);
+extern "C" int FUN_0037d870(...);
+extern "C" int FUN_0037daf0(...);
+extern "C" int FUN_0037dd10(...);
+extern "C" void *Memory_GetAllocatorBySelector(...);
+extern "C" int ObjectList_AppendRetained(...);
+extern "C" int beMessenger_AppendBool(...);
+extern "C" int beMessenger_AppendInt(...);
+extern "C" int beMessenger_AppendLong(...);
+extern "C" int beMessenger_AppendString(...);
+extern "C" int beMessenger_EnqueueSelected(...);
+extern "C" float beMessenger_GetFloat(...);
+extern "C" int beMessenger_GetFloatCount(...);
+extern "C" int beMessenger_GetInt(...);
+extern "C" int beMessenger_GetLong(...);
+extern "C" int beMessenger_GetLongCount(...);
+extern "C" char *beMessenger_GetString(...);
+extern "C" int beMessenger_GetStringCount(...);
+extern "C" int beMessenger_PrepareDelayedGroup(...);
+extern "C" unsigned int beMessenger_ResolveEnumValue(...);
+extern "C" void *igObject_GetAllocator(...);
+extern "C" int DAT_00589ad8[4];
+extern "C" igObject *FUN_00236f80(int, int);
+extern "C" void Gap__Bec__beSound__vfunc_32(beSound *arg0);
+typedef struct K { char pad[52]; int f52; char pad2[8]; int f64; } K;
+/* matching construct: pointer-typed view of beBaseInfoRam._parentInfo (+12) and beSoundInfo._dataType (+32); the matching compiler
+ * schedules differently when those two fields are int handles.  The shorts at +36/+38 are read through beSoundInfo. */
+typedef struct SoundInfoPointerView { char pad0[12]; struct SoundInfoPointerView *f12; char pad[16]; int *f32; } SoundInfoPointerView;
+extern "C" int beMessenger_RegisterReceiver(int, SoundInfoPointerView *, int *, int, int);
+extern "C" int DAT_00586f20[4];
+extern "C" int DAT_0050f9a0[4];
+extern "C" int DAT_0050f9a8[4];
+extern "C" void Gap__Bec__beSound__vfunc_29(beSound *arg0, SoundInfoPointerView *arg1);
+extern "C" int g_beSoundInfo_metaObject[4];
+extern "C" int g_beSound_metaObject[4];
+extern "C" igObjectList * beMessenger_GetObject(...);
+extern "C" char DAT_004e0858[];
+extern "C" int DAT_0050f9b0[4];
+extern "C" int DAT_0050f9c0[4];
+extern "C" int DAT_0050f9d0[4];
+extern "C" int DAT_0050f9d8[4];
+struct RP { int *p; };
+typedef struct SE { int p[2]; int _name; int p2[2]; igDataList *_list; } SE;
+extern "C" void Gap__Bec__beSound__vfunc_31(beSound *self, beBaseInfoRam *arg1);
+extern "C" char *DAT_004c22f0[];
+extern "C" int DAT_0050f9e0[4];
+extern "C" int DAT_0050f9e8[4];
+extern "C" int DAT_0050f9f0[4];
+extern "C" int DAT_0050f9f8[4];
+extern "C" int DAT_00587110[4];
+extern "C" unsigned char GPR_00554c14;
 struct Arg2 { int p[5]; int f20; };
 struct SubE { int p[5]; igObjectList *f20; };
-
 struct NameListRef {
     igObject *p;
     NameListRef(igObject *o) : p(o) {}
@@ -83,12 +103,7 @@ struct StringRef {
 };
 extern "C" int StringList_AppendRetained(void *list, const StringRef &text);
 extern "C" StringRef StringList_CopyRetained(void *list, int index);
-
 struct FloatBits { unsigned mantissa : 31; unsigned sign : 1; };
-static inline float Abs(float value) {
-    ((FloatBits *)&value)->sign = 0;
-    return value;
-}
 struct U { static inline char *Intern(char *text) {
     if (DAT_00586f20[0] == 0) {
         int pool = FUN_002eb010(0x10);
@@ -97,8 +112,170 @@ struct U { static inline char *Intern(char *text) {
     }
     return StringPool_Intern(DAT_00586f20[0], text);
 } };
+extern "C" int Gap__Bec__beSound__vfunc_34(beSound *self, beBaseInfoRam *arg1, Arg2 *arg2);
+extern "C" int FUN_0039fb60(void *arg0, beBaseInfoRam *arg1, int arg2);
+
+void Gap__Bec__beSound__vfunc_32(beSound *arg0) {
+    igDataList *l;
+    int n;
+    int i;
+    igObject *o;
+    igDataList *l2;
+    if (arg0->_cri == 0) {
+        igObject *t = FUN_00236f80(arg0->_insight, DAT_00589ad8[0]);
+        igObject *old;
+        if (t != 0) {
+            t->_refCount = (int)t->_refCount + 1;
+        }
+        old = (igObject *)arg0->_cri;
+        if (old != 0) {
+            old->_refCount = (int)old->_refCount - 1;
+            if (((unsigned long long)((long long)(int)old->_refCount << 0x29) >> 0x29) == 0) {
+                igObject_Destroy((void *)old);
+            }
+        }
+        arg0->_cri = (int)t;
+    }
+    l = (igDataList *)arg0->_playSEs;
+    n = l->_count;
+    for (i = 0; i < n; i++) {
+        o = ((igObject **)l->_data)[i];
+        if (o != 0) {
+            o->_refCount = (int)o->_refCount - 1;
+            if (((unsigned long long)((long long)(int)o->_refCount << 0x29) >> 0x29) == 0) {
+                igObject_Destroy((void *)o);
+            }
+        }
+    }
+    {
+        int m = l->_count;
+        int j;
+        for (j = 0; j < m; j++) {
+            ((igObject **)l->_data)[j] = 0;
+        }
+    }
+    l->_count = 0;
+    l2 = (igDataList *)arg0->_playSEs;
+    if (0 < l2->_count) {
+    } else {
+        List_Reserve(l2, 0, 4);
+    }
+}
+
+void Gap__Bec__beSound__vfunc_29(beSound *arg0, SoundInfoPointerView *arg1) {
+    int *s2;
+    int *old;
+    int *a1;
+    int v1;
+    int var_v0;
+    beMessenger_RegisterReceiver(arg0->_messenger, arg1, &DAT_0050f9a0[0], 0, -1);
+    arg1 = arg1->f12;
+    ((K *)arg0->_cri)->f52 = ((beSoundInfo *)arg1)->_baseVolume;
+    FUN_0037e020(arg0->_cri, ((beSoundInfo *)arg1)->_sndfVolume);
+    if (arg1->f32 == 0) {
+        if (DAT_00586f20[0] == 0) {
+            var_v0 = FUN_002eb010(0x10);
+            if (var_v0 != 0) {
+                var_v0 = StringPool_Construct(var_v0);
+            }
+            DAT_00586f20[0] = var_v0;
+        }
+        s2 = (int *)StringPool_Intern(DAT_00586f20[0], &DAT_0050f9a8[0]);
+        old = arg1->f32;
+        if (old != 0) {
+            a1 = old - 2;
+            v1 = old[-1] - 1;
+            old[-1] = v1;
+            if (v1 == 0) {
+                StringChunk_ReleaseHeader(*a1, a1);
+            }
+        }
+        arg1->f32 = s2;
+    }
+    if (strcmp(arg1->f32, &DAT_0050f9a8[0]) == 0) {
+        ((K *)arg0->_cri)->f64 = 0;
+    } else {
+        ((K *)arg0->_cri)->f64 = 1;
+    }
+}
+
+int Gap__Bec__beSound__vfunc_30(void)
+{
+    return g_beSoundInfo_metaObject[0];
+}
+
+#define NM(e) ((e)->_name ? (char *)(e)->_name : DAT_004e0858)
+#define REL(o) { igObject *rr = (igObject *)(o); if (rr != 0) { rr->_refCount = (int)rr->_refCount - 1; if (((unsigned long long)((long long)(int)rr->_refCount << 0x29) >> 0x29) == 0) { igObject_Destroy(rr); } } }
+void Gap__Bec__beSound__vfunc_31(beSound *self, beBaseInfoRam *arg1) {
+    igDataList *objs;
+    long long now;
+    SE *e;
+    igDataList *l;
+    int n;
+    int i;
+    int m;
+    int j2;
+    RP sp;
+    int k;
+    int j;
+    switch (arg1->_st0) {
+    case 0:
+        beMessenger_SendGroup(self->_messenger, &DAT_0050f9b0[0], &DAT_0050f9c0[0]);
+        if (beMessenger_GetObjectCount(self->_messenger) <= 0) break;
+            objs = (igDataList *)beMessenger_GetObject(self->_messenger, 0);
+            i = 0;
+            if (0 < objs->_count) do {
+                e = ((SE **)objs->_data)[i];
+                if (NM(e) == 0) { i++; continue; }
+                if (strcmp(NM(e), &DAT_0050f9d0[0]) == 0) { i++; continue; }
+                l = e->_list;
+                n = l->_count;
+                for (j = 0; j < n; j++) {
+                    REL(((igObject **)l->_data)[j]);
+                }
+                m = l->_count;
+                for (j2 = 0; j2 < m; j2++) {
+                    ((int *)l->_data)[j2] = 0;
+                }
+                l->_count = 0;
+                if (0 < e->_list->_count) {
+                } else {
+                    List_Reserve(e->_list, 0, 4);
+                }
+                REL(((igObject **)objs->_data)[i]);
+                List_RemoveWordAt(objs, i);
+                ((int *)objs->_data)[objs->_count] = 0;
+            } while (i < objs->_count);
+        FUN_0037dc60(self->_cri, &DAT_0050f9d8[0]);
+        arg1->_st0 = arg1->_st0 + 1;
+        arg1->_st3 = 0;
+        arg1->_st2 = 0;
+        arg1->_st1 = 0;
+    case 1:
+        now = ((igInsightCore *)self->_insight)->_worldTime;
+        l = (igDataList *)self->_playSEs;
+        k = 0;
+        if (0 < l->_count) do {
+            bePlaySE *s = ((bePlaySE **)l->_data)[k];
+            if (s->_time < now) {
+                ObjectList_RemoveFirstRetained(&sp, l, s, k);
+                k--;
+            }
+            l = (igDataList *)self->_playSEs;
+            k++;
+        } while (k < l->_count);
+    }
+}
+
+#undef REL
+#undef NM
+
 #define SREL(s) { char *ss = (s); if (ss != 0) { int *hd = (int *)ss - 2; int cnt = ((int *)ss)[-1] - 1; ((int *)ss)[-1] = cnt; if (cnt == 0) StringChunk_ReleaseHeader(*hd, hd); } }
 #define ALLOC(a, self) { a = igObject_GetAllocator(self); a = GPR_00554c14 ? a : Memory_GetAllocatorBySelector(DAT_00587110[0]); }
+static inline float Abs(float value) {
+    ((FloatBits *)&value)->sign = 0;
+    return value;
+}
 
 int Gap__Bec__beSound__vfunc_34(beSound *self, beBaseInfoRam *arg1, Arg2 *arg2) {
     igObjectList *spCC;
@@ -147,7 +324,7 @@ int Gap__Bec__beSound__vfunc_34(beSound *self, beBaseInfoRam *arg1, Arg2 *arg2) 
     case 3:
         ((beCri *)self->_cri)->_pauseOnetime = 1;
     case 2:
-        if ((r0 = FUN_0039fb60(self, arg1, beMessenger_GetString(self->_messenger, 0))) == -1) return 0;
+        if ((r0 = FUN_0039fb60((void *)self, arg1, (int)(beMessenger_GetString(self->_messenger, 0)))) == -1) return 0;
         idx = r0;
         e = ((beSoundData **)((igObjectList *)info->_dataList)->_data)[idx];
         switch (e->_type) {
@@ -394,4 +571,30 @@ int Gap__Bec__beSound__vfunc_34(beSound *self, beBaseInfoRam *arg1, Arg2 *arg2) 
         return 0;
     }
     return 1;
+}
+
+#undef ALLOC
+#undef SREL
+
+int FUN_0039fb60(void *arg0, beBaseInfoRam *arg1, int arg2) {
+    int i;
+    igObjectList *t;
+    int n;
+    int *p;
+
+    t = (igObjectList *)((beSoundInfo *)arg1->_parentInfo)->_dataList;
+    n = t->_count;
+    for (i = 0; i < n; i++) {
+        p = (int *)((beSoundData **)t->_data)[i]->_name;
+        p = p ? p : &((int *)DAT_004e0858)[0];
+        if (strcmp(arg2, p) == 0) {
+            return i;
+        }
+    }
+    return -1;
+}
+
+int Gap__Bec__beSound__vfunc_20(void)
+{
+    return g_beSound_metaObject[0];
 }

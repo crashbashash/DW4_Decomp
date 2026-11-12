@@ -583,19 +583,6 @@
       "__dl__FPv": "0x00100610"
     }
   },
-  "0x0039ec10": {
-    "emitted": {
-      "__dt__25igSmartPointer<8igObject>Fv": "0x0039fae0"
-    },
-    "duplicates": {
-      "__dt__11NameListRefFv": "0x001c6460",
-      "__dt__12GlobalStrRefFv": "0x001489a0",
-      "__dt__9StringRefFv": "0x00130720"
-    },
-    "externals": {
-      "__dl__FPv": "0x00100610"
-    }
-  },
   "0x003d8740": {
     "emitted": {
       "__dt__10ItemRef<1>Fv": "0x003d9d50",
@@ -31016,6 +31003,48 @@
       "__dt__9StringRefFv": "0x00130720"
     },
     "symbol": "FUN_003b04e0"
+  },
+  "0x0039e540": {
+    "whole_file": true,
+    "emitted": {
+      "Gap__Bec__beSound__vfunc_29": "0x0039e740",
+      "Gap__Bec__beSound__vfunc_30": "0x0039e860",
+      "Gap__Bec__beSound__vfunc_31": "0x0039e870",
+      "Gap__Bec__beSound__vfunc_34": "0x0039ec10",
+      "__dt__25igSmartPointer<8igObject>Fv": "0x0039fae0",
+      "FUN_0039fb60": "0x0039fb60",
+      "Gap__Bec__beSound__vfunc_20": "0x0039fc20"
+    },
+    "data": {
+      "@985": "0x0050fa00",
+      "DAT_004c22f0": "0x004c22f0",
+      "DAT_004e0858": "0x004e0858",
+      "DAT_0050f9a0": "0x0050f9a0",
+      "DAT_0050f9a8": "0x0050f9a8",
+      "DAT_0050f9b0": "0x0050f9b0",
+      "DAT_0050f9c0": "0x0050f9c0",
+      "DAT_0050f9d0": "0x0050f9d0",
+      "DAT_0050f9d8": "0x0050f9d8",
+      "DAT_0050f9e0": "0x0050f9e0",
+      "DAT_0050f9e8": "0x0050f9e8",
+      "DAT_0050f9f0": "0x0050f9f0",
+      "DAT_0050f9f8": "0x0050f9f8",
+      "DAT_00586f20": "0x00586f20",
+      "DAT_00587110": "0x00587110",
+      "DAT_00589ad8": "0x00589ad8",
+      "GPR_00554c14": "0x00554c14",
+      "g_beSoundInfo_metaObject": "0x00587e40",
+      "g_beSound_metaObject": "0x00587ea8"
+    },
+    "duplicates": {
+      "__dt__11NameListRefFv": "0x001c6460",
+      "__dt__12GlobalStrRefFv": "0x001489a0",
+      "__dt__9StringRefFv": "0x00130720"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    },
+    "symbol": "Gap__Bec__beSound__vfunc_32"
   },
   "0x0039dee0": {
     "whole_file": true,
