@@ -235,8 +235,8 @@ them (`make symbols`, `tools/jumptables.py`, `scripts/sync_data.sh`,
 `make progress`); `src/` and the prose docs are not.
 
 `src/` is grouped by module, and every function that has no recovered name yet lives in
-`src/unmatched/`. It holds **translation units**, the way the game was built — `src/lua/api.cpp`
-is one file defining 47 functions, `src/engine/*.c` will be a system each — written in retail
+`src/unmatched/`. It holds **translation units**, the way the game was built — `src/game/be.cpp`
+is one file, the `be` class with the game's Lua API, `src/engine/*.c` will be a system each — written in retail
 address order, with a function moved out of `unmatched/` into its module once its purpose is
 known. The per-function matching build (`check.py`, `linkgen.py`) splits a function back out
 with [`tools/units.py`](tools/units.py), so a unit compiles as one and is still verified as

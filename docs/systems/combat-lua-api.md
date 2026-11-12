@@ -2,9 +2,7 @@
 
 All **26 functions / 5,372 code bytes** at `0x00374800..0x00375d8c`
 now rebuild byte-for-byte from readable C. The functions are in
-[`src/lua/api.cpp`](../../src/lua/api.cpp) and
-[`src/lua/combat.cpp`](../../src/lua/combat.cpp), in retail address order within
-each unit. The [generated inventory](combat-inventory.md) lists every body,
+[`src/game/be.cpp`](../../src/game/be.cpp), in retail address order. The [generated inventory](combat-inventory.md) lists every body,
 its reviewed size and source.
 
 This is the caller API, not the calculation dispatcher. It assembles messenger

@@ -2,7 +2,7 @@
 
 The contiguous helper group at `0x0038aca0..0x0038af70` implements the seven Lua MAT bindings on
 the material controller `beMatCtrl`. The binding wrappers at `0x00373160..0x00373274` are
-C++ in [`src/lua/material.cpp`](../../src/lua/material.cpp). The adjacent controller methods at
+C++ in [`src/game/be.cpp`](../../src/game/be.cpp). The adjacent controller methods at
 `0x0038af70..0x0038bed0` (initialization, receiver registration, recursive contact search, the
 per-instance update, message dispatch and two metadata getters) and the box-membership leaf at
 `0x0018b630` belong to the same module; for the update see [Open items](#open-items).
@@ -26,7 +26,7 @@ then use the dry run and `--apply --check` naming workflow.
 
 | Address | Symbol | Role | Source |
 | --- | --- | --- | --- |
-| `0x00373160..0x00373274` | `MATisPlayer`, `MATisAllPlayer`, `MATgetPlayerNo`, `MATisRidePlayer`, `MATisRideOffPlayer`, `MATgetPlayerMatStat`, `MATsetRun` | Lua binding wrappers | matched, [`src/lua/material.cpp`](../../src/lua/material.cpp) |
+| `0x00373160..0x00373274` | `MATisPlayer`, `MATisAllPlayer`, `MATgetPlayerNo`, `MATisRidePlayer`, `MATisRideOffPlayer`, `MATgetPlayerMatStat`, `MATsetRun` | Lua binding wrappers | matched, [`src/game/be.cpp`](../../src/game/be.cpp) |
 | `0x0038aca0` | `beMatCtrl_IsPlayer` | query helper | matched, `src/unmatched/beMatCtrl_IsPlayer.cpp` |
 | `0x0038acd0` | `beMatCtrl_IsAllPlayer` | query helper | matched, `src/unmatched/beMatCtrl_IsAllPlayer.cpp` |
 | `0x0038ad40` | `beMatCtrl_GetPlayerNo` | query helper | matched, `src/unmatched/beMatCtrl_GetPlayerNo.cpp` |

@@ -45,32 +45,32 @@ their own recovery. Source presence does not substitute for `make check`.
 
 | Address | Function | Bytes | Matching source |
 | --- | --- | ---: | --- |
-| `0x00374800` | `BLTisPlayerBullet` | 128 | [src/lua/combat.cpp](../../src/lua/combat.cpp) |
-| `0x00374880` | `BLTgetShootRamNo` | 12 | [src/lua/api.cpp](../../src/lua/api.cpp) |
-| `0x00374890` | `BLTisHitCheck` | 272 | [src/lua/combat.cpp](../../src/lua/combat.cpp) |
-| `0x003749a0` | `BLTisCritical` | 156 | [src/lua/api.cpp](../../src/lua/api.cpp) |
-| `0x00374a40` | `BLTgetDamageValue` | 364 | [src/lua/combat.cpp](../../src/lua/combat.cpp) |
-| `0x00374bb0` | `BLTgetDamageRank` | 264 | [src/lua/combat.cpp](../../src/lua/combat.cpp) |
-| `0x00374cc0` | `BLTgetAttributeStr` | 56 | [src/lua/combat.cpp](../../src/lua/combat.cpp) |
-| `0x00374d00` | `BLTgetStunTime` | 212 | [src/lua/api.cpp](../../src/lua/api.cpp) |
-| `0x00374de0` | `BLTgetPoisonTime` | 288 | [src/lua/combat.cpp](../../src/lua/combat.cpp) |
-| `0x00374f00` | `BLTgetSleepTime` | 260 | [src/lua/combat.cpp](../../src/lua/combat.cpp) |
-| `0x00375010` | `BLTgetBindTime` | 260 | [src/lua/combat.cpp](../../src/lua/combat.cpp) |
-| `0x00375120` | `BLTgetAttackDownTime` | 288 | [src/lua/combat.cpp](../../src/lua/combat.cpp) |
-| `0x00375240` | `BLTgetPowerDownTime` | 288 | [src/lua/combat.cpp](../../src/lua/combat.cpp) |
-| `0x00375360` | `BLTcalcSkillUp` | 176 | [src/lua/api.cpp](../../src/lua/api.cpp) |
-| `0x00375410` | `BLTcalcEXPUp` | 136 | [src/lua/api.cpp](../../src/lua/api.cpp) |
-| `0x003754a0` | `BLPisHitCheck` | 156 | [src/lua/api.cpp](../../src/lua/api.cpp) |
-| `0x00375540` | `BLPgetDamageValue` | 336 | [src/lua/combat.cpp](../../src/lua/combat.cpp) |
-| `0x00375690` | `BLPgetAttackZokusei` | 148 | [src/lua/api.cpp](../../src/lua/api.cpp) |
-| `0x00375730` | `BLPgetDamageRank` | 244 | [src/lua/combat.cpp](../../src/lua/combat.cpp) |
-| `0x00375830` | `BLPgetStunTime` | 328 | [src/lua/combat.cpp](../../src/lua/combat.cpp) |
-| `0x00375980` | `BLPgetPoisonTime` | 164 | [src/lua/api.cpp](../../src/lua/api.cpp) |
-| `0x00375a30` | `BLPgetSleepTime` | 156 | [src/lua/api.cpp](../../src/lua/api.cpp) |
-| `0x00375ad0` | `BLPgetBindTime` | 156 | [src/lua/api.cpp](../../src/lua/api.cpp) |
-| `0x00375b70` | `BLPgetAttackDownTime` | 184 | [src/lua/api.cpp](../../src/lua/api.cpp) |
-| `0x00375c30` | `BLPgetPowerDownTime` | 184 | [src/lua/api.cpp](../../src/lua/api.cpp) |
-| `0x00375cf0` | `BLPcalcKoukaMagic` | 156 | [src/lua/api.cpp](../../src/lua/api.cpp) |
+| `0x00374800` | `BLTisPlayerBullet` | 128 | [src/game/be.cpp](../../src/game/be.cpp) |
+| `0x00374880` | `BLTgetShootRamNo` | 12 | [src/game/be.cpp](../../src/game/be.cpp) |
+| `0x00374890` | `BLTisHitCheck` | 272 | [src/game/be.cpp](../../src/game/be.cpp) |
+| `0x003749a0` | `BLTisCritical` | 156 | [src/game/be.cpp](../../src/game/be.cpp) |
+| `0x00374a40` | `BLTgetDamageValue` | 364 | [src/game/be.cpp](../../src/game/be.cpp) |
+| `0x00374bb0` | `BLTgetDamageRank` | 264 | [src/game/be.cpp](../../src/game/be.cpp) |
+| `0x00374cc0` | `BLTgetAttributeStr` | 56 | [src/game/be.cpp](../../src/game/be.cpp) |
+| `0x00374d00` | `BLTgetStunTime` | 212 | [src/game/be.cpp](../../src/game/be.cpp) |
+| `0x00374de0` | `BLTgetPoisonTime` | 288 | [src/game/be.cpp](../../src/game/be.cpp) |
+| `0x00374f00` | `BLTgetSleepTime` | 260 | [src/game/be.cpp](../../src/game/be.cpp) |
+| `0x00375010` | `BLTgetBindTime` | 260 | [src/game/be.cpp](../../src/game/be.cpp) |
+| `0x00375120` | `BLTgetAttackDownTime` | 288 | [src/game/be.cpp](../../src/game/be.cpp) |
+| `0x00375240` | `BLTgetPowerDownTime` | 288 | [src/game/be.cpp](../../src/game/be.cpp) |
+| `0x00375360` | `BLTcalcSkillUp` | 176 | [src/game/be.cpp](../../src/game/be.cpp) |
+| `0x00375410` | `BLTcalcEXPUp` | 136 | [src/game/be.cpp](../../src/game/be.cpp) |
+| `0x003754a0` | `BLPisHitCheck` | 156 | [src/game/be.cpp](../../src/game/be.cpp) |
+| `0x00375540` | `BLPgetDamageValue` | 336 | [src/game/be.cpp](../../src/game/be.cpp) |
+| `0x00375690` | `BLPgetAttackZokusei` | 148 | [src/game/be.cpp](../../src/game/be.cpp) |
+| `0x00375730` | `BLPgetDamageRank` | 244 | [src/game/be.cpp](../../src/game/be.cpp) |
+| `0x00375830` | `BLPgetStunTime` | 328 | [src/game/be.cpp](../../src/game/be.cpp) |
+| `0x00375980` | `BLPgetPoisonTime` | 164 | [src/game/be.cpp](../../src/game/be.cpp) |
+| `0x00375a30` | `BLPgetSleepTime` | 156 | [src/game/be.cpp](../../src/game/be.cpp) |
+| `0x00375ad0` | `BLPgetBindTime` | 156 | [src/game/be.cpp](../../src/game/be.cpp) |
+| `0x00375b70` | `BLPgetAttackDownTime` | 184 | [src/game/be.cpp](../../src/game/be.cpp) |
+| `0x00375c30` | `BLPgetPowerDownTime` | 184 | [src/game/be.cpp](../../src/game/be.cpp) |
+| `0x00375cf0` | `BLPcalcKoukaMagic` | 156 | [src/game/be.cpp](../../src/game/be.cpp) |
 
 ## Direct callees from the FIGHTCALC region
 

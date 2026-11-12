@@ -116,7 +116,7 @@ integer function loses that result.
 ## Where the code is
 
 Lua asks the native `FIGHTCALC` object for a result by key name. `BLTisCritical`
-(`0x003749a0`, [`src/lua/api.cpp`](../../src/lua/api.cpp)) sends the key `P2EISCRITICAL` plus three ints
+(`0x003749a0`, [`src/game/be.cpp`](../../src/game/be.cpp)) sends the key `P2EISCRITICAL` plus three ints
 (the MDL cache fields `0x58a208`, `0x58a1f4`, `0x58a1fc`) and reads a bool back; it contains no
 game logic. The handlers sit in one dispatcher switch:
 

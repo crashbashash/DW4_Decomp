@@ -18642,7 +18642,7 @@
       "address": 3606400,
       "name": "LuaAPI_Dispatch",
       "size": 4188,
-      "source": "src/unmatched/LuaAPI_Dispatch.cpp",
+      "source": "src/game/be.cpp",
       "direct": [
         {
           "site": 3606420,
@@ -20235,7 +20235,7 @@
       "address": 3611088,
       "name": "LuaAPI_Register",
       "size": 60,
-      "source": "src/unmatched/LuaAPI_Register.cpp",
+      "source": "src/game/be.cpp",
       "direct": [
         {
           "site": 3611128,
@@ -20250,7 +20250,7 @@
       "address": 3611664,
       "name": "bePlayer_GetStruct",
       "size": 84,
-      "source": "src/game/bePlayer_GetStruct.cpp",
+      "source": "src/game/be.cpp",
       "direct": [
         {
           "site": 3611712,
@@ -20271,7 +20271,7 @@
       "address": 3611760,
       "name": "SYSisJoinPlayer",
       "size": 48,
-      "source": "src/lua/api.cpp",
+      "source": "src/game/be.cpp",
       "direct": [
         {
           "site": 3611768,
@@ -20292,7 +20292,7 @@
       "address": 3611808,
       "name": "SYSgetPlayerName",
       "size": 48,
-      "source": "src/lua/api.cpp",
+      "source": "src/game/be.cpp",
       "direct": [
         {
           "site": 3611816,
@@ -20313,7 +20313,7 @@
       "address": 3611856,
       "name": "SYSgetWeaponName",
       "size": 152,
-      "source": "src/unmatched/SYSgetWeaponName.cpp",
+      "source": "src/game/be.cpp",
       "direct": [
         {
           "site": 3611872,
@@ -20346,7 +20346,7 @@
       "address": 3612016,
       "name": "SYSgetPlayerNinzu",
       "size": 48,
-      "source": "src/lua/api.cpp",
+      "source": "src/game/be.cpp",
       "direct": [
         {
           "site": 3612024,
@@ -20367,7 +20367,7 @@
       "address": 3612064,
       "name": "SYSgetDifficulty",
       "size": 48,
-      "source": "src/lua/api.cpp",
+      "source": "src/game/be.cpp",
       "direct": [
         {
           "site": 3612072,
@@ -20388,7 +20388,7 @@
       "address": 3612112,
       "name": "SYSsetDifficulty",
       "size": 60,
-      "source": "src/lua/api.cpp",
+      "source": "src/game/be.cpp",
       "direct": [
         {
           "site": 3612128,
@@ -20409,7 +20409,7 @@
       "address": 3612176,
       "name": "SYSgetCameraMode",
       "size": 84,
-      "source": "src/lua/api.cpp",
+      "source": "src/game/be.cpp",
       "direct": [
         {
           "site": 3612204,
@@ -20436,7 +20436,7 @@
       "address": 3612272,
       "name": "SYSgetLightMode",
       "size": 84,
-      "source": "src/lua/api.cpp",
+      "source": "src/game/be.cpp",
       "direct": [
         {
           "site": 3612300,
@@ -20463,7 +20463,7 @@
       "address": 3612368,
       "name": "SYSgetArea",
       "size": 8,
-      "source": "src/lua/api.cpp",
+      "source": "src/game/be.cpp",
       "direct": [],
       "indirect": []
     },
@@ -20471,7 +20471,7 @@
       "address": 3612384,
       "name": "SYSgetCountry",
       "size": 8,
-      "source": "src/lua/api.cpp",
+      "source": "src/game/be.cpp",
       "direct": [],
       "indirect": []
     },
@@ -20479,7 +20479,7 @@
       "address": 3612400,
       "name": "SYSgetTarget",
       "size": 8,
-      "source": "src/lua/api.cpp",
+      "source": "src/game/be.cpp",
       "direct": [],
       "indirect": []
     },
@@ -20487,7 +20487,7 @@
       "address": 3612416,
       "name": "SYSgetIsPackOnly",
       "size": 8,
-      "source": "src/lua/api.cpp",
+      "source": "src/game/be.cpp",
       "direct": [],
       "indirect": []
     },
@@ -20495,7 +20495,7 @@
       "address": 3612432,
       "name": "SYSgetRandom",
       "size": 68,
-      "source": "src/unmatched/SYSgetRandom.cpp",
+      "source": "src/game/be.cpp",
       "direct": [],
       "indirect": [
         {
@@ -20509,7 +20509,7 @@
       "address": 3612512,
       "name": "SYSsetGateStage",
       "size": 400,
-      "source": "src/unmatched/SYSsetGateStage.cpp",
+      "source": "src/game/be.cpp",
       "direct": [
         {
           "site": 3612560,
@@ -20596,7 +20596,7 @@
       "address": 3612912,
       "name": "SYSgetGateStageName",
       "size": 84,
-      "source": "src/lua/api.cpp",
+      "source": "src/game/be.cpp",
       "direct": [
         {
           "site": 3612940,
@@ -20623,7 +20623,7 @@
       "address": 3613008,
       "name": "SYSgetGateStageNo",
       "size": 84,
-      "source": "src/lua/api.cpp",
+      "source": "src/game/be.cpp",
       "direct": [
         {
           "site": 3613036,
@@ -20650,7 +20650,7 @@
       "address": 3613104,
       "name": "SYSctlDeviceFolder",
       "size": 264,
-      "source": "src/lua/api.cpp",
+      "source": "src/game/be.cpp",
       "direct": [
         {
           "site": 3613172,
@@ -20719,7 +20719,7 @@
       "address": 3613376,
       "name": "SYSctlDiskFolder",
       "size": 244,
-      "source": "src/lua/api.cpp",
+      "source": "src/game/be.cpp",
       "direct": [
         {
           "site": 3613428,
@@ -20788,7 +20788,7 @@
       "address": 3613632,
       "name": "SYSctlFlagFolder",
       "size": 220,
-      "source": "src/lua/api.cpp",
+      "source": "src/game/be.cpp",
       "direct": [
         {
           "site": 3613668,
@@ -20857,7 +20857,7 @@
       "address": 3613856,
       "name": "SYSctlBit",
       "size": 232,
-      "source": "src/lua/api.cpp",
+      "source": "src/game/be.cpp",
       "direct": [
         {
           "site": 3613900,
@@ -20926,7 +20926,7 @@
       "address": 3614096,
       "name": "SYSgetPlayerLevel",
       "size": 48,
-      "source": "src/lua/api.cpp",
+      "source": "src/game/be.cpp",
       "direct": [
         {
           "site": 3614104,
@@ -20947,7 +20947,7 @@
       "address": 3614144,
       "name": "SYSgetPlayerDigimon",
       "size": 48,
-      "source": "src/lua/api.cpp",
+      "source": "src/game/be.cpp",
       "direct": [
         {
           "site": 3614152,
@@ -20968,7 +20968,7 @@
       "address": 3614192,
       "name": "SYSisGetShinkaDigimon",
       "size": 72,
-      "source": "src/unmatched/SYSisGetShinkaDigimon.cpp",
+      "source": "src/game/be.cpp",
       "direct": [
         {
           "site": 3614208,
@@ -20989,7 +20989,7 @@
       "address": 3614272,
       "name": "SYSctlCardFolder",
       "size": 392,
-      "source": "src/unmatched/SYSctlCardFolder.cpp",
+      "source": "src/game/be.cpp",
       "direct": [
         {
           "site": 3614300,
@@ -21028,7 +21028,7 @@
       "address": 3614672,
       "name": "SYSctlShinka",
       "size": 412,
-      "source": "src/unmatched/SYSctlShinka.cpp",
+      "source": "src/game/be.cpp",
       "direct": [
         {
           "site": 3614708,
@@ -21103,7 +21103,7 @@
       "address": 3615088,
       "name": "SYSctlPlayer",
       "size": 188,
-      "source": "src/lua/api.cpp",
+      "source": "src/game/be.cpp",
       "direct": [
         {
           "site": 3615140,
@@ -21154,7 +21154,7 @@
       "address": 3615280,
       "name": "CFLclear",
       "size": 276,
-      "source": "src/unmatched/CFLclear.cpp",
+      "source": "src/game/be.cpp",
       "direct": [
         {
           "site": 3615364,
@@ -21193,7 +21193,7 @@
       "address": 3615568,
       "name": "CFLsetName",
       "size": 392,
-      "source": "src/unmatched/CFLsetName.cpp",
+      "source": "src/game/be.cpp",
       "direct": [
         {
           "site": 3615640,
@@ -21256,7 +21256,7 @@
       "address": 3615968,
       "name": "CFLgetFolderName",
       "size": 16,
-      "source": "src/lua/api.cpp",
+      "source": "src/game/be.cpp",
       "direct": [],
       "indirect": []
     },
@@ -21264,7 +21264,7 @@
       "address": 3615984,
       "name": "Lua_sd_OptionalArg",
       "size": 756,
-      "source": "src/unmatched/Lua_sd_OptionalArg.cpp",
+      "source": "src/game/be.cpp",
       "direct": [
         {
           "site": 3616036,
@@ -21333,7 +21333,7 @@
       "address": 3616752,
       "name": "sd_29",
       "size": 108,
-      "source": "src/unmatched/sd_29.cpp",
+      "source": "src/game/be.cpp",
       "direct": [
         {
           "site": 3616800,
@@ -21360,7 +21360,7 @@
       "address": 3616864,
       "name": "sd_30",
       "size": 56,
-      "source": "src/unmatched/sd_30.cpp",
+      "source": "src/game/be.cpp",
       "direct": [
         {
           "site": 3616900,
@@ -21375,7 +21375,7 @@
       "address": 3616928,
       "name": "sd_31",
       "size": 124,
-      "source": "src/unmatched/sd_31.cpp",
+      "source": "src/game/be.cpp",
       "direct": [
         {
           "site": 3616984,
@@ -21402,7 +21402,7 @@
       "address": 3617056,
       "name": "sd_32",
       "size": 64,
-      "source": "src/unmatched/sd_32.cpp",
+      "source": "src/game/be.cpp",
       "direct": [
         {
           "site": 3617100,
@@ -21417,7 +21417,7 @@
       "address": 3617120,
       "name": "MATisPlayer",
       "size": 32,
-      "source": "src/lua/material.cpp",
+      "source": "src/game/be.cpp",
       "direct": [
         {
           "site": 3617132,
@@ -21432,7 +21432,7 @@
       "address": 3617152,
       "name": "MATisAllPlayer",
       "size": 32,
-      "source": "src/lua/material.cpp",
+      "source": "src/game/be.cpp",
       "direct": [
         {
           "site": 3617164,
@@ -21447,7 +21447,7 @@
       "address": 3617184,
       "name": "MATgetPlayerNo",
       "size": 32,
-      "source": "src/lua/material.cpp",
+      "source": "src/game/be.cpp",
       "direct": [
         {
           "site": 3617196,
@@ -21462,7 +21462,7 @@
       "address": 3617216,
       "name": "MATisRidePlayer",
       "size": 36,
-      "source": "src/lua/material.cpp",
+      "source": "src/game/be.cpp",
       "direct": [
         {
           "site": 3617232,
@@ -21477,7 +21477,7 @@
       "address": 3617264,
       "name": "MATisRideOffPlayer",
       "size": 36,
-      "source": "src/lua/material.cpp",
+      "source": "src/game/be.cpp",
       "direct": [
         {
           "site": 3617280,
@@ -21492,7 +21492,7 @@
       "address": 3617312,
       "name": "MATgetPlayerMatStat",
       "size": 36,
-      "source": "src/lua/material.cpp",
+      "source": "src/game/be.cpp",
       "direct": [
         {
           "site": 3617328,
@@ -21507,7 +21507,7 @@
       "address": 3617360,
       "name": "MATsetRun",
       "size": 36,
-      "source": "src/lua/material.cpp",
+      "source": "src/game/be.cpp",
       "direct": [
         {
           "site": 3617376,
@@ -21522,7 +21522,7 @@
       "address": 3617408,
       "name": "DMsetSD_40",
       "size": 68,
-      "source": "src/unmatched/DMsetSD_40.cpp",
+      "source": "src/game/be.cpp",
       "direct": [
         {
           "site": 3617456,
@@ -21537,7 +21537,7 @@
       "address": 3617488,
       "name": "DMsetSD_41",
       "size": 64,
-      "source": "src/unmatched/DMsetSD_41.cpp",
+      "source": "src/game/be.cpp",
       "direct": [
         {
           "site": 3617532,
@@ -21552,7 +21552,7 @@
       "address": 3617552,
       "name": "DMsetSD_42",
       "size": 64,
-      "source": "src/unmatched/DMsetSD_42.cpp",
+      "source": "src/game/be.cpp",
       "direct": [
         {
           "site": 3617596,
@@ -21567,7 +21567,7 @@
       "address": 3617616,
       "name": "DMsetSD_43",
       "size": 60,
-      "source": "src/unmatched/DMsetSD_43.cpp",
+      "source": "src/game/be.cpp",
       "direct": [
         {
           "site": 3617656,
@@ -21582,7 +21582,7 @@
       "address": 3617680,
       "name": "DMchkSD_44",
       "size": 276,
-      "source": "src/unmatched/DMchkSD_44.cpp",
+      "source": "src/game/be.cpp",
       "direct": [
         {
           "site": 3617744,
@@ -21627,7 +21627,7 @@
       "address": 3617968,
       "name": "DMchkSD_45",
       "size": 264,
-      "source": "src/unmatched/DMchkSD_45.cpp",
+      "source": "src/game/be.cpp",
       "direct": [
         {
           "site": 3618024,
@@ -21672,7 +21672,7 @@
       "address": 3618240,
       "name": "DMsetLua",
       "size": 36,
-      "source": "src/unmatched/DMsetLua.cpp",
+      "source": "src/game/be.cpp",
       "direct": [
         {
           "site": 3618256,
@@ -21687,7 +21687,7 @@
       "address": 3618288,
       "name": "DMmsgBox",
       "size": 44,
-      "source": "src/unmatched/DMmsgBox.cpp",
+      "source": "src/game/be.cpp",
       "direct": [
         {
           "site": 3618312,
@@ -21702,7 +21702,7 @@
       "address": 3618336,
       "name": "DMswtSD_46",
       "size": 64,
-      "source": "src/unmatched/DMswtSD_46.cpp",
+      "source": "src/game/be.cpp",
       "direct": [
         {
           "site": 3618380,
@@ -21717,7 +21717,7 @@
       "address": 3618400,
       "name": "DMswtSD_47",
       "size": 60,
-      "source": "src/unmatched/DMswtSD_47.cpp",
+      "source": "src/game/be.cpp",
       "direct": [
         {
           "site": 3618440,
@@ -21732,7 +21732,7 @@
       "address": 3618464,
       "name": "DMswtEnd",
       "size": 32,
-      "source": "src/unmatched/DMswtEnd.cpp",
+      "source": "src/game/be.cpp",
       "direct": [
         {
           "site": 3618476,
@@ -21747,7 +21747,7 @@
       "address": 3618496,
       "name": "DMcase",
       "size": 36,
-      "source": "src/unmatched/DMcase.cpp",
+      "source": "src/game/be.cpp",
       "direct": [
         {
           "site": 3618512,
@@ -21762,7 +21762,7 @@
       "address": 3618544,
       "name": "DMrun",
       "size": 32,
-      "source": "src/unmatched/DMrun.cpp",
+      "source": "src/game/be.cpp",
       "direct": [
         {
           "site": 3618556,
@@ -21777,7 +21777,7 @@
       "address": 3618576,
       "name": "DMgetCount",
       "size": 148,
-      "source": "src/unmatched/DMgetCount.cpp",
+      "source": "src/game/be.cpp",
       "direct": [
         {
           "site": 3618644,
@@ -21804,7 +21804,7 @@
       "address": 3618736,
       "name": "FLGisOn",
       "size": 144,
-      "source": "src/unmatched/FLGisOn.cpp",
+      "source": "src/game/be.cpp",
       "direct": [
         {
           "site": 3618780,
@@ -21837,7 +21837,7 @@
       "address": 3618880,
       "name": "FLGset",
       "size": 156,
-      "source": "src/unmatched/FLGset.cpp",
+      "source": "src/game/be.cpp",
       "direct": [
         {
           "site": 3618932,
@@ -21864,7 +21864,7 @@
       "address": 3619040,
       "name": "FLGflip",
       "size": 268,
-      "source": "src/unmatched/FLGflip.cpp",
+      "source": "src/game/be.cpp",
       "direct": [
         {
           "site": 3619088,
@@ -21903,7 +21903,7 @@
       "address": 3619312,
       "name": "COUNTERset",
       "size": 164,
-      "source": "src/unmatched/COUNTERset.cpp",
+      "source": "src/game/be.cpp",
       "direct": [
         {
           "site": 3619364,
@@ -21930,7 +21930,7 @@
       "address": 3619488,
       "name": "COUNTERget",
       "size": 120,
-      "source": "src/unmatched/COUNTERget.cpp",
+      "source": "src/game/be.cpp",
       "direct": [
         {
           "site": 3619532,
@@ -21957,7 +21957,7 @@
       "address": 3619616,
       "name": "MDLgetRamNo",
       "size": 12,
-      "source": "src/lua/api.cpp",
+      "source": "src/game/be.cpp",
       "direct": [],
       "indirect": []
     },
@@ -21965,7 +21965,7 @@
       "address": 3619632,
       "name": "MDLgetInfoName",
       "size": 12,
-      "source": "src/lua/api.cpp",
+      "source": "src/game/be.cpp",
       "direct": [],
       "indirect": []
     },
@@ -21973,7 +21973,7 @@
       "address": 3619648,
       "name": "MDLgetPosStr",
       "size": 204,
-      "source": "src/unmatched/MDLgetPosStr.cpp",
+      "source": "src/game/be.cpp",
       "direct": [
         {
           "site": 3619688,
@@ -22030,7 +22030,7 @@
       "address": 3619856,
       "name": "MDLgetRotStr",
       "size": 232,
-      "source": "src/unmatched/MDLgetRotStr.cpp",
+      "source": "src/game/be.cpp",
       "direct": [
         {
           "site": 3619900,
@@ -22087,7 +22087,7 @@
       "address": 3620096,
       "name": "MDLgetMHp",
       "size": 12,
-      "source": "src/lua/api.cpp",
+      "source": "src/game/be.cpp",
       "direct": [],
       "indirect": []
     },
@@ -22095,7 +22095,7 @@
       "address": 3620112,
       "name": "MDLgetHp",
       "size": 12,
-      "source": "src/lua/api.cpp",
+      "source": "src/game/be.cpp",
       "direct": [],
       "indirect": []
     },
@@ -22103,7 +22103,7 @@
       "address": 3620128,
       "name": "MDLaddHp",
       "size": 48,
-      "source": "src/lua/api.cpp",
+      "source": "src/game/be.cpp",
       "direct": [],
       "indirect": []
     },
@@ -22111,7 +22111,7 @@
       "address": 3620176,
       "name": "MDLsetSeq",
       "size": 60,
-      "source": "src/unmatched/MDLsetSeq.cpp",
+      "source": "src/game/be.cpp",
       "direct": [
         {
           "site": 3620216,
@@ -22126,7 +22126,7 @@
       "address": 3620240,
       "name": "MDLsetSD",
       "size": 56,
-      "source": "src/unmatched/MDLsetSD.cpp",
+      "source": "src/game/be.cpp",
       "direct": [
         {
           "site": 3620276,
@@ -22141,7 +22141,7 @@
       "address": 3620304,
       "name": "MDLisLive",
       "size": 172,
-      "source": "src/unmatched/MDLisLive.cpp",
+      "source": "src/game/be.cpp",
       "direct": [
         {
           "site": 3620352,
@@ -22168,7 +22168,7 @@
       "address": 3620480,
       "name": "MDLgetBulletKind",
       "size": 12,
-      "source": "src/lua/api.cpp",
+      "source": "src/game/be.cpp",
       "direct": [],
       "indirect": []
     },
@@ -22176,7 +22176,7 @@
       "address": 3620496,
       "name": "MDLgetBulletName",
       "size": 68,
-      "source": "src/unmatched/MDLgetBulletName.c",
+      "source": "src/game/be.cpp",
       "direct": [],
       "indirect": []
     },
@@ -22184,7 +22184,7 @@
       "address": 3620576,
       "name": "MDLgetBulletBoxNo",
       "size": 12,
-      "source": "src/lua/api.cpp",
+      "source": "src/game/be.cpp",
       "direct": [],
       "indirect": []
     },
@@ -22192,7 +22192,7 @@
       "address": 3620592,
       "name": "FloatingNumber_Spawn",
       "size": 528,
-      "source": "src/game/FloatingNumber_Spawn.cpp",
+      "source": "src/game/be.cpp",
       "direct": [
         {
           "site": 3620696,
@@ -22267,7 +22267,7 @@
       "address": 3621120,
       "name": "MDLdspDamage",
       "size": 28,
-      "source": "src/lua/MDLdspDamage.cpp",
+      "source": "src/game/be.cpp",
       "direct": [
         {
           "site": 3621128,
@@ -22282,7 +22282,7 @@
       "address": 3621152,
       "name": "MDLdspDamageP",
       "size": 28,
-      "source": "src/lua/MDLdspDamageP.cpp",
+      "source": "src/game/be.cpp",
       "direct": [
         {
           "site": 3621160,
@@ -22297,7 +22297,7 @@
       "address": 3621184,
       "name": "MDLdspExp",
       "size": 28,
-      "source": "src/lua/MDLdspExp.cpp",
+      "source": "src/game/be.cpp",
       "direct": [
         {
           "site": 3621192,
@@ -22312,7 +22312,7 @@
       "address": 3621216,
       "name": "MDLsetDMGTurn",
       "size": 20,
-      "source": "src/lua/api.cpp",
+      "source": "src/game/be.cpp",
       "direct": [],
       "indirect": []
     },
@@ -22320,7 +22320,7 @@
       "address": 3621248,
       "name": "MDLisCallName",
       "size": 68,
-      "source": "src/unmatched/MDLisCallName.cpp",
+      "source": "src/game/be.cpp",
       "direct": [
         {
           "site": 3621288,
@@ -22335,7 +22335,7 @@
       "address": 3621328,
       "name": "MDLsetWorldPosTarget_78",
       "size": 40,
-      "source": "src/unmatched/MDLsetWorldPosTarget_78.c",
+      "source": "src/game/be.cpp",
       "direct": [],
       "indirect": []
     },
@@ -22343,7 +22343,7 @@
       "address": 3621376,
       "name": "MDLsetWorldPosTarget_79",
       "size": 84,
-      "source": "src/unmatched/MDLsetWorldPosTarget_79.cpp",
+      "source": "src/game/be.cpp",
       "direct": [
         {
           "site": 3621404,
@@ -22358,7 +22358,7 @@
       "address": 3621472,
       "name": "MDLgetKyoriSquare",
       "size": 112,
-      "source": "src/unmatched/MDLgetKyoriSquare.cpp",
+      "source": "src/game/be.cpp",
       "direct": [
         {
           "site": 3621512,
@@ -22373,7 +22373,7 @@
       "address": 3621584,
       "name": "MDLgetRecNo",
       "size": 12,
-      "source": "src/lua/api.cpp",
+      "source": "src/game/be.cpp",
       "direct": [],
       "indirect": []
     },
@@ -22381,7 +22381,7 @@
       "address": 3621600,
       "name": "MDLisSeqName",
       "size": 304,
-      "source": "src/unmatched/MDLisSeqName.cpp",
+      "source": "src/game/be.cpp",
       "direct": [
         {
           "site": 3621640,
@@ -22432,7 +22432,7 @@
       "address": 3621904,
       "name": "MDLisStatus",
       "size": 144,
-      "source": "src/unmatched/MDLisStatus.cpp",
+      "source": "src/game/be.cpp",
       "direct": [
         {
           "site": 3621940,
@@ -22471,7 +22471,7 @@
       "address": 3622048,
       "name": "PLAYERgetPos",
       "size": 64,
-      "source": "src/lua/api.cpp",
+      "source": "src/game/be.cpp",
       "direct": [
         {
           "site": 3622076,
@@ -22492,7 +22492,7 @@
       "address": 3622112,
       "name": "PLAYERgetDataStr",
       "size": 320,
-      "source": "src/unmatched/PLAYERgetDataStr.cpp",
+      "source": "src/game/be.cpp",
       "direct": [
         {
           "site": 3622164,
@@ -22579,7 +22579,7 @@
       "address": 3622432,
       "name": "PLAYERgetPosStr",
       "size": 264,
-      "source": "src/unmatched/PLAYERgetPosStr.cpp",
+      "source": "src/game/be.cpp",
       "direct": [
         {
           "site": 3622500,
@@ -22642,7 +22642,7 @@
       "address": 3622704,
       "name": "MsgBox",
       "size": 8,
-      "source": "src/lua/api.cpp",
+      "source": "src/game/be.cpp",
       "direct": [],
       "indirect": []
     },
@@ -22650,7 +22650,7 @@
       "address": 3622720,
       "name": "ShutDown",
       "size": 168,
-      "source": "src/unmatched/ShutDown.cpp",
+      "source": "src/game/be.cpp",
       "direct": [
         {
           "site": 3622772,
@@ -22683,7 +22683,7 @@
       "address": 3622896,
       "name": "TXTgetCallNo",
       "size": 12,
-      "source": "src/lua/api.cpp",
+      "source": "src/game/be.cpp",
       "direct": [],
       "indirect": []
     },
@@ -22691,7 +22691,7 @@
       "address": 3622912,
       "name": "BLTisPlayerBullet",
       "size": 128,
-      "source": "src/lua/combat.cpp",
+      "source": "src/game/be.cpp",
       "direct": [],
       "indirect": []
     },
@@ -22699,7 +22699,7 @@
       "address": 3623040,
       "name": "BLTgetShootRamNo",
       "size": 12,
-      "source": "src/lua/api.cpp",
+      "source": "src/game/be.cpp",
       "direct": [],
       "indirect": []
     },
@@ -22707,7 +22707,7 @@
       "address": 3623056,
       "name": "BLTisHitCheck",
       "size": 272,
-      "source": "src/lua/combat.cpp",
+      "source": "src/game/be.cpp",
       "direct": [
         {
           "site": 3623112,
@@ -22782,7 +22782,7 @@
       "address": 3623328,
       "name": "BLTisCritical",
       "size": 156,
-      "source": "src/lua/api.cpp",
+      "source": "src/game/be.cpp",
       "direct": [
         {
           "site": 3623348,
@@ -22833,7 +22833,7 @@
       "address": 3623488,
       "name": "BLTgetDamageValue",
       "size": 364,
-      "source": "src/lua/combat.cpp",
+      "source": "src/game/be.cpp",
       "direct": [
         {
           "site": 3623552,
@@ -22926,7 +22926,7 @@
       "address": 3623856,
       "name": "BLTgetDamageRank",
       "size": 264,
-      "source": "src/lua/combat.cpp",
+      "source": "src/game/be.cpp",
       "direct": [],
       "indirect": []
     },
@@ -22934,7 +22934,7 @@
       "address": 3624128,
       "name": "BLTgetAttributeStr",
       "size": 56,
-      "source": "src/lua/combat.cpp",
+      "source": "src/game/be.cpp",
       "direct": [],
       "indirect": []
     },
@@ -22942,7 +22942,7 @@
       "address": 3624192,
       "name": "BLTgetStunTime",
       "size": 212,
-      "source": "src/lua/api.cpp",
+      "source": "src/game/be.cpp",
       "direct": [
         {
           "site": 3624228,
@@ -23005,7 +23005,7 @@
       "address": 3624416,
       "name": "BLTgetPoisonTime",
       "size": 288,
-      "source": "src/lua/combat.cpp",
+      "source": "src/game/be.cpp",
       "direct": [
         {
           "site": 3624548,
@@ -23062,7 +23062,7 @@
       "address": 3624704,
       "name": "BLTgetSleepTime",
       "size": 260,
-      "source": "src/lua/combat.cpp",
+      "source": "src/game/be.cpp",
       "direct": [
         {
           "site": 3624828,
@@ -23113,7 +23113,7 @@
       "address": 3624976,
       "name": "BLTgetBindTime",
       "size": 260,
-      "source": "src/lua/combat.cpp",
+      "source": "src/game/be.cpp",
       "direct": [
         {
           "site": 3625100,
@@ -23164,7 +23164,7 @@
       "address": 3625248,
       "name": "BLTgetAttackDownTime",
       "size": 288,
-      "source": "src/lua/combat.cpp",
+      "source": "src/game/be.cpp",
       "direct": [
         {
           "site": 3625380,
@@ -23221,7 +23221,7 @@
       "address": 3625536,
       "name": "BLTgetPowerDownTime",
       "size": 288,
-      "source": "src/lua/combat.cpp",
+      "source": "src/game/be.cpp",
       "direct": [
         {
           "site": 3625668,
@@ -23278,7 +23278,7 @@
       "address": 3625824,
       "name": "BLTcalcSkillUp",
       "size": 176,
-      "source": "src/lua/api.cpp",
+      "source": "src/game/be.cpp",
       "direct": [
         {
           "site": 3625860,
@@ -23329,7 +23329,7 @@
       "address": 3626000,
       "name": "BLTcalcEXPUp",
       "size": 136,
-      "source": "src/lua/api.cpp",
+      "source": "src/game/be.cpp",
       "direct": [
         {
           "site": 3626020,
@@ -23374,7 +23374,7 @@
       "address": 3626144,
       "name": "BLPisHitCheck",
       "size": 156,
-      "source": "src/lua/api.cpp",
+      "source": "src/game/be.cpp",
       "direct": [
         {
           "site": 3626164,
@@ -23425,7 +23425,7 @@
       "address": 3626304,
       "name": "BLPgetDamageValue",
       "size": 336,
-      "source": "src/lua/combat.cpp",
+      "source": "src/game/be.cpp",
       "direct": [
         {
           "site": 3626360,
@@ -23512,7 +23512,7 @@
       "address": 3626640,
       "name": "BLPgetAttackZokusei",
       "size": 148,
-      "source": "src/lua/api.cpp",
+      "source": "src/game/be.cpp",
       "direct": [
         {
           "site": 3626660,
@@ -23563,7 +23563,7 @@
       "address": 3626800,
       "name": "BLPgetDamageRank",
       "size": 244,
-      "source": "src/lua/combat.cpp",
+      "source": "src/game/be.cpp",
       "direct": [
         {
           "site": 3626836,
@@ -23626,7 +23626,7 @@
       "address": 3627056,
       "name": "BLPgetStunTime",
       "size": 328,
-      "source": "src/lua/combat.cpp",
+      "source": "src/game/be.cpp",
       "direct": [
         {
           "site": 3627128,
@@ -23713,7 +23713,7 @@
       "address": 3627392,
       "name": "BLPgetPoisonTime",
       "size": 164,
-      "source": "src/lua/api.cpp",
+      "source": "src/game/be.cpp",
       "direct": [
         {
           "site": 3627420,
@@ -23764,7 +23764,7 @@
       "address": 3627568,
       "name": "BLPgetSleepTime",
       "size": 156,
-      "source": "src/lua/api.cpp",
+      "source": "src/game/be.cpp",
       "direct": [
         {
           "site": 3627588,
@@ -23815,7 +23815,7 @@
       "address": 3627728,
       "name": "BLPgetBindTime",
       "size": 156,
-      "source": "src/lua/api.cpp",
+      "source": "src/game/be.cpp",
       "direct": [
         {
           "site": 3627748,
@@ -23866,7 +23866,7 @@
       "address": 3627888,
       "name": "BLPgetAttackDownTime",
       "size": 184,
-      "source": "src/lua/api.cpp",
+      "source": "src/game/be.cpp",
       "direct": [
         {
           "site": 3627916,
@@ -23923,7 +23923,7 @@
       "address": 3628080,
       "name": "BLPgetPowerDownTime",
       "size": 184,
-      "source": "src/lua/api.cpp",
+      "source": "src/game/be.cpp",
       "direct": [
         {
           "site": 3628108,
@@ -23980,7 +23980,7 @@
       "address": 3628272,
       "name": "BLPcalcKoukaMagic",
       "size": 156,
-      "source": "src/lua/api.cpp",
+      "source": "src/game/be.cpp",
       "direct": [
         {
           "site": 3628292,
@@ -24031,7 +24031,7 @@
       "address": 3628432,
       "name": "LISsetDifficultMax",
       "size": 96,
-      "source": "src/lua/api.cpp",
+      "source": "src/game/be.cpp",
       "direct": [
         {
           "site": 3628468,

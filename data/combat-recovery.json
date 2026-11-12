@@ -2121,157 +2121,157 @@
       "address": "0x00374800",
       "name": "BLTisPlayerBullet",
       "size": 128,
-      "source": "src/lua/combat.cpp"
+      "source": "src/game/be.cpp"
     },
     {
       "address": "0x00374880",
       "name": "BLTgetShootRamNo",
       "size": 12,
-      "source": "src/lua/api.cpp"
+      "source": "src/game/be.cpp"
     },
     {
       "address": "0x00374890",
       "name": "BLTisHitCheck",
       "size": 272,
-      "source": "src/lua/combat.cpp"
+      "source": "src/game/be.cpp"
     },
     {
       "address": "0x003749a0",
       "name": "BLTisCritical",
       "size": 156,
-      "source": "src/lua/api.cpp"
+      "source": "src/game/be.cpp"
     },
     {
       "address": "0x00374a40",
       "name": "BLTgetDamageValue",
       "size": 364,
-      "source": "src/lua/combat.cpp"
+      "source": "src/game/be.cpp"
     },
     {
       "address": "0x00374bb0",
       "name": "BLTgetDamageRank",
       "size": 264,
-      "source": "src/lua/combat.cpp"
+      "source": "src/game/be.cpp"
     },
     {
       "address": "0x00374cc0",
       "name": "BLTgetAttributeStr",
       "size": 56,
-      "source": "src/lua/combat.cpp"
+      "source": "src/game/be.cpp"
     },
     {
       "address": "0x00374d00",
       "name": "BLTgetStunTime",
       "size": 212,
-      "source": "src/lua/api.cpp"
+      "source": "src/game/be.cpp"
     },
     {
       "address": "0x00374de0",
       "name": "BLTgetPoisonTime",
       "size": 288,
-      "source": "src/lua/combat.cpp"
+      "source": "src/game/be.cpp"
     },
     {
       "address": "0x00374f00",
       "name": "BLTgetSleepTime",
       "size": 260,
-      "source": "src/lua/combat.cpp"
+      "source": "src/game/be.cpp"
     },
     {
       "address": "0x00375010",
       "name": "BLTgetBindTime",
       "size": 260,
-      "source": "src/lua/combat.cpp"
+      "source": "src/game/be.cpp"
     },
     {
       "address": "0x00375120",
       "name": "BLTgetAttackDownTime",
       "size": 288,
-      "source": "src/lua/combat.cpp"
+      "source": "src/game/be.cpp"
     },
     {
       "address": "0x00375240",
       "name": "BLTgetPowerDownTime",
       "size": 288,
-      "source": "src/lua/combat.cpp"
+      "source": "src/game/be.cpp"
     },
     {
       "address": "0x00375360",
       "name": "BLTcalcSkillUp",
       "size": 176,
-      "source": "src/lua/api.cpp"
+      "source": "src/game/be.cpp"
     },
     {
       "address": "0x00375410",
       "name": "BLTcalcEXPUp",
       "size": 136,
-      "source": "src/lua/api.cpp"
+      "source": "src/game/be.cpp"
     },
     {
       "address": "0x003754a0",
       "name": "BLPisHitCheck",
       "size": 156,
-      "source": "src/lua/api.cpp"
+      "source": "src/game/be.cpp"
     },
     {
       "address": "0x00375540",
       "name": "BLPgetDamageValue",
       "size": 336,
-      "source": "src/lua/combat.cpp"
+      "source": "src/game/be.cpp"
     },
     {
       "address": "0x00375690",
       "name": "BLPgetAttackZokusei",
       "size": 148,
-      "source": "src/lua/api.cpp"
+      "source": "src/game/be.cpp"
     },
     {
       "address": "0x00375730",
       "name": "BLPgetDamageRank",
       "size": 244,
-      "source": "src/lua/combat.cpp"
+      "source": "src/game/be.cpp"
     },
     {
       "address": "0x00375830",
       "name": "BLPgetStunTime",
       "size": 328,
-      "source": "src/lua/combat.cpp"
+      "source": "src/game/be.cpp"
     },
     {
       "address": "0x00375980",
       "name": "BLPgetPoisonTime",
       "size": 164,
-      "source": "src/lua/api.cpp"
+      "source": "src/game/be.cpp"
     },
     {
       "address": "0x00375a30",
       "name": "BLPgetSleepTime",
       "size": 156,
-      "source": "src/lua/api.cpp"
+      "source": "src/game/be.cpp"
     },
     {
       "address": "0x00375ad0",
       "name": "BLPgetBindTime",
       "size": 156,
-      "source": "src/lua/api.cpp"
+      "source": "src/game/be.cpp"
     },
     {
       "address": "0x00375b70",
       "name": "BLPgetAttackDownTime",
       "size": 184,
-      "source": "src/lua/api.cpp"
+      "source": "src/game/be.cpp"
     },
     {
       "address": "0x00375c30",
       "name": "BLPgetPowerDownTime",
       "size": 184,
-      "source": "src/lua/api.cpp"
+      "source": "src/game/be.cpp"
     },
     {
       "address": "0x00375cf0",
       "name": "BLPcalcKoukaMagic",
       "size": 156,
-      "source": "src/lua/api.cpp"
+      "source": "src/game/be.cpp"
     }
   ]
 }
