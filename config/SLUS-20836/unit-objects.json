@@ -5462,51 +5462,6 @@
     },
     "symbol": "Gap__Bec__beWeapon__vfunc_32"
   },
-  "0x001efd90": {
-    "whole_file": true,
-    "emitted": {
-      "p2FreeDmaPredicates": "0x001efe70",
-      "p2DmaPredicatesSatisfied": "0x001efec0",
-      "p2InitDmaCompletionPool": "0x001eff40",
-      "p2ReserveDmaCompletions": "0x001eff60",
-      "p2AddDmaCompletion": "0x001effc0",
-      "p2FreeDmaCompletions": "0x001f0090",
-      "p2TryStartDmaPacket": "0x001f0310",
-      "p2PreviousFinishFuncDonePredicate": "0x001f0390",
-      "p2AddPreviousFinishFuncPredicate": "0x001f03a0",
-      "p2RegisterPredicateName": "0x001f0410",
-      "textureDeferredPredicate": "0x001f0470",
-      "textureLoadedPredicate": "0x001f0490",
-      "p2DmaPacketQueued": "0x001f04b0",
-      "p2DmaSequenceLastCompleted": "0x001f0500",
-      "p2SignalDmaWait": "0x001f0520",
-      "p2GetVif1WaitSequence": "0x001f0560",
-      "p2WaitDmaSequence": "0x001f05a0",
-      "p2DmaSequenceDone": "0x001f0710",
-      "p2ShutdownDmaChannels": "0x001f0730",
-      "p2WaitDmaCondition": "0x001f0930"
-    },
-    "data": {
-      "p2BlockedSema": "0x00568ed0",
-      "p2DmaActivePacket": "0x00568f60",
-      "p2DmaChannelIdle": "0x005690b8",
-      "p2DmaCompletedSequence": "0x00568fe0",
-      "p2DmaCompletionPool": "0x005691c0",
-      "p2DmaCurrentPacket": "0x00568f00",
-      "p2DmaFreePackets": "0x00569120",
-      "p2DmaLastPacket": "0x00568f30",
-      "p2DmaPacketCount": "0x00490cc0",
-      "p2DmaPredicatePool": "0x005691b8",
-      "p2DmaStartedSequence": "0x00568f90",
-      "p2DmaWaitSema": "0x00569030",
-      "p2DmaWaitSequence": "0x00569040",
-      "p2DmaWaitTime": "0x0056c15c",
-      "p2DmaWatchFlags": "0x0056d670",
-      "p2PredicateNames": "0x005691d0",
-      "p2PreviousFinishFuncDone": "0x0056bf38",
-      "p2StoreImagePending": "0x00554bbc"
-    }
-  },
   "0x001fd5a0": {
     "whole_file": true,
     "emitted": {
@@ -34851,5 +34806,54 @@
       "__dt__3AppFv": "0x00234b90"
     },
     "symbol": "FUN_002590c0"
+  },
+  "0x001efd90": {
+    "whole_file": true,
+    "emitted": {
+      "p2FreeDmaPredicates": "0x001efe70",
+      "p2DmaPredicatesSatisfied": "0x001efec0",
+      "p2InitDmaCompletionPool": "0x001eff40",
+      "p2ReserveDmaCompletions": "0x001eff60",
+      "p2AddDmaCompletion": "0x001effc0",
+      "p2FreeDmaCompletions": "0x001f0090",
+      "p2StartDmaPacket": "0x001f00e0",
+      "p2TryStartDmaPacket": "0x001f0310",
+      "p2PreviousFinishFuncDonePredicate": "0x001f0390",
+      "p2AddPreviousFinishFuncPredicate": "0x001f03a0",
+      "p2RegisterPredicateName": "0x001f0410",
+      "textureDeferredPredicate": "0x001f0470",
+      "textureLoadedPredicate": "0x001f0490",
+      "p2DmaPacketQueued": "0x001f04b0",
+      "p2DmaSequenceLastCompleted": "0x001f0500",
+      "p2SignalDmaWait": "0x001f0520",
+      "p2GetVif1WaitSequence": "0x001f0560",
+      "p2WaitDmaSequence": "0x001f05a0",
+      "p2DmaSequenceDone": "0x001f0710",
+      "p2ShutdownDmaChannels": "0x001f0730",
+      "p2WaitDmaCondition": "0x001f0930"
+    },
+    "data": {
+      "DAT_00568ed8": "0x00568ed8",
+      "DAT_00568ee0": "0x00568ee0",
+      "DAT_00568ef8": "0x00568ef8",
+      "p2BlockedSema": "0x00568ed0",
+      "p2DmaActivePacket": "0x00568f60",
+      "p2DmaChannelIdle": "0x005690b8",
+      "p2DmaCompletedSequence": "0x00568fe0",
+      "p2DmaCompletionPool": "0x005691c0",
+      "p2DmaCurrentPacket": "0x00568f00",
+      "p2DmaFreePackets": "0x00569120",
+      "p2DmaLastPacket": "0x00568f30",
+      "p2DmaPacketCount": "0x00490cc0",
+      "p2DmaPredicatePool": "0x005691b8",
+      "p2DmaStartedSequence": "0x00568f90",
+      "p2DmaWaitSema": "0x00569030",
+      "p2DmaWaitSequence": "0x00569040",
+      "p2DmaWaitTime": "0x0056c15c",
+      "p2DmaWatchFlags": "0x0056d670",
+      "p2PredicateNames": "0x005691d0",
+      "p2PreviousFinishFuncDone": "0x0056bf38",
+      "p2StoreImagePending": "0x00554bbc"
+    }
   }
 }

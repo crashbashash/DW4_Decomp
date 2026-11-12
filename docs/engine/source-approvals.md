@@ -368,6 +368,23 @@ frame count at `0x56bf70` and the watchdog's tick counter at `0x56d680`.
   that counter is shared with other threads and polled in the loop, where the keyword keeps the order of its
   accesses.
 
+### dma-packet-kick
+
+`p2StartDmaPacket` in `src/engine/dmaChannel.c` starts a channel's packet: it writes QWC, TADR and CHCR, then
+branches to the function's end. Retail has `sw CHCR; b; nop` in the VIF0 and VIF1 cases.
+
+* MWCC's delay-slot filler (traced in the compiler, `0x4c7690`) takes the first instruction before a branch that
+  nothing later in the block depends on; in these cases that is the CHCR store, so plain C gives `b; sw CHCR`.
+  The store stays put only when a later instruction in the block pins it, and the only one that leaves retail's
+  bytes is a `nop`, which the filler then takes into the slot itself. An `__asm__("nop")` after each CHCR store
+  is that instruction: retail's delay-slot `nop` is the one the source wrote. The owner approved it as the
+  original's own padding after a DMA register write.
+* The GIF case calls a timer before its stores and has a different block shape, so it needs no `nop`.
+* The `sync` before the switch is written `__asm__ volatile`, which turns the global optimiser off for the
+  function as in [gs-interrupt-sync-ei](#gs-interrupt-sync-ei); without the keyword the function differs.
+* The busy bits it sets are in the watchdog's flag word at `0x56d670`, the shared word of
+  [dma-channel-shared-words](#dma-channel-shared-words), declared `volatile` in the file.
+
 ### gs-interrupt-sync-ei
 
 The GS interrupt handler in `src/engine/p2gs.c`, an MWCC file registered with `AddIntcHandler`, ends with `sync`

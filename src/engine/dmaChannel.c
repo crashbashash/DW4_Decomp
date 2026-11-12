@@ -1,4 +1,13 @@
 #include "dw4/p2dma.h"
+#define D0_CHCR ((unsigned int *)0x10008000)
+#define D0_QWC ((unsigned int *)0x10008020)
+#define D0_TADR ((unsigned int *)0x10008030)
+#define D1_CHCR ((unsigned int *)0x10009000)
+#define D1_QWC ((unsigned int *)0x10009020)
+#define D1_TADR ((unsigned int *)0x10009030)
+#define D2_CHCR ((unsigned int *)0x1000a000)
+#define D2_QWC ((unsigned int *)0x1000a020)
+#define D2_TADR ((unsigned int *)0x1000a030)
 
 enum {
     P2_POOL_DMA_PREDICATE = 7,
@@ -157,6 +166,65 @@ void p2FreeDmaCompletions(int channel) {
         node = next;
     }
     packet->completions = 0;
+}
+
+extern long long DAT_00568ed8;
+extern long long DAT_00568ee0;
+extern long long DAT_00568ef8;
+
+void p2StartDmaPacket(int channel) {
+    p2DmaPacket *packet = p2DmaActivePacket[channel];
+    int v;
+
+    p2FreeDmaPredicates(channel);
+    p2DmaChannelIdle[channel] = 0;
+    if (packet->finishPredicate) {
+        p2PreviousFinishFuncDone = 0;
+        packet->finishPredicate = 0;
+    }
+    packet->b3 = 0;
+    packet->ready = 0;
+    if (packet->storeImage) {
+        p2StoreImagePending = 1;
+    }
+    p2DmaStartedSequence[channel] = packet->sequence;
+    __asm__ volatile("sync");
+    switch (channel) {
+    case P2_DMA_VIF0:
+        p2DmaWatchFlags.busy |= 0x20;
+        *D0_QWC = 0;
+        v = packet->chain & 0x0fffffff;
+        *D0_TADR = v;
+        v = 389;
+        *D0_CHCR = v;
+        __asm__("nop");
+        break;
+    case P2_DMA_VIF1:
+        p2DmaWatchFlags.busy |= 0x40;
+        FUN_0020d270(&DAT_00568ed8);
+        if (p2DmaChannelIdle[P2_DMA_VIF1] == 0 && p2DmaChannelIdle[P2_DMA_GIF] == 0) {
+            DAT_00568ef8 = DAT_00568ed8;
+        }
+        *D1_QWC = 0;
+        v = packet->chain & 0x0fffffff;
+        *D1_TADR = v;
+        v = 389;
+        *D1_CHCR = v;
+        __asm__("nop");
+        break;
+    case P2_DMA_GIF:
+        p2DmaWatchFlags.busy |= 0x80;
+        FUN_0020d270(&DAT_00568ee0);
+        if (p2DmaChannelIdle[P2_DMA_VIF1] == 0 && p2DmaChannelIdle[P2_DMA_GIF] == 0) {
+            DAT_00568ef8 = DAT_00568ee0;
+        }
+        *D2_QWC = 0;
+        v = packet->chain & 0x0fffffff;
+        *D2_TADR = v;
+        v = 389;
+        *D2_CHCR = v;
+        break;
+    }
 }
 
 void p2TryStartDmaPacket(int channel) {
