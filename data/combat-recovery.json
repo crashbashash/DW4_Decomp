@@ -1207,7 +1207,7 @@
       "address": "0x003c9be0",
       "name": "FightCom_GetMetaEnum",
       "size": 84,
-      "source": "src/game/FightCom_GetMetaEnum.cpp",
+      "source": "src/game/ndmw/NdmwLibrary.cpp",
       "sites": [
         "0x003fde64"
       ]

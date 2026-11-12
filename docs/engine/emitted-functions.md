@@ -180,9 +180,13 @@ whichever vtable a disassembler scanned last, not after its owner. A unit's `.ro
 code order across all its classes. A library-sized unit is built and measured like any whole file: one
 row over the library's range, its members in retail order. Two things argue against one unit: a member
 that matches only under another profile, and two equal float literals read from two different
-addresses, since MWCC merges equal literals within one unit.
+addresses, since MWCC merges equal literals within one unit. The game's generated front units (the
+register list, latch and data classes of a game library) compiled the same way under the game profile,
+exceptions on; their run can also hold a copy of an inline method of a class whose own file comes later,
+and retail keeps that copy, so it is a member of the front unit.
 
 Such a unit is written as the original most likely was, a unity build: `src/engine/<library>/<Library>.cpp`
+(`src/game/<library>/` for a game library)
 holds only `#include` lines, the library header with the shared declarations first, then one `.inc`
 fragment per class run in retail order, named after the class (`<Class>_tail.inc` when a class's code
 resumes later; `LibraryFront.inc` for the latch and register list, `InlineTail.inc` for the trailing

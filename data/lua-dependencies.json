@@ -27147,7 +27147,7 @@
       "address": 3869200,
       "name": "NdmwLibrary_MarkRegistered",
       "size": 24,
-      "source": "src/game/NdmwLibrary_MarkRegistered.c",
+      "source": "src/game/ndmw/NdmwLibrary.cpp",
       "direct": [],
       "indirect": []
     },
@@ -27155,7 +27155,7 @@
       "address": 3874160,
       "name": "FUN_003b1d70",
       "size": 84,
-      "source": "src/unmatched/FUN_003b1d70.cpp",
+      "source": "src/game/ndmw/NdmwLibrary.cpp",
       "direct": [
         {
           "site": 3874204,
@@ -27170,7 +27170,7 @@
       "address": 3878704,
       "name": "FUN_003b2f30",
       "size": 128,
-      "source": "src/unmatched/FUN_003b2f30.cpp",
+      "source": "src/game/ndmw/NdmwLibrary.cpp",
       "direct": [
         {
           "site": 3878776,
@@ -27191,7 +27191,7 @@
       "address": 3878832,
       "name": "FUN_003b2fb0",
       "size": 128,
-      "source": "src/unmatched/FUN_003b2fb0.cpp",
+      "source": "src/game/ndmw/NdmwLibrary.cpp",
       "direct": [
         {
           "site": 3878904,
@@ -27212,7 +27212,7 @@
       "address": 3879344,
       "name": "FUN_003b31b0",
       "size": 52,
-      "source": "src/unmatched/FUN_003b31b0.cpp",
+      "source": "src/game/ndmw/NdmwLibrary.cpp",
       "direct": [
         {
           "site": 3879356,
@@ -27233,7 +27233,7 @@
       "address": 3879616,
       "name": "FUN_003b32c0",
       "size": 32,
-      "source": "src/unmatched/FUN_003b32c0.cpp",
+      "source": "src/game/ndmw/NdmwLibrary.cpp",
       "direct": [
         {
           "site": 3879628,
@@ -27248,7 +27248,7 @@
       "address": 3879792,
       "name": "FUN_003b3370",
       "size": 52,
-      "source": "src/unmatched/FUN_003b3370.cpp",
+      "source": "src/game/ndmw/NdmwLibrary.cpp",
       "direct": [
         {
           "site": 3879804,
@@ -27269,7 +27269,7 @@
       "address": 3880064,
       "name": "FUN_003b3480",
       "size": 32,
-      "source": "src/unmatched/FUN_003b3480.cpp",
+      "source": "src/game/ndmw/NdmwLibrary.cpp",
       "direct": [
         {
           "site": 3880076,
@@ -27284,7 +27284,7 @@
       "address": 3880688,
       "name": "FUN_003b36f0",
       "size": 52,
-      "source": "src/unmatched/FUN_003b36f0.cpp",
+      "source": "src/game/ndmw/NdmwLibrary.cpp",
       "direct": [
         {
           "site": 3880700,
@@ -27305,7 +27305,7 @@
       "address": 3881040,
       "name": "FUN_003b3850",
       "size": 32,
-      "source": "src/unmatched/FUN_003b3850.cpp",
+      "source": "src/game/ndmw/NdmwLibrary.cpp",
       "direct": [
         {
           "site": 3881052,
@@ -27320,7 +27320,7 @@
       "address": 3881216,
       "name": "FUN_003b3900",
       "size": 52,
-      "source": "src/unmatched/FUN_003b3900.cpp",
+      "source": "src/game/ndmw/NdmwLibrary.cpp",
       "direct": [
         {
           "site": 3881228,
@@ -27341,7 +27341,7 @@
       "address": 3881488,
       "name": "FUN_003b3a10",
       "size": 32,
-      "source": "src/unmatched/FUN_003b3a10.cpp",
+      "source": "src/game/ndmw/NdmwLibrary.cpp",
       "direct": [
         {
           "site": 3881500,
@@ -27356,7 +27356,7 @@
       "address": 3881664,
       "name": "FUN_003b3ac0",
       "size": 52,
-      "source": "src/unmatched/FUN_003b3ac0.cpp",
+      "source": "src/game/ndmw/NdmwLibrary.cpp",
       "direct": [
         {
           "site": 3881676,
@@ -27377,7 +27377,7 @@
       "address": 3881936,
       "name": "FUN_003b3bd0",
       "size": 32,
-      "source": "src/unmatched/FUN_003b3bd0.cpp",
+      "source": "src/game/ndmw/NdmwLibrary.cpp",
       "direct": [
         {
           "site": 3881948,
@@ -27392,7 +27392,7 @@
       "address": 3884048,
       "name": "FUN_003b4410",
       "size": 52,
-      "source": "src/unmatched/FUN_003b4410.cpp",
+      "source": "src/game/ndmw/NdmwLibrary.cpp",
       "direct": [
         {
           "site": 3884060,
@@ -27413,7 +27413,7 @@
       "address": 3884320,
       "name": "FUN_003b4520",
       "size": 32,
-      "source": "src/unmatched/FUN_003b4520.cpp",
+      "source": "src/game/ndmw/NdmwLibrary.cpp",
       "direct": [
         {
           "site": 3884332,
@@ -27428,7 +27428,7 @@
       "address": 3884944,
       "name": "FUN_003b4790",
       "size": 52,
-      "source": "src/unmatched/FUN_003b4790.cpp",
+      "source": "src/game/ndmw/NdmwLibrary.cpp",
       "direct": [
         {
           "site": 3884956,
@@ -27449,7 +27449,7 @@
       "address": 3885216,
       "name": "FUN_003b48a0",
       "size": 32,
-      "source": "src/unmatched/FUN_003b48a0.cpp",
+      "source": "src/game/ndmw/NdmwLibrary.cpp",
       "direct": [
         {
           "site": 3885228,
@@ -27464,7 +27464,7 @@
       "address": 3886480,
       "name": "FUN_003b4d90",
       "size": 52,
-      "source": "src/unmatched/FUN_003b4d90.cpp",
+      "source": "src/game/ndmw/NdmwLibrary.cpp",
       "direct": [
         {
           "site": 3886492,
@@ -27485,7 +27485,7 @@
       "address": 3886752,
       "name": "FUN_003b4ea0",
       "size": 32,
-      "source": "src/unmatched/FUN_003b4ea0.cpp",
+      "source": "src/game/ndmw/NdmwLibrary.cpp",
       "direct": [
         {
           "site": 3886764,
@@ -27500,7 +27500,7 @@
       "address": 3886928,
       "name": "FUN_003b4f50",
       "size": 52,
-      "source": "src/unmatched/FUN_003b4f50.cpp",
+      "source": "src/game/ndmw/NdmwLibrary.cpp",
       "direct": [
         {
           "site": 3886940,
@@ -27521,7 +27521,7 @@
       "address": 3887216,
       "name": "FUN_003b5070",
       "size": 32,
-      "source": "src/unmatched/FUN_003b5070.cpp",
+      "source": "src/game/ndmw/NdmwLibrary.cpp",
       "direct": [
         {
           "site": 3887228,
@@ -27536,7 +27536,7 @@
       "address": 3887536,
       "name": "FUN_003b51b0",
       "size": 52,
-      "source": "src/unmatched/FUN_003b51b0.cpp",
+      "source": "src/game/ndmw/NdmwLibrary.cpp",
       "direct": [
         {
           "site": 3887548,
@@ -27557,7 +27557,7 @@
       "address": 3887808,
       "name": "FUN_003b52c0",
       "size": 32,
-      "source": "src/unmatched/FUN_003b52c0.cpp",
+      "source": "src/game/ndmw/NdmwLibrary.cpp",
       "direct": [
         {
           "site": 3887820,
@@ -27572,7 +27572,7 @@
       "address": 3890880,
       "name": "FUN_003b5ec0",
       "size": 52,
-      "source": "src/unmatched/FUN_003b5ec0.cpp",
+      "source": "src/game/ndmw/NdmwLibrary.cpp",
       "direct": [
         {
           "site": 3890892,
@@ -27593,7 +27593,7 @@
       "address": 3891472,
       "name": "FUN_003b6110",
       "size": 32,
-      "source": "src/unmatched/FUN_003b6110.cpp",
+      "source": "src/game/ndmw/NdmwLibrary.cpp",
       "direct": [
         {
           "site": 3891484,
@@ -27608,7 +27608,7 @@
       "address": 3891984,
       "name": "FUN_003b6310",
       "size": 52,
-      "source": "src/unmatched/FUN_003b6310.cpp",
+      "source": "src/game/ndmw/NdmwLibrary.cpp",
       "direct": [
         {
           "site": 3891996,
@@ -27629,7 +27629,7 @@
       "address": 3892272,
       "name": "beNDMWWindowCtrl_Destroy",
       "size": 192,
-      "source": "src/game/beNDMWWindowCtrl_Destroy.cpp",
+      "source": "src/game/ndmw/NdmwLibrary.cpp",
       "direct": [
         {
           "site": 3892332,
@@ -27686,7 +27686,7 @@
       "address": 3892464,
       "name": "FUN_003b64f0",
       "size": 32,
-      "source": "src/unmatched/FUN_003b64f0.cpp",
+      "source": "src/game/ndmw/NdmwLibrary.cpp",
       "direct": [
         {
           "site": 3892476,
@@ -27701,7 +27701,7 @@
       "address": 3892656,
       "name": "beNDMWWindowCtrl_GetPublishedMetaObject",
       "size": 12,
-      "source": "src/game/shop-root-metadata.cpp",
+      "source": "src/game/ndmw/NdmwLibrary.cpp",
       "direct": [],
       "indirect": []
     },
@@ -27709,7 +27709,7 @@
       "address": 3892816,
       "name": "FUN_003b6650",
       "size": 52,
-      "source": "src/unmatched/FUN_003b6650.cpp",
+      "source": "src/game/ndmw/NdmwLibrary.cpp",
       "direct": [
         {
           "site": 3892828,
@@ -27730,7 +27730,7 @@
       "address": 3893216,
       "name": "FUN_003b67e0",
       "size": 32,
-      "source": "src/unmatched/FUN_003b67e0.cpp",
+      "source": "src/game/ndmw/NdmwLibrary.cpp",
       "direct": [
         {
           "site": 3893228,
@@ -27745,7 +27745,7 @@
       "address": 3893568,
       "name": "FUN_003b6940",
       "size": 52,
-      "source": "src/unmatched/FUN_003b6940.cpp",
+      "source": "src/game/ndmw/NdmwLibrary.cpp",
       "direct": [
         {
           "site": 3893580,
@@ -27766,7 +27766,7 @@
       "address": 3893856,
       "name": "FUN_003b6a60",
       "size": 32,
-      "source": "src/unmatched/FUN_003b6a60.cpp",
+      "source": "src/game/ndmw/NdmwLibrary.cpp",
       "direct": [
         {
           "site": 3893868,
@@ -27781,7 +27781,7 @@
       "address": 3894208,
       "name": "FUN_003b6bc0",
       "size": 52,
-      "source": "src/unmatched/FUN_003b6bc0.cpp",
+      "source": "src/game/ndmw/NdmwLibrary.cpp",
       "direct": [
         {
           "site": 3894220,
@@ -27802,7 +27802,7 @@
       "address": 3894512,
       "name": "FUN_003b6cf0",
       "size": 32,
-      "source": "src/unmatched/FUN_003b6cf0.cpp",
+      "source": "src/game/ndmw/NdmwLibrary.cpp",
       "direct": [
         {
           "site": 3894524,
@@ -27817,7 +27817,7 @@
       "address": 3896160,
       "name": "FUN_003b7360",
       "size": 52,
-      "source": "src/unmatched/FUN_003b7360.cpp",
+      "source": "src/game/ndmw/NdmwLibrary.cpp",
       "direct": [
         {
           "site": 3896172,
@@ -27838,7 +27838,7 @@
       "address": 3896432,
       "name": "FUN_003b7470",
       "size": 32,
-      "source": "src/unmatched/FUN_003b7470.cpp",
+      "source": "src/game/ndmw/NdmwLibrary.cpp",
       "direct": [
         {
           "site": 3896444,
@@ -27853,7 +27853,7 @@
       "address": 3896608,
       "name": "FUN_003b7520",
       "size": 52,
-      "source": "src/unmatched/FUN_003b7520.cpp",
+      "source": "src/game/ndmw/NdmwLibrary.cpp",
       "direct": [
         {
           "site": 3896620,
@@ -27874,7 +27874,7 @@
       "address": 3896880,
       "name": "FUN_003b7630",
       "size": 32,
-      "source": "src/unmatched/FUN_003b7630.cpp",
+      "source": "src/game/ndmw/NdmwLibrary.cpp",
       "direct": [
         {
           "site": 3896892,
@@ -27889,7 +27889,7 @@
       "address": 3897168,
       "name": "FUN_003b7750",
       "size": 52,
-      "source": "src/unmatched/FUN_003b7750.cpp",
+      "source": "src/game/ndmw/NdmwLibrary.cpp",
       "direct": [
         {
           "site": 3897180,
@@ -27910,7 +27910,7 @@
       "address": 3897504,
       "name": "FUN_003b78a0",
       "size": 32,
-      "source": "src/unmatched/FUN_003b78a0.cpp",
+      "source": "src/game/ndmw/NdmwLibrary.cpp",
       "direct": [
         {
           "site": 3897516,
@@ -27925,7 +27925,7 @@
       "address": 3899056,
       "name": "FUN_003b7eb0",
       "size": 52,
-      "source": "src/unmatched/FUN_003b7eb0.cpp",
+      "source": "src/game/ndmw/NdmwLibrary.cpp",
       "direct": [
         {
           "site": 3899068,
@@ -27946,7 +27946,7 @@
       "address": 3899488,
       "name": "FUN_003b8060",
       "size": 32,
-      "source": "src/unmatched/FUN_003b8060.cpp",
+      "source": "src/game/ndmw/NdmwLibrary.cpp",
       "direct": [
         {
           "site": 3899500,
@@ -27961,7 +27961,7 @@
       "address": 3899856,
       "name": "FUN_003b81d0",
       "size": 52,
-      "source": "src/unmatched/FUN_003b81d0.cpp",
+      "source": "src/game/ndmw/NdmwLibrary.cpp",
       "direct": [
         {
           "site": 3899868,
@@ -27982,7 +27982,7 @@
       "address": 3900128,
       "name": "FUN_003b82e0",
       "size": 32,
-      "source": "src/unmatched/FUN_003b82e0.cpp",
+      "source": "src/game/ndmw/NdmwLibrary.cpp",
       "direct": [
         {
           "site": 3900140,
@@ -27997,7 +27997,7 @@
       "address": 3900416,
       "name": "FUN_003b8400",
       "size": 52,
-      "source": "src/unmatched/FUN_003b8400.cpp",
+      "source": "src/game/ndmw/NdmwLibrary.cpp",
       "direct": [
         {
           "site": 3900428,
@@ -28018,7 +28018,7 @@
       "address": 3900688,
       "name": "FUN_003b8510",
       "size": 32,
-      "source": "src/unmatched/FUN_003b8510.cpp",
+      "source": "src/game/ndmw/NdmwLibrary.cpp",
       "direct": [
         {
           "site": 3900700,
@@ -28033,7 +28033,7 @@
       "address": 3900976,
       "name": "FUN_003b8630",
       "size": 52,
-      "source": "src/unmatched/FUN_003b8630.cpp",
+      "source": "src/game/ndmw/NdmwLibrary.cpp",
       "direct": [
         {
           "site": 3900988,
@@ -28054,7 +28054,7 @@
       "address": 3901248,
       "name": "FUN_003b8740",
       "size": 32,
-      "source": "src/unmatched/FUN_003b8740.cpp",
+      "source": "src/game/ndmw/NdmwLibrary.cpp",
       "direct": [
         {
           "site": 3901260,
@@ -28069,7 +28069,7 @@
       "address": 3902304,
       "name": "FUN_003b8b60",
       "size": 52,
-      "source": "src/unmatched/FUN_003b8b60.cpp",
+      "source": "src/game/ndmw/NdmwLibrary.cpp",
       "direct": [
         {
           "site": 3902316,
@@ -28090,7 +28090,7 @@
       "address": 3902576,
       "name": "FUN_003b8c70",
       "size": 32,
-      "source": "src/unmatched/FUN_003b8c70.cpp",
+      "source": "src/game/ndmw/NdmwLibrary.cpp",
       "direct": [
         {
           "site": 3902588,
@@ -28105,7 +28105,7 @@
       "address": 3902864,
       "name": "beNDMWShopCtrl00_Create",
       "size": 52,
-      "source": "src/game/shop-root-metadata.cpp",
+      "source": "src/game/ndmw/NdmwLibrary.cpp",
       "direct": [
         {
           "site": 3902876,
@@ -28126,7 +28126,7 @@
       "address": 3902928,
       "name": "beNDMWShopCtrl00_ResolveMetaObject",
       "size": 76,
-      "source": "src/game/shop-root-metadata.cpp",
+      "source": "src/game/ndmw/NdmwLibrary.cpp",
       "direct": [
         {
           "site": 3902976,
@@ -28141,7 +28141,7 @@
       "address": 3903008,
       "name": "beNDMWShopCtrl00_GetVTable",
       "size": 116,
-      "source": "src/unmatched/beNDMWShopCtrl00_GetVTable.cpp",
+      "source": "src/game/ndmw/NdmwLibrary.cpp",
       "direct": [
         {
           "site": 3903020,
@@ -28162,7 +28162,7 @@
       "address": 3903136,
       "name": "beNDMWShopCtrl00_EnsureRegistered",
       "size": 32,
-      "source": "src/game/shop-root-metadata.cpp",
+      "source": "src/game/ndmw/NdmwLibrary.cpp",
       "direct": [
         {
           "site": 3903148,
@@ -28177,7 +28177,7 @@
       "address": 3903168,
       "name": "beNDMWShopCtrl00_Register",
       "size": 100,
-      "source": "src/game/beNDMWShopCtrl00_Register.cpp",
+      "source": "src/game/ndmw/NdmwLibrary.cpp",
       "direct": [
         {
           "site": 3903176,
@@ -28198,7 +28198,7 @@
       "address": 3903280,
       "name": "beNDMWShopCtrl00_GetMetaObject",
       "size": 28,
-      "source": "src/game/shop-root-metadata.cpp",
+      "source": "src/game/ndmw/NdmwLibrary.cpp",
       "direct": [
         {
           "site": 3903288,
@@ -28213,7 +28213,7 @@
       "address": 3911440,
       "name": "FUN_003baf10",
       "size": 52,
-      "source": "src/unmatched/FUN_003baf10.cpp",
+      "source": "src/game/ndmw/NdmwLibrary.cpp",
       "direct": [
         {
           "site": 3911452,
@@ -28234,7 +28234,7 @@
       "address": 3911744,
       "name": "FUN_003bb040",
       "size": 32,
-      "source": "src/unmatched/FUN_003bb040.cpp",
+      "source": "src/game/ndmw/NdmwLibrary.cpp",
       "direct": [
         {
           "site": 3911756,
@@ -28249,7 +28249,7 @@
       "address": 3912144,
       "name": "FUN_003bb1d0",
       "size": 52,
-      "source": "src/unmatched/FUN_003bb1d0.cpp",
+      "source": "src/game/ndmw/NdmwLibrary.cpp",
       "direct": [
         {
           "site": 3912156,
@@ -28270,7 +28270,7 @@
       "address": 3912416,
       "name": "FUN_003bb2e0",
       "size": 32,
-      "source": "src/unmatched/FUN_003bb2e0.cpp",
+      "source": "src/game/ndmw/NdmwLibrary.cpp",
       "direct": [
         {
           "site": 3912428,
@@ -28285,7 +28285,7 @@
       "address": 3913520,
       "name": "FUN_003bb730",
       "size": 84,
-      "source": "src/unmatched/FUN_003bb730.cpp",
+      "source": "src/game/ndmw/NdmwLibrary.cpp",
       "direct": [
         {
           "site": 3913564,
@@ -28300,7 +28300,7 @@
       "address": 3966960,
       "name": "FUN_003c87f0",
       "size": 52,
-      "source": "src/unmatched/FUN_003c87f0.cpp",
+      "source": "src/game/ndmw/NdmwLibrary.cpp",
       "direct": [
         {
           "site": 3966972,
@@ -28321,7 +28321,7 @@
       "address": 3967168,
       "name": "FUN_003c88c0",
       "size": 32,
-      "source": "src/unmatched/FUN_003c88c0.cpp",
+      "source": "src/game/ndmw/NdmwLibrary.cpp",
       "direct": [
         {
           "site": 3967180,
@@ -28336,7 +28336,7 @@
       "address": 3967344,
       "name": "FUN_003c8970",
       "size": 52,
-      "source": "src/unmatched/FUN_003c8970.cpp",
+      "source": "src/game/ndmw/NdmwLibrary.cpp",
       "direct": [
         {
           "site": 3967356,
@@ -28357,7 +28357,7 @@
       "address": 3967552,
       "name": "FUN_003c8a40",
       "size": 32,
-      "source": "src/unmatched/FUN_003c8a40.cpp",
+      "source": "src/game/ndmw/NdmwLibrary.cpp",
       "direct": [
         {
           "site": 3967564,
@@ -28372,7 +28372,7 @@
       "address": 3967744,
       "name": "FUN_003c8b00",
       "size": 52,
-      "source": "src/unmatched/FUN_003c8b00.cpp",
+      "source": "src/game/ndmw/NdmwLibrary.cpp",
       "direct": [
         {
           "site": 3967756,
@@ -28393,7 +28393,7 @@
       "address": 3967952,
       "name": "FUN_003c8bd0",
       "size": 32,
-      "source": "src/unmatched/FUN_003c8bd0.cpp",
+      "source": "src/game/ndmw/NdmwLibrary.cpp",
       "direct": [
         {
           "site": 3967964,
@@ -28408,7 +28408,7 @@
       "address": 3968144,
       "name": "FUN_003c8c90",
       "size": 52,
-      "source": "src/unmatched/FUN_003c8c90.cpp",
+      "source": "src/game/ndmw/NdmwLibrary.cpp",
       "direct": [
         {
           "site": 3968156,
@@ -28429,7 +28429,7 @@
       "address": 3968352,
       "name": "FUN_003c8d60",
       "size": 32,
-      "source": "src/unmatched/FUN_003c8d60.cpp",
+      "source": "src/game/ndmw/NdmwLibrary.cpp",
       "direct": [
         {
           "site": 3968364,

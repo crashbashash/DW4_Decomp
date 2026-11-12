@@ -494,7 +494,7 @@
   "igNamedObjectInfo": 3,
   "igNode": 3,
   "igNodeList": 5,
-  "igObject": 1261,
+  "igObject": 1259,
   "igObjectDirEntry": 31,
   "igObjectList": 709,
   "igObjectListList": 4,
@@ -641,22 +641,22 @@
    "total": 3043
   },
   "engine": {
-   "files": 209,
-   "offset_casts": 3895,
-   "other_members": 10455,
+   "files": 206,
+   "offset_casts": 3897,
+   "other_members": 10461,
    "recovered": 5810,
-   "recovered_pct": 21.34,
-   "synthetic": 7062,
-   "total": 27222
+   "recovered_pct": 21.36,
+   "synthetic": 7029,
+   "total": 27197
   },
   "game": {
-   "files": 1587,
-   "offset_casts": 58,
-   "other_members": 277,
-   "recovered": 2539,
-   "recovered_pct": 85.37,
-   "synthetic": 100,
-   "total": 2974
+   "files": 1101,
+   "offset_casts": 310,
+   "other_members": 468,
+   "recovered": 3097,
+   "recovered_pct": 75.67,
+   "synthetic": 218,
+   "total": 4093
   },
   "libgcc": {
    "files": 7,
@@ -731,19 +731,19 @@
    "total": 3776
   },
   "unmatched": {
-   "files": 5679,
-   "offset_casts": 2496,
-   "other_members": 6040,
-   "recovered": 17846,
-   "recovered_pct": 61.19,
-   "synthetic": 2782,
-   "total": 29164
+   "files": 4902,
+   "offset_casts": 2244,
+   "other_members": 5849,
+   "recovered": 17286,
+   "recovered_pct": 61.64,
+   "synthetic": 2664,
+   "total": 28043
   }
  },
  "note": "Baseline for tools/typed_coverage.py --check. The gate is on the *count* of recovered accesses, never on the percentage: the m2c loop keeps adding matched (and so untyped) C, so the ratio can fall while the count only grows. Update it deliberately with --update-baseline and commit, so every change in coverage is a reviewed diff.",
- "offset_casts": 6505,
- "recovered": 26209,
- "synthetic": 10388,
- "total": 67263,
+ "offset_casts": 6507,
+ "recovered": 26207,
+ "synthetic": 10355,
+ "total": 67236,
  "typeable": 363
 }

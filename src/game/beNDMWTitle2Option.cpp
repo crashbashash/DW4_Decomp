@@ -1,5 +1,4 @@
 extern "C" {
-extern int g_beNDMWTitle2Option_metaObject[4];
 #include "dw4/reflected.h"
 int beMessenger_SendGroup(int, int *, int *);
 int beMessenger_GetObject(int, int);
@@ -10,11 +9,6 @@ extern int CAMERAMODE_2[4];
 extern int LIGHTMODE_2[4];
 /* Set once the title settings are valid: InitSettings restores the saved modes only then. */
 extern unsigned char g_commonSettingsValid;
-
-int Gap__Bec__beNDMWTitle2Option__vfunc_20(void)
-{
-    return g_beNDMWTitle2Option_metaObject[0];
-}
 
 /* Bind the messenger and load the Options settings. Once the title settings are valid, the saved
  * camera and light modes are read back from the GAMERAM GETCOMMON property group (property record

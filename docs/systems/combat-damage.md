@@ -123,7 +123,7 @@ game logic. The handlers sit in one dispatcher switch:
 | Piece | Address |
 |---|---|
 | Key-name table (22 pointers, `E2PISHITCHECK` first) | `0x004cc350` |
-| Name → id dictionary builder | [`FightCom_GetMetaEnum`](../../src/game/FightCom_GetMetaEnum.cpp), `0x003c9be0` (second table at `0x004cc3b0` is just ids 0–21); 84 bytes |
+| Name → id dictionary builder | [`FightCom_GetMetaEnum`](../../src/game/ndmw/beNDMWGameRam.inc), `0x003c9be0` (second table at `0x004cc3b0` is just ids 0–21); 84 bytes |
 | Dispatcher jump table (22 entries) | `0x00519310` |
 | Case 2, `P2EISCRITICAL` | `0x003fe130` |
 | Case 5, `P2EDAMAGE` | `0x003fe550`–`0x003ff030` |

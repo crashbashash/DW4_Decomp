@@ -1,9 +1,0 @@
-extern "C" {
-int igMetaObject_CreateInstance(int, int);
-int FUN_003c8d60();
-
-void FUN_003c8c90(int arg0) {
-    FUN_003c8d60();
-    igMetaObject_CreateInstance(*(int *)0x58BF60, arg0);
-}
-}

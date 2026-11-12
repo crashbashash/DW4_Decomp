@@ -127,7 +127,7 @@ replacement hub or modernize the original scripts to satisfy this goal.
    212 bytes that include 84 under anonymous
    factory/ensure names, 12 bytes of classification/matching, the 76-byte
    accessor and the 116-byte vtable getter
-   (`src/unmatched/beNDMWShopCtrl00_GetVTable.cpp`).
+   (`src/game/ndmw/beNDMWShopCtrl00.inc`).
    The concrete class vtable53feb0 raw92 identifies update4267b0, also selected
    by the tree updater. The [root runtime/window tree](../engine/window-tree-and-shop-root.md)
    is six complete bodies /2,980 bytes,

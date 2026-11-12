@@ -414,7 +414,7 @@ defect.
 
 ## Parent command enum
 
-[`GameRamMessage_GetMetaEnum`](../../src/game/GameRamMessage_GetMetaEnum.cpp)
+[`GameRamMessage_GetMetaEnum`](../../src/game/ndmw/beNDMWGameRam.inc)
 is **84 matched code bytes**, including all 13 relocations.
 Its metadata label is `Message`; the 22 names at `0x4cc410` include GETCOMMON,
 GETPLAYER, CTRLITEM, FIGHTCALC and CTRLPLAYER. Values at `0x4cc470` are 0–21,

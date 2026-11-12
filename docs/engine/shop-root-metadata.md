@@ -7,7 +7,7 @@ The complete contiguous six-body **3b8d90..3b8f4c** `beNDMWShopCtrl00` metadata 
 The 76-byte lazy
 accessor uses the existing project padding convention. The factory52, registration wrapper32,
 Register100 and GetMetaObject28 make up 212 bytes; the parent
-getter is 12. The vtable getter116 is in [beNDMWShopCtrl00_GetVTable.cpp](../../src/unmatched/beNDMWShopCtrl00_GetVTable.cpp).
+getter is 12. The vtable getter116 is in [beNDMWShopCtrl00.inc](../../src/game/ndmw/beNDMWShopCtrl00.inc).
 This is metadata recovery, not working shop transactions.
 
 ## Factory and published metadata
@@ -103,7 +103,7 @@ The lazy76-byte body needs one explicit retail padding NOP and a
 label preserving the null branch's direct entry at the registration call. The
 non-null/not-ready path executes the NOP. This follows the existing convention,
 without claiming the original C++ source spelling. The116-byte vtable getter is in
-[beNDMWShopCtrl00_GetVTable.cpp](../../src/unmatched/beNDMWShopCtrl00_GetVTable.cpp). It retains its
+[beNDMWShopCtrl00.inc](../../src/game/ndmw/beNDMWShopCtrl00.inc). It retains its
 original no-op within readable C++ under the established project convention.
 
 Actual shop subcontrollers, price/item services and transaction results lie beyond these metadata bytes and the

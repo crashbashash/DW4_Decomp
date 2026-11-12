@@ -112,7 +112,7 @@ their own recovery. Source presence does not substitute for `make check`.
 | `0x003a92e0` | `FUN_003a92e0` | 36 | [src/unmatched/FUN_003a92e0.cpp](../../src/unmatched/FUN_003a92e0.cpp) |
 | `0x003a9460` | `beDataBase_GetRecordInt` | 216 | [src/game/beDataBase.cpp](../../src/game/beDataBase.cpp) |
 | `0x003a9580` | `beDataBase_GetRecordString` | 88 | [src/game/beDataBase.cpp](../../src/game/beDataBase.cpp) |
-| `0x003c9be0` | `FightCom_GetMetaEnum` | 84 | [src/game/FightCom_GetMetaEnum.cpp](../../src/game/FightCom_GetMetaEnum.cpp) |
+| `0x003c9be0` | `FightCom_GetMetaEnum` | 84 | [src/game/ndmw/NdmwLibrary.cpp](../../src/game/ndmw/NdmwLibrary.cpp) |
 | `0x003e9090` | `DataList_GetData_003e9090` | 8 | [src/engine/DataList_GetData_003e9090.c](../../src/engine/DataList_GetData_003e9090.c) |
 | `0x003e9110` | `ObjectRef_Release_003e9110` | 68 | [src/engine/ObjectRef_Release_003e9110.cpp](../../src/engine/ObjectRef_Release_003e9110.cpp) |
 | `0x003e9220` | `FUN_003e9220` | 28 | [src/unmatched/FUN_003e9220.c](../../src/unmatched/FUN_003e9220.c) |
