@@ -31067,6 +31067,30 @@
     },
     "symbol": "FUN_003b04e0"
   },
+  "0x0039a930": {
+    "whole_file": true,
+    "emitted": {
+      "FUN_0039a960": "0x0039a960",
+      "FUN_0039a9e0": "0x0039a9e0",
+      "FUN_0039ad80": "0x0039ad80",
+      "FUN_0039adc0": "0x0039adc0",
+      "FUN_0039adf0": "0x0039adf0",
+      "FUN_0039ae00": "0x0039ae00",
+      "FUN_0039ae10": "0x0039ae10",
+      "Gap__Bec__bePadData__vfunc_07": "0x0039ae50",
+      "Gap__Bec__bePadData__vfunc_08": "0x0039aef0",
+      "FUN_0039af10": "0x0039af10",
+      "FUN_0039af90": "0x0039af90",
+      "FUN_0039b050": "0x0039b050",
+      "FUN_0039b110": "0x0039b110",
+      "Gap__Bec__bePadData__vfunc_20": "0x0039b2d0"
+    },
+    "data": {
+      "DAT_00562640": "0x00562640",
+      "g_bePadData_metaObject": "0x00588550"
+    },
+    "symbol": "FUN_0039a930"
+  },
   "0x003902f0": {
     "whole_file": true,
     "emitted": {

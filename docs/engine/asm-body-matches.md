@@ -137,7 +137,7 @@ Shapes found on one function:
 
 * `beSystem::vfunc_27` (`0x003a0020`, 1,300 bytes): see
   [system update recovery](system-clock.md#complete-besystem-update-recovery).
-* The node-clock timer is in `src/game/beNodeAnimClock.cpp`.
+* The node-clock timer is in `src/game/bePadData.cpp`.
   A `const` timestamp snapshot, a `const` play-count load before subtraction,
   and reuse of the incoming parameter for the elapsed delta preserve the original
   parameter web and operand order. No inline assembly, fake arguments or compiler modification is used.

@@ -38,7 +38,7 @@ therefore selects a different regional card. USA ML02 is entry
 ## Clock update
 
 `FUN_0039a9e0` is typed C in
-[`beNodeAnimClock.cpp`](../../src/game/beNodeAnimClock.cpp): 308 code bytes and
+[`bePadData.cpp`](../../src/game/bePadData.cpp): 308 code bytes and
 two relocations. It uses the reflected `beNodeAnim` base
 fields; the same clock routine serves derived loading nodes.
 
