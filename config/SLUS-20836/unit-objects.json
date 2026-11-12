@@ -460,14 +460,6 @@
       "__dl__FPv": "0x00100610"
     }
   },
-  "0x00382eb0": {
-    "duplicates": {
-      "__dt__30igSmartPointer<12beUnicodeObj>Fv": "0x003832d0"
-    },
-    "externals": {
-      "__dl__FPv": "0x00100610"
-    }
-  },
   "0x003dd6d0": {
     "duplicates": {
       "__dt__30igSmartPointer<12beUnicodeObj>Fv": "0x003832d0"
@@ -940,18 +932,6 @@
       "__dl__FPv": "0x00100610"
     }
   },
-  "0x00381d70": {
-    "emitted": {},
-    "duplicates": {
-      "__dt__5RP<0>Fv": "0x00382d70",
-      "__dt__5RP<1>Fv": "0x001353b0",
-      "__dt__5RP<2>Fv": "0x001363f0",
-      "__dt__5RP<3>Fv": "0x001489a0"
-    },
-    "externals": {
-      "__dl__FPv": "0x00100610"
-    }
-  },
   "0x004081a0": {
     "emitted": {},
     "duplicates": {
@@ -1133,32 +1113,6 @@
     "exceptions": {
       "index": "0x00547334",
       "table": "0x00542c3c",
-      "table_size": "0x000010"
-    },
-    "externals": {
-      "__dl__FPv": "0x00100610"
-    }
-  },
-  "0x00383910": {
-    "duplicates": {
-      "__dt__31igSmartPointer<13igVertexArray>Fv": "0x001338d0"
-    },
-    "exceptions": {
-      "index": "0x0054e930",
-      "table": "0x0054378c",
-      "table_size": "0x000010"
-    },
-    "externals": {
-      "__dl__FPv": "0x00100610"
-    }
-  },
-  "0x00383ab0": {
-    "duplicates": {
-      "__dt__31igSmartPointer<13igVertexArray>Fv": "0x001338d0"
-    },
-    "exceptions": {
-      "index": "0x0054e93c",
-      "table": "0x0054379c",
       "table_size": "0x000010"
     },
     "externals": {
@@ -31325,6 +31279,65 @@
       "__dt__9StringRefFv": "0x00130720"
     },
     "symbol": "FUN_003b04e0"
+  },
+  "0x003819a0": {
+    "whole_file": true,
+    "emitted": {
+      "Gap__Bec__beFont__vfunc_24": "0x003819c0",
+      "Gap__Bec__beFont__vfunc_29": "0x00381b40",
+      "Gap__Bec__beFont__vfunc_32": "0x00381b70",
+      "Gap__Bec__beFont__vfunc_30": "0x00381d50",
+      "Gap__Bec__beFont__vfunc_31": "0x00381d60",
+      "Gap__Bec__beFont__vfunc_34": "0x00381d70",
+      "__dt__5RP<0>Fv": "0x00382d70",
+      "FUN_00382df0": "0x00382df0",
+      "FUN_00382eb0": "0x00382eb0",
+      "__dt__30igSmartPointer<12beUnicodeObj>Fv": "0x003832d0",
+      "FUN_00383350": "0x00383350",
+      "FUN_00383910": "0x00383910",
+      "FUN_00383ab0": "0x00383ab0",
+      "FUN_00383bf0": "0x00383bf0",
+      "FUN_00384010": "0x00384010",
+      "FUN_003840a0": "0x003840a0",
+      "FUN_003841d0": "0x003841d0",
+      "Gap__Bec__beUnicodeObj__vfunc_08": "0x00384370",
+      "beUnicodeObj_AllocateBuffer": "0x003843c0",
+      "Gap__Bec__beUnicodeObj__vfunc_20": "0x00384480",
+      "Gap__Bec__beFont__vfunc_20": "0x00384490"
+    },
+    "data": {
+      "@1010": "0x0050e770",
+      "DAT_004c8880": "0x004c8880",
+      "DAT_004e0858": "0x004e0858",
+      "DAT_0050e730": "0x0050e730",
+      "DAT_0050e740": "0x0050e740",
+      "DAT_0050e748": "0x0050e748",
+      "DAT_0050e758": "0x0050e758",
+      "DAT_0050e7b8": "0x0050e7b8",
+      "DAT_0055f2e0": "0x0055f2e0",
+      "DAT_005619f8": "0x005619f8",
+      "DAT_00562078": "0x00562078",
+      "DAT_00586f20": "0x00586f20",
+      "DAT_00587110": "0x00587110",
+      "DAT_00589640": "0x00589640",
+      "DAT_00589658": "0x00589658",
+      "GPR_00554c14": "0x00554c14",
+      "TEXTCTL": "0x0050e728",
+      "g_beFontInfo_metaObject": "0x005895e8",
+      "g_beFont_metaObject": "0x00589678",
+      "g_beUnicodeObj_metaObject": "0x00589640"
+    },
+    "duplicates": {
+      "__dt__31igSmartPointer<13igVertexArray>Fv": "0x001338d0",
+      "__dt__5RP<1>Fv": "0x001353b0",
+      "__dt__5RP<2>Fv": "0x001363f0",
+      "__dt__5RP<3>Fv": "0x001489a0"
+    },
+    "externals": {
+      "FUN_00301e30": "0x00301e30",
+      "__dl__FPv": "0x00100610"
+    },
+    "symbol": "Gap__Bec__beFont__vfunc_23"
   },
   "0x0037f1b0": {
     "whole_file": true,
