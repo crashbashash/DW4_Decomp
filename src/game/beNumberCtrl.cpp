@@ -1,23 +1,32 @@
 #include "dw4/reflected.h"
+
+extern "C" void Gap__Bec__beNumberCtrl__vfunc_32(void);
+extern "C" int Gap__Bec__beNumberCtrl__vfunc_30(void);
+extern "C" int Gap__Bec__beNumberCtrl__vfunc_20(void);
+extern "C" int FUN_003a4e40(void *arg0, int arg1);
+extern "C" void *FUN_0034d2b0(...);
+extern "C" int FUN_0034e300(...);
+extern "C" int FUN_003a4b20(...);
+extern "C" int Memory_GetAllocatorBySelector(...);
+extern "C" int beMessenger_AppendInt(...);
+extern "C" int beMessenger_GetInt(...);
+extern "C" int beMessenger_GetIntCount(...);
+extern "C" int beMessenger_ResolveEnumValue(...);
+extern "C" void igObject_Destroy(void *);
+extern "C" int igObject_GetAllocator(...);
+extern "C" int g_beNumberCtrlInfo_metaObject[4];
+extern "C" int g_beNumberCtrl_metaObject[4];
+struct UnidentifiedNameHolder { char pad8[8]; int f8; };
+struct UnidentifiedReceiverObject { char pad8[8]; int f8; UnidentifiedNameHolder *f12; };
+extern "C" int beMessenger_RegisterReceiver(int, UnidentifiedReceiverObject *, void *, int *, int);
+extern "C" int DAT_004e0858[4];
+extern "C" int DAT_0050feb0[4];
+extern "C" void Gap__Bec__beNumberCtrl__vfunc_29(beNumberCtrl *arg0, UnidentifiedReceiverObject *arg1);
 /* igObject header (vtable, reference count); the count at +4 is not a reflected field */
 /* unreflected message argument: only the command word at +20 is read */
 struct MessageCommandArg { char p0[20]; int command; };
-extern "C" {
-void *FUN_0034d2b0(...);
-int FUN_0034e300();
-int FUN_003a4b20(...);
-int FUN_003a4e40(...);
-int Memory_GetAllocatorBySelector(...);
-int beMessenger_AppendInt(...);
-int beMessenger_GetInt(...);
-int beMessenger_GetIntCount(...);
-int beMessenger_ResolveEnumValue(...);
-void igObject_Destroy(void *);
-int igObject_GetAllocator(...);
-extern int DAT_00587110[4];
-extern unsigned char GPR_00554c14;
-int Gap__Bec__beNumberCtrl__vfunc_34(beNumberCtrl *arg0, beNumberCtrlInfoRam *arg1, MessageCommandArg *arg2);
-}
+extern "C" int DAT_00587110[4];
+extern "C" unsigned char GPR_00554c14;
 /* matching construct: stack smart pointer whose destructor releases the object, reproduces the retail cleanup path */
 struct Ref {
     igObject *p;
@@ -30,6 +39,47 @@ struct Ref {
         }
     }
 };
+extern "C" int Gap__Bec__beNumberCtrl__vfunc_34(beNumberCtrl *arg0, beNumberCtrlInfoRam *arg1, MessageCommandArg *arg2);
+
+void Gap__Bec__beNumberCtrl__vfunc_32(void)
+{
+}
+
+int Gap__Bec__beNumberCtrl__vfunc_30(void)
+{
+    return g_beNumberCtrlInfo_metaObject[0];
+}
+
+int FUN_003a4e40(void *arg0, int arg1) {
+    int v = 0;
+    if (arg1 > 0) {
+        v = arg1 / 128 + 1;
+        if (v >= 100) {
+            v = 99;
+        }
+        if (v % 10 == 0) {
+            v++;
+        }
+    } else if (arg1 < 0) {
+        v = arg1 / 128 - 1;
+        if (v < -99) {
+            v = -99;
+        }
+        if (v % 10 == 0) {
+            v--;
+        }
+    }
+    return v;
+}
+
+void Gap__Bec__beNumberCtrl__vfunc_29(beNumberCtrl *arg0, UnidentifiedReceiverObject *arg1) {
+    int *var_a3;
+    int t = arg1->f8;
+    var_a3 = (int *)(((UnidentifiedNameHolder *)arg1->f12)->f8);
+    var_a3 = var_a3 != 0 ? var_a3 : &DAT_004e0858[0];
+    beMessenger_RegisterReceiver(arg0->_messenger, arg1, &DAT_0050feb0[0], var_a3, t);
+}
+
 int Gap__Bec__beNumberCtrl__vfunc_34(beNumberCtrl *arg0, beNumberCtrlInfoRam *arg1, MessageCommandArg *arg2) {
     int s3;
     int var;
@@ -99,4 +149,9 @@ int Gap__Bec__beNumberCtrl__vfunc_34(beNumberCtrl *arg0, beNumberCtrlInfoRam *ar
     default:
         return 0;
     }
+}
+
+int Gap__Bec__beNumberCtrl__vfunc_20(void)
+{
+    return g_beNumberCtrl_metaObject[0];
 }

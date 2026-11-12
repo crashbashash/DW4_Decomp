@@ -162,15 +162,6 @@
       "__dl__FPv": "0x00100610"
     }
   },
-  "0x003a4f40": {
-    "emitted": {},
-    "duplicates": {
-      "__dt__3RefFv": "0x0034d6c0"
-    },
-    "externals": {
-      "__dl__FPv": "0x00100610"
-    }
-  },
   "0x00376930": {
     "duplicates": {
       "__dt__6Ref<0>Fv": "0x0019ab10",
@@ -31003,6 +30994,31 @@
       "__dt__9StringRefFv": "0x00130720"
     },
     "symbol": "FUN_003b04e0"
+  },
+  "0x003a4930": {
+    "whole_file": true,
+    "emitted": {
+      "Gap__Bec__beNumberCtrl__vfunc_30": "0x003a4940",
+      "FUN_003a4e40": "0x003a4e40",
+      "Gap__Bec__beNumberCtrl__vfunc_29": "0x003a4ef0",
+      "Gap__Bec__beNumberCtrl__vfunc_34": "0x003a4f40",
+      "Gap__Bec__beNumberCtrl__vfunc_20": "0x003a5290"
+    },
+    "data": {
+      "DAT_004e0858": "0x004e0858",
+      "DAT_0050feb0": "0x0050feb0",
+      "DAT_00587110": "0x00587110",
+      "GPR_00554c14": "0x00554c14",
+      "g_beNumberCtrlInfo_metaObject": "0x005886d0",
+      "g_beNumberCtrl_metaObject": "0x005886e0"
+    },
+    "duplicates": {
+      "__dt__3RefFv": "0x0034d6c0"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    },
+    "symbol": "Gap__Bec__beNumberCtrl__vfunc_32"
   },
   "0x003a3850": {
     "whole_file": true,
