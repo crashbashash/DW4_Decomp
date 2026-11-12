@@ -1,6 +1,6 @@
 # Retained object lists and property lookup
 
-The separate [unchecked entry-word getter](../../src/engine/ObjectList_GetAt_003e9260.c)
+The separate [unchecked entry-word getter](../../src/game/beNDMWLoadIntf2.cpp)
 at `0x3e9260` uses the declaring base `igDataList::_data` and retains its exact
 20 bytes. A LoadIntf2 `_system` receiver association for it is refuted;
 see [GAMERAM ABI recovery](../systems/combat-draft-recovery.md).

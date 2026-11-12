@@ -38,7 +38,7 @@ A whole-callback compile comparison isolates four changed instruction words:
 fixed byte argument to `AppendBool` narrows it. Its source width is repaired as well
 so correctness does not depend on that consumer. Sizes and frame are unchanged by the repairs.
 
-The [list accessor](../../src/engine/ObjectList_GetAt_003e9260.c)
+The [list accessor](../../src/game/beNDMWLoadIntf2.cpp)
 takes an `igDataList` receiver. Its complete five-instruction body reads
 the buffer at +16 and an indexed word. GAMERAM supplies object lists and lists
 of lists, whose hierarchy reaches the declaring base `igDataList`. The source

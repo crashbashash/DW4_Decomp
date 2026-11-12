@@ -17,12 +17,12 @@ calls; the whole run provides the surrounding reference/list contract.
 | `0x003d9c50` | 128 | [Unwind reference cleanup](../../src/game/beNDMWStatus.cpp) |
 | `0x003d9cd0` | 128 | [Unwind reference cleanup](../../src/game/beNDMWStatus.cpp) |
 | `0x003d9d50` | 128 | [Unwind reference cleanup](../../src/game/beNDMWStatus.cpp) |
-| `0x003e9010` | 128 | [Deleting reference-wrapper destruction](../../src/engine/ObjectRef_Destruct_003e9010.cpp) |
-| `0x003e90d0` | 32 | [Retain one object reference](../../src/engine/ObjectRef_Retain_003e90d0.c) |
-| `0x003e9110` | 68 | [Release one object reference](../../src/engine/ObjectRef_Release_003e9110.cpp) |
-| `0x003e9160` | 188 | [Retained list-slot replacement](../../src/engine/ObjectList_SetAtRetained_003e9160.cpp) |
-| `0x003e92b0` | 124 | [Assign from reference storage](../../src/engine/ObjectRef_Assign_003e92b0.cpp) |
-| `0x003e9370` | 56 | [Allocator selection](../../src/engine/Memory_SelectAllocator_003e9370.cpp) |
+| `0x003e9010` | 128 | [Deleting reference-wrapper destruction](../../src/game/beNDMWLoadIntf2.cpp) |
+| `0x003e90d0` | 32 | [Retain one object reference](../../src/game/beNDMWLoadIntf2.cpp) |
+| `0x003e9110` | 68 | [Release one object reference](../../src/game/beNDMWLoadIntf2.cpp) |
+| `0x003e9160` | 188 | [Retained list-slot replacement](../../src/game/beNDMWLoadIntf2.cpp) |
+| `0x003e92b0` | 124 | [Assign from reference storage](../../src/game/beNDMWLoadIntf2.cpp) |
+| `0x003e9370` | 56 | [Allocator selection](../../src/game/beNDMWLoadIntf2.cpp) |
 | `0x00406e60` | 124 | [Assign from an object pointer](../../src/engine/ObjectRef_AssignObject_00406e60.cpp) |
 
 The generated names describe decoded operations. Address suffixes distinguish

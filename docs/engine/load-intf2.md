@@ -23,38 +23,38 @@ Byte sizes on this page are the function extents in
 
 | Start | Bytes | Symbol | Role | Source |
 |---|---:|---|---|---|
-| `0x003e46b0` | 156 | `Gap__Bec__beNDMWLoadIntf2__vfunc_32` | reference/pad wrapper: takes the pad-manager reference into `_padManager` when it is not set | `src/unmatched/Gap__Bec__beNDMWLoadIntf2__vfunc_32.cpp` |
+| `0x003e46b0` | 156 | `Gap__Bec__beNDMWLoadIntf2__vfunc_32` | reference/pad wrapper: takes the pad-manager reference into `_padManager` when it is not set | `src/game/beNDMWLoadIntf2.cpp` |
 | `0x003e4750` | 18,616 | `Gap__Bec__beNDMWLoadIntf2__vfunc_31` | per-frame update (the master flow) | `src/game/beNDMWLoadIntf2Update.cpp` |
 | `0x003e9010`–`0x003e93b0` | 19 functions | see the next table | accessors / per-controller helpers | `src/engine/`, `src/game/`, `src/unmatched/` |
-| `0x003e93c0` | 12 | `Gap__Bec__beNDMWLoadIntf2__vfunc_30` | MetaObject return | `src/game/beNDMWLoadIntf2.c` |
-| `0x003e93d0` | 88 | `Gap__Bec__beNDMWLoadIntf2__vfunc_29` | descriptor wrapper: registers the record as receiver of `LOADINTF2_ALL` and `LOADINTF2` | `src/unmatched/Gap__Bec__beNDMWLoadIntf2__vfunc_29.cpp` |
+| `0x003e93c0` | 12 | `Gap__Bec__beNDMWLoadIntf2__vfunc_30` | MetaObject return | `src/game/beNDMWLoadIntf2.cpp` |
+| `0x003e93d0` | 88 | `Gap__Bec__beNDMWLoadIntf2__vfunc_29` | descriptor wrapper: registers the record as receiver of `LOADINTF2_ALL` and `LOADINTF2` | `src/game/beNDMWLoadIntf2.cpp` |
 | `0x003e9430` | 8,272 | `Gap__Bec__beNDMWLoadIntf2__vfunc_34` | message handler (builds the family, answers the commands) | `src/unmatched/Gap__Bec__beNDMWLoadIntf2__vfunc_34.cpp` |
-| `0x003eb480`–`0x003eb980` | 11 × 128 | `FUN_003eb480` … `FUN_003eb980` | destructor copies of the handler's owning stack references, one per created child | `src/unmatched/FUN_003eb480.cpp` … `FUN_003eb980.cpp` |
-| `0x003eba00` | 12 | `Gap__Bec__beNDMWLoadIntf2__vfunc_20` | MetaObject return | `src/game/beNDMWLoadIntf2.c` |
+| `0x003eb480`–`0x003eb980` | 11 × 128 | `FUN_003eb480` … `FUN_003eb980` | destructor copies of the handler's owning stack references, one per created child | `src/game/beNDMWLoadIntf2.cpp` |
+| `0x003eba00` | 12 | `Gap__Bec__beNDMWLoadIntf2__vfunc_20` | MetaObject return | `src/game/beNDMWLoadIntf2.cpp` |
 
 The accessors and per-controller helpers:
 
 | Start | Bytes | Symbol | Source |
 |---|---:|---|---|
-| `0x003e9010` | 128 | `ObjectRef_Destruct_003e9010` | `src/engine/ObjectRef_Destruct_003e9010.cpp` |
-| `0x003e9090` | 8 | `DataList_GetData_003e9090` | `src/engine/DataList_GetData_003e9090.c` |
-| `0x003e90a0` | 8 | `beNDMWLoadSavePlWork__SetIsCtrl` | `src/game/beNDMWLoadSavePlWork__SetIsCtrl.c` |
-| `0x003e90b0` | 8 | `beNDMWLoadSavePlWork__GetIsRdy` | `src/game/beNDMWLoadSavePlWork__GetIsRdy.c` |
-| `0x003e90c0` | 8 | `beNDMWLoadSavePlWork__GetIsEntry` | `src/game/beNDMWLoadSavePlWork__GetIsEntry.c` |
-| `0x003e90d0` | 32 | `ObjectRef_Retain_003e90d0` | `src/engine/ObjectRef_Retain_003e90d0.c` |
-| `0x003e90f0` | 20 | `DataList_GetWordAt_003e90f0` | `src/engine/DataList_GetWordAt_003e90f0.c` |
-| `0x003e9110` | 68 | `ObjectRef_Release_003e9110` | `src/engine/ObjectRef_Release_003e9110.cpp` |
-| `0x003e9160` | 188 | `ObjectList_SetAtRetained_003e9160` | `src/engine/ObjectList_SetAtRetained_003e9160.cpp` |
-| `0x003e9220` | 28 | `FUN_003e9220` (three-float copy, `+0/+4/+8`) | `src/unmatched/FUN_003e9220.c` |
-| `0x003e9240` | 20 | `DataList_GetWordAt_003e9240` | `src/engine/DataList_GetWordAt_003e9240.c` |
-| `0x003e9260` | 20 | `ObjectList_GetAt_003e9260` | `src/engine/ObjectList_GetAt_003e9260.c` |
-| `0x003e9280` | 28 | `FUN_003e9280` | `src/unmatched/FUN_003e9280.cpp` |
-| `0x003e92a0` | 8 | `FUN_003e92a0` | `src/unmatched/FUN_003e92a0.c` |
-| `0x003e92b0` | 124 | `ObjectRef_Assign_003e92b0` | `src/engine/ObjectRef_Assign_003e92b0.cpp` |
-| `0x003e9330` | 48 | `FUN_003e9330` | `src/unmatched/FUN_003e9330.cpp` |
-| `0x003e9360` | 8 | `FUN_003e9360` | `src/unmatched/FUN_003e9360.c` |
-| `0x003e9370` | 56 | `Memory_SelectAllocator_003e9370` | `src/engine/Memory_SelectAllocator_003e9370.cpp` |
-| `0x003e93b0` | 8 | `FUN_003e93b0` | `src/unmatched/FUN_003e93b0.c` |
+| `0x003e9010` | 128 | `ObjectRef_Destruct_003e9010` | `src/game/beNDMWLoadIntf2.cpp` |
+| `0x003e9090` | 8 | `DataList_GetData_003e9090` | `src/game/beNDMWLoadIntf2.cpp` |
+| `0x003e90a0` | 8 | `beNDMWLoadSavePlWork__SetIsCtrl` | `src/game/beNDMWLoadIntf2.cpp` |
+| `0x003e90b0` | 8 | `beNDMWLoadSavePlWork__GetIsRdy` | `src/game/beNDMWLoadIntf2.cpp` |
+| `0x003e90c0` | 8 | `beNDMWLoadSavePlWork__GetIsEntry` | `src/game/beNDMWLoadIntf2.cpp` |
+| `0x003e90d0` | 32 | `ObjectRef_Retain_003e90d0` | `src/game/beNDMWLoadIntf2.cpp` |
+| `0x003e90f0` | 20 | `DataList_GetWordAt_003e90f0` | `src/game/beNDMWLoadIntf2.cpp` |
+| `0x003e9110` | 68 | `ObjectRef_Release_003e9110` | `src/game/beNDMWLoadIntf2.cpp` |
+| `0x003e9160` | 188 | `ObjectList_SetAtRetained_003e9160` | `src/game/beNDMWLoadIntf2.cpp` |
+| `0x003e9220` | 28 | `FUN_003e9220` (three-float copy, `+0/+4/+8`) | `src/game/beNDMWLoadIntf2.cpp` |
+| `0x003e9240` | 20 | `DataList_GetWordAt_003e9240` | `src/game/beNDMWLoadIntf2.cpp` |
+| `0x003e9260` | 20 | `ObjectList_GetAt_003e9260` | `src/game/beNDMWLoadIntf2.cpp` |
+| `0x003e9280` | 28 | `FUN_003e9280` | `src/game/beNDMWLoadIntf2.cpp` |
+| `0x003e92a0` | 8 | `FUN_003e92a0` | `src/game/beNDMWLoadIntf2.cpp` |
+| `0x003e92b0` | 124 | `ObjectRef_Assign_003e92b0` | `src/game/beNDMWLoadIntf2.cpp` |
+| `0x003e9330` | 48 | `FUN_003e9330` | `src/game/beNDMWLoadIntf2.cpp` |
+| `0x003e9360` | 8 | `FUN_003e9360` | `src/game/beNDMWLoadIntf2.cpp` |
+| `0x003e9370` | 56 | `Memory_SelectAllocator_003e9370` | `src/game/beNDMWLoadIntf2.cpp` |
+| `0x003e93b0` | 8 | `FUN_003e93b0` | `src/game/beNDMWLoadIntf2.cpp` |
 
 ## Object model
 
@@ -308,13 +308,13 @@ manager, `+0x18` CommMdlCtrl, `+0x1c` TextOrder, `+0x20` the common interface.
 
 | Entry | Bytes | Symbol / source | Contract |
 |---|---:|---|---|
-| `0x003e0b80` | 40 | `FUN_003e0b80`, `src/unmatched/FUN_003e0b80.c` | clears `+0x34`/`+0x35`/`+0x36`/`+0x38` and `+0x4c..+0x58` |
-| `0x003e0bb0` | 140 | `beNDMWLoadIntf2SelSlot__Init`, `src/game/beNDMWLoadIntf2SelSlot__Init.cpp` | reads the manager's `+0x38` mode → SELSLOT `+0x24`/`+0x2c` (0→5, 1→2, 2→9) |
-| `0x003e0c40` | 2,848 | `beNDMWLoadIntf2SelSlot__Open`, `src/game/beNDMWLoadIntf2SelSlot__Open.cpp` | open/refresh: publishes `j_slotbase`/`j_memoryiconwin`, the `j_slotcursor` line and the marks, reconciles `+0x48`; returns `+0x34` |
-| `0x003e1760` | 4,888 | `beNDMWLoadIntf2SelSlot__UpdateSelection`, `src/game/beNDMWLoadIntf2SelSlot__UpdateSelection.cpp` | samples the pad through `+0x14`, moves the `+0x3c` cursor on the direction bits (`0x10` up / `0x40` down / `0x20`,`0x80` cross), cancels on `0x2000` (`+0x36`), commits/selects on `0x4000` via `0x3ee190` (`+0x40`), publishes the marks; returns `+0x35` |
-| `0x003e2a80` | 140 | `beNDMWLoadIntf2SelSlot__PublishCursor`, `src/game/beNDMWLoadIntf2SelSlot__PublishCursor.cpp` | resets `+0x35`/`+0x4c..+0x58`, publishes one `j_slotcursor` line from the mark table |
-| `0x003e2b10` | 1,364 | `beNDMWLoadIntf2SelSlot__Close`, `src/game/beNDMWLoadIntf2SelSlot__Close.cpp` | finishes the mark publish (tracked closes of `j_slotbase`/`j_slotcursor`/`j_memoryiconwin`, and the marks), returns SELSLOT `+0x38` |
-| `0x003e3070` | 2,832 | `beNDMWLoadIntf2SelSlot__RefreshSlotMarks`, `src/game/beNDMWLoadIntf2SelSlot__RefreshSlotMarks.cpp` | re-publishes the marks, suppressing the selected row (`param_2 == loop index`), reconciles `+0x48` |
+| `0x003e0b80` | 40 | `FUN_003e0b80`, `src/game/beNDMWLoadIntf2.cpp` | clears `+0x34`/`+0x35`/`+0x36`/`+0x38` and `+0x4c..+0x58` |
+| `0x003e0bb0` | 140 | `beNDMWLoadIntf2SelSlot__Init`, `src/game/beNDMWLoadIntf2.cpp` | reads the manager's `+0x38` mode → SELSLOT `+0x24`/`+0x2c` (0→5, 1→2, 2→9) |
+| `0x003e0c40` | 2,848 | `beNDMWLoadIntf2SelSlot__Open`, `src/game/beNDMWLoadIntf2.cpp` | open/refresh: publishes `j_slotbase`/`j_memoryiconwin`, the `j_slotcursor` line and the marks, reconciles `+0x48`; returns `+0x34` |
+| `0x003e1760` | 4,888 | `beNDMWLoadIntf2SelSlot__UpdateSelection`, `src/game/beNDMWLoadIntf2.cpp` | samples the pad through `+0x14`, moves the `+0x3c` cursor on the direction bits (`0x10` up / `0x40` down / `0x20`,`0x80` cross), cancels on `0x2000` (`+0x36`), commits/selects on `0x4000` via `0x3ee190` (`+0x40`), publishes the marks; returns `+0x35` |
+| `0x003e2a80` | 140 | `beNDMWLoadIntf2SelSlot__PublishCursor`, `src/game/beNDMWLoadIntf2.cpp` | resets `+0x35`/`+0x4c..+0x58`, publishes one `j_slotcursor` line from the mark table |
+| `0x003e2b10` | 1,364 | `beNDMWLoadIntf2SelSlot__Close`, `src/game/beNDMWLoadIntf2.cpp` | finishes the mark publish (tracked closes of `j_slotbase`/`j_slotcursor`/`j_memoryiconwin`, and the marks), returns SELSLOT `+0x38` |
+| `0x003e3070` | 2,832 | `beNDMWLoadIntf2SelSlot__RefreshSlotMarks`, `src/game/beNDMWLoadIntf2.cpp` | re-publishes the marks, suppressing the selected row (`param_2 == loop index`), reconciles `+0x48` |
 
 The two mark tables are `0x004cd090` (`SQ_SELECT01`/`SQ_SELECT02`, 2 rows) and
 `0x004cd060` (`SQ_SELECT1A..1D` + `SQ_SELECT02`, 5 rows), `{u32 name; u32
@@ -370,8 +370,8 @@ The two CommMdlCtrl queue queries and the confirm selection.
 
 | Entry | Bytes | Symbol / source | Contract |
 |---|---:|---|---|
-| `0x003e4280` | 20 | `beNDMWLoadIntf2ComMdlCtrl__IsOpenQueueEmpty`, `src/game/beNDMWLoadIntf2ComMdlCtrl__IsOpenQueueEmpty.c` | `CommMdlCtrl(a0)._openDataList(+0x14).count(+8) <= 0` (an `igObjectList`: `+8` count, `+0x10` data) |
-| `0x003e44d0` | 20 | `beNDMWLoadIntf2ComMdlCtrl__IsCloseQueueEmpty`, `src/game/beNDMWLoadIntf2ComMdlCtrl__IsCloseQueueEmpty.c` | the same predicate on `_closeDataList(+0x18)` |
+| `0x003e4280` | 20 | `beNDMWLoadIntf2ComMdlCtrl__IsOpenQueueEmpty`, `src/game/beNDMWLoadIntf2.cpp` | `CommMdlCtrl(a0)._openDataList(+0x14).count(+8) <= 0` (an `igObjectList`: `+8` count, `+0x10` data) |
+| `0x003e44d0` | 20 | `beNDMWLoadIntf2ComMdlCtrl__IsCloseQueueEmpty`, `src/game/beNDMWLoadIntf2.cpp` | the same predicate on `_closeDataList(+0x18)` |
 | `0x003ee190` | 184 | `FUN_003ee190`, `src/unmatched/FUN_003ee190.c` | over the four per-player `beNDMWLoadSavePlWork` records of `COMMONINTF._flagWork` (`+0x28 → +0x10 → [i*4]`): arm rows 0–3 (`_sysStat0` `+0x24` = 1, `+0x28`/`+0x2c`/`+0x30` = 0, `_isCtrl` `+0xf` = 0, `_sysCount0` `+8` = `0x3c`), then clear the selected row (`+0x24` = 0, `+0xf` = 1, `+8` = 0) |
 
 `0x3e4280`/`0x3e44d0` are called with the `COMMDLCTRL` record; `0x3ee190` is
@@ -387,8 +387,8 @@ window.
 
 | Entry | Bytes | Symbol / source | Role |
 |---|---:|---|---|
-| `0x003ddb10` | 112 | `beNDMWLoadIntf2Diffselect__Init`, `src/game/beNDMWLoadIntf2Diffselect__Init.c` | cursor 0, rows 2 (kind 0, `j_linewin02`) or 3 (kind 1, `j_linewin03`), player, flags clear |
-| `0x003ddb80` | 1,748 | `beNDMWLoadIntf2Diffselect__Update`, `src/game/beNDMWLoadIntf2Diffselect__Update.cpp` | open (`SQ_OPEN`, text `0x402`/`0x403`, notice `0x404`), cursor with `SQ_LINEUP00/01` and `SQ_LINEDW01/02`, Cross stores the row at `+0x1C`, Circle sets `+0x25`, then `SQ_LINEON00..02` or `SQ_CANCEL` and `+0x24 = 1` |
+| `0x003ddb10` | 112 | `beNDMWLoadIntf2Diffselect__Init`, `src/game/beNDMWLoadIntf2.cpp` | cursor 0, rows 2 (kind 0, `j_linewin02`) or 3 (kind 1, `j_linewin03`), player, flags clear |
+| `0x003ddb80` | 1,748 | `beNDMWLoadIntf2Diffselect__Update`, `src/game/beNDMWLoadIntf2.cpp` | open (`SQ_OPEN`, text `0x402`/`0x403`, notice `0x404`), cursor with `SQ_LINEUP00/01` and `SQ_LINEDW01/02`, Cross stores the row at `+0x1C`, Circle sets `+0x25`, then `SQ_LINEON00..02` or `SQ_CANCEL` and `+0x24 = 1` |
 
 `hostLoad.lua` (title pack, AFS entry 806) runs `LISsetDifficultMax` from story
 flags 77 and 711 of the loaded character and so decides whether, and with how
@@ -401,11 +401,11 @@ The `beNDMWLoadIntf2NameSel` functions.
 
 | Entry | Bytes | Symbol / source | Role |
 |---|---:|---|---|
-| `0x003de260` | 540 | `beNDMWLoadIntf2NameSel__Init`, `src/game/beNDMWLoadIntf2NameSel__Init.c` | `_langID` = 1 always; `_nameMojiMax` 8 and rows 0..3 (lang 1), 6 cells and rows 0..0x17 (lang 0), 8 cells and rows 0x18..0x1D (lang 2); with a1 = 1 clears the cells and sets `_nameCurPos` -1; restores the row/strip/column saved for the current cell, marks it as the live preview, clears the flags and `_st0`–`_st3` |
-| `0x003de480` | 796 | `FUN_003de480`, `src/unmatched/FUN_003de480.cpp` | `CHRSELFONT10` fonts 0..2: the first key of the previous, current and next row (a1 = 1 clears) |
-| `0x003de7a0` | 492 | `FUN_003de7a0`, `src/unmatched/FUN_003de7a0.cpp` | `CHRSELFONT11` fonts 0..4: the five keys from `_yokoPoint` (wrapping) |
-| `0x003de990` | 1,492 | `FUN_003de990`, `src/unmatched/FUN_003de990.cpp` | the name cells, `CHRSELFONT12` (6, lang 0) or `CHRSELFONT13` (8): a typed code in colour 0, the live preview in colour 1, the rest cleared |
-| `0x003def70` | 16 | `beNDMWLoadIntf2NameSel__SetAnswer`, `src/game/beNDMWLoadIntf2NameSel__SetAnswer.c` | the Yes/No answer: `_isNameOK` = a1, `_isAnswer` = 1 |
+| `0x003de260` | 540 | `beNDMWLoadIntf2NameSel__Init`, `src/game/beNDMWLoadIntf2.cpp` | `_langID` = 1 always; `_nameMojiMax` 8 and rows 0..3 (lang 1), 6 cells and rows 0..0x17 (lang 0), 8 cells and rows 0x18..0x1D (lang 2); with a1 = 1 clears the cells and sets `_nameCurPos` -1; restores the row/strip/column saved for the current cell, marks it as the live preview, clears the flags and `_st0`–`_st3` |
+| `0x003de480` | 796 | `FUN_003de480`, `src/game/beNDMWLoadIntf2.cpp` | `CHRSELFONT10` fonts 0..2: the first key of the previous, current and next row (a1 = 1 clears) |
+| `0x003de7a0` | 492 | `FUN_003de7a0`, `src/game/beNDMWLoadIntf2.cpp` | `CHRSELFONT11` fonts 0..4: the five keys from `_yokoPoint` (wrapping) |
+| `0x003de990` | 1,492 | `FUN_003de990`, `src/game/beNDMWLoadIntf2.cpp` | the name cells, `CHRSELFONT12` (6, lang 0) or `CHRSELFONT13` (8): a typed code in colour 0, the live preview in colour 1, the rest cleared |
+| `0x003def70` | 16 | `beNDMWLoadIntf2NameSel__SetAnswer`, `src/game/beNDMWLoadIntf2.cpp` | the Yes/No answer: `_isNameOK` = a1, `_isAnswer` = 1 |
 | `0x003def80` | 7,168 | `beNDMWLoadIntf2NameSel__Update`, `src/game/beNDMWLoadIntf2NameSel__Update.cpp` | open (face window `SQ_<species>OPEN`, seven windows `SQ_OPEN`, cursor `SQ_NAMESL0n`), typing (left/right/up/down, Cross `SQ_NAMEON0n`, Circle `SQ_NAMECANCEL`, START), question (`_isQuestion` until `_isAnswer`), close; returns `_isEnd` |
 
 `0x003de260` ends with four stores of zero to `+84`, `+96`, `+92` and `+88`
@@ -427,9 +427,9 @@ reads the reflected receivers listed under
 
 | Entry | Bytes | Symbol / source | Note |
 |---|---:|---|---|
-| `0x003db780` | 2,052 | `beNDMWLoadIntf2DataSelIntf__UpdateSelection`, `src/game/beNDMWLoadIntf2DataSelIntf__UpdateSelection.cpp` | data selection; reads the `bePadData` words |
-| `0x003dbf90` | 844 | `FUN_003dbf90`, `src/unmatched/FUN_003dbf90.cpp` | |
-| `0x003dcab0` | 428 | `FUN_003dcab0`, `src/unmatched/FUN_003dcab0.cpp` | |
+| `0x003db780` | 2,052 | `beNDMWLoadIntf2DataSelIntf__UpdateSelection`, `src/game/beNDMWLoadIntf2.cpp` | data selection; reads the `bePadData` words |
+| `0x003dbf90` | 844 | `FUN_003dbf90`, `src/game/beNDMWLoadIntf2.cpp` | |
+| `0x003dcab0` | 428 | `FUN_003dcab0`, `src/game/beNDMWLoadIntf2.cpp` | |
 | `0x003ed050` | 644 | `FUN_003ed050`, `src/unmatched/FUN_003ed050.cpp` | |
 | `0x003ed2e0` | 872 | `FUN_003ed2e0`, `src/unmatched/FUN_003ed2e0.cpp` | |
 | `0x003edc20` | 828 | `FUN_003edc20`, `src/unmatched/FUN_003edc20.cpp` | |

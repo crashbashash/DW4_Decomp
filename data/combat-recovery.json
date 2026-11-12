@@ -1216,7 +1216,7 @@
       "address": "0x003e9090",
       "name": "DataList_GetData_003e9090",
       "size": 8,
-      "source": "src/engine/DataList_GetData_003e9090.c",
+      "source": "src/game/beNDMWLoadIntf2.cpp",
       "sites": [
         "0x003fdfa0",
         "0x003fe058",
@@ -1264,7 +1264,7 @@
       "address": "0x003e9110",
       "name": "ObjectRef_Release_003e9110",
       "size": 68,
-      "source": "src/engine/ObjectRef_Release_003e9110.cpp",
+      "source": "src/game/beNDMWLoadIntf2.cpp",
       "sites": [
         "0x00405580",
         "0x004059c8",
@@ -1278,7 +1278,7 @@
       "address": "0x003e9220",
       "name": "FUN_003e9220",
       "size": 28,
-      "source": "src/unmatched/FUN_003e9220.c",
+      "source": "src/game/beNDMWLoadIntf2.cpp",
       "sites": [
         "0x003ff6fc",
         "0x003ffb50",
@@ -1293,7 +1293,7 @@
       "address": "0x003e9260",
       "name": "ObjectList_GetAt_003e9260",
       "size": 20,
-      "source": "src/engine/ObjectList_GetAt_003e9260.c",
+      "source": "src/game/beNDMWLoadIntf2.cpp",
       "sites": [
         "0x003fdf54",
         "0x003fe16c",
@@ -1328,7 +1328,7 @@
       "address": "0x003e9280",
       "name": "FUN_003e9280",
       "size": 28,
-      "source": "src/unmatched/FUN_003e9280.cpp",
+      "source": "src/game/beNDMWLoadIntf2.cpp",
       "sites": [
         "0x00403188"
       ]
@@ -1337,7 +1337,7 @@
       "address": "0x003e92a0",
       "name": "FUN_003e92a0",
       "size": 8,
-      "source": "src/unmatched/FUN_003e92a0.c",
+      "source": "src/game/beNDMWLoadIntf2.cpp",
       "sites": [
         "0x00403170"
       ]
@@ -1346,7 +1346,7 @@
       "address": "0x003e92b0",
       "name": "ObjectRef_Assign_003e92b0",
       "size": 124,
-      "source": "src/engine/ObjectRef_Assign_003e92b0.cpp",
+      "source": "src/game/beNDMWLoadIntf2.cpp",
       "sites": [
         "0x00403158"
       ]
@@ -1355,7 +1355,7 @@
       "address": "0x003e9360",
       "name": "FUN_003e9360",
       "size": 8,
-      "source": "src/unmatched/FUN_003e9360.c",
+      "source": "src/game/beNDMWLoadIntf2.cpp",
       "sites": [
         "0x00403140"
       ]
@@ -1364,7 +1364,7 @@
       "address": "0x003e9370",
       "name": "Memory_SelectAllocator_003e9370",
       "size": 56,
-      "source": "src/engine/Memory_SelectAllocator_003e9370.cpp",
+      "source": "src/game/beNDMWLoadIntf2.cpp",
       "sites": [
         "0x00403134"
       ]
@@ -1373,7 +1373,7 @@
       "address": "0x003e93b0",
       "name": "FUN_003e93b0",
       "size": 8,
-      "source": "src/unmatched/FUN_003e93b0.c",
+      "source": "src/game/beNDMWLoadIntf2.cpp",
       "sites": [
         "0x00403114"
       ]

@@ -71,19 +71,6 @@
       "__dl__FPv": "0x00100610"
     }
   },
-  "0x003de7a0": {
-    "duplicates": {
-      "__dt__30igSmartPointer<12beUnicodeObj>Fv": "0x003832d0"
-    },
-    "exceptions": {
-      "index": "0x005534d8",
-      "table": "0x005447ec",
-      "table_size": "0x000010"
-    },
-    "externals": {
-      "__dl__FPv": "0x00100610"
-    }
-  },
   "0x0044b290": {
     "duplicates": {
       "__dt__8ValueRefFv": "0x00352fc0",
@@ -335,19 +322,6 @@
       "__dl__FPv": "0x00100610"
     }
   },
-  "0x003e42a0": {
-    "duplicates": {
-      "__dt__39igSmartPointer<21beLoadIntf2ComMdlData>Fv": "0x003e3d80"
-    },
-    "exceptions": {
-      "index": "0x00553580",
-      "table": "0x00544880",
-      "table_size": "0x000010"
-    },
-    "externals": {
-      "__dl__FPv": "0x00100610"
-    }
-  },
   "0x003f96e0": {
     "duplicates": {
       "__dt__30igSmartPointer<12beUnicodeObj>Fv": "0x003832d0"
@@ -361,46 +335,6 @@
       "__dl__FPv": "0x00100610"
     }
   },
-  "0x003de480": {
-    "duplicates": {
-      "__dt__20igSmartPointer<3Obj>Fv": "0x003832d0"
-    },
-    "exceptions": {
-      "index": "0x005534cc",
-      "table": "0x005447c8",
-      "table_size": "0x000024"
-    },
-    "externals": {
-      "__dl__FPv": "0x00100610"
-    }
-  },
-  "0x003dd6d0": {
-    "duplicates": {
-      "__dt__30igSmartPointer<12beUnicodeObj>Fv": "0x003832d0"
-    },
-    "exceptions": {
-      "index": "0x005534b4",
-      "table": "0x005447b4",
-      "table_size": "0x000014"
-    },
-    "externals": {
-      "__dl__FPv": "0x00100610"
-    }
-  },
-  "0x003dc590": {
-    "emitted": {},
-    "duplicates": {
-      "__dt__30igSmartPointer<12beUnicodeObj>Fv": "0x003832d0"
-    },
-    "externals": {
-      "__dl__FPv": "0x00100610"
-    },
-    "exceptions": {
-      "index": "0x00553478",
-      "table": "0x00544784",
-      "table_size": "0x14"
-    }
-  },
   "0x00439f30": {
     "duplicates": {
       "__dt__25igSmartPointer<8igObject>Fv": "0x003b6090"
@@ -408,32 +342,6 @@
     "exceptions": {
       "index": "0x00554408",
       "table": "0x005468a4",
-      "table_size": "0x000020"
-    },
-    "externals": {
-      "__dl__FPv": "0x00100610"
-    }
-  },
-  "0x003db060": {
-    "duplicates": {
-      "__dt__30igSmartPointer<12beUnicodeObj>Fv": "0x003832d0"
-    },
-    "exceptions": {
-      "index": "0x00553448",
-      "table": "0x00544758",
-      "table_size": "0x000014"
-    },
-    "externals": {
-      "__dl__FPv": "0x00100610"
-    }
-  },
-  "0x003d9ec0": {
-    "duplicates": {
-      "__dt__30igSmartPointer<12beUnicodeObj>Fv": "0x003832d0"
-    },
-    "exceptions": {
-      "index": "0x00553424",
-      "table": "0x00544730",
       "table_size": "0x000020"
     },
     "externals": {
@@ -566,19 +474,6 @@
       "__dt__12WindowRef<1>Fv": "0x00428710",
       "__dt__12WindowRef<2>Fv": "0x00411080",
       "__dt__9StringRefFv": "0x00130720"
-    },
-    "externals": {
-      "__dl__FPv": "0x00100610"
-    }
-  },
-  "0x003de990": {
-    "duplicates": {
-      "__dt__20igSmartPointer<3Obj>Fv": "0x003832d0"
-    },
-    "exceptions": {
-      "index": "0x005534e4",
-      "table": "0x005447fc",
-      "table_size": "0x000030"
     },
     "externals": {
       "__dl__FPv": "0x00100610"
@@ -1061,45 +956,6 @@
     "exceptions": {
       "index": "0x0054f0ec",
       "table": "0x00543c8c",
-      "table_size": "0x000010"
-    },
-    "externals": {
-      "__dl__FPv": "0x00100610"
-    }
-  },
-  "0x003dcc60": {
-    "duplicates": {
-      "__dt__30igSmartPointer<12beUnicodeObj>Fv": "0x003832d0"
-    },
-    "exceptions": {
-      "index": "0x00553490",
-      "table": "0x00544798",
-      "table_size": "0x000014"
-    },
-    "externals": {
-      "__dl__FPv": "0x00100610"
-    }
-  },
-  "0x003e3e00": {
-    "duplicates": {
-      "__dt__39igSmartPointer<21beLoadIntf2ComMdlData>Fv": "0x003e3d80"
-    },
-    "exceptions": {
-      "index": "0x0055355c",
-      "table": "0x0054485c",
-      "table_size": "0x000014"
-    },
-    "externals": {
-      "__dl__FPv": "0x00100610"
-    }
-  },
-  "0x003e4030": {
-    "duplicates": {
-      "__dt__39igSmartPointer<21beLoadIntf2ComMdlData>Fv": "0x003e3d80"
-    },
-    "exceptions": {
-      "index": "0x00553568",
-      "table": "0x00544870",
       "table_size": "0x000010"
     },
     "externals": {
@@ -4253,19 +4109,6 @@
     "exceptions": {
       "index": "0x0054f464",
       "table": "0x00543e00",
-      "table_size": "0x000010"
-    },
-    "externals": {
-      "__dl__FPv": "0x00100610"
-    }
-  },
-  "0x003e3b80": {
-    "duplicates": {
-      "__dt__39igSmartPointer<21beLoadIntf2ComMdlData>Fv": "0x003e3d80"
-    },
-    "exceptions": {
-      "index": "0x00553544",
-      "table": "0x0054484c",
       "table_size": "0x000010"
     },
     "externals": {
@@ -30687,6 +30530,177 @@
       "__dt__9StringRefFv": "0x00130720"
     },
     "symbol": "FUN_003b04e0"
+  },
+  "0x003d9de0": {
+    "whole_file": true,
+    "emitted": {
+      "FUN_003d9e10": "0x003d9e10",
+      "FUN_003d9e40": "0x003d9e40",
+      "FUN_003d9e70": "0x003d9e70",
+      "FUN_003d9e90": "0x003d9e90",
+      "FUN_003d9ec0": "0x003d9ec0",
+      "FUN_003da5f0": "0x003da5f0",
+      "FUN_003da7c0": "0x003da7c0",
+      "FUN_003dafb0": "0x003dafb0",
+      "beNDMWLoadIntf2DataSelIntf__ClearStatesFrom": "0x003daff0",
+      "FUN_003db060": "0x003db060",
+      "beNDMWLoadIntf2DataSelIntf__UpdateSelection": "0x003db780",
+      "FUN_003dbf90": "0x003dbf90",
+      "FUN_003dc2e0": "0x003dc2e0",
+      "FUN_003dc590": "0x003dc590",
+      "FUN_003dcab0": "0x003dcab0",
+      "FUN_003dcc60": "0x003dcc60",
+      "FUN_003dd160": "0x003dd160",
+      "FUN_003dd440": "0x003dd440",
+      "FUN_003dd6d0": "0x003dd6d0",
+      "beNDMWLoadIntf2Diffselect__Init": "0x003ddb10",
+      "beNDMWLoadIntf2Diffselect__Update": "0x003ddb80",
+      "beNDMWLoadIntf2NameSel__Init": "0x003de260",
+      "FUN_003de480": "0x003de480",
+      "FUN_003de7a0": "0x003de7a0",
+      "FUN_003de990": "0x003de990",
+      "beNDMWLoadIntf2NameSel__SetAnswer": "0x003def70",
+      "FUN_003e0b80": "0x003e0b80",
+      "beNDMWLoadIntf2SelSlot__Init": "0x003e0bb0",
+      "beNDMWLoadIntf2SelSlot__Open": "0x003e0c40",
+      "beNDMWLoadIntf2SelSlot__UpdateSelection": "0x003e1760",
+      "beNDMWLoadIntf2SelSlot__PublishCursor": "0x003e2a80",
+      "beNDMWLoadIntf2SelSlot__Close": "0x003e2b10",
+      "beNDMWLoadIntf2SelSlot__RefreshSlotMarks": "0x003e3070",
+      "beNDMWLoadIntf2ComMdlCtrl__Start": "0x003e3b80",
+      "__dt__39igSmartPointer<21beLoadIntf2ComMdlData>Fv": "0x003e3d80",
+      "beNDMWLoadIntf2ComMdlCtrl__StartAt": "0x003e3e00",
+      "beNDMWLoadIntf2ComMdlCtrl__Play": "0x003e4030",
+      "beNDMWLoadIntf2ComMdlCtrl__IsSequence": "0x003e4210",
+      "beNDMWLoadIntf2ComMdlCtrl__IsOpenQueueEmpty": "0x003e4280",
+      "beNDMWLoadIntf2ComMdlCtrl__Close": "0x003e42a0",
+      "beNDMWLoadIntf2ComMdlCtrl__IsRunning": "0x003e4480",
+      "beNDMWLoadIntf2ComMdlCtrl__IsCloseQueueEmpty": "0x003e44d0",
+      "beNDMWLoadIntf2ComMdlCtrl__Poll": "0x003e44f0",
+      "Gap__Bec__beNDMWLoadIntf2__vfunc_32": "0x003e46b0",
+      "ObjectRef_Destruct_003e9010": "0x003e9010",
+      "DataList_GetData_003e9090": "0x003e9090",
+      "beNDMWLoadSavePlWork__SetIsCtrl": "0x003e90a0",
+      "beNDMWLoadSavePlWork__GetIsRdy": "0x003e90b0",
+      "beNDMWLoadSavePlWork__GetIsEntry": "0x003e90c0",
+      "ObjectRef_Retain_003e90d0": "0x003e90d0",
+      "DataList_GetWordAt_003e90f0": "0x003e90f0",
+      "ObjectRef_Release_003e9110": "0x003e9110",
+      "ObjectList_SetAtRetained_003e9160": "0x003e9160",
+      "FUN_003e9220": "0x003e9220",
+      "DataList_GetWordAt_003e9240": "0x003e9240",
+      "ObjectList_GetAt_003e9260": "0x003e9260",
+      "FUN_003e9280": "0x003e9280",
+      "FUN_003e92a0": "0x003e92a0",
+      "ObjectRef_Assign_003e92b0": "0x003e92b0",
+      "FUN_003e9330": "0x003e9330",
+      "FUN_003e9360": "0x003e9360",
+      "Memory_SelectAllocator_003e9370": "0x003e9370",
+      "FUN_003e93b0": "0x003e93b0",
+      "Gap__Bec__beNDMWLoadIntf2__vfunc_30": "0x003e93c0",
+      "Gap__Bec__beNDMWLoadIntf2__vfunc_29": "0x003e93d0",
+      "FUN_003eb480": "0x003eb480",
+      "FUN_003eb500": "0x003eb500",
+      "FUN_003eb580": "0x003eb580",
+      "FUN_003eb600": "0x003eb600",
+      "FUN_003eb680": "0x003eb680",
+      "FUN_003eb700": "0x003eb700",
+      "FUN_003eb780": "0x003eb780",
+      "FUN_003eb800": "0x003eb800",
+      "FUN_003eb880": "0x003eb880",
+      "FUN_003eb900": "0x003eb900",
+      "FUN_003eb980": "0x003eb980",
+      "Gap__Bec__beNDMWLoadIntf2__vfunc_20": "0x003eba00"
+    },
+    "data": {
+      "@775": "0x00516e50",
+      "DAT_004cc830": "0x004cc830",
+      "DAT_004cc840": "0x004cc840",
+      "DAT_004cc850": "0x004cc850",
+      "DAT_004cc860": "0x004cc860",
+      "DAT_004cd060": "0x004cd060",
+      "DAT_004cd090": "0x004cd090",
+      "DAT_004cec70": "0x004cec70",
+      "DAT_00516c40": "0x00516c40",
+      "DAT_00516c50": "0x00516c50",
+      "DAT_00516c60": "0x00516c60",
+      "DAT_00516c68": "0x00516c68",
+      "DAT_00516c78": "0x00516c78",
+      "DAT_00516c80": "0x00516c80",
+      "DAT_00516c90": "0x00516c90",
+      "DAT_00516c98": "0x00516c98",
+      "DAT_00516ca8": "0x00516ca8",
+      "DAT_00516cc0": "0x00516cc0",
+      "DAT_00516cd0": "0x00516cd0",
+      "DAT_00516cd8": "0x00516cd8",
+      "DAT_00516ce8": "0x00516ce8",
+      "DAT_00516cf8": "0x00516cf8",
+      "DAT_00516d08": "0x00516d08",
+      "DAT_00516d10": "0x00516d10",
+      "DAT_00516d20": "0x00516d20",
+      "DAT_00516d30": "0x00516d30",
+      "DAT_00516d40": "0x00516d40",
+      "DAT_00516d50": "0x00516d50",
+      "DAT_00516d60": "0x00516d60",
+      "DAT_00516d70": "0x00516d70",
+      "DAT_00516d80": "0x00516d80",
+      "DAT_00516d90": "0x00516d90",
+      "DAT_00516da0": "0x00516da0",
+      "DAT_00516db0": "0x00516db0",
+      "DAT_00516dc8": "0x00516dc8",
+      "DAT_00516e18": "0x00516e18",
+      "DAT_00516e28": "0x00516e28",
+      "DAT_00516e48": "0x00516e48",
+      "DAT_00516e70": "0x00516e70",
+      "DAT_00516e80": "0x00516e80",
+      "DAT_00516e90": "0x00516e90",
+      "DAT_00516ea0": "0x00516ea0",
+      "DAT_00516eb0": "0x00516eb0",
+      "DAT_00516ec0": "0x00516ec0",
+      "DAT_00516ed0": "0x00516ed0",
+      "DAT_00516ee0": "0x00516ee0",
+      "DAT_00516ef0": "0x00516ef0",
+      "DAT_00516f00": "0x00516f00",
+      "DAT_00516f10": "0x00516f10",
+      "DAT_00516f20": "0x00516f20",
+      "DAT_00516f30": "0x00516f30",
+      "DAT_00516f40": "0x00516f40",
+      "DAT_00517118": "0x00517118",
+      "DAT_00517128": "0x00517128",
+      "DAT_00517138": "0x00517138",
+      "DAT_00517150": "0x00517150",
+      "DAT_00517160": "0x00517160",
+      "DAT_00517170": "0x00517170",
+      "DAT_00517180": "0x00517180",
+      "DAT_00517190": "0x00517190",
+      "DAT_005171a0": "0x005171a0",
+      "DAT_005171b0": "0x005171b0",
+      "DAT_005171c0": "0x005171c0",
+      "DAT_005171d0": "0x005171d0",
+      "DAT_005171e0": "0x005171e0",
+      "DAT_005171f0": "0x005171f0",
+      "DAT_005175d8": "0x005175d8",
+      "DAT_005175e8": "0x005175e8",
+      "DAT_00586f20": "0x00586f20",
+      "DAT_00587110": "0x00587110",
+      "DAT_00588518": "0x00588518",
+      "GENERATE": "0x00517208",
+      "GPR_00554c14": "0x00554c14",
+      "ISRUN": "0x00517228",
+      "ISSEQNAME": "0x00517218",
+      "MODELCTRL": "0x005171f8",
+      "g_beNDMWLoadIntf2Info_metaObject": "0x0058b5d0",
+      "g_beNDMWLoadIntf2_metaObject": "0x0058bac8",
+      "g_defaultAllocatorSelector": "0x00587110",
+      "g_stringPool": "0x00586f20"
+    },
+    "duplicates": {
+      "__dt__30igSmartPointer<12beUnicodeObj>Fv": "0x003832d0"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    },
+    "symbol": "FUN_003d9de0"
   },
   "0x003d58f0": {
     "whole_file": true,
