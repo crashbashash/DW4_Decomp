@@ -282,6 +282,18 @@ int FUN_001ad990(CombinerBlendView *c, CombinerAnimation *anim, int combineMode,
     return 1;
 }
 
+int FUN_001adec0(CombinerBlendView *c, CombinerAnimation *anim, int combineMode, int transitionMode, int status, int *priorities, bool perBone) {
+    CombinerBinding *binding;
+    int result;
+
+    FUN_001ab8b0((int)anim, *(int *)((char *)c + 12), (void **)&binding);
+    result = 0;
+    if (binding != 0) {
+        result = FUN_001ad990(c, anim, combineMode, transitionMode, status, priorities, perBone, binding);
+    }
+    return result;
+}
+
 int FUN_001adf70(CombinerResetView *c) {
     PoolObjectList *states;
     int k;
@@ -460,12 +472,12 @@ int FUN_001ae2d0(CombinerStateView *c, igPoolObject *state) {
     return 1;
 }
 
-int FUN_001ae660(struct O_1ae660 *arg0, int a1, int a2, int a3, int a4, int a5, int a6, long long arg7, float fparg0, float fparg1, long long arg_sp0) {
+int FUN_001ae660(CombinerBlendView *c, CombinerAnimation *anim, int combineMode, int transitionMode, int status, int *priorities, bool perBone, long long arg7, float fparg0, float fparg1, long long arg_sp0) {
     struct L_1ae660 *l;
     struct E_1ae660 *e;
     int r;
-    r = FUN_001adec0(arg0) & 0xFF;
-    l = arg0->list;
+    r = FUN_001adec0(c, anim, combineMode, transitionMode, status, priorities, perBone) & 0xFF;
+    l = (struct L_1ae660 *)c->_animationStateList;
     e = (struct E_1ae660 *)*(int *)(l->items + ((l->count - 1) * 4));
     e->f96 = arg_sp0;
     e->f80 = fparg0;
@@ -486,11 +498,11 @@ int Gap__Sg__igAnimationCombiner__vfunc_23(void *arg0) {
     return *(int *)((char *)(arg0) + 64) != 0;
 }
 
-void FUN_001ae750(int a0, void *arg1, int a2, int a3, int a4) {
-    int sp1C;
+void FUN_001ae750(CombinerBlendView *c, CombinerAnimation *anim, int combineMode, int transitionMode, int status) {
+    int priority;
 
-    sp1C = *(int *)((char *)(arg1) + 12);
-    FUN_001adec0(a0, arg1, a2, a3, a4, &sp1C, 0);
+    priority = anim->_priority;
+    FUN_001adec0(c, anim, combineMode, transitionMode, status, &priority, 0);
 }
 
 int FUN_001ae780(CombinerStateView_1ae780 *c, CombinerStateView_1ae780 *from) {

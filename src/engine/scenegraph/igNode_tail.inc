@@ -126,6 +126,30 @@ Ref_1c5eb0 FUN_001c5eb0(S_1c5eb0 *host, int idx) {
     return Ref_1c5eb0(0);
 }
 
+unsigned int FUN_001c6050(S_1c5eb0 *host, Obj_1c5eb0 *child) {
+    List_1c5eb0 *l;
+    unsigned int n;
+    unsigned int i;
+    bool found;
+    l = host->getList();
+    n = 0;
+    if (l != 0) {
+        n = l->n;
+    }
+    found = false;
+    for (i = 0; i < n; i++) {
+        if (host->list->data[i] == child) {
+            found = true;
+            break;
+        }
+    }
+    if (found) {
+        FUN_001c5eb0(host, i);
+        return i;
+    }
+    return -1U;
+}
+
 void FUN_001c6110(O_1c6110 *arg0, int arg1) {
     int t1, i;
     Lst_1c6110 *a3;

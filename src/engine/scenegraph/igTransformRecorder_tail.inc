@@ -180,3 +180,16 @@ int FUN_001bafb0(int arg0, struct S_1bafb0 *arg1) {
     return var_s0;
 }
 
+int FUN_001bb090(S_1e04c0 *self, KeyTrackView *track) {
+    long long time;
+    double fraction;
+
+    time = ((DW4VC_104_3 *)self)->vX();
+    fraction = (double)(time % 1000000000) / 1000000000;
+    igSmartPointer<KeyTrackValue> found((KeyTrackValue *)FUN_001dcc80(track, (double)(time / 1000000000) + fraction), kRetainReference);
+    if (found.p == 0) {
+        return 0;
+    }
+    return FUN_001e04c0(self, (V_1e04c0 *)found.p);
+}
+

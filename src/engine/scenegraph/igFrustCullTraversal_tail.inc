@@ -66,7 +66,7 @@ void FUN_001c47a0(void *arg0, int arg1, int arg2) {
     *(int *)((char *)(arg0) + 544) = arg2;
 }
 
-void FUN_001c4ac0(CullFrustumView *o, CullBoundsView *b) {
+int FUN_001c4ac0(CullFrustumView *o, CullBoundsView *b) {
     CullAttrState *st;
     /* matching construct: permuter — st assigned inside the first lookup, so the second reloads its fields */
     float *world = currentEntry_1c4ac0(stackOf_1c4ac0(st = o->_state, ((CullMeta * *)DAT_0055efe8)[0]))->_matrix;
@@ -78,7 +78,32 @@ void FUN_001c4ac0(CullFrustumView *o, CullBoundsView *b) {
     if (!same) {
         FUN_001c47a0((void *)o, (int)(world), (int)(view));
     }
-    FUN_001c47f0(o->_frustum, b->_min, b->_max);
+    return FUN_001c47f0(o->_frustum, b->_min, b->_max);
+}
+
+void FUN_001c5030(igFrustCullTraversal *arg0, igNode *arg1) {
+    if (arg0->_modeMask & 0x200) {
+        BoundVolume *o = (BoundVolume *)arg1->_bound;
+        void *var = o;
+        if (o != 0) {
+            int t = DAT_005610e0[0];
+            if (t == o->ty()) {
+                var = o;
+            } else {
+                igAABox *x = (igAABox *)arg0->_boundingBox;
+                var = x;
+                float *mn = (float *)x->_min;
+                float *mx = (float *)&x->_max;
+                mn[0] = mn[1] = mn[2] = 3.4028235e38f;
+                mx[0] = mx[1] = mx[2] = -3.4028235e38f;
+                FUN_00190060(x, o);
+            }
+            FUN_001c4c20(arg0, arg1, FUN_001c4ac0((CullFrustumView *)arg0, (CullBoundsView *)var));
+            return;
+        }
+    }
+    unsigned sel = arg1->_handle;
+    ((void (*)(igFrustCullTraversal *, igNode *))DAT_00562640[0]->_data[sel])(arg0, arg1);
 }
 
 int FUN_001c5130(void *arg0, TraversalNodeView *arg1) {

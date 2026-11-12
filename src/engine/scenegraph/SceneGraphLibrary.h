@@ -115,7 +115,14 @@ extern "C" char igTransformSequence_GetPublishedMetaObject[];
 extern "C" char g_igTransformSequence1_5_callbackList[];
 extern "C" char igTransformSequence1_5_className[];
 extern "C" char g_igTransformSequence1_5_metaObject[];
-extern "C" int igTransformSequence1_5_InitFields(...);
+extern "C" void igTransformSequence1_5_InitFields(void);
+extern "C" int FUN_002ca680(...);
+extern "C" int DAT_0048afb0[4];
+extern "C" int DAT_0048afe0[4];
+extern "C" int DAT_0048b010[4];
+extern "C" int DAT_0048b040[4];
+extern "C" int DAT_004e1418[4];
+extern "C" int DAT_005611e8[4];
 extern "C" int DAT_00561230[4];
 extern igMetaObject *g_igTransformSequence_metaObject[4];
 extern "C" char igTransformSource_GetPublishedMetaObject[];
@@ -1524,9 +1531,8 @@ struct CombinerStateView {
     char pad60[20];
     unsigned char _cacheValid;
 };
-extern "C" int FUN_001adec0(...);
+extern "C" int FUN_001adec0(CombinerBlendView *c, CombinerAnimation *anim, int combineMode, int transitionMode, int status, int *priorities, bool perBone);
 struct L_1ae660 { char p0[8]; int count; char p1[4]; int items; };
-struct O_1ae660 { char p0[56]; struct L_1ae660 *list; };
 struct E_1ae660 { char p0[72]; long long f72; float f80; float f84; long long f88; long long f96; };
 extern "C" int Gap__Core__igObject__vfunc_08__002ff0f0(...);
 class DW4VC_92_0 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual int vX(); };
@@ -1881,7 +1887,7 @@ extern "C" int DAT_005625e0[4];
 extern "C" int DAT_005625e8[4];
 extern "C" void *DAT_005625f0;
 extern "C" VC_1b2fa0 *DAT_00562638[4];
-extern "C" int DAT_00562640[4];
+extern "C" TravFunctionTable *DAT_00562640[4];
 extern "C" int FUN_00130830(...);
 extern "C" int FUN_00130a70(...);
 extern "C" int FUN_00130cf0(...);
@@ -2230,7 +2236,7 @@ extern "C" void FUN_00130f20(...);
 class DW4VC_148_0 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void d32(); virtual void d33(); virtual void d34(); virtual int vX(); };
 class DW4VC_152_1 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void d32(); virtual void d33(); virtual void d34(); virtual void d35(); virtual int vX(int); };
 class DW4VC_160_1 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void d32(); virtual void d33(); virtual void d34(); virtual void d35(); virtual void d36(); virtual void d37(); virtual int vX(int); };
-class DW4VC_164_0 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void d32(); virtual void d33(); virtual void d34(); virtual void d35(); virtual void d36(); virtual void d37(); virtual void d38(); virtual int vX(); };
+class DW4VC_164_0 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void d32(); virtual void d33(); virtual void d34(); virtual void d35(); virtual void d36(); virtual void d37(); virtual void d38(); virtual unsigned char vX(); };
 class DW4VC_172_0 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void d32(); virtual void d33(); virtual void d34(); virtual void d35(); virtual void d36(); virtual void d37(); virtual void d38(); virtual void d39(); virtual void d40(); virtual int vX(); };
 class DW4VC_176_1 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void d32(); virtual void d33(); virtual void d34(); virtual void d35(); virtual void d36(); virtual void d37(); virtual void d38(); virtual void d39(); virtual void d40(); virtual void d41(); virtual int vX(int); };
 class DW4VC_184_1 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void d32(); virtual void d33(); virtual void d34(); virtual void d35(); virtual void d36(); virtual void d37(); virtual void d38(); virtual void d39(); virtual void d40(); virtual void d41(); virtual void d42(); virtual void d43(); virtual int vX(int); };
@@ -2315,10 +2321,40 @@ typedef struct QSView {
     float _quaternionBase;
     float _quaternionRangeOverMaxUShort;
 } QSView;
+struct QSDataList { int _vtable; int _refCount; int _count; int _capacity; int *_data; };
+class QSSequenceSlots {
+public:
+    virtual void slot0(); virtual void slot1(); virtual void slot2(); virtual void slot3(); virtual void slot4(); virtual void slot5(); virtual void slot6(); virtual void slot7(); virtual void slot8(); virtual void slot9();
+    virtual void slot10(); virtual void slot11(); virtual void slot12(); virtual void slot13(); virtual void slot14(); virtual void slot15(); virtual void slot16(); virtual void slot17(); virtual void slot18(); virtual void slot19();
+    virtual void slot20(); virtual void slot21(); virtual void slot22(); virtual void slot23(); virtual void slot24(); virtual void slot25(); virtual void slot26(); virtual void slot27(); virtual void slot28(); virtual void slot29();
+    virtual void slot30(); virtual void slot31(); virtual void slot32(); virtual void slot33(); virtual void slot34(); virtual void slot35(); virtual void slot36(); virtual void slot37(); virtual void slot38(); virtual void slot39();
+    virtual long long keyTime(int i);
+};
+struct QSSequenceView : QSSequenceSlots {
+    int _refCount;
+    QSDataList *_compressedTranslationList;
+    QSDataList *_compressedQuaternionList;
+    QSDataList *_compressedTimeList;
+    float _translationBase;
+    float _translationRangeOverMaxUShort;
+    float _quaternionBase;
+    float _quaternionRangeOverMaxUShort;
+    int _pad36;
+    unsigned long long _animationDuration;
+    int _playMode;
+    int _lastTime;
+    unsigned char _channels;
+    unsigned char _interpolationMethod[7];
+};
+struct QSSourceSequence { virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void d32(); virtual void d33(); virtual void d34(); virtual void d35(); virtual void d36(); virtual int v156(); virtual void d38(); virtual void d39(); virtual void d40(); virtual void *v172(); virtual void d42(); virtual void d43(); virtual void *v184(); virtual void d45(); virtual void d46(); virtual void d47(); virtual void d48(); virtual void d49(); virtual void d50(); virtual void d51(); virtual void d52(); virtual void d53(); virtual long long v224(int); virtual void d55(); virtual void d56(); virtual int v236(int); virtual int v240(); virtual void d59(); virtual void d60(); virtual void d61(); virtual void d62(); virtual long long v260(); char pad[32]; int f36; };
+extern "C" QSDataList *FUN_002c9ff0(int);
+extern "C" int FUN_001e5f00(void *, int *, float *, float *);
+extern "C" int FUN_001e6130(void *, int *, float *, float *);
+extern "C" void Gap__Sg__igCompressedAnimationSequenceQS__vfunc_44(QSSequenceView *arg0, QSSourceSequence *arg1);
 struct M_1bfa60 { int pad[2]; int count; };
 struct O_1bfa60 { virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3(); virtual void v4(); virtual void v5(); virtual void v6(); virtual void v7(); virtual void v8(); virtual void v9(); virtual void v10(); virtual void v11(); virtual void v12(); virtual void v13(); virtual void v14(); virtual void v15(); virtual void v16(); virtual void v17(); virtual void v18(); virtual void v19(); virtual void v20(); virtual void v21(); virtual void v22(); virtual void v23(); virtual void v24(); virtual void v25(); virtual void v26(); virtual void v27(); virtual void v28(); virtual void v29(); virtual void v30(); virtual void v31(); virtual void v32(); virtual int v33(); virtual void v34(); virtual void v35(); virtual void v36(); virtual void v37(); virtual void v38(); virtual void v39(); virtual void v40(); virtual void v41(); virtual void v42(); virtual void v43(); virtual void v44(int,int*); virtual void v45(int*,int,int,float); virtual void v46(int*,int,int,float);
  int p0[3]; M_1bfa60 *m; int p1[8]; int idx; unsigned char flags; };
-extern "C" int FUN_001bf7d0(...);
+extern "C" void FUN_001bf7d0(QSSequenceView *o, unsigned char *before, unsigned char *after, int *key0, int *key1, float *t0, float *t1, long long time);
 extern "C" int FUN_00192810(...);
 extern "C" int Matrix44_SetTranslation(...);
 struct M_1bfc70 { int pad[2]; int count; };
@@ -2658,7 +2694,7 @@ struct EnbayaTransformSourceView_1c1c10 {
     int _trackId;
     EnbayaSourceSlots_1c1c10 *_enbayaAnimationSource;
 };
-extern "C" int FUN_001c0ea0(...);
+extern "C" unsigned long long FUN_001c0ea0(EnbayaSourceView *o);
 extern "C" int igMetaObject_CountInstances(...);
 struct Ref_1c1c60 { int w0; int rc; };
 struct List_1c1c60 { int w0; int w4; int count; int cap; Ref_1c1c60 **data; };
@@ -2789,7 +2825,11 @@ struct R_1c4650 { int word0; int references; };
 extern "C" R_1c4650 *DAT_00562760[4];
 class V128_1c4650 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void vX(int); };
 struct O_1c4650 { char p0[28]; R_1c4650 *ref; char p1[196]; unsigned int flags; char p2[316]; V128_1c4650 *v; };
-extern "C" int FUN_001c5030(...);
+/* matching construct: dummy virtual slots so the type-test call dispatches through the retail vtable offset 88 */
+struct BoundVolume { virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual int ty(); };
+extern "C" int DAT_005610e0[4];
+extern "C" int FUN_001c4c20(igFrustCullTraversal *, igNode *, int);
+extern "C" void FUN_001c5030(igFrustCullTraversal *arg0, igNode *arg1);
 typedef struct CullFrustumView { char _pad0[52]; CullAttrState *_state; char _pad38[420]; char _frustum[64]; float *_lastWorld; float *_lastView; } CullFrustumView;
 typedef struct CullBoundsView { char _pad0[8]; float _min[3]; float _max[3]; } CullBoundsView;
 extern "C" CullMeta *DAT_0055ef50[4];
@@ -2865,18 +2905,18 @@ struct Obj_1c5eb0 {
 };
 struct List_1c5eb0 { int p0, p4; int n; int p12; Obj_1c5eb0 **data; };
 struct S_1c5eb0 { char pad[28]; List_1c5eb0 * list; List_1c5eb0 *getList() const { return list; } };
+static inline void releaseNode(Obj_1c5eb0 *o) {
+    if (o) {
+        --o->refs;
+        if (((unsigned long long)(long long)o->refs & 0x7fffffULL) == 0) igObject_Destroy(o);
+    }
+}
 struct Ref_1c5eb0 {
     Obj_1c5eb0 *p;
     Ref_1c5eb0() { p = 0; }
     Ref_1c5eb0(Obj_1c5eb0 *o) { p = o; if (p) p->refs++; }
     Ref_1c5eb0(const Ref_1c5eb0 &r) { p = r.p; if (p) p->refs++; }
-    ~Ref_1c5eb0() {
-        Obj_1c5eb0 *o = p;
-        if (o) {
-            --o->refs;
-            if (((unsigned long long)(long long)o->refs & 0x7fffffULL) == 0) igObject_Destroy(o);
-        }
-    }
+    ~Ref_1c5eb0() { releaseNode(p); }
 };
 extern "C" int DAT_0048da58[4];
 class VO { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual int v92(); virtual void * v96(int); virtual void d23(); virtual void d24(); virtual void d25(); virtual void v112(int, int); virtual void d27(); virtual int v120(); };
@@ -2971,8 +3011,40 @@ extern "C" void FUN_0030b770(IniValueObject *, unsigned char, int);
 extern "C" void FUN_002d9740(IniValueTarget *, int, int, char *);
 extern "C" int DAT_004e4710[2];
 extern "C" int DAT_004e4718[2];
-struct T_1cb1f0 { int w0; int refs; };
-extern "C" int FUN_001cd9f0(...);
+struct IniSectionObject { int pad0; int _refCount; char *name; };
+struct IniTypeTable { char pad0[60]; void *meta; };
+struct IniShaderFactoryView;
+struct SectionRef {
+    IniSectionObject *p;
+    SectionRef() {}
+    SectionRef(IniSectionObject *object) : p(object) {
+        if (p != 0) {
+            p->_refCount = p->_refCount + 1;
+        }
+    }
+    SectionRef(const SectionRef &other) : p(other.p) {
+        if (p != 0) {
+            p->_refCount = p->_refCount + 1;
+        }
+    }
+    ~SectionRef() {
+        release();
+    }
+    void release() {
+        IniSectionObject *object = p;
+        if (object != 0) {
+            object->_refCount = object->_refCount - 1;
+            if ((object->_refCount & 0x7FFFFF) == 0) {
+                igObject_Destroy(object);
+            }
+        }
+    }
+    IniSectionObject *get() const { return p; }
+};
+extern "C" IniSectionObject *FUN_002c6750(void *);
+extern "C" void FUN_003006a0(IniSectionObject *, void *);
+extern "C" int FUN_002da710(IniSectionObject *, char *, char *);
+extern "C" SectionRef FUN_001cd9f0(IniShaderFactoryView *self, char *name);
 extern "C" int FUN_002da990(...);
 class DW4VC_96_1 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual int vX(int); };
 extern "C" int FUN_00303dc0(...);
@@ -3332,7 +3404,7 @@ struct S_1d32f0;
 class V_1d32f0 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual int c(); virtual S_1d32f0 *g(int); };
 struct S_1d32f0 : V_1d32f0 { char p[16]; int f20; };
 class DW4VC_120_0 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual int vX(); };
-extern "C" void FUN_001c6050(void *, void *);
+extern "C" unsigned int FUN_001c6050(S_1c5eb0 *host, Obj_1c5eb0 *child);
 struct NodeParentListView { int _vtable; unsigned int _refCount; int _count; int _capacity; void **_data; };
 class NodeSlots {
 public:
@@ -3699,8 +3771,8 @@ struct T_1d7630 {
 typedef struct ShaderTraversalPair { void *_meta; void *_function; } ShaderTraversalPair;
 typedef struct ShaderTraversalPairs { ShaderTraversalPair _pairs[4]; } ShaderTraversalPairs;
 extern "C" ShaderTraversalPairs DAT_0048dac0;
-extern "C" int DAT_005628e0[4];
-extern "C" int DAT_005628e8[4];
+extern "C" TravFunctionTable *DAT_005628e0[4];
+extern "C" TravFunctionTable *DAT_005628e8[4];
 class DW4VCSR_128_0 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual int vX(float *); };
 typedef struct L_1d7b70 { char p[8]; int n; char q[4]; int *arr; } L_1d7b70;
 typedef struct S0_1d7b70 {
@@ -5340,10 +5412,10 @@ extern "C" void FUN_001ae1b0(void *arg0, float fparg0, float fparg1, float fparg
 extern "C" void **FUN_001ae1d0(void **arg0, void *arg1);
 extern "C" void **FUN_001ae250(void **arg0, igObject *arg1);
 extern "C" int FUN_001ae2d0(CombinerStateView *c, igPoolObject *state);
-extern "C" int FUN_001ae660(struct O_1ae660 *arg0, int a1, int a2, int a3, int a4, int a5, int a6, long long arg7, float fparg0, float fparg1, long long arg_sp0);
+extern "C" int FUN_001ae660(CombinerBlendView *c, CombinerAnimation *anim, int combineMode, int transitionMode, int status, int *priorities, bool perBone, long long arg7, float fparg0, float fparg1, long long arg_sp0);
 extern "C" void Gap__Sg__igAnimationCombiner__vfunc_10(void **arg0);
 extern "C" int Gap__Sg__igAnimationCombiner__vfunc_23(void *arg0);
-extern "C" void FUN_001ae750(int a0, void *arg1, int a2, int a3, int a4);
+extern "C" void FUN_001ae750(CombinerBlendView *c, CombinerAnimation *anim, int combineMode, int transitionMode, int status);
 extern "C" int FUN_001ae780(CombinerStateView_1ae780 *c, CombinerStateView_1ae780 *from);
 extern "C" void *Gap__Sg__igAnimationDatabase__vfunc_24(O_1aea60 *arg0, char *arg1);
 extern "C" int FUN_001aedd0(void *self, igTDataList<AnimDbRecord *> *list, int file, AnimDbRecord *object);
@@ -5457,6 +5529,9 @@ extern "C" int FUN_001bac90(int arg0, void **arg1);
 extern "C" int FUN_001bacf0(DrawItemSource *arg0, DrawItemIndex *arg1);
 extern "C" int FUN_001bae20(CompileTraversalHead *o, BlendNodeView *node);
 extern "C" int FUN_001bafb0(int arg0, struct S_1bafb0 *arg1);
+class DW4VC_104_3 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual long long vX(); };
+struct KeyTrackValue : public igObject { };
+extern "C" int FUN_001bb090(S_1e04c0 *self, KeyTrackView *track);
 extern "C" void FUN_001bb1f0(int arg0);
 extern "C" void FUN_001bb200(void);
 extern "C" void FUN_001bb230(void);
@@ -5493,13 +5568,13 @@ extern "C" void FUN_001bf400(int arg0, int arg1, long long arg2);
 extern "C" void FUN_001bf560(QSView *o, int index, float *out);
 extern "C" void Gap__Sg__igCompressedAnimationSequenceQS__vfunc_46(QSView *o, int index, float *out);
 extern "C" long long Gap__Sg__igCompressedAnimationSequenceQS__vfunc_42(int *arg0, int arg1);
-extern "C" int Gap__Sg__igCompressedAnimationSequenceQS__vfunc_23(O_1bfa60 *a0, int a1, int a2);
+extern "C" int Gap__Sg__igCompressedAnimationSequenceQS__vfunc_23(O_1bfa60 *a0, int a1, long long a2);
 extern "C" int Gap__Sg__igCompressedAnimationSequenceQS__vfunc_35(igCompressedAnimationSequenceQS *self);
 extern "C" void FUN_001bfc70(O_1bfc70 *o, long long t, int *a2, int *a3, float *a4, float *a5);
 extern "C" void Gap__Sg__igCompressedAnimationSequenceQS__vfunc_48(struct S_1bfe90 *arg0, int *arg1, void *arg2, int *arg3, float fparg0);
 extern "C" void Gap__Sg__igCompressedAnimationSequenceQS__vfunc_47(void *arg0, int *arg1, int arg2, int arg3, float fparg0);
-extern "C" int Gap__Sg__igCompressedAnimationSequenceQS__vfunc_25(S_1c0010 *arg0, int arg1, int arg2);
-extern "C" int Gap__Sg__igCompressedAnimationSequenceQS__vfunc_27(O_1c00e0 *arg0, int arg1, int arg2, int arg3);
+extern "C" int Gap__Sg__igCompressedAnimationSequenceQS__vfunc_25(S_1c0010 *arg0, int arg1, long long arg2);
+extern "C" int Gap__Sg__igCompressedAnimationSequenceQS__vfunc_27(O_1c00e0 *arg0, int arg1, int arg2, long long arg3);
 extern "C" int FUN_001c0240(igTransformSequence1_5 *self);
 extern "C" int FUN_001c0390(void *, int);
 extern "C" void FUN_001c03a0(A0_1c03a0 *arg0, A1_1c03a0 *arg1);
@@ -5542,6 +5617,52 @@ extern "C" void FUN_001c1e10(void);
 extern "C" void FUN_001c1f90(int);
 extern "C" void FUN_001c20b0(Controller *self);
 extern "C" void FUN_001c2880(S_1c2880 *arg0);
+struct EnvAttr { char _pad0[8]; short _attrIndex; short _unitOffset; };
+struct EnvAttrList { char _pad0[8]; int _count; int _capacity; EnvAttr **_data; };
+struct EnvSlot : igTDataList<EnvAttr *> { char _pad14[4]; int _mark; void (*_onPop)(EnvAttr *, int); };
+struct EnvSlotTable { char _pad0[16]; EnvSlot **_data; };
+struct EnvAttrStack { char _pad0[16]; EnvSlotTable *_slots; char _pad14[28]; int _popArg; char _pad34[16]; int *_unitOfAttr; };
+struct EnvListList { char _pad0[8]; int _count; int _capacity; EnvAttrList **_data; };
+struct EnvTraversalView { char _pad0[32]; int _arg32; char _pad24[16]; EnvAttrStack *_attrStack; char _pad38[12]; A_1dc500 *_context; };
+class EnvPassShaderView {
+public:
+    virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9();
+    virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19();
+    virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29();
+    virtual void d30(); virtual void d31(); virtual void d32(); virtual void d33(); virtual void d34(); virtual void d35(); virtual void d36(); virtual void d37(); virtual void d38(); virtual void d39();
+    virtual void d40(); virtual void d41(); virtual void d42();
+    virtual void prepare(EnvTraversalView *);
+    virtual void d44(); virtual void d45();
+    virtual void configure(int);
+    char _pad4[44];
+    unsigned char _unit;
+    char _pad31[11];
+    unsigned char _configured;
+    char _pad3d[3];
+    EnvListList *_pushLists;
+    EnvListList *_popLists;
+    unsigned char _useContext;
+};
+static inline void pushEnvAttr(EnvAttrStack *s, EnvAttr *a) {
+    int idx = a->_unitOffset + s->_unitOfAttr[a->_attrIndex];
+    EnvSlot *l = s->_slots->_data[idx];
+    if (l->_mark < 0) l->_mark = l->_count;
+    l->append(a);
+    FUN_001b1490((A_1b1490 *)s, (B_1b1490 *)l, idx);
+}
+static inline void popEnvAttr(EnvAttrStack *s, EnvAttr *a) {
+    int idx = a->_unitOffset + s->_unitOfAttr[a->_attrIndex];
+    EnvSlot *l = s->_slots->_data[idx];
+    int last = l->_count - 1;
+    EnvAttr **d = l->_data;
+    EnvAttr *top = d[last];
+    void (*cb)(EnvAttr *, int) = l->_onPop;
+    if (cb != 0 && top == a) cb(top, s->_popArg);
+    l->_count = l->_count - 1;
+    if (l->_count == l->_mark) l->_mark = -1;
+    FUN_001b1490((A_1b1490 *)s, (B_1b1490 *)l, idx);
+}
+extern "C" void FUN_001c2be0(EnvPassShaderView *self, EnvTraversalView *t);
 extern "C" void FUN_001c2eb0(S0_1c2eb0 *arg0, Rc *arg1);
 extern "C" void FUN_001c2f50(igPsx2EnvironmentMapShader *self, igObject *value);
 extern "C" void FUN_001c2fd0(igPsx2EnvironmentMapShader *self, int coordIndex);
@@ -5561,7 +5682,7 @@ extern "C" void Gap__Sg__igFrustCullTraversal__vfunc_09(O_1c4650 *arg0, int arg1
 extern "C" void FUN_001c4700(int arg0, int arg1);
 extern "C" void Gap__Sg__igFrustCullTraversal__vfunc_24(igCommonTraversal *self, int arg1);
 extern "C" void FUN_001c47a0(void *arg0, int arg1, int arg2);
-extern "C" void FUN_001c4ac0(CullFrustumView *o, CullBoundsView *b);
+extern "C" int FUN_001c4ac0(CullFrustumView *o, CullBoundsView *b);
 extern "C" int FUN_001c5160(S0_1c5160 *arg0, float fparg0);
 extern "C" void FUN_001c51b0(int arg0, int arg1, int arg2);
 extern "C" void FUN_001c51d0(void);
@@ -5606,7 +5727,34 @@ extern "C" void StringList_AppendRetained(igStringRefList *arg0, void **arg1);
 extern "C" int FUN_001ca6b0(int *p, int);
 extern "C" int FUN_001ca6c0(ShaderObject_1ca6c0 **out, ShaderProcessorView *self, char *name, unsigned char flag);
 extern "C" int Gap__Sg__igShaderProcessor__vfunc_22(void);
-extern "C" int FUN_001cafc0(struct L_1cafc0 *arg0, int *arg1, int arg2);
+struct IniStrRef {
+    char *p;
+    IniStrRef() {}
+    IniStrRef(const IniStrRef &o) : p(o.p) { if (p != 0) ((int *)p)[-1] = ((int *)p)[-1] + 1; }
+    static inline void Release(char *s) {
+        int *x = (int *)s;
+        if (x != 0) { int *hd = x - 2; int c = x[-1] - 1; x[-1] = c; if (c == 0) StringChunk_ReleaseHeader(*hd, hd); }
+    }
+    ~IniStrRef() { Release(p); }
+};
+class IniFieldTarget {
+public:
+    virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9();
+    virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19();
+    virtual void *getMeta();
+};
+struct IniItemList { char pad0[8]; int count; char pad1[4]; void **data; };
+struct IniFieldView { char pad0[56]; void *refMeta; };
+extern "C" void igObjectRefMetaField_Assign(IniFieldView *, IniFieldTarget *, void *);
+static inline IniFieldView *asObjectRefField(IniFieldView *f) {
+    if (f != 0 && igObject_IsKindOf(f, DAT_00585b20[0]) != 0) {
+        return f;
+    }
+    return 0;
+}
+static inline void *itemAt(IniItemList *l, int i) { return l->data[i]; }
+extern "C" int FUN_001cafc0(struct L_1cafc0 *arg0, IniStrRef name, int arg2);
+extern "C" void FUN_001cade0(void *self, IniFieldTarget *target, IniItemList *items, void *names, void *lookup, void *fieldNames);
 extern "C" void FUN_001cb010(void *self, IniValueTarget *target, IniValueList *list);
 extern "C" void FUN_001cb1f0(int arg0, int arg1, int arg2, int arg3, void **arg4, int arg5);
 extern "C" void FUN_001cb2d0(int dummy0, int arg1, int arg2, void *arg3);
@@ -5617,6 +5765,10 @@ extern "C" void Gap__Sg__igIniShaderFactory__vfunc_17(void *arg0);
 extern "C" void Gap__Sg__igIniShaderFactory__vfunc_18(void *arg0);
 extern "C" int FUN_001cd150(IniDocument **out, IniFactoryState *self, char *name);
 extern "C" int FUN_001cdbb0(IniSectionText **out, IniFactoryView *self, char *name);
+struct IniHeldObject { int vt; int refs; };
+struct IniFactoryBinding { char pad[44]; IniHeldObject *r44; IniHeldObject *r48; };
+extern "C" int FUN_001cb340(IniFactoryBinding *, int, int);
+extern "C" bool Gap__Sg__igIniShaderFactory__vfunc_23(IniFactoryBinding *self, int a1, IniHeldObject *a2, int a3);
 extern "C" struct R **FUN_001ce350(struct R **arg0, short arg1);
 extern "C" void Gap__Core__igFolder__vfunc_25(void **arg0);
 extern "C" int FUN_001ce400(IniStringObject **out, char *path);
@@ -5756,13 +5908,14 @@ extern "C" void Gap__Sg__igSorter__vfunc_09(SorterState *o, int arg1);
 extern "C" void FUN_001db500(A_1db500 *arg0);
 extern "C" void Gap__Sg__igSorter__vfunc_24(Sorter *arg0);
 extern "C" void FUN_001dc400(igSorter *arg0, igGroup *arg1, igAttrStackManager *arg2);
-extern "C" void FUN_001dc500(A_1dc500 *arg0, int arg1, int arg2);
+extern "C" void FUN_001dc500(A_1dc500 *arg0, unsigned char arg1, int arg2);
 extern "C" void FUN_001dc820(void *arg0, unsigned int arg1);
 extern "C" void FUN_001dc870(int *p);
 extern "C" void FUN_001dc880(void *arg0, unsigned int arg1);
 extern "C" void FUN_001dc8d0(int *p);
 extern "C" int FUN_001dc8e0(void *arg0, int arg1);
 extern "C" int Gap__Sg__igSwitch__vfunc_35(S_1dc940 *arg0, int arg1, void *arg2);
+extern "C" Obj_1c5eb0 *FUN_001dc9a0(S_1dc940 *arg0, int arg1);
 extern "C" void FUN_001dca40(List_1dca40 *arg0, Obj_1dca40 *(*arg1)(int));
 extern "C" void FUN_001dcb80(ObjectPool *pool, igObject *object);
 extern "C" int FUN_001dcc80(KeyTrackView *o, double t);

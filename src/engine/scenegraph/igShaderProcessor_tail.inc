@@ -5,12 +5,12 @@ int Gap__Sg__igShaderProcessor__vfunc_22(void) {
     return DAT_005614f8[0];
 }
 
-int FUN_001cafc0(struct L_1cafc0 *arg0, int *arg1, int arg2) {
+int FUN_001cafc0(struct L_1cafc0 *arg0, IniStrRef name, int arg2) {
     int n = arg0->n;
     int i = arg2;
     int r;
     while (i < n) {
-        if (*arg1 == arg0->items[i]) { r = i; goto done; }
+        if ((int)name.p == arg0->items[i]) { r = i; goto done; }
         i++;
     }
     r = -1;
@@ -45,20 +45,11 @@ void FUN_001cb010(void *self, IniValueTarget *target, IniValueList *list) {
 }
 
 void FUN_001cb1f0(int arg0, int arg1, int arg2, int arg3, void **arg4, int arg5) {
-    T_1cb1f0 *sp6C;
-
-    FUN_001cd9f0(&sp6C, arg0, arg1);
-    if (sp6C != 0) {
-        ((DW4VC_96_1 *)(arg4))->vX((int)(sp6C));
-        FUN_001cb010((void *)arg0, (IniValueTarget *)sp6C, (IniValueList *)arg5);
-        FUN_002da990(sp6C, arg2, arg3, 1);
-    }
-    T_1cb1f0 *p = sp6C;
-    if (p != 0) {
-        p->refs = p->refs - 1;
-        if (((unsigned long long) ((long long) p->refs << 0x29) >> 0x29) == 0) {
-            igObject_Destroy((void *)p);
-        }
+    SectionRef section = FUN_001cd9f0((IniShaderFactoryView *)arg0, (char *)arg1);
+    if (section.get() != 0) {
+        ((DW4VC_96_1 *)(arg4))->vX((int)(section.get()));
+        FUN_001cb010((void *)arg0, (IniValueTarget *)section.get(), (IniValueList *)arg5);
+        FUN_002da990(section.get(), arg2, arg3, 1);
     }
 }
 

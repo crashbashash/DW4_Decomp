@@ -156,3 +156,7 @@ void Gap__Sg__igEnbayaAnimationSource__vfunc_17(Obj_1c0e70 *arg0) {
     arg0->f32 = FUN_002808f0(arg0->f32);
 }
 
+unsigned long long FUN_001c0ea0(EnbayaSourceView *o) {
+    return (unsigned long long)(1000000000 * (double)o->_enbayaAnimationStream->duration());
+}
+

@@ -403,3 +403,23 @@ int FUN_001ca6c0(ShaderObject_1ca6c0 **out, ShaderProcessorView *self, char *nam
     releaseString(text);
     return 0;
 }
+
+void FUN_001cade0(void *self, IniFieldTarget *target, IniItemList *items, void *names, void *lookup, void *fieldNames) {
+    int i;
+    for (i = 0; i < items->count; i++) {
+        void *item = itemAt(items, i);
+        IniStrRef name;
+        int index;
+        StringList_CopyRetained((int *)&name.p, (igStringRefList *)names, i);
+        index = FUN_001cafc0((struct L_1cafc0 *)lookup, name, 0);
+        if (index != -1) {
+            IniStrRef fieldName;
+            IniFieldView *field;
+            StringList_CopyRetained((int *)&fieldName.p, (igStringRefList *)fieldNames, index);
+            field = asObjectRefField((IniFieldView *)igMetaObject_FindFieldByName(target->getMeta(), fieldName.p));
+            if (field != 0 && igObject_IsKindOf(item, field->refMeta) != 0) {
+                igObjectRefMetaField_Assign(field, target, item);
+            }
+        }
+    }
+}

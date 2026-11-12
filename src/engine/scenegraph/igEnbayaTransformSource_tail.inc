@@ -30,7 +30,7 @@ int Gap__Sg__igEnbayaTransformSource__vfunc_31(void) {
 }
 
 void Gap__Sg__igEnbayaTransformSource__vfunc_32(int a0) {
-    FUN_001c0ea0(*(int *)((char *)a0 + 12));
+    FUN_001c0ea0(*(EnbayaSourceView **)((char *)a0 + 12));
 }
 
 void FUN_001c1c50(void **self, int flag) {
@@ -286,6 +286,32 @@ void FUN_001c2880(S_1c2880 *arg0) {
         if (((unsigned long long)((long long)q->refs << 0x29) >> 0x29) == 0) igObject_Destroy((void *)q);
     }
     arg0->f108 = 0;
+}
+
+void FUN_001c2be0(EnvPassShaderView *self, EnvTraversalView *t) {
+    EnvAttrStack *s = t->_attrStack;
+    int n;
+    int i;
+    if (!self->_configured) self->configure(t->_arg32);
+    self->prepare(t);
+    n = self->_pushLists->_count;
+    if (n == 0) {
+        FUN_001e07a0((int)t, (S_1e07a0 *)self);
+        return;
+    }
+    if (self->_useContext) FUN_001dc500(t->_context, self->_unit, 0);
+    for (i = 0; i < n; i++) {
+        EnvAttrList *p = self->_pushLists->_data[i];
+        int m = p->_count;
+        int j;
+        for (j = 0; j < m; j++) pushEnvAttr(s, p->_data[j]);
+        FUN_001e07a0((int)t, (S_1e07a0 *)self);
+        {
+            EnvAttrList *q = self->_popLists->_data[i];
+            for (j = q->_count - 1; j >= 0; j--) popEnvAttr(s, q->_data[j]);
+        }
+    }
+    if (self->_useContext) FUN_001dc610(t->_context);
 }
 
 void FUN_001c2eb0(S0_1c2eb0 *arg0, Rc *arg1) {

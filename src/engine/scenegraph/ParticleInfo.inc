@@ -438,11 +438,11 @@ void FUN_001d7b70(S0_1d7b70 *arg0, S1_1d7b70 *arg1) {
     L_1d7b70 *temp_v0_2;
     int var_s2;
     int temp_s2;
-    int temp_s4;
+    TravFunctionTable *temp_s4;
     int temp_s3;
     int temp_s2_2;
     int temp_s5_2;
-    int temp_s2_3;
+    TravFunctionTable *temp_s2_3;
     L_1d7b70 *temp_v0;
 
     if (arg0->b32 == 0) {

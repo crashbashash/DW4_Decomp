@@ -1,3 +1,28 @@
+#define REL(p) { IniHeldObject *o = (p); if(o){ --(o)->refs; if((((unsigned long long)(long long)(o)->refs)&0x7fffffULL)==0) igObject_Destroy(o);}}
+#define ADD(o) if(o){ ++(o)->refs; }
+bool Gap__Sg__igIniShaderFactory__vfunc_23(IniFactoryBinding *self, int a1, IniHeldObject *a2, int a3) {
+    unsigned char ok = 1;
+    if (FUN_001c6520((O_1c6520 *)self, 1) != 0) {
+        IniHeldObject *n;
+        ADD(a2);
+        REL(self->r48);
+        self->r48 = a2;
+        n = (IniHeldObject *)igObject_GetAllocator(a1);
+        ADD(n);
+        REL(self->r44);
+        self->r44 = n;
+        ok = !FUN_001cb340(self, a1, a3);
+    }
+    if (ok) Gap__Sg__igShaderFactory__vfunc_23(self, (VA_1d8980 *)a1, a2, a3);
+    REL(self->r48);
+    self->r48 = 0;
+    REL(self->r44);
+    self->r44 = 0;
+    return !ok;
+}
+#undef REL
+#undef ADD
+
 void Gap__Sg__igIniShaderFactory__vfunc_26(int a0) {
     FUN_00303ed0(*(int *)((char *)a0 + 56));
 }
@@ -169,6 +194,27 @@ int FUN_001cd150(IniDocument **out, IniFactoryState *self, char *name) {
 #undef SET_OUT
 #undef FINISH
 #undef USE_CACHE
+
+SectionRef FUN_001cd9f0(IniShaderFactoryView *self, char *name) {
+    SectionRef result(0);
+    SectionRef section;
+    FUN_001cdbb0((IniSectionText **)&section.p, (IniFactoryView *)self, name);
+    if (section.get() != 0) {
+        void *allocator = (void *)igObject_GetAllocator(self);
+        char *text;
+        result.release();
+        result.p = FUN_002c6750(allocator);
+        FUN_003006a0(result.get(), ((IniTypeTable *)DAT_00586dc8[0])->meta);
+        IniSectionObject *created = result.get();
+        text = section.get()->name;
+        text = (text == 0) ? DAT_004c22f0[0] : text;
+        if (FUN_002da710(created, text, name) == 0) {
+            result.release();
+            result.p = 0;
+        }
+    }
+    return result;
+}
 
 #define SLOT(T, x) (*(T **)&(x))
 #define ADD(o) do { if (o != 0) { o->_refCount = o->_refCount + 1; } } while (0)

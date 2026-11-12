@@ -18163,6 +18163,7 @@
       "igTransformSequence1_5_Register": "0x001952a0",
       "thunk_FUN_00194ef0": "0x00195320",
       "FUN_00195330": "0x00195330",
+      "igTransformSequence1_5_InitFields": "0x00195340",
       "thunk_FUN_001ddfd0": "0x00195520",
       "igTransformSequence_GetMetaObject": "0x00195530",
       "FUN_00195580": "0x00195580",
@@ -19121,6 +19122,7 @@
       "FUN_001ad770": "0x001ad770",
       "FUN_001ad860": "0x001ad860",
       "FUN_001ad990": "0x001ad990",
+      "FUN_001adec0": "0x001adec0",
       "FUN_001adf70": "0x001adf70",
       "FUN_001ae1a0": "0x001ae1a0",
       "FUN_001ae1b0": "0x001ae1b0",
@@ -19247,6 +19249,7 @@
       "FUN_001bacf0": "0x001bacf0",
       "FUN_001bae20": "0x001bae20",
       "FUN_001bafb0": "0x001bafb0",
+      "FUN_001bb090": "0x001bb090",
       "FUN_001bb1f0": "0x001bb1f0",
       "FUN_001bb200": "0x001bb200",
       "FUN_001bb230": "0x001bb230",
@@ -19276,6 +19279,7 @@
       "FUN_001bd6b0": "0x001bd6b0",
       "FUN_001bd890": "0x001bd890",
       "FUN_001bf020": "0x001bf020",
+      "Gap__Sg__igCompressedAnimationSequenceQS__vfunc_44": "0x001bf030",
       "FUN_001bf3d0": "0x001bf3d0",
       "Gap__Sg__igTransformSequence1_5__vfunc_43": "0x001bf3e0",
       "Gap__Sg__igTransformSequence1_5__vfunc_39": "0x001bf3f0",
@@ -19283,6 +19287,7 @@
       "FUN_001bf560": "0x001bf560",
       "Gap__Sg__igCompressedAnimationSequenceQS__vfunc_46": "0x001bf690",
       "Gap__Sg__igCompressedAnimationSequenceQS__vfunc_42": "0x001bf790",
+      "FUN_001bf7d0": "0x001bf7d0",
       "Gap__Sg__igCompressedAnimationSequenceQS__vfunc_23": "0x001bfa60",
       "Gap__Sg__igCompressedAnimationSequenceQS__vfunc_35": "0x001bfc60",
       "FUN_001bfc70": "0x001bfc70",
@@ -19304,6 +19309,7 @@
       "Gap__Sg__igEnbayaAnimationSource__vfunc_27": "0x001c0ba0",
       "Gap__Sg__igEnbayaAnimationSource__vfunc_28": "0x001c0e50",
       "Gap__Sg__igEnbayaAnimationSource__vfunc_17": "0x001c0e70",
+      "FUN_001c0ea0": "0x001c0ea0",
       "FUN_001c0f00": "0x001c0f00",
       "FUN_001c10e0": "0x001c10e0",
       "FUN_001c10f0": "0x001c10f0",
@@ -19333,6 +19339,7 @@
       "FUN_001c1f90": "0x001c1f90",
       "FUN_001c20b0": "0x001c20b0",
       "FUN_001c2880": "0x001c2880",
+      "FUN_001c2be0": "0x001c2be0",
       "FUN_001c2eb0": "0x001c2eb0",
       "FUN_001c2f50": "0x001c2f50",
       "FUN_001c2fd0": "0x001c2fd0",
@@ -19353,6 +19360,7 @@
       "Gap__Sg__igFrustCullTraversal__vfunc_24": "0x001c4790",
       "FUN_001c47a0": "0x001c47a0",
       "FUN_001c4ac0": "0x001c4ac0",
+      "FUN_001c5030": "0x001c5030",
       "FUN_001c5130": "0x001c5130",
       "FUN_001c5160": "0x001c5160",
       "FUN_001c51b0": "0x001c51b0",
@@ -19379,6 +19387,7 @@
       "FUN_001c5d70": "0x001c5d70",
       "FUN_001c5e20": "0x001c5e20",
       "FUN_001c5eb0": "0x001c5eb0",
+      "FUN_001c6050": "0x001c6050",
       "FUN_001c6110": "0x001c6110",
       "FUN_001c6230": "0x001c6230",
       "Gap__Sg__igGroup__vfunc_26": "0x001c6260",
@@ -19397,17 +19406,20 @@
       "StringList_AppendRetained": "0x001ca620",
       "FUN_001ca6b0": "0x001ca6b0",
       "FUN_001ca6c0": "0x001ca6c0",
+      "FUN_001cade0": "0x001cade0",
       "Gap__Sg__igShaderProcessor__vfunc_22": "0x001cafb0",
       "FUN_001cafc0": "0x001cafc0",
       "FUN_001cb010": "0x001cb010",
       "FUN_001cb1f0": "0x001cb1f0",
       "FUN_001cb2d0": "0x001cb2d0",
       "FUN_001ccb20": "0x001ccb20",
+      "Gap__Sg__igIniShaderFactory__vfunc_23": "0x001ccb50",
       "Gap__Sg__igIniShaderFactory__vfunc_26": "0x001ccd00",
       "FUN_001ccd10": "0x001ccd10",
       "Gap__Sg__igIniShaderFactory__vfunc_17": "0x001cd0c0",
       "Gap__Sg__igIniShaderFactory__vfunc_18": "0x001cd110",
       "FUN_001cd150": "0x001cd150",
+      "FUN_001cd9f0": "0x001cd9f0",
       "FUN_001cdbb0": "0x001cdbb0",
       "FUN_001ce350": "0x001ce350",
       "Gap__Core__igFolder__vfunc_25": "0x001ce3d0",
@@ -19555,6 +19567,7 @@
       "FUN_001dc8d0": "0x001dc8d0",
       "FUN_001dc8e0": "0x001dc8e0",
       "Gap__Sg__igSwitch__vfunc_35": "0x001dc940",
+      "FUN_001dc9a0": "0x001dc9a0",
       "FUN_001dca40": "0x001dca40",
       "FUN_001dcb80": "0x001dcb80",
       "FUN_001dcc80": "0x001dcc80",
@@ -19825,12 +19838,16 @@
       "FUN_001e3f70": "0x001e3f70"
     },
     "data": {
-      "@12130": "0x004e4540",
-      "@12157": "0x004e4590",
+      "@12273": "0x004e4540",
+      "@12300": "0x004e4590",
       "DAT_0048af10": "0x0048af10",
       "DAT_0048af30": "0x0048af30",
       "DAT_0048af50": "0x0048af50",
       "DAT_0048af70": "0x0048af70",
+      "DAT_0048afb0": "0x0048afb0",
+      "DAT_0048afe0": "0x0048afe0",
+      "DAT_0048b010": "0x0048b010",
+      "DAT_0048b040": "0x0048b040",
       "DAT_0048b080": "0x0048b080",
       "DAT_0048b0b0": "0x0048b0b0",
       "DAT_0048b0e0": "0x0048b0e0",
@@ -20138,6 +20155,7 @@
       "DAT_004e12b8": "0x004e12b8",
       "DAT_004e12c8": "0x004e12c8",
       "DAT_004e13a0": "0x004e13a0",
+      "DAT_004e1418": "0x004e1418",
       "DAT_004e1448": "0x004e1448",
       "DAT_004e1b58": "0x004e1b58",
       "DAT_004e1c00": "0x004e1c00",
@@ -20317,6 +20335,7 @@
       "DAT_0055f360": "0x0055f360",
       "DAT_0055f468": "0x0055f468",
       "DAT_005610b8": "0x005610b8",
+      "DAT_005610e0": "0x005610e0",
       "DAT_00561178": "0x00561178",
       "DAT_005611a8": "0x005611a8",
       "DAT_005611b0": "0x005611b0",
@@ -20325,6 +20344,7 @@
       "DAT_005611c8": "0x005611c8",
       "DAT_005611d0": "0x005611d0",
       "DAT_005611d8": "0x005611d8",
+      "DAT_005611e8": "0x005611e8",
       "DAT_00561230": "0x00561230",
       "DAT_00561280": "0x00561280",
       "DAT_00561298": "0x00561298",
@@ -21006,6 +21026,7 @@
       "__dt__10Ref_1b2750Fv",
       "__dt__10Ref_1c5eb0Fv",
       "__dt__10Ref_1e1ac0Fv",
+      "__dt__10SectionRefFv",
       "__dt__10SeqTempRefFv",
       "__dt__11FieldHolderFv",
       "__dt__11igActorViewFv",
@@ -21034,9 +21055,11 @@
       "__dt__30igSmartPointer<12BoundsObject>Fv",
       "__dt__30igSmartPointer<12ShaderObject>Fv",
       "__dt__31igSmartPointer<13IniFileObject>Fv",
+      "__dt__31igSmartPointer<13KeyTrackValue>Fv",
       "__dt__32igSmartPointer<14IniValueObject>Fv",
       "__dt__36igSmartPointer<18igUnsignedCharList>Fv",
       "__dt__9EnvMapRefFv",
+      "__dt__9IniStrRefFv",
       "__dt__9RecordRefFv",
       "__dt__9ShadowRefFv"
     ],
@@ -21066,23 +21089,6 @@
     },
     "symbol": "SceneGraphLibrary_MarkRegistered"
   },
-  "0x001bb090": {
-    "duplicates": {
-      "__dt__18igSmartPointer<1T>Fv": "0x0025a230"
-    },
-    "externals": {
-      "__dl__FPv": "0x00100610"
-    }
-  },
-  "0x001cade0": {
-    "emitted": {},
-    "duplicates": {
-      "__dt__9IniStrRefFv": "0x00130720"
-    },
-    "externals": {
-      "__dl__FPv": "0x00100610"
-    }
-  },
   "0x001cb340": {
     "duplicates": {
       "__dt__23igSmartPointer<6SrList>Fv": "0x001489a0",
@@ -21098,14 +21104,6 @@
     "duplicates": {
       "__dt__20igSmartPointer<3Obj>Fv": "0x0025a230",
       "__dt__9StringRefFv": "0x00130720"
-    },
-    "externals": {
-      "__dl__FPv": "0x00100610"
-    }
-  },
-  "0x001cd9f0": {
-    "duplicates": {
-      "__dt__10SectionRefFv": "0x0025a230"
     },
     "externals": {
       "__dl__FPv": "0x00100610"

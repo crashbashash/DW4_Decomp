@@ -179,7 +179,7 @@ void FUN_001dc400(igSorter *arg0, igGroup *arg1, igAttrStackManager *arg2) {
     List_AppendWords(((struct LA_1dc400 *)arg0->_lightAttrs)->l, ((igNodeList *)arg1->_childList)->_count, ((igNodeList *)arg1->_childList)->_data);
 }
 
-void FUN_001dc500(A_1dc500 *arg0, int arg1, int arg2) {
+void FUN_001dc500(A_1dc500 *arg0, unsigned char arg1, int arg2) {
     int temp_a0;
     L_1dc500 *temp_s0;
     X_1dc500 *temp_s0_2;

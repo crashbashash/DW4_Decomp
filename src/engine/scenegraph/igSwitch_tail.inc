@@ -16,6 +16,23 @@ int Gap__Sg__igSwitch__vfunc_35(S_1dc940 *arg0, int arg1, void *arg2) {
     return temp_s0;
 }
 
+Obj_1c5eb0 *FUN_001dc9a0(S_1dc940 *arg0, int arg1) {
+    Obj_1c5eb0 *removed;
+    int var_a1;
+
+    removed = FUN_001c5eb0((S_1c5eb0 *)arg0, arg1).p;
+    {
+        int a0v = arg0->f32;
+        if (arg0->f28 != 0) {
+            var_a1 = arg0->f28->f8;
+        } else {
+            var_a1 = 0;
+        }
+        FUN_001b1e50((void *)a0v, var_a1);
+    }
+    return removed;
+}
+
 void FUN_001dca40(List_1dca40 *arg0, Obj_1dca40 *(*arg1)(int)) {
     int n;
     int alloc;
