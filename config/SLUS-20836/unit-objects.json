@@ -1223,19 +1223,6 @@
     },
     "symbol": "Gap__Bec__beNDMWShopSelect00__vfunc_22"
   },
-  "0x00441040": {
-    "duplicates": {
-      "__dt__9StringRefFv": "0x00130720"
-    },
-    "exceptions": {
-      "index": "0x005544f8",
-      "table": "0x00546d94",
-      "table_size": "0x000018"
-    },
-    "externals": {
-      "__dl__FPv": "0x00100610"
-    }
-  },
   "0x004429d0": {
     "duplicates": {
       "__dt__25igSmartPointer<8igObject>Fv": "0x0033e9c0"
@@ -30472,6 +30459,39 @@
       "__dt__9StringRefFv": "0x00130720"
     },
     "symbol": "FUN_003b04e0"
+  },
+  "0x00440fd0": {
+    "whole_file": true,
+    "emitted": {
+      "Gap__Bec__beNDMWShopTitle01__vfunc_22": "0x00441040",
+      "Gap__Bec__beNDMWShopTitle03__vfunc_22": "0x00441250",
+      "Gap__Bec__beNDMWShopTitle03__vfunc_20": "0x00441290",
+      "Gap__Bec__beNDMWShopTitle01__vfunc_20": "0x004412a0",
+      "Gap__Bec__beNDMWShopTitle00__vfunc_20": "0x004412b0"
+    },
+    "data": {
+      "@99": "0x0051cba0",
+      "DAT_0051cb28": "0x0051cb28",
+      "DAT_0051cb38": "0x0051cb38",
+      "DAT_0051cb40": "0x0051cb40",
+      "DAT_0051cb50": "0x0051cb50",
+      "DAT_0051cb60": "0x0051cb60",
+      "DAT_0051cb70": "0x0051cb70",
+      "DAT_0051cb80": "0x0051cb80",
+      "DAT_0051cb88": "0x0051cb88",
+      "DAT_0051cbd0": "0x0051cbd0",
+      "DAT_00586f20": "0x00586f20",
+      "g_beNDMWShopTitle00_metaObject": "0x0058ab48",
+      "g_beNDMWShopTitle01_metaObject": "0x0058ab40",
+      "g_beNDMWShopTitle03_metaObject": "0x0058ab38"
+    },
+    "duplicates": {
+      "__dt__9StringRefFv": "0x00130720"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    },
+    "symbol": "Gap__Bec__beNDMWShopTitle00__vfunc_22"
   },
   "0x00424160": {
     "whole_file": true,
