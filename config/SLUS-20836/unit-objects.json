@@ -1077,19 +1077,6 @@
       "__dl__FPv": "0x00100610"
     }
   },
-  "0x003b02c0": {
-    "duplicates": {
-      "__dt__34igSmartPointer<16NewObjectVirtual>Fv": "0x0019aa10"
-    },
-    "exceptions": {
-      "index": "0x0054fa88",
-      "table": "0x00543fb4",
-      "table_size": "0x000014"
-    },
-    "externals": {
-      "__dl__FPv": "0x00100610"
-    }
-  },
   "0x003d14c0": {
     "duplicates": {
       "__dt__8ValueRefFv": "0x00352fc0",
@@ -30905,6 +30892,31 @@
       "__dt__9StringRefFv": "0x00130720"
     },
     "symbol": "FUN_003b04e0"
+  },
+  "0x003b00e0": {
+    "whole_file": true,
+    "emitted": {
+      "Gap__Bec__beTextureCtrl__vfunc_30": "0x003b0150",
+      "Gap__Bec__beTextureCtrl__vfunc_29": "0x003b0160",
+      "Gap__Bec__beTextureCtrl__vfunc_31": "0x003b02c0",
+      "Gap__Bec__beTextureCtrl__vfunc_20": "0x003b04d0"
+    },
+    "data": {
+      "DAT_004e0858": "0x004e0858",
+      "DAT_0055ed88": "0x0055ed88",
+      "DAT_00585be0": "0x00585be0",
+      "DAT_00587110": "0x00587110",
+      "GPR_00554c14": "0x00554c14",
+      "g_beTextureCtrlInfo_metaObject": "0x00587c80",
+      "g_beTextureCtrl_metaObject": "0x00587cb8"
+    },
+    "duplicates": {
+      "__dt__34igSmartPointer<16NewObjectVirtual>Fv": "0x0019aa10"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    },
+    "symbol": "Gap__Bec__beTextureCtrl__vfunc_32"
   },
   "0x003aff00": {
     "whole_file": true,
