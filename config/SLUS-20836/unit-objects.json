@@ -9642,9 +9642,10 @@
       "__dt__24igSmartPointer<7Binding>Fv"
     ]
   },
-  "0x00463910": {
+  "0x00463560": {
     "whole_file": true,
     "emitted": {
+      "__dt__11ViewerSetupFv": "0x00463910",
       "FUN_00463b30": "0x00463b30",
       "FUN_00463b70": "0x00463b70",
       "FUN_00463bb0": "0x00463bb0",
@@ -9668,9 +9669,13 @@
       "Gap__Viewer__igViewManager__vfunc_22": "0x00464f80"
     },
     "data": {
-      "@285": "0x0051fbf0",
-      "@286": "0x0051fc70",
+      "@275": "0x0051fbb8",
+      "@276": "0x0051fbc8",
+      "@277": "0x0051fbd8",
+      "@588": "0x0051fbf0",
+      "@589": "0x0051fc70",
       "DAT_0056dc50": "0x0056dc50",
+      "DAT_00586f20": "0x00586f20",
       "DAT_0058cd08": "0x0058cd08",
       "DAT_0058cd40": "0x0058cd40",
       "DAT_0058cd48": "0x0058cd48",
@@ -9679,7 +9684,16 @@
       "DAT_0058cd80": "0x0058cd80",
       "GPR_00554e7c": "0x00554e7c",
       "GPR_00554e80": "0x00554e80"
-    }
+    },
+    "stripped": [
+      "__dt__25igSmartPointer<8igObject>Fv",
+      "__dt__29igSmartPointer<11InsightCore>Fv",
+      "__dt__9StringRefFv"
+    ],
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    },
+    "symbol": "__ct__11ViewerSetupFP8igObject"
   },
   "0x00464f90": {
     "whole_file": true,

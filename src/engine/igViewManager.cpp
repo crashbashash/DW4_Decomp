@@ -1,4 +1,5 @@
 #include "dw4/reflected.h"
+#include "dw4/igSmartPointer.h"
 
 extern "C" {
 
@@ -6,16 +7,12 @@ int FUN_002377c0(...);
 int FUN_00462ac0(...);
 int FUN_002370c0(...);
 
-int igObject_Destroy(...);
 int FUN_00100610(...);
 
 extern "C" int FUN_00236b10(void *, void *);
 
 int FUN_00236f30(...);
 
-struct S1 { char pad4[4]; int f4; };
-struct O { S1 *m0; S1 *m4; S1 *m8; S1 *m12; unsigned char f16; char pad17[3]; S1 *m20; S1 *m24; };
-O *FUN_00463910(O *arg0, short arg1);
 
 int FUN_00236ca0(int);
 int FUN_002371f0(int);
@@ -81,7 +78,11 @@ typedef struct Frame {
     char pad2[3];
     float f72;
     float f76;
-    char pad3[152];
+    char pad3[133];
+    unsigned char f213;
+    char pad4[2];
+    unsigned char f216;
+    char pad5[15];
     int f232;
     void *f236;
 } Frame;
@@ -109,43 +110,119 @@ class V { public: virtual void d0(); virtual void d1(); virtual void d2(); virtu
 struct O2 { char p[8]; V *o; };
 class DW4VC_116_0 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual int vX(); };
 
-extern "C" O *FUN_00463910(O *arg0, short arg1) {
-    if (arg0) {
-        if (arg0->m24 != 0) {
-            FUN_00236b10(arg0->m0, arg0->m12);
-            FUN_00236b10(arg0->m0, arg0->m8);
-            FUN_00236b10(arg0->m0, arg0->m4);
-            if (arg0->f16 != 0) {
-                FUN_00236f30(arg0->m0, arg0->m20);
+igObject *FUN_00459340(int);
+igObject *FUN_0045e230(int);
+igObject *FUN_0045be30(int);
+igObject *FUN_0045dbe0(int);
+int FUN_00237020(...);
+int FUN_00236ee0(...);
+int FUN_00236ab0(...);
+int FUN_002eb010(...);
+int StringPool_Construct(...);
+void *StringPool_Intern(...);
+int igNamedObject_SetName(...);
+extern int DAT_00586f20[4];
+
+static inline void releaseString(void *p) {
+    if (p != 0) {
+        int *h = (int *)((char *)p - 8);
+        int rc = *(int *)((char *)p - 4) - 1;
+        *(int *)((char *)p - 4) = rc;
+        if (rc == 0) StringChunk_ReleaseHeader(*h, h);
+    }
+}
+
+static inline void *intern(const char *s) {
+    if (s == 0) return 0;
+    if (DAT_00586f20[0] == 0) {
+        int pool = FUN_002eb010(16);
+        if (pool != 0) pool = StringPool_Construct(pool);
+        DAT_00586f20[0] = pool;
+    }
+    return StringPool_Intern(DAT_00586f20[0], s);
+}
+
+struct StringRef {
+    void *p;
+    ~StringRef() { releaseString(p); }
+};
+
+/* The igInsightCore that FUN_00232800 creates, with its window field (+20) as the reference holder
+   it is. */
+struct InsightCore : igObject {
+    char pad8[12];
+    igSmartPointer<igObject> window;
+};
+InsightCore *FUN_00232800(int);
+
+/* The viewer's setup: an Insight core, its scene-info, actor and data-pump managers, the logo
+   renderer and the window, each held by reference (the same object FUN_00463bc0 reads as S). */
+struct ViewerSetup {
+    igSmartPointer<InsightCore> core;
+    igSmartPointer<igObject> sceneInfo;
+    igSmartPointer<igObject> actors;
+    igSmartPointer<igObject> dataPump;
+    unsigned char showLogo;
+    igSmartPointer<igObject> logo;
+    igSmartPointer<igObject> window;
+    ViewerSetup(igObject *window);
+    ~ViewerSetup();
+};
+
+ViewerSetup::ViewerSetup(igObject *w)
+    : core(FUN_00232800(0), AdoptReference()), sceneInfo(FUN_00459340(0), AdoptReference()),
+      actors(FUN_0045e230(0), AdoptReference()), dataPump(FUN_0045be30(0), AdoptReference()), showLogo(1),
+      logo(FUN_0045dbe0(0), AdoptReference()), window(w, kRetainReference) {
+    igObject *next = window.p;
+    if (next != 0) {
+        InsightCore *c = core.p;
+        c->window = next;
+        if (DAT_0056dc50[0] == 0) {
+            Frame *f = (Frame *)FUN_001007e0(240);
+            if (f != 0) f = (Frame *)FUN_00238110(f);
+            DAT_0056dc50[0] = f;
+        }
+        DAT_0056dc50[0]->f232 = DAT_0056dc50[0]->f232 + 1;
+        {
+            Frame *g = DAT_0056dc50[0];
+            showLogo = g->f213 != 0 && !(g->f216 != 0);
+        }
+        if (DAT_0056dc50[0] != 0) {
+            if (--DAT_0056dc50[0]->f232 <= 0) {
+                Frame *s1 = DAT_0056dc50[0];
+                if (s1 != 0) {
+                    if (&s1->f236) releaseString(s1->f236);
+                    if (s1 != 0) releaseString(s1->f0);
+                    FUN_00100610(s1);
+                }
+                DAT_0056dc50[0] = 0;
             }
         }
-        if (&arg0->m24) {
-            S1 *t = arg0->m24;
-            if (t) { t->f4 -= 1; if ((t->f4 & 0x7fffff) == 0) igObject_Destroy(t); }
+        if (showLogo) {
+            StringRef scenes;
+            StringRef overlays;
+            scenes.p = intern("Scenes done");
+            overlays.p = intern("Overlays done");
+            FUN_00237020(core.p, scenes.p, logo.p);
+            FUN_00237020(core.p, logo.p, overlays.p);
+            FUN_00236ee0(core.p, logo.p);
         }
-        if (&arg0->m20) {
-            S1 *t = arg0->m20;
-            if (t) { t->f4 -= 1; if ((t->f4 & 0x7fffff) == 0) igObject_Destroy(t); }
-        }
-        if (&arg0->m12) {
-            S1 *t = arg0->m12;
-            if (t) { t->f4 -= 1; if ((t->f4 & 0x7fffff) == 0) igObject_Destroy(t); }
-        }
-        if (&arg0->m8) {
-            S1 *t = arg0->m8;
-            if (t) { t->f4 -= 1; if ((t->f4 & 0x7fffff) == 0) igObject_Destroy(t); }
-        }
-        if (&arg0->m4) {
-            S1 *t = arg0->m4;
-            if (t) { t->f4 -= 1; if ((t->f4 & 0x7fffff) == 0) igObject_Destroy(t); }
-        }
-        if (arg0) {
-            S1 *t = arg0->m0;
-            if (t) { t->f4 -= 1; if ((t->f4 & 0x7fffff) == 0) igObject_Destroy(t); }
-        }
-        if (arg1 > 0) FUN_00100610(arg0);
+        FUN_00236ab0(core.p, sceneInfo.p);
+        FUN_00236ab0(core.p, dataPump.p);
+        igNamedObject_SetName(actors.p, "Actor manager");
+        FUN_00236ab0(core.p, actors.p);
     }
-    return arg0;
+}
+
+ViewerSetup::~ViewerSetup() {
+    if (window.p != 0) {
+        FUN_00236b10(core.p, dataPump.p);
+        FUN_00236b10(core.p, actors.p);
+        FUN_00236b10(core.p, sceneInfo.p);
+        if (showLogo != 0) {
+            FUN_00236f30(core.p, logo.p);
+        }
+    }
 }
 
 void FUN_00463b30(int *arg0) {

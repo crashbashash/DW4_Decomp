@@ -352,7 +352,9 @@ remains the integration oracle.
   bytes show the store, not the reason, and nothing yet shows why the source would write this.
 - **What the empty tag objects were.** The `sb zero` beside a factory call shows an empty class passed by value. Its
   purpose is not shown: it may have selected a constructor, or been a default argument or an allocator. Names such as
-  `AdoptReference` and `DriverType` are best guesses and need more evidence.
+  `AdoptReference` and `DriverType` are best guesses and need more evidence. One context is known: the five tags of
+  the viewer setup's constructor (`0x463560`) are the adopting `igSmartPointer` constructor's argument in member
+  initialisers, with no helper, and its destructor (`0x463910`) is the compiler's teardown of those members.
 - **One root.** `igVirtualObject` stands beside `igObject` because a polymorphic class puts its vtable pointer at +0. A
   polymorphic `igObject` under C++ would give one root, but needs another pass over the generated header.
 - **What the retain tag was.** `RetainReference` selects the retaining constructor at no cost in bytes. The name and the
