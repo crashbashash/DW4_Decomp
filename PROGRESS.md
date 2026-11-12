@@ -42,18 +42,18 @@ The `code-only` debt by exception-metadata reason (from each unit's diagnostic):
 
 Matching proves the bytes; it does not make the source readable. A matched function counts as **readable** when it also passes every test below. The tests are mechanical, so this is a floor: a function can pass them all and still be hard to follow. An owner-approved assembly source counts as readable when it has a recovered name, because its approval records that no C reproduces it.
 
-**5,251** of the 19,556 matched functions are readable: **780,380** code bytes, **22.5 %** of the code.
+**5,255** of the 19,556 matched functions are readable: **781,092** code bytes, **22.5 %** of the code.
 
 | A matched function is readable when | matched functions failing it | code bytes |
 | --- | ---: | ---: |
 | the function has a recovered name, not `FUN_<address>` or a numbered virtual slot | 13,800 | 1,875,496 |
 | no name holds an address: not the function's own, nor any function, variable or type it uses | 10,365 | 1,748,408 |
-| the types it uses have real names, not a placeholder such as `S`, `Obj`, `Info176` or `DW4VC_232_2` | 725 | 396,656 |
-| it sits in its class or module file, not `src/unmatched/` | 3,331 | 900,424 |
+| the types it uses have real names, not a placeholder such as `S`, `Obj`, `Info176` or `DW4VC_232_2` | 783 | 419,264 |
+| it sits in its class or module file, not `src/unmatched/` | 2,634 | 608,344 |
 | what it calls and reads is named: no `FUN_`/`DAT_` references | 4,132 | 1,115,776 |
-| no decompiler leftovers: `temp_*`, `var_*`, `argN`, stack-offset locals such as `sp5C` | 1,802 | 602,188 |
-| fields are reached through named struct members: no `fNN`/`unkNN` members, no cast of a pointer plus an offset | 1,368 | 424,968 |
-| virtual calls go through a named method, not a slot number such as `v216` or a cast function pointer | 267 | 168,588 |
+| no decompiler leftovers: `temp_*`, `var_*`, `argN`, stack-offset locals such as `sp5C` | 1,824 | 605,004 |
+| fields are reached through named struct members: no `fNN`/`unkNN` members, no cast of a pointer plus an offset | 1,394 | 427,628 |
+| virtual calls go through a named method, not a slot number such as `v216` or a cast function pointer | 301 | 172,940 |
 
 ## Debt
 
@@ -84,12 +84,12 @@ The debt ratchet ([`docs/engine/debt-ratchet.md`](docs/engine/debt-ratchet.md)):
 | `inline_asm.other` | 0 | 0 | 0 | `asm` statements other than `sync` and `ei` without an owner's approval row for each function they reach (tools/inline_asm.py) |
 | `unmatched.functions` | 951 | 951 | 0 | functions in the layout with no definition in src/ |
 | `unmatched.bytes` | 629,360 | 629,360 | 0 | bytes of those |
-| `struct.a` | 81 | 79 | -2 | struct-report groups: same view name, clashing layouts across units (scripts/check_struct_conflicts.py) |
-| `struct.b` | 98 | 11 | -87 | struct-report groups: receiver view disagrees with the reflected class |
-| `struct.c` | 165 | 98 | -67 | struct-report groups: offset-named member whose number is not its offset |
-| `m2c_idiom.units` | 2,386 | 1,566 | -820 | source files (asm bodies excluded) still carrying m2c idioms: `temp_*`, `var_*` or `argN` |
+| `struct.a` | 76 | 76 | 0 | struct-report groups: same view name, clashing layouts across units (scripts/check_struct_conflicts.py) |
+| `struct.b` | 8 | 8 | 0 | struct-report groups: receiver view disagrees with the reflected class |
+| `struct.c` | 98 | 98 | 0 | struct-report groups: offset-named member whose number is not its offset |
+| `m2c_idiom.units` | 1,140 | 1,140 | 0 | source files (asm bodies excluded) still carrying m2c idioms: `temp_*`, `var_*` or `argN` |
 | `raw_casts.reflected` | 363 | 363 | 0 | raw offset casts on a named receiver where reflection names the field (tools/typed_coverage.py `typeable`) |
-| `fun_dat_refs` | 56,842 | 42,790 | -14052 | FUN_/DAT_-named references in matched units' code (comments and strings excluded, definitions subtracted) |
+| `fun_dat_refs` | 41,351 | 41,351 | 0 | FUN_/DAT_-named references in matched units' code (comments and strings excluded, definitions subtracted) |
 | `foreign_profile.functions` | 10 | 10 | 0 | code bytes match only under a provisional per-function override that differs from the unit's profile in config/SLUS-20836/units.tsv (data/check-categories.tsv) |
 | `foreign_profile.bytes` | 288 | 288 | 0 | bytes of those |
 | `unapproved.functions` | 58 | 58 | 0 | code bytes match, but the source uses inline `asm` or `volatile` with no owner approval (config/source-approvals.tsv) |
@@ -97,7 +97,7 @@ The debt ratchet ([`docs/engine/debt-ratchet.md`](docs/engine/debt-ratchet.md)):
 | `orphan.bytes` | 32 | 32 | 0 | exception-metadata orphan bytes: code-only `extra` + `differ` bytes, plus foreign-profile units whose override emits metadata retail lacks |
 | `inventory.unsymbolised_bytes` | 1,020 | 1,020 | 0 | instruction-shaped bytes in layout `data` units that no symbol owns (data/inventory-scan.tsv, scripts/inventory_scan.py) |
 | `profile_split.units` | 7 | 7 | 0 | units whose compiler, optimisation level, -sdatathreshold or -inline setting differs from their library's main profile (config/SLUS-20836/units.tsv; a library was one build) |
-| `profile_split.bytes` | 23,612 | 23,612 | 0 | bytes of those |
+| `profile_split.bytes` | 23,616 | 23,616 | 0 | bytes of those — increase recorded: ndmw_beNDMWMdlPlayer2 (-O3,p, off the Ndmw profile) is measured as a whole file and now runs to 0x3d58f0, so the 4 padding bytes before the next unit count with it |
 | `opt_pragma.statements` | 7 | 7 | 0 | optimiser pragmas in src/ (`opt_*`, `optimize_for_size`, `inline_depth`, ...): a flag change written in the source |
 
 ## The data half
@@ -179,7 +179,7 @@ The section in 16 equal parts. `0x00100000` is the start of everything.
 | reflection fields with offset and type | 3,680 |
 | switch jump tables recovered | 209 tables, 4,147 entries, in 172 functions |
 | Lua chunks decompiled | 5,291 |
-| field accesses using a **recovered** type (not an offset cast) | 26,207 of 67,236 (38.98 %) |
+| field accesses using a **recovered** type (not an offset cast) | 26,213 of 67,294 (38.95 %) |
 | functions in the retail split (`asm/`, generated) | 20,584 |
 
 ## How these numbers are produced
