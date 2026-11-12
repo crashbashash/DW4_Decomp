@@ -1,9 +1,9 @@
 # The `sd` callee-saved prologue: vendor library code, not MWCC
 
-Two independent investigations reached the same conclusion: the functions that
-save callee-saved registers with `sd` at 8-byte spacing are **Sony EE GCC output**, the SDK libraries and the CRI middleware linked into the
-game, not Metrowerks code. A Sony EE GCC 2.96 build is kept
-under `local/ee-gcc2.96/` and reproduces this prologue, so these functions *are* matchable as C — the Sony-built units
+The functions that save callee-saved registers with `sd` at 8-byte spacing are **Sony EE GCC output**,
+the SDK libraries and the CRI middleware linked into the game, not Metrowerks code. A Sony EE GCC 2.96
+build is kept under `local/ee-gcc2.96/` and reproduces this prologue, so these functions *are*
+matchable as C. The Sony-built units
 rebuild with it through `tools/cc.py` / `tools/eegcc_compile.py`, pinned per unit in `config/SLUS-20836/unit-compilers.tsv` (see
 [the Sony compiler](#the-sony-libraries-compiler)).
 

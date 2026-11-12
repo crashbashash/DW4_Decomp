@@ -58,10 +58,10 @@ particular class field. Messenger group names use offset eight.
 
 | Address | Recovered contract |
 | --- | --- |
-| `3022c0` — `igProperty_FindByName` | With non-null descriptor and key, scan records and compare non-null selected strings; return the first record matching text |
-| `302380` — `igProperty_FindByPointer` | With non-null descriptor, scan non-null records for exact selected-word equality, including a zero key |
-| `3023f0` — `igProperty_FindBySortedKey` | Search using the insertion-index helper, then return the record only if its selected word equals the key |
-| `302480` — `igProperty_FindInsertionIndex` | Binary-search sorted unsigned selected words; return an equal midpoint or an insertion position; return -1 for a null descriptor and zero for an empty list |
+| `3022c0` (`igProperty_FindByName`) | With non-null descriptor and key, scan records and compare non-null selected strings; return the first record matching text |
+| `302380` (`igProperty_FindByPointer`) | With non-null descriptor, scan non-null records for exact selected-word equality, including a zero key |
+| `3023f0` (`igProperty_FindBySortedKey`) | Search using the insertion-index helper, then return the record only if its selected word equals the key |
+| `302480` (`igProperty_FindInsertionIndex`) | Binary-search sorted unsigned selected words; return an equal midpoint or an insertion position; return -1 for a null descriptor and zero for an empty list |
 
 The older labels `igProperty_GetByIndex` for `302480` and
 `igProperty_FindByIndexChecked` for `3023f0` are wrong: neither consumes a positional

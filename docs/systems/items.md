@@ -1,7 +1,7 @@
 # Item / Device Database
 
 Goal: turn the device folder (`+0x6c..0x8c`, 9×u32) and weapon slots
-(`+0x2e4/8/c`) into a usable save editor — i.e. know which **item ID** gives
+(`+0x2e4/8/c`) into a usable save editor, i.e. know which **item ID** gives
 which **item**.
 
 ## Where the item names live
@@ -29,7 +29,7 @@ item names (identified by an item-type icon prefix byte `0x81b8/0x81b9/0x81c8/
 0x81c9/0x81bd/…` and/or a trailing grade letter).
 
 Grades are the fullwidth/Greek letters **α β γ δ ε** = Shift-JIS
-`0x83bf 0x83c0 0x83c1 0x83c2 0x83c3` (α/β/γ/δ/ε; in-game display = A, B, Y, D, E —
+`0x83bf 0x83c0 0x83c1 0x83c2 0x83c3` (α/β/γ/δ/ε; in-game display = A, B, Y, D, E;
 gamma renders as **Y**, not C).
 
 Full extracted list: `ghidra-projects/dw4/item_names.txt`.
@@ -62,8 +62,8 @@ The weapons section holds ~50 **graded** weapon models (α–ε each) plus a set
   Judgment, Light Bringer, Data Destroyer, Hyakki Yako, Orochi Slayer,
   Nightmare Lance.
 
-## The string-ID table (ELF) — how a name is fetched
-`0x004cda40` — 360 records, 12-byte stride, terminated by `0xFFFFFFFF`:
+## The string-ID table (ELF): how a name is fetched
+`0x004cda40`: 360 records, 12-byte stride, terminated by `0xFFFFFFFF`:
 ```
 {u32 key, u32 message_id, u32 font_subtable_ptr}
 key = (flag << 16) | (category << 8) | sub          (only low 20 bits used)
@@ -76,9 +76,9 @@ Categories present in this table: `0x00, 0x01, 0x03, 0x04, 0x05, 0x10, 0x11`,
 each ×4 flag pages (flag `0x00/0x01/0x02/0x03` → message-id bases
 ~200 / ~10200 / ~20100 / ~30100). The message id is the index into the entry-9
 text table used by the text system (exact message-id→string resolution still to
-map — see open items).
+map; see open items).
 
-## ✅ Weapon ID table (cat 0x00) — CONFIRMED by dynamic probe
+## ✅ Weapon ID table (cat 0x00): confirmed by dynamic probe
 `id = model_index * 5 + grade` (grade 0–4 = α β γ δ ε). 50 graded models
 (IDs 0–249) + 2 unique grade-less weapons (250, 255).
 
@@ -143,7 +143,7 @@ map — see open items).
 
 Machine-readable: `weapons.json` (256 ids, complete).
 
-## ✅ Styled weapons (cat 0x05) — flat unique list (confirmed)
+## ✅ Styled weapons (cat 0x05): flat unique list (confirmed)
 `0x0500–0x0514`, one id per weapon (no grades):
 ```
 0x0500 Dark Shadow   0x0501 Omega Blade   0x0502 Stargazer    0x0503 Invisible
@@ -155,7 +155,7 @@ Machine-readable: `weapons.json` (256 ids, complete).
 ```
 Invalid range: `0x0515–0x053f` (see glitch notes).
 
-## ✅ Armor boards (cat 0x20) — stride 3, grades α/β/γ (confirmed)
+## ✅ Armor boards (cat 0x20): stride 3, grades α/β/γ (confirmed)
 `id = 0x2000 + model*3 + grade`. 14 graded boards + 2 unique:
 ```
 model  0 Achilles Board    1 Atlas Board      2 Meteor Board
@@ -169,11 +169,11 @@ unique: 0x202a Filter Board, 0x202b Talis of Chaos
 Invalid range: `0x202d–0x203f` (see glitch notes).
 
 ## 🧨 Illegal-ID / glitch notes (device folder)
-These are the interesting exploit levers — game does **not** validate ids on load:
+These are the exploit levers; the game does **not** validate ids on load:
 - `0x0514` (weapon), `0x101f` (core), `0x202c` (board) = `??????` appraisal
   wildcards. **Appraise into a RANDOM item of their slot's category** (model +
   grade rolled at appraisal time, varies on reload); result is always **white**
-  rarity — the seed is NOT preserved, so no forced-rarity exploit.
+  rarity. The seed is NOT preserved, so no forced-rarity exploit.
 - `0x0515–0x051a` = blank items; some crash when interacted with.
 - `0x051b–0x053e` = **crash on load**.
 - `0x053f` = blank `"0"` weapon: loads, but cannot hit anything.
@@ -219,7 +219,7 @@ Category `0x05` = the style-prefixed weapons (Bash/Slash/Stab/Blunt/Crush/Shot
    the item *stats* (attack/defence/stat bonuses), since the save only stores
    the id + loadout.
 
-**Item name catalogue is COMPLETE** — all 5 categories, all grades, all stat
+**The item name catalogue is complete**: all 5 categories, all grades, all stat
 variants: weapons `0x00` (256) + styled `0x05` (21) + cores `0x10` (32) +
 boards `0x20` (45) + mods/chips `0x30/0x34` (185 bases × inv/eq).
 
@@ -232,7 +232,7 @@ table. (See [`save-format.md`](save-format.md) for the offsets.)
 
 ---
 
-## ✅ Confirmed additions (dynamic testing, later session)
+## ✅ Confirmed additions (dynamic testing)
 
 ### Item-ID instance field (corrected)
 `instance(16b) = (seed << 4) | mod_count`
@@ -248,7 +248,7 @@ item_stat = item_base_stat + (seed & 0x7FF)     # +0 .. +2047
 ```
 
 Bit 11 (`0x800`) is masked off (`0x800` == `0x000`). The bonus is a **universal
-+N quality value**, not stat-specific — each item type routes +N to its own
++N quality value**, not stat-specific: each item type routes +N to its own
 stat (weapon → attack, armor → defence, etc.), and the base stat differs per
 item. Verified on 28 probe points (Battle Hawk A, base attack 143):
 `seed 0x530` → `143+1328=1471`, `seed 0xFFF` → `143+2047=2190`.
@@ -268,18 +268,18 @@ one `0x040` anomaly likely a misread):
 Order (CONFIRMED by tester, most common -> rarest): **white < blue < green <
 yellow < orange < pink**.
 
-#### Bit 11 (`0x800`) — purpose UNKNOWN
+#### Bit 11 (`0x800`): purpose unknown
 
 The top bit of the 12-bit seed is ignored by both the stat bonus and the colour,
 so the instance field is most likely really `[1 flag bit | 11 quality bits |
 4 mod bits]`. Hypotheses **eliminated by the tester**:
 
-- ❌ "new item" marker — no such system exists.
-- ❌ favouriting/starred — no such system exists.
-- ❌ identified/unidentified — `??????` items have their own dedicated item IDs
+- ❌ "new item" marker: no such system exists.
+- ❌ favouriting/starred: no such system exists.
+- ❌ identified/unidentified: `??????` items have their own dedicated item IDs
   (`0x0514` weapon / `0x101f` core / `0x202c` board), not a flag bit.
 
-Still open: the actual meaning of bit 11 (future work — trace the `0x8000`
+Still open: the actual meaning of bit 11 (trace the `0x8000`
 flag read/write sites in the ELF, or dynamic-test it).
 
 ### Item classes (corrected)
@@ -295,7 +295,7 @@ flag read/write sites in the ELF, or dynamic-test it).
 ### Equipment slots (device-folder indices)
 ```
 +0x2e4/2e8/2ec   weapon 1/2/3
-+0x2f0..+0x300   5 weapon-mod slots (SHARED pool — all 3 weapons show the same mods)
++0x2f0..+0x300   5 weapon-mod slots (SHARED pool; all 3 weapons show the same mods)
 +0x304           armor
 +0x308..+0x318   5 armor-mod slots
 +0x31c           sub slot
@@ -303,7 +303,7 @@ flag read/write sites in the ELF, or dynamic-test it).
 Mods reset when a weapon is re-equipped (game design). Identical chips stack
 (5× Speed Chip works).
 
-### Mod / AB-chip IDs (mods.json — full grade layout)
+### Mod / AB-chip IDs (mods.json, full grade layout)
 Base index (low byte) is **grade-major within family blocks**. Category byte
 `0x30` = in inventory, `0x34` = equipped.
 
@@ -340,7 +340,7 @@ CONFIRMED by probe round 4.** Within a 3-grade family each grade spans 5 bases
 `variant_seq = [30,60,120,240,360,480]`. So α=+30/+60/+120/+240,
 β=+60/+120/+240/+360, γ=+120/+240/+360/+480.
 
-## Cores (cat 0x10) — model mapping ✅ (complete)
+## Cores (cat 0x10): model mapping ✅ (complete)
 `id = 0x1000 + model*3 + grade` (α/β/γ). Full model order confirmed:
 
 | model | α id | core |
@@ -361,13 +361,13 @@ needs appraisal). The valid range is `0x1000–0x101f` (32 items). Invalid range
 `0x1020–0x103f` = blank (`0x1026` crashes when selected). Machine-readable:
 `cores.json`.
 
-## String-ID table (0x004cda40) — static name lookup (partial)
+## String-ID table (0x004cda40): static name lookup (partial)
 360 records, 12-byte stride: `{u32 key, u32 message_id, u32 font_subtable_ptr}`,
 terminated by `key==0xFFFFFFFF`. `key = (flag<<16)|(category<<8)|sub`; lookup
 uses `key & 0xFFFFF`. `message_id` = index into the entry-9 text table
 (cat 0x05→200-270, cat 0x10→1000-1304, cat 0x11→1200-1205), and the flag
 selects a message-id page (flag 0/1/2/3 → base +0/+10000/+20000/+30000).
-The table is **incomplete** — several confirmed items (Omega Blade 0x0501,
+The table is **incomplete**: several confirmed items (Omega Blade 0x0501,
 Crush Arm 0x0512, Divine β 0x1019) are absent, so a second name path exists.
 A sub absent from this table is likely blank/crash, but a row does not prove an
 id is valid: `0x1024` and `0x1026`–`0x102e`, inside the invalid core range, have

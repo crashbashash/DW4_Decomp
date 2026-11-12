@@ -1,4 +1,4 @@
-# `tools/dispatcher/` — register-allocation and shape tools
+# `tools/dispatcher/`: register-allocation and shape tools
 
 Written while matching the GAMERAM combat dispatcher ([result](../../docs/systems/combat-dispatcher.md)); the tools work on any
 function. Background: [register allocation](../../docs/engine/register-allocation.md).

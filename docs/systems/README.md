@@ -1,4 +1,4 @@
-# `systems/` — game data and mechanics
+# `systems/`: game data and mechanics
 
 Content, save format, and the data-driven systems. Index: [`../README.md`](../README.md).
 
@@ -24,7 +24,7 @@ Content, save format, and the data-driven systems. Index: [`../README.md`](../RE
 | `drop-tables.md` | Item drop tables and the weighted roll |
 | `rng.md` + `rng-sites.tsv` + `rng-verification.md` | The one RNG: MT19937, seed **5150**, every draw site (Lua + native), the new-game draw timeline, and how to predict/shift it |
 | `critical-path.md` | Flag-by-flag path to the ending (speedrun reference) |
-| `flags/` | Flag data — see its own [`README.md`](flags/README.md) (map, meanings, `flag-xref.tsv`) |
+| `flags/` | Flag data; see its own [`README.md`](flags/README.md) (map, meanings, `flag-xref.tsv`) |
 
 Related: engine internals are in [`../engine/`](../engine); what is still unknown is indexed in
 [`open-questions.md`](open-questions.md).

@@ -1,4 +1,4 @@
-# CRI SRD — the sector read driver
+# CRI SRD: the sector read driver
 
 SRD (`SRD/PS2EE Ver.2.22` at `0x4efb90`) is the layer under cvFs's devices that reads the disc and the
 host file system. It keeps one request object, queues a read on it (DVD sectors through `sceCdRead`, or

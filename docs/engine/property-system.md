@@ -7,7 +7,7 @@ by string key. This is the layer the `SYS*` script functions use.
 The complete list/lookup group is described in [object lists](object-lists.md),
 including two corrected historical search labels.
 
-## Core lookup — `0x3022c0`
+## Core lookup: `0x3022c0`
 ```asm
 3022c0: addiu sp,sp,-112
 3022d0: move  s5,a0        ; s5 = container
@@ -44,11 +44,11 @@ including two corrected historical search labels.
 | `+ *(registry+8)` | **name** (char*) |
 | `+12` | **value** (u32; u8 for boolean props) |
 
-`registry = *(0x00585be0)`; its `+8` field is the name-member offset — **measured
+`registry = *(0x00585be0)`; its `+8` field is the name-member offset, **measured
 live as `8`** (see "Registry object" below), so a record's name pointer is at `+8`
 and its value at `+12`, exactly as the record layout says.
 
-### `strcmp` — `0x12a4a4`
+### `strcmp`: `0x12a4a4`
 Word-parallel `strcmp` using the `0x01010101`/`0x80808080` tricks. Returns 0 on
 equal.
 
@@ -63,7 +63,7 @@ equal.
 ## Getter/setter wrappers
 | Function | Behaviour |
 | --- | --- |
-| `0x3a9220(a0, key)` | `igProperty_FindByName(a0, *(0x00585be0), key)` — get record (u32) |
+| `0x3a9220(a0, key)` | `igProperty_FindByName(a0, *(0x00585be0), key)`: get record (u32) |
 | `0x3a9280` | get record, value read as byte (`lbu ...,12(v0)`) |
 | `0x3a92b0` | get record (byte-array copy form, used by save) |
 | `0x3a92e0`, `0x3a92a0`, `0x3a9250`, `0x3a92b0` | variants used in save/load |
@@ -93,7 +93,7 @@ equal.
 Each returned player struct is itself a property container (`+8` count,
 `+16` entries).
 
-## Stat getter dispatch — `0x003fd1e0`
+## Stat getter dispatch: `0x003fd1e0`
 A function that `strcmp`s the method key and resolves through `0x3a9220`:
 ```
 "HP"  (0x00518890)   "MHP" (0x00518898)   "MP" (0x005188a0)  "LEVEL" (0x00518858)
@@ -162,8 +162,8 @@ Element names: `common`, `fire`, `ice`, `thunder`, `dark`.
 
 ## Registry object (measured, not inferred)
 
-`*(0x585be0)` is read (never written) by this code path — every one of the ~15
-references in the ELF is a `lui at,0x58` + `lw a1,23520(at)` load — so it is a BSS
+`*(0x585be0)` is read (never written) by this code path: every one of the ~15
+references in the ELF is a `lui at,0x58` + `lw a1,23520(at)` load, so it is a BSS
 slot filled by the generic object machinery, and its value can only be read, not
 reconstructed statically. Read from off-line EE RAM (`p2s_ram.py` on
 `states/SLUS-20836/dw4-inworld.p2s`):
@@ -185,13 +185,13 @@ So `*(registry+8) == 8`: the container lookup's
 sits at `+12`. The `+0x1c` word pointing at its own handle slot is how the class
 instance is reachable from the fixed global.
 
-## `sd` — the four internal ids (29–32)
+## `sd`: the four internal ids (29–32)
 
 The Lua-facing `sd` is registered **four times**, and they are not four different
 operations: they are **two operations, each in a with/without-optional-5th-argument
 pair**. Each id is a trampoline (`0x00370c38`, `0x00370c58`, `0x00370c78`,
-`0x00370ca0`) that pulls the Lua frame's argument slots — a 24-byte stride at
-`+16`, `+40`, `+64`, `+88`, `+112`, `+136` — and forwards them to an impl:
+`0x00370ca0`) that pulls the Lua frame's argument slots (a 24-byte stride at
+`+16`, `+40`, `+64`, `+88`, `+112`, `+136`) and forwards them to an impl:
 
 | id | trampoline | impl | forwards to |
 | --- | --- | --- | --- |
@@ -201,7 +201,7 @@ pair**. Each id is a trampoline (`0x00370c38`, `0x00370c58`, `0x00370c78`,
 | 32 | `0x00370ca0` | `0x00373120` | `0x38eca0(root,a,b,c,d,e)` = `0x38e6b0` + `0x38e8f0` (5th read with `ld`, i.e. 64-bit) |
 
 `0x38e5f0` **is** `0x38d860` followed by `0x38e060`, and `0x38eca0` **is** `0x38e6b0`
-followed by `0x38e8f0` — verified in the decompiler, which is what collapses the
+followed by `0x38e8f0`, verified in the decompiler, which is what collapses the
 "four ids" into two operations. So ids 29/30 differ only in whether the optional
 5th argument is applied, and 31/32 likewise; `0x372cf0` is the helper that consumes
 that optional argument. All six object-system calls take the root object

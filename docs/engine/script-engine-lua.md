@@ -13,7 +13,7 @@ means for gameplay or general stage-unload behaviour is not established.
 ## Version
 The embedded VM is **stock Lua 4.0.1** (not Lua 5.x):
 - Version string `"Lua 4.0.1"` @ `0x004eb1b8`.
-- Bytecode chunks begin `1B 4C 75 61 40` — `ESC "Lua"`, version byte **`0x40`**
+- Bytecode chunks begin `1B 4C 75 61 40`: `ESC "Lua"`, version byte **`0x40`**
   (Lua 4.0's `VERSION`).
 - Lua 4.0 error strings present: `"bad signature in \`%.99s'"` (0x004ec4b0),
   `"virtual machine mismatch in \`%.99s':\n  %.20s is %d but read %d"`
@@ -49,7 +49,7 @@ with reason codes `LUA_ERRRUN`, `LUA_ERRFILE`, `LUA_ERRSYNTAX`, `LUA_ERRMEM`,
 Scripts call C++ through an object called **`be`** (e.g. `be:SYSgetPlayerLevel()`).
 The 116 exposed functions are bound through four parallel tables.
 
-### 1. Name table — `0x004c8560`
+### 1. Name table: `0x004c8560`
 An array of 116 `char*` pointers to the API name strings. The names are stored
 around `0x0050c700`–`0x0050cfa0`, e.g.:
 ```
@@ -60,7 +60,7 @@ around `0x0050c700`–`0x0050cfa0`, e.g.:
 [113] -> 'GETPLAYER1'         [114] -> 'GETPLAYER2'   [115] -> 'GETPLAYER3'
 ```
 
-### 2. Descriptor table — `0x0050cfc0`
+### 2. Descriptor table: `0x0050cfc0`
 Variable-length records. Per entry:
 ```
 word0 : descriptor
@@ -72,12 +72,12 @@ word1 : value word
 word2..: subcount extra words
 ```
 
-### 3. Dispatch jump table — `0x0050d620`
+### 3. Dispatch jump table: `0x0050d620`
 116 entries (u32), each pointing at a 1–4 instruction **stub** in
 `0x003707f0`–`0x00371798`. Each stub `jal`s the real implementation, then
 returns to the common epilogue `0x003717c8`.
 
-### 4. Dispatcher — `0x00370780`
+### 4. Dispatcher: `0x00370780`
 ```
 370780: addiu sp,sp,-48
 370784: li    a1,-1

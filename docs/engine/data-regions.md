@@ -4,17 +4,17 @@
 *identified* (see [`progress-metrics.md`](progress-metrics.md) for why that number is published).
 This page is the identification step above that accounting: what the regions actually are.
 
-The starting fact is that the unclassified data is **extremely concentrated** — 20 regions hold
+The starting fact is that the unclassified data is **highly concentrated**: 20 regions hold
 880,360 of the 1,162,652 unclassified bytes (76 %), and three of them hold 642 KB between them
 (the "one 644 KB block" `tools/layout.py`'s docstring mentions, which is really three regions).
 
 The method is three cheap measurements over each region, all reproducible:
 
-* **composition** — each 32-bit word classified as a small integer, a plausible IEEE-754 float, a
+* **composition**: each 32-bit word classified as a small integer, a plausible IEEE-754 float, a
   pointer into the image, or zero;
-* **pointer targets** — where a pointer's value lands: code, another data region, the string dump
+* **pointer targets**: where a pointer's value lands: code, another data region, the string dump
   (`data/strings.json`), or `.bss`;
-* **printable runs** — ASCII sequences of six characters or more, which name most of these regions
+* **printable runs**: ASCII sequences of six characters or more, which name most of these regions
   outright.
 
 ## Which library owns what
@@ -44,17 +44,17 @@ An owner is who reaches the data, so for those it can be the wrong library.
 
 | region | bytes | composition | what it is |
 | --- | ---: | --- | --- |
-| `0x521750` | 209,840 | 79 % code pointers | **the vtable region.** 6,613 runs of code pointers, most 21–23 long, each preceded by a `[rtti, 0]` header — the layout the 478 vtables in `data/vtables.json` have. That dump came from the RTTI records, so this region holds the vtables of the classes with **no** RTTI (980 class vtables are extracted in total). Its first 828 words are code, not data (§below) |
+| `0x521750` | 209,840 | 79 % code pointers | **the vtable region.** 6,613 runs of code pointers, most 21–23 long, each preceded by a `[rtti, 0]` header, the layout the 478 vtables in `data/vtables.json` have. That dump came from the RTTI records, so this region holds the vtables of the classes with **no** RTTI (980 class vtables are extracted in total). Its first 828 words are code, not data (§below) |
 | `0x4833c8` | 321,816 | 44 % pointers, 33 % zero | **Sony SDK library metadata + embedded VU1 microcode.** Strings: `PsIIlibcdvd 2800`, `PsIIlibpad 2800`, `PsIIlibsdr 2800`, `PsIIlibmc 2810`, plus VU program metadata (`EXECUTE_PATH;1073741824;;131077;;;;.EXECUTE_RENDERLIST;…`, `vu1_entry_UCODE_BEGIN;0;vu1_entry_EXECUTE_PATH;16;vu1_end_EXECUTE_PATH`) and `Error decoding compressed text` |
 | `0x467108` | 110,536 | packed records: 4,465 words of `0x2ff`, 3,515 of `0x8000033c` | **the VU1 microcode** from `0x467178` to `0x481bf8`, the 109,184 bytes `UCODE_END` gives; those two words are the VU's upper and lower nops. The Sony library descriptors follow it: `PsIIlibgraph2800`, `PsIIlibdma  2800`, `PsIIlibipu  2800`, `PsIIlibkernl2800` |
-| `0x50005c` | 54,724 | 11 % pointers, 1,688 ASCII runs | **reflection metadata** — the class and field name/descriptor arrays behind the MetaObject field tables (`Gap::igAdxFile`, `Gap::Core::igNamedObject`, `_ptNumber`, `_fileNumber`) |
-| `0x4d7020` | 30,720 | 31 % floats, 893 ASCII runs | **the engine string table plus IOP module names** — `sio2man.irx`, `padman.irx`, `mtapman.irx`, `supportMultitap`, `IG_GFX_INDEX_SIZE_16_BIT`, `error creating visual context` |
+| `0x50005c` | 54,724 | 11 % pointers, 1,688 ASCII runs | **reflection metadata**: the class and field name/descriptor arrays behind the MetaObject field tables (`Gap::igAdxFile`, `Gap::Core::igNamedObject`, `_ptNumber`, `_fileNumber`) |
+| `0x4d7020` | 30,720 | 31 % floats, 893 ASCII runs | **the engine string table plus IOP module names**: `sio2man.irx`, `padman.irx`, `mtapman.irx`, `supportMultitap`, `IG_GFX_INDEX_SIZE_16_BIT`, `error creating visual context` |
 
 Two consequences worth stating:
 
 * **The IOP modules are not stored here.** The SDK strings suggest otherwise, but an IRX image
   would carry the `0x7fELF` magic and the whole image contains exactly one such word, outside these
-  regions. What is here is the *library version strings* the SDK registers — relevant to
+  regions. What is here is the *library version strings* the SDK registers, relevant to
   [`binary.md`](binary.md).
 * **The data percentage is a floor set by the dumps, not by what is known.** Three of these five
   are mechanically recoverable: the vtable region by enumerating `[rtti|0, 0, codeptr…]` runs (which
@@ -63,9 +63,9 @@ Two consequences worth stating:
 
 ## Unclaimed code hiding inside the "data" regions
 
-Two of the biggest regions **start with code**. `0x521750` disassembles cleanly — a
+Two of the biggest regions **start with code**. `0x521750` disassembles cleanly (a
 `lui at,0x59 / sw zero,-14736(at)` guard, then a tail `j 0x100c20` with its arguments set, the
-static-initialiser idiom — and is `FUN_00521750` in `config/SLUS-20836/symbols.txt`, directly after
+static-initialiser idiom) and is `FUN_00521750` in `config/SLUS-20836/symbols.txt`, directly after
 `FUN_00521730`.
 
 Ghidra's labels miss verified leaf functions in the same way:
@@ -76,7 +76,7 @@ Ghidra's labels miss verified leaf functions in the same way:
 | `0x1024d0` | `lui v0,0x4d; jr ra; addiu v0,v0,0x1e60` | `return &DAT_004d1e60;` |
 | `0x13c410` | `jr ra; sw a1,12(a0)` | a one-instruction setter, `obj->unkC = v` |
 
-`0x1024d0` appears as a 4-byte word in the image — once, at `0x5224ac` inside the vtable region —
+`0x1024d0` appears as a 4-byte word in the image once, at `0x5224ac` inside the vtable region,
 so this is not dead code. **The two label rules cannot see such a function, because both iterate
 Ghidra's gap `LAB_` labels**: `promote_gap_labels` wants a frame prologue and `promote_data_labels`
 wants a data reference, but for an address Ghidra never disassembled there is no label to iterate at

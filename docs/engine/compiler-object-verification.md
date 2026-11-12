@@ -177,13 +177,13 @@ candidate with trailing extra code or unapplied relocations.
 The rules above are not weakened; instead every verified unit lands in exactly
 one category (`verify.category`, `cat=` in the report head, listed per unit in
 `build/check-categories.tsv`): `match` (bytes, exception metadata and symbol
-rules all pass — the only thing the `cover :` line counts), `code-only` (bytes
+rules all pass; the only thing the `cover :` line counts), `code-only` (bytes
 identical, exception metadata `missing`/`extra`/`differ`), `name-defect` (bytes
 identical at the address the name spells, but a data name sits on a function
 start or a mapped name's eight-digit suffix is not its address),
 `inventory-gap` (bytes identical, a reference lands in a symbol-map gap or
 inside another function's extent), `mismatch` (bytes, size, tables or object
-shape differ — smuggled data and unowned sections included) and `compile`.
+shape differ, smuggled data and unowned sections included) and `compile`.
 Precedence: mismatch > inventory-gap > name-defect > code-only. The verifier
 compares bytes at the spelled address of a refused name (what the relink
 provides) precisely so a naming defect can be told apart from a mismatch.
@@ -215,7 +215,7 @@ Three guards keep the oracle itself honest:
 * **Section census.** `tools/verify.py` lists every section name an object of
   the relink may carry in `COMPARED_SECTIONS` (compared with retail or
   deliberately ignored, one reason each) and `DEBT_SECTIONS` (known, not yet
-  compared — empty today). `tools/test_section_census.py` scans every
+  compared; empty today). `tools/test_section_census.py` scans every
   `build/link/u_*.o` of the last `make link` (it skips, saying so, without one)
   and fails on any other name, naming the object and section, or on a
   `.data`/`.bss` with content. `make check` ends a whole-tree run with
@@ -233,8 +233,8 @@ Three guards keep the oracle itself honest:
   line, in [`.githooks/oracle-files.txt`](../../.githooks/oracle-files.txt) (the
   single source; the hook reads it). A push whose commits touch any of them must
   (a) pass `python3 -m unittest discover -s tools -p 'test_*.py'`, (b) show every
-  counterexample test of `tools/test_oracle_holes.py` run and pass — i.e. the
-  audit's sources still fail to verify, not skipped — and (c) carry a line
+  counterexample test of `tools/test_oracle_holes.py` run and pass (i.e. the
+  audit's sources still fail to verify, not skipped), and (c) carry a line
   starting `oracle-change:` in the message of every commit in the range that
   touches a protected file, saying what changed in the oracle. The hook prints
   `oracle a/c`, `b/c`, `c/c` lines; `testing/test_prepush_gate.py` exercises them
@@ -300,8 +300,8 @@ would leave about 35 groups passing only under a `-Cpp_exceptions off` override,
 counted foreign-profile although their code matches. The `exceptions` row is an optional
 assertion for the owner: it must agree with the recovered table, and it stands
 in for the table in a fixture without one. A differing relocated word in a
-table is reported with both targets — `[n] is a relocated address: ours
-0x3d9bd0 (__dt__3RefFv), retail 0x1489a0 (<name>)` — so the source side can
+table is reported with both targets (`[n] is a relocated address: ours
+0x3d9bd0 (__dt__3RefFv), retail 0x1489a0 (<name>)`) so the source side can
 re-point the duplicate. `isolate_emitted_body` keeps the selected member's
 reproduced record and table, renamed `.exceptix.dw4_<index va>` /
 `.exception.dw4_<table va>`, and `linkgen` places them like a standalone unit's

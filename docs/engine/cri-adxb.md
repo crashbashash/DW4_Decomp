@@ -1,4 +1,4 @@
-# CRI ADXB — the ADX decoder core
+# CRI ADXB: the ADX decoder core
 
 ADXB is the decoder-handle layer of CRI ADX: 16 handles of 260 bytes, each owning an ADX predictive
 decoder (ADXPD) handle and a buffer block. It decodes the ADX stream header (`ADXB_DecodeHeaderAdx`, with

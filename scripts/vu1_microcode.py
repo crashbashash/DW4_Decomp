@@ -387,7 +387,7 @@ def main():
     w("## What each bit means\n")
     w("Each bit's meaning is read off the *names*: a boolean condition over the words in the program "
       "names (words present, words absent, combined with OR) that reproduces the bit's program set "
-      "**exactly, over all %d records** — so it is a proof, not a reading. **%d of %d bits** have "
+      "**exactly, over all %d records**, so it is a proof, not a reading. **%d of %d bits** have "
       "such a condition; the rest are combinations of capabilities rather than one feature, and for "
       "those the exact program set is given.\n"
       % (len(meta), proven, len(conds)))

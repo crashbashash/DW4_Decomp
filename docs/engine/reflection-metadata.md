@@ -1,4 +1,4 @@
-# Reflection metadata — MetaObjects, MetaFields and the `be*` structures
+# Reflection metadata: MetaObjects, MetaFields and the `be*` structures
 
 The engine (`Gap::Core`, derived from the Insomniac `ig` object model) has a runtime
 **reflection** system: every class registers a `MetaObject`, and every field of that class becomes a
@@ -7,7 +7,7 @@ The engine (`Gap::Core`, derived from the Insomniac `ig` object model) has a run
 its data structures.
 
 **Status: the records are decoded.** `scripts/dump_reflection.py` extracts all of it to
-`data/reflection.json` — 1,075 `MetaObject`s, 659 of them with fields, **3,680 fields with name +
+`data/reflection.json`: 1,075 `MetaObject`s, 659 of them with fields, **3,680 fields with name +
 offset + type**.
 
 ---
@@ -59,7 +59,7 @@ Real example, `0x001301d0` registering `igVisualContextAttrDefaultManager`:
 > the **class name** (`0x5026d0` = `"beSvPs2McImage128k"`). There is no `Gap::Bec::`-prefixed
 > argument here; the namespaced spelling only appears in the `__RTTI__` string.
 
-The class name is *not* stored in the reflection data — it is an argument at the call site. That
+The class name is *not* stored in the reflection data; it is an argument at the call site. That
 is why the record region has no adjacent class-name pointers.
 
 ## 2. The per-class field tables
@@ -97,7 +97,7 @@ Example (`igViewportAttr`: ctors at `0x00485940`, names/descs/offsets from `0x00
 0x4859a0  0x0c 0x10 0x14 0x18 0x1c 0x20 0x24          (7 offsets)
 ```
 
-Note there is **no per-array zero terminator** — the length is `n` and the zeros are alignment
+There is **no per-array zero terminator**: the length is `n` and the zeros are alignment
 padding, so an odd `n` leaves exactly one zero word after each array.
 
 ### Why the name/offset pairs looked like "records"
@@ -174,15 +174,15 @@ igMemoryRefArrayMetaField
 (Other `ig*MetaField`-looking strings such as `igCharMetricsMetaField` are unrelated classes whose
 names merely match.)
 
-### `igMetaEnum` — the named value table
+### `igMetaEnum`: the named value table
 
 `igEnumMetaField` is the *field type*; the value it points at is an **`igMetaEnum`**, the
 engine's generic name ↔ value table. Its three declared fields are `+0x08 _name` (the
 enum's own name, an `igStringMetaField`), `+0x0c _names` (an `igStringRefList`) and
 `+0x10 _values` (an `igIntList`); the two lists are indexed in lockstep, so a value
-maps to its name and back. Every enum is a lazily-built singleton — the per-enum
+maps to its name and back. Every enum is a lazily-built singleton (the per-enum
 accessor is `if (!*global) *global = igMetaEnum_Create(name, names[], values[], count);`,
-e.g. `ApplyType` = `{NOT_SET=0, CUBE_MAP=1, SPHERE_MAP=2}` at `0x131f80` — and the class
+e.g. `ApplyType` = `{NOT_SET=0, CUBE_MAP=1, SPHERE_MAP=2}` at `0x131f80`), and the class
 has no virtual overrides. The methods are in `config/SLUS-20836/names/ObjectModel.tsv`.
 
 ## 5. Running it
@@ -244,7 +244,7 @@ It also labels each class's field-table and ctor-table addresses `reflect_<Class
 
 **Answers.**
 
-- Per-class field **names, offsets and types** — the struct layouts of all 659 field-bearing classes,
+- Per-class field **names, offsets and types**: the struct layouts of all 659 field-bearing classes,
   including every `be*` game type (`beBaseInfo`, `beNDMWStatusInfo`, `beModelCtrl*`, …),
   materialised as Ghidra structures under `/DW4/reflection`.
 - The class-name association for 1,075 `MetaObject`s, including the `ig*MetaField` classes.
@@ -266,7 +266,7 @@ It also labels each class's field-table and ctor-table addresses `reflect_<Class
   `operator==`, `operator<<`, `>=`, …). Reading them as class method
   metadata is wrong.
 - **`{X,Y}` igBinary field descriptors.** The field metadata above is the
-  *source* those descriptors index, so this is testable — decode a pack's type directory and
+  *source* those descriptors index, so this is testable: decode a pack's type directory and
   correlate `{X,Y}` against a known class's field list. Still open.
 
 ## 7. Engine object types (`ig*`) and game data types (`be*`, `Gap::Bec::`)
@@ -301,10 +301,10 @@ stun  sleep  poison  guard  powerdown  attackdown
 in `data/reflection.json` for the layout does not work: `beNDMWStatusInfo` has `field_count 0`, `beBaseInfoData` has one field
 (`_version`, `igIntMetaField` @12) and `beBaseInfo` two (`_dataList` @20, `_ramList` @24). The names
 exist as strings (`data/strings.json`) and in the igBinary directories only as near-empty records.
-Recovering the hp/mhp/… layout needs the stat-name xrefs or a fit against the object instances — see
+Recovering the hp/mhp/… layout needs the stat-name xrefs or a fit against the object instances; see
 [`../systems/enemy-data.md`](../systems/enemy-data.md) §"Next steps".
 
-## 9. Live objects — an object's class is its `+0` vtable pointer
+## 9. Live objects: an object's class is its `+0` vtable pointer
 
 Sections 1–4 say what a class *looks like*. This says how to find an **instance** of one in a running
 game, which is the object identity [`typed-coverage.md`](typed-coverage.md) needs.
@@ -330,7 +330,7 @@ plus 3,271 records over 463 classes below `0x1000000`.
 
 **Two populations, and the word at `+4` separates them.** Heap instances carry **bit 28**
 (`0x10000000 | n`, `n` a small per-instance counter) and follow reflection exactly. The records below
-`0x1000000` — one per class, for 463 of the 478 — carry the class's own vtable but **not** the
+`0x1000000` (one per class, for 463 of the 478) carry the class's own vtable but **not** the
 instance layout (a `beGeneraterData` record at `0x63d5b4` reads a rodata pointer at `+12` where the
 instance reads a position float), and several classes share the same word at `+12`, i.e. a common
 header. What those records *are* is **not established** (candidates: per-class
@@ -338,17 +338,17 @@ constructor/descriptor records, statically allocated pools, a registry); they ar
 rather than silently dropped, and only the bit-28 hits are treated as instances.
 
 **This needs the emulator**, so it is a recorded measurement rather than a
-regenerable artifact under `data/` — the same rule the other live measurements follow. The scanner
+regenerable artifact under `data/`, the same rule the other live measurements follow. The scanner
 itself is kept with the emulator tooling, outside this repository.
 
 **The vtable test undercounts by 3.2×, and the `+4` marker is the fix.** A search for
-words equal to a known vtable cannot see the **vtable-less** classes at all — and those are every
+words equal to a known vtable cannot see the **vtable-less** classes at all, and those are every
 `*List` kind (`igVec3fList`, `igFloatList`, `igDataList`, the `be*List` families). Every instance,
 vtable-less ones included, instead carries the `0x10000000 | n` word at `+4`, so scanning for that
 shape enumerates the whole population: **60,041 objects** in the same `pre-leomon` state where the
 vtable scan saw **18,810**. Treat the 18,810 / 171-class figure as a **floor, not a count**, and note
 that any per-class census or address-order argument built on the vtable scan inherits the error.
-(The `+4` scan is highly selective — ~8 false positives expected across 8M positions — and
+(The `+4` scan is highly selective, with ~8 false positives expected across 8M positions, and
 reproduces exactly across reloads of the same savestate.) For the list classes `n` equals the list's
 own count, which is a useful check.
 
@@ -359,8 +359,8 @@ that vtable, by resolving each `beGeneraterInfoRam._work` (`+0x2c`).
 
 ## 10. The generated families as translation units
 
-The reflection boilerplate — `<Class>_Register`, `<Class>_InitFields` and the guard-family
-accessors `<Class>_GetMetaObject` / `<Class>_ResolveMetaObject` — is generated, so the
+The reflection boilerplate (`<Class>_Register`, `<Class>_InitFields` and the guard-family
+accessors `<Class>_GetMetaObject` / `<Class>_ResolveMetaObject`) is generated, so the
 [build profiles](build-profiles.md) gate, "`cat=match` under the unit's own profile", is met in
 the generators, not in the 800 files. Two things decide it.
 
@@ -397,7 +397,7 @@ are typed prototypes, not K&R `int f();`:
 **The declaration order.** A body shaped for another compiler matches only under a provisional
 override. The differences between the compilers are small and
 systematic: MWCC 3.0-011126 assigns s0, s1, s2 … to the locals in **declaration order**, the 2003
-beta (`combat`) in **reverse declaration order** — the m2c names `temp_sN` carry the retail
+beta (`combat`) in **reverse declaration order**. The m2c names `temp_sN` carry the retail
 register, so `initfields_gen.py --order auto` sorts the declarations for the unit compiler and, when
 that first guess fails under `--verify`, tries the other orders (bounded). For the guard family the
 default compiler needs the value-tested `bool ready = meta->_validity & 4` (plus `asm { nop }` for the
@@ -416,10 +416,10 @@ Two bodies need more than the unit profile:
   `FUN_002d9500(field, -1.0)` call passes the double as a 128-bit value (`dsll32 v0; … pcpyld
   a1,zero,v0`), which the 2003 beta emits and the default build does not (it writes `dsll32 a1,v0,0`
   after the call); the body matches only under its combat override. Either the unit's profile or
-  the default compiler's double-passing is the open question — a `tools/unitprofiles` review item,
+  the default compiler's double-passing is the open question: a `tools/unitprofiles` review item,
   not a source shape.
 * `igMovieInfo_InitFields` (0x336580, combat `-O3,p`): the code reproduces under the unit profile but
-  needs **two symbols at 0x149980** — `FUN_00149980` and the data-named `DAT_00149980` — because
+  needs **two symbols at 0x149980**, `FUN_00149980` and the data-named `DAT_00149980`, because
   retail loads the address twice; with one name the compiler keeps it in a saved register and the
   frame grows. With one name in `config/SLUS-20836/symbols.txt` the file verifies `name-defect` and needs its
   override.

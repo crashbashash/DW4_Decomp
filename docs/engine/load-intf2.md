@@ -1,4 +1,4 @@
-# Slot, character, name, difficulty and card controllers — `beNDMWLoadIntf2`
+# Slot, character, name, difficulty and card controllers: `beNDMWLoadIntf2`
 
 The Game Start path hands off from `beNDMWLoadCtrl2` (see
 [title-menu-controller](title-menu-controller.md) §*Recovered load-controller
@@ -149,32 +149,32 @@ Command `0` (`RUN`) creates the whole household once, when the record has no dat
 yet, in this fixed order (constructor addresses from the retail `jal`s; classes
 from the meta-object handle each constructor instantiates):
 
-1. `0x003c43c0` — `beNDMWLoadIntf2CtrlData`, with `_isRun` (`+0x10`) = 1,
+1. `0x003c43c0`: `beNDMWLoadIntf2CtrlData`, with `_isRun` (`+0x10`) = 1,
    `_isRdy` (`+0x11`) = 0, `_isCtrl` (`+0x13`) = 1 and `_isEntry` (`+0x12`) = 1
    for kind 0, 0 for the other kinds.
 2. `LOADCTRL2 GETCOMMON` (`0x0038e5f0`, `beMessenger_SendNamed`) and `0x0038f800`
-   (`beMessenger_GetObject`) — the load controller's common block is appended to
+   (`beMessenger_GetObject`): the load controller's common block is appended to
    the list.
-3. `0x003c40c0` — `beNDMWLoadIntf2MakeChr`.
-4. `0x003c6ea0` (`beNDMWLoadIntf2ComMdlCtrl_Create`) — `_messenger`, and `_pos`
+3. `0x003c40c0`: `beNDMWLoadIntf2MakeChr`.
+4. `0x003c6ea0` (`beNDMWLoadIntf2ComMdlCtrl_Create`): `_messenger`, and `_pos`
    from the three floats of the `0x004cd0a0` kind table.
-5. `0x003c76c0` (`beNDMWLoadIntf2TextOrder_Create`) — `+0x10` messenger, `+0x14`
+5. `0x003c76c0` (`beNDMWLoadIntf2TextOrder_Create`): `+0x10` messenger, `+0x14`
    lua node.
-6. `0x003c2e60` — `beNDMWLoadIntf2SelSlot`: `_ramNo` = kind, `_messenger`,
+6. `0x003c2e60`, `beNDMWLoadIntf2SelSlot`: `_ramNo` = kind, `_messenger`,
    `_padManager`, and `_comMdlCtrl`/`_textOrder`/`_commonIntf` from the
    `COMMDLCTRL`/`TEXTORDER`/`COMMONINTF` lookups.
-7. `0x003c27c0` — `beNDMWLoadIntf2NameSel`: `_ramNo`, `_messenger`,
+7. `0x003c27c0`, `beNDMWLoadIntf2NameSel`: `_ramNo`, `_messenger`,
    `_padManager`, `_comMdlCtrl`, `_textOrder`.
-8. `0x003c6b00` — `beNDMWLoadIntf2MesWin`: `_ramNo`, `_messenger`, `_padManager`,
+8. `0x003c6b00`, `beNDMWLoadIntf2MesWin`: `_ramNo`, `_messenger`, `_padManager`,
    `_textOrder`.
-9. `0x003c3900` — `beNDMWLoadIntf2DegiStateCtrl`, whose `_statDataList` receives
+9. `0x003c3900`: `beNDMWLoadIntf2DegiStateCtrl`, whose `_statDataList` receives
    two `beNDMWLoadIntf2DegiState` entries (`0x003c3e40`), each wired by
    `0x003d9de0` with the kind, `COMMONINTF`, `TEXTORDER`, `COMMDLCTRL`, the
    messenger and its index 0 or 1.
-10. `0x003c3560` — `beNDMWLoadIntf2DataSelIntf`: `_padManager`, `_comMdlCtrl`,
+10. `0x003c3560`, `beNDMWLoadIntf2DataSelIntf`: `_padManager`, `_comMdlCtrl`,
     `_textOrder`, `_commonIntf`, `_mesWin` (`MESWIN`) and `_statDisp`
     (`DEGISTATECTRL`).
-11. `0x003c31e0` — `beNDMWLoadIntf2Diffselect`: `_padManager`, `_comMdlCtrl`,
+11. `0x003c31e0`, `beNDMWLoadIntf2Diffselect`: `_padManager`, `_comMdlCtrl`,
     `_textOrder`, `_commonIntf`, `_mesWin`.
 
 ### Other commands
@@ -194,8 +194,8 @@ effect when the record has no data list:
 
 `beNDMWLoadCtrl2`'s update drives the sub-controller at
 `beNDMWLoadCtrl2CommonIntf._mcUtilCtrl` (`+0x34`) through
-`FUN_003f1270`/`FUN_003f12f0`/`FUN_003f1380`/`FUN_003f13d0` — start / wait /
-close / done — and `FUN_003ecc60` is the release path the load controller calls
+`FUN_003f1270`/`FUN_003f12f0`/`FUN_003f1380`/`FUN_003f13d0` (start / wait /
+close / done), and `FUN_003ecc60` is the release path the load controller calls
 when the selector reports `_intfStat == 0`. Those four model-controller wrappers
 are the seam between the load controller and this interface. All five are
 in `src/unmatched/`.
@@ -207,7 +207,7 @@ The `beNDMWLoadIntf2*` `…CtrlData`/`…Intf` classes are **passive
 (`vfunc_31`/`vfunc_34`) to the shared base bodies `0x002ff0e0`/`0x002ff150`
 (only `beNDMWLoadIntf2MesWin` overrides, `0x003cb2f0`/`0x003cb390`). So the slot
 grid, the portrait/naming entry, the difficulty rows and the card utilities are
-not each a virtual method — they run inside the master update `0x003e4750` and
+not each a virtual method; they run inside the master update `0x003e4750` and
 its helper functions (`0x003eba10`, `0x003ebe00`, `0x003ec120`, `0x003ec450`,
 `0x003ecdc0`–`0x003ee4d0`, `0x003ee6d0` (2,824 B), `0x003ef1e0`, `0x003ef5d0`
 (6,020 B)), against the records' reflected fields.
@@ -447,7 +447,7 @@ The other helpers of the master update in this range:
 
 The title's two character flows run these states:
 
-- **Call Digimon**: control states 6, 7 and 8 in order — the
+- **Call Digimon**: control states 6, 7 and 8 in order: the
   memory-card chooser (SelSlot, text `0x1009`), the card-access notice
   (`0x1004`) while item state 5 checks and reads the card, the data select
   (`0x513`), the difficulty window and the log-in prompt (`0x51D`).

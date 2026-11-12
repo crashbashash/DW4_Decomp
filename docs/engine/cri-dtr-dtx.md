@@ -1,4 +1,4 @@
-# CRI DTR and DTX — data transfer between EE and IOP
+# CRI DTR and DTX: data transfer between EE and IOP
 
 DTR (`DTR Ver.1.06`) moves stream data between CRI stream joints (SJ) in 64-byte transfer objects, 32 of them
 at `0x4a9310`. DTX (`DTX Ver.1.08`) is its RPC side: 16 objects of 68 bytes at `0x4a9b30`, a SIF RPC server

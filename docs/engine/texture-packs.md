@@ -1,4 +1,4 @@
-# Texture packs — the second container shape
+# Texture packs: the second container shape
 
 An `NDMW.AFS` archive holds **two kinds of pack**, and a texture's bytes live in the second kind. This
 page records what is known about it; the object-graph kind is
@@ -41,7 +41,7 @@ igImage   class 10, 104|108 bytes   igClut  class 11, 28 bytes
 
 So an igImage record carries its own **name**, **size** (`_px`/`_py`, `_bytesPerRow` repeats the
 width), its **grid block id** (`_pImage`) and its **palette reference** (`_pClut`). The run earlier
-work read as a separate "descriptor entry" — `[1, 0, C, bitsIdx, DIM, 0, 0, namelen, name]` — is
+work read as a separate "descriptor entry" (`[1, 0, C, bitsIdx, DIM, 0, 0, namelen, name]`) is
 just this record's own tail (`_localImage`, `_bitsInt`, `_pClut`, `_bitsIdx`, `_bytesPerRow`, …,
 `_pNameString`), which is why the record can look 60 bytes long.
 
@@ -52,15 +52,15 @@ entry 621, and 35 of its 130 igImage records have an empty `_pNameString`; the i
 the texture packs (`P10G00n.png` is in entry 618).
 
 An igClut's `_pData` is the id of its palette block. Palette entries are `A R G B` with a **varying**
-alpha — many textures have a transparent or partly-transparent entry 0 — so a palette block must not
+alpha (many textures have a transparent or partly-transparent entry 0), so a palette block must not
 be recognised by testing bytes for `0xFF`; only its RGB (bytes 1..3) is reliable, and then only at
 its own offset.
 
-## The id→class table and the texture→palette link — solved
+## The id→class table and the texture→palette link (solved)
 
 `_pClut` is **an id in the pack's own id space, not a block id**. That space is declared by the same
 `{u32 tableBytes}{u32 idCount}` + `idCount × u16` shape the object packs use for their id remap table
-(`igbinary-format.md`) — but here each entry is the **class of that id**:
+(`igbinary-format.md`), but here each entry is the **class of that id**:
 
 * entry 625: `+0x1099`, `tableBytes 388`, `idCount 190`. The space interleaves the pack's objects
   and their memory blocks, so it is longer than the record stream.
@@ -76,8 +76,8 @@ id within its class is that object's position in the stream. Hence:
 palette_block = igClut_records_in_file_order[ rank( _pClut among the ids of its class ) ]._pData
 ```
 
-and the texture→palette link needs nothing else. (The rank is monotone in the clut record index —
-0→3, 1→20, … 25→188 on entry 625 — which is the signature of an id rather than an offset.)
+and the texture→palette link needs nothing else. (The rank is monotone in the clut record index,
+0→3, 1→20, … 25→188 on entry 625, which is the signature of an id rather than an offset.)
 
 The name→grid half is then just the record's own `_pImage`, and both halves are checked: all **26**
 textures of entry 625 decode **pixel-for-pixel** against the live dump through
@@ -119,7 +119,7 @@ the sum undercounts and the identities fail.
 
 A pad **reuses the id of the block it follows**, so a table of layout rows must skip pad rows or it
 silently picks the four-byte pad instead of the block. And because an image's data is one byte longer
-than its block, its last byte lands on the next block's first byte — which is why a palette's
+than its block, its last byte lands on the next block's first byte. That is why a palette's
 entry-0 **alpha** byte is unreliable (it is the preceding image's last grid byte) even though its RGB
 is the palette's own index-0 colour.
 

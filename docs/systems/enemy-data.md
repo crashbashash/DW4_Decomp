@@ -1,19 +1,19 @@
 > **NOTE:** the enemy stat table is *plain data inside the ISO*
 > (`AREA.AFS`, 665 identical copies) and can therefore be rewritten directly in the disc image:
-> changing a stat is a data patch, not a RAM-side patch — see [`../engine/afs-archives.md`](../engine/afs-archives.md).
+> changing a stat is a data patch, not a RAM-side patch. See [`../engine/afs-archives.md`](../engine/afs-archives.md).
 >
-> **Row coverage:** the 649-row table holds 580 live rows
-> — all **31 `e_*`** types (regular enemies + area bosses) and **8 `f_*` story-boss rows**
+> **Row coverage:** the 649-row table holds 580 live rows:
+> all **31 `e_*`** types (regular enemies + area bosses) and **8 `f_*` story-boss rows**
 > (`f_apocaly`, `f_belvam`, `f_luce`, `f_luce2`, `f_devl1`, `f_devl1b`, `f_devl22`, `f_devl3`),
 > plus 9 `g_*` destructibles. The many other `f_*` model variants
 > listed below (`f_devl1c/e/f/f2/f3`, `f_devl2`, `f_devl21-26/250`, `f_devl31/31g/32`,
-> `f_luce1`) have **no row of their own** and are believed to reuse their family's row — not
-> yet proven. The 69 empty rows are unused slot-grid cells (HP 0, no model).
+> `f_luce1`) have **no row of their own** and are believed to reuse their family's row (not
+> yet proven). The 69 empty rows are unused slot-grid cells (HP 0, no model).
 
-# 16 — Enemy Roster & Stat DB
+# 16: Enemy Roster & Stat DB
 
 Full enemy list plus the decode of the enemy **stat** data.
-Stats are NOT in the save file — they live in the igBinary object graph inside
+Stats are NOT in the save file; they live in the igBinary object graph inside
 `NDMW.AFS` / `AREA.AFS` (see [`docs/engine/igbinary-format.md`](../engine/igbinary-format.md)).
 
 ## Enemy model namespaces
@@ -27,7 +27,7 @@ are NOT enemies; `n_*` single-letter names are texture/material noise, not model
 | `f_*` | story bosses (the "devil" family + Apocalymon/MaloMyotismon/Lucemon) | 26 |
 | `n_*` (digimon only) | NPCs (Leomon, Seraphimon, Ophanimon, Mamemon, Gekomon, Metete, Recorder) | 7 |
 
-### `e_*` — 31 regular enemies
+### `e_*`: 31 regular enemies
 
 | Model | Display name (US) |
 | --- | --- |
@@ -66,7 +66,7 @@ are NOT enemies; `n_*` single-letter names are texture/material noise, not model
 Sub-variants present as models: `e_mecha2st0203`, `e_mecha4dn`, `e_mecha5dn`,
 `e_rare02`, `e_nume_skin0Shape2` (skin, not a distinct type).
 
-### `f_*` — 26 boss models
+### `f_*`: 26 boss models
 
 | Model | Enemy | Family |
 | --- | --- | --- |
@@ -90,12 +90,12 @@ string found).
 
 ## Stat DB location
 
-- **`beBaseInfoData`** — type name refs in `AREA.AFS`; a "×667" instance count is a
+- **`beBaseInfoData`**: type name refs in `AREA.AFS`; a "×667" instance count is a
   miscount of the stat table's 665 copies (§"The enemy stat table" below).
-- **`beNDMWStatusInfo`** — 88 instances in `NDMW.AFS` (≈ 64 enemies/NPCs + playable).
+- **`beNDMWStatusInfo`**: 88 instances in `NDMW.AFS` (≈ 64 enemies/NPCs + playable).
 - Field model: the **names** `hp mhp mp mmp level lv def power hit waza
   no kazu` + `stun sleep poison guard powerdown attackdown` (18 total) exist as
-  strings, but they are **not** reflection field records — see
+  strings, but they are **not** reflection field records; see
   §"Field descriptor encoding" below.
 
 ### Key addresses
@@ -108,7 +108,7 @@ string found).
 | NDMW.AFS blob (stage pack, magic `0x6300`) | `0x1055b000` |
 | …`beNDMWStatusInfo` type definition | `0x1055efc4` |
 
-## igBinary object-graph decode — current state
+## igBinary object-graph decode
 
 ### Blob header (12×u32)
 
@@ -145,13 +145,13 @@ encoding".
 **Ordinal and offset:**
 
 - `ordinal = i + K + 1` for the class's declared field `f[i]`, where `K` (the
-  inherited base-slot count) is **constant per class** — over the 135 records, 93 have
+  inherited base-slot count) is **constant per class**: over the 135 records, 93 have
   reflection fields; **87 satisfy the rule** (K = 1 ×8, 2 ×21, 3 ×30, 4 ×1, 6 ×12,
   7 ×4, 9 ×1, 10 ×8, 11 ×2), **48 of them confirmed by ≥2 descriptors** and 39 on a
   single one; 6 fail to greedy type-matching artefacts.
 - The byte offset is **not in the descriptor**; it is the class's declared offset
   from `data/reflection.json`, which *is* the igBinary layout (descriptor `size` is
-  the element size, not the stride — `igImage`'s bools are size 1 with stride 4,
+  the element size, not the stride: `igImage`'s bools are size 1 with stride 4,
   `igColorMaskAttr`'s are size 1 with stride 1).
 - A descriptor with `ordinal <= K` matches no declared field: those are
   **inherited-slot markers**, 203 of them (`igObjectRef` 53, `igString` 50, `igInt`
@@ -169,7 +169,7 @@ stat fields' offsets:
 `_ramList` @24). Their igBinary directory records are equally thin
 (`beNDMWStatusInfo` @NDMW blob+`0x3fc4` = `(igString,2,4)(igBool,4,1)(igObjectRef,5,4)…`;
 `beBaseInfoData` @+`0x24b2` = `(igString,2,4)(igInt,3,4)`). So the hp/mhp/… layout
-must come from the stat-name xrefs or from fitting the object instances — **not**
+must come from the stat-name xrefs or from fitting the object instances, **not**
 from `reflection.json`. (The class registers no fields of its own.)
 
 The 48 MetaField names (string table @ `0x30`): `igObjectRefMetaField(0)
@@ -189,17 +189,17 @@ data index?).
 valid anchor: `e_goburi` has **several rows** in the
 649-row table (row 1 → 58, row 5 → 649, rows 379-393 → the crown ladder), so a single
 number cannot serve as an anchor. Any "HP ≈ N" anchor should name the **row**
-(§"The enemy stat table" below) — that is the stable identifier.
+(§"The enemy stat table" below); that is the stable identifier.
 
 ## The live stat read path
 
-> **This section is corroboration.** The path is confirmed and documented in
+> **This section corroborates the decode.** The path is confirmed and documented in
 > [`enemy-spawn-system.md`](enemy-spawn-system.md); the table it reads from is decoded
 > [below](#the-enemy-stat-table-areaafs--iso). Read it as confirmation that the same conclusions reproduce
 > from savestates, and for the `FUN_00394400`/`"ONE"` mechanism, which only this
 > section describes.
 
-Read out of a running game rather than decoded from the igBinary layout — which is the
+Read out of a running game rather than decoded from the igBinary layout, which is the
 project's standard for a stat claim.
 
 ### The populator: `FUN_00394400` (`0x394400`)
@@ -226,19 +226,19 @@ the same layout (`beNDMWMdlPEBaseInfoWork`, vtable `0x53D3E0`, `+0x10` row,
 `[+0x0c]+0x0c` current HP).
 
 **Caveat on the `+0x08` label.** Calling `*(*(status+8)+0xc)` "MHP" is this page's
-inference, not an established name — nothing else corroborates it. For the uncrowned
+inference, not an established name; nothing else corroborates it. For the uncrowned
 `e_goburi` it yields 649, which is the row-5 HPMAX, so `+0x08` is *plausibly* the
 max-HP field object, but treat the name as unverified and check it (the same
 field-object mechanism reaches current HP through `+0x0c`).
 
 `FUN_00394400` is also the **sole writer** of the MDL block (one store site in the
-whole ELF), and it re-writes HP after the UI update when HP did not change — a meter
+whole ELF), and it re-writes HP after the UI update when HP did not change: a meter
 clamp, not a second stat source.
 
 ### Measured values across savestates
 
 `InfoName` = `*(0x58a1f8)`, MHP = `*(0x58a1ec)`, row = `*(0x58a1f4)`. The third column
-is the **row into the 649-row table**, not a per-species id — that is why the same
+is the **row into the 649-row table**, not a per-species id; that is why the same
 enemy appears with different values:
 
 | State | InfoName | row | `*(0x58a1ec)` | |
@@ -247,10 +247,10 @@ enemy appears with different values:
 | `goblin_pass_crate_barrell` | `e_goburi` | 0 | 50 | |
 | `normal_lvl1_before_crown_enemy` | `e_goburi` | 1 | 58 | = table row 1, `e_goburi` 58 |
 | `before_crown_spawn` / `before_enemy_spawn` / `no_crown` / `pink_crown` | `e_goburi` | 5 | **649** | = table row 5, as in rng-verification |
-| `before_load_area` | `p_susanoo` | — | 99999 | |
-| `dw4-inworld`, `op-ready`, `all_worlds_gate` | `n_digilff` | — | 100 | |
+| `before_load_area` | `p_susanoo` | - | 99999 | |
+| `dw4-inworld`, `op-ready`, `all_worlds_gate` | `n_digilff` | - | 100 | |
 
-So the same enemy has **different RecNo and MHP in different stages** — RecNo is the
+So the same enemy has **different RecNo and MHP in different stages**: RecNo is the
 *instance's* row in the 649-row table, not a fixed per-species id.
 
 ### The live entity records
@@ -284,15 +284,15 @@ points "the 649-row stat table" here). The layout is confirmed:
 | | |
 | --- | --- |
 | **Rows** | **649**, replicated as **665 byte-identical copies** ("×667" is a miscount of this) |
-| **Where** | plain data in `AREA.AFS` / the ISO — **fully patchable without code patches** |
+| **Where** | plain data in `AREA.AFS` / the ISO, **fully patchable without code patches** |
 | **HPMAX** | `i32`, **column-major** @ ISO `0x78D64C5` |
 | **12 stats** | `i16`, **row-major** @ ISO `0x78DACB9` |
-| **3 bytes** | `CHIMEIRITSU`, `MAHIRITSU`, `RARITY` — `u8`, row-major @ ISO `0x78DA51D` |
+| **3 bytes** | `CHIMEIRITSU`, `MAHIRITSU`, `RARITY`: `u8`, row-major @ ISO `0x78DA51D` |
 
 Anchors: row 370 = destructible crate, 100 HP / 100 TSUYOSA / RARITY 0;
 row 60 = boss 3194/3564; row 1 = `e_goburi` 58; 69 rows are zeroed. Only **60 of the
-649 rows have `RARITY > 0`** — 4 types × 3 tiers × 5 crown ranks (`e_goburi`
-379-393, `e_mummy` 394-408, `e_otama` 409-423, `e_mecha2` 610-624) — and they hold
+649 rows have `RARITY > 0`** (4 types × 3 tiers × 5 crown ranks: `e_goburi`
+379-393, `e_mummy` 394-408, `e_otama` 409-423, `e_mecha2` 610-624), and they hold
 the [crown ladder](#the-crown-ladder).
 
 **There is no 88-row table.** "88" is the `beNDMWStatusInfo` *instance* count;
@@ -344,10 +344,10 @@ beNDMWMdlPEBaseInfoWork (vtable 0x53D3E0, the enemy InfoWork)
                       +0x10 row        [+0x0c]+0x0c current HP
 ```
 
-So an entity carrying `(name, row, HPMAX)` in RAM is a **per-instance copy of a row**
-— e.g. row 5 → 649 at `0x17ff7a0`, row 386 → 3200 for a pink-crown `e_goburi`
+So an entity carrying `(name, row, HPMAX)` in RAM is a **per-instance copy of a row**,
+e.g. row 5 → 649 at `0x17ff7a0`, row 386 → 3200 for a pink-crown `e_goburi`
 ([`rng-verification.md`](rng-verification.md)). The same enemy type spans several rows
-(1, 5, and the 379-393 crown ladder), so a single "Goburimon HP" does not exist — which
+(1, 5, and the 379-393 crown ladder), so a single "Goburimon HP" does not exist, which
 is why an "HP ≈ 200–600" anchor is unreliable.
 
 ## Next steps
@@ -356,10 +356,10 @@ is why an "HP ≈ 200–600" anchor is unreliable.
 > and the live read path is proven. Do not hunt for another stat table:
 > an "88-record `beNDMWStatusInfo` definition table" is
 > **refuted**, and the `×667`/`×88` counts are a miscount of the 665 copies.
-> Following the MDL block is not a route to the stats either — it is a cache whose
+> Following the MDL block is not a route to the stats either: it is a cache whose
 > producing chain resolves to 0.
 
-The genuinely open work here is the igBinary **object graph** (below), not the stats.
+The open work here is the igBinary **object graph** (below), not the stats.
 The descriptor structure and the `ordinal` → byte offset rule are not part of it
 (§"Field descriptor encoding"):
 
@@ -367,7 +367,7 @@ The descriptor structure and the `ordinal` → byte offset rule are not part of 
    directory, reading each field per its resolved type. The instance encoding at
    `hdr[4]` is described in [`../engine/igbinary-format.md`](../engine/igbinary-format.md)
    §"The instance encoding".
-2. **Recover the `beBaseInfoData`/`beNDMWStatusInfo` layout** — these two classes
+2. **Recover the `beBaseInfoData`/`beNDMWStatusInfo` layout.** These two classes
    have no usable field list in `data/reflection.json`, so this is
    a prerequisite for the dump below, not a given. Start from the xrefs to the
    `hp`/`mhp`/`powerdown` strings in `data/strings.json`.

@@ -3,7 +3,7 @@
 Extracted from the **Lua string constants** in `NDMW.AFS` (17,239 unique strings
 → 5,291 chunks). Full lists in `ghidra-projects/dw4/lua_*.txt`.
 
-## Playable Digimon — 16
+## Playable Digimon: 16
 Models come in pairs: `_common/p_<name>.igb` (player) and
 `_common/m_<name>.igb` (monster/NPC variant).
 
@@ -26,7 +26,7 @@ Models come in pairs: `_common/p_<name>.igb` (player) and
 | `wargrey` | WarGreymon |
 | `weregaru` | WereGarurumon |
 
-## Enemy roster — 29 types
+## Enemy roster: 29 types
 Extracted from `e_*` names. A `/I<n>` suffix denotes a stat/AI variant
 (e.g. `e_skulgrey/I<0>` = the boss version).
 
@@ -87,7 +87,7 @@ Observed boss → HP-bar mapping:
 | `e_ldknight` | `BT_SBOSS` | `i_bosshp17` |
 | `e_mecha4` | `BT_SBOSS` | (none in chunk) |
 
-## Missions — 18 (`AM_*`)
+## Missions: 18 (`AM_*`)
 ```
 AM_TITLE AM_TITLE2 AM_START AM_LOBBY AM_OFNI1 AM_OFNI2 AM_DUNGE AM_DESER
 AM_FORR1 AM_FORR2 AM_GOBLI AM_RIVER AM_MACHI AM_VALLE AM_EVOLV AM_BOS01
@@ -95,7 +95,7 @@ AM_DEVI3 AM_LEOMN
 ```
 (`AM_` = "Area/Mission".)
 
-## Stages — 41 (`stag*`)
+## Stages: 41 (`stag*`)
 ```
 stag0001
 stag0101 stag0102 stag0103 stag0104
@@ -107,7 +107,7 @@ stagML02 stagML11 stagML12 stagML13 stagML14
 stageLocalFuncQuickSandOn/Off   stageLocalFuncSlippedFloorOn/Off
 ```
 
-## Script files — 269 named `.lua`
+## Script files: 269 named `.lua`
 Organized as `b<stage><no>.lua`:
 - `b0001001.lua` … `b0001010.lua`
 - `bML01001.lua` … `bML01055.lua` (Mission Level 01)
@@ -117,7 +117,7 @@ Organized as `b<stage><no>.lua`:
   `txt_Tar.lua`
 - loaded via `_callLuaFile`.
 
-## Script globals — 515 `g_*`
+## Script globals: 515 `g_*`
 Shared script state. Categories:
 | Category | Examples |
 | --- | --- |
@@ -134,7 +134,7 @@ Shared script state. Categories:
 
 Full list: `lua_globals.txt`.
 
-## Action sequences — 367 `SQ_*`
+## Action sequences: 367 `SQ_*`
 Animation/action state machine states. Examples:
 ```
 SQ_GAMEOVER SQ_CLEAR SQ_TALK SQ_JUMP SQ_GUARD SQ_STUN SQ_WAIT SQ_WALK02/04
@@ -146,7 +146,7 @@ SQ_STUN SQ_SETPOISON/SLEEP/BIND/…
 ```
 Full list: `lua_sequences.txt`.
 
-## Asset paths — 117 `.igb`
+## Asset paths: 117 `.igb`
 | Prefix | Kind | Examples |
 | --- | --- | --- |
 | `_common/p_*` | player models | `p_agumon`, `p_dorumon`, `p_vmon`, … (16) |

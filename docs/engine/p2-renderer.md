@@ -1,4 +1,4 @@
-# The `p2` layer — the EE-side renderer
+# The `p2` layer: the EE-side renderer
 
 `p2` is Intrinsic Alchemy's PS2/EE backend: the code that turns a render list into VU1 programs and GS
 packets. It occupies `0x1e74b0`-`0x20e750` in [`module-map.md`](module-map.md)'s region table; the census
@@ -18,7 +18,7 @@ memory-mapped register, and one of them is the uploader:
 | `FUN_0020cd10` | 656 | `timer` |
 | `FUN_001f8350` | 308 | `dma_spr` |
 
-So the whole backend is register-free except for a DMA/VIF/VU1 path and two GS accessors — the rest of
+So the whole backend is register-free except for a DMA/VIF/VU1 path and two GS accessors; the rest of
 the layer is ordinary code building data for those.
 
 ## The VU1 upload path, end to end
@@ -52,28 +52,28 @@ FUN_001f0960(g)                                  the uploader
 
 Two things in that are worth reading twice. `& 0xFFF8` is the 8-byte unit: a VU micro instruction is
 a 64-bit pair, so the transfer is measured in *instructions*, which is what microcode upload looks
-like. And the destination is not an argument — the uploader writes the **VU1 registers** and hands the
+like. And the destination is not an argument: the uploader writes the **VU1 registers** and hands the
 buffer to the **scratchpad DMA**, so "where it lands" is VU1-relative, not EE-relative.
 
 ### The linked-in microcode is what runs
 
-The static trace above leaves one thing open — nothing references `0x467178` — and a
+The static trace above leaves one thing open (nothing references `0x467178`), and a
 running game settles it. **PINE cannot read VU memory** (`0x11000000` is outside EE main RAM and
 reads back as zeros), but a **PCSX2 savestate carries `vu1MicroMem.bin`, the 16 KiB VU1 micro
 memory**, so `scripts/p2s_ram.py` gives it without the emulator running:
 
 * a word unique in the whole 109,184-byte image (`0x10af05ed`, blob offset 16) occurs **exactly once
-  in 32 MiB of live EE RAM**, at its linked address — so there is **no heap copy**, and an upload
+  in 32 MiB of live EE RAM**, at its linked address, so there is **no heap copy**, and an upload
   must read the image *in place* from rodata;
 * **80.7 % of the resident instruction pairs are in the blob** (1,635 of 2,026), and 42.4 % of the
-  blob's pairs are resident — the resident code **is** this microcode, not a different build;
+  blob's pairs are resident: the resident code **is** this microcode, not a different build;
 * and the mapping is **not identity**: VU1 offset `0` holds image offset **24**, while a second
   resident window maps image offset ~`0x11ac0` to VU1 ~`0x5a8` (a per-program delta). So the engine
-  copies each program to a **VU1 address of its choosing** — a program cache, which is what VU1's
+  copies each program to a **VU1 address of its choosing**: a program cache, which is what VU1's
   16 KiB against a 109 KB image forces, and the reason the symbol table exists at all.
 
 The 24-byte shift at the start is consistent with `0x467178` being 8 mod 16 and the transfer needing
-16-byte alignment (the "Buffer not aligned" path in the chain above) — read as the explanation of the
+16-byte alignment (the "Buffer not aligned" path in the chain above). Read this as the explanation of the
 delta, not as a proven step.
 
 The microcode does not locate itself. No word in the image holds the address `0x467178` or the constant
@@ -89,7 +89,7 @@ error messages, so the identification is recovered rather than guessed:
 
 | address | size | its own string |
 | --- | --- | --- |
-| `0x001f8050` | 320 | `p2readGSPrivRegister(%d)` — and it does touch the `gs` block |
+| `0x001f8050` | 320 | `p2readGSPrivRegister(%d)`, and it does touch the `gs` block |
 | `0x0020c270` | 1324 | `Unsupported texture format in p2LoadTexture: %d` |
 | `0x001fb710` | 980 | `p2lighting` |
 | `0x001f7490` | 72 | `GS csr.id = %d, csr.rev = %d` |
@@ -97,7 +97,7 @@ error messages, so the identification is recovered rather than guessed:
 | `0x002082f0` | 312 | `textureLoadedPredicate`, `textureDeferredPredicate` |
 
 `p2LoadTexture` is the GS-side texture upload, `p2readGSPrivRegister` the privileged GS readback, and
-the two predicate pairs belong to the swap-buffers and deferred-texture paths — i.e. the layer's
+the two predicate pairs belong to the swap-buffers and deferred-texture paths, i.e. the layer's
 outside face. The names in the first column are the *addresses*; the strings are the evidence for
 what they are.
 
@@ -128,7 +128,7 @@ are already in VRAM.
 The layer's lighting is one function, **`p2lighting` (`0x001fb710`, 980 bytes)**, plus the two it
 tails into: it packs the engine's light list into the VU1's 16-byte constant records, and the LIGHT
 microcode does the arithmetic. The record stream, the runtime state and light tables, the light
-matrix and the call chain are decoded on their own page — [`p2-lighting.md`](p2-lighting.md)
+matrix and the call chain are decoded on their own page: [`p2-lighting.md`](p2-lighting.md)
 : the pair (LIGHT family,
 capability bits) states *what* each program computes, and `p2lighting` states *what it is handed*.
 
@@ -142,7 +142,7 @@ above; [`vertex-shading.md`](vertex-shading.md) has the rig read from a live fra
 At the seam, what the engine asks for and in what units:
 
 * the **unit of work is a 48-byte program record** addressed by an index, with a type at `+28` that
-  decides code vs data and a size at `+40` — so "which VU program runs" is a table index, and the
+  decides code vs data and a size at `+40`, so "which VU program runs" is a table index, and the
   237 names in [`vu1-microcode.md`](vu1-microcode.md) are what those indices select;
 * **state reaches the VU1 as a transfer**, not as calls;
 * the layer's outside face is small and named: texture upload, GS readback, swap, and lighting.

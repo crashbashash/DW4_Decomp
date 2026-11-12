@@ -1,4 +1,4 @@
-# Digimon World 4 — documentation
+# Digimon World 4: documentation
 
 How *Digimon World 4* (USA, `SLUS-20836`) works under the hood: the engine, the data formats and the
 game systems, as recovered from the binary and from the game's own Lua.
@@ -35,12 +35,12 @@ reviewed call interfaces and memory repairs while the full callback is unmatched
 | Game | *Digimon World 4* (USA), `SLUS_208.36` / `BASLUS-20836`, v1.01 |
 | Binary | ELF32, MIPS R5900 (Emotion Engine), little-endian, entry `0x00100008`, one 4.5 MB section at `0x00100000` |
 | Matching toolchain | Metrowerks CodeWarrior for PS2 (MWCCPS2 3.0 build `011126`) under wibo for the game and engine code; an alternate MWCC build, content-pinned per unit, for the bodies the default build cannot reproduce ([per-unit compiler requirements](engine/unit-compilers.md)); and Sony EE GCC 2.96 (`local/ee-gcc2.96`, via `tools/cc.py` / `tools/eegcc_compile.py`) for the ~100 Sony-built SDK/CRI units ([sd prologue](engine/sd-prologue.md)). CRI audio/video and the Sony SDK are statically linked in retail |
-| Scripting | Lua 4.0.1, with 116 C++ functions exposed to scripts — see [`engine/script-engine-lua.md`](engine/script-engine-lua.md) |
-| Data archives | `NDMW.AFS` (972 entries) and `AREA.AFS` (1,382 entries) — see [`engine/afs-archives.md`](engine/afs-archives.md) |
-| Save file | 80 KB, two mirrored 40 KB blocks, per-block SUM checksum, level formula `n³ + 137n² − 77n − 61` — see [`systems/save-format.md`](systems/save-format.md) |
-| Enemy stats | 649 rows in `AREA.AFS` (665 byte-identical copies): an i32 HP max, twelve i16 stats, then three u8 (critical, magic-critical, rarity) — see [`systems/enemy-data.md`](systems/enemy-data.md) |
+| Scripting | Lua 4.0.1, with 116 C++ functions exposed to scripts; see [`engine/script-engine-lua.md`](engine/script-engine-lua.md) |
+| Data archives | `NDMW.AFS` (972 entries) and `AREA.AFS` (1,382 entries); see [`engine/afs-archives.md`](engine/afs-archives.md) |
+| Save file | 80 KB, two mirrored 40 KB blocks, per-block SUM checksum, level formula `n³ + 137n² − 77n − 61`; see [`systems/save-format.md`](systems/save-format.md) |
+| Enemy stats | 649 rows in `AREA.AFS` (665 byte-identical copies): an i32 HP max, twelve i16 stats, then three u8 (critical, magic-critical, rarity); see [`systems/enemy-data.md`](systems/enemy-data.md) |
 | Classes recovered | 579 RTTI records, 478 vtables, 11,714 vfunc slots → `Class::vfunc_NN` names for the slot functions (47 shared bodies left unnamed). Named functions: see the "Recovered metadata" table in [`../PROGRESS.md`](../PROGRESS.md), which separates *any* recovered name (role names such as `*_Register` and `::vfunc_NN` included) from *semantic* names |
-| Reflection metadata | 1,075 MetaObjects, 659 with fields → 3,680 fields with name, byte offset and type — see [`engine/reflection-metadata.md`](engine/reflection-metadata.md) |
+| Reflection metadata | 1,075 MetaObjects, 659 with fields → 3,680 fields with name, byte offset and type; see [`engine/reflection-metadata.md`](engine/reflection-metadata.md) |
 
 ## Contents
 
@@ -61,8 +61,8 @@ Each folder also has its own `README.md` listing what is in it.
 | Original hub menu selection and pad handling | [SELECTCTRL manager](engine/selectctrl.md), [shared shop selector widgets](engine/shop-selectors.md) |
 | Shared shop page controls and chip-list text | [ListCtrl/chip-list helper recovery](engine/list-controller-chip-view.md) |
 | Original allocation and cleanup behind hub controllers | [Object creation/destruction](engine/object-creation.md), [window object cleanup](engine/window-object-lifetime.md) |
-| How much is done — the code and data numbers | [`engine/progress-metrics.md`](engine/progress-metrics.md), [`../PROGRESS.md`](../PROGRESS.md) |
-| The debt ratchet — the counters that may only go down, and how to re-record them | [`engine/debt-ratchet.md`](engine/debt-ratchet.md) (`tools/progress.py --debt-check`, `config/debt-baseline.json`) |
+| How much is done: the code and data numbers | [`engine/progress-metrics.md`](engine/progress-metrics.md), [`../PROGRESS.md`](../PROGRESS.md) |
+| The debt ratchet: the counters that may only go down, and how to re-record them | [`engine/debt-ratchet.md`](engine/debt-ratchet.md) (`tools/progress.py --debt-check`, `config/debt-baseline.json`) |
 | What all the non-code bytes are | [`engine/data-regions.md`](engine/data-regions.md) |
 | Which code is the Sony SDK | [`engine/platform-boundary.md`](engine/platform-boundary.md) |
 | How much of the C is typed rather than casts | [`engine/typed-coverage.md`](engine/typed-coverage.md) |
@@ -75,7 +75,7 @@ Each folder also has its own `README.md` listing what is in it.
 | How the game boots to the title menu | [`engine/front-end-boot.md`](engine/front-end-boot.md), [`engine/engine-boot.md`](engine/engine-boot.md) |
 | Complete matching title/menu/options controller and remaining engine boundaries | [`engine/title-menu-controller.md`](engine/title-menu-controller.md), [`engine/common-model-controller.md`](engine/common-model-controller.md) |
 | The Game Start slot/character/name/difficulty/card controller family | [`engine/load-intf2.md`](engine/load-intf2.md) |
-| When a model-controller ACTION completes — WAIT/WAITCHECK, the named timer, JOINTSET completion, the node clock and the EE float arithmetic under them | [`engine/system-clock.md`](engine/system-clock.md), [`engine/action2-timing.md`](engine/action2-timing.md), [`engine/action2-jointset.md`](engine/action2-jointset.md), [`engine/model-sequence-waits.md`](engine/model-sequence-waits.md) |
+| When a model-controller ACTION completes: WAIT/WAITCHECK, the named timer, JOINTSET completion, the node clock and the EE float arithmetic under them | [`engine/system-clock.md`](engine/system-clock.md), [`engine/action2-timing.md`](engine/action2-timing.md), [`engine/action2-jointset.md`](engine/action2-jointset.md), [`engine/model-sequence-waits.md`](engine/model-sequence-waits.md) |
 | How the binary was built, or how to import it into Ghidra | [`engine/binary.md`](engine/binary.md), [`engine/toolchain.md`](engine/toolchain.md) |
 | A kernel syscall, its number, or a `libkernel` stub | [`engine/binary.md`](engine/binary.md) §Kernel syscall stubs, `../config/SLUS-20836/syscalls.txt` |
 | Corrected Lua numeric recovery and affected progression evidence | [Lua numeric audit](engine/lua-numeric-audit.md) |
@@ -94,8 +94,8 @@ Each folder also has its own `README.md` listing what is in it.
 | A stage's sound effects, or the `.sfp` / `ps2_` bank format | [`engine/sound-format.md`](engine/sound-format.md) |
 | How a model's geometry is laid out (vertices, strips, why there are no indices) | [`engine/model-format.md`](engine/model-format.md) |
 | How a model's vertex streams are addressed by `(componentType, componentIndex)` | [`engine/igvertexarray2helper.md`](engine/igvertexarray2helper.md) |
-| How a model is lit — the per-vertex colour the VU1 produces | [`engine/vertex-shading.md`](engine/vertex-shading.md) |
-| How the destructible props are textured — the inline `igAttrSet` atlas and its orientation | [`engine/inline-textures.md`](engine/inline-textures.md) |
+| How a model is lit: the per-vertex colour the VU1 produces | [`engine/vertex-shading.md`](engine/vertex-shading.md) |
+| How the destructible props are textured: the inline `igAttrSet` atlas and its orientation | [`engine/inline-textures.md`](engine/inline-textures.md) |
 | An `.igb` file, or a reflection (`be*`) structure | [`engine/igbinary-format.md`](engine/igbinary-format.md), [`engine/reflection-metadata.md`](engine/reflection-metadata.md) |
 | The decompiled game scripts | [`engine/lua-decompilation.md`](engine/lua-decompilation.md), [`engine/lua-tree-layout.md`](engine/lua-tree-layout.md) |
 | The save file's byte layout, checksum or level formula | [`systems/save-format.md`](systems/save-format.md) |
@@ -118,9 +118,9 @@ Each folder also has its own `README.md` listing what is in it.
 
 ## Scripts
 
-Two trees, split by what they operate on. `scripts/` is analysis — reading the binary, its data, retail captures and
+Two trees, split by what they operate on. `scripts/` is analysis: reading the binary, its data, retail captures and
 its intermediate files. The [analysis-script guide](../scripts/README.md) indexes
-emulator probes, model/texture capture and stage/save evidence utilities. `tools/` is the matching build — proving that `src/` compiles back to
+emulator probes, model/texture capture and stage/save evidence utilities. `tools/` is the matching build, proving that `src/` compiles back to
 retail. Both take `--help`.
 
 `scripts/`:
@@ -133,7 +133,7 @@ retail. Both take `--help`.
 | `dump_vtables.py`, `apply_vtable_names.py` | Recover `__RTTI__`/`__vt__` records, and write `Class::vfunc_NN` names back into the analysed program |
 | `decompile_funcs.py` | Ghidra's decompiler, by address |
 | `find_table_refs.py` | Find the instructions that reference an address range (locating data tables) |
-| `igb_parse.py`, `igb_dir.py`, `igb_inst.py` | igBinary (`be*`) headers; the type-directory / `{type_id, ordinal, size}` descriptor chain; and the **instance records** (`{classIndex, recordSize, nameLen}{name}{fields}`, size-verified) — which read a stage's generator and drop rows offline |
+| `igb_parse.py`, `igb_dir.py`, `igb_inst.py` | igBinary (`be*`) headers; the type-directory / `{type_id, ordinal, size}` descriptor chain; and the **instance records** (`{classIndex, recordSize, nameLen}{name}{fields}`, size-verified), which read a stage's generator and drop rows offline |
 | `lua_extract.py`, `lua_dump.py`, `lua_decompile.py`, `build_lua_tree.py`, `lua_tree.py` | Lua 4.0.1 chunk extraction, bytecode parsing, decompilation, and the `lua/` tree |
 | `flag_xref.py`, `flag_meanings.py` | Every flag operation in the decompiled Lua → `systems/flags/` |
 | `dw4_rng.py`, `p2s_ram.py` | MT19937 identification and draw sites; reading a savestate's RAM without the emulator |
@@ -141,9 +141,9 @@ retail. Both take `--help`.
 | `same_file_calls.py` | Retail calls that keep a caller-saved register across the call: the callee was compiled earlier in the caller's file, so both belong in one [whole-file unit](engine/emitted-functions.md#whole-file-units) |
 | `sync_data.sh` | Refresh the committed `../data/` snapshot |
 | `progress.py` | Count what is committed (symbols vs `../src/`) into `../PROGRESS.md`, `progress.json` and the block at the top of `../README.md`; run by `make progress` and by CI on every push |
-| `datamap.py` | Classify the image's data bytes (jump tables, RTTI vtables, strings, class handles, unclassified) for the data half of the progress numbers — see [`engine/progress-metrics.md`](engine/progress-metrics.md) |
+| `datamap.py` | Classify the image's data bytes (jump tables, RTTI vtables, strings, class handles, unclassified) for the data half of the progress numbers; see [`engine/progress-metrics.md`](engine/progress-metrics.md) |
 
-`tools/` — method, measured yields and the approaches already ruled out are in
+`tools/`: method, measured yields and the approaches already ruled out are in
 [`engine/m2c-bulk.md`](engine/m2c-bulk.md):
 
 | Tool | Purpose |
@@ -154,17 +154,17 @@ retail. Both take `--help`.
 | `verify.py` | The oracle: compile one candidate and diff it against retail, relocation-aware |
 | `automatch.py` | Bulk decompilation by instruction-shape template |
 | `m2c_one.py`, `m2c_batch.py`, `m2c_context.py` | The bulk m2c pass: assembly in, cleaned C out, verified before writing |
-| `m2c_loop.py`, `args_search.py` | The per-function loop: one candidate plus its aligned instruction diff, and the automatic leading-call-argument correction — see [`engine/m2c-bulk.md`](engine/m2c-bulk.md) §The per-function loop |
-| `m2c_errors.py` | Triage a tier's compile failures: regenerate each candidate and bucket MWCC's first error message — see [`engine/m2c-bulk.md`](engine/m2c-bulk.md) §What blocks the rest |
-| `queue_diag.py` | Cluster a worklist tier by *why* each function misses — the retail shape plus the per-instruction `retail -> ours` signature — instead of by diff count, and flag size-truncated rows whose diff count under-reports — see [`engine/m2c-bulk.md`](engine/m2c-bulk.md) §The queue, measured before it is worked |
-| `platform_map.py` | Resolve the addresses the code forms and classify them against the EE's register blocks — which functions are platform code, and the game's call surface into the SDK — see [`engine/platform-boundary.md`](engine/platform-boundary.md) |
-| `sdk_bindings.py` | Decode the eight SDK library descriptors at `0x481000+` (name, ASCII version, and whatever each library actually stores — register bases, function tables, DCT tables, string tables) into `data/sdk-bindings.json`, and report the function starts their tables imply — see [`engine/platform-boundary.md`](engine/platform-boundary.md) |
+| `m2c_loop.py`, `args_search.py` | The per-function loop: one candidate plus its aligned instruction diff, and the automatic leading-call-argument correction; see [`engine/m2c-bulk.md`](engine/m2c-bulk.md) §The per-function loop |
+| `m2c_errors.py` | Triage a tier's compile failures: regenerate each candidate and bucket MWCC's first error message; see [`engine/m2c-bulk.md`](engine/m2c-bulk.md) §What blocks the rest |
+| `queue_diag.py` | Cluster a worklist tier by *why* each function misses (the retail shape plus the per-instruction `retail -> ours` signature) instead of by diff count, and flag size-truncated rows whose diff count under-reports; see [`engine/m2c-bulk.md`](engine/m2c-bulk.md) §The queue, measured before it is worked |
+| `platform_map.py` | Resolve the addresses the code forms and classify them against the EE's register blocks: which functions are platform code, and the game's call surface into the SDK; see [`engine/platform-boundary.md`](engine/platform-boundary.md) |
+| `sdk_bindings.py` | Decode the eight SDK library descriptors at `0x481000+` (name, ASCII version, and whatever each library actually stores: register bases, function tables, DCT tables, string tables) into `data/sdk-bindings.json`, and report the function starts their tables imply; see [`engine/platform-boundary.md`](engine/platform-boundary.md) |
 | `jumptables.py` | Recover the `switch`es' `.rodata` tables → `../config/SLUS-20836/jumptables.txt` |
 | `syscalls.py` | Recover the EE kernel syscall stubs → `../config/SLUS-20836/syscalls.txt` (number per stub; the pipeline skips them) |
-| `permuter_one.py`, `permuter/` | The `decomp-permuter` harness — see [`../tools/permuter/README.md`](../tools/permuter/README.md) |
+| `permuter_one.py`, `permuter/` | The `decomp-permuter` harness; see [`../tools/permuter/README.md`](../tools/permuter/README.md) |
 
 Ghidra work needs the analysed project (`../ghidra-projects/dw4/`) and **one Ghidra process at a
-time** — a second one against the same project fails with a project lock error.
+time**: a second one against the same project fails with a project lock error.
 
 ## Data and working directories
 
@@ -207,7 +207,7 @@ Committed files, and the gitignored working directories the analysis writes to. 
   when a push touches the oracle's own files.
 - **Game data stays out of the repo.** `.gitignore` enforces it; a disc image dropped into a working
   directory is easy to do and easy to miss, and `git add -f` is never the answer.
-- **No host details, ever — and it is enforced.** Nothing that identifies a developer's machine or account (absolute home
+- **No host details, ever; this is enforced.** Nothing that identifies a developer's machine or account (absolute home
   or container paths, hardware models, controller brands, driver/kernel versions, device ids, e-mail, credentials) goes into
   code, docs, test fixtures or a commit message. The hard rules, the pre-commit/commit-msg hooks
   (`scripts/install_git_hooks.sh`), the CI job and `make hygiene` are in [host details policy](host-details-policy.md).
@@ -215,7 +215,7 @@ Committed files, and the gitignored working directories the analysis writes to. 
   working directory of this tree (`orig/`, `build/`, `states/`, `local/` for your toolchain copies), apart
   from the extracted disc in the sibling `../local/extracted/`.
   Reference paths relative to the project root, never a home directory or a machine-specific
-  location, and keep machine-specific environment and setup notes out of the docs — a reader clones this
+  location, and keep machine-specific environment and setup notes out of the docs; a reader clones this
   onto their own machine. Saying a thing is *not* redistributed here (the compiler, the game) is
   useful; describing where one particular machine keeps it is not.
 - **Addresses** are the ELF's virtual addresses, written `0x00……` so they paste into Ghidra.

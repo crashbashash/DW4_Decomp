@@ -1,10 +1,10 @@
-# RNG — Mersenne Twister, seed 5150, and every draw site
+# RNG: Mersenne Twister, seed 5150, and every draw site
 
 **Status: solved.** The game has exactly **one** pseudo-random generator, seeded
 with a **hard-coded constant 5150 (0x141E)** at boot, and it is advanced by the
 Lua binding `be:SYSgetRandom(M)` **and by ~11 native `genrand` callers** (drop
-rolls, damage/AI rolls — see §4). There is **no reseed anywhere in the code**
-— the whole run is a single deterministic MT19937 sequence.
+rolls, damage/AI rolls; see §4). There is **no reseed anywhere in the code**:
+the whole run is a single deterministic MT19937 sequence.
 
 Tool: `scripts/dw4_rng.py`. Generated site table: [`rng-sites.tsv`](rng-sites.tsv).
 
@@ -15,12 +15,12 @@ Tool: `scripts/dw4_rng.py`. Generated site table: [`rng-sites.tsv`](rng-sites.ts
 | Question | Answer |
 |---|---|
 | Algorithm | **MT19937** (624-word state), original **1997 `sgenrand()` seeding** (multiplier **69069**), not `init_genrand()` |
-| **Start seed** | **5150** = `0x141E` — the only seed constant in the ELF; applied once at object construction |
-| Reseed during play | **None — no reseed code exists.** Every snapshot of the game anywhere in play lies on the seed-5150 sequence |
-| What advances the state | Every `genrand` call — the 112 Lua `be:SYSgetRandom(M)` sites **and** the ~11 native callers (one `_mti` increment each; a full twist every 624 stamps) |
+| **Start seed** | **5150** = `0x141E`, the only seed constant in the ELF; applied once at object construction |
+| Reseed during play | **None; no reseed code exists.** Every snapshot of the game anywhere in play lies on the seed-5150 sequence |
+| What advances the state | Every `genrand` call: the 112 Lua `be:SYSgetRandom(M)` sites **and** the ~11 native callers (one `_mti` increment each; a full twist every 624 stamps) |
 | Native consumers | The Lua binding `SYSgetRandom` (`0x00371F10`) **plus ~11 native `genrand` callers** (item-drop `%10000`, etc.) that reach the same object via `*(obj+0x10)+0x30` |
 | Lua draw sites | **112** calls in **44 chunks** across **21 AFS entries** (see §5 / [`rng-sites.tsv`](rng-sites.tsv)) |
-| Manipulable? | Yes, trivially — the state is a plain global: read `_mti` to know the exact position, or write `_mt[]` to force any next value |
+| Manipulable? | Yes, trivially: the state is a plain global. Read `_mti` to know the exact position, or write `_mt[]` to force any next value |
 
 ---
 
@@ -30,8 +30,8 @@ The class is `igMersenneTwisterRandomNumber` (a subclass of `igRandomNumber`;
 both class names, plus the member names `_mti`/`_mt`, are in the reflection name
 pool at `0x4E48D0` / `0x4E4900`). The class registration (`0x001E4630`, property
 setup `0x001E46B0`) declares `_mt` as a **624-element array** (it stores the
-literal 624) with `_mti` alongside it; nothing serialises or writes them —
-see §6).
+literal 624) with `_mti` alongside it; nothing serialises or writes them
+(see §6).
 
 | Symbol | Address | Notes |
 |---|---|---|
@@ -103,8 +103,8 @@ the live object and the class descriptor's vtable pointer.
 | `*(0x0058A1B8) + 0x30` | → the one `igMersenneTwisterRandomNumber` instance, **`0x006FF180`** |
 | `0x006FF180` | vtable `0x0052B8E0` |
 | `0x006FF184` | refcount/flags (`0x0A000001`) |
-| `0x006FF188` | **`_mti`** — current index, `0..624` |
-| `0x006FF18C` | **`_mt[0]`** — 624 × `u32` = 2496 bytes (object ends at `0x006FFB4C`) |
+| `0x006FF188` | **`_mti`**: current index, `0..624` |
+| `0x006FF18C` | **`_mt[0]`**: 624 × `u32` = 2496 bytes (object ends at `0x006FFB4C`) |
 
 `genrand()` reads `mt[mti]`, tempers it, and posts `_mti = _mti + 1`. When
 `_mti` reaches 624 the twist regenerates all 624 words in place and resets
@@ -128,44 +128,44 @@ which is why the draw count in the table above is simply the number of
 371f48  mfhi v0
 ```
 
-- `jal 0x371F10` occurs **exactly once** in the whole ELF — from its Lua
+- `jal 0x371F10` occurs **exactly once** in the whole ELF, from its Lua
   dispatch stub `0x00370888` (API id 4).
 
 **But it is not the only consumer.** Native code reaches the *same* object
 through a different chain:
 
 1. The RNG object at `0x006FF180` has exactly **one** incoming pointer in all
-   of RAM — at `manager+0x30` (`0x006FF140`). So anything that calls `genrand`
+   of RAM, at `manager+0x30` (`0x006FF140`). So anything that calls `genrand`
    must first read the manager.
 2. The manager pointer `0x6FF110` occurs 60 times in RAM, and **53 of those sit
-   at `object+0x10` with a vtable at `object+0x00`** — i.e. game objects carry
+   at `object+0x10` with a vtable at `object+0x00`**, i.e. game objects carry
    the manager at `+0x10`.
 3. At least **11 native functions** do `lw v0,16(obj); lw a0,48(v0); lw t9,0(a0);
-   lw t9,96(t9); jalr` — load the manager, then the RNG, then call `genrand` —
+   lw t9,96(t9); jalr`: load the manager, then the RNG, then call `genrand`,
    and immediately take a roll-shaped modulus. A strict scan for that exact
    shape finds exactly these 11 (no others):
 
    | function / site | what it does |
    |---|---|
-   | `FUN_00384800` `0x3849AC` | `genrand()%10000` — **item-drop roll** (walks the `OneList`, subtracting `_rate`) |
-   | `Gap__Bec__beNDMWShopCtrl40__vfunc_21` `0x429EA0` | `genrand()%10000 <= t` — **probability check** |
-   | `FUN_0039BCA0` `0x39BDB0` | `genrand()%6144 / 1000.0` — random float ≤ 6.144 (effect/timer offset) |
-   | `FUN_003764C0` `0x376594` | `genrand()%range` — random duration/animation timing |
-   | `FUN_004480A0` `0x4480C8` `0x4480F0` | two rolls `%6000+1` and `%param` — **damage/score variance** |
+   | `FUN_00384800` `0x3849AC` | `genrand()%10000`: **item-drop roll** (walks the `OneList`, subtracting `_rate`) |
+   | `Gap__Bec__beNDMWShopCtrl40__vfunc_21` `0x429EA0` | `genrand()%10000 <= t`: **probability check** |
+   | `FUN_0039BCA0` `0x39BDB0` | `genrand()%6144 / 1000.0`: random float ≤ 6.144 (effect/timer offset) |
+   | `FUN_003764C0` `0x376594` | `genrand()%range`: random duration/animation timing |
+   | `FUN_004480A0` `0x4480C8` `0x4480F0` | two rolls `%6000+1` and `%param`: **damage/score variance** |
    | `FUN_00448190` `0x4481B0` | `genrand()%620` → 6-tier rank (0–5) |
-   | `FUN_0042EB80` `0x42F288` | `(genrand()%1000)*1000` — random step |
-   | `FUN_004487A0` `0x4489A8` | `genrand()%10 <= 8-k` — probability check |
-   | `FUN_00448AE0` `0x448CEC` | `genrand()%range` scaled by `(X+100)/100` — value variance |
-   | `FUN_00390F80` `0x39129C` | `genrand() & 0xf` — small index/variant roll |
+   | `FUN_0042EB80` `0x42F288` | `(genrand()%1000)*1000`: random step |
+   | `FUN_004487A0` `0x4489A8` | `genrand()%10 <= 8-k`: probability check |
+   | `FUN_00448AE0` `0x448CEC` | `genrand()%range` scaled by `(X+100)/100`: value variance |
+   | `FUN_00390F80` `0x39129C` | `genrand() & 0xf`: small index/variant roll |
 
-So combat, loot, AI and other systems advance the same stream — the Lua sites
+So combat, loot, AI and other systems advance the same stream; the Lua sites
 in §5 are only part of the picture.
 
 **No reseed exists in code.** A strict scan for a slot‑23 (`sgenrand`) or
 slot‑22 call on that same `object+0x10 → +0x30` chain returns **zero** sites.
 The `0x330158`/`0x3301B8` calls to slots 23/24/25 on `*(s0+0x30)` are the
 **thread subsystem** (`Gap__Core__igPsx2Thread__vfunc_30` is `CreateThread`/`_StartThread`), and the
-`*(0x5871D0)` slot‑24 call at `0x3300F8` is the same thread manager — neither is
+`*(0x5871D0)` slot‑24 call at `0x3300F8` is the same thread manager; neither is
 the RNG. Likewise the 116-function Lua API has no `SYSsetRandom`. So `sgenrand`
 is called only from `Reset()` (slot 13) via the generic object-init path, with
 the hard-coded seed 5150.
@@ -235,17 +235,17 @@ Extracting the RNG object from the curated save states on the character-creation
 | fresh save before finishing the practice stage | 266 | 9 | **5258** |
 
 The jump from the title (0) to the World-1 gate (~4000) is **not** the big
-rolls — those stages are not loaded yet. It is the hub's path draw: AFS entry
+rolls; those stages are not loaded yet. It is the hub's path draw: AFS entry
 `816` (`lobby-ofanimon-seraphimon`) chunk `c100` runs
 `funcRandom`, which draws `SYSgetRandom(2)`, from a model `WPos` handler, so it stamps `_mti`
 **continuously while you are in the lobby**. Measured live: `_mti` 330 → 458 →
-590 over 10 s of doing nothing — **~26 draws/second**, i.e. the hub position is
+590 over 10 s of doing nothing (**~26 draws/second**), i.e. the hub position is
 a function of how many frames you spend there. In the practice stage itself the
 only resident draw chunk is `607/c18` (`SYSgetRandom(7)`, damage-reaction
 tier), which fires when you take damage.
 
 So after that trip the **seed is still 5150**, but the RNG has advanced by
-several thousand draws (several full 624-word cycles) — the exact number
+several thousand draws (several full 624-word cycles); the exact number
 depends on real time spent in the hub.
 
 ---
@@ -263,27 +263,27 @@ made so far**. Three practical consequences:
    first consuming the right number of *other* draws. The cheapest knobs are the
    lobby `WPos` callbacks, Lucemon's hit reactions and
    re-entering an area (the crown/demo rolls). Because a savestate carries the
-   RNG, you can save before a roll, spend draws, and compare — or pick the
+   RNG, you can save before a roll, spend draws, and compare, or pick the
    number of draws that gives the wanted result.
 3. **Force directly.** Write `_mt[_mti]` (the word `genrand()` will temper next)
    or `_mti` itself, or the whole 624-word array, at `0x006FF18C` /
    `0x006FF188`. There is no checksum and nothing rewrites the object except
-   `genrand`. Example — force the next star-aligned roll to `M-1` when
+   `genrand`. Example: force the next star-aligned roll to `M-1` when
    `_mti=k`: set `_mt[k]` to a value whose temper ≡ `M-1 (mod M)`.
 
-Caveats that keep this honest:
+Caveats:
 
 - Combat, boss AI, platform movement and **especially the lobby** produce draws,
   so the raw position depends on the exact route and on time: idling in the hub
   alone advances the RNG at **~26 draws/s** (measured), which is why a fresh
   boot does not hand you a fixed roll unless you reproduce the same frame
-  timings. The exploit is deterministic, not *static* — count (or read `_mti`)
+  timings. The exploit is deterministic, not *static*: count (or read `_mti`)
   from a known point.
 - Loading the game's **memory-card save** does not reseed (no reseed exists), so
   the RNG just continues. Power-cycling restarts it at seed 5150. The MT state
   is not part of the 80 KB save file; a **PCSX2 savestate** does carry it.
 - The reflection system registers `_mti`/`_mt` as properties of
-  `igMersenneTwisterRandomNumber`, so a serialiser *could* capture the state —
+  `igMersenneTwisterRandomNumber`, so a serialiser *could* capture the state,
   but no script or data path does, and the empirical single-sequence result
   rules out any restore in the states we have.
 
@@ -321,10 +321,10 @@ _None of these block understanding or using the RNG; all are low priority and
 recorded for completeness._
 
 - Exact call frequency of the lobby `funcRandom` draws (per NPC update
-  vs per frame) — measured ~26/s in the hub, but the trigger granularity is not
+  vs per frame): measured ~26/s in the hub, but the trigger granularity is not
   pinned. Relevant to how fast `_mti` drifts while you are in the lobby.
 - What caused the ~6 draws/s idle drift measured in the Goblin Pass state
-  (`goblin_pass_crate_barrell`) — its only resident Lua draw chunk is
+  (`goblin_pass_crate_barrell`): its only resident Lua draw chunk is
   flag-gated, so it is either a running scripted cutscene or a native periodic
   draw. Normal-play idling in `before_crown_spawn` was draw-free, so drift is
   state-dependent.

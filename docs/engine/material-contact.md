@@ -38,7 +38,7 @@ then use the dry run and `--apply --check` naming workflow.
 | `0x0038b040` | `Gap__Bec__beMatCtrl__vfunc_30` | metadata getter | matched, `src/game/beMatCtrl.cpp` |
 | `0x0038b050` | `Gap__Bec__beMatCtrl__vfunc_29` | receiver registration (44 bytes) | matched, `src/game/beMatCtrl.cpp` |
 | `0x0038b080` | `FUN_0038b080` | recursive contact search | matched, `src/game/beMatCtrl.cpp` |
-| `0x0038b1f0` | `Gap__Bec__beMatCtrl__vfunc_31` | per-instance update (3,064 bytes) | — |
+| `0x0038b1f0` | `Gap__Bec__beMatCtrl__vfunc_31` | per-instance update (3,064 bytes) | none |
 | `0x0038bdf0` | `Gap__Bec__beMatCtrl__vfunc_34` | message dispatch (220 bytes) | matched, `src/game/beMatCtrl.cpp` |
 | `0x0038bed0` | `Gap__Bec__beMatCtrl__vfunc_20` | metadata getter | matched, `src/game/beMatCtrl.cpp` |
 | `0x0018b630` | `FUN_0018b630` | box membership | matched, `src/engine/maths/igAABox.inc` |

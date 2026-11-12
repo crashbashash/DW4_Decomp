@@ -1,4 +1,4 @@
-# `igVertexArray2Helper` — the vertex-array accessor/binder
+# `igVertexArray2Helper`: the vertex-array accessor/binder
 
 `Gap::Core::igVertexArray2Helper` is the Intrinsic Alchemy class that *binds* an
 `igVertexArray2` to a typed view: it looks up a named vertex-data stream inside the
@@ -12,7 +12,7 @@ array and reads or writes its elements. It sits in the Alchemy graphics core
 | Class metaobject handle | `0x0055f9d0` (`DAT_0055f9d0[0]` is the MetaObject returned by slot 22) |
 | vtable | `0x005262a0`, stamped by `igVertexArray2Helper_GetVTable` (`0x0014a560`) |
 | Base | `igNamedObject` (`data/class-hierarchy.tsv`); no `__RTTI__` record, so the class name comes from the `GetVTable` function |
-| Reflected fields | **one**: `+0x0c _vertexArray` (`igObjectRefMetaField`) — the `igVertexArray2` it binds |
+| Reflected fields | one: `+0x0c _vertexArray` (`igObjectRefMetaField`), the `igVertexArray2` it binds |
 | vtable slots | 62 (0–61): 0/1 null (MWCC's two reserved slots), 2–21 the inherited `igObject`/`igNamedObject` defaults, **22–61 the class's own methods** |
 
 The data classes it reads (all from `data/reflection.json`):
@@ -28,7 +28,7 @@ igVertexStream  (0x55fa10, igNamedObject)   +0x0c _stream  +0x10 _isConfigured  
 ## The stream lookup
 
 Every accessor reaches its data through one helper, `igVertexArray2__FindVertexData(va, componentType,
-componentIndex)` — a *method of `igVertexArray2`* (it reads `va->_objList` at `+0x10`):
+componentIndex)`, a *method of `igVertexArray2`* (it reads `va->_objList` at `+0x10`):
 
 1. `count = va->_objList->_count` (the `igObjectList`'s `+8`);
 2. for each element (array at `va->_objList + 0x10`): dynamic-cast the element to
@@ -43,12 +43,12 @@ the shared `igVertexArray2` stream accessor, not a static of the helper class.
 Two sibling helpers dispatch on the *class of the data object* and return its
 component count/stride:
 
-* `FUN_00162b50(vd)` — called only by slot 24. It calls
+* `FUN_00162b50(vd)`: called only by slot 24. It calls
   `vd->_data->GetMetaObject()` (slot 22 of the list class) and compares it against
   `igFloatList`, `igLongList`, `igUnsignedCharList`, `igShortList`,
   `igUnsignedShortList` (each → returns `vd->_componentSize`, `vd + 0x18`) then
   `igVec2fList` → 2, `igVec3fList` → 3, `igVec4ucList` → 4, else 0.
-* `FUN_00162ca0(vd)` — called by slots 25 and `FUN_001805a0`; same shape, fewer
+* `FUN_00162ca0(vd)`: called by slots 25 and `FUN_001805a0`; same shape, fewer
   classes.
 
 `FUN_00163770` / `FUN_00163800` are private helpers called only from slot 61.
@@ -61,12 +61,12 @@ stride `arg*4` or `arg*8` into the list's `+0x10` array).
 
 | slot | VA | size | comp | list class | role |
 |---|---|---|---|---|---|
-| 22 | `0x00180e30` | 8 | — | — | `GetMetaObject` (`return metafield[0]`) |
-| 23 | `0x0015ff10` | 3484 | — | — | builds the stream records of a new `igVertexArray2` (see [Open questions](#open-questions)) |
-| 24 | `0x001624b0` | 44 | 5 | — | `FUN_00162b50(igVertexArray2__FindVertexData(va,5,0))` |
-| 25 | `0x001624e0` | 44 | 6 | — | `FUN_00162ca0(igVertexArray2__FindVertexData(va,6,0))` |
-| 26 | `0x00160cb0` | 260 | — | — | ctor/`igObject`-swap (refcount) |
-| 27 | `0x00160dc0` | 52 | — | — | `_vertexArray->_vertexStream->_accessMode (+0x18) == 2` predicate |
+| 22 | `0x00180e30` | 8 | - | - | `GetMetaObject` (`return metafield[0]`) |
+| 23 | `0x0015ff10` | 3484 | - | - | builds the stream records of a new `igVertexArray2` (see [Open questions](#open-questions)) |
+| 24 | `0x001624b0` | 44 | 5 | - | `FUN_00162b50(igVertexArray2__FindVertexData(va,5,0))` |
+| 25 | `0x001624e0` | 44 | 6 | - | `FUN_00162ca0(igVertexArray2__FindVertexData(va,6,0))` |
+| 26 | `0x00160cb0` | 260 | - | - | ctor/`igObject`-swap (refcount) |
+| 27 | `0x00160dc0` | 52 | - | - | `_vertexArray->_vertexStream->_accessMode (+0x18) == 2` predicate |
 | 28/29/30 | `0x160e00`/`0x160ec0`/`0x160f60` | 184/156/120 | 1 | `igVec3fList` | set / get / pointer |
 | 31/32/33 | `0x160fe0`/`0x1610a0`/`0x161140` | 184/156/120 | 3 | `igVec3fList` | set / get / pointer |
 | 34/35/36 | `0x1611c0`/`0x161280`/`0x161320` | 184/156/120 | 7 | `igVec3fList` | set / get / pointer |
@@ -80,12 +80,12 @@ stride `arg*4` or `arg*8` into the list's `+0x10` array).
 | 48/49/50 | `0x1620a0`/`0x162150`/`0x1621e0` | 168/140/112 | 4 | `igVec2fList` | set / get / pointer |
 | 51/52 | `0x162250`/`0x1622f0` | 156/116 | 9 | `igFloatList` | set / get |
 | 53/54 | `0x162370`/`0x162420` | 168/140 | 9 | `igVec2fList` | set / get |
-| 55 | `0x00180e40` | 8 | — | — | — |
-| 56 | `0x162510` | 856 | — | — | block copy/convert |
-| 57 | `0x00162870` | 8 | — | — | — |
+| 55 | `0x00180e40` | 8 | - | - | - |
+| 56 | `0x162510` | 856 | - | - | block copy/convert |
+| 57 | `0x00162870` | 8 | - | - | - |
 | 58 | `0x162880` | 708 | 4 | `igFloatList` | block |
-| 59/60 | `0x162d50`/`0x163260` | 1292 | — | `igFloatList`,`igVec2fList`,`igVec3fList` | block |
-| 61 | `0x163810` | 4192 | — | `igFloatList`,`igVec2fList`,`igVec3fList` | block (largest) |
+| 59/60 | `0x162d50`/`0x163260` | 1292 | - | `igFloatList`,`igVec2fList`,`igVec3fList` | block |
+| 61 | `0x163810` | 4192 | - | `igFloatList`,`igVec2fList`,`igVec3fList` | block (largest) |
 
 The four look-up tables of slots 28–39 are the same three bodies over four
 `componentType`s (1, 3, 7, 8), all resolving to `igVec3fList`.
@@ -111,7 +111,7 @@ alternate compiler.
 ## Vertex stream addressing
 
 The helper and `igVertexArray2__FindVertexData` define how a model's vertex streams are addressed by
-`(componentType, componentIndex)` — i.e. how the engine turns the `igVertexArray2`
+`(componentType, componentIndex)`, that is, how the engine turns the `igVertexArray2`
 object graph into typed position/normal/UV/colour buffers
 (`docs/engine/model-format.md`). `FUN_00162b50`/`FUN_00162ca0` return the element
 stride/component count.

@@ -39,7 +39,7 @@ Tree builder: `scripts/build_lua_tree.py` (index: [lua-tree-layout](lua-tree-lay
 
 ## Script-API recap (the `be:` object)
 
-Scripts drive the engine through `be` — 116 native C++ functions bound to Lua
+Scripts drive the engine through `be`, 116 native C++ functions bound to Lua
 (see `docs/engine/script-engine-lua.md`). Common patterns:
 
 ```lua
@@ -76,6 +76,6 @@ triggers); a few are large level-init scripts (the `funcStartLayerSet`,
   empty-loop branches. Source reconstruction remains best-effort; execute
   original bytecode. See the [numeric documentation audit](lua-numeric-audit.md).
 - `local_N` are unnamed locals; the original names were stripped at build time.
-- The enemy/item **stats** are NOT in these scripts — they live in the
+- The enemy/item stats are not in these scripts. They live in the
   igBinary `beBaseInfoData`/`beNDMWStatusInfo` objects (see `docs/systems/enemy-data.md`).
   The Lua only references them by name (`MDLgetHp`, `BLTgetDamageValue`, …).

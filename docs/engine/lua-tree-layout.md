@@ -1,10 +1,10 @@
-# `lua/` — decompiled Lua tree layout
+# `lua/`: decompiled Lua tree layout
 
 `lua/` holds every Lua chunk of `NDMW.AFS`, decompiled and filed by stage. A stage folder's `_e<N>` suffix is the pack entry and a file's numeric prefix its chunk index in that entry (`scripts/lua_tree.py` resolves the pair to a path). This file is the index for the tree.
 
 ## Layout
 
-### 00 — Title screens & menus
+### 00: Title screens & menus
 
 | entry | stage | description |
 | --- | --- | --- |
@@ -17,7 +17,7 @@
 | 812 | `character-select-3` | Character select / difficulty |
 | 814 | `endroll` | End roll / staff credits |
 
-### 01 — Digimon City (lobby / item-change hub)
+### 01: Digimon City (lobby / item-change hub)
 
 | entry | stage | description |
 | --- | --- | --- |
@@ -29,16 +29,16 @@
 | 824 | `lobby-quest-board` | Lobby quest board dialogue |
 | 828 | `lobby-shops` | Lobby shops: bank + disk (bankshop.lua, diskshop.lua) |
 
-### 02 — Valley overworld (stag0101-0104)
+### 02: Valley overworld (stag0101-0104)
 
 | entry | stage | description |
 | --- | --- | --- |
 | 614 | `stag0101-valley-entrance` | Leads to dungeon 1 (dng101b1) + Goblimon fortress (stagGF01) |
 | 621 | `stag0102-valley-crossroads` | Leads to dng102b1 |
-| 628 | `stag0103-valley-river` | River (AM_RIVER) — boat, n_digilfm |
+| 628 | `stag0103-valley-river` | River (AM_RIVER), boat, n_digilfm |
 | 635 | `stag0104-valley-cliff` | Leads to dng103f1 |
 
-### 03 — Desert overworld (stag0201-0205)
+### 03: Desert overworld (stag0201-0205)
 
 | entry | stage | description |
 | --- | --- | --- |
@@ -48,7 +48,7 @@
 | 665 | `stag0204-desert-canyon` | Leads to dng206f1 |
 | 672 | `stag0205-desert-oasis` | Leads to Goblimon fortress (stagGF04) |
 
-### 04 — Forest overworld (stag0301-0304)
+### 04: Forest overworld (stag0301-0304)
 
 | entry | stage | description |
 | --- | --- | --- |
@@ -57,7 +57,7 @@
 | 695 | `stag0303-forest-cave` | Connector between grove and deep forest |
 | 702 | `stag0304-forest-deep` | Leads to dng310f1 |
 
-### 05 — City overworld (stag0401-0404)
+### 05: City overworld (stag0401-0404)
 
 | entry | stage | description |
 | --- | --- | --- |
@@ -65,7 +65,7 @@
 | 716 | `stag0404-city-magnet-flower` | Magnet-flower puzzle (g_magnetflore) |
 | 723 | `city-boss4-approach` | Approach to boss 4 (stagBS04) |
 
-### 06 — Dungeon 1 — Valley dungeon (dng1xx)
+### 06: Dungeon 1, Valley dungeon (dng1xx)
 
 | entry | stage | description |
 | --- | --- | --- |
@@ -77,7 +77,7 @@
 | 218 | `dng103f1` | final area 1 |
 | 226 | `dng103f2` | final area 2 -> boss stagBS01 |
 
-### 07 — Dungeon 2 — Desert dungeon (dng2xx)
+### 07: Dungeon 2, Desert dungeon (dng2xx)
 
 | entry | stage | description |
 | --- | --- | --- |
@@ -89,7 +89,7 @@
 | 273 | `dng206f1` | final area 1 |
 | 281 | `dng206f2` | final area 2 -> boss stagBS02 |
 
-### 08 — Dungeon 3 — Forest dungeon (dng3xx)
+### 08: Dungeon 3, Forest dungeon (dng3xx)
 
 | entry | stage | description |
 | --- | --- | --- |
@@ -106,7 +106,7 @@
 | 365 | `dng310f2` | final area 2 |
 | 372 | `dng310f3` | final area 3 -> boss stagBS03 |
 
-### 09 — Dungeon 4 — City dungeon (dng4xx)
+### 09: Dungeon 4, City dungeon (dng4xx)
 
 | entry | stage | description |
 | --- | --- | --- |
@@ -118,7 +118,7 @@
 | 417 | `dng412b3` | block 2 (security gate) |
 | 425 | `dng412b4` | block 2 (e_ldknight = LordKnightmon) |
 
-### 10 — Quest dungeons (dngq1-q8)
+### 10: Quest dungeons (dngq1-q8)
 
 | entry | stage | description |
 | --- | --- | --- |
@@ -135,7 +135,7 @@
 | 510 | `dngq4b2e` | quest 4 stage 2 easy |
 | 518 | `dngq4b2h` | quest 4 stage 2 hard |
 | 526 | `dngq4b2v` | quest 4 stage 2 very hard |
-| 540 | `quest-5-6-rare-six-doors` | quest 5/6 — six-door puzzle, rare enemies (e_rare; exact stage id uncertain) |
+| 540 | `quest-5-6-rare-six-doors` | quest 5/6: six-door puzzle, rare enemies (e_rare; exact stage id uncertain) |
 | 548 | `dngq7b1e` | quest 7 stage 1 |
 | 556 | `dngq7b2e` | quest 7 stage 2 (e_tonogeko) |
 | 564 | `dngq8b1e` | quest 8 stage 1 |
@@ -144,7 +144,7 @@
 | 587 | `dngq8b3h` | quest 8 stage 3 hard |
 | 595 | `dngq8b3v` | quest 8 stage 3 very hard (e_ldknight) |
 
-### 11 — Boss stages (stagBS01-06)
+### 11: Boss stages (stagBS01-06)
 
 | entry | stage | description |
 | --- | --- | --- |
@@ -155,7 +155,7 @@
 | 758 | `boss05-devimon-2` | f_devl2x (Devimon form 2) |
 | 765 | `boss06-devimon-3` | f_devl3 (Devimon final, AM_DEVI3) |
 
-### 12 — Goblimon fortress (stagGF01-04)
+### 12: Goblimon fortress (stagGF01-04)
 
 | entry | stage | description |
 | --- | --- | --- |
@@ -164,13 +164,13 @@
 | 786 | `fortress-leomon` | Leomon encounter (AM_LEOMN, n_leomon) |
 | 793 | `fortress-exit` | Fortress exit (stag0205, stagGF02) |
 
-### 13 — Digivolution
+### 13: Digivolution
 
 | entry | stage | description |
 | --- | --- | --- |
 | 832 | `digivolution` | Digivolution stage (AM_EVOLV) |
 
-### 14 — Misc / shared
+### 14: Misc / shared
 
 | entry | stage | description |
 | --- | --- | --- |
@@ -180,11 +180,11 @@
 ## Chunk naming
 
 Each chunk is named by what it does, e.g.:
-- `000-layer-setup.lua` — `funcStartLayerSet` / `funcFirstLayerSet`
-- `012-exit-to-dng204b2.lua` — `funcStageChange("dng204b2", ...)`
-- `005-npc-agumon.lua` — an NPC (`n_agumon`) talk/interaction script
-- `003-enemy-mammos.lua` / `004-boss-devimon-1.lua` — enemy / boss behavior
-- `007-flag-123.lua` — `be:FLGset(123, 0)` (flag reset) + related logic
+- `000-layer-setup.lua`: `funcStartLayerSet` / `funcFirstLayerSet`
+- `012-exit-to-dng204b2.lua`: `funcStageChange("dng204b2", ...)`
+- `005-npc-agumon.lua`: an NPC (`n_agumon`) talk/interaction script
+- `003-enemy-mammos.lua` / `004-boss-devimon-1.lua`: enemy / boss behavior
+- `007-flag-123.lua`: `be:FLGset(123, 0)` (flag reset) + related logic
 - `002-door-d1.lua`, `006-heal-hp.lua`, `009-security-gate.lua`, ...
 
 The numeric prefix keeps the original concatenation order. Each stage folder also has a `_origin.txt` with the original `entry_NNNN` it came from.

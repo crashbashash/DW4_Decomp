@@ -48,10 +48,10 @@ engine, to be checked against this binary's RTTI before use.
 | `g_*` | Lua global variables (script state) | `g_GateOn`, `g_HP0`, `g_SItemDB` |
 
 ## Two state systems
-1. **Live/C++ state** — cached scalars + object graph in BSS (`0x0058xxxx`), e.g.
+1. **Live/C++ state**: cached scalars + object graph in BSS (`0x0058xxxx`), e.g.
    the "MDL" (current model) HP at `0x0058a1f0`. Updated every frame. See
    `docs/engine/game-state.md`.
-2. **Persistent/property state** — named records stored in the `GAMERAM` object
+2. **Persistent/property state**: named records stored in the `GAMERAM` object
    (`LEVEL`, `EXP`, `HP`, `BIT`, …). Read/written by `SYS*` functions and
    serialised to the memory card. See `docs/engine/property-system.md`.
 

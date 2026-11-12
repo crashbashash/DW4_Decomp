@@ -1,4 +1,4 @@
-# CRI MFCI — the memory-file device
+# CRI MFCI: the memory-file device
 
 MFCI (`MFCI/PS2EE Ver.1.09` at `0x4f0c50`) is a cvFs device whose files are blocks already in memory. A
 file name is the block's address and size in hexadecimal, `AAAAAAAA.SSSSSSSS` (17 characters, a dot at

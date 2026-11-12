@@ -32,7 +32,7 @@ MODULES/              IOP modules + IOPRP280.IMG
 | Entry point | `0x00100008` |
 | Type | `EXEC` |
 | Section headers | 8 (`.shstrtab`, `.strtab`(0), `.symtab`(0), code, bss, `.comment`, `.reginfo`) |
-| Symbols | **stripped** (`.symtab` size 0) — game code is `FUN_*` |
+| Symbols | **stripped** (`.symtab` size 0); game code is `FUN_*` |
 
 ### Program headers
 | # | Type | VirtAddr | FileSz | MemSz | Flags |
@@ -52,25 +52,25 @@ The C runtime sets memory up from two EE kernel calls in its startup code
 | call | arguments | meaning |
 | --- | --- | --- |
 | syscall 60, `SetupThread` | `gp = 0x0055C870`, stack `0x01F00000`, size `0x00100000` | the main thread's stack is the **last megabyte of RAM**, `0x01F00000`–`0x02000000`; the call's result is moved straight into `sp` |
-| syscall 61, `SetupHeap` | `heap_start = 0x0058D280` (the byte after BSS), `heap_size = -1` | **the C heap starts at the image's end and runs to the top of memory** — `-1` means "everything left" |
+| syscall 61, `SetupHeap` | `heap_start = 0x0058D280` (the byte after BSS), `heap_size = -1` | **the C heap starts at the image's end and runs to the top of memory**; `-1` means "everything left" |
 
 The syscall numbers are pinned by the repo's own table, which lists `EndOfHeap` as 62
 (`config/SLUS-20836/syscalls.txt`); 60 and 61 are the two immediately before it. Measured live from an in-world
 save state:
 
 - `0x0058D280` holds allocator structures (a few small words, then zeros);
-- the **first 8 MB above the image is 57.8 % non-zero**, with live data reaching `0x00D77D31` — about
+- the **first 8 MB above the image is 57.8 % non-zero**, with live data reaching `0x00D77D31`: about
   **8.3 MB of heap in use**, so the heap is used from its first byte;
 - the stack's live frames sit just below `0x02000000` (`0x01FFF000` holds words that are return
   addresses into the loaded section), and `0x01E00000`–`0x01F00000` is untouched.
 
-**So the space above the BSS is not free — it is the game's working memory.** It is nevertheless
+**So the space above the BSS is not free: it is the game's working memory.** It is nevertheless
 *movable*: `heap_start` is an argument to a call that this repo **re-links**, so a mod region can be
 placed at `0x0058D280`…`0x0058D280+N` with `SetupHeap` given `0x0058D280+N`, and segment 0's
 `FileSz`/`MemSz` grown by `N` so the region is file-backed. The cost is `N` bytes off the game's
 heap (≈8.3 MB live against ≈26 MB of address space; the game's *peak* is unmeasured). Taking this
 route means the CRT startup has to be built from source rather than linked as the committed
-disassembly — ordinary decompilation work, but work.
+disassembly, which is ordinary decompilation work.
 
 Two addresses in that range recur as code immediates (`0x008BA000`, `0x00979680`) and are **not**
 anywhere as data; whether they are hardcoded pool bases or bit patterns is unresolved, and it only
@@ -79,11 +79,11 @@ matters if a mod region is megabytes deep.
 ### Rebuilding the image with a mod
 
 The loadable image is one flat blob, and the build reproduces it **only while every unit keeps its
-size** — which the generated linker script now enforces a unit at a time.
+size**, which the generated linker script now enforces a unit at a time.
 
 - `tools/linkgen.py` emits `. = <offset>;` before every unit, pinning it to its retail address
   (`. ` is an offset from the section start inside an output section, so an absolute VA would prefix
-  1 MB of zeros — measured). For a matched build this changes nothing and the byte-for-byte
+  1 MB of zeros; measured). For a matched build this changes nothing and the byte-for-byte
   comparison still holds; what it buys is that a **modified** unit may compile smaller or larger than
   its retail slot without shifting any neighbour, so every absolute address baked into the committed
   disassembly stays valid. A unit that outgrows its slot is a loud ld error, not a silent
@@ -92,7 +92,7 @@ size** — which the generated linker script now enforces a unit at a time.
   (one LOAD at `0x00100000`, entry `0x100008`, and the CRT clears BSS itself, so the segment's
   `MemSiz == FileSz` is fine).
 - A later step splices the linked section back into a copy of the retail ELF.
-  That is not needed to boot — it is what makes a mod *small*: the linked file is 7.3 MB because ld
+  That is not needed to boot; it is what makes a mod *small*: the linked file is 7.3 MB because ld
   pads its segment and adds a separately named `.exceptix` section. Retail retains exception-index
   data within its flat image ([combat example](../systems/combat-reference-helpers.md#retail-unwind-identities)). A retail-shaped file
   of 4,541,744 bytes lets the disc be patched **in place**, so the ISO keeps its exact size and a mod
@@ -107,7 +107,7 @@ bytes**; and that disc boots and plays.
 
 What that means for how much a mod can change today:
 
-- **Any function can be replaced**, not only the 7,462 decompiled ones — the decompilation is what
+- **Any function can be replaced**, not only the 7,462 decompiled ones. The decompilation is what
   makes a change readable, not what makes it possible. The constraint is space, not coverage: a
   unit may grow only into slack a shrunk unit left, and retail's tiling is gap-free.
 - **Additions beyond the section** need the two things the memory map implies: the ELF container
@@ -121,25 +121,25 @@ The C runtime sets memory up from two EE kernel calls in its startup code
 | call | arguments | meaning |
 | --- | --- | --- |
 | syscall 60, `SetupThread` | `gp = 0x0055C870`, stack `0x01F00000`, size `0x00100000` | the main thread's stack is the **last megabyte of RAM**, `0x01F00000`–`0x02000000`; the call's result is moved straight into `sp` |
-| syscall 61, `SetupHeap` | `heap_start = 0x0058D280` (the byte after BSS), `heap_size = -1` | **the C heap starts at the image's end and runs to the top of memory** — `-1` means "everything left" |
+| syscall 61, `SetupHeap` | `heap_start = 0x0058D280` (the byte after BSS), `heap_size = -1` | **the C heap starts at the image's end and runs to the top of memory**; `-1` means "everything left" |
 
 The syscall numbers are pinned by the repo's own table, which lists `EndOfHeap` as 62
 (`config/SLUS-20836/syscalls.txt`); 60 and 61 are the two immediately before it. Measured live from an in-world
 save state:
 
 - `0x0058D280` holds allocator structures (a few small words, then zeros);
-- the **first 8 MB above the image is 57.8 % non-zero**, with live data reaching `0x00D77D31` — about
+- the **first 8 MB above the image is 57.8 % non-zero**, with live data reaching `0x00D77D31`: about
   **8.3 MB of heap in use**, so the heap is used from its first byte;
 - the stack's live frames sit just below `0x02000000` (`0x01FFF000` holds words that are return
   addresses into the loaded section), and `0x01E00000`–`0x01F00000` is untouched.
 
-**So the space above the BSS is not free — it is the game's working memory.** It is nevertheless
+**So the space above the BSS is not free: it is the game's working memory.** It is nevertheless
 *movable*: `heap_start` is an argument to a call that this repo **re-links**, so a mod region can be
 placed at `0x0058D280`…`0x0058D280+N` with `SetupHeap` given `0x0058D280+N`, and segment 0's
 `FileSz`/`MemSz` grown by `N` so the region is file-backed. The cost is `N` bytes off the game's
 heap (≈8.3 MB live against ≈26 MB of address space; the game's *peak* is unmeasured). Taking this
 route means the CRT startup has to be built from source rather than linked as the committed
-disassembly — ordinary decompilation work, but work.
+disassembly, which is ordinary decompilation work.
 
 Two addresses in that range recur as code immediates (`0x008BA000`, `0x00979680`) and are **not**
 anywhere as data; whether they are hardcoded pool bases or bit patterns is unresolved, and it only
@@ -152,21 +152,21 @@ size**: `build/link.ld` lists the 33,085 units in address order and contains **n
 directives**, so a unit that compiles to a different length shifts every unit after it. Two facts
 make such a shift fatal rather than merely inconvenient:
 
-- the generated remainder (`asm/`) is raw `.word`s — an address inside it is a literal, not a
-  relocation — so anything that moves invalidates the addresses baked into it;
+- the generated remainder (`asm/`) is raw `.word`s (an address inside it is a literal, not a
+  relocation), so anything that moves invalidates the addresses baked into it;
 - retail's tiling is **gap-free**: every byte of `0x00100000`–`0x00554b00` belongs to some unit, so
   there is no slack for a function to grow into.
 
 So:
 
 - **Same-size edits work today and need nothing else.** The rebuilt section is byte-identical
-  everywhere else, so the mod is written into the disc in place — what
+  everywhere else, so the mod is written into the disc in place. That is what
   `dw4_yellowcrown/patch_iso.py` and `set_disc_serial.py` do, and why both refuse a length change.
   Keeping the mod's new code inside the modified unit's own bytes (padding to the original length)
   keeps this true, and covers any edit whose compiled form fits the slot it replaces.
 - **A size-growing mod needs a home for its code, and there is no proven one.** The candidate is
   above the BSS, past `0x0058d280`, reached by growing segment 0's `FileSz` and `MemSz` together so
-  that the BSS hole (`0x00554b00`–`0x0058d280`, 231,296 bytes) becomes file-backed zeros — but that
+  that the BSS hole (`0x00554b00`–`0x0058d280`, 231,296 bytes) becomes file-backed zeros. But that
   address is also where the SDK's heap is likely to start, and whether it does has not been measured,
   so this is a hypothesis. The alternatives are both real work: pin every unit with `. = addr` in the
   generated script, so a modded unit may grow into slack a shrunk one left (retail has none, so this
@@ -178,7 +178,7 @@ So:
   was verified by booting a grown image.
 
 ### Entry point (`0x00100008`)
-Disassembles to `padduw`-based register zeroing — an **EE MMI** instruction, which
+Disassembles to `padduw`-based register zeroing, an **EE MMI** instruction, which
 confirms the `r5900` language is required (plain MIPS would mis-decode it):
 ```
 100008: 70000c28  padduw  at,zero,zero
@@ -190,7 +190,7 @@ confirms the `r5900` language is required (plain MIPS would mis-decode it):
 
 ### Ghidra import
 - Language: **`r5900:LE:32:default`** (correct; the ELF's `5900` flag lets the
-  opinion system select it automatically — no `EF_MIPS_MACH_5900` patch needed).
+  opinion system select it automatically; no `EF_MIPS_MACH_5900` patch needed).
 - Dumps produced: **15,167 functions**, **28,784 strings**.
 
 ## Compiler & middleware
@@ -199,7 +199,7 @@ confirms the `r5900` language is required (plain MIPS would mis-decode it):
 | Compiler | `"MW MIPS C Compiler (2.4.1.01)"` @ `0x00000000`-adjacent `.comment` → Metrowerks CodeWarrior for PS2 |
 | CRI audio | `ADXRT  Ver.2810 Build:Oct  6 2004`, `PL2ENC Ver.1.01` |
 | CRI libraries | `CRI_ADXI.IRX`, `SNDFI.IRX` IOP modules |
-| Sony SDK | 80 kernel syscall stubs, 16 bytes each (`CreateThread`, `AddIntcHandler`, `SetGsCrt`, `sceSifSetDma`, …) — see [Kernel syscall stubs](#kernel-syscall-stubs-80); `config/SLUS-20836/syscalls.txt` |
+| Sony SDK | 80 kernel syscall stubs, 16 bytes each (`CreateThread`, `AddIntcHandler`, `SetGsCrt`, `sceSifSetDma`, …); see [Kernel syscall stubs](#kernel-syscall-stubs-80) and `config/SLUS-20836/syscalls.txt` |
 | C++ runtime | `std::exception`, `std::bad_alloc`, `std::bad_exception`, RTTI |
 | Video | MPEG-2 decoder strings (`slice_start_code`, `macroblock_address_increment`) |
 | Graphics data | PNG decoder (zlib), full CRC32 impl at `0x00221a20` |
@@ -218,10 +218,10 @@ nop
 ```
 
 **80 stubs / 1,280 bytes / 68 distinct numbers**, at `0x0010aae0..0x00114070`. Fifteen use
-the `0xFF80..0xFFFF` range (`i*`, `_i*`, `isceSif*` variants — the interrupt-control
+the `0xFF80..0xFFFF` range (`i*`, `_i*`, `isceSif*` variants, the interrupt-control
 entry points), e.g. `iResumeThread` = 65478, `_iEnableIntc` = 65510; the rest are 2..131
 (`SetGsCrt` 2, `_Exit` 4, `SleepThread` 50, `FlushCache` 100). The number is read from the
-bytes; the *name* comes from the SDK's published syscall table — the ELF has no symbol
+bytes; the *name* comes from the SDK's published syscall table. The ELF has no symbol
 table, so the names are inferred, the numbers are not.
 
 Five copies of syscall 90, five of 116 (`RFU116_SetSyscall`) and three of 91 exist at
@@ -230,7 +230,7 @@ stub in more than once, which is also why `tools/split.py` suffixes duplicate na
 `__<va>`.
 
 `config/SLUS-20836/syscalls.txt` is the generated table (`tools/syscalls.py`). The m2c pipeline
-**skips** these — worklist status `sdk` — because there is no game C to recover and none
+**skips** these (worklist status `sdk`) because there is no game C to recover and none
 can be written: MWCC's integrated assembler rejects the `syscall` mnemonic in an inline
 `asm` block (`unexpected end of line`), so the bytes cannot be reproduced from `src/`
 either. They stay in `asm/`, and `make link` rebuilds them from the retail bytes.
@@ -247,7 +247,7 @@ Sample of the non-`i` stubs:
 0x0010abf0 AddDmacHandler 18   0x0010b1b0 sceSifStopDma 107
 0x0010b2a0 sceSifSetDma 119   0x0010b2e0 sceSifSetReg  121
 ```
-**No game-specific *symbol* survives** — every gameplay function name in `data/functions.json`
+**No game-specific *symbol* survives.** Every gameplay function name in `data/functions.json`
 is a later recovery (RTTI/vtables, reflection), not an original symbol.
 
 ## Notes for re-analysis

@@ -1,12 +1,12 @@
-# Digimon World 4 — decompilation
+# Digimon World 4 decompilation
 
 Guidance for AI coding agents (and a summary for people) working in this repository. The method
 contributors follow is in [CONTRIBUTING.md](CONTRIBUTING.md); read it first. This file holds the
 strict form of it: what makes a function matched and readable, and the rules for driving the build,
 delegating work and reporting a result.
 
-The goal: recover the PS2 release of **Digimon World 4** — USA `SLUS-20836` — as readable,
-evidence-named source that rebuilds to a byte-identical retail ELF. Run every command from the repository root; paths here are repository-relative.
+The goal: recover the PS2 release of **Digimon World 4** (USA, `SLUS-20836`) as readable,
+evidence-named source that rebuilds to a byte-identical retail ELF.
 
 ## Hard rules
 
@@ -48,6 +48,8 @@ evidence-named source that rebuilds to a byte-identical retail ELF. Run every co
 - **Commits.** Sync with `git fetch && git merge origin/main` (never rebase shared history).
 
 ## Layout
+
+Paths here are repository-relative, and commands run from the repository root.
 
 - `src/` recovered source (`src/third_party/` is stock zlib, libpng and Lua, never edited;
   [README](src/third_party/README.md)), `asm/` the retail split, one unit per function, generated from
@@ -166,13 +168,13 @@ A task is complete only when the report quotes these four lines verbatim from ru
 The pre-push hook does not repeat them (it checks host details and the oracle-change rule); the oracle
 runner runs them again on every pushed commit ([oracle runner](docs/engine/oracle-runner.md)).
 
-1. `make check` — the `cover :` summary, `0 mismatch` in its `(N not matched: M mismatch, D debt)` line when
+1. `make check`: the `cover :` summary, `0 mismatch` in its `(N not matched: M mismatch, D debt)` line when
    that line appears, and the `match` count at or above `functions.fully_verified` in the parent commit's
    `docs/progress.json`.
-2. `make link` — `linkcheck: BYTE-IDENTICAL — the relinked section matches retail exactly`.
-3. `make typed-check` — `typed coverage: N recovered accesses, baseline matches` (or the re-recorded baseline
+2. `make link`: `linkcheck: BYTE-IDENTICAL — the relinked section matches retail exactly`.
+3. `make typed-check`: `typed coverage: N recovered accesses, baseline matches` (or the re-recorded baseline
    with the reason).
-4. `make hygiene` — `check_host_details: clean`.
+4. `make hygiene`: `check_host_details: clean`.
 
 Run `make check-fresh` and `make link-fresh` (cache ignored) before any commit that changes
 `config/<GAMEID>/units.tsv`, `unit-*`, `extent-overrides.tsv`, `jumptables.txt`, `compiler-runtime-symbols.tsv`

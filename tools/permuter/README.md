@@ -1,4 +1,4 @@
-# `tools/permuter/` — driving decomp-permuter with MWCC-MIPS
+# `tools/permuter/`: driving decomp-permuter with MWCC-MIPS
 
 A search harness for the *one-instruction-off* functions that shape templates can't crack.
 `decomp-permuter` mutates a C candidate at the AST level, recompiles it, and scores the disassembly
@@ -11,17 +11,17 @@ A 150 s run (~118k iterations) did not find a match; the tool is built for hours
 
 ## What it is and is not good for
 
-The permuter is the right instrument for "one instruction off", and it runs fine on this target —
+The permuter is the right instrument for "one instruction off", and it runs fine on this target,
 but on the guard family **it did not find the answer and could not have**: the base source had no
 `bool` at all, so the named-boolean value conversion that fixes the family was outside its mutation
 space. Both harnesses ended at the base score of 105 (66k and ~1.2 M iterations respectively), and the
 idiom was found by reading the code instead. The measured cost/benefit of scaling it
-is in [`../../docs/engine/m2c-bulk.md`](../../docs/engine/m2c-bulk.md) §Measured negatives — the
+is in [`../../docs/engine/m2c-bulk.md`](../../docs/engine/m2c-bulk.md) §Measured negatives: the
 near-miss tier it would work on is less than 1 % of the remaining code bytes.
 
 ## Setup
 
-Two things must be supplied locally, both under `local/` (gitignored — see
+Two things must be supplied locally, both under `local/` (gitignored; see
 [`../../README.md`](../../README.md) §Prerequisites):
 
 ```sh
@@ -90,7 +90,7 @@ two calls kept throughout.
 ## The compile contract
 
 The permuter preprocesses the candidate in C mode and then hands the *preprocessed* text to
-`compile.sh` — so `#ifdef __cplusplus` is already resolved and any `extern "C"` is stripped. For the
+`compile.sh`, so `#ifdef __cplusplus` is already resolved and any `extern "C"` is stripped. For the
 `bool` idiom that matters: the `typedef _Bool bool;` line pycparser needs would reach MWCC's C++
 front end, which rejects `_Bool`, so `FUN_00334460/compile.sh` deletes that line
 (`sed '/^typedef .* bool;$/d'`) before compiling. No MWCC-MIPS code adapter was needed:
@@ -108,10 +108,10 @@ A project directory must contain exactly **`base.c`, `target.o`, `compile.sh`**.
    only has a `bool` type in C++ mode**, and it picks the language from the file *extension*.
    `compile.sh` copies to a `.cpp` before invoking the compiler.
 2. **C++ mangles names**, so `extern "C"` is needed for the linked symbol to stay
-   `FUN_00130060` — but the permuter's own parser is C-only and errors on `extern "C"`. `base.c`
+   `FUN_00130060`, but the permuter's own parser is C-only and errors on `extern "C"`. `base.c`
    guards it with `#ifdef __cplusplus`: plain C to the permuter, C++ linkage to MWCC.
 3. **GNU `as` pads every section to 16 bytes**, so a 72-byte function lands in an 80-byte `.text`,
-   and the permuter disassembles the *whole object* (no symbol filter) — the padding would make a
+   and the permuter disassembles the *whole object* (no symbol filter); the padding would make a
    perfect score unreachable. `build_target.sh` rewrites `sh_size` to 72 (safe: all relocations sit
    below 72).
 4. **MIPS `as` needs `$`-prefixed registers** (bare `sp`/`ra` parse as symbols, giving

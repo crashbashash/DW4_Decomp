@@ -1,8 +1,8 @@
-# The function inventory — what the denominator counts, and why it can be trusted
+# The function inventory: what the denominator counts, and why it can be trusted
 
 `config/SLUS-20836/symbols.txt` is the denominator of every progress number: a function that is not in it
 cannot be decompiled, counted or missed. The relink proves every byte, but it proves bytes, not
-the inventory — code with no symbol links as a `data` unit of `config/SLUS-20836/layout.txt` and is counted
+the inventory: code with no symbol links as a `data` unit of `config/SLUS-20836/layout.txt` and is counted
 by nobody. This page states the rules that put a function into the inventory, the reviewed extent
 corrections, the scan that keeps unowned code from growing back, and the before/after numbers.
 
@@ -26,18 +26,18 @@ The rules decide extents from the retail words. The model is three helpers in `t
 - `_code_shaped(word)`: the word is an instruction the EE has (R5900 opcode and function-code
   inventory: no `dmult`, no COP3, no `ll`/`sc`) and a compiler could emit (nothing but the zero
   word writes `$zero`; a `j`/`jal` lands inside the section). Rodata that happens to decode
-  rarely survives a whole body of this test — the one shape that did, before the jump-target
+  rarely survives a whole body of this test; the one shape that did, before the jump-target
   rule, was a string table: a tab or newline byte decodes as `j`, so `"...ect\n"` ended a
   "body" of `daddiu`/`ldr` words (twelve such promotions in `0x4d2448..0x510330`, caught by
   screening every new function for all-printable words).
-- `_fresh_start(va)`: nothing falls into `va` — the word before it is padding (a zero that is not
+- `_fresh_start(va)`: nothing falls into `va`: the word before it is padding (a zero that is not
   a conditional branch's or a call's delay slot), or the delay slot of `jr`/`j`/`b`. A `jr v0; nop`
   is a switch dispatch, so what follows it is a case body, never a function.
 - `_sweep_extent(va, bound)`: walk forward; the body ends after the delay slot of the first
-  transfer that is unconditional **and not jumped over** by an earlier branch of the body —
+  transfer that is unconditional **and not jumped over** by an earlier branch of the body:
   `jr ra`, `jr t9`, a `j` that leaves the bound, goes backwards or lands on a frame prologue (a
-  tail call). Internal `j`s (EE GCC's long forward jumps) and every PC-relative branch — `b`
-  included — extend the body to their target; a body ending in a backward `b` (an idle loop) is
+  tail call). Internal `j`s (EE GCC's long forward jumps) and every PC-relative branch (`b`
+  included) extend the body to their target; a body ending in a backward `b` (an idle loop) is
   not recognised, because `b` is also what string bytes most easily decode to. The walk fails (no promotion) when a word is not
   code-shaped, a branch leaves the bound, a fresh frame prologue appears (the walk ran into the
   next function) or no end comes before the bound.
@@ -76,7 +76,7 @@ the last function (the global constructor at `0x521790`, 2.7 KB) is scanned like
 What changed against the earlier rules: rule 1 bounded a candidate at the next label *of any kind*
 and only accepted `jr ra`, so a function with an internal branch-target label or a tail-call
 ending was dropped (106 + 76 cases in the inventory audit); rule 2 never ran on the last gap;
-nothing promoted an unreferenced `jal`/`j` target (47 tail-call and 11 call targets — the cause of
+nothing promoted an unreferenced `jal`/`j` target (47 tail-call and 11 call targets, the cause of
 the 33 `inventory-gap` units); nothing promoted a vtable-referenced body with a frame (`0x3236a0`,
 3.6 KB, 272-byte `sq` frame, 34 calls, sat in a gap). Rule 2 now also refuses a label right after
 a switch dispatch (`jr v1; nop`): it had turned the first case body of four switch functions into
@@ -88,12 +88,12 @@ a switch dispatch (`jr v1; nop`): it had turned the first case body of four swit
 A row sets a function's size. Plain rows grow to the next function or shrink over zero words only.
 Two keywords go further, each reviewed against the bytes:
 
-- `cut` — the shrink leaves code behind: the dump glued a second function onto this one. The head
+- `cut`: the shrink leaves code behind: the dump glued a second function onto this one. The head
   keeps the bytes up to its own return or tail call; the remainder must be claimed by a promotion
   rule, and `check_cuts` fails the run otherwise, so a cut never orphans code.
-- `merge` — the function absorbs every dump function that starts inside its new extent and takes
+- `merge`: the function absorbs every dump function that starts inside its new extent and takes
   the row's name.
-- `start` — a function no rule can walk, added at the row's address and size. The row must lie in a
+- `start`: a function no rule can walk, added at the row's address and size. The row must lie in a
   gap of the code below `CODE_HI`, start at a fresh start and not begin with padding.
 
 The rows this pass added, by evidence class:
@@ -104,7 +104,7 @@ The rows this pass added, by evidence class:
 | `cut`: tail-call wrapper + framed body | 20 (`_getpid_r`, `FUN_00269878`, `FUN_00297f30`, `FUN_002980c0`, `FUN_0017c880`, `FUN_00260d48`, `FUN_002a1110`, `FUN_00109c88`, `vfiprintf`, `Gap__Gfx__igPsx2VisualContext__vfunc_172`, `FUN_00299110`, `FUN_002997c0`, `FUN_0029b6d0`, `FUN_002a3730`, `FUN_002b2ee8`, `FUN_002b3300`, `FUN_002b4210`, …) | the head ends in `j <body>` to a fresh frame prologue under the same symbol (a function never jumps to its own frame-opening word) |
 | `cut`: wrapper + leaf body | 12 (`FUN_002612c0`, `FUN_002854b0`, `FUN_0028abc0`, `FUN_00293788`, `FUN_00294838/8b8/938`, `FUN_002ad2e0`, `FUN_002ad3e0`, `FUN_002b3530`, `FUN_002b4630`, `Memory_AllocateBufferViaSharedTail`) | the head's walk ends at its `j` to a fresh start that follows after padding; the body is claimed by rule 3 |
 | `cut`: span reached a referenced leaf | 5 (`Gap__Core__igCallStackTable__vfunc_28`, `FUN_00155340`, `FUN_00159320`, `igMemoryFile::vfunc_23`, `FUN_004657b0`) | `data/function-extents.json` ran to a vtable-referenced leaf after the function's own `jr ra` |
-| `cut`: verifier extent corrections | `FUN_001b4c40` (7296 → 7276: `DAT_001b68b0` is a 16-byte wrapper, `move a1,a0; lui; j 0x1b68c0; lw`, after the function's `jr ra` and a nop — `FUN_001a44d0` now passes it as a function pointer), `FUN_00267438` (96 → 88: `FUN_00267490` is the 8-byte getter `jr ra; lw v0,152(a0)` that `FUN_0026c3c8` calls), `FUN_00453a20` (8-byte `j` wrapper + referenced 12-byte leaf at `0x453a30`), `FUN_0018edb0` (1768 → 1576: twelve 8-byte default stubs at `0x18f3e0..0x18f490`, 16-byte aligned after its `jr ra`, whose addresses it builds with `lui`/`addiu` and stores into its tables; claimed by rule 4) | the inner address is a fresh start after the container's return |
+| `cut`: verifier extent corrections | `FUN_001b4c40` (7296 → 7276: `DAT_001b68b0` is a 16-byte wrapper, `move a1,a0; lui; j 0x1b68c0; lw`, after the function's `jr ra` and a nop; `FUN_001a44d0` now passes it as a function pointer), `FUN_00267438` (96 → 88: `FUN_00267490` is the 8-byte getter `jr ra; lw v0,152(a0)` that `FUN_0026c3c8` calls), `FUN_00453a20` (8-byte `j` wrapper + referenced 12-byte leaf at `0x453a30`), `FUN_0018edb0` (1768 → 1576: twelve 8-byte default stubs at `0x18f3e0..0x18f490`, 16-byte aligned after its `jr ra`, whose addresses it builds with `lui`/`addiu` and stores into its tables; claimed by rule 4) | the inner address is a fresh start after the container's return |
 | `merge` | `FUN_002fe290` (44 bytes) | `thunk_FUN_002fe2ac` (`b 0x2fe2ac; nop`) was the entry of a list-search loop whose other half Ghidra called `FUN_002fe2ac`; one leaf, its callers now name `FUN_002fe290` |
 | `start` | `FUN_00100230` (8), `FUN_001051c8` (96), `FUN_00113bc0` (284), `FUN_00113d00` (244), `FUN_00113e00` (288), `FUN_001c5130` (36), `FUN_00265d30` (52) | bodies the sweep cannot end: a thread entry whose `syscall` (ExitThread) does not return; an MMI clamp loop that a `j` from `FUN_00104258` enters, with its 16-byte `lq` constant inline (each word writes `$zero`, so falling through is harmless) before `jr ra`; three kernel exception handlers ending in `eret`, `syscall` and `break` (the syscall table at `0x4822a8` installs `0x113d00` as call 0x54); a tail call through `jr v0`; an error call followed by an idle `b` loop |
 | plain shrink | `FUN_00108078` (312 → 272), `FUN_001e6130` (584 → 248) | the dump's extent ran into the next symbol; both now end at their own transfer. `FUN_001e6130` remains a block of an earlier function (its `j 0x1e5fe0` lands inside `FUN_001e5f00`), a matter for the EE GCC blocks |
@@ -152,14 +152,14 @@ literals point outside the image and nothing in the image references its pieces;
 
 Net: 1,283 functions added (104,416 bytes), 6 removed (`FUN_002fe2ac` merged; `FUN_00172184`,
 `FUN_0016c598`, `FUN_0016ce28`, `FUN_0016ceb4`, `FUN_00177918` were switch case bodies the leaf
-rule had mistaken for functions — their switch functions now own them), 203 resized, 4 renamed.
+rule had mistaken for functions; their switch functions now own them), 203 resized, 4 renamed.
 The denominator grew by the code that was always there; no byte moved.
 
 A side effect on matched units: 104 units pass the address of a promoted function as a `DAT_<va>`
 (a callback, a field adder, a static-initializer item). The verifier flags a data name that points
 into code (`name-defect`), so those units now declare the function and pass it by name (an `(int *)`
 cast or a function-pointer parameter where the callee's prototype demanded it). Four units keep a
-data alias on purpose — `DAT_`/`g_` spellings of one address next to its `FUN_` name defeat the
+data alias on purpose: `DAT_`/`g_` spellings of one address next to its `FUN_` name defeat the
 compiler's address CSE, a matching construct the m2c pass used (`igTextureFunctionAttr_InitFields`,
 `igStencilFunctionAttr_InitFields`, `igBlendFunctionAttr_InitFields`, `igMovieInfo_InitFields`);
 naming the function there changes the bytes. The

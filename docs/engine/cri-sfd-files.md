@@ -1,4 +1,4 @@
-# CRI SFD files — the Sofdec player library
+# CRI SFD files: the Sofdec player library
 
 The CRI SFD library (`CRI SFD/PS2EE Ver.1.946` at `0x4f4d00`) is the core of the Sofdec movie player under
 the MWSFD front end. Its functions check a handle with one routine and report numeric error codes

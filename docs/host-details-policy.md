@@ -1,4 +1,4 @@
-# Host details policy — hard rules
+# Host details policy
 
 Nothing that identifies a developer's **machine or account** may be committed. This repository is cloned onto other people's
 machines and may be public; a reader needs the *requirements* to reproduce a result, not a description of where one particular

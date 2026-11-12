@@ -59,10 +59,10 @@ tries the override only when the unit profile does not reproduce the code bytes:
 
 | unit profile | override | category | head token |
 | --- | --- | --- | --- |
-| reproduces the code | none | the ordinary category (`match`, `code-only`, …) | — |
+| reproduces the code | none | the ordinary category (`match`, `code-only`, …) | - |
 | reproduces the code | row exists | the ordinary category; the row is stale | `override=unused` / `override=redundant` |
 | fails | reproduces the code | **`foreign-profile`** | `override=foreign` |
-| fails | fails | `mismatch`, naming both profiles | — |
+| fails | fails | `mismatch`, naming both profiles | - |
 
 `foreign-profile` is debt, never a match: `cover :` excludes it, `tools/progress.py`
 counts it (`foreign_profile.functions`, `foreign_profile.bytes`) and the debt ratchet
@@ -118,7 +118,7 @@ members it reproduces. The evidence is the result files the generator is given
 * a `mismatch` or `compile` category is a definite no;
 * a bare `ok = false` (the audit's older result files) is a no only when the metadata
   could have passed, i.e. the function is fully verified under its pin and, for C++,
-  the exception mode agrees — a `.cpp` with exceptions on in an exceptions-off unit
+  the exception mode agrees: a `.cpp` with exceptions on in an exceptions-off unit
   fails verification on its `.exceptix` record whatever its code did.
 
 Pairs the evidence does not decide are written out (`--sweep-tasks`) or verified on the
@@ -193,8 +193,8 @@ conclusions.
 ## First-generation measurements
 
 `make check` and `tools/progress.py` carry the current numbers. The first generation of the
-table measured `config/SLUS-20836/units.tsv` at **4,987 units** —
-154 library/Sony pieces, 2,143 class runs, 2,690 unlabeled runs — of which **554 are
+table measured `config/SLUS-20836/units.tsv` at **4,987 units**
+(154 library/Sony pieces, 2,143 class runs, 2,690 unlabeled runs), of which **554 are
 provisional**. 1,678 units compile with exceptions on and 3,309 off (957 of those are
 undetermined: frameless leaves only). Profiles: 2,933 × default `-O3`, 877 × combat
 `-O3,p`, 623 × combat `-O3`, **400 × 3.0.3 `-O3`** (328 `ig*` engine classes, 71 `be*`

@@ -1,4 +1,4 @@
-# Inline textures — the destructible props' material
+# Inline textures: the destructible props' material
 
 Most stage geometry samples a **texture pack** (see [`texture-packs.md`](texture-packs.md)); the
 destructible props do not. The Goblin Pass crate and barrel (`M_BK19a0_boxShape`,
@@ -15,7 +15,7 @@ come back empty for these two shapes.
 
 ## The format
 
-* **Palette order is `R G B A`** — colour in bytes 0..2. (The texture packs use `A R G B`; the two
+* **Palette order is `R G B A`**: colour in bytes 0..2. (The texture packs use `A R G B`; the two
   are not interchangeable.)
 * The image is a `_px × _py` grid of indices, `_bytesPerRow` bytes per row (row-major), indexing the
   palette. In the Goblin Pass fixture both props' atlases are **32×32**.
@@ -25,7 +25,7 @@ come back empty for these two shapes.
 ## Orientation
 
 **The stored image is top-down**: row 0 of `_pImage` is the row the GS samples at `v = 0`. A GS dump
-confirms it — the per-vertex `ST/Q` the VU1 emitted equals the mesh's own `(u, v)` exactly (an affine
+confirms it: the per-vertex `ST/Q` the VU1 emitted equals the mesh's own `(u, v)` exactly (an affine
 fit is the identity, residual `0.000000`), and the texture the GS samples out of VRAM is this image,
 RGB-for-RGB.
 
@@ -38,7 +38,7 @@ atlas instead of the dark hoop band.
 
 One more property of the same aliasing: the palette's alpha is what the GS sees. The Goblin Pass
 barrel's inline palette carries **alpha `128`** on every entry (the GS's texture alpha), while the
-same RGB written with alpha `255` is a decode difference, not a colour one — the barrel is drawn
+same RGB written with alpha `255` is a decode difference, not a colour one: the barrel is drawn
 `ABE 0`, so alpha only feeds the `TEST` cutout (`ATE 1 ATST 6 AREF 0xc`, i.e. discard `A ≤ 12`).
 
 ## Where the decoded data is consumed

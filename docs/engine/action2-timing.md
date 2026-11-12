@@ -23,7 +23,7 @@ sequence layer polls.
 | `0x00376f40` | 324 | `a2_jointset_start(mgr, act, comp)` | `beAction2JOINTSET_Start`; returns 1 |
 | `0x00377700` | 456 | `a2_start_components(mgr, act)` | `beAction2_StartComponents` |
 | `0x003778d0` | 192 | `a2_update(mgr, act)` | `Gap::Bec::beAction2::vfunc_31`, the per-frame driver |
-| `0x00377990` | — | `a2_msg_iscomend(mgr, act, msg)` | the `ISCOMEND` case of `vfunc_33` only; any other resolved case returns −1 |
+| `0x00377990` | - | `a2_msg_iscomend(mgr, act, msg)` | the `ISCOMEND` case of `vfunc_33` only; any other resolved case returns −1 |
 
 Signatures come from the call sites, not from guesses. Every handler's first argument
 is the `Gap::Bec::beAction2` manager (`mgr`) and its second the playing-action object
@@ -102,9 +102,9 @@ component's type string (a null string reads as empty):
 | `J…` (`Joint`) | 3 | state only | 0 |
 | `M…` (`Motion`) | 2 | state only | 0 |
 | `F…` (`Frame`) | 1 | arm timer `WAIT` for `(int64)(1e9f · secs / 60.0f)`, then set state | 0 |
-| `R…`, `name[3]=='S'` | — | store `secs` in the f32 global `0x58a348` | 1 |
+| `R…`, `name[3]=='S'` | - | store `secs` in the f32 global `0x58a348` | 1 |
 | `R…` otherwise | 1 | `secs' = global + (float)(r) / 100`, where `r` is a virtual query on `mgr+0x10→+0x30` taken modulo `trunc(100·secs − 100·global)` (unsigned; a zero divisor leaves the dividend), then as `Frame` | 0 |
-| anything else | — | nothing | 0 |
+| anything else | - | nothing | 0 |
 
 `*_Update` acts only on a pending state; each completion **clears the state first, then
 resumes `a2_start_components`** (the store happens before the call):
@@ -159,7 +159,7 @@ For scale 1.0, while both absolute tick counts remain exactly representable
 `ticks = clock >> 18` (1907 ticks = 499,908,608 ns is not enough, 1908 = 500,170,752 ns
 is). At the 60 fps step of 16,666,667 ns that is the 30th frame after the start when
 the start clock's offset inside its tick is at least 170,742 ns, and the 31st frame
-otherwise — about 35 % / 65 % over uniformly distributed phase. OPEN and CLOSE complete
+otherwise: about 35 % / 65 % over uniformly distributed phase. OPEN and CLOSE complete
 on the same frame as their final `JOINTSET`/`WAITCHECK` update, and `ISCOMEND` is true
 on that frame. The exact frame in the real game depends on the clock's phase and
 cadence, which this page does not establish (below).

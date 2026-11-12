@@ -1,4 +1,4 @@
-# The guard family — the missing `sltu`, cracked
+# The guard family: the missing `sltu`
 
 **The 72-byte variant has 550 functions; the 76-byte variant (507 functions)
 has a source form under each compiler (§5).**
@@ -24,7 +24,7 @@ nop                      ; nop
          lw v0,%lo(DAT_0055ebc0)(at) ; jr ra ; addiu sp,sp,16
 ```
 
-Semantics: `if (!g || !(g->f36 & 4)) X(); return g;` — the global is loaded exactly
+Semantics: `if (!g || !(g->f36 & 4)) X(); return g;`. The global is loaded exactly
 twice (null test, return) and the flag test is *materialised*.
 
 A census over the whole image finds the motif `andi + sltu rd,zero,rs + bnez rd`
@@ -44,8 +44,8 @@ Three details are all load-bearing:
 
 1. **The flag test must be an assignment to a *named* `bool` inside the
    short-circuit condition.** `!(t = g->f & 4)` forces MWCC to convert the `int`
-   expression to `bool` — a *value* conversion, which is exactly the
-   `sltu v0,zero,v0` — while the pointer test stays a plain `beqz` and the global
+   expression to `bool`, a *value* conversion, which is exactly the
+   `sltu v0,zero,v0`, while the pointer test stays a plain `beqz` and the global
    is still loaded only twice. The test has to be spelled as a value:
    * under 3.0b52, `bool t; ... !(t = g->f & 4)` differs, and `((g->f & 4) != 0) == false` or
      `int t; ... !(t = (g->f & 4) != 0)` gives the bytes; all three give them under the default compiler;
@@ -53,7 +53,7 @@ Three details are all load-bearing:
    * a `bool` *cast* (`(bool)(g->f & 4)`) is folded away;
    * a `bool` initialised in its declaration (`bool t = g->f & 4;`) loads the
      global before the null test, so the prologue order is wrong;
-   * `bool t = g && (g->f & 4);` materialises *both* operands — a second `sltu`
+   * `bool t = g && (g->f & 4);` materialises *both* operands: a second `sltu`
      on the pointer, 76 bytes with `v1`.
 2. **C++ mode.** Only C++ has `bool`, and MWCC picks the language from the file
    *extension*.
@@ -78,7 +78,7 @@ C++ and why. Three build pieces treat `src/<name>.cpp` as a source unit:
 
 ## 4. The two variants of the family
 
-The family is **not uniform** — it is the same source idiom compiled in two
+The family is **not uniform**: it is the same source idiom compiled in two
 *contiguous regions*, so the split is per-file, not per-function:
 
 | Variant | Count | Size | Regions (in address order) | The dead `nop` |
@@ -121,7 +121,7 @@ get/release pairs).
 ## 6. Bonus: the one-call wrapper family, also cracked
 
 The 28-byte and 32-byte "keep the frame for a single call" wrappers resisted for a
-*related* reason — and the reason turns out to be **the same extension switch**:
+*related* reason, and the reason turns out to be **the same extension switch**:
 
 > MWCC's **C** front end turns `void f(void){ X(); }` into a 2-instruction `j` tail
 > call. Its **C++** front end keeps the frame. The retail wrappers are C++.
@@ -169,9 +169,9 @@ None of these produces the 76-byte form under the default compiler:
   order, does not produce the pad.
 * **The permuter.** A harness under `tools/permuter/` (the same shape as the A harness) ran to ~1.65 M iterations at ~900/s with base score 105 and produced exactly
   one output, `output-65-1/` (score 65), which is a reward hack. That candidate inserts
-  dead code — `if ((!g) && (!g)) { g++; g--; }` — which MWCC emits as a single `nop`,
+  dead code, `if ((!g) && (!g)) { g++; g--; }`, which MWCC emits as a single `nop`,
   **but at index 4** (between the global load and the null test), not at index 11:
   76 bytes with 7 wrong instructions. MWCC does emit a `nop` for a dead or empty block,
   but the `nop` lands *where the dead construct sits*, and every placement that would
-  land it at index 11 — inside the `if` body, or at the top of an explicit `call:` block
-  reached by `goto` — is folded away by the `-O3` optimiser.
+  land it at index 11 (inside the `if` body, or at the top of an explicit `call:` block
+  reached by `goto`) is folded away by the `-O3` optimiser.

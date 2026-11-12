@@ -1,4 +1,4 @@
-# CRI ADXENC — the ADX encoder
+# CRI ADXENC: the ADX encoder
 
 ADXENC (`ADXENC/PS2EE Ver.1.09` at `0x4ee3f0`, and the DLL name `ADXENC.DLL Ver.1.09` its version query
 returns) encodes 16-bit PCM read from input streams into ADX blocks written to an output stream. It keeps 8

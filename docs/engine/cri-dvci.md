@@ -1,4 +1,4 @@
-# CRI DVCI — the disc-file device
+# CRI DVCI: the disc-file device
 
 DVCI (`DVCI/PS2EE Ver.2.71` at `0x4f0180`) is the cvFs device for files on the disc: the twin of
 [HTCI](cri-htci.md), reading through `sceCd` and SRD, with a cache of files located in advance from a file

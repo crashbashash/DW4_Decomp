@@ -97,7 +97,7 @@ group units with an `exceptions` row in `config/SLUS-20836/unit-objects.json`.
 
 Every record is 12 bytes: the function address, its code size with **bit 0 set
 when the third word is the packed inline form**, and either that packed
-summary (`0x2000`, `0x406000`, `0x4001`, ... — no table) or the table address.
+summary (`0x2000`, `0x406000`, `0x4001`, ...; no table) or the table address.
 `FUN_001005f0`'s record at `0x546fd4` is `(0x1005f0, 0x1d, 0x2000)`: 28 code
 bytes, packed. The retail linker concatenated all `.exceptix` input sections
 into one array at `0x546fb0..0x554858` (4,622 records in link order; eight

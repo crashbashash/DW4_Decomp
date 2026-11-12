@@ -6,16 +6,16 @@ The logic of `0x003e3b80` is under [Submission and completion](#submission-and-c
 
 | Entry | Bytes | Symbol and arguments |
 |---|---:|---|
-| `0x003e3b80` | 504 | `beNDMWLoadIntf2ComMdlCtrl__Start(cm, slot, name, sequence, wait)` — GENERATE, play, optional open tracking |
-| `0x003e3d80` | 128 | `FUN_003e3d80(wrapper, flags)` — release wrapped object, optionally delete wrapper |
-| `0x003e3e00` | 556 | `beNDMWLoadIntf2ComMdlCtrl__StartAt(cm, slot, name, sequence, vec3, wait)` — positioned GENERATE, play, optional open tracking |
+| `0x003e3b80` | 504 | `beNDMWLoadIntf2ComMdlCtrl__Start(cm, slot, name, sequence, wait)`: GENERATE, play, optional open tracking |
+| `0x003e3d80` | 128 | `FUN_003e3d80(wrapper, flags)`: release wrapped object, optionally delete wrapper |
+| `0x003e3e00` | 556 | `beNDMWLoadIntf2ComMdlCtrl__StartAt(cm, slot, name, sequence, vec3, wait)`: positioned GENERATE, play, optional open tracking |
 | `0x003e4030` | 472 | `beNDMWLoadIntf2ComMdlCtrl__Play(cm, slot, name, sequence, wait)` |
-| `0x003e4210` | 104 | `beNDMWLoadIntf2ComMdlCtrl__IsSequence(cm, slot, name, sequence)` — MODELCTRL ISSEQNAME |
-| `0x003e4280` | 20 | `beNDMWLoadIntf2ComMdlCtrl__IsOpenQueueEmpty(cm)` — signed count <= 0 |
-| `0x003e42a0` | 472 | `beNDMWLoadIntf2ComMdlCtrl__Close(cm, slot, name, sequence, wait)` — play and optional close tracking |
-| `0x003e4480` | 72 | `beNDMWLoadIntf2ComMdlCtrl__IsRunning(cm, slot, name)` — MODELCTRL ISRUN |
-| `0x003e44d0` | 20 | `beNDMWLoadIntf2ComMdlCtrl__IsCloseQueueEmpty(cm)` — signed count <= 0 |
-| `0x003e44f0` | 436 | `beNDMWLoadIntf2ComMdlCtrl__Poll(cm)` — poll/drain both queues |
+| `0x003e4210` | 104 | `beNDMWLoadIntf2ComMdlCtrl__IsSequence(cm, slot, name, sequence)`: MODELCTRL ISSEQNAME |
+| `0x003e4280` | 20 | `beNDMWLoadIntf2ComMdlCtrl__IsOpenQueueEmpty(cm)`: signed count <= 0 |
+| `0x003e42a0` | 472 | `beNDMWLoadIntf2ComMdlCtrl__Close(cm, slot, name, sequence, wait)`: play and optional close tracking |
+| `0x003e4480` | 72 | `beNDMWLoadIntf2ComMdlCtrl__IsRunning(cm, slot, name)`: MODELCTRL ISRUN |
+| `0x003e44d0` | 20 | `beNDMWLoadIntf2ComMdlCtrl__IsCloseQueueEmpty(cm)`: signed count <= 0 |
+| `0x003e44f0` | 436 | `beNDMWLoadIntf2ComMdlCtrl__Poll(cm)`: poll/drain both queues |
 
 The names above describe observed behavior; they are not recovered method names.
 `0x003e3d80` is the intervening reference-wrapper destructor, not a controller

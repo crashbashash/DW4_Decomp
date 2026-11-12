@@ -1,4 +1,4 @@
-# `flags/` — flag & progression data
+# `flags/`: flag and progression data
 
 The authoritative mapping of every flag operation in the game's Lua. The big per-flag xref is
 kept as **TSV**, not markdown, so it stays machine-readable and greppable.
@@ -8,7 +8,7 @@ kept as **TSV**, not markdown, so it stays machine-readable and greppable.
 | [`flag-map.md`](flag-map.md) | Save-flag encoding + story-state map, derived from real save diffs. **Overrides the heuristic labels** below where they disagree. | hand-written |
 | [`flag-meanings.md`](flag-meanings.md) | Curated story flags + heuristic labels, grouped by category (human-readable). | hand-written / curated |
 | [`flag-meanings.tsv`](flag-meanings.tsv) | The same per-flag meaning + confidence + evidence, machine-readable. | generated |
-| [`flag-xref.tsv`](flag-xref.tsv) | **Every flag operation** in the decompiled Lua — one row per operation. The canonical cross-reference. | generated |
+| [`flag-xref.tsv`](flag-xref.tsv) | Every flag operation in the decompiled Lua, one row per operation. The canonical cross-reference. | generated |
 
 Generators (in `scripts/`):
 
@@ -33,7 +33,7 @@ Tab-separated, one row per operation, with a header row:
 | `line` | line number |
 | `text` | the source line (truncated) |
 
-Query it with anything — e.g. all writes to flag 375:
+Query it with any tool, e.g. all writes to flag 375:
 
 ```sh
 awk -F'\t' '$2==375 && $1=="set"' docs/systems/flags/flag-xref.tsv

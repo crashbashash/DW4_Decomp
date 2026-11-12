@@ -19,9 +19,9 @@ A function counts as decompiled when a definition for it exists in `src/`. Every
 written only after `tools/verify.py` proved its compiled bytes identical to retail, so the
 number is a *record* of verification rather than a re-verification; `make check` re-proves it.
 
-* denominator — the sum of the function sizes in `config/SLUS-20836/symbols.txt` (the retail split);
-* numerator — those functions whose name is defined in `src/` (which is why a filename count
-  is wrong: a folded translation unit is one file for many functions — `tools/units.py` reads
+* denominator: the sum of the function sizes in `config/SLUS-20836/symbols.txt` (the retail split);
+* numerator: those functions whose name is defined in `src/` (which is why a filename count
+  is wrong: a folded translation unit is one file for many functions; `tools/units.py` reads
   the definitions).
 
 Coverage is quoted in bytes rather than functions, because the function count is flattered by
@@ -41,7 +41,7 @@ metadata the repo has recovered:
 | --- | --- | --- |
 | `code` | `config/SLUS-20836/layout.txt` | the function extents from `config/SLUS-20836/symbols.txt` |
 | `jtbl` | `config/SLUS-20836/layout.txt` | `config/SLUS-20836/jumptables.txt` |
-| `vtable` | `data/vtables.json` | `8 + 4 × len(vfuncs)` — the words are `[rtti, offset, vfuncs…]` |
+| `vtable` | `data/vtables.json` | `8 + 4 × len(vfuncs)`; the words are `[rtti, offset, vfuncs…]` |
 | `str` | `data/strings.json` | `length + 1`, for strings actually in the image |
 | `handle` | `data/reflection.json` | 4 bytes per class handle (they live in the `.bss` tail) |
 | `?` | the remainder | alignment, tables whose extent is not pinned yet, the rest of `.bss` |
@@ -60,8 +60,8 @@ metric: matched bytes say how much of the binary is verified, this says how much
 **typed**. m2c's C matches retail while encoding 4-byte pointers and hand-computed offsets, which
 is exactly what another compiler cannot use (see [`typed-coverage.md`](typed-coverage.md)).
 
-It was measured **neutral for matching**: it buys nothing in the matched-byte percentage. The number also has a *ceiling*
-worth watching — only a small share of accesses is typeable from the receiver class alone, because most
+It was measured **neutral for matching**: it buys nothing in the matched-byte percentage. The number also has a ceiling:
+only a small share of accesses is typeable from the receiver class alone, because most
 matched C is address-named, so **typed coverage advances with naming**: the two loops are the same
 work seen from two sides.
 
@@ -77,7 +77,7 @@ function inside a half-finished unit does not move the linked figure.
 **Here the two numbers coincide for code, by construction.** `tools/layout.py` tiles the
 section **per function**, and `tools/linkgen.py` decides per unit, so a matched function's C
 replaces those retail bytes immediately and the rest of its original translation unit stays
-in `asm/`. `make link` proves the result — the whole section compares byte-identical — and it
+in `asm/`. `make link` proves the result (the whole section compares byte-identical), and it
 prints the accounting from the link itself:
 
 ```
@@ -92,17 +92,17 @@ The headline is the same accounting against the **whole image**
 plus the jump tables the compiler regenerates. That is the number `PROGRESS.md` shows as the
 `fully linked` bar, with the code-only reading (equal to matched) explained next to it.
 
-One consequence worth stating plainly: because nothing decompiled is ever *waiting* to be
-linked, "matched" and "fully linked" cannot drift apart later — the risk a TU-based project
+Because nothing decompiled is ever *waiting* to be
+linked, "matched" and "fully linked" cannot drift apart later. The risk a TU-based project
 carries (a large backlog of matched-but-unlinked code) is structurally absent here.
 
 ## Publishing
 
 `tools/progress.py` writes three things, all generated and never hand-edited:
 
-* `PROGRESS.md` — the detailed page (code bands, where in the binary, the data table, the
+* `PROGRESS.md`: the detailed page (code bands, where in the binary, the data table, the
   recovered-metadata table);
-* `docs/progress.json` — the same numbers, machine-readable;
+* `docs/progress.json`: the same numbers, machine-readable;
 * the block between `<!-- progress:start -->` and `<!-- progress:end -->` at the top of
   `README.md`.
 

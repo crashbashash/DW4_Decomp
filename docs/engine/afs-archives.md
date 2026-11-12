@@ -68,14 +68,14 @@ serialized reflection metadata. The type names visible there include the engine
 types (`igObject`, `igNode`, `igTransform`, …) and the game types (`beBaseInfo`,
 `beModelCtrl*`, `beSaveData*`, …). See `docs/engine/reflection-metadata.md`.
 
-Example (entry 179, pre-Lua) — field names present in the metadata:
+Example (entry 179, pre-Lua); field names present in the metadata:
 ```
 hp mhp mp mmp level lv def power hit waza no kazu stun sleep poison guard
 beBaseInfo beBaseInfoRam beNDMWStatusInfo beNDMWStatusInfoRam beNDMWPanelWazaInfo
 beLuaData beLuaDataObject beActionStarterData beModelCtrlAIData ...
 ```
 
-## `NDMW.IGB` — the root manifest, which is also the virtual filesystem
+## `NDMW.IGB`: the root manifest, which is also the virtual filesystem
 
 A standalone 106,350-byte igBinary file (first words `00 01 00 00 0B 00 00 00 …`). Decoded,
 it is a schema of **20 classes** and 2,297 objects; the container's own record decode
@@ -88,7 +88,7 @@ it is a schema of **20 classes** and 2,297 objects; the container's own record d
 | `igAdxAfsFile` | `_name`, `_ptNumber`, `_fileNumber` | one per file: which archive, which entry |
 
 So **`_ptNumber` 0 is `NDMW.AFS` and 1 is `AREA.AFS`**, and a name resolves to an
-`(archive, entry)` pair. The manifest names **2,080 files — all 1,382 AREA entries and 697 of
+`(archive, entry)` pair. The manifest names **2,080 files: all 1,382 AREA entries and 697 of
 NDMW's 972**. Two anchors check it: `(0, 140)` is `stag0102.igb`, the manifest at AFS entry 140, and
 `(1, 0)` is `aeu_opening.sfd`, whose AREA entry 0 starts `00 00 01 ba`, an MPEG pack.
 
@@ -100,7 +100,7 @@ python3 scripts/afs_manifest_names.py <path>/NDMW.IGB --grep stag01
 
 What the names show about the NDMW layout: the stage manifests sit in a run
 (`stag0000.igb` = entry 137, `stag0101` = 139, `stag0102` = 140, …), and after them the
-entries repeat in **groups of seven** — `generatorh.igb`, `generatorn.igb`,
+entries repeat in **groups of seven**: `generatorh.igb`, `generatorn.igb`,
 `generatorv.igb`, `lh_pack.igb`, `ls_pack.igb` and two **unnamed** entries. Those two
 unnamed ones are the packs a stage manifest reaches *by index* rather than by name: the
 `[0.620]`/`[0.621]` pair (`stag0102`'s sound and model packs) is entries 620 and 621. The
@@ -109,9 +109,9 @@ same two slots in every later group.
 
 The object mix, as a sanity check on the schema: `igAdxAfsFile` 2,080, `igNamedObject`
 106, `igNamedObjectList` 105, then a handful of `beNDMWAfsSetupData`/`igInfo`/`igInfoList`
-records — the lists being `igMemoryRef`s into the content pool after the stream.
+records, the lists being `igMemoryRef`s into the content pool after the stream.
 
-### `[<ptNumber>.<fileNumber>]` — the notation a stage manifest uses
+### `[<ptNumber>.<fileNumber>]`: the notation a stage manifest uses
 
 A stage's own file list spells its packs the same way the root manifest addresses them:
 `stag0102.igb` (AFS entry 140) contains the literal strings **`[0.620]/s`** and
@@ -129,7 +129,7 @@ Resolved, so the indices are no longer opaque:
 | `stag0201.igb` | `[0.641]` | `NDMW.AFS` entry 641 | 346,670 |
 | | `[0.642]` | `NDMW.AFS` entry 642 | 5,173,220 |
 
-The pair is `(base+0, base+1)` in `NDMW.AFS` — sound then model — and `642` is the pack the test
+The pair is `(base+0, base+1)` in `NDMW.AFS` (sound then model), and `642` is the pack the test
 below swaps into `stag0102`. A sweep of the whole table confirms **2,079 of the 2,080 named files resolve into their archive**; the 2,080th is the
 manifest's own `NONE` record (`_ptNumber` 0, `_fileNumber` -1).
 
@@ -187,7 +187,7 @@ The root manifest names exactly three media files: the extension count
 over all 2,080 names is **2,076 `.igb` + 3 `.sfd` + 1 `NONE`**. The movies are `aeu_opening.sfd`,
 `ajp_opening.sfd` and `aus_opening.sfd`, AREA.AFS entries 0, 1 and 2 (40,091,648 B each ≈ 1:04).
 
-They are CRI **Sofdec** — a program stream, so the `00 00 01 ba` prefix looked like MPEG-2, but ffprobe
+They are CRI **Sofdec**, a program stream, so the `00 00 01 ba` prefix looked like MPEG-2, but ffprobe
 says otherwise:
 
 ```
@@ -196,11 +196,11 @@ Stream #0:0: Audio: adpcm_adx, 48000 Hz, 2 channels, s16p, 432 kb/s
 Stream #0:1: Video: mpeg1video, 640x480, 29.97 fps
 ```
 
-**MPEG-1**, not MPEG-2, and the audio is **ADX carried inside the container** — so the movies need no
+**MPEG-1**, not MPEG-2, and the audio is **ADX carried inside the container**, so the movies need no
 reverse engineering at all: stock ffmpeg decodes both streams.
 
 A stage's resident sound effects are CRI `ps2_` banks inside its **sound pack** (the smaller of its pair
-of AFS entries), and those decode offline — see [`sound-format.md`](sound-format.md). Music and ambience
+of AFS entries), and those decode offline; see [`sound-format.md`](sound-format.md). Music and ambience
 can instead be **standalone ADX streams**: `NDMW.AFS` entries 0–78 are ADX files, each opening `80 00`
 with `(c)CRI` at its header's copyright offset. The root manifest does not name them; sound metadata
 reaches them by index, so `ST_CHARA`, `AM_TITLE` and `AM_START` resolve to `[0.53]`, `[0.19]` and
@@ -223,7 +223,7 @@ pack's own directory, with no load-level replay ([`igbinary-format.md`](igbinary
 [`inline-textures.md`](inline-textures.md).
 
 **The live route reaches the same images at run time.** A scan of a loaded save finds 18,812 live
-objects over 171 classes and no `igImage`/`igClut` *by class* — those classes are not among the 478
+objects over 171 classes and no `igImage`/`igClut` *by class*: those classes are not among the 478
 recovered vtables, which is why a vtable-keyed scan cannot see them. But the chain is reachable from
 one that *is* live:
 
@@ -238,7 +238,7 @@ and at runtime those are ordinary **pointers**, not ordinals. Confirmed field-fo
 256, `_stride` 4, `_clutSize` 1024, so the palette is 32-bit **R,G,B,A**. Two facts the pixels settle:
 row 0 is the row the GS samples at `v = 0`, so a sampler that indexes with `1 - v` flips the rows on
 decode ([`inline-textures.md`](inline-textures.md)), and the source is a **plain linear
-8-bit indexed image** — no swizzle — since `_bytesPerRow == _px` for all 46 reachable textures and all
+8-bit indexed image** (no swizzle), since `_bytesPerRow == _px` for all 46 reachable textures and all
 share `_pfmt` 0x00010000.
 
 Verified by eye: `stmojipnl01.png` is the status-screen label atlas (Strength/Defense/Wisdom/Spirit/
@@ -248,7 +248,7 @@ ramps. All 46 keep their real asset names
 (`base01.png`, `num02.png`, `P12W00.png`, …).
 
 ## Unexplored
-- `AREA.AFS` level data beyond a class census (which entries carry `igImage`, `igGeometry`, …) —
+- `AREA.AFS` level data beyond a class census (which entries carry `igImage`, `igGeometry`, …):
   object placement and spawn points are not parsed.
-- `OUTER.DAT` (204 MB) — **completely unexplored**.
+- `OUTER.DAT` (204 MB): unexplored.
 - Full igBinary parse of the reflection metadata.

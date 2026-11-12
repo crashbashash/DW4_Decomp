@@ -52,7 +52,7 @@ def fix_checksums(buf):                 # buf = bytearray of the 81920-byte save
 Verified on both real saves (`save1 SUM blk = 0x40F3E11D`, `save2 = 0x47000881`,
 both equal the stored value), and used successfully to edit a save.
 
-> **Not a whole-file XOR.** A whole-file *XOR* match is a tautology — because
+> **Not a whole-file XOR.** A whole-file *XOR* match is a tautology: because
 > the two 0xA000-byte blocks are byte-identical mirrors, `XOR(u32, 4..EOF)`
 > always equals the mirrored checksum field and thus says nothing about the
 > data. The real checksum is the per-block **SUM** above (it is non-trivial and
@@ -74,10 +74,10 @@ The 8-byte header is followed by the "deliver struct" (base = block+8).
 | `+0x30` | 8 B | save name `PLAYERNAME` (**fullwidth UTF-16**) | `0xff41 0xff42 0xff43` = ａｂｃ ("abc") |
 | `+0x38` | 24 B | (padding) | zeros |
 | `+0x50` | u32 | `LEVEL` (menu snapshot only) | `1` |
-| `+0x54` | u32 | `HP` (**derived** — menu only) | `170` |
-| `+0x58` | u32 | `MHP` (**derived** — menu only) | `170` |
-| `+0x5c` | u32 | `MP` (**derived** — menu only) | `60` |
-| `+0x60` | u32 | `MMP` (**derived** — menu only) | `60` |
+| `+0x54` | u32 | `HP` (**derived**, menu only) | `170` |
+| `+0x58` | u32 | `MHP` (**derived**, menu only) | `170` |
+| `+0x5c` | u32 | `MP` (**derived**, menu only) | `60` |
+| `+0x60` | u32 | `MMP` (**derived**, menu only) | `60` |
 | `+0x64` | u32 | `XDATA` | `0` |
 | `+0x68` | u32 | **`BIT`** (currency, trusted) | `0` / `187` **✔ confirmed** |
 | `+0x6c` | 36 × u32 | **device folder** (`0xFFFFFFFF` = empty, trusted) | see below |
@@ -85,14 +85,14 @@ The 8-byte header is followed by the "deliver struct" (base = block+8).
 | `+0x470`–`+0x48b` | bytes | `BASE_FLAG[336..363]` (flags, not a technique-level table; see `docs/systems/techniques.md`) | |
 | `+0x788` | u32 | **REAL level** (`BASE_LEVEL[3]`, trusted until EXP gain) | `2` |
 | `+0x7c8` | u32 | **EXP** (`BASE_EXP[3]`, trusted; drives the level formula) | `398` |
-| `+0x874` | u32 | single technique level — `BASE_SKILL[30]` = species 3 (Dorumon) skill slot 3 = **bash** | `7` |
+| `+0x874` | u32 | single technique level: `BASE_SKILL[30]` = species 3 (Dorumon) skill slot 3 = **bash** | `7` |
 | `+0xfc` | 48 B | sequential ids `0x4000..0x400B` (+ high-bit flags) | |
 | other | | `0xFFFFFFFF` slot tables, flag/usage data (see the complete map below) | |
 | `+0xafc`–`+0xA000` | | zero padding | |
 
 ## ✅ Complete block byte map (authoritative)
 
-The whole 0xA000 block is mapped contiguously — **no unknown bytes**.
+The whole 0xA000 block is mapped contiguously, with no unknown bytes.
 Verified by a pure-synthesis builder that reproduces both reference saves **byte-for-byte**.
 
 | File offset | Size | Field |
@@ -130,7 +130,7 @@ Verified by a pure-synthesis builder that reproduces both reference saves **byte
 | `+0x7bc` | 16×u32 | BASE_EXP |
 | `+0x7fc` | 144×u32 | BASE_SKILL (16 species × 9 techniques) |
 | `+0xa3c` | 176×u32 | BASE_UPCNT (16 species × 11 power-ups) |
-| `+0xafc` | — | zero padding to end of block |
+| `+0xafc` | - | zero padding to end of block |
 
 Struct-offset note: `beNDMWDegiData__LoadFromProperties` writes the deliver struct at `block+8`, so
 struct offsets = file offsets − 8 (e.g. `sw v0,72(s0)` = file `+0x50`). The
@@ -161,9 +161,9 @@ Normal (−1): intro `0..4 ← 699..703`; `18,19 ← 705,706`; bosses
 folders `0..9 ← 530..539`. Very Hard: `0..4 ← 12..16`, `66..68 ← 77..79`,
 `82 ← 772`, `85 ← 87`, folders `0..9 ← 542..551`.)
 
-Difficulty itself is **not** serialized — it is runtime-only.
+Difficulty itself is **not** serialized; it is runtime-only.
 
-### Device folder — `file+0x6c` (36 × u32)
+### Device folder: `file+0x6c` (36 × u32)
 
 The first 9 slots of the reference save, confirmed by 2-save diff (user's
 folder lists "dyno tooth a" twice at positions 4 & 8 → both read `50`):
@@ -180,7 +180,7 @@ folder lists "dyno tooth a" twice at positions 4 & 8 → both read `50`):
 | 8 | `+0x88` | dyno tooth a | `50` |
 | 9 | `+0x8c` | kamikiri maru a | `75` |
 
-### Weapon slots — `file+0x2e4/0x2e8/0x2ec` (3 × u32)
+### Weapon slots: `file+0x2e4/0x2e8/0x2ec` (3 × u32)
 
 Each stores an **index into the device folder**; the **equipped weapon is
 weapon slot 1** (`*(0x2e4)`). Confirmed when the player swapped the equipped
@@ -234,7 +234,7 @@ but the game clamps/display-caps at 999). The polynomial itself keeps growing.
 
 **Save-edit recipes:**
 
-- Set level directly: write level to `+0x788` (and `+0x50` for the menu) — trusted
+- Set level directly: write level to `+0x788` (and `+0x50` for the menu); trusted
   until the next EXP gain.
 - Set level via EXP: write `EXP = threshold(n)` (or `threshold(n) .. threshold(n+1)-1`)
   to `+0x7c8`, then trigger any EXP gain in-game to force the recalc.
@@ -261,7 +261,7 @@ XDATA, BIT, DEVICEFOLDER, …` (key strings `0x00517e58`–`0x00517ee0`).
   `+0xa3c` (16×11 u32), `BASE_FLAG` `+0x320` (1024×u8), `BASE_FLAGFOLDER`
   `+0x720`, `BASE_COUNTER` `+0x72c` (16×u32), `BASE_ISUSE` `+0x76c` (16×u8,
   species-indexed). The six attack
-  styles (blunt/slash/stab/bash/shot/crush) are `BASE_SKILL[species*9 + 0..5]` —
+  styles (blunt/slash/stab/bash/shot/crush) are `BASE_SKILL[species*9 + 0..5]`;
   see [`techniques.md`](techniques.md).
 
 **Species index order** (confirmed): the game derives the
@@ -320,7 +320,7 @@ Meta     : SaveDataTime MakeDataTime GAMEDATAINIT
 2. Edit **trusted** fields in **both** blocks, then recompute each block's SUM
    checksum and repack the image. Trusted = BIT `+0x68`, device folder `+0x6c`,
    weapon slots `+0x2e4/8/c`, real level `+0x788`, EXP `+0x7c8`.
-   (HP/MP `+0x54..0x60` and LEVEL `+0x50` are menu-only — the game recomputes
+   (HP/MP `+0x54..0x60` and LEVEL `+0x50` are menu-only; the game recomputes
    them, so don't bother editing them for gameplay effect.)
 3. Recompute the checksums (per-block SUM) and write at `+0x00` and `+0xA000`.
 4. Write back into the memory card image.
@@ -353,13 +353,13 @@ Meta     : SaveDataTime MakeDataTime GAMEDATAINIT
 
 ---
 
-## Memory-card creation — console-validated metadata ⭐
+## Memory-card creation: console-validated metadata
 
 Notes for **building a `.ps2` from scratch** rather than editing an existing one.
 
 Verified by synthesising cards with the DW4orge Rust rewrite and loading them in
 PCSX2. Every item below was found by the console rejecting a card that was
-internally consistent — valid FAT, valid ECC, readable by `ps2mc` — and that the
+internally consistent (valid FAT, valid ECC, readable by `ps2mc`) and that the
 BIOS memory-card browser happily listed.
 
 ### Layout the game accepts
@@ -377,7 +377,7 @@ Mirror a real card's allocation rather than inventing a tidy contiguous one:
 Indirect FAT at absolute cluster 8 (listing `9..40`); FAT at absolute clusters
 9–40. Raw FAT encoding: free `0x7FFFFFFF`, allocated pointer
 `0x80000000 | next`, chain end `0xFFFFFFFF`. The save directory's own `.` entry
-has `length` 0 while its parent entry holds 5 — reproduce that, do not "fix" it.
+has `length` 0 while its parent entry holds 5; reproduce that, do not "fix" it.
 
 ### Directory entry fields the console validates
 
@@ -395,7 +395,7 @@ save-directory `..` `0x8427`.
 Proven by deleting each from a working card and re-testing:
 
 - the contents of **page 1** (real cards carry 8 bytes there; erased is accepted);
-- the **backup block** — superblock `backup_block1`/`backup_block2` = 1022/1023,
+- the **backup block**: superblock `backup_block1`/`backup_block2` = 1022/1023,
   physical clusters 8184–8191 (erased is accepted);
 - FAT entries at or after `alloc_end` (`0xFFFFFFFF` vs `0x7FFFFFFF` is irrelevant);
 - ECC spare bytes on erased pages.

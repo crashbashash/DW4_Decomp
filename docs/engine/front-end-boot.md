@@ -20,7 +20,7 @@ set of Lua chunks run in order, each driving a named 3-D scene stage. From the d
 
 | AFS entry | tree name | scene stage | what it is |
 | --- | --- | --- | --- |
-| 800 | `menu-database` | — | `DBBase` + font database load |
+| 800 | `menu-database` | - | `DBBase` + font database load |
 | 802 | `bandai-logo` | `stagIS09` | Bandai logo + rating splash |
 | 804 | `opening` | `stagIS10` | the opening movie |
 | 806 | `title-screen` | `AM_TITLE` | the title screen and its menu |
@@ -30,12 +30,12 @@ set of Lua chunks run in order, each driving a named 3-D scene stage. From the d
 The scene-stage names sit in one run of the ELF's `.data` at **`0x50e668`**:
 `start.lua`, `first.lua`, `stagIS08`, `stagIS09`, `stagIS10`, `stagIS12` (the neighbouring strings
 `ROOTATTR`, `Gap::Bec::beFileListInfoManager` are the same table's tail). The title's own Lua writes
-the names lower-case (`stagis09`, `stagis10`); the ELF spells them upper-case — one side is
+the names lower-case (`stagis09`, `stagis10`); the ELF spells them upper-case, so one side is
 normalised at lookup.
 
 The front-end stages are in the game's own stage list (`data/lua_stages.txt`, recovered from the
 master stage list, AFS entry 603): **`stagIS07`…`stagIS13`, `stagIS20`, `stagML02`, and
-`stagML12`–`stagML14`** alongside the title's **`stagML11`** — `IS` for the interface scenes, `ML`
+`stagML12`–`stagML14`** alongside the title's **`stagML11`**: `IS` for the interface scenes, `ML`
 for the menu/title scenes. (The file is alphabetically sorted, so the front-end rows are adjacent but
 that is the sort, not the running order.) The debug stage-select menu
 (`14-misc/01-stage-select-list_e603/050-msg-80129.lua`, see
@@ -46,7 +46,7 @@ over these, which is why the same names appear in it.
 
 - **`beNDMWStageCtl`** (vtable `0x53dea0`, RTTI `0x515708`) with its info record
   **`beNDMWStageCtlInfo`** (vtable `0x53d9d0`, RTTI `0x515238`) carrying `_stageName` (`0x501d00`),
-  `_nextStage` (`0x501d10`) and `_isStageLoop` (`0x501d20`) — the stage machine's own fields.
+  `_nextStage` (`0x501d10`) and `_isStageLoop` (`0x501d20`), the stage machine's own fields.
 - **The Lua API does the switching.** Every front-end entry has a `dm-run` chunk that ends with the
   same template, differing only in stage name and mode:
 
@@ -58,18 +58,18 @@ over these, which is why the same names appear in it.
   and the input gate `be:sd("STAGECTL", nil, -2, "PADINPUT", "ENABLE", 29)`. Seen with
   `stagis09` 0 (bandai-logo), `stagis10` 0 (opening) and `stagML11` 9 (title / menu-database /
   bandai-logo tails).
-- **`beNDMWLoadCtrl2::vfunc_31` @ `0x3f1a80`** (2,512 B) — the front-end **load controller**. Its
+- **`beNDMWLoadCtrl2::vfunc_31` @ `0x3f1a80`** (2,512 B): the front-end **load controller**. Its
   name table (`0x518130…`) is the sequence of things it loads and does: `COMMONINTF`,
   `LOADINTF2_ALL`, `j_chrselback`, `SQ_OPEN` / `SQ_WTIN60` / `SQ_BLOUT30` / `SQ_CLOSE`,
   `SETSELECT_DATA`, `GAMERAM`, `GETCOMMON`, `NINZU`, `DIFFICULTY`, `CAMERAMODE`, `LIGHTMODE`,
   `TITLE2`, `GAMESTART`, `gameStart.lua`, `PLAYERPOINT`, `SETGENERATEPOS`, `STAGECTL`, `stagML11`,
   `NEXTSTAGE`, `LOADCTRL2`, `GAMEDATAINIT`.
-- **`beNDMWTitle2`** (vtable `0x53e9a0`, RTTI `0x5186f8`) — `vfunc_31` @ `0x3f2ef0` (**8,700 B**)
+- **`beNDMWTitle2`** (vtable `0x53e9a0`, RTTI `0x5186f8`): `vfunc_31` @ `0x3f2ef0` (**8,700 B**)
   references `stagIS08` and `stagIS09`, and `vfunc_29` @ `0x3f5320` references `TITLE2`, so the
   title controller also runs the logo scenes. Its menu rows are **`beNDMWTitle2Option`**
-  (vtable `0x53dcf0`, RTTI `0x515450`) — the "Game Start" / "Option" entries.
+  (vtable `0x53dcf0`, RTTI `0x515450`), the "Game Start" / "Option" entries.
 - **`beNDMWLogo`** (vtable `0x5409d0`, RTTI `0x51db88`) with `beNDMWLogoInfo` /
-  `beNDMWLogoCtrlData` — the logo splash.
+  `beNDMWLogoCtrlData`: the logo splash.
 
 The small slot-29 wrappers are matching C++. `beNDMWTitle2::vfunc_29`
 (`0x3f5320`) forwards `(this->_field14, callerArgument, descriptor 0x5186a8)` to
@@ -99,11 +99,11 @@ graph (the tunnel layer, recovered separately):
 
 | graph | nodes (world) | geometry | texture |
 | --- | --- | --- | --- |
-| `j_startlogo` | `rogo` y=+73 | `polySurfaceShape2` — x ∈ [−294.4, 294.4], y ∈ [−129.95, 164.45], z=400, full UV | `logo.png` (512×256) |
-| `j_startlogo` | `kenri` y=−170 | `polySurfaceShape4` — x ∈ [−155, 155], y ∈ [−48.5, 27.5], z=400, UV v 0…0.4 | `mojips.png` (the copyright lines) |
-| `j_startmenu01` | `start` | `polySurfaceShape5` — x ∈ [−160, 160], z=400, UV v 0.758…0.984 | `mojips.png` (the "Press START button" line) |
+| `j_startlogo` | `rogo` y=+73 | `polySurfaceShape2`: x ∈ [−294.4, 294.4], y ∈ [−129.95, 164.45], z=400, full UV | `logo.png` (512×256) |
+| `j_startlogo` | `kenri` y=−170 | `polySurfaceShape4`: x ∈ [−155, 155], y ∈ [−48.5, 27.5], z=400, UV v 0…0.4 | `mojips.png` (the copyright lines) |
+| `j_startmenu01` | `start` | `polySurfaceShape5`: x ∈ [−160, 160], z=400, UV v 0.758…0.984 | `mojips.png` (the "Press START button" line) |
 | `j_startmenu02` | `menu`, `null1` | `polySurfaceShape5` / `polySurfaceShape34`, z=600 | `mojips.png` (the "Game Start" / "Option" rows) |
-| both menus | `null2`, `select` | `polySurfaceShape35/36/37` — `cursor.png` sampled at a constant texel | `cursor.png` (the highlight bars) |
+| both menus | `null2`, `select` | `polySurfaceShape35/36/37`: `cursor.png` sampled at a constant texel | `cursor.png` (the highlight bars) |
 
 The engine draws each geometry's four UV'd vertices in **screen space**: one model unit = one pixel
 in a **640×448** space, +y up, origin at the framebuffer centre, `z` as painter depth (a larger `z`
@@ -112,7 +112,7 @@ is nearer). The material is the pack's own chain: `igAttrSet._attributes` (**ord
 the `igTextureBindAttr._texture` (**ordinal 4**) → `igTextureAttr._image` (**ordinal 12**) →
 `igImage` (`_px` 2 / `_py` 3 / `_pImage` 13 / `_pClut` 17 / `_bytesPerRow` 19 / `_pNameString` 22)
 → `igClut._pData` (**ordinal 5**). The ordinals are the class's descriptor slots, read from the
-pack's class triples — *not* the `reflection.json` field-list index.
+pack's class triples, *not* the `reflection.json` field-list index.
 
 Each node carries an `igTransformSequence1_5` **pop-in** (scale (0,0,1) → (1,1,1)), so the
 `igTransform`'s stored `_m` is a placeholder (zero x/y rows) and the visible resting layout is the
@@ -127,7 +127,7 @@ sequence carries the indicator's `y = −60 / −108` rest keys. A JOINTSET is a
 
 Beneath the layer and this UI sits the static **`stagML11` dome** (`NDMW.AFS` 806, `stagml11.igb`
 ref 0: 208 meshes / 24 949 triangles), composed through the same recovered title camera and drawn
-first — the game's order is backdrop → `j_startback` layer → UI. That pack carries no
+first. The game's order is backdrop → `j_startback` layer → UI. That pack carries no
 lights, colours or textures, so its exact VU1 tone (and the mirrored "DIGIMON WORLD" reflection) is
 engine runtime state that the pack does not encode and is not recovered.
 
@@ -137,15 +137,15 @@ quad at `t=0` settling to the rest rectangle.
 
 **How the controller addresses them.** `beNDMWTitle2`'s own message/target table in
 `.data` runs `… TEXTORDER`, `j_startlogo`, `SQ_OPEN`, `j_startmenu01`, `MODELCTRL`, `SQ_LINESL00`,
-`ISSEQNAME`, `i_fadewn01`, `GENERATE`, `SQ_BLOUT30`, `ISRUN` — so the graphs are named targets of
+`ISSEQNAME`, `i_fadewn01`, `GENERATE`, `SQ_BLOUT30`, `ISRUN`, so the graphs are named targets of
 `MODELCTRL … GENERATE <seq>` exactly like `j_startback`, which is why the recovered layout *is* the
 title's rendering path.
 
 ## The title's two states
 
-The title is not one screen. The `mojips.png` atlas (256×128) holds three zones — **"Press START
+The title is not one screen. The `mojips.png` atlas (256×128) holds three zones (**"Press START
 button"** at v 0.78…1.0, the **"Game Start" / "Option"** rows at v 0.62…0.78 and the copyright block
-at v 0.1…0.45 — and the game shows the two menu zones **mutually exclusively**:
+at v 0.1…0.45), and the game shows the two menu zones **mutually exclusively**:
 
 - **press-start** (the boot state): `j_startlogo` (logo + copyright) plus `j_startmenu01`, the single
   `start` line = "Press START button" (UV v 0.758…0.984). No rows, no highlight.
@@ -155,7 +155,7 @@ at v 0.1…0.45 — and the game shows the two menu zones **mutually exclusively
 The game advances on the
 pad's **START** (Cross skips the opening FMV instead).
 
-The opening effect runs first, on its own — see *The opening: traces, a white flash, then the UI* below.
+The opening effect runs first, on its own; see *The opening: traces, a white flash, then the UI* below.
 
 ## Title input, skipping and the Option screen
 
@@ -247,9 +247,9 @@ finished. Watched live, frame by frame (a no-input boot):
 
 | phase | what the screen shows |
 | --- | --- |
-| ~2.4 s | on **black**, thick glowing **blue circuit-trace lines are drawn progressively** — segments appear and extend into a ring decorated with runes, with traces radiating out to the screen edges |
+| ~2.4 s | on **black**, thick glowing **blue circuit-trace lines are drawn progressively**: segments appear and extend into a ring decorated with runes, with traces radiating out to the screen edges |
 | then | the pattern turns white with a bright flare in the centre |
-| when `SQ_OPEN` ends | a **full-screen white flash**: the stage's Lua runs `MODELCTRL i_fadewn01 GENERATE SQ_WTIN60`, which is `beAction2FADESET OUT _fadeTime=60 _fadeValue=1.0` on the fade model's joint 45 — white at alpha 1.0 fading to 0 over 60 frames |
+| when `SQ_OPEN` ends | a **full-screen white flash**: the stage's Lua runs `MODELCTRL i_fadewn01 GENERATE SQ_WTIN60`, which is `beAction2FADESET OUT _fadeTime=60 _fadeValue=1.0` on the fade model's joint 45 (white at alpha 1.0 fading to 0 over 60 frames) |
 | then | a solid 3D **tunnel of concentric rings** with a bright white core, seen head-on |
 | at the same tick | the **title UI** (logo + "Press START button" + copyright) over the tunnel |
 
@@ -261,7 +261,7 @@ nodes stay degenerate (sequence scale 0, not drawn) until it elapses.
 **The traces are `j_startback` geometry** (see the title layer
 below): the ring and trace strips of that graph, not a separate graph or loader screen. Its animated parent
 groups carry **no scale keys and no keyframe before t≈2.0 s**, so the layer is static for the opening's first two seconds. The flash is
-`i_fadewn01`'s `SQ_WTIN60` —
+`i_fadewn01`'s `SQ_WTIN60`,
 *not* the layer's one-frame node 895 `group9`, which is a different thing in a different model.
 
 `i_fadewn01` is a family of full-screen fade actions: joint 45 is the white node and joint 5 the black
@@ -269,33 +269,33 @@ node. `SQ_BLIN30` is `beAction2FADESET OUT` on joint 5 over 30 frames, the mirro
 rest are the same pair at 0/30/60 frames (`BLOUT00/30/60`, `BLIN60`, `WTOUT00/60`), plus
 `BHLFIN30`/`BHLFOUT30` at 20 frames.
 
-The title stage's own Lua (`lua/00-title-menus/04-title-screen_e806/`) is the driver and is
-worth reading before the controller: `004-layer-setup-2.lua` runs `SQ_BLIN30` (the fade the title
+The title stage's own Lua (`lua/00-title-menus/04-title-screen_e806/`) is the driver and should be
+read before the controller: `004-layer-setup-2.lua` runs `SQ_BLIN30` (the fade the title
 fades in from), `SETDEMOCAMERA "entry"`, `j_startback GENERATE SQ_OPEN`, waits on
 `ISSEQNAME SQ_OPEN ==0`, then `SQ_WTIN60` and `TITLE2 RUN`; `003-camera.lua` names the graphs the
 stage loads (`FontTree DBBase mainstatuswin savecheckwin startback startlogo startmenu01
 startmenu02`).
 
 The controller block at `0x3f4d80` does generate `j_startlogo` with `SQ_OPEN`, wait on `0x3e4280`,
-then issue `MODELCTRL j_startmenu01 ISRUN` — but which state enters that block, and whether it is
+then issue `MODELCTRL j_startmenu01 ISRUN`, but which state enters that block, and whether it is
 gated on the layer's action, is **not yet recovered**.
 
 ## What the front end depends on
 
-1. **A stage/script sequencer** — a front-end entry's chunk set is loaded, the chunks run in order,
+1. **A stage/script sequencer**: a front-end entry's chunk set is loaded, the chunks run in order,
    and they drive that entry's scene stage pack plus its fade. The front-end entries are ordinary stage
    entries in the same loader the world stages use; there is no separate menu code path.
-2. **The `be:` API subset the front-end uses** — `sd` / `DMsetSD` / `DMchkSD` / `DMrun`, `FLGset` /
+2. **The `be:` API subset the front-end uses**: `sd` / `DMsetSD` / `DMchkSD` / `DMrun`, `FLGset` /
    `FLGisOn` / `COUNTERset`, `SYSgetArea` / `SYSgetDifficulty` / `SYSctlFlagFolder`,
    `LISsetDifficultMax`, `CFLclear`, `MsgBox`.
-3. **The scene content** — the logo/opening/title packs, the FMV (CRI Sofdec, `igCriMovieCodec`),
+3. **The scene content**: the logo/opening/title packs, the FMV (CRI Sofdec, `igCriMovieCodec`),
    and the title menu rows.
-4. **The input gate** — the title's "Press START" state; in the recorded test the *pad*'s START does not
+4. **The input gate**: the title's "Press START" state; in the recorded test the *pad*'s START does not
    reach PCSX2, so it has to be rebound.
 
 ## The title layer: `j_startback`
 
-The front-end UI pack is **AREA.AFS entry 620** — `j_startback` (the trail/tunnel layer, scene 3),
+The front-end UI pack is **AREA.AFS entry 620**: `j_startback` (the trail/tunnel layer, scene 3),
 `j_startlogo`, `j_startmenu01/02`, 5 `igSceneInfo`, 5914 records.
 
 The layer's chain is `igSceneInfo` -> `igAttrSet` `BG02` (texture bind -> `igImage` `sback00.png`,
@@ -374,7 +374,7 @@ recoverable from data:
 | `igAlphaStateAttr` / `igBlendStateAttr` | `_enabled=1` | both on |
 | `igLightingStateAttr` | `_enabled=0` | lighting **off**; entry 620 has no `igLightAttr` for the layer |
 | `igMaterialAttr` | `_diffuse=[1,1,1,1] _ambient=[1,1,1,1]` | white, unlit |
-| `igColorAttr` ×265 | `_color=[0.9, 0.9, 0.9, 0.95]` | on the **265 font attribute sets** (`font00`, `font01`, … `font000`…): the UI text tint. *Not* the layer — 265 of 301 `igAttrSet`s resolve one and all are `font*`; none of the layer's 16 meshes does |
+| `igColorAttr` ×265 | `_color=[0.9, 0.9, 0.9, 0.95]` | on the **265 font attribute sets** (`font00`, `font01`, … `font000`…): the UI text tint. *Not* the layer: 265 of 301 `igAttrSet`s resolve one and all are `font*`; none of the layer's 16 meshes does |
 | `igTextureAttr` ×12 | filter/wrap = 1 | `_image` → `sback00.png`, `logo.png`, `base*.png`, `moji*.png`, `cursor.png` |
 
 `igShadeModelAttr _mode=1`, `igCullFaceAttr _enabled=0`, `igDepthStateAttr`, `igFogStateAttr` (one

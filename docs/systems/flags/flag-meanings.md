@@ -1,4 +1,4 @@
-# Flag meanings — Digimon World 4
+# Flag meanings: Digimon World 4
 
 Curated story/progression flags plus heuristic labels for the rest.
 Confidence: **high** = decoded from direct evidence (set-on-defeat,

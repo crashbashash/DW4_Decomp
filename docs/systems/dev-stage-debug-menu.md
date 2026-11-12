@@ -1,7 +1,7 @@
 # The developer stage (`stag0000`) and its debug-NPC menu
 
 **Status:** mapped, captured, translated
-**Evidence:** in-game captures — 90 translated debug-menu screens (45 dialogue/menu + 40
+**Evidence:** in-game captures: 90 translated debug-menu screens (45 dialogue/menu + 40
 stage-list captures) plus the original frames.
 
 ## 1. What `stag0000` is
@@ -13,10 +13,10 @@ It loads cleanly by cold warp (verified in a 20-destination sweep). No stage is 
 see [Warp safety](#warp-safety).
 
 It appears exactly **once** as a `NEXTSTAGE` literal in the whole decompiled corpus, and
-it is *not* reachable through normal play — the hub's gate menu offers the four worlds,
+it is *not* reachable through normal play; the hub's gate menu offers the four worlds,
 not this.
 
-**It is a debug sandbox built around a menu of debug NPCs (§3).** Everything the debug
+It is a debug sandbox built around a menu of debug NPCs (§3). Everything the debug
 build could do at runtime is exposed here as an in-world character you talk to.
 
 ## 2. Getting in (three routes)
@@ -25,7 +25,7 @@ build could do at runtime is exposed here as an in-world character you talk to.
 |---|---|---|
 | **savestate** (most reliable) | load a state captured while standing in the dev world | verified by the engine's current-stage field `0x006FF148` = `stag0000`. A state does not re-read the disc, so it works on any build |
 | the eleven NPC states | one state per debug NPC | each stands the player in front of one NPC |
-| patched disc | rewrite the single `"stagML11"` literal in the character-select packs' `dm-run` (AFS entries 808/810/812) to `"stag0000"` | a normal boot after character select then lands in the dev world; **blocked on a valid memcard** — see §7 |
+| patched disc | rewrite the single `"stagML11"` literal in the character-select packs' `dm-run` (AFS entries 808/810/812) to `"stag0000"` | a normal boot after character select then lands in the dev world; **blocked on a valid memcard** (see §7) |
 
 The RAM route that produced the state: the gate menu keeps pre-built `STAGECTL NEXTSTAGE`
 command records; re-point the record's `+0x00` (stage-name pointer) at another interned
@@ -53,42 +53,42 @@ up clean this way. Other RAM warps fail; see [What didn't work](#11-what-didnt-w
 
 ## 3. The NPC roster
 
-Six of the NPCs are the same model and share the on-screen name **デジルフ** — in
+Six of the NPCs are the same model and share the on-screen name **デジルフ**, in
 romanised form "Digi-elf"; it is a debug mascot, not a Digimon. The seventh is
 **レオモン (Leomon)**, and two of the "NPCs" are rocks.
 
 | state | on-screen | role | first line (JP → EN) |
 |---|---|---|---|
 | `digi-elf-1` | デジルフ | **text/font size test** | 「もじをみたのか？…サイズをえらびな!!」→ "Did you see the characters? … Choose the SIZE!!" |
-| `digi-elf-2` | デジルフ | **stage select — a working warp menu** | 「ステージせんたくするよ！ほかのステージにどうする？」→ "Let's select a stage! What about another stage?" |
+| `digi-elf-2` | デジルフ | **stage select: a working warp menu** | 「ステージせんたくするよ！ほかのステージにどうする？」→ "Let's select a stage! What about another stage?" |
 | `digi-elf-3` | デジルフ | **play mode / difficulty** | 「プレイするモードをせんたくします」→ "Select the mode to play." |
 | `digi-elf-4` | デジルフ | **TIME flag editor** | 「TIMEフラグをへんこうします」→ "Change the TIME flag." |
 | `digi-elf-5` | デジルフ | **evolution-arts unlock** | 「しんかワザをおぼえます」→ "Learn evolution arts." |
 | `digi-elf-6` | デジルフ | **EXP / level cheat** | 「すきなLVまでのEXPをあげますよ…」→ "I'll give you EXP up to any LV you like…" |
 | `leomon-1` | レオモン (**Leomon**) | **leave debug mode → the lobby** | 「デバッグをしゅうりょうして ML11にてんそうします」→ "Finish debug and transport to ML11." |
-| `rock-1` | — | **item cheat** | 「--アイテム MAX-- アイテム すべてx9 になりました」 |
-| `rock-2` | — | **money cheat** | 「--おかね MAX-- BITが 9999999 になりました」 |
-| `goblin-1/2` | — | **enemies, attack only** (no dialogue) | ゴブリモン — see §5 |
+| `rock-1` | - | **item cheat** | 「--アイテム MAX-- アイテム すべてx9 になりました」 |
+| `rock-2` | - | **money cheat** | 「--おかね MAX-- BITが 9999999 になりました」 |
+| `goblin-1/2` | - | **enemies, attack only** (no dialogue) | ゴブリモン; see §5 |
 
 ## 4. Each menu, in full
 
-**`digi-elf-1` — text size.** `NORMALでおねがいします` / `MINIMUMでおねがいします` /
+**`digi-elf-1`: text size.** `NORMALでおねがいします` / `MINIMUMでおねがいします` /
 `スミマセン、みるのやめます` ("NORMAL please" / "MINIMUM please" / "Sorry, I'll stop
-looking"). Choosing either size then **ends the conversation** — the visible effect is a
+looking"). Choosing either size then **ends the conversation**; the visible effect is a
 global text-size flag, so the NPC becomes silent afterwards.
 
-**`digi-elf-3` — play mode / difficulty.** `へんこうしません` / `ハード` / `ベリーハード`
+**`digi-elf-3`: play mode / difficulty.** `へんこうしません` / `ハード` / `ベリーハード`
 ("Don't change" / "Hard" / "Very Hard"). This is the retail difficulty setting the debug
 build lets you set directly.
 
-**`digi-elf-4` — TIME flags.** `は、へんこうします` / `いいえ、へんこうしません`
+**`digi-elf-4`: TIME flags.** `は、へんこうします` / `いいえ、へんこうしません`
 ("Yes, change it" / "No") then a paged flag list:
 `つぎのページ` (Next page) + `TIME00 TIME01 TIME02` → `TIME03 TIME04 TIME05` →
 `TIME06`, `フィールドクエスト` (Field Quest), `やっぱり へんこうしません`
-("On second thought, don't change"). Useful: these are **named debug flags**, and the
+("On second thought, don't change"). These are **named debug flags**, and the
 `TIME*` family is a lead for the in-game clock/time-of-day logic.
 
-**`digi-elf-5` — evolution arts (`しんかワザ`) unlock.** `つぎのページ` + either
+**`digi-elf-5`: evolution arts (`しんかワザ`) unlock.** `つぎのページ` + either
 `ぜんぶのしんかワザをおぼえます` ("learn ALL") or one Digimon at a time. Six pages, the
 full playable roster:
 
@@ -101,16 +101,16 @@ full playable roster:
 | 5 | IPドラモンFM Imperialdramon Fighter Mode · IPドラモンPM Paladin Mode · メタルガルルモン MetalGarurumon |
 | 6 | デュークモンCM Dukemon Crimson Mode · スサノオモン Susanoomon · おぼえません (learn none) |
 
-Selecting one confirms, e.g. 「デュークモンCMをおぼえました」 ("Learned Dukemon CM"). **This
-is the authoritative list of which Digimon have evolution arts in this build.**
+Selecting one confirms, e.g. 「デュークモンCMをおぼえました」 ("Learned Dukemon CM"). This
+is the authoritative list of which Digimon have evolution arts in this build.
 
-**`digi-elf-6` — EXP / level.** Dialogue: 「ちぇ、、、すきなLVまでのEXPをあげますよ、、、
+**`digi-elf-6`: EXP / level.** Dialogue: 「ちぇ、、、すきなLVまでのEXPをあげますよ、、、
 LV いくつになりたいですか？」("Che…, I'll give you EXP up to any LV you like… what LV do
-you want to be?"). Three pages of targets — `LV16/36/46`, `LV76/106/999`, `LV50/100/200`,
+you want to be?"). Three pages of targets (`LV16/36/46`, `LV76/106/999`, `LV50/100/200`),
 plus `やめます` (stop). Setting a level then produces §5's line.
 
-**`leomon-1` (Leomon) — exit debug.** `は、てんそうします` / `いいえ、てんそうしません`
-("Yes, transport me" / "No"). Confirming transports to **ML11**, the main lobby — i.e. the
+**`leomon-1` (Leomon): exit debug.** `は、てんそうします` / `いいえ、てんそうしません`
+("Yes, transport me" / "No"). Confirming transports to **ML11**, the main lobby, i.e. the
 supported way to leave the dev stage and return to normal play with whatever the debug
 menu just changed.
 
@@ -122,16 +122,16 @@ says:
 > 「EXPをふやしたので、、、となりのゴブリモンをなぐってくださいよ、、、LVが1あがりますから、、、」
 > *"I raised your EXP, so… please punch the Goblimon next to you… your LV will go up by 1…"*
 
-That is why exactly two ゴブリモン (**Goblimon**) stand beside it — they have no dialogue
-and exist to be attacked so the pending level-up resolves. Any future save-editing work
-should note the same mechanic: **level is applied through combat, not by the cheat itself.**
+That is why exactly two ゴブリモン (**Goblimon**) stand beside it: they have no dialogue
+and exist to be attacked so the pending level-up resolves. Save-editing work
+should note the same mechanic: level is applied through combat, not by the cheat itself.
 
-## 6. The stage-select menu (`digi-elf-2`) — the supported warp
+## 6. The stage-select menu (`digi-elf-2`): the supported warp
 
 Talking to this NPC prints its two lines and then shows a **full screen of eleven stage
 IDs at once**, with an extra `つぎのページ` ("next page") line on top. Selecting that line
-advances to the next screen. **It is the engine's own stage-ID enumeration**, and it covers
-**every one of the 97 stages** — nine screens, 11 entries each except the last (9).
+advances to the next screen. It is the engine's own stage-ID enumeration, and it covers
+every one of the 97 stages: nine screens, 11 entries each except the last (9).
 
 > The whole eleven-entry screen is rendered at once (it is not three entries per page); the
 > 40 stage-list captures are the same nine screens grabbed more than once. Page order is
@@ -214,7 +214,7 @@ once `g_dreturngate` is live.
 
 "Call Digimon." answers *"This memory card (PS2) contains no Digimon World 4 game file."*
 That message is **correct**: `Mcd001.ps2` and `Mcd002.ps2` both contain the bytes
-`BASLUS-20836savedata`, but the directory entry at that offset is **all zeroes** — a
+`BASLUS-20836savedata`, but the directory entry at that offset is **all zeroes**: a
 stale/deleted record, not a live save. No valid DW4 save exists on either card, so the
 `[devworld].iso` route cannot reach the world until one is installed from
 a generated probe save.
@@ -240,7 +240,7 @@ input stick l 0 1.0 --backend pad --hold      # menu one step: hold 0.10 s, then
   occupies **y 478–636, x 236–905** of the 1280×960 display grab. The bottom border
   (y 642–663) must be excluded or it reads as a text line.
 * **Unhighlighted menu options are drawn dimmer** than the selected one and fall under a
-  bright-pixel threshold of ~150 — at that threshold some menus appear to have a single
+  bright-pixel threshold of ~150; at that threshold some menus appear to have a single
   line. Threshold ≈110 finds them.
 * The translated images reproduce the Japanese by **cropping the game's own text pixels**
   and putting the English beside them, because no CJK font was available to the image
@@ -250,7 +250,7 @@ input stick l 0 1.0 --backend pad --hold      # menu one step: hold 0.10 s, then
 
 | artifact | what |
 |---|---|
-| captures | raw 1280×960 grabs of every press, plus **90 translated images** — every text screen: 45 dialogue/menu + 40 stage-list captures (+ repeats) |
+| captures | raw 1280×960 grabs of every press, plus **90 translated images**: every text screen, 45 dialogue/menu + 40 stage-list captures (+ repeats) |
 | savestates | one per debug NPC, plus a free-roam dev-world state |
 
 The captures and savestates are working artifacts of the survey, not part of this repo.
@@ -259,11 +259,11 @@ The captures and savestates are working artifacts of the survey, not part of thi
 
 1. What do the `TIME00…TIME06` flags actually gate, and where are they read? (The
    decompiled corpus has the flag-setter but not obviously a reader.)
-2. `digi-elf-1`'s size setting — which text does it affect? It is global; find the
+2. `digi-elf-1`'s size setting: which text does it affect? It is global; find the
    consumer to learn whether it changes dialogue, menus, or both.
 3. `digi-elf-3`'s play mode: locate the difficulty variable it writes, and whether it is
    the same variable the retail "difficulty" option uses.
-4. `stag0000` also appears once as a `NEXTSTAGE` destination in normal scripts — find which
+4. `stag0000` also appears once as a `NEXTSTAGE` destination in normal scripts; find which
    script, and whether it is a leftover or a reachable path.
 5. Why does re-pointing the gate menu's Death Valley record crash ([Warp safety](#warp-safety))? The
    cause is unproven: that record is the only one of four with no adjacent `PLAYERPOINT` record.

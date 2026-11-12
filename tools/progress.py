@@ -128,7 +128,7 @@ def semantic_named(name):
 CATEGORY_ORDER = ["match", "code-only", "name-defect", "inventory-gap", "foreign-profile", "unapproved", "asm-body", "assembly",
                   "mismatch", "compile"]
 CATEGORY_EXPLAIN = {
-    "match": "code bytes, exception metadata and symbol rules all pass — fully verified",
+    "match": "code bytes, exception metadata and symbol rules all pass; fully verified",
     "code-only": "code bytes identical; exception metadata not reproduced (compile mode or cleanup scope)",
     "name-defect": "code bytes identical; a symbol name is wrong for its address",
     "inventory-gap": "code bytes identical; a reference lands in a symbol-map gap or inside another extent",
@@ -938,9 +938,9 @@ def render_md(d):
         A("  code bytes %s %5.1f %%   %s / %s   (make check `match` and `assembly`: code bytes, exception metadata and symbol rules)"
           % (bar(pct(b["fully_matched"], b["total"])), pct(b["fully_matched"], b["total"]),
              format(b["fully_matched"], ","), format(b["total"], ",")))
-        A("code bytes identical (verification debt included — see below)")
+        A("code bytes identical (verification debt included; see below)")
     else:
-        A("fully matched: (categories not recorded — data/check-categories.tsv missing or stale; run make check)")
+        A("fully matched: (categories not recorded: data/check-categories.tsv missing or stale; run make check)")
         A("code bytes identical")
     identical_f = f["matched"] + b["functions_assembly"]
     identical_b = b["matched"] + b["assembly"]
@@ -1003,7 +1003,7 @@ def render_md(d):
                     A("| `%s` | %s | %s | %s |" % (k, format(co[k]["functions"], ","),
                                                   format(co[k]["bytes"], ","), EXC_EXPLAIN[k]))
     else:
-        A("**(categories not recorded)** — %s. The headline above is therefore the decompiled "
+        A("**(categories not recorded)**: %s. The headline above is therefore the decompiled "
           "(code-bytes-identical) figure, not the fully verified one." % cats.get("warning", "no table"))
     A("")
     A("**Fully linked** is the sibling number a WIP decomp is read on, and the bar above measures "
@@ -1016,13 +1016,13 @@ def render_md(d):
       "overstate the decompilation. Elsewhere the two "
       "headlines differ (Twilight Princess: 12.07 %% decompiled, 8.12 %% fully linked) since "
       "a translation-unit build can only drop a unit's asm stub once the *whole* unit is "
-      "decompiled. Counting **code alone**, this repo's two numbers are identical — "
-      "**%.1f %%** C/C++ — and that is a property of the pipeline, not a coincidence: "
+      "decompiled. Counting **code alone**, this repo's two numbers are identical, "
+      "**%.1f %%** C/C++, because of how the pipeline works: "
       "`tools/layout.py` tiles the section per function, so `tools/linkgen.py` replaces "
       "retail one function at a time and a match is linked from source immediately. "
-      "`make link` prints the accounting from the link itself — **%s units / %s bytes from "
+      "`make link` prints the accounting from the link itself (**%s units / %s bytes from "
       "C/C++ (%s of them compiler-generated jump tables), %s units / %s bytes of asm "
-      "bodies, %s bytes from `asm/`** — and the section then compares byte-identical, so "
+      "bodies, %s bytes from `asm/`**), and the section then compares byte-identical, so "
       "nothing decompiled is waiting to be linked."
       % (format(lk["section_bytes"], ","), pct(b["matched"], b["total"]),
          format(lk["from_c_units"], ","), format(lk["from_c_bytes"], ","),
@@ -1067,16 +1067,16 @@ def render_md(d):
         bv = base.get(k, {}).get("value") if base else None
         reason = base.get(k, {}).get("reason") if base else None
         cur_s = format(v, ",") if v is not None else "n/a"
-        base_s = format(bv, ",") if bv is not None else "—"
+        base_s = format(bv, ",") if bv is not None else "n/a"
         if v is None or bv is None:
-            delta = "—"
+            delta = "n/a"
         else:
             delta = ("%+d" % (v - bv)) if v != bv else "0"
             if v > bv:
                 delta = "**" + delta + "**"
         A("| `%s` | %s | %s | %s | %s%s |"
           % (k, base_s, cur_s, delta, what,
-             (" — increase recorded: " + reason) if reason else ""))
+             ("; increase recorded: " + reason) if reason else ""))
     A("")
     if base is None:
         A("No baseline recorded yet (`tools/progress.py --debt-baseline`).")
@@ -1088,7 +1088,7 @@ def render_md(d):
     A("each with its own bar. The image here is a single ")
     A("merged section, so \"data\" is what `tools/layout.py` tiles *between* the functions; ")
     A("`tools/datamap.py` then classifies those bytes from the metadata the repo has recovered. ")
-    A("Bytes in `?` are not a failure — they are alignment, tables whose extent is not pinned ")
+    A("Bytes in `?` are not a failure: they are alignment, tables whose extent is not pinned ")
     A("yet, and the rest of `.bss`.")
     A("")
     A("| kind | bytes | % of data |")
@@ -1183,7 +1183,7 @@ def render_md(d):
     A("`tools/split.py`.")
     A("")
     A("A function is an **asm body**, and is counted in no figure, when its definition is an MWCC `asm` function under")
-    A("`#pragma optimization_level 0` — decided from the file's content, wherever the file sits")
+    A("`#pragma optimization_level 0`, decided from the file's content, wherever the file sits")
     A("(asm bodies are not kept in the repository). A C function that contains an inline")
     A("`asm { sync }` statement is C. A **semantic name** is a recovered name that says what the")
     A("function does; the per-class boilerplate names (`*_GetMetaObject`, `*_GetVTable`,")

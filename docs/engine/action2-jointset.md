@@ -27,8 +27,8 @@ applies the current state:
 - state 2 (one-shot): clamp the current time to `end` and mark `_jointIsEnd`.
 
 When a change occurred, it rebases `_timeBias` against the engine clock in nanoseconds. The
-clock is read at 2^18 ns granularity — `clock->_time >> 18` is a tick count of 262,144 ns, not a
-frame count — truncated to 32 bits and converted as **unsigned**
+clock is read at 2^18 ns granularity (`clock->_time >> 18` is a tick count of 262,144 ns, not a
+frame count), truncated to 32 bits and converted as **unsigned**
 (`(float)(unsigned int)(clock->_time >> 18)`); MWCC lowers that to the `dsll32`/`dsra32` +
 `bltz` + `(x >> 1) | (x & 1)` doubling sequence seen in retail, not a plain `cvt.s.w` of a
 signed value. The resulting time is written to `node->_timeBias`, and `_jointIsEnd` is set to
@@ -46,8 +46,8 @@ round-toward-zero arithmetic, which makes 30 frames 499,999,968 ns rather than 5
 The block has two drivers:
 
 - `beAction2_StartComponents` (`0x00377700`, 456 B) is the per-object Start driver. It walks the
-  `beAction2Data`'s component list — an `igObjectList`-shaped `{_count, _capacity, _data}` struct at
-  `_comList` — and calls each component's virtual `GetMetaObject()` to route it to one of the five
+  `beAction2Data`'s component list (an `igObjectList`-shaped `{_count, _capacity, _data}` struct at
+  `_comList`) and calls each component's virtual `GetMetaObject()` to route it to one of the five
   `*_Start` handlers, advancing `_comIndex` and stopping at the first handler that returns false.
 - `Gap::Bec::beAction2::vfunc_31` (`0x003778d0`, 192 B) is the per-frame Update driver. After the
   info's `+0x14` gate and the work's `+0x4c` gate it calls each active component's `*_Update` in type
@@ -130,7 +130,7 @@ limit of the source: the same handlers match under the `combat` profile.
   0..16 match, but two scheduler `nop`s never appear (one after the state branch's delay slot, one after
   the `mtc1` of `60.0f` in the first conversion), and the float register allocation differs (retail
   keeps the `1e9f` constant in `f1`, the loaded time in `f2`, `60.0f` in `f0`; every tested spelling of
-  the conversion — operand order, integer-cast constant, explicit float temp — places them differently,
+  the conversion (operand order, integer-cast constant, explicit float temp) places them differently,
   and no `-O` level from `-O2` to `-O4` changes it). `beAction2JOINTSET_Update` is 332 B retail vs ~320 B,
   with the state guard's compare order and `work`'s `s`-register differing.
 - `beAction2WAITCHECK_Update` stays at 380/372 B (the scheduler keeps an `s1+40` address live where retail

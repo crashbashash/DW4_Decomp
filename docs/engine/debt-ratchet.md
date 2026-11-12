@@ -1,4 +1,4 @@
-# The debt ratchet — debt counters may only go down
+# The debt ratchet: debt counters may only go down
 
 `make check` proves bytes; it does not stop the tree from accumulating *debt*: units whose
 code bytes match while something else is unproven, functions with no C at all, m2c
@@ -21,7 +21,7 @@ same numbers under `debt`.
 ## The counters
 
 All of them come out of `tools/progress.py` (`DEBT_COUNTERS`, `debt_summary`). A counter
-whose source is missing is reported as *unavailable* and fails the check — it is never read
+whose source is missing is reported as *unavailable* and fails the check; it is never read
 as zero.
 
 | counter | source | what it measures |
@@ -34,12 +34,12 @@ as zero.
 | `name_defect.*` | `data/check-categories.tsv` | code bytes match; a symbol name is wrong for its address |
 | `inventory_gap.*` | `data/check-categories.tsv` | code bytes match; a reference lands in a symbol-map gap or inside another function's extent |
 | `mismatch.*`, `compile.*` | `data/check-categories.tsv` | units whose bytes differ, or that do not compile (both 0 on a tree that passed `make check`) |
-| `asm_body.functions` / `.bytes` | content of `src/` (an `asm` definition under `#pragma optimization_level 0`) | functions kept as an `asm` body — retail instructions kept as source, not recovered C, and in no matched figure |
+| `asm_body.functions` / `.bytes` | content of `src/` (an `asm` definition under `#pragma optimization_level 0`) | functions kept as an `asm` body: retail instructions kept as source, not recovered C, and in no matched figure |
 | `inline_asm.other` | `tools/inline_asm.py`, over `src/` and `include/dw4/` | `asm` statements inside C without an approval. `sync` and `ei` are not counted: C cannot spell them and the owner has approved them all. A statement passes the byte check whether or not C could produce the same bytes, so `tools/inline_asm.py --test <source>` has to show its function fails without it. A statement stops counting once every function it reaches has a current row in `config/source-approvals.tsv`, an oracle file only the owner approves; a statement reaching one function without a row still counts |
 | `unmatched.functions` / `.bytes` | `config/SLUS-20836/symbols.txt` minus the definitions in `src/` | functions still linked from `asm/` |
 | `struct.a`, `struct.b`, `struct.c` | `scripts/check_struct_conflicts.py` (imported, not re-implemented) | report groups: (a) the same view name with clashing layouts across units, (b) a receiver view disagreeing with the reflected class, (c) an offset-named member (`fNN`) whose number is not its offset |
 | `m2c_idiom.units` | the matched units' source, comments and strings blanked, asm bodies excluded | files still carrying m2c spellings: `temp_*`, `var_*`, or an `argN` identifier |
-| `raw_casts.reflected` | `tools/typed_coverage.py` (`typeable`) | raw `*(T *)((char *)this + N)` casts on the function's own receiver at an offset where reflection names the field — the mechanically convertible casts |
+| `raw_casts.reflected` | `tools/typed_coverage.py` (`typeable`) | raw `*(T *)((char *)this + N)` casts on the function's own receiver at an offset where reflection names the field (the mechanically convertible casts) |
 | `fun_dat_refs` | the matched units' source, comments and strings blanked, asm bodies excluded | occurrences of `FUN_<va>` / `DAT_<va>` identifiers (prototypes and calls), minus every occurrence of the name of each `FUN_` function the file defines (its definition and, in a C++ unit, its `extern "C"` prototype) |
 | `foreign_profile.functions`, `foreign_profile.bytes` | `data/check-categories.tsv` | functions whose code bytes match only under a provisional per-function override (compiler, flags or exception mode) that differs from their translation unit's profile in `config/SLUS-20836/units.tsv`; never counted as `match` (see [build profiles](build-profiles.md)) |
 | `orphan.bytes` | `data/check-categories.tsv` | exception-metadata orphan bytes: the `extra` + `differ` code-only bytes |
@@ -57,7 +57,7 @@ functions or merges struct views. After such a commit, run `--debt-baseline`: it
 every counter as `old -> new` and writes `config/debt-baseline.json`; commit the file with
 the change so the lowered floor is reviewed with the work that earned it.
 
-A counter can legitimately rise — a newly matched unit may be `code-only` until its
+A counter can legitimately rise: a newly matched unit may be `code-only` until its
 exception metadata is reproduced, a rename
 may expose a struct clash the report had not seen. The ratchet does not forbid that; it
 forbids it *happening silently*. `--debt-baseline` refuses to record a higher value unless
@@ -66,8 +66,8 @@ forbids it *happening silently*. `--debt-baseline` refuses to record a higher va
 is a reviewed decision with its justification in the diff, not a drift.
 
 Why read-only inputs: the gate has to run in a hook and in CI, neither of which has the
-compiler or the game. Everything the counters need is committed — the categories table
+compiler or the game. Everything the counters need is committed (the categories table
 from the last complete `make check`, the symbol map, the source tree, the reflection
-headers — so a stale `data/check-categories.tsv` (its row count differs from the number of
+headers), so a stale `data/check-categories.tsv` (its row count differs from the number of
 decompiled units) makes the category counters *unavailable* rather than wrong, and the
 check says so.

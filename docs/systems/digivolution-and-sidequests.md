@@ -11,7 +11,7 @@ Original bytecode is the execution baseline.
 ## 0. Summary
 
 - **"Can digivolve to form F" is one byte per form in a 16-byte array named
-  `BASE_ISUSE`** — a runtime GAMERAM property record, serialised in the save at
+  `BASE_ISUSE`**, a runtime GAMERAM property record, serialised in the save at
   **`+0x76c`** (16 × u8).
 - Set by `SYSctlShinka("SETSHINKA", player, form)`; read by
   `SYSisGetShinkaDigimon(player, form)`.
@@ -30,7 +30,7 @@ Original bytecode is the execution baseline.
 
 Both are in the 116-function native API table (see `docs/engine/script-engine-lua.md`).
 
-### 1.1 Getter — `SYSisGetShinkaDigimon` (`0x003725f0`)
+### 1.1 Getter: `SYSisGetShinkaDigimon` (`0x003725f0`)
 
 ```
 3725f0: a0 = a0 + 1                       ; player index+1
@@ -44,7 +44,7 @@ Both are in the 116-function native API table (see `docs/engine/script-engine-lu
 The stub then runs the raw byte through the value wrapper at `0x00100290`
 before pushing it to Lua.
 
-### 1.2 Setter — `SYSctlShinka` (`0x003727d0`)
+### 1.2 Setter: `SYSctlShinka` (`0x003727d0`)
 
 This is a **three-command multiplexer** on `a0` (the command string), with
 `a1 = player`, `a2 = form`:
@@ -67,7 +67,7 @@ if 0 <= form < count      -> BASE_ISUSE[form] = *(gp - 32428)
 The written constant is a small-data global (`lbu v1,-32428(gp)`); its value was
 not resolved statically but is **inferred to be 1** (the "unlocked" byte).
 
-## 2. Storage — `BASE_ISUSE`
+## 2. Storage: `BASE_ISUSE`
 
 | | |
 | --- | --- |
@@ -83,7 +83,7 @@ Save values measured directly:
 | second save | `p_dorumon` | `[0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0]` |
 | fresh save | `p_dorumon` | `[0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0]` |
 
-A fresh Digimon has **only its own index set** — consistent with one byte per
+A fresh Digimon has **only its own index set**, consistent with one byte per
 form and only the starting form available.
 
 > **`BASE_ISUSE` is not an "active species" marker (that reading does not hold).** The active
@@ -171,9 +171,9 @@ carry further grants. A single-form-4 interpretation of `chunk_0029` is wrong.
 
 | state | persists in save? |
 | --- | --- |
-| digivolution unlock | **yes** — `BASE_ISUSE` @ `+0x76c` |
-| kill counters | **yes** — `BASE_COUNTER`, 16 × u32 @ `+0x72c` |
-| quest-chain flags `376–381`, sub-steps `384–389`, `409`, `571–575` | **no** — transient; `entry_0806/chunk_0006` clears them on load and does not restore from the mirror |
+| digivolution unlock | yes: `BASE_ISUSE` @ `+0x76c` |
+| kill counters | yes: `BASE_COUNTER`, 16 × u32 @ `+0x72c` |
+| quest-chain flags `376–381`, sub-steps `384–389`, `409`, `571–575` | no: transient; `entry_0806/chunk_0006` clears them on load and does not restore from the mirror |
 | persistent quest marker | folder `11` (`SYSctlFlagFolder("SET",11)`) |
 
 Consequence: **you cannot mark a side quest "done" by editing a save.** The
@@ -184,9 +184,9 @@ change). The `376–381` gate condition itself is documented in
 ### 5.4 The walkthrough's 10 named side quests
 
 The retail walkthrough (§5SQ) lists 10
-Digi-Elf side quests — Undead Yard, Dungeon of Doom, Captive Dungeon, Barbaric
+Digi-Elf side quests (Undead Yard, Dungeon of Doom, Captive Dungeon, Barbaric
 Cave, Forbidden Dungeon, ShogunGekomon, Legendary Coliseum, Trading Hall, Item
-Road, Final Side Quest — with their reward Digivolutions. **The per-quest →
+Road, Final Side Quest) with their reward Digivolutions. **The per-quest →
 flag mapping for those 10 named quests is not yet established**: the scripts
 above are identified, but the quest names live in the igBinary text table
 (`TALKFONT…/I<n>` message ids), not in the Lua. See
@@ -200,7 +200,7 @@ the in-game quest board (§3 of the game's own manual pages) for the quest list 
 2. Recompute the per-block SUM checksum (`docs/systems/save-format.md`).
 3. The Digi Lab should then offer the form.
 
-**Cannot** be done via save for quest completion — use live memory instead
+**Cannot** be done via save for quest completion; use live memory instead
 (`pine write` to the transient flags + counters), or complete the quest.
 
 **Confirm the encoding live** (recommended, closes §2.1):
@@ -214,11 +214,11 @@ state load op-ready
 
 ## 7. Open items
 
-1. **Byte → Lua encoding** — confirm live that scripts see `0` (locked) / `1`
+1. **Byte → Lua encoding**: confirm live that scripts see `0` (locked) / `1`
    (available) and that rewards are delivered (see §2.1).
 2. **Per-quest flag map** for the 10 named walkthrough side quests.
-3. **`*(gp-32428)` constant** written by `SETSHINKA` — resolve its value.
-4. **`entry_0603/chunk_0030`** grant-all loop — is it a quest reward, a debug
+3. **`*(gp-32428)` constant** written by `SETSHINKA`: resolve its value.
+4. **`entry_0603/chunk_0030`** grant-all loop: is it a quest reward, a debug
    path, or both?
 
 ## 8. Evidence / reproduction

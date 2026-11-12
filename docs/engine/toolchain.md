@@ -25,9 +25,9 @@ anywhere else, with `DW4_MWCC` pointing at it.
 
 | Signal | Value | Where |
 | --- | --- | --- |
-| `.comment` section | `MW MIPS C Compiler (2.4.1.01)` + `PlayStation2` | `readelf -p .comment game.elf` — **not identifying, see below** |
-| Linker layout | single merged `main` section (unnamed PROGBITS, `WAX`) at `0x00100000` — text+data+rodata joined | `readelf -S` section [4] |
-| Overlays | none (`MWo` header absent) — whole 4.5 MB in one section, fits in RAM | `strings -a game.elf | grep MWo` → empty |
+| `.comment` section | `MW MIPS C Compiler (2.4.1.01)` + `PlayStation2` | `readelf -p .comment game.elf`; not identifying, see below |
+| Linker layout | single merged `main` section (unnamed PROGBITS, `WAX`) at `0x00100000`: text+data+rodata joined | `readelf -S` section [4] |
+| Overlays | none (`MWo` header absent); whole 4.5 MB in one section, fits in RAM | `strings -a game.elf | grep MWo` → empty |
 | ISA | `e_flags` `0x20924000` (`EF_MIPS_MACH_5900`, eabi64, mips3) | `readelf -h` |
 
 The `.comment` string is written by the **linker (MWLD)**, and (per
@@ -62,22 +62,22 @@ c2a4e463f8f7b324350d6bfb26d6daed83f4d5cb46df8b20dcfec8617b22ad5d  mwcps2-2.3.3-0
 ```
 
 All executables are **PE32 console binaries for x86 Windows** (`file` confirms),
-so they must run under a Win32 loader. Use **wibo**, not Wine — see "Running it".
+so they must run under a Win32 loader. Use **wibo**, not Wine (see "Running it").
 
 ## Move-idiom fingerprint: useful exclusion, incomplete identity
 
 `.comment` is `MW MIPS C Compiler (2.4.1.01)`, and that string is emitted by more
-than one release — 2.4 *and* 3.0 both produce it, and `mwldps2.exe` reports it in
+than one release (2.4 *and* 3.0 both produce it), and `mwldps2.exe` reports it in
 every version. It is a **backend/linker version string, not a build id**. Verified by
 compiling a fingerprint function and diffing `.comment`:
 
 | Build | `mwccps2.exe` CRC32 | fingerprint `int f1(int a){return a;}` | object `.comment` |
 | --- | --- | --- | --- |
-| 2.3.3 (000906) | — | `paddub v0,a0,zero` | `2.3.1.01` |
+| 2.3.3 (000906) | - | `paddub v0,a0,zero` | `2.3.1.01` |
 | 2.4 (001213) | `D37D90D4` | `paddub v0,a0,zero` | `2.4.1.01` |
-| 3.0.1b87 / b119 / b145 | — | other | `3.0.0` |
+| 3.0.1b87 / b119 / b145 | - | other | `3.0.0` |
 | **3.0 (011126)** | **`C82F0A93`** | **`move v0,a0`** | **`2.4.1.01`** |
-| `game.elf` (retail) | — | **`move v0,a0`** (413×) and **`paddub` 0×** | `2.4.1.01` |
+| `game.elf` (retail) | - | **`move v0,a0`** (413×) and **`paddub` 0×** | `2.4.1.01` |
 
 The register-move comparison rejects incompatible candidates for this source
 spelling: the retail ELF contains **zero** `paddub v0,a0,zero` and 413
@@ -101,7 +101,7 @@ python3 scripts/match_func.py 0x151090 cand.c f1
 `archive.org/details/compilers-no-license` collection is explicitly *"compilers …
 [that] don't contain licenses needed to activate them, so they need to be cracked"*.
 Under **wibo** (the N64/PS2 decomps' loader; `decompals/wibo`, one static binary) the
-same binary compiles with no license prompt at all — no patching needed. Other real
+same binary compiles with no license prompt at all; no patching needed. Other real
 PS2 decomps do the same (`WIBO := $(BIN_DIR)/wibo` in 3s-decomp's Makefile).
 
 A compile under wibo costs time in proportion to the entries of the folder its object is
@@ -126,7 +126,7 @@ they do not pin the level. The project default is `wibo` + `3.0-011126` with `-O
 units under the alternate compiler, mostly the third-party zlib and libpng units.
 `scripts/match_func.py` still defaults to `-O4,p`, so pass `--flags` for anything else.
 
-## Fingerprinting — reproducible, with an incomplete provenance conclusion
+## Fingerprinting: reproducible, with an incomplete provenance conclusion
 
 The original comparison: compile a function whose codegen differs between
 candidates and diff it against the ELF. `scripts/match_func.py` automates it
@@ -146,7 +146,7 @@ itself should not be redistributed further from here.
 
 ## References
 
-- https://decomp.wiki/compilers/MWCC — MWCCPS2 codegen quirks, `main` section, overlay headers, active PS2 MWCC decomp projects
-- https://github.com/decompme/compilers — compiler archive source
-- https://github.com/Raikaru/mwccps2-debugger — matching-decomp tooling
-- https://daniel-mccarthy.github.io/MW/ — Metrowerks CodeWarrior release catalog
+- https://decomp.wiki/compilers/MWCC: MWCCPS2 codegen quirks, `main` section, overlay headers, active PS2 MWCC decomp projects
+- https://github.com/decompme/compilers: compiler archive source
+- https://github.com/Raikaru/mwccps2-debugger: matching-decomp tooling
+- https://daniel-mccarthy.github.io/MW/: Metrowerks CodeWarrior release catalog

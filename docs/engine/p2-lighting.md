@@ -1,4 +1,4 @@
-# `p2lighting` — what the EE packs for the VU1 light programs
+# `p2lighting`: what the EE packs for the VU1 light programs
 
 `p2lighting` (`0x001fb710`, 980 bytes) is the one lighting function in the `p2` backend that
 **builds the constant block the LIGHT microcode reads**. It is named in its own trace string (the
@@ -8,7 +8,7 @@ page is the static decode of its body and of the runtime state it reads.
 Every source the function reads is a runtime global in the EE's bss, and the per-light descriptors
 are built by the scene-load hooks around `0x00170ed0`/`0x001709d0`. The record stream is fully
 recovered. The packs carry serialised `igLightAttr` records, but those are prototypes, not the running
-**parameters** — see *Light records in the packs* and *What is not recovered*.
+**parameters**; see *Light records in the packs* and *What is not recovered*.
 
 ## The call chain
 
@@ -22,7 +22,7 @@ recovered. The packs carry serialised `igLightAttr` records, but those are proto
 | `FUN_001f8b50` | 2260 | the light-state refresh: fills the index tables `0x56AF30`/`0x56AF38`, the count `0x56AF94` and the enable flags from the pointer table `0x56AF40` |
 | `FUN_001f8490` | 660 | initialises the light-type → program-index table at `0x56AE50` (`0,1,…,10,12,13,20,…,127`) |
 | `FUN_001f8a30` / `FUN_001f8ae0` | 108 / 108 | register a light descriptor into `0x56AF40` / `0x56AF60` at a caller-supplied index |
-| `FUN_001f8aa0` | 60 | copies 16 bytes into `0x56AEE0` — the block `p2lighting` emits as record 3 |
+| `FUN_001f8aa0` | 60 | copies 16 bytes into `0x56AEE0`, the block `p2lighting` emits as record 3 |
 
 `FUN_001fb0e0` reads the current program record's flags through `0x562C70 + 4*(*(0x569330))` (the
 runtime program table, the same flags decoded in [VU1 microcode](vu1-microcode.md)) and branches on four bits: `0x1000`
@@ -80,7 +80,7 @@ per-material multipass suffixes. `igLightAttr` is the serialised light
 ```
 
 Three of the emitted records land on those offsets: record C on `+0x10` (`_lightId` + `_position`),
-record D on `+0x20` (`_ambient`), record B on `+0x70` (`_shininess` + `_cachedPosition`) — and
+record D on `+0x20` (`_ambient`), record B on `+0x70` (`_shininess` + `_cachedPosition`), and
 `FUN_001fb470` reads the descriptor at `+0x60..0x68` (the serialised `_cutoff`/`_attenuation` slots)
 as a **direction**.
 
@@ -91,13 +91,13 @@ names:
 
 | offset | measured role |
 | --- | --- |
-| `+0x10` | 4 words — accumulated by the ambient pass and emitted as record C |
-| `+0x20` | 4 words — emitted as record D; `+0x2c` is the "no-flag" `w` |
+| `+0x10` | 4 words, accumulated by the ambient pass and emitted as record C |
+| `+0x20` | 4 words, emitted as record D; `+0x2c` is the "no-flag" `w` |
 | `+0x40..0x48` | vec3 copied from the scene source (`Gap__Gfx__igPsx2VisualContext__vfunc_90`) |
 | `+0x50` | an index (used by `FUN_001f72330`) and `+0x54` a `w` for record D |
 | `+0x60..0x68` | a **normalised direction** (`Gap__Gfx__igPsx2VisualContext__vfunc_90` negates the source, transforms and normalises) |
 | `+0x6c` | capability/flag word (`& 8` clears a bit and marks the state dirty) |
-| `+0x70` | 4 words — the light position for the matrix path / record B |
+| `+0x70` | 4 words: the light position for the matrix path / record B |
 | `+0x84`, `+0x90`, `+0x94`, `+0x98` | `w`, registration index, enabled bool, direction mode (0 or 2) |
 
 So the *stream* is recovered to the byte, and the *field roles* are recovered from how the code uses
@@ -126,7 +126,7 @@ so the records are prototypes, not the running values.
 | `0x56AF38` | u8[8] | per-light-pass indices into the pointer table |
 | `0x56AF40` | void*[8] | the registered light descriptors |
 | `0x56AF60` | void*[8] | the registered lighting-state descriptors; slot 0 is `p2lighting`'s `state` |
-| `0x56AF94` | int | **the light count** — the loop bound and record 0's `w` |
+| `0x56AF94` | int | **the light count**: the loop bound and record 0's `w` |
 | `0x56AF9C` | int | enables the extra `+0x30/+0x40/+0x50` words in the unlit path |
 | `0x56AFA0/…/A8` | int | per-class light counts (`FUN_001f8b50`) |
 | `0x56AFAC`…`B0` | bool | mode flags; `0x56AFAE` gates the ambient pass and the `FUN_001fbaf0` tail |

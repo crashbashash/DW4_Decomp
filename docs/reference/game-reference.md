@@ -1,14 +1,14 @@
-# Digimon World 4 (SLUS-20836) — game reference for decomp / dynamic analysis
+# Digimon World 4 (SLUS-20836): game reference for decomp / dynamic analysis
 
 Sources (both in `../local/`):
 
 | File | What it is | Extractability |
 | --- | --- | --- |
-| `US_PS2_Game_Manual.pdf` | 24-page US PS2 manual, scanned — **image only, no text layer** | 12 PDF pages, each a 2-page spread, one 1360×1088 JPEG per page |
+| `US_PS2_Game_Manual.pdf` | 24-page US PS2 manual, scanned; **image only, no text layer** | 12 PDF pages, each a 2-page spread, one 1360×1088 JPEG per page |
 | `DW4_Walkthrough.pdf` | GameFAQs FAQ v1.1 (2006-03-25) by Unlimiting/divinedragonslayer, 54 pages | real text layer |
 
 Identity: **SLUS-20836**, disc CRC used by PCSX2 sstate naming: **B871C1D0**.
-Game supports **up to 4 players** (multitap, controller ports 1A–1D) — expect
+Game supports **up to 4 players** (multitap, controller ports 1A–1D), so expect
 player struct arrays of size 4.
 
 ---
@@ -31,7 +31,7 @@ player struct arrays of size 4.
 | L2 | (unused) |
 
 Analog-only game ("analog controller exclusive"; LED stays on). No vibration.
-In-game on-screen prompts are `◇ Select`, `⊗ Confirm`, `○ Cancel` — i.e. Cross
+In-game on-screen prompts are `◇ Select`, `⊗ Confirm`, `○ Cancel`, i.e. Cross
 confirms, Circle cancels.
 
 > **Measured on retail (PCSX2, pad D-pad via the agent controller):** menus accept D-pad *and* stick, world movement is
@@ -47,9 +47,9 @@ confirms, Circle cancels.
 > reads as "the D-pad does nothing in menus"; a measurement on such a pad does not support that conclusion.
 
 Advanced moves (manual p.8–9):
-- **Slam Attack** — while guarding, double-tap left stick in a direction; pushes/crushes enemies.
-- **Spiral Attack** — rotate left stick 360° + Cross; AoE around the player.
-- **MP Techniques** — R1 → up/down → Cross. **Items** — L1 → up/down → Cross.
+- **Slam Attack**: while guarding, double-tap left stick in a direction; pushes/crushes enemies.
+- **Spiral Attack**: rotate left stick 360° + Cross; AoE around the player.
+- **MP Techniques**: R1 → up/down → Cross. **Items**: L1 → up/down → Cross.
 - Basic controls are taught by the in-game tutorial (not in the manual).
 
 ### Xbox / GameCube equivalence (walkthrough p.12, for cross-referencing guides)
@@ -82,7 +82,7 @@ Elements: **(1) HP gauge, (2) Digimon icon, (3) Level, (4) MP, (5) HP,
 Window** (plus R2 = Status Effects Window). HUD shows current/max as e.g.
 `140 / 160 70`, `Lv 1`, and context text such as `Gate to Outside World`.
 
-### Status screen (manual p.18) — the field layout to mirror in a struct
+### Status screen (manual p.18): the field layout to mirror in a struct
 ```
 Lv. / Digimon name            | Equipment / Folder / Techniques
 HP  cur / max                 | ◇ Select  ⊗ Confirm  ○ Cancel
@@ -117,18 +117,18 @@ EXP-to-next-level, plus level and both name strings (player name and Digimon
 name are separate fields).
 
 ### Equip window / folders (manual p.20)
-- **Weapon Slot** — 3 active Weapon Units (only 3; swapping in anything else
+- **Weapon Slot**: 3 active Weapon Units (only 3; swapping in anything else
   requires the Digi Lab).
-- **Armor Slot** — `⊗` Armor Boards (Main Slot).
-- **Sub Slot** — `∨` Armor Boards.
-- **Folder** — `Device Folder` (weapons, armor boards, ability chips),
+- **Armor Slot**: `⊗` Armor Boards (Main Slot).
+- **Sub Slot**: `∨` Armor Boards.
+- **Folder**: `Device Folder` (weapons, armor boards, ability chips),
   `Key Folder` (key items, cannot be given away or broken),
   `Disk Folder` (disks, booster packs, key chains; can be broken),
   `Bits Folder` (money; can be given to other players).
-- **Techniques** — Digivolve Technique, Technique (skill levels), MP Technique.
+- **Techniques**: Digivolve Technique, Technique (skill levels), MP Technique.
   `↑` = skill the Digimon excels at, `↓` = skill it is bad at.
 
-### Home Server (Yamato Server) — manual p.10–13
+### Home Server (Yamato Server), manual p.10–13
 Areas/keepers, useful as a name list for NPC/keeper entities and menu code:
 
 | Keeper / node | Function |
@@ -175,7 +175,7 @@ Five weapon skill types: **Blunt, Slash, Stab, Bash, Shot, Crush**
 | Guilmon | Stab | Stab Dagger | Data Destroyer |
 | Dorumon | Bash | Bash Katana | Hyakki Yako |
 
-Each weapon has a **Tech Needed** threshold — you cannot equip a Weapon Unit
+Each weapon has a **Tech Needed** threshold: you cannot equip a Weapon Unit
 until the matching skill level is high enough (table in walkthrough §9,
 e.g. Beam Magnum A needs Shot 90). Three starting weapons (Shot Pistol, Crush
 Arm, and the specialist weapon) implies Shot and Crush are also real skills.
@@ -186,7 +186,7 @@ Cure Lt), **Force** (Power Up, Power Down, Resist, Speed Up, Freeze, Sleep,
 Venom). Learned at **level 1, 12, 22**; the 4 starters get Blast at 1, Force at
 12, Petty Heal Lt at 22. Techniques rank up with use through the ladder
 `Petty → Mega → Giga → Terra → ?`. Costs: Petty Fire/Ice/Dark/Bolt = 8 MP,
-Petty Heal Lt ≈ 12, Petty Aura ≈ 20, Petty Cure Lt = 8 (walkthrough §11 —
+Petty Heal Lt ≈ 12, Petty Aura ≈ 20, Petty Cure Lt = 8 (walkthrough §11,
 partly incomplete).
 
 Elements seen: **Fire, Ice, Lightning (Bolt/Thunder), Darkness**, plus
@@ -215,7 +215,7 @@ Beelzemon BM, Alphamon, BK WarGreymon (BlackWarGreymon), IPDramonFM
 (Imperialdramon Fighter Mode), IPDramonPM (Paladin Mode), MetalGarurumon,
 Gallantmon CM (Chaos Mode), Susanomon. Unlocked by side quests; each starter
 maps to a *different* form per quest, so the unlock tables are
-(quest, mode, starter) → digimon id — a good target for reverse engineering.
+(quest, mode, starter) → digimon id, a good target for reverse engineering.
 Side quests that gate them: Undead Yard, Dungeon of Doom, Captive Dungeon,
 Barbaric Cave, Forbidden Dungeon, ShogunGekomon, Legendary Coliseum,
 Trading Hall, Item Road, Final Sidequest.
@@ -278,7 +278,7 @@ Cursed Dungeon.
 `stagIS07`-`IS10`, `stagIS20` (the ending) and `stagML14` have no banner.
 `stagIS09` renders nothing and `stagIS10` is the title screen.
 
-Enemy sets per area (walkthrough §4) — handy for mapping spawn tables:
+Enemy sets per area (walkthrough §4), for mapping spawn tables:
 
 | Area | Enemies |
 | --- | --- |
@@ -312,7 +312,7 @@ circle), end-of-dungeon **teleporter** back to the Home Server.
 
 ## 5. Asset / table indexes (for name→id mapping)
 
-- **Weapon Units** — 6 skill lines × tiered names; tier order within each line
+- **Weapon Units**: 6 skill lines × tiered names; tier order within each line
   is: starter, `<X> A` at tech 1, then 210, 810, 1080, 1400, 1680, 2020, 2200,
   2510, 2600. Lines: Blunt (Blunt Axe, Battle Hawk, Dbl Axe, Van Blade,
   Rage Hammer, Crusher, Hekatoncheir, Destroyer, Fang Smasher, Soul Burn,
@@ -334,17 +334,17 @@ circle), end-of-dungeon **teleporter** back to the Home Server.
   Lightning, Atlas, EXP, Rack, Resist, Mana, Bit, Talis of Chaos
   (lv 1 / 61 / …).
 - **Disks**: HP Disk, MP Disk, Cure Disk (cure poison), Raise Disk, Gate Disk,
-  Recovery (full HP+MP) — each in A/B/Y grades.
-- **Ability Chips**: *Dual* — Speed Chip, Wisdom Chip, Spirit Chip;
-  *Armor* — Defense ROM, Resist [fire/ice/darkness/lightning];
-  *Weapon* — Assault RAM (crit), Drain RAM (HP on hit), Dread RAM (MP on hit),
+  Recovery (full HP+MP), each in A/B/Y grades.
+- **Ability Chips**: *Dual*: Speed Chip, Wisdom Chip, Spirit Chip;
+  *Armor*: Defense ROM, Resist [fire/ice/darkness/lightning];
+  *Weapon*: Assault RAM (crit), Drain RAM (HP on hit), Dread RAM (MP on hit),
   PWR Medal [element] (strength + element on attack).
 - **Other items**: `???????????` (unidentified → Appraiser), `B. Pack` /
   Booster Pack (→ Card Keeper), `Key Chain` (trade 9 to Prince Maememon),
   `Digimon Data` = **X Data** (upgrades stats/chips).
 
-**Known text bugs to expect in the string table** (walkthrough §12) — useful
-because they confirm the *real* data when a tooltip disagrees:
+**Known text bugs to expect in the string table** (walkthrough §12). These are
+useful because they confirm the *real* data when a tooltip disagrees:
 Fang Smasher is listed as Bash but is Blunt; Dbl Axe and Rage Hammer are shown
 as Bash but require Blunt; Prince Maememon says he gives an item but actually
 gives Fang Smasher.

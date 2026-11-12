@@ -10,10 +10,10 @@ complete functions emitted by the nearby-query source. Every registered member
 is verified and placed; unregistered extra code remains an error.
 
 **Goal: rebuild `game.elf` from C with the original compiler, and prove every function
-byte-for-byte.** This is a *matching* decomp — matching is the success condition, not
+byte-for-byte.** This is a *matching* decomp: matching is the success condition, not
 "the code looks equivalent". It is the stated goal of the repo.
 
-Toolchain identity and how it was found: [`toolchain.md`](toolchain.md). In one line —
+Toolchain identity and how it was found: [`toolchain.md`](toolchain.md). In short:
 **MWCCPS2 3.0, build `011126` (CRC32 `C82F0A93`)**, driven by **wibo** (Wine fails its
 FLEXlm license check).
 
@@ -21,16 +21,16 @@ FLEXlm license check).
 
 The downstream goal is a decompilation someone can change and rebuild onto a PS2. This is possible
 at the current coverage: `make link` rebuilds the whole section from a mix of decompiled C and the
-generated split assembly, byte-identically, so any function can be edited — C where it is decompiled,
-assembly where it is not — and everything else relinks bit-exact. What is missing here is **tooling,
+generated split assembly, byte-identically, so any function can be edited (C where it is decompiled,
+assembly where it is not) and everything else relinks bit-exact. What is missing here is **tooling,
 not percentage**: an ISO relayout step (a rebuilt ELF changes size, and the current patchers
 byte-patch precisely to avoid that) and a documented edit → build → burn recipe.
 
-**Typing is not decoration.** m2c's output matches retail while spelling everything
+**Typing still matters.** m2c's output matches retail while spelling everything
 `*(int *)((char *)p + 8)`, so reproducing the structs and signatures the original had is separate
-work, and the recovered metadata — `data/reflection.json`'s 659 classes and 3,680 fields, the
-object-model field maps, the vtable slot signatures — is a first-class deliverable. It measures as
-*neutral for matching*, and that is exactly as expected: it buys nothing in the matched-byte
+work, and the recovered metadata (`data/reflection.json`'s 659 classes and 3,680 fields, the
+object-model field maps, the vtable slot signatures) is a first-class deliverable. It is
+*neutral for matching*, as expected: it adds nothing to the matched-byte
 percentage. The SDK/IOP modules are outside decompilation scope, and the
 [SDK boundary](platform-boundary.md) is recorded instead.
 
@@ -38,17 +38,17 @@ percentage. The SDK/IOP modules are outside decompilation scope, and the
 
 | Path | What | Committed? |
 | --- | --- | --- |
-| `config/SLUS-20836/symbols.txt` | **the code layout** — one `va size name` line per function, sorted (the current function and byte counts are in [`../../PROGRESS.md`](../../PROGRESS.md)). The canonical answer to "what code exists and where" | yes (generated) |
-| `config/SLUS-20836/jumptables.txt` | **the switches' jump tables** — `fn_va jtbl_va count` per table, recovered from the retail image (`tools/jumptables.py`). `verify.py` compares the compiled `.rodata` against these bytes and the relink places it at that address | yes (generated) |
+| `config/SLUS-20836/symbols.txt` | **the code layout**: one `va size name` line per function, sorted (the current function and byte counts are in [`../../PROGRESS.md`](../../PROGRESS.md)). The canonical answer to "what code exists and where" | yes (generated) |
+| `config/SLUS-20836/jumptables.txt` | **the switches' jump tables**: `fn_va jtbl_va count` per table, recovered from the retail image (`tools/jumptables.py`). `verify.py` compares the compiled `.rodata` against these bytes and the relink places it at that address | yes (generated) |
 | `config/SLUS-20836/layout.txt` | the **disjoint tiling** of the section (code, data, and a `jtbl` unit per table) that the relink places, one unit per address | yes (generated) |
-| `asm/<name>.s` | the retail instruction words for every function, so the undecompiled remainder links (the "Ship of Theseus" build) | no (generated from your executable, gitignored) |
-| `src/**/*.c` | the decompiled C, grouped by module (`src/lua/`, `src/engine/`, …) with unnamed functions under `src/unmatched/`. A file is a **translation unit** — one system, many functions, in retail address order — not one function; `tools/units.py` splits a function back out for the per-function tools (`check.py`, `linkgen.py`, `verify.py`) | yes |
+| `asm/<name>.s` | the retail instruction words for every function, so the undecompiled remainder links | no (generated from your executable, gitignored) |
+| `src/**/*.c` | the decompiled C, grouped by module (`src/lua/`, `src/engine/`, …) with unnamed functions under `src/unmatched/`. A file is a **translation unit** (one system, many functions, in retail address order), not one function; `tools/units.py` splits a function back out for the per-function tools (`check.py`, `linkgen.py`, `verify.py`) | yes |
 | `build/` | objects | no |
-| `tools/split.py` | writes `config/SLUS-20836/symbols.txt` and emits `asm/` from the retail ELF | — |
-| `tools/jumptables.py` | writes `config/SLUS-20836/jumptables.txt` — the switches' `.rodata` tables | — |
-| `tools/layout.py` | writes `config/SLUS-20836/layout.txt` — the disjoint tiling the relink places | — |
-| `tools/check.py` | split integrity + coverage; the only number worth quoting | — |
-| `scripts/match_func.py` | one-off: compile a candidate and diff it against a target | — |
+| `tools/split.py` | writes `config/SLUS-20836/symbols.txt` and emits `asm/` from the retail ELF | n/a |
+| `tools/jumptables.py` | writes `config/SLUS-20836/jumptables.txt`, the switches' `.rodata` tables | n/a |
+| `tools/layout.py` | writes `config/SLUS-20836/layout.txt`, the disjoint tiling the relink places | n/a |
+| `tools/check.py` | split integrity + coverage; the only number worth quoting | n/a |
+| `scripts/match_func.py` | one-off: compile a candidate and diff it against a target | n/a |
 
 `asm/` is **generated and not committed**: it is the retail code as text, so every clone
 writes it from its own executable. `make asm` regenerates it; `make check` and `make report`
@@ -67,8 +67,8 @@ few thousand matched functions; they describe the thread pool's scaling, not the
 stores definite results in `build/cache/` (untracked), keyed by content:
 
 * **`tools/check.py`** caches two sweeps: split integrity per `asm/*.s` unit (key: the assembly bytes, the retail bytes, the
-  binutils versions and the tool source), and per-function coverage (key: the exact text the compiler sees — the file, or the one
-  function extracted from it — plus flags, compiler binary, `wibo`, the retail ELF, the whole `include/` tree and every non-C file
+  binutils versions and the tool source), and per-function coverage (key: the exact text the compiler sees, i.e. the file or the one
+  function extracted from it, plus flags, compiler binary, `wibo`, the retail ELF, the whole `include/` tree and every non-C file
   under `src/`, the config tables and the source of every tool module `check.py` imports). Only `matched` / `mismatched` are cached,
   never a compile failure.
 * **`tools/linkgen.py`** caches each unit's object (compiled C units and the raw-bytes units), keyed the same way plus the layout and
@@ -87,7 +87,7 @@ stores definite results in `build/cache/` (untracked), keyed by content:
 is the `be` class with the Lua API, `src/engine/core/CoreLibrary.cpp` the Core library in retail order, one fragment per class run, `src/game/*.c` a
 `be*` class each. Unnamed functions stay in `src/unmatched/`; named ones are grouped and folded
 there by `tools/place_named.py` (see [`naming.md`](naming.md)). A unit's functions are
-written in retail address order, because MWCC emits a unit's functions in source order — so
+written in retail address order, because MWCC emits a unit's functions in source order, so
 contiguity in the binary is what identifies the original file, and `tools/merge_units.py` folds
 per-function files into a unit once a module is worked. (The Lua functions are one contiguous
 run: the 116 real implementations occupy `0x371c70..0x375d90` with every gap between them ≤16
@@ -108,8 +108,8 @@ reads a file's extension from the first dot, so it refuses a filename with a lea
 
 ```sh
 make symbols           # (re)generate config/SLUS-20836/symbols.txt
-make asm               # (re)generate asm/  — generated from your executable, never committed
-make check             # split integrity + coverage  (all cores; cached reruns are quick, a cold run is long — see Cached gates)
+make asm               # (re)generate asm/; generated from your executable, never committed
+make check             # split integrity + coverage  (all cores; cached reruns are quick, a cold run is long; see Cached gates)
 make report            # coverage only
 
 # decompile one function
@@ -135,7 +135,7 @@ What is stable:
 | --- | --- |
 | Split integrity | every unit of the layout round-trips byte-exactly (`make check` prints `split : N/N`) |
 | Compiler + flags | global default `-O3`; proven [per-unit compiler requirements](unit-compilers.md) and flag overrides for an alternate MWCC build and for Sony EE GCC 2.96 ([sd-prologue](sd-prologue.md)). A unique original build is not established |
-| **Full section relink** | **BYTE-IDENTICAL** — all 4,541,184 bytes of the main section rebuild from the per-function objects (C/C++ where matched, `asm` bodies, retail bytes from `asm/` for the rest), including the switches' tables as `obj(.rodata)`; `make link` prints the object and byte accounting |
+| **Full section relink** | **BYTE-IDENTICAL**: all 4,541,184 bytes of the main section rebuild from the per-function objects (C/C++ where matched, `asm` bodies, retail bytes from `asm/` for the rest), including the switches' tables as `obj(.rodata)`; `make link` prints the object and byte accounting |
 
 The function count flatters (it counts trivial leaves), so the byte figure is the headline.
 Because the ELF *is* the engine (the proprietary, Insomniac-derived `ig` object model), finishing
@@ -169,18 +169,18 @@ Trivial leaves cannot pin the flags: three 8-byte leaves match `-O4,p` by
 coincidence (no optimisation level can tell `return -1;` apart), and only a real loop function
 separates the levels.
 
-**C89 note:** MWCC 3.0 defaults to C89 — `for (int i = 0; ...)` is a syntax error. Declare loop
+**C89 note:** MWCC 3.0 defaults to C89, so `for (int i = 0; ...)` is a syntax error. Declare loop
 variables at the top of the block.
 
 **Relocations:** only functions with *no calls and no globals* can be compared as unlinked
 objects. An object stores a relocation, not a final address (`lbu v1,-32112(gp)` becomes
 offset 0 + `R_MIPS_GPREL16`), so anything touching a global or calling out cannot be compared until
-its relocations are applied — the next section.
+its relocations are applied (next section).
 
 ## Relocation-aware verification
 
-`tools/verify.py` is the tool that makes the decomp *scale*, and it exists because of a
-simple fact: **an unlinked object stores relocations, not addresses.** Raw object bytes can
+`tools/verify.py` is what lets the decomp scale. It exists because
+**an unlinked object stores relocations, not addresses.** Raw object bytes can
 only be compared for self-contained leaf functions (4 of 15,974). Everything else needs the
 relocations applied first:
 
@@ -195,12 +195,12 @@ kinds, all three confirmed against retail:
 
 | Reloc | Symbol resolution | Verified on |
 | --- | --- | --- |
-| `R_MIPS_HI16` / `LO16` | functions from `config/SLUS-20836/symbols.txt`; data from an **address-bearing name** (`D_0056df30`, `DAT_004d22e8`) — the bootstrap convention | `0x246780` — `if (p) *p = D_0056df30[2]; return D_0056df30[0];` |
-| `R_MIPS_GPREL16` | same, plus `gp` | `0x130000` — the one-shot guard byte at `.sbss` `0x554b00` |
-| `R_MIPS_26` | callee from the layout | `0x109ac8` — tail call passing `"[MPEG ERROR]%s\n"` (0x4d22e8) |
+| `R_MIPS_HI16` / `LO16` | functions from `config/SLUS-20836/symbols.txt`; data from an **address-bearing name** (`D_0056df30`, `DAT_004d22e8`), the bootstrap convention | `0x246780`: `if (p) *p = D_0056df30[2]; return D_0056df30[0];` |
+| `R_MIPS_GPREL16` | same, plus `gp` | `0x130000`: the one-shot guard byte at `.sbss` `0x554b00` |
+| `R_MIPS_26` | callee from the layout | `0x109ac8`: tail call passing `"[MPEG ERROR]%s\n"` (0x4d22e8) |
 
 **`gp` comes from the ELF's `.reginfo`** (24 bytes: `gprmask`, `cprmask[4]`, `gp_value` at
-`+20`) — it has to, because `__start` is `move gp, a0` (`0x001001c0`), i.e. the loader passes
+`+20`). It has to, because `__start` is `move gp, a0` (`0x001001c0`), i.e. the loader passes
 it in. `gp = 0x0055c870`, and `gp - 32112 == 0x00554b00`, exactly the first byte of `.sbss`.
 
 `make check` uses the same path for every unit under `src/` (`tools/srctree.py`), so coverage counts real matches
@@ -230,11 +230,11 @@ rejects corruption, missing/wrong-sized tables and unresolved relocations.
 
 ## Bulk decompilation (`tools/automatch.py`)
 
-Hand-writing every function is not the way in. The same instruction shapes recur, so
+Hand-writing every function does not scale. The same instruction shapes recur, so
 `automatch.py` templates them, compiles each candidate, and **writes
-`src/unmatched/<name>.c`** (or `.cpp` when the template needs C++ mode — see
+`src/unmatched/<name>.c`** (or `.cpp` when the template needs C++ mode; see
 [`guard-family.md`](guard-family.md))
-**only when `verify.py` confirms the bytes match** — an auto-generated file is exactly as
+**only when `verify.py` confirms the bytes match**, so an auto-generated file is exactly as
 trustworthy as a hand-written one; the tool saves typing, it does not lower the bar. Failures are
 reported and nothing is written.
 
@@ -246,11 +246,11 @@ python3 tools/automatch.py --only gget --limit 50
 
 | Template | Shape | Yield |
 | --- | --- | --- |
-| `guard` | 18-insn flag-guard body (`bool t; if (!g \|\| !(t = g->f & 4)) X();`) — `.cpp` | 550 / 550 |
-| `wcall` | 28-byte single call, frame kept — `void f(void){ X(); }` — `.cpp` | 527 / 527 |
-| `wload` | 32-byte single call with a constant-address argument — `.cpp` | 485 / 493 |
-| `wargs` | any other frame-keeping single call: the argument setup is decoded (constant, pass-through, field load, global address, address of a parameter) — `.cpp` | 55 / 658 |
-| `m2c` | *not a template* — drafts the harder shapes, verified before writing (`tools/m2c_batch.py`) | see [`m2c-bulk.md`](m2c-bulk.md) |
+| `guard` | 18-insn flag-guard body (`bool t; if (!g \|\| !(t = g->f & 4)) X();`), `.cpp` | 550 / 550 |
+| `wcall` | 28-byte single call, frame kept: `void f(void){ X(); }`, `.cpp` | 527 / 527 |
+| `wload` | 32-byte single call with a constant-address argument, `.cpp` | 485 / 493 |
+| `wargs` | any other frame-keeping single call: the argument setup is decoded (constant, pass-through, field load, global address, address of a parameter), `.cpp` | 55 / 658 |
+| `m2c` | *not a template*: drafts the harder shapes, verified before writing (`tools/m2c_batch.py`) | see [`m2c-bulk.md`](m2c-bulk.md) |
 | `gget` | `lui at,HI ; jr ra ; lw v0,OFF(at)` → `return *(int*)ADDR;` | 601 / 609 |
 | `ccall` | `lui a0,HI ; j TARGET ; addiu a0,a0,OFF` → `TARGET(OBJ)` | 591 / 591 |
 | `empty` | `jr ra ; nop` | 184 / 184 |
@@ -308,9 +308,9 @@ language mode, not by flags.** The full account is
 [`m2c`](https://github.com/matt-kempster/m2c) with its
 **`mipsee-mwcc-c`** target (the EE ABI), each draft verified before it is written.
 Two things that pass depends on
-are worth more than its yield: feeding m2c **symbolized** data references (`%hi`/`%lo`) rather
+matter more than its yield: feeding m2c **symbolized** data references (`%hi`/`%lo`) rather
 than raw `lui`/`lw` (its type context is useless without that), and **727 functions whose Ghidra
-boundary cuts off the delay slot** — not functions at all, and unmatchable until `tools/split.py`
+boundary cuts off the delay slot**: not functions at all, and unmatchable until `tools/split.py`
 grows them (the link stays byte-identical). The pipeline, the cleaner, the measured failure
 taxonomy and the near-miss worklist are in [`m2c-bulk.md`](m2c-bulk.md).
 
@@ -478,7 +478,7 @@ Retail shapes that only one spelling reproduces:
 decomp-permuter's assembler rejects EE MMI opcodes (`opcode not supported on this processor:
 mips3`), so a function containing `lq`/`sq` cannot become a permuter project.
 
-## The relink — byte-identical (`make link`)
+## The relink: byte-identical (`make link`)
 
 ```sh
 make link     # layout -> one object per unit -> ld -> compare against game.elf
@@ -492,15 +492,15 @@ linkcheck: BYTE-IDENTICAL — the relinked section matches retail exactly
 Every byte of the merged `main` section (`0x100000..0x554b00`) reconstructs from one
 object per layout unit (the count grows with the layout; `make link` prints it, and the
 from-source accounting is in `PROGRESS.md`): the functions compiled from C/C++, the `asm`
-bodies, the remaining code and data units as retail bytes, and the **`jtbl` units** — a
+bodies, the remaining code and data units as retail bytes, and the **`jtbl` units** (a
 `switch`'s jump table, which the
-compiler emits into `.rodata`. Those are the one
+compiler emits into `.rodata`). Those are the one
 thing that is not `obj(.text)`: `tools/layout.py` carves each function's table span out
 of the enclosing data unit, and `tools/linkgen.py` places `obj(.rodata)` of the owning
 function's object there, checking the size against the layout. Duplicate-named
 table sections use the individual names described above. Without that the table
-would be orphaned and the retail bytes emitted twice. This is the Ship-of-Theseus proof
-for the whole build — it demonstrates that the compiler reproduces retail code for every
+would be orphaned and the retail bytes emitted twice. This is the proof
+for the whole build: it demonstrates that the compiler reproduces retail code for every
 decompiled function, that the tiling is exact, and that **every cross-reference
 resolves**: calls into not-yet-decompiled functions, absolute data globals, gp-relative
 small data, and a switch's own case labels. From here, each new function is a mechanical
@@ -512,7 +512,7 @@ linker script) → `mipsel-linux-gnu-ld -G0 --no-warn-mismatch` → `tools/linkc
 ## The build runs on every core (`--jobs`)
 
 `make check` and `make link` are thread pools over the compiler and binutils
-subprocesses. The work is subprocess-bound — which releases the GIL — so it scales
+subprocesses. The work is subprocess-bound (which releases the GIL), so it scales
 until the cores run out. The timings below were measured on a tree of a
 few thousand matched functions; on the full tree a cold `make check` takes about 47
 minutes (see *Cached gates*), and the scaling is what this table shows:
@@ -537,24 +537,24 @@ make the pool safe, and there is one trap:
   report is kept by reporting the first failure in layout order.
 * **The trap: never let the compiler create its output in a large directory.**
   `build/link/` holds ~34k objects, and wibo/MWCC writes its output through a
-  *freshly-named* temp file in the destination directory — creating a new name in a
+  *freshly-named* temp file in the destination directory. Creating a new name in a
   35k-entry directory costs **~160 ms** against ~5 ms in an empty one (measured), which
   alone is ~94 s of `linkgen --all`. Compiling to `/tmp` and copying the finished
   object in (a plain write, ~0.03 ms) takes linkgen from 106 s to 28 s. `make check` is
   fast for the same reason: `verify.py` compiles into `/tmp`.
 
-`ld` itself is ~42 s of `make link` and does not parallelise — MIPS has neither `gold`
-nor `lld` — so it is the current floor.
+`ld` itself is ~42 s of `make link` and does not parallelise (MIPS has neither `gold`
+nor `lld`), so it is the current floor.
 
 ### Six things that have to be right, each of which fails silently or misleadingly
 
-1. **Exact-size objects.** GNU `as` rounds *every* section up to 16 bytes — an 8-byte
+1. **Exact-size objects.** GNU `as` rounds *every* section up to 16 bytes: an 8-byte
    unit becomes 16 and shifts the whole layout. Retail units are therefore made with
    `objcopy -I binary` (exact size, alignment 1). MWCC's `.text` is already exact-size
    (8, 8, 12 for small functions); only its 16-byte alignment needs overriding, which
    the script's `SUBALIGN(1)` does.
 2. **`--rename-section …,contents`.** Without the `contents` flag the renamed section
-   keeps its size but is treated as having **no data**, so every unit links as zeros —
+   keeps its size but is treated as having **no data**, so every unit links as zeros,
    which looks exactly like a placement bug.
 3. **A disjoint tiling.** The Ghidra dump has **33 overlapping function pairs**;
    `tools/layout.py` truncates the earlier unit so each byte is emitted once. Nine function
@@ -581,8 +581,8 @@ code bytes.
    is about the ELF container. The build proves the 4,541,184-byte main section; it does not
    rebuild the ELF headers, program headers and `.reginfo` around it, which a from-source
    `game.elf` would need (entry `0x100008`, the single merged section at `0x100000`).
-2. **Naming.** The current counts — any recovered name versus a *semantic*
-   name — are the "Recovered metadata" rows of `PROGRESS.md`. Most functions still carry an
+2. **Naming.** The current counts (any recovered name versus a *semantic*
+   name) are the "Recovered metadata" rows of `PROGRESS.md`. Most functions still carry an
    address-derived or role name; decompiling them is possible, organising the work by module is
    what naming buys. Re-run `scripts/sync_data.sh` before trusting `data/functions.json`'s
    symbol coverage.

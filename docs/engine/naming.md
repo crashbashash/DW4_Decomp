@@ -1,4 +1,4 @@
-# Naming — the committed name overlay and the module loop
+# Naming: the committed name overlay and the module loop
 
 Many functions in `config/SLUS-20836/symbols.txt` are still `FUN_<addr>` (the live counts are in
 [`../../PROGRESS.md`](../../PROGRESS.md)). This page is how a name gets recovered and
@@ -15,7 +15,7 @@ named, from the strongest evidence there is. Doubt about a name goes in the open
 A name has to reach three things that all key off it: the C unit's filename, the
 definition and call sites inside `src/`, and the `asm/<name>.s` unit that links the
 undecompiled remainder. The build reads the layout from `config/SLUS-20836/symbols.txt`, which
-`tools/split.py` regenerates from `data/functions.json` — a dump of the Ghidra
+`tools/split.py` regenerates from `data/functions.json`, a dump of the Ghidra
 project. So a name that only exists in Ghidra is invisible to the repository: it
 cannot be reviewed, and re-dumping is a manual round-trip.
 
@@ -31,15 +31,15 @@ config/SLUS-20836/names/GapCore.tsv  # (future) a Gap::Core module
 <va>\t<name>\t<module>
 ```
 
-- `va` — the function address (the key; an address may be named once, so two
+- `va`: the function address (the key; an address may be named once, so two
   modules disagreeing is an error rather than a silent last-wins).
-- `name` — the recovered name. `::` is allowed and sanitised to `__` for C/as, so
+- `name`: the recovered name. `::` is allowed and sanitised to `__` for C/as, so
   `Gap::Core::Foo` becomes the C identifier `Gap__Core__Foo`.
-- `module` — the `src/` folder the unit belongs in (`Lua`, `Gap/Core`, …). Unnamed
+- `module`: the `src/` folder the unit belongs in (`Lua`, `Gap/Core`, …). Unnamed
   units are `unmatched`.
 
 The dump is still the source for every function the overlay does not name, so
-adding an overlay never reduces coverage — it is merged, not substituted.
+adding an overlay never reduces coverage: it is merged, not substituted.
 
 ## The module loop
 
@@ -77,7 +77,7 @@ python3 tools/merge_units.py --out src/<module>/<Unit>.c \
 Functions are written in **retail address order** (the order the original compiler
 saw, which is why the original file can be recovered from the binary at all), and
 declarations every user agrees on are hoisted. A symbol two functions declare
-differently — m2c guesses `int[4]` in one and `char[]` in another — is kept inside
+differently (m2c guesses `int[4]` in one and `char[]` in another) is kept inside
 each user as a block-scope `extern` instead, since a declaration has no effect on
 the code being matched.
 
@@ -113,7 +113,7 @@ gate, as always.
 
 The original build compiled a class or a source file once, with one compiler and one
 flag set, so a folded unit must verify that way too. **Every method of a class, and
-every function of a folded unit, verifies under the same compiler and flags** — the
+every function of a folded unit, verifies under the same compiler and flags**: the
 rows in `config/SLUS-20836/unit-compilers.tsv` and `config/SLUS-20836/unit-flags.tsv` are per unit, not per
 function. A per-function row that disagrees with its siblings (one method pinned to
 the alternate compiler inside a class the pinned compiler builds, or `-O3,p` beside
@@ -129,7 +129,7 @@ A matched function that reads a field the reflection does not describe may spell
 as an offset member (`p->f12`). Two rules: the number is the **decimal** byte offset
 (`f12`, never `f0xc` or `f0c`), so one field has one spelling across the tree and
 `tools/typed_coverage.py` can pair it with the reflected layout; and an `fNN` member
-is a temporary form — it is replaced by the recovered field name (through
+is a temporary form: it is replaced by the recovered field name (through
 `include/dw4/reflected.h` or a hand header) when the struct is typed, and a module
 with `fNN` members left is not complete.
 
@@ -139,9 +139,9 @@ A class or struct has **one definition**, under `include/dw4/`: the generated
 `include/dw4/reflected.h` for every reflected class, or a hand-written header for a
 struct the reflection does not describe. Matched files include that header instead of
 restating the struct. A **local view** (a file-private struct covering only the offsets
-one function touches) is allowed only where ABI dispatch needs it — a receiver whose
+one function touches) is allowed only where ABI dispatch needs it (a receiver whose
 real class is undetermined, or a layout the compiler must see differently to colour
-registers as retail — and it must not reuse a reflected class name: `struct
+registers as retail), and it must not reuse a reflected class name: `struct
 beSound_view` or `struct G`, never a second `struct beSound`. When the real class is
 known, the local view is replaced by the shared header in the same commit.
 
@@ -154,7 +154,7 @@ counts are in [`../../PROGRESS.md`](../../PROGRESS.md) and the overlay files the
 | Source | Names | Where |
 |---|---|---|
 | RTTI / vtables | `Class::vfunc_NN` for RTTI-headed vtables | `docs/engine/rtti-and-vtables.md` |
-| `GetVTable`-derived vtables | `<Namespace>::<Class>::vfunc_NN` for the vtables that have no `__RTTI__` record — the class comes from its own `<Class>_GetVTable`, the namespace from the nearest RTTI ancestor, the role from the slot | `scripts/seed_names_getvtable_slots.py` → `config/SLUS-20836/names/GetVTableSlots.tsv` |
+| `GetVTable`-derived vtables | `<Namespace>::<Class>::vfunc_NN` for the vtables that have no `__RTTI__` record: the class comes from its own `<Class>_GetVTable`, the namespace from the nearest RTTI ancestor, the role from the slot | `scripts/seed_names_getvtable_slots.py` → `config/SLUS-20836/names/GetVTableSlots.tsv` |
 | Lua native API table | the real implementations + dispatcher | `data/script_api.json`, `docs/engine/script-engine-lua.md` |
 | Class registration (reflection) | `<Class>_Register` + `<Class>_InitFields` | `data/reflection.json` (per-class `register_site` / `post_init`), `scripts/seed_names_reflection.py` |
 | MetaObject accessors | `<Class>_GetMetaObject` (t0 -> `_getMetaObjectFunction`; many are reached through the registrar's `j <accessor>; nop` thunk), `<Class>_GetVTable` (t3 -> `_vTablePointer`) + the `igMetaObject` methods | `scripts/seed_names_metaobject.py` (the registrar's `t0`, role read from the decompiler) |
@@ -203,7 +203,7 @@ the build.
 | `callback-list` | `g_<Class>_callbackList` | the eleventh argument of the class's `igMetaObject_RegisterClass` call (docs/engine/reflection-metadata.md section 1); `scripts/format_registrars.py` lays those calls out one argument per line |
 | `string-literal` | `<TEXT>` | the printable NUL-terminated text at the address in the image |
 
-An address that matches no rule keeps its `DAT_` name: it is not named until it has evidence —
+An address that matches no rule keeps its `DAT_` name: it is not named until it has evidence,
 and a module is not complete while such a `DAT_` is referenced.
 
 **String literals** always take the `string-literal` row above: the printable text at the address,
@@ -249,7 +249,7 @@ The *denominator* is not fixed: `tools/split.py` passes recover functions Ghidra
 only labelled. `promote_gap_labels` promotes a gap label with a frame prologue;
 `promote_data_labels` promotes a gap label a vtable points at whose
 bytes form a leaf body. Both only add entries in unclaimed gaps and
-never change an existing symbol's size, so the relink stays byte-identical — but each
+never change an existing symbol's size, so the relink stays byte-identical, but each
 one lowers the coverage *percentage* by growing the denominator while the matched
 count is unchanged. A commit that changes the denominator (a split pass, an extent
 override, a symbol split or merge) says so in its message with the before/after

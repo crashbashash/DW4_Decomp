@@ -1,4 +1,4 @@
-# `testing/` — dynamic testing
+# `testing/`: dynamic testing
 
 The testing tools, and the bugs and traps that waste time.
 
@@ -15,7 +15,7 @@ Index: [documentation hub](../docs/README.md).
 | File | Topic |
 |---|---|
 | `tools.md` | Ghidra pipeline, project tooling, dynamic-testing helpers, disassembly |
-| `verify_models_offline.py` | Ground-truth check that the offline model extractor reproduces the live game's models from a saved EE RAM dump — 450 of NDMW.AFS entry 621's 549 attributes byte-identical, none unresolvable, and 383 of the 386 live-named models named identically |
+| `verify_models_offline.py` | Ground-truth check that the offline model extractor reproduces the live game's models from a saved EE RAM dump: 450 of NDMW.AFS entry 621's 549 attributes byte-identical, none unresolvable, and 383 of the 386 live-named models named identically |
 | `texture-pack-groundtruth.tsv` | The 25 live-located texture buffers of entry 625 (name, size, palette/grid offset, `C`, dim) |
 | `texture-pack-625-layout.tsv` | The complete derived 54-row pool layout of entry 625 (mirrors `docs/engine/texture-pack-625-layout.tsv`) |
 

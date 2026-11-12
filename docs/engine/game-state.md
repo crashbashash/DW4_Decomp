@@ -9,10 +9,10 @@ All addresses are in the ELF's BSS (`0x00554b00`–`0x0058d280`) and are stable.
 | Global | Type | Meaning | Class typeinfo |
 | --- | --- | --- | --- |
 | `0x0058a1b8` | ptr | object #1 | `0x00587d08` |
-| `0x0058a1c0` | ptr | **main game / GAMERAM object** (property root) — the instance it points at is a `Gap::Bec::beMessenger` (its `+0` vtable is `0x0053ab70`) | `0x00588f38` |
+| `0x0058a1c0` | ptr | **main game / GAMERAM object** (property root); the instance it points at is a `Gap::Bec::beMessenger` (its `+0` vtable is `0x0053ab70`) | `0x00588f38` |
 | `0x0058a1c8` | ptr | object #3 | `0x00589160` |
 | `0x0058a1d0` | ptr | object #4 | `0x00589790` |
-| `0x0058a1d8` | ptr | the Game `this` pointer | — |
+| `0x0058a1d8` | ptr | the Game `this` pointer | - |
 
 Disassembly:
 ```
@@ -82,7 +82,7 @@ property system (`docs/engine/property-system.md`).
 > with further copies elsewhere in the heap, so change every copy when testing a stat.
 > Two mirrors of MP sit at `0x1227730`/`0x1227734`.
 > **The container address is save-dependent** (LV-999 saves: MP `0x88041C`; level-1 save: MP
-> `0x87E3A4`, container moved -0x2044) — locate it per save by scanning for the MP def pointer
+> `0x87E3A4`, container moved -0x2044); locate it per save by scanning for the MP def pointer
 > `u32 == 0x69A4E4`, whose value is at `hit+4`. A Heal Circle refill
 > moves all of them (60 -> 99999), and a pnach pinning them at 9999 keeps the VM there while
 > R1 techniques still cast against the field (HUD showed `9999 - 960 = 9039` after `Heal Lt`,
@@ -112,7 +112,7 @@ position:
 > translation in the row starting at `+0x30`/`0x01173158` for the 1P object). It is a
 > **placement record**, not the live position, in two measurable ways:
 >
-> * it does **not track walking** — after 2 s of movement input that visibly moves the
+> * it does **not track walking**: after 2 s of movement input that visibly moves the
 >   character, `transform+48/52/56` is unchanged, to the bit. It **is** rewritten on a
 >   *placement* event, though (a knockdown/knockback re-place moved it from
 >   `(120.74, 62.54, 327.63)` to `(147.85, 56.48, 325.24)` across one interval in a live
@@ -123,13 +123,13 @@ position:
 >
 > It does read correctly **immediately after a stage load** (it is set when the
 > character is placed), which is why it is usable as "the player position" right
-> after a load — read it early, and treat it as where the character was *placed*.
+> after a load. Read it early, and treat it as where the character was *placed*.
 > The value the movement systems use is the scene node's translation row (below). Writes to
 > this field *can* wedge the character: after writing it, movement input produced no
 > change at all until the save state was reloaded.
 >
 > The stage's **entry-point table** (the `PLAYERPOINT`/`SETGENERATEPOS` targets) is a
-> flat array of 12-byte xyz triples at `0x00dca7d4` in `stag0101` — e.g.
+> flat array of 12-byte xyz triples at `0x00dca7d4` in `stag0101`, e.g.
 > `(417.01, 72.02, −106.22)`, `(417.18, 72.00, −119.96)`, `(427.45, 72.00, −117.33)`,
 > `(402.37, 53.53, −10.06)`. Those are the positions the game itself teleports to.
 
@@ -172,21 +172,21 @@ in total). Read them; write the scene node.
 
 They are not discoverable by value: `pine find` returns "no
 match" for u32 values that provably exist (it missed a float read back from a known
-address even with `--start/--end` around it), so scan a RAM window in Python instead —
+address even with `--start/--end` around it), so scan a RAM window in Python instead,
 or use the differential method:
 
 1. pause the game and read 16 MB at `0x800000` (≈60 s),
 2. **walk the character one step in an OPEN direction** (into a wall gives zero
-   candidates — this is the trap),
+   candidates; this is the trap),
 3. pause and read the window again, so the diff is exact,
 4. keep the triples that moved, and among them those sharing the *dominant
-   displacement* — that set is the player's copies.
+   displacement*; that set is the player's copies.
 
 Ignore the static program image (the ELF loads at `0x100000..0x554b00`; it never changes as the world moves)
 and keep only translation rows (x, y, z, 1.0): unfiltered three-float diffs are dominated by rotation-matrix
 rows of unit vectors.
 
-Addresses are stable across reloads of the **same savestate** — but not across different
+Addresses are stable across reloads of the **same savestate**, but not across different
 states, and not even across two states of the same stage: the allocator decides.
 `pre-leomon` and `normal_lvl1_before_crown_enemy` share **no** copy
 address, and a `stag0102` calibration was dead in a later
@@ -194,7 +194,7 @@ address, and a `stag0102` calibration was dead in a later
 stale one points at other objects. **Never hard-code or reuse
 these across loads.** To avoid hunting each time, derive them from a stable route: read
 the placement record at `*(0x0058a1e8)+48` (accurate right after a load) and keep every
-copy of that triple in RAM — no walking, ~2 min; the walk-based differential
+copy of that triple in RAM: no walking, ~2 min; the walk-based differential
 is the fallback for when the record has gone stale. `stag0101`'s set (found by this
 method):
 `0x0111ee50 0x012fecc0 0x01383e50 0x0165135c 0x01651368 0x016b9720 0x016de1c0 0x017bdf10`,
@@ -226,7 +226,7 @@ The retail story-flag table is a 1,024-byte array of 0/1 bytes in the heap, inde
 | Story-flag table | `*(*(*(0x5875e0)+0xdc)+0x10)` |
 
 ## Hot engine globals (not game state)
-Very-high-reference-count BSS words — engine/runtime, not gameplay:
+Very-high-reference-count BSS words (engine/runtime, not gameplay):
 | Global | Refs | Likely |
 | --- | --- | --- |
 | `0x00586dc8` | 1151 | engine/allocator |

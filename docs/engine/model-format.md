@@ -1,4 +1,4 @@
-# Model geometry — `igGeometryAttr`
+# Model geometry: `igGeometryAttr`
 
 A rendered object in DW4 is **not** a mesh handed to the GS. Its geometry is an
 `igGeometryAttr` object whose vertices are consumed *sequentially* by a strip-length array; there is
@@ -7,7 +7,7 @@ what makes a model extractable at all.
 
 This page is the format. The live-memory extractor used to prove it is kept with the emulator
 tooling rather than in this repository (it needs a running game, which this repo deliberately does
-not depend on); the offline route — reading the same geometry out of a stage's model pack — is
+not depend on); the offline route (reading the same geometry out of a stage's model pack) is
 described under *The offline route* below.
 
 ## The object chain
@@ -45,7 +45,7 @@ Three details are easy to get wrong:
 
 * `igVertexArray._vdata` and `igPrimLengthArray1_1._vdata` are **not the same kind of pointer**.
   The prim-length array's is the lengths themselves.  The vertex array's is a **two-pointer block
-  `{positions, normals}`** — not a `{start, size}` memory ref — so `_vdata[0]` is the 12-byte-stride
+  `{positions, normals}`**, not a `{start, size}` memory ref, so `_vdata[0]` is the 12-byte-stride
   vertex buffer and `_vdata[1]` the normal buffer **or 0** (see *Normals and UVs* below).  Reading the
   block as a `{start, end}` pair makes `end - start` look like `12 * numVerts + 8` whenever a second
   buffer happens to follow the vertices; that coincidence suggests a size field, and there is
@@ -61,7 +61,7 @@ Three details are easy to get wrong:
   colour element, so per-vertex colour comes from the VU1 shade.  The GS vertex packing is VU1
   microcode, not C.
 
-## Connecting the vertices — no indices
+## Connecting the vertices: no indices
 
 Both representations walk the vertex buffer **in order**, which is why `sum(primLengths) ==
 _numVerts` and `3 * numPrims == numVerts` hold and make usable self-checks.
@@ -69,12 +69,12 @@ _numVerts` and `3 * numPrims == numVerts` hold and make usable self-checks.
 **`_primType == 4`, triangle strip.** `_primLengths` gives the length `L` of each strip. Strip *i*
 owns vertices `[off, off+L)` with `off` advancing by `L`; it contributes `L-2` triangles. A live
 barrel, for example, is 494 vertices and 118 strips (`{4: 72, 3: 36, 12: 5, 7: 4, 10: 1}`) totalling
-258 triangles — `sum(L) == 494 == numVerts`.
+258 triangles: `sum(L) == 494 == numVerts`.
 
 **`_primType == 3`, triangle list.** There is no prim-length array: `_numPrims` triangles read
 straight through the buffer in triples (`3 * numPrims == numVerts`).
 
-**`_primType == 0`.** An empty or recycled slot — `_vertexArray` is 0, and freed slots hold a
+**`_primType == 0`.** An empty or recycled slot: `_vertexArray` is 0, and freed slots hold a
 self-pointer at `+0x38`. Of 1,006 live attributes, 454 are strips, 337 are lists, and 215 are empty.
 
 ## Normals and UVs
@@ -84,23 +84,23 @@ normals are unit length.  **`_vdata[1]` is 0 for most meshes and there is then n
 all.**  Of the 669 extracted live models 130 carry unit-length normals and **539 carry none** (221
 strip + 318 list).  (That split is a property of the **live** object graph, not of the pack: read
 straight from the file, *every* mesh of a stage's drawn set in `NDMW.AFS:614` carries a unit-length
-second `12*numVerts` stream — the six big terrain meshes, the floor, the props and the character.)  The buffer layout in the loader's packed pool is
+second `12*numVerts` stream: the six big terrain meshes, the floor, the props and the character.)  The buffer layout in the loader's packed pool is
 
     [positions: 12*n][tag + pad][optional normals: 12*n][tag + pad][uv: 8*n]
 
-so when `_vdata[1]` is 0 the buffer right after the positions is the UV, not the normals — a search of
+so when `_vdata[1]` is 0 the buffer right after the positions is the UV, not the normals; a search of
 the pool around 40 of those meshes found no `12*n` unit-length block, so the normals really are absent
 rather than relocated.  `igPsx2VertexArray1_1`'s `_pBlendedNormsList` (+0x34) is 0 on all of them, so
 the blended path the field name implies is not the source either.  The split is by kind, not accident:
 the meshes *with* normals are effect/part meshes and props (`M_BK_op_0Shape`, `M_BK_p0Shape`,
-`expnumShape`, `kouka0Shape`, the barrel), while those *without* are unlit/2D — `font*` (205),
+`expnumShape`, `kouka0Shape`, the barrel), while those *without* are unlit/2D: `font*` (205),
 `polySurfaceShape`, `CF_*`, `pPlaneShape`, `pCylinderShape`, `iconShape`, `win0Shape`.
 
 The UV stream **is** real, and it is at
 
     uv = align8((normals if present else positions) + 12 * numVerts),   align8(x) = (x + 4 + 7) & ~7
 
-— the 4 bytes in the gap are a pool tag and the block is then 8-byte aligned.  Each entry is an
+(the 4 bytes in the gap are a pool tag and the block is then 8-byte aligned.  Each entry is an
 8-byte `{u, v}` float pair, `8 * numVerts` bytes, and the buffer after it is again tag + alignment
 (checked against the buffer-pointer pool for meshes both with and without normals).  Nothing in the
 object points at the UV, so it is established **geometrically**: for
@@ -111,7 +111,7 @@ all 55 pairs sit in `[0,1]`, and the values are dyadic (a barrel's first pair is
 ## Names come from the art source, not the binary
 
 The shipped binary keeps no model names of its own, but the exported geometry does, and they survive:
-model parts are named after their **DCC source objects** (Maya/3ds Max) — `M_BK17v1_barrelmShape`,
+model parts are named after their **DCC source objects** (Maya/3ds Max): `M_BK17v1_barrelmShape`,
 `pCylinderShape3`, `pCubeShape5`, `polySurfaceShape38`, `group2`, `barrelbody`.
 
 They live on the shape object, and the link to a geometry attribute is a single list:
@@ -122,29 +122,29 @@ M_<model>Shape               vtable 0x00528e70   (826 live)
   +0x20  ->  exactly one igAttrList (vtable 0x00524420), { _count +0x08, _array +0x10 }; its array
              holds the shape's attr pointers, and the entry whose vtable is 0x005238c0 is that
              shape's geometry attribute
-  +0x1c  ->  a wrapper (vtable 0x0052ab20) embedding the shape's FIRST attr at +0x18 — fallback
+  +0x1c  ->  a wrapper (vtable 0x0052ab20) embedding the shape's FIRST attr at +0x18; fallback
              only: it is any attr subclass (class 0x00529750 on ~1,100 other objects, not the
              geometry) and normally duplicates the +0x20 entry
 ```
 
 So a geometry attribute is named by the `M_*Shape` whose attribute list contains it.  **One list per
-shape, at `+0x20` — not a chain.**  The `igAttrList` objects live in a packed shared arena, so the
+shape, at `+0x20`, not a chain.**  The `igAttrList` objects live in a packed shared arena, so the
 object 0x18 bytes past one shape's list is simply the *next shape's* list (and a shape's own inline
 data array can sit there too); walking that stride claimed 637 of 752 attributes for more than one
 shape and left `font000` holding 177.  The one-list rule is collision-free (826 shapes, 826 distinct
 `+0x20` pointers, 786 owning exactly one geometry attr) and names **599 of the 669** extracted models
 with 357 distinct DCC names.  The other 70 belong to shapes whose `+0x08` name pointer is **null**
-(runtime/UI sub-meshes — small, content-unique 24-vertex glyph quads), so they are left as
+(runtime/UI sub-meshes: small, content-unique 24-vertex glyph quads), so they are left as
 `model_<address>.obj` rather than given a neighbour's name.
 
 A dead end worth recording: the run of ~1,792 object pointers at
 `0x0092a000..0x0092bbfc` looks like a table of geometry attributes and is one, but it is the
-**load-time object registry**, not a name index — nothing references it by name, so no name can be read
+**load-time object registry**, not a name index; nothing references it by name, so no name can be read
 out of it.
 
 ## What was verified
 
-The interpretation was not inferred from the field names — it was checked by rasterising the result.
+The interpretation was not inferred from the field names; it was checked by rasterising the result.
 Rendering the vertices as a plain list, or ignoring the strip boundaries, shreds the mesh even with a
 z-buffer; applying the rules above produces recognisable objects, including staves-and-spout barrels
 and the claw/ring/box props, and the extraction run pulls **669** distinct models out of one loaded
@@ -170,29 +170,29 @@ igGeometryAttr1_5  slot 4 (+0x0c) _vertexArray  ->  an igObjectRef id
 
 for `igGeometryAttr1_5` slot *k* sits at `4*(k-1)` (`+0x10` `_indexArray` = −1, `+0x14` `_primType`,
 `+0x18` `_numPrims`, `+0x30` `_stripLengths`; all confirmed by value).  Slot *numbers* are not
-comparable across classes — each class numbers its own declaration chain — so the field *offsets* come
+comparable across classes (each class numbers its own declaration chain), so the field *offsets* come
 from `data/reflection.json` (a base class declares its own fields, at absolute offsets, so
 `igGeometryAttr`/`igVertexArray`/`igPrimLengthArray` hold most of them), and every link is then
 *validated* by the format's own arithmetic: the `_vdata` block must list a `12*_numVerts` stream and the
 lengths must sum to `_numVerts`, so an offset that did not hold would show up as a skipped attribute
 rather than as bad geometry.
 
-**`_memSize` is the stream's content size exactly** — `12*_numVerts` for the positions, `8*_numVerts`
-for the UVs — verified over all 549 vertex arrays of entry 621.  So a stream is found with no search:
+**`_memSize` is the stream's content size exactly**: `12*_numVerts` for the positions, `8*_numVerts`
+for the UVs, verified over all 549 vertex arrays of entry 621.  So a stream is found with no search:
 its id gives its offset and its `_memSize` gives its length.
 
 The extractor is `scripts/igb_models.py` (`--list`, `--tsv`, `--obj ID`, `--out-dir`).  It pulls **all 549** of entry 621's
 geometry attributes, and **450 of them are byte-identical to a live-extracted model**
 (`scripts/extract_live_models.py`; the check is `testing/verify_models_offline.py`).  Of the rest, 52
 have a vertex count the live session never held and 47 are same-count models from another part of the
-stage — the dump holds only what the session had loaded, so those cannot match rather than being wrong.
+stage; the dump holds only what the session had loaded, so those cannot match rather than being wrong.
 `docs/engine/model-pack-621-attributes.tsv` is the committed fixture (one row per attribute: ids, mode,
 counts, streams) and `scripts/verify_models_layout.py` re-derives it from the pack.
 
 The **character model packs** (`common/p_*.igb`, e.g. entry 861 = the player) read the same way, but
 they are a second record alignment: their records start at an **odd** file offset, while the stage packs
 start at `2 mod 4`.  The chain finder scans every offset rather than stepping by two,
-so `igb_models.py --entry 861` yields the player's three `igGeometryAttr1_5` — the three actor **LODs**,
+so `igb_models.py --entry 861` yields the player's three `igGeometryAttr1_5`, the three actor **LODs**,
 named `P_susanoo_Skin0Shape0/1/2`; `docs/engine/model-pack-861-attributes.tsv` is that
 fixture, re-derived by the same `make rules` check.
 
@@ -203,7 +203,7 @@ Note this is an **offline extractor** route: the engine's own loader allocates t
 
 A shape is an `igGeometry` record: its
 **ordinal-2** value is the DCC part name (`pCylinderShape3`, `M_BK17v1_barrelmShape`, …) and its
-**ordinal-8** value is an `igAttrList` whose `_array` (+0x10) is a block of attribute ids — the ones
+**ordinal-8** value is an `igAttrList` whose `_array` (+0x10) is a block of attribute ids; the ones
 that are `igGeometryAttr1_5` records are that shape's geometry, so they take its name.  That is the
 same link the live walk uses from RAM (an `M_*Shape`'s list of attrs), reached from the pack instead.
 Found by **ordinal, not offset**: a record's byte offsets shift with a variable-length value, because
@@ -212,7 +212,7 @@ a long name pushes everything after it along, while the container's slot numbers
 attributes of `stag0102`'s pack (`igb_models.py --tsv` carries the names, `--out-dir` writes
 `model_pCylinderShape3.obj` instead of `model_13842.obj`); the other 105 belong to shapes with an
 empty name and stay unnamed rather than borrowing a neighbour's.  **383 of the 386** matched models
-get the same name the live namer gives them (`testing/verify_models_offline.py`) — the 3 that differ
+get the same name the live namer gives them (`testing/verify_models_offline.py`); the 3 that differ
 are content duplicates, where two shapes share a vertex list and either name is right for its own
 attribute.  The live path is `scripts/name_live_models.py`, which reads EE RAM once and resolves
 offline (`--from` reuses a saved dump); `--rename-dir` re-applies names to the OBJs.
@@ -305,15 +305,15 @@ paused capture (`scripts/livedump.py` trims a `.p2s` to the base the readers exp
 
 and the stream is **not in the pack**: `igVertexArray1_1._blendWeights` exists in the file but holds a
 4-byte stub, because the engine allocates the real arrays at load.  So a skinned mesh is identifiable
-from the live graph alone — it is the one whose vertex array has non-NULL `_blendWeights` *and*
+from the live graph alone: it is the one whose vertex array has non-NULL `_blendWeights` *and*
 `_blendIndices`.  **A skinned mesh is not necessarily the player**: on the
 Goblin Pass capture the only such mesh is `ogre_skinShape`, an **Ogremon NPC**, while the player is
 Susanoomon (see the actor graph below).  The bone-selection map is
 `igBlendMatrixSelect._blendMatrixIndices` (+0x28, an `igIntList` of bone-count entries mapping a vertex
 bone to a matrix slot), and the pose matrices are a 24-matrix `igBlendMatricesAttr._matrixCache` (+0x0c,
-count +0x10) — or, for an actor, its own `_boneMatrixCacheArray` (+0x24) and `_blendMatrixCacheArray`
+count +0x10) or, for an actor, its own `_boneMatrixCacheArray` (+0x24) and `_blendMatrixCacheArray`
 (+0x28).  **Open:** no back-link from a free mesh or the select to *its* `igBlendMatricesAttr` was
-found — several live 24-/40-matrix caches exist with no back-pointer — so for an unparented mesh the
+found (several live 24-/40-matrix caches exist with no back-pointer), so for an unparented mesh the
 palette cannot be paired from the object graph and the bind pose stands.
 
 `gobr_skinShape2` (pack 614 attr 22308) is a Goburimon, not the player.  Its live parent group
@@ -336,13 +336,13 @@ For the player the gaps above are closed, and the answer is
 *not* in the object graph:
 
 * **The per-vertex bone indices are in the pack**: pack 861 holds pool blocks of exactly
-  `num_verts` bytes — 5483 (354, shape0), 5595 (2018, shape2), 5566 (3580, shape1) — each a u8
+  `num_verts` bytes: 5483 (354, shape0), 5595 (2018, shape2), 5566 (3580, shape1). Each is a u8
   bone index per vertex, values 1..23.  The neighbouring 4-bytes-per-vertex blocks (5593/5594/5565)
-  are constant `1.0f` weights — **no weight data exists in the pack**.
+  are constant `1.0f` weights: **no weight data exists in the pack**.
 * **The palette the GPU actually skinned with is a per-bone array staged in the VU/DMA packet area**
 : four byte-identical 24-matrix copies (0x1b743dc0 / 0x1b53f40 / 0x1b64040 / 0x1b741c0,
   one per character draw run) with a repeated copy 0x11f0 bytes into each, indexed **directly by the
-  bone byte** — the `igBlendMatrixSelect` list is not consulted for the player.  Shape1 fits the
+  bone byte**; the `igBlendMatrixSelect` list is not consulted for the player.  Shape1 fits the
   native GS draw at median 0.0057 model units single-bone (100 % within 0.05); the
   `igAnimationCombiner`-held palette (0x16df680, 21 slots, slot-mapped) fits the same vertices about
   7× worse, so the combiner's +0x58 pointer is the engine's own copy, not what the VU received.
@@ -378,7 +378,7 @@ Pass capture the player's skin is `P_susanoo_Skin0Shape0/1/2` (Susanoomon), the 
 `common/p_susanoo.igb` names the model, and the manifest resolves `p_susanoo.igb` to **`NDMW.AFS` entry
 861** (685,597 B, beside `m_`/`q_`/`s_susanoo.igb` = 845/877/893) with textures `P_susanoo01.png` /
 `P_susanoo02.png`.  **Offline:** the live skin shapes' `igVertexArray1_1` read
-`numVerts` 0 / `vdata` 0 in the capture because the actor builds its geometry through the actor graph —
+`numVerts` 0 / `vdata` 0 in the capture because the actor builds its geometry through the actor graph,
 but the pack itself is complete: entry 861 decodes and yields its three `igGeometryAttr1_5`, all named
 `P_susanoo_Skin0Shape0/1/2`, which are the actor's **three LODs** (354 / 3,580 / 2,018 verts) and each
 spans the whole humanoid.  The model loads from `p_susanoo.igb`, and the actor's `_attachedGraphs` also
@@ -388,19 +388,19 @@ records sit at the odd alignment).
 **A material can hang off the parent node.**  A shape's own `+0x20` list is geometry only, but a mesh's
 texture can instead sit on the `igBlendMatrixSelect` (an `igAttrSet` subclass) that is its `_parentList`
 entry: the `igAttrSet._attributes` (+0x20) list holds the `igTextureBindAttr`.  Reading the
-parent-chain node attr sets — testing that `+0x20` really is an `igAttrList` (`0x00524420`), because on a
-plain `igTransform` the same offset is `_m` — lifts the live material map from 106 to 136 geometry
+parent-chain node attr sets (testing that `+0x20` really is an `igAttrList` (`0x00524420`), because on a
+plain `igTransform` the same offset is `_m`) lifts the live material map from 106 to 136 geometry
 attributes.  The big ground mesh and the crates still resolve nothing this way.  Their binding is the
 live-built material attr set: `beTextureCtrlAttr._attrSet` (+0xc), whose `+0x1c` list holds the shapes
 and `+0x20` the `igTextureBindAttr`.
 
 ## See also
 
-* [`reflection-metadata.md`](reflection-metadata.md) — the `ig*` reflection system these field names
+* [`reflection-metadata.md`](reflection-metadata.md): the `ig*` reflection system these field names
   come from.
-* [`rtti-and-vtables.md`](rtti-and-vtables.md) — how `0x5238c0` and friends are resolved to classes.
-* [`igbinary-format.md`](igbinary-format.md) — the container the model packs are written in.
-* [`afs-archives.md`](afs-archives.md) — which pack holds a stage's models.
+* [`rtti-and-vtables.md`](rtti-and-vtables.md): how `0x5238c0` and friends are resolved to classes.
+* [`igbinary-format.md`](igbinary-format.md): the container the model packs are written in.
+* [`afs-archives.md`](afs-archives.md): which pack holds a stage's models.
 
 ## Open questions
 

@@ -1,4 +1,4 @@
-# CRI HTCI — the host-file device
+# CRI HTCI: the host-file device
 
 HTCI (`HTCI/PS2EE Ver.2.69` at `0x4f0590`) is the cvFs device for files on the development host
 (`host:`), read through the IOP file calls and SRD. It keeps 13 file handles of 48 bytes, opens files

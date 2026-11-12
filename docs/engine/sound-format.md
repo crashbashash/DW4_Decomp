@@ -1,4 +1,4 @@
-# `ps2_` sound banks — the game's SE/BGM container
+# `ps2_` sound banks: the game's SE/BGM container
 
 A stage's resident effects live inside CRI `ps2_` banks in its own sound pack.
 Music and ambience can instead be standalone ADX streams in
@@ -19,7 +19,7 @@ smaller entry is its sound + SE pack, the bigger its model/setup pack:
 | `stag0201` | 641 | 346,670 B | 642 | 5,173,220 B |
 
 The sound pack is an ordinary **igBinary container** (magic `0x40c`, version 38 for entry 620). Its
-record chain is small — 29 classes, 617 records over 24,232 bytes at `+0x18a0 .. +0x7748` — and the
+record chain is small (29 classes, 617 records over 24,232 bytes at `+0x18a0 .. +0x7748`), and the
 **content pool** that follows (`hdr[6]` = 463,548 bytes, `+0x7748 .. end`) is almost entirely the sound
 data. That pool is:
 
@@ -34,7 +34,7 @@ data. That pool is:
 ```
 
 Each bank is one `.sfp` file. The pack's `beCriSfpData` records name them and carry their sizes, and
-`_pcmSize` matches the bank's `DTPK` size field exactly — so the name set is recovered, not guessed:
+`_pcmSize` matches the bank's `DTPK` size field exactly, so the name set is recovered, not guessed:
 
 | bank | record name | `_pcmSize` | `DTPK` at | VAG bytes | rate | sounds |
 | --- | --- | --- | --- | --- | --- | --- |
@@ -56,7 +56,7 @@ Everything is little-endian; the sample rate is a u16 (24000 = `c0 5d` on disk).
          +0x0c  pcm_size    the bank's total size (matches beCriSfpData `_pcmSize`)
          +0x10  field       equals beCriSfpData slot 7 (800..1216); role unproven
          +0x18  vag_size    ADPCM bytes in the VAGD chunk (= beCriSfpData slot 8)
-         +0x1c  header_size the VAGD chunk's offset — 0x800 in every bank seen
+         +0x1c  header_size the VAGD chunk's offset; 0x800 in every bank seen
          +0x20  three 0x4000 words (0x20..0x2b), then zero
 
 +0x060  ps2_TBLD
@@ -76,8 +76,8 @@ Everything is little-endian; the sample rate is a u16 (24000 = `c0 5d` on disk).
          +0x20  the ADPCM
 ```
 
-The record table's `end` fields **tile the VAGD chunk exactly** — entry *i* is `[end_{i-1}, end_i)`,
-starting at `0x20` — so a bank's sounds are delimited with no counting and no guesswork.
+The record table's `end` fields **tile the VAGD chunk exactly**: entry *i* is `[end_{i-1}, end_i)`,
+starting at `0x20`, so a bank's sounds are delimited with no counting and no guesswork.
 
 ## The ADPCM is Sony VAG, with a control byte
 
@@ -87,7 +87,7 @@ pinned by matching ffmpeg's `adpcm_psx` output:
 1. **byte 0** is the usual `shift` (low nibble) / `filter` (high nibble);
 2. **byte 1 is a control byte**, so the 28 four-bit samples are the nibbles of **bytes 2..15**, low
    nibble first. `0x00` is normal, `0x01` appears on the last audio frame of an entry, and **`0x07`
-   silences the frame and resets the predictor** — it is the padding between sounds;
+   silences the frame and resets the predictor**; it is the padding between sounds;
 3. the predictor feeds back the **unclamped** sample (only the output is clamped to int16), and the
    two-tap prediction is a **truncating** `/ 64`.
 
@@ -107,7 +107,7 @@ at all. The names live in the pack's **records**:
 
 ```
 beCriSfpData._name     the bank's name (e_goburi.sfp, …)
-beCriSfpData._pcmSize  equals the bank's DTPK size — so the bank ↔ name match is exact
+beCriSfpData._pcmSize  equals the bank's DTPK size; the bank ↔ name match is exact
 beSoundData._name      the sound's name (goDEAD01, …)
 beSoundData._fnameIdx  which bank, through beSoundInfo._fnameList
 beSoundData._memoryIdx high 16 bits = sequence index; low 16 bits = sequence-group tag
@@ -130,8 +130,8 @@ The list `_fnameIdx` indexes is the stage's `beSoundInfo._fnameList`, read live 
 
 (`allse.sfp` is a 64-sound **global** bank in `sbiallse.igb`, NDMW entry 897;
 the four `[pt.entry]` slots are (part, entry) pairs: `[0.55]` is `NDMW.AFS` entry 55.) Matching each
-`_fnameIdx` group to the one bank whose entry count equals the group's size — which is unique on every
-shipped pack — and leaving a group that matches no bank external names the 33 stage
+`_fnameIdx` group to the one bank whose entry count equals the group's size (which is unique on every
+shipped pack), and leaving a group that matches no bank external names the 33 stage
 sequence selectors (`goDEAD01`/`goNATK01`… for `e_goburi`, `og*` for `e_ogre`, `bl*` for
 `e_blosso`, the four blasts in `common_blst`, the stage objects `TARU_BLST01`/`OBJ_TORCH_CRASH`/… in
 `stag0102.sfp`). A sequence number does not establish waveform identity; the
@@ -142,7 +142,7 @@ full selector resolution is described under
 
 **Settled:** every bank decodes to PCM offline, and
 every stage sound is **named**. All six
-banks of entry 620 decode sample-for-sample identical to ffmpeg — **773,472 samples, 0 differences**.
+banks of entry 620 decode sample-for-sample identical to ffmpeg: **773,472 samples, 0 differences**.
 
 **Global bank recovered:** `sbiallse.igb` contains `allse.sfp` at an unaligned
 DTPK offset, `0xecc7`, with 64 entry records. Four-byte-aligned scans miss it.

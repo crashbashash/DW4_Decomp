@@ -1,4 +1,4 @@
-# RNG verification — evidence
+# RNG verification: evidence
 
 Raw, reproducible evidence for the claims in [`rng.md`](rng.md). Everything here
 was produced by `scripts/dw4_rng.py`, `scripts/p2s_ram.py`,
@@ -95,7 +95,7 @@ $ sleep 5 ; pine read 0x6FF188 --type u32
 ```
 
 The source is AFS entry **816** (`lobby-ofanimon-seraphimon`) chunk **c100**,
-whose model `WPos` handler runs `funcRandom`, which draws `SYSgetRandom(2)` — a
+whose model `WPos` handler runs `funcRandom`, which draws `SYSgetRandom(2)`, a
 coin flip that steps the model's path index and stamps `_mti`. A full live read-back (vtable `0x52b8e0`, `mti` 323,
 `state0` `91738063`, twist #9, 5315 draws) was still exactly on the
 `sgenrand(5150)` sequence, confirming no reseed.
@@ -119,7 +119,7 @@ Fresh boot of the pristine ISO, no statefile; emulator left on the title screen.
 | T+10 s | 624 |
 | T+15 s | 624 |
 
-The RNG object exists (vtable `0x52b8e0`) and sits at twist #0 / **0 draws** —
+The RNG object exists (vtable `0x52b8e0`) and sits at twist #0 / **0 draws**:
 the raw `sgenrand(5150)` array. A screenshot
 confirms the title screen.
 
@@ -200,21 +200,21 @@ Strict scan for the RNG-chain idiom (`lw rX,16(obj)` … `lw rY,48(rX)` …
 
 | function / site | operation |
 |---|---|
-| `FUN_00384800` `0x3849AC` | `genrand()%10000` — item-drop roll |
-| `Gap__Bec__beNDMWShopCtrl40__vfunc_21` `0x429EA0` | `%10000 <= t` — probability check |
-| `FUN_0039BCA0` `0x39BDB0` | `%6144 / 1000.0` — random float ≤ 6.144 |
-| `FUN_003764C0` `0x376594` | `%range` — random duration/timing |
-| `FUN_004480A0` `0x4480C8`, `0x4480F0` | `%6000+1`, `%param` — damage/score variance |
-| `FUN_00448190` `0x4481B0` | `%620` — 6-tier rank |
-| `FUN_0042EB80` `0x42F288` | `(%1000)*1000` — random step |
-| `FUN_004487A0` `0x4489A8` | `%10 <= 8-k` — probability check |
-| `FUN_00448AE0` `0x448CEC` | `%range` scaled — value variance |
-| `FUN_00390F80` `0x39129C` | `& 0xf` — small variant index |
+| `FUN_00384800` `0x3849AC` | `genrand()%10000`: item-drop roll |
+| `Gap__Bec__beNDMWShopCtrl40__vfunc_21` `0x429EA0` | `%10000 <= t`: probability check |
+| `FUN_0039BCA0` `0x39BDB0` | `%6144 / 1000.0`: random float ≤ 6.144 |
+| `FUN_003764C0` `0x376594` | `%range`: random duration/timing |
+| `FUN_004480A0` `0x4480C8`, `0x4480F0` | `%6000+1`, `%param`: damage/score variance |
+| `FUN_00448190` `0x4481B0` | `%620`: 6-tier rank |
+| `FUN_0042EB80` `0x42F288` | `(%1000)*1000`: random step |
+| `FUN_004487A0` `0x4489A8` | `%10 <= 8-k`: probability check |
+| `FUN_00448AE0` `0x448CEC` | `%range` scaled: value variance |
+| `FUN_00390F80` `0x39129C` | `& 0xf`: small variant index |
 
 **No reseed.** The same strict scan for a slot‑23 (`sgenrand`) or slot‑22 call on
 the RNG chain returns **0** sites. The look-alike calls of §5 are false positives:
 `Gap__Core__igPsx2Thread__vfunc_30` (`0x330158`/`0x3301B8`, slots 23/24/25 on `*(s0+0x30)`) is
-`CreateThread`/`_StartThread` — the thread subsystem — and the `*(0x5871D0)`
+`CreateThread`/`_StartThread` (the thread subsystem), and the `*(0x5871D0)`
 slot‑24 call at `0x3300F8` is the same thread manager. The 116-function Lua API
 has no set-seed either. So `sgenrand` runs only from `Reset()` (hard-coded
 5150): the seed never changes after boot.

@@ -1,4 +1,4 @@
-# System clock `sys+0x50` — source, update, and the logo CLOSE WAIT timer
+# System clock `sys+0x50`: source, update, and the logo CLOSE WAIT timer
 
 **Lifecycle and normal Action2 update order are recovered.**
 The clock owner is `igInsightCore`; `+0x50` is its reflected `_worldTime`.
@@ -131,8 +131,8 @@ the model's completion clock 211,854,819,328 (= (806,254 + 1,908) << 18); the ne
 212,172,185,800, no longer has the timer. This brackets completion; it does not pin the frame.
 
 Other graphs share the duration: the dev-world state holds four completed (wait state 0) WAIT
-timers on `i_stpnl01/02/04` and `p_susanoo`, all 499,999,968 with the same start tick — evidence
-that the value occurs outside the logo too; this does not prove every conversion path.
+timers on `i_stpnl01/02/04` and `p_susanoo`, all 499,999,968 with the same start tick. So the
+value occurs outside the logo too, though this does not prove every conversion path.
 
 **This confirms the EE-float result 499,999,968 for the 30-frame WAIT duration** (retail wrote it;
 host rounding would give 500,000,000). It does not by itself validate the full FPU model.

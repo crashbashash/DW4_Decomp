@@ -1,4 +1,4 @@
-# `docs/reference/` — human-facing reference
+# `docs/reference/`: human-facing reference
 
 | File | Topic |
 |---|---|

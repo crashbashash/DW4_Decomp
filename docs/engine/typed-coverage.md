@@ -1,6 +1,6 @@
 # Typed coverage
 
-**How much of the matched C speaks in recovered structs instead of offset casts** — the inward
+**How much of the matched C speaks in recovered structs instead of offset casts**: the inward
 metric, next to matched bytes (outward) and identified data. Tool: `tools/typed_coverage.py`.
 The gate is `make typed-check` against the baseline `config/typed-coverage.json`.
 
@@ -72,7 +72,7 @@ Two things are recorded and one is gated:
 | `make typed` / `make typed-check` | report it / fail if this run differs from the baseline |
 | CI (`.github/workflows/progress.yml`) | runs `--check` on every push to main |
 
-**The gate is on the count of recovered accesses, never on the percentage** — and that distinction is
+**The gate is on the count of recovered accesses, never on the percentage**, and that distinction is
 the whole design. The m2c loop keeps adding matched C, and every new function arrives with offset
 casts, so the *ratio* can fall while the count only grows. A percentage gate would fail on progress,
 which trains you to ignore it. The count is monotonic in a way the ratio is not.
@@ -85,11 +85,11 @@ make typed-baseline   # record the new count, then commit config/typed-coverage.
 make typed-check      # what CI runs
 ```
 
-That is deliberate: it means every change in coverage — up or down — is a reviewed diff, and a drop
+That is deliberate: every change in coverage, up or down, is a reviewed diff, and a drop
 cannot hide behind a stale baseline. When a drop is a *move* (accesses retyped from one class to
 another) the output shows both classes, so the intent is visible rather than inferred.
 
-The gate is tested both ways, because a gate that has not been tested is not a gate: reverting one
+The gate is tested both ways: reverting one
 converted file gives exit 1 with a line of the form
 `REGRESSION — 549 recovered accesses, baseline 550 (-1)` and the class delta `igMetaObject -1`;
 restoring it gives exit 0.
@@ -97,13 +97,13 @@ restoring it gives exit 0.
 ## How the types are recovered
 
 `data/reflection.json` holds 659 classes and 3,680 fields with a name, a byte offset and a MetaField
-type. `scripts/gen_type_headers.py` turns that into `include/dw4/reflected.h` — real C structs, with
+type. `scripts/gen_type_headers.py` turns that into `include/dw4/reflected.h`: real C structs, with
 these rules that keep them honest:
 
 - **A struct carries its ancestors' fields too** (`data/class-hierarchy.tsv`, recovered from the
   registrar's base MetaObject). Reflection lists only a class's *own* fields, so a subclass whose
-  fields are all inherited — `igVec3fList`, whose `_count`/`_capacity`/`_data` come from `igDataList`
-  — would otherwise have **no struct at all** and could not be declared, which is what typing an object-graph walk needs (`((igVec3fList *)p)->_count`). Because a base sits at
+  fields are all inherited (`igVec3fList`, whose `_count`/`_capacity`/`_data` come from `igDataList`)
+  would otherwise have **no struct at all** and could not be declared, which is what typing an object-graph walk needs (`((igVec3fList *)p)->_count`). Because a base sits at
   offset 0 the layout is unchanged. The header defines 1,040 structs; its opening comment states the
   class and field totals.
 - **The offsets are the authority for where a field sits.** Gaps become explicit `char _padN[K];`,
@@ -121,7 +121,7 @@ these rules that keep them honest:
 The generator takes **type and size from the kind**, through three tables:
 
 - `SCALAR`: a MetaField whose C type is fixed by the metadata (bool/char/short/int/long/float/
-  double, plus the 4-byte refs — handles, not inline data) takes that type's size, and the rest of
+  double, plus the 4-byte refs, which are handles, not inline data) takes that type's size, and the rest of
   the gap becomes explicit padding. So `unsigned char _refCounted; char _pad61[3]; int _poolName;`
   and `unsigned char _construct; unsigned char _destruct;`. Sizing a scalar by the distance to the
   next field does not work: `igObjectRefMetaField._refCounted` (a bool at +60, next field at +64)
@@ -134,7 +134,7 @@ The generator takes **type and size from the kind**, through three tables:
 - `VECTOR`: `igVec2f/3f/4fMetaField` → `float[2|3|4]`, `igMatrix44fMetaField` → `float[16]`.
 - `ARRAY`: an `ig*ArrayMetaField` → its element type, with the count from the span.
 
-`igStringMetaField` stays `int` by decision — the 4-byte handle of an interned string, like the
+`igStringMetaField` stays `int` by decision: the 4-byte handle of an interned string, like the
 object references, because `const char *`
 would widen the field on a 64-bit host. `igStructMetaField` (an inline struct reflection does not
 describe) keeps the distance-to-next-field rule.
@@ -152,9 +152,9 @@ Matrix44f, 24 Vec4f, 16 Vec2f, 32 arrays) and the `sizeof` of 57 classes.
 What closes the struct is the registered size: **every class registers its `sizeof`** with
 the class registrar (`li t2,N` in `asm/<Class>_Register.s`, `reflection-metadata.md` §1),
 and the generator reads it for all 1,039 registered classes (the one exception is the
-duplicate-handle `igModelViewMatrixBoneSelectList`). That sizes a trailing array —
-`igMersenneTwisterRandomNumber._mt` is `(2508 - 12) / 4 = 624` words, the MT19937 state, and
-`igCompressedAnimationSequenceQS._interpolationMethod` at +57 is 7 bytes of a 64-byte object —
+duplicate-handle `igModelViewMatrixBoneSelectList`). That sizes a trailing array
+(`igMersenneTwisterRandomNumber._mt` is `(2508 - 12) / 4 = 624` words, the MT19937 state, and
+`igCompressedAnimationSequenceQS._interpolationMethod` at +57 is 7 bytes of a 64-byte object)
 and pads the tail, so `sizeof(Class)` on the host is the retail one. Each struct's comment records
 `sizeof N (registered instance size)`, and `scripts/check_reflected_layout.py` asserts the 1,040
 sizes and every field type next to the offsets (`make reflected-check`). No class's fields overrun
@@ -188,7 +188,7 @@ either way.
 ## Typing passes
 
 Each pass is a script with rules that stop it from inventing a type. Every pass is verified, not
-assumed: `make check` must show 0 mismatching and `make link` must be **BYTE-IDENTICAL** —
+assumed: `make check` must show 0 mismatching and `make link` must be **BYTE-IDENTICAL**;
 typing that changes codegen is a bug, and the build is the test that says so. After a pass that
 adds coverage, the baseline is re-recorded with `make typed-baseline`.
 
@@ -199,7 +199,7 @@ count for any unit whose first function has no forward declaration).
 
 ### Synthetic layouts from automatch
 
-`tools/automatch.py` emits a layout with no meaning — 550 files, all identical:
+`tools/automatch.py` emits a layout with no meaning, in 550 files, all identical:
 
 ```c
 struct G { char pad[36]; int f; };
@@ -212,7 +212,7 @@ return DAT_0055ebc0[0];
 Every fact needed to say that meaningfully is recovered: the global is a **reflection class
 handle**, so what it holds is an **`igMetaObject *`** (the invariant the object-model work
 established), reflection names the field at +36 **`_validity`**, and this accessor is the lazy
-get-or-register path — `if (!*handle || flags & 4 == 0) register();` — so `_validity & 4`
+get-or-register path (`if (!*handle || flags & 4 == 0) register();`), so `_validity & 4`
 is read, not guessed.
 
 `scripts/retype_metaobject_idiom.py` rewrites those 550 files (and only files whose shape is exactly
@@ -246,12 +246,12 @@ name, so its first argument *is* that class and its offset casts can become memb
 Three rules keep it from inventing anything, and everything skipped is counted and reported:
 
 * the receiver class is taken from the **function's name**, never inferred from the body;
-* the field comes from the reflection metadata and its **width must equal the cast's width** — a
+* the field comes from the reflection metadata and its **width must equal the cast's width**: a
   `char` field written through a 4-byte cast is left raw, because rewriting it changes codegen and
   `make check` would (correctly) fail. This is why the converter reads the *generated* header rather
   than the MetaField→C map: `igMemoryRefMetaField._releaseOnCopy` is a `bool` (1 byte) and the code
   does a byte store, which the map alone would have called `int`;
-* only the receiver (`arg0`/`this`) is usable as a base — **a temporary generally holds a different
+* only the receiver (`arg0`/`this`) is usable as a base; **a temporary generally holds a different
   object.** An `_InitFields` body's `temp_s2` is the *field* object returned by
   the field getter, not the class the function is named for; using the function-name class
   there would produce wrong member names that happen to compile.
@@ -268,7 +268,7 @@ below in place. What the rule can still convert is the `typeable` figure.
 ### The signature table and the `_InitFields` family
 
 The receiver rule only sees the *caller's* name. The larger multiplier is the **callee's return
-type** — so `config/SLUS-20836/signatures.tsv` carries recovered signatures (`name`, return,
+type**, so `config/SLUS-20836/signatures.tsv` carries recovered signatures (`name`, return,
 parameters, and the evidence that settles each), seeded from the object model:
 
 ```
@@ -289,7 +289,7 @@ temp_s2 = (void *)(get_field_at(temp_s1, temp_s0 + 1));   /* field k = 1 */
 for **`reflection[Class].fields[k]`**, and *its class* is that field's declared type. That fixes what
 +52/+56 mean per field: `beAction2InfoRam`'s four object-ref fields get `_metaObject` at +56, and
 `igGeometryAttr`'s five object-ref fields get +56 while its one enum field gets
-`_getMetaEnumAttribute`/`_getMetaEnumFunction` at +52 — exactly the accesses those files contain. The
+`_getMetaEnumAttribute`/`_getMetaEnumFunction` at +52, exactly the accesses those files contain. The
 rewrite adds an explicit cast around the temporary rather than retyping its declaration, so it is one
 expression:
 
@@ -319,7 +319,7 @@ The rules of this pass:
   generated `data/class-hierarchy.tsv`) into one offset map, which covers 359 accesses across 167
   files.
 - **A field is reached through the struct that declares it.** The merged map carries each field's
-  declaring class and the rewrite casts to that — `((igRefMetaField *)p)->_construct = 1;`,
+  declaring class and the rewrite casts to that: `((igRefMetaField *)p)->_construct = 1;`,
   `((igMetaField *)p)->_persistent = 0;`. The field really is the base's.
 - **Byte-wide fields depend on the `SCALAR` size rule.** With scalars sized by the metadata, the
   1-byte stores type as members (93 accesses across 63 files that an `int`-sized bool blocks).
@@ -339,8 +339,8 @@ reuse, unrelated reassignment, and real type errors both before and after reuse.
 `scripts/seed_names_getvtable_slots.py` resolves the class of every vtable from the class's own
 `<Class>_GetVTable` function, taking the map from the 478 RTTI vtables to
 **958 / 980 classes**, and names the **1,177** unmatched unique slots of the 499 non-RTTI vtables
-(`config/SLUS-20836/names/GetVTableSlots.tsv`). All of them are `ig*` engine classes — the game's `be*`
-classes all carry RTTI — so this is engine naming, not game typing. The
+(`config/SLUS-20836/names/GetVTableSlots.tsv`). All of them are `ig*` engine classes (the game's `be*`
+classes all carry RTTI), so this is engine naming, not game typing. The
 same generator emits `data/vtables-getvtable.json` (vtable → class + slots). The names feed
 the receiver rule above.
 
@@ -421,7 +421,7 @@ only. These entries stay untyped for a recorded reason:
   name with file:line pairs. Tests: `testing/test_check_struct_conflicts.py` and
   `testing/test_check_vtable_slots.py` (run by `make struct-report` / `make vtable-slots-check`).
 - The `IntList` views
-  agree and are not a conflict: all put `count` at +8 and `capacity` at +12 — the order
+  agree and are not a conflict: all put `count` at +8 and `capacity` at +12, the order
   the retail code shows (`lw s5,8(s4); lw v1,12(s4)`, the in-capacity test, then
   `sw v1,8(s4)` for the increment and `lw a1,16(s4)` for the data) and the reflected `igIntList`.
 
@@ -429,7 +429,7 @@ only. These entries stay untyped for a recorded reason:
 
 Two routes for the game-side receiver queue are measured and are dry:
 
-- Attributing a receiver class from the offsets it accesses against `reflection.json` is too weak —
+- Attributing a receiver class from the offsets it accesses against `reflection.json` is too weak:
   **0** of 78 unmatched game functions with `argN` casts has a unique matching class (thousands of
   classes share a field at +8/+16/+20).
 - Adjacency to the same class's RTTI `vfunc_*` on both sides **does** recover the class, because
@@ -464,25 +464,25 @@ accumulate known wrong types or to discard the recovered model:
 
 ## Raising it further
 
-The order that pays:
+In order of yield:
 
 1. **The remaining mass is object *identity*, not signatures.** In the measurement that set this
    order, of 2,826 raw casts **2,621 are in unnamed `FUN_*` units**, and of the 1,830 that apply
    the offset to `arg0`, **1,777 are in functions whose name-implied class is not a reflected class
    at all**. Only ~40 are call results any signature could type. So the levers are **naming** (each
    name whose class is recovered converts that function's accesses at once) and the **live
-   identity** route below — `config/SLUS-20836/signatures.tsv` should still grow (it is seeded with
+   identity** route below. `config/SLUS-20836/signatures.tsv` should still grow (it is seeded with
    the object model only, and passes read it), but it is not the biggest lever.
-2. **Name receivers** (the naming loop) — each name converts that function's accesses from *not
+2. **Name receivers** (the naming loop): each name converts that function's accesses from *not
    typeable* to typeable.
-3. **Object identity from a live instance** — the one route that supplies *identity*
+3. **Object identity from a live instance**: the one route that supplies *identity*
    without naming the receiver first. Every engine object's `+0` word is its class's vtable, and the
    478 vtables are decoded, so scanning RAM for vtable words enumerates live objects by class
    and reading them at their reflection offsets gives named, typed fields (verified field-perfect on
    `beGeneraterData`, and cross-validated against the stat table). That is a source of types
    that does not depend on the naming loop, though it needs the emulator and so cannot run in CI: it
    is evidence for a name or a cast, like any other live measurement.
-   It also bounds the work — only **171 of 478** classes are instantiated in a loaded stage, so a
+   It also bounds the work: only **171 of 478** classes are instantiated in a loaded stage, so a
    batch can be scoped to what the game actually builds.
 
 ## Open items

@@ -1,4 +1,4 @@
-# Digimon World 4 — script progression gates
+# Digimon World 4: script progression gates
 
 These are static script predicates, not a verified speedrun route. Decoding the script numbers with a signed bias one too large
 gives incorrect flag IDs and values and a spurious Lua-to-save inversion. See the

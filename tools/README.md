@@ -1,4 +1,4 @@
-# `tools/` — the matching build and its helpers
+# `tools/`: the matching build and its helpers
 
 Run everything from the repository root. The Makefile calls the build tools; the rest are used while recovering functions. Analysis, capture and evidence scripts live in [`scripts/`](../scripts/README.md), and regression tests of these tools sit beside them as `test_*.py`.
 
@@ -27,7 +27,7 @@ Run everything from the repository root. The Makefile calls the build tools; the
 | [`project.py`](project.py) | per-version build helpers behind the Makefile: the executable check and disc extraction, the image hash check, and `objdiff.json` with the rules for the objdiff objects |
 | [`inline_asm.py`](inline_asm.py) | counts the `asm` statements inside C for the debt ratchet, leaving out those the owner approved, and `--test` shows which ones a function verifies without |
 | [`target_asm.py`](target_asm.py) | objdiff target assembly: the retail words of a function with their relocations restored (`.reloc` + masked `.word`) |
-| [`eegcc_compile.py`](eegcc_compile.py) | compile one C file with the Sony EE GCC 2.96 (`-S` then the sibling `ee-as`, with the symbol table repaired for GNU ld) — the Sony-built library units |
+| [`eegcc_compile.py`](eegcc_compile.py) | compile one C file with the Sony EE GCC 2.96 (`-S` then the sibling `ee-as`, with the symbol table repaired for GNU ld); used for the Sony-built library units |
 | [`unitobjects.py`](unitobjects.py) | Explicit ownership of additional functions emitted by a compiler unit |
 | [`regions.py`](regions.py) | read config/SLUS-20836/regions.tsv, the record of what each part of the image is |
 | [`check_regions.py`](check_regions.py) | test that table against the retail image |
@@ -95,4 +95,4 @@ Run everything from the repository root. The Makefile calls the build tools; the
 
 ## Subfolders
 
-- `permuter/` — per-function decomp-permuter projects written by `permuter_one.py`.
+- `permuter/`: per-function decomp-permuter projects written by `permuter_one.py`.

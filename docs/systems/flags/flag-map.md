@@ -1,4 +1,4 @@
-# Digimon World 4 — Save Flag Encoding & Story-State Map
+# Digimon World 4: Save Flag Encoding & Story-State Map
 
 **How to read this page:** the raw save-byte observations below are evidence at
 their recorded offsets. §3, §4, §6, §7, §9 and §10 quote the current Lua. An older
@@ -17,15 +17,15 @@ In the save file, **`0x01` = done/defeated/set** ("event happened / boss dead / 
 **`0x00` = not-done/clear** ("not yet / boss alive / flag off").
 Every one of the 1024 `BASE_FLAG` bytes is only ever `0x00` or `0x01`.
 
-An inverse Lua-to-save model — `be:FLGset(N, 0)` (runtime byte `0x00`) saved as `0x01`
-and `be:FLGset(N, -1)` (runtime byte `0xFF`) saved as `0x00` — is refuted:
+An inverse Lua-to-save model (`be:FLGset(N, 0)`, runtime byte `0x00`, saved as `0x01`
+and `be:FLGset(N, -1)`, runtime byte `0xFF`, saved as `0x00`) is refuted:
 it rests on the old decoder's `0`/`-1` values.
 
 The observation it was built on (the Apocalymon flag, written in exactly one gameplay
 location):
 
 - `boss01-apocalymon` (`lua/11-bosses/01-boss01-apocalymon_e730/006-boss-bit.lua:87`) writes the
-  flag inside the boss-death sequence (return gate spawned, victory sound) — `be:FLGset(66, 0)`
+  flag inside the boss-death sequence (return gate spawned, victory sound): `be:FLGset(66, 0)`
   in the old decoder's text, **flag 67 = 1** in the original.
 - Diff `Mcd001_op_base.ps2 → prog_world1.ps2`: `flags[66] 0x00 → 0x01`.
 
@@ -42,13 +42,13 @@ polarity and are wrong.
 | offset | field |
 | --- | --- |
 | `+0x00` | u32 checksum (sum of u32 words from +4..+0xA000) |
-| `+0x320` | **BASE_FLAG** — 1024 × u8 (runtime `be:FLG*` flags, ids 0–1023) |
-| `+0x720` | **BASE_FLAGFOLDER** — 12 × u8 (persistent folder flags, ids 0–11) |
+| `+0x320` | **BASE_FLAG**: 1024 × u8 (runtime `be:FLG*` flags, ids 0–1023) |
+| `+0x720` | **BASE_FLAGFOLDER**: 12 × u8 (persistent folder flags, ids 0–11) |
 | `+0x72c` | BASE_COUNTER (u32 array; `[1]` @ +0x730 = junk-shop counter) |
 | `+0x77c` | BASE_LEVEL (16 × u32) · `+0x7bc` BASE_EXP · `+0x7fc` BASE_SKILL · `+0xa3c` BASE_UPCNT |
 
 `counter[2]` (@ +0x734) is a non-story per-act counter (0x66/0xcc/0xcd/0x133…),
-resets to 0 at each world completion — **ignore it for story state**.
+resets to 0 at each world completion; ignore it for story state.
 
 ---
 
@@ -90,7 +90,7 @@ The World-4 checkpoints (`prog_mecha_nest`, `prog_electro_mine`, `prog_world4`) 
 | 83 | LordKnightmon (`dng412b4`) | `entry_0425/chunk_0076:29` | `prog_electro_mine` (§9) |
 | 70 | Devimon (form 3 / final) | `entry_0765/chunk_0005:105` | `prog_world4` (§9) |
 | 86 | story cleared | `entry_0765/chunk_0005:107` (Hard/Very Hard only), `entry_0820/chunk_0009:30` (when flag 70 is on) | `prog_world4` (§9) |
-| 610 | final scene (Hard/Very Hard only) | `entry_0765/chunk_0005:108` | *(still 0 — not reached)* |
+| 610 | final scene (Hard/Very Hard only) | `entry_0765/chunk_0005:108` | *(still 0, not reached)* |
 
 Notes:
 
@@ -124,7 +124,7 @@ Folders are the `impItem` records: the important-item page lists them, and scrip
 | 10 | `prog_electro_mine` | LordKnight ID (`dng412b4`, `e_ldknight`) |
 | 11 | quest scripts | Offering; cleared on load and not restored |
 
-*(Note: the W1 boss defeat — `prog_world1` — sets flag 67 (save bytes 66 and 67
+*(Note: the W1 boss defeat (`prog_world1`) sets flag 67 (save bytes 66 and 67
 both flip) but **no** folder; folder 2 is the earlier Boat Key.)*
 
 **Flag 905 needs folders 9 and 10 SET.**
@@ -152,9 +152,9 @@ below for the observed World-4 end state).
 
 - **700-series = per-difficulty mirror backups** of the intro/chapter flags (see §7): on Normal,
   `700–705` mirror `1–6` and `706/707` mirror `19/20`. In the checkpoint diffs they read as a one-hot
-  world chapter — 701 = W1 era → 702 (got Ophanimon key) → 703 (key used / W2) → 704 (W3) → 705 (W4),
-  with advance points matching the folder table above — because "chapter" and "mirror" are the same
-  bytes; §7's table is the authoritative interpretation.
+  world chapter: 701 = W1 era → 702 (got Ophanimon key) → 703 (key used / W2) → 704 (W3) → 705 (W4),
+  with advance points matching the folder table above. That is because "chapter" and "mirror" are the
+  same bytes; §7's table is the authoritative interpretation.
 - **1–6 = chapter one-hot, then 86** (NOT a 0→1→2… sequence):
   - flag **1** = tutorial in progress, the fresh state.
     `lua/01-lobby-hub/04-lobby-ofanimon-seraphimon_e816/096-layer-setup-3.lua` and the Terminal's
@@ -172,12 +172,12 @@ below for the observed World-4 end state).
 
 ## 6. Other flags worth knowing
 
-- `376–380` quests 1–5, `381` final quest gate — quest-chain, **not** required
+- `376–380` quests 1–5, `381` final quest gate: quest-chain, **not** required
   for the main story (see `entry_0820`/`entry_0824`).
-- `409, 571, 424, 385, 389` — quest sub-state, written by the quest NPCs.
-- `905` — set when folders 9 and 10 are both set.
-- `904` — set in the stage-select final snapshot (world 4 reached).
-- `49, 82, 334, 383, 320–327, 329–333, 335` — story sub-state copied by the
+- `409, 571, 424, 385, 389`: quest sub-state, written by the quest NPCs.
+- `905`: set when folders 9 and 10 are both set.
+- `904`: set in the stage-select final snapshot (world 4 reached).
+- `49, 82, 334, 383, 320–327, 329–333, 335`: story sub-state copied by the
   title-screen restore (`entry_0806/chunk_0006`) from per-difficulty mirror
   flags (see below).
 - **Transient flags (cleared on load, NOT restored from a mirror):**
@@ -197,7 +197,7 @@ a big flag range (`FLGset(N,0)` → save `0x00`), then restores the active story
 flags from **per-difficulty mirror flags**.
 
 **Difficulties:** **Normal = `SYSgetDifficulty() == 0`,
-Hard = 1, Very Hard = 2.** Difficulty is **not stored in the save** — the editor
+Hard = 1, Very Hard = 2.** Difficulty is **not stored in the save**; the editor
 infers it from which mirror set is live (see below).
 
 Active ← mirror, per difficulty:
@@ -302,15 +302,15 @@ A save editor for this format wants **Story**, **Disks**, **Bank** and
 
 - Story: checkboxes for folders 0–11, boss flags (67/68/69/70/83/86/610),
   chapter (701–706), intro steps (0–6), quests (376–381), and lobby/system
-  flags (24/501/508/931/935/936/960) — checked = `0x01`;
+  flags (24/501/508/931/935/936/960); checked = `0x01`;
 - presets: **Fresh (tutorial)** (matches `test_base_save`), After World 1/2/3,
   All worlds + keys, Story cleared (post-game), plus "mark all quests done";
-- a **difficulty selector** (auto / Normal / Hard / Very Hard) — the editor
+- a **difficulty selector** (auto / Normal / Hard / Very Hard); the editor
   writes the corresponding **mirror flags** in sync with the active flags so
   edits survive the load-time restore;
 - Disks: the 12 disk counts; Bank: balance + 96 item slots.
 
-*(Note: quest flags 376–381 and final-scene 610 are transient — the editor
+*(Note: quest flags 376–381 and final-scene 610 are transient: the editor
 can set them but they revert to 0 on load; see §6.)*
 
 ---
@@ -333,10 +333,10 @@ the property key table `0x00517e50`. Struct offset + 8 = block offset.
 | `+0x64` | XDATA | u32 |
 | `+0x68` | BIT | u32 (currency) |
 | `+0x6c` | **DEVICEFOLDER** | 36 × u32 (30 used + 6 pad, `0xFFFFFFFF`=empty) |
-| `+0xfc` | **DISKFOLDER** | 12 × u32 — `(count << 16) \| (0x4000 + type)` |
-| `+0x12c` | **CARDLIST** | ≤52 B — collected-card bitfield |
+| `+0xfc` | **DISKFOLDER** | 12 × u32: `(count << 16) \| (0x4000 + type)` |
+| `+0x12c` | **CARDLIST** | ≤52 B, collected-card bitfield |
 | `+0x160` | **BANKDEVICE** | 96 × u32 (`0xFFFFFFFF`=empty) |
-| `+0x2e0` | **BANKBIT** | u32 — bank balance |
+| `+0x2e0` | **BANKBIT** | u32, bank balance |
 | `+0x2e4` | POWERSOCKET (weapons) | 3 × u32 (device-folder indices) |
 | `+0x2f0` | POWERPOCKET (weapon mods) | 5 × u32 |
 | `+0x304` | armor | u32 |
@@ -361,9 +361,9 @@ the property key table `0x00517e50`. Struct offset + 8 = block offset.
 
 ### Bank
 
-- **`BANKBIT` @ `+0x2e0`** (u32) — the banked-bit balance.
+- **`BANKBIT` @ `+0x2e0`** (u32): the banked-bit balance.
   **Byte-confirmed**: `Mcd001_bank.ps2` (1M deposit) → `+0x2e0 = 0x000F4240`.
-- **`BANKDEVICE` @ `+0x160`** (96 × u32) — items deposited in the bank,
+- **`BANKDEVICE` @ `+0x160`** (96 × u32): items deposited in the bank,
   `0xFFFFFFFF` = empty. Same item-id encoding as the device folder
   (byte-confirmed: 21 items decoded to real weapons/cores/boards/mods).
 
@@ -386,7 +386,7 @@ the property key table `0x00517e50`. Struct offset + 8 = block offset.
   (not yet pinned).
 - **Intro flags don't control the spawn stage.** `test_base_save` (flag 1 = 1)
   is the tutorial. A save with flag 0 = 1 and flags 1–6 all 0 loads
-  into a **locked** state (no NPC chat, no levels) — there is **no loadable
+  into a **locked** state (no NPC chat, no levels); there is **no loadable
   pre-DigiElf state**. The new-game opening (title → char select → stagML11 →
   first DigiElf chat) is runtime-state-driven; the save record contains **no
   stage/intro/location field** (verified from `beNDMWDegiData__LoadFromProperties`).

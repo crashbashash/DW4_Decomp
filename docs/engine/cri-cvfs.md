@@ -1,4 +1,4 @@
-# CRI cvFs — the middleware file-system layer
+# CRI cvFs: the middleware file-system layer
 
 cvFs is CRI's device-independent file layer (`CVFS/PS2EE Ver.2.37 Build:Oct 6 2004` at `0x4eeed8`). ADX
 and the other CRI libraries open, read and query files only through its API; a device (the CD/DVD

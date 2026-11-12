@@ -1,4 +1,4 @@
-# The engine boot chain — from the CRT entry to the frame loop
+# The engine boot chain: from the CRT entry to the frame loop
 
 `main`, the SDK init and both frame functions are C in `src/unmatched/`.  Everything here is in the EE runtime / Alchemy-core region.
 
@@ -61,7 +61,7 @@ delay-slot differences.
 Each of the three is `<Class>_Create`: it runs the class's static init
 (`igMetaObject_RunStaticInit(<Class>_Register)`, through the 12-byte `_RunStaticInit` thunks
 `0x1a1ca0`/`0x1a7d90`/`0x1a6890`) and then `igMetaObject_CreateInstance(<Class> MetaObject, owner)`.
-The class is recovered from both ends and they agree — the `_Register` function the thunk tail-calls,
+The class is recovered from both ends and they agree: the `_Register` function the thunk tail-calls,
 and the MetaObject global the class's own `_GetMetaObject` accessor lazily fills:
 
 | `main` call | class (`_Create`) | `_RunStaticInit` | MetaObject global | stored at |
@@ -90,8 +90,8 @@ the global.
 The [clock scheduling recovery](system-clock.md#executable-lifecycle-and-scheduling-contracts)
 shows that `0x25a8c0` can repeat render passes without sampling the world clock
 again; these bodies are not single-frame callbacks.
-The disassembly of `FUN_0025a580` carries the whole sequence — the same subsystem calls the text
-below used to attribute to `0x25a8c0` — so they are two variants `main` chooses between, and the
+The disassembly of `FUN_0025a580` carries the whole sequence (the same subsystem calls the text
+below used to attribute to `0x25a8c0`), so they are two variants `main` chooses between, and the
 README's earlier split into a "non-windowed" and a "windowed/drawing" path read the flag as a
 pipeline split rather than as a variant selector.
 
