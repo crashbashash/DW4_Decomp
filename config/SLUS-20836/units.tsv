@@ -777,7 +777,7 @@
 0x004477b0	0x00447bac	beNDMWMdlPEBaseInfoWork_4477b0	b52	-O4,p -sdatathreshold 2 -inline level=8 -Iinclude	on	-	class run of 2 labeled members, 2 unlabeled functions inside; exceptions on: 2/4 functions have retail index records; combat -O3,p -Iinclude reproduces 4/4 members
 0x00447bb0	0x00447bbc	beNDMWMdlPEBase_447bb0	b52	-O4,p -sdatathreshold 2 -inline level=8 -Iinclude	off	-	class run of 1 labeled members; exceptions undetermined (every function is a frameless leaf, which carries no record either way): off; default -O3 -Iinclude reproduces 1/1 members
 0x00447bc0	0x00448fd0	ndmw_beNDMWItemBase	b52	-O4,p -sdatathreshold 2 -inline level=8 -Iinclude	on	-	whole file
-0x00448fd0	0x0044ac5c	beNDMWLogo_448fd0	b52	-O4,p -sdatathreshold 2 -inline level=8 -Iinclude	on	-	class run of 6 labeled members, 3 unlabeled functions inside; exceptions on: 7/9 functions have retail index records; combat -O3,p -Iinclude reproduces 8/8 members
+0x00448fd0	0x0044ac60	ndmw_beNDMWLogo	b52	-O4,p -sdatathreshold 2 -inline level=8 -Iinclude	on	-	whole file
 0x0044ac60	0x0044b25c	beNDMWMdlMapBase_44ac60	b52	-O4,p -sdatathreshold 2 -inline level=8 -Iinclude	on	-	class run of 5 labeled members; exceptions on: 4/5 functions have retail index records; combat -O3,p -Iinclude reproduces 5/5 members
 0x0044b260	0x0044b85c	beNDMWMdlMapCursor_44b260	b52	-O4,p -sdatathreshold 2 -inline level=8 -Iinclude	on	-	class run of 4 labeled members; exceptions on: 3/4 functions have retail index records; combat -O3,p -Iinclude reproduces 4/4 members
 0x0044b860	0x004583f0	alchemy-gui_GuiLibrary	b52	-O4,s -sdatathreshold 2 -Iinclude	off	-	whole file
