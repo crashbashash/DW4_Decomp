@@ -34870,5 +34870,45 @@
       "@bss": "0x0056d6c0",
       "@rodata": "0x004e7858"
     }
+  },
+  "0x00238d40": {
+    "whole_file": true,
+    "emitted": {
+      "SceneSearchLibrary_MarkRegistered": "0x00238d50",
+      "FUN_00238d70": "0x00238d70",
+      "igSearchSceneGraph_GetMetaObject": "0x00238dd0",
+      "igSearchSceneGraph_GetVTable": "0x00238e20",
+      "FUN_00238ed0": "0x00238ed0",
+      "igSearchSceneGraph_Register": "0x00238ee0",
+      "thunk_igSearchSceneGraph_GetMetaObject": "0x00238f60",
+      "igSearchSceneGraph_InitFields": "0x00238f70",
+      "FUN_00239070": "0x00239070",
+      "FUN_00239200": "0x00239200",
+      "FUN_00239280": "0x00239280",
+      "FUN_00239300": "0x00239300",
+      "Gap__igSearchSceneGraph__vfunc_22": "0x00239380"
+    },
+    "data": {
+      "DAT_00498270": "0x00498270",
+      "DAT_00498280": "0x00498280",
+      "DAT_004982a0": "0x004982a0",
+      "DAT_004982b0": "0x004982b0",
+      "DAT_004982c0": "0x004982c0",
+      "DAT_004982d0": "0x004982d0",
+      "DAT_004982e0": "0x004982e0",
+      "DAT_004e9d20": "0x004e9d20",
+      "DAT_004e9da0": "0x004e9da0",
+      "DAT_0052d0d0": "0x0052d0d0",
+      "DAT_00562498": "0x00562498",
+      "DAT_005624a0": "0x005624a0",
+      "DAT_0056dc58": "0x0056dc58",
+      "DAT_00586dc8": "0x00586dc8",
+      "g_SceneSearchLibrary_registered": "0x00554bd4",
+      "g_igSearchSceneGraph_callbackList": "0x00498290",
+      "g_igSearchSceneGraph_metaObject": "0x0056dc60",
+      "igNamedObject_GetPublishedMetaObject": "0x0014a6e0",
+      "igSearchSceneGraph_className": "0x004e9d40"
+    },
+    "symbol": "thunk_FUN_00238ed0"
   }
 }

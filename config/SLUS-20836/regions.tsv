@@ -31,8 +31,8 @@
 0x002252d8	0x00225770	sony-libmtap	Sony libmtap	Sony	gcc	-	-	high	`sceMtap*` and their RPC errors; 0x2252d8 is the no-op printf those errors go to, the only caller of it is libmtap
 0x00225770	0x0022e4b8	alchemy-base	Alchemy Base	Alchemy	mwcc	-	BaseLibrary_MarkRegistered	high	latch, 27 registrars around `igBase` and `igInterfaced` (the Item, Lock, Listener, Message and Opt families); the name describes the classes
 0x0022e4b8	0x00230f50	libgcc	libgcc	libgcc	gcc	-	__divdi3	high	`__divdi3`, `__moddi3`, `__umoddi3`, `__floatdidf`, `__pack_d`; every library calls it
-0x00230f50	0x00238d50	alchemy-insight	Alchemy Insight	Alchemy	mwcc	Insight	InsightLibrary_MarkRegistered	high	latch, 20 registrars; RTTI `Gap::Insight`
-0x00238d50	0x00239390	alchemy-scene-search	Alchemy SceneSearch	Alchemy	mwcc	-	SceneSearchLibrary_MarkRegistered	high	latch, 1 registrar (`igSearchSceneGraph`); the name describes the class
+0x00230f50	0x00238d40	alchemy-insight	Alchemy Insight	Alchemy	mwcc	Insight	InsightLibrary_MarkRegistered	high	latch, 20 registrars; RTTI `Gap::Insight`
+0x00238d40	0x00239390	alchemy-scene-search	Alchemy SceneSearch	Alchemy	mwcc	-	thunk_FUN_00238ed0	high	register list then latch, 1 registrar (`igSearchSceneGraph`); `main` runs the list; the name describes the class
 0x00239390	0x0023c440	alchemy-collision	Alchemy Collision	Alchemy	mwcc	-	FUN_00239390	high	register list then latch, 9 registrars (`igCollisionGrid`, `igCollisionCell`); `main` runs the list; the name describes the classes
 0x0023c440	0x00246d30	alchemy-lua	Alchemy Lua bindings	Alchemy	mwcc	Lua	LuaLibrary_MarkRegistered	high	latch; RTTI `Gap::Lua`; `igLuaState`, `Cannot find field "%s" on class "%s"`
 0x00246d30	0x002590c0	lua	Lua 4.0.1	Lua	mwcc	-	luaA_index	high	stock source compiles to retail (src/third_party/)
