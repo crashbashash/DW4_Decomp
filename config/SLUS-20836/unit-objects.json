@@ -485,19 +485,6 @@
     },
     "symbol": "Gap__Bec__beNDMWShopCtrl00__vfunc_21"
   },
-  "0x004432a0": {
-    "duplicates": {
-      "__dt__25igSmartPointer<8igObject>Fv": "0x00443540"
-    },
-    "exceptions": {
-      "index": "0x005545b8",
-      "table": "0x00546e94",
-      "table_size": "0x000010"
-    },
-    "externals": {
-      "__dl__FPv": "0x00100610"
-    }
-  },
   "0x004081a0": {
     "emitted": {},
     "duplicates": {
@@ -33558,7 +33545,8 @@
   "0x00443110": {
     "whole_file": true,
     "emitted": {
-      "FUN_00443540": "0x00443540",
+      "FUN_004432a0": "0x004432a0",
+      "__dt__25igSmartPointer<8igObject>Fv": "0x00443540",
       "FUN_004435c0": "0x004435c0",
       "FUN_00443900": "0x00443900",
       "Gap__Bec__beNDMWMdlPEBase__vfunc_46": "0x00443bd0",
@@ -33574,7 +33562,7 @@
       "Gap__Bec__beNDMWMdlPEBase__vfunc_20": "0x00447bb0"
     },
     "data": {
-      "@2445": "0x0051d510",
+      "@2586": "0x0051d510",
       "DAT_004cfc50": "0x004cfc50",
       "DAT_004cfc74": "0x004cfc74",
       "DAT_004cfc80": "0x004cfc80",
@@ -33649,6 +33637,7 @@
       "DAT_0051d1c0": "0x0051d1c0",
       "DAT_0051d1d0": "0x0051d1d0",
       "DAT_0051d1d8": "0x0051d1d8",
+      "DAT_0051d1e8": "0x0051d1e8",
       "DAT_0051d1f8": "0x0051d1f8",
       "DAT_0051d208": "0x0051d208",
       "DAT_0051d210": "0x0051d210",

@@ -22,7 +22,6 @@ extern "C" void * beMessenger_GetObject(...);
 extern "C" int beMessenger_SelectGroup(...);
 extern "C" int beMessenger_SendNamed(...);
 extern "C" int FUN_00100610(void **);
-extern "C" void **FUN_00443540(void **arg0, short arg1);
 extern "C" int FUN_002eb010(int);
 extern "C" void * FUN_003a9250(...);
 extern "C" int StringChunk_ReleaseHeader(int, int *);
@@ -60,7 +59,12 @@ extern "C" int beMessenger_GetString(...);
 extern "C" int beMessenger_AppendBool(int, bool);
 extern "C" int Gap__Bec__beNDMWMdlPEBaseInfoWork__vfunc_20(void);
 extern "C" int Gap__Bec__beNDMWMdlPEBase__vfunc_20(void);
-extern "C" int FUN_004432a0(beNDMWShinkaCtrl *);
+extern "C" void FUN_004432a0(beNDMWShinkaCtrl *self);
+extern "C" beDataObjBoolList *igProperty_GetRecordArray(...);
+extern "C" igObject *FUN_003c99a0(...);
+extern "C" int List_InsertWords(...);
+extern "C" int ObjectList_AppendRetained(...);
+extern "C" int DAT_0051d1e8[4];
 extern "C" int DAT_0051d1a8[4];
 extern "C" int DAT_0051d1b8[4];
 extern "C" int DAT_0051d1c0[4];
@@ -327,22 +331,67 @@ void FUN_00443110(beNDMWShinkaCtrl *arg0, int arg1, int arg2) {
     FUN_004432a0(arg0);
 }
 
-void **FUN_00443540(void **arg0, short arg1) {
-    int *o;
+/* Owning stack reference to the evolution entry under construction; released on scope exit
+ * (reference count in the low 23 bits of _refCount). */
 
-    if (arg0 != 0) {
-        o = (int *)*arg0;
-        if (o != 0) {
-            o[1] = o[1] - 1;
-            if ((o[1] & 0x7FFFFF) == 0) {
-                igObject_Destroy(o);
+void FUN_004432a0(beNDMWShinkaCtrl *self) {
+    int ia;
+    igObject *obj;
+    igObjectList *l4;
+    igObject *o3;
+    igBoolList *s2;
+    igObjectList *lst;
+    int n;
+    int i;
+    int cnt;
+    int j;
+    int idx;
+    int base;
+    int alloc;
+
+    lst = (igObjectList *)self->_list;
+    n = lst->_count;
+    for (i = 0; i < n; i++) {
+        obj = ((igObject **)lst->_data)[i];
+        if (obj != 0) {
+            obj->_refCount = obj->_refCount - 1;
+            if ((obj->_refCount & 0x7FFFFF) == 0) {
+                igObject_Destroy(obj);
             }
         }
-        if (arg1 > 0) {
-            FUN_00100610(arg0);
+    }
+    cnt = lst->_count;
+    for (j = 0; j < cnt; j++) {
+        ((igObject **)lst->_data)[j] = 0;
+    }
+    lst->_count = 0;
+    s2 = (igBoolList *)igProperty_GetRecordArray(self->_playerParameter, &DAT_0051d1e8[0])->_data;
+    FUN_003a9250(self->_playerParameter, &DAT_0051d1f8[0]);
+    for (idx = 0; idx < 16; idx++) {
+        if ((*(unsigned char **)&s2->_data)[idx] != 0) {
+            base = igObject_GetAllocator(self);
+            if (GPR_00554c14 != 0) {
+                alloc = base;
+            } else {
+                alloc = Memory_GetAllocatorBySelector(DAT_00587110[0]);
+            }
+            igSmartPointer<igObject> entry(FUN_003c99a0(alloc));
+            igObject *slotB[1];
+            FUN_004435c0((beNDMWShinkaObject *)entry.p, (beNDMWGameRam *)self->_gameRam, self->_playerNo, idx);
+            if (idx == 3) {
+                l4 = (igObjectList *)self->_list;
+                o3 = (igObject *)slotB; /* matching construct: hand spelling — one-element array, the retained word is re-read through its address */
+                slotB[0] = entry.p;
+                o3 = *(igObject **)o3;
+                if (o3 != 0) {
+                    o3->_refCount = o3->_refCount + 1;
+                }
+                List_InsertWords(l4, 0, 1, slotB);
+            } else {
+                ObjectList_AppendRetained((igObjectList *)self->_list, entry.p);
+            }
         }
     }
-    return arg0;
 }
 
 void FUN_004435c0(beNDMWShinkaObject *out, beNDMWGameRam *ctx, int arg2, int arg3) {
