@@ -145,7 +145,7 @@ replacement hub or modernize the original scripts to satisfy this goal.
    binding in both core packs. Its widget/chip/recalculation dependencies
    remain open. The [selector widgets](../engine/shop-selectors.md)
    have six complete bodies /7,916 bytes (the 772-byte shared update at 4233f0 is in
-   `src/unmatched/Gap__Bec__beNDMWWindowSelect__vfunc_21.cpp`), plus 76 metadata bytes. Their SELECTCTRL
+   `src/game/beNDMWWindowSelect.cpp`), plus 76 metadata bytes. Their SELECTCTRL
    input/receiver and chip dependencies are in the sections below; the
    recalculation contract remains open. Review the corresponding script branches.
 4. Close every hub transition, progression state and multiplayer-dependent branch.

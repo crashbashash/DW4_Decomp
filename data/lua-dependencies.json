@@ -33285,7 +33285,7 @@
       "address": 4338672,
       "name": "Gap__Bec__beNDMWWindowSelect__vfunc_21",
       "size": 772,
-      "source": "src/unmatched/Gap__Bec__beNDMWWindowSelect__vfunc_21.cpp",
+      "source": "src/game/beNDMWWindowSelect.cpp",
       "direct": [
         {
           "site": 4338784,
@@ -33426,7 +33426,7 @@
       "address": 4339456,
       "name": "beNDMWWindowSelect_CanRequestFO2TOP",
       "size": 84,
-      "source": "src/game/beNDMWWindowSelect_CanRequestFO2TOP.cpp",
+      "source": "src/game/beNDMWWindowSelect.cpp",
       "direct": [
         {
           "site": 4339496,

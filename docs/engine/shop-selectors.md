@@ -8,10 +8,10 @@ ShopSelect11 initializer43ecc0 /3,752 and its stat/cost display43fb70 /696.
 The full1,979-word spans hold **1,909 reachable instruction addresses**, six
 zero padding words and64 statically impossible
 literal-null construction words. The84-byte
-[FO2TOP predicate](../../src/game/beNDMWWindowSelect_CanRequestFO2TOP.cpp) is in `src/game/`;
+[FO2TOP predicate](../../src/game/beNDMWWindowSelect.cpp) is in `src/game/`;
 the three shop initializers and the stat/cost display /7,060 bytes are one-function
 files under `src/unmatched/`, and the shared update4233f0 /772 bytes is
-[Gap__Bec__beNDMWWindowSelect__vfunc_21.cpp](../../src/unmatched/Gap__Bec__beNDMWWindowSelect__vfunc_21.cpp). Receiver/input, pool/list,
+[beNDMWWindowSelect.cpp](../../src/game/beNDMWWindowSelect.cpp). Receiver/input, pool/list,
 lookup/recalculation, formatting, text/model and Lua services remain boundaries.
 
 The76-byte lazy shop metadata
