@@ -1,10 +1,4 @@
-typedef struct AdxPdObj {
-    char pad0[16];
-    int nblk;
-    char pad20[12];
-    short *src;
-    short *dst;
-} AdxPdObj;
+#include "dw4/cri/adxpd.h"
 
 typedef struct AdxbBuf {
     int f0;
@@ -63,11 +57,11 @@ struct AdxbObj {
     short f160;
     short f162;
     short f164;
-    short f166;
-    short f168;
-    short f170;
-    int f172;
-    int f176;
+    unsigned short f166;
+    unsigned short f168;
+    unsigned short f170;
+    unsigned short dly1[2];
+    unsigned short dly2[2];
     int f180;
     char pad184[20];
     int f204;
@@ -99,37 +93,19 @@ void FUN_0025d078(void);
 void FUN_0025d098(void);
 void FUN_0025d0b8(const char *text, unsigned int length, unsigned short *first, unsigned short *second,
                   unsigned short *third);
-void ADXPD_Init(void);
-void ADXPD_Finish(void);
-AdxPdObj *ADXPD_Create(void);
-void ADXPD_Destroy(AdxPdObj *rna);
-void ADXPD_GetDly(AdxPdObj *rna, int *a, int *b);
-void ADXPD_GetExtPrm(AdxPdObj *rna, short *a, short *b, short *c);
-void ADXPD_SetDly(AdxPdObj *rna, int *a, int *b);
-void ADXPD_SetExtPrm(AdxPdObj *rna, int a, int b, int c);
 int FUN_0025f588(unsigned short *hdr, int size, short *hdrlen, signed char *type, signed char *bits,
                  signed char *blksize, signed char *nch, int *rate, int *total, int *f16);
 int FUN_0025f708(unsigned short *hdr, int size, unsigned char *ver, unsigned char *flag);
 int FUN_0025f688(unsigned short *hdr, int size, short *out);
-int FUN_0025f780(unsigned short *hdr, int size, int *a, int *b);
+int FUN_0025f780(unsigned short *hdr, int size, unsigned short *dly1, unsigned short *dly2);
 void FUN_0025f8b8(unsigned short *hdr, int size, int *f32, short *f36, short *f38, int *f40, int *f44, int *f48,
                   int *f52);
 void FUN_0025fb18(unsigned short *hdr, int size, int *f204, char *f208, short *f224, short *f226);
 void FUN_00260840(const char *code, const char *message);
-void ADXPD_SetCoef(AdxPdObj *rna, int rate, int f28);
 extern void (*DAT_00498c68)(int ahx, unsigned short *keys);
 extern char DAT_004ed800[];
 extern char DAT_004ed820[];
 
-void ADXPD_Stop(AdxPdObj *rna);
-void ADXPD_Reset(AdxPdObj *rna);
-void ADXPD_EntryMono(AdxPdObj *rna, int a, int b, int c, int d);
-void ADXPD_EntrySte(AdxPdObj *rna, int a, int b, int c, int d);
-void ADXPD_EntryPl2(AdxPdObj *rna, int a, int b, int c, int d);
-void ADXPD_Start(AdxPdObj *rna);
-int ADXPD_GetNumBlk(AdxPdObj *rna);
-int ADXPD_GetStat(AdxPdObj *rna);
-void ADXPD_ExecHndl(AdxPdObj *rna);
 void FUN_0025f2d0(void);
 void FUN_0025f2e8(void);
 
@@ -228,8 +204,8 @@ void FUN_0025d4f8(AdxbObj *rec)
 
 int FUN_0025d540(AdxbObj *obj, unsigned short *hdr, int size)
 {
-    int a16[4];
-    int a32[4];
+    unsigned short dly1[2];
+    unsigned short dly2[2];
     unsigned short keys[4];
     short hdrlen;
     unsigned char ver;
@@ -281,11 +257,11 @@ int FUN_0025d540(AdxbObj *obj, unsigned short *hdr, int size)
         if (FUN_0025f688(hdr, size, &obj->f28) < 0) {
             return 0;
         }
-        if (FUN_0025f780(hdr, size, a16, a32) < 0) {
+        if (FUN_0025f780(hdr, size, dly1, dly2) < 0) {
             return 0;
         }
         ADXPD_SetCoef(obj->rna, obj->f20, obj->f28);
-        ADXPD_SetDly(obj->rna, a16, a32);
+        ADXPD_SetDly(obj->rna, dly1, dly2);
         FUN_0025f8b8(hdr, size, &obj->f32, &obj->f36, &obj->f38, &obj->f40, &obj->f44, &obj->f48, &obj->f52);
         FUN_0025fb18(hdr, size, &obj->f204, obj->f208, &obj->f224, obj->f226);
         obj->f152 = 0;
@@ -501,13 +477,13 @@ char *FUN_0025db90(AdxbObj *obj)
 
 void FUN_0025db98(AdxbObj *obj)
 {
-    ADXPD_GetDly(obj->rna, &obj->f172, &obj->f176);
+    ADXPD_GetDly(obj->rna, obj->dly1, obj->dly2);
     ADXPD_GetExtPrm(obj->rna, &obj->f166, &obj->f168, &obj->f170);
 }
 
 void FUN_0025dbd8(AdxbObj *rec)
 {
-    ADXPD_SetDly(rec->rna, &rec->f172, &rec->f176);
+    ADXPD_SetDly(rec->rna, rec->dly1, rec->dly2);
     ADXPD_SetExtPrm(rec->rna, rec->f166, rec->f168, rec->f170);
 }
 
@@ -626,36 +602,36 @@ AdxPdObj *FUN_0025df10(AdxbObj *obj)
 
 void FUN_0025df18(AdxbObj *obj, int n)
 {
-    AdxPdObj *temp_s0;
-    AdxbBuf *temp_v0;
-    temp_v0 = &obj->buf;
-    temp_s0 = obj->rna;
-    ADXPD_EntryMono(temp_s0, obj->buf.f0, n, temp_v0->f20 + temp_v0->pos * 2, 0);
-    ADXPD_Start(temp_s0);
+    AdxPdObj *pd;
+    AdxbBuf *buf;
+    buf = &obj->buf;
+    pd = obj->rna;
+    ADXPD_EntryMono(pd, (unsigned char *)obj->buf.f0, n, (short *)(buf->f20 + buf->pos * 2), 0);
+    ADXPD_Start(pd);
 }
 
 void FUN_0025df68(AdxbObj *obj, int n)
 {
-    int temp_a3;
-    AdxPdObj *temp_s0;
-    AdxbBuf *temp_v1;
-    temp_v1 = &obj->buf;
-    temp_s0 = obj->rna;
-    temp_a3 = temp_v1->f20 + temp_v1->pos * 2;
-    ADXPD_EntrySte(temp_s0, obj->buf.f0, n * 2, temp_a3, temp_a3 + temp_v1->f28 * 2);
-    ADXPD_Start(temp_s0);
+    short *obufl;
+    AdxPdObj *pd;
+    AdxbBuf *buf;
+    buf = &obj->buf;
+    pd = obj->rna;
+    obufl = (short *)(buf->f20 + buf->pos * 2);
+    ADXPD_EntrySte(pd, (unsigned char *)obj->buf.f0, n * 2, obufl, obufl + buf->f28);
+    ADXPD_Start(pd);
 }
 
 void FUN_0025dfc0(AdxbObj *obj, int n)
 {
-    int temp_a3;
-    AdxPdObj *temp_s0;
-    AdxbBuf *temp_v1;
-    temp_v1 = &obj->buf;
-    temp_s0 = obj->rna;
-    temp_a3 = temp_v1->f20 + temp_v1->pos * 2;
-    ADXPD_EntryPl2(temp_s0, obj->buf.f0, n, temp_a3, temp_a3 + temp_v1->f28 * 2);
-    ADXPD_Start(temp_s0);
+    short *obufl;
+    AdxPdObj *pd;
+    AdxbBuf *buf;
+    buf = &obj->buf;
+    pd = obj->rna;
+    obufl = (short *)(buf->f20 + buf->pos * 2);
+    ADXPD_EntryPl2(pd, (unsigned char *)obj->buf.f0, n, obufl, obufl + buf->f28);
+    ADXPD_Start(pd);
 }
 
 void FUN_0025e120(short *dst, short *src, int count)
@@ -721,7 +697,7 @@ void FUN_0025e1e0(AdxbObj *d)
 
 void FUN_0025e368(AdxbObj *w)
 {
-    AdxPdObj *rna;
+    AdxPdObj *pd;
     int i;
     if (w->stat == 1) {
         if (ADXPD_GetStat(w->rna) == 0) {
@@ -734,10 +710,10 @@ void FUN_0025e368(AdxbObj *w)
         ADXPD_ExecHndl(w->rna);
         if (ADXPD_GetStat(w->rna) == 3) {
             if (w->f232 != 0) {
-                rna = w->rna;
+                pd = w->rna;
                 FUN_0025f2d0();
-                for (i = 0; i < rna->nblk * 32; i++) {
-                    DAT_00498c6c(w, rna->src[i], &rna->src[i], &rna->dst[i]);
+                for (i = 0; i < pd->nblk_decoded * 32; i++) {
+                    DAT_00498c6c(w, pd->obufl[i], &pd->obufl[i], &pd->obufr[i]);
                 }
                 FUN_0025f2e8();
             }
