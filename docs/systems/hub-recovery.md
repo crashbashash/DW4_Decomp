@@ -132,9 +132,8 @@ replacement hub or modernize the original scripts to satisfy this goal.
    by the tree updater. The [root runtime/window tree](../engine/window-tree-and-shop-root.md)
    is six complete bodies /2,980 bytes,
    including all mode factories, child binding/update/removal and the
-   actual child-close helper, in `src/unmatched/`
-   (`beNDMWWindow_RequestChildrenClose.c`, `beNDMWWindow_BindContext.cpp`,
-   `beNDMWWindow_UpdateTree.cpp`, `Gap__Bec__beNDMWShopCtrl00__vfunc_21.cpp`,
+   actual child-close helper, in `src/game/beNDMWWindow.cpp` (the window helpers)
+   and `src/unmatched/` (`Gap__Bec__beNDMWShopCtrl00__vfunc_21.cpp`,
    `FUN_00426fa0.cpp` and `FUN_00427020.cpp`); concrete selected
    service controllers and transaction/result producers remain open. The
    [presentation/title module](../engine/window-presentation.md) is

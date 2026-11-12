@@ -32071,7 +32071,7 @@
       "address": 4150288,
       "name": "FUN_003f5410",
       "size": 584,
-      "source": "src/unmatched/FUN_003f5410.cpp",
+      "source": "src/game/beNDMWWindow.cpp",
       "direct": [
         {
           "site": 4150352,
@@ -32230,7 +32230,7 @@
       "address": 4150880,
       "name": "FUN_003f5660",
       "size": 112,
-      "source": "src/unmatched/FUN_003f5660.cpp",
+      "source": "src/game/beNDMWWindow.cpp",
       "direct": [
         {
           "site": 4150932,
@@ -32251,7 +32251,7 @@
       "address": 4151584,
       "name": "beNDMWWindow_RunMessageScript",
       "size": 144,
-      "source": "src/unmatched/beNDMWWindow_RunMessageScript.cpp",
+      "source": "src/game/beNDMWWindow.cpp",
       "direct": [
         {
           "site": 4151620,
@@ -32278,7 +32278,7 @@
       "address": 4151728,
       "name": "beNDMWWindow_ClearTextElement",
       "size": 136,
-      "source": "src/game/beNDMWWindow_ClearTextElement.cpp",
+      "source": "src/game/beNDMWWindow.cpp",
       "direct": [
         {
           "site": 4151776,
@@ -32317,7 +32317,7 @@
       "address": 4151872,
       "name": "beNDMWWindow_ClearQueuedText",
       "size": 580,
-      "source": "src/unmatched/beNDMWWindow_ClearQueuedText.cpp",
+      "source": "src/game/beNDMWWindow.cpp",
       "direct": [
         {
           "site": 4151944,
@@ -32404,7 +32404,7 @@
       "address": 4152464,
       "name": "beNDMWWindow_PresentModel",
       "size": 620,
-      "source": "src/unmatched/beNDMWWindow_PresentModel.cpp",
+      "source": "src/game/beNDMWWindow.cpp",
       "direct": [
         {
           "site": 4152544,
@@ -32521,7 +32521,7 @@
       "address": 4153088,
       "name": "beNDMWWindow_PresentModelAtOrigin",
       "size": 64,
-      "source": "src/game/window-model-forwarding.cpp",
+      "source": "src/game/beNDMWWindow.cpp",
       "direct": [
         {
           "site": 4153132,
@@ -32536,7 +32536,7 @@
       "address": 4153152,
       "name": "beNDMWWindow_SendModelSequence",
       "size": 52,
-      "source": "src/game/window-model-forwarding.cpp",
+      "source": "src/game/beNDMWWindow.cpp",
       "direct": [
         {
           "site": 4153184,
@@ -32551,7 +32551,7 @@
       "address": 4153216,
       "name": "beNDMWWindow_PlayQueuedModelClose",
       "size": 272,
-      "source": "src/unmatched/beNDMWWindow_PlayQueuedModelClose.cpp",
+      "source": "src/game/beNDMWWindow.cpp",
       "direct": [
         {
           "site": 4153288,
@@ -32689,7 +32689,7 @@
       "address": 4154192,
       "name": "beNDMWWindow_RequestChildrenClose",
       "size": 104,
-      "source": "src/unmatched/beNDMWWindow_RequestChildrenClose.c",
+      "source": "src/game/beNDMWWindow.cpp",
       "direct": [],
       "indirect": []
     },
@@ -32697,7 +32697,7 @@
       "address": 4154304,
       "name": "beNDMWWindow_BindContext",
       "size": 208,
-      "source": "src/unmatched/beNDMWWindow_BindContext.cpp",
+      "source": "src/game/beNDMWWindow.cpp",
       "direct": [
         {
           "site": 4154412,
@@ -32724,7 +32724,7 @@
       "address": 4154512,
       "name": "beNDMWWindow_UpdateTree",
       "size": 392,
-      "source": "src/unmatched/beNDMWWindow_UpdateTree.cpp",
+      "source": "src/game/beNDMWWindow.cpp",
       "direct": [
         {
           "site": 4154804,

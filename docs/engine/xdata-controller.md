@@ -12,7 +12,7 @@ construction branches. The five
 bodies are in `src/unmatched/Gap__Bec__beNDMWShopCtrl10__vfunc_21.cpp`,
 `src/unmatched/FUN_00428610.cpp`, `src/unmatched/FUN_00428690.cpp`,
 `src/unmatched/FUN_00428710.cpp` and
-`src/unmatched/beNDMWWindow_RunMessageScript.cpp`. Widget/input, player recalculation, lookup, pool/list, formatting,
+`src/game/beNDMWWindow.cpp`. Widget/input, player recalculation, lookup, pool/list, formatting,
 text/model receivers and Lua execution are separate services.
 
 ## Owner and primary state

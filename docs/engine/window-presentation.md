@@ -8,11 +8,11 @@ under the callee-save ABI.
 
 The eight bodies are 2,628 bytes. ClearTextElement136's five receiver accesses
 use the recovered Window layout. The
-[model forwards](../../src/game/window-model-forwarding.cpp) are **116
+[model forwards](../../src/game/beNDMWWindow.cpp) are **116
 bytes**: default-origin64 and model-sequence52. The other five bodies /2,376 bytes
-are `src/unmatched/beNDMWWindow_ClearQueuedText.cpp`,
-`src/unmatched/beNDMWWindow_PresentModel.cpp`,
-`src/unmatched/beNDMWWindow_PlayQueuedModelClose.cpp`,
+are `src/game/beNDMWWindow.cpp`,
+`src/game/beNDMWWindow.cpp`,
+`src/game/beNDMWWindow.cpp`,
 `src/unmatched/beNDMWWindow_PollCloseComplete.cpp` and
 `src/unmatched/Gap__Bec__beNDMWWindowTitle__vfunc_21.cpp`.
 This does not establish shop transactions or UI operation.
@@ -20,7 +20,7 @@ This does not establish shop transactions or UI operation.
 The run extends backward with the 144-byte
 [message-script dispatcher](xdata-controller.md#script-call-number-and-pack-ownership)
 at3f5920. The current presentation/title boundary is nine bodies /2,772 bytes;
-the added body is `src/unmatched/beNDMWWindow_RunMessageScript.cpp`.
+the added body is `src/game/beNDMWWindow.cpp`.
 
 ## Text close requests
 
