@@ -8,7 +8,7 @@ its reviewed size and source.
 This is the caller API, not the calculation dispatcher. It assembles messenger
 arguments, reads results and handles a few local decisions. The complete
 41,864-byte GAMERAM callback containing FIGHTCALC matches as
-`src/unmatched/Gap__Bec__beNDMWGameRam__vfunc_34.cpp`.
+`src/game/beNDMWGameRam.cpp`.
 Its [calculation rules and recovery blockers](combat-damage.md) remain separate.
 
 ## Recovered behavior
@@ -70,4 +70,4 @@ It lazily allocates 16 bytes and calls `StringPool_Construct`; failed
 allocation leaves the cache null so a later call retries. The semantic name is
 generated with the other combat dependency names. Neither that helper nor the
 Lua API closes the calculation dispatcher. The callback itself is
-`src/unmatched/Gap__Bec__beNDMWGameRam__vfunc_34.cpp`.
+`src/game/beNDMWGameRam.cpp`.

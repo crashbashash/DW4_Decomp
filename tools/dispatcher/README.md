@@ -5,7 +5,7 @@ function. Background: [register allocation](../../docs/engine/register-allocatio
 
 ## Register allocation tools
 
-    python3 tools/dispatcher/regalloc_trace.py src/unmatched/Gap__Bec__beNDMWGameRam__vfunc_34.cpp [--only-case N] [--tail N] [--adj DIR --ctx FILE] [--ids a,b,c]
+    python3 tools/dispatcher/regalloc_trace.py src/game/beNDMWGameRam.cpp [--only-case N] [--tail N] [--adj DIR --ctx FILE] [--ids a,b,c]
     python3 tools/dispatcher/regalloc_sim.py DIR/adj1.json FILE
 
 `regalloc_trace.py` traces the pinned compiler's graph colouring (last big pass) and reports the receiver colour and the last

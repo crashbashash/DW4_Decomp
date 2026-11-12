@@ -21,7 +21,7 @@ the 128-byte deleting destructor, 132-byte technique-row lookup and 652-byte
 nearby query, totaling 912 bytes.
 The [26 contiguous BLT/BLP Lua helpers](combat-lua-api.md) total 5,372 bytes.
 The calculation dispatcher itself is
-`src/unmatched/Gap__Bec__beNDMWGameRam__vfunc_34.cpp`.
+`src/game/beNDMWGameRam.cpp`.
 The [draft recovery notes](combat-draft-recovery.md) describe its reviewed
 argument slots, byte/word access widths, address units and protected repairs.
 Its three [reference-ownership helpers](combat-reference-helpers.md) total

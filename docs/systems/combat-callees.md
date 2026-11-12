@@ -59,4 +59,4 @@ register-colouring lessons above and needs inline assembly to reproduce, which i
   Only a candidate with an `asm` block reproduces it.
 
 The dispatcher itself (`0x3fca10`, 41,864 bytes), which contains the 22 FIGHTCALC commands, is
-`src/unmatched/Gap__Bec__beNDMWGameRam__vfunc_34.cpp`.
+`src/game/beNDMWGameRam.cpp`.

@@ -56,7 +56,7 @@ from the factory copies while preserving the same ownership rule.
 These are physical cleanup identities and verified object-prefix operations.
 Distinct entry points do not establish distinct original template spellings.
 The [complete protected ranges](../engine/exception-unwind.md) are now decoded. The callback
-itself is `src/unmatched/Gap__Bec__beNDMWGameRam__vfunc_34.cpp`; see
+itself is `src/game/beNDMWGameRam.cpp`; see
 [draft recovery](combat-draft-recovery.md#retail-unwind-data).
 
 The string cleanup at `0x130720` releases its nonnull token by decrementing the
@@ -131,4 +131,4 @@ guest-word pointers in that analysis-only context to agree with reflected
 four-byte fields. These are machine-ABI projections, not original template names.
 The [three immediate helpers](combat-helpers.md) include the nearby query.
 The full [calculation callback](combat-damage.md) is
-`src/unmatched/Gap__Bec__beNDMWGameRam__vfunc_34.cpp`.
+`src/game/beNDMWGameRam.cpp`.

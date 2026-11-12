@@ -1,7 +1,8 @@
 # GAMERAM combat dispatcher
 
-`beNDMWGameRam::vfunc_34` at `0x3fca10` (41,864 bytes, 3,259 relocations) is
-[`src/unmatched/Gap__Bec__beNDMWGameRam__vfunc_34.cpp`](../../src/unmatched/Gap__Bec__beNDMWGameRam__vfunc_34.cpp). It is the
+`beNDMWGameRam::vfunc_34` at `0x3fca10` (41,864 bytes, 3,259 relocations) is a member of the whole-file unit
+[`src/game/beNDMWGameRam.cpp`](../../src/game/beNDMWGameRam.cpp) (`0x3f6620`-`0x407080`), at its retail position after
+`beNDMWGameRam_CollectNearbyNonzeroHp`. It is the
 parent command callback (GETCOMMON, GETPLAYER, CTRLITEM, FIGHTCALC, CTRLPLAYER and the rest of the 22-name `Message` enum) and
 contains the 36,000-byte FIGHTCALC region with its 22 sub-commands: hit checks, damage and damage rank, critical, the status times,
 EXP and skill gain, the Kouka magic and the attack-attribute lookup.
@@ -36,19 +37,23 @@ nops, and declarations placed where the register colouring needs them ([register
 
 ## What it takes to bank a function this size
 
-* **Compiler:** the pinned alternate compiler at `-O3,p -Iinclude` with `#pragma inline_depth(1)` (the destructor wrappers stay
-  out-of-line inside the callback and are expanded inside the destructor copies).
-* **Ownership** (`config/SLUS-20836/unit-objects.json`, `0x003fca10`): nine `duplicates` (the compiler's own copies of destructors whose retail
-  bodies live in other units: `0x1363f0`, `0x3d9d50`, `0x3d9cd0`, `0x3d9c50`, `0x3d9bd0`, `0x150eb0`, `0x130720`, `0x3e9110`,
-  `0x406fa0`, four of them compared a second time under their own unit's compiler profile), `externals` (`__dl__FPv`, the copied-reference
-  constructor and destructor) and `exceptions` (index `0x553b80`, table `0x544fd4`, 416 bytes). The verifier compares the owner's
-  switch tables and exception data against retail exactly; anything undeclared is still rejected.
+* **Compiler:** the unit's Ndmw profile, b52 `-O4,p -sdatathreshold 2 -inline level=8,bottomup -Iinclude` with exceptions on, and
+  no pragma. Under bottom-up inlining the compiler stops expanding nested inline calls once a function passes
+  `inline_max_total_size` (10,000 expression-node units; the dispatcher measures about 19,000), so each destructor wrapper is
+  expanded at its call site while the release helper inside it stays an out-of-line call (`0x3e9110`, `0x406fa0`); the
+  destructor copies and the unit's small functions inline fully.
+* **Ownership** (`config/SLUS-20836/unit-objects.json`, the unit row `0x003f6620`, measured by `tools/whole_file_rows.py`):
+  the dispatcher is an `emitted` member, as is `release__9StringRefFPPc` at `0x406fa0` (the out-of-line copy of
+  `StringRef::release` the dispatcher calls). Destructors whose retail bodies live in other units are `duplicates` (`0x1363f0`,
+  `0x3d9d50`, `0x3d9cd0`, `0x3d9c50`, `0x3d9bd0`, `0x150eb0`, `0x130720`, `0x3e9110`); the copied-reference constructor and
+  destructor are `externals`. The exception record (index `0x553b80`, table `0x544fd4`, 416 bytes) comes from
+  `config/SLUS-20836/exceptions.txt`. The verifier compares switch tables and exception data against retail exactly; anything
+  undeclared is still rejected.
 * **Two switch tables:** `0x519310` and `0x519370` (22 entries each) are compiled `.rodata` sections placed individually.
   `tools/layout.py` records a function's tables as one span (with the compiler's padding inside it), so `tools/linkgen.py` takes a
   compiled owner's individual tables from `config/SLUS-20836/jumptables.txt` and pins each at its own address.
-* **Verification:** `python3 tools/dispatcher/full_verify.py src/unmatched/Gap__Bec__beNDMWGameRam__vfunc_34.cpp` (code, duplicates,
-  tables, exception data), `tools/dispatcher/score.py` (per-region shape/exact/extra diff), `tools/dispatcher/bank.py` (rehearsal and
-  banking).
+* **Verification:** `python3 tools/check.py --no-cache --function 0x3f6620 --cand src/game/beNDMWGameRam.cpp` (the whole unit,
+  including `MATCH emitted 0x3fca10 Gap__Bec__beNDMWGameRam__vfunc_34 41864B`).
 
 ## How the registers were matched
 

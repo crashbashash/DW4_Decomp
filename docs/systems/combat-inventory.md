@@ -6,7 +6,7 @@ FIGHTCALC occupies **36,000 bytes** at `0x003fde30`–`0x00406ad0` (exclusive), 
 GAMERAM dispatcher `0x003fca10`. These bytes overlap the dispatcher;
 do not add the two totals. Cases share its stack frame and epilogue.
 
-Dispatcher matching source: **src/unmatched/Gap__Bec__beNDMWGameRam__vfunc_34.cpp**.
+Dispatcher matching source: **src/game/beNDMWGameRam.cpp**.
 
 This is a direct-call lower bound, not a percentage of all combat recovered.
 Indirect calls, hit geometry, actor programs, spawning and progression need

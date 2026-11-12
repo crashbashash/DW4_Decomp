@@ -96,5 +96,5 @@ MMU fault behavior and arbitrary aliases into compiler scratch storage are
 not established. The engine's other dependencies remain separate work.
 
 The full [combat calculation callback](combat-damage.md) matches as
-`src/unmatched/Gap__Bec__beNDMWGameRam__vfunc_34.cpp`; the three
+`src/game/beNDMWGameRam.cpp`; the three
 completed immediate helpers do not complete the combat module.
