@@ -736,7 +736,10 @@ def main(argv=None):
             dishonest.append(str(error))
             address = verify.spelled_address(sym, a.symbols)
         if address is not None and sym not in by_name:
-            script.append("  PROVIDE(%s = 0x%08x);" % (sym, address))
+            # a mangled template name (`__dt__19igSmartPointer<2Rc>Fv_...`) is quoted: ld's script
+            # syntax reads `<` as an operator
+            spelled = sym if re.fullmatch(r"[A-Za-z0-9_.$]+", sym) else '"%s"' % sym
+            script.append("  PROVIDE(%s = 0x%08x);" % (spelled, address))
     script.append("}")
     for why in dishonest[:5]:
         print("linkgen: naming rule: " + why, file=sys.stderr)
