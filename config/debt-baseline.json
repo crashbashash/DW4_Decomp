@@ -14,20 +14,14 @@
   "code_only.other.functions": 2,
   "compile.bytes": 0,
   "compile.functions": 0,
-  "foreign_profile.bytes": {
-   "reason": "FUN_0042e330 held under its old inline flags (foreign-profile) until a spelling without the Slots device matches under bottom-up inlining",
-   "value": 1992
-  },
-  "foreign_profile.functions": {
-   "reason": "FUN_0042e330 held under its old inline flags (foreign-profile) until a spelling without the Slots device matches under bottom-up inlining",
-   "value": 11
-  },
-  "fun_dat_refs": 37018,
+  "foreign_profile.bytes": 288,
+  "foreign_profile.functions": 10,
+  "fun_dat_refs": 36996,
   "inline_asm.other": 0,
   "inventory.unsymbolised_bytes": 1020,
   "inventory_gap.bytes": 0,
   "inventory_gap.functions": 0,
-  "m2c_idiom.units": 820,
+  "m2c_idiom.units": 819,
   "mismatch.bytes": 0,
   "mismatch.functions": 0,
   "name_defect.bytes": 0,

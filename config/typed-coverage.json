@@ -145,7 +145,7 @@
   "beNDMWGameRamInfo": 2,
   "beNDMWGameRamInfoRam": 10,
   "beNDMWItemAbilityChip": 9,
-  "beNDMWItemBase": 94,
+  "beNDMWItemBase": 95,
   "beNDMWItemBaseList": 15,
   "beNDMWItemBlueArmor": 21,
   "beNDMWItemDisk": 35,
@@ -214,7 +214,7 @@
   "beNDMWShopCtrl40": 114,
   "beNDMWShopCtrl50": 251,
   "beNDMWShopCtrlA0": 114,
-  "beNDMWShopCtrlA1": 170,
+  "beNDMWShopCtrlA1": 168,
   "beNDMWShopCtrlA2": 94,
   "beNDMWShopCtrlDeviceSell": 197,
   "beNDMWShopCtrlDigilabo": 234,
@@ -223,7 +223,7 @@
   "beNDMWShopCtrlEvolve": 315,
   "beNDMWShopCtrlSales": 95,
   "beNDMWShopCtrlSell": 95,
-  "beNDMWShopCtrlXdataChip": 213,
+  "beNDMWShopCtrlXdataChip": 214,
   "beNDMWShopDevice": 59,
   "beNDMWShopJunk": 132,
   "beNDMWShopSelect00": 27,
@@ -393,7 +393,7 @@
   "igControllerManager": 5,
   "igCriMovieData": 7,
   "igCullFaceAttr": 2,
-  "igDataList": 407,
+  "igDataList": 409,
   "igDataPump": 14,
   "igDataPumpList": 13,
   "igDataPumpManager": 1,
@@ -447,7 +447,7 @@
   "igIniShaderFactory": 5,
   "igInsightCore": 35,
   "igIntArrayMetaField": 15,
-  "igIntList": 313,
+  "igIntList": 314,
   "igIntMetaField": 14,
   "igInterface": 2,
   "igIntersectTraversal": 7,
@@ -642,21 +642,21 @@
   },
   "engine": {
    "files": 88,
-   "offset_casts": 4086,
-   "other_members": 10781,
+   "offset_casts": 4075,
+   "other_members": 10789,
    "recovered": 6058,
    "recovered_pct": 21.64,
-   "synthetic": 7072,
-   "total": 27997
+   "synthetic": 7067,
+   "total": 27989
   },
   "game": {
    "files": 84,
-   "offset_casts": 1239,
-   "other_members": 2924,
-   "recovered": 19052,
-   "recovered_pct": 77.72,
-   "synthetic": 1300,
-   "total": 24515
+   "offset_casts": 1243,
+   "other_members": 2933,
+   "recovered": 19086,
+   "recovered_pct": 77.7,
+   "synthetic": 1301,
+   "total": 24563
   },
   "libgcc": {
    "files": 7,
@@ -722,19 +722,19 @@
    "total": 3776
   },
   "unmatched": {
-   "files": 1996,
-   "offset_casts": 1009,
-   "other_members": 2794,
-   "recovered": 596,
-   "recovered_pct": 10.77,
-   "synthetic": 1136,
-   "total": 5535
+   "files": 1995,
+   "offset_casts": 997,
+   "other_members": 2789,
+   "recovered": 565,
+   "recovered_pct": 10.3,
+   "synthetic": 1135,
+   "total": 5486
   }
  },
  "note": "Baseline for tools/typed_coverage.py --check. The gate is on the *count* of recovered accesses, never on the percentage: the m2c loop keeps adding matched (and so untyped) C, so the ratio can fall while the count only grows. Update it deliberately with --update-baseline and commit, so every change in coverage is a reviewed diff.",
- "offset_casts": 6433,
- "recovered": 25908,
- "synthetic": 10058,
- "total": 66405,
+ "offset_casts": 6414,
+ "recovered": 25911,
+ "synthetic": 10053,
+ "total": 66396,
  "typeable": 363
 }
