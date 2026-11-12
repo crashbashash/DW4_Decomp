@@ -2622,8 +2622,7 @@
 0x0044b860	0x004583f0	alchemy-gui_GuiLibrary	b52	-O4,s -sdatathreshold 2 -Iinclude	off	-	whole file
 0x004583f0	0x004585f0	unlabeled_4583f0	b52	-O4,p -sdatathreshold 2 -Iinclude	on	-	unlabeled run, no boundary evidence: cut where the retail exception evidence or the pins change; exceptions on: 4/4 functions have retail index records; combat -O3,p -Iinclude reproduces 4/4 members
 0x004585f0	0x00458680	alchemy-viewer_4585f0	b52	-O4,p -sdatathreshold 2 -Iinclude	on	-	unlabeled run, no boundary evidence: cut where the retail exception evidence or the pins change; exceptions on: 1/6 functions have retail index records; default -O3 -Iinclude reproduces 6/6 members
-0x00458680	0x00458698	alchemy-viewer_458680	b52	-O4,p -sdatathreshold 2 -Iinclude	on	-	unlabeled run, no boundary evidence: cut where the retail exception evidence or the pins change; exceptions on: 1/6 functions have retail index records; default -O3 -Iinclude reproduces 6/6 members
-0x004586a0	0x0045e9a0	viewer_ViewerRegistration	b52	-O4,p -sdatathreshold 2 -Iinclude	off	-	whole file
+0x00458680	0x0045e9a0	viewer_ViewerRegistration	b52	-O4,p -sdatathreshold 2 -Iinclude	off	-	whole file
 0x0045e9a0	0x0045e9f0	viewer_igLogoRenderer	b52	-O4,p -sdatathreshold 2 -Iinclude	off	-	whole file
 0x0045e9f0	0x0045ea40	viewer_igNormalsRenderer	b52	-O4,p -sdatathreshold 2 -Iinclude	off	-	whole file
 0x0045ea40	0x0045ec90	viewer_igViewerDataPumpManager	b52	-O4,p -sdatathreshold 2 -Iinclude	off	-	whole file
