@@ -24505,7 +24505,7 @@
       "address": 3714208,
       "name": "beMatCtrl_IsPlayer",
       "size": 48,
-      "source": "src/unmatched/beMatCtrl_IsPlayer.cpp",
+      "source": "src/game/beMatCtrl.cpp",
       "direct": [],
       "indirect": []
     },
@@ -24513,7 +24513,7 @@
       "address": 3714256,
       "name": "beMatCtrl_IsAllPlayer",
       "size": 104,
-      "source": "src/unmatched/beMatCtrl_IsAllPlayer.cpp",
+      "source": "src/game/beMatCtrl.cpp",
       "direct": [],
       "indirect": []
     },
@@ -24521,7 +24521,7 @@
       "address": 3714368,
       "name": "beMatCtrl_GetPlayerNo",
       "size": 136,
-      "source": "src/unmatched/beMatCtrl_GetPlayerNo.cpp",
+      "source": "src/game/beMatCtrl.cpp",
       "direct": [],
       "indirect": []
     },
@@ -24529,7 +24529,7 @@
       "address": 3714512,
       "name": "beMatCtrl_IsRidePlayer",
       "size": 96,
-      "source": "src/unmatched/beMatCtrl_IsRidePlayer.c",
+      "source": "src/game/beMatCtrl.cpp",
       "direct": [],
       "indirect": []
     },
@@ -24537,7 +24537,7 @@
       "address": 3714608,
       "name": "beMatCtrl_IsRideOffPlayer",
       "size": 96,
-      "source": "src/unmatched/beMatCtrl_IsRideOffPlayer.c",
+      "source": "src/game/beMatCtrl.cpp",
       "direct": [],
       "indirect": []
     },
@@ -24545,7 +24545,7 @@
       "address": 3714704,
       "name": "beMatCtrl_SetRun",
       "size": 16,
-      "source": "src/game/beMatCtrl_SetRun.c",
+      "source": "src/game/beMatCtrl.cpp",
       "direct": [],
       "indirect": []
     },
@@ -24553,7 +24553,7 @@
       "address": 3714720,
       "name": "beMatCtrl_GetPlayerMatStat",
       "size": 200,
-      "source": "src/unmatched/beMatCtrl_GetPlayerMatStat.c",
+      "source": "src/game/beMatCtrl.cpp",
       "direct": [],
       "indirect": []
     },

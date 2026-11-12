@@ -27,20 +27,20 @@ then use the dry run and `--apply --check` naming workflow.
 | Address | Symbol | Role | Source |
 | --- | --- | --- | --- |
 | `0x00373160..0x00373274` | `MATisPlayer`, `MATisAllPlayer`, `MATgetPlayerNo`, `MATisRidePlayer`, `MATisRideOffPlayer`, `MATgetPlayerMatStat`, `MATsetRun` | Lua binding wrappers | matched, [`src/game/be.cpp`](../../src/game/be.cpp) |
-| `0x0038aca0` | `beMatCtrl_IsPlayer` | query helper | matched, `src/unmatched/beMatCtrl_IsPlayer.cpp` |
-| `0x0038acd0` | `beMatCtrl_IsAllPlayer` | query helper | matched, `src/unmatched/beMatCtrl_IsAllPlayer.cpp` |
-| `0x0038ad40` | `beMatCtrl_GetPlayerNo` | query helper | matched, `src/unmatched/beMatCtrl_GetPlayerNo.cpp` |
-| `0x0038add0` | `beMatCtrl_IsRidePlayer` | query helper | matched, `src/unmatched/beMatCtrl_IsRidePlayer.c` |
-| `0x0038ae30` | `beMatCtrl_IsRideOffPlayer` | query helper | matched, `src/unmatched/beMatCtrl_IsRideOffPlayer.c` |
-| `0x0038ae90` | `beMatCtrl_SetRun` | activation request (16 bytes) | matched, `src/game/beMatCtrl_SetRun.c` |
-| `0x0038aea0` | `beMatCtrl_GetPlayerMatStat` | query helper | matched, `src/unmatched/beMatCtrl_GetPlayerMatStat.c` |
-| `0x0038af70` | `Gap__Bec__beMatCtrl__vfunc_32` | initialization | matched, `src/unmatched/Gap__Bec__beMatCtrl__vfunc_32.cpp` |
-| `0x0038b040` | `Gap__Bec__beMatCtrl__vfunc_30` | metadata getter | matched, `src/game/beMatCtrl.c` |
+| `0x0038aca0` | `beMatCtrl_IsPlayer` | query helper | matched, `src/game/beMatCtrl.cpp` |
+| `0x0038acd0` | `beMatCtrl_IsAllPlayer` | query helper | matched, `src/game/beMatCtrl.cpp` |
+| `0x0038ad40` | `beMatCtrl_GetPlayerNo` | query helper | matched, `src/game/beMatCtrl.cpp` |
+| `0x0038add0` | `beMatCtrl_IsRidePlayer` | query helper | matched, `src/game/beMatCtrl.cpp` |
+| `0x0038ae30` | `beMatCtrl_IsRideOffPlayer` | query helper | matched, `src/game/beMatCtrl.cpp` |
+| `0x0038ae90` | `beMatCtrl_SetRun` | activation request (16 bytes) | matched, `src/game/beMatCtrl.cpp` |
+| `0x0038aea0` | `beMatCtrl_GetPlayerMatStat` | query helper | matched, `src/game/beMatCtrl.cpp` |
+| `0x0038af70` | `Gap__Bec__beMatCtrl__vfunc_32` | initialization | matched, `src/game/beMatCtrl.cpp` |
+| `0x0038b040` | `Gap__Bec__beMatCtrl__vfunc_30` | metadata getter | matched, `src/game/beMatCtrl.cpp` |
 | `0x0038b050` | `Gap__Bec__beMatCtrl__vfunc_29` | receiver registration (44 bytes) | matched, `src/game/beMatCtrl.cpp` |
-| `0x0038b080` | `FUN_0038b080` | recursive contact search | matched, `src/unmatched/FUN_0038b080.cpp` |
+| `0x0038b080` | `FUN_0038b080` | recursive contact search | matched, `src/game/beMatCtrl.cpp` |
 | `0x0038b1f0` | `Gap__Bec__beMatCtrl__vfunc_31` | per-instance update (3,064 bytes) | — |
-| `0x0038bdf0` | `Gap__Bec__beMatCtrl__vfunc_34` | message dispatch (220 bytes) | matched, `src/unmatched/Gap__Bec__beMatCtrl__vfunc_34.cpp` |
-| `0x0038bed0` | `Gap__Bec__beMatCtrl__vfunc_20` | metadata getter | matched, `src/game/beMatCtrl.c` |
+| `0x0038bdf0` | `Gap__Bec__beMatCtrl__vfunc_34` | message dispatch (220 bytes) | matched, `src/game/beMatCtrl.cpp` |
+| `0x0038bed0` | `Gap__Bec__beMatCtrl__vfunc_20` | metadata getter | matched, `src/game/beMatCtrl.cpp` |
 | `0x0018b630` | `FUN_0018b630` | box membership | matched, `src/unmatched/FUN_0018b630.c` |
 
 The seven Lua wrappers total 240 code bytes and need C++

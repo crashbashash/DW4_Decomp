@@ -31222,6 +31222,31 @@
     },
     "symbol": "FUN_003b04e0"
   },
+  "0x0038aca0": {
+    "whole_file": true,
+    "emitted": {
+      "beMatCtrl_IsAllPlayer": "0x0038acd0",
+      "beMatCtrl_GetPlayerNo": "0x0038ad40",
+      "beMatCtrl_IsRidePlayer": "0x0038add0",
+      "beMatCtrl_IsRideOffPlayer": "0x0038ae30",
+      "beMatCtrl_SetRun": "0x0038ae90",
+      "beMatCtrl_GetPlayerMatStat": "0x0038aea0",
+      "Gap__Bec__beMatCtrl__vfunc_32": "0x0038af70",
+      "Gap__Bec__beMatCtrl__vfunc_30": "0x0038b040",
+      "Gap__Bec__beMatCtrl__vfunc_29": "0x0038b050",
+      "FUN_0038b080": "0x0038b080",
+      "Gap__Bec__beMatCtrl__vfunc_34": "0x0038bdf0",
+      "Gap__Bec__beMatCtrl__vfunc_20": "0x0038bed0"
+    },
+    "data": {
+      "@212": "0x0050eda0",
+      "DAT_00589208": "0x00589208",
+      "MATCTRL": "0x0050ed58",
+      "g_beMatCtrlInfo_metaObject": "0x005890e8",
+      "g_beMatCtrl_metaObject": "0x00589160"
+    },
+    "symbol": "beMatCtrl_IsPlayer"
+  },
   "0x0038a660": {
     "whole_file": true,
     "emitted": {
