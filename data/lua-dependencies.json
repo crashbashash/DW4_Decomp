@@ -26245,7 +26245,7 @@
       "address": 3782672,
       "name": "bePadManager_GetPadForPlayer",
       "size": 88,
-      "source": "src/unmatched/bePadManager_GetPadForPlayer.c",
+      "source": "src/game/bePadManager.cpp",
       "direct": [],
       "indirect": []
     },

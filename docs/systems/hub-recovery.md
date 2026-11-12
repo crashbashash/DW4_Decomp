@@ -168,7 +168,7 @@ registry/work/list/string ownership and full generate/close lifecycles
 The [original pad-record lookup](../engine/selectctrl.md#original-pad-record-selection)
 executes beneath SELECTCTRL. Its 88-byte body is
 named from original callers/reflection; see
-`src/unmatched/bePadManager_GetPadForPlayer.c`.
+`src/game/bePadManager.cpp`.
 
 Actual pad acquisition and sampling, model execution and message services
 remain open boundaries.

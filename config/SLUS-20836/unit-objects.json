@@ -93,15 +93,6 @@
       "__dl__FPv": "0x00100610"
     }
   },
-  "0x0039b320": {
-    "emitted": {},
-    "duplicates": {
-      "__dt__3RefFv": "0x0039b4e0"
-    },
-    "externals": {
-      "__dl__FPv": "0x00100610"
-    }
-  },
   "0x0044b290": {
     "duplicates": {
       "__dt__8ValueRefFv": "0x00352fc0",
@@ -31066,6 +31057,31 @@
       "__dt__9StringRefFv": "0x00130720"
     },
     "symbol": "FUN_003b04e0"
+  },
+  "0x0039b2e0": {
+    "whole_file": true,
+    "emitted": {
+      "Gap__Bec__bePadManager__vfunc_22": "0x0039b300",
+      "Gap__Bec__bePadManager__vfunc_23": "0x0039b320",
+      "__dt__3RefFv": "0x0039b4e0",
+      "Gap__Bec__bePadManager__vfunc_24": "0x0039b560",
+      "Gap__Bec__bePadManager__vfunc_25": "0x0039b5b0",
+      "Gap__Bec__bePadManager__vfunc_26": "0x0039b5c0",
+      "Gap__Bec__bePadManager__vfunc_27": "0x0039b5d0",
+      "bePadManager_GetPadForPlayer": "0x0039b810",
+      "Gap__Bec__bePadManager__vfunc_20": "0x0039b870"
+    },
+    "data": {
+      "DAT_00587108": "0x00587108",
+      "DAT_00587d08": "0x00587d08",
+      "DAT_0058c790": "0x0058c790",
+      "GPR_00554c14": "0x00554c14",
+      "g_bePadManager_metaObject": "0x00588518"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    },
+    "symbol": "Gap__Bec__bePadManager__vfunc_21"
   },
   "0x0039a930": {
     "whole_file": true,

@@ -145,7 +145,7 @@ The SELECTCTRL update's lookup at `0x0039b810` is named
 `bePadManager_GetPadForPlayer` from its body and its manager/player arguments.
 The lookup is 88 bytes with no external callees, beside a
 12-byte metadata getter. The
-lookup is in [bePadManager_GetPadForPlayer.c](../../src/unmatched/bePadManager_GetPadForPlayer.c).
+lookup is in [bePadManager.cpp](../../src/game/bePadManager.cpp).
 
 Reflection handle `0x00588518` identifies `bePadManager`: `_padList` is word20,
 `_is1pAllDevice` byte28 and `_isPadDisable` byte29. The lookup uses byte29 and
