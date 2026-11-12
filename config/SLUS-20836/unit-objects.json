@@ -30880,6 +30880,32 @@
     },
     "symbol": "FUN_003b04e0"
   },
+  "0x003cdb00": {
+    "whole_file": true,
+    "emitted": {
+      "Gap__Bec__beNDMWAfsSetup__vfunc_22": "0x003cdb10",
+      "Gap__Bec__beNDMWAfsSetup__vfunc_23": "0x003cdb20",
+      "Gap__Bec__beNDMWAfsSetup__vfunc_24": "0x003cdb30",
+      "Gap__Bec__beNDMWAfsSetup__vfunc_25": "0x003cdb60",
+      "Gap__Bec__beNDMWAfsSetup__vfunc_26": "0x003cdd10",
+      "Gap__Bec__beNDMWAfsSetup__vfunc_27": "0x003cdeb0",
+      "Gap__Bec__beNDMWAfsStageLoad__vfunc_21": "0x003cdec0",
+      "Gap__Bec__beNDMWAfsStageLoad__vfunc_20": "0x003cded0",
+      "Gap__Bec__beNDMWAfsSetup__vfunc_20": "0x003cdee0"
+    },
+    "data": {
+      "DAT_004e0858": "0x004e0858",
+      "DAT_00515710": "0x00515710",
+      "DAT_00586f20": "0x00586f20",
+      "DAT_00587d08": "0x00587d08",
+      "DAT_00589ad8": "0x00589ad8",
+      "DAT_0058c110": "0x0058c110",
+      "g_beCri_metaObject": "0x00589ad8",
+      "g_beNDMWAfsSetup_metaObject": "0x0058c158",
+      "g_beNDMWAfsStageLoad_metaObject": "0x0058c140"
+    },
+    "symbol": "Gap__Bec__beNDMWAfsSetup__vfunc_21"
+  },
   "0x003cd4b0": {
     "whole_file": true,
     "emitted": {

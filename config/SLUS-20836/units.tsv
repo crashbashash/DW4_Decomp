@@ -651,9 +651,7 @@
 0x003b04e0	0x003cc7d0	ndmw_NdmwLibrary	b52	-O4,p -sdatathreshold 2 -inline level=8 -Iinclude	on	-	whole file
 0x003cc7d0	0x003cd4b0	ndmw_libNdmwRuntimePlugin	b52	-O4,p -sdatathreshold 2 -inline level=8 -Iinclude	on	-	whole file
 0x003cd4b0	0x003cdb00	ndmw_beNDMWStageCtl	b52	-O4,p -sdatathreshold 2 -inline level=8 -Iinclude	on	-	whole file
-0x003cdb00	0x003cdeb8	beNDMWAfsSetup_3cdb00	b52	-O4,p -sdatathreshold 2 -inline level=8 -Iinclude	on	-	class run of 7 labeled members; exceptions on: 3/7 functions have retail index records; combat -O3,p -Iinclude reproduces 6/6 members
-0x003cdec0	0x003cdedc	beNDMWAfsStageLoad_3cdec0	b52	-O4,p -sdatathreshold 2 -inline level=8 -Iinclude	off	-	class run of 2 labeled members; exceptions undetermined (every function is a frameless leaf, which carries no record either way): off; default -O3 -Iinclude reproduces 2/2 members
-0x003cdee0	0x003cdeec	beNDMWAfsSetup_3cdee0	b52	-O4,p -sdatathreshold 2 -inline level=8 -Iinclude	off	-	class run of 1 labeled members; exceptions undetermined (every function is a frameless leaf, which carries no record either way): off; default -O3 -Iinclude reproduces 1/1 members
+0x003cdb00	0x003cdef0	ndmw_beNDMWAfsSetup	b52	-O4,p -sdatathreshold 2 -inline level=8 -Iinclude	on	-	whole file
 0x003cdef0	0x003ce4bc	unlabeled_3cdef0	b52	-O4,p -sdatathreshold 2 -inline level=8 -Iinclude	on	-	unlabeled run, no boundary evidence: cut where the retail exception evidence or the pins change; exceptions on: 1/1 functions have retail index records; combat -O3,p -Iinclude reproduces 1/1 members
 0x003ce4c0	0x003ce4f8	unlabeled_3ce4c0	b52	-O4,p -sdatathreshold 2 -inline level=8 -Iinclude	on	-	unlabeled run, no boundary evidence: cut where the retail exception evidence or the pins change; exceptions on: 1/1 functions have retail index records; default -O3 -Iinclude reproduces 1/1 members
 0x003ce500	0x003ce960	unlabeled_3ce500	b52	-O4,p -sdatathreshold 2 -inline level=8 -Iinclude	on	-	unlabeled run, no boundary evidence: cut where the retail exception evidence or the pins change; exceptions on: 5/5 functions have retail index records; combat -O3,p -Iinclude reproduces 5/5 members
