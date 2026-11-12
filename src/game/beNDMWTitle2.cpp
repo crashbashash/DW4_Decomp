@@ -1,3 +1,199 @@
+#include "dw4/reflected.h"
+#define ALLOC(dst, obj)                                                                            \
+    {                                                                                              \
+        int alloc = igObject_GetAllocator(obj);                                                    \
+        if (g_useOwnerAllocator != 0) {                                                                   \
+            dst = alloc;                                                                           \
+        } else {                                                                                   \
+            dst = Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);                                  \
+        }                                                                                          \
+    }
+#define SET_DATA(ref)                                                                              \
+    {                                                                                              \
+        igObject *n = (igObject *)(ref).p;                                                         \
+        if (n != 0)                                                                                \
+            n->_refCount = n->_refCount + 1;                                                       \
+        igObject *old = (igObject *)infoRam->_dataList;                                            \
+        if (old != 0) {                                                                            \
+            old->_refCount = old->_refCount - 1;                                                   \
+            if (((unsigned long long)((long long)(int)old->_refCount << 0x29) >> 0x29) == 0)       \
+                igObject_Destroy(old);                                                             \
+        }                                                                                          \
+        infoRam->_dataList = (int)n;                                                               \
+    }
+
+extern "C" int beMessenger_SendGroup(...);
+extern "C" int beMessenger_GetObject(...);
+extern "C" void * igProperty_GetRecord(...);
+extern "C" int FUN_00236f80(...);
+extern "C" void *beBaseInfoDataList_Create(...);
+extern "C" void *FUN_003b2250(...);
+extern "C" void *FUN_003b2560(...);
+extern "C" void *beNDMWLoadIntf2ComMdlCtrl_Create(...);
+extern "C" void *beNDMWLoadIntf2TextOrder_Create(...);
+extern "C" int beNDMWLoadIntf2ComMdlCtrl__Start(...);
+extern "C" int beNDMWLoadIntf2ComMdlCtrl__Play(...);
+extern "C" int beNDMWLoadIntf2ComMdlCtrl__IsOpenQueueEmpty(...);
+extern "C" int beNDMWLoadIntf2ComMdlCtrl__Close(...);
+extern "C" int beNDMWLoadIntf2ComMdlCtrl__IsRunning(...);
+extern "C" int beNDMWLoadIntf2ComMdlCtrl__IsCloseQueueEmpty(...);
+extern "C" int beNDMWLoadIntf2ComMdlCtrl__Poll(...);
+extern "C" int beNDMWLoadIntf2TextOrder_PublishIdLines(...);
+extern "C" int TextOrder_PublishLineListOnly(...);
+extern "C" int Memory_GetAllocatorBySelector(...);
+extern "C" int ObjectList_AppendRetained(...);
+extern "C" int beMessenger_AppendInt(...);
+extern "C" int beMessenger_AppendString(...);
+extern "C" int beMessenger_DispatchSelected(...);
+extern "C" int beMessenger_GetBool(...);
+extern "C" int beMessenger_SelectGroup(...);
+extern "C" int beMessenger_SelectReceivers(...);
+extern "C" int beMessenger_SendNamed(...);
+extern "C" void *bePadManager_GetPadForPlayer(...);
+extern "C" int igObject_Destroy(...);
+extern "C" int igObject_GetAllocator(...);
+extern "C" void *igProperty_FindByName(...);
+extern "C" int FUN_002ff820(...);
+extern "C" int beMessenger_RegisterReceiverFromInfo(int, int, int *);
+extern "C" int Gap__Bec__beNDMWTitle2__vfunc_30(void);
+extern "C" int Gap__Bec__beNDMWTitle2__vfunc_20(void);
+extern "C" int FUN_003b2840(...);
+extern "C" int beMessenger_ResolveEnumValue(int, int, int);
+extern "C" int GAMERAM_3[4];
+extern "C" int GETCOMMON_2[4];
+extern "C" int CAMERAMODE_2[4];
+extern "C" int LIGHTMODE_2[4];
+extern "C" void beNDMWTitle2Option_InitSettings(beNDMWTitle2Option *self, int messenger);
+extern "C" int CTRL_2[4];
+extern "C" int COMMDLCTRL_2[4];
+extern "C" int TEXTORDER_2[4];
+extern "C" int j_startlogo[4];
+extern "C" int SQ_OPEN_2[4];
+extern "C" int j_startmenu01[4];
+extern "C" int MODELCTRL_2[4];
+extern "C" int SQ_LINESL00_2[4];
+extern "C" int ISSEQNAME_2[4];
+extern "C" int i_fadewn01[4];
+extern "C" int GENERATE_2[4];
+extern "C" int SQ_BLOUT30[4];
+extern "C" int ISRUN_2[4];
+extern "C" int STAGECTL[4];
+extern "C" int stagIS09[4];
+extern "C" int NEXTSTAGE[4];
+extern "C" int SQ_LINEON00_2[4];
+extern "C" int j_startmenu02[4];
+extern "C" int SQ_LINEUP00_2[4];
+extern "C" int SQ_LINEDW01_2[4];
+extern "C" int SQ_LINEON01_2[4];
+extern "C" int SQ_CANCEL_2[4];
+extern "C" int SQ_CLOSE_2[4];
+extern "C" int OPTION[4];
+extern "C" int j_optionwin02[4];
+extern "C" int SQ_BOPEN[4];
+extern "C" int SQ_AOPEN[4];
+extern "C" int j_optioncursor11[4];
+extern "C" int j_optioncursor12[4];
+extern "C" int SQ_MOVE[4];
+extern "C" int SQ_LINERT00[4];
+extern "C" int SQ_LINERT01[4];
+extern "C" int SQ_LINERT02[4];
+extern "C" int SQ_LINELF00[4];
+extern "C" int SQ_LINELF01[4];
+extern "C" int SQ_LINELF02[4];
+extern "C" int SQ_LINESL01[4];
+extern "C" int SQ_LINESL02[4];
+extern "C" int SQ_LINESL03[4];
+extern "C" int SQ_LINEON02[4];
+extern "C" int SQ_LINEON03[4];
+extern "C" int SOUND[4];
+extern "C" int BGMSTOP[4];
+extern "C" int ENVSTOP[4];
+extern "C" int SESTOP[4];
+extern "C" int stagIS08[4];
+extern "C" int SQ_WTOUT60[4];
+extern "C" int j_startback[4];
+extern "C" int LOADCTRL2_2[4];
+extern "C" int GENERATE_TITLE[4];
+extern "C" int g_propertyNameField[4];
+extern "C" int g_defaultAllocatorSelector[4];
+extern "C" int g_beLua_metaObject[4];
+extern "C" unsigned char g_useOwnerAllocator;
+extern "C" char g_commonSettingsValid;
+extern "C" int g_beNDMWTitle2Info_metaObject[4];
+extern "C" int g_beNDMWTitle2_metaObject[4];
+extern "C" int g_bePadManager_metaObject[4];
+extern "C" int TITLE2[4];
+extern "C" void Gap__Bec__beNDMWTitle2__vfunc_32(beNDMWTitle2 *self);
+/* Outer state, CTRL._st0. */
+enum TitleState {
+    TitleStateWaitRun = 0,
+    TitleStateLogo = 1,
+    TitleStateMenu = 2,
+    TitleStateOptions = 4,
+    TitleStateFadeOut = 7,
+    TitleStateLoadHandoff = 8
+};
+/* Direction bits of the pad's left-stick words (_lTrg, _lRpt). */
+enum PadStickDirection { DirUp = 0x01, DirRight = 0x02, DirDown = 0x04, DirLeft = 0x08 };
+/* Button bits of the pad's pressed (_trigger) and repeat (_repeat) words. */
+enum PadButton {
+    ButtonStart = 0x0008,
+    ButtonUp = 0x0010,
+    ButtonRight = 0x0020,
+    ButtonDown = 0x0040,
+    ButtonLeft = 0x0080,
+    ButtonCircle = 0x2000,
+    ButtonCross = 0x4000
+};
+/* Options window rows, OPTION._ctrlPos. Row 0 edits _comConf, row 1 _lightConf and row 2 the
+ * country (only with _selLang != 0); row 3 confirms. */
+enum OptionRow { OptionRowCamera = 0, OptionRowLight = 1, OptionRowCountry = 2, OptionRowOk = 3 };
+enum TitleReferenceRole {
+    TitleWorkList = 0,
+    TitleControl = 1,
+    TitleModels = 2,
+    TitleOptions = 3,
+    TitleText = 4
+};
+template <int Tag> struct TitleRef {
+    void *p;
+    TitleRef(void *v) : p(v) {}
+    ~TitleRef() {
+        igObject *o = (igObject *)p;
+        if (o != 0) {
+            o->_refCount = o->_refCount - 1;
+            if (((unsigned long long)(long long)(int)o->_refCount & 0x7fffffULL) == 0) {
+                igObject_Destroy(o);
+            }
+        }
+    }
+};
+extern "C" void Gap__Bec__beNDMWTitle2__vfunc_31(beNDMWTitle2 *self, beBaseInfoRam *infoRam);
+extern "C" void Gap__Bec__beNDMWTitle2__vfunc_29(beNDMWTitle2 *self, int info);
+extern "C" char GPR_00554e70;
+extern "C" int Gap__Bec__beNDMWTitle2__vfunc_34(beNDMWTitle2 *arg0, beBaseInfoRam *arg1, void *arg2);
+
+/* Bind the messenger and load the Options settings. Once the title settings are valid, the saved
+ * camera and light modes are read back from the GAMERAM GETCOMMON property group (property record
+ * value at +12); otherwise the defaults are camera 0 and light 1. The language selector always
+ * starts at 0. */
+void beNDMWTitle2Option_InitSettings(beNDMWTitle2Option *self, int messenger) {
+    int commonSettings;
+
+    self->_messenger = messenger;
+    if ((*(unsigned char *)&g_commonSettingsValid) == 1) {
+        beMessenger_SendGroup(self->_messenger, &GAMERAM_3[0], &GETCOMMON_2[0]);
+        commonSettings = beMessenger_GetObject(self->_messenger, 0);
+        self->_comConf = (int)((int) *(int *)((char *)(igProperty_GetRecord(commonSettings, &CAMERAMODE_2[0])) + 12));
+        self->_lightConf = (int)((int) *(int *)((char *)(igProperty_GetRecord(commonSettings, &LIGHTMODE_2[0])) + 12));
+        self->_selLang = 0;
+        return;
+    }
+    self->_comConf = 0;
+    self->_lightConf = 1;
+    self->_selLang = 0;
+}
+
 /* The title-menu controller. vfunc_31 is the per-frame update: a four-level state machine
  * (CTRL._st0.._st3) that drives the logo, the Press START wait, the Game Start / Option menu, the
  * Options window and the hand-off to beNDMWLoadCtrl2. The numbers 0xf0001..0xf000d passed to the
@@ -10,120 +206,10 @@
  *    (`ctrl->_stN = stN(ctrl) + 1`) fix register allocation and reload points.
  *  - The two language locals (Up and Down handlers) are kept separate; merging them changes the
  *    register colouring. */
-#include "dw4/reflected.h"
-static inline int st1(const beNDMWTitle2CtrlData *data) { return data->_st1; }
-static inline int st2(const beNDMWTitle2CtrlData *data) { return data->_st2; }
-extern "C" {
-int FUN_00236f80(...);
-void *beBaseInfoDataList_Create(...);
-void *FUN_003b2250(...);
-void *FUN_003b2560(...);
-void *beNDMWLoadIntf2ComMdlCtrl_Create(...);
-void *beNDMWLoadIntf2TextOrder_Create(...);
-int beNDMWLoadIntf2ComMdlCtrl__Start(...);
-int beNDMWLoadIntf2ComMdlCtrl__Play(...);
-int beNDMWLoadIntf2ComMdlCtrl__IsOpenQueueEmpty(...);
-int beNDMWLoadIntf2ComMdlCtrl__Close(...);
-int beNDMWLoadIntf2ComMdlCtrl__IsRunning(...);
-int beNDMWLoadIntf2ComMdlCtrl__IsCloseQueueEmpty(...);
-int beNDMWLoadIntf2ComMdlCtrl__Poll(...);
-int beNDMWLoadIntf2TextOrder_PublishIdLines(...);
-int TextOrder_PublishLineListOnly(...);
-int Memory_GetAllocatorBySelector(...);
-int ObjectList_AppendRetained(...);
-int beMessenger_AppendInt(...);
-int beMessenger_AppendString(...);
-int beMessenger_DispatchSelected(...);
-int beMessenger_GetBool(...);
-int beMessenger_GetObject(...);
-int beMessenger_SelectGroup(...);
-int beMessenger_SelectReceivers(...);
-int beMessenger_SendGroup(...);
-int beMessenger_SendNamed(...);
-int beNDMWTitle2Option_InitSettings(...);
-void *bePadManager_GetPadForPlayer(...);
-int igObject_Destroy(...);
-int igObject_GetAllocator(...);
-void *igProperty_FindByName(...);
-void *igProperty_GetRecord(...);
-extern int GAMERAM_3[4];
-extern int GETCOMMON_2[4];
-extern int CAMERAMODE_2[4];
-extern int LIGHTMODE_2[4];
-extern int CTRL_2[4];
-extern int COMMDLCTRL_2[4];
-extern int TEXTORDER_2[4];
-extern int j_startlogo[4];
-extern int SQ_OPEN_2[4];
-extern int j_startmenu01[4];
-extern int MODELCTRL_2[4];
-extern int SQ_LINESL00_2[4];
-extern int ISSEQNAME_2[4];
-extern int i_fadewn01[4];
-extern int GENERATE_2[4];
-extern int SQ_BLOUT30[4];
-extern int ISRUN_2[4];
-extern int STAGECTL[4];
-extern int stagIS09[4];
-extern int NEXTSTAGE[4];
-extern int SQ_LINEON00_2[4];
-extern int j_startmenu02[4];
-extern int SQ_LINEUP00_2[4];
-extern int SQ_LINEDW01_2[4];
-extern int SQ_LINEON01_2[4];
-extern int SQ_CANCEL_2[4];
-extern int SQ_CLOSE_2[4];
-extern int OPTION[4];
-extern int j_optionwin02[4];
-extern int SQ_BOPEN[4];
-extern int SQ_AOPEN[4];
-extern int j_optioncursor11[4];
-extern int j_optioncursor12[4];
-extern int SQ_MOVE[4];
-extern int SQ_LINERT00[4];
-extern int SQ_LINERT01[4];
-extern int SQ_LINERT02[4];
-extern int SQ_LINELF00[4];
-extern int SQ_LINELF01[4];
-extern int SQ_LINELF02[4];
-extern int SQ_LINESL01[4];
-extern int SQ_LINESL02[4];
-extern int SQ_LINESL03[4];
-extern int SQ_LINEON02[4];
-extern int SQ_LINEON03[4];
-extern int SOUND[4];
-extern int BGMSTOP[4];
-extern int ENVSTOP[4];
-extern int SESTOP[4];
-extern int stagIS08[4];
-extern int SQ_WTOUT60[4];
-extern int j_startback[4];
-extern int LOADCTRL2_2[4];
-extern int GENERATE_TITLE[4];
-extern int g_propertyNameField[4];
-extern int g_defaultAllocatorSelector[4];
-extern int g_beLua_metaObject[4];
-/* Byte flag: allocate from the owner's allocator. */
-extern unsigned char g_useOwnerAllocator;
-/* Set by the GAMESTART path; tells the Options initialiser that GAMERAM's CAMERAMODE/LIGHTMODE are
- * valid. */
-extern char g_commonSettingsValid;
-extern int g_beNDMWTitle2Info_metaObject[4];
-extern int g_beNDMWTitle2_metaObject[4];
-extern int g_bePadManager_metaObject[4];
-extern int TITLE2[4];
-/* igObject_Destroy (0x002ff820): called when a reference count reaches zero.  Declared and
- * called without its argument in vfunc_32: retail's a0 still holds the released object
- * (matching construct). */
-int FUN_002ff820();
-int beMessenger_RegisterReceiverFromInfo(int, int, int *);
 
-void Gap__Bec__beNDMWTitle2__vfunc_32(beNDMWTitle2 *);
-void Gap__Bec__beNDMWTitle2__vfunc_31(beNDMWTitle2 *, beBaseInfoRam *);
-int Gap__Bec__beNDMWTitle2__vfunc_30(void);
-void Gap__Bec__beNDMWTitle2__vfunc_29(beNDMWTitle2 *, int);
-int Gap__Bec__beNDMWTitle2__vfunc_20(void);
-}
+static inline int st1(const beNDMWTitle2CtrlData *data) { return data->_st1; }
+
+static inline int st2(const beNDMWTitle2CtrlData *data) { return data->_st2; }
 
 void Gap__Bec__beNDMWTitle2__vfunc_32(beNDMWTitle2 *self) {
     igObject *padManager;
@@ -153,79 +239,12 @@ void Gap__Bec__beNDMWTitle2__vfunc_32(beNDMWTitle2 *self) {
         self->_mcUtilCtrl = 0;
     }
 }
-/* Outer state, CTRL._st0. */
-enum TitleState {
-    TitleStateWaitRun = 0,
-    TitleStateLogo = 1,
-    TitleStateMenu = 2,
-    TitleStateOptions = 4,
-    TitleStateFadeOut = 7,
-    TitleStateLoadHandoff = 8
-};
 
-/* Direction bits of the pad's left-stick words (_lTrg, _lRpt). */
-enum PadStickDirection { DirUp = 0x01, DirRight = 0x02, DirDown = 0x04, DirLeft = 0x08 };
-
-/* Button bits of the pad's pressed (_trigger) and repeat (_repeat) words. */
-enum PadButton {
-    ButtonStart = 0x0008,
-    ButtonUp = 0x0010,
-    ButtonRight = 0x0020,
-    ButtonDown = 0x0040,
-    ButtonLeft = 0x0080,
-    ButtonCircle = 0x2000,
-    ButtonCross = 0x4000
-};
-
-/* Options window rows, OPTION._ctrlPos. Row 0 edits _comConf, row 1 _lightConf and row 2 the
- * country (only with _selLang != 0); row 3 confirms. */
-enum OptionRow { OptionRowCamera = 0, OptionRowLight = 1, OptionRowCountry = 2, OptionRowOk = 3 };
-
-enum TitleReferenceRole {
-    TitleWorkList = 0,
-    TitleControl = 1,
-    TitleModels = 2,
-    TitleOptions = 3,
-    TitleText = 4
-};
-template <int Tag> struct TitleRef {
-    void *p;
-    TitleRef(void *v) : p(v) {}
-    ~TitleRef() {
-        igObject *o = (igObject *)p;
-        if (o != 0) {
-            o->_refCount = o->_refCount - 1;
-            if (((unsigned long long)(long long)(int)o->_refCount & 0x7fffffULL) == 0) {
-                igObject_Destroy(o);
-            }
-        }
-    }
-};
 /* Pick the allocator for a new object: the owner's own allocator when the
  * global flag at 0x00554c14 is set, otherwise the registry's default one. */
-#define ALLOC(dst, obj)                                                                            \
-    {                                                                                              \
-        int alloc = igObject_GetAllocator(obj);                                                    \
-        if (g_useOwnerAllocator != 0) {                                                                   \
-            dst = alloc;                                                                           \
-        } else {                                                                                   \
-            dst = Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);                                  \
-        }                                                                                          \
-    }
+
 /* Store a reference-counted object as infoRam->_dataList, releasing the old list. */
-#define SET_DATA(ref)                                                                              \
-    {                                                                                              \
-        igObject *n = (igObject *)(ref).p;                                                         \
-        if (n != 0)                                                                                \
-            n->_refCount = n->_refCount + 1;                                                       \
-        igObject *old = (igObject *)infoRam->_dataList;                                            \
-        if (old != 0) {                                                                            \
-            old->_refCount = old->_refCount - 1;                                                   \
-            if (((unsigned long long)((long long)(int)old->_refCount << 0x29) >> 0x29) == 0)       \
-                igObject_Destroy(old);                                                             \
-        }                                                                                          \
-        infoRam->_dataList = (int)n;                                                               \
-    }
+
 
 /* per-frame title-menu update. Lazily builds the CTRL / COMMDLCTRL / OPTION / TEXTORDER objects in
  * the info record's property list, then runs the CTRL._st0.._st3 state machine. */
@@ -277,7 +296,7 @@ void Gap__Bec__beNDMWTitle2__vfunc_31(beNDMWTitle2 *self, beBaseInfoRam *infoRam
         ALLOC(allocator, self);
         {
             TitleRef<TitleOptions> optionRef(FUN_003b2250(allocator));
-            beNDMWTitle2Option_InitSettings(optionRef.p, self->_messenger);
+            beNDMWTitle2Option_InitSettings((beNDMWTitle2Option *)optionRef.p, (int)self->_messenger);
             ObjectList_AppendRetained(infoRam->_dataList, optionRef.p);
         }
         ALLOC(allocator, self);
@@ -1108,9 +1127,6 @@ done:
     return;
 }
 
-#undef SET_DATA
-#undef ALLOC
-
 int Gap__Bec__beNDMWTitle2__vfunc_30(void)
 {
     return g_beNDMWTitle2Info_metaObject[0];
@@ -1120,6 +1136,27 @@ int Gap__Bec__beNDMWTitle2__vfunc_30(void)
 void Gap__Bec__beNDMWTitle2__vfunc_29(beNDMWTitle2 *self, int info)
 {
     beMessenger_RegisterReceiverFromInfo(self->_messenger, info, &TITLE2[0]);
+}
+
+int Gap__Bec__beNDMWTitle2__vfunc_34(beNDMWTitle2 *arg0, beBaseInfoRam *arg1, void *arg2) {
+    int temp_v0;
+
+    if (arg1->_dataList == 0) {
+        return 1;
+    }
+    temp_v0 = beMessenger_ResolveEnumValue(arg0->_messenger, FUN_003b2840(), *(int *)((char *)(arg2) + 20));
+    switch (temp_v0) {
+    case 0:
+        arg1->_st0 = 1;
+        arg1->_st3 = 0;
+        arg1->_st2 = 0;
+        arg1->_st1 = 0;
+        break;
+    case 1:
+        GPR_00554e70 = 1;
+        break;
+    }
+    return 1;
 }
 
 int Gap__Bec__beNDMWTitle2__vfunc_20(void)

@@ -759,24 +759,6 @@
       "__dl__FPv": "0x00100610"
     }
   },
-  "0x003f2ef0": {
-    "emitted": {},
-    "duplicates": {
-      "__dt__11TitleRef<0>Fv": "0x0033e9c0",
-      "__dt__11TitleRef<2>Fv": "0x003eb880",
-      "__dt__11TitleRef<4>Fv": "0x003eb800",
-      "__dt__11TitleRef<3>Fv": "0x003f5210",
-      "__dt__11TitleRef<1>Fv": "0x003f5290"
-    },
-    "externals": {
-      "__dl__FPv": "0x00100610"
-    },
-    "exceptions": {
-      "index": "0x005538e0",
-      "table": "0x00544d74",
-      "table_size": "0x80"
-    }
-  },
   "0x003e4750": {
     "emitted": {},
     "duplicates": {
@@ -30451,6 +30433,98 @@
       "__dt__9StringRefFv": "0x00130720"
     },
     "symbol": "FUN_003b04e0"
+  },
+  "0x003f2d50": {
+    "whole_file": true,
+    "emitted": {
+      "Gap__Bec__beNDMWTitle2__vfunc_32": "0x003f2e00",
+      "Gap__Bec__beNDMWTitle2__vfunc_31": "0x003f2ef0",
+      "__dt__11TitleRef<3>Fv": "0x003f5210",
+      "__dt__11TitleRef<1>Fv": "0x003f5290",
+      "Gap__Bec__beNDMWTitle2__vfunc_30": "0x003f5310",
+      "Gap__Bec__beNDMWTitle2__vfunc_29": "0x003f5320",
+      "Gap__Bec__beNDMWTitle2__vfunc_34": "0x003f5350",
+      "Gap__Bec__beNDMWTitle2__vfunc_20": "0x003f5400"
+    },
+    "data": {
+      "@1103": "0x00518680",
+      "@1108": "0x00518660",
+      "@1109": "0x00518640",
+      "BGMSTOP": "0x005185d8",
+      "CAMERAMODE_2": "0x00518328",
+      "COMMDLCTRL_2": "0x00518350",
+      "CTRL_2": "0x00518348",
+      "ENVSTOP": "0x005185e0",
+      "GAMERAM_3": "0x00518310",
+      "GENERATE_2": "0x005183d8",
+      "GENERATE_TITLE": "0x00518630",
+      "GETCOMMON_2": "0x00518318",
+      "GPR_00554e70": "0x00554e70",
+      "ISRUN_2": "0x005183f8",
+      "ISSEQNAME_2": "0x005183b8",
+      "LIGHTMODE_2": "0x00518338",
+      "LOADCTRL2_2": "0x00518620",
+      "MODELCTRL_2": "0x00518398",
+      "NEXTSTAGE": "0x00518420",
+      "OPTION": "0x005184a0",
+      "SESTOP": "0x005185e8",
+      "SOUND": "0x005185d0",
+      "SQ_AOPEN": "0x005184c8",
+      "SQ_BLOUT30": "0x005183e8",
+      "SQ_BOPEN": "0x005184b8",
+      "SQ_CANCEL_2": "0x00518480",
+      "SQ_CLOSE_2": "0x00518490",
+      "SQ_LINEDW01_2": "0x00518460",
+      "SQ_LINELF00": "0x00518550",
+      "SQ_LINELF01": "0x00518560",
+      "SQ_LINELF02": "0x00518570",
+      "SQ_LINEON00_2": "0x00518430",
+      "SQ_LINEON01_2": "0x00518470",
+      "SQ_LINEON02": "0x005185b0",
+      "SQ_LINEON03": "0x005185c0",
+      "SQ_LINERT00": "0x00518520",
+      "SQ_LINERT01": "0x00518530",
+      "SQ_LINERT02": "0x00518540",
+      "SQ_LINESL00_2": "0x005183a8",
+      "SQ_LINESL01": "0x00518580",
+      "SQ_LINESL02": "0x00518590",
+      "SQ_LINESL03": "0x005185a0",
+      "SQ_LINEUP00_2": "0x00518450",
+      "SQ_MOVE": "0x00518518",
+      "SQ_OPEN_2": "0x00518380",
+      "SQ_WTOUT60": "0x00518600",
+      "STAGECTL": "0x00518400",
+      "TEXTORDER_2": "0x00518360",
+      "TITLE2": "0x005186a8",
+      "g_beLua_metaObject": "0x00589208",
+      "g_beNDMWTitle2Info_metaObject": "0x0058aa50",
+      "g_beNDMWTitle2_metaObject": "0x0058ab10",
+      "g_bePadManager_metaObject": "0x00588518",
+      "g_commonSettingsValid": "0x00554e70",
+      "g_defaultAllocatorSelector": "0x00587110",
+      "g_propertyNameField": "0x00585be0",
+      "g_useOwnerAllocator": "0x00554c14",
+      "i_fadewn01": "0x005183c8",
+      "j_optioncursor11": "0x005184e0",
+      "j_optioncursor12": "0x00518500",
+      "j_optionwin02": "0x005184a8",
+      "j_startback": "0x00518610",
+      "j_startlogo": "0x00518370",
+      "j_startmenu01": "0x00518388",
+      "j_startmenu02": "0x00518440",
+      "stagIS08": "0x005185f0",
+      "stagIS09": "0x00518410"
+    },
+    "duplicates": {
+      "__dt__11TitleRef<0>Fv": "0x0033e9c0",
+      "__dt__11TitleRef<2>Fv": "0x003eb880",
+      "__dt__11TitleRef<4>Fv": "0x003eb800"
+    },
+    "externals": {
+      "FUN_002ff820": "0x002ff820",
+      "__dl__FPv": "0x00100610"
+    },
+    "symbol": "beNDMWTitle2Option_InitSettings"
   },
   "0x003eba10": {
     "whole_file": true,
