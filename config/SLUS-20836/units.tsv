@@ -628,7 +628,7 @@
 0x0039b880	0x0039c15c	bec_beParticleCtrl2	b52	-O4,p -sdatathreshold 2 -inline level=8 -Iinclude	on	-	whole file
 0x0039c160	0x0039c42c	bec_bePoint01	b52	-O4,p -sdatathreshold 2 -inline level=8 -Iinclude	on	-	whole file
 0x0039c430	0x0039cb6c	bec_beSeCtl	b52	-O4,p -sdatathreshold 2 -inline level=8 -Iinclude	on	-	whole file
-0x0039cb70	0x0039dedc	beSelectCtrl_39cb70	b52	-O4,p -sdatathreshold 2 -inline level=8 -Iinclude	on	-	class run of 6 labeled members; exceptions on: 4/6 functions have retail index records; combat -O3,p -Iinclude reproduces 6/6 members
+0x0039cb70	0x0039dedc	bec_beSelectCtrl	b52	-O4,p -sdatathreshold 2 -inline level=8 -Iinclude	on	-	whole file
 0x0039dee0	0x0039e53c	beShadow01_39dee0	b52	-O4,p -sdatathreshold 2 -inline level=8 -Iinclude	on	-	class run of 5 labeled members, 1 unlabeled functions inside; exceptions on: 4/6 functions have retail index records; combat -O3,p -Iinclude reproduces 5/5 members
 0x0039e540	0x0039fc2c	beSound_39e540	b52	-O4,p -sdatathreshold 2 -inline level=8 -Iinclude	on	-	class run of 6 labeled members, 2 unlabeled functions inside; exceptions on: 6/8 functions have retail index records; combat -O3,p -Iinclude reproduces 8/8 members
 0x0039fc30	0x0039fd2c	beSwitchCtrl_39fc30	b52	-O4,p -sdatathreshold 2 -inline level=8 -Iinclude	on	-	class run of 6 labeled members; exceptions on: 2/6 functions have retail index records; combat -O3,p -Iinclude reproduces 6/6 members

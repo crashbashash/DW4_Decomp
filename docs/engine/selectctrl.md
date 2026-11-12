@@ -7,8 +7,7 @@ This page covers the concrete `beSelectCtrl` receiver used by the
 The metadata getter is at `0x0039cbb0` (12 bytes) and the inherited dispatch check at
 `0x00378410` (8 bytes).
 The complete update (2,864 bytes) and general handler (1,960 bytes) are in
-[Gap__Bec__beSelectCtrl__vfunc_31.cpp](../../src/unmatched/Gap__Bec__beSelectCtrl__vfunc_31.cpp) and
-[Gap__Bec__beSelectCtrl__vfunc_33.cpp](../../src/unmatched/Gap__Bec__beSelectCtrl__vfunc_33.cpp).
+[beSelectCtrl.cpp](../../src/game/beSelectCtrl.cpp).
 
 ## Entry methods and ownership
 
@@ -31,8 +30,7 @@ existing explicit retail NOP convention after pointer publication.
 These sources preserve observed machine behavior; their original
 source spelling is unknown.
 
-Sources: [manager methods](../../src/game/beSelectCtrl.cpp) and
-[receiver registration](../../src/game/beSelectCtrl_RegisterReceiver.cpp).
+Source: [beSelectCtrl.cpp](../../src/game/beSelectCtrl.cpp).
 Reflection supplies the field names and offsets; there is no synthetic receiver
 layout.
 

@@ -26268,7 +26268,7 @@
       "address": 3787712,
       "name": "beSelectCtrl_RegisterReceiver",
       "size": 36,
-      "source": "src/game/beSelectCtrl_RegisterReceiver.cpp",
+      "source": "src/game/beSelectCtrl.cpp",
       "direct": [
         {
           "site": 3787728,
@@ -26283,7 +26283,7 @@
       "address": 3787760,
       "name": "Gap__Bec__beSelectCtrl__vfunc_31",
       "size": 2864,
-      "source": "src/unmatched/Gap__Bec__beSelectCtrl__vfunc_31.cpp",
+      "source": "src/game/beSelectCtrl.cpp",
       "direct": [
         {
           "site": 3787832,
@@ -26670,7 +26670,7 @@
       "address": 3790624,
       "name": "Gap__Bec__beSelectCtrl__vfunc_33",
       "size": 1960,
-      "source": "src/unmatched/Gap__Bec__beSelectCtrl__vfunc_33.cpp",
+      "source": "src/game/beSelectCtrl.cpp",
       "direct": [
         {
           "site": 3790680,

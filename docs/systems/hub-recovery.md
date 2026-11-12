@@ -162,8 +162,7 @@ The [complete manager update/general handler](../engine/selectctrl.md) are
 4,824 bytes (the 2,864-byte update and the
 1,960-byte handler) with 1,187 non-padding words, covering input/confirmation/cancel/FO2TOP,
 registry/work/list/string ownership and full generate/close lifecycles
-(`src/unmatched/Gap__Bec__beSelectCtrl__vfunc_31.cpp` and
-`src/unmatched/Gap__Bec__beSelectCtrl__vfunc_33.cpp`).
+(`src/game/beSelectCtrl.cpp`).
 
 The [original pad-record lookup](../engine/selectctrl.md#original-pad-record-selection)
 executes beneath SELECTCTRL. Its 88-byte body is
