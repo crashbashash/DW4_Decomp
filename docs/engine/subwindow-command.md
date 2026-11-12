@@ -7,12 +7,7 @@ function from [preparation](subwindow-preparation.md) at3d8740.
 
 Together with the [lifecycle](subwindow-lifecycle.md) and preparation, this makes up
 the11-body SUBWND manager region /17,616 code
-bytes (`src/game/beNDMWStatus.c`,
-`src/unmatched/Gap__Bec__beNDMWStatus__vfunc_29.cpp`,
-`src/unmatched/Gap__Bec__beNDMWStatus__vfunc_31.cpp`,
-`src/unmatched/Gap__Bec__beNDMWStatus__vfunc_32.cpp`,
-`src/unmatched/Gap__Bec__beNDMWStatus__vfunc_34.cpp` and
-`src/unmatched/FUN_003d8740.cpp`).
+bytes (`src/game/beNDMWStatus.cpp`).
 
 ## Dispatch and command contract
 
@@ -131,8 +126,7 @@ The generated extent gives the actual9,820-byte return span; the final padding w
 Existing RTTI/slot names are retained.
 
 The 72-byte init at 3d5960 and the adjacent 92-byte scoped cleanup at 3d58f0 are in
-(`src/unmatched/Gap__Bec__beNDMWStatus__vfunc_29.cpp` and
-`src/unmatched/Gap__Bec__beNDMWStatus__vfunc_32.cpp`). Continue
+(`src/game/beNDMWStatus.cpp`). Continue
 the concrete [hub service-controller and result dependencies](../systems/hub-recovery.md),
 including price/stock services, transactions, bank/appraisal/lab/X Data and the
 separate Save Keeper stagIS12 route.

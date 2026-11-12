@@ -5,7 +5,7 @@ The complete **3d8740..3d9bd0 / 5,264-byte** preparation body called by the
 instructions**. The94 remaining words are zero padding excluded by Ghidra's address ranges
 in the generated [reviewed extents](../../data/function-extents.json).
 
-It matches as `src/unmatched/FUN_003d8740.cpp`. Database access,
+It matches as `src/game/beNDMWStatus.cpp`. Database access,
 record lookup, item construction/initialization, list operations, allocation and
 destruction are separate services. It does not implement prices, buy/sell,
 service transactions or NPC menus.

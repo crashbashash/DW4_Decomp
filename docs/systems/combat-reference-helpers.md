@@ -13,10 +13,10 @@ calls; the whole run provides the surrounding reference/list contract.
 | `0x001363f0` | 128 | [Unwind reference cleanup](../../src/engine/attrs/igLightStateAttr.inc) |
 | `0x00150eb0` | 128 | [Unwind reference cleanup](../../src/engine/gfx/igPsx2VisualContext_tail.inc) |
 | `0x0033e9c0` | 128 | [Temporary owning-reference cleanup](../../src/game/bec/beWeaponInfoRam.inc) |
-| `0x003d9bd0` | 128 | [Unwind reference cleanup](../../src/unmatched/FUN_003d8740.cpp) |
-| `0x003d9c50` | 128 | [Unwind reference cleanup](../../src/unmatched/FUN_003d8740.cpp) |
-| `0x003d9cd0` | 128 | [Unwind reference cleanup](../../src/unmatched/FUN_003d8740.cpp) |
-| `0x003d9d50` | 128 | [Unwind reference cleanup](../../src/unmatched/FUN_003d8740.cpp) |
+| `0x003d9bd0` | 128 | [Unwind reference cleanup](../../src/game/beNDMWStatus.cpp) |
+| `0x003d9c50` | 128 | [Unwind reference cleanup](../../src/game/beNDMWStatus.cpp) |
+| `0x003d9cd0` | 128 | [Unwind reference cleanup](../../src/game/beNDMWStatus.cpp) |
+| `0x003d9d50` | 128 | [Unwind reference cleanup](../../src/game/beNDMWStatus.cpp) |
 | `0x003e9010` | 128 | [Deleting reference-wrapper destruction](../../src/engine/ObjectRef_Destruct_003e9010.cpp) |
 | `0x003e90d0` | 32 | [Retain one object reference](../../src/engine/ObjectRef_Retain_003e90d0.c) |
 | `0x003e9110` | 68 | [Release one object reference](../../src/engine/ObjectRef_Release_003e9110.cpp) |

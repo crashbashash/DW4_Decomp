@@ -28444,7 +28444,7 @@
       "address": 4020464,
       "name": "Gap__Bec__beNDMWStatus__vfunc_32",
       "size": 92,
-      "source": "src/unmatched/Gap__Bec__beNDMWStatus__vfunc_32.cpp",
+      "source": "src/game/beNDMWStatus.cpp",
       "direct": [
         {
           "site": 4020524,
@@ -28459,7 +28459,7 @@
       "address": 4020576,
       "name": "Gap__Bec__beNDMWStatus__vfunc_29",
       "size": 72,
-      "source": "src/unmatched/Gap__Bec__beNDMWStatus__vfunc_29.cpp",
+      "source": "src/game/beNDMWStatus.cpp",
       "direct": [
         {
           "site": 4020616,
@@ -28474,7 +28474,7 @@
       "address": 4020656,
       "name": "Gap__Bec__beNDMWStatus__vfunc_31",
       "size": 1832,
-      "source": "src/unmatched/Gap__Bec__beNDMWStatus__vfunc_31.cpp",
+      "source": "src/game/beNDMWStatus.cpp",
       "direct": [
         {
           "site": 4020728,
@@ -28927,7 +28927,7 @@
       "address": 4022496,
       "name": "Gap__Bec__beNDMWStatus__vfunc_34",
       "size": 9820,
-      "source": "src/unmatched/Gap__Bec__beNDMWStatus__vfunc_34.cpp",
+      "source": "src/game/beNDMWStatus.cpp",
       "direct": [
         {
           "site": 4022560,
@@ -31510,7 +31510,7 @@
       "address": 4032320,
       "name": "FUN_003d8740",
       "size": 5264,
-      "source": "src/unmatched/FUN_003d8740.cpp",
+      "source": "src/game/beNDMWStatus.cpp",
       "direct": [
         {
           "site": 4032380,
