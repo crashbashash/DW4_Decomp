@@ -160,7 +160,7 @@ int FUN_001cf990(A_1cf990 *arg0, B_1cf990 *arg1) {
     ObjectList_AppendRetained(arg0->f36, arg1);
     r = FUN_001ceab0((HitTraversal *)arg0, (HitNode *)arg1);
     if (r == 0) {
-        r = FUN_001e07a0((int)arg0, (S_1e07a0 *)arg1);
+        r = igTraversal_TraverseChildren((int)arg0, (S_1e07a0 *)arg1);
     }
     m = arg0->f36;
     k = m->n - 1;
@@ -188,7 +188,7 @@ int FUN_001cfaa0(ModelTraversal *self, TraversalNode *node) {
             int meta = DAT_00561838[0];
             int got = node->getMeta();
             if (got != meta) {
-                return passStop(FUN_001e07a0((int)(self), (S_1e07a0 *)node));
+                return passStop(igTraversal_TraverseChildren((int)(self), (S_1e07a0 *)node));
             }
         }
     }
@@ -197,7 +197,7 @@ int FUN_001cfaa0(ModelTraversal *self, TraversalNode *node) {
     result = FUN_001ceab0((HitTraversal *)self, (HitNode *)node);
     if (result == 0) {
         FUN_001e68e0(self->matrices, node->transform);
-        result = FUN_001e07a0((int)(self), (S_1e07a0 *)node);
+        result = igTraversal_TraverseChildren((int)(self), (S_1e07a0 *)node);
         {
             MatrixStack *s = self->matrices;
             TraversalMatrix m;
@@ -258,7 +258,7 @@ void FUN_001d0130(SceneTransformNode *self, SceneRenderer *renderer, SceneMatrix
         } else {
             pool = renderer->pool;
             if (!(pool->used < pool->capacity)) {
-                FUN_001dca40((List_1dca40 *)pool, (Obj_1dca40 * (*)(int))((void *)FUN_001356b0));
+                igObjectPool_Grow((List_1dca40 *)pool, (Obj_1dca40 * (*)(int))((void *)FUN_001356b0));
             }
             item = pool->data[pool->used++];
             item->setMatrix(&world);

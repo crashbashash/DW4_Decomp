@@ -137,6 +137,30 @@ Open: actual ShopSelect initialization and XDATA transactions under the common o
 pad/model service dependencies. The broader chip/list/recalculation, other services,
 saving and hub script closure belong to the full lobby goal, which is unfinished.
 
+## Pad record update
+
+`bePadData` (reflection handle `0x00588550`, 104 bytes) is one pad's input
+state. Its functions are in [bePadData.cpp](../../src/game/bePadData.cpp),
+after the node-clock functions of [stage loading](stage-loading.md#node-clock-and-traversal).
+The constructor (`bePadData::vfunc_07`) sets the dead zone `_enaLen` to the length of
+(0.4, 0), the sector widening `_adAngle` to π/4, the first repeat delay `_1sttime`
+to 10 frames and the next ones `_2ndtime` to 6, and clears every edge word.
+
+`bePadManager::vfunc_27` feeds each record once per frame:
+
+- `bePadData_UpdateButtons` (`0x0039af10`) stores the button word. `_trigger` is the
+  newly pressed bits. On any change `_repeat` takes `_trigger` and `_rptime` restarts
+  at `_1sttime`; otherwise `_repeat` is zero until `_rptime` counts down, then takes
+  the held bits and `_rptime` restarts at `_2ndtime`.
+- `bePadData_UpdateLeftStick` / `bePadData_UpdateRightStick` (`0x0039af90`,
+  `0x0039b050`) store `_LStick` / `_RStick` and run the same edge and repeat logic on
+  `_lStk`/`_lTrg`/`_lRpt`/`_lTime` and the `_r` set, with the stick's direction bits
+  in place of buttons.
+- `bePadData_StickDirections` (`0x0039b110`) turns a stick vector into direction bits:
+  nothing when its length is below `_enaLen`; otherwise 8 left, 4 down, 2 right
+  and 1 up, each a 90° sector around its axis widened by half of `_adAngle` on each
+  side, so a diagonal sets two bits.
+
 ## Original pad-record selection
 
 The SELECTCTRL update's lookup at `0x0039b810` is named

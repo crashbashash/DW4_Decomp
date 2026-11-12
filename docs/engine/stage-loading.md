@@ -20,7 +20,7 @@ The constants are at `0x0050e570` (`ld`), `0x0050e578` (`.igb`) and
 `0x0050e580` (`loadingUSA/`). State 1 waits for request completion before
 registering its objects. State 4 checks both the remaining file queue and the
 loading node's play-limit predicate. Only when both complete does it lock the
-loading animation through `FUN_0039adf0`, and advance through states 20/21/5.
+loading animation through `beLoadingNode_Lock`, and advance through states 20/21/5.
 State 6 orders layers, then sends `LAYERCTL`, `LOADING`, `SET`, `SWITCH` before
 attaching layer nodes. These calls and constants were cross-checked against
 retail `mipsel-linux-gnu-objdump` output, not inferred solely from decompiler C.
@@ -35,42 +35,28 @@ AREA.AFS **1321**; `loadingeng` selects **831**. A basename-first lookup
 therefore selects a different regional card. USA ML02 is entry
 1320.
 
-## Clock update
+## Node clock and traversal
 
-`FUN_0039a9e0` is typed C in
-[`bePadData.cpp`](../../src/game/bePadData.cpp): 308 code bytes and
-two relocations. It uses the reflected `beNodeAnim` base
-fields; the same clock routine serves derived loading nodes.
+The first nine bodies of [`bePadData.cpp`](../../src/game/bePadData.cpp)
+(`0x0039a930`..`0x0039ae44`) run the animation clock of `beNodeAnim` and its
+derived `beLoadingNode`; the rest of the file is the [pad record](selectctrl.md#pad-record-update).
 
-Keeping the
-incoming timestamp in a `const` local, reading the previous play count into a
-second `const` local, and then reusing the incoming parameter for elapsed time
-reproduce both the original `a1` register and the addition's operand order;
-without them four words differ in register allocation.
-The explicit locked-time switch and compound 64-bit shift retain the original
-control flow and arithmetic shape. The pinned alternate compiler with `-O3,p`
-produces the entire retail body without inline assembly or compiler changes.
+| Address | Function | Contract |
+|---|---|---|
+| `0x0039a930` | `beNodeAnim_TraversalFunction` | Traversal callback: receives traversal then node, calls `beNodeAnim_Traverse` with node then traversal |
+| `0x0039a960` | `beNodeAnim_SetTime` | Rebase `_timeBias` so the clock reads a given time now |
+| `0x0039a9e0` | `beNodeAnim_UpdateTime` | Return the stop time, or advance and loop the node clock |
+| `0x0039ab20` | `beNodeAnim_Traverse` | First-time rebase, push an `igTimeAttr` with the node time, traverse the children, pop it |
+| `0x0039ad80` | `beNodeAnim_RegisterTraversalFunction` | Register the callback for `beNodeAnim` |
+| `0x0039adc0` | `beLoadingNode_TraversalFunction` | Same operation for `beLoadingNode` |
+| `0x0039adf0` | `beLoadingNode_Lock` | Copy `_lockTime` to `_stopTime` |
+| `0x0039ae00` | `beLoadingNode_IsPastPlayLimit` | Strict predicate `_playLimitTime < _playTime` |
+| `0x0039ae10` | `beLoadingNode_RegisterTraversalFunction` | Register the callback for `beLoadingNode` |
 
-The full matching check has zero mismatches and the relink is
-byte-identical.
-
-## Complete contiguous runtime group
-
-The group is nine consecutive bodies from `0x0039a930` through `0x0039ae44`
-(1,232 instruction bytes, excluding alignment), including the clock routine
-`0x0039a9e0` (above) and the two traversal thunks `0x0039a930` and `0x0039adc0`.
-
-| Address | Contract |
-|---|---|
-| `0x0039a930` | Base-node traversal thunk: receives context then node, calls `0x0039ab20` with node then context, returns its result |
-| `0x0039a960` | Rebase `_timeBias` against the scaled clock |
-| `0x0039a9e0` | Return locked time or advance/loop the node clock |
-| `0x0039ab20` | First-time setup, context time push, child traversal, callback/pop |
-| `0x0039ad80` | Register base-node traversal callback |
-| `0x0039adc0` | Loading-node traversal thunk, same operation as `0x0039a930` |
-| `0x0039adf0` | Copy `_lockTime` to `_stopTime` |
-| `0x0039ae00` | Strict predicate `_playLimitTime < _playTime` |
-| `0x0039ae10` | Register loading-node traversal callback |
+The registration passes the class's lazy metadata accessor result
+(`beNodeAnim_ResolveMetaObject`, `beLoadingNode_ResolveMetaObject`) to
+`igTraversal_RegisterFunction`, which gives the class a traversal index on first
+use and stores the callback at that index of the function list in `DAT_00562640`.
 
 The reflected `beNodeAnim` fields are start/loop1/loop2/stop at
 `+0x20/+0x28/+0x30/+0x38`, first-time flag `+0x40`, time scale `+0x50`,
@@ -85,6 +71,13 @@ and float-to-int64 conversion, then shifts back by 18. If local time reaches
 loop2, the code subtracts loop2 while local time is **strictly greater**, adds
 loop1, and rebases. This unusual equality/subtraction behavior is retained.
 A nonzero stop time returns immediately without advancing play time.
+
+`beNodeAnim_Traverse` takes an `igTimeAttr` from the traversal's time pool
+(`igObjectPool_Grow` with `igTimeAttr_CreateInstance` when it is empty), sets the
+traversal time, pushes the attribute on its attribute stack
+(`igAttrStackManager_MarkStackChanged` after the push and after the pop), runs
+`igTraversal_TraverseChildren`, runs the stack's pop procedure on the top entry and
+pops. It returns 2 when the children stopped the traversal, otherwise 0.
 
 The USA ML11 asset serializes start 16,666,666 ns, loop1 1,666,666,666 ns,
 loop2 4,666,666,666 ns, lock 4,733,333,333 ns, and play limit

@@ -18,18 +18,18 @@ void FUN_001ce790(int arg0, int arg1) {
     FUN_001e02f0(arg0, arg1);
     if (FUN_002fe290(arg1, ((int)igNode_GetMetaObject())) != 0) {
         if (FUN_002fe290(arg1, ((int)igGeometry_GetMetaObject())) != 0) {
-            FUN_001e06c0((struct L_1e06c0 *)arg0, (struct X_1e06c0 *)arg1, (void *)&FUN_001cfc70);
+            igTraversal_RegisterFunction((struct L_1e06c0 *)arg0, (struct X_1e06c0 *)arg1, (void *)&FUN_001cfc70);
             return;
         }
         if (FUN_002fe290(arg1, ((int)igTransform_GetMetaObject())) != 0) {
-            FUN_001e06c0((struct L_1e06c0 *)arg0, (struct X_1e06c0 *)arg1, (void *)&FUN_001cfaa0);
+            igTraversal_RegisterFunction((struct L_1e06c0 *)arg0, (struct X_1e06c0 *)arg1, (void *)&FUN_001cfaa0);
             return;
         }
         if (FUN_002fe290(arg1, ((int)igGroup_GetMetaObject())) != 0) {
-            FUN_001e06c0((struct L_1e06c0 *)arg0, (struct X_1e06c0 *)arg1, (void *)&FUN_001cf990);
+            igTraversal_RegisterFunction((struct L_1e06c0 *)arg0, (struct X_1e06c0 *)arg1, (void *)&FUN_001cf990);
             return;
         }
-        FUN_001e06c0((struct L_1e06c0 *)arg0, (struct X_1e06c0 *)arg1, (void *)((int *)FUN_001cf980));
+        igTraversal_RegisterFunction((struct L_1e06c0 *)arg0, (struct X_1e06c0 *)arg1, (void *)((int *)FUN_001cf980));
     }
 }
 

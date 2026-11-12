@@ -160,7 +160,7 @@ int FUN_001b8de0(Dst_1b8de0 *arg0, Src_1b8de0 *arg1) {
         LB *lb = arg0->l72;
         int b = a + ((G_1b8de0 * *)DAT_00561918)[0]->f8;
         V128_1b8de0 *o;
-        if (lb->count >= lb->cap) FUN_001dca40((List_1dca40 *)lb, (Obj_1dca40 * (*)(int))((void *)&FUN_001356b0));
+        if (lb->count >= lb->cap) igObjectPool_Grow((List_1dca40 *)lb, (Obj_1dca40 * (*)(int))((void *)&FUN_001356b0));
         o = lb->data[lb->count++];
         o->vY(b);
         FUN_001b1030((igAttrStackManager *)s4, (igAttr *)o);
@@ -194,7 +194,7 @@ int FUN_001b8f20(C_1b8f20 *arg0, D *arg1) {
         FUN_001b1aa0(arg1, sp80, ((char *)DAT_004e0ef0), s0);
     }
     lb = arg0->l72;
-    if (lb->count >= lb->cap) FUN_001dca40((List_1dca40 *)lb, (Obj_1dca40 * (*)(int))((void *)&FUN_001356b0));
+    if (lb->count >= lb->cap) igObjectPool_Grow((List_1dca40 *)lb, (Obj_1dca40 * (*)(int))((void *)&FUN_001356b0));
     o = lb->data[lb->count++];
     if (o != 0) o->refs++;
     old = arg1->f60;
@@ -205,7 +205,7 @@ int FUN_001b8f20(C_1b8f20 *arg0, D *arg1) {
     arg1->f60 = o;
     FUN_001904f0((char *)o + 12, sp80, arg0->v100);
     FUN_001b1030((igAttrStackManager *)arg0->x, (igAttr *)o);
-    r = FUN_001e07a0((int)arg0, (S_1e07a0 *)arg1);
+    r = igTraversal_TraverseChildren((int)arg0, (S_1e07a0 *)arg1);
     FUN_001b1100((struct A_1b1100 *)arg0->x, (struct B_1b1100 *)o);
     if (r == 2) return 2;
     return 0;
@@ -330,7 +330,7 @@ int FUN_001b9f00(igCompileTraversal *arg0, igAttrSet *arg1) {
     if (temp_v0 == 4 || temp_v0 == 1) {
         return 0;
     }
-    if (FUN_001e07a0((int)arg0, (S_1e07a0 *)arg1) == 2) {
+    if (igTraversal_TraverseChildren((int)arg0, (S_1e07a0 *)arg1) == 2) {
         return 2;
     }
     return 0;
@@ -344,7 +344,7 @@ int FUN_001b9fc0(struct A_1b9fc0 *arg0, struct B_1b9fc0 *arg1) {
     for (s1 = 0; s1 < s0; s1++) {
         FUN_001b06f0(arg0->f52, arg1->f32->data[s1], 0);
     }
-    FUN_001e07a0((int)arg0, (S_1e07a0 *)arg1);
+    igTraversal_TraverseChildren((int)arg0, (S_1e07a0 *)arg1);
     for (s0 = s0 - 1; s0 >= 0; s0--) {
         FUN_001b0aa0(arg0->f52, arg1->f32->data[s0], 0);
     }
@@ -438,7 +438,7 @@ int FUN_001ba880(igCommonTraversal *arg0, VC1 *arg1) {
         }
     }
     arg1->vX(v + 0xC);
-    if (FUN_001e07a0((int)arg0, (S_1e07a0 *)arg1) == 2) {
+    if (igTraversal_TraverseChildren((int)arg0, (S_1e07a0 *)arg1) == 2) {
         return 2;
     }
     return 0;

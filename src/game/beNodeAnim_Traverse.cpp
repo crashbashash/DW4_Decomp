@@ -1,12 +1,12 @@
 #include "dw4/reflected.h"
 extern "C" {
-int FUN_001b1490(...);
-int FUN_001e07a0(void *, void *);
-int FUN_001dca40(void *, void *);
+int igAttrStackManager_MarkStackChanged(...);
+int igTraversal_TraverseChildren(void *, void *);
+int igObjectPool_Grow(void *, void *);
 int List_Resize(void *, int, int);
-int FUN_00130f20();
-int FUN_0039a960(void *, long long, long long);
-long long FUN_0039a9e0(void *, long long);
+int igTimeAttr_CreateInstance();
+int beNodeAnim_SetTime(void *, long long, long long);
+long long beNodeAnim_UpdateTime(void *, long long);
 }
 typedef int (*CB)(void *, int, void *);
 /* vtable view of the traversal context (igCommonTraversal): slots 24/30/31 only */
@@ -18,7 +18,7 @@ class Vt { public:
     virtual void v31();
 };
 /* matching construct: the 4-byte reference fields (_attrStack, _timePool, _attrStacks, _data, _popProc, ...) are viewed through pointer casts; no layout effect */
-extern "C" int FUN_0039ab20(beNodeAnim *arg0, igCommonTraversal *arg1)
+extern "C" int beNodeAnim_Traverse(beNodeAnim *arg0, igCommonTraversal *arg1)
 {
     igTimeAttr * volatile spAC;
     long long t;
@@ -43,14 +43,14 @@ extern "C" int FUN_0039ab20(beNodeAnim *arg0, igCommonTraversal *arg1)
     b = (igAttrStackManager *)arg1->_attrStack;
     t = ((Vt *)arg1)->v24();
     if (arg0->_isFirstTime != 0) {
-        FUN_0039a960(arg0, arg0->_startTime, t);
+        beNodeAnim_SetTime(arg0, arg0->_startTime, t);
         arg0->_beforeTime = t;
         arg0->_isFirstTime = 0;
     }
-    dd = FUN_0039a9e0(arg0, t);
+    dd = beNodeAnim_UpdateTime(arg0, t);
     p = (igObjectPool *)arg1->_timePool;
     if (p->_freeIndex >= p->_count) {
-        FUN_001dca40(p, (void *)&FUN_00130f20);
+        igObjectPool_Grow(p, (void *)&igTimeAttr_CreateInstance);
     }
     cnt = p->_freeIndex;
     p->_freeIndex = cnt + 1;
@@ -71,9 +71,9 @@ extern "C" int FUN_0039ab20(beNodeAnim *arg0, igCommonTraversal *arg1)
     {
         igTimeAttr *a3 = spAC;
         ((void **)l->_data)[cnt2] = a3;
-        FUN_001b1490(b, l, idx, a3);
+        igAttrStackManager_MarkStackChanged(b, l, idx, a3);
     }
-    r = FUN_001e07a0(arg1, arg0);
+    r = igTraversal_TraverseChildren(arg1, arg0);
     idx2 = *pi + ((int *)b->_attrStackIndexTable)[*pg];
     l2 = ((igAttrStack **)((igObjectList *)b->_attrStacks)->_data)[idx2];
     ix = l2->_count - 1;
@@ -84,7 +84,7 @@ extern "C" int FUN_0039ab20(beNodeAnim *arg0, igCommonTraversal *arg1)
         cb(ob, b->_popProcData, cb);
     }
     l2->_count = l2->_count - 1;
-    FUN_001b1490(b, l2, idx2);
+    igAttrStackManager_MarkStackChanged(b, l2, idx2);
     ((Vt *)arg1)->v31();
     if (r == 2) {
         return 2;

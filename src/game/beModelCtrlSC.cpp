@@ -5,14 +5,14 @@
 extern "C" long long __fixsfdi(float);
 extern "C" int igMatrix44f_SetIdentity(...);
 extern "C" int FUN_001904f0(...);
-extern "C" int FUN_001dca40(...);
-extern "C" int FUN_001b1490(...);
+extern "C" int igObjectPool_Grow(...);
+extern "C" int igAttrStackManager_MarkStackChanged(...);
 extern "C" int FUN_001b12f0(...);
 extern "C" int FUN_001b13d0(...);
-extern "C" int FUN_001e07a0(...);
+extern "C" int igTraversal_TraverseChildren(...);
 extern "C" int FUN_001356b0(...);
-extern "C" int FUN_00130f20(...);
-extern "C" int FUN_001e06c0(int, int, void (*)(void));
+extern "C" int igTimeAttr_CreateInstance(...);
+extern "C" int igTraversal_RegisterFunction(int, int, void (*)(void));
 extern "C" int FUN_0034fd90(...);
 extern "C" void FUN_003993a0(void);
 extern "C" int FUN_003908d0(...);
@@ -243,7 +243,7 @@ int FUN_00398ef0(beModelCtrlNode2 *self, Ctl *ctl) {
     }
     {
         Pool *p = ctl->pa;
-        if (p->cur >= p->cap) FUN_001dca40(p, FUN_001356b0);
+        if (p->cur >= p->cap) igObjectPool_Grow(p, FUN_001356b0);
         i = p->cur;
         p->cur = i + 1;
         ea = (Ent *)p->data[i];
@@ -251,7 +251,7 @@ int FUN_00398ef0(beModelCtrlNode2 *self, Ctl *ctl) {
     ea->v30(mat);
     {
         Pool *p = ctl->pb;
-        if (p->cur >= p->cap) FUN_001dca40(p, FUN_00130f20);
+        if (p->cur >= p->cap) igObjectPool_Grow(p, igTimeAttr_CreateInstance);
         i = p->cur;
         p->cur = i + 1;
         eb = (Ent *)p->data[i];
@@ -264,14 +264,14 @@ int FUN_00398ef0(beModelCtrlNode2 *self, Ctl *ctl) {
     s6 = ea->off + mgr->base[ea->idx];
     tgt = mgr->tb->data[s6];
     ((AttrSlots<Ent *> *)tgt)->append(ea);
-    FUN_001b1490(mgr, tgt, s6);
+    igAttrStackManager_MarkStackChanged(mgr, tgt, s6);
 
     bi = &eb->idx;
     bo = &eb->off;
     s7 = eb->off + mgr->base[eb->idx];
     tgt = mgr->tb->data[s7];
     ((AttrSlots<Ent *> *)tgt)->append(eb);
-    FUN_001b1490(mgr, tgt, s7);
+    igAttrStackManager_MarkStackChanged(mgr, tgt, s7);
 
     j = 0;
     if (j < overrides(self)->_count) {
@@ -282,7 +282,7 @@ int FUN_00398ef0(beModelCtrlNode2 *self, Ctl *ctl) {
             jo += 4;
         } while (j < ((igAttrList *)self->_overrideAttrList)->_count);
     }
-    r = FUN_001e07a0(ctl, self);
+    r = igTraversal_TraverseChildren(ctl, self);
     for (l = ((igAttrList *)self->_overrideAttrList)->_count - 1, lo = l * 4; l >= 0; l--) {
         FUN_001b13d0(mgr, *(int *)(((igAttrList *)self->_overrideAttrList)->_data + lo));
         lo -= 4;
@@ -296,7 +296,7 @@ int FUN_00398ef0(beModelCtrlNode2 *self, Ctl *ctl) {
         int (*cbb)(int, int) = qb->cb;
         if (cbb != 0) cbb(xb, mgr->f48);
         qb->n = qb->n - 1;
-        FUN_001b1490(mgr, qb, pb);
+        igAttrStackManager_MarkStackChanged(mgr, qb, pb);
     }
     {
         int pa = *ao + mgr->base[*ai];
@@ -307,7 +307,7 @@ int FUN_00398ef0(beModelCtrlNode2 *self, Ctl *ctl) {
         int (*cba)(int, int) = qa->cb;
         if (cba != 0) cba(xa, mgr->f48);
         qa->n = qa->n - 1;
-        FUN_001b1490(mgr, qa, pa);
+        igAttrStackManager_MarkStackChanged(mgr, qa, pa);
     }
     ctl->v31();
     if (r == 2) return 2;
@@ -315,7 +315,7 @@ int FUN_00398ef0(beModelCtrlNode2 *self, Ctl *ctl) {
 }
 
 void FUN_003993a0(void) {
-    FUN_001e06c0(DAT_00562640[0], FUN_0034fd90(), (void (*)())FUN_00398e50);
+    igTraversal_RegisterFunction(DAT_00562640[0], FUN_0034fd90(), (void (*)())FUN_00398e50);
 }
 
 int Gap__Bec__beModelCtrlSCHitBox__vfunc_21(beModelCtrlSCHitBox *arg0, beBaseInfoRam *arg1) {

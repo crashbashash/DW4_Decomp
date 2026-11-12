@@ -2,7 +2,7 @@
 
 extern "C" int FUN_00389bc0(void *, void *);
 extern "C" int FUN_00389b90(void *node, void *traversal);
-extern "C" int FUN_001e06c0(int, int, void (*)(void));
+extern "C" int igTraversal_RegisterFunction(int, int, void (*)(void));
 extern "C" int FUN_0035cd40(...);
 extern "C" void FUN_00389fb0(void);
 extern "C" int sprintf(char *, const char *, ...);
@@ -94,7 +94,7 @@ int FUN_00389b90(void *node, void *traversal) {
 }
 
 void FUN_00389fb0(void) {
-    FUN_001e06c0(DAT_00562640[0], FUN_0035cd40(), (void (*)())FUN_00389b90);
+    igTraversal_RegisterFunction(DAT_00562640[0], FUN_0035cd40(), (void (*)())FUN_00389b90);
 }
 
 int beLua__RunNamedChunk(beLua *self, const char *name, const char *given)

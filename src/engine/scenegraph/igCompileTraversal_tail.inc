@@ -56,67 +56,67 @@ void Gap__Sg__igCompileTraversal__vfunc_10(void **self) {
 void FUN_001bb550(int arg0, int arg1) {
     FUN_001b68c0((void *)arg0, (void *)arg1);
     if (FUN_002fe290(arg1, DAT_00561620[0]) != 0) {
-        FUN_001e06c0((struct L_1e06c0 *)arg0, (struct X_1e06c0 *)arg1, (void *)FUN_001bcd80);
+        igTraversal_RegisterFunction((struct L_1e06c0 *)arg0, (struct X_1e06c0 *)arg1, (void *)FUN_001bcd80);
         return;
     }
     if (FUN_002fe290(arg1, DAT_00561bd8[0]) != 0) {
-        FUN_001e06c0((struct L_1e06c0 *)arg0, (struct X_1e06c0 *)arg1, (void *)FUN_001bcd90);
+        igTraversal_RegisterFunction((struct L_1e06c0 *)arg0, (struct X_1e06c0 *)arg1, (void *)FUN_001bcd90);
         return;
     }
     if (FUN_002fe290(arg1, DAT_00561a98[0]) != 0) {
-        FUN_001e06c0((struct L_1e06c0 *)arg0, (struct X_1e06c0 *)arg1, (void *)FUN_001bcdf0);
+        igTraversal_RegisterFunction((struct L_1e06c0 *)arg0, (struct X_1e06c0 *)arg1, (void *)FUN_001bcdf0);
         return;
     }
     if (FUN_002fe290(arg1, DAT_00561860[0]) != 0) {
-        FUN_001e06c0((struct L_1e06c0 *)arg0, (struct X_1e06c0 *)arg1, (void *)FUN_001bcda0);
+        igTraversal_RegisterFunction((struct L_1e06c0 *)arg0, (struct X_1e06c0 *)arg1, (void *)FUN_001bcda0);
         return;
     }
     if (FUN_002fe290(arg1, DAT_00561e98[0]) != 0) {
-        FUN_001e06c0((struct L_1e06c0 *)arg0, (struct X_1e06c0 *)arg1, (void *)FUN_001bcdb0);
+        igTraversal_RegisterFunction((struct L_1e06c0 *)arg0, (struct X_1e06c0 *)arg1, (void *)FUN_001bcdb0);
         return;
     }
     if (FUN_002fe290(arg1, DAT_00561ee8[0]) != 0) {
-        FUN_001e06c0((struct L_1e06c0 *)arg0, (struct X_1e06c0 *)arg1, (void *)FUN_001bcdc0);
+        igTraversal_RegisterFunction((struct L_1e06c0 *)arg0, (struct X_1e06c0 *)arg1, (void *)FUN_001bcdc0);
         return;
     }
     if (FUN_002fe290(arg1, DAT_005617a8[0]) != 0) {
-        FUN_001e06c0((struct L_1e06c0 *)arg0, (struct X_1e06c0 *)arg1, (void *)FUN_001bcdd0);
+        igTraversal_RegisterFunction((struct L_1e06c0 *)arg0, (struct X_1e06c0 *)arg1, (void *)FUN_001bcdd0);
         return;
     }
     if (FUN_002fe290(arg1, DAT_00561578[0]) != 0) {
-        FUN_001e06c0((struct L_1e06c0 *)arg0, (struct X_1e06c0 *)arg1, (void *)FUN_001bcde0);
+        igTraversal_RegisterFunction((struct L_1e06c0 *)arg0, (struct X_1e06c0 *)arg1, (void *)FUN_001bcde0);
         return;
     }
     if (FUN_002fe290(arg1, DAT_00561a38[0]) != 0) {
-        FUN_001e06c0((struct L_1e06c0 *)arg0, (struct X_1e06c0 *)arg1, (void *)FUN_001bc1e0);
+        igTraversal_RegisterFunction((struct L_1e06c0 *)arg0, (struct X_1e06c0 *)arg1, (void *)FUN_001bc1e0);
         return;
     }
     if (FUN_002fe290(arg1, DAT_005618f8[0]) != 0) {
-        FUN_001e06c0((struct L_1e06c0 *)arg0, (struct X_1e06c0 *)arg1, (void *)FUN_001bc0e0);
+        igTraversal_RegisterFunction((struct L_1e06c0 *)arg0, (struct X_1e06c0 *)arg1, (void *)FUN_001bc0e0);
         return;
     }
     if (FUN_002fe290(arg1, DAT_005612b0[0]) != 0) {
-        FUN_001e06c0((struct L_1e06c0 *)arg0, (struct X_1e06c0 *)arg1, (void *)FUN_001bbae0);
+        igTraversal_RegisterFunction((struct L_1e06c0 *)arg0, (struct X_1e06c0 *)arg1, (void *)FUN_001bbae0);
         return;
     }
     if (FUN_002fe290(arg1, DAT_00561ca0[0]) != 0) {
-        FUN_001e06c0((struct L_1e06c0 *)arg0, (struct X_1e06c0 *)arg1, (void *)FUN_001bd0e0);
+        igTraversal_RegisterFunction((struct L_1e06c0 *)arg0, (struct X_1e06c0 *)arg1, (void *)FUN_001bd0e0);
         return;
     }
     if (FUN_002fe290(arg1, DAT_00561888[0]) != 0) {
-        FUN_001e06c0((struct L_1e06c0 *)arg0, (struct X_1e06c0 *)arg1, (void *)FUN_001bce40);
+        igTraversal_RegisterFunction((struct L_1e06c0 *)arg0, (struct X_1e06c0 *)arg1, (void *)FUN_001bce40);
         return;
     }
     if (FUN_002fe290(arg1, DAT_00561f38[0]) != 0) {
-        FUN_001e06c0((struct L_1e06c0 *)arg0, (struct X_1e06c0 *)arg1, (void *)FUN_001bcf70);
+        igTraversal_RegisterFunction((struct L_1e06c0 *)arg0, (struct X_1e06c0 *)arg1, (void *)FUN_001bcf70);
         return;
     }
     if (FUN_002fe290(arg1, DAT_00562488[0]) != 0) {
-        FUN_001e06c0((struct L_1e06c0 *)arg0, (struct X_1e06c0 *)arg1, (void *)FUN_001bd150);
+        igTraversal_RegisterFunction((struct L_1e06c0 *)arg0, (struct X_1e06c0 *)arg1, (void *)FUN_001bd150);
         return;
     }
     if (FUN_002fe290(arg1, DAT_005615d8[0]) != 0) {
-        FUN_001e06c0((struct L_1e06c0 *)arg0, (struct X_1e06c0 *)arg1, (void *)FUN_001bd160);
+        igTraversal_RegisterFunction((struct L_1e06c0 *)arg0, (struct X_1e06c0 *)arg1, (void *)FUN_001bd160);
     }
 }
 
@@ -238,7 +238,7 @@ int FUN_001bce40(A_1bce40 *arg0, int *arg1) {
         igObject_Destroy((void *)temp_v0);
     }
     FUN_001b1030((igAttrStackManager *)temp_s0, (igAttr *)temp_s2);
-    temp_s1 = FUN_001e07a0((int)arg0, (S_1e07a0 *)arg1);
+    temp_s1 = igTraversal_TraverseChildren((int)arg0, (S_1e07a0 *)arg1);
     FUN_001b1100((struct A_1b1100 *)temp_s0, (struct B_1b1100 *)temp_s2);
     if (temp_s1 == 2) {
         return 2;
@@ -279,7 +279,7 @@ int FUN_001bd0e0(int arg0, void *arg1) {
     if (*(int *)((char *)(*(int *)((char *)(arg1) + 32)) + 8) > 0) {
         ((DW4VC_124_0 *)(((char *)(arg1) + 0)))->vX();
     }
-    if (FUN_001e07a0(arg0, (S_1e07a0 *)arg1) == 2) {
+    if (igTraversal_TraverseChildren(arg0, (S_1e07a0 *)arg1) == 2) {
         return 2;
     }
     return 0;

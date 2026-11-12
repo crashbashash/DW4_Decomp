@@ -138,7 +138,7 @@ extern "C" int DAT_00485a88[4];
 extern "C" int DAT_0055ec68[4];
 extern "C" void igVertexBlendMatrixAttr_InitFields(void);
 extern "C" void FUN_00130e90(void *arg0, void *arg1, void *arg2, void *arg3, void *arg4);
-extern "C" void FUN_00130f20(int arg0);
+extern "C" void igTimeAttr_CreateInstance(int arg0);
 extern "C" int DAT_0055ec80[4];
 extern "C" int FUN_00130f60(void);
 extern "C" igMetaObject *g_igTimeAttr_metaObject[4];

@@ -5,10 +5,10 @@ void FUN_001e02e0(int arg0) {
 void FUN_001e02f0(int arg0, int arg1) {
     if (FUN_002fe290(arg1, ((int)igNode_GetMetaObject())) != 0) {
         if (FUN_002fe290(arg1, ((int)igGroup_GetMetaObject())) != 0) {
-            FUN_001e06c0((struct L_1e06c0 *)arg0, (struct X_1e06c0 *)arg1, (void *)&FUN_001e07a0);
+            igTraversal_RegisterFunction((struct L_1e06c0 *)arg0, (struct X_1e06c0 *)arg1, (void *)&igTraversal_TraverseChildren);
             return;
         }
-        FUN_001e06c0((struct L_1e06c0 *)arg0, (struct X_1e06c0 *)arg1, (void *)((int *)FUN_001e0790));
+        igTraversal_RegisterFunction((struct L_1e06c0 *)arg0, (struct X_1e06c0 *)arg1, (void *)((int *)FUN_001e0790));
     }
 }
 
@@ -60,7 +60,7 @@ int FUN_001e04c0(S_1e04c0 *arg0, V_1e04c0 *arg1) {
                 temp_s0 = DAT_00561838[0];
                 int rr = arg1->vX();
                 if (rr != temp_s0) {
-                    if (FUN_001e07a0((int)arg0, (S_1e07a0 *)arg1) == 2) {
+                    if (igTraversal_TraverseChildren((int)arg0, (S_1e07a0 *)arg1) == 2) {
                         temp_v0 = 2;
                     } else {
                         temp_v0 = 0;
@@ -84,7 +84,7 @@ void Gap__Sg__igTraversal__vfunc_24(void *, int)
 {
 }
 
-void FUN_001e06c0(struct L_1e06c0 *arg0, struct X_1e06c0 *arg1, void *arg2) {
+void igTraversal_RegisterFunction(struct L_1e06c0 *arg0, struct X_1e06c0 *arg1, void *arg2) {
     int a1;
     int v1;
     int s2;
@@ -114,7 +114,7 @@ int FUN_001e0790(void) {
     return 0;
 }
 
-int FUN_001e07a0(int arg0, S_1e07a0 *arg1) {
+int igTraversal_TraverseChildren(int arg0, S_1e07a0 *arg1) {
     L_1e07a0 *temp_v0 = arg1->f28;
     int *var_s0;
     int *temp_s2;

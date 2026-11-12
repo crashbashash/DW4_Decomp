@@ -193,7 +193,7 @@ void FUN_001dc500(A_1dc500 *arg0, unsigned char arg1, int arg2) {
         arg0->f114 = arg2;
         temp_s0 = arg0->f16;
         if (temp_s0->f20 >= temp_s0->f8) {
-            FUN_001dca40((List_1dca40 *)temp_s0, (Obj_1dca40 * (*)(int))&FUN_00197ab0);
+            igObjectPool_Grow((List_1dca40 *)temp_s0, (Obj_1dca40 * (*)(int))&FUN_00197ab0);
         }
         temp_a0 = temp_s0->f20;
         temp_s0->f20 = temp_a0 + 1;

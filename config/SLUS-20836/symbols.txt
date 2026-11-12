@@ -984,7 +984,7 @@
 00130d70 000008 thunk_igVertexBlendMatrixAttr_GetMetaObject
 00130d80 000108 igVertexBlendMatrixAttr_InitFields
 00130e90 000084 FUN_00130e90
-00130f20 000034 FUN_00130f20
+00130f20 000034 igTimeAttr_CreateInstance
 00130f60 000048 FUN_00130f60
 00130fb0 000048 igTimeAttr_GetMetaObject
 00131000 00003c igTimeAttr_GetVTable
@@ -4995,7 +4995,7 @@
 001b1250 0000a0 FUN_001b1250
 001b12f0 0000d8 FUN_001b12f0
 001b13d0 0000c0 FUN_001b13d0
-001b1490 0000fc FUN_001b1490
+001b1490 0000fc igAttrStackManager_MarkStackChanged
 001b1590 000510 FUN_001b1590
 001b1aa0 00024c FUN_001b1aa0
 001b1cf0 0000d0 FUN_001b1cf0
@@ -5451,7 +5451,7 @@
 001dc8e0 000054 FUN_001dc8e0
 001dc940 000054 Gap__Sg__igSwitch__vfunc_35 Gap::Sg::igSwitch::vfunc_35
 001dc9a0 000094 FUN_001dc9a0
-001dca40 00013c FUN_001dca40
+001dca40 00013c igObjectPool_Grow
 001dcb80 0000f4 FUN_001dcb80
 001dcc80 0001e8 FUN_001dcc80
 001dce70 0000d0 FUN_001dce70
@@ -5503,9 +5503,9 @@
 001e0590 000008 Gap__Sg__igTraversal__vfunc_23 Gap::Sg::igTraversal::vfunc_23
 001e05a0 000008 Gap__Sg__igTraversal__vfunc_24 Gap::Sg::igTraversal::vfunc_24
 001e05b0 000110 Gap__Bec__beHitLandModelTraversal__vfunc_23 Gap::Bec::beHitLandModelTraversal::vfunc_23
-001e06c0 0000d0 FUN_001e06c0
+001e06c0 0000d0 igTraversal_RegisterFunction
 001e0790 000008 FUN_001e0790
-001e07a0 000090 FUN_001e07a0
+001e07a0 000090 igTraversal_TraverseChildren
 001e0830 000008 thunk_FUN_001c1c50
 001e0840 00005c Gap__Sg__igPsx2EnvironmentMapShader__vfunc_10 Gap::Sg::igPsx2EnvironmentMapShader::vfunc_10
 001e08a0 00000c Gap__Sg__igPsx2EnvironmentMapShader__vfunc_22 Gap::Sg::igPsx2EnvironmentMapShader::vfunc_22
@@ -15066,7 +15066,7 @@
 0034e520 000020 FUN_0034e520
 0034e540 000064 beNumberCtrl_Register
 0034e5b0 00001c beNumberCtrl_GetMetaObject
-0034e5d0 00004c FUN_0034e5d0
+0034e5d0 00004c beLoadingNode_ResolveMetaObject
 0034e620 000068 beLoadingNode_GetVTable
 0034e690 000080 FUN_0034e690
 0034e710 000020 FUN_0034e710
@@ -15075,7 +15075,7 @@
 0034e7d0 00000c FUN_0034e7d0
 0034e7e0 000070 beLoadingNode_InitFields
 0034e850 00001c FUN_0034e850
-0034e870 00004c FUN_0034e870
+0034e870 00004c beNodeAnim_ResolveMetaObject
 0034e8c0 000068 beNodeAnim_GetVTable
 0034e930 000020 FUN_0034e930
 0034e950 000074 beNodeAnim_Register
@@ -17294,21 +17294,21 @@
 0039a900 00000c Gap__Bec__beModelCtrlSCSound__vfunc_20 Gap::Bec::beModelCtrlSCSound::vfunc_20
 0039a910 00000c Gap__Bec__beModelCtrlSCEffect__vfunc_20 Gap::Bec::beModelCtrlSCEffect::vfunc_20
 0039a920 00000c Gap__Bec__beModelCtrlSCHitBox__vfunc_20 Gap::Bec::beModelCtrlSCHitBox::vfunc_20
-0039a930 000024 FUN_0039a930
-0039a960 00007c FUN_0039a960
-0039a9e0 000134 FUN_0039a9e0
-0039ab20 000254 FUN_0039ab20
-0039ad80 000034 FUN_0039ad80
-0039adc0 000024 FUN_0039adc0
-0039adf0 00000c FUN_0039adf0
-0039ae00 000010 FUN_0039ae00
-0039ae10 000034 FUN_0039ae10
+0039a930 000024 beNodeAnim_TraversalFunction
+0039a960 00007c beNodeAnim_SetTime
+0039a9e0 000134 beNodeAnim_UpdateTime
+0039ab20 000254 beNodeAnim_Traverse
+0039ad80 000034 beNodeAnim_RegisterTraversalFunction
+0039adc0 000024 beLoadingNode_TraversalFunction
+0039adf0 00000c beLoadingNode_Lock
+0039ae00 000010 beLoadingNode_IsPastPlayLimit
+0039ae10 000034 beLoadingNode_RegisterTraversalFunction
 0039ae50 0000a0 Gap__Bec__bePadData__vfunc_07 Gap::Bec::bePadData::vfunc_07
 0039aef0 00001c Gap__Bec__bePadData__vfunc_08 Gap::Bec::bePadData::vfunc_08
-0039af10 000078 FUN_0039af10
-0039af90 0000b8 FUN_0039af90
-0039b050 0000b8 FUN_0039b050
-0039b110 0001b8 FUN_0039b110
+0039af10 000078 bePadData_UpdateButtons
+0039af90 0000b8 bePadData_UpdateLeftStick
+0039b050 0000b8 bePadData_UpdateRightStick
+0039b110 0001b8 bePadData_StickDirections
 0039b2d0 00000c Gap__Bec__bePadData__vfunc_20 Gap::Bec::bePadData::vfunc_20
 0039b2e0 000020 Gap__Bec__bePadManager__vfunc_21 Gap::Bec::bePadManager::vfunc_21
 0039b300 000020 Gap__Bec__bePadManager__vfunc_22 Gap::Bec::bePadManager::vfunc_22

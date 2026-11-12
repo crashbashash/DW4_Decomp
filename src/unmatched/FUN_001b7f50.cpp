@@ -59,12 +59,12 @@ extern MatrixMetaField *DAT_0055ece0;
 extern MatrixMetaField *DAT_0055ec70;
 extern "C" {
 void List_Resize(AttrStackSlots *, int, int);
-void FUN_001dca40(AttrPool *, void *);
+void igObjectPool_Grow(AttrPool *, void *);
 void FUN_001356b0(void);
 void FUN_001317c0(void);
 void FUN_00130c10(void);
 void FUN_001904f0(void *, float *, float *);
-void FUN_001b1490(AttrMgr *, AttrStackSlots *, int, MatrixAttrOps *);
+void igAttrStackManager_MarkStackChanged(AttrMgr *, AttrStackSlots *, int, MatrixAttrOps *);
 int igObject_Destroy(void *);
 float *FUN_001b7f50(MatrixOwner *o, TraversalOps *arg);
 }
@@ -91,7 +91,7 @@ static inline char *topAttrLate(AttrMgr *m, int slot) {
 static inline MatrixAttrOps *take(AttrPool *pool, void *ctor) {
     int i;
     if (pool->_used >= pool->_capacity) {
-        FUN_001dca40(pool, ctor);
+        igObjectPool_Grow(pool, ctor);
     }
     i = pool->_used;
     pool->_used = i + 1;
@@ -113,7 +113,7 @@ static inline void pushOn(AttrMgr *m, MatrixAttrOps *attr) {
     {
         MatrixAttrOps *value = held;
         list->_data[n] = (char *)value;
-        FUN_001b1490(m, list, unit, value);
+        igAttrStackManager_MarkStackChanged(m, list, unit, value);
     }
 }
 static inline void cacheAttr(MatrixOwner *o, MatrixAttrOps *a) {

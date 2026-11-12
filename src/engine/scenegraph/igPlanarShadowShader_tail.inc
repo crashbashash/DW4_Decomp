@@ -146,11 +146,11 @@ void FUN_001d3e20(igPlanarShadowShader *arg0, igCommonTraversal *arg1) {
                 s5 = (int *)nd->_default;
             }
             pool = (igObjectPool *)arg1->_projectionMatrixPool;
-            if (pool->_freeIndex >= pool->_count) FUN_001dca40((List_1dca40 *)pool, (Obj_1dca40 * (*)(int))((void *)&FUN_00134690));
+            if (pool->_freeIndex >= pool->_count) igObjectPool_Grow((List_1dca40 *)pool, (Obj_1dca40 * (*)(int))((void *)&FUN_00134690));
             o = (char *)((int *)pool->_data)[pool->_freeIndex++];
             FUN_001904f0(o + 12, sp70, (char *)s5 + 12);
             FUN_001b1030((igAttrStackManager *)s1, (igAttr *)o);
-            FUN_001e07a0((int)arg1, (S_1e07a0 *)arg0);
+            igTraversal_TraverseChildren((int)arg1, (S_1e07a0 *)arg0);
             FUN_001b1100((struct A_1b1100 *)s1, (struct B_1b1100 *)o);
         }
     }

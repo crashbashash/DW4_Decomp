@@ -1,4 +1,4 @@
-void *FUN_0034e5d0(void) {
+void *beLoadingNode_ResolveMetaObject(void) {
     struct G *g = DAT_005886e8[0];
     if (!g || ((g->f & 4) != 0) == false) {
         FUN_0034e710();
@@ -61,7 +61,7 @@ void *beLoadingNode_Register(void) {
 
 void beLoadingNode_GetMetaObject(void)
 {
-    FUN_0034e5d0();
+    beLoadingNode_ResolveMetaObject();
 }
 
 int FUN_0034e7d0(void) {
@@ -80,6 +80,6 @@ void beLoadingNode_InitFields(void) {
 
 void FUN_0034e850(void)
 {
-    FUN_0039ae10();
+    beLoadingNode_RegisterTraversalFunction();
 }
 

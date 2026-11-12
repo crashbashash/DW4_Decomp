@@ -17,7 +17,7 @@ extern "C" int FUN_004542e0(int, int, int);
 extern "C" int Gap__Bec__bePadManager__vfunc_25(void);
 extern "C" void Gap__Bec__bePadManager__vfunc_26(void);
 extern "C" int Gap__Bec__bePadManager__vfunc_20(void);
-extern "C" int FUN_0039af10(...);
+extern "C" int bePadData_UpdateButtons(...);
 extern "C" void Gap__Bec__bePadManager__vfunc_21(bePadManager *self, int unusedArg);
 extern "C" void Gap__Bec__bePadManager__vfunc_22(bePadManager *self, int unusedArg);
 struct Rc { int vt; int rc; };
@@ -45,8 +45,8 @@ extern "C" int g_bePadManager_metaObject[4];
 /* matching construct: dummy-virtual pad device class; real slots are v28 (+120), v29 (+124), v30 (+128), v32 (+136) */
 class Pad { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual int v28(); virtual int v29(int, float *, float *); virtual int v30(); virtual void d31(); virtual int v32(); };
 struct Vec2 { float x, y; };
-extern "C" int FUN_0039af90(bePadData *, Vec2 *);
-extern "C" int FUN_0039b050(bePadData *, Vec2 *);
+extern "C" int bePadData_UpdateLeftStick(bePadData *, Vec2 *);
+extern "C" int bePadData_UpdateRightStick(bePadData *, Vec2 *);
 extern "C" void Gap__Bec__bePadManager__vfunc_27(bePadManager *arg0);
 extern "C" int bePadManager_GetPadForPlayer(bePadManager *arg0, int arg1);
 
@@ -154,17 +154,17 @@ void Gap__Bec__bePadManager__vfunc_27(bePadManager *arg0) {
                 if (b != 0) {
                     pad->v29(0, &out.x, &out.y);
                     t1.x = out.x; t1.y = out.y;
-                    FUN_0039af90(slot, &t1);
+                    bePadData_UpdateLeftStick(slot, &t1);
                     pad->v29(1, &out.x, &out.y);
                     t2.x = out.x; t2.y = out.y;
-                    FUN_0039b050(slot, &t2);
-                    FUN_0039af10(slot, pad->v28());
+                    bePadData_UpdateRightStick(slot, &t2);
+                    bePadData_UpdateButtons(slot, pad->v28());
                 } else {
                     t3.x = 0; t3.y = 0;
-                    FUN_0039af90(slot, &t3);
+                    bePadData_UpdateLeftStick(slot, &t3);
                     t4.x = 0; t4.y = 0;
-                    FUN_0039b050(slot, &t4);
-                    FUN_0039af10(slot, 0);
+                    bePadData_UpdateRightStick(slot, &t4);
+                    bePadData_UpdateButtons(slot, 0);
                 }
             }
         }

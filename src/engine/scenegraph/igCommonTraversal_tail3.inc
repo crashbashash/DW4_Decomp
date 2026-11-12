@@ -135,7 +135,7 @@ V128 *FUN_001b7330(O_1b7330 *arg0, float *arg1) {
     int idx;
     V128 *e;
     if (l->count >= l->cap) {
-        FUN_001dca40((List_1dca40 *)l, (Obj_1dca40 * (*)(int))&FUN_001356b0);
+        igObjectPool_Grow((List_1dca40 *)l, (Obj_1dca40 * (*)(int))&FUN_001356b0);
     }
     idx = l->count;
     l->count = idx + 1;
@@ -177,7 +177,7 @@ void Gap__Sg__igCommonTraversal__vfunc_23(igCommonTraversalOps *t, int root) {
     unit = attr->_cachedUnitID + m->_firstUnit[unit];
     list = (AttrSlotList *)((AttrStackListView *)list)->_data[unit];
     list->append(attr);
-    FUN_001b1490((struct A_1b1490 *)m, (struct B_1b1490 *)list, unit);
+    igAttrStackManager_MarkStackChanged((struct A_1b1490 *)m, (struct B_1b1490 *)list, unit);
     Gap__Sg__igTraversal__vfunc_23((void *)t, root);
 }
 
@@ -213,7 +213,7 @@ void Gap__Sg__igCommonTraversal__vfunc_24(igCommonTraversal *t, int arg1) {
         e->fn(v, m->arg);
     }
     e->count = e->count - 1;
-    FUN_001b1490((struct A_1b1490 *)m, (struct B_1b1490 *)e, idx);
+    igAttrStackManager_MarkStackChanged((struct A_1b1490 *)m, (struct B_1b1490 *)e, idx);
     Gap__Sg__igTraversal__vfunc_24(t, arg1);
 }
 

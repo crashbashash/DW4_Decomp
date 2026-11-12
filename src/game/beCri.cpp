@@ -7,15 +7,15 @@
 #define LIST(a) (*(void **)((a) + 40))
 
 extern "C" int FUN_0037b010(void *node, void *traversal);
-extern "C" int FUN_001b1490(...);
-extern "C" int FUN_001e07a0(void *, void *);
-extern "C" int FUN_001dca40(void *, void *);
+extern "C" int igAttrStackManager_MarkStackChanged(...);
+extern "C" int igTraversal_TraverseChildren(void *, void *);
+extern "C" int igObjectPool_Grow(void *, void *);
 extern "C" int FUN_001356b0(...);
-extern "C" int FUN_00130f20(...);
+extern "C" int igTimeAttr_CreateInstance(...);
 extern "C" int igMatrix44f_SetIdentity(void *);
 extern "C" int FUN_001904f0(void *, void *, void *);
 extern "C" int Matrix44_Copy(void *, void *);
-extern "C" int FUN_001e06c0(int, int, void (*)());
+extern "C" int igTraversal_RegisterFunction(int, int, void (*)());
 extern "C" int FUN_003680b0(...);
 extern "C" void FUN_0037b460(void);
 extern "C" int FUN_00367e50(...);
@@ -237,7 +237,7 @@ int FUN_0037b040(Rec *arg0, igCommonTraversal *arg1)
     }
     p = (igObjectPool *)arg1->_matrixPool;
     if (p->_freeIndex >= p->_count) {
-        FUN_001dca40(p, (void *)&FUN_001356b0);
+        igObjectPool_Grow(p, (void *)&FUN_001356b0);
     }
     cnt = p->_freeIndex;
     p->_freeIndex = cnt + 1;
@@ -245,7 +245,7 @@ int FUN_0037b040(Rec *arg0, igCommonTraversal *arg1)
     item->v30(&mA);
     p2 = (igObjectPool *)arg1->_timePool;
     if (p2->_freeIndex >= p2->_count) {
-        FUN_001dca40(p2, (void *)&FUN_00130f20);
+        igObjectPool_Grow(p2, (void *)&igTimeAttr_CreateInstance);
     }
     cnt = p2->_freeIndex;
     p2->_freeIndex = cnt + 1;
@@ -257,14 +257,14 @@ int FUN_0037b040(Rec *arg0, igCommonTraversal *arg1)
     idx = *pi + ((int *)b->_attrStackIndexTable)[*pg];
     l = ((igAttrStack **)((igObjectList *)b->_attrStacks)->_data)[idx];
     ((AttrSlots<Item *> *)l)->append(item);
-    FUN_001b1490(b, l, idx);
+    igAttrStackManager_MarkStackChanged(b, l, idx);
     pg2 = &item2->_cachedAttrIndex;
     pi2 = &item2->_cachedUnitID;
     idxB = *pi2 + ((int *)b->_attrStackIndexTable)[*pg2];
     l = ((igAttrStack **)((igObjectList *)b->_attrStacks)->_data)[idxB];
     ((AttrSlots<igTimeAttr *> *)l)->append(item2);
-    FUN_001b1490(b, l, idxB);
-    r = FUN_001e07a0(arg1, arg0);
+    igAttrStackManager_MarkStackChanged(b, l, idxB);
+    r = igTraversal_TraverseChildren(arg1, arg0);
     idx2 = *pi2 + ((int *)b->_attrStackIndexTable)[*pg2];
     l2 = ((igAttrStack **)((igObjectList *)b->_attrStacks)->_data)[idx2];
     ix = l2->_count - 1;
@@ -274,7 +274,7 @@ int FUN_0037b040(Rec *arg0, igCommonTraversal *arg1)
         cb(ob, b->_popProcData, cb);
     }
     l2->_count = l2->_count - 1;
-    FUN_001b1490(b, l2, idx2);
+    igAttrStackManager_MarkStackChanged(b, l2, idx2);
     idx2 = *pi + ((int *)b->_attrStackIndexTable)[*pg];
     l2 = ((igAttrStack **)((igObjectList *)b->_attrStacks)->_data)[idx2];
     ix = l2->_count - 1;
@@ -284,7 +284,7 @@ int FUN_0037b040(Rec *arg0, igCommonTraversal *arg1)
         cb(ob, b->_popProcData, cb);
     }
     l2->_count = l2->_count - 1;
-    FUN_001b1490(b, l2, idx2);
+    igAttrStackManager_MarkStackChanged(b, l2, idx2);
     ((Trav *)arg1)->v31();
     if (r == 2) {
         return 2;
@@ -293,7 +293,7 @@ int FUN_0037b040(Rec *arg0, igCommonTraversal *arg1)
 }
 
 void FUN_0037b460(void) {
-    FUN_001e06c0(DAT_00562640[0], FUN_003680b0(), (void (*)())FUN_0037b010);
+    igTraversal_RegisterFunction(DAT_00562640[0], FUN_003680b0(), (void (*)())FUN_0037b010);
 }
 
 int FUN_0037b4a0(igCommonTraversal *traversal, void *node)
@@ -338,7 +338,7 @@ int FUN_0037b4d0(Rec_37b4d0 *arg0, igCommonTraversal *arg1)
     }
     p = (igObjectPool *)arg1->_matrixPool;
     if (p->_freeIndex >= p->_count) {
-        FUN_001dca40(p, (void *)&FUN_001356b0);
+        igObjectPool_Grow(p, (void *)&FUN_001356b0);
     }
     cnt = p->_freeIndex;
     p->_freeIndex = cnt + 1;
@@ -351,8 +351,8 @@ int FUN_0037b4d0(Rec_37b4d0 *arg0, igCommonTraversal *arg1)
     idx = *pi + ((int *)b->_attrStackIndexTable)[idx];
     l = ((igAttrStack **)l->_data)[idx];
     ((ItemStack *)l)->append(item);
-    FUN_001b1490(b, l, idx);
-    r = FUN_001e07a0(arg1, arg0);
+    igAttrStackManager_MarkStackChanged(b, l, idx);
+    r = igTraversal_TraverseChildren(arg1, arg0);
     idx2 = *pi + ((int *)b->_attrStackIndexTable)[*pg];
     l2 = ((igAttrStack **)((igObjectList *)b->_attrStacks)->_data)[idx2];
     ix = l2->_count - 1;
@@ -363,7 +363,7 @@ int FUN_0037b4d0(Rec_37b4d0 *arg0, igCommonTraversal *arg1)
         cb(ob, b->_popProcData, cb);
     }
     l2->_count = l2->_count - 1;
-    FUN_001b1490(b, l2, idx2);
+    igAttrStackManager_MarkStackChanged(b, l2, idx2);
     if (r == 2) {
         return 2;
     }
@@ -371,7 +371,7 @@ int FUN_0037b4d0(Rec_37b4d0 *arg0, igCommonTraversal *arg1)
 }
 
 void FUN_0037b760(void) {
-    FUN_001e06c0(DAT_00562640[0], FUN_00367e50(), (void (*)())FUN_0037b4a0);
+    igTraversal_RegisterFunction(DAT_00562640[0], FUN_00367e50(), (void (*)())FUN_0037b4a0);
 }
 
 void Gap__Bec__beCri__vfunc_21(beCri *self) {

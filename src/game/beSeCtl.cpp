@@ -7,8 +7,8 @@ extern "C" void Matrix44_Copy(float *, float *);
 extern "C" void Matrix44_GetTranslation(float *, float *);
 extern "C" void Matrix44_SetTranslation(float *, float *);
 extern "C" void FUN_001356b0(void);
-extern "C" void FUN_00130f20(void);
-extern "C" int FUN_001e06c0(int, int, void (*)(void));
+extern "C" void igTimeAttr_CreateInstance(void);
+extern "C" int igTraversal_RegisterFunction(int, int, void (*)(void));
 extern "C" int FUN_0034b4a0(...);
 extern "C" void FUN_0039c8c0(void);
 extern "C" int FUN_00236f80(int, int);
@@ -22,9 +22,9 @@ extern "C" int beMessenger_AppendString(int, int);
 extern "C" int beMessenger_DispatchSelected(int, int *);
 extern "C" int beMessenger_SelectReceivers(int, int *, int, int);
 extern "C" int strcmp(int *, int);
-extern "C" void FUN_001dca40(igObjectPool *, void (*)(void));
-extern "C" void FUN_001b1490(igAttrStackManager *, igAttrStack *, int);
-extern "C" int FUN_001e07a0(igCommonTraversal *, beResetNode *);
+extern "C" void igObjectPool_Grow(igObjectPool *, void (*)(void));
+extern "C" void igAttrStackManager_MarkStackChanged(igAttrStackManager *, igAttrStack *, int);
+extern "C" int igTraversal_TraverseChildren(igCommonTraversal *, beResetNode *);
 extern "C" igMetaObject *DAT_0055efe8[4];
 /* virtual slots 32/33 (offsets 128/132): the matrix attribute takes the matrix; the traversal sets/ends the time */
 class MatrixAttrVT { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void setMatrix(float *m); };
@@ -83,7 +83,7 @@ int FUN_0039c460(beResetNode *node, igCommonTraversal *trav) {
         Matrix44_SetTranslation(m, t);
         igObjectPool *pool = (igObjectPool *)trav->_matrixPool;
         if (pool->_freeIndex >= pool->_count)
-            FUN_001dca40(pool, FUN_001356b0);
+            igObjectPool_Grow(pool, FUN_001356b0);
         matAttr = ((igModelViewMatrixAttr **)pool->_data)[pool->_freeIndex++];
         ((MatrixAttrVT *)matAttr)->setMatrix(m);
     }
@@ -93,7 +93,7 @@ int FUN_0039c460(beResetNode *node, igCommonTraversal *trav) {
         igObjectPool *pool = (igObjectPool *)trav->_timePool;
         time = ((long long *)((igLongList *)trav->_timeStack)->_data)[0];
         if (pool->_freeIndex >= pool->_count)
-            FUN_001dca40(pool, FUN_00130f20);
+            igObjectPool_Grow(pool, igTimeAttr_CreateInstance);
         timeAttr = ((igTimeAttr **)pool->_data)[pool->_freeIndex++];
         timeAttr->_time = time;
     }
@@ -104,15 +104,15 @@ int FUN_0039c460(beResetNode *node, igCommonTraversal *trav) {
         int idx = timeAttr->_cachedUnitID + ((int *)mgr->_attrStackIndexTable)[timeAttr->_cachedAttrIndex];
         igAttrStack *st = ((igAttrStack **)((igAttrStackList *)mgr->_attrStacks)->_data)[idx];
         ((AttrList *)st)->append((igAttr *)timeAttr);
-        FUN_001b1490(mgr, st, idx);
+        igAttrStackManager_MarkStackChanged(mgr, st, idx);
     }
     if (node->_isResetRotAndScale) {
         int idx = matAttr->_cachedUnitID + ((int *)mgr->_attrStackIndexTable)[matAttr->_cachedAttrIndex];
         igAttrStack *st = ((igAttrStack **)((igAttrStackList *)mgr->_attrStacks)->_data)[idx];
         ((AttrList *)st)->append((igAttr *)matAttr);
-        FUN_001b1490(mgr, st, idx);
+        igAttrStackManager_MarkStackChanged(mgr, st, idx);
     }
-    int r = FUN_001e07a0(trav, node);
+    int r = igTraversal_TraverseChildren(trav, node);
     if (node->_isResetRotAndScale) {
         /* pop matAttr: run the stack's pop procedure on the top attribute, then shrink */
         int idx = matAttr->_cachedUnitID + ((int *)mgr->_attrStackIndexTable)[matAttr->_cachedAttrIndex];
@@ -123,7 +123,7 @@ int FUN_0039c460(beResetNode *node, igCommonTraversal *trav) {
         if (popProc)
             popProc(top, mgr->_popProcData);
         st->_count = st->_count - 1;
-        FUN_001b1490(mgr, st, idx);
+        igAttrStackManager_MarkStackChanged(mgr, st, idx);
     }
     if (node->_isResetTime) {
         int idx = timeAttr->_cachedUnitID + ((int *)mgr->_attrStackIndexTable)[timeAttr->_cachedAttrIndex];
@@ -134,7 +134,7 @@ int FUN_0039c460(beResetNode *node, igCommonTraversal *trav) {
         if (popProc)
             popProc(top, mgr->_popProcData);
         st->_count = st->_count - 1;
-        FUN_001b1490(mgr, st, idx);
+        igAttrStackManager_MarkStackChanged(mgr, st, idx);
     }
     if (node->_isResetTime)
         ((TraversalVT *)trav)->endTime();
@@ -144,7 +144,7 @@ int FUN_0039c460(beResetNode *node, igCommonTraversal *trav) {
 }
 
 void FUN_0039c8c0(void) {
-    FUN_001e06c0(DAT_00562640[0], FUN_0034b4a0(), (void (*)())FUN_0039c430);
+    igTraversal_RegisterFunction(DAT_00562640[0], FUN_0034b4a0(), (void (*)())FUN_0039c430);
 }
 
 void Gap__Bec__beSeCtl__vfunc_32(beSeCtl *arg0) {

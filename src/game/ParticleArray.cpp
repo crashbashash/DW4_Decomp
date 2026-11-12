@@ -3,15 +3,15 @@
 
 extern "C" int igObject_IsKindOf(char *, int);
 extern "C" int FUN_003a3850(char* arg0, char* arg1);
-extern "C" int FUN_001e06c0(int, int, int ( *)());
+extern "C" int igTraversal_RegisterFunction(int, int, int ( *)());
 extern "C" int FUN_0036e610(...);
 extern "C" void FUN_003a3900(void);
 extern "C" void FUN_001d3550(void);
 extern "C" void Gap__Bec__ParticleTimer__vfunc_11(void);
-extern "C" int FUN_001b1490(...);
+extern "C" int igAttrStackManager_MarkStackChanged(...);
 extern "C" int FUN_001b9530(void *, void *);
-extern "C" int FUN_001dca40(void *, void *);
-extern "C" int FUN_00130f20(...);
+extern "C" int igObjectPool_Grow(void *, void *);
+extern "C" int igTimeAttr_CreateInstance(...);
 extern "C" int Gap__Gfx__igParticleArray__vfunc_13(...);
 extern "C" int Gap__Bec__ParticleArray__vfunc_20(void);
 extern "C" int Gap__Bec__ParticleTimer__vfunc_20(void);
@@ -50,7 +50,7 @@ int FUN_003a3850(char* arg0, char* arg1) {
 }
 
 void FUN_003a3900(void) {
-    FUN_001e06c0(DAT_00562640[0], FUN_0036e610(), (int (*)())&FUN_003a3850);
+    igTraversal_RegisterFunction(DAT_00562640[0], FUN_0036e610(), (int (*)())&FUN_003a3850);
 }
 
 void Gap__Bec__ParticleTimer__vfunc_11(void)
@@ -91,7 +91,7 @@ int FUN_003a3960(ParticleTimer *arg0, igCommonTraversal *arg1)
     p = (igTimeAttrPool *)arg1->_timePool;
     b = (igAttrStackManager *)arg1->_attrStack;
     if (p->_freeIndex >= p->_count) {
-        FUN_001dca40(p, (void *)&FUN_00130f20);
+        igObjectPool_Grow(p, (void *)&igTimeAttr_CreateInstance);
     }
     cnt = p->_freeIndex;
     p->_freeIndex = cnt + 1;
@@ -105,7 +105,7 @@ int FUN_003a3960(ParticleTimer *arg0, igCommonTraversal *arg1)
     idx = *pi + ((int *)b->_attrStackIndexTable)[idx];
     l = ((igTDataList<igTimeAttr *> **)l->_data)[idx];
     l->append(item);
-    FUN_001b1490(b, l, idx);
+    igAttrStackManager_MarkStackChanged(b, l, idx);
     r = FUN_001b9530(arg1, arg0);
     idx2 = *pi + ((int *)b->_attrStackIndexTable)[*pg];
     l2 = ((igAttrStack **)((igAttrStackList *)b->_attrStacks)->_data)[idx2];
@@ -117,7 +117,7 @@ int FUN_003a3960(ParticleTimer *arg0, igCommonTraversal *arg1)
         cb(ob, b->_popProcData, cb);
     }
     l2->_count = l2->_count - 1;
-    FUN_001b1490(b, l2, idx2);
+    igAttrStackManager_MarkStackChanged(b, l2, idx2);
     ((TraversalTimeOps *)arg1)->v31();
     return r;
 }

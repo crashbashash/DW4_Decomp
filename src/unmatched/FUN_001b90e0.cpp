@@ -11,10 +11,10 @@ struct CommandHolderView { int _pad0[2]; CommandSinkView *_sink; };
 struct AttrTraversalView { char _pad0[52]; AttrState *_state; char _pad38[8]; DirtyList *_dirty; CommandHolderView *_holder; };
 extern "C" {
 void List_Resize(AttrStack *, int, int);
-void FUN_001b1490(AttrState *, AttrStack *, int);
+void igAttrStackManager_MarkStackChanged(AttrState *, AttrStack *, int);
 void FUN_001b0440(AttrState *, DirtyList *);
 void FUN_002d6c60(int, int, int);
-int FUN_001e07a0(AttrTraversalView *, AttrSetView *);
+int igTraversal_TraverseChildren(AttrTraversalView *, AttrSetView *);
 }
 static inline AttrView *attrAt(AttrStack *l, int i) { return l->_data[i]; }
 static inline void pushAttr(AttrStack *l, AttrView *&v) {
@@ -59,13 +59,13 @@ extern "C" int FUN_001b90e0(AttrTraversalView *o, AttrSetView *set) {
             }
             stack->_data[n] = held;
         }
-        FUN_001b1490(state, stack, index);
+        igAttrStackManager_MarkStackChanged(state, stack, index);
     }
     if (set->_dirty) {
         FUN_001b0440(o->_state, o->_dirty);
         FUN_002d6c60(o->_holder->_sink->_queue, o->_dirty->_count, o->_dirty->_data);
     }
-    r = FUN_001e07a0(o, set);
+    r = igTraversal_TraverseChildren(o, set);
     if (p != 0) {
         begin = list->_data;
         for (p--; p >= begin; p--) {
@@ -83,7 +83,7 @@ extern "C" int FUN_001b90e0(AttrTraversalView *o, AttrSetView *set) {
             if (stack2->_count == stack2->_base) {
                 stack2->_base = -1;
             }
-            FUN_001b1490(state, stack2, index2);
+            igAttrStackManager_MarkStackChanged(state, stack2, index2);
         }
     }
     if (r == 2) {

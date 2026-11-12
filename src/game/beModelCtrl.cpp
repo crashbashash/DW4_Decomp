@@ -4,7 +4,7 @@
 #define REL(q) { igObject *o_ = (igObject *)(q); if (o_) { o_->_refCount = o_->_refCount - 1; if ((o_->_refCount & 0x7fffff) == 0) igObject_Destroy(o_); } }
 #define RET(q) { igObject *o_ = (igObject *)(q); if (o_) o_->_refCount = o_->_refCount + 1; }
 
-extern "C" int FUN_001e06c0(int, int, void (*)(void));
+extern "C" int igTraversal_RegisterFunction(int, int, void (*)(void));
 extern "C" int FUN_00356d10(...);
 extern "C" void FUN_00390890(void);
 extern "C" void FUN_003908d0(void);
@@ -649,7 +649,7 @@ int FUN_003902f0(igCommonTraversal *traversal, void *node)
 }
 
 void FUN_00390890(void) {
-    FUN_001e06c0(DAT_00562640[0], FUN_00356d10(), (void (*)())FUN_003902f0);
+    igTraversal_RegisterFunction(DAT_00562640[0], FUN_00356d10(), (void (*)())FUN_003902f0);
 }
 
 void FUN_003908d0(void)

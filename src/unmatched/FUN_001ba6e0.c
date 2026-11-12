@@ -1,4 +1,4 @@
-int FUN_001b1490();
+int igAttrStackManager_MarkStackChanged();
 int FUN_001d7b70();
 int List_Resize();
 typedef struct Lst { int w0; int w4; int count; int cap; int *data; int w20; int w24; int (*cb)(int, int, void *); } Lst;
@@ -29,7 +29,7 @@ int FUN_001ba6e0(O *arg0, int arg1) {
     }
     t = sp7C;
     l->data[n] = (int)t;
-    FUN_001b1490(s, l, idx, t);
+    igAttrStackManager_MarkStackChanged(s, l, idx, t);
     FUN_001d7b70(arg1, arg0);
     cur = arg0->f232;
     s = arg0->f52;
@@ -41,6 +41,6 @@ int FUN_001ba6e0(O *arg0, int arg1) {
         l->cb(item, s->f48, l->cb);
     }
     l->count = l->count - 1;
-    FUN_001b1490(s, l, idx);
+    igAttrStackManager_MarkStackChanged(s, l, idx);
     return 0;
 }

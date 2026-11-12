@@ -33,7 +33,7 @@ Obj_1c5eb0 *FUN_001dc9a0(S_1dc940 *arg0, int arg1) {
     return removed;
 }
 
-void FUN_001dca40(List_1dca40 *arg0, Obj_1dca40 *(*arg1)(int)) {
+void igObjectPool_Grow(List_1dca40 *arg0, Obj_1dca40 *(*arg1)(int)) {
     int n;
     int alloc;
     int i;

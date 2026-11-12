@@ -1,0 +1,23 @@
+# bePadData.cpp: beNodeAnim / beLoadingNode clock and traversal, bePadData input edges;
+# plus the engine helpers that unit calls. Evidence in docs/engine/stage-loading.md.
+# <va>	<name>	<module>
+0x00130f20	igTimeAttr_CreateInstance	engine
+0x001b1490	igAttrStackManager_MarkStackChanged	engine
+0x001dca40	igObjectPool_Grow	engine
+0x001e06c0	igTraversal_RegisterFunction	engine
+0x001e07a0	igTraversal_TraverseChildren	engine
+0x0034e5d0	beLoadingNode_ResolveMetaObject	game
+0x0034e870	beNodeAnim_ResolveMetaObject	game
+0x0039a930	beNodeAnim_TraversalFunction	game
+0x0039a960	beNodeAnim_SetTime	game
+0x0039a9e0	beNodeAnim_UpdateTime	game
+0x0039ab20	beNodeAnim_Traverse	game
+0x0039ad80	beNodeAnim_RegisterTraversalFunction	game
+0x0039adc0	beLoadingNode_TraversalFunction	game
+0x0039adf0	beLoadingNode_Lock	game
+0x0039ae00	beLoadingNode_IsPastPlayLimit	game
+0x0039ae10	beLoadingNode_RegisterTraversalFunction	game
+0x0039af10	bePadData_UpdateButtons	game
+0x0039af90	bePadData_UpdateLeftStick	game
+0x0039b050	bePadData_UpdateRightStick	game
+0x0039b110	bePadData_StickDirections	game

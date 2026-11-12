@@ -18,8 +18,8 @@ extern "C" int FUN_003810c0(...);
 extern "C" int FUN_003817d0(...);
 extern "C" int beLua__RunNamedChunk(...);
 extern "C" int FUN_0038a2d0(...);
-extern "C" int FUN_0039adf0(...);
-extern "C" int FUN_0039ae00(...);
+extern "C" int beLoadingNode_Lock(...);
+extern "C" int beLoadingNode_IsPastPlayLimit(...);
 extern "C" int List_RemoveWordAt(...);
 extern "C" int ObjectList_AppendRetained(...);
 extern "C" void StringChunk_ReleaseHeader(int, void *);
@@ -409,7 +409,7 @@ extern "C" void Gap__Bec__beFileListInfoManager__vfunc_27(beFileListInfoManager 
             if (cnt > 0) {
                 igInfoList *il = (igInfoList *)li; int *ob = *(int **)il->_data;
                 if (ob != 0 && igObject_IsKindOf(ob, DAT_005886e8[0]) != 0) { s1 = (int)ob; } else { s1 = 0; }
-                if (s1 != 0) { s3 = FUN_0039ae00(s1) & 0xFF; } else { s3 = 1; }
+                if (s1 != 0) { s3 = beLoadingNode_IsPastPlayLimit(s1) & 0xFF; } else { s3 = 1; }
             } else {
                 s3 = 1;
             }
@@ -418,7 +418,7 @@ extern "C" void Gap__Bec__beFileListInfoManager__vfunc_27(beFileListInfoManager 
                 arg0->_loaded = 0;
                 arg0->_proc = 0x14;
                 if (s1 != 0) {
-                    FUN_0039adf0(s1);
+                    beLoadingNode_Lock(s1);
                 }
                 while (((igInfoList *)arg0->_importantInfoList)->_count > 0) {
                     igInfoList *l;

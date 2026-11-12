@@ -35,10 +35,10 @@ struct LightManagerRec {
 };
 extern "C" {
 void List_Resize(LightSlotList *, int, int);
-void FUN_001dca40(LightPool *, void *);
+void igObjectPool_Grow(LightPool *, void *);
 void FUN_001361b0(void);
 int igObject_Destroy(void *);
-void FUN_001b1490(LightManagerRec *, LightSlotList *, int);
+void igAttrStackManager_MarkStackChanged(LightManagerRec *, LightSlotList *, int);
 void FUN_001b0aa0(LightManagerRec *m, AttrRec *attr, int pushed);
 }
 static inline int findKey(LightKeyList *list, unsigned int key0) {
@@ -91,7 +91,7 @@ void FUN_001b0aa0(LightManagerRec *m, AttrRec *attr, int pushed) {
         AttrRec *light;
         int i;
         if (pool->_used >= pool->_capacity) {
-            FUN_001dca40(pool, (void *)FUN_001361b0);
+            igObjectPool_Grow(pool, (void *)FUN_001361b0);
         }
         i = pool->_used;
         pool->_used = i + 1;
@@ -147,7 +147,7 @@ void FUN_001b0aa0(LightManagerRec *m, AttrRec *attr, int pushed) {
         if (list->_count == list->_cachedOverride) {
             list->_cachedOverride = -1;
         }
-        FUN_001b1490(m, list, slot);
+        igAttrStackManager_MarkStackChanged(m, list, slot);
     } else {
         AttrRec *top;
         AttrPopProc proc;
@@ -160,6 +160,6 @@ void FUN_001b0aa0(LightManagerRec *m, AttrRec *attr, int pushed) {
             proc(top, m->_popProcData);
         }
         other->_count = other->_count - 1;
-        FUN_001b1490(m, other, slot);
+        igAttrStackManager_MarkStackChanged(m, other, slot);
     }
 }

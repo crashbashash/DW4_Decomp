@@ -1,4 +1,4 @@
-void *FUN_0034e870(void) {
+void *beNodeAnim_ResolveMetaObject(void) {
     struct G *g = DAT_00588700[0];
     if (!g || ((g->f & 4) != 0) == false) {
         FUN_0034e930();
@@ -46,7 +46,7 @@ void *beNodeAnim_Register(void) {
 
 void beNodeAnim_GetMetaObject(void)
 {
-    FUN_0034e870();
+    beNodeAnim_ResolveMetaObject();
 }
 
 void beNodeAnim_InitFields(void) {
@@ -66,6 +66,6 @@ void beNodeAnim_InitFields(void) {
 
 void FUN_0034eaf0(void)
 {
-    FUN_0039ad80();
+    beNodeAnim_RegisterTraversalFunction();
 }
 

@@ -2232,7 +2232,7 @@ public:
 struct RecorderTraversalView : TransformRecorderTraversal {
     char _pad4[48]; int _state; char _pad38[20]; RecorderFramePool *_frames;
 };
-extern "C" void FUN_00130f20(...);
+extern "C" void igTimeAttr_CreateInstance(...);
 class DW4VC_148_0 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void d32(); virtual void d33(); virtual void d34(); virtual int vX(); };
 class DW4VC_152_1 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void d32(); virtual void d33(); virtual void d34(); virtual void d35(); virtual int vX(int); };
 class DW4VC_160_1 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void d32(); virtual void d33(); virtual void d34(); virtual void d35(); virtual void d36(); virtual void d37(); virtual int vX(int); };
@@ -5460,7 +5460,7 @@ extern "C" void FUN_001b11b0(struct A_1b11b0 *arg0, struct B_1b11b0 *arg1);
 extern "C" void FUN_001b1250(struct A_1b1250 *arg0, struct B_1b1250 *arg1, int arg2);
 extern "C" void FUN_001b12f0(igAttrStackManager *self, igAttr *attr);
 extern "C" void FUN_001b13d0(struct A_1b13d0 *arg0, struct B_1b13d0 *arg1);
-extern "C" void FUN_001b1490(struct A_1b1490 *arg0, struct B_1b1490 *arg1, int arg2);
+extern "C" void igAttrStackManager_MarkStackChanged(struct A_1b1490 *arg0, struct B_1b1490 *arg1, int arg2);
 extern "C" void FUN_001b1cf0(igDataList *arg0);
 extern "C" void FUN_001b1dc0(igDataList *arg0);
 extern "C" void FUN_001b1e50(void *arg, unsigned int bits);
@@ -5661,7 +5661,7 @@ static inline void pushEnvAttr(EnvAttrStack *s, EnvAttr *a) {
     EnvSlot *l = s->_slots->_data[idx];
     if (l->_mark < 0) l->_mark = l->_count;
     l->append(a);
-    FUN_001b1490((A_1b1490 *)s, (B_1b1490 *)l, idx);
+    igAttrStackManager_MarkStackChanged((A_1b1490 *)s, (B_1b1490 *)l, idx);
 }
 static inline void popEnvAttr(EnvAttrStack *s, EnvAttr *a) {
     int idx = a->_unitOffset + s->_unitOfAttr[a->_attrIndex];
@@ -5673,7 +5673,7 @@ static inline void popEnvAttr(EnvAttrStack *s, EnvAttr *a) {
     if (cb != 0 && top == a) cb(top, s->_popArg);
     l->_count = l->_count - 1;
     if (l->_count == l->_mark) l->_mark = -1;
-    FUN_001b1490((A_1b1490 *)s, (B_1b1490 *)l, idx);
+    igAttrStackManager_MarkStackChanged((A_1b1490 *)s, (B_1b1490 *)l, idx);
 }
 extern "C" void FUN_001c2be0(EnvPassShaderView *self, EnvTraversalView *t);
 extern "C" void FUN_001c2eb0(S0_1c2eb0 *arg0, Rc *arg1);
@@ -5976,7 +5976,7 @@ extern "C" void FUN_001dc8d0(int *p);
 extern "C" int FUN_001dc8e0(void *arg0, int arg1);
 extern "C" int Gap__Sg__igSwitch__vfunc_35(S_1dc940 *arg0, int arg1, void *arg2);
 extern "C" Obj_1c5eb0 *FUN_001dc9a0(S_1dc940 *arg0, int arg1);
-extern "C" void FUN_001dca40(List_1dca40 *arg0, Obj_1dca40 *(*arg1)(int));
+extern "C" void igObjectPool_Grow(List_1dca40 *arg0, Obj_1dca40 *(*arg1)(int));
 extern "C" void FUN_001dcb80(ObjectPool *pool, igObject *object);
 extern "C" int FUN_001dcc80(KeyTrackView *o, double t);
 extern "C" int FUN_001dce70(struct S_1dce70 *arg0, double arg1);
@@ -6021,8 +6021,8 @@ extern "C" void FUN_001e0470(void);
 extern "C" int FUN_001e04c0(S_1e04c0 *arg0, V_1e04c0 *arg1);
 extern "C" void Gap__Sg__igTraversal__vfunc_23(void *, int);
 extern "C" void Gap__Sg__igTraversal__vfunc_24(void *, int);
-extern "C" void FUN_001e06c0(struct L_1e06c0 *arg0, struct X_1e06c0 *arg1, void *arg2);
-extern "C" int FUN_001e07a0(int arg0, S_1e07a0 *arg1);
+extern "C" void igTraversal_RegisterFunction(struct L_1e06c0 *arg0, struct X_1e06c0 *arg1, void *arg2);
+extern "C" int igTraversal_TraverseChildren(int arg0, S_1e07a0 *arg1);
 extern "C" void thunk_FUN_001c1c50(void **self, int flag);
 extern "C" void Gap__Sg__igPsx2EnvironmentMapShader__vfunc_10(void **arg0);
 extern "C" int Gap__Sg__igPsx2EnvironmentMapShader__vfunc_22(void);
@@ -6278,7 +6278,7 @@ static inline void clearBoneInfo(CombinerBoneInfo *b) {
 static inline igPoolObject *poolTake(CombinerPool *pool, void *ctor) {
     int i;
     if (pool->_used >= pool->_capacity) {
-        FUN_001dca40((List_1dca40 *)pool, (Obj_1dca40 * (*)(int))ctor);
+        igObjectPool_Grow((List_1dca40 *)pool, (Obj_1dca40 * (*)(int))ctor);
     }
     i = pool->_used;
     pool->_used = i + 1;

@@ -226,7 +226,7 @@ void FUN_001c03a0(A0_1c03a0 *arg0, A1_1c03a0 *arg1) {
                 FUN_001d9bb0((void *)arg1->f68, s0);
                 FUN_001b12f0((igAttrStackManager *)s0, (igAttr *)DAT_00562660[0]);
                 FUN_001b12f0((igAttrStackManager *)s0, (igAttr *)DAT_005626b8[0]);
-                FUN_001e07a0((int)(arg1), (S_1e07a0 *)arg0);
+                igTraversal_TraverseChildren((int)(arg1), (S_1e07a0 *)arg0);
                 FUN_001b13d0((struct A_1b13d0 *)s0, (struct B_1b13d0 *)DAT_005626b8[0]);
                 FUN_001b13d0((struct A_1b13d0 *)s0, (struct B_1b13d0 *)DAT_00562660[0]);
                 FUN_001b13d0((struct A_1b13d0 *)s0, (struct B_1b13d0 *)DAT_00562670[0]);
@@ -262,7 +262,7 @@ void FUN_001c03a0(A0_1c03a0 *arg0, A1_1c03a0 *arg1) {
                 FUN_001b13d0((struct A_1b13d0 *)s0, (struct B_1b13d0 *)DAT_005626c8[0]);
                 FUN_001d9bb0((void *)arg1->f68, s0);
                 FUN_001b12f0((igAttrStackManager *)s0, (igAttr *)DAT_005626b0[0]);
-                FUN_001e07a0((int)(arg1), (S_1e07a0 *)arg0);
+                igTraversal_TraverseChildren((int)(arg1), (S_1e07a0 *)arg0);
                 FUN_001b13d0((struct A_1b13d0 *)s0, (struct B_1b13d0 *)DAT_005626b0[0]);
                 FUN_001d9bb0((void *)arg1->f68, s0);
                 FUN_001dc610(arg1->f68);
@@ -270,7 +270,7 @@ void FUN_001c03a0(A0_1c03a0 *arg0, A1_1c03a0 *arg1) {
             }
         }
         FUN_001dc500((A_1dc500 *)arg1->f68, 0, 0);
-        FUN_001e07a0((int)(arg1), (S_1e07a0 *)arg0);
+        igTraversal_TraverseChildren((int)(arg1), (S_1e07a0 *)arg0);
         FUN_001dc610(arg1->f68);
     }
 }

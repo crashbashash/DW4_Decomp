@@ -397,7 +397,7 @@ void FUN_001d7910(void) {
         m = &metas[i];
         count = igMetaObject_CountTree(*m);
         for (child = 0; child < count; child++) {
-            FUN_001e06c0((struct L_1e06c0 *)((void *)DAT_005628e0[0]), (struct X_1e06c0 *)(FUN_002fe300(*m, child)), FUN_001e07a0);
+            igTraversal_RegisterFunction((struct L_1e06c0 *)((void *)DAT_005628e0[0]), (struct X_1e06c0 *)(FUN_002fe300(*m, child)), igTraversal_TraverseChildren);
         }
     }
     pairs = DAT_0048dac0;
@@ -409,7 +409,7 @@ void FUN_001d7910(void) {
         p = &pairs._pairs[i];
         n = igMetaObject_CountTree(p->_meta);
         for (j = 0; j < n; j++) {
-            FUN_001e06c0((struct L_1e06c0 *)((void *)DAT_005628e8[0]), (struct X_1e06c0 *)(FUN_002fe300(p->_meta, j)), p->_function);
+            igTraversal_RegisterFunction((struct L_1e06c0 *)((void *)DAT_005628e8[0]), (struct X_1e06c0 *)(FUN_002fe300(p->_meta, j)), p->_function);
         }
     }
 }

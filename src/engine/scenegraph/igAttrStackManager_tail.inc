@@ -353,7 +353,7 @@ void FUN_001b1030(igAttrStackManager *self, igAttr *attr) {
     slot = attr->_cachedUnitID + ((int *)self->_attrStackIndexTable)[slot];
     stack = (AttrObjectStack *)stack->_data[slot];
     stack->append((igObject *)attr);
-    FUN_001b1490((struct A_1b1490 *)self, (struct B_1b1490 *)stack, slot);
+    igAttrStackManager_MarkStackChanged((struct A_1b1490 *)self, (struct B_1b1490 *)stack, slot);
 }
 
 void FUN_001b1100(struct A_1b1100 *arg0, struct B_1b1100 *arg1) {
@@ -370,7 +370,7 @@ n1 = temp_s0->n - 1; a = temp_s0->a; x = a[n1];
         temp_a2(x, arg0->f48);
     }
     temp_s0->n = temp_s0->n - 1;
-    FUN_001b1490((struct A_1b1490 *)arg0, (struct B_1b1490 *)temp_s0, temp_s1);
+    igAttrStackManager_MarkStackChanged((struct A_1b1490 *)arg0, (struct B_1b1490 *)temp_s0, temp_s1);
 }
 
 void FUN_001b11b0(struct A_1b11b0 *arg0, struct B_1b11b0 *arg1) {
@@ -387,7 +387,7 @@ n1 = temp_s0->n - 1; a = temp_s0->a; x = a[n1];
         temp_a2(x, arg0->f48);
     }
     temp_s0->n = temp_s0->n - 1;
-    FUN_001b1490((struct A_1b1490 *)arg0, (struct B_1b1490 *)temp_s0, temp_s1);
+    igAttrStackManager_MarkStackChanged((struct A_1b1490 *)arg0, (struct B_1b1490 *)temp_s0, temp_s1);
 }
 
 void FUN_001b1250(struct A_1b1250 *arg0, struct B_1b1250 *arg1, int arg2) {
@@ -404,7 +404,7 @@ n1 = temp_s0->n - 1; a = temp_s0->a; x = a[n1];
         temp_a2(x, arg0->f48);
     }
     temp_s0->n = temp_s0->n - 1;
-    FUN_001b1490((struct A_1b1490 *)arg0, (struct B_1b1490 *)temp_s0, temp_s1);
+    igAttrStackManager_MarkStackChanged((struct A_1b1490 *)arg0, (struct B_1b1490 *)temp_s0, temp_s1);
 }
 
 void FUN_001b12f0(igAttrStackManager *self, igAttr *attr) {
@@ -416,7 +416,7 @@ void FUN_001b12f0(igAttrStackManager *self, igAttr *attr) {
         stack->_cachedOverride = stack->_count;
     }
     stack->append((igObject *)attr);
-    FUN_001b1490((struct A_1b1490 *)self, (struct B_1b1490 *)stack, slot);
+    igAttrStackManager_MarkStackChanged((struct A_1b1490 *)self, (struct B_1b1490 *)stack, slot);
 }
 
 void FUN_001b13d0(struct A_1b13d0 *arg0, struct B_1b13d0 *arg1) {
@@ -436,10 +436,10 @@ void FUN_001b13d0(struct A_1b13d0 *arg0, struct B_1b13d0 *arg1) {
     if (temp_s0->n == temp_s0->f24) {
         temp_s0->f24 = -1;
     }
-    FUN_001b1490((struct A_1b1490 *)arg0, (struct B_1b1490 *)temp_s0, temp_s1);
+    igAttrStackManager_MarkStackChanged((struct A_1b1490 *)arg0, (struct B_1b1490 *)temp_s0, temp_s1);
 }
 
-void FUN_001b1490(struct A_1b1490 *arg0, struct B_1b1490 *arg1, int arg2) {
+void igAttrStackManager_MarkStackChanged(struct A_1b1490 *arg0, struct B_1b1490 *arg1, int arg2) {
     int c1;
     int c2;
     struct L_1b1490 *l1;
