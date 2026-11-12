@@ -115,7 +115,7 @@ pipeline split rather than as a variant selector.
 `FUN_002595e0` calls one of them around `0x2598c0`/`0x2598d0`, chosen by byte `+0xd8` of the frame
 object; the update loop itself is inside the body.
 
-`FUN_0025a580` is `src/unmatched/FUN_0025a580.cpp`.  Retail saves `s0`–`s2` in an 80-byte frame, keeps `arg0` in
+`FUN_0025a580` is in `src/game/GameMain.cpp`.  Retail saves `s0`–`s2` in an 80-byte frame, keeps `arg0` in
 `s1` and reloads `24(s1)` for the later virtual call.  This allocation is source-driven, not a compiler
 flag effect: in a minimal MWCC test a two-parameter function with a `short` second parameter gets
 `s1` = arg0, `s0` = arg1 only when the first call in the body takes no argument, and passing a pointer

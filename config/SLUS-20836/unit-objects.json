@@ -68,14 +68,6 @@
       "__dl__FPv": "0x00100610"
     }
   },
-  "0x0025a8c0": {
-    "duplicates": {
-      "__dt__3RefFv": "0x00150a70"
-    },
-    "externals": {
-      "__dl__FPv": "0x00100610"
-    }
-  },
   "0x00376930": {
     "duplicates": {
       "__dt__6Ref<0>Fv": "0x0019ab10",
@@ -1343,36 +1335,6 @@
       "table_size": "0x000030"
     }
   },
-  "0x00259dc0": {
-    "duplicates": {
-      "__dt__9StringRefFv": "0x00130720"
-    },
-    "exceptions": {
-      "index": "0x0054716c",
-      "table": "0x00542b88",
-      "table_size": "0x000010"
-    },
-    "externals": {
-      "__dl__FPv": "0x00100610"
-    }
-  },
-  "0x002595e0": {
-    "emitted": {
-      "__dt__5GuardFv": "0x002599b0"
-    },
-    "externals": {
-      "__dl__FPv": "0x00100610",
-      "__ct__3AppFv": "0x00234900",
-      "__dt__3AppFv": "0x00234b90",
-      "__ct__3BlkFv": "0x0025a070",
-      "__dt__3BlkFv": "0x0025a330"
-    },
-    "exceptions": {
-      "index": "0x00547100",
-      "table": "0x00542b5c",
-      "table_size": "0x2c"
-    }
-  },
   "0x003ef1e0": {
     "emitted": {},
     "duplicates": {
@@ -1657,16 +1619,6 @@
     "emitted": {},
     "duplicates": {
       "__dt__34igSmartPointer<16RefCountedHeader>Fv": "0x001489a0"
-    },
-    "externals": {
-      "__dl__FPv": "0x00100610"
-    }
-  },
-  "0x0025ac60": {
-    "emitted": {},
-    "duplicates": {
-      "__dt__3RefFv": "0x001c6460",
-      "__dt__9StringRefFv": "0x00130720"
     },
     "externals": {
       "__dl__FPv": "0x00100610"
@@ -33628,5 +33580,89 @@
       "__dl__FPv": "0x00100610"
     },
     "symbol": "FUN_00338f70"
+  },
+  "0x002590c0": {
+    "whole_file": true,
+    "emitted": {
+      "FUN_002595e0": "0x002595e0",
+      "__dt__5GuardFv": "0x002599b0",
+      "FUN_00259a10": "0x00259a10",
+      "FUN_00259a20": "0x00259a20",
+      "FUN_00259a60": "0x00259a60",
+      "FUN_00259b60": "0x00259b60",
+      "Gap__Core__igPsx2Thread__vfunc_39": "0x00259bf0",
+      "FUN_00259cd0": "0x00259cd0",
+      "FUN_00259d10": "0x00259d10",
+      "FUN_00259d40": "0x00259d40",
+      "FUN_00259dc0": "0x00259dc0",
+      "FUN_00259f80": "0x00259f80",
+      "FUN_00259f90": "0x00259f90",
+      "FUN_0025a230": "0x0025a230",
+      "FUN_0025a2b0": "0x0025a2b0",
+      "FUN_0025a330": "0x0025a330",
+      "FUN_0025a550": "0x0025a550",
+      "FUN_0025a580": "0x0025a580",
+      "FUN_0025a8c0": "0x0025a8c0",
+      "FUN_0025ac60": "0x0025ac60",
+      "Gap__Core__igFolder__vfunc_26": "0x0025afb0",
+      "FUN_0025afe0": "0x0025afe0"
+    },
+    "data": {
+      "DAT_00498728": "0x00498728",
+      "DAT_004ec870": "0x004ec870",
+      "DAT_004ec890": "0x004ec890",
+      "DAT_004ecf40": "0x004ecf40",
+      "DAT_004ecf50": "0x004ecf50",
+      "DAT_004ecf60": "0x004ecf60",
+      "DAT_004ecf70": "0x004ecf70",
+      "DAT_004ecfa0": "0x004ecfa0",
+      "DAT_004fb410": "0x004fb410",
+      "DAT_004fb418": "0x004fb418",
+      "DAT_00562528": "0x00562528",
+      "DAT_00562540": "0x00562540",
+      "DAT_00562718": "0x00562718",
+      "DAT_0056dc50": "0x0056dc50",
+      "DAT_0056df78": "0x0056df78",
+      "DAT_0056df80": "0x0056df80",
+      "DAT_00586f20": "0x00586f20",
+      "DAT_00586fd8": "0x00586fd8",
+      "DAT_00586fe0": "0x00586fe0",
+      "DAT_00586fe8": "0x00586fe8",
+      "DAT_00586ff0": "0x00586ff0",
+      "DAT_00587108": "0x00587108",
+      "DAT_00587110": "0x00587110",
+      "DAT_005871d0": "0x005871d0",
+      "DAT_00587338": "0x00587338",
+      "DAT_00587340": "0x00587340",
+      "DAT_00587d08": "0x00587d08",
+      "DAT_0058c790": "0x0058c790",
+      "DAT_0058cab8": "0x0058cab8",
+      "DAT_0058cac0": "0x0058cac0",
+      "DAT_0058cac8": "0x0058cac8",
+      "DAT_0058cad0": "0x0058cad0",
+      "GPR_00554990": "0x00554990",
+      "GPR_0055499c": "0x0055499c",
+      "GPR_005549a0": "0x005549a0",
+      "GPR_005549b8": "0x005549b8",
+      "GPR_00554be8": "0x00554be8",
+      "GPR_00554bec": "0x00554bec",
+      "GPR_00554bf0": "0x00554bf0",
+      "GPR_00554c14": "0x00554c14"
+    },
+    "duplicates": {
+      "__dt__10Ref_25ac60Fv": "0x001c6460",
+      "__dt__3RefFv": "0x00150a70",
+      "__dt__9StringRefFv": "0x00130720"
+    },
+    "externals": {
+      "FUN_001ca620": "0x001ca620",
+      "FUN_00238d40": "0x00238d40",
+      "__ct__3AppFv": "0x00234900",
+      "__ct__3BlkFv": "0x0025a070",
+      "__dl__FPv": "0x00100610",
+      "__dt__3AppFv": "0x00234b90",
+      "__dt__3BlkFv": "0x0025a330"
+    },
+    "symbol": "FUN_002590c0"
   }
 }
