@@ -426,25 +426,6 @@
     },
     "symbol": "Gap__Bec__beNDMWShopCtrl00__vfunc_21"
   },
-  "0x004081a0": {
-    "emitted": {},
-    "duplicates": {
-      "__dt__14RecoveryRef<0>Fv": "0x003e9010",
-      "__dt__14RecoveryRef<1>Fv": "0x003edba0",
-      "release__14RecoveryTargetFP14RecoveryTarget": "0x003e9110"
-    },
-    "externals": {
-      "__dl__FPv": "0x00100610",
-      "__ct__17RecoveryCopiedRefFRC8DW4Sret4": "0x0040c180",
-      "__dt__17RecoveryCopiedRefFv": "0x0033e9c0",
-      "__ct__8DW4Vec16FRC8DW4Vec16": "0x003e9220"
-    },
-    "exceptions": {
-      "index": "0x00553c10",
-      "table": "0x00545200",
-      "table_size": "0x6c"
-    }
-  },
   "0x003cdef0": {
     "whole_file": true,
     "emitted": {
@@ -29881,7 +29862,8 @@
   "0x00408100": {
     "whole_file": true,
     "emitted": {
-      "FUN_0040c180": "0x0040c180",
+      "Gap__Bec__beNDMWSaveIntf__vfunc_31": "0x004081a0",
+      "__ct__17RecoveryCopiedRefFRC8DW4Sret4": "0x0040c180",
       "Gap__Bec__beNDMWSaveIntf__vfunc_30": "0x0040c1b0",
       "Gap__Bec__beNDMWSaveIntf__vfunc_29": "0x0040c1c0",
       "Gap__Bec__beNDMWSaveIntf__vfunc_34": "0x0040c220",
@@ -29889,16 +29871,39 @@
       "Gap__Bec__beNDMWSaveIntf__vfunc_20": "0x0040dad0"
     },
     "data": {
-      "@1201": "0x00519970",
+      "@2311": "0x005198e0",
+      "@2312": "0x005198b0",
+      "@2313": "0x00519890",
+      "@2314": "0x00519870",
+      "@2315": "0x00519850",
+      "@2316": "0x00519830",
+      "@2317": "0x00519800",
+      "@2318": "0x005197d0",
+      "@2319": "0x005197a0",
+      "@2320": "0x00519780",
+      "@2329": "0x00519750",
+      "@3490": "0x00519970",
+      "DAT_004cec70": "0x004cec70",
       "DAT_004cf640": "0x004cf640",
       "DAT_004cf644": "0x004cf644",
       "DAT_004cf648": "0x004cf648",
       "DAT_00519670": "0x00519670",
       "DAT_00519678": "0x00519678",
       "DAT_00519688": "0x00519688",
+      "DAT_00519690": "0x00519690",
       "DAT_00519698": "0x00519698",
       "DAT_005196a8": "0x005196a8",
+      "DAT_005196b8": "0x005196b8",
+      "DAT_005196c8": "0x005196c8",
+      "DAT_005196d8": "0x005196d8",
       "DAT_005196e0": "0x005196e0",
+      "DAT_005196e8": "0x005196e8",
+      "DAT_005196f8": "0x005196f8",
+      "DAT_00519700": "0x00519700",
+      "DAT_00519710": "0x00519710",
+      "DAT_00519720": "0x00519720",
+      "DAT_00519730": "0x00519730",
+      "DAT_00519740": "0x00519740",
       "DAT_00519908": "0x00519908",
       "DAT_00519918": "0x00519918",
       "DAT_00519928": "0x00519928",
@@ -29915,6 +29920,8 @@
       "g_beNDMWSaveIntf_metaObject": "0x0058b160"
     },
     "duplicates": {
+      "__dt__14RecoveryRef<0>Fv": "0x003e9010",
+      "__dt__14RecoveryRef<1>Fv": "0x003edba0",
       "__dt__5RP<0>Fv": "0x0033e9c0",
       "__dt__5RP<2>Fv": "0x003eb800",
       "__dt__5RP<3>Fv": "0x003eb880",
@@ -29922,10 +29929,13 @@
       "__dt__5RP<5>Fv": "0x003eb780",
       "__dt__5RP<6>Fv": "0x003eb600",
       "__dt__5RP<7>Fv": "0x003eb580",
-      "__dt__5RP<8>Fv": "0x003eb500"
+      "__dt__5RP<8>Fv": "0x003eb500",
+      "release__14RecoveryTargetFP14RecoveryTarget": "0x003e9110"
     },
     "externals": {
-      "__dl__FPv": "0x00100610"
+      "__ct__8DW4Vec16FRC8DW4Vec16": "0x003e9220",
+      "__dl__FPv": "0x00100610",
+      "__dt__17RecoveryCopiedRefFv": "0x0033e9c0"
     },
     "symbol": "Gap__Bec__beNDMWSaveIntf__vfunc_32"
   },
