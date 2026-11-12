@@ -202,7 +202,7 @@ asm	p2AddDmaCompletion	1	#dma-channel-cop0
 volatile	p2AddDmaCompletion	1	#dma-channel-cop0
 asm-function	p2WaitDmaCondition	1	#dma-channel-cop0
 volatile	p2WaitDmaSequence	3	#dma-channel-shared-words
-volatile	FUN_001ef4c0	2	#dma-channel-shared-words
+volatile	p2Vif0DmaHandler	1	#dma-channel-shared-words
 volatile	FUN_00207560	4	#dma-channel-shared-words
 asm	p2StartDmaPacket	2	#dma-packet-kick
 volatile	p2StartDmaPacket	2	#dma-packet-kick

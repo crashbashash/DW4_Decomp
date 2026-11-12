@@ -28,7 +28,7 @@ extern int DAT_004e4f50[4];
 extern int DAT_004e4f80[4];
 extern int DAT_004e4fb0[4];
 extern int DAT_00568e38[4];
-extern int DAT_00569190[4];
+extern int p2DmaHandlerIds[4];
 extern int DAT_00569194[4];
 extern int DAT_00569198[4];
 void FUN_001edf20(void) {
@@ -51,7 +51,7 @@ void FUN_001edf20(void) {
         if (RemoveDmacHandler(1, DAT_00569194[0]) == -1) {
             printf(&DAT_004e4f50[0]);
         }
-        if ((DAT_00569190[0] != -1) && (RemoveDmacHandler(0, DAT_00569190[0]) == -1)) {
+        if ((p2DmaHandlerIds[0] != -1) && (RemoveDmacHandler(0, p2DmaHandlerIds[0]) == -1)) {
             printf(&DAT_004e4f80[0]);
         }
         if (RemoveDmacHandler(2, DAT_00569198[0]) == -1) {

@@ -2596,6 +2596,7 @@
 0x0048dbb0	g_igDataPumpInfo_callbackList	callback-list
 0x0048dbe0	g_igDataPump_callbackList	callback-list
 0x00490cc0	p2DmaPacketCount	recovered-global
+0x00490d00	p2DmaWaitSemaParam	recovered-global
 0x00497bb0	g_igOptInterface_callbackList	callback-list
 0x00497c00	g_igOptBase_callbackList	callback-list
 0x00497c30	g_igMessageInterface_callbackList	callback-list
@@ -5074,6 +5075,7 @@
 0x00569040	p2DmaWaitSequence	recovered-global
 0x005690b8	p2DmaChannelIdle	recovered-global
 0x00569120	p2DmaFreePackets	recovered-global
+0x00569190	p2DmaHandlerIds	recovered-global
 0x005691b8	p2DmaPredicatePool	recovered-global
 0x005691c0	p2DmaCompletionPool	recovered-global
 0x005691d0	p2PredicateNames	recovered-global

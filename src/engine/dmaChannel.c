@@ -1,4 +1,5 @@
 #include "dw4/p2dma.h"
+#define D_CTRL ((unsigned int *)0x1000e000)
 #define D0_CHCR ((unsigned int *)0x10008000)
 #define D0_QWC ((unsigned int *)0x10008020)
 #define D0_TADR ((unsigned int *)0x10008030)
@@ -39,7 +40,17 @@ int FlushCache(int);
 int iReferSemaStatus();
 int iSignalSema();
 int WaitSema(int);
+int CreateSema(struct SemaParam *param);
+int AddDmacHandler(int channel, int (*handler)(int channel), int next);
+int FUN_0010baf8(int channel);
 
+void p2CompleteDmaPacket(int channel, p2DmaPacket *packet);
+int p2Vif1DmaHandler(int channel);
+int p2GifDmaHandler(int channel);
+void p2InitDmaPredicatePool(void);
+void p2InitDmaCompletionPool(void);
+int p2PreviousFinishFuncDonePredicate(long long arg);
+void p2RegisterPredicateName(int (*predicate)(long long), const char *name);
 void p2StartDmaPacket(int channel);
 
 extern p2DmaPacket *p2DmaCurrentPacket[P2_DMA_CHANNEL_COUNT];
@@ -60,6 +71,115 @@ extern int p2DmaWaitSema;
 extern int p2BlockedSema;
 extern int p2DmaWaitTime;
 extern volatile p2DmaWatch p2DmaWatchFlags;
+extern int p2DmaHandlerIds[P2_DMA_CHANNEL_COUNT];
+extern struct SemaParam p2DmaWaitSemaParam;
+extern struct SemaParam DAT_00490d20;
+extern int DAT_00490b60;
+extern int DAT_00490c70;
+extern int DAT_00490c74;
+extern int DAT_00490c78;
+extern int DAT_00490c7c;
+extern int DAT_00490c80;
+extern int DAT_00490c84;
+extern int DAT_00569090;
+extern int DAT_00569094;
+extern int DAT_00569098;
+extern char DAT_005690a0[P2_DMA_CHANNEL_COUNT];
+extern const char DAT_004e4fe0[];
+
+/* The DMAC handler of channel 0 (VIF0): the transfer of the active packet has ended. */
+int p2Vif0DmaHandler(int channel) {
+    p2DmaPacket *packet = p2DmaActivePacket[P2_DMA_VIF0];
+    if (packet != 0) {
+        p2DmaWatchFlags.busy &= ~0x20;
+        p2DmaWatchFlags.seen &= ~0x20;
+        p2CompleteDmaPacket(channel, packet);
+    }
+    asm { sync }
+    asm { ei }
+    return 0;
+}
+
+/* Sets up one channel's packet ring and installs its DMAC handler. */
+void p2InitDmaChannel(int channel) {
+    if (p2DmaPacketCount[channel] == -1) {
+        p2DmaPacketCount[channel] = 20;
+    }
+    p2DmaFreePackets[channel] = -1;
+    p2DmaCurrentPacket[channel] = 0;
+    p2DmaLastPacket[channel] = 0;
+    FUN_00204240(channel, &p2DmaCurrentPacket[channel]);
+    p2DmaCompletedSequence[channel] = -1;
+    p2DmaStartedSequence[channel] = -1;
+    p2DmaWaitSequence[channel] = 0;
+    p2DmaActivePacket[channel] = p2DmaCurrentPacket[channel];
+    p2DmaChannelIdle[channel] = 1;
+    if (channel == P2_DMA_VIF1) {
+        p2DmaHandlerIds[channel] = AddDmacHandler(channel, p2Vif1DmaHandler, 0);
+    } else if (channel == P2_DMA_GIF) {
+        p2DmaHandlerIds[channel] = AddDmacHandler(channel, p2GifDmaHandler, 0);
+    } else if (channel == P2_DMA_VIF0) {
+        p2DmaHandlerIds[channel] = AddDmacHandler(channel, p2Vif0DmaHandler, 0);
+    }
+    FUN_0010baf8(channel);
+}
+
+/* Creates the wait semaphores, sets the pool sizes and brings up VIF1, GIF and (when it has packets)
+ * VIF0, then enables the DMAC. */
+void p2InitDmaChannels(void) {
+    struct SemaParam wait = p2DmaWaitSemaParam;
+    struct SemaParam lock = DAT_00490d20;
+
+    if (DAT_00490b60 != 0) {
+        p2DmaWaitSema = CreateSema(&wait);
+        DAT_00569090 = 0;
+        DAT_00569094 = CreateSema(&lock);
+        DAT_00569098 = CreateSema(&lock);
+    }
+    DAT_00490c74 = 64;
+    DAT_00490c7c = 320;
+    DAT_00490c84 = 96;
+    p2StoreImagePending = 0;
+    DAT_005690a0[P2_DMA_VIF0] = 0;
+    DAT_005690a0[P2_DMA_VIF1] = 0;
+    DAT_005690a0[P2_DMA_GIF] = 0;
+    if (DAT_00490c70 == -1) DAT_00490c70 = 256;
+    if (DAT_00490c78 == -1) DAT_00490c78 = 2048;
+    if (DAT_00490c80 == -1) DAT_00490c80 = 256;
+    p2InitDmaPredicatePool();
+    p2InitDmaCompletionPool();
+    p2InitDmaChannel(P2_DMA_VIF1);
+    p2InitDmaChannel(P2_DMA_GIF);
+    if (DAT_00490c70 != 0 && p2DmaPacketCount[P2_DMA_VIF0] != 0) {
+        p2InitDmaChannel(P2_DMA_VIF0);
+    } else {
+        p2DmaHandlerIds[P2_DMA_VIF0] = -1;
+    }
+    *D_CTRL = 1;
+}
+
+void p2InitDmaPredicatePool(void) {
+    p2DmaPredicatePool = 0;
+    FUN_00204240(P2_POOL_DMA_PREDICATE, &p2DmaPredicatePool);
+    if (DAT_00490b60 != 0) {
+        p2RegisterPredicateName(p2PreviousFinishFuncDonePredicate, DAT_004e4fe0);
+    }
+}
+
+void p2ReserveDmaPredicates(int count) {
+    int i = 0;
+    p2DmaPredicate *node = p2DmaPredicatePool;
+    while (i < count) {
+        if (node == 0) {
+            break;
+        }
+        node = node->next;
+        i++;
+    }
+    if (i != count) {
+        FUN_00204240(P2_POOL_DMA_PREDICATE, &p2DmaPredicatePool, i);
+    }
+}
 
 void p2AddDmaPredicate(int channel, int (*predicate)(long long), long long arg) {
     p2DmaPacket *packet = p2DmaCurrentPacket[channel];

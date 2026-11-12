@@ -1,5 +1,5 @@
 int FUN_001ee600();
-int FUN_001eef70();
+int p2SubmitDmaPacket();
 extern int DAT_0048dcc0[4];
 extern int DAT_0048dcc4[4];
 extern int DAT_0048dcc8[4];
@@ -34,7 +34,7 @@ int FUN_001e8be0(int arg0, void *arg1) {
             if (DAT_00568e50[0] != 0) {
                 FUN_001ee600();
             } else {
-                FUN_001eef70(1);
+                p2SubmitDmaPacket(1);
             }
         }
     }

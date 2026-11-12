@@ -61,7 +61,7 @@ extern unsigned int DAT_00490f50, DAT_00490f54, DAT_00490f58, DAT_00490f5c, DAT_
 extern unsigned int DAT_00569328;
 extern int DAT_00568e50;
 void FUN_001ee600(void);
-void FUN_001eef70(int arg);
+void p2SubmitDmaPacket(int arg);
 int printf();
 long long p2readGSPrivRegister();
 extern int DAT_004e5110[4];
@@ -270,7 +270,7 @@ void FUN_001f7370(float value) {
         if (DAT_00568e50 != 0) {
             FUN_001ee600();
         } else {
-            FUN_001eef70(1);
+            p2SubmitDmaPacket(1);
         }
     }
 }
@@ -410,7 +410,7 @@ void FUN_001f76f0(int count, int *regs) {
                 if (DAT_00568e50 != 0) {
                     FUN_001ee600();
                 } else {
-                    FUN_001eef70(1);
+                    p2SubmitDmaPacket(1);
                 }
             }
         }
@@ -435,12 +435,12 @@ void FUN_001f7db0(unsigned int addr, int unused, int flush) {
     p[3] = DAT_00491040.w[3];
     DAT_00568f08->cursor = p + 4;
     if (flush != 0) {
-        FUN_001eef70(2);
+        p2SubmitDmaPacket(2);
     } else if (DAT_00568f08->cursor >= DAT_00568f08->end) {
         if (DAT_00568e50 != 0) {
             FUN_001ee600();
         } else {
-            FUN_001eef70(2);
+            p2SubmitDmaPacket(2);
         }
     }
 }

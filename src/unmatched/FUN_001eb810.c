@@ -2,7 +2,7 @@ typedef struct S { int a, b, c, d, e, g; short f18; char f1a; unsigned char val:
 extern S DAT_00490b40;
 void FUN_001eb6a0(int, int *);
 void FUN_001ee600(void);
-void FUN_001eef70(int);
+void p2SubmitDmaPacket(int);
 typedef struct T { unsigned short lo:1; unsigned short a:15; unsigned short b:15; unsigned short hi:1; unsigned short pad[14]; } T;
 extern T DAT_00568db4;
 extern int DAT_00568dc8[16];
@@ -46,6 +46,6 @@ void FUN_001eb810(void) {
             FUN_001ee600();
             return;
         }
-        FUN_001eef70(1);
+        p2SubmitDmaPacket(1);
     }
 }

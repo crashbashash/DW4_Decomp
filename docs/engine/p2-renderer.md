@@ -27,20 +27,25 @@ at `0x10005000` is the VIF1 FIFO, and `dma_spr` at `0x10003020` is `GIF_STAT`.
 `src/engine/dmaChannel.c` holds the channel code; the types are in `include/dw4/p2dma.h`. The layer
 drives three DMA channels, 0 (VIF0), 1 (VIF1) and 2 (GIF): the shutdown path prints "VIF0/VIF1/GIF already
 disabled" and "Error removing VIF0/VIF1/GIF dmac handler" for channels 0, 1 and 2, and one DMAC handler is
-registered per channel.
+registered per channel (`p2Vif0DmaHandler`, `p2Vif1DmaHandler`, `p2GifDmaHandler`, ids in `p2DmaHandlerIds`).
 
+* **Setup.** `p2InitDmaChannels` creates the wait semaphore from `p2DmaWaitSemaParam`, sets the pool sizes,
+  initialises the predicate pool (`p2InitDmaPredicatePool`) and the completion pool, then brings up VIF1,
+  GIF and, when it has packets, VIF0 with `p2InitDmaChannel`, and enables the DMAC (`D_CTRL = 1`).
+  `p2InitDmaChannel` grows the channel's packet ring (each packet set up by `p2InitDmaPacket`), resets its
+  sequences and installs its handler.
 * **Packets.** Each channel owns a ring of packets, `p2DmaCurrentPacket[ch]` is the one being filled,
   `p2DmaLastPacket[ch]` the one submitted last and `p2DmaActivePacket[ch]` the next to transfer or the
   one transferring. A packet is a DMA chain buffer (`chain` is the first tag, `cursor` the write
   position) with a 64-bit `sequence`, one higher than the previous packet of its channel. Submitting
-  (`FUN_001eef70`) writes the end tag, marks the packet `ready` and makes the next packet current.
+  (`p2SubmitDmaPacket`) writes the end tag, marks the packet `ready` and makes the next packet current.
 * **Starting.** `p2TryStartDmaPacket` starts the active packet when the channel is idle, the packet is
   ready, every predicate on it holds and no GS-to-memory transfer is pending. `p2StartDmaPacket` records
   `p2DmaStartedSequence[ch]`, sets the channel's bit in the watchdog word (`0x20`/`0x40`/`0x80`), stamps
   the VIF1 or GIF start time and writes `QWC = 0`, `TADR = chain` and `CHCR = 0x185` (chain mode, from
   memory, tag interrupt, start). The submit path, the DMAC handlers and the GS FINISH handler all call
   it.
-* **Completion.** The channel's DMAC handler copies the started sequence to
+* **Completion.** The channel's DMAC handler clears its watchdog bit and calls `p2CompleteDmaPacket`, which copies the started sequence to
   `p2DmaCompletedSequence[ch]`, runs the packet's completion callbacks (`p2AddDmaCompletion`), signals
   a waiting thread, moves `p2DmaActivePacket[ch]` to the next packet and starts it if it can.
 * **Predicates.** `p2AddDmaPredicate` attaches `test(arg)` to the current packet; the packet does not start

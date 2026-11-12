@@ -226,6 +226,16 @@
 0x00333a40	igAdxFile_SetUseBuffer	audio
 0x00333a50	igAdxFile_SetUseAsync	audio
 0x00334370	igAdxFile_GetFileSize	audio
+0x001eef70	p2SubmitDmaPacket	engine
+0x001ef280	p2CompleteDmaPacket	engine
+0x001ef4c0	p2Vif0DmaHandler	engine
+0x001ef520	p2Vif1DmaHandler	engine
+0x001ef6a0	p2GifDmaHandler	engine
+0x001ef820	p2InitDmaPacket	engine
+0x001ef9b0	p2InitDmaChannel	engine
+0x001efb40	p2InitDmaChannels	engine
+0x001efce0	p2InitDmaPredicatePool	engine
+0x001efd30	p2ReserveDmaPredicates	engine
 0x001efd90	p2AddDmaPredicate	engine
 0x001efe70	p2FreeDmaPredicates	engine
 0x001efec0	p2DmaPredicatesSatisfied	engine

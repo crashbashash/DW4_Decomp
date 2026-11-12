@@ -231,7 +231,7 @@ typedef struct GifTag {
 } GifTag;
 extern GsPacketBuffer *DAT_00568f04;
 void FUN_001ee600();
-void FUN_001eef70();
+void p2SubmitDmaPacket();
 extern int DAT_00491480;
 extern int DAT_00490d38;
 extern int DAT_00569308;
@@ -320,7 +320,7 @@ void FUN_001ffcf0(void) {
         if (DAT_00568e50[0] != 0) {
             FUN_001ee600();
         } else {
-            FUN_001eef70(1);
+            p2SubmitDmaPacket(1);
         }
     }
 }

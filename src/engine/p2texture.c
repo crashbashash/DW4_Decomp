@@ -10,7 +10,7 @@ int WaitSema(int);
 int iReferSemaStatus();
 int iSignalSema();
 long long p2readGSPrivRegister();
-int FUN_001eef70();
+int p2SubmitDmaPacket();
 void FUN_001ea5d0(void *clut);
 int FUN_001fcb00();
 int FUN_001edcb0();
@@ -148,7 +148,7 @@ void FUN_00208120(void) {
     if (s->a != s->b) goto call;
     if (s->f.c1 != 0) {
 call:
-        FUN_001eef70(1, s);
+        p2SubmitDmaPacket(1, s);
     }
 }
 
@@ -689,10 +689,10 @@ void FUN_002097f0(struct Tex_2097f0 **list, int count) {
         count--;
         list++;
         if (count != 0 && DAT_00568f08[0]->cur > DAT_00568f08[0]->end) {
-            FUN_001eef70(2);
+            p2SubmitDmaPacket(2);
         }
     } while (count != 0);
-    FUN_001eef70(2);
+    p2SubmitDmaPacket(2);
 }
 
 int FUN_00209cc0(int a) {
@@ -1183,7 +1183,7 @@ unsigned char FUN_0020b7f0(struct N_20b7f0 *arg0) {
             if (DAT_0056c130[0] == 1) {
                 FUN_00207e70(FUN_001f7500, 0);
                 t = DAT_00568f04[0]->f0;
-                FUN_001eef70(1);
+                p2SubmitDmaPacket(1);
                 FUN_0020b280(arg0, s0, r);
                 p2AddDmaPredicate(2, FUN_001f74e0, t);
             } else {
@@ -1191,7 +1191,7 @@ unsigned char FUN_0020b7f0(struct N_20b7f0 *arg0) {
                 if (p->f0 == t || p->f32 == p->f48) {
                     p->b3 = 1;
                 }
-                FUN_001eef70(1, p);
+                p2SubmitDmaPacket(1, p);
                 FUN_0020b280(arg0, s0, r);
                 p2AddDmaPredicate(2, textureDeferredPredicate, t);
             }
