@@ -42,18 +42,18 @@ The `code-only` debt by exception-metadata reason (from each unit's diagnostic):
 
 Matching proves the bytes; it does not make the source readable. A matched function counts as **readable** when it also passes every test below. The tests are mechanical, so this is a floor: a function can pass them all and still be hard to follow. An owner-approved assembly source counts as readable when it has a recovered name, because its approval records that no C reproduces it.
 
-**4,441** of the 19,556 matched functions are readable: **687,716** code bytes, **19.8 %** of the code.
+**5,251** of the 19,556 matched functions are readable: **780,380** code bytes, **22.5 %** of the code.
 
 | A matched function is readable when | matched functions failing it | code bytes |
 | --- | ---: | ---: |
 | the function has a recovered name, not `FUN_<address>` or a numbered virtual slot | 13,800 | 1,875,496 |
-| no name holds an address: not the function's own, nor any function, variable or type it uses | 11,183 | 1,842,072 |
-| the types it uses have real names, not a placeholder such as `S`, `Obj`, `Info176` or `DW4VC_232_2` | 1,275 | 465,544 |
-| it sits in its class or module file, not `src/unmatched/` | 4,907 | 1,059,228 |
-| what it calls and reads is named: no `FUN_`/`DAT_` references | 5,654 | 1,269,096 |
-| no decompiler leftovers: `temp_*`, `var_*`, `argN`, stack-offset locals such as `sp5C` | 2,301 | 679,060 |
-| fields are reached through named struct members: no `fNN`/`unkNN` members, no cast of a pointer plus an offset | 1,540 | 448,700 |
-| virtual calls go through a named method, not a slot number such as `v216` or a cast function pointer | 295 | 175,004 |
+| no name holds an address: not the function's own, nor any function, variable or type it uses | 10,364 | 1,748,208 |
+| the types it uses have real names, not a placeholder such as `S`, `Obj`, `Info176` or `DW4VC_232_2` | 724 | 396,800 |
+| it sits in its class or module file, not `src/unmatched/` | 3,340 | 904,172 |
+| what it calls and reads is named: no `FUN_`/`DAT_` references | 4,132 | 1,115,776 |
+| no decompiler leftovers: `temp_*`, `var_*`, `argN`, stack-offset locals such as `sp5C` | 1,802 | 602,188 |
+| fields are reached through named struct members: no `fNN`/`unkNN` members, no cast of a pointer plus an offset | 1,368 | 424,968 |
+| virtual calls go through a named method, not a slot number such as `v216` or a cast function pointer | 267 | 168,588 |
 
 ## Debt
 
@@ -84,12 +84,12 @@ The debt ratchet ([`docs/engine/debt-ratchet.md`](docs/engine/debt-ratchet.md)):
 | `inline_asm.other` | 0 | 0 | 0 | `asm` statements other than `sync` and `ei` without an owner's approval row for each function they reach (tools/inline_asm.py) |
 | `unmatched.functions` | 951 | 951 | 0 | functions in the layout with no definition in src/ |
 | `unmatched.bytes` | 629,360 | 629,360 | 0 | bytes of those |
-| `struct.a` | 81 | 80 | -1 | struct-report groups: same view name, clashing layouts across units (scripts/check_struct_conflicts.py) |
-| `struct.b` | 98 | 64 | -34 | struct-report groups: receiver view disagrees with the reflected class |
-| `struct.c` | 165 | 139 | -26 | struct-report groups: offset-named member whose number is not its offset |
-| `m2c_idiom.units` | 2,386 | 2,070 | -316 | source files (asm bodies excluded) still carrying m2c idioms: `temp_*`, `var_*` or `argN` |
+| `struct.a` | 81 | 79 | -2 | struct-report groups: same view name, clashing layouts across units (scripts/check_struct_conflicts.py) |
+| `struct.b` | 98 | 11 | -87 | struct-report groups: receiver view disagrees with the reflected class |
+| `struct.c` | 165 | 98 | -67 | struct-report groups: offset-named member whose number is not its offset |
+| `m2c_idiom.units` | 2,386 | 1,571 | -815 | source files (asm bodies excluded) still carrying m2c idioms: `temp_*`, `var_*` or `argN` |
 | `raw_casts.reflected` | 363 | 363 | 0 | raw offset casts on a named receiver where reflection names the field (tools/typed_coverage.py `typeable`) |
-| `fun_dat_refs` | 56,842 | 52,132 | -4710 | FUN_/DAT_-named references in matched units' code (comments and strings excluded, definitions subtracted) |
+| `fun_dat_refs` | 56,842 | 42,797 | -14045 | FUN_/DAT_-named references in matched units' code (comments and strings excluded, definitions subtracted) |
 | `foreign_profile.functions` | 10 | 10 | 0 | code bytes match only under a provisional per-function override that differs from the unit's profile in config/SLUS-20836/units.tsv (data/check-categories.tsv) |
 | `foreign_profile.bytes` | 288 | 288 | 0 | bytes of those |
 | `unapproved.functions` | 58 | 58 | 0 | code bytes match, but the source uses inline `asm` or `volatile` with no owner approval (config/source-approvals.tsv) |
