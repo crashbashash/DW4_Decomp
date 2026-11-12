@@ -1,7 +1,7 @@
 int FUN_00113f20();
 int FUN_00113f78();
 int FUN_001ebc00();
-int FUN_001efd90();
+int p2AddDmaPredicate();
 int FUN_001f76c0();
 int FUN_001f8190();
 int FUN_00207470();
@@ -63,7 +63,7 @@ void FUN_00207560(void) {
         DAT_0056d670[0] &= ~4;
         DAT_0056d678[0] &= ~4;
         FUN_00113f78();
-        FUN_001efd90(1, FUN_00207400, DAT_0056bf78[0]);
+        p2AddDmaPredicate(1, FUN_00207400, DAT_0056bf78[0]);
     } else {
         DAT_0056bf60[0] = 0;
         if (s0 == 0) {
@@ -79,7 +79,7 @@ void FUN_00207560(void) {
     if (DAT_00568e16[0] == 0) {
         DAT_00568e12[0] = ((DAT_00568e12[0] != 0) ^ 1) & 0xFF;
         if (DAT_00568e0c[0] != 0 && (DAT_00568e10[0] == 1 || DAT_00568e0e[0] == 0)) {
-            FUN_001efd90(1, &FUN_00207420, DAT_00568e12[0]);
+            p2AddDmaPredicate(1, &FUN_00207420, DAT_00568e12[0]);
         }
         if (DAT_00568e0e[0] != 0 && DAT_00568e10[0] == 1) {
             if (DAT_00568e12[0] == 0) {

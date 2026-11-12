@@ -2,7 +2,7 @@
 #define MAX(a, b) ((a) < (b) ? (b) : (a))
 int FUN_00113f20();
 int FUN_00113f78();
-long long FUN_001f03a0();
+long long p2AddPreviousFinishFuncPredicate();
 int FUN_00204240();
 int FUN_001f76c0();
 int FUN_0020d270(long long *);
@@ -14,18 +14,18 @@ int FUN_001eef70();
 void FUN_001ea5d0(void *clut);
 int FUN_001fcb00();
 int FUN_001edcb0();
-int FUN_001f0410();
-void FUN_001f0470(void);
-int FUN_001f0490();
-int FUN_001f0500();
+int p2RegisterPredicateName();
+void textureDeferredPredicate(void);
+int textureLoadedPredicate();
+int p2DmaSequenceLastCompleted();
 int FUN_001ebc00();
 int FUN_001f76f0();
-int FUN_001efd90();
+int p2AddDmaPredicate();
 void FUN_001f74e0(void);
 void FUN_001f7500(void);
 
 extern int DAT_0056bfd8[4];
-extern int DAT_00568ed0[4];
+extern int p2BlockedSema;
 extern int DAT_0056c164[4];
 extern int DAT_0056c010[4];
 extern long long DAT_0056b020[4];
@@ -68,7 +68,7 @@ void FUN_00207e70(int arg0, int arg1) {
     temp_s0 = DAT_0056bf50[0];
     DAT_0056bf50[0] = temp_s0->f4;
     FUN_00113f78();
-    temp_s0->f8 = FUN_001f03a0();
+    temp_s0->f8 = p2AddPreviousFinishFuncPredicate();
     temp_s0->f16 = arg0;
     temp_s0->f20 = arg1;
     temp_s0->f4 = 0;
@@ -113,9 +113,9 @@ void FUN_00207fa0(unsigned int arg0) {
     goto test;
 body:
     FUN_0020d270(&sp28);
-    DAT_00568ed0[0] = DAT_0056bf80[0];
+    p2BlockedSema = DAT_0056bf80[0];
     WaitSema(DAT_0056bf80[0]);
-    DAT_00568ed0[0] = -1;
+    p2BlockedSema = -1;
     FUN_0020d270(&sp20);
     DAT_0056c164[0] += (long long)((sp20 - sp28) << 0x20) >> 0x20;
 test:
@@ -251,8 +251,8 @@ void FUN_002082f0(void) {
     DAT_0056c0d8[0] = DAT_0056c0d0[0];
     DAT_0056c078[0] = temp_v0_2->f56;
     if (DAT_00490b60[0] != 0) {
-        FUN_001f0410(FUN_001f0490, &DAT_004e5370[0]);
-        FUN_001f0410(FUN_001f0470, &DAT_004e5390[0]);
+        p2RegisterPredicateName(textureLoadedPredicate, &DAT_004e5370[0]);
+        p2RegisterPredicateName(textureDeferredPredicate, &DAT_004e5390[0]);
     }
     j = 0;
     do {
@@ -265,7 +265,7 @@ void FUN_002082f0(void) {
 typedef struct { char p0[8]; long long f8; char p1[54]; signed char f : 7; } S_208430;
 
 void FUN_00208430(S_208430 *arg0) {
-    if (arg0->f == 4 && FUN_001f0500(1, arg0->f8) != 0) {
+    if (arg0->f == 4 && p2DmaSequenceLastCompleted(1, arg0->f8) != 0) {
         arg0->f = 5;
     }
 }
@@ -587,9 +587,9 @@ struct Ch_2097f0 {
 };
 struct Tex_2097f0 { long long tag; char p8[40]; int addr; char p52[4]; int tbp; unsigned short width; unsigned short height; char p64[2]; unsigned short format; };
 void FUN_002097f0(struct Tex_2097f0 **list, int count) {
-    int FUN_001f04b0();
+    int p2DmaPacketQueued();
     int FUN_001f7e90();
-    int FUN_001effc0();
+    int p2AddDmaCompletion();
     void FUN_002084a0();
     extern struct G_20a590 *DAT_0056ad80[4];
     extern struct Ch_2097f0 *DAT_00568f08[4];
@@ -616,7 +616,7 @@ void FUN_002097f0(struct Tex_2097f0 **list, int count) {
     unsigned int qwc;
 
     FUN_00113f20();
-    if (FUN_001f04b0(2, DAT_00568f38[0]) != 0) {
+    if (p2DmaPacketQueued(2, DAT_00568f38[0]) != 0) {
         seq = DAT_00568f08[0]->seq;
         if (seq >= 0 && DAT_00568f38[0]->seq >= seq && DAT_00568f38[0]->cur < DAT_00568f38[0]->end) {
             n = DAT_00568f08[0]->head;
@@ -685,7 +685,7 @@ void FUN_002097f0(struct Tex_2097f0 **list, int count) {
             addr += (DAT_00491770[fmt] * (w * h)) >> 1;
         }
         t->tag = DAT_00568f08[0]->tag;
-        FUN_001effc0(2, FUN_002084a0, *list);
+        p2AddDmaCompletion(2, FUN_002084a0, *list);
         count--;
         list++;
         if (count != 0 && DAT_00568f08[0]->cur > DAT_00568f08[0]->end) {
@@ -1185,7 +1185,7 @@ unsigned char FUN_0020b7f0(struct N_20b7f0 *arg0) {
                 t = DAT_00568f04[0]->f0;
                 FUN_001eef70(1);
                 FUN_0020b280(arg0, s0, r);
-                FUN_001efd90(2, FUN_001f74e0, t);
+                p2AddDmaPredicate(2, FUN_001f74e0, t);
             } else {
                 p = DAT_00568f04[0];
                 if (p->f0 == t || p->f32 == p->f48) {
@@ -1193,7 +1193,7 @@ unsigned char FUN_0020b7f0(struct N_20b7f0 *arg0) {
                 }
                 FUN_001eef70(1, p);
                 FUN_0020b280(arg0, s0, r);
-                FUN_001efd90(2, FUN_001f0470, t);
+                p2AddDmaPredicate(2, textureDeferredPredicate, t);
             }
             lp = &DAT_00568f08[0]->f8;
             if (*lp < t) {
@@ -1215,8 +1215,8 @@ unsigned char FUN_0020b7f0(struct N_20b7f0 *arg0) {
 
 #pragma cplusplus on
 extern "C" {
-int FUN_001eff60(...);
-int FUN_001effc0(...);
+int p2ReserveDmaCompletions(...);
+int p2AddDmaCompletion(...);
 void FUN_0020b9d0(void *arg0);
 }
 struct N_20b9d0 {
@@ -1235,7 +1235,7 @@ struct N_20b9d0 {
         extern long long * DAT_00568f04[4];
         m = 4;
         f8 = *DAT_00568f04[0];
-        FUN_001effc0(1, &FUN_00208430, this);
+        p2AddDmaCompletion(1, &FUN_00208430, this);
     }
 };
 void FUN_0020b9d0(void *arg0) {
@@ -1248,14 +1248,14 @@ void FUN_0020b9d0(void *arg0) {
     var_s0 = n->f32;
     int t = n->f71 + a1;
     if (n->f72 == 0) {
-        FUN_001eff60(t, a1);
+        p2ReserveDmaCompletions(t, a1);
         FUN_00113f20();
         n->Set();
         c = n->f36;
         if (c != 0) {
             c->m = 4;
             n->f36->f8 = *DAT_00568f04[0];
-            FUN_001effc0(1, &FUN_00208430, n->f36);
+            p2AddDmaCompletion(1, &FUN_00208430, n->f36);
         }
         while (var_s0 != 0) {
             if (var_s0->getM() != 1) {
@@ -1466,7 +1466,7 @@ typedef struct N_20c9f0 {
     char p71;
     char f72;
 } N_20c9f0;
-int FUN_001f05a0();
+int p2WaitDmaSequence();
 void FUN_0020c9f0(N_20c9f0 *arg0) {
     extern N_20c9f0 *DAT_0056c0d0[4];
     extern N_20c9f0 *DAT_0056c0d8[4];
@@ -1485,7 +1485,7 @@ void FUN_0020c9f0(N_20c9f0 *arg0) {
         DAT_0056c0e0[0] = p;
     }
     if (arg0->f48 == 0 && arg0->f52 == 0) {
-        FUN_001f05a0(1, arg0->f8);
+        p2WaitDmaSequence(1, arg0->f8);
     }
     FUN_00113f20();
     arg0->m = 0;

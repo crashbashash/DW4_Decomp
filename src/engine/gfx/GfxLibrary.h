@@ -3077,7 +3077,7 @@ extern "C" int FUN_001ea420(int handle);
 extern "C" int FUN_001ea430(int a, int b, int c, int d);
 extern "C" int FUN_001ea8a0(int handle);
 extern "C" int FUN_001edf20(...);
-extern "C" int FUN_001f05a0(...);
+extern "C" int p2WaitDmaSequence(...);
 extern "C" void FUN_00203580(void *source, int sourceFormat, int width, int height, int layout, void *pixels, int flags);
 extern "C" void FUN_00203c50(void *source, int sourceFormat, int width, int height, int layout, void *pixels, int flags);
 extern "C" void FUN_002094c0(int a, int b);
@@ -3420,7 +3420,7 @@ struct R_16d660 { char pad0[708]; int f708; char pad1[228]; struct Q_16d660 *f94
 extern "C" int FUN_0016d910(...);
 extern "C" int FUN_0016db20(...);
 extern "C" int FUN_0017f080(...);
-extern "C" long long FUN_001f0560(...);
+extern "C" long long p2GetVif1WaitSequence(...);
 extern "C" int FUN_001f10f0(...);
 extern "C" int FUN_001f2730(...);
 extern "C" int FUN_001f1850(...);

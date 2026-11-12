@@ -1,6 +1,6 @@
 typedef long long s128;
 int CreateSema();
-int FUN_001f0410();
+int p2RegisterPredicateName();
 int FUN_00204240();
 int FUN_00206610();
 int FUN_00207f30();
@@ -47,8 +47,8 @@ void FUN_00207210(void) {
         sp.b = 1;
         sp.c = 1;
         DAT_0056bf88[0] = CreateSema(&sp);
-        FUN_001f0410(FUN_00207400, &DAT_004e5330[0]);
-        FUN_001f0410(&FUN_00207420, &DAT_004e5350[0]);
+        p2RegisterPredicateName(FUN_00207400, &DAT_004e5330[0]);
+        p2RegisterPredicateName(&FUN_00207420, &DAT_004e5350[0]);
         FUN_00206610();
     }
     if (DAT_00568e16[0] != 0) {

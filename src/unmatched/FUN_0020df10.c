@@ -1,5 +1,12 @@
 int CreateSema();
-struct SemaParam { int a[6]; };
+struct SemaParam {
+    int currentCount;
+    int maxCount;
+    int initCount;
+    int numWaitThreads;
+    unsigned int attr;
+    unsigned int option;
+};
 extern int DAT_00490b60[4];
 extern struct SemaParam DAT_00496500;
 extern struct SemaParam DAT_00496520;

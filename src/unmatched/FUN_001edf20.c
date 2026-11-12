@@ -4,7 +4,7 @@ int FUN_0010ba90();
 int printf();
 int FUN_001ea9c0();
 int FUN_001eb570();
-int FUN_001f0730();
+int p2ShutdownDmaChannels();
 int FUN_00203500();
 int FUN_00204950();
 int FUN_00206540();
@@ -72,7 +72,7 @@ void FUN_001edf20(void) {
         DeleteThread(DAT_004965b8[0]);
         FUN_001eb570();
         FUN_00203500();
-        FUN_001f0730();
+        p2ShutdownDmaChannels();
         FUN_00204950(3, 0);
         FUN_00204950(9, 0);
         FUN_00204950(0xA, 0);

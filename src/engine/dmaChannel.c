@@ -1,327 +1,322 @@
-int FUN_001efec0();
-void FUN_001f00e0(int);
-int FUN_001f0390(void);
-int FUN_00204240();
+#include "dw4/p2dma.h"
+
+enum {
+    P2_POOL_DMA_PREDICATE = 7,
+    P2_POOL_DMA_COMPLETION = 8
+};
+
+typedef struct p2PredicateName {
+    int (*predicate)(long long arg);
+    const char *name;
+} p2PredicateName;
+
+struct SemaParam {
+    int currentCount;
+    int maxCount;
+    int initCount;
+    int numWaitThreads;
+    unsigned int attr;
+    unsigned int option;
+};
+
 int FUN_00113f20();
 int FUN_00113f78();
+int FUN_00204240();
+int FUN_00204100(int);
+int FUN_00208120(void);
+int FUN_00330770();
+void FUN_0020d270(long long *);
+int FlushCache(int);
 int iReferSemaStatus();
 int iSignalSema();
+int WaitSema(int);
 
-typedef struct N { int pad[3]; int f12; int f16; struct N *f20; } N;
-struct ProcNode { long long a; int pad; int next; int fn; };
-struct ProcList { char pad[16]; struct ProcNode *head; };
-typedef struct PoolNode { int pad0; struct PoolNode *next; int pad2[4]; struct PoolNode *head; } PoolNode;
-struct S { char pad[64]; unsigned char f64; };
-struct S2 { long long f0; char pad[56]; unsigned char b0:1; unsigned char b1:1; unsigned char b2:6; };
-struct P { int a; int b; };
+void p2StartDmaPacket(int channel);
 
-extern void *DAT_00568f60[4];
-extern int DAT_005691b8[4];
-extern void *DAT_005691c0[4];
-extern char DAT_005690b8[];
-extern char GPR_00554bbc;
-extern int DAT_0056bf38[4];
-extern void *DAT_00568f04[4];
-extern struct P DAT_005691d0[16];
-extern long long DAT_00568fe8[4];
-extern long long DAT_00568ff0[4];
-extern char DAT_00568f00[];
-extern long long DAT_00568fe0[4];
-extern int DAT_00569030[4];
-extern void *DAT_00568f34[4];
-extern int DAT_00490cc0[4];
-extern int DAT_00569120[4];
-extern long long DAT_00569040[4];
-extern long long DAT_00568f90[4];
-int FlushCache(int);
-int FUN_00204100(int);
-int FUN_00330770();
-typedef struct ChanView { long long v; char pad0[24]; int w32; char pad1[12]; int w48; char pad2[12]; unsigned char b0:1; unsigned char b1:1; unsigned char b2:1; unsigned char b3:1; unsigned char b4:1; unsigned char b5:1; unsigned char b6:1; unsigned char b7:1; } ChanView;
-typedef struct Desc { char p0[16]; int f16; char p1[8]; void *f28; char p2[20]; struct Desc *next; char p3[8]; unsigned char lo : 4; unsigned char flag : 1; unsigned char hi : 3; } Desc;
+extern p2DmaPacket *p2DmaCurrentPacket[P2_DMA_CHANNEL_COUNT];
+extern p2DmaPacket *p2DmaLastPacket[P2_DMA_CHANNEL_COUNT];
+extern p2DmaPacket *p2DmaActivePacket[P2_DMA_CHANNEL_COUNT];
+extern long long p2DmaStartedSequence[P2_DMA_CHANNEL_COUNT];
+extern long long p2DmaCompletedSequence[P2_DMA_CHANNEL_COUNT];
+extern long long p2DmaWaitSequence[P2_DMA_CHANNEL_COUNT];
+extern char p2DmaChannelIdle[P2_DMA_CHANNEL_COUNT];
+extern int p2DmaPacketCount[P2_DMA_CHANNEL_COUNT];
+extern int p2DmaFreePackets[P2_DMA_CHANNEL_COUNT];
+extern p2DmaPredicate *p2DmaPredicatePool;
+extern p2DmaCompletion *p2DmaCompletionPool;
+extern p2PredicateName p2PredicateNames[10];
+extern int p2PreviousFinishFuncDone;
+extern char p2StoreImagePending;
+extern int p2DmaWaitSema;
+extern int p2BlockedSema;
+extern int p2DmaWaitTime;
+extern volatile p2DmaWatch p2DmaWatchFlags;
 
-void FUN_001efd90(int channel, int (*callback)(long long), long long data) {
-    N *c = ((N **)DAT_00568f00)[channel];
-    N *n;
+void p2AddDmaPredicate(int channel, int (*predicate)(long long), long long arg) {
+    p2DmaPacket *packet = p2DmaCurrentPacket[channel];
+    p2DmaPredicate *node;
     unsigned int status;
-    if (DAT_005691b8[0] == 0) {
-        FUN_00204240(7, &DAT_005691b8[0]);
+    if (p2DmaPredicatePool == 0) {
+        FUN_00204240(P2_POOL_DMA_PREDICATE, &p2DmaPredicatePool);
     }
     __asm__ volatile("mfc0 %0, $12\n\tsrl $6, %0, 16\n\tand %0, %0, $6" : "=r"(status) : : "$6");
     if (status & 1) {
         FUN_00113f20();
-        n = (N *)DAT_005691b8[0];
-        DAT_005691b8[0] = n->f12;
+        node = p2DmaPredicatePool;
+        p2DmaPredicatePool = node->next;
         FUN_00113f78();
     } else {
-        n = (N *)DAT_005691b8[0];
-        DAT_005691b8[0] = n->f12;
+        node = p2DmaPredicatePool;
+        p2DmaPredicatePool = node->next;
     }
-    n->f16 = (int)callback;
-    *(long long *)n = data;
-    n->f12 = c->f16;
-    if (c->f16 == 0) {
-        c->f20 = n;
+    node->test = predicate;
+    node->arg = arg;
+    node->next = packet->predicates;
+    if (packet->predicates == 0) {
+        packet->lastPredicate = node;
     }
-    c->f16 = (int)n;
+    packet->predicates = node;
 }
 
-static void FUN_001efe70(int arg0) {
-    N *temp_a1;
-
-    temp_a1 = DAT_00568f60[arg0];
-    if (temp_a1->f16 != 0) {
-        temp_a1->f20->f12 = DAT_005691b8[0];
-        DAT_005691b8[0] = temp_a1->f16;
-        temp_a1->f16 = 0;
+static void p2FreeDmaPredicates(int channel) {
+    p2DmaPacket *packet = p2DmaActivePacket[channel];
+    if (packet->predicates != 0) {
+        packet->lastPredicate->next = p2DmaPredicatePool;
+        p2DmaPredicatePool = packet->predicates;
+        packet->predicates = 0;
     }
 }
 
-int FUN_001efec0(int arg0) {
-    int var_s0;
-    int var_v0;
-    struct ProcNode *var_s1;
-    var_s1 = ((struct ProcList *)DAT_00568f60[arg0])->head;
-    var_s0 = 1;
-    while (var_s1 != 0) { var_v0 = ((int (*)(long long))var_s1->fn)(var_s1->a) != 0 ? 1 : 0; var_s0 &= var_v0; if (var_s0 == 0) break; var_s1 = (struct ProcNode *)var_s1->next; }
-    return var_s0;
+int p2DmaPredicatesSatisfied(int channel) {
+    int satisfied;
+    int result;
+    p2DmaPredicate *node = p2DmaActivePacket[channel]->predicates;
+    satisfied = 1;
+    while (node != 0) {
+        result = node->test(node->arg) != 0 ? 1 : 0;
+        satisfied &= result;
+        if (satisfied == 0) {
+            break;
+        }
+        node = node->next;
+    }
+    return satisfied;
 }
 
-void FUN_001eff40(void) {
-    DAT_005691c0[0] = 0;
-    FUN_00204240(8, &DAT_005691c0[0]);
+void p2InitDmaCompletionPool(void) {
+    p2DmaCompletionPool = 0;
+    FUN_00204240(P2_POOL_DMA_COMPLETION, &p2DmaCompletionPool);
 }
 
-void FUN_001eff60(int arg0) {
+void p2ReserveDmaCompletions(int count) {
     int i = 0;
-    int *n = (int *)DAT_005691c0[0];
-    while (i < arg0) {
-        if (n == 0) break;
-        n = (int *)n[1];
+    p2DmaCompletion *node = p2DmaCompletionPool;
+    while (i < count) {
+        if (node == 0) {
+            break;
+        }
+        node = node->next;
         i++;
     }
-    if (i != arg0) {
-        FUN_00204240(8, &DAT_005691c0[0], i);
+    if (i != count) {
+        FUN_00204240(P2_POOL_DMA_COMPLETION, &p2DmaCompletionPool, i);
     }
 }
 
-typedef struct Slot { int pad0; struct Slot *next; int f8; int f12; } Slot;
-
-void FUN_001effc0(int channel, int value, int data) {
-    char *c = ((char **)DAT_00568f00)[channel];
-    Slot *n;
+void p2AddDmaCompletion(int channel, void (*func)(void *), void *arg) {
+    p2DmaPacket *packet = p2DmaCurrentPacket[channel];
+    p2DmaCompletion *node;
     unsigned int status;
-    if (DAT_005691c0[0] == 0) {
-        FUN_00204240(8, &DAT_005691c0[0]);
+    if (p2DmaCompletionPool == 0) {
+        FUN_00204240(P2_POOL_DMA_COMPLETION, &p2DmaCompletionPool);
     }
     __asm__ volatile("mfc0 %0, $12\n\tsrl $6, %0, 16\n\tand %0, %0, $6" : "=r"(status) : : "$6");
     if (status & 1) {
         FUN_00113f20();
-        n = (Slot *)DAT_005691c0[0];
-        DAT_005691c0[0] = n->next;
+        node = p2DmaCompletionPool;
+        p2DmaCompletionPool = node->next;
         FUN_00113f78();
     } else {
-        n = (Slot *)DAT_005691c0[0];
-        DAT_005691c0[0] = n->next;
+        node = p2DmaCompletionPool;
+        p2DmaCompletionPool = node->next;
     }
-    n->f8 = value;
-    n->f12 = data;
-    n->next = *(Slot **)(c + 24);
-    *(Slot **)(c + 24) = n;
+    node->func = func;
+    node->arg = arg;
+    node->next = packet->completions;
+    packet->completions = node;
 }
 
-void FUN_001f0090(int arg0) {
-    PoolNode *temp_a2;
-    PoolNode *var_a1;
-    PoolNode *temp_a0;
-
-    temp_a2 = DAT_00568f60[arg0];
-    var_a1 = temp_a2->head;
-    while (var_a1 != 0) {
-        temp_a0 = var_a1->next;
-        var_a1->next = DAT_005691c0[0];
-        DAT_005691c0[0] = var_a1;
-        var_a1 = temp_a0;
+void p2FreeDmaCompletions(int channel) {
+    p2DmaPacket *packet = p2DmaActivePacket[channel];
+    p2DmaCompletion *node = packet->completions;
+    p2DmaCompletion *next;
+    while (node != 0) {
+        next = node->next;
+        node->next = p2DmaCompletionPool;
+        p2DmaCompletionPool = node;
+        node = next;
     }
-    temp_a2->head = 0;
+    packet->completions = 0;
 }
 
-void FUN_001f0310(int arg0) {
-    struct S *temp_a1;
-    temp_a1 = (struct S *)DAT_00568f60[arg0];
-    if (DAT_005690b8[arg0] != 0 && (temp_a1->f64 & 1) && FUN_001efec0(arg0) != 0 && GPR_00554bbc == 0) {
-        FUN_001f00e0(arg0);
+void p2TryStartDmaPacket(int channel) {
+    p2DmaPacket *packet = p2DmaActivePacket[channel];
+    if (p2DmaChannelIdle[channel] != 0 && packet->ready && p2DmaPredicatesSatisfied(channel) != 0 &&
+        p2StoreImagePending == 0) {
+        p2StartDmaPacket(channel);
     }
 }
 
-int FUN_001f0390(void) {
-    return DAT_0056bf38[0];
+int p2PreviousFinishFuncDonePredicate(long long arg) {
+    return p2PreviousFinishFuncDone;
 }
 
-static inline int b1_of(const struct S2 *s) { return s->b1; }
-long long FUN_001f03a0(void) {
-    struct S2 *s = DAT_00568f04[0];
-    unsigned char t;
-    if (b1_of(s) != 1) {
-        t = *(unsigned char *)((char *)s + 64);
-        s->b1 = 1;
-        FUN_001efd90(1, (int (*)(long long))FUN_001f0390, 0);
+static inline int p2HasFinishPredicate(const p2DmaPacket *packet) {
+    return packet->finishPredicate;
+}
+
+long long p2AddPreviousFinishFuncPredicate(void) {
+    p2DmaPacket *packet = p2DmaCurrentPacket[P2_DMA_VIF1];
+    if (p2HasFinishPredicate(packet) != 1) {
+        packet->finishPredicate = 1;
+        p2AddDmaPredicate(P2_DMA_VIF1, p2PreviousFinishFuncDonePredicate, 0);
     }
-    return s->f0;
+    return packet->sequence;
 }
 
-void FUN_001f0410(int arg0, int arg1) {
+void p2RegisterPredicateName(int (*predicate)(long long), const char *name) {
     int i = 0;
-    while (i < 10 && DAT_005691d0[i].a != 0) {
+    while (i < 10 && p2PredicateNames[i].predicate != 0) {
         i += 1;
     }
-    DAT_005691d0[i].a = arg0;
-    DAT_005691d0[i].b = arg1;
+    p2PredicateNames[i].predicate = predicate;
+    p2PredicateNames[i].name = name;
 }
 
-int FUN_001f0470(long long arg0) {
-    return DAT_00568fe8[0] >= arg0;
+int textureDeferredPredicate(long long sequence) {
+    return p2DmaCompletedSequence[P2_DMA_VIF1] >= sequence;
 }
 
-int FUN_001f0490(long long arg0) {
-    return DAT_00568ff0[0] >= arg0;
+int textureLoadedPredicate(long long sequence) {
+    return p2DmaCompletedSequence[P2_DMA_GIF] >= sequence;
 }
 
-#define DAT_00568f60 ((char *)DAT_00568f60)
-int FUN_001f04b0(int arg0, int arg1) {
-    int temp_a2;
-    int temp_a0;
-    int var_v0;
-
-    temp_a0 = arg0 * 4;
-    temp_a2 = *(int *)(DAT_00568f60 + temp_a0);
-    var_v0 = 0;
-    if ((temp_a2 != 0) && (arg1 != 0) && (*(int *)(DAT_00568f00 + temp_a0) != temp_a2) && (arg1 != temp_a2)) {
-        var_v0 = 1;
+int p2DmaPacketQueued(int channel, p2DmaPacket *packet) {
+    p2DmaPacket *active = p2DmaActivePacket[channel];
+    int queued = 0;
+    if (active != 0 && packet != 0 && p2DmaCurrentPacket[channel] != active && packet != active) {
+        queued = 1;
     }
-    return var_v0;
-}
-#undef DAT_00568f60
-
-int FUN_001f0500(int arg0, long long arg1) {
-    return arg1 == DAT_00568fe0[arg0];
+    return queued;
 }
 
-void FUN_001f0520(void) {
-    int buf[8];
+int p2DmaSequenceLastCompleted(int channel, long long sequence) {
+    return sequence == p2DmaCompletedSequence[channel];
+}
 
-    iReferSemaStatus(DAT_00569030[0], buf);
-    if (buf[0] != buf[1]) {
-        iSignalSema(DAT_00569030[0]);
+void p2SignalDmaWait(void) {
+    struct SemaParam info;
+    iReferSemaStatus(p2DmaWaitSema, &info);
+    if (info.currentCount != info.maxCount) {
+        iSignalSema(p2DmaWaitSema);
     }
 }
 
-long long FUN_001f0560(void) {
-    ChanView *p;
-    long long r;
-    p = DAT_00568f04[0];
-    r = p->v;
-    if (p->w48 == p->w32) {
-        p = DAT_00568f34[0];
-        r = p->v;
+long long p2GetVif1WaitSequence(void) {
+    p2DmaPacket *packet = p2DmaCurrentPacket[P2_DMA_VIF1];
+    long long sequence = packet->sequence;
+    if (packet->cursor == packet->chain) {
+        packet = p2DmaLastPacket[P2_DMA_VIF1];
+        sequence = packet->sequence;
     }
-    p->b2 = 1;
-    return r;
+    packet->signalWait = 1;
+    return sequence;
 }
 
-extern int DAT_00568ed0[4];
-extern int DAT_0056c15c[4];
-int WaitSema(int);
-int FUN_00208120(void);
-void FUN_0020d270(long long *);
-extern volatile int DAT_0056d670[4];
-void FUN_001f05a0(int ch, long long seq) {
+void p2WaitDmaSequence(int channel, long long sequence) {
     int wait;
-    long long *done;
-    long long t1;
-    long long t0;
+    long long *completed;
+    long long start;
+    long long end;
 
     FUN_00113f20();
     wait = 0;
-    if (DAT_00568fe0[ch] < seq) {
+    if (p2DmaCompletedSequence[channel] < sequence) {
         wait = 1;
-        DAT_00569040[ch] = seq;
+        p2DmaWaitSequence[channel] = sequence;
     }
     FUN_00113f78();
     if (wait) {
         FUN_00113f20();
-        DAT_0056d670[0] |= 2;
+        p2DmaWatchFlags.busy |= 2;
         FUN_00113f78();
         FUN_00208120();
-        done = (long long *)((char *)DAT_00568fe0 + ch * 8);
-        while (seq > *done) {
-            FUN_0020d270(&t1);
-            DAT_00568ed0[0] = *(volatile int *)DAT_00569030;
-            WaitSema(*(volatile int *)DAT_00569030);
-            DAT_00568ed0[0] = -1;
-            FUN_0020d270(&t0);
-            DAT_0056c15c[0] += (int)(t0 - t1);
+        completed = (long long *)((char *)p2DmaCompletedSequence + channel * 8);
+        while (sequence > *completed) {
+            FUN_0020d270(&start);
+            p2BlockedSema = *(volatile int *)&p2DmaWaitSema;
+            WaitSema(*(volatile int *)&p2DmaWaitSema);
+            p2BlockedSema = -1;
+            FUN_0020d270(&end);
+            p2DmaWaitTime += (int)(end - start);
         }
         FUN_00113f20();
-        DAT_0056d670[0] &= ~2;
-        DAT_0056d670[2] &= ~2;
+        p2DmaWatchFlags.busy &= ~2;
+        p2DmaWatchFlags.seen &= ~2;
         FUN_00113f78();
-        DAT_00569040[ch] = 0;
+        p2DmaWaitSequence[channel] = 0;
     }
 }
 
-int FUN_001f0710(int arg0, long long arg1) {
-    return DAT_00568fe0[arg0] >= arg1;
+int p2DmaSequenceDone(int channel, long long sequence) {
+    return p2DmaCompletedSequence[channel] >= sequence;
 }
 
-void FUN_001f0730(void) {
-    int i;
-    int o8;
-    Desc *p;
-    Desc *q;
-    Desc **pp;
-    int o;
-    Desc *prev;
+void p2ShutdownDmaChannels(void) {
+    int channel;
+    p2DmaPacket *packet;
+    p2DmaPacket *head;
+    p2DmaPacket **current;
+    p2DmaPacket *keep;
     FlushCache(0);
-    i = 0;
+    channel = 0;
     do {
-        FUN_00204100(i);
-        o = i * 4;
-        *(int *)((char *)DAT_00490cc0 + o) = -1;
-        *(int *)((char *)DAT_00569120 + o) = -1;
-        pp = (Desc **)((char *)DAT_00568f00 + o);
-        p = *pp;
+        FUN_00204100(channel);
+        p2DmaPacketCount[channel] = -1;
+        p2DmaFreePackets[channel] = -1;
+        current = &p2DmaCurrentPacket[channel];
+        packet = *current;
         do {
-            FUN_00330770(p->f28, 22);
-            p->f28 = 0;
-            if (p->f16 == 0 && i == 2) FUN_001efe70(i);
-            p = p->next;
-            q = *pp;
-        } while (p != q);
-        while (!q->flag) q = q->next;
-        p = q->next;
-        prev = q;
+            FUN_00330770(packet->memory, 22);
+            packet->memory = 0;
+            if (packet->predicates == 0 && channel == P2_DMA_GIF) p2FreeDmaPredicates(channel);
+            packet = packet->next;
+            head = *current;
+        } while (packet != head);
+        while (!head->blockHead) head = head->next;
+        packet = head->next;
+        keep = head;
         do {
-            if (prev != 0 && prev->flag && !p->flag) prev->next = p->next;
-            else if (prev != 0 && prev->flag && p->flag) prev = p;
-            p = p->next;
-        } while (p != q);
+            if (keep != 0 && keep->blockHead && !packet->blockHead) keep->next = packet->next;
+            else if (keep != 0 && keep->blockHead && packet->blockHead) keep = packet;
+            packet = packet->next;
+        } while (packet != head);
         do {
-            Desc *t = p;
-            p = p->next;
-            FUN_00330770(t, 22);
-        } while (p != q);
-        o8 = i * 8;
-        *pp = 0;
-        *(long long *)((char *)DAT_00568fe0 + o8) = -1;
-        *(long long *)((char *)DAT_00568f90 + o8) = -1;
-        *(long long *)((char *)DAT_00569040 + o8) = 0;
-        *(DAT_005690b8 + i) = 1;
-        i++;
-        *(int *)((char *)DAT_00568f60 + o) = 0;
-    } while (i <= 2);
+            p2DmaPacket *block = packet;
+            packet = packet->next;
+            FUN_00330770(block, 22);
+        } while (packet != head);
+        *current = 0;
+        p2DmaCompletedSequence[channel] = -1;
+        p2DmaStartedSequence[channel] = -1;
+        p2DmaWaitSequence[channel] = 0;
+        p2DmaChannelIdle[channel] = 1;
+        p2DmaActivePacket[channel] = 0;
+        channel++;
+    } while (channel <= P2_DMA_GIF);
 }
 
-static asm void FUN_001f0930(void)
+static asm void p2WaitDmaCondition(void)
 {
 wait:
     nop

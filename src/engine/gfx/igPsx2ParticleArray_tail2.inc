@@ -48,7 +48,7 @@ void Gap__Gfx__igPsx2ParticleArray__vfunc_29(PA_175ba0 *arg0) {
         }
         FUN_001fe390(arg0->f100, arg0->f56, arg0->f52, arg0->f28);
         if (arg0->f104 != 0) {
-            arg0->f112 = FUN_001f0560();
+            arg0->f112 = p2GetVif1WaitSequence();
         }
 }
 
@@ -179,7 +179,7 @@ void Gap__Gfx__igPsx2ParticleArray__vfunc_12(igPsx2ParticleArray *self) {
         if (self->_bSynchronize != 0) {
             sequence = self->_lSequence;
             if (sequence != 0) {
-                FUN_001f05a0(1, sequence);
+                p2WaitDmaSequence(1, sequence);
             }
         }
         Memory_FreeBuffer(self->_ps2ParticleFormat);

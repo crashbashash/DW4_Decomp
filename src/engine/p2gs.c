@@ -49,7 +49,7 @@ extern long long DAT_0056c070[4];
 extern int DAT_0056c150[4];
 extern int DAT_0056c154[4];
 extern int DAT_0056c158[4];
-extern int DAT_0056c15c[4];
+extern int p2DmaWaitTime;
 extern int DAT_0056c160[4];
 extern int DAT_0056c164[4];
 extern int DAT_0056c168[4];
@@ -221,7 +221,7 @@ void FUN_001f6f50(void *arg0) {
     *(long long *)((char *)arg0 + 312) = DAT_0056c150[0];
     *(long long *)((char *)arg0 + 320) = DAT_0056c154[0];
     *(long long *)((char *)arg0 + 328) = DAT_0056c158[0];
-    *(long long *)((char *)arg0 + 336) = DAT_0056c15c[0];
+    *(long long *)((char *)arg0 + 336) = p2DmaWaitTime;
     *(long long *)((char *)arg0 + 344) = DAT_0056c160[0];
     *(long long *)((char *)arg0 + 352) = DAT_0056c164[0];
     *(long long *)((char *)arg0 + 360) = DAT_0056c168[0];

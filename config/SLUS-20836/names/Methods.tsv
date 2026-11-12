@@ -43,8 +43,14 @@
 #
 # Left unnamed on purpose: 0x1fb710's only identifying string, `p2lighting`, is a *log tag* -- it is
 # passed as a0 to 0x20dfd0 together with a 3-float payload built from s4+112..120, i.e. an event
-# name, not the function's own name.  0x207210 / 0x2082f0 carry `swapbuffers*Predicate` /
-# `textureLoaded*Predicate`, which are registry names for *other* functions; the ones here register
-# them.  Both stay hypotheses until the registration site is read.
+# name, not the function's own name.
+#
+# The DMA predicates name themselves through their registry: 0x1f0410 stores (function, name) pairs
+# in a ten-entry table, and every call passes a predicate's address with its name string.
+#   0x1efce0  (0x1f0390, "p2PreviousFinishFuncDonePredicate")
+#   0x2082f0  (0x1f0490, "textureLoadedPredicate") and (0x1f0470, "textureDeferredPredicate")
 0x001f8050	p2readGSPrivRegister	engine
 0x0020c270	p2LoadTexture	engine
+0x001f0390	p2PreviousFinishFuncDonePredicate	engine
+0x001f0470	textureDeferredPredicate	engine
+0x001f0490	textureLoadedPredicate	engine

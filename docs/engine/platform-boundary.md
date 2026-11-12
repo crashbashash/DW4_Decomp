@@ -57,7 +57,7 @@ are anonymous `FUN_`*. By block:
 
 Cross-checked by hand (`objdump`), because the tool's word is not evidence: `FUN_001f8190` is a
 switch over a register id whose arms are 14 `lui at,0x1200` GS accesses (a GS register writer);
-`FUN_001f00e0` forms `0x10008000`/`0x10009000`/`0x1000a000` (DMA channel registers); the prefix
+`p2StartDmaPacket` forms `0x10008000`/`0x10009000`/`0x1000a000` (DMA channel registers); the prefix
 functions below call the SDK's lazy-init and list-insert helpers.
 
 ## The SDK's own code block

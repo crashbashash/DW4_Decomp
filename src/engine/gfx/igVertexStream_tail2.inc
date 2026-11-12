@@ -3,6 +3,6 @@ int Gap__Gfx__igVertexStream__vfunc_23(void *arg0) {
 }
 
 void FUN_00180020(long long *arg0) {
-    FUN_001f05a0(1, arg0[5]);
+    p2WaitDmaSequence(1, arg0[5]);
 }
 

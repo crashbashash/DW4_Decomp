@@ -1170,7 +1170,7 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_130(UCodeContextView *context, int ind
     } else if (slot->buffers != 0) {
         for (i = 0; i < 8; i++) {
             if (slot->buffers[i] != 0) {
-                FUN_001f05a0(2, FUN_0020b270(slot->buffers[i]));
+                p2WaitDmaSequence(2, FUN_0020b270(slot->buffers[i]));
                 FUN_0020c9f0(slot->buffers[i]);
                 slot->buffers[i] = 0;
             }

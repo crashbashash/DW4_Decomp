@@ -762,7 +762,7 @@ void FUN_0016af30(A_1690d0 *arg0, int arg1, RAf30 *arg2) {
         n = 16;
     }
     if (e->f10 != 0 && e->f8 != 0) {
-        FUN_001f05a0(2, FUN_0020b270(FUN_001ea420(e->f8)));
+        p2WaitDmaSequence(2, FUN_0020b270(FUN_001ea420(e->f8)));
     } else if (e->f10 == 0) {
         o = (void **)FUN_00165cf0((int *)arg0);
         e->f10 = ((VC_220 *)o)->vX(n * 4, 128);
@@ -786,7 +786,7 @@ bool FUN_0016b090(Ob *arg0, int arg1) {
         if (s->f8 != 0) {
             h = FUN_001ea420(s->f8);
             FUN_0020c800(h);
-            FUN_001f05a0(2, FUN_0020b270(h));
+            p2WaitDmaSequence(2, FUN_0020b270(h));
             q = s->f4;
             q->f28 = 1;
             FUN_0016aea0((int)arg0, s->f12, (int *)s->f16, (int *)q->f20);
@@ -812,7 +812,7 @@ void FUN_0016b1d0(OB1d0 *arg0, int arg1) {
         e = t->f16 + arg1;
         if (e->w8 != 0) {
             h = FUN_001ea420(e->w8);
-            FUN_001f05a0(2, FUN_0020b270(h));
+            p2WaitDmaSequence(2, FUN_0020b270(h));
             FUN_0020c9f0(h);
             FUN_001ea8a0(e->w8);
         }

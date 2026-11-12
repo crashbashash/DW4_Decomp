@@ -1,6 +1,6 @@
 void Gap__Gfx__igPsx2VertexArray1_1__vfunc_12(igPsx2VertexArray1_1 *self) {
     if (self->_usageFlags & 4) {
-        FUN_001f05a0(1, self->_lSequence);
+        p2WaitDmaSequence(1, self->_lSequence);
     }
     if (self->_vdata != 0) {
         FUN_0015e7b0((VertexBufferOwner *)self);
@@ -338,7 +338,7 @@ void Gap__Gfx__igPsx2VertexArray1_1__vfunc_27(VA_17da90 *arg0, St_17da90 *arg1) 
     }
     arg1->f24 = 0;
     if (arg0->f20 & 4) {
-        FUN_001f05a0(1, arg0->f64);
+        p2WaitDmaSequence(1, arg0->f64);
     }
 }
 
@@ -352,7 +352,7 @@ void Gap__Gfx__igPsx2VertexArray1_1__vfunc_19(struct VertexArrayColorView *s) {
     unsigned int x;
     unsigned int hi;
     if (s->f20 & 4) {
-        FUN_001f05a0(1, s->f64);
+        p2WaitDmaSequence(1, s->f64);
     }
     FUN_0017d2b0((O_17d2b0 *)s);
     if (s->f28 & 4) {

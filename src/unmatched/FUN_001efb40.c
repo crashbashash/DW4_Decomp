@@ -9,7 +9,7 @@ typedef struct WaitSemaParam {
 
 int CreateSema(WaitSemaParam *param);
 void FUN_001efce0(void);
-void FUN_001eff40(void);
+void p2InitDmaCompletionPool(void);
 void FUN_001ef9b0(int channel);
 extern WaitSemaParam DAT_00490d00;
 extern WaitSemaParam DAT_00490d20;
@@ -52,7 +52,7 @@ void FUN_001efb40(void)
     if (DAT_00490c78 == -1) DAT_00490c78 = 2048;
     if (DAT_00490c80 == -1) DAT_00490c80 = 256;
     FUN_001efce0();
-    FUN_001eff40();
+    p2InitDmaCompletionPool();
     FUN_001ef9b0(1);
     FUN_001ef9b0(2);
     if (DAT_00490c70 != 0 && DAT_00490cc0 != 0) {

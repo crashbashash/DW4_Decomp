@@ -6,7 +6,7 @@ extern struct Node *DAT_0056bf40[4];
 extern struct Node *DAT_0056bf48[4];
 extern struct Node *DAT_0056bf50[4];
 extern int DAT_0056bf88[4];
-int FUN_001f0310();
+int p2TryStartDmaPacket();
 int iReferSemaStatus();
 int iSignalSema();
 void FUN_00207d70(void) {
@@ -33,6 +33,6 @@ void FUN_00207d70(void) {
     if (loc.a != loc.b) {
         iSignalSema(DAT_0056bf88[0]);
     }
-    FUN_001f0310(1);
-    FUN_001f0310(2);
+    p2TryStartDmaPacket(1);
+    p2TryStartDmaPacket(2);
 }

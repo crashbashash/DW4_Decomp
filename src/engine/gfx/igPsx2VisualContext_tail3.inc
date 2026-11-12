@@ -197,11 +197,11 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_74(struct R_16d660 *arg0, int arg1, in
         FUN_0016cd10(arg0);
         if (s6 == 1) {
             q = arg0->f940;
-            FUN_0016e140(q, (int)FUN_001f0560());
+            FUN_0016e140(q, (int)p2GetVif1WaitSequence());
         }
         q = arg0->f940;
         if (q->f20 & 4) {
-            q->f64 = FUN_001f0560();
+            q->f64 = p2GetVif1WaitSequence();
         }
     } else {
         FUN_0017f080(arg0, arg1 + 0x2000);

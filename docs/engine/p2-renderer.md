@@ -7,57 +7,71 @@ below covers its 169 functions from `0x1f0000` to `0x20d000`.
 ## The hardware boundary is six functions
 
 `tools/platform_map.py --code-lo 0x1f0000 --code-hi 0x20d000` finds only **6 of the 169** touching a
-memory-mapped register, and one of them is the uploader:
+memory-mapped register:
 
 | function | size | blocks (the tool's own names) |
 | --- | --- | --- |
-| `FUN_001f0960` | 924 | `dma_spr`, `dmac`, `dmac_ctrl`, `vif1`, `vu1_regs` |
-| `FUN_001f00e0` | 560 | `dmac` |
+| `p2StoreImage` | 924 | `dma_spr`, `dmac`, `dmac_ctrl`, `vif1`, `vu1_regs` |
+| `p2StartDmaPacket` | 560 | `dmac` |
 | `FUN_001f8190` | 400 | `gs` |
 | `p2readGSPrivRegister` | 320 | `gs` |
 | `FUN_0020cd10` | 656 | `timer` |
 | `FUN_001f8350` | 308 | `dma_spr` |
 
-So the whole backend is register-free except for a DMA/VIF/VU1 path and two GS accessors; the rest of
-the layer is ordinary code building data for those.
+So the whole backend is register-free except for the DMA kicks, one GS-to-memory transfer and two GS
+accessors; the rest of the layer is ordinary code building data for those. The tool's `vu1_regs` block
+at `0x10005000` is the VIF1 FIFO, and `dma_spr` at `0x10003020` is `GIF_STAT`.
 
-## The VU1 upload path, end to end
+## The DMA channels
 
-This is the answer to "how does the engine get a program onto the VU1", traced with `objdump`:
+`src/engine/dmaChannel.c` holds the channel code; the types are in `include/dw4/p2dma.h`. The layer
+drives three DMA channels, 0 (VIF0), 1 (VIF1) and 2 (GIF): the shutdown path prints "VIF0/VIF1/GIF already
+disabled" and "Error removing VIF0/VIF1/GIF dmac handler" for channels 0, 1 and 2, and one DMAC handler is
+registered per channel.
 
-```
-Gap__Gfx__igPsx2VisualContext__vfunc_172(a0, a1, ...)                        the dispatcher (Alchemy core, not p2)
-    s0 = *(a0 + 868) -> +16  +  a1 * 48          a1 indexes a table of 48-byte program records
-    type = *(s0 + 28)
-    if (type == 2)  FUN_00203c50(...)            "Buffer not aligned" -- the code transfer
-    else            FUN_00203580(...)            the data transfer
-    both are handed the record's +40 and the caller's alignment value
+* **Packets.** Each channel owns a ring of packets, `p2DmaCurrentPacket[ch]` is the one being filled,
+  `p2DmaLastPacket[ch]` the one submitted last and `p2DmaActivePacket[ch]` the next to transfer or the
+  one transferring. A packet is a DMA chain buffer (`chain` is the first tag, `cursor` the write
+  position) with a 64-bit `sequence`, one higher than the previous packet of its channel. Submitting
+  (`FUN_001eef70`) writes the end tag, marks the packet `ready` and makes the next packet current.
+* **Starting.** `p2TryStartDmaPacket` starts the active packet when the channel is idle, the packet is
+  ready, every predicate on it holds and no GS-to-memory transfer is pending. `p2StartDmaPacket` records
+  `p2DmaStartedSequence[ch]`, sets the channel's bit in the watchdog word (`0x20`/`0x40`/`0x80`), stamps
+  the VIF1 or GIF start time and writes `QWC = 0`, `TADR = chain` and `CHCR = 0x185` (chain mode, from
+  memory, tag interrupt, start). The submit path, the DMAC handlers and the GS FINISH handler all call
+  it.
+* **Completion.** The channel's DMAC handler copies the started sequence to
+  `p2DmaCompletedSequence[ch]`, runs the packet's completion callbacks (`p2AddDmaCompletion`), signals
+  a waiting thread, moves `p2DmaActivePacket[ch]` to the next packet and starts it if it can.
+* **Predicates.** `p2AddDmaPredicate` attaches `test(arg)` to the current packet; the packet does not start
+  until every test returns nonzero. `p2RegisterPredicateName` records a name for a predicate in a
+  ten-entry table, and its callers name three: `p2PreviousFinishFuncDonePredicate` (the GS FINISH
+  handler has run the finish functions queued before this packet), `textureLoadedPredicate` (GIF
+  sequence reached) and `textureDeferredPredicate` (VIF1 sequence reached).
+* **Waiting.** Callers keep the sequence of the packet that carries their data (a vertex array keeps it in
+  `_lSequence`, from `p2GetVif1WaitSequence`) and later call `p2WaitDmaSequence(channel, sequence)`, which
+  submits the current VIF1 packet and sleeps on a semaphore until the channel's completed sequence
+  reaches it, adding the time slept to `p2DmaWaitTime`, which the statistics getter reports.
 
-FUN_00203c50 / FUN_00203580                      the two transfer functions
-    g = *(0x568F04)                              a single global transfer descriptor
-    g->+48 = cursor (advances by 16)
-    g->+56 = source
-    g->+60 = size
-    g->+64 bit 5 = a flag
-    FUN_001f0960(g)                              and hand it to the uploader
+### Reading a GS buffer back
 
-FUN_001f0960(g)                                  the uploader
-    wait for the DMA pointer page  (0x10003020 & 0x1F001FE6 == 6, 100,000-iteration timeout)
-    DMA controller: 0x1000E020 = 2               (the dmac_ctrl page)
-    VIF1:           0x10003C00 = 0x00800000
-    VU1 registers:  0x10005000
-    size = g->+60, masked with 0xFFF8            **8-byte units** -- one VU instruction pair
-    FUN_001f8190(68)                             the GS accessor
-```
+`Gap__Gfx__igPsx2VisualContext__vfunc_172` copies a VRAM buffer into an image through `FUN_00203c50` (a
+palettised buffer) or `FUN_00203580`. Both write a GS local-to-host transfer into the current VIF1
+packet (`BITBLTBUF`, `TRXPOS`, `TRXREG`, then `TRXDIR = 1`), store the destination and its size in
+quadwords in the packet's `storeImageTarget` and set its `storeImage` flag. Without a
+completion handle they flush and call `p2StoreImage` at once; with one they queue `p2StoreImage` as the
+packet's completion callback. Starting such a packet sets `p2StoreImagePending`, which holds every channel
+until the read is done.
 
-Two things in that are worth reading twice. `& 0xFFF8` is the 8-byte unit: a VU micro instruction is
-a 64-bit pair, so the transfer is measured in *instructions*, which is what microcode upload looks
-like. And the destination is not an argument: the uploader writes the **VU1 registers** and hands the
-buffer to the **scratchpad DMA**, so "where it lands" is VU1-relative, not EE-relative.
+`p2StoreImage` waits for `GIF_STAT` to go idle, sets `BUSDIR` to 1 and turns VIF1's FIFO around
+(`VIF1_STAT.FDR`), then reads the data with up to three VIF1 DMA transfers into memory (`CHCR = 0x100`), each
+at most `0xffff` quadwords rounded down to a multiple of 8, waiting for each through the COP0 condition
+(`D_PCR = 2`, `p2WaitDmaCondition`). The CPU reads the remainder from the FIFO at `0x10005000`. In
+interrupt context it also clears `p2StoreImagePending` and the packet's flag.
 
 ### The linked-in microcode is what runs
 
-The static trace above leaves one thing open (nothing references `0x467178`), and a
+Nothing in the code references the microcode image at `0x467178`, and a
 running game settles it. **PINE cannot read VU memory** (`0x11000000` is outside EE main RAM and
 reads back as zeros), but a **PCSX2 savestate carries `vu1MicroMem.bin`, the 16 KiB VU1 micro
 memory**, so `scripts/p2s_ram.py` gives it without the emulator running:
@@ -73,8 +87,7 @@ memory**, so `scripts/p2s_ram.py` gives it without the emulator running:
   16 KiB against a 109 KB image forces, and the reason the symbol table exists at all.
 
 The 24-byte shift at the start is consistent with `0x467178` being 8 mod 16 and the transfer needing
-16-byte alignment (the "Buffer not aligned" path in the chain above). Read this as the explanation of the
-delta, not as a proven step.
+16-byte alignment. Read this as the explanation of the delta, not as a proven step.
 
 The microcode does not locate itself. No word in the image holds the address `0x467178` or the constant
 109184, so the upload does not build the address inline. `B`/`BAL` targets inside the microcode do not
