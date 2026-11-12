@@ -667,7 +667,7 @@
 0x003f5410	0x003f6620	ndmw_beNDMWWindow	b52	-O4,p -sdatathreshold 2 -inline level=8 -Iinclude	on	-	whole file
 0x003f6620	0x00407080	ndmw_beNDMWGameRam	b52	-O4,p -sdatathreshold 2 -inline level=8 -Iinclude	on	-	whole file
 0x00407080	0x00408100	ndmw_beNDMWSaveCtrl	b52	-O4,p -sdatathreshold 2 -inline level=8 -Iinclude	on	-	whole file
-0x00408100	0x0040dadc	beNDMWSaveIntf_408100	b52	-O4,p -sdatathreshold 2 -inline level=8 -Iinclude	on	-	class run of 6 labeled members, 2 unlabeled functions inside; exceptions on: 6/8 functions have retail index records; combat -O3,p -Iinclude reproduces 8/8 members
+0x00408100	0x0040dae0	ndmw_beNDMWSaveIntf	b52	-O4,p -sdatathreshold 2 -inline level=8 -Iinclude	on	-	whole file
 0x0040dae0	0x0040de80	beNDMWListCtrl_40dae0	b52	-O4,p -sdatathreshold 2 -inline level=8 -Iinclude	on	-	class run of 3 labeled members; exceptions on: 3/3 functions have retail index records; default -O3 -Iinclude reproduces 3/3 members
 0x0040de80	0x0040ead8	beNDMWStatusCtrl00_40de80	b52	-O4,p -sdatathreshold 2 -inline level=8 -Iinclude	on	-	class run of 1 labeled members; exceptions on: 1/1 functions have retail index records; combat -O3,p -Iinclude reproduces 1/1 members
 0x0040eae0	0x0040ee60	unlabeled_40eae0	b52	-O4,p -sdatathreshold 2 -inline level=8 -Iinclude	on	-	unlabeled run, no boundary evidence: cut where the retail exception evidence or the pins change; exceptions on: 7/7 functions have retail index records; combat -O3,p -Iinclude reproduces 7/7 members

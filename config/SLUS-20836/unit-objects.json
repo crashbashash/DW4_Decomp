@@ -349,24 +349,6 @@
       "__dl__FPv": "0x00100610"
     }
   },
-  "0x0040c220": {
-    "emitted": {
-      "__dt__5RP<1>Fv": "0x0040da50"
-    },
-    "duplicates": {
-      "__dt__5RP<0>Fv": "0x0033e9c0",
-      "__dt__5RP<2>Fv": "0x003eb800",
-      "__dt__5RP<3>Fv": "0x003eb880",
-      "__dt__5RP<4>Fv": "0x003eb680",
-      "__dt__5RP<5>Fv": "0x003eb780",
-      "__dt__5RP<6>Fv": "0x003eb600",
-      "__dt__5RP<7>Fv": "0x003eb580",
-      "__dt__5RP<8>Fv": "0x003eb500"
-    },
-    "externals": {
-      "__dl__FPv": "0x00100610"
-    }
-  },
   "0x0040f720": {
     "emitted": {
       "__dt__4RefAFv": "0x00411080",
@@ -30526,6 +30508,57 @@
       "__dt__9StringRefFv": "0x00130720"
     },
     "symbol": "FUN_003b04e0"
+  },
+  "0x00408100": {
+    "whole_file": true,
+    "emitted": {
+      "FUN_0040c180": "0x0040c180",
+      "Gap__Bec__beNDMWSaveIntf__vfunc_30": "0x0040c1b0",
+      "Gap__Bec__beNDMWSaveIntf__vfunc_29": "0x0040c1c0",
+      "Gap__Bec__beNDMWSaveIntf__vfunc_34": "0x0040c220",
+      "__dt__5RP<1>Fv": "0x0040da50",
+      "Gap__Bec__beNDMWSaveIntf__vfunc_20": "0x0040dad0"
+    },
+    "data": {
+      "@1201": "0x00519970",
+      "DAT_004cf640": "0x004cf640",
+      "DAT_004cf644": "0x004cf644",
+      "DAT_004cf648": "0x004cf648",
+      "DAT_00519670": "0x00519670",
+      "DAT_00519678": "0x00519678",
+      "DAT_00519688": "0x00519688",
+      "DAT_00519698": "0x00519698",
+      "DAT_005196a8": "0x005196a8",
+      "DAT_005196e0": "0x005196e0",
+      "DAT_00519908": "0x00519908",
+      "DAT_00519918": "0x00519918",
+      "DAT_00519928": "0x00519928",
+      "DAT_00519938": "0x00519938",
+      "DAT_00519948": "0x00519948",
+      "DAT_00519958": "0x00519958",
+      "DAT_00585be0": "0x00585be0",
+      "DAT_00587110": "0x00587110",
+      "DAT_00587d08": "0x00587d08",
+      "DAT_00588518": "0x00588518",
+      "DAT_00589208": "0x00589208",
+      "GPR_00554c14": "0x00554c14",
+      "g_beNDMWSaveIntfInfo_metaObject": "0x0058b070",
+      "g_beNDMWSaveIntf_metaObject": "0x0058b160"
+    },
+    "duplicates": {
+      "__dt__5RP<0>Fv": "0x0033e9c0",
+      "__dt__5RP<2>Fv": "0x003eb800",
+      "__dt__5RP<3>Fv": "0x003eb880",
+      "__dt__5RP<4>Fv": "0x003eb680",
+      "__dt__5RP<5>Fv": "0x003eb780",
+      "__dt__5RP<6>Fv": "0x003eb600",
+      "__dt__5RP<7>Fv": "0x003eb580",
+      "__dt__5RP<8>Fv": "0x003eb500"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    },
+    "symbol": "Gap__Bec__beNDMWSaveIntf__vfunc_32"
   },
   "0x00407080": {
     "whole_file": true,

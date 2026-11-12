@@ -1,4 +1,46 @@
 #include "dw4/reflected.h"
+
+extern "C" int igObject_Destroy(...);
+extern "C" void * beBaseInfoDataList_Create(...);
+extern "C" int *FUN_0040c180(int *arg0, int *arg1);
+extern "C" int Gap__Bec__beNDMWSaveIntf__vfunc_30(void);
+extern "C" int Gap__Bec__beNDMWSaveIntf__vfunc_20(void);
+extern "C" void *FUN_003bc940(...);
+extern "C" int FUN_003bcc20(...);
+extern "C" void *FUN_003c2e60(...);
+extern "C" void *FUN_003c3560(...);
+extern "C" void *FUN_003c3900(...);
+extern "C" void *FUN_003c3e40(...);
+extern "C" void *FUN_003c6b00(...);
+extern "C" void *beNDMWLoadIntf2ComMdlCtrl_Create(...);
+extern "C" void *beNDMWLoadIntf2TextOrder_Create(...);
+extern "C" int FUN_003d9de0(...);
+extern "C" int Memory_GetAllocatorBySelector(...);
+extern "C" int ObjectList_AppendRetained(...);
+extern "C" int beMessenger_AppendInt(...);
+extern "C" int beMessenger_DispatchSelected(...);
+extern "C" int beMessenger_GetInt(...);
+extern "C" int beMessenger_GetIntCount(...);
+extern "C" void *beMessenger_GetObject(...);
+extern "C" unsigned int beMessenger_ResolveEnumValue(...);
+extern "C" int beMessenger_SelectGroup(...);
+extern "C" int beMessenger_SendNamed(...);
+extern "C" int beMessenger_SetInt(...);
+extern "C" int igObject_GetAllocator(...);
+extern "C" void *igProperty_FindByName(...);
+/* reference-counted engine object header: refcount word at +4 */
+
+typedef struct RefCountedHeader { char pad4[4]; int f4; } RefCountedHeader;
+extern "C" RefCountedHeader * FUN_00236f80(...);
+extern "C" int DAT_00588518[4];
+extern "C" void Gap__Bec__beNDMWSaveIntf__vfunc_32(beNDMWSaveIntf *arg0);
+extern "C" int g_beNDMWSaveIntfInfo_metaObject[4];
+extern "C" int g_beNDMWSaveIntf_metaObject[4];
+extern "C" int beMessenger_RegisterReceiver(int, beBaseInfoRam *, int *, int, int);
+extern "C" int beMessenger_RegisterReceiverFromInfo(int, beBaseInfoRam *, int *);
+extern "C" int DAT_00519908[4];
+extern "C" int DAT_00519918[4];
+extern "C" void Gap__Bec__beNDMWSaveIntf__vfunc_29(beNDMWSaveIntf *arg0, beBaseInfoRam *arg1);
 /* reference-counted engine object header: refcount word at +4 */
 struct RC { int vt; int rc; };
 /* Message record: only the enum value name at +20 is read. */
@@ -7,54 +49,24 @@ struct MsgArg { char pad20[20]; int f20; };
 struct PropZ { char pad13[13]; unsigned char f13; };
 struct PropY { char pad16[16]; struct PropZ **f16; };
 struct PropX { char pad40[40]; struct PropY *f40; };
-extern "C" {
-int FUN_00236f80(...);
-void *beBaseInfoDataList_Create(...);
-void *FUN_003bc940(...);
-int FUN_003bcc20(...);
-void *FUN_003c2e60(...);
-void *FUN_003c3560(...);
-void *FUN_003c3900(...);
-void *FUN_003c3e40(...);
-void *FUN_003c6b00(...);
-void *beNDMWLoadIntf2ComMdlCtrl_Create(...);
-void *beNDMWLoadIntf2TextOrder_Create(...);
-int FUN_003d9de0(...);
-int Memory_GetAllocatorBySelector(...);
-int ObjectList_AppendRetained(...);
-int beMessenger_AppendInt(...);
-int beMessenger_DispatchSelected(...);
-int beMessenger_GetInt(...);
-int beMessenger_GetIntCount(...);
-void *beMessenger_GetObject(...);
-unsigned int beMessenger_ResolveEnumValue(...);
-int beMessenger_SelectGroup(...);
-int beMessenger_SendNamed(...);
-int beMessenger_SetInt(...);
-int igObject_Destroy(...);
-int igObject_GetAllocator(...);
-void *igProperty_FindByName(...);
-extern int DAT_004cf640[4];
-extern int DAT_004cf644[4];
-extern int DAT_004cf648[4];
-extern int DAT_00519670[4];
-extern int DAT_00519678[4];
-extern int DAT_00519688[4];
-extern int DAT_00519698[4];
-extern int DAT_005196a8[4];
-extern int DAT_005196e0[4];
-extern int DAT_00519928[4];
-extern int DAT_00519938[4];
-extern int DAT_00519948[4];
-extern int DAT_00519958[4];
-extern int DAT_00585be0[4];
-extern int DAT_00587110[4];
-extern int DAT_00587d08[4];
-extern int DAT_00588518[4];
-extern int DAT_00589208[4];
-extern unsigned char GPR_00554c14;
-int Gap__Bec__beNDMWSaveIntf__vfunc_34(beNDMWSaveIntf *arg0, beBaseInfoRam *arg1, MsgArg *arg2);
-}
+extern "C" int DAT_004cf640[4];
+extern "C" int DAT_004cf644[4];
+extern "C" int DAT_004cf648[4];
+extern "C" int DAT_00519670[4];
+extern "C" int DAT_00519678[4];
+extern "C" int DAT_00519688[4];
+extern "C" int DAT_00519698[4];
+extern "C" int DAT_005196a8[4];
+extern "C" int DAT_005196e0[4];
+extern "C" int DAT_00519928[4];
+extern "C" int DAT_00519938[4];
+extern "C" int DAT_00519948[4];
+extern "C" int DAT_00519958[4];
+extern "C" int DAT_00585be0[4];
+extern "C" int DAT_00587110[4];
+extern "C" int DAT_00587d08[4];
+extern "C" int DAT_00589208[4];
+extern "C" unsigned char GPR_00554c14;
 /* Owning stack reference to a request or window object; one instantiation per object class (0 the
  * data list, 1 the control data, 2 text order, 3 model control, 4 message window, 5 slot selector,
  * 6 state control, 7 state data, 8 data selector), so each gets its own out-of-line destructor. */
@@ -75,6 +87,43 @@ struct En { static inline void Run(beBaseInfoRam *o) {
         o->_dataList = (int)n;
     }
 } };
+extern "C" int Gap__Bec__beNDMWSaveIntf__vfunc_34(beNDMWSaveIntf *arg0, beBaseInfoRam *arg1, MsgArg *arg2);
+
+void Gap__Bec__beNDMWSaveIntf__vfunc_32(beNDMWSaveIntf *arg0) {
+    RefCountedHeader *temp_a0;
+    RefCountedHeader *temp_v0;
+
+    if (arg0->_padManager == 0) {
+        temp_v0 = FUN_00236f80(arg0->_insight, DAT_00588518[0]);
+        if (temp_v0 != 0) {
+            temp_v0->f4 = (int)((int) (temp_v0->f4 + 1));
+        }
+        temp_a0 = (RefCountedHeader *)arg0->_padManager;
+        if (temp_a0 != 0) {
+            temp_a0->f4 = (int)((int) (temp_a0->f4 - 1));
+            if (((unsigned long long) ((long long) temp_a0->f4 << 0x29) >> 0x29) == 0) {
+                igObject_Destroy(temp_a0);
+            }
+        }
+        arg0->_padManager = (int)temp_v0;
+    }
+}
+
+int *FUN_0040c180(int *arg0, int *arg1) {
+    *arg0 = ((int)beBaseInfoDataList_Create(*arg1));
+    return arg0;
+}
+
+int Gap__Bec__beNDMWSaveIntf__vfunc_30(void)
+{
+    return g_beNDMWSaveIntfInfo_metaObject[0];
+}
+
+void Gap__Bec__beNDMWSaveIntf__vfunc_29(beNDMWSaveIntf *arg0, beBaseInfoRam *arg1) {
+    beMessenger_RegisterReceiverFromInfo(arg0->_messenger, arg1, &DAT_00519908[0]);
+    beMessenger_RegisterReceiver(arg0->_messenger, arg1, &DAT_00519918[0], 0, arg1->_ramNo);
+}
+
 int Gap__Bec__beNDMWSaveIntf__vfunc_34(beNDMWSaveIntf *arg0, beBaseInfoRam *arg1, MsgArg *arg2) {
     unsigned int v = beMessenger_ResolveEnumValue(arg0->_messenger, FUN_003bcc20(), arg2->f20);
     if (v == 0) {
@@ -85,7 +134,7 @@ int Gap__Bec__beNDMWSaveIntf__vfunc_34(beNDMWSaveIntf *arg0, beBaseInfoRam *arg1
             old = (RC *)arg1->_dataList;
             if (old != 0) { old->rc = old->rc - 1; if (((unsigned long long)((long long)old->rc << 0x29) >> 0x29) == 0) igObject_Destroy(old); }
             arg1->_dataList = (int)n;
-            arg0->_system_ = FUN_00236f80(arg0->_insight, DAT_00587d08[0]);
+            arg0->_system_ = ((int)FUN_00236f80(arg0->_insight, DAT_00587d08[0]));
             {
                 int base = igObject_GetAllocator(arg0); int a; if (GPR_00554c14 != 0) { a = base; } else { a = Memory_GetAllocatorBySelector(DAT_00587110[0]); }
                 RP<1> c8((RC *)FUN_003bc940(a));
@@ -108,7 +157,7 @@ int Gap__Bec__beNDMWSaveIntf__vfunc_34(beNDMWSaveIntf *arg0, beBaseInfoRam *arg1
                 RP<2> c4((RC *)beNDMWLoadIntf2TextOrder_Create(a));
                 ((beNDMWLoadIntf2TextOrder *)c4.p)->_messenger = arg0->_messenger;
                 beNDMWLoadIntf2TextOrder *o4 = (beNDMWLoadIntf2TextOrder *)c4.p;
-                o4->_lua = FUN_00236f80(arg0->_insight, DAT_00589208[0]);
+                o4->_lua = ((int)FUN_00236f80(arg0->_insight, DAT_00589208[0]));
                 ObjectList_AppendRetained(arg1->_dataList, c4.p);
             }
             {
@@ -131,7 +180,7 @@ int Gap__Bec__beNDMWSaveIntf__vfunc_34(beNDMWSaveIntf *arg0, beBaseInfoRam *arg1
                 RP<4> bc((RC *)FUN_003c6b00(a));
                 ((beNDMWLoadIntf2MesWin *)bc.p)->_ramNo = arg1->_ramNo;
                 ((beNDMWLoadIntf2MesWin *)bc.p)->_messenger = arg0->_messenger;
-                ((beNDMWLoadIntf2MesWin *)bc.p)->_padManager = FUN_00236f80(arg0->_insight, DAT_00588518[0]);
+                ((beNDMWLoadIntf2MesWin *)bc.p)->_padManager = ((int)FUN_00236f80(arg0->_insight, DAT_00588518[0]));
                 ObjectList_AppendRetained(arg1->_dataList, bc.p);
                 En::Run(arg1);
                 ((beNDMWLoadIntf2MesWin *)bc.p)->_textOrder = (int)igProperty_FindByName(arg1->_dataList, DAT_00585be0[0], &DAT_00519948[0]);
@@ -141,7 +190,7 @@ int Gap__Bec__beNDMWSaveIntf__vfunc_34(beNDMWSaveIntf *arg0, beBaseInfoRam *arg1
                 RP<5> b8((RC *)FUN_003c2e60(a));
                 ((beNDMWLoadIntf2SelSlot *)b8.p)->_ramNo = arg1->_ramNo;
                 ((beNDMWLoadIntf2SelSlot *)b8.p)->_messenger = arg0->_messenger;
-                ((beNDMWLoadIntf2SelSlot *)b8.p)->_padManager = FUN_00236f80(arg0->_insight, DAT_00588518[0]);
+                ((beNDMWLoadIntf2SelSlot *)b8.p)->_padManager = ((int)FUN_00236f80(arg0->_insight, DAT_00588518[0]));
                 En::Run(arg1);
                 ((beNDMWLoadIntf2SelSlot *)b8.p)->_comMdlCtrl = (int)igProperty_FindByName(arg1->_dataList, DAT_00585be0[0], &DAT_00519678[0]);
                 En::Run(arg1);
@@ -180,7 +229,7 @@ int Gap__Bec__beNDMWSaveIntf__vfunc_34(beNDMWSaveIntf *arg0, beBaseInfoRam *arg1
             {
                 int base = igObject_GetAllocator(arg0); int a; if (GPR_00554c14 != 0) { a = base; } else { a = Memory_GetAllocatorBySelector(DAT_00587110[0]); }
                 RP<8> a8((RC *)FUN_003c3560(a));
-                ((beNDMWLoadIntf2DataSelIntf *)a8.p)->_padManager = FUN_00236f80(arg0->_insight, DAT_00588518[0]);
+                ((beNDMWLoadIntf2DataSelIntf *)a8.p)->_padManager = ((int)FUN_00236f80(arg0->_insight, DAT_00588518[0]));
                 En::Run(arg1);
                 ((beNDMWLoadIntf2DataSelIntf *)a8.p)->_comMdlCtrl = (int)igProperty_FindByName(arg1->_dataList, DAT_00585be0[0], &DAT_00519678[0]);
                 En::Run(arg1);
@@ -242,3 +291,9 @@ int Gap__Bec__beNDMWSaveIntf__vfunc_34(beNDMWSaveIntf *arg0, beBaseInfoRam *arg1
         return 0;
     }
 }
+
+int Gap__Bec__beNDMWSaveIntf__vfunc_20(void)
+{
+    return g_beNDMWSaveIntf_metaObject[0];
+}
+
