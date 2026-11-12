@@ -932,24 +932,6 @@
     },
     "symbol": "beMessenger_InitializeMemory"
   },
-  "0x003ef1e0": {
-    "emitted": {},
-    "duplicates": {
-      "__dt__10ItemRef<1>Fv": "0x003d9d50",
-      "__dt__10ItemRef<2>Fv": "0x003d9cd0",
-      "__dt__10ItemRef<3>Fv": "0x003d9c50",
-      "__dt__10ItemRef<4>Fv": "0x003d9bd0",
-      "__dt__25igSmartPointer<8igObject>Fv": "0x003b9ba0"
-    },
-    "externals": {
-      "__dl__FPv": "0x00100610"
-    },
-    "exceptions": {
-      "index": "0x005537d8",
-      "table": "0x00544c20",
-      "table_size": "0x3c"
-    }
-  },
   "0x003f6620": {
     "whole_file": true,
     "emitted": {
@@ -30314,6 +30296,7 @@
       "beNDMWDegiData__UpdateFieldsFromData": "0x003ee4d0",
       "FUN_003ee690": "0x003ee690",
       "beNDMWDegiData__LoadFromProperties": "0x003ee6d0",
+      "FUN_003ef1e0": "0x003ef1e0",
       "beNDMWDegiData__StoreToProperties": "0x003ef5d0",
       "FUN_003f0d60": "0x003f0d60",
       "FUN_003f0e30": "0x003f0e30",
@@ -30338,7 +30321,7 @@
       "Gap__Bec__beNDMWLoadCtrl2__vfunc_20": "0x003f2d40"
     },
     "data": {
-      "@3032": "0x00518110",
+      "@3364": "0x00518110",
       "DAT_004cda40": "0x004cda40",
       "DAT_004cda44": "0x004cda44",
       "DAT_004cda48": "0x004cda48",
@@ -30461,6 +30444,11 @@
     },
     "duplicates": {
       "__dt__11DegiDataRefFv": "0x003e9010",
+      "__dt__17CreatedItemRef<1>Fv": "0x003d9d50",
+      "__dt__17CreatedItemRef<2>Fv": "0x003d9cd0",
+      "__dt__17CreatedItemRef<3>Fv": "0x003d9c50",
+      "__dt__17CreatedItemRef<4>Fv": "0x003d9bd0",
+      "__dt__17CreatedItemRef<5>Fv": "0x003b9ba0",
       "__dt__25igSmartPointer<8igObject>Fv": "0x0033e9c0",
       "__dt__7ItemRefFv": "0x001363f0",
       "__dt__8ChunkRefFv": "0x003832d0"
