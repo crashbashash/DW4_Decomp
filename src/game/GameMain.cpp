@@ -1,5 +1,7 @@
 #include "dw4/reflected.h"
 #include "dw4/igTDataList.h"
+#include "dw4/igSmartPointer.h"
+#include "dw4/ViewerSetup.h"
 #define REL(x) if ((x) != 0) { int *hd_ = (int *)(x) - 2; int c_ = ((int *)(x))[-1] - 1; ((int *)(x))[-1] = c_; if (c_ == 0) StringChunk_ReleaseHeader(*hd_, hd_); }
 #define REL_25afe0(v) { igObject *t_ = (igObject *)(v); if (t_ != 0) { t_->_refCount = t_->_refCount - 1; if (((unsigned long long) ((long long) (int) t_->_refCount << 0x29) >> 0x29) == 0) { igObject_Destroy(t_); } } }
 
@@ -173,7 +175,6 @@ extern "C" int FUN_00165d20(int);
 extern "C" int FUN_002d16a0(int);
 extern "C" int FUN_002d1770(...);
 extern "C" int StringChunk_ReleaseHeader(...);
-extern "C" int igObject_Destroy(...);
 extern "C" int FUN_002595e0(int arg0, int *arg1);
 extern "C" int *FUN_00259a10(void);
 extern "C" int FUN_002d18c0(int);
@@ -195,8 +196,6 @@ extern "C" int FUN_00463c70(...);
 extern "C" int StringPool_Construct(...);
 extern "C" int StringPool_Intern(...);
 extern "C" void FUN_00259f80(int *arg0);
-extern "C" void **FUN_0025a2b0(void **arg0, short arg1);
-extern "C" int FUN_00463910(...);
 extern "C" void *FUN_00236f80(...);
 extern "C" int FUN_00239390(...);
 extern "C" int FUN_00238d40(...);
@@ -223,7 +222,6 @@ extern "C" int FUN_00463c80(...);
 typedef igObject Obj;
 /* matching construct: out-of-line ctor/dtor classes reproduce the retail unwind table (retail 0x2595e0 table 0x542b5c: App dtor 0x234b90, Blk dtor 0x25a330, scope guard dtor 0x2599b0) */
 struct App { char p[232]; int f232; int f236; App(); ~App(); };
-struct Blk { char p[64]; Blk(); ~Blk(); };
 struct G { int f0; char p[212]; unsigned char f216; char p2[15]; int f232; int f236; };
 extern "C" G * FUN_001007e0(...);
 extern "C" int FUN_00234d70(App *, int, int *);
@@ -306,7 +304,6 @@ extern "C" CountedHeader *FUN_002b90e0(int);
 extern "C" NameList *FUN_002caa70(int);
 extern "C" int DAT_00498728[4];
 extern "C" int DAT_00586f20[4];
-struct AdoptReference {};
 struct StringRef {
     int *p;
     StringRef() {}
@@ -321,25 +318,6 @@ extern "C" void FUN_00259dc0(NamedLists *arg0, int arg1, int arg2);
 struct R_259f90 { int w0; int rc; };
 struct A { char pad[36]; struct R_259f90 *f36; struct R_259f90 *f40; };
 extern "C" void FUN_00259f90(struct A *arg0, struct R_259f90 *arg1, struct R_259f90 *arg2);
-/* Deleting destructor; the deletion flag is a signed short. */
-typedef struct ObjectRefTarget { int word0; int references; } ObjectRefTarget;
-typedef struct ObjectRefWord { ObjectRefTarget *value; } ObjectRefWord;
-extern "C" ObjectRefWord *FUN_0025a230(ObjectRefWord *self,int delete_storage);
-struct T_25a330 { int word0; int references; };
-struct Obj_25a330 {
-    int *vt; char p4[24]; T_25a330 *m28; T_25a330 *m32; T_25a330 *m36; T_25a330 *m40; char p44[4]; T_25a330 *m48; T_25a330 *m52; T_25a330 *m56;
-    inline void rel(T_25a330 **self) {
-        if (self) {
-            T_25a330 *object = *self;
-            if (object) {
-                --object->references;
-                if (((unsigned long long)(long long)object->references & 0x7fffffULL) == 0)
-                    igObject_Destroy(object);
-            }
-        }
-    }
-};
-extern "C" Obj_25a330 *FUN_0025a330(Obj_25a330 *arg0, short arg1);
 extern "C" void FUN_0025a550(NamedLists *arg0, int);
 extern "C" int DAT_004ecf60[16];
 struct Fr;
@@ -415,31 +393,27 @@ struct Ref {
 };
 extern "C" void FUN_0025a8c0(App_25a8c0 *arg0);
 struct R_25ac60 { int w0; int refs; int f8; int w12; int *f16; };
-/* Engine-object reference returned by value from the owner's slot 24. The owner unit's inline
- * releases read the pointer again after the count store. */
-struct Ref_25ac60 {
-    R_25ac60 *p;
-    Ref_25ac60() {}
-    ~Ref_25ac60() {
-#if __option(exceptions)
-        if (p != 0) {
-            p->refs = p->refs - 1;
-            if (((unsigned long long)(long long)p->refs & 0x7fffffULL) == 0) igObject_Destroy(p);
-        }
-#else
-        R_25ac60 *o = p;
-        if (o != 0) {
-            o->refs = o->refs - 1;
-            if (((unsigned long long)(long long)o->refs & 0x7fffffULL) == 0) igObject_Destroy(o);
-        }
-#endif
-    }
+extern "C" igSmartPointer<igPsx2Window> FUN_002364e0(int);
+extern "C" igFolder *FUN_002c43b0(int);
+extern "C" igViewerLoadingFileMessage *FUN_0045a680(int);
+struct Blk {
+    ViewerSetup viewer;
+    igSmartPointer<igObject> f28;
+    igSmartPointer<igObject> f32;
+    igSmartPointer<igIntList> f36;
+    igSmartPointer<igStringRefList> f40;
+    bool f44;
+    igSmartPointer<igStringRefList> f48;
+    igSmartPointer<igFolder> folder;
+    igSmartPointer<igViewerLoadingFileMessage> loadingMessage;
+    Blk();
+    ~Blk();
 };
-class V { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual Ref_25ac60 v24(); };
+class V { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual igSmartPointer<igStringRefList> v24(); };
 /* matching construct: the returned reference is a temporary of the call, so it takes a low frame slot and is released right after the store */
 struct Assign {
-    static inline void Take(R_25ac60 *&dst, const Ref_25ac60 &src) {
-        R_25ac60 *rs = src.p;
+    static inline void Take(R_25ac60 *&dst, const igSmartPointer<igStringRefList> &src) {
+        R_25ac60 *rs = (R_25ac60 *)src.p;
         R_25ac60 *o;
         if (rs != 0) rs->refs = rs->refs + 1;
         o = dst;
@@ -977,51 +951,30 @@ void FUN_00259f90(struct A *arg0, struct R_259f90 *arg1, struct R_259f90 *arg2) 
     arg0->f36 = arg2;
 }
 
-ObjectRefWord *FUN_0025a230(ObjectRefWord *self,int delete_storage) {
-    if(self) {
-        ObjectRefTarget *object=self->value;
-        if(object) {
-            --object->references;
-            if(((unsigned long long)(long long)object->references & 0x7fffffULL)==0)
-                igObject_Destroy(object);
-        }
-        if((short)delete_storage>0) FUN_00100610(self);
+static inline int *internString(const char *s) {
+    if (DAT_00586f20[0] == 0) {
+        int pool = FUN_002eb010(16);
+        if (pool != 0) pool = StringPool_Construct(pool);
+        DAT_00586f20[0] = pool;
     }
-    return self;
+    return (int *)StringPool_Intern(DAT_00586f20[0], s);
 }
 
-void **FUN_0025a2b0(void **arg0, short arg1) {
-    int *r;
-    if (arg0 != 0) {
-        r = (int *)*arg0;
-        if (r != 0) {
-            r[1] = r[1] - 1;
-            if ((r[1] & 0x7fffff) == 0) {
-                igObject_Destroy(r);
-            }
-        }
-        if (arg1 > 0) {
-            FUN_00100610(arg0);
-        }
-    }
-    return arg0;
+static inline void setFolderName(igFolder *folder, const char *name) {
+    int *s = internString(name);
+    StringRef::Release((int *)folder->_folderName);
+    folder->_folderName = (int)s;
 }
 
-Obj_25a330 *FUN_0025a330(Obj_25a330 *arg0, short arg1) {
-    if (arg0) {
-        arg0->rel(&arg0->m56);
-        arg0->rel(&arg0->m52);
-        arg0->rel(&arg0->m48);
-        arg0->rel(&arg0->m40);
-        arg0->rel(&arg0->m36);
-        arg0->rel(&arg0->m32);
-        arg0->rel(&arg0->m28);
-        FUN_00463910(arg0, -1);
-        if (arg1 > 0) {
-            FUN_00100610(arg0);
-        }
-    }
-    return arg0;
+Blk::Blk()
+    : viewer(FUN_002364e0(0)), f28(0, kRetainReference), f32(0, kRetainReference), f36(0, kRetainReference),
+      f40(0, kRetainReference), f44(false), f48(0, kRetainReference), folder(FUN_002c43b0(0), AdoptReference()),
+      loadingMessage(FUN_0045a680(0), AdoptReference()) {
+    setFolderName(folder, "cdrom0:");
+    FUN_0025ac60((S *)this);
+}
+
+Blk::~Blk() {
 }
 
 void FUN_0025a550(NamedLists *arg0, int) {

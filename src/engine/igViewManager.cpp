@@ -1,5 +1,6 @@
 #include "dw4/reflected.h"
 #include "dw4/igSmartPointer.h"
+#include "dw4/ViewerSetup.h"
 
 extern "C" {
 
@@ -147,27 +148,7 @@ struct StringRef {
     ~StringRef() { releaseString(p); }
 };
 
-/* The igInsightCore that FUN_00232800 creates, with its window field (+20) as the reference holder
-   it is. */
-struct InsightCore : igObject {
-    char pad8[12];
-    igSmartPointer<igObject> window;
-};
 InsightCore *FUN_00232800(int);
-
-/* The viewer's setup: an Insight core, its scene-info, actor and data-pump managers, the logo
-   renderer and the window, each held by reference (the same object FUN_00463bc0 reads as S). */
-struct ViewerSetup {
-    igSmartPointer<InsightCore> core;
-    igSmartPointer<igObject> sceneInfo;
-    igSmartPointer<igObject> actors;
-    igSmartPointer<igObject> dataPump;
-    unsigned char showLogo;
-    igSmartPointer<igObject> logo;
-    igSmartPointer<igObject> window;
-    ViewerSetup(igObject *window);
-    ~ViewerSetup();
-};
 
 ViewerSetup::ViewerSetup(igObject *w)
     : core(FUN_00232800(0), AdoptReference()), sceneInfo(FUN_00459340(0), AdoptReference()),

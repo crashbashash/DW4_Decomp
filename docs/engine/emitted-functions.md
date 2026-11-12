@@ -306,6 +306,15 @@ Table tags: `0x02` destroy, `0x06`/`0x86` base subobject flag 0, `0x07`/`0x87` m
 `0x01` chain link. `scripts/combat_unwind_inventory.py` does not decode `0x01`, `0x06`/`0x86`/`0xa6`,
 `0x07`/`0x87`/`0x27` or an FPR-flag header.
 
+An out-of-line constructor that keeps `this` in a saved register writes its members' cleanup as
+`0x27` (`0xa7` for the last action of the chain): the location byte is the register (`0x20`, register 16,
+`s0`), then the member's compact offset and the destructor address. A class held as the first member
+(`0xa7 20 00 ...`) is told apart from a base class this way: a base writes `0xa6 20` with no offset, and
+its destructor is called with flag 0 where a member's gets -1. Each range action starts the chain at the
+last member constructed before that call; a by-value temporary passed to the first member's constructor
+has its own destroy action (`0x82`) over that call alone. Members whose constructors make no call (a
+retaining holder built from 0, a `bool`) add no range.
+
 Further holder shapes:
 
 - Expression temporaries take the lowest frame slots. A temporary read in one statement is destroyed at

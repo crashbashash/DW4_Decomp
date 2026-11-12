@@ -44,7 +44,10 @@ Read as a sequence of phases:
 
 The `0x1a1ae0`/`0x1a7cc0`/`0x1a67c0` trio is the manager construction (Insight core); the
 temporary is released with `0x2ff820` after each, which is the object-model destructor
-(`igObject`'s refcount release).  `0x25a070`/`0x259f90` build the app's parameter block.
+(`igObject`'s refcount release). `0x25a070` constructs the game's viewer object on the stack: the
+viewer setup (`0x463560`) built around a new window, reference holders, an `igFolder` named `cdrom0:`
+and a loading-file message; `0x259f90` then stores two of the app's references into it, and `0x25a330`
+is its destructor.
 
 ### The engine core init (`FUN_002d16a0`)
 

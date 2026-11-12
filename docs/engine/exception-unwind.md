@@ -162,9 +162,3 @@ out: `exc=extra` units match fully with `-Cpp_exceptions off`, and 12 of 40
   each failed, and neither table has a cleanup scope. Unproven: the original had a
   frame or call the optimiser removed after the record was scheduled, or an inlined
   helper left a cleanup scope.
-- The 84-byte exception table of `FUN_0025a070` reads as a constructor's member-destroy
-  chain: action kinds `0x27`/`0x02` over five ranges, with base destructor `0x463910`
-  and seven member destructors. That makes the function a mangled constructor of a
-  class with a base and seven destructible members. Reproducing the table needs the
-  unit written as that constructor, and `tools/verify.py` cannot find the body by its
-  retail symbol name once the definition is mangled. The body alone reproduces as C++.
