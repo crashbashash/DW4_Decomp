@@ -42,7 +42,7 @@ extern "C" int beMessenger_AppendString(int, int);
 extern "C" int beMessenger_GetBool(int, int);
 extern "C" void igObject_Destroy(void *);
 extern "C" void FUN_003e9220(void *arg0, void *arg1);
-extern "C" void igProperty_FindByName(void);
+extern "C" void *igProperty_FindByName(...);
 extern "C" void FUN_003e9280(void);
 extern "C" int FUN_003e92a0(int *p);
 extern "C" int beBaseInfoDataList_Create(int);
@@ -53,12 +53,6 @@ extern "C" int FUN_003e93b0(int *p);
 extern "C" int Gap__Bec__beNDMWLoadIntf2__vfunc_30(void);
 extern "C" int Gap__Bec__beNDMWLoadIntf2__vfunc_20(void);
 extern "C" int FUN_00100610(...);
-extern "C" void **FUN_003eb480(void **arg0, long long arg1);
-extern "C" void **FUN_003eb580(void **arg0, short arg1);
-extern "C" void **FUN_003eb600(void **arg0, short arg1);
-extern "C" void **FUN_003eb700(void **arg0, short arg1);
-extern "C" void **FUN_003eb900(void **arg0, int arg1);
-extern "C" void **FUN_003eb980(void **arg0, short arg1);
 extern "C" void FUN_003d9de0(beNDMWLoadIntf2DegiState *arg0, int arg1, int arg2, int arg3, int arg4, int arg5, int arg6);
 extern "C" void FUN_003d9e10(beNDMWLoadIntf2DegiState *arg0, int arg1, int arg2);
 extern "C" void FUN_003d9e40(beNDMWLoadIntf2DegiState *arg0, int arg1, int arg2);
@@ -286,16 +280,6 @@ extern "C" int beMessenger_RegisterReceiverFromInfo(int, beBaseInfoRam *, int *)
 extern "C" int DAT_005175d8[4];
 extern "C" int DAT_005175e8[4];
 extern "C" void Gap__Bec__beNDMWLoadIntf2__vfunc_29(beNDMWLoadIntf2 *arg0, beBaseInfoRam *arg1);
-struct S_temp_a0 { char pad4[4]; int f4; };
-struct O { S_temp_a0 *m; };
-extern "C" O *FUN_003eb500(O *arg0, short arg1);
-typedef struct S_temp_a0_3eb580 { char pad4[4]; int f4; } S_temp_a0_3eb580;
-typedef struct S_temp_a0_3eb600 { char pad4[4]; int f4; } S_temp_a0_3eb600;
-extern "C" ObjectRefWord *FUN_003eb680(ObjectRefWord *self,int delete_storage);
-extern "C" ObjectRefWord *FUN_003eb780(ObjectRefWord *self,int delete_storage);
-struct R_3eb800 { int vt; unsigned int rc; };
-extern "C" struct R_3eb800 **FUN_003eb800(struct R_3eb800 **arg0, short arg1);
-extern "C" ObjectRefWord *FUN_003eb880(ObjectRefWord *self,int delete_storage);
 
 void FUN_003d9de0(beNDMWLoadIntf2DegiState *arg0, int arg1, int arg2, int arg3, int arg4, int arg5, int arg6) {
     arg0->_comMdlCtrl = arg4;
@@ -3777,177 +3761,340 @@ void Gap__Bec__beNDMWLoadIntf2__vfunc_29(beNDMWLoadIntf2 *arg0, beBaseInfoRam *a
     beMessenger_RegisterReceiver(arg0->_messenger, arg1, &DAT_005175e8[0], 0, arg1->_ramNo);
 }
 
-void **FUN_003eb480(void **arg0, long long arg1) {
-    char *o;
+extern "C" {
+void *FUN_003c27c0(...);
+void *FUN_003c2e60(...);
+void *FUN_003c31e0(...);
+void *FUN_003c3560(...);
+void *FUN_003c3900(...);
+void *FUN_003c3e40(...);
+void *FUN_003c40c0(...);
+void *FUN_003c43c0(...);
+int FUN_003c46a0(...);
+void *FUN_003c6b00(...);
+void *beNDMWLoadIntf2ComMdlCtrl_Create(...);
+void *beNDMWLoadIntf2TextOrder_Create(...);
+int beMessenger_AppendInt(...);
+int beMessenger_GetInt(...);
+int beMessenger_GetIntCount(...);
+unsigned int beMessenger_ResolveEnumValue(...);
+int beMessenger_SelectGroup(...);
+int beMessenger_SetInt(...);
+extern float DAT_004cd0a0[4][3];
+extern int DAT_005172a0[4];
+extern int DAT_005172b0[4];
+extern int DAT_005172b8[4];
+extern int DAT_005172c0[4];
+extern int DAT_005172d0[4];
+extern int DAT_005172e8[4];
+extern int DAT_005172f8[4];
+extern int DAT_00517338[4];
+extern int DAT_005175f8[4];
+extern int DAT_00517608[4];
+extern int DAT_00517618[4];
+extern int DAT_00585be0[4];
+extern int DAT_00587d08[4];
+extern int DAT_00589208[4];
 
-    if (arg0 != 0) {
-        o = (char *)*arg0;
-        if (o != 0) {
-            *(int *)(o + 4) = *(int *)(o + 4) - 1;
-            if ((*(int *)(o + 4) & 0x7FFFFF) == 0) {
-                igObject_Destroy((void *)o);
+int Gap__Bec__beNDMWLoadIntf2__vfunc_34(beNDMWLoadIntf2 *self, void *ctx, void *msg);
+}
+
+struct Rc : public igObject { };
+/* Owning stack references to the freshly created controller objects while the list is wired up;
+ * each releases its object on scope exit (reference count in the low 23 bits of _refCount). Each
+ * object kind has its own class, one per destructor copy. */
+
+class CtrlDataRef {
+public:
+    Rc *p;
+    CtrlDataRef(Rc *o) : p(o) {}
+    ~CtrlDataRef() { Rc *o = p; if (o != 0) { o->_refCount = o->_refCount - 1; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
+};
+class ItemListRef {
+public:
+    Rc *p;
+    ItemListRef(Rc *o) : p(o) {}
+    ~ItemListRef() { Rc *o = p; if (o != 0) { o->_refCount = o->_refCount - 1; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
+};
+class ComMdlRef {
+public:
+    Rc *p;
+    ComMdlRef(Rc *o) : p(o) {}
+    ~ComMdlRef() { Rc *o = p; if (o != 0) { o->_refCount = o->_refCount - 1; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
+};
+class TextOrderRef {
+public:
+    Rc *p;
+    TextOrderRef(Rc *o) : p(o) {}
+    ~TextOrderRef() { Rc *o = p; if (o != 0) { o->_refCount = o->_refCount - 1; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
+};
+class SelSlotRef {
+public:
+    Rc *p;
+    SelSlotRef(Rc *o) : p(o) {}
+    ~SelSlotRef() { Rc *o = p; if (o != 0) { o->_refCount = o->_refCount - 1; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
+};
+class NameSelRef {
+public:
+    Rc *p;
+    NameSelRef(Rc *o) : p(o) {}
+    ~NameSelRef() { Rc *o = p; if (o != 0) { o->_refCount = o->_refCount - 1; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
+};
+class MesWinRef {
+public:
+    Rc *p;
+    MesWinRef(Rc *o) : p(o) {}
+    ~MesWinRef() { Rc *o = p; if (o != 0) { o->_refCount = o->_refCount - 1; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
+};
+class DegiStateRef {
+public:
+    Rc *p;
+    DegiStateRef(Rc *o) : p(o) {}
+    ~DegiStateRef() { Rc *o = p; if (o != 0) { o->_refCount = o->_refCount - 1; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
+};
+class StatDataRef {
+public:
+    Rc *p;
+    StatDataRef(Rc *o) : p(o) {}
+    ~StatDataRef() { Rc *o = p; if (o != 0) { o->_refCount = o->_refCount - 1; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
+};
+class DataSelRef {
+public:
+    Rc *p;
+    DataSelRef(Rc *o) : p(o) {}
+    ~DataSelRef() { Rc *o = p; if (o != 0) { o->_refCount = o->_refCount - 1; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
+};
+class DiffSelRef {
+public:
+    Rc *p;
+    DiffSelRef(Rc *o) : p(o) {}
+    ~DiffSelRef() { Rc *o = p; if (o != 0) { o->_refCount = o->_refCount - 1; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
+};
+struct Ctx { int p0; int p4; int kind; int p12[7]; Rc *list; };
+struct Msg { int p[5]; int f20; };
+struct CommonSlot { char p[13]; unsigned char b13; };
+struct CommonSlotList { char p[16]; CommonSlot **f16; };
+struct Rec { char p[40]; CommonSlotList *f40; };
+
+#define ALLOC(a, o) { a = igObject_GetAllocator(o); a = GPR_00554c14 ? a : Memory_GetAllocatorBySelector(DAT_00587110[0]); }
+#define REL(o) { Rc *rr = (o); if (rr != 0) { rr->_refCount = rr->_refCount - 1; if ((rr->_refCount & 0x7FFFFF) == 0) { igObject_Destroy(rr); } } }
+struct ListInstall { static inline void go(Ctx *o, const igSmartPointer<Rc> &fresh) {
+    Rc *n = fresh.p;
+    if (n != 0) n->_refCount = n->_refCount + 1;
+    REL(o->list)
+    o->list = n;
+}
+static inline void make(Ctx *o, int al) { igSmartPointer<Rc> fresh((Rc *)beBaseInfoDataList_Create(al)); go(o, fresh); }
+};
+#define ENSURE(o) { int al; ALLOC(al, o) ListInstall::make(o, al); }
+#define FIND(n) igProperty_FindByName(a1->list, DAT_00585be0[0], &n[0])
+
+int Gap__Bec__beNDMWLoadIntf2__vfunc_34(beNDMWLoadIntf2 *self, void *ctx, void *msg) {
+    Ctx *a1 = (Ctx *)ctx;
+    Msg *a2 = (Msg *)msg;
+    int al;
+    unsigned int v;
+    void *s0;
+    void *s4;
+    void *s3;
+    void *s0b;
+    void *s4b;
+    float fx;
+    float fy;
+    float fz;
+    beNDMWLoadIntf2CtrlData *fl;
+
+    v = beMessenger_ResolveEnumValue(self->_messenger, FUN_003c46a0(), a2->f20);
+    if (v == 0) {
+        if (a1->list == 0) {
+            ALLOC(al, self)
+            {
+            igSmartPointer<Rc> spFC((Rc *)beBaseInfoDataList_Create(al));
+            { Rc *n = spFC.p; if (n != 0) n->_refCount = n->_refCount + 1; REL(a1->list) a1->list = n; }
+            self->_system_ = (int)FUN_00236f80(self->_insight, DAT_00587d08[0]);
+            ALLOC(al, self)
+            {
+            CtrlDataRef spF8((Rc *)FUN_003c43c0(al));
+            ObjectList_AppendRetained(a1->list, spF8.p);
+            ((beNDMWLoadIntf2CtrlData *)spF8.p)->_isRun = 1;
+            if (a1->kind == 0) {
+                ((beNDMWLoadIntf2CtrlData *)spF8.p)->_isRdy = 0;
+                ((beNDMWLoadIntf2CtrlData *)spF8.p)->_isEntry = 1;
+                ((beNDMWLoadIntf2CtrlData *)spF8.p)->_isCtrl = 1;
+            } else {
+                ((beNDMWLoadIntf2CtrlData *)spF8.p)->_isRdy = 0;
+                ((beNDMWLoadIntf2CtrlData *)spF8.p)->_isEntry = 0;
+                ((beNDMWLoadIntf2CtrlData *)spF8.p)->_isCtrl = 1;
+            }
+            }
+            beMessenger_SendNamed(self->_messenger, &DAT_005175f8[0], 0, 0, &DAT_00517608[0]);
+            ObjectList_AppendRetained(a1->list, beMessenger_GetObject(self->_messenger, 0));
+            ALLOC(al, self)
+            {
+            ItemListRef spF4((Rc *)FUN_003c40c0(al));
+            ObjectList_AppendRetained(a1->list, spF4.p);
+            }
+            ALLOC(al, self)
+            {
+            ComMdlRef spF0((Rc *)beNDMWLoadIntf2ComMdlCtrl_Create(al));
+            ObjectList_AppendRetained(a1->list, spF0.p);
+            ((beNDMWLoadIntf2ComMdlCtrl *)spF0.p)->_messenger = self->_messenger;
+            { beNDMWLoadIntf2ComMdlCtrl *t = (beNDMWLoadIntf2ComMdlCtrl *)spF0.p;
+            /* matching construct: hand search — the table's declared bound keeps the three loads ahead of the stores */
+            fz = DAT_004cd0a0[a1->kind][2]; fy = DAT_004cd0a0[a1->kind][1]; fx = DAT_004cd0a0[a1->kind][0];
+            t->_pos[0] = fx; t->_pos[1] = fy; t->_pos[2] = fz; }
+            }
+            ALLOC(al, self)
+            {
+            TextOrderRef spEC((Rc *)beNDMWLoadIntf2TextOrder_Create(al));
+            ((beNDMWLoadIntf2TextOrder *)spEC.p)->_messenger = self->_messenger;
+            { beNDMWLoadIntf2TextOrder *t = (beNDMWLoadIntf2TextOrder *)spEC.p; t->_lua = (int)FUN_00236f80(self->_insight, DAT_00589208[0]); }
+            ObjectList_AppendRetained(a1->list, spEC.p);
+            }
+            ALLOC(al, self)
+            {
+            SelSlotRef spE8((Rc *)FUN_003c2e60(al));
+            ((beNDMWLoadIntf2SelSlot *)spE8.p)->_ramNo = a1->kind;
+            ((beNDMWLoadIntf2SelSlot *)spE8.p)->_messenger = self->_messenger;
+            ((beNDMWLoadIntf2SelSlot *)spE8.p)->_padManager = (int)FUN_00236f80(self->_insight, DAT_00588518[0]);
+            if (a1->list == 0) ENSURE(a1)
+            ((beNDMWLoadIntf2SelSlot *)spE8.p)->_comMdlCtrl = (int)FIND(DAT_005172c0);
+            if (a1->list == 0) ENSURE(a1)
+            ((beNDMWLoadIntf2SelSlot *)spE8.p)->_textOrder = (int)FIND(DAT_005172e8);
+            if (a1->list == 0) ENSURE(a1)
+            ((beNDMWLoadIntf2SelSlot *)spE8.p)->_commonIntf = (int)FIND(DAT_005172a0);
+            ObjectList_AppendRetained(a1->list, spE8.p);
+            }
+            ALLOC(al, self)
+            {
+            NameSelRef spE4((Rc *)FUN_003c27c0(al));
+            ((beNDMWLoadIntf2NameSel *)spE4.p)->_ramNo = a1->kind;
+            ((beNDMWLoadIntf2NameSel *)spE4.p)->_messenger = self->_messenger;
+            ((beNDMWLoadIntf2NameSel *)spE4.p)->_padManager = (int)FUN_00236f80(self->_insight, DAT_00588518[0]);
+            if (a1->list == 0) ENSURE(a1)
+            s3 = FIND(DAT_005172c0);
+            if (a1->list == 0) ENSURE(a1)
+            s0 = FIND(DAT_005172e8);
+            ((beNDMWLoadIntf2NameSel *)spE4.p)->_comMdlCtrl = (int)s3;
+            ((beNDMWLoadIntf2NameSel *)spE4.p)->_textOrder = (int)s0;
+            ObjectList_AppendRetained(a1->list, spE4.p);
+            }
+            ALLOC(al, self)
+            {
+            MesWinRef spE0((Rc *)FUN_003c6b00(al));
+            ((beNDMWLoadIntf2MesWin *)spE0.p)->_ramNo = a1->kind;
+            ((beNDMWLoadIntf2MesWin *)spE0.p)->_messenger = self->_messenger;
+            ((beNDMWLoadIntf2MesWin *)spE0.p)->_padManager = (int)FUN_00236f80(self->_insight, DAT_00588518[0]);
+            ObjectList_AppendRetained(a1->list, spE0.p);
+            if (a1->list == 0) ENSURE(a1)
+            ((beNDMWLoadIntf2MesWin *)spE0.p)->_textOrder = (int)FIND(DAT_005172e8);
+            }
+            ALLOC(al, self)
+            {
+            DegiStateRef spDC((Rc *)FUN_003c3900(al));
+            ALLOC(al, self)
+            {
+            StatDataRef spD8((Rc *)FUN_003c3e40(al));
+            if (a1->list == 0) ENSURE(a1)
+            s0 = FIND(DAT_005172a0);
+            if (a1->list == 0) ENSURE(a1)
+            s4 = FIND(DAT_005172e8);
+            if (a1->list == 0) ENSURE(a1)
+            FUN_003d9de0((beNDMWLoadIntf2DegiState *)spD8.p, a1->kind, (int)s0, (int)s4, (int)FIND(DAT_005172c0), self->_messenger, 0);
+            ObjectList_AppendRetained(((beNDMWLoadIntf2DegiStateCtrl *)spDC.p)->_statDataList, spD8.p);
+            }
+            ALLOC(al, self)
+            {
+            StatDataRef spD4((Rc *)FUN_003c3e40(al));
+            if (a1->list == 0) ENSURE(a1)
+            s0b = FIND(DAT_005172a0);
+            if (a1->list == 0) ENSURE(a1)
+            s4b = FIND(DAT_005172e8);
+            if (a1->list == 0) ENSURE(a1)
+            FUN_003d9de0((beNDMWLoadIntf2DegiState *)spD4.p, a1->kind, (int)s0b, (int)s4b, (int)FIND(DAT_005172c0), self->_messenger, 1);
+            ObjectList_AppendRetained(((beNDMWLoadIntf2DegiStateCtrl *)spDC.p)->_statDataList, spD4.p);
+            }
+            ObjectList_AppendRetained(a1->list, spDC.p);
+            }
+            ALLOC(al, self)
+            {
+            DataSelRef spD0((Rc *)FUN_003c3560(al));
+            ((beNDMWLoadIntf2DataSelIntf *)spD0.p)->_padManager = (int)FUN_00236f80(self->_insight, DAT_00588518[0]);
+            if (a1->list == 0) ENSURE(a1)
+            ((beNDMWLoadIntf2DataSelIntf *)spD0.p)->_comMdlCtrl = (int)FIND(DAT_005172c0);
+            if (a1->list == 0) ENSURE(a1)
+            ((beNDMWLoadIntf2DataSelIntf *)spD0.p)->_textOrder = (int)FIND(DAT_005172e8);
+            if (a1->list == 0) ENSURE(a1)
+            ((beNDMWLoadIntf2DataSelIntf *)spD0.p)->_commonIntf = (int)FIND(DAT_005172a0);
+            if (a1->list == 0) ENSURE(a1)
+            ((beNDMWLoadIntf2DataSelIntf *)spD0.p)->_mesWin = (int)FIND(DAT_005172d0);
+            if (a1->list == 0) ENSURE(a1)
+            ((beNDMWLoadIntf2DataSelIntf *)spD0.p)->_statDisp = (int)FIND(DAT_005172f8);
+            ObjectList_AppendRetained(a1->list, spD0.p);
+            }
+            ALLOC(al, self)
+            {
+            DiffSelRef spCC((Rc *)FUN_003c31e0(al));
+            ((beNDMWLoadIntf2Diffselect *)spCC.p)->_padManager = (int)FUN_00236f80(self->_insight, DAT_00588518[0]);
+            if (a1->list == 0) ENSURE(a1)
+            ((beNDMWLoadIntf2Diffselect *)spCC.p)->_comMdlCtrl = (int)FIND(DAT_005172c0);
+            if (a1->list == 0) ENSURE(a1)
+            ((beNDMWLoadIntf2Diffselect *)spCC.p)->_textOrder = (int)FIND(DAT_005172e8);
+            if (a1->list == 0) ENSURE(a1)
+            ((beNDMWLoadIntf2Diffselect *)spCC.p)->_commonIntf = (int)FIND(DAT_005172a0);
+            if (a1->list == 0) ENSURE(a1)
+            ((beNDMWLoadIntf2Diffselect *)spCC.p)->_mesWin = (int)FIND(DAT_005172d0);
+            ObjectList_AppendRetained(a1->list, spCC.p);
+            }
             }
         }
-        if ((short)arg1 > 0) {
-            FUN_00100610(arg0);
-        }
+        return 1;
     }
-    return arg0;
-}
-
-O *FUN_003eb500(O *arg0, short arg1) {
-    if (arg0) {
-        S_temp_a0 *t = arg0->m;
-        if (t) { t->f4 -= 1; if ((t->f4 & 0x7fffff) == 0) igObject_Destroy(t); }
-        if (arg1 > 0) FUN_00100610(arg0);
+    if (a1->list == 0) return 1;
+    if (a1->list == 0) ENSURE(a1)
+    fl = (beNDMWLoadIntf2CtrlData *)FIND(DAT_005172b0);
+    if (a1->list == 0) ENSURE(a1)
+    FIND(DAT_005172b8);
+    switch (v) {
+    case 2:
+        if (beMessenger_GetIntCount(self->_messenger) == 0) {
+            beMessenger_AppendInt(self->_messenger, 0);
+        }
+        if (fl->_isEntry == 1) {
+            beMessenger_SetInt(self->_messenger, 0, beMessenger_GetInt(self->_messenger, 0) + 1);
+        }
+        return 1;
+    case 3:
+        if (beMessenger_GetIntCount(self->_messenger) == 0) {
+            beMessenger_AppendInt(self->_messenger, 0);
+        }
+        if (fl->_isRdy == 1) {
+            beMessenger_SetInt(self->_messenger, 0, beMessenger_GetInt(self->_messenger, 0) + 1);
+        }
+        return 1;
+    case 4:
+        fl->_isCtrl = 1;
+        return 1;
+    case 5:
+        fl->_isCtrl = 0;
+        return 1;
+    case 6:
+        if (a1->list == 0) ENSURE(a1)
+        if (((Rec *)FIND(DAT_005172a0))->f40->f16[a1->kind]->b13 != 1) {
+            beMessenger_SelectGroup(self->_messenger, &DAT_00517338[0]);
+            beMessenger_AppendInt(self->_messenger, a1->kind);
+            beMessenger_DispatchSelected(self->_messenger, &DAT_00517618[0]);
+        }
+        return 1;
+    case 7:
+        if (beMessenger_GetIntCount(self->_messenger) == 0) {
+            beMessenger_AppendInt(self->_messenger, 0);
+        }
+        self->_difficultMax = beMessenger_GetInt(self->_messenger, 0);
+        return 1;
+    default:
+        return 0;
     }
-    return arg0;
-}
-
-void **FUN_003eb580(void **arg0, short arg1) {
-    S_temp_a0_3eb580 *temp_a0;
-
-    if (arg0 != 0) {
-        temp_a0 = (S_temp_a0_3eb580 *)(*arg0);
-        if (temp_a0 != 0) {
-            temp_a0->f4 = (int)((int) (temp_a0->f4 - 1));
-            if ((temp_a0->f4 & 0x7FFFFF) == 0) {
-                igObject_Destroy((void *)temp_a0);
-            }
-        }
-        if (arg1 > 0) {
-            FUN_00100610(arg0);
-        }
-    }
-    return arg0;
-}
-
-void **FUN_003eb600(void **arg0, short arg1) {
-    S_temp_a0_3eb600 *temp_a0;
-
-    if (arg0 != 0) {
-        temp_a0 = (S_temp_a0_3eb600 *)(*arg0);
-        if (temp_a0 != 0) {
-            temp_a0->f4 = (int)((int) (temp_a0->f4 - 1));
-            if ((temp_a0->f4 & 0x7FFFFF) == 0) {
-                igObject_Destroy((void *)temp_a0);
-            }
-        }
-        if (arg1 > 0) {
-            FUN_00100610(arg0);
-        }
-    }
-    return arg0;
-}
-
-ObjectRefWord *FUN_003eb680(ObjectRefWord *self,int delete_storage) {
-    if(self) {
-        ObjectRefTarget *object=self->value;
-        if(object) {
-            --object->references;
-            if(((unsigned long long)(long long)object->references & 0x7fffffULL)==0)
-                igObject_Destroy((void *)object);
-        }
-        if((short)delete_storage>0) FUN_00100610(self);
-    }
-    return self;
-}
-
-void **FUN_003eb700(void **arg0, short arg1) {
-    int *r;
-    if (arg0 != 0) {
-        r = (int *)*arg0;
-        if (r != 0) {
-            r[1] = r[1] - 1;
-            if ((r[1] & 0x7fffff) == 0) {
-                igObject_Destroy((void *)r);
-            }
-        }
-        if (arg1 > 0) {
-            FUN_00100610(arg0);
-        }
-    }
-    return arg0;
-}
-
-ObjectRefWord *FUN_003eb780(ObjectRefWord *self,int delete_storage) {
-    if(self) {
-        ObjectRefTarget *object=self->value;
-        if(object) {
-            --object->references;
-            if(((unsigned long long)(long long)object->references & 0x7fffffULL)==0)
-                igObject_Destroy((void *)object);
-        }
-        if((short)delete_storage>0) FUN_00100610(self);
-    }
-    return self;
-}
-
-struct R_3eb800 **FUN_003eb800(struct R_3eb800 **arg0, short arg1) {
-    struct R_3eb800 *temp_a0;
-
-    if (arg0 != 0) {
-        temp_a0 = *arg0;
-        if (temp_a0 != 0) {
-            temp_a0->rc = temp_a0->rc - 1;
-            if ((temp_a0->rc & 0x7FFFFF) == 0) {
-                igObject_Destroy((void *)temp_a0);
-            }
-        }
-        if (arg1 > 0) {
-            FUN_00100610(arg0);
-        }
-    }
-    return arg0;
-}
-
-ObjectRefWord *FUN_003eb880(ObjectRefWord *self,int delete_storage) {
-    if(self) {
-        ObjectRefTarget *object=self->value;
-        if(object) {
-            --object->references;
-            if(((unsigned long long)(long long)object->references & 0x7fffffULL)==0)
-                igObject_Destroy((void *)object);
-        }
-        if((short)delete_storage>0) FUN_00100610(self);
-    }
-    return self;
-}
-
-void **FUN_003eb900(void **arg0, int arg1) {
-    int *o;
-
-    if (arg0 != 0) {
-        o = (int *)(*arg0);
-        if (o != 0) {
-            o[1] = o[1] - 1;
-            if ((o[1] & 0x7FFFFF) == 0) {
-                igObject_Destroy((void *)o);
-            }
-        }
-        if ((short)arg1 > 0) {
-            FUN_00100610(arg0);
-        }
-    }
-    return arg0;
-}
-
-void **FUN_003eb980(void **arg0, short arg1) {
-    int *o;
-
-    if (arg0 != 0) {
-        o = (int *)*arg0;
-        if (o != 0) {
-            o[1] = o[1] - 1;
-            if ((o[1] & 0x7FFFFF) == 0) {
-                igObject_Destroy((void *)o);
-            }
-        }
-        if (arg1 > 0) {
-            FUN_00100610(arg0);
-        }
-    }
-    return arg0;
 }
 
 int Gap__Bec__beNDMWLoadIntf2__vfunc_20(void)

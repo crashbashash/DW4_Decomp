@@ -31,26 +31,6 @@
       "table_size": "0xc0"
     }
   },
-  "0x003e9430": {
-    "emitted": {},
-    "duplicates": {
-      "__dt__11CtrlDataRefFv": "0x003eb980",
-      "__dt__11ItemListRefFv": "0x003eb900",
-      "__dt__9ComMdlRefFv": "0x003eb880",
-      "__dt__12TextOrderRefFv": "0x003eb800",
-      "__dt__10SelSlotRefFv": "0x003eb780",
-      "__dt__10NameSelRefFv": "0x003eb700",
-      "__dt__9MesWinRefFv": "0x003eb680",
-      "__dt__12DegiStateRefFv": "0x003eb600",
-      "__dt__11StatDataRefFv": "0x003eb580",
-      "__dt__10DataSelRefFv": "0x003eb500",
-      "__dt__10DiffSelRefFv": "0x003eb480",
-      "__dt__19igSmartPointer<2Rc>Fv": "0x0033e9c0"
-    },
-    "externals": {
-      "__dl__FPv": "0x00100610"
-    }
-  },
   "0x003fca10": {
     "emitted": {},
     "duplicates": {
@@ -30316,22 +30296,24 @@
       "FUN_003e93b0": "0x003e93b0",
       "Gap__Bec__beNDMWLoadIntf2__vfunc_30": "0x003e93c0",
       "Gap__Bec__beNDMWLoadIntf2__vfunc_29": "0x003e93d0",
-      "FUN_003eb480": "0x003eb480",
-      "FUN_003eb500": "0x003eb500",
-      "FUN_003eb580": "0x003eb580",
-      "FUN_003eb600": "0x003eb600",
-      "FUN_003eb680": "0x003eb680",
-      "FUN_003eb700": "0x003eb700",
-      "FUN_003eb780": "0x003eb780",
-      "FUN_003eb800": "0x003eb800",
-      "FUN_003eb880": "0x003eb880",
-      "FUN_003eb900": "0x003eb900",
-      "FUN_003eb980": "0x003eb980",
+      "Gap__Bec__beNDMWLoadIntf2__vfunc_34": "0x003e9430",
+      "__dt__10DiffSelRefFv": "0x003eb480",
+      "__dt__10DataSelRefFv": "0x003eb500",
+      "__dt__11StatDataRefFv": "0x003eb580",
+      "__dt__12DegiStateRefFv": "0x003eb600",
+      "__dt__9MesWinRefFv": "0x003eb680",
+      "__dt__10NameSelRefFv": "0x003eb700",
+      "__dt__10SelSlotRefFv": "0x003eb780",
+      "__dt__12TextOrderRefFv": "0x003eb800",
+      "__dt__9ComMdlRefFv": "0x003eb880",
+      "__dt__11ItemListRefFv": "0x003eb900",
+      "__dt__11CtrlDataRefFv": "0x003eb980",
       "Gap__Bec__beNDMWLoadIntf2__vfunc_20": "0x003eba00"
     },
     "data": {
       "@2111": "0x005170a0",
       "@2112": "0x00517080",
+      "@4713": "0x00517630",
       "@775": "0x00516e50",
       "DAT_004cc830": "0x004cc830",
       "DAT_004cc840": "0x004cc840",
@@ -30339,6 +30321,7 @@
       "DAT_004cc860": "0x004cc860",
       "DAT_004cd060": "0x004cd060",
       "DAT_004cd090": "0x004cd090",
+      "DAT_004cd0a0": "0x004cd0a0",
       "DAT_004cec70": "0x004cec70",
       "DAT_00516c40": "0x00516c40",
       "DAT_00516c50": "0x00516c50",
@@ -30416,11 +30399,25 @@
       "DAT_005171d0": "0x005171d0",
       "DAT_005171e0": "0x005171e0",
       "DAT_005171f0": "0x005171f0",
+      "DAT_005172a0": "0x005172a0",
+      "DAT_005172b0": "0x005172b0",
+      "DAT_005172b8": "0x005172b8",
+      "DAT_005172c0": "0x005172c0",
+      "DAT_005172d0": "0x005172d0",
+      "DAT_005172e8": "0x005172e8",
+      "DAT_005172f8": "0x005172f8",
+      "DAT_00517338": "0x00517338",
       "DAT_005175d8": "0x005175d8",
       "DAT_005175e8": "0x005175e8",
+      "DAT_005175f8": "0x005175f8",
+      "DAT_00517608": "0x00517608",
+      "DAT_00517618": "0x00517618",
+      "DAT_00585be0": "0x00585be0",
       "DAT_00586f20": "0x00586f20",
       "DAT_00587110": "0x00587110",
+      "DAT_00587d08": "0x00587d08",
       "DAT_00588518": "0x00588518",
+      "DAT_00589208": "0x00589208",
       "GENERATE": "0x00517208",
       "GPR_00554c14": "0x00554c14",
       "ISRUN": "0x00517228",
@@ -30432,6 +30429,7 @@
       "g_stringPool": "0x00586f20"
     },
     "duplicates": {
+      "__dt__19igSmartPointer<2Rc>Fv": "0x0033e9c0",
       "__dt__30igSmartPointer<12beUnicodeObj>Fv": "0x003832d0"
     },
     "externals": {

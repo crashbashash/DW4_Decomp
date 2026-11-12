@@ -28,8 +28,8 @@ Byte sizes on this page are the function extents in
 | `0x003e9010`–`0x003e93b0` | 19 functions | see the next table | accessors / per-controller helpers | `src/engine/`, `src/game/`, `src/unmatched/` |
 | `0x003e93c0` | 12 | `Gap__Bec__beNDMWLoadIntf2__vfunc_30` | MetaObject return | `src/game/beNDMWLoadIntf2.cpp` |
 | `0x003e93d0` | 88 | `Gap__Bec__beNDMWLoadIntf2__vfunc_29` | descriptor wrapper: registers the record as receiver of `LOADINTF2_ALL` and `LOADINTF2` | `src/game/beNDMWLoadIntf2.cpp` |
-| `0x003e9430` | 8,272 | `Gap__Bec__beNDMWLoadIntf2__vfunc_34` | message handler (builds the family, answers the commands) | `src/unmatched/Gap__Bec__beNDMWLoadIntf2__vfunc_34.cpp` |
-| `0x003eb480`–`0x003eb980` | 11 × 128 | `FUN_003eb480` … `FUN_003eb980` | destructor copies of the handler's owning stack references, one per created child | `src/game/beNDMWLoadIntf2.cpp` |
+| `0x003e9430` | 8,272 | `Gap__Bec__beNDMWLoadIntf2__vfunc_34` | message handler (builds the family, answers the commands) | `src/game/beNDMWLoadIntf2.cpp` |
+| `0x003eb480`–`0x003eb980` | 11 × 128 | `FUN_003eb480` … `FUN_003eb980` | destructors of the handler's owning stack references (`CtrlDataRef` … `DiffSelRef`), one class per created child, emitted with the handler | `src/game/beNDMWLoadIntf2.cpp` |
 | `0x003eba00` | 12 | `Gap__Bec__beNDMWLoadIntf2__vfunc_20` | MetaObject return | `src/game/beNDMWLoadIntf2.cpp` |
 
 The accessors and per-controller helpers:
