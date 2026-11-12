@@ -31004,6 +31004,35 @@
     },
     "symbol": "FUN_003b04e0"
   },
+  "0x0039fd30": {
+    "whole_file": true,
+    "emitted": {
+      "Gap__Bec__beSystem__vfunc_22": "0x0039fd50",
+      "Gap__Bec__beSystem__vfunc_23": "0x0039fd70",
+      "Gap__Bec__beSystem__vfunc_24": "0x0039fff0",
+      "Gap__Bec__beSystem__vfunc_25": "0x003a0000",
+      "Gap__Bec__beSystem__vfunc_26": "0x003a0010",
+      "Gap__Bec__beSystem__vfunc_27": "0x003a0020",
+      "FUN_003a0540": "0x003a0540",
+      "Gap__Bec__beSystem__vfunc_20": "0x003a0560"
+    },
+    "data": {
+      "DAT_004c22e8": "0x004c22e8",
+      "DAT_0050fb10": "0x0050fb10",
+      "DAT_00586dd0": "0x00586dd0",
+      "DAT_00586f20": "0x00586f20",
+      "DAT_00587060": "0x00587060",
+      "DAT_00587108": "0x00587108",
+      "GPR_00554c14": "0x00554c14",
+      "g_beSystem_metaObject": "0x00587d08",
+      "g_defaultAllocatorSelector": "0x00587110",
+      "g_globalContext": "0x00586dd0",
+      "g_ndmwAllocatorSelector": "0x00587108",
+      "g_stringPool": "0x00586f20",
+      "ndmw_igb": "0x0050fb10"
+    },
+    "symbol": "Gap__Bec__beSystem__vfunc_21"
+  },
   "0x0039fc30": {
     "whole_file": true,
     "emitted": {

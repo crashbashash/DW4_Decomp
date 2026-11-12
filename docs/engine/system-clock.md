@@ -16,7 +16,7 @@ a running game or a savestate) and **[hypothesis]**.
 ## Complete beSystem update recovery
 
 `beSystem::vfunc_27` (`0x003a0020`, **1,300 code bytes**) has
-byte-identical typed C in `src/game/beSystemUpdate.cpp`.
+byte-identical typed C in `src/game/beSystem.cpp`.
 The function samples `igInsightCore._worldTime`, stores the signed wrapped delta
 in `_frameTimeL`, converts it to `_frameTimeF` with the original frame divisor,
 and stores the new `_svWorldTimeL`. Its remaining body owns next-stage directory
