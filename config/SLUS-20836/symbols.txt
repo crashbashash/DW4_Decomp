@@ -14062,10 +14062,10 @@
 003338c0 00000c Gap__igAdxFile__vfunc_20 Gap::igAdxFile::vfunc_20
 003338d0 000060 Gap__igAdxFile__vfunc_02 Gap::igAdxFile::vfunc_02
 00333930 000040 Gap__igAdxFile__vfunc_08 Gap::igAdxFile::vfunc_08
-00333970 00001c FUN_00333970
-00333990 0000a4 FUN_00333990
-00333a40 000008 FUN_00333a40
-00333a50 000008 FUN_00333a50
+00333970 00001c igAdxFile_GetReadStatus
+00333990 0000a4 igAdxFile_WaitForReadEnd
+00333a40 000008 igAdxFile_SetUseBuffer
+00333a50 000008 igAdxFile_SetUseAsync
 00333a60 0001e4 Gap__igAdxFile__vfunc_21 Gap::igAdxFile::vfunc_21
 00333c50 000034 Gap__igAdxFile__vfunc_22 Gap::igAdxFile::vfunc_22
 00333c90 0000dc Gap__igAdxFile__vfunc_23 Gap::igAdxFile::vfunc_23
@@ -14082,7 +14082,7 @@
 00334260 0000cc Gap__igAdxFile__vfunc_36 Gap::igAdxFile::vfunc_36
 00334330 00002c Gap__igAdxFile__vfunc_37 Gap::igAdxFile::vfunc_37
 00334360 000008 Gap__igAdxFile__vfunc_32 Gap::igAdxFile::vfunc_32
-00334370 000030 FUN_00334370
+00334370 000030 igAdxFile_GetFileSize
 003343a0 00009c FUN_003343a0
 00334440 000018 AdxMovieLibrary_MarkRegistered
 00334460 00004c FUN_00334460

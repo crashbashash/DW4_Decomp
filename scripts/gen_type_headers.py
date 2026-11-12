@@ -255,8 +255,9 @@ def main():
     for handle, o in data["classes"].items():
         own[o["class"]] = sorted(o.get("fields") or [], key=lambda f: f["offset"])
 
-    # Authoritative fields for classes reflection lists no field for (igObject's vtable and reference
-    # count): config/SLUS-20836/authoritative-fields.tsv, inherited by every subclass like any other field.
+    # Authoritative fields reflection does not list (igObject's vtable and reference count, unreflected
+    # members such as igAdxFile's ADXF handle): config/SLUS-20836/authoritative-fields.tsv, inherited by
+    # every subclass like any other field.
     overlay = os.path.join(os.path.dirname(os.path.abspath(args.reflection)), "..", "config",
                            "SLUS-20836",
                            "authoritative-fields.tsv")

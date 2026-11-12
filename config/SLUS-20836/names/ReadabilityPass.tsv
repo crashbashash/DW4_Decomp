@@ -221,3 +221,8 @@
 0x002d3550	thunk_free	engine
 0x002f0050	thunk_free_2	engine
 0x0030bed0	thunk_strcasecmp	engine
+0x00333970	igAdxFile_GetReadStatus	audio
+0x00333990	igAdxFile_WaitForReadEnd	audio
+0x00333a40	igAdxFile_SetUseBuffer	audio
+0x00333a50	igAdxFile_SetUseAsync	audio
+0x00334370	igAdxFile_GetFileSize	audio

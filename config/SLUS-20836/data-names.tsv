@@ -4685,6 +4685,9 @@
 0x00554bd8	g_CollisionLibrary_registered	recovered-global
 0x00554bdc	g_LuaLibrary_registered	recovered-global
 0x00554c14	g_useOwnerAllocator	recovered-global
+0x00554df0	g_igAdxFile_ignoreReadModeWarning	recovered-global
+0x00554df4	g_igAdxFile_ignoreWriteWarning	recovered-global
+0x00554df8	g_igAdxFile_ignoreOpenModeWarning	recovered-global
 0x00554dfc	g_AdxMovieLibrary_registered	recovered-global
 0x00554e50	g_BecLibrary_registered	recovered-global
 0x00554e68	g_NdmwLibrary_registered	recovered-global
