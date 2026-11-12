@@ -1,31 +1,4 @@
 {
-  "0x0038d860": {
-    "emitted": {
-      "__dt__3RefFv": "0x0038c410"
-    },
-    "externals": {
-      "__dl__FPv": "0x00100610"
-    }
-  },
-  "0x0038e060": {
-    "emitted": {
-      "__dt__6ObjRefFv": "0x0038e530"
-    },
-    "externals": {
-      "__dl__FPv": "0x00100610"
-    }
-  },
-  "0x0038e8f0": {
-    "emitted": {
-      "__dt__6RowRefFv": "0x0038c390"
-    },
-    "duplicates": {
-      "__dt__8SavedRefFv": "0x00357a90"
-    },
-    "externals": {
-      "__dl__FPv": "0x00100610"
-    }
-  },
   "0x003fca10": {
     "emitted": {},
     "duplicates": {
@@ -738,33 +711,6 @@
       "__dl__FPv": "0x00100610"
     }
   },
-  "0x0038d560": {
-    "duplicates": {
-      "__dt__9StringRefFv": "0x00130720",
-      "__dt__34igSmartPointer<16beMessengerGroup>Fv": "0x0038d7a0"
-    },
-    "exceptions": {
-      "index": "0x0054ec48",
-      "table": "0x00543928",
-      "table_size": "0x000020"
-    },
-    "externals": {
-      "__dl__FPv": "0x00100610"
-    }
-  },
-  "0x0038f830": {
-    "duplicates": {
-      "__dt__9StringRefFv": "0x00130720"
-    },
-    "exceptions": {
-      "index": "0x0054ed98",
-      "table": "0x005439d0",
-      "table_size": "0x000010"
-    },
-    "externals": {
-      "__dl__FPv": "0x00100610"
-    }
-  },
   "0x00396740": {
     "duplicates": {
       "__dt__25igSmartPointer<8igObject>Fv": "0x0033e9c0"
@@ -1268,59 +1214,100 @@
       "__dl__FPv": "0x00100610"
     }
   },
-  "0x0038ed70": {
-    "duplicates": {
-      "__dt__9ObjectRefFv": "0x00357a90"
-    },
-    "externals": {
-      "__dl__FPv": "0x00100610"
-    },
-    "exceptions": {
-      "index": "0x0054ed08",
-      "table": "0x005439a8",
-      "table_size": "0x000010"
-    }
-  },
-  "0x0038ef50": {
-    "duplicates": {
-      "__dt__9ObjectRefFv": "0x00357a90"
-    },
-    "externals": {
-      "__dl__FPv": "0x00100610"
-    },
-    "exceptions": {
-      "index": "0x0054ed14",
-      "table": "0x005439b8",
-      "table_size": "0x000010"
-    }
-  },
-  "0x0038e6b0": {
-    "duplicates": {
-      "__dt__25igSmartPointer<8igObject>Fv": "0x0038c390"
-    },
-    "externals": {
-      "__dl__FPv": "0x00100610"
-    },
-    "exceptions": {
-      "index": "0x0054eccc",
-      "table": "0x0054397c",
-      "table_size": "0x000010"
-    }
-  },
   "0x0038bee0": {
-    "duplicates": {
+    "whole_file": true,
+    "emitted": {
+      "__dt__25igSmartPointer<8igObject>Fv": "0x0038c390",
       "__dt__7WorkRefFv": "0x0038c410",
-      "__dt__8DelayRefFv": "0x0038c390",
-      "__dt__25igSmartPointer<8igObject>Fv": "0x00357a90"
+      "beMessenger_ResetMemory": "0x0038c490",
+      "beMessengerArgData_Clear": "0x0038ca40",
+      "beMessengerDelay_Clear": "0x0038ce70",
+      "Gap__Bec__beMessenger__vfunc_21": "0x0038cff0",
+      "Gap__Bec__beMessenger__vfunc_22": "0x0038d010",
+      "Gap__Bec__beMessenger__vfunc_23": "0x0038d030",
+      "Gap__Bec__beMessenger__vfunc_24": "0x0038d040",
+      "Gap__Bec__beMessenger__vfunc_25": "0x0038d050",
+      "Gap__Bec__beMessenger__vfunc_26": "0x0038d080",
+      "beMessenger_SetFreezeTime": "0x0038d470",
+      "beMessenger_ResolveEnumValue": "0x0038d4a0",
+      "beMessenger_RegisterReceiver": "0x0038d560",
+      "__dt__34igSmartPointer<16beMessengerGroup>Fv": "0x0038d7a0",
+      "beMessenger_RegisterReceiverFromInfo": "0x0038d820",
+      "beMessenger_SelectReceivers": "0x0038d860",
+      "beMessenger_DispatchSelected": "0x0038e060",
+      "__dt__6ObjRefFv": "0x0038e530",
+      "beMessenger_SelectGroupRam": "0x0038e5b0",
+      "beMessenger_SelectGroup": "0x0038e5d0",
+      "beMessenger_SendNamed": "0x0038e5f0",
+      "beMessenger_SendRam": "0x0038e630",
+      "beMessenger_SendGroup": "0x0038e670",
+      "beMessenger_PrepareDelayedSelection": "0x0038e6b0",
+      "beMessenger_EnqueueSelected": "0x0038e8f0",
+      "beMessenger_SendDelayedNamed": "0x0038eca0",
+      "beMessenger_SendDelayedGroup": "0x0038ecf0",
+      "beMessenger_PrepareDelayedGroup": "0x0038ed50",
+      "beMessenger_PushArgContext": "0x0038ed70",
+      "beMessenger_PopArgContext": "0x0038ef50",
+      "beMessenger_SetRunCheck": "0x0038f0e0",
+      "beMessenger_GetBoolCount": "0x0038f0f0",
+      "beMessenger_ResizeBool": "0x0038f100",
+      "beMessenger_AppendBool": "0x0038f150",
+      "beMessenger_ClearBool": "0x0038f1d0",
+      "beMessenger_SetBool": "0x0038f1e0",
+      "beMessenger_GetBool": "0x0038f220",
+      "beMessenger_GetIntCount": "0x0038f240",
+      "beMessenger_AppendInt": "0x0038f250",
+      "beMessenger_ClearInt": "0x0038f2d0",
+      "beMessenger_SetInt": "0x0038f2e0",
+      "beMessenger_GetInt": "0x0038f320",
+      "beMessenger_GetFloatCount": "0x0038f340",
+      "beMessenger_AppendFloat": "0x0038f350",
+      "beMessenger_GetFloat": "0x0038f3d0",
+      "beMessenger_GetLongCount": "0x0038f3f0",
+      "beMessenger_AppendLong": "0x0038f400",
+      "beMessenger_GetLong": "0x0038f480",
+      "beMessenger_GetVec3Count": "0x0038f4a0",
+      "beMessenger_AppendVec3": "0x0038f4b0",
+      "beMessenger_ClearVec3": "0x0038f550",
+      "beMessenger_GetVec3": "0x0038f560",
+      "beMessenger_GetMatrixCount": "0x0038f5a0",
+      "beMessenger_AppendMatrix": "0x0038f5b0",
+      "beMessenger_GetMatrix": "0x0038f630",
+      "beMessenger_GetObjectCount": "0x0038f660",
+      "beMessenger_AppendObject": "0x0038f670",
+      "beMessenger_ClearObjects": "0x0038f690",
+      "beMessenger_GetObject": "0x0038f800",
+      "beMessenger_GetStringCount": "0x0038f820",
+      "beMessenger_AppendString": "0x0038f830",
+      "beMessenger_GetString": "0x0038f8f0",
+      "Gap__Bec__beMessenger__vfunc_20": "0x0038f950"
+    },
+    "data": {
+      "DAT_004c8f88": "0x004c8f88",
+      "DAT_004e0858": "0x004e0858",
+      "DAT_004fb410": "0x004fb410",
+      "DAT_0050ee10": "0x0050ee10",
+      "DAT_0050ee18": "0x0050ee18",
+      "DAT_00585be0": "0x00585be0",
+      "DAT_00586f20": "0x00586f20",
+      "DAT_00587110": "0x00587110",
+      "DAT_0058a4e0": "0x0058a4e0",
+      "DAT_0058a4f0": "0x0058a4f0",
+      "DAT_0058a530": "0x0058a530",
+      "GPR_005549d4": "0x005549d4",
+      "GPR_005549d8": "0x005549d8",
+      "GPR_00554c14": "0x00554c14",
+      "g_beMessenger_metaObject": "0x00588f38",
+      "g_stringPool": "0x00586f20"
+    },
+    "duplicates": {
+      "__dt__9ObjectRefFv": "0x00357a90",
+      "__dt__9StringRefFv": "0x00130720"
     },
     "externals": {
       "__dl__FPv": "0x00100610"
     },
-    "exceptions": {
-      "index": "0x0054ebb8",
-      "table": "0x005438d0",
-      "table_size": "0x000030"
-    }
+    "symbol": "beMessenger_InitializeMemory"
   },
   "0x003ef1e0": {
     "emitted": {},
@@ -3952,20 +3939,6 @@
       "index": "0x00553ebc",
       "table": "0x005457f8",
       "table_size": "0x000010"
-    },
-    "externals": {
-      "__dl__FPv": "0x00100610"
-    }
-  },
-  "0x0038d0a0": {
-    "duplicates": {
-      "__dt__6RowRefFv": "0x0038c390",
-      "__dt__8SavedRefFv": "0x00357a90"
-    },
-    "exceptions": {
-      "index": "0x0054ec30",
-      "table": "0x00543908",
-      "table_size": "0x000020"
     },
     "externals": {
       "__dl__FPv": "0x00100610"

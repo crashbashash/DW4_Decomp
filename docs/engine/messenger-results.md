@@ -2,10 +2,8 @@
 
 The complete contiguous 32-body block at `0x0038f0e0..0x0038f94c`
 (2,032 code bytes) exposes `beMessenger`'s typed result/argument channels.
-Twenty bodies are in [beMessengerResults.c](../../src/game/beMessengerResults.c)
-and [beMessengerResults.cpp](../../src/game/beMessengerResults.cpp); the other twelve
-are in [beMessengerArgs.cpp](../../src/game/beMessengerArgs.cpp) (seven) and in one-function files
-under `src/unmatched/` (five).
+The block ends the messenger's whole-file unit,
+[beMessenger.cpp](../../src/game/beMessenger.cpp).
 
 Receiver selection and actual message routing are covered in
 [receiver dispatch](messenger-dispatch.md); receiver virtual implementations

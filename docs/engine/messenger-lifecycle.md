@@ -6,9 +6,8 @@ bodies at `38e8f0..38f0e0` form a contiguous enqueue/nesting block; the adjacent
 clear functions are `38ca40..38cff0`. Initialization/update retain their existing
 vtable-slot names.
 
-Three forwarding bodies (192 bytes) are in
-[beMessengerLifecycle.cpp](../../src/game/beMessengerLifecycle.cpp). Six more bodies
-(3,312 bytes) are in one-function files under `src/unmatched/`. The expiry update is
+They are part of the messenger's whole-file unit,
+[beMessenger.cpp](../../src/game/beMessenger.cpp). The expiry update is
 `38d0a0` (`beMessenger::vfunc_27`, 972 bytes).
 
 ## Entry points and storage

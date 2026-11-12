@@ -1,9 +1,8 @@
 # Messenger receiver selection and dispatch
 
 The contiguous fourteen-body block at `0x0038d470..0x0038e8f0` contains
-5,192 code bytes. Five forwarding bodies
-(244 bytes) are in
-[beMessengerDispatch.cpp](../../src/game/beMessengerDispatch.cpp).
+5,192 code bytes, in the messenger's whole-file unit
+[beMessenger.cpp](../../src/game/beMessenger.cpp).
 The semantic names describe verified operations,
 not original C++ method spellings.
 
@@ -109,8 +108,8 @@ The original code requires nonempty work/delay stacks and parallel registry list
 it has no bounds checks or fallback behaviour for them. Registry, list, intern,
 allocator/delete, argument clearing, object factories and virtual receiver handlers
 lie outside this block. Lower list/string services are described in
-[list services](list-services.md) and [result channels](messenger-results.md). The other nine bodies are in
-`src/unmatched/` (`FUN_0038e530` as the destructor emitted by `beMessenger_DispatchSelected.cpp`).
+[list services](list-services.md) and [result channels](messenger-results.md). `FUN_0038e530` is the holder
+destructor the file emits directly after `beMessenger_DispatchSelected`, its first user.
 
 The reviewed Ghidra address sets contain holes: occupied byte counts truncated
 the selector before `jr ra` and dispatch inside its epilogue. Generated

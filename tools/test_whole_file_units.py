@@ -424,12 +424,14 @@ class LiteralAtTwoEntries(unittest.TestCase):
 
 
 class ProfileTwin(unittest.TestCase):
-    """A duplicate the retail linker kept from a unit of another profile: beMessenger_RegisterReceiver
-    (-O3,p, exceptions on) reaches the StringRef destructor at 0x130720, an -O4,s copy from the Attrs
-    library. As tools/verify.py checks it, the same source compiled under that unit's profile must
-    reproduce it there; the file's own copy cannot."""
+    """A duplicate the retail linker kept from a unit of another profile: in the messenger file (-O3,p,
+    exceptions on), beMessenger_RegisterReceiver reaches the StringRef destructor at 0x130720, an -O4,s
+    copy from the Attrs library. As tools/verify.py checks it, the same source compiled under that unit's
+    profile must reproduce it there; the file's own copy cannot. Placed alone, the member also reaches
+    the group holder's destructor, a copy the file places at 0x38d7a0 under its own profile."""
     OWNER, NAME, COPY, DESTRUCTOR = 0x38d560, "beMessenger_RegisterReceiver", 0x130720, "__dt__9StringRefFv"
-    SOURCE = Path(verify.ROOT) / "src/unmatched/beMessenger_RegisterReceiver.cpp"
+    HOLDER = "__dt__34igSmartPointer<16beMessengerGroup>Fv"
+    SOURCE = Path(verify.ROOT) / "src/game/beMessenger.cpp"
     CONFIG = Path(verify.ROOT) / "config/SLUS-20836"
 
     def setUp(self):
@@ -471,7 +473,8 @@ class ProfileTwin(unittest.TestCase):
     def test_a_twin_is_compiled_under_its_own_units_profile(self):
         found = self.duplicates()
         self.assertEqual(found[self.DESTRUCTOR], self.COPY)
-        self.assertEqual(found, dict(unitobjects.group_for(self.OWNER).duplicates))
+        emitted = dict(unitobjects.group_for(self.OWNER).emitted)
+        self.assertEqual(found, {self.DESTRUCTOR: self.COPY, self.HOLDER: emitted[self.HOLDER]})
 
     def test_a_copy_under_the_files_profile_is_not_recompiled(self):
         with self.assertRaisesRegex(SystemExit, "0x130720, which holds other code"):

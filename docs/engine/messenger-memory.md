@@ -4,12 +4,14 @@ The complete contiguous four-body group at `38bee0..38ca40` holds
 initialization, two
 temporary reference-owner destructors and reset, totaling 2,904 code bytes.
 With the 28-byte `beMessenger::vfunc_26` reset forwarder,
-that makes five bodies / 2,932 bytes: the forwarder in [beMessenger.cpp](../../src/game/beMessenger.cpp), initialization in
-[beMessenger_InitializeMemory.cpp](../../src/unmatched/beMessenger_InitializeMemory.cpp), reset in
-[beMessenger_ResetMemory.cpp](../../src/unmatched/beMessenger_ResetMemory.cpp), and the two destructors as
-compiler-emitted members of the units in
-[beMessenger_EnqueueSelected.cpp](../../src/unmatched/beMessenger_EnqueueSelected.cpp) (`38c390`) and
-[beMessenger_SelectReceivers.cpp](../../src/unmatched/beMessenger_SelectReceivers.cpp) (`38c410`).
+that makes five bodies / 2,932 bytes, all in the messenger's whole-file unit,
+[beMessenger.cpp](../../src/game/beMessenger.cpp). Initialization is the first function of the file to
+instantiate three reference-holder classes: one for the argument object, one for a work record and
+one for a delay record. MWCC writes the out-of-line copy of each inline destructor directly after that
+function, in the reverse order of first use, so the delay-record holder's copy (`38c390`) comes
+before the work-record holder's (`38c410`). The argument-object holder's copy is the one the retail
+linker had already kept from the library's front unit (`357a90`), so the file's own copy is a duplicate.
+The later functions that hold the same records use the same classes and call these copies.
 
 The [name generator](../../scripts/seed_names_messenger_memory.py) identifies
 initialization and reset from reflection and original instructions. The precise
@@ -71,8 +73,7 @@ flag additionally deletes owner storage. They return the original owner referenc
 The existing reset forwarder in [beMessenger.cpp](../../src/game/beMessenger.cpp)
 now explicitly receives and forwards its messenger argument. Its prior source
 omitted the argument despite the original call using incoming a0. The corrected
-signature preserves all 28 original bytes. The two destructors match as
-compiler-emitted members of the units named above.
+signature preserves all 28 original bytes.
 
 ## Verification and remaining work
 

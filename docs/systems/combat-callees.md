@@ -14,13 +14,13 @@ original source.
 | `0x002d6790` | 120 | `List_Resize` (grow capacity: min 4, double below 1024, then +1024) | `src/engine/core/igDataList_tail.inc` |
 | `0x002eaf60` | 172 | `StringPool_Intern` | `src/engine/core/StringPool.inc` |
 | `0x002fba30` | 260 | `igMetaEnum_GetValueByName` | `src/engine/core/igMetaEnum_tail.inc` |
-| `0x0038d860` | 2036 | `beMessenger_SelectReceivers` (+ emitted destructor `0x0038c410`, 128) | `src/unmatched/beMessenger_SelectReceivers.cpp` |
-| `0x0038e6b0` | 576 | `beMessenger_PrepareDelayedSelection` | `src/unmatched/beMessenger_PrepareDelayedSelection.cpp` |
-| `0x0038ed70` | 476 | `beMessenger_PushArgContext` | `src/unmatched/beMessenger_PushArgContext.cpp` |
-| `0x0038ef50` | 400 | `beMessenger_PopArgContext` | `src/unmatched/beMessenger_PopArgContext.cpp` |
-| `0x0038f150`..`0x0038f8f0` | 908 | `beMessenger_AppendBool/Int/Float/Vec3/Matrix/String`, `GetString` (7 bodies) | `src/game/beMessengerArgs.cpp` |
-| `0x0038e060` | 1228 | `beMessenger_DispatchSelected` (+ emitted holder destructor `0x0038e530`, 128) | `src/unmatched/beMessenger_DispatchSelected.cpp` |
-| `0x0038e8f0` | 932 | `beMessenger_EnqueueSelected` (+ emitted destructors `0x0038c390` and `0x00357a90`, 128 each) | `src/unmatched/beMessenger_EnqueueSelected.cpp` |
+| `0x0038d860` | 2036 | `beMessenger_SelectReceivers` (calls the work-record holder destructor `0x0038c410`, 128, emitted after `beMessenger_InitializeMemory`) | `src/game/beMessenger.cpp` |
+| `0x0038e6b0` | 576 | `beMessenger_PrepareDelayedSelection` | `src/game/beMessenger.cpp` |
+| `0x0038ed70` | 476 | `beMessenger_PushArgContext` | `src/game/beMessenger.cpp` |
+| `0x0038ef50` | 400 | `beMessenger_PopArgContext` | `src/game/beMessenger.cpp` |
+| `0x0038f150`..`0x0038f8f0` | 908 | `beMessenger_AppendBool/Int/Float/Vec3/Matrix/String`, `GetString` (7 bodies) | `src/game/beMessenger.cpp` |
+| `0x0038e060` | 1228 | `beMessenger_DispatchSelected` (+ emitted holder destructor `0x0038e530`, 128) | `src/game/beMessenger.cpp` |
+| `0x0038e8f0` | 932 | `beMessenger_EnqueueSelected` (its cleanups are the destructors `0x0038c390`, emitted after `beMessenger_InitializeMemory`, and `0x00357a90`, 128 each) | `src/game/beMessenger.cpp` |
 | `0x003fab90` | 6872 | player stat recompute (derived stats, WAZALIST rebuild, rates); owns the `0x003fc670` destructor and the `0x003fc780` query | `src/game/beNDMWGameRam.cpp` |
 | `0x003f8760` | 548 | current-to-BASE save preparation (mirror of `FUN_003f82a0`) | `src/game/beNDMWGameRam.cpp` |
 | `0x003f9c80` | 408 | HP gauge update (delta or absolute, clamp to [0, MHP], `hpmt`/`hpnm`) | `src/game/beNDMWGameRam.cpp` |
