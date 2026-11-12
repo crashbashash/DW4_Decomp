@@ -43,7 +43,9 @@ extern "C" int StringPool_Construct(int);
 extern "C" int StringPool_Intern(...);
 extern "C" void StringChunk_ReleaseHeader(...);
 extern "C" void FUN_0030b3c0(void *, void *);
-extern "C" void FUN_00383420(void *, void *, void *, int);
+class N;
+struct FontLayout;
+extern "C" void FUN_00383420(beFont *self, FontLayout *layout, N *src, int idx);
 extern "C" void FUN_001dc820(void *, int);
 extern "C" void FUN_001dc880(void *, int);
 extern "C" void FUN_00193540(void *, int, int);
@@ -132,12 +134,12 @@ struct Table { Pair e[425]; };
 extern "C" beUnicodeObj *FUN_003614f0(int);
 extern "C" int FUN_0030b460(igStringObj *, char *, int, int);
 extern "C" const Table DAT_004c8880;
-extern "C" int FUN_00382eb0(igSmartPointer<beUnicodeObj> *out, beFont *self, const char *str);
+extern "C" igSmartPointer<beUnicodeObj> FUN_00382eb0(beFont *self, const char *str);
 extern "C" int FUN_00383350(beFont *arg0, int arg1);
 /* matching construct: dummy virtual slots so the vX() call dispatches through the retail vtable offset of the
    vertex-array configure method (an igVertexArray subclass instance; the reflected igVertexArray has no vtable type) */
 
-class Sink { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void vX(unsigned &, int, int, int); };
+class Sink { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void vX(unsigned &, int, int, int); virtual void d23(); virtual void d24(); virtual void d25(); virtual void drop(void *, int); };
 extern "C" Sink *FUN_0014b940(...);
 extern "C" void FUN_00383910(beFont *arg0, igGeometryAttr *arg1, int arg2, int arg3);
 /* matching construct: dummy-virtual class supplies the retail vtable slot offset for igGeometryAttr's configure virtual (vtable slot 39) */
@@ -399,7 +401,7 @@ int Gap__Bec__beFont__vfunc_34(beFont *arg0, N *arg1, N *arg2) {
                 idx = FUN_003840a0((beFont *)arg0, (int)arg1, s1, s0);
                 if (idx != -1) {
                     do {
-                        FUN_00383420(arg0, arg1, ra.p, idx);
+                        FUN_00383420(arg0, (FontLayout *)arg1, ra.p, idx);
                         idx = FUN_003841d0((beFont *)arg0, (struct P *)arg1);
                     } while (idx != -1);
                 }
@@ -586,7 +588,7 @@ void FUN_00382df0(KindMatchTarget *arg0, KindMatchSource *arg1) {
     }
 }
 
-int FUN_00382eb0(igSmartPointer<beUnicodeObj> *out, beFont *self, const char *str) {
+igSmartPointer<beUnicodeObj> FUN_00382eb0(beFont *self, const char *str) {
     Table t = DAT_004c8880;
     char c0;
     char c1;
@@ -677,9 +679,7 @@ int FUN_00382eb0(igSmartPointer<beUnicodeObj> *out, beFont *self, const char *st
         }
     }
     buf[m] = 0;
-    out->p = r.p;
-    if (out->p) ++out->p->_refCount;
-    return 0;
+    return r;
 }
 
 int FUN_00383350(beFont *arg0, int arg1) {
@@ -700,6 +700,104 @@ int FUN_00383350(beFont *arg0, int arg1) {
         } while (s1 < ((beFontImageList *)arg0->_fonts)->_count);
     }
     return 0;
+}
+
+extern "C" int FUN_0015db90(void *);
+extern "C" void FUN_00383ed0(beFont *, int, void *, void *);
+extern "C" void List_RemoveWordAt(void *, int);
+extern "C" const char *DAT_004c22f0[4];
+extern "C" char DAT_0050e798[16];
+extern "C" char DAT_0050e7a8[16];
+class FontSlot {
+public:
+    virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21();
+    virtual void apply(Sink *, int);
+};
+struct FontLayoutEntry { char p0[8]; const int *name1; int p12; int names; char p20[16]; int kind; int key; };
+struct FontLayoutTable { char p0[20]; igObjectList *entries; };
+struct FontLayout { char p0[12]; FontLayoutTable *table; };
+
+void FUN_00383420(beFont *self, FontLayout *layout, N *src, int idx) {
+    FontLayoutEntry *ent = (FontLayoutEntry *)((int *)layout->table->entries->_data)[idx];
+    igAttrSet *out = (igAttrSet *)((int *)((igObjectList *)((igAttrSet *)((int *)((igObjectList *)((igAttrSet *)ent->names)->_childList)->_data)[0])->_childList)->_data)[0];
+    void *keep = (void *)((int *)((igObjectList *)out->_attributes)->_data)[0];
+    igSmartPointer<beUnicodeObj> cur(0);
+    igMetaObject *info;
+    if (cur.p != 0) ++cur.p->_refCount;
+    info = (igMetaObject *)src->Meta();
+    if (strcmp((const char *)info->_name, DAT_0050e798) == 0) {
+        const char *s0 = (const char *)((igStringObj *)src)->_buffer;
+        const char *s;
+        if (s0 == 0) s = DAT_004c22f0[0]; else s = s0;
+        igSmartPointer<beUnicodeObj> tmp(FUN_00382eb0(self, s));
+        beUnicodeObj *n = tmp.get();
+        if (n != 0) ++n->_refCount;
+        beUnicodeObj *o = cur.p;
+        if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); }
+        cur.p = n;
+    } else if (strcmp((const char *)info->_name, DAT_0050e7a8) == 0) {
+        if (src != 0) ++((beUnicodeObj *)src)->_refCount;
+        beUnicodeObj *o = cur.p;
+        if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); }
+        cur.p = (beUnicodeObj *)src;
+    } else {
+        return;
+    }
+    /* matching construct: declaration-order search — the order of these locals sets which argument registers the search loop uses */
+    beFontGeomAttrPair *g = 0;
+    int i;
+    beFontGeomAttrPair *e;
+    int off;
+    beFontGeomAttrPairList *gl = (beFontGeomAttrPairList *)self->_gaPairList;
+    beFontGeomAttrPairList *l = gl;
+    if (l->_count > 0) {
+        i = 0;
+        if (i < l->_count) {
+            off = 0;
+            do {
+                e = (beFontGeomAttrPair *)((int *)((char *)l->_data + off))[0];
+                const int *a = ent->name1;
+                const int *a2;
+                if (a != 0) a2 = a; else a2 = DAT_004e0858;
+                if ((int)a2 == e->_category) {
+                    const int *b = (const int *)((igAttrSet *)ent->names)->_name;
+                    const int *b2;
+                    if (b != 0) b2 = b; else b2 = DAT_004e0858;
+                    if ((int)b2 == e->_panel) { g = e; break; }
+                }
+                l = gl;
+                i++;
+                off += 4;
+            } while (i < *(int *)&l->_count);
+        }
+    }
+    int fid = cur.p->_buffer;
+    self->_fontIdx = FUN_00383350(self, ent->key);
+    igGeometryAttr *fr = (igGeometryAttr *)((int *)((igObjectList *)g->_geomAttrs)->_data)[0];
+    FUN_00383ab0(self, fr, fid, 1);
+    Sink *sk = (Sink *)fr->_vertexArray;
+    ((FontSlot *)((int *)((beFontImageList *)self->_fonts)->_data)[self->_fontIdx])->apply(sk, fid);
+    char bufB[32];
+    char buf9[32];
+    FUN_0015db90(bufB);
+    FUN_0015db90(buf9);
+    FUN_00384010((int)self, (int *)sk, (int *)bufB, (int *)buf9);
+    FUN_00383bf0(self, (unsigned short *)fid, (int)ent, (Mesh *)bufB);
+    if (ent->kind == 1 || ent->kind == 2) FUN_00383ed0(self, fid, ent, bufB);
+    sk->drop(buf9, 0);
+    sk->drop(bufB, 0);
+    ObjectList_AppendRetained((void *)g->_geomAttrs, keep);
+    igObjectList *fl = (igObjectList *)out->_attributes;
+    if (fr != 0) ++fr->_refCount;
+    igGeometryAttr *old = (igGeometryAttr *)((int *)fl->_data)[0];
+    if (old != 0) { --old->_refCount; if ((old->_refCount & 0x7fffff) == 0) igObject_Destroy(old); }
+    int k = 0;
+    if (fl->_count != 0 && k >= 0 && k < fl->_count) ((int *)fl->_data)[0] = (int)fr;
+    igObjectList *fl2 = (igObjectList *)g->_geomAttrs;
+    igGeometryAttr *old2 = (igGeometryAttr *)((int *)fl2->_data)[0];
+    if (old2 != 0) { --old2->_refCount; if ((old2->_refCount & 0x7fffff) == 0) igObject_Destroy(old2); }
+    List_RemoveWordAt(fl2, 0);
+    ((int *)fl2->_data)[fl2->_count] = 0;
 }
 
 /* Owning stack reference to a vertex array: first the attribute's current array, then the newly
