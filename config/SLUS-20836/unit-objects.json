@@ -1077,45 +1077,6 @@
       "__dl__FPv": "0x00100610"
     }
   },
-  "0x00425430": {
-    "duplicates": {
-      "__dt__9StringRefFv": "0x00130720"
-    },
-    "exceptions": {
-      "index": "0x005540fc",
-      "table": "0x00545f9c",
-      "table_size": "0x000014"
-    },
-    "externals": {
-      "__dl__FPv": "0x00100610"
-    }
-  },
-  "0x00426140": {
-    "duplicates": {
-      "__dt__9StringRefFv": "0x00130720"
-    },
-    "exceptions": {
-      "index": "0x0055412c",
-      "table": "0x00545fc0",
-      "table_size": "0x000040"
-    },
-    "externals": {
-      "__dl__FPv": "0x00100610"
-    }
-  },
-  "0x004265c0": {
-    "duplicates": {
-      "__dt__9StringRefFv": "0x00130720"
-    },
-    "exceptions": {
-      "index": "0x00554144",
-      "table": "0x00546000",
-      "table_size": "0x000018"
-    },
-    "externals": {
-      "__dl__FPv": "0x00100610"
-    }
-  },
   "0x0042df70": {
     "duplicates": {
       "__dt__9StringRefFv": "0x00130720"
@@ -30482,6 +30443,92 @@
       "__dt__9StringRefFv": "0x00130720"
     },
     "symbol": "FUN_003b04e0"
+  },
+  "0x00424160": {
+    "whole_file": true,
+    "emitted": {
+      "Gap__Bec__beNDMWStatusTitle00__vfunc_22": "0x00424230",
+      "FUN_00425430": "0x00425430",
+      "FUN_00425e60": "0x00425e60",
+      "FUN_00425fb0": "0x00425fb0",
+      "Gap__Bec__beNDMWStatusTitle02__vfunc_22": "0x00426100",
+      "Gap__Bec__beNDMWStatusTitle03__vfunc_22": "0x00426140",
+      "FUN_00426530": "0x00426530",
+      "Gap__Bec__beNDMWStatusTitle04__vfunc_22": "0x004265c0",
+      "Gap__Bec__beNDMWStatusTitle04__vfunc_20": "0x00426750",
+      "Gap__Bec__beNDMWStatusTitle03__vfunc_20": "0x00426760",
+      "Gap__Bec__beNDMWStatusTitle02__vfunc_20": "0x00426770",
+      "Gap__Bec__beNDMWStatusTitle01__vfunc_20": "0x00426780",
+      "Gap__Bec__beNDMWStatusTitle00__vfunc_20": "0x00426790",
+      "Gap__Bec__beNDMWWindowTitle__vfunc_20": "0x004267a0"
+    },
+    "data": {
+      "@560": "0x0051aed0",
+      "DAT_004cf7a0": "0x004cf7a0",
+      "DAT_004cf820": "0x004cf820",
+      "DAT_0051abf8": "0x0051abf8",
+      "DAT_0051ac08": "0x0051ac08",
+      "DAT_0051ac10": "0x0051ac10",
+      "DAT_0051ac20": "0x0051ac20",
+      "DAT_0051ac30": "0x0051ac30",
+      "DAT_0051acb0": "0x0051acb0",
+      "DAT_0051acc8": "0x0051acc8",
+      "DAT_0051ace0": "0x0051ace0",
+      "DAT_0051ad60": "0x0051ad60",
+      "DAT_0051ad70": "0x0051ad70",
+      "DAT_0051ad78": "0x0051ad78",
+      "DAT_0051ad80": "0x0051ad80",
+      "DAT_0051ad88": "0x0051ad88",
+      "DAT_0051ad98": "0x0051ad98",
+      "DAT_0051ada8": "0x0051ada8",
+      "DAT_0051adb8": "0x0051adb8",
+      "DAT_0051adc8": "0x0051adc8",
+      "DAT_0051add8": "0x0051add8",
+      "DAT_0051adf0": "0x0051adf0",
+      "DAT_0051ae00": "0x0051ae00",
+      "DAT_0051ae10": "0x0051ae10",
+      "DAT_0051ae20": "0x0051ae20",
+      "DAT_0051ae30": "0x0051ae30",
+      "DAT_0051ae40": "0x0051ae40",
+      "DAT_0051ae50": "0x0051ae50",
+      "DAT_0051ae60": "0x0051ae60",
+      "DAT_0051ae70": "0x0051ae70",
+      "DAT_0051ae80": "0x0051ae80",
+      "DAT_0051aea0": "0x0051aea0",
+      "DAT_0051aeb0": "0x0051aeb0",
+      "DAT_0051aec0": "0x0051aec0",
+      "DAT_0051af10": "0x0051af10",
+      "DAT_0051af20": "0x0051af20",
+      "DAT_0051af30": "0x0051af30",
+      "DAT_0051af38": "0x0051af38",
+      "DAT_0051af40": "0x0051af40",
+      "DAT_0051af48": "0x0051af48",
+      "DAT_0051af58": "0x0051af58",
+      "DAT_0051af60": "0x0051af60",
+      "DAT_0051af70": "0x0051af70",
+      "DAT_0051af80": "0x0051af80",
+      "DAT_0051af90": "0x0051af90",
+      "DAT_0051afa0": "0x0051afa0",
+      "DAT_0051afb0": "0x0051afb0",
+      "DAT_0051afb8": "0x0051afb8",
+      "DAT_0051afc8": "0x0051afc8",
+      "DAT_0051afd8": "0x0051afd8",
+      "DAT_0051afe8": "0x0051afe8",
+      "DAT_00586f20": "0x00586f20",
+      "g_beNDMWStatusTitle00_metaObject": "0x0058ab70",
+      "g_beNDMWStatusTitle01_metaObject": "0x0058ab68",
+      "g_beNDMWStatusTitle02_metaObject": "0x0058ab60",
+      "g_beNDMWStatusTitle03_metaObject": "0x0058ab58",
+      "g_beNDMWStatusTitle04_metaObject": "0x0058ab50",
+      "g_beNDMWWindowTitle_metaObject": "0x0058ab78"
+    },
+    "duplicates": {
+      "__dt__9StringRefFv": "0x00130720"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    },
+    "symbol": "Gap__Bec__beNDMWWindowTitle__vfunc_21"
   },
   "0x004233f0": {
     "whole_file": true,

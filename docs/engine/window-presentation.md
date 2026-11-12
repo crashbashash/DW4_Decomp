@@ -14,7 +14,7 @@ are `src/game/beNDMWWindow.cpp`,
 `src/game/beNDMWWindow.cpp`,
 `src/game/beNDMWWindow.cpp`,
 `src/unmatched/beNDMWWindow_PollCloseComplete.cpp` and
-`src/unmatched/Gap__Bec__beNDMWWindowTitle__vfunc_21.cpp`.
+`src/game/beNDMWWindowTitle.cpp`.
 This does not establish shop transactions or UI operation.
 
 The run extends backward with the 144-byte
@@ -145,6 +145,6 @@ make typed-check
 ```
 
 The 208-byte title matches as
-`src/unmatched/Gap__Bec__beNDMWWindowTitle__vfunc_21.cpp`. Recover
+`src/game/beNDMWWindowTitle.cpp`. Recover
 the selected XDATA/BANK/CNOS/DISK/ShopDevice/JUNK controllers and their actual
 record transactions against the [full hub contract](../systems/hub-recovery.md).
