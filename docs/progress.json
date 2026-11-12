@@ -84,16 +84,16 @@
     "functions": 0
    },
    "foreign-profile": {
-    "bytes": 1992,
-    "functions": 11
+    "bytes": 288,
+    "functions": 10
    },
    "inventory-gap": {
     "bytes": 0,
     "functions": 0
    },
    "match": {
-    "bytes": 2807396,
-    "functions": 19480
+    "bytes": 2809100,
+    "functions": 19481
    },
    "mismatch": {
     "bytes": 0,
@@ -128,12 +128,12 @@
   },
   "foreign_orphan_bytes": 32,
   "fully_matched": {
-   "bytes": 2812752,
-   "functions": 19564
+   "bytes": 2814456,
+   "functions": 19565
   },
   "fully_verified": {
-   "bytes": 2807396,
-   "functions": 19480
+   "bytes": 2809100,
+   "functions": 19481
   },
   "recorded": true,
   "source": "data/check-categories.tsv",
@@ -142,8 +142,8 @@
  "code_bytes": {
   "asm_body": 0,
   "assembly": 5356,
-  "fully_matched": 2812752,
-  "fully_verified": 2807396,
+  "fully_matched": 2814456,
+  "fully_verified": 2809100,
   "functions_asm_body": 0,
   "functions_assembly": 84,
   "matched": 2840992,
@@ -221,16 +221,16 @@
     "value": 0
    },
    "foreign_profile.bytes": {
-    "reason": "FUN_0042e330 held under its old inline flags (foreign-profile) until a spelling without the Slots device matches under bottom-up inlining",
-    "value": 1992
+    "reason": null,
+    "value": 288
    },
    "foreign_profile.functions": {
-    "reason": "FUN_0042e330 held under its old inline flags (foreign-profile) until a spelling without the Slots device matches under bottom-up inlining",
-    "value": 11
+    "reason": null,
+    "value": 10
    },
    "fun_dat_refs": {
     "reason": null,
-    "value": 37018
+    "value": 36996
    },
    "inline_asm.other": {
     "reason": null,
@@ -250,7 +250,7 @@
    },
    "m2c_idiom.units": {
     "reason": null,
-    "value": 820
+    "value": 819
    },
    "mismatch.bytes": {
     "reason": null,
@@ -332,14 +332,14 @@
    "code_only.other.functions": 2,
    "compile.bytes": 0,
    "compile.functions": 0,
-   "foreign_profile.bytes": 1992,
-   "foreign_profile.functions": 11,
-   "fun_dat_refs": 37018,
+   "foreign_profile.bytes": 288,
+   "foreign_profile.functions": 10,
+   "fun_dat_refs": 36996,
    "inline_asm.other": 0,
    "inventory.unsymbolised_bytes": 1020,
    "inventory_gap.bytes": 0,
    "inventory_gap.functions": 0,
-   "m2c_idiom.units": 820,
+   "m2c_idiom.units": 819,
    "mismatch.bytes": 0,
    "mismatch.functions": 0,
    "name_defect.bytes": 0,
@@ -359,8 +359,8 @@
   }
  },
  "functions": {
-  "fully_matched": 19564,
-  "fully_verified": 19480,
+  "fully_matched": 19565,
+  "fully_verified": 19481,
   "matched": 19551,
   "named": 9732,
   "named_semantic": 2055,
@@ -455,28 +455,28 @@
   "bytes": 792784,
   "failing": {
    "addresses": {
-    "bytes": 1758376,
-    "functions": 10210
+    "bytes": 1760080,
+    "functions": 10211
    },
    "fields": {
-    "bytes": 442920,
-    "functions": 1368
+    "bytes": 444624,
+    "functions": 1369
    },
    "idioms": {
     "bytes": 585616,
     "functions": 1679
    },
    "name": {
-    "bytes": 1896696,
-    "functions": 13782
+    "bytes": 1898400,
+    "functions": 13783
    },
    "placed": {
     "bytes": 260820,
     "functions": 1949
    },
    "references": {
-    "bytes": 1097420,
-    "functions": 3833
+    "bytes": 1099124,
+    "functions": 3834
    },
    "types": {
     "bytes": 428556,
@@ -488,7 +488,7 @@
    }
   },
   "functions": 5381,
-  "matched_functions": 19564
+  "matched_functions": 19565
  },
  "regions": [
   {
@@ -622,11 +622,11 @@
  ],
  "typed": {
   "error": null,
-  "offset_casts": 6422,
+  "offset_casts": 6414,
   "pct": 39.02,
-  "recovered": 25908,
+  "recovered": 25911,
   "synthetic": 10053,
-  "total": 66397,
+  "total": 66396,
   "typeable": 363,
   "typeable_pct": 0.55
  }
