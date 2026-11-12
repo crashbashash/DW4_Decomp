@@ -271,6 +271,13 @@ class SharedRenameTargets(unittest.TestCase):
                           "__dt__12StringRefViewFv": "__dt__12StringRefViewFv_00130720", "same": "same"})
         self.assertEqual(verify.spelled_address("__dt__9StringRefFv_00130720"), 0x130720)
 
+    def test_the_isolated_member_keeps_its_retail_label(self):
+        renames = {"__dt__14ModelNodeFieldFv": "FUN_0034c1b0", "__dt__12SrcNodeFieldFv": "FUN_0034c1b0"}
+        addresses = {"__dt__14ModelNodeFieldFv": 0x34c1b0, "__dt__12SrcNodeFieldFv": 0x34c1b0}
+        self.assertEqual(verify.unshared_renames(renames, addresses, keep="__dt__14ModelNodeFieldFv"),
+                         {"__dt__14ModelNodeFieldFv": "FUN_0034c1b0",
+                          "__dt__12SrcNodeFieldFv": "__dt__12SrcNodeFieldFv_0034c1b0"})
+
     def test_single_rename_is_kept(self):
         self.assertEqual(verify.unshared_renames({"a": "b"}), {"a": "b"})
 

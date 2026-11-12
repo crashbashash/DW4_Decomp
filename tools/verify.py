@@ -1733,14 +1733,15 @@ def verify_emitted_unit(obj, group, elf, symbols, profile, recompile,
         records if (records is not None and twins_ok) else None
 
 
-def unshared_renames(renames, addresses=None):
+def unshared_renames(renames, addresses=None, keep=None):
     """`renames` without the entries whose target several names share.
 
     A unit can reach one retail address through several local names (separately declared
     aliases make the compiler materialise the address once per use, as retail does, and a
     library unit can name one retail destructor through several holder classes). objcopy
-    cannot redefine two symbols to one name. A name that already carries its address keeps
-    its own spelling and resolves through `sym_address` at link. Any other such name (a
+    cannot redefine two symbols to one name. `keep`, the member being isolated, always takes
+    its retail label, which defines it for the link. A name that already carries its address
+    keeps its own spelling and resolves through `sym_address` at link. Any other such name (a
     mangled destructor) is renamed to itself plus the retail address it stands for (from
     `addresses`), which `sym_address` resolves the same way. The relocation comparison reads
     the same map, so every one is still checked.
@@ -1748,7 +1749,7 @@ def unshared_renames(renames, addresses=None):
     shared = collections.Counter(new for old, new in renames.items() if old != new)
     out = {}
     for old, new in renames.items():
-        if old == new or shared[new] == 1:
+        if old == new or shared[new] == 1 or old == keep:
             out[old] = new
         elif addresses is not None and old in addresses and not BOOTSTRAP_NAME.search(old):
             out[old] = "%s_%08x" % (old, addresses[old])
@@ -1834,7 +1835,7 @@ def isolate_emitted_body(obj, requested, records, group, symbols, source=None):
     renames.update({name: "DAT_%08x" % address for name, address in group.data})
     addresses = {name: address for name, (address, _, _) in records.items()}
     addresses.update(dict(group.externals))
-    renames = unshared_renames(renames, addresses)
+    renames = unshared_renames(renames, addresses, keep=selected)
     for old, new in renames.items():
         if old != new:
             arguments += ["--redefine-sym", f"{old}={new}"]
