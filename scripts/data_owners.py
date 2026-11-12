@@ -13,6 +13,7 @@ a section the heaviest chain of runs in link order stands; the rest are counted 
 """
 import argparse
 import collections
+import json
 import os
 import struct
 import sys
@@ -23,6 +24,7 @@ import regions  # noqa: E402
 
 ELF = os.path.join(ROOT, "orig", "SLUS-20836", "SLUS_208.36")
 OUT = os.path.join(ROOT, "config", "SLUS-20836", "data-owners.tsv")
+VTABLES = os.path.join(ROOT, "data", "vtables.json")
 BASE, FILE_BASE = 0x100000, 0x80
 CODE_END, DATA_END = 0x467120, 0x58d280
 BSS_START = 0x554b00
@@ -33,6 +35,8 @@ MIN_RUN = 4        # references a run needs to stand as its own owner
 LINK_START = 0     # the link position that opens a section: the first object, the runtime
 FALL_BACK = 8      # link positions a section must reach before it can end
 SECTION_START = 6  # references the opening run of a section needs
+METAOBJECT_SLOT = 20  # the vtable slot of a class's own metaobject getter, compiled with the class
+RTTI_REACH = 0x100    # how far from its record a class's name, base list and base-record copies lie
 
 
 def written(w):
@@ -68,6 +72,44 @@ def references(image):
         if target is not None and CODE_END <= target < DATA_END:
             found[target][regions.of(at).id] += 1
         high.pop(written(w), None)
+    return found
+
+
+def rtti_references(image, path=VTABLES):
+    """-> {data address: Counter(region id)} for the RTTI records no code forms an address of.
+
+    A class's RTTI record (its name, its base list and the copies of its base classes' records the
+    object emits beside it) is data of the unit that compiles the class, but only its vtable points
+    at it. The record belongs to the library whose code fills the vtable's metaobject slot (20)."""
+    def word(at):
+        return struct.unpack_from("<I", image, FILE_BASE + at - BASE)[0]
+
+    found = collections.defaultdict(collections.Counter)
+    vtables = json.load(open(path))["vtables"]
+    for table in vtables.values():
+        slots = table.get("vfuncs") or []
+        if len(slots) <= METAOBJECT_SLOT or not table.get("rtti"):
+            continue
+        owner = regions.of(int(slots[METAOBJECT_SLOT], 16))
+        if owner is None:
+            continue
+        record = int(table["rtti"], 16)
+        todo, seen = [record], set()
+        while todo:
+            at = todo.pop()
+            if at in seen or not CODE_END <= at < DATA_END or abs(at - record) > RTTI_REACH:
+                continue
+            seen.add(at)
+            found[at][owner.id] += 1
+            name, bases = word(at), word(at + 4)
+            if CODE_END <= name < DATA_END and abs(name - record) <= RTTI_REACH:
+                found[name][owner.id] += 1
+            if bases and CODE_END <= bases < DATA_END and abs(bases - record) <= RTTI_REACH:
+                found[bases][owner.id] += 1
+                cursor = bases
+                while word(cursor):
+                    todo.append(word(cursor))
+                    cursor += 8
     return found
 
 
@@ -116,7 +158,10 @@ def sections(rows, order):
 
 def table(image):
     order = {row.id: index for index, row in enumerate(regions.load())}
-    rows = [run for run in runs(references(image)) if run[3] >= MIN_RUN]
+    found = references(image)
+    for address, owners in rtti_references(image).items():
+        found[address].update(owners)
+    rows = [run for run in runs(found) if run[3] >= MIN_RUN]
     lines = []
     parts = sections(rows, order)
     for number, part in enumerate(parts):

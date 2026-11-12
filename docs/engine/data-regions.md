@@ -21,6 +21,10 @@ The method is three cheap measurements over each region, all reproducible:
 
 The linker lays data out by section and, inside a section, in the same object order as the code, so
 the library whose code forms an address most is that data's owner, and owners run in link order.
+A class's RTTI record, its name, its base list and the copies of its base classes' records beside
+it are reached only from its vtable, so they count for the library whose code fills the vtable's
+metaobject slot (20); without that, a unit whose data opens with RTTI starts at its first
+code-formed address instead.
 `scripts/data_owners.py` measures this into `config/SLUS-20836/data-owners.tsv`, with `make rules`
 checking it is current. Each section opens with the first object of the link, the Metrowerks runtime:
 
