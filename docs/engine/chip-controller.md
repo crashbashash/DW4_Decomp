@@ -1,7 +1,7 @@
 # XDATA chip transaction controller
 
 The complete 7,232-byte update at `43aae0..43c720` is in
-`src/unmatched/Gap__Bec__beNDMWShopCtrlXdataChip__vfunc_21.cpp`. Its adjacent
+`src/game/beNDMWShopCtrl00.cpp`. Its adjacent
 [count/text and inherited paging helpers](list-controller-chip-view.md) are
 2,196 bytes.
 

@@ -133,8 +133,8 @@ replacement hub or modernize the original scripts to satisfy this goal.
    is six complete bodies /2,980 bytes,
    including all mode factories, child binding/update/removal and the
    actual child-close helper, in `src/game/beNDMWWindow.cpp` (the window helpers)
-   and `src/unmatched/` (`Gap__Bec__beNDMWShopCtrl00__vfunc_21.cpp`,
-   `FUN_00426fa0.cpp` and `FUN_00427020.cpp`); concrete selected
+   and `src/game/beNDMWShopCtrl00.cpp` (the update and its two window-holder
+   destructors); concrete selected
    service controllers and transaction/result producers remain open. The
    [presentation/title module](../engine/window-presentation.md) is
    eight bodies /2,628 bytes;
@@ -209,7 +209,7 @@ non-padding words and 47 padding/static-dead words. Inventory rebuilding, equipp
 preview restoration, notice/confirmation, current-record increment and fresh
 XDATA debit are recovered. Item/status/recalculation/message/script and selector
 execution remain dependencies; full hub acceptance remains open.
-The update is in `src/unmatched/Gap__Bec__beNDMWShopCtrlXdataChip__vfunc_21.cpp`.
+The update is in `src/game/beNDMWShopCtrl00.cpp`.
 
 ### Item/database lookup and return ABI
 

@@ -10,8 +10,7 @@ page 320, next page 336, chip page-count 208 and chip text 1,072. Source
 lives in the
 [C-mode initializer](../../src/game/beNDMWListCtrl.cpp),
 [C++ page methods](../../src/game/beNDMWListCtrl.cpp),
-[chip count](../../src/game/beNDMWShopCtrlXdataChip_UpdatePageCount.c) and
-[chip text](../../src/game/beNDMWShopCtrlXdataChip_RefreshText.cpp).
+[chip count and chip text](../../src/game/beNDMWShopCtrl00.cpp).
 The primary7,232-byte chip transaction update is documented
 [separately](chip-controller.md).
 
@@ -89,8 +88,8 @@ boundaries; this code displays values and does not compute costs or debit XDATA.
 ## Source shapes and extent
 
 The two page methods use C++ `bool`, and the source of all these helpers is C and C++ with no `asm`.
-The chip text helper uses full-width flags, status and NEXTX results, reflected fields and a four-byte
-font-pointer stride. Unspecified callee argument lists keep the retail call setup, and fully prototyped
+The chip text helper takes full-width flags, holds the status and NEXTX results as plain words, and uses
+reflected fields and a four-byte font-pointer stride. Unspecified callee argument lists keep the retail call setup, and fully prototyped
 candidates change argument and delay-slot ordering. These are call-site projections, not recovered
 callee types. Subtracting a negation in the description index keeps the retail `addu` operand order. No
 new stale-field clearing or index guards were added.

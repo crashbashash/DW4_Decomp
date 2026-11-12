@@ -9,8 +9,8 @@ instruction addresses**; four further zero words are padding.
 Ghidra counts2,004 occupied bytes for the shop-root update, which spans **2,020 bytes**, with four internal
 NOP holes. The occupied-byte size would end after restoring ra at426f80, losing
 saved-s1/s0 restores, return and stack-release delay slot. Generated ranges and
-split/layout include the full sequence. The three window helpers are in `src/game/beNDMWWindow.cpp`; the other three bodies are in
-`src/unmatched/` (`Gap__Bec__beNDMWShopCtrl00__vfunc_21.cpp`, `FUN_00426fa0.cpp` and `FUN_00427020.cpp`).
+split/layout include the full sequence. The three window helpers are in `src/game/beNDMWWindow.cpp`; the other three bodies (the update and its two
+window-holder destructors) are in `src/game/beNDMWShopCtrl00.cpp`.
 
 ## Window ownership and context
 

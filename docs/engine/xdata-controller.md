@@ -9,10 +9,8 @@ message-script dispatcher3f5920 brings that to
 The five bodies hold **1,503 instruction addresses**. Thirty-three zero
 words are padding; twelve nonzero words are statically unreachable literal-null
 construction branches. The five
-bodies are in `src/unmatched/Gap__Bec__beNDMWShopCtrl10__vfunc_21.cpp`,
-`src/unmatched/FUN_00428610.cpp`, `src/unmatched/FUN_00428690.cpp`,
-`src/unmatched/FUN_00428710.cpp` and
-`src/game/beNDMWWindow.cpp`. Widget/input, player recalculation, lookup, pool/list, formatting,
+bodies are in `src/game/beNDMWShopCtrl00.cpp` (the update and its three window-holder
+destructors) and `src/game/beNDMWWindow.cpp`. Widget/input, player recalculation, lookup, pool/list, formatting,
 text/model receivers and Lua execution are separate services.
 
 ## Owner and primary state
