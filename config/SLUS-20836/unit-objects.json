@@ -33581,6 +33581,17 @@
     },
     "symbol": "FUN_00338f70"
   },
+  "0x00331f30": {
+    "whole_file": true,
+    "emitted": {
+      "Gap__igAdxAudio__vfunc_20": "0x00331f80",
+      "Gap__igAdxAudio__vfunc_08": "0x00331f90"
+    },
+    "data": {
+      "g_igAdxAudio_metaObject": "0x005876e0"
+    },
+    "symbol": "Gap__igAdxAudio__vfunc_07"
+  },
   "0x002590c0": {
     "whole_file": true,
     "emitted": {

@@ -497,7 +497,7 @@
 0x002b4210	0x002b50e4	cri_sfxz	ee-gcc	-O2 -G0 -ffunction-sections -Iinclude	off	-	whole file
 0x002b50e8	0x002b5d4c	cri_sud	ee-gcc	-O2 -G0 -ffunction-sections -Iinclude	off	-	whole file
 0x002b5d50	0x00331f30	alchemy-core_CoreLibrary	b52	-O4,s -sdatathreshold 2 -Iinclude	off	-	whole file
-0x00331f30	0x00331fac	igAdxAudio_331f30	b52	-O4,p -sdatathreshold 2 -Iinclude	on	-	unlabeled run, no boundary evidence: cut where the retail exception evidence or the pins change; exceptions on: 2/3 functions have retail index records; default -O3 -Iinclude reproduces 3/3 members
+0x00331f30	0x00331fb0	movie_igAdxAudio	b52	-O4,p -sdatathreshold 2 -Iinclude	on	-	whole file
 0x00331fb0	0x003320c8	unlabeled_331fb0	b52	-O4,p -sdatathreshold 2 -Iinclude	on	-	unlabeled run, no boundary evidence: cut where the retail exception evidence or the pins change; exceptions on: 1/1 functions have retail index records; combat -O4,p -Iinclude reproduces 1/1 members
 0x003320d0	0x0033236c	unlabeled_3320d0	b52	-O4,p -sdatathreshold 2 -Iinclude	on	-	unlabeled run, no boundary evidence: cut where the retail exception evidence or the pins change; exceptions on: 5/5 functions have retail index records; combat -O3,p -Iinclude reproduces 5/5 members
 0x00332370	0x003323d0	unlabeled_332370	b52	-O4,p -sdatathreshold 2 -Iinclude	on	-	unlabeled run, no boundary evidence: cut where the retail exception evidence or the pins change; exceptions on: 2/2 functions have retail index records; default -O3 -Iinclude reproduces 2/2 members
