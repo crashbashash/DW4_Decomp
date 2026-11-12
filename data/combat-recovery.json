@@ -186,7 +186,7 @@
       "address": "0x00190380",
       "name": "igMatrix44f_SetIdentity",
       "size": 72,
-      "source": "src/engine/igMatrix44f_SetIdentity.c",
+      "source": "src/engine/maths/MathsLibrary.cpp",
       "sites": [
         "0x00405a48"
       ]
@@ -204,7 +204,7 @@
       "address": "0x00190a30",
       "name": "Matrix44_GetTranslation",
       "size": 28,
-      "source": "src/engine/matrix-primitives.c",
+      "source": "src/engine/maths/MathsLibrary.cpp",
       "sites": [
         "0x00405450",
         "0x004057d0",

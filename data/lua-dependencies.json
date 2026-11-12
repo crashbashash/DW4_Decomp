@@ -6036,7 +6036,7 @@
       "address": 1619504,
       "name": "FUN_0018b630",
       "size": 128,
-      "source": "src/unmatched/FUN_0018b630.c",
+      "source": "src/engine/maths/MathsLibrary.cpp",
       "direct": [],
       "indirect": []
     },
@@ -6077,7 +6077,7 @@
       "address": 1639296,
       "name": "igMatrix44f_SetIdentity",
       "size": 72,
-      "source": "src/engine/igMatrix44f_SetIdentity.c",
+      "source": "src/engine/maths/MathsLibrary.cpp",
       "direct": [],
       "indirect": []
     },
@@ -6093,7 +6093,7 @@
       "address": 1641008,
       "name": "Matrix44_GetTranslation",
       "size": 28,
-      "source": "src/engine/matrix-primitives.c",
+      "source": "src/engine/maths/MathsLibrary.cpp",
       "direct": [],
       "indirect": []
     },
@@ -6109,7 +6109,7 @@
       "address": 1650512,
       "name": "FUN_00192f50",
       "size": 112,
-      "source": "src/unmatched/FUN_00192f50.c",
+      "source": "src/engine/maths/MathsLibrary.cpp",
       "direct": [],
       "indirect": []
     },

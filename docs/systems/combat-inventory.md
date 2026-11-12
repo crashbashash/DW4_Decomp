@@ -79,9 +79,9 @@ their own recovery. Source presence does not substitute for `make check`.
 | Address | Function | Bytes | Matching source |
 | --- | --- | ---: | --- |
 | `0x0012a4a4` | `strcmp` | 324 | [src/newlib/strcmp.S](../../src/newlib/strcmp.S) |
-| `0x00190380` | `igMatrix44f_SetIdentity` | 72 | [src/engine/igMatrix44f_SetIdentity.c](../../src/engine/igMatrix44f_SetIdentity.c) |
+| `0x00190380` | `igMatrix44f_SetIdentity` | 72 | [src/engine/maths/MathsLibrary.cpp](../../src/engine/maths/MathsLibrary.cpp) |
 | `0x001908f0` | `Matrix44_Copy` | 188 | assembly only |
-| `0x00190a30` | `Matrix44_GetTranslation` | 28 | [src/engine/matrix-primitives.c](../../src/engine/matrix-primitives.c) |
+| `0x00190a30` | `Matrix44_GetTranslation` | 28 | [src/engine/maths/MathsLibrary.cpp](../../src/engine/maths/MathsLibrary.cpp) |
 | `0x002d6790` | `List_Resize` | 120 | [src/engine/core/CoreLibrary.cpp](../../src/engine/core/CoreLibrary.cpp) |
 | `0x002eaf60` | `StringPool_Intern` | 172 | [src/engine/core/CoreLibrary.cpp](../../src/engine/core/CoreLibrary.cpp) |
 | `0x002fba30` | `igMetaEnum_GetValueByName` | 260 | [src/engine/core/CoreLibrary.cpp](../../src/engine/core/CoreLibrary.cpp) |

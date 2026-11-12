@@ -41,7 +41,7 @@ then use the dry run and `--apply --check` naming workflow.
 | `0x0038b1f0` | `Gap__Bec__beMatCtrl__vfunc_31` | per-instance update (3,064 bytes) | — |
 | `0x0038bdf0` | `Gap__Bec__beMatCtrl__vfunc_34` | message dispatch (220 bytes) | matched, `src/game/beMatCtrl.cpp` |
 | `0x0038bed0` | `Gap__Bec__beMatCtrl__vfunc_20` | metadata getter | matched, `src/game/beMatCtrl.cpp` |
-| `0x0018b630` | `FUN_0018b630` | box membership | matched, `src/unmatched/FUN_0018b630.c` |
+| `0x0018b630` | `FUN_0018b630` | box membership | matched, `src/engine/maths/igAABox.inc` |
 
 The seven Lua wrappers total 240 code bytes and need C++
 mode. C mode produces tail jumps rather than the original stack frames.
