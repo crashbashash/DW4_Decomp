@@ -653,7 +653,7 @@
 0x003cd4b0	0x003cdb00	ndmw_beNDMWStageCtl	b52	-O4,p -sdatathreshold 2 -inline level=8 -Iinclude	on	-	whole file
 0x003cdb00	0x003cdef0	ndmw_beNDMWAfsSetup	b52	-O4,p -sdatathreshold 2 -inline level=8 -Iinclude	on	-	whole file
 0x003cdef0	0x003d1480	ndmw_beNDMWPanelWaza	b52	-O4,p -sdatathreshold 2 -inline level=8 -Iinclude	on	-	whole file
-0x003d1480	0x003d16bc	beNDMWMdlEBullet_3d1480	b52	-O4,p -sdatathreshold 2 -inline level=8 -Iinclude	on	-	class run of 4 labeled members; exceptions on: 2/4 functions have retail index records; combat -O3,p -Iinclude reproduces 4/4 members
+0x003d1480	0x003d16c0	ndmw_beNDMWMdlEBullet	b52	-O4,p -sdatathreshold 2 -inline level=8 -Iinclude	on	-	whole file
 0x003d16c0	0x003d18fc	beNDMWMdlEffect_3d16c0	b52	-O4,p -sdatathreshold 2 -inline level=8 -Iinclude	on	-	class run of 4 labeled members; exceptions on: 2/4 functions have retail index records; combat -O3,p -Iinclude reproduces 4/4 members
 0x003d1900	0x003d1d0c	beNDMWMdlEnemy_3d1900	b52	-O4,p -sdatathreshold 2 -inline level=8 -Iinclude	on	-	class run of 5 labeled members, 1 unlabeled functions inside; exceptions on: 5/6 functions have retail index records; combat -O3,p -Iinclude reproduces 6/6 members
 0x003d1d10	0x003d1fec	beNDMWMdlObject_3d1d10	b52	-O4,p -sdatathreshold 2 -inline level=8 -Iinclude	on	-	class run of 4 labeled members; exceptions on: 2/4 functions have retail index records; default -O3 -Iinclude reproduces 3/3 members

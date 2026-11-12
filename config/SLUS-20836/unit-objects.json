@@ -1135,20 +1135,6 @@
       "__dl__FPv": "0x00100610"
     }
   },
-  "0x003d14c0": {
-    "duplicates": {
-      "__dt__8ValueRefFv": "0x00352fc0",
-      "__dt__25igSmartPointer<8igObject>Fv": "0x0033e9c0"
-    },
-    "exceptions": {
-      "index": "0x00553244",
-      "table": "0x00544504",
-      "table_size": "0x00001c"
-    },
-    "externals": {
-      "__dl__FPv": "0x00100610"
-    }
-  },
   "0x003d1700": {
     "duplicates": {
       "__dt__9EffectRefFv": "0x00352fc0",
@@ -30938,6 +30924,30 @@
       "__dt__9StringRefFv": "0x00130720"
     },
     "symbol": "FUN_003b04e0"
+  },
+  "0x003d1480": {
+    "whole_file": true,
+    "emitted": {
+      "Gap__Bec__beNDMWMdlEBullet__vfunc_37": "0x003d14b0",
+      "Gap__Bec__beNDMWMdlEBullet__vfunc_36": "0x003d14c0",
+      "Gap__Bec__beNDMWMdlEBullet__vfunc_20": "0x003d16b0"
+    },
+    "data": {
+      "DAT_00515d30": "0x00515d30",
+      "DAT_00515d40": "0x00515d40",
+      "DAT_00585be0": "0x00585be0",
+      "DAT_00587110": "0x00587110",
+      "GPR_00554c14": "0x00554c14",
+      "g_beNDMWMdlEBullet_metaObject": "0x0058b520"
+    },
+    "duplicates": {
+      "__dt__25igSmartPointer<8igObject>Fv": "0x0033e9c0",
+      "__dt__8ValueRefFv": "0x00352fc0"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    },
+    "symbol": "Gap__Bec__beNDMWMdlEBullet__vfunc_35"
   },
   "0x003cdb00": {
     "whole_file": true,
