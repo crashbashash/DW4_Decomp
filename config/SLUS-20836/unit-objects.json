@@ -31451,6 +31451,19 @@
     },
     "symbol": "FUN_003b04e0"
   },
+  "0x00378ce0": {
+    "whole_file": true,
+    "emitted": {
+      "Gap__Bec__beBkColor__vfunc_30": "0x00378cf0",
+      "Gap__Bec__beBkColor__vfunc_31": "0x00378d00",
+      "Gap__Bec__beBkColor__vfunc_20": "0x00378d70"
+    },
+    "data": {
+      "g_beBkColorInfo_metaObject": "0x00589d00",
+      "g_beBkColor_metaObject": "0x00589d10"
+    },
+    "symbol": "Gap__Bec__beBkColor__vfunc_32"
+  },
   "0x00378710": {
     "whole_file": true,
     "emitted": {
