@@ -131,9 +131,12 @@ measures the rows from retail and stops if a retail function in its range has no
 docstring gives the command, and [`src/third_party/`](../../src/third_party/README.md) holds the
 sources. A recovered source file that still lacks some of its functions is measured with `--partial`:
 the retail functions it does not define keep linking from the retail image between its members, and
-each gains its place in the file when its C is written. Recovered files of both compilers are
-whole-file units: the CRI middleware under EE GCC in `src/cri/`, and game classes under MWCC, such
-as `src/game/`'s, in C++ with exceptions on.
+each gains its place in the file when its C is written. A function a member reaches outside the
+range becomes a `duplicates` row at the address the retail field holds; when that copy is a
+[profile twin](#duplicates-switch-tables-and-exception-data), the tool compiles the same source
+under the twin's unit profile, as `verify_emitted_unit` does, and requires that copy at the retail
+extent there. Recovered files of both compilers are whole-file units: the CRI middleware under EE
+GCC in `src/cri/`, and game classes under MWCC, such as `src/game/`'s, in C++ with exceptions on.
 
 Compiling the file whole is what the original build did, and under both compilers it decides code,
 so a member can match only when the functions before it in the file are present:

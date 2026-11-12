@@ -311,6 +311,65 @@ class ExceptionsOn(unittest.TestCase):
         self.assertEqual(found, dict(self.group.duplicates))
 
 
+class ProfileTwin(unittest.TestCase):
+    """A duplicate the retail linker kept from a unit of another profile: beMessenger_RegisterReceiver
+    (-O3,p, exceptions on) reaches the StringRef destructor at 0x130720, an -O4,s copy from the Attrs
+    library. As tools/verify.py checks it, the same source compiled under that unit's profile must
+    reproduce it there; the file's own copy cannot."""
+    OWNER, NAME, COPY, DESTRUCTOR = 0x38d560, "beMessenger_RegisterReceiver", 0x130720, "__dt__9StringRefFv"
+    SOURCE = Path(verify.ROOT) / "src/unmatched/beMessenger_RegisterReceiver.cpp"
+    CONFIG = Path(verify.ROOT) / "config/SLUS-20836"
+
+    def setUp(self):
+        self.elf = Path(verify.ROOT) / "orig/SLUS-20836/SLUS_208.36"
+        if not all(Path(p).exists() for p in (verify.WIBO_DEFAULT, self.elf, self.SOURCE)):
+            self.skipTest("private compiler or retail image unavailable")
+        self.profile = unitprofiles.resolve(self.OWNER, verify.FLAGS_DEFAULT, verify.MWCC_DEFAULT).profile
+        temp = tempfile.TemporaryDirectory(prefix="dw4-whole-file-twin-")
+        self.addCleanup(temp.cleanup)
+        self.root = Path(temp.name)
+        self.obj = self.root / "unit.o"
+        subprocess.run(cc.compile_argv(verify.WIBO_DEFAULT, self.profile.compiler,
+                                       unitprofiles.command_flags(self.profile), str(self.SOURCE),
+                                       str(self.obj)), cwd=verify.ROOT, check=True, capture_output=True)
+
+    def duplicates(self, config=CONFIG):
+        syms, headers, functions = whole_file_rows.text_functions(str(self.obj))
+        twins = whole_file_rows.Twins(self.profile, str(self.SOURCE), str(self.root), str(config),
+                                      verify.WIBO_DEFAULT)
+        return whole_file_rows.duplicate_rows(
+            {self.NAME: self.OWNER}, whole_file_rows.Retail(str(self.elf)), syms, headers, str(self.obj),
+            functions, exceptions.load(), twins)
+
+    def config(self, flags, mode):
+        """The profile tables, with the unit holding the copy built under `flags` and `mode`."""
+        config = self.root / "config"
+        config.mkdir()
+        for name in ("unit-flags.tsv", "unit-compilers.tsv", "symbols.txt"):
+            shutil.copyfile(self.CONFIG / name, config / name)
+        lines = []
+        for line in (self.CONFIG / "units.tsv").read_text().splitlines(keepends=True):
+            fields = line.split("\t")
+            if fields[0].startswith("0x") and int(fields[0], 16) <= self.COPY < int(fields[1], 16):
+                fields[4:6] = [flags, mode]
+            lines.append("\t".join(fields))
+        (config / "units.tsv").write_text("".join(lines))
+        return config
+
+    def test_a_twin_is_compiled_under_its_own_units_profile(self):
+        found = self.duplicates()
+        self.assertEqual(found[self.DESTRUCTOR], self.COPY)
+        self.assertEqual(found, dict(unitobjects.group_for(self.OWNER).duplicates))
+
+    def test_a_copy_under_the_files_profile_is_not_recompiled(self):
+        with self.assertRaisesRegex(SystemExit, "0x130720, which holds other code"):
+            self.duplicates(self.config(self.profile.flags, self.profile.exceptions))
+
+    def test_a_twin_that_differs_stops_the_run(self):
+        with self.assertRaisesRegex(SystemExit, "is 148 bytes and retail's copy at 0x130720 is 116"):
+            self.duplicates(self.config("-O1 -sdatathreshold 2 -Iinclude", "off"))
+
+
 class SharedStatics(unittest.TestCase):
     def setUp(self):
         temp = tempfile.TemporaryDirectory(prefix="dw4-statics-")

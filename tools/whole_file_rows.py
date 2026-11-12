@@ -10,7 +10,9 @@ unit's profile, then:
              function that fits more than one retail start
   duplicates a compiled function outside the range that a member still calls or names in its
              exception table: the retail linker kept another file's copy, found at the address
-             the retail call or table word holds
+             the retail call or table word holds. A copy kept from a unit of another profile (a
+             profile twin) must be reproduced as tools/verify.py checks it: the same source
+             compiled under that unit's profile, at the retail extent
   stripped   any other compiled function with no retail copy: the retail linker dropped it
   data       each referenced datum's address, read back from the retail relocation fields
   externals  each call out of the file, read from the retail `jal`
@@ -49,6 +51,7 @@ import tempfile
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import cc
 import exceptions
+import unitprofiles
 import verify
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -104,6 +107,52 @@ def text_functions(obj):
                 and value == 0 and size:
             out[name] = Function(name, section, obj, headers)
     return syms, headers, out
+
+
+class Twins:
+    """The duplicates' copies as retail built them ("Profile twins", docs/engine/emitted-functions.md).
+
+    Retail keeps the copy the linker saw first, compiled under the profile of the unit at its
+    address (verify.duplicate_profiles). When that profile is not the file's, the same source is
+    compiled under it, as verify_emitted_unit does, and that compile's copy is the one retail must
+    hold, with the retail extent. Under the file's own profile the file's copy is the one."""
+
+    def __init__(self, profile, source, tmp, config, wibo):
+        self.profile, self.source, self.tmp, self.wibo = profile, source, tmp, wibo
+        self.tables = dict(units=os.path.join(config, "units.tsv"),
+                           unit_flags=os.path.join(config, "unit-flags.tsv"),
+                           unit_compilers=os.path.join(config, "unit-compilers.tsv"),
+                           symbols=os.path.join(config, "symbols.txt"))
+        self.extents = verify.load_symbols(self.tables["symbols"])[1]
+        self.objects, self.copies = {}, {}
+
+    def __call__(self, name, address):
+        """The copy of `name` retail must hold at `address`, or None for the file's own copy."""
+        if (name, address) not in self.copies:
+            self.copies[name, address] = self.copy(name, address)
+        return self.copies[name, address]
+
+    def copy(self, name, address):
+        group = collections.namedtuple("Duplicates", "duplicates")(((name, address),))
+        try:
+            profiles = verify.duplicate_profiles(group, self.profile, **self.tables)
+        except ValueError as error:
+            sys.exit("%s at 0x%x: %s" % (name, address, error))
+        if not profiles:
+            return None
+        (profile,) = profiles
+        flags = unitprofiles.command_flags(profile)
+        if profile not in self.objects:
+            stem = os.path.splitext(os.path.basename(self.source))[0]
+            obj = os.path.join(self.tmp, "twin%d_%s.o" % (len(self.objects), stem))
+            compile_file(self.wibo, profile.compiler, flags, self.source, obj)
+            self.objects[profile] = text_functions(obj)[2]
+        copy = self.objects[profile].get(name)
+        extent = self.extents[address][1] if address in self.extents else None
+        if copy is None or len(copy.raw) != extent:
+            sys.exit("%s: %s compiled under '%s' is %s bytes and retail's copy at 0x%x is %s"
+                     % (self.source, name, flags, len(copy.raw) if copy else "no", address, extent))
+        return copy
 
 
 def locate(functions, retail, starts, placed, dropped=()):
@@ -190,11 +239,12 @@ def data_rows(function_at, retail, syms, headers, obj, functions, names, hi):
     return data, externals
 
 
-def duplicate_rows(function_at, retail, syms, headers, obj, functions, records):
+def duplicate_rows(function_at, retail, syms, headers, obj, functions, records, twins=None):
     """{name: va} for the compiled functions outside the file's retail range that a placed member
     still reaches: an inline destructor or helper the retail linker kept from another file.
     The address is read from the retail field that reaches it, a `jal` of a placed body or a
-    word of the member's retail exception table, and the body must fit there."""
+    word of the member's retail exception table, and the body must fit there: the compiled one,
+    or the profile twin `twins(name, address)` returns when another unit's profile built it."""
     compiled = {name: (function_at.get(name), f.section, len(f.raw)) for name, f in functions.items()}
     fields = [(va, functions[name].section) for name, va in function_at.items()]
     for name, (_index, table) in verify.group_exception_sections(obj, headers, syms, compiled).items():
@@ -216,7 +266,8 @@ def duplicate_rows(function_at, retail, syms, headers, obj, functions, records):
                 continue
             if out.get(name, address) != address:
                 sys.exit("%s: %s reads as 0x%x and 0x%x" % (obj, name, out[name], address))
-            if not functions[name].fits(retail, address):
+            copy = (twins(name, address) if twins else None) or functions[name]
+            if not copy.fits(retail, address):
                 sys.exit("%s: %s is reached at 0x%x, which holds other code" % (obj, name, address))
             out[name] = address
     return out
@@ -288,6 +339,7 @@ def main(argv=None):
     compilers = {p[1]: p[2] for p in (l.rstrip("\n").split("\t") for l in open(units_path))
                  if p[0] == "@compiler"}
     compiler = os.path.join(ROOT, compilers[a.compiler])
+    profile = unitprofiles.Profile(compiler, a.flags, a.exceptions)
     by_name, by_va = verify.load_symbols(os.path.join(a.config, "symbols.txt"))
     retail = Retail(a.elf)
     records = exceptions.load(exceptions.config_path(os.path.join(a.config, "symbols.txt")))
@@ -301,13 +353,13 @@ def main(argv=None):
         compiled = []
         for stem in a.files:
             obj = os.path.join(tmp, stem + ".o")
-            mwcc_off = a.exceptions == "off" and not cc.is_eegcc(compiler)
-            compile_file(a.wibo, compiler, a.flags + (" -Cpp_exceptions off" if mwcc_off else ""),
-                         os.path.join(a.src, stem + a.ext), obj)
+            source = os.path.join(a.src, stem + a.ext)
+            compile_file(a.wibo, compiler, unitprofiles.command_flags(profile), source, obj)
             syms, headers, functions = text_functions(obj)
             at = locate(functions, retail, [v for v in starts if v not in owned], placed, a.drop)
             owned.update({va: name for name, va in at.items()})
-            compiled.append((stem, obj, syms, headers, functions, at))
+            compiled.append((stem, obj, syms, headers, functions, at,
+                             Twins(profile, source, tmp, a.config, a.wibo)))
         missing = [by_va[v] for v in starts if v not in owned]
         lacking = unrecovered(missing, {n for c in compiled for n in c[4]}) if a.partial else None
         if lacking:
@@ -320,12 +372,12 @@ def main(argv=None):
         known = dict(((n, v) for n, (v, _s) in by_name.items()))
         if not a.cxx:
             known.update({name: va for va, name in owned.items()})
-        for stem, obj, syms, headers, functions, at in compiled:
+        for stem, obj, syms, headers, functions, at, twins in compiled:
             if not at:
                 print("%-10s no retail function: the linker dropped the file" % stem, file=sys.stderr)
                 continue
             data, externals = data_rows(at, retail, syms, headers, obj, functions, known, hi)
-            duplicates = duplicate_rows(at, retail, syms, headers, obj, functions, records)
+            duplicates = duplicate_rows(at, retail, syms, headers, obj, functions, records, twins)
             members = sorted((va, name) for name, va in at.items())
             row = {"whole_file": True,
                    "emitted": {name: "0x%08x" % va for va, name in members[1:]},
