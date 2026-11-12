@@ -2,7 +2,7 @@
 
 `Gap::Bec::beNDMWMdlPlayer::vfunc_44` (608 bytes) is the player's idle player-number-badge handler
 . It matches: the source is
-[Gap__Bec__beNDMWMdlPlayer__vfunc_44.cpp](../../src/unmatched/Gap__Bec__beNDMWMdlPlayer__vfunc_44.cpp). The source below is byte-identical to retail except
+[beNDMWMdlPlayer.cpp](../../src/game/beNDMWMdlPlayer.cpp). The source below is byte-identical to retail except
 for one 5-word cluster; the matched file compares the status through a pointer-to-pointer, which keeps that cluster.
 
 ## What it does (typed)
