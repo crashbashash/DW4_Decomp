@@ -1,13 +1,20 @@
-/* The result is a switch so the zero return sits behind the one. */
 #include "dw4/reflected.h"
-extern "C" {
-int FUN_0035bfb0();
-int beMessenger_GetString(int, int);
-void beMessenger_GetVec3(void *, int, int);
-int beMessenger_ResolveEnumValue(int, int, int);
-void *igProperty_FindByName(int, int, int);
-extern int DAT_00585be0[4];
-}
+
+extern "C" void Gap__Bec__beLightCtrl__vfunc_32(void);
+extern "C" int Gap__Bec__beLightCtrl__vfunc_30(void);
+extern "C" void Gap__Bec__beLightCtrl__vfunc_31(void);
+extern "C" int Gap__Bec__beLightCtrl__vfunc_20(void);
+extern "C" void beMessenger_RegisterReceiverFromInfo(int, int, char *);
+extern "C" int FUN_0035bfb0(...);
+extern "C" int beMessenger_GetString(int, int);
+extern "C" void beMessenger_GetVec3(void *, int, int);
+extern "C" int beMessenger_ResolveEnumValue(int, int, int);
+extern "C" void *igProperty_FindByName(int, int, int);
+extern "C" int g_beLightCtrlInfo_metaObject[4];
+extern "C" int g_beLightCtrl_metaObject[4];
+extern "C" char DAT_00510838[];
+extern "C" void Gap__Bec__beLightCtrl__vfunc_29(beLightCtrl * p0, int p1, char * p2);
+extern "C" int DAT_00585be0[4];
 struct Light {
     virtual void d0();
     virtual void d1();
@@ -45,7 +52,27 @@ struct Light {
 };
 struct V3 { float x; float y; float z; };
 struct V4 { float x; float y; float z; int w; };
-extern "C" int Gap__Bec__beLightCtrl__vfunc_33(beLightCtrl *arg0, beBaseInfoRam *arg1, int arg2) {
+extern "C" int Gap__Bec__beLightCtrl__vfunc_33(beLightCtrl *arg0, beBaseInfoRam *arg1, int arg2);
+
+void Gap__Bec__beLightCtrl__vfunc_32(void)
+{
+}
+
+int Gap__Bec__beLightCtrl__vfunc_30(void)
+{
+    return g_beLightCtrlInfo_metaObject[0];
+}
+
+void Gap__Bec__beLightCtrl__vfunc_29(beLightCtrl * p0, int p1, char * p2)
+{
+    beMessenger_RegisterReceiverFromInfo(p0->_messenger, p1, DAT_00510838);
+}
+
+void Gap__Bec__beLightCtrl__vfunc_31(void)
+{
+}
+
+int Gap__Bec__beLightCtrl__vfunc_33(beLightCtrl *arg0, beBaseInfoRam *arg1, int arg2) {
     beLightCtrlInfo *s1;
     V3 a;
     Light *l;
@@ -78,4 +105,9 @@ extern "C" int Gap__Bec__beLightCtrl__vfunc_33(beLightCtrl *arg0, beBaseInfoRam 
     default:
         return 0;
     }
+}
+
+int Gap__Bec__beLightCtrl__vfunc_20(void)
+{
+    return g_beLightCtrl_metaObject[0];
 }

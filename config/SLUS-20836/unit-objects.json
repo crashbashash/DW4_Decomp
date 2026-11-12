@@ -30906,6 +30906,23 @@
     },
     "symbol": "FUN_003b04e0"
   },
+  "0x003aff00": {
+    "whole_file": true,
+    "emitted": {
+      "Gap__Bec__beLightCtrl__vfunc_30": "0x003aff10",
+      "Gap__Bec__beLightCtrl__vfunc_29": "0x003aff20",
+      "Gap__Bec__beLightCtrl__vfunc_31": "0x003aff50",
+      "Gap__Bec__beLightCtrl__vfunc_33": "0x003aff60",
+      "Gap__Bec__beLightCtrl__vfunc_20": "0x003b00d0"
+    },
+    "data": {
+      "DAT_00510838": "0x00510838",
+      "DAT_00585be0": "0x00585be0",
+      "g_beLightCtrlInfo_metaObject": "0x00589238",
+      "g_beLightCtrl_metaObject": "0x00589258"
+    },
+    "symbol": "Gap__Bec__beLightCtrl__vfunc_32"
+  },
   "0x003afe80": {
     "whole_file": true,
     "emitted": {
