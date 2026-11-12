@@ -25,8 +25,8 @@ original source.
 | `0x003f8760` | 548 | current-to-BASE save preparation (mirror of `FUN_003f82a0`) | `src/game/beNDMWGameRam.cpp` |
 | `0x003f9c80` | 408 | HP gauge update (delta or absolute, clamp to [0, MHP], `hpmt`/`hpnm`) | `src/game/beNDMWGameRam.cpp` |
 | `0x003f9e20` | 344 | MP gauge update (`mpmt`/`mpnm`) | `src/game/beNDMWGameRam.cpp` |
-| `0x00447b00` | 56 | list slot nonzero test | `src/unmatched/FUN_00447b00.cpp` |
-| `0x00447b40` | 88 | list slot store from `DAT_004cfe80` | `src/unmatched/FUN_00447b40.cpp` |
+| `0x00447b00` | 56 | list slot nonzero test | `src/game/beNDMWMdlPEBase.cpp` |
+| `0x00447b40` | 88 | list slot store from `DAT_004cfe80` | `src/game/beNDMWMdlPEBase.cpp` |
 
 ## What the three hardest shapes needed
 

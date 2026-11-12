@@ -2068,7 +2068,7 @@
       "address": "0x00447b00",
       "name": "FUN_00447b00",
       "size": 56,
-      "source": "src/unmatched/FUN_00447b00.cpp",
+      "source": "src/game/beNDMWMdlPEBase.cpp",
       "sites": [
         "0x00405708",
         "0x00405898"
@@ -2078,7 +2078,7 @@
       "address": "0x00447b40",
       "name": "FUN_00447b40",
       "size": 88,
-      "source": "src/unmatched/FUN_00447b40.cpp",
+      "source": "src/game/beNDMWMdlPEBase.cpp",
       "sites": [
         "0x0040576c",
         "0x004058fc"

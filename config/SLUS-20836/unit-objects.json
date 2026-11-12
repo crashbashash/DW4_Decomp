@@ -846,86 +846,6 @@
     },
     "symbol": "Gap__Bec__beNDMWShopSelect00__vfunc_22"
   },
-  "0x00443900": {
-    "duplicates": {
-      "__dt__25igSmartPointer<8igObject>Fv": "0x0033e9c0"
-    },
-    "exceptions": {
-      "index": "0x005545dc",
-      "table": "0x00546ea4",
-      "table_size": "0x000010"
-    },
-    "externals": {
-      "__dl__FPv": "0x00100610"
-    }
-  },
-  "0x00443bd0": {
-    "duplicates": {
-      "__dt__21igSmartPointer<4List>Fv": "0x0033e9c0"
-    },
-    "exceptions": {
-      "index": "0x005545e8",
-      "table": "0x00546eb4",
-      "table_size": "0x000010"
-    },
-    "externals": {
-      "__dl__FPv": "0x00100610"
-    }
-  },
-  "0x00445200": {
-    "duplicates": {
-      "__dt__25igSmartPointer<8igObject>Fv": "0x0033e9c0"
-    },
-    "exceptions": {
-      "index": "0x005545f4",
-      "table": "0x00546ec4",
-      "table_size": "0x000010"
-    },
-    "externals": {
-      "__dl__FPv": "0x00100610"
-    }
-  },
-  "0x004456c0": {
-    "duplicates": {
-      "__dt__21igSmartPointer<4List>Fv": "0x00150eb0"
-    },
-    "exceptions": {
-      "index": "0x00554600",
-      "table": "0x00546ed4",
-      "table_size": "0x000010"
-    },
-    "externals": {
-      "__dl__FPv": "0x00100610"
-    }
-  },
-  "0x00445990": {
-    "duplicates": {
-      "__dt__26igSmartPointer<9igIntList>Fv": "0x00150eb0"
-    },
-    "exceptions": {
-      "index": "0x0055460c",
-      "table": "0x00546ee4",
-      "table_size": "0x000010"
-    },
-    "externals": {
-      "__dl__FPv": "0x00100610"
-    }
-  },
-  "0x00445d10": {
-    "duplicates": {
-      "__dt__10IntListRefFv": "0x00150eb0",
-      "__dt__11BoolListRefFv": "0x00226990",
-      "__dt__21igSmartPointer<4List>Fv": "0x0033e9c0"
-    },
-    "exceptions": {
-      "index": "0x00554624",
-      "table": "0x00546ef4",
-      "table_size": "0x000028"
-    },
-    "externals": {
-      "__dl__FPv": "0x00100610"
-    }
-  },
   "0x0038bee0": {
     "whole_file": true,
     "emitted": {
@@ -33076,6 +32996,189 @@
       "__dl__FPv": "0x00100610"
     },
     "symbol": "FUN_00338f70"
+  },
+  "0x00443110": {
+    "whole_file": true,
+    "emitted": {
+      "FUN_00443540": "0x00443540",
+      "FUN_004435c0": "0x004435c0",
+      "FUN_00443900": "0x00443900",
+      "Gap__Bec__beNDMWMdlPEBase__vfunc_46": "0x00443bd0",
+      "FUN_00445200": "0x00445200",
+      "FUN_004456c0": "0x004456c0",
+      "FUN_00445990": "0x00445990",
+      "FUN_00445c60": "0x00445c60",
+      "Gap__Bec__beNDMWMdlPEBase__vfunc_47": "0x00445d10",
+      "Gap__Bec__beNDMWMdlPEBaseInfoWork__vfunc_8": "0x004477b0",
+      "FUN_00447b00": "0x00447b00",
+      "FUN_00447b40": "0x00447b40",
+      "Gap__Bec__beNDMWMdlPEBaseInfoWork__vfunc_20": "0x00447ba0",
+      "Gap__Bec__beNDMWMdlPEBase__vfunc_20": "0x00447bb0"
+    },
+    "data": {
+      "@2445": "0x0051d510",
+      "DAT_004cfc50": "0x004cfc50",
+      "DAT_004cfc74": "0x004cfc74",
+      "DAT_004cfc80": "0x004cfc80",
+      "DAT_004cfca0": "0x004cfca0",
+      "DAT_004cfcb8": "0x004cfcb8",
+      "DAT_004cfcc0": "0x004cfcc0",
+      "DAT_004cfcc8": "0x004cfcc8",
+      "DAT_004cfcd0": "0x004cfcd0",
+      "DAT_004cfcd8": "0x004cfcd8",
+      "DAT_004cfce0": "0x004cfce0",
+      "DAT_004cfce8": "0x004cfce8",
+      "DAT_004cfcf0": "0x004cfcf0",
+      "DAT_004cfcf8": "0x004cfcf8",
+      "DAT_004cfd00": "0x004cfd00",
+      "DAT_004cfd08": "0x004cfd08",
+      "DAT_004cfd10": "0x004cfd10",
+      "DAT_004cfd18": "0x004cfd18",
+      "DAT_004cfd20": "0x004cfd20",
+      "DAT_004cfd28": "0x004cfd28",
+      "DAT_004cfd30": "0x004cfd30",
+      "DAT_004cfd38": "0x004cfd38",
+      "DAT_004cfd40": "0x004cfd40",
+      "DAT_004cfd48": "0x004cfd48",
+      "DAT_004cfd50": "0x004cfd50",
+      "DAT_004cfd58": "0x004cfd58",
+      "DAT_004cfd60": "0x004cfd60",
+      "DAT_004cfd68": "0x004cfd68",
+      "DAT_004cfd70": "0x004cfd70",
+      "DAT_004cfd78": "0x004cfd78",
+      "DAT_004cfd80": "0x004cfd80",
+      "DAT_004cfd88": "0x004cfd88",
+      "DAT_004cfd90": "0x004cfd90",
+      "DAT_004cfd98": "0x004cfd98",
+      "DAT_004cfda0": "0x004cfda0",
+      "DAT_004cfda8": "0x004cfda8",
+      "DAT_004cfdb0": "0x004cfdb0",
+      "DAT_004cfdb8": "0x004cfdb8",
+      "DAT_004cfdc0": "0x004cfdc0",
+      "DAT_004cfdc8": "0x004cfdc8",
+      "DAT_004cfdd0": "0x004cfdd0",
+      "DAT_004cfdd8": "0x004cfdd8",
+      "DAT_004cfde0": "0x004cfde0",
+      "DAT_004cfde8": "0x004cfde8",
+      "DAT_004cfdf0": "0x004cfdf0",
+      "DAT_004cfdf8": "0x004cfdf8",
+      "DAT_004cfe00": "0x004cfe00",
+      "DAT_004cfe08": "0x004cfe08",
+      "DAT_004cfe10": "0x004cfe10",
+      "DAT_004cfe18": "0x004cfe18",
+      "DAT_004cfe20": "0x004cfe20",
+      "DAT_004cfe28": "0x004cfe28",
+      "DAT_004cfe30": "0x004cfe30",
+      "DAT_004cfe38": "0x004cfe38",
+      "DAT_004cfe40": "0x004cfe40",
+      "DAT_004cfe48": "0x004cfe48",
+      "DAT_004cfe50": "0x004cfe50",
+      "DAT_004cfe58": "0x004cfe58",
+      "DAT_004cfe60": "0x004cfe60",
+      "DAT_004cfe68": "0x004cfe68",
+      "DAT_004cfe70": "0x004cfe70",
+      "DAT_004cfe78": "0x004cfe78",
+      "DAT_004cfe80": "0x004cfe80",
+      "DAT_004e1058": "0x004e1058",
+      "DAT_004e105c": "0x004e105c",
+      "DAT_004e1060": "0x004e1060",
+      "DAT_004fb410": "0x004fb410",
+      "DAT_00519420": "0x00519420",
+      "DAT_00519430": "0x00519430",
+      "DAT_00519438": "0x00519438",
+      "DAT_0051d1a8": "0x0051d1a8",
+      "DAT_0051d1b8": "0x0051d1b8",
+      "DAT_0051d1c0": "0x0051d1c0",
+      "DAT_0051d1d0": "0x0051d1d0",
+      "DAT_0051d1d8": "0x0051d1d8",
+      "DAT_0051d1f8": "0x0051d1f8",
+      "DAT_0051d208": "0x0051d208",
+      "DAT_0051d210": "0x0051d210",
+      "DAT_0051d3a0": "0x0051d3a0",
+      "DAT_0051d3a8": "0x0051d3a8",
+      "DAT_0051d3b8": "0x0051d3b8",
+      "DAT_0051d3c8": "0x0051d3c8",
+      "DAT_0051d3d8": "0x0051d3d8",
+      "DAT_0051d3e8": "0x0051d3e8",
+      "DAT_0051d3f0": "0x0051d3f0",
+      "DAT_0051d3f8": "0x0051d3f8",
+      "DAT_0051d408": "0x0051d408",
+      "DAT_0051d410": "0x0051d410",
+      "DAT_0051d420": "0x0051d420",
+      "DAT_0051d430": "0x0051d430",
+      "DAT_0051d438": "0x0051d438",
+      "DAT_0051d448": "0x0051d448",
+      "DAT_0051d450": "0x0051d450",
+      "DAT_0051d458": "0x0051d458",
+      "DAT_0051d460": "0x0051d460",
+      "DAT_0051d468": "0x0051d468",
+      "DAT_0051d470": "0x0051d470",
+      "DAT_0051d478": "0x0051d478",
+      "DAT_0051d480": "0x0051d480",
+      "DAT_0051d488": "0x0051d488",
+      "DAT_0051d490": "0x0051d490",
+      "DAT_0051d498": "0x0051d498",
+      "DAT_0051d4a0": "0x0051d4a0",
+      "DAT_0051d4a8": "0x0051d4a8",
+      "DAT_0051d4b0": "0x0051d4b0",
+      "DAT_0051d4b8": "0x0051d4b8",
+      "DAT_0051d4c8": "0x0051d4c8",
+      "DAT_0051d4d8": "0x0051d4d8",
+      "DAT_0051d4e8": "0x0051d4e8",
+      "DAT_0051d4f0": "0x0051d4f0",
+      "DAT_0051d500": "0x0051d500",
+      "DAT_00585be0": "0x00585be0",
+      "DAT_00586f20": "0x00586f20",
+      "DAT_00587110": "0x00587110",
+      "DAT_00588f38": "0x00588f38",
+      "DAT_0058c0a0": "0x0058c0a0",
+      "GPR_00554a78": "0x00554a78",
+      "GPR_00554a7c": "0x00554a7c",
+      "GPR_00554a80": "0x00554a80",
+      "GPR_00554a84": "0x00554a84",
+      "GPR_00554a88": "0x00554a88",
+      "GPR_00554a8c": "0x00554a8c",
+      "GPR_00554a90": "0x00554a90",
+      "GPR_00554a94": "0x00554a94",
+      "GPR_00554a98": "0x00554a98",
+      "GPR_00554a9c": "0x00554a9c",
+      "GPR_00554aa0": "0x00554aa0",
+      "GPR_00554aa4": "0x00554aa4",
+      "GPR_00554aa8": "0x00554aa8",
+      "GPR_00554aac": "0x00554aac",
+      "GPR_00554ab0": "0x00554ab0",
+      "GPR_00554ab4": "0x00554ab4",
+      "GPR_00554ab8": "0x00554ab8",
+      "GPR_00554abc": "0x00554abc",
+      "GPR_00554ac0": "0x00554ac0",
+      "GPR_00554ac4": "0x00554ac4",
+      "GPR_00554ac8": "0x00554ac8",
+      "GPR_00554acc": "0x00554acc",
+      "GPR_00554ad0": "0x00554ad0",
+      "GPR_00554ad4": "0x00554ad4",
+      "GPR_00554ad8": "0x00554ad8",
+      "GPR_00554adc": "0x00554adc",
+      "GPR_00554ae0": "0x00554ae0",
+      "GPR_00554ae4": "0x00554ae4",
+      "GPR_00554ae8": "0x00554ae8",
+      "GPR_00554aec": "0x00554aec",
+      "GPR_00554af0": "0x00554af0",
+      "GPR_00554af4": "0x00554af4",
+      "GPR_00554af8": "0x00554af8",
+      "GPR_00554afc": "0x00554afc",
+      "GPR_00554c14": "0x00554c14",
+      "g_beNDMWMdlPEBaseInfoWork_metaObject": "0x0058b430",
+      "g_beNDMWMdlPEBase_metaObject": "0x0058b428"
+    },
+    "duplicates": {
+      "__dt__10IntListRefFv": "0x00150eb0",
+      "__dt__11BoolListRefFv": "0x00226990",
+      "__dt__21igSmartPointer<4List>Fv": "0x0033e9c0"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    },
+    "symbol": "FUN_00443110"
   },
   "0x0040dae0": {
     "whole_file": true,
