@@ -507,14 +507,7 @@
 0x0033be60	0x0033bf50	movie_igMoviePlugin	b52	-O4,p -sdatathreshold 2 -Iinclude	on	-	whole file
 0x0033bf50	0x00370780	bec_BecLibrary	b52	-O4,p -sdatathreshold 2 -inline level=8 -Iinclude	on	-	whole file
 0x00370780	0x00375e00	bec_be	b52	-O4,p -sdatathreshold 2 -inline level=8 -Iinclude	on	-	whole file
-0x00375e00	0x00375e64	beAction2_375e00	b52	-O4,p -sdatathreshold 2 -inline level=8 -Iinclude	on	-	class run of 3 labeled members; exceptions on: 1/3 functions have retail index records; default -O3 -Iinclude reproduces 3/3 members
-0x00375e70	0x00376340	beAction2FLASHSET_375e70	b52	-O4,p -sdatathreshold 2 -inline level=8 -Iinclude	on	-	class run of 2 labeled members; exceptions on: 2/2 functions have retail index records; combat -O3,p -Iinclude reproduces 2/2 members
-0x00376340	0x00376680	beAction2WAITCHECK_376340	b52	-O4,p -sdatathreshold 2 -inline level=8 -Iinclude	on	-	class run of 2 labeled members; exceptions on: 2/2 functions have retail index records; combat -O3,p -Iinclude reproduces 2/2 members
-0x00376680	0x00376de0	beAction2FADESET_376680	b52	-O4,p -sdatathreshold 2 -inline level=8 -Iinclude	on	-	class run of 2 labeled members; exceptions on: 2/2 functions have retail index records; combat -O3,p -Iinclude reproduces 2/2 members
-0x00376de0	0x00377084	beAction2JOINTSET_376de0	b52	-O4,p -sdatathreshold 2 -inline level=8 -Iinclude	on	-	class run of 2 labeled members; exceptions on: 2/2 functions have retail index records; combat -O3,p -Iinclude reproduces 2/2 members
-0x00377090	0x00377700	beAction2MOTIONSET_377090	b52	-O4,p -sdatathreshold 2 -inline level=8 -Iinclude	on	-	class run of 2 labeled members; exceptions on: 2/2 functions have retail index records; combat -O3,p -Iinclude reproduces 2/2 members
-0x00377700	0x003783fc	beAction2_377700	b52	-O3,p -sdatathreshold 2 -Iinclude	on	-	class run of 4 labeled members; exceptions on: 3/4 functions have retail index records, and all 4 members match here with no override; stays off the file's -O4,p -inline level=8 profile because Gap__Bec__beAction2__vfunc_33 (0x377990) schedules differently there (case 1 argument loads, case 6 time-bias update)
-0x00378400	0x00378418	igObject_378400	b52	-O4,p -sdatathreshold 2 -inline level=8 -Iinclude	off	-	class run of 2 labeled members; exceptions undetermined (every function is a frameless leaf, which carries no record either way): off; default -O3 -Iinclude reproduces 2/2 members
+0x00375e00	0x00378420	bec_beAction2	b52	-O4,p -sdatathreshold 2 -inline level=8 -Iinclude	on	-	whole file
 0x00378420	0x00378710	bec_beActionStarter	b52	-O4,p -sdatathreshold 2 -inline level=8 -Iinclude	on	-	whole file
 0x00378710	0x00378ce0	bec_beBaseInfoManager	b52	-O4,p -sdatathreshold 2 -inline level=8 -Iinclude	on	-	whole file
 0x00378ce0	0x00378d80	bec_beBkColor	b52	-O4,p -sdatathreshold 2 -inline level=8 -Iinclude	on	-	whole file

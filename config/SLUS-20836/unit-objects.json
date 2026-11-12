@@ -31,26 +31,6 @@
       "__dl__FPv": "0x00100610"
     }
   },
-  "0x00375ff0": {
-    "duplicates": {
-      "__dt__10AttrRef<0>Fv": "0x0019ab10",
-      "__dt__10AttrRef<1>Fv": "0x001d21b0",
-      "__dt__10AttrRef<2>Fv": "0x00239200"
-    },
-    "externals": {
-      "__dl__FPv": "0x00100610"
-    }
-  },
-  "0x00376930": {
-    "duplicates": {
-      "__dt__6Ref<0>Fv": "0x0019ab10",
-      "__dt__6Ref<1>Fv": "0x001aaf00",
-      "__dt__6Ref<2>Fv": "0x00239200"
-    },
-    "externals": {
-      "__dl__FPv": "0x00100610"
-    }
-  },
   "0x0043cc20": {
     "duplicates": {
       "__dt__12WindowRef<0>Fv": "0x00428710",
@@ -404,15 +384,6 @@
       "index": "0x005543e4",
       "table": "0x00546888",
       "table_size": "0x1c"
-    }
-  },
-  "0x00377990": {
-    "emitted": {},
-    "duplicates": {
-      "__dt__2RPFv": "0x0036c790"
-    },
-    "externals": {
-      "__dl__FPv": "0x00100610"
     }
   },
   "0x0042a2e0": {
@@ -33532,6 +33503,65 @@
       "__dl__FPv": "0x00100610"
     },
     "symbol": "FUN_00338f70"
+  },
+  "0x00375e00": {
+    "whole_file": true,
+    "emitted": {
+      "Gap__Bec__beAction2__vfunc_30": "0x00375e10",
+      "Gap__Bec__beAction2__vfunc_29": "0x00375e20",
+      "beAction2FLASHSET_Update": "0x00375e70",
+      "beAction2FLASHSET_Start": "0x00375ff0",
+      "beAction2WAITCHECK_Update": "0x00376340",
+      "beAction2WAITCHECK_Start": "0x003764c0",
+      "beAction2FADESET_Update": "0x00376680",
+      "beAction2FADESET_Start": "0x00376930",
+      "beAction2JOINTSET_Update": "0x00376de0",
+      "beAction2JOINTSET_Start": "0x00376f40",
+      "beAction2MOTIONSET_Update": "0x00377090",
+      "beAction2MOTIONSET_Start": "0x00377340",
+      "beAction2_StartComponents": "0x00377700",
+      "Gap__Bec__beAction2__vfunc_31": "0x003778d0",
+      "Gap__Bec__beAction2__vfunc_33": "0x00377990",
+      "Gap__Bec__beAction2__vfunc_20": "0x003783f0",
+      "Gap__Core__igObject__vfunc_28": "0x00378400",
+      "Gap__Core__igObject__vfunc_34": "0x00378410"
+    },
+    "data": {
+      "@1239": "0x0050e050",
+      "DAT_004e0858": "0x004e0858",
+      "DAT_0050dfc8": "0x0050dfc8",
+      "DAT_0050dfd0": "0x0050dfd0",
+      "DAT_0050dfd8": "0x0050dfd8",
+      "DAT_0050dfe0": "0x0050dfe0",
+      "DAT_0050dfe8": "0x0050dfe8",
+      "DAT_0050dff0": "0x0050dff0",
+      "DAT_0050e010": "0x0050e010",
+      "DAT_0050e030": "0x0050e030",
+      "DAT_00561b48": "0x00561b48",
+      "DAT_005626e0": "0x005626e0",
+      "DAT_00585be0": "0x00585be0",
+      "DAT_00587110": "0x00587110",
+      "DAT_0058a348": "0x0058a348",
+      "GPR_00554c14": "0x00554c14",
+      "g_beAction2FADESET_metaObject": "0x00589fb0",
+      "g_beAction2FLASHSET_metaObject": "0x00589f98",
+      "g_beAction2Info_metaObject": "0x00589f78",
+      "g_beAction2JOINTSET_metaObject": "0x00589fc8",
+      "g_beAction2MOTIONSET_metaObject": "0x00589fe8",
+      "g_beAction2WAITCHECK_metaObject": "0x00589fa0",
+      "g_beAction2_metaObject": "0x0058a028"
+    },
+    "duplicates": {
+      "__dt__2RPFv": "0x0036c790",
+      "__dt__6Ref<0>Fv": "0x0019ab10",
+      "__dt__6Ref<1>Fv": "0x001aaf00",
+      "__dt__6Ref<2>Fv": "0x00239200",
+      "__dt__6Ref<3>Fv": "0x001d21b0"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    },
+    "symbol": "Gap__Bec__beAction2__vfunc_32"
   },
   "0x003343a0": {
     "whole_file": true,

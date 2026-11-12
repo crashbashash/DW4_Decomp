@@ -24025,7 +24025,7 @@
       "address": 3638288,
       "name": "Gap__Core__igObject__vfunc_34",
       "size": 8,
-      "source": "src/engine/igObjectVirtuals.c",
+      "source": "src/game/beAction2.cpp",
       "direct": [],
       "indirect": []
     },
