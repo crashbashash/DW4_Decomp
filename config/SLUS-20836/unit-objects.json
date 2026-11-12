@@ -31004,6 +31004,19 @@
     },
     "symbol": "FUN_003b04e0"
   },
+  "0x003a2130": {
+    "whole_file": true,
+    "emitted": {
+      "Gap__Bec__libBecRuntimePlugin__vfunc_22": "0x003a3470",
+      "Gap__Bec__libBecRuntimePlugin__vfunc_20": "0x003a3840"
+    },
+    "data": {
+      "DAT_00587108": "0x00587108",
+      "GPR_00554c14": "0x00554c14",
+      "g_libBecRuntimePlugin_metaObject": "0x005878e0"
+    },
+    "symbol": "Gap__Bec__libBecRuntimePlugin__vfunc_21"
+  },
   "0x0039fd30": {
     "whole_file": true,
     "emitted": {
