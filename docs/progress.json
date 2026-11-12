@@ -230,7 +230,7 @@
    },
    "fun_dat_refs": {
     "reason": null,
-    "value": 56842
+    "value": 41351
    },
    "inline_asm.other": {
     "reason": null,
@@ -250,7 +250,7 @@
    },
    "m2c_idiom.units": {
     "reason": null,
-    "value": 2386
+    "value": 1140
    },
    "mismatch.bytes": {
     "reason": null,
@@ -277,8 +277,8 @@
     "value": 32
    },
    "profile_split.bytes": {
-    "reason": null,
-    "value": 23612
+    "reason": "ndmw_beNDMWMdlPlayer2 (-O3,p, off the Ndmw profile) is measured as a whole file and now runs to 0x3d58f0, so the 4 padding bytes before the next unit count with it",
+    "value": 23616
    },
    "profile_split.units": {
     "reason": null,
@@ -290,15 +290,15 @@
    },
    "struct.a": {
     "reason": null,
-    "value": 81
+    "value": 76
    },
    "struct.b": {
     "reason": null,
-    "value": 98
+    "value": 8
    },
    "struct.c": {
     "reason": null,
-    "value": 165
+    "value": 98
    },
    "unapproved.bytes": {
     "reason": null,
@@ -334,23 +334,23 @@
    "compile.functions": 0,
    "foreign_profile.bytes": 288,
    "foreign_profile.functions": 10,
-   "fun_dat_refs": 42790,
+   "fun_dat_refs": 41351,
    "inline_asm.other": 0,
    "inventory.unsymbolised_bytes": 1020,
    "inventory_gap.bytes": 0,
    "inventory_gap.functions": 0,
-   "m2c_idiom.units": 1566,
+   "m2c_idiom.units": 1140,
    "mismatch.bytes": 0,
    "mismatch.functions": 0,
    "name_defect.bytes": 0,
    "name_defect.functions": 0,
    "opt_pragma.statements": 7,
    "orphan.bytes": 32,
-   "profile_split.bytes": 23612,
+   "profile_split.bytes": 23616,
    "profile_split.units": 7,
    "raw_casts.reflected": 363,
-   "struct.a": 79,
-   "struct.b": 11,
+   "struct.a": 76,
+   "struct.b": 8,
    "struct.c": 98,
    "unapproved.bytes": 47092,
    "unapproved.functions": 58,
@@ -452,42 +452,42 @@
   "vtables": 478
  },
  "readable": {
-  "bytes": 780380,
+  "bytes": 781092,
   "failing": {
    "addresses": {
     "bytes": 1748408,
     "functions": 10365
    },
    "fields": {
-    "bytes": 424968,
-    "functions": 1368
+    "bytes": 427628,
+    "functions": 1394
    },
    "idioms": {
-    "bytes": 602188,
-    "functions": 1802
+    "bytes": 605004,
+    "functions": 1824
    },
    "name": {
     "bytes": 1875496,
     "functions": 13800
    },
    "placed": {
-    "bytes": 900424,
-    "functions": 3331
+    "bytes": 608344,
+    "functions": 2634
    },
    "references": {
     "bytes": 1115776,
     "functions": 4132
    },
    "types": {
-    "bytes": 396656,
-    "functions": 725
+    "bytes": 419264,
+    "functions": 783
    },
    "virtuals": {
-    "bytes": 168588,
-    "functions": 267
+    "bytes": 172940,
+    "functions": 301
    }
   },
-  "functions": 5251,
+  "functions": 5255,
   "matched_functions": 19556
  },
  "regions": [
@@ -622,11 +622,11 @@
  ],
  "typed": {
   "error": null,
-  "offset_casts": 6507,
-  "pct": 38.98,
-  "recovered": 26207,
-  "synthetic": 10355,
-  "total": 67236,
+  "offset_casts": 6502,
+  "pct": 38.95,
+  "recovered": 26213,
+  "synthetic": 10336,
+  "total": 67294,
   "typeable": 363,
   "typeable_pct": 0.54
  }
