@@ -1,17 +1,22 @@
 #include "dw4/igSmartPointer.h"
-extern "C" {
-igObject *FUN_00350020(...);
-igObject *beBaseInfoDataList_Create(...);
-int FUN_00396340(...);
-int Memory_GetAllocatorBySelector(...);
-int igObject_GetAllocator(...);
+
+extern "C" int strcmp(int, int *);
+extern "C" int Gap__Bec__beNDMWMdlPBullet__vfunc_35(int dummy0, int arg1);
+extern "C" void Gap__Bec__beNDMWMdlPBullet__vfunc_37(void);
+extern "C" int Gap__Bec__beNDMWMdlPBullet__vfunc_20(void);
+extern "C" int FUN_00396340(...);
+extern "C" int Memory_GetAllocatorBySelector(...);
+extern "C" int igObject_GetAllocator(...);
+extern "C" int DAT_00515fb8[4];
+extern "C" int g_beNDMWMdlPBullet_metaObject[4];
+extern "C" igObject *FUN_00350020(...);
+extern "C" igObject *beBaseInfoDataList_Create(...);
 struct PropertyRecord { char header[20]; igObject *value; };
-PropertyRecord *igProperty_FindByName(...);
-extern int DAT_00515fc8[4];
-extern int DAT_00585be0[4];
-extern int DAT_00587110[4];
-extern unsigned char GPR_00554c14;
-}
+extern "C" PropertyRecord *igProperty_FindByName(...);
+extern "C" int DAT_00515fc8[4];
+extern "C" int DAT_00585be0[4];
+extern "C" int DAT_00587110[4];
+extern "C" unsigned char GPR_00554c14;
 /* matching construct: inline release helper reproduces the retail release sequence */
 struct ReleaseRef { static inline void go(igObject *object) {
     if (object) {
@@ -53,6 +58,15 @@ struct RamDataList { static inline void Ensure(beBaseInfoRam *ram) {
     }
 } };
 extern "C" void Gap__Bec__beNDMWMdlPBullet__vfunc_36(beNDMWMdlPBullet *arg0, beBaseInfoRam *arg1);
+
+int Gap__Bec__beNDMWMdlPBullet__vfunc_35(int dummy0, int arg1) {
+    return strcmp(arg1, &DAT_00515fb8[0]) == 0;
+}
+
+void Gap__Bec__beNDMWMdlPBullet__vfunc_37(void)
+{
+}
+
 void Gap__Bec__beNDMWMdlPBullet__vfunc_36(beNDMWMdlPBullet *arg0, beBaseInfoRam *arg1) {
     igObject *s0;
     PropertyRecord *s1;
@@ -74,4 +88,9 @@ void Gap__Bec__beNDMWMdlPBullet__vfunc_36(beNDMWMdlPBullet *arg0, beBaseInfoRam 
     ReleaseRef::go(s1->value);
     s1->value = s0;
     FUN_00396340(arg0, arg1);
+}
+
+int Gap__Bec__beNDMWMdlPBullet__vfunc_20(void)
+{
+    return g_beNDMWMdlPBullet_metaObject[0];
 }
