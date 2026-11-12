@@ -1,19 +1,23 @@
 #include "dw4/igSmartPointer.h"
-extern "C" {
-/* reference-counted engine object header: refcount word at +4 */
-igObject *FUN_00350020(...);
-igObject *beBaseInfoDataList_Create(...);
-int FUN_00396340(...);
-int Memory_GetAllocatorBySelector(...);
-int igObject_GetAllocator(...);
+
+extern "C" int strcmp(int, int *);
+extern "C" int Gap__Bec__beNDMWMdlEffect__vfunc_35(int dummy0, int arg1);
+extern "C" void Gap__Bec__beNDMWMdlEffect__vfunc_37(void);
+extern "C" int Gap__Bec__beNDMWMdlEffect__vfunc_20(void);
+extern "C" int FUN_00396340(...);
+extern "C" int Memory_GetAllocatorBySelector(...);
+extern "C" int igObject_GetAllocator(...);
+extern "C" int DAT_00515da8[4];
+extern "C" int g_beNDMWMdlEffect_metaObject[4];
+extern "C" igObject *FUN_00350020(...);
+extern "C" igObject *beBaseInfoDataList_Create(...);
 /* Property record: reference at +20. */
 struct PropertyRecordRef { char p[20]; igObject *f20; };
-PropertyRecordRef *igProperty_FindByName(...);
-extern int DAT_00515db8[4];
-extern int DAT_00585be0[4];
-extern int DAT_00587110[4];
-extern unsigned char GPR_00554c14;
-}
+extern "C" PropertyRecordRef *igProperty_FindByName(...);
+extern "C" int DAT_00515db8[4];
+extern "C" int DAT_00585be0[4];
+extern "C" int DAT_00587110[4];
+extern "C" unsigned char GPR_00554c14;
 /* matching construct: inline static helper reproduces the retail release sequence */
 struct ReleaseRef { static inline void go(igObject *object) {
     if (object) {
@@ -51,6 +55,15 @@ static inline void create(beBaseInfoRam *ram, int a) { igSmartPointer<igObject> 
 /* matching construct: opaque receiver; arg0 is only forwarded */
 struct EffectReceiverShim { int dummy; };
 extern "C" void Gap__Bec__beNDMWMdlEffect__vfunc_36(EffectReceiverShim *arg0, beBaseInfoRam *arg1);
+
+int Gap__Bec__beNDMWMdlEffect__vfunc_35(int dummy0, int arg1) {
+    return strcmp(arg1, &DAT_00515da8[0]) == 0;
+}
+
+void Gap__Bec__beNDMWMdlEffect__vfunc_37(void)
+{
+}
+
 void Gap__Bec__beNDMWMdlEffect__vfunc_36(EffectReceiverShim *arg0, beBaseInfoRam *arg1) {
     igObject *s0;
     PropertyRecordRef *s1;
@@ -82,4 +95,9 @@ void Gap__Bec__beNDMWMdlEffect__vfunc_36(EffectReceiverShim *arg0, beBaseInfoRam
     ReleaseRef::go(s1->f20);
     s1->f20 = s0;
     FUN_00396340(arg0, arg1);
+}
+
+int Gap__Bec__beNDMWMdlEffect__vfunc_20(void)
+{
+    return g_beNDMWMdlEffect_metaObject[0];
 }
