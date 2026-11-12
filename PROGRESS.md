@@ -97,7 +97,7 @@ The debt ratchet ([`docs/engine/debt-ratchet.md`](docs/engine/debt-ratchet.md)):
 | `orphan.bytes` | 32 | 32 | 0 | exception-metadata orphan bytes: code-only `extra` + `differ` bytes, plus foreign-profile units whose override emits metadata retail lacks |
 | `inventory.unsymbolised_bytes` | 1,020 | 1,020 | 0 | instruction-shaped bytes in layout `data` units that no symbol owns (data/inventory-scan.tsv, scripts/inventory_scan.py) |
 | `profile_split.units` | 9 | 9 | 0 | units whose compiler, optimisation level, -sdatathreshold or -inline setting differs from their library's main profile (config/SLUS-20836/units.tsv; a library was one build) |
-| `profile_split.bytes` | 39,168 | 39,168 | 0 | bytes of those |
+| `profile_split.bytes` | 39,168 | 38,852 | -316 | bytes of those |
 | `opt_pragma.statements` | 8 | 7 | -1 | optimiser pragmas in src/ (`opt_*`, `optimize_for_size`, `inline_depth`, ...): a flag change written in the source |
 
 ## The data half
@@ -179,7 +179,7 @@ The section in 16 equal parts. `0x00100000` is the start of everything.
 | reflection fields with offset and type | 3,680 |
 | switch jump tables recovered | 209 tables, 4,147 entries, in 172 functions |
 | Lua chunks decompiled | 5,291 |
-| field accesses using a **recovered** type (not an offset cast) | 26,210 of 67,273 (38.96 %) |
+| field accesses using a **recovered** type (not an offset cast) | 26,209 of 67,263 (38.96 %) |
 | functions in the retail split (`asm/`, generated) | 20,584 |
 
 ## How these numbers are produced
