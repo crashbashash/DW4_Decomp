@@ -181,9 +181,12 @@ The run also holds the inline methods of classes whose only other code is in the
 the library's front, and a function emitted in the run is a getter or an empty slot named after
 whichever vtable a disassembler scanned last, not after its owner. A unit's `.rodata` strings run in
 code order across all its classes. A library-sized unit is built and measured like any whole file: one
-row over the library's range, its members in retail order. Two things argue against one unit: a member
-that matches only under another profile, and two equal float literals read from two different
-addresses, since MWCC merges equal literals within one unit. The game's generated front units (the
+row over the library's range, its members in retail order. A member that matches only under another
+profile argues against one unit. An equal float literal read from two pool addresses does not: the
+retail linker gave each literal reference its own lookup in a hash table of pool entries where a newer
+entry of another value in the same slot replaces the older one, so a later reference to the same
+compiled literal can get a new entry ([compiler literals](compiler-object-verification.md#compiler-literals)).
+The game's generated front units (the
 register list, latch and data classes of a game library) compiled the same way under the game profile,
 exceptions on; their run can also hold a copy of an inline method of a class whose own file comes later,
 and retail keeps that copy, so it is a member of the front unit.
@@ -214,7 +217,10 @@ retail function. Four things differ from an ordinary group:
   literal; the numbering is stable for one source and profile) defined by the object, or a name it
   only references. Each defined section is compared byte for byte with retail, relocations applied,
   and references resolve to the row. Switch tables are `data` rows here too, since they belong to a
-  member rather than the owner, and their retail `jtbl` units stay.
+  member rather than the owner, and their retail `jtbl` units stay. A float or double literal is
+  not a row: as in a group, each reference reads the pool entry its retail instruction names
+  (`verify.fold_literals`), so one literal may sit at several entries; the literals only stripped
+  bodies reach go with them.
 - **`duplicates` are read from retail.** An inline destructor or helper the file emits whose kept
   copy is in another file is a duplicate when a member still calls it or names it in its exception
   table: its address is the one the retail `jal` or table word holds, and its body must fit there.

@@ -311,6 +311,118 @@ class ExceptionsOn(unittest.TestCase):
         self.assertEqual(found, dict(self.group.duplicates))
 
 
+class LiteralAtTwoEntries(unittest.TestCase):
+    """The retail linker gives each literal *reference* a pool entry as it walks the program, and a
+    newer entry of another value in the same hash slot makes a later reference to an equal value
+    get a new entry: two members of one file read one compiled literal at two pool addresses. The
+    rows and verify resolve each reference from its retail instruction (verify.fold_literals)."""
+    SOURCE = "float lit_first(float x) { return x * 0.3f; }\nfloat lit_second(float x) { return x + 0.3f; }\n"
+    FIRST, SECOND = 0x180000, 0x180100
+    GP, ENTRY_A, OTHER, ENTRY_B = 0x55c870, 0x554900, 0x554904, 0x554908
+
+    def setUp(self):
+        if not all(Path(p).exists() for p in (verify.WIBO_DEFAULT, verify.MWCC_DEFAULT)):
+            self.skipTest("private compiler unavailable")
+        temp = tempfile.TemporaryDirectory(prefix="dw4-whole-file-literal-")
+        self.addCleanup(temp.cleanup)
+        self.root = Path(temp.name)
+        source, self.obj = self.root / "lits.c", self.root / "lits.o"
+        source.write_text(self.SOURCE)
+        subprocess.run([verify.WIBO_DEFAULT, verify.MWCC_DEFAULT, "-c", "-O4,s", "-sdatathreshold", "2",
+                        "-lang", "c", "-Cpp_exceptions", "off", str(source), "-o", str(self.obj)],
+                       check=True, capture_output=True, env=dict(os.environ, MWCIncludes=str(self.root)))
+        self.syms, self.headers, self.functions = whole_file_rows.text_functions(str(self.obj))
+        literal = {self.syms[r[3]][0] for f in self.functions.values() for r in f.relocs}
+        self.assertEqual([self.headers[i][0] for i in literal], [".lit4"])
+        self.value = verify.object_section(str(self.obj), ".lit4", literal.pop())
+        self.placed = {"lit_first": self.FIRST, "lit_second": self.SECOND}
+        self.symbols = self.root / "symbols.txt"
+        self.symbols.write_text("".join(f"{va:08x} {len(self.functions[n].raw):06x} {n}\n"
+                                        for n, va in self.placed.items()))
+
+    def retail(self, second_value=None):
+        """A retail image: lit_first reads the literal at ENTRY_A, lit_second at ENTRY_B, with
+        another value between them, as retail's 5e-7 sits at 0x5548ec and 0x55495c."""
+        image = bytearray(0x554a00 - verify.VADDR_BASE + verify.FILE_BASE)
+        at = lambda va: va - verify.VADDR_BASE + verify.FILE_BASE
+        for name, entry in (("lit_first", self.ENTRY_A), ("lit_second", self.ENTRY_B)):
+            function = self.functions[name]
+            words = list(function.words)
+            for _section, offset, kind, _symbol, _addend in function.relocs:
+                self.assertEqual(kind, verify.R_GPREL16)       # R_MIPS_LITERAL reads as GPREL16
+                words[offset // 4] = (words[offset // 4] & ~0xffff) | ((entry - self.GP) & 0xffff)
+            image[at(self.placed[name]):at(self.placed[name]) + 4 * len(words)] = struct.pack(
+                "<%dI" % len(words), *words)
+        image[at(self.ENTRY_A):at(self.ENTRY_A) + 4] = self.value
+        image[at(self.OTHER):at(self.OTHER) + 4] = struct.pack("<f", -1e-6)
+        image[at(self.ENTRY_B):at(self.ENTRY_B) + 4] = second_value or self.value
+        image[:6] = b"\x7fELF\x01\x01"
+        reginfo = len(image)
+        image.extend(struct.pack("<6I", 0, 0, 0, 0, 0, self.GP))
+        strings = b"\0.shstrtab\0.reginfo\0"
+        strings_at = len(image)
+        image.extend(strings)
+        image.extend(b"\0" * (-len(image) % 4))
+        shoff = len(image)
+        image.extend(bytes(40))
+        image.extend(struct.pack("<10I", 1, 3, 0, 0, strings_at, len(strings), 0, 0, 1, 0))
+        image.extend(struct.pack("<10I", 11, 0x70000006, 0, 0, reginfo, 24, 0, 0, 4, 0))
+        struct.pack_into("<I", image, 0x20, shoff)
+        struct.pack_into("<HHH", image, 0x2e, 40, 3, 1)
+        path = self.root / ("retail%d.elf" % len(list(self.root.glob("retail*.elf"))))
+        path.write_bytes(image)
+        return path
+
+    def rows(self, elf):
+        retail = whole_file_rows.Retail(str(elf))
+        data, externals = whole_file_rows.data_rows(self.placed, retail, self.syms, self.headers, str(self.obj),
+                                                    self.functions, {}, self.SECOND + 0x100)
+        whole_file_rows.literals(self.placed, {}, retail, self.syms, self.headers, str(self.obj),
+                                 self.functions, data)
+        return data, externals
+
+    def verify(self, elf, data=None):
+        registry = self.root / "objects.json"
+        registry.write_text(json.dumps({hex(self.FIRST): {
+            "whole_file": True, "emitted": {"lit_second": hex(self.SECOND)}, "data": data or {}}}))
+        unitobjects.load.cache_clear()
+        self.addCleanup(unitobjects.load.cache_clear)
+        group = unitobjects.group_for(self.FIRST, registry)
+        obj = self.root / "verified.o"
+        shutil.copyfile(self.obj, obj)
+        ok, report, records = verify.verify_emitted_object(str(obj), group, str(elf), str(self.symbols),
+                                                           jumptables={})
+        return ok, report, records, group, obj
+
+    def test_one_literal_read_at_two_entries_is_one_unit(self):
+        elf = self.retail()
+        self.assertEqual(self.rows(elf), ({}, {}))
+        ok, report, records, group, obj = self.verify(elf)
+        self.assertTrue(ok, report)
+        # each linked member reads its own entry: the folded immediates are retail's words
+        for name, va in self.placed.items():
+            isolated = self.root / f"{name}.o"
+            shutil.copyfile(obj, isolated)
+            verify.isolate_emitted_body(str(isolated), va, records, group, str(self.symbols))
+            text = verify.object_section(str(isolated), ".text")
+            self.assertEqual(text, verify.va_bytes(verify.read_elf(str(elf)), va, len(text)))
+            self.assertEqual(verify.object_relocs(str(isolated)), [])
+
+    def test_an_entry_without_the_literals_bytes_stops_both(self):
+        elf = self.retail(second_value=struct.pack("<f", 0.25))
+        with self.assertRaisesRegex(SystemExit, "is not the retail pool entry at 0x554908"):
+            self.rows(elf)
+        ok, report, _records, _group, _obj = self.verify(elf)
+        self.assertFalse(ok)
+        self.assertIn("is not the retail pool entry at 0x554908", report)
+
+    def test_a_literal_has_no_data_row(self):
+        name = next(r[3] for r in self.functions["lit_first"].relocs)
+        ok, report, _records, _group, _obj = self.verify(self.retail(), {name: hex(self.ENTRY_A)})
+        self.assertFalse(ok)
+        self.assertIn("is a compiler literal", report)
+
+
 class ProfileTwin(unittest.TestCase):
     """A duplicate the retail linker kept from a unit of another profile: beMessenger_RegisterReceiver
     (-O3,p, exceptions on) reaches the StringRef destructor at 0x130720, an -O4,s copy from the Attrs

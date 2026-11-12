@@ -1058,15 +1058,19 @@ def literal_error(address, data, img):
     return None
 
 
-def fold_literals(obj, bodies, img, gp):
+def fold_literals(obj, bodies, img, gp, dead=()):
     """Point the `R_MIPS_LITERAL` references of `bodies` ({name: retail address}) at the retail pool.
 
-    MWCC gives each object its own `.lit4`/`.lit8`, and the linker cannot scatter one section
-    over the entries of a shared pool. The retail instruction names the entry, so each
-    reference takes its address from there, and the value must be the one retail holds at
-    that address. The immediate is written into the object and the relocation cleared; the
-    pool itself stays retail data. An object is rewritten only when every reference is proven
-    and every entry of its literal sections is referenced, so nothing else can ride along.
+    MWCC gives each object its own `.lit4`/`.lit8`. The retail linker built one shared pool and gave
+    each *reference* an entry as it walked the program (mwldps2 looks a value up in a table whose
+    newest entry of a hash slot replaces the older one, so a later reference to an equal value can get
+    a new entry): one literal of one object can be read at several pool addresses. The retail
+    instruction names the entry, so each reference takes its address from there, and the value must
+    be the one retail holds at that address. The immediate is written into the object and the
+    relocation cleared; the pool itself stays retail data. An object is rewritten only when every
+    reference is proven and every entry of its literal sections is referenced, so nothing else can
+    ride along. `dead` holds the sections the link drops (a whole-file unit's stripped bodies and the
+    data only they reach): their references are not folded and their literals need no reference.
 
     -> (indices of the folded sections, error strings). With errors the object is unchanged.
     """
@@ -1082,7 +1086,7 @@ def fold_literals(obj, bodies, img, gp):
 
     names = [section_name(section) for section in sections]
     literal_sections = {i: LITERAL_SECTIONS[n] for i, n in enumerate(names)
-                        if n in LITERAL_SECTIONS and sections[i][5]}
+                        if n in LITERAL_SECTIONS and sections[i][5] and i not in dead}
     if not literal_sections:
         return [], []
     spans, errors = {}, []
@@ -1094,7 +1098,7 @@ def fold_literals(obj, bodies, img, gp):
             spans.setdefault(index, []).append((start, start + size, va))
     used, patches, cleared = set(), [], []
     for section in sections:
-        if section[1] != 9:                                  # SHT_REL
+        if section[1] != 9 or section[7] in dead:            # SHT_REL
             continue
         symbols = sections[section[6]]
         for at in range(section[4], section[4] + section[5], 8):
@@ -1381,13 +1385,15 @@ def verify_emitted_object(obj, group, elf, symbols, gp_override=None, verbose=Fa
         aliases = dict(group.externals)
         if any(address not in by_va for address in group.members + tuple(aliases.values())):
             raise ValueError("emitted body or external alias has no retail function")
-        literal_sections = []
-        if not group.whole_file:
-            literal_sections, literal_errors = fold_literals(
+        def fold(dead=()):
+            folded, errors = fold_literals(
                 obj, {member: address for member, address in members if member not in deferred}, image,
-                gp_override if gp_override is not None else reginfo_gp(elf))
-            if literal_errors:
-                raise ValueError(literal_errors[0])
+                gp_override if gp_override is not None else reginfo_gp(elf), dead)
+            if errors:
+                raise ValueError(errors[0])
+            return folded
+
+        literal_sections = [] if group.whole_file else fold()
         records, sections = {}, set()
         for compiler_name, address in members:
             section, value, size = syms.get(compiler_name, (None, None, None))
@@ -1408,6 +1414,9 @@ def verify_emitted_object(obj, group, elf, symbols, gp_override=None, verbose=Fa
         data_sections = {}      # section -> retail address of its first byte
         for name, address in group.data:
             section, value, _ = syms.get(name, (None, None, None))
+            if isinstance(section, int) and headers[section][0] in LITERAL_SECTIONS:
+                raise ValueError(f"data row {name} is a compiler literal: each reference reads the pool "
+                                 "entry its retail instruction names, so a literal has no row")
             if isinstance(section, int) and data_sections.setdefault(section, address - value) != address - value:
                 raise ValueError(f"data symbol {name} disagrees with its section's retail address")
         stripped = stripped_bodies(obj, headers, syms, group, sections, image, by_va)
@@ -1423,6 +1432,10 @@ def verify_emitted_object(obj, group, elf, symbols, gp_override=None, verbose=Fa
         dead = (dead_data(obj, headers, syms, sections, set(data_sections) | exc_live)
                 if group.whole_file else set())
         dropped |= dead
+        if group.whole_file:
+            # folded once the dropped bodies are known: their references and the literals only
+            # they reach go with them
+            literal_sections = fold(dropped)
         unreferenced(obj, headers, set(stripped), dropped)
         exc_expected = expected_exception_records(group, symbols)
         allocated = {i for i, (_, h) in enumerate(headers) if h[2] & 2 and h[5] and i not in dropped}

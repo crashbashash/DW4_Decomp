@@ -14,7 +14,10 @@ unit's profile, then:
              profile twin) must be reproduced as tools/verify.py checks it: the same source
              compiled under that unit's profile, at the retail extent
   stripped   any other compiled function with no retail copy: the retail linker dropped it
-  data       each referenced datum's address, read back from the retail relocation fields
+  data       each referenced datum's address, read back from the retail relocation fields. A float
+             or double literal has no row: each reference reads the pool entry its retail
+             instruction names, which must hold the literal's bytes (verify.fold_literals), and
+             one literal may be read at several entries
   externals  each call out of the file, read from the retail `jal` of a member or of a duplicate's
              retail copy, and each function out of the file a member's exception table names (a
              cleanup destructor no member calls), read from the retail table word
@@ -46,6 +49,7 @@ import collections
 import json
 import os
 import struct
+import shutil
 import subprocess
 import sys
 import tempfile
@@ -210,6 +214,9 @@ def data_rows(function_at, retail, syms, headers, obj, functions, names, hi):
         for index, (_section, offset, kind, name, _addend) in enumerate(relocs):
             if name in functions or (name in names and (kind == R_26 or names[name] < hi)):
                 continue
+            home = syms.get(name, (None,))[0]
+            if isinstance(home, int) and headers[home][0] in verify.LITERAL_SECTIONS:
+                continue        # a literal has no row: literals() proves each reference
             field = retail.word(base + offset)
             own = struct.unpack_from("<I", raw, offset)[0]
             if kind == R_26:
@@ -235,10 +242,30 @@ def data_rows(function_at, retail, syms, headers, obj, functions, names, hi):
             if data.get(name, address) != address:
                 sys.exit("%s: %s reads as 0x%x and 0x%x" % (obj, name, data[name], address))
             data[name] = address
-            home = syms.get(name, (None,))[0]
             if isinstance(home, int):
                 work.append((address - syms[name][1], home))
     return data, externals
+
+
+def literals(function_at, duplicates, retail, syms, headers, obj, functions, data, deferred=()):
+    """Prove the float and double literals the kept bodies read, as verify folds them
+    (verify.fold_literals): each reference reads the pool entry its retail instruction names, and
+    that entry must hold exactly the literal's bytes. The retail linker gave each reference its own
+    pool lookup, so one literal can be read at several entries, and a literal has no `data` row.
+    The stripped bodies and the data only they reach are dropped with them, as in verify; a
+    duplicate built under another profile (`deferred`) is no body here, as in verify."""
+    kept = {name: va for name, va in list(function_at.items()) + list(duplicates.items())
+            if name not in deferred}
+    live = {functions[name].section for name in list(function_at) + list(duplicates)}
+    stripped = {f.section for name, f in functions.items() if name not in function_at and name not in duplicates}
+    declared = {syms[name][0] for name in data if isinstance(syms.get(name, (None,))[0], int)}
+    dead = stripped | verify.dead_data(obj, headers, syms, live, declared)
+    with tempfile.TemporaryDirectory(prefix="dw4-whole-file-literals-") as tmp:
+        copy = os.path.join(tmp, os.path.basename(obj))
+        shutil.copyfile(obj, copy)
+        _folded, errors = verify.fold_literals(copy, kept, retail.image, retail.gp, dead)
+    if errors:
+        sys.exit("%s: %s" % (obj, errors[0]))
 
 
 def table_fields(function_at, syms, headers, obj, functions, records):
@@ -429,6 +456,8 @@ def main(argv=None):
                 continue
             data, externals = data_rows(at, retail, syms, headers, obj, functions, known, hi)
             duplicates = duplicate_rows(at, retail, syms, headers, obj, functions, records, twins)
+            literals(at, duplicates, retail, syms, headers, obj, functions, data,
+                     {name for name, va in duplicates.items() if twins(name, va)})
             externals = duplicate_externals(duplicates, retail, functions, known, externals, twins)
             externals = table_externals(at, retail, syms, headers, obj, functions, records, known, data,
                                         externals, by_va)

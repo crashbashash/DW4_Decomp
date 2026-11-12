@@ -111,13 +111,18 @@ candidate cannot carry initialised data, string literals, `.sdata` scalars or
 ### Compiler literals
 
 MWCC puts a float or double constant in the object's own `.lit4` or `.lit8` and reaches it through
-`R_MIPS_LITERAL`. Retail merged those into one pool, `0x554880`-`0x554974`, and one object's section
-cannot be scattered over its entries. `verify.fold_literals` takes each entry's address from the retail
-instruction, requires it to lie in the pool, be aligned and hold exactly the literal's bytes, writes the
-immediate into the object and clears the relocation. Every entry of the section must be used by a proven
-reference, so a literal cannot carry data in. The verifier and `tools/linkgen.py` share this step; the
-link discards the sections and the pool stays retail data. An emitted group folds across all its
-bodies; a whole-file unit keeps its literals as declared `data` rows.
+`R_MIPS_LITERAL`. Retail has one shared pool, `0x554880`-`0x554974`, whose entries are not grouped by
+object. The retail linker (mwldps2) gives each *reference* an entry while it walks the program from
+`main`: it looks the value up in a table of 256 slots keyed by the byte sum of the value, where a newer
+entry replaces the slot's older one, so a later reference to an equal value whose slot another value
+has taken gets a new entry. One literal of one object can therefore be read at several entries, by two
+functions or even two instructions of one function. `verify.fold_literals` takes each reference's
+address from the retail instruction, requires it to lie in the pool, be aligned and hold exactly the
+literal's bytes, writes the immediate into the object and clears the relocation. Every entry of the
+section must be used by a proven reference, so a literal cannot carry data in. The verifier and
+`tools/linkgen.py` share this step; the link discards the sections and the pool stays retail data. An
+emitted group folds across all its bodies, and a whole-file unit across its placed bodies, once the
+stripped bodies and the literals only they reach are dropped; a literal is never a `data` row.
 
 ### Symbol identity
 
