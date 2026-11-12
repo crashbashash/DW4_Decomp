@@ -1,0 +1,27 @@
+# CRI ADX packet decoder (ADXPD): the job table src/cri/convjobs.c keeps for the ADXB layer.
+# No string survives; the names follow the CRI ADX library's ADXPD API and what each function does.
+# <va>	<name>	<module>
+0x0025f300	ADX_GetCoefficient	cri
+0x0025fdf0	ADX_DecodeMono4	cri
+0x002606e0	ADX_DecodeSte4	cri
+0x0026ee48	ADXPD_Init	cri
+0x0026ee70	ADXPD_Finish	cri
+0x0026ee98	ADXPD_Create	cri
+0x0026ef68	ADXPD_SetCoef	cri
+0x0026ef90	ADXPD_SetDly	cri
+0x0026efb8	ADXPD_GetDly	cri
+0x0026efe0	ADXPD_SetExtPrm	cri
+0x0026eff0	ADXPD_GetExtPrm	cri
+0x0026f010	ADXPD_Destroy	cri
+0x0026f048	ADXPD_SetMode	cri
+0x0026f050	ADXPD_GetStat	cri
+0x0026f058	ADXPD_EntryMono	cri
+0x0026f088	ADXPD_EntrySte	cri
+0x0026f0b8	ADXPD_EntryPl2	cri
+0x0026f0e8	ADXPD_Start	cri
+0x0026f108	ADXPD_Stop	cri
+0x0026f130	ADXPD_Reset	cri
+0x0026f148	ADXPD_GetNumBlk	cri
+0x0026f150	adxpd_SetOddBlockError	cri
+0x0026f160	ADXPD_ExecHndl	cri
+0x0026f258	ADXPD_ExecServer	cri

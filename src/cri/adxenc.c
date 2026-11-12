@@ -113,7 +113,7 @@ void *memset(void *dst, int value, unsigned int size);
 void *memcpy(void *dst, const void *src, unsigned int size);
 unsigned int strlen(const char *s);
 char *strncpy(char *dst, const char *src, unsigned int size);
-int FUN_0025f300(short id, int arg, short *first, short *second);
+int ADX_GetCoefficient(short id, int arg, short *first, short *second);
 int FUN_0025f588(unsigned short *data, int size, short *out_a, char *out_b, char *out_c, char *out_d, char *out_e, int *out_f, int *out_g, int *out_h);
 
 int FUN_00268188(AdxEnc *e, int ch);
@@ -388,7 +388,7 @@ void FUN_00267de8(AdxEncFilter *f, int id, int arg)
     short first;
     short second;
 
-    FUN_0025f300(id, arg, &first, &second);
+    ADX_GetCoefficient(id, arg, &first, &second);
     FUN_00267dd8(f, first, second);
     FUN_00267c50(f->pred, first, second);
 }

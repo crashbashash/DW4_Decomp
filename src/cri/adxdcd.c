@@ -5,7 +5,7 @@ extern int DAT_00499cd0;
 
 #define SWAP16(x) (((x) >> 8) | (((x) << 8) & 0xFF00))
 
-void FUN_0025f300(int arg0, int arg1, short *arg2, short *arg3) {
+void ADX_GetCoefficient(int arg0, int arg1, short *arg2, short *arg3) {
     float a, b, r, s, c;
 s = sqrtf(2.0f);
 c = cosf(((float) arg0 * 6.2831851f) / (float) arg1);
@@ -155,7 +155,7 @@ int FUN_0025ffd0(unsigned char *ibuf, int nblk, short *obufr, short *dlyl, short
 int FUN_00260398(unsigned char *ibuf, int nblk, short *obufl, short *dlyl, short *obufr, short *dlyr,
                  short k0, short k1, unsigned short *seed, short mul, short add);
 
-int FUN_002606e0(unsigned char *ibuf, int nblk, short *obufl, short *dlyl, short *obufr, short *dlyr,
+int ADX_DecodeSte4(unsigned char *ibuf, int nblk, short *obufl, short *dlyl, short *obufr, short *dlyr,
                  short k0, short k1, unsigned short *seed, short mul, short add)
 {
     if (DAT_00499cd0 == 0) {

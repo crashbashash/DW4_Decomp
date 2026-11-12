@@ -99,14 +99,14 @@ void FUN_0025d078(void);
 void FUN_0025d098(void);
 void FUN_0025d0b8(const char *text, unsigned int length, unsigned short *first, unsigned short *second,
                   unsigned short *third);
-void FUN_0026ee48(void);
-void FUN_0026ee70(void);
-AdxPdObj *FUN_0026ee98(void);
-void FUN_0026f010(AdxPdObj *rna);
-void FUN_0026efb8(AdxPdObj *rna, int *a, int *b);
-void FUN_0026eff0(AdxPdObj *rna, short *a, short *b, short *c);
-void FUN_0026ef90(AdxPdObj *rna, int *a, int *b);
-void FUN_0026efe0(AdxPdObj *rna, int a, int b, int c);
+void ADXPD_Init(void);
+void ADXPD_Finish(void);
+AdxPdObj *ADXPD_Create(void);
+void ADXPD_Destroy(AdxPdObj *rna);
+void ADXPD_GetDly(AdxPdObj *rna, int *a, int *b);
+void ADXPD_GetExtPrm(AdxPdObj *rna, short *a, short *b, short *c);
+void ADXPD_SetDly(AdxPdObj *rna, int *a, int *b);
+void ADXPD_SetExtPrm(AdxPdObj *rna, int a, int b, int c);
 int FUN_0025f588(unsigned short *hdr, int size, short *hdrlen, signed char *type, signed char *bits,
                  signed char *blksize, signed char *nch, int *rate, int *total, int *f16);
 int FUN_0025f708(unsigned short *hdr, int size, unsigned char *ver, unsigned char *flag);
@@ -116,20 +116,20 @@ void FUN_0025f8b8(unsigned short *hdr, int size, int *f32, short *f36, short *f3
                   int *f52);
 void FUN_0025fb18(unsigned short *hdr, int size, int *f204, char *f208, short *f224, short *f226);
 void FUN_00260840(const char *code, const char *message);
-void FUN_0026ef68(AdxPdObj *rna, int rate, int f28);
+void ADXPD_SetCoef(AdxPdObj *rna, int rate, int f28);
 extern void (*DAT_00498c68)(int ahx, unsigned short *keys);
 extern char DAT_004ed800[];
 extern char DAT_004ed820[];
 
-void FUN_0026f108(AdxPdObj *rna);
-void FUN_0026f130(AdxPdObj *rna);
-void FUN_0026f058(AdxPdObj *rna, int a, int b, int c, int d);
-void FUN_0026f088(AdxPdObj *rna, int a, int b, int c, int d);
-void FUN_0026f0b8(AdxPdObj *rna, int a, int b, int c, int d);
-void FUN_0026f0e8(AdxPdObj *rna);
-int FUN_0026f148(AdxPdObj *rna);
-int FUN_0026f050(AdxPdObj *rna);
-void FUN_0026f160(AdxPdObj *rna);
+void ADXPD_Stop(AdxPdObj *rna);
+void ADXPD_Reset(AdxPdObj *rna);
+void ADXPD_EntryMono(AdxPdObj *rna, int a, int b, int c, int d);
+void ADXPD_EntrySte(AdxPdObj *rna, int a, int b, int c, int d);
+void ADXPD_EntryPl2(AdxPdObj *rna, int a, int b, int c, int d);
+void ADXPD_Start(AdxPdObj *rna);
+int ADXPD_GetNumBlk(AdxPdObj *rna);
+int ADXPD_GetStat(AdxPdObj *rna);
+void ADXPD_ExecHndl(AdxPdObj *rna);
 void FUN_0025f2d0(void);
 void FUN_0025f2e8(void);
 
@@ -160,14 +160,14 @@ void FUN_0025e5a0(AdxbObj *obj);
 
 void FUN_0025d300(void)
 {
-    FUN_0026ee48();
+    ADXPD_Init();
     FUN_0025d078();
     memset(DAT_00498c80, 0, 0x1040);
 }
 
 void FUN_0025d338(void)
 {
-    FUN_0026ee70();
+    ADXPD_Finish();
     FUN_0025d098();
     memset(DAT_00498c80, 0, 0x1040);
 }
@@ -194,7 +194,7 @@ AdxbObj *FUN_0025d3c0(int a0, int a1, int a2, int a3)
     p = &DAT_00498c80[i];
     memset(p, 0, sizeof(*p));
     p->used = 1;
-    p->rna = FUN_0026ee98();
+    p->rna = ADXPD_Create();
     if (p->rna == 0) {
         FUN_0025d4f8(p);
         return 0;
@@ -220,7 +220,7 @@ void FUN_0025d4f8(AdxbObj *rec)
     if (rec != 0) {
         AdxPdObj *handle = rec->rna;
         rec->rna = 0;
-        FUN_0026f010(handle);
+        ADXPD_Destroy(handle);
         memset(rec, 0, sizeof(*rec));
         rec->used = 0;
     }
@@ -277,15 +277,15 @@ int FUN_0025d540(AdxbObj *obj, unsigned short *hdr, int size)
         if (FUN_0025dcc8(obj, ver, flag, obj->f24, &k0, &k1, &k2) < 0) {
             return -1;
         }
-        FUN_0026efe0(obj->rna, k0, k1, k2);
+        ADXPD_SetExtPrm(obj->rna, k0, k1, k2);
         if (FUN_0025f688(hdr, size, &obj->f28) < 0) {
             return 0;
         }
         if (FUN_0025f780(hdr, size, a16, a32) < 0) {
             return 0;
         }
-        FUN_0026ef68(obj->rna, obj->f20, obj->f28);
-        FUN_0026ef90(obj->rna, a16, a32);
+        ADXPD_SetCoef(obj->rna, obj->f20, obj->f28);
+        ADXPD_SetDly(obj->rna, a16, a32);
         FUN_0025f8b8(hdr, size, &obj->f32, &obj->f36, &obj->f38, &obj->f40, &obj->f44, &obj->f48, &obj->f52);
         FUN_0025fb18(hdr, size, &obj->f204, obj->f208, &obj->f224, obj->f226);
         obj->f152 = 0;
@@ -501,14 +501,14 @@ char *FUN_0025db90(AdxbObj *obj)
 
 void FUN_0025db98(AdxbObj *obj)
 {
-    FUN_0026efb8(obj->rna, &obj->f172, &obj->f176);
-    FUN_0026eff0(obj->rna, &obj->f166, &obj->f168, &obj->f170);
+    ADXPD_GetDly(obj->rna, &obj->f172, &obj->f176);
+    ADXPD_GetExtPrm(obj->rna, &obj->f166, &obj->f168, &obj->f170);
 }
 
 void FUN_0025dbd8(AdxbObj *rec)
 {
-    FUN_0026ef90(rec->rna, &rec->f172, &rec->f176);
-    FUN_0026efe0(rec->rna, rec->f166, rec->f168, rec->f170);
+    ADXPD_SetDly(rec->rna, &rec->f172, &rec->f176);
+    ADXPD_SetExtPrm(rec->rna, rec->f166, rec->f168, rec->f170);
 }
 
 void FUN_0025dc18(AdxbObj *block, const char *text)
@@ -589,14 +589,14 @@ void FUN_0025de68(AdxbObj *rec)
     if (rec->f232) {
         DAT_00498c70();
     }
-    FUN_0026f108(rec->rna);
+    ADXPD_Stop(rec->rna);
     rec->stat = 0;
 }
 
 void FUN_0025deb0(AdxbObj *obj)
 {
     if (obj->stat == 3) {
-        FUN_0026f130(obj->rna);
+        ADXPD_Reset(obj->rna);
         obj->f140 = 0;
         obj->stat = 0;
     }
@@ -630,8 +630,8 @@ void FUN_0025df18(AdxbObj *obj, int n)
     AdxbBuf *temp_v0;
     temp_v0 = &obj->buf;
     temp_s0 = obj->rna;
-    FUN_0026f058(temp_s0, obj->buf.f0, n, temp_v0->f20 + temp_v0->pos * 2, 0);
-    FUN_0026f0e8(temp_s0);
+    ADXPD_EntryMono(temp_s0, obj->buf.f0, n, temp_v0->f20 + temp_v0->pos * 2, 0);
+    ADXPD_Start(temp_s0);
 }
 
 void FUN_0025df68(AdxbObj *obj, int n)
@@ -642,8 +642,8 @@ void FUN_0025df68(AdxbObj *obj, int n)
     temp_v1 = &obj->buf;
     temp_s0 = obj->rna;
     temp_a3 = temp_v1->f20 + temp_v1->pos * 2;
-    FUN_0026f088(temp_s0, obj->buf.f0, n * 2, temp_a3, temp_a3 + temp_v1->f28 * 2);
-    FUN_0026f0e8(temp_s0);
+    ADXPD_EntrySte(temp_s0, obj->buf.f0, n * 2, temp_a3, temp_a3 + temp_v1->f28 * 2);
+    ADXPD_Start(temp_s0);
 }
 
 void FUN_0025dfc0(AdxbObj *obj, int n)
@@ -654,8 +654,8 @@ void FUN_0025dfc0(AdxbObj *obj, int n)
     temp_v1 = &obj->buf;
     temp_s0 = obj->rna;
     temp_a3 = temp_v1->f20 + temp_v1->pos * 2;
-    FUN_0026f0b8(temp_s0, obj->buf.f0, n, temp_a3, temp_a3 + temp_v1->f28 * 2);
-    FUN_0026f0e8(temp_s0);
+    ADXPD_EntryPl2(temp_s0, obj->buf.f0, n, temp_a3, temp_a3 + temp_v1->f28 * 2);
+    ADXPD_Start(temp_s0);
 }
 
 void FUN_0025e120(short *dst, short *src, int count)
@@ -702,7 +702,7 @@ void FUN_0025e1e0(AdxbObj *d)
     q = t / blk;
     r = blk - t % blk - 1;
     pos = b->pos;
-    done = FUN_0026f148(d->rna);
+    done = ADXPD_GetNumBlk(d->rna);
     nch = b->nch;
     n = done * blk / nch;
     n = (done < q * nch) ? n : n - r;
@@ -724,15 +724,15 @@ void FUN_0025e368(AdxbObj *w)
     AdxPdObj *rna;
     int i;
     if (w->stat == 1) {
-        if (FUN_0026f050(w->rna) == 0) {
+        if (ADXPD_GetStat(w->rna) == 0) {
             w->cb120(w->obj124, &w->buf.pos, &w->buf.lim, &w->buf.end);
             FUN_0025e018(w);
             w->stat = 2;
         }
     }
     if (w->stat == 2) {
-        FUN_0026f160(w->rna);
-        if (FUN_0026f050(w->rna) == 3) {
+        ADXPD_ExecHndl(w->rna);
+        if (ADXPD_GetStat(w->rna) == 3) {
             if (w->f232 != 0) {
                 rna = w->rna;
                 FUN_0025f2d0();
@@ -742,7 +742,7 @@ void FUN_0025e368(AdxbObj *w)
                 FUN_0025f2e8();
             }
             FUN_0025e1e0(w);
-            FUN_0026f130(w->rna);
+            ADXPD_Reset(w->rna);
             w->cb128(w->obj132, w->f148, w->f144);
             w->stat = 3;
         }

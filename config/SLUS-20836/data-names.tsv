@@ -5859,3 +5859,5 @@
 0x0058ce60	g_igActorManager_metaObject	class-handle
 0x0058ceb8	g_igActorManagerParams_metaObject	class-handle
 0x0058d244	errno	recovered-global
+0x004a8eb0	adxpd_odd_block_error	recovered-global
+0x004a8eb8	adxpd_obj	recovered-global

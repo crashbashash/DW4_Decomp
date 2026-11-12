@@ -3479,30 +3479,30 @@
   "0x0026ee48": {
     "whole_file": true,
     "emitted": {
-      "FUN_0026ee70": "0x0026ee70",
-      "FUN_0026ee98": "0x0026ee98",
-      "FUN_0026ef68": "0x0026ef68",
-      "FUN_0026ef90": "0x0026ef90",
-      "FUN_0026efb8": "0x0026efb8",
-      "FUN_0026efe0": "0x0026efe0",
-      "FUN_0026eff0": "0x0026eff0",
-      "FUN_0026f010": "0x0026f010",
-      "FUN_0026f048": "0x0026f048",
-      "FUN_0026f050": "0x0026f050",
-      "FUN_0026f058": "0x0026f058",
-      "FUN_0026f088": "0x0026f088",
-      "FUN_0026f0b8": "0x0026f0b8",
-      "FUN_0026f0e8": "0x0026f0e8",
-      "FUN_0026f108": "0x0026f108",
-      "FUN_0026f130": "0x0026f130",
-      "FUN_0026f148": "0x0026f148",
-      "FUN_0026f150": "0x0026f150",
-      "FUN_0026f160": "0x0026f160",
-      "FUN_0026f258": "0x0026f258"
+      "ADXPD_Finish": "0x0026ee70",
+      "ADXPD_Create": "0x0026ee98",
+      "ADXPD_SetCoef": "0x0026ef68",
+      "ADXPD_SetDly": "0x0026ef90",
+      "ADXPD_GetDly": "0x0026efb8",
+      "ADXPD_SetExtPrm": "0x0026efe0",
+      "ADXPD_GetExtPrm": "0x0026eff0",
+      "ADXPD_Destroy": "0x0026f010",
+      "ADXPD_SetMode": "0x0026f048",
+      "ADXPD_GetStat": "0x0026f050",
+      "ADXPD_EntryMono": "0x0026f058",
+      "ADXPD_EntrySte": "0x0026f088",
+      "ADXPD_EntryPl2": "0x0026f0b8",
+      "ADXPD_Start": "0x0026f0e8",
+      "ADXPD_Stop": "0x0026f108",
+      "ADXPD_Reset": "0x0026f130",
+      "ADXPD_GetNumBlk": "0x0026f148",
+      "adxpd_SetOddBlockError": "0x0026f150",
+      "ADXPD_ExecHndl": "0x0026f160",
+      "ADXPD_ExecServer": "0x0026f258"
     },
     "data": {
-      "DAT_004a8eb0": "0x004a8eb0",
-      "DAT_004a8eb8": "0x004a8eb8"
+      "adxpd_odd_block_error": "0x004a8eb0",
+      "adxpd_obj": "0x004a8eb8"
     }
   },
   "0x00271640": {
@@ -4830,7 +4830,7 @@
       "FUN_0025f780": "0x0025f780",
       "FUN_0025fd38": "0x0025fd38",
       "FUN_0025fd98": "0x0025fd98",
-      "FUN_002606e0": "0x002606e0"
+      "ADX_DecodeSte4": "0x002606e0"
     },
     "data": {
       "DAT_00499cd0": "0x00499cd0"

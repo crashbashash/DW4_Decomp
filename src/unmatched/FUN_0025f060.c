@@ -30,7 +30,7 @@ struct AdxtWork {
     int f148;
 };
 
-int FUN_0026f050(void *rna);
+int ADXPD_GetStat(void *rna);
 
 void FUN_0025f060(AdxtWork *w)
 {
@@ -44,7 +44,7 @@ void FUN_0025f060(AdxtWork *w)
     pcm = &w->pcm;
     src = pcm->src;
     if (w->stat == 1) {
-        if (FUN_0026f050(w->rna) == 0) {
+        if (ADXPD_GetStat(w->rna) == 0) {
             w->cb120(w->obj124, &pcm->pos, &pcm->max, &pcm->f40);
             n = pcm->total - pcm->pos;
             if (pcm->max < n) {
