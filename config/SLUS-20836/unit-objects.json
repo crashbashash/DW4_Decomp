@@ -93,15 +93,6 @@
       "__dl__FPv": "0x00100610"
     }
   },
-  "0x0037d310": {
-    "emitted": {},
-    "duplicates": {
-      "__dt__20igSmartPointer<3Obj>Fv": "0x00367a20"
-    },
-    "externals": {
-      "__dl__FPv": "0x00100610"
-    }
-  },
   "0x0039b320": {
     "emitted": {},
     "duplicates": {
@@ -1049,15 +1040,6 @@
       "__dt__3RPBFv": "0x001c6460",
       "__dt__9StringRefFv": "0x00130720",
       "__dt__25igSmartPointer<8igObject>Fv": "0x00150eb0"
-    },
-    "externals": {
-      "__dl__FPv": "0x00100610"
-    }
-  },
-  "0x0037c4c0": {
-    "emitted": {},
-    "duplicates": {
-      "__dt__31igSmartPointer<13igNamedObject>Fv": "0x001489a0"
     },
     "externals": {
       "__dl__FPv": "0x00100610"
@@ -4944,19 +4926,6 @@
     "exceptions": {
       "index": "0x0054f830",
       "table": "0x00543f1c",
-      "table_size": "0x000010"
-    },
-    "externals": {
-      "__dl__FPv": "0x00100610"
-    }
-  },
-  "0x0037b7a0": {
-    "duplicates": {
-      "__dt__29igSmartPointer<11igStringObj>Fv": "0x001489a0"
-    },
-    "exceptions": {
-      "index": "0x0054e63c",
-      "table": "0x00543574",
       "table_size": "0x000010"
     },
     "externals": {
@@ -31417,6 +31386,92 @@
       "__dt__9StringRefFv": "0x00130720"
     },
     "symbol": "FUN_003b04e0"
+  },
+  "0x0037b010": {
+    "whole_file": true,
+    "emitted": {
+      "FUN_0037b040": "0x0037b040",
+      "FUN_0037b460": "0x0037b460",
+      "FUN_0037b4a0": "0x0037b4a0",
+      "FUN_0037b4d0": "0x0037b4d0",
+      "FUN_0037b760": "0x0037b760",
+      "Gap__Bec__beCri__vfunc_21": "0x0037b7a0",
+      "FUN_0037b950": "0x0037b950",
+      "Gap__Bec__beCri__vfunc_22": "0x0037b960",
+      "Gap__Bec__beCri__vfunc_23": "0x0037b9a0",
+      "Gap__Bec__beCri__vfunc_24": "0x0037bb70",
+      "Gap__Bec__beCri__vfunc_25": "0x0037bbc0",
+      "Gap__Bec__beCri__vfunc_26": "0x0037bc30",
+      "Gap__Bec__beCri__vfunc_27": "0x0037bde0",
+      "FUN_0037c2c0": "0x0037c2c0",
+      "FUN_0037c4c0": "0x0037c4c0",
+      "FUN_0037caf0": "0x0037caf0",
+      "FUN_0037cb80": "0x0037cb80",
+      "FUN_0037cc50": "0x0037cc50",
+      "FUN_0037cd90": "0x0037cd90",
+      "FUN_0037cf30": "0x0037cf30",
+      "FUN_0037d160": "0x0037d160",
+      "FUN_0037d270": "0x0037d270",
+      "FUN_0037d2a0": "0x0037d2a0",
+      "FUN_0037d2f0": "0x0037d2f0",
+      "FUN_0037d310": "0x0037d310",
+      "FUN_0037d4a0": "0x0037d4a0",
+      "FUN_0037d570": "0x0037d570",
+      "FUN_0037d680": "0x0037d680",
+      "FUN_0037d780": "0x0037d780",
+      "FUN_0037d870": "0x0037d870",
+      "FUN_0037daf0": "0x0037daf0",
+      "FUN_0037dc60": "0x0037dc60",
+      "FUN_0037dd10": "0x0037dd10",
+      "FUN_0037e020": "0x0037e020",
+      "FUN_0037e070": "0x0037e070",
+      "Gap__Bec__beCri__vfunc_20": "0x0037e100"
+    },
+    "data": {
+      "DAT_004c22f0": "0x004c22f0",
+      "DAT_004e0858": "0x004e0858",
+      "DAT_0050e400": "0x0050e400",
+      "DAT_0050e410": "0x0050e410",
+      "DAT_0050e420": "0x0050e420",
+      "DAT_0050e428": "0x0050e428",
+      "DAT_0050e438": "0x0050e438",
+      "DAT_0050e440": "0x0050e440",
+      "DAT_0050e460": "0x0050e460",
+      "DAT_0050e480": "0x0050e480",
+      "DAT_0050e488": "0x0050e488",
+      "DAT_0050e490": "0x0050e490",
+      "DAT_0050e4a0": "0x0050e4a0",
+      "DAT_0055efe8": "0x0055efe8",
+      "DAT_00562640": "0x00562640",
+      "DAT_00585d80": "0x00585d80",
+      "DAT_005863b0": "0x005863b0",
+      "DAT_00586dc8": "0x00586dc8",
+      "DAT_00586dd0": "0x00586dd0",
+      "DAT_00587108": "0x00587108",
+      "DAT_00587110": "0x00587110",
+      "DAT_005873c8": "0x005873c8",
+      "DAT_005875e8": "0x005875e8",
+      "DAT_00587668": "0x00587668",
+      "DAT_00587d08": "0x00587d08",
+      "DAT_00589998": "0x00589998",
+      "DAT_005899f8": "0x005899f8",
+      "DAT_00589ad0": "0x00589ad0",
+      "DAT_0058a350": "0x0058a350",
+      "DAT_0058a360": "0x0058a360",
+      "DAT_0058a3e0": "0x0058a3e0",
+      "DAT_0058a460": "0x0058a460",
+      "GPR_00554c14": "0x00554c14",
+      "GPR_00554de4": "0x00554de4",
+      "g_beCri_metaObject": "0x00589ad8"
+    },
+    "duplicates": {
+      "__dt__20igSmartPointer<3Obj>Fv": "0x00367a20",
+      "__dt__29igSmartPointer<11igStringObj>Fv": "0x001489a0"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    },
+    "symbol": "FUN_0037b010"
   },
   "0x0037aac0": {
     "whole_file": true,
