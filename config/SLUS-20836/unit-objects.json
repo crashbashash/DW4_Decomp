@@ -1119,19 +1119,6 @@
       "__dl__FPv": "0x00100610"
     }
   },
-  "0x00388f00": {
-    "duplicates": {
-      "__dt__25igSmartPointer<8igObject>Fv": "0x0019e3c0"
-    },
-    "exceptions": {
-      "index": "0x0054ea74",
-      "table": "0x00543818",
-      "table_size": "0x000010"
-    },
-    "externals": {
-      "__dl__FPv": "0x00100610"
-    }
-  },
   "0x0038a6e0": {
     "duplicates": {
       "__dt__9ReaderRefFv": "0x0038ab70",
@@ -4819,19 +4806,6 @@
     "exceptions": {
       "index": "0x0054f830",
       "table": "0x00543f1c",
-      "table_size": "0x000010"
-    },
-    "externals": {
-      "__dl__FPv": "0x00100610"
-    }
-  },
-  "0x00388c30": {
-    "duplicates": {
-      "__dt__37igSmartPointer<19beHitLandResultData>Fv": "0x00388de0"
-    },
-    "exceptions": {
-      "index": "0x0054ea5c",
-      "table": "0x00543808",
       "table_size": "0x000010"
     },
     "externals": {
@@ -31279,6 +31253,40 @@
       "__dt__9StringRefFv": "0x00130720"
     },
     "symbol": "FUN_003b04e0"
+  },
+  "0x00386030": {
+    "whole_file": true,
+    "emitted": {
+      "Gap__Bec__beHitLandModel__vfunc_32": "0x00386060",
+      "Gap__Bec__beHitLandModel__vfunc_30": "0x00386180",
+      "Gap__Bec__beHitLandModel__vfunc_29": "0x00386190",
+      "Gap__Bec__beHitLandModel__vfunc_31": "0x003861c0",
+      "FUN_00388590": "0x00388590",
+      "FUN_003885e0": "0x003885e0",
+      "Gap__Bec__beHitLandModelOrder__vfunc_22": "0x00388c30",
+      "__dt__37igSmartPointer<19beHitLandResultData>Fv": "0x00388de0",
+      "FUN_00388e60": "0x00388e60",
+      "Gap__Bec__beHitLandModelOrder__vfunc_21": "0x00388f00",
+      "FUN_00388ff0": "0x00388ff0",
+      "Gap__Bec__beHitLandModelOrder__vfunc_20": "0x00389000",
+      "Gap__Bec__beHitLandModel__vfunc_20": "0x00389010"
+    },
+    "data": {
+      "DAT_0050eae0": "0x0050eae0",
+      "DAT_00586f20": "0x00586f20",
+      "DAT_00587110": "0x00587110",
+      "GPR_00554c14": "0x00554c14",
+      "g_beHitLandModelInfo_metaObject": "0x00589320",
+      "g_beHitLandModelOrder_metaObject": "0x00589390",
+      "g_beHitLandModel_metaObject": "0x00589350"
+    },
+    "duplicates": {
+      "__dt__25igSmartPointer<8igObject>Fv": "0x0019e3c0"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    },
+    "symbol": "FUN_00386030"
   },
   "0x00385830": {
     "whole_file": true,
