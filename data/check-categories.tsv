@@ -13195,10 +13195,10 @@
 003338c0	Gap__igAdxFile__vfunc_20	match	-
 003338d0	Gap__igAdxFile__vfunc_02	match	-
 00333930	Gap__igAdxFile__vfunc_08	match	-
-00333970	FUN_00333970	match	-
-00333990	FUN_00333990	match	-
-00333a40	FUN_00333a40	match	-
-00333a50	FUN_00333a50	match	-
+00333970	igAdxFile_GetReadStatus	match	-
+00333990	igAdxFile_WaitForReadEnd	match	-
+00333a40	igAdxFile_SetUseBuffer	match	-
+00333a50	igAdxFile_SetUseAsync	match	-
 00333a60	Gap__igAdxFile__vfunc_21	match	-
 00333c50	Gap__igAdxFile__vfunc_22	match	-
 00333c90	Gap__igAdxFile__vfunc_23	match	-
@@ -13215,7 +13215,7 @@
 00334260	Gap__igAdxFile__vfunc_36	match	-
 00334330	Gap__igAdxFile__vfunc_37	match	-
 00334360	Gap__igAdxFile__vfunc_32	match	-
-00334370	FUN_00334370	match	-
+00334370	igAdxFile_GetFileSize	match	-
 003343a0	FUN_003343a0	match	-
 00334440	AdxMovieLibrary_MarkRegistered	match	-
 00334460	FUN_00334460	match	-
@@ -18128,7 +18128,7 @@
 003e44d0	beNDMWLoadIntf2ComMdlCtrl__IsCloseQueueEmpty	match	-
 003e44f0	beNDMWLoadIntf2ComMdlCtrl__Poll	match	-
 003e46b0	Gap__Bec__beNDMWLoadIntf2__vfunc_32	match	-
-003e4750	Gap__Bec__beNDMWLoadIntf2__vfunc_31	unapproved	unapproved: 5 volatile without an approval row
+003e4750	Gap__Bec__beNDMWLoadIntf2__vfunc_31	match	-
 003e9010	ObjectRef_Destruct_003e9010	match	-
 003e9090	DataList_GetData_003e9090	match	-
 003e90a0	beNDMWLoadSavePlWork__SetIsCtrl	match	-
@@ -18283,7 +18283,7 @@
 003fc670	ObjectRef_Destruct_003fc670	match	DEFERRED duplicate 0x150eb0 __dt__13NearbyListRefFv 128B (compared under the profile of its retail unit)
 003fc6f0	beNDMWGameRam_FindTechniqueRow	match	DEFERRED duplicate 0x150eb0 __dt__13NearbyListRefFv 128B (compared under the profile of its retail unit)
 003fc780	beNDMWGameRam_CollectNearbyNonzeroHp	match	DEFERRED duplicate 0x150eb0 __dt__13NearbyListRefFv 128B (compared under the profile of its retail unit)
-003fca10	Gap__Bec__beNDMWGameRam__vfunc_34	match	DEFERRED duplicate 0x1363f0 __dt__14RecoveryRef<0>Fv 128B (compared under the profile of its retail unit)
+003fca10	Gap__Bec__beNDMWGameRam__vfunc_34	match	DEFERRED duplicate 0x150eb0 __dt__13NearbyListRefFv 128B (compared under the profile of its retail unit)
 00406da0	FUN_00406da0	match	DEFERRED duplicate 0x150eb0 __dt__13NearbyListRefFv 128B (compared under the profile of its retail unit)
 00406db0	FUN_00406db0	match	DEFERRED duplicate 0x150eb0 __dt__13NearbyListRefFv 128B (compared under the profile of its retail unit)
 00406dc0	FUN_00406dc0	match	DEFERRED duplicate 0x150eb0 __dt__13NearbyListRefFv 128B (compared under the profile of its retail unit)
@@ -18494,7 +18494,7 @@
 0042de70	FUN_0042de70	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
 0042def0	FUN_0042def0	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
 0042df70	FUN_0042df70	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
-0042e330	FUN_0042e330	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+0042e330	FUN_0042e330	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/3.0b52-030722/mwccps2.exe '-O4,p -sdatathreshold 2 -inline level=8 -Iinclude'); under the unit profile of ndmw_beNDMWShopCtrl00 (local/mwcps2/3.0b52-030722/mwccps2.exe '-O4,p -sdatathreshold 2 -inline level=8,bottomup -Iinclude') they are not
 0042e9e0	FUN_0042e9e0	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
 0042eb80	Gap__Bec__beNDMWShopCtrlA2__vfunc_21	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
 0042f710	Gap__Bec__beNDMWShopCtrlEvolve__vfunc_21	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
