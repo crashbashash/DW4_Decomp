@@ -19198,10 +19198,12 @@
       "FUN_001cb010": "0x001cb010",
       "FUN_001cb1f0": "0x001cb1f0",
       "FUN_001cb2d0": "0x001cb2d0",
+      "FUN_001cb340": "0x001cb340",
       "FUN_001ccb20": "0x001ccb20",
       "Gap__Sg__igIniShaderFactory__vfunc_23": "0x001ccb50",
       "Gap__Sg__igIniShaderFactory__vfunc_26": "0x001ccd00",
       "FUN_001ccd10": "0x001ccd10",
+      "Gap__Sg__igIniShaderFactory__vfunc_27": "0x001cce60",
       "Gap__Sg__igIniShaderFactory__vfunc_17": "0x001cd0c0",
       "Gap__Sg__igIniShaderFactory__vfunc_18": "0x001cd110",
       "FUN_001cd150": "0x001cd150",
@@ -19628,8 +19630,8 @@
       "FUN_001e3f70": "0x001e3f70"
     },
     "data": {
-      "@12273": "0x004e4540",
-      "@12300": "0x004e4590",
+      "@12303": "0x004e4540",
+      "@12330": "0x004e4590",
       "DAT_0048af10": "0x0048af10",
       "DAT_0048af30": "0x0048af30",
       "DAT_0048af50": "0x0048af50",
@@ -19965,17 +19967,28 @@
       "DAT_004e4600": "0x004e4600",
       "DAT_004e4630": "0x004e4630",
       "DAT_004e4640": "0x004e4640",
+      "DAT_004e4658": "0x004e4658",
       "DAT_004e4660": "0x004e4660",
       "DAT_004e4668": "0x004e4668",
       "DAT_004e4678": "0x004e4678",
       "DAT_004e4688": "0x004e4688",
       "DAT_004e4690": "0x004e4690",
+      "DAT_004e46c0": "0x004e46c0",
       "DAT_004e46e0": "0x004e46e0",
+      "DAT_004e46e8": "0x004e46e8",
       "DAT_004e46f8": "0x004e46f8",
       "DAT_004e4700": "0x004e4700",
       "DAT_004e4708": "0x004e4708",
       "DAT_004e4710": "0x004e4710",
       "DAT_004e4718": "0x004e4718",
+      "DAT_004e4720": "0x004e4720",
+      "DAT_004e4738": "0x004e4738",
+      "DAT_004e4748": "0x004e4748",
+      "DAT_004e4750": "0x004e4750",
+      "DAT_004e4760": "0x004e4760",
+      "DAT_004e4778": "0x004e4778",
+      "DAT_004e4788": "0x004e4788",
+      "DAT_004e4798": "0x004e4798",
       "DAT_004e47a8": "0x004e47a8",
       "DAT_004e47b0": "0x004e47b0",
       "DAT_004e4820": "0x004e4820",
@@ -20123,6 +20136,7 @@
       "DAT_0055f208": "0x0055f208",
       "DAT_0055f308": "0x0055f308",
       "DAT_0055f360": "0x0055f360",
+      "DAT_0055f460": "0x0055f460",
       "DAT_0055f468": "0x0055f468",
       "DAT_005610b8": "0x005610b8",
       "DAT_005610e0": "0x005610e0",
@@ -20844,10 +20858,16 @@
       "__dt__30igSmartPointer<12AttrStackRec>Fv",
       "__dt__30igSmartPointer<12BoundsObject>Fv",
       "__dt__30igSmartPointer<12ShaderObject>Fv",
+      "__dt__31igSmartPointer<13IniFileHandle>Fv",
       "__dt__31igSmartPointer<13IniFileObject>Fv",
       "__dt__31igSmartPointer<13KeyTrackValue>Fv",
+      "__dt__32igSmartPointer<14IniNamedObject>Fv",
+      "__dt__32igSmartPointer<14IniSectionText>Fv",
       "__dt__32igSmartPointer<14IniValueObject>Fv",
+      "__dt__32igSmartPointer<14ShaderNameList>Fv",
+      "__dt__36igSmartPointer<18ShaderStringObject>Fv",
       "__dt__36igSmartPointer<18igUnsignedCharList>Fv",
+      "__dt__37igSmartPointer<19ShaderObject_1ca6c0>Fv",
       "__dt__9EnvMapRefFv",
       "__dt__9IniStrRefFv",
       "__dt__9RecordRefFv",
@@ -20878,26 +20898,6 @@
       "__dt__20ActorAppearanceFieldFv": "0x001aa950"
     },
     "symbol": "SceneGraphLibrary_MarkRegistered"
-  },
-  "0x001cb340": {
-    "duplicates": {
-      "__dt__23igSmartPointer<6SrList>Fv": "0x001489a0",
-      "__dt__25igSmartPointer<8SrObject>Fv": "0x0025a230",
-      "__dt__25igSmartPointer<8igObject>Fv": "0x001c6460",
-      "__dt__9StringRefFv": "0x00130720"
-    },
-    "externals": {
-      "__dl__FPv": "0x00100610"
-    }
-  },
-  "0x001cce60": {
-    "duplicates": {
-      "__dt__20igSmartPointer<3Obj>Fv": "0x0025a230",
-      "__dt__9StringRefFv": "0x00130720"
-    },
-    "externals": {
-      "__dl__FPv": "0x00100610"
-    }
   },
   "0x00225770": {
     "whole_file": true,

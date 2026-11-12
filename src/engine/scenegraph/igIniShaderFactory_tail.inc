@@ -187,29 +187,20 @@ int FUN_001c66c0(Node *self, int force)
 #undef REL_STR
 #undef REL_ALL
 
-int FUN_001c6fa0(char **out, IniSectionNode *node) {
-    char *text;
+IniStrRef FUN_001c6fa0(IniSectionNode *node) {
     int index;
-    int ok;
-    if ((ok = FUN_001c6520((O_1c6520 *)node, 0)) == 0) {
-        *out = 0;
-        return;
+    if (FUN_001c6520((O_1c6520 *)node, 0) == 0) {
+        return IniStrRef(0);
     }
     index = FUN_00306360(node->_parent, DAT_004e4690, 0);
     if (index == -1) {
-        *out = 0;
-        return;
+        return IniStrRef(0);
     }
-    text = 0;
-    if (FUN_00306910(node->_parent, index, DAT_004e4678, &text, DAT_004e4660, 0) == 0) {
-        *out = 0;
-        return (int)releaseText(text);
+    IniStrRef text(0);
+    if (FUN_00306910(node->_parent, index, DAT_004e4678, &text.p, DAT_004e4660, 0) == 0) {
+        return IniStrRef(0);
     }
-    *out = text;
-    if (*out != 0) {
-        ((int *)*out)[-1]++;
-    }
-    return (int)releaseText(text);
+    return text;
 }
 
 igSmartPointer<ShaderObject> Gap__Sg__igIniShaderFactory__vfunc_24(Factory *self, const char *name) {
@@ -217,7 +208,7 @@ igSmartPointer<ShaderObject> Gap__Sg__igIniShaderFactory__vfunc_24(Factory *self
     if (FUN_001c66c0((Node *)self, 0) == 0) {
         return igSmartPointer<ShaderObject>(0, kRetainReference);
     }
-    if (FUN_00306770(self->f32, self->f40, name, &shader.p, &DAT_004e4660[0], 0) == 0) {
+    if (!FUN_00306770(self->f32, self->f40, name, &shader.p, &DAT_004e4660[0], 0)) {
         return igSmartPointer<ShaderObject>(0, kRetainReference);
     }
     return shader;
@@ -260,7 +251,7 @@ void igStringMetaField_AssignRetainedToken(igStringMetaField *arg0, int arg1, vo
     *temp_s0 = *arg2;
 }
 
-void StringList_AppendRetained(igStringRefList *arg0, void **arg1) {
+void StringList_AppendRetained(igStringRefList *arg0, const IniStrRef &value) {
     int *temp_a1_2;
     int temp_s0;
     int temp_v1;
@@ -270,7 +261,7 @@ void StringList_AppendRetained(igStringRefList *arg0, void **arg1) {
 
     temp_s0 = arg0->_count;
     StringList_Resize(arg0, temp_s0 + 1);
-    temp_a1 = (void *)(*arg1);
+    temp_a1 = (void *)value.p;
     temp_s0_2 = (void **)(arg0->_data + (temp_s0 * 4));
     if (temp_a1 != 0) {
         *(int *)((char *)(temp_a1) - 4) = (int)((int) (*(int *)((char *)(temp_a1) - 4) + 1));
@@ -284,7 +275,7 @@ void StringList_AppendRetained(igStringRefList *arg0, void **arg1) {
             StringChunk_ReleaseHeader(*temp_a1_2, temp_a1_2);
         }
     }
-    *temp_s0_2 = *arg1;
+    *temp_s0_2 = value.p;
 }
 
 int FUN_001ca6b0(int *p, int)
@@ -292,85 +283,42 @@ int FUN_001ca6b0(int *p, int)
     return *(int *)((char *)p + 52);
 }
 
-#define SET_OUT(v) \
-    do { \
-        *out = (v); \
-        { \
-            ShaderObject_1ca6c0 *a_ = *out; \
-            if (a_ != 0) { \
-                a_->_refCount = a_->_refCount + 1; \
-            } \
-        } \
-    } while (0)
-#define DROP(T, x) \
-    do { \
-        T *o_ = (x); \
-        if (o_ != 0) { \
-            o_->_refCount = o_->_refCount - 1; \
-            if (((unsigned long long)((long long)(int)o_->_refCount << 0x29) >> 0x29) == 0) { \
-                igObject_Destroy(o_); \
-            } \
-        } \
-    } while (0)
-int FUN_001ca6c0(ShaderObject_1ca6c0 **out, ShaderProcessorView *self, char *name, unsigned char flag) {
-    unsigned char cached;
-    char *text;
-    ShaderObject_1ca6c0 *object;
-    ShaderNameList *names;
-    char *key;
+igSmartPointer<ShaderObject_1ca6c0> FUN_001ca6c0(ShaderProcessorView *self, char *name, unsigned char flag) {
     int section;
     ShaderMetaView *meta;
     int count;
     int i;
     char *field;
     void *info;
-    ShaderCacheView *cache;
-    ShaderObject_1ca6c0 *existing;
+    unsigned char cached;
     section = FUN_00306360(self->ini, name, 0);
     if (section == -1) {
-        SET_OUT(0);
-        return;
+        return igSmartPointer<ShaderObject_1ca6c0>(0, kRetainReference);
     }
-    text = 0;
-    if (FUN_00306910(self->ini, section, DAT_004e46f8, &text, DAT_004e4660, 0) == 0) {
-        SET_OUT(0);
-        releaseString(text);
-        return 0;
+    IniStrRef text(0);
+    if (FUN_00306910(self->ini, section, DAT_004e46f8, &text.p, DAT_004e4660, 0) == 0) {
+        return igSmartPointer<ShaderObject_1ca6c0>(0, kRetainReference);
     }
-    meta = FUN_002fe460(text);
+    meta = FUN_002fe460(text.p);
     if (meta == 0) {
-        SET_OUT(0);
-        releaseString(text);
-        return 0;
+        return igSmartPointer<ShaderObject_1ca6c0>(0, kRetainReference);
     }
-    FUN_002fd6e0((ShaderObject_1ca6c0 **)&object, meta, self->allocatorKey);
-    if (object == 0) {
-        SET_OUT(0);
-        DROP(ShaderObject_1ca6c0, object);
-        releaseString(text);
-        return 0;
+    igSmartPointer<ShaderObject_1ca6c0> object = FUN_002fd6e0(meta, self->allocatorKey);
+    if (object.p == 0) {
+        return igSmartPointer<ShaderObject_1ca6c0>(0, kRetainReference);
     }
-    *(ShaderNameList **)&names = FUN_002b90e0(((void *)igObject_GetAllocator(self)));
-    FUN_00306aa0(self->ini, section, DAT_004e4700, names, 0);
-    count = names->count;
+    igSmartPointer<ShaderNameList> names(FUN_002b90e0(((void *)igObject_GetAllocator(self))));
+    FUN_00306aa0(self->ini, section, DAT_004e4700, names.p, 0);
+    count = names.p->count;
     for (i = 0; i < count; i++) {
-        StringList_CopyRetained((int *)&key, (igStringRefList *)names, i);
-        field = key;
+        field = StringList_CopyRetained((igStringRefList *)names.p, i).p;
         releaseString(field);
         info = FUN_002fdf20(meta, field);
         if (info == 0) {
-            SET_OUT(0);
-            DROP(ShaderNameList, names);
-            DROP(ShaderObject_1ca6c0, object);
-            releaseString(text);
-            return 0;
+            return igSmartPointer<ShaderObject_1ca6c0>(0, kRetainReference);
         }
-        if (FUN_001c7680(self, section, field, object, info, &flag) == 0) {
-            SET_OUT(0);
-            DROP(ShaderNameList, names);
-            DROP(ShaderObject_1ca6c0, object);
-            releaseString(text);
-            return 0;
+        if (FUN_001c7680(self, section, field, object.p, info, &flag) == 0) {
+            return igSmartPointer<ShaderObject_1ca6c0>(0, kRetainReference);
         }
     }
     {
@@ -379,47 +327,35 @@ int FUN_001ca6c0(ShaderObject_1ca6c0 **out, ShaderProcessorView *self, char *nam
         FUN_00306e50(self->ini, section, DAT_004e4708, &cached, initial, 0);
     }
     if (cached != 0) {
-        cache = ((ShaderCacheView *)FUN_001ca6b0((int *)self, self->kind));
-        existing = ((ShaderObject_1ca6c0 *)FUN_00303d70(cache, name));
+        ShaderCacheView *cache = ((ShaderCacheView *)FUN_001ca6b0((int *)self, self->kind));
+        ShaderObject_1ca6c0 *existing = ((ShaderObject_1ca6c0 *)FUN_00303d70(cache, name));
         if (existing != 0) {
-            if (FUN_00300920(existing, object) != 0) {
-                SET_OUT(existing);
-                DROP(ShaderNameList, names);
-                DROP(ShaderObject_1ca6c0, object);
-                releaseString(text);
-                return 0;
+            if (FUN_00300920(existing, object.p) != 0) {
+                return igSmartPointer<ShaderObject_1ca6c0>(existing, kRetainReference);
             }
-            SET_OUT(object);
-            DROP(ShaderNameList, names);
-            DROP(ShaderObject_1ca6c0, object);
-            releaseString(text);
-            return 0;
+            return object;
         }
-        FUN_00303cd0(cache, name, object);
+        FUN_00303cd0(cache, name, object.p);
     }
-    SET_OUT(object);
-    DROP(ShaderNameList, names);
-    DROP(ShaderObject_1ca6c0, object);
-    releaseString(text);
-    return 0;
+    return object;
 }
 
 void FUN_001cade0(void *self, IniFieldTarget *target, IniItemList *items, void *names, void *lookup, void *fieldNames) {
     int i;
     for (i = 0; i < items->count; i++) {
         void *item = itemAt(items, i);
-        IniStrRef name;
+        RetainedString name = StringList_CopyRetained((igStringRefList *)names, i);
         int index;
-        StringList_CopyRetained((int *)&name.p, (igStringRefList *)names, i);
         index = FUN_001cafc0((struct L_1cafc0 *)lookup, name, 0);
         if (index != -1) {
-            IniStrRef fieldName;
+            RetainedString fieldName = StringList_CopyRetained((igStringRefList *)fieldNames, index);
             IniFieldView *field;
-            StringList_CopyRetained((int *)&fieldName.p, (igStringRefList *)fieldNames, index);
             field = asObjectRefField((IniFieldView *)igMetaObject_FindFieldByName(target->getMeta(), fieldName.p));
             if (field != 0 && igObject_IsKindOf(item, field->refMeta) != 0) {
                 igObjectRefMetaField_Assign(field, target, item);
             }
+            releaseString(fieldName.p);
         }
+        releaseString(name.p);
     }
 }

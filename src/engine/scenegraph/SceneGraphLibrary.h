@@ -2973,19 +2973,20 @@ extern "C" int DAT_004e4678[4];
 extern "C" int DAT_004e4688[4];
 typedef struct IniSectionNode { char _pad0[28]; int _parent; } IniSectionNode;
 extern "C" int DAT_004e4690[4];
-extern "C" int FUN_00306770(int, int, const char *, void *, int *, int);
+extern "C" bool FUN_00306770(int, int, const char *, void *, int *, int);
 struct ShaderObject : public igObject { };
 struct Factory { char pad32[32]; int f32; int f36; int f40; };
 extern "C" int StringList_Resize(...);
-struct ShaderObject_1ca6c0 { int pad0; int _refCount; };
-struct ShaderNameList { int pad0; int _refCount; int count; };
+struct ShaderObject_1ca6c0 : public igObject {};
+struct ShaderNameList : public igObject { int count; int capacity; char **data; };
 struct ShaderMetaView;
-struct ShaderProcessorView { char pad0[24]; int kind; int ini; char pad1[12]; int allocatorKey; };
+struct ShaderProcessorTypes { char pad0[28]; void *types; };
+struct ShaderProcessorView { char pad0[24]; int kind; int ini; char pad1[12]; int allocatorKey; ShaderProcessorTypes *info; };
 struct ShaderCacheView;
 extern "C" ShaderMetaView *FUN_002fe460(char *);
-extern "C" void FUN_002fd6e0(ShaderObject_1ca6c0 * *, ShaderMetaView *, int);
+extern "C" igSmartPointer<ShaderObject_1ca6c0> FUN_002fd6e0(ShaderMetaView *, int);
 extern "C" ShaderNameList *FUN_002b90e0(void *);
-extern "C" void FUN_00306aa0(int, int, void *, ShaderNameList *, int);
+extern "C" unsigned char FUN_00306aa0(int, int, void *, ShaderNameList *, int);
 extern "C" void *FUN_002fdf20(ShaderMetaView *, char *);
 extern "C" int FUN_001c7680(ShaderProcessorView *, int, char *, ShaderObject_1ca6c0 *, void *, unsigned char *);
 extern "C" void *FUN_00303d70(...);
@@ -3014,6 +3015,14 @@ extern "C" int DAT_004e4718[2];
 struct IniSectionObject { int pad0; int _refCount; char *name; };
 struct IniTypeTable { char pad0[60]; void *meta; };
 struct IniShaderFactoryView;
+static inline void releaseSection(IniSectionObject *object) {
+    if (object != 0) {
+        object->_refCount = object->_refCount - 1;
+        if ((object->_refCount & 0x7FFFFF) == 0) {
+            igObject_Destroy(object);
+        }
+    }
+}
 struct SectionRef {
     IniSectionObject *p;
     SectionRef() {}
@@ -3028,16 +3037,19 @@ struct SectionRef {
         }
     }
     ~SectionRef() {
+        releaseSection(p);
+    }
+    SectionRef &operator=(const SectionRef &other) {
+        IniSectionObject *next = other.p;
+        if (next != 0) {
+            next->_refCount = next->_refCount + 1;
+        }
         release();
+        p = next;
+        return *this;
     }
     void release() {
-        IniSectionObject *object = p;
-        if (object != 0) {
-            object->_refCount = object->_refCount - 1;
-            if ((object->_refCount & 0x7FFFFF) == 0) {
-                igObject_Destroy(object);
-            }
-        }
+        releaseSection(p);
     }
     IniSectionObject *get() const { return p; }
 };
@@ -3075,20 +3087,19 @@ extern "C" int DAT_004fb3a8[4];
 extern "C" int DAT_004e1b58[4];
 extern "C" void *DAT_005619b0[4];
 extern "C" void *DAT_00585a08[4];
-struct IniSectionText { int pad0; int _refCount; char *text; };
-struct IniNamedObject { int pad0; int _refCount; };
+struct IniSectionText : public igObject { char *text; };
+struct IniNamedObject : public igObject {};
 struct IniFieldEntry_1cdbb0 { char pad0[56]; IniNamedObject *cache; };
 struct IniFactoryView { char pad0[20]; int mode; char pad1[32]; IniNamedObject *cache; };
-class IniFileHandle {
+class IniFileHandle : public igVirtualObject {
 public:
-    virtual void d0();    virtual void d1();    virtual void d2();    virtual void d3();    virtual void d4();    virtual void d5();    virtual void d6();    virtual void d7();    virtual void d8();    virtual void d9();    virtual void d10();    virtual void d11();    virtual void d12();    virtual void d13();    virtual void d14();    virtual void d15();    virtual void d16();    virtual void d17();    virtual void d18();    virtual void d19();    virtual void d20();    virtual void d21();    virtual void d22();
+        virtual void d1();    virtual void d2();    virtual void d3();    virtual void d4();    virtual void d5();    virtual void d6();    virtual void d7();    virtual void d8();    virtual void d9();    virtual void d10();    virtual void d11();    virtual void d12();    virtual void d13();    virtual void d14();    virtual void d15();    virtual void d16();    virtual void d17();    virtual void d18();    virtual void d19();    virtual void d20();    virtual void d21();    virtual void d22();
     virtual int open(char *, void *);
     virtual void close();
     virtual void read(char *, int, int);
     virtual void d26();    virtual void d27();    virtual void d28();    virtual void d29();    virtual void d30();    virtual void d31();    virtual void d32();    virtual void d33();    virtual void d34();    virtual void d35();
     virtual void seek(int, int);
     virtual int tell();
-    int _refCount;
 };
 extern "C" void *FUN_002c4ca0(void *);
 extern "C" char *FUN_00300d70(IniFactoryView *, int);
@@ -5718,20 +5729,16 @@ extern "C" void FUN_001c6340(int *arg0, int arg1);
 extern "C" void Gap__Sg__igNode__vfunc_27(void);
 extern "C" void FUN_001c63e0(int arg0, int arg1);
 extern "C" void **ObjectRef_Destruct_001c6460(void **arg0, short arg1);
-extern "C" void StringList_CopyRetained(int *out, igStringRefList *list, int index);
-extern "C" int FUN_001c6520(O_1c6520 *arg0, int arg1);
-extern "C" int FUN_001c66c0(Node *self, int force);
-extern "C" int FUN_001c6fa0(char **out, IniSectionNode *node);
-extern "C" igSmartPointer<ShaderObject> Gap__Sg__igIniShaderFactory__vfunc_24(Factory *self, const char *name);
-extern "C" ObjectRefWord *FUN_001c7600(ObjectRefWord *self,int delete_storage);
-extern "C" void igStringMetaField_AssignRetainedToken(igStringMetaField *arg0, int arg1, void **arg2);
-extern "C" void StringList_AppendRetained(igStringRefList *arg0, void **arg1);
-extern "C" int FUN_001ca6b0(int *p, int);
-extern "C" int FUN_001ca6c0(ShaderObject_1ca6c0 **out, ShaderProcessorView *self, char *name, unsigned char flag);
-extern "C" int Gap__Sg__igShaderProcessor__vfunc_22(void);
+/* A string handed out with a reference already taken; whoever receives it releases it. */
+struct RetainedString {
+    char *p;
+    RetainedString(char *text) : p(text) { if (p != 0) ((int *)p)[-1] = ((int *)p)[-1] + 1; }
+};
 struct IniStrRef {
     char *p;
     IniStrRef() {}
+    IniStrRef(char *text) : p(text) {}
+    IniStrRef(const RetainedString &s) : p(s.p) { if (p != 0) ((int *)p)[-1] = ((int *)p)[-1] + 1; }
     IniStrRef(const IniStrRef &o) : p(o.p) { if (p != 0) ((int *)p)[-1] = ((int *)p)[-1] + 1; }
     static inline void Release(char *s) {
         int *x = (int *)s;
@@ -5739,6 +5746,17 @@ struct IniStrRef {
     }
     ~IniStrRef() { Release(p); }
 };
+extern "C" RetainedString StringList_CopyRetained(igStringRefList *list, int index);
+extern "C" IniStrRef FUN_001c6fa0(IniSectionNode *node);
+extern "C" void StringList_AppendRetained(igStringRefList *list, const IniStrRef &value);
+extern "C" int FUN_001c6520(O_1c6520 *arg0, int arg1);
+extern "C" int FUN_001c66c0(Node *self, int force);
+extern "C" igSmartPointer<ShaderObject> Gap__Sg__igIniShaderFactory__vfunc_24(Factory *self, const char *name);
+extern "C" ObjectRefWord *FUN_001c7600(ObjectRefWord *self,int delete_storage);
+extern "C" void igStringMetaField_AssignRetainedToken(igStringMetaField *arg0, int arg1, void **arg2);
+extern "C" int FUN_001ca6b0(int *p, int);
+extern "C" igSmartPointer<ShaderObject_1ca6c0> FUN_001ca6c0(ShaderProcessorView *self, char *name, unsigned char flag);
+extern "C" int Gap__Sg__igShaderProcessor__vfunc_22(void);
 class IniFieldTarget {
 public:
     virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9();
@@ -5758,18 +5776,58 @@ static inline void *itemAt(IniItemList *l, int i) { return l->data[i]; }
 extern "C" int FUN_001cafc0(struct L_1cafc0 *arg0, IniStrRef name, int arg2);
 extern "C" void FUN_001cade0(void *self, IniFieldTarget *target, IniItemList *items, void *names, void *lookup, void *fieldNames);
 extern "C" void FUN_001cb010(void *self, IniValueTarget *target, IniValueList *list);
-extern "C" void FUN_001cb1f0(int arg0, int arg1, int arg2, int arg3, void **arg4, int arg5);
-extern "C" void FUN_001cb2d0(int dummy0, int arg1, int arg2, void *arg3);
-extern "C" void FUN_001ccb20(int **arg0, int *arg1);
+extern "C" void FUN_001cb1f0(void *self, char *name, int ini, int section, DW4VC_96_1 *target, IniValueList *values);
+extern "C" void FUN_001cb2d0(void *self, void *types, void *key, void *target);
+class ShaderPassList {
+public:
+    virtual void d0();    virtual void d1();    virtual void d2();    virtual void d3();    virtual void d4();    virtual void d5();    virtual void d6();    virtual void d7();    virtual void d8();    virtual void d9();    virtual void d10();    virtual void d11();    virtual void d12();    virtual void d13();    virtual void d14();    virtual void d15();    virtual void d16();    virtual void d17();    virtual void d18();    virtual void d19();    virtual void d20();
+    virtual void setCount(int);
+    virtual void d22();
+    virtual void prepare();
+};
+class ShaderTarget {
+public:
+    virtual void d0();    virtual void d1();    virtual void d2();    virtual void d3();    virtual void d4();    virtual void d5();    virtual void d6();    virtual void d7();    virtual void d8();    virtual void d9();    virtual void d10();    virtual void d11();    virtual void d12();    virtual void d13();    virtual void d14();    virtual void d15();    virtual void d16();    virtual void d17();    virtual void d18();    virtual void d19();    virtual void d20();    virtual void d21();    virtual void d22();    virtual void d23();    virtual void d24();    virtual void d25();    virtual void d26();    virtual void d27();    virtual void d28();
+    virtual void clear();
+    virtual void d30();    virtual void d31();    virtual void d32();    virtual void d33();    virtual void d34();    virtual void d35();    virtual void d36();    virtual void d37();    virtual void d38();    virtual void d39();
+    virtual void setFlag(unsigned char);
+    virtual void d41();    virtual void d42();
+    virtual void setInfo(ShaderObject_1ca6c0 *);
+    char pad0[32];
+    ShaderPassList *passes;
+};
+struct ShaderStringObject : public igObject { char *text; int length; };
+extern "C" int FUN_001cb340(ShaderProcessorView *self, ShaderTarget *target, int arg);
+extern "C" igSmartPointer<igObject> FUN_001c8c80(ShaderProcessorView *self, int section, void *key, void *meta, ShaderNameList *shared);
+extern "C" void FUN_0030b460(ShaderStringObject *, void *, int, int);
+extern "C" int DAT_004e4658[2];
+extern "C" int DAT_004e46c0[4];
+extern "C" int DAT_004e46e8[4];
+extern "C" int DAT_004e4720[4];
+extern "C" int DAT_004e4738[4];
+extern "C" int DAT_004e4748[2];
+extern "C" int DAT_004e4750[4];
+extern "C" int DAT_004e4760[4];
+extern "C" int DAT_004e4778[4];
+extern "C" int DAT_004e4788[4];
+extern "C" int DAT_004e4798[4];
+extern "C" void *DAT_0055f460[4];
+extern "C" IniStrRef FUN_001ccb20(igStringRefList *list);
 extern "C" void Gap__Sg__igIniShaderFactory__vfunc_26(int a0);
 extern "C" void FUN_001ccd10(IniShaderFactoryView *self, IniNodeList *list);
+struct IniShaderFactoryFields { char pad0[20]; int f20; char pad1[4]; int f28; };
+struct IniFactoryEntry { char pad0[12]; IniSectionObject *f12; char *f16; };
+extern "C" IniNodeList *FUN_002da780(IniSectionObject *);
+extern "C" int FUN_002da850(IniSectionObject *, IniNodeList *);
+extern "C" IniFactoryEntry *FUN_00307630(int, int);
+extern "C" int FUN_00307650(int);
+extern "C" void Gap__Sg__igIniShaderFactory__vfunc_27(IniShaderFactoryFields *self);
 extern "C" void Gap__Sg__igIniShaderFactory__vfunc_17(void *arg0);
 extern "C" void Gap__Sg__igIniShaderFactory__vfunc_18(void *arg0);
 extern "C" int FUN_001cd150(IniDocument **out, IniFactoryState *self, char *name);
-extern "C" int FUN_001cdbb0(IniSectionText **out, IniFactoryView *self, char *name);
+extern "C" igSmartPointer<IniSectionText> FUN_001cdbb0(IniFactoryView *self, char *name);
 struct IniHeldObject { int vt; int refs; };
 struct IniFactoryBinding { char pad[44]; IniHeldObject *r44; IniHeldObject *r48; };
-extern "C" int FUN_001cb340(IniFactoryBinding *, int, int);
 extern "C" bool Gap__Sg__igIniShaderFactory__vfunc_23(IniFactoryBinding *self, int a1, IniHeldObject *a2, int a3);
 extern "C" struct R **FUN_001ce350(struct R **arg0, short arg1);
 extern "C" void Gap__Core__igFolder__vfunc_25(void **arg0);
