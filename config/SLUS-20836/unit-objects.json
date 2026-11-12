@@ -222,19 +222,6 @@
       "__dl__FPv": "0x00100610"
     }
   },
-  "0x003cd810": {
-    "duplicates": {
-      "__dt__3RefFv": "0x001489a0"
-    },
-    "exceptions": {
-      "index": "0x00553124",
-      "table": "0x00544474",
-      "table_size": "0x000010"
-    },
-    "externals": {
-      "__dl__FPv": "0x00100610"
-    }
-  },
   "0x003993e0": {
     "emitted": {},
     "duplicates": {
@@ -30892,6 +30879,52 @@
       "__dt__9StringRefFv": "0x00130720"
     },
     "symbol": "FUN_003b04e0"
+  },
+  "0x003cd4b0": {
+    "whole_file": true,
+    "emitted": {
+      "Gap__Bec__beNDMWStageCtl__vfunc_29": "0x003cd4c0",
+      "Gap__Bec__beNDMWStageCtl__vfunc_30": "0x003cd4f0",
+      "Gap__Bec__beNDMWStageCtl__vfunc_31": "0x003cd500",
+      "Gap__Bec__beNDMWStageCtl__vfunc_34": "0x003cd810",
+      "Gap__Bec__beNDMWStageCtl__vfunc_20": "0x003cdaf0"
+    },
+    "data": {
+      "@60": "0x00515680",
+      "DAT_004c22f0": "0x004c22f0",
+      "DAT_005155c0": "0x005155c0",
+      "DAT_005155d0": "0x005155d0",
+      "DAT_005155d8": "0x005155d8",
+      "DAT_005155e0": "0x005155e0",
+      "DAT_005155e8": "0x005155e8",
+      "DAT_005155f0": "0x005155f0",
+      "DAT_005155f8": "0x005155f8",
+      "DAT_00515600": "0x00515600",
+      "DAT_00515608": "0x00515608",
+      "DAT_00515618": "0x00515618",
+      "DAT_00515620": "0x00515620",
+      "DAT_00515628": "0x00515628",
+      "DAT_00515630": "0x00515630",
+      "DAT_00515640": "0x00515640",
+      "DAT_00515650": "0x00515650",
+      "DAT_00515660": "0x00515660",
+      "DAT_00515670": "0x00515670",
+      "DAT_00515698": "0x00515698",
+      "DAT_005156a0": "0x005156a0",
+      "DAT_005156a8": "0x005156a8",
+      "DAT_005156b0": "0x005156b0",
+      "DAT_00586f20": "0x00586f20",
+      "DAT_00588518": "0x00588518",
+      "g_beNDMWStageCtlInfo_metaObject": "0x0058b050",
+      "g_beNDMWStageCtl_metaObject": "0x0058b060"
+    },
+    "duplicates": {
+      "__dt__3RefFv": "0x001489a0"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    },
+    "symbol": "Gap__Bec__beNDMWStageCtl__vfunc_32"
   },
   "0x003cc7d0": {
     "whole_file": true,
