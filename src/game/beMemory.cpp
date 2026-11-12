@@ -1,7 +1,14 @@
-/* beMemory overrides slots 21-27 of its base class with empty bodies (slot 25 reports 0) and
- * returns its class handle from slot 20; it adds no behaviour of its own here. */
 
-extern int g_beMemory_metaObject[4];
+extern "C" void Gap__Bec__beMemory__vfunc_21(void);
+extern "C" void Gap__Bec__beMemory__vfunc_22(void);
+extern "C" void Gap__Bec__beMemory__vfunc_23(void);
+extern "C" void Gap__Bec__beMemory__vfunc_24(void);
+extern "C" int Gap__Bec__beMemory__vfunc_25(void);
+extern "C" void Gap__Bec__beMemory__vfunc_26(void);
+extern "C" void Gap__Bec__beMemory__vfunc_27(void);
+extern "C" int Gap__Bec__beMemory__vfunc_20(void);
+extern "C" int g_beMemory_metaObject[4];
+
 /* Slot 21, empty override. */
 void Gap__Bec__beMemory__vfunc_21(void)
 {

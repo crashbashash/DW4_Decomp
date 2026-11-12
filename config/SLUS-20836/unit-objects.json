@@ -30906,6 +30906,22 @@
     },
     "symbol": "FUN_003b04e0"
   },
+  "0x003afe80": {
+    "whole_file": true,
+    "emitted": {
+      "Gap__Bec__beMemory__vfunc_22": "0x003afe90",
+      "Gap__Bec__beMemory__vfunc_23": "0x003afea0",
+      "Gap__Bec__beMemory__vfunc_24": "0x003afeb0",
+      "Gap__Bec__beMemory__vfunc_25": "0x003afec0",
+      "Gap__Bec__beMemory__vfunc_26": "0x003afed0",
+      "Gap__Bec__beMemory__vfunc_27": "0x003afee0",
+      "Gap__Bec__beMemory__vfunc_20": "0x003afef0"
+    },
+    "data": {
+      "g_beMemory_metaObject": "0x00589090"
+    },
+    "symbol": "Gap__Bec__beMemory__vfunc_21"
+  },
   "0x003ae680": {
     "whole_file": true,
     "emitted": {
