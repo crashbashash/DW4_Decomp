@@ -472,7 +472,7 @@
 0x0040dae0	0x004233f0	ndmw_beNDMWListCtrl	b52	-O4,p -sdatathreshold 2 -inline level=8,bottomup -Iinclude	on	-	whole file
 0x004233f0	0x00424160	ndmw_beNDMWWindowSelect	b52	-O4,p -sdatathreshold 2 -inline level=8,bottomup -Iinclude	on	-	whole file
 0x00424160	0x004267b0	ndmw_beNDMWWindowTitle	b52	-O4,p -sdatathreshold 2 -inline level=8,bottomup -Iinclude	on	-	whole file
-0x004267b0	0x0043d1d0	ndmw_beNDMWShopCtrl00	b52	-O4,p -sdatathreshold 2 -inline level=8,bottomup -Iinclude	on	provisional	whole file; 1 member(s) keep a provisional override
+0x004267b0	0x0043d1d0	ndmw_beNDMWShopCtrl00	b52	-O4,p -sdatathreshold 2 -inline level=8,bottomup -Iinclude	on	-	whole file
 0x0043d1d0	0x00440fd0	ndmw_beNDMWShopSelect00	b52	-O4,p -sdatathreshold 2 -inline level=8,bottomup -Iinclude	on	-	whole file
 0x00440fd0	0x004412c0	ndmw_beNDMWShopTitle00	b52	-O4,p -sdatathreshold 2 -inline level=8,bottomup -Iinclude	on	-	whole file
 0x004412c0	0x00443110	ndmw_beNDMWMdlItem	b52	-O4,p -sdatathreshold 2 -inline level=8,bottomup -Iinclude	on	-	whole file

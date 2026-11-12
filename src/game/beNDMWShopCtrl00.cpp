@@ -446,6 +446,22 @@ struct Str { static inline int intern(int *s) {
 struct Arr { char p0[16]; unsigned char *f16; };
 struct Rec_42df70 { char p0[12]; Arr *f12; };
 extern "C" void FUN_0042df70(beNDMWShopCtrlA1 *arg0);
+extern "C" int DAT_004cf9f0[4];
+extern "C" int DAT_004cf9f8[4];
+extern "C" int DAT_0051b948[4];
+/* Stores a retained card name into slot `index` of the card-info list. */
+static inline void StoreCardName(beNDMWShopCtrlA1 *self, int index, int token) {
+    StringRef name(token);
+    igDataList *list = (igDataList *)self->_cardInfoList;
+    int count = list->_count;
+    if (count != 0 && index >= 0 && index < count) {
+        int *slot = &((int *)list->_data)[index];
+        int text = (int)name.p;
+        if (text) *(int *)(text - 4) = *(int *)(text - 4) + 1;
+        RELS((char *)*slot);
+        *slot = (int)name.p;
+    }
+}
 extern "C" void FUN_0042e330(beNDMWShopCtrlA1 *arg0);
 extern "C" void FUN_0042e9e0(beNDMWShopCtrlA1 *arg0);
 struct Rec_42eb80 { int p[3]; igDataList *f12; };
@@ -3083,6 +3099,80 @@ void FUN_0042df70(beNDMWShopCtrlA1 *arg0) {
             }
             s0++;
         } while (s0 < 6);
+    }
+}
+
+void FUN_0042e330(beNDMWShopCtrlA1 *self) {
+    char pageText[2];
+    igDataList *list;
+    Arr *flags;
+    int page;
+    int record;
+    int i;
+    int count;
+    int model;
+    int card;
+    beMessenger_SelectGroup(self->_messenger, &DAT_0051b398[0]);
+    beMessenger_AppendInt(self->_messenger, self->_playerNo);
+    beMessenger_DispatchSelected(self->_messenger, &DAT_0051b3e8[0]);
+    flags = ((Rec_42df70 *)igProperty_GetRecordArray(beMessenger_GetObject(self->_messenger, 0), &DAT_0051b908[0]))->f12;
+    page = self->_retCode;
+    beMessenger_SendNamed(self->_messenger, &DAT_0051b5d8[0], &DAT_0051b918[0], 0, &DAT_0051b5e8[0]);
+    if (beMessenger_GetObjectCount(self->_messenger) > 0) {
+        record = beMessenger_GetObject(self->_messenger, 0);
+    } else {
+        return;
+    }
+    pageText[1] = 0;
+    pageText[0] = page + '1';
+    beMessenger_SelectGroup(self->_messenger, &DAT_0051b3c0[0]);
+    beMessenger_AppendString(self->_messenger, &DAT_0051b8d8[0]);
+    beMessenger_AppendString(self->_messenger, &DAT_0051b1c8[0]);
+    beMessenger_AppendString(self->_messenger, pageText);
+    beMessenger_DispatchSelected(self->_messenger, &DAT_0051b6b0[0]);
+    switch (page) {
+    case 0: case 1: case 2: case 3: case 4: case 5: case 6: case 7: case 8:
+        for (i = 0; i < 6; i++) {
+            StringRef name = StringList_CopyRetained(((igDataList *)self->_cardInfoList), i);
+            /* matching construct: variant search — `card` before the ram-number load (induction register order) */
+            card = page * 6 + i;
+            model = ((int *)((igIntList *)self->_cardRamNoList)->_data)[i];
+            if (card > 49) {
+                beNDMWWindow_SendModelSequence(self, name.p, model, &DAT_0051b620[0]);
+                StoreCardName(self, i, Str::intern(&DAT_0051b948[0]));
+                list = ((igDataList *)self->_cardRamNoList);
+                count = list->_count;
+                if (count != 0 && i >= 0 && i < count) ((int *)list->_data)[i] = DAT_004cf9f0[0];
+            } else if (flags->f16[card] != 0) {
+                if (model != -1) beNDMWWindow_SendModelSequence(self, name.p, model, &DAT_0051b620[0]);
+                StringRef cardName(Str::intern((int *)beDataBase_GetRecordString(record, card, &DAT_0051b920[0])));
+                beNDMWWindow_PresentModelAtOrigin(self, cardName.p, 0, ((int)beDataBase_GetRecordString(record, card, &DAT_0051b930[0])), 0);
+                list = ((igDataList *)self->_cardInfoList);
+                count = list->_count;
+                if (count != 0 && i >= 0 && i < count) {
+                    int *slot = &((int *)list->_data)[i];
+                    int text = (int)cardName.p;
+                    if (text) *(int *)(text - 4) = *(int *)(text - 4) + 1;
+                    RELS((char *)*slot);
+                    *slot = (int)cardName.p;
+                }
+                list = ((igDataList *)self->_cardRamNoList);
+                count = list->_count;
+                if (count != 0 && i >= 0 && i < count) ((int *)list->_data)[i] = DAT_004cf9f8[0];
+            } else {
+                if (model != -1) {
+                    if (strcmp(name.p, &DAT_0051b938[0]) == 0)
+                        continue;
+                    beNDMWWindow_SendModelSequence(self, name.p, model, &DAT_0051b620[0]);
+                }
+                beNDMWWindow_PresentModelAtOrigin(self, &DAT_0051b938[0], i, ((int)beDataBase_GetRecordString(record, i, &DAT_0051b930[0])), 0);
+                StoreCardName(self, i, Str::intern(&DAT_0051b938[0]));
+                list = ((igDataList *)self->_cardRamNoList);
+                count = list->_count;
+                if (count != 0 && i >= 0 && i < count) ((int *)list->_data)[i] = i;
+            }
+        }
+        break;
     }
 }
 

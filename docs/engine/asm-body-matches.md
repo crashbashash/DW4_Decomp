@@ -116,6 +116,9 @@ General shapes:
   variable and the base load hoists late;
 * explicit byte-offset variables (`jo += 4`) with `j = 0; if (j < n) { jo = 0; do { } while
   (j < n); }` replacing compiler offset webs whose vreg ids sit above anything a declaration can reach;
+* the converse: an indexed loop (`list[i]`, `flags[page * 6 + i]`) in place of a draft's explicit byte offset and
+  running row counter, so the optimiser creates both as induction variables numbered after an inlined helper's
+  locals; the two inductions take s-registers in the order of their first uses in the loop body (`0x42e330`);
 * `#pragma opt_strength_reduction off` (kept in the source file);
 * a harmless `li = (int)lst;` between a diamond and its loop test;
 * `tools/dispatcher/regalloc.py` to read off which node ids must sit below which.

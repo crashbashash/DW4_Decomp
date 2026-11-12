@@ -331,16 +331,6 @@ way, with `operator!=` as a member. 132 source files use that constant and may h
   `tools/check.py` compares that copy under the Attrs profile.
   `tools/roll_profile.py` lists the members. Respelling for b52 moved the rest: most members differed
   only in register order, because b52 gives the first-declared local the higher register.
-* **A frame-slot helper under bottom-up inlining.** `0x42e330` places two of its three string holders below
-  the function's own locals through a static inline helper struct whose members take the loop variables by
-  reference. Under `bottomup` that helper passes `inline_max_size`, so the string intern and release it holds
-  stay calls. The function matches only under top-down `-inline level=8`, so it keeps a provisional
-  `unit-flags.tsv` row, is `foreign-profile` and is held out of the shop unit, which is `provisional`.
-  Written without the struct it does not match under `bottomup`. A helper taking the list index, its byte
-  offset and the interned token is fully inlined with retail's frame slots, but retail keeps the incoming
-  object in `s2` and the row counter in `s4` and this spelling swaps them, which no declaration order of the
-  locals reaches. Holders in the loop body swap two frame slots, and list-store helpers taking the holders as
-  expression temporaries colour the registers differently. The original spelling is open.
 * **Why an `asm { nop }` stood in.** An empty true arm before `else { x = 0; }` was an inlined cast: `static inline void *cast(void *o) { if (o != 0 && igObject_IsKindOf(o, meta) != 0) { return o; } return 0; }`, with the meta read inside it.
 * **`-O3` or `-O4`.** Neither level fits every function. Some functions pass only at `-O4` and others
   only at `-O3`, in spite of
