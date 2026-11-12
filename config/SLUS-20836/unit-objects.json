@@ -933,20 +933,6 @@
       "table_size": "0xc0"
     }
   },
-  "0x003af150": {
-    "emitted": {
-      "__dt__5RP<0>Fv": "0x003afdf0",
-      "__dt__5RP<1>Fv": "0x003afd70",
-      "__dt__5RP<2>Fv": "0x003afcf0",
-      "__dt__5RP<3>Fv": "0x003afc70",
-      "__dt__5RP<4>Fv": "0x003afbf0",
-      "__dt__5RP<5>Fv": "0x003afb70",
-      "__dt__5RP<6>Fv": "0x003afaf0"
-    },
-    "externals": {
-      "__dl__FPv": "0x00100610"
-    }
-  },
   "0x00418090": {
     "duplicates": {
       "__dt__9StringRefFv": "0x00130720",
@@ -30919,6 +30905,38 @@
       "__dt__9StringRefFv": "0x00130720"
     },
     "symbol": "FUN_003b04e0"
+  },
+  "0x003ae680": {
+    "whole_file": true,
+    "emitted": {
+      "FUN_003ae770": "0x003ae770",
+      "Gap__Bec__beSaveUtil__vfunc_32": "0x003ae7c0",
+      "FUN_003af010": "0x003af010",
+      "FUN_003af090": "0x003af090",
+      "Gap__Bec__beSaveUtil__vfunc_30": "0x003af110",
+      "Gap__Bec__beSaveUtil__vfunc_29": "0x003af120",
+      "Gap__Bec__beSaveUtil__vfunc_34": "0x003af150",
+      "__dt__5RP<6>Fv": "0x003afaf0",
+      "__dt__5RP<5>Fv": "0x003afb70",
+      "__dt__5RP<4>Fv": "0x003afbf0",
+      "__dt__5RP<3>Fv": "0x003afc70",
+      "__dt__5RP<2>Fv": "0x003afcf0",
+      "__dt__5RP<1>Fv": "0x003afd70",
+      "__dt__5RP<0>Fv": "0x003afdf0",
+      "Gap__Bec__beSaveUtil__vfunc_20": "0x003afe70"
+    },
+    "data": {
+      "@607": "0x00510750",
+      "DAT_00510738": "0x00510738",
+      "DAT_00587110": "0x00587110",
+      "GPR_00554c14": "0x00554c14",
+      "g_beSaveUtilInfo_metaObject": "0x00588010",
+      "g_beSaveUtil_metaObject": "0x00588020"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    },
+    "symbol": "FUN_003ae680"
   },
   "0x003a9810": {
     "whole_file": true,
