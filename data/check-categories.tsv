@@ -5607,6 +5607,7 @@
 001eff60	p2ReserveDmaCompletions	match	-
 001effc0	p2AddDmaCompletion	match	-
 001f0090	p2FreeDmaCompletions	match	-
+001f00e0	p2StartDmaPacket	match	-
 001f0310	p2TryStartDmaPacket	match	-
 001f0390	p2PreviousFinishFuncDonePredicate	match	-
 001f03a0	p2AddPreviousFinishFuncPredicate	match	-
