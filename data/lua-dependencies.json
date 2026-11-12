@@ -39075,7 +39075,7 @@
       "address": 4444624,
       "name": "Gap__Bec__beNDMWShopSelect00__vfunc_22",
       "size": 636,
-      "source": "src/unmatched/Gap__Bec__beNDMWShopSelect00__vfunc_22.cpp",
+      "source": "src/game/beNDMWShopSelect00.cpp",
       "direct": [
         {
           "site": 4444696,
@@ -39186,7 +39186,7 @@
       "address": 4445264,
       "name": "Gap__Bec__beNDMWShopSelect01__vfunc_22",
       "size": 1976,
-      "source": "src/unmatched/Gap__Bec__beNDMWShopSelect01__vfunc_22.cpp",
+      "source": "src/game/beNDMWShopSelect00.cpp",
       "direct": [
         {
           "site": 4445544,
@@ -39531,7 +39531,7 @@
       "address": 4451520,
       "name": "Gap__Bec__beNDMWShopSelect11__vfunc_22",
       "size": 3752,
-      "source": "src/unmatched/Gap__Bec__beNDMWShopSelect11__vfunc_22.cpp",
+      "source": "src/game/beNDMWShopSelect00.cpp",
       "direct": [
         {
           "site": 4451564,
@@ -40272,7 +40272,7 @@
       "address": 4455280,
       "name": "beNDMWShopSelect11_RefreshStatCosts",
       "size": 696,
-      "source": "src/unmatched/beNDMWShopSelect11_RefreshStatCosts.cpp",
+      "source": "src/game/beNDMWShopSelect00.cpp",
       "direct": [
         {
           "site": 4455336,
