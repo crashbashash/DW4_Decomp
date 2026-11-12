@@ -1,21 +1,44 @@
 #include "dw4/reflected.h"
-extern "C" {
-int FUN_00357600(...);
-int FUN_0038f9b0(...);
-int beMessenger_AppendFloat(int, float);
-float beMessenger_GetFloat(int, int);
-int beMessenger_GetInt(int, int);
-void *beMessenger_GetObject(int, int);
-int beMessenger_GetString(int, int);
-int beMessenger_PopArgContext(int);
-int beMessenger_PushArgContext(int);
-unsigned int beMessenger_ResolveEnumValue(int, int, int);
-int beMessenger_SendNamed(int, void *, int, int, void *);
-int igObject_Destroy(...);
-extern int DAT_0050ee88[4];
-extern int DAT_0050ee98[4];
+
+extern "C" void Gap__Bec__beMeterCtrl__vfunc_32(void);
+extern "C" int Gap__Bec__beMeterCtrl__vfunc_30(void);
+extern "C" int Gap__Bec__beMeterCtrl__vfunc_20(void);
+extern "C" void beMessenger_RegisterReceiverFromInfo(int, int, char *);
+extern "C" int FUN_00357600(...);
+extern "C" int FUN_0038f9b0(...);
+extern "C" int beMessenger_AppendFloat(int, float);
+extern "C" float beMessenger_GetFloat(int, int);
+extern "C" int beMessenger_GetInt(int, int);
+extern "C" void *beMessenger_GetObject(int, int);
+extern "C" int beMessenger_GetString(int, int);
+extern "C" int beMessenger_PopArgContext(int);
+extern "C" int beMessenger_PushArgContext(int);
+extern "C" unsigned int beMessenger_ResolveEnumValue(int, int, int);
+extern "C" int beMessenger_SendNamed(int, void *, int, int, void *);
+extern "C" int igObject_Destroy(...);
+extern "C" int g_beMeterCtrlInfo_metaObject[4];
+extern "C" int g_beMeterCtrl_metaObject[4];
+extern "C" char DAT_0050ee78[];
+extern "C" void Gap__Bec__beMeterCtrl__vfunc_29(beMeterCtrl * p0, int p1, char * p2);
+extern "C" int DAT_0050ee88[4];
+extern "C" int DAT_0050ee98[4];
+extern "C" int Gap__Bec__beMeterCtrl__vfunc_33(beMeterCtrl *arg0, beBaseInfoRam *arg1, int arg2);
+
+void Gap__Bec__beMeterCtrl__vfunc_32(void)
+{
 }
-extern "C" int Gap__Bec__beMeterCtrl__vfunc_33(beMeterCtrl *arg0, beBaseInfoRam *arg1, int arg2) {
+
+int Gap__Bec__beMeterCtrl__vfunc_30(void)
+{
+    return g_beMeterCtrlInfo_metaObject[0];
+}
+
+void Gap__Bec__beMeterCtrl__vfunc_29(beMeterCtrl * p0, int p1, char * p2)
+{
+    beMessenger_RegisterReceiverFromInfo(p0->_messenger, p1, DAT_0050ee78);
+}
+
+int Gap__Bec__beMeterCtrl__vfunc_33(beMeterCtrl *arg0, beBaseInfoRam *arg1, int arg2) {
     beMeterCtrlOneData *s1;
     igObjectList *l;
     float f0, f2, f3, v;
@@ -93,4 +116,9 @@ extern "C" int Gap__Bec__beMeterCtrl__vfunc_33(beMeterCtrl *arg0, beBaseInfoRam 
     default:
         return 0;
     }
+}
+
+int Gap__Bec__beMeterCtrl__vfunc_20(void)
+{
+    return g_beMeterCtrl_metaObject[0];
 }
