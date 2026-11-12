@@ -4937,12 +4937,12 @@
 001cb010	FUN_001cb010	match	-
 001cb1f0	FUN_001cb1f0	match	-
 001cb2d0	FUN_001cb2d0	match	-
-001cb340	FUN_001cb340	match	DEFERRED duplicate 0x25a230 __dt__25igSmartPointer<8SrObject>Fv 128B (compared under the profile of its retail unit)
+001cb340	FUN_001cb340	match	-
 001ccb20	FUN_001ccb20	match	-
 001ccb50	Gap__Sg__igIniShaderFactory__vfunc_23	match	-
 001ccd00	Gap__Sg__igIniShaderFactory__vfunc_26	match	-
 001ccd10	FUN_001ccd10	match	-
-001cce60	Gap__Sg__igIniShaderFactory__vfunc_27	match	DEFERRED duplicate 0x25a230 __dt__20igSmartPointer<3Obj>Fv 128B (compared under the profile of its retail unit)
+001cce60	Gap__Sg__igIniShaderFactory__vfunc_27	match	-
 001cd0c0	Gap__Sg__igIniShaderFactory__vfunc_17	match	-
 001cd110	Gap__Sg__igIniShaderFactory__vfunc_18	match	-
 001cd150	FUN_001cd150	match	-
@@ -13191,7 +13191,7 @@
 003337f0	FUN_003337f0	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
 00333800	Gap__igAdxFile__vfunc_01	match	-
 00333820	Gap__igAdxFile__vfunc_11	match	-
-00333860	Gap__igAdxFile__vfunc_07	unapproved	unapproved: 1 volatile without an approval row
+00333860	Gap__igAdxFile__vfunc_07	match	-
 003338c0	Gap__igAdxFile__vfunc_20	match	-
 003338d0	Gap__igAdxFile__vfunc_02	match	-
 00333930	Gap__igAdxFile__vfunc_08	match	-

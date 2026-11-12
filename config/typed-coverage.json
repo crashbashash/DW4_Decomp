@@ -339,7 +339,7 @@
   "igActorManager": 5,
   "igAdxAfsFile": 2,
   "igAdxAudio": 1,
-  "igAdxFile": 116,
+  "igAdxFile": 119,
   "igAliasMemoryPool": 78,
   "igAlphaFunctionAttr": 2,
   "igAnimation": 7,
@@ -569,7 +569,7 @@
   "igStringMetaField": 64,
   "igStringObj": 20,
   "igStringObjList": 2,
-  "igStringRefList": 53,
+  "igStringRefList": 54,
   "igStructMetaField": 11,
   "igSwitch": 1,
   "igSymbolTable": 4,
@@ -625,11 +625,11 @@
   "audio": {
    "files": 3,
    "offset_casts": 10,
-   "other_members": 69,
-   "recovered": 119,
-   "recovered_pct": 48.97,
+   "other_members": 70,
+   "recovered": 122,
+   "recovered_pct": 49.39,
    "synthetic": 45,
-   "total": 243
+   "total": 247
   },
   "cri": {
    "files": 38,
@@ -641,13 +641,13 @@
    "total": 3043
   },
   "engine": {
-   "files": 89,
-   "offset_casts": 4087,
-   "other_members": 10772,
-   "recovered": 6057,
-   "recovered_pct": 21.65,
-   "synthetic": 7059,
-   "total": 27975
+   "files": 88,
+   "offset_casts": 4086,
+   "other_members": 10781,
+   "recovered": 6058,
+   "recovered_pct": 21.64,
+   "synthetic": 7072,
+   "total": 27997
   },
   "game": {
    "files": 84,
@@ -722,19 +722,19 @@
    "total": 3776
   },
   "unmatched": {
-   "files": 1998,
+   "files": 1996,
    "offset_casts": 1009,
-   "other_members": 2813,
+   "other_members": 2794,
    "recovered": 596,
-   "recovered_pct": 10.7,
-   "synthetic": 1154,
-   "total": 5572
+   "recovered_pct": 10.77,
+   "synthetic": 1136,
+   "total": 5535
   }
  },
  "note": "Baseline for tools/typed_coverage.py --check. The gate is on the *count* of recovered accesses, never on the percentage: the m2c loop keeps adding matched (and so untyped) C, so the ratio can fall while the count only grows. Update it deliberately with --update-baseline and commit, so every change in coverage is a reviewed diff.",
- "offset_casts": 6434,
- "recovered": 25904,
- "synthetic": 10063,
- "total": 66416,
+ "offset_casts": 6433,
+ "recovered": 25908,
+ "synthetic": 10058,
+ "total": 66405,
  "typeable": 363
 }
