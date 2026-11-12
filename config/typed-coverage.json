@@ -385,7 +385,7 @@
   "igCommonTraversal": 92,
   "igCompileTraversal": 22,
   "igCompoundMetaField": 4,
-  "igCompressedAnimationSequenceQS": 11,
+  "igCompressedAnimationSequenceQS": 15,
   "igContext": 14,
   "igContextExtInfo": 8,
   "igContextExtInfoList": 8,
@@ -444,6 +444,7 @@
   "igInfo": 2,
   "igInfoList": 28,
   "igInfoManagerOrderedList": 2,
+  "igIniShaderFactory": 5,
   "igInsightCore": 34,
   "igIntArrayMetaField": 15,
   "igIntList": 345,
@@ -641,22 +642,22 @@
    "total": 3043
   },
   "engine": {
-   "files": 721,
-   "offset_casts": 3321,
-   "other_members": 8625,
-   "recovered": 4897,
-   "recovered_pct": 21.97,
-   "synthetic": 5443,
-   "total": 22286
+   "files": 314,
+   "offset_casts": 3752,
+   "other_members": 10346,
+   "recovered": 5738,
+   "recovered_pct": 21.38,
+   "synthetic": 6996,
+   "total": 26832
   },
   "game": {
-   "files": 1589,
+   "files": 1587,
    "offset_casts": 58,
    "other_members": 286,
-   "recovered": 2544,
-   "recovered_pct": 85.14,
+   "recovered": 2540,
+   "recovered_pct": 85.12,
    "synthetic": 100,
-   "total": 2988
+   "total": 2984
   },
   "libgcc": {
    "files": 7,
@@ -731,19 +732,19 @@
    "total": 3776
   },
   "unmatched": {
-   "files": 6916,
-   "offset_casts": 3065,
-   "other_members": 7829,
-   "recovered": 18749,
-   "recovered_pct": 55.07,
-   "synthetic": 4404,
-   "total": 34047
+   "files": 5877,
+   "offset_casts": 2639,
+   "other_members": 6153,
+   "recovered": 17921,
+   "recovered_pct": 60.67,
+   "synthetic": 2825,
+   "total": 29538
   }
  },
  "note": "Baseline for tools/typed_coverage.py --check. The gate is on the *count* of recovered accesses, never on the percentage: the m2c loop keeps adding matched (and so untyped) C, so the ratio can fall while the count only grows. Update it deliberately with --update-baseline and commit, so every change in coverage is a reviewed diff.",
- "offset_casts": 6500,
- "recovered": 26204,
- "synthetic": 10391,
- "total": 67224,
+ "offset_casts": 6505,
+ "recovered": 26213,
+ "synthetic": 10365,
+ "total": 67257,
  "typeable": 363
 }

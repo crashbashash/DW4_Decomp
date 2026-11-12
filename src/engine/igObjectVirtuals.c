@@ -1,28 +1,8 @@
 /* Shared default virtual slots that almost every class inherits, so most are empty or return a
  * constant. The slot number is the only name evidence, so the bodies are documented by what they
- * do. The `__<addr>` names are distinct bodies resolved to the same slot. */
+ * do. */
 
-#include "dw4/reflected.h"
 extern int g_beModelCtrlInfo_metaObject[4];
-int Gap__Core__igObject__vfunc_08__002ff0f0();
-
-/* Second copy of the slot 8 forwarder. */
-int Gap__Core__igObject__vfunc_08__001ce700()
-{
-    return Gap__Core__igObject__vfunc_08__002ff0f0();
-}
-
-/* Third copy of the slot 8 forwarder. */
-int Gap__Core__igObject__vfunc_08__001d3390()
-{
-    return Gap__Core__igObject__vfunc_08__002ff0f0();
-}
-
-/* Slot 36, shared by igTransform descendants: store the igTransform::_target field (+96). */
-void Gap__Core__igObject__vfunc_36(igTransform *self, int target)
-{
-    self->_target = target;
-}
 
 /* Slot 28 default: empty. */
 void Gap__Core__igObject__vfunc_28(void)

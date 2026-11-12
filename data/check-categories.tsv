@@ -4636,8 +4636,8 @@
 001ae750	FUN_001ae750	match	-
 001ae780	FUN_001ae780	match	-
 001aea60	Gap__Sg__igAnimationDatabase__vfunc_24	match	-
-001aedd0	FUN_001aedd0	match	DEFERRED duplicate 0x25a230 __dt__9RecordRefFv 128B (compared under the profile of its retail unit)
-001aefe0	Gap__Sg__igAnimationDatabase__vfunc_23	match	DEFERRED duplicate 0x25a230 __dt__30igSmartPointer<12AnimDbObject>Fv 128B (compared under the profile of its retail unit)
+001aedd0	FUN_001aedd0	match	-
+001aefe0	Gap__Sg__igAnimationDatabase__vfunc_23	match	-
 001af510	FUN_001af510	match	-
 001af5e0	Gap__Sg__igAnimationState__vfunc_23	match	-
 001af5f0	Gap__Sg__igAnimationState__vfunc_24	match	-
@@ -4653,11 +4653,11 @@
 001afa30	Gap__Sg__igAttrStackManager__vfunc_10	match	-
 001afb00	FUN_001afb00	match	-
 001afb60	FUN_001afb60	match	-
-001afc90	FUN_001afc90	match	DEFERRED duplicate 0x25a230 __dt__24igSmartPointer<7AttrObj>Fv 128B (compared under the profile of its retail unit)
+001afc90	FUN_001afc90	match	-
 001b0000	FUN_001b0000	match	-
 001b0250	FUN_001b0250	match	-
 001b0440	FUN_001b0440	match	-
-001b0450	FUN_001b0450	match	DEFERRED duplicate 0x25a230 __dt__19igSmartPointer<2Rc>Fv 128B (compared under the profile of its retail unit)
+001b0450	FUN_001b0450	match	-
 001b0aa0	FUN_001b0aa0	unapproved	unapproved: 3 volatile without an approval row
 001b0dc0	FUN_001b0dc0	match	-
 001b0ea0	FUN_001b0ea0	unapproved	unapproved: 2 volatile without an approval row
@@ -4668,13 +4668,13 @@
 001b12f0	FUN_001b12f0	match	-
 001b13d0	FUN_001b13d0	match	-
 001b1490	FUN_001b1490	match	-
-001b1cf0	FUN_001b1cf0	match	jump table 0x4e4540: 17 entries, 68 bytes, matches retail
-001b1dc0	FUN_001b1dc0	match	jump table 0x4e4590: 17 entries, 68 bytes, matches retail
+001b1cf0	FUN_001b1cf0	match	-
+001b1dc0	FUN_001b1dc0	match	-
 001b1e50	FUN_001b1e50	match	-
 001b21d0	FUN_001b21d0	match	-
 001b23b0	FUN_001b23b0	match	-
-001b23e0	FUN_001b23e0	match	DEFERRED duplicate 0x25a230 __dt__18igSmartPointer<1X>Fv 128B (compared under the profile of its retail unit)
-001b24d0	FUN_001b24d0	match	DEFERRED duplicate 0x25a230 __dt__30igSmartPointer<12BoundsObject>Fv 128B (compared under the profile of its retail unit)
+001b23e0	FUN_001b23e0	match	-
+001b24d0	FUN_001b24d0	match	-
 001b2600	FUN_001b2600	match	-
 001b26f0	FUN_001b26f0	match	-
 001b2750	Gap__Core__igObject__vfunc_37	match	-
@@ -4705,7 +4705,7 @@
 001b6e20	Gap__Sg__igCommonTraversal__vfunc_31	match	-
 001b6ee0	FUN_001b6ee0	match	-
 001b6f30	FUN_001b6f30	match	-
-001b7010	Gap__Sg__igCommonTraversal__vfunc_28	match	DEFERRED duplicate 0x25a230 __dt__18igSmartPointer<1R>Fv 128B (compared under the profile of its retail unit)
+001b7010	Gap__Sg__igCommonTraversal__vfunc_28	match	-
 001b7330	FUN_001b7330	match	-
 001b73d0	FUN_001b73d0	match	-
 001b73e0	Gap__Sg__igCommonTraversal__vfunc_23	match	-
@@ -4722,6 +4722,7 @@
 001b7d70	FUN_001b7d70	match	-
 001b7f50	FUN_001b7f50	unapproved	unapproved: 2 volatile without an approval row
 001b85c0	FUN_001b85c0	unapproved	unapproved: 2 volatile without an approval row
+001b8720	FUN_001b8720	match	-
 001b8740	Gap__Sg__igActor__vfunc_37	match	-
 001b89b0	FUN_001b89b0	match	-
 001b8a00	FUN_001b8a00	match	-
@@ -4743,7 +4744,9 @@
 001ba1a0	FUN_001ba1a0	match	-
 001ba200	FUN_001ba200	match	-
 001ba650	FUN_001ba650	match	-
+001ba6b0	FUN_001ba6b0	match	-
 001ba6e0	FUN_001ba6e0	unapproved	unapproved: 2 volatile without an approval row
+001ba850	FUN_001ba850	match	-
 001ba880	FUN_001ba880	match	-
 001ba9f0	Gap__Sg__igTransformRecorder__vfunc_38	match	-
 001baa00	Gap__Sg__igTransformRecorder__vfunc_37	match	-
@@ -4762,7 +4765,7 @@
 001bb310	Gap__Sg__igCompileTraversal__vfunc_31	match	-
 001bb510	Gap__Sg__igCompileTraversal__vfunc_10	match	-
 001bb550	FUN_001bb550	match	-
-001bb880	Gap__Sg__igCompileTraversal__vfunc_23	match	DEFERRED duplicate 0x25a230 __dt__18igSmartPointer<1T>Fv 128B (compared under the profile of its retail unit)
+001bb880	Gap__Sg__igCompileTraversal__vfunc_23	match	-
 001bba70	Gap__Sg__igCompileTraversal__vfunc_24	match	-
 001bbae0	FUN_001bbae0	match	-
 001bc050	FUN_001bc050	unapproved	unapproved: 2 volatile without an approval row
@@ -4829,7 +4832,7 @@
 001c12d0	Gap__Sg__igEnbayaContextPool__vfunc_13	match	-
 001c1450	Gap__Sg__igEnbayaContextPool__vfunc_04	match	-
 001c1560	FUN_001c1560	match	-
-001c17e0	FUN_001c17e0	match	DEFERRED duplicate 0x2e2300 __dt__14PoolListHolderFv 68B (compared under the profile of its retail unit)
+001c17e0	FUN_001c17e0	match	-
 001c1a80	FUN_001c1a80	match	-
 001c1b50	Gap__Sg__igEnbayaTransformSource__vfunc_23	match	-
 001c1b80	Gap__Sg__igEnbayaTransformSource__vfunc_24	match	-
@@ -4868,6 +4871,7 @@
 001c47a0	FUN_001c47a0	match	-
 001c4ac0	FUN_001c4ac0	match	-
 001c5030	FUN_001c5030	match	-
+001c5130	FUN_001c5130	match	-
 001c5160	FUN_001c5160	match	-
 001c51b0	FUN_001c51b0	match	-
 001c51d0	FUN_001c51d0	match	-
@@ -4906,7 +4910,7 @@
 001c6520	FUN_001c6520	match	-
 001c66c0	FUN_001c66c0	match	-
 001c6fa0	FUN_001c6fa0	match	-
-001c70d0	Gap__Sg__igIniShaderFactory__vfunc_24	match	DEFERRED duplicate 0x25a230 __dt__30igSmartPointer<12ShaderObject>Fv 128B (compared under the profile of its retail unit)
+001c70d0	Gap__Sg__igIniShaderFactory__vfunc_24	match	-
 001c7600	FUN_001c7600	match	-
 001c8c00	igStringMetaField_AssignRetainedToken	match	-
 001ca620	StringList_AppendRetained	match	-
@@ -4915,7 +4919,7 @@
 001cade0	FUN_001cade0	match	-
 001cafb0	Gap__Sg__igShaderProcessor__vfunc_22	match	-
 001cafc0	FUN_001cafc0	match	-
-001cb010	FUN_001cb010	match	DEFERRED duplicate 0x25a230 __dt__32igSmartPointer<14IniValueObject>Fv 128B (compared under the profile of its retail unit)
+001cb010	FUN_001cb010	match	-
 001cb1f0	FUN_001cb1f0	match	-
 001cb2d0	FUN_001cb2d0	match	-
 001cb340	FUN_001cb340	match	DEFERRED duplicate 0x25a230 __dt__25igSmartPointer<8SrObject>Fv 128B (compared under the profile of its retail unit)
@@ -4931,7 +4935,7 @@
 001cdbb0	FUN_001cdbb0	match	-
 001ce350	FUN_001ce350	match	-
 001ce3d0	Gap__Core__igFolder__vfunc_25	match	-
-001ce400	FUN_001ce400	match	DEFERRED duplicate 0x333760 __dt__12IniStringRefFv 128B (compared under the profile of its retail unit)
+001ce400	FUN_001ce400	match	-
 001ce640	FUN_001ce640	match	-
 001ce660	FUN_001ce660	match	-
 001ce670	Gap__Bec__beHitLandModelTraversal__vfunc_07	match	-
@@ -4945,6 +4949,7 @@
 001ceaa0	Gap__Bec__beHitLandModelTraversal__vfunc_22	match	-
 001ceab0	FUN_001ceab0	match	-
 001cf950	FUN_001cf950	match	-
+001cf980	FUN_001cf980	match	-
 001cf990	FUN_001cf990	match	-
 001cfaa0	FUN_001cfaa0	match	-
 001cfc60	FUN_001cfc60	match	-
@@ -5009,14 +5014,14 @@
 001d62f0	Gap__Sg__igProjectiveShadowShader__vfunc_31	match	-
 001d6340	FUN_001d6340	match	-
 001d63c0	Gap__Bec__ParticleInfo__vfunc_22	match	-
-001d6410	FUN_001d6410	match	DEFERRED duplicate 0x25a230 __dt__26igSmartPointer<9PathEntry>Fv 128B (compared under the profile of its retail unit)
+001d6410	FUN_001d6410	match	-
 001d6560	FUN_001d6560	match	-
-001d65e0	FUN_001d65e0	match	DEFERRED duplicate 0x25a230 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
-001d6700	FUN_001d6700	match	DEFERRED duplicate 0x25a230 __dt__29igSmartPointer<11ChildObject>Fv 128B (compared under the profile of its retail unit)
+001d65e0	FUN_001d65e0	match	-
+001d6700	FUN_001d6700	match	-
 001d6790	FUN_001d6790	match	-
 001d68e0	FUN_001d68e0	match	-
 001d68f0	FUN_001d68f0	match	-
-001d6900	FUN_001d6900	match	DEFERRED duplicate 0x25a230 __dt__26igSmartPointer<9Primitive>Fv 128B (compared under the profile of its retail unit)
+001d6900	FUN_001d6900	match	-
 001d6a70	FUN_001d6a70	match	-
 001d7120	FUN_001d7120	match	-
 001d7630	FUN_001d7630	match	-
@@ -5035,7 +5040,7 @@
 001d87b0	FUN_001d87b0	match	-
 001d8870	FUN_001d8870	match	-
 001d8930	Gap__Sg__igShaderData__vfunc_17	match	-
-001d8980	Gap__Sg__igShaderFactory__vfunc_23	match	DEFERRED duplicate 0x25a230 __dt__21igSmartPointer<4Attr>Fv 128B (compared under the profile of its retail unit)
+001d8980	Gap__Sg__igShaderFactory__vfunc_23	match	-
 001d8a30	Gap__Sg__igShaderFactory__vfunc_24	match	-
 001d8a60	Gap__Sg__igShaderFactory__vfunc_25	match	-
 001d8aa0	Gap__Sg__igShaderFactory__vfunc_26	match	-
@@ -5121,6 +5126,7 @@
 001e0590	Gap__Sg__igTraversal__vfunc_23	match	-
 001e05a0	Gap__Sg__igTraversal__vfunc_24	match	-
 001e06c0	FUN_001e06c0	match	-
+001e0790	FUN_001e0790	match	-
 001e07a0	FUN_001e07a0	match	-
 001e0830	thunk_FUN_001c1c50	match	-
 001e0840	Gap__Sg__igPsx2EnvironmentMapShader__vfunc_10	match	-

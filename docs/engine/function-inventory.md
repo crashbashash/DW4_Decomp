@@ -164,7 +164,7 @@ compiler's address CSE, a matching construct the m2c pass used (`igTextureFuncti
 `igStencilFunctionAttr_InitFields`, `igBlendFunctionAttr_InitFields`, `igMovieInfo_InitFields`);
 naming the function there changes the bytes. The
 real reason the original did not keep the address live is unproven ([open questions](#open-questions)). `FUN_001c0f00` passes the function
-by name (`src/unmatched/FUN_001c0f00.cpp`).
+by name (`src/engine/scenegraph/igEnbayaAnimationState_tail.inc`).
 
 ## 6. Replaying and checking
 
