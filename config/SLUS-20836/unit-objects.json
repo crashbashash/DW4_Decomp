@@ -31045,6 +31045,26 @@
     },
     "symbol": "FUN_003b04e0"
   },
+  "0x0039c160": {
+    "whole_file": true,
+    "emitted": {
+      "Gap__Bec__bePoint01__vfunc_30": "0x0039c170",
+      "Gap__Bec__bePoint01__vfunc_29": "0x0039c180",
+      "Gap__Bec__bePoint01__vfunc_31": "0x0039c1b0",
+      "FUN_0039c1c0": "0x0039c1c0",
+      "Gap__Bec__bePoint01__vfunc_34": "0x0039c260",
+      "Gap__Bec__bePoint01__vfunc_20": "0x0039c420"
+    },
+    "data": {
+      "@72": "0x0050f6f0",
+      "DAT_004e0858": "0x004e0858",
+      "DAT_004e0ef0": "0x004e0ef0",
+      "DAT_0050f6e0": "0x0050f6e0",
+      "g_bePoint01Info_metaObject": "0x00588478",
+      "g_bePoint01_metaObject": "0x00588498"
+    },
+    "symbol": "Gap__Bec__bePoint01__vfunc_32"
+  },
   "0x0039b880": {
     "whole_file": true,
     "emitted": {
