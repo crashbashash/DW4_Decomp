@@ -1223,32 +1223,6 @@
     },
     "symbol": "Gap__Bec__beNDMWShopSelect00__vfunc_22"
   },
-  "0x004429d0": {
-    "duplicates": {
-      "__dt__25igSmartPointer<8igObject>Fv": "0x0033e9c0"
-    },
-    "exceptions": {
-      "index": "0x00554588",
-      "table": "0x00546e64",
-      "table_size": "0x000010"
-    },
-    "externals": {
-      "__dl__FPv": "0x00100610"
-    }
-  },
-  "0x00442d10": {
-    "duplicates": {
-      "__dt__25igSmartPointer<8igObject>Fv": "0x0033e9c0"
-    },
-    "exceptions": {
-      "index": "0x005545a0",
-      "table": "0x00546e84",
-      "table_size": "0x000010"
-    },
-    "externals": {
-      "__dl__FPv": "0x00100610"
-    }
-  },
   "0x00443900": {
     "duplicates": {
       "__dt__25igSmartPointer<8igObject>Fv": "0x0033e9c0"
@@ -1469,29 +1443,6 @@
       "index": "0x005537d8",
       "table": "0x00544c20",
       "table_size": "0x3c"
-    }
-  },
-  "0x004415b0": {
-    "emitted": {
-      "__dt__8ItemRefCFv": "0x00441f10",
-      "__dt__8ItemRefBFv": "0x00441f90",
-      "__dt__39igSmartPointer<21beNDMWMdlItemInfoWork>Fv": "0x00442010"
-    },
-    "duplicates": {
-      "__dt__9ObjectRefFv": "0x0033e9c0",
-      "__dt__7ItemRefFv": "0x003b9ba0",
-      "__dt__11ItemRefK<1>Fv": "0x003d9d50",
-      "__dt__11ItemRefK<2>Fv": "0x003d9cd0",
-      "__dt__11ItemRefK<3>Fv": "0x003d9c50",
-      "__dt__11ItemRefK<4>Fv": "0x003d9bd0"
-    },
-    "externals": {
-      "__dl__FPv": "0x00100610"
-    },
-    "exceptions": {
-      "index": "0x0055454c",
-      "table": "0x00546dac",
-      "table_size": "0xa4"
     }
   },
   "0x003f6620": {
@@ -4000,19 +3951,6 @@
       "index": "0x00553e14",
       "table": "0x00545740",
       "table_size": "0x000020"
-    },
-    "externals": {
-      "__dl__FPv": "0x00100610"
-    }
-  },
-  "0x00442bd0": {
-    "duplicates": {
-      "__dt__25igSmartPointer<8igObject>Fv": "0x0033e9c0"
-    },
-    "exceptions": {
-      "index": "0x00554594",
-      "table": "0x00546e74",
-      "table_size": "0x000010"
     },
     "externals": {
       "__dl__FPv": "0x00100610"
@@ -30459,6 +30397,73 @@
       "__dt__9StringRefFv": "0x00130720"
     },
     "symbol": "FUN_003b04e0"
+  },
+  "0x004412c0": {
+    "whole_file": true,
+    "emitted": {
+      "Gap__Bec__beNDMWMdlItem__vfunc_35": "0x004413b0",
+      "Gap__Bec__beNDMWMdlItem__vfunc_37": "0x004413e0",
+      "Gap__Bec__beNDMWMdlItem__vfunc_23": "0x00441410",
+      "Gap__Bec__beNDMWMdlItem__vfunc_32": "0x00441450",
+      "Gap__Bec__beNDMWMdlItem__vfunc_36": "0x004415b0",
+      "__dt__8ItemRefCFv": "0x00441f10",
+      "__dt__8ItemRefBFv": "0x00441f90",
+      "__dt__39igSmartPointer<21beNDMWMdlItemInfoWork>Fv": "0x00442010",
+      "Gap__Bec__beNDMWMdlItem__vfunc_43": "0x004429d0",
+      "Gap__Bec__beNDMWMdlItem__vfunc_44": "0x00442bd0",
+      "Gap__Bec__beNDMWMdlItem__vfunc_45": "0x00442d10",
+      "Gap__Bec__beNDMWMdlItem__vfunc_20": "0x00443100"
+    },
+    "data": {
+      "@1027": "0x0051d130",
+      "@1028": "0x0051d110",
+      "@737": "0x0051cf80",
+      "DAT_004cfb40": "0x004cfb40",
+      "DAT_004cfb44": "0x004cfb44",
+      "DAT_004cfc10": "0x004cfc10",
+      "DAT_004e0858": "0x004e0858",
+      "DAT_004e1058": "0x004e1058",
+      "DAT_004e105c": "0x004e105c",
+      "DAT_004e1060": "0x004e1060",
+      "DAT_0051ce80": "0x0051ce80",
+      "DAT_0051ce88": "0x0051ce88",
+      "DAT_0051ce98": "0x0051ce98",
+      "DAT_0051cea8": "0x0051cea8",
+      "DAT_0051cf58": "0x0051cf58",
+      "DAT_0051cf60": "0x0051cf60",
+      "DAT_0051cf68": "0x0051cf68",
+      "DAT_0051cf78": "0x0051cf78",
+      "DAT_0051cfc8": "0x0051cfc8",
+      "DAT_0051cfd0": "0x0051cfd0",
+      "DAT_0051cfd8": "0x0051cfd8",
+      "DAT_0051d018": "0x0051d018",
+      "DAT_0051d0a8": "0x0051d0a8",
+      "DAT_0051d0b0": "0x0051d0b0",
+      "DAT_0051d0b8": "0x0051d0b8",
+      "DAT_0051d0c8": "0x0051d0c8",
+      "DAT_0051d0d8": "0x0051d0d8",
+      "DAT_0051d0e8": "0x0051d0e8",
+      "DAT_0051d0f8": "0x0051d0f8",
+      "DAT_00585be0": "0x00585be0",
+      "DAT_00587108": "0x00587108",
+      "DAT_00587110": "0x00587110",
+      "GPR_00554a74": "0x00554a74",
+      "GPR_00554c14": "0x00554c14",
+      "g_beNDMWMdlItem_metaObject": "0x0058b4a8",
+      "g_igViewerSceneInfoManager_metaObject": "0x0058c790"
+    },
+    "duplicates": {
+      "__dt__11ItemRefK<1>Fv": "0x003d9d50",
+      "__dt__11ItemRefK<2>Fv": "0x003d9cd0",
+      "__dt__11ItemRefK<3>Fv": "0x003d9c50",
+      "__dt__11ItemRefK<4>Fv": "0x003d9bd0",
+      "__dt__7ItemRefFv": "0x003b9ba0",
+      "__dt__9ObjectRefFv": "0x0033e9c0"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    },
+    "symbol": "FUN_004412c0"
   },
   "0x00440fd0": {
     "whole_file": true,
