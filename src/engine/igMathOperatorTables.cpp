@@ -82,6 +82,26 @@ static inline void setAt(OpTable *t, int i, int v) {
     if (t->count != 0 && i >= 0 && i < t->count) { t->data[i] = v; }
 }
 
+// igTDataList<int>::set(index, const int &): the value reference makes the slot's value
+// materialise before the bounds checks.
+static inline void setSlot(OpTable *t, int i, const int &v) {
+    if (t->count != 0 && i >= 0 && i < t->count) {
+        t->data[i] = v;
+    }
+}
+
+extern "C" void FUN_002d6790(OpTable *, int, int);
+
+static inline void setCount(OpTable *t, int n) {
+    if (n >= 0) {
+        if (n <= t->capacity) {
+            t->count = n;
+        } else {
+            FUN_002d6790(t, n, 4);
+        }
+    }
+}
+
 static inline void setElement(const InstanceListRef &list, int index, const igSmartPointer<InstanceNode> &element) {
     InstanceNode *value = element.p;
     NodeList *l = list.p;
@@ -119,6 +139,69 @@ void FUN_0018ec40(void) {
     DAT_00561120 = FUN_001896e0(Memory_GetAllocatorBySelector(DAT_00587038[0]));
     DAT_00561128 = FUN_00189580(Memory_GetAllocatorBySelector(DAT_00587038[0]));
 }
+
+int FUN_002fe290(int, int);
+int FUN_0018f3e0(void);
+void FUN_0018f3f0(void);
+int FUN_0018f400(void);
+void FUN_0018f410(void);
+int FUN_0018f420(void);
+void FUN_0018f430(void);
+void FUN_0018f440(void);
+int FUN_0018f450(void);
+void FUN_0018f460(void);
+int FUN_0018f470(void);
+void FUN_0018f480(void);
+int FUN_0018f490(void);
+
+void FUN_0018edb0(int meta) {
+    int root = DAT_00560f08[0];
+    unsigned n;
+    unsigned i;
+    unsigned j;
+    if (FUN_002fe290(meta, root) == 0) {
+        return;
+    }
+    if (root == meta) {
+        return;
+    }
+    n = FUN_002fe2c0(root);
+    i = DAT_00561160->count;
+    if (i >= n) {
+        return;
+    }
+    ((IndexedWordPairKey *)FUN_002fe2e0(root, i))->idx = i;
+    setCount(DAT_00561130, n); setSlot(DAT_00561130, i, (int)FUN_0018f490);
+    setCount(DAT_00561138, n); setSlot(DAT_00561138, i, (int)FUN_0018f480);
+    setCount(DAT_00561140, n); setSlot(DAT_00561140, i, (int)FUN_0018f470);
+    setCount(DAT_00561148, n); setSlot(DAT_00561148, i, (int)FUN_0018f460);
+    setCount(DAT_00561150, n); setSlot(DAT_00561150, i, (int)FUN_0018f450);
+    setCount(DAT_00561158, n); setSlot(DAT_00561158, i, (int)FUN_0018f440);
+    setCount(DAT_00561160, n); setSlot(DAT_00561160, i, (int)FUN_0018f430);
+    setCount(DAT_00561168, n); setSlot(DAT_00561168, i, (int)FUN_0018f420);
+    setCount(DAT_00561170, n); setSlot(DAT_00561170, i, (int)FUN_0018f410);
+    n = n * n;
+    i = i * i;
+    setCount(DAT_00561118, n);
+    for (j = i; j < n; j++) setSlot(DAT_00561118, j, (int)FUN_0018f400);
+    setCount(DAT_00561120, n);
+    for (j = i; j < n; j++) setSlot(DAT_00561120, j, (int)FUN_0018f3f0);
+    setCount(DAT_00561128, n);
+    for (j = i; j < n; j++) setSlot(DAT_00561128, j, (int)FUN_0018f3e0);
+}
+
+int FUN_0018f3e0(void) { return 0; }
+void FUN_0018f3f0(void) { }
+int FUN_0018f400(void) { return 0; }
+void FUN_0018f410(void) { }
+int FUN_0018f420(void) { return 1; }
+void FUN_0018f430(void) { }
+void FUN_0018f440(void) { }
+int FUN_0018f450(void) { return 0; }
+void FUN_0018f460(void) { }
+int FUN_0018f470(void) { return 0; }
+void FUN_0018f480(void) { }
+int FUN_0018f490(void) { return 0; }
 
 void FUN_0018f4a0(void){
   REL(DAT_00561118)

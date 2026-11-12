@@ -60,7 +60,7 @@ a switch dispatch owns the data words that point into it (its own jump table).
 | sdk | starts an SDK library descriptor declares (`data/sdk-bindings.json`) | `jr ra` extent; the last split piece takes the walk's extent | the descriptor's table | 3 |
 | thunk | `j <function>; nop` stubs a data word or literal names | 8 bytes | the reference and the target | 636 |
 | 3 | `jal`/`j` targets of known functions with no symbol | `_sweep_extent`, any shape | the call | 100 |
-| 4 | table-context data words and literals in gaps | `_sweep_extent`, any shape | the table or literal | 481 |
+| 4 | table-context data words and literals in gaps | `_sweep_extent`, any shape | the table or literal | 493 |
 | 5 | gap words that open a frame, referenced by nothing | `_sweep_extent`; the final transfer restores exactly the frame it opened | the symmetric frame | 111 |
 | 6 | every non-zero gap word below `CODE_HI` (`0x467120`, where the VU1 microcode starts) | `_sweep_extent`, any shape | the code range: below it the image holds only functions, their padding and constants inside their bodies | 349 |
 
@@ -104,7 +104,7 @@ The rows this pass added, by evidence class:
 | `cut`: tail-call wrapper + framed body | 20 (`_getpid_r`, `FUN_00269878`, `FUN_00297f30`, `FUN_002980c0`, `FUN_0017c880`, `FUN_00260d48`, `FUN_002a1110`, `FUN_00109c88`, `vfiprintf`, `Gap__Gfx__igPsx2VisualContext__vfunc_172`, `FUN_00299110`, `FUN_002997c0`, `FUN_0029b6d0`, `FUN_002a3730`, `FUN_002b2ee8`, `FUN_002b3300`, `FUN_002b4210`, …) | the head ends in `j <body>` to a fresh frame prologue under the same symbol (a function never jumps to its own frame-opening word) |
 | `cut`: wrapper + leaf body | 12 (`FUN_002612c0`, `FUN_002854b0`, `FUN_0028abc0`, `FUN_00293788`, `FUN_00294838/8b8/938`, `FUN_002ad2e0`, `FUN_002ad3e0`, `FUN_002b3530`, `FUN_002b4630`, `Memory_AllocateBufferViaSharedTail`) | the head's walk ends at its `j` to a fresh start that follows after padding; the body is claimed by rule 3 |
 | `cut`: span reached a referenced leaf | 5 (`Gap__Core__igCallStackTable__vfunc_28`, `FUN_00155340`, `FUN_00159320`, `igMemoryFile::vfunc_23`, `FUN_004657b0`) | `data/function-extents.json` ran to a vtable-referenced leaf after the function's own `jr ra` |
-| `cut`: verifier extent corrections | `FUN_001b4c40` (7296 → 7276: `DAT_001b68b0` is a 16-byte wrapper, `move a1,a0; lui; j 0x1b68c0; lw`, after the function's `jr ra` and a nop — `FUN_001a44d0` now passes it as a function pointer), `FUN_00267438` (96 → 88: `FUN_00267490` is the 8-byte getter `jr ra; lw v0,152(a0)` that `FUN_0026c3c8` calls), `FUN_00453a20` (8-byte `j` wrapper + referenced 12-byte leaf at `0x453a30`) | the inner address is a fresh start after the container's return |
+| `cut`: verifier extent corrections | `FUN_001b4c40` (7296 → 7276: `DAT_001b68b0` is a 16-byte wrapper, `move a1,a0; lui; j 0x1b68c0; lw`, after the function's `jr ra` and a nop — `FUN_001a44d0` now passes it as a function pointer), `FUN_00267438` (96 → 88: `FUN_00267490` is the 8-byte getter `jr ra; lw v0,152(a0)` that `FUN_0026c3c8` calls), `FUN_00453a20` (8-byte `j` wrapper + referenced 12-byte leaf at `0x453a30`), `FUN_0018edb0` (1768 → 1576: twelve 8-byte default stubs at `0x18f3e0..0x18f490`, 16-byte aligned after its `jr ra`, whose addresses it builds with `lui`/`addiu` and stores into its tables; claimed by rule 4) | the inner address is a fresh start after the container's return |
 | `merge` | `FUN_002fe290` (44 bytes) | `thunk_FUN_002fe2ac` (`b 0x2fe2ac; nop`) was the entry of a list-search loop whose other half Ghidra called `FUN_002fe2ac`; one leaf, its callers now name `FUN_002fe290` |
 | `start` | `FUN_00100230` (8), `FUN_001051c8` (96), `FUN_00113bc0` (284), `FUN_00113d00` (244), `FUN_00113e00` (288), `FUN_001c5130` (36), `FUN_00265d30` (52) | bodies the sweep cannot end: a thread entry whose `syscall` (ExitThread) does not return; an MMI clamp loop that a `j` from `FUN_00104258` enters, with its 16-byte `lq` constant inline (each word writes `$zero`, so falling through is harmless) before `jr ra`; three kernel exception handlers ending in `eret`, `syscall` and `break` (the syscall table at `0x4822a8` installs `0x113d00` as call 0x54); a tail call through `jr v0`; an error call followed by an idle `b` loop |
 | plain shrink | `FUN_00108078` (312 → 272), `FUN_001e6130` (584 → 248) | the dump's extent ran into the next symbol; both now end at their own transfer. `FUN_001e6130` remains a block of an earlier function (its `j 0x1e5fe0` lands inside `FUN_001e5f00`), a matter for the EE GCC blocks |
@@ -141,9 +141,9 @@ literals point outside the image and nothing in the image references its pieces;
 
 | | before (`ed33b3b4d`) | after |
 | --- | --- | --- |
-| functions in `config/SLUS-20836/symbols.txt` | 19,293 | 20,572 |
-| code bytes in `config/SLUS-20836/symbols.txt` | 3,377,884 | 3,475,508 |
-| code bytes laid out (`config/SLUS-20836/layout.txt`) | 3,377,372 in 19,293 units | 3,475,508 in 20,572 units |
+| functions in `config/SLUS-20836/symbols.txt` | 19,293 | 20,584 |
+| code bytes in `config/SLUS-20836/symbols.txt` | 3,377,884 | 3,475,412 |
+| code bytes laid out (`config/SLUS-20836/layout.txt`) | 3,377,372 in 19,293 units | 3,475,412 in 20,584 units |
 | truncated layout units (symbol overlapping the next) | 4 | 0 |
 | symbols ending without a return (audit) | 167 | 1 (`abort`, non-returning callee) |
 | symbols holding two functions (audit + the `j`-to-fresh-start scan) | 11 + 26 | 0 |

@@ -256,6 +256,8 @@
 0x00169e30	8	FUN_00169e30	cut
 # wrapper tail-calls the framed body at 0x17c8a0 (near-miss-shapes-extents.md)
 0x0017c880	20	FUN_0017c880	cut
+# the dump ran the body over the twelve 8-byte default stubs at 0x18f3e0..0x18f490 whose addresses it stores
+0x0018edb0	1576	FUN_0018edb0	cut
 # jump-table growth reached the referenced 16-byte wrapper at 0x1b68b0 (DAT_001b68b0 in FUN_001a44d0)
 0x001b4c40	7276	FUN_001b4c40	cut
 # wrapper tail-calls the framed body at the j target
