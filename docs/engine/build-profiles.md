@@ -322,11 +322,10 @@ way, with `operator!=` as a member. 132 source files use that constant and may h
   the Ndmw profile with `#pragma inline_depth(1)`: retail calls `RecoveryTarget::release` and
   `RecoveryString::release` out of line from it while its own copies of the `RecoveryRef` destructors
   have them inlined, which is what a depth of 1 gives; no source form found gives both. A unit holding the retail copy of a shared inline
-  destructor also needs every other unit's copy of it to match under the new profile: the Attrs unit at
-  `0x130060` stays on 3.0 because the movie renderer's inlined release and its
-  out-of-line copy need different spellings at b52. Retail's movie unit refers to `0x130140` from its
-  exception table, so its own copy was most likely discarded at link time in favour of the Attrs one;
-  the verifier has no way yet to express a copy that was emitted and then discarded.
+  destructor also needs every other unit's copy of it to match under the new profile: the copy at
+  `0x130140` is in the Attrs library unit, and the movie renderer's exception table refers to it, so
+  the movie unit's own copy was most likely discarded at link time in favour of the Attrs one;
+  `tools/check.py` compares that copy under the Attrs profile.
   `tools/roll_profile.py` lists the members. Respelling for b52 moved the rest: most members differed
   only in register order, because b52 gives the first-declared local the higher register.
 * **Why an `asm { nop }` stood in.** An empty true arm before `else { x = 0; }` was an inlined cast: `static inline void *cast(void *o) { if (o != 0 && igObject_IsKindOf(o, meta) != 0) { return o; } return 0; }`, with the meta read inside it.

@@ -1,7 +1,0 @@
-#include "dw4/reflected.h"
-
-/* Setter: stores the blend-state enable flag (`_enabled`, an igBoolMetaField of the reflected
- * igBlendStateAttr). */
-void Gap__Attrs__igBlendStateAttr__vfunc_32(igBlendStateAttr *self, char enabled) {
-    self->_enabled = enabled;
-}

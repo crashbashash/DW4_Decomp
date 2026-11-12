@@ -9,8 +9,8 @@ calls; the whole run provides the surrounding reference/list contract.
 
 | Address | Bytes | Semantic role / source |
 | --- | ---: | --- |
-| `0x00130720` | 116 | [Deleting interned-string wrapper cleanup](../../src/engine/StringRef_Destruct_00130720.c) |
-| `0x001363f0` | 128 | [Unwind reference cleanup](../../src/engine/ObjectRef_Destruct_001363f0.c) |
+| `0x00130720` | 116 | [Deleting interned-string wrapper cleanup](../../src/engine/attrs/igViewportAttr.inc) |
+| `0x001363f0` | 128 | [Unwind reference cleanup](../../src/engine/attrs/igLightStateAttr.inc) |
 | `0x00150eb0` | 128 | [Unwind reference cleanup](../../src/engine/gfx/igPsx2VisualContext_tail.inc) |
 | `0x0033e9c0` | 128 | [Temporary owning-reference cleanup](../../src/engine/ObjectRef_Destruct_0033e9c0.cpp) |
 | `0x003d9bd0` | 128 | [Unwind reference cleanup](../../src/unmatched/FUN_003d8740.cpp) |

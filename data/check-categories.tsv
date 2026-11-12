@@ -731,7 +731,7 @@
 00130000	AttrsLibrary_MarkRegistered	match	-
 00130020	FUN_00130020	match	-
 00130060	igVisualContextAttrDefaultManager_GetMetaObject	match	-
-001300b0	igVisualContextAttrDefaultManager_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude'); under the unit profile of igVisualContextAttrDefaultManager (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude -Cpp_exceptions off') they are not
+001300b0	igVisualContextAttrDefaultManager_GetVTable	match	-
 00130140	FUN_00130140	match	-
 001301c0	FUN_001301c0	match	-
 001301d0	igVisualContextAttrDefaultManager_Register	match	-
@@ -1282,7 +1282,7 @@
 0013b820	FUN_0013b820	match	-
 0013b860	FUN_0013b860	match	-
 0013b8a0	FUN_0013b8a0	match	-
-0013b900	Gap__Attrs__igAttrDefaultManager__vfunc_23	match	DEFERRED duplicate 0x130140 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
+0013b900	Gap__Attrs__igAttrDefaultManager__vfunc_23	match	-
 0013bfe0	FUN_0013bfe0	match	-
 0013c060	FUN_0013c060	match	-
 0013c110	FUN_0013c110	match	-
@@ -1351,7 +1351,7 @@
 0013d060	thunk_FUN_0013cf70	match	-
 0013d180	Gap__Attrs__igGeometryAttr1_5__vfunc_20	match	-
 0013d2f0	Gap__Attrs__igGeometryAttr1_5__vfunc_24	match	-
-0013d460	Gap__Attrs__igGeometryAttr1_5__vfunc_39	match	DEFERRED duplicate 0x130140 __dt__18igSmartPointer<1R>Fv 128B (compared under the profile of its retail unit)
+0013d460	Gap__Attrs__igGeometryAttr1_5__vfunc_39	match	-
 0013de80	Gap__Attrs__igGeometryAttr1_5__vfunc_40	match	-
 0013dfb0	Gap__Attrs__igGeometryAttr1_5__vfunc_42	match	-
 0013e0a0	Gap__Attrs__igGeometryAttr1_5__vfunc_34	match	-
@@ -1432,7 +1432,7 @@
 0013ff90	Gap__Attrs__igRenderListAttr__vfunc_12	match	-
 0013ffd0	Gap__Attrs__igRenderListAttr__vfunc_28	match	-
 00140050	FUN_00140050	match	-
-00140190	Gap__Attrs__igSetRenderDestinationAttr__vfunc_26	match	DEFERRED duplicate 0x130140 __dt__29igSmartPointer<11Destination>Fv 128B (compared under the profile of its retail unit)
+00140190	Gap__Attrs__igSetRenderDestinationAttr__vfunc_26	match	-
 00140280	Gap__Attrs__igSetRenderDestinationAttr__vfunc_12	match	-
 001402c0	Gap__Attrs__igSetRenderDestinationAttr__vfunc_28	match	-
 001402f0	Gap__Attrs__igShadeModelAttr__vfunc_24	match	-
@@ -1452,7 +1452,7 @@
 00140540	Gap__Attrs__igTexGenMatrixAttr__vfunc_24	match	-
 00140550	Gap__Attrs__igTexGenMatrixAttr__vfunc_26	match	-
 001405a0	FUN_001405a0	match	-
-00140610	Gap__Attrs__igTextureAttr__vfunc_37	match	DEFERRED duplicate 0x25a230 __dt__22igSmartPointer<5Image>Fv 128B (compared under the profile of its retail unit)
+00140610	Gap__Attrs__igTextureAttr__vfunc_37	match	-
 00140740	Gap__Attrs__igTextureAttr__vfunc_38	match	-
 001408a0	Gap__Attrs__igTextureAttr__vfunc_26	match	-
 001408b0	Gap__Attrs__igTextureAttr__vfunc_17	match	-
@@ -4635,7 +4635,7 @@
 001ae740	Gap__Sg__igAnimationCombiner__vfunc_23	match	-
 001ae750	FUN_001ae750	match	-
 001ae780	FUN_001ae780	match	-
-001aea60	Gap__Sg__igAnimationDatabase__vfunc_24	match	DEFERRED duplicate 0x130140 __dt__18igSmartPointer<1R>Fv 128B (compared under the profile of its retail unit)
+001aea60	Gap__Sg__igAnimationDatabase__vfunc_24	match	-
 001aedd0	FUN_001aedd0	match	DEFERRED duplicate 0x25a230 __dt__9RecordRefFv 128B (compared under the profile of its retail unit)
 001aefe0	Gap__Sg__igAnimationDatabase__vfunc_23	match	DEFERRED duplicate 0x25a230 __dt__30igSmartPointer<12AnimDbObject>Fv 128B (compared under the profile of its retail unit)
 001af510	FUN_001af510	match	-
@@ -4844,7 +4844,7 @@
 001c1e00	FUN_001c1e00	match	-
 001c1e10	FUN_001c1e10	match	-
 001c1f90	FUN_001c1f90	match	-
-001c20b0	FUN_001c20b0	match	DEFERRED duplicate 0x130140 __dt__20igSmartPointer<3Obj>Fv 128B (compared under the profile of its retail unit)
+001c20b0	FUN_001c20b0	match	-
 001c2880	FUN_001c2880	match	-
 001c2be0	FUN_001c2be0	match	-
 001c2eb0	FUN_001c2eb0	match	-
@@ -4892,7 +4892,7 @@
 001c5d10	FUN_001c5d10	match	-
 001c5d70	FUN_001c5d70	match	-
 001c5e20	FUN_001c5e20	match	-
-001c5eb0	FUN_001c5eb0	match	DEFERRED duplicate 0x130140 __dt__3RefFv 128B (compared under the profile of its retail unit)
+001c5eb0	FUN_001c5eb0	match	-
 001c6050	FUN_001c6050	match	-
 001c6110	FUN_001c6110	match	-
 001c6230	FUN_001c6230	match	-
@@ -4960,7 +4960,7 @@
 001d07e0	Gap__Sg__igLod__vfunc_31	match	-
 001d0850	Gap__Sg__igLod__vfunc_17	match	-
 001d0890	Gap__Sg__igLod__vfunc_27	match	-
-001d08d0	FUN_001d08d0	match	DEFERRED duplicate 0x130140 __dt__29igSmartPointer<11igFloatList>Fv 128B (compared under the profile of its retail unit)
+001d08d0	FUN_001d08d0	match	-
 001d1550	FUN_001d1550	match	-
 001d15a0	FUN_001d15a0	match	-
 001d1760	FUN_001d1760	match	-
@@ -4994,7 +4994,7 @@
 001d4180	FUN_001d4180	match	-
 001d4420	Gap__Sg__igProjectiveShadowShader__vfunc_09	match	-
 001d4470	Gap__Sg__igProjectiveShadowShader__vfunc_22	match	-
-001d4480	FUN_001d4480	match	DEFERRED duplicate 0x130140 __dt__9ShadowRefFv 128B (compared under the profile of its retail unit)
+001d4480	FUN_001d4480	match	-
 001d5430	FUN_001d5430	match	-
 001d5a10	Gap__Sg__igProjectiveShadowShader__vfunc_10	match	-
 001d5a70	FUN_001d5a70	match	-
@@ -5018,7 +5018,7 @@
 001d68f0	FUN_001d68f0	match	-
 001d6900	FUN_001d6900	match	DEFERRED duplicate 0x25a230 __dt__26igSmartPointer<9Primitive>Fv 128B (compared under the profile of its retail unit)
 001d6a70	FUN_001d6a70	match	-
-001d7120	FUN_001d7120	match	DEFERRED duplicate 0x130140 __dt__9ShadowRefFv 128B (compared under the profile of its retail unit)
+001d7120	FUN_001d7120	match	-
 001d7630	FUN_001d7630	match	-
 001d7910	FUN_001d7910	match	-
 001d7b10	FUN_001d7b10	match	-
@@ -5039,7 +5039,7 @@
 001d8a30	Gap__Sg__igShaderFactory__vfunc_24	match	-
 001d8a60	Gap__Sg__igShaderFactory__vfunc_25	match	-
 001d8aa0	Gap__Sg__igShaderFactory__vfunc_26	match	-
-001d8ab0	FUN_001d8ab0	match	DEFERRED duplicate 0x130140 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
+001d8ab0	FUN_001d8ab0	match	-
 001d8b90	FUN_001d8b90	match	-
 001d8c10	Gap__Sg__igShaderInfo__vfunc_23	match	-
 001d8cf0	Gap__Sg__igShaderInfo__vfunc_24	match	-
@@ -5131,10 +5131,10 @@
 001e1400	Gap__Sg__igPsx2EnvironmentMapShader__vfunc_52	match	-
 001e14d0	Gap__Sg__igPsx2EnvironmentMapShader__vfunc_45	match	-
 001e1580	Gap__Sg__igPsx2EnvironmentMapShader__vfunc_48	match	-
-001e16a0	FUN_001e16a0	match	DEFERRED duplicate 0x130140 __dt__9EnvMapRefFv 128B (compared under the profile of its retail unit)
-001e1ac0	FUN_001e1ac0	match	DEFERRED duplicate 0x130140 __dt__3RefFv 128B (compared under the profile of its retail unit)
-001e1e70	FUN_001e1e70	match	DEFERRED duplicate 0x130140 __dt__9EnvMapRefFv 128B (compared under the profile of its retail unit)
-001e22c0	FUN_001e22c0	match	DEFERRED duplicate 0x130140 __dt__9EnvMapRefFv 128B (compared under the profile of its retail unit)
+001e16a0	FUN_001e16a0	match	-
+001e1ac0	FUN_001e1ac0	match	-
+001e1e70	FUN_001e1e70	match	-
+001e22c0	FUN_001e22c0	match	-
 001e2800	Gap__Sg__igPsx2EnvironmentMapShader__vfunc_46	match	-
 001e2810	FUN_001e2810	match	-
 001e2820	FUN_001e2820	match	-
@@ -6123,7 +6123,7 @@
 00229f90	FUN_00229f90	match	-
 00229fb0	FUN_00229fb0	match	-
 0022a030	FUN_0022a030	match	-
-0022a1e0	Gap__igItemInterface__vfunc_27	match	DEFERRED duplicate 0x130140 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
+0022a1e0	Gap__igItemInterface__vfunc_27	match	DEFERRED duplicate 0x25a230 __dt__31igSmartPointer<13InterfaceItem>Fv 128B (compared under the profile of its retail unit)
 0022a740	FUN_0022a740	match	-
 0022a7b0	Gap__igItemInterface__vfunc_30	match	DEFERRED duplicate 0x25a230 __dt__25igSmartPointer<8Iterator>Fv 128B (compared under the profile of its retail unit)
 0022a8d0	FUN_0022a8d0	match	-
@@ -11376,7 +11376,7 @@
 002dba50	FUN_002dba50	match	-
 002dbc10	FUN_002dbc10	match	-
 002dbca0	FUN_002dbca0	match	-
-002dbd10	FUN_002dbd10	match	DEFERRED duplicate 0x130140 __dt__18igSmartPointer<1R>Fv 128B (compared under the profile of its retail unit)
+002dbd10	FUN_002dbd10	match	-
 002dbfb0	FUN_002dbfb0	match	-
 002dc050	FUN_002dc050	match	-
 002dc0a0	FUN_002dc0a0	match	-
@@ -11454,7 +11454,7 @@
 002e26b0	FUN_002e26b0	match	-
 002e2750	Gap__Core__igExternalDirEntry__vfunc_23	match	-
 002e27d0	Gap__Core__igExternalDirEntry__vfunc_44	match	-
-002e2950	Gap__Core__igExternalDirEntry__vfunc_43	match	DEFERRED duplicate 0x130140 __dt__20igSmartPointer<3Obj>Fv 128B (compared under the profile of its retail unit)
+002e2950	Gap__Core__igExternalDirEntry__vfunc_43	match	-
 002e2bc0	Gap__Core__igExternalDirEntry__vfunc_11	match	-
 002e2bf0	Gap__Core__igExternalDirEntry__vfunc_12	match	-
 002e2c30	Gap__Core__igExternalIndexedEntry__vfunc_32	match	-
@@ -11509,7 +11509,7 @@
 002e6f50	FUN_002e6f50	match	-
 002e7000	FUN_002e7000	match	-
 002e7030	FUN_002e7030	match	-
-002e7100	igIGBFile_ReadObject	match	DEFERRED duplicate 0x130140 __dt__20igSmartPointer<3T30>Fv 128B (compared under the profile of its retail unit)
+002e7100	igIGBFile_ReadObject	match	-
 002e7390	igIGBFile_ReadObjectSection	match	-
 002e7640	FUN_002e7640	match	-
 002e78b0	FUN_002e78b0	match	-
@@ -12223,10 +12223,10 @@
 00308860	FUN_00308860	match	-
 00308a90	FUN_00308a90	match	-
 00308c00	FUN_00308c00	match	-
-00308c80	FUN_00308c80	match	DEFERRED duplicate 0x130140 __dt__19igSmartPointer<2RO>Fv 128B (compared under the profile of its retail unit)
+00308c80	FUN_00308c80	match	-
 00308e00	FUN_00308e00	match	-
 00308f00	Gap__Core__igResource__vfunc_12	match	-
-00308fb0	FUN_00308fb0	match	DEFERRED duplicate 0x130140 __dt__20igSmartPointer<3Obj>Fv 128B (compared under the profile of its retail unit)
+00308fb0	FUN_00308fb0	match	DEFERRED duplicate 0x25a230 __dt__20igSmartPointer<3Res>Fv 128B (compared under the profile of its retail unit)
 003092f0	FUN_003092f0	match	-
 00309640	FUN_00309640	match	-
 00309740	FUN_00309740	match	-
@@ -12234,7 +12234,7 @@
 00309870	FUN_00309870	match	-
 00309970	FUN_00309970	match	-
 00309a50	FUN_00309a50	match	-
-00309a60	FUN_00309a60	match	DEFERRED duplicate 0x130140 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
+00309a60	FUN_00309a60	match	-
 00309c90	FUN_00309c90	match	-
 00309fe0	FUN_00309fe0	match	-
 0030a260	FUN_0030a260	match	-
@@ -12737,7 +12737,7 @@
 0032a1e0	FUN_0032a1e0	match	-
 0032a220	FUN_0032a220	match	-
 0032a260	FUN_0032a260	match	-
-0032a280	FUN_0032a280	match	DEFERRED duplicate 0x130140 __dt__13DumpObjectRefFv 128B (compared under the profile of its retail unit)
+0032a280	FUN_0032a280	match	-
 0032a5f0	FUN_0032a5f0	match	-
 0032a600	FUN_0032a600	match	-
 0032a900	FUN_0032a900	match	-
@@ -12777,11 +12777,11 @@
 0032c110	FUN_0032c110	match	-
 0032c190	Gap__Core__igPsx2File__vfunc_41	match	-
 0032c240	FUN_0032c240	match	-
-0032c4d0	Gap__Core__igPsx2Folder__vfunc_24	match	DEFERRED duplicate 0x130140 __dt__15FolderObjectRefFv 128B (compared under the profile of its retail unit)
-0032c700	Gap__Core__igPsx2Folder__vfunc_25	match	DEFERRED duplicate 0x130140 __dt__15FolderObjectRefFv 128B (compared under the profile of its retail unit)
+0032c4d0	Gap__Core__igPsx2Folder__vfunc_24	match	-
+0032c700	Gap__Core__igPsx2Folder__vfunc_25	match	-
 0032c930	Gap__Core__igPsx2Folder__vfunc_26	match	-
 0032cac0	FUN_0032cac0	match	-
-0032cb50	FUN_0032cb50	match	DEFERRED duplicate 0x130140 __dt__15FolderObjectRefFv 128B (compared under the profile of its retail unit)
+0032cb50	FUN_0032cb50	match	-
 0032cf50	FUN_0032cf50	match	-
 0032cf70	FUN_0032cf70	match	-
 0032d070	FUN_0032d070	match	-

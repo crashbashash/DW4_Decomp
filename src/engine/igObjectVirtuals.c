@@ -6,12 +6,6 @@
 extern int g_beModelCtrlInfo_metaObject[4];
 int Gap__Core__igObject__vfunc_08__002ff0f0();
 
-/* Default slot 21: constant 4. */
-int Gap__Core__igObject__vfunc_21(void)
-{
-    return 4;
-}
-
 /* Second copy of the slot 8 forwarder. */
 int Gap__Core__igObject__vfunc_08__001ce700()
 {

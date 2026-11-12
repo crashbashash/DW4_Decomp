@@ -5931,7 +5931,7 @@
       "address": 1247008,
       "name": "StringRef_Destruct_00130720",
       "size": 116,
-      "source": "src/engine/StringRef_Destruct_00130720.c",
+      "source": "src/engine/attrs/AttrsLibrary.cpp",
       "direct": [
         {
           "site": 1247068,
@@ -5952,7 +5952,7 @@
       "address": 1248256,
       "name": "igObjectList_GetPublishedMetaObject",
       "size": 12,
-      "source": "src/engine/list-parent-accessors.c",
+      "source": "src/engine/attrs/AttrsLibrary.cpp",
       "direct": [],
       "indirect": []
     },
@@ -5960,7 +5960,7 @@
       "address": 1266992,
       "name": "igObject_GetMetaObject_ParentAccessor",
       "size": 12,
-      "source": "src/engine/object-base-accessors.c",
+      "source": "src/engine/attrs/AttrsLibrary.cpp",
       "direct": [],
       "indirect": []
     },
@@ -5968,7 +5968,7 @@
       "address": 1294720,
       "name": "igObjectList_TrimCapacity",
       "size": 48,
-      "source": "src/engine/igObjectList_TrimCapacity.c",
+      "source": "src/engine/attrs/AttrsLibrary.cpp",
       "direct": [
         {
           "site": 1294748,
@@ -5983,7 +5983,7 @@
       "address": 1321584,
       "name": "igObjectList_GetMetaObject_Virtual",
       "size": 12,
-      "source": "src/engine/igObjectList_GetMetaObject_Virtual.c",
+      "source": "src/engine/attrs/AttrsLibrary.cpp",
       "direct": [],
       "indirect": []
     },
@@ -5991,7 +5991,7 @@
       "address": 1321792,
       "name": "igDataList_GetMetaObject_Virtual",
       "size": 12,
-      "source": "src/engine/igDataList_GetMetaObject_Virtual.c",
+      "source": "src/engine/attrs/AttrsLibrary.cpp",
       "direct": [],
       "indirect": []
     },

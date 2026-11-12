@@ -8,7 +8,7 @@ form this family. These fifteen bodies account for 2,228 code bytes. Four bodies
 and the table and its chunks in [StringTable.inc](../../src/engine/core/StringTable.inc).
 
 The combat unwind table also identifies the complete 116-byte
-[deleting string-wrapper cleanup](../../src/engine/StringRef_Destruct_00130720.c):
+[deleting string-wrapper cleanup](../../src/engine/attrs/igViewportAttr.inc):
 it preserves both owner and header arguments to the final-release bridge.
 See [cleanup identities](../systems/combat-reference-helpers.md).
 

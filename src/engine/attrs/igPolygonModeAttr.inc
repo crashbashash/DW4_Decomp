@@ -1,0 +1,62 @@
+int FUN_00134940(void) {
+    if (DAT_0055ef60[0] == 0) {
+        DAT_0055ef60[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(DAT_00587040[0]));
+    }
+    return DAT_0055ef60[0];
+}
+
+igMetaObject *igPolygonModeAttr_GetMetaObject(void)
+{
+    igMetaObject *g = g_igPolygonModeAttr_metaObject[0];
+    if (!g || ((g->_validity & 4) != 0) == false)
+        FUN_00134a20();
+    return g_igPolygonModeAttr_metaObject[0];
+}
+
+int igPolygonModeAttr_GetVTable(void) {
+    struct Obj obj;
+    igObject_InitHeader(&obj);
+    obj.vt = &DAT_00523170[0];
+    return *(int *)((char *)&obj + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+}
+
+void FUN_00134a20(void)
+{
+    igMetaObject_RunStaticInit(igPolygonModeAttr_Register);
+}
+
+void igPolygonModeAttr_Register(void) {
+    AttrsLibrary_MarkRegistered();
+    igMetaObject_RegisterClass(
+        0, /* abstract */
+        g_igPolygonModeAttr_metaObject,
+        igVisualAttribute_Register,
+        igVisualAttribute_GetPublishedMetaObject,
+        thunk_igPolygonModeAttr_GetMetaObject,
+        igPolygonModeAttr_className,
+        0x10, /* instance size */
+        igPolygonModeAttr_GetVTable,
+        &igPolygonModeAttr_InitFields,
+        0, /* extra callback item */
+        0 /* callback list */
+    );
+}
+
+void thunk_igPolygonModeAttr_GetMetaObject(void) {
+    igPolygonModeAttr_GetMetaObject();
+}
+
+void igPolygonModeAttr_InitFields(void) {
+    int temp_s2;
+    void *temp_v0;
+    void *temp_s0;
+
+    temp_s0 = (void *)DAT_0055ef60[0];
+    temp_s2 = igMetaObject_GetFieldCount(temp_s0);
+    igMetaObject_CreateFields(temp_s0, &DAT_00486100[0], 1);
+    temp_v0 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
+    FUN_002dc7a0(temp_v0, &DAT_00486120[0]);
+    ((igEnumMetaField *)temp_v0)->_getMetaEnumFunction = (int)(&FUN_001495c0);
+    igMetaObject_NameFields(temp_s0, &DAT_00486108[0], &DAT_00486110[0], &DAT_00486118[0], temp_s2);
+}
+
