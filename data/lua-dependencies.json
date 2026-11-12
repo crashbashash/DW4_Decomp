@@ -18012,7 +18012,7 @@
       "address": 3393760,
       "name": "BecLibrary_MarkRegistered",
       "size": 24,
-      "source": "src/game/BecLibrary_MarkRegistered.c",
+      "source": "src/game/bec/BecLibrary.cpp",
       "direct": [],
       "indirect": []
     },
@@ -18020,7 +18020,7 @@
       "address": 3402752,
       "name": "FUN_0033ec00",
       "size": 128,
-      "source": "src/unmatched/FUN_0033ec00.cpp",
+      "source": "src/game/bec/BecLibrary.cpp",
       "direct": [
         {
           "site": 3402824,
@@ -18041,7 +18041,7 @@
       "address": 3430016,
       "name": "FUN_00345680",
       "size": 52,
-      "source": "src/unmatched/FUN_00345680.cpp",
+      "source": "src/game/bec/BecLibrary.cpp",
       "direct": [
         {
           "site": 3430028,
@@ -18062,7 +18062,7 @@
       "address": 3430448,
       "name": "FUN_00345830",
       "size": 32,
-      "source": "src/unmatched/FUN_00345830.cpp",
+      "source": "src/game/bec/BecLibrary.cpp",
       "direct": [
         {
           "site": 3430460,
@@ -18077,7 +18077,7 @@
       "address": 3430816,
       "name": "FUN_003459a0",
       "size": 84,
-      "source": "src/unmatched/FUN_003459a0.cpp",
+      "source": "src/game/bec/BecLibrary.cpp",
       "direct": [
         {
           "site": 3430860,
@@ -18092,7 +18092,7 @@
       "address": 3506288,
       "name": "beMessengerWork_Create",
       "size": 52,
-      "source": "src/game/beMessengerFactories.cpp",
+      "source": "src/game/bec/BecLibrary.cpp",
       "direct": [
         {
           "site": 3506300,
@@ -18113,7 +18113,7 @@
       "address": 3506432,
       "name": "beMessengerWork_GetVTable",
       "size": 204,
-      "source": "src/unmatched/beMessengerWork_GetVTable.cpp",
+      "source": "src/game/bec/BecLibrary.cpp",
       "direct": [
         {
           "site": 3506460,
@@ -18158,7 +18158,7 @@
       "address": 3506640,
       "name": "beMessengerWork_EnsureRegistered",
       "size": 32,
-      "source": "src/game/beMessengerFactories.cpp",
+      "source": "src/game/bec/BecLibrary.cpp",
       "direct": [
         {
           "site": 3506652,
@@ -18173,7 +18173,7 @@
       "address": 3506672,
       "name": "beMessengerWork_Register",
       "size": 116,
-      "source": "src/game/beMessengerWork_Register.cpp",
+      "source": "src/game/bec/BecLibrary.cpp",
       "direct": [
         {
           "site": 3506680,
@@ -18194,7 +18194,7 @@
       "address": 3506832,
       "name": "beMessengerWork_InitFields",
       "size": 184,
-      "source": "src/unmatched/beMessengerWork_InitFields.cpp",
+      "source": "src/game/bec/BecLibrary.cpp",
       "direct": [
         {
           "site": 3506860,
@@ -18245,7 +18245,7 @@
       "address": 3507424,
       "name": "beMessengerGroup_Create",
       "size": 52,
-      "source": "src/game/beMessengerFactories.cpp",
+      "source": "src/game/bec/BecLibrary.cpp",
       "direct": [
         {
           "site": 3507436,
@@ -18266,7 +18266,7 @@
       "address": 3507744,
       "name": "beMessengerGroup_EnsureRegistered",
       "size": 32,
-      "source": "src/game/beMessengerFactories.cpp",
+      "source": "src/game/bec/BecLibrary.cpp",
       "direct": [
         {
           "site": 3507756,
@@ -18281,7 +18281,7 @@
       "address": 3508560,
       "name": "beMessengerDelay_Create",
       "size": 52,
-      "source": "src/game/beMessengerFactories.cpp",
+      "source": "src/game/bec/BecLibrary.cpp",
       "direct": [
         {
           "site": 3508572,
@@ -18302,7 +18302,7 @@
       "address": 3508880,
       "name": "beMessengerDelay_EnsureRegistered",
       "size": 32,
-      "source": "src/game/beMessengerFactories.cpp",
+      "source": "src/game/bec/BecLibrary.cpp",
       "direct": [
         {
           "site": 3508892,
@@ -18317,7 +18317,7 @@
       "address": 3509632,
       "name": "beMessengerArgData_Create",
       "size": 52,
-      "source": "src/game/beMessengerFactories.cpp",
+      "source": "src/game/bec/BecLibrary.cpp",
       "direct": [
         {
           "site": 3509644,
@@ -18338,7 +18338,7 @@
       "address": 3510176,
       "name": "beMessengerArgData_EnsureRegistered",
       "size": 32,
-      "source": "src/game/beMessengerFactories.cpp",
+      "source": "src/game/bec/BecLibrary.cpp",
       "direct": [
         {
           "site": 3510188,
@@ -18353,7 +18353,7 @@
       "address": 3511424,
       "name": "FUN_00359480",
       "size": 52,
-      "source": "src/unmatched/FUN_00359480.cpp",
+      "source": "src/game/bec/BecLibrary.cpp",
       "direct": [
         {
           "site": 3511436,
@@ -18374,7 +18374,7 @@
       "address": 3511872,
       "name": "FUN_00359640",
       "size": 32,
-      "source": "src/unmatched/FUN_00359640.cpp",
+      "source": "src/game/bec/BecLibrary.cpp",
       "direct": [
         {
           "site": 3511884,
@@ -18389,7 +18389,7 @@
       "address": 3516080,
       "name": "FUN_0035a6b0",
       "size": 84,
-      "source": "src/unmatched/FUN_0035a6b0.cpp",
+      "source": "src/game/bec/BecLibrary.cpp",
       "direct": [
         {
           "site": 3516124,
@@ -18404,7 +18404,7 @@
       "address": 3553216,
       "name": "FUN_003637c0",
       "size": 52,
-      "source": "src/unmatched/FUN_003637c0.cpp",
+      "source": "src/game/bec/BecLibrary.cpp",
       "direct": [
         {
           "site": 3553228,
@@ -18425,7 +18425,7 @@
       "address": 3553584,
       "name": "FUN_00363930",
       "size": 32,
-      "source": "src/unmatched/FUN_00363930.cpp",
+      "source": "src/game/bec/BecLibrary.cpp",
       "direct": [
         {
           "site": 3553596,
@@ -18440,7 +18440,7 @@
       "address": 3554336,
       "name": "FUN_00363c20",
       "size": 52,
-      "source": "src/unmatched/FUN_00363c20.cpp",
+      "source": "src/game/bec/BecLibrary.cpp",
       "direct": [
         {
           "site": 3554348,
@@ -18461,7 +18461,7 @@
       "address": 3554656,
       "name": "FUN_00363d60",
       "size": 32,
-      "source": "src/unmatched/FUN_00363d60.cpp",
+      "source": "src/game/bec/BecLibrary.cpp",
       "direct": [
         {
           "site": 3554668,
@@ -18476,7 +18476,7 @@
       "address": 3580064,
       "name": "beBaseInfoRamList_GetOrCreateMetaObject",
       "size": 68,
-      "source": "src/unmatched/beBaseInfoRamList_GetOrCreateMetaObject.cpp",
+      "source": "src/game/bec/BecLibrary.cpp",
       "direct": [
         {
           "site": 3580088,
@@ -18497,7 +18497,7 @@
       "address": 3580144,
       "name": "beBaseInfoRamList_GetReadyMetaObject",
       "size": 76,
-      "source": "src/unmatched/beBaseInfoRamList_GetReadyMetaObject.cpp",
+      "source": "src/game/bec/BecLibrary.cpp",
       "direct": [
         {
           "site": 3580192,
@@ -18512,7 +18512,7 @@
       "address": 3580224,
       "name": "beBaseInfoRamList_GetVTable",
       "size": 60,
-      "source": "src/unmatched/beBaseInfoRamList_GetVTable.cpp",
+      "source": "src/game/bec/BecLibrary.cpp",
       "direct": [
         {
           "site": 3580232,
@@ -18527,7 +18527,7 @@
       "address": 3580288,
       "name": "beBaseInfoRamList_EnsureRegistered",
       "size": 32,
-      "source": "src/game/beBaseInfoRamList_EnsureRegistered.cpp",
+      "source": "src/game/bec/BecLibrary.cpp",
       "direct": [
         {
           "site": 3580300,
@@ -18542,7 +18542,7 @@
       "address": 3580432,
       "name": "beBaseInfoRamList_GetMetaObject",
       "size": 28,
-      "source": "src/game/beBaseInfoRamList_GetMetaObject.cpp",
+      "source": "src/game/bec/BecLibrary.cpp",
       "direct": [
         {
           "site": 3580440,
@@ -18557,7 +18557,7 @@
       "address": 3583616,
       "name": "beBaseInfoDataList_Create",
       "size": 52,
-      "source": "src/game/beBaseInfoDataList_Create.cpp",
+      "source": "src/game/bec/BecLibrary.cpp",
       "direct": [
         {
           "site": 3583628,
@@ -18578,7 +18578,7 @@
       "address": 3583904,
       "name": "FUN_0036afa0",
       "size": 32,
-      "source": "src/unmatched/FUN_0036afa0.cpp",
+      "source": "src/game/bec/BecLibrary.cpp",
       "direct": [
         {
           "site": 3583916,
@@ -18593,7 +18593,7 @@
       "address": 3600288,
       "name": "beBaseInfoRamList_GetMetaObject_Virtual",
       "size": 12,
-      "source": "src/game/beBaseInfoRamList.c",
+      "source": "src/game/bec/BecLibrary.cpp",
       "direct": [],
       "indirect": []
     },
@@ -18601,7 +18601,7 @@
       "address": 3601920,
       "name": "beMessengerWork_GetMetaObject_Virtual",
       "size": 12,
-      "source": "src/game/beMessengerWork.c",
+      "source": "src/game/bec/BecLibrary.cpp",
       "direct": [],
       "indirect": []
     },

@@ -262,7 +262,7 @@
       "address": "0x0033e9c0",
       "name": "ObjectRef_Destruct_0033e9c0",
       "size": 128,
-      "source": "src/engine/ObjectRef_Destruct_0033e9c0.cpp",
+      "source": "src/game/bec/BecLibrary.cpp",
       "sites": [
         "0x00403164"
       ]

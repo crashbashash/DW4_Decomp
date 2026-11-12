@@ -9,7 +9,10 @@ Sizes include the eight factory/registration
 wrappers (336), default creation (48), instance registration (180), the
 static initializer runner (120), full object destruction (268) and
 field zeroing `2ff930` (200). Sources are one-function files under `src/unmatched/`,
-[beMessengerFactories.cpp](../../src/game/beMessengerFactories.cpp),
+[beMessengerWork.inc](../../src/game/bec/beMessengerWork.inc),
+[beMessengerGroup.inc](../../src/game/bec/beMessengerGroup.inc),
+[beMessengerDelay.inc](../../src/game/bec/beMessengerDelay.inc),
+[beMessengerArgData.inc](../../src/game/bec/beMessengerArgData.inc),
 [igMetaObject_tail.inc](../../src/engine/core/igMetaObject_tail.inc), and the
 the object class run, [igObject_tail2.inc](../../src/engine/core/igObject_tail2.inc).
 Explicit allocator/return signatures preserve the retail bytes.

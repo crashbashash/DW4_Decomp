@@ -16,7 +16,6 @@ struct igProperty;
 typedef igTDataList<igProperty *> ColumnList;
 /* C++ with exceptions on; the C-ABI names stay unmangled through this block. */
 extern "C" {
-extern int g_beDataBase_metaObject[4];
 int igProperty_FindByName(void *, void *, const char *);
 /* Descriptor of the property record's name member. */
 extern int g_propertyNameField[4];
@@ -25,7 +24,6 @@ extern int g_propertyNameField[4];
 /* Empty string returned for a null string cell. */
 extern char emptyString[];
 
-int Gap__Bec__beDataBase__vfunc_20(void);
 int beDataBase_FindRecordValueIndex(beDataBase *, int, const char *, ColumnList *);
 long long beDataBase_GetRecordInt(beDataBase *, int, const char *);
 /* Boolean cell (one byte) for (record, key). The index is used unchecked, as in retail, so the key
@@ -36,8 +34,6 @@ unsigned long long beDataBase_GetRecordBool(beDataBase *, int, const char *);
 char *beDataBase_GetRecordString(beDataBase *, int, const char *);
 int beDataBase_GetRecordCount(beDataBase *);
 }
-
-int Gap__Bec__beDataBase__vfunc_20(void) { return g_beDataBase_metaObject[0]; }
 
 /* Flat index of the cell for (record, key) in the data list that pairs with the offset list
  * `columns`. The key is resolved to a column name through igProperty_FindByName, then located

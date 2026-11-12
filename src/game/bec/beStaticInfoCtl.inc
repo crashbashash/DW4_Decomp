@@ -1,0 +1,77 @@
+void FUN_00343760(int arg0) {
+    FUN_003438b0();
+    igMetaObject_CreateInstance(*(int *)0x587E10, arg0);
+}
+
+int FUN_003437a0(void) {
+    if (((int *)DAT_00587e10)[0] == 0) {
+        ((int *)DAT_00587e10)[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(DAT_00587040[0]));
+    }
+    return ((int *)DAT_00587e10)[0];
+}
+
+void *FUN_003437f0(void) {
+    struct G *g = DAT_00587e10[0];
+    if (!g || ((g->f & 4) != 0) == false) {
+        FUN_003438b0();
+    }
+    return DAT_00587e10[0];
+}
+
+int beStaticInfoCtl_GetVTable(void) {
+    struct Obj_343840 obj;
+    int t;
+
+    igObject_InitHeader(&obj);
+    obj.w2 = 0;
+    obj.w6 = 0;
+    obj.vt = &DAT_0053b9b0[0];
+    obj.w8 = 0;
+    t = *(int *)((char *)&obj + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+    obj.vt = &DAT_0053b9b0[0];
+    FUN_0033f560((void **)&obj.w8, -1);
+    FUN_0033f5e0((O_33f5e0 *)&obj, (short)0);
+    return t;
+}
+
+void FUN_003438b0(void)
+{
+    igMetaObject_RunStaticInit(beStaticInfoCtl_Register);
+}
+
+void *beStaticInfoCtl_Register(void) {
+    BecLibrary_MarkRegistered();
+    return igMetaObject_RegisterClass(
+        0, /* abstract */
+        g_beStaticInfoCtl_metaObject,
+        beBaseInfoManager_Register,
+        beBaseInfoManager_GetPublishedMetaObject,
+        beStaticInfoCtl_GetMetaObject,
+        beStaticInfoCtl_className,
+        0x24, /* instance size */
+        beStaticInfoCtl_GetVTable,
+        beStaticInfoCtl_InitFields,
+        0, /* extra callback item */
+        g_beStaticInfoCtl_callbackList /* callback list */
+    );
+}
+
+void beStaticInfoCtl_GetMetaObject(void)
+{
+    FUN_003437f0();
+}
+
+void beStaticInfoCtl_InitFields(void) {
+    int temp_s2;
+    void *temp_s1;
+    void *temp_s0;
+
+    temp_s0 = (void *)((int *)DAT_00587e10)[0];
+    temp_s2 = igMetaObject_GetFieldCount(temp_s0);
+    igMetaObject_CreateFields(temp_s0, &DAT_004c37a0[0], 1);
+    temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
+    ((igObjectRefMetaField *)temp_s1)->_metaObject = FUN_0036aaf0();
+    ((igRefMetaField *)temp_s1)->_construct = 1;
+    igMetaObject_NameFields(temp_s0, &DAT_004c37a8[0], &DAT_004c37b0[0], &DAT_004c37b8[0], temp_s2);
+}
+

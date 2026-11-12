@@ -189,14 +189,15 @@ exceptions on; their run can also hold a copy of an inline method of a class who
 and retail keeps that copy, so it is a member of the front unit.
 
 Such a unit is written as the original most likely was, a unity build: `src/engine/<library>/<Library>.cpp`
-(`src/game/<library>/` for a game library)
-holds only `#include` lines, the library header with the shared declarations first, then one `.inc`
-fragment per class run in retail order, named after the class (`<Class>_tail.inc` when a class's code
-resumes later; `LibraryFront.inc` for the latch and register list, `InlineTail.inc` for the trailing
-getter run). The includes are repository-relative (`#include "src/engine/<library>/<Class>.inc"`),
-since MWCC searches its working directory, not the including file's. The compiler sees the same text a
-single file would give, so the object is identical; tools that read definitions from source go through
-`tools/srctext.py`, which expands those includes, and the fragments are never scanned on their own.
+(`src/game/<library>/` for a game library) holds only `#include` lines, the library header with the shared
+declarations first, then one `.inc` fragment per class run in retail order, named after the class
+(`<Class>_tail.inc` when a class's code resumes later; `LibraryFront.inc` for the latch and register list,
+`InlineTail.inc` for the trailing getter run). MWCC opens files without regard to case, so of two classes
+whose names differ only in case the later one's fragment takes a suffix (`<Class>_Command.inc`). The
+includes are repository-relative (`#include "src/engine/<library>/<Class>.inc"`), since MWCC searches its
+working directory, not the including file's. The compiler sees the same text a single file would give, so
+the object is identical; tools that read definitions from source go through `tools/srctext.py`, which
+expands those includes, and the fragments are never scanned on their own.
 
 A C++ file's object names are mangled while `symbols.txt` keeps the plain names its source
 and callers use, so `emitted` and `externals` carry the mangled names and `symbol` gives the owner's.

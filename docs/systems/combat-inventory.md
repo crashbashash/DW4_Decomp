@@ -86,7 +86,7 @@ their own recovery. Source presence does not substitute for `make check`.
 | `0x002eaf60` | `StringPool_Intern` | 172 | [src/engine/core/CoreLibrary.cpp](../../src/engine/core/CoreLibrary.cpp) |
 | `0x002fba30` | `igMetaEnum_GetValueByName` | 260 | [src/engine/core/CoreLibrary.cpp](../../src/engine/core/CoreLibrary.cpp) |
 | `0x00301000` | `igObject_GetAllocator` | 8 | [src/engine/core/CoreLibrary.cpp](../../src/engine/core/CoreLibrary.cpp) |
-| `0x0033e9c0` | `ObjectRef_Destruct_0033e9c0` | 128 | [src/engine/ObjectRef_Destruct_0033e9c0.cpp](../../src/engine/ObjectRef_Destruct_0033e9c0.cpp) |
+| `0x0033e9c0` | `ObjectRef_Destruct_0033e9c0` | 128 | [src/game/bec/BecLibrary.cpp](../../src/game/bec/BecLibrary.cpp) |
 | `0x0038d860` | `beMessenger_SelectReceivers` | 2036 | [src/unmatched/beMessenger_SelectReceivers.cpp](../../src/unmatched/beMessenger_SelectReceivers.cpp) |
 | `0x0038e060` | `beMessenger_DispatchSelected` | 1228 | [src/unmatched/beMessenger_DispatchSelected.cpp](../../src/unmatched/beMessenger_DispatchSelected.cpp) |
 | `0x0038e5f0` | `beMessenger_SendNamed` | 60 | [src/game/beMessengerDispatch.cpp](../../src/game/beMessengerDispatch.cpp) |
