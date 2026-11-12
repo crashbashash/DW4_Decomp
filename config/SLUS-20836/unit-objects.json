@@ -31418,6 +31418,18 @@
     },
     "symbol": "FUN_003b04e0"
   },
+  "0x0037aac0": {
+    "whole_file": true,
+    "emitted": {
+      "Gap__Bec__beChangePosTransform__vfunc_30": "0x0037aad0",
+      "Gap__Bec__beChangePosTransform__vfunc_20": "0x0037b000"
+    },
+    "data": {
+      "g_beChangePosTransformInfo_metaObject": "0x00589b78",
+      "g_beChangePosTransform_metaObject": "0x00589b80"
+    },
+    "symbol": "Gap__Bec__beChangePosTransform__vfunc_32"
+  },
   "0x0037a7b0": {
     "whole_file": true,
     "emitted": {
