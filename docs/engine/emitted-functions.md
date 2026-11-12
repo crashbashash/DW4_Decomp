@@ -136,9 +136,12 @@ range becomes a `duplicates` row at the address the retail field holds; when tha
 [profile twin](#duplicates-switch-tables-and-exception-data), the tool compiles the same source
 under the twin's unit profile, as `verify_emitted_unit` does, and requires that copy at the retail
 extent there. A call out of the file that only a duplicate makes (`operator delete` in an inline
-destructor) is an `externals` row too, read from the `jal` of retail's copy. Recovered files of both
-compilers are whole-file units: the CRI middleware under EE GCC in `src/cri/`, and game classes
-under MWCC, such as `src/game/`'s, in C++ with exceptions on.
+destructor) is an `externals` row too, read from the `jal` of retail's copy. So is a function out of
+the file that only a member's exception table names, such as a base-class destructor that is
+declared but never called and appears only as a cleanup pointer. It is read from the retail table
+word and must start a retail function, and `verify` still compares the whole table with retail.
+Recovered files of both compilers are whole-file units: the CRI middleware under EE GCC in
+`src/cri/`, and game classes under MWCC, such as `src/game/`'s, in C++ with exceptions on.
 
 Compiling the file whole is what the original build did, and under both compilers it decides code,
 so a member can match only when the functions before it in the file are present:

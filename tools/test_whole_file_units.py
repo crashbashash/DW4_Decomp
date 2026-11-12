@@ -386,6 +386,110 @@ class ProfileTwin(unittest.TestCase):
         self.assertEqual(externals, dict(unitobjects.group_for(self.OWNER).externals))
 
 
+class TableExternals(unittest.TestCase):
+    """beTransformSync_GetVTable: retail's exception table names the igNodeView destructor
+    (0x195a90) as the cleanup of its base subobject, and no member calls it. The rows must still
+    bind it, from the retail table word, or the table relocation is unresolved in verify."""
+    OWNER, NAME, CLEANUP = 0x3410c0, "beTransformSync_GetVTable", "__dt__10igNodeViewFv"
+    SOURCE = '''
+extern "C" {
+extern int DAT_005284f0[4];
+extern int DAT_005397d0[4];
+extern void *DAT_00586dc8[4];
+int beTransformSync_GetVTable(void);
+}
+struct igObjectView { int *vtable; unsigned int refCount; igObjectView(); };
+struct igMatrix44fView { float m[16]; igMatrix44fView(); };
+struct SyncTransformListField { int *p; SyncTransformListField() { p = 0; } ~SyncTransformListField(); };
+struct igTransformVtable { igTransformVtable(int **slot) { *slot = DAT_005284f0; } };
+struct TransformSyncVtable { TransformSyncVtable(int **slot) { *slot = DAT_005397d0; } };
+struct igNodeView : igObjectView {
+    int name, bound, parentList, flags, handle, childList;
+    igNodeView() { name = 0; bound = 0; parentList = 0; childList = 0; }
+    ~igNodeView();
+};
+struct igTransformView : igNodeView, igTransformVtable {
+    igMatrix44fView m;
+    int target, mvm, transformInput;
+    igTransformView() : igTransformVtable(&vtable) { mvm = 0; transformInput = 0; }
+    ~igTransformView();
+};
+struct TransformSyncView : igTransformView, TransformSyncVtable {
+    SyncTransformListField syncTransformList;
+    TransformSyncView() : TransformSyncVtable(&vtable) { }
+    ~TransformSyncView() { vtable = DAT_005397d0; }
+};
+int beTransformSync_GetVTable(void) {
+    TransformSyncView transform;
+    return *(int *)((char *)&transform + *(int *)((char *)DAT_00586dc8[0] + 916));
+}
+'''
+    EXTERNALS = {"__ct__12igObjectViewFv": 0x2fef20, "__ct__15igMatrix44fViewFv": 0x190380,
+                 "__dt__10igNodeViewFv": 0x195a90, "__dt__15igTransformViewFv": 0x1962d0,
+                 "__dt__22SyncTransformListFieldFv": 0x341160}
+
+    def setUp(self):
+        self.elf = Path(verify.ROOT) / "orig/SLUS-20836/SLUS_208.36"
+        if not all(Path(p).exists() for p in (verify.WIBO_DEFAULT, self.elf)):
+            self.skipTest("private compiler or retail image unavailable")
+        self.symbols = os.path.join(verify.ROOT, "config/SLUS-20836/symbols.txt")
+        profile = unitprofiles.resolve(self.OWNER, verify.FLAGS_DEFAULT, verify.MWCC_DEFAULT).profile
+        self.assertEqual(profile.exceptions, "on")
+        temp = tempfile.TemporaryDirectory(prefix="dw4-whole-file-table-")
+        self.addCleanup(temp.cleanup)
+        self.root = Path(temp.name)
+        source = self.root / "unit.cpp"
+        source.write_text(self.SOURCE)
+        self.obj = self.root / "unit.o"
+        subprocess.run(cc.compile_argv(verify.WIBO_DEFAULT, profile.compiler,
+                                       unitprofiles.command_flags(profile), str(source), str(self.obj)),
+                       cwd=verify.ROOT, check=True, capture_output=True)
+
+    def rows(self):
+        """(data, externals, stripped) as whole_file_rows.main derives them for the one member."""
+        syms, headers, functions = whole_file_rows.text_functions(str(self.obj))
+        retail = whole_file_rows.Retail(str(self.elf))
+        by_name, by_va = verify.load_symbols(self.symbols)
+        names = {name: address for name, (address, _size) in by_name.items()}
+        placed, records = {self.NAME: self.OWNER}, exceptions.load()
+        data, externals = whole_file_rows.data_rows(placed, retail, syms, headers, str(self.obj), functions,
+                                                    names, self.OWNER + by_va[self.OWNER][1])
+        duplicates = whole_file_rows.duplicate_rows(placed, retail, syms, headers, str(self.obj), functions,
+                                                    records)
+        self.assertEqual(duplicates, {})
+        externals = whole_file_rows.table_externals(placed, retail, syms, headers, str(self.obj), functions,
+                                                    records, names, data, externals, by_va)
+        return data, externals, sorted(n for n in functions if n not in placed)
+
+    def test_a_cleanup_only_the_table_names_is_an_external(self):
+        _data, externals, _stripped = self.rows()
+        self.assertEqual(externals, self.EXTERNALS)
+
+    def verify(self, drop=()):
+        data, externals, stripped = self.rows()
+        overlay = self.root / "objects.json"
+        overlay.write_text(json.dumps({"0x%08x" % self.OWNER: {
+            "whole_file": True, "symbol": self.NAME, "stripped": stripped,
+            "data": {k: "0x%08x" % v for k, v in data.items()},
+            "externals": {k: "0x%08x" % v for k, v in externals.items() if k not in drop}}}))
+        unitobjects.load.cache_clear()
+        self.addCleanup(unitobjects.load.cache_clear)
+        group, = unitobjects.load(str(overlay))
+        ok, report, _records = verify.verify_emitted_object(str(self.obj), group, str(self.elf), self.symbols)
+        return ok, report
+
+    def test_the_derived_row_verifies_the_table_exactly(self):
+        ok, report = self.verify()
+        self.assertTrue(ok, report)
+        self.assertIn("exc=ok cat=match", report.splitlines()[0])
+        self.assertIn("MATCH exception table (beTransformSync_GetVTable) 0x54302c 15B", report)
+
+    def test_without_the_cleanup_external_the_table_differs(self):
+        ok, report = self.verify(drop=(self.CLEANUP,))
+        self.assertFalse(ok)
+        self.assertIn("unresolved relocation '__dt__10igNodeViewFv'", report)
+
+
 class SharedStatics(unittest.TestCase):
     def setUp(self):
         temp = tempfile.TemporaryDirectory(prefix="dw4-statics-")
