@@ -334,24 +334,24 @@
    "compile.functions": 0,
    "foreign_profile.bytes": 288,
    "foreign_profile.functions": 10,
-   "fun_dat_refs": 57659,
+   "fun_dat_refs": 56779,
    "inline_asm.other": 0,
    "inventory.unsymbolised_bytes": 1020,
    "inventory_gap.bytes": 0,
    "inventory_gap.functions": 0,
-   "m2c_idiom.units": 2483,
+   "m2c_idiom.units": 2386,
    "mismatch.bytes": 0,
    "mismatch.functions": 0,
    "name_defect.bytes": 0,
    "name_defect.functions": 0,
-   "opt_pragma.statements": 8,
+   "opt_pragma.statements": 7,
    "orphan.bytes": 32,
    "profile_split.bytes": 39168,
    "profile_split.units": 9,
    "raw_casts.reflected": 363,
-   "struct.a": 83,
-   "struct.b": 100,
-   "struct.c": 171,
+   "struct.a": 81,
+   "struct.b": 98,
+   "struct.c": 165,
    "unapproved.bytes": 47092,
    "unapproved.functions": 58,
    "unmatched.bytes": 632488,
@@ -452,42 +452,42 @@
   "vtables": 478
  },
  "readable": {
-  "bytes": 631368,
+  "bytes": 638600,
   "failing": {
    "addresses": {
-    "bytes": 1900324,
-    "functions": 11687
+    "bytes": 1890920,
+    "functions": 11592
    },
    "fields": {
-    "bytes": 465392,
-    "functions": 1661
+    "bytes": 456912,
+    "functions": 1609
    },
    "idioms": {
-    "bytes": 740304,
-    "functions": 2713
+    "bytes": 723156,
+    "functions": 2616
    },
    "name": {
     "bytes": 1872464,
     "functions": 13784
    },
    "placed": {
-    "bytes": 1156812,
-    "functions": 5882
+    "bytes": 1136052,
+    "functions": 5684
    },
    "references": {
-    "bytes": 1363980,
-    "functions": 6568
+    "bytes": 1344468,
+    "functions": 6402
    },
    "types": {
-    "bytes": 511340,
-    "functions": 1620
+    "bytes": 501628,
+    "functions": 1564
    },
    "virtuals": {
-    "bytes": 184772,
-    "functions": 337
+    "bytes": 182904,
+    "functions": 323
    }
   },
-  "functions": 3962,
+  "functions": 4024,
   "matched_functions": 19540
  },
  "regions": [
@@ -624,9 +624,9 @@
   "error": null,
   "offset_casts": 6505,
   "pct": 38.97,
-  "recovered": 26213,
-  "synthetic": 10365,
-  "total": 67257,
+  "recovered": 26210,
+  "synthetic": 10377,
+  "total": 67260,
   "typeable": 363,
   "typeable_pct": 0.54
  }
