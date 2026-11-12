@@ -980,15 +980,6 @@
       "__dl__FPv": "0x00100610"
     }
   },
-  "0x0037e3a0": {
-    "emitted": {},
-    "duplicates": {
-      "__dt__31igSmartPointer<13beDemoKeepMes>Fv": "0x0037e250"
-    },
-    "externals": {
-      "__dl__FPv": "0x00100610"
-    }
-  },
   "0x00383420": {
     "emitted": {},
     "duplicates": {
@@ -1133,58 +1124,6 @@
     "emitted": {},
     "externals": {
       "__dl__FPv": "0x00100610"
-    }
-  },
-  "0x0037e180": {
-    "duplicates": {
-      "__dt__31igSmartPointer<13beDemoKeepMes>Fv": "0x0037e250"
-    },
-    "externals": {
-      "__dl__FPv": "0x00100610"
-    },
-    "exceptions": {
-      "index": "0x0054e7b0",
-      "table": "0x005435dc",
-      "table_size": "0x10"
-    }
-  },
-  "0x0037e2d0": {
-    "duplicates": {
-      "__dt__31igSmartPointer<13beDemoKeepMes>Fv": "0x0037e250"
-    },
-    "externals": {
-      "__dl__FPv": "0x00100610"
-    },
-    "exceptions": {
-      "index": "0x0054e7c8",
-      "table": "0x005435ec",
-      "table_size": "0x10"
-    }
-  },
-  "0x0037e6e0": {
-    "duplicates": {
-      "__dt__31igSmartPointer<13beDemoKeepMes>Fv": "0x0037e250"
-    },
-    "externals": {
-      "__dl__FPv": "0x00100610"
-    },
-    "exceptions": {
-      "index": "0x0054e7e0",
-      "table": "0x00543610",
-      "table_size": "0x10"
-    }
-  },
-  "0x0037e890": {
-    "duplicates": {
-      "__dt__31igSmartPointer<13beDemoKeepMes>Fv": "0x0037e250"
-    },
-    "externals": {
-      "__dl__FPv": "0x00100610"
-    },
-    "exceptions": {
-      "index": "0x0054e7ec",
-      "table": "0x00543620",
-      "table_size": "0x10"
     }
   },
   "0x00332e90": {
@@ -31386,6 +31325,40 @@
       "__dt__9StringRefFv": "0x00130720"
     },
     "symbol": "FUN_003b04e0"
+  },
+  "0x0037e110": {
+    "whole_file": true,
+    "emitted": {
+      "FUN_0037e180": "0x0037e180",
+      "__dt__31igSmartPointer<13beDemoKeepMes>Fv": "0x0037e250",
+      "FUN_0037e2d0": "0x0037e2d0",
+      "FUN_0037e3a0": "0x0037e3a0",
+      "FUN_0037e6e0": "0x0037e6e0",
+      "FUN_0037e890": "0x0037e890",
+      "FUN_0037ea50": "0x0037ea50",
+      "Gap__Bec__beDemoManager__vfunc_21": "0x0037ead0",
+      "Gap__Bec__beDemoManager__vfunc_22": "0x0037eaf0",
+      "Gap__Bec__beDemoManager__vfunc_23": "0x0037eb10",
+      "Gap__Bec__beDemoManager__vfunc_24": "0x0037eb60",
+      "Gap__Bec__beDemoManager__vfunc_25": "0x0037eb70",
+      "Gap__Bec__beDemoManager__vfunc_26": "0x0037eb80",
+      "Gap__Bec__beDemoManager__vfunc_27": "0x0037ed70",
+      "Gap__Bec__beDemoManager__vfunc_20": "0x0037f1a0"
+    },
+    "data": {
+      "@604": "0x0050e4f0",
+      "DAT_00586f20": "0x00586f20",
+      "DAT_00587110": "0x00587110",
+      "DAT_00588f38": "0x00588f38",
+      "DAT_00589208": "0x00589208",
+      "DAT_0058a1e0": "0x0058a1e0",
+      "GPR_00554c14": "0x00554c14",
+      "g_beDemoManager_metaObject": "0x00589790"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    },
+    "symbol": "FUN_0037e110"
   },
   "0x0037b010": {
     "whole_file": true,

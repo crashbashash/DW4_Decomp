@@ -598,10 +598,7 @@
 0x0037a7b0	0x0037aac0	bec_beCameraMode	b52	-O4,p -sdatathreshold 2 -inline level=8 -Iinclude	on	-	whole file
 0x0037aac0	0x0037b010	bec_beChangePosTransform	b52	-O4,p -sdatathreshold 2 -inline level=8 -Iinclude	on	-	whole file
 0x0037b010	0x0037e110	bec_beCri	b52	-O4,p -sdatathreshold 2 -inline level=8 -Iinclude	on	-	whole file
-0x0037e110	0x0037e2d0	unlabeled_37e110	b52	-O4,p -sdatathreshold 2 -inline level=8 -Iinclude	on	-	unlabeled run, no boundary evidence: cut where the retail exception evidence or the pins change; exceptions on: 3/3 functions have retail index records; combat -O3,p -Iinclude reproduces 3/3 members
-0x0037e2d0	0x0037e394	unlabeled_37e2d0	b52	-O4,p -sdatathreshold 2 -inline level=8 -Iinclude	on	-	unlabeled run, no boundary evidence: cut where the retail exception evidence or the pins change; exceptions on: 1/1 functions have retail index records; default -O3 -Iinclude reproduces 1/1 members
-0x0037e3a0	0x0037ead0	unlabeled_37e3a0	b52	-O4,p -sdatathreshold 2 -inline level=8 -Iinclude	on	-	unlabeled run, no boundary evidence: cut where the retail exception evidence or the pins change; exceptions on: 4/4 functions have retail index records; combat -O3,p -Iinclude reproduces 4/4 members
-0x0037ead0	0x0037f1ac	beDemoManager_37ead0	b52	-O4,p -sdatathreshold 2 -inline level=8 -Iinclude	on	-	class run of 8 labeled members; exceptions on: 5/8 functions have retail index records; combat -O3,p -Iinclude reproduces 8/8 members
+0x0037e110	0x0037f1b0	bec_beDemoManager	b52	-O4,p -sdatathreshold 2 -inline level=8 -Iinclude	on	-	whole file
 0x0037f1b0	0x0037f218	unlabeled_37f1b0	b52	-O4,p -sdatathreshold 2 -inline level=8 -Iinclude	on	-	unlabeled run, no boundary evidence: cut where the retail exception evidence or the pins change; exceptions on: 1/1 functions have retail index records; combat -O3,p -Iinclude reproduces 1/1 members
 0x0037f220	0x0038199c	beFileListInfoManager_37f220	b52	-O4,p -sdatathreshold 2 -inline level=8 -Iinclude	on	-	class run of 8 labeled members, 2 unlabeled functions inside; exceptions on: 8/10 functions have retail index records; combat -O3,p -Iinclude reproduces 9/9 members
 0x003819a0	0x00382d6c	beFont_3819a0	b52	-O4,p -sdatathreshold 2 -inline level=8 -Iinclude	on	-	class run of 7 labeled members; exceptions on: 5/7 functions have retail index records; combat -O3,p -Iinclude reproduces 7/7 members
