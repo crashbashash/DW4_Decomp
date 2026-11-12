@@ -15,7 +15,8 @@ unit's profile, then:
              compiled under that unit's profile, at the retail extent
   stripped   any other compiled function with no retail copy: the retail linker dropped it
   data       each referenced datum's address, read back from the retail relocation fields
-  externals  each call out of the file, read from the retail `jal`
+  externals  each call out of the file, read from the retail `jal` of a member or of a duplicate's
+             retail copy
 
 A retail function in the range that no compiled function reproduces stops the run with its name:
 the compile is wrong, and writing rows would hide it behind `stripped`. A source file that is still
@@ -273,6 +274,24 @@ def duplicate_rows(function_at, retail, syms, headers, obj, functions, records, 
     return out
 
 
+def duplicate_externals(duplicates, retail, functions, names, externals, twins=None):
+    """`externals` with the calls out of the file that the duplicates make, read from the `jal`
+    of retail's copy: the copy is relocated with the row's externals when it is checked, and a
+    call only a duplicate makes (`operator delete` in an inline destructor) has no member's `jal`
+    to be read from."""
+    out = dict(externals)
+    for name, address in duplicates.items():
+        copy = (twins(name, address) if twins else None) or functions[name]
+        for _section, offset, kind, symbol, _addend in copy.relocs:
+            if kind != R_26 or symbol in functions or symbol in names:
+                continue
+            target = (address & 0xf0000000) | ((retail.word(address + offset) & 0x3ffffff) << 2)
+            if out.get(symbol, target) != target:
+                sys.exit("%s: %s reads as 0x%x and 0x%x" % (name, symbol, out[symbol], target))
+            out[symbol] = target
+    return out
+
+
 def unrecovered(missing, defined):
     """The names of the retail functions a partial file has no source for, or None when the file
     defines one of them: a definition that reproduces no retail copy is a wrong compile, not a
@@ -378,6 +397,7 @@ def main(argv=None):
                 continue
             data, externals = data_rows(at, retail, syms, headers, obj, functions, known, hi)
             duplicates = duplicate_rows(at, retail, syms, headers, obj, functions, records, twins)
+            externals = duplicate_externals(duplicates, retail, functions, known, externals, twins)
             members = sorted((va, name) for name, va in at.items())
             row = {"whole_file": True,
                    "emitted": {name: "0x%08x" % va for va, name in members[1:]},

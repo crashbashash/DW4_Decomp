@@ -369,6 +369,22 @@ class ProfileTwin(unittest.TestCase):
         with self.assertRaisesRegex(SystemExit, "is 148 bytes and retail's copy at 0x130720 is 116"):
             self.duplicates(self.config("-O1 -sdatathreshold 2 -Iinclude", "off"))
 
+    def test_a_call_only_the_duplicates_make_is_an_external(self):
+        syms, headers, functions = whole_file_rows.text_functions(str(self.obj))
+        retail = whole_file_rows.Retail(str(self.elf))
+        placed = {self.NAME: self.OWNER}
+        names = {name: address for name, (address, _size) in verify.load_symbols(
+            str(self.CONFIG / "symbols.txt"))[0].items()}
+        _data, externals = whole_file_rows.data_rows(placed, retail, syms, headers, str(self.obj),
+                                                     functions, names, self.OWNER + 4)
+        self.assertNotIn("__dl__FPv", externals)
+        twins = whole_file_rows.Twins(self.profile, str(self.SOURCE), str(self.root), str(self.CONFIG),
+                                      verify.WIBO_DEFAULT)
+        duplicates = whole_file_rows.duplicate_rows(placed, retail, syms, headers, str(self.obj), functions,
+                                                    exceptions.load(), twins)
+        externals = whole_file_rows.duplicate_externals(duplicates, retail, functions, names, externals, twins)
+        self.assertEqual(externals, dict(unitobjects.group_for(self.OWNER).externals))
+
 
 class SharedStatics(unittest.TestCase):
     def setUp(self):
