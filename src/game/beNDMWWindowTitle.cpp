@@ -1,16 +1,16 @@
 #include "dw4/reflected.h"
-#define ENSURE_POOL() if (((int *)DAT_00586f20)[0] == 0) { v = ((int)FUN_002eb010(0x10)); if (v != 0) { v = ((int)StringPool_Construct(v)); } ((int *)DAT_00586f20)[0] = v; }
+#define ENSURE_POOL() if (((int *)g_stringPool)[0] == 0) { v = ((int)FUN_002eb010(0x10)); if (v != 0) { v = ((int)StringPool_Construct(v)); } ((int *)g_stringPool)[0] = v; }
 #define INTERN_APPEND(field, text) { \
     const char *tok; \
     if ((text) == 0) { \
         tok = 0; \
     } else { \
-        if (DAT_00586f20[0] == 0) { \
+        if (g_stringPool[0] == 0) { \
             void *pool = FUN_002eb010(0x10); \
             if (pool != 0) pool = StringPool_Construct(pool); \
-            DAT_00586f20[0] = pool; \
+            g_stringPool[0] = pool; \
         } \
-        tok = StringPool_Intern(DAT_00586f20[0], (const char *)(text)); \
+        tok = StringPool_Intern(g_stringPool[0], (const char *)(text)); \
     } \
     StringRef held((int *)tok); \
     StringList_AppendRetained(field, &held); }
@@ -69,19 +69,19 @@ extern "C" int DAT_0051ae70[4];
 extern "C" int DAT_0051ae80[4];
 extern "C" int DAT_0051aea0[4];
 extern "C" int DAT_0051aeb0[4];
-extern "C" void *DAT_00586f20[4];
+extern "C" void *g_stringPool[4];
 struct Rec { char pad[12]; unsigned int sel; };
 /* Creates the shared string pool on first use; open-coded in the two clear loops because the
  * inline Str::intern there would change their register allocation. */
 
 struct Str {
     static inline int *intern(const char *s) {
-        if (((int *)DAT_00586f20)[0] == 0) {
+        if (((int *)g_stringPool)[0] == 0) {
             int v = ((int)FUN_002eb010(0x10));
             if (v != 0) v = ((int)StringPool_Construct(v));
-            ((int *)DAT_00586f20)[0] = v;
+            ((int *)g_stringPool)[0] = v;
         }
-        return (int *)StringPool_Intern(((int *)DAT_00586f20)[0], s);
+        return (int *)StringPool_Intern(((int *)g_stringPool)[0], s);
     }
     static inline void release(int *p) {
         if (p != 0) {
@@ -198,7 +198,7 @@ void FUN_00425430(beNDMWWindow *arg0) {
         do {
             e1 = (int **)((char *)l1->_data + off1);
             ENSURE_POOL();
-            a2b = (int *)StringPool_Intern(((int *)DAT_00586f20)[0], 0);
+            a2b = (int *)StringPool_Intern(((int *)g_stringPool)[0], 0);
             t = *e1;
             Str::release(t);
             i1 += 1;
@@ -216,7 +216,7 @@ void FUN_00425430(beNDMWWindow *arg0) {
         do {
             e = (int **)((char *)l3->_data + off3);
             ENSURE_POOL();
-            a2 = (int *)StringPool_Intern(((int *)DAT_00586f20)[0], 0);
+            a2 = (int *)StringPool_Intern(((int *)g_stringPool)[0], 0);
             t = *e;
             Str::release(t);
             i3 += 1;

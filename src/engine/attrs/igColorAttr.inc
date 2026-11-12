@@ -3,11 +3,11 @@ void FUN_00138ee0(int arg0) {
     igMetaObject_CreateInstance(*(int *)0x55F2E0, arg0);
 }
 
-int FUN_00138f20(void) {
-    if (DAT_0055f2e0[0] == 0) {
-        DAT_0055f2e0[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(DAT_00587040[0]));
+igMetaObject *FUN_00138f20(void) {
+    if (g_igColorAttr_metaObject[0] == 0) {
+        g_igColorAttr_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
     }
-    return DAT_0055f2e0[0];
+    return g_igColorAttr_metaObject[0];
 }
 
 igMetaObject *igColorAttr_GetMetaObject(void)
@@ -23,7 +23,7 @@ int igColorAttr_GetVTable(void) {
 
     igObject_InitHeader(&obj);
     obj.vt = &DAT_00523ee0[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 
 void FUN_00139000(void)
@@ -60,7 +60,7 @@ void igColorAttr_InitFields(void) {
     void *temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)DAT_0055f2e0[0];
+    temp_s0 = (void *)g_igColorAttr_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_00486918[0], 2);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));

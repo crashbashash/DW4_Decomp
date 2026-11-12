@@ -20,7 +20,7 @@ int igPsx2VertexArray2_GetVTable(void) {
     *(int *)&u.b[16] = 0;
     *(int *)&u.b[20] = 0;
     u.vt = (int)&DAT_00525120[0];
-    temp_s0 = *(int *)&u.b[*(int *)((char *)(DAT_00586dc8[0]) + 916)];
+    temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.vt = (int)&DAT_00525120[0];
     FUN_0014a910((Obj_14a910 *)u.b, 0);
     return temp_s0;
@@ -48,11 +48,11 @@ void igPsx2VertexArray2_Register(void) {
     );
 }
 
-int FUN_00152340(void) {
-    return DAT_0055f9e0[0];
+igMetaObject *FUN_00152340(void) {
+    return g_igVertexArray2_metaObject[0];
 }
 
 void FUN_00152350(void) {
-    *(int *)((char *)(DAT_00560478[0]) + 64) = (int)(&thunk_igVertexArray2_GetMetaObject);
+    *(int *)((char *)(g_igPsx2VertexArray2_metaObject[0]) + 64) = (int)(&thunk_igVertexArray2_GetMetaObject);
 }
 

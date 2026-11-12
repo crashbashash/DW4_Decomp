@@ -4,11 +4,11 @@ void FUN_0034f8e0(int arg0) {
 }
 
 void *FUN_0034f920(void) {
-    struct G *g = DAT_00588800[0];
-    if (!g || ((g->f & 4) != 0) == false) {
+    igMetaObject *g = g_beModelCtrlSCEffect_metaObject[0];
+    if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_0034fa30();
     }
-    return DAT_00588800[0];
+    return g_beModelCtrlSCEffect_metaObject[0];
 }
 
 int beModelCtrlSCEffect_GetVTable(void) {
@@ -25,7 +25,7 @@ int beModelCtrlSCEffect_GetVTable(void) {
     obj._vtable = (int)&DAT_0053aef0[0];
     *p0 = 0;
     *p1 = 0;
-    t = *(int *)((char *)&obj + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+    t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
     obj._vtable = (int)&DAT_0053aef0[0];
     if (p1 != 0) {
         o = (char *)*p1;
@@ -83,7 +83,7 @@ void beModelCtrlSCEffect_InitFields(void) {
     int temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)((int *)DAT_00588800)[0];
+    temp_s0 = (void *)g_beModelCtrlSCEffect_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_004c4c80[0], 7);
     FUN_002ea4b0(((int)igMetaObject_GetFieldAt(temp_s0, temp_s1)), -1);

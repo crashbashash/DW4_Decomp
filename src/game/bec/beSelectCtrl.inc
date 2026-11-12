@@ -3,19 +3,19 @@ void FUN_00345a00(int arg0) {
     igMetaObject_CreateInstance(*(int *)0x587F98, arg0);
 }
 
-int FUN_00345a40(void) {
-    if (((int *)DAT_00587f98)[0] == 0) {
-        ((int *)DAT_00587f98)[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(DAT_00587040[0]));
+igMetaObject *FUN_00345a40(void) {
+    if (g_beSelectCtrl_metaObject[0] == 0) {
+        g_beSelectCtrl_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
     }
-    return ((int *)DAT_00587f98)[0];
+    return g_beSelectCtrl_metaObject[0];
 }
 
 void *FUN_00345a90(void) {
-    struct G *g = DAT_00587f98[0];
-    if (!g || ((g->f & 4) != 0) == false) {
+    igMetaObject *g = g_beSelectCtrl_metaObject[0];
+    if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_00345bc0();
     }
-    return DAT_00587f98[0];
+    return g_beSelectCtrl_metaObject[0];
 }
 
 int beSelectCtrl_GetVTable(void) {
@@ -34,7 +34,7 @@ int beSelectCtrl_GetVTable(void) {
     q0 = (S_ref *)&u.b[24];
     *(int *)q0 = 0;
     u.vt = (int)&DAT_0053b290[0];
-    temp_s0 = *(int *)&u.b[*(int *)((char *)(DAT_00586dc8[0]) + 916)];
+    temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.vt = (int)&DAT_0053a0d0[0];
     if (q0 != 0) {
         q0 = *(S_ref **)q0;
@@ -92,11 +92,11 @@ void beSelectCtrl_InitFields(void) {
     void *temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)((int *)DAT_00587f98)[0];
+    temp_s0 = (void *)g_beSelectCtrl_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_004c3b88[0], 2);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = FUN_0034c8e0();
+    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_0034c8e0();
     ((igObjectRefMetaField *)temp_s1)->_refCounted = 0;
     FUN_002d3890(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1), 1);
     igMetaObject_NameFields(temp_s0, &DAT_004c3b90[0], &DAT_004c3b98[0], &DAT_004c3ba0[0], temp_s2);

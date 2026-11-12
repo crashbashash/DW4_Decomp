@@ -23,8 +23,8 @@ int igVec4ucMetaField_GetVTable(void) {
 
     igMetaField_Init(u.b);
     u.vt = (int)&DAT_005271e0[0];
-    temp_s0 = *(int *)&u.b[*(int *)((char *)(DAT_00586dc8[0]) + 916)];
-    u.vt = (int)&DAT_0052f230[0];
+    temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
+    u.vt = (int)&g_igMetaField_vtable[0];
     ps = &u.b[12];
     if (ps != 0) {
         temp_v1 = *(int **)ps;
@@ -67,7 +67,7 @@ void thunk_FUN_00187010(void) {
 }
 
 int FUN_00187180(void) {
-    return DAT_00585cc8[0];
+    return g_igMetaField_metaObject[0];
 }
 
 void FUN_00187190(void) {
@@ -76,7 +76,7 @@ void FUN_00187190(void) {
     int len;
 
     if (DAT_00560f30[0] == 0) {
-        DAT_00560f30[0] = igMetaObject_CreateInstance(DAT_00560f28[0], Memory_GetAllocatorBySelector(DAT_00587040[0]));
+        DAT_00560f30[0] = igMetaObject_CreateInstance(g_igVec4ucMetaField_metaObject[0], Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
         temp_s0 = DAT_00560f30[0];
         if (temp_s0 != 0) {
             MetaRefList_AppendRetained(FUN_002fc250(), temp_s0);

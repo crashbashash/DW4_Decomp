@@ -11,7 +11,7 @@ int igCompoundList_GetVTable(void) {
 
     igObject_InitHeader(&obj);
     obj.vt = &DAT_0052c750[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 
 void FUN_00225900(void)
@@ -45,7 +45,7 @@ void igCompoundList_InitFields(void) {
     void *temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)DAT_0056d840[0];
+    temp_s0 = (void *)g_igCompoundList_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_00497b68[0], 3);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 2));
@@ -56,7 +56,7 @@ void igCompoundList_InitFields(void) {
     igMetaObject_NameFields(temp_s0, &DAT_00497b78[0], &DAT_00497b88[0], &DAT_00497b98[0], temp_s2);
 }
 
-int FUN_00225a30(void) {
-    return DAT_0056d890[0];
+igMetaObject *FUN_00225a30(void) {
+    return g_igOptBase_metaObject[0];
 }
 

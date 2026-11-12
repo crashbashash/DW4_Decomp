@@ -1,15 +1,15 @@
-void *beMessengerArgData_Create(void *allocator){beMessengerArgData_EnsureRegistered();return ((void *)igMetaObject_CreateInstance((void *)((int *)g_beMessengerArgData_metaObject)[0],allocator));}
+void *beMessengerArgData_Create(void *allocator){beMessengerArgData_EnsureRegistered();return ((void *)igMetaObject_CreateInstance((void *)g_beMessengerArgData_metaObject[0],allocator));}
 
-int FUN_00358dc0(void) {
-    if (((int *)DAT_00589038)[0] == 0) {
-        ((int *)DAT_00589038)[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(DAT_00587040[0]));
+igMetaObject *FUN_00358dc0(void) {
+    if (g_beMessengerArgData_metaObject[0] == 0) {
+        g_beMessengerArgData_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
     }
-    return ((int *)DAT_00589038)[0];
+    return g_beMessengerArgData_metaObject[0];
 }
 
-SFUN_00358e10 *FUN_00358e10(void) {
-    if (DAT_00589038[0] == 0 || !DAT_00589038[0]->ok()) beMessengerArgData_EnsureRegistered();
-    return DAT_00589038[0];
+igMetaObject *FUN_00358e10(void) {
+    if (g_beMessengerArgData_metaObject[0] == 0 || !isValid(g_beMessengerArgData_metaObject[0])) beMessengerArgData_EnsureRegistered();
+    return g_beMessengerArgData_metaObject[0];
 }
 
 int beMessengerArgData_GetVTable(void) {
@@ -27,7 +27,7 @@ int beMessengerArgData_GetVTable(void) {
     obj.w9 = 0;
     obj.w10 = 0;
     obj.w11 = 0;
-    t = *(int *)((char *)&obj + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+    t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
     obj.vt = &DAT_00536ca0[0];
     ObjectRef_Destruct_001c6460(&obj.w11, -1);
     FUN_0014aa70(&obj.w10, -1);
@@ -77,7 +77,7 @@ void beMessengerArgData_InitFields(void) {
     int temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)((int *)DAT_00589038)[0];
+    temp_s0 = (void *)g_beMessengerArgData_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_004c5e80[0], 0xA);
     temp_s2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 2));

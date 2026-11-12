@@ -6,7 +6,7 @@ class W { public: virtual void d0(); virtual void d1(); virtual void d2(); virtu
 struct R { int w0; int rc; };
 R *FUN_00236f80(...);
 int igObject_Destroy(...);
-extern int DAT_0058c790[4];
+extern int g_igViewerSceneInfoManager_metaObject[4];
 void Gap__Viewer__igActorManager__vfunc_25(igActorManager *arg0);
 
 int FUN_00236be0(...);
@@ -48,7 +48,7 @@ void Gap__Viewer__igActorManager__vfunc_25(igActorManager *arg0) {
     R *temp_v0;
     R *temp_a0;
 
-    temp_v0 = FUN_00236f80(arg0->_insight, DAT_0058c790[0]);
+    temp_v0 = FUN_00236f80(arg0->_insight, g_igViewerSceneInfoManager_metaObject[0]);
     if (temp_v0 != 0) {
         temp_v0->rc = temp_v0->rc + 1;
     }

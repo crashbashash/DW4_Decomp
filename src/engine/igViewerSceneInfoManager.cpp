@@ -138,9 +138,9 @@ typedef struct NodeEntry { char pad[12]; NodeList *fc; } NodeEntry;
 
 int igObject_IsKindOf(...);
 
-extern int DAT_0055ef80[4];
-extern void *DAT_0055f170[4];
-extern int DAT_0055f208[4];
+extern int g_igParticleAttr_metaObject[4];
+extern void *g_igGeometryAttr_metaObject[4];
+extern int g_igDisplayListAttr_metaObject[4];
 
 void FUN_00462d10(void *arg0);
 
@@ -186,7 +186,7 @@ int FUN_001d6700(...);
 int ObjectList_AppendRetainedList(...);
 int igSceneInfo_GetMetaObject(...);
 
-extern float DAT_004e1058[4];
+extern float g_vec3Zero[4];
 extern float DAT_004e105c[4];
 extern float DAT_004e1060[4];
 extern int DAT_0058c9f8[4];
@@ -329,17 +329,17 @@ static inline void setObject(const igSmartPointer<Camera> &ref, igObject *value)
 struct T2 { void f(); };
 struct O { int p0, p1; T2 *t; void (T2::*pmf)(); };
 
-extern int DAT_0058c770[4];
+extern int g_igViewerAction_metaObject[4];
 
-extern int DAT_0058c790[4];
+extern int g_igViewerSceneInfoManager_metaObject[4];
 
-extern int DAT_0058c928[4];
+extern int g_igViewerSceneInfoManagerController_metaObject[4];
 
-extern int DAT_0058c9e8;
+extern int g_igViewerParameters_metaObject;
 
-extern int DAT_0058c680[4];
+extern int g_igViewerStatisticsManager_metaObject[4];
 
-extern int DAT_0058c708[4];
+extern int g_igStatisticsItem_metaObject[4];
 
 int igOnOffModel_GetMetaObject(...);
 
@@ -556,13 +556,13 @@ int FUN_00462100(NodeEntry *arg0) {
     if (arg0 == 0) {
         return 0;
     }
-    if (igObject_IsKindOf(arg0, DAT_0055f170[0]) != 0) {
+    if (igObject_IsKindOf(arg0, g_igGeometryAttr_metaObject[0]) != 0) {
         return 1;
     }
-    if (igObject_IsKindOf(arg0, DAT_0055ef80[0]) != 0) {
+    if (igObject_IsKindOf(arg0, g_igParticleAttr_metaObject[0]) != 0) {
         return 1;
     }
-    if (igObject_IsKindOf(arg0, DAT_0055f208[0]) != 0) {
+    if (igObject_IsKindOf(arg0, g_igDisplayListAttr_metaObject[0]) != 0) {
         n = arg0->fc->f8;
         i = 0;
         if (0 < n) {
@@ -672,7 +672,7 @@ int Gap__Viewer__igViewerSceneInfoManager__vfunc_27(igViewerSceneInfoManager *ar
         b = false;
         float f2 = s0->f80;
         a = false;
-        if (!(f2 != DAT_004e1058[0])) { if (!(s0->f84 != DAT_004e105c[0])) { a = true; } }
+        if (!(f2 != g_vec3Zero[0])) { if (!(s0->f84 != DAT_004e105c[0])) { a = true; } }
         if (a && s0->f88 == DAT_004e1060[0]) {
             b = true;
         }
@@ -1062,19 +1062,19 @@ extern "C" void Gap__Viewer__igViewerAction__vfunc_23(O *o) {
 }
 
 int Gap__Viewer__igViewerAction__vfunc_22(void) {
-    return DAT_0058c770[0];
+    return g_igViewerAction_metaObject[0];
 }
 
 int Gap__Viewer__igViewerSceneInfoManager__vfunc_22(void) {
-    return DAT_0058c790[0];
+    return g_igViewerSceneInfoManager_metaObject[0];
 }
 
 int Gap__Viewer__igViewerSceneInfoManagerController__vfunc_22(void) {
-    return DAT_0058c928[0];
+    return g_igViewerSceneInfoManagerController_metaObject[0];
 }
 
 void Gap__Viewer__igViewerSceneInfoManagerController__vfunc_23(int arg0, int arg1) {
-    igObject_IsKindOf(arg1, DAT_0058c9e8);
+    igObject_IsKindOf(arg1, g_igViewerParameters_metaObject);
 }
 
 void Gap__Viewer__igStatisticsItem__vfunc_24(void) {
@@ -1110,11 +1110,11 @@ float Gap__Viewer__igViewerStatisticsManager__vfunc_26(void) {
 }
 
 int Gap__Viewer__igViewerStatisticsManager__vfunc_22(void) {
-    return DAT_0058c680[0];
+    return g_igViewerStatisticsManager_metaObject[0];
 }
 
 int Gap__Viewer__igStatisticsItem__vfunc_22(void) {
-    return DAT_0058c708[0];
+    return g_igStatisticsItem_metaObject[0];
 }
 
 void Gap__Viewer__igStatisticsItem__vfunc_23(void *arg0, int arg1) {

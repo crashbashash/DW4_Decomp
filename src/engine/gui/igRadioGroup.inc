@@ -1,8 +1,8 @@
-int FUN_0044cdf0(void) {
-    if (DAT_0058c240[0] == 0) {
-        DAT_0058c240[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(DAT_00587040[0]));
+igMetaObject *FUN_0044cdf0(void) {
+    if (g_igRadioGroup_metaObject[0] == 0) {
+        g_igRadioGroup_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
     }
-    return DAT_0058c240[0];
+    return g_igRadioGroup_metaObject[0];
 }
 
 igMetaObject *igRadioGroup_GetMetaObject(void)
@@ -30,7 +30,7 @@ int igRadioGroup_GetVTable(void) {
     *(int *)p4C = 0;
     p50 = &u.b[16];
     *(int *)p50 = 0;
-    r = *(int *)&u.b[*(int *)((char *)(DAT_00586dc8[0]) + 916)];
+    r = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.vt = (int)&DAT_00540dd0[0];
     if (p50 != 0) {
         v1 = *(int **)p50;
@@ -95,17 +95,17 @@ void igRadioGroup_InitFields(void) {
     void *temp_s2_3;
     void *temp_s1;
 
-    temp_s1 = (void *)DAT_0058c240[0];
+    temp_s1 = (void *)g_igRadioGroup_metaObject[0];
     temp_s0 = igMetaObject_GetFieldCount(temp_s1);
     igMetaObject_CreateFields(temp_s1, &DAT_004d0020[0], 6);
     temp_s2 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0));
-    ((igObjectRefMetaField *)temp_s2)->_metaObject = FUN_0044d170();
+    ((igObjectRefMetaField *)temp_s2)->_metaObject = (int)FUN_0044d170();
     ((igRefMetaField *)temp_s2)->_construct = 1;
     temp_s2_2 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 1));
-    ((igObjectRefMetaField *)temp_s2_2)->_metaObject = FUN_0044cbd0();
+    ((igObjectRefMetaField *)temp_s2_2)->_metaObject = (int)FUN_0044cbd0();
     ((igRefMetaField *)temp_s2_2)->_construct = 1;
     temp_s2_3 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 2));
-    ((igObjectRefMetaField *)temp_s2_3)->_metaObject = FUN_0044c880();
+    ((igObjectRefMetaField *)temp_s2_3)->_metaObject = (int)FUN_0044c880();
     ((igRefMetaField *)temp_s2_3)->_construct = 1;
     FUN_002d3890(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 3), 1);
     FUN_002ea4b0(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 4), -1);

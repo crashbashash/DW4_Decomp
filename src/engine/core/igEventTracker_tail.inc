@@ -183,9 +183,9 @@ void Gap__Core__igEventTracker__vfunc_28(int *arg0, char *arg1, char *arg2, int 
     } while (1);
     *arg3 = acc;
     if (*arg3 >= 0x20) {
-        *arg0 = DAT_004fb418.v;
+        *arg0 = g_allocatorFailureStatus.v;
     } else {
-        *arg0 = DAT_004fb410.v;
+        *arg0 = g_statusSucceeded.v;
     }
 }
 
@@ -212,14 +212,14 @@ void Gap__Core__igEventTracker__vfunc_29(int *arg0, char *arg1, char *arg2, int 
         sh += 7;
     } while (1);
     if (acc >= 0x20) {
-        *arg0 = DAT_004fb418.v;
+        *arg0 = g_allocatorFailureStatus.v;
         return;
     }
     {
     char *q = arg2 + 1;
     c = *arg2;
     if (c > DAT_004c1ea8[0]) {
-        *arg0 = DAT_004fb418.v;
+        *arg0 = g_allocatorFailureStatus.v;
         return;
     }
     acc2 = 0;
@@ -237,10 +237,10 @@ void Gap__Core__igEventTracker__vfunc_29(int *arg0, char *arg1, char *arg2, int 
     if (acc2 & 1) {
         *arg3 = ((unsigned char)q[0]) | ((((unsigned char)q[1]) << 8) | ((((unsigned char)q[3]) << 24) | (((unsigned char)q[2]) << 16)));
     } else {
-        *arg0 = DAT_004fb418.v;
+        *arg0 = g_allocatorFailureStatus.v;
         return;
     }
-    *arg0 = DAT_004fb410.v;
+    *arg0 = g_statusSucceeded.v;
     }
 }
 
@@ -266,7 +266,7 @@ void Gap__Core__igEventTracker__vfunc_33(T_2df6d0 *arg0, int arg1, int arg2, int
     }
     for (;;) {
         int c = arg0->v25(var_s0, &ev).Code();
-        if (c != DAT_004fb410.v) break;
+        if (c != g_statusSucceeded.v) break;
         if (ev.str != 0 && *ev.str != 0 && strcmp(ev.str, key) == 0) {
             switch (ev.type) {
             case 6:
@@ -435,7 +435,7 @@ void Gap__Core__igEventTracker__vfunc_50(EventTrackerSlots *self, int n) {
         offset = p - base;
         len = p[1];
         p += 2;
-        if (self->Lookup(offset, &value) == ((EventLookupResult *)&DAT_004fb410)[0]) {
+        if (self->Lookup(offset, &value) == ((EventLookupResult *)&g_statusSucceeded)[0]) {
             self->Bind(value, offset);
         }
         p += len;
@@ -511,7 +511,7 @@ R_2e1710 Gap__Core__igEventTracker__vfunc_40(T_2e1710 *arg1, int arg2, int arg3,
     int s0;
     if (FUN_002eb210((void *)arg1->f76) != 0) {
         s0 = arg1->f76->v108(arg2, arg3, arg4, arg5, arg6, arg7, arg8).a;
-        if (s0 == DAT_004fb418.v) {
+        if (s0 == g_allocatorFailureStatus.v) {
             if (arg1->f92->v100() != 0) {
                 s0 = arg1->f92->v108(arg2, arg3, arg4, arg5, arg6, arg7, arg8).a;
                 arg1->f76->v116(arg2, arg3, *arg5, arg6, *arg8);
@@ -633,11 +633,11 @@ void Gap__Core__igEventTracker__vfunc_13(TrackerConfig *self) {
     self->pad9255 = 0;
     self->s1[0] = 0;
     self->s1end = 0;
-    if (((Cfg * *)DAT_00586dc8)[0] != 0) {
-        self->a = ((Cfg * *)DAT_00586dc8)[0]->a;
-        self->b = ((Cfg * *)DAT_00586dc8)[0]->b;
-        self->c = ((Cfg * *)DAT_00586dc8)[0]->c;
-        self->d = ((Cfg * *)DAT_00586dc8)[0]->d;
+    if (((Cfg * *)g_objectSystem)[0] != 0) {
+        self->a = ((Cfg * *)g_objectSystem)[0]->a;
+        self->b = ((Cfg * *)g_objectSystem)[0]->b;
+        self->c = ((Cfg * *)g_objectSystem)[0]->c;
+        self->d = ((Cfg * *)g_objectSystem)[0]->d;
     }
     FUN_0030cf20((int)self->map, 0x1000);
     FUN_0030cf30((int)self->map, 0x100);

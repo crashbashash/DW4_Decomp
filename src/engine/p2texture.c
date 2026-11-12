@@ -98,7 +98,7 @@ int FUN_00207f30(int arg0) {
     return DAT_0056bfb8[0];
 }
 
-extern volatile int DAT_0056d670[4];
+extern volatile int p2DmaWatchFlags[4];
 extern volatile int DAT_0056d678[4];
 void FUN_00207fa0(unsigned int arg0) {
     int FUN_00208120();
@@ -108,7 +108,7 @@ void FUN_00207fa0(unsigned int arg0) {
     long long sp20;
     FUN_00208120();
     FUN_00113f20();
-    DAT_0056d670[0] |= 8;
+    p2DmaWatchFlags[0] |= 8;
     FUN_00113f78();
     goto test;
 body:
@@ -121,7 +121,7 @@ body:
 test:
     if (DAT_0056bfc0[0] < arg0) goto body;
     FUN_00113f20();
-    DAT_0056d670[0] = DAT_0056d670[0] & ~8;
+    p2DmaWatchFlags[0] = p2DmaWatchFlags[0] & ~8;
     DAT_0056d678[0] &= ~8;
     FUN_00113f78();
     DAT_0056bfd8[0] = DAT_0056bfd8[0] - 1;

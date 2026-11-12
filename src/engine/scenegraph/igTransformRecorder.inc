@@ -1,8 +1,8 @@
-int FUN_001957c0(void) {
-    if (DAT_00561280[0] == 0) {
-        DAT_00561280[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(DAT_00587040[0]));
+igMetaObject *FUN_001957c0(void) {
+    if (g_igTransformRecorder_metaObject[0] == 0) {
+        g_igTransformRecorder_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
     }
-    return DAT_00561280[0];
+    return g_igTransformRecorder_metaObject[0];
 }
 
 igMetaObject *igTransformRecorder_GetMetaObject(void)
@@ -16,7 +16,7 @@ igMetaObject *igTransformRecorder_GetMetaObject(void)
 int igTransformRecorder_GetVTable(void) { struct Obj_195860 o; int *p = (int *)&o; int t;
  igObject_InitHeader((struct Obj_195860 *)p); o.vt = &DAT_0052b7d0[0]; o.f8 = 0; o.f12 = 0; o.f16 = 0; o.f28 = 0;
  igMatrix44f_SetIdentity(o.sub1); igMatrix44f_SetIdentity(p + 24);
- t = *(int *)((char *)&o + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+ t = *(int *)((char *)&o + *(int *)((char *)(g_objectSystem[0]) + 916));
  o.vt = &DAT_0052b7d0[0]; FUN_00195a90((struct T_195a90 *)((struct Obj_195860 *)p), 0); return t; }
 
 void **FUN_001958f0(void **arg0, short arg1) {
@@ -169,7 +169,7 @@ void igTransformRecorder_InitFields(void) {
     int temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)DAT_00561280[0];
+    temp_s0 = (void *)g_igTransformRecorder_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_0048b140[0], 2);
     igMetaObject_NameFields(temp_s0, &DAT_0048b148[0], &DAT_0048b150[0], &DAT_0048b158[0], temp_s1);

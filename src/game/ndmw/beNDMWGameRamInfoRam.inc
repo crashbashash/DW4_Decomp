@@ -3,9 +3,9 @@ void FUN_003ca1a0(int arg0) {
     igMetaObject_CreateInstance(*(int *)0x58C100, arg0);
 }
 
-SFUN_003ca1e0 *beNDMWGameRamInfoRam_ResolveMetaObject(void) {
-    if (DAT_0058c100[0] == 0 || !DAT_0058c100[0]->ok()) FUN_003ca2d0();
-    return DAT_0058c100[0];
+igMetaObject *beNDMWGameRamInfoRam_ResolveMetaObject(void) {
+    if (g_beNDMWGameRamInfoRam_metaObject[0] == 0 || !isValid(g_beNDMWGameRamInfoRam_metaObject[0])) FUN_003ca2d0();
+    return g_beNDMWGameRamInfoRam_metaObject[0];
 }
 
 int beNDMWGameRamInfoRam_GetVTable(void) {
@@ -19,7 +19,7 @@ int beNDMWGameRamInfoRam_GetVTable(void) {
     q1 = &u.b[40];
     *(int *)q1 = 0;
     u.vt = (int)&DAT_0053c550[0];
-    temp_s0 = *(int *)&u.b[*(int *)((char *)(DAT_00586dc8[0]) + 916)];
+    temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.vt = (int)&DAT_00539e90[0];
     if (q1 != 0) {
         a0 = *(int **)q1;

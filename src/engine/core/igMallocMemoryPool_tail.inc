@@ -43,17 +43,17 @@ R_3223d0 Gap__Core__igMallocMemoryPool__vfunc_34(OB_3223d0 *arg1, unsigned char 
         }
         arg1->lock.clear();
     } else if (arg2 == 1) {
-        if (arg1->lock.p != 0) return R_3223d0(DAT_004fb410.v);
+        if (arg1->lock.p != 0) return R_3223d0(g_statusSucceeded.v);
         igSmartPointer<Rc_3223d0> created((Rc_3223d0 *)FUN_002ba650((int)(((void *)igObject_GetAllocator((int)arg1)))));
         c = created.p->v92();
         arg1->lock = created;
     }
-    return R_3223d0(DAT_004fb410.v);
+    return R_3223d0(g_statusSucceeded.v);
 }
 
 void Gap__Core__igMallocMemoryPool__vfunc_35(int *outStatus, igMallocMemoryPool *self, long long size) {
     self->_size = size;
-    *outStatus = g_statusSucceeded[0];
+    *outStatus = g_statusSucceeded.v;
 }
 
 /* Accessor: the pool's reflected _size field (igUnsignedLongMetaField, +136). */
@@ -63,7 +63,7 @@ long long Gap__Core__igMallocMemoryPool__vfunc_36(igMallocMemoryPool *self) {
 
 void Gap__Core__igMallocMemoryPool__vfunc_41(int *status, igMallocMemoryPool *self, long long maxSize) {
     self->_maxSize = maxSize;
-    *status = g_statusSucceeded[0];
+    *status = g_statusSucceeded.v;
 }
 
 /* Accessor: the pool's reflected _maxSize field (igUnsignedLongMetaField, +128). */
@@ -73,7 +73,7 @@ long long Gap__Core__igMallocMemoryPool__vfunc_42(igMallocMemoryPool *self) {
 
 void Gap__Core__igMallocMemoryPool__vfunc_37(int *outStatus, igMallocMemoryPool *self, short alignment) {
     self->_alignment = alignment;
-    *outStatus = g_statusSucceeded[0];
+    *outStatus = g_statusSucceeded.v;
 }
 
 /* Returns the pool's allocation alignment, _alignment (+144). */
@@ -83,7 +83,7 @@ unsigned short Gap__Core__igMallocMemoryPool__vfunc_38(igMallocMemoryPool *self)
 
 void Gap__Core__igMallocMemoryPool__vfunc_39(int *status, igMallocMemoryPool *self, int elementSize) {
     self->_elementSize = elementSize;
-    *status = g_statusSucceeded[0];
+    *status = g_statusSucceeded.v;
 }
 
 int Gap__Core__igMallocMemoryPool__vfunc_40(igMallocMemoryPool *self) {
@@ -210,7 +210,7 @@ void *Gap__Core__igMallocMemoryPool__vfunc_59(igMallocMemoryPoolView *self, void
 }
 
 void Gap__Core__igMallocMemoryPool__vfunc_63(int *arg0) {
-    *arg0 = DAT_004fb418.v;
+    *arg0 = g_allocatorFailureStatus.v;
 }
 
 static inline char *blockHeader(char *p) {
@@ -341,7 +341,7 @@ void Gap__Core__igMallocMemoryPool__vfunc_87(Pool87 *self, char *title) {
         FUN_00304430(DAT_004f90b0);
         FUN_00304680();
     }
-    if (((struct Ctx { char p[36]; int on; } * *)DAT_00586dc8)[0]->on != 0) {
+    if (((struct Ctx { char p[36]; int on; } * *)g_objectSystem)[0]->on != 0) {
         name = FUN_00312140(buf, 64, self->name, FUN_002ce1b0());
     } else {
         name = ((char *)DAT_004f7910);
@@ -434,9 +434,9 @@ void Gap__Core__igMallocMemoryPool__vfunc_93(int *arg0, S_3223d0 *arg1, char *ar
         if (h->flag == 1) {
             h->ext = a >> 5;
         }
-        *arg0 = DAT_004fb410.v;
+        *arg0 = g_statusSucceeded.v;
     } else {
-        *arg0 = DAT_004fb418.v;
+        *arg0 = g_allocatorFailureStatus.v;
     }
 }
 

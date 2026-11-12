@@ -1,9 +1,9 @@
 void *FUN_0036bdf0(void) {
-    struct G *g = DAT_00589e60[0];
-    if (!g || ((g->f & 4) != 0) == false) {
+    igMetaObject *g = g_beActionStarterData_metaObject[0];
+    if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_0036bf10();
     }
-    return DAT_00589e60[0];
+    return g_beActionStarterData_metaObject[0];
 }
 
 int beActionStarterData_GetVTable(void) {
@@ -14,7 +14,7 @@ int beActionStarterData_GetVTable(void) {
     obj._name = 0;
     obj._vtable = (int)&DAT_005344e0[0];
     obj._message = 0;
-    r = *(int *)((char *)&obj + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+    r = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
     obj._vtable = (int)&DAT_005344e0[0];
     obj.rel12();
     obj._vtable = (int)&DAT_00524950[0];
@@ -53,7 +53,7 @@ void beActionStarterData_InitFields(void) {
     int temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)((int *)DAT_00589e60)[0];
+    temp_s0 = (void *)g_beActionStarterData_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_004c7e20[0], 5);
     igMetaObject_NameFields(temp_s0, &DAT_004c7e40[0], &DAT_004c7e60[0], &DAT_004c7e80[0], temp_s1);

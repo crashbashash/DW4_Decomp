@@ -1,9 +1,9 @@
 void *FUN_0034a780(void) {
-    struct G *g = DAT_00588340[0];
-    if (!g || ((g->f & 4) != 0) == false) {
+    igMetaObject *g = g_beSvSlotGC_metaObject[0];
+    if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_0034a810();
     }
-    return DAT_00588340[0];
+    return g_beSvSlotGC_metaObject[0];
 }
 
 int beSvSlotGC_GetVTable(void) {
@@ -11,7 +11,7 @@ int beSvSlotGC_GetVTable(void) {
 
     igObject_InitHeader(&obj);
     obj.vt = &DAT_005389d0[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 
 void FUN_0034a810(void)

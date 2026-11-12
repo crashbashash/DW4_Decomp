@@ -7,7 +7,7 @@ FieldNameView *igMetaField_FindByName(int arg0, char *arg1) {
         if (q != 0) {
             s8 = q + strlen(DAT_004c22c0[0]);
             i = 0;
-            list = ((MetaObjectRegistryView * *)DAT_00586dc8)[0]->f24;
+            list = ((MetaObjectRegistryView * *)g_objectSystem)[0]->f24;
             n = list->n;
             goto test;
 body:

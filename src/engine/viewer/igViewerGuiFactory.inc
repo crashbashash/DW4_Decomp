@@ -1,17 +1,17 @@
-int FUN_0045b8d0(void) {
-    if (DAT_0058cb28[0] == 0) {
-        DAT_0058cb28[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(DAT_00587040[0]));
+igMetaObject *FUN_0045b8d0(void) {
+    if (g_igViewerGuiFactory_metaObject[0] == 0) {
+        g_igViewerGuiFactory_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
     }
-    return DAT_0058cb28[0];
+    return g_igViewerGuiFactory_metaObject[0];
 }
 
 igMetaObject *igViewerGuiFactory_GetMetaObject(void)
 {
-    igMetaObject *g = ((igMetaObject *)DAT_0058cb28[0]);
+    igMetaObject *g = ((igMetaObject *)g_igViewerGuiFactory_metaObject[0]);
     bool t;
     if (!g || (t = g->_validity & 4) == 0)
         FUN_0045bc10();
-    return ((igMetaObject *)DAT_0058cb28[0]);
+    return ((igMetaObject *)g_igViewerGuiFactory_metaObject[0]);
 }
 
 int igViewerGuiFactory_GetVTable(void) {
@@ -27,7 +27,7 @@ int igViewerGuiFactory_GetVTable(void) {
     obj.w7 = 0;
     obj.w8 = 0;
     obj.w9 = 0;
-    t = *(int *)((char *)&obj + *(int *)((char *)(((void *)DAT_00586dc8[0])) + 916));
+    t = *(int *)((char *)&obj + *(int *)((char *)(((void *)g_objectSystem[0])) + 916));
     obj.vt = &DAT_00542390[0];
     FUN_0045bb90((void **)&obj.w9, -1);
     FUN_0045bb10((Ref **)&obj.w8, -1);
@@ -127,7 +127,7 @@ void igViewerGuiFactory_InitFields(void) {
     int temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)DAT_0058cb28[0];
+    temp_s0 = (void *)g_igViewerGuiFactory_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_004d12d0[0], 8);
     temp_s2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s1));

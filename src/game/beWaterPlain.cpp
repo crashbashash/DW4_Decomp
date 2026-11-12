@@ -10,7 +10,7 @@ void *FUN_00236f80(int, int);
 int igMatrix44f_SetIdentity(Mx *);
 int FUN_001906d0(Mx *, void *);
 int FUN_001c51b0(int, int, Mx *);
-extern int DAT_0058c790[4];
+extern int g_igViewerSceneInfoManager_metaObject[4];
 extern char DAT_0050fb88[];
 extern int g_beWaterPlainInfo_metaObject[4];
 extern int g_beWaterPlain_metaObject[4];
@@ -33,7 +33,7 @@ int Gap__Bec__beWaterPlain__vfunc_20(void);
 
 bool FUN_003a0570(O *o, int a1, int a2) {
     bool r = false;
-    T *t = (T *)(((int *)FUN_00236f80(o->f12, DAT_0058c790[0]))[5]);
+    T *t = (T *)(((int *)FUN_00236f80(o->f12, g_igViewerSceneInfoManager_metaObject[0]))[5]);
     Mx m;
     igMatrix44f_SetIdentity(&m);
     Mx *q = &m;

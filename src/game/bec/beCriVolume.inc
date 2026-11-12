@@ -1,19 +1,19 @@
-int FUN_00366340(void) {
-    if (((int *)DAT_00589960)[0] == 0) {
-        ((int *)DAT_00589960)[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(DAT_00587040[0]));
+igMetaObject *FUN_00366340(void) {
+    if (g_beCriVolume_metaObject[0] == 0) {
+        g_beCriVolume_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
     }
-    return ((int *)DAT_00589960)[0];
+    return g_beCriVolume_metaObject[0];
 }
 
-S_366390 *FUN_00366390(void) {
-    S_366390 *g = DAT_00589960[0];
+igMetaObject *FUN_00366390(void) {
+    igMetaObject *g = g_beCriVolume_metaObject[0];
     if (g != 0) {
-        int b = !!(g->flags & 4);
+        int b = !!(g->_validity & 4);
         if (b) goto done;
     }
     FUN_00366420();
 done:
-    return DAT_00589960[0];
+    return g_beCriVolume_metaObject[0];
 }
 
 int beCriVolume_GetVTable(void) {
@@ -21,7 +21,7 @@ int beCriVolume_GetVTable(void) {
 
     igObject_InitHeader(&obj);
     obj.vt = &DAT_00535090[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 
 void FUN_00366420(void)
@@ -55,7 +55,7 @@ void beCriVolume_InitFields(void) {
     int temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)((int *)DAT_00589960)[0];
+    temp_s0 = (void *)g_beCriVolume_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_004c7350[0], 6);
     igMetaObject_NameFields(temp_s0, &DAT_004c7370[0], &DAT_004c7390[0], &DAT_004c73b0[0], temp_s1);

@@ -49,7 +49,7 @@ int igCommonTraversal_GetVTable(void) {
     FUN_001a3c60(p + 84);
     FUN_001510a0(p + 86);
     FUN_001510a0(p + 102);
-    t = *(int *)((char *)&o + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+    t = *(int *)((char *)&o + *(int *)((char *)(g_objectSystem[0]) + 916));
     o.vt = (int)&D_005293c0[0];
     FUN_001a0890((ObjectRefWord *)((char*)&o + 336), -1);
     FUN_001a0810((O *)((char*)&o + 268), -1);

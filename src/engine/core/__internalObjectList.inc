@@ -18,7 +18,7 @@ void **InternalObjectList_Create(int allocator) {
 int FUN_002c2710(int arg0, int arg1) {
     int temp_v0;
 
-    if (*DAT_00586dc8[0] != 0) {
+    if (*g_objectSystem[0] != 0) {
         __internalObjectList_EnsureRegistered();
         return igObject_CloneViaMetadata((void **)arg0, arg1);
     }
@@ -29,11 +29,11 @@ int FUN_002c2710(int arg0, int arg1) {
     return temp_v0;
 }
 
-int FUN_002c2790(void) {
-    if (DAT_005860d0[0] == 0) {
-        DAT_005860d0[0] = ((int)igMetaObject_Create(((int)Memory_GetAllocatorBySelector(DAT_00587040[0]))));
+igMetaObject *FUN_002c2790(void) {
+    if (g___internalObjectList_metaObject[0] == 0) {
+        g___internalObjectList_metaObject[0] = (igMetaObject *)igMetaObject_Create(((int)Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0])));
     }
-    return DAT_005860d0[0];
+    return g___internalObjectList_metaObject[0];
 }
 
 igMetaObject *__internalObjectList_GetMetaObject(void)
@@ -47,7 +47,7 @@ igMetaObject *__internalObjectList_GetMetaObject(void)
 int __internalObjectList_GetVTable(void) {
     int o[4];
     InternalObjectList_Init((PointerList *)o);
-    return *(int *)((char *)o + *(int *)((char *)((int * *)DAT_00586dc8)[0] + 916));
+    return *(int *)((char *)o + *(int *)((char *)((int * *)g_objectSystem)[0] + 916));
 }
 
 void __internalObjectList_EnsureRegistered(void)
@@ -75,8 +75,8 @@ void thunk___internalObjectList_GetMetaObject(void) {
     __internalObjectList_GetMetaObject();
 }
 
-int FUN_002c28f0(void) {
-    return DAT_005860e0[0];
+igMetaObject *FUN_002c28f0(void) {
+    return g___internalNonRefCountedObjectList_metaObject[0];
 }
 
 void __internalObjectList_InitFields(void) {
@@ -85,8 +85,8 @@ void __internalObjectList_InitFields(void) {
     void *temp_s0;
     T_2c2900 *temp_v0_2;
 
-    temp_s0 = (void *)(((void * *)DAT_005860d0)[0]);
-    temp_v0 = (void **)(((void **)igMetaObject_FindFieldByName((igMetaObject *)temp_s0, (const char *)&DAT_004f5eb0[0])));
+    temp_s0 = (void *)(((void * *)g___internalObjectList_metaObject)[0]);
+    temp_v0 = (void **)(((void **)igMetaObject_FindFieldByName((igMetaObject *)temp_s0, data)));
     temp_s1 = ObjectPointerList_FindIndex((char *)(*(int *)((char *)(temp_s0) + 40)), (int)temp_v0);
     temp_v0_2 = (T_2c2900 *)(((DW4VC_84_1 *)(temp_v0))->vX((int)(1)));
     *(char *)((char *)(temp_v0_2) + 66) = 1;

@@ -16,7 +16,7 @@ int igBlendMatricesAttr_GetVTable(void) {
 
     igObject_InitHeader(&obj);
     obj.vt = &DAT_00524190[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 
 void FUN_00139ce0(void)
@@ -50,7 +50,7 @@ void igBlendMatricesAttr_InitFields(void) {
     void *temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)DAT_0055f388[0];
+    temp_s0 = (void *)g_igBlendMatricesAttr_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_00486a50[0], 3);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));

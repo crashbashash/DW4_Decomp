@@ -25,10 +25,8 @@ void *igObject_GetAllocator(...);
 int FUN_00318b40(...);
 void FUN_00314510(void *, int, int);
 void igArenaMemoryPool_SetPoolOptionFlags(SetFlagsPool *, int);
-extern int g_statusSucceeded[4];
-extern int g_allocatorFailureStatus[4];
-extern igResult DAT_004fb410;
-extern igResult DAT_004fb418;
+extern igResult g_statusSucceeded;
+extern igResult g_allocatorFailureStatus;
 extern int DAT_004fd640[4];
 extern int DAT_00587200[4];
 extern int DAT_00531030[4];
@@ -59,12 +57,12 @@ class HeapBoundsPool;
 extern "C" igResult FUN_00312790(HeapBoundsPool *self, int index, char *cur, char *end);
 extern "C" igResult igArenaMemoryPool_CheckHeap(CheckHeapPool *self) {
     CheckHeapArena *arena = self->arena;
-    igResult ok = DAT_004fb410;
+    igResult ok = g_statusSucceeded;
     igResult result;
     int i;
     int r;
 
-    result.w0 = DAT_004fb410.w0;
+    result.w0 = g_statusSucceeded.w0;
     if (arena->count == 0) {
         return ok;
     }
@@ -79,7 +77,7 @@ extern "C" igResult igArenaMemoryPool_CheckHeap(CheckHeapPool *self) {
                 }
             }
         }
-        result = DAT_004fb418;
+        result = g_allocatorFailureStatus;
     }
     if (arena->count < 0 || arena->capacity < 0 || arena->count > arena->capacity) {
         if (self->verbosity >= 3 && GPR_00554cf0 == 0) {
@@ -89,12 +87,12 @@ extern "C" igResult igArenaMemoryPool_CheckHeap(CheckHeapPool *self) {
                 GPR_00554cf0 = 1;
             }
         }
-        return DAT_004fb418;
+        return g_allocatorFailureStatus;
     }
     for (i = 0; i < arena->count; i += 2) {
         int *p = &arena->blocks[i];
-        if (FUN_00312790((HeapBoundsPool *)self, i, (char *)p[0], (char *)p[1]) == DAT_004fb418) {
-            result = DAT_004fb418;
+        if (FUN_00312790((HeapBoundsPool *)self, i, (char *)p[0], (char *)p[1]) == g_allocatorFailureStatus) {
+            result = g_allocatorFailureStatus;
             break;
         }
     }
@@ -168,7 +166,7 @@ struct PoolRequest { char pad0[60]; char *options; char pad64[4]; char *integrit
 struct CoreGlobals { char pad0[48]; igArenaMemoryPool *defaultPool; };
 char *strstr(const char *, const char *);
 void FUN_002f0880(int *status);
-extern struct CoreGlobals *DAT_00586dc8[4];
+extern struct CoreGlobals *g_objectSystem[4];
 extern char DAT_004fd2f8[];
 extern char DAT_004fd300[];
 extern char DAT_004fd308[];

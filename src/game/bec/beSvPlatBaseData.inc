@@ -1,16 +1,16 @@
-int FUN_0034a210(void) {
-    if (((int *)DAT_00588308)[0] == 0) {
-        ((int *)DAT_00588308)[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(DAT_00587040[0]));
+igMetaObject *FUN_0034a210(void) {
+    if (g_beSvPlatBaseData_metaObject[0] == 0) {
+        g_beSvPlatBaseData_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
     }
-    return ((int *)DAT_00588308)[0];
+    return g_beSvPlatBaseData_metaObject[0];
 }
 
 void *FUN_0034a260(void) {
-    struct G *g = DAT_00588308[0];
-    if (!g || ((g->f & 4) != 0) == false) {
+    igMetaObject *g = g_beSvPlatBaseData_metaObject[0];
+    if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_0034a340();
     }
-    return DAT_00588308[0];
+    return g_beSvPlatBaseData_metaObject[0];
 }
 
 int beSvPlatBaseData_GetVTable(void) {
@@ -23,7 +23,7 @@ int beSvPlatBaseData_GetVTable(void) {
     f.vt = &DAT_00538d40[0];
     pr = &f.ref;
     *pr = 0;
-    temp_s0 = *(int *)((char *)&f + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+    temp_s0 = *(int *)((char *)&f + *(int *)((char *)(g_objectSystem[0]) + 916));
     f.vt = &DAT_00538d40[0];
     if (pr != 0) {
         if (*pr != 0) {
@@ -69,11 +69,11 @@ void beSvPlatBaseData_InitFields(void) {
     void *temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)((int *)DAT_00588308)[0];
+    temp_s0 = (void *)g_beSvPlatBaseData_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_004c4260[0], 4);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = FUN_0034a4a0();
+    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_0034a4a0();
     ((igRefMetaField *)temp_s1)->_construct = 1;
     igMetaObject_NameFields(temp_s0, &DAT_004c4270[0], &DAT_004c4280[0], &DAT_004c4290[0], temp_s2);
 }

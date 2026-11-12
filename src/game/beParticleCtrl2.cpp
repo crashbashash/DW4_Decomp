@@ -30,10 +30,10 @@ extern "C" int g_beParticleCtrl2_metaObject[4];
 typedef struct NameHolder { char pad[8]; int *f8; } NameHolder;
 typedef struct RamInfoArg { char pad[8]; int f8; NameHolder *fc; char pad2[4]; unsigned char f14; char pad3[31]; igObject *f34; } RamInfoArg;
 extern "C" int beMessenger_RegisterReceiver(int, RamInfoArg *, int *, int *, int);
-extern "C" int DAT_004e0858[4];
+extern "C" int emptyString[4];
 extern "C" int DAT_0050f638[4];
 extern "C" void Gap__Bec__beParticleCtrl2__vfunc_29(beParticleCtrl2 *arg0, RamInfoArg *arg1);
-extern "C" float DAT_004e1058[4];
+extern "C" float g_vec3Zero[4];
 extern "C" float DAT_004e105c[4];
 extern "C" float DAT_004e1060[4];
 extern "C" int DAT_004e1078[4];
@@ -42,7 +42,7 @@ extern "C" int DAT_004e1098[4];
 extern "C" int DAT_0050f648[4];
 extern "C" int DAT_0050f658[4];
 extern "C" int DAT_0050f668[4];
-extern "C" int DAT_00587110[4];
+extern "C" int g_defaultAllocatorSelector[4];
 extern "C" unsigned char GPR_00554c14;
 struct Rel { static inline void go(igObject *object) {
     if (object) {
@@ -178,7 +178,7 @@ void Gap__Bec__beParticleCtrl2__vfunc_29(beParticleCtrl2 *arg0, RamInfoArg *arg1
 
     t0 = arg1->f8;
     var_a3 = arg1->fc->f8;
-    var_a3 = (var_a3 != 0) ? var_a3 : (int *)(&DAT_004e0858[0]);
+    var_a3 = (var_a3 != 0) ? var_a3 : (int *)(&emptyString[0]);
     beMessenger_RegisterReceiver(arg0->_messenger, arg1, &DAT_0050f638[0], var_a3, t0);
     arg1->f14 = 0;
     temp_a0 = arg1->f34;
@@ -212,7 +212,7 @@ int Gap__Bec__beParticleCtrl2__vfunc_34(beParticleCtrl2 *arg0, beParticleCtrl2In
                     f21 = (float)(((Clk *)((beSystem *)arg0->_system)->_random)->t() % 6144U) / 1000.0f;
                 }
             } else {
-                f22 = DAT_004e1058[0];
+                f22 = g_vec3Zero[0];
                 f21 = DAT_004e105c[0];
                 f20 = DAT_004e1060[0];
             }
@@ -224,7 +224,7 @@ int Gap__Bec__beParticleCtrl2__vfunc_34(beParticleCtrl2 *arg0, beParticleCtrl2In
                 if (GPR_00554c14 != 0) {
                     a = alloc;
                 } else {
-                    a = Memory_GetAllocatorBySelector(DAT_00587110[0]);
+                    a = Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
                 }
                 igSmartPointer<beParticleCtrl2InfoWork> work((beParticleCtrl2InfoWork *)FUN_0034c040(a));
                 igObject *o = (igObject *)beMessenger_GetObject(arg0->_messenger, 0);

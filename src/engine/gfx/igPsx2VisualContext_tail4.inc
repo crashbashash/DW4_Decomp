@@ -51,7 +51,7 @@ void FUN_00170510(Obj_170510 *o, int arg1) {
         t = o->t;
         if (t != 0) {
             POOL();
-            s1 = (char *)StringPool_Intern(DAT_00586f20[0], 0);
+            s1 = (char *)StringPool_Intern(g_stringPool[0], 0);
             STR_RELEASE(t->str);
             t->str = s1;
             Memory_FreeBuffer(t->buf);
@@ -440,19 +440,19 @@ void FUN_00171690(void *arg0, void *arg1) {
 }
 
 void FUN_001716c0(void *arg0) {
-    *(float *)((char *)(arg0) + 16) = (float) DAT_004e1170[0];
+    *(float *)((char *)(arg0) + 16) = (float) g_vec4Zero[0];
     *(float *)((char *)(arg0) + 20) = (float) DAT_004e1174[0];
     *(float *)((char *)(arg0) + 24) = (float) DAT_004e1178[0];
     *(float *)((char *)(arg0) + 28) = (float) DAT_004e117c[0];
-    *(float *)((char *)(arg0) + 0) = (float) DAT_004e1170[0];
+    *(float *)((char *)(arg0) + 0) = (float) g_vec4Zero[0];
     *(float *)((char *)(arg0) + 4) = (float) DAT_004e1174[0];
     *(float *)((char *)(arg0) + 8) = (float) DAT_004e1178[0];
     *(float *)((char *)(arg0) + 12) = (float) DAT_004e117c[0];
-    *(float *)((char *)(arg0) + 48) = (float) DAT_004e1170[0];
+    *(float *)((char *)(arg0) + 48) = (float) g_vec4Zero[0];
     *(float *)((char *)(arg0) + 52) = (float) DAT_004e1174[0];
     *(float *)((char *)(arg0) + 56) = (float) DAT_004e1178[0];
     *(float *)((char *)(arg0) + 60) = (float) DAT_004e117c[0];
-    *(float *)((char *)(arg0) + 32) = (float) DAT_004e1170[0];
+    *(float *)((char *)(arg0) + 32) = (float) g_vec4Zero[0];
     *(float *)((char *)(arg0) + 36) = (float) DAT_004e1174[0];
     *(float *)((char *)(arg0) + 40) = (float) DAT_004e1178[0];
     *(float *)((char *)(arg0) + 44) = (float) DAT_004e117c[0];
@@ -1052,7 +1052,7 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_216(void *a0, int arg1) {
         FUN_0017c880((igPsx2VisualContext *)a0, ((VC596 *)a0)->vX(0), 1);
     }
     if (arg1 & 0x40) {
-        o = (VC104 *)((VC104 *)a0)->vX(&DAT_004dcd68[0]);
+        o = (VC104 *)((VC104 *)a0)->vX(&igDecalExt_className[0]);
         if (o != 0) {
             ((VC120 *)o)->vX(0);
         }
@@ -1683,9 +1683,9 @@ float Gap__Gfx__igPsx2VisualContext__vfunc_252(void *arg0) {
 
 void Gap__Gfx__igPsx2VisualContext__vfunc_253(int *arg0, struct S_1753f0 *arg1, struct E_1753f0 *arg2) {
     if (arg1->b322 == 1) {
-        *arg0 = DAT_004fb418[0];
+        *arg0 = g_allocatorFailureStatus[0];
     } else if (arg2 == 0) {
-        *arg0 = DAT_004fb418[0];
+        *arg0 = g_allocatorFailureStatus[0];
     } else {
         arg1->b1348 = arg2->b0;
         arg1->b1349 = arg2->b1;
@@ -1694,7 +1694,7 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_253(int *arg0, struct S_1753f0 *arg1, 
         arg1->f1360 = arg2->f12;
         arg1->f1364 = arg2->f16;
         arg1->f1368 = arg2->f20;
-        *arg0 = DAT_004fb410[0];
+        *arg0 = g_statusSucceeded[0];
     }
 }
 

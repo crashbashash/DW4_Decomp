@@ -5,11 +5,11 @@ int FUN_001a21b0(void) {
     return DAT_00561b98[0];
 }
 
-int FUN_001a2210(void) {
-    if (DAT_00561ba0[0] == 0) {
-        DAT_00561ba0[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(DAT_00587040[0]));
+igMetaObject *FUN_001a2210(void) {
+    if (g_igEnbayaAnimationSource_metaObject[0] == 0) {
+        g_igEnbayaAnimationSource_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
     }
-    return DAT_00561ba0[0];
+    return g_igEnbayaAnimationSource_metaObject[0];
 }
 
 igMetaObject *igEnbayaAnimationSource_GetMetaObject(void)
@@ -25,7 +25,7 @@ int igEnbayaAnimationSource_GetVTable(void) {
 
     igObject_InitHeader(u.b);
     u.w[0] = (int)(&DAT_005291e0[0]);
-    return *(int *)&u.b[*(int *)((char *)(DAT_00586dc8[0]) + 916)];
+    return *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
 }
 
 void FUN_001a22f0(void)
@@ -62,7 +62,7 @@ void igEnbayaAnimationSource_InitFields(void) {
     igEnumMetaField *tf2;
     void *temp_s1;
     int temp_s0;
-    temp_s1 = (void *)DAT_00561ba0[0];
+    temp_s1 = (void *)g_igEnbayaAnimationSource_metaObject[0];
     temp_s0 = igMetaObject_GetFieldCount(temp_s1);
     igMetaObject_CreateFields(temp_s1, &DAT_0048c3a0[0], 6);
     temp_s2 = (igMemoryRefMetaField *)igMetaObject_GetFieldAt(temp_s1, temp_s0);

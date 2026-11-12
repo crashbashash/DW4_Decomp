@@ -1,11 +1,11 @@
-void *beMessengerDelay_Create(void *allocator){beMessengerDelay_EnsureRegistered();return ((void *)igMetaObject_CreateInstance((void *)((int *)g_beMessengerDelay_metaObject)[0],allocator));}
+void *beMessengerDelay_Create(void *allocator){beMessengerDelay_EnsureRegistered();return ((void *)igMetaObject_CreateInstance((void *)g_beMessengerDelay_metaObject[0],allocator));}
 
-G_358990 *FUN_00358990(void) {
-    G_358990 *g = DAT_00588ff0[0];
+igMetaObject *FUN_00358990(void) {
+    igMetaObject *g = g_beMessengerDelay_metaObject[0];
     int t;
-    if (!g || !(t = (g->f & 4) != 0))
+    if (!g || !(t = (g->_validity & 4) != 0))
         beMessengerDelay_EnsureRegistered();
-    return DAT_00588ff0[0];
+    return g_beMessengerDelay_metaObject[0];
 }
 
 int beMessengerDelay_GetVTable(void) {
@@ -18,7 +18,7 @@ int beMessengerDelay_GetVTable(void) {
     u.w[7] = 0;
     u.w[9] = 0;
     u.w[10] = 0;
-    temp_s3 = *(int *)&u.b[*(int *)((char *)(DAT_00586dc8[0]) + 916)];
+    temp_s3 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.w[0] = (int)(&DAT_00536d70[0]);
     FUN_00357a90((void **)&u.w[10], -1);
     StringRef_Destruct_00130720(&u.w[9], -1);
@@ -56,11 +56,11 @@ void beMessengerDelay_InitFields(void) {
     void *temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)((int *)DAT_00588ff0)[0];
+    temp_s0 = (void *)g_beMessengerDelay_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_004c5dc0[0], 7);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 6));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = FUN_00358dc0();
+    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_00358dc0();
     ((igRefMetaField *)temp_s1)->_construct = 1;
     igMetaObject_NameFields(temp_s0, &DAT_004c5de0[0], &DAT_004c5e00[0], &DAT_004c5e20[0], temp_s2);
 }

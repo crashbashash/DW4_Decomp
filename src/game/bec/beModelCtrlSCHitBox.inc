@@ -3,9 +3,9 @@ void FUN_0034f6f0(int arg0) {
     igMetaObject_CreateInstance(*(int *)0x5887C8, arg0);
 }
 
-SFUN_0034f730 *FUN_0034f730(void) {
-    if (DAT_005887c8[0] == 0 || !DAT_005887c8[0]->ok()) FUN_0034f7c0();
-    return DAT_005887c8[0];
+igMetaObject *FUN_0034f730(void) {
+    if (g_beModelCtrlSCHitBox_metaObject[0] == 0 || !isValid(g_beModelCtrlSCHitBox_metaObject[0])) FUN_0034f7c0();
+    return g_beModelCtrlSCHitBox_metaObject[0];
 }
 
 int beModelCtrlSCHitBox_GetVTable(void) {
@@ -13,7 +13,7 @@ int beModelCtrlSCHitBox_GetVTable(void) {
 
     igObject_InitHeader(&obj);
     obj.vt = &DAT_0053af60[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 
 void FUN_0034f7c0(void)
@@ -47,7 +47,7 @@ void beModelCtrlSCHitBox_InitFields(void) {
     int temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)((int *)DAT_005887c8)[0];
+    temp_s0 = (void *)g_beModelCtrlSCHitBox_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_004c4c00[0], 6);
     igMetaObject_NameFields(temp_s0, &DAT_004c4c20[0], &DAT_004c4c40[0], &DAT_004c4c60[0], temp_s1);

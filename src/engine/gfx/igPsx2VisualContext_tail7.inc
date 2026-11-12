@@ -27,28 +27,28 @@ bool FUN_0017e590(Self_17e590 *arg0, int arg1, int arg2, int *arg3, int *arg4) {
     bool var_s2 = false;
     Node *n = (Node *)FUN_0015f4a0((S_15f430 *)arg1, 9, 0);
     if (n != 0) {
-        if (n->obj->vX() == DAT_00586808[0]) {
+        if (n->obj->vX() == g_igFloatList_metaObject[0]) {
             *arg3 = n->obj->f16;
             FUN_001eb5e0(4, 0, 0, 0);
-        } else if (n->obj->vX() == DAT_005610c8[0]) {
+        } else if (n->obj->vX() == g_igVec2fList_metaObject[0]) {
             *arg3 = n->obj->f16;
             FUN_001eb5e0(4, 0, 0, 0);
         } else {
             VC_17e590 *o = n->obj;
-            if (o->vX() == DAT_00586898[0]) {
+            if (o->vX() == g_igCharList_metaObject[0]) {
                 int a = n->f32;
                 FUN_001eb5e0(4, 1, 7 - a, a);
                 var_s2 = true;
                 *arg3 = o->f16;
-            } else if (o->vX() == DAT_00586818[0]) {
+            } else if (o->vX() == g_igUnsignedCharList_metaObject[0]) {
                 int a = n->f32;
                 FUN_001eb5e0(4, 0, 8 - a, a);
                 *arg3 = o->f16;
-            } else if (o->vX() == DAT_00586830[0]) {
+            } else if (o->vX() == g_igShortList_metaObject[0]) {
                 int a = n->f32;
                 FUN_001eb5e0(4, 1, 0xF - a, a);
                 *arg3 = o->f16;
-            } else if (o->vX() == DAT_00586840[0]) {
+            } else if (o->vX() == g_igUnsignedShortList_metaObject[0]) {
                 int a = n->f32;
                 FUN_001eb5e0(4, 0, 0x10 - a, a);
                 *arg3 = o->f16;
@@ -60,7 +60,7 @@ bool FUN_0017e590(Self_17e590 *arg0, int arg1, int arg2, int *arg3, int *arg4) {
     n2 = (Node *)FUN_0015f4a0((S_15f430 *)arg1, 4, 1);
     if (n2 != 0) {
         s = n2->obj;
-        if (s != 0 && igObject_IsKindOf(s, DAT_005610c8[0]) != 0) {
+        if (s != 0 && igObject_IsKindOf(s, g_igVec2fList_metaObject[0]) != 0) {
             r = s;
         } else {
             r = 0;
@@ -69,19 +69,19 @@ bool FUN_0017e590(Self_17e590 *arg0, int arg1, int arg2, int *arg3, int *arg4) {
             *arg4 = r->f16;
         } else {
             o2 = n2->obj;
-            if (o2->vX() == DAT_00586898[0]) {
+            if (o2->vX() == g_igCharList_metaObject[0]) {
                 int a = n2->f32;
                 FUN_001eb5e0(2, 1, 7 - a, a);
                 *arg4 = o2->f16;
-            } else if (o2->vX() == DAT_00586818[0]) {
+            } else if (o2->vX() == g_igUnsignedCharList_metaObject[0]) {
                 int a = n2->f32;
                 FUN_001eb5e0(2, 0, 8 - a, a);
                 *arg4 = o2->f16;
-            } else if (o2->vX() == DAT_00586830[0]) {
+            } else if (o2->vX() == g_igShortList_metaObject[0]) {
                 int a = n2->f32;
                 FUN_001eb5e0(2, 1, 0xF - a, a);
                 *arg4 = o2->f16;
-            } else if (o2->vX() == DAT_00586840[0]) {
+            } else if (o2->vX() == g_igUnsignedShortList_metaObject[0]) {
                 int a = n2->f32;
                 FUN_001eb5e0(2, 0, 0x10 - a, a);
                 *arg4 = o2->f16;
@@ -110,7 +110,7 @@ void FUN_0017e980(igPsx2VisualContext *h, int arg1, int arg2)
             v = 0;
             if (e != 0) {
                 o = e->obj;
-                if (o != 0 && igObject_IsKindOf(o, DAT_005610c8[0]) != 0) {
+                if (o != 0 && igObject_IsKindOf(o, g_igVec2fList_metaObject[0]) != 0) {
                     o = (Obj_17e980 *)o;
                 } else {
                     o = 0;
@@ -119,16 +119,16 @@ void FUN_0017e980(igPsx2VisualContext *h, int arg1, int arg2)
                     v = ((int *)o)[4];
                 } else {
                     o = e->obj;
-                    if (DAT_00586898[0] == o->meta()) {
+                    if (g_igCharList_metaObject[0] == o->meta()) {
                         FUN_001eb5e0(2, 1, 7 - e->f32, e->f32);
                         v = ((int *)o)[4];
-                    } else if (DAT_00586818[0] == o->meta()) {
+                    } else if (g_igUnsignedCharList_metaObject[0] == o->meta()) {
                         FUN_001eb5e0(2, 0, 8 - e->f32, e->f32);
                         v = ((int *)o)[4];
-                    } else if (DAT_00586830[0] == o->meta()) {
+                    } else if (g_igShortList_metaObject[0] == o->meta()) {
                         FUN_001eb5e0(2, 1, 15 - e->f32, e->f32);
                         v = ((int *)o)[4];
-                    } else if (DAT_00586840[0] == o->meta()) {
+                    } else if (g_igUnsignedShortList_metaObject[0] == o->meta()) {
                         FUN_001eb5e0(2, 0, 16 - e->f32, e->f32);
                         v = ((int *)o)[4];
                     }

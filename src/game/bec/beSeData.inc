@@ -1,9 +1,9 @@
-G_3462b0 *FUN_003462b0(void) {
-    G_3462b0 *g = DAT_00587fd0[0];
+igMetaObject *FUN_003462b0(void) {
+    igMetaObject *g = g_beSeData_metaObject[0];
     int t;
-    if (!g || !(t = (g->f & 4) != 0))
+    if (!g || !(t = (g->_validity & 4) != 0))
         FUN_003463d0();
-    return DAT_00587fd0[0];
+    return g_beSeData_metaObject[0];
 }
 
 int beSeData_GetVTable(void) {
@@ -14,7 +14,7 @@ int beSeData_GetVTable(void) {
     obj._name = 0;
     obj._vtable = (int)&DAT_00538e70[0];
     obj._sound = 0;
-    r = *(int *)((char *)&obj + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+    r = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
     obj._vtable = (int)&DAT_00538e70[0];
     obj.relSound();
     obj._vtable = (int)&DAT_00524950[0];
@@ -53,7 +53,7 @@ void beSeData_InitFields(void) {
     int temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)((int *)DAT_00587fd0)[0];
+    temp_s0 = (void *)g_beSeData_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_004c3bd8[0], 2);
     igMetaObject_NameFields(temp_s0, &DAT_004c3be0[0], &DAT_004c3be8[0], &DAT_004c3bf0[0], temp_s1);

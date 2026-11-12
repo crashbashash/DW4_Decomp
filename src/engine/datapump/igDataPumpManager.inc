@@ -1,8 +1,8 @@
-int FUN_001e5150(void) {
-    if (DAT_00562bf0[0] == 0) {
-        DAT_00562bf0[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(DAT_00587040[0]));
+igMetaObject *FUN_001e5150(void) {
+    if (g_igDataPumpManager_metaObject[0] == 0) {
+        g_igDataPumpManager_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
     }
-    return DAT_00562bf0[0];
+    return g_igDataPumpManager_metaObject[0];
 }
 
 igMetaObject *igDataPumpManager_GetMetaObject(void)
@@ -20,7 +20,7 @@ int igDataPumpManager_GetVTable(void) {
     igObject_InitHeader(&obj);
     obj.vt = &DAT_0052baf0[0];
     obj.ref = 0;
-    r = *(int *)((char *)&obj + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+    r = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
     obj.vt = &DAT_0052baf0[0];
     obj.release();
     return r;
@@ -57,11 +57,11 @@ void igDataPumpManager_InitFields(void) {
     void *temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)DAT_00562bf0[0];
+    temp_s0 = (void *)g_igDataPumpManager_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_0048db88[0], 1);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = FUN_001e53c0();
+    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_001e53c0();
     ((igRefMetaField *)temp_s1)->_construct = 1;
     ((igMetaField *)temp_s1)->_persistent = 0;
     igMetaObject_NameFields(temp_s0, &DAT_0048db90[0], &DAT_0048db98[0], &DAT_0048dba0[0], temp_s2);

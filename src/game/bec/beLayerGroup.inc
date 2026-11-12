@@ -1,9 +1,9 @@
 void *FUN_0035c850(void) {
-    struct G *g = DAT_00589280[0];
-    if (!g || ((g->f & 4) != 0) == false) {
+    igMetaObject *g = g_beLayerGroup_metaObject[0];
+    if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_0035c930();
     }
-    return DAT_00589280[0];
+    return g_beLayerGroup_metaObject[0];
 }
 
 int beLayerGroup_GetVTable(void) {
@@ -19,7 +19,7 @@ int beLayerGroup_GetVTable(void) {
     q1 = &u.b[8];
     *(int *)q1 = 0;
     u.vt = (int)&DAT_00536540[0];
-    temp_s0 = *(int *)&u.b[*(int *)((char *)(DAT_00586dc8[0]) + 916)];
+    temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.vt = (int)&DAT_00524950[0];
     if (q1 != 0) {
         temp_v1 = *(int **)q1;

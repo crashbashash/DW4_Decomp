@@ -52,7 +52,7 @@ void FUN_001abca0(void) {
         }
     }
     DAT_00562558[0] = ((AnimationPoolObject *)FUN_001a90f0(s0));
-    FUN_00306e50(*(int *)((char *)(((int * *)DAT_00586dc8)[0]) + 56), 7, &DAT_004e44e0[0], &GPR_00554b84, 0, 0);
+    FUN_00306e50(*(int *)((char *)(((int * *)g_objectSystem)[0]) + 56), 7, &DAT_004e44e0[0], &GPR_00554b84, 0, 0);
 }
 
 void FUN_001abdf0(void) {

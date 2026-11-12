@@ -16,7 +16,7 @@ int igColorMaskAttr_GetVTable(void) {
 
     igObject_InitHeader(&obj);
     obj.vt = &DAT_00523e50[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 
 void FUN_00138d80(void)
@@ -49,7 +49,7 @@ void igColorMaskAttr_InitFields(void) {
     int temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)DAT_0055f2b0[0];
+    temp_s0 = (void *)g_igColorMaskAttr_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_004868a0[0], 5);
     FUN_002d3890(igMetaObject_GetFieldAt(temp_s0, temp_s1), 1);

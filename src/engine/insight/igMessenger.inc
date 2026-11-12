@@ -1,8 +1,8 @@
-int FUN_00231400(void) {
-    if (DAT_0056dac8[0] == 0) {
-        DAT_0056dac8[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(DAT_00587040[0]));
+igMetaObject *FUN_00231400(void) {
+    if (g_igMessenger_metaObject[0] == 0) {
+        g_igMessenger_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
     }
-    return DAT_0056dac8[0];
+    return g_igMessenger_metaObject[0];
 }
 
 igMetaObject *igMessenger_GetMetaObject(void)
@@ -20,7 +20,7 @@ int igMessenger_GetVTable(void) {
     igObject_InitHeader(&o);
     o.vt = DAT_0052cf20;
     o.ref = 0;
-    r = *(int *)((char *)&o + *(int *)(DAT_00586dc8[0] + 916));
+    r = *(int *)((char *)&o + *(int *)(g_objectSystem[0] + 916));
     o.vt = DAT_0052cf20;
     if (&o.ref != 0) {
         p = o.ref;
@@ -63,11 +63,11 @@ void igMessenger_InitFields(void) {
     void *temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)DAT_0056dac8[0];
+    temp_s0 = (void *)g_igMessenger_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_00497fb8[0], 1);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = FUN_002320b0();
+    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_002320b0();
     ((igRefMetaField *)temp_s1)->_construct = 1;
     igMetaObject_NameFields(temp_s0, &DAT_00497fc0[0], &DAT_00497fc8[0], &DAT_00497fd0[0], temp_s2);
 }

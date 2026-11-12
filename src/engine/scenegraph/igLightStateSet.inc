@@ -17,7 +17,7 @@ int igLightStateSet_GetVTable(void) {
     obj.w[6] = 0;
     obj.vt = &DAT_00528bc0[0];
     obj.w[7] = 0;
-    r = *(int *)((char *)&obj + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+    r = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
     obj.vt = &DAT_00528bc0[0];
     FUN_0019d9e0((void * *)&obj.w[7], -1);
     FUN_00195a90((struct T_195a90 *)&obj, 0);
@@ -73,7 +73,7 @@ void igLightStateSet_InitFields(void) {
     void *temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)DAT_005618d8[0];
+    temp_s0 = (void *)g_igLightStateSet_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_0048bd98[0], 1);
     temp_s1 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s2)));

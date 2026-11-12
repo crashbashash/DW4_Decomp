@@ -27,9 +27,9 @@ extern "C" int DAT_0051db90[4];
 extern "C" char DAT_0051dba0[];
 extern "C" void Gap__Bec__beNDMWMdlMapBase__vfunc_37(beNDMWMdlMapBase * p0, int p1, char * p2);
 extern "C" int DAT_0051dba8[4];
-extern "C" int DAT_00585be0[4];
-extern "C" int DAT_00586f20[4];
-extern "C" int DAT_00587110[4];
+extern "C" int g_propertyNameField[4];
+extern "C" int g_stringPool[4];
+extern "C" int g_defaultAllocatorSelector[4];
 extern "C" unsigned char GPR_00554c14;
 /* Property record: reference at +20. */
 struct Prop { char pad[20]; igObject *f20; };
@@ -57,7 +57,7 @@ extern "C" void Gap__Bec__beNDMWMdlMapBase__vfunc_36(beNDMWMdlMapBase *arg0, beB
 struct PropertyRecord { char p[16]; int f16; };
 extern "C" int DAT_0051dbb0[4];
 extern "C" int DAT_0051dbb8[4];
-extern "C" float DAT_004e1058[4];
+extern "C" float g_vec3Zero[4];
 extern "C" float DAT_004e105c[4];
 extern "C" float DAT_004e1060[4];
 /* Owning stack reference to the freshly created data list; released on scope exit (reference count
@@ -80,16 +80,16 @@ void Gap__Bec__beNDMWMdlMapBase__vfunc_37(beNDMWMdlMapBase * p0, int p1, char * 
 void Gap__Bec__beNDMWMdlMapBase__vfunc_36(beNDMWMdlMapBase *arg0, beBaseInfoRam *arg1) {
     if (arg1->_dataList == 0) {
         int a = igObject_GetAllocator(arg1);
-        int al = GPR_00554c14 != 0 ? a : Memory_GetAllocatorBySelector(DAT_00587110[0]);
+        int al = GPR_00554c14 != 0 ? a : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
         igObject *created = (igObject *)beBaseInfoDataList_Create(al);
         /* matching construct: the new list is a temporary bound to the setter's reference parameter (it
          * takes the stack slot below the named info-work reference, as retail's +0x58 does) */
         Slot::adopt(arg1, created);
     }
-    Prop *s3 = (Prop *)igProperty_FindByName(arg1->_dataList, DAT_00585be0[0], DAT_0051dba8);
+    Prop *s3 = (Prop *)igProperty_FindByName(arg1->_dataList, g_propertyNameField[0], DAT_0051dba8);
     {
         int a2 = igObject_GetAllocator(arg0);
-        int al2 = GPR_00554c14 != 0 ? a2 : Memory_GetAllocatorBySelector(DAT_00587110[0]);
+        int al2 = GPR_00554c14 != 0 ? a2 : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
         InfoWorkRef w((igObject *)FUN_00350020(al2));
         igObject *t2 = w.p;
         if (t2 != 0) t2->_refCount = t2->_refCount + 1;
@@ -99,12 +99,12 @@ void Gap__Bec__beNDMWMdlMapBase__vfunc_36(beNDMWMdlMapBase *arg0, beBaseInfoRam 
             int str = beMessenger_GetString(arg0->_messenger, 0);
             int ns;
             Tgt *tg = (Tgt *)w.p;
-            if (DAT_00586f20[0] == 0) {
+            if (g_stringPool[0] == 0) {
                 int v = FUN_002eb010(16);
                 if (v != 0) v = StringPool_Construct(v);
-                DAT_00586f20[0] = v;
+                g_stringPool[0] = v;
             }
-            ns = (int)StringPool_Intern(DAT_00586f20[0], str);
+            ns = (int)StringPool_Intern(g_stringPool[0], str);
             int old = tg->f220;
             if (old != 0) {
                 int *hdr = (int *)(old - 8);
@@ -127,7 +127,7 @@ void Gap__Bec__beNDMWMdlMapBase__vfunc_46(beNDMWMdlMapBase *arg0, RamInfoArg *ar
     int n, i;
     float *py = &sum.y;
     float *pz = &sum.z;
-    sum.x = DAT_004e1058[0];
+    sum.x = g_vec3Zero[0];
     *py = DAT_004e105c[0];
     *pz = DAT_004e1060[0];
     beMessenger_SendGroup(arg0->_messenger, DAT_0051dbb0, DAT_0051dbb8);
@@ -159,7 +159,7 @@ void Gap__Bec__beNDMWMdlMapBase__vfunc_46(beNDMWMdlMapBase *arg0, RamInfoArg *ar
         if (GPR_00554c14 != 0) {
             a = alloc;
         } else {
-            a = Memory_GetAllocatorBySelector(DAT_00587110[0]);
+            a = Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
         }
         igSmartPointer<igObject> created(((igObject *)beBaseInfoDataList_Create(a)));
         igObject *s0 = created.p;
@@ -173,7 +173,7 @@ void Gap__Bec__beNDMWMdlMapBase__vfunc_46(beNDMWMdlMapBase *arg0, RamInfoArg *ar
         }
         arg1->m40 = s0;
     }
-    r = ((PropertyRecord *)igProperty_FindByName(arg1->m40, DAT_00585be0[0], DAT_0051dba8));
+    r = ((PropertyRecord *)igProperty_FindByName(arg1->m40, g_propertyNameField[0], DAT_0051dba8));
     Matrix44_SetTranslation(r->f16 + 32, &sum);
 }
 

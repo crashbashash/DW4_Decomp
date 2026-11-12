@@ -3,11 +3,11 @@ void FUN_0044c490(int arg0) {
     igMetaObject_CreateInstance(*(int *)0x58C200, arg0);
 }
 
-int FUN_0044c4d0(void) {
-    if (DAT_0058c200[0] == 0) {
-        DAT_0058c200[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(DAT_00587040[0]));
+igMetaObject *FUN_0044c4d0(void) {
+    if (g_igRendererOrderedList_metaObject[0] == 0) {
+        g_igRendererOrderedList_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
     }
-    return DAT_0058c200[0];
+    return g_igRendererOrderedList_metaObject[0];
 }
 
 igMetaObject *igRendererOrderedList_GetMetaObject(void)
@@ -28,7 +28,7 @@ int igRendererOrderedList_GetVTable(void) {
     obj.w[3] = 0;
     obj.w[4] = 0;
     obj.vt = &DAT_00541d70[0];
-    r = *(int *)((char *)&obj + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+    r = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
     obj.vt = &DAT_00541d70[0];
     FUN_0044c5e0((int **)&obj, 0);
     return r;

@@ -13,7 +13,7 @@ int igTraversal_GetVTable(void) {
     igObject_InitHeader(&o);
     o.vt = &DAT_00528250[0];
     o.p = 0;
-    r = *(int *)((char *)&o + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+    r = *(int *)((char *)&o + *(int *)((char *)(g_objectSystem[0]) + 916));
     o.vt = &DAT_00528250[0];
     if (&o.p != 0) {
         t = o.p;
@@ -81,12 +81,12 @@ void igTraversal_InitFields(void) {
     void *temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)DAT_00561178[0];
+    temp_s0 = (void *)g_igTraversal_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_0048af10[0], 5);
     FUN_002ebc00(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s2 + 2)), -1);
     temp_s1 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s2 + 4)));
-    *(int *)((char *)(temp_s1) + 56) = FUN_0019a720();
+    *(int *)((char *)(temp_s1) + 56) = (int)FUN_0019a720();
     igMetaObject_NameFields(temp_s0, &DAT_0048af30[0], &DAT_0048af50[0], &DAT_0048af70[0], temp_s2);
     FUN_002fe480(&thunk_FUN_001e0470);
 }

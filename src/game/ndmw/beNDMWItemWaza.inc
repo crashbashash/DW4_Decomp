@@ -3,12 +3,12 @@ void FUN_003c8040(int arg0) {
     igMetaObject_CreateInstance(*(int *)0x58BF10, arg0);
 }
 
-G_3c8080 *beNDMWItemWaza_GetReadyMetaObject(void) {
-    G_3c8080 *g = DAT_0058bf10[0];
+igMetaObject *beNDMWItemWaza_GetReadyMetaObject(void) {
+    igMetaObject *g = g_beNDMWItemWaza_metaObject[0];
     int t;
-    if (!g || !(t = (g->f & 4) != 0))
+    if (!g || !(t = (g->_validity & 4) != 0))
         FUN_003c8110();
-    return DAT_0058bf10[0];
+    return g_beNDMWItemWaza_metaObject[0];
 }
 
 int beNDMWItemWaza_GetVTable(void) {
@@ -16,7 +16,7 @@ int beNDMWItemWaza_GetVTable(void) {
 
     igObject_InitHeader(obj);
     obj[0] = (int)&DAT_00540650[0];
-    return *(int *)((char *)obj + *(int *)((char *)DAT_00586dc8[0] + 916));
+    return *(int *)((char *)obj + *(int *)((char *)g_objectSystem[0] + 916));
 }
 
 void FUN_003c8110(void)
@@ -46,15 +46,15 @@ void beNDMWItemWaza_GetMetaObject(void)
     beNDMWItemWaza_GetReadyMetaObject();
 }
 
-int FUN_003c81c0(void) {
-    return ((int *)DAT_0058bf90)[0];
+igMetaObject *FUN_003c81c0(void) {
+    return g_beNDMWItemBase_metaObject[0];
 }
 
 void beNDMWItemWaza_InitFields(void) {
     int temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)((int *)DAT_0058bf10)[0];
+    temp_s0 = (void *)g_beNDMWItemWaza_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_004cc088[0], 1);
     igMetaObject_NameFields(temp_s0, &DAT_004cc090[0], &DAT_004cc098[0], &DAT_004cc0a0[0], temp_s1);

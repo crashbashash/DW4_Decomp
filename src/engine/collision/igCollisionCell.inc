@@ -19,7 +19,7 @@ int igCollisionCell_GetVTable(void) {
     obj.vt = &DAT_0052d290[0];
     obj.r1 = 0;
     obj.r3 = 0;
-    r = *(int *)((char *)&obj + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+    r = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
     obj.vt = &DAT_0052d290[0];
     obj.rel3();
     obj.rel1();
@@ -59,14 +59,14 @@ void igCollisionCell_InitFields(void) {
     void *temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)DAT_0056ddc8[0];
+    temp_s0 = (void *)g_igCollisionCell_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_004985a0[0], 6);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = FUN_00239a40();
+    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_00239a40();
     ((igRefMetaField *)temp_s1)->_construct = 1;
     temp_s1_2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
-    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = FUN_0023a080();
+    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = (int)FUN_0023a080();
     ((igObjectRefMetaField *)temp_s1_2)->_refCounted = 0;
     temp_s1_3 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 2));
     ((igObjectRefMetaField *)temp_s1_3)->_metaObject = FUN_0018a6a0();

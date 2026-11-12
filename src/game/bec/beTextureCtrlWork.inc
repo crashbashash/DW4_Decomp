@@ -3,22 +3,22 @@ void FUN_00342630(int arg0) {
     igMetaObject_CreateInstance(*(int *)0x587CD0, arg0);
 }
 
-int FUN_00342670(void) {
-    if (((int *)DAT_00587cd0)[0] == 0) {
-        ((int *)DAT_00587cd0)[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(DAT_00587040[0]));
+igMetaObject *FUN_00342670(void) {
+    if (g_beTextureCtrlWork_metaObject[0] == 0) {
+        g_beTextureCtrlWork_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
     }
-    return ((int *)DAT_00587cd0)[0];
+    return g_beTextureCtrlWork_metaObject[0];
 }
 
 void *FUN_003426c0(void) {
     bool ok;
-    if (DAT_00587cd0[0] == 0) goto make;
-    ok = !!(DAT_00587cd0[0]->f & 4);
+    if (g_beTextureCtrlWork_metaObject[0] == 0) goto make;
+    ok = !!(g_beTextureCtrlWork_metaObject[0]->_validity & 4);
     if (ok != false) goto done;
 make:
     FUN_003427f0();
 done:;
-    return DAT_00587cd0[0];
+    return g_beTextureCtrlWork_metaObject[0];
 }
 
 int beTextureCtrlWork_GetVTable(void) {
@@ -33,7 +33,7 @@ int beTextureCtrlWork_GetVTable(void) {
     *(int *)q1 = 0;
     q0 = (S_ref *)&u.b[12];
     *(int *)q0 = 0;
-    temp_s0 = *(int *)&u.b[*(int *)((char *)(DAT_00586dc8[0]) + 916)];
+    temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.vt = (int)&DAT_00539500[0];
     if (q0 != 0) {
         q0 = *(S_ref **)q0;
@@ -89,7 +89,7 @@ void beTextureCtrlWork_InitFields(void) {
     void *temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)((int *)DAT_00587cd0)[0];
+    temp_s0 = (void *)g_beTextureCtrlWork_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_004c3510[0], 2);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));

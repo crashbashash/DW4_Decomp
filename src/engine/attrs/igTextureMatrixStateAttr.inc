@@ -20,7 +20,7 @@ int igTextureMatrixStateAttr_GetVTable(void) {
 
     igObject_InitHeader(&obj);
     obj.vt = &DAT_005228f0[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 
 void FUN_001316a0(void)
@@ -50,11 +50,11 @@ void thunk_igTextureMatrixStateAttr_GetMetaObject(void) {
 }
 
 void igTextureMatrixStateAttr_InitFields(void) {
-    int temp_s0;
+    igMetaObject *temp_s0;
     int temp_s1;
     struct F *f;
 
-    temp_s0 = DAT_0055ecc0[0];
+    temp_s0 = g_igTextureMatrixStateAttr_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_00485af8[0], 2);
     f = (struct F *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 1);

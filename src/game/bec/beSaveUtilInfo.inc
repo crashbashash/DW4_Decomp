@@ -1,9 +1,9 @@
 void *FUN_00346ab0(void) {
-    struct G *g = DAT_00588010[0];
-    if (!g || ((g->f & 4) != 0) == false) {
+    igMetaObject *g = g_beSaveUtilInfo_metaObject[0];
+    if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_00346b70();
     }
-    return DAT_00588010[0];
+    return g_beSaveUtilInfo_metaObject[0];
 }
 
 int beSaveUtilInfo_GetVTable(void) {
@@ -14,7 +14,7 @@ int beSaveUtilInfo_GetVTable(void) {
     o.f20 = 0;
     o.f24 = 0;
     o.vt = &DAT_00538da0[0];
-    r = *(int *)((char *)&o + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+    r = *(int *)((char *)&o + *(int *)((char *)(g_objectSystem[0]) + 916));
     o.vt = &DAT_00538da0[0];
     
     FUN_0033ec80((struct S_33ec80 *)&o, (short)0);

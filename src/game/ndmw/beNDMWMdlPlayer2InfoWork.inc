@@ -5,13 +5,13 @@ void FUN_003bf560(int arg0) {
 
 void *beNDMWMdlPlayer2InfoWork_ResolveMetaObject(void) {
     bool ok;
-    if (DAT_0058b378[0] == 0) goto make;
-    ok = !!(DAT_0058b378[0]->f & 4);
+    if (g_beNDMWMdlPlayer2InfoWork_metaObject[0] == 0) goto make;
+    ok = !!(g_beNDMWMdlPlayer2InfoWork_metaObject[0]->_validity & 4);
     if (ok != false) goto done;
 make:
     FUN_003bf700();
 done:;
-    return DAT_0058b378[0];
+    return g_beNDMWMdlPlayer2InfoWork_metaObject[0];
 }
 
 int beNDMWMdlPlayer2InfoWork_GetVTable(void) {
@@ -20,7 +20,7 @@ int beNDMWMdlPlayer2InfoWork_GetVTable(void) {
 
     beModelCtrlInfoWork_Construct((beModelCtrlInfoWork *)&o);
     o.vt = DAT_0053d500;
-    r = *(int *)((char *)&o + *(int *)(((char * *)DAT_00586dc8)[0] + 916));
+    r = *(int *)((char *)&o + *(int *)(((char * *)g_objectSystem)[0] + 916));
     o.vt = DAT_0053d500;
     FUN_00350410(&o, 0);
     return r;
@@ -88,14 +88,14 @@ void beNDMWMdlPlayer2InfoWork_GetMetaObject(void)
 }
 
 int FUN_003bf7b0(void) {
-    return DAT_00588888[0];
+    return g_beModelCtrlInfoWork_metaObject[0];
 }
 
 void beNDMWMdlPlayer2InfoWork_InitFields(void) {
     int temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)((int *)DAT_0058b378)[0];
+    temp_s0 = (void *)g_beNDMWMdlPlayer2InfoWork_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_004ca7e0[0], 4);
     igMetaObject_NameFields(temp_s0, &DAT_004ca7f0[0], &DAT_004ca800[0], &DAT_004ca810[0], temp_s1);

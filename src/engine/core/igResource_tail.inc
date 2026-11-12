@@ -85,12 +85,12 @@ void *FUN_003092f0(Item_3092f0 *arg0, int arg1) {
     ((Out_3092f0 *)sp5C.p)->f49 = 0;
     ((Out_3092f0 *)sp5C.p)->f48 = 1;
     o = (Out_3092f0 *)sp5C.p;
-    if (DAT_00586f20[0] == 0) {
+    if (g_stringPool[0] == 0) {
         v = ((int)FUN_002eb010(16));
         if (v != 0) v = ((int)StringPool_Construct((S_2eadf0 *)v));
-        DAT_00586f20[0] = v;
+        g_stringPool[0] = v;
     }
-    v = StringPool_Intern((StringPool *)DAT_00586f20[0], (const char *)arg1);
+    v = StringPool_Intern((StringPool *)g_stringPool[0], (const char *)arg1);
     old = o->f20;
     if (old != 0) {
         hd = old - 2;
@@ -199,7 +199,7 @@ void FUN_00309970(S_309970 *self) {
     Ob_309970 *o;
     for (i = self->list->count - 1; i >= 0; i--) {
         off = i * 4;
-        if (igObject_IsKindOf((void *)(*(Ob_309970 **)((char *)self->list->data + off)), (igMetaObject *)(((int *)DAT_00586140)[0])) != 0) {
+        if (igObject_IsKindOf((void *)(*(Ob_309970 **)((char *)self->list->data + off)), (igMetaObject *)(((int *)g_igIGBFile_metaObject)[0])) != 0) {
             l = self->list;
             o = *(Ob_309970 **)((char *)l->data + off);
             if (o != 0) {

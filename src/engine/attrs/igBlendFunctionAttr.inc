@@ -17,11 +17,11 @@ void FUN_00139ed0(int arg0) {
     igMetaObject_CreateInstance(*(int *)0x55F3B8, arg0);
 }
 
-int FUN_00139f10(void) {
-    if (DAT_0055f3b8[0] == 0) {
-        DAT_0055f3b8[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(DAT_00587040[0]));
+igMetaObject *FUN_00139f10(void) {
+    if (g_igBlendFunctionAttr_metaObject[0] == 0) {
+        g_igBlendFunctionAttr_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
     }
-    return DAT_0055f3b8[0];
+    return g_igBlendFunctionAttr_metaObject[0];
 }
 
 igMetaObject *igBlendFunctionAttr_GetMetaObject(void)
@@ -41,7 +41,7 @@ int igBlendFunctionAttr_GetVTable(void) {
     p = (S_ref *)&u.b[24];
     u.vt = (int)&DAT_00524210[0];
     *(int *)p = 0;
-    temp_s0 = *(int *)&u.b[*(int *)((char *)(DAT_00586dc8[0]) + 916)];
+    temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.vt = (int)&DAT_00524210[0];
     if (p != 0) {
         p = *(S_ref **)p;
@@ -95,7 +95,7 @@ void igBlendFunctionAttr_InitFields(void) {
     struct BlendAttrMetaField *temp_v0_7;
     struct BlendAttrMetaField *temp_v0_8;
 
-    temp_s0 = (void *)DAT_0055f3b8[0];
+    temp_s0 = (void *)g_igBlendFunctionAttr_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_00486ae0[0], 0xB);
     temp_v0 = (BlendAttrMetaField *)igMetaObject_GetFieldAt(temp_s0, temp_s1);

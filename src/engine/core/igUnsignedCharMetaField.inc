@@ -19,8 +19,8 @@ int igUnsignedCharMetaField_GetVTable(void) {
     int t;
     igMetaField_Init((igMetaField *)&obj);
     obj.vt = &DAT_0052e530[0];
-    t = *(int *)((char *)&obj + *(int *)((char *)(((void * *)DAT_00586dc8)[0]) + 916));
-    obj.vt = &DAT_0052f230[0];
+    t = *(int *)((char *)&obj + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
+    obj.vt = &g_igMetaField_vtable[0];
     if (&obj.m != 0) {
         o = obj.m;
         if (o != 0) {
@@ -64,20 +64,20 @@ void thunk_igUnsignedCharMetaField_GetMetaObject(void) {
 void FUN_002b7590(void) {
     void *temp_s0;
 
-    if (DAT_00585768[0] == 0) {
-        DAT_00585768[0] = (void *)(((void *)igMetaObject_CreateInstance((CreateMeta *)DAT_00585760[0], (MemoryPool *)(((int)Memory_GetAllocatorBySelector(DAT_00587040[0]))))));
-        temp_s0 = (void *)(DAT_00585768[0]);
+    if (g_igUnsignedCharMetaField_descriptor[0] == 0) {
+        g_igUnsignedCharMetaField_descriptor[0] = (void *)(((void *)igMetaObject_CreateInstance((CreateMeta *)g_igUnsignedCharMetaField_metaObject[0], (MemoryPool *)(((int)Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]))))));
+        temp_s0 = (void *)(g_igUnsignedCharMetaField_descriptor[0]);
         if (temp_s0 != 0) {
             MetaRefList_AppendRetained((PointerList *)(((void *)FUN_002fc250())), (RefHeader *)temp_s0);
             {
-                void *held = (void *)DAT_00585768[0];
+                void *held = (void *)g_igUnsignedCharMetaField_descriptor[0];
                 *(int *)((char *)(held) + 4) = *(int *)((char *)(held) + 4) - 1;
                 if (((unsigned long long) ((long long) *(int *)((char *)(held) + 4) << 0x29) >> 0x29) == 0) {
                     igObject_Destroy(held);
                 }
             }
-            *(short *)((char *)(DAT_00585768[0]) + 18) = (short) (*(int *)((char *)(((void *)FUN_002fc250())) + 12) - 1);
-            igMetaField_FinalizeDescriptor((igMetaField *)DAT_00585768[0]);
+            *(short *)((char *)(g_igUnsignedCharMetaField_descriptor[0]) + 18) = (short) (*(int *)((char *)(((void *)FUN_002fc250())) + 12) - 1);
+            igMetaField_FinalizeDescriptor((igMetaField *)g_igUnsignedCharMetaField_descriptor[0]);
         }
     }
 }
@@ -86,6 +86,6 @@ int igUnsignedCharMetaField_GetDefaultDescriptor(void) {
     if (g_igUnsignedCharMetaField_descriptor[0] == 0) {
         igUnsignedCharMetaField_EnsureRegistered();
     }
-    return g_igUnsignedCharMetaField_descriptor[0];
+    return (int)g_igUnsignedCharMetaField_descriptor[0];
 }
 

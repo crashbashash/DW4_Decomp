@@ -1,21 +1,21 @@
-int Gap__Insight__igSerialScheduler__vfunc_22(void) {
-    return DAT_0056dab0[0];
+igMetaObject *Gap__Insight__igSerialScheduler__vfunc_22(void) {
+    return g_igSerialScheduler_metaObject[0];
 }
 
-int Gap__Insight__igFilterMessageDispatcher__vfunc_22(void) {
-    return DAT_0056db10[0];
+igMetaObject *Gap__Insight__igFilterMessageDispatcher__vfunc_22(void) {
+    return g_igFilterMessageDispatcher_metaObject[0];
 }
 
-int Gap__Insight__igMessageDefaultReceiver__vfunc_22(void) {
-    return DAT_0056db30[0];
+igMetaObject *Gap__Insight__igMessageDefaultReceiver__vfunc_22(void) {
+    return g_igMessageDefaultReceiver_metaObject[0];
 }
 
-int Gap__Insight__igInsightCore__vfunc_22(void) {
-    return DAT_0056db60[0];
+igMetaObject *Gap__Insight__igInsightCore__vfunc_22(void) {
+    return g_igInsightCore_metaObject[0];
 }
 
-int Gap__Insight__igWindowResizeEventReceiver__vfunc_22(void) {
-    return DAT_0056dc00[0];
+igMetaObject *Gap__Insight__igWindowResizeEventReceiver__vfunc_22(void) {
+    return g_igWindowResizeEventReceiver_metaObject[0];
 }
 
 int Gap__Gui__igEventReceiver__vfunc_23(void) {
@@ -72,8 +72,8 @@ int Gap__Bec__beKeyboardReceiver__vfunc_32(void) {
     return 0;
 }
 
-int Gap__Insight__igFlushRenderer__vfunc_22(void) {
-    return DAT_0056dc48[0];
+igMetaObject *Gap__Insight__igFlushRenderer__vfunc_22(void) {
+    return g_igFlushRenderer_metaObject[0];
 }
 
 void Gap__Insight__igFlushRenderer__vfunc_25(void) {
@@ -88,24 +88,24 @@ void Gap__Insight__igFlushRenderer__vfunc_24(void) {
 
 }
 
-int Gap__Insight__igInfoManagerList__vfunc_22(void) {
-    return DAT_0056dc30[0];
+igMetaObject *Gap__Insight__igInfoManagerList__vfunc_22(void) {
+    return g_igInfoManagerList_metaObject[0];
 }
 
-int Gap__Insight__igInfoManagerOrderedList__vfunc_22(void) {
-    return DAT_0056dc28[0];
+igMetaObject *Gap__Insight__igInfoManagerOrderedList__vfunc_22(void) {
+    return g_igInfoManagerOrderedList_metaObject[0];
 }
 
 int Gap__Core__igDependencyOrderedList__vfunc_22(void) {
-    return DAT_00586738[0];
+    return g_igDependencyOrderedList_metaObject[0];
 }
 
-int Gap__Insight__igViewportResizedMessage__vfunc_22(void) {
-    return DAT_0056dc10[0];
+igMetaObject *Gap__Insight__igViewportResizedMessage__vfunc_22(void) {
+    return g_igViewportResizedMessage_metaObject[0];
 }
 
 int Gap__Gui__igEventReceiver__vfunc_22(void) {
-    return DAT_0058c570[0];
+    return g_igEventReceiver_metaObject[0];
 }
 
 /* Slot 30, empty override returning 0. */
@@ -113,24 +113,24 @@ int Gap__Bec__beKeyboardReceiver__vfunc_30(void) {
     return 0;
 }
 
-int Gap__Insight__igInsightPluginList__vfunc_22(void) {
-    return DAT_0056db50[0];
+igMetaObject *Gap__Insight__igInsightPluginList__vfunc_22(void) {
+    return g_igInsightPluginList_metaObject[0];
 }
 
-int Gap__Insight__igMessageFilter__vfunc_22(void) {
-    return DAT_0056daf8[0];
+igMetaObject *Gap__Insight__igMessageFilter__vfunc_22(void) {
+    return g_igMessageFilter_metaObject[0];
 }
 
-int Gap__Insight__igMessageFilterList__vfunc_22(void) {
-    return DAT_0056daf0[0];
+igMetaObject *Gap__Insight__igMessageFilterList__vfunc_22(void) {
+    return g_igMessageFilterList_metaObject[0];
 }
 
-int Gap__Insight__igMessageReceiverList__vfunc_22(void) {
-    return DAT_0056dae0[0];
+igMetaObject *Gap__Insight__igMessageReceiverList__vfunc_22(void) {
+    return g_igMessageReceiverList_metaObject[0];
 }
 
-int Gap__Insight__igMessenger__vfunc_22(void) {
-    return DAT_0056dac8[0];
+igMetaObject *Gap__Insight__igMessenger__vfunc_22(void) {
+    return g_igMessenger_metaObject[0];
 }
 
 int Gap__Insight__igMessage__vfunc_22(void) {
@@ -141,19 +141,19 @@ int FUN_00238cf0(void) {
     return g_igRenderer_metaObject[0];
 }
 
-int Gap__Insight__igInsightPluginList__vfunc_24(void) {
-    return DAT_0056db58[0];
+igMetaObject *Gap__Insight__igInsightPluginList__vfunc_24(void) {
+    return g_igInsightPlugin_metaObject[0];
 }
 
-int Gap__Insight__igMessageFilterList__vfunc_24(void) {
-    return DAT_0056daf8[0];
+igMetaObject *Gap__Insight__igMessageFilterList__vfunc_24(void) {
+    return g_igMessageFilter_metaObject[0];
 }
 
-int Gap__Insight__igInfoManagerList__vfunc_24(void) {
-    return DAT_0056dc38[0];
+igMetaObject *Gap__Insight__igInfoManagerList__vfunc_24(void) {
+    return g_igInfoManager_metaObject[0];
 }
 
-int Gap__Insight__igMessageReceiverList__vfunc_24(void) {
-    return DAT_0056dae8[0];
+igMetaObject *Gap__Insight__igMessageReceiverList__vfunc_24(void) {
+    return g_igMessageReceiver_metaObject[0];
 }
 

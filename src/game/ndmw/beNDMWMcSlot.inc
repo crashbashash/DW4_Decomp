@@ -1,15 +1,15 @@
 void *beNDMWMcSlot_GetReadyMetaObject(void) {
-    struct G *g = DAT_0058bcc8[0];
+    igMetaObject *g = g_beNDMWMcSlot_metaObject[0];
     bool ready;
     if (g) {
         /* matching construct: the bool compared against false keeps the retail sltu normalisation under the
          * unit profile (3.0 -O3, exceptions on); a member-function spelling matched only under the combat -O3,p override */
-        ready = g->f & 4;
+        ready = g->_validity & 4;
         if (ready != false) goto end;
     }
     FUN_003c60b0();
 end:
-    return DAT_0058bcc8[0];
+    return g_beNDMWMcSlot_metaObject[0];
 }
 
 void FUN_003c60b0(void)
@@ -43,7 +43,7 @@ void beNDMWMcSlot_InitFields(void) {
     int temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)((int *)DAT_0058bcc8)[0];
+    temp_s0 = (void *)g_beNDMWMcSlot_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_004cbba0[0], 5);
     igMetaObject_NameFields(temp_s0, &DAT_004cbbc0[0], &DAT_004cbbe0[0], &DAT_004cbc00[0], temp_s1);

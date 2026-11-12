@@ -21,12 +21,12 @@ int igMetaEnum_GetValueByName(int *status, igMetaEnum *meta, const char *name, i
             }
             if (match) {
                 *value = ((NameList *)meta->_values)->data[index];
-                *status = DAT_004fb410.v;
+                *status = g_statusSucceeded.v;
                 return;
             }
         }
     }
-    *status = DAT_004fb418.v;
+    *status = g_allocatorFailureStatus.v;
 }
 
 void igMetaEnum_GetNameByValue(int *arg0, const struct E_2fbb40 *arg1, int arg2) {
@@ -85,12 +85,12 @@ int igMetaEnum_GetValueAt(void *arg0, int arg1)
 }
 
 static inline int pool_2fbc70(void) {
-    if ((*(int *)DAT_00586f20) == 0) {
+    if ((*(int *)g_stringPool) == 0) {
         int p = ((int)FUN_002eb010(0x10));
         if (p != 0) { p = ((int)StringPool_Construct((struct S_2eadf0 *)p)); }
-        (*(int *)DAT_00586f20) = p;
+        (*(int *)g_stringPool) = p;
     }
-    return (*(int *)DAT_00586f20);
+    return (*(int *)g_stringPool);
 }
 
 static inline void dropString(char *s) {
@@ -129,16 +129,16 @@ MetaEnumView *igMetaEnum_Create(char *name, char **names, int *values, int count
     MetaEnumValueList *vl;
     int a;
     char **slot;
-    e = ((MetaEnumView *)FUN_002befe0(((int)Memory_GetAllocatorBySelector((*(int *)DAT_00587040)))));
+    e = ((MetaEnumView *)FUN_002befe0(((int)Memory_GetAllocatorBySelector((*(int *)g_metadataAllocatorKey)))));
     v = ((char *)StringPool_Intern((StringPool *)(pool_2fbc70()), (const char *)name));
     old = e->name;
     dropString(old);
     e->name = v;
-    a = ((int)Memory_GetAllocatorBySelector((*(int *)DAT_00587040)));
+    a = ((int)Memory_GetAllocatorBySelector((*(int *)g_metadataAllocatorKey)));
     dropNames_2fbc70(e->names);
     e->names = ((MetaEnumNameList *)FUN_002b90e0(a));
     StringList_Resize((StringRefListView *)e->names, count);
-    a = ((int)Memory_GetAllocatorBySelector((*(int *)DAT_00587040)));
+    a = ((int)Memory_GetAllocatorBySelector((*(int *)g_metadataAllocatorKey)));
     dropValues(e->values);
     e->values = ((MetaEnumValueList *)FUN_002caa70(a));
     vl = e->values;
@@ -168,7 +168,7 @@ MetaEnumView *igMetaEnum_Create(char *name, char **names, int *values, int count
         dropString(held);
         setValue(e->values, i, &values[i]);
     }
-    FUN_002d30b0((int *)((*(int *)DAT_00586dc8)), (int)e);
+    FUN_002d30b0((int *)((*(int *)g_objectSystem)), (int)e);
     e->_refCount = e->_refCount - 1;
     if (((unsigned long long)((long long)e->_refCount << 0x29) >> 0x29) == 0) { igObject_Destroy(e); }
     return e;

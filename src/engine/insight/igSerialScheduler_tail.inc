@@ -76,7 +76,7 @@ void *FUN_00238110(void *arg0) {
     *(char *)((char *)(arg0) + 68) = 1;
     *(float *)((char *)(arg0) + 72) = (float) 0.100000001f;
     *(int *)((char *)(arg0) + 76) = 0x447A0000;
-    *(float *)((char *)(arg0) + 80) = (float) DAT_004e1058[0];
+    *(float *)((char *)(arg0) + 80) = (float) g_vec3Zero[0];
     *(float *)((char *)(arg0) + 84) = (float) DAT_004e105c[0];
     *(float *)((char *)(arg0) + 88) = (float) DAT_004e1060[0];
     *(char *)((char *)(arg0) + 92) = 1;
@@ -92,7 +92,7 @@ void *FUN_00238110(void *arg0) {
     *(int *)((char *)(arg0) + 120) = 0x3F800000;
     *(int *)((char *)(arg0) + 124) = 0x3F800000;
     *(int *)((char *)(arg0) + 128) = 0x3F800000;
-    *(float *)((char *)(arg0) + 132) = (float) DAT_004e1170[0];
+    *(float *)((char *)(arg0) + 132) = (float) g_vec4Zero[0];
     *(float *)((char *)(arg0) + 136) = (float) DAT_004e1174[0];
     *(float *)((char *)(arg0) + 140) = (float) DAT_004e1178[0];
     *(float *)((char *)(arg0) + 144) = (float) DAT_004e117c[0];
@@ -136,7 +136,7 @@ void *FUN_00238110(void *arg0) {
 /* Matching construct: `group` is declared apart from `props` so the property set lands in the first saved register. */
 void FUN_002382e0(ViewerOptions_2382e0 *opt, int, int, int, int, int, int, int) {
   int group;
-  int props = ((PropertySet *)DAT_00586dc8[0])->props;
+  int props = ((PropertySet *)g_objectSystem[0])->props;
   group = FUN_00306360(props, DAT_004e9870, 0);
   if (group < 0) {
     group = FUN_00306360(props, DAT_004e9878, 0);

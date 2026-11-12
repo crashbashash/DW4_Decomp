@@ -66,7 +66,7 @@ extern "C" int DAT_00515970[4];
 extern "C" int DAT_00515978[4];
 extern "C" int DAT_00515980[4];
 extern "C" int DAT_00515988[4];
-extern "C" int DAT_00586f20[4];
+extern "C" int g_stringPool[4];
 extern "C" float DAT_0058c180[12];
 extern "C" char GPR_00554e6c;
 struct RecoveryString { void *p; RecoveryString() {} RecoveryString(void *q) { p = q; } ~RecoveryString() { if (p != 0) { int *t = (int *)((char *)p - 8); int v = *(int *)((char *)p - 4) - 1; *(int *)((char *)p - 4) = v; if (v == 0) StringChunk_ReleaseHeader(*t, t); } } };
@@ -120,7 +120,7 @@ extern "C" int DAT_00515a98[4];
 /* Property record: integer value at +12. */
 struct PropertyRecordInt { char p[12]; int value; };
 extern "C" void Gap__Bec__beNDMWPanelObjectWaza__vfunc_22(beNDMWPanelObjectWaza *arg0, int *arg1, long long *arg2);
-extern "C" int DAT_00588518[4];
+extern "C" int g_bePadManager_metaObject[4];
 extern "C" void Gap__Bec__beNDMWPanelWaza__vfunc_32(beNDMWPanelWaza *arg0);
 extern "C" int g_beNDMWPanelWazaInfo_metaObject[4];
 extern "C" int g_beNDMWPanelWaza_metaObject[4];
@@ -161,14 +161,14 @@ static void SetLabel(beNDMWPanelWazaInfoWork *w, int str)
     int *hd;
     int rc;
 
-    if (DAT_00586f20[0] == 0) {
+    if (g_stringPool[0] == 0) {
         pool = FUN_002eb010(0x10);
         if (pool != 0) {
             pool = StringPool_Construct(pool);
         }
-        DAT_00586f20[0] = pool;
+        g_stringPool[0] = pool;
     }
-    fresh = StringPool_Intern(DAT_00586f20[0], str);
+    fresh = StringPool_Intern(g_stringPool[0], str);
     old = w->_retWazaLabel;
     if (old != 0) {
         hd = (int *)(old - 8);
@@ -223,7 +223,7 @@ extern "C" void FUN_003d0a90(int arg0, beNDMWPanelWazaInfoRam *arg1, int arg2, i
 extern "C" int DAT_00515bd8[4];
 extern "C" int DAT_00515be0[4];
 extern "C" int DAT_00515be8[4];
-extern "C" int DAT_00587110[4];
+extern "C" int g_defaultAllocatorSelector[4];
 extern "C" unsigned char GPR_00554c14;
 extern "C" int Gap__Bec__beNDMWPanelWaza__vfunc_34(beNDMWPanelWaza *self, beNDMWPanelWazaInfoRam *ram, beMessengerWork *arg2);
 extern "C" int g_beNDMWPanelObjectStat_metaObject[4];
@@ -263,12 +263,12 @@ void FUN_003cdef0(beNDMWPanelObject *self, int g, int s, int *name, int val) {
             if (name == 0) {
                 ref = 0;
             } else {
-                if (DAT_00586f20[0] == 0) {
+                if (g_stringPool[0] == 0) {
                     pool = FUN_002eb010(16);
                     if (pool != 0) pool = StringPool_Construct(pool);
-                    DAT_00586f20[0] = pool;
+                    g_stringPool[0] = pool;
                 }
-                ref = StringPool_Intern(DAT_00586f20[0], name);
+                ref = StringPool_Intern(g_stringPool[0], name);
             }
             SetOp::go(((igStringRefList *)self->_textSetList), idx, RecoveryString((void *)ref));
             beMessenger_SelectGroup(self->_messenger, &DAT_00515950[0]);
@@ -576,7 +576,7 @@ void Gap__Bec__beNDMWPanelObjectWaza__vfunc_22(beNDMWPanelObjectWaza *arg0, int 
 
 void Gap__Bec__beNDMWPanelWaza__vfunc_32(beNDMWPanelWaza *arg0) {
     if (arg0->_padManager == 0) {
-        arg0->_padManager = FUN_00236f80(arg0->_insight, DAT_00588518[0]);
+        arg0->_padManager = FUN_00236f80(arg0->_insight, g_bePadManager_metaObject[0]);
     }
 }
 
@@ -972,7 +972,7 @@ int Gap__Bec__beNDMWPanelWaza__vfunc_34(beNDMWPanelWaza *self, beNDMWPanelWazaIn
     work = (beNDMWPanelWazaInfoWork *)ram->_work;
     if (work == 0) {
         alloc = igObject_GetAllocator(self);
-        alloc = GPR_00554c14 ? alloc : Memory_GetAllocatorBySelector(DAT_00587110[0]);
+        alloc = GPR_00554c14 ? alloc : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
         igSmartPointer<igObject> created((igObject *)FUN_003bdb10(alloc));
         { igObject *n = created.p; RET(n) { igObject *o = (igObject *)ram->_work; REL(o) } ram->_work = (int)n; }
         work = (beNDMWPanelWazaInfoWork *)created.p;

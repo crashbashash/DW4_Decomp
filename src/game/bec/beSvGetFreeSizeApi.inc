@@ -3,12 +3,12 @@ void FUN_00348c70(int arg0) {
     igMetaObject_CreateInstance(*(int *)0x588200, arg0);
 }
 
-G_348cb0 *FUN_00348cb0(void) {
-    G_348cb0 *g = DAT_00588200[0];
+igMetaObject *FUN_00348cb0(void) {
+    igMetaObject *g = g_beSvGetFreeSizeApi_metaObject[0];
     int t;
-    if (!g || !(t = (g->f & 4) != 0))
+    if (!g || !(t = (g->_validity & 4) != 0))
         FUN_00348e40();
-    return DAT_00588200[0];
+    return g_beSvGetFreeSizeApi_metaObject[0];
 }
 
 int beSvGetFreeSizeApi_GetVTable(void) {
@@ -30,7 +30,7 @@ int beSvGetFreeSizeApi_GetVTable(void) {
     p78 = &u.b[56];
     *(int *)p78 = 0;
     u.vt = (int)&DAT_0053bd60[0];
-    r = *(int *)&u.b[*(int *)((char *)(DAT_00586dc8[0]) + 916)];
+    r = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.vt = (int)&DAT_0053c070[0];
     if (p78 != 0) {
         v1 = *(int **)p78;
@@ -93,7 +93,7 @@ void beSvGetFreeSizeApi_InitFields(void) {
     int temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)((int *)DAT_00588200)[0];
+    temp_s0 = (void *)g_beSvGetFreeSizeApi_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_004c4028[0], 3);
     igMetaObject_NameFields(temp_s0, &DAT_004c4038[0], &DAT_004c4048[0], &DAT_004c4058[0], temp_s1);

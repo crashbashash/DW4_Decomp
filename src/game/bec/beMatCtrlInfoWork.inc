@@ -3,19 +3,19 @@ void FUN_00359480(int arg0) {
     igMetaObject_CreateInstance(*(int *)0x5890C0, arg0);
 }
 
-int FUN_003594c0(void) {
-    if (((int *)DAT_005890c0)[0] == 0) {
-        ((int *)DAT_005890c0)[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(DAT_00587040[0]));
+igMetaObject *FUN_003594c0(void) {
+    if (g_beMatCtrlInfoWork_metaObject[0] == 0) {
+        g_beMatCtrlInfoWork_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
     }
-    return ((int *)DAT_005890c0)[0];
+    return g_beMatCtrlInfoWork_metaObject[0];
 }
 
 void *FUN_00359510(void) {
-    struct G *g = DAT_005890c0[0];
-    if (!g || ((g->f & 4) != 0) == false) {
+    igMetaObject *g = g_beMatCtrlInfoWork_metaObject[0];
+    if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_00359640();
     }
-    return DAT_005890c0[0];
+    return g_beMatCtrlInfoWork_metaObject[0];
 }
 
 int beMatCtrlInfoWork_GetVTable(void) {
@@ -26,7 +26,7 @@ int beMatCtrlInfoWork_GetVTable(void) {
     obj.vt = &DAT_00536c40[0];
     obj.m8 = 0;
     obj.m12 = 0;
-    r = *(int *)((char *)&obj + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+    r = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
     obj.vt = &DAT_00536c40[0];
     obj.rel12();
     obj.rel8();
@@ -66,7 +66,7 @@ void beMatCtrlInfoWork_InitFields(void) {
     void *temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)((int *)DAT_005890c0)[0];
+    temp_s0 = (void *)g_beMatCtrlInfoWork_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_004c5fd8[0], 2);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));

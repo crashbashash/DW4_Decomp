@@ -1,5 +1,5 @@
-int Gap__igPsx2Controller__vfunc_22(void) {
-    return DAT_0055f760[0];
+igMetaObject *Gap__igPsx2Controller__vfunc_22(void) {
+    return g_igPsx2Controller_metaObject[0];
 }
 
 int Gap__igPsx2Controller__vfunc_24(void *arg0) {

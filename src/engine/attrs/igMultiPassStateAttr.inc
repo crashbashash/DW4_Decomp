@@ -3,11 +3,11 @@ void FUN_00135190(int arg0) {
     igMetaObject_CreateInstance(*(int *)0x55EFD0, arg0);
 }
 
-int FUN_001351d0(void) {
-    if (DAT_0055efd0[0] == 0) {
-        DAT_0055efd0[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(DAT_00587040[0]));
+igMetaObject *FUN_001351d0(void) {
+    if (g_igMultiPassStateAttr_metaObject[0] == 0) {
+        g_igMultiPassStateAttr_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
     }
-    return DAT_0055efd0[0];
+    return g_igMultiPassStateAttr_metaObject[0];
 }
 
 igMetaObject *igMultiPassStateAttr_GetMetaObject(void)
@@ -22,7 +22,7 @@ int igMultiPassStateAttr_GetVTable(void) {
     struct O_135270 o;
     igObject_InitHeader(&o.vt);
     o.vt = DAT_00523390;
-    return *(int *)((char *)&o.vt + *(int *)(DAT_00586dc8[0] + 916));
+    return *(int *)((char *)&o.vt + *(int *)(g_objectSystem[0] + 916));
 }
 
 void FUN_001352b0(void)
@@ -55,7 +55,7 @@ void igMultiPassStateAttr_InitFields(void) {
     int temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)DAT_0055efd0[0];
+    temp_s0 = (void *)g_igMultiPassStateAttr_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_00486200[0], 1);
     igMetaObject_NameFields(temp_s0, &DAT_00486208[0], &DAT_00486210[0], &DAT_00486218[0], temp_s1);

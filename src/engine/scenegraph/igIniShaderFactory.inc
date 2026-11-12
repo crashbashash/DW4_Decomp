@@ -22,7 +22,7 @@ int igIniShaderFactory_GetVTable(void) {
     obj.w12 = 0;
     obj.w13 = 0;
     obj.w14 = 0;
-    t = *(int *)((char *)&obj + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+    t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
     obj.vt = &DAT_00528d60[0];
     FUN_0014dd40(&obj.w14, -1);
     FUN_0014dd40(&obj.w13, -1);
@@ -92,8 +92,8 @@ void thunk_igIniShaderFactory_GetMetaObject(void) {
     igIniShaderFactory_GetMetaObject();
 }
 
-int FUN_0019f050(void) {
-    return DAT_00561528[0];
+igMetaObject *FUN_0019f050(void) {
+    return g_igShaderFactory_metaObject[0];
 }
 
 void igIniShaderFactory_InitFields(void) {
@@ -108,7 +108,7 @@ void igIniShaderFactory_InitFields(void) {
     void *temp_v0_2;
     void *temp_s1;
 
-    temp_s1 = (void *)DAT_005619a8[0];
+    temp_s1 = (void *)g_igIniShaderFactory_metaObject[0];
     temp_s0 = igMetaObject_GetFieldCount(temp_s1);
     igMetaObject_CreateFields(temp_s1, &DAT_0048bf20[0], 9);
     temp_s2 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s1, temp_s0 + 1)));
@@ -130,7 +130,7 @@ void igIniShaderFactory_InitFields(void) {
     ((igObjectRefMetaField *)temp_s2_4)->_metaObject = FUN_002c04a0();
     ((igObjectRefMetaField *)temp_s2_4)->_persistent = 0;
     temp_s2_5 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s1, temp_s0 + 7)));
-    ((igObjectRefMetaField *)temp_s2_5)->_metaObject = FUN_0019ea00();
+    ((igObjectRefMetaField *)temp_s2_5)->_metaObject = (int)FUN_0019ea00();
     ((igObjectRefMetaField *)temp_s2_5)->_persistent = 0;
     temp_s2_6 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s1, temp_s0 + 8)));
     ((igObjectRefMetaField *)temp_s2_6)->_metaObject = FUN_002bcbb0();

@@ -1,5 +1,5 @@
-int Gap__Attrs__igParticleAttr__vfunc_22(void) {
-    return DAT_0055ef80[0];
+igMetaObject *Gap__Attrs__igParticleAttr__vfunc_22(void) {
+    return g_igParticleAttr_metaObject[0];
 }
 
 void Gap__Attrs__igParticleAttr__vfunc_28(void *arg0) {

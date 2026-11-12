@@ -1,6 +1,6 @@
 void FUN_001e4c50(int arg0) {
     FUN_001e4d30();
-    igMetaObject_CreateInstance(DAT_00562bc0[0], arg0);
+    igMetaObject_CreateInstance(g_igMatrixObject_metaObject[0], arg0);
 }
 
 igMetaObject *igMatrixObject_GetMetaObject(void)
@@ -16,7 +16,7 @@ int igMatrixObject_GetVTable(void) {
     igObject_InitHeader(&obj);
     obj.vt = &DAT_0052bc10[0];
     igMatrix44f_SetIdentity(obj.pad + 4);
-    return *(int *)((char *)&obj + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 
 void FUN_001e4d30(void)
@@ -49,7 +49,7 @@ void igMatrixObject_InitFields(void) {
     int temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)DAT_00562bc0[0];
+    temp_s0 = (void *)g_igMatrixObject_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_0048db20[0], 1);
     igMetaObject_NameFields(temp_s0, &DAT_0048db28[0], &DAT_0048db30[0], &DAT_0048db38[0], temp_s1);

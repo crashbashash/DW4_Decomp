@@ -6,7 +6,7 @@ void Gap__Sg__igPsx2EnvironmentMapShader__vfunc_10(void **arg0) {
 }
 
 int Gap__Sg__igPsx2EnvironmentMapShader__vfunc_22(void) {
-    return ((int *)DAT_005624f8)[0];
+    return ((int *)g_igPsx2EnvironmentMapShader_metaObject)[0];
 }
 
 void Gap__Sg__igPsx2EnvironmentMapShader__vfunc_49(void) {

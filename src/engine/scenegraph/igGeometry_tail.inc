@@ -35,7 +35,7 @@ int FUN_001ceab0(HitTraversal *self, HitNode *node) {
         }
     }
     if (self->flags & 2) {
-        if (igObject_IsKindOf(node, ((void * *)DAT_00561a38)[0]) != 0 || igObject_IsKindOf(node, ((void * *)DAT_00561ca0)[0]) != 0) {
+        if (igObject_IsKindOf(node, ((void * *)g_igGeometry_metaObject)[0]) != 0 || igObject_IsKindOf(node, ((void * *)DAT_00561ca0)[0]) != 0) {
             bool hit;
             unsigned int i;
             HitSegmentList *segments;
@@ -67,7 +67,7 @@ int FUN_001ceab0(HitTraversal *self, HitNode *node) {
         }
     }
     if (self->flags & 4) {
-        if (igObject_IsKindOf(node, ((void * *)DAT_00561a38)[0]) != 0) {
+        if (igObject_IsKindOf(node, ((void * *)g_igGeometry_metaObject)[0]) != 0) {
             HitMatrix *matrix;
             unsigned int attrCount;
             unsigned int segmentCount;
@@ -96,7 +96,7 @@ int FUN_001ceab0(HitTraversal *self, HitNode *node) {
                 }
                 for (a = 0; a < attrCount; a++) {
                     HitAttr *attr = attrs->data[a];
-                    if (igObject_IsKindOf(attr, ((void * *)DAT_0055f170)[0]) != 0 || igObject_IsKindOf(attr, ((void * *)DAT_0055f158)[0]) != 0) {
+                    if (igObject_IsKindOf(attr, ((void * *)g_igGeometryAttr_metaObject)[0]) != 0 || igObject_IsKindOf(attr, ((void * *)DAT_0055f158)[0]) != 0) {
                         int *f = &pointReport.first;
                         int *g = &pointReport.second;
                         *f = -1;
@@ -185,7 +185,7 @@ int FUN_001cfaa0(ModelTraversal *self, TraversalNode *node) {
             return 0;
         }
         if (r == 2) {
-            int meta = DAT_00561838[0];
+            int meta = (int)g_igNode_metaObject[0];
             int got = node->getMeta();
             if (got != meta) {
                 return passStop(igTraversal_TraverseChildren((int)(self), (S_1e07a0 *)node));
@@ -223,8 +223,8 @@ int FUN_001cfaa0(ModelTraversal *self, TraversalNode *node) {
     return passStop(result);
 }
 
-int FUN_001cfc60(void) {
-    return DAT_005612b0[0];
+igMetaObject *FUN_001cfc60(void) {
+    return g_igTransform_metaObject[0];
 }
 
 int Gap__Sg__igGeometry__vfunc_22(void) {

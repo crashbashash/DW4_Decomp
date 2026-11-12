@@ -17,7 +17,7 @@ int igBillboard_GetVTable(void) {
     u.w[7] = 0;
     u.w[0] = (int)(&DAT_0052a2a0[0]);
     u.w[15] = 0;
-    temp_s0 = *(int *)&u.b[*(int *)((char *)(DAT_00586dc8[0]) + 916)];
+    temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.w[0] = (int)(&DAT_0052a2a0[0]);
     FUN_00142d10(&u.w[15], -1);
     FUN_00195a90((struct T_195a90 *)&u.w[0], 0);
@@ -59,7 +59,7 @@ void igBillboard_InitFields(void) {
     void *temp_a0;
     void *temp_s0;
 
-    temp_s0 = (void *)DAT_00561f68[0];
+    temp_s0 = (void *)g_igBillboard_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_0048cbc0[0], 4);
     temp_a0 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1)));

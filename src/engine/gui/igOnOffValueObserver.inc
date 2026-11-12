@@ -10,7 +10,7 @@ int igOnOffValueObserver_GetVTable(void) {
     struct Obj_44ca40 obj;
     igObject_InitHeader(&obj);
     obj.vt = &DAT_00540cf0[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 
 void igOnOffValueObserver_EnsureRegistered(void)
@@ -39,8 +39,8 @@ void thunk_igOnOffValueObserver_GetMetaObject(void) {
     igOnOffValueObserver_GetMetaObject();
 }
 
-int FUN_0044cb20(void) {
-    return DAT_0058c1c0[0];
+igMetaObject *FUN_0044cb20(void) {
+    return g_igView_metaObject[0];
 }
 
 void igOnOffValueObserver_InitFields(void) {
@@ -48,11 +48,11 @@ void igOnOffValueObserver_InitFields(void) {
     void *temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)DAT_0058c220[0];
+    temp_s0 = (void *)g_igOnOffValueObserver_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_004cffc8[0], 1);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = FUN_0044cdf0();
+    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_0044cdf0();
     ((igObjectRefMetaField *)temp_s1)->_refCounted = 0;
     igMetaObject_NameFields(temp_s0, &DAT_004cffd0[0], &DAT_004cffd8[0], &DAT_004cffe0[0], temp_s2);
 }

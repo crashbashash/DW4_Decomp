@@ -7,7 +7,7 @@
 #define AREAS(common, pl) (((beNDMWDegiData **)((beNDMWDegiDataList *)((beNDMWLoadSlotPlayer *)PLW(common, pl)->_haveSaveData)->_saveDataList)->_data))
 #define SLOT_DEGI(bk, pl, i) \
     ((beNDMWDegiData *)((int *)((beNDMWDegiDataList *)((beNDMWLoadSlotPlayer *)((beNDMWLoadSavePlWork *)((int *)((beNDMWLoadSavePlWorkList *)(bk)->_flagWork)->_data)[pl])->_haveSaveData)->_saveDataList)->_data)[i])
-#define BIND(P, I, F) do { int a = igObject_GetAllocator(arg0); a = GPR_00554c14 ? a : Memory_GetAllocatorBySelector(DAT_00587110[0]); igSmartPointer<Obj> r(((Obj *)FUN_003614f0(a))); beUnicodeObj_AllocateBuffer(r.p, 1); *(unsigned short *)r.p->_buffer = arg0->t.name[I]; FUN_003ec120(arg0->n._textOrder, P, arg0->n._ramNo, I, r.p, 1, F); } while (0)
+#define BIND(P, I, F) do { int a = igObject_GetAllocator(arg0); a = GPR_00554c14 ? a : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]); igSmartPointer<Obj> r(((Obj *)FUN_003614f0(a))); beUnicodeObj_AllocateBuffer(r.p, 1); *(unsigned short *)r.p->_buffer = arg0->t.name[I]; FUN_003ec120(arg0->n._textOrder, P, arg0->n._ramNo, I, r.p, 1, F); } while (0)
 #define MC_UTIL(owner) ((beNDMWMcUtilCtrl *)(owner)->_mcUtilCtrl)
 #define MC_SLOTS(owner) ((beNDMWMcSlotList *)MC_UTIL(owner)->_slot)
 #define MC_SLOT(list, i) (((beNDMWMcSlot **)(list)->_data)[i])
@@ -30,10 +30,10 @@ extern "C" int strcmp(...);
 extern "C" int TextOrder_ClearFont(...);
 extern "C" int TextOrder_PublishLineListOnly(...);
 extern "C" int FUN_003ecad0(...);
-extern "C" int FUN_002eb010(...);
+extern "C" void *FUN_002eb010(...);
 extern "C" int ObjectList_AppendRetained(...);
 extern "C" int StringChunk_ReleaseHeader(...);
-extern "C" int StringPool_Construct(...);
+extern "C" void *StringPool_Construct(...);
 extern "C" void * StringPool_Intern(...);
 extern "C" int beMessenger_AppendVec3(int, float *);
 extern "C" int beMessenger_DispatchSelected(int, int *);
@@ -65,14 +65,14 @@ extern "C" void FUN_003d9e90(beNDMWLoadIntf2DegiState *arg0);
 extern "C" beUnicodeObj * FUN_003614f0(...);
 typedef struct SlotEnt { int name; int val; int val2; } SlotEnt;
 extern "C" int DAT_00516c40[4];
-extern "C" int DAT_00516c50[4];
-extern "C" int DAT_00516c60[4];
-extern "C" int DAT_00516c68[4];
-extern "C" int DAT_00516c78[4];
+extern "C" int DATABASE[4];
+extern "C" int shinka[4];
+extern "C" int GETDATABASE[4];
+extern "C" int NAME[4];
 extern "C" int DAT_00516c80[4];
 extern "C" int DAT_00516c90[4];
 extern "C" int DAT_00516c98[4];
-extern "C" int DAT_00587110[4];
+extern "C" int g_defaultAllocatorSelector[4];
 extern "C" unsigned char GPR_00554c14;
 struct SlotDisplay { char p0[40]; unsigned char used; char p2[7]; int model; char p3[4]; int level; int hp; int maxHp; int mp; int maxMp; };
 struct AreaCell { char p[12]; igObjectList *displays; };
@@ -82,19 +82,19 @@ struct SlotPanel { char p0[8]; int messenger; char p1[4]; int textCtrl; SlotBack
 extern "C" void FUN_003d9ec0(SlotPanel *arg0);
 extern "C" void FUN_003da5f0(beNDMWLoadIntf2DegiState *arg0);
 typedef struct Ent { int name; int val; int val2; } Ent;
-extern "C" Ent DAT_004cec70[16];
-extern "C" int DAT_00516ca8[4];
-extern "C" int DAT_00516cc0[4];
-extern "C" int DAT_00516cd0[4];
+extern "C" Ent g_playerModelRow[16];
+extern "C" int j_digifacewin[4];
+extern "C" int j_mainstatuswin[4];
+extern "C" int SQ_OPEN[4];
 extern "C" int DAT_00516cd8[4];
 extern "C" int DAT_00516ce8[4];
 extern "C" int DAT_00516cf8[4];
 extern "C" int DAT_00516d08[4];
 extern "C" int DAT_00516d10[4];
 extern "C" int DAT_00516d20[4];
-extern "C" int DAT_00516d30[4];
-extern "C" int DAT_00516d40[4];
-extern "C" int DAT_00516d50[4];
+extern "C" int SQ_CLOSE[4];
+extern "C" int SQ_LINEON00[4];
+extern "C" int SQ_CANCEL[4];
 extern "C" int DAT_00516d60[4];
 struct Item { char p0[40]; unsigned char b40; char p1[7]; int f48; };
 struct IL { char p[16]; Item **arr; };
@@ -121,7 +121,7 @@ typedef struct Node { int f0; char p0[12]; struct Node *n16; } Node;
 extern "C" int DAT_00516e48[4];
 extern "C" void *DAT_004cc840[4];
 extern "C" void *DAT_004cc850[4];
-extern "C" void *DAT_00586f20[4];
+extern "C" void *g_stringPool[4];
 extern "C" bePadData * bePadManager_GetPadForPlayer(...);
 extern "C" int FUN_003ee190(beNDMWLoadCtrl2CommonIntf *, int);
 extern "C" unsigned char beNDMWLoadIntf2DataSelIntf__UpdateSelection(beNDMWLoadIntf2DataSelIntf *c, int sel);
@@ -159,13 +159,13 @@ extern "C" int FUN_003dd6d0(beNDMWLoadIntf2DataSelIntf *arg0, int arg1);
 extern "C" void beNDMWLoadIntf2Diffselect__Init(beNDMWLoadIntf2Diffselect *arg0, int arg1, int arg2);
 /* The pad object is a bePadData: _lTrg/_lRpt are held, _trigger/_repeat are edges. */
 typedef struct VecSrc { char p0[28]; float x, y, z; } VecSrc;
-extern "C" int DAT_00516e18[4];
+extern "C" int SQ_LINEON01[4];
 extern "C" int DAT_00516e28[4];
-extern "C" int DAT_00516eb0[4];
+extern "C" int j_linewin02[4];
 extern "C" int DAT_00516ec0[4];
-extern "C" int DAT_00516ed0[4];
+extern "C" int SQ_LINEUP00[4];
 extern "C" int DAT_00516ee0[4];
-extern "C" int DAT_00516ef0[4];
+extern "C" int SQ_LINEDW01[4];
 extern "C" int DAT_00516f00[4];
 extern "C" unsigned char beNDMWLoadIntf2Diffselect__Update(beNDMWLoadIntf2Diffselect *self, unsigned char usePad);
 struct R { int a, b, c; };
@@ -240,7 +240,6 @@ extern "C" void beNDMWLoadIntf2SelSlot__RefreshSlotMarks(beNDMWLoadIntf2SelSlot 
 extern "C" beLoadIntf2ComMdlData * beLoadIntf2ComMdlData__Create(...);
 extern "C" int MODELCTRL[4];
 extern "C" int GENERATE[4];
-extern "C" int g_stringPool[4];
 extern "C" int g_defaultAllocatorSelector[4];
 typedef struct StringTokenHeader {
     int owner;
@@ -259,7 +258,7 @@ extern "C" int beNDMWLoadIntf2ComMdlCtrl__IsCloseQueueEmpty(beNDMWLoadIntf2ComMd
 extern "C" int List_RemoveWordAt(beLoadIntf2ComMdlDataList *, int);
 extern "C" void beNDMWLoadIntf2ComMdlCtrl__Poll(beNDMWLoadIntf2ComMdlCtrl *self);
 extern "C" igObject *FUN_00236f80(int, int);
-extern "C" int DAT_00588518[4];
+extern "C" int g_bePadManager_metaObject[4];
 extern "C" void Gap__Bec__beNDMWLoadIntf2__vfunc_32(beNDMWLoadIntf2 *arg0);
 typedef struct ObjectRefTarget { int word0; int references; } ObjectRefTarget;
 typedef struct ObjectRefWord { ObjectRefTarget *value; } ObjectRefWord;
@@ -339,7 +338,6 @@ extern "C" void *igProperty_GetRecord(...);
 extern "C" void *igProperty_GetRecordByte(...);
 extern "C" int text_0rQ[4];
 extern "C" int g_starterPlayerModelName_004cd0e0[4];
-extern "C" int g_playerModelRow[4];
 extern "C" int g_playerModelRowOpenSeq[4];
 extern "C" int g_playerModelRowSeq[4];
 extern "C" int DATABASE[4];
@@ -352,12 +350,12 @@ extern "C" int SQ_OPEN[4];
 extern "C" int SQ_CLOSE[4];
 extern "C" int SQ_LINEON00[4];
 extern "C" int SQ_CANCEL[4];
-extern "C" int SQ_LINESL00[4];
+extern "C" char SQ_LINESL00[];
 extern "C" int SQ_LINEON01[4];
 extern "C" int j_linewin02[4];
 extern "C" int SQ_LINEUP00[4];
 extern "C" int SQ_LINEDW01[4];
-extern "C" int SQ_ON00[4];
+extern "C" char SQ_ON00[];
 extern "C" int COMMONINTF[4];
 extern "C" int CTRL[4];
 extern "C" int MAKECHR[4];
@@ -389,12 +387,12 @@ extern "C" int UNIQUE[4];
 extern "C" int BASE2CURRENT[4];
 extern "C" int RECALCPLAYER[4];
 extern "C" int hostLoad_lua[4];
-extern "C" int DAT_00585be0[4];
+extern "C" int g_propertyNameField[4];
 extern "C" int g_ndmwAllocatorSelector[4];
 extern "C" int g_bePadManager_metaObject[4];
 extern "C" int g_beLua_metaObject[4];
 extern "C" int g_beFont_metaObject[4];
-extern "C" int DAT_0058a1e0[4];
+extern "C" int g_mdlEntity[4];
 /* The 4-byte value returned by FUN_003e9360 is copied into a temporary reference before it is
  * handed to ObjectRef_Assign_003e92b0; these two classes reproduce that copy/destroy pair. */
 class RecoveryCopiedRef {
@@ -756,76 +754,76 @@ extern "C" void Gap__Bec__beNDMWLoadIntf2__vfunc_31(beNDMWLoadIntf2 *self,
       DW4Fresh::Assign(&host->_dataList, igObject_GetAllocator(host));
     }
     common = (beNDMWLoadCtrl2CommonIntf *)(FUN_003e9280(
-        FUN_003e92a0(&host->_dataList), DAT_00585be0[0],
+        FUN_003e92a0(&host->_dataList), g_propertyNameField[0],
         &COMMONINTF[0]));
     dataListRef = FUN_003e93b0(&host->_dataList);
     if (dataListRef == 0) {
       DW4Fresh::Assign(&host->_dataList, igObject_GetAllocator(host));
     }
     control = (beNDMWLoadIntf2CtrlData *)(FUN_003e9280(
-        FUN_003e92a0(&host->_dataList), DAT_00585be0[0], &CTRL[0]));
+        FUN_003e92a0(&host->_dataList), g_propertyNameField[0], &CTRL[0]));
     dataListRef = FUN_003e93b0(&host->_dataList);
     if (dataListRef == 0) {
       DW4Fresh::Assign(&host->_dataList, igObject_GetAllocator(host));
     }
     creation = (beNDMWLoadIntf2MakeChr *)(FUN_003e9280(
-        FUN_003e92a0(&host->_dataList), DAT_00585be0[0],
+        FUN_003e92a0(&host->_dataList), g_propertyNameField[0],
         &MAKECHR[0]));
     dataListRef = FUN_003e93b0(&host->_dataList);
     if (dataListRef == 0) {
       DW4Fresh::Assign(&host->_dataList, igObject_GetAllocator(host));
     }
     models = (beNDMWLoadIntf2ComMdlCtrl *)(FUN_003e9280(
-        FUN_003e92a0(&host->_dataList), DAT_00585be0[0],
+        FUN_003e92a0(&host->_dataList), g_propertyNameField[0],
         &COMMDLCTRL[0]));
     dataListRef = FUN_003e93b0(&host->_dataList);
     if (dataListRef == 0) {
       DW4Fresh::Assign(&host->_dataList, igObject_GetAllocator(host));
     }
     messages = (beNDMWLoadIntf2MesWin *)(FUN_003e9280(
-        FUN_003e92a0(&host->_dataList), DAT_00585be0[0],
+        FUN_003e92a0(&host->_dataList), g_propertyNameField[0],
         &MESWIN[0]));
     dataListRef = FUN_003e93b0(&host->_dataList);
     if (dataListRef == 0) {
       DW4Fresh::Assign(&host->_dataList, igObject_GetAllocator(host));
     }
     slots = (beNDMWLoadIntf2SelSlot *)(FUN_003e9280(
-        FUN_003e92a0(&host->_dataList), DAT_00585be0[0],
+        FUN_003e92a0(&host->_dataList), g_propertyNameField[0],
         &SELSLOT[0]));
     dataListRef = FUN_003e93b0(&host->_dataList);
     if (dataListRef == 0) {
       DW4Fresh::Assign(&host->_dataList, igObject_GetAllocator(host));
     }
     nameEntry = (beNDMWLoadIntf2NameSel *)(FUN_003e9280(
-        FUN_003e92a0(&host->_dataList), DAT_00585be0[0],
+        FUN_003e92a0(&host->_dataList), g_propertyNameField[0],
         &NAMESEL[0]));
     dataListRef = FUN_003e93b0(&host->_dataList);
     if (dataListRef == 0) {
       DW4Fresh::Assign(&host->_dataList, igObject_GetAllocator(host));
     }
     textOrder = (beNDMWLoadIntf2TextOrder *)(FUN_003e9280(
-        FUN_003e92a0(&host->_dataList), DAT_00585be0[0],
+        FUN_003e92a0(&host->_dataList), g_propertyNameField[0],
         &TEXTORDER[0]));
     dataListRef = FUN_003e93b0(&host->_dataList);
     if (dataListRef == 0) {
       DW4Fresh::Assign(&host->_dataList, igObject_GetAllocator(host));
     }
     status = (beNDMWLoadIntf2DegiStateCtrl *)(FUN_003e9280(
-        FUN_003e92a0(&host->_dataList), DAT_00585be0[0],
+        FUN_003e92a0(&host->_dataList), g_propertyNameField[0],
         &DEGISTATECTRL[0]));
     dataListRef = FUN_003e93b0(&host->_dataList);
     if (dataListRef == 0) {
       DW4Fresh::Assign(&host->_dataList, igObject_GetAllocator(host));
     }
     dataSelection = (beNDMWLoadIntf2DataSelIntf *)(FUN_003e9280(
-        FUN_003e92a0(&host->_dataList), DAT_00585be0[0],
+        FUN_003e92a0(&host->_dataList), g_propertyNameField[0],
         &DATASELINTF[0]));
     dataListRef = FUN_003e93b0(&host->_dataList);
     if (dataListRef == 0) {
       DW4Fresh::Assign(&host->_dataList, igObject_GetAllocator(host));
     }
     difficulty = (beNDMWLoadIntf2Diffselect *)(FUN_003e9280(
-        FUN_003e92a0(&host->_dataList), DAT_00585be0[0],
+        FUN_003e92a0(&host->_dataList), g_propertyNameField[0],
         &DIFFSELECT[0]));
     beNDMWLoadIntf2ComMdlCtrl__Poll(models);
     beNDMWLoadIntf2MesWin__Update(messages);
@@ -1296,7 +1294,7 @@ extern "C" void Gap__Bec__beNDMWLoadIntf2__vfunc_31(beNDMWLoadIntf2 *self,
                       1, 0);
                   beNDMWLoadIntf2ComMdlCtrl__Play(models, host->_ramNo,
                                &j_digiselcursorright[0],
-                               &SQ_ON00[0], 1);
+                               (int *)SQ_ON00, 1);
                   beNDMWLoadIntf2ComMdlCtrl__Play(models, host->_ramNo, &j_namewin02[0],
                                &SQ_LINECG00[0], 0);
                   beNDMWLoadIntf2ComMdlCtrl__Play(
@@ -1350,7 +1348,7 @@ extern "C" void Gap__Bec__beNDMWLoadIntf2__vfunc_31(beNDMWLoadIntf2 *self,
                       1, 0);
                   beNDMWLoadIntf2ComMdlCtrl__Play(models, host->_ramNo,
                                &j_digiselcursorleft[0],
-                               &SQ_ON00[0], 1);
+                               (int *)SQ_ON00, 1);
                   beNDMWLoadIntf2ComMdlCtrl__Play(models, host->_ramNo, &j_namewin02[0],
                                &SQ_LINECG00[0], 0);
                   beNDMWLoadIntf2ComMdlCtrl__Play(
@@ -1802,8 +1800,7 @@ extern "C" void Gap__Bec__beNDMWLoadIntf2__vfunc_31(beNDMWLoadIntf2 *self,
                         beMessenger_AppendInt(self->_messenger, host->_ramNo);
                         beMessenger_AppendString(
                             self->_messenger,
-                            g_playerModelRow[creation->_chaSelDegi *
-                                                      3]);
+                            g_playerModelRow[creation->_chaSelDegi].name);
                         beMessenger_AppendObject(self->_messenger,
                                                  nameRef.p);
                         beMessenger_DispatchSelected(self->_messenger,
@@ -1873,7 +1870,7 @@ extern "C" void Gap__Bec__beNDMWLoadIntf2__vfunc_31(beNDMWLoadIntf2 *self,
                   if ((host->_ramNo == 0) && (control->_isRdyCancel == 1)) {
                     common->_difficultMode = 0;
                     self->_difficultMax = 0;
-                    DAT_0058a1e0[0] = 0;
+                    g_mdlEntity[0] = 0;
                     beLua__RunNamedChunk(FUN_00236f80(self->_insight,
                                               g_beLua_metaObject[0]),
                                  &hostLoad_lua[0], 0);
@@ -2903,7 +2900,7 @@ void FUN_003d9ec0(SlotPanel *arg0) {
             SlotEnt *s2;
             a = igObject_GetAllocator(arg0);
             {
-                igSmartPointer<beUnicodeObj> text(FUN_003614f0(GPR_00554c14 != 0 ? a : Memory_GetAllocatorBySelector(DAT_00587110[0])));
+                igSmartPointer<beUnicodeObj> text(FUN_003614f0(GPR_00554c14 != 0 ? a : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0])));
                 beUnicodeObj_AllocateBuffer(text.p, 8);
                 srcA = (unsigned short *)((char *)s0 + 8);
                 iA = 0;
@@ -2919,10 +2916,10 @@ void FUN_003d9ec0(SlotPanel *arg0) {
                 }
                 FUN_003ec120(arg0->textCtrl, DAT_00516c40, arg0->player, 0, text.p, 0, 0);
             }
-            beMessenger_SendNamed(arg0->messenger, DAT_00516c50, DAT_00516c60, 0, DAT_00516c68);
+            beMessenger_SendNamed(arg0->messenger, DATABASE, shinka, 0, GETDATABASE);
             s4 = beMessenger_GetObject(arg0->messenger, 0);
             s3 = 0;
-            s2 = ((SlotEnt *)DAT_004cec70);
+            s2 = ((SlotEnt *)g_playerModelRow);
         lsA:
             if (strcmp(s2->name, s0->model) == 0) {
                 s5 = s3;
@@ -2931,7 +2928,7 @@ void FUN_003d9ec0(SlotPanel *arg0) {
                 s2 += 1;
                 if (s3 < 16) goto lsA;
             }
-            TextOrder_ConfigureFont(arg0->textCtrl, DAT_00516c80, arg0->player, 10, beDataBase_GetRecordString(s4, s5, DAT_00516c78), 0, 0);
+            TextOrder_ConfigureFont(arg0->textCtrl, DAT_00516c80, arg0->player, 10, beDataBase_GetRecordString(s4, s5, NAME), 0, 0);
             sprintf(sp90, DAT_00516c90, s0->level);
             TextOrder_ConfigureFont(arg0->textCtrl, DAT_00516c80, arg0->player, 0, sp90, 1, 0);
             sprintf(sp90, DAT_00516c90, s0->hp);
@@ -2958,7 +2955,7 @@ void FUN_003d9ec0(SlotPanel *arg0) {
             SlotEnt *s2;
             a = igObject_GetAllocator(arg0);
             {
-                igSmartPointer<beUnicodeObj> text(FUN_003614f0(GPR_00554c14 != 0 ? a : Memory_GetAllocatorBySelector(DAT_00587110[0])));
+                igSmartPointer<beUnicodeObj> text(FUN_003614f0(GPR_00554c14 != 0 ? a : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0])));
                 beUnicodeObj_AllocateBuffer(text.p, 8);
                 srcB = (unsigned short *)((char *)s0 + 8);
                 iB = 0;
@@ -2974,10 +2971,10 @@ void FUN_003d9ec0(SlotPanel *arg0) {
                 }
                 FUN_003ec120(arg0->textCtrl, DAT_00516c40, arg0->player, 10, text.p, 0, 0);
             }
-            beMessenger_SendNamed(arg0->messenger, DAT_00516c50, DAT_00516c60, 0, DAT_00516c68);
+            beMessenger_SendNamed(arg0->messenger, DATABASE, shinka, 0, GETDATABASE);
             s4 = beMessenger_GetObject(arg0->messenger, 0);
             s3 = 0;
-            s2 = ((SlotEnt *)DAT_004cec70);
+            s2 = ((SlotEnt *)g_playerModelRow);
         lsB:
             if (strcmp(s2->name, s0->model) == 0) {
                 s5 = s3;
@@ -2986,7 +2983,7 @@ void FUN_003d9ec0(SlotPanel *arg0) {
                 s2 += 1;
                 if (s3 < 16) goto lsB;
             }
-            TextOrder_ConfigureFont(arg0->textCtrl, DAT_00516c80, arg0->player, 11, beDataBase_GetRecordString(s4, s5, DAT_00516c78), 0, 0);
+            TextOrder_ConfigureFont(arg0->textCtrl, DAT_00516c80, arg0->player, 11, beDataBase_GetRecordString(s4, s5, NAME), 0, 0);
             sprintf(sp70, DAT_00516c90, s0->level);
             TextOrder_ConfigureFont(arg0->textCtrl, DAT_00516c80, arg0->player, 1, sp70, 1, 0);
             sprintf(sp70, DAT_00516c90, s0->hp);
@@ -3054,7 +3051,7 @@ unsigned char FUN_003da7c0(beNDMWLoadIntf2DegiState *arg0) {
             if (arg0->_isUseData == 1) {
                 int s0 = 0;
                 int s4 = 0;
-                Ent *s3 = DAT_004cec70;
+                Ent *s3 = g_playerModelRow;
             loop_22:
                 if (strcmp(s3->name, s1->f48) == 0) {
                     s0 = s4;
@@ -3069,24 +3066,24 @@ unsigned char FUN_003da7c0(beNDMWLoadIntf2DegiState *arg0) {
                     V3 vb; V3 va;
                     Ob *o = (Ob *)arg0->_comMdlCtrl;
                     vb.x = o->v28; vb.y = o->v32; vb.z = o->v36;
-                    beNDMWLoadIntf2ComMdlCtrl__StartAt((beNDMWLoadIntf2ComMdlCtrl *)arg0->_comMdlCtrl, (int)arg0->_plNo, (const char *)DAT_00516ca8, (const char *)DAT_004cec70[s0].val, (float *)&vb, 1);
+                    beNDMWLoadIntf2ComMdlCtrl__StartAt((beNDMWLoadIntf2ComMdlCtrl *)arg0->_comMdlCtrl, (int)arg0->_plNo, (const char *)j_digifacewin, (const char *)g_playerModelRow[s0].val, (float *)&vb, 1);
                     o = (Ob *)arg0->_comMdlCtrl;
                     va.x = o->v28; va.y = o->v32; va.z = o->v36;
-                    beNDMWLoadIntf2ComMdlCtrl__StartAt((beNDMWLoadIntf2ComMdlCtrl *)arg0->_comMdlCtrl, (int)arg0->_plNo, (const char *)DAT_00516cc0, (const char *)DAT_00516cd0, (float *)&va, 1);
+                    beNDMWLoadIntf2ComMdlCtrl__StartAt((beNDMWLoadIntf2ComMdlCtrl *)arg0->_comMdlCtrl, (int)arg0->_plNo, (const char *)j_mainstatuswin, (const char *)SQ_OPEN, (float *)&va, 1);
                 } else {
                     V3 vc;
                     Ob *o = (Ob *)arg0->_comMdlCtrl;
                     vc.x = o->v28; vc.y = o->v32; vc.z = o->v36;
-                    beNDMWLoadIntf2ComMdlCtrl__StartAt((beNDMWLoadIntf2ComMdlCtrl *)arg0->_comMdlCtrl, (int)arg0->_plNo, (const char *)DAT_00516cd8, (const char *)DAT_004cec70[s0].val, (float *)&vc, 1);
+                    beNDMWLoadIntf2ComMdlCtrl__StartAt((beNDMWLoadIntf2ComMdlCtrl *)arg0->_comMdlCtrl, (int)arg0->_plNo, (const char *)DAT_00516cd8, (const char *)g_playerModelRow[s0].val, (float *)&vc, 1);
                 }
             } else if (arg0->_dispPos == 0) {
                 V3 vd; V3 ve;
                 Ob *o = (Ob *)arg0->_comMdlCtrl;
                 vd.x = o->v28; vd.y = o->v32; vd.z = o->v36;
-                beNDMWLoadIntf2ComMdlCtrl__StartAt((beNDMWLoadIntf2ComMdlCtrl *)arg0->_comMdlCtrl, (int)arg0->_plNo, (const char *)DAT_00516ca8, (const char *)DAT_00516ce8, (float *)&vd, 1);
+                beNDMWLoadIntf2ComMdlCtrl__StartAt((beNDMWLoadIntf2ComMdlCtrl *)arg0->_comMdlCtrl, (int)arg0->_plNo, (const char *)j_digifacewin, (const char *)DAT_00516ce8, (float *)&vd, 1);
                 o = (Ob *)arg0->_comMdlCtrl;
                 ve.x = o->v28; ve.y = o->v32; ve.z = o->v36;
-                beNDMWLoadIntf2ComMdlCtrl__StartAt((beNDMWLoadIntf2ComMdlCtrl *)arg0->_comMdlCtrl, (int)arg0->_plNo, (const char *)DAT_00516cc0, (const char *)DAT_00516cf8, (float *)&ve, 1);
+                beNDMWLoadIntf2ComMdlCtrl__StartAt((beNDMWLoadIntf2ComMdlCtrl *)arg0->_comMdlCtrl, (int)arg0->_plNo, (const char *)j_mainstatuswin, (const char *)DAT_00516cf8, (float *)&ve, 1);
             } else {
                 V3 vf;
                 Ob *o = (Ob *)arg0->_comMdlCtrl;
@@ -3125,7 +3122,7 @@ unsigned char FUN_003da7c0(beNDMWLoadIntf2DegiState *arg0) {
         if (arg0->_isUseData == 1) {
             int s0 = 0;
             int s4 = 0;
-            Ent *s3 = DAT_004cec70;
+            Ent *s3 = g_playerModelRow;
         loop_46:
             if (strcmp(s3->name, s1->f48) == 0) {
                 s0 = s4;
@@ -3137,14 +3134,14 @@ unsigned char FUN_003da7c0(beNDMWLoadIntf2DegiState *arg0) {
                 }
             }
             if (arg0->_dispPos == 0) {
-                beNDMWLoadIntf2ComMdlCtrl__Play((beNDMWLoadIntf2ComMdlCtrl *)arg0->_comMdlCtrl, (int)arg0->_plNo, (int *)DAT_00516ca8, (int *)DAT_004cec70[s0].val2, 0);
-                beNDMWLoadIntf2ComMdlCtrl__Play((beNDMWLoadIntf2ComMdlCtrl *)arg0->_comMdlCtrl, (int)arg0->_plNo, (int *)DAT_00516cc0, (int *)DAT_00516d08, 0);
+                beNDMWLoadIntf2ComMdlCtrl__Play((beNDMWLoadIntf2ComMdlCtrl *)arg0->_comMdlCtrl, (int)arg0->_plNo, (int *)j_digifacewin, (int *)g_playerModelRow[s0].val2, 0);
+                beNDMWLoadIntf2ComMdlCtrl__Play((beNDMWLoadIntf2ComMdlCtrl *)arg0->_comMdlCtrl, (int)arg0->_plNo, (int *)j_mainstatuswin, (int *)DAT_00516d08, 0);
             } else {
-                beNDMWLoadIntf2ComMdlCtrl__Play((beNDMWLoadIntf2ComMdlCtrl *)arg0->_comMdlCtrl, (int)arg0->_plNo, (int *)DAT_00516cd8, (int *)DAT_004cec70[s0].val2, 0);
+                beNDMWLoadIntf2ComMdlCtrl__Play((beNDMWLoadIntf2ComMdlCtrl *)arg0->_comMdlCtrl, (int)arg0->_plNo, (int *)DAT_00516cd8, (int *)g_playerModelRow[s0].val2, 0);
             }
         } else if (arg0->_dispPos == 0) {
-            beNDMWLoadIntf2ComMdlCtrl__Play((beNDMWLoadIntf2ComMdlCtrl *)arg0->_comMdlCtrl, (int)arg0->_plNo, (int *)DAT_00516ca8, (int *)DAT_00516d10, 0);
-            beNDMWLoadIntf2ComMdlCtrl__Play((beNDMWLoadIntf2ComMdlCtrl *)arg0->_comMdlCtrl, (int)arg0->_plNo, (int *)DAT_00516cc0, (int *)DAT_00516d20, 0);
+            beNDMWLoadIntf2ComMdlCtrl__Play((beNDMWLoadIntf2ComMdlCtrl *)arg0->_comMdlCtrl, (int)arg0->_plNo, (int *)j_digifacewin, (int *)DAT_00516d10, 0);
+            beNDMWLoadIntf2ComMdlCtrl__Play((beNDMWLoadIntf2ComMdlCtrl *)arg0->_comMdlCtrl, (int)arg0->_plNo, (int *)j_mainstatuswin, (int *)DAT_00516d20, 0);
         } else {
             beNDMWLoadIntf2ComMdlCtrl__Play((beNDMWLoadIntf2ComMdlCtrl *)arg0->_comMdlCtrl, (int)arg0->_plNo, (int *)DAT_00516cd8, (int *)DAT_00516d10, 0);
         }
@@ -3172,24 +3169,24 @@ unsigned char FUN_003da7c0(beNDMWLoadIntf2DegiState *arg0) {
         switch (arg0->_st1) {
         case 0:
             if (arg0->_dispPos == 0) {
-                beNDMWLoadIntf2ComMdlCtrl__Close((beNDMWLoadIntf2ComMdlCtrl *)arg0->_comMdlCtrl, (int)arg0->_plNo, (const char *)DAT_00516ca8, (const char *)DAT_00516d30, 1);
+                beNDMWLoadIntf2ComMdlCtrl__Close((beNDMWLoadIntf2ComMdlCtrl *)arg0->_comMdlCtrl, (int)arg0->_plNo, (const char *)j_digifacewin, (const char *)SQ_CLOSE, 1);
                 if (arg0->_isUseData == 1) {
                     switch (arg0->_closeKind) {
                     case 0:
-                        beNDMWLoadIntf2ComMdlCtrl__Close((beNDMWLoadIntf2ComMdlCtrl *)arg0->_comMdlCtrl, (int)arg0->_plNo, (const char *)DAT_00516cc0, (const char *)DAT_00516d30, 1);
+                        beNDMWLoadIntf2ComMdlCtrl__Close((beNDMWLoadIntf2ComMdlCtrl *)arg0->_comMdlCtrl, (int)arg0->_plNo, (const char *)j_mainstatuswin, (const char *)SQ_CLOSE, 1);
                         break;
                     case 1:
-                        beNDMWLoadIntf2ComMdlCtrl__Close((beNDMWLoadIntf2ComMdlCtrl *)arg0->_comMdlCtrl, (int)arg0->_plNo, (const char *)DAT_00516cc0, (const char *)DAT_00516d40, 1);
+                        beNDMWLoadIntf2ComMdlCtrl__Close((beNDMWLoadIntf2ComMdlCtrl *)arg0->_comMdlCtrl, (int)arg0->_plNo, (const char *)j_mainstatuswin, (const char *)SQ_LINEON00, 1);
                         break;
                     case 2:
-                        beNDMWLoadIntf2ComMdlCtrl__Close((beNDMWLoadIntf2ComMdlCtrl *)arg0->_comMdlCtrl, (int)arg0->_plNo, (const char *)DAT_00516cc0, (const char *)DAT_00516d50, 1);
+                        beNDMWLoadIntf2ComMdlCtrl__Close((beNDMWLoadIntf2ComMdlCtrl *)arg0->_comMdlCtrl, (int)arg0->_plNo, (const char *)j_mainstatuswin, (const char *)SQ_CANCEL, 1);
                         break;
                     }
                 } else {
-                    beNDMWLoadIntf2ComMdlCtrl__Close((beNDMWLoadIntf2ComMdlCtrl *)arg0->_comMdlCtrl, (int)arg0->_plNo, (const char *)DAT_00516cc0, (const char *)DAT_00516d60, 1);
+                    beNDMWLoadIntf2ComMdlCtrl__Close((beNDMWLoadIntf2ComMdlCtrl *)arg0->_comMdlCtrl, (int)arg0->_plNo, (const char *)j_mainstatuswin, (const char *)DAT_00516d60, 1);
                 }
             } else {
-                beNDMWLoadIntf2ComMdlCtrl__Close((beNDMWLoadIntf2ComMdlCtrl *)arg0->_comMdlCtrl, (int)arg0->_plNo, (const char *)DAT_00516cd8, (const char *)DAT_00516d30, 1);
+                beNDMWLoadIntf2ComMdlCtrl__Close((beNDMWLoadIntf2ComMdlCtrl *)arg0->_comMdlCtrl, (int)arg0->_plNo, (const char *)DAT_00516cd8, (const char *)SQ_CLOSE, 1);
             }
             FUN_003da5f0((beNDMWLoadIntf2DegiState *)arg0);
             arg0->_st1 = arg0->_st1 + 1;
@@ -3306,7 +3303,7 @@ unsigned char FUN_003db060(beNDMWLoadIntf2DataSelIntf *arg0, int arg1) {
                 if (*(char *)it->_dmkind != 0) {
                     s5 = 0;
                     s4 = 0;
-                    s8 = DAT_004cec70;
+                    s8 = g_playerModelRow;
                     V3 v1;
                 loop_19:
                     if (strcmp(s8->name, it->_dmkind) == 0) {
@@ -3317,7 +3314,7 @@ unsigned char FUN_003db060(beNDMWLoadIntf2DataSelIntf *arg0, int arg1) {
                         if (s4 < 16) goto loop_19;
                     }
                     v1.x = s0->v28; v1.y = s0->v32; v1.z = s0->v36;
-                    beNDMWLoadIntf2ComMdlCtrl__StartAt((beNDMWLoadIntf2ComMdlCtrl *)s0, (int)arg0->_plNo, (const char *)(*s2p), (const char *)DAT_004cec70[s5].val, (float *)&v1, 1);
+                    beNDMWLoadIntf2ComMdlCtrl__StartAt((beNDMWLoadIntf2ComMdlCtrl *)s0, (int)arg0->_plNo, (const char *)(*s2p), (const char *)g_playerModelRow[s5].val, (float *)&v1, 1);
                 } else {
                     V3 v2;
                     it->_isUse = 0;
@@ -3338,7 +3335,7 @@ unsigned char FUN_003db060(beNDMWLoadIntf2DataSelIntf *arg0, int arg1) {
         {
             V3 v4;
             v4.x = s0->v28; v4.y = s0->v32; v4.z = s0->v36;
-            beNDMWLoadIntf2ComMdlCtrl__StartAt((beNDMWLoadIntf2ComMdlCtrl *)s0, (int)arg0->_plNo, (const char *)DAT_00516db0, (const char *)DAT_00516cd0, (float *)&v4, 1);
+            beNDMWLoadIntf2ComMdlCtrl__StartAt((beNDMWLoadIntf2ComMdlCtrl *)s0, (int)arg0->_plNo, (const char *)DAT_00516db0, (const char *)SQ_OPEN, (float *)&v4, 1);
         }
         arg0->_isSelCur = 1;
         if (arg0->_kind == 0) {
@@ -3392,7 +3389,7 @@ unsigned char FUN_003db060(beNDMWLoadIntf2DataSelIntf *arg0, int arg1) {
                 it = (beNDMWDegiData *)SLOT_ITEMS(sp100, arg0->_plNo)[s4];
                 if (it->_isUse == 1) {
                     al = igObject_GetAllocator(arg0);
-                    al = GPR_00554c14 ? al : Memory_GetAllocatorBySelector(DAT_00587110[0]);
+                    al = GPR_00554c14 ? al : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
                     igSmartPointer<beUnicodeObj> text((beUnicodeObj *)((int)FUN_003614f0(al)));
                     beUnicodeObj_AllocateBuffer(text.p, 8);
                     src = (unsigned short *)it->_dmNameUni;
@@ -3533,12 +3530,12 @@ unsigned char beNDMWLoadIntf2DataSelIntf__UpdateSelection(beNDMWLoadIntf2DataSel
                         DEGI(host, c->_plNo)->_id = s4->_id;
                         d = DEGI(host, c->_plNo);
                         src = (char *)s4->_dmName;
-                        if (DAT_00586f20[0] == 0) {
+                        if (g_stringPool[0] == 0) {
                             void *q = (void *)FUN_002eb010(16);
                             if (q != 0) q = ((void *)StringPool_Construct(q));
-                            DAT_00586f20[0] = q;
+                            g_stringPool[0] = q;
                         }
-                        nw2 = ((char *)StringPool_Intern(DAT_00586f20[0], src));
+                        nw2 = ((char *)StringPool_Intern(g_stringPool[0], src));
                         old = (char *)d->_dmName;
                         if (old != 0) {
                             int *hd = (int *)old - 2;
@@ -3610,7 +3607,7 @@ unsigned char beNDMWLoadIntf2DataSelIntf__UpdateSelection(beNDMWLoadIntf2DataSel
         if ((beNDMWLoadIntf2ComMdlCtrl__IsCloseQueueEmpty((beNDMWLoadIntf2ComMdlCtrl *)a) & 0xFF) == 1) v = 6;
         break;
     case 4:
-        beNDMWLoadIntf2ComMdlCtrl__Close((beNDMWLoadIntf2ComMdlCtrl *)a, c->_plNo, (const char *)DAT_00516db0, (const char *)DAT_00516d50, 1);
+        beNDMWLoadIntf2ComMdlCtrl__Close((beNDMWLoadIntf2ComMdlCtrl *)a, c->_plNo, (const char *)DAT_00516db0, (const char *)SQ_CANCEL, 1);
         c->_isSelCur = 0;
         v = 5;
         break;
@@ -3645,10 +3642,10 @@ unsigned char FUN_003dbf90(beNDMWLoadIntf2DataSelIntf *c, int sel) {
     switch (v) {
     case 0:
         if (c->_isSaveArea == 1) {
-            beNDMWLoadIntf2ComMdlCtrl__Close((beNDMWLoadIntf2ComMdlCtrl *)a, c->_plNo, (const char *)DAT_00516d70, (const char *)DAT_00516d30, 1);
-            beNDMWLoadIntf2ComMdlCtrl__Close((beNDMWLoadIntf2ComMdlCtrl *)a, c->_plNo, (const char *)DAT_00516d80, (const char *)DAT_00516d30, 1);
-            beNDMWLoadIntf2ComMdlCtrl__Close((beNDMWLoadIntf2ComMdlCtrl *)a, c->_plNo, (const char *)DAT_00516d90, (const char *)DAT_00516d30, 1);
-            beNDMWLoadIntf2ComMdlCtrl__Close((beNDMWLoadIntf2ComMdlCtrl *)a, c->_plNo, (const char *)DAT_00516da0, (const char *)DAT_00516d30, 1);
+            beNDMWLoadIntf2ComMdlCtrl__Close((beNDMWLoadIntf2ComMdlCtrl *)a, c->_plNo, (const char *)DAT_00516d70, (const char *)SQ_CLOSE, 1);
+            beNDMWLoadIntf2ComMdlCtrl__Close((beNDMWLoadIntf2ComMdlCtrl *)a, c->_plNo, (const char *)DAT_00516d80, (const char *)SQ_CLOSE, 1);
+            beNDMWLoadIntf2ComMdlCtrl__Close((beNDMWLoadIntf2ComMdlCtrl *)a, c->_plNo, (const char *)DAT_00516d90, (const char *)SQ_CLOSE, 1);
+            beNDMWLoadIntf2ComMdlCtrl__Close((beNDMWLoadIntf2ComMdlCtrl *)a, c->_plNo, (const char *)DAT_00516da0, (const char *)SQ_CLOSE, 1);
             TextOrder_ClearFont(b, DAT_00516dc8, c->_plNo, 0);
             TextOrder_ClearFont(b, DAT_00516dc8, c->_plNo, 1);
             TextOrder_ClearFont(b, DAT_00516dc8, c->_plNo, 2);
@@ -3662,7 +3659,7 @@ unsigned char FUN_003dbf90(beNDMWLoadIntf2DataSelIntf *c, int sel) {
             FUN_003d9e70((beNDMWLoadIntf2DegiState *)n->n16->n16->f4, 0);
         }
         if (c->_isSelCur == 1) {
-            beNDMWLoadIntf2ComMdlCtrl__Close((beNDMWLoadIntf2ComMdlCtrl *)a, c->_plNo, (const char *)DAT_00516db0, (const char *)DAT_00516d30, 1);
+            beNDMWLoadIntf2ComMdlCtrl__Close((beNDMWLoadIntf2ComMdlCtrl *)a, c->_plNo, (const char *)DAT_00516db0, (const char *)SQ_CLOSE, 1);
         }
         v++;
         break;
@@ -3708,10 +3705,10 @@ unsigned char FUN_003dc2e0(beNDMWLoadIntf2DataSelIntf *c, int sel) {
     switch (v) {
     case 0:
         if (c->_isSaveArea == 1) {
-            beNDMWLoadIntf2ComMdlCtrl__Close((beNDMWLoadIntf2ComMdlCtrl *)a, c->_plNo, (const char *)DAT_00516d70, (const char *)DAT_00516d30, 1);
-            beNDMWLoadIntf2ComMdlCtrl__Close((beNDMWLoadIntf2ComMdlCtrl *)a, c->_plNo, (const char *)DAT_00516d80, (const char *)DAT_00516d30, 1);
-            beNDMWLoadIntf2ComMdlCtrl__Close((beNDMWLoadIntf2ComMdlCtrl *)a, c->_plNo, (const char *)DAT_00516d90, (const char *)DAT_00516d30, 1);
-            beNDMWLoadIntf2ComMdlCtrl__Close((beNDMWLoadIntf2ComMdlCtrl *)a, c->_plNo, (const char *)DAT_00516da0, (const char *)DAT_00516d30, 1);
+            beNDMWLoadIntf2ComMdlCtrl__Close((beNDMWLoadIntf2ComMdlCtrl *)a, c->_plNo, (const char *)DAT_00516d70, (const char *)SQ_CLOSE, 1);
+            beNDMWLoadIntf2ComMdlCtrl__Close((beNDMWLoadIntf2ComMdlCtrl *)a, c->_plNo, (const char *)DAT_00516d80, (const char *)SQ_CLOSE, 1);
+            beNDMWLoadIntf2ComMdlCtrl__Close((beNDMWLoadIntf2ComMdlCtrl *)a, c->_plNo, (const char *)DAT_00516d90, (const char *)SQ_CLOSE, 1);
+            beNDMWLoadIntf2ComMdlCtrl__Close((beNDMWLoadIntf2ComMdlCtrl *)a, c->_plNo, (const char *)DAT_00516da0, (const char *)SQ_CLOSE, 1);
             TextOrder_ClearFont(b, DAT_00516dc8, c->_plNo, 0);
             TextOrder_ClearFont(b, DAT_00516dc8, c->_plNo, 1);
             TextOrder_ClearFont(b, DAT_00516dc8, c->_plNo, 2);
@@ -3775,11 +3772,11 @@ unsigned char FUN_003dc590(beNDMWLoadIntf2DataSelIntf *arg0, int arg1) {
                 int j = 0;
                 int k = 0;
                 for (; k < 16; k++) {
-                    if (strcmp(((Ent_3dc590 *)DAT_004cec70)[k].name, it->_dmkind) == 0) { j = k; break; }
+                    if (strcmp(((Ent_3dc590 *)g_playerModelRow)[k].name, it->_dmkind) == 0) { j = k; break; }
                 }
                 float v1[3];
                 v1[0] = ob->x; v1[1] = ob->y; v1[2] = ob->z;
-                beNDMWLoadIntf2ComMdlCtrl__StartAt((beNDMWLoadIntf2ComMdlCtrl *)ob, (int)arg0->_plNo, (const char *)DAT_004cc830[i], (const char *)(((Ent_3dc590 *)DAT_004cec70)[j].val), (float *)v1, 1);
+                beNDMWLoadIntf2ComMdlCtrl__StartAt((beNDMWLoadIntf2ComMdlCtrl *)ob, (int)arg0->_plNo, (const char *)DAT_004cc830[i], (const char *)(((Ent_3dc590 *)g_playerModelRow)[j].val), (float *)v1, 1);
             } else {
                 float v2[3];
                 v2[0] = ob->x; v2[1] = ob->y; v2[2] = ob->z;
@@ -3797,7 +3794,7 @@ unsigned char FUN_003dc590(beNDMWLoadIntf2DataSelIntf *arg0, int arg1) {
                 beNDMWDegiData *it = SLOT_DEGI(bk, arg0->_plNo, i);
                 if (it->_isUse == 1) {
                     int a = igObject_GetAllocator(arg0);
-                    a = GPR_00554c14 ? a : Memory_GetAllocatorBySelector(DAT_00587110[0]);
+                    a = GPR_00554c14 ? a : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
                     igSmartPointer<beUnicodeObj> rp(FUN_003614f0(a));
                     beUnicodeObj_AllocateBuffer(rp.p, 8);
                     unsigned short *dst = (unsigned short *)rp.p->_buffer;
@@ -3920,10 +3917,10 @@ unsigned char FUN_003dcc60(beNDMWLoadIntf2DataSelIntf *arg0, int arg1) {
                 V3_3dcc60 va;
                 s5 = 0;
                 for (s4 = 0; s4 < 16; s4++) {
-                    if (strcmp(DAT_004cec70[s4].name, it->_dmkind) == 0) { s5 = s4; break; }
+                    if (strcmp(g_playerModelRow[s4].name, it->_dmkind) == 0) { s5 = s4; break; }
                 }
                 va.x = s0->_pos[0]; va.y = s0->_pos[1]; va.z = s0->_pos[2];
-                beNDMWLoadIntf2ComMdlCtrl__StartAt((beNDMWLoadIntf2ComMdlCtrl *)s0, (int)arg0->_plNo, (const char *)(*s3), (const char *)DAT_004cec70[s5].val, (float *)&va, 1);
+                beNDMWLoadIntf2ComMdlCtrl__StartAt((beNDMWLoadIntf2ComMdlCtrl *)s0, (int)arg0->_plNo, (const char *)(*s3), (const char *)g_playerModelRow[s5].val, (float *)&va, 1);
             } else {
                 V3_3dcc60 vb;
                 vb.x = s0->_pos[0]; vb.y = s0->_pos[1]; vb.z = s0->_pos[2];
@@ -3948,7 +3945,7 @@ unsigned char FUN_003dcc60(beNDMWLoadIntf2DataSelIntf *arg0, int arg1) {
                 it = *(beNDMWDegiData **)((char *)((beNDMWDegiDataList *)((beNDMWLoadSlotPlayer *)((beNDMWLoadSavePlWork **)((beNDMWLoadSavePlWorkList *)spF0->_flagWork)->_data)[arg0->_plNo]->_haveSaveData)->_saveDataList)->_data + off);
                 if (it->_isUse == 1) {
                     al = igObject_GetAllocator(arg0, arg0->_plNo);
-                    if (GPR_00554c14 != 0) a0 = al; else a0 = Memory_GetAllocatorBySelector(DAT_00587110[0]);
+                    if (GPR_00554c14 != 0) a0 = al; else a0 = Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
                     igSmartPointer<beUnicodeObj> rcs((beUnicodeObj *)((int)FUN_003614f0(a0)));
                     beUnicodeObj_AllocateBuffer(rcs.p, 8);
                     src = (unsigned short *)it->_dmNameUni;
@@ -4063,10 +4060,10 @@ unsigned char FUN_003dd440(beNDMWLoadIntf2DataSelIntf *arg0, int arg1) {
     switch (s0) {
     case 0:
         if (arg0->_isSaveArea == 1) {
-            beNDMWLoadIntf2ComMdlCtrl__Close((beNDMWLoadIntf2ComMdlCtrl *)s3, arg0->_plNo, (const char *)DAT_00516d70, (const char *)DAT_00516d30, 1);
-            beNDMWLoadIntf2ComMdlCtrl__Close((beNDMWLoadIntf2ComMdlCtrl *)s3, arg0->_plNo, (const char *)DAT_00516d80, (const char *)DAT_00516d30, 1);
-            beNDMWLoadIntf2ComMdlCtrl__Close((beNDMWLoadIntf2ComMdlCtrl *)s3, arg0->_plNo, (const char *)DAT_00516d90, (const char *)DAT_00516d30, 1);
-            beNDMWLoadIntf2ComMdlCtrl__Close((beNDMWLoadIntf2ComMdlCtrl *)s3, arg0->_plNo, (const char *)DAT_00516da0, (const char *)DAT_00516d30, 1);
+            beNDMWLoadIntf2ComMdlCtrl__Close((beNDMWLoadIntf2ComMdlCtrl *)s3, arg0->_plNo, (const char *)DAT_00516d70, (const char *)SQ_CLOSE, 1);
+            beNDMWLoadIntf2ComMdlCtrl__Close((beNDMWLoadIntf2ComMdlCtrl *)s3, arg0->_plNo, (const char *)DAT_00516d80, (const char *)SQ_CLOSE, 1);
+            beNDMWLoadIntf2ComMdlCtrl__Close((beNDMWLoadIntf2ComMdlCtrl *)s3, arg0->_plNo, (const char *)DAT_00516d90, (const char *)SQ_CLOSE, 1);
+            beNDMWLoadIntf2ComMdlCtrl__Close((beNDMWLoadIntf2ComMdlCtrl *)s3, arg0->_plNo, (const char *)DAT_00516da0, (const char *)SQ_CLOSE, 1);
             TextOrder_ClearFont(s2, DAT_00516dc8, arg0->_plNo, 0);
             TextOrder_ClearFont(s2, DAT_00516dc8, arg0->_plNo, 1);
             TextOrder_ClearFont(s2, DAT_00516dc8, arg0->_plNo, 2);
@@ -4074,7 +4071,7 @@ unsigned char FUN_003dd440(beNDMWLoadIntf2DataSelIntf *arg0, int arg1) {
             arg0->_isSaveArea = 0;
         }
         if (arg0->_isSelCur == 1) {
-            beNDMWLoadIntf2ComMdlCtrl__Close((beNDMWLoadIntf2ComMdlCtrl *)s3, arg0->_plNo, (const char *)DAT_00516db0, (const char *)DAT_00516d30, 1);
+            beNDMWLoadIntf2ComMdlCtrl__Close((beNDMWLoadIntf2ComMdlCtrl *)s3, arg0->_plNo, (const char *)DAT_00516db0, (const char *)SQ_CLOSE, 1);
         }
         s0 += 1;
         break;
@@ -4145,11 +4142,11 @@ int FUN_003dd6d0(beNDMWLoadIntf2DataSelIntf *arg0, int arg1) {
                     int k = 0;
                     int m;
                     for (m = 0; m < 16; m++) {
-                        if (strcmp(((Tab *)DAT_004cec70)[m].name, e->_dmkind) == 0) { k = m; break; }
+                        if (strcmp(((Tab *)g_playerModelRow)[m].name, e->_dmkind) == 0) { k = m; break; }
                     }
-                    beNDMWLoadIntf2ComMdlCtrl__Play((beNDMWLoadIntf2ComMdlCtrl *)s4, s3, (int *)DAT_004cc830[j], ((Tab *)DAT_004cec70)[k].f8, 0);
+                    beNDMWLoadIntf2ComMdlCtrl__Play((beNDMWLoadIntf2ComMdlCtrl *)s4, s3, (int *)DAT_004cc830[j], ((Tab *)g_playerModelRow)[k].f8, 0);
                     int a = igObject_GetAllocator(arg0);
-                    a = GPR_00554c14 ? a : Memory_GetAllocatorBySelector(DAT_00587110[0]);
+                    a = GPR_00554c14 ? a : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
                     igSmartPointer<beUnicodeObj> r(FUN_003614f0(a));
                     beUnicodeObj_AllocateBuffer(r.p, 8);
                     unsigned short *base;
@@ -4250,11 +4247,11 @@ unsigned char beNDMWLoadIntf2Diffselect__Update(beNDMWLoadIntf2Diffselect *self,
             switch (self->_kind) {
             case 0:
                 v0[0] = a0->x; v0[1] = a0->y; v0[2] = a0->z;
-                beNDMWLoadIntf2ComMdlCtrl__StartAt((beNDMWLoadIntf2ComMdlCtrl *)a0, (int)self->_plNo, (const char *)DAT_00516eb0, (const char *)DAT_00516cd0, (float *)v0, 1);
+                beNDMWLoadIntf2ComMdlCtrl__StartAt((beNDMWLoadIntf2ComMdlCtrl *)a0, (int)self->_plNo, (const char *)j_linewin02, (const char *)SQ_OPEN, (float *)v0, 1);
                 break;
             case 1:
                 v1[0] = a0->x; v1[1] = a0->y; v1[2] = a0->z;
-                beNDMWLoadIntf2ComMdlCtrl__StartAt((beNDMWLoadIntf2ComMdlCtrl *)a0, (int)self->_plNo, (const char *)DAT_00516ec0, (const char *)DAT_00516cd0, (float *)v1, 1);
+                beNDMWLoadIntf2ComMdlCtrl__StartAt((beNDMWLoadIntf2ComMdlCtrl *)a0, (int)self->_plNo, (const char *)DAT_00516ec0, (const char *)SQ_OPEN, (float *)v1, 1);
                 break;
             }
             self->_st1 = self->_st1 + 1; self->_st3 = 0; self->_st2 = 0;
@@ -4280,10 +4277,10 @@ unsigned char beNDMWLoadIntf2Diffselect__Update(beNDMWLoadIntf2Diffselect *self,
                 else {
                     switch (self->_kind) {
                     case 0:
-                        beNDMWLoadIntf2ComMdlCtrl__Play((beNDMWLoadIntf2ComMdlCtrl *)a0, (int)self->_plNo, (int *)DAT_00516eb0, (int *)DAT_00516ed0, 1);
+                        beNDMWLoadIntf2ComMdlCtrl__Play((beNDMWLoadIntf2ComMdlCtrl *)a0, (int)self->_plNo, (int *)j_linewin02, (int *)SQ_LINEUP00, 1);
                         break;
                     case 1:
-                        if (self->_selectPoint == 0) beNDMWLoadIntf2ComMdlCtrl__Play((beNDMWLoadIntf2ComMdlCtrl *)a0, (int)self->_plNo, (int *)DAT_00516ec0, (int *)DAT_00516ed0, 1);
+                        if (self->_selectPoint == 0) beNDMWLoadIntf2ComMdlCtrl__Play((beNDMWLoadIntf2ComMdlCtrl *)a0, (int)self->_plNo, (int *)DAT_00516ec0, (int *)SQ_LINEUP00, 1);
                         else beNDMWLoadIntf2ComMdlCtrl__Play((beNDMWLoadIntf2ComMdlCtrl *)a0, (int)self->_plNo, (int *)DAT_00516ec0, (int *)DAT_00516ee0, 1);
                         break;
                     }
@@ -4295,10 +4292,10 @@ unsigned char beNDMWLoadIntf2Diffselect__Update(beNDMWLoadIntf2Diffselect *self,
                 else {
                     switch (self->_kind) {
                     case 0:
-                        beNDMWLoadIntf2ComMdlCtrl__Play((beNDMWLoadIntf2ComMdlCtrl *)a0, (int)self->_plNo, (int *)DAT_00516eb0, (int *)DAT_00516ef0, 1);
+                        beNDMWLoadIntf2ComMdlCtrl__Play((beNDMWLoadIntf2ComMdlCtrl *)a0, (int)self->_plNo, (int *)j_linewin02, (int *)SQ_LINEDW01, 1);
                         break;
                     case 1:
-                        if (self->_selectPoint == 1) beNDMWLoadIntf2ComMdlCtrl__Play((beNDMWLoadIntf2ComMdlCtrl *)a0, (int)self->_plNo, (int *)DAT_00516ec0, (int *)DAT_00516ef0, 1);
+                        if (self->_selectPoint == 1) beNDMWLoadIntf2ComMdlCtrl__Play((beNDMWLoadIntf2ComMdlCtrl *)a0, (int)self->_plNo, (int *)DAT_00516ec0, (int *)SQ_LINEDW01, 1);
                         else beNDMWLoadIntf2ComMdlCtrl__Play((beNDMWLoadIntf2ComMdlCtrl *)a0, (int)self->_plNo, (int *)DAT_00516ec0, (int *)DAT_00516f00, 1);
                         break;
                     }
@@ -4324,19 +4321,19 @@ unsigned char beNDMWLoadIntf2Diffselect__Update(beNDMWLoadIntf2Diffselect *self,
             case 0:
                 TextOrder_PublishLineListOnly(s1, (self->_plNo << 16) | 0x402);
                 if (self->_isCancel == 0) {
-                    if (self->_selectPoint == 0) beNDMWLoadIntf2ComMdlCtrl__Close((beNDMWLoadIntf2ComMdlCtrl *)a0, (int)self->_plNo, (const char *)DAT_00516eb0, (const char *)DAT_00516d40, 1);
-                    else beNDMWLoadIntf2ComMdlCtrl__Close((beNDMWLoadIntf2ComMdlCtrl *)a0, (int)self->_plNo, (const char *)DAT_00516eb0, (const char *)DAT_00516e18, 1);
-                } else beNDMWLoadIntf2ComMdlCtrl__Close((beNDMWLoadIntf2ComMdlCtrl *)a0, (int)self->_plNo, (const char *)DAT_00516eb0, (const char *)DAT_00516d50, 1);
+                    if (self->_selectPoint == 0) beNDMWLoadIntf2ComMdlCtrl__Close((beNDMWLoadIntf2ComMdlCtrl *)a0, (int)self->_plNo, (const char *)j_linewin02, (const char *)SQ_LINEON00, 1);
+                    else beNDMWLoadIntf2ComMdlCtrl__Close((beNDMWLoadIntf2ComMdlCtrl *)a0, (int)self->_plNo, (const char *)j_linewin02, (const char *)SQ_LINEON01, 1);
+                } else beNDMWLoadIntf2ComMdlCtrl__Close((beNDMWLoadIntf2ComMdlCtrl *)a0, (int)self->_plNo, (const char *)j_linewin02, (const char *)SQ_CANCEL, 1);
                 break;
             case 1:
                 TextOrder_PublishLineListOnly(s1, (self->_plNo << 16) | 0x403);
                 if (self->_isCancel == 0) {
                     switch (self->_selectPoint) {
-                    case 0: beNDMWLoadIntf2ComMdlCtrl__Close((beNDMWLoadIntf2ComMdlCtrl *)a0, (int)self->_plNo, (const char *)DAT_00516ec0, (const char *)DAT_00516d40, 1); break;
-                    case 1: beNDMWLoadIntf2ComMdlCtrl__Close((beNDMWLoadIntf2ComMdlCtrl *)a0, (int)self->_plNo, (const char *)DAT_00516ec0, (const char *)DAT_00516e18, 1); break;
+                    case 0: beNDMWLoadIntf2ComMdlCtrl__Close((beNDMWLoadIntf2ComMdlCtrl *)a0, (int)self->_plNo, (const char *)DAT_00516ec0, (const char *)SQ_LINEON00, 1); break;
+                    case 1: beNDMWLoadIntf2ComMdlCtrl__Close((beNDMWLoadIntf2ComMdlCtrl *)a0, (int)self->_plNo, (const char *)DAT_00516ec0, (const char *)SQ_LINEON01, 1); break;
                     case 2: beNDMWLoadIntf2ComMdlCtrl__Close((beNDMWLoadIntf2ComMdlCtrl *)a0, (int)self->_plNo, (const char *)DAT_00516ec0, (const char *)DAT_00516e28, 1); break;
                     }
-                } else beNDMWLoadIntf2ComMdlCtrl__Close((beNDMWLoadIntf2ComMdlCtrl *)a0, (int)self->_plNo, (const char *)DAT_00516ec0, (const char *)DAT_00516d50, 1);
+                } else beNDMWLoadIntf2ComMdlCtrl__Close((beNDMWLoadIntf2ComMdlCtrl *)a0, (int)self->_plNo, (const char *)DAT_00516ec0, (const char *)SQ_CANCEL, 1);
                 break;
             }
             self->_st1 = self->_st1 + 1; self->_st3 = 0; self->_st2 = 0;
@@ -4423,7 +4420,7 @@ void FUN_003de480(beNDMWLoadIntf2NameSel *arg0, int arg1) {
         s0 = arg0->_tatePoint - 1;
         if (s0 < arg0->_tateMin) s0 = arg0->_tateMax - 1;
         a = igObject_GetAllocator(arg0);
-        a = GPR_00554c14 ? a : Memory_GetAllocatorBySelector(DAT_00587110[0]);
+        a = GPR_00554c14 ? a : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
         igSmartPointer<Obj> r0(((Obj *)FUN_003614f0(a)));
         beUnicodeObj_AllocateBuffer(r0.p, 1);
         *(unsigned short *)r0.p->_buffer = DAT_004cc860[s0].v[0];
@@ -4432,7 +4429,7 @@ void FUN_003de480(beNDMWLoadIntf2NameSel *arg0, int arg1) {
         {
         s0 = arg0->_tatePoint;
         a = igObject_GetAllocator(arg0);
-        a = GPR_00554c14 ? a : Memory_GetAllocatorBySelector(DAT_00587110[0]);
+        a = GPR_00554c14 ? a : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
         igSmartPointer<Obj> r1(((Obj *)FUN_003614f0(a)));
         beUnicodeObj_AllocateBuffer(r1.p, 1);
         *(unsigned short *)r1.p->_buffer = DAT_004cc860[s0].v[0];
@@ -4442,7 +4439,7 @@ void FUN_003de480(beNDMWLoadIntf2NameSel *arg0, int arg1) {
         int n = arg0->_tatePoint + 1;
         if (n >= arg0->_tateMax) s0 = arg0->_tateMin; else s0 = n;
         a = igObject_GetAllocator(arg0);
-        a = GPR_00554c14 ? a : Memory_GetAllocatorBySelector(DAT_00587110[0]);
+        a = GPR_00554c14 ? a : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
         igSmartPointer<Obj> r2(((Obj *)FUN_003614f0(a)));
         beUnicodeObj_AllocateBuffer(r2.p, 1);
         *(unsigned short *)r2.p->_buffer = DAT_004cc860[s0].v[0];
@@ -4473,7 +4470,7 @@ void FUN_003de7a0(beNDMWLoadIntf2NameSel *arg0, int arg1) {
         for (i = 0; i < 5; i++) {
             s3 = (s1 + i) % DAT_004cc860[arg0->_tatePoint].mod;
             a = igObject_GetAllocator(arg0);
-            a = GPR_00554c14 ? a : Memory_GetAllocatorBySelector(DAT_00587110[0]);
+            a = GPR_00554c14 ? a : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
             igSmartPointer<beUnicodeObj> r(FUN_003614f0(a));
             beUnicodeObj_AllocateBuffer(r.p, 1);
             *(unsigned short *)r.p->_buffer = DAT_004cc860[arg0->_tatePoint].v[s3];
@@ -4561,8 +4558,8 @@ void beNDMWLoadIntf2NameSel__SetAnswer(beNDMWLoadIntf2NameSel *arg0, char arg1) 
  * per-cell save area below is the unlisted tail of the same object (+104..), so NameSelRam is that
  * tail laid over it. */
 struct Vec3f { float x, y, z; };
-extern "C" char DAT_00516dd8[], DAT_00516f50[], DAT_00516f60[], DAT_00516f70[], DAT_00516f80[], DAT_00516f98[], DAT_00516fb0[], DAT_00516fd0[];
-extern "C" char DAT_00516fe8[], DAT_00516ff8[], DAT_00517008[], DAT_00517018[], DAT_00517028[], DAT_00517030[], DAT_00517040[];
+extern "C" char DAT_00516f50[], DAT_00516f60[], DAT_00516f70[], DAT_00516f80[], DAT_00516f98[], DAT_00516fb0[], DAT_00516fd0[];
+extern "C" char DAT_00516fe8[], DAT_00516ff8[], DAT_00517008[], DAT_00517018[], DAT_00517030[], DAT_00517040[];
 extern "C" char DAT_00517050[], DAT_00517060[], DAT_00517070[];
 #define NS (s->n)
 #define CM ((beNDMWLoadIntf2ComMdlCtrl *)NS._comMdlCtrl)
@@ -4604,14 +4601,14 @@ int beNDMWLoadIntf2NameSel__Update(NameSelRam *s, int arg1) {
     case 0:
         switch (NS._st1) {
         case 0:
-            POS(pos0) beNDMWLoadIntf2ComMdlCtrl__StartAt(CM, NS._ramNo, (const char *)DAT_00516ca8, (const char *)DAT_004cec70[NS._selDataNo].val, (float *)&pos0, 1);
-            DRAWPOS(pos1, DAT_00516f50, (const char *)DAT_00516cd0, 1)
-            DRAWPOS(pos2, DAT_00516f60, (const char *)DAT_00516cd0, 1)
-            DRAWPOS(pos3, DAT_00516f70, (const char *)DAT_00516cd0, 1)
-            DRAWPOS(pos4, DAT_00516f80, (const char *)DAT_00516cd0, 1)
-            DRAWPOS(pos5, DAT_00516f98, (const char *)DAT_00516cd0, 1)
-            DRAWPOS(pos6, DAT_00516fb0, (const char *)DAT_00516cd0, 1)
-            DRAWPOS(pos7, DAT_00516fd0, (const char *)DAT_00516cd0, 1)
+            POS(pos0) beNDMWLoadIntf2ComMdlCtrl__StartAt(CM, NS._ramNo, (const char *)j_digifacewin, (const char *)g_playerModelRow[NS._selDataNo].val, (float *)&pos0, 1);
+            DRAWPOS(pos1, DAT_00516f50, (const char *)SQ_OPEN, 1)
+            DRAWPOS(pos2, DAT_00516f60, (const char *)SQ_OPEN, 1)
+            DRAWPOS(pos3, DAT_00516f70, (const char *)SQ_OPEN, 1)
+            DRAWPOS(pos4, DAT_00516f80, (const char *)SQ_OPEN, 1)
+            DRAWPOS(pos5, DAT_00516f98, (const char *)SQ_OPEN, 1)
+            DRAWPOS(pos6, DAT_00516fb0, (const char *)SQ_OPEN, 1)
+            DRAWPOS(pos7, DAT_00516fd0, (const char *)SQ_OPEN, 1)
             NS._isSideCur = 1;
             SETCH
             sprintf(buf0, DAT_00516fe8, NS._nameCurPos);
@@ -4649,7 +4646,7 @@ int beNDMWLoadIntf2NameSel__Update(NameSelRam *s, int arg1) {
                         NS._yokoPoint++;
                         if (NS._yokoPoint >= DAT_004cc860[NS._tatePoint].mod) NS._yokoPoint = 0;
                         if (NS._isSideCur == 1) {
-                            beNDMWLoadIntf2ComMdlCtrl__Play(CM, NS._ramNo, (int *)DAT_00516fd0, (int *)DAT_00517028, 1);
+                            beNDMWLoadIntf2ComMdlCtrl__Play(CM, NS._ramNo, (int *)DAT_00516fd0, (int *)SQ_ON00, 1);
                             sprintf(buf2, DAT_00517030, NS._nameCurPos);
                             LANGDRAW(buf2, 1)
                         }
@@ -4673,7 +4670,7 @@ int beNDMWLoadIntf2NameSel__Update(NameSelRam *s, int arg1) {
                         if (0 > NS._yokoPoint) NS._yokoPoint = DAT_004cc860[NS._tatePoint].mod - 1;
                         FUN_003de7a0(&NS, 0);
                         if (NS._isSideCur == 1) {
-                            beNDMWLoadIntf2ComMdlCtrl__Play(CM, NS._ramNo, (int *)DAT_00516fb0, (int *)DAT_00517028, 1);
+                            beNDMWLoadIntf2ComMdlCtrl__Play(CM, NS._ramNo, (int *)DAT_00516fb0, (int *)SQ_ON00, 1);
                             sprintf(buf5, DAT_00517030, NS._nameCurPos);
                             LANGDRAW(buf5, 1)
                         }
@@ -4688,7 +4685,7 @@ int beNDMWLoadIntf2NameSel__Update(NameSelRam *s, int arg1) {
                 FUN_003de990(s, 0);
                 NEXT
             } else if (up) {
-                beNDMWLoadIntf2ComMdlCtrl__Play(CM, NS._ramNo, (int *)DAT_00516f98, (int *)DAT_00517028, 1);
+                beNDMWLoadIntf2ComMdlCtrl__Play(CM, NS._ramNo, (int *)DAT_00516f98, (int *)SQ_ON00, 1);
                 sprintf(buf8, DAT_00517030, NS._nameCurPos);
                 LANGDRAW(buf8, 1)
                 NS._tatePoint--;
@@ -4709,7 +4706,7 @@ int beNDMWLoadIntf2NameSel__Update(NameSelRam *s, int arg1) {
                 FUN_003de480(&NS, 0);
                 FUN_003de7a0(&NS, 0);
             } else if (down) {
-                beNDMWLoadIntf2ComMdlCtrl__Play(CM, NS._ramNo, (int *)DAT_00516f80, (int *)DAT_00517028, 1);
+                beNDMWLoadIntf2ComMdlCtrl__Play(CM, NS._ramNo, (int *)DAT_00516f80, (int *)SQ_ON00, 1);
                 sprintf(buf9, DAT_00517030, NS._nameCurPos);
                 LANGDRAW(buf9, 1)
                 NS._tatePoint++;
@@ -4810,7 +4807,7 @@ int beNDMWLoadIntf2NameSel__Update(NameSelRam *s, int arg1) {
     case 2:
         switch (NS._st1) {
         case 0:
-            LANGDRAW(DAT_00516dd8, 1)
+            LANGDRAW(SQ_LINESL00, 1)
             NEXT
             break;
         case 1:
@@ -4833,7 +4830,7 @@ int beNDMWLoadIntf2NameSel__Update(NameSelRam *s, int arg1) {
             }
             break;
         case 2:
-            LANGDRAW0((const char *)DAT_00516d40, 1)
+            LANGDRAW0((const char *)SQ_LINEON00, 1)
             NEXT
             break;
         case 3:
@@ -4861,7 +4858,7 @@ int beNDMWLoadIntf2NameSel__Update(NameSelRam *s, int arg1) {
     case 4:
         switch (NS._st1) {
         case 0:
-            LANGDRAW0((const char *)DAT_00516d30, 1)
+            LANGDRAW0((const char *)SQ_CLOSE, 1)
             NEXT
             break;
         case 1:
@@ -4875,14 +4872,14 @@ int beNDMWLoadIntf2NameSel__Update(NameSelRam *s, int arg1) {
             FUN_003de480(&NS, 1);
             FUN_003de7a0(&NS, 1);
             FUN_003de990(s, 1);
-            beNDMWLoadIntf2ComMdlCtrl__Close(CM, NS._ramNo, (const char *)DAT_00516ca8, (const char *)DAT_00516d30, 1);
-            beNDMWLoadIntf2ComMdlCtrl__Close(CM, NS._ramNo, DAT_00516f70, (const char *)DAT_00516d30, 1);
-            beNDMWLoadIntf2ComMdlCtrl__Close(CM, NS._ramNo, DAT_00516f50, (const char *)DAT_00516d30, 1);
-            beNDMWLoadIntf2ComMdlCtrl__Close(CM, NS._ramNo, DAT_00516f60, (const char *)DAT_00516d30, 1);
-            beNDMWLoadIntf2ComMdlCtrl__Close(CM, NS._ramNo, DAT_00516f80, (const char *)DAT_00516d30, 1);
-            beNDMWLoadIntf2ComMdlCtrl__Close(CM, NS._ramNo, DAT_00516f98, (const char *)DAT_00516d30, 1);
-            beNDMWLoadIntf2ComMdlCtrl__Close(CM, NS._ramNo, DAT_00516fb0, (const char *)DAT_00516d30, 1);
-            beNDMWLoadIntf2ComMdlCtrl__Close(CM, NS._ramNo, DAT_00516fd0, (const char *)DAT_00516d30, 1);
+            beNDMWLoadIntf2ComMdlCtrl__Close(CM, NS._ramNo, (const char *)j_digifacewin, (const char *)SQ_CLOSE, 1);
+            beNDMWLoadIntf2ComMdlCtrl__Close(CM, NS._ramNo, DAT_00516f70, (const char *)SQ_CLOSE, 1);
+            beNDMWLoadIntf2ComMdlCtrl__Close(CM, NS._ramNo, DAT_00516f50, (const char *)SQ_CLOSE, 1);
+            beNDMWLoadIntf2ComMdlCtrl__Close(CM, NS._ramNo, DAT_00516f60, (const char *)SQ_CLOSE, 1);
+            beNDMWLoadIntf2ComMdlCtrl__Close(CM, NS._ramNo, DAT_00516f80, (const char *)SQ_CLOSE, 1);
+            beNDMWLoadIntf2ComMdlCtrl__Close(CM, NS._ramNo, DAT_00516f98, (const char *)SQ_CLOSE, 1);
+            beNDMWLoadIntf2ComMdlCtrl__Close(CM, NS._ramNo, DAT_00516fb0, (const char *)SQ_CLOSE, 1);
+            beNDMWLoadIntf2ComMdlCtrl__Close(CM, NS._ramNo, DAT_00516fd0, (const char *)SQ_CLOSE, 1);
             NEXT
             break;
         case 1:
@@ -4979,7 +4976,7 @@ unsigned char beNDMWLoadIntf2SelSlot__Open(beNDMWLoadIntf2SelSlot *self, int mar
                 self->_mode = 1;
             }
             o = (Own *)self->_comMdlCtrl; vc[0] = o->pos.x; vc[1] = o->pos.y; vc[2] = o->pos.z;
-            beNDMWLoadIntf2ComMdlCtrl__StartAt((beNDMWLoadIntf2ComMdlCtrl *)self->_comMdlCtrl, self->_ramNo, (const char *)DAT_00517150, (const char *)DAT_00516cd0, vc, 1);
+            beNDMWLoadIntf2ComMdlCtrl__StartAt((beNDMWLoadIntf2ComMdlCtrl *)self->_comMdlCtrl, self->_ramNo, (const char *)DAT_00517150, (const char *)SQ_OPEN, vc, 1);
             self->_isReOpenReq = 0;
             self->_st1 = self->_st1 + 1;
             self->_st3 = 0;
@@ -5220,12 +5217,12 @@ unsigned char beNDMWLoadIntf2SelSlot__UpdateSelection(beNDMWLoadIntf2SelSlot *se
                     switch (i) {
                     case 0:
                         if ((beNDMWLoadIntf2ComMdlCtrl__IsRunning((beNDMWLoadIntf2ComMdlCtrl *)self->_comMdlCtrl, self->_ramNo * 2, (const char *)DAT_00517170) & 0xFF) == 1) {
-                            beNDMWLoadIntf2ComMdlCtrl__Close((beNDMWLoadIntf2ComMdlCtrl *)self->_comMdlCtrl, self->_ramNo * 2, (const char *)DAT_00517170, (const char *)DAT_00516d30, 0);
+                            beNDMWLoadIntf2ComMdlCtrl__Close((beNDMWLoadIntf2ComMdlCtrl *)self->_comMdlCtrl, self->_ramNo * 2, (const char *)DAT_00517170, (const char *)SQ_CLOSE, 0);
                         }
                         break;
                     case 1:
                         if ((beNDMWLoadIntf2ComMdlCtrl__IsRunning((beNDMWLoadIntf2ComMdlCtrl *)self->_comMdlCtrl, self->_ramNo * 2 + 1, (const char *)DAT_00517170) & 0xFF) == 1) {
-                            beNDMWLoadIntf2ComMdlCtrl__Close((beNDMWLoadIntf2ComMdlCtrl *)self->_comMdlCtrl, self->_ramNo * 2 + 1, (const char *)DAT_00517170, (const char *)DAT_00516d30, 0);
+                            beNDMWLoadIntf2ComMdlCtrl__Close((beNDMWLoadIntf2ComMdlCtrl *)self->_comMdlCtrl, self->_ramNo * 2 + 1, (const char *)DAT_00517170, (const char *)SQ_CLOSE, 0);
                         }
                         break;
                     }
@@ -5333,27 +5330,27 @@ unsigned char beNDMWLoadIntf2SelSlot__UpdateSelection(beNDMWLoadIntf2SelSlot *se
                     switch (i) {
                     case 0:
                         if ((beNDMWLoadIntf2ComMdlCtrl__IsRunning((beNDMWLoadIntf2ComMdlCtrl *)self->_comMdlCtrl, self->_ramNo * 5, (const char *)DAT_005171a0) & 0xFF) == 1) {
-                            beNDMWLoadIntf2ComMdlCtrl__Close((beNDMWLoadIntf2ComMdlCtrl *)self->_comMdlCtrl, self->_ramNo * 5, (const char *)DAT_005171a0, (const char *)DAT_00516d30, 0);
+                            beNDMWLoadIntf2ComMdlCtrl__Close((beNDMWLoadIntf2ComMdlCtrl *)self->_comMdlCtrl, self->_ramNo * 5, (const char *)DAT_005171a0, (const char *)SQ_CLOSE, 0);
                         }
                         break;
                     case 1:
                         if ((beNDMWLoadIntf2ComMdlCtrl__IsRunning((beNDMWLoadIntf2ComMdlCtrl *)self->_comMdlCtrl, self->_ramNo * 5 + 1, (const char *)DAT_005171a0) & 0xFF) == 1) {
-                            beNDMWLoadIntf2ComMdlCtrl__Close((beNDMWLoadIntf2ComMdlCtrl *)self->_comMdlCtrl, self->_ramNo * 5 + 1, (const char *)DAT_005171a0, (const char *)DAT_00516d30, 0);
+                            beNDMWLoadIntf2ComMdlCtrl__Close((beNDMWLoadIntf2ComMdlCtrl *)self->_comMdlCtrl, self->_ramNo * 5 + 1, (const char *)DAT_005171a0, (const char *)SQ_CLOSE, 0);
                         }
                         break;
                     case 2:
                         if ((beNDMWLoadIntf2ComMdlCtrl__IsRunning((beNDMWLoadIntf2ComMdlCtrl *)self->_comMdlCtrl, self->_ramNo * 5 + 2, (const char *)DAT_005171a0) & 0xFF) == 1) {
-                            beNDMWLoadIntf2ComMdlCtrl__Close((beNDMWLoadIntf2ComMdlCtrl *)self->_comMdlCtrl, self->_ramNo * 5 + 2, (const char *)DAT_005171a0, (const char *)DAT_00516d30, 0);
+                            beNDMWLoadIntf2ComMdlCtrl__Close((beNDMWLoadIntf2ComMdlCtrl *)self->_comMdlCtrl, self->_ramNo * 5 + 2, (const char *)DAT_005171a0, (const char *)SQ_CLOSE, 0);
                         }
                         break;
                     case 3:
                         if ((beNDMWLoadIntf2ComMdlCtrl__IsRunning((beNDMWLoadIntf2ComMdlCtrl *)self->_comMdlCtrl, self->_ramNo * 5 + 3, (const char *)DAT_005171a0) & 0xFF) == 1) {
-                            beNDMWLoadIntf2ComMdlCtrl__Close((beNDMWLoadIntf2ComMdlCtrl *)self->_comMdlCtrl, self->_ramNo * 5 + 3, (const char *)DAT_005171a0, (const char *)DAT_00516d30, 0);
+                            beNDMWLoadIntf2ComMdlCtrl__Close((beNDMWLoadIntf2ComMdlCtrl *)self->_comMdlCtrl, self->_ramNo * 5 + 3, (const char *)DAT_005171a0, (const char *)SQ_CLOSE, 0);
                         }
                         break;
                     case 4:
                         if ((beNDMWLoadIntf2ComMdlCtrl__IsRunning((beNDMWLoadIntf2ComMdlCtrl *)self->_comMdlCtrl, self->_ramNo * 2, (const char *)DAT_00517170) & 0xFF) == 1) {
-                            beNDMWLoadIntf2ComMdlCtrl__Close((beNDMWLoadIntf2ComMdlCtrl *)self->_comMdlCtrl, self->_ramNo * 2, (const char *)DAT_00517170, (const char *)DAT_00516d30, 0);
+                            beNDMWLoadIntf2ComMdlCtrl__Close((beNDMWLoadIntf2ComMdlCtrl *)self->_comMdlCtrl, self->_ramNo * 2, (const char *)DAT_00517170, (const char *)SQ_CLOSE, 0);
                         }
                         break;
                     }
@@ -5416,7 +5413,7 @@ unsigned char beNDMWLoadIntf2SelSlot__UpdateSelection(beNDMWLoadIntf2SelSlot *se
                     }
                 } else if (held & 0x2000) {
                     self->_isCansel = 1;
-                    beNDMWLoadIntf2ComMdlCtrl__Play((beNDMWLoadIntf2ComMdlCtrl *)self->_comMdlCtrl, self->_ramNo, DAT_00517160, DAT_00516d50, 1);
+                    beNDMWLoadIntf2ComMdlCtrl__Play((beNDMWLoadIntf2ComMdlCtrl *)self->_comMdlCtrl, self->_ramNo, DAT_00517160, SQ_CANCEL, 1);
                     self->_st1 = 2;
                     self->_st3 = 0;
                     self->_st2 = 0;
@@ -5433,7 +5430,7 @@ unsigned char beNDMWLoadIntf2SelSlot__UpdateSelection(beNDMWLoadIntf2SelSlot *se
                 }
             } else if (held & 0x2000) {
                 self->_isCansel = 1;
-                beNDMWLoadIntf2ComMdlCtrl__Play((beNDMWLoadIntf2ComMdlCtrl *)self->_comMdlCtrl, self->_ramNo, DAT_00517160, DAT_00516d50, 1);
+                beNDMWLoadIntf2ComMdlCtrl__Play((beNDMWLoadIntf2ComMdlCtrl *)self->_comMdlCtrl, self->_ramNo, DAT_00517160, SQ_CANCEL, 1);
                 self->_st1 = 2;
                 self->_st3 = 0;
                 self->_st2 = 0;
@@ -5581,9 +5578,9 @@ unsigned char beNDMWLoadIntf2SelSlot__Close(beNDMWLoadIntf2SelSlot *self) {
             if (self->_mode == 0) {
                 int i;
                 int c;
-                beNDMWLoadIntf2ComMdlCtrl__Close((beNDMWLoadIntf2ComMdlCtrl *)self->_comMdlCtrl, self->_ramNo, (const char *)DAT_00517118, (const char *)DAT_00516d30, 1);
-                beNDMWLoadIntf2ComMdlCtrl__Close((beNDMWLoadIntf2ComMdlCtrl *)self->_comMdlCtrl, self->_ramNo, (const char *)DAT_00517160, (const char *)DAT_00516d30, 1);
-                beNDMWLoadIntf2ComMdlCtrl__Close((beNDMWLoadIntf2ComMdlCtrl *)self->_comMdlCtrl, self->_ramNo, (const char *)DAT_00517150, (const char *)DAT_00516d30, 1);
+                beNDMWLoadIntf2ComMdlCtrl__Close((beNDMWLoadIntf2ComMdlCtrl *)self->_comMdlCtrl, self->_ramNo, (const char *)DAT_00517118, (const char *)SQ_CLOSE, 1);
+                beNDMWLoadIntf2ComMdlCtrl__Close((beNDMWLoadIntf2ComMdlCtrl *)self->_comMdlCtrl, self->_ramNo, (const char *)DAT_00517160, (const char *)SQ_CLOSE, 1);
+                beNDMWLoadIntf2ComMdlCtrl__Close((beNDMWLoadIntf2ComMdlCtrl *)self->_comMdlCtrl, self->_ramNo, (const char *)DAT_00517150, (const char *)SQ_CLOSE, 1);
                 c = self->_textOrder;
                 TextOrder_PublishLineListOnly(c, (self->_ramNo << 16) | 0x100c);
                 TextOrder_PublishLineListOnly(c, (self->_ramNo << 16) | 0x1100);
@@ -5592,20 +5589,20 @@ unsigned char beNDMWLoadIntf2SelSlot__Close(beNDMWLoadIntf2SelSlot *self) {
                     switch (i) {
                     case 0:
                         if (((unsigned char)beNDMWLoadIntf2ComMdlCtrl__IsRunning((beNDMWLoadIntf2ComMdlCtrl *)self->_comMdlCtrl, self->_ramNo * 2, (const char *)DAT_00517170)) == 1)
-                            beNDMWLoadIntf2ComMdlCtrl__Close((beNDMWLoadIntf2ComMdlCtrl *)self->_comMdlCtrl, self->_ramNo * 2, (const char *)DAT_00517170, (const char *)DAT_00516d30, 0);
+                            beNDMWLoadIntf2ComMdlCtrl__Close((beNDMWLoadIntf2ComMdlCtrl *)self->_comMdlCtrl, self->_ramNo * 2, (const char *)DAT_00517170, (const char *)SQ_CLOSE, 0);
                         break;
                     case 1:
                         if (((unsigned char)beNDMWLoadIntf2ComMdlCtrl__IsRunning((beNDMWLoadIntf2ComMdlCtrl *)self->_comMdlCtrl, self->_ramNo * 2 + 1, (const char *)DAT_00517170)) == 1)
-                            beNDMWLoadIntf2ComMdlCtrl__Close((beNDMWLoadIntf2ComMdlCtrl *)self->_comMdlCtrl, self->_ramNo * 2 + 1, (const char *)DAT_00517170, (const char *)DAT_00516d30, 0);
+                            beNDMWLoadIntf2ComMdlCtrl__Close((beNDMWLoadIntf2ComMdlCtrl *)self->_comMdlCtrl, self->_ramNo * 2 + 1, (const char *)DAT_00517170, (const char *)SQ_CLOSE, 0);
                         break;
                     }
                 }
             } else {
                 int j;
                 int d;
-                beNDMWLoadIntf2ComMdlCtrl__Close((beNDMWLoadIntf2ComMdlCtrl *)self->_comMdlCtrl, self->_ramNo, (const char *)DAT_00517118, (const char *)DAT_00516d30, 1);
-                beNDMWLoadIntf2ComMdlCtrl__Close((beNDMWLoadIntf2ComMdlCtrl *)self->_comMdlCtrl, self->_ramNo, (const char *)DAT_00517160, (const char *)DAT_00516d30, 1);
-                beNDMWLoadIntf2ComMdlCtrl__Close((beNDMWLoadIntf2ComMdlCtrl *)self->_comMdlCtrl, self->_ramNo, (const char *)DAT_00517150, (const char *)DAT_00516d30, 1);
+                beNDMWLoadIntf2ComMdlCtrl__Close((beNDMWLoadIntf2ComMdlCtrl *)self->_comMdlCtrl, self->_ramNo, (const char *)DAT_00517118, (const char *)SQ_CLOSE, 1);
+                beNDMWLoadIntf2ComMdlCtrl__Close((beNDMWLoadIntf2ComMdlCtrl *)self->_comMdlCtrl, self->_ramNo, (const char *)DAT_00517160, (const char *)SQ_CLOSE, 1);
+                beNDMWLoadIntf2ComMdlCtrl__Close((beNDMWLoadIntf2ComMdlCtrl *)self->_comMdlCtrl, self->_ramNo, (const char *)DAT_00517150, (const char *)SQ_CLOSE, 1);
                 d = self->_textOrder;
                 TextOrder_PublishLineListOnly(d, (self->_ramNo << 16) | 0x100c);
                 TextOrder_PublishLineListOnly(d, (self->_ramNo << 16) | 0x1100);
@@ -5614,23 +5611,23 @@ unsigned char beNDMWLoadIntf2SelSlot__Close(beNDMWLoadIntf2SelSlot *self) {
                     switch (j) {
                     case 0:
                         if (((unsigned char)beNDMWLoadIntf2ComMdlCtrl__IsRunning((beNDMWLoadIntf2ComMdlCtrl *)self->_comMdlCtrl, self->_ramNo * 5, (const char *)DAT_005171a0)) == 1)
-                            beNDMWLoadIntf2ComMdlCtrl__Close((beNDMWLoadIntf2ComMdlCtrl *)self->_comMdlCtrl, self->_ramNo * 5, (const char *)DAT_005171a0, (const char *)DAT_00516d30, 0);
+                            beNDMWLoadIntf2ComMdlCtrl__Close((beNDMWLoadIntf2ComMdlCtrl *)self->_comMdlCtrl, self->_ramNo * 5, (const char *)DAT_005171a0, (const char *)SQ_CLOSE, 0);
                         break;
                     case 1:
                         if (((unsigned char)beNDMWLoadIntf2ComMdlCtrl__IsRunning((beNDMWLoadIntf2ComMdlCtrl *)self->_comMdlCtrl, self->_ramNo * 5 + 1, (const char *)DAT_005171a0)) == 1)
-                            beNDMWLoadIntf2ComMdlCtrl__Close((beNDMWLoadIntf2ComMdlCtrl *)self->_comMdlCtrl, self->_ramNo * 5 + 1, (const char *)DAT_005171a0, (const char *)DAT_00516d30, 0);
+                            beNDMWLoadIntf2ComMdlCtrl__Close((beNDMWLoadIntf2ComMdlCtrl *)self->_comMdlCtrl, self->_ramNo * 5 + 1, (const char *)DAT_005171a0, (const char *)SQ_CLOSE, 0);
                         break;
                     case 2:
                         if (((unsigned char)beNDMWLoadIntf2ComMdlCtrl__IsRunning((beNDMWLoadIntf2ComMdlCtrl *)self->_comMdlCtrl, self->_ramNo * 5 + 2, (const char *)DAT_005171a0)) == 1)
-                            beNDMWLoadIntf2ComMdlCtrl__Close((beNDMWLoadIntf2ComMdlCtrl *)self->_comMdlCtrl, self->_ramNo * 5 + 2, (const char *)DAT_005171a0, (const char *)DAT_00516d30, 0);
+                            beNDMWLoadIntf2ComMdlCtrl__Close((beNDMWLoadIntf2ComMdlCtrl *)self->_comMdlCtrl, self->_ramNo * 5 + 2, (const char *)DAT_005171a0, (const char *)SQ_CLOSE, 0);
                         break;
                     case 3:
                         if (((unsigned char)beNDMWLoadIntf2ComMdlCtrl__IsRunning((beNDMWLoadIntf2ComMdlCtrl *)self->_comMdlCtrl, self->_ramNo * 5 + 3, (const char *)DAT_005171a0)) == 1)
-                            beNDMWLoadIntf2ComMdlCtrl__Close((beNDMWLoadIntf2ComMdlCtrl *)self->_comMdlCtrl, self->_ramNo * 5 + 3, (const char *)DAT_005171a0, (const char *)DAT_00516d30, 0);
+                            beNDMWLoadIntf2ComMdlCtrl__Close((beNDMWLoadIntf2ComMdlCtrl *)self->_comMdlCtrl, self->_ramNo * 5 + 3, (const char *)DAT_005171a0, (const char *)SQ_CLOSE, 0);
                         break;
                     case 4:
                         if (((unsigned char)beNDMWLoadIntf2ComMdlCtrl__IsRunning((beNDMWLoadIntf2ComMdlCtrl *)self->_comMdlCtrl, self->_ramNo * 2, (const char *)DAT_00517170)) == 1)
-                            beNDMWLoadIntf2ComMdlCtrl__Close((beNDMWLoadIntf2ComMdlCtrl *)self->_comMdlCtrl, self->_ramNo * 2, (const char *)DAT_00517170, (const char *)DAT_00516d30, 0);
+                            beNDMWLoadIntf2ComMdlCtrl__Close((beNDMWLoadIntf2ComMdlCtrl *)self->_comMdlCtrl, self->_ramNo * 2, (const char *)DAT_00517170, (const char *)SQ_CLOSE, 0);
                         break;
                     }
                 }
@@ -5700,10 +5697,10 @@ void beNDMWLoadIntf2SelSlot__RefreshSlotMarks(beNDMWLoadIntf2SelSlot *self, int 
             } else {
         switch (i) {
         case 0:
-            if (((unsigned char)beNDMWLoadIntf2ComMdlCtrl__IsRunning((beNDMWLoadIntf2ComMdlCtrl *)TGT, self->_ramNo*2, (const char *)(((char *)DAT_00517170)))) == 1) beNDMWLoadIntf2ComMdlCtrl__Close((beNDMWLoadIntf2ComMdlCtrl *)TGT, self->_ramNo*2, (const char *)(((char *)DAT_00517170)), (const char *)(((char *)DAT_00516d30)), 0);
+            if (((unsigned char)beNDMWLoadIntf2ComMdlCtrl__IsRunning((beNDMWLoadIntf2ComMdlCtrl *)TGT, self->_ramNo*2, (const char *)(((char *)DAT_00517170)))) == 1) beNDMWLoadIntf2ComMdlCtrl__Close((beNDMWLoadIntf2ComMdlCtrl *)TGT, self->_ramNo*2, (const char *)(((char *)DAT_00517170)), (const char *)(((char *)SQ_CLOSE)), 0);
             break;
         case 1:
-            if (((unsigned char)beNDMWLoadIntf2ComMdlCtrl__IsRunning((beNDMWLoadIntf2ComMdlCtrl *)TGT, self->_ramNo*2+1, (const char *)(((char *)DAT_00517170)))) == 1) beNDMWLoadIntf2ComMdlCtrl__Close((beNDMWLoadIntf2ComMdlCtrl *)TGT, self->_ramNo*2+1, (const char *)(((char *)DAT_00517170)), (const char *)(((char *)DAT_00516d30)), 0);
+            if (((unsigned char)beNDMWLoadIntf2ComMdlCtrl__IsRunning((beNDMWLoadIntf2ComMdlCtrl *)TGT, self->_ramNo*2+1, (const char *)(((char *)DAT_00517170)))) == 1) beNDMWLoadIntf2ComMdlCtrl__Close((beNDMWLoadIntf2ComMdlCtrl *)TGT, self->_ramNo*2+1, (const char *)(((char *)DAT_00517170)), (const char *)(((char *)SQ_CLOSE)), 0);
             break;
         }
             }
@@ -5783,19 +5780,19 @@ void beNDMWLoadIntf2SelSlot__RefreshSlotMarks(beNDMWLoadIntf2SelSlot *self, int 
             } else {
         switch (i) {
         case 0:
-            if (((unsigned char)beNDMWLoadIntf2ComMdlCtrl__IsRunning((beNDMWLoadIntf2ComMdlCtrl *)TGT, self->_ramNo*5, (const char *)(((char *)DAT_005171a0)))) == 1) beNDMWLoadIntf2ComMdlCtrl__Close((beNDMWLoadIntf2ComMdlCtrl *)TGT, self->_ramNo*5, (const char *)(((char *)DAT_005171a0)), (const char *)(((char *)DAT_00516d30)), 0);
+            if (((unsigned char)beNDMWLoadIntf2ComMdlCtrl__IsRunning((beNDMWLoadIntf2ComMdlCtrl *)TGT, self->_ramNo*5, (const char *)(((char *)DAT_005171a0)))) == 1) beNDMWLoadIntf2ComMdlCtrl__Close((beNDMWLoadIntf2ComMdlCtrl *)TGT, self->_ramNo*5, (const char *)(((char *)DAT_005171a0)), (const char *)(((char *)SQ_CLOSE)), 0);
             break;
         case 1:
-            if (((unsigned char)beNDMWLoadIntf2ComMdlCtrl__IsRunning((beNDMWLoadIntf2ComMdlCtrl *)TGT, self->_ramNo*5+1, (const char *)(((char *)DAT_005171a0)))) == 1) beNDMWLoadIntf2ComMdlCtrl__Close((beNDMWLoadIntf2ComMdlCtrl *)TGT, self->_ramNo*5+1, (const char *)(((char *)DAT_005171a0)), (const char *)(((char *)DAT_00516d30)), 0);
+            if (((unsigned char)beNDMWLoadIntf2ComMdlCtrl__IsRunning((beNDMWLoadIntf2ComMdlCtrl *)TGT, self->_ramNo*5+1, (const char *)(((char *)DAT_005171a0)))) == 1) beNDMWLoadIntf2ComMdlCtrl__Close((beNDMWLoadIntf2ComMdlCtrl *)TGT, self->_ramNo*5+1, (const char *)(((char *)DAT_005171a0)), (const char *)(((char *)SQ_CLOSE)), 0);
             break;
         case 2:
-            if (((unsigned char)beNDMWLoadIntf2ComMdlCtrl__IsRunning((beNDMWLoadIntf2ComMdlCtrl *)TGT, self->_ramNo*5+2, (const char *)(((char *)DAT_005171a0)))) == 1) beNDMWLoadIntf2ComMdlCtrl__Close((beNDMWLoadIntf2ComMdlCtrl *)TGT, self->_ramNo*5+2, (const char *)(((char *)DAT_005171a0)), (const char *)(((char *)DAT_00516d30)), 0);
+            if (((unsigned char)beNDMWLoadIntf2ComMdlCtrl__IsRunning((beNDMWLoadIntf2ComMdlCtrl *)TGT, self->_ramNo*5+2, (const char *)(((char *)DAT_005171a0)))) == 1) beNDMWLoadIntf2ComMdlCtrl__Close((beNDMWLoadIntf2ComMdlCtrl *)TGT, self->_ramNo*5+2, (const char *)(((char *)DAT_005171a0)), (const char *)(((char *)SQ_CLOSE)), 0);
             break;
         case 3:
-            if (((unsigned char)beNDMWLoadIntf2ComMdlCtrl__IsRunning((beNDMWLoadIntf2ComMdlCtrl *)TGT, self->_ramNo*5+3, (const char *)(((char *)DAT_005171a0)))) == 1) beNDMWLoadIntf2ComMdlCtrl__Close((beNDMWLoadIntf2ComMdlCtrl *)TGT, self->_ramNo*5+3, (const char *)(((char *)DAT_005171a0)), (const char *)(((char *)DAT_00516d30)), 0);
+            if (((unsigned char)beNDMWLoadIntf2ComMdlCtrl__IsRunning((beNDMWLoadIntf2ComMdlCtrl *)TGT, self->_ramNo*5+3, (const char *)(((char *)DAT_005171a0)))) == 1) beNDMWLoadIntf2ComMdlCtrl__Close((beNDMWLoadIntf2ComMdlCtrl *)TGT, self->_ramNo*5+3, (const char *)(((char *)DAT_005171a0)), (const char *)(((char *)SQ_CLOSE)), 0);
             break;
         case 4:
-            if (((unsigned char)beNDMWLoadIntf2ComMdlCtrl__IsRunning((beNDMWLoadIntf2ComMdlCtrl *)TGT, self->_ramNo*2, (const char *)(((char *)DAT_00517170)))) == 1) beNDMWLoadIntf2ComMdlCtrl__Close((beNDMWLoadIntf2ComMdlCtrl *)TGT, self->_ramNo*2, (const char *)(((char *)DAT_00517170)), (const char *)(((char *)DAT_00516d30)), 0);
+            if (((unsigned char)beNDMWLoadIntf2ComMdlCtrl__IsRunning((beNDMWLoadIntf2ComMdlCtrl *)TGT, self->_ramNo*2, (const char *)(((char *)DAT_00517170)))) == 1) beNDMWLoadIntf2ComMdlCtrl__Close((beNDMWLoadIntf2ComMdlCtrl *)TGT, self->_ramNo*2, (const char *)(((char *)DAT_00517170)), (const char *)(((char *)SQ_CLOSE)), 0);
             break;
         }
             }
@@ -5829,9 +5826,9 @@ void beNDMWLoadIntf2ComMdlCtrl__Start(beNDMWLoadIntf2ComMdlCtrl *self, int ramNo
     StringTokenHeader *oldOpenSQHeader;
     void *oldInfoName;
     StringTokenHeader *oldNameHeader;
-    int pool2;
+    void *pool2;
     int newRefCount2;
-    int pool;
+    void *pool;
     void *internedOpenSQ;
     beLoadIntf2ComMdlData *record;
     int allocator;
@@ -5902,8 +5899,8 @@ void beNDMWLoadIntf2ComMdlCtrl__StartAt(beNDMWLoadIntf2ComMdlCtrl *self, int ram
     int newRefCount;
     int newRefCount2;
     int allocator;
-    int pool;
-    int pool2;
+    void *pool;
+    void *pool2;
     void *internedOpenSQ;
     void *internedInfoName;
     void *oldInfoName;
@@ -5975,7 +5972,7 @@ void beNDMWLoadIntf2ComMdlCtrl__Play(beNDMWLoadIntf2ComMdlCtrl *self, int slot, 
     beLoadIntf2ComMdlData *entry;
     int allocator;
     int objectAllocator;
-    int pool;
+    void *pool;
     int *oldToken;
     int *oldTokenHeader;
     int refCount;
@@ -6069,7 +6066,7 @@ void beNDMWLoadIntf2ComMdlCtrl__Close(beNDMWLoadIntf2ComMdlCtrl *self, int ramNo
         record.p->_ramNo = ramNo;
         infoOwner = record.p;
         if (g_stringPool[0] == 0) {
-            int pool = FUN_002eb010(0x10);
+            void *pool = FUN_002eb010(0x10);
             if (pool != 0) pool = StringPool_Construct(pool);
             g_stringPool[0] = pool;
         }
@@ -6078,7 +6075,7 @@ void beNDMWLoadIntf2ComMdlCtrl__Close(beNDMWLoadIntf2ComMdlCtrl *self, int ramNo
         infoOwner->_infoName = (int)infoNameToken;
         sequenceOwner = record.p;
         if (g_stringPool[0] == 0) {
-            int pool = FUN_002eb010(0x10);
+            void *pool = FUN_002eb010(0x10);
             if (pool != 0) pool = StringPool_Construct(pool);
             g_stringPool[0] = pool;
         }
@@ -6151,7 +6148,7 @@ void Gap__Bec__beNDMWLoadIntf2__vfunc_32(beNDMWLoadIntf2 *arg0) {
     igObject *temp_v0;
 
     if (arg0->_padManager == 0) {
-        temp_v0 = FUN_00236f80(arg0->_insight, DAT_00588518[0]);
+        temp_v0 = FUN_00236f80(arg0->_insight, g_bePadManager_metaObject[0]);
         if (temp_v0 != 0) {
             temp_v0->_refCount = (int)temp_v0->_refCount + 1;
         }
@@ -6305,20 +6302,20 @@ unsigned int beMessenger_ResolveEnumValue(...);
 int beMessenger_SelectGroup(...);
 int beMessenger_SetInt(...);
 extern float DAT_004cd0a0[4][3];
-extern int DAT_005172a0[4];
-extern int DAT_005172b0[4];
-extern int DAT_005172b8[4];
-extern int DAT_005172c0[4];
-extern int DAT_005172d0[4];
-extern int DAT_005172e8[4];
-extern int DAT_005172f8[4];
-extern int DAT_00517338[4];
+extern int COMMONINTF[4];
+extern int CTRL[4];
+extern int MAKECHR[4];
+extern int COMMDLCTRL[4];
+extern int MESWIN[4];
+extern int TEXTORDER[4];
+extern int DEGISTATECTRL[4];
+extern int GAMERAM_2[4];
 extern int DAT_005175f8[4];
 extern int DAT_00517608[4];
 extern int DAT_00517618[4];
-extern int DAT_00585be0[4];
-extern int DAT_00587d08[4];
-extern int DAT_00589208[4];
+extern int g_propertyNameField[4];
+extern int g_beSystem_metaObject[4];
+extern int g_beLua_metaObject[4];
 
 int Gap__Bec__beNDMWLoadIntf2__vfunc_34(beNDMWLoadIntf2 *self, void *ctx, void *msg);
 }
@@ -6400,7 +6397,7 @@ struct CommonSlot { char p[13]; unsigned char b13; };
 struct CommonSlotList { char p[16]; CommonSlot **f16; };
 struct Rec { char p[40]; CommonSlotList *f40; };
 
-#define ALLOC(a, o) { a = igObject_GetAllocator(o); a = GPR_00554c14 ? a : Memory_GetAllocatorBySelector(DAT_00587110[0]); }
+#define ALLOC(a, o) { a = igObject_GetAllocator(o); a = GPR_00554c14 ? a : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]); }
 #define REL(o) { Rc *rr = (o); if (rr != 0) { rr->_refCount = rr->_refCount - 1; if ((rr->_refCount & 0x7FFFFF) == 0) { igObject_Destroy(rr); } } }
 struct ListInstall { static inline void go(Ctx *o, const igSmartPointer<Rc> &fresh) {
     Rc *n = fresh.p;
@@ -6411,7 +6408,7 @@ struct ListInstall { static inline void go(Ctx *o, const igSmartPointer<Rc> &fre
 static inline void make(Ctx *o, int al) { igSmartPointer<Rc> fresh((Rc *)beBaseInfoDataList_Create(al)); go(o, fresh); }
 };
 #define ENSURE(o) { int al; ALLOC(al, o) ListInstall::make(o, al); }
-#define FIND(n) igProperty_FindByName(a1->list, DAT_00585be0[0], &n[0])
+#define FIND(n) igProperty_FindByName(a1->list, g_propertyNameField[0], &n[0])
 
 int Gap__Bec__beNDMWLoadIntf2__vfunc_34(beNDMWLoadIntf2 *self, void *ctx, void *msg) {
     Ctx *a1 = (Ctx *)ctx;
@@ -6435,7 +6432,7 @@ int Gap__Bec__beNDMWLoadIntf2__vfunc_34(beNDMWLoadIntf2 *self, void *ctx, void *
             {
             igSmartPointer<Rc> spFC((Rc *)beBaseInfoDataList_Create(al));
             { Rc *n = spFC.p; if (n != 0) n->_refCount = n->_refCount + 1; REL(a1->list) a1->list = n; }
-            self->_system_ = (int)FUN_00236f80(self->_insight, DAT_00587d08[0]);
+            self->_system_ = (int)FUN_00236f80(self->_insight, g_beSystem_metaObject[0]);
             ALLOC(al, self)
             {
             CtrlDataRef spF8((Rc *)FUN_003c43c0(al));
@@ -6472,7 +6469,7 @@ int Gap__Bec__beNDMWLoadIntf2__vfunc_34(beNDMWLoadIntf2 *self, void *ctx, void *
             {
             TextOrderRef spEC((Rc *)beNDMWLoadIntf2TextOrder_Create(al));
             ((beNDMWLoadIntf2TextOrder *)spEC.p)->_messenger = self->_messenger;
-            { beNDMWLoadIntf2TextOrder *t = (beNDMWLoadIntf2TextOrder *)spEC.p; t->_lua = (int)FUN_00236f80(self->_insight, DAT_00589208[0]); }
+            { beNDMWLoadIntf2TextOrder *t = (beNDMWLoadIntf2TextOrder *)spEC.p; t->_lua = (int)FUN_00236f80(self->_insight, g_beLua_metaObject[0]); }
             ObjectList_AppendRetained(a1->list, spEC.p);
             }
             ALLOC(al, self)
@@ -6480,13 +6477,13 @@ int Gap__Bec__beNDMWLoadIntf2__vfunc_34(beNDMWLoadIntf2 *self, void *ctx, void *
             SelSlotRef spE8((Rc *)FUN_003c2e60(al));
             ((beNDMWLoadIntf2SelSlot *)spE8.p)->_ramNo = a1->kind;
             ((beNDMWLoadIntf2SelSlot *)spE8.p)->_messenger = self->_messenger;
-            ((beNDMWLoadIntf2SelSlot *)spE8.p)->_padManager = (int)FUN_00236f80(self->_insight, DAT_00588518[0]);
+            ((beNDMWLoadIntf2SelSlot *)spE8.p)->_padManager = (int)FUN_00236f80(self->_insight, g_bePadManager_metaObject[0]);
             if (a1->list == 0) ENSURE(a1)
-            ((beNDMWLoadIntf2SelSlot *)spE8.p)->_comMdlCtrl = (int)FIND(DAT_005172c0);
+            ((beNDMWLoadIntf2SelSlot *)spE8.p)->_comMdlCtrl = (int)FIND(COMMDLCTRL);
             if (a1->list == 0) ENSURE(a1)
-            ((beNDMWLoadIntf2SelSlot *)spE8.p)->_textOrder = (int)FIND(DAT_005172e8);
+            ((beNDMWLoadIntf2SelSlot *)spE8.p)->_textOrder = (int)FIND(TEXTORDER);
             if (a1->list == 0) ENSURE(a1)
-            ((beNDMWLoadIntf2SelSlot *)spE8.p)->_commonIntf = (int)FIND(DAT_005172a0);
+            ((beNDMWLoadIntf2SelSlot *)spE8.p)->_commonIntf = (int)FIND(COMMONINTF);
             ObjectList_AppendRetained(a1->list, spE8.p);
             }
             ALLOC(al, self)
@@ -6494,11 +6491,11 @@ int Gap__Bec__beNDMWLoadIntf2__vfunc_34(beNDMWLoadIntf2 *self, void *ctx, void *
             NameSelRef spE4((Rc *)FUN_003c27c0(al));
             ((beNDMWLoadIntf2NameSel *)spE4.p)->_ramNo = a1->kind;
             ((beNDMWLoadIntf2NameSel *)spE4.p)->_messenger = self->_messenger;
-            ((beNDMWLoadIntf2NameSel *)spE4.p)->_padManager = (int)FUN_00236f80(self->_insight, DAT_00588518[0]);
+            ((beNDMWLoadIntf2NameSel *)spE4.p)->_padManager = (int)FUN_00236f80(self->_insight, g_bePadManager_metaObject[0]);
             if (a1->list == 0) ENSURE(a1)
-            s3 = FIND(DAT_005172c0);
+            s3 = FIND(COMMDLCTRL);
             if (a1->list == 0) ENSURE(a1)
-            s0 = FIND(DAT_005172e8);
+            s0 = FIND(TEXTORDER);
             ((beNDMWLoadIntf2NameSel *)spE4.p)->_comMdlCtrl = (int)s3;
             ((beNDMWLoadIntf2NameSel *)spE4.p)->_textOrder = (int)s0;
             ObjectList_AppendRetained(a1->list, spE4.p);
@@ -6508,10 +6505,10 @@ int Gap__Bec__beNDMWLoadIntf2__vfunc_34(beNDMWLoadIntf2 *self, void *ctx, void *
             MesWinRef spE0((Rc *)FUN_003c6b00(al));
             ((beNDMWLoadIntf2MesWin *)spE0.p)->_ramNo = a1->kind;
             ((beNDMWLoadIntf2MesWin *)spE0.p)->_messenger = self->_messenger;
-            ((beNDMWLoadIntf2MesWin *)spE0.p)->_padManager = (int)FUN_00236f80(self->_insight, DAT_00588518[0]);
+            ((beNDMWLoadIntf2MesWin *)spE0.p)->_padManager = (int)FUN_00236f80(self->_insight, g_bePadManager_metaObject[0]);
             ObjectList_AppendRetained(a1->list, spE0.p);
             if (a1->list == 0) ENSURE(a1)
-            ((beNDMWLoadIntf2MesWin *)spE0.p)->_textOrder = (int)FIND(DAT_005172e8);
+            ((beNDMWLoadIntf2MesWin *)spE0.p)->_textOrder = (int)FIND(TEXTORDER);
             }
             ALLOC(al, self)
             {
@@ -6520,22 +6517,22 @@ int Gap__Bec__beNDMWLoadIntf2__vfunc_34(beNDMWLoadIntf2 *self, void *ctx, void *
             {
             StatDataRef spD8((Rc *)FUN_003c3e40(al));
             if (a1->list == 0) ENSURE(a1)
-            s0 = FIND(DAT_005172a0);
+            s0 = FIND(COMMONINTF);
             if (a1->list == 0) ENSURE(a1)
-            s4 = FIND(DAT_005172e8);
+            s4 = FIND(TEXTORDER);
             if (a1->list == 0) ENSURE(a1)
-            FUN_003d9de0((beNDMWLoadIntf2DegiState *)spD8.p, a1->kind, (int)s0, (int)s4, (int)FIND(DAT_005172c0), self->_messenger, 0);
+            FUN_003d9de0((beNDMWLoadIntf2DegiState *)spD8.p, a1->kind, (int)s0, (int)s4, (int)FIND(COMMDLCTRL), self->_messenger, 0);
             ObjectList_AppendRetained(((beNDMWLoadIntf2DegiStateCtrl *)spDC.p)->_statDataList, spD8.p);
             }
             ALLOC(al, self)
             {
             StatDataRef spD4((Rc *)FUN_003c3e40(al));
             if (a1->list == 0) ENSURE(a1)
-            s0b = FIND(DAT_005172a0);
+            s0b = FIND(COMMONINTF);
             if (a1->list == 0) ENSURE(a1)
-            s4b = FIND(DAT_005172e8);
+            s4b = FIND(TEXTORDER);
             if (a1->list == 0) ENSURE(a1)
-            FUN_003d9de0((beNDMWLoadIntf2DegiState *)spD4.p, a1->kind, (int)s0b, (int)s4b, (int)FIND(DAT_005172c0), self->_messenger, 1);
+            FUN_003d9de0((beNDMWLoadIntf2DegiState *)spD4.p, a1->kind, (int)s0b, (int)s4b, (int)FIND(COMMDLCTRL), self->_messenger, 1);
             ObjectList_AppendRetained(((beNDMWLoadIntf2DegiStateCtrl *)spDC.p)->_statDataList, spD4.p);
             }
             ObjectList_AppendRetained(a1->list, spDC.p);
@@ -6543,31 +6540,31 @@ int Gap__Bec__beNDMWLoadIntf2__vfunc_34(beNDMWLoadIntf2 *self, void *ctx, void *
             ALLOC(al, self)
             {
             DataSelRef spD0((Rc *)FUN_003c3560(al));
-            ((beNDMWLoadIntf2DataSelIntf *)spD0.p)->_padManager = (int)FUN_00236f80(self->_insight, DAT_00588518[0]);
+            ((beNDMWLoadIntf2DataSelIntf *)spD0.p)->_padManager = (int)FUN_00236f80(self->_insight, g_bePadManager_metaObject[0]);
             if (a1->list == 0) ENSURE(a1)
-            ((beNDMWLoadIntf2DataSelIntf *)spD0.p)->_comMdlCtrl = (int)FIND(DAT_005172c0);
+            ((beNDMWLoadIntf2DataSelIntf *)spD0.p)->_comMdlCtrl = (int)FIND(COMMDLCTRL);
             if (a1->list == 0) ENSURE(a1)
-            ((beNDMWLoadIntf2DataSelIntf *)spD0.p)->_textOrder = (int)FIND(DAT_005172e8);
+            ((beNDMWLoadIntf2DataSelIntf *)spD0.p)->_textOrder = (int)FIND(TEXTORDER);
             if (a1->list == 0) ENSURE(a1)
-            ((beNDMWLoadIntf2DataSelIntf *)spD0.p)->_commonIntf = (int)FIND(DAT_005172a0);
+            ((beNDMWLoadIntf2DataSelIntf *)spD0.p)->_commonIntf = (int)FIND(COMMONINTF);
             if (a1->list == 0) ENSURE(a1)
-            ((beNDMWLoadIntf2DataSelIntf *)spD0.p)->_mesWin = (int)FIND(DAT_005172d0);
+            ((beNDMWLoadIntf2DataSelIntf *)spD0.p)->_mesWin = (int)FIND(MESWIN);
             if (a1->list == 0) ENSURE(a1)
-            ((beNDMWLoadIntf2DataSelIntf *)spD0.p)->_statDisp = (int)FIND(DAT_005172f8);
+            ((beNDMWLoadIntf2DataSelIntf *)spD0.p)->_statDisp = (int)FIND(DEGISTATECTRL);
             ObjectList_AppendRetained(a1->list, spD0.p);
             }
             ALLOC(al, self)
             {
             DiffSelRef spCC((Rc *)FUN_003c31e0(al));
-            ((beNDMWLoadIntf2Diffselect *)spCC.p)->_padManager = (int)FUN_00236f80(self->_insight, DAT_00588518[0]);
+            ((beNDMWLoadIntf2Diffselect *)spCC.p)->_padManager = (int)FUN_00236f80(self->_insight, g_bePadManager_metaObject[0]);
             if (a1->list == 0) ENSURE(a1)
-            ((beNDMWLoadIntf2Diffselect *)spCC.p)->_comMdlCtrl = (int)FIND(DAT_005172c0);
+            ((beNDMWLoadIntf2Diffselect *)spCC.p)->_comMdlCtrl = (int)FIND(COMMDLCTRL);
             if (a1->list == 0) ENSURE(a1)
-            ((beNDMWLoadIntf2Diffselect *)spCC.p)->_textOrder = (int)FIND(DAT_005172e8);
+            ((beNDMWLoadIntf2Diffselect *)spCC.p)->_textOrder = (int)FIND(TEXTORDER);
             if (a1->list == 0) ENSURE(a1)
-            ((beNDMWLoadIntf2Diffselect *)spCC.p)->_commonIntf = (int)FIND(DAT_005172a0);
+            ((beNDMWLoadIntf2Diffselect *)spCC.p)->_commonIntf = (int)FIND(COMMONINTF);
             if (a1->list == 0) ENSURE(a1)
-            ((beNDMWLoadIntf2Diffselect *)spCC.p)->_mesWin = (int)FIND(DAT_005172d0);
+            ((beNDMWLoadIntf2Diffselect *)spCC.p)->_mesWin = (int)FIND(MESWIN);
             ObjectList_AppendRetained(a1->list, spCC.p);
             }
             }
@@ -6576,9 +6573,9 @@ int Gap__Bec__beNDMWLoadIntf2__vfunc_34(beNDMWLoadIntf2 *self, void *ctx, void *
     }
     if (a1->list == 0) return 1;
     if (a1->list == 0) ENSURE(a1)
-    fl = (beNDMWLoadIntf2CtrlData *)FIND(DAT_005172b0);
+    fl = (beNDMWLoadIntf2CtrlData *)FIND(CTRL);
     if (a1->list == 0) ENSURE(a1)
-    FIND(DAT_005172b8);
+    FIND(MAKECHR);
     switch (v) {
     case 2:
         if (beMessenger_GetIntCount(self->_messenger) == 0) {
@@ -6604,8 +6601,8 @@ int Gap__Bec__beNDMWLoadIntf2__vfunc_34(beNDMWLoadIntf2 *self, void *ctx, void *
         return 1;
     case 6:
         if (a1->list == 0) ENSURE(a1)
-        if (((Rec *)FIND(DAT_005172a0))->f40->f16[a1->kind]->b13 != 1) {
-            beMessenger_SelectGroup(self->_messenger, &DAT_00517338[0]);
+        if (((Rec *)FIND(COMMONINTF))->f40->f16[a1->kind]->b13 != 1) {
+            beMessenger_SelectGroup(self->_messenger, &GAMERAM_2[0]);
             beMessenger_AppendInt(self->_messenger, a1->kind);
             beMessenger_DispatchSelected(self->_messenger, &DAT_00517618[0]);
         }

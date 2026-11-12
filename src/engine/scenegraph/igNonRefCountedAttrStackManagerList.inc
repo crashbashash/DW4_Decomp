@@ -16,7 +16,7 @@ int igNonRefCountedAttrStackManagerList_GetVTable(void) {
 
     igObject_InitHeader(&obj);
     obj.vt = &DAT_0052a230[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 
 void FUN_001a52a0(void)

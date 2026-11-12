@@ -1,9 +1,9 @@
 void *FUN_0034a8c0(void) {
-    struct G *g = DAT_00588348[0];
-    if (!g || ((g->f & 4) != 0) == false) {
+    igMetaObject *g = g_beSvSlotXbox_metaObject[0];
+    if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_0034a9a0();
     }
-    return DAT_00588348[0];
+    return g_beSvSlotXbox_metaObject[0];
 }
 
 int beSvSlotXbox_GetVTable(void) {
@@ -18,7 +18,7 @@ int beSvSlotXbox_GetVTable(void) {
     u.vt = (int)&DAT_00538970[0];
     ps = &u.b[24];
     *(int *)ps = 0;
-    temp_s0 = *(int *)&u.b[*(int *)((char *)(DAT_00586dc8[0]) + 916)];
+    temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.vt = (int)&DAT_00538970[0];
     if (ps != 0) {
         temp_v1 = *(int **)ps;
@@ -65,7 +65,7 @@ void beSvSlotXbox_InitFields(void) {
     int temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)((int *)DAT_00588348)[0];
+    temp_s0 = (void *)g_beSvSlotXbox_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_004c42b0[0], 4);
     igStringMetaField_SetDefaultText(((int)igMetaObject_GetFieldAt(temp_s0, temp_s1)), &DAT_00502a98[0]);

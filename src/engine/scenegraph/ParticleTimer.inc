@@ -18,7 +18,7 @@ void FUN_001c51d0(void) {
         field.p->_flag52 = 1;
         field.p->_flag38 = 0;
         field.p->_metaObject = igGeometrySetAttr_GetMetaObject();
-        FUN_002fe570(DAT_00561a38[0], field.p);
+        FUN_002fe570(g_igGeometry_metaObject[0], field.p);
         held = field.p;
         if (held != 0) {
             held->_refCount = held->_refCount - 1;
@@ -91,7 +91,7 @@ void Gap__Bec__ParticleTimer__vfunc_25(ParticleTimer *arg0, int arg1) {
     unsigned int var_s1;
     for (var_s1 = 0; var_s1 < temp_s2; var_s1++) {
         AttributeObjView *temp_s0 = (AttributeObjView *)((int *)temp_s3->_data)[var_s1];
-        if (temp_s0 != 0 && igObject_IsKindOf(temp_s0, DAT_0055f170[0]) != 0) {
+        if (temp_s0 != 0 && igObject_IsKindOf(temp_s0, g_igGeometryAttr_metaObject[0]) != 0) {
             if (!((((unsigned int)(*temp_s0->f12->v100() & 0xF0)) >> 4) & 0xFF)) {
                 ((AttributeVtable *)temp_s0)->v132(arg1);
             }
@@ -225,7 +225,7 @@ void FUN_001c59f0(OO *arg0, int arg1, int arg2, int arg3) {
     igMatrix44f_SetIdentity(arg2);
     for (i = 0; i < arg1; i++) {
         e = (EE *)arg0->list->items[i];
-        if (FUN_002fe290(((DW4VC_88_0 *)(e))->vX(), DAT_005612b0[0]) != 0) {
+        if (FUN_002fe290(((DW4VC_88_0 *)(e))->vX(), g_igTransform_metaObject[0]) != 0) {
             if (e->f96 == 0) {
                 ((DW4VC_156_1 *)(e))->vX(arg3);
                 FUN_001906d0(arg2, (char *)e + 0x20);

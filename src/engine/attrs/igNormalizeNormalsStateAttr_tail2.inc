@@ -1,4 +1,4 @@
-int Gap__Attrs__igNormalizeNormalsStateAttr__vfunc_22(void) {
-    return DAT_0055efc0[0];
+igMetaObject *Gap__Attrs__igNormalizeNormalsStateAttr__vfunc_22(void) {
+    return g_igNormalizeNormalsStateAttr_metaObject[0];
 }
 

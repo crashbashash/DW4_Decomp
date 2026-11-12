@@ -3,15 +3,15 @@ void beBaseInfoDataList_Create(int arg0) {
     igMetaObject_CreateInstance(*(int *)0x589E00, arg0);
 }
 
-int FUN_0036aec0(void) {
-    if (((int *)DAT_00589e00)[0] == 0) {
-        ((int *)DAT_00589e00)[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(DAT_00587040[0]));
+igMetaObject *FUN_0036aec0(void) {
+    if (g_beBaseInfoDataList_metaObject[0] == 0) {
+        g_beBaseInfoDataList_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
     }
-    return ((int *)DAT_00589e00)[0];
+    return g_beBaseInfoDataList_metaObject[0];
 }
 
 void *FUN_0036af10(void) {
-    igMetaObject *g = DAT_00589e00[0];
+    igMetaObject *g = g_beBaseInfoDataList_metaObject[0];
     int ready;
     if (g) {
         /* matching construct: the readiness test materialised as an int (`sltu`) before
@@ -21,7 +21,7 @@ void *FUN_0036af10(void) {
     }
     FUN_0036afa0();
 end:
-    return DAT_00589e00[0];
+    return g_beBaseInfoDataList_metaObject[0];
 }
 
 int beBaseInfoDataList_GetVTable(void) {
@@ -29,7 +29,7 @@ int beBaseInfoDataList_GetVTable(void) {
 
     igObject_InitHeader(&obj);
     obj.vt = &DAT_005346e0[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 
 void FUN_0036afa0(void)

@@ -49,17 +49,17 @@ bool FUN_002f0b50(int arg0, int arg1) {
     VM *q;
     bool s0;
     s0 = false;
-    s1 = ((L_2f0b50 * *)DAT_00586f60)[0]->count - 1;
+    s1 = ((L_2f0b50 * *)g_secondaryAllocatorList)[0]->count - 1;
     while (s1 >= 0) {
-        o = (VM *)((L_2f0b50 * *)DAT_00586f60)[0]->data[s1];
+        o = (VM *)((L_2f0b50 * *)g_secondaryAllocatorList)[0]->data[s1];
         if (o != 0 && o->v132() != 0 && o->v108(arg1) != 0) {
             s0 = true;
         }
         s1--;
     }
-    s2 = ((L_2f0b50 * *)DAT_00586f58)[0]->count - 1;
+    s2 = ((L_2f0b50 * *)g_primaryAllocatorList)[0]->count - 1;
     while (s2 >= 0) {
-        q = (VM *)((L_2f0b50 * *)DAT_00586f58)[0]->data[s2];
+        q = (VM *)((L_2f0b50 * *)g_primaryAllocatorList)[0]->data[s2];
         if (q != 0 && q->v132() != 0 && q->v108(arg1) != 0) {
             s0 = true;
         }
@@ -152,7 +152,7 @@ void FUN_002f19f0(R_2f19f0 *arg0, F_2f19f0 *arg1, int arg2, int *arg3, int *arg4
     Ctx_2f19f0 *ctx;
 
     R_2f19f0 res = arg1->v248();
-    if ((arg2 != 0) && (arg3 != 0) && (arg4 != 0) && (res.w == DAT_004fb410.v)) {
+    if ((arg2 != 0) && (arg3 != 0) && (arg4 != 0) && (res.w == g_statusSucceeded.v)) {
         first = *arg4;
         total = 0;
         for (i = 0; i < (unsigned int) (arg2 & 0xFFFF); i++) {
@@ -175,7 +175,7 @@ void FUN_002f1b70(R_2f1b70 *arg0, F_2f1b70 *arg1, int arg2, int *arg3, int *arg4
     Ctx_2f1b70 *ctx;
 
     R_2f1b70 res = arg1->v252();
-    if ((arg2 != 0) && (arg3 != 0) && (arg4 != 0) && (res.w == DAT_004fb410.v)) {
+    if ((arg2 != 0) && (arg3 != 0) && (arg4 != 0) && (res.w == g_statusSucceeded.v)) {
         first = *arg4;
         total = 0;
         for (i = 0; i < (unsigned int) (arg2 & 0xFFFF); i++) {
@@ -332,6 +332,6 @@ void FUN_002f2450(long long arg0, long long arg1, int arg2) {
 }
 
 void Gap__Core__igMemoryPool__vfunc_34(int *status_out) {
-    *status_out = g_allocatorFailureStatus[0];
+    *status_out = g_allocatorFailureStatus.v;
 }
 

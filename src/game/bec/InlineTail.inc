@@ -1,6 +1,6 @@
-int Gap__Bec__ParticleInfo__vfunc_20(void)
+igMetaObject *Gap__Bec__ParticleInfo__vfunc_20(void)
 {
-    return ((int *)g_ParticleInfo_metaObject)[0];
+    return g_ParticleInfo_metaObject[0];
 }
 
 /* Runs the igObject base step, then (when `clearControls` is set) zeroes the particle control
@@ -13,174 +13,174 @@ void Gap__Bec__ParticleInfo__vfunc_11(ParticleInfo *self, int clearControls) {
     }
 }
 
-int Gap__Bec__beAction2Data__vfunc_20(void)
+igMetaObject *Gap__Bec__beAction2Data__vfunc_20(void)
 {
-    return ((int *)g_beAction2Data_metaObject)[0];
+    return g_beAction2Data_metaObject[0];
 }
 
-int Gap__Bec__beAction2DataList__vfunc_20(void)
+igMetaObject *Gap__Bec__beAction2DataList__vfunc_20(void)
 {
-    return ((int *)g_beAction2DataList_metaObject)[0];
+    return g_beAction2DataList_metaObject[0];
 }
 
-int Gap__Bec__beAction2MOTIONSET__vfunc_20(void)
+igMetaObject *Gap__Bec__beAction2MOTIONSET__vfunc_20(void)
 {
-    return ((int *)g_beAction2MOTIONSET_metaObject)[0];
+    return g_beAction2MOTIONSET_metaObject[0];
 }
 
-int Gap__Bec__beAction2JOINTSET__vfunc_20(void)
+igMetaObject *Gap__Bec__beAction2JOINTSET__vfunc_20(void)
 {
-    return ((int *)g_beAction2JOINTSET_metaObject)[0];
+    return g_beAction2JOINTSET_metaObject[0];
 }
 
-int Gap__Bec__beAction2FADESET__vfunc_20(void)
+igMetaObject *Gap__Bec__beAction2FADESET__vfunc_20(void)
 {
-    return ((int *)g_beAction2FADESET_metaObject)[0];
+    return g_beAction2FADESET_metaObject[0];
 }
 
-int Gap__Bec__beAction2WAITCHECK__vfunc_20(void)
+igMetaObject *Gap__Bec__beAction2WAITCHECK__vfunc_20(void)
 {
-    return ((int *)g_beAction2WAITCHECK_metaObject)[0];
+    return g_beAction2WAITCHECK_metaObject[0];
 }
 
-int Gap__Bec__beAction2FLASHSET__vfunc_20(void)
+igMetaObject *Gap__Bec__beAction2FLASHSET__vfunc_20(void)
 {
-    return ((int *)g_beAction2FLASHSET_metaObject)[0];
+    return g_beAction2FLASHSET_metaObject[0];
 }
 
-int Gap__Bec__beAction2Info__vfunc_20(void)
+igMetaObject *Gap__Bec__beAction2Info__vfunc_20(void)
 {
-    return ((int *)g_beAction2Info_metaObject)[0];
+    return g_beAction2Info_metaObject[0];
 }
 
-int Gap__Bec__beAction2InfoList__vfunc_20(void)
+igMetaObject *Gap__Bec__beAction2InfoList__vfunc_20(void)
 {
-    return ((int *)g_beAction2InfoList_metaObject)[0];
+    return g_beAction2InfoList_metaObject[0];
 }
 
-int Gap__Bec__beAction2InfoRam__vfunc_20(void)
+igMetaObject *Gap__Bec__beAction2InfoRam__vfunc_20(void)
 {
-    return ((int *)g_beAction2InfoRam_metaObject)[0];
+    return g_beAction2InfoRam_metaObject[0];
 }
 
-int Gap__Bec__beAction2InfoWork__vfunc_20(void)
+igMetaObject *Gap__Bec__beAction2InfoWork__vfunc_20(void)
 {
-    return ((int *)g_beAction2InfoWork_metaObject)[0];
+    return g_beAction2InfoWork_metaObject[0];
 }
 
-int Gap__Bec__beActionStarterDataList__vfunc_20(void)
+igMetaObject *Gap__Bec__beActionStarterDataList__vfunc_20(void)
 {
-    return ((int *)g_beActionStarterDataList_metaObject)[0];
+    return g_beActionStarterDataList_metaObject[0];
 }
 
-int Gap__Bec__beActionStarterData2__vfunc_20(void)
+igMetaObject *Gap__Bec__beActionStarterData2__vfunc_20(void)
 {
-    return ((int *)g_beActionStarterData2_metaObject)[0];
+    return g_beActionStarterData2_metaObject[0];
 }
 
-int Gap__Bec__beActionStarterData__vfunc_20(void)
+igMetaObject *Gap__Bec__beActionStarterData__vfunc_20(void)
 {
-    return ((int *)g_beActionStarterData_metaObject)[0];
+    return g_beActionStarterData_metaObject[0];
 }
 
-int Gap__Bec__beAsTargetModelData__vfunc_20(void)
+igMetaObject *Gap__Bec__beAsTargetModelData__vfunc_20(void)
 {
-    return ((int *)g_beAsTargetModelData_metaObject)[0];
+    return g_beAsTargetModelData_metaObject[0];
 }
 
-int Gap__Bec__beAsTargetModelDataList__vfunc_20(void)
+igMetaObject *Gap__Bec__beAsTargetModelDataList__vfunc_20(void)
 {
-    return ((int *)g_beAsTargetModelDataList_metaObject)[0];
+    return g_beAsTargetModelDataList_metaObject[0];
 }
 
-int Gap__Bec__beActionStarterInfo__vfunc_20(void)
+igMetaObject *Gap__Bec__beActionStarterInfo__vfunc_20(void)
 {
-    return ((int *)g_beActionStarterInfo_metaObject)[0];
+    return g_beActionStarterInfo_metaObject[0];
 }
 
-int Gap__Bec__beActionStarterInfoRam__vfunc_20(void)
+igMetaObject *Gap__Bec__beActionStarterInfoRam__vfunc_20(void)
 {
-    return ((int *)g_beActionStarterInfoRam_metaObject)[0];
+    return g_beActionStarterInfoRam_metaObject[0];
 }
 
-int Gap__Bec__beBaseInfoDataList__vfunc_20(void)
+igMetaObject *Gap__Bec__beBaseInfoDataList__vfunc_20(void)
 {
-    return ((int *)g_beBaseInfoDataList_metaObject)[0];
+    return g_beBaseInfoDataList_metaObject[0];
 }
 
-int Gap__Bec__beBaseInfoList__vfunc_20(void)
+igMetaObject *Gap__Bec__beBaseInfoList__vfunc_20(void)
 {
-    return ((int *)g_beBaseInfoList_metaObject)[0];
+    return g_beBaseInfoList_metaObject[0];
 }
 
-int Gap__Bec__beBaseInfoManagerList__vfunc_20(void)
+igMetaObject *Gap__Bec__beBaseInfoManagerList__vfunc_20(void)
 {
-    return ((int *)g_beBaseInfoManagerList_metaObject)[0];
+    return g_beBaseInfoManagerList_metaObject[0];
 }
 
-int Gap__Bec__beBaseInfoRamTimer__vfunc_20(void)
+igMetaObject *Gap__Bec__beBaseInfoRamTimer__vfunc_20(void)
 {
-    return ((int *)g_beBaseInfoRamTimer_metaObject)[0];
+    return g_beBaseInfoRamTimer_metaObject[0];
 }
 
-int beBaseInfoRamList_GetMetaObject_Virtual(void)
+igMetaObject *beBaseInfoRamList_GetMetaObject_Virtual(void)
 {
-    return ((int *)g_beBaseInfoRamList_metaObject)[0];
+    return g_beBaseInfoRamList_metaObject[0];
 }
 
-int Gap__Bec__beBkColorInfo__vfunc_20(void)
+igMetaObject *Gap__Bec__beBkColorInfo__vfunc_20(void)
 {
-    return ((int *)g_beBkColorInfo_metaObject)[0];
+    return g_beBkColorInfo_metaObject[0];
 }
 
-int Gap__Bec__beCameraCtrlInfoRamShake__vfunc_20(void)
+igMetaObject *Gap__Bec__beCameraCtrlInfoRamShake__vfunc_20(void)
 {
-    return ((int *)g_beCameraCtrlInfoRamShake_metaObject)[0];
+    return g_beCameraCtrlInfoRamShake_metaObject[0];
 }
 
-int Gap__Bec__beCameraBoxData__vfunc_20(void)
+igMetaObject *Gap__Bec__beCameraBoxData__vfunc_20(void)
 {
-    return ((int *)g_beCameraBoxData_metaObject)[0];
+    return g_beCameraBoxData_metaObject[0];
 }
 
-int Gap__Bec__beCameraDemoData__vfunc_20(void)
+igMetaObject *Gap__Bec__beCameraDemoData__vfunc_20(void)
 {
-    return ((int *)g_beCameraDemoData_metaObject)[0];
+    return g_beCameraDemoData_metaObject[0];
 }
 
-int Gap__Bec__beCameraCtrlInfo__vfunc_20(void)
+igMetaObject *Gap__Bec__beCameraCtrlInfo__vfunc_20(void)
 {
-    return ((int *)g_beCameraCtrlInfo_metaObject)[0];
+    return g_beCameraCtrlInfo_metaObject[0];
 }
 
-int Gap__Bec__beChangePosTransformInfo__vfunc_20(void)
+igMetaObject *Gap__Bec__beChangePosTransformInfo__vfunc_20(void)
 {
-    return ((int *)g_beChangePosTransformInfo_metaObject)[0];
+    return g_beChangePosTransformInfo_metaObject[0];
 }
 
-int Gap__Bec__beChangePosTransformInfoRam__vfunc_20(void)
+igMetaObject *Gap__Bec__beChangePosTransformInfoRam__vfunc_20(void)
 {
-    return ((int *)g_beChangePosTransformInfoRam_metaObject)[0];
+    return g_beChangePosTransformInfoRam_metaObject[0];
 }
 
-int Gap__Bec__beCopyModelCtrl2__vfunc_20(void)
+igMetaObject *Gap__Bec__beCopyModelCtrl2__vfunc_20(void)
 {
-    return ((int *)g_beCopyModelCtrl2_metaObject)[0];
+    return g_beCopyModelCtrl2_metaObject[0];
 }
 
-int Gap__Bec__beCopyTransform__vfunc_20(void)
+igMetaObject *Gap__Bec__beCopyTransform__vfunc_20(void)
 {
-    return ((int *)g_beCopyTransform_metaObject)[0];
+    return g_beCopyTransform_metaObject[0];
 }
 
-int Gap__Bec__beCountry__vfunc_20(void)
+igMetaObject *Gap__Bec__beCountry__vfunc_20(void)
 {
-    return ((int *)g_beCountry_metaObject)[0];
+    return g_beCountry_metaObject[0];
 }
 
-int Gap__Bec__beCriAcxData__vfunc_20(void)
+igMetaObject *Gap__Bec__beCriAcxData__vfunc_20(void)
 {
-    return ((int *)g_beCriAcxData_metaObject)[0];
+    return g_beCriAcxData_metaObject[0];
 }
 
 void Gap__Bec__beBinDataObject__vfunc_8(beBinDataObject *arg0) {
@@ -191,156 +191,156 @@ void Gap__Bec__beBinDataObject__vfunc_8(beBinDataObject *arg0) {
     Gap__Core__igObject__vfunc_08__002ff0f0(arg0);
 }
 
-int Gap__Bec__beCriSndf__vfunc_20(void)
+igMetaObject *Gap__Bec__beCriSndf__vfunc_20(void)
 {
-    return ((int *)g_beCriSndf_metaObject)[0];
+    return g_beCriSndf_metaObject[0];
 }
 
-int Gap__Bec__beCriAudio__vfunc_20(void)
+igMetaObject *Gap__Bec__beCriAudio__vfunc_20(void)
 {
-    return ((int *)g_beCriAudio_metaObject)[0];
+    return g_beCriAudio_metaObject[0];
 }
 
-int Gap__Bec__beCriFxXbData__vfunc_20(void)
+igMetaObject *Gap__Bec__beCriFxXbData__vfunc_20(void)
 {
-    return ((int *)g_beCriFxXbData_metaObject)[0];
+    return g_beCriFxXbData_metaObject[0];
 }
 
-int Gap__Bec__beCriFxInfo__vfunc_20(void)
+igMetaObject *Gap__Bec__beCriFxInfo__vfunc_20(void)
 {
-    return ((int *)g_beCriFxInfo_metaObject)[0];
+    return g_beCriFxInfo_metaObject[0];
 }
 
-int Gap__Bec__beCriHandle__vfunc_20(void)
+igMetaObject *Gap__Bec__beCriHandle__vfunc_20(void)
 {
-    return ((int *)g_beCriHandle_metaObject)[0];
+    return g_beCriHandle_metaObject[0];
 }
 
-int Gap__Bec__beCriHandleList__vfunc_20(void)
+igMetaObject *Gap__Bec__beCriHandleList__vfunc_20(void)
 {
-    return ((int *)g_beCriHandleList_metaObject)[0];
+    return g_beCriHandleList_metaObject[0];
 }
 
-int Gap__Bec__beCriSfpData__vfunc_20(void)
+igMetaObject *Gap__Bec__beCriSfpData__vfunc_20(void)
 {
-    return ((int *)g_beCriSfpData_metaObject)[0];
+    return g_beCriSfpData_metaObject[0];
 }
 
-int Gap__Bec__beCriVolume__vfunc_20(void)
+igMetaObject *Gap__Bec__beCriVolume__vfunc_20(void)
 {
-    return ((int *)g_beCriVolume_metaObject)[0];
+    return g_beCriVolume_metaObject[0];
 }
 
-int Gap__Bec__beDBManagerInfo__vfunc_20(void)
+igMetaObject *Gap__Bec__beDBManagerInfo__vfunc_20(void)
 {
-    return ((int *)g_beDBManagerInfo_metaObject)[0];
+    return g_beDBManagerInfo_metaObject[0];
 }
 
-int Gap__Bec__beDataBase__vfunc_20(void) { return ((int *)g_beDataBase_metaObject)[0]; }
+igMetaObject *Gap__Bec__beDataBase__vfunc_20(void) { return g_beDataBase_metaObject[0]; }
 
-int Gap__Bec__beDataBaseList__vfunc_20(void)
+igMetaObject *Gap__Bec__beDataBaseList__vfunc_20(void)
 {
-    return ((int *)g_beDataBaseList_metaObject)[0];
+    return g_beDataBaseList_metaObject[0];
 }
 
-int Gap__Bec__beDataObjInt__vfunc_20(void)
+igMetaObject *Gap__Bec__beDataObjInt__vfunc_20(void)
 {
-    return ((int *)g_beDataObjInt_metaObject)[0];
+    return g_beDataObjInt_metaObject[0];
 }
 
-int Gap__Bec__beDataObjIntList__vfunc_20(void)
+igMetaObject *Gap__Bec__beDataObjIntList__vfunc_20(void)
 {
-    return ((int *)g_beDataObjIntList_metaObject)[0];
+    return g_beDataObjIntList_metaObject[0];
 }
 
-int Gap__Bec__beDataObjBool__vfunc_20(void)
+igMetaObject *Gap__Bec__beDataObjBool__vfunc_20(void)
 {
-    return ((int *)g_beDataObjBool_metaObject)[0];
+    return g_beDataObjBool_metaObject[0];
 }
 
-int Gap__Bec__beDataObjBoolList__vfunc_20(void)
+igMetaObject *Gap__Bec__beDataObjBoolList__vfunc_20(void)
 {
-    return ((int *)g_beDataObjBoolList_metaObject)[0];
+    return g_beDataObjBoolList_metaObject[0];
 }
 
-int Gap__Bec__beDataObjString__vfunc_20(void)
+igMetaObject *Gap__Bec__beDataObjString__vfunc_20(void)
 {
-    return ((int *)g_beDataObjString_metaObject)[0];
+    return g_beDataObjString_metaObject[0];
 }
 
-int Gap__Bec__beDataObjStringList__vfunc_20(void)
+igMetaObject *Gap__Bec__beDataObjStringList__vfunc_20(void)
 {
-    return ((int *)g_beDataObjStringList_metaObject)[0];
+    return g_beDataObjStringList_metaObject[0];
 }
 
-int Gap__Bec__beDataObjObjectList__vfunc_20(void)
+igMetaObject *Gap__Bec__beDataObjObjectList__vfunc_20(void)
 {
-    return ((int *)g_beDataObjObjectList_metaObject)[0];
+    return g_beDataObjObjectList_metaObject[0];
 }
 
-int Gap__Bec__beDataObjFloatList__vfunc_20(void)
+igMetaObject *Gap__Bec__beDataObjFloatList__vfunc_20(void)
 {
-    return ((int *)g_beDataObjFloatList_metaObject)[0];
+    return g_beDataObjFloatList_metaObject[0];
 }
 
-int Gap__Bec__beDataObjList__vfunc_20(void)
+igMetaObject *Gap__Bec__beDataObjList__vfunc_20(void)
 {
-    return ((int *)g_beDataObjList_metaObject)[0];
+    return g_beDataObjList_metaObject[0];
 }
 
-int Gap__Bec__beDataObjListList__vfunc_20(void)
+igMetaObject *Gap__Bec__beDataObjListList__vfunc_20(void)
 {
-    return ((int *)g_beDataObjListList_metaObject)[0];
+    return g_beDataObjListList_metaObject[0];
 }
 
-int Gap__Bec__beDemoKeepMes__vfunc_20(void)
+igMetaObject *Gap__Bec__beDemoKeepMes__vfunc_20(void)
 {
-    return ((int *)g_beDemoKeepMes_metaObject)[0];
+    return g_beDemoKeepMes_metaObject[0];
 }
 
-int Gap__Bec__beDemoKeepMesList__vfunc_20(void)
+igMetaObject *Gap__Bec__beDemoKeepMesList__vfunc_20(void)
 {
-    return ((int *)g_beDemoKeepMesList_metaObject)[0];
+    return g_beDemoKeepMesList_metaObject[0];
 }
 
-int Gap__Bec__beDemoManagerWork__vfunc_20(void)
+igMetaObject *Gap__Bec__beDemoManagerWork__vfunc_20(void)
 {
-    return ((int *)g_beDemoManagerWork_metaObject)[0];
+    return g_beDemoManagerWork_metaObject[0];
 }
 
-int Gap__Bec__beDemoManagerWorkList__vfunc_20(void)
+igMetaObject *Gap__Bec__beDemoManagerWorkList__vfunc_20(void)
 {
-    return ((int *)g_beDemoManagerWorkList_metaObject)[0];
+    return g_beDemoManagerWorkList_metaObject[0];
 }
 
-int Gap__Bec__beFileChkObj__vfunc_20(void)
+igMetaObject *Gap__Bec__beFileChkObj__vfunc_20(void)
 {
-    return ((int *)g_beFileChkObj_metaObject)[0];
+    return g_beFileChkObj_metaObject[0];
 }
 
-int Gap__Bec__beFile__vfunc_20(void)
+igMetaObject *Gap__Bec__beFile__vfunc_20(void)
 {
-    return ((int *)g_beFile_metaObject)[0];
+    return g_beFile_metaObject[0];
 }
 
-int Gap__Bec__beFileListInfo__vfunc_20(void)
+igMetaObject *Gap__Bec__beFileListInfo__vfunc_20(void)
 {
-    return ((int *)g_beFileListInfo_metaObject)[0];
+    return g_beFileListInfo_metaObject[0];
 }
 
-int Gap__Bec__beFontGeomAttrPair__vfunc_20(void)
+igMetaObject *Gap__Bec__beFontGeomAttrPair__vfunc_20(void)
 {
-    return ((int *)g_beFontGeomAttrPair_metaObject)[0];
+    return g_beFontGeomAttrPair_metaObject[0];
 }
 
-int Gap__Bec__beFontGeomAttrPairList__vfunc_20(void)
+igMetaObject *Gap__Bec__beFontGeomAttrPairList__vfunc_20(void)
 {
-    return ((int *)g_beFontGeomAttrPairList_metaObject)[0];
+    return g_beFontGeomAttrPairList_metaObject[0];
 }
 
-int Gap__Bec__beFontImage__vfunc_20(void)
+igMetaObject *Gap__Bec__beFontImage__vfunc_20(void)
 {
-    return ((int *)g_beFontImage_metaObject)[0];
+    return g_beFontImage_metaObject[0];
 }
 
 int Gap__Gui__igFont__vfunc_20(void)
@@ -348,164 +348,164 @@ int Gap__Gui__igFont__vfunc_20(void)
     return g_igFont_metaObject[0];
 }
 
-int Gap__Bec__beFontImageList__vfunc_20(void)
+igMetaObject *Gap__Bec__beFontImageList__vfunc_20(void)
 {
-    return ((int *)g_beFontImageList_metaObject)[0];
+    return g_beFontImageList_metaObject[0];
 }
 
-int Gap__Bec__beUnicodeObjList__vfunc_20(void)
+igMetaObject *Gap__Bec__beUnicodeObjList__vfunc_20(void)
 {
-    return ((int *)g_beUnicodeObjList_metaObject)[0];
+    return g_beUnicodeObjList_metaObject[0];
 }
 
-int Gap__Bec__beFontInfoData__vfunc_20(void)
+igMetaObject *Gap__Bec__beFontInfoData__vfunc_20(void)
 {
-    return ((int *)g_beFontInfoData_metaObject)[0];
+    return g_beFontInfoData_metaObject[0];
 }
 
-int Gap__Bec__beFontInfo__vfunc_20(void)
+igMetaObject *Gap__Bec__beFontInfo__vfunc_20(void)
 {
-    return ((int *)g_beFontInfo_metaObject)[0];
+    return g_beFontInfo_metaObject[0];
 }
 
-int Gap__Bec__beGeneraterItemDataOne__vfunc_20(void)
+igMetaObject *Gap__Bec__beGeneraterItemDataOne__vfunc_20(void)
 {
-    return ((int *)g_beGeneraterItemDataOne_metaObject)[0];
+    return g_beGeneraterItemDataOne_metaObject[0];
 }
 
-int Gap__Bec__beGeneraterItemDataOneList__vfunc_20(void)
+igMetaObject *Gap__Bec__beGeneraterItemDataOneList__vfunc_20(void)
 {
-    return ((int *)g_beGeneraterItemDataOneList_metaObject)[0];
+    return g_beGeneraterItemDataOneList_metaObject[0];
 }
 
-int Gap__Bec__beGeneraterItemData__vfunc_20(void)
+igMetaObject *Gap__Bec__beGeneraterItemData__vfunc_20(void)
 {
-    return ((int *)g_beGeneraterItemData_metaObject)[0];
+    return g_beGeneraterItemData_metaObject[0];
 }
 
-int Gap__Bec__beGeneraterItemDataList__vfunc_20(void)
+igMetaObject *Gap__Bec__beGeneraterItemDataList__vfunc_20(void)
 {
-    return ((int *)g_beGeneraterItemDataList_metaObject)[0];
+    return g_beGeneraterItemDataList_metaObject[0];
 }
 
-int Gap__Bec__beGeneraterPlayerData__vfunc_20(void)
+igMetaObject *Gap__Bec__beGeneraterPlayerData__vfunc_20(void)
 {
-    return ((int *)g_beGeneraterPlayerData_metaObject)[0];
+    return g_beGeneraterPlayerData_metaObject[0];
 }
 
-int Gap__Bec__beGeneraterPlayerDataList__vfunc_20(void)
+igMetaObject *Gap__Bec__beGeneraterPlayerDataList__vfunc_20(void)
 {
-    return ((int *)g_beGeneraterPlayerDataList_metaObject)[0];
+    return g_beGeneraterPlayerDataList_metaObject[0];
 }
 
-int Gap__Bec__beGeneraterData__vfunc_20(void)
+igMetaObject *Gap__Bec__beGeneraterData__vfunc_20(void)
 {
-    return ((int *)g_beGeneraterData_metaObject)[0];
+    return g_beGeneraterData_metaObject[0];
 }
 
-int Gap__Bec__beGeneraterDataList__vfunc_20(void)
+igMetaObject *Gap__Bec__beGeneraterDataList__vfunc_20(void)
 {
-    return ((int *)g_beGeneraterDataList_metaObject)[0];
+    return g_beGeneraterDataList_metaObject[0];
 }
 
-int Gap__Bec__beGeneraterInfo__vfunc_20(void)
+igMetaObject *Gap__Bec__beGeneraterInfo__vfunc_20(void)
 {
-    return ((int *)g_beGeneraterInfo_metaObject)[0];
+    return g_beGeneraterInfo_metaObject[0];
 }
 
-int Gap__Bec__beGeneraterInfoRam__vfunc_20(void)
+igMetaObject *Gap__Bec__beGeneraterInfoRam__vfunc_20(void)
 {
-    return ((int *)g_beGeneraterInfoRam_metaObject)[0];
+    return g_beGeneraterInfoRam_metaObject[0];
 }
 
-int Gap__Bec__beGeneraterInfoWork__vfunc_20(void)
+igMetaObject *Gap__Bec__beGeneraterInfoWork__vfunc_20(void)
 {
-    return ((int *)g_beGeneraterInfoWork_metaObject)[0];
+    return g_beGeneraterInfoWork_metaObject[0];
 }
 
-int Gap__Bec__beGroupKeep__vfunc_20(void)
+igMetaObject *Gap__Bec__beGroupKeep__vfunc_20(void)
 {
-    return ((int *)g_beGroupKeep_metaObject)[0];
+    return g_beGroupKeep_metaObject[0];
 }
 
-int Gap__Bec__beGroupKeepList__vfunc_20(void)
+igMetaObject *Gap__Bec__beGroupKeepList__vfunc_20(void)
 {
-    return ((int *)g_beGroupKeepList_metaObject)[0];
+    return g_beGroupKeepList_metaObject[0];
 }
 
-int Gap__Bec__beHitLandDelivInfo__vfunc_20(void)
+igMetaObject *Gap__Bec__beHitLandDelivInfo__vfunc_20(void)
 {
-    return ((int *)g_beHitLandDelivInfo_metaObject)[0];
+    return g_beHitLandDelivInfo_metaObject[0];
 }
 
-int Gap__Bec__beHitLandDelivInfoRam__vfunc_20(void)
+igMetaObject *Gap__Bec__beHitLandDelivInfoRam__vfunc_20(void)
 {
-    return ((int *)g_beHitLandDelivInfoRam_metaObject)[0];
+    return g_beHitLandDelivInfoRam_metaObject[0];
 }
 
-int Gap__Bec__beHitLandResultData__vfunc_20(void)
+igMetaObject *Gap__Bec__beHitLandResultData__vfunc_20(void)
 {
-    return ((int *)g_beHitLandResultData_metaObject)[0];
+    return g_beHitLandResultData_metaObject[0];
 }
 
-int Gap__Bec__beHitLandResultDataList__vfunc_20(void)
+igMetaObject *Gap__Bec__beHitLandResultDataList__vfunc_20(void)
 {
-    return ((int *)g_beHitLandResultDataList_metaObject)[0];
+    return g_beHitLandResultDataList_metaObject[0];
 }
 
-int Gap__Bec__beHitLandModelTraversal__vfunc_20(void)
+igMetaObject *Gap__Bec__beHitLandModelTraversal__vfunc_20(void)
 {
-    return ((int *)g_beHitLandModelTraversal_metaObject)[0];
+    return g_beHitLandModelTraversal_metaObject[0];
 }
 
-int Gap__Bec__beHitLandModelInfo__vfunc_20(void)
+igMetaObject *Gap__Bec__beHitLandModelInfo__vfunc_20(void)
 {
-    return ((int *)g_beHitLandModelInfo_metaObject)[0];
+    return g_beHitLandModelInfo_metaObject[0];
 }
 
-int Gap__Bec__beHitLandModelInfoRam__vfunc_20(void)
+igMetaObject *Gap__Bec__beHitLandModelInfoRam__vfunc_20(void)
 {
-    return ((int *)g_beHitLandModelInfoRam_metaObject)[0];
+    return g_beHitLandModelInfoRam_metaObject[0];
 }
 
-int Gap__Bec__beLOA__vfunc_20(void)
+igMetaObject *Gap__Bec__beLOA__vfunc_20(void)
 {
-    return ((int *)g_beLOA_metaObject)[0];
+    return g_beLOA_metaObject[0];
 }
 
-int Gap__Bec__beLayerGroup__vfunc_20(void)
+igMetaObject *Gap__Bec__beLayerGroup__vfunc_20(void)
 {
-    return ((int *)g_beLayerGroup_metaObject)[0];
+    return g_beLayerGroup_metaObject[0];
 }
 
-int Gap__Bec__beLayerGroupList__vfunc_20(void)
+igMetaObject *Gap__Bec__beLayerGroupList__vfunc_20(void)
 {
-    return ((int *)g_beLayerGroupList_metaObject)[0];
+    return g_beLayerGroupList_metaObject[0];
 }
 
-int Gap__Bec__beLayerInfo__vfunc_20(void)
+igMetaObject *Gap__Bec__beLayerInfo__vfunc_20(void)
 {
-    return ((int *)g_beLayerInfo_metaObject)[0];
+    return g_beLayerInfo_metaObject[0];
 }
 
-int Gap__Bec__beLayerInfoRam__vfunc_20(void)
+igMetaObject *Gap__Bec__beLayerInfoRam__vfunc_20(void)
 {
-    return ((int *)g_beLayerInfoRam_metaObject)[0];
+    return g_beLayerInfoRam_metaObject[0];
 }
 
-int Gap__Bec__beLightCtrlInfo__vfunc_20(void)
+igMetaObject *Gap__Bec__beLightCtrlInfo__vfunc_20(void)
 {
-    return ((int *)g_beLightCtrlInfo_metaObject)[0];
+    return g_beLightCtrlInfo_metaObject[0];
 }
 
-int Gap__Bec__igLightSetList__vfunc_20(void)
+igMetaObject *Gap__Bec__igLightSetList__vfunc_20(void)
 {
-    return ((int *)g_igLightSetList_metaObject)[0];
+    return g_igLightSetList_metaObject[0];
 }
 
-int Gap__Bec__beLuaDataObject__vfunc_20(void)
+igMetaObject *Gap__Bec__beLuaDataObject__vfunc_20(void)
 {
-    return ((int *)g_beLuaDataObject_metaObject)[0];
+    return g_beLuaDataObject_metaObject[0];
 }
 
 void Gap__Bec__beLuaDataObject__vfunc_08(beLuaDataObject *arg0) {
@@ -519,303 +519,303 @@ void Gap__Bec__beLuaDataObject__vfunc_08(beLuaDataObject *arg0) {
     Gap__Core__igObject__vfunc_08__002ff0f0(arg0);
 }
 
-int Gap__Bec__beLuaDataObjectist__vfunc_20(void)
+igMetaObject *Gap__Bec__beLuaDataObjectist__vfunc_20(void)
 {
-    return ((int *)g_beLuaDataObjectist_metaObject)[0];
+    return g_beLuaDataObjectist_metaObject[0];
 }
 
-int Gap__Bec__beLuaData__vfunc_20(void)
+igMetaObject *Gap__Bec__beLuaData__vfunc_20(void)
 {
-    return ((int *)g_beLuaData_metaObject)[0];
+    return g_beLuaData_metaObject[0];
 }
 
-int Gap__Bec__beLuaDataList__vfunc_20(void)
+igMetaObject *Gap__Bec__beLuaDataList__vfunc_20(void)
 {
-    return ((int *)g_beLuaDataList_metaObject)[0];
+    return g_beLuaDataList_metaObject[0];
 }
 
-int Gap__Bec__beLuaInfo__vfunc_20(void)
+igMetaObject *Gap__Bec__beLuaInfo__vfunc_20(void)
 {
-    return ((int *)g_beLuaInfo_metaObject)[0];
+    return g_beLuaInfo_metaObject[0];
 }
 
-int Gap__Bec__beMatCtrlData__vfunc_20(void)
+igMetaObject *Gap__Bec__beMatCtrlData__vfunc_20(void)
 {
-    return ((int *)g_beMatCtrlData_metaObject)[0];
+    return g_beMatCtrlData_metaObject[0];
 }
 
-int Gap__Bec__beMatCtrlDataList__vfunc_20(void)
+igMetaObject *Gap__Bec__beMatCtrlDataList__vfunc_20(void)
 {
-    return ((int *)g_beMatCtrlDataList_metaObject)[0];
+    return g_beMatCtrlDataList_metaObject[0];
 }
 
-int Gap__Bec__beMatCtrlSearch__vfunc_20(void)
+igMetaObject *Gap__Bec__beMatCtrlSearch__vfunc_20(void)
 {
-    return ((int *)g_beMatCtrlSearch_metaObject)[0];
+    return g_beMatCtrlSearch_metaObject[0];
 }
 
-int Gap__Bec__beMatCtrlSearchList__vfunc_20(void)
+igMetaObject *Gap__Bec__beMatCtrlSearchList__vfunc_20(void)
 {
-    return ((int *)g_beMatCtrlSearchList_metaObject)[0];
+    return g_beMatCtrlSearchList_metaObject[0];
 }
 
-int Gap__Bec__beMatCtrlInfo__vfunc_20(void)
+igMetaObject *Gap__Bec__beMatCtrlInfo__vfunc_20(void)
 {
-    return ((int *)g_beMatCtrlInfo_metaObject)[0];
+    return g_beMatCtrlInfo_metaObject[0];
 }
 
-int Gap__Bec__beMatCtrlInfoRam__vfunc_20(void)
+igMetaObject *Gap__Bec__beMatCtrlInfoRam__vfunc_20(void)
 {
-    return ((int *)g_beMatCtrlInfoRam_metaObject)[0];
+    return g_beMatCtrlInfoRam_metaObject[0];
 }
 
-int Gap__Bec__beMatCtrlInfoWork__vfunc_20(void)
+igMetaObject *Gap__Bec__beMatCtrlInfoWork__vfunc_20(void)
 {
-    return ((int *)g_beMatCtrlInfoWork_metaObject)[0];
+    return g_beMatCtrlInfoWork_metaObject[0];
 }
 
-int Gap__Bec__beMessengerArgData__vfunc_20(void)
+igMetaObject *Gap__Bec__beMessengerArgData__vfunc_20(void)
 {
-    return ((int *)g_beMessengerArgData_metaObject)[0];
+    return g_beMessengerArgData_metaObject[0];
 }
 
-int Gap__Bec__beMessengerArgDataList__vfunc_20(void)
+igMetaObject *Gap__Bec__beMessengerArgDataList__vfunc_20(void)
 {
-    return ((int *)g_beMessengerArgDataList_metaObject)[0];
+    return g_beMessengerArgDataList_metaObject[0];
 }
 
-int Gap__Bec__beMessengerDelay__vfunc_20(void)
+igMetaObject *Gap__Bec__beMessengerDelay__vfunc_20(void)
 {
-    return ((int *)g_beMessengerDelay_metaObject)[0];
+    return g_beMessengerDelay_metaObject[0];
 }
 
-int Gap__Bec__beMessengerDelayList__vfunc_20(void)
+igMetaObject *Gap__Bec__beMessengerDelayList__vfunc_20(void)
 {
-    return ((int *)g_beMessengerDelayList_metaObject)[0];
+    return g_beMessengerDelayList_metaObject[0];
 }
 
-int Gap__Bec__beMessengerGroup__vfunc_20(void)
+igMetaObject *Gap__Bec__beMessengerGroup__vfunc_20(void)
 {
-    return ((int *)g_beMessengerGroup_metaObject)[0];
+    return g_beMessengerGroup_metaObject[0];
 }
 
-int Gap__Bec__beMessengerGroupList__vfunc_20(void)
+igMetaObject *Gap__Bec__beMessengerGroupList__vfunc_20(void)
 {
-    return ((int *)g_beMessengerGroupList_metaObject)[0];
+    return g_beMessengerGroupList_metaObject[0];
 }
 
-int beMessengerWork_GetMetaObject_Virtual(void)
+igMetaObject *beMessengerWork_GetMetaObject_Virtual(void)
 {
-    return ((int *)g_beMessengerWork_metaObject)[0];
+    return g_beMessengerWork_metaObject[0];
 }
 
-int Gap__Bec__beMessengerWorkList__vfunc_20(void)
+igMetaObject *Gap__Bec__beMessengerWorkList__vfunc_20(void)
 {
-    return ((int *)g_beMessengerWorkList_metaObject)[0];
+    return g_beMessengerWorkList_metaObject[0];
 }
 
-int Gap__Bec__beMeterCtrlOneData__vfunc_20(void)
+igMetaObject *Gap__Bec__beMeterCtrlOneData__vfunc_20(void)
 {
-    return ((int *)g_beMeterCtrlOneData_metaObject)[0];
+    return g_beMeterCtrlOneData_metaObject[0];
 }
 
-int Gap__Bec__beMeterCtrlInfo__vfunc_20(void)
+igMetaObject *Gap__Bec__beMeterCtrlInfo__vfunc_20(void)
 {
-    return ((int *)g_beMeterCtrlInfo_metaObject)[0];
+    return g_beMeterCtrlInfo_metaObject[0];
 }
 
-int Gap__Bec__beMeterCtrlInfoList__vfunc_20(void)
+igMetaObject *Gap__Bec__beMeterCtrlInfoList__vfunc_20(void)
 {
-    return ((int *)g_beMeterCtrlInfoList_metaObject)[0];
+    return g_beMeterCtrlInfoList_metaObject[0];
 }
 
-int Gap__Bec__beMeterCtrlNode__vfunc_20(void)
+igMetaObject *Gap__Bec__beMeterCtrlNode__vfunc_20(void)
 {
-    return ((int *)g_beMeterCtrlNode_metaObject)[0];
+    return g_beMeterCtrlNode_metaObject[0];
 }
 
-int Gap__Bec__beModelCtrlData__vfunc_20(void)
+igMetaObject *Gap__Bec__beModelCtrlData__vfunc_20(void)
 {
-    return ((int *)g_beModelCtrlData_metaObject)[0];
+    return g_beModelCtrlData_metaObject[0];
 }
 
-int Gap__Bec__beModelCtrlDataList__vfunc_20(void)
+igMetaObject *Gap__Bec__beModelCtrlDataList__vfunc_20(void)
 {
-    return ((int *)g_beModelCtrlDataList_metaObject)[0];
+    return g_beModelCtrlDataList_metaObject[0];
 }
 
-int Gap__Bec__beModelCtrlLUACALL__vfunc_20(void)
+igMetaObject *Gap__Bec__beModelCtrlLUACALL__vfunc_20(void)
 {
-    return ((int *)g_beModelCtrlLUACALL_metaObject)[0];
+    return g_beModelCtrlLUACALL_metaObject[0];
 }
 
-int Gap__Bec__beModelCtrlLABEL__vfunc_20(void)
+igMetaObject *Gap__Bec__beModelCtrlLABEL__vfunc_20(void)
 {
-    return ((int *)g_beModelCtrlLABEL_metaObject)[0];
+    return g_beModelCtrlLABEL_metaObject[0];
 }
 
-int Gap__Bec__beModelCtrlLABELCTRL__vfunc_20(void)
+igMetaObject *Gap__Bec__beModelCtrlLABELCTRL__vfunc_20(void)
 {
-    return ((int *)g_beModelCtrlLABELCTRL_metaObject)[0];
+    return g_beModelCtrlLABELCTRL_metaObject[0];
 }
 
-int Gap__Bec__beModelCtrlACTION__vfunc_20(void)
+igMetaObject *Gap__Bec__beModelCtrlACTION__vfunc_20(void)
 {
-    return ((int *)g_beModelCtrlACTION_metaObject)[0];
+    return g_beModelCtrlACTION_metaObject[0];
 }
 
-int Gap__Bec__beModelCtrlJUMP__vfunc_20(void)
+igMetaObject *Gap__Bec__beModelCtrlJUMP__vfunc_20(void)
 {
-    return ((int *)g_beModelCtrlJUMP_metaObject)[0];
+    return g_beModelCtrlJUMP_metaObject[0];
 }
 
-int Gap__Bec__beModelCtrlCTRL__vfunc_20(void)
+igMetaObject *Gap__Bec__beModelCtrlCTRL__vfunc_20(void)
 {
-    return ((int *)g_beModelCtrlCTRL_metaObject)[0];
+    return g_beModelCtrlCTRL_metaObject[0];
 }
 
-int Gap__Bec__beModelCtrlMSGBOX__vfunc_20(void)
+igMetaObject *Gap__Bec__beModelCtrlMSGBOX__vfunc_20(void)
 {
-    return ((int *)g_beModelCtrlMSGBOX_metaObject)[0];
+    return g_beModelCtrlMSGBOX_metaObject[0];
 }
 
-int Gap__Bec__beModelCtrlMOVE__vfunc_20(void)
+igMetaObject *Gap__Bec__beModelCtrlMOVE__vfunc_20(void)
 {
-    return ((int *)g_beModelCtrlMOVE_metaObject)[0];
+    return g_beModelCtrlMOVE_metaObject[0];
 }
 
-int Gap__Bec__beModelCtrlMOVEEX__vfunc_20(void)
+igMetaObject *Gap__Bec__beModelCtrlMOVEEX__vfunc_20(void)
 {
-    return ((int *)g_beModelCtrlMOVEEX_metaObject)[0];
+    return g_beModelCtrlMOVEEX_metaObject[0];
 }
 
-int Gap__Bec__beModelCtrlMOVERL__vfunc_20(void)
+igMetaObject *Gap__Bec__beModelCtrlMOVERL__vfunc_20(void)
 {
-    return ((int *)g_beModelCtrlMOVERL_metaObject)[0];
+    return g_beModelCtrlMOVERL_metaObject[0];
 }
 
-int Gap__Bec__beModelCtrlPDMOVE__vfunc_20(void)
+igMetaObject *Gap__Bec__beModelCtrlPDMOVE__vfunc_20(void)
 {
-    return ((int *)g_beModelCtrlPDMOVE_metaObject)[0];
+    return g_beModelCtrlPDMOVE_metaObject[0];
 }
 
-int Gap__Bec__beModelCtrlWCHECK__vfunc_20(void)
+igMetaObject *Gap__Bec__beModelCtrlWCHECK__vfunc_20(void)
 {
-    return ((int *)g_beModelCtrlWCHECK_metaObject)[0];
+    return g_beModelCtrlWCHECK_metaObject[0];
 }
 
-int Gap__Bec__beModelCtrlAIMAP__vfunc_20(void)
+igMetaObject *Gap__Bec__beModelCtrlAIMAP__vfunc_20(void)
 {
-    return ((int *)g_beModelCtrlAIMAP_metaObject)[0];
+    return g_beModelCtrlAIMAP_metaObject[0];
 }
 
-int Gap__Bec__beModelCtrlMUTEKI__vfunc_20(void)
+igMetaObject *Gap__Bec__beModelCtrlMUTEKI__vfunc_20(void)
 {
-    return ((int *)g_beModelCtrlMUTEKI_metaObject)[0];
+    return g_beModelCtrlMUTEKI_metaObject[0];
 }
 
-int Gap__Bec__beModelCtrlHITBOX__vfunc_20(void)
+igMetaObject *Gap__Bec__beModelCtrlHITBOX__vfunc_20(void)
 {
-    return ((int *)g_beModelCtrlHITBOX_metaObject)[0];
+    return g_beModelCtrlHITBOX_metaObject[0];
 }
 
-int Gap__Bec__beModelCtrlAIData__vfunc_20(void)
+igMetaObject *Gap__Bec__beModelCtrlAIData__vfunc_20(void)
 {
-    return ((int *)g_beModelCtrlAIData_metaObject)[0];
+    return g_beModelCtrlAIData_metaObject[0];
 }
 
-int Gap__Bec__beModelCtrlAIDataList__vfunc_20(void)
+igMetaObject *Gap__Bec__beModelCtrlAIDataList__vfunc_20(void)
 {
-    return ((int *)g_beModelCtrlAIDataList_metaObject)[0];
+    return g_beModelCtrlAIDataList_metaObject[0];
 }
 
-int Gap__Bec__beModelCtrlAIMap__vfunc_20(void)
+igMetaObject *Gap__Bec__beModelCtrlAIMap__vfunc_20(void)
 {
-    return ((int *)g_beModelCtrlAIMap_metaObject)[0];
+    return g_beModelCtrlAIMap_metaObject[0];
 }
 
-int Gap__Bec__beModelCtrlAIMapList__vfunc_20(void)
+igMetaObject *Gap__Bec__beModelCtrlAIMapList__vfunc_20(void)
 {
-    return ((int *)g_beModelCtrlAIMapList_metaObject)[0];
+    return g_beModelCtrlAIMapList_metaObject[0];
 }
 
-int Gap__Bec__beModelCtrlInfoDataAIM__vfunc_20(void)
+igMetaObject *Gap__Bec__beModelCtrlInfoDataAIM__vfunc_20(void)
 {
-    return ((int *)g_beModelCtrlInfoDataAIM_metaObject)[0];
+    return g_beModelCtrlInfoDataAIM_metaObject[0];
 }
 
-int Gap__Bec__beModelCtrlInfoDataAIH__vfunc_20(void)
+igMetaObject *Gap__Bec__beModelCtrlInfoDataAIH__vfunc_20(void)
 {
-    return ((int *)g_beModelCtrlInfoDataAIH_metaObject)[0];
+    return g_beModelCtrlInfoDataAIH_metaObject[0];
 }
 
-int Gap__Bec__beModelCtrlInfoDataHit__vfunc_20(void)
+igMetaObject *Gap__Bec__beModelCtrlInfoDataHit__vfunc_20(void)
 {
-    return ((int *)g_beModelCtrlInfoDataHit_metaObject)[0];
+    return g_beModelCtrlInfoDataHit_metaObject[0];
 }
 
-int Gap__Bec__beModelCtrlInfoDataSeq__vfunc_20(void)
+igMetaObject *Gap__Bec__beModelCtrlInfoDataSeq__vfunc_20(void)
 {
-    return ((int *)g_beModelCtrlInfoDataSeq_metaObject)[0];
+    return g_beModelCtrlInfoDataSeq_metaObject[0];
 }
 
-int Gap__Bec__beModelCtrlInfoDataTrc__vfunc_20(void)
+igMetaObject *Gap__Bec__beModelCtrlInfoDataTrc__vfunc_20(void)
 {
-    return ((int *)g_beModelCtrlInfoDataTrc_metaObject)[0];
+    return g_beModelCtrlInfoDataTrc_metaObject[0];
 }
 
-int Gap__Bec__beModelCtrlInfoRamData__vfunc_20(void)
+igMetaObject *Gap__Bec__beModelCtrlInfoRamData__vfunc_20(void)
 {
-    return ((int *)g_beModelCtrlInfoRamData_metaObject)[0];
+    return g_beModelCtrlInfoRamData_metaObject[0];
 }
 
-int Gap__Bec__beModelCtrlInfo__vfunc_20(void)
+igMetaObject *Gap__Bec__beModelCtrlInfo__vfunc_20(void)
 {
-    return ((int *)g_beModelCtrlInfo_metaObject)[0];
+    return g_beModelCtrlInfo_metaObject[0];
 }
 
-int Gap__Bec__beModelCtrlInfoList__vfunc_20(void)
+igMetaObject *Gap__Bec__beModelCtrlInfoList__vfunc_20(void)
 {
-    return ((int *)g_beModelCtrlInfoList_metaObject)[0];
+    return g_beModelCtrlInfoList_metaObject[0];
 }
 
-int Gap__Bec__beModelCtrlMoveObject__vfunc_20(void)
+igMetaObject *Gap__Bec__beModelCtrlMoveObject__vfunc_20(void)
 {
-    return ((int *)g_beModelCtrlMoveObject_metaObject)[0];
+    return g_beModelCtrlMoveObject_metaObject[0];
 }
 
-int Gap__Bec__beModelCtrlMoveObjectList__vfunc_20(void)
+igMetaObject *Gap__Bec__beModelCtrlMoveObjectList__vfunc_20(void)
 {
-    return ((int *)g_beModelCtrlMoveObjectList_metaObject)[0];
+    return g_beModelCtrlMoveObjectList_metaObject[0];
 }
 
-int Gap__Bec__beModelCtrlInfoHitBody__vfunc_20(void)
+igMetaObject *Gap__Bec__beModelCtrlInfoHitBody__vfunc_20(void)
 {
-    return ((int *)g_beModelCtrlInfoHitBody_metaObject)[0];
+    return g_beModelCtrlInfoHitBody_metaObject[0];
 }
 
-int Gap__Bec__beModelCtrlInfoAI__vfunc_20(void)
+igMetaObject *Gap__Bec__beModelCtrlInfoAI__vfunc_20(void)
 {
-    return ((int *)g_beModelCtrlInfoAI_metaObject)[0];
+    return g_beModelCtrlInfoAI_metaObject[0];
 }
 
-int Gap__Bec__beModelCtrlInfoRideOn__vfunc_20(void)
+igMetaObject *Gap__Bec__beModelCtrlInfoRideOn__vfunc_20(void)
 {
-    return ((int *)g_beModelCtrlInfoRideOn_metaObject)[0];
+    return g_beModelCtrlInfoRideOn_metaObject[0];
 }
 
 void Gap__Bec__beModelCtrlInfoRideOn__vfunc_21(void)
 {
 }
 
-int Gap__Bec__beModelCtrlInfoWork__vfunc_20(void)
+igMetaObject *Gap__Bec__beModelCtrlInfoWork__vfunc_20(void)
 {
-    return ((int *)g_beModelCtrlInfoWork_metaObject)[0];
+    return g_beModelCtrlInfoWork_metaObject[0];
 }
 
-int Gap__Bec__beModelCtrlNode2__vfunc_20(void)
+igMetaObject *Gap__Bec__beModelCtrlNode2__vfunc_20(void)
 {
-    return ((int *)g_beModelCtrlNode2_metaObject)[0];
+    return g_beModelCtrlNode2_metaObject[0];
 }
 
 int Gap__Bec__beModelCtrlSubComBase__vfunc_24(void)
@@ -827,54 +827,54 @@ void Gap__Bec__beModelCtrlSCHitBox__vfunc_23(void)
 {
 }
 
-int Gap__Bec__beModelCtrlSubCom__vfunc_20(void)
+igMetaObject *Gap__Bec__beModelCtrlSubCom__vfunc_20(void)
 {
-    return ((int *)g_beModelCtrlSubCom_metaObject)[0];
+    return g_beModelCtrlSubCom_metaObject[0];
 }
 
-int Gap__Bec__beMovieInfoData__vfunc_20(void)
+igMetaObject *Gap__Bec__beMovieInfoData__vfunc_20(void)
 {
-    return ((int *)g_beMovieInfoData_metaObject)[0];
+    return g_beMovieInfoData_metaObject[0];
 }
 
-int Gap__Bec__beMovieInfo__vfunc_20(void)
+igMetaObject *Gap__Bec__beMovieInfo__vfunc_20(void)
 {
-    return ((int *)g_beMovieInfo_metaObject)[0];
+    return g_beMovieInfo_metaObject[0];
 }
 
-int Gap__Bec__beLoadingNode__vfunc_20(void)
+igMetaObject *Gap__Bec__beLoadingNode__vfunc_20(void)
 {
-    return ((int *)g_beLoadingNode_metaObject)[0];
+    return g_beLoadingNode_metaObject[0];
 }
 
-int Gap__Bec__beNodeAnim__vfunc_20(void)
+igMetaObject *Gap__Bec__beNodeAnim__vfunc_20(void)
 {
-    return ((int *)g_beNodeAnim_metaObject)[0];
+    return g_beNodeAnim_metaObject[0];
 }
 
-int Gap__Bec__beNumberCtrlInfo__vfunc_20(void)
+igMetaObject *Gap__Bec__beNumberCtrlInfo__vfunc_20(void)
 {
-    return ((int *)g_beNumberCtrlInfo_metaObject)[0];
+    return g_beNumberCtrlInfo_metaObject[0];
 }
 
-int Gap__Bec__beNumberCtrlInfoList__vfunc_20(void)
+igMetaObject *Gap__Bec__beNumberCtrlInfoList__vfunc_20(void)
 {
-    return ((int *)g_beNumberCtrlInfoList_metaObject)[0];
+    return g_beNumberCtrlInfoList_metaObject[0];
 }
 
-int Gap__Bec__beNumVerInsideData__vfunc_20(void)
+igMetaObject *Gap__Bec__beNumVerInsideData__vfunc_20(void)
 {
-    return ((int *)g_beNumVerInsideData_metaObject)[0];
+    return g_beNumVerInsideData_metaObject[0];
 }
 
-int Gap__Bec__beNumVerInsideDataList__vfunc_20(void)
+igMetaObject *Gap__Bec__beNumVerInsideDataList__vfunc_20(void)
 {
-    return ((int *)g_beNumVerInsideDataList_metaObject)[0];
+    return g_beNumVerInsideDataList_metaObject[0];
 }
 
-int Gap__Bec__beNumVerData__vfunc_20(void)
+igMetaObject *Gap__Bec__beNumVerData__vfunc_20(void)
 {
-    return ((int *)g_beNumVerData_metaObject)[0];
+    return g_beNumVerData_metaObject[0];
 }
 
 void Gap__Bec__beNumVerData__vfunc_07(Obj_36f970 *arg0, int arg1) {
@@ -886,7 +886,7 @@ void Gap__Bec__beNumVerData__vfunc_07(Obj_36f970 *arg0, int arg1) {
         i = 0;
         do {
             alloc = igObject_GetAllocator(arg0);
-            alloc = (GPR_00554c14 != 0) ? alloc : ((void *)Memory_GetAllocatorBySelector(DAT_00587110[0]));
+            alloc = (GPR_00554c14 != 0) ? alloc : ((void *)Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]));
             { Ref_36f970 sp3C(((T_36f970 *)FUN_0034de60((int)alloc)));
             ObjectList_AppendRetained(arg0->list, sp3C.p); }
             i += 1;
@@ -949,64 +949,64 @@ void Gap__Bec__beNumVerData__vfunc_08(Obj_36fae0 *arg0) {
     Gap__Core__igObject__vfunc_08__002ff0f0(arg0);
 }
 
-int Gap__Bec__beNumVerDataList__vfunc_20(void)
+igMetaObject *Gap__Bec__beNumVerDataList__vfunc_20(void)
 {
-    return ((int *)g_beNumVerDataList_metaObject)[0];
+    return g_beNumVerDataList_metaObject[0];
 }
 
-int Gap__Bec__beNumberCtrlInfoRam__vfunc_20(void)
+igMetaObject *Gap__Bec__beNumberCtrlInfoRam__vfunc_20(void)
 {
-    return ((int *)g_beNumberCtrlInfoRam_metaObject)[0];
+    return g_beNumberCtrlInfoRam_metaObject[0];
 }
 
-int Gap__Bec__beNumberCtrlInfoWork__vfunc_20(void)
+igMetaObject *Gap__Bec__beNumberCtrlInfoWork__vfunc_20(void)
 {
-    return ((int *)g_beNumberCtrlInfoWork_metaObject)[0];
+    return g_beNumberCtrlInfoWork_metaObject[0];
 }
 
-int Gap__Bec__beOptInfo__vfunc_20(void)
+igMetaObject *Gap__Bec__beOptInfo__vfunc_20(void)
 {
-    return ((int *)g_beOptInfo_metaObject)[0];
+    return g_beOptInfo_metaObject[0];
 }
 
-int Gap__Bec__bePadDataList__vfunc_20(void)
+igMetaObject *Gap__Bec__bePadDataList__vfunc_20(void)
 {
-    return ((int *)g_bePadDataList_metaObject)[0];
+    return g_bePadDataList_metaObject[0];
 }
 
-int Gap__Bec__beParticleCtrl2Info__vfunc_20(void)
+igMetaObject *Gap__Bec__beParticleCtrl2Info__vfunc_20(void)
 {
-    return ((int *)g_beParticleCtrl2Info_metaObject)[0];
+    return g_beParticleCtrl2Info_metaObject[0];
 }
 
-int Gap__Bec__beParticleCtrl2InfoWork__vfunc_20(void)
+igMetaObject *Gap__Bec__beParticleCtrl2InfoWork__vfunc_20(void)
 {
-    return ((int *)g_beParticleCtrl2InfoWork_metaObject)[0];
+    return g_beParticleCtrl2InfoWork_metaObject[0];
 }
 
-int Gap__Bec__beParticleCtrl2InfoRam__vfunc_20(void)
+igMetaObject *Gap__Bec__beParticleCtrl2InfoRam__vfunc_20(void)
 {
-    return ((int *)g_beParticleCtrl2InfoRam_metaObject)[0];
+    return g_beParticleCtrl2InfoRam_metaObject[0];
 }
 
-int Gap__Bec__bePoint01Info__vfunc_20(void)
+igMetaObject *Gap__Bec__bePoint01Info__vfunc_20(void)
 {
-    return ((int *)g_bePoint01Info_metaObject)[0];
+    return g_bePoint01Info_metaObject[0];
 }
 
-int Gap__Bec__beResetNode__vfunc_20(void)
+igMetaObject *Gap__Bec__beResetNode__vfunc_20(void)
 {
-    return ((int *)g_beResetNode_metaObject)[0];
+    return g_beResetNode_metaObject[0];
 }
 
-int Gap__Bec__beSvDeliver__vfunc_20(void)
+igMetaObject *Gap__Bec__beSvDeliver__vfunc_20(void)
 {
-    return ((int *)g_beSvDeliver_metaObject)[0];
+    return g_beSvDeliver_metaObject[0];
 }
 
-int Gap__Bec__beSaveDataDeliver__vfunc_20(void)
+igMetaObject *Gap__Bec__beSaveDataDeliver__vfunc_20(void)
 {
-    return ((int *)g_beSaveDataDeliver_metaObject)[0];
+    return g_beSaveDataDeliver_metaObject[0];
 }
 
 void Gap__Bec__beSaveDataDeliver__vfunc_07(void **arg0) {
@@ -1027,29 +1027,29 @@ void Gap__Bec__beSaveDataDeliver__vfunc_08(DW4VC_88_0_36fd80 *arg0) {
     Gap__Core__igObject__vfunc_08__002ff0f0(arg0);
 }
 
-int Gap__Bec__beSvSlotXbox__vfunc_20(void)
+igMetaObject *Gap__Bec__beSvSlotXbox__vfunc_20(void)
 {
-    return ((int *)g_beSvSlotXbox_metaObject)[0];
+    return g_beSvSlotXbox_metaObject[0];
 }
 
-int Gap__Bec__beSvSlotGC__vfunc_20(void)
+igMetaObject *Gap__Bec__beSvSlotGC__vfunc_20(void)
 {
-    return ((int *)g_beSvSlotGC_metaObject)[0];
+    return g_beSvSlotGC_metaObject[0];
 }
 
-int Gap__Bec__beSvSlotPS2__vfunc_20(void)
+igMetaObject *Gap__Bec__beSvSlotPS2__vfunc_20(void)
 {
-    return ((int *)g_beSvSlotPS2_metaObject)[0];
+    return g_beSvSlotPS2_metaObject[0];
 }
 
-int Gap__Bec__beSvSlotDataList__vfunc_20(void)
+igMetaObject *Gap__Bec__beSvSlotDataList__vfunc_20(void)
 {
-    return ((int *)g_beSvSlotDataList_metaObject)[0];
+    return g_beSvSlotDataList_metaObject[0];
 }
 
-int Gap__Bec__beSvPlatDataGC__vfunc_20(void)
+igMetaObject *Gap__Bec__beSvPlatDataGC__vfunc_20(void)
 {
-    return ((int *)g_beSvPlatDataGC_metaObject)[0];
+    return g_beSvPlatDataGC_metaObject[0];
 }
 
 void Gap__Bec__beSvPlatDataGC__vfunc_07(void **arg0) {
@@ -1070,9 +1070,9 @@ void Gap__Bec__beSvPlatDataGC__vfunc_08(beSvPlatDataGC *arg0) {
     Gap__Core__igObject__vfunc_08__002ff0f0(arg0);
 }
 
-int Gap__Bec__beSvPs2McImage128k__vfunc_20(void)
+igMetaObject *Gap__Bec__beSvPs2McImage128k__vfunc_20(void)
 {
-    return ((int *)g_beSvPs2McImage128k_metaObject)[0];
+    return g_beSvPs2McImage128k_metaObject[0];
 }
 
 void Gap__Bec__beSvPs2McImage128k__vfunc_07(beSvPs2McImage128k *arg0, int arg1) {
@@ -1093,14 +1093,14 @@ void Gap__Bec__beSvPs2McImage128k__vfunc_08(void *arg0) {
     Gap__Core__igObject__vfunc_08__002ff0f0(arg0);
 }
 
-int Gap__Bec__beSvPlatDataPS2__vfunc_20(void)
+igMetaObject *Gap__Bec__beSvPlatDataPS2__vfunc_20(void)
 {
-    return ((int *)g_beSvPlatDataPS2_metaObject)[0];
+    return g_beSvPlatDataPS2_metaObject[0];
 }
 
-int Gap__Bec__beXboxImage24k__vfunc_20(void)
+igMetaObject *Gap__Bec__beXboxImage24k__vfunc_20(void)
 {
-    return ((int *)g_beXboxImage24k_metaObject)[0];
+    return g_beXboxImage24k_metaObject[0];
 }
 
 void Gap__Bec__beXboxImage24k__vfunc_07(beXboxImage24k *arg0, int arg1) {
@@ -1124,149 +1124,149 @@ void Gap__Bec__beXboxImage24k__vfunc_08(DW4VC_88_0_370070 *arg0) {
     Gap__Core__igObject__vfunc_08__002ff0f0(arg0);
 }
 
-int Gap__Bec__beSvPlatDataXbox__vfunc_20(void)
+igMetaObject *Gap__Bec__beSvPlatDataXbox__vfunc_20(void)
 {
-    return ((int *)g_beSvPlatDataXbox_metaObject)[0];
+    return g_beSvPlatDataXbox_metaObject[0];
 }
 
-int Gap__Bec__beSvPlatDataPC__vfunc_20(void)
+igMetaObject *Gap__Bec__beSvPlatDataPC__vfunc_20(void)
 {
-    return ((int *)g_beSvPlatDataPC_metaObject)[0];
+    return g_beSvPlatDataPC_metaObject[0];
 }
 
-int Gap__Bec__beSvPlatBaseData__vfunc_20(void)
+igMetaObject *Gap__Bec__beSvPlatBaseData__vfunc_20(void)
 {
-    return ((int *)g_beSvPlatBaseData_metaObject)[0];
+    return g_beSvPlatBaseData_metaObject[0];
 }
 
-int Gap__Bec__beSaveUtilInfo__vfunc_20(void)
+igMetaObject *Gap__Bec__beSaveUtilInfo__vfunc_20(void)
 {
-    return ((int *)g_beSaveUtilInfo_metaObject)[0];
+    return g_beSaveUtilInfo_metaObject[0];
 }
 
-int Gap__Bec__beSaveUtilInfoRam__vfunc_20(void)
+igMetaObject *Gap__Bec__beSaveUtilInfoRam__vfunc_20(void)
 {
-    return ((int *)g_beSaveUtilInfoRam_metaObject)[0];
+    return g_beSaveUtilInfoRam_metaObject[0];
 }
 
-int Gap__Bec__beSeData__vfunc_20(void)
+igMetaObject *Gap__Bec__beSeData__vfunc_20(void)
 {
-    return ((int *)g_beSeData_metaObject)[0];
+    return g_beSeData_metaObject[0];
 }
 
-int Gap__Bec__beSeDataList__vfunc_20(void)
+igMetaObject *Gap__Bec__beSeDataList__vfunc_20(void)
 {
-    return ((int *)g_beSeDataList_metaObject)[0];
+    return g_beSeDataList_metaObject[0];
 }
 
-int Gap__Bec__beSeInfoData__vfunc_20(void)
+igMetaObject *Gap__Bec__beSeInfoData__vfunc_20(void)
 {
-    return ((int *)g_beSeInfoData_metaObject)[0];
+    return g_beSeInfoData_metaObject[0];
 }
 
-int Gap__Bec__beSeInfo__vfunc_20(void)
+igMetaObject *Gap__Bec__beSeInfo__vfunc_20(void)
 {
-    return ((int *)g_beSeInfo_metaObject)[0];
+    return g_beSeInfo_metaObject[0];
 }
 
-int Gap__Bec__beSelectCtrlInfoWork__vfunc_20(void)
+igMetaObject *Gap__Bec__beSelectCtrlInfoWork__vfunc_20(void)
 {
-    return ((int *)g_beSelectCtrlInfoWork_metaObject)[0];
+    return g_beSelectCtrlInfoWork_metaObject[0];
 }
 
-int Gap__Bec__beSelectCtrlInfoRamData__vfunc_20(void)
+igMetaObject *Gap__Bec__beSelectCtrlInfoRamData__vfunc_20(void)
 {
-    return ((int *)g_beSelectCtrlInfoRamData_metaObject)[0];
+    return g_beSelectCtrlInfoRamData_metaObject[0];
 }
 
-int Gap__Bec__beSelectCtrlInfo__vfunc_20(void)
+igMetaObject *Gap__Bec__beSelectCtrlInfo__vfunc_20(void)
 {
-    return ((int *)g_beSelectCtrlInfo_metaObject)[0];
+    return g_beSelectCtrlInfo_metaObject[0];
 }
 
-int Gap__Bec__beShadow01Info__vfunc_20(void)
+igMetaObject *Gap__Bec__beShadow01Info__vfunc_20(void)
 {
-    return ((int *)g_beShadow01Info_metaObject)[0];
+    return g_beShadow01Info_metaObject[0];
 }
 
-int Gap__Bec__beShadow01InfoList__vfunc_20(void)
+igMetaObject *Gap__Bec__beShadow01InfoList__vfunc_20(void)
 {
-    return ((int *)g_beShadow01InfoList_metaObject)[0];
+    return g_beShadow01InfoList_metaObject[0];
 }
 
-int Gap__Bec__bePlaySE__vfunc_20(void)
+igMetaObject *Gap__Bec__bePlaySE__vfunc_20(void)
 {
-    return ((int *)g_bePlaySE_metaObject)[0];
+    return g_bePlaySE_metaObject[0];
 }
 
-int Gap__Bec__bePlaySEList__vfunc_20(void)
+igMetaObject *Gap__Bec__bePlaySEList__vfunc_20(void)
 {
-    return ((int *)g_bePlaySEList_metaObject)[0];
+    return g_bePlaySEList_metaObject[0];
 }
 
-int Gap__Bec__beSoundData__vfunc_20(void)
+igMetaObject *Gap__Bec__beSoundData__vfunc_20(void)
 {
-    return ((int *)g_beSoundData_metaObject)[0];
+    return g_beSoundData_metaObject[0];
 }
 
-int Gap__Bec__beBaseInfoData__vfunc_20(void)
+igMetaObject *Gap__Bec__beBaseInfoData__vfunc_20(void)
 {
-    return ((int *)g_beBaseInfoData_metaObject)[0];
+    return g_beBaseInfoData_metaObject[0];
 }
 
-int Gap__Bec__beSoundInfo__vfunc_20(void)
+igMetaObject *Gap__Bec__beSoundInfo__vfunc_20(void)
 {
-    return ((int *)g_beSoundInfo_metaObject)[0];
+    return g_beSoundInfo_metaObject[0];
 }
 
-int Gap__Bec__beStaticInfo__vfunc_20(void)
+igMetaObject *Gap__Bec__beStaticInfo__vfunc_20(void)
 {
-    return ((int *)g_beStaticInfo_metaObject)[0];
+    return g_beStaticInfo_metaObject[0];
 }
 
-int Gap__Bec__beSwitchCtrlInfo__vfunc_20(void)
+igMetaObject *Gap__Bec__beSwitchCtrlInfo__vfunc_20(void)
 {
-    return ((int *)g_beSwitchCtrlInfo_metaObject)[0];
+    return g_beSwitchCtrlInfo_metaObject[0];
 }
 
-int Gap__Bec__beTextureCtrlWork__vfunc_20(void)
+igMetaObject *Gap__Bec__beTextureCtrlWork__vfunc_20(void)
 {
-    return ((int *)g_beTextureCtrlWork_metaObject)[0];
+    return g_beTextureCtrlWork_metaObject[0];
 }
 
-int Gap__Bec__beTextureCtrlData__vfunc_20(void)
+igMetaObject *Gap__Bec__beTextureCtrlData__vfunc_20(void)
 {
-    return ((int *)g_beTextureCtrlData_metaObject)[0];
+    return g_beTextureCtrlData_metaObject[0];
 }
 
-int Gap__Bec__beTextureCtrlAttr__vfunc_20(void)
+igMetaObject *Gap__Bec__beTextureCtrlAttr__vfunc_20(void)
 {
-    return ((int *)g_beTextureCtrlAttr_metaObject)[0];
+    return g_beTextureCtrlAttr_metaObject[0];
 }
 
-int Gap__Bec__beTextureCtrlInfo__vfunc_20(void)
+igMetaObject *Gap__Bec__beTextureCtrlInfo__vfunc_20(void)
 {
-    return ((int *)g_beTextureCtrlInfo_metaObject)[0];
+    return g_beTextureCtrlInfo_metaObject[0];
 }
 
-int Gap__Bec__beTextureCtrlInfoList__vfunc_20(void)
+igMetaObject *Gap__Bec__beTextureCtrlInfoList__vfunc_20(void)
 {
-    return ((int *)g_beTextureCtrlInfoList_metaObject)[0];
+    return g_beTextureCtrlInfoList_metaObject[0];
 }
 
-int Gap__Bec__beTimerData__vfunc_20(void)
+igMetaObject *Gap__Bec__beTimerData__vfunc_20(void)
 {
-    return ((int *)g_beTimerData_metaObject)[0];
+    return g_beTimerData_metaObject[0];
 }
 
-int Gap__Bec__beTimerDataList__vfunc_20(void)
+igMetaObject *Gap__Bec__beTimerDataList__vfunc_20(void)
 {
-    return ((int *)g_beTimerDataList_metaObject)[0];
+    return g_beTimerDataList_metaObject[0];
 }
 
-int Gap__Bec__beTransformSync__vfunc_20(void)
+igMetaObject *Gap__Bec__beTransformSync__vfunc_20(void)
 {
-    return ((int *)g_beTransformSync_metaObject)[0];
+    return g_beTransformSync_metaObject[0];
 }
 
 void Gap__Bec__beTransformSync__vfunc_35(beTransformSync *arg0, int arg1) {
@@ -1286,179 +1286,179 @@ void Gap__Bec__beTransformSync__vfunc_35(beTransformSync *arg0, int arg1) {
     }
 }
 
-int Gap__Bec__beUnicode__vfunc_20(void)
+igMetaObject *Gap__Bec__beUnicode__vfunc_20(void)
 {
-    return ((int *)g_beUnicode_metaObject)[0];
+    return g_beUnicode_metaObject[0];
 }
 
-int Gap__Bec__beWaterPlainInfo__vfunc_20(void)
+igMetaObject *Gap__Bec__beWaterPlainInfo__vfunc_20(void)
 {
-    return ((int *)g_beWaterPlainInfo_metaObject)[0];
+    return g_beWaterPlainInfo_metaObject[0];
 }
 
-int Gap__Bec__beWaterMoveData__vfunc_20(void)
+igMetaObject *Gap__Bec__beWaterMoveData__vfunc_20(void)
 {
-    return ((int *)g_beWaterMoveData_metaObject)[0];
+    return g_beWaterMoveData_metaObject[0];
 }
 
-int Gap__Bec__beWaterMoveDataList__vfunc_20(void)
+igMetaObject *Gap__Bec__beWaterMoveDataList__vfunc_20(void)
 {
-    return ((int *)g_beWaterMoveDataList_metaObject)[0];
+    return g_beWaterMoveDataList_metaObject[0];
 }
 
-int Gap__Bec__beWaterMove__vfunc_20(void)
+igMetaObject *Gap__Bec__beWaterMove__vfunc_20(void)
 {
-    return ((int *)g_beWaterMove_metaObject)[0];
+    return g_beWaterMove_metaObject[0];
 }
 
-int Gap__Bec__beWaterPlainInfoRam__vfunc_20(void)
+igMetaObject *Gap__Bec__beWaterPlainInfoRam__vfunc_20(void)
 {
-    return ((int *)g_beWaterPlainInfoRam_metaObject)[0];
+    return g_beWaterPlainInfoRam_metaObject[0];
 }
 
-int Gap__Bec__igModelViewMatrixBoneSelectList__vfunc_20(void)
+igMetaObject *Gap__Bec__igModelViewMatrixBoneSelectList__vfunc_20(void)
 {
-    return ((int *)g_igModelViewMatrixBoneSelectList_metaObject_00587aa0)[0];
+    return g_igModelViewMatrixBoneSelectList_metaObject_00587aa0[0];
 }
 
-int Gap__Bec__igAppearanceListList__vfunc_20(void)
+igMetaObject *Gap__Bec__igAppearanceListList__vfunc_20(void)
 {
-    return ((int *)g_igAppearanceListList_metaObject)[0];
+    return g_igAppearanceListList_metaObject[0];
 }
 
-int Gap__Bec__beWeaponAttachData__vfunc_20(void)
+igMetaObject *Gap__Bec__beWeaponAttachData__vfunc_20(void)
 {
-    return ((int *)g_beWeaponAttachData_metaObject)[0];
+    return g_beWeaponAttachData_metaObject[0];
 }
 
-int Gap__Bec__beWeaponAttachDataList__vfunc_20(void)
+igMetaObject *Gap__Bec__beWeaponAttachDataList__vfunc_20(void)
 {
-    return ((int *)g_beWeaponAttachDataList_metaObject)[0];
+    return g_beWeaponAttachDataList_metaObject[0];
 }
 
-int Gap__Bec__beWeaponSeqData__vfunc_20(void)
+igMetaObject *Gap__Bec__beWeaponSeqData__vfunc_20(void)
 {
-    return ((int *)g_beWeaponSeqData_metaObject)[0];
+    return g_beWeaponSeqData_metaObject[0];
 }
 
-int Gap__Bec__beWeaponSeqDataList__vfunc_20(void)
+igMetaObject *Gap__Bec__beWeaponSeqDataList__vfunc_20(void)
 {
-    return ((int *)g_beWeaponSeqDataList_metaObject)[0];
+    return g_beWeaponSeqDataList_metaObject[0];
 }
 
-int Gap__Bec__beWeaponInfo__vfunc_20(void)
+igMetaObject *Gap__Bec__beWeaponInfo__vfunc_20(void)
 {
-    return ((int *)g_beWeaponInfo_metaObject)[0];
+    return g_beWeaponInfo_metaObject[0];
 }
 
-int Gap__Bec__beBaseInfo__vfunc_20(void)
+igMetaObject *Gap__Bec__beBaseInfo__vfunc_20(void)
 {
-    return ((int *)g_beBaseInfo_metaObject)[0];
+    return g_beBaseInfo_metaObject[0];
 }
 
-int Gap__Bec__beWeaponInfoRam__vfunc_20(void)
+igMetaObject *Gap__Bec__beWeaponInfoRam__vfunc_20(void)
 {
-    return ((int *)g_beWeaponInfoRam_metaObject)[0];
+    return g_beWeaponInfoRam_metaObject[0];
 }
 
-int Gap__Bec__beBaseInfoRam__vfunc_20(void)
+igMetaObject *Gap__Bec__beBaseInfoRam__vfunc_20(void)
 {
-    return ((int *)g_beBaseInfoRam_metaObject)[0];
+    return g_beBaseInfoRam_metaObject[0];
 }
 
-int Gap__Bec__beAction2InfoList__vfunc_22(void)
+igMetaObject *Gap__Bec__beAction2InfoList__vfunc_22(void)
 {
-    return ((int *)g_beAction2Info_metaObject)[0];
+    return g_beAction2Info_metaObject[0];
 }
 
-int Gap__Bec__beAction2DataList__vfunc_22(void)
+igMetaObject *Gap__Bec__beAction2DataList__vfunc_22(void)
 {
-    return ((int *)g_beAction2Data_metaObject)[0];
+    return g_beAction2Data_metaObject[0];
 }
 
-int Gap__Bec__beAsTargetModelDataList__vfunc_22(void)
+igMetaObject *Gap__Bec__beAsTargetModelDataList__vfunc_22(void)
 {
-    return ((int *)g_beAsTargetModelData_metaObject)[0];
+    return g_beAsTargetModelData_metaObject[0];
 }
 
-int Gap__Bec__beActionStarterDataList__vfunc_22(void)
+igMetaObject *Gap__Bec__beActionStarterDataList__vfunc_22(void)
 {
-    return ((int *)g_beActionStarterData_metaObject)[0];
+    return g_beActionStarterData_metaObject[0];
 }
 
-int Gap__Bec__beCriHandleList__vfunc_22(void)
+igMetaObject *Gap__Bec__beCriHandleList__vfunc_22(void)
 {
-    return ((int *)g_beCriHandle_metaObject)[0];
+    return g_beCriHandle_metaObject[0];
 }
 
-int Gap__Bec__beDataBaseList__vfunc_22(void)
+igMetaObject *Gap__Bec__beDataBaseList__vfunc_22(void)
 {
-    return ((int *)g_beDataBase_metaObject)[0];
+    return g_beDataBase_metaObject[0];
 }
 
-int Gap__Bec__beDataObjListList__vfunc_22(void)
+igMetaObject *Gap__Bec__beDataObjListList__vfunc_22(void)
 {
-    return ((int *)g_beDataObjList_metaObject)[0];
+    return g_beDataObjList_metaObject[0];
 }
 
-int Gap__Bec__beDemoManagerWorkList__vfunc_22(void)
+igMetaObject *Gap__Bec__beDemoManagerWorkList__vfunc_22(void)
 {
-    return ((int *)g_beDemoManagerWork_metaObject)[0];
+    return g_beDemoManagerWork_metaObject[0];
 }
 
-int Gap__Bec__beDemoKeepMesList__vfunc_22(void)
+igMetaObject *Gap__Bec__beDemoKeepMesList__vfunc_22(void)
 {
-    return ((int *)g_beDemoKeepMes_metaObject)[0];
+    return g_beDemoKeepMes_metaObject[0];
 }
 
-int Gap__Bec__beFontGeomAttrPairList__vfunc_22(void)
+igMetaObject *Gap__Bec__beFontGeomAttrPairList__vfunc_22(void)
 {
-    return ((int *)g_beFontGeomAttrPair_metaObject)[0];
+    return g_beFontGeomAttrPair_metaObject[0];
 }
 
-int Gap__Bec__beUnicodeObjList__vfunc_22(void)
+igMetaObject *Gap__Bec__beUnicodeObjList__vfunc_22(void)
 {
-    return ((int *)g_beUnicodeObj_metaObject)[0];
+    return g_beUnicodeObj_metaObject[0];
 }
 
-int Gap__Bec__beFontImageList__vfunc_22(void)
+igMetaObject *Gap__Bec__beFontImageList__vfunc_22(void)
 {
-    return ((int *)g_beFontImage_metaObject)[0];
+    return g_beFontImage_metaObject[0];
 }
 
-int Gap__Bec__beGeneraterDataList__vfunc_22(void)
+igMetaObject *Gap__Bec__beGeneraterDataList__vfunc_22(void)
 {
-    return ((int *)g_beGeneraterData_metaObject)[0];
+    return g_beGeneraterData_metaObject[0];
 }
 
-int Gap__Bec__beGeneraterPlayerDataList__vfunc_22(void)
+igMetaObject *Gap__Bec__beGeneraterPlayerDataList__vfunc_22(void)
 {
-    return ((int *)g_beGeneraterPlayerData_metaObject)[0];
+    return g_beGeneraterPlayerData_metaObject[0];
 }
 
-int Gap__Bec__beGeneraterItemDataList__vfunc_22(void)
+igMetaObject *Gap__Bec__beGeneraterItemDataList__vfunc_22(void)
 {
-    return ((int *)g_beGeneraterItemData_metaObject)[0];
+    return g_beGeneraterItemData_metaObject[0];
 }
 
-int Gap__Bec__beGeneraterItemDataOneList__vfunc_22(void)
+igMetaObject *Gap__Bec__beGeneraterItemDataOneList__vfunc_22(void)
 {
-    return ((int *)g_beGeneraterItemDataOne_metaObject)[0];
+    return g_beGeneraterItemDataOne_metaObject[0];
 }
 
-int Gap__Bec__beGroupKeepList__vfunc_22(void)
+igMetaObject *Gap__Bec__beGroupKeepList__vfunc_22(void)
 {
-    return ((int *)g_beGroupKeep_metaObject)[0];
+    return g_beGroupKeep_metaObject[0];
 }
 
-int Gap__Bec__beHitLandResultDataList__vfunc_22(void)
+igMetaObject *Gap__Bec__beHitLandResultDataList__vfunc_22(void)
 {
-    return ((int *)g_beHitLandResultData_metaObject)[0];
+    return g_beHitLandResultData_metaObject[0];
 }
 
-int Gap__Bec__beLayerGroupList__vfunc_22(void)
+igMetaObject *Gap__Bec__beLayerGroupList__vfunc_22(void)
 {
-    return ((int *)g_beLayerGroup_metaObject)[0];
+    return g_beLayerGroup_metaObject[0];
 }
 
 int Gap__Bec__igLightSetList__vfunc_22(void)
@@ -1466,114 +1466,114 @@ int Gap__Bec__igLightSetList__vfunc_22(void)
     return g_igLightSet_metaObject[0];
 }
 
-int Gap__Bec__beLuaDataList__vfunc_22(void)
+igMetaObject *Gap__Bec__beLuaDataList__vfunc_22(void)
 {
-    return ((int *)g_beLuaData_metaObject)[0];
+    return g_beLuaData_metaObject[0];
 }
 
-int Gap__Bec__beLuaDataObjectist__vfunc_22(void)
+igMetaObject *Gap__Bec__beLuaDataObjectist__vfunc_22(void)
 {
-    return ((int *)g_beLuaDataObject_metaObject)[0];
+    return g_beLuaDataObject_metaObject[0];
 }
 
-int Gap__Bec__beMatCtrlSearchList__vfunc_22(void)
+igMetaObject *Gap__Bec__beMatCtrlSearchList__vfunc_22(void)
 {
-    return ((int *)g_beMatCtrlSearch_metaObject)[0];
+    return g_beMatCtrlSearch_metaObject[0];
 }
 
-int Gap__Bec__beMatCtrlDataList__vfunc_22(void)
+igMetaObject *Gap__Bec__beMatCtrlDataList__vfunc_22(void)
 {
-    return ((int *)g_beMatCtrlData_metaObject)[0];
+    return g_beMatCtrlData_metaObject[0];
 }
 
-int Gap__Bec__beMeterCtrlInfoList__vfunc_22(void)
+igMetaObject *Gap__Bec__beMeterCtrlInfoList__vfunc_22(void)
 {
-    return ((int *)g_beMeterCtrlInfo_metaObject)[0];
+    return g_beMeterCtrlInfo_metaObject[0];
 }
 
-int Gap__Bec__beModelCtrlInfoList__vfunc_22(void)
+igMetaObject *Gap__Bec__beModelCtrlInfoList__vfunc_22(void)
 {
-    return ((int *)g_beModelCtrlInfo_metaObject)[0];
+    return g_beModelCtrlInfo_metaObject[0];
 }
 
-int Gap__Bec__beModelCtrlAIMapList__vfunc_22(void)
+igMetaObject *Gap__Bec__beModelCtrlAIMapList__vfunc_22(void)
 {
-    return ((int *)g_beModelCtrlAIMap_metaObject)[0];
+    return g_beModelCtrlAIMap_metaObject[0];
 }
 
-int Gap__Bec__beModelCtrlAIDataList__vfunc_22(void)
+igMetaObject *Gap__Bec__beModelCtrlAIDataList__vfunc_22(void)
 {
-    return ((int *)g_beModelCtrlAIData_metaObject)[0];
+    return g_beModelCtrlAIData_metaObject[0];
 }
 
-int Gap__Bec__beModelCtrlDataList__vfunc_22(void)
+igMetaObject *Gap__Bec__beModelCtrlDataList__vfunc_22(void)
 {
-    return ((int *)g_beModelCtrlData_metaObject)[0];
+    return g_beModelCtrlData_metaObject[0];
 }
 
-int Gap__Bec__beModelCtrlMoveObjectList__vfunc_22(void)
+igMetaObject *Gap__Bec__beModelCtrlMoveObjectList__vfunc_22(void)
 {
-    return ((int *)g_beModelCtrlMoveObject_metaObject)[0];
+    return g_beModelCtrlMoveObject_metaObject[0];
 }
 
-int Gap__Bec__beNumberCtrlInfoList__vfunc_22(void)
+igMetaObject *Gap__Bec__beNumberCtrlInfoList__vfunc_22(void)
 {
-    return ((int *)g_beNumberCtrlInfo_metaObject)[0];
+    return g_beNumberCtrlInfo_metaObject[0];
 }
 
-int Gap__Bec__beNumVerDataList__vfunc_22(void)
+igMetaObject *Gap__Bec__beNumVerDataList__vfunc_22(void)
 {
-    return ((int *)g_beNumVerData_metaObject)[0];
+    return g_beNumVerData_metaObject[0];
 }
 
-int Gap__Bec__beNumVerInsideDataList__vfunc_22(void)
+igMetaObject *Gap__Bec__beNumVerInsideDataList__vfunc_22(void)
 {
-    return ((int *)g_beNumVerInsideData_metaObject)[0];
+    return g_beNumVerInsideData_metaObject[0];
 }
 
-int Gap__Bec__beSvSlotDataList__vfunc_22(void)
+igMetaObject *Gap__Bec__beSvSlotDataList__vfunc_22(void)
 {
-    return ((int *)g_beSvSlotData_metaObject)[0];
+    return g_beSvSlotData_metaObject[0];
 }
 
-int Gap__Bec__bePadDataList__vfunc_22(void)
+igMetaObject *Gap__Bec__bePadDataList__vfunc_22(void)
 {
-    return ((int *)g_bePadData_metaObject)[0];
+    return g_bePadData_metaObject[0];
 }
 
-int Gap__Bec__beSeDataList__vfunc_22(void)
+igMetaObject *Gap__Bec__beSeDataList__vfunc_22(void)
 {
-    return ((int *)g_beSeData_metaObject)[0];
+    return g_beSeData_metaObject[0];
 }
 
-int Gap__Bec__beShadow01InfoList__vfunc_22(void)
+igMetaObject *Gap__Bec__beShadow01InfoList__vfunc_22(void)
 {
-    return ((int *)g_beShadow01Info_metaObject)[0];
+    return g_beShadow01Info_metaObject[0];
 }
 
-int Gap__Bec__bePlaySEList__vfunc_22(void)
+igMetaObject *Gap__Bec__bePlaySEList__vfunc_22(void)
 {
-    return ((int *)g_bePlaySE_metaObject)[0];
+    return g_bePlaySE_metaObject[0];
 }
 
-int Gap__Bec__beTextureCtrlInfoList__vfunc_22(void)
+igMetaObject *Gap__Bec__beTextureCtrlInfoList__vfunc_22(void)
 {
-    return ((int *)g_beTextureCtrlInfo_metaObject)[0];
+    return g_beTextureCtrlInfo_metaObject[0];
 }
 
-int Gap__Bec__beTimerDataList__vfunc_22(void)
+igMetaObject *Gap__Bec__beTimerDataList__vfunc_22(void)
 {
-    return ((int *)g_beTimerData_metaObject)[0];
+    return g_beTimerData_metaObject[0];
 }
 
-int Gap__Bec__beWaterMoveDataList__vfunc_22(void)
+igMetaObject *Gap__Bec__beWaterMoveDataList__vfunc_22(void)
 {
-    return ((int *)g_beWaterMoveData_metaObject)[0];
+    return g_beWaterMoveData_metaObject[0];
 }
 
-int Gap__Bec__beWeaponAttachDataList__vfunc_22(void)
+igMetaObject *Gap__Bec__beWeaponAttachDataList__vfunc_22(void)
 {
-    return ((int *)g_beWeaponAttachData_metaObject)[0];
+    return g_beWeaponAttachData_metaObject[0];
 }
 
 int Gap__Bec__igAppearanceListList__vfunc_22(void)
@@ -1581,48 +1581,48 @@ int Gap__Bec__igAppearanceListList__vfunc_22(void)
     return g_igAppearanceList_metaObject[0];
 }
 
-int Gap__Bec__beBaseInfoManagerList__vfunc_22(void)
+igMetaObject *Gap__Bec__beBaseInfoManagerList__vfunc_22(void)
 {
-    return ((int *)g_beBaseInfoManager_metaObject)[0];
+    return g_beBaseInfoManager_metaObject[0];
 }
 
-int Gap__Bec__beMessengerWorkList__vfunc_22(void)
+igMetaObject *Gap__Bec__beMessengerWorkList__vfunc_22(void)
 {
-    return ((int *)g_beMessengerWork_metaObject)[0];
+    return g_beMessengerWork_metaObject[0];
 }
 
-int Gap__Bec__beMessengerGroupList__vfunc_22(void)
+igMetaObject *Gap__Bec__beMessengerGroupList__vfunc_22(void)
 {
-    return ((int *)g_beMessengerGroup_metaObject)[0];
+    return g_beMessengerGroup_metaObject[0];
 }
 
-int Gap__Bec__beMessengerDelayList__vfunc_22(void)
+igMetaObject *Gap__Bec__beMessengerDelayList__vfunc_22(void)
 {
-    return ((int *)g_beMessengerDelay_metaObject)[0];
+    return g_beMessengerDelay_metaObject[0];
 }
 
-int Gap__Bec__beMessengerArgDataList__vfunc_22(void)
+igMetaObject *Gap__Bec__beMessengerArgDataList__vfunc_22(void)
 {
-    return ((int *)g_beMessengerArgData_metaObject)[0];
+    return g_beMessengerArgData_metaObject[0];
 }
 
-int Gap__Bec__beWeaponSeqDataList__vfunc_22(void)
+igMetaObject *Gap__Bec__beWeaponSeqDataList__vfunc_22(void)
 {
-    return ((int *)g_beWeaponSeqData_metaObject)[0];
+    return g_beWeaponSeqData_metaObject[0];
 }
 
-int Gap__Bec__beBaseInfoRamList__vfunc_22(void)
+igMetaObject *Gap__Bec__beBaseInfoRamList__vfunc_22(void)
 {
-    return ((int *)g_beBaseInfoRam_metaObject)[0];
+    return g_beBaseInfoRam_metaObject[0];
 }
 
-int Gap__Bec__beBaseInfoList__vfunc_22(void)
+igMetaObject *Gap__Bec__beBaseInfoList__vfunc_22(void)
 {
-    return ((int *)g_beBaseInfo_metaObject)[0];
+    return g_beBaseInfo_metaObject[0];
 }
 
-int Gap__Bec__beBaseInfoDataList__vfunc_22(void)
+igMetaObject *Gap__Bec__beBaseInfoDataList__vfunc_22(void)
 {
-    return ((int *)g_beBaseInfoData_metaObject)[0];
+    return g_beBaseInfoData_metaObject[0];
 }
 

@@ -12,15 +12,15 @@ extern "C" int Gap__Bec__beNDMWLogo__vfunc_20(void);
 extern "C" int beMessenger_RegisterReceiverFromInfo(int, int, int *);
 extern "C" int FUN_003c22e0(...);
 extern "C" int beMessenger_ResolveEnumValue(int, int, int);
-extern "C" int DAT_00587d08[4];
-extern "C" int DAT_00588518[4];
+extern "C" int g_beSystem_metaObject[4];
+extern "C" int g_bePadManager_metaObject[4];
 extern "C" void Gap__Bec__beNDMWLogo__vfunc_32(beNDMWLogo *arg0);
 struct Ref { int pad; union { int w; struct { unsigned cnt:23; unsigned f:9; } b; } u; };
 extern "C" void **FUN_0044a7f0(struct Ref **self, short flag);
 extern "C" int DAT_0051dac0[4];
-extern "C" int DAT_00589208[4];
-extern "C" int DAT_0058a1e0[4];
-extern "C" int DAT_0058a220[4];
+extern "C" int g_beLua_metaObject[4];
+extern "C" int g_mdlEntity[4];
+extern "C" int g_txtCallNo[4];
 extern "C" void FUN_0044a870(beNDMWLogo *arg0, int arg1);
 typedef struct O { char p0[20]; int m; } O;
 extern "C" char DAT_0051dad0[];
@@ -43,10 +43,10 @@ extern "C" int Gap__Bec__beNDMWLogo__vfunc_34(beNDMWLogo *arg0, beBaseInfoRam *a
 
 void Gap__Bec__beNDMWLogo__vfunc_32(beNDMWLogo *arg0) {
     if (arg0->_padManager == 0) {
-        arg0->_padManager = FUN_00236f80(arg0->_insight, DAT_00588518[0]);
+        arg0->_padManager = FUN_00236f80(arg0->_insight, g_bePadManager_metaObject[0]);
     }
     if (arg0->_system_ == 0) {
-        arg0->_system_ = FUN_00236f80(arg0->_insight, DAT_00587d08[0]);
+        arg0->_system_ = FUN_00236f80(arg0->_insight, g_beSystem_metaObject[0]);
     }
 }
 
@@ -66,9 +66,9 @@ void **FUN_0044a7f0(struct Ref **self, short flag) {
 void FUN_0044a870(beNDMWLogo *arg0, int arg1) {
     int temp_v0;
 
-    temp_v0 = FUN_00236f80(arg0->_insight, DAT_00589208[0]);
-    DAT_0058a220[0] = arg1;
-    DAT_0058a1e0[0] = 0;
+    temp_v0 = FUN_00236f80(arg0->_insight, g_beLua_metaObject[0]);
+    g_txtCallNo[0] = arg1;
+    g_mdlEntity[0] = 0;
     beLua__RunNamedChunk(temp_v0, &DAT_0051dac0[0], 0);
 }
 

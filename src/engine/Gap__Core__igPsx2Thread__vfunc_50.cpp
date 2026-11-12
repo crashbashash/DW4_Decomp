@@ -50,7 +50,7 @@ int memset(...);
 void igObject_Destroy(...);
 extern Result g_statusSucceeded;
 extern Result g_allocatorFailureStatus;
-extern int DAT_0055c870[4];
+extern int _gp[4];
 extern unsigned char GPR_00554ddc;
 extern ThreadMgr *DAT_005871d0[4];
 

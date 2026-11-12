@@ -1,9 +1,9 @@
 void *FUN_0035e9c0(void) {
-    struct G *g = DAT_00589450[0];
-    if (!g || ((g->f & 4) != 0) == false) {
+    igMetaObject *g = g_beHitLandDelivInfo_metaObject[0];
+    if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_0035ea80();
     }
-    return DAT_00589450[0];
+    return g_beHitLandDelivInfo_metaObject[0];
 }
 
 int beHitLandDelivInfo_GetVTable(void) {
@@ -14,7 +14,7 @@ int beHitLandDelivInfo_GetVTable(void) {
     o.f20 = 0;
     o.f24 = 0;
     o.vt = &DAT_005361c0[0];
-    r = *(int *)((char *)&o + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+    r = *(int *)((char *)&o + *(int *)((char *)(g_objectSystem[0]) + 916));
     o.vt = &DAT_005361c0[0];
     
     FUN_0033ec80((struct S_33ec80 *)&o, (short)0);

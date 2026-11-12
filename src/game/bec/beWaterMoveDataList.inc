@@ -1,19 +1,19 @@
-int FUN_00340720(void) {
-    if (((int *)DAT_00587bb8)[0] == 0) {
-        ((int *)DAT_00587bb8)[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(DAT_00587040[0]));
+igMetaObject *FUN_00340720(void) {
+    if (g_beWaterMoveDataList_metaObject[0] == 0) {
+        g_beWaterMoveDataList_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
     }
-    return ((int *)DAT_00587bb8)[0];
+    return g_beWaterMoveDataList_metaObject[0];
 }
 
 void *FUN_00340770(void) {
     bool ok;
-    if (DAT_00587bb8[0] == 0) goto make;
-    ok = !!(DAT_00587bb8[0]->f & 4);
+    if (g_beWaterMoveDataList_metaObject[0] == 0) goto make;
+    ok = !!(g_beWaterMoveDataList_metaObject[0]->_validity & 4);
     if (ok != false) goto done;
 make:
     FUN_00340800();
 done:;
-    return DAT_00587bb8[0];
+    return g_beWaterMoveDataList_metaObject[0];
 }
 
 int beWaterMoveDataList_GetVTable(void) {
@@ -21,7 +21,7 @@ int beWaterMoveDataList_GetVTable(void) {
 
     igObject_InitHeader(&obj);
     obj.vt = &DAT_005399a0[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 
 void FUN_00340800(void)

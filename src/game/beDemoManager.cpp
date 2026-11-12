@@ -1,7 +1,7 @@
 #include "dw4/reflected.h"
 #include "dw4/igSmartPointer.h"
-#define POOL(v) if (DAT_00586f20[0] == 0) { v = FUN_002eb010(16); if (v != 0) v = StringPool_Construct(v); DAT_00586f20[0] = v; }
-#define SETSTR(fld, arg) { int *nw; beDemoKeepMes *c = e.p; POOL(v) nw = (int *)((void *)StringPool_Intern(DAT_00586f20[0], arg)); old = (int *)c->fld; if (old != 0) { hd = old - 2; r = old[-1] - 1; old[-1] = r; if (r == 0) StringChunk_ReleaseHeader(*hd, hd); } c->fld = (int)nw; }
+#define POOL(v) if (g_stringPool[0] == 0) { v = FUN_002eb010(16); if (v != 0) v = StringPool_Construct(v); g_stringPool[0] = v; }
+#define SETSTR(fld, arg) { int *nw; beDemoKeepMes *c = e.p; POOL(v) nw = (int *)((void *)StringPool_Intern(g_stringPool[0], arg)); old = (int *)c->fld; if (old != 0) { hd = old - 2; r = old[-1] - 1; old[-1] = r; if (r == 0) StringChunk_ReleaseHeader(*hd, hd); } c->fld = (int)nw; }
 #define WORK(a, i) (((beDemoManagerWork **)((beDemoManagerWorkList *)(a)->_activeDataList)->_data)[i])
 #define ITEMO(a, i, o) (*((beDemoKeepMes **)((char *)((beDemoKeepMesList *)WORK(a, i)->_keepMesList)->_data + (o))))
 #define ITEM(a, i, j) (((beDemoKeepMes **)((beDemoKeepMesList *)WORK(a, i)->_keepMesList)->_data)[j])
@@ -30,11 +30,11 @@ extern "C" int beLua__RunNamedChunk(...);
 extern "C" int List_RemoveWordAt(...);
 extern "C" void FUN_0037e110(beDemoManager *arg0, int arg1, int arg2, int arg3, int arg4, int arg5);
 extern "C" beDemoKeepMes * FUN_00363c20(...);
-extern "C" int DAT_00587110[4];
+extern "C" int g_defaultAllocatorSelector[4];
 extern "C" unsigned char GPR_00554c14;
 extern "C" void FUN_0037e180(beDemoManager *a0);
 extern "C" void FUN_0037e2d0(beDemoManager *a0, int ramNo);
-extern "C" int DAT_00586f20[4];
+extern "C" int g_stringPool[4];
 extern "C" void FUN_0037e3a0(beDemoManager *self, int a1, int a2, int a3, int t0, int t1, int t2, long long t3);
 extern "C" beDemoManagerWork * FUN_003637c0(...);
 extern "C" void FUN_0037e6e0(beDemoManager *arg0, int arg1);
@@ -44,13 +44,13 @@ extern "C" void FUN_00236be0(int, beDemoManager *);
 extern "C" void FUN_00236c40(int, beDemoManager *);
 extern "C" void Gap__Bec__beDemoManager__vfunc_21(beDemoManager *self, int unusedArg);
 extern "C" void Gap__Bec__beDemoManager__vfunc_22(beDemoManager *self, int unusedArg);
-extern "C" int DAT_00588f38[4];
-extern "C" int DAT_00589208[4];
+extern "C" int g_beMessenger_metaObject[4];
+extern "C" int g_beLua_metaObject[4];
 extern "C" void Gap__Bec__beDemoManager__vfunc_23(beDemoManager *arg0);
 extern "C" int g_beDemoManager_metaObject[4];
 extern "C" int List_Reserve(igObjectList *, int, int);
 extern "C" void Gap__Bec__beDemoManager__vfunc_26(beDemoManager *arg0);
-extern "C" int DAT_0058a1e0[4];
+extern "C" int g_mdlEntity[4];
 struct VO {
     virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3();
     virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7();
@@ -87,7 +87,7 @@ void FUN_0037e180(beDemoManager *a0) {
         {
             l = (beDemoManagerWork *)a0->_buildData;
             al = igObject_GetAllocator(a0);
-            al = GPR_00554c14 ? al : Memory_GetAllocatorBySelector(DAT_00587110[0]);
+            al = GPR_00554c14 ? al : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
             igSmartPointer<beDemoKeepMes> mes(FUN_00363c20(al));
             mes.p->_kind = 5;
             ObjectList_AppendRetained(l->_keepMesList, mes.p);
@@ -105,7 +105,7 @@ void FUN_0037e2d0(beDemoManager *a0, int ramNo) {
     l = (beDemoManagerWork *)a0->_buildData;
     if ((l != 0) && (a0->_turningOK != 0)) {
         al = igObject_GetAllocator(a0);
-        al = GPR_00554c14 ? al : Memory_GetAllocatorBySelector(DAT_00587110[0]);
+        al = GPR_00554c14 ? al : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
         igSmartPointer<beDemoKeepMes> mes(FUN_00363c20(al));
         mes.p->_kind = 4;
         mes.p->_ramNo = ramNo;
@@ -122,7 +122,7 @@ void FUN_0037e3a0(beDemoManager *self, int a1, int a2, int a3, int t0, int t1, i
     int r;
     if (self->_buildData == 0) {
         v = igObject_GetAllocator(self);
-        v = (GPR_00554c14 != 0) ? v : Memory_GetAllocatorBySelector(DAT_00587110[0]);
+        v = (GPR_00554c14 != 0) ? v : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
         q = (beDemoManagerWork *)self->_buildData;
         if (q != 0) {
             q->_refCount = q->_refCount - 1;
@@ -133,7 +133,7 @@ void FUN_0037e3a0(beDemoManager *self, int a1, int a2, int a3, int t0, int t1, i
     }
     q2 = (beDemoManagerWork *)self->_buildData;
     v = igObject_GetAllocator(self);
-    v = (GPR_00554c14 != 0) ? v : Memory_GetAllocatorBySelector(DAT_00587110[0]);
+    v = (GPR_00554c14 != 0) ? v : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
     /* matching construct: the holder is declared after the allocation call returns, so retail's protected range starts after the allocator and not at it */
     beDemoKeepMes *k = (beDemoKeepMes *)((void *)FUN_00363c20(v));
     igSmartPointer<beDemoKeepMes> e(k);
@@ -168,7 +168,7 @@ void FUN_0037e6e0(beDemoManager *arg0, int arg1) {
         if (GPR_00554c14 != 0) {
             var_v0_3 = (int)var_v0_3;
         } else {
-            var_v0_3 = Memory_GetAllocatorBySelector(DAT_00587110[0]);
+            var_v0_3 = Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
         }
         old = (beDemoManagerWork *)arg0->_buildData;
         if (old != 0) {
@@ -185,19 +185,19 @@ void FUN_0037e6e0(beDemoManager *arg0, int arg1) {
     if (GPR_00554c14 != 0) {
         var_v0 = (int)var_v0;
     } else {
-        var_v0 = Memory_GetAllocatorBySelector(DAT_00587110[0]);
+        var_v0 = Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
     }
     igSmartPointer<beDemoKeepMes> mes(FUN_00363c20(var_v0));
     mes.p->_kind = 7;
     s1 = mes.p;
-    if (DAT_00586f20[0] == 0) {
+    if (g_stringPool[0] == 0) {
         var_v0_2 = FUN_002eb010(0x10);
         if (var_v0_2 != 0) {
             var_v0_2 = StringPool_Construct(var_v0_2);
         }
-        DAT_00586f20[0] = var_v0_2;
+        g_stringPool[0] = var_v0_2;
     }
-    key = (int)StringPool_Intern(DAT_00586f20[0], key);
+    key = (int)StringPool_Intern(g_stringPool[0], key);
     temp_v1 = (int *)s1->_mesParam;
     if (temp_v1 != 0) {
         temp_a1 = temp_v1 - 2;
@@ -232,7 +232,7 @@ void FUN_0037e890(beDemoManager *arg0, int arg1, int arg2) {
         if (GPR_00554c14 != 0) {
             var_v0_3 = (int)var_v0_3;
         } else {
-            var_v0_3 = Memory_GetAllocatorBySelector(DAT_00587110[0]);
+            var_v0_3 = Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
         }
         old = (beDemoManagerWork *)arg0->_buildData;
         if (old != 0) {
@@ -249,19 +249,19 @@ void FUN_0037e890(beDemoManager *arg0, int arg1, int arg2) {
     if (GPR_00554c14 != 0) {
         var_v0 = (int)var_v0;
     } else {
-        var_v0 = Memory_GetAllocatorBySelector(DAT_00587110[0]);
+        var_v0 = Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
     }
     igSmartPointer<beDemoKeepMes> mes(FUN_00363c20(var_v0));
     mes.p->_kind = 6;
     s1 = mes.p;
-    if (DAT_00586f20[0] == 0) {
+    if (g_stringPool[0] == 0) {
         var_v0_2 = FUN_002eb010(0x10);
         if (var_v0_2 != 0) {
             var_v0_2 = StringPool_Construct(var_v0_2);
         }
-        DAT_00586f20[0] = var_v0_2;
+        g_stringPool[0] = var_v0_2;
     }
-    key = (int)StringPool_Intern(DAT_00586f20[0], key);
+    key = (int)StringPool_Intern(g_stringPool[0], key);
     temp_v1 = (int *)s1->_mesParam;
     if (temp_v1 != 0) {
         temp_a1 = temp_v1 - 2;
@@ -313,8 +313,8 @@ void Gap__Bec__beDemoManager__vfunc_22(beDemoManager *self, int unusedArg)
 }
 
 void Gap__Bec__beDemoManager__vfunc_23(beDemoManager *arg0) {
-    arg0->_messenger = FUN_00236f80(arg0->_insight, DAT_00588f38[0]);
-    arg0->_lua = FUN_00236f80(arg0->_insight, DAT_00589208[0]);
+    arg0->_messenger = FUN_00236f80(arg0->_insight, g_beMessenger_metaObject[0]);
+    arg0->_lua = FUN_00236f80(arg0->_insight, g_beLua_metaObject[0]);
 }
 
 void Gap__Bec__beDemoManager__vfunc_24(void)
@@ -440,7 +440,7 @@ void Gap__Bec__beDemoManager__vfunc_27(beDemoManager *arg0) {
                 }
                 break;
             case 7:
-                DAT_0058a1e0[0] = 0;
+                g_mdlEntity[0] = 0;
                 beLua__RunNamedChunk(arg0->_lua, item->_mesParam, 0);
                 break;
             }

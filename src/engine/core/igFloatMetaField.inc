@@ -20,8 +20,8 @@ int igFloatMetaField_GetVTable(void) {
 
     igMetaField_Init((igMetaField *)&o);
     o.vt = &DAT_0052ff50[0];
-    r = *(int *)((char *)&o + *(int *)((char *)(((void * *)DAT_00586dc8)[0]) + 916));
-    o.vt = &DAT_0052f230[0];
+    r = *(int *)((char *)&o + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
+    o.vt = &g_igMetaField_vtable[0];
     if (&o.str != 0) {
         temp_v1 = o.str;
         if (temp_v1 != 0) {
@@ -66,7 +66,7 @@ void FUN_002c47a0(void) {
     void *temp_s0;
 
     if (DAT_00586380[0] == 0) {
-        DAT_00586380[0] = (void *)(((void *)igMetaObject_CreateInstance((CreateMeta *)DAT_00586378[0], (MemoryPool *)(((int)Memory_GetAllocatorBySelector(DAT_00587040[0]))))));
+        DAT_00586380[0] = (void *)(((void *)igMetaObject_CreateInstance((CreateMeta *)g_igFloatMetaField_metaObject[0], (MemoryPool *)(((int)Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]))))));
         temp_s0 = (void *)(DAT_00586380[0]);
         if (temp_s0 != 0) {
             MetaRefList_AppendRetained((PointerList *)(((void *)FUN_002fc250())), (RefHeader *)temp_s0);

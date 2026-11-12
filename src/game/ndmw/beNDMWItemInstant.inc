@@ -3,9 +3,9 @@ void FUN_003c83c0(int arg0) {
     igMetaObject_CreateInstance(*(int *)0x58BF28, arg0);
 }
 
-SFUN_003c8400 *beNDMWItemInstant_GetReadyMetaObject(void) {
-    if (DAT_0058bf28[0] == 0 || !DAT_0058bf28[0]->ok()) FUN_003c8490();
-    return DAT_0058bf28[0];
+igMetaObject *beNDMWItemInstant_GetReadyMetaObject(void) {
+    if (g_beNDMWItemInstant_metaObject[0] == 0 || !isValid(g_beNDMWItemInstant_metaObject[0])) FUN_003c8490();
+    return g_beNDMWItemInstant_metaObject[0];
 }
 
 int beNDMWItemInstant_GetVTable(void) {
@@ -13,7 +13,7 @@ int beNDMWItemInstant_GetVTable(void) {
 
     igObject_InitHeader(&obj);
     obj.vt = &DAT_00540730[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 
 void FUN_003c8490(void)
@@ -47,7 +47,7 @@ void beNDMWItemInstant_InitFields(void) {
     int temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)((int *)DAT_0058bf28)[0];
+    temp_s0 = (void *)g_beNDMWItemInstant_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_004cc0a8[0], 1);
     igMetaObject_NameFields(temp_s0, &DAT_004cc0b0[0], &DAT_004cc0b8[0], &DAT_004cc0c0[0], temp_s1);

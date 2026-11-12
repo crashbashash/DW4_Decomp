@@ -5,11 +5,11 @@ void FUN_003b3900(int arg0) {
 
 igMetaObject *FUN_003b3940(void)
 {
-    igMetaObject *g = DAT_0058ab60[0];
+    igMetaObject *g = g_beNDMWStatusTitle02_metaObject[0];
     bool t;
     if (!g || (t = g->_validity & 4) == 0)
         FUN_003b3a10();
-    return DAT_0058ab60[0];
+    return g_beNDMWStatusTitle02_metaObject[0];
 }
 
 int beNDMWStatusTitle02_GetVTable(void) {
@@ -25,7 +25,7 @@ int beNDMWStatusTitle02_GetVTable(void) {
     o.f[17] = 0;
     o.f[18] = 0;
     o.vt = DAT_0053f640;
-    r = *(int *)((char *)&o + *(int *)(((char * *)DAT_00586dc8)[0] + 916));
+    r = *(int *)((char *)&o + *(int *)(((char * *)g_objectSystem)[0] + 916));
     o.vt = DAT_0053f640;
     FUN_003b3030((int **)&o, (long long)0);
     return r;

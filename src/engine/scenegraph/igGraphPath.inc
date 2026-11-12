@@ -3,11 +3,11 @@ int FUN_0019f630(int arg0) {
     return igMetaObject_CreateInstance(*(int *)0x561A10, arg0);
 }
 
-int FUN_0019f670(void) {
-    if (DAT_00561a10[0] == 0) {
-        DAT_00561a10[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(DAT_00587040[0]));
+igMetaObject *FUN_0019f670(void) {
+    if (g_igGraphPath_metaObject[0] == 0) {
+        g_igGraphPath_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
     }
-    return DAT_00561a10[0];
+    return g_igGraphPath_metaObject[0];
 }
 
 igMetaObject *igGraphPath_GetMetaObject(void)
@@ -28,7 +28,7 @@ int igGraphPath_GetVTable(void) {
     ps = &o.ref;
     o.vt = &DAT_0052a810[0];
     *ps = 0;
-    temp_s0 = *(int *)((char *)&o + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+    temp_s0 = *(int *)((char *)&o + *(int *)((char *)(g_objectSystem[0]) + 916));
     o.vt = &DAT_0052a810[0];
     if (ps != 0) {
         temp_a0 = *ps;
@@ -75,11 +75,11 @@ void igGraphPath_InitFields(void) {
     void *temp_s0;
     struct { int a; int b; int c; } z;
 
-    temp_s0 = (void *)DAT_00561a10[0];
+    temp_s0 = (void *)g_igGraphPath_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_0048c010[0], 3);
     temp_s1 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s2)));
-    *(int *)((char *)(temp_s1) + 56) = FUN_0019cbe0();
+    *(int *)((char *)(temp_s1) + 56) = (int)FUN_0019cbe0();
     *(char *)((char *)(temp_s1) + 36) = 3;
     *(char *)((char *)(temp_s1) + 52) = 1;
     temp_a0 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1)));

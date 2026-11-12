@@ -1,10 +1,10 @@
 igMetaObject *FUN_0035cd40(void)
 {
-    igMetaObject *g = DAT_005892b0[0];
+    igMetaObject *g = g_beLOA_metaObject[0];
     bool t;
     if (!g || (t = g->_validity & 4) == 0)
         FUN_0035ce60();
-    return DAT_005892b0[0];
+    return g_beLOA_metaObject[0];
 }
 
 int beLOA_GetVTable(void) {
@@ -27,7 +27,7 @@ int beLOA_GetVTable(void) {
     p18 = &o.f[20];
     *p18 = 0;
     o.f[21] = 0;
-    r = *(int *)((char *)&o + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+    r = *(int *)((char *)&o + *(int *)((char *)(g_objectSystem[0]) + 916));
     o.vt = &DAT_005364a0[0];
     FUN_0019ab10(&o.f[21], -1);
     FUN_001ab380(p18, -1);
@@ -74,7 +74,7 @@ void beLOA_InitFields(void) {
     void *temp_s2_4;
     void *temp_s1;
 
-    temp_s1 = (void *)((int *)DAT_005892b0)[0];
+    temp_s1 = (void *)g_beLOA_metaObject[0];
     temp_s0 = igMetaObject_GetFieldCount(temp_s1);
     igMetaObject_CreateFields(temp_s1, &DAT_004c6470[0], 0xA);
     temp_a0 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 5));

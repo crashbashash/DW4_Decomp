@@ -1,9 +1,9 @@
 igMetaObject *FUN_00198960(void)
 {
-    igMetaObject *g = ((igMetaObject * *)DAT_005614d8)[0];
+    igMetaObject *g = ((igMetaObject * *)g_igSkeletonBoneInfo_metaObject)[0];
     if (!g || ((g->_validity & 4) != 0) == false)
         FUN_00198a40();
-    return ((igMetaObject * *)DAT_005614d8)[0];
+    return ((igMetaObject * *)g_igSkeletonBoneInfo_metaObject)[0];
 }
 
 int igSkeletonBoneInfo_GetVTable(void) {
@@ -18,7 +18,7 @@ int igSkeletonBoneInfo_GetVTable(void) {
     *(int *)ps = 0;
     u.vt = (int)&DAT_00524950[0];
     u.vt = (int)&DAT_0052b270[0];
-    temp_s0 = *(int *)&u.b[*(int *)((char *)(DAT_00586dc8[0]) + 916)];
+    temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.vt = (int)&DAT_00524950[0];
     if (ps != 0) {
         temp_v1 = *(int **)ps;
@@ -64,7 +64,7 @@ void igSkeletonBoneInfo_InitFields(void) {
     int temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)DAT_005614d8[0];
+    temp_s0 = (void *)g_igSkeletonBoneInfo_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_0048b5d8[0], 3);
     FUN_002ea4b0(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 1), -1);

@@ -46,7 +46,7 @@ extern "C" int FUN_00448050(...);
 extern "C" int ObjectList_AppendRetained(...);
 extern "C" int DAT_004cfb40[4];
 extern "C" int DAT_004cfb44[4];
-extern "C" float DAT_004e1058[4];
+extern "C" float g_vec3Zero[4];
 extern "C" float DAT_004e105c[4];
 extern "C" float DAT_004e1060[4];
 extern "C" int DAT_0051ce80[4];
@@ -75,14 +75,14 @@ extern "C" igObject *FUN_003c8970(...);
 extern "C" Prop * igProperty_FindByName(...);
 extern "C" Rec *igProperty_GetRecord(...);
 extern "C" char *DAT_004cfc10[10];
-extern "C" char DAT_004e0858[];
+extern "C" char emptyString[];
 extern "C" int DAT_0051cf58[4];
 extern "C" int DAT_0051cf60[4];
 extern "C" int DAT_0051cf68[4];
 extern "C" int DAT_0051cf78[4];
-extern "C" int DAT_00585be0[4];
-extern "C" int DAT_00587108[4];
-extern "C" int DAT_00587110[4];
+extern "C" int g_propertyNameField[4];
+extern "C" int g_ndmwAllocatorSelector[4];
+extern "C" int g_defaultAllocatorSelector[4];
 extern "C" unsigned char GPR_00554c14;
 struct ObjectRef { igObject *p; ObjectRef(igObject *o) : p(o) {} ~ObjectRef() HOLDER_BODY };
 struct ItemRef { igObject *p; ItemRef(igObject *o) : p(o) {} ~ItemRef() HOLDER_BODY };
@@ -150,7 +150,7 @@ void FUN_004412c0(struct A0 *arg0, int arg1, int arg2) {
     beMessenger_AppendString(arg0->f20, *(int *)((char *)DAT_004cfb40 + temp_s1));
     beMessenger_AppendString(arg0->f20, *(int *)((char *)DAT_004cfb44 + temp_s1));
     beMessenger_AppendFloat(arg0->f20, 1.0f);
-    sp30[0] = DAT_004e1058[0];
+    sp30[0] = g_vec3Zero[0];
     sp30[1] = DAT_004e105c[0];
     sp30[2] = DAT_004e1060[0];
     beMessenger_AppendVec3(arg0->f20, sp30);
@@ -219,11 +219,11 @@ void Gap__Bec__beNDMWMdlItem__vfunc_36(beNDMWMdlItem *self, beBaseInfoRam *info)
     int roll;
 
     if (info->_dataList == 0) {
-        ALLOC_OF(info, alloc, DAT_00587110)
+        ALLOC_OF(info, alloc, g_defaultAllocatorSelector)
         Store::assign(info->_dataList, ObjectRef(beBaseInfoDataList_Create(alloc)).p);
     }
-    prop = igProperty_FindByName((void *)info->_dataList, DAT_00585be0[0], &DAT_0051cf58[0]);
-    ALLOC(alloc, DAT_00587110)
+    prop = igProperty_FindByName((void *)info->_dataList, g_propertyNameField[0], &DAT_0051cf58[0]);
+    ALLOC(alloc, g_defaultAllocatorSelector)
     {
     igSmartPointer<beNDMWMdlItemInfoWork> work((beNDMWMdlItemInfoWork *)FUN_003c13f0(alloc));
     held = (igObject *)work.p;
@@ -237,7 +237,7 @@ void Gap__Bec__beNDMWMdlItem__vfunc_36(beNDMWMdlItem *self, beBaseInfoRam *info)
     i = 0;
     do {
         name = parent->_name;
-        name = name != 0 ? name : DAT_004e0858;
+        name = name != 0 ? name : emptyString;
         if (strcmp(name, DAT_004cfc10[i]) == 0) {
             work.p->_kind = i;
             break;
@@ -254,28 +254,28 @@ void Gap__Bec__beNDMWMdlItem__vfunc_36(beNDMWMdlItem *self, beBaseInfoRam *info)
     }
     switch ((unsigned int)work.p->_dbId) {
     case 0: {
-        ALLOC(alloc, DAT_00587108)
+        ALLOC(alloc, g_ndmwAllocatorSelector)
         ItemRef h(FUN_003c85b0(alloc));
         { beNDMWMdlItemInfoWork *w = work.p; FUN_00448710(h.p, w->_recNo); }
         storeItem(work, h);
         break;
     }
     case 1: {
-        ALLOC(alloc, DAT_00587108)
+        ALLOC(alloc, g_ndmwAllocatorSelector)
         ItemRefB h(FUN_003c83c0(alloc));
         { beNDMWMdlItemInfoWork *w = work.p; FUN_00448ad0(h.p, w->_recNo); }
         storeItem(work, h);
         break;
     }
     case 2: {
-        ALLOC(alloc, DAT_00587108)
+        ALLOC(alloc, g_ndmwAllocatorSelector)
         ItemRefC h(FUN_003c8240(alloc));
         { beNDMWMdlItemInfoWork *w = work.p; FUN_00448f00(h.p, w->_recNo); }
         storeItem(work, h);
         break;
     }
     case 6: {
-        ALLOC(alloc, DAT_00587108)
+        ALLOC(alloc, g_ndmwAllocatorSelector)
         ItemRefK<4> h(FUN_003c87f0(alloc));
         { beNDMWMdlItemInfoWork *w = work.p; FUN_00448660(h.p, w->_recNo); }
         storeItem(work, h);
@@ -289,21 +289,21 @@ void Gap__Bec__beNDMWMdlItem__vfunc_36(beNDMWMdlItem *self, beBaseInfoRam *info)
         roll = igProperty_GetRecord(beMessenger_GetObject(self->_messenger, 0), &DAT_0051cf78[0])->f12;
         switch ((unsigned int)work.p->_dbId) {
         case 3: {
-            ALLOC(alloc, DAT_00587108)
+            ALLOC(alloc, g_ndmwAllocatorSelector)
             ItemRefK<1> h(FUN_003c8c90(alloc));
             { beNDMWMdlItemInfoWork *w = work.p; FUN_004482e0(h.p, w->_recNo, self, roll); }
             storeItem(work, h);
             break;
         }
         case 4: {
-            ALLOC(alloc, DAT_00587108)
+            ALLOC(alloc, g_ndmwAllocatorSelector)
             ItemRefK<2> h(FUN_003c8b00(alloc));
             { beNDMWMdlItemInfoWork *w = work.p; FUN_00448430(h.p, w->_recNo, self, roll); }
             storeItem(work, h);
             break;
         }
         case 5: {
-            ALLOC(alloc, DAT_00587108)
+            ALLOC(alloc, g_ndmwAllocatorSelector)
             ItemRefK<3> h(FUN_003c8970(alloc));
             { beNDMWMdlItemInfoWork *w = work.p; FUN_00448580(h.p, w->_recNo, self, roll); }
             storeItem(work, h);
@@ -329,7 +329,7 @@ void Gap__Bec__beNDMWMdlItem__vfunc_43(beNDMWMdlItem *arg0, beBaseInfoRam *arg1)
         if (GPR_00554c14 != 0) {
             a = alloc;
         } else {
-            a = ((int)Memory_GetAllocatorBySelector(DAT_00587110[0]));
+            a = ((int)Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]));
         }
         ObjectRef created(beBaseInfoDataList_Create(a));
         igObject *s0 = created.p;
@@ -339,7 +339,7 @@ void Gap__Bec__beNDMWMdlItem__vfunc_43(beNDMWMdlItem *arg0, beBaseInfoRam *arg1)
         RefRelease::go((igObject *)arg1->_dataList);
         arg1->_dataList = (int)s0;
     }
-    s3 = ((PropertyEntry *)igProperty_FindByName(arg1->_dataList, DAT_00585be0[0], DAT_0051cf58));
+    s3 = ((PropertyEntry *)igProperty_FindByName(arg1->_dataList, g_propertyNameField[0], DAT_0051cf58));
     q = s3->q;
     if (q->f256 != 0) {
         q->f256 = 0;
@@ -375,11 +375,11 @@ static inline void adoptDataList(beBaseInfoRam *ram, igObject *created) {
 void Gap__Bec__beNDMWMdlItem__vfunc_44(beNDMWMdlItem *self, beBaseInfoRam *ram) {
     if (ram->_dataList == 0) {
         void *a = igObject_GetAllocator(ram);
-        void *al = GPR_00554c14 != 0 ? a : Memory_GetAllocatorBySelector(DAT_00587110[0]);
+        void *al = GPR_00554c14 != 0 ? a : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
         igObject *created = (igObject *)((void *)beBaseInfoDataList_Create(al));
         adoptDataList(ram, created);
     }
-    beModelCtrlInfoRamData *one = ((beModelCtrlInfoRamData *)igProperty_FindByName(ram->_dataList, DAT_00585be0[0], ((char *)DAT_0051cf58)));
+    beModelCtrlInfoRamData *one = ((beModelCtrlInfoRamData *)igProperty_FindByName(ram->_dataList, g_propertyNameField[0], ((char *)DAT_0051cf58)));
     if (strcmp((const char *)((beModelCtrlInfoWork *)one->_work)->_seqCodeName, DAT_0051d0b0) == 0)
         ((MdlItemVt *)self)->exit(ram);
 }
@@ -397,7 +397,7 @@ void Gap__Bec__beNDMWMdlItem__vfunc_45(MdlItemVirtual *arg0, beNDMWGameRamInfoRa
         if (GPR_00554c14 != 0) {
             a = alloc;
         } else {
-            a = ((int)Memory_GetAllocatorBySelector(DAT_00587110[0]));
+            a = ((int)Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]));
         }
         ObjectRef ref(beBaseInfoDataList_Create(a));
         s0 = ref.p;
@@ -407,7 +407,7 @@ void Gap__Bec__beNDMWMdlItem__vfunc_45(MdlItemVirtual *arg0, beNDMWGameRamInfoRa
         ReleaseRefInline::go((igObject *)arg1->_dataList);
         arg1->_dataList = (int)s0;
     }
-    s5 = ((PropertyRecord *)igProperty_FindByName(arg1->_dataList, DAT_00585be0[0], DAT_0051cf58))->q;
+    s5 = ((PropertyRecord *)igProperty_FindByName(arg1->_dataList, g_propertyNameField[0], DAT_0051cf58))->q;
     if (beMessenger_GetBoolCount(self->_messenger) == 0 && s5->_isNamed != 0 && s5->_isDispName != 0) {
         s2 = beMessenger_GetInt(self->_messenger, 0);
         if (s2 == s5->_dispPlayerRamNo) {
@@ -470,7 +470,7 @@ void Gap__Bec__beNDMWMdlItem__vfunc_45(MdlItemVirtual *arg0, beNDMWGameRamInfoRa
                 }
                 int f8 = arg1->_ramNo;
                 beNDMWGameRamInfo *info = (beNDMWGameRamInfo *)arg1->_parentInfo;
-                int *name = info->_name ? (int *)info->_name : ((int *)DAT_004e0858);
+                int *name = info->_name ? (int *)info->_name : ((int *)emptyString);
                 beMessenger_SendNamed(self->_messenger, ((int *)DAT_0051cea8), name, f8, DAT_0051cfc8);
                 arg0->vX(arg1);
             }

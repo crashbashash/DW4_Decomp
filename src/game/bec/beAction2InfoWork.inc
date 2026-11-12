@@ -3,20 +3,20 @@ void FUN_0036c2a0(int arg0) {
     igMetaObject_CreateInstance(*(int *)0x589E98, arg0);
 }
 
-int FUN_0036c2e0(void) {
-    if (((int *)DAT_00589e98)[0] == 0) {
-        ((int *)DAT_00589e98)[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(DAT_00587040[0]));
+igMetaObject *FUN_0036c2e0(void) {
+    if (g_beAction2InfoWork_metaObject[0] == 0) {
+        g_beAction2InfoWork_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
     }
-    return ((int *)DAT_00589e98)[0];
+    return g_beAction2InfoWork_metaObject[0];
 }
 
 igMetaObject *FUN_0036c330(void)
 {
-    igMetaObject *g = DAT_00589e98[0];
+    igMetaObject *g = g_beAction2InfoWork_metaObject[0];
     bool t;
     if (!g || (t = g->_validity & 4) == 0)
         FUN_0036c4d0();
-    return DAT_00589e98[0];
+    return g_beAction2InfoWork_metaObject[0];
 }
 
 int beAction2InfoWork_GetVTable(void) {
@@ -38,7 +38,7 @@ int beAction2InfoWork_GetVTable(void) {
     p184 = &u.b[88];
     *(int *)p184 = 0;
     *(int *)&u.b[92] = 0;
-    temp_s = *(int *)&u.b[*(int *)((char *)(DAT_00586dc8[0]) + 916)];
+    temp_s = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.vt = (int)&DAT_005343b0[0];
     FUN_00239200(&u.b[92], -1);
     FUN_001d21b0(p184, -1);
@@ -102,11 +102,11 @@ void beAction2InfoWork_InitFields(void) {
     void *temp_s1_5;
     void *temp_s0;
 
-    temp_s0 = (void *)((int *)DAT_00589e98)[0];
+    temp_s0 = (void *)g_beAction2InfoWork_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_004c7ec0[0], 0x15);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = FUN_0036d9f0();
+    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_0036d9f0();
     temp_s1_2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 0x11));
     ((igObjectRefMetaField *)temp_s1_2)->_metaObject = FUN_00138f20();
     temp_s1_3 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 0x12));

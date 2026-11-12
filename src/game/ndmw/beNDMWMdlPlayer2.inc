@@ -3,19 +3,19 @@ void FUN_003bf1b0(int arg0) {
     igMetaObject_CreateInstance(*(int *)0x58B368, arg0);
 }
 
-int FUN_003bf1f0(void) {
-    if (((int *)DAT_0058b368)[0] == 0) {
-        ((int *)DAT_0058b368)[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(DAT_00587040[0]));
+igMetaObject *FUN_003bf1f0(void) {
+    if (g_beNDMWMdlPlayer2_metaObject[0] == 0) {
+        g_beNDMWMdlPlayer2_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
     }
-    return ((int *)DAT_0058b368)[0];
+    return g_beNDMWMdlPlayer2_metaObject[0];
 }
 
 void *beNDMWMdlPlayer2_ResolveMetaObject(void) {
-    struct G *g = DAT_0058b368[0];
-    if (!g || ((g->f & 4) != 0) == false) {
+    igMetaObject *g = g_beNDMWMdlPlayer2_metaObject[0];
+    if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_003bf3f0();
     }
-    return DAT_0058b368[0];
+    return g_beNDMWMdlPlayer2_metaObject[0];
 }
 
 int beNDMWMdlPlayer2_GetVTable(void) {
@@ -26,7 +26,7 @@ int beNDMWMdlPlayer2_GetVTable(void) {
     *(int *)&u.b[8] = 0;
     *(int *)&u.b[24] = 0;
     u.vt = (int)&DAT_0053e6f0[0];
-    t = *(int *)&u.b[*(int *)((char *)(DAT_00586dc8[0]) + 916)];
+    t = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.vt = (int)&DAT_0053e6f0[0];
     FUN_003bf2f0((struct NamedRefObject *)u.b, (long long)0);
     return t;
@@ -104,7 +104,7 @@ void beNDMWMdlPlayer2_GetMetaObject(void)
 }
 
 int FUN_003bf4b0(void) {
-    return DAT_00588e58[0];
+    return g_beModelCtrl_metaObject[0];
 }
 
 void beNDMWMdlPlayer2_InitFields(void) {
@@ -112,7 +112,7 @@ void beNDMWMdlPlayer2_InitFields(void) {
     void *temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)((int *)DAT_0058b368)[0];
+    temp_s0 = (void *)g_beNDMWMdlPlayer2_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_004ca7c0[0], 1);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));

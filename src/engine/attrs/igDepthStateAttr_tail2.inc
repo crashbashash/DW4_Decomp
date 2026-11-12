@@ -1,4 +1,4 @@
-int Gap__Attrs__igDepthStateAttr__vfunc_22(void) {
-    return DAT_0055f228[0];
+igMetaObject *Gap__Attrs__igDepthStateAttr__vfunc_22(void) {
+    return g_igDepthStateAttr_metaObject[0];
 }
 

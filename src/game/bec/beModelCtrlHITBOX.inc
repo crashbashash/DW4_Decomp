@@ -5,11 +5,11 @@ void FUN_00354a60(int arg0) {
 
 igMetaObject *FUN_00354aa0(void)
 {
-    igMetaObject *g = DAT_00588d20[0];
+    igMetaObject *g = g_beModelCtrlHITBOX_metaObject[0];
     bool t;
     if (!g || (t = g->_validity & 4) == 0)
         FUN_00354b80();
-    return DAT_00588d20[0];
+    return g_beModelCtrlHITBOX_metaObject[0];
 }
 
 int beModelCtrlHITBOX_GetVTable(void) {
@@ -25,7 +25,7 @@ int beModelCtrlHITBOX_GetVTable(void) {
     *(int *)ps = 0;
     u.vt = (int)&DAT_00524950[0];
     u.vt = (int)&DAT_005377d0[0];
-    temp_s0 = *(int *)&u.b[*(int *)((char *)(DAT_00586dc8[0]) + 916)];
+    temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.vt = (int)&DAT_00524950[0];
     if (ps != 0) {
         temp_v1 = *(int **)ps;
@@ -72,7 +72,7 @@ void beModelCtrlHITBOX_InitFields(void) {
     int temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)((int *)DAT_00588d20)[0];
+    temp_s0 = (void *)g_beModelCtrlHITBOX_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_004c5700[0], 5);
     igMetaObject_NameFields(temp_s0, &DAT_004c5720[0], &DAT_004c5740[0], &DAT_004c5760[0], temp_s1);

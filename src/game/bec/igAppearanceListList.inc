@@ -1,19 +1,19 @@
-int FUN_0033fd70(void) {
-    if (((int *)DAT_00587a98)[0] == 0) {
-        ((int *)DAT_00587a98)[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(DAT_00587040[0]));
+igMetaObject *FUN_0033fd70(void) {
+    if (g_igAppearanceListList_metaObject[0] == 0) {
+        g_igAppearanceListList_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
     }
-    return ((int *)DAT_00587a98)[0];
+    return g_igAppearanceListList_metaObject[0];
 }
 
-S_33fdc0 *FUN_0033fdc0(void) {
-    S_33fdc0 *g = DAT_00587a98[0];
+igMetaObject *FUN_0033fdc0(void) {
+    igMetaObject *g = g_igAppearanceListList_metaObject[0];
     if (g != 0) {
-        int b = !!(g->flags & 4);
+        int b = !!(g->_validity & 4);
         if (b) goto done;
     }
     FUN_0033fe50();
 done:
-    return DAT_00587a98[0];
+    return g_igAppearanceListList_metaObject[0];
 }
 
 int igAppearanceListList_GetVTable(void) {
@@ -21,7 +21,7 @@ int igAppearanceListList_GetVTable(void) {
 
     igObject_InitHeader(&o);
     o.vt = &DAT_00539b40[0];
-    return *(int *)((char *)&o + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+    return *(int *)((char *)&o + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 
 void FUN_0033fe50(void)
@@ -51,10 +51,10 @@ void igAppearanceListList_GetMetaObject(void)
     FUN_0033fdc0();
 }
 
-int FUN_0033ff00(void) {
-    if (((int *)DAT_00587aa0)[0] == 0) {
-        ((int *)DAT_00587aa0)[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(DAT_00587040[0]));
+igMetaObject *FUN_0033ff00(void) {
+    if (g_igModelViewMatrixBoneSelectList_metaObject_00587aa0[0] == 0) {
+        g_igModelViewMatrixBoneSelectList_metaObject_00587aa0[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
     }
-    return ((int *)DAT_00587aa0)[0];
+    return g_igModelViewMatrixBoneSelectList_metaObject_00587aa0[0];
 }
 

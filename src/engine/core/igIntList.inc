@@ -1,5 +1,5 @@
-int FUN_002caa60(void) {
-    return DAT_00586880[0];
+igMetaObject *FUN_002caa60(void) {
+    return g_igIntList_metaObject[0];
 }
 
 void * FUN_002caa70(int arg0) {
@@ -10,7 +10,7 @@ void * FUN_002caa70(int arg0) {
 /* Created with allocation only when missing. */
 int igIntList_GetOrCreateMetaObject(void) {
     if (((int *)g_igIntList_metaObject)[0] == 0) {
-        ((int *)g_igIntList_metaObject)[0] = ((int)igMetaObject_Create(((int)Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]))));
+        ((int *)g_igIntList_metaObject)[0] = (int)igMetaObject_Create(((int)Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0])));
     }
     return ((int *)g_igIntList_metaObject)[0];
 }
@@ -28,7 +28,7 @@ int igIntList_GetVTable(void) {
 
     igObject_InitHeader((struct ObjectHeader *)&obj);
     obj.vt = &DAT_00531b70[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(((void * *)DAT_00586dc8)[0]) + 916));
+    return *(int *)((char *)&obj + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
 }
 
 void igIntList_EnsureRegistered(void)

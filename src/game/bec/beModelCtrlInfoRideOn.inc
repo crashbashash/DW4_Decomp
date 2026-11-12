@@ -3,24 +3,24 @@ void FUN_00351e20(int arg0) {
     igMetaObject_CreateInstance(*(int *)0x588AA8, arg0);
 }
 
-int FUN_00351e60(void) {
-    if (((int *)DAT_00588aa8)[0] == 0) {
-        ((int *)DAT_00588aa8)[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(DAT_00587040[0]));
+igMetaObject *FUN_00351e60(void) {
+    if (g_beModelCtrlInfoRideOn_metaObject[0] == 0) {
+        g_beModelCtrlInfoRideOn_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
     }
-    return ((int *)DAT_00588aa8)[0];
+    return g_beModelCtrlInfoRideOn_metaObject[0];
 }
 
 void *FUN_00351eb0(void) {
-    struct G *g = DAT_00588aa8[0];
-    if (!g || ((g->f & 4) != 0) == false) {
+    igMetaObject *g = g_beModelCtrlInfoRideOn_metaObject[0];
+    if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_00351ff0();
     }
-    return DAT_00588aa8[0];
+    return g_beModelCtrlInfoRideOn_metaObject[0];
 }
 
 int beModelCtrlInfoRideOn_GetVTable(void) {
     RideOnView info;
-    return *(int *)((char *)&info + *(int *)((char *)DAT_00586dc8[0] + 916));
+    return *(int *)((char *)&info + *(int *)((char *)g_objectSystem[0] + 916));
 }
 
 void FUN_00351ff0(void)
@@ -55,11 +55,11 @@ void beModelCtrlInfoRideOn_InitFields(void) {
     void *temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)((int *)DAT_00588aa8)[0];
+    temp_s0 = (void *)g_beModelCtrlInfoRideOn_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_004c5230[0], 4);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = FUN_0034fd40();
+    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_0034fd40();
     igMetaObject_NameFields(temp_s0, &DAT_004c5240[0], &DAT_004c5250[0], &DAT_004c5260[0], temp_s2);
 }
 

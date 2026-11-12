@@ -120,8 +120,8 @@ extern int DAT_004faf60[4];
 extern int DAT_004faf78[4];
 extern int DAT_004faf80[4];
 extern int DAT_004faf88[4];
-extern int DAT_00585a60[4];
-extern int DAT_00586f20[4];
+extern int g_igRefMetaField_metaObject[4];
+extern int g_stringPool[4];
 extern int DAT_005871a0[4];
 extern int DAT_005871a8[4];
 
@@ -423,7 +423,7 @@ extern "C" int FUN_00300250(FieldObjectView *object, FieldRecordHead *head, Fiel
         field = (FieldEntryView *)igMetaObject_GetFieldAt(meta, i);
         if (i < limit) {
             field->Prepare(object);
-            if (igObject_IsKindOf(field, (igMetaObject *)DAT_00585a60[0]) == 0 || field->_skipReset == 0) {
+            if (igObject_IsKindOf(field, (igMetaObject *)g_igRefMetaField_metaObject[0]) == 0 || field->_skipReset == 0) {
                 igMetaField_Reset(field, object);
             }
         } else {

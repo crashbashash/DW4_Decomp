@@ -33,7 +33,7 @@ int igPluginRepository_GetVTable(void) {
     u.vt = (int)&DAT_00532de0[0];
     q0 = &u.b[12];
     *(int *)q0 = 0;
-    temp_s0 = *(int *)&u.b[*(int *)((char *)(((void * *)DAT_00586dc8)[0]) + 916)];
+    temp_s0 = *(int *)&u.b[*(int *)((char *)(((void * *)g_objectSystem)[0]) + 916)];
     u.vt = (int)&DAT_00532de0[0];
     if (q0 != 0) {
         temp_v1 = *(int **)q0;
@@ -88,7 +88,7 @@ void thunk_igPluginRepository_GetMetaObject(void) {
 }
 
 void igPluginRepository_InitFields(void) {
-    igMetaObject *meta = DAT_00585af0[0];
+    igMetaObject *meta = g_igPluginRepository_metaObject[0];
     int base = igMetaObject_GetFieldCount(meta);
     igMetaField *field;
     igMetaObject_CreateFields(meta, (FieldFactory *)DAT_004bfa58, 2);

@@ -4,11 +4,11 @@ void FUN_003c1910(int arg0) {
 }
 
 void *beNDMWMdlEnemyInfoWork_GetReadyMetaObject(void) {
-    struct G *g = DAT_0058b510[0];
-    if (!g || ((g->f & 4) != 0) == false) {
+    igMetaObject *g = g_beNDMWMdlEnemyInfoWork_metaObject[0];
+    if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_003c1a00();
     }
-    return DAT_0058b510[0];
+    return g_beNDMWMdlEnemyInfoWork_metaObject[0];
 }
 
 int beNDMWMdlEnemyInfoWork_GetVTable(void) {
@@ -17,7 +17,7 @@ int beNDMWMdlEnemyInfoWork_GetVTable(void) {
 
     beNDMWMdlPEBaseInfoWork_Construct(&o);
     o.vt = &DAT_0053d3e0[0];
-    r = *(int *)((char *)&o + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+    r = *(int *)((char *)&o + *(int *)((char *)(g_objectSystem[0]) + 916));
     o.vt = &DAT_0053d3e0[0];
     FUN_003bfde0((Obj_3bfde0 *)&o, (short)0);
     return r;

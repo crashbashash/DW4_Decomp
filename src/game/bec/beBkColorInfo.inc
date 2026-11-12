@@ -1,9 +1,9 @@
 void *FUN_00369be0(void) {
-    struct G *g = DAT_00589d00[0];
-    if (!g || ((g->f & 4) != 0) == false) {
+    igMetaObject *g = g_beBkColorInfo_metaObject[0];
+    if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_00369ca0();
     }
-    return DAT_00589d00[0];
+    return g_beBkColorInfo_metaObject[0];
 }
 
 int beBkColorInfo_GetVTable(void) {
@@ -15,7 +15,7 @@ int beBkColorInfo_GetVTable(void) {
     obj.w5 = 0;
     obj.w6 = 0;
     obj.vt = &DAT_00534900[0];
-    t = *(int *)((char *)&obj + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+    t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
     obj.vt = &DAT_00534900[0];
     FUN_0033ec80((struct S_33ec80 *)&obj, (short)0);
     return t;
@@ -52,7 +52,7 @@ void beBkColorInfo_InitFields(void) {
     int temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)((int *)DAT_00589d00)[0];
+    temp_s0 = (void *)g_beBkColorInfo_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_004c7b58[0], 1);
     igMetaObject_NameFields(temp_s0, &DAT_004c7b60[0], &DAT_004c7b68[0], &DAT_004c7b70[0], temp_s1);

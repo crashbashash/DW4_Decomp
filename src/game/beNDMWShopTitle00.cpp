@@ -3,12 +3,12 @@
     if ((text) == 0) { \
         tok = 0; \
     } else { \
-        if (DAT_00586f20[0] == 0) { \
+        if (g_stringPool[0] == 0) { \
             void *pool = FUN_002eb010(0x10); \
             if (pool != 0) pool = StringPool_Construct(pool); \
-            DAT_00586f20[0] = pool; \
+            g_stringPool[0] = pool; \
         } \
-        tok = StringPool_Intern(DAT_00586f20[0], (const char *)(text)); \
+        tok = StringPool_Intern(g_stringPool[0], (const char *)(text)); \
     } \
     StringRef held(tok); \
     StringList_AppendRetained(field, &held); }
@@ -32,7 +32,7 @@ extern "C" int DAT_0051cb60[4];
 extern "C" int DAT_0051cb70[4];
 extern "C" int DAT_0051cb80[4];
 extern "C" int DAT_0051cb88[4];
-extern "C" void *DAT_00586f20[4];
+extern "C" void *g_stringPool[4];
 /* Owning stack reference to a pooled string token (reference count at p[-1], chunk header at
  * p[-2]); releases the token on scope exit. */
 class StringRef {

@@ -1,8 +1,8 @@
-int FUN_00152370(void) {
-    if (DAT_00560480[0] == 0) {
-        DAT_00560480[0] = (int)igMetaObject_Create(Memory_GetAllocatorBySelector(DAT_00587040[0]));
+igMetaObject *FUN_00152370(void) {
+    if (g_igPsx2VertexArray1_1_metaObject[0] == 0) {
+        g_igPsx2VertexArray1_1_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
     }
-    return DAT_00560480[0];
+    return g_igPsx2VertexArray1_1_metaObject[0];
 }
 
 igMetaObject *igPsx2VertexArray1_1_GetMetaObject(void)
@@ -23,7 +23,7 @@ int igPsx2VertexArray1_1_GetVTable(void) {
     obj.w[11] = 0;
     obj.w[12] = 0;
     obj.w[13] = 0;
-    t = *(int *)((char *)&obj + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+    t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
     obj.vt = &DAT_00525190[0];
     FUN_00152560((void **)&obj.w[13], -1);
     FUN_00135430(&obj.w[12], -1);
@@ -95,8 +95,8 @@ void igPsx2VertexArray1_1_Register(void) {
     );
 }
 
-int FUN_00152670(void) {
-    return DAT_0055fa90[0];
+igMetaObject *FUN_00152670(void) {
+    return g_igVertexArray1_1_metaObject[0];
 }
 
 void igPsx2VertexArray1_1_InitFields(void) {
@@ -108,7 +108,7 @@ void igPsx2VertexArray1_1_InitFields(void) {
     void *f3;
     void *temp_s0;
 
-    temp_s0 = (void *)(DAT_00560480[0]);
+    temp_s0 = (void *)(g_igPsx2VertexArray1_1_metaObject[0]);
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_00489d30[0], 7);
     f1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
@@ -129,7 +129,7 @@ void igPsx2VertexArray1_1_InitFields(void) {
     ((igIntArrayMetaField *)f5)->_persistent = 0;
     ((igIntMetaField *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 6)))->_persistent = 0;
     igMetaObject_NameFields(temp_s0, &DAT_00489d50[0], &DAT_00489d70[0], &DAT_00489d90[0], temp_s2);
-    ((igMetaObject *)(DAT_00560480[0]))->_writeProxy = (int)(&thunk_igVertexArray1_1_GetMetaObject);
+    ((igMetaObject *)(g_igPsx2VertexArray1_1_metaObject[0]))->_writeProxy = (int)(&thunk_igVertexArray1_1_GetMetaObject);
 }
 
 int FUN_001527c0(int arg0) {
@@ -138,9 +138,9 @@ int FUN_001527c0(int arg0) {
 }
 
 int FUN_00152800(void) {
-    if (DAT_005604c0[0] == 0) {
-        DAT_005604c0[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(DAT_00587040[0]));
+    if (g_igPsx2LongList_metaObject[0] == 0) {
+        g_igPsx2LongList_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
     }
-    return (int)DAT_005604c0[0];
+    return (int)g_igPsx2LongList_metaObject[0];
 }
 

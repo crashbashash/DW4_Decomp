@@ -1,5 +1,5 @@
-int Gap__Attrs__igTextureBindAttr__vfunc_22(void) {
-    return DAT_0055ed88[0];
+igMetaObject *Gap__Attrs__igTextureBindAttr__vfunc_22(void) {
+    return g_igTextureBindAttr_metaObject[0];
 }
 
 /* slot 33 of igTextureBindAttr: set the _texture reference (+12). Reference-counted assignment:

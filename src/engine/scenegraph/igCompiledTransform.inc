@@ -25,7 +25,7 @@ int igCompiledTransform_GetVTable(void) {
     u.w[0] = (int)(&DAT_0052a5a0[0]);
     *q1 = 0;
     *q2 = 0;
-    temp_s1 = *(int *)&u.b[*(int *)((char *)(DAT_00586dc8[0]) + 916)];
+    temp_s1 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.w[0] = (int)(&DAT_0052a5a0[0]);
     if (q2 != 0) {
         temp_a0 = (struct Rc *)*q2;
@@ -82,12 +82,12 @@ void igCompiledTransform_InitFields(void) {
     struct Fld_1a37a0 *temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)DAT_00561d30[0];
+    temp_s0 = (void *)g_igCompiledTransform_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_0048c6e0[0], 8);
     ((struct Fld_1a37a0 *)igMetaObject_GetFieldAt(temp_s0, temp_s2))->f38 = 0;
     temp_s1 = ((struct Fld_1a37a0 *)igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
-    temp_s1->f56 = FUN_00194dd0();
+    temp_s1->f56 = (int)FUN_00194dd0();
     temp_s1->f38 = 0;
     temp_v0 = ((struct Fld_1a37a0 *)igMetaObject_GetFieldAt(temp_s0, temp_s2 + 2));
     FUN_002ea4b0(temp_v0, -1);

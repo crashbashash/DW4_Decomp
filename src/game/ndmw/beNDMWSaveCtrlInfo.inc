@@ -1,12 +1,12 @@
 void *FUN_003bcf40(void) {
     unsigned char b;
-    if (DAT_0058b180[0] != 0) {
-        b = (*(int *)((char *)(DAT_0058b180[0]) + 36) & 4) != 0;
+    if (g_beNDMWSaveCtrlInfo_metaObject[0] != 0) {
+        b = (*(int *)((char *)(g_beNDMWSaveCtrlInfo_metaObject[0]) + 36) & 4) != 0;
         if (b != 0) goto done;
     }
     FUN_003bd000();
 done:
-    return DAT_0058b180[0];
+    return g_beNDMWSaveCtrlInfo_metaObject[0];
 }
 
 int beNDMWSaveCtrlInfo_GetVTable(void) {
@@ -18,7 +18,7 @@ int beNDMWSaveCtrlInfo_GetVTable(void) {
     o.f20 = 0;
     o.f24 = 0;
     o.vt = &DAT_0053d760[0];
-    r = *(int *)((char *)&o + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+    r = *(int *)((char *)&o + *(int *)((char *)(g_objectSystem[0]) + 916));
     o.vt = &DAT_0053d760[0];
     FUN_0033ec80(&o, 0);
     return r;

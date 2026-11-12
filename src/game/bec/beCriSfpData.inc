@@ -1,6 +1,6 @@
-SFUN_00366540 *FUN_00366540(void) {
-    if (DAT_00589998[0] == 0 || !DAT_00589998[0]->ok()) FUN_00366620();
-    return DAT_00589998[0];
+igMetaObject *FUN_00366540(void) {
+    if (g_beCriSfpData_metaObject[0] == 0 || !isValid(g_beCriSfpData_metaObject[0])) FUN_00366620();
+    return g_beCriSfpData_metaObject[0];
 }
 
 int beCriSfpData_GetVTable(void) {
@@ -16,7 +16,7 @@ int beCriSfpData_GetVTable(void) {
     q1 = &u.b[8];
     *(int *)q1 = 0;
     u.vt = (int)&DAT_00535030[0];
-    temp_s0 = *(int *)&u.b[*(int *)((char *)(DAT_00586dc8[0]) + 916)];
+    temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.vt = (int)&DAT_00524950[0];
     if (q1 != 0) {
         temp_v1 = *(int **)q1;
@@ -59,15 +59,15 @@ void beCriSfpData_GetMetaObject(void)
     FUN_00366540();
 }
 
-int FUN_003666e0(void) {
-    return ((int *)DAT_00587e28)[0];
+igMetaObject *FUN_003666e0(void) {
+    return g_beBinDataObject_metaObject[0];
 }
 
 void beCriSfpData_InitFields(void) {
     int temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)((int *)DAT_00589998)[0];
+    temp_s0 = (void *)g_beCriSfpData_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_004c73d0[0], 4);
     igMetaObject_NameFields(temp_s0, &DAT_004c73e0[0], &DAT_004c73f0[0], &DAT_004c7400[0], temp_s1);

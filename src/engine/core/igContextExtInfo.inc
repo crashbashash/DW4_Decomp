@@ -26,7 +26,7 @@ int igContextExtInfo_GetVTable(void) {
     *(int *)q1 = 0;
     q0 = &u.b[12];
     *(int *)q0 = 0;
-    temp_s0 = *(int *)&u.b[*(int *)((char *)(((void * *)DAT_00586dc8)[0]) + 916)];
+    temp_s0 = *(int *)&u.b[*(int *)((char *)(((void * *)g_objectSystem)[0]) + 916)];
     u.vt = (int)&DAT_005318b0[0];
     if (q0 != 0) {
         temp_v1 = *(int **)q0;
@@ -84,11 +84,11 @@ void igContextExtInfo_InitFields(void) {
     void *temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)DAT_005868c8[0];
+    temp_s0 = (void *)g_igContextExtInfo_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
     igMetaObject_CreateFields((igMetaObject *)temp_s0, (igMetaField * (**)(void *))&DAT_004c1420[0], 3);
     temp_s1 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2)));
-    *(int *)((char *)(temp_s1) + 56) = FUN_002be610();
+    *(int *)((char *)(temp_s1) + 56) = (int)FUN_002be610();
     temp_v0 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 1)));
     igStringMetaField_SetDefaultText((int *)temp_v0, 0);
     *(char *)((char *)(temp_v0) + 53) = 1;

@@ -22,7 +22,7 @@ int beNDMWLoadCtrl2Info_GetVTable(void) {
     u.vt = (int)&DAT_0053ce60[0];
     p = (int *)&u.b[28];
     *p = 0;
-    temp_s0 = *(int *)&u.b[*(int *)((char *)(DAT_00586dc8[0]) + 916)];
+    temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.vt = (int)&DAT_0053ce60[0];
     FUN_0014aa70(p, -1);
     FUN_0033ec80(u.b, 0);
@@ -61,7 +61,7 @@ void beNDMWLoadCtrl2Info_InitFields(void) {
     void *temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)DAT_0058baf0[0];
+    temp_s0 = (void *)g_beNDMWLoadCtrl2Info_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_004cb7a8[0], 1);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));

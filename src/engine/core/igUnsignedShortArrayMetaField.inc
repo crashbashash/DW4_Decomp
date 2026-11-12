@@ -20,8 +20,8 @@ int igUnsignedShortArrayMetaField_GetVTable(void) {
 
     FUN_0030ee10((int **)&o);
     o.vt = &DAT_0052e230[0];
-    r = *(int *)((char *)&o + *(int *)((char *)(((void * *)DAT_00586dc8)[0]) + 916));
-    o.vt = &DAT_0052f230[0];
+    r = *(int *)((char *)&o + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
+    o.vt = &g_igMetaField_vtable[0];
     if (&o.str != 0) {
         temp_v1 = o.str;
         if (temp_v1 != 0) {
@@ -62,15 +62,15 @@ void thunk_igUnsignedShortArrayMetaField_GetMetaObject(void) {
     igUnsignedShortArrayMetaField_GetMetaObject();
 }
 
-int FUN_002b6530(void) {
-    return DAT_005856e8[0];
+igMetaObject *FUN_002b6530(void) {
+    return g_igUnsignedShortMetaField_metaObject[0];
 }
 
 void igUnsignedShortArrayMetaField_InitFields(void) {
     int temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)DAT_005856f8[0];
+    temp_s0 = (void *)g_igUnsignedShortArrayMetaField_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
     igMetaObject_CreateFields((igMetaObject *)temp_s0, (igMetaField * (**)(void *))&DAT_004bf2b8[0], 1);
     FUN_002ea4b0((void **)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1)), 1);
@@ -81,18 +81,18 @@ void FUN_002b65d0(void) {
     T_2b65d0 *temp_s0;
     T_2b65d0 *p;
 
-    if (DAT_00585700[0] == 0) {
-        DAT_00585700[0] = ((T_2b65d0 *)igMetaObject_CreateInstance((CreateMeta *)DAT_005856f8[0], (MemoryPool *)(((int)Memory_GetAllocatorBySelector(DAT_00587040[0])))));
-        temp_s0 = DAT_00585700[0];
+    if (g_igUnsignedShortArrayMetaField_descriptor[0] == 0) {
+        g_igUnsignedShortArrayMetaField_descriptor[0] = ((T_2b65d0 *)igMetaObject_CreateInstance((CreateMeta *)g_igUnsignedShortArrayMetaField_metaObject[0], (MemoryPool *)(((int)Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0])))));
+        temp_s0 = g_igUnsignedShortArrayMetaField_descriptor[0];
         if (temp_s0 != 0) {
             MetaRefList_AppendRetained((PointerList *)(((C *)FUN_002fc250())), (RefHeader *)temp_s0);
-            p = DAT_00585700[0];
+            p = g_igUnsignedShortArrayMetaField_descriptor[0];
             p->references = p->references - 1;
             if (((unsigned long long)(long long)p->references & 0x7fffffULL) == 0) {
                 igObject_Destroy(p);
             }
-            DAT_00585700[0]->s18 = ((C *)FUN_002fc250())->cnt - 1;
-            igMetaField_FinalizeDescriptor((igMetaField *)DAT_00585700[0]);
+            g_igUnsignedShortArrayMetaField_descriptor[0]->s18 = ((C *)FUN_002fc250())->cnt - 1;
+            igMetaField_FinalizeDescriptor((igMetaField *)g_igUnsignedShortArrayMetaField_descriptor[0]);
         }
     }
 }

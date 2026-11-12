@@ -1,13 +1,13 @@
-int FUN_0034d8f0(void) {
-    if (((int *)DAT_00588688)[0] == 0) {
-        ((int *)DAT_00588688)[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(DAT_00587040[0]));
+igMetaObject *FUN_0034d8f0(void) {
+    if (g_beNumVerDataList_metaObject[0] == 0) {
+        g_beNumVerDataList_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
     }
-    return ((int *)DAT_00588688)[0];
+    return g_beNumVerDataList_metaObject[0];
 }
 
-SFUN_0034d940 *FUN_0034d940(void) {
-    if (DAT_00588688[0] == 0 || !DAT_00588688[0]->ok()) FUN_0034d9d0();
-    return DAT_00588688[0];
+igMetaObject *FUN_0034d940(void) {
+    if (g_beNumVerDataList_metaObject[0] == 0 || !isValid(g_beNumVerDataList_metaObject[0])) FUN_0034d9d0();
+    return g_beNumVerDataList_metaObject[0];
 }
 
 int beNumVerDataList_GetVTable(void) {
@@ -15,7 +15,7 @@ int beNumVerDataList_GetVTable(void) {
 
     igObject_InitHeader(&obj);
     obj.vt = &DAT_00538460[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 
 void FUN_0034d9d0(void)

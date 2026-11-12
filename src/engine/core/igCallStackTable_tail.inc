@@ -90,7 +90,7 @@ void Gap__Core__igCallStackTable__vfunc_24(int *arg0, struct S_2d3aa0 *arg1, int
     cnt = 0;
     if (arg2 == 0) {
         if (0 <= l->cap) { l->n = 0; } else { List_Resize(l, 0, 4); }
-        *arg0 = DAT_004fb410.v;
+        *arg0 = g_statusSucceeded.v;
         return;
     }
     for (i = 0; i < n; i++) {
@@ -101,12 +101,12 @@ void Gap__Core__igCallStackTable__vfunc_24(int *arg0, struct S_2d3aa0 *arg1, int
                 if (t >= 0) {
                     if (t <= l->cap) { l->n = t; } else { List_Resize(l, t, 4); }
                 }
-                *arg0 = DAT_004fb410.v;
+                *arg0 = g_statusSucceeded.v;
                 return;
             }
         }
     }
-    *arg0 = DAT_004fb418.v;
+    *arg0 = g_allocatorFailureStatus.v;
 }
 
 int *Gap__Core__igCallStackTable__vfunc_25(struct O_2d3b80 *o, int i) {

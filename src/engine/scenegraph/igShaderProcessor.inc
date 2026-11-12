@@ -15,7 +15,7 @@ int igShaderProcessor_GetVTable(void) {
     struct Obj_198bf0 obj;
     igObject_InitHeader(&obj);
     obj.vt = &DAT_00528720[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 
 void FUN_00198c30(void)

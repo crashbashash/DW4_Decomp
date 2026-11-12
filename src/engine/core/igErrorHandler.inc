@@ -15,7 +15,7 @@ int igErrorHandler_GetVTable(void) {
     struct Obj_2c5ea0 obj;
     igObject_InitHeader((struct ObjectHeader *)&obj);
     obj.vt = &DAT_00532530[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(((void * *)DAT_00586dc8)[0]) + 916));
+    return *(int *)((char *)&obj + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
 }
 
 void FUN_002c5ee0(void)

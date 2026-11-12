@@ -28,7 +28,7 @@ int igShaderInfo_GetVTable(void) {
     u.w[0] = (int)(&DAT_00528790[0]);
     q5 = (S_ref *)&u.p[5];
     *(int *)q5 = 0;
-    temp_s1 = *(int *)&u.b[*(int *)((char *)(DAT_00586dc8[0]) + 916)];
+    temp_s1 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.w[0] = (int)(&DAT_00528790[0]);
     if (q5 != 0) {
         q5 = *(S_ref **)q5;
@@ -85,11 +85,11 @@ void igShaderInfo_InitFields(void) {
     void *temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)DAT_00561500[0];
+    temp_s0 = (void *)g_igShaderInfo_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_0048b620[0], 1);
     temp_s1 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s2)));
-    *(int *)((char *)(temp_s1) + 56) = FUN_00198fa0();
+    *(int *)((char *)(temp_s1) + 56) = (int)FUN_00198fa0();
     *(char *)((char *)(temp_s1) + 52) = 1;
     igMetaObject_NameFields(temp_s0, &DAT_0048b628[0], &DAT_0048b630[0], &DAT_0048b638[0], temp_s2);
     FUN_002fe480((int)thunk_FUN_001d8b90);

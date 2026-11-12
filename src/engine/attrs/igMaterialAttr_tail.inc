@@ -16,7 +16,7 @@ static inline void clampColor(float *c, const float *lo, const float *hi) {
 
 void Gap__Attrs__igMaterialAttr__vfunc_33(A_13f0b0 *a, B_13f0b0 *b) {
     a->c[0] = b->c[0]; a->c[1] = b->c[1]; a->c[2] = b->c[2]; a->c[3] = b->c[3];
-    clampColor(a->c, DAT_004e1170, DAT_004e1180);
+    clampColor(a->c, g_vec4Zero, DAT_004e1180);
 }
 
 void Gap__Attrs__igMaterialAttr__vfunc_36(S_13f1c0 *self, float *src) {
@@ -24,7 +24,7 @@ void Gap__Attrs__igMaterialAttr__vfunc_36(S_13f1c0 *self, float *src) {
     self->g = src[1];
     self->b = src[2];
     self->a = src[3];
-    { float lo = DAT_004e1170[0]; if (self->r < D_004e1170[0]) self->r = lo; }
+    { float lo = g_vec4Zero[0]; if (self->r < D_004e1170[0]) self->r = lo; }
     if (self->g < D_004e1174[0]) self->g = D_004e1174[0];
     if (self->b < D_004e1178[0]) self->b = D_004e1178[0];
     if (self->a < D_004e117c[0]) self->a = D_004e117c[0];
@@ -39,13 +39,13 @@ void Gap__Attrs__igMaterialAttr__vfunc_35(igMaterialAttr *material, const float 
     material->_ambient[1] = color[1];
     material->_ambient[2] = color[2];
     material->_ambient[3] = color[3];
-    clampColor(material->_ambient, DAT_004e1170, DAT_004e1180);
+    clampColor(material->_ambient, g_vec4Zero, DAT_004e1180);
 }
 
 void Gap__Attrs__igMaterialAttr__vfunc_34(A_13f3e0 *a, float *b) {
     a->v[0] = b[0]; a->v[1] = b[1]; a->v[2] = b[2]; a->v[3] = b[3];
     { float lo = g_004e1170[0];
-    if (a->v[0] < DAT_004e1170[0]) a->v[0] = lo; }
+    if (a->v[0] < g_vec4Zero[0]) a->v[0] = lo; }
     if (a->v[1] < DAT_004e1174[0]) a->v[1] = DAT_004e1174[0];
     if (a->v[2] < DAT_004e1178[0]) a->v[2] = DAT_004e1178[0];
     if (a->v[3] < DAT_004e117c[0]) a->v[3] = DAT_004e117c[0];

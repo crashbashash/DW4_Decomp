@@ -30,7 +30,7 @@ int Gap__Gfx__igParticleArray__vfunc_28(PA *arg0, int arg1, int arg2, int *arg3,
             }
             arg0->f44 = a;
             if (arg0->f73 != 0 && arg0->f8->f32 != 0 && arg0->f48 == 0) {
-                b = arg0->f44->v104(&DAT_004dc000[0]);
+                b = arg0->f44->v104(&igPointSpriteExt_className[0]);
                 if (b != 0) {
                     b->refs = b->refs + 1;
                 }

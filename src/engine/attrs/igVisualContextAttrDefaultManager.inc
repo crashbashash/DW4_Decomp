@@ -20,7 +20,7 @@ int igVisualContextAttrDefaultManager_GetVTable(void) {
     p = (S_ref *)&u.b[8];
     u.vt = (int)&DAT_005224b0[0];
     *(int *)p = 0;
-    temp_s0 = *(int *)&u.b[*(int *)((char *)(DAT_00586dc8[0]) + 916)];
+    temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.vt = (int)&DAT_005224b0[0];
     if (p != 0) {
         p = *(S_ref **)p;
@@ -78,8 +78,8 @@ void thunk_igVisualContextAttrDefaultManager_GetMetaObject(void) {
     igVisualContextAttrDefaultManager_GetMetaObject();
 }
 
-int FUN_00130260(void) {
-    return DAT_0055f448[0];
+igMetaObject *FUN_00130260(void) {
+    return g_igAttrDefaultManager_metaObject[0];
 }
 
 void igVisualContextAttrDefaultManager_InitFields(void) {
@@ -87,7 +87,7 @@ void igVisualContextAttrDefaultManager_InitFields(void) {
     void *temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)DAT_0055ebc0[0];
+    temp_s0 = (void *)g_igVisualContextAttrDefaultManager_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_00485918[0], 1);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));

@@ -61,7 +61,7 @@ extern "C" int Gap__Bec__beSvFileMakeApi__vfunc_20(void);
 extern "C" void Gap__Bec__beSvFileMakeApi__vfunc_07(void **arg0);
 extern "C" void Gap__Bec__beSaveApi__vfunc_08(void);
 extern "C" void Gap__Bec__beSaveMemoryObj__vfunc_07(void **arg0);
-extern "C" int DAT_00587110[4];
+extern "C" int g_defaultAllocatorSelector[4];
 extern "C" unsigned char GPR_00554c14;
 struct S { char pad[8]; int f8; int fc; };
 extern "C" void FUN_003a9870(struct S *arg0);
@@ -226,7 +226,7 @@ void FUN_003a9810(void *arg0, int arg1) {
     if (GPR_00554c14 != 0) {
         a = t;
     } else {
-        a = Memory_GetAllocatorBySelector(DAT_00587110[0]);
+        a = Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
     }
     *(int *)((char *)(arg0) + 8) = Memory_AllocateBufferDirect(arg1, a);
 }
@@ -236,7 +236,7 @@ void FUN_003a9870(struct S *arg0) {
 
     if (arg0->f8 != 0) {
         var_v0 = igObject_GetAllocator(arg0);
-        var_v0 = (GPR_00554c14 != 0) ? var_v0 : Memory_GetAllocatorBySelector(DAT_00587110[0]);
+        var_v0 = (GPR_00554c14 != 0) ? var_v0 : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
         Memory_FreeBufferWithAllocator(arg0->f8, var_v0);
     }
     arg0->f8 = 0;
@@ -248,11 +248,11 @@ void FUN_003a98d0(struct O *arg0, int arg1, int arg2) {
 
     if (arg2 == 0) {
         a = igObject_GetAllocator(arg0);
-        b = GPR_00554c14 != 0 ? a : Memory_GetAllocatorBySelector(DAT_00587110[0]);
+        b = GPR_00554c14 != 0 ? a : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
         arg0->buf = (void *)Memory_AllocateBufferDirect(arg1, b);
     } else {
         a = igObject_GetAllocator(arg0);
-        b = GPR_00554c14 != 0 ? a : Memory_GetAllocatorBySelector(DAT_00587110[0]);
+        b = GPR_00554c14 != 0 ? a : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
         arg0->buf = (void *)FUN_002ed2b0(arg1, arg2 & 0xFFFF, b);
     }
     memset(arg0->buf, 0, arg1);
@@ -263,7 +263,7 @@ void FUN_003a9990(struct S_3a9990 *arg0) {
 
     if (arg0->f8 != 0) {
         var_v0 = igObject_GetAllocator();
-        var_v0 = (GPR_00554c14 != 0) ? var_v0 : Memory_GetAllocatorBySelector(DAT_00587110[0]);
+        var_v0 = (GPR_00554c14 != 0) ? var_v0 : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
         Memory_FreeBufferWithAllocator(arg0->f8, var_v0);
     }
     arg0->f8 = 0;

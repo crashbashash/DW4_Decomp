@@ -1,5 +1,5 @@
-int Gap__Sg__igShaderProcessor__vfunc_22(void) {
-    return DAT_005614f8[0];
+igMetaObject *Gap__Sg__igShaderProcessor__vfunc_22(void) {
+    return g_igShaderProcessor_metaObject[0];
 }
 
 int FUN_001cafc0(struct L_1cafc0 *arg0, IniStrRef name, int arg2) {
@@ -61,14 +61,14 @@ void FUN_001cb2d0(void *self, void *types, void *key, void *target) {
 }
 
 static inline ShaderObject_1ca6c0 *asMaterial(ShaderObject_1ca6c0 *o) {
-    if (o != 0 && igObject_IsKindOf(o, DAT_0055f460[0]) != 0) {
+    if (o != 0 && igObject_IsKindOf(o, g_igAttrList_metaObject[0]) != 0) {
         return o;
     }
     return 0;
 }
 
 static inline ShaderObject_1ca6c0 *asTexture(ShaderObject_1ca6c0 *o) {
-    if (o != 0 && igObject_IsKindOf(o, DAT_00561830[0]) != 0) {
+    if (o != 0 && igObject_IsKindOf(o, g_igNodeList_metaObject[0]) != 0) {
         return o;
     }
     return 0;
@@ -171,14 +171,14 @@ int FUN_001cb340(ShaderProcessorView *self, ShaderTarget *target, int arg) {
                 if (text == 0) {
                     interned = 0;
                 } else {
-                    if (DAT_00586f20[0] == 0) {
+                    if (g_stringPool[0] == 0) {
                         int pool = FUN_002eb010(16);
                         if (pool != 0) {
                             pool = StringPool_Construct(pool);
                         }
-                        DAT_00586f20[0] = pool;
+                        g_stringPool[0] = pool;
                     }
-                    interned = (char *)StringPool_Intern(DAT_00586f20[0], text);
+                    interned = (char *)StringPool_Intern(g_stringPool[0], text);
                 }
                 StringList_AppendRetained((igStringRefList *)keys.p, IniStrRef(interned));
                 StringList_AppendRetained((igStringRefList *)values.p, FUN_001ccb20((igStringRefList *)pending.p));
@@ -210,12 +210,12 @@ int FUN_001cb340(ShaderProcessorView *self, ShaderTarget *target, int arg) {
         igSmartPointer<ShaderObject_1ca6c0> second((ShaderObject_1ca6c0 *)0, kRetainReference);
         igSmartPointer<ShaderObject_1ca6c0> third((ShaderObject_1ca6c0 *)0, kRetainReference);
         igSmartPointer<igObject> found((igObject *)0, kRetainReference);
-        found = FUN_001c8c80(self, pass, DAT_004e4778, DAT_0055f460[0], shared.p);
+        found = FUN_001c8c80(self, pass, DAT_004e4778, g_igAttrList_metaObject[0], shared.p);
         held = (ShaderObject_1ca6c0 *)found.p;
         if (held != 0) {
             primary = asMaterial(held);
             FUN_001cade0(self, (IniFieldTarget *)info.p, (IniItemList *)primary.p, shared.p, keys.p, values.p);
-            found = FUN_001c8c80(self, pass, DAT_004e4788, DAT_0055f460[0], shared.p);
+            found = FUN_001c8c80(self, pass, DAT_004e4788, g_igAttrList_metaObject[0], shared.p);
             held = (ShaderObject_1ca6c0 *)found.get();
             if (held == 0) {
                 return 0;
@@ -223,7 +223,7 @@ int FUN_001cb340(ShaderProcessorView *self, ShaderTarget *target, int arg) {
             second = asMaterial(held);
             FUN_001cade0(self, (IniFieldTarget *)info.p, (IniItemList *)second.p, shared.p, keys.p, values.p);
         } else {
-            found = FUN_001c8c80(self, pass, DAT_004e4658, DAT_0055f460[0], shared.p);
+            found = FUN_001c8c80(self, pass, DAT_004e4658, g_igAttrList_metaObject[0], shared.p);
             held = (ShaderObject_1ca6c0 *)found.get();
             if (held == 0) {
                 return 0;
@@ -232,7 +232,7 @@ int FUN_001cb340(ShaderProcessorView *self, ShaderTarget *target, int arg) {
             second = primary.p;
             FUN_001cade0(self, (IniFieldTarget *)info.p, (IniItemList *)primary.p, shared.p, keys.p, values.p);
         }
-        found = FUN_001c8c80(self, pass, DAT_004e4798, (void *)DAT_00561830[0], shared.p);
+        found = FUN_001c8c80(self, pass, DAT_004e4798, (void *)g_igNodeList_metaObject[0], shared.p);
         held = (ShaderObject_1ca6c0 *)found.p;
         if (held != 0) {
             third = asTexture(held);

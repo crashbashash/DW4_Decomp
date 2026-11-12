@@ -1,8 +1,8 @@
-int FUN_00233480(void) {
-    if (DAT_0056dc28[0] == 0) {
-        DAT_0056dc28[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(DAT_00587040[0]));
+igMetaObject *FUN_00233480(void) {
+    if (g_igInfoManagerOrderedList_metaObject[0] == 0) {
+        g_igInfoManagerOrderedList_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
     }
-    return DAT_0056dc28[0];
+    return g_igInfoManagerOrderedList_metaObject[0];
 }
 
 igMetaObject *igInfoManagerOrderedList_GetMetaObject(void)
@@ -23,7 +23,7 @@ int igInfoManagerOrderedList_GetVTable(void) {
     o.w[3] = 0;
     o.w[4] = 0;
     o.vt = &DAT_0052cb60[0];
-    r = *(int *)((char *)&o + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+    r = *(int *)((char *)&o + *(int *)((char *)(g_objectSystem[0]) + 916));
     o.vt = &DAT_0052cb60[0];
     FUN_00233610((int **)&o, 0);
     return r;
@@ -86,6 +86,6 @@ void thunk_igInfoManagerOrderedList_GetMetaObject(void) {
 }
 
 int FUN_00233740(void) {
-    return DAT_00586738[0];
+    return g_igDependencyOrderedList_metaObject[0];
 }
 

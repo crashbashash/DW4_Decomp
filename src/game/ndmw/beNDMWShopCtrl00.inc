@@ -26,7 +26,7 @@ int beNDMWShopCtrl00_GetVTable(void) {
     o._modelCloseRamNoList = 0;
     o._modelCloseSeqNameList = 0;
     o._vtable = (int)&DAT_0053feb0[0];
-    r = *(int *)((char *)&o + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+    r = *(int *)((char *)&o + *(int *)((char *)(g_objectSystem[0]) + 916));
     o._vtable = (int)&DAT_0053feb0[0];
     beNDMWWindowCtrl_Destroy(&o, (long long)0);
     return r;

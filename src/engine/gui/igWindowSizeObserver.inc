@@ -15,7 +15,7 @@ int igWindowSizeObserver_GetVTable(void) {
     struct O o;
     igObject_InitHeader(&o.vt);
     o.vt = DAT_00541100;
-    return *(int *)((char *)&o.vt + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+    return *(int *)((char *)&o.vt + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 
 void igWindowSizeObserver_RunStaticInit(void)

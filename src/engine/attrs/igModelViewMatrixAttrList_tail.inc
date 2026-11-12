@@ -1,4 +1,4 @@
-int Gap__Attrs__igModelViewMatrixAttrList__vfunc_22(void) {
-    return DAT_0055efe0[0];
+igMetaObject *Gap__Attrs__igModelViewMatrixAttrList__vfunc_22(void) {
+    return g_igModelViewMatrixAttrList_metaObject[0];
 }
 

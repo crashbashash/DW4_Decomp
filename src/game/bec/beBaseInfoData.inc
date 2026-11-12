@@ -1,9 +1,9 @@
 void *FUN_0036b050(void) {
-    struct G *g = DAT_00589e08[0];
-    if (!g || ((g->f & 4) != 0) == false) {
+    igMetaObject *g = g_beBaseInfoData_metaObject[0];
+    if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_0036b0a0();
     }
-    return DAT_00589e08[0];
+    return g_beBaseInfoData_metaObject[0];
 }
 
 void FUN_0036b0a0(void)
@@ -37,7 +37,7 @@ void beBaseInfoData_InitFields(void) {
     int temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)((int *)DAT_00589e08)[0];
+    temp_s0 = (void *)g_beBaseInfoData_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_004c7d80[0], 1);
     igMetaObject_NameFields(temp_s0, &DAT_004c7d88[0], &DAT_004c7d90[0], &DAT_004c7d98[0], temp_s1);

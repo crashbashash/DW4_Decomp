@@ -3,19 +3,19 @@ void FUN_00361e50(int arg0) {
     igMetaObject_CreateInstance(*(int *)0x589678, arg0);
 }
 
-int FUN_00361e90(void) {
-    if (((int *)DAT_00589678)[0] == 0) {
-        ((int *)DAT_00589678)[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(DAT_00587040[0]));
+igMetaObject *FUN_00361e90(void) {
+    if (g_beFont_metaObject[0] == 0) {
+        g_beFont_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
     }
-    return ((int *)DAT_00589678)[0];
+    return g_beFont_metaObject[0];
 }
 
 void *FUN_00361ee0(void) {
-    struct G *g = DAT_00589678[0];
-    if (!g || ((g->f & 4) != 0) == false) {
+    igMetaObject *g = g_beFont_metaObject[0];
+    if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_00362170();
     }
-    return DAT_00589678[0];
+    return g_beFont_metaObject[0];
 }
 
 int beFont_GetVTable(void) {
@@ -34,7 +34,7 @@ int beFont_GetVTable(void) {
     obj.w14 = 0;
     obj.w15 = 0;
     obj.w16 = 0;
-    t = *(int *)((char *)&obj + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+    t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
     obj.vt = &DAT_0053a5c0[0];
     StringRef_Destruct_00130720(&obj.w16, -1);
     StringRef_Destruct_00130720(&obj.w15, -1);
@@ -115,16 +115,16 @@ void beFont_InitFields(void) {
     void *temp_s1;
     int temp_s0;
 
-    temp_s1 = (void *)((int *)DAT_00589678)[0];
+    temp_s1 = (void *)g_beFont_metaObject[0];
     temp_s0 = igMetaObject_GetFieldCount(temp_s1);
     igMetaObject_CreateFields(temp_s1, &DAT_004c6d60[0], 0xA);
     temp_s2 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0));
     ((igObjectRefMetaField *)temp_s2)->_metaObject = FUN_001a5d70();
     temp_s2_2 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 1));
-    ((igObjectRefMetaField *)temp_s2_2)->_metaObject = FUN_00361750();
+    ((igObjectRefMetaField *)temp_s2_2)->_metaObject = (int)FUN_00361750();
     ((igRefMetaField *)temp_s2_2)->_construct = 1;
     temp_s2_3 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 3));
-    ((igObjectRefMetaField *)temp_s2_3)->_metaObject = FUN_00362360();
+    ((igObjectRefMetaField *)temp_s2_3)->_metaObject = (int)FUN_00362360();
     ((igRefMetaField *)temp_s2_3)->_construct = 1;
     temp_s2_4 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 4));
     ((igObjectRefMetaField *)temp_s2_4)->_metaObject = igIntList_GetOrCreateMetaObject();

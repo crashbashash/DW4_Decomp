@@ -1,6 +1,6 @@
 #include "dw4/reflected.h"
 #include "dw4/igSmartPointer.h"
-#define ALLOC(var, arg) { int base_ = igObject_GetAllocator(arg); if (GPR_00554c14 != 0) var = base_; else var = Memory_GetAllocatorBySelector(DAT_00587110[0]); }
+#define ALLOC(var, arg) { int base_ = igObject_GetAllocator(arg); if (GPR_00554c14 != 0) var = base_; else var = Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]); }
 #define REL(q) { igObject *o_ = (igObject *)(q); if (o_) { o_->_refCount = o_->_refCount - 1; if ((o_->_refCount & 0x7fffff) == 0) igObject_Destroy(o_); } }
 #define RET(q) { igObject *o_ = (igObject *)(q); if (o_) o_->_refCount = o_->_refCount + 1; }
 
@@ -113,14 +113,14 @@ extern "C" int DAT_00562640[4];
 struct AABoxExtent { float x, y, z; };
 extern "C" igAABox * FUN_0018a660(...);
 extern "C" void FUN_0018b990(igAABox *, float *);
-extern "C" int DAT_00585be0[4];
+extern "C" int g_propertyNameField[4];
 extern "C" int DAT_0050ef10[4];
-extern "C" int DAT_00587110[4];
+extern "C" int g_defaultAllocatorSelector[4];
 extern "C" unsigned char GPR_00554c14;
 extern "C" igAABoxList *FUN_003908e0(beModelCtrlInfoHitBody *arg0, beBaseInfoRam *arg1, int arg2, long long arg3);
 struct S { char pad[12]; int f12; char pad2[16]; int f32; int f36; };
-extern "C" int DAT_00587ce8[4];
-extern "C" int DAT_00589208[4];
+extern "C" int g_beTargetObj_metaObject[4];
+extern "C" int g_beLua_metaObject[4];
 extern "C" void FUN_00390d70(S *arg0);
 extern "C" int g_beModelCtrlInfo_metaObject[4];
 class DW4VC_88_0 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual int vX(); };
@@ -135,14 +135,14 @@ extern "C" int DAT_0050ef50[4];
 extern "C" void Gap__Core__igObject__vfunc_29(beModelCtrl *arg0, beBaseInfoRam *arg1);
 extern "C" int g_beNDMWMdlMapCursor_metaObject[4];
 extern "C" igObject * beBaseInfoDataList_Create(...);
-extern "C" int DAT_004e0858[4];
+extern "C" int emptyString[4];
 extern "C" int DAT_0050ef60[4];
 extern "C" int DAT_0050ef68[4];
 extern "C" int DAT_0050ef70[4];
 extern "C" int DAT_0050ef78[4];
 extern "C" int DAT_0050ef80[4];
 extern "C" int DAT_0050ef88[4];
-extern "C" int DAT_00586f20[4];
+extern "C" int g_stringPool[4];
 class Ctl { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual int vX(); };
 /* Owning stack reference to the freshly created property list; released on scope exit once the ram
  * holds its own reference. */
@@ -200,9 +200,8 @@ extern "C" int DAT_0050f000[4];
 extern "C" void FUN_00392050(beModelCtrlInfoRideOn *arg0, int arg1, int arg2, int arg3);
 extern "C" int FUN_003921a0(beModelCtrlInfoRideOn *arg0, int arg1, int arg2);
 extern "C" int g_beModelCtrlInfoRideOn2_metaObject[4];
-extern "C" int g_vec3Zero[4];
 extern "C" void Gap__Bec__beModelCtrlInfoRideOn2__vfunc_21(beModelCtrlInfoRideOn2 *self);
-extern "C" float DAT_004e1058[4];
+extern "C" float g_vec3Zero[4];
 typedef struct { float x, y, z; } Vec3Float;
 extern "C" void Gap__Bec__beModelCtrlInfoRideOn3__vfunc_21(beModelCtrlInfoRideOn3 *self, void *m);
 extern "C" int DAT_0050f010[4];
@@ -245,8 +244,8 @@ extern "C" int DAT_0050f0e8[4];
 extern "C" int DAT_0050f0f0[4];
 extern "C" int DAT_0050f0f8[4];
 extern "C" int DAT_0050f100[4];
-extern "C" int DAT_00588da0[4];
-extern "C" int DAT_00588dd8[4];
+extern "C" int g_beModelCtrlMOVEEX_metaObject[4];
+extern "C" int g_beModelCtrlMOVE_metaObject[4];
 /* Owning references live across calls (retail exception table 0x543a8c): igSmartPointer<igObject> is the ObjectRef copy at
  * 0x33e9c0 (slot 152), MoveRef the copy emitted behind this function at 0x393aa0 (slot 156). */
 
@@ -297,18 +296,18 @@ typedef struct Cell { char pad12[12]; int value; } Cell;
 typedef struct PropData { char pad8[8]; Cell *first; Cell *second; int third; } PropData;
 typedef struct Prop_394400 { char pad16[16]; int base; PropData *data; } Prop_394400;
 extern "C" int DAT_0050f110[4];
-extern "C" beBaseInfoRam *DAT_0058a1e0[4];
-extern "C" int DAT_0058a1e4[4];
+extern "C" beBaseInfoRam *g_mdlEntity[4];
+extern "C" int g_mdlRamNo[4];
 extern "C" int DAT_0058a1e8[4];
-extern "C" int DAT_0058a1ec[4];
-extern "C" int DAT_0058a1f0[4];
-extern "C" int DAT_0058a1f4[4];
-extern "C" int DAT_0058a1f8[4];
-extern "C" int DAT_0058a1fc[4];
-extern "C" int DAT_0058a200[4];
-extern "C" int DAT_0058a204[4];
-extern "C" int DAT_0058a208[4];
-extern "C" int DAT_0058a20c[4];
+extern "C" int g_mdlMaxHp[4];
+extern "C" int g_mdlHp[4];
+extern "C" int g_mdlRecNo[4];
+extern "C" int g_mdlInfoName[4];
+extern "C" int g_mdlBulletKind[4];
+extern "C" int g_mdlBulletBoxNo[4];
+extern "C" int g_statusFieldA[4];
+extern "C" int g_bltShootRamNo[4];
+extern "C" int g_blpStatus[4];
 extern "C" char DAT_0058a210[16];
 extern "C" int DAT_0058a214[4];
 extern "C" void FUN_00394400(beModelCtrl *arg0, beBaseInfoRam *arg1, const char *arg2, const char *arg3, const char *arg4, int arg5, int arg6, const char *arg7, int arg8, int arg9);
@@ -335,28 +334,28 @@ typedef struct A { char pad[228]; int f228; } A;
 extern "C" int FUN_0039a500(int, B *);
 extern "C" char DAT_0050f178[];
 extern "C" char DAT_0050f188[];
-extern "C" int DAT_005887c8[4];
+extern "C" int g_beModelCtrlSCHitBox_metaObject[4];
 extern "C" int FUN_00394fa0(int arg0, int arg1, A *arg2, B *arg3);
 extern "C" int DAT_0050f190[4];
 extern "C" int DAT_0050f198[4];
 extern "C" int DAT_0050f1a0[4];
 extern "C" int DAT_0050f1b0[4];
-struct MutekiNameOf { static int *Get(beModelCtrlMUTEKI *m) { if (m->_name != 0) { return (int *)m->_name; } return &DAT_004e0858[0]; } };
+struct MutekiNameOf { static int *Get(beModelCtrlMUTEKI *m) { if (m->_name != 0) { return (int *)m->_name; } return &emptyString[0]; } };
 extern "C" int FUN_00395070(int arg0, int arg1, beModelCtrlInfoWork *arg2, beModelCtrlMUTEKI *arg3);
 struct VO_395250 { virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual int vX(); };
-extern "C" int DAT_00588df8[4];
-extern "C" int DAT_00588e08[4];
-extern "C" int DAT_00588d88[4];
-extern "C" int DAT_00588d70[4];
-extern "C" int DAT_00588d68[4];
-extern "C" int DAT_00588d20[4];
-extern "C" int DAT_00588d50[4];
-extern "C" int DAT_00588e10[4];
-extern "C" int DAT_00588e28[4];
-extern "C" int DAT_00588d60[4];
-extern "C" int DAT_00588df0[4];
-extern "C" int DAT_00588e20[4];
-extern "C" int DAT_00588e00[4];
+extern "C" int g_beModelCtrlCTRL_metaObject[4];
+extern "C" int g_beModelCtrlACTION_metaObject[4];
+extern "C" int g_beModelCtrlMOVERL_metaObject[4];
+extern "C" int g_beModelCtrlPDMOVE_metaObject[4];
+extern "C" int g_beModelCtrlWCHECK_metaObject[4];
+extern "C" int g_beModelCtrlHITBOX_metaObject[4];
+extern "C" int g_beModelCtrlMUTEKI_metaObject[4];
+extern "C" int g_beModelCtrlLABELCTRL_metaObject[4];
+extern "C" int g_beModelCtrlLUACALL_metaObject[4];
+extern "C" int g_beModelCtrlAIMAP_metaObject[4];
+extern "C" int g_beModelCtrlMSGBOX_metaObject[4];
+extern "C" int g_beModelCtrlLABEL_metaObject[4];
+extern "C" int g_beModelCtrlJUMP_metaObject[4];
 extern "C" void FUN_00395250(int arg0, int arg1, int arg2, beModelCtrlInfoWork *arg3);
 /* Steps the model's direction toward its target (per-axis rate limit, wrapping at 2*pi), then
  * writes the new rotation into the ram object's transform. The ram object's data list is created
@@ -561,7 +560,7 @@ extern "C" char DAT_0050f210[];
 extern "C" char DAT_0050f220[];
 extern "C" char DAT_0050f228[];
 extern "C" char DAT_0050f230[];
-extern "C" int DAT_00561898[4];
+extern "C" int g_igLod_metaObject[4];
 /* matching construct: RAII holder; its mangled destructor name pins the class name igSmartPointer<igObject> */
 
 /* Owning stack references to the objects this handler creates before binding them: kind 0 the AI
@@ -629,7 +628,7 @@ struct Hp {
     static inline void Ensure(beBaseInfoRam *e, beModelCtrlInfoRideOn *&s) {
         if (e->_dataList == 0) {
             int a = igObject_GetAllocator(e);
-            a = GPR_00554c14 ? a : Memory_GetAllocatorBySelector(DAT_00587110[0]);
+            a = GPR_00554c14 ? a : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
             igSmartPointer<igObject> r((igObject *)((beBaseInfoDataList *)beBaseInfoDataList_Create(a)));
             s = (beModelCtrlInfoRideOn *)r.p;
             RET(s)
@@ -658,7 +657,7 @@ void FUN_003908d0(void)
 
 igAABoxList *FUN_003908e0(beModelCtrlInfoHitBody *arg0, beBaseInfoRam *arg1, int arg2, long long arg3) {
     if (arg0->_isFirst != 0) {
-        beModelCtrlInfoDataHit *pr = ((beModelCtrlInfoDataHit *)igProperty_FindByName(((beBaseInfo *)arg1->_parentInfo)->_dataList, DAT_00585be0[0], DAT_0050ef10));
+        beModelCtrlInfoDataHit *pr = ((beModelCtrlInfoDataHit *)igProperty_FindByName(((beBaseInfo *)arg1->_parentInfo)->_dataList, g_propertyNameField[0], DAT_0050ef10));
         igAABoxList *q = (igAABoxList *)pr->_hitBulletAABoxList;
         arg0->_orgAABoxList = (int)q;
         arg0->_count = q->_count;
@@ -701,7 +700,7 @@ igAABoxList *FUN_003908e0(beModelCtrlInfoHitBody *arg0, beBaseInfoRam *arg1, int
             {
                 int alloc = igObject_GetAllocator(arg0);
                 int a;
-                if (GPR_00554c14 != 0) a = alloc; else a = Memory_GetAllocatorBySelector(DAT_00587110[0]);
+                if (GPR_00554c14 != 0) a = alloc; else a = Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
                 igSmartPointer<igAABox> ob(FUN_0018a660(a));
                 { igAABox *t = ob.p; igAABoxList *ol = (igAABoxList *)arg0->_AABoxList; ObjectList_AppendRetained(ol, t); }
             }
@@ -735,10 +734,10 @@ igAABoxList *FUN_003908e0(beModelCtrlInfoHitBody *arg0, beBaseInfoRam *arg1, int
 
 void FUN_00390d70(S *arg0) {
     if (arg0->f32 == 0) {
-        arg0->f32 = FUN_00236f80(arg0->f12, DAT_00589208[0]);
+        arg0->f32 = FUN_00236f80(arg0->f12, g_beLua_metaObject[0]);
     }
     if (arg0->f36 == 0) {
-        arg0->f36 = FUN_00236f80(arg0->f12, DAT_00587ce8[0]);
+        arg0->f36 = FUN_00236f80(arg0->f12, g_beTargetObj_metaObject[0]);
     }
 }
 
@@ -765,7 +764,7 @@ void Gap__Core__igObject__vfunc_29(beModelCtrl *arg0, beBaseInfoRam *arg1) {
 
     temp_s0 = (beBaseInfo *)arg1->_parentInfo;
     beMessenger_RegisterReceiverFromInfo(arg0->_messenger, arg1, &DAT_0050ef18[0]);
-    temp_v0 = (beModelCtrlInfoDataHit *)igProperty_FindByName(temp_s0->_dataList, DAT_00585be0[0], &DAT_0050ef10[0]);
+    temp_v0 = (beModelCtrlInfoDataHit *)igProperty_FindByName(temp_s0->_dataList, g_propertyNameField[0], &DAT_0050ef10[0]);
     if (temp_v0 != 0) {
         if (temp_v0->_isHitPlayerBullet != 0) {
             beMessenger_RegisterReceiverFromInfo(arg0->_messenger, arg1, &DAT_0050ef30[0]);
@@ -805,23 +804,23 @@ void FUN_00390f80(beModelCtrl *arg0, void *arg1, beBaseInfoRam *arg2, beModelCtr
     float fv;
     if (arg2->_dataList == 0) {
         v = igObject_GetAllocator(arg2);
-        v = (GPR_00554c14 != 0) ? v : Memory_GetAllocatorBySelector(DAT_00587110[0]);
+        v = (GPR_00554c14 != 0) ? v : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
         DataListInstall::make(arg2, v);
     }
-    prop = ((beModelCtrlInfoRamData *)igProperty_FindByName((igObject *)arg2->_dataList, DAT_00585be0[0], &DAT_0050ef60[0]));
+    prop = ((beModelCtrlInfoRamData *)igProperty_FindByName((igObject *)arg2->_dataList, g_propertyNameField[0], &DAT_0050ef60[0]));
     cur = (beModelCtrlInfoAI *)arg3->_aI;
     StringRef str(0);
     if (FUN_003a7e90(arg2, &DAT_0050ef68[0]) != 0) {
         e = ((beModelCtrlAIMap **)((beModelCtrlAIMapList *)arg4->_aIMapList)->_data)[cur->_mapNo];
         if ((char *)e->_targetType == 0) {
-            if (DAT_00586f20[0] == 0) {
+            if (g_stringPool[0] == 0) {
                 v = FUN_002eb010(16);
                 if (v != 0) {
                     v = StringPool_Construct(v);
                 }
-                DAT_00586f20[0] = v;
+                g_stringPool[0] = v;
             }
-            newv = (char *)StringPool_Intern(DAT_00586f20[0], (char *)&DAT_0050ef70[0]);
+            newv = (char *)StringPool_Intern(g_stringPool[0], (char *)&DAT_0050ef70[0]);
             oldv = (char *)e->_targetType;
             if (oldv != 0) {
                 int *a1 = (int *)oldv - 2;
@@ -873,16 +872,16 @@ void FUN_00390f80(beModelCtrl *arg0, void *arg1, beBaseInfoRam *arg2, beModelCtr
         if (nm2 != 0) {
             nm = nm2;
         } else {
-            nm = (char *)&DAT_004e0858[0];
+            nm = (char *)&emptyString[0];
         }
-        if (DAT_00586f20[0] == 0) {
+        if (g_stringPool[0] == 0) {
             v = FUN_002eb010(16);
             if (v != 0) {
                 v = StringPool_Construct(v);
             }
-            DAT_00586f20[0] = v;
+            g_stringPool[0] = v;
         }
-        newv = (char *)StringPool_Intern(DAT_00586f20[0], nm);
+        newv = (char *)StringPool_Intern(g_stringPool[0], nm);
         oldv = str.p;
         if (oldv != 0) {
             int *a1 = (int *)oldv - 2;
@@ -896,14 +895,14 @@ void FUN_00390f80(beModelCtrl *arg0, void *arg1, beBaseInfoRam *arg2, beModelCtr
         fv = seg->_time; fv = fv; FUN_003a7a20(arg2, &DAT_0050ef68[0], __fixsfdi((1e9f * fv) / 60.0f));
     } else {
         nm = (char *)cur->_seqName;
-        if (DAT_00586f20[0] == 0) {
+        if (g_stringPool[0] == 0) {
             v = FUN_002eb010(16);
             if (v != 0) {
                 v = StringPool_Construct(v);
             }
-            DAT_00586f20[0] = v;
+            g_stringPool[0] = v;
         }
-        newv = (char *)StringPool_Intern(DAT_00586f20[0], nm);
+        newv = (char *)StringPool_Intern(g_stringPool[0], nm);
         oldv = str.p;
         if (oldv != 0) {
             int *a1 = (int *)oldv - 2;
@@ -917,14 +916,14 @@ void FUN_00390f80(beModelCtrl *arg0, void *arg1, beBaseInfoRam *arg2, beModelCtr
     }
     arg3->_keyInput = strcmp(str.p, &DAT_0050ef88[0]) == 0;
     nm = str.p;
-    if (DAT_00586f20[0] == 0) {
+    if (g_stringPool[0] == 0) {
         v = FUN_002eb010(16);
         if (v != 0) {
             v = StringPool_Construct(v);
         }
-        DAT_00586f20[0] = v;
+        g_stringPool[0] = v;
     }
-    newv = (char *)StringPool_Intern(DAT_00586f20[0], nm);
+    newv = (char *)StringPool_Intern(g_stringPool[0], nm);
     oldv = (char *)arg3->_keyEventName;
     if (oldv != 0) {
         int *a1 = (int *)oldv - 2;
@@ -936,14 +935,14 @@ void FUN_00390f80(beModelCtrl *arg0, void *arg1, beBaseInfoRam *arg2, beModelCtr
     }
     arg3->_keyEventName = (int)newv;
     nm = str.p;
-    if (DAT_00586f20[0] == 0) {
+    if (g_stringPool[0] == 0) {
         v = FUN_002eb010(16);
         if (v != 0) {
             v = StringPool_Construct(v);
         }
-        DAT_00586f20[0] = v;
+        g_stringPool[0] = v;
     }
-    newv = (char *)StringPool_Intern(DAT_00586f20[0], nm);
+    newv = (char *)StringPool_Intern(g_stringPool[0], nm);
     oldv = (char *)cur->_seqName;
     if (oldv != 0) {
         int *a1 = (int *)oldv - 2;
@@ -959,7 +958,7 @@ void FUN_00390f80(beModelCtrl *arg0, void *arg1, beBaseInfoRam *arg2, beModelCtr
 int FUN_00391a10(int arg0, LogoSeqState *arg1, NamedEntry *arg2) {
     char *s;
     if (arg2->name != 0) s = arg2->name;
-    else s = (char *)&DAT_004e0858[0];
+    else s = (char *)&emptyString[0];
     if (strcmp(s, &DAT_0050efa8[0]) == 0) {
         arg1->mode = 1;
         arg1->sub = 0;
@@ -993,7 +992,7 @@ void Gap__Core__igObject__vfunc_38(int arg0, beBaseInfoRam *arg1) {
     info = (beBaseInfo *)arg1->_parentInfo;
     if (arg1->_dataList == 0) {
         allocator = igObject_GetAllocator(arg1);
-        allocator = (GPR_00554c14 != 0) ? allocator : Memory_GetAllocatorBySelector(DAT_00587110[0]);
+        allocator = (GPR_00554c14 != 0) ? allocator : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
         igSmartPointer<igObject> ref(beBaseInfoDataList_Create(allocator));
         list = ref.p;
         if (list != 0) {
@@ -1008,14 +1007,14 @@ void Gap__Core__igObject__vfunc_38(int arg0, beBaseInfoRam *arg1) {
         }
         arg1->_dataList = (int)list;
     }
-    work = ((beModelCtrlInfoRamData *)igProperty_FindByName(arg1->_dataList, DAT_00585be0[0], &DAT_0050ef60[0]))->_work;
-    prop = ((beModelCtrlInfoRamData *)igProperty_FindByName(info->_dataList, DAT_00585be0[0], &DAT_0050efd8[0]));
+    work = ((beModelCtrlInfoRamData *)igProperty_FindByName(arg1->_dataList, g_propertyNameField[0], &DAT_0050ef60[0]))->_work;
+    prop = ((beModelCtrlInfoRamData *)igProperty_FindByName(info->_dataList, g_propertyNameField[0], &DAT_0050efd8[0]));
     if (prop != 0) {
         if (((NodeView *)prop->_node)->f8 != 0) {
             FUN_00390f80((beModelCtrl *)arg0, (void *)info, arg1, (beModelCtrlInfoWork *)work, (beModelCtrlInfoDataAIM *)prop);
         }
     } else {
-        prop = ((beModelCtrlInfoRamData *)igProperty_FindByName(info->_dataList, DAT_00585be0[0], &DAT_0050efe0[0]));
+        prop = ((beModelCtrlInfoRamData *)igProperty_FindByName(info->_dataList, g_propertyNameField[0], &DAT_0050efe0[0]));
         if (prop != 0) {
             FUN_003915a0(arg0, info, arg1, work, prop);
         }
@@ -1067,12 +1066,12 @@ void FUN_00391cf0(KeyCtrlOwner *self, int arg1, int arg2, beModelCtrlInfoWork *s
         case 2:
             if (s->_keyInput == 1) {
                 char *n;
-                if (DAT_00586f20[0] == 0) {
+                if (g_stringPool[0] == 0) {
                     int p = FUN_002eb010(16);
                     if (p != 0) p = StringPool_Construct(p);
-                    DAT_00586f20[0] = p;
+                    g_stringPool[0] = p;
                 }
-                n = (char *)StringPool_Intern(DAT_00586f20[0], &DAT_0050ef88[0]);
+                n = (char *)StringPool_Intern(g_stringPool[0], &DAT_0050ef88[0]);
                 KeyEventName::rel((char *)s->_keyEventName);
                 s->_keyEventName = (int)n;
             }
@@ -1080,12 +1079,12 @@ void FUN_00391cf0(KeyCtrlOwner *self, int arg1, int arg2, beModelCtrlInfoWork *s
         case 3:
             if (s->_keyInput == 0) {
                 char *n;
-                if (DAT_00586f20[0] == 0) {
+                if (g_stringPool[0] == 0) {
                     int p = FUN_002eb010(16);
                     if (p != 0) p = StringPool_Construct(p);
-                    DAT_00586f20[0] = p;
+                    g_stringPool[0] = p;
                 }
-                n = (char *)StringPool_Intern(DAT_00586f20[0], &DAT_0050eff0[0]);
+                n = (char *)StringPool_Intern(g_stringPool[0], &DAT_0050eff0[0]);
                 KeyEventName::rel((char *)s->_keyEventName);
                 s->_keyEventName = (int)n;
             }
@@ -1102,9 +1101,9 @@ int FUN_00391fe0(beModelCtrl *arg0, beModelCtrlInfo *arg1, beBaseInfoRam *arg2, 
     int var_a4;
     int t;
 
-    var_a4 = arg3->_name ? arg3->_name : (int)&DAT_004e0858[0];
+    var_a4 = arg3->_name ? arg3->_name : (int)&emptyString[0];
     t = arg2->_ramNo;
-    var_a2 = arg1->_name ? arg1->_name : (int)&DAT_004e0858[0];
+    var_a2 = arg1->_name ? arg1->_name : (int)&emptyString[0];
     beMessenger_SendNamed(arg0->_messenger, &DAT_0050eff8[0], var_a2, t, var_a4);
     return 1;
 }
@@ -1119,14 +1118,14 @@ void FUN_00392050(beModelCtrlInfoRideOn *arg0, int arg1, int arg2, int arg3) {
     beMessenger_SendNamed(arg3, &DAT_0050ef18[0], arg1, arg2, &DAT_0050f000[0]);
     s1 = beMessenger_GetObject(arg3, 0);
     Matrix44_Copy(sp60, (char *)s1 + 32);
-    if (DAT_00586f20[0] == 0) {
+    if (g_stringPool[0] == 0) {
         v = FUN_002eb010(16);
         if (v != 0) {
             v = StringPool_Construct(v);
         }
-        DAT_00586f20[0] = v;
+        g_stringPool[0] = v;
     }
-    s0 = ((int)StringPool_Intern(DAT_00586f20[0], arg1));
+    s0 = ((int)StringPool_Intern(g_stringPool[0], arg1));
     old = arg0->_modelName;
     if (old != 0) {
         hd = (int *)(old - 8);
@@ -1169,7 +1168,7 @@ void Gap__Bec__beModelCtrlInfoRideOn3__vfunc_21(beModelCtrlInfoRideOn3 *self, vo
     Vec3Float t;
     Vec3Float d;
     float e, x, g, k, b, z, len, inv, y, c, a;
-    Matrix44_SetTranslation((float *)((char *)self->_oldMatrix), DAT_004e1058);
+    Matrix44_SetTranslation((float *)((char *)self->_oldMatrix), g_vec3Zero);
     Matrix44_GetTranslation((int)m, (float *)&t);
     d.x = ((Vec3Float *)self->_worldPosition)->x;
     d.y = ((Vec3Float *)self->_worldPosition)->y;
@@ -1222,11 +1221,11 @@ void FUN_003926d0(beModelCtrl *arg0, beBaseInfoRam *arg1, beBaseInfoRam *arg2, b
         if (arg3->_rideOnData == 0) t0 = DAT_0050f010; else t0 = DAT_0050f018;
         a2 = arg1->_ramNo;
         a3 = arg2->_ramNo;
-        a2 = a2 ? a2 : (int)DAT_004e0858;
+        a2 = a2 ? a2 : (int)emptyString;
         beMessenger_SendNamed(arg0->_messenger, DAT_0050f028, a2, a3, t0);
         if (arg3->_luaWHit != 0 && beMessenger_GetBool(arg0->_messenger, 1) != 0) {
             int s = arg1->_ramNo;
-            s = s ? s : (int)DAT_004e0858;
+            s = s ? s : (int)emptyString;
             FUN_00394400(arg0, arg2, (const char *)arg3->_luaWHit, (const char *)DAT_0050f038, (const char *)s, 0, 0, (const char *)0, 0, 0);
         }
     }
@@ -1235,7 +1234,7 @@ void FUN_003926d0(beModelCtrl *arg0, beBaseInfoRam *arg1, beBaseInfoRam *arg2, b
         {
             int a2 = arg1->_ramNo;
             int a3 = arg2->_ramNo;
-            a2 = a2 ? a2 : (int)DAT_004e0858;
+            a2 = a2 ? a2 : (int)emptyString;
             beMessenger_SendNamed(arg0->_messenger, DAT_0050f028, a2, a3, DAT_0050f040);
         }
         if (beMessenger_GetBoolCount(arg0->_messenger) == 0) return;
@@ -1257,7 +1256,7 @@ void FUN_003926d0(beModelCtrl *arg0, beBaseInfoRam *arg1, beBaseInfoRam *arg2, b
                 if (s7 != 0) {
                     int a2 = arg1->_ramNo;
                     int a3 = arg2->_ramNo;
-                    a2 = a2 ? a2 : (int)DAT_004e0858;
+                    a2 = a2 ? a2 : (int)emptyString;
                     beMessenger_SendNamed(arg0->_messenger, DAT_0050f028, a2, a3, DAT_0050f058);
                     FUN_00392be0((int)arg0, (int)arg2, arg3, 5);
                     s8 = true;
@@ -1265,7 +1264,7 @@ void FUN_003926d0(beModelCtrl *arg0, beBaseInfoRam *arg1, beBaseInfoRam *arg2, b
             } else if (b0) {
                 int a2 = arg1->_ramNo;
                 int a3 = arg2->_ramNo;
-                a2 = a2 ? a2 : (int)DAT_004e0858;
+                a2 = a2 ? a2 : (int)emptyString;
                 beMessenger_SendNamed(arg0->_messenger, DAT_0050f028, a2, a3, DAT_0050f058);
                 FUN_00392be0((int)arg0, (int)arg2, arg3, 5);
                 return;
@@ -1277,7 +1276,7 @@ void FUN_003926d0(beModelCtrl *arg0, beBaseInfoRam *arg1, beBaseInfoRam *arg2, b
         }
         if (arg3->_luaFHit != 0 && s7 != 0) {
             int s = arg1->_ramNo;
-            s = s ? s : (int)DAT_004e0858;
+            s = s ? s : (int)emptyString;
             FUN_00394400(arg0, arg2, (const char *)arg3->_luaFHit, (const char *)DAT_0050f078, (const char *)s, 0, 0, (const char *)0, 0, 0);
         }
         if (s8) {
@@ -1291,7 +1290,7 @@ void FUN_003926d0(beModelCtrl *arg0, beBaseInfoRam *arg1, beBaseInfoRam *arg2, b
                     int alloc = igObject_GetAllocator(arg0);
                     int a;
                     beModelCtrlInfoRideOn4 *n;
-                    if (GPR_00554c14 != 0) a = alloc; else a = Memory_GetAllocatorBySelector(DAT_00587110[0]);
+                    if (GPR_00554c14 != 0) a = alloc; else a = Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
                     RideOnRef holder((beModelCtrlInfoRideOn4 *)FUN_00351e20(a));
                     FUN_00392050((beModelCtrlInfoRideOn *)holder.p, s0, s5, arg0->_messenger);
                     n = holder.p;
@@ -1456,7 +1455,7 @@ void FUN_00392fa0(beModelCtrl *arg0, int arg1, beBaseInfoRam *arg2, beModelCtrlI
                 if (GPR_00554c14 != 0) {
                     var_v0 = (int)var_v0;
                 } else {
-                    var_v0 = Memory_GetAllocatorBySelector(DAT_00587110[0]);
+                    var_v0 = Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
                 }
                 {
                     igSmartPointer<igObject> r(beBaseInfoDataList_Create(var_v0));
@@ -1474,7 +1473,7 @@ void FUN_00392fa0(beModelCtrl *arg0, int arg1, beBaseInfoRam *arg2, beModelCtrlI
                     arg2->_dataList = (int)s1;
                 }
             }
-            prop = ((beModelCtrlInfoRamData *)igProperty_FindByName((igObject *)arg2->_dataList, DAT_00585be0[0], &DAT_0050ef60[0]));
+            prop = ((beModelCtrlInfoRamData *)igProperty_FindByName((igObject *)arg2->_dataList, g_propertyNameField[0], &DAT_0050ef60[0]));
             Matrix44_Copy(sp70, (char *)prop->_node + 0x20);
             vec[0] = FUN_00392e10((beModelCtrlMoveObject *)(MOVES(arg3)[0]), f20);
             vec[1] = FUN_00392e10((beModelCtrlMoveObject *)(MOVES(arg3)[1]), f20);
@@ -1507,7 +1506,7 @@ unsigned char FUN_00393260(beModelCtrl *arg0, beBaseInfoRam *arg1, beModelCtrlIn
             igObject *p, *old;
             Locals::CreateDataList(arg1, al, p, old);
         }
-        FUN_00192f50(&sp88[0], &DAT_004e1098[0], ((Prop *)igProperty_FindByName((igObject *)arg1->_dataList, DAT_00585be0[0], &DAT_0050ef60[0]))->f16 + 32);
+        FUN_00192f50(&sp88[0], &DAT_004e1098[0], ((Prop *)igProperty_FindByName((igObject *)arg1->_dataList, g_propertyNameField[0], &DAT_0050ef60[0]))->f16 + 32);
         {
             float r = atan2f(sp88[0], sp88[2]);
             *(float *)&arg2->_direction[1] = r;
@@ -1539,12 +1538,12 @@ unsigned char FUN_00393260(beModelCtrl *arg0, beBaseInfoRam *arg1, beModelCtrlIn
         sp9C.p = (igObject *)FUN_00352940(al);
         { igObject *q_ = sp9C.p; beModelCtrlMoveObjectList *l_ = *(beModelCtrlMoveObjectList **)&arg2->_moveObjectList; ObjectList_AppendRetained(l_, q_); }
     }
-    k = DAT_00588dd8[0];
+    k = g_beModelCtrlMOVE_metaObject[0];
     if (k == arg3->vX()) {
         char *nm;
         float fa, fb;
         beModelCtrlMOVE *m = (beModelCtrlMOVE *)arg3;
-        nm = m->_name ? (char *)m->_name : (char *)&DAT_004e0858[0];
+        nm = m->_name ? (char *)m->_name : (char *)&emptyString[0];
         fa = m->_value;
         fb = m->_frame;
         if (strcmp(nm, &DAT_0050f0c8[0]) == 0) {
@@ -1561,7 +1560,7 @@ unsigned char FUN_00393260(beModelCtrl *arg0, beBaseInfoRam *arg1, beModelCtrlIn
             FUN_00392d20((beModelCtrlMoveObject *)(MOVES(arg2)[1]), 1, fa, fb, 0.0f);
         }
     } else {
-        k = DAT_00588da0[0];
+        k = g_beModelCtrlMOVEEX_metaObject[0];
         if (k == arg3->vX()) {
             char *s;
             int idx, mode, off;
@@ -1569,7 +1568,7 @@ unsigned char FUN_00393260(beModelCtrl *arg0, beBaseInfoRam *arg1, beModelCtrlIn
             float fa, fb, fc, fd, fe;
             beModelCtrlMoveObject *obj;
             beModelCtrlMOVEEX *m = (beModelCtrlMOVEEX *)arg3;
-            s = m->_name ? (char *)m->_name : (char *)&DAT_004e0858[0];
+            s = m->_name ? (char *)m->_name : (char *)&emptyString[0];
             fa = m->_value;
             fb = m->_frame;
             fc = m->_playTime;
@@ -1592,7 +1591,7 @@ unsigned char FUN_00393260(beModelCtrl *arg0, beBaseInfoRam *arg1, beModelCtrlIn
         } else {
             char *s;
             beModelCtrlMOVERL *m = (beModelCtrlMOVERL *)arg3;
-            s = m->_name ? (char *)m->_name : (char *)&DAT_004e0858[0];
+            s = m->_name ? (char *)m->_name : (char *)&emptyString[0];
             if (strcmp(s, &DAT_0050f0f8[0]) == 0) {
                 igObject *ob, *old;
                 beMessenger_SendNamed(arg0->_messenger, &DAT_0050ef18[0], (char *)m->_modelName, arg1->_ramNo, &DAT_0050f100[0]);
@@ -1611,12 +1610,12 @@ unsigned char FUN_00393260(beModelCtrl *arg0, beBaseInfoRam *arg1, beModelCtrlIn
                 char *n1, *n2;
                 char *old1, *old2;
                 n1 = (char *)m->_modelName;
-                if (DAT_00586f20[0] == 0) {
+                if (g_stringPool[0] == 0) {
                     int p = FUN_002eb010(16);
                     if (p != 0) p = StringPool_Construct(p);
-                    DAT_00586f20[0] = p;
+                    g_stringPool[0] = p;
                 }
-                n1 = (char *)StringPool_Intern(DAT_00586f20[0], n1);
+                n1 = (char *)StringPool_Intern(g_stringPool[0], n1);
                 old1 = (char *)arg2->_posLockModelName;
                 if (old1 != 0) {
                     int *h = (int *)(old1 - 8);
@@ -1626,12 +1625,12 @@ unsigned char FUN_00393260(beModelCtrl *arg0, beBaseInfoRam *arg1, beModelCtrlIn
                 }
                 arg2->_posLockModelName = (int)n1;
                 n2 = (char *)m->_boneName;
-                if (DAT_00586f20[0] == 0) {
+                if (g_stringPool[0] == 0) {
                     int p = FUN_002eb010(16);
                     if (p != 0) p = StringPool_Construct(p);
-                    DAT_00586f20[0] = p;
+                    g_stringPool[0] = p;
                 }
-                n2 = (char *)StringPool_Intern(DAT_00586f20[0], n2);
+                n2 = (char *)StringPool_Intern(g_stringPool[0], n2);
                 old2 = (char *)arg2->_posLockBoneName;
                 if (old2 != 0) {
                     int *h = (int *)(old2 - 8);
@@ -1722,7 +1721,7 @@ void FUN_00393c80(int a0, int a1, beModelCtrlInfoWork *a2, int name, int val) {
         if (GPR_00554c14 != 0) {
             al = al0;
         } else {
-            al = Memory_GetAllocatorBySelector(DAT_00587110[0]);
+            al = Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
         }
         o = sp9C.p;
         if (o != 0) {
@@ -1744,7 +1743,7 @@ void FUN_00393c80(int a0, int a1, beModelCtrlInfoWork *a2, int name, int val) {
         if (GPR_00554c14 != 0) {
             al = al0;
         } else {
-            al = Memory_GetAllocatorBySelector(DAT_00587110[0]);
+            al = Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
         }
         o = sp9C.p;
         if (o != 0) {
@@ -1766,7 +1765,7 @@ void FUN_00393c80(int a0, int a1, beModelCtrlInfoWork *a2, int name, int val) {
         if (GPR_00554c14 != 0) {
             al = al0;
         } else {
-            al = Memory_GetAllocatorBySelector(DAT_00587110[0]);
+            al = Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
         }
         o = sp98.p;
         if (o != 0) {
@@ -1787,12 +1786,12 @@ void FUN_00393c80(int a0, int a1, beModelCtrlInfoWork *a2, int name, int val) {
     if (name == 0) {
         v = 0;
     } else {
-        if (DAT_00586f20[0] == 0) {
+        if (g_stringPool[0] == 0) {
             c = FUN_002eb010(16);
             if (c != 0) c = StringPool_Construct(c);
-            DAT_00586f20[0] = c;
+            g_stringPool[0] = c;
         }
-        v = (int)StringPool_Intern(DAT_00586f20[0], name);
+        v = (int)StringPool_Intern(g_stringPool[0], name);
     }
     {
         StringRef sp94((char *)v);
@@ -1802,12 +1801,12 @@ void FUN_00393c80(int a0, int a1, beModelCtrlInfoWork *a2, int name, int val) {
         if (name == 0) {
             v = 0;
         } else {
-            if (DAT_00586f20[0] == 0) {
+            if (g_stringPool[0] == 0) {
                 c = FUN_002eb010(16);
                 if (c != 0) c = StringPool_Construct(c);
-                DAT_00586f20[0] = c;
+                g_stringPool[0] = c;
             }
-            v = (int)StringPool_Intern(DAT_00586f20[0], name);
+            v = (int)StringPool_Intern(g_stringPool[0], name);
         }
         {
         StringRef sp90((char *)v);
@@ -1829,12 +1828,12 @@ void FUN_00393c80(int a0, int a1, beModelCtrlInfoWork *a2, int name, int val) {
         if (val == 0) {
             v = 0;
         } else {
-            if (DAT_00586f20[0] == 0) {
+            if (g_stringPool[0] == 0) {
                 c = FUN_002eb010(16);
                 if (c != 0) c = StringPool_Construct(c);
-                DAT_00586f20[0] = c;
+                g_stringPool[0] = c;
             }
-            v = (int)StringPool_Intern(DAT_00586f20[0], val);
+            v = (int)StringPool_Intern(g_stringPool[0], val);
         }
         {
         StringRef sp8C((char *)v);
@@ -1861,12 +1860,12 @@ void FUN_00393c80(int a0, int a1, beModelCtrlInfoWork *a2, int name, int val) {
         if (name == 0) {
             v = 0;
         } else {
-            if (DAT_00586f20[0] == 0) {
+            if (g_stringPool[0] == 0) {
                 c = FUN_002eb010(16);
                 if (c != 0) c = StringPool_Construct(c);
-                DAT_00586f20[0] = c;
+                g_stringPool[0] = c;
             }
-            v = (int)StringPool_Intern(DAT_00586f20[0], name);
+            v = (int)StringPool_Intern(g_stringPool[0], name);
         }
         {
             StringRef sp88((char *)v);
@@ -1875,12 +1874,12 @@ void FUN_00393c80(int a0, int a1, beModelCtrlInfoWork *a2, int name, int val) {
         if (val == 0) {
             v = 0;
         } else {
-            if (DAT_00586f20[0] == 0) {
+            if (g_stringPool[0] == 0) {
                 c = FUN_002eb010(16);
                 if (c != 0) c = StringPool_Construct(c);
-                DAT_00586f20[0] = c;
+                g_stringPool[0] = c;
             }
-            v = (int)StringPool_Intern(DAT_00586f20[0], val);
+            v = (int)StringPool_Intern(g_stringPool[0], val);
         }
         {
             StringRef sp84((char *)v);
@@ -1898,7 +1897,7 @@ void FUN_00393c80(int a0, int a1, beModelCtrlInfoWork *a2, int name, int val) {
 
 int FUN_003943c0(int arg0, int arg1, int arg2, beModelCtrlLABELCTRL *arg3) {
     int *p = (int *)arg3->_name;
-    p = p != 0 ? p : &DAT_004e0858[0];
+    p = p != 0 ? p : &emptyString[0];
     FUN_00393c80(arg0, arg1, (beModelCtrlInfoWork *)arg2, arg3->_seqName, (int)p);
     return 1;
 }
@@ -1922,7 +1921,7 @@ void FUN_00394400(beModelCtrl *arg0, beBaseInfoRam *arg1, const char *arg2, cons
         if (GPR_00554c14 != 0) {
             var_v0 = t;
         } else {
-            var_v0 = Memory_GetAllocatorBySelector(DAT_00587110[0]);
+            var_v0 = Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
         }
         igSmartPointer<igObject> created(beBaseInfoDataList_Create(var_v0));
         p = created.p;
@@ -1938,20 +1937,20 @@ void FUN_00394400(beModelCtrl *arg0, beBaseInfoRam *arg1, const char *arg2, cons
         }
         arg1->_dataList = (int)p;
     }
-    prop = ((Prop_394400 *)igProperty_FindByName((igObject *)arg1->_dataList, DAT_00585be0[0], &DAT_0050ef60[0]));
+    prop = ((Prop_394400 *)igProperty_FindByName((igObject *)arg1->_dataList, g_propertyNameField[0], &DAT_0050ef60[0]));
     q = prop->data;
-    DAT_0058a1e0[0] = arg1;
-    DAT_0058a1e4[0] = arg1->_ramNo;
+    g_mdlEntity[0] = arg1;
+    g_mdlRamNo[0] = arg1->_ramNo;
     DAT_0058a1e8[0] = prop->base + 0x20;
-    DAT_0058a1ec[0] = q->first->value;
-    DAT_0058a1f0[0] = q->second->value;
-    DAT_0058a1f4[0] = q->third;
-    DAT_0058a1f8[0] = (int)arg4;
-    DAT_0058a1fc[0] = arg5;
-    DAT_0058a200[0] = arg6;
-    DAT_0058a204[0] = (int)arg7;
-    DAT_0058a208[0] = arg8;
-    DAT_0058a20c[0] = arg9;
+    g_mdlMaxHp[0] = q->first->value;
+    g_mdlHp[0] = q->second->value;
+    g_mdlRecNo[0] = q->third;
+    g_mdlInfoName[0] = (int)arg4;
+    g_mdlBulletKind[0] = arg5;
+    g_mdlBulletBoxNo[0] = arg6;
+    g_statusFieldA[0] = (int)arg7;
+    g_bltShootRamNo[0] = arg8;
+    g_blpStatus[0] = arg9;
     DAT_0058a210[0] = 1;
     DAT_0058a214[0] = (int)arg3;
     saved = q->second->value;
@@ -1959,20 +1958,20 @@ void FUN_00394400(beModelCtrl *arg0, beBaseInfoRam *arg1, const char *arg2, cons
     beLua__RunNamedChunk(arg0->_luaManager, spA0, 0);
     h = q->second;
     if (saved == h->value) {
-        h->value = DAT_0058a1f0[0];
+        h->value = g_mdlHp[0];
     }
 }
 
 #define SETSTR(fld, lit) { \
     int *p; \
     s = (int *)arg4->_name; \
-    if (s != 0) { s = (int *)s; } else { s = &DAT_004e0858[0]; } \
-    if (DAT_00586f20[0] == 0) { \
+    if (s != 0) { s = (int *)s; } else { s = &emptyString[0]; } \
+    if (g_stringPool[0] == 0) { \
         int pool = FUN_002eb010(0x10); \
         if (pool != 0) pool = StringPool_Construct(pool); \
-        DAT_00586f20[0] = pool; \
+        g_stringPool[0] = pool; \
     } \
-    s = (int *)StringPool_Intern(DAT_00586f20[0], s); \
+    s = (int *)StringPool_Intern(g_stringPool[0], s); \
     p = (int *)arg3->fld; \
     if (p != 0) { \
         int *hd = p - 2; \
@@ -2002,10 +2001,10 @@ int FUN_00394640(beModelCtrl *arg0, beBaseInfo *arg1, beBaseInfoRam *arg2, beMod
     }
     if (ok) {
         a4 = (int *)arg1->_name;
-        if (a4 != 0) { a4 = (int *)a4; } else { a4 = &DAT_004e0858[0]; }
+        if (a4 != 0) { a4 = (int *)a4; } else { a4 = &emptyString[0]; }
         t = arg4->_modeName;
         a2 = (int *)arg4->_name;
-        if (a2 != 0) { a2 = (int *)a2; } else { a2 = &DAT_004e0858[0]; }
+        if (a2 != 0) { a2 = (int *)a2; } else { a2 = &emptyString[0]; }
         FUN_00394400(arg0, arg2, (const char *)a2, (const char *)t, (const char *)a4, 0, 0, (const char *)0, 0, 0);
     }
     return 1;
@@ -2023,10 +2022,10 @@ int FUN_00394920(beModelCtrl *arg0, beModelCtrlInfo *arg1, beBaseInfoRam *arg2, 
     int *name2;
     beModelCtrlInfoAI *o;
     beModelCtrlAIMap *prop;
-    lst = (beModelCtrlAIMapList *)((beModelCtrlInfoDataAIM *)igProperty_FindByName(arg1->_dataList, DAT_00585be0[0], &DAT_0050efd8[0]))->_aIMapList;
+    lst = (beModelCtrlAIMapList *)((beModelCtrlInfoDataAIM *)igProperty_FindByName(arg1->_dataList, g_propertyNameField[0], &DAT_0050efd8[0]))->_aIMapList;
     name = (int *)arg4->_name;
-    name = name != 0 ? name : &DAT_004e0858[0];
-    prop = (beModelCtrlAIMap *)igProperty_FindByName(lst, DAT_00585be0[0], name);
+    name = name != 0 ? name : &emptyString[0];
+    prop = (beModelCtrlAIMap *)igProperty_FindByName(lst, g_propertyNameField[0], name);
     beModelCtrlAIMap *key = prop;
     cnt = lst->_count;
     for (i = 0; i < cnt; i++) { if (*(beModelCtrlAIMap **)&key == ((beModelCtrlAIMap **)lst->_data)[i]) { idx = i; goto found; } }
@@ -2038,7 +2037,7 @@ found:
         if (prop->_targetType != 0 && strcmp(prop->_targetType, &DAT_0050ef78[0]) == 0) {
             DAT_0058a218[0] = &vec;
             name2 = (int *)arg1->_name;
-            name2 = name2 != 0 ? name2 : &DAT_004e0858[0];
+            name2 = name2 != 0 ? name2 : &emptyString[0];
             FUN_00394400(arg0, arg2, (const char *)&DAT_0050f128[0], (const char *)&DAT_0050f130[0], (const char *)name2, 0, 0, (const char *)0, 0, 0);
             { beModelCtrlInfoAI *oo = (beModelCtrlInfoAI *)arg3->_aI; ((float *)oo->_worldPos)[0] = vec.x; ((float *)oo->_worldPos)[1] = vec.y; ((float *)oo->_worldPos)[2] = vec.z; }
             DAT_0058a218[0] = 0;
@@ -2057,7 +2056,7 @@ int FUN_00394ae0(void **arg0, int arg1, beModelCtrlJUMP *arg2) {
     int *var_a2;
 
     var_a2 = (int *)(arg2->_name);
-    var_a2 = var_a2 ? var_a2 : (int *)&DAT_004e0858[0];
+    var_a2 = var_a2 ? var_a2 : (int *)&emptyString[0];
     ((DW4VC_140_1 *)(arg0))->vX(arg1, (int)(var_a2));
     return 1;
 }
@@ -2070,15 +2069,15 @@ int FUN_00394b30(int arg0, beModelCtrlInfoWork *arg1, igNamedObject *arg2) {
     void *temp_s0;
     char *temp_v1;
     var_s0 = (int *)arg2->_name;
-    var_s0 = var_s0 != 0 ? var_s0 : (int *)(&DAT_004e0858[0]);
-    if (DAT_00586f20[0] == 0) {
+    var_s0 = var_s0 != 0 ? var_s0 : (int *)(&emptyString[0]);
+    if (g_stringPool[0] == 0) {
         var_v0 = FUN_002eb010(0x10);
         if (var_v0 != 0) {
             var_v0 = StringPool_Construct(var_v0);
         }
-        DAT_00586f20[0] = var_v0;
+        g_stringPool[0] = var_v0;
     }
-    temp_s0 = (void *)(StringPool_Intern(DAT_00586f20[0], var_s0));
+    temp_s0 = (void *)(StringPool_Intern(g_stringPool[0], var_s0));
     temp_v1 = (char *)arg1->_wCheckName;
     if (temp_v1 != 0) {
         temp_a1 = (int *)(temp_v1 - 8);
@@ -2094,8 +2093,8 @@ int FUN_00394b30(int arg0, beModelCtrlInfoWork *arg1, igNamedObject *arg2) {
 
 #define SETSTR() do { \
     int v; int s4; int old; int *hd; \
-    if (DAT_00586f20[0] == 0) { v = FUN_002eb010(16); if (v != 0) v = StringPool_Construct(v); DAT_00586f20[0] = v; } \
-    s4 = ((int)StringPool_Intern(DAT_00586f20[0], 0)); \
+    if (g_stringPool[0] == 0) { v = FUN_002eb010(16); if (v != 0) v = StringPool_Construct(v); g_stringPool[0] = v; } \
+    s4 = ((int)StringPool_Intern(g_stringPool[0], 0)); \
     old = arg3->_wCheckName; \
     if (old != 0) { hd = (int *)(old - 8); v = *(int *)(old - 4) - 1; *(int *)(old - 4) = v; if (v == 0) StringChunk_ReleaseHeader(*hd, hd); } \
     arg3->_wCheckName = s4; \
@@ -2109,7 +2108,7 @@ void FUN_00394bf0(beModelCtrl *arg0, beModelCtrlInfo *arg1, beBaseInfoRam *arg2,
     } else if (strcmp(arg3->_wCheckName, DAT_0050f148) == 0) {
         int a2 = arg1->_name;
         int a3 = arg2->_ramNo;
-        a2 = a2 ? a2 : (int)DAT_004e0858;
+        a2 = a2 ? a2 : (int)emptyString;
         beMessenger_SendNamed(arg0->_messenger, DAT_0050eff8, a2, a3, DAT_0050f150);
         if (beMessenger_GetBool(arg0->_messenger, 0) != 0) {
             SETSTR();
@@ -2143,16 +2142,16 @@ int FUN_00394fa0(int arg0, int arg1, A *arg2, B *arg3) {
     if (t != 0) {
         var_a0 = t;
     } else {
-        var_a0 = ((char *)DAT_004e0858);
+        var_a0 = ((char *)emptyString);
     }
     if (strcmp(var_a0, DAT_0050f178) == 0) {
-        FUN_0039a130(arg2->f228, arg1, DAT_005887c8[0]);
+        FUN_0039a130(arg2->f228, arg1, g_beModelCtrlSCHitBox_metaObject[0]);
     } else {
         t = arg3->f8;
         if (t != 0) {
             var_a0_2 = t;
         } else {
-            var_a0_2 = ((char *)DAT_004e0858);
+            var_a0_2 = ((char *)emptyString);
         }
         if (strcmp(var_a0_2, DAT_0050f188) == 0) {
             FUN_0039a500(arg2->f228, arg3);
@@ -2193,53 +2192,53 @@ void FUN_00395250(int arg0, int arg1, int arg2, beModelCtrlInfoWork *arg3) {
         do {
             s1 = 1;
             s0 = ((VO_395250 **)((igObjectList *)spA0->_comList)->_data)[s2];
-            if (DAT_00588df8[0] == s0->vX()) {
+            if (g_beModelCtrlCTRL_metaObject[0] == s0->vX()) {
                 s1 = ((unsigned char)FUN_00391a10(arg0, (LogoSeqState *)arg3, (NamedEntry *)s0));
                 s2 += 1;
-            } else if (DAT_00588e08[0] == s0->vX()) {
+            } else if (g_beModelCtrlACTION_metaObject[0] == s0->vX()) {
                 s1 = ((unsigned char)FUN_00391fe0((beModelCtrl *)arg0, (beModelCtrlInfo *)arg1, (beBaseInfoRam *)arg2, (beModelCtrlACTION *)s0));
                 s2 += 1;
-            } else if (DAT_00588dd8[0] == s0->vX()) {
+            } else if (g_beModelCtrlMOVE_metaObject[0] == s0->vX()) {
                 s1 = FUN_00393260((beModelCtrl *)arg0, (beBaseInfoRam *)arg2, arg3, (Msg *)s0);
                 s2 += 1;
-            } else if (DAT_00588da0[0] == s0->vX()) {
+            } else if (g_beModelCtrlMOVEEX_metaObject[0] == s0->vX()) {
                 s1 = FUN_00393260((beModelCtrl *)arg0, (beBaseInfoRam *)arg2, arg3, (Msg *)s0);
                 s2 += 1;
-            } else if (DAT_00588d88[0] == s0->vX()) {
+            } else if (g_beModelCtrlMOVERL_metaObject[0] == s0->vX()) {
                 s1 = FUN_00393260((beModelCtrl *)arg0, (beBaseInfoRam *)arg2, arg3, (Msg *)s0);
                 s2 += 1;
-            } else if (DAT_00588d70[0] == s0->vX()) {
+            } else if (g_beModelCtrlPDMOVE_metaObject[0] == s0->vX()) {
                 s1 = ((unsigned char)FUN_00393b20(arg0, arg2, (A2 *)arg3, (A3 *)s0));
                 s2 += 1;
-            } else if (DAT_00588d68[0] == s0->vX()) {
+            } else if (g_beModelCtrlWCHECK_metaObject[0] == s0->vX()) {
                 s1 = ((unsigned char)FUN_00394b30(arg0, arg3, (igNamedObject *)s0));
                 s2 += 1;
-            } else if (DAT_00588d20[0] == s0->vX()) {
+            } else if (g_beModelCtrlHITBOX_metaObject[0] == s0->vX()) {
                 s1 = ((unsigned char)FUN_00394fa0(arg0, arg2, (A *)arg3, (B *)s0));
                 s2 += 1;
-            } else if (DAT_00588d50[0] == s0->vX()) {
+            } else if (g_beModelCtrlMUTEKI_metaObject[0] == s0->vX()) {
                 s1 = ((unsigned char)FUN_00395070(arg0, arg2, arg3, (beModelCtrlMUTEKI *)s0));
                 s2 += 1;
-            } else if (DAT_00588e10[0] == s0->vX()) {
+            } else if (g_beModelCtrlLABELCTRL_metaObject[0] == s0->vX()) {
                 s1 = ((unsigned char)FUN_003943c0(arg0, arg2, (int)arg3, (beModelCtrlLABELCTRL *)s0));
                 s2 += 1;
-            } else if (DAT_00588e28[0] == s0->vX()) {
+            } else if (g_beModelCtrlLUACALL_metaObject[0] == s0->vX()) {
                 s1 = ((unsigned char)FUN_00394640((beModelCtrl *)arg0, (beBaseInfo *)arg1, (beBaseInfoRam *)arg2, arg3, (beModelCtrlLUACALL *)s0));
                 s2 += 1;
-            } else if (DAT_00588d60[0] == s0->vX()) {
+            } else if (g_beModelCtrlAIMAP_metaObject[0] == s0->vX()) {
                 s1 = ((unsigned char)FUN_00394920((beModelCtrl *)arg0, (beModelCtrlInfo *)arg1, (beBaseInfoRam *)arg2, arg3, (beModelCtrlMSGBOX *)s0));
                 s2 += 1;
-            } else if (DAT_00588df0[0] == s0->vX()) {
+            } else if (g_beModelCtrlMSGBOX_metaObject[0] == s0->vX()) {
                 s1 = FUN_00394ad0(arg0, arg1, arg3, s0);
                 s2 += 1;
-            } else if (DAT_00588e20[0] == s0->vX()) {
+            } else if (g_beModelCtrlLABEL_metaObject[0] == s0->vX()) {
                 if (arg3->_comLabelCount != 0) {
                     s1 = 0;
                 } else {
                     arg3->_comLabelCount = 1;
                     s2 += 1;
                 }
-            } else if (DAT_00588e00[0] == s0->vX()) {
+            } else if (g_beModelCtrlJUMP_metaObject[0] == s0->vX()) {
                 s7 = ((unsigned char)FUN_00394ae0((void **)arg0, arg2, (beModelCtrlJUMP *)s0)) & 0xFF;
             }
         } while (s7 == 0 && (s1 & 0xFF) && s2 != ((igObjectList *)spA0->_comList)->_count);
@@ -2318,7 +2317,7 @@ void FUN_003956e0(int a0, int a1, beBaseInfoRam *obj, beModelCtrlInfoWork *st, i
     if (((Ref *)obj->_dataList) == 0) {
         int alloc = igObject_GetAllocator(obj);
         int a2;
-        if (GPR_00554c14 != 0) a2 = alloc; else a2 = Memory_GetAllocatorBySelector(DAT_00587110[0]);
+        if (GPR_00554c14 != 0) a2 = alloc; else a2 = Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
         igSmartPointer<igObject> created(((Ref *)beBaseInfoDataList_Create(a2)));
         Ref *r = (Ref *)created.p;
         if (r != 0) r->_refCount = r->_refCount + 1;
@@ -2329,7 +2328,7 @@ void FUN_003956e0(int a0, int a1, beBaseInfoRam *obj, beModelCtrlInfoWork *st, i
         }
         obj->_dataList = (int)r;
     }
-    m = ((Prop_3956e0 *)igProperty_FindByName(((Ref *)obj->_dataList), DAT_00585be0[0], &DAT_0050ef60[0]))->f16 + 32;
+    m = ((Prop_3956e0 *)igProperty_FindByName(((Ref *)obj->_dataList), g_propertyNameField[0], &DAT_0050ef60[0]))->f16 + 32;
     Matrix44_GetTranslation(m, tmp);
     FUN_00190ed0(m, v.x, ((float*)&v)[1], ((float*)&v)[2]);
     Matrix44_SetTranslation((float *)m, (void *)tmp);
@@ -2367,7 +2366,7 @@ void Gap__Core__igObject__vfunc_31(beModelCtrl *arg0, beBaseInfoRam *arg1) {
         int a;
         igObject *o;
         igObject *old;
-        if (GPR_00554c14 != 0) { a = base; } else { a = Memory_GetAllocatorBySelector(DAT_00587110[0]); }
+        if (GPR_00554c14 != 0) { a = base; } else { a = Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]); }
         igSmartPointer<igObject> ref(beBaseInfoDataList_Create(a));
         o = ref.p;
         if (o != 0) o->_refCount = o->_refCount + 1;
@@ -2378,7 +2377,7 @@ void Gap__Core__igObject__vfunc_31(beModelCtrl *arg0, beBaseInfoRam *arg1) {
         }
         arg1->_dataList = (int)o;
     }
-    beModelCtrlInfoRamData *prop = (beModelCtrlInfoRamData *)igProperty_FindByName(arg1->_dataList, DAT_00585be0[0], &DAT_0050ef60[0]);
+    beModelCtrlInfoRamData *prop = (beModelCtrlInfoRamData *)igProperty_FindByName(arg1->_dataList, g_propertyNameField[0], &DAT_0050ef60[0]);
     beModelCtrlInfoWork *q = (beModelCtrlInfoWork *)prop->_work;
     if (arg1->_isRun != 0 && q->_isOnFreeze == 0) {
         int t;
@@ -2389,12 +2388,12 @@ void Gap__Core__igObject__vfunc_31(beModelCtrl *arg0, beBaseInfoRam *arg1) {
             return;
         }
         q->_keyInput = 0;
-        if (DAT_00586f20[0] == 0) {
+        if (g_stringPool[0] == 0) {
             int pool = FUN_002eb010(16);
             if (pool != 0) pool = StringPool_Construct(pool);
-            DAT_00586f20[0] = pool;
+            g_stringPool[0] = pool;
         }
-        t = ((int)StringPool_Intern(DAT_00586f20[0], &DAT_0050efe8[0]));
+        t = ((int)StringPool_Intern(g_stringPool[0], &DAT_0050efe8[0]));
         if (q->_keyEventName != 0) {
             int *hdr = (int *)(q->_keyEventName - 8);
             int c = *(int *)(q->_keyEventName - 4) - 1;
@@ -2443,7 +2442,7 @@ void Gap__Core__igObject__vfunc_31(beModelCtrl *arg0, beBaseInfoRam *arg1) {
             sp248[2] = sp258[2] - sp268[2];
             Matrix44_Copy(sp130, p->_oldMatrix);
             Matrix44_Copy(spF0, prop->_node + 32);
-            Matrix44_SetTranslation((float *)sp130, (void *)&DAT_004e1058[0]);
+            Matrix44_SetTranslation((float *)sp130, (void *)&g_vec3Zero[0]);
             FUN_00191f30(&sp27C, sp130, sp130);
             Matrix44_SetTranslation((float *)spF0, (void *)sp248);
             igMatrix44f_SetIdentity(spB0);
@@ -2482,12 +2481,12 @@ int FUN_003960f0(int arg0, beModelCtrlInfoWork *self) {
         if (name == 0) {
             v = 0;
         } else {
-            if (DAT_00586f20[0] == 0) {
+            if (g_stringPool[0] == 0) {
                 int al = FUN_002eb010(16);
                 if (al != 0) al = StringPool_Construct(al);
-                DAT_00586f20[0] = al;
+                g_stringPool[0] = al;
             }
-            v = ((int)StringPool_Intern(DAT_00586f20[0], name));
+            v = ((int)StringPool_Intern(g_stringPool[0], name));
         }
         {
             StringRef key((char *)v);
@@ -2505,8 +2504,8 @@ int FUN_003960f0(int arg0, beModelCtrlInfoWork *self) {
                 n = ((igObjectList *)lst->_comList)->_count;
                 for (j = 0; j < n; j++) {
                     Obj *o = (Obj *)((int *)((igObjectList *)lst->_comList)->_data)[j];
-                    if (DAT_00588e20[0] == o->vX()) {
-                        if (strcmp(o->nm != 0 ? (int *)o->nm : &DAT_004e0858[0], s2) == 0) {
+                    if (g_beModelCtrlLABEL_metaObject[0] == o->vX()) {
+                        if (strcmp(o->nm != 0 ? (int *)o->nm : &emptyString[0], s2) == 0) {
                             igIntList *ia = (igIntList *)self->_labelOffsetList;
                             result = j;
                             if (ia->_count != 0 && idx >= 0 && idx < ia->_count) {
@@ -2534,7 +2533,7 @@ void FUN_00396940(beModelCtrl *arg0, beModelCtrlNode2 *arg1, igAABox *arg2) {
         if (GPR_00554c14 != 0) {
             a = alloc;
         } else {
-            a = Memory_GetAllocatorBySelector(DAT_00587110[0]);
+            a = Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
         }
         igSmartPointer<igAABox> created(FUN_0018a660(a));
         s0 = created.p;
@@ -2556,11 +2555,11 @@ void FUN_00396940(beModelCtrl *arg0, beModelCtrlNode2 *arg1, igAABox *arg2) {
     FUN_0018ac80(s0, arg1->_m);
 }
 
-#define ALLOC(a, o) int a = igObject_GetAllocator(o); a = GPR_00554c14 ? a : Memory_GetAllocatorBySelector(DAT_00587110[0]);
-#define POOL() if (((void * *)DAT_00586f20)[0] == 0) { void *pl_ = ((void *)FUN_002eb010(0x10)); if (pl_ != 0) pl_ = ((void *)StringPool_Construct(pl_)); ((void * *)DAT_00586f20)[0] = pl_; }
+#define ALLOC(a, o) int a = igObject_GetAllocator(o); a = GPR_00554c14 ? a : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
+#define POOL() if (((void * *)g_stringPool)[0] == 0) { void *pl_ = ((void *)FUN_002eb010(0x10)); if (pl_ != 0) pl_ = ((void *)StringPool_Construct(pl_)); ((void * *)g_stringPool)[0] = pl_; }
 #define SREL(old) if (old) { int *h_ = (int *)old - 2; int c_ = ((int *)old)[-1] - 1; ((int *)old)[-1] = c_; if (c_ == 0) StringChunk_ReleaseHeader(*h_, h_); }
-#define SETSTR(fld, txt) { POOL() const char *tk_ = ((const char *)StringPool_Intern(((void * *)DAT_00586f20)[0], txt)); const char *old_ = (const char *)d->fld; SREL(old_) d->fld = (int)tk_; }
-#define NAMEOF(b) const char *b; { const char *a_ = (const char *)nm->_name; if (a_ != 0) b = a_; else b = ((char *)DAT_004e0858); }
+#define SETSTR(fld, txt) { POOL() const char *tk_ = ((const char *)StringPool_Intern(((void * *)g_stringPool)[0], txt)); const char *old_ = (const char *)d->fld; SREL(old_) d->fld = (int)tk_; }
+#define NAMEOF(b) const char *b; { const char *a_ = (const char *)nm->_name; if (a_ != 0) b = a_; else b = ((char *)emptyString); }
 #define FLT(x) (*(float *)&(x))
 #define M (self->_messenger)
 #define CV ((CtlV *)self)
@@ -2579,7 +2578,7 @@ int Gap__Bec__beModelCtrl__vfunc_33(beModelCtrl *self, beBaseInfoRam *ent, const
     igObject *s_;
     beModelCtrlInfoRideOn *tf_;
     ENSURE(ent)
-    beModelCtrlInfoRamData *node = (beModelCtrlInfoRamData *)((beBaseInfoData *)igProperty_FindByName(ent->_dataList, DAT_00585be0[0], ((char *)DAT_0050ef60)));
+    beModelCtrlInfoRamData *node = (beModelCtrlInfoRamData *)((beBaseInfoData *)igProperty_FindByName(ent->_dataList, g_propertyNameField[0], ((char *)DAT_0050ef60)));
     beModelCtrlInfoWork *d = (beModelCtrlInfoWork *)node->_work;
     if (CV->v47(ent, msgname) == 1) return 1;
     unsigned sel = beMessenger_ResolveEnumValue(M, FUN_00356ab0(), msgname);
@@ -2592,14 +2591,14 @@ int Gap__Bec__beModelCtrl__vfunc_33(beModelCtrl *self, beBaseInfoRam *ent, const
         if (beMessenger_GetStringCount(M) == 1) {
             const char *t = beMessenger_GetString(M, 0);
             POOL()
-            const char *tk = ((const char *)StringPool_Intern(((void * *)DAT_00586f20)[0], t));
+            const char *tk = ((const char *)StringPool_Intern(((void * *)g_stringPool)[0], t));
             const char *o = sp30C.p;
             SREL(o)
             sp30C.p = (char *)tk;
         } else if (beMessenger_GetStringCount(M) >= 2) {
             const char *t = beMessenger_GetString(M, 1);
             POOL()
-            const char *tk = ((const char *)StringPool_Intern(((void * *)DAT_00586f20)[0], t));
+            const char *tk = ((const char *)StringPool_Intern(((void * *)g_stringPool)[0], t));
             const char *o = sp30C.p;
             SREL(o)
             sp30C.p = (char *)tk;
@@ -2622,8 +2621,8 @@ int Gap__Bec__beModelCtrl__vfunc_33(beModelCtrl *self, beBaseInfoRam *ent, const
         float ang = atan2f(c0_v.x, c0_v.z);
         FLT(d2->_direction[1]) = ang;
         FLT(d2->_targetDirection[1]) = ang;
-        if (((beBaseInfoData *)igProperty_FindByName(nm->_dataList, DAT_00585be0[0], ((char *)DAT_0050efd8))) != 0 ||
-            ((beBaseInfoData *)igProperty_FindByName(nm->_dataList, DAT_00585be0[0], ((char *)DAT_0050efe0))) != 0) {
+        if (((beBaseInfoData *)igProperty_FindByName(nm->_dataList, g_propertyNameField[0], ((char *)DAT_0050efd8))) != 0 ||
+            ((beBaseInfoData *)igProperty_FindByName(nm->_dataList, g_propertyNameField[0], ((char *)DAT_0050efe0))) != 0) {
             ALLOC(a, self)
             ObjRef<0> r((igObject *)FUN_00352140(a));
             igObject *s = r.p;
@@ -2680,7 +2679,7 @@ int Gap__Bec__beModelCtrl__vfunc_33(beModelCtrl *self, beBaseInfoRam *ent, const
                 beMessenger_GetVec3(&c8_238, M, 1);
                 p = &c8_238.x;
             } else {
-                p = DAT_004e1058;
+                p = g_vec3Zero;
             }
             c8_248.x = p[0]; c8_248.y = p[1]; c8_248.z = p[2];
             int sub = d->_subCommand;
@@ -2700,7 +2699,7 @@ int Gap__Bec__beModelCtrl__vfunc_33(beModelCtrl *self, beBaseInfoRam *ent, const
         }
         return 1;
     case 32: {
-        beModelCtrlInfoDataSeq *seq = (beModelCtrlInfoDataSeq *)((beBaseInfoData *)igProperty_FindByName(nm->_dataList, DAT_00585be0[0], DAT_0050f1e0));
+        beModelCtrlInfoDataSeq *seq = (beModelCtrlInfoDataSeq *)((beBaseInfoData *)igProperty_FindByName(nm->_dataList, g_propertyNameField[0], DAT_0050f1e0));
         igObjectList *l = (igObjectList *)seq->_dataList;
         int n = l->_count;
         beMessenger_AppendString(M, ((char *)DAT_0050f1b8));
@@ -2709,7 +2708,7 @@ int Gap__Bec__beModelCtrl__vfunc_33(beModelCtrl *self, beBaseInfoRam *ent, const
             beModelCtrlData *entry = (beModelCtrlData *)((void **)l->_data)[i];
             const char *b;
             const char *a_ = (const char *)entry->_name;
-            if (a_ != 0) b = a_; else b = ((char *)DAT_004e0858);
+            if (a_ != 0) b = a_; else b = ((char *)emptyString);
             beMessenger_AppendString(M, b);
         }
         return 1;
@@ -2759,7 +2758,7 @@ int Gap__Bec__beModelCtrl__vfunc_33(beModelCtrl *self, beBaseInfoRam *ent, const
     case 13:
         if (ent->_isRun != 0) {
             ENSURE(ent)
-            beBaseInfoData *t = ((beBaseInfoData *)igProperty_FindByName(ent->_dataList, DAT_00585be0[0], DAT_0050f1e8));
+            beBaseInfoData *t = ((beBaseInfoData *)igProperty_FindByName(ent->_dataList, g_propertyNameField[0], DAT_0050f1e8));
             if (t != 0) beMessenger_AppendObject(M, t);
         }
         return 1;
@@ -2793,7 +2792,7 @@ int Gap__Bec__beModelCtrl__vfunc_33(beModelCtrl *self, beBaseInfoRam *ent, const
         return 1;
     case 22:
         if (ent->_isRun != 0 && d != 0 && d->_svLODHighRange == -1.0f) {
-            int t = DAT_00561898[0];
+            int t = g_igLod_metaObject[0];
             igLod *o = LOD0(O3);
             if (t == ((LodV *)o)->v20()) {
                 igNodeList *yc = (igNodeList *)o->_childList;
@@ -2933,7 +2932,7 @@ int Gap__Bec__beModelCtrl__vfunc_33(beModelCtrl *self, beBaseInfoRam *ent, const
             if (strcmp(msgname, ((char *)DAT_0050f1b8)) == 0) {
                 CV->v43(ent);
                 POOL()
-                const char *tk = ((const char *)StringPool_Intern(((void * *)DAT_00586f20)[0], ((char *)DAT_0050f1b8)));
+                const char *tk = ((const char *)StringPool_Intern(((void * *)g_stringPool)[0], ((char *)DAT_0050f1b8)));
                 const char *old = (const char *)d->_seqCodeName;
                 SREL(old)
                 d->_seqCodeName = (int)tk;
@@ -2950,10 +2949,10 @@ int Gap__Bec__beModelCtrl__vfunc_33(beModelCtrl *self, beBaseInfoRam *ent, const
                 beMessenger_PopArgContext(M);
             } else {
                 const char *tk;
-                beModelCtrlInfoDataSeq *fb = (beModelCtrlInfoDataSeq *)((beBaseInfoData *)igProperty_FindByName(nm->_dataList, DAT_00585be0[0], DAT_0050f1e0));
-                beModelCtrlData *t = (beModelCtrlData *)((beBaseInfoData *)igProperty_FindByName(fb->_dataList, DAT_00585be0[0], msgname));
+                beModelCtrlInfoDataSeq *fb = (beModelCtrlInfoDataSeq *)((beBaseInfoData *)igProperty_FindByName(nm->_dataList, g_propertyNameField[0], DAT_0050f1e0));
+                beModelCtrlData *t = (beModelCtrlData *)((beBaseInfoData *)igProperty_FindByName(fb->_dataList, g_propertyNameField[0], msgname));
                 POOL()
-                tk = ((const char *)StringPool_Intern(((void * *)DAT_00586f20)[0], msgname));
+                tk = ((const char *)StringPool_Intern(((void * *)g_stringPool)[0], msgname));
                 const char *old = (const char *)d->_seqCodeName;
                 SREL(old)
                 d->_seqCodeName = (int)tk;
@@ -3086,7 +3085,7 @@ int Gap__Bec__beModelCtrl__vfunc_33(beModelCtrl *self, beBaseInfoRam *ent, const
                     Matrix44_Copy(((beModelCtrlInfoRideOn4 *)r.p)->_oldMatrix, c27_m);
                     ((int *)&c27_t)[1] = 0;
                     { beModelCtrlInfoRideOn4 *f4 = (beModelCtrlInfoRideOn4 *)r.p; FLT(f4->_oldPlayerPos[0]) = c27_t.x; FLT(f4->_oldPlayerPos[1]) = c27_t.y; FLT(f4->_oldPlayerPos[2]) = c27_t.z; }
-                    { beModelCtrlInfoRideOn4 *f4 = (beModelCtrlInfoRideOn4 *)r.p; FLT(f4->_vector[0]) = DAT_004e1058[0]; FLT(f4->_vector[1]) = DAT_004e105c[0]; FLT(f4->_vector[2]) = DAT_004e1060[0]; }
+                    { beModelCtrlInfoRideOn4 *f4 = (beModelCtrlInfoRideOn4 *)r.p; FLT(f4->_vector[0]) = g_vec3Zero[0]; FLT(f4->_vector[1]) = DAT_004e105c[0]; FLT(f4->_vector[2]) = DAT_004e1060[0]; }
                     ((beModelCtrlInfoRideOn4 *)r.p)->_scalar = beMessenger_GetFloat(M, 0);
                     ((beModelCtrlInfoRideOn4 *)r.p)->_limitter = beMessenger_GetFloat(M, 1);
                     {

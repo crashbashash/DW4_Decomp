@@ -4,11 +4,11 @@ void FUN_00349d70(int arg0) {
 }
 
 void *FUN_00349db0(void) {
-    struct G *g = DAT_00588280[0];
-    if (!g || ((g->f & 4) != 0) == false) {
+    igMetaObject *g = g_beSvFileMakeApi_metaObject[0];
+    if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_00349e90();
     }
-    return DAT_00588280[0];
+    return g_beSvFileMakeApi_metaObject[0];
 }
 
 int beSvFileMakeApi_GetVTable(void) {
@@ -22,7 +22,7 @@ int beSvFileMakeApi_GetVTable(void) {
     obj.vt = &DAT_0053c000[0];
     obj.w[15] = 0;
     obj.w[16] = 0;
-    r = *(int *)((char *)&obj + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+    r = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
     obj.vt = &DAT_0053c000[0];
     FUN_003484b0((struct Ref **)(&obj.w[16]), (short)(-1));
     FUN_00349080((void **)(&obj.w[15]), (long long)(-1));
@@ -63,13 +63,13 @@ void beSvFileMakeApi_InitFields(void) {
     void *temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)((int *)DAT_00588280)[0];
+    temp_s0 = (void *)g_beSvFileMakeApi_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_004c4138[0], 2);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = FUN_0034a210();
+    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_0034a210();
     temp_s1_2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
-    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = FUN_0034ac90();
+    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = (int)FUN_0034ac90();
     igMetaObject_NameFields(temp_s0, &DAT_004c4140[0], &DAT_004c4148[0], &DAT_004c4150[0], temp_s2);
 }
 

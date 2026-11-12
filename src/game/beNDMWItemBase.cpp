@@ -131,8 +131,8 @@ extern "C" int DAT_0051d5d8[4];
 extern "C" int DAT_0051d5e8[4];
 extern "C" int DAT_0051d5f8[4];
 extern "C" int DAT_0051d600[4];
-extern "C" int DAT_00589208[4];
-extern "C" int DAT_0058c0a0[4];
+extern "C" int g_beLua_metaObject[4];
+extern "C" int g_beNDMWGameRam_metaObject[4];
 class DW4VC_96_1 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual int vX(int); };
 extern "C" int Gap__Bec__beNDMWItemDisk__vfunc_22(beNDMWItemDisk *arg0, beNDMWGameRam *arg1, int arg2);
 extern "C" char DAT_0051d610[];
@@ -484,7 +484,7 @@ int Gap__Bec__beNDMWItemDisk__vfunc_22(beNDMWItemDisk *arg0, beNDMWGameRam *arg1
     int v = arg0->_recNo;
     switch (v) {
     case 9: {
-        int s3 = FUN_00236f80(arg1->_insight, DAT_0058c0a0[0]);
+        int s3 = FUN_00236f80(arg1->_insight, g_beNDMWGameRam_metaObject[0]);
         FUN_003f9c80(s3, arg2, beNDMWItemBase_GetRecordInt((beNDMWItemBase *)arg0, (beNDMWStatus *)arg1, (const char *)&DAT_0051d5a8[0]), -1);
         FUN_003f9e20(s3, arg2, beNDMWItemBase_GetRecordInt((beNDMWItemBase *)arg0, (beNDMWStatus *)arg1, (const char *)&DAT_0051d5b0[0]));
         return 0;
@@ -493,14 +493,14 @@ int Gap__Bec__beNDMWItemDisk__vfunc_22(beNDMWItemDisk *arg0, beNDMWGameRam *arg1
     switch (v) {
     case 0: case 1: case 2: {
         int r = beNDMWItemBase_GetRecordInt((beNDMWItemBase *)arg0, (beNDMWStatus *)arg1, (const char *)&DAT_0051d5a8[0]);
-        FUN_003f9c80(FUN_00236f80(arg1->_insight, DAT_0058c0a0[0]), arg2, r, -1);
+        FUN_003f9c80(FUN_00236f80(arg1->_insight, g_beNDMWGameRam_metaObject[0]), arg2, r, -1);
         return 0;
     }
     }
     switch (v) {
     case 3: case 4: case 5: {
         int r = beNDMWItemBase_GetRecordInt((beNDMWItemBase *)arg0, (beNDMWStatus *)arg1, (const char *)&DAT_0051d5b0[0]);
-        FUN_003f9e20(FUN_00236f80(arg1->_insight, DAT_0058c0a0[0]), arg2, r);
+        FUN_003f9e20(FUN_00236f80(arg1->_insight, g_beNDMWGameRam_metaObject[0]), arg2, r);
         return 0;
     }
     }
@@ -530,7 +530,7 @@ int Gap__Bec__beNDMWItemDisk__vfunc_22(beNDMWItemDisk *arg0, beNDMWGameRam *arg1
         return 0;
     }
     case 8: {
-        int s1 = FUN_00236f80(arg1->_insight, DAT_00589208[0]);
+        int s1 = FUN_00236f80(arg1->_insight, g_beLua_metaObject[0]);
         SYSsetGateStage(&DAT_0051d5f8[0], arg2);
         beLua__RunNamedChunk(s1, &DAT_0051d600[0], 0);
         return 1;

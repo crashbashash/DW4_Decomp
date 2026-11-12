@@ -3,11 +3,11 @@ void FUN_0018a660(int arg0) {
     igMetaObject_CreateInstance(*(int *)0x5610E0, arg0);
 }
 
-int FUN_0018a6a0(void) {
-    if (DAT_005610e0[0] == 0) {
-        DAT_005610e0[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(DAT_00587040[0]));
+igMetaObject *FUN_0018a6a0(void) {
+    if (g_igAABox_metaObject[0] == 0) {
+        g_igAABox_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
     }
-    return DAT_005610e0[0];
+    return g_igAABox_metaObject[0];
 }
 
 igMetaObject *igAABox_GetMetaObject(void)
@@ -23,7 +23,7 @@ int igAABox_GetVTable(void) {
     int off;
     igObject_InitHeader(&tmp[0]);
     tmp[0] = (int)&DAT_005277e0[0];
-    off = *(int *)((char *)(DAT_00586dc8[0]) + 916);
+    off = *(int *)((char *)(g_objectSystem[0]) + 916);
     return *(int *)((char *)tmp + off);
 }
 
@@ -61,7 +61,7 @@ void igAABox_InitFields(void) {
     int temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)DAT_005610e0[0];
+    temp_s0 = (void *)g_igAABox_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_0048ae58[0], 2);
     temp_a0 = igMetaObject_GetFieldAt(temp_s0, temp_s1);
@@ -82,23 +82,23 @@ void thunk_FUN_0018a8f0(void) {
 }
 
 void FUN_0018a8f0(void) {
-    FUN_0018fbc0((void *)DAT_005610e0[0], (void *)DAT_005610e0[0], (int)FUN_0018b050);
-    FUN_0018fbc0((void *)DAT_005610e0[0], igPlane_GetMetaObject(), (int)FUN_0018b110);
-    FUN_0018fbc0((void *)DAT_005610e0[0], igSphere_GetMetaObject(), (int)FUN_0018afa0);
-    FUN_0018fca0((PairKeyedItem *)DAT_005610e0[0], (PairKeyedItem *)DAT_005610e0[0], (int)FUN_0018b350);
-    FUN_0018fca0((PairKeyedItem *)DAT_005610e0[0], (PairKeyedItem *)DAT_00560fe0[0], (int)FUN_0018b300);
-    FUN_0018fca0((PairKeyedItem *)DAT_005610e0[0], (PairKeyedItem *)DAT_00560fa0[0], (int)FUN_0018b450);
-    FUN_0018fc30((IndexedWordPairKey *)DAT_005610e0[0], (IndexedWordPairKey *)DAT_005610e0[0], (int)FUN_0018b730);
-    FUN_0018fc30((IndexedWordPairKey *)DAT_005610e0[0], (IndexedWordPairKey *)DAT_00560fa0[0], (int)FUN_0018b7d0);
-    FUN_0018fd10((int *)DAT_005610e0[0], (int)FUN_0018b170);
-    FUN_0018fd90((IndexedWordKey *)DAT_005610e0[0], (int)FUN_0018b540);
-    FUN_0018fd50((IndexedSlotKey *)DAT_005610e0[0], (int)FUN_0018b6b0);
-    FUN_0018fe10((int *)DAT_005610e0[0], (int)FUN_0018b630);
-    FUN_0018fdd0(DAT_005610e0[0], (int)FUN_0018b890);
-    FUN_0018fe50((IndexedSlotKey *)DAT_005610e0[0], (int)thunk_FUN_0018ac80);
-    FUN_0018fe90((IndexedWordKey *)DAT_005610e0[0], (int)FUN_0018b940);
-    FUN_0018fed0(DAT_005610e0[0], (int)FUN_0018b970);
-    FUN_0018ff10((int *)DAT_005610e0[0], (int)FUN_0018b990);
+    FUN_0018fbc0((void *)g_igAABox_metaObject[0], (void *)g_igAABox_metaObject[0], (int)FUN_0018b050);
+    FUN_0018fbc0((void *)g_igAABox_metaObject[0], igPlane_GetMetaObject(), (int)FUN_0018b110);
+    FUN_0018fbc0((void *)g_igAABox_metaObject[0], igSphere_GetMetaObject(), (int)FUN_0018afa0);
+    FUN_0018fca0((PairKeyedItem *)g_igAABox_metaObject[0], (PairKeyedItem *)g_igAABox_metaObject[0], (int)FUN_0018b350);
+    FUN_0018fca0((PairKeyedItem *)g_igAABox_metaObject[0], (PairKeyedItem *)g_igPlane_metaObject[0], (int)FUN_0018b300);
+    FUN_0018fca0((PairKeyedItem *)g_igAABox_metaObject[0], (PairKeyedItem *)g_igSphere_metaObject[0], (int)FUN_0018b450);
+    FUN_0018fc30((IndexedWordPairKey *)g_igAABox_metaObject[0], (IndexedWordPairKey *)g_igAABox_metaObject[0], (int)FUN_0018b730);
+    FUN_0018fc30((IndexedWordPairKey *)g_igAABox_metaObject[0], (IndexedWordPairKey *)g_igSphere_metaObject[0], (int)FUN_0018b7d0);
+    FUN_0018fd10((int *)g_igAABox_metaObject[0], (int)FUN_0018b170);
+    FUN_0018fd90((IndexedWordKey *)g_igAABox_metaObject[0], (int)FUN_0018b540);
+    FUN_0018fd50((IndexedSlotKey *)g_igAABox_metaObject[0], (int)FUN_0018b6b0);
+    FUN_0018fe10((int *)g_igAABox_metaObject[0], (int)FUN_0018b630);
+    FUN_0018fdd0(g_igAABox_metaObject[0], (int)FUN_0018b890);
+    FUN_0018fe50((IndexedSlotKey *)g_igAABox_metaObject[0], (int)thunk_FUN_0018ac80);
+    FUN_0018fe90((IndexedWordKey *)g_igAABox_metaObject[0], (int)FUN_0018b940);
+    FUN_0018fed0(g_igAABox_metaObject[0], (int)FUN_0018b970);
+    FUN_0018ff10((int *)g_igAABox_metaObject[0], (int)FUN_0018b990);
 }
 
 void FUN_0018aaa0(S *arg0, float *arg1) {

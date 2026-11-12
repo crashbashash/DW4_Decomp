@@ -4,20 +4,20 @@
     if ((text) == 0) { \
         tok = 0; \
     } else { \
-        if (((void * *)DAT_00586f20)[0] == 0) { \
+        if (((void * *)g_stringPool)[0] == 0) { \
             void *pool = FUN_002eb010(0x10); \
             if (pool != 0) pool = StringPool_Construct(pool); \
-            ((void * *)DAT_00586f20)[0] = pool; \
+            ((void * *)g_stringPool)[0] = pool; \
         } \
-        tok = StringPool_Intern(((void * *)DAT_00586f20)[0], (const char *)(text)); \
+        tok = StringPool_Intern(((void * *)g_stringPool)[0], (const char *)(text)); \
     } \
     StringRef held(tok); \
     StringList_AppendRetained(field, (const StringRef &)held); }
 #define INTERN_APPEND_440a20(field, text) { \
     void *tok; \
     if ((text) == 0) { tok = (void *)0; } else { \
-        if (DAT_00586f20[0] == 0) { int pool = ((int)FUN_002eb010(0x10)); if (pool != 0) { pool = ((int)StringPool_Construct(pool)); } DAT_00586f20[0] = pool; } \
-        tok = ((void *)StringPool_Intern(DAT_00586f20[0], (text))); } \
+        if (g_stringPool[0] == 0) { int pool = ((int)FUN_002eb010(0x10)); if (pool != 0) { pool = ((int)StringPool_Construct(pool)); } g_stringPool[0] = pool; } \
+        tok = ((void *)StringPool_Intern(g_stringPool[0], (text))); } \
     StringList_AppendRetained(field, StringRef(tok)); }
 
 class StringRef;
@@ -50,7 +50,7 @@ extern "C" int DAT_0051c488[4];
 extern "C" int DAT_0051c498[4];
 extern "C" int DAT_0051c4a0[4];
 extern "C" int DAT_0051c4b0[4];
-extern "C" int DAT_00586f20[4];
+extern "C" int g_stringPool[4];
 /* Owning stack reference to a pooled string token (reference count at p[-1], chunk header at
  * p[-2]); releases the token on scope exit. */
 class StringRef {
@@ -69,13 +69,13 @@ struct Str { static inline int intern(int *s) {
     if (s == 0) {
         ref = 0;
     } else {
-        if (DAT_00586f20[0] == 0) {
+        if (g_stringPool[0] == 0) {
             pool = ((int)FUN_002eb010(16));
             if (pool)
                 pool = ((int)StringPool_Construct(pool));
-            DAT_00586f20[0] = pool;
+            g_stringPool[0] = pool;
         }
-        ref = ((int)StringPool_Intern(DAT_00586f20[0], s));
+        ref = ((int)StringPool_Intern(g_stringPool[0], s));
     }
     return ref;
 }
@@ -123,13 +123,13 @@ struct StringRefHelpers { static inline int intern(int *s) {
     if (s == 0) {
         ref = 0;
     } else {
-        if (DAT_00586f20[0] == 0) {
+        if (g_stringPool[0] == 0) {
             pool = ((int)FUN_002eb010(16));
             if (pool)
                 pool = ((int)StringPool_Construct(pool));
-            DAT_00586f20[0] = pool;
+            g_stringPool[0] = pool;
         }
-        ref = ((int)StringPool_Intern(DAT_00586f20[0], s));
+        ref = ((int)StringPool_Intern(g_stringPool[0], s));
     }
     return ref;
 }
@@ -224,13 +224,13 @@ void Gap__Bec__beNDMWShopSelect00__vfunc_22(beNDMWShopSelect00 *arg0) {
         }
         beNDMWWindow_RunMessageScript(arg0, &DAT_0051c4a0[0], arg0->_entCode);
     }
-    if (DAT_00586f20[0] == 0) {
+    if (g_stringPool[0] == 0) {
         pool = ((int)FUN_002eb010(16));
         if (pool)
             pool = ((int)StringPool_Construct(pool));
-        DAT_00586f20[0] = pool;
+        g_stringPool[0] = pool;
     }
-    ref = ((int)StringPool_Intern(DAT_00586f20[0], &DAT_0051c4b0[0]));
+    ref = ((int)StringPool_Intern(g_stringPool[0], &DAT_0051c4b0[0]));
     old = arg0->_infoName;
     Str::release(old);
     arg0->_infoName = ref;
@@ -270,12 +270,12 @@ void Gap__Bec__beNDMWShopSelect01__vfunc_22(beNDMWShopSelect01 *arg0) {
         arg0->_selectMax = 3;
         break;
     }
-    if (((void * *)DAT_00586f20)[0] == 0) {
+    if (((void * *)g_stringPool)[0] == 0) {
         void *pool = FUN_002eb010(0x10);
         if (pool != 0) pool = StringPool_Construct(pool);
-        ((void * *)DAT_00586f20)[0] = pool;
+        ((void * *)g_stringPool)[0] = pool;
     }
-    n = StringPool_Intern(((void * *)DAT_00586f20)[0], (const char *)DAT_0051c4d0);
+    n = StringPool_Intern(((void * *)g_stringPool)[0], (const char *)DAT_0051c4d0);
     old = (const char *)arg0->_infoName;
     if (old != 0) {
         int *hd = (int *)old - 2;
@@ -298,12 +298,12 @@ void Gap__Bec__beNDMWShopSelect03__vfunc_22(beNDMWShopSelect03 *arg0) {
         INTERN_APPEND(arg0->_textCloseNameList, DAT_0051c5a8)
         beNDMWWindow_RunMessageScript(arg0, DAT_0051c4a0, arg0->_entCode);
     }
-    if (((void * *)DAT_00586f20)[0] == 0) {
+    if (((void * *)g_stringPool)[0] == 0) {
         void *pool = FUN_002eb010(0x10);
         if (pool != 0) pool = StringPool_Construct(pool);
-        ((void * *)DAT_00586f20)[0] = pool;
+        ((void * *)g_stringPool)[0] = pool;
     }
-    n = StringPool_Intern(((void * *)DAT_00586f20)[0], (const char *)DAT_0051c5b0);
+    n = StringPool_Intern(((void * *)g_stringPool)[0], (const char *)DAT_0051c5b0);
     old = (const char *)arg0->_infoName;
     if (old != 0) {
         int *hd = (int *)old - 2;
@@ -362,13 +362,13 @@ void Gap__Bec__beNDMWShopSelect11__vfunc_22(beNDMWShopSelect11 *arg0) {
     beMessenger_DispatchSelected(arg0->_messenger, &DAT_0051c670[0]);
     beNDMWShopSelect11_RefreshStatCosts(arg0);
     beNDMWWindow_RunMessageScript(arg0, &DAT_0051c4a0[0], arg0->_entCode + 0x482);
-    if (DAT_00586f20[0] == 0) {
+    if (g_stringPool[0] == 0) {
         pool = ((int)FUN_002eb010(16));
         if (pool)
             pool = ((int)StringPool_Construct(pool));
-        DAT_00586f20[0] = pool;
+        g_stringPool[0] = pool;
     }
-    ref = ((int)StringPool_Intern(DAT_00586f20[0], &DAT_0051c680[0]));
+    ref = ((int)StringPool_Intern(g_stringPool[0], &DAT_0051c680[0]));
     old = arg0->_infoName;
     StringRefHelpers::release(old);
     arg0->_infoName = ref;
@@ -485,12 +485,12 @@ void Gap__Bec__beNDMWShopSelect34__vfunc_22(beNDMWShopSelect34 *arg0) {
         }
         i++;
     } while (i < 7);
-    if (((void * *)DAT_00586f20)[0] == 0) {
+    if (((void * *)g_stringPool)[0] == 0) {
         void *pool = FUN_002eb010(0x10);
         if (pool != 0) pool = StringPool_Construct(pool);
-        ((void * *)DAT_00586f20)[0] = pool;
+        ((void * *)g_stringPool)[0] = pool;
     }
-    n = StringPool_Intern(((void * *)DAT_00586f20)[0], (const char *)DAT_0051c770);
+    n = StringPool_Intern(((void * *)g_stringPool)[0], (const char *)DAT_0051c770);
     old = (const char *)arg0->_infoName;
     if (old != 0) {
         int *hd = (int *)old - 2;
@@ -634,14 +634,14 @@ void Gap__Bec__beNDMWShopSelect52__vfunc_22(beNDMWShopSelect52 *arg0) {
     int var_v0;
     char *temp_a0;
     void *temp_s1;
-    if (DAT_00586f20[0] == 0) {
+    if (g_stringPool[0] == 0) {
         var_v0 = ((int)FUN_002eb010(0x10));
         if (var_v0 != 0) {
             var_v0 = ((int)StringPool_Construct(var_v0));
         }
-        DAT_00586f20[0] = var_v0;
+        g_stringPool[0] = var_v0;
     }
-    temp_s1 = (void *)(((void *)StringPool_Intern(DAT_00586f20[0], &DAT_0051c7f0[0])));
+    temp_s1 = (void *)(((void *)StringPool_Intern(g_stringPool[0], &DAT_0051c7f0[0])));
     temp_a0 = (char *)arg0->_infoName;
     if (temp_a0 != 0) {
         temp_a1 = (int *)(temp_a0 - 8);
@@ -669,13 +669,13 @@ void Gap__Bec__beNDMWShopSelectA0__vfunc_22(beNDMWShopSelectA0 *arg0) {
     beNDMWWindow_RunMessageScript(arg0, &DAT_0051c4a0[0], 0x7D1);
     FUN_003f5410(arg0, &DAT_0051c828[0], &DAT_0051c498[0], &DAT_0051c660[0], &DAT_0051c730[0]);
     FUN_003f5410(arg0, &DAT_0051c828[0], &DAT_0051c4c0[0], &DAT_0051c660[0], &DAT_0051c730[0]);
-    if (DAT_00586f20[0] == 0) {
+    if (g_stringPool[0] == 0) {
         pool = ((int)FUN_002eb010(16));
         if (pool)
             pool = ((int)StringPool_Construct(pool));
-        DAT_00586f20[0] = pool;
+        g_stringPool[0] = pool;
     }
-    ref = ((int)StringPool_Intern(DAT_00586f20[0], &DAT_0051c838[0]));
+    ref = ((int)StringPool_Intern(g_stringPool[0], &DAT_0051c838[0]));
     old = arg0->_infoName;
     StringRefHelpers::release(old);
     arg0->_infoName = ref;
@@ -725,14 +725,14 @@ void Gap__Bec__beNDMWShopSelectB0__vfunc_22(beNDMWShopSelectB0 *arg0) {
             } while (s1 < ((DecideFlagList *)arg0->_decideList)->count);
         }
     }
-    if (DAT_00586f20[0] == 0) {
+    if (g_stringPool[0] == 0) {
         t = ((int)FUN_002eb010(0x10));
         if (t != 0) {
             t = ((int)StringPool_Construct(t));
         }
-        DAT_00586f20[0] = t;
+        g_stringPool[0] = t;
     }
-    s0b = ((void *)StringPool_Intern(DAT_00586f20[0], &DAT_0051c4d0[0]));
+    s0b = ((void *)StringPool_Intern(g_stringPool[0], &DAT_0051c4d0[0]));
     a0 = (void *)arg0->_infoName;
     if (a0 != 0) {
         a1 = (int *)((char *)a0 - 8);

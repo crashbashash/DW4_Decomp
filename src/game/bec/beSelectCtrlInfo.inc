@@ -1,12 +1,12 @@
 void *FUN_00345170(void) {
     unsigned char b;
-    if (DAT_00587f28[0] != 0) {
-        b = (*(int *)((char *)(DAT_00587f28[0]) + 36) & 4) != 0;
+    if (g_beSelectCtrlInfo_metaObject[0] != 0) {
+        b = (*(int *)((char *)(g_beSelectCtrlInfo_metaObject[0]) + 36) & 4) != 0;
         if (b != 0) goto done;
     }
     FUN_00345230();
 done:
-    return DAT_00587f28[0];
+    return g_beSelectCtrlInfo_metaObject[0];
 }
 
 int beSelectCtrlInfo_GetVTable(void) {
@@ -18,7 +18,7 @@ int beSelectCtrlInfo_GetVTable(void) {
     f.w[4] = 0;
     f.w[5] = 0;
     f.vt = &DAT_005390d0[0];
-    temp_s0 = *(int *)((char *)&f + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+    temp_s0 = *(int *)((char *)&f + *(int *)((char *)(g_objectSystem[0]) + 916));
     f.vt = &DAT_005390d0[0];
     FUN_0033ec80((struct S_33ec80 *)&f, (short)0);
     return temp_s0;

@@ -3,11 +3,11 @@ void FUN_001325a0(int arg0) {
     igMetaObject_CreateInstance(*(int *)0x55ED68, arg0);
 }
 
-int FUN_001325e0(void) {
-    if (DAT_0055ed68[0] == 0) {
-        DAT_0055ed68[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(DAT_00587040[0]));
+igMetaObject *FUN_001325e0(void) {
+    if (g_igTextureCoordSourceAttr_metaObject[0] == 0) {
+        g_igTextureCoordSourceAttr_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
     }
-    return DAT_0055ed68[0];
+    return g_igTextureCoordSourceAttr_metaObject[0];
 }
 
 igMetaObject *igTextureCoordSourceAttr_GetMetaObject(void)
@@ -27,7 +27,7 @@ int igTextureCoordSourceAttr_GetVTable(void) {
 
     igObject_InitHeader(&obj);
     obj.vt = &DAT_00522b40[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 
 void FUN_001326c0(void)
@@ -58,11 +58,11 @@ void thunk_igTextureCoordSourceAttr_GetMetaObject(void) {
 
 void igTextureCoordSourceAttr_InitFields(void) {
     void *temp_v0_2;
-    int temp_s0;
+    igMetaObject *temp_s0;
     int temp_s2;
     void *temp_v0;
 
-    temp_s0 = DAT_0055ed68[0];
+    temp_s0 = g_igTextureCoordSourceAttr_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_00485c60[0], 3);
     temp_v0 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));

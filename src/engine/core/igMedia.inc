@@ -1,8 +1,8 @@
-int FUN_002c16e0(void) {
-    if (DAT_00586020[0] == 0) {
-        DAT_00586020[0] = ((int)igMetaObject_Create(((int)Memory_GetAllocatorBySelector(DAT_00587040[0]))));
+igMetaObject *FUN_002c16e0(void) {
+    if (g_igMedia_metaObject[0] == 0) {
+        g_igMedia_metaObject[0] = (igMetaObject *)igMetaObject_Create(((int)Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0])));
     }
-    return DAT_00586020[0];
+    return g_igMedia_metaObject[0];
 }
 
 igMetaObject *igMedia_GetMetaObject(void)
@@ -40,7 +40,7 @@ void thunk_igMedia_GetMetaObject(void) {
 }
 
 void FUN_002c1810(void) {
-    *(int *)((char *)((*(int *)DAT_00586020)) + 60) = (int)&thunk_igPsx2Media_GetMetaObject;
+    *(int *)((char *)((*(int *)g_igMedia_metaObject)) + 60) = (int)&thunk_igPsx2Media_GetMetaObject;
     FUN_002fe480((int)&thunk_FUN_002ebd70);
 }
 

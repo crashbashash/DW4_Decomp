@@ -21,7 +21,7 @@ int igModelViewMatrixBoneSelect_GetVTable(void) {
     u.w[4] = 0;
     u.w[7] = 0;
     u.w[0] = (int)(&DAT_0052aa10[0]);
-    temp_s0 = *(int *)&u.b[*(int *)((char *)(DAT_00586dc8[0]) + 916)];
+    temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.w[0] = (int)(&DAT_0052aa10[0]);
     FUN_00195a90((struct T_195a90 *)&u.w[0], 0);
     return temp_s0;
@@ -57,7 +57,7 @@ void igModelViewMatrixBoneSelect_InitFields(void) {
     int temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)DAT_00561888[0];
+    temp_s0 = (void *)g_igModelViewMatrixBoneSelect_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_0048bcd8[0], 1);
     FUN_002ea4b0(igMetaObject_GetFieldAt(temp_s0, temp_s1), -1);

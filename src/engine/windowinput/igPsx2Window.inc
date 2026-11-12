@@ -28,7 +28,7 @@ int igPsx2Window_GetVTable(void) {
     *(int *)q1 = 0;
     q0 = &u.b[32];
     *(int *)q0 = 0;
-    temp_s0 = *(int *)&u.b[*(int *)((char *)(DAT_00586dc8[0]) + 916)];
+    temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.vt = (int)&DAT_00524be0[0];
     if (q0 != 0) {
         temp_v1 = *(int **)q0;
@@ -75,8 +75,8 @@ void igPsx2Window_Register(void) {
     );
 }
 
-int FUN_00146c10(void) {
-    return DAT_0055f5d8[0];
+igMetaObject *FUN_00146c10(void) {
+    return g_igWindow_metaObject[0];
 }
 
 void igPsx2Window_InitFields(void) {
@@ -84,7 +84,7 @@ void igPsx2Window_InitFields(void) {
     void *temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)(DAT_0055f6c8[0]);
+    temp_s0 = (void *)(g_igPsx2Window_metaObject[0]);
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_00487450[0], 0xC);
     FUN_002ea4b0(igMetaObject_GetFieldAt(temp_s0, temp_s2), 0x280);
@@ -98,6 +98,6 @@ void igPsx2Window_InitFields(void) {
     FUN_002ea4b0(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 0xA), 8);
     FUN_002ea4b0(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 0xB), 0x20);
     igMetaObject_NameFields(temp_s0, &DAT_00487480[0], &DAT_004874b0[0], &DAT_004874e0[0], temp_s2);
-    *(int *)((char *)(DAT_0055f6c8[0]) + 64) = (int)thunk_igWindow_GetMetaObject;
+    *(int *)((char *)(g_igPsx2Window_metaObject[0]) + 64) = (int)thunk_igWindow_GetMetaObject;
 }
 

@@ -1,12 +1,12 @@
-S_35d300 *FUN_0035d300(void) {
-    S_35d300 *g = DAT_00589318[0];
+igMetaObject *FUN_0035d300(void) {
+    igMetaObject *g = g_beHitLandModelInfoRam_metaObject[0];
     if (g != 0) {
-        int b = !!(g->flags & 4);
+        int b = !!(g->_validity & 4);
         if (b) goto done;
     }
     FUN_0035d3f0();
 done:
-    return DAT_00589318[0];
+    return g_beHitLandModelInfoRam_metaObject[0];
 }
 
 int beHitLandModelInfoRam_GetVTable(void) {
@@ -17,7 +17,7 @@ int beHitLandModelInfoRam_GetVTable(void) {
     obj.ref = 0;
     obj.vt = &DAT_00539e90[0];
     obj.vt = &DAT_00536440[0];
-    r = *(int *)((char *)&obj + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+    r = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
     obj.vt = &DAT_00539e90[0];
     obj.releaseRef();
     return r;

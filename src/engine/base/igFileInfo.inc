@@ -1,8 +1,8 @@
-int FUN_00228e60(void) {
-    if (DAT_0056da38[0] == 0) {
-        DAT_0056da38[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(DAT_00587040[0]));
+igMetaObject *FUN_00228e60(void) {
+    if (g_igFileInfo_metaObject[0] == 0) {
+        g_igFileInfo_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
     }
-    return DAT_0056da38[0];
+    return g_igFileInfo_metaObject[0];
 }
 
 igMetaObject *igFileInfo_GetMetaObject(void)
@@ -24,7 +24,7 @@ int igFileInfo_GetVTable(void) {
     obj.w[3] = 0;
     obj.w[4] = 0;
     obj.w[5] = 0;
-    r = *(int *)((char *)&obj + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+    r = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
     obj.vt = &DAT_0052c170[0];
     FUN_00229040((R **)&obj.w[5], -1);
     FUN_00228fc0((ObjectRefWord *)&obj.w[4], -1);
@@ -100,7 +100,7 @@ void igFileInfo_InitFields(void) {
     void *temp_s2_4;
     void *temp_s1;
 
-    temp_s1 = (void *)DAT_0056da38[0];
+    temp_s1 = (void *)g_igFileInfo_metaObject[0];
     temp_s0 = igMetaObject_GetFieldCount(temp_s1);
     igMetaObject_CreateFields(temp_s1, &DAT_00497f30[0], 4);
     temp_s2 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0));
@@ -110,7 +110,7 @@ void igFileInfo_InitFields(void) {
     ((igObjectRefMetaField *)temp_s2_2)->_metaObject = FUN_002c3440();
     ((igRefMetaField *)temp_s2_2)->_construct = 1;
     temp_s2_3 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 2));
-    ((igObjectRefMetaField *)temp_s2_3)->_metaObject = FUN_00228cf0();
+    ((igObjectRefMetaField *)temp_s2_3)->_metaObject = (int)FUN_00228cf0();
     ((igRefMetaField *)temp_s2_3)->_construct = 1;
     temp_s2_4 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 3));
     ((igObjectRefMetaField *)temp_s2_4)->_metaObject = FUN_002c3820();

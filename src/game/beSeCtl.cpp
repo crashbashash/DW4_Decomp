@@ -25,7 +25,7 @@ extern "C" int strcmp(int *, int);
 extern "C" void igObjectPool_Grow(igObjectPool *, void (*)(void));
 extern "C" void igAttrStackManager_MarkStackChanged(igAttrStackManager *, igAttrStack *, int);
 extern "C" int igTraversal_TraverseChildren(igCommonTraversal *, beResetNode *);
-extern "C" igMetaObject *DAT_0055efe8[4];
+extern "C" igMetaObject *g_igModelViewMatrixAttr_metaObject[4];
 /* virtual slots 32/33 (offsets 128/132): the matrix attribute takes the matrix; the traversal sets/ends the time */
 class MatrixAttrVT { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void setMatrix(float *m); };
 class TraversalVT { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void setTime(long long t); virtual void endTime(); };
@@ -47,13 +47,13 @@ struct AttrList : igTDataList<igAttr *> {
 };
 extern "C" int FUN_0039c460(beResetNode *node, igCommonTraversal *trav);
 extern "C" int DAT_00562640[4];
-extern "C" int DAT_00587ea8[4];
+extern "C" int g_beSound_metaObject[4];
 extern "C" void Gap__Bec__beSeCtl__vfunc_32(beSeCtl *arg0);
 extern "C" char DAT_0050f760[];
 extern "C" void Gap__Bec__beSeCtl__vfunc_29(beSeCtl * p0, int p1, char * p2, int p3, int p4);
 extern "C" int g_beSeInfo_metaObject[4];
 extern "C" int g_beSeCtl_metaObject[4];
-extern "C" int DAT_004e0858[4];
+extern "C" int emptyString[4];
 extern "C" int DAT_0050f778[4];
 extern "C" int DAT_0050f788[4];
 /* arg1 context: +12 holds the owning info. */
@@ -73,7 +73,7 @@ int FUN_0039c460(beResetNode *node, igCommonTraversal *trav) {
     igModelViewMatrixAttr *matAttr;
     igTimeAttr *timeAttr;
     igAttrStackManager *mgr = (igAttrStackManager *)trav->_attrStack;
-    igObjectList *mvStack = (igObjectList *)AttrStackOps::stackFor(mgr, DAT_0055efe8[0]->_id);
+    igObjectList *mvStack = (igObjectList *)AttrStackOps::stackFor(mgr, g_igModelViewMatrixAttr_metaObject[0]->_id);
     igMatrix44f_SetIdentity(m);
     matAttr = 0;
     if (node->_isResetRotAndScale) {
@@ -149,7 +149,7 @@ void FUN_0039c8c0(void) {
 
 void Gap__Bec__beSeCtl__vfunc_32(beSeCtl *arg0) {
     if (arg0->_sndMng == 0) {
-        arg0->_sndMng = FUN_00236f80(arg0->_insight, DAT_00587ea8[0]);
+        arg0->_sndMng = FUN_00236f80(arg0->_insight, g_beSound_metaObject[0]);
     }
 }
 
@@ -195,7 +195,7 @@ int Gap__Bec__beSeCtl__vfunc_34(beSeCtl *arg0, struct ContextView *arg1, struct 
         do {
             row = (beSeInfoData *)*(int *)((char *)l1->_data + off);
             p = (int *)row->_name;
-            if (strcmp(p != 0 ? p : &DAT_004e0858[0], s5) == 0) {
+            if (strcmp(p != 0 ? p : &emptyString[0], s5) == 0) {
                 res = i;
             }
             i += 1;
@@ -213,7 +213,7 @@ int Gap__Bec__beSeCtl__vfunc_34(beSeCtl *arg0, struct ContextView *arg1, struct 
         do {
             it = *(beSeData **)((char *)l2->_data + off);
             p = (int *)it->_name;
-            if (strcmp(p != 0 ? p : &DAT_004e0858[0], s7) == 0) {
+            if (strcmp(p != 0 ? p : &emptyString[0], s7) == 0) {
                 sh = it->_delay;
                 beMessenger_SelectReceivers(arg0->_messenger, &DAT_0050f778[0], s5, s8);
                 beMessenger_AppendString(arg0->_messenger, it->_sound);

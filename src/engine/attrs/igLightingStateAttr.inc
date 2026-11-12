@@ -3,11 +3,11 @@ void FUN_00135e20(int arg0) {
     igMetaObject_CreateInstance(*(int *)0x55F048, arg0);
 }
 
-int FUN_00135e60(void) {
-    if (DAT_0055f048[0] == 0) {
-        DAT_0055f048[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(DAT_00587040[0]));
+igMetaObject *FUN_00135e60(void) {
+    if (g_igLightingStateAttr_metaObject[0] == 0) {
+        g_igLightingStateAttr_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
     }
-    return DAT_0055f048[0];
+    return g_igLightingStateAttr_metaObject[0];
 }
 
 igMetaObject *igLightingStateAttr_GetMetaObject(void)
@@ -22,7 +22,7 @@ int igLightingStateAttr_GetVTable(void) {
     struct Obj_135f00 obj;
     igObject_InitHeader(&obj);
     obj.vt = &DAT_005235e0[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 
 void FUN_00135f40(void)
@@ -55,7 +55,7 @@ void igLightingStateAttr_InitFields(void) {
     int temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)DAT_0055f048[0];
+    temp_s0 = (void *)g_igLightingStateAttr_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_004862e8[0], 1);
     igMetaObject_NameFields(temp_s0, &DAT_004862f0[0], &DAT_004862f8[0], &DAT_00486300[0], temp_s1);

@@ -3,11 +3,11 @@ void FUN_00187e10(int arg0) {
     igMetaObject_CreateInstance(*(int *)0x560FA0, arg0);
 }
 
-int FUN_00187e50(void) {
-    if (DAT_00560fa0[0] == 0) {
-        DAT_00560fa0[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(DAT_00587040[0]));
+igMetaObject *FUN_00187e50(void) {
+    if (g_igSphere_metaObject[0] == 0) {
+        g_igSphere_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
     }
-    return DAT_00560fa0[0];
+    return g_igSphere_metaObject[0];
 }
 
 igMetaObject *igSphere_GetMetaObject(void)
@@ -22,7 +22,7 @@ int igSphere_GetVTable(void) {
     union U2 u;
     igObject_InitHeader(u.b);
     u.vt = (int)&DAT_00527fe0[0];
-    return *(int *)&u.b[*(int *)((char *)(DAT_00586dc8[0]) + 916)];
+    return *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
 }
 
 void FUN_00187f30(void)
@@ -51,8 +51,8 @@ void thunk_igSphere_GetMetaObject(void) {
     igSphere_GetMetaObject();
 }
 
-int FUN_00187fd0(void) {
-    return DAT_00560f08[0];
+igMetaObject *FUN_00187fd0(void) {
+    return g_igVolume_metaObject[0];
 }
 
 void igSphere_InitFields(void) {
@@ -61,7 +61,7 @@ void igSphere_InitFields(void) {
     int v[3];
     int temp_a0;
 
-    temp_s0 = (void *)DAT_00560fa0[0];
+    temp_s0 = (void *)g_igSphere_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_0048ada0[0], 2);
     temp_a0 = igMetaObject_GetFieldAt(temp_s0, temp_s1);

@@ -37,7 +37,7 @@ int igDirEntry_GetVTable(void) {
     *(int *)ps = 0;
     u.vt = (int)&DAT_00524950[0];
     u.vt = (int)&DAT_00530900[0];
-    temp_s0 = *(int *)&u.b[*(int *)((char *)(((void * *)DAT_00586dc8)[0]) + 916)];
+    temp_s0 = *(int *)&u.b[*(int *)((char *)(((void * *)g_objectSystem)[0]) + 916)];
     u.vt = (int)&DAT_00524950[0];
     if (ps != 0) {
         temp_v1 = *(int **)ps;
@@ -86,7 +86,7 @@ void igDirEntry_InitFields(void) {
     void *temp_v0;
     void *temp_s0;
 
-    temp_s0 = (void *)DAT_00586710[0];
+    temp_s0 = (void *)g_igDirEntry_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
     igMetaObject_CreateFields((igMetaObject *)temp_s0, (igMetaField * (**)(void *))&DAT_004c1290[0], 4);
     temp_v0 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2)));

@@ -1,9 +1,9 @@
 void *FUN_003b5a40(void) {
-    struct G *g = DAT_0058ac30[0];
-    if (!g || ((g->f & 4) != 0) == false) {
+    igMetaObject *g = g_beNDMWStatusInfo_metaObject[0];
+    if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_003b5b00();
     }
-    return DAT_0058ac30[0];
+    return g_beNDMWStatusInfo_metaObject[0];
 }
 
 int beNDMWStatusInfo_GetVTable(void) {
@@ -15,7 +15,7 @@ int beNDMWStatusInfo_GetVTable(void) {
     obj.w[4] = 0;
     obj.w[5] = 0;
     obj.vt = &DAT_0053dbc0[0];
-    r = *(int *)((char *)&obj + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+    r = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
     obj.vt = &DAT_0053dbc0[0];
     FUN_0033ec80(&obj, 0);
     return r;

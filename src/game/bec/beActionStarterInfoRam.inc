@@ -1,12 +1,12 @@
 void *FUN_0036b1c0(void) {
     bool ok;
-    if (DAT_00589e18[0] == 0) goto make;
-    ok = !!(DAT_00589e18[0]->f & 4);
+    if (g_beActionStarterInfoRam_metaObject[0] == 0) goto make;
+    ok = !!(g_beActionStarterInfoRam_metaObject[0]->_validity & 4);
     if (ok != false) goto done;
 make:
     FUN_0036b2b0();
 done:;
-    return DAT_00589e18[0];
+    return g_beActionStarterInfoRam_metaObject[0];
 }
 
 int beActionStarterInfoRam_GetVTable(void) {
@@ -17,7 +17,7 @@ int beActionStarterInfoRam_GetVTable(void) {
     obj.ref = 0;
     obj.vt = &DAT_00539e90[0];
     obj.vt = &DAT_00534680[0];
-    r = *(int *)((char *)&obj + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+    r = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
     obj.vt = &DAT_00539e90[0];
     obj.releaseRef();
     return r;

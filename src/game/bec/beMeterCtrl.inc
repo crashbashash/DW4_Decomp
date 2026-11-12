@@ -3,22 +3,22 @@ void FUN_00357660(int arg0) {
     igMetaObject_CreateInstance(*(int *)0x588F30, arg0);
 }
 
-int FUN_003576a0(void) {
-    if (DAT_00588f30[0] == 0) {
-        DAT_00588f30[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(DAT_00587040[0]));
+igMetaObject *FUN_003576a0(void) {
+    if (g_beMeterCtrl_metaObject[0] == 0) {
+        g_beMeterCtrl_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
     }
-    return DAT_00588f30[0];
+    return g_beMeterCtrl_metaObject[0];
 }
 
 void *FUN_003576f0(void) {
     unsigned char b;
-    if (((void * *)DAT_00588f30)[0] != 0) {
-        b = (*(int *)((char *)(((void * *)DAT_00588f30)[0]) + 36) & 4) != 0;
+    if (((void * *)g_beMeterCtrl_metaObject)[0] != 0) {
+        b = (*(int *)((char *)(((void * *)g_beMeterCtrl_metaObject)[0]) + 36) & 4) != 0;
         if (b != 0) goto done;
     }
     FUN_00357820();
 done:
-    return ((void * *)DAT_00588f30)[0];
+    return ((void * *)g_beMeterCtrl_metaObject)[0];
 }
 
 int beMeterCtrl_GetVTable(void) {
@@ -30,7 +30,7 @@ int beMeterCtrl_GetVTable(void) {
     obj.r1 = 0;
     obj.r2 = 0;
     obj.vt = &DAT_0053abf0[0];
-    r = *(int *)((char *)&obj + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+    r = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
     obj.vt = &DAT_0053a0d0[0];
     obj.rel2();
     obj.vt = &DAT_00524950[0];

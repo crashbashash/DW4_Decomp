@@ -103,7 +103,7 @@ int FUN_001bacf0(DrawItemSource *arg0, DrawItemIndex *arg1) {
     obj->v(buf);
     FUN_001b1030((igAttrStackManager *)x, (igAttr *)obj);
     r = igTraversal_TraverseChildren((int)arg0, (S_1e07a0 *)arg1);
-    FUN_001b11b0((struct A_1b11b0 *)x, (struct B_1b11b0 *)((int *)DAT_0055efe8)[0]);
+    FUN_001b11b0((struct A_1b11b0 *)x, (struct B_1b11b0 *)((int *)g_igModelViewMatrixAttr_metaObject)[0]);
     if (r == 2) {
         return 2;
     }
@@ -164,15 +164,15 @@ int FUN_001bafb0(int arg0, struct S_1bafb0 *arg1) {
     int var_s0;
 
     var_a1 = arg1->f8;
-    var_a1 = var_a1 ? var_a1 : &DAT_004e0858[0];
+    var_a1 = var_a1 ? var_a1 : &emptyString[0];
     temp_v0 = FUN_001b7af0((void *)arg0, (int)var_a1);
     if (temp_v0 != 0) {
         var_a1_2 = arg1->f8;
-        var_a1_2 = var_a1_2 ? var_a1_2 : &DAT_004e0858[0];
+        var_a1_2 = var_a1_2 ? var_a1_2 : &emptyString[0];
         FUN_001b7770((igCommonTraversal *)arg0, (int)var_a1_2, 0);
         var_s0 = FUN_001e04c0((S_1e04c0 *)arg0, (V_1e04c0 *)temp_v0);
         var_a1_3 = arg1->f8;
-        var_a1_3 = var_a1_3 ? var_a1_3 : &DAT_004e0858[0];
+        var_a1_3 = var_a1_3 ? var_a1_3 : &emptyString[0];
         FUN_001b7920((igCommonTraversal *)arg0, (int)var_a1_3);
     } else {
         var_s0 = igTraversal_TraverseChildren(arg0, (S_1e07a0 *)arg1);

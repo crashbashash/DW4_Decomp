@@ -4,11 +4,11 @@ void FUN_003c87f0(int arg0) {
 }
 
 void *beNDMWItemAbilityChip_GetReadyMetaObject(void) {
-    struct G *g = DAT_0058bf48[0];
-    if (!g || ((g->f & 4) != 0) == false) {
+    igMetaObject *g = g_beNDMWItemAbilityChip_metaObject[0];
+    if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_003c88c0();
     }
-    return DAT_0058bf48[0];
+    return g_beNDMWItemAbilityChip_metaObject[0];
 }
 
 int beNDMWItemAbilityChip_GetVTable(void) {
@@ -16,7 +16,7 @@ int beNDMWItemAbilityChip_GetVTable(void) {
 
     igObject_InitHeader(&obj);
     obj.vt = &DAT_00540810[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 
 void FUN_003c88c0(void)

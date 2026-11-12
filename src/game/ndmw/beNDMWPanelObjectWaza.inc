@@ -1,19 +1,19 @@
-int FUN_003be8e0(void) {
-    if (((int *)DAT_0058b2a8)[0] == 0) {
-        ((int *)DAT_0058b2a8)[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(DAT_00587040[0]));
+igMetaObject *FUN_003be8e0(void) {
+    if (g_beNDMWPanelObjectWaza_metaObject[0] == 0) {
+        g_beNDMWPanelObjectWaza_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
     }
-    return ((int *)DAT_0058b2a8)[0];
+    return g_beNDMWPanelObjectWaza_metaObject[0];
 }
 
-S *beNDMWPanelObjectWaza_ResolveMetaObject(void) {
-    S *g = DAT_0058b2a8[0];
+igMetaObject *beNDMWPanelObjectWaza_ResolveMetaObject(void) {
+    igMetaObject *g = g_beNDMWPanelObjectWaza_metaObject[0];
     if (g != 0) {
-        int b = !!(g->flags & 4);
+        int b = !!(g->_validity & 4);
         if (b) goto done;
     }
     FUN_003bea10();
 done:
-    return DAT_0058b2a8[0];
+    return g_beNDMWPanelObjectWaza_metaObject[0];
 }
 
 int beNDMWPanelObjectWaza_GetVTable(void) {
@@ -27,7 +27,7 @@ int beNDMWPanelObjectWaza_GetVTable(void) {
     obj.vt = &DAT_0053e1a0[0];
     obj.w15 = 0;
     obj.w16 = 0;
-    t = *(int *)((char *)&obj + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+    t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
     obj.vt = &DAT_0053e1a0[0];
     ObjectRef_Destruct_00150eb0(&obj.w16, -1);
     FUN_0014aa70(&obj.w15, -1);
@@ -71,7 +71,7 @@ void beNDMWPanelObjectWaza_InitFields(void) {
     void *temp_s1;
     igMetaField *temp_v0_2;
 
-    temp_s1 = (void *)(((void * *)DAT_0058b2a8)[0]);
+    temp_s1 = (void *)(((void * *)g_beNDMWPanelObjectWaza_metaObject)[0]);
     temp_s2 = igMetaObject_GetFieldCount(temp_s1);
     igMetaObject_CreateFields(temp_s1, &DAT_004ca5f0[0], 2);
     temp_v0 = (void **)(igMetaObject_FindFieldByName(temp_s1, &DAT_00511df8[0]));

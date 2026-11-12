@@ -1,8 +1,8 @@
-int FUN_0019c6a0(void) {
-    if (DAT_00561818[0] == 0) {
-        DAT_00561818[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(DAT_00587040[0]));
+igMetaObject *FUN_0019c6a0(void) {
+    if (g_igOverrideAttrSet_metaObject[0] == 0) {
+        g_igOverrideAttrSet_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
     }
-    return DAT_00561818[0];
+    return g_igOverrideAttrSet_metaObject[0];
 }
 
 igMetaObject *igOverrideAttrSet_GetMetaObject(void)
@@ -24,7 +24,7 @@ int igOverrideAttrSet_GetVTable(void) {
     f.w[6] = 0;
     f.w[7] = 0;
     f.vt = &DAT_0052ac70[0];
-    temp_s0 = *(int *)((char *)&f + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+    temp_s0 = *(int *)((char *)&f + *(int *)((char *)(g_objectSystem[0]) + 916));
     f.vt = &DAT_0052ac70[0];
     FUN_0019c0e0((struct S_19c0e0 *)&f, 0);
     return temp_s0;

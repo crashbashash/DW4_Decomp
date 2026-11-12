@@ -1,8 +1,8 @@
-int FUN_002beca0(void) {
-    if (DAT_00585cc8[0] == 0) {
-        DAT_00585cc8[0] = ((int)igMetaObject_Create(((int)Memory_GetAllocatorBySelector(DAT_00587040[0]))));
+igMetaObject *FUN_002beca0(void) {
+    if (g_igMetaField_metaObject[0] == 0) {
+        g_igMetaField_metaObject[0] = (igMetaObject *)igMetaObject_Create(((int)Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0])));
     }
-    return DAT_00585cc8[0];
+    return g_igMetaField_metaObject[0];
 }
 
 igMetaObject *igMetaField_GetMetaObject(void)
@@ -47,7 +47,7 @@ void igMetaField_InitFields(void) {
     struct Fld *temp_v0_2;
     void *temp_s1;
 
-    temp_s1 = (void *)DAT_00585cc8[0];
+    temp_s1 = (void *)g_igMetaField_metaObject[0];
     temp_s0 = igMetaObject_GetFieldCount((igMetaObject *)temp_s1);
     igMetaObject_CreateFields((igMetaObject *)temp_s1, (igMetaField * (**)(void *))&DAT_004bfe00[0], 0x12);
     ((struct Fld *)igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0))->f38 = 0;
@@ -59,7 +59,7 @@ void igMetaField_InitFields(void) {
     temp_v0_2->f38 = 0;
     ((struct Fld *)igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 4))->f38 = 0;
     temp_s2 = ((struct Fld *)igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 5));
-    temp_s2->f56 = FUN_002be610();
+    temp_s2->f56 = (int)FUN_002be610();
     temp_s2->f60 = 0;
     temp_s2->f38 = 0;
     temp_s2->f40 = 1;

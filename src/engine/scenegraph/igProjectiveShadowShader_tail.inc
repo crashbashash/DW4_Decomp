@@ -31,8 +31,8 @@ void Gap__Sg__igProjectiveShadowShader__vfunc_09(void **arg0, int arg1) {
     }
 }
 
-int Gap__Sg__igProjectiveShadowShader__vfunc_22(void) {
-    return DAT_00561620[0];
+igMetaObject *Gap__Sg__igProjectiveShadowShader__vfunc_22(void) {
+    return g_igProjectiveShadowShader_metaObject[0];
 }
 
 void FUN_001d4480(void) {

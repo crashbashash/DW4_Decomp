@@ -1,4 +1,4 @@
-int Gap__Attrs__igSetRenderDestinationAttr__vfunc_22(void) {
-    return DAT_0055eea0[0];
+igMetaObject *Gap__Attrs__igSetRenderDestinationAttr__vfunc_22(void) {
+    return g_igSetRenderDestinationAttr_metaObject[0];
 }
 

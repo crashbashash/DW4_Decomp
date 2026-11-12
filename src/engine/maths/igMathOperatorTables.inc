@@ -14,7 +14,7 @@ void FUN_0018ec40(void) {
 }
 
 void FUN_0018edb0(int meta) {
-    int root = DAT_00560f08[0];
+    int root = (int)g_igVolume_metaObject[0];
     unsigned n;
     unsigned i;
     unsigned j;
@@ -89,7 +89,7 @@ void FUN_0018f4a0(void){
 }
 
 InstanceListRef FUN_0018f760(int allocator) {
-    int meta = DAT_00560f08[0];
+    int meta = (int)g_igVolume_metaObject[0];
     unsigned count = FUN_002fe2c0(meta);
     unsigned i;
     InstanceListRef list((NodeList *)FUN_00186c00(allocator));
@@ -254,8 +254,8 @@ void FUN_0018fd90(struct IndexedWordKey *arg0, int arg1) {
     setEntry(DAT_00561140, arg0->idx, arg1);
 }
 
-void FUN_0018fdd0(int arg0, int arg1) {
-    setAt(DAT_00561148, *(int *)(arg0 + 8), arg1);
+void FUN_0018fdd0(igMetaObject *meta, int arg1) {
+    setAt(DAT_00561148, meta->_id, arg1);
 }
 
 void FUN_0018fe10(int *arg0, int arg1) {
@@ -280,8 +280,8 @@ void FUN_0018fe90(struct IndexedWordKey *arg0, int arg1) {
     setEntry(DAT_00561160, arg0->idx, arg1);
 }
 
-void FUN_0018fed0(int arg0, int arg1) {
-    setAt(DAT_00561168, *(int *)(arg0 + 8), arg1);
+void FUN_0018fed0(igMetaObject *meta, int arg1) {
+    setAt(DAT_00561168, meta->_id, arg1);
 }
 
 void FUN_0018ff10(int *arg0, int arg1) {

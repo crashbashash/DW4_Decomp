@@ -35,7 +35,7 @@ void Gap__Sg__igAttrStackManager__vfunc_09(unsigned char *arg0, int arg1) {
         idx = n_of(l);
         if (idx < l->cap) { l->n = l->n + 1; } else { List_Resize((void *)l, idx + 1, 4); }
         l->data[idx] = (int)arg0;
-        z = ((struct Z * *)DAT_00586dc8)[0]->f56;
+        z = ((struct Z * *)g_objectSystem)[0]->f56;
         sp4F = arg0[60];
         FUN_00306e50(z, 7, &DAT_004e4520[0], &sp4F, 0, 0);
         arg0[60] = sp4F;
@@ -332,7 +332,7 @@ void FUN_001b0dc0(O_1b0dc0 *arg0) {
     int n, i;
     n = arg0->c24->n;
     for (i = 0; i < n; i++) {
-        E2 *e = arg0->l->arr[i + arg0->base[DAT_0055f060[0]->idx]]->f14;
+        E2 *e = arg0->l->arr[i + arg0->base[g_igLightStateAttr_metaObject[0]->idx]]->f14;
         R_1b0dc0 **slot = &e->f10;
         R_1b0dc0 *r = *slot;
         if (r != 0) {

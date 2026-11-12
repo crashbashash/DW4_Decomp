@@ -18,7 +18,7 @@ void igMemoryRefMetaField_SetAlignmentType(AlignmentFieldView *self, char *name)
         self->alignmentType = -1;
         return;
     }
-    *(AlignmentNameList **)&names = *(AlignmentNameList **)((*(char * *)&DAT_00586dd0) + 44);
+    *(AlignmentNameList **)&names = *(AlignmentNameList **)((*(char * *)&g_globalContext) + 44);
     held = names;
     if (held != 0) { held->_refCount = held->_refCount + 1; }
     n = countOf(names);
@@ -40,7 +40,7 @@ int igMemoryRefMetaField_Write(F_2fb3d0 *f, int off, int a2) {
     if (f->f38 == 0) return -1;
     p = *(int *)(off + f->base);
     if (p == 0) return -1;
-    if (igObject_IsKindOf((void *)f->f60, (igMetaObject *)(((int *)DAT_00585d80)[0])) != 0) {
+    if (igObject_IsKindOf((void *)f->f60, (igMetaObject *)(((int *)g_igMemoryRefMetaField_metaObject)[0])) != 0) {
         n = Memory_GetBufferSize((void *)p) >> 2;
         s1 = FUN_002d8a80((L8a80 *)a2, (int)f, p, f->f60, f->f68, 0, 0, 1);
         for (s0 = 0; s0 < (int)n; s0++) {
@@ -49,7 +49,7 @@ int igMemoryRefMetaField_Write(F_2fb3d0 *f, int off, int a2) {
         }
         return s1;
     }
-    if (igObject_IsKindOf((void *)f->f60, (igMetaObject *)DAT_00585b20[0]) != 0) {
+    if (igObject_IsKindOf((void *)f->f60, (igMetaObject *)g_igObjectRefMetaField_metaObject[0]) != 0) {
         s1 = FUN_002d8a80((L8a80 *)a2, (int)f, p, f->f60, f->f68, 0, 0, ((F2 *)f)->f66);
         return s1;
     }
@@ -70,7 +70,7 @@ int igMemoryRefMetaField_IsAlikeDeep(DW4VC_188_2 *arg0, int arg1, int arg2) {
     int b;
     int i;
 
-    if (igObject_IsKindOf((void *)arg0->f60, (igMetaObject *)DAT_00585b20[0]) == 0) {
+    if (igObject_IsKindOf((void *)arg0->f60, (igMetaObject *)g_igObjectRefMetaField_metaObject[0]) == 0) {
         return arg0->vX(arg1, arg2);
     }
     off = arg0->f8;
@@ -155,14 +155,14 @@ void igMemoryRefMetaField_SetPoolName(struct M_2fb830 *arg0, int arg1) {
     char *temp_a0;
     char *temp_s0;
 
-    if (DAT_00586f20[0] == 0) {
+    if (g_stringPool[0] == 0) {
         var_v0 = ((int)FUN_002eb010(0x10));
         if (var_v0 != 0) {
             var_v0 = ((int)StringPool_Construct((S_2eadf0 *)var_v0));
         }
-        DAT_00586f20[0] = var_v0;
+        g_stringPool[0] = var_v0;
     }
-    temp_s0 = ((char *)StringPool_Intern((StringPool *)DAT_00586f20[0], (const char *)arg1));
+    temp_s0 = ((char *)StringPool_Intern((StringPool *)g_stringPool[0], (const char *)arg1));
     temp_a0 = arg0->f76;
     if (temp_a0 != 0) {
         temp_a1 = (int *)(temp_a0 - 8);

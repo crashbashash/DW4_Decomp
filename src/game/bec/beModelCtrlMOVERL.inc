@@ -1,9 +1,9 @@
 void *FUN_003553c0(void) {
-    struct G *g = DAT_00588d88[0];
-    if (!g || ((g->f & 4) != 0) == false) {
+    igMetaObject *g = g_beModelCtrlMOVERL_metaObject[0];
+    if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_00355520();
     }
-    return DAT_00588d88[0];
+    return g_beModelCtrlMOVERL_metaObject[0];
 }
 
 int beModelCtrlMOVERL_GetVTable(void) {
@@ -24,7 +24,7 @@ int beModelCtrlMOVERL_GetVTable(void) {
     *(int *)p4C = 0;
     p50 = &u.b[16];
     *(int *)p50 = 0;
-    r = *(int *)&u.b[*(int *)((char *)(DAT_00586dc8[0]) + 916)];
+    r = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.vt = (int)&DAT_005375f0[0];
     if (p50 != 0) {
         v1 = *(int **)p50;
@@ -94,7 +94,7 @@ void beModelCtrlMOVERL_InitFields(void) {
     int temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)((int *)DAT_00588d88)[0];
+    temp_s0 = (void *)g_beModelCtrlMOVERL_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_004c57b8[0], 2);
     igMetaObject_NameFields(temp_s0, &DAT_004c57c0[0], &DAT_004c57c8[0], &DAT_004c57d0[0], temp_s1);

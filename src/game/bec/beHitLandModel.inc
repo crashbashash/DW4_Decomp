@@ -3,24 +3,24 @@ void FUN_0035d780(int arg0) {
     igMetaObject_CreateInstance(*(int *)0x589350, arg0);
 }
 
-int FUN_0035d7c0(void) {
-    if (((int *)DAT_00589350)[0] == 0) {
-        ((int *)DAT_00589350)[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(DAT_00587040[0]));
+igMetaObject *FUN_0035d7c0(void) {
+    if (g_beHitLandModel_metaObject[0] == 0) {
+        g_beHitLandModel_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
     }
-    return ((int *)DAT_00589350)[0];
+    return g_beHitLandModel_metaObject[0];
 }
 
 void *FUN_0035d810(void) {
-    struct G *g = DAT_00589350[0];
-    if (!g || ((g->f & 4) != 0) == false) {
+    igMetaObject *g = g_beHitLandModel_metaObject[0];
+    if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_0035da30();
     }
-    return DAT_00589350[0];
+    return g_beHitLandModel_metaObject[0];
 }
 
 int beHitLandModel_GetVTable(void) {
     HitLandModelView model;
-    return *(int *)((char *)&model + *(int *)((char *)DAT_00586dc8[0] + 916));
+    return *(int *)((char *)&model + *(int *)((char *)g_objectSystem[0] + 916));
 }
 
 void **FUN_0035d930(void **arg0, int arg1) {
@@ -93,13 +93,13 @@ void beHitLandModel_InitFields(void) {
     void *temp_s1_3;
     void *temp_s0;
 
-    temp_s0 = (void *)((int *)DAT_00589350)[0];
+    temp_s0 = (void *)g_beHitLandModel_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_004c65f0[0], 5);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = FUN_0035ded0();
+    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_0035ded0();
     temp_s1_2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
-    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = FUN_0035dc10();
+    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = (int)FUN_0035dc10();
     temp_s1_3 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 2));
     ((igObjectRefMetaField *)temp_s1_3)->_metaObject = FUN_0019e6c0();
     FUN_002d3890(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 3), 1);

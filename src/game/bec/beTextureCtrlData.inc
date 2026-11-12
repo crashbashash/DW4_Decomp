@@ -1,9 +1,9 @@
 void *FUN_00342090(void) {
-    struct G *g = DAT_00587ca8[0];
-    if (!g || ((g->f & 4) != 0) == false) {
+    igMetaObject *g = g_beTextureCtrlData_metaObject[0];
+    if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_003421c0();
     }
-    return DAT_00587ca8[0];
+    return g_beTextureCtrlData_metaObject[0];
 }
 
 int beTextureCtrlData_GetVTable(void) {
@@ -17,7 +17,7 @@ int beTextureCtrlData_GetVTable(void) {
     obj._name = 0;
     *(int **)&obj._vtable = &DAT_00539560[0];
     obj._tex = 0;
-    t = *(int *)((char *)&obj + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+    t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
     *(int **)&obj._vtable = &DAT_00539560[0];
     if (&obj._tex != 0) {
         o = (char *)obj._tex;
@@ -75,7 +75,7 @@ void beTextureCtrlData_InitFields(void) {
     void *temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)((int *)DAT_00587ca8)[0];
+    temp_s0 = (void *)g_beTextureCtrlData_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_004c34c0[0], 1);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));

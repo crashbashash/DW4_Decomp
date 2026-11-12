@@ -33,10 +33,10 @@ void thunk_igUserUCodeExt_GetMetaObject(void) {
 }
 
 int FUN_0014bc40(void) {
-    return DAT_005868e8[0];
+    return g_igContextExt_metaObject[0];
 }
 
 void FUN_0014bc50(void) {
-    *(int *)((char *)(DAT_0055faf0[0]) + 60) = (int)(&thunk_igPsx2UserUCodeExt_GetMetaObject);
+    *(int *)((char *)(g_igUserUCodeExt_metaObject[0]) + 60) = (int)(&thunk_igPsx2UserUCodeExt_GetMetaObject);
 }
 

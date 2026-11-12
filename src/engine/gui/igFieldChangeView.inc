@@ -18,7 +18,7 @@ int igFieldChangeView_GetVTable(void) {
     igObject_InitHeader(&obj);
     obj.vt = &DAT_00541360[0];
     obj.m = 0;
-    t = *(int *)((char *)&obj + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+    t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
     obj.vt = &DAT_00541360[0];
     if (&obj.m != 0) {
         o = obj.m;
@@ -64,11 +64,11 @@ void igFieldChangeView_InitFields(void) {
     void *temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)DAT_0058c550[0];
+    temp_s0 = (void *)g_igFieldChangeView_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_004d0700[0], 2);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = FUN_00450a00();
+    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_00450a00();
     ((igObjectRefMetaField *)temp_s1)->_refCounted = 0;
     temp_s1_2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
     ((igObjectRefMetaField *)temp_s1_2)->_metaObject = FUN_002beca0();

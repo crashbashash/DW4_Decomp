@@ -3,11 +3,11 @@ int FUN_0019f480(int arg0) {
     return igMetaObject_CreateInstance(*(int *)0x561A08, arg0);
 }
 
-int FUN_0019f4c0(void) {
-    if (DAT_00561a08[0] == 0) {
-        DAT_00561a08[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(DAT_00587040[0]));
+igMetaObject *FUN_0019f4c0(void) {
+    if (g_igGraphPathList_metaObject[0] == 0) {
+        g_igGraphPathList_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
     }
-    return DAT_00561a08[0];
+    return g_igGraphPathList_metaObject[0];
 }
 
 igMetaObject *igGraphPathList_GetMetaObject(void)
@@ -23,7 +23,7 @@ int igGraphPathList_GetVTable(void) {
     int off;
     igObject_InitHeader(&tmp[0]);
     tmp[0] = (int)&DAT_0052a870[0];
-    off = *(int *)((char *)(((int * *)DAT_00586dc8)[0]) + 916);
+    off = *(int *)((char *)(((int * *)g_objectSystem)[0]) + 916);
     return *(int *)((char *)tmp + off);
 }
 

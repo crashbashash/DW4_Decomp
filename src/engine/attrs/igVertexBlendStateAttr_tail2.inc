@@ -1,4 +1,4 @@
-int Gap__Attrs__igVertexBlendStateAttr__vfunc_22(void) {
-    return DAT_0055ec18[0];
+igMetaObject *Gap__Attrs__igVertexBlendStateAttr__vfunc_22(void) {
+    return g_igVertexBlendStateAttr_metaObject[0];
 }
 

@@ -2,14 +2,14 @@ void Gap__Core__igExternalDirEntry__vfunc_31(O_2e25a0 *arg0, void *arg1) {
     int s2, v, old, r;
     int *hd;
     s2 = ((A_2e25a0 *)arg1)->f200;
-    if (DAT_00586f20[0] == 0) {
+    if (g_stringPool[0] == 0) {
         v = ((int)FUN_002eb010(16));
         if (v != 0) {
             v = ((int)StringPool_Construct((struct S_2eadf0 *)v));
         }
-        DAT_00586f20[0] = v;
+        g_stringPool[0] = v;
     }
-    s2 = StringPool_Intern((StringPool *)DAT_00586f20[0], (const char *)s2);
+    s2 = StringPool_Intern((StringPool *)g_stringPool[0], (const char *)s2);
     old = arg0->f40;
     if (old != 0) {
         hd = (int *)(old - 8);
@@ -36,14 +36,14 @@ void FUN_002e26b0(struct O_2e26b0 *arg0, int arg1) {
     int var_v0;
     int *temp_a0;
     int *temp_s0;
-    if (DAT_00586f20[0] == 0) {
+    if (g_stringPool[0] == 0) {
         var_v0 = ((int)FUN_002eb010(0x10));
         if (var_v0 != 0) {
             var_v0 = ((int)StringPool_Construct((S_2eadf0 *)var_v0));
         }
-        DAT_00586f20[0] = var_v0;
+        g_stringPool[0] = var_v0;
     }
-    temp_s0 = (int *)(((void *)StringPool_Intern((StringPool *)DAT_00586f20[0], (const char *)arg1)));
+    temp_s0 = (int *)(((void *)StringPool_Intern((StringPool *)g_stringPool[0], (const char *)arg1)));
     temp_a0 = arg0->s;
     if (temp_a0 != 0) {
         temp_a1 = temp_a0 - 2;

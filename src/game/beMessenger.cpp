@@ -36,16 +36,15 @@ void StringList_AppendRetained(void *, const StringRef &);
 void Matrix44_Copy(void *, void *);
 int FUN_00100610(void *);
 
-extern void *DAT_00586f20[4];
-extern int g_stringPool[4];
-extern int DAT_00587110[4];
-extern int DAT_00585be0[4];
+extern void *g_stringPool[4];
+extern int g_defaultAllocatorSelector[4];
+extern int g_propertyNameField[4];
 extern unsigned char GPR_00554c14;
-extern int DAT_004fb410[4];
+extern int g_statusSucceeded[4];
 extern int DAT_0058a4e0[4];
 extern int DAT_0058a4f0[4];
 extern int DAT_0058a530[4];
-extern int DAT_004e0858[4];
+extern int emptyString[4];
 extern char DAT_0050ee10[], DAT_0050ee18[];
 extern int DAT_004c8f88[4];
 extern unsigned char GPR_005549d4, GPR_005549d8;
@@ -134,7 +133,7 @@ typedef igObject Obj;
 #define OBJ_RELEASE(o) if (o) { --(o)->_refCount; if (((o)->_refCount & 0x7fffff) == 0) igObject_Destroy(o); }
 /* Interned strings carry {owner, count} in the 8 bytes before the text. */
 #define STR_RELEASE(s) if (s) { int *h_ = (int *)((char *)(s) - 8); if (--h_[1] == 0) StringChunk_ReleaseHeader(h_[0], h_); }
-#define POOL() if (!DAT_00586f20[0]) { void *p_ = FUN_002eb010(16); if (p_) p_ = StringPool_Construct(p_); DAT_00586f20[0] = p_; }
+#define POOL() if (!g_stringPool[0]) { void *p_ = FUN_002eb010(16); if (p_) p_ = StringPool_Construct(p_); g_stringPool[0] = p_; }
 
 typedef beMessengerWork Work;
 /* Stack reference to a work record: adopts or retains on construction, releases when it leaves scope. */
@@ -183,7 +182,7 @@ public:
 };
 
 #define ALLOC(var) \
-    { var = igObject_GetAllocator(arg0); var = GPR_00554c14 ? var : Memory_GetAllocatorBySelector(DAT_00587110[0]); }
+    { var = igObject_GetAllocator(arg0); var = GPR_00554c14 ? var : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]); }
 
 template <class Ref> static inline void storeAt(const int &list, int i, const Ref &slot) {
     igObject *cur = slot.p;
@@ -278,14 +277,14 @@ void beMessengerArgData_Clear(beMessengerArgData *arg0) {
     int i2;
 
     arg0->_isRunCheck = 0;
-    if (DAT_00586f20[0] == 0) {
+    if (g_stringPool[0] == 0) {
         v = FUN_002eb010(0x10);
         if (v != 0) {
             v = StringPool_Construct(v);
         }
-        DAT_00586f20[0] = v;
+        g_stringPool[0] = v;
     }
-    s1 = (int *)StringPool_Intern(DAT_00586f20[0], 0);
+    s1 = (int *)StringPool_Intern(g_stringPool[0], 0);
     old = (int *)arg0->_debugString;
     if (old != 0) {
         hd = old - 2;
@@ -322,14 +321,14 @@ void beMessengerArgData_Clear(beMessengerArgData *arg0) {
     for (i1 = 0; i1 < n1; i1++) {
         int **slot = &((int **)sl->_data)[i1];
         int *rr;
-        if (DAT_00586f20[0] == 0) {
+        if (g_stringPool[0] == 0) {
             v = FUN_002eb010(0x10);
             if (v != 0) {
                 v = StringPool_Construct(v);
             }
-            DAT_00586f20[0] = v;
+            g_stringPool[0] = v;
         }
-        rr = (int *)StringPool_Intern(DAT_00586f20[0], 0);
+        rr = (int *)StringPool_Intern(g_stringPool[0], 0);
         old = *slot;
         if (old != 0) {
             hd = old - 2;
@@ -378,14 +377,14 @@ void beMessengerDelay_Clear(beMessengerDelay *arg0) {
     int *s1;
     arg0->_isUse = 0;
     arg0->_sendTime = 0;
-    if (DAT_00586f20[0] == 0) {
+    if (g_stringPool[0] == 0) {
         v = FUN_002eb010(0x10);
         if (v != 0) {
             v = StringPool_Construct(v);
         }
-        DAT_00586f20[0] = v;
+        g_stringPool[0] = v;
     }
-    s1 = (int *)StringPool_Intern(DAT_00586f20[0], 0);
+    s1 = (int *)StringPool_Intern(g_stringPool[0], 0);
     old = (int *)arg0->_groupName;
     if (old != 0) {
         hd = old - 2;
@@ -396,14 +395,14 @@ void beMessengerDelay_Clear(beMessengerDelay *arg0) {
         }
     }
     arg0->_groupName = (int)s1;
-    if (DAT_00586f20[0] == 0) {
+    if (g_stringPool[0] == 0) {
         v = FUN_002eb010(0x10);
         if (v != 0) {
             v = StringPool_Construct(v);
         }
-        DAT_00586f20[0] = v;
+        g_stringPool[0] = v;
     }
-    s1 = (int *)StringPool_Intern(DAT_00586f20[0], 0);
+    s1 = (int *)StringPool_Intern(g_stringPool[0], 0);
     old = (int *)arg0->_infoName;
     if (old != 0) {
         hd = old - 2;
@@ -415,14 +414,14 @@ void beMessengerDelay_Clear(beMessengerDelay *arg0) {
     }
     arg0->_infoName = (int)s1;
     arg0->_ramNo = 0;
-    if (DAT_00586f20[0] == 0) {
+    if (g_stringPool[0] == 0) {
         v = FUN_002eb010(0x10);
         if (v != 0) {
             v = StringPool_Construct(v);
         }
-        DAT_00586f20[0] = v;
+        g_stringPool[0] = v;
     }
-    s1 = (int *)StringPool_Intern(DAT_00586f20[0], 0);
+    s1 = (int *)StringPool_Intern(g_stringPool[0], 0);
     old = (int *)arg0->_message;
     if (old != 0) {
         hd = old - 2;
@@ -481,7 +480,7 @@ int beMessenger_ResolveEnumValue(beMessenger *self, int arg1, int arg2) {
         return DAT_0058a530[0];
     }
     igMetaEnum_GetValueByName(&found, arg1, arg2, &value);
-    if (*(int *)(unsigned)&found == DAT_004fb410[0]) {
+    if (*(int *)(unsigned)&found == g_statusSucceeded[0]) {
         DAT_0058a4e0[0] = arg1;
         strcpy(&DAT_0058a4f0[0], arg2);
         DAT_0058a530[0] = value;
@@ -495,12 +494,12 @@ struct Str { static inline const char *intern(const char *text) {
     if (text == 0) {
         token = 0;
     } else {
-        if (DAT_00586f20[0] == 0) {
+        if (g_stringPool[0] == 0) {
             void *pool = FUN_002eb010(0x10);
             if (pool != 0) pool = StringPool_Construct(pool);
-            DAT_00586f20[0] = pool;
+            g_stringPool[0] = pool;
         }
-        token = StringPool_Intern(DAT_00586f20[0], text);
+        token = StringPool_Intern(g_stringPool[0], text);
     }
     return token;
 } };
@@ -511,11 +510,11 @@ void beMessenger_RegisterReceiver(beMessenger *self, void *recv, const char *nam
     igIntList *l;
     int n;
 
-    igSmartPointer<beMessengerGroup> grp((beMessengerGroup *)igProperty_FindByName((void *)self->_groupList, DAT_00585be0[0]));
+    igSmartPointer<beMessengerGroup> grp((beMessengerGroup *)igProperty_FindByName((void *)self->_groupList, g_propertyNameField[0]));
     RETAIN_REF(grp.p)
     if (grp.p == 0) {
         allocator = igObject_GetAllocator(self);
-        allocator = GPR_00554c14 ? allocator : Memory_GetAllocatorBySelector(DAT_00587110[0]);
+        allocator = GPR_00554c14 ? allocator : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
         RELEASE_REF(grp.p)
         grp.p = (beMessengerGroup *)beMessengerGroup_Create(allocator);
         igNamedObject_SetName(grp.p, name);
@@ -539,7 +538,7 @@ void beMessenger_RegisterReceiverFromInfo(int arg0, beBaseInfoRam *arg1, int arg
     beBaseInfo *info = (beBaseInfo *)arg1->_parentInfo;
     int *recv = (int *)info->_name;
     int t = arg1->_ramNo;
-    recv = recv != 0 ? recv : &DAT_004e0858[0];
+    recv = recv != 0 ? recv : &emptyString[0];
     beMessenger_RegisterReceiver((beMessenger *)arg0, arg1, (const char *)arg2, (const char *)recv, t);
 }
 
@@ -555,7 +554,7 @@ struct WorkOps {
 static inline char *InfoName2(Work *w) { return (char *)((Work *)w)->_infoName; }
 static inline char *Intern(char *text) {
     POOL();
-    return (char *)StringPool_Intern(DAT_00586f20[0], text);
+    return (char *)StringPool_Intern(g_stringPool[0], text);
 }
 static inline void SetGroupName(Work *w, char *c) { char *s; s = Intern(c); char *o = (char *)w->_groupName; STR_RELEASE(o); w->_groupName = (int)s; }
 static inline void SetInfoName(Work *w, char *n) { char *s; s = Intern(n); char *o = (char *)w->_infoName; STR_RELEASE(o); w->_infoName = (int)s; }
@@ -657,7 +656,7 @@ void beMessenger_SelectReceivers(Messenger *self, char *category, char *name, in
 
     work = (Work *)LDATA((List *)self->_workStack)[0];
     if (((List *)work->_findRamList)->_count == 0) {
-        g = (Group *)igProperty_FindByName((void *)self->_groupList, DAT_00585be0[0], (char *)work->_groupName);
+        g = (Group *)igProperty_FindByName((void *)self->_groupList, g_propertyNameField[0], (char *)work->_groupName);
         if (g) {
             m = ((List *)g->_ramList)->_count;
             for (k = 0; k < m; k++) {
@@ -766,12 +765,12 @@ void beMessenger_DispatchSelected(beMessenger *self, int name)
     int matches;
 
     work = (beMessengerWork *)((int *)((beMessengerWorkList *)self->_workStack)->_data)[0];
-    if (DAT_00586f20[0] == 0) {
+    if (g_stringPool[0] == 0) {
         alloc = FUN_002eb010(16);
         if (alloc) alloc = StringPool_Construct(alloc);
-        DAT_00586f20[0] = alloc;
+        g_stringPool[0] = alloc;
     }
-    str = (int)StringPool_Intern(DAT_00586f20[0], (const char *)name);
+    str = (int)StringPool_Intern(g_stringPool[0], (const char *)name);
     old = work->_message;
     if (old) {
         header = (int *)(old - 8);
@@ -846,12 +845,12 @@ void beMessenger_SendGroup(void *self,const char *category,const char *key){beMe
 
 #define SET_STRING(field, text) { \
     beMessengerDelay *r = (beMessengerDelay *)row.p; \
-    if (DAT_00586f20[0] == 0) { \
+    if (g_stringPool[0] == 0) { \
         void *pool = FUN_002eb010(0x10); \
         if (pool != 0) pool = StringPool_Construct(pool); \
-        DAT_00586f20[0] = pool; \
+        g_stringPool[0] = pool; \
     } \
-    token = StringPool_Intern(DAT_00586f20[0], (text)); \
+    token = StringPool_Intern(g_stringPool[0], (text)); \
     int *old = (int *)r->field; \
     if (old) { \
         int *header = old - 2; \
@@ -876,7 +875,7 @@ void beMessenger_PrepareDelayedSelection(beMessenger *self, const char *group, c
     RETAIN_REF(row.p)
     if (((beMessengerDelay *)row.p)->_isUse) {
         allocator = igObject_GetAllocator(self);
-        allocator = GPR_00554c14 ? allocator : Memory_GetAllocatorBySelector(DAT_00587110[0]);
+        allocator = GPR_00554c14 ? allocator : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
         RELEASE_REF(row.p)
         row.p = (igObject *)beMessengerDelay_Create(allocator);
         ObjectList_AppendRetained((void *)self->_delayStack, row.p);
@@ -962,12 +961,12 @@ void beMessenger_EnqueueSelected(beMessenger *self, const char *text, long long 
 
     {
         beMessengerDelay *r = (beMessengerDelay *)row.p;
-        if (DAT_00586f20[0] == 0) {
+        if (g_stringPool[0] == 0) {
             void *pool = FUN_002eb010(0x10);
             if (pool != 0) pool = StringPool_Construct(pool);
-            DAT_00586f20[0] = pool;
+            g_stringPool[0] = pool;
         }
-        token = StringPool_Intern(DAT_00586f20[0], text);
+        token = StringPool_Intern(g_stringPool[0], text);
         int *old = (int *)r->_message;
         if (old) {
             int *header = old - 2;
@@ -1343,18 +1342,18 @@ int beMessenger_GetStringCount(beMessenger *self) {
 void beMessenger_AppendString(beMessenger *self, const char *text)
 {
     int token;
-    int pool;
+    void *pool;
 
     if (text == 0) {
         token = 0;
     } else {
         if (g_stringPool[0] == 0) {
-            pool = (int)FUN_002eb010(16);
+            pool = FUN_002eb010(16);
             if (pool)
-                pool = (int)StringPool_Construct((void *)pool);
+                pool = StringPool_Construct(pool);
             g_stringPool[0] = pool;
         }
-        token = (int)StringPool_Intern((void *)g_stringPool[0], text);
+        token = (int)StringPool_Intern(g_stringPool[0], text);
     }
     StringList_AppendRetained((void *)((beMessengerArgData *)self->_argData)->_stringList, StringRef(token));
 }

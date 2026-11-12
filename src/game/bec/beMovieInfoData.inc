@@ -1,9 +1,9 @@
 void *FUN_0034ec80(void) {
-    struct G *g = DAT_00588760[0];
-    if (!g || ((g->f & 4) != 0) == false) {
+    igMetaObject *g = g_beMovieInfoData_metaObject[0];
+    if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_0034ed80();
     }
-    return DAT_00588760[0];
+    return g_beMovieInfoData_metaObject[0];
 }
 
 int beMovieInfoData_GetVTable(void) {
@@ -16,7 +16,7 @@ int beMovieInfoData_GetVTable(void) {
     obj.w4 = 0;
     obj.w5 = 0;
     obj.w6 = 0;
-    t = *(int *)((char *)&obj + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+    t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
     obj.vt = &DAT_00538040[0];
     FUN_001d3650(&obj.w6, -1);
     FUN_00130720(&obj.w5, -1);
@@ -57,7 +57,7 @@ void beMovieInfoData_InitFields(void) {
     void *temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)((int *)DAT_00588760)[0];
+    temp_s0 = (void *)g_beMovieInfoData_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_004c4b30[0], 3);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 2));

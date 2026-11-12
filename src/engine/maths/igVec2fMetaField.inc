@@ -20,8 +20,8 @@ int igVec2fMetaField_GetVTable(void) {
 
     igMetaField_Init(&o);
     o.vt = &DAT_005275e0[0];
-    r = *(int *)((char *)&o + *(int *)((char *)(DAT_00586dc8[0]) + 916));
-    o.vt = &DAT_0052f230[0];
+    r = *(int *)((char *)&o + *(int *)((char *)(g_objectSystem[0]) + 916));
+    o.vt = &g_igMetaField_vtable[0];
     if (&o.str != 0) {
         temp_v1 = o.str;
         if (temp_v1 != 0) {
@@ -65,28 +65,28 @@ void thunk_igVec2fMetaField_GetMetaObject(void) {
 void FUN_00187d00(void) {
     void *temp_s0;
 
-    if (DAT_00560f90[0] == 0) {
-        DAT_00560f90[0] = (int)(igMetaObject_CreateInstance(DAT_00560f88[0], Memory_GetAllocatorBySelector(DAT_00587040[0])));
-        temp_s0 = (void *)(DAT_00560f90[0]);
+    if (g_igVec2fMetaField_descriptor[0] == 0) {
+        g_igVec2fMetaField_descriptor[0] = (int)(igMetaObject_CreateInstance(g_igVec2fMetaField_metaObject[0], Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0])));
+        temp_s0 = (void *)(g_igVec2fMetaField_descriptor[0]);
         if (temp_s0 != 0) {
             MetaRefList_AppendRetained(FUN_002fc250(), temp_s0);
             {
-                void *held = (void *)DAT_00560f90[0];
+                void *held = (void *)g_igVec2fMetaField_descriptor[0];
                 *(int *)((char *)(held) + 4) = *(int *)((char *)(held) + 4) - 1;
                 if (((unsigned long long) ((long long) *(int *)((char *)(held) + 4) << 0x29) >> 0x29) == 0) {
                     igObject_Destroy(held);
                 }
             }
-            *(short *)((char *)(DAT_00560f90[0]) + 18) = (short) (*(int *)((char *)(FUN_002fc250()) + 12) - 1);
-            igMetaField_FinalizeDescriptor(DAT_00560f90[0]);
+            *(short *)((char *)(g_igVec2fMetaField_descriptor[0]) + 18) = (short) (*(int *)((char *)(FUN_002fc250()) + 12) - 1);
+            igMetaField_FinalizeDescriptor(g_igVec2fMetaField_descriptor[0]);
         }
     }
 }
 
 int FUN_00187dd0(void) {
-    if (DAT_00560f90[0] == 0) {
+    if (g_igVec2fMetaField_descriptor[0] == 0) {
         FUN_00187c70();
     }
-    return DAT_00560f90[0];
+    return g_igVec2fMetaField_descriptor[0];
 }
 

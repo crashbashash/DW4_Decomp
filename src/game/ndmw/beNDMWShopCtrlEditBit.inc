@@ -5,11 +5,11 @@ void FUN_003b7520(int arg0) {
 
 igMetaObject *FUN_003b7560(void)
 {
-    igMetaObject *g = DAT_0058ad28[0];
+    igMetaObject *g = g_beNDMWShopCtrlEditBit_metaObject[0];
     bool t;
     if (!g || (t = g->_validity & 4) == 0)
         FUN_003b7630();
-    return DAT_0058ad28[0];
+    return g_beNDMWShopCtrlEditBit_metaObject[0];
 }
 
 int beNDMWShopCtrlEditBit_GetVTable(void) {
@@ -25,7 +25,7 @@ int beNDMWShopCtrlEditBit_GetVTable(void) {
     o.w[17] = 0;
     o.w[18] = 0;
     o.vt = &DAT_0053fa80[0];
-    r = *(int *)((char *)&o + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+    r = *(int *)((char *)&o + *(int *)((char *)(g_objectSystem[0]) + 916));
     o.vt = &DAT_0053fa80[0];
     beNDMWWindowCtrl_Destroy((beNDMWWindowCtrl *)&o, (long long)0);
     return r;
@@ -62,7 +62,7 @@ void beNDMWShopCtrlEditBit_InitFields(void) {
     int temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)((int *)DAT_0058ad28)[0];
+    temp_s0 = (void *)g_beNDMWShopCtrlEditBit_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_004c9a60[0], 2);
     igMetaObject_NameFields(temp_s0, &DAT_004c9a68[0], &DAT_004c9a70[0], &DAT_004c9a78[0], temp_s1);

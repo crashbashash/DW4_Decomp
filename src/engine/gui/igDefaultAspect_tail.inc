@@ -27,7 +27,7 @@ void Gap__Gui__igDefaultAspect__vfunc_26(A_453f70 *arg0) {
         var_s0 -= 1;
     }
     temp_v1 = arg0->f8;
-    temp_v1->f16 = DAT_004e1058[0];
+    temp_v1->f16 = g_vec3Zero[0];
     temp_v1->f20 = DAT_004e105c[0];
     temp_v1->f24 = DAT_004e1060[0];
     sp30[0] = 2;

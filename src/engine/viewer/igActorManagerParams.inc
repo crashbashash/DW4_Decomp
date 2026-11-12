@@ -1,16 +1,16 @@
-int FUN_0045e6f0(void) {
-    if (DAT_0058ceb8[0] == 0) {
-        DAT_0058ceb8[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(DAT_00587040[0]));
+igMetaObject *FUN_0045e6f0(void) {
+    if (g_igActorManagerParams_metaObject[0] == 0) {
+        g_igActorManagerParams_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
     }
-    return DAT_0058ceb8[0];
+    return g_igActorManagerParams_metaObject[0];
 }
 
 void *igActorManagerParams_GetMetaObject(void) {
-    struct G *g = ((G *)DAT_0058ceb8[0]);
-    if (!g || ((g->f & 4) != 0) == false) {
+    igMetaObject *g = g_igActorManagerParams_metaObject[0];
+    if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_0045e830();
     }
-    return ((G *)DAT_0058ceb8[0]);
+    return g_igActorManagerParams_metaObject[0];
 }
 
 int igActorManagerParams_GetVTable(void) {
@@ -25,7 +25,7 @@ int igActorManagerParams_GetVTable(void) {
     *(int *)ps = 0;
     u.vt = (int)&DAT_00540e30[0];
     u.vt = (int)&DAT_00541fe0[0];
-    s0 = *(int *)&u.b[*(int *)((char *)(((void *)DAT_00586dc8[0])) + 916)];
+    s0 = *(int *)&u.b[*(int *)((char *)(((void *)g_objectSystem[0])) + 916)];
     u.vt = (int)&DAT_00540e30[0];
     if (ps != 0) {
         v1 = *(int **)ps;
@@ -69,13 +69,13 @@ void igActorManagerParams_InitFields(void) {
     int temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)DAT_0058ceb8[0];
+    temp_s0 = (void *)g_igActorManagerParams_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_004d1aa8[0], 2);
     igMetaObject_NameFields(temp_s0, &DAT_004d1ab0[0], &DAT_004d1ab8[0], &DAT_004d1ac0[0], temp_s1);
 }
 
-int Gap__Viewer__igActorManagerParams__vfunc_22(void) {
-    return DAT_0058ceb8[0];
+igMetaObject *Gap__Viewer__igActorManagerParams__vfunc_22(void) {
+    return g_igActorManagerParams_metaObject[0];
 }
 

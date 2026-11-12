@@ -3,15 +3,15 @@ void FUN_003c8240(int arg0) {
     igMetaObject_CreateInstance(*(int *)0x58BF20, arg0);
 }
 
-S *beNDMWItemImportant_GetReadyMetaObject(void) {
-    S *g = DAT_0058bf20[0];
+igMetaObject *beNDMWItemImportant_GetReadyMetaObject(void) {
+    igMetaObject *g = g_beNDMWItemImportant_metaObject[0];
     if (g != 0) {
-        int b = !!(g->flags & 4);
+        int b = !!(g->_validity & 4);
         if (b) goto done;
     }
     FUN_003c8310();
 done:
-    return DAT_0058bf20[0];
+    return g_beNDMWItemImportant_metaObject[0];
 }
 
 int beNDMWItemImportant_GetVTable(void) {
@@ -19,7 +19,7 @@ int beNDMWItemImportant_GetVTable(void) {
 
     igObject_InitHeader(&obj);
     obj.vt = &DAT_005406c0[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 
 void FUN_003c8310(void)

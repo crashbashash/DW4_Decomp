@@ -3,11 +3,11 @@ void FUN_00142f30(int arg0) {
     igMetaObject_CreateInstance(*(int *)0x55F540, arg0);
 }
 
-int FUN_00142f70(void) {
-    if (DAT_0055f540[0] == 0) {
-        DAT_0055f540[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(DAT_00587040[0]));
+igMetaObject *FUN_00142f70(void) {
+    if (g_igAudioContext_metaObject[0] == 0) {
+        g_igAudioContext_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
     }
-    return DAT_0055f540[0];
+    return g_igAudioContext_metaObject[0];
 }
 
 igMetaObject *igAudioContext_GetMetaObject(void)
@@ -48,12 +48,12 @@ void igAudioContext_InitFields(void) {
     int temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)(DAT_0055f540[0]);
+    temp_s0 = (void *)(g_igAudioContext_metaObject[0]);
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_00486cd8[0], 1);
     FUN_002d3890(igMetaObject_GetFieldAt(temp_s0, temp_s1), 1);
     igMetaObject_NameFields(temp_s0, &DAT_00486ce0[0], &DAT_00486ce8[0], &DAT_00486cf0[0], temp_s1);
-    *(int *)((char *)(DAT_0055f540[0]) + 60) = (int)(thunk_FUN_00143150);
+    *(int *)((char *)(g_igAudioContext_metaObject[0]) + 60) = (int)(thunk_FUN_00143150);
 }
 
 void thunk_FUN_00143150(void) {

@@ -3,7 +3,7 @@
 #include "dw4/igSmartPointer.h"
 #define SLOTS ((igObjectList *)self->_hdSEs)
 #define ENTS ((igObjectList *)self->_lsBinObjs)
-#define DEFN ((char *)DAT_004e0858)
+#define DEFN ((char *)emptyString)
 #define LIST(a) (*(void **)((a) + 40))
 
 extern "C" int FUN_0037b010(void *node, void *traversal);
@@ -91,7 +91,7 @@ struct Mat { int w[16]; };
 struct Src { int pad[8]; Mat m32; int pad2[4]; long long t112; };
 struct Rec { int pad[8]; Mat m32; int pad2[3]; Src *src108; };
 struct Dat { int pad[2]; int f8; };
-extern "C" Dat *DAT_0055efe8[4];
+extern "C" Dat *g_igModelViewMatrixAttr_metaObject[4];
 extern "C" int FUN_0037b040(Rec *arg0, igCommonTraversal *arg1);
 extern "C" int DAT_00562640[4];
 extern "C" int FUN_0037b4a0(igCommonTraversal *traversal, void *node);
@@ -104,11 +104,11 @@ extern "C" igStringObj *FUN_002b9500(void *);
 extern "C" int FUN_00306770(int, int, const char *, igSmartPointer<igStringObj> *, const char *, int);
 struct IniRoot { char pad[56]; int ini; };
 struct ErrorHooks { char pad[60]; void (*onError)(void); };
-extern "C" IniRoot *DAT_00586dc8[4];
-extern "C" ErrorHooks *DAT_005863b0[4];
+extern "C" IniRoot *g_objectSystem[4];
+extern "C" ErrorHooks *g_igFile_metaObject[4];
 extern "C" void (*DAT_0058a350[4])(void);
 extern "C" int DAT_005873c8[4];
-extern "C" int DAT_00587110[4];
+extern "C" int g_defaultAllocatorSelector[4];
 extern "C" char *DAT_004c22f0[4];
 extern "C" char DAT_0050e400[];
 extern "C" char DAT_0050e410[];
@@ -120,24 +120,24 @@ extern "C" char DAT_0050e460[];
 extern "C" unsigned char GPR_00554c14;
 extern "C" unsigned char GPR_00554de4;
 extern "C" void Gap__Bec__beCri__vfunc_21(beCri *self);
-extern "C" int DAT_00587668[4];
+extern "C" int g_igAdxFile_metaObject[4];
 extern "C" void Gap__Bec__beCri__vfunc_22(beCri *arg0);
 struct RefCountedNamedObject { int w0; int rc; int w8; int f12; };
 extern "C" struct RefCountedNamedObject * FUN_00366910(...);
-extern "C" int DAT_00587108[4];
-extern "C" int DAT_00587d08[4];
+extern "C" int g_ndmwAllocatorSelector[4];
+extern "C" int g_beSystem_metaObject[4];
 extern "C" int DAT_0058a360[4];
 extern "C" int DAT_0058a460[4];
 extern "C" void Gap__Bec__beCri__vfunc_23(beCri *arg0);
 extern "C" void Gap__Bec__beCri__vfunc_24(beCri *arg0);
-extern "C" int DAT_005899f8[4];
+extern "C" int g_beCriFxInfo_metaObject[4];
 class DW4VC_88_0 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual int vX(); };
 extern "C" int Gap__Bec__beCri__vfunc_25(beCri *arg0, void **arg1);
 extern "C" int DAT_0050e480[4];
 extern "C" void Gap__Bec__beCri__vfunc_26(beCri *arg0);
 struct CriSystemState { char p0[88]; int f88; };
 extern "C" void Gap__Bec__beCri__vfunc_27(beCri *arg0);
-extern "C" int DAT_004e0858[4];
+extern "C" int emptyString[4];
 extern "C" void FUN_003a7590(beCriVolume *, int, float, float, float);
 extern "C" long long FUN_0037c2c0(beCri *self, igObjectList *table, beSoundData *ev);
 extern "C" int FUN_0037c130(beCri *self, unsigned char kind, short priority);
@@ -166,8 +166,8 @@ extern "C" void FUN_0037d570(Owner *self, int on);
 extern "C" int DAT_0058a3e0[4];
 extern "C" int FUN_0037d680(beCri *arg0, beCriSfpData *arg1);
 extern "C" bool FUN_0037d780(beCri *o);
-extern "C" int DAT_00589998[4];
-extern "C" int DAT_00589ad0[4];
+extern "C" int g_beCriSfpData_metaObject[4];
+extern "C" int g_beCriAcxData_metaObject[4];
 /* matching construct: dummy-virtual view (20 slots) so Kind() compiles to the retail jalr; fields are read through beCriSfpData. */
 struct SndKindV {
     virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3();
@@ -186,8 +186,8 @@ extern "C" unsigned char FUN_0037dd10(beCri *arg0, int *arg1);
 extern "C" void FUN_0037e020(beCri *arg0, int arg1);
 extern "C" int DAT_0050e490[4];
 extern "C" int DAT_0050e4a0[4];
-extern "C" int DAT_00585d80[4];
-extern "C" int DAT_00586dd0[4];
+extern "C" int g_igMemoryRefMetaField_metaObject[4];
+extern "C" int g_globalContext[4];
 extern "C" int g_beCri_metaObject[4];
 
 int FUN_0037b010(void *node, void *traversal) {
@@ -223,7 +223,7 @@ int FUN_0037b040(Rec *arg0, igCommonTraversal *arg1)
     int n1;
 
     b = (igAttrStackManager *)arg1->_attrStack;
-    ix = DAT_0055efe8[0]->f8;
+    ix = g_igModelViewMatrixAttr_metaObject[0]->f8;
     l = ((igAttrStack **)((igObjectList *)b->_attrStacks)->_data)[((int *)b->_attrStackIndexTable)[ix]];
     Matrix44_Copy(&arg0->m32, &arg0->src108->m32);
     t = arg0->src108->t112;
@@ -325,7 +325,7 @@ int FUN_0037b4d0(Rec_37b4d0 *arg0, igCommonTraversal *arg1)
     int n1;
 
     b = (igAttrStackManager *)arg1->_attrStack;
-    ix = DAT_0055efe8[0]->f8;
+    ix = g_igModelViewMatrixAttr_metaObject[0]->f8;
     l0 = ((igAttrStack **)((igObjectList *)b->_attrStacks)->_data)[((int *)b->_attrStackIndexTable)[ix]];
     Matrix44_Copy(&arg0->m32, &arg0->src108->w[8]);
     igMatrix44f_SetIdentity(&mA);
@@ -378,12 +378,12 @@ void Gap__Bec__beCri__vfunc_21(beCri *self) {
     int section;
     int ini;
     FUN_00236be0(self->_insight, self);
-    ini = DAT_00586dc8[0]->ini;
+    ini = g_objectSystem[0]->ini;
     if (ini == 0) return;
     section = FUN_00306360(ini, DAT_0050e400, 0);
     if (section == -1) return;
     void *alloc = igObject_GetAllocator(self);
-    alloc = GPR_00554c14 ? alloc : Memory_GetAllocatorBySelector(DAT_00587110[0]);
+    alloc = GPR_00554c14 ? alloc : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
     igSmartPointer<igStringObj> path(FUN_002b9500(alloc));
     if (FUN_00306770(ini, section, DAT_0050e410, &path, DAT_0050e420, 0) == 0) {
         if (strcmp(DAT_0050e428, DAT_0050e438) == 0)
@@ -397,17 +397,17 @@ void Gap__Bec__beCri__vfunc_21(beCri *self) {
     FUN_00332810(0);
     DAT_005873c8[0] = 2;
     FUN_00332c50(1);
-    ErrorHooks *hooks = DAT_005863b0[0];
+    ErrorHooks *hooks = g_igFile_metaObject[0];
     DAT_0058a350[0] = hooks->onError;
     hooks->onError = (void (*)(void))FUN_0037b950;
 }
 
 int FUN_0037b950(void) {
-    return DAT_00587668[0];
+    return g_igAdxFile_metaObject[0];
 }
 
 void Gap__Bec__beCri__vfunc_22(beCri *arg0) {
-    ((int * *)DAT_005863b0)[0][15] = (int)DAT_0058a350[0];
+    ((int * *)g_igFile_metaObject)[0][15] = (int)DAT_0058a350[0];
     FUN_00236c40(arg0->_insight, arg0);
 }
 
@@ -419,12 +419,12 @@ void Gap__Bec__beCri__vfunc_23(beCri *arg0) {
     int *a1;
     int *a0;
 
-    arg0->_system = FUN_00236f80(arg0->_insight, DAT_00587d08[0]);
+    arg0->_system = FUN_00236f80(arg0->_insight, g_beSystem_metaObject[0]);
     var_v0 = ((int)igObject_GetAllocator(arg0));
     if (GPR_00554c14 != 0) {
         var_v0 = (int)var_v0;
     } else {
-        var_v0 = ((int)Memory_GetAllocatorBySelector(DAT_00587108[0]));
+        var_v0 = ((int)Memory_GetAllocatorBySelector(g_ndmwAllocatorSelector[0]));
     }
     t = (struct RefCountedNamedObject *)arg0->_hdBGM;
     if (t != 0) {
@@ -440,7 +440,7 @@ void Gap__Bec__beCri__vfunc_23(beCri *arg0) {
     if (GPR_00554c14 != 0) {
         var_v0_2 = (int)var_v0_2;
     } else {
-        var_v0_2 = ((int)Memory_GetAllocatorBySelector(DAT_00587108[0]));
+        var_v0_2 = ((int)Memory_GetAllocatorBySelector(g_ndmwAllocatorSelector[0]));
     }
     t = (struct RefCountedNamedObject *)arg0->_hdENV;
     if (t != 0) {
@@ -471,7 +471,7 @@ void Gap__Bec__beCri__vfunc_24(beCri *arg0) {
 int Gap__Bec__beCri__vfunc_25(beCri *arg0, void **arg1) {
     int temp_s0;
 
-    temp_s0 = DAT_005899f8[0];
+    temp_s0 = g_beCriFxInfo_metaObject[0];
     if (temp_s0 == ((DW4VC_88_0 *)(arg1))->vX()) {
         ObjectList_AppendRetained(arg0->_infoList, arg1);
         return 1;
@@ -676,7 +676,7 @@ long long FUN_0037c2c0(beCri *self, igObjectList *table, beSoundData *ev) {
     }
     handle->_max = ev->_volume;
     name = (int *)((igNamedObject **)table->_data)[ev->_fnameIdx]->_name;
-    name = name != 0 ? name : &DAT_004e0858[0];
+    name = name != 0 ? name : &emptyString[0];
     FUN_003a7260(voice, 1);
     FUN_003a6f70(voice, handle->_max + self->_baseVolume);
     if (FUN_003a6c00(voice, name) & 0xff) {
@@ -686,7 +686,7 @@ long long FUN_0037c2c0(beCri *self, igObjectList *table, beSoundData *ev) {
         slot->_playID = seq;
         slot->_type = ev->_type;
         name = (int *)ev->_name;
-        name = name != 0 ? name : &DAT_004e0858[0];
+        name = name != 0 ? name : &emptyString[0];
         igNamedObject_SetName(slot, name);
         return seq;
     }
@@ -727,7 +727,7 @@ long long FUN_0037c4c0(beCri *self, igObjectList *lst, beSoundData *req) {
         df = (beCriVolume *)slot->_volume;
         df->_max = req->_volume;
         src = (char *)((igNamedObject **)lst->_data)[req->_fnameIdx]->_name;
-        nm = src != 0 ? src : ((char *)DAT_004e0858);
+        nm = src != 0 ? src : ((char *)emptyString);
         vf->_audioType = 1;
         FUN_003a7260(vf, 1);
         FUN_003a6f70(vf, df->_max + self->_baseVolume);
@@ -738,7 +738,7 @@ long long FUN_0037c4c0(beCri *self, igObjectList *lst, beSoundData *req) {
     } else {
         if (ENTS->_count <= 0) return 0;
         src = (char *)((igNamedObject **)lst->_data)[req->_fnameIdx]->_name;
-        nm = src != 0 ? src : ((char *)DAT_004e0858);
+        nm = src != 0 ? src : ((char *)emptyString);
         igSmartPointer<igStringObj> h((igStringObj *)((beSystem *)self->_system)->_globalStrObj, kRetainReference);
         FUN_0030b3c0(h.p, nm);
         FUN_0030ba20((igNamedObject *)h.p);
@@ -750,7 +750,7 @@ long long FUN_0037c4c0(beCri *self, igObjectList *lst, beSoundData *req) {
             do {
                 e = *(beCriSfpData **)((char *)ENTS->_data + off);
                 src = (char *)e->_name;
-                nm = src != 0 ? src : ((char *)DAT_004e0858);
+                nm = src != 0 ? src : ((char *)emptyString);
                 cur = (char *)h.p->_buffer;
                 cur = (cur == 0) ? DAT_004c22f0[0] : cur;
                 if (strcmp(cur, nm) == 0) { found = i; break; }
@@ -809,7 +809,7 @@ long long FUN_0037c4c0(beCri *self, igObjectList *lst, beSoundData *req) {
         slot->_playID = id;
         slot->_type = req->_type;
         src = (char *)req->_name;
-        nm = src != 0 ? src : ((char *)DAT_004e0858);
+        nm = src != 0 ? src : ((char *)emptyString);
         igNamedObject_SetName(slot, nm);
         slot->_priority = req->_priority;
         return id;
@@ -900,12 +900,12 @@ void FUN_0037cd90(beCri *arg0, int arg1) {
     int *p;
 
     p = (int *)((beCriHandle *)arg0->_hdBGM)->_name;
-    p = p != 0 ? p : &DAT_004e0858[0];
+    p = p != 0 ? p : &emptyString[0];
     if (strcmp(p, arg1) == 0) {
         FUN_003a7260(((beCriHandle *)arg0->_hdBGM)->_audio, 0);
     } else {
         p = (int *)((beCriHandle *)arg0->_hdENV)->_name;
-        p = p != 0 ? p : &DAT_004e0858[0];
+        p = p != 0 ? p : &emptyString[0];
         if (strcmp(p, arg1) == 0) {
             FUN_003a7260(((beCriHandle *)arg0->_hdENV)->_audio, 0);
         } else {
@@ -914,11 +914,11 @@ void FUN_0037cd90(beCri *arg0, int arg1) {
                 off = 0;
                 do {
                     it = (beCriHandle *)((int *)(((beCriHandleList *)arg0->_hdSEs)->_data + off))[0];
-                    p = it->_name != 0 ? (int *)it->_name : &DAT_004e0858[0];
+                    p = it->_name != 0 ? (int *)it->_name : &emptyString[0];
                     if (p != 0) {
-                        p = it->_name != 0 ? (int *)it->_name : &DAT_004e0858[0];
+                        p = it->_name != 0 ? (int *)it->_name : &emptyString[0];
                         if (strlen(p) != 0) {
-                            p = it->_name != 0 ? (int *)it->_name : &DAT_004e0858[0];
+                            p = it->_name != 0 ? (int *)it->_name : &emptyString[0];
                             if (strcmp(p, arg1) == 0) {
                                 FUN_003a7260(it->_audio, 0);
                             }
@@ -1006,7 +1006,7 @@ void FUN_0037d310(int arg0) {
     do {
         {
         int a = ((int)igObject_GetAllocator(arg0));
-        a = GPR_00554c14 ? a : ((int)Memory_GetAllocatorBySelector(DAT_00587108[0]));
+        a = GPR_00554c14 ? a : ((int)Memory_GetAllocatorBySelector(g_ndmwAllocatorSelector[0]));
         igSmartPointer<Obj> r((Obj *)((void *)FUN_00366910(a)));
         FUN_003a6950(r.p->w12, 1);
         igNamedObject_SetName((Obj *)r, 0);
@@ -1018,7 +1018,7 @@ void FUN_0037d310(int arg0) {
     do {
         {
         int a = ((int)igObject_GetAllocator(arg0));
-        a = GPR_00554c14 ? a : ((int)Memory_GetAllocatorBySelector(DAT_00587108[0]));
+        a = GPR_00554c14 ? a : ((int)Memory_GetAllocatorBySelector(g_ndmwAllocatorSelector[0]));
         igSmartPointer<Obj> r((Obj *)((void *)FUN_00366910(a)));
         FUN_003a6950(r.p->w12, -1);
         igNamedObject_SetName((Obj *)r, 0);
@@ -1140,10 +1140,10 @@ int FUN_0037d870(beCri *arg0, int arg1) {
     if (lo < idx) {
         off = idx * 4;
         do {
-            a = DAT_00589ad0[0];
+            a = g_beCriAcxData_metaObject[0];
             e = *(beCriSfpData **)((char *)((igObjectList *)arg0->_lsBinObjs)->_data + off);
             if (a != ((SndKindV *)e)->Kind()) {
-                b = DAT_00589998[0];
+                b = g_beCriSfpData_metaObject[0];
                 if (b == ((SndKindV *)e)->Kind() && e->_isTransfer != 0) {
                     int ch = e->_portNo;
                     if (DAT_0058a360[ch] != 0 || DAT_0058a360[ch + 32] != 0) {
@@ -1242,7 +1242,7 @@ void FUN_0037dc60(int *arg0, char *arg1) {
         if (arg1 == 0) {
             arg1 = ((char *)DAT_0050e480);
         }
-        if (strcmp(arg1, s0->name != 0 ? s0->name : ((char *)DAT_004e0858)) == 0) {
+        if (strcmp(arg1, s0->name != 0 ? s0->name : ((char *)emptyString)) == 0) {
             FUN_002829f0(0xA4000000, s0->val);
             return;
         }
@@ -1284,11 +1284,11 @@ unsigned char FUN_0037dd10(beCri *arg0, int *arg1) {
     }
     res2 = 1;
     p = (int *)((beCriHandle *)arg0->_hdBGM)->_name;
-    if ((p != 0 ? p : &DAT_004e0858[0]) != 0 && strcmp(p != 0 ? p : &DAT_004e0858[0], arg1) == 0) {
+    if ((p != 0 ? p : &emptyString[0]) != 0 && strcmp(p != 0 ? p : &emptyString[0], arg1) == 0) {
         if (FUN_00332490(((beCriAudio *)((beCriHandle *)arg0->_hdBGM)->_audio)->_adxt) != 3) res2 = 0;
     } else {
         p = (int *)((beCriHandle *)arg0->_hdENV)->_name;
-        if ((p != 0 ? p : &DAT_004e0858[0]) != 0 && strcmp(p != 0 ? p : &DAT_004e0858[0], arg1) == 0) {
+        if ((p != 0 ? p : &emptyString[0]) != 0 && strcmp(p != 0 ? p : &emptyString[0], arg1) == 0) {
             if (FUN_00332490(((beCriAudio *)((beCriHandle *)arg0->_hdENV)->_audio)->_adxt) != 3) res2 = 0;
         } else {
             i2 = 0;
@@ -1296,9 +1296,9 @@ unsigned char FUN_0037dd10(beCri *arg0, int *arg1) {
                 do {
                     it = ((beCriHandle **)((beCriHandleList *)arg0->_hdSEs)->_data)[i2];
                     p = (int *)it->_name;
-                    if ((p != 0 ? p : &DAT_004e0858[0]) != 0) {
-                        if (strlen(p != 0 ? p : &DAT_004e0858[0]) != 0) {
-                            if (strcmp(arg1, (int *)it->_name != 0 ? (int *)it->_name : &DAT_004e0858[0]) == 0 && it->_playID != 0 && FUN_00332490(((beCriAudio *)it->_audio)->_adxt) != 3) {
+                    if ((p != 0 ? p : &emptyString[0]) != 0) {
+                        if (strlen(p != 0 ? p : &emptyString[0]) != 0) {
+                            if (strcmp(arg1, (int *)it->_name != 0 ? (int *)it->_name : &emptyString[0]) == 0 && it->_playID != 0 && FUN_00332490(((beCriAudio *)it->_audio)->_adxt) != 3) {
                                 res2 = 0;
                                 break;
                             }
@@ -1320,13 +1320,13 @@ void FUN_0037e020(beCri *arg0, int arg1) {
     }
 }
 
-static inline int cast0(int o) { if (o != 0 && igObject_IsKindOf(o, DAT_00585d80[0]) != 0) { return o; } return 0; }
+static inline int cast0(int o) { if (o != 0 && igObject_IsKindOf(o, g_igMemoryRefMetaField_metaObject[0]) != 0) { return o; } return 0; }
 
 void FUN_0037e070(void) {
     int var_s0;
 
-    FUN_00308860(DAT_00586dd0[0], &DAT_0050e490[0], 0x20);
-    var_s0 = igMetaObject_FindFieldByName(DAT_00589998[0], &DAT_0050e4a0[0]);
+    FUN_00308860(g_globalContext[0], &DAT_0050e490[0], 0x20);
+    var_s0 = igMetaObject_FindFieldByName(g_beCriSfpData_metaObject[0], &DAT_0050e4a0[0]);
     var_s0 = cast0(var_s0);
     igMemoryRefMetaField_SetAlignmentType(var_s0, &DAT_0050e490[0]);
 }

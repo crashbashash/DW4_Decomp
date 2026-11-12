@@ -3,11 +3,11 @@ void FUN_00232800(int arg0) {
     igMetaObject_CreateInstance(*(int *)0x56DB60, arg0);
 }
 
-int FUN_00232840(void) {
-    if (DAT_0056db60[0] == 0) {
-        DAT_0056db60[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(DAT_00587040[0]));
+igMetaObject *FUN_00232840(void) {
+    if (g_igInsightCore_metaObject[0] == 0) {
+        g_igInsightCore_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
     }
-    return DAT_0056db60[0];
+    return g_igInsightCore_metaObject[0];
 }
 
 igMetaObject *igInsightCore_GetMetaObject(void)
@@ -35,7 +35,7 @@ int igInsightCore_GetVTable(void) {
     obj.w11 = 0;
     obj.w12 = 0;
     obj.w26 = 0;
-    t = *(int *)((char *)&obj + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+    t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
     obj.vt = &DAT_0052c990[0];
     FUN_00232d60((struct R **)&obj.w26, -1);
     FUN_00150a70(&obj.w12, -1);
@@ -195,14 +195,14 @@ void igInsightCore_InitFields(void) {
     void *temp_s2_9;
     void *temp_s0;
 
-    temp_s0 = (void *)DAT_0056db60[0];
+    temp_s0 = (void *)g_igInsightCore_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_004980b0[0], 0x13);
     temp_s2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s1));
-    ((igObjectRefMetaField *)temp_s2)->_metaObject = FUN_00233480();
+    ((igObjectRefMetaField *)temp_s2)->_metaObject = (int)FUN_00233480();
     ((igRefMetaField *)temp_s2)->_construct = 1;
     temp_s2_2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 1));
-    ((igObjectRefMetaField *)temp_s2_2)->_metaObject = FUN_00232470();
+    ((igObjectRefMetaField *)temp_s2_2)->_metaObject = (int)FUN_00232470();
     ((igRefMetaField *)temp_s2_2)->_construct = 1;
     temp_s2_3 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 2));
     ((igObjectRefMetaField *)temp_s2_3)->_metaObject = FUN_002c3440();
@@ -218,10 +218,10 @@ void igInsightCore_InitFields(void) {
     ((igObjectRefMetaField *)temp_s2_7)->_metaObject = FUN_004513b0();
     ((igRefMetaField *)temp_s2_7)->_construct = 1;
     temp_s2_8 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 7));
-    ((igObjectRefMetaField *)temp_s2_8)->_metaObject = FUN_00233080();
+    ((igObjectRefMetaField *)temp_s2_8)->_metaObject = (int)FUN_00233080();
     ((igRefMetaField *)temp_s2_8)->_construct = 1;
     temp_s2_9 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 8));
-    ((igObjectRefMetaField *)temp_s2_9)->_metaObject = FUN_00231400();
+    ((igObjectRefMetaField *)temp_s2_9)->_metaObject = (int)FUN_00231400();
     ((igRefMetaField *)temp_s2_9)->_construct = 1;
     temp_s2_10 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 9));
     ((igObjectRefMetaField *)temp_s2_10)->_metaObject = FUN_0044c250();
@@ -230,7 +230,7 @@ void igInsightCore_InitFields(void) {
     ((igObjectRefMetaField *)temp_s2_11)->_metaObject = FUN_002b7a10();
     ((igRefMetaField *)temp_s2_11)->_construct = 1;
     temp_s2_12 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0x12));
-    ((igObjectRefMetaField *)temp_s2_12)->_metaObject = FUN_002325c0();
+    ((igObjectRefMetaField *)temp_s2_12)->_metaObject = (int)FUN_002325c0();
     ((igRefMetaField *)temp_s2_12)->_construct = 1;
     igMetaObject_NameFields(temp_s0, &DAT_00498100[0], &DAT_00498150[0], &DAT_004981a0[0], temp_s1);
 }

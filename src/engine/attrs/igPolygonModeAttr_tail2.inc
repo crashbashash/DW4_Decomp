@@ -1,4 +1,4 @@
-int Gap__Attrs__igPolygonModeAttr__vfunc_22(void) {
-    return DAT_0055ef60[0];
+igMetaObject *Gap__Attrs__igPolygonModeAttr__vfunc_22(void) {
+    return g_igPolygonModeAttr_metaObject[0];
 }
 

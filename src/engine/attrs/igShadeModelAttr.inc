@@ -1,8 +1,8 @@
-int FUN_00133950(void) {
-    if (DAT_0055ee90[0] == 0) {
-        DAT_0055ee90[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(DAT_00587040[0]));
+igMetaObject *FUN_00133950(void) {
+    if (g_igShadeModelAttr_metaObject[0] == 0) {
+        g_igShadeModelAttr_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
     }
-    return DAT_0055ee90[0];
+    return g_igShadeModelAttr_metaObject[0];
 }
 
 igMetaObject *igShadeModelAttr_GetMetaObject(void)
@@ -18,7 +18,7 @@ int igShadeModelAttr_GetVTable(void) {
 
     igObject_InitHeader(&obj);
     obj.vt = &DAT_00522ec0[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 
 void FUN_00133a30(void)
@@ -52,7 +52,7 @@ void igShadeModelAttr_InitFields(void) {
     void *temp_v0;
     void *temp_s0;
 
-    temp_s0 = (void *)DAT_0055ee90[0];
+    temp_s0 = (void *)g_igShadeModelAttr_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_00485f10[0], 1);
     temp_v0 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));

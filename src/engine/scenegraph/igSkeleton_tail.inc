@@ -77,7 +77,7 @@ int Gap__Sg__igSkeleton__vfunc_27(S_1d9500 *arg0, int arg1) {
 
     for (i = 0; i < arg0->l->cnt; i++) {
         p = arg0->l->arr[i]->f8;
-        p = p != 0 ? p : &DAT_004e0858[0];
+        p = p != 0 ? p : &emptyString[0];
         if (strcasecmp(p, arg1) == 0) {
             return i;
         }

@@ -11,7 +11,7 @@ extern "C" void Gap__Bec__beLuaState__vfunc_23(void);
 extern "C" int FUN_002ed2b0(int, int, int);
 extern "C" int Gap__Bec__beLuaState__vfunc_20(void);
 extern "C" int Gap__Lua__igLuaState__vfunc_10(beLuaState *);
-extern "C" int DAT_00587110[4];
+extern "C" int g_defaultAllocatorSelector[4];
 extern "C" unsigned char GPR_00554c14;
 extern "C" void Gap__Bec__beLuaState__vfunc_08(beLuaState *arg0);
 extern "C" igObject *FUN_00362f90(int);
@@ -42,7 +42,7 @@ void Gap__Bec__beLuaState__vfunc_08(beLuaState *arg0) {
 
     if (arg0->_lp != 0) {
         var_v0 = igObject_GetAllocator(arg0);
-        var_v0 = (GPR_00554c14 != 0) ? var_v0 : Memory_GetAllocatorBySelector(DAT_00587110[0]);
+        var_v0 = (GPR_00554c14 != 0) ? var_v0 : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
         Memory_FreeBufferWithAllocator(arg0->_lp, var_v0);
     }
     Gap__Lua__igLuaState__vfunc_10(arg0);
@@ -60,13 +60,13 @@ int Gap__Bec__beLuaState__vfunc_22(beLuaState *arg0, int arg1) {
     int a2;
     bool found;
     var_v0 = igObject_GetAllocator();
-    var_v0 = (GPR_00554c14 != 0) ? var_v0 : Memory_GetAllocatorBySelector(DAT_00587110[0]);
+    var_v0 = (GPR_00554c14 != 0) ? var_v0 : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
     igSmartPointer<igObject> locator(FUN_00362f90(var_v0));
     if (FUN_0037f1b0(locator.p, arg1) == 0) {
         return 2;
     }
     var_v0 = igObject_GetAllocator(arg0);
-    var_v0 = (GPR_00554c14 != 0) ? var_v0 : Memory_GetAllocatorBySelector(DAT_00587110[0]);
+    var_v0 = (GPR_00554c14 != 0) ? var_v0 : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
     ReaderRef reader(FUN_00334dc0(var_v0));
     if (((V *)reader.p)->v23(arg1, DAT_0050ecc8) == 0) {
         return -1;
@@ -74,11 +74,11 @@ int Gap__Bec__beLuaState__vfunc_22(beLuaState *arg0, int arg1) {
     s0 = igAdxFile_GetFileSize(reader.p);
     if (arg0->_lp != 0) {
         var_v0 = igObject_GetAllocator(arg0);
-        var_v0 = (GPR_00554c14 != 0) ? var_v0 : Memory_GetAllocatorBySelector(DAT_00587110[0]);
+        var_v0 = (GPR_00554c14 != 0) ? var_v0 : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
         Memory_FreeBufferWithAllocator(arg0->_lp, var_v0);
     }
     var_v0 = igObject_GetAllocator(arg0);
-    var_v0 = (GPR_00554c14 != 0) ? var_v0 : Memory_GetAllocatorBySelector(DAT_00587110[0]);
+    var_v0 = (GPR_00554c14 != 0) ? var_v0 : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
     arg0->_lp = (int)FUN_002ed2b0(s0, 0x40, var_v0);
     if (arg0->_lp == 0) {
         ((V *)reader.p)->v24();

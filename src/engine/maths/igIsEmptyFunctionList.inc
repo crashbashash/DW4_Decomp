@@ -15,7 +15,7 @@ int igIsEmptyFunctionList_GetVTable(void) {
     union U3 u;
     igObject_InitHeader(u.b);
     u.vt = (int)&DAT_00527df0[0];
-    return *(int *)&u.b[*(int *)((char *)(DAT_00586dc8[0]) + 916)];
+    return *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
 }
 
 void FUN_00188b50(void)

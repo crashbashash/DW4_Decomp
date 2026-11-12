@@ -18,7 +18,7 @@ int igCustomStateCollection_GetVTable(void) {
     igObject_InitHeader(&o);
     o.vt = DAT_00526d10;
     *(int *)((char *)&o + 20) = 0;
-    r = *(int *)((char *)&o + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+    r = *(int *)((char *)&o + *(int *)((char *)(g_objectSystem[0]) + 916));
     o.vt = DAT_00526d10;
     if (&*(int *)((char *)&o + 20) != 0) { p = *(int **)((char *)&o + 20); if (p != 0) { a1 = p - 2; t = p[-1] - 1; p[-1] = t; if (t == 0) StringChunk_ReleaseHeader(*a1, a1); } }
     return r;
@@ -54,7 +54,7 @@ void igCustomStateCollection_InitFields(void) {
     int temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)DAT_0055fe70[0];
+    temp_s0 = (void *)g_igCustomStateCollection_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_00489050[0], 2);
     igStringMetaField_SetDefaultText(igMetaObject_GetFieldAt(temp_s0, temp_s1), &DAT_004dc870[0]);

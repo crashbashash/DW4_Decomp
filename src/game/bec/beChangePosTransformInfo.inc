@@ -1,12 +1,12 @@
-S_3685a0 *FUN_003685a0(void) {
-    S_3685a0 *g = DAT_00589b78[0];
+igMetaObject *FUN_003685a0(void) {
+    igMetaObject *g = g_beChangePosTransformInfo_metaObject[0];
     if (g != 0) {
-        int b = !!(g->flags & 4);
+        int b = !!(g->_validity & 4);
         if (b) goto done;
     }
     FUN_00368660();
 done:
-    return DAT_00589b78[0];
+    return g_beChangePosTransformInfo_metaObject[0];
 }
 
 int beChangePosTransformInfo_GetVTable(void) {
@@ -18,7 +18,7 @@ int beChangePosTransformInfo_GetVTable(void) {
     obj.f14 = 0;
     obj.f18 = 0;
     obj.vt = (&DAT_00534b00[0]);
-    temp_s0 = *(int *)((char *)&obj + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+    temp_s0 = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
     obj.vt = (&DAT_00534b00[0]);
     FUN_0033ec80((struct S_33ec80 *)&obj, (short)0);
     return temp_s0;

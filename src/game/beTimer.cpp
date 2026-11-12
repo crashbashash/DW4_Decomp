@@ -12,9 +12,9 @@ extern "C" int FUN_003a0540(...);
 extern "C" int List_RemoveWordAt(...);
 extern "C" int strcmp(...);
 extern "C" int g_beTimer_metaObject[4];
-extern "C" int DAT_00587d08[4];
-extern "C" int DAT_00588518[4];
-extern "C" int DAT_00589208[4];
+extern "C" int g_beSystem_metaObject[4];
+extern "C" int g_bePadManager_metaObject[4];
+extern "C" int g_beLua_metaObject[4];
 extern "C" void Gap__Bec__beTimer__vfunc_23(beTimer *arg0);
 extern "C" void Gap__Bec__beTimer__vfunc_26(beTimer *arg0);
 struct Pad { char pad[36]; int f36; char p2[28]; int f68; };
@@ -33,9 +33,9 @@ void Gap__Bec__beTimer__vfunc_22(void)
 }
 
 void Gap__Bec__beTimer__vfunc_23(beTimer *arg0) {
-    arg0->_system = FUN_00236f80(arg0->_insight, DAT_00587d08[0]);
-    arg0->_padManager = FUN_00236f80(arg0->_insight, DAT_00588518[0]);
-    arg0->_luaManager = FUN_00236f80(arg0->_insight, DAT_00589208[0]);
+    arg0->_system = FUN_00236f80(arg0->_insight, g_beSystem_metaObject[0]);
+    arg0->_padManager = FUN_00236f80(arg0->_insight, g_bePadManager_metaObject[0]);
+    arg0->_luaManager = FUN_00236f80(arg0->_insight, g_beLua_metaObject[0]);
 }
 
 void Gap__Bec__beTimer__vfunc_24(void)

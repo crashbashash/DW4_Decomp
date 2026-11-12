@@ -17,7 +17,7 @@ int igOnOffModel_GetVTable(void) {
     q1 = &u.b[8];
     *(int *)q1 = 0;
     u.vt = (int)&DAT_00541c40[0];
-    temp_s0 = *(int *)&u.b[*(int *)((char *)(DAT_00586dc8[0]) + 916)];
+    temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.vt = (int)&DAT_00540e30[0];
     if (q1 != 0) {
         temp_a0 = *(void **)q1;
@@ -61,7 +61,7 @@ void igOnOffModel_InitFields(void) {
     int temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)DAT_0058c288[0];
+    temp_s0 = (void *)g_igOnOffModel_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_004d00b8[0], 1);
     igMetaObject_NameFields(temp_s0, &DAT_004d00c0[0], &DAT_004d00c8[0], &DAT_004d00d0[0], temp_s1);

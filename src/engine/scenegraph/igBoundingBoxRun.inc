@@ -1,5 +1,5 @@
 int FUN_001b2790(Obj_1b2750 *arg0, Dev *arg1) {
-    if (igObject_IsKindOf(arg1, DAT_00561230[0]) != 0) {
+    if (igObject_IsKindOf(arg1, g_igTransformSequence_metaObject[0]) != 0) {
         Ref_1b2750 a((Obj_1b2750 *)FUN_0018a660(FUN_00301000(arg0)));
         FUN_00190060(a.o, arg0);
         Ref_1b2750 b((Obj_1b2750 *)FUN_0018a660(FUN_00301000(arg0)));

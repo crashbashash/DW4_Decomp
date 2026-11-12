@@ -9,7 +9,7 @@ extern int DAT_0058d154[4];
 extern int DAT_0058d164[4];
 typedef struct S { char pad[8]; int f8; int f12; int f16; int f20; int f24; int f28; int f32; } S;
 
-extern int DAT_0058cb28[4];
+extern int g_igViewerGuiFactory_metaObject[4];
 
 void FUN_0045eda0(void **arg0) {
     void *temp_a0;
@@ -59,7 +59,7 @@ void Gap__Viewer__igViewerGuiFactory__vfunc_13(S *arg0) {
 }
 
 int Gap__Viewer__igViewerGuiFactory__vfunc_22(void) {
-    return DAT_0058cb28[0];
+    return g_igViewerGuiFactory_metaObject[0];
 }
 
 void FUN_0045f1e0(void *arg0, float fparg0, float fparg1) {

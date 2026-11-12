@@ -4,11 +4,11 @@ void FUN_00349870(int arg0) {
 }
 
 void *FUN_003498b0(void) {
-    struct G *g = DAT_00588270[0];
-    if (!g || ((g->f & 4) != 0) == false) {
+    igMetaObject *g = g_beSvFormatApi_metaObject[0];
+    if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_00349a40();
     }
-    return DAT_00588270[0];
+    return g_beSvFormatApi_metaObject[0];
 }
 
 int beSvFormatApi_GetVTable(void) {
@@ -29,7 +29,7 @@ int beSvFormatApi_GetVTable(void) {
     q3 = (S_ref *)&u.b[56];
     *(int *)q3 = 0;
     u.vt = (int)&DAT_0053bf20[0];
-    r = *(int *)&u.b[*(int *)((char *)(DAT_00586dc8[0]) + 916)];
+    r = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.vt = (int)&DAT_0053c070[0];
     if (q3 != 0) {
         q3 = *(S_ref **)q3;

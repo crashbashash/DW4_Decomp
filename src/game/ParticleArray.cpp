@@ -15,8 +15,8 @@ extern "C" int igTimeAttr_CreateInstance(...);
 extern "C" int Gap__Gfx__igParticleArray__vfunc_13(...);
 extern "C" int Gap__Bec__ParticleArray__vfunc_20(void);
 extern "C" int Gap__Bec__ParticleTimer__vfunc_20(void);
-extern "C" int DAT_00561d78[4];
-extern "C" int DAT_0058a0a0[4];
+extern "C" int g_igCommonTraversal_metaObject[4];
+extern "C" int g_ParticleTimer_metaObject[4];
 extern "C" int DAT_00562640[4];
 typedef int (*CB)(void *, int, void *);
 class TraversalTimeOps { public:
@@ -36,12 +36,12 @@ extern "C" int g_ParticleTimer_metaObject[4];
 int FUN_003a3850(char* arg0, char* arg1) {
     char *s1;
     char *s0;
-    if (arg0 != 0 && igObject_IsKindOf(arg0, DAT_00561d78[0]) != 0) {
+    if (arg0 != 0 && igObject_IsKindOf(arg0, g_igCommonTraversal_metaObject[0]) != 0) {
         s1 = arg0;
     } else {
         s1 = 0;
     }
-    if (arg1 != 0 && igObject_IsKindOf(arg1, DAT_0058a0a0[0]) != 0) {
+    if (arg1 != 0 && igObject_IsKindOf(arg1, g_ParticleTimer_metaObject[0]) != 0) {
         s0 = arg1;
     } else {
         s0 = 0;

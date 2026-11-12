@@ -114,9 +114,9 @@ void FUN_002d7760(int *arg0, O_2d7760 *arg1, int arg2, int arg3) {
     int var_s2;
     if (idx >= 0) {
         List_RemoveAt((L_2d69a0 *)temp_a0, idx, 8);
-        var_s2 = DAT_004fb410.v;
+        var_s2 = g_statusSucceeded.v;
     } else {
-        var_s2 = DAT_004fb418.v;
+        var_s2 = g_allocatorFailureStatus.v;
     }
     if (arg1->f24 != 0) {
         FUN_002d7280(arg1);
@@ -156,14 +156,14 @@ void FUN_002d78e0(void *arg0, int arg1) {
     if (arg1 == 0) {
         var_v0 = (void *)(0);
     } else {
-        if (DAT_00586f20[0] == 0) {
+        if (g_stringPool[0] == 0) {
             var_v0_2 = ((int)FUN_002eb010(0x10));
             if (var_v0_2 != 0) {
                 var_v0_2 = ((int)StringPool_Construct((struct S_2eadf0 *)var_v0_2));
             }
-            DAT_00586f20[0] = var_v0_2;
+            g_stringPool[0] = var_v0_2;
         }
-        var_v0 = (void *)(StringPool_Intern((StringPool *)DAT_00586f20[0], (const char *)arg1));
+        var_v0 = (void *)(StringPool_Intern((StringPool *)g_stringPool[0], (const char *)arg1));
     }
     sp3C = (void *)(var_v0);
     StringList_AppendRetained(*(int *)((char *)(arg0) + 20), &sp3C);

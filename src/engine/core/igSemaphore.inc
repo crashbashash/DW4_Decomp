@@ -3,11 +3,11 @@ void * FUN_002ba650(int arg0) {
     return (void *)(igMetaObject_CreateInstance((CreateMeta *)(*(int *)0x585970), (MemoryPool *)arg0));
 }
 
-int FUN_002ba690(void) {
-    if (DAT_00585970[0] == 0) {
-        DAT_00585970[0] = ((int)igMetaObject_Create(((int)Memory_GetAllocatorBySelector(DAT_00587040[0]))));
+igMetaObject *FUN_002ba690(void) {
+    if (g_igSemaphore_metaObject[0] == 0) {
+        g_igSemaphore_metaObject[0] = (igMetaObject *)igMetaObject_Create(((int)Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0])));
     }
-    return DAT_00585970[0];
+    return g_igSemaphore_metaObject[0];
 }
 
 igMetaObject *igSemaphore_GetMetaObject(void)
@@ -45,6 +45,6 @@ void thunk_igSemaphore_GetMetaObject(void) {
 }
 
 void FUN_002ba7c0(void) {
-    *(int *)((char *)(((void * *)DAT_00585970)[0]) + 60) = (int)(&thunk_igPsx2Semaphore_GetMetaObject);
+    *(int *)((char *)(((void * *)g_igSemaphore_metaObject)[0]) + 60) = (int)(&thunk_igPsx2Semaphore_GetMetaObject);
 }
 

@@ -1,12 +1,12 @@
 void *FUN_00344b40(void) {
     bool ok;
-    if (DAT_00587ef0[0] == 0) goto make;
-    ok = !!(DAT_00587ef0[0]->f & 4);
+    if (g_beShadow01Info_metaObject[0] == 0) goto make;
+    ok = !!(g_beShadow01Info_metaObject[0]->_validity & 4);
     if (ok != false) goto done;
 make:
     FUN_00344cc0();
 done:;
-    return DAT_00587ef0[0];
+    return g_beShadow01Info_metaObject[0];
 }
 
 int beShadow01Info_GetVTable(void) {
@@ -25,7 +25,7 @@ int beShadow01Info_GetVTable(void) {
     *(int *)&u.b[28] = 0;
     *(int *)&u.b[32] = 0;
     *(int *)&u.b[36] = 0;
-    t = *(int *)&u.b[*(int *)((char *)(DAT_00586dc8[0]) + 916)];
+    t = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.vt = (int)&DAT_00539140[0];
     FUN_00344c40((ObjectRefWord *)(&u.b[36]), -1);
     FUN_00198210(&u.b[32], -1);
@@ -81,7 +81,7 @@ void beShadow01Info_InitFields(void) {
     void *temp_s1_3;
     void *temp_s0;
 
-    temp_s0 = (void *)((int *)DAT_00587ef0)[0];
+    temp_s0 = (void *)g_beShadow01Info_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_004c3a00[0], 3);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));

@@ -25,7 +25,7 @@ int igMessageDefaultReceiver_GetVTable(void) {
     u.vt = (int)&DAT_0052c930[0];
     ps = &u.b[8];
     *(int *)ps = 0;
-    temp_s0 = *(int *)&u.b[*(int *)((char *)(DAT_00586dc8[0]) + 916)];
+    temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.vt = (int)&DAT_0052c930[0];
     if (ps != 0) {
         p = *(int **)ps;
@@ -66,20 +66,20 @@ void thunk_igMessageDefaultReceiver_GetMetaObject(void) {
     igMessageDefaultReceiver_GetMetaObject();
 }
 
-int FUN_002323c0(void) {
-    return DAT_0056dae8[0];
+igMetaObject *FUN_002323c0(void) {
+    return g_igMessageReceiver_metaObject[0];
 }
 
 void igMessageDefaultReceiver_InitFields(void) {
-    int temp_s0;
+    igMetaObject *temp_s0;
     int temp_s1;
     char *p;
 
-    temp_s0 = DAT_0056db30[0];
+    temp_s0 = g_igMessageDefaultReceiver_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_00498048[0], 2);
     p = (char *)igMetaObject_GetFieldAt(temp_s0, temp_s1);
-    *(int *)(p + 56) = (int)DAT_00587198[0];
+    *(int *)(p + 56) = (int)g_igObject_metaObject[0];
     p = (char *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 1);
     *(short *)(p + 20) = 0xC;
     igMetaObject_NameFields(temp_s0, &DAT_00498050[0], &DAT_00498058[0], &DAT_00498060[0], temp_s1);

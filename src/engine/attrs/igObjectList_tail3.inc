@@ -1,4 +1,4 @@
-int Gap__Core__igObjectList__vfunc_24(void) {
-    return DAT_00587198[0];
+igMetaObject *Gap__Core__igObjectList__vfunc_24(void) {
+    return g_igObject_metaObject[0];
 }
 

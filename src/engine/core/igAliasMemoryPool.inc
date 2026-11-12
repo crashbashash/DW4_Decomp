@@ -14,7 +14,7 @@ FactoryPoolView *igAliasMemoryPool_Create(void *allocator) {
 
 void *Gap__Core__igAliasMemoryPool__vfunc_21(int arg0, int arg1) {
     void *p;
-    if (*DAT_00586dc8[0] != 0) {
+    if (*g_objectSystem[0] != 0) {
         igAliasMemoryPool_EnsureRegistered();
         return (void *)igObject_CloneViaMetadata((void **)arg0, arg1);
     }
@@ -45,8 +45,8 @@ int igAliasMemoryPool_GetVTable(void) {
     S_ref *q2;
 
     FUN_002d1500(u.b);
-    temp_s0 = *(int *)&u.b[*(int *)((char *)(((void * *)DAT_00586dc8)[0]) + 916)];
-    u.vt = (int)&DAT_005313a0[0];
+    temp_s0 = *(int *)&u.b[*(int *)((char *)(((void * *)g_objectSystem)[0]) + 916)];
+    u.vt = (int)&g_igAliasMemoryPool_vtable[0];
     q2 = (S_ref *)&u.b[180];
     if (q2 != 0) {
         q2 = *(S_ref **)q2;
@@ -105,8 +105,8 @@ void thunk_igAliasMemoryPool_GetMetaObject(void) {
     igAliasMemoryPool_GetMetaObject();
 }
 
-int FUN_002cd480(void) {
-    return DAT_00585ea0[0];
+igMetaObject *FUN_002cd480(void) {
+    return g_igMemoryPool_metaObject[0];
 }
 
 int FUN_002cd5c0(void) {

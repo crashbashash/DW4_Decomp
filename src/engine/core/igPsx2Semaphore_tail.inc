@@ -19,7 +19,7 @@ int igPsx2Semaphore_GetVTable(void) {
     *q = 0;
     o.vt = &DAT_00524950[0];
     o.vt = &DAT_0052d970[0];
-    temp_s0 = *(int *)((char *)&o + *(int *)((char *)(((void * *)DAT_00586dc8)[0]) + 916));
+    temp_s0 = *(int *)((char *)&o + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
     o.vt = &DAT_00524950[0];
     if (q != 0) {
         temp_v1 = *q;
@@ -57,21 +57,21 @@ void igPsx2Semaphore_Register(void) {
     );
 }
 
-int FUN_002cf820(void) {
-    return DAT_00585970[0];
+igMetaObject *FUN_002cf820(void) {
+    return g_igSemaphore_metaObject[0];
 }
 
 void igPsx2Semaphore_InitFields(void) {
     int temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)(DAT_00586cd8[0]);
+    temp_s0 = (void *)(g_igPsx2Semaphore_metaObject[0]);
     temp_s1 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
     igMetaObject_CreateFields((igMetaObject *)temp_s0, (igMetaField * (**)(void *))&DAT_004c1cf8[0], 3);
     FUN_002ea4b0((void **)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1)), -1);
     FUN_0030e9b0((void **)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 1)), 1);
     FUN_0030e9b0((void **)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 2)), 1);
     igMetaObject_NameFields((igMetaObject *)temp_s0, (const char **)&DAT_004c1d08[0], (igMetaField ***)&DAT_004c1d18[0], &DAT_004c1d28[0], temp_s1);
-    *(int *)((char *)(DAT_00586cd8[0]) + 64) = (int)(&thunk_igSemaphore_GetMetaObject);
+    *(int *)((char *)(g_igPsx2Semaphore_metaObject[0]) + 64) = (int)(&thunk_igSemaphore_GetMetaObject);
 }
 

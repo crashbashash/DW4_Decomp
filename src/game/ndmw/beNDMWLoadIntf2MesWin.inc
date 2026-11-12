@@ -3,22 +3,22 @@ void FUN_003c6b00(int arg0) {
     igMetaObject_CreateInstance(*(int *)0x58BD98, arg0);
 }
 
-int FUN_003c6b40(void) {
-    if (((int *)DAT_0058bd98)[0] == 0) {
-        ((int *)DAT_0058bd98)[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(DAT_00587040[0]));
+igMetaObject *FUN_003c6b40(void) {
+    if (g_beNDMWLoadIntf2MesWin_metaObject[0] == 0) {
+        g_beNDMWLoadIntf2MesWin_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
     }
-    return ((int *)DAT_0058bd98)[0];
+    return g_beNDMWLoadIntf2MesWin_metaObject[0];
 }
 
 void *beNDMWLoadIntf2MesWin_GetReadyMetaObject(void) {
     unsigned char b;
-    if (DAT_0058bd98[0] != 0) {
-        b = (*(int *)((char *)(DAT_0058bd98[0]) + 36) & 4) != 0;
+    if (g_beNDMWLoadIntf2MesWin_metaObject[0] != 0) {
+        b = (*(int *)((char *)(g_beNDMWLoadIntf2MesWin_metaObject[0]) + 36) & 4) != 0;
         if (b != 0) goto done;
     }
     FUN_003c6c70();
 done:
-    return DAT_0058bd98[0];
+    return g_beNDMWLoadIntf2MesWin_metaObject[0];
 }
 
 int beNDMWLoadIntf2MesWin_GetVTable(void) {
@@ -34,7 +34,7 @@ int beNDMWLoadIntf2MesWin_GetVTable(void) {
     *(int *)ps = 0;
     u.vt = (int)&DAT_00524950[0];
     u.vt = (int)&DAT_0053c940[0];
-    s0 = *(int *)&u.b[*(int *)((char *)(DAT_00586dc8[0]) + 916)];
+    s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.vt = (int)&DAT_00524950[0];
     if (ps != 0) {
         v1 = *(int **)ps;
@@ -87,7 +87,7 @@ void beNDMWLoadIntf2MesWin_InitFields(void) {
     igMetaObject *temp_s1;
     igStringMetaField *temp_v0_2;
 
-    temp_s1 = (igMetaObject *)(DAT_0058bd98[0]);
+    temp_s1 = (igMetaObject *)(g_beNDMWLoadIntf2MesWin_metaObject[0]);
     temp_s2 = igMetaObject_GetFieldCount(temp_s1);
     igMetaObject_CreateFields(temp_s1, &DAT_004cbd90[0], 0x12);
     temp_v0 = (void **)(igMetaObject_FindFieldByName(temp_s1, &DAT_00510cd8[0]));
@@ -107,7 +107,7 @@ void beNDMWLoadIntf2MesWin_InitFields(void) {
     temp_s0_2->_metaObject = FUN_0034c8e0();
     temp_s0_2->_refCounted = 0;
     temp_s0_3 = (igObjectRefMetaField *)(igMetaObject_GetFieldAt(temp_s1, temp_s2 + 2));
-    temp_s0_3->_metaObject = FUN_003c7700();
+    temp_s0_3->_metaObject = (int)FUN_003c7700();
     temp_s0_3->_refCounted = 0;
     igMetaObject_NameFields(temp_s1, &DAT_004cbde0[0], &DAT_004cbe30[0], &DAT_004cbe80[0], temp_s2);
 }

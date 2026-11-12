@@ -1,8 +1,8 @@
-int FUN_0019c8c0(void) {
-    if (DAT_00561820[0] == 0) {
-        DAT_00561820[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(DAT_00587040[0]));
+igMetaObject *FUN_0019c8c0(void) {
+    if (g_igNonRefCountedNodeList_metaObject[0] == 0) {
+        g_igNonRefCountedNodeList_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
     }
-    return DAT_00561820[0];
+    return g_igNonRefCountedNodeList_metaObject[0];
 }
 
 igMetaObject *igNonRefCountedNodeList_GetMetaObject(void)
@@ -18,7 +18,7 @@ int igNonRefCountedNodeList_GetVTable(void) {
 
     igObject_InitHeader(&obj);
     obj.vt = &DAT_0052ac00[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 
 void FUN_0019c9a0(void)

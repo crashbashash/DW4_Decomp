@@ -3,11 +3,11 @@ void FUN_0018a060(int arg0) {
     igMetaObject_CreateInstance(*(int *)0x5610B8, arg0);
 }
 
-int FUN_0018a0a0(void) {
-    if (DAT_005610b8[0] == 0) {
-        DAT_005610b8[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(DAT_00587040[0]));
+igMetaObject *FUN_0018a0a0(void) {
+    if (g_igVec3fList_metaObject[0] == 0) {
+        g_igVec3fList_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
     }
-    return DAT_005610b8[0];
+    return g_igVec3fList_metaObject[0];
 }
 
 igMetaObject *igVec3fList_GetMetaObject(void)
@@ -23,7 +23,7 @@ int igVec3fList_GetVTable(void) {
 
     igObject_InitHeader(&obj);
     obj.vt = &DAT_00524880[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 
 void FUN_0018a180(void)
@@ -58,7 +58,7 @@ void FUN_0018a210(void) {
     void *temp_s0;
     void *temp_s1;
 
-    temp_s1 = (void *)(DAT_005610b8[0]);
+    temp_s1 = (void *)(g_igVec3fList_metaObject[0]);
     temp_v0 = (void **)(igMetaObject_FindFieldByName(temp_s1, &DAT_004e0ca0[0]));
     temp_s2 = ObjectPointerList_FindIndex(*(int *)((char *)(temp_s1) + 40), temp_v0);
     temp_s0 = (void *)(((DW4VC_84_1 *)(temp_v0))->vX((int)(1)));

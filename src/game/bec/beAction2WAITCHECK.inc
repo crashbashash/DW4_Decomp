@@ -1,9 +1,9 @@
 void *FUN_0036cfa0(void) {
-    struct G *g = DAT_00589fa0[0];
-    if (!g || ((g->f & 4) != 0) == false) {
+    igMetaObject *g = g_beAction2WAITCHECK_metaObject[0];
+    if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_0036d080();
     }
-    return DAT_00589fa0[0];
+    return g_beAction2WAITCHECK_metaObject[0];
 }
 
 int beAction2WAITCHECK_GetVTable(void) {
@@ -19,7 +19,7 @@ int beAction2WAITCHECK_GetVTable(void) {
     *(int *)ps = 0;
     u.vt = (int)&DAT_00524950[0];
     u.vt = (int)&DAT_005341b0[0];
-    temp_s0 = *(int *)&u.b[*(int *)((char *)(DAT_00586dc8[0]) + 916)];
+    temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.vt = (int)&DAT_00524950[0];
     if (ps != 0) {
         temp_v1 = *(int **)ps;
@@ -66,7 +66,7 @@ void beAction2WAITCHECK_InitFields(void) {
     int temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)((int *)DAT_00589fa0)[0];
+    temp_s0 = (void *)g_beAction2WAITCHECK_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_004c8100[0], 1);
     igMetaObject_NameFields(temp_s0, &DAT_004c8108[0], &DAT_004c8110[0], &DAT_004c8118[0], temp_s1);

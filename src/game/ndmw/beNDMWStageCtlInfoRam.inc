@@ -1,9 +1,9 @@
 void *FUN_003bba30(void) {
-    struct G *g = DAT_0058b048[0];
-    if (!g || ((g->f & 4) != 0) == false) {
+    igMetaObject *g = g_beNDMWStageCtlInfoRam_metaObject[0];
+    if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_003bbb20();
     }
-    return DAT_0058b048[0];
+    return g_beNDMWStageCtlInfoRam_metaObject[0];
 }
 
 int beNDMWStageCtlInfoRam_GetVTable(void) {
@@ -16,7 +16,7 @@ int beNDMWStageCtlInfoRam_GetVTable(void) {
     q1 = (S_ref *)&u.b[40];
     *(int *)q1 = 0;
     u.w[0] = (int)(&DAT_0053da40[0]);
-    temp_s0 = *(int *)&u.b[*(int *)((char *)(DAT_00586dc8[0]) + 916)];
+    temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.w[0] = (int)(&DAT_00539e90[0]);
     if (q1 != 0) {
         q1 = *(S_ref **)q1;

@@ -4,17 +4,17 @@ int FUN_001e68a0(...);
 int FUN_00236be0(...);
 int igObject_IsKindOf(...);
 
-extern int DAT_00562c10[4];
+extern int g_igDataPumpInfo_metaObject[4];
 
 int FUN_00236c40(...);
 int igObject_Destroy(...);
 
 void FUN_001e67a0(int, long long);
 
-extern int DAT_0058cb70[4];
+extern int g_igViewerDataPumpManager_metaObject[4];
 
 int Gap__Viewer__igViewerDataPumpManager__vfunc_27(void *arg0, int arg1) {
-    if (igObject_IsKindOf(arg1, DAT_00562c10[0]) != 0) {
+    if (igObject_IsKindOf(arg1, g_igDataPumpInfo_metaObject[0]) != 0) {
         FUN_001e68a0(*(int *)((char *)(arg0) + 16), arg1);
         FUN_00236be0(*(int *)((char *)(arg0) + 12), arg0);
         return 1;
@@ -87,7 +87,7 @@ void Gap__Viewer__igViewerDataPumpManager__vfunc_29(int arg0) {
 }
 
 int Gap__Viewer__igViewerDataPumpManager__vfunc_22(void) {
-    return DAT_0058cb70[0];
+    return g_igViewerDataPumpManager_metaObject[0];
 }
 
 void Gap__Viewer__igViewerDataPumpManager__vfunc_25(void) {

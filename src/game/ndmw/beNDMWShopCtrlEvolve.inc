@@ -5,13 +5,13 @@ void FUN_003b8860(int arg0) {
 
 void *FUN_003b88a0(void) {
     unsigned char b;
-    if (DAT_0058ae08[0] != 0) {
-        b = (*(int *)((char *)(DAT_0058ae08[0]) + 36) & 4) != 0;
+    if (g_beNDMWShopCtrlEvolve_metaObject[0] != 0) {
+        b = (*(int *)((char *)(g_beNDMWShopCtrlEvolve_metaObject[0]) + 36) & 4) != 0;
         if (b != 0) goto done;
     }
     FUN_003b8a00();
 done:
-    return DAT_0058ae08[0];
+    return g_beNDMWShopCtrlEvolve_metaObject[0];
 }
 
 int beNDMWShopCtrlEvolve_GetVTable(void) {
@@ -30,7 +30,7 @@ int beNDMWShopCtrlEvolve_GetVTable(void) {
     u.vt = (int)&DAT_0053fb40[0];
     p = (int *)&u.b[96];
     *p = 0;
-    temp_s0 = *(int *)&u.b[*(int *)((char *)(DAT_00586dc8[0]) + 916)];
+    temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.vt = (int)&DAT_0053fb40[0];
     FUN_003b8980((ObjectRefWord *)p, -1);
     FUN_003b6770((int **)u.b, (long long)0);
@@ -82,11 +82,11 @@ void beNDMWShopCtrlEvolve_InitFields(void) {
     void *temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)((int *)DAT_0058ae08)[0];
+    temp_s0 = (void *)g_beNDMWShopCtrlEvolve_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_004c9c30[0], 1);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = FUN_003c9480();
+    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_003c9480();
     ((igRefMetaField *)temp_s1)->_construct = 1;
     igMetaObject_NameFields(temp_s0, &DAT_004c9c38[0], &DAT_004c9c40[0], &DAT_004c9c48[0], temp_s2);
 }

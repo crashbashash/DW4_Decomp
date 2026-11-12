@@ -3,22 +3,22 @@ void FUN_00342ca0(int arg0) {
     igMetaObject_CreateInstance(*(int *)0x587D08, arg0);
 }
 
-int FUN_00342ce0(void) {
-    if (DAT_00587d08[0] == 0) {
-        DAT_00587d08[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(DAT_00587040[0]));
+igMetaObject *FUN_00342ce0(void) {
+    if (g_beSystem_metaObject[0] == 0) {
+        g_beSystem_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
     }
-    return DAT_00587d08[0];
+    return g_beSystem_metaObject[0];
 }
 
 void *FUN_00342d30(void) {
     unsigned char b;
-    if (((void * *)DAT_00587d08)[0] != 0) {
-        b = (*(int *)((char *)(((void * *)DAT_00587d08)[0]) + 36) & 4) != 0;
+    if (((void * *)g_beSystem_metaObject)[0] != 0) {
+        b = (*(int *)((char *)(((void * *)g_beSystem_metaObject)[0]) + 36) & 4) != 0;
         if (b != 0) goto done;
     }
     FUN_00342f30();
 done:
-    return ((void * *)DAT_00587d08)[0];
+    return ((void * *)g_beSystem_metaObject)[0];
 }
 
 int beSystem_GetVTable(void) {
@@ -36,7 +36,7 @@ int beSystem_GetVTable(void) {
     obj.w18 = 0;
     obj.w19 = 0;
     obj.w20 = 0;
-    t = *(int *)((char *)&obj + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+    t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
     obj.vt = &DAT_0053b510[0];
     FUN_00229350(&obj.w20, -1);
     FUN_001d35d0(&obj.w19, -1);
@@ -105,7 +105,7 @@ void beSystem_InitFields(void) {
     int temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)DAT_00587d08[0];
+    temp_s0 = (void *)g_beSystem_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_004c35a0[0], 0x1A);
     FUN_002e3810(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 3), 1.0f);

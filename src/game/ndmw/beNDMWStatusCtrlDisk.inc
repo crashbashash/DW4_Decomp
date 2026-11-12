@@ -5,11 +5,11 @@ void FUN_003b9a50(int arg0) {
 
 igMetaObject *FUN_003b9a90(void)
 {
-    igMetaObject *g = DAT_0058aec0[0];
+    igMetaObject *g = g_beNDMWStatusCtrlDisk_metaObject[0];
     bool t;
     if (!g || (t = g->_validity & 4) == 0)
         FUN_003b9c20();
-    return DAT_0058aec0[0];
+    return g_beNDMWStatusCtrlDisk_metaObject[0];
 }
 
 int beNDMWStatusCtrlDisk_GetVTable(void) {
@@ -28,7 +28,7 @@ int beNDMWStatusCtrlDisk_GetVTable(void) {
     obj.w[21] = 0;
     obj.w[23] = 0;
     obj.w[24] = 0;
-    t = *(int *)((char *)&obj + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+    t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
     obj.vt = &DAT_0053edb0[0];
     FUN_003b9ba0((ObjectRefWord *)(&obj.w[24]), -1);
     FUN_003b6090((void **)(&obj.w[23]), (long long)(-1));
@@ -84,17 +84,17 @@ void beNDMWStatusCtrlDisk_InitFields(void) {
     void *temp_s1_3;
     void *temp_s0;
 
-    temp_s0 = (void *)((int *)DAT_0058aec0)[0];
+    temp_s0 = (void *)g_beNDMWStatusCtrlDisk_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_004c9dd0[0], 6);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
     ((igObjectRefMetaField *)temp_s1)->_metaObject = igIntList_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s1)->_construct = 1;
     temp_s1_2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 3));
-    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = FUN_003c9130();
+    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = (int)FUN_003c9130();
     ((igRefMetaField *)temp_s1_2)->_construct = 1;
     temp_s1_3 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 4));
-    ((igObjectRefMetaField *)temp_s1_3)->_metaObject = FUN_003c85f0();
+    ((igObjectRefMetaField *)temp_s1_3)->_metaObject = (int)FUN_003c85f0();
     igMetaObject_NameFields(temp_s0, &DAT_004c9df0[0], &DAT_004c9e10[0], &DAT_004c9e30[0], temp_s2);
 }
 

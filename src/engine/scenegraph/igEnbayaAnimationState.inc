@@ -24,7 +24,7 @@ int igEnbayaAnimationState_GetVTable(void) {
     pB8 = &u.b[120];
     *(int *)pB8 = 0;
     u.vt = (int)&DAT_00529170[0];
-    r = *(int *)&u.b[*(int *)((char *)(DAT_00586dc8[0]) + 916)];
+    r = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.vt = (int)&DAT_00529550[0];
     if (pB8 != 0) {
         v1 = *(int **)pB8;
@@ -95,15 +95,15 @@ void thunk_igEnbayaAnimationState_GetMetaObject(void) {
     igEnbayaAnimationState_GetMetaObject();
 }
 
-int FUN_001a20d0(void) {
-    return DAT_00562100[0];
+igMetaObject *FUN_001a20d0(void) {
+    return g_igAnimationState_metaObject[0];
 }
 
 void igEnbayaAnimationState_InitFields(void) {
     int temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)DAT_00561b80[0];
+    temp_s0 = (void *)g_igEnbayaAnimationState_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_0048c340[0], 2);
     *(char *)((char *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s1))) + 38) = 0;

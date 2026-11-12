@@ -25,7 +25,7 @@ extern "C" void Gap__Bec__beNDMWMdlEnemy__vfunc_44(void);
 extern "C" int Gap__Bec__beNDMWMdlEnemy__vfunc_20(void);
 extern "C" int DAT_00515e18[4];
 extern "C" void Gap__Bec__beNDMWMdlEnemy__vfunc_37(beNDMWMdlEnemy * p0, int p1, char * p2);
-extern "C" int DAT_004e0858[4];
+extern "C" int emptyString[4];
 extern "C" int DAT_00515e28[4];
 extern "C" int DAT_00515e30[4];
 extern "C" int DAT_00515e38[4];
@@ -33,8 +33,8 @@ extern "C" int DAT_00515e48[4];
 extern "C" int DAT_00515e50[4];
 extern "C" int DAT_00515e60[4];
 extern "C" int DAT_00515e68[4];
-extern "C" int DAT_00585be0[4];
-extern "C" int DAT_00587110[4];
+extern "C" int g_propertyNameField[4];
+extern "C" int g_defaultAllocatorSelector[4];
 extern "C" unsigned char GPR_00554c14;
 /* Property record: reference at +20. */
 struct Holder { char pad[20]; igObject *f20; };
@@ -85,16 +85,16 @@ void Gap__Bec__beNDMWMdlEnemy__vfunc_36(beNDMWMdlEnemy *arg0, beBaseInfoRam *arg
     s0 = (beBaseInfo *)arg1->_parentInfo;
     if (arg1->_dataList == 0) {
         int a = igObject_GetAllocator(arg1);
-        a = GPR_00554c14 ? a : Memory_GetAllocatorBySelector(DAT_00587110[0]);
+        a = GPR_00554c14 ? a : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
         igObject *created = (igObject *)beBaseInfoDataList_Create(a);
         /* matching construct: the new list is a temporary bound to the setter's reference parameter (it
          * takes the stack slot below the named info-work reference, as retail's +0x68 does) */
         Slot::adopt(arg1, created);
     }
-    s4 = (Holder *)igProperty_FindByName((void *)arg1->_dataList, DAT_00585be0[0], &DAT_00515e30[0]);
+    s4 = (Holder *)igProperty_FindByName((void *)arg1->_dataList, g_propertyNameField[0], &DAT_00515e30[0]);
     {
         int a = igObject_GetAllocator(arg0);
-        a = GPR_00554c14 ? a : Memory_GetAllocatorBySelector(DAT_00587110[0]);
+        a = GPR_00554c14 ? a : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
         InfoWorkRef work((igObject *)FUN_003c1910(a));
         igObject *t = work.p;
         if (t != 0) t->_refCount = t->_refCount + 1;
@@ -109,7 +109,7 @@ void Gap__Bec__beNDMWMdlEnemy__vfunc_36(beNDMWMdlEnemy *arg0, beBaseInfoRam *arg
             v = beDataBase_GetRecordInt(beMessenger_GetObject(arg0->_messenger, 0), ((beNDMWMdlEnemyInfoWork *)work.p)->_recNo, &DAT_00515e60[0]);
             if (v != 0) {
                 int k = arg1->_ramNo;
-                a2 = s0->_name ? (int *)s0->_name : &DAT_004e0858[0];
+                a2 = s0->_name ? (int *)s0->_name : &emptyString[0];
                 beMessenger_PrepareDelayedSelection(arg0->_messenger, &DAT_00515e28[0], a2, k);
                 beMessenger_AppendInt(arg0->_messenger, v);
                 beMessenger_EnqueueSelected(arg0->_messenger, &DAT_00515e68[0], 0x3C);

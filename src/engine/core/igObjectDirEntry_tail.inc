@@ -7,11 +7,11 @@ void Gap__Core__igObjectDirEntry__vfunc_12(igObjectDirEntry *self) {
 }
 
 static inline const char *nameOf_3010f0(const igObjectDirEntry *entry) {
-    return entry->_name != 0 ? (const char *)entry->_name : ((char *)DAT_004e0858);
+    return entry->_name != 0 ? (const char *)entry->_name : ((char *)emptyString);
 }
 
 static inline EntryList_3010f0 *asEntryList_3010f0(igObject *object) {
-    if (object != 0 && igObject_IsKindOf(object, (igMetaObject *)DAT_00585b60[0]) != 0) return (EntryList_3010f0 *)object;
+    if (object != 0 && igObject_IsKindOf(object, (igMetaObject *)g_igObjectList_metaObject[0]) != 0) return (EntryList_3010f0 *)object;
     return 0;
 }
 

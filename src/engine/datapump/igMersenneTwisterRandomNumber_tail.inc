@@ -14,7 +14,7 @@ int igMersenneTwisterRandomNumber_GetVTable(void) {
     struct Obj_1e45e0 obj;
     igObject_InitHeader(&obj);
     obj.vt = &DAT_0052b8e0[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 
 void FUN_001e4620(void)
@@ -39,16 +39,16 @@ void igMersenneTwisterRandomNumber_Register(void) {
     );
 }
 
-int FUN_001e46a0(void) {
-    return DAT_00562b70[0];
+igMetaObject *FUN_001e46a0(void) {
+    return g_igRandomNumber_metaObject[0];
 }
 
 void igMersenneTwisterRandomNumber_InitFields(void) {
-    int temp_s0;
+    igMetaObject *temp_s0;
     int temp_s1;
     struct F *f;
 
-    temp_s0 = DAT_00562b88[0];
+    temp_s0 = g_igMersenneTwisterRandomNumber_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_0048daf0[0], 2);
     f = (struct F *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 1);

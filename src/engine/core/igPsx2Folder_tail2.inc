@@ -12,14 +12,14 @@ FolderObjectRef Gap__Core__igPsx2Folder__vfunc_26(FolderSelf *self) {
         if (name == 0) {
             interned = 0;
         } else {
-            if ((*(int *)DAT_00586f20) == 0) {
+            if ((*(int *)g_stringPool) == 0) {
                 int v = ((int)FUN_002eb010(16));
                 if (v != 0) {
                     v = ((int)StringPool_Construct((struct S_2eadf0 *)v));
                 }
-                (*(int *)DAT_00586f20) = v;
+                (*(int *)g_stringPool) = v;
             }
-            interned = ((char *)StringPool_Intern((StringPool *)((*(int *)DAT_00586f20)), (const char *)name));
+            interned = ((char *)StringPool_Intern((StringPool *)((*(int *)g_stringPool)), (const char *)name));
         }
         FolderStringRef text(interned);
         StringList_AppendRetained(list.obj, &text);
@@ -66,12 +66,12 @@ int FUN_0032cf70(int *arg0, int arg1, int arg2, int arg3, int arg4, int *arg5) {
     char *temp_v0;
 
     if (arg3 > 0xFB) {
-        *arg0 = DAT_004fb418.v;
+        *arg0 = g_allocatorFailureStatus.v;
         return;
     }
     temp_v0 = FUN_0032cb50((char *)arg1, arg2);
     if (temp_v0 == 0) {
-        *arg0 = DAT_004fb418.v;
+        *arg0 = g_allocatorFailureStatus.v;
         return;
     }
     if (*temp_v0 == 0x63) {
@@ -83,12 +83,12 @@ int FUN_0032cf70(int *arg0, int arg1, int arg2, int arg3, int arg4, int *arg5) {
     }
     if (var_v0 < 0) {
         Memory_FreeBufferAliasA(temp_v0);
-        *arg0 = DAT_004fb418.v;
+        *arg0 = g_allocatorFailureStatus.v;
         return;
     }
     *arg5 = var_v0;
     Memory_FreeBufferAliasA(temp_v0);
-    *arg0 = DAT_004fb410.v;
+    *arg0 = g_statusSucceeded.v;
 }
 
 void FUN_0032d070(void)
@@ -140,14 +140,14 @@ void FUN_0032d1f0(void) {
 }
 
 static inline int internPool(void) {
-    if (DAT_00586f20[0] == 0) {
+    if (g_stringPool[0] == 0) {
         int a = ((int)FUN_002eb010(0x10));
         if (a != 0) {
             a = ((int)StringPool_Construct((S_2eadf0 *)a));
         }
-        DAT_00586f20[0] = a;
+        g_stringPool[0] = a;
     }
-    return DAT_00586f20[0];
+    return g_stringPool[0];
 }
 
 static inline void setName(O_32d220 *object, int name) {
@@ -184,9 +184,9 @@ void FUN_0032d4b0(int *arg0, char *arg1) {
         *(char *)(DAT_00587358[0] + temp_s1) = 0;
         DAT_00587330[0] = DAT_00587358[0];
         FUN_0032ded0(DAT_00587358[0]);
-        *arg0 = DAT_004fb410.v;
+        *arg0 = g_statusSucceeded.v;
     } else {
-        *arg0 = DAT_004fb418.v;
+        *arg0 = g_allocatorFailureStatus.v;
     }
 }
 

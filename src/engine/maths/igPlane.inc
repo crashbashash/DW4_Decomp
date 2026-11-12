@@ -15,7 +15,7 @@ int igPlane_GetVTable(void) {
 
     igObject_InitHeader(&obj);
     obj.vt = &DAT_00527eb0[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 
 void FUN_00188520(void)
@@ -45,11 +45,11 @@ void thunk_igPlane_GetMetaObject(void) {
 }
 
 void igPlane_InitFields(void) {
-    int temp_s0;
+    igMetaObject *temp_s0;
     int temp_s1;
     void *f;
 
-    temp_s0 = DAT_00560fe0[0];
+    temp_s0 = g_igPlane_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_0048ae08[0], 3);
     f = (void *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 2);

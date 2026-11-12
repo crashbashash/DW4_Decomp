@@ -1,5 +1,5 @@
-int Gap__Core__igPsx2LongTimer__vfunc_22(void) {
-    return DAT_00586d40[0];
+igMetaObject *Gap__Core__igPsx2LongTimer__vfunc_22(void) {
+    return g_igPsx2LongTimer_metaObject[0];
 }
 
 void Gap__Core__igPsx2LongTimer__vfunc_23(void **arg0) {

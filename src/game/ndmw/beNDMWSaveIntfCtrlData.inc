@@ -5,13 +5,13 @@ void FUN_003bc940(int arg0) {
 
 void *FUN_003bc980(void) {
     bool ok;
-    if (DAT_0058b0d0[0] == 0) goto make;
-    ok = !!(DAT_0058b0d0[0]->f & 4);
+    if (g_beNDMWSaveIntfCtrlData_metaObject[0] == 0) goto make;
+    ok = !!(g_beNDMWSaveIntfCtrlData_metaObject[0]->_validity & 4);
     if (ok != false) goto done;
 make:
     FUN_003bca60();
 done:;
-    return DAT_0058b0d0[0];
+    return g_beNDMWSaveIntfCtrlData_metaObject[0];
 }
 
 int beNDMWSaveIntfCtrlData_GetVTable(void) {
@@ -27,7 +27,7 @@ int beNDMWSaveIntfCtrlData_GetVTable(void) {
     *(int *)ps = 0;
     u.vt = (int)&DAT_00524950[0];
     u.vt = (int)&DAT_0053d7d0[0];
-    temp_s0 = *(int *)&u.b[*(int *)((char *)(DAT_00586dc8[0]) + 916)];
+    temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.vt = (int)&DAT_00524950[0];
     if (ps != 0) {
         temp_v1 = *(int **)ps;
@@ -77,7 +77,7 @@ void beNDMWSaveIntfCtrlData_InitFields(void) {
     void *temp_s1;
     T_3bcb10 *temp_v0_2;
 
-    temp_s1 = (void *)(((void * *)DAT_0058b0d0)[0]);
+    temp_s1 = (void *)(((void * *)g_beNDMWSaveIntfCtrlData_metaObject)[0]);
     temp_s2 = igMetaObject_GetFieldCount(temp_s1);
     igMetaObject_CreateFields(temp_s1, &DAT_004ca200[0], 0xF);
     temp_v0 = (void **)(igMetaObject_FindFieldByName(temp_s1, &DAT_00510cd8[0]));
@@ -95,7 +95,7 @@ void beNDMWSaveIntfCtrlData_InitFields(void) {
 
 int FUN_003bcc20(void) {
     if (DAT_0058b158[0] == 0) {
-        DAT_0058b158[0] = igMetaEnum_Create(&DAT_00510d58[0], &DAT_004ca300[0], &DAT_004ca320[0], 7);
+        DAT_0058b158[0] = igMetaEnum_Create(Message, &DAT_004ca300[0], &DAT_004ca320[0], 7);
     }
     return DAT_0058b158[0];
 }

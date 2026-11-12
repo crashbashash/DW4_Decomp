@@ -23,8 +23,8 @@ int igObjectRefArrayMetaField_GetVTable(void) {
 
     igObjectRefMetaField_Init((igObjectRefMetaField *)&o);
     o.vt = &DAT_0052ef40[0];
-    r = *(int *)((char *)&o + *(int *)((char *)(((void * *)DAT_00586dc8)[0]) + 916));
-    o.vt = &DAT_00532c80[0];
+    r = *(int *)((char *)&o + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
+    o.vt = &g_igObjectRefMetaField_vtable[0];
     if (&o.str2 != 0) {
         temp_v1 = o.str2;
         if (temp_v1 != 0) {
@@ -36,7 +36,7 @@ int igObjectRefArrayMetaField_GetVTable(void) {
             }
         }
     }
-    o.vt = &DAT_0052f230[0];
+    o.vt = &g_igMetaField_vtable[0];
     if (&o.str != 0) {
         temp_v1_2 = o.str;
         if (temp_v1_2 != 0) {
@@ -77,15 +77,15 @@ void thunk_igObjectRefArrayMetaField_GetMetaObject(void) {
     igObjectRefArrayMetaField_GetMetaObject();
 }
 
-int FUN_002bd510(void) {
-    return DAT_00585b20[0];
+igMetaObject *FUN_002bd510(void) {
+    return g_igObjectRefMetaField_metaObject[0];
 }
 
 void igObjectRefArrayMetaField_InitFields(void) {
     int temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)DAT_00585b48[0];
+    temp_s0 = (void *)g_igObjectRefArrayMetaField_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
     igMetaObject_CreateFields((igMetaObject *)temp_s0, (igMetaField * (**)(void *))&DAT_004bfb00[0], 1);
     FUN_002ea4b0((void **)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1)), 1);
@@ -98,7 +98,7 @@ void FUN_002bd5b0(void) {
     int t;
 
     if (DAT_00585b50[0] == 0) {
-        DAT_00585b50[0] = ((R_2bd5b0 *)igMetaObject_CreateInstance((CreateMeta *)DAT_00585b48[0], (MemoryPool *)(((int)Memory_GetAllocatorBySelector(DAT_00587040[0])))));
+        DAT_00585b50[0] = ((R_2bd5b0 *)igMetaObject_CreateInstance((CreateMeta *)g_igObjectRefArrayMetaField_metaObject[0], (MemoryPool *)(((int)Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0])))));
         temp_s0 = DAT_00585b50[0];
         if (temp_s0 != 0) {
             MetaRefList_AppendRetained((PointerList *)(((Q_2bd5b0 *)FUN_002fc250())), (RefHeader *)temp_s0);

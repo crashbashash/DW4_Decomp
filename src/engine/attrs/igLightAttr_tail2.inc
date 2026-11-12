@@ -1,5 +1,5 @@
-int Gap__Attrs__igLightAttr__vfunc_22(void) {
-    return DAT_0055f088[0];
+igMetaObject *Gap__Attrs__igLightAttr__vfunc_22(void) {
+    return g_igLightAttr_metaObject[0];
 }
 
 /* slot 40 of igLightAttr: set the _vc reference (+140). Reference-counted assignment: retain the

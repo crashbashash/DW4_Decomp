@@ -3,9 +3,9 @@ void FUN_00349270(int arg0) {
     igMetaObject_CreateInstance(*(int *)0x588238, arg0);
 }
 
-SFUN_003492b0 *FUN_003492b0(void) {
-    if (DAT_00588238[0] == 0 || !DAT_00588238[0]->ok()) FUN_00349430();
-    return DAT_00588238[0];
+igMetaObject *FUN_003492b0(void) {
+    if (g_beSvReadMediaApi_metaObject[0] == 0 || !isValid(g_beSvReadMediaApi_metaObject[0])) FUN_00349430();
+    return g_beSvReadMediaApi_metaObject[0];
 }
 
 int beSvReadMediaApi_GetVTable(void) {
@@ -20,7 +20,7 @@ int beSvReadMediaApi_GetVTable(void) {
     obj.w17 = 0;
     obj.w19 = 0;
     obj.w20 = 0;
-    t = *(int *)((char *)&obj + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+    t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
     obj.vt = &DAT_0053be40[0];
     FUN_0014aa70(&obj.w20, -1);
     FUN_003493b0((O *)&obj.w19, (short)(-1));
@@ -73,17 +73,17 @@ void beSvReadMediaApi_InitFields(void) {
     void *temp_s1_4;
     void *temp_s0;
 
-    temp_s0 = (void *)((int *)DAT_00588238)[0];
+    temp_s0 = (void *)g_beSvReadMediaApi_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_004c40b0[0], 5);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = FUN_0034a210();
+    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_0034a210();
     temp_s1_2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
-    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = FUN_0034aeb0();
+    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = (int)FUN_0034aeb0();
     ((igObjectRefMetaField *)temp_s1_2)->_refCounted = 0;
     FUN_002ea4b0(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 2), 0x10);
     temp_s1_3 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 3));
-    ((igObjectRefMetaField *)temp_s1_3)->_metaObject = FUN_0034aeb0();
+    ((igObjectRefMetaField *)temp_s1_3)->_metaObject = (int)FUN_0034aeb0();
     temp_s1_4 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 4));
     ((igObjectRefMetaField *)temp_s1_4)->_metaObject = igObjectList_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s1_4)->_construct = 1;

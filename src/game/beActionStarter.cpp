@@ -17,10 +17,10 @@ extern "C" int g_beActionStarterInfo_metaObject[4];
 extern "C" int g_beActionStarter_metaObject[4];
 extern "C" char DAT_0050e110[];
 extern "C" void Gap__Bec__beActionStarter__vfunc_29(beActionStarter * p0, int p1, char * p2, int p3, int p4);
-extern "C" int DAT_004e0858[4];
+extern "C" int emptyString[4];
 extern "C" int DAT_0050e128[4];
 extern "C" int DAT_0050e138[4];
-extern "C" int DAT_00589e48[4];
+extern "C" int g_beActionStarterData2_metaObject[4];
 /* matching construct: dummy-virtual class (20 slots) so getKind() compiles to the retail jalr; the element data is read through beActionStarterData2 below. */
 struct ActionStarterDataVTable {
     virtual void d0();
@@ -80,7 +80,7 @@ int Gap__Bec__beActionStarter__vfunc_34(beActionStarter *arg0, beActionStarterIn
         int **v1 = (int **)a0->_data;
         do {
             int *v0 = (int *)(*v1)[2];
-            v0 = v0 != 0 ? v0 : &DAT_004e0858[0];
+            v0 = v0 != 0 ? v0 : &emptyString[0];
             if (s4 == (int)v0) {
                 a3 = true;
                 break;
@@ -101,12 +101,12 @@ int Gap__Bec__beActionStarter__vfunc_34(beActionStarter *arg0, beActionStarterIn
                 ActionStarterDataVTable *s2 = (ActionStarterDataVTable *)((int *)s6->_data)[s0];
                 beActionStarterData2 *d = (beActionStarterData2 *)s2;
                 int *v0 = (int *)d->_name;
-                v0 = v0 != 0 ? v0 : &DAT_004e0858[0];
+                v0 = v0 != 0 ? v0 : &emptyString[0];
                 if ((int)v0 == s8) {
                     int *n;
                     beMessenger_SelectReceivers(arg0->_messenger, &DAT_0050e128[0], s4, spA0);
                     n = (int *)s7->_name;
-                    n = n != 0 ? n : &DAT_004e0858[0];
+                    n = n != 0 ? n : &emptyString[0];
                     beMessenger_AppendString(arg0->_messenger, n);
                     beMessenger_AppendString(arg0->_messenger, (int *)d->_message);
                     beMessenger_AppendFloat(arg0->_messenger, (float)d->_delay);
@@ -117,7 +117,7 @@ int Gap__Bec__beActionStarter__vfunc_34(beActionStarter *arg0, beActionStarterIn
                     beMessenger_AppendBool(arg0->_messenger, d->_isSeqDead);
                     beMessenger_AppendBool(arg0->_messenger, d->_isPositionLock);
                     {
-                        int s1 = DAT_00589e48[0];
+                        int s1 = g_beActionStarterData2_metaObject[0];
                         if (s1 == s2->getKind()) {
                             vB[0] = ((float *)&d->_rotation)[0];
                             vB[1] = ((float *)&d->_rotation)[1];

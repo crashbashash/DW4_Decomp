@@ -3,16 +3,16 @@ void FUN_00368710(int arg0) {
     igMetaObject_CreateInstance(*(int *)0x589B80, arg0);
 }
 
-int FUN_00368750(void) {
-    if (((int *)DAT_00589b80)[0] == 0) {
-        ((int *)DAT_00589b80)[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(DAT_00587040[0]));
+igMetaObject *FUN_00368750(void) {
+    if (g_beChangePosTransform_metaObject[0] == 0) {
+        g_beChangePosTransform_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
     }
-    return ((int *)DAT_00589b80)[0];
+    return g_beChangePosTransform_metaObject[0];
 }
 
-SFUN_003687a0 *FUN_003687a0(void) {
-    if (DAT_00589b80[0] == 0 || !DAT_00589b80[0]->ok()) FUN_003688d0();
-    return DAT_00589b80[0];
+igMetaObject *FUN_003687a0(void) {
+    if (g_beChangePosTransform_metaObject[0] == 0 || !isValid(g_beChangePosTransform_metaObject[0])) FUN_003688d0();
+    return g_beChangePosTransform_metaObject[0];
 }
 
 int beChangePosTransform_GetVTable(void) {
@@ -31,7 +31,7 @@ int beChangePosTransform_GetVTable(void) {
     q0 = (S_ref *)&u.b[24];
     *(int *)q0 = 0;
     u.vt = (int)&DAT_0053a340[0];
-    temp_s0 = *(int *)&u.b[*(int *)((char *)(DAT_00586dc8[0]) + 916)];
+    temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.vt = (int)&DAT_0053a0d0[0];
     if (q0 != 0) {
         q0 = *(S_ref **)q0;
@@ -88,7 +88,7 @@ void beChangePosTransform_InitFields(void) {
     int temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)((int *)DAT_00589b80)[0];
+    temp_s0 = (void *)g_beChangePosTransform_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_004c7798[0], 1);
     igMetaObject_NameFields(temp_s0, &DAT_004c77a0[0], &DAT_004c77a8[0], &DAT_004c77b0[0], temp_s1);

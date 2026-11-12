@@ -3,11 +3,11 @@ void FUN_00133160(int arg0) {
     igMetaObject_CreateInstance(*(int *)0x55EE28, arg0);
 }
 
-int FUN_001331a0(void) {
-    if (DAT_0055ee28[0] == 0) {
-        DAT_0055ee28[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(DAT_00587040[0]));
+igMetaObject *FUN_001331a0(void) {
+    if (g_igTexGenMatrixAttr_metaObject[0] == 0) {
+        g_igTexGenMatrixAttr_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
     }
-    return DAT_0055ee28[0];
+    return g_igTexGenMatrixAttr_metaObject[0];
 }
 
 igMetaObject *igTexGenMatrixAttr_GetMetaObject(void)
@@ -27,7 +27,7 @@ int igTexGenMatrixAttr_GetVTable(void) {
     igObject_InitHeader(u.b);
     u.vt = (int)&DAT_00522d00[0];
     igMatrix44f_SetIdentity(&u.b[12]);
-    return *(int *)&u.b[*(int *)((char *)(DAT_00586dc8[0]) + 916)];
+    return *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
 }
 
 void FUN_00133290(void)
@@ -67,7 +67,7 @@ void igTexGenMatrixAttr_InitFields(void) {
     void *temp_s0;
     struct Fld *fld;
 
-    temp_s0 = (void *)DAT_0055ee28[0];
+    temp_s0 = (void *)g_igTexGenMatrixAttr_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_00485e28[0], 2);
     temp_s1 = igMetaObject_GetFieldAt(temp_s0, temp_s2);

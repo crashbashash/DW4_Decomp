@@ -4,7 +4,7 @@ void beNDMWDegiData_Create(int arg0) {
 }
 
 void *beNDMWDegiData_GetReadyMetaObject(void) {
-    struct G *g = ((struct G * *)DAT_0058bd28)[0];
+    struct G *g = ((struct G * *)g_beNDMWDegiData_metaObject)[0];
     bool ready;
     if (g) {
         /* matching construct: the bool compared against false keeps the retail sltu normalisation under the
@@ -14,7 +14,7 @@ void *beNDMWDegiData_GetReadyMetaObject(void) {
     }
     beNDMWDegiData_RunStaticInit();
 end:
-    return ((struct G * *)DAT_0058bd28)[0];
+    return ((struct G * *)g_beNDMWDegiData_metaObject)[0];
 }
 
 int beNDMWDegiData_GetVTable(void) {
@@ -32,7 +32,7 @@ int beNDMWDegiData_GetVTable(void) {
     *(int *)q1 = 0;
     q0 = &u.b[52];
     *(int *)q0 = 0;
-    temp_s0 = *(int *)&u.b[*(int *)((char *)(DAT_00586dc8[0]) + 916)];
+    temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.vt = (int)&DAT_0053c9a0[0];
     if (q0 != 0) {
         temp_v1 = *(int **)q0;
@@ -87,13 +87,13 @@ void beNDMWDegiData_GetMetaObject(void)
 }
 
 void beNDMWDegiData_InitFields(void) {
-    int temp_s0;
+    igMetaObject *temp_s0;
     int temp_s2;
     void *temp_s1;
     void *temp_v0;
     void *temp_s1_2;
 
-    temp_s0 = DAT_0058bd28[0];
+    temp_s0 = g_beNDMWDegiData_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_004cbc80[0], 0xD);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));

@@ -1,9 +1,9 @@
 void **FUN_002b5fe0(int arg0) {
     void **var_s0;
 
-    if (*DAT_00586dc8[0] != 0) {
+    if (*g_objectSystem[0] != 0) {
         FUN_002b61d0();
-        var_s0 = (void **)(((void **)igMetaObject_CreateInstance((CreateMeta *)DAT_005856e8[0], (MemoryPool *)arg0)));
+        var_s0 = (void **)(((void **)igMetaObject_CreateInstance((CreateMeta *)g_igUnsignedShortMetaField_metaObject[0], (MemoryPool *)arg0)));
     } else {
         var_s0 = (void **)(((void **)igObject_AllocateRawStorage(0x34, 0, (void **)arg0)));
         if (var_s0 != 0) {
@@ -18,7 +18,7 @@ void **FUN_002b5fe0(int arg0) {
 int Gap__Core__igUnsignedShortMetaField__vfunc_21(int arg0, int arg1) {
     int temp_v0;
 
-    if (*DAT_00586dc8[0] != 0) {
+    if (*g_objectSystem[0] != 0) {
         FUN_002b61d0();
         return igObject_CloneViaMetadata((void **)arg0, arg1);
     }
@@ -45,8 +45,8 @@ int igUnsignedShortMetaField_GetVTable(void) {
     int c;
 
     FUN_0030ee10((int **)&o);
-    r = *(int *)((char *)&o + *(int *)((char *)(((void * *)DAT_00586dc8)[0]) + 916));
-    o.vt = &DAT_0052f230[0];
+    r = *(int *)((char *)&o + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
+    o.vt = &g_igMetaField_vtable[0];
     if (&o.str != 0) {
         p = o.str;
         if (p != 0) {
@@ -90,7 +90,7 @@ void FUN_002b6260(void) {
     void *temp_s0;
 
     if (DAT_005856f0[0] == 0) {
-        DAT_005856f0[0] = (void *)(((void *)igMetaObject_CreateInstance((CreateMeta *)DAT_005856e8[0], (MemoryPool *)(((int)Memory_GetAllocatorBySelector(DAT_00587040[0]))))));
+        DAT_005856f0[0] = (void *)(((void *)igMetaObject_CreateInstance((CreateMeta *)g_igUnsignedShortMetaField_metaObject[0], (MemoryPool *)(((int)Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]))))));
         temp_s0 = (void *)(DAT_005856f0[0]);
         if (temp_s0 != 0) {
             MetaRefList_AppendRetained((PointerList *)(((void *)FUN_002fc250())), (RefHeader *)temp_s0);

@@ -1,9 +1,9 @@
-G_356690 *FUN_00356690(void) {
-    G_356690 *g = DAT_00588e38[0];
+igMetaObject *FUN_00356690(void) {
+    igMetaObject *g = g_beModelCtrlDataList_metaObject[0];
     int t;
-    if (!g || !(t = (g->f & 4) != 0))
+    if (!g || !(t = (g->_validity & 4) != 0))
         FUN_00356720();
-    return DAT_00588e38[0];
+    return g_beModelCtrlDataList_metaObject[0];
 }
 
 int beModelCtrlDataList_GetVTable(void) {
@@ -12,7 +12,7 @@ int beModelCtrlDataList_GetVTable(void) {
 
     igObject_InitHeader(&tmp[0]);
     tmp[0] = (int)&DAT_00537220[0];
-    off = *(int *)((char *)(((int * *)DAT_00586dc8)[0]) + 916);
+    off = *(int *)((char *)(((int * *)g_objectSystem)[0]) + 916);
     return *(int *)((char *)tmp + off);
 }
 

@@ -31,14 +31,14 @@ void FUN_001e6230(igDataPump *arg0, Src **arg1, int arg2) {
     }
     arg0->_destMeta = (int)fld;
     name = ((igMetaObject *)((igMetaField *)arg0->_destMeta)->_parentMetaObject)->_name;
-    if (DAT_00586f20[0] == 0) {
+    if (g_stringPool[0] == 0) {
         v = FUN_002eb010(16);
         if (v != 0) {
             v = StringPool_Construct(v);
         }
-        DAT_00586f20[0] = v;
+        g_stringPool[0] = v;
     }
-    newv = StringPool_Intern(DAT_00586f20[0], name);
+    newv = StringPool_Intern(g_stringPool[0], name);
     oldv = arg0->_destMetaClassName;
     if (oldv != 0) {
         int *a1 = (int *)oldv - 2;
@@ -50,14 +50,14 @@ void FUN_001e6230(igDataPump *arg0, Src **arg1, int arg2) {
     }
     arg0->_destMetaClassName = newv;
     name = ((igMetaField *)arg0->_destMeta)->_fieldName;
-    if (DAT_00586f20[0] == 0) {
+    if (g_stringPool[0] == 0) {
         v = FUN_002eb010(16);
         if (v != 0) {
             v = StringPool_Construct(v);
         }
-        DAT_00586f20[0] = v;
+        g_stringPool[0] = v;
     }
-    newv = StringPool_Intern(DAT_00586f20[0], name);
+    newv = StringPool_Intern(g_stringPool[0], name);
     oldv = arg0->_destMetaFieldName;
     if (oldv != 0) {
         int *a1 = (int *)oldv - 2;
@@ -96,7 +96,7 @@ int FUN_001e6490(ValueBinding *binding, int selection) {
     binding->source->select(selection);
     binding->sink->write(binding->key, (int)binding->source + value->offset);
     if (DAT_00562c60[0] == 0) {
-        DAT_00562c60[0] = igMetaObject_FindFieldByName(DAT_00585cc8[0], &DAT_004e4aa0[0]);
+        DAT_00562c60[0] = igMetaObject_FindFieldByName(g_igMetaField_metaObject[0], &DAT_004e4aa0[0]);
     }
     Notify notify = *(Notify *)((char *)binding->sink + ((FieldDesc *)DAT_00562c60[0])->offset);
     if (notify != 0) {

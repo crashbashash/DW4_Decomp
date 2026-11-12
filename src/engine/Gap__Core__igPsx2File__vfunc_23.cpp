@@ -56,8 +56,8 @@ public:
     int f64;
 };
 extern "C" {
-extern int DAT_004fb410[4];
-extern int DAT_004fb418[4];
+extern int g_statusSucceeded[4];
+extern int g_allocatorFailureStatus[4];
 int FUN_0010f330(...);
 int FUN_0010f738(...);
 int FUN_0010f970(...);
@@ -88,7 +88,7 @@ extern "C" void Gap__Core__igPsx2File__vfunc_23(int *arg0, FO *arg1, unsigned ar
     s0 = 0;
     if (arg2 == 8) arg2 = arg1->f20;
     if (arg1->f64 == 1 && arg1->f20 == arg2) {
-        *arg0 = DAT_004fb410[0];
+        *arg0 = g_statusSucceeded[0];
     } else {
         switch (arg2) {
         case 0: case 1: case 2: case 3: case 8:
@@ -151,7 +151,7 @@ L23:
             s4 += 1;
         }
         if (arg1->f24 < 0) {
-            *arg0 = DAT_004fb418[0];
+            *arg0 = g_allocatorFailureStatus[0];
         } else {
             if (arg2 == 6) FUN_0010f738(arg1->f24, 0, 2);
             if (arg1->f60 == 0) {
@@ -167,7 +167,7 @@ L23:
             }
             arg1->f20 = arg2;
             arg1->f64 = 1;
-            *arg0 = DAT_004fb410[0];
+            *arg0 = g_statusSucceeded[0];
         }
     }
 }

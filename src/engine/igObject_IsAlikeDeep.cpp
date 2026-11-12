@@ -120,8 +120,8 @@ extern int DAT_004faf60[4];
 extern int DAT_004faf78[4];
 extern int DAT_004faf80[4];
 extern int DAT_004faf88[4];
-extern int DAT_00585a60[4];
-extern int DAT_00586f20[4];
+extern int g_igRefMetaField_metaObject[4];
+extern int g_stringPool[4];
 extern int DAT_005871a0[4];
 extern int DAT_005871a8[4];
 

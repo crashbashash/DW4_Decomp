@@ -51,13 +51,13 @@ extern "C" int Gap__Bec__libBecRuntimePlugin__vfunc_20(void);
 struct RefCountedObject { int w0; int refCount; };
 extern "C" int igObject_Destroy(RefCountedObject *);
 extern "C" int igObject_GetAllocator(libBecRuntimePlugin *);
-extern "C" int DAT_00587108[4];
+extern "C" int g_ndmwAllocatorSelector[4];
 extern "C" unsigned char GPR_00554c14;
 extern "C" void Gap__Bec__libBecRuntimePlugin__vfunc_21(libBecRuntimePlugin *plugin, int context);
 extern "C" void Gap__Bec__libBecRuntimePlugin__vfunc_22(libBecRuntimePlugin *arg0, int arg1);
 extern "C" int g_libBecRuntimePlugin_metaObject[4];
 
-#define PICK_ALLOCATOR(owner) allocator = igObject_GetAllocator(owner); allocator = GPR_00554c14 != 0 ? allocator : Memory_GetAllocatorBySelector(DAT_00587108[0]);
+#define PICK_ALLOCATOR(owner) allocator = igObject_GetAllocator(owner); allocator = GPR_00554c14 != 0 ? allocator : Memory_GetAllocatorBySelector(g_ndmwAllocatorSelector[0]);
 #define RELEASE_REF(ref) if ((ref) != 0) { (ref)->refCount = (ref)->refCount - 1; if (((ref)->refCount & 0x7FFFFF) == 0) { igObject_Destroy(ref); } }
 void Gap__Bec__libBecRuntimePlugin__vfunc_21(libBecRuntimePlugin *plugin, int context) {
     int allocator;

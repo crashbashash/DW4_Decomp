@@ -1,6 +1,6 @@
 #include "dw4/reflected.h"
 #define RELEASE(field) { igObject *old = (igObject *)(field); if (old != 0) { old->_refCount = old->_refCount - 1; if (((unsigned long long)((long long)(int)old->_refCount << 0x29) >> 0x29) == 0) { igObject_Destroy(old); } } }
-#define ALLOC(a) { a = igObject_GetAllocator(arg0); a = GPR_00554c14 ? a : Memory_GetAllocatorBySelector(DAT_00587108[0]); }
+#define ALLOC(a) { a = igObject_GetAllocator(arg0); a = GPR_00554c14 ? a : Memory_GetAllocatorBySelector(g_ndmwAllocatorSelector[0]); }
 #define CREATE(field, factory) { ALLOC(alloc) RELEASE(arg0->field) arg0->field = (int)factory(alloc); }
 #define REGISTER(field) { int sub = arg0->field; if (sub != 0) FUN_00236ab0(arg1, sub); }
 
@@ -31,7 +31,7 @@ extern "C" int Memory_GetAllocatorBySelector(int);
 extern "C" int FUN_00236b10(int, int);
 extern "C" int Gap__Bec__libNdmwRuntimePlugin__vfunc_20(void);
 extern "C" int igObject_GetAllocator(libNdmwRuntimePlugin *);
-extern "C" int DAT_00587108[4];
+extern "C" int g_ndmwAllocatorSelector[4];
 extern "C" unsigned char GPR_00554c14;
 extern "C" void Gap__Bec__libNdmwRuntimePlugin__vfunc_21(libNdmwRuntimePlugin *arg0, int arg1);
 extern "C" void Gap__Bec__libNdmwRuntimePlugin__vfunc_22(libNdmwRuntimePlugin *arg0, int arg1);

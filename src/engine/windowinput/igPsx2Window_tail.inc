@@ -15,14 +15,14 @@ void Gap__igPsx2Window__vfunc_26(struct A_148b00 *arg0) {
         }
     }
     arg0->f24 = 0;
-    if (DAT_00586f20[0] == 0) {
+    if (g_stringPool[0] == 0) {
         var_v0 = FUN_002eb010(0x10);
         if (var_v0 != 0) {
             var_v0 = StringPool_Construct(var_v0);
         }
-        DAT_00586f20[0] = var_v0;
+        g_stringPool[0] = var_v0;
     }
-    s1 = (int *)StringPool_Intern(DAT_00586f20[0], 0);
+    s1 = (int *)StringPool_Intern(g_stringPool[0], 0);
     old = arg0->f32;
     if (old != 0) {
         a1 = old - 2;
@@ -62,12 +62,12 @@ void Gap__igPsx2Window__vfunc_25(igPsx2WindowView *self)
 }
 
 static inline void setWindowName(igPsx2Window *self, const char *name) {
-    if (DAT_00586f20[0] == 0) {
+    if (g_stringPool[0] == 0) {
         void *pool = (void *)FUN_002eb010(16);
         if (pool != 0) pool = (void *)StringPool_Construct(pool);
-        DAT_00586f20[0] = (int)pool;
+        g_stringPool[0] = (int)pool;
     }
-    const char *interned = (const char *)StringPool_Intern(DAT_00586f20[0], name);
+    const char *interned = (const char *)StringPool_Intern(g_stringPool[0], name);
     int *old = (int *)self->_winName;
     if (old != 0) {
         int *header = old - 2;
@@ -139,14 +139,14 @@ void Gap__igPsx2Window__vfunc_27(int *arg0, char *arg1) {
     int *s;
     int v;
     if ((arg1 != 0) && (*arg1 != 0)) {
-        if (DAT_00586f20[0] == 0) {
+        if (g_stringPool[0] == 0) {
             v = FUN_002eb010(0x10);
             if (v != 0) {
                 v = StringPool_Construct(v);
             }
-            DAT_00586f20[0] = v;
+            g_stringPool[0] = v;
         }
-        s = StringPool_Intern(DAT_00586f20[0], arg1);
+        s = StringPool_Intern(g_stringPool[0], arg1);
         old = (int *)arg0[8];
         if (old != 0) {
             hdr = old - 2;
@@ -180,8 +180,8 @@ void Gap__igPsx2Window__vfunc_35(void *arg0, char *arg1, int *arg2, int *arg3, i
     }
 }
 
-int Gap__igPsx2Window__vfunc_22(void) {
-    return DAT_0055f6c8[0];
+igMetaObject *Gap__igPsx2Window__vfunc_22(void) {
+    return g_igPsx2Window_metaObject[0];
 }
 
 int Gap__igPsx2Window__vfunc_28(void *arg0) {

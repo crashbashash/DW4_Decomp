@@ -43,7 +43,7 @@ void beNDMWPanelObject_InitFields(void) {
     void *temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)DAT_0058b2c8[0];
+    temp_s0 = (void *)g_beNDMWPanelObject_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_004ca630[0], 0x10);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
@@ -64,7 +64,7 @@ void beNDMWPanelObject_InitFields(void) {
 
 int FUN_003bee30(void) {
     if (DAT_0058b350[0] == 0) {
-        DAT_0058b350[0] = igMetaEnum_Create(&DAT_00510d58[0], &DAT_004ca730[0], &DAT_004ca760[0], 0xB);
+        DAT_0058b350[0] = igMetaEnum_Create(Message, &DAT_004ca730[0], &DAT_004ca760[0], 0xB);
     }
     return DAT_0058b350[0];
 }

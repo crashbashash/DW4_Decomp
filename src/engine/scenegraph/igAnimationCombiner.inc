@@ -1,9 +1,9 @@
 igMetaObject *FUN_001a8520(void)
 {
-    igMetaObject *g = ((igMetaObject * *)DAT_005622b8)[0];
+    igMetaObject *g = ((igMetaObject * *)g_igAnimationCombiner_metaObject)[0];
     if (!g || ((g->_validity & 4) != 0) == false)
         FUN_001a8800();
-    return ((igMetaObject * *)DAT_005622b8)[0];
+    return ((igMetaObject * *)g_igAnimationCombiner_metaObject)[0];
 }
 
 int igAnimationCombiner_GetVTable(void) {
@@ -16,7 +16,7 @@ int igAnimationCombiner_GetVTable(void) {
     obj.w12 = 0;
     obj.w13 = 0;
     obj.w14 = 0;
-    t = *(int *)((char *)&obj + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+    t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
     obj.vt = &DAT_00529630[0];
     FUN_001a8780((struct R * *)&obj.w14, -1);
     ObjectRef_Destruct_00150eb0(&obj.w13, -1);
@@ -121,8 +121,8 @@ void thunk_FUN_001a8520(void) {
     FUN_001a8520();
 }
 
-int FUN_001a88a0(void) {
-    return DAT_005620c8[0];
+igMetaObject *FUN_001a88a0(void) {
+    return g_igAnimationSystem_metaObject[0];
 }
 
 void igAnimationCombiner_InitFields(void) {
@@ -136,17 +136,17 @@ void igAnimationCombiner_InitFields(void) {
     struct Fld_1a88b0 *temp_s2_7;
     void *temp_s0;
 
-    temp_s0 = (void *)DAT_005622b8[0];
+    temp_s0 = (void *)g_igAnimationCombiner_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_0048d360[0], 0xE);
     temp_s2 = ((struct Fld_1a88b0 *)igMetaObject_GetFieldAt(temp_s0, temp_s1));
-    temp_s2->f56 = FUN_001a7e20();
+    temp_s2->f56 = (int)FUN_001a7e20();
     temp_s2->f52 = 1;
     temp_s2_2 = ((struct Fld_1a88b0 *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 1));
     temp_s2_2->f56 = igIntList_GetOrCreateMetaObject();
     temp_s2_2->f52 = 1;
     temp_s2_3 = ((struct Fld_1a88b0 *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 2));
-    temp_s2_3->f56 = FUN_001a6920();
+    temp_s2_3->f56 = (int)FUN_001a6920();
     temp_s2_3->f52 = 1;
     temp_s2_4 = ((struct Fld_1a88b0 *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 3));
     temp_s2_4->f60 = FUN_00187520();

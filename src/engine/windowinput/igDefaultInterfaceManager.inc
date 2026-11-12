@@ -20,7 +20,7 @@ int igDefaultInterfaceManager_GetVTable(void) {
     *(int *)q0 = 0;
     u.vt = (int)&DAT_00524da0[0];
     u.vt = (int)&DAT_00524e50[0];
-    temp_s0 = *(int *)&u.b[*(int *)((char *)(DAT_00586dc8[0]) + 916)];
+    temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.vt = (int)&DAT_00524da0[0];
     if (q0 != 0) {
         q0 = *(S_ref **)q0;
@@ -56,15 +56,15 @@ void igDefaultInterfaceManager_Register(void) {
     );
 }
 
-int FUN_001465e0(void) {
-    return DAT_0055f5e8[0];
+igMetaObject *FUN_001465e0(void) {
+    return g_igInterfaceManager_metaObject[0];
 }
 
 void igDefaultInterfaceManager_InitFields(void) {
     int temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)DAT_0055f610[0];
+    temp_s0 = (void *)g_igDefaultInterfaceManager_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_00487160[0], 0x10);
     igMetaObject_NameFields(temp_s0, &DAT_004871a0[0], &DAT_004871e0[0], &DAT_00487220[0], temp_s1);

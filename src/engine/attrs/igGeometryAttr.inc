@@ -3,11 +3,11 @@ void FUN_00137810(int arg0) {
     igMetaObject_CreateInstance(*(int *)0x55F170, arg0);
 }
 
-int FUN_00137850(void) {
-    if (DAT_0055f170[0] == 0) {
-        DAT_0055f170[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(DAT_00587040[0]));
+igMetaObject *FUN_00137850(void) {
+    if (g_igGeometryAttr_metaObject[0] == 0) {
+        g_igGeometryAttr_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
     }
-    return DAT_0055f170[0];
+    return g_igGeometryAttr_metaObject[0];
 }
 
 igMetaObject *igGeometryAttr_GetMetaObject(void)
@@ -54,7 +54,7 @@ void igGeometryAttr_InitFields(void) {
     void *temp_v0;
     void *temp_s1;
 
-    temp_s1 = (void *)(DAT_0055f170[0]);
+    temp_s1 = (void *)(g_igGeometryAttr_metaObject[0]);
     temp_s0 = igMetaObject_GetFieldCount(temp_s1);
     igMetaObject_CreateFields(temp_s1, &DAT_004865a0[0], 9);
     temp_s2 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0));
@@ -71,6 +71,6 @@ void igGeometryAttr_InitFields(void) {
     temp_s2_5 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 8));
     ((igObjectRefMetaField *)temp_s2_5)->_metaObject = FUN_0018a0a0();
     igMetaObject_NameFields(temp_s1, &DAT_004865d0[0], &DAT_00486600[0], &DAT_00486630[0], temp_s0);
-    *(int *)((char *)(DAT_0055f170[0]) + 60) = (int)thunk_igGeometryAttr1_5_GetMetaObject;
+    *(int *)((char *)(g_igGeometryAttr_metaObject[0]) + 60) = (int)thunk_igGeometryAttr1_5_GetMetaObject;
 }
 

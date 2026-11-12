@@ -69,7 +69,7 @@ int FUN_001dd370(void *arg0) {
     int var_v0;
 
     var_v0 = 1;
-    if (*(float *)((char *)(arg0) + 44) == DAT_004e1058[0]) {
+    if (*(float *)((char *)(arg0) + 44) == g_vec3Zero[0]) {
         var_v0 = 0;
     }
     if (var_v0 == 0) {
@@ -97,7 +97,7 @@ void FUN_001dd3e0(void *arg0, int arg1) {
         ((V_1dd3e0 *)arg0)->vGet(i, sp50);
         FUN_001904f0(sp50, sp50, arg1);
         ((V_1dd3e0 *)arg0)->vSet(i, sp50);
-        ((F_1dd3e0 *)arg0)->a = DAT_004e1058[0];
+        ((F_1dd3e0 *)arg0)->a = g_vec3Zero[0];
         ((F_1dd3e0 *)arg0)->b = DAT_004e105c[0];
         ((F_1dd3e0 *)arg0)->c = DAT_004e1060[0];
     }

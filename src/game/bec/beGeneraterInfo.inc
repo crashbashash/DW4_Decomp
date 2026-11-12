@@ -1,12 +1,12 @@
-S_35f720 *FUN_0035f720(void) {
-    S_35f720 *g = DAT_005894d8[0];
+igMetaObject *FUN_0035f720(void) {
+    igMetaObject *g = g_beGeneraterInfo_metaObject[0];
     if (g != 0) {
-        int b = !!(g->flags & 4);
+        int b = !!(g->_validity & 4);
         if (b) goto done;
     }
     FUN_0035f870();
 done:
-    return DAT_005894d8[0];
+    return g_beGeneraterInfo_metaObject[0];
 }
 
 int beGeneraterInfo_GetVTable(void) {
@@ -19,7 +19,7 @@ int beGeneraterInfo_GetVTable(void) {
     f.w[5] = 0;
     f.vt = &DAT_00535f80[0];
     f.w[6] = 0;
-    temp_s0 = *(int *)((char *)&f + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+    temp_s0 = *(int *)((char *)&f + *(int *)((char *)(g_objectSystem[0]) + 916));
     f.vt = &DAT_00535f80[0];
     FUN_0035f7f0((void **)(&f.w[6]), (long long)(-1));
     FUN_0033ec80((struct S_33ec80 *)&f, (short)0);
@@ -76,11 +76,11 @@ void beGeneraterInfo_InitFields(void) {
     void *temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)((int *)DAT_005894d8)[0];
+    temp_s0 = (void *)g_beGeneraterInfo_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_004c6988[0], 1);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = FUN_0035f9d0();
+    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_0035f9d0();
     ((igRefMetaField *)temp_s1)->_construct = 1;
     igMetaObject_NameFields(temp_s0, &DAT_004c6990[0], &DAT_004c6998[0], &DAT_004c69a0[0], temp_s2);
 }

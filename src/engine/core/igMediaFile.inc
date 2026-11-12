@@ -17,7 +17,7 @@ int igMediaFile_GetVTable(void) {
     u.vt = (int)&DAT_0052f9a0[0];
     ps = &u.b[64];
     *(int *)ps = 0;
-    temp_s0 = *(int *)&u.b[*(int *)((char *)(((void * *)DAT_00586dc8)[0]) + 916)];
+    temp_s0 = *(int *)&u.b[*(int *)((char *)(((void * *)g_objectSystem)[0]) + 916)];
     u.vt = (int)&DAT_0052f9a0[0];
     FUN_002c13b0((void **)ps, -1);
     FUN_002c0790((igFile *)u.b, 0);
@@ -73,13 +73,13 @@ void igMediaFile_InitFields(void) {
     void *temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)DAT_00585fc8[0];
+    temp_s0 = (void *)g_igMediaFile_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
     igMetaObject_CreateFields((igMetaObject *)temp_s0, (igMetaField * (**)(void *))&DAT_004c03e0[0], 9);
     temp_s1 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 7)));
     ((igMemoryRefMetaField *)temp_s1)->_memType = igUnsignedCharMetaField_GetDefaultDescriptor();
     temp_s1_2 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 8)));
-    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = FUN_002c16e0();
+    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = (int)FUN_002c16e0();
     igMetaObject_NameFields((igMetaObject *)temp_s0, (const char **)&DAT_004c0410[0], (igMetaField ***)&DAT_004c0440[0], &DAT_004c0470[0], temp_s2);
 }
 

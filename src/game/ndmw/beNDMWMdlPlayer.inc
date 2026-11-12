@@ -3,19 +3,19 @@ void FUN_003bf890(int arg0) {
     igMetaObject_CreateInstance(*(int *)0x58B3A8, arg0);
 }
 
-int FUN_003bf8d0(void) {
-    if (((int *)DAT_0058b3a8)[0] == 0) {
-        ((int *)DAT_0058b3a8)[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(DAT_00587040[0]));
+igMetaObject *FUN_003bf8d0(void) {
+    if (g_beNDMWMdlPlayer_metaObject[0] == 0) {
+        g_beNDMWMdlPlayer_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
     }
-    return ((int *)DAT_0058b3a8)[0];
+    return g_beNDMWMdlPlayer_metaObject[0];
 }
 
 void *beNDMWMdlPlayer_ResolveMetaObject(void) {
-    struct MetaObjectValidityView *g = DAT_0058b3a8[0];
-    if (!g || ((g->f & 4) != 0) == false) {
+    igMetaObject *g = g_beNDMWMdlPlayer_metaObject[0];
+    if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_003bfae0();
     }
-    return DAT_0058b3a8[0];
+    return g_beNDMWMdlPlayer_metaObject[0];
 }
 
 int beNDMWMdlPlayer_GetVTable(void) {
@@ -26,7 +26,7 @@ int beNDMWMdlPlayer_GetVTable(void) {
     o.f[1] = 0;
     o.f[5] = 0;
     o.vt = DAT_0053e620;
-    r = *(int *)((char *)&o + *(int *)(((char * *)DAT_00586dc8)[0] + 916));
+    r = *(int *)((char *)&o + *(int *)(((char * *)g_objectSystem)[0] + 916));
     o.vt = DAT_0053e620;
     FUN_003bf9d0((O_3bf9d0 *)&o, (short)0);
     return r;
@@ -106,8 +106,8 @@ void beNDMWMdlPlayer_GetMetaObject(void)
     beNDMWMdlPlayer_ResolveMetaObject();
 }
 
-int FUN_003bfba0(void) {
-    return ((int *)DAT_0058b428)[0];
+igMetaObject *FUN_003bfba0(void) {
+    return g_beNDMWMdlPEBase_metaObject[0];
 }
 
 void beNDMWMdlPlayer_InitFields(void) {
@@ -117,7 +117,7 @@ void beNDMWMdlPlayer_InitFields(void) {
     void *temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)((int *)DAT_0058b3a8)[0];
+    temp_s0 = (void *)g_beNDMWMdlPlayer_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_004ca870[0], 3);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
@@ -127,7 +127,7 @@ void beNDMWMdlPlayer_InitFields(void) {
     ((igObjectRefMetaField *)temp_s1_2)->_metaObject = FUN_0034c8e0();
     ((igObjectRefMetaField *)temp_s1_2)->_refCounted = 0;
     temp_s1_3 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 2));
-    ((igObjectRefMetaField *)temp_s1_3)->_metaObject = FUN_003c9ce0();
+    ((igObjectRefMetaField *)temp_s1_3)->_metaObject = (int)FUN_003c9ce0();
     ((igObjectRefMetaField *)temp_s1_3)->_refCounted = 0;
     igMetaObject_NameFields(temp_s0, &DAT_004ca880[0], &DAT_004ca890[0], &DAT_004ca8a0[0], temp_s2);
 }

@@ -4,11 +4,11 @@ void FUN_003b2c00(int arg0) {
 }
 
 void *FUN_003b2c40(void) {
-    struct G *g = DAT_0058ab38[0];
-    if (!g || ((g->f & 4) != 0) == false) {
+    igMetaObject *g = g_beNDMWShopTitle03_metaObject[0];
+    if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_003b30f0();
     }
-    return DAT_0058ab38[0];
+    return g_beNDMWShopTitle03_metaObject[0];
 }
 
 int beNDMWShopTitle03_GetVTable(void) {
@@ -24,7 +24,7 @@ int beNDMWShopTitle03_GetVTable(void) {
     obj.w18 = 0;
     obj.w19 = 0;
     obj.vt = &DAT_00540300[0];
-    t = *(int *)((char *)&obj + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+    t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
     obj.vt = &DAT_00540300[0];
     FUN_003b3030((int **)&obj, (long long)0);
     return t;
@@ -35,7 +35,7 @@ void *FUN_003b2d10(beNDMWWindowCtrl *arg0, short arg1) {
     int rc;
 
     if (arg0 != 0) {
-        arg0->_vtable = (int)&DAT_0053dc30[0];
+        arg0->_vtable = (int)&g_beNDMWWindow_vtable[0];
         if (&arg0->_modelCloseSeqNameList) {
             p = (igObject *)arg0->_modelCloseSeqNameList;
             if (p != 0) {
@@ -153,7 +153,7 @@ int **FUN_003b3030(int **arg0, long long arg1) {
     if (arg0 != 0) {
         *arg0 = &DAT_0053f790[0];
         if (arg0 != 0) {
-            *arg0 = &DAT_0053dc30[0];
+            *arg0 = &g_beNDMWWindow_vtable[0];
             ObjectRef_Destruct_001c6460((int **)((char *)arg0 + 0x4C), -1);
             ObjectRef_Destruct_00150eb0((int **)((char *)arg0 + 0x48), -1);
             ObjectRef_Destruct_001c6460((int **)((char *)arg0 + 0x44), -1);
@@ -196,7 +196,7 @@ void beNDMWShopTitle03_GetMetaObject(void)
     FUN_003b2c40();
 }
 
-int FUN_003b31a0(void) {
-    return ((int *)DAT_0058ab78)[0];
+igMetaObject *FUN_003b31a0(void) {
+    return g_beNDMWWindowTitle_metaObject[0];
 }
 

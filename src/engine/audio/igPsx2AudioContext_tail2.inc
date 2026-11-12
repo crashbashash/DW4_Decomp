@@ -11,37 +11,37 @@ void Gap__igPsx2AudioContext__vfunc_56(int arg0, int arg1) {
 }
 
 void Gap__igPsx2AudioContext__vfunc_57(int arg0, int arg1) {
-    ((struct VoiceTable57 *)DAT_0055f5d0[0])->arr[arg1].bitA = 1;
-    ((struct VoiceTable57 *)DAT_0055f5d0[0])->arr[arg1].bitE = 1;
+    ((struct VoiceTable57 *)g_audioTableOwner[0])->arr[arg1].bitA = 1;
+    ((struct VoiceTable57 *)g_audioTableOwner[0])->arr[arg1].bitE = 1;
 }
 
 void Gap__igPsx2AudioContext__vfunc_58(int arg0, int arg1) {
-    ((struct VoiceTable58 *)DAT_0055f5d0[0])->arr[arg1].b1 = 1;
-    ((struct VoiceTable58 *)DAT_0055f5d0[0])->arr[arg1].b4 = 1;
+    ((struct VoiceTable58 *)g_audioTableOwner[0])->arr[arg1].b1 = 1;
+    ((struct VoiceTable58 *)g_audioTableOwner[0])->arr[arg1].b4 = 1;
 }
 
 void Gap__igPsx2AudioContext__vfunc_59(void *arg0, int arg1, int arg2) {
-    ((struct VoiceTable61 *)DAT_0055f5d0[0])->e[arg1].b2 = arg2;
-    ((struct VoiceTable61 *)DAT_0055f5d0[0])->e[arg1].b4 = 1;
-    ((struct VoiceTable61 *)DAT_0055f5d0[0])->e[arg1].b5 = 1;
+    ((struct VoiceTable61 *)g_audioTableOwner[0])->e[arg1].b2 = arg2;
+    ((struct VoiceTable61 *)g_audioTableOwner[0])->e[arg1].b4 = 1;
+    ((struct VoiceTable61 *)g_audioTableOwner[0])->e[arg1].b5 = 1;
 }
 
 void Gap__igPsx2AudioContext__vfunc_60(int arg0, int arg1, int arg2, int arg3) {
     int temp_v1;
 
     temp_v1 = arg1 * 0x24;
-    ((VoiceFlags42 *)(*(int *)((char *)(DAT_0055f5d0[0]) + 16) + temp_v1))->b2 = arg2;
-    ((VoiceFlags42 *)(*(int *)((char *)(DAT_0055f5d0[0]) + 16) + temp_v1))->v = arg3;
-    ((VoiceFlags42 *)(*(int *)((char *)(DAT_0055f5d0[0]) + 16) + temp_v1))->b5 = 1;
-    ((VoiceFlags42 *)(*(int *)((char *)(DAT_0055f5d0[0]) + 16) + temp_v1))->b4 = 1;
+    ((VoiceFlags42 *)(*(int *)((char *)(g_audioTableOwner[0]) + 16) + temp_v1))->b2 = arg2;
+    ((VoiceFlags42 *)(*(int *)((char *)(g_audioTableOwner[0]) + 16) + temp_v1))->v = arg3;
+    ((VoiceFlags42 *)(*(int *)((char *)(g_audioTableOwner[0]) + 16) + temp_v1))->b5 = 1;
+    ((VoiceFlags42 *)(*(int *)((char *)(g_audioTableOwner[0]) + 16) + temp_v1))->b4 = 1;
 }
 
 void Gap__igPsx2AudioContext__vfunc_37(int *arg0, void *arg1, int arg2, int arg3) {
     int sp;
     VoiceFlags37 *p;
-    p = (VoiceFlags37 *)(*(int *)((char *)(DAT_0055f5d0[0]) + 16) + (arg2 * 0x24));
+    p = (VoiceFlags37 *)(*(int *)((char *)(g_audioTableOwner[0]) + 16) + (arg2 * 0x24));
     if (p->b1 != 0) {
-        *arg0 = DAT_004fb410[0];
+        *arg0 = g_statusSucceeded[0];
         return;
     }
     if (*(unsigned char *)((char *)arg1 + 8) != 0) {
@@ -50,7 +50,7 @@ void Gap__igPsx2AudioContext__vfunc_37(int *arg0, void *arg1, int arg2, int arg3
         *(int *)((char *)p + 28) = arg3;
         p->c2 = 1;
     }
-    *arg0 = DAT_004fb410[0];
+    *arg0 = g_statusSucceeded[0];
 }
 
 void Gap__igPsx2AudioContext__vfunc_44(igPsx2AudioContext *self) {
@@ -70,7 +70,7 @@ int Gap__igPsx2AudioContext__vfunc_38(igPsx2AudioContext *arg0, int arg1) {
 }
 
 int Gap__igPsx2AudioContext__vfunc_39(void *arg0, int arg1) {
-    return ((unsigned long long) ((long long) *(unsigned char *)((char *)((*(int *)((char *)(DAT_0055f5d0[0]) + 16) + (arg1 * 0x24))) + 8) << 0x3A) >> 0x3F) != 0;
+    return ((unsigned long long) ((long long) *(unsigned char *)((char *)((*(int *)((char *)(g_audioTableOwner[0]) + 16) + (arg1 * 0x24))) + 8) << 0x3A) >> 0x3F) != 0;
 }
 
 unsigned FUN_00145960(void *context, void *voice) {

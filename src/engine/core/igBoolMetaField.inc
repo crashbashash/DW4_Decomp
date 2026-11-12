@@ -1,9 +1,9 @@
 void **FUN_002ccab0(int arg0) {
     void **var_s0;
 
-    if (*DAT_00586dc8[0] != 0) {
+    if (*g_objectSystem[0] != 0) {
         FUN_002ccca0();
-        var_s0 = (void **)(((void **)igMetaObject_CreateInstance((CreateMeta *)DAT_00586988[0], (MemoryPool *)arg0)));
+        var_s0 = (void **)(((void **)igMetaObject_CreateInstance((CreateMeta *)g_igBoolMetaField_metaObject[0], (MemoryPool *)arg0)));
     } else {
         var_s0 = (void **)(((void **)igObject_AllocateRawStorage(0x34, 0, (void **)arg0)));
         if (var_s0 != 0) {
@@ -17,7 +17,7 @@ void **FUN_002ccab0(int arg0) {
 
 int Gap__Core__igBoolMetaField__vfunc_21(int arg0, int arg1) {
     int t;
-    if (*DAT_00586dc8[0]) {
+    if (*g_objectSystem[0]) {
         FUN_002ccca0();
         FUN_00300c60(arg0, arg1);
         return;
@@ -44,8 +44,8 @@ int igBoolMetaField_GetVTable(void) {
     int temp_v0;
 
     FUN_002d37f0((int **)u.b);
-    temp_s0 = *(int *)&u.b[*(int *)((char *)(((void * *)DAT_00586dc8)[0]) + 916)];
-    u.vt = (int)&DAT_0052f230[0];
+    temp_s0 = *(int *)&u.b[*(int *)((char *)(((void * *)g_objectSystem)[0]) + 916)];
+    u.vt = (int)&g_igMetaField_vtable[0];
     ps = &u.b[12];
     if (ps != 0) {
         temp_v1 = *(int **)ps;
@@ -90,7 +90,7 @@ void FUN_002ccd30(void) {
     void *temp_s0;
 
     if (DAT_00586990[0] == 0) {
-        DAT_00586990[0] = (void *)(((void *)igMetaObject_CreateInstance((CreateMeta *)DAT_00586988[0], (MemoryPool *)(((int)Memory_GetAllocatorBySelector(DAT_00587040[0]))))));
+        DAT_00586990[0] = (void *)(((void *)igMetaObject_CreateInstance((CreateMeta *)g_igBoolMetaField_metaObject[0], (MemoryPool *)(((int)Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]))))));
         temp_s0 = (void *)(DAT_00586990[0]);
         if (temp_s0 != 0) {
             MetaRefList_AppendRetained((PointerList *)(((void *)FUN_002fc250())), (RefHeader *)temp_s0);

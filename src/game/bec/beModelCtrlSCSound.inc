@@ -3,15 +3,15 @@ void FUN_0034f4a0(int arg0) {
     igMetaObject_CreateInstance(*(int *)0x5887B0, arg0);
 }
 
-S_34f4e0 *FUN_0034f4e0(void) {
-    S_34f4e0 *g = DAT_005887b0[0];
+igMetaObject *FUN_0034f4e0(void) {
+    igMetaObject *g = g_beModelCtrlSCSound_metaObject[0];
     if (g != 0) {
-        int b = !!(g->flags & 4);
+        int b = !!(g->_validity & 4);
         if (b) goto done;
     }
     FUN_0034f5c0();
 done:
-    return DAT_005887b0[0];
+    return g_beModelCtrlSCSound_metaObject[0];
 }
 
 int beModelCtrlSCSound_GetVTable(void) {
@@ -26,7 +26,7 @@ int beModelCtrlSCSound_GetVTable(void) {
     u.vt = (int)&DAT_0053ae80[0];
     ps = &u.b[20];
     *(int *)ps = 0;
-    temp_s0 = *(int *)&u.b[*(int *)((char *)(DAT_00586dc8[0]) + 916)];
+    temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.vt = (int)&DAT_0053ae80[0];
     if (ps != 0) {
         temp_v1 = *(int **)ps;
@@ -69,15 +69,15 @@ void beModelCtrlSCSound_GetMetaObject(void)
     FUN_0034f4e0();
 }
 
-int FUN_0034f670(void) {
-    return ((int *)DAT_00588840)[0];
+igMetaObject *FUN_0034f670(void) {
+    return g_beModelCtrlSubComBase_metaObject[0];
 }
 
 void beModelCtrlSCSound_InitFields(void) {
     int temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)((int *)DAT_005887b0)[0];
+    temp_s0 = (void *)g_beModelCtrlSCSound_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_004c4be0[0], 2);
     igMetaObject_NameFields(temp_s0, &DAT_004c4be8[0], &DAT_004c4bf0[0], &DAT_004c4bf8[0], temp_s1);

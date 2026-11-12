@@ -1,8 +1,8 @@
-int FUN_00233080(void) {
-    if (DAT_0056dc00[0] == 0) {
-        DAT_0056dc00[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(DAT_00587040[0]));
+igMetaObject *FUN_00233080(void) {
+    if (g_igWindowResizeEventReceiver_metaObject[0] == 0) {
+        g_igWindowResizeEventReceiver_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
     }
-    return DAT_0056dc00[0];
+    return g_igWindowResizeEventReceiver_metaObject[0];
 }
 
 igMetaObject *igWindowResizeEventReceiver_GetMetaObject(void)
@@ -17,7 +17,7 @@ int igWindowResizeEventReceiver_GetVTable(void) {
     struct Obj_233120 o;
     igObject_InitHeader(&o);
     o.vt = &DAT_0052c9f0[0];
-    return *(int *)((char *)&o + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+    return *(int *)((char *)&o + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 
 void FUN_00233160(void)
@@ -47,7 +47,7 @@ void thunk_igWindowResizeEventReceiver_GetMetaObject(void) {
 }
 
 int FUN_00233200(void) {
-    return DAT_0058c570[0];
+    return g_igEventReceiver_metaObject[0];
 }
 
 void igWindowResizeEventReceiver_InitFields(void) {
@@ -55,11 +55,11 @@ void igWindowResizeEventReceiver_InitFields(void) {
     void *temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)DAT_0056dc00[0];
+    temp_s0 = (void *)g_igWindowResizeEventReceiver_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_004981f8[0], 1);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = FUN_00232840();
+    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_00232840();
     ((igObjectRefMetaField *)temp_s1)->_refCounted = 0;
     igMetaObject_NameFields(temp_s0, &DAT_00498200[0], &DAT_00498208[0], &DAT_00498210[0], temp_s2);
 }

@@ -1,8 +1,8 @@
-int FUN_0044fa40(void) {
-    if (DAT_0058c478[0] == 0) {
-        DAT_0058c478[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(DAT_00587040[0]));
+igMetaObject *FUN_0044fa40(void) {
+    if (g_igGuiComponentController_metaObject[0] == 0) {
+        g_igGuiComponentController_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
     }
-    return DAT_0058c478[0];
+    return g_igGuiComponentController_metaObject[0];
 }
 
 igMetaObject *igGuiComponentController_GetMetaObject(void)
@@ -17,7 +17,7 @@ int igGuiComponentController_GetVTable(void) {
     struct Obj_44fae0 obj;
     igObject_InitHeader(&obj);
     obj.vt = &DAT_00541270[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 
 void igGuiComponentController_EnsureRegistered(void)

@@ -1,10 +1,10 @@
 igMetaObject *FUN_00343d20(void)
 {
-    igMetaObject *g = DAT_00587e40[0];
+    igMetaObject *g = g_beSoundInfo_metaObject[0];
     bool t;
     if (!g || (t = g->_validity & 4) == 0)
         FUN_00343e00();
-    return DAT_00587e40[0];
+    return g_beSoundInfo_metaObject[0];
 }
 
 int beSoundInfo_GetVTable(void) {
@@ -20,7 +20,7 @@ int beSoundInfo_GetVTable(void) {
     p1 = &u.b[28];
     *(int *)p1 = 0;
     *(int *)&u.b[32] = 0;
-    temp_s1 = *(int *)&u.b[*(int *)((char *)(DAT_00586dc8[0]) + 916)];
+    temp_s1 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.vt = (int)&DAT_005393b0[0];
     StringRef_Destruct_00130720(&u.b[32], -1);
     FUN_00199450(p1, -1);
@@ -60,7 +60,7 @@ void beSoundInfo_InitFields(void) {
     void *temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)((int *)DAT_00587e40)[0];
+    temp_s0 = (void *)g_beSoundInfo_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_004c37f0[0], 4);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));

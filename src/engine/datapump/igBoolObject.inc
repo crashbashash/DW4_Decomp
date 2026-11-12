@@ -10,7 +10,7 @@ int igBoolObject_GetVTable(void) {
     struct O o;
     igObject_InitHeader(&o.vt);
     o.vt = DAT_0052b9b0;
-    return *(int *)((char *)&o.vt + *(int *)(DAT_00586dc8[0] + 916));
+    return *(int *)((char *)&o.vt + *(int *)(g_objectSystem[0] + 916));
 }
 
 void FUN_001e5ce0(void)
@@ -43,7 +43,7 @@ void igBoolObject_InitFields(void) {
     int temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)DAT_00562c50[0];
+    temp_s0 = (void *)g_igBoolObject_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_0048dc68[0], 1);
     igMetaObject_NameFields(temp_s0, &DAT_0048dc70[0], &DAT_0048dc78[0], &DAT_0048dc80[0], temp_s1);

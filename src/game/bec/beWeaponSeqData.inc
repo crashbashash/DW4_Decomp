@@ -1,9 +1,9 @@
 void *FUN_0033f170(void) {
-    struct G *g = DAT_00587a50[0];
-    if (!g || ((g->f & 4) != 0) == false) {
+    igMetaObject *g = g_beWeaponSeqData_metaObject[0];
+    if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_0033f290();
     }
-    return DAT_00587a50[0];
+    return g_beWeaponSeqData_metaObject[0];
 }
 
 int beWeaponSeqData_GetVTable(void) {
@@ -14,7 +14,7 @@ int beWeaponSeqData_GetVTable(void) {
     obj.r1 = 0;
     obj.vt = &DAT_00539c80[0];
     obj.r2 = 0;
-    r = *(int *)((char *)&obj + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+    r = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
     obj.vt = &DAT_00539c80[0];
     obj.rel2();
     obj.vt = &DAT_00524950[0];
@@ -53,7 +53,7 @@ void beWeaponSeqData_InitFields(void) {
     int temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)((int *)DAT_00587a50)[0];
+    temp_s0 = (void *)g_beWeaponSeqData_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_004c2fd8[0], 1);
     igMetaObject_NameFields(temp_s0, &DAT_004c2fe0[0], &DAT_004c2fe8[0], &DAT_004c2ff0[0], temp_s1);

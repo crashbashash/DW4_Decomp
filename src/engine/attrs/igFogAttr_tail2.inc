@@ -1,4 +1,4 @@
-int Gap__Attrs__igFogAttr__vfunc_22(void) {
-    return DAT_0055f1d8[0];
+igMetaObject *Gap__Attrs__igFogAttr__vfunc_22(void) {
+    return g_igFogAttr_metaObject[0];
 }
 

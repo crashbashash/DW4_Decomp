@@ -16,7 +16,7 @@ int igAlphaFunctionAttr_GetVTable(void) {
 
     igObject_InitHeader(&o);
     o.vt = &DAT_00524390[0];
-    return *(int *)((char *)&o + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+    return *(int *)((char *)&o + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 
 void FUN_0013b560(void)
@@ -50,7 +50,7 @@ void igAlphaFunctionAttr_InitFields(void) {
     void *temp_v0;
     void *temp_s0;
 
-    temp_s0 = (void *)DAT_0055f490[0];
+    temp_s0 = (void *)g_igAlphaFunctionAttr_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_00486c90[0], 2);
     temp_v0 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));

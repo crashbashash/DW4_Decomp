@@ -1,10 +1,10 @@
-static inline int cast0(int o) { if (o != 0 && igObject_IsKindOf(o, DAT_00585d80[0]) != 0) { return o; } return 0; }
+static inline int cast0(int o) { if (o != 0 && igObject_IsKindOf(o, g_igMemoryRefMetaField_metaObject[0]) != 0) { return o; } return 0; }
 
 void FUN_0017f5a0(void) {
     int var_s0;
 
-    FUN_00308860(DAT_00586dd0[0], &DAT_004e0848[0], 0x10);
-    var_s0 = (int)igMetaObject_FindFieldByName(DAT_00560420[0], &DAT_004ddf18[0]);
+    FUN_00308860(g_globalContext[0], &DAT_004e0848[0], 0x10);
+    var_s0 = (int)igMetaObject_FindFieldByName(g_igPsx2VertexStream_metaObject[0], &DAT_004ddf18[0]);
     var_s0 = cast0(var_s0);
     igMemoryRefMetaField_SetAlignmentType(var_s0, &DAT_004e0848[0]);
 }

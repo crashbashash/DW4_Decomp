@@ -38,9 +38,9 @@ extern "C" int DAT_005165d0[4];
 extern "C" int DAT_005165d8[4];
 extern "C" int DAT_005165e8[4];
 extern "C" int DAT_005165f8[4];
-extern "C" int DAT_00585be0[4];
-extern "C" int DAT_00586f20[4];
-extern "C" int DAT_00587110[4];
+extern "C" int g_propertyNameField[4];
+extern "C" int g_stringPool[4];
+extern "C" int g_defaultAllocatorSelector[4];
 extern "C" unsigned char GPR_00554c14;
 /* matching construct: Rel::go and Str::release inline the retail refcount releases */
 struct Rel { static inline void go(igObject *object) {
@@ -55,12 +55,12 @@ struct Str { static inline int *intern(int s) {
     if (s == 0) {
         ref = 0;
     } else {
-        if (DAT_00586f20[0] == 0) {
+        if (g_stringPool[0] == 0) {
             int pool = FUN_002eb010(16);
             if (pool != 0) pool = StringPool_Construct(pool);
-            DAT_00586f20[0] = pool;
+            g_stringPool[0] = pool;
         }
-        ref = (int *)StringPool_Intern(DAT_00586f20[0], s);
+        ref = (int *)StringPool_Intern(g_stringPool[0], s);
     }
     return ref;
 }
@@ -97,7 +97,7 @@ struct RamDataList { static inline void Ensure(beBaseInfoRam *ram) {
         if (GPR_00554c14 != 0) {
             a = alloc;
         } else {
-            a = Memory_GetAllocatorBySelector(DAT_00587110[0]);
+            a = Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
         }
         igSmartPointer<igObject> list(beBaseInfoDataList_Create(a));
         igObject *s0 = list.p;
@@ -151,14 +151,14 @@ void Gap__Bec__beNDMWMdlPlayer2__vfunc_36(beNDMWMdlPlayer2 *arg0, beBaseInfoRam 
     int *e;
     int s1;
     RamDataList::Ensure(arg1);
-    r = igProperty_FindByName((igObject *)arg1->_dataList, DAT_00585be0[0], DAT_005165c8);
+    r = igProperty_FindByName((igObject *)arg1->_dataList, g_propertyNameField[0], DAT_005165c8);
     {
         int alloc = igObject_GetAllocator(arg0);
         int a;
         if (GPR_00554c14 != 0) {
             a = alloc;
         } else {
-            a = Memory_GetAllocatorBySelector(DAT_00587110[0]);
+            a = Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
         }
         ValueRef value(FUN_003bf560(a));
         igObject *n = value.p;
@@ -232,7 +232,7 @@ void Gap__Bec__beNDMWMdlPlayer2__vfunc_38(MdlPlayer2VirtualShim *arg0, beBaseInf
         if (GPR_00554c14 != 0) {
             a = alloc;
         } else {
-            a = Memory_GetAllocatorBySelector(DAT_00587110[0]);
+            a = Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
         }
         igSmartPointer<igObject> created(beBaseInfoDataList_Create(a));
         igObject *s0 = created.p;
@@ -246,7 +246,7 @@ void Gap__Bec__beNDMWMdlPlayer2__vfunc_38(MdlPlayer2VirtualShim *arg0, beBaseInf
         }
         arg1->_dataList = (int)s0;
     }
-    prop = ((PropertyRecord *)igProperty_FindByName(arg1->_dataList, DAT_00585be0[0], DAT_005165c8));
+    prop = ((PropertyRecord *)igProperty_FindByName(arg1->_dataList, g_propertyNameField[0], DAT_005165c8));
     q = prop->q;
     if (q->f240 < 10) {
         q->f240 = q->f240 + 1;

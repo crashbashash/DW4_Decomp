@@ -31,7 +31,7 @@ int igPsx2Media_GetVTable(void) {
     *(int *)q1 = 0;
     q2 = (S_ref *)&u.b[32];
     *(int *)q2 = 0;
-    temp_s2 = *(int *)&u.b[*(int *)((char *)(((void * *)DAT_00586dc8)[0]) + 916)];
+    temp_s2 = *(int *)&u.b[*(int *)((char *)(((void * *)g_objectSystem)[0]) + 916)];
     u.vt = (int)(&DAT_0052da00[0]);
     if (q2 != 0) {
         q2 = *(S_ref **)q2;
@@ -85,8 +85,8 @@ void igPsx2Media_Register(void) {
     );
 }
 
-int FUN_002cfb50(void) {
-    return DAT_00586020[0];
+igMetaObject *FUN_002cfb50(void) {
+    return g_igMedia_metaObject[0];
 }
 
 void igPsx2Media_InitFields(void) {
@@ -95,7 +95,7 @@ void igPsx2Media_InitFields(void) {
     igRawRefMetaField *t5;
     void *temp_s0;
 
-    temp_s0 = (void *)DAT_00586cf8[0];
+    temp_s0 = (void *)g_igPsx2Media_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
     igMetaObject_CreateFields((igMetaObject *)temp_s0, (igMetaField * (**)(void *))&DAT_004c1d50[0], 8);
     temp_s2 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1)));
@@ -105,10 +105,10 @@ void igPsx2Media_InitFields(void) {
     ((igMemoryRefMetaField *)temp_s2)->_releaseOnCopy = 1;
     ((igMemoryRefMetaField *)temp_s2)->_releaseOnReset = 1;
     temp_s2 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 1)));
-    ((igObjectRefMetaField *)temp_s2)->_metaObject = FUN_002cfe50();
+    ((igObjectRefMetaField *)temp_s2)->_metaObject = (int)FUN_002cfe50();
     ((igObjectRefMetaField *)temp_s2)->_construct = 1;
     temp_s2 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 2)));
-    ((igObjectRefMetaField *)temp_s2)->_metaObject = FUN_002ba690();
+    ((igObjectRefMetaField *)temp_s2)->_metaObject = (int)FUN_002ba690();
     ((igObjectRefMetaField *)temp_s2)->_construct = 1;
     temp_s2 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 3)));
     ((igMemoryRefMetaField *)temp_s2)->_memType = igUnsignedCharMetaField_GetDefaultDescriptor();
@@ -125,7 +125,7 @@ void igPsx2Media_InitFields(void) {
     t5 = (igRawRefMetaField *)((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 5));
     t5->_resetMethod = 3;
     temp_s2 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 6)));
-    ((igObjectRefMetaField *)temp_s2)->_metaObject = FUN_002b9540();
+    ((igObjectRefMetaField *)temp_s2)->_metaObject = (int)FUN_002b9540();
     ((igObjectRefMetaField *)temp_s2)->_construct = 1;
     igMetaObject_NameFields((igMetaObject *)temp_s0, (const char **)&DAT_004c1d70[0], (igMetaField ***)&DAT_004c1d90[0], &DAT_004c1db0[0], temp_s1);
 }

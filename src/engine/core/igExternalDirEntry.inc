@@ -19,7 +19,7 @@ int igExternalDirEntry_GetVTable(void) {
     *(int *)&u.b[28] = 0;
     *(int *)&u.b[32] = 0;
     *(int *)&u.b[40] = 0;
-    t = *(int *)&u.b[*(int *)((char *)(((void * *)DAT_00586dc8)[0]) + 916)];
+    t = *(int *)&u.b[*(int *)((char *)(((void * *)g_objectSystem)[0]) + 916)];
     u.vt = (int)&DAT_00530360[0];
     StringRef_Destruct_00130720(&u.b[40], -1);
     StringRef_Destruct_00130720(&u.b[32], -1);

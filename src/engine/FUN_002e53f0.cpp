@@ -11,10 +11,10 @@ public:
     inline bool isFailed(int &f) const;
     inline bool failed() const;
 };
-extern igResult DAT_004fb410;
-extern igResult DAT_004fb418;
-inline bool igResult::isFailed(int &f) const { f = DAT_004fb418.v; return *this == DAT_004fb418; }
-inline bool igResult::failed() const { return v == DAT_004fb418.v; }
+extern igResult g_statusSucceeded;
+extern igResult g_allocatorFailureStatus;
+inline bool igResult::isFailed(int &f) const { f = g_allocatorFailureStatus.v; return *this == g_allocatorFailureStatus; }
+inline bool igResult::failed() const { return v == g_allocatorFailureStatus.v; }
 
 class Clock {
 public:
@@ -67,16 +67,16 @@ extern int DAT_004f9ac8[4];
 extern int DAT_004f9ad8[4];
 extern int DAT_004f9af0[4];
 extern int DAT_004f9b90[4];
-extern int DAT_00585b70[4];
-extern int DAT_00586140[4];
+extern int g_igObjectDirEntry_metaObject[4];
+extern int g_igIGBFile_metaObject[4];
 extern FieldOffsetInfo *DAT_00586280[4];
-extern int DAT_00586710[4];
+extern int g_igDirEntry_metaObject[4];
 extern int DAT_00586730[4];
-extern LogContext *DAT_00586dc8[4];
-extern ReflectedRegistry *DAT_00586dd0;
+extern LogContext *g_objectSystem[4];
+extern ReflectedRegistry *g_globalContext;
 extern char DAT_00586e20[64];
-extern void *DAT_00586f20;
-extern int DAT_00587198[4];
+extern void *g_stringPool;
+extern int g_igObject_metaObject[4];
 extern Clock *DAT_005871d8[4];
 extern char GPR_00554c04;
 extern unsigned char GPR_00554c08;
@@ -439,7 +439,7 @@ extern "C" igResult FUN_002e53f0(void *arg1) {
         var_s1 += igObject_WritePersistentFields(o->f16[var_s0], var_s1, 0, o->f192, o->f168);
         var_s0 += 1;
     }
-    return DAT_004fb410;
+    return g_statusSucceeded;
 }
 
 class A17 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void d32(); virtual void d33(); virtual void d34(); virtual void d35(); virtual void d36(); virtual void d37(); virtual void d38(); virtual void d39(); virtual void d40(); virtual void d41(); virtual void d42(); virtual void d43(); virtual void d44(); virtual void d45(); virtual void d46(); virtual void d47(); virtual void d48(); virtual void d49(); virtual void d50(); virtual void d51(); virtual void d52(); virtual int a(int,int); };
@@ -757,7 +757,7 @@ public:
 };
 extern "C" void *igMetaObject_CreateInstanceWithPool(...);
 static inline T30 *castToKind(T30 *object) {
-    if (object != 0 && igObject_IsKindOf(object, DAT_00586710[0]) != 0) {
+    if (object != 0 && igObject_IsKindOf(object, g_igDirEntry_metaObject[0]) != 0) {
         return object;
     }
     return 0;
@@ -983,12 +983,12 @@ extern "C" igResult FUN_002e8d40(A46 *arg1);
 
 struct PooledStringHead { int chunk; int refs; };
 static inline void *stringPool() {
-    if (DAT_00586f20 == 0) {
+    if (g_stringPool == 0) {
         void *p = FUN_002eb010(16);
         if (p != 0) { p = StringPool_Construct(p); }
-        DAT_00586f20 = p;
+        g_stringPool = p;
     }
-    return DAT_00586f20;
+    return g_stringPool;
 }
 static inline void setPooled(char **dst, char *src) {
     char *v = StringPool_Intern(stringPool(), src);
@@ -1084,7 +1084,7 @@ class IgbInfoObject : public IgbInfoBase { public: int rc; };
 struct IgbInfoList { int vt; int rc; int count; int cap; IgbInfoObject **data; };
 class Ref55 { public: IgbInfoObject *p; Ref55(IgbInfoObject *o) : p(o) { if (p != 0) { p->rc = p->rc + 1; } }
  ~Ref55() { IgbInfoObject *object = p; if (object) { --object->rc; if (((unsigned long long)(long long)object->rc & 0x7fffffULL) == 0) igObject_Destroy(object); } } };
-static inline IgbInfoObject *castInfo(IgbInfoObject *o) { if (o != 0 && igObject_IsKindOf(o, DAT_00586140[0]) != 0) { return o; } return 0; }
+static inline IgbInfoObject *castInfo(IgbInfoObject *o) { if (o != 0 && igObject_IsKindOf(o, g_igIGBFile_metaObject[0]) != 0) { return o; } return 0; }
 class IgbFileInfoView { public: virtual void p0(); virtual void p1(); virtual void p2(); virtual void p3(); virtual void p4(); virtual void p5(); virtual void p6(); virtual void p7(); virtual void p8(); virtual void p9(); virtual void p10(); virtual void p11(); virtual void p12(); virtual void p13(); virtual void p14(); virtual void p15(); virtual void p16(); virtual void p17(); virtual void p18(); virtual void p19(); virtual void p20(); virtual void p21(); virtual void p22(); virtual void p23(); virtual void p24(); virtual void p25(); virtual void p26(); virtual void p27(); virtual igResult finish(); char pad[20]; IgbInfoList *list; };
 extern "C" igResult Gap__Core__igIGBFile__vfunc_31(IgbFileInfoView *self);
 

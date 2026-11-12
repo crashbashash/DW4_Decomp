@@ -101,7 +101,7 @@ typedef struct ViewModelEvent {
     int data;
 } ViewModelEvent;
 extern int DAT_0058cd40;
-extern int DAT_0058cd08[4];
+extern int g_igViewManager_metaObject[4];
 int FUN_003082b0(...);
 void igMatrix44f_SetIdentity(float *);
 int FUN_00191f30(int *, float *, float *);
@@ -122,7 +122,7 @@ int FUN_002eb010(...);
 int StringPool_Construct(...);
 void *StringPool_Intern(...);
 int igNamedObject_SetName(...);
-extern int DAT_00586f20[4];
+extern int g_stringPool[4];
 
 static inline void releaseString(void *p) {
     if (p != 0) {
@@ -135,12 +135,12 @@ static inline void releaseString(void *p) {
 
 static inline void *intern(const char *s) {
     if (s == 0) return 0;
-    if (DAT_00586f20[0] == 0) {
+    if (g_stringPool[0] == 0) {
         int pool = FUN_002eb010(16);
         if (pool != 0) pool = StringPool_Construct(pool);
-        DAT_00586f20[0] = pool;
+        g_stringPool[0] = pool;
     }
-    return StringPool_Intern(DAT_00586f20[0], s);
+    return StringPool_Intern(g_stringPool[0], s);
 }
 
 struct StringRef {
@@ -475,7 +475,7 @@ void FUN_00464c60(igViewManager *self) {
 void Gap__Viewer__igViewManager__vfunc_13(int *a) { FUN_00457e90(a[2], a[3]); }
 
 int Gap__Viewer__igViewManager__vfunc_22(void) {
-    return DAT_0058cd08[0];
+    return g_igViewManager_metaObject[0];
 }
 
 }

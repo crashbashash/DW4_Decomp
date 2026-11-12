@@ -63,15 +63,15 @@ R_2f0180 FUN_002f0180(int arg1, int *arg2) {
     int sp3C;
     O_2f0180 *o = ((O_2f0180 * *)DAT_00586f68)[0];
     if (o != 0) {
-        int x = o->vX(arg1, &sp3C).get(); if (x == DAT_004fb410.v) {
+        int x = o->vX(arg1, &sp3C).get(); if (x == g_statusSucceeded.v) {
             *arg2 = igAllocator_ResolveEncodedIndex(sp3C);
             if (*arg2 != 0) {
-                return R_2f0180(DAT_004fb410.v);
+                return R_2f0180(g_statusSucceeded.v);
             }
         }
     }
     *arg2 = 0;
-    return R_2f0180(DAT_004fb418.v);
+    return R_2f0180(g_allocatorFailureStatus.v);
 }
 
 R_2f0320 FUN_002f0320(int arg1, V_2f0220 *pool) {
@@ -79,7 +79,7 @@ R_2f0320 FUN_002f0320(int arg1, V_2f0220 *pool) {
     if (p != 0) {
         return p->vX(arg1);
     }
-    return R_2f0320(DAT_004fb418.v);
+    return R_2f0320(g_allocatorFailureStatus.v);
 }
 
 void FUN_002f0370(void **arg0) {
@@ -88,12 +88,12 @@ void FUN_002f0370(void **arg0) {
     int flag;
 
     if (((DW4VC_116_0 *)(arg0))->vX() == 0) {
-        list = ((PL * *)DAT_00586f58)[0];
+        list = ((PL * *)g_primaryAllocatorList)[0];
         idx = list->n;
         flag = 0;
     } else {
         flag = 1;
-        list = ((PL * *)DAT_00586f60)[0];
+        list = ((PL * *)g_secondaryAllocatorList)[0];
         idx = list->n;
     }
     if (idx < 0x1F) {
@@ -115,14 +115,14 @@ void FUN_002f0460(void **arg0) {
     int temp_v0;
 
     if (((DW4VC_116_0 *)(arg0))->vX() == 0) {
-        temp_v0 = igMemoryPoolInfoList_IndexOf((AllocatorRegistry *)(((int * *)DAT_00586f58)[0]), (AllocatorLookupView *)arg0);
+        temp_v0 = igMemoryPoolInfoList_IndexOf((AllocatorRegistry *)(((int * *)g_primaryAllocatorList)[0]), (AllocatorLookupView *)arg0);
         if (temp_v0 >= 0) {
-            *(int *)(*((int * *)DAT_00586f58)[0] + (temp_v0 * 4)) = 0;
+            *(int *)(*((int * *)g_primaryAllocatorList)[0] + (temp_v0 * 4)) = 0;
         }
     } else {
-        temp_v0 = igMemoryPoolInfoList_IndexOf((AllocatorRegistry *)(((int * *)DAT_00586f60)[0]), (AllocatorLookupView *)arg0);
+        temp_v0 = igMemoryPoolInfoList_IndexOf((AllocatorRegistry *)(((int * *)g_secondaryAllocatorList)[0]), (AllocatorLookupView *)arg0);
         if (temp_v0 >= 0) {
-            *(int *)(*((int * *)DAT_00586f60)[0] + (temp_v0 * 4)) = 0;
+            *(int *)(*((int * *)g_secondaryAllocatorList)[0] + (temp_v0 * 4)) = 0;
         }
     }
 }
@@ -133,17 +133,17 @@ void *Memory_FindOwningAllocator(int arg0) {
     VC_2f04f0 *temp_s2;
     int var_s1;
 
-    var_s2 = DAT_00586f60[0]->n - 1;
+    var_s2 = g_secondaryAllocatorList[0]->count - 1;
     while (var_s2 >= 0) {
-        temp_s1 = DAT_00586f60[0]->arr[var_s2];
+        temp_s1 = (VC_2f04f0 *)g_secondaryAllocatorList[0]->data[var_s2];
         if ((temp_s1 != 0) && (temp_s1->a() != 0) && (temp_s1->b(arg0) != 0)) {
             return temp_s1;
         }
         var_s2 -= 1;
     }
-    var_s1 = DAT_00586f58[0]->n - 1;
+    var_s1 = g_primaryAllocatorList[0]->count - 1;
     while (var_s1 >= 0) {
-        temp_s2 = DAT_00586f58[0]->arr[var_s1];
+        temp_s2 = (VC_2f04f0 *)g_primaryAllocatorList[0]->data[var_s1];
         if ((temp_s2 != 0) && (temp_s2->a() != 0) && (temp_s2->b(arg0) != 0)) {
             return temp_s2;
         }
@@ -153,7 +153,7 @@ void *Memory_FindOwningAllocator(int arg0) {
 }
 
 void FUN_002f0620(int *arg0) {
-    *arg0 = DAT_004fb418.v;
+    *arg0 = g_allocatorFailureStatus.v;
 }
 
 int FUN_002f0630(void) {

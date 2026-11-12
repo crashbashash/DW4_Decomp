@@ -1,15 +1,15 @@
 igMetaObject *FUN_003680b0(void)
 {
-    igMetaObject *g = DAT_00589b58[0];
+    igMetaObject *g = g_beCopyModelCtrl2_metaObject[0];
     bool t;
     if (!g || (t = g->_validity & 4) == 0)
         FUN_003681a0();
-    return DAT_00589b58[0];
+    return g_beCopyModelCtrl2_metaObject[0];
 }
 
 int beCopyModelCtrl2_GetVTable(void) {
     CopyModelCtrl2View copy;
-    return *(int *)((char *)&copy + *(int *)((char *)DAT_00586dc8[0] + 916));
+    return *(int *)((char *)&copy + *(int *)((char *)g_objectSystem[0] + 916));
 }
 
 void FUN_003681a0(void)
@@ -44,11 +44,11 @@ void beCopyModelCtrl2_InitFields(void) {
     void *temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)((int *)DAT_00589b58)[0];
+    temp_s0 = (void *)g_beCopyModelCtrl2_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_004c7750[0], 1);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = FUN_0034fd40();
+    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_0034fd40();
     igMetaObject_NameFields(temp_s0, &DAT_004c7758[0], &DAT_004c7760[0], &DAT_004c7768[0], temp_s2);
 }
 

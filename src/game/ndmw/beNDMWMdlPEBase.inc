@@ -1,9 +1,9 @@
 void *beNDMWMdlPEBase_ResolveMetaObject(void) {
-    struct G *g = DAT_0058b428[0];
-    if (!g || ((g->f & 4) != 0) == false) {
+    igMetaObject *g = g_beNDMWMdlPEBase_metaObject[0];
+    if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_003c0550();
     }
-    return DAT_0058b428[0];
+    return g_beNDMWMdlPEBase_metaObject[0];
 }
 
 void FUN_003c0550(void)

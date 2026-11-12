@@ -5,13 +5,13 @@ void FUN_0035e400(int arg0) {
 
 void *FUN_0035e440(void) {
     unsigned char b;
-    if (DAT_005893e8[0] != 0) {
-        b = (*(int *)((char *)(DAT_005893e8[0]) + 36) & 4) != 0;
+    if (g_beHitLandResultData_metaObject[0] != 0) {
+        b = (*(int *)((char *)(g_beHitLandResultData_metaObject[0]) + 36) & 4) != 0;
         if (b != 0) goto done;
     }
     FUN_0035e520();
 done:
-    return DAT_005893e8[0];
+    return g_beHitLandResultData_metaObject[0];
 }
 
 int beHitLandResultData_GetVTable(void) {
@@ -26,7 +26,7 @@ int beHitLandResultData_GetVTable(void) {
     u.vt = (int)&DAT_00536290[0];
     ps = &u.b[8];
     *(int *)ps = 0;
-    temp_s0 = *(int *)&u.b[*(int *)((char *)(DAT_00586dc8[0]) + 916)];
+    temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.vt = (int)&DAT_00536290[0];
     if (ps != 0) {
         temp_v1 = *(int **)ps;
@@ -73,7 +73,7 @@ void beHitLandResultData_InitFields(void) {
     int temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)((int *)DAT_005893e8)[0];
+    temp_s0 = (void *)g_beHitLandResultData_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_004c6760[0], 2);
     igStringMetaField_SetDefaultText(((int)igMetaObject_GetFieldAt(temp_s0, temp_s1)), &DAT_00502a98[0]);

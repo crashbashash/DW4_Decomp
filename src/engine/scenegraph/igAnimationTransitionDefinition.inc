@@ -20,7 +20,7 @@ int igAnimationTransitionDefinition_GetVTable(void) {
     u.vt = (int)&DAT_00529a30[0];
     *(int *)p2 = 0;
     *(int *)p1 = 0;
-    temp_s0 = *(int *)&u.b[*(int *)((char *)(DAT_00586dc8[0]) + 916)];
+    temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.vt = (int)&DAT_00529a30[0];
     if (p1 != 0) {
         t1 = *(S_ref **)p1;
@@ -76,17 +76,17 @@ void igAnimationTransitionDefinition_InitFields(void) {
     void *temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)DAT_005623c0[0];
+    temp_s0 = (void *)g_igAnimationTransitionDefinition_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_0048d5b0[0], 3);
     temp_s1 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s2)));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = FUN_001a9130();
+    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_001a9130();
     ((igObjectRefMetaField *)temp_s1)->_refCounted = 0;
     temp_s1_2 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1)));
-    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = FUN_001a9830();
+    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = (int)FUN_001a9830();
     ((igRefMetaField *)temp_s1_2)->_construct = 1;
     temp_s1_3 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s2 + 2)));
-    ((igObjectRefMetaField *)temp_s1_3)->_metaObject = FUN_001a9bb0();
+    ((igObjectRefMetaField *)temp_s1_3)->_metaObject = (int)FUN_001a9bb0();
     igMetaObject_NameFields(temp_s0, &DAT_0048d5c0[0], &DAT_0048d5d0[0], &DAT_0048d5e0[0], temp_s2);
 }
 

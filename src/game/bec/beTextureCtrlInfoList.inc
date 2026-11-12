@@ -1,9 +1,9 @@
-G_341aa0 *FUN_00341aa0(void) {
-    G_341aa0 *g = DAT_00587c78[0];
+igMetaObject *FUN_00341aa0(void) {
+    igMetaObject *g = g_beTextureCtrlInfoList_metaObject[0];
     int t;
-    if (!g || !(t = (g->f & 4) != 0))
+    if (!g || !(t = (g->_validity & 4) != 0))
         FUN_00341b30();
-    return DAT_00587c78[0];
+    return g_beTextureCtrlInfoList_metaObject[0];
 }
 
 int beTextureCtrlInfoList_GetVTable(void) {
@@ -11,7 +11,7 @@ int beTextureCtrlInfoList_GetVTable(void) {
 
     igObject_InitHeader(&obj);
     obj.vt = &DAT_00539690[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 
 void FUN_00341b30(void)

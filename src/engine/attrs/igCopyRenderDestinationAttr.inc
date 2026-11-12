@@ -5,11 +5,11 @@ int FUN_001388f0(void) {
     return DAT_0055f250[0];
 }
 
-int FUN_00138950(void) {
-    if (DAT_0055f258[0] == 0) {
-        DAT_0055f258[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(DAT_00587040[0]));
+igMetaObject *FUN_00138950(void) {
+    if (g_igCopyRenderDestinationAttr_metaObject[0] == 0) {
+        g_igCopyRenderDestinationAttr_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
     }
-    return DAT_0055f258[0];
+    return g_igCopyRenderDestinationAttr_metaObject[0];
 }
 
 igMetaObject *igCopyRenderDestinationAttr_GetMetaObject(void)
@@ -35,7 +35,7 @@ int igCopyRenderDestinationAttr_GetVTable(void) {
     *(int *)q1 = 0;
     q0 = (S_ref *)&u.b[24];
     *(int *)q0 = 0;
-    temp_s0 = *(int *)&u.b[*(int *)((char *)(DAT_00586dc8[0]) + 916)];
+    temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.vt = (int)&DAT_00523dd0[0];
     if (q0 != 0) {
         q0 = *(S_ref **)q0;
@@ -101,18 +101,18 @@ void igCopyRenderDestinationAttr_InitFields(void) {
     void *temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)DAT_0055f258[0];
+    temp_s0 = (void *)g_igCopyRenderDestinationAttr_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_004867e0[0], 0xA);
     temp_v0 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
     FUN_002dc7a0(temp_v0, &DAT_00486898[0]);
     ((igEnumMetaField *)temp_v0)->_getMetaEnumFunction = (int)(&FUN_001388f0);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = FUN_001341f0();
+    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_001341f0();
     temp_s1_2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 2));
     ((igObjectRefMetaField *)temp_s1_2)->_metaObject = FUN_0014dfb0();
     temp_s1_3 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 3));
-    ((igObjectRefMetaField *)temp_s1_3)->_metaObject = FUN_00132ba0();
+    ((igObjectRefMetaField *)temp_s1_3)->_metaObject = (int)FUN_00132ba0();
     igMetaObject_NameFields(temp_s0, &DAT_00486810[0], &DAT_00486840[0], &DAT_00486870[0], temp_s2);
 }
 

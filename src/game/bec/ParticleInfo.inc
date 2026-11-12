@@ -26,12 +26,12 @@ int FUN_0036e9a0(void) {
     return DAT_0058a0d8[0];
 }
 
-G_36ea00 *FUN_0036ea00(void) {
-    G_36ea00 *g = DAT_0058a0e0[0];
+igMetaObject *FUN_0036ea00(void) {
+    igMetaObject *g = g_ParticleInfo_metaObject[0];
     int t;
-    if (!g || !(t = (g->f & 4) != 0))
+    if (!g || !(t = (g->_validity & 4) != 0))
         FUN_0036eaf0();
-    return DAT_0058a0e0[0];
+    return g_ParticleInfo_metaObject[0];
 }
 
 int ParticleInfo_GetVTable(void) {
@@ -47,7 +47,7 @@ int ParticleInfo_GetVTable(void) {
     obj.vt = &DAT_00533f50[0];
     obj.w242 = 0;
     obj.w254 = 0;
-    t = *(int *)((char *)&obj + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+    t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
     obj.vt = &DAT_00533f50[0];
     FUN_001971e0(&obj.w254, -1);
     FUN_00132390(&obj.w242, -1);
@@ -83,7 +83,7 @@ void ParticleInfo_GetMetaObject(void)
 }
 
 int FUN_0036ebb0(void) {
-    return DAT_005615e0[0];
+    return g_igSceneInfo_metaObject[0];
 }
 
 void ParticleInfo_InitFields(void) {
@@ -91,7 +91,7 @@ void ParticleInfo_InitFields(void) {
     void *f;
     void *temp_s0;
 
-    temp_s0 = (void *)((int *)DAT_0058a0e0)[0];
+    temp_s0 = (void *)g_ParticleInfo_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_004c8400[0], 0x12);
     f = igMetaObject_GetFieldAt(temp_s0, temp_s1);

@@ -41,14 +41,14 @@ void Gap__Core__igStringArrayMetaField__vfunc_32(struct SS *arg0, int arg1) {
     if (arg0->f53 != 0) {
         var_s1 = (int *)(arg1 + arg0->f8);
         for (var_s0 = 0; var_s0 < arg0->f60; var_s0++) {
-            if (DAT_00586f20[0] == 0) {
+            if (g_stringPool[0] == 0) {
                 var_v0 = ((int)FUN_002eb010(0x10));
                 if (var_v0 != 0) {
                     var_v0 = ((int)StringPool_Construct((struct S_2eadf0 *)var_v0));
                 }
-                DAT_00586f20[0] = var_v0;
+                g_stringPool[0] = var_v0;
             }
-            temp_s3 = StringPool_Intern((StringPool *)DAT_00586f20[0], (const char *)0);
+            temp_s3 = StringPool_Intern((StringPool *)g_stringPool[0], (const char *)0);
             temp_a0 = *var_s1;
             if (temp_a0 != 0) {
                 temp_a1 = (int *)(temp_a0 - 8);

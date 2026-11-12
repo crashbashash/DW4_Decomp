@@ -1,9 +1,9 @@
 void *FUN_0035ef90(void) {
-    struct G *g = DAT_00589470[0];
-    if (!g || ((g->f & 4) != 0) == false) {
+    igMetaObject *g = g_beGroupKeep_metaObject[0];
+    if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_0035f050();
     }
-    return DAT_00589470[0];
+    return g_beGroupKeep_metaObject[0];
 }
 
 int beGroupKeep_GetVTable(void) {
@@ -16,7 +16,7 @@ int beGroupKeep_GetVTable(void) {
     obj.w4 = 0;
     obj.w7 = 0;
     obj.vt = &DAT_005360b0[0];
-    t = *(int *)((char *)&obj + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+    t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
     obj.vt = &DAT_005360b0[0];
     FUN_00195a90(&obj, 0);
     return t;

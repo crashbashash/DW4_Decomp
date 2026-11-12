@@ -76,7 +76,7 @@ int FUN_00155340(FieldTypeTable *table, unsigned int type) {
 }
 
 int FUN_00155490(void) {
-    return DAT_00585cc8[0];
+    return g_igMetaField_metaObject[0];
 }
 
 StringRef FUN_001554a0(int arg1) {
@@ -98,14 +98,14 @@ StringRef FUN_001554a0(int arg1) {
     if (s == 0) {
         r = 0;
     } else {
-        if (DAT_00586f20[0] == 0) {
+        if (g_stringPool[0] == 0) {
             r = FUN_002eb010(0x10);
             if (r != 0) {
                 r = StringPool_Construct(r);
             }
-            DAT_00586f20[0] = r;
+            g_stringPool[0] = r;
         }
-        r = (int)StringPool_Intern(DAT_00586f20[0], s);
+        r = (int)StringPool_Intern(g_stringPool[0], s);
     }
     return StringRef((char *)r);
 }
@@ -116,7 +116,7 @@ void FUN_00155c00(int *out, Owner *owner, int id) {
     int i;
     List *l = owner->a;
     if (id >= l->count || l->data[id] == 0) {
-        *out = DAT_004fb418[0];
+        *out = g_allocatorFailureStatus[0];
         return;
     }
     for (i = 0; i < owner->b->count; i++) {
@@ -133,7 +133,7 @@ void FUN_00155c00(int *out, Owner *owner, int id) {
         REL(o);
         if (la->count && id >= 0 && id < la->count) la->data[id] = 0;
     }
-    *out = DAT_004fb410[0];
+    *out = g_statusSucceeded[0];
 }
 
 void FUN_00155db0(O_155db0 *arg0) {
@@ -195,7 +195,7 @@ int FUN_00155f10(Table *table, int key) {
 }
 
 static inline const char *nameOf(const KeyedEntry *entry) {
-    return entry->name ? entry->name : DAT_004e0858;
+    return entry->name ? entry->name : emptyString;
 }
 
 int FUN_001560b0(KeyedEntryOwner *table, int key) {
@@ -233,7 +233,7 @@ int FUN_001562d0(struct A_1562d0 *arg0, int arg1) {
 }
 
 void FUN_00156300(void) {
-    FUN_00308860(DAT_00586dd0[0], &DAT_004dee80[0], 0x10);
+    FUN_00308860(g_globalContext[0], &DAT_004dee80[0], 0x10);
     igMemoryRefMetaField_SetAlignmentType(DAT_0055fde0[0], &DAT_004dee80[0]);
 }
 
@@ -691,14 +691,14 @@ void FUN_0015a030(struct A_15a030 *arg0) {
     Gap__Core__igObject__vfunc_15(arg0);
     tmp = arg0->f56;
     if (tmp != 0) {
-        if (DAT_00586f20[0] == 0) {
+        if (g_stringPool[0] == 0) {
             var_v0 = FUN_002eb010(0x10);
             if (var_v0 != 0) {
                 var_v0 = StringPool_Construct(var_v0);
             }
-            DAT_00586f20[0] = var_v0;
+            g_stringPool[0] = var_v0;
         }
-        s0 = (int *)StringPool_Intern(DAT_00586f20[0], tmp);
+        s0 = (int *)StringPool_Intern(g_stringPool[0], tmp);
         old = arg0->f88;
         if (old != 0) {
             a1 = old - 2;

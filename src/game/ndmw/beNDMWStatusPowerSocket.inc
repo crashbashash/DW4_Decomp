@@ -4,11 +4,11 @@ void FUN_003ba900(int arg0) {
 }
 
 void *FUN_003ba940(void) {
-    struct G *g = DAT_0058af28[0];
-    if (!g || ((g->f & 4) != 0) == false) {
+    igMetaObject *g = g_beNDMWStatusPowerSocket_metaObject[0];
+    if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_003ba9f0();
     }
-    return DAT_0058af28[0];
+    return g_beNDMWStatusPowerSocket_metaObject[0];
 }
 
 int beNDMWStatusPowerSocket_GetVTable(void) {
@@ -17,7 +17,7 @@ int beNDMWStatusPowerSocket_GetVTable(void) {
 
     beNDMWStatusCtrlBaseEquip_Construct((beNDMWStatusCtrlBaseEquip *)u.b);
     u.vt = (int)&DAT_0053f0a0[0];
-    temp_s0 = *(int *)&u.b[*(int *)((char *)(DAT_00586dc8[0]) + 916)];
+    temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.vt = (int)&DAT_0053f0a0[0];
     FUN_003ba3d0((S_arg0 *)u.b, (long long)0);
     return temp_s0;

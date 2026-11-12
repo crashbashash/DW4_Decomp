@@ -286,7 +286,7 @@ int FUN_00303d70(void *arg0, int extra1) {
 }
 
 int FUN_00303dc0(FieldTable *table, int name) {
-    igObject *field = ((igObject *)igProperty_FindByName((struct L_3022c0 *)table->fields, (struct P_3022c0 *)DAT_00585be0[0], name));
+    igObject *field = ((igObject *)igProperty_FindByName((struct L_3022c0 *)table->fields, (struct P_3022c0 *)g_propertyNameField[0], name));
     if (field == 0) {
         return -1;
     }
@@ -314,7 +314,7 @@ int *FUN_00303e80(void *arg0, int arg1) {
     if (temp_v0 != 0) {
         return temp_v0;
     }
-    return &DAT_004e0858[0];
+    return &emptyString[0];
 }
 
 void FUN_00303ed0(Owner_303ed0 *o) {
@@ -503,14 +503,14 @@ void FUN_00304720(igPluginHelper *helper, int name, int location, int locationTy
     igSmartPointer<igPluginRepository> repository(((igPluginRepository *)FUN_002bc930(((int)igObject_GetAllocator((int)helper)))));
     igNamedObject_SetName((N_2fecb0 *)repository.p, name);
     target = repository.p;
-    if (DAT_00586f20[0] == 0) {
+    if (g_stringPool[0] == 0) {
         pool = ((int)FUN_002eb010(0x10));
         if (pool != 0) {
             pool = ((int)StringPool_Construct((S_2eadf0 *)pool));
         }
-        DAT_00586f20[0] = pool;
+        g_stringPool[0] = pool;
     }
-    text = ((char *)StringPool_Intern((StringPool *)DAT_00586f20[0], (const char *)location));
+    text = ((char *)StringPool_Intern((StringPool *)g_stringPool[0], (const char *)location));
     old = (char *)target->_location;
     if (old != 0) {
         int *header = (int *)(old - 8);
@@ -530,14 +530,14 @@ static inline void setLocation(const igSmartPointer<igPluginRepository> &ref, in
     int interned, left;
     int old;
     int *header;
-    if (DAT_00586f20[0] == 0) {
+    if (g_stringPool[0] == 0) {
         int pool = ((int)FUN_002eb010(16));
         if (pool != 0) {
             pool = ((int)StringPool_Construct((struct S_2eadf0 *)pool));
         }
-        DAT_00586f20[0] = pool;
+        g_stringPool[0] = pool;
     }
-    interned = StringPool_Intern((StringPool *)DAT_00586f20[0], (const char *)((char *)(path + skip)));
+    interned = StringPool_Intern((StringPool *)g_stringPool[0], (const char *)((char *)(path + skip)));
     old = repository->_location;
     if (old != 0) {
         header = (int *)(old - 8);
@@ -555,14 +555,14 @@ static inline void setLocation(const igSmartPointer<igPluginRepository> &ref, ch
     int interned, left;
     int old;
     int *header;
-    if (DAT_00586f20[0] == 0) {
+    if (g_stringPool[0] == 0) {
         int pool = ((int)FUN_002eb010(16));
         if (pool != 0) {
             pool = ((int)StringPool_Construct((struct S_2eadf0 *)pool));
         }
-        DAT_00586f20[0] = pool;
+        g_stringPool[0] = pool;
     }
-    interned = StringPool_Intern((StringPool *)DAT_00586f20[0], (const char *)location);
+    interned = StringPool_Intern((StringPool *)g_stringPool[0], (const char *)location);
     old = repository->_location;
     if (old != 0) {
         header = (int *)(old - 8);

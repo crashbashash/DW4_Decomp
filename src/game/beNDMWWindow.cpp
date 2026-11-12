@@ -4,12 +4,12 @@
     if ((text) == 0) { \
         tok = 0; \
     } else { \
-        if (DAT_00586f20[0] == 0) { \
+        if (g_stringPool[0] == 0) { \
             void *pool = FUN_002eb010(0x10); \
             if (pool != 0) pool = StringPool_Construct(pool); \
-            DAT_00586f20[0] = pool; \
+            g_stringPool[0] = pool; \
         } \
-        tok = StringPool_Intern(DAT_00586f20[0], (const char *)(text)); \
+        tok = StringPool_Intern(g_stringPool[0], (const char *)(text)); \
     } \
     StringRef held(tok); \
     StringList_AppendRetained(field, &held); }
@@ -36,12 +36,12 @@ extern "C" int beMessenger_GetBool(int, int);
 extern "C" int beMessenger_SendNamed(...);
 extern "C" int igObject_Destroy(...);
 extern "C" void List_RemoveWordAt(void *, int);
-extern "C" int DAT_00518700[4];
+extern "C" int TEXTCTL_2[4];
 extern "C" int DAT_00518708[4];
 extern "C" int DAT_00518710[4];
 extern "C" int DAT_00518718[4];
-extern "C" int DAT_00518720[4];
-extern "C" void *DAT_00586f20[4];
+extern "C" int SWITCH[4];
+extern "C" void *g_stringPool[4];
 /* Owning stack reference to a pooled string token (reference count at p[-1], chunk header at
  * p[-2]); releases the token on scope exit. */
 class StringRef {
@@ -54,8 +54,8 @@ extern "C" int StringList_AppendRetained(int, StringRef *);
 extern "C" void FUN_003f5410(beNDMWWindow *arg0, int *arg1, int *arg2, int *arg3, int *arg4);
 extern "C" int DAT_00518728[4];
 extern "C" void FUN_003f56d0(beNDMWWindow *arg0, const char *arg1, const char *arg2, int *arg3, const char *arg4);
-extern "C" int DAT_00589208[4];
-extern "C" int DAT_0058a220[4];
+extern "C" int g_beLua_metaObject[4];
+extern "C" int g_txtCallNo[4];
 extern "C" int TEXTCTL_2[4];
 extern "C" int SWITCH[4];
 extern "C" int CLR[4];
@@ -66,12 +66,12 @@ struct Clr { static inline void ClearList(igStringRefList *l) {
     int **slot; int *ref; int *old; int pool; int *a1; int c;
     for (i = 0; i < n; i++) {
         slot = &((int **)l->_data)[i];
-        if (((int *)DAT_00586f20)[0] == 0) {
+        if (((int *)g_stringPool)[0] == 0) {
             pool = ((int)FUN_002eb010(16));
             if (pool) pool = ((int)StringPool_Construct(pool));
-            ((int *)DAT_00586f20)[0] = pool;
+            ((int *)g_stringPool)[0] = pool;
         }
-        ref = (int *)StringPool_Intern(((int *)DAT_00586f20)[0], 0);
+        ref = (int *)StringPool_Intern(((int *)g_stringPool)[0], 0);
         old = *slot;
         if (old) { a1 = old - 2; c = old[-1] - 1; old[-1] = c; if (c == 0) StringChunk_ReleaseHeader(*a1, a1); }
         *slot = ref;
@@ -93,29 +93,29 @@ extern "C" void beNDMWWindow_PlayQueuedModelClose(beNDMWWindow *w);
 extern "C" int beMessenger_GetBoolCount(int);
 extern "C" int beNDMWWindow_PollCloseComplete(beNDMWWindow *self);
 extern "C" void beNDMWWindow_RequestChildrenClose(beNDMWWindow *arg0);
-extern "C" int DAT_00588518[4];
-extern "C" int DAT_00588f38[4];
+extern "C" int g_bePadManager_metaObject[4];
+extern "C" int g_beMessenger_metaObject[4];
 extern "C" void beNDMWWindow_BindContext(beNDMWWindow *arg0, igObject *arg1, int arg2, int arg3, int arg4);
 /* matching construct: dummy-virtual view so ->f21() dispatches through vtable slot 21 of the window */
 struct WinView { virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void f21(); };
 extern "C" void beNDMWWindow_UpdateTree(beNDMWWindow *w);
 
 void FUN_003f5410(beNDMWWindow *arg0, int *arg1, int *arg2, int *arg3, int *arg4) {
-    beMessenger_SelectReceivers(arg0->_messenger, DAT_00518700, 0, -1);
+    beMessenger_SelectReceivers(arg0->_messenger, TEXTCTL_2, 0, -1);
     beMessenger_AppendString(arg0->_messenger, arg1);
     beMessenger_AppendString(arg0->_messenger, arg2);
     beMessenger_AppendString(arg0->_messenger, arg4);
     beMessenger_DispatchSelected(arg0->_messenger, DAT_00518708);
-    beMessenger_SelectReceivers(arg0->_messenger, DAT_00518700, 0, -1);
+    beMessenger_SelectReceivers(arg0->_messenger, TEXTCTL_2, 0, -1);
     beMessenger_AppendString(arg0->_messenger, arg1);
     beMessenger_AppendString(arg0->_messenger, arg2);
     beMessenger_AppendString(arg0->_messenger, arg3);
     beMessenger_DispatchSelected(arg0->_messenger, DAT_00518710);
-    beMessenger_SelectReceivers(arg0->_messenger, DAT_00518700, 0, -1);
+    beMessenger_SelectReceivers(arg0->_messenger, TEXTCTL_2, 0, -1);
     beMessenger_AppendString(arg0->_messenger, arg1);
     beMessenger_AppendString(arg0->_messenger, arg2);
     beMessenger_AppendString(arg0->_messenger, DAT_00518718);
-    beMessenger_DispatchSelected(arg0->_messenger, DAT_00518720);
+    beMessenger_DispatchSelected(arg0->_messenger, SWITCH);
     INTERN_APPEND(arg0->_textCloseTypeList, arg1)
     INTERN_APPEND(arg0->_textCloseNameList, arg2)
 }
@@ -127,35 +127,35 @@ void FUN_003f5660(int arg0, int arg1, int arg2, int arg3, int arg4) {
 }
 
 void FUN_003f56d0(beNDMWWindow *arg0, const char *arg1, const char *arg2, int *arg3, const char *arg4) {
-    beMessenger_SelectReceivers(arg0->_messenger, &DAT_00518700[0], 0, -1);
+    beMessenger_SelectReceivers(arg0->_messenger, &TEXTCTL_2[0], 0, -1);
     beMessenger_AppendString(arg0->_messenger, arg1);
     beMessenger_AppendString(arg0->_messenger, arg2);
     beMessenger_AppendString(arg0->_messenger, arg4);
     beMessenger_DispatchSelected(arg0->_messenger, &DAT_00518708[0]);
-    beMessenger_SelectReceivers(arg0->_messenger, &DAT_00518700[0], 0, -1);
+    beMessenger_SelectReceivers(arg0->_messenger, &TEXTCTL_2[0], 0, -1);
     beMessenger_AppendString(arg0->_messenger, arg1);
     beMessenger_AppendString(arg0->_messenger, arg2);
     beMessenger_AppendObject(arg0->_messenger, *arg3);
     beMessenger_DispatchSelected(arg0->_messenger, &DAT_00518710[0]);
-    beMessenger_SelectReceivers(arg0->_messenger, &DAT_00518700[0], 0, -1);
+    beMessenger_SelectReceivers(arg0->_messenger, &TEXTCTL_2[0], 0, -1);
     beMessenger_AppendString(arg0->_messenger, arg1);
     beMessenger_AppendString(arg0->_messenger, arg2);
     beMessenger_AppendString(arg0->_messenger, (const char *)&DAT_00518718[0]);
-    beMessenger_DispatchSelected(arg0->_messenger, &DAT_00518720[0]);
+    beMessenger_DispatchSelected(arg0->_messenger, &SWITCH[0]);
     INTERN_APPEND(arg0->_textCloseTypeList, arg1)
     INTERN_APPEND(arg0->_textCloseNameList, arg2)
 }
 
 static inline int castToLuaManager(int object) {
-    if (object != 0 && igObject_IsKindOf(object, DAT_00589208[0]) != 0) {
+    if (object != 0 && igObject_IsKindOf(object, g_beLua_metaObject[0]) != 0) {
         return object;
     }
     return 0;
 }
 
 void beNDMWWindow_RunMessageScript(int *arg0, int arg1, int arg2) {
-    int manager = castToLuaManager(FUN_00236f80(arg0[2], DAT_00589208[0]));
-    DAT_0058a220[0] = arg2;
+    int manager = castToLuaManager(FUN_00236f80(arg0[2], g_beLua_metaObject[0]));
+    g_txtCallNo[0] = arg2;
     beLua__RunNamedChunk(manager, arg1, 0);
 }
 
@@ -315,8 +315,8 @@ void beNDMWWindow_BindContext(beNDMWWindow *arg0, igObject *arg1, int arg2, int 
     }
     arg0->_mother = (int)arg1;
     arg0->_insight = arg2;
-    arg0->_messenger = FUN_00236f80(arg2, DAT_00588f38[0]);
-    arg0->_padManager = FUN_00236f80(arg2, DAT_00588518[0]);
+    arg0->_messenger = FUN_00236f80(arg2, g_beMessenger_metaObject[0]);
+    arg0->_padManager = FUN_00236f80(arg2, g_bePadManager_metaObject[0]);
     arg0->_playerNo = arg3;
     arg0->_entCode = arg4;
 }

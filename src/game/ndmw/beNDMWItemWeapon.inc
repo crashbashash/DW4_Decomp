@@ -5,13 +5,13 @@ void FUN_003c8c90(int arg0) {
 
 void *beNDMWItemWeapon_GetReadyMetaObject(void) {
     unsigned char b;
-    if (DAT_0058bf60[0] != 0) {
-        b = (*(int *)((char *)(DAT_0058bf60[0]) + 36) & 4) != 0;
+    if (g_beNDMWItemWeapon_metaObject[0] != 0) {
+        b = (*(int *)((char *)(g_beNDMWItemWeapon_metaObject[0]) + 36) & 4) != 0;
         if (b != 0) goto done;
     }
     FUN_003c8d60();
 done:
-    return DAT_0058bf60[0];
+    return g_beNDMWItemWeapon_metaObject[0];
 }
 
 int beNDMWItemWeapon_GetVTable(void) {
@@ -19,7 +19,7 @@ int beNDMWItemWeapon_GetVTable(void) {
 
     igObject_InitHeader(u.b);
     u.vt = (int)&DAT_00540960[0];
-    return *(int *)&u.b[*(int *)((char *)(DAT_00586dc8[0]) + 916)];
+    return *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
 }
 
 void FUN_003c8d60(void)

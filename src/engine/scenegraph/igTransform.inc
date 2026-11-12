@@ -3,11 +3,11 @@ void FUN_00196150(int arg0) {
     igMetaObject_CreateInstance(*(int *)0x5612B0, arg0);
 }
 
-int FUN_00196190(void) {
-    if (DAT_005612b0[0] == 0) {
-        DAT_005612b0[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(DAT_00587040[0]));
+igMetaObject *FUN_00196190(void) {
+    if (g_igTransform_metaObject[0] == 0) {
+        g_igTransform_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
     }
-    return DAT_005612b0[0];
+    return g_igTransform_metaObject[0];
 }
 
 igMetaObject *igTransform_GetMetaObject(void)
@@ -31,7 +31,7 @@ int igTransform_GetVTable(void) {
     igMatrix44f_SetIdentity((char *)&o + 32);
     pa[25] = 0;
     pa[26] = 0;
-    r = *(int *)((char *)&o + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+    r = *(int *)((char *)&o + *(int *)((char *)(g_objectSystem[0]) + 916));
     o.vt = &DAT_005284f0[0];
     FUN_00196450((void * *)&o.f[25], -1);
     FUN_001963d0((ObjectRefWord *)&o.f[24], -1);
@@ -145,7 +145,7 @@ void igTransform_InitFields(void) {
     struct V o4;
     struct V o5;
 
-    temp_s0 = (void *)DAT_005612b0[0];
+    temp_s0 = (void *)g_igTransform_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_0048b190[0], 4);
     temp_s1 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s2)));
@@ -172,7 +172,7 @@ void igTransform_InitFields(void) {
     *(int *)((char *)(temp_s1_2) + 56) = FUN_00130310();
     *(char *)((char *)(temp_s1_2) + 38) = 0;
     temp_s1_3 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s2 + 3)));
-    *(int *)((char *)(temp_s1_3) + 56) = FUN_00194dd0();
+    *(int *)((char *)(temp_s1_3) + 56) = (int)FUN_00194dd0();
     igMetaObject_NameFields(temp_s0, &DAT_0048b1a0[0], &DAT_0048b1b0[0], &DAT_0048b1c0[0], temp_s2);
 }
 

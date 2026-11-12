@@ -1,12 +1,12 @@
 void *FUN_003570a0(void) {
     bool ok;
-    if (DAT_00588ea0[0] == 0) goto make;
-    ok = !!(DAT_00588ea0[0]->f & 4);
+    if (g_beMeterCtrlInfo_metaObject[0] == 0) goto make;
+    ok = !!(g_beMeterCtrlInfo_metaObject[0]->_validity & 4);
     if (ok != false) goto done;
 make:
     FUN_00357170();
 done:;
-    return DAT_00588ea0[0];
+    return g_beMeterCtrlInfo_metaObject[0];
 }
 
 int beMeterCtrlInfo_GetVTable(void) {
@@ -19,7 +19,7 @@ int beMeterCtrlInfo_GetVTable(void) {
     o.w[5] = 0;
     o.vt = &DAT_00537040[0];
     o.s = 0;
-    r = *(int *)((char *)&o + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+    r = *(int *)((char *)&o + *(int *)((char *)(g_objectSystem[0]) + 916));
     o.vt = &DAT_00537040[0];
     FUN_00199450(&o.s, -1);
     FUN_0033ec80((struct S_33ec80 *)&o, (short)0);
@@ -58,7 +58,7 @@ void beMeterCtrlInfo_InitFields(void) {
     void *temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)((int *)DAT_00588ea0)[0];
+    temp_s0 = (void *)g_beMeterCtrlInfo_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_004c5ab0[0], 1);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));

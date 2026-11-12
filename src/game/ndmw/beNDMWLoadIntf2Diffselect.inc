@@ -5,11 +5,11 @@ void FUN_003c31e0(int arg0) {
 
 igMetaObject *beNDMWLoadIntf2Diffselect_ResolveMetaObject(void)
 {
-    igMetaObject *g = DAT_0058b800[0];
+    igMetaObject *g = g_beNDMWLoadIntf2Diffselect_metaObject[0];
     bool t;
     if (!g || (t = g->_validity & 4) == 0)
         FUN_003c3300();
-    return DAT_0058b800[0];
+    return g_beNDMWLoadIntf2Diffselect_metaObject[0];
 }
 
 int beNDMWLoadIntf2Diffselect_GetVTable(void) {
@@ -23,7 +23,7 @@ int beNDMWLoadIntf2Diffselect_GetVTable(void) {
     o.vt = DAT_00524950;
     o.str = 0;
     o.vt = DAT_0053d120;
-    r = *(int *)((char *)&o + *(int *)(((char * *)DAT_00586dc8)[0] + 916));
+    r = *(int *)((char *)&o + *(int *)(((char * *)g_objectSystem)[0] + 916));
     o.vt = DAT_00524950;
     if (&o.str != 0) {
         s = o.str;
@@ -76,7 +76,7 @@ void beNDMWLoadIntf2Diffselect_InitFields(void) {
     void *temp_s1;
     void *temp_v0_2;
 
-    temp_s1 = (void *)(((void * *)DAT_0058b800)[0]);
+    temp_s1 = (void *)(((void * *)g_beNDMWLoadIntf2Diffselect_metaObject)[0]);
     temp_s2 = igMetaObject_GetFieldCount(temp_s1);
     igMetaObject_CreateFields(temp_s1, &DAT_004cb1e0[0], 0x10);
     temp_v0 = (void **)(igMetaObject_FindFieldByName(temp_s1, &DAT_00510cd8[0]));
@@ -93,16 +93,16 @@ void beNDMWLoadIntf2Diffselect_InitFields(void) {
     ((igObjectRefMetaField *)temp_s0)->_metaObject = FUN_0034c8e0();
     ((igObjectRefMetaField *)temp_s0)->_refCounted = 0;
     temp_s0_2 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s2 + 8));
-    ((igObjectRefMetaField *)temp_s0_2)->_metaObject = FUN_003c6ee0();
+    ((igObjectRefMetaField *)temp_s0_2)->_metaObject = (int)FUN_003c6ee0();
     ((igObjectRefMetaField *)temp_s0_2)->_refCounted = 0;
     temp_s0_3 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s2 + 9));
-    ((igObjectRefMetaField *)temp_s0_3)->_metaObject = FUN_003c7700();
+    ((igObjectRefMetaField *)temp_s0_3)->_metaObject = (int)FUN_003c7700();
     ((igObjectRefMetaField *)temp_s0_3)->_refCounted = 0;
     temp_s0_4 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s2 + 0xA));
-    ((igObjectRefMetaField *)temp_s0_4)->_metaObject = FUN_003c4c20();
+    ((igObjectRefMetaField *)temp_s0_4)->_metaObject = (int)FUN_003c4c20();
     ((igObjectRefMetaField *)temp_s0_4)->_refCounted = 0;
     temp_s0_5 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s2 + 0xB));
-    ((igObjectRefMetaField *)temp_s0_5)->_metaObject = FUN_003c6b40();
+    ((igObjectRefMetaField *)temp_s0_5)->_metaObject = (int)FUN_003c6b40();
     ((igObjectRefMetaField *)temp_s0_5)->_refCounted = 0;
     igMetaObject_NameFields(temp_s1, &DAT_004cb220[0], &DAT_004cb260[0], &DAT_004cb2a0[0], temp_s2);
 }

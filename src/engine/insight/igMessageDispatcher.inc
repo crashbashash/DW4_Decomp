@@ -1,8 +1,8 @@
-int FUN_002320b0(void) {
-    if (DAT_0056db28[0] == 0) {
-        DAT_0056db28[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(DAT_00587040[0]));
+igMetaObject *FUN_002320b0(void) {
+    if (g_igMessageDispatcher_metaObject[0] == 0) {
+        g_igMessageDispatcher_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
     }
-    return DAT_0056db28[0];
+    return g_igMessageDispatcher_metaObject[0];
 }
 
 igMetaObject *igMessageDispatcher_GetMetaObject(void)
@@ -40,6 +40,6 @@ void thunk_igMessageDispatcher_GetMetaObject(void) {
 }
 
 void FUN_002321e0(void) {
-    *(int *)((char *)(DAT_0056db28[0]) + 60) = (int)(&thunk_igFilterMessageDispatcher_GetMetaObject);
+    *(int *)((char *)(g_igMessageDispatcher_metaObject[0]) + 60) = (int)(&thunk_igFilterMessageDispatcher_GetMetaObject);
 }
 

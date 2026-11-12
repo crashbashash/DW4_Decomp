@@ -19,13 +19,13 @@ extern "C" int g_beNumberCtrl_metaObject[4];
 struct UnidentifiedNameHolder { char pad8[8]; int f8; };
 struct UnidentifiedReceiverObject { char pad8[8]; int f8; UnidentifiedNameHolder *f12; };
 extern "C" int beMessenger_RegisterReceiver(int, UnidentifiedReceiverObject *, void *, int *, int);
-extern "C" int DAT_004e0858[4];
+extern "C" int emptyString[4];
 extern "C" int DAT_0050feb0[4];
 extern "C" void Gap__Bec__beNumberCtrl__vfunc_29(beNumberCtrl *arg0, UnidentifiedReceiverObject *arg1);
 /* igObject header (vtable, reference count); the count at +4 is not a reflected field */
 /* unreflected message argument: only the command word at +20 is read */
 struct MessageCommandArg { char p0[20]; int command; };
-extern "C" int DAT_00587110[4];
+extern "C" int g_defaultAllocatorSelector[4];
 extern "C" unsigned char GPR_00554c14;
 /* matching construct: stack smart pointer whose destructor releases the object, reproduces the retail cleanup path */
 struct Ref {
@@ -76,7 +76,7 @@ void Gap__Bec__beNumberCtrl__vfunc_29(beNumberCtrl *arg0, UnidentifiedReceiverOb
     int *var_a3;
     int t = arg1->f8;
     var_a3 = (int *)(((UnidentifiedNameHolder *)arg1->f12)->f8);
-    var_a3 = var_a3 != 0 ? var_a3 : &DAT_004e0858[0];
+    var_a3 = var_a3 != 0 ? var_a3 : &emptyString[0];
     beMessenger_RegisterReceiver(arg0->_messenger, arg1, &DAT_0050feb0[0], var_a3, t);
 }
 
@@ -98,7 +98,7 @@ int Gap__Bec__beNumberCtrl__vfunc_34(beNumberCtrl *arg0, beNumberCtrlInfoRam *ar
             igObject *o;
             int var;
             var = igObject_GetAllocator(arg0);
-            var = GPR_00554c14 != 0 ? var : Memory_GetAllocatorBySelector(DAT_00587110[0]);
+            var = GPR_00554c14 != 0 ? var : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
             Ref r((igObject *)FUN_0034d2b0(var));
             s0 = (beNumberCtrlInfoWork *)r.p;
             if (s0 != 0) ((igObject *)s0)->_refCount = ((igObject *)s0)->_refCount + 1;
@@ -124,7 +124,7 @@ int Gap__Bec__beNumberCtrl__vfunc_34(beNumberCtrl *arg0, beNumberCtrlInfoRam *ar
             igObject *o;
             int var;
             var = igObject_GetAllocator(arg0);
-            var = GPR_00554c14 != 0 ? var : Memory_GetAllocatorBySelector(DAT_00587110[0]);
+            var = GPR_00554c14 != 0 ? var : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
             Ref r((igObject *)FUN_0034d2b0(var));
             s0 = (beNumberCtrlInfoWork *)r.p;
             if (s0 != 0) ((igObject *)s0)->_refCount = ((igObject *)s0)->_refCount + 1;

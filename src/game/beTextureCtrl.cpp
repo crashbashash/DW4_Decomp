@@ -16,7 +16,7 @@ struct TextureCtrlWork { char header[8]; int f8; int f12; };
 /* The _work object: two list handles at +8 and +12. */
 struct TextureCtrlSource { char pad[12]; struct TextureCtrlSource *f12; char pad1[12]; unsigned char f28; char pad2[3]; igObjectList *f32; };
 extern "C" struct TextureCtrlWork *FUN_00342630(int);
-extern "C" int DAT_00587110[4];
+extern "C" int g_defaultAllocatorSelector[4];
 extern "C" unsigned char GPR_00554c14;
 extern "C" void Gap__Bec__beTextureCtrl__vfunc_29(beTextureCtrl *arg0, struct TextureCtrlSource *arg1);
 /* matching construct: dummy-virtual class supplies the retail vtable slot offsets for the virtual calls */
@@ -26,9 +26,9 @@ class NewObjectVirtual : public igVirtualObject { public: virtual void d1(); vir
 struct PropertyRecord { char pad[12]; int f12; };
 extern "C" NewObjectVirtual *FUN_00132810(...);
 extern "C" PropertyRecord *igProperty_FindByName(...);
-extern "C" int DAT_004e0858[4];
-extern "C" int DAT_0055ed88[4];
-extern "C" int DAT_00585be0[4];
+extern "C" int emptyString[4];
+extern "C" int g_igTextureBindAttr_metaObject[4];
+extern "C" int g_propertyNameField[4];
 extern "C" void Gap__Bec__beTextureCtrl__vfunc_31(beTextureCtrl *arg0, beBaseInfoRam *arg1);
 
 void Gap__Bec__beTextureCtrl__vfunc_32(beTextureCtrl *arg0) {
@@ -63,7 +63,7 @@ void Gap__Bec__beTextureCtrl__vfunc_29(beTextureCtrl *arg0, struct TextureCtrlSo
         if (GPR_00554c14 != 0) {
             var_v0 = (int)var_v0;
         } else {
-            var_v0 = Memory_GetAllocatorBySelector(DAT_00587110[0]);
+            var_v0 = Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
         }
         old = (igObject *)arg0->_work;
         if (old != 0) {
@@ -133,12 +133,12 @@ void Gap__Bec__beTextureCtrl__vfunc_31(beTextureCtrl *arg0, beBaseInfoRam *arg1)
                     if (a2 != 0) {
                         a2 = (int *)a2;
                     } else {
-                        a2 = &DAT_004e0858[0];
+                        a2 = &emptyString[0];
                     }
-                    p = igProperty_FindByName(x->_textureList, DAT_00585be0[0], a2);
+                    p = igProperty_FindByName(x->_textureList, g_propertyNameField[0], a2);
                     if (p != 0) {
                         var_v0 = igObject_GetAllocator(arg0);
-                        var_v0 = GPR_00554c14 ? var_v0 : Memory_GetAllocatorBySelector(DAT_00587110[0]);
+                        var_v0 = GPR_00554c14 ? var_v0 : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
                         igSmartPointer<NewObjectVirtual> attr(FUN_00132810(var_v0));
                         attr.p->v132(p->f12);
                         s3 = (igAttrSet *)s1->_attrSet;
@@ -147,7 +147,7 @@ void Gap__Bec__beTextureCtrl__vfunc_31(beTextureCtrl *arg0, beBaseInfoRam *arg1)
                         if (0 < s6) {
                             s0 = 0;
                             do {
-                                k = DAT_0055ed88[0];
+                                k = g_igTextureBindAttr_metaObject[0];
                                 s2 = (TypeIdVirtual *)*(int *)(((igAttrList *)s3->_attributes)->_data + s0);
                                 if (k == s2->v88()) {
                                     int removed; /* matching construct: the removal out-slot is declared after the holder so it lies below it (+0xb8 under +0xbc) as in retail */

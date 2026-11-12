@@ -1,4 +1,4 @@
-int Gap__Gfx__igFileImagePng__vfunc_22(void) {
-    return DAT_0055ff68[0];
+igMetaObject *Gap__Gfx__igFileImagePng__vfunc_22(void) {
+    return g_igFileImagePng_metaObject[0];
 }
 

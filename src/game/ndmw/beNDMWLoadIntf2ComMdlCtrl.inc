@@ -3,25 +3,25 @@ void beNDMWLoadIntf2ComMdlCtrl_Create(int arg0) {
     igMetaObject_CreateInstance(*(int *)0x58BE38, arg0);
 }
 
-int FUN_003c6ee0(void) {
-    if (((int *)DAT_0058be38)[0] == 0) {
-        ((int *)DAT_0058be38)[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(DAT_00587040[0]));
+igMetaObject *FUN_003c6ee0(void) {
+    if (g_beNDMWLoadIntf2ComMdlCtrl_metaObject[0] == 0) {
+        g_beNDMWLoadIntf2ComMdlCtrl_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
     }
-    return ((int *)DAT_0058be38)[0];
+    return g_beNDMWLoadIntf2ComMdlCtrl_metaObject[0];
 }
 
 void *beNDMWLoadIntf2ComMdlCtrl_GetReadyMetaObject(void) {
-    struct G *g = DAT_0058be38[0];
+    igMetaObject *g = g_beNDMWLoadIntf2ComMdlCtrl_metaObject[0];
     bool ready;
     if (g) {
         /* matching construct: the bool compared against false keeps the retail sltu normalisation under the
          * unit profile (exceptions on); `if (ready = ...)` folds it away */
-        ready = g->f & 4;
+        ready = g->_validity & 4;
         if (ready != false) goto end;
     }
     FUN_003c7090();
 end:
-    return DAT_0058be38[0];
+    return g_beNDMWLoadIntf2ComMdlCtrl_metaObject[0];
 }
 
 int beNDMWLoadIntf2ComMdlCtrl_GetVTable(void) {
@@ -33,7 +33,7 @@ int beNDMWLoadIntf2ComMdlCtrl_GetVTable(void) {
     o.f[1] = 0;
     o.f[4] = 0;
     o.f[5] = 0;
-    r = *(int *)((char *)&o + *(int *)(((char * *)DAT_00586dc8)[0] + 916));
+    r = *(int *)((char *)&o + *(int *)(((char * *)g_objectSystem)[0] + 916));
     o.vt = DAT_0053c8e0;
     FUN_003c7010((ObjectRefWord *)(&o.f[5]), -1);
     FUN_003c7010((ObjectRefWord *)(&o.f[4]), -1);
@@ -91,7 +91,7 @@ void beNDMWLoadIntf2ComMdlCtrl_InitFields(void) {
     void *temp_s1;
     void *temp_v0_2;
 
-    temp_s1 = (void *)(((void * *)DAT_0058be38)[0]);
+    temp_s1 = (void *)(((void * *)g_beNDMWLoadIntf2ComMdlCtrl_metaObject)[0]);
     temp_s2 = igMetaObject_GetFieldCount(temp_s1);
     igMetaObject_CreateFields(temp_s1, &DAT_004cbee0[0], 4);
     temp_v0 = (void **)(igMetaObject_FindFieldByName(temp_s1, &DAT_00510cd8[0]));
@@ -108,10 +108,10 @@ void beNDMWLoadIntf2ComMdlCtrl_InitFields(void) {
     ((igObjectRefMetaField *)temp_s0)->_metaObject = FUN_00357910();
     ((igObjectRefMetaField *)temp_s0)->_refCounted = 0;
     temp_s0_2 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s2 + 1));
-    ((igObjectRefMetaField *)temp_s0_2)->_metaObject = FUN_003c72c0();
+    ((igObjectRefMetaField *)temp_s0_2)->_metaObject = (int)FUN_003c72c0();
     ((igObjectRefMetaField *)temp_s0_2)->_construct = 1;
     temp_s0_3 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s2 + 2));
-    ((igObjectRefMetaField *)temp_s0_3)->_metaObject = FUN_003c72c0();
+    ((igObjectRefMetaField *)temp_s0_3)->_metaObject = (int)FUN_003c72c0();
     ((igObjectRefMetaField *)temp_s0_3)->_construct = 1;
     igMetaObject_NameFields(temp_s1, &DAT_004cbef0[0], &DAT_004cbf00[0], &DAT_004cbf10[0], temp_s2);
 }

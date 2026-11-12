@@ -36,7 +36,7 @@ int igPsx2MultiTextureExt_GetVTable(void) {
     obj.vt = &DAT_00530a10[0];
     obj.r2 = 0;
     obj.vt = &DAT_00525510[0];
-    r = *(int *)((char *)&obj + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+    r = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
     obj.vt = &DAT_00530a10[0];
     obj.rel(&obj.r2);
     obj.rel(&obj.r1);
@@ -66,7 +66,7 @@ void igPsx2MultiTextureExt_Register(void) {
 }
 
 int FUN_001538b0(void) {
-    return (int)DAT_0055fd10[0];
+    return (int)g_igMultiTextureExt_metaObject[0];
 }
 
 void igPsx2MultiTextureExt_InitFields(void) {
@@ -74,7 +74,7 @@ void igPsx2MultiTextureExt_InitFields(void) {
     void *m;
     int base;
 
-    m = (void *)DAT_00560588[0];
+    m = (void *)g_igPsx2MultiTextureExt_metaObject[0];
     base = igMetaObject_GetFieldCount(m);
     igMetaObject_CreateFields(m, &DAT_00489fe0[0], 8);
     f = igMetaObject_GetFieldAt(m, base);

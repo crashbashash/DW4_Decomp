@@ -10,8 +10,8 @@ int FUN_003209a0(...);
 int FUN_00320a20(...);
 void *FUN_00320ea0(...);
 
-extern int DAT_004fb410[4];
-extern int DAT_004fb418[4];
+extern int g_statusSucceeded[4];
+extern int g_allocatorFailureStatus[4];
 extern int D_004fb418[4];
 extern int DAT_004fdda0[4];
 extern int DAT_004fddc0[4];
@@ -43,7 +43,7 @@ extern "C" void Gap__Core__igElfFile__vfunc_24(int *arg0, S *arg1) {
     a = D_004fb418[0];
     pp = (int *)((int)&sp4C + 0);
     a = D_004fb418[0];
-    if (*pp == DAT_004fb418[0]) {
+    if (*pp == g_allocatorFailureStatus[0]) {
         *arg0 = a;
         return;
     }
@@ -51,7 +51,7 @@ extern "C" void Gap__Core__igElfFile__vfunc_24(int *arg0, S *arg1) {
         FUN_00304430(&DAT_004fdda0[0], arg1->f8);
         FUN_00304680();
         Res sp48 = arg1->v23();
-        *arg0 = DAT_004fb418[0];
+        *arg0 = g_allocatorFailureStatus[0];
         return;
     }
     a1v = 1;
@@ -66,7 +66,7 @@ extern "C" void Gap__Core__igElfFile__vfunc_24(int *arg0, S *arg1) {
         FUN_00304430(&DAT_004fddc0[0], arg1->f8);
         FUN_00304680();
         Res sp44 = arg1->v23();
-        *arg0 = DAT_004fb418[0];
+        *arg0 = g_allocatorFailureStatus[0];
         return;
     }
     a2 = arg1->f48;
@@ -74,14 +74,14 @@ extern "C" void Gap__Core__igElfFile__vfunc_24(int *arg0, S *arg1) {
         FUN_00304430(&DAT_004fdde0[0], arg1->f8, a2);
         FUN_00304680();
         Res sp40 = arg1->v23();
-        *arg0 = DAT_004fb418[0];
+        *arg0 = g_allocatorFailureStatus[0];
         return;
     }
     Res sp3C = arg1->v24(a2, arg1->f64 * arg1->f62, &arg1->f80);
     a = D_004fb418[0];
     pp = (int *)((int)&sp3C + 0);
     a = D_004fb418[0];
-    if (*pp == DAT_004fb418[0]) {
+    if (*pp == g_allocatorFailureStatus[0]) {
         *arg0 = a;
         return;
     }
@@ -103,11 +103,11 @@ extern "C" void Gap__Core__igElfFile__vfunc_24(int *arg0, S *arg1) {
             a = D_004fb418[0];
             pp = (int *)((int)&sp38 + 0);
     a = D_004fb418[0];
-    if (*pp == DAT_004fb418[0]) {
+    if (*pp == g_allocatorFailureStatus[0]) {
                 *arg0 = a;
                 return;
             }
         }
     }
-    *arg0 = DAT_004fb410[0];
+    *arg0 = g_statusSucceeded[0];
 }

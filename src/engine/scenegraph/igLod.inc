@@ -22,7 +22,7 @@ int igLod_GetVTable(void) {
     p17 = &o.f[8];
     *p17 = 0;
     o.f[15] = 0;
-    r = *(int *)((char *)&o + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+    r = *(int *)((char *)&o + *(int *)((char *)(g_objectSystem[0]) + 916));
     o.vt = &DAT_00528b20[0];
     FUN_001354b0(&o.f[15], -1);
     FUN_00198210((ObjectRefWord *)p17, -1);
@@ -69,7 +69,7 @@ void igLod_InitFields(void) {
     void *temp_v0_2;
     void *temp_v0_3;
 
-    temp_s1 = (void *)DAT_00561898[0];
+    temp_s1 = (void *)g_igLod_metaObject[0];
     temp_s0 = igMetaObject_GetFieldCount(temp_s1);
     igMetaObject_CreateFields(temp_s1, &DAT_0048bd10[0], 7);
     temp_s2 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s1, temp_s0)));
@@ -78,7 +78,7 @@ void igLod_InitFields(void) {
     ((igMetaField *)temp_s2)->_deepCopyMethod = 0;
     ((igMetaField *)temp_s2)->_shallowCopyMethod = 2;
     temp_s2_2 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s1, temp_s0 + 1)));
-    ((igObjectRefMetaField *)temp_s2_2)->_metaObject = FUN_0019cd50();
+    ((igObjectRefMetaField *)temp_s2_2)->_metaObject = (int)FUN_0019cd50();
     ((igMetaField *)temp_s2_2)->_persistent = 0;
     temp_v0 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s1, temp_s0 + 2)));
     FUN_002ea4b0(temp_v0, -1);

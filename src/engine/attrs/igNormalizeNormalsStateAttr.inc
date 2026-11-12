@@ -1,8 +1,8 @@
-int FUN_00134fb0(void) {
-    if (DAT_0055efc0[0] == 0) {
-        DAT_0055efc0[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(DAT_00587040[0]));
+igMetaObject *FUN_00134fb0(void) {
+    if (g_igNormalizeNormalsStateAttr_metaObject[0] == 0) {
+        g_igNormalizeNormalsStateAttr_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
     }
-    return DAT_0055efc0[0];
+    return g_igNormalizeNormalsStateAttr_metaObject[0];
 }
 
 igMetaObject *igNormalizeNormalsStateAttr_GetMetaObject(void)
@@ -17,7 +17,7 @@ int igNormalizeNormalsStateAttr_GetVTable(void) {
     struct Obj obj;
     igObject_InitHeader(&obj);
     obj.vt = &DAT_00523310[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 
 void FUN_00135090(void)
@@ -50,7 +50,7 @@ void igNormalizeNormalsStateAttr_InitFields(void) {
     int temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)DAT_0055efc0[0];
+    temp_s0 = (void *)g_igNormalizeNormalsStateAttr_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_004861e0[0], 1);
     igMetaObject_NameFields(temp_s0, &DAT_004861e8[0], &DAT_004861f0[0], &DAT_004861f8[0], temp_s1);

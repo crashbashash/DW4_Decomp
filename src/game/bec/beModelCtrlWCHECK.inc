@@ -1,6 +1,6 @@
-SFUN_00355030 *FUN_00355030(void) {
-    if (DAT_00588d68[0] == 0 || !DAT_00588d68[0]->ok()) FUN_00355110();
-    return DAT_00588d68[0];
+igMetaObject *FUN_00355030(void) {
+    if (g_beModelCtrlWCHECK_metaObject[0] == 0 || !isValid(g_beModelCtrlWCHECK_metaObject[0])) FUN_00355110();
+    return g_beModelCtrlWCHECK_metaObject[0];
 }
 
 int beModelCtrlWCHECK_GetVTable(void) {
@@ -16,7 +16,7 @@ int beModelCtrlWCHECK_GetVTable(void) {
     *(int *)ps = 0;
     u.vt = (int)&DAT_00524950[0];
     u.vt = (int)&DAT_005376b0[0];
-    s0 = *(int *)&u.b[*(int *)((char *)(DAT_00586dc8[0]) + 916)];
+    s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.vt = (int)&DAT_00524950[0];
     if (ps != 0) {
         v1 = *(int **)ps;

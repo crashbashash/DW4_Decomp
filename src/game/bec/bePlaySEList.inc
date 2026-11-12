@@ -1,13 +1,13 @@
-int FUN_00344630(void) {
-    if (((int *)DAT_00587ec8)[0] == 0) {
-        ((int *)DAT_00587ec8)[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(DAT_00587040[0]));
+igMetaObject *FUN_00344630(void) {
+    if (g_bePlaySEList_metaObject[0] == 0) {
+        g_bePlaySEList_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
     }
-    return ((int *)DAT_00587ec8)[0];
+    return g_bePlaySEList_metaObject[0];
 }
 
-SFUN_00344680 *FUN_00344680(void) {
-    if (DAT_00587ec8[0] == 0 || !DAT_00587ec8[0]->ok()) FUN_00344710();
-    return DAT_00587ec8[0];
+igMetaObject *FUN_00344680(void) {
+    if (g_bePlaySEList_metaObject[0] == 0 || !isValid(g_bePlaySEList_metaObject[0])) FUN_00344710();
+    return g_bePlaySEList_metaObject[0];
 }
 
 int bePlaySEList_GetVTable(void) {
@@ -15,7 +15,7 @@ int bePlaySEList_GetVTable(void) {
 
     igObject_InitHeader(&obj);
     obj.vt = &DAT_00539280[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 
 void FUN_00344710(void)

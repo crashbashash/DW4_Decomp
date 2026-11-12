@@ -3,12 +3,12 @@ void FUN_0045cc40(int arg0) {
     igMetaObject_CreateInstance(*(int *)0x58CCE0, arg0);
 }
 
-G_45cc80 *igCameraMode_GetMetaObject(void) {
-    G_45cc80 *g = ((G_45cc80 *)DAT_0058cce0[0]);
+igMetaObject *igCameraMode_GetMetaObject(void) {
+    igMetaObject *g = g_igCameraMode_metaObject[0];
     int t;
-    if (!g || !(t = (g->f & 4) != 0))
+    if (!g || !(t = (g->_validity & 4) != 0))
         FUN_0045cdc0();
-    return ((G_45cc80 *)DAT_0058cce0[0]);
+    return g_igCameraMode_metaObject[0];
 }
 
 int igCameraMode_GetVTable(void) {
@@ -26,7 +26,7 @@ int igCameraMode_GetVTable(void) {
     *(int *)q1 = 0;
     q2 = (S_ref *)&u.b[80];
     *(int *)q2 = 0;
-    temp_s1 = *(int *)&u.b[*(int *)((char *)(((void *)DAT_00586dc8[0])) + 916)];
+    temp_s1 = *(int *)&u.b[*(int *)((char *)(((void *)g_objectSystem[0])) + 916)];
     u.w[0] = (int)(&DAT_005428d0[0]);
     if (q2 != 0) {
         q2 = *(S_ref **)q2;
@@ -81,7 +81,7 @@ void igCameraMode_InitFields(void) {
     void *temp_s1_2;
     void *temp_s0;
 
-    temp_s0 = (void *)DAT_0058cce0[0];
+    temp_s0 = (void *)g_igCameraMode_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_004d1660[0], 2);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));

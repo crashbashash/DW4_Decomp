@@ -16,10 +16,10 @@ int igObject_GetSerializedSize(...);
 int igObject_RegisterInstance(...);
 int FUN_002fff90(int, int, void *, int, unsigned char);
 int FUN_00300250(int, int, void *, int, unsigned char);
-extern int DAT_00585b60[4];
-extern char DAT_004e0858[];
+extern int g_igObjectList_metaObject[4];
+extern char emptyString[];
 extern int DAT_004f6518[4];
-extern void *DAT_00586f20[4];
+extern void *g_stringPool[4];
 /* The array extern keeps the load absolute. */
 extern int g_igObjectDirEntry_metaObject[4];
 }
@@ -61,10 +61,10 @@ struct EntryList : public igObjectList {
 struct DirFile { char pad0[92]; EntryList *sharedEntries; char pad96[184]; int pool; };
 extern "C" EntryList *FUN_002bd680(int pool);
 static inline const char *nameOf(const igObjectDirEntry *entry) {
-    return entry->_name != 0 ? (const char *)entry->_name : DAT_004e0858;
+    return entry->_name != 0 ? (const char *)entry->_name : emptyString;
 }
 static inline EntryList *asEntryList(igObject *object) {
-    if (object != 0 && igObject_IsKindOf(object, DAT_00585b60[0]) != 0) return (EntryList *)object;
+    if (object != 0 && igObject_IsKindOf(object, g_igObjectList_metaObject[0]) != 0) return (EntryList *)object;
     return 0;
 }
 
@@ -98,14 +98,14 @@ struct SRel { static inline void go(char *s) {
     }
 } };
 struct Pool { static inline void *get() {
-    if (DAT_00586f20[0] == 0) {
+    if (g_stringPool[0] == 0) {
         void *p = (void *)FUN_002eb010(16);
         if (p != 0) {
             p = StringPool_Construct(p);
         }
-        DAT_00586f20[0] = p;
+        g_stringPool[0] = p;
     }
-    return DAT_00586f20[0];
+    return g_stringPool[0];
 } };
 extern "C" void FUN_00301590(igObjectDirEntry *arg0, igMetaObject *arg1);
 void FUN_00301590(igObjectDirEntry *arg0, igMetaObject *arg1);

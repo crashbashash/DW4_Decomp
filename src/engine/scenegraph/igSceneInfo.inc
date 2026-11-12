@@ -3,11 +3,11 @@ void FUN_0019aea0(int arg0) {
     igMetaObject_CreateInstance(*(int *)0x5615E0, arg0);
 }
 
-int FUN_0019aee0(void) {
-    if (DAT_005615e0[0] == 0) {
-        DAT_005615e0[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(DAT_00587040[0]));
+igMetaObject *FUN_0019aee0(void) {
+    if (g_igSceneInfo_metaObject[0] == 0) {
+        g_igSceneInfo_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
     }
-    return DAT_005615e0[0];
+    return g_igSceneInfo_metaObject[0];
 }
 
 igMetaObject *igSceneInfo_GetMetaObject(void)
@@ -28,7 +28,7 @@ int igSceneInfo_GetVTable(void) {
     obj.w6 = 0;
     obj.w7 = 0;
     obj.w15 = 0;
-    t = *(int *)((char *)&obj + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+    t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
     obj.vt = &DAT_005288e0[0];
     FUN_001958f0((void * *)&obj.w15, -1);
     FUN_0019b1f0((void * *)&obj.w7, -1);
@@ -163,18 +163,18 @@ void igSceneInfo_InitFields(void) {
     void *temp_s2_4;
     void *temp_s0;
 
-    temp_s0 = (void *)DAT_005615e0[0];
+    temp_s0 = (void *)g_igSceneInfo_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_0048b780[0], 7);
     temp_s2 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s1)));
-    ((igObjectRefMetaField *)temp_s2)->_metaObject = FUN_0019cd50();
+    ((igObjectRefMetaField *)temp_s2)->_metaObject = (int)FUN_0019cd50();
     temp_s2_2 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 1)));
     ((igObjectRefMetaField *)temp_s2_2)->_metaObject = FUN_0013a360();
     ((igRefMetaField *)temp_s2_2)->_construct = 1;
     ((igMetaField *)temp_s2_2)->_deepCopyMethod = 0;
     ((igMetaField *)temp_s2_2)->_shallowCopyMethod = 2;
     temp_s2_3 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 2)));
-    ((igObjectRefMetaField *)temp_s2_3)->_metaObject = FUN_0019f4c0();
+    ((igObjectRefMetaField *)temp_s2_3)->_metaObject = (int)FUN_0019f4c0();
     ((igRefMetaField *)temp_s2_3)->_construct = 1;
     ((igMetaField *)temp_s2_3)->_deepCopyMethod = 0;
     ((igMetaField *)temp_s2_3)->_shallowCopyMethod = 2;
@@ -184,7 +184,7 @@ void igSceneInfo_InitFields(void) {
     v.z = 0;
     FUN_0018e470(temp_a0, &v);
     temp_s2_4 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 6)));
-    ((igObjectRefMetaField *)temp_s2_4)->_metaObject = FUN_0019cbe0();
+    ((igObjectRefMetaField *)temp_s2_4)->_metaObject = (int)FUN_0019cbe0();
     ((igRefMetaField *)temp_s2_4)->_construct = 1;
     igMetaObject_NameFields(temp_s0, &DAT_0048b7a0[0], &DAT_0048b7c0[0], &DAT_0048b7e0[0], temp_s1);
 }

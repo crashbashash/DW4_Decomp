@@ -21,7 +21,7 @@ int igBoundingBoxesMaker_GetVTable(void) {
     obj.w[5] = 0;
     obj.w[7] = 0;
     obj.w[8] = 0;
-    r = *(int *)((char *)&obj + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+    r = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
     obj.vt = &DAT_0052a4a0[0];
     FUN_0013a880(&obj.w[8], -1);
     FUN_001489a0(&obj.w[7], -1);
@@ -64,7 +64,7 @@ void igBoundingBoxesMaker_InitFields(void) {
     void *temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)DAT_00561ef0[0];
+    temp_s0 = (void *)g_igBoundingBoxesMaker_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_0048cad0[0], 8);
     FUN_002ebc00(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s2)), -1);

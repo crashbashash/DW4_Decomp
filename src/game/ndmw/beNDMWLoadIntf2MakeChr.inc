@@ -28,7 +28,7 @@ int beNDMWLoadIntf2MakeChr_GetVTable(void) {
     *(int *)ps = 0;
     u.vt = (int)&DAT_00524950[0];
     u.vt = (int)&DAT_0053cf30[0];
-    s0 = *(int *)&u.b[*(int *)((char *)(DAT_00586dc8[0]) + 916)];
+    s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.vt = (int)&DAT_00524950[0];
     if (ps != 0) {
         v1 = *(int **)ps;
@@ -78,7 +78,7 @@ void beNDMWLoadIntf2MakeChr_InitFields(void) {
     igMetaObject *temp_s1;
     igStringMetaField *temp_v0_2;
 
-    temp_s1 = (igMetaObject *)(DAT_0058ba00[0]);
+    temp_s1 = (igMetaObject *)(g_beNDMWLoadIntf2MakeChr_metaObject[0]);
     temp_s2 = igMetaObject_GetFieldCount(temp_s1);
     igMetaObject_CreateFields(temp_s1, &DAT_004cb5d0[0], 4);
     temp_v0 = (void **)(igMetaObject_FindFieldByName(temp_s1, &DAT_00510cd8[0]));

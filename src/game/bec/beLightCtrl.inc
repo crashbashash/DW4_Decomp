@@ -3,22 +3,22 @@ void FUN_0035c010(int arg0) {
     igMetaObject_CreateInstance(*(int *)0x589258, arg0);
 }
 
-int FUN_0035c050(void) {
-    if (DAT_00589258[0] == 0) {
-        DAT_00589258[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(DAT_00587040[0]));
+igMetaObject *FUN_0035c050(void) {
+    if (g_beLightCtrl_metaObject[0] == 0) {
+        g_beLightCtrl_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
     }
-    return DAT_00589258[0];
+    return g_beLightCtrl_metaObject[0];
 }
 
 void *FUN_0035c0a0(void) {
     unsigned char b;
-    if (((void * *)DAT_00589258)[0] != 0) {
-        b = (*(int *)((char *)(((void * *)DAT_00589258)[0]) + 36) & 4) != 0;
+    if (((void * *)g_beLightCtrl_metaObject)[0] != 0) {
+        b = (*(int *)((char *)(((void * *)g_beLightCtrl_metaObject)[0]) + 36) & 4) != 0;
         if (b != 0) goto done;
     }
     FUN_0035c1d0();
 done:
-    return ((void * *)DAT_00589258)[0];
+    return ((void * *)g_beLightCtrl_metaObject)[0];
 }
 
 int beLightCtrl_GetVTable(void) {
@@ -36,7 +36,7 @@ int beLightCtrl_GetVTable(void) {
     q2 = (S_ref *)&u.b[24];
     *(int *)q2 = 0;
     u.w[0] = (int)(&DAT_0053c260[0]);
-    temp_s1 = *(int *)&u.b[*(int *)((char *)(DAT_00586dc8[0]) + 916)];
+    temp_s1 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.w[0] = (int)(&DAT_0053a0d0[0]);
     if (q2 != 0) {
         q2 = *(S_ref **)q2;

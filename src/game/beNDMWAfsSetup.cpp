@@ -21,11 +21,11 @@ extern "C" void FUN_00236be0(int, beNDMWAfsSetup *);
 extern "C" void FUN_0037d270(beCri *, int, int);
 extern "C" void FUN_0037d2a0(beCri *, int, const char *, int);
 extern "C" void ObjectList_AppendRetained(int, igObject *);
-extern "C" void *DAT_00586f20[4];
-extern "C" int DAT_0058c110[4];
-extern "C" int DAT_00589ad8[4];
-extern "C" int DAT_00587d08[4];
-extern "C" char DAT_004e0858[];
+extern "C" void *g_stringPool[4];
+extern "C" int g_beNDMWAfsSetupInfo_metaObject[4];
+extern "C" int g_beCri_metaObject[4];
+extern "C" int g_beSystem_metaObject[4];
+extern "C" char emptyString[];
 extern "C" char DAT_00515710[];
 extern "C" int Gap__Bec__beNDMWAfsSetup__vfunc_25(beNDMWAfsSetup *self, igObject *info);
 extern "C" int FUN_00236c40(int, beNDMWAfsSetup *);
@@ -56,8 +56,8 @@ void Gap__Bec__beNDMWAfsSetup__vfunc_24(beNDMWAfsSetup *self) {
 }
 
 int Gap__Bec__beNDMWAfsSetup__vfunc_25(beNDMWAfsSetup *self, igObject *info) {
-    if (igObject_IsKindOf(info, DAT_0058c110[0])) {
-        beCri *cri = (beCri *)FUN_00236f80(self->_insight, DAT_00589ad8[0]);
+    if (igObject_IsKindOf(info, g_beNDMWAfsSetupInfo_metaObject[0])) {
+        beCri *cri = (beCri *)FUN_00236f80(self->_insight, g_beCri_metaObject[0]);
         if (cri == 0) return 0;
         ObjectList_AppendRetained(self->_infoList, info);
         FUN_00236be0(self->_insight, self);
@@ -68,15 +68,15 @@ int Gap__Bec__beNDMWAfsSetup__vfunc_25(beNDMWAfsSetup *self, igObject *info) {
         for (i = 0; i < files->_count; i++) {
             beNDMWAfsSetupData *data = ((beNDMWAfsSetupData **)files->_data)[i];
             int count = data->_fileCount;
-            FUN_0037d2a0(cri, i, data->_name ? (const char *)data->_name : DAT_004e0858, count);
+            FUN_0037d2a0(cri, i, data->_name ? (const char *)data->_name : emptyString, count);
         }
-        beSystem *system = (beSystem *)FUN_00236f80(self->_insight, DAT_00587d08[0]);
-        if (DAT_00586f20[0] == 0) {
+        beSystem *system = (beSystem *)FUN_00236f80(self->_insight, g_beSystem_metaObject[0]);
+        if (g_stringPool[0] == 0) {
             void *pool = FUN_002eb010(16);
             if (pool != 0) pool = StringPool_Construct(pool);
-            DAT_00586f20[0] = pool;
+            g_stringPool[0] = pool;
         }
-        const char *token = StringPool_Intern(DAT_00586f20[0], DAT_00515710);
+        const char *token = StringPool_Intern(g_stringPool[0], DAT_00515710);
         const char *old = (const char *)system->_nextStage;
         if (old != 0) {
             int *header = (int *)old - 2;

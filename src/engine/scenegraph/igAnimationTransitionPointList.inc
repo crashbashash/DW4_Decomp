@@ -1,8 +1,8 @@
-int FUN_001a9830(void) {
-    if (DAT_005623e0[0] == 0) {
-        DAT_005623e0[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(DAT_00587040[0]));
+igMetaObject *FUN_001a9830(void) {
+    if (g_igAnimationTransitionPointList_metaObject[0] == 0) {
+        g_igAnimationTransitionPointList_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
     }
-    return DAT_005623e0[0];
+    return g_igAnimationTransitionPointList_metaObject[0];
 }
 
 igMetaObject *igAnimationTransitionPointList_GetMetaObject(void)
@@ -18,7 +18,7 @@ int igAnimationTransitionPointList_GetVTable(void) {
 
     igObject_InitHeader(&obj);
     obj.vt = &DAT_005299c0[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 
 void FUN_001a9910(void)

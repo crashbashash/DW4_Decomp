@@ -7,9 +7,9 @@ class X { public: virtual void d0(); virtual void d1(); virtual void d2(); virtu
 
 int igObject_IsKindOf(...);
 
-extern int DAT_005612b0[4];
-extern int DAT_005618e8[4];
-extern int DAT_005619f8[4];
+extern int g_igTransform_metaObject[4];
+extern int g_igLightSet_metaObject[4];
+extern int g_igGroup_metaObject[4];
 int FUN_0045f200(int arg0, X *arg1);
 
 typedef struct T { char pad[60]; unsigned char f60; } T;
@@ -114,7 +114,7 @@ int ObjectList_AppendRetained(...);
 extern float DAT_004e1098[4];
 extern float DAT_004e109c[4];
 extern float DAT_004e10a0[4];
-extern int DAT_004e1170[4];
+extern int g_vec4Zero[4];
 void Gap__Viewer__igViewerRenderer__vfunc_13(P *arg0);
 struct Tag { };
 static inline void *createFirst() {
@@ -130,7 +130,7 @@ static inline void *createThird() {
     return FUN_0019fde0(0, 1);
 }
 
-extern int DAT_0055ebd8[4];
+extern int g_igViewportAttr_metaObject[4];
 int FUN_001b0000(int, int, int, int);
 
 int FUN_001b6ce0(void *, float, float, float, float, float);
@@ -212,11 +212,11 @@ struct PropertyList { char pad[32]; int f32; };
 int igMetaObject_FindFieldByName(...);
 int igProperty_FindByPointer(...);
 extern int DAT_0051fab8[4];
-extern int DAT_0055f468[4];
-extern int DAT_00585b20[4];
+extern int g_igAttr_metaObject[4];
+extern int g_igObjectRefMetaField_metaObject[4];
 int FUN_00460be0(PropertyHolder *arg0, PropertyList *arg1);
 static inline int castToProperty(int object) {
-    if (object != 0 && igObject_IsKindOf(object, DAT_00585b20[0]) != 0) {
+    if (object != 0 && igObject_IsKindOf(object, g_igObjectRefMetaField_metaObject[0]) != 0) {
         return object;
     }
     return 0;
@@ -233,15 +233,15 @@ static inline void removeFromList(int list, int object) {
     ObjectList_RemoveFirstRetained(list, object, 0);
 }
 
-extern int DAT_0058c940[4];
+extern int g_igViewerRenderer_metaObject[4];
 
 /* The ids are held in a pointer-typed local so the compare puts the call result first (beq v0,s0). */
 int FUN_0045f200(int arg0, X *arg1) {
     int *s0;
     if (arg1->f20 & 1) {
-        s0 = (int *)DAT_005612b0[0];
-        if ((int *)arg1->v88() == s0 || (s0 = (int *)DAT_005618e8[0], (int *)arg1->v88() == s0)) return 0;
-        if (igObject_IsKindOf(arg1, DAT_005619f8[0]) != 0) return 2;
+        s0 = (int *)g_igTransform_metaObject[0];
+        if ((int *)arg1->v88() == s0 || (s0 = (int *)g_igLightSet_metaObject[0], (int *)arg1->v88() == s0)) return 0;
+        if (igObject_IsKindOf(arg1, g_igGroup_metaObject[0]) != 0) return 2;
     }
     return 1;
 }
@@ -533,7 +533,7 @@ void Gap__Viewer__igViewerRenderer__vfunc_13(P *arg0) {
     ((B2 *)second.p)->v128(4);
     ((B2 *)second.p)->v132(s0->range);
     arg0->f36->v128(s0->eye);
-    arg0->f36->v136(&DAT_004e1170[0]);
+    arg0->f36->v136(&g_vec4Zero[0]);
     arg0->f36->v132(s0->center);
     sp58[0] = -DAT_004e1098[0];
     sp58[1] = -DAT_004e109c[0];
@@ -621,7 +621,7 @@ void FUN_004601c0(void *arg0) {
     void *temp_v0;
 
     temp_v0 = (void *)(*(int *)((char *)(arg0) + 80));
-    FUN_001b0000(*(int *)((char *)(temp_v0) + 52), DAT_0055ebd8[0], *(int *)((char *)(temp_v0) + 36), *(int *)((char *)(temp_v0) + 32));
+    FUN_001b0000(*(int *)((char *)(temp_v0) + 52), g_igViewportAttr_metaObject[0], *(int *)((char *)(temp_v0) + 36), *(int *)((char *)(temp_v0) + 32));
 }
 
 void FUN_004601e0(igViewerRenderer *arg0) {
@@ -716,7 +716,7 @@ extern "C" void FUN_00460330(LightOwner *arg0) {
 void FUN_00460790(igViewerRenderer *arg0, igGroup *arg1) {
     int n; int i; int off;
     if (arg1->_flags & 1) {
-        if (igObject_IsKindOf(arg1, DAT_005619f8[0]) != 0) {
+        if (igObject_IsKindOf(arg1, g_igGroup_metaObject[0]) != 0) {
             n = 0;
             if (arg1->_childList != 0) n = ((igNodeList *)arg1->_childList)->_count;
             i = 0;
@@ -728,7 +728,7 @@ void FUN_00460790(igViewerRenderer *arg0, igGroup *arg1) {
                     off += 4;
                 } while (i < n);
             }
-        } else if (igObject_IsKindOf(arg1, DAT_005618e8[0]) != 0) {
+        } else if (igObject_IsKindOf(arg1, g_igLightSet_metaObject[0]) != 0) {
             n = ((igObjectList *)arg1->_childList)->_count;
             i = 0;
             if (0 < n) {
@@ -793,7 +793,7 @@ void FUN_004608a0(igViewerRenderer *arg0) {
                 }
             }
         } else {
-            ((V3 *)arg0->_headlightAttr)->v32(&DAT_004e1170[0]);
+            ((V3 *)arg0->_headlightAttr)->v32(&g_vec4Zero[0]);
         }
     } else {
         ((V3 *)arg0->_headlightStateAttr)->v30(0);
@@ -819,7 +819,7 @@ void FUN_00460ac0(OptionPanelView *arg0) {
 }
 
 int FUN_00460be0(PropertyHolder *arg0, PropertyList *arg1) {
-    int field = castToProperty(igMetaObject_FindFieldByName(DAT_0055f468[0], &DAT_0051fab8[0]));
+    int field = castToProperty(igMetaObject_FindFieldByName(g_igAttr_metaObject[0], &DAT_0051fab8[0]));
     return igProperty_FindByPointer(arg1->f32, field, arg0->vX());
 }
 
@@ -860,7 +860,7 @@ void FUN_00460f20(void *arg0, int arg1, int arg2) {
 }
 
 int Gap__Viewer__igViewerRenderer__vfunc_22(void) {
-    return DAT_0058c940[0];
+    return g_igViewerRenderer_metaObject[0];
 }
 
 void Gap__Viewer__igViewerRenderer__vfunc_24(void) {

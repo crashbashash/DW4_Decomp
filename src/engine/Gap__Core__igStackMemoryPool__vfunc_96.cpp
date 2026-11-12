@@ -16,8 +16,8 @@ int List_InsertWords(...);
 void FUN_0032a260(void);
 extern int g_allocatorFailureStatus[4];
 extern int g_statusSucceeded[4];
-extern int DAT_004fb410[4];
-extern int DAT_004fb418[4];
+extern int g_statusSucceeded[4];
+extern int g_allocatorFailureStatus[4];
 extern int DAT_004ff570[4];
 
 /* Output-first status wrapper. The status word is returned through the hidden output pointer (a0).

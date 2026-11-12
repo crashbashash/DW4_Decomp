@@ -1,12 +1,12 @@
-S_354ea0 *FUN_00354ea0(void) {
-    S_354ea0 *g = DAT_00588d60[0];
+igMetaObject *FUN_00354ea0(void) {
+    igMetaObject *g = g_beModelCtrlAIMAP_metaObject[0];
     if (g != 0) {
-        int b = !!(g->flags & 4);
+        int b = !!(g->_validity & 4);
         if (b) goto done;
     }
     FUN_00354f80();
 done:
-    return DAT_00588d60[0];
+    return g_beModelCtrlAIMAP_metaObject[0];
 }
 
 int beModelCtrlAIMAP_GetVTable(void) {
@@ -22,7 +22,7 @@ int beModelCtrlAIMAP_GetVTable(void) {
     *(int *)ps = 0;
     u.vt = (int)&DAT_00524950[0];
     u.vt = (int)&DAT_00537710[0];
-    temp_s0 = *(int *)&u.b[*(int *)((char *)(DAT_00586dc8[0]) + 916)];
+    temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.vt = (int)&DAT_00524950[0];
     if (ps != 0) {
         temp_v1 = *(int **)ps;

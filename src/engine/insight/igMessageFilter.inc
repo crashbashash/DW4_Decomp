@@ -26,7 +26,7 @@ int igMessageFilter_GetVTable(void) {
     u.w[0] = (int)(&DAT_0052cde0[0]);
     *(int *)q2 = 0;
     *(int *)q3 = 0;
-    temp_s1 = *(int *)&u.b[*(int *)((char *)(DAT_00586dc8[0]) + 916)];
+    temp_s1 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.w[0] = (int)(&DAT_0052cde0[0]);
     if (q3 != 0) {
         q3 = *(S_ref **)q3;
@@ -81,14 +81,14 @@ void igMessageFilter_InitFields(void) {
     void *temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)DAT_0056daf8[0];
+    temp_s0 = (void *)g_igMessageFilter_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_00497ff8[0], 2);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
     ((igObjectRefMetaField *)temp_s1)->_metaObject = FUN_002be610();
     ((igRefMetaField *)temp_s1)->_construct = 1;
     temp_s1_2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
-    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = FUN_00231790();
+    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = (int)FUN_00231790();
     ((igRefMetaField *)temp_s1_2)->_construct = 1;
     igMetaObject_NameFields(temp_s0, &DAT_00498000[0], &DAT_00498008[0], &DAT_00498010[0], temp_s2);
 }

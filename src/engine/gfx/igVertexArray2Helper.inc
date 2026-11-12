@@ -19,7 +19,7 @@ int igVertexArray2Helper_GetVTable(void) {
     obj.m8 = 0;
     obj.vt = &DAT_005262a0[0];
     obj.m12 = 0;
-    r = *(int *)((char *)&obj + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+    r = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
     obj.vt = &DAT_005262a0[0];
     obj.rel12();
     obj.vt = &DAT_00524950[0];
@@ -54,7 +54,7 @@ void thunk_igVertexArray2Helper_GetMetaObject(void) {
 }
 
 int FUN_0014a6e0(void) {
-    return DAT_00585bd8[0];
+    return g_igNamedObject_metaObject[0];
 }
 
 void igVertexArray2Helper_InitFields(void) {
@@ -62,11 +62,11 @@ void igVertexArray2Helper_InitFields(void) {
     void *temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)DAT_0055f9d0[0];
+    temp_s0 = (void *)g_igVertexArray2Helper_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_004884f0[0], 1);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = FUN_0014a7c0();
+    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_0014a7c0();
     igMetaObject_NameFields(temp_s0, &DAT_004884f8[0], &DAT_00488500[0], &DAT_00488508[0], temp_s2);
 }
 

@@ -1,9 +1,9 @@
 void *FUN_00347e20(void) {
-    struct G *g = DAT_00588160[0];
-    if (!g || ((g->f & 4) != 0) == false) {
+    igMetaObject *g = g_beSvPlatDataGC_metaObject[0];
+    if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_00347f50();
     }
-    return DAT_00588160[0];
+    return g_beSvPlatDataGC_metaObject[0];
 }
 
 int beSvPlatDataGC_GetVTable(void) {
@@ -21,7 +21,7 @@ int beSvPlatDataGC_GetVTable(void) {
     u.vt = (int)&DAT_00538b00[0];
     q0 = &u.b[104];
     *(int *)q0 = 0;
-    temp_s0 = *(int *)&u.b[*(int *)((char *)(DAT_00586dc8[0]) + 916)];
+    temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.vt = (int)&DAT_00538b00[0];
     if (q0 != 0) {
         temp_v1 = *(int **)q0;
@@ -84,7 +84,7 @@ void beSvPlatDataGC_InitFields(void) {
     void *temp_s1;
     T_348000 *temp_v0_2;
 
-    temp_s1 = (void *)(((void * *)DAT_00588160)[0]);
+    temp_s1 = (void *)(((void * *)g_beSvPlatDataGC_metaObject)[0]);
     temp_s2 = igMetaObject_GetFieldCount(temp_s1);
     igMetaObject_CreateFields(temp_s1, &DAT_004c3f30[0], 0xD);
     temp_v0 = (void **)(igMetaObject_FindFieldByName(temp_s1, &DAT_00502570[0]));

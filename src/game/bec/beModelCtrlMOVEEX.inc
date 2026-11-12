@@ -1,12 +1,12 @@
 void *FUN_00355640(void) {
     bool ok;
-    if (DAT_00588da0[0] == 0) goto make;
-    ok = !!(DAT_00588da0[0]->f & 4);
+    if (g_beModelCtrlMOVEEX_metaObject[0] == 0) goto make;
+    ok = !!(g_beModelCtrlMOVEEX_metaObject[0]->_validity & 4);
     if (ok != false) goto done;
 make:
     FUN_00355720();
 done:;
-    return DAT_00588da0[0];
+    return g_beModelCtrlMOVEEX_metaObject[0];
 }
 
 int beModelCtrlMOVEEX_GetVTable(void) {
@@ -22,7 +22,7 @@ int beModelCtrlMOVEEX_GetVTable(void) {
     *(int *)ps = 0;
     u.vt = (int)&DAT_00524950[0];
     u.vt = (int)&DAT_00537590[0];
-    temp_s0 = *(int *)&u.b[*(int *)((char *)(DAT_00586dc8[0]) + 916)];
+    temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.vt = (int)&DAT_00524950[0];
     if (ps != 0) {
         temp_v1 = *(int **)ps;
@@ -69,7 +69,7 @@ void beModelCtrlMOVEEX_InitFields(void) {
     int temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)((int *)DAT_00588da0)[0];
+    temp_s0 = (void *)g_beModelCtrlMOVEEX_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_004c57e0[0], 6);
     igMetaObject_NameFields(temp_s0, &DAT_004c5800[0], &DAT_004c5820[0], &DAT_004c5840[0], temp_s1);

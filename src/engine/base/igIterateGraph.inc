@@ -3,11 +3,11 @@ void FUN_00227460(int arg0) {
     igMetaObject_CreateInstance(*(int *)0x56D948, arg0);
 }
 
-int FUN_002274a0(void) {
-    if (DAT_0056d948[0] == 0) {
-        DAT_0056d948[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(DAT_00587040[0]));
+igMetaObject *FUN_002274a0(void) {
+    if (g_igIterateGraph_metaObject[0] == 0) {
+        g_igIterateGraph_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
     }
-    return DAT_0056d948[0];
+    return g_igIterateGraph_metaObject[0];
 }
 
 igMetaObject *igIterateGraph_GetMetaObject(void)
@@ -26,7 +26,7 @@ extern "C" int igIterateGraph_GetVTable(void) {
     obj.vt = &DAT_0052c460[0];
     obj.m12 = 0;
     obj.m16 = 0;
-    r = *(int *)((char *)&obj + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+    r = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
     obj.vt = &DAT_0052c460[0];
     obj.rel16();
     obj.rel12();
@@ -65,7 +65,7 @@ void igIterateGraph_InitFields(void) {
     void *temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)DAT_0056d948[0];
+    temp_s0 = (void *)g_igIterateGraph_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_00497d40[0], 3);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));

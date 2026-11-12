@@ -1,9 +1,9 @@
 void *FUN_00362e50(void) {
-    struct G *g = DAT_00589778[0];
-    if (!g || ((g->f & 4) != 0) == false) {
+    igMetaObject *g = g_beFile_metaObject[0];
+    if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_00362ee0();
     }
-    return DAT_00589778[0];
+    return g_beFile_metaObject[0];
 }
 
 int beFile_GetVTable(void) {
@@ -11,7 +11,7 @@ int beFile_GetVTable(void) {
 
     igObject_InitHeader(&obj);
     obj.vt = &DAT_00535810[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 
 void FUN_00362ee0(void)

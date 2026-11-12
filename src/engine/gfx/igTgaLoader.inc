@@ -21,7 +21,7 @@ int igTgaLoader_GetVTable(void) {
     ps = &o.ref;
     o.vt = &DAT_00525cc0[0];
     *ps = 0;
-    temp_s0 = *(int *)((char *)&o + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+    temp_s0 = *(int *)((char *)&o + *(int *)((char *)(g_objectSystem[0]) + 916));
     o.vt = &DAT_00525cc0[0];
     if (ps != 0) {
         temp_a0 = *ps;
@@ -79,8 +79,8 @@ void thunk_igTgaLoader_GetMetaObject(void) {
     igTgaLoader_GetMetaObject();
 }
 
-int FUN_001502a0(void) {
-    return DAT_0055fd58[0];
+igMetaObject *FUN_001502a0(void) {
+    return g_igImageLoader_metaObject[0];
 }
 
 void igTgaLoader_InitFields(void) {
@@ -91,7 +91,7 @@ void igTgaLoader_InitFields(void) {
     void *temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)DAT_0055ff10[0];
+    temp_s0 = (void *)g_igTgaLoader_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_00489150[0], 0xA);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));

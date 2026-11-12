@@ -1,8 +1,8 @@
-int FUN_0014d7f0(void) {
-    if (DAT_0055fd28[0] == 0) {
-        DAT_0055fd28[0] = (int)igMetaObject_Create(Memory_GetAllocatorBySelector(DAT_00587040[0]));
+igMetaObject *FUN_0014d7f0(void) {
+    if (g_igIndexArray_metaObject[0] == 0) {
+        g_igIndexArray_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
     }
-    return DAT_0055fd28[0];
+    return g_igIndexArray_metaObject[0];
 }
 
 igMetaObject *igIndexArray_GetMetaObject(void)
@@ -46,7 +46,7 @@ void igIndexArray_InitFields(void) {
     void *temp_v0;
     void *temp_s0;
 
-    temp_s0 = (void *)(DAT_0055fd28[0]);
+    temp_s0 = (void *)(g_igIndexArray_metaObject[0]);
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_00488d40[0], 5);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
@@ -64,6 +64,6 @@ void igIndexArray_InitFields(void) {
     ((igMetaField *)temp_s1_2)->_deepCopyMethod = 1;
     ((igMetaField *)temp_s1_2)->_shallowCopyMethod = 1;
     igMetaObject_NameFields(temp_s0, &DAT_00488d60[0], &DAT_00488d80[0], &DAT_00488da0[0], temp_s2);
-    ((igMetaObject *)DAT_0055fd28[0])->_abstractProxy = (int)(&thunk_igPsx2IndexArray_GetMetaObject);
+    ((igMetaObject *)g_igIndexArray_metaObject[0])->_abstractProxy = (int)(&thunk_igPsx2IndexArray_GetMetaObject);
 }
 

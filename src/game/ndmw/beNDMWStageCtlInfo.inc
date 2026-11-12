@@ -1,10 +1,10 @@
 igMetaObject *FUN_003bbbd0(void)
 {
-    igMetaObject *g = DAT_0058b050[0];
+    igMetaObject *g = g_beNDMWStageCtlInfo_metaObject[0];
     bool t;
     if (!g || (t = g->_validity & 4) == 0)
         FUN_003bbc90();
-    return DAT_0058b050[0];
+    return g_beNDMWStageCtlInfo_metaObject[0];
 }
 
 int beNDMWStageCtlInfo_GetVTable(void) {
@@ -16,7 +16,7 @@ int beNDMWStageCtlInfo_GetVTable(void) {
     *(int *)&u.b[20] = 0;
     *(int *)&u.b[24] = 0;
     u.vt = (int)&DAT_0053d9d0[0];
-    temp_s0 = *(int *)&u.b[*(int *)((char *)(DAT_00586dc8[0]) + 916)];
+    temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.vt = (int)&DAT_0053d9d0[0];
     FUN_0033ec80(u.b, 0);
     return temp_s0;
@@ -51,7 +51,7 @@ void beNDMWStageCtlInfo_GetMetaObject(void)
 
 int FUN_003bbd40(void) {
     if (DAT_0058b058[0] == 0) {
-        DAT_0058b058[0] = igMetaEnum_Create(&DAT_00510d58[0], &DAT_004ca118[0], &DAT_004ca128[0], 3);
+        DAT_0058b058[0] = igMetaEnum_Create(Message, &DAT_004ca118[0], &DAT_004ca128[0], 3);
     }
     return DAT_0058b058[0];
 }

@@ -47,7 +47,7 @@ extern "C" int Gap__Bec__beModelCtrlSCEffect__vfunc_20(void);
 extern "C" int Gap__Bec__beModelCtrlSCHitBox__vfunc_20(void);
 extern "C" int FUN_00398e50(igCommonTraversal *traversal, beModelCtrlNode2 *node);
 extern "C" long long FUN_00398e80(beModelCtrlNode2 *arg0, long long arg1);
-extern "C" igMetaObject *DAT_0055efe8[4];
+extern "C" igMetaObject *g_igModelViewMatrixAttr_metaObject[4];
 class Ctl;
 template <class T> struct AttrSlots : igTDataList<T> {
 };
@@ -74,15 +74,15 @@ extern "C" igObject *beBaseInfoDataList_Create(int);
 extern "C" BoxF *FUN_0018a660(int);
 struct PropertyRecord { char p[16]; int f16; beModelCtrlInfoWork *q; };
 extern "C" PropertyRecord * igProperty_FindByName(...);
-extern "C" int DAT_004e0858[4];
+extern "C" int emptyString[4];
 extern "C" int DAT_0050f410[4];
 extern "C" int DAT_0050f420[4];
 extern "C" int DAT_0050f430[4];
 extern "C" int DAT_0050f440[4];
 extern "C" int DAT_0050f450[4];
 extern "C" int DAT_0050f460[4];
-extern "C" int DAT_00585be0[4];
-extern "C" int DAT_00587110[4];
+extern "C" int g_propertyNameField[4];
+extern "C" int g_defaultAllocatorSelector[4];
 extern "C" float DAT_0058a540[4];
 extern "C" unsigned char GPR_00554c14;
 extern "C" char GPR_00554e54;
@@ -152,7 +152,7 @@ class V96;
 class V96 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual unsigned char vX(void *, int); };
 extern "C" unsigned char FUN_00399d90(beModelCtrlSubComBase *arg0, beBaseInfoRam *arg1);
 extern "C" void FUN_00399e20(beModelCtrlSubCom *arg0, int arg1);
-extern "C" int DAT_00588800[4];
+extern "C" int g_beModelCtrlSCEffect_metaObject[4];
 class DW4VC_88 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual int vX(); };
 class DW4VC_100 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual int vX(int); };
 struct E { char pad[56]; unsigned char f56; };
@@ -167,7 +167,7 @@ extern "C" void FUN_0039a130(beModelCtrlSubCom *arg0, int arg1, int arg2);
 
 struct V { float x, y, z; };
 extern "C" beModelCtrlSCEffect *FUN_0034f8e0(int);
-extern "C" int DAT_00586f20[4];
+extern "C" int g_stringPool[4];
 extern "C" void FUN_0039a250(beModelCtrlSubCom *self, int str1, int str2, struct V *va, struct V *vb, char c1, char c2, float f);
 /* Build one timed record from the request `arg1` (start time, optional duration, two vectors and a
  * kind code classified by its ten-thousands digit) and append it, retained, to the list at
@@ -228,7 +228,7 @@ int FUN_00398ef0(beModelCtrlNode2 *self, Ctl *ctl) {
     char tmp[64];
 
     mgr = ctl->mgr;
-    idx = DAT_0055efe8[0]->_id;
+    idx = g_igModelViewMatrixAttr_metaObject[0]->_id;
     top = (Q *)mgr->tb->data[mgr->base[idx]];
     t = FUN_00398e80(self, ctl->v24());
     self->_time = t;
@@ -334,11 +334,11 @@ int Gap__Bec__beModelCtrlSCHitBox__vfunc_21(beModelCtrlSCHitBox *arg0, beBaseInf
         if (GPR_00554c14 != 0) {
             a = alloc;
         } else {
-            a = Memory_GetAllocatorBySelector(DAT_00587110[0]);
+            a = Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
         }
         DataListInit::make(arg1, a);
     }
-    s2 = igProperty_FindByName(arg1->_dataList, DAT_00585be0[0], DAT_0050f410);
+    s2 = igProperty_FindByName(arg1->_dataList, g_propertyNameField[0], DAT_0050f410);
     s1 = s2->q;
     m = (beModelCtrl *)arg1->_parentManager;
     int alloc = igObject_GetAllocator(arg0);
@@ -346,7 +346,7 @@ int Gap__Bec__beModelCtrlSCHitBox__vfunc_21(beModelCtrlSCHitBox *arg0, beBaseInf
     if (GPR_00554c14 != 0) {
         a = alloc;
     } else {
-        a = Memory_GetAllocatorBySelector(DAT_00587110[0]);
+        a = Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
     }
     Ref spAC(FUN_0018a660(a));
     goto L2;
@@ -400,7 +400,7 @@ L1b:
     {
         int a1 = s1->_hitParentName;
         if (a1 == 0) {
-            int n = info->_name != 0 ? info->_name : (int)DAT_004e0858;
+            int n = info->_name != 0 ? info->_name : (int)emptyString;
             beMessenger_AppendString(m->_messenger, n);
             beMessenger_AppendInt(m->_messenger, arg1->_ramNo);
         } else {
@@ -413,7 +413,7 @@ L1b:
     if (beMessenger_GetBoolCount(m->_messenger) != 0) {
         int a2 = s2->q->_luaBHit;
         if (a2 != 0) {
-            int n = info->_name != 0 ? info->_name : (int)DAT_004e0858;
+            int n = info->_name != 0 ? info->_name : (int)emptyString;
             FUN_00394400(m, arg1, a2, DAT_0050f460, n, 0, 0, 0, 0, 0);
         }
     }
@@ -461,12 +461,12 @@ int Gap__Bec__beModelCtrlSCEffect__vfunc_21(beModelCtrlSCEffect *arg0, beBaseInf
     beMessenger_SelectReceivers(s1->_messenger, &DAT_0050f468[0], arg0->_modelName, arg0->_geneRamNo);
     beMessenger_AppendInt(s1->_messenger, arg1->_ramNo);
     v = (int *)s2->_name;
-    if (v != 0) str = v; else str = &DAT_004e0858[0];
+    if (v != 0) str = v; else str = &emptyString[0];
     beMessenger_AppendString(s1->_messenger, str);
     beMessenger_AppendString(s1->_messenger, arg0->_seqName);
     if (arg1->_dataList == 0) {
         int a = igObject_GetAllocator(arg1);
-        igSmartPointer<igObject> created(beBaseInfoDataList_Create(GPR_00554c14 != 0 ? a : Memory_GetAllocatorBySelector(DAT_00587110[0])));
+        igSmartPointer<igObject> created(beBaseInfoDataList_Create(GPR_00554c14 != 0 ? a : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0])));
         igObject *t = created.p;
         if (t != 0) t->_refCount = t->_refCount + 1;
         igObject *old = (igObject *)arg1->_dataList;
@@ -476,10 +476,10 @@ int Gap__Bec__beModelCtrlSCEffect__vfunc_21(beModelCtrlSCEffect *arg0, beBaseInf
         }
         arg1->_dataList = (int)t;
     }
-    s0 = ((PropertyEntry *)igProperty_FindByName(arg1->_dataList, DAT_00585be0[0], &DAT_0050f410[0]))->f20;
+    s0 = ((PropertyEntry *)igProperty_FindByName(arg1->_dataList, g_propertyNameField[0], &DAT_0050f410[0]))->f20;
     if (s0->f220 == 0) {
         v = (int *)s2->_name;
-        if (v != 0) str = v; else str = &DAT_004e0858[0];
+        if (v != 0) str = v; else str = &emptyString[0];
         beMessenger_AppendString(s1->_messenger, str);
         beMessenger_AppendInt(s1->_messenger, arg1->_ramNo);
     } else {
@@ -606,7 +606,7 @@ void FUN_00399f20(beModelCtrlSubCom *arg0, int arg1) {
     i = 0;
     if (0 < n) {
         do {
-            s1 = DAT_00588800[0];
+            s1 = g_beModelCtrlSCEffect_metaObject[0];
             o = ((DW4VC_88 **)((igObjectList *)arg0->_comList)->_data)[i];
             if (s1 != o->vX() || ((E *)o)->f56 != 0) {
                 ((DW4VC_100 *)o)->vX(arg1);
@@ -675,16 +675,16 @@ void FUN_0039a250(beModelCtrlSubCom *self, int str1, int str2, struct V *va, str
     int r;
     beModelCtrlSCEffect *e;
     a = igObject_GetAllocator();
-    igSmartPointer<beModelCtrlSCEffect> effect(FUN_0034f8e0(GPR_00554c14 != 0 ? a : Memory_GetAllocatorBySelector(DAT_00587110[0])));
+    igSmartPointer<beModelCtrlSCEffect> effect(FUN_0034f8e0(GPR_00554c14 != 0 ? a : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0])));
     e = effect.p;
-    if (DAT_00586f20[0] == 0) {
+    if (g_stringPool[0] == 0) {
         v = FUN_002eb010(0x10);
         if (v != 0) {
             v = StringPool_Construct(v);
         }
-        DAT_00586f20[0] = v;
+        g_stringPool[0] = v;
     }
-    s = (int *)StringPool_Intern(DAT_00586f20[0], str1);
+    s = (int *)StringPool_Intern(g_stringPool[0], str1);
     old = (int *)e->_modelName;
     if (old != 0) {
         hd = old - 2;
@@ -697,14 +697,14 @@ void FUN_0039a250(beModelCtrlSubCom *self, int str1, int str2, struct V *va, str
     e->_modelName = (int)s;
     effect.p->_geneRamNo = -1;
     e = effect.p;
-    if (DAT_00586f20[0] == 0) {
+    if (g_stringPool[0] == 0) {
         v = FUN_002eb010(0x10);
         if (v != 0) {
             v = StringPool_Construct(v);
         }
-        DAT_00586f20[0] = v;
+        g_stringPool[0] = v;
     }
-    s = (int *)StringPool_Intern(DAT_00586f20[0], str2);
+    s = (int *)StringPool_Intern(g_stringPool[0], str2);
     old = (int *)e->_seqName;
     if (old != 0) {
         hd = old - 2;
@@ -740,7 +740,7 @@ void FUN_0039a500(A *arg0, S *arg1) {
     int k;
 
     v = igObject_GetAllocator(arg0);
-    v = (GPR_00554c14 != 0) ? v : Memory_GetAllocatorBySelector(DAT_00587110[0]);
+    v = (GPR_00554c14 != 0) ? v : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
     igSmartPointer<R> rec((R *)FUN_0034f6f0(v));
     rec.p->f16 = arg1->f16;
     e = arg1->f20;
@@ -806,18 +806,18 @@ void FUN_0039a750(beModelCtrlSubCom *arg0, int arg1, float fparg0) {
     if (GPR_00554c14 != 0) {
         var_v0 = (int)var_v0;
     } else {
-        var_v0 = Memory_GetAllocatorBySelector(DAT_00587110[0]);
+        var_v0 = Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
     }
     igSmartPointer<beModelCtrlSCSound> cmd(FUN_0034f4a0(var_v0));
     s1 = cmd.p;
-    if (DAT_00586f20[0] == 0) {
+    if (g_stringPool[0] == 0) {
         var_v0_2 = FUN_002eb010(0x10);
         if (var_v0_2 != 0) {
             var_v0_2 = StringPool_Construct(var_v0_2);
         }
-        DAT_00586f20[0] = var_v0_2;
+        g_stringPool[0] = var_v0_2;
     }
-    key = (int)StringPool_Intern(DAT_00586f20[0], key);
+    key = (int)StringPool_Intern(g_stringPool[0], key);
     temp_v1 = (int *)s1->_sndName;
     if (temp_v1 != 0) {
         temp_a1 = temp_v1 - 2;

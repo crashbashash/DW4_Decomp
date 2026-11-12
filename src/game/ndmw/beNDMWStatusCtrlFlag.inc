@@ -3,12 +3,12 @@ void FUN_003b9db0(int arg0) {
     igMetaObject_CreateInstance(*(int *)0x58AEF8, arg0);
 }
 
-G_3b9df0 *FUN_003b9df0(void) {
-    G_3b9df0 *g = DAT_0058aef8[0];
+igMetaObject *FUN_003b9df0(void) {
+    igMetaObject *g = g_beNDMWStatusCtrlFlag_metaObject[0];
     int t;
-    if (!g || !(t = (g->f & 4) != 0))
+    if (!g || !(t = (g->_validity & 4) != 0))
         FUN_003b9ed0();
-    return DAT_0058aef8[0];
+    return g_beNDMWStatusCtrlFlag_metaObject[0];
 }
 
 int beNDMWStatusCtrlFlag_GetVTable(void) {
@@ -27,7 +27,7 @@ int beNDMWStatusCtrlFlag_GetVTable(void) {
     u.vt = (int)&DAT_0053ee10[0];
     ps = &u.b[84];
     *(int *)ps = 0;
-    temp_s0 = *(int *)&u.b[*(int *)((char *)(DAT_00586dc8[0]) + 916)];
+    temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.vt = (int)&DAT_0053ee10[0];
     ObjectRef_Destruct_00150eb0(ps, -1);
     beNDMWWindowCtrl_Destroy((beNDMWWindowCtrl *)u.b, (long long)0);
@@ -66,7 +66,7 @@ void beNDMWStatusCtrlFlag_InitFields(void) {
     void *temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)((int *)DAT_0058aef8)[0];
+    temp_s0 = (void *)g_beNDMWStatusCtrlFlag_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_004c9e50[0], 1);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));

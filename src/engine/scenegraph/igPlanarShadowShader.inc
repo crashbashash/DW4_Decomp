@@ -25,7 +25,7 @@ int igPlanarShadowShader_GetVTable(void) {
     FUN_0019c330((int *)&u.b[96]);
     FUN_0019ac10((int *)&u.b[100]);
     FUN_0019c320((int *)&u.b[104]);
-    temp_s5 = *(int *)&u.b[*(int *)((char *)(DAT_00586dc8[0]) + 916)];
+    temp_s5 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.vt = (int)&D_005289f0[0];
     FUN_0019c2a0((ObjectRefWord *)&u.b[104], -1);
     FUN_0019ab10((O *)&u.b[100], -1);
@@ -188,8 +188,8 @@ void thunk_igPlanarShadowShader_GetMetaObject(void) {
     igPlanarShadowShader_GetMetaObject();
 }
 
-int FUN_0019c490(void) {
-    return DAT_00562078[0];
+igMetaObject *FUN_0019c490(void) {
+    return g_igAttrSet_metaObject[0];
 }
 
 void igPlanarShadowShader_InitFields(void) {
@@ -209,7 +209,7 @@ void igPlanarShadowShader_InitFields(void) {
     V4 spA;
     V4 spB;
 
-    temp_s0 = (void *)DAT_005617a8[0];
+    temp_s0 = (void *)g_igPlanarShadowShader_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_0048bb70[0], 0xD);
     temp_s2 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s1)));
@@ -229,7 +229,7 @@ void igPlanarShadowShader_InitFields(void) {
     ((igRefMetaField *)temp_s2_3)->_construct = 1;
     ((igMetaField *)temp_s2_3)->_persistent = 0;
     temp_s2_4 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 7)));
-    ((igObjectRefMetaField *)temp_s2_4)->_metaObject = FUN_0019f930();
+    ((igObjectRefMetaField *)temp_s2_4)->_metaObject = (int)FUN_0019f930();
     ((igRefMetaField *)temp_s2_4)->_construct = 1;
     ((igMetaField *)temp_s2_4)->_persistent = 0;
     temp_s2_5 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 8)));

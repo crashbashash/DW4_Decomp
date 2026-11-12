@@ -4,11 +4,11 @@ void FUN_00362f90(int arg0) {
 }
 
 void *FUN_00362fd0(void) {
-    struct G *g = DAT_00589780[0];
-    if (!g || ((g->f & 4) != 0) == false) {
+    igMetaObject *g = g_beFileChkObj_metaObject[0];
+    if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_003630b0();
     }
-    return DAT_00589780[0];
+    return g_beFileChkObj_metaObject[0];
 }
 
 int beFileChkObj_GetVTable(void) {
@@ -21,7 +21,7 @@ int beFileChkObj_GetVTable(void) {
     f.vt = &DAT_005357b0[0];
     pr = &f.ref;
     *pr = 0;
-    temp_s0 = *(int *)((char *)&f + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+    temp_s0 = *(int *)((char *)&f + *(int *)((char *)(g_objectSystem[0]) + 916));
     f.vt = &DAT_005357b0[0];
     if (pr != 0) {
         if (*pr != 0) {
@@ -67,7 +67,7 @@ void beFileChkObj_InitFields(void) {
     void *temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)((int *)DAT_00589780)[0];
+    temp_s0 = (void *)g_beFileChkObj_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_004c6f80[0], 1);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));

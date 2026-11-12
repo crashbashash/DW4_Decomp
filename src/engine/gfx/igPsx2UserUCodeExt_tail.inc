@@ -15,7 +15,7 @@ int igPsx2UserUCodeExt_GetVTable(void) {
     obj.vt = &DAT_005252a0[0];
     obj.w6 = 0;
     obj.w7 = 0;
-    t = *(int *)((char *)&obj + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+    t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
     obj.vt = &DAT_005252a0[0];
     FUN_00152c90((void **)&obj.w7, -1);
     FUN_00152c10((ObjectRefWord *)&obj.w6, -1);
@@ -114,8 +114,8 @@ void igPsx2UserUCodeExt_Register(void) {
     );
 }
 
-int FUN_00152da0(void) {
-    return DAT_0055faf0[0];
+igMetaObject *FUN_00152da0(void) {
+    return g_igUserUCodeExt_metaObject[0];
 }
 
 void igPsx2UserUCodeExt_InitFields(void) {
@@ -125,7 +125,7 @@ void igPsx2UserUCodeExt_InitFields(void) {
     void *temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)DAT_005604d0[0];
+    temp_s0 = (void *)g_igPsx2UserUCodeExt_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_00489dc0[0], 4);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));

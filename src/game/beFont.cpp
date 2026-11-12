@@ -5,7 +5,7 @@
 #define RELH(h) { N *r_ = (h).p; REL(r_) }
 #define FAIL(m) { (m)->f24 = 10000; (m)->f36 = 0; (m)->f32 = 0; (m)->f28 = 0; { ret = 1; goto end; } }
 #define CNT(l) H::cnt(l)
-#define SETSTR(o, fld, srcnm) { const char *nm_ = (srcnm) ? (const char *)(srcnm) : (const char *)DAT_004e0858; int nw_; mem = (o); int old_; int *hd_; int rf_; if (DAT_00586f20[0] == 0) { int pl_ = FUN_002eb010(16); if (pl_) pl_ = StringPool_Construct(pl_); DAT_00586f20[0] = pl_; } nw_ = StringPool_Intern(DAT_00586f20[0], nm_); old_ = mem->fld; if (old_) { hd_ = (int *)(old_ - 8); rf_ = *(int *)(old_ - 4) - 1; *(int *)(old_ - 4) = rf_; if (rf_ == 0) StringChunk_ReleaseHeader(*hd_, hd_); } mem->fld = nw_; }
+#define SETSTR(o, fld, srcnm) { const char *nm_ = (srcnm) ? (const char *)(srcnm) : (const char *)emptyString; int nw_; mem = (o); int old_; int *hd_; int rf_; if (g_stringPool[0] == 0) { int pl_ = FUN_002eb010(16); if (pl_) pl_ = StringPool_Construct(pl_); g_stringPool[0] = pl_; } nw_ = StringPool_Intern(g_stringPool[0], nm_); old_ = mem->fld; if (old_) { hd_ = (int *)(old_ - 8); rf_ = *(int *)(old_ - 4) - 1; *(int *)(old_ - 4) = rf_; if (rf_ == 0) StringChunk_ReleaseHeader(*hd_, hd_); } mem->fld = nw_; }
 #include "dw4/igSmartPointer.h"
 
 extern "C" void Gap__Core__igObject__vfunc_23(void);
@@ -70,17 +70,17 @@ extern "C" void Gap__Bec__beFont__vfunc_32(beFont *arg0);
 extern "C" int g_beFontInfo_metaObject[4];
 extern "C" int g_beFont_metaObject[4];
 class VObj;
-extern "C" int DAT_004e0858[4];
+extern "C" int emptyString[4];
 extern "C" int DAT_0050e730[4];
 extern "C" int DAT_0050e740[4];
 extern "C" int DAT_0050e748[4];
 extern "C" int DAT_0050e758[4];
-extern "C" int DAT_0055f2e0[4];
-extern "C" int DAT_005619f8[4];
-extern "C" int DAT_00562078[4];
-extern "C" int DAT_00586f20[4];
-extern "C" int DAT_00587110[4];
-extern "C" int DAT_00589640[4];
+extern "C" int g_igColorAttr_metaObject[4];
+extern "C" int g_igGroup_metaObject[4];
+extern "C" int g_igAttrSet_metaObject[4];
+extern "C" int g_stringPool[4];
+extern "C" int g_defaultAllocatorSelector[4];
+extern "C" int g_beUnicodeObj_metaObject[4];
 extern "C" unsigned char GPR_00554c14;
 class N;
 /* element array of an igObjectList (_data is a 4-byte arena handle) */
@@ -115,7 +115,7 @@ template <int kind> struct RP {
     ~RP() { N *o = p; if (o != 0) { o->ref = o->ref - 1; if ((o->ref & 0x7FFFFF) == 0) igObject_Destroy(o); } }
 };
 struct H { static int cnt(igObjectList *l) { if (l != 0) return l->_count; return 0; }
-  static N *castit(N *s) { if (s != 0 && igObject_IsKindOf(s, DAT_00562078[0]) != 0) return s; else return 0; } };
+  static N *castit(N *s) { if (s != 0 && igObject_IsKindOf(s, g_igAttrSet_metaObject[0]) != 0) return s; else return 0; } };
 extern "C" int Gap__Bec__beFont__vfunc_34(beFont *arg0, N *arg1, N *arg2);
 struct KindMatchObject {
     virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3(); virtual void v4();
@@ -127,7 +127,7 @@ struct KindMatchObject {
 struct KindMatchList { char p[8]; int n; char q[4]; KindMatchObject **arr; };
 struct KindMatchSource { char p[20]; KindMatchList * list; KindMatchList *getList() const { return list; } };
 struct KindMatchTarget { char p[36]; int f36; };
-extern "C" int DAT_00589658[4];
+extern "C" int g_beFontImage_metaObject[4];
 extern "C" void FUN_00382df0(KindMatchTarget *arg0, KindMatchSource *arg1);
 struct Pair { unsigned short out; unsigned short key; };
 struct Table { Pair e[425]; };
@@ -300,13 +300,13 @@ int Gap__Bec__beFont__vfunc_34(beFont *arg0, N *arg1, N *arg2) {
         beMessenger_DispatchSelected(arg0->_messenger, DAT_0050e748);
         if (beMessenger_GetBoolCount(arg0->_messenger) <= 0) FAIL(arg1)
         o = (N *)beMessenger_GetObject(arg0->_messenger, 0);
-        if (DAT_005619f8[0] != o->Meta()) FAIL(arg1)
+        if (g_igGroup_metaObject[0] != o->Meta()) FAIL(arg1)
         lst = o->f28;
         cc = 0;
         if (lst != 0) cc = lst->_count;
         if (cc <= 0) FAIL(arg1)
         mem = LD(lst)[0];
-        if (DAT_00562078[0] != mem->Meta()) FAIL(arg1)
+        if (g_igAttrSet_metaObject[0] != mem->Meta()) FAIL(arg1)
         RETAIN(mem)
         {
             N *old = (N *)arg0->_root;
@@ -319,19 +319,19 @@ int Gap__Bec__beFont__vfunc_34(beFont *arg0, N *arg1, N *arg2) {
         do {
             e1 = LD((igObjectList *)li)[i];
             e2 = LD(e1->f28)[0];
-            ObjectList_AppendRetainedList(e1->f32, (void *)((beFontImage *)((int *)((beFontImageList *)arg0->_fonts)->_data)[FUN_00383350((beFont *)arg0, (int)(e2->f8 ? (const char *)e2->f8 : (const char *)DAT_004e0858))])->_attrList);
+            ObjectList_AppendRetainedList(e1->f32, (void *)((beFontImage *)((int *)((beFontImageList *)arg0->_fonts)->_data)[FUN_00383350((beFont *)arg0, (int)(e2->f8 ? (const char *)e2->f8 : (const char *)emptyString))])->_attrList);
             j = 0;
             while (j < CNT(e2->f28)) {
                 e3 = H::castit(LD(e2->f28)[j]);
                 {
                     void *ga = igObject_GetAllocator(arg0);
                     void *al;
-                    if (GPR_00554c14 != 0) al = ga; else al = Memory_GetAllocatorBySelector(DAT_00587110[0]);
+                    if (GPR_00554c14 != 0) al = ga; else al = Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
                     RP<0> po((N *)FUN_003624f0(al));
                     SETSTR(po.p, f8, e1->f8)
                     SETSTR(po.p, f12, e3->f8)
                     ga = igObject_GetAllocator(arg0);
-                    if (GPR_00554c14 != 0) al = ga; else al = Memory_GetAllocatorBySelector(DAT_00587110[0]);
+                    if (GPR_00554c14 != 0) al = ga; else al = Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
                     RP<1> pq((N *)FUN_00137810(al));
                     ObjectList_AppendRetained(po.p->f16, pq.p);
                     ObjectList_AppendRetained((void *)arg0->_gaPairList, po.p);
@@ -384,7 +384,7 @@ int Gap__Bec__beFont__vfunc_34(beFont *arg0, N *arg1, N *arg2) {
             } else if (beMessenger_GetObjectCount(arg0->_messenger) > 0) {
                 N *x = (N *)beMessenger_GetObject(arg0->_messenger, 0);
                 x->Meta();
-                if (DAT_00589640[0] == x->Meta()) {
+                if (g_beUnicodeObj_metaObject[0] == x->Meta()) {
                     RETAIN(x)
                     RELH(ra)
                     ra.p = x;
@@ -528,7 +528,7 @@ int Gap__Bec__beFont__vfunc_34(beFont *arg0, N *arg1, N *arg2) {
                     if (0 < ll->_count) {
                         do {
                         w = LD(ll)[q];
-                        if (DAT_0055f2e0[0] == w->Meta()) {
+                        if (g_igColorAttr_metaObject[0] == w->Meta()) {
                             Vec cc;
                             FUN_00193540(&cc, 1, (int)w->f28);
                             cc.x = f22;
@@ -581,7 +581,7 @@ void FUN_00382df0(KindMatchTarget *arg0, KindMatchSource *arg1) {
     int i;
     for (i = 0; i < count_382df0(arg1->getList()); i++) {
         KindMatchObject *o = at(arg1->list, i);
-        int g = DAT_00589658[0];
+        int g = g_beFontImage_metaObject[0];
         if (g == o->v20()) {
             FUN_00301e30(arg0->f36, o);
         }
@@ -638,7 +638,7 @@ igSmartPointer<beUnicodeObj> FUN_00382eb0(beFont *self, const char *str) {
         }
     }
     a = ((int)igObject_GetAllocator(self));
-    a = GPR_00554c14 ? a : ((int)Memory_GetAllocatorBySelector(DAT_00587110[0]));
+    a = GPR_00554c14 ? a : ((int)Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]));
     igSmartPointer<beUnicodeObj> r(FUN_003614f0(a));
     beUnicodeObj_AllocateBuffer(r.p, n);
     unsigned short *buf = (unsigned short *)r.p->_buffer;
@@ -692,7 +692,7 @@ int FUN_00383350(beFont *arg0, int arg1) {
     if (0 < ((beFontImageList *)arg0->_fonts)->_count) {
         do {
             a1 = (int *)(((beFontImage **)((beFontImageList *)arg0->_fonts)->_data)[s1])->_name;
-            a1 = a1 ? a1 : &DAT_004e0858[0];
+            a1 = a1 ? a1 : &emptyString[0];
             if (strcmp(arg1, a1) == 0) {
                 return s1;
             }
@@ -758,11 +758,11 @@ void FUN_00383420(beFont *self, FontLayout *layout, N *src, int idx) {
                 e = (beFontGeomAttrPair *)((int *)((char *)l->_data + off))[0];
                 const int *a = ent->name1;
                 const int *a2;
-                if (a != 0) a2 = a; else a2 = DAT_004e0858;
+                if (a != 0) a2 = a; else a2 = emptyString;
                 if ((int)a2 == e->_category) {
                     const int *b = (const int *)((igAttrSet *)ent->names)->_name;
                     const int *b2;
-                    if (b != 0) b2 = b; else b2 = DAT_004e0858;
+                    if (b != 0) b2 = b; else b2 = emptyString;
                     if ((int)b2 == e->_panel) { g = e; break; }
                 }
                 l = gl;
@@ -814,7 +814,7 @@ void FUN_00383910(beFont *arg0, igGeometryAttr *arg1, int arg2, int arg3) {
         t->_refCount = t->_refCount + 1;
     }
     al = igObject_GetAllocator(arg0);
-    al = (GPR_00554c14 != 0) ? al : Memory_GetAllocatorBySelector(DAT_00587110[0]);
+    al = (GPR_00554c14 != 0) ? al : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
     t = va.p;
     if (t != 0) {
         t->_refCount = t->_refCount - 1;
@@ -985,14 +985,14 @@ int FUN_003840a0(beFont *p0, int p1, int p2, int p3) {
     int temp_v1;
     int temp_v1_2;
 
-    if (DAT_00586f20[0] == 0) {
+    if (g_stringPool[0] == 0) {
         var_v0 = FUN_002eb010(0x10);
         if (var_v0 != 0) {
             var_v0 = StringPool_Construct(var_v0);
         }
-        DAT_00586f20[0] = var_v0;
+        g_stringPool[0] = var_v0;
     }
-    arg2 = StringPool_Intern(DAT_00586f20[0], arg2);
+    arg2 = StringPool_Intern(g_stringPool[0], arg2);
     temp_v1 = arg0->_condition00;
     if (temp_v1 != 0) {
         temp_a1 = (int *)(temp_v1 - 8);
@@ -1003,14 +1003,14 @@ int FUN_003840a0(beFont *p0, int p1, int p2, int p3) {
         }
     }
     arg0->_condition00 = arg2;
-    if (DAT_00586f20[0] == 0) {
+    if (g_stringPool[0] == 0) {
         var_v0_2 = FUN_002eb010(0x10);
         if (var_v0_2 != 0) {
             var_v0_2 = StringPool_Construct(var_v0_2);
         }
-        DAT_00586f20[0] = var_v0_2;
+        g_stringPool[0] = var_v0_2;
     }
-    arg3 = StringPool_Intern(DAT_00586f20[0], arg3);
+    arg3 = StringPool_Intern(g_stringPool[0], arg3);
     temp_v1_2 = arg0->_condition01;
     if (temp_v1_2 != 0) {
         temp_a1_2 = (int *)(temp_v1_2 - 8);
@@ -1046,7 +1046,7 @@ int FUN_003841d0(beFont *arg0, struct P *arg1) {
             do {
                 q = (const char *)arg0->_condition01;
                 p = (const char *)((igAttrSet *)((beFontInfoData *)*(int *)(l->_data + off))->_attrSet)->_name;
-                if (strcmp(p != 0 ? p : ((char *)DAT_004e0858), q) == 0) {
+                if (strcmp(p != 0 ? p : ((char *)emptyString), q) == 0) {
                     res = i;
                     break;
                 }
@@ -1063,10 +1063,10 @@ int FUN_003841d0(beFont *arg0, struct P *arg1) {
                 p = (const char *)it->_name;
                 y = (igAttrSet *)it->_attrSet;
                 q = (const char *)arg0->_condition00;
-                if (strcmp(p != 0 ? p : ((char *)DAT_004e0858), q) == 0) {
+                if (strcmp(p != 0 ? p : ((char *)emptyString), q) == 0) {
                     p = (const char *)y->_name;
                     q = (const char *)arg0->_condition01;
-                    if (strcmp(p != 0 ? p : ((char *)DAT_004e0858), q) == 0) {
+                    if (strcmp(p != 0 ? p : ((char *)emptyString), q) == 0) {
                         res = j;
                         break;
                     }

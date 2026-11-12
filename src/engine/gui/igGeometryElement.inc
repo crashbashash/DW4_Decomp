@@ -1,8 +1,8 @@
-int FUN_004505b0(void) {
-    if (DAT_0058c4e8[0] == 0) {
-        DAT_0058c4e8[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(DAT_00587040[0]));
+igMetaObject *FUN_004505b0(void) {
+    if (g_igGeometryElement_metaObject[0] == 0) {
+        g_igGeometryElement_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
     }
-    return DAT_0058c4e8[0];
+    return g_igGeometryElement_metaObject[0];
 }
 
 igMetaObject *igGeometryElement_GetMetaObject(void)
@@ -50,7 +50,7 @@ void igGeometryElement_InitFields(void) {
     float v4[4];
     float v3[3];
 
-    temp_s0 = (void *)DAT_0058c4e8[0];
+    temp_s0 = (void *)g_igGeometryElement_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_004d0630[0], 4);
     temp_s1 = (struct GeometryMetaFieldView *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));

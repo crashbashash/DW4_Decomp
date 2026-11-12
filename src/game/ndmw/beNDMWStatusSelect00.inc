@@ -3,15 +3,15 @@ void FUN_003b56f0(int arg0) {
     igMetaObject_CreateInstance(*(int *)0x58ABF0, arg0);
 }
 
-S *FUN_003b5730(void) {
-    S *g = DAT_0058abf0[0];
+igMetaObject *FUN_003b5730(void) {
+    igMetaObject *g = g_beNDMWStatusSelect00_metaObject[0];
     if (g != 0) {
-        int b = !!(g->flags & 4);
+        int b = !!(g->_validity & 4);
         if (b) goto done;
     }
     FUN_003b5800();
 done:
-    return DAT_0058abf0[0];
+    return g_beNDMWStatusSelect00_metaObject[0];
 }
 
 int beNDMWStatusSelect00_GetVTable(void) {
@@ -29,7 +29,7 @@ int beNDMWStatusSelect00_GetVTable(void) {
     f.w[19] = 0;
     f.w[26] = 0;
     f.vt = &DAT_0053f480[0];
-    temp_s0 = *(int *)((char *)&f + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+    temp_s0 = *(int *)((char *)&f + *(int *)((char *)(g_objectSystem[0]) + 916));
     f.vt = &DAT_0053f480[0];
     FUN_003b4050((struct S_3b4050 *)&f, (short)0);
     return temp_s0;

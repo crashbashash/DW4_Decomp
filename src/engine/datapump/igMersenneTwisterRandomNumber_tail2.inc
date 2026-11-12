@@ -62,14 +62,14 @@ int FUN_001e6de0(int *result, Vector3f *value, int *format) {
     if (name == 0) {
         res = 0;
     } else {
-        if (DAT_00586f20[0] == 0) {
+        if (g_stringPool[0] == 0) {
             pool = FUN_002eb010(0x10);
             if (pool != 0) {
                 pool = StringPool_Construct(pool);
             }
-            DAT_00586f20[0] = pool;
+            g_stringPool[0] = pool;
         }
-        res = StringPool_Intern(DAT_00586f20[0], name);
+        res = StringPool_Intern(g_stringPool[0], name);
     }
     *result = res;
     return 0;
@@ -93,14 +93,14 @@ int FUN_001e6f10(int *result, Quad *quad, int *kind) {
     if (name == 0) {
         res = 0;
     } else {
-        if (DAT_00586f20[0] == 0) {
+        if (g_stringPool[0] == 0) {
             obj = FUN_002eb010(0x10);
             if (obj != 0) {
                 obj = StringPool_Construct(obj);
             }
-            DAT_00586f20[0] = obj;
+            g_stringPool[0] = obj;
         }
-        res = StringPool_Intern(DAT_00586f20[0], name);
+        res = StringPool_Intern(g_stringPool[0], name);
     }
     *result = res;
     return 0;

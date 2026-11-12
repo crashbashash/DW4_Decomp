@@ -27,17 +27,17 @@ void FUN_002f0760(int arg0, int extra1) {
     VC_2f0760 *temp_s2;
     int var_s1;
 
-    var_s2 = ((L_2f0760 * *)DAT_00586f60)[0]->n - 1;
+    var_s2 = ((L_2f0760 * *)g_secondaryAllocatorList)[0]->n - 1;
     while (var_s2 >= 0) {
-        temp_s1 = ((L_2f0760 * *)DAT_00586f60)[0]->arr[var_s2];
+        temp_s1 = ((L_2f0760 * *)g_secondaryAllocatorList)[0]->arr[var_s2];
         if ((temp_s1 != 0) && (temp_s1->a() != 0)) {
             temp_s1->b(arg0);
         }
         var_s2 -= 1;
     }
-    var_s1 = ((L_2f0760 * *)DAT_00586f58)[0]->n - 1;
+    var_s1 = ((L_2f0760 * *)g_primaryAllocatorList)[0]->n - 1;
     while (var_s1 >= 0) {
-        temp_s2 = ((L_2f0760 * *)DAT_00586f58)[0]->arr[var_s1];
+        temp_s2 = ((L_2f0760 * *)g_primaryAllocatorList)[0]->arr[var_s1];
         if ((temp_s2 != 0) && (temp_s2->a() != 0)) {
             temp_s2->b(arg0);
         }
@@ -46,7 +46,7 @@ void FUN_002f0760(int arg0, int extra1) {
 }
 
 void FUN_002f0860(int *arg0) {
-    *arg0 = DAT_004fb418.v;
+    *arg0 = g_allocatorFailureStatus.v;
 }
 
 int FUN_002f0870(void) {
@@ -61,6 +61,6 @@ void FUN_002f0880(int *arg0, void **arg1, void *arg2) {
     if (temp_v1 != 0) {
         sp2C = ((DW4VCSR_164_1 *)(arg1))->vX((long long)temp_v1);
     }
-    *arg0 = DAT_004fb410.v;
+    *arg0 = g_statusSucceeded.v;
 }
 

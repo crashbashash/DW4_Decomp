@@ -1,8 +1,8 @@
-int FUN_00450c70(void) {
-    if (DAT_0058c548[0] == 0) {
-        DAT_0058c548[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(DAT_00587040[0]));
+igMetaObject *FUN_00450c70(void) {
+    if (g_igFieldChangeViewList_metaObject[0] == 0) {
+        g_igFieldChangeViewList_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
     }
-    return DAT_0058c548[0];
+    return g_igFieldChangeViewList_metaObject[0];
 }
 
 igMetaObject *igFieldChangeViewList_GetMetaObject(void)
@@ -18,7 +18,7 @@ int igFieldChangeViewList_GetVTable(void) {
 
     igObject_InitHeader(&obj);
     obj.vt = &DAT_005419d0[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 
 void igFieldChangeViewList_EnsureRegistered(void)

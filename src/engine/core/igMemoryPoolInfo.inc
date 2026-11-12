@@ -29,7 +29,7 @@ int igMemoryPoolInfo_GetVTable(void) {
     obj.w17 = 0;
     obj.w18 = 0;
     obj.w19 = 0;
-    t = *(int *)((char *)&obj + *(int *)((char *)(((void * *)DAT_00586dc8)[0]) + 916));
+    t = *(int *)((char *)&obj + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
     obj.vt = &DAT_0052f430[0];
     StringRef_Destruct_00130720(&obj.w19, -1);
     StringRef_Destruct_00130720(&obj.w18, -1);
@@ -77,7 +77,7 @@ void igMemoryPoolInfo_InitFields(void) {
     int temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)DAT_00585e00[0];
+    temp_s0 = (void *)g_igMemoryPoolInfo_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
     igMetaObject_CreateFields((igMetaObject *)temp_s0, (igMetaField * (**)(void *))&DAT_004c0060[0], 0x10);
     igMetaObject_NameFields((igMetaObject *)temp_s0, (const char **)&DAT_004c00a0[0], (igMetaField ***)&DAT_004c00e0[0], &DAT_004c0120[0], temp_s1);

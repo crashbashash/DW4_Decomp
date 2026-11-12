@@ -1,16 +1,16 @@
-int FUN_003658e0(void) {
-    if (((int *)DAT_005898d0)[0] == 0) {
-        ((int *)DAT_005898d0)[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(DAT_00587040[0]));
+igMetaObject *FUN_003658e0(void) {
+    if (g_beDataBase_metaObject[0] == 0) {
+        g_beDataBase_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
     }
-    return ((int *)DAT_005898d0)[0];
+    return g_beDataBase_metaObject[0];
 }
 
 void *FUN_00365930(void) {
-    struct G *g = DAT_005898d0[0];
-    if (!g || ((g->f & 4) != 0) == false) {
+    igMetaObject *g = g_beDataBase_metaObject[0];
+    if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_00365b00();
     }
-    return DAT_005898d0[0];
+    return g_beDataBase_metaObject[0];
 }
 
 int beDataBase_GetVTable(void) {
@@ -31,7 +31,7 @@ int beDataBase_GetVTable(void) {
     u.w[11] = 0;
     u.w[12] = 0;
     u.w[13] = 0;
-    temp_s5 = *(int *)&u.b[*(int *)((char *)(DAT_00586dc8[0]) + 916)];
+    temp_s5 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.w[0] = (int)(&DAT_00535160[0]);
     FUN_00199450(&u.w[13], -1);
     FUN_00199450(&u.w[12], -1);
@@ -91,7 +91,7 @@ void beDataBase_InitFields(void) {
     void *temp_s2_9;
     void *temp_s0;
 
-    temp_s0 = (void *)((int *)DAT_005898d0)[0];
+    temp_s0 = (void *)g_beDataBase_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_004c7260[0], 0xC);
     temp_s2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s1));

@@ -16,7 +16,7 @@ int igPixelPipelineModeAttr_GetVTable(void) {
 
     igObject_InitHeader(u.b);
     u.w[0] = (int)(&DAT_00523200[0]);
-    return *(int *)&u.b[*(int *)((char *)(DAT_00586dc8[0]) + 916)];
+    return *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
 }
 
 void FUN_00134c30(void)
@@ -50,7 +50,7 @@ void igPixelPipelineModeAttr_InitFields(void) {
     void *temp_v0;
     void *temp_s0;
 
-    temp_s0 = (void *)DAT_0055ef70[0];
+    temp_s0 = (void *)g_igPixelPipelineModeAttr_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_00486128[0], 1);
     temp_v0 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));

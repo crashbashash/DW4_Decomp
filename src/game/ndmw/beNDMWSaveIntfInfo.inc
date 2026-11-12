@@ -1,12 +1,12 @@
-S *FUN_003bc080(void) {
-    S *g = DAT_0058b070[0];
+igMetaObject *FUN_003bc080(void) {
+    igMetaObject *g = g_beNDMWSaveIntfInfo_metaObject[0];
     if (g != 0) {
-        int b = !!(g->flags & 4);
+        int b = !!(g->_validity & 4);
         if (b) goto done;
     }
     FUN_003bc140();
 done:
-    return DAT_0058b070[0];
+    return g_beNDMWSaveIntfInfo_metaObject[0];
 }
 
 int beNDMWSaveIntfInfo_GetVTable(void) {
@@ -18,7 +18,7 @@ int beNDMWSaveIntfInfo_GetVTable(void) {
     u.w[5] = 0;
     u.w[6] = 0;
     u.w[0] = (int)(&DAT_0053d960[0]);
-    temp_s0 = *(int *)&u.b[*(int *)((char *)(DAT_00586dc8[0]) + 916)];
+    temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.w[0] = (int)(&DAT_0053d960[0]);
     FUN_0033ec80(&u.w[0], 0);
     return temp_s0;

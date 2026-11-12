@@ -17,8 +17,8 @@ extern "C" int igObject_IsKindOf(...);
 extern "C" int Memory_GetAllocatorBySelector(int);
 extern "C" int igObject_Destroy(...);
 extern "C" int igObject_GetAllocator(...);
-extern "C" int DAT_0055ff88[4];
-extern "C" int DAT_00587108[4];
+extern "C" int g_igPsx2VisualContext_metaObject[4];
+extern "C" int g_ndmwAllocatorSelector[4];
 extern "C" int DAT_005878c0[4];
 extern "C" void * DAT_005878d8[4];
 extern "C" unsigned char GPR_00554c14;
@@ -52,7 +52,7 @@ extern "C" void FUN_00100610(void *);
 extern "C" ObjectRefWord *FUN_003387d0(ObjectRefWord *self,int delete_storage);
 extern "C" int FUN_0026b728(int);
 extern "C" int FUN_0026bc60(int);
-extern "C" int DAT_00587760[4];
+extern "C" int g_igCriMovieData_metaObject[4];
 typedef struct S_338850 { char pad8[8]; int *f8; int f12; int f16; int f20; } S_338850;
 extern "C" int Gap__igCriMovieCodec__vfunc_24(int arg0, void *arg1);
 typedef struct V { int *vt; } V;
@@ -65,7 +65,7 @@ extern "C" int Gap__igCriMovieCodec__vfunc_25(int arg0, A_338920 *arg1);
 extern "C" int Gap__igCriMovieCodec__vfunc_26(void *arg0, igMovieInfo *arg1, int arg2);
 struct D_338ae0 { char pad[8]; int f8; int pad2; int f16; 
     static inline D_338ae0 *Cast(D_338ae0 *p) {
-        if (p != 0 && igObject_IsKindOf(p, DAT_00587760[0]) != 0) { return p; }
+        if (p != 0 && igObject_IsKindOf(p, g_igCriMovieData_metaObject[0]) != 0) { return p; }
         return 0;
     }
 };
@@ -139,11 +139,11 @@ int Gap__igCriMovieCodec__vfunc_28(int arg0, A *arg1, void **arg2) {
     if (GPR_00554c14 != 0) {
         w = var_v0;
     } else {
-        w = Memory_GetAllocatorBySelector(DAT_00587108[0]);
+        w = Memory_GetAllocatorBySelector(g_ndmwAllocatorSelector[0]);
     }
     DAT_005878c0[0] = FUN_002ed2b0(((unsigned int) ((((temp_s2 * temp_s1 * 6) + 0xA) * 4) + 0x3F) >> 6) << 8, 0x40, w);
     a = (R *)(*arg2);
-    if ((a != 0) && (igObject_IsKindOf(a, DAT_0055ff88[0]) != 0)) {
+    if ((a != 0) && (igObject_IsKindOf(a, g_igPsx2VisualContext_metaObject[0]) != 0)) {
         var_s0 = a;
     } else {
         var_s0 = 0;
@@ -166,7 +166,7 @@ int Gap__igCriMovieCodec__vfunc_29(void *arg0) {
     int a;
 
     a = igObject_GetAllocator(arg0);
-    a = GPR_00554c14 ? a : Memory_GetAllocatorBySelector(DAT_00587108[0]);
+    a = GPR_00554c14 ? a : Memory_GetAllocatorBySelector(g_ndmwAllocatorSelector[0]);
     Memory_FreeBufferWithAllocator(DAT_005878c0[0], a);
     return 1;
 }
@@ -236,7 +236,7 @@ int Gap__igCriMovieCodec__vfunc_24(int arg0, void *arg1) {
     S_338850 *var_s0;
     int temp_a0;
 
-    var_s0 = (S_338850 *)dw4_cast_or_null((char *)*(int *)((char *)(arg1) + 96), DAT_00587760);
+    var_s0 = (S_338850 *)dw4_cast_or_null((char *)*(int *)((char *)(arg1) + 96), g_igCriMovieData_metaObject);
     if (var_s0 != 0) {
         temp_a0 = var_s0->f16;
         if (temp_a0 != 0) {
@@ -255,7 +255,7 @@ int Gap__igCriMovieCodec__vfunc_24(int arg0, void *arg1) {
     return 0;
 }
 
-static inline D * cast0(D * o) { if (o != 0 && igObject_IsKindOf(o, DAT_00587760[0]) != 0) { return o; } return 0; }
+static inline D * cast0(D * o) { if (o != 0 && igObject_IsKindOf(o, g_igCriMovieData_metaObject[0]) != 0) { return o; } return 0; }
 
 int Gap__igCriMovieCodec__vfunc_25(int arg0, A_338920 *arg1) {
     V *temp_a0;
@@ -282,7 +282,7 @@ int Gap__igCriMovieCodec__vfunc_26(void *arg0, igMovieInfo *arg1, int arg2) {
     void *obj;
     igCriMovieData *r;
     obj = (void *)arg1->_userdata;
-    if (obj != 0 && igObject_IsKindOf(obj, DAT_00587760[0]) != 0) {
+    if (obj != 0 && igObject_IsKindOf(obj, g_igCriMovieData_metaObject[0]) != 0) {
         r = (igCriMovieData *)obj;
     } else {
         r = 0;

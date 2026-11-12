@@ -14,7 +14,7 @@ int FUN_00150710(void) {
 
 igMetaObject *FUN_00150770(void) {
     if (g_igPsx2VisualContext_metaObject[0] == 0) {
-        g_igPsx2VisualContext_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(DAT_00587040[0]));
+        g_igPsx2VisualContext_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
     }
     return g_igPsx2VisualContext_metaObject[0];
 }
@@ -57,7 +57,7 @@ int igPsx2VisualContext_GetVTable(void) {
     FUN_00151090((int)(p + 1312));
     FUN_00151030(p + 1348);
     FUN_00151090((int)(p + 1432));
-    r = *(int *)((char *)&s + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+    r = *(int *)((char *)&s + *(int *)((char *)(g_objectSystem[0]) + 916));
     s.vt = &DAT_00525870[0];
     FUN_00150fb0((ObjectRefWord *)((char *)&s + 1016), -1);
     FUN_00150fb0((ObjectRefWord *)((char *)&s + 1012), -1);
@@ -268,8 +268,8 @@ void igPsx2VisualContext_Register(void) {
     );
 }
 
-int FUN_00151230(void) {
-    return DAT_0055f8e8[0];
+igMetaObject *FUN_00151230(void) {
+    return g_igVisualContext_metaObject[0];
 }
 
 void igPsx2VisualContext_InitFields(void) {
@@ -394,11 +394,11 @@ void igPsx2VisualContext_InitFields(void) {
     FUN_002e3810(igMetaObject_GetFieldAt(meta, base + 0x28), 0.0f);
     FUN_002e3810(igMetaObject_GetFieldAt(meta, base + 0x29), 1.0f);
     temp_s2_6 = igMetaObject_GetFieldAt(meta, base + 0x2A);
-    ((igObjectRefMetaField *)temp_s2_6)->_metaObject = FUN_00152370();
+    ((igObjectRefMetaField *)temp_s2_6)->_metaObject = (int)FUN_00152370();
     temp_s2_7 = igMetaObject_GetFieldAt(meta, base + 0x2B);
-    ((igObjectRefMetaField *)temp_s2_7)->_metaObject = FUN_0014d7f0();
+    ((igObjectRefMetaField *)temp_s2_7)->_metaObject = (int)FUN_0014d7f0();
     temp_s2_8 = igMetaObject_GetFieldAt(meta, base + 0x2C);
-    ((igObjectRefMetaField *)temp_s2_8)->_metaObject = FUN_0014c030();
+    ((igObjectRefMetaField *)temp_s2_8)->_metaObject = (int)FUN_0014c030();
     FUN_002ea4b0(igMetaObject_GetFieldAt(meta, base + 0x30), -1);
     temp_s2_9 = igMetaObject_GetFieldAt(meta, base + 0x32);
     ((igObjectRefMetaField *)temp_s2_9)->_metaObject = FUN_001e4740();
@@ -449,7 +449,7 @@ void igPsx2VisualContext_InitFields(void) {
     *(int (**)())&((igEnumArrayMetaField *)temp_v0_9)->_getMetaEnumFunction = (int (*)())FUN_002d1870;
     { igMetaField *q = igMetaObject_GetFieldAt(meta, base + 0x46); ((igIntArrayMetaField *)q)->_num = 0x10; }
     temp_s2_21 = igMetaObject_GetFieldAt(meta, base + 0x48);
-    ((igObjectRefMetaField *)temp_s2_21)->_metaObject = FUN_00152e80();
+    ((igObjectRefMetaField *)temp_s2_21)->_metaObject = (int)FUN_00152e80();
     ((igObjectRefMetaField *)temp_s2_21)->_refCounted = 0;
     FUN_002ea4b0(igMetaObject_GetFieldAt(meta, base + 0x4B), 0x280);
     FUN_002ea4b0(igMetaObject_GetFieldAt(meta, base + 0x4C), 0x1C0);

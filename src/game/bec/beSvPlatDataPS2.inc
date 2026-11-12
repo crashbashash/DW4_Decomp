@@ -1,9 +1,9 @@
 void *FUN_00347820(void) {
-    struct G *g = DAT_00588088[0];
-    if (!g || ((g->f & 4) != 0) == false) {
+    igMetaObject *g = g_beSvPlatDataPS2_metaObject[0];
+    if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_00347970();
     }
-    return DAT_00588088[0];
+    return g_beSvPlatDataPS2_metaObject[0];
 }
 
 int beSvPlatDataPS2_GetVTable(void) {
@@ -23,7 +23,7 @@ int beSvPlatDataPS2_GetVTable(void) {
     *(int *)&u.b[188] = 0;
     *(int *)&u.b[192] = 0;
     *(int *)&u.b[212] = 0;
-    t = *(int *)&u.b[*(int *)((char *)(DAT_00586dc8[0]) + 916)];
+    t = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.vt = (int)&DAT_00538bc0[0];
     FUN_0014aa70(&u.b[212], -1);
     StringRef_Destruct_00130720(&u.b[192], -1);
@@ -70,7 +70,7 @@ void beSvPlatDataPS2_InitFields(void) {
     igMetaObject *temp_s1;
     igEnumMetaField *temp_v0_2;
 
-    temp_s1 = (igMetaObject *)(((void * *)DAT_00588088)[0]);
+    temp_s1 = (igMetaObject *)(((void * *)g_beSvPlatDataPS2_metaObject)[0]);
     temp_s2 = igMetaObject_GetFieldCount(temp_s1);
     igMetaObject_CreateFields(temp_s1, &DAT_004c3d90[0], 0x16);
     temp_v0 = (void **)(igMetaObject_FindFieldByName(temp_s1, &DAT_00502570[0]));

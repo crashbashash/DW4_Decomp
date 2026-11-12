@@ -3,12 +3,12 @@ void FUN_003b7750(int arg0) {
     igMetaObject_CreateInstance(*(int *)0x58AD40, arg0);
 }
 
-G_3b7790 *FUN_003b7790(void) {
-    G_3b7790 *g = DAT_0058ad40[0];
+igMetaObject *FUN_003b7790(void) {
+    igMetaObject *g = g_beNDMWShopCtrlDigilabo_metaObject[0];
     int t;
-    if (!g || !(t = (g->f & 4) != 0))
+    if (!g || !(t = (g->_validity & 4) != 0))
         FUN_003b78a0();
-    return DAT_0058ad40[0];
+    return g_beNDMWShopCtrlDigilabo_metaObject[0];
 }
 
 int beNDMWShopCtrlDigilabo_GetVTable(void) {
@@ -27,7 +27,7 @@ int beNDMWShopCtrlDigilabo_GetVTable(void) {
     obj.w21 = 0;
     obj.w22 = 0;
     obj.w23 = 0;
-    t = *(int *)((char *)&obj + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+    t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
     obj.vt = &DAT_0053fae0[0];
     FUN_0019d200(&obj.w23, -1);
     ObjectRef_Destruct_00150eb0(&obj.w22, -1);
@@ -70,7 +70,7 @@ void beNDMWShopCtrlDigilabo_InitFields(void) {
     void *temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)((int *)DAT_0058ad40)[0];
+    temp_s0 = (void *)g_beNDMWShopCtrlDigilabo_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_004c9a90[0], 7);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));

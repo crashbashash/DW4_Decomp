@@ -124,14 +124,14 @@ static inline void releaseBound(FieldBindObject *o) {
 }
 
 static inline FieldBindItem *castBinding(FieldBindItem *o) {
-    if (o != 0 && igObject_IsKindOf(o, (igMetaObject *)DAT_00585b70[0]) != 0) {
+    if (o != 0 && igObject_IsKindOf(o, (igMetaObject *)g_igObjectDirEntry_metaObject[0]) != 0) {
         return o;
     }
     return 0;
 }
 
 static inline FieldBindItem *castRefField(FieldBindItem *o) {
-    if (o != 0 && igObject_IsKindOf(o, (igMetaObject *)((*(int *)DAT_00585b20))) != 0) {
+    if (o != 0 && igObject_IsKindOf(o, (igMetaObject *)((*(int *)g_igObjectRefMetaField_metaObject))) != 0) {
         return o;
     }
     return 0;
@@ -206,7 +206,7 @@ void FUN_002d8310(void *arg0, void *arg1) {
 }
 
 void * igDirectory_FindInfoByName(int *arg0, int arg1) {
-    return ((void *)igProperty_FindByName((struct L_3022c0 *)arg0[7], (struct P_3022c0 *)DAT_00585be0[0], arg1));
+    return ((void *)igProperty_FindByName((struct L_3022c0 *)arg0[7], (struct P_3022c0 *)g_propertyNameField[0], arg1));
 }
 
 /* The lower bound is spelled `arg1 <= -1` so it fuses into slti at. */
@@ -319,7 +319,7 @@ int FUN_002d87b0(FieldLinkSet *self, FieldLinkObject *obj, char *name, int user)
     }
     if (obj != 0) {
         obj->Touch();
-        if (igObject_IsKindOf(self, (igMetaObject *)((*(int *)DAT_00586140))) != 0) {
+        if (igObject_IsKindOf(self, (igMetaObject *)((*(int *)g_igIGBFile_metaObject))) != 0) {
             if (self->mode == 1) {
                 obj->Prepare();
             }

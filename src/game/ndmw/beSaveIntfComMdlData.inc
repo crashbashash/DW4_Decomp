@@ -1,9 +1,9 @@
 void *FUN_003bc710(void) {
-    struct G *g = DAT_0058b0b0[0];
-    if (!g || ((g->f & 4) != 0) == false) {
+    igMetaObject *g = g_beSaveIntfComMdlData_metaObject[0];
+    if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_003bc820();
     }
-    return DAT_0058b0b0[0];
+    return g_beSaveIntfComMdlData_metaObject[0];
 }
 
 int beSaveIntfComMdlData_GetVTable(void) {
@@ -14,7 +14,7 @@ int beSaveIntfComMdlData_GetVTable(void) {
     obj._vtable = (int)&DAT_0053d830[0];
     obj._openSQ = 0;
     obj._infoName = 0;
-    r = *(int *)((char *)&obj + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+    r = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
     obj._vtable = (int)&DAT_0053d830[0];
     obj.rel16();
     obj.rel12();
@@ -52,7 +52,7 @@ void beSaveIntfComMdlData_InitFields(void) {
     int temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)((int *)DAT_0058b0b0)[0];
+    temp_s0 = (void *)g_beSaveIntfComMdlData_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_004ca1b8[0], 3);
     igMetaObject_NameFields(temp_s0, &DAT_004ca1c8[0], &DAT_004ca1d8[0], &DAT_004ca1e8[0], temp_s1);

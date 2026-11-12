@@ -21,9 +21,9 @@ extern "C" int bePadData_UpdateButtons(...);
 extern "C" void Gap__Bec__bePadManager__vfunc_21(bePadManager *self, int unusedArg);
 extern "C" void Gap__Bec__bePadManager__vfunc_22(bePadManager *self, int unusedArg);
 struct Rc { int vt; int rc; };
-extern "C" int DAT_00587108[4];
-extern "C" int DAT_00587d08[4];
-extern "C" int DAT_0058c790[4];
+extern "C" int g_ndmwAllocatorSelector[4];
+extern "C" int g_beSystem_metaObject[4];
+extern "C" int g_igViewerSceneInfoManager_metaObject[4];
 extern "C" unsigned char GPR_00554c14;
 struct Ref {
     Rc *p;
@@ -68,7 +68,7 @@ void Gap__Bec__bePadManager__vfunc_22(bePadManager *self, int unusedArg)
 }
 
 void Gap__Bec__bePadManager__vfunc_23(O *o) {
-    Rc *t0 = (Rc *)FUN_00236f80(o->f12, DAT_00587d08[0]);
+    Rc *t0 = (Rc *)FUN_00236f80(o->f12, g_beSystem_metaObject[0]);
     if (t0 != 0) t0->rc = t0->rc + 1;
     {
         Rc *a0 = o->f16;
@@ -80,14 +80,14 @@ void Gap__Bec__bePadManager__vfunc_23(O *o) {
     o->f16 = t0;
     for (int i = 0; i < 5; i++) {
         int v0 = igObject_GetAllocator(o);
-        Ref sp3C((Rc *)FUN_0034ce50(GPR_00554c14 != 0 ? v0 : Memory_GetAllocatorBySelector(DAT_00587108[0])));
+        Ref sp3C((Rc *)FUN_0034ce50(GPR_00554c14 != 0 ? v0 : Memory_GetAllocatorBySelector(g_ndmwAllocatorSelector[0])));
         ObjectList_AppendRetained(o->f20, sp3C.p);
     }
     M *m = o->f12;
     int s0 = m->f32;
     FUN_004542d0(s0, o->f24, m->f36);
     FUN_00454290(s0, o->f24);
-    char *v = (char *)FUN_00236f80(o->f12, DAT_0058c790[0]);
+    char *v = (char *)FUN_00236f80(o->f12, g_igViewerSceneInfoManager_metaObject[0]);
     int s = *(int *)(v + 132);
     FUN_004574f0(s, 15);
     FUN_004574f0(s, 3);

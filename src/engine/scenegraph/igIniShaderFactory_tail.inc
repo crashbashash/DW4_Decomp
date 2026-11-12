@@ -18,14 +18,14 @@ int FUN_001c6520(O_1c6520 *arg0, int arg1) {
             }
         }
         arg0->f32 = 0;
-        if (DAT_00586f20[0] == 0) {
+        if (g_stringPool[0] == 0) {
             v = FUN_002eb010(16);
             if (v != 0) {
                 v = StringPool_Construct(v);
             }
-            DAT_00586f20[0] = v;
+            g_stringPool[0] = v;
         }
-        s = StringPool_Intern(DAT_00586f20[0], 0);
+        s = StringPool_Intern(g_stringPool[0], 0);
         old = arg0->f36;
         if (old != 0) {
             hd = (int *)(old - 8);
@@ -89,12 +89,12 @@ int FUN_001c66c0(Node *self, int force)
     }
     REL_OBJ(self->f32)
     self->f32 = 0;
-    if (DAT_00586f20[0] == 0) {
+    if (g_stringPool[0] == 0) {
         int pool = FUN_002eb010(16);
         if (pool != 0) pool = StringPool_Construct(pool);
-        DAT_00586f20[0] = pool;
+        g_stringPool[0] = pool;
     }
-    s = ((char *)StringPool_Intern(DAT_00586f20[0], 0));
+    s = ((char *)StringPool_Intern(g_stringPool[0], 0));
     REL_STR(self->f36)
     self->f36 = s;
     self->f40 = -1;

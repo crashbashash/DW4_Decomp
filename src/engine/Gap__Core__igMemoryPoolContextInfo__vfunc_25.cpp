@@ -37,10 +37,10 @@ public:
     virtual Res get(int, int);
 };
 extern "C" {
-extern Res DAT_004fb418[4];
-extern Res DAT_004fb410[4];
+extern Res g_allocatorFailureStatus[4];
+extern Res g_statusSucceeded[4];
 extern char *DAT_004c2228[4];
-extern G *DAT_00586dc8[4];
+extern G *g_objectSystem[4];
 int FUN_00306360(int, char *, int);
 }
 
@@ -49,10 +49,10 @@ extern "C" Res Gap__Core__igMemoryPoolContextInfo__vfunc_25(Dev *arg1, int arg2,
     int index;
     char *name;
     if (arg2 == 0) {
-        arg2 = DAT_00586dc8[0]->f38;
+        arg2 = g_objectSystem[0]->f38;
     }
     if (arg2 == 0) {
-        return DAT_004fb418[0];
+        return g_allocatorFailureStatus[0];
     }
     if ((arg3 == 0) || (name = arg3, (*arg3 == 0))) {
         arg3 = DAT_004c2228[0];
@@ -60,10 +60,10 @@ extern "C" Res Gap__Core__igMemoryPoolContextInfo__vfunc_25(Dev *arg1, int arg2,
     }
     index = FUN_00306360(arg2, name, 0);
     if (index == -1) {
-        return DAT_004fb418[0];
+        return g_allocatorFailureStatus[0];
     }
-    if (arg1->get(arg2, index) == DAT_004fb410[0]) {
-        return DAT_004fb410[0];
+    if (arg1->get(arg2, index) == g_statusSucceeded[0]) {
+        return g_statusSucceeded[0];
     }
-    return DAT_004fb418[0];
+    return g_allocatorFailureStatus[0];
 }

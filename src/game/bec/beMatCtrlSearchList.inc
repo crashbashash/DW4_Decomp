@@ -1,19 +1,19 @@
-int FUN_00359e60(void) {
-    if (DAT_00589108[0] == 0) {
-        DAT_00589108[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(DAT_00587040[0]));
+igMetaObject *FUN_00359e60(void) {
+    if (g_beMatCtrlSearchList_metaObject[0] == 0) {
+        g_beMatCtrlSearchList_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
     }
-    return DAT_00589108[0];
+    return g_beMatCtrlSearchList_metaObject[0];
 }
 
 void *FUN_00359eb0(void) {
     unsigned char b;
-    if (((void * *)DAT_00589108)[0] != 0) {
-        b = (*(int *)((char *)(((void * *)DAT_00589108)[0]) + 36) & 4) != 0;
+    if (((void * *)g_beMatCtrlSearchList_metaObject)[0] != 0) {
+        b = (*(int *)((char *)(((void * *)g_beMatCtrlSearchList_metaObject)[0]) + 36) & 4) != 0;
         if (b != 0) goto done;
     }
     FUN_00359f40();
 done:
-    return ((void * *)DAT_00589108)[0];
+    return ((void * *)g_beMatCtrlSearchList_metaObject)[0];
 }
 
 int beMatCtrlSearchList_GetVTable(void) {
@@ -21,7 +21,7 @@ int beMatCtrlSearchList_GetVTable(void) {
 
     igObject_InitHeader(&obj);
     obj.vt = &DAT_00536b00[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 
 void FUN_00359f40(void)

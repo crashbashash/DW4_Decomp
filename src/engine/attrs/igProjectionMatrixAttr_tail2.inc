@@ -1,4 +1,4 @@
-int Gap__Attrs__igProjectionMatrixAttr__vfunc_22(void) {
-    return DAT_0055ef50[0];
+igMetaObject *Gap__Attrs__igProjectionMatrixAttr__vfunc_22(void) {
+    return g_igProjectionMatrixAttr_metaObject[0];
 }
 

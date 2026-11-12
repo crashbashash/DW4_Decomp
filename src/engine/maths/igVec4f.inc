@@ -8,7 +8,7 @@ int FUN_001931b0(float *arg0, unsigned int arg1) {
 if (g > DAT_004e1184[0]) g = DAT_004e1184[0];
 if (b > DAT_004e1188[0]) b = DAT_004e1188[0];
 if (a > DAT_004e118c[0]) a = DAT_004e118c[0];
-{ float mn = DAT_004e1170[0]; if (r < D_004e1170[0]) r = mn; }
+{ float mn = g_vec4Zero[0]; if (r < D_004e1170[0]) r = mn; }
 if (g < DAT_004e1174[0]) g = DAT_004e1174[0];
 if (b < DAT_004e1178[0]) b = DAT_004e1178[0];
 if (a < DAT_004e117c[0]) a = DAT_004e117c[0];

@@ -1,12 +1,12 @@
 void *FUN_00347060(void) {
     bool ok;
-    if (DAT_00588038[0] == 0) goto make;
-    ok = !!(DAT_00588038[0]->f & 4);
+    if (g_beSvPlatDataPC_metaObject[0] == 0) goto make;
+    ok = !!(g_beSvPlatDataPC_metaObject[0]->_validity & 4);
     if (ok != false) goto done;
 make:
     FUN_003471f0();
 done:;
-    return DAT_00588038[0];
+    return g_beSvPlatDataPC_metaObject[0];
 }
 
 int beSvPlatDataPC_GetVTable(void) {
@@ -22,7 +22,7 @@ int beSvPlatDataPC_GetVTable(void) {
     *(int *)ps = 0;
     u.vt = (int)&DAT_00538d40[0];
     u.vt = (int)&DAT_00538ce0[0];
-    s0 = *(int *)&u.b[*(int *)((char *)(DAT_00586dc8[0]) + 916)];
+    s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.vt = (int)&DAT_00538d40[0];
     if (ps != 0) {
         v1 = *(int **)ps;
@@ -84,7 +84,7 @@ void beSvPlatDataPC_GetMetaObject(void)
     FUN_00347060();
 }
 
-int FUN_003472a0(void) {
-    return ((int *)DAT_00588308)[0];
+igMetaObject *FUN_003472a0(void) {
+    return g_beSvPlatBaseData_metaObject[0];
 }
 

@@ -28,8 +28,8 @@ extern "C" int g_beHitLandModel_metaObject[4];
 extern "C" char DAT_0050eae0[];
 extern "C" void Gap__Bec__beHitLandModel__vfunc_29(beHitLandModel * p0, int p1, char * p2, int p3, int p4);
 extern "C" beHitLandResultData *FUN_0035e400(void *);
-extern "C" void *DAT_00586f20[4];
-extern "C" int DAT_00587110[4];
+extern "C" void *g_stringPool[4];
+extern "C" int g_defaultAllocatorSelector[4];
 extern "C" unsigned char GPR_00554c14;
 struct HitRecord { char pad[12]; void *matrix; char pad16[32]; float position[3]; };
 struct ResultRecord { char header[16]; char hit[72]; };
@@ -130,7 +130,7 @@ void Gap__Bec__beHitLandModelOrder__vfunc_22(beHitLandModelOrder *self, HitRecor
     const char *old;
     if (self->_hitdataCount >= ((igObjectList *)self->_hitdataList)->_count) {
         void *alloc = igObject_GetAllocator(self);
-        alloc = GPR_00554c14 ? alloc : Memory_GetAllocatorBySelector(DAT_00587110[0]);
+        alloc = GPR_00554c14 ? alloc : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
         igSmartPointer<beHitLandResultData> created(FUN_0035e400(alloc));
         ObjectList_AppendRetained(self->_hitdataList, (beHitLandResultData *)created);
     }
@@ -138,12 +138,12 @@ void Gap__Bec__beHitLandModelOrder__vfunc_22(beHitLandModelOrder *self, HitRecor
     FUN_00388e60(((ResultRecord *)((beHitLandResultData **)((igObjectList *)self->_hitdataList)->_data)[self->_hitdataCount])->hit, hit);
     result = ((beHitLandResultData **)((igObjectList *)self->_hitdataList)->_data)[self->_hitdataCount];
     name = (const char *)self->_infoName;
-    if (DAT_00586f20[0] == 0) {
+    if (g_stringPool[0] == 0) {
         void *pool = FUN_002eb010(16);
         if (pool != 0) pool = StringPool_Construct(pool);
-        DAT_00586f20[0] = pool;
+        g_stringPool[0] = pool;
     }
-    token = StringPool_Intern(DAT_00586f20[0], name);
+    token = StringPool_Intern(g_stringPool[0], name);
     old = (const char *)result->_infoName;
     if (old != 0) {
         int *header = (int *)old - 2;
@@ -184,7 +184,7 @@ void *FUN_00388e60(void *arg0, void *arg1) {
 void Gap__Bec__beHitLandModelOrder__vfunc_21(beHitLandModelOrder *self, int a1, int a2) {
     if (self->_rayCount >= ((igRayList *)self->_rayList)->_count) {
         int a = ((int)igObject_GetAllocator(self));
-        igSmartPointer<igObject> ray(FUN_00188220(GPR_00554c14 != 0 ? a : ((int)Memory_GetAllocatorBySelector(DAT_00587110[0]))));
+        igSmartPointer<igObject> ray(FUN_00188220(GPR_00554c14 != 0 ? a : ((int)Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]))));
         /* matching construct: the (void *)(long) cast fixes the argument evaluation order of the append */
         ObjectList_AppendRetained((void *)(long)self->_rayList, ray.p);
     }

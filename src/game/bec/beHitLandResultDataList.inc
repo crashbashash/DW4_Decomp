@@ -1,16 +1,16 @@
-int FUN_0035e270(void) {
-    if (((int *)DAT_005893e0)[0] == 0) {
-        ((int *)DAT_005893e0)[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(DAT_00587040[0]));
+igMetaObject *FUN_0035e270(void) {
+    if (g_beHitLandResultDataList_metaObject[0] == 0) {
+        g_beHitLandResultDataList_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
     }
-    return ((int *)DAT_005893e0)[0];
+    return g_beHitLandResultDataList_metaObject[0];
 }
 
 void *FUN_0035e2c0(void) {
-    struct G *g = DAT_005893e0[0];
-    if (!g || ((g->f & 4) != 0) == false) {
+    igMetaObject *g = g_beHitLandResultDataList_metaObject[0];
+    if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_0035e350();
     }
-    return DAT_005893e0[0];
+    return g_beHitLandResultDataList_metaObject[0];
 }
 
 int beHitLandResultDataList_GetVTable(void) {
@@ -19,7 +19,7 @@ int beHitLandResultDataList_GetVTable(void) {
 
     igObject_InitHeader(&tmp[0]);
     tmp[0] = (int)&DAT_005362f0[0];
-    off = *(int *)((char *)(((int * *)DAT_00586dc8)[0]) + 916);
+    off = *(int *)((char *)(((int * *)g_objectSystem)[0]) + 916);
     return *(int *)((char *)tmp + off);
 }
 

@@ -21,8 +21,8 @@ int igEnumArrayMetaField_GetVTable(void) {
 
     FUN_002dc900((int **)u.b);
     u.vt = (int)&DAT_005304f0[0];
-    temp_s0 = *(int *)&u.b[*(int *)((char *)(((void * *)DAT_00586dc8)[0]) + 916)];
-    u.vt = (int)&DAT_0052f230[0];
+    temp_s0 = *(int *)&u.b[*(int *)((char *)(((void * *)g_objectSystem)[0]) + 916)];
+    u.vt = (int)&g_igMetaField_vtable[0];
     ps = &u.b[12];
     if (ps != 0) {
         temp_v1 = *(int **)ps;
@@ -64,15 +64,15 @@ void thunk_igEnumArrayMetaField_GetMetaObject(void) {
     igEnumArrayMetaField_GetMetaObject();
 }
 
-int FUN_002c6580(void) {
-    return DAT_00586598[0];
+igMetaObject *FUN_002c6580(void) {
+    return g_igEnumMetaField_metaObject[0];
 }
 
 void igEnumArrayMetaField_InitFields(void) {
     int temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)DAT_005865b0[0];
+    temp_s0 = (void *)g_igEnumArrayMetaField_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
     igMetaObject_CreateFields((igMetaObject *)temp_s0, (igMetaField * (**)(void *))&DAT_004c0f98[0], 1);
     FUN_002ea4b0((void **)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1)), 1);
@@ -83,18 +83,18 @@ void FUN_002c6620(void) {
     int *s0;
     int *g;
 
-    if (DAT_005865b8[0] == 0) {
-        DAT_005865b8[0] = ((int *)igMetaObject_CreateInstance((CreateMeta *)DAT_005865b0[0], (MemoryPool *)(((int)Memory_GetAllocatorBySelector(DAT_00587040[0])))));
-        s0 = DAT_005865b8[0];
+    if (g_igEnumArrayMetaField_descriptor[0] == 0) {
+        g_igEnumArrayMetaField_descriptor[0] = ((int *)igMetaObject_CreateInstance((CreateMeta *)g_igEnumArrayMetaField_metaObject[0], (MemoryPool *)(((int)Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0])))));
+        s0 = g_igEnumArrayMetaField_descriptor[0];
         if (s0 != 0) {
             MetaRefList_AppendRetained((PointerList *)(((int *)FUN_002fc250())), (RefHeader *)s0);
-            g = DAT_005865b8[0];
+            g = g_igEnumArrayMetaField_descriptor[0];
             g[1] = g[1] - 1;
             if ((g[1] & 0x7FFFFF) == 0) {
                 igObject_Destroy(g);
             }
-            *(short *)((char *)DAT_005865b8[0] + 18) = (short)(((int *)FUN_002fc250())[3] - 1);
-            igMetaField_FinalizeDescriptor((igMetaField *)DAT_005865b8[0]);
+            *(short *)((char *)g_igEnumArrayMetaField_descriptor[0] + 18) = (short)(((int *)FUN_002fc250())[3] - 1);
+            igMetaField_FinalizeDescriptor((igMetaField *)g_igEnumArrayMetaField_descriptor[0]);
         }
     }
 }

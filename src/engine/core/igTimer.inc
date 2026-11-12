@@ -3,11 +3,11 @@ void FUN_002b79d0(int arg0) {
     igMetaObject_CreateInstance((CreateMeta *)(*(int *)0x585788), (MemoryPool *)arg0);
 }
 
-int FUN_002b7a10(void) {
-    if (DAT_00585788[0] == 0) {
-        DAT_00585788[0] = ((int)igMetaObject_Create(((int)Memory_GetAllocatorBySelector(DAT_00587040[0]))));
+igMetaObject *FUN_002b7a10(void) {
+    if (g_igTimer_metaObject[0] == 0) {
+        g_igTimer_metaObject[0] = (igMetaObject *)igMetaObject_Create(((int)Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0])));
     }
-    return DAT_00585788[0];
+    return g_igTimer_metaObject[0];
 }
 
 igMetaObject *igTimer_GetMetaObject(void)
@@ -45,7 +45,7 @@ void thunk_igTimer_GetMetaObject(void) {
 }
 
 void FUN_002b7b40(void) {
-    *(int *)((char *)(((void * *)DAT_00585788)[0]) + 60) = (int)(&thunk_FUN_002c1860);
+    *(int *)((char *)(((void * *)g_igTimer_metaObject)[0]) + 60) = (int)(&thunk_FUN_002c1860);
 }
 
 void thunk_FUN_002c1860(void) {

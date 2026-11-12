@@ -1,9 +1,9 @@
 void *FUN_003408b0(void) {
-    struct G *g = DAT_00587bc0[0];
-    if (!g || ((g->f & 4) != 0) == false) {
+    igMetaObject *g = g_beWaterMoveData_metaObject[0];
+    if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_00340990();
     }
-    return DAT_00587bc0[0];
+    return g_beWaterMoveData_metaObject[0];
 }
 
 int beWaterMoveData_GetVTable(void) {
@@ -17,7 +17,7 @@ int beWaterMoveData_GetVTable(void) {
     u.vt = (int)&DAT_00539940[0];
     ps = &u.b[20];
     *(int *)ps = 0;
-    temp_s0 = *(int *)&u.b[*(int *)((char *)(DAT_00586dc8[0]) + 916)];
+    temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.vt = (int)&DAT_00539940[0];
     if (ps != 0) {
         p = *(int **)ps;
@@ -64,7 +64,7 @@ void beWaterMoveData_InitFields(void) {
     void *temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)((int *)DAT_00587bc0)[0];
+    temp_s0 = (void *)g_beWaterMoveData_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_004c3308[0], 3);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 2));

@@ -25,7 +25,7 @@ int igCompressedAnimationSequenceQS_GetVTable(void) {
     *(int *)q1 = 0;
     q0 = (S_ref *)&u.b[16];
     *(int *)q0 = 0;
-    temp_s0 = *(int *)&u.b[*(int *)((char *)(DAT_00586dc8[0]) + 916)];
+    temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.vt = (int)&DAT_00529260[0];
     if (q0 != 0) {
         q0 = *(S_ref **)q0;
@@ -85,7 +85,7 @@ void thunk_igCompressedAnimationSequenceQS_GetMetaObject(void) {
 
 void igCompressedAnimationSequenceQS_InitFields(void) {
     int temp_s0;
-    int temp_s1;
+    igMetaObject *temp_s1;
     struct Fld_1a29e0 *temp_s2;
     struct Fld_1a29e0 *temp_s2_2;
     struct Fld_1a29e0 *temp_s2_3;
@@ -93,7 +93,7 @@ void igCompressedAnimationSequenceQS_InitFields(void) {
     struct Fld_1a29e0 *temp_v0;
     struct Fld_1a29e0 *temp_v0_2;
 
-    temp_s1 = DAT_00561c38[0];
+    temp_s1 = g_igCompressedAnimationSequenceQS_metaObject[0];
     temp_s0 = igMetaObject_GetFieldCount(temp_s1);
     igMetaObject_CreateFields(temp_s1, &DAT_0048c4e0[0], 0xC);
     temp_s2 = ((struct Fld_1a29e0 *)igMetaObject_GetFieldAt(temp_s1, temp_s0));

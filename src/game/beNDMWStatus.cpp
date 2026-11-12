@@ -1,7 +1,7 @@
 #include "dw4/reflected.h"
 #include "dw4/igSmartPointer.h"
 #define RELEASE_WIN(p_) { beNDMWWindow *rw = (p_); if (rw) { --rw->_refCount; if (!(rw->_refCount & 0x7fffff)) igObject_Destroy(rw); } }
-#define GET_ALLOC(v) { void *ga = igObject_GetAllocator(self); if (GPR_00554c14 != 0) { v = ga; } else { v = Memory_GetAllocatorBySelector(DAT_00587110[0]); } }
+#define GET_ALLOC(v) { void *ga = igObject_GetAllocator(self); if (GPR_00554c14 != 0) { v = ga; } else { v = Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]); } }
 #define NEXT() { info->_st0 = info->_st0 + 1; info->_st3 = 0; info->_st2 = 0; info->_st1 = 0; }
 #define MK(fn) { void *al; GET_ALLOC(al) RELEASE_WIN(w.p) w.p = fn(al); }
 #define RELEASE_REF(q) { igObject *rr = (igObject *)(q); if (rr) { --rr->_refCount; if (!(rr->_refCount & 0x7fffff)) igObject_Destroy(rr); } }
@@ -22,8 +22,8 @@
 #define WL(f) ((igObjectList *)work->f)
 #define REL(o) { igObject *rr = (o); if (rr != 0) { rr->_refCount = rr->_refCount - 1; if ((rr->_refCount & 0x7FFFFF) == 0) { igObject_Destroy(rr); } } }
 #define ALLOC(a, sel) { a = igObject_GetAllocator(owner); a = GPR_00554c14 ? a : Memory_GetAllocatorBySelector(sel); }
-#define ITEM4(K, sp, fac, init, lst, id) { ALLOC(alloc, DAT_00587108[0]) ItemRef<K> sp((igObject *)fac(alloc)); init(sp.p, id, owner, level); ObjectList_AppendRetained(lst, sp.p); }
-#define ITEM2(K, sp, fac, init, lst, id) { ALLOC(alloc, DAT_00587108[0]) ItemRef<K> sp((igObject *)fac(alloc)); init(sp.p, id); ObjectList_AppendRetained(lst, sp.p); }
+#define ITEM4(K, sp, fac, init, lst, id) { ALLOC(alloc, g_ndmwAllocatorSelector[0]) ItemRef<K> sp((igObject *)fac(alloc)); init(sp.p, id, owner, level); ObjectList_AppendRetained(lst, sp.p); }
+#define ITEM2(K, sp, fac, init, lst, id) { ALLOC(alloc, g_ndmwAllocatorSelector[0]) ItemRef<K> sp((igObject *)fac(alloc)); init(sp.p, id); ObjectList_AppendRetained(lst, sp.p); }
 
 extern "C" void igObject_Destroy(void *);
 extern "C" int Gap__Bec__beNDMWStatus__vfunc_30(void);
@@ -110,8 +110,8 @@ extern "C" int DAT_005168a8[4];
 extern "C" int DAT_005168b8[4];
 extern "C" int DAT_005168c8[4];
 extern "C" int DAT_005168d0[4];
-extern "C" int DAT_00587110[4];
-extern "C" int DAT_00589208[4];
+extern "C" int g_defaultAllocatorSelector[4];
+extern "C" int g_beLua_metaObject[4];
 extern "C" unsigned char GPR_00554c14;
 extern "C" void Gap__Bec__beNDMWStatus__vfunc_31(beNDMWStatus *self, beNDMWStatusInfoRam *info);
 struct Folder { int pad[3]; igObjectList *list; };
@@ -193,7 +193,7 @@ extern "C" int DAT_00516b80[4];
 extern "C" int DAT_00516b90[4];
 extern "C" int DAT_00516b98[4];
 extern "C" int DAT_00516ba8[4];
-extern "C" int DAT_00587108[4];
+extern "C" int g_ndmwAllocatorSelector[4];
 /* Owning reference to a freshly created object: the destructor drops one reference and destroys at
  * zero. Every item kind is its own class, so the compiler emits one destructor per kind. */
 
@@ -329,7 +329,7 @@ void Gap__Bec__beNDMWStatus__vfunc_31(beNDMWStatus *self, beNDMWStatusInfoRam *i
                 beMessenger_AppendString(self->_messenger, DAT_005168c8);
                 beMessenger_DispatchSelected(self->_messenger, DAT_005167d8);
                 if (self->_subWndNo != 0)
-                    beLua__RunNamedChunk(FUN_00236f80(self->_insight, DAT_00589208[0]), DAT_005168d0, 0);
+                    beLua__RunNamedChunk(FUN_00236f80(self->_insight, g_beLua_metaObject[0]), DAT_005168d0, 0);
             }
         }
     }
@@ -980,7 +980,7 @@ void FUN_003d8740(beNDMWStatus *owner, beNDMWStatusInfoRam *ram) {
 
     work = (beNDMWStatusInfoWork *)ram->_work;
     if (work == 0) {
-        ALLOC(alloc, DAT_00587110[0])
+        ALLOC(alloc, g_defaultAllocatorSelector[0])
         igSmartPointer<beNDMWStatusInfoWork> spWork((beNDMWStatusInfoWork *)FUN_003b5ec0(alloc));
         igObject *w = spWork.p;
         if (w != 0) w->_refCount = w->_refCount + 1;

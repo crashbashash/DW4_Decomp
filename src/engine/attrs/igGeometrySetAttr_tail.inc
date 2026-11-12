@@ -13,7 +13,7 @@ bool FUN_0013e6e0(igGeometrySetAttr *arg0, int arg1) {
     p = (Item **)((igGeometryAttrList *)arg0->_geometryAttrList)->_data;
     end = p + ((igGeometryAttrList *)arg0->_geometryAttrList)->_count;
     for (; p < end; p++) {
-        if (igObject_IsKindOf(*p, *(int *)DAT_0055f170) == 0) {
+        if (igObject_IsKindOf(*p, *(int *)g_igGeometryAttr_metaObject) == 0) {
             ok = false;
             break;
         }

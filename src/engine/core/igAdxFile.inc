@@ -20,14 +20,14 @@ void ***FUN_002e2fb0(void) {
         if (t != 0) { *t = 0; }
         DAT_00586e18[0] = cell;
         name = DAT_004c2128[0];
-        if (DAT_00586f20[0] == 0) {
+        if (g_stringPool[0] == 0) {
             pool = ((int)FUN_002eb010(16));
             if (pool != 0) {
                 pool = ((int)StringPool_Construct((S_2eadf0 *)pool));
             }
-            DAT_00586f20[0] = pool;
+            g_stringPool[0] = pool;
         }
-        nw = ((void *)StringPool_Intern((StringPool *)DAT_00586f20[0], (const char *)name));
+        nw = ((void *)StringPool_Intern((StringPool *)g_stringPool[0], (const char *)name));
         old = (RC *)*cell;
         if (old != 0) {
             hdr = (int *)((char *)old - 8);
@@ -49,14 +49,14 @@ void FUN_002e30b0(int *arg0, int arg1) {
     void *temp_a0;
     void *temp_s0;
 
-    if (DAT_00586f20[0] == 0) {
+    if (g_stringPool[0] == 0) {
         var_v0 = ((int)FUN_002eb010(0x10));
         if (var_v0 != 0) {
             var_v0 = ((int)StringPool_Construct((S_2eadf0 *)var_v0));
         }
-        DAT_00586f20[0] = var_v0;
+        g_stringPool[0] = var_v0;
     }
-    temp_s0 = (void *)(((void *)StringPool_Intern((StringPool *)DAT_00586f20[0], (const char *)arg1)));
+    temp_s0 = (void *)(((void *)StringPool_Intern((StringPool *)g_stringPool[0], (const char *)arg1)));
     temp_a0 = (void *)arg0[3];
     if (temp_a0 != 0) {
         temp_a1 = (int *)((char *)temp_a0 - 8);
@@ -135,14 +135,14 @@ void FUN_002e3280(int arg0) {
         }
     } else {
         temp_s1 = (void **)(*FUN_002e2fb0());
-        if (DAT_00586f20[0] == 0) {
+        if (g_stringPool[0] == 0) {
             var_v0 = ((int)FUN_002eb010(0x10));
             if (var_v0 != 0) {
                 var_v0 = ((int)StringPool_Construct((S_2eadf0 *)var_v0));
             }
-            DAT_00586f20[0] = var_v0;
+            g_stringPool[0] = var_v0;
         }
-        temp_s0_2 = (void *)(((void *)StringPool_Intern((StringPool *)DAT_00586f20[0], (const char *)arg0)));
+        temp_s0_2 = (void *)(((void *)StringPool_Intern((StringPool *)g_stringPool[0], (const char *)arg0)));
         temp_a0 = (void *)(*temp_s1);
         if (temp_a0 != 0) {
             temp_a1_2 = (int *)((char *)temp_a0 - 8);
@@ -211,14 +211,14 @@ int Gap__igAdxFile__vfunc_39(struct AX *arg0, int arg1) {
     int *hdr;
     int v;
     int obj;
-    if (DAT_00586f20[0] == 0) {
+    if (g_stringPool[0] == 0) {
         obj = ((int)FUN_002eb010(0x10));
         if (obj != 0) {
             obj = ((int)StringPool_Construct((struct S_2eadf0 *)obj));
         }
-        DAT_00586f20[0] = obj;
+        g_stringPool[0] = obj;
     }
-    s0 = StringPool_Intern((StringPool *)DAT_00586f20[0], (const char *)arg1);
+    s0 = StringPool_Intern((StringPool *)g_stringPool[0], (const char *)arg1);
     a0 = (int *)arg0->f40;
     if (a0 != 0) {
         hdr = a0 - 2;

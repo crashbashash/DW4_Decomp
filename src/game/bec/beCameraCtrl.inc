@@ -3,24 +3,24 @@ void FUN_00369820(int arg0) {
     igMetaObject_CreateInstance(*(int *)0x589C90, arg0);
 }
 
-int FUN_00369860(void) {
-    if (((int *)DAT_00589c90)[0] == 0) {
-        ((int *)DAT_00589c90)[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(DAT_00587040[0]));
+igMetaObject *FUN_00369860(void) {
+    if (g_beCameraCtrl_metaObject[0] == 0) {
+        g_beCameraCtrl_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
     }
-    return ((int *)DAT_00589c90)[0];
+    return g_beCameraCtrl_metaObject[0];
 }
 
 void *FUN_003698b0(void) {
-    struct G *g = DAT_00589c90[0];
-    if (!g || ((g->f & 4) != 0) == false) {
+    igMetaObject *g = g_beCameraCtrl_metaObject[0];
+    if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_00369a20();
     }
-    return DAT_00589c90[0];
+    return g_beCameraCtrl_metaObject[0];
 }
 
 int beCameraCtrl_GetVTable(void) {
     CameraCtrlView camera;
-    return *(int *)((char *)&camera + *(int *)((char *)DAT_00586dc8[0] + 916));
+    return *(int *)((char *)&camera + *(int *)((char *)g_objectSystem[0] + 916));
 }
 
 void **FUN_003699a0(void **arg0, long long arg1) {
@@ -75,7 +75,7 @@ void beCameraCtrl_InitFields(void) {
     void *temp_s1_3;
     void *temp_s0;
 
-    temp_s0 = (void *)((int *)DAT_00589c90)[0];
+    temp_s0 = (void *)g_beCameraCtrl_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_004c7a60[0], 0xD);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
@@ -85,7 +85,7 @@ void beCameraCtrl_InitFields(void) {
     *(int *)((char *)(temp_s1_2) + 56) = FUN_0045b420();
     *(char *)((char *)(temp_s1_2) + 60) = 0;
     temp_s1_3 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 2));
-    *(int *)((char *)(temp_s1_3) + 56) = FUN_00368a30();
+    *(int *)((char *)(temp_s1_3) + 56) = (int)FUN_00368a30();
     FUN_002e3810(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 0xB), 1.0f);
     FUN_002d3890(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 0xC), 1);
     igMetaObject_NameFields(temp_s0, &DAT_004c7aa0[0], &DAT_004c7ae0[0], &DAT_004c7b20[0], temp_s2);

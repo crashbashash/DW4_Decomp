@@ -1,5 +1,5 @@
-int Gap__Attrs__igStencilFunctionAttr__vfunc_22(void) {
-    return DAT_0055ee50[0];
+igMetaObject *Gap__Attrs__igStencilFunctionAttr__vfunc_22(void) {
+    return g_igStencilFunctionAttr_metaObject[0];
 }
 
 /* Accessor: returns the stencil reference value (`_refVal`, igUnsignedIntMetaField, +12). */

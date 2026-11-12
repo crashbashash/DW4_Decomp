@@ -11,7 +11,7 @@ int igNonRefCountedObjectStack_GetVTable(void) {
 
     igObject_InitHeader(&obj);
     obj.vt = &DAT_00524fe0[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 
 void FUN_001e4430(void)
@@ -46,7 +46,7 @@ void FUN_001e44c0(void) {
     void *temp_s0;
     void *temp_s1;
 
-    temp_s1 = (void *)(DAT_00562b78[0]);
+    temp_s1 = (void *)(g_igNonRefCountedObjectStack_metaObject[0]);
     temp_v0 = (void **)(igMetaObject_FindFieldByName(temp_s1, &DAT_004e48c8[0]));
     temp_s2 = ObjectPointerList_FindIndex(*(int *)((char *)(temp_s1) + 40), temp_v0);
     temp_s0 = (void *)(((DW4VC_84_1 *)(temp_v0))->vX((int)(1)));

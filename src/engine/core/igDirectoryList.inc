@@ -1,8 +1,8 @@
-int FUN_002c7150(void) {
-    if (DAT_00586660[0] == 0) {
-        DAT_00586660[0] = ((int)igMetaObject_Create(((int)Memory_GetAllocatorBySelector(DAT_00587040[0]))));
+igMetaObject *FUN_002c7150(void) {
+    if (g_igDirectoryList_metaObject[0] == 0) {
+        g_igDirectoryList_metaObject[0] = (igMetaObject *)igMetaObject_Create(((int)Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0])));
     }
-    return DAT_00586660[0];
+    return g_igDirectoryList_metaObject[0];
 }
 
 igMetaObject *igDirectoryList_GetMetaObject(void)
@@ -17,7 +17,7 @@ int igDirectoryList_GetVTable(void) {
     union U_2c71f0 u;
     igObject_InitHeader((ObjectHeader *)u.b);
     u.vt = (int)&DAT_005323c0[0];
-    return *(int *)&u.b[*(int *)((char *)(((void * *)DAT_00586dc8)[0]) + 916)];
+    return *(int *)&u.b[*(int *)((char *)(((void * *)g_objectSystem)[0]) + 916)];
 }
 
 void FUN_002c7230(void)

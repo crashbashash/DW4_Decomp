@@ -1,9 +1,9 @@
 void *beNDMWPanelWazaInfo_ResolveMetaObject(void) {
-    struct G *g = DAT_0058b1e8[0];
-    if (!g || ((g->f & 4) != 0) == false) {
+    igMetaObject *g = g_beNDMWPanelWazaInfo_metaObject[0];
+    if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_003bd750();
     }
-    return DAT_0058b1e8[0];
+    return g_beNDMWPanelWazaInfo_metaObject[0];
 }
 
 int beNDMWPanelWazaInfo_GetVTable(void) {
@@ -15,7 +15,7 @@ int beNDMWPanelWazaInfo_GetVTable(void) {
     obj.w5 = 0;
     obj.w6 = 0;
     obj.vt = &DAT_0053d690[0];
-    t = *(int *)((char *)&obj + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+    t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
     obj.vt = &DAT_0053d690[0];
     FUN_0033ec80(&obj, 0);
     return t;

@@ -58,7 +58,7 @@ int Gap__Core__igAliasMemoryPool__vfunc_26(void) {
 
 /* Slot 24, output the allocator failure-status word. */
 void Gap__Core__igAliasMemoryPool__vfunc_24(int *outStatus) {
-    *outStatus = g_allocatorFailureStatus[0];
+    *outStatus = g_allocatorFailureStatus.v;
 }
 
 /* Slot 25, fixed result 0. */
@@ -97,19 +97,19 @@ LockStatus Gap__Core__igAliasMemoryPool__vfunc_34(igAliasMemoryPool *pool, int e
         }
     } else if ((enable & 0xFF) == 1) {
         if (pool->_allocationLock != 0) {
-            return DAT_004fb410.v;
+            return g_statusSucceeded.v;
         }
         igSmartPointer<Lock> created((Lock *)FUN_002ba650((int)(((void *)igObject_GetAllocator((int)pool)))));
         created.get()->open();
         setLock(pool, created.get());
     }
-    return DAT_004fb410.v;
+    return g_statusSucceeded.v;
 }
 
 /* IgAliasMemoryPool vtable slot 35: status leaf. Ignores the pool and writes the engine's failure-
  * status word (set to 1 by the engine init) through the output-first argument. */
 void Gap__Core__igAliasMemoryPool__vfunc_35(int *statusOut) {
-    *statusOut = g_allocatorFailureStatus[0];
+    *statusOut = g_allocatorFailureStatus.v;
 }
 
 int Gap__Core__igAliasMemoryPool__vfunc_36(void) {
@@ -120,7 +120,7 @@ int Gap__Core__igAliasMemoryPool__vfunc_36(void) {
  * setters (vfunc_37 alignment, vfunc_39 element size) share the shape. */
 void Gap__Core__igAliasMemoryPool__vfunc_41(int *status, igAliasMemoryPool *self, long long maxSize) {
     self->_maxSize = maxSize;
-    *status = g_statusSucceeded[0];
+    *status = g_statusSucceeded.v;
 }
 
 /* Vtable slot 42: the pool's capacity in bytes (_maxSize). */
@@ -131,7 +131,7 @@ long long Gap__Core__igAliasMemoryPool__vfunc_42(igAliasMemoryPool *self) {
 /* Set the pool's alignment (`_alignment`) and report success through the status word. */
 void Gap__Core__igAliasMemoryPool__vfunc_37(int *status, igAliasMemoryPool *self, short alignment) {
     self->_alignment = alignment;
-    *status = g_statusSucceeded[0];
+    *status = g_statusSucceeded.v;
 }
 
 /* IgAliasMemoryPool slot 38, returns the reflected _alignment (+176, unsigned short). */
@@ -144,7 +144,7 @@ unsigned short Gap__Core__igAliasMemoryPool__vfunc_38(igAliasMemoryPool *self) {
  * g_statusSucceeded). */
 void Gap__Core__igAliasMemoryPool__vfunc_39(int *status_out, igAliasMemoryPool *self, int element_size) {
     self->_elementSize = element_size;
-    *status_out = g_statusSucceeded[0];
+    *status_out = g_statusSucceeded.v;
 }
 
 /* IgAliasMemoryPool slot 40, returns the reflected _elementSize (+172). */
@@ -288,7 +288,7 @@ R62 Gap__Core__igAliasMemoryPool__vfunc_62(igAliasMemoryPool *arg1) {
     if (o != 0) {
         return o->vX();
     }
-    return R62(DAT_004fb418.v);
+    return R62(g_allocatorFailureStatus.v);
 }
 
 R63 Gap__Core__igAliasMemoryPool__vfunc_63(igAliasMemoryPool *arg1) {
@@ -296,7 +296,7 @@ R63 Gap__Core__igAliasMemoryPool__vfunc_63(igAliasMemoryPool *arg1) {
     if (p != 0) {
         return p->vX();
     }
-    return R63(DAT_004fb418.v);
+    return R63(g_allocatorFailureStatus.v);
 }
 
 void Gap__Core__igAliasMemoryPool__vfunc_64(igAliasMemoryPool *arg0) {
@@ -537,14 +537,14 @@ void FUN_002d16a0(int arg0) {
     int var_v0;
 
     if (DAT_00586dd8[0]++ == 0) {
-        DAT_004fb410.v = 0;
-        DAT_004fb418.v = 1;
+        g_statusSucceeded.v = 0;
+        g_allocatorFailureStatus.v = 1;
         FUN_0032d1f0();
         var_v0 = thunk_malloc(0x3A0);
         if (var_v0 != 0) {
             var_v0 = ((int)FUN_002d1930((void *)var_v0));
         }
-        ((int *)DAT_00586dc8)[0] = var_v0;
+        ((int *)g_objectSystem)[0] = var_v0;
         FUN_002d1a00((S_2d1a00 *)var_v0);
         FUN_002b9620();
         FUN_002b9470();
@@ -553,9 +553,9 @@ void FUN_002d16a0(int arg0) {
         FUN_002bad40();
         sp2C = (int *)(&DAT_00530d80[0]);
         FUN_002d1690((int)&sp2C);
-        FUN_002d1e40(((int *)DAT_00586dc8)[0]);
+        FUN_002d1e40(((int *)g_objectSystem)[0]);
     }
-    FUN_002d18d0((void *)(((int *)DAT_00586dc8)[0]), arg0);
+    FUN_002d18d0((void *)(((int *)g_objectSystem)[0]), arg0);
 }
 
 void FUN_002d1770(void) {
@@ -564,13 +564,13 @@ void FUN_002d1770(void) {
     int *h;
     int rc;
 
-    if (((struct Core *)((void * *)DAT_00586dc8)[0])->f21 == 0) {
-        FUN_002d27a0((S_2d27a0 *)(((void * *)DAT_00586dc8)[0]));
+    if (((struct Core *)((void * *)g_objectSystem)[0])->f21 == 0) {
+        FUN_002d27a0((S_2d27a0 *)(((void * *)g_objectSystem)[0]));
     }
     if (--DAT_00586dd8[0] == 0) {
-        FUN_002d2800(((void * *)DAT_00586dc8)[0]);
-        FUN_002d2e60((S_2d2e60 *)(((void * *)DAT_00586dc8)[0]));
-        core = (struct Core *)((void * *)DAT_00586dc8)[0];
+        FUN_002d2800(((void * *)g_objectSystem)[0]);
+        FUN_002d2e60((S_2d2e60 *)(((void * *)g_objectSystem)[0]));
+        core = (struct Core *)((void * *)g_objectSystem)[0];
         if (core != 0) {
             if (&core->f924) {
                 p = core->f924;
@@ -596,7 +596,7 @@ void FUN_002d1770(void) {
             }
             thunk_free((int)core);
         }
-        ((void * *)DAT_00586dc8)[0] = 0;
+        ((void * *)g_objectSystem)[0] = 0;
     }
 }
 

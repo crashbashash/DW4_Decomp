@@ -1,6 +1,6 @@
 #include "dw4/reflected.h"
 #include "dw4/igSmartPointer.h"
-#define ALLOC(dst, obj) { int alloc = igObject_GetAllocator(obj); if (GPR_00554c14 != 0) { dst = alloc; } else { dst = Memory_GetAllocatorBySelector(DAT_00587110[0]); } }
+#define ALLOC(dst, obj) { int alloc = igObject_GetAllocator(obj); if (GPR_00554c14 != 0) { dst = alloc; } else { dst = Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]); } }
 
 extern "C" int Gap__Bec__beNDMWSaveCtrl__vfunc_30(void);
 extern "C" int Gap__Bec__beNDMWSaveCtrl__vfunc_20(void);
@@ -15,7 +15,7 @@ extern "C" int beMessenger_GetObjectCount(...);
 extern "C" int beMessenger_ResolveEnumValue(...);
 extern "C" int igProperty_FindByName(...);
 extern "C" igObject * FUN_00236f80(...);
-extern "C" int DAT_00588518[4];
+extern "C" int g_bePadManager_metaObject[4];
 extern "C" void Gap__Bec__beNDMWSaveCtrl__vfunc_32(beNDMWSaveCtrl *arg0);
 extern "C" int g_beNDMWSaveCtrlInfo_metaObject[4];
 extern "C" int g_beNDMWSaveCtrl_metaObject[4];
@@ -28,9 +28,9 @@ extern "C" igObject *FUN_003c56b0(int);
 extern "C" igObject *beNDMWDegiData_Create(int);
 extern "C" int DAT_005194e0[4];
 extern "C" int DAT_005194e8[4];
-extern "C" int DAT_00585be0[4];
-extern "C" int DAT_00587110[4];
-extern "C" int DAT_00587d08[4];
+extern "C" int g_propertyNameField[4];
+extern "C" int g_defaultAllocatorSelector[4];
+extern "C" int g_beSystem_metaObject[4];
 extern "C" unsigned char GPR_00554c14;
 /* The incoming message: its +20 word is the enum name. */
 struct A2 { char p[20]; int f20; };
@@ -76,7 +76,7 @@ void Gap__Bec__beNDMWSaveCtrl__vfunc_32(beNDMWSaveCtrl *arg0) {
     igObject *temp_v0;
 
     if (arg0->_padManager == 0) {
-        temp_v0 = FUN_00236f80(arg0->_insight, DAT_00588518[0]);
+        temp_v0 = FUN_00236f80(arg0->_insight, g_bePadManager_metaObject[0]);
         if (temp_v0 != 0) {
             temp_v0->_refCount = temp_v0->_refCount + 1;
             ;
@@ -131,7 +131,7 @@ int Gap__Bec__beNDMWSaveCtrl__vfunc_34(beNDMWSaveCtrl *arg0, beBaseInfoRam *arg1
             ALLOC(a, arg0);
             {
             CommonIntfRef common(FUN_003c4be0(a));
-            ((beNDMWLoadCtrl2CommonIntf *)common.p)->_system = ((int)FUN_00236f80(arg0->_insight, DAT_00587d08[0]));
+            ((beNDMWLoadCtrl2CommonIntf *)common.p)->_system = ((int)FUN_00236f80(arg0->_insight, g_beSystem_metaObject[0]));
             ((beNDMWLoadCtrl2CommonIntf *)common.p)->_inforam = (int)arg1;
             ((beNDMWLoadCtrl2CommonIntf *)common.p)->_insight = arg0->_insight;
             i = 0;
@@ -169,7 +169,7 @@ int Gap__Bec__beNDMWSaveCtrl__vfunc_34(beNDMWSaveCtrl *arg0, beBaseInfoRam *arg1
         arg1->_dataList = (int)t;
         }
     }
-    igProperty_FindByName(arg1->_dataList, DAT_00585be0[0], &DAT_005194e0[0]);
+    igProperty_FindByName(arg1->_dataList, g_propertyNameField[0], &DAT_005194e0[0]);
     switch (e) {
     case 1:
         return 1;
@@ -188,7 +188,7 @@ int Gap__Bec__beNDMWSaveCtrl__vfunc_34(beNDMWSaveCtrl *arg0, beBaseInfoRam *arg1
                 arg1->_dataList = (int)t;
                 }
             }
-            beMessenger_AppendObject(arg0->_messenger, igProperty_FindByName(arg1->_dataList, DAT_00585be0[0], &DAT_005194e8[0]));
+            beMessenger_AppendObject(arg0->_messenger, igProperty_FindByName(arg1->_dataList, g_propertyNameField[0], &DAT_005194e8[0]));
         }
         return 1;
     default:

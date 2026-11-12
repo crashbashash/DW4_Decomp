@@ -4,11 +4,11 @@ void FUN_003ca380(int arg0) {
 }
 
 void *beNDMWGameRamInfo_ResolveMetaObject(void) {
-    struct G *g = DAT_0058c108[0];
-    if (!g || ((g->f & 4) != 0) == false) {
+    igMetaObject *g = g_beNDMWGameRamInfo_metaObject[0];
+    if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_003ca480();
     }
-    return DAT_0058c108[0];
+    return g_beNDMWGameRamInfo_metaObject[0];
 }
 
 int beNDMWGameRamInfo_GetVTable(void) {
@@ -20,7 +20,7 @@ int beNDMWGameRamInfo_GetVTable(void) {
     f.w[4] = 0;
     f.w[5] = 0;
     f.vt = &DAT_0053c4e0[0];
-    temp_s0 = *(int *)((char *)&f + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+    temp_s0 = *(int *)((char *)&f + *(int *)((char *)(g_objectSystem[0]) + 916));
     f.vt = &DAT_0053c4e0[0];
     FUN_0033ec80(&f, 0);
     return temp_s0;

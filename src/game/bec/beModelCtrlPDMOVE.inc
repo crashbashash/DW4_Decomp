@@ -1,9 +1,9 @@
 void *FUN_003551c0(void) {
-    struct G *g = DAT_00588d70[0];
-    if (!g || ((g->f & 4) != 0) == false) {
+    igMetaObject *g = g_beModelCtrlPDMOVE_metaObject[0];
+    if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_003552a0();
     }
-    return DAT_00588d70[0];
+    return g_beModelCtrlPDMOVE_metaObject[0];
 }
 
 int beModelCtrlPDMOVE_GetVTable(void) {
@@ -19,7 +19,7 @@ int beModelCtrlPDMOVE_GetVTable(void) {
     *(int *)ps = 0;
     u.vt = (int)&DAT_00524950[0];
     u.vt = (int)&DAT_00537650[0];
-    temp_s0 = *(int *)&u.b[*(int *)((char *)(DAT_00586dc8[0]) + 916)];
+    temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.vt = (int)&DAT_00524950[0];
     if (ps != 0) {
         temp_v1 = *(int **)ps;
@@ -66,7 +66,7 @@ void beModelCtrlPDMOVE_InitFields(void) {
     int temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)((int *)DAT_00588d70)[0];
+    temp_s0 = (void *)g_beModelCtrlPDMOVE_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_004c5798[0], 2);
     igMetaObject_NameFields(temp_s0, &DAT_004c57a0[0], &DAT_004c57a8[0], &DAT_004c57b0[0], temp_s1);

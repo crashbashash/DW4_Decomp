@@ -3,11 +3,11 @@ void FUN_00139990(int arg0) {
     igMetaObject_CreateInstance(*(int *)0x55F360, arg0);
 }
 
-int FUN_001399d0(void) {
-    if (DAT_0055f360[0] == 0) {
-        DAT_0055f360[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(DAT_00587040[0]));
+igMetaObject *FUN_001399d0(void) {
+    if (g_igBlendMatrixPaletteAttr_metaObject[0] == 0) {
+        g_igBlendMatrixPaletteAttr_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
     }
-    return DAT_0055f360[0];
+    return g_igBlendMatrixPaletteAttr_metaObject[0];
 }
 
 igMetaObject *igBlendMatrixPaletteAttr_GetMetaObject(void)
@@ -22,7 +22,7 @@ int igBlendMatrixPaletteAttr_GetVTable(void) {
     union U_139a70 u;
     igObject_InitHeader(u.b);
     u.vt = (int)&DAT_00524110[0];
-    return *(int *)&u.b[*(int *)((char *)(DAT_00586dc8[0]) + 916)];
+    return *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
 }
 
 void FUN_00139ab0(void)
@@ -57,7 +57,7 @@ void igBlendMatrixPaletteAttr_InitFields(void) {
     void *temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)DAT_0055f360[0];
+    temp_s0 = (void *)g_igBlendMatrixPaletteAttr_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_00486a10[0], 4);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));

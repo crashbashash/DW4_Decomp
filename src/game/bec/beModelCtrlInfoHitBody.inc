@@ -3,19 +3,19 @@ void FUN_003523d0(int arg0) {
     igMetaObject_CreateInstance(*(int *)0x588B00, arg0);
 }
 
-int FUN_00352410(void) {
-    if (((int *)DAT_00588b00)[0] == 0) {
-        ((int *)DAT_00588b00)[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(DAT_00587040[0]));
+igMetaObject *FUN_00352410(void) {
+    if (g_beModelCtrlInfoHitBody_metaObject[0] == 0) {
+        g_beModelCtrlInfoHitBody_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
     }
-    return ((int *)DAT_00588b00)[0];
+    return g_beModelCtrlInfoHitBody_metaObject[0];
 }
 
 void *FUN_00352460(void) {
-    struct G *g = DAT_00588b00[0];
-    if (!g || ((g->f & 4) != 0) == false) {
+    igMetaObject *g = g_beModelCtrlInfoHitBody_metaObject[0];
+    if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_003525e0();
     }
-    return DAT_00588b00[0];
+    return g_beModelCtrlInfoHitBody_metaObject[0];
 }
 
 int beModelCtrlInfoHitBody_GetVTable(void) {
@@ -33,7 +33,7 @@ int beModelCtrlInfoHitBody_GetVTable(void) {
     *(int *)q1 = 0;
     q0 = (S_ref *)&u.b[40];
     *(int *)q0 = 0;
-    temp_s0 = *(int *)&u.b[*(int *)((char *)(DAT_00586dc8[0]) + 916)];
+    temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.vt = (int)&DAT_00537dc0[0];
     if (q0 != 0) {
         q0 = *(S_ref **)q0;
@@ -100,7 +100,7 @@ void beModelCtrlInfoHitBody_InitFields(void) {
     void *temp_s2_4;
     void *temp_s1;
 
-    temp_s1 = (void *)((int *)DAT_00588b00)[0];
+    temp_s1 = (void *)g_beModelCtrlInfoHitBody_metaObject[0];
     temp_s0 = igMetaObject_GetFieldCount(temp_s1);
     igMetaObject_CreateFields(temp_s1, &DAT_004c5300[0], 7);
     FUN_002d3890(igMetaObject_GetFieldAt(temp_s1, temp_s0), 1);

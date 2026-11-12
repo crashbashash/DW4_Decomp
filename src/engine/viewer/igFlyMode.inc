@@ -3,15 +3,15 @@ void FUN_0045c8e0(int arg0) {
     igMetaObject_CreateInstance(*(int *)0x58CC80, arg0);
 }
 
-S_45c920 *igFlyMode_GetMetaObject(void) {
-    S_45c920 *g = ((S_45c920 *)DAT_0058cc80[0]);
+igMetaObject *igFlyMode_GetMetaObject(void) {
+    igMetaObject *g = g_igFlyMode_metaObject[0];
     if (g != 0) {
-        int b = !!(g->flags & 4);
+        int b = !!(g->_validity & 4);
         if (b) goto done;
     }
     FUN_0045ca20();
 done:
-    return ((S_45c920 *)DAT_0058cc80[0]);
+    return g_igFlyMode_metaObject[0];
 }
 
 int igFlyMode_GetVTable(void) {
@@ -23,7 +23,7 @@ int igFlyMode_GetVTable(void) {
     igMatrix44f_SetIdentity(o.sub);
     o.vt = &DAT_00542840[0];
     o.ref = 0;
-    r = *(int *)((char *)&o + *(int *)((char *)(((void *)DAT_00586dc8[0])) + 916));
+    r = *(int *)((char *)&o + *(int *)((char *)(((void *)g_objectSystem[0])) + 916));
     o.vt = &DAT_00542840[0];
     if (&o.ref != 0) {
         t = o.ref;
@@ -82,7 +82,7 @@ void igFlyMode_InitFields(void) {
     struct V2 f;
     struct V2 g;
 
-    temp_s0 = (void *)DAT_0058cc80[0];
+    temp_s0 = (void *)g_igFlyMode_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_004d1590[0], 0xB);
     temp_a0 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));

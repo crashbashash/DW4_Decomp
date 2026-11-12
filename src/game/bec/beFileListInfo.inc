@@ -1,12 +1,12 @@
 void *FUN_00362c00(void) {
     unsigned char b;
-    if (DAT_00589760[0] != 0) {
-        b = (*(int *)((char *)(DAT_00589760[0]) + 36) & 4) != 0;
+    if (g_beFileListInfo_metaObject[0] != 0) {
+        b = (*(int *)((char *)(g_beFileListInfo_metaObject[0]) + 36) & 4) != 0;
         if (b != 0) goto done;
     }
     FUN_00362ce0();
 done:
-    return DAT_00589760[0];
+    return g_beFileListInfo_metaObject[0];
 }
 
 int beFileListInfo_GetVTable(void) {
@@ -22,7 +22,7 @@ int beFileListInfo_GetVTable(void) {
     *(int *)p2 = 0;
     p1 = &u.b[24];
     *(int *)p1 = 0;
-    temp_s1 = *(int *)&u.b[*(int *)((char *)(DAT_00586dc8[0]) + 916)];
+    temp_s1 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.vt = (int)&DAT_00535870[0];
     FUN_00199450(p1, -1);
     StringRef_Destruct_00130720(p2, -1);
@@ -62,7 +62,7 @@ void beFileListInfo_InitFields(void) {
     void *temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)((int *)DAT_00589760)[0];
+    temp_s0 = (void *)g_beFileListInfo_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_004c6f58[0], 2);
     igStringMetaField_SetDefaultText(igMetaObject_GetFieldAt(temp_s0, temp_s2), 0);

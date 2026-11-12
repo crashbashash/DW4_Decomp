@@ -20,7 +20,7 @@ int igPsx2BlendEquationExt_GetVTable(void) {
     q2 = (S_ref *)&u.b[16];
     *(int *)q2 = 0;
     u.w[0] = (int)(&DAT_00525770[0]);
-    temp_s1 = *(int *)&u.b[*(int *)((char *)(DAT_00586dc8[0]) + 916)];
+    temp_s1 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.w[0] = (int)(&DAT_00530a10[0]);
     if (q2 != 0) {
         q2 = *(S_ref **)q2;
@@ -65,8 +65,8 @@ void igPsx2BlendEquationExt_Register(void) {
     );
 }
 
-int FUN_001547a0(void) {
-    return DAT_0055ff00[0];
+igMetaObject *FUN_001547a0(void) {
+    return g_igBlendEquationExt_metaObject[0];
 }
 
 void igPsx2BlendEquationExt_InitFields(void) {
@@ -74,7 +74,7 @@ void igPsx2BlendEquationExt_InitFields(void) {
     void *temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)DAT_00560628[0];
+    temp_s0 = (void *)g_igPsx2BlendEquationExt_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_0048a100[0], 6);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));

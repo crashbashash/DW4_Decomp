@@ -21,7 +21,7 @@ int igNamedObjectInfo_GetVTable(void) {
     u.vt = (int)&DAT_0052f150[0];
     q0 = (S_ref *)&u.b[20];
     *(int *)q0 = 0;
-    temp_s0 = *(int *)&u.b[*(int *)((char *)(((void * *)DAT_00586dc8)[0]) + 916)];
+    temp_s0 = *(int *)&u.b[*(int *)((char *)(((void * *)g_objectSystem)[0]) + 916)];
     u.vt = (int)&DAT_0052f150[0];
     if (q0 != 0) {
         q0 = *(S_ref **)q0;
@@ -78,11 +78,11 @@ void igNamedObjectInfo_InitFields(void) {
     void *temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)DAT_00585bc0[0];
+    temp_s0 = (void *)g_igNamedObjectInfo_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
     igMetaObject_CreateFields((igMetaObject *)temp_s0, (igMetaField * (**)(void *))&DAT_004bfbb0[0], 1);
     temp_s1 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2)));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = FUN_002be100();
+    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_002be100();
     ((igRefMetaField *)temp_s1)->_construct = 1;
     igMetaObject_NameFields((igMetaObject *)temp_s0, (const char **)&DAT_004bfbb8[0], (igMetaField ***)&DAT_004bfbc0[0], &DAT_004bfbc8[0], temp_s2);
 }

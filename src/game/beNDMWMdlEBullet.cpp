@@ -14,8 +14,8 @@ extern "C" igObject *beBaseInfoDataList_Create(...);
 struct PropertyRecord { char header[20]; igObject *value; };
 extern "C" PropertyRecord *igProperty_FindByName(...);
 extern "C" int DAT_00515d40[4];
-extern "C" int DAT_00585be0[4];
-extern "C" int DAT_00587110[4];
+extern "C" int g_propertyNameField[4];
+extern "C" int g_defaultAllocatorSelector[4];
 extern "C" unsigned char GPR_00554c14;
 /* matching construct: inline release helper reproduces the retail release sequence */
 struct ReleaseRef { static inline void go(igObject *object) {
@@ -46,7 +46,7 @@ struct RamDataList { static inline void Ensure(beBaseInfoRam *ram) {
         if (GPR_00554c14 != 0) {
             a = alloc;
         } else {
-            a = Memory_GetAllocatorBySelector(DAT_00587110[0]);
+            a = Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
         }
         igSmartPointer<igObject> list(beBaseInfoDataList_Create(a));
         s0 = list.p;
@@ -73,12 +73,12 @@ void Gap__Bec__beNDMWMdlEBullet__vfunc_36(beNDMWMdlEBullet *arg0, beBaseInfoRam 
     int alloc;
     int a;
     RamDataList::Ensure(arg1);
-    s1 = igProperty_FindByName((void *)arg1->_dataList, DAT_00585be0[0], DAT_00515d40);
+    s1 = igProperty_FindByName((void *)arg1->_dataList, g_propertyNameField[0], DAT_00515d40);
     alloc = igObject_GetAllocator(arg0);
     if (GPR_00554c14 != 0) {
         a = alloc;
     } else {
-        a = Memory_GetAllocatorBySelector(DAT_00587110[0]);
+        a = Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
     }
     ValueRef value(FUN_00350020(a));
     s0 = value.p;

@@ -12,7 +12,7 @@ int Gap__Sg__igActor__vfunc_37(ActorView *o0, ActorTraversal *t0) {
     t = (ActorTraversal *)(int)t0;
     if (o->_animate) {
         ActorAttrState *st = t->_state;
-        Matrix44_Copy(o->_world, lastEntry(st->_stacks->_data[st->_slotOfIndex[((ActorMeta * *)DAT_0055efe8)[0]->_offset]])->_matrix);
+        Matrix44_Copy(o->_world, lastEntry(st->_stacks->_data[st->_slotOfIndex[((ActorMeta * *)g_igModelViewMatrixAttr_metaObject)[0]->_offset]])->_matrix);
         Matrix44_Copy(o->_view, t->_view);
         if (o->_nodes->_count == 0 && o->_forced == 0) {
             o->_useCached = 0;
@@ -106,7 +106,7 @@ int FUN_001b8ba0(void *arg0, int arg1) {
     void *temp_a2;
 
     temp_a2 = (void *)(*(int *)((char *)(arg0) + 52));
-    temp_a1 = (void *)(*(int *)(*(int *)((char *)(*(int *)((char *)(temp_a2) + 16)) + 16) + (*(int *)(*(int *)((char *)(temp_a2) + 68) + (*(int *)((char *)(((void * *)DAT_0055efe8)[0]) + 8) * 4)) * 4)));
+    temp_a1 = (void *)(*(int *)(*(int *)((char *)(*(int *)((char *)(temp_a2) + 16)) + 16) + (*(int *)(*(int *)((char *)(temp_a2) + 68) + (*(int *)((char *)(((void * *)g_igModelViewMatrixAttr_metaObject)[0]) + 8) * 4)) * 4)));
     temp_v0 = *(int *)((char *)(temp_a1) + 8);
     if (temp_v0 != 0) {
         temp_s2 = (int *)(*(int *)(*(int *)((char *)(temp_a1) + 16) + ((temp_v0 - 1) * 4)) + 0xC);
@@ -136,7 +136,7 @@ void FUN_001b8cf0(igCommonTraversal *arg0, char *arg1) {
     char *dst;
     ((VC_156b *)arg1)->vX(((VC_104a *)arg0)->vX());
     a2 = (igAttrStackManager *)arg0->_attrStack;
-    a0 = ((igAttrStack **)((igAttrStackList *)a2->_attrStacks)->_data)[((int *)a2->_attrStackIndexTable)[((igMetaObject *)((int *)DAT_0055efe8)[0])->_id]];
+    a0 = ((igAttrStack **)((igAttrStackList *)a2->_attrStacks)->_data)[((int *)a2->_attrStackIndexTable)[((igMetaObject *)((int *)g_igModelViewMatrixAttr_metaObject)[0])->_id]];
     n = a0->_count;
     a1 = 0;
     if (n == 0) { v = 0; } else { k = n - 1; v = ((int *)a0->_data)[k]; }
@@ -183,7 +183,7 @@ int FUN_001b8f20(C_1b8f20 *arg0, D *arg1) {
     int n;
     char *s0;
     x = arg0->x;
-    a = (Arr *)x->a16->data[x->a68[((G_1b8f20 * *)DAT_0055efe8)[0]->f8]];
+    a = (Arr *)x->a16->data[x->a68[((G_1b8f20 * *)g_igModelViewMatrixAttr_metaObject)[0]->f8]];
     s0 = arg0->v164;
     n = a->count;
     if (n == 0) v = 0; else v = *(int *)((char *)a->data + (n - 1) * 4);
@@ -298,7 +298,7 @@ int FUN_001b9d90(LightTraversalView *o, LightSceneView *scene) {
     float matrix[16];
     int i;
     FUN_001dc400((igSorter *)o->_collector, (igGroup *)scene, (igAttrStackManager *)o->_state);
-    FUN_001904f0(matrix, currentEntry(stackOf_1b9d90(o->_state, ((CullMeta * *)DAT_0055efe8)[0]))->_matrix, o->_view);
+    FUN_001904f0(matrix, currentEntry(stackOf_1b9d90(o->_state, ((CullMeta * *)g_igModelViewMatrixAttr_metaObject)[0]))->_matrix, o->_view);
     for (i = 0; i < scene->_lights->_count; i++) {
         LightView *light = scene->_lights->_data[i];
         FUN_00192fc0(&position, (char *)light + DAT_0055f0a0[0]->_offset, matrix);
@@ -361,7 +361,7 @@ int FUN_001ba080(CullTraversalView *o, CullNodeView *node) {
     center.y = node->_center.y;
     center.z = node->_center.z;
     st = o->_state;
-    stack = st->_stacks->_data[st->_slotOfIndex[((CullMeta * *)DAT_0055efe8)[0]->_index]];
+    stack = st->_stacks->_data[st->_slotOfIndex[((CullMeta * *)g_igModelViewMatrixAttr_metaObject)[0]->_index]];
     FUN_00192fc0(&out, &center, currentEntry_1ba080(stack)->_matrix);
     child = ((int)FUN_001d0520((RangeLookup *)node, out.x * out.x + out.y * out.y + out.z * out.z));
     if (child != 0) {
@@ -409,7 +409,7 @@ int FUN_001ba880(igCommonTraversal *arg0, VC1 *arg1) {
     int sp30[16];
     igAttrStack *l;
     int i, k, v;
-    l = ((igAttrStack **)((igAttrStackList *)((igAttrStackManager *)arg0->_attrStack)->_attrStacks)->_data)[((int *)((igAttrStackManager *)arg0->_attrStack)->_attrStackIndexTable)[DAT_0055efe8[0]->_id]];
+    l = ((igAttrStack **)((igAttrStackList *)((igAttrStackManager *)arg0->_attrStack)->_attrStacks)->_data)[((int *)((igAttrStackManager *)arg0->_attrStack)->_attrStackIndexTable)[g_igModelViewMatrixAttr_metaObject[0]->_id]];
     i = l->_cachedOverride;
     if (i >= 0) {
         v = ((int *)l->_data)[i];
@@ -424,7 +424,7 @@ int FUN_001ba880(igCommonTraversal *arg0, VC1 *arg1) {
     }
     FUN_001904f0(sp30, v + 0xC, arg0->_viewMatInv);
     ((VC0 *)arg1)->vX(sp30);
-    l = ((igAttrStack **)((igAttrStackList *)((igAttrStackManager *)arg0->_attrStack)->_attrStacks)->_data)[((int *)((igAttrStackManager *)arg0->_attrStack)->_attrStackIndexTable)[DAT_0055efe8[0]->_id]];
+    l = ((igAttrStack **)((igAttrStackList *)((igAttrStackManager *)arg0->_attrStack)->_attrStacks)->_data)[((int *)((igAttrStackManager *)arg0->_attrStack)->_attrStackIndexTable)[g_igModelViewMatrixAttr_metaObject[0]->_id]];
     i = l->_cachedOverride;
     if (i >= 0) {
         v = ((int *)l->_data)[i];

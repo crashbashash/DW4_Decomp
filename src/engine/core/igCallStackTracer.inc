@@ -1,8 +1,8 @@
-int FUN_002cc630(void) {
-    if (DAT_00586958[0] == 0) {
-        DAT_00586958[0] = ((int)igMetaObject_Create(((int)Memory_GetAllocatorBySelector(DAT_00587040[0]))));
+igMetaObject *FUN_002cc630(void) {
+    if (g_igCallStackTracer_metaObject[0] == 0) {
+        g_igCallStackTracer_metaObject[0] = (igMetaObject *)igMetaObject_Create(((int)Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0])));
     }
-    return DAT_00586958[0];
+    return g_igCallStackTracer_metaObject[0];
 }
 
 igMetaObject *igCallStackTracer_GetMetaObject(void)
@@ -18,7 +18,7 @@ int igCallStackTracer_GetVTable(void) {
     int off;
     igObject_InitHeader((ObjectHeader *)&tmp[0]);
     tmp[0] = (int)&DAT_00530b80[0];
-    off = *(int *)((char *)(((int * *)DAT_00586dc8)[0]) + 916);
+    off = *(int *)((char *)(((int * *)g_objectSystem)[0]) + 916);
     return *(int *)((char *)tmp + off);
 }
 
@@ -48,11 +48,11 @@ void thunk_igCallStackTracer_GetMetaObject(void) {
     igCallStackTracer_GetMetaObject();
 }
 
-int FUN_002cc7a0(void) {
-    return DAT_00586850[0];
+igMetaObject *FUN_002cc7a0(void) {
+    return g_igUnsignedIntListNoClean_metaObject[0];
 }
 
 void FUN_002cc7b0(void) {
-    *(int *)((char *)(((void * *)DAT_00586958)[0]) + 60) = (int)(&thunk_igPsx2CallStackTracer_GetMetaObject);
+    *(int *)((char *)(((void * *)g_igCallStackTracer_metaObject)[0]) + 60) = (int)(&thunk_igPsx2CallStackTracer_GetMetaObject);
 }
 

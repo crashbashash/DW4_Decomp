@@ -1,7 +1,7 @@
 #include "dw4/igSmartPointer.h"
 #include "dw4/reflected.h"
 #define REL(x) { RC *q = (x); if (q != 0) { q->_refCount = q->_refCount - 1; if ((q->_refCount & 0x7FFFFF) == 0) igObject_Destroy(q); } }
-#define ALLOC(a, self) { int base_ = igObject_GetAllocator(self); if (GPR_00554c14 != 0) { a = base_; } else { a = Memory_GetAllocatorBySelector(DAT_00587110[0]); } }
+#define ALLOC(a, self) { int base_ = igObject_GetAllocator(self); if (GPR_00554c14 != 0) { a = base_; } else { a = Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]); } }
 
 typedef struct O { char p[32]; int w; int h; char q[20]; int cw; int ch; } O;
 extern "C" int DAT_004c2c50[4];
@@ -40,14 +40,14 @@ extern "C" int FUN_00236be0(...);
 extern "C" int FUN_00236ee0(...);
 extern "C" int FUN_002d6f50(...);
 extern "C" int FUN_002d7690(...);
-extern "C" int DAT_004e0858[4];
+extern "C" int emptyString[4];
 extern "C" int DAT_005010f0[4];
 extern "C" int DAT_00501120[4];
 extern "C" int DAT_00501140[4];
 extern "C" int DAT_00501170[4];
-extern "C" int DAT_00587110[4];
-extern "C" int DAT_00587738[4];
-extern "C" int DAT_005877b0[4];
+extern "C" int g_defaultAllocatorSelector[4];
+extern "C" int g_igMovieCodec_metaObject[4];
+extern "C" int g_igMovieInfo_metaObject[4];
 extern "C" unsigned char GPR_00554c14;
 extern "C" unsigned char GPR_00554e30;
 extern "C" unsigned char GPR_00554e34;
@@ -202,7 +202,7 @@ int Gap__igMovieManager__vfunc_25(igMovieManager *self, void *arg1) {
     int i;
     MovieInfo *movie;
     int a;
-    if (arg1 != 0 && igObject_IsKindOf(arg1, DAT_005877b0[0]) != 0) { movie = (MovieInfo *)arg1; } else { movie = 0; }
+    if (arg1 != 0 && igObject_IsKindOf(arg1, g_igMovieInfo_metaObject[0]) != 0) { movie = (MovieInfo *)arg1; } else { movie = 0; }
     if (movie != 0) {
     const char *codecName = movie->codecName;
     if (codecName != 0) {
@@ -241,7 +241,7 @@ int Gap__igMovieManager__vfunc_25(igMovieManager *self, void *arg1) {
         ALLOC(a, self);
         RC *created = (RC *)igMetaObject_CreateInstance(meta, a);
         RC *c;
-        if (created != 0 && igObject_IsKindOf(created, DAT_00587738[0]) != 0) { c = created; } else { c = 0; }
+        if (created != 0 && igObject_IsKindOf(created, g_igMovieCodec_metaObject[0]) != 0) { c = created; } else { c = 0; }
         if (c != 0) c->_refCount = c->_refCount + 1;
         REL(codec.p)
         codec.p = c;
@@ -278,7 +278,7 @@ int Gap__igMovieManager__vfunc_25(igMovieManager *self, void *arg1) {
                 if (GPR_00554e34 == 0) {
                     const char *nm = movie->name;
                     const char *shown;
-                    if (nm != 0) { shown = nm; } else { shown = (const char *)&DAT_004e0858[0]; }
+                    if (nm != 0) { shown = nm; } else { shown = (const char *)&emptyString[0]; }
                     int r = FUN_00308320(&DAT_00501120[0], shown);
                     if (r != 1) { if (r == 2) GPR_00554e34 = 1; }
                 }
@@ -317,7 +317,7 @@ int Gap__igMovieManager__vfunc_25(igMovieManager *self, void *arg1) {
         if (GPR_00554e38 == 0) {
             const char *nm = movie->name;
             const char *shown;
-            if (nm != 0) { shown = nm; } else { shown = (const char *)&DAT_004e0858[0]; }
+            if (nm != 0) { shown = nm; } else { shown = (const char *)&emptyString[0]; }
             int r = FUN_00308320(&DAT_00501140[0], shown);
             if (r != 1) { if (r == 2) GPR_00554e38 = 1; }
         }
@@ -326,7 +326,7 @@ int Gap__igMovieManager__vfunc_25(igMovieManager *self, void *arg1) {
     if (GPR_00554e3c == 0) {
         const char *nm = movie->name;
         const char *shown;
-        if (nm != 0) { shown = nm; } else { shown = (const char *)&DAT_004e0858[0]; }
+        if (nm != 0) { shown = nm; } else { shown = (const char *)&emptyString[0]; }
         int r = FUN_00308320(&DAT_00501170[0], shown);
         if (r != 1) { if (r == 2) GPR_00554e3c = 1; }
     }

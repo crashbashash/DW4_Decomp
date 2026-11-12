@@ -19,8 +19,8 @@ int igStructMetaField_GetVTable(void) {
     int c;
     igMetaField_Init((igMetaField *)&o);
     o.vt = DAT_0052e7c0;
-    r = *(int *)((char *)&o + *(int *)(((char * *)DAT_00586dc8)[0] + 916));
-    o.vt = DAT_0052f230;
+    r = *(int *)((char *)&o + *(int *)(((char * *)g_objectSystem)[0] + 916));
+    o.vt = g_igMetaField_vtable;
     if (&o.str != 0) {
         s = o.str;
         if (s != 0) {
@@ -67,7 +67,7 @@ static inline void releaseField(igMetaField *f) {
 }
 
 void FUN_002b8b50(void) {
-    igMetaObject *meta = DAT_00585880[0];
+    igMetaObject *meta = g_igStructMetaField_metaObject[0];
     int base = igMetaObject_GetFieldCount(meta);
     igMetaField *field;
     int index;
@@ -92,7 +92,7 @@ void FUN_002b8c80(void) {
     int n;
 
     if (DAT_00585888[0] == 0) {
-        DAT_00585888[0] = ((S1 *)igMetaObject_CreateInstance((CreateMeta *)(((int *)DAT_00585880)[0]), (MemoryPool *)(((int)Memory_GetAllocatorBySelector(DAT_00587040[0])))));
+        DAT_00585888[0] = ((S1 *)igMetaObject_CreateInstance((CreateMeta *)(((int *)g_igStructMetaField_metaObject)[0]), (MemoryPool *)(((int)Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0])))));
         temp_s0 = DAT_00585888[0];
         if (temp_s0 != 0) {
             MetaRefList_AppendRetained((PointerList *)(((L *)FUN_002fc250())), (RefHeader *)temp_s0);

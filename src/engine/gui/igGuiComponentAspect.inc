@@ -1,8 +1,8 @@
-int FUN_0044fbb0(void) {
-    if (DAT_0058c480[0] == 0) {
-        DAT_0058c480[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(DAT_00587040[0]));
+igMetaObject *FUN_0044fbb0(void) {
+    if (g_igGuiComponentAspect_metaObject[0] == 0) {
+        g_igGuiComponentAspect_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
     }
-    return DAT_0058c480[0];
+    return g_igGuiComponentAspect_metaObject[0];
 }
 
 igMetaObject *igGuiComponentAspect_GetMetaObject(void)
@@ -48,11 +48,11 @@ void igGuiComponentAspect_InitFields(void) {
     struct GuiAspectMetaField *temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)DAT_0058c480[0];
+    temp_s0 = (void *)g_igGuiComponentAspect_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_004d0538[0], 3);
     temp_s1 = (struct GuiAspectMetaField *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    temp_s1->f56 = FUN_0044f540();
+    temp_s1->f56 = (int)FUN_0044f540();
     temp_s1->b60 = 0;
     temp_a0 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
     v1[0] = 0.0f;

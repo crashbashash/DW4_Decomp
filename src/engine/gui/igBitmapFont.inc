@@ -1,8 +1,8 @@
-int FUN_004524f0(void) {
-    if (DAT_0058c620[0] == 0) {
-        DAT_0058c620[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(DAT_00587040[0]));
+igMetaObject *FUN_004524f0(void) {
+    if (g_igBitmapFont_metaObject[0] == 0) {
+        g_igBitmapFont_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
     }
-    return DAT_0058c620[0];
+    return g_igBitmapFont_metaObject[0];
 }
 
 igMetaObject *igBitmapFont_GetMetaObject(void)
@@ -22,7 +22,7 @@ int igBitmapFont_GetVTable(void) {
     obj.vt = &DAT_00541610[0];
     obj.w7 = 0;
     obj.w8 = 0;
-    t = *(int *)((char *)&obj + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+    t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
     obj.vt = &DAT_00541610[0];
     FUN_0019aa10(&obj.w8, -1);
     FUN_003619a0(&obj.w7, -1);
@@ -56,8 +56,8 @@ void thunk_igBitmapFont_GetMetaObject(void) {
     igBitmapFont_GetMetaObject();
 }
 
-int FUN_004526c0(void) {
-    return DAT_0058c510[0];
+igMetaObject *FUN_004526c0(void) {
+    return g_igFont_metaObject[0];
 }
 
 void igBitmapFont_InitFields(void) {
@@ -66,11 +66,11 @@ void igBitmapFont_InitFields(void) {
     void *temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)DAT_0058c620[0];
+    temp_s0 = (void *)g_igBitmapFont_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_004d0870[0], 2);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = FUN_00452790();
+    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_00452790();
     ((igRefMetaField *)temp_s1)->_construct = 1;
     temp_s1_2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
     ((igObjectRefMetaField *)temp_s1_2)->_metaObject = FUN_00132850();

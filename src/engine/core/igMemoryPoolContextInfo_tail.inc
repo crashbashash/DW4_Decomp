@@ -1,11 +1,11 @@
-inline bool igResult_2f25d0::isFailed_2f25d0(int &f) const { f = (*(igResult_2f25d0 *)&DAT_004fb418).v; return *this == (*(igResult_2f25d0 *)&DAT_004fb418); }
+inline bool igResult_2f25d0::isFailed_2f25d0(int &f) const { f = (*(igResult_2f25d0 *)&g_allocatorFailureStatus).v; return *this == (*(igResult_2f25d0 *)&g_allocatorFailureStatus); }
 
 /* Refcount field as a 23+9 bit-field (read-modify-write with a 64-bit constant) and a 43-slot
  * virtual call. */
 /* matching construct: the word at +16 is stored/loaded as a reference pointer (the reflected _resolveState is a 1-byte bool there; code wins); the vtable is the reflected int _vtable, called through slot 45 */
 igMemoryPoolContextInfo *igMemoryPoolContextInfo_Construct(igMemoryPoolContextInfo *arg0) {
     igObject_InitHeader((struct ObjectHeader *)arg0);
-    arg0->_vtable = (int)&DAT_0052f510[0];
+    arg0->_vtable = (int)g_igMemoryPoolContextInfo_vtable;
     arg0->_name = 0x1E;
     arg0->_directory = 0;
     *(Ref_2f25d0 **)&arg0->_resolveState = 0;
@@ -184,7 +184,7 @@ int FUN_002f2bc0(int arg0, char *arg1) {
             if (strcmp(arg0 + i * 0x90 + 0x18, s) == 0) return i;
         }
         for (i = 0; i < 0x2E; i++) {
-            if (strcmp(*(int *)((char *)DAT_004c2170 + i * 4), s) == 0) return i;
+            if (strcmp(g_memoryContextNames[i], s) == 0) return i;
         }
     }
     return -1;
@@ -215,10 +215,10 @@ R2 FUN_002f2d20(OB *arg1, int arg2, int arg3) {
         arg1->f16 = (RO_2f25d0 *)FUN_002c01f0(temp_s0);
     }
     if (arg2 == 0) {
-        arg2 = *(int *)((char *)(*(void * *)DAT_00586dc8) + 56);
+        arg2 = *(int *)((char *)(*(void * *)g_objectSystem) + 56);
     }
     R2 sp6C = ((Child *)arg1->f16)->vA(arg2, arg3);
-    if (sp6C.v == (*(igResult_2f25d0 *)&DAT_004fb410).v) {
+    if (sp6C.v == (*(igResult_2f25d0 *)&g_statusSucceeded).v) {
         R2 sp68 = ((Self_2f25d0 *)arg1)->vB((int)arg1->f16, 1);
         sp6C = sp68;
     }
@@ -238,10 +238,10 @@ R2 FUN_002f2e30(OB *arg1, int arg2, int arg3) {
         arg1->f16 = (RO_2f25d0 *)FUN_002c01f0(temp_s0);
     }
     if (arg2 == 0) {
-        arg2 = *(int *)((char *)(*(void * *)DAT_00586dc8) + 56);
+        arg2 = *(int *)((char *)(*(void * *)g_objectSystem) + 56);
     }
     R2 sp6C = ((Child2 *)arg1->f16)->vA(arg2, arg3);
-    if (sp6C.v == (*(igResult_2f25d0 *)&DAT_004fb410).v) {
+    if (sp6C.v == (*(igResult_2f25d0 *)&g_statusSucceeded).v) {
         R2 sp68 = ((Self_2f25d0 *)arg1)->vB((int)arg1->f16, 1);
         sp6C = sp68;
     }
@@ -249,7 +249,7 @@ R2 FUN_002f2e30(OB *arg1, int arg2, int arg3) {
 }
 
 igResult_2f25d0 FUN_002f2f40(SlotReadTable *self, int file) {
-    igResult_2f25d0 result = (*(igResult_2f25d0 *)&DAT_004fb410);
+    igResult_2f25d0 result = (*(igResult_2f25d0 *)&g_statusSucceeded);
     int i;
     FUN_002f8b20((void *)file);
     for (i = 0; i < 46; i++) {
@@ -270,7 +270,7 @@ igResult_2f25d0 FUN_002f2f40(SlotReadTable *self, int file) {
 
 igResult_2f25d0 FUN_002f3060(DirSlotTable *self, int file, int arg) {
     int count = FUN_002f8a50((void *)file);
-    igResult_2f25d0 result = (*(igResult_2f25d0 *)&DAT_004fb410);
+    igResult_2f25d0 result = (*(igResult_2f25d0 *)&g_statusSucceeded);
     int fail;
     int i;
     if (self->slots == 0) {
@@ -296,8 +296,8 @@ igResult_2f25d0 FUN_002f3060(DirSlotTable *self, int file, int arg) {
  * (+0x1c..+0x24, +0x50), and ten interned strings (+0x18, +0x28..+0x4c, each assigned through the
  * shared StringPool with the usual retain/release of the old token). The descriptor's attached
  * object (+0 of the entry) supplies +0x1c when it reports a size; the handle name (+0x14) is built
- * from the table name 'kIGMemoryPoolHandle%s'. The status written through `result` is DAT_004fb410
- * on success and DAT_004fb418 for an out-of-range index. */
+ * from the table name 'kIGMemoryPoolHandle%s'. The status written through `result` is g_statusSucceeded
+ * on success and g_allocatorFailureStatus for an out-of-range index. */
 void FUN_002f31b0(int *result, PoolTable *table, int index, PoolHandle *handle)
 {
     StringToken *old;
@@ -311,7 +311,7 @@ void FUN_002f31b0(int *result, PoolTable *table, int index, PoolHandle *handle)
     StringToken *token;
     int status;
 
-    status = (*(igResult_2f25d0 *)&DAT_004fb410).v;
+    status = (*(igResult_2f25d0 *)&g_statusSucceeded).v;
     if (index >= 0 && index < 46) {
         entry = &table->entries[index];
         igNamedObject_SetName((N_2fecb0 *)handle, (int)entry->name);
@@ -319,7 +319,7 @@ void FUN_002f31b0(int *result, PoolTable *table, int index, PoolHandle *handle)
             ASSIGN_TOKEN(handle->token0, entry->defaults->text0);
             object = table->entries[index].object;
             if (object != 0) {
-                if (igObject_IsKindOf(object, (igMetaObject *)DAT_00586a88[0]) != 0) {
+                if (igObject_IsKindOf(object, (igMetaObject *)g_igArenaMemoryPool_metaObject[0]) != 0) {
                     if (object->count() != 0) {
                         if (object->total() > object->count()) {
                             entry->defaults->limit = (int)object->total();
@@ -346,21 +346,21 @@ void FUN_002f31b0(int *result, PoolTable *table, int index, PoolHandle *handle)
             ASSIGN_TOKEN(handle->token10, entry->defaults->text10);
             handle->field50 = entry->defaults->field50;
         }
-        sprintf(nameBuf, DAT_004fa3e0, DAT_004c2170[index]);
+        sprintf(nameBuf, DAT_004fa3e0, g_memoryContextNames[index]);
         ASSIGN_TOKEN_DIRECT(handle->handleName, nameBuf);
     } else {
-        status = (*(igResult_2f25d0 *)&DAT_004fb418).v;
+        status = (*(igResult_2f25d0 *)&g_allocatorFailureStatus).v;
     }
     *result = status;
 }
 
 static inline void *descPool() {
-    if ((*(void * *)DAT_00586f20) == 0) {
+    if ((*(void * *)g_stringPool) == 0) {
         void *p = FUN_002eb010(16);
         if (p != 0) { p = ((void *)StringPool_Construct((struct S_2eadf0 *)p)); }
-        (*(void * *)DAT_00586f20) = p;
+        (*(void * *)g_stringPool) = p;
     }
-    return (*(void * *)DAT_00586f20);
+    return (*(void * *)g_stringPool);
 }
 
 static inline void setDescString(char **dst, char *src) {
@@ -375,16 +375,16 @@ static inline void setDescString(char **dst, char *src) {
     *dst = v;
 }
 
-static inline char *descName(PoolDescRecord *r) { char *n = r->name; if (n != 0) { return n; } return ((char *)DAT_004e0858); }
+static inline char *descName(PoolDescRecord *r) { char *n = r->name; if (n != 0) { return n; } return ((char *)emptyString); }
 
 igResult_2f25d0 FUN_002f3910(PoolDescManager *self, int index, PoolDescRecord *desc, int build) {
-    igResult_2f25d0 result = (*(igResult_2f25d0 *)&DAT_004fb410);
+    igResult_2f25d0 result = (*(igResult_2f25d0 *)&g_statusSucceeded);
     int fail;
     PoolDescSlot *slot;
     if (index == -1) {
         index = self->nextSlot;
         if (index < 46) {
-            setDescString(&desc->alias, DAT_004c2170[index]);
+            setDescString(&desc->alias, g_memoryContextNames[index]);
             self->nextSlot = self->nextSlot + 1;
         }
     } else if (index >= self->nextSlot) {
@@ -397,7 +397,7 @@ igResult_2f25d0 FUN_002f3910(PoolDescManager *self, int index, PoolDescRecord *d
         slot->record = ((PoolDescRecord *)FUN_002f8be0((struct O_2f8be0 *)self->table, (int)(descName(desc))));
         if (slot->record == 0) { slot->record = ((PoolDescRecord *)FUN_002f8ca0((struct Own_2f8ca0 *)self->table, desc->alias)); }
         if (slot->record == 0) {
-            slot->record = (PoolDescRecord *)FUN_002bfed0((int)((igMemoryPool *)Memory_GetAllocatorBySelector(DAT_00587018[0])));
+            slot->record = (PoolDescRecord *)FUN_002bfed0((int)((igMemoryPool *)Memory_GetAllocatorBySelector(g_allocatorSelector[0])));
             FUN_002f8a80((void *)self->table, (void *)slot->record);
         }
         if (slot->record != desc) {
@@ -421,7 +421,7 @@ igResult_2f25d0 FUN_002f3910(PoolDescManager *self, int index, PoolDescRecord *d
             if (self->build(index, 0).isFailed_2f25d0(fail)) { result.v = fail; }
         }
     } else {
-        result = (*(igResult_2f25d0 *)&DAT_004fb418);
+        result = (*(igResult_2f25d0 *)&g_allocatorFailureStatus);
     }
     return result;
 }
@@ -553,11 +553,11 @@ void FUN_002f43a0(PoolSlotTable *self) {
                 p->prepare();
                 if (DAT_00586fd8[0] != 0) { p->setName(DAT_00586fd8[0]); }
                 p->finish();
-                ((PoolContext *)(*(void * *)DAT_00586dc8))->main = p;
+                ((PoolContext *)(*(void * *)g_objectSystem))->main = p;
                 Memory_InitializeAllocatorRegistries((igObject *)p);
                 break;
             case 4:
-                ((PoolContext *)(*(void * *)DAT_00586dc8))->second = p;
+                ((PoolContext *)(*(void * *)g_objectSystem))->second = p;
                 break;
             }
         } else {
@@ -566,11 +566,11 @@ void FUN_002f43a0(PoolSlotTable *self) {
                 p->prepare();
                 if (DAT_00586fd8[0] != 0) { p->setName(DAT_00586fd8[0]); }
                 p->finish();
-                ((PoolContext *)(*(void * *)DAT_00586dc8))->main = p;
+                ((PoolContext *)(*(void * *)g_objectSystem))->main = p;
                 Memory_InitializeAllocatorRegistries((igObject *)p);
                 break;
             case 4:
-                ((PoolContext *)(*(void * *)DAT_00586dc8))->second = p;
+                ((PoolContext *)(*(void * *)g_objectSystem))->second = p;
                 p->prepare();
                 if (DAT_00586fe0[0] != 0) { p->setName(DAT_00586fe0[0]); }
                 FUN_002f0370((void **)p);
@@ -608,7 +608,7 @@ void FUN_002f48d0(char *arg0) {
     while (D_00587010[0] > 1) {
         FUN_002f8760();
     }
-    *(int *)((char *)(*(void * *)DAT_00586dc8) + 52) = 0;
+    *(int *)((char *)(*(void * *)g_objectSystem) + 52) = 0;
     i = 6;
     if (GPR_00554c14 == 0) {
         do {
@@ -628,7 +628,7 @@ void FUN_002f48d0(char *arg0) {
     while (D_00587010[0] > 0) {
         FUN_002f8760();
     }
-    *(int *)((char *)(*(void * *)DAT_00586dc8) + 48) = 0;
+    *(int *)((char *)(*(void * *)g_objectSystem) + 48) = 0;
     thunk_free_2((int)ent);
 }
 
@@ -661,7 +661,7 @@ void FUN_002f50e0(Mgr *arg0) {
         FUN_002f00f0((void *)0);
     }
     arg0->f53();
-    if (*(unsigned char *)((char *)(*(void * *)DAT_00586dc8) + 119) != 0) {
+    if (*(unsigned char *)((char *)(*(void * *)g_objectSystem) + 119) != 0) {
         arg0->f64(0);
     }
     s0 = 45;
@@ -687,8 +687,8 @@ void FUN_002f50e0(Mgr *arg0) {
     }
 }
 
-int FUN_002f5220(void) {
-    return DAT_00585ea0[0];
+igMetaObject *FUN_002f5220(void) {
+    return g_igMemoryPool_metaObject[0];
 }
 
 static inline void releaseTable(PoolDescTable *t) {
@@ -708,7 +708,7 @@ void FUN_002f5230(int *out, PoolDescSetup *self, int config, char *name) {
     PoolDescRecord *rec;
     PoolDescSlot *slot;
     int ctxConfig;
-    ctxConfig = ((PoolDescContext *)(*(void * *)DAT_00586dc8))->config;
+    ctxConfig = ((PoolDescContext *)(*(void * *)g_objectSystem))->config;
     slot = self->slots;
     if (self->table != 0) {
         FUN_002f8b20(self->table);
@@ -716,15 +716,15 @@ void FUN_002f5230(int *out, PoolDescSetup *self, int config, char *name) {
         self->table = 0;
     }
     {
-        int alloc = (int)Memory_GetAllocatorBySelector(DAT_00587018[0]);
+        int alloc = (int)Memory_GetAllocatorBySelector(g_allocatorSelector[0]);
         releaseTable(self->table);
         self->table = (PoolDescTable *)FUN_002c01f0(alloc);
     }
     i = 0;
     do {
-        rec = (PoolDescRecord *)FUN_002bfed0((int)((igMemoryPool *)Memory_GetAllocatorBySelector(DAT_00587018[0])));
+        rec = (PoolDescRecord *)FUN_002bfed0((int)((igMemoryPool *)Memory_GetAllocatorBySelector(g_allocatorSelector[0])));
         igNamedObject_SetName((N_2fecb0 *)rec, (int)(self->recordName(i)));
-        setDescString(&rec->alias, DAT_004c2170[i]);
+        setDescString(&rec->alias, g_memoryContextNames[i]);
         switch (i) {
         case 0:
             if (rec->s60 != 0 && *rec->s60 != 0) {
@@ -780,7 +780,7 @@ void FUN_002f5230(int *out, PoolDescSetup *self, int config, char *name) {
                 setDescString(&rec->s48, DAT_004fa5f0);
                 rec->a28 = scratchSize;
             } else {
-                setDescString(&rec->s24, DAT_004c2170[1]);
+                setDescString(&rec->s24, g_memoryContextNames[1]);
             }
             if (rec->s52 == 0 || *rec->s52 == 0) { setDescString(&rec->s52, DAT_004fa600); }
             break;
@@ -792,16 +792,16 @@ void FUN_002f5230(int *out, PoolDescSetup *self, int config, char *name) {
                     rec = self->slots[20].record;
                     rec->a28 = driverSize;
                 } else {
-                    setDescString(&rec->s24, DAT_004c2170[1]);
+                    setDescString(&rec->s24, g_memoryContextNames[1]);
                 }
             } else {
-                setDescString(&rec->s24, DAT_004c2170[1]);
+                setDescString(&rec->s24, g_memoryContextNames[1]);
             }
             if (rec->s52 == 0 || *rec->s52 == 0) { setDescString(&rec->s52, DAT_004fa600); }
             break;
         default:
             if (rec->s52 == 0 || *rec->s52 == 0) { setDescString(&rec->s52, DAT_004fa600); }
-            setDescString(&rec->s24, DAT_004c2170[1]);
+            setDescString(&rec->s24, g_memoryContextNames[1]);
             break;
         }
         FUN_002f8a80(self->table, rec);
@@ -812,7 +812,7 @@ void FUN_002f5230(int *out, PoolDescSetup *self, int config, char *name) {
     if (config != 0 && name != 0 && *name != 0) {
         self->table->load(config, name);
     }
-    *out = (*(igResult_2f25d0 *)&DAT_004fb410).v;
+    *out = (*(igResult_2f25d0 *)&g_statusSucceeded).v;
 }
 
 void FUN_002f5c30(void *arg0) {
@@ -840,7 +840,7 @@ set:
 }
 
 void FUN_002f5cc0(int *arg0) {
-    *arg0 = (*(igResult_2f25d0 *)&DAT_004fb410).v;
+    *arg0 = (*(igResult_2f25d0 *)&g_statusSucceeded).v;
 }
 
 void MemoryContext_BuildAllocator(int *out, igMemoryPoolContextInfo *arg1, int idx, int flag) {
@@ -860,14 +860,14 @@ void MemoryContext_BuildAllocator(int *out, igMemoryPoolContextInfo *arg1, int i
     bool owned;
     igMemoryPool *a;
     slot = &ctx->slots[idx];
-    meta = DAT_00586a88[0];
+    meta = (int)g_igArenaMemoryPool_metaObject[0];
     allocA = ctx->slots[0].obj;
     allocB = ctx->slots[1].obj;
     mbc = ctx->slots[3].obj;
     cfg = slot->cfg;
     owned = true;
     obj = slot->obj;
-    if (allocA == 0) allocA = ((igMemoryPool *)Memory_GetAllocatorBySelector(DAT_00587018[0]));
+    if (allocA == 0) allocA = ((igMemoryPool *)Memory_GetAllocatorBySelector(g_allocatorSelector[0]));
     if (allocB == 0) {
         allocB = ((igMemoryPool *)Memory_GetAllocatorBySelector(DAT_00587020[0]));
         if (allocB == 0) allocB = allocA;
@@ -878,8 +878,8 @@ void MemoryContext_BuildAllocator(int *out, igMemoryPoolContextInfo *arg1, int i
         allocB->_refCount = allocB->_refCount + 1;
     }
     if (cfg == 0) {
-        if (idx >= 30) { *out = (*(igResult_2f25d0 *)&DAT_004fb410).v; return; }
-        *out = (*(igResult_2f25d0 *)&DAT_004fb418).v;
+        if (idx >= 30) { *out = (*(igResult_2f25d0 *)&g_statusSucceeded).v; return; }
+        *out = (*(igResult_2f25d0 *)&g_allocatorFailureStatus).v;
         return;
     }
     if (cfg->_scope != 0) {
@@ -894,7 +894,7 @@ void MemoryContext_BuildAllocator(int *out, igMemoryPoolContextInfo *arg1, int i
         if (flag == 0) {
             int f = slot->f140;
             if ((((unsigned long long)((long long)f << 0x28)) >> 0x28) != 0 && (f & 0x05000000) != 0) {
-                *out = (*(igResult_2f25d0 *)&DAT_004fb410).v;
+                *out = (*(igResult_2f25d0 *)&g_statusSucceeded).v;
                 return;
             }
         }
@@ -915,7 +915,7 @@ void MemoryContext_BuildAllocator(int *out, igMemoryPoolContextInfo *arg1, int i
                 obj = o->obj;
                 if (obj == 0) {
                     int rv = ctx->v204(j, flag).get();
-                    if (rv != (*(igResult_2f25d0 *)&DAT_004fb410).v) { *out = (*(igResult_2f25d0 *)&DAT_004fb418).v; return; }
+                    if (rv != (*(igResult_2f25d0 *)&g_statusSucceeded).v) { *out = (*(igResult_2f25d0 *)&g_allocatorFailureStatus).v; return; }
                     obj = *pslot;
                 }
             }
@@ -924,12 +924,12 @@ void MemoryContext_BuildAllocator(int *out, igMemoryPoolContextInfo *arg1, int i
                 if (refMode) {
                     if (cfg->_scope != 0) {
                         if ((strstr((char *)cfg->_scope, DAT_004fa600) != 0 || strstr((char *)cfg->_scope, DAT_004fa648) != 0 || strstr((char *)cfg->_scope, DAT_004fa658) != 0) && flag == 0) {
-                            *out = (*(igResult_2f25d0 *)&DAT_004fb410).v;
+                            *out = (*(igResult_2f25d0 *)&g_statusSucceeded).v;
                             return;
                         }
                     }
                     if (idx == 5) {
-                        if (((igMemoryPool *)Memory_GetAllocatorBySelector(DAT_00587040[0])) == 0) ctx->slots[5].obj = allocA;
+                        if (((igMemoryPool *)Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0])) == 0) ctx->slots[5].obj = allocA;
                     }
                     {
                         igMemoryPool *old = obj;
@@ -946,7 +946,7 @@ void MemoryContext_BuildAllocator(int *out, igMemoryPoolContextInfo *arg1, int i
                     if (RC(obj) == 0) igObject_Destroy(obj);
                 }
                 if (((OV *)obj)->v132() == 0) ((OV *)obj)->v120();
-                *out = (*(igResult_2f25d0 *)&DAT_004fb410).v;
+                *out = (*(igResult_2f25d0 *)&g_statusSucceeded).v;
                 return;
             }
         }
@@ -955,7 +955,7 @@ void MemoryContext_BuildAllocator(int *out, igMemoryPoolContextInfo *arg1, int i
         if (mname != 0 && *mname != 0) {
             int m = igObjectSystem_FindMetaByNameDefault((const char *)mname);
             meta = m;
-            if (m == 0) meta = DAT_00586a88[0];
+            if (m == 0) meta = (int)g_igArenaMemoryPool_metaObject[0];
         }
     }
     {
@@ -1002,7 +1002,7 @@ common:
     }
     }
     if (((OV *)obj)->v132() == 0) ((OV *)obj)->v120();
-    *out = (*(igResult_2f25d0 *)&DAT_004fb410).v;
+    *out = (*(igResult_2f25d0 *)&g_statusSucceeded).v;
 }
 
 void MemoryContext_BuildAndAttachEventTracker(R4 *out, Ctx3 *self, int idx) {
@@ -1026,7 +1026,7 @@ void MemoryContext_BuildAndAttachEventTracker(R4 *out, Ctx3 *self, int idx) {
             int h2 = (self->flags & 2) != 0;
             if ((h2 && idx != 1) || (ty != 0 && strstr(ty, &DAT_004fa550[0]) != 0)) {
                 o = (Obj5 *)FUN_002c5780((int)(self->v92(3)));
-                void *b = ((Gl2 *)(*(void * *)DAT_00586dc8))->f124;
+                void *b = ((Gl2 *)(*(void * *)g_objectSystem))->f124;
                 void *f = (void *)(*ps)->_eventTrackerCapacity;
                 if (f != 0) b = f;
                 FUN_002dcc40((int)o, (int)b);
@@ -1045,7 +1045,7 @@ void MemoryContext_BuildAndAttachEventTracker(R4 *out, Ctx3 *self, int idx) {
         if (sub2 != 0) ty2 = (void *)sub2->_releaseOptions;
         if (ty2 != 0 && strstr(ty2, &DAT_004fa550[0]) != 0) {
             o2 = (Obj5 *)FUN_002c5780((int)(self->v92(3)));
-            void *b2 = ((Gl2 *)(*(void * *)DAT_00586dc8))->f124;
+            void *b2 = ((Gl2 *)(*(void * *)g_objectSystem))->f124;
             void *f2 = (void *)(*ps2)->_eventTrackerCapacity;
             if (f2 != 0) b2 = f2;
             FUN_002dcc40((int)o2, (int)b2);
@@ -1143,10 +1143,10 @@ void FUN_002f7420(LeakReportSlot *self) {
     char line[140];
     int counts[32];
     char type[80];
-    LeakReportTracker *tracker = ((LeakReportContext *)(*(void * *)DAT_00586dc8))->tracker;
+    LeakReportTracker *tracker = ((LeakReportContext *)(*(void * *)g_objectSystem))->tracker;
     int i;
     if (tracker != 0) {
-        if (((LeakReportContext *)(*(void * *)DAT_00586dc8))->dumpNames != 0) {
+        if (((LeakReportContext *)(*(void * *)g_objectSystem))->dumpNames != 0) {
             int n;
             int names;
             int k;
@@ -1177,7 +1177,7 @@ void FUN_002f7420(LeakReportSlot *self) {
                 }
             }
         }
-        if (((LeakReportContext *)(*(void * *)DAT_00586dc8))->dumpSummary != 0) {
+        if (((LeakReportContext *)(*(void * *)g_objectSystem))->dumpSummary != 0) {
             total = 0; f = 0; g = 0; h = 0; i2 = 0; j2 = 0; k2 = 0; l2 = 0; m2 = 0;
             tracker->summary(0, -1, &total, counts, &f, &g, &h, &i2, &j2, &k2, &l2, 1, 1, &m2, 2, -1);
             for (LeakKind t = LeakKindFirst; t < LeakKindCount; t = (LeakKind)(t + 1)) {
@@ -1206,7 +1206,7 @@ void FUN_002f7420(LeakReportSlot *self) {
                     if (q != 0 && q->owner() == o) { seen = 1; break; }
                 }
                 if (o != 0 && seen == 0) {
-                    if (((LeakReportContext *)(*(void * *)DAT_00586dc8))->dumpLeaks != 0) {
+                    if (((LeakReportContext *)(*(void * *)g_objectSystem))->dumpLeaks != 0) {
                         if (o->count() > 0) { o->dump(); }
                     }
                     o->flush();
@@ -1215,11 +1215,11 @@ void FUN_002f7420(LeakReportSlot *self) {
         }
     }
     {
-        LeakReportTracker *t = ((LeakReportContext *)(*(void * *)DAT_00586dc8))->tracker;
+        LeakReportTracker *t = ((LeakReportContext *)(*(void * *)g_objectSystem))->tracker;
         if (t != 0) {
             t->rc = t->rc - 1;
             if (((unsigned long long)((long long)(int)t->rc << 0x29) >> 0x29) == 0) igObject_Destroy(t);
-            ((LeakReportContext *)(*(void * *)DAT_00586dc8))->tracker = 0;
+            ((LeakReportContext *)(*(void * *)g_objectSystem))->tracker = 0;
         }
     }
     for (int k = 0; k < 46; k++) {
@@ -1260,7 +1260,7 @@ void FUN_002f78b0(VA_2f25d0 *arg0) {
                     sp70[255] = 0;
                     if (!s0) {
                         if (s4 == 0 || s4 == 1) {
-                            strncpy(sp70, (char *)(*(void * *)DAT_00586dc8) + 528, 255);
+                            strncpy(sp70, (char *)(*(void * *)g_objectSystem) + 528, 255);
                             s0 = true;
                         } else {
                             goto b16;
@@ -1268,7 +1268,7 @@ void FUN_002f78b0(VA_2f25d0 *arg0) {
                     } else {
 b16:
                         if (s4 == 4) {
-                            strncpy(sp70, (char *)(*(void * *)DAT_00586dc8) + 656, 255);
+                            strncpy(sp70, (char *)(*(void * *)g_objectSystem) + 656, 255);
                         } else {
                             sp70[0] = 0;
                         }
@@ -1571,9 +1571,9 @@ igResult_2f25d0 FUN_002f86e0(void *arg1) {
         DAT_00587000[DAT_00587010[0]] = arg1;
         DAT_00587010[0] += 1;
         *(int *)((char *)(arg1) + 4) = (int)((int) (*(int *)((char *)(arg1) + 4) + 1));
-        return (*(igResult_2f25d0 *)&DAT_004fb410);
+        return (*(igResult_2f25d0 *)&g_statusSucceeded);
     } else {
-        return (*(igResult_2f25d0 *)&DAT_004fb418);
+        return (*(igResult_2f25d0 *)&g_allocatorFailureStatus);
     }
 }
 
@@ -1594,7 +1594,7 @@ struct ContextStackEntry *FUN_002f8760(void) {
 }
 
 void * FUN_002f87f0(int arg0) {
-    if (*(unsigned char *)(*(void * *)DAT_00586dc8) != 0) {
+    if (*(unsigned char *)(*(void * *)g_objectSystem) != 0) {
         igObject_AllocateRawStorageDefault(arg0, 0);
         return;
     }
@@ -1725,7 +1725,7 @@ struct Item_2f8be0 *FUN_002f8be0(struct O_2f8be0 *arg0, int arg1) {
     for (; i < n; i++) {
         it = arg0->list->items[i];
         if (it != 0) {
-            name = it->name != 0 ? it->name : DAT_004e0858;
+            name = it->name != 0 ? it->name : emptyString;
             if (strcmp(name, arg1) == 0) return it;
         }
     }

@@ -3,22 +3,22 @@ void FUN_0034c040(int arg0) {
     igMetaObject_CreateInstance(*(int *)0x5884C8, arg0);
 }
 
-int FUN_0034c080(void) {
-    if (DAT_005884c8[0] == 0) {
-        DAT_005884c8[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(DAT_00587040[0]));
+igMetaObject *FUN_0034c080(void) {
+    if (g_beParticleCtrl2InfoWork_metaObject[0] == 0) {
+        g_beParticleCtrl2InfoWork_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
     }
-    return DAT_005884c8[0];
+    return g_beParticleCtrl2InfoWork_metaObject[0];
 }
 
 void *FUN_0034c0d0(void) {
     unsigned char b;
-    if (((void * *)DAT_005884c8)[0] != 0) {
-        b = (*(int *)((char *)(((void * *)DAT_005884c8)[0]) + 36) & 4) != 0;
+    if (((void * *)g_beParticleCtrl2InfoWork_metaObject)[0] != 0) {
+        b = (*(int *)((char *)(((void * *)g_beParticleCtrl2InfoWork_metaObject)[0]) + 36) & 4) != 0;
         if (b != 0) goto done;
     }
     FUN_0034c230();
 done:
-    return ((void * *)DAT_005884c8)[0];
+    return ((void * *)g_beParticleCtrl2InfoWork_metaObject)[0];
 }
 
 int beParticleCtrl2InfoWork_GetVTable(void) {
@@ -31,7 +31,7 @@ int beParticleCtrl2InfoWork_GetVTable(void) {
     u.vt = (int)&DAT_005386e0[0];
     ps = &u.b[8];
     *(int *)ps = 0;
-    temp_s0 = *(int *)&u.b[*(int *)((char *)(DAT_00586dc8[0]) + 916)];
+    temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.vt = (int)&DAT_005386e0[0];
     if (ps != 0) {
         temp_a0 = *(int **)ps;
@@ -77,11 +77,11 @@ void beParticleCtrl2InfoWork_InitFields(void) {
     void *temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)DAT_005884c8[0];
+    temp_s0 = (void *)g_beParticleCtrl2InfoWork_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_004c4608[0], 2);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = FUN_0034fd40();
+    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_0034fd40();
     igMetaObject_NameFields(temp_s0, &DAT_004c4610[0], &DAT_004c4618[0], &DAT_004c4620[0], temp_s2);
 }
 

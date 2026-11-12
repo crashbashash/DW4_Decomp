@@ -1,16 +1,16 @@
-int FUN_0036d9f0(void) {
-    if (((int *)DAT_0058a010)[0] == 0) {
-        ((int *)DAT_0058a010)[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(DAT_00587040[0]));
+igMetaObject *FUN_0036d9f0(void) {
+    if (g_beAction2Data_metaObject[0] == 0) {
+        g_beAction2Data_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
     }
-    return ((int *)DAT_0058a010)[0];
+    return g_beAction2Data_metaObject[0];
 }
 
 void *FUN_0036da40(void) {
-    struct G *g = DAT_0058a010[0];
-    if (!g || ((g->f & 4) != 0) == false) {
+    igMetaObject *g = g_beAction2Data_metaObject[0];
+    if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_0036db70();
     }
-    return DAT_0058a010[0];
+    return g_beAction2Data_metaObject[0];
 }
 
 int beAction2Data_GetVTable(void) {
@@ -29,7 +29,7 @@ int beAction2Data_GetVTable(void) {
     u.w[0] = (int)(&DAT_00533fc0[0]);
     q3 = (S_ref *)&u.p[3];
     *(int *)q3 = 0;
-    temp_s1 = *(int *)&u.b[*(int *)((char *)(DAT_00586dc8[0]) + 916)];
+    temp_s1 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.w[0] = (int)(&DAT_00533fc0[0]);
     if (q3 != 0) {
         q3 = *(S_ref **)q3;
@@ -87,7 +87,7 @@ void beAction2Data_InitFields(void) {
     void *temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)((int *)DAT_0058a010)[0];
+    temp_s0 = (void *)g_beAction2Data_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_004c81d0[0], 1);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));

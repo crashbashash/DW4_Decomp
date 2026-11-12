@@ -3,11 +3,11 @@ void * FUN_002bc0d0(int arg0) {
     return (void *)(igMetaObject_CreateInstance((CreateMeta *)(*(int *)0x585AA8), (MemoryPool *)arg0));
 }
 
-int FUN_002bc110(void) {
-    if (DAT_00585aa8[0] == 0) {
-        DAT_00585aa8[0] = ((int)igMetaObject_Create(((int)Memory_GetAllocatorBySelector(DAT_00587040[0]))));
+igMetaObject *FUN_002bc110(void) {
+    if (g_igQueue_metaObject[0] == 0) {
+        g_igQueue_metaObject[0] = (igMetaObject *)igMetaObject_Create(((int)Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0])));
     }
-    return DAT_00585aa8[0];
+    return g_igQueue_metaObject[0];
 }
 
 igMetaObject *igQueue_GetMetaObject(void)
@@ -49,13 +49,13 @@ void igQueue_InitFields(void) {
     void *temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)(((void * *)DAT_00585aa8)[0]);
+    temp_s0 = (void *)(((void * *)g_igQueue_metaObject)[0]);
     temp_s2 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
     igMetaObject_CreateFields((igMetaObject *)temp_s0, (igMetaField * (**)(void *))&DAT_004bf9b8[0], 1);
     temp_s1 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2)));
-    *(int *)((char *)(temp_s1) + 56) = FUN_002b8390();
+    *(int *)((char *)(temp_s1) + 56) = (int)FUN_002b8390();
     *(char *)((char *)(temp_s1) + 52) = 1;
     igMetaObject_NameFields((igMetaObject *)temp_s0, (const char **)&DAT_004bf9c0[0], (igMetaField ***)&DAT_004bf9c8[0], &DAT_004bf9d0[0], temp_s2);
-    *(int *)((char *)(((void * *)DAT_00585aa8)[0]) + 60) = (int)thunk_igStandardQueue_GetMetaObject;
+    *(int *)((char *)(((void * *)g_igQueue_metaObject)[0]) + 60) = (int)thunk_igStandardQueue_GetMetaObject;
 }
 

@@ -1,8 +1,8 @@
-int FUN_004507f0(void) {
-    if (DAT_0058c510[0] == 0) {
-        DAT_0058c510[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(DAT_00587040[0]));
+igMetaObject *FUN_004507f0(void) {
+    if (g_igFont_metaObject[0] == 0) {
+        g_igFont_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
     }
-    return DAT_0058c510[0];
+    return g_igFont_metaObject[0];
 }
 
 igMetaObject *igFont_GetMetaObject(void)
@@ -44,7 +44,7 @@ void igFont_InitFields(void) {
     void *temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)DAT_0058c510[0];
+    temp_s0 = (void *)g_igFont_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_004d0680[0], 4);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 2));

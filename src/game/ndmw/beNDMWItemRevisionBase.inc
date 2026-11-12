@@ -1,9 +1,9 @@
 void *beNDMWItemRevisionBase_GetReadyMetaObject(void) {
-    struct G *g = DAT_0058bf78[0];
-    if (!g || ((g->f & 4) != 0) == false) {
+    igMetaObject *g = g_beNDMWItemRevisionBase_metaObject[0];
+    if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_003c8fd0();
     }
-    return DAT_0058bf78[0];
+    return g_beNDMWItemRevisionBase_metaObject[0];
 }
 
 void FUN_003c8fd0(void)
@@ -37,7 +37,7 @@ void beNDMWItemRevisionBase_InitFields(void) {
     int temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)((int *)DAT_0058bf78)[0];
+    temp_s0 = (void *)g_beNDMWItemRevisionBase_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_004cc108[0], 1);
     igMetaObject_NameFields(temp_s0, &DAT_004cc110[0], &DAT_004cc118[0], &DAT_004cc120[0], temp_s1);

@@ -1,6 +1,6 @@
 void FUN_00188660(int arg0) {
     FUN_00188780();
-    igMetaObject_CreateInstance(DAT_00561000[0], arg0);
+    igMetaObject_CreateInstance(g_igMatrix44fMetaField_metaObject[0], arg0);
 }
 
 igMetaObject *igMatrix44fMetaField_GetMetaObject(void)
@@ -21,8 +21,8 @@ int igMatrix44fMetaField_GetVTable(void) {
 
     igMetaField_Init(u.b);
     u.vt = (int)&DAT_005276e0[0];
-    temp_s0 = *(int *)&u.b[*(int *)((char *)(DAT_00586dc8[0]) + 916)];
-    u.vt = (int)&DAT_0052f230[0];
+    temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
+    u.vt = (int)&g_igMetaField_vtable[0];
     ps = &u.b[12];
     if (ps != 0) {
         temp_v1 = *(int **)ps;
@@ -67,28 +67,28 @@ void thunk_igMatrix44fMetaField_GetMetaObject(void) {
 void FUN_00188810(void) {
     void *temp_s0;
 
-    if (DAT_00561008[0] == 0) {
-        DAT_00561008[0] = (int)(igMetaObject_CreateInstance(DAT_00561000[0], Memory_GetAllocatorBySelector(DAT_00587040[0])));
-        temp_s0 = (void *)(DAT_00561008[0]);
+    if (g_igMatrix44fMetaField_descriptor[0] == 0) {
+        g_igMatrix44fMetaField_descriptor[0] = (int)(igMetaObject_CreateInstance(g_igMatrix44fMetaField_metaObject[0], Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0])));
+        temp_s0 = (void *)(g_igMatrix44fMetaField_descriptor[0]);
         if (temp_s0 != 0) {
             MetaRefList_AppendRetained(FUN_002fc250(), temp_s0);
             {
-                void *held = (void *)DAT_00561008[0];
+                void *held = (void *)g_igMatrix44fMetaField_descriptor[0];
                 *(int *)((char *)(held) + 4) = *(int *)((char *)(held) + 4) - 1;
                 if (((unsigned long long) ((long long) *(int *)((char *)(held) + 4) << 0x29) >> 0x29) == 0) {
                     igObject_Destroy(held);
                 }
             }
-            *(short *)((char *)(DAT_00561008[0]) + 18) = (short) (*(int *)((char *)(FUN_002fc250()) + 12) - 1);
-            igMetaField_FinalizeDescriptor(DAT_00561008[0]);
+            *(short *)((char *)(g_igMatrix44fMetaField_descriptor[0]) + 18) = (short) (*(int *)((char *)(FUN_002fc250()) + 12) - 1);
+            igMetaField_FinalizeDescriptor(g_igMatrix44fMetaField_descriptor[0]);
         }
     }
 }
 
 int FUN_001888e0(void) {
-    if (DAT_00561008[0] == 0) {
+    if (g_igMatrix44fMetaField_descriptor[0] == 0) {
         FUN_00188780();
     }
-    return DAT_00561008[0];
+    return g_igMatrix44fMetaField_descriptor[0];
 }
 

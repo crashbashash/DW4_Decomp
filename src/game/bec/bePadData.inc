@@ -4,11 +4,11 @@ void FUN_0034ce50(int arg0) {
 }
 
 void *FUN_0034ce90(void) {
-    struct G *g = DAT_00588550[0];
-    if (!g || ((g->f & 4) != 0) == false) {
+    igMetaObject *g = g_bePadData_metaObject[0];
+    if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_0034cf20();
     }
-    return DAT_00588550[0];
+    return g_bePadData_metaObject[0];
 }
 
 int bePadData_GetVTable(void) {
@@ -16,7 +16,7 @@ int bePadData_GetVTable(void) {
 
     igObject_InitHeader(&obj);
     obj.vt = &DAT_0053afd0[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 
 void FUN_0034cf20(void)
@@ -54,7 +54,7 @@ void bePadData_InitFields(void) {
     int temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)((int *)DAT_00588550)[0];
+    temp_s0 = (void *)g_bePadData_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_004c4740[0], 0x16);
     temp_a0 = ((int)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 1));

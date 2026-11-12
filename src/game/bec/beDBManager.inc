@@ -3,19 +3,19 @@ void FUN_003660d0(int arg0) {
     igMetaObject_CreateInstance(*(int *)0x589958, arg0);
 }
 
-int FUN_00366110(void) {
-    if (((int *)DAT_00589958)[0] == 0) {
-        ((int *)DAT_00589958)[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(DAT_00587040[0]));
+igMetaObject *FUN_00366110(void) {
+    if (g_beDBManager_metaObject[0] == 0) {
+        g_beDBManager_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
     }
-    return ((int *)DAT_00589958)[0];
+    return g_beDBManager_metaObject[0];
 }
 
-G_366160 *FUN_00366160(void) {
-    G_366160 *g = DAT_00589958[0];
+igMetaObject *FUN_00366160(void) {
+    igMetaObject *g = g_beDBManager_metaObject[0];
     int t;
-    if (!g || !(t = (g->f & 4) != 0))
+    if (!g || !(t = (g->_validity & 4) != 0))
         FUN_00366290();
-    return DAT_00589958[0];
+    return g_beDBManager_metaObject[0];
 }
 
 int beDBManager_GetVTable(void) {
@@ -34,7 +34,7 @@ int beDBManager_GetVTable(void) {
     q0 = (S_ref *)&u.b[24];
     *(int *)q0 = 0;
     u.vt = (int)&DAT_0053bb70[0];
-    temp_s0 = *(int *)&u.b[*(int *)((char *)(DAT_00586dc8[0]) + 916)];
+    temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.vt = (int)&DAT_0053a0d0[0];
     if (q0 != 0) {
         q0 = *(S_ref **)q0;

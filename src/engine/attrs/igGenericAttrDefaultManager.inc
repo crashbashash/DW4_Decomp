@@ -16,7 +16,7 @@ int igGenericAttrDefaultManager_GetVTable(void) {
     int pad[2];
     igObject_InitHeader(&o);
     o.vt = DAT_00523a20;
-    return *(int *)((char *)&o + *(int *)(DAT_00586dc8[0] + 916));
+    return *(int *)((char *)&o + *(int *)(g_objectSystem[0] + 916));
 }
 
 void FUN_00137b80(void)

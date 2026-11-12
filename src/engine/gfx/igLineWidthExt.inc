@@ -1,6 +1,6 @@
 igMetaObject *FUN_0014d680(void)
 {
-    igMetaObject *meta = g_igLineWidthExt_metaObject;
+    igMetaObject *meta = g_igLineWidthExt_metaObject[0];
     bool ready;
 
     if (meta) {
@@ -10,7 +10,7 @@ igMetaObject *FUN_0014d680(void)
     }
     FUN_0014d6d0();
 end:
-    return g_igLineWidthExt_metaObject;
+    return g_igLineWidthExt_metaObject[0];
 }
 
 void FUN_0014d6d0(void)
@@ -22,7 +22,7 @@ void igLineWidthExt_Register(void) {
     FUN_00149bc0();
     igMetaObject_RegisterClass(
         1, /* abstract */
-        &g_igLineWidthExt_metaObject,
+        g_igLineWidthExt_metaObject,
         igContextExt_Register,
         igContextExt_GetPublishedMetaObject,
         thunk_igLineWidthExt_GetMetaObject_0014d750,
@@ -43,7 +43,7 @@ void igLineWidthExt_InitFields(void) {
     int temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)DAT_0055fd18[0];
+    temp_s0 = (void *)g_igLineWidthExt_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_00488d10[0], 1);
     FUN_002e3810(igMetaObject_GetFieldAt(temp_s0, temp_s1), 1.0f);

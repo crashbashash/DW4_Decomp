@@ -15,7 +15,7 @@ int igAnimationStatePool_GetVTable(void) {
     union U u;
     igObject_InitHeader(u.b);
     u.vt = (int)&DAT_0052a020[0];
-    return *(int *)&u.b[*(int *)((char *)(DAT_00586dc8[0]) + 916)];
+    return *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
 }
 
 void igAnimationStatePool_RunStaticInit(void)

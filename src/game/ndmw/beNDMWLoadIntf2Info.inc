@@ -1,9 +1,9 @@
 void *beNDMWLoadIntf2Info_GetReadyMetaObject(void) {
-    struct G *g = DAT_0058b5d0[0];
-    if (!g || ((g->f & 4) != 0) == false) {
+    igMetaObject *g = g_beNDMWLoadIntf2Info_metaObject[0];
+    if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_003c2710();
     }
-    return DAT_0058b5d0[0];
+    return g_beNDMWLoadIntf2Info_metaObject[0];
 }
 
 int beNDMWLoadIntf2Info_GetVTable(void) {
@@ -15,7 +15,7 @@ int beNDMWLoadIntf2Info_GetVTable(void) {
     *(int *)&u.b[20] = 0;
     *(int *)&u.b[24] = 0;
     u.vt = (int)&DAT_0053d2a0[0];
-    t = *(int *)&u.b[*(int *)((char *)(DAT_00586dc8[0]) + 916)];
+    t = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.vt = (int)&DAT_0053d2a0[0];
     FUN_0033ec80(u.b, 0);
     return t;

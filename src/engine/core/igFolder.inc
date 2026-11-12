@@ -23,7 +23,7 @@ int igFolder_GetVTable(void) {
     q = &u.p[2];
     u.w[0] = (int)(&DAT_0052fee0[0]);
     *q = 0;
-    temp_s0 = *(int *)&u.b[*(int *)((char *)(((void * *)DAT_00586dc8)[0]) + 916)];
+    temp_s0 = *(int *)&u.b[*(int *)((char *)(((void * *)g_objectSystem)[0]) + 916)];
     u.w[0] = (int)(&DAT_0052fee0[0]);
     if (q != 0) {
         temp_v1 = *q;
@@ -69,10 +69,10 @@ void igFolder_InitFields(void) {
     int temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)(((void * *)DAT_00586368)[0]);
+    temp_s0 = (void *)(((void * *)g_igFolder_metaObject)[0]);
     temp_s1 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
     igMetaObject_CreateFields((igMetaObject *)temp_s0, (igMetaField * (**)(void *))&DAT_004c0a98[0], 1);
     igMetaObject_NameFields((igMetaObject *)temp_s0, (const char **)&DAT_004c0aa0[0], (igMetaField ***)&DAT_004c0aa8[0], &DAT_004c0ab0[0], temp_s1);
-    *(int *)((char *)(((void * *)DAT_00586368)[0]) + 60) = (int)(&thunk_igPsx2Folder_GetMetaObject);
+    *(int *)((char *)(((void * *)g_igFolder_metaObject)[0]) + 60) = (int)(&thunk_igPsx2Folder_GetMetaObject);
 }
 

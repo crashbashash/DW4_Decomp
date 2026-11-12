@@ -13,11 +13,11 @@ void FUN_002d1a00(S_2d1a00 *self) {
         ((P_2d1a00 * *)DAT_00586fd0)[0] = (P_2d1a00 *)m;
     }
     ((P_2d1a00 * *)DAT_00586fd0)[0]->v40();
-    self->f24 = ((L_2d1a00 *)InternalObjectList_Create(((int)Memory_GetAllocatorBySelector(DAT_00587018[0]))));
+    self->f24 = ((L_2d1a00 *)InternalObjectList_Create(((int)Memory_GetAllocatorBySelector(g_allocatorSelector[0]))));
     l = self->f24;
     if (l->f8 == 0) n = 0; else n = Memory_GetBufferSize((void *)l->f8) >> 2;
     if ((int)n < 0x401) ObjectPointerList_EnsureIndex((List_2ea4f0 *)l, 0x400);
-    self->f36 = ((L_2d1a00 *)InternalObjectList_Create(((int)Memory_GetAllocatorBySelector(DAT_00587018[0]))));
+    self->f36 = ((L_2d1a00 *)InternalObjectList_Create(((int)Memory_GetAllocatorBySelector(g_allocatorSelector[0]))));
     b = ((int)Memory_AllocateDefaultBuffer((unsigned int)12));
     if (b != 0) b = ((int)igArray_Construct((CallbackArray *)b));
     self->f40 = b;
@@ -50,7 +50,7 @@ void FUN_002d1a00(S_2d1a00 *self) {
     FUN_002c4710();
     FUN_002c1b10();
     igUnsignedCharMetaField_EnsureRegistered();
-    ((int *)DAT_00585a68)[0] = igRawRefMetaField_GetDefaultDescriptor();
+    ((int *)g_igRefMetaField_descriptor)[0] = igRawRefMetaField_GetDefaultDescriptor();
     ((P_2d1a00 * *)DAT_00586fd0)[0]->v41();
 }
 
@@ -76,8 +76,8 @@ void FUN_002d1c40(Obj_2d1c40 *arg0) {
     arg0->m924.adopt(text);
 }
 
-int FUN_002d2790(void) {
-    return DAT_00585fc8[0];
+igMetaObject *FUN_002d2790(void) {
+    return g_igMediaFile_metaObject[0];
 }
 
 void FUN_002d27a0(S_2d27a0 *arg0) {
@@ -130,12 +130,12 @@ void FUN_002d2e60(S_2d2e60 *arg0) {
         o->refs = o->refs - 1;
         if ((o->refs & 0x7fffff) == 0) igObject_Destroy(o);
     }
-    if (DAT_00586f20[0] == 0) {
+    if (g_stringPool[0] == 0) {
         v = ((int)FUN_002eb010(16));
         if (v != 0) v = ((int)StringPool_Construct((S_2eadf0 *)v));
-        DAT_00586f20[0] = v;
+        g_stringPool[0] = v;
     }
-    StringPool_Destroy((int *)DAT_00586f20[0], 1);
+    StringPool_Destroy((int *)g_stringPool[0], 1);
     arg0->f20 = 0;
     if (DAT_00586fd0[0] != 0) {
         DAT_00586fd0[0]->v42();

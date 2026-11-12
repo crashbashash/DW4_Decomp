@@ -1,4 +1,4 @@
-int Gap__Gfx__igCustomStateCollectionList__vfunc_24(void) {
-    return DAT_0055fe70[0];
+igMetaObject *Gap__Gfx__igCustomStateCollectionList__vfunc_24(void) {
+    return g_igCustomStateCollection_metaObject[0];
 }
 

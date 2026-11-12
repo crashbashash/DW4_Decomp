@@ -1,8 +1,8 @@
-int FUN_0044f790(void) {
-    if (DAT_0058c438[0] == 0) {
-        DAT_0058c438[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(DAT_00587040[0]));
+igMetaObject *FUN_0044f790(void) {
+    if (g_igGuiComponentModel_metaObject[0] == 0) {
+        g_igGuiComponentModel_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
     }
-    return DAT_0058c438[0];
+    return g_igGuiComponentModel_metaObject[0];
 }
 
 igMetaObject *igGuiComponentModel_GetMetaObject(void)
@@ -23,7 +23,7 @@ int igGuiComponentModel_GetVTable(void) {
     *(int *)q0 = 0;
     u.vt = (int)&DAT_00540e30[0];
     u.vt = (int)&DAT_00541e30[0];
-    temp_s0 = *(int *)&u.b[*(int *)((char *)(DAT_00586dc8[0]) + 916)];
+    temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.vt = (int)&DAT_00540e30[0];
     if (q0 != 0) {
         q0 = *(S_ref **)q0;
@@ -70,11 +70,11 @@ void igGuiComponentModel_InitFields(void) {
     struct { int a; int b; int c; } z;
     void *temp_s0;
 
-    temp_s0 = (void *)DAT_0058c438[0];
+    temp_s0 = (void *)g_igGuiComponentModel_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_004d04b0[0], 7);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    *(int *)((char *)(temp_s1) + 56) = FUN_0044ff40();
+    *(int *)((char *)(temp_s1) + 56) = (int)FUN_0044ff40();
     *(char *)(60 + (char *)(temp_s1)) = 0;
     FUN_002d3890(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1), 1);
     temp_a0 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 5));

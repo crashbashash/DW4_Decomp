@@ -1,8 +1,8 @@
-int FUN_0044d840(void) {
-    if (DAT_0058c2a8[0] == 0) {
-        DAT_0058c2a8[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(DAT_00587040[0]));
+igMetaObject *FUN_0044d840(void) {
+    if (g_igHotKeyEventReceiver_metaObject[0] == 0) {
+        g_igHotKeyEventReceiver_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
     }
-    return DAT_0058c2a8[0];
+    return g_igHotKeyEventReceiver_metaObject[0];
 }
 
 igMetaObject *igHotKeyEventReceiver_GetMetaObject(void)
@@ -22,7 +22,7 @@ int igHotKeyEventReceiver_GetVTable(void) {
     u.vt = (int)&DAT_00540e90[0];
     ps = &u.b[8];
     *(int *)ps = 0;
-    temp_s0 = *(int *)&u.b[*(int *)((char *)(DAT_00586dc8[0]) + 916)];
+    temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.vt = (int)&DAT_00540e90[0];
     if (ps != 0) {
         temp_a0 = *(int **)ps;
@@ -67,11 +67,11 @@ void igHotKeyEventReceiver_InitFields(void) {
     void *temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)DAT_0058c2a8[0];
+    temp_s0 = (void *)g_igHotKeyEventReceiver_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_004d0108[0], 1);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = FUN_0044dab0();
+    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_0044dab0();
     ((igRefMetaField *)temp_s1)->_construct = 1;
     igMetaObject_NameFields(temp_s0, &DAT_004d0110[0], &DAT_004d0118[0], &DAT_004d0120[0], temp_s2);
 }

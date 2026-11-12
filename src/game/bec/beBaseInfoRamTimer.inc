@@ -4,11 +4,11 @@ void FUN_0036a510(int arg0) {
 }
 
 void *FUN_0036a550(void) {
-    struct G *g = DAT_00589d78[0];
-    if (!g || ((g->f & 4) != 0) == false) {
+    igMetaObject *g = g_beBaseInfoRamTimer_metaObject[0];
+    if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_0036a630();
     }
-    return DAT_00589d78[0];
+    return g_beBaseInfoRamTimer_metaObject[0];
 }
 
 int beBaseInfoRamTimer_GetVTable(void) {
@@ -24,7 +24,7 @@ int beBaseInfoRamTimer_GetVTable(void) {
     *q = 0;
     o.vt = &DAT_00524950[0];
     o.vt = &DAT_00534830[0];
-    temp_s0 = *(int *)((char *)&o + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+    temp_s0 = *(int *)((char *)&o + *(int *)((char *)(g_objectSystem[0]) + 916));
     o.vt = &DAT_00524950[0];
     if (q != 0) {
         temp_v1 = *q;
@@ -71,7 +71,7 @@ void beBaseInfoRamTimer_InitFields(void) {
     int temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)((int *)DAT_00589d78)[0];
+    temp_s0 = (void *)g_beBaseInfoRamTimer_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_004c7c70[0], 6);
     FUN_002e3810((void *)(((int)igMetaObject_GetFieldAt(temp_s0, temp_s1))), 1.0f);

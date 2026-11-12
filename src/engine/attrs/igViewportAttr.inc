@@ -1,8 +1,8 @@
-int FUN_00130440(void) {
-    if (DAT_0055ebd8[0] == 0) {
-        DAT_0055ebd8[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(DAT_00587040[0]));
+igMetaObject *FUN_00130440(void) {
+    if (g_igViewportAttr_metaObject[0] == 0) {
+        g_igViewportAttr_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
     }
-    return DAT_0055ebd8[0];
+    return g_igViewportAttr_metaObject[0];
 }
 
 igMetaObject *igViewportAttr_GetMetaObject(void)
@@ -22,7 +22,7 @@ int igViewportAttr_GetVTable(void) {
     u.vt = (int)&DAT_00522520[0];
     ps = &u.b[28];
     *(int *)ps = 0;
-    temp_s0 = *(int *)&u.b[*(int *)((char *)(DAT_00586dc8[0]) + 916)];
+    temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.vt = (int)&DAT_00522520[0];
     if (ps != 0) {
         temp_a0 = *(int **)ps;
@@ -62,8 +62,8 @@ void thunk_igViewportAttr_GetMetaObject(void) {
     igViewportAttr_GetMetaObject();
 }
 
-int FUN_00130610(void) {
-    return DAT_0055ebd0[0];
+igMetaObject *FUN_00130610(void) {
+    return g_igVisualAttribute_metaObject[0];
 }
 
 void igViewportAttr_InitFields(void) {
@@ -71,7 +71,7 @@ void igViewportAttr_InitFields(void) {
     void *temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)DAT_0055ebd8[0];
+    temp_s0 = (void *)g_igViewportAttr_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_00485940[0], 7);
     FUN_002ea4b0(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 2), 0x27F);

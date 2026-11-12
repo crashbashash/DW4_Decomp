@@ -22,7 +22,7 @@ int igPsx2PointSpriteExt_GetVTable(void) {
     igMatrix44f_SetIdentity(pa + 232);
     igMatrix44f_SetIdentity(pa + 296);
     o.vt = (int)&DAT_00525320[0];
-    temp_s0 = *(int *)((char *)&o + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+    temp_s0 = *(int *)((char *)&o + *(int *)((char *)(g_objectSystem[0]) + 916));
     o.vt = (int)&DAT_00525320[0];
     FUN_0014c440((O *)&o, 0);
     return temp_s0;
@@ -50,8 +50,8 @@ void igPsx2PointSpriteExt_Register(void) {
     );
 }
 
-int FUN_001532f0(void) {
-    return DAT_0055fb40[0];
+igMetaObject *FUN_001532f0(void) {
+    return g_igPointSpriteExt_metaObject[0];
 }
 
 void igPsx2PointSpriteExt_InitFields(void) {
@@ -59,7 +59,7 @@ void igPsx2PointSpriteExt_InitFields(void) {
     void *temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)DAT_00560530[0];
+    temp_s0 = (void *)g_igPsx2PointSpriteExt_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_00489e90[0], 1);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));

@@ -1,6 +1,6 @@
-SFUN_003618e0 *FUN_003618e0(void) {
-    if (DAT_00589658[0] == 0 || !DAT_00589658[0]->ok()) FUN_00361c70();
-    return DAT_00589658[0];
+igMetaObject *FUN_003618e0(void) {
+    if (g_beFontImage_metaObject[0] == 0 || !isValid(g_beFontImage_metaObject[0])) FUN_00361c70();
+    return g_beFontImage_metaObject[0];
 }
 
 int beFontImage_GetVTable(void) {
@@ -13,7 +13,7 @@ int beFontImage_GetVTable(void) {
     obj.w[6] = 0;
     obj.w[7] = 0;
     obj.vt = &DAT_005359b0[0];
-    r = *(int *)((char *)&obj + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+    r = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
     obj.vt = &DAT_005359b0[0];
     FUN_00361b00((O_361b00 *)&obj, (short)0);
     return r;
@@ -164,7 +164,7 @@ void beFontImage_GetMetaObject(void)
 }
 
 int FUN_00361d20(void) {
-    return DAT_0058c620[0];
+    return g_igBitmapFont_metaObject[0];
 }
 
 int FUN_00361d30(void) {

@@ -9,7 +9,7 @@ unsigned __int128 FUN_0031d370(void *);
 unsigned __int128 FUN_0031d390(void *);
 char *FUN_00312140(char *, int, int, int);
 char *FUN_00312020(char *, int, int, int);
-extern int *DAT_00586dc8[4];
+extern int *g_objectSystem[4];
 extern char DAT_004f7910[];
 extern char DAT_004fc1e0[];
 }
@@ -23,7 +23,7 @@ void Gap__Core__igArenaMemoryPool__vfunc_87(void *arg0) {
     int s0;
     V *o = (V *)arg0;
     FUN_002f08d0();
-    s0 = DAT_00586dc8[0][9] != 0;
+    s0 = g_objectSystem[0][9] != 0;
     if (s0 != 0) { s4 = FUN_00312140(spE0, 64, ((int *)arg0)[47], FUN_002cd9f0()); } else { s4 = DAT_004f7910; }
     if (s0 != 0) { s3 = FUN_00312140(sp120, 64, ((int *)arg0)[46], FUN_002cda50()); } else { s3 = DAT_004f7910; }
     if (s0 != 0) { s2 = FUN_00312020(sp160, 256, ((int *)arg0)[48], FUN_002cd990()); } else { s2 = DAT_004f7910; }

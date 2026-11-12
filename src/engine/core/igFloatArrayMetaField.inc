@@ -21,8 +21,8 @@ int igFloatArrayMetaField_GetVTable(void) {
 
     FUN_002fbfe0(u.b);
     u.vt = (int)&DAT_00530050[0];
-    temp_s0 = *(int *)&u.b[*(int *)((char *)(((void * *)DAT_00586dc8)[0]) + 916)];
-    u.vt = (int)&DAT_0052f230[0];
+    temp_s0 = *(int *)&u.b[*(int *)((char *)(((void * *)g_objectSystem)[0]) + 916)];
+    u.vt = (int)&g_igMetaField_vtable[0];
     ps = &u.b[12];
     if (ps != 0) {
         temp_v1 = *(int **)ps;
@@ -64,15 +64,15 @@ void thunk_igFloatArrayMetaField_GetMetaObject(void) {
     igFloatArrayMetaField_GetMetaObject();
 }
 
-int FUN_002c4a70(void) {
-    return DAT_00586378[0];
+igMetaObject *FUN_002c4a70(void) {
+    return g_igFloatMetaField_metaObject[0];
 }
 
 void igFloatArrayMetaField_InitFields(void) {
     int temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)DAT_00586388[0];
+    temp_s0 = (void *)g_igFloatArrayMetaField_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
     igMetaObject_CreateFields((igMetaObject *)temp_s0, (igMetaField * (**)(void *))&DAT_004c0ac8[0], 1);
     FUN_002ea4b0((void **)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1)), 1);
@@ -84,19 +84,19 @@ void FUN_002c4b10(void) {
     S1 *temp_a0;
     int n;
 
-    if (DAT_00586390[0] == 0) {
-        DAT_00586390[0] = ((S1 *)igMetaObject_CreateInstance((CreateMeta *)DAT_00586388[0], (MemoryPool *)(((int)Memory_GetAllocatorBySelector(DAT_00587040[0])))));
-        temp_s0 = DAT_00586390[0];
+    if (g_igFloatArrayMetaField_descriptor[0] == 0) {
+        g_igFloatArrayMetaField_descriptor[0] = ((S1 *)igMetaObject_CreateInstance((CreateMeta *)g_igFloatArrayMetaField_metaObject[0], (MemoryPool *)(((int)Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0])))));
+        temp_s0 = g_igFloatArrayMetaField_descriptor[0];
         if (temp_s0 != 0) {
             MetaRefList_AppendRetained((PointerList *)(((L *)FUN_002fc250())), (RefHeader *)temp_s0);
-            temp_a0 = DAT_00586390[0];
+            temp_a0 = g_igFloatArrayMetaField_descriptor[0];
             temp_a0->f4 = (int)((int) (temp_a0->f4 - 1));
             if (((unsigned long long) ((long long) temp_a0->f4 << 0x29) >> 0x29) == 0) {
                 igObject_Destroy(temp_a0);
             }
             n = ((L *)FUN_002fc250())->fc - 1;
-            DAT_00586390[0]->f12 = n;
-            igMetaField_FinalizeDescriptor((igMetaField *)DAT_00586390[0]);
+            g_igFloatArrayMetaField_descriptor[0]->f12 = n;
+            igMetaField_FinalizeDescriptor((igMetaField *)g_igFloatArrayMetaField_descriptor[0]);
         }
     }
 }

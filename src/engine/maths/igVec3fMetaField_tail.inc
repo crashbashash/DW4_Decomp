@@ -19,13 +19,13 @@ void Gap__igVec3fMetaField__vfunc_57(char **out, int unused, float *v)
     if (buf == 0) {
         s = 0;
     } else {
-        if (g_stringPool == 0) {
+        if (g_stringPool[0] == 0) {
             pool = FUN_002eb010(16);
             if (pool != 0)
                 pool = StringPool_Construct(pool);
-            g_stringPool = pool;
+            g_stringPool[0] = pool;
         }
-        s = (char *)StringPool_Intern(g_stringPool, buf);
+        s = (char *)StringPool_Intern(g_stringPool[0], buf);
     }
     *out = s;
 }

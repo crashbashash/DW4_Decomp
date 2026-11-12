@@ -15,14 +15,14 @@ void Gap__Core__igUnsignedIntMetaField__vfunc_57(int *arg0, void *arg1, int *arg
     if (sp20 == 0) {
         var_v1 = 0;
     } else {
-        if (DAT_00586f20[0] == 0) {
+        if (g_stringPool[0] == 0) {
             var_v0 = ((int)FUN_002eb010(0x10));
             if (var_v0 != 0) {
                 var_v0 = ((int)StringPool_Construct((S_2eadf0 *)var_v0));
             }
-            DAT_00586f20[0] = var_v0;
+            g_stringPool[0] = var_v0;
         }
-        var_v1 = StringPool_Intern((StringPool *)DAT_00586f20[0], (const char *)sp20);
+        var_v1 = StringPool_Intern((StringPool *)g_stringPool[0], (const char *)sp20);
     }
     *arg0 = var_v1;
 }
@@ -52,7 +52,7 @@ void *igUnsignedIntMetaField_Init(igMetaField *self) {
 
 int **FUN_0030e960(int **arg0, int extra1) {
     igMetaField_CopyConstruct((igMetaField *)arg0, (igMetaField *)extra1);
-    *arg0 = &DAT_00533430[0];
+    *arg0 = &g_igUnsignedIntMetaField_vtable[0];
     return arg0;
 }
 

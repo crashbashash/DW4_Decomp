@@ -53,7 +53,7 @@ extern "C" int beMessenger_GetStringCount(...);
 extern "C" int beMessenger_PrepareDelayedGroup(...);
 extern "C" unsigned int beMessenger_ResolveEnumValue(...);
 extern "C" void *igObject_GetAllocator(...);
-extern "C" int DAT_00589ad8[4];
+extern "C" int g_beCri_metaObject[4];
 extern "C" igObject *FUN_00236f80(int, int);
 extern "C" void Gap__Bec__beSound__vfunc_32(beSound *arg0);
 typedef struct K { char pad[52]; int f52; char pad2[8]; int f64; } K;
@@ -61,14 +61,14 @@ typedef struct K { char pad[52]; int f52; char pad2[8]; int f64; } K;
  * schedules differently when those two fields are int handles.  The shorts at +36/+38 are read through beSoundInfo. */
 typedef struct SoundInfoPointerView { char pad0[12]; struct SoundInfoPointerView *f12; char pad[16]; int *f32; } SoundInfoPointerView;
 extern "C" int beMessenger_RegisterReceiver(int, SoundInfoPointerView *, int *, int, int);
-extern "C" int DAT_00586f20[4];
+extern "C" int g_stringPool[4];
 extern "C" int DAT_0050f9a0[4];
 extern "C" int DAT_0050f9a8[4];
 extern "C" void Gap__Bec__beSound__vfunc_29(beSound *arg0, SoundInfoPointerView *arg1);
 extern "C" int g_beSoundInfo_metaObject[4];
 extern "C" int g_beSound_metaObject[4];
 extern "C" igObjectList * beMessenger_GetObject(...);
-extern "C" char DAT_004e0858[];
+extern "C" char emptyString[];
 extern "C" int DAT_0050f9b0[4];
 extern "C" int DAT_0050f9c0[4];
 extern "C" int DAT_0050f9d0[4];
@@ -81,7 +81,7 @@ extern "C" int DAT_0050f9e0[4];
 extern "C" int DAT_0050f9e8[4];
 extern "C" int DAT_0050f9f0[4];
 extern "C" int DAT_0050f9f8[4];
-extern "C" int DAT_00587110[4];
+extern "C" int g_defaultAllocatorSelector[4];
 extern "C" unsigned char GPR_00554c14;
 struct Arg2 { int p[5]; int f20; };
 struct SubE { int p[5]; igObjectList *f20; };
@@ -105,12 +105,12 @@ extern "C" int StringList_AppendRetained(void *list, const StringRef &text);
 extern "C" StringRef StringList_CopyRetained(void *list, int index);
 struct FloatBits { unsigned mantissa : 31; unsigned sign : 1; };
 struct U { static inline char *Intern(char *text) {
-    if (DAT_00586f20[0] == 0) {
+    if (g_stringPool[0] == 0) {
         int pool = FUN_002eb010(0x10);
         if (pool != 0) pool = StringPool_Construct(pool);
-        DAT_00586f20[0] = pool;
+        g_stringPool[0] = pool;
     }
-    return StringPool_Intern(DAT_00586f20[0], text);
+    return StringPool_Intern(g_stringPool[0], text);
 } };
 extern "C" int Gap__Bec__beSound__vfunc_34(beSound *self, beBaseInfoRam *arg1, Arg2 *arg2);
 extern "C" int FUN_0039fb60(void *arg0, beBaseInfoRam *arg1, int arg2);
@@ -122,7 +122,7 @@ void Gap__Bec__beSound__vfunc_32(beSound *arg0) {
     igObject *o;
     igDataList *l2;
     if (arg0->_cri == 0) {
-        igObject *t = FUN_00236f80(arg0->_insight, DAT_00589ad8[0]);
+        igObject *t = FUN_00236f80(arg0->_insight, g_beCri_metaObject[0]);
         igObject *old;
         if (t != 0) {
             t->_refCount = (int)t->_refCount + 1;
@@ -173,14 +173,14 @@ void Gap__Bec__beSound__vfunc_29(beSound *arg0, SoundInfoPointerView *arg1) {
     ((K *)arg0->_cri)->f52 = ((beSoundInfo *)arg1)->_baseVolume;
     FUN_0037e020(arg0->_cri, ((beSoundInfo *)arg1)->_sndfVolume);
     if (arg1->f32 == 0) {
-        if (DAT_00586f20[0] == 0) {
+        if (g_stringPool[0] == 0) {
             var_v0 = FUN_002eb010(0x10);
             if (var_v0 != 0) {
                 var_v0 = StringPool_Construct(var_v0);
             }
-            DAT_00586f20[0] = var_v0;
+            g_stringPool[0] = var_v0;
         }
-        s2 = (int *)StringPool_Intern(DAT_00586f20[0], &DAT_0050f9a8[0]);
+        s2 = (int *)StringPool_Intern(g_stringPool[0], &DAT_0050f9a8[0]);
         old = arg1->f32;
         if (old != 0) {
             a1 = old - 2;
@@ -204,7 +204,7 @@ int Gap__Bec__beSound__vfunc_30(void)
     return g_beSoundInfo_metaObject[0];
 }
 
-#define NM(e) ((e)->_name ? (char *)(e)->_name : DAT_004e0858)
+#define NM(e) ((e)->_name ? (char *)(e)->_name : emptyString)
 #define REL(o) { igObject *rr = (igObject *)(o); if (rr != 0) { rr->_refCount = (int)rr->_refCount - 1; if (((unsigned long long)((long long)(int)rr->_refCount << 0x29) >> 0x29) == 0) { igObject_Destroy(rr); } } }
 void Gap__Bec__beSound__vfunc_31(beSound *self, beBaseInfoRam *arg1) {
     igDataList *objs;
@@ -271,7 +271,7 @@ void Gap__Bec__beSound__vfunc_31(beSound *self, beBaseInfoRam *arg1) {
 #undef NM
 
 #define SREL(s) { char *ss = (s); if (ss != 0) { int *hd = (int *)ss - 2; int cnt = ((int *)ss)[-1] - 1; ((int *)ss)[-1] = cnt; if (cnt == 0) StringChunk_ReleaseHeader(*hd, hd); } }
-#define ALLOC(a, self) { a = igObject_GetAllocator(self); a = GPR_00554c14 ? a : Memory_GetAllocatorBySelector(DAT_00587110[0]); }
+#define ALLOC(a, self) { a = igObject_GetAllocator(self); a = GPR_00554c14 ? a : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]); }
 static inline float Abs(float value) {
     ((FloatBits *)&value)->sign = 0;
     return value;
@@ -330,16 +330,16 @@ int Gap__Bec__beSound__vfunc_34(beSound *self, beBaseInfoRam *arg1, Arg2 *arg2) 
         switch (e->_type) {
         case 1:
             if (self->_currentBGM != 0) {
-                nm = e->_name ? (char *)e->_name : DAT_004e0858;
+                nm = e->_name ? (char *)e->_name : emptyString;
                 if (strcmp(nm, self->_currentBGM) == 0) return 1;
             }
             if (FUN_0037c2c0(self->_cri, info->_fnameList, e) == 0) {
                 beMessenger_PrepareDelayedGroup(self->_messenger, &DAT_0050f9a0[0]);
-                nm = e->_name ? (char *)e->_name : DAT_004e0858;
+                nm = e->_name ? (char *)e->_name : emptyString;
                 beMessenger_AppendString(self->_messenger, nm);
                 beMessenger_EnqueueSelected(self->_messenger, &DAT_0050f9e0[0], 0xB);
             } else {
-                nm = e->_name ? (char *)e->_name : DAT_004e0858;
+                nm = e->_name ? (char *)e->_name : emptyString;
                 s1 = U::Intern(nm);
                 old = (char *)self->_currentBGM;
                 SREL(old)
@@ -349,7 +349,7 @@ int Gap__Bec__beSound__vfunc_34(beSound *self, beBaseInfoRam *arg1, Arg2 *arg2) 
         case 2:
             if (FUN_0037c2c0(self->_cri, info->_fnameList, e) == 0) {
                 beMessenger_PrepareDelayedGroup(self->_messenger, &DAT_0050f9a0[0]);
-                nm = e->_name ? (char *)e->_name : DAT_004e0858;
+                nm = e->_name ? (char *)e->_name : emptyString;
                 beMessenger_AppendString(self->_messenger, nm);
                 beMessenger_EnqueueSelected(self->_messenger, &DAT_0050f9e0[0], 0xB);
             }
@@ -448,7 +448,7 @@ int Gap__Bec__beSound__vfunc_34(beSound *self, beBaseInfoRam *arg1, Arg2 *arg2) 
         i9 = 0;
         if (0 < n9) {
             do {
-                nm = ((beSoundData **)l9->_data)[i9]->_name ? (char *)((beSoundData **)l9->_data)[i9]->_name : DAT_004e0858;
+                nm = ((beSoundData **)l9->_data)[i9]->_name ? (char *)((beSoundData **)l9->_data)[i9]->_name : emptyString;
                 beMessenger_AppendString(self->_messenger, nm);
                 i9 += 1;
             } while (i9 < n9);
@@ -464,11 +464,11 @@ int Gap__Bec__beSound__vfunc_34(beSound *self, beBaseInfoRam *arg1, Arg2 *arg2) 
         beMessenger_AppendBool(self->_messenger, FUN_0037dd10(self->_cri, s1) & 0xFF);
         break;
     case 13:
-        nm = ((beCriHandle *)((beCri *)self->_cri)->_hdBGM)->_name ? (char *)((beCriHandle *)((beCri *)self->_cri)->_hdBGM)->_name : DAT_004e0858;
+        nm = ((beCriHandle *)((beCri *)self->_cri)->_hdBGM)->_name ? (char *)((beCriHandle *)((beCri *)self->_cri)->_hdBGM)->_name : emptyString;
         beMessenger_AppendBool(self->_messenger, FUN_0037dd10(self->_cri, nm) & 0xFF);
         break;
     case 14:
-        nm = ((beCriHandle *)((beCri *)self->_cri)->_hdENV)->_name ? (char *)((beCriHandle *)((beCri *)self->_cri)->_hdENV)->_name : DAT_004e0858;
+        nm = ((beCriHandle *)((beCri *)self->_cri)->_hdENV)->_name ? (char *)((beCriHandle *)((beCri *)self->_cri)->_hdENV)->_name : emptyString;
         beMessenger_AppendBool(self->_messenger, FUN_0037dd10(self->_cri, nm) & 0xFF);
         break;
     case 17:
@@ -493,7 +493,7 @@ int Gap__Bec__beSound__vfunc_34(beSound *self, beBaseInfoRam *arg1, Arg2 *arg2) 
         ia = 0;
         if (0 < fl20->_count) {
             do {
-                nm = ((igNamedObject **)fl20->_data)[ia]->_name ? (char *)((igNamedObject **)fl20->_data)[ia]->_name : DAT_004e0858;
+                nm = ((igNamedObject **)fl20->_data)[ia]->_name ? (char *)((igNamedObject **)fl20->_data)[ia]->_name : emptyString;
                 FUN_0030b3c0(scratch.p, nm);
                 FUN_0030b8a0(scratch.p);
                 FUN_0030bbf0(scratch.p, 0, 1);
@@ -501,7 +501,7 @@ int Gap__Bec__beSound__vfunc_34(beSound *self, beBaseInfoRam *arg1, Arg2 *arg2) 
                 bn = (char *)((igStringObj *)scratch.p)->_buffer;
                 if (bn == 0) bn2 = DAT_004c22f0[0]; else bn2 = bn;
                 if (strcmp(dt, bn2) == 0) {
-                    nm = ((igNamedObject **)fl20->_data)[ia]->_name ? (char *)((igNamedObject **)fl20->_data)[ia]->_name : DAT_004e0858;
+                    nm = ((igNamedObject **)fl20->_data)[ia]->_name ? (char *)((igNamedObject **)fl20->_data)[ia]->_name : emptyString;
                     FUN_0030b3c0(scratch.p, nm);
                     FUN_0030ba20(scratch.p);
                     FUN_0030b5c0(scratch.p);
@@ -540,7 +540,7 @@ int Gap__Bec__beSound__vfunc_34(beSound *self, beBaseInfoRam *arg1, Arg2 *arg2) 
                         if (0 < sub->_count) {
                             do {
                                 ne = ((igNamedObject **)sub->_data)[nb];
-                                nm = ne->_name ? (char *)ne->_name : DAT_004e0858;
+                                nm = ne->_name ? (char *)ne->_name : emptyString;
                                 if (strcmp(nm, nmb) == 0) {
                                     ObjectList_AppendRetained(((beCri *)self->_cri)->_lsBinObjs, ne);
                                     fb1 = 1;
@@ -586,7 +586,7 @@ int FUN_0039fb60(void *arg0, beBaseInfoRam *arg1, int arg2) {
     n = t->_count;
     for (i = 0; i < n; i++) {
         p = (int *)((beSoundData **)t->_data)[i]->_name;
-        p = p ? p : &((int *)DAT_004e0858)[0];
+        p = p ? p : &((int *)emptyString)[0];
         if (strcmp(arg2, p) == 0) {
             return i;
         }

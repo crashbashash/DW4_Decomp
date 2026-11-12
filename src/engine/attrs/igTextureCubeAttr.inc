@@ -5,11 +5,11 @@ int FUN_00131f80(void) {
     return DAT_0055ed40[0];
 }
 
-int FUN_00131fe0(void) {
-    if (DAT_0055ed48[0] == 0) {
-        DAT_0055ed48[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(DAT_00587040[0]));
+igMetaObject *FUN_00131fe0(void) {
+    if (g_igTextureCubeAttr_metaObject[0] == 0) {
+        g_igTextureCubeAttr_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
     }
-    return DAT_0055ed48[0];
+    return g_igTextureCubeAttr_metaObject[0];
 }
 
 igMetaObject *igTextureCubeAttr_GetMetaObject(void)
@@ -31,7 +31,7 @@ int igTextureCubeAttr_GetVTable(void) {
     o.f[13] = 0;
     o.f[15] = 0;
     FUN_00100400(&o.f[17], &FUN_00132410, &FUN_00132390, 4, 6);
-    r = *(int *)((char *)&o + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+    r = *(int *)((char *)&o + *(int *)((char *)(g_objectSystem[0]) + 916));
     o.vt = &DAT_00522aa0[0];
     FUN_00100390(&o.f[17], &FUN_00132390, 4, 6);
     FUN_00132230((S_132230 *)&o, 0);
@@ -158,8 +158,8 @@ void thunk_igTextureCubeAttr_GetMetaObject(void) {
     igTextureCubeAttr_GetMetaObject();
 }
 
-int FUN_001324c0(void) {
-    return DAT_0055eda0[0];
+igMetaObject *FUN_001324c0(void) {
+    return g_igTextureAttr_metaObject[0];
 }
 
 void igTextureCubeAttr_InitFields(void) {
@@ -168,7 +168,7 @@ void igTextureCubeAttr_InitFields(void) {
     void *temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)DAT_0055ed48[0];
+    temp_s0 = (void *)g_igTextureCubeAttr_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_00485c18[0], 3);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));

@@ -1,12 +1,12 @@
 void *beNDMWPanelWazaInfoRam_ResolveMetaObject(void) {
-    WazaInfoRamMeta *meta = DAT_0058b1f0[0];
+    igMetaObject *meta = g_beNDMWPanelWazaInfoRam_metaObject[0];
     if (meta) {
         bool t;
-        if ((t = meta->ready()) != false) goto end;
+        if ((t = (meta->_validity & 4) != 0) != false) goto end;
     }
     FUN_003bd9c0();
 end:
-    return DAT_0058b1f0[0];
+    return g_beNDMWPanelWazaInfoRam_metaObject[0];
 }
 
 int beNDMWPanelWazaInfoRam_GetVTable(void) {
@@ -26,7 +26,7 @@ int beNDMWPanelWazaInfoRam_GetVTable(void) {
     u.vt = (int)(&DAT_0053d630[0]);
     q1 = (WazaInfoRamRefHeader *)&u.b[44];
     *(int *)q1 = 0;
-    temp_s1 = *(int *)&u.b[*(int *)((char *)(DAT_00586dc8[0]) + 916)];
+    temp_s1 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.vt = (int)(&DAT_0053d630[0]);
     if (q1 != 0) {
         q1 = *(WazaInfoRamRefHeader **)q1;
@@ -100,11 +100,11 @@ void beNDMWPanelWazaInfoRam_InitFields(void) {
     void *temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)((int *)DAT_0058b1f0)[0];
+    temp_s0 = (void *)g_beNDMWPanelWazaInfoRam_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_004ca460[0], 1);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = FUN_003bdb50();
+    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_003bdb50();
     igMetaObject_NameFields(temp_s0, &DAT_004ca468[0], &DAT_004ca470[0], &DAT_004ca478[0], temp_s2);
 }
 

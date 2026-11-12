@@ -1,8 +1,8 @@
-int FUN_001983e0(void) {
-    if (DAT_005614a8[0] == 0) {
-        DAT_005614a8[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(DAT_00587040[0]));
+igMetaObject *FUN_001983e0(void) {
+    if (g_igSkeletonList_metaObject[0] == 0) {
+        g_igSkeletonList_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
     }
-    return DAT_005614a8[0];
+    return g_igSkeletonList_metaObject[0];
 }
 
 igMetaObject *igSkeletonList_GetMetaObject(void)
@@ -18,7 +18,7 @@ int igSkeletonList_GetVTable(void) {
 
     igObject_InitHeader(&obj);
     obj.vt = &DAT_0052b340[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 
 void FUN_001984c0(void)

@@ -20,7 +20,7 @@ extern "C" char DAT_0050f6e0[];
 extern "C" void Gap__Bec__bePoint01__vfunc_29(bePoint01 * p0, int p1, char * p2);
 extern "C" int DAT_004e0ef0[4];
 extern "C" void FUN_0039c1c0(bePoint01 *arg0, bePoint01Info *arg1, int arg2, int arg3);
-extern "C" int DAT_004e0858[4];
+extern "C" int emptyString[4];
 extern "C" int Gap__Bec__bePoint01__vfunc_34(bePoint01 *arg0, beBaseInfoRam *arg1, void *arg2);
 
 void Gap__Bec__bePoint01__vfunc_32(void)
@@ -89,7 +89,7 @@ int Gap__Bec__bePoint01__vfunc_34(bePoint01 *arg0, beBaseInfoRam *arg1, void *ar
             int off = 0;
             do {
                 int *a1 = (int *)(((beBaseInfoData *)(*(int *)((char *)l->_data + off)))->_name);
-                beMessenger_AppendString(arg0->_messenger, a1 ? a1 : &DAT_004e0858[0]);
+                beMessenger_AppendString(arg0->_messenger, a1 ? a1 : &emptyString[0]);
                 i += 1;
                 off += 4;
             } while (i < n);

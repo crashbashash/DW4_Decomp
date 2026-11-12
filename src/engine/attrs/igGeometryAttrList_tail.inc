@@ -1,4 +1,4 @@
-int Gap__Attrs__igGeometryAttrList__vfunc_22(void) {
-    return DAT_0055f420[0];
+igMetaObject *Gap__Attrs__igGeometryAttrList__vfunc_22(void) {
+    return g_igGeometryAttrList_metaObject[0];
 }
 

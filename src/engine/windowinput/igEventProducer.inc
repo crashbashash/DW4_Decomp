@@ -33,6 +33,6 @@ void thunk_igEventProducer_GetMetaObject(void) {
 }
 
 int FUN_001462f0(void) {
-    return DAT_00562b78[0];
+    return g_igNonRefCountedObjectStack_metaObject[0];
 }
 

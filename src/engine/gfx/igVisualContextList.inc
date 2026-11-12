@@ -16,7 +16,7 @@ int igVisualContextList_GetVTable(void) {
 
     igObject_InitHeader(&o);
     o.vt = &DAT_00527170[0];
-    return *(int *)((char *)&o + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+    return *(int *)((char *)&o + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 
 void FUN_00149f70(void)

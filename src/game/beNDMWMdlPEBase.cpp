@@ -9,7 +9,7 @@
 #define SETI_445200(L, I, V) if ((L)->_count != 0 && (I) >= 0 && (I) < (L)->_count) ((int *)(L)->_data)[I] = (V);
 #define SETB_445200(L, I, V) if ((L)->_count != 0 && (I) >= 0 && (I) < (L)->_count) ((unsigned char *)(L)->_data)[I] = (V);
 #define GI(i) beMessenger_GetInt(self->_messenger, i)
-#define MKLIST(H, F, CT) { int a = igObject_GetAllocator(self); a = GPR_00554c14 != 0 ? a : Memory_GetAllocatorBySelector(DAT_00587110[0]); { List *u = H.p; RELEASE(u) } H.p = (List *)CT(a); { List *c = H.p; if (c != 0) c->_refCount = c->_refCount + 1; { List *old = W(F); RELEASE(old) } w->F = (int)c; } }
+#define MKLIST(H, F, CT) { int a = igObject_GetAllocator(self); a = GPR_00554c14 != 0 ? a : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]); { List *u = H.p; RELEASE(u) } H.p = (List *)CT(a); { List *c = H.p; if (c != 0) c->_refCount = c->_refCount + 1; { List *old = W(F); RELEASE(old) } w->F = (int)c; } }
 #define SIZEIT(F, N, ES) { List *l = W(F); if (l->size < (N) + 1) List_Reserve(l, N, ES); } { List *l = W(F); if (l->cap >= (N)) l->size = N; else List_Resize(l, N, ES); }
 #define FILLI(F, DAT) { int n = W(F)->size; int *d = W(F)->data; int j; for (j = 0; j < n; j++) d[j] = DAT[0]; }
 #define FILLB(F, DAT) { BList *l = (BList *)w->F; int n = l->size; unsigned char *d = l->data; int j; for (j = 0; j < n; j++) d[j] = DAT; }
@@ -70,8 +70,8 @@ extern "C" int DAT_0051d1b8[4];
 extern "C" int DAT_0051d1c0[4];
 extern "C" int DAT_0051d1d0[4];
 extern "C" int DAT_0051d1d8[4];
-extern "C" int DAT_00588f38[4];
-extern "C" int DAT_0058c0a0[4];
+extern "C" int g_beMessenger_metaObject[4];
+extern "C" int g_beNDMWGameRam_metaObject[4];
 extern "C" void FUN_00443110(beNDMWShinkaCtrl *arg0, int arg1, int arg2);
 extern "C" int FUN_003fa3b0(beNDMWGameRam *, int, int, int);
 extern "C" int FUN_003fa850(beNDMWGameRam *, int, int, int);
@@ -81,7 +81,7 @@ extern "C" int DAT_00519438[4];
 extern "C" int DAT_0051d1f8[4];
 extern "C" int DAT_0051d208[4];
 extern "C" int DAT_0051d210[4];
-extern "C" int DAT_00586f20[4];
+extern "C" int g_stringPool[4];
 /* Property record returned by FUN_003a9250: its int list sits at +12. */
 struct PropertyIntArray { char pad[12]; igIntList *list; };
 extern "C" void FUN_004435c0(beNDMWShinkaObject *out, beNDMWGameRam *ctx, int arg2, int arg3);
@@ -93,11 +93,11 @@ extern "C" int DAT_0051d3a8[4];
 extern "C" int DAT_0051d3b8[4];
 extern "C" int DAT_0051d3c8[4];
 extern "C" int DAT_0051d3d8[4];
-extern "C" float DAT_004e1058[4];
+extern "C" float g_vec3Zero[4];
 extern "C" float DAT_004e105c[4];
 extern "C" float DAT_004e1060[4];
-extern "C" int DAT_00585be0[4];
-extern "C" int DAT_00587110[4];
+extern "C" int g_propertyNameField[4];
+extern "C" int g_defaultAllocatorSelector[4];
 extern "C" unsigned char GPR_00554c14;
 struct Rel { static inline void go(igObject *object) {
     if (object) {
@@ -152,7 +152,7 @@ extern "C" int DAT_004cfd98[4];
 extern "C" int DAT_004cfda0[4];
 extern "C" int DAT_004cfda8[4];
 extern "C" int DAT_004cfdb0[4];
-extern "C" igResult DAT_004fb410;
+extern "C" igResult g_statusSucceeded;
 extern "C" int DAT_0051d3e8[4];
 extern "C" int DAT_0051d3f0[4];
 extern "C" int DAT_0051d3f8[4];
@@ -298,8 +298,8 @@ void FUN_00443110(beNDMWShinkaCtrl *arg0, int arg1, int arg2) {
     igObject *t;
     igObject *a0;
     arg0->_playerNo = arg2;
-    arg0->_messenger = FUN_00236f80(arg1, DAT_00588f38[0]);
-    arg0->_gameRam = FUN_00236f80(arg1, DAT_0058c0a0[0]);
+    arg0->_messenger = FUN_00236f80(arg1, g_beMessenger_metaObject[0]);
+    arg0->_gameRam = FUN_00236f80(arg1, g_beNDMWGameRam_metaObject[0]);
     beMessenger_SendNamed(arg0->_messenger, DAT_0051d1a8, DAT_0051d1b8, 0, DAT_0051d1c0);
     t = (igObject *)((int *)beMessenger_GetObject(arg0->_messenger, 0));
     if (t != 0) {
@@ -373,7 +373,7 @@ void FUN_004432a0(beNDMWShinkaCtrl *self) {
             if (GPR_00554c14 != 0) {
                 alloc = base;
             } else {
-                alloc = Memory_GetAllocatorBySelector(DAT_00587110[0]);
+                alloc = Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
             }
             igSmartPointer<igObject> entry(FUN_003c99a0(alloc));
             igObject *slotB[1];
@@ -423,13 +423,13 @@ void FUN_004435c0(beNDMWShinkaObject *out, beNDMWGameRam *ctx, int arg2, int arg
         ctx->_dBShinka = (int)o;
     }
     s = beDataBase_GetRecordString(ctx->_dBShinka, arg3, &DAT_0051d208[0]);
-    if (DAT_00586f20[0] == 0) {
+    if (g_stringPool[0] == 0) {
         pool = FUN_002eb010(16);
         if (pool != 0)
             pool = StringPool_Construct(pool);
-        DAT_00586f20[0] = pool;
+        g_stringPool[0] = pool;
     }
-    ref = StringPool_Intern(DAT_00586f20[0], s);
+    ref = StringPool_Intern(g_stringPool[0], s);
     oldref = out->_name;
     if (oldref != 0) {
         hdr = (int *)(oldref - 8);
@@ -475,7 +475,7 @@ int FUN_00443900(beNDMWMdlPEBase *arg0, beBaseInfoRam *arg1, int arg2, int arg3,
         if (GPR_00554c14 != 0) {
             a = alloc;
         } else {
-            a = Memory_GetAllocatorBySelector(DAT_00587110[0]);
+            a = Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
         }
         igSmartPointer<List> created(beBaseInfoDataList_Create(a));
         s0 = created.p;
@@ -485,7 +485,7 @@ int FUN_00443900(beNDMWMdlPEBase *arg0, beBaseInfoRam *arg1, int arg2, int arg3,
         Rel::go((igObject *)arg1->_dataList);
         arg1->_dataList = (int)s0;
     }
-    r = ((R *)igProperty_FindByName((void *)arg1->_dataList, DAT_00585be0[0], DAT_0051d3a0));
+    r = ((R *)igProperty_FindByName((void *)arg1->_dataList, g_propertyNameField[0], DAT_0051d3a0));
     Matrix44_GetTranslation(r->f16 + 32, &t);
     if (arg3 == -1) {
         beMessenger_SendNamed(arg0->_messenger, DAT_0051d3a8, arg2, -1, DAT_0051d3b8);
@@ -507,7 +507,7 @@ int FUN_00443900(beNDMWMdlPEBase *arg0, beBaseInfoRam *arg1, int arg2, int arg3,
     beMessenger_SelectReceivers(arg0->_messenger, DAT_0051d3a8, arg2, arg3);
     c2 = t;
     beMessenger_AppendVec3(arg0->_messenger, &c2);
-    c3.x = DAT_004e1058[0];
+    c3.x = g_vec3Zero[0];
     c3.y = DAT_004e105c[0];
     c3.z = DAT_004e1060[0];
     beMessenger_AppendVec3(arg0->_messenger, &c3);
@@ -521,7 +521,7 @@ static inline void ensureProps(Model *obj)
 {
     if (obj->props == 0) {
         int allocator = igObject_GetAllocator(obj);
-        igSmartPointer<List> holder(beBaseInfoDataList_Create(GPR_00554c14 != 0 ? allocator : Memory_GetAllocatorBySelector(DAT_00587110[0])));
+        igSmartPointer<List> holder(beBaseInfoDataList_Create(GPR_00554c14 != 0 ? allocator : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0])));
         List *created = holder.p;
         if (created != 0) created->_refCount = created->_refCount + 1;
         List *old = obj->props;
@@ -538,7 +538,7 @@ void Gap__Bec__beNDMWMdlPEBase__vfunc_46(beNDMWMdlPEBase *self, Model *obj) {
     int j;
     int enumExtra;
     ensureProps(obj);
-    w = igProperty_FindByName(obj->props, DAT_00585be0[0], &DAT_0051d3a0[0])->work;
+    w = igProperty_FindByName(obj->props, g_propertyNameField[0], &DAT_0051d3a0[0])->work;
     if (w->_timerList != 0) {
         if (((Param *)w->_hp)->value == 0) {
             int i = 0;
@@ -631,7 +631,7 @@ void Gap__Bec__beNDMWMdlPEBase__vfunc_46(beNDMWMdlPEBase *self, Model *obj) {
                 SETI(w->_timerList, 3, DAT_004cfcf0[0])
                 CALLV(&DAT_0051d460[0]);
             } else {
-                if (!(igMetaEnum_GetValueByName(FUN_003c03e0(), w->_seqCodeName, &enumExtra) == DAT_004fb410)) {
+                if (!(igMetaEnum_GetValueByName(FUN_003c03e0(), w->_seqCodeName, &enumExtra) == g_statusSucceeded)) {
                     OList *moves = (OList *)w->_moveObjectList;
                     int n = moves->size;
                     int i;
@@ -785,7 +785,7 @@ void FUN_00445200(beNDMWMdlPEBase *arg0, beBaseInfoRam *arg1) {
         if (GPR_00554c14 != 0) {
             al = (void *)(int)al;
         } else {
-            al = ((void *)Memory_GetAllocatorBySelector(DAT_00587110[0]));
+            al = ((void *)Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]));
         }
         igSmartPointer<List> ref(beBaseInfoDataList_Create(al));
         s1 = ref.p;
@@ -797,7 +797,7 @@ void FUN_00445200(beNDMWMdlPEBase *arg0, beBaseInfoRam *arg1) {
         }
         arg1->_dataList = (int)s1;
     }
-    st = *(beNDMWMdlPEBaseInfoWork **)((char *)((void *)igProperty_FindByName((igObject *)arg1->_dataList, DAT_00585be0[0], &DAT_0051d3a0[0])) + 20);
+    st = *(beNDMWMdlPEBaseInfoWork **)((char *)((void *)igProperty_FindByName((igObject *)arg1->_dataList, g_propertyNameField[0], &DAT_0051d3a0[0])) + 20);
     if (st->_dispRamNoList != 0) {
         if (((igIntList *)st->_dispRamNoList)->_count != 0 && ((HpWord *)st->_hp)->f12 == 0) {
             int i;
@@ -874,7 +874,7 @@ void FUN_004456c0(beNDMWMdlPEBase *arg0, beBaseInfoRam *arg1, beNDMWMdlPEBaseInf
         igObject *old;
         alloc = igObject_GetAllocator(); /* matching construct: a0 still holds arg0, retail passes it without a move */
         /* The six-entry list is owned by the stack reference until the work record has taken its own. */
-        IntListRef created((List *)FUN_002caa70(GPR_00554c14 != 0 ? alloc : Memory_GetAllocatorBySelector(DAT_00587110[0])));
+        IntListRef created((List *)FUN_002caa70(GPR_00554c14 != 0 ? alloc : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0])));
         if (created.p->size < 7) List_Reserve(created.p, 6, 4);
         if (created.p->cap >= 6) created.p->size = 6;
         else List_Resize(created.p, 6, 4);
@@ -920,7 +920,7 @@ void FUN_00445990(beNDMWMdlPEBase *arg0, beBaseInfoRam *arg1, beNDMWMdlPEBaseInf
         igObject *old;
         alloc = igObject_GetAllocator(); /* matching construct: a0 still holds arg0, retail passes it without a move */
         /* The seven-entry list is owned by the stack reference until the work record has taken its own. */
-        IntListRef created((List *)FUN_002caa70(GPR_00554c14 != 0 ? alloc : Memory_GetAllocatorBySelector(DAT_00587110[0])));
+        IntListRef created((List *)FUN_002caa70(GPR_00554c14 != 0 ? alloc : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0])));
         if (created.p->size < 8) List_Reserve(created.p, 7, 4);
         if (created.p->cap >= 7) created.p->size = 7;
         else List_Resize(created.p, 7, 4);
@@ -956,7 +956,7 @@ int Gap__Bec__beNDMWMdlPEBase__vfunc_47(beNDMWMdlPEBase *self, Model *obj, int n
     beNDMWMdlPEBaseInfoWork *w;
     int e;
     ensureProps(obj);
-    w = igProperty_FindByName(obj->props, DAT_00585be0[0], &DAT_0051d3a0[0])->work;
+    w = igProperty_FindByName(obj->props, g_propertyNameField[0], &DAT_0051d3a0[0])->work;
     e = beMessenger_ResolveEnumValue(self->_messenger, FUN_003c04a0(), name);
     switch (e) {
     default:
@@ -1112,7 +1112,7 @@ int Gap__Bec__beNDMWMdlPEBase__vfunc_47(beNDMWMdlPEBase *self, Model *obj, int n
         bool r = false;
         if (w != 0 && w->_dispRamNoList != 0 && w->_timerList != 0) {
             int s = beMessenger_GetString(self->_messenger, 0);
-            if (igMetaEnum_GetValueByName(FUN_003c0440(), s, &e2) == DAT_004fb410 && W(_timerList)->data[e2] != 0) r = 1;
+            if (igMetaEnum_GetValueByName(FUN_003c0440(), s, &e2) == g_statusSucceeded && W(_timerList)->data[e2] != 0) r = 1;
         }
         beMessenger_AppendBool(self->_messenger, r);
         return 1;

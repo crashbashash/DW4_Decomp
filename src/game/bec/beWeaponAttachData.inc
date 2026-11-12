@@ -3,12 +3,12 @@ void FUN_0033fa80(int arg0) {
     igMetaObject_CreateInstance(*(int *)0x587A80, arg0);
 }
 
-G_33fac0 *FUN_0033fac0(void) {
-    G_33fac0 *g = DAT_00587a80[0];
+igMetaObject *FUN_0033fac0(void) {
+    igMetaObject *g = g_beWeaponAttachData_metaObject[0];
     int t;
-    if (!g || !(t = (g->f & 4) != 0))
+    if (!g || !(t = (g->_validity & 4) != 0))
         FUN_0033fbf0();
-    return DAT_00587a80[0];
+    return g_beWeaponAttachData_metaObject[0];
 }
 
 int beWeaponAttachData_GetVTable(void) {
@@ -19,7 +19,7 @@ int beWeaponAttachData_GetVTable(void) {
     obj.vt = &DAT_00539bb0[0];
     obj.m8 = 0;
     obj.m12 = 0;
-    r = *(int *)((char *)&obj + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+    r = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
     obj.vt = &DAT_00539bb0[0];
     obj.rel12();
     obj.rel8();
@@ -59,14 +59,14 @@ void beWeaponAttachData_InitFields(void) {
     void *temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)((int *)DAT_00587a80)[0];
+    temp_s0 = (void *)g_beWeaponAttachData_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_004c3058[0], 2);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = FUN_0033ff00();
+    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_0033ff00();
     ((igRefMetaField *)temp_s1)->_construct = 1;
     temp_s1_2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
-    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = FUN_0033fd70();
+    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = (int)FUN_0033fd70();
     ((igRefMetaField *)temp_s1_2)->_construct = 1;
     igMetaObject_NameFields(temp_s0, &DAT_004c3060[0], &DAT_004c3068[0], &DAT_004c3070[0], temp_s2);
 }

@@ -5,13 +5,13 @@ void FUN_00349af0(int arg0) {
 
 void *FUN_00349b30(void) {
     bool ok;
-    if (DAT_00588278[0] == 0) goto make;
-    ok = !!(DAT_00588278[0]->f & 4);
+    if (g_beSvFileFindApi_metaObject[0] == 0) goto make;
+    ok = !!(g_beSvFileFindApi_metaObject[0]->_validity & 4);
     if (ok != false) goto done;
 make:
     FUN_00349cc0();
 done:;
-    return DAT_00588278[0];
+    return g_beSvFileFindApi_metaObject[0];
 }
 
 int beSvFileFindApi_GetVTable(void) {
@@ -31,7 +31,7 @@ int beSvFileFindApi_GetVTable(void) {
     q3 = &u.o._iconWork;
     *q3 = 0;
     u.o._vtable = (int)(&DAT_0053bf90[0]);
-    temp_s2 = *(int *)&u.b[*(int *)((char *)(DAT_00586dc8[0]) + 916)];
+    temp_s2 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.o._vtable = (int)(&DAT_0053c070[0]);
     if (q3 != 0) {
         a0 = (igObject *)*q3;

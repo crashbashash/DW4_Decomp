@@ -3,11 +3,11 @@ void FUN_003bfc80(int arg0) {
     igMetaObject_CreateInstance(*(int *)0x58B3C8, arg0);
 }
 
-int FUN_003bfcc0(void) {
-    if (DAT_0058b3c8[0] == 0) {
-        DAT_0058b3c8[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(DAT_00587040[0]));
+igMetaObject *FUN_003bfcc0(void) {
+    if (g_beNDMWMdlPlayerInfoWork_metaObject[0] == 0) {
+        g_beNDMWMdlPlayerInfoWork_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
     }
-    return DAT_0058b3c8[0];
+    return g_beNDMWMdlPlayerInfoWork_metaObject[0];
 }
 
 igMetaObject *beNDMWMdlPlayerInfoWork_ResolveMetaObject(void)
@@ -24,12 +24,12 @@ done:
 
 int beNDMWMdlPlayerInfoWork_GetVTable(void) {
     PlayerInfoWorkView work;
-    return *(int *)((char *)&work + *(int *)((char *)DAT_00586dc8[0] + 916));
+    return *(int *)((char *)&work + *(int *)((char *)g_objectSystem[0] + 916));
 }
 
 Obj_3bfde0 *FUN_003bfde0(Obj_3bfde0 *arg0, short arg1) {
     if (arg0) {
-        arg0->vt = DAT_00540520;
+        arg0->vt = g_beNDMWMdlPEBaseInfoWork_vtable;
         arg0->rel(&arg0->m268);
         arg0->rel(&arg0->m264);
         arg0->rel(&arg0->m252);
@@ -37,7 +37,7 @@ Obj_3bfde0 *FUN_003bfde0(Obj_3bfde0 *arg0, short arg1) {
         arg0->rel(&arg0->m244);
         arg0->rel(&arg0->m240);
         if (arg0) {
-            arg0->vt = DAT_00537ee0;
+            arg0->vt = g_beModelCtrlInfoWork_vtable;
             FUN_00198190((char *)arg0 + 232, -1);
             FUN_00350e90((char *)arg0 + 228, -1);
             StringRef_Destruct_00130720((char *)arg0 + 220, -1);
@@ -101,8 +101,8 @@ void beNDMWMdlPlayerInfoWork_GetMetaObject(void)
     beNDMWMdlPlayerInfoWork_ResolveMetaObject();
 }
 
-int FUN_003c0340(void) {
-    return ((int *)DAT_0058b430)[0];
+igMetaObject *FUN_003c0340(void) {
+    return g_beNDMWMdlPEBaseInfoWork_metaObject[0];
 }
 
 void beNDMWMdlPlayerInfoWork_InitFields(void) {
@@ -110,7 +110,7 @@ void beNDMWMdlPlayerInfoWork_InitFields(void) {
     void *temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)DAT_0058b3c8[0];
+    temp_s0 = (void *)g_beNDMWMdlPlayerInfoWork_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_004ca8c0[0], 8);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));

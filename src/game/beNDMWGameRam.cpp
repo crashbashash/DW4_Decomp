@@ -1,13 +1,13 @@
 #include "dw4/igSmartPointer.h"
 #include "dw4/reflected.h"
 #define RELEASE_REF(T, q) { T *rr = (q); if (rr) { --rr->_refCount; if (!(rr->_refCount & 0x7fffff)) igObject_Destroy(rr); } }
-#define ALLOC(var) { void *got = ((void *)igObject_GetAllocator(arg0)); if (GPR_00554c14) var = got; else var = ((void *)Memory_GetAllocatorBySelector(DAT_00587108[0])); }
+#define ALLOC(var) { void *got = ((void *)igObject_GetAllocator(arg0)); if (GPR_00554c14) var = got; else var = ((void *)Memory_GetAllocatorBySelector(g_ndmwAllocatorSelector[0])); }
 #define RESERVE(LT, h, SZ) { LT *l = (LT *)(h)->_data; if (!(e->count < l->_count)) List_Reserve(l, e->count, SZ); }
 #define RESIZE(LT, h, SZ) { int n = e->count; LT *l = (LT *)(h)->_data; if (n >= 0) { if (n <= l->_capacity) l->_count = n; else List_Resize(l, n, SZ); } }
 #define A_(x) (x)
 #define RELO(X) { igObject *q = (X); if (q != 0) { q->_refCount = q->_refCount - 1; if ((q->_refCount & 0x7fffff) == 0) igObject_Destroy(q); } }
-#define PROP_DIGIMONNO       ((char *)DAT_00518848)
-#define PROP_SKILL           ((char *)DAT_00518860)
+#define PROP_DIGIMONNO       ((char *)DIGIMONNO_2)
+#define PROP_SKILL           ((char *)SKILL)
 #define PROP_TSUYOSA         DAT_005188b0
 #define PROP_POWERPOCKET     ((char *)DAT_00518a40)
 #define PROP_POWERSOCKET     ((char *)DAT_00518a88)
@@ -20,12 +20,12 @@
 #define SHINKA_3fa850(g) StatHelpers_3fa850::shinka(g)
 #define NEARBY_RADIUS_SQUARED 900.0f
 #define REFERENCE_COUNT_MASK 0x7fffffULL
-#define PROP_LEVEL           DAT_00518858
-#define PROP_UPCNT           DAT_00518868
-#define PROP_HP              DAT_00518890
-#define PROP_MHP             DAT_00518898
-#define PROP_MP              DAT_005188a0
-#define PROP_MMP             DAT_005188a8
+#define PROP_LEVEL           LEVEL_2
+#define PROP_UPCNT           UPCNT
+#define PROP_HP              HP
+#define PROP_MHP             MHP
+#define PROP_MP              MP
+#define PROP_MMP             MMP
 #define PROP_MAMORI          DAT_005188b8
 #define PROP_KASHIKOSA       DAT_005188c0
 #define PROP_SEISHIN         DAT_005188d0
@@ -34,7 +34,7 @@
 #define PROP_KOORITEIKO      DAT_005188f8
 #define PROP_KAMINARITEIKO   DAT_00518908
 #define PROP_YAMITEIKO       DAT_00518918
-#define PROP_WAZALIST        DAT_00518928
+#define PROP_WAZALIST        WAZALIST
 #define PROP_NEXTEXP         DAT_00518938
 #define PROP_ATTACKDELAY     DAT_00518940
 #define PROP_MEICHURITSU     DAT_00518950
@@ -144,7 +144,7 @@ extern "C" int StringPool_GetInstance(void);
 extern "C" int FUN_00407030(int *p);
 extern "C" int FUN_00407040(int *p);
 extern "C" int FUN_00407050(int *p);
-extern "C" int DAT_00587108[4];
+extern "C" int g_ndmwAllocatorSelector[4];
 extern "C" int DAT_004cf100[4];
 extern "C" unsigned char GPR_00554c14;
 extern "C" unsigned char GPR_005549e4;
@@ -191,8 +191,8 @@ extern "C" int DAT_004cf110[4];
 extern "C" int DAT_004cf118[4];
 extern "C" int DAT_00518a50[4];
 extern "C" int DAT_00518ae8[4];
-extern "C" int DAT_00518b30[4];
-extern "C" int DAT_00518b50[4];
+extern "C" const char BASE_LEVEL[];
+extern "C" const char BASE_SKILL[];
 extern "C" unsigned char GPR_005549e8;
 /* Owning stack reference to one new item record, released at the end of each loop pass. */
 class ItemRef {
@@ -246,7 +246,7 @@ extern "C" beNDMWGameRamInfoRam *FUN_003ca1a0(int);
 extern "C" int beMessenger_RegisterReceiverFromInfo(int, beNDMWGameRamInfoRam *, int *);
 extern "C" int DAT_00518bb8[4];
 extern "C" int DAT_00518bc0[4];
-extern "C" int DAT_00587110[4];
+extern "C" int g_defaultAllocatorSelector[4];
 /* Owning stack reference to the game-ram info created here, released on scope exit (reference
  * count in the low 23 bits of _refCount). */
 
@@ -263,7 +263,7 @@ extern "C" int DAT_00518bc8[4];
 extern "C" int DAT_00519420[4];
 extern "C" int DAT_00519430[4];
 extern "C" int DAT_00519438[4];
-extern "C" int DAT_00586f20[4];
+extern "C" int g_stringPool[4];
 struct R { int w0; int rc; };
 extern "C" int FUN_003f80e0(beNDMWGameRam *arg0, int arg1);
 typedef struct PropertyRecord { char header[12]; void *value; } PropertyRecord;
@@ -272,16 +272,16 @@ extern "C" igObject * beMessenger_GetObject(...);
 extern "C" int DAT_00518798[4];
 extern "C" int DAT_005187a0[4];
 extern "C" int DAT_005187b0[4];
-extern "C" int DAT_00518848[4];
-extern "C" char DAT_00518858[];
-extern "C" int DAT_00518860[4];
-extern "C" char DAT_00518868[];
+extern "C" const char DIGIMONNO_2[];
+extern "C" const char LEVEL_2[];
+extern "C" const char SKILL[];
+extern "C" const char UPCNT[];
 extern "C" int DAT_00518870[4];
-extern "C" int DAT_00518880[4];
+extern "C" const char EXP[];
 extern "C" int DAT_00518b00[4];
 extern "C" int DAT_00518b10[4];
-extern "C" int DAT_00518b40[4];
-extern "C" char DAT_00518b60[];
+extern "C" const char BASE_EXP[];
+extern "C" const char BASE_UPCNT[];
 extern "C" void FUN_003f82a0(beNDMWGameRam *arg0, int arg1, int arg2);
 /* Current player record -> BASE_* save arrays. Mirror of the post-load BASE -> current mapping:
  * LEVEL and EXP go to the species' slot of BASE_LEVEL / BASE_EXP, SKILL[9] and UPCNT[11] to
@@ -300,15 +300,6 @@ typedef struct PropertyIntArray {
     char pad[12];
     igIntList *list;
 } PropertyIntArray;
-extern "C" const char DIGIMONNO_2[];
-extern "C" const char LEVEL_2[];
-extern "C" const char SKILL[];
-extern "C" const char UPCNT[];
-extern "C" const char EXP[];
-extern "C" const char BASE_LEVEL[];
-extern "C" const char BASE_EXP[];
-extern "C" const char BASE_SKILL[];
-extern "C" const char BASE_UPCNT[];
 extern "C" void FUN_003f8760(beNDMWGameRam *self, int player_index);
 extern "C" int DAT_004cf120[4];
 extern "C" int DAT_00518a40[4];
@@ -362,7 +353,7 @@ extern "C" int FUN_00382eb0(beUnicodeObj **, int, int);
 extern "C" int beUnicodeObj_AllocateBuffer(beUnicodeObj *, int);
 extern "C" beUnicodeObj *FUN_003614f0(int);
 extern "C" char DAT_00518828[];
-extern "C" int DAT_00589678[4];
+extern "C" int g_beFont_metaObject[4];
 extern "C" void FUN_003f96e0(beNDMWGameRam *arg0, int arg1, void *arg2, StringRef arg3);
 extern "C" void FUN_003f99f0(beNDMWGameRam *arg0, int arg1, void *arg2, RecoveryRef<0> arg3);
 extern "C" void FUN_003f9bb0(beNDMWGameRam *arg0, int arg1);
@@ -508,10 +499,6 @@ public:
     ~NearbyListRef() { RecoveryTarget::release((RecoveryTarget *)value); }
 };
 extern "C" NearbyListRef beNDMWGameRam_CollectNearbyNonzeroHp(beNDMWGameRam *self,const char *group,int excluded,const Vec3 *center);
-extern "C" char DAT_00518890[];
-extern "C" char DAT_00518898[];
-extern "C" char DAT_005188a0[];
-extern "C" char DAT_005188a8[];
 extern "C" char DAT_005188b8[];
 extern "C" char DAT_005188c0[];
 extern "C" char DAT_005188d0[];
@@ -520,7 +507,7 @@ extern "C" char DAT_005188e8[];
 extern "C" char DAT_005188f8[];
 extern "C" char DAT_00518908[];
 extern "C" char DAT_00518918[];
-extern "C" char DAT_00518928[];
+extern "C" const char WAZALIST[];
 extern "C" char DAT_00518938[];
 extern "C" char DAT_00518940[];
 extern "C" char DAT_00518950[];
@@ -598,7 +585,7 @@ struct StatHelpers_3fab90 {
     static inline int select_allocator(int fallback)
     {
         if (GPR_00554c14) return fallback;
-        else return Memory_GetAllocatorBySelector(DAT_00587108[0]);
+        else return Memory_GetAllocatorBySelector(g_ndmwAllocatorSelector[0]);
     }
 
     static inline void *GetPlayer(beNDMWGameRam *g, int idx)
@@ -622,7 +609,6 @@ typedef struct TechniqueListProperty {
     char pad[12];
     igObjectList *list;
 } TechniqueListProperty;
-extern "C" const char WAZALIST[16];
 extern "C" void beNDMWGameRam_FindTechniqueRow(beNDMWGameRam *receiver, void *player, int base_no, int *output);
 extern "C" int FUN_00406da0(igDataList *p);
 extern "C" int FUN_00406dd0(beNDMWGameRam *arg0, int arg1);
@@ -802,18 +788,18 @@ void FUN_003f7310(beNDMWGameRam *arg0, int arg1) {
     if (GPR_00554c14 != 0) {
         a0 = (int)a0;
     } else {
-        a0 = Memory_GetAllocatorBySelector(DAT_00587108[0]);
+        a0 = Memory_GetAllocatorBySelector(g_ndmwAllocatorSelector[0]);
     }
     igSmartPointer<igObject> data(FUN_00364050(a0));
     FUN_003f6620((void *)arg0, data.p, (void *)(&DAT_004cedf0[0]));
     for (c = 0; c < 16; c++) {
-        recs = (igObjectList *)((igObject **)((void *)FUN_003a9250(data.p, &DAT_00518b30[0])))[3];
+        recs = (igObjectList *)((igObject **)((void *)FUN_003a9250(data.p, BASE_LEVEL)))[3];
         if (recs->_count != 0 && c >= 0 && c < recs->_count)
             ((int *)recs->_data)[c] = DAT_004cf110[0];
     }
     for (d = 0; d < 16; d++) {
         for (e = 0; e < 9; e++) {
-            arr = (igObjectList *)((igObject **)((void *)FUN_003a9250(data.p, &DAT_00518b50[0])))[3];
+            arr = (igObjectList *)((igObject **)((void *)FUN_003a9250(data.p, BASE_SKILL)))[3];
             v = e + d * 9;
             if (arr->_count != 0 && v >= 0 && v < arr->_count)
                 ((int *)arr->_data)[v] = DAT_004cf118[0];
@@ -824,7 +810,7 @@ void FUN_003f7310(beNDMWGameRam *arg0, int arg1) {
         if (GPR_00554c14 != 0) {
             a1 = (int)a1;
         } else {
-            a1 = Memory_GetAllocatorBySelector(DAT_00587108[0]);
+            a1 = Memory_GetAllocatorBySelector(g_ndmwAllocatorSelector[0]);
         }
         ItemRef item(FUN_003c85b0(a1));
         FUN_00448710(item.p, f);
@@ -852,7 +838,7 @@ void Gap__Bec__beNDMWGameRam__vfunc_23(beNDMWGameRam *arg0) {
     if (GPR_00554c14 != 0) {
         var_v0 = (int)var_v0;
     } else {
-        var_v0 = Memory_GetAllocatorBySelector(DAT_00587108[0]);
+        var_v0 = Memory_GetAllocatorBySelector(g_ndmwAllocatorSelector[0]);
     }
     {
         /* The new list is owned by the stack reference while it is retained into the field and the old
@@ -869,7 +855,7 @@ void Gap__Bec__beNDMWGameRam__vfunc_23(beNDMWGameRam *arg0) {
     if (GPR_00554c14 != 0) {
         var_v0_2 = (int)var_v0_2;
     } else {
-        var_v0_2 = Memory_GetAllocatorBySelector(DAT_00587108[0]);
+        var_v0_2 = Memory_GetAllocatorBySelector(g_ndmwAllocatorSelector[0]);
     }
     {
         PlayerDataListListRef players(FUN_00363e80(var_v0_2));
@@ -965,10 +951,10 @@ int Gap__Bec__beNDMWGameRam__vfunc_25(beNDMWGameRam *arg0) {
     infos = (beBaseInfoList *)arg0->_infoList;
     if (infos->_count == 0) {
         var_v0 = igObject_GetAllocator(arg0);
-        var_v0 = GPR_00554c14 ? var_v0 : Memory_GetAllocatorBySelector(DAT_00587110[0]);
+        var_v0 = GPR_00554c14 ? var_v0 : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
         igSmartPointer<beNDMWGameRamInfo> info(FUN_003ca380(var_v0));
         var_v0 = igObject_GetAllocator(arg0);
-        var_v0 = GPR_00554c14 ? var_v0 : Memory_GetAllocatorBySelector(DAT_00587110[0]);
+        var_v0 = GPR_00554c14 ? var_v0 : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
         RamRef ram(FUN_003ca1a0(var_v0));
         igNamedObject_SetName(info.p, &DAT_00518bb8[0]);
         ram.p->_parentInfo = (int)info.p;
@@ -1002,14 +988,14 @@ int FUN_003f80e0(beNDMWGameRam *arg0, int arg1) {
     if (arg1 == 0) {
         var_v0 = 0;
     } else {
-        if (DAT_00586f20[0] == 0) {
+        if (g_stringPool[0] == 0) {
             var_v0_2 = FUN_002eb010(0x10);
             if (var_v0_2 != 0) {
                 var_v0_2 = StringPool_Construct(var_v0_2);
             }
-            DAT_00586f20[0] = var_v0_2;
+            g_stringPool[0] = var_v0_2;
         }
-        var_v0 = StringPool_Intern(DAT_00586f20[0], arg1);
+        var_v0 = StringPool_Intern(g_stringPool[0], arg1);
     }
     StringRef name(var_v0);
     s2 = 0;
@@ -1076,8 +1062,8 @@ void FUN_003f82a0(beNDMWGameRam *arg0, int arg1, int arg2) {
     int var_s2b;
     int s1i;
     s4 = A_(((int *)((igIntList *)arg0->_playerDataListList)->_data)[arg1]);
-    igProperty_GetRecord(s4, &((int *)DAT_00518858)[0]);
-    ((PropertyRecord *)igProperty_GetRecord(s4, &DAT_00518848[0]))->value = (void *)arg2;
+    igProperty_GetRecord(s4, &((int *)LEVEL_2)[0]);
+    ((PropertyRecord *)igProperty_GetRecord(s4, DIGIMONNO_2))->value = (void *)arg2;
     if (arg0->_dBShinka == 0) {
         beMessenger_SendNamed(arg0->_messenger, &DAT_00519438[0], &DAT_00519430[0], 0, &DAT_00519420[0]);
         o = beMessenger_GetObject(arg0->_messenger, 0);
@@ -1088,12 +1074,12 @@ void FUN_003f82a0(beNDMWGameRam *arg0, int arg1, int arg2) {
     }
     s0 = ((int)beDataBase_GetRecordString(arg0->_dBShinka, arg2, &DAT_00518bc8[0]));
     s1 = FUN_003a92e0((void *)s4, &DAT_00518870[0]);
-    if (DAT_00586f20[0] == 0) {
+    if (g_stringPool[0] == 0) {
         v0 = FUN_002eb010(16);
         if (v0 != 0) v0 = StringPool_Construct(v0);
-        DAT_00586f20[0] = v0;
+        g_stringPool[0] = v0;
     }
-    s1i = ((int)StringPool_Intern(DAT_00586f20[0], s0));
+    s1i = ((int)StringPool_Intern(g_stringPool[0], s0));
     hd = (int)s1->value;
     if (hd != 0) {
         int *p = (int *)(hd - 8);
@@ -1102,21 +1088,21 @@ void FUN_003f82a0(beNDMWGameRam *arg0, int arg1, int arg2) {
         if (c == 0) StringChunk_ReleaseHeader(*p, p);
     }
     s1->value = (void *)s1i;
-    l1 = (igIntList *)((PropertyRecord *)FUN_003a9250(s4, &DAT_00518b30[0]))->value;
+    l1 = (igIntList *)((PropertyRecord *)FUN_003a9250(s4, BASE_LEVEL))->value;
     s0 = arg2 * 4;
     e1 = ((int *)l1->_data)[arg2];
-    ((PropertyRecord *)igProperty_GetRecord(s4, &((int *)DAT_00518858)[0]))->value = (void *)e1;
-    l2 = (igIntList *)((PropertyRecord *)FUN_003a9250(s4, &DAT_00518b40[0]))->value;
+    ((PropertyRecord *)igProperty_GetRecord(s4, &((int *)LEVEL_2)[0]))->value = (void *)e1;
+    l2 = (igIntList *)((PropertyRecord *)FUN_003a9250(s4, BASE_EXP))->value;
     e2 = ((int *)l2->_data)[arg2];
-    ((PropertyRecord *)igProperty_GetRecord(s4, &DAT_00518880[0]))->value = (void *)e2;
+    ((PropertyRecord *)igProperty_GetRecord(s4, EXP))->value = (void *)e2;
     /* matching construct: base9/base11 hoisted into locals, else MWCC strength-reduces the index */
     base9 = arg2 * 9;
     var_s2 = 0;
     var_s0 = 0;
     do {
-        a2 = (igIntList *)((PropertyRecord *)FUN_003a9250(s4, &DAT_00518b50[0]))->value;
+        a2 = (igIntList *)((PropertyRecord *)FUN_003a9250(s4, BASE_SKILL))->value;
         e1L = ((int *)a2->_data)[base9 + var_s2];
-        a0 = (igIntList *)((PropertyRecord *)FUN_003a9250(s4, &DAT_00518860[0], a2))->value;
+        a0 = (igIntList *)((PropertyRecord *)FUN_003a9250(s4, SKILL, a2))->value;
         cnt1 = a0->_count;
         if (cnt1 != 0 && var_s2 >= 0 && var_s2 < cnt1) ((int *)(a0->_data + var_s0))[0] = e1L;
         var_s2 += 1;
@@ -1126,9 +1112,9 @@ void FUN_003f82a0(beNDMWGameRam *arg0, int arg1, int arg2) {
     var_s2b = 0;
     var_s0b = 0;
     do {
-        a2b = (igIntList *)((PropertyRecord *)FUN_003a9250(s4, &((int *)DAT_00518b60)[0]))->value;
+        a2b = (igIntList *)((PropertyRecord *)FUN_003a9250(s4, &((int *)BASE_UPCNT)[0]))->value;
         e2 = ((int *)a2b->_data)[base11 + var_s2b];
-        a0b = (igIntList *)((PropertyRecord *)FUN_003a9250(s4, &((int *)DAT_00518868)[0], a2b))->value;
+        a0b = (igIntList *)((PropertyRecord *)FUN_003a9250(s4, &((int *)UPCNT)[0], a2b))->value;
         cnt2 = a0b->_count;
         if (cnt2 != 0 && var_s2b >= 0 && var_s2b < cnt2) ((int *)(a0b->_data + var_s0b))[0] = e2;
         var_s2b += 1;
@@ -1219,7 +1205,7 @@ void FUN_003f8990(beNDMWGameRam *arg0, int arg1) {
     int s6;
     obj = ((int *)((igObjectList *)arg0->_playerDataListList)->_data)[arg1];
     l = ((RecL *)igProperty_GetRecordFolder(obj, &DAT_00518a40[0]))->f12;
-    s6 = ((Rec *)((void *)igProperty_GetRecord(obj, &DAT_00518848[0])))->f12;
+    s6 = ((Rec *)((void *)igProperty_GetRecord(obj, DIGIMONNO_2)))->f12;
     n = l->_count;
     i = 0;
     if (0 < n) {
@@ -1241,7 +1227,7 @@ void FUN_003f8990(beNDMWGameRam *arg0, int arg1) {
     pt = &DAT_004cf120[0];
     do {
         al = igObject_GetAllocator(arg0);
-        al = (GPR_00554c14 != 0) ? al : Memory_GetAllocatorBySelector(DAT_00587108[0]);
+        al = (GPR_00554c14 != 0) ? al : Memory_GetAllocatorBySelector(g_ndmwAllocatorSelector[0]);
         {
         RecoveryRef<1> sp8C(FUN_003c8c90(al), false);
         hv = sp8C.value;
@@ -1290,12 +1276,12 @@ void FUN_003f8c90(beNDMWGameRam *self, int index, int apply)
         for (int i = 0; i < nameCount; i++) {
             char **entry = &((char **)names->_data)[i];
             char *old, *fresh;
-            if (!DAT_00586f20[0]) {
+            if (!g_stringPool[0]) {
                 int pool = FUN_002eb010(16);
                 if (pool) pool = StringPool_Construct(pool);
-                DAT_00586f20[0] = pool;
+                g_stringPool[0] = pool;
             }
-            fresh = StringPool_Intern(DAT_00586f20[0], 0);
+            fresh = StringPool_Intern(g_stringPool[0], 0);
             old = *entry;
             if (old) {
                 int *header = (int *)(old - 8);
@@ -1315,12 +1301,12 @@ void FUN_003f8c90(beNDMWGameRam *self, int index, int apply)
                 if (!model) {
                     interned = 0;
                 } else {
-                    if (!DAT_00586f20[0]) {
+                    if (!g_stringPool[0]) {
                         int pool = FUN_002eb010(16);
                         if (pool) pool = StringPool_Construct(pool);
-                        DAT_00586f20[0] = pool;
+                        g_stringPool[0] = pool;
                     }
-                    interned = StringPool_Intern(DAT_00586f20[0], model);
+                    interned = StringPool_Intern(g_stringPool[0], model);
                 }
                 StringList_AppendRetained((int)names, StringRef(interned));
                 item->_isEquip = 1;
@@ -1346,12 +1332,12 @@ void FUN_003f8c90(beNDMWGameRam *self, int index, int apply)
         for (int i = 0; i < nameCount; i++) {
             char **entry = &((char **)names->_data)[i];
             char *old, *fresh;
-            if (!DAT_00586f20[0]) {
+            if (!g_stringPool[0]) {
                 int pool = FUN_002eb010(16);
                 if (pool) pool = StringPool_Construct(pool);
-                DAT_00586f20[0] = pool;
+                g_stringPool[0] = pool;
             }
-            fresh = StringPool_Intern(DAT_00586f20[0], 0);
+            fresh = StringPool_Intern(g_stringPool[0], 0);
             old = *entry;
             if (old) {
                 int *header = (int *)(old - 8);
@@ -1395,12 +1381,12 @@ void FUN_003f8c90(beNDMWGameRam *self, int index, int apply)
             if (!model) {
                 interned = 0;
             } else {
-                if (!DAT_00586f20[0]) {
+                if (!g_stringPool[0]) {
                     int pool = FUN_002eb010(16);
                     if (pool) pool = StringPool_Construct(pool);
-                    DAT_00586f20[0] = pool;
+                    g_stringPool[0] = pool;
                 }
-                interned = StringPool_Intern(DAT_00586f20[0], model);
+                interned = StringPool_Intern(g_stringPool[0], model);
             }
             StringList_AppendRetained((int)names, StringRef(interned));
             chosen->_isEquip = 1;
@@ -1419,12 +1405,12 @@ unsigned char FUN_003f93c0(beNDMWGameRam *arg0, int arg1, int arg2) {
     obj = ((int *)((igIntList *)arg0->_playerDataListList)->_data)[arg1];
     folder = (igObjectList *)((Rec_3f93c0 *)igProperty_GetRecordFolder(obj, DAT_00518a40))->w12;
     {
-    int t = ((Rec_3f93c0 *)igProperty_GetRecord(obj, DAT_00518848))->w12;
+    int t = ((Rec_3f93c0 *)igProperty_GetRecord(obj, DIGIMONNO_2))->w12;
     if (t == arg2) {
-        tbl = (igIntList *)((Rec_3f93c0 *)FUN_003a9250(obj, DAT_00518860))->w12;
+        tbl = (igIntList *)((Rec_3f93c0 *)FUN_003a9250(obj, SKILL))->w12;
         base = 0;
     } else {
-        tbl = (igIntList *)((Rec_3f93c0 *)FUN_003a9250(obj, DAT_00518b50))->w12;
+        tbl = (igIntList *)((Rec_3f93c0 *)FUN_003a9250(obj, BASE_SKILL))->w12;
         base = arg2 * 9;
     }
     }
@@ -1434,7 +1420,7 @@ unsigned char FUN_003f93c0(beNDMWGameRam *arg0, int arg1, int arg2) {
         Rec_3f93c0 *r = (Rec_3f93c0 *)((int *)folder->_data)[i];
         if (r->w8 == 0) {
             int f = mask & beNDMWItemBase_GetRecordInt(r, arg0, ((int *)DAT_00518c10));
-            int idx = beNDMWItemBase_GetRecordInt(r, arg0, DAT_00518860);
+            int idx = beNDMWItemBase_GetRecordInt(r, arg0, SKILL);
             int need = beNDMWItemBase_GetRecordInt(r, arg0, ((int *)DAT_00518c18));
             if (f != 0 && ((int *)tbl->_data)[base + idx] >= need) return 1;
         }
@@ -1494,7 +1480,7 @@ void FUN_003f96e0(beNDMWGameRam *arg0, int arg1, void *arg2, StringRef arg3) {
     FUN_003f9570(arg0, arg1, (int)arg2);
     s0 = ((int *)(((igObjectList *)arg0->_playerDataListList)->_data))[arg1];
     al = igObject_GetAllocator(arg0);
-    al = GPR_00554c14 ? al : Memory_GetAllocatorBySelector(DAT_00587108[0]);
+    al = GPR_00554c14 ? al : Memory_GetAllocatorBySelector(g_ndmwAllocatorSelector[0]);
     igSmartPointer<beUnicodeObj> rb(FUN_003614f0(al));
     beUnicodeObj_AllocateBuffer(rb.p, 8);
     {
@@ -1502,7 +1488,7 @@ void FUN_003f96e0(beNDMWGameRam *arg0, int arg1, void *arg2, StringRef arg3) {
          * than by a destructor. */
         beUnicodeObj *ra;
         int sel = (int)arg3.p;
-        int table = FUN_00236f80(arg0->_insight, DAT_00589678[0]);
+        int table = FUN_00236f80(arg0->_insight, g_beFont_metaObject[0]);
         FUN_00382eb0(&ra, table, sel);
         k = 0;
         src = (unsigned short *)ra->_buffer;
@@ -1737,14 +1723,14 @@ int FUN_003fa3b0(beNDMWGameRam *arg0, int arg1, int arg2, int arg3) {
     player = (void *)((int *)((igObjectListList *)arg0->_playerDataListList)->_data)[arg1];
     rec = arg2;
     if (rec < 0) {
-        rec = igProperty_GetRecord(player, ((char *)DAT_00518848))->value;
-        tbl = FUN_003a9250(player, DAT_00518868)->obj;
+        rec = igProperty_GetRecord(player, ((char *)DIGIMONNO_2))->value;
+        tbl = FUN_003a9250(player, UPCNT)->obj;
         base = 0;
-        lvl = igProperty_GetRecord(player, DAT_00518858)->value;
+        lvl = igProperty_GetRecord(player, LEVEL_2)->value;
     } else {
-        tbl = FUN_003a9250(player, DAT_00518b60)->obj;
+        tbl = FUN_003a9250(player, BASE_UPCNT)->obj;
         base = rec * 11;
-        lvl = FUN_003a9250(player, ((char *)DAT_00518b30))->obj->v[rec];
+        lvl = FUN_003a9250(player, ((char *)BASE_LEVEL))->obj->v[rec];
     }
     if (arg3 != 0) {
         s0 = beDataBase_GetRecordInt(SHINKA(arg0), rec, DAT_00518c98);
@@ -1778,14 +1764,14 @@ int FUN_003fa850(beNDMWGameRam *arg0, int arg1, int arg2, int arg3) {
     player = (void *)((int *)((igDataList *)arg0->_playerDataListList)->_data)[arg1];
     rec = arg2;
     if (rec < 0) {
-        rec = igProperty_GetRecord(player, ((char *)DAT_00518848))->value;
-        tbl = FUN_003a9250(player, DAT_00518868)->obj;
+        rec = igProperty_GetRecord(player, ((char *)DIGIMONNO_2))->value;
+        tbl = FUN_003a9250(player, UPCNT)->obj;
         base = 0;
-        lvl = igProperty_GetRecord(player, DAT_00518858)->value;
+        lvl = igProperty_GetRecord(player, LEVEL_2)->value;
     } else {
-        tbl = FUN_003a9250(player, DAT_00518b60)->obj;
+        tbl = FUN_003a9250(player, BASE_UPCNT)->obj;
         base = rec * 11;
-        lvl = FUN_003a9250(player, ((char *)DAT_00518b30))->obj->v[rec];
+        lvl = FUN_003a9250(player, ((char *)BASE_LEVEL))->obj->v[rec];
     }
     s0 = beDataBase_GetRecordInt(SHINKA_3fa850(arg0), rec, DAT_004cf250[arg3]);
     mul = beDataBase_GetRecordInt(SHINKA_3fa850(arg0), rec, DAT_004cf270[arg3]);
@@ -2056,12 +2042,12 @@ void FUN_003fab90(beNDMWGameRam *self, int index, unsigned char apply)
         for (int i = 0; i < nameCount; i++) {
             char **entry = &((char **)names->_data)[i];
             char *old, *fresh;
-            if (!DAT_00586f20[0]) {
+            if (!g_stringPool[0]) {
                 int pool = FUN_002eb010(16);
                 if (pool) pool = StringPool_Construct(pool);
-                DAT_00586f20[0] = pool;
+                g_stringPool[0] = pool;
             }
-            fresh = StringPool_Intern(DAT_00586f20[0], 0);
+            fresh = StringPool_Intern(g_stringPool[0], 0);
             old = *entry;
             if (old) {
                 int *header = (int *)(old - 8);
@@ -2079,12 +2065,12 @@ void FUN_003fab90(beNDMWGameRam *self, int index, unsigned char apply)
                 if (!model) {
                     interned = 0;
                 } else {
-                    if (!DAT_00586f20[0]) {
+                    if (!g_stringPool[0]) {
                         int pool = FUN_002eb010(16);
                         if (pool) pool = StringPool_Construct(pool);
-                        DAT_00586f20[0] = pool;
+                        g_stringPool[0] = pool;
                     }
-                    interned = StringPool_Intern(DAT_00586f20[0], model);
+                    interned = StringPool_Intern(g_stringPool[0], model);
                 }
                 StringRef token(interned);
                 StringList_AppendRetained((int)names, (const StringRef &)token);
@@ -2217,25 +2203,17 @@ extern int DAT_004cf5e8[4];
 extern int DAT_004cf5f0[4];
 extern int DAT_004cf600[4];
 extern int DAT_004cf620[4];
-extern Vec3 DAT_004e1058[4];
+extern Vec3 g_vec3Zero[4];
 extern char DAT_005187d8[];
 extern char DAT_005187e8[];
 extern char DAT_00518840[];
-extern char DAT_00518c28[];
-extern char DAT_00518c38[];
-extern int DAT_00518c40[4];
-extern char DAT_00518c50[];
-extern char DAT_00518c60[];
-extern int DAT_00518c68[4];
-extern char DAT_00518c78[];
-extern char DAT_00518c80[];
 extern char DAT_00518fa8[];
 extern char DAT_00518fb0[];
 extern char DAT_00518fb8[];
 extern char DAT_00518fc0[];
 extern char DAT_00519020[];
-extern char DAT_00519030[];
-extern char DAT_00519040[];
+extern char GETMATRIX[];
+extern char GETHP[];
 extern char DAT_005190a8[];
 extern char DAT_005190b0[];
 extern char DAT_005190c0[];
@@ -2298,7 +2276,7 @@ extern char DAT_00519488[];
 extern char DAT_00519498[];
 extern char DAT_005194a8[];
 extern char DAT_005194b0[];
-extern int DAT_00585be0[4];
+extern int g_propertyNameField[4];
 extern unsigned char GPR_005549f0;
 extern unsigned char GPR_005549f4;
 int Gap__Bec__beNDMWGameRam__vfunc_34(beNDMWGameRam *arg0, int arg1, void *arg2);
@@ -2308,7 +2286,7 @@ extern "C" int FUN_00229fb0(void *, const StringRef &);
 /* matching construct: inline helper reproduces the retail arithmetic shape */ struct DW4Curve { static int g(int d, int x) { return d * 0xC8 + (x + 0x8B) * (d * d); } static int f(int x) { int d = x - 1; return d * 0xC8 + (x + 0x8B) * (d * d); } };
 /* matching construct: RAII copied-reference local reproduces the retail unwind table */ class RecoveryCopiedRef { public: void *value; RecoveryCopiedRef(const DW4Sret4 &source); ~RecoveryCopiedRef(); };
 extern "C" int *ObjectRef_Assign_003e92b0(void *, const RecoveryCopiedRef &);
-/* matching construct: out-of-line helper reproduces the retail call shape */ struct DW4Fresh { static int *Assign(void *obj, int alloc) { RecoveryCopiedRef c(FUN_003e9360(Memory_SelectAllocator_003e9370(&DAT_00587110[0], alloc))); return ObjectRef_Assign_003e92b0(obj, c); } };
+/* matching construct: out-of-line helper reproduces the retail call shape */ struct DW4Fresh { static int *Assign(void *obj, int alloc) { RecoveryCopiedRef c(FUN_003e9360(Memory_SelectAllocator_003e9370(&g_defaultAllocatorSelector[0], alloc))); return ObjectRef_Assign_003e92b0(obj, c); } };
 /* matching construct: out-of-line helper that reproduces the retail call shape of the BKCHIPNAME string-list store */
 struct DW4StrListOps { static void SetAt(igStringRefList *list, int idx, const StringRef &v) { if (list->_count != 0 && idx >= 0 && idx < list->_count) FUN_00229fb0((void *)((char *)FUN_00406da0((igDataList *)list) + idx * 4), v); } };
 /* matching construct: RAII list local reproduces the retail unwind table */ class RecoveryList { public:
@@ -4200,13 +4178,13 @@ int Gap__Bec__beNDMWGameRam__vfunc_34(beNDMWGameRam *arg0, int arg1, void *arg2)
             temp_v0_6 = (void *)(temp_ret_47);
             temp_ret_48 = (beDataObjBool *)(igProperty_GetRecordByte((int)temp_v0_6, &DAT_00518888[0]));
             if (temp_ret_48->_data != 0) {
-                temp_ret_49 = (int)igProperty_GetRecord(temp_v0_6, &DAT_00518898[0]);
+                temp_ret_49 = (int)igProperty_GetRecord(temp_v0_6, MHP);
                 temp_ret_50 = FUN_00406f90((beDataObjInt *)temp_ret_49);
-                temp_ret_51 = (int)igProperty_GetRecord(temp_v0_6, &DAT_00518890[0]);
+                temp_ret_51 = (int)igProperty_GetRecord(temp_v0_6, HP);
                 ((beDataObjInt *)temp_ret_51)->_data = temp_ret_50;
-                temp_ret_52 = (int)igProperty_GetRecord(temp_v0_6, &DAT_005188a8[0]);
+                temp_ret_52 = (int)igProperty_GetRecord(temp_v0_6, MMP);
                 temp_ret_53 = FUN_00406f90((beDataObjInt *)temp_ret_52);
-                temp_ret_54 = (int)igProperty_GetRecord(temp_v0_6, &DAT_005188a0[0]);
+                temp_ret_54 = (int)igProperty_GetRecord(temp_v0_6, MP);
                 ((beDataObjInt *)temp_ret_54)->_data = temp_ret_53;
             }
             var_s2 += 1;
@@ -4228,7 +4206,7 @@ int Gap__Bec__beNDMWGameRam__vfunc_34(beNDMWGameRam *arg0, int arg1, void *arg2)
             beMessenger_AppendString(arg0->_messenger, &DAT_005190b0[0]);
             beMessenger_AppendString(arg0->_messenger, &DAT_005190c0[0]);
             beMessenger_AppendFloat(arg0->_messenger, 1.0f);
-            FUN_003e9220(&sp378, &DAT_004e1058[0]);
+            FUN_003e9220(&sp378, &g_vec3Zero[0]);
             beMessenger_AppendVec3(arg0->_messenger, &sp378);
             beMessenger_AppendBool(arg0->_messenger, 0U);
             beMessenger_AppendBool(arg0->_messenger, 1U);
@@ -4255,7 +4233,7 @@ int Gap__Bec__beNDMWGameRam__vfunc_34(beNDMWGameRam *arg0, int arg1, void *arg2)
             beMessenger_AppendString(arg0->_messenger, &DAT_005190b0[0]);
             beMessenger_AppendString(arg0->_messenger, &DAT_005190c0[0]);
             beMessenger_AppendFloat(arg0->_messenger, 1.0f);
-            FUN_003e9220(&sp368, &DAT_004e1058[0]);
+            FUN_003e9220(&sp368, &g_vec3Zero[0]);
             beMessenger_AppendVec3(arg0->_messenger, &sp368);
             beMessenger_AppendBool(arg0->_messenger, 0U);
             beMessenger_AppendBool(arg0->_messenger, 1U);
@@ -4266,7 +4244,7 @@ int Gap__Bec__beNDMWGameRam__vfunc_34(beNDMWGameRam *arg0, int arg1, void *arg2)
         temp_ret_79 = beMessenger_GetString(arg0->_messenger, 0);
         temp_v0_9 = temp_ret_79;
         var_s0_4 = 0;
-        temp_ret_80 = strcmp(temp_v0_9, &DAT_00518880[0]);
+        temp_ret_80 = strcmp(temp_v0_9, EXP);
         if (temp_ret_80 == 0) {
             temp_ret_81 = beMessenger_GetString(arg0->_messenger, 1);
             temp_v0_10 = (char *)(temp_ret_81);
@@ -4275,7 +4253,7 @@ int Gap__Bec__beNDMWGameRam__vfunc_34(beNDMWGameRam *arg0, int arg1, void *arg2)
             temp_v0_11 = temp_ret_83;
             temp_ret_84 = (void *)(FUN_00407030(&arg0->_playerDataListList));
             temp_ret_85 = ObjectList_GetAt_003e9260(temp_ret_84, temp_ret_82);
-            temp_ret_86 = (int)igProperty_GetRecord(temp_ret_85, &DAT_00518880[0]);
+            temp_ret_86 = (int)igProperty_GetRecord(temp_ret_85, EXP);
             temp_v0_12 = (void *)(temp_ret_86);
             temp_ret_87 = strcmp(temp_v0_10, &DAT_005190e0[0]);
             if (temp_ret_87 == 0) {
@@ -4288,7 +4266,7 @@ int Gap__Bec__beNDMWGameRam__vfunc_34(beNDMWGameRam *arg0, int arg1, void *arg2)
                 }
             }
         } else {
-            temp_ret_90 = strcmp(temp_v0_9, &DAT_00518890[0]);
+            temp_ret_90 = strcmp(temp_v0_9, HP);
             if (temp_ret_90 == 0) {
                 temp_ret_91 = beMessenger_GetString(arg0->_messenger, 1);
                 temp_v0_13 = temp_ret_91;
@@ -4296,19 +4274,19 @@ int Gap__Bec__beNDMWGameRam__vfunc_34(beNDMWGameRam *arg0, int arg1, void *arg2)
                 temp_ret_93 = (void *)(FUN_00407030(&arg0->_playerDataListList));
                 temp_ret_94 = ObjectList_GetAt_003e9260(temp_ret_93, temp_ret_92);
                 temp_v0_14 = (void *)(temp_ret_94);
-                temp_ret_95 = strcmp(temp_v0_13, &DAT_00519040[0]);
+                temp_ret_95 = strcmp(temp_v0_13, &GETHP[0]);
                 if (temp_ret_95 == 0) {
-                    temp_ret_96 = (int)igProperty_GetRecord(temp_v0_14, &DAT_00518890[0]);
+                    temp_ret_96 = (int)igProperty_GetRecord(temp_v0_14, HP);
                     var_s0_4 = ((beDataObjInt *)temp_ret_96)->_data;
                 } else {
                     temp_ret_97 = strcmp(temp_v0_13, &DAT_005190f0[0]);
                     if (temp_ret_97 == 0) {
-                        temp_ret_98 = (int)igProperty_GetRecord(temp_v0_14, &DAT_00518898[0]);
+                        temp_ret_98 = (int)igProperty_GetRecord(temp_v0_14, MHP);
                         var_s0_4 = ((beDataObjInt *)temp_ret_98)->_data;
                     }
                 }
             } else {
-                temp_ret_99 = strcmp(temp_v0_9, &DAT_005188a0[0]);
+                temp_ret_99 = strcmp(temp_v0_9, MP);
                 if (temp_ret_99 == 0) {
                     temp_ret_100 = beMessenger_GetString(arg0->_messenger, 1);
                     temp_v0_15 = temp_ret_100;
@@ -4318,12 +4296,12 @@ int Gap__Bec__beNDMWGameRam__vfunc_34(beNDMWGameRam *arg0, int arg1, void *arg2)
                     temp_v0_16 = (void *)(temp_ret_103);
                     temp_ret_104 = strcmp(temp_v0_15, &DAT_005190f8[0]);
                     if (temp_ret_104 == 0) {
-                        temp_ret_105 = (int)igProperty_GetRecord(temp_v0_16, &DAT_005188a0[0]);
+                        temp_ret_105 = (int)igProperty_GetRecord(temp_v0_16, MP);
                         var_s0_4 = ((beDataObjInt *)temp_ret_105)->_data;
                     } else {
                         temp_ret_106 = strcmp(temp_v0_15, &DAT_00519100[0]);
                         if (temp_ret_106 == 0) {
-                            temp_ret_107 = (int)igProperty_GetRecord(temp_v0_16, &DAT_005188a8[0]);
+                            temp_ret_107 = (int)igProperty_GetRecord(temp_v0_16, MMP);
                             var_s0_4 = ((beDataObjInt *)temp_ret_107)->_data;
                         }
                     }
@@ -4395,7 +4373,7 @@ int Gap__Bec__beNDMWGameRam__vfunc_34(beNDMWGameRam *arg0, int arg1, void *arg2)
                         switch (var_s5) {
                         case 0:
                             temp_ret_131 = igObject_GetAllocator(arg0);
-                            temp_ret_132 = Memory_SelectAllocator_003e9370(&DAT_00587108[0], temp_ret_131);
+                            temp_ret_132 = Memory_SelectAllocator_003e9370(&g_ndmwAllocatorSelector[0], temp_ret_131);
                             temp_ret_134 = (void *)(FUN_003c8c90(FUN_00406f70(temp_ret_132).v));
                             { RecoveryRef<1> sp4A8((void *)(temp_ret_134), false);
                             temp_ret_135 = FUN_004482c0(sp4A8.value, temp_v0_21, temp_v0_23, temp_v0_22);
@@ -4404,7 +4382,7 @@ int Gap__Bec__beNDMWGameRam__vfunc_34(beNDMWGameRam *arg0, int arg1, void *arg2)
                             break;
                         case 1:
                             temp_ret_137 = igObject_GetAllocator(arg0);
-                            temp_ret_138 = Memory_SelectAllocator_003e9370(&DAT_00587108[0], temp_ret_137);
+                            temp_ret_138 = Memory_SelectAllocator_003e9370(&g_ndmwAllocatorSelector[0], temp_ret_137);
                             temp_ret_140 = (void *)(FUN_003c8b00(FUN_00406f60(temp_ret_138).v));
                             { RecoveryRef<2> sp4A4((void *)(temp_ret_140), false);
                             temp_ret_141 = FUN_00448410(sp4A4.value, temp_v0_21, temp_v0_23, temp_v0_22);
@@ -4413,7 +4391,7 @@ int Gap__Bec__beNDMWGameRam__vfunc_34(beNDMWGameRam *arg0, int arg1, void *arg2)
                             break;
                         case 2:
                             temp_ret_143 = igObject_GetAllocator(arg0);
-                            temp_ret_144 = Memory_SelectAllocator_003e9370(&DAT_00587108[0], temp_ret_143);
+                            temp_ret_144 = Memory_SelectAllocator_003e9370(&g_ndmwAllocatorSelector[0], temp_ret_143);
                             temp_ret_146 = (void *)(FUN_003c8970(FUN_00406f50(temp_ret_144).v));
                             { RecoveryRef<3> sp4A0((void *)(temp_ret_146), false);
                             temp_ret_147 = FUN_00448560(sp4A0.value, temp_v0_21, temp_v0_22);
@@ -4422,7 +4400,7 @@ int Gap__Bec__beNDMWGameRam__vfunc_34(beNDMWGameRam *arg0, int arg1, void *arg2)
                             break;
                         case 3:
                             temp_ret_149 = igObject_GetAllocator(arg0);
-                            temp_ret_150 = Memory_SelectAllocator_003e9370(&DAT_00587108[0], temp_ret_149);
+                            temp_ret_150 = Memory_SelectAllocator_003e9370(&g_ndmwAllocatorSelector[0], temp_ret_149);
                             temp_ret_152 = (void *)(FUN_003c87f0(FUN_00406f40(temp_ret_150).v));
                             { RecoveryRef<4> sp49C((void *)(temp_ret_152), false);
                             temp_ret_153 = FUN_00448660(sp49C.value, temp_v0_21);
@@ -4664,7 +4642,7 @@ block_215:
                 temp_s3 = ((beDataObjInt *)temp_ret_199)->_data;
                 temp_ret_200 = (int)igProperty_GetRecord(temp_v0_34, &DAT_005188d8[0]);
                 temp_s1 = ((beDataObjInt *)temp_ret_200)->_data;
-                temp_ret_201 = (int)FUN_003a9250(temp_v0_34, &DAT_00518860[0]);
+                temp_ret_201 = (int)FUN_003a9250(temp_v0_34, SKILL);
                 temp_ret_202 = (void *)(FUN_00406ef0(&((beDataObjIntList *)temp_ret_201)->_data));
                 temp_ret_203 = DataList_GetData_003e9090(temp_ret_202);
                 temp_s3 = *(int *)(temp_ret_203 + (temp_s3 * 4));
@@ -4817,7 +4795,7 @@ block_215:
                 temp_s0_5 = ((beDataObjInt *)temp_ret_250)->_data;
                 temp_ret_251 = (int)igProperty_GetRecord(temp_v0_47, &DAT_005188b0[0]);
                 temp_s2 = ((beDataObjInt *)temp_ret_251)->_data;
-                temp_ret_252 = (int)FUN_003a9250(temp_v0_47, &DAT_00518860[0]);
+                temp_ret_252 = (int)FUN_003a9250(temp_v0_47, SKILL);
                 temp_ret_253 = (void *)(FUN_00406ef0(&((beDataObjIntList *)temp_ret_252)->_data));
                 temp_ret_254 = DataList_GetData_003e9090(temp_ret_253);
                 var_s0 = *(int *)(temp_ret_254 + (temp_s0_5 * 4));
@@ -4877,7 +4855,7 @@ block_215:
                     temp_ret_272 = (int *)(ObjectRef_AssignObject_00406e60((ObjectRefTarget **)&arg0->_dBPcTech, (ObjectRefTarget *)temp_ret_271));
                 }
                 temp_ret_273 = (void *)(FUN_00406ee0(&arg0->_dBPcTech));
-                temp_ret_274 = beDataBase_GetRecordInt(temp_ret_273, sp48C, &DAT_00518890[0]);
+                temp_ret_274 = beDataBase_GetRecordInt(temp_ret_273, sp48C, HP);
                 temp_v0_51 = (int)(0U - (unsigned int)temp_ret_274);
                 if (temp_v0_51 != 0) {
                     temp_ret_275 = (void *)(FUN_00406ee0(&arg0->_dBPcTech));
@@ -4887,8 +4865,8 @@ block_215:
                         temp_ret_277 = (int *)(ObjectRef_AssignObject_00406e60((ObjectRefTarget **)&arg0->_dBPcTech, (ObjectRefTarget *)temp_ret_276));
                     }
                     temp_ret_278 = (void *)(FUN_00406ee0(&arg0->_dBPcTech));
-                    temp_ret_279 = beDataBase_GetRecordInt(temp_ret_278, sp48C, &DAT_00518860[0]);
-                    temp_ret_280 = (int)FUN_003a9250(temp_v0_47, &DAT_00518860[0]);
+                    temp_ret_279 = beDataBase_GetRecordInt(temp_ret_278, sp48C, SKILL);
+                    temp_ret_280 = (int)FUN_003a9250(temp_v0_47, SKILL);
                     temp_ret_281 = (void *)(FUN_00406ef0(&((beDataObjIntList *)temp_ret_280)->_data));
                     temp_ret_282 = DataList_GetData_003e9090(temp_ret_281);
                     var_s0 = *(int *)(temp_ret_282 + (temp_ret_279 * 4));
@@ -5109,7 +5087,7 @@ block_215:
             temp_ret_329 = (void *)(FUN_00407030(&arg0->_playerDataListList));
             temp_ret_330 = ObjectList_GetAt_003e9260(temp_ret_329, temp_v0_63);
             skp = (void *)(temp_ret_330);
-            temp_ret_331 = (int)igProperty_GetRecord(skp, &DAT_00518858[0]);
+            temp_ret_331 = (int)igProperty_GetRecord(skp, LEVEL_2);
             sklv = ((beDataObjInt *)temp_ret_331)->_data;
             /* Ternary chain rather than if/else: only this form copies each next compare into the
              * beqz delay slot. */
@@ -5121,7 +5099,7 @@ block_215:
             if ((skcls != 9) && (skcls != 8) && (skcls != 4)) {
                 temp_ret_332 = (int)igProperty_GetRecord(skp, &DAT_00518a30[0]);
                 var_s5_3 = ((beDataObjInt *)temp_ret_332)->_data;
-                temp_ret_333 = (int)FUN_003a9250(skp, &DAT_00518860[0]);
+                temp_ret_333 = (int)FUN_003a9250(skp, SKILL);
                 temp_ret_334 = (void *)(FUN_00406ef0(&((beDataObjIntList *)temp_ret_333)->_data));
                 temp_ret_335 = DataList_GetData_003e9090(temp_ret_334);
                 var_s7_2 = *(int *)(temp_ret_335 + (var_s5_3 * 4));
@@ -5136,9 +5114,9 @@ block_215:
                     temp_ret_338 = (int *)(ObjectRef_AssignObject_00406e60((ObjectRefTarget **)&arg0->_dBPcTech, (ObjectRefTarget *)temp_ret_337));
                 }
                 temp_ret_339 = (void *)(FUN_00406ee0(&arg0->_dBPcTech));
-                temp_ret_340 = beDataBase_GetRecordInt(temp_ret_339, sp484, &DAT_00518860[0]);
+                temp_ret_340 = beDataBase_GetRecordInt(temp_ret_339, sp484, SKILL);
                 var_s5_3 = temp_ret_340;
-                temp_ret_341 = (int)FUN_003a9250(skp, &DAT_00518860[0]);
+                temp_ret_341 = (int)FUN_003a9250(skp, SKILL);
                 temp_ret_342 = (void *)(FUN_00406ef0(&((beDataObjIntList *)temp_ret_341)->_data));
                 temp_ret_343 = DataList_GetData_003e9090(temp_ret_342);
                 var_s7_2 = *(int *)(temp_ret_343 + (var_s5_3 * 4));
@@ -5164,7 +5142,7 @@ block_215:
                  * after the third beq. */
                 switch (skcls) {
                 default: {
-                    temp_ret_344 = (int)igProperty_GetRecord(skp, &DAT_00518848[0]);
+                    temp_ret_344 = (int)igProperty_GetRecord(skp, DIGIMONNO_2);
                     temp_s0_8 = ((beDataObjInt *)temp_ret_344)->_data;
                     temp_ret_345 = (void *)(FUN_00406ee0(&arg0->_dBShinka));
                     if (temp_ret_345 == 0) {
@@ -5185,7 +5163,7 @@ block_215:
                 temp_v0_66 = ((DW4VC_96_0 *)(temp_v0_65))->vX() % 100000U;
                 if ((int) temp_v0_66 < var_s0_11) {
                     int skill_next = var_s7_2 + 1;
-                    temp_ret_351 = (int)FUN_003a9250(skp, &DAT_00518860[0]);
+                    temp_ret_351 = (int)FUN_003a9250(skp, SKILL);
                     temp_ret_352 = (void *)(FUN_00406e40((int *)temp_ret_351));
                     temp_v0_67 = (void *)(temp_ret_352);
                     temp_v1_3 = ((igIntList *)temp_v0_67)->_count;
@@ -5201,7 +5179,7 @@ block_215:
                     beMessenger_AppendString(arg0->_messenger, &DAT_00519178[0]);
                     beMessenger_AppendString(arg0->_messenger, &DAT_00519188[0]);
                     beMessenger_AppendFloat(arg0->_messenger, 1.0f);
-                    FUN_003e9220(&sp358, &DAT_004e1058[0]);
+                    FUN_003e9220(&sp358, &g_vec3Zero[0]);
                     beMessenger_AppendVec3(arg0->_messenger, &sp358);
                     beMessenger_AppendBool(arg0->_messenger, 0U);
                     beMessenger_AppendBool(arg0->_messenger, 1U);
@@ -5229,9 +5207,9 @@ block_215:
                 expup_player = (void *)(temp_ret_365);
                 temp_ret_366 = (beDataObjBool *)(igProperty_GetRecordByte((int)expup_player, &DAT_00518888[0]));
                 if (temp_ret_366->_data != 0) {
-                    temp_ret_367 = (int)igProperty_GetRecord(expup_player, &DAT_00518890[0]);
+                    temp_ret_367 = (int)igProperty_GetRecord(expup_player, HP);
                     if (((beDataObjInt *)temp_ret_367)->_data != 0) {
-                        temp_ret_368 = (int)igProperty_GetRecord(expup_player, &DAT_00518858[0]);
+                        temp_ret_368 = (int)igProperty_GetRecord(expup_player, LEVEL_2);
                         expup_level = ((beDataObjInt *)temp_ret_368)->_data;
                         if (expup_level != 0x3E7) {
                             temp_ret_369 = (void *)(FUN_00406ee0(&arg0->_dBEnemy));
@@ -5241,7 +5219,7 @@ block_215:
                                 temp_ret_371 = (int *)(ObjectRef_AssignObject_00406e60((ObjectRefTarget **)&arg0->_dBEnemy, (ObjectRefTarget *)temp_ret_370));
                             }
                             temp_ret_372 = (void *)(FUN_00406ee0(&arg0->_dBEnemy));
-                            temp_ret_373 = beDataBase_GetRecordInt(temp_ret_372, temp_ret_361, &DAT_00518880[0]);
+                            temp_ret_373 = beDataBase_GetRecordInt(temp_ret_372, temp_ret_361, EXP);
                             var_s0_12 = temp_ret_373;
                             temp_ret_374 = (int)igProperty_GetRecord(expup_player, &DAT_005189d0[0]);
                             temp_v0_69 = ((beDataObjInt *)temp_ret_374)->_data;
@@ -5270,19 +5248,19 @@ block_215:
                             } else {
                                 split /= 100;
                             }
-                            temp_ret_375 = (int)igProperty_GetRecord(expup_player, &DAT_00518880[0]);
+                            temp_ret_375 = (int)igProperty_GetRecord(expup_player, EXP);
                             /* The old value is read before the second record lookup (it lives
                              * across that call); the add is in place. */
                             expup_exp = ((beDataObjInt *)temp_ret_375)->_data;
                             expup_exp = expup_exp + split;
-                            temp_ret_376 = (int)igProperty_GetRecord(expup_player, &DAT_00518880[0]);
+                            temp_ret_376 = (int)igProperty_GetRecord(expup_player, EXP);
                             ((beDataObjInt *)temp_ret_376)->_data = expup_exp;
                             bool leveled_up = false;
                             temp_ret_377 = (int)igProperty_GetRecord(expup_player, &DAT_00518938[0]);
                             if (((beDataObjInt *)temp_ret_377)->_data <= expup_exp) {
 loop_449:
                                 expup_level += 1;
-                                temp_ret_378 = (int)igProperty_GetRecord(expup_player, &DAT_00518858[0]);
+                                temp_ret_378 = (int)igProperty_GetRecord(expup_player, LEVEL_2);
                                 ((beDataObjInt *)temp_ret_378)->_data = expup_level;
                                 FUN_003fab90(arg0, expup_idx, 1);
                                 FUN_003f8760(arg0, expup_idx);
@@ -5295,9 +5273,9 @@ loop_449:
                                 }
                             }
                             if (leveled_up) {
-                                temp_ret_382 = (int)igProperty_GetRecord(expup_player, &DAT_00518898[0]);
+                                temp_ret_382 = (int)igProperty_GetRecord(expup_player, MHP);
                                 temp_s0_10 = ((beDataObjInt *)temp_ret_382)->_data;
-                                temp_ret_383 = (int)igProperty_GetRecord(expup_player, &DAT_005188a8[0]);
+                                temp_ret_383 = (int)igProperty_GetRecord(expup_player, MMP);
                                 temp_s5 = ((beDataObjInt *)temp_ret_383)->_data;
                                 temp_ret_384 = (int)FUN_003a92e0(expup_player, &DAT_00518870[0]);
                                 temp_ret_385 = (char *)(FUN_00407050(&((beDataObjString *)temp_ret_384)->_data));
@@ -5305,30 +5283,30 @@ loop_449:
                                 beMessenger_AppendString(arg0->_messenger, &DAT_00519178[0]);
                                 beMessenger_AppendString(arg0->_messenger, &DAT_00519198[0]);
                                 beMessenger_AppendFloat(arg0->_messenger, 1.0f);
-                                FUN_003e9220(&sp348, &DAT_004e1058[0]);
+                                FUN_003e9220(&sp348, &g_vec3Zero[0]);
                                 beMessenger_AppendVec3(arg0->_messenger, &sp348);
                                 beMessenger_AppendBool(arg0->_messenger, 0U);
                                 beMessenger_AppendBool(arg0->_messenger, 1U);
                                 temp_ret_387 = beMessenger_EnqueueSelected(arg0->_messenger, &DAT_005190d0[0], 1);
-                                temp_ret_388 = (int)igProperty_GetRecord(expup_player, &DAT_00518890[0]);
+                                temp_ret_388 = (int)igProperty_GetRecord(expup_player, HP);
                                 ((beDataObjInt *)temp_ret_388)->_data = temp_s0_10;
-                                temp_ret_389 = (int)igProperty_GetRecord(expup_player, &DAT_005188a0[0]);
+                                temp_ret_389 = (int)igProperty_GetRecord(expup_player, MP);
                                 ((beDataObjInt *)temp_ret_389)->_data = temp_s5;
-                                temp_ret_390 = beMessenger_PrepareDelayedSelection(arg0->_messenger, &DAT_00518c50[0], &DAT_005191a0[0], expup_idx);
+                                temp_ret_390 = beMessenger_PrepareDelayedSelection(arg0->_messenger, NUMBERCTRL, &DAT_005191a0[0], expup_idx);
                                 beMessenger_AppendInt(arg0->_messenger, expup_level);
-                                temp_ret_391 = beMessenger_EnqueueSelected(arg0->_messenger, &DAT_00518c68[0], 1);
-                                temp_ret_392 = beMessenger_PrepareDelayedSelection(arg0->_messenger, &DAT_00518c28[0], &DAT_00518c38[0], expup_idx);
+                                temp_ret_391 = beMessenger_EnqueueSelected(arg0->_messenger, SETVALUE, 1);
+                                temp_ret_392 = beMessenger_PrepareDelayedSelection(arg0->_messenger, METERCTRL, hpmt, expup_idx);
                                 beMessenger_AppendFloat(arg0->_messenger, 100.0f);
-                                temp_ret_393 = beMessenger_EnqueueSelected(arg0->_messenger, &DAT_00518c40[0], 1);
-                                temp_ret_394 = beMessenger_PrepareDelayedSelection(arg0->_messenger, &DAT_00518c50[0], &DAT_00518c60[0], expup_idx);
+                                temp_ret_393 = beMessenger_EnqueueSelected(arg0->_messenger, SETPERCENT, 1);
+                                temp_ret_394 = beMessenger_PrepareDelayedSelection(arg0->_messenger, NUMBERCTRL, hpnm, expup_idx);
                                 beMessenger_AppendInt(arg0->_messenger, temp_s0_10);
-                                temp_ret_395 = beMessenger_EnqueueSelected(arg0->_messenger, &DAT_00518c68[0], 1);
-                                temp_ret_396 = beMessenger_PrepareDelayedSelection(arg0->_messenger, &DAT_00518c28[0], &DAT_00518c78[0], expup_idx);
+                                temp_ret_395 = beMessenger_EnqueueSelected(arg0->_messenger, SETVALUE, 1);
+                                temp_ret_396 = beMessenger_PrepareDelayedSelection(arg0->_messenger, METERCTRL, mpmt, expup_idx);
                                 beMessenger_AppendFloat(arg0->_messenger, 100.0f);
-                                temp_ret_397 = beMessenger_EnqueueSelected(arg0->_messenger, &DAT_00518c40[0], 1);
-                                temp_ret_398 = beMessenger_PrepareDelayedSelection(arg0->_messenger, &DAT_00518c50[0], &DAT_00518c80[0], expup_idx);
+                                temp_ret_397 = beMessenger_EnqueueSelected(arg0->_messenger, SETPERCENT, 1);
+                                temp_ret_398 = beMessenger_PrepareDelayedSelection(arg0->_messenger, NUMBERCTRL, mpnm, expup_idx);
                                 beMessenger_AppendInt(arg0->_messenger, temp_s5);
-                                temp_ret_399 = beMessenger_EnqueueSelected(arg0->_messenger, &DAT_00518c68[0], 1);
+                                temp_ret_399 = beMessenger_EnqueueSelected(arg0->_messenger, SETVALUE, 1);
                             }
                         }
                     }
@@ -5396,8 +5374,8 @@ loop_449:
                     temp_ret_425 = (int *)(ObjectRef_AssignObject_00406e60((ObjectRefTarget **)&arg0->_dBPcTech, (ObjectRefTarget *)temp_ret_424));
                 }
                 temp_ret_426 = (void *)(FUN_00406ee0(&arg0->_dBPcTech));
-                temp_ret_427 = beDataBase_GetRecordInt(temp_ret_426, sp47C, &DAT_00518860[0]);
-                temp_ret_428 = (int)FUN_003a9250(temp_v0_78, &DAT_00518860[0]);
+                temp_ret_427 = beDataBase_GetRecordInt(temp_ret_426, sp47C, SKILL);
+                temp_ret_428 = (int)FUN_003a9250(temp_v0_78, SKILL);
                 temp_ret_429 = (void *)(FUN_00406ef0((int *)(temp_ret_428 + 0xC)));
                 temp_ret_430 = DataList_GetData_003e9090(temp_ret_429);
                 temp_s1_4 = ((int *)temp_ret_430)[temp_ret_427];
@@ -5456,7 +5434,7 @@ loop_449:
                     temp_ret_445 = (int *)(ObjectRef_AssignObject_00406e60((ObjectRefTarget **)&arg0->_dBPcTech, (ObjectRefTarget *)temp_ret_444));
                 }
                 temp_ret_446 = (void *)(FUN_00406ee0(&arg0->_dBPcTech));
-                var_s0_13 = -(beDataBase_GetRecordInt(temp_ret_446, sp478, &DAT_00518890[0]) / 5);
+                var_s0_13 = -(beDataBase_GetRecordInt(temp_ret_446, sp478, HP) / 5);
 
                 beMessenger_ClearInt(arg0->_messenger);
                 beMessenger_AppendInt(arg0->_messenger, var_s0_13);
@@ -5482,8 +5460,8 @@ loop_449:
                 temp_ret_456 = (int *)(ObjectRef_AssignObject_00406e60((ObjectRefTarget **)&arg0->_dBPcTech, (ObjectRefTarget *)temp_ret_455));
             }
             temp_ret_457 = (void *)(FUN_00406ee0(&arg0->_dBPcTech));
-            temp_ret_458 = beDataBase_GetRecordInt(temp_ret_457, sp474, &DAT_00518860[0]);
-            temp_ret_459 = (int)FUN_003a9250(temp_v0_82, &DAT_00518860[0]);
+            temp_ret_458 = beDataBase_GetRecordInt(temp_ret_457, sp474, SKILL);
+            temp_ret_459 = (int)FUN_003a9250(temp_v0_82, SKILL);
             temp_ret_460 = (void *)(FUN_00406ef0((int *)(temp_ret_459 + 0xC)));
             temp_ret_461 = DataList_GetData_003e9090(temp_ret_460);
             temp_s3_3 = ((int *)temp_ret_461)[temp_ret_458];
@@ -5550,8 +5528,8 @@ loop_449:
                 temp_ret_481 = (int *)(ObjectRef_AssignObject_00406e60((ObjectRefTarget **)&arg0->_dBPcTech, (ObjectRefTarget *)temp_ret_480));
             }
             temp_ret_482 = (void *)(FUN_00406ee0(&arg0->_dBPcTech));
-            temp_ret_483 = beDataBase_GetRecordInt(temp_ret_482, sp470, &DAT_00518860[0]);
-            temp_ret_484 = (int)FUN_003a9250(temp_v0_86, &DAT_00518860[0]);
+            temp_ret_483 = beDataBase_GetRecordInt(temp_ret_482, sp470, SKILL);
+            temp_ret_484 = (int)FUN_003a9250(temp_v0_86, SKILL);
             temp_ret_485 = (void *)(FUN_00406ef0((int *)(temp_ret_484 + 0xC)));
             temp_ret_486 = DataList_GetData_003e9090(temp_ret_485);
             temp_s3_4 = ((int *)temp_ret_486)[temp_ret_483];
@@ -5626,8 +5604,8 @@ loop_449:
                     temp_ret_510 = (int *)(ObjectRef_AssignObject_00406e60((ObjectRefTarget **)&arg0->_dBPcTech, (ObjectRefTarget *)temp_ret_509));
                 }
                 temp_ret_511 = (void *)(FUN_00406ee0(&arg0->_dBPcTech));
-                temp_ret_512 = beDataBase_GetRecordInt(temp_ret_511, sp468, &DAT_00518860[0]);
-                temp_ret_513 = (int)FUN_003a9250(temp_v0_93, &DAT_00518860[0]);
+                temp_ret_512 = beDataBase_GetRecordInt(temp_ret_511, sp468, SKILL);
+                temp_ret_513 = (int)FUN_003a9250(temp_v0_93, SKILL);
                 temp_ret_514 = (void *)(FUN_00406ef0((int *)(temp_ret_513 + 0xC)));
                 temp_ret_515 = DataList_GetData_003e9090(temp_ret_514);
                 temp_s1_5 = ((int *)temp_ret_515)[temp_ret_512];
@@ -5689,8 +5667,8 @@ loop_449:
                         temp_ret_531 = (int *)(ObjectRef_AssignObject_00406e60((ObjectRefTarget **)&arg0->_dBPcTech, (ObjectRefTarget *)temp_ret_530));
                     }
                     temp_ret_532 = (void *)(FUN_00406ee0(&arg0->_dBPcTech));
-                    temp_ret_533 = beDataBase_GetRecordInt(temp_ret_532, sp464, &DAT_00518860[0]);
-                    temp_ret_534 = (int)FUN_003a9250(temp_v0_93, &DAT_00518860[0]);
+                    temp_ret_533 = beDataBase_GetRecordInt(temp_ret_532, sp464, SKILL);
+                    temp_ret_534 = (int)FUN_003a9250(temp_v0_93, SKILL);
                     temp_ret_535 = (void *)(FUN_00406ef0((int *)(temp_ret_534 + 0xC)));
                     temp_ret_536 = DataList_GetData_003e9090(temp_ret_535);
                     temp_s1_6 = ((int *)temp_ret_536)[temp_ret_533];
@@ -5798,8 +5776,8 @@ loop_449:
                     temp_ret_577 = (int *)(ObjectRef_AssignObject_00406e60((ObjectRefTarget **)&arg0->_dBPcTech, (ObjectRefTarget *)temp_ret_576));
                 }
                 temp_ret_578 = (void *)(FUN_00406ee0(&arg0->_dBPcTech));
-                temp_ret_579 = beDataBase_GetRecordInt(temp_ret_578, sp450, &DAT_00518860[0]);
-                temp_ret_580 = (int)FUN_003a9250(temp_v0_100, &DAT_00518860[0]);
+                temp_ret_579 = beDataBase_GetRecordInt(temp_ret_578, sp450, SKILL);
+                temp_ret_580 = (int)FUN_003a9250(temp_v0_100, SKILL);
                 temp_ret_581 = (void *)(FUN_00406ef0((int *)(temp_ret_580 + 0xC)));
                 temp_ret_582 = DataList_GetData_003e9090(temp_ret_581);
                 temp_s3_5 = ((int *)temp_ret_582)[temp_ret_579];
@@ -5861,8 +5839,8 @@ loop_449:
                         temp_ret_598 = (int *)(ObjectRef_AssignObject_00406e60((ObjectRefTarget **)&arg0->_dBPcTech, (ObjectRefTarget *)temp_ret_597));
                     }
                     temp_ret_599 = (void *)(FUN_00406ee0(&arg0->_dBPcTech));
-                    temp_ret_600 = beDataBase_GetRecordInt(temp_ret_599, sp44C, &DAT_00518860[0]);
-                    temp_ret_601 = (int)FUN_003a9250(temp_v0_100, &DAT_00518860[0]);
+                    temp_ret_600 = beDataBase_GetRecordInt(temp_ret_599, sp44C, SKILL);
+                    temp_ret_601 = (int)FUN_003a9250(temp_v0_100, SKILL);
                     temp_ret_602 = (void *)(FUN_00406ef0((int *)(temp_ret_601 + 0xC)));
                     temp_ret_603 = DataList_GetData_003e9090(temp_ret_602);
                     temp_s1_7 = ((int *)temp_ret_603)[temp_ret_600];
@@ -5903,8 +5881,8 @@ loop_449:
                             temp_ret_617 = (int *)(ObjectRef_AssignObject_00406e60((ObjectRefTarget **)&arg0->_dBPcTech, (ObjectRefTarget *)temp_ret_616));
                         }
                         temp_ret_618 = (void *)(FUN_00406ee0(&arg0->_dBPcTech));
-                        temp_ret_619 = beDataBase_GetRecordInt(temp_ret_618, sp448, &DAT_00518860[0]);
-                        temp_ret_620 = (int)FUN_003a9250(temp_v0_100, &DAT_00518860[0]);
+                        temp_ret_619 = beDataBase_GetRecordInt(temp_ret_618, sp448, SKILL);
+                        temp_ret_620 = (int)FUN_003a9250(temp_v0_100, SKILL);
                         temp_ret_621 = (void *)(FUN_00406ef0((int *)(temp_ret_620 + 0xC)));
                         temp_ret_622 = DataList_GetData_003e9090(temp_ret_621);
                         temp_s1_8 = ((int *)temp_ret_622)[temp_ret_619];
@@ -6250,7 +6228,7 @@ loop_449:
                 }
                 temp_ret_745 = (void *)(FUN_00406ee0(&arg0->_dBEneatk));
                 temp_ret_746 = beDataBase_GetRecordInt(temp_ret_745, temp_s5_2, &DAT_005188b0[0]);
-                temp_ret_747 = (int)igProperty_GetRecord(temp_v0_110, &DAT_00518898[0]);
+                temp_ret_747 = (int)igProperty_GetRecord(temp_v0_110, MHP);
                 var_s3_4 = (int)((int) (((beDataObjInt *)temp_ret_747)->_data * temp_ret_746) / 100);
                 if (var_s3_4 < 0) {
                     var_s3_4 = 0;
@@ -6387,7 +6365,7 @@ loop_449:
                 temp_ret_778 = (void *)(FUN_00406ee0(&arg0->_dBEneatk));
                 temp_ret_779 = beDataBase_GetRecordInt(temp_ret_778, temp_s5_3, &DAT_005191d8[0]);
                 temp_v0_129 = temp_ret_779;
-                temp_ret_780 = (int)igProperty_GetRecord(temp_ret_769, &DAT_00518898[0]);
+                temp_ret_780 = (int)igProperty_GetRecord(temp_ret_769, MHP);
                 int e2p_rec_780; e2p_rec_780 = ((beDataObjInt *)temp_ret_780)->_data;
                 switch (temp_v0_129) {
                 case 0:
@@ -6428,7 +6406,7 @@ loop_449:
                     temp_ret_786 = DW4Fresh::Assign((char *)temp_v0_128 + 0x28, temp_ret_782);
                 }
                 temp_ret_788 = FUN_003e92a0((char *)temp_v0_128 + 0x28);
-                temp_ret_789 = FUN_003e9280(temp_ret_788, DAT_00585be0[0], &DAT_005191e8[0]);
+                temp_ret_789 = FUN_003e9280(temp_ret_788, g_propertyNameField[0], &DAT_005191e8[0]);
                 temp_ret_790 = FUN_00406e00((int *)(temp_ret_789 + 0x14));
                 temp_ret_791 = (void *)(FUN_00406df0((int *)(temp_ret_790 + 0xC8)));
                 temp_v0_130 = (void *)(temp_ret_791);
@@ -6511,7 +6489,7 @@ loop_449:
             }
             var_s2_9 = 0;
             if (var_s0_22) {
-                temp_ret_819 = (int)igProperty_GetRecord(temp_v0_133, &DAT_00518898[0]);
+                temp_ret_819 = (int)igProperty_GetRecord(temp_v0_133, MHP);
                 temp_s3_8 = ((beDataObjInt *)temp_ret_819)->_data;
                 temp_ret_820 = (int)igProperty_GetRecord(temp_v0_133, &DAT_005189a0[0]);
                 temp_s0_23 = ((beDataObjInt *)temp_ret_820)->_data;
@@ -6589,7 +6567,7 @@ loop_449:
             } else {
                 temp_ret_848 = strcmp(sp444.p, &DAT_00519220[0]);
                 if (temp_ret_848 == 0) {
-                    temp_ret_849 = (int)igProperty_GetRecord(temp_v0_138, &DAT_00518898[0]);
+                    temp_ret_849 = (int)igProperty_GetRecord(temp_v0_138, MHP);
                     temp_s0_25 = ((beDataObjInt *)temp_ret_849)->_data;
                     temp_ret_850 = (void *)(FUN_00406ee0(&arg0->_dBEneatk));
                     if (temp_ret_850 == 0) {
@@ -7115,22 +7093,22 @@ loop_449:
                         temp_ret_1075 = (int *)(ObjectRef_AssignObject_00406e60((ObjectRefTarget **)&arg0->_dBPcTech, (ObjectRefTarget *)temp_ret_1074));
                     }
                     temp_ret_1076 = (void *)(FUN_00406ee0(&arg0->_dBPcTech));
-                    temp_ret_1077 = beDataBase_GetRecordInt(temp_ret_1076, sp438, &DAT_00518860[0]);
+                    temp_ret_1077 = beDataBase_GetRecordInt(temp_ret_1076, sp438, SKILL);
                     temp_v0_166 = temp_ret_1077;
                     if (temp_v0_166 != 8) {
                         if (temp_v0_166 != 7) {
-                            temp_ret_1078 = (int)FUN_003a9250(temp_v0_165, &DAT_00518860[0]);
+                            temp_ret_1078 = (int)FUN_003a9250(temp_v0_165, SKILL);
                             temp_ret_1079 = (void *)(FUN_00406ef0(&((beDataObjIntList *)temp_ret_1078)->_data));
                             temp_ret_1080 = DataList_GetData_003e9090(temp_ret_1079);
                             var_s3_5 = *(int *)(temp_ret_1080 + (temp_v0_166 * 4));
                         } else {
-                            temp_ret_1081 = (int)FUN_003a9250(temp_v0_165, &DAT_00518860[0]);
+                            temp_ret_1081 = (int)FUN_003a9250(temp_v0_165, SKILL);
                             temp_ret_1082 = (void *)(FUN_00406ef0(&((beDataObjIntList *)temp_ret_1081)->_data));
                             temp_ret_1083 = DataList_GetData_003e9090(temp_ret_1082);
                             var_s3_5 = ((int *)temp_ret_1083)[7];
                         }
                     } else {
-                        temp_ret_1084 = (int)FUN_003a9250(temp_v0_165, &DAT_00518860[0]);
+                        temp_ret_1084 = (int)FUN_003a9250(temp_v0_165, SKILL);
                         temp_ret_1085 = (void *)(FUN_00406ef0(&((beDataObjIntList *)temp_ret_1084)->_data));
                         temp_ret_1086 = DataList_GetData_003e9090(temp_ret_1085);
                         var_s3_5 = ((int *)temp_ret_1086)[8];
@@ -7142,7 +7120,7 @@ loop_449:
                         temp_ret_1089 = (int *)(ObjectRef_AssignObject_00406e60((ObjectRefTarget **)&arg0->_dBPcTech, (ObjectRefTarget *)temp_ret_1088));
                     }
                     temp_ret_1090 = (void *)(FUN_00406ee0(&arg0->_dBPcTech));
-                    temp_ret_1091 = beDataBase_GetRecordInt(temp_ret_1090, sp438, &DAT_00518890[0]);
+                    temp_ret_1091 = beDataBase_GetRecordInt(temp_ret_1090, sp438, HP);
                     temp_ret_1092 = (int)igProperty_GetRecord(temp_v0_165, &DAT_005188c0[0]);
                     int pre_sum = temp_ret_1091 + var_s3_5;
                     temp_s2_5 = pre_sum + ((beDataObjInt *)temp_ret_1092)->_data;
@@ -7150,7 +7128,7 @@ loop_449:
                     if (temp_s5_4 == 0x2D) {
                         temp_ret_1094 = (int)FUN_003a92e0(temp_v0_165, &DAT_00518870[0]);
                         temp_ret_1095 = (const char *)FUN_00407050(&((beDataObjString *)temp_ret_1094)->_data);
-                        beMessenger_SendNamed(arg0->_messenger, &DAT_005190a8[0], temp_ret_1095, temp_v0_164, &DAT_00519030[0]);
+                        beMessenger_SendNamed(arg0->_messenger, &DAT_005190a8[0], temp_ret_1095, temp_v0_164, &GETMATRIX[0]);
                         beMessenger_GetMatrix(&sp270, arg0->_messenger, 0);
                         Matrix44_GetTranslation(&sp270, &sp3D8);
                         { NearbyListRef sp434 = beNDMWGameRam_CollectNearbyNonzeroHp(arg0, &DAT_005190a8[0], temp_v0_164, &sp3D8);
@@ -7167,7 +7145,7 @@ loop_449:
                                 beMessenger_AppendString(arg0->_messenger, &DAT_005190b0[0]);
                                 beMessenger_AppendString(arg0->_messenger, &DAT_005190c0[0]);
                                 beMessenger_AppendFloat(arg0->_messenger, 1.0f);
-                                FUN_003e9220(&sp338, &DAT_004e1058[0]);
+                                FUN_003e9220(&sp338, &g_vec3Zero[0]);
                                 beMessenger_AppendVec3(arg0->_messenger, &sp338);
                                 beMessenger_AppendBool(arg0->_messenger, 0U);
                                 beMessenger_AppendBool(arg0->_messenger, 1U);
@@ -7185,13 +7163,13 @@ loop_449:
                         temp_ret_1106 = (int *)(ObjectRef_AssignObject_00406e60((ObjectRefTarget **)&arg0->_dBPcTech, (ObjectRefTarget *)temp_ret_1105));
                     }
                     temp_ret_1107 = (void *)(FUN_00406ee0(&arg0->_dBPcTech));
-                    temp_ret_1108 = beDataBase_GetRecordInt(temp_ret_1107, sp430, &DAT_00518860[0]);
+                    temp_ret_1108 = beDataBase_GetRecordInt(temp_ret_1107, sp430, SKILL);
                     temp_v0_167 = temp_ret_1108;
-                    switch (temp_v0_167) { default: temp_ret_1109 = (int)FUN_003a9250(temp_v0_165, &DAT_00518860[0]);
+                    switch (temp_v0_167) { default: temp_ret_1109 = (int)FUN_003a9250(temp_v0_165, SKILL);
  temp_ret_1110 = (void *)(FUN_00406ef0(&((beDataObjIntList *)temp_ret_1109)->_data));
- temp_ret_1111 = (int)DataList_GetData_003e9090(temp_ret_1110); break; case 7: temp_ret_1112 = (int)FUN_003a9250(temp_v0_165, &DAT_00518860[0]);
+ temp_ret_1111 = (int)DataList_GetData_003e9090(temp_ret_1110); break; case 7: temp_ret_1112 = (int)FUN_003a9250(temp_v0_165, SKILL);
  temp_ret_1113 = (void *)(FUN_00406ef0(&((beDataObjIntList *)temp_ret_1112)->_data));
- temp_ret_1114 = (int)DataList_GetData_003e9090(temp_ret_1113); break; case 8: temp_ret_1115 = (int)FUN_003a9250(temp_v0_165, &DAT_00518860[0]);
+ temp_ret_1114 = (int)DataList_GetData_003e9090(temp_ret_1113); break; case 8: temp_ret_1115 = (int)FUN_003a9250(temp_v0_165, SKILL);
  temp_ret_1116 = (void *)(FUN_00406ef0(&((beDataObjIntList *)temp_ret_1115)->_data));
  temp_ret_1117 = DataList_GetData_003e9090(temp_ret_1116); break; }
 temp_ret_1118 = (int)FUN_003a92e0(temp_v0_165, &DAT_00518870[0]);
@@ -7213,7 +7191,7 @@ temp_ret_1118 = (int)FUN_003a92e0(temp_v0_165, &DAT_00518870[0]);
                     if (temp_s5_4 == 0x3C) {
                         temp_ret_1125 = (int)FUN_003a92e0(temp_v0_165, &DAT_00518870[0]);
                         temp_ret_1126 = (const char *)FUN_00407050(&((beDataObjString *)temp_ret_1125)->_data);
-                        beMessenger_SendNamed(arg0->_messenger, &DAT_005190a8[0], temp_ret_1126, temp_v0_164, &DAT_00519030[0]);
+                        beMessenger_SendNamed(arg0->_messenger, &DAT_005190a8[0], temp_ret_1126, temp_v0_164, &GETMATRIX[0]);
                         beMessenger_GetMatrix(&sp230, arg0->_messenger, 0);
                         Matrix44_GetTranslation(&sp230, &sp3C8);
                         { NearbyListRef sp42C = beNDMWGameRam_CollectNearbyNonzeroHp(arg0, &DAT_005190a8[0], temp_v0_164, &sp3C8);
@@ -7247,7 +7225,7 @@ temp_ret_1118 = (int)FUN_003a92e0(temp_v0_165, &DAT_00518870[0]);
                                 beMessenger_AppendString(arg0->_messenger, &DAT_00519270[0]);
                                 beMessenger_AppendString(arg0->_messenger, &DAT_00519280[0]);
                                 beMessenger_AppendFloat(arg0->_messenger, 1.0f);
-                                FUN_003e9220(&sp328, &DAT_004e1058[0]);
+                                FUN_003e9220(&sp328, &g_vec3Zero[0]);
                                 beMessenger_AppendVec3(arg0->_messenger, &sp328);
                                 beMessenger_AppendBool(arg0->_messenger, 0U);
                                 beMessenger_AppendBool(arg0->_messenger, 1U);
@@ -7269,7 +7247,7 @@ temp_ret_1118 = (int)FUN_003a92e0(temp_v0_165, &DAT_00518870[0]);
                     igMatrix44f_SetIdentity(&sp2B0);
                     temp_ret_1141 = (int)FUN_003a92e0(temp_v0_165, &DAT_00518870[0]);
                     temp_ret_1142 = (const char *)FUN_00407050(&((beDataObjString *)temp_ret_1141)->_data);
-                    beMessenger_SendNamed(arg0->_messenger, &DAT_005190a8[0], temp_ret_1142, temp_v0_164, &DAT_00519030[0]);
+                    beMessenger_SendNamed(arg0->_messenger, &DAT_005190a8[0], temp_ret_1142, temp_v0_164, &GETMATRIX[0]);
                     beMessenger_GetMatrix(&sp1F0, arg0->_messenger, 0);
                     Matrix44_Copy(&sp2B0, &sp1F0);
                     Matrix44_GetTranslation(&sp2B0, &sp3B8);
@@ -7294,7 +7272,7 @@ temp_ret_1118 = (int)FUN_003a92e0(temp_v0_165, &DAT_00518870[0]);
                         temp_ret_1147 = (int *)(ObjectRef_AssignObject_00406e60((ObjectRefTarget **)&arg0->_dBPcTech, (ObjectRefTarget *)temp_ret_1146));
                     }
                     temp_ret_1148 = (void *)(FUN_00406ee0(&arg0->_dBPcTech));
-                    temp_ret_1149 = beDataBase_GetRecordInt(temp_ret_1148, sp420, &DAT_00518860[0]);
+                    temp_ret_1149 = beDataBase_GetRecordInt(temp_ret_1148, sp420, SKILL);
                     temp_ret_1150 = (int)igProperty_GetRecord(temp_v0_165, &DAT_005188c0[0]);
                     temp_s2_7 = ((beDataObjInt *)temp_ret_1150)->_data;
                     temp_ret_1151 = (void *)(FUN_00406ee0(&arg0->_dBPcTech));
@@ -7306,7 +7284,7 @@ temp_ret_1118 = (int)FUN_003a92e0(temp_v0_165, &DAT_00518870[0]);
                     temp_ret_1154 = (void *)(FUN_00406ee0(&arg0->_dBPcTech));
                     temp_ret_1155 = beDataBase_GetRecordInt(temp_ret_1154, sp420, &DAT_005191b8[0]);
                     int spF0 = temp_ret_1155 + temp_s2_7;
-                    temp_ret_1156 = (int)FUN_003a9250(temp_v0_165, &DAT_00518860[0]);
+                    temp_ret_1156 = (int)FUN_003a9250(temp_v0_165, SKILL);
                     temp_ret_1157 = (void *)(FUN_00406ef0(&((beDataObjIntList *)temp_ret_1156)->_data));
                     temp_ret_1158 = DataList_GetData_003e9090(temp_ret_1157);
                     temp_s2_8 = *(int *)(temp_ret_1158 + (temp_ret_1149 * 4));
@@ -7321,7 +7299,7 @@ temp_ret_1118 = (int)FUN_003a92e0(temp_v0_165, &DAT_00518870[0]);
                     int spE0 = ((int) temp_s2_8 / 5) + temp_ret_1163;
                     temp_ret_1164 = (int)FUN_003a92e0(temp_v0_165, &DAT_00518870[0]);
                     temp_ret_1165 = (const char *)FUN_00407050(&((beDataObjString *)temp_ret_1164)->_data);
-                    beMessenger_SendNamed(arg0->_messenger, &DAT_005190a8[0], temp_ret_1165, temp_v0_164, &DAT_00519030[0]);
+                    beMessenger_SendNamed(arg0->_messenger, &DAT_005190a8[0], temp_ret_1165, temp_v0_164, &GETMATRIX[0]);
                     beMessenger_GetMatrix(&sp1B0, arg0->_messenger, 0);
                     Matrix44_GetTranslation(&sp1B0, &sp3A8);
                     { NearbyListRef sp41C = beNDMWGameRam_CollectNearbyNonzeroHp(arg0, &DAT_005190a8[0], temp_v0_164, &sp3A8);
@@ -7377,7 +7355,7 @@ temp_ret_1118 = (int)FUN_003a92e0(temp_v0_165, &DAT_00518870[0]);
                                 beMessenger_AppendString(arg0->_messenger, &DAT_005192b0[0]);
                                 beMessenger_AppendString(arg0->_messenger, &DAT_005192c0[0]);
                                 beMessenger_AppendFloat(arg0->_messenger, 1.0f);
-                                FUN_003e9220(&sp318, &DAT_004e1058[0]);
+                                FUN_003e9220(&sp318, &g_vec3Zero[0]);
                                 beMessenger_AppendVec3(arg0->_messenger, &sp318);
                                 beMessenger_AppendBool(arg0->_messenger, 0U);
                                 beMessenger_AppendBool(arg0->_messenger, 1U);
@@ -7407,8 +7385,8 @@ temp_ret_1118 = (int)FUN_003a92e0(temp_v0_165, &DAT_00518870[0]);
                         temp_ret_1201 = (int *)(ObjectRef_AssignObject_00406e60((ObjectRefTarget **)&arg0->_dBPcTech, (ObjectRefTarget *)temp_ret_1200));
                     }
                     temp_ret_1202 = (void *)(FUN_00406ee0(&arg0->_dBPcTech));
-                    temp_ret_1203 = beDataBase_GetRecordInt(temp_ret_1202, sp418, &DAT_00518860[0]);
-                    temp_ret_1204 = (int)FUN_003a9250(temp_v0_165, &DAT_00518860[0]);
+                    temp_ret_1203 = beDataBase_GetRecordInt(temp_ret_1202, sp418, SKILL);
+                    temp_ret_1204 = (int)FUN_003a9250(temp_v0_165, SKILL);
                     temp_ret_1205 = (void *)(FUN_00406ef0(&((beDataObjIntList *)temp_ret_1204)->_data));
                     temp_ret_1206 = DataList_GetData_003e9090(temp_ret_1205);
                     temp_s2_10 = *(int *)(temp_ret_1206 + (temp_ret_1203 * 4));
@@ -7442,7 +7420,7 @@ temp_ret_1118 = (int)FUN_003a92e0(temp_v0_165, &DAT_00518870[0]);
                     int spB0 = temp_s2_11 + temp_ret_1221;
                     temp_ret_1222 = (int)FUN_003a92e0(temp_v0_165, &DAT_00518870[0]);
                     temp_ret_1223 = (const char *)FUN_00407050(&((beDataObjString *)temp_ret_1222)->_data);
-                    beMessenger_SendNamed(arg0->_messenger, &DAT_005190a8[0], temp_ret_1223, temp_v0_164, &DAT_00519030[0]);
+                    beMessenger_SendNamed(arg0->_messenger, &DAT_005190a8[0], temp_ret_1223, temp_v0_164, &GETMATRIX[0]);
                     beMessenger_GetMatrix(&sp170, arg0->_messenger, 0);
                     Matrix44_GetTranslation(&sp170, &sp398);
                     { NearbyListRef sp414 = beNDMWGameRam_CollectNearbyNonzeroHp(arg0, &DAT_005190a8[0], temp_v0_164, &sp398);
@@ -7472,7 +7450,7 @@ temp_ret_1118 = (int)FUN_003a92e0(temp_v0_165, &DAT_00518870[0]);
                                 beMessenger_AppendString(arg0->_messenger, &DAT_005192b0[0]);
                                 beMessenger_AppendString(arg0->_messenger, &DAT_005192c0[0]);
                                 beMessenger_AppendFloat(arg0->_messenger, 1.0f);
-                                FUN_003e9220(&sp308, &DAT_004e1058[0]);
+                                FUN_003e9220(&sp308, &g_vec3Zero[0]);
                                 beMessenger_AppendVec3(arg0->_messenger, &sp308);
                                 beMessenger_AppendBool(arg0->_messenger, 0U);
                                 beMessenger_AppendBool(arg0->_messenger, 1U);
@@ -7529,7 +7507,7 @@ temp_ret_1118 = (int)FUN_003a92e0(temp_v0_165, &DAT_00518870[0]);
                     temp_ret_1260 = beDataBase_GetRecordInt(temp_ret_1259, sp410, &DAT_005192f8[0]);
                     temp_ret_1261 = (int)FUN_003a92e0(temp_v0_165, &DAT_00518870[0]);
                     temp_ret_1262 = (const char *)FUN_00407050(&((beDataObjString *)temp_ret_1261)->_data);
-                    beMessenger_SendNamed(arg0->_messenger, &DAT_005190a8[0], temp_ret_1262, temp_v0_164, &DAT_00519030[0]);
+                    beMessenger_SendNamed(arg0->_messenger, &DAT_005190a8[0], temp_ret_1262, temp_v0_164, &GETMATRIX[0]);
                     beMessenger_GetMatrix(&sp130, arg0->_messenger, 0);
                     Matrix44_GetTranslation(&sp130, &sp388);
                     { NearbyListRef sp40C = beNDMWGameRam_CollectNearbyNonzeroHp(arg0, &DAT_005190a8[0], temp_v0_164, &sp388);
@@ -7560,7 +7538,7 @@ temp_ret_1118 = (int)FUN_003a92e0(temp_v0_165, &DAT_00518870[0]);
                                 beMessenger_AppendString(arg0->_messenger, &DAT_005192b0[0]);
                                 beMessenger_AppendString(arg0->_messenger, &DAT_005192c0[0]);
                                 beMessenger_AppendFloat(arg0->_messenger, 1.0f);
-                                FUN_003e9220(&sp2F8, &DAT_004e1058[0]);
+                                FUN_003e9220(&sp2F8, &g_vec3Zero[0]);
                                 beMessenger_AppendVec3(arg0->_messenger, &sp2F8);
                                 beMessenger_AppendBool(arg0->_messenger, 0U);
                                 beMessenger_AppendBool(arg0->_messenger, 1U);
@@ -7608,10 +7586,10 @@ temp_ret_1118 = (int)FUN_003a92e0(temp_v0_165, &DAT_00518870[0]);
         temp_ret_1293 = (int)igProperty_GetRecord(tail_player, &DAT_00518840[0]);
         ((beDataObjInt *)temp_ret_1293)->_data = 0;
         temp_s4 = temp_s0_34 + 1;
-        temp_ret_1294 = (int)igProperty_GetRecord(tail_player, &DAT_00518858[0]);
+        temp_ret_1294 = (int)igProperty_GetRecord(tail_player, LEVEL_2);
         temp_s0_35 = ((beDataObjInt *)temp_ret_1294)->_data;
         if ((temp_s0_35 != 0x3E7) && (temp_s0_35 != 1)) {
-            temp_ret_1295 = (int)igProperty_GetRecord(tail_player, &DAT_00518880[0]);
+            temp_ret_1295 = (int)igProperty_GetRecord(tail_player, EXP);
             temp_v0_189 = ((beDataObjInt *)temp_ret_1295)->_data;
             temp_a4_4 = DW4Curve::g(temp_s0_35 - 1, temp_s0_35);
             var_s3_8 = temp_v0_189 - ((temp_a4_4 - DW4Curve::g(temp_s0_35 - 2, temp_s0_35 - 1)) * 2) / 10;
@@ -7627,7 +7605,7 @@ temp_ret_1118 = (int)FUN_003a92e0(temp_v0_165, &DAT_00518870[0]);
                 temp_ret_1298 = DataList_GetData_003e9090(temp_v0_190);
                 *(int *)(temp_ret_1298 + (temp_s4 * 4)) = new_value;
             }
-            temp_ret_1299 = (int)igProperty_GetRecord(tail_player, &DAT_00518880[0]);
+            temp_ret_1299 = (int)igProperty_GetRecord(tail_player, EXP);
             ((beDataObjInt *)temp_ret_1299)->_data = var_s3_8;
         }
         return 1;

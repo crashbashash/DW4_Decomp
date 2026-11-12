@@ -3,22 +3,22 @@ void FUN_003c1ca0(int arg0) {
     igMetaObject_CreateInstance(*(int *)0x58B520, arg0);
 }
 
-int FUN_003c1ce0(void) {
-    if (((int *)DAT_0058b520)[0] == 0) {
-        ((int *)DAT_0058b520)[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(DAT_00587040[0]));
+igMetaObject *FUN_003c1ce0(void) {
+    if (g_beNDMWMdlEBullet_metaObject[0] == 0) {
+        g_beNDMWMdlEBullet_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
     }
-    return ((int *)DAT_0058b520)[0];
+    return g_beNDMWMdlEBullet_metaObject[0];
 }
 
 void *beNDMWMdlEBullet_GetReadyMetaObject(void) {
     bool ok;
-    if (DAT_0058b520[0] == 0) goto make;
-    ok = !!(DAT_0058b520[0]->f & 4);
+    if (g_beNDMWMdlEBullet_metaObject[0] == 0) goto make;
+    ok = !!(g_beNDMWMdlEBullet_metaObject[0]->_validity & 4);
     if (ok != false) goto done;
 make:
     FUN_003c1de0();
 done:;
-    return DAT_0058b520[0];
+    return g_beNDMWMdlEBullet_metaObject[0];
 }
 
 int beNDMWMdlEBullet_GetVTable(void) {
@@ -29,7 +29,7 @@ int beNDMWMdlEBullet_GetVTable(void) {
     *(int *)&u.b[8] = 0;
     *(int *)&u.b[24] = 0;
     u.vt = (int)&DAT_0053e210[0];
-    temp_s0 = *(int *)&u.b[*(int *)((char *)(DAT_00586dc8[0]) + 916)];
+    temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.vt = (int)&DAT_0053e210[0];
     FUN_003bf2f0((struct NamedRefObject *)u.b, (long long)0);
     return temp_s0;

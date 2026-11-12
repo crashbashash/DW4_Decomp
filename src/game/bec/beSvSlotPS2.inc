@@ -1,9 +1,9 @@
 void *FUN_0034a630(void) {
-    struct G *g = DAT_00588338[0];
-    if (!g || ((g->f & 4) != 0) == false) {
+    igMetaObject *g = g_beSvSlotPS2_metaObject[0];
+    if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_0034a6c0();
     }
-    return DAT_00588338[0];
+    return g_beSvSlotPS2_metaObject[0];
 }
 
 int beSvSlotPS2_GetVTable(void) {
@@ -11,7 +11,7 @@ int beSvSlotPS2_GetVTable(void) {
 
     igObject_InitHeader(&obj);
     obj.vt = &DAT_00538a30[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 
 void FUN_0034a6c0(void)
@@ -41,7 +41,7 @@ void beSvSlotPS2_GetMetaObject(void)
     FUN_0034a630();
 }
 
-int FUN_0034a770(void) {
-    return ((int *)DAT_00588370)[0];
+igMetaObject *FUN_0034a770(void) {
+    return g_beSvSlotData_metaObject[0];
 }
 

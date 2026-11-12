@@ -5,7 +5,7 @@ void Gap__Core__igNamedObjectInfo__vfunc_23(This *arg0, int arg1, Obj_2fed50 *ar
     while (i < (a = arg0->a)->n) {
         Obj_2fed50 *o = (Obj_2fed50 *)a->d[i];
         if (o == arg2) {
-            int *nm = o->name ? o->name : DAT_004e0858;
+            int *nm = o->name ? o->name : emptyString;
  FUN_002e2d30(arg1, arg0, nm, arg2, i, arg0);
             return;
         }

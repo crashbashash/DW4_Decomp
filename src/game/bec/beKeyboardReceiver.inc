@@ -1,16 +1,16 @@
-int FUN_0035d070(void) {
-    if (((int *)DAT_00589308)[0] == 0) {
-        ((int *)DAT_00589308)[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(DAT_00587040[0]));
+igMetaObject *FUN_0035d070(void) {
+    if (g_beKeyboardReceiver_metaObject[0] == 0) {
+        g_beKeyboardReceiver_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
     }
-    return ((int *)DAT_00589308)[0];
+    return g_beKeyboardReceiver_metaObject[0];
 }
 
-G_35d0c0 *FUN_0035d0c0(void) {
-    G_35d0c0 *g = DAT_00589308[0];
+igMetaObject *FUN_0035d0c0(void) {
+    igMetaObject *g = g_beKeyboardReceiver_metaObject[0];
     int t;
-    if (!g || !(t = (g->f & 4) != 0))
+    if (!g || !(t = (g->_validity & 4) != 0))
         FUN_0035d1a0();
-    return DAT_00589308[0];
+    return g_beKeyboardReceiver_metaObject[0];
 }
 
 int beKeyboardReceiver_GetVTable(void) {
@@ -21,7 +21,7 @@ int beKeyboardReceiver_GetVTable(void) {
     igObject_InitHeader(&o);
     o.vt = DAT_0053a8b0;
     *(int *)((char *)&o + 8) = 0;
-    r = *(int *)((char *)&o + *(int *)(((char * *)DAT_00586dc8)[0] + 916));
+    r = *(int *)((char *)&o + *(int *)(((char * *)g_objectSystem)[0] + 916));
     o.vt = DAT_0053a8b0;
     if (&*(int *)((char *)&o + 8) != 0) { p = *(struct Ref **)((char *)&o + 8); if (p != 0) { p->u.w = p->u.w - 1; if (p->u.b.cnt == 0) igObject_Destroy(p); } }
     return r;
@@ -59,7 +59,7 @@ void beKeyboardReceiver_InitFields(void) {
     void *temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)((int *)DAT_00589308)[0];
+    temp_s0 = (void *)g_beKeyboardReceiver_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_004c6530[0], 1);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));

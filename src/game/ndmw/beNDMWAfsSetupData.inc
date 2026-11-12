@@ -1,9 +1,9 @@
 void *beNDMWAfsSetupData_ResolveMetaObject(void) {
-    struct G *g = DAT_0058c130[0];
-    if (!g || ((g->f & 4) != 0) == false) {
+    igMetaObject *g = g_beNDMWAfsSetupData_metaObject[0];
+    if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_003caa70();
     }
-    return DAT_0058c130[0];
+    return g_beNDMWAfsSetupData_metaObject[0];
 }
 
 int beNDMWAfsSetupData_GetVTable(void) {
@@ -19,7 +19,7 @@ int beNDMWAfsSetupData_GetVTable(void) {
     *(int *)ps = 0;
     u.vt = (int)&DAT_00524950[0];
     u.vt = (int)&DAT_0053c3a0[0];
-    temp_s0 = *(int *)&u.b[*(int *)((char *)(DAT_00586dc8[0]) + 916)];
+    temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.vt = (int)&DAT_00524950[0];
     if (ps != 0) {
         temp_v1 = *(int **)ps;
@@ -66,7 +66,7 @@ void beNDMWAfsSetupData_InitFields(void) {
     int temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)((int *)DAT_0058c130)[0];
+    temp_s0 = (void *)g_beNDMWAfsSetupData_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_004cc5d8[0], 1);
     igMetaObject_NameFields(temp_s0, &DAT_004cc5e0[0], &DAT_004cc5e8[0], &DAT_004cc5f0[0], temp_s1);

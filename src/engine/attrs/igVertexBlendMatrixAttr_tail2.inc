@@ -1,4 +1,4 @@
-int Gap__Attrs__igVertexBlendMatrixAttr__vfunc_22(void) {
-    return DAT_0055ec68[0];
+igMetaObject *Gap__Attrs__igVertexBlendMatrixAttr__vfunc_22(void) {
+    return g_igVertexBlendMatrixAttr_metaObject[0];
 }
 

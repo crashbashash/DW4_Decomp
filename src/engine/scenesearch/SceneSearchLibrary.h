@@ -40,7 +40,7 @@ extern "C" int FUN_002293d0(...);
 extern "C" int FUN_00131bc0(...);
 extern "C" int StringRef_Destruct_00130720(...);
 extern "C" int DAT_0052d0d0[4];
-extern "C" void *DAT_00586dc8[4];
+extern "C" void *g_objectSystem[4];
 
 /* InitFields' field tables and field helpers. */
 extern "C" int igMetaObject_GetFieldCount(...);

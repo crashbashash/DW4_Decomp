@@ -31,11 +31,11 @@ void * FUN_002b7f40(int arg0) {
     return (void *)(igMetaObject_CreateInstance((CreateMeta *)(*(int *)0x5857C8), (MemoryPool *)arg0));
 }
 
-int FUN_002b7f80(void) {
-    if (DAT_005857c8[0] == 0) {
-        DAT_005857c8[0] = ((int)igMetaObject_Create(((int)Memory_GetAllocatorBySelector(DAT_00587040[0]))));
+igMetaObject *FUN_002b7f80(void) {
+    if (g_igThread_metaObject[0] == 0) {
+        g_igThread_metaObject[0] = (igMetaObject *)igMetaObject_Create(((int)Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0])));
     }
-    return DAT_005857c8[0];
+    return g_igThread_metaObject[0];
 }
 
 igMetaObject *igThread_GetMetaObject(void)
@@ -80,7 +80,7 @@ void igThread_InitFields(void) {
     void *temp_v0_4;
     void *temp_s1;
 
-    temp_s1 = (void *)(((void * *)DAT_005857c8)[0]);
+    temp_s1 = (void *)(((void * *)g_igThread_metaObject)[0]);
     temp_s0 = igMetaObject_GetFieldCount((igMetaObject *)temp_s1);
     igMetaObject_CreateFields((igMetaObject *)temp_s1, (igMetaField * (**)(void *))&DAT_004bf420[0], 0xA);
     temp_v0 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0)));
@@ -97,6 +97,6 @@ void igThread_InitFields(void) {
     ((igEnumMetaField *)temp_v0_4)->_getMetaEnumFunction = (int)(&FUN_002b7e20);
     FUN_0030e9b0((void **)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 6))), 0x1000);
     igMetaObject_NameFields((igMetaObject *)temp_s1, (const char **)&DAT_004bf450[0], (igMetaField ***)&DAT_004bf480[0], &DAT_004bf4b0[0], temp_s0);
-    *(int *)((char *)(((void * *)DAT_005857c8)[0]) + 60) = (int)thunk_igPsx2Thread_GetMetaObject;
+    *(int *)((char *)(((void * *)g_igThread_metaObject)[0]) + 60) = (int)thunk_igPsx2Thread_GetMetaObject;
 }
 

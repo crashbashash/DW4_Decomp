@@ -26,7 +26,7 @@ int igEnbayaContextPool_GetVTable(void) {
     *(int *)q1 = 0;
     q0 = (S_ref *)&u.b[16];
     *(int *)q0 = 0;
-    temp_s0 = *(int *)&u.b[*(int *)((char *)(DAT_00586dc8[0]) + 916)];
+    temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.vt = (int)&DAT_00529110[0];
     if (q0 != 0) {
         q0 = *(S_ref **)q0;
@@ -91,7 +91,7 @@ void igEnbayaContextPool_InitFields(void) {
     void *temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)DAT_00561b60[0];
+    temp_s0 = (void *)g_igEnbayaContextPool_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_0048c300[0], 3);
     temp_s1 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s2)));

@@ -1,4 +1,4 @@
-int Gap__Attrs__igTextureMatrixAttr__vfunc_22(void) {
-    return DAT_0055ecd8[0];
+igMetaObject *Gap__Attrs__igTextureMatrixAttr__vfunc_22(void) {
+    return g_igTextureMatrixAttr_metaObject[0];
 }
 

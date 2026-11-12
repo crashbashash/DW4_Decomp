@@ -3,19 +3,19 @@ void beNDMWLoadIntf2TextOrder_Create(int arg0) {
     igMetaObject_CreateInstance(*(int *)0x58BE90, arg0);
 }
 
-int FUN_003c7700(void) {
-    if (((int *)DAT_0058be90)[0] == 0) {
-        ((int *)DAT_0058be90)[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(DAT_00587040[0]));
+igMetaObject *FUN_003c7700(void) {
+    if (g_beNDMWLoadIntf2TextOrder_metaObject[0] == 0) {
+        g_beNDMWLoadIntf2TextOrder_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
     }
-    return ((int *)DAT_0058be90)[0];
+    return g_beNDMWLoadIntf2TextOrder_metaObject[0];
 }
 
 void *beNDMWLoadIntf2TextOrder_GetReadyMetaObject(void) {
-    struct G *g = DAT_0058be90[0];
-    if (!g || ((g->f & 4) != 0) == false) {
+    igMetaObject *g = g_beNDMWLoadIntf2TextOrder_metaObject[0];
+    if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_003c7830();
     }
-    return DAT_0058be90[0];
+    return g_beNDMWLoadIntf2TextOrder_metaObject[0];
 }
 
 int beNDMWLoadIntf2TextOrder_GetVTable(void) {
@@ -31,7 +31,7 @@ int beNDMWLoadIntf2TextOrder_GetVTable(void) {
     *(int *)ps = 0;
     u.vt = (int)&DAT_00524950[0];
     u.vt = (int)&DAT_0053c7b0[0];
-    temp_s0 = *(int *)&u.b[*(int *)((char *)(DAT_00586dc8[0]) + 916)];
+    temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.vt = (int)&DAT_00524950[0];
     if (ps != 0) {
         temp_v1 = *(int **)ps;
@@ -83,7 +83,7 @@ void beNDMWLoadIntf2TextOrder_InitFields(void) {
     void *temp_s1;
     igStringMetaField *temp_v0_2;
 
-    temp_s1 = (void *)(((void * *)DAT_0058be90)[0]);
+    temp_s1 = (void *)(((void * *)g_beNDMWLoadIntf2TextOrder_metaObject)[0]);
     temp_s2 = igMetaObject_GetFieldCount(temp_s1);
     igMetaObject_CreateFields(temp_s1, &DAT_004cbf78[0], 2);
     temp_v0 = (void **)(igMetaObject_FindFieldByName(temp_s1, &DAT_00510cd8[0]));

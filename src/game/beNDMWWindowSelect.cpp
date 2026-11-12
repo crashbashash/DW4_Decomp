@@ -4,12 +4,12 @@
     if ((text) == 0) { \
         tok = 0; \
     } else { \
-        if (((void * *)DAT_00586f20)[0] == 0) { \
+        if (((void * *)g_stringPool)[0] == 0) { \
             void *pool = ((void *)FUN_002eb010(0x10)); \
             if (pool != 0) pool = ((void *)StringPool_Construct(pool)); \
-            ((void * *)DAT_00586f20)[0] = pool; \
+            ((void * *)g_stringPool)[0] = pool; \
         } \
-        tok = (char *)StringPool_Intern(((void * *)DAT_00586f20)[0], (const char *)(text)); \
+        tok = (char *)StringPool_Intern(((void * *)g_stringPool)[0], (const char *)(text)); \
     } \
     StringRef held(tok); \
     StringList_AppendRetained(field, &held); }
@@ -60,7 +60,7 @@ extern "C" int DAT_0051a9c0[4];
 extern "C" int DAT_0051a9c8[4];
 extern "C" int DAT_0051a9d0[4];
 extern "C" int DAT_0051a9e0[4];
-extern "C" int DAT_00586f20[4];
+extern "C" int g_stringPool[4];
 /* Owning stack reference to a pooled string token (reference count at p[-1], chunk header at
  * p[-2]); releases the token on scope exit. */
 class StringRef {
@@ -193,12 +193,12 @@ void Gap__Bec__beNDMWStatusSelect00__vfunc_22(Sh *arg0) {
     INTERN_APPEND(arg0->f60, DAT_0051a9a8)
     INTERN_APPEND(arg0->f64, DAT_0051a9c8)
     beNDMWWindow_RunMessageScript(arg0, DAT_0051a9d0, 0xF);
-    if (((void * *)DAT_00586f20)[0] == 0) {
+    if (((void * *)g_stringPool)[0] == 0) {
         void *pool = ((void *)FUN_002eb010(0x10));
         if (pool != 0) pool = ((void *)StringPool_Construct(pool));
-        ((void * *)DAT_00586f20)[0] = pool;
+        ((void * *)g_stringPool)[0] = pool;
     }
-    t = StringPool_Intern(((void * *)DAT_00586f20)[0], (const char *)DAT_0051a9e0);
+    t = StringPool_Intern(((void * *)g_stringPool)[0], (const char *)DAT_0051a9e0);
     old = arg0->f80;
     if (old != 0) {
         int *hd = (int *)old - 2;
@@ -227,25 +227,25 @@ void Gap__Bec__beNDMWStatusSelect01__vfunc_22(beNDMWStatusSelect01 *arg0) {
     switch (arg0->_entCode) {
     case 0x1F:
     case 0x5B:
-        if (DAT_00586f20[0] == 0) {
+        if (g_stringPool[0] == 0) {
             var_v0 = FUN_002eb010(0x10);
             if (var_v0 != 0) {
                 var_v0 = StringPool_Construct(var_v0);
             }
-            DAT_00586f20[0] = var_v0;
+            g_stringPool[0] = var_v0;
         }
-        name.Assign(((char *)StringPool_Intern(DAT_00586f20[0], &DAT_0051a9f0[0])));
+        name.Assign(((char *)StringPool_Intern(g_stringPool[0], &DAT_0051a9f0[0])));
         arg0->_selectMax = 3;
         break;
     case 0x3D:
-        if (DAT_00586f20[0] == 0) {
+        if (g_stringPool[0] == 0) {
             var_v0 = FUN_002eb010(0x10);
             if (var_v0 != 0) {
                 var_v0 = StringPool_Construct(var_v0);
             }
-            DAT_00586f20[0] = var_v0;
+            g_stringPool[0] = var_v0;
         }
-        name.Assign(((char *)StringPool_Intern(DAT_00586f20[0], &DAT_0051aa08[0])));
+        name.Assign(((char *)StringPool_Intern(g_stringPool[0], &DAT_0051aa08[0])));
         arg0->_selectMax = 4;
         break;
     }
@@ -259,14 +259,14 @@ void Gap__Bec__beNDMWStatusSelect01__vfunc_22(beNDMWStatusSelect01 *arg0) {
     if (arg0->_entCode > 0) {
         beNDMWWindow_RunMessageScript(arg0, &DAT_0051a9d0[0], arg0->_entCode);
     }
-    if (DAT_00586f20[0] == 0) {
+    if (g_stringPool[0] == 0) {
         var_v0 = FUN_002eb010(0x10);
         if (var_v0 != 0) {
             var_v0 = StringPool_Construct(var_v0);
         }
-        DAT_00586f20[0] = var_v0;
+        g_stringPool[0] = var_v0;
     }
-    temp_s1 = ((char *)StringPool_Intern(DAT_00586f20[0], &DAT_0051a9e0[0]));
+    temp_s1 = ((char *)StringPool_Intern(g_stringPool[0], &DAT_0051a9e0[0]));
     temp_a0 = (int *)arg0->_infoName;
     if (temp_a0 != 0) {
         temp_a1 = temp_a0 - 2;
@@ -297,14 +297,14 @@ void Gap__Bec__beNDMWStatusSelectE0__vfunc_22(beNDMWStatusSelectE0 *arg0) {
     if (arg0->_entCode > 0) {
         beNDMWWindow_RunMessageScript(arg0, &DAT_0051a9d0[0], arg0->_entCode);
     }
-    if (DAT_00586f20[0] == 0) {
+    if (g_stringPool[0] == 0) {
         var_v0 = FUN_002eb010(0x10);
         if (var_v0 != 0) {
             var_v0 = StringPool_Construct(var_v0);
         }
-        DAT_00586f20[0] = var_v0;
+        g_stringPool[0] = var_v0;
     }
-    temp_s0 = ((int *)StringPool_Intern(DAT_00586f20[0], &DAT_0051aa58[0]));
+    temp_s0 = ((int *)StringPool_Intern(g_stringPool[0], &DAT_0051aa58[0]));
     temp_a0 = (int *)arg0->_infoName;
     if (temp_a0 != 0) {
         temp_a1 = temp_a0 - 2;
@@ -329,14 +329,14 @@ void Gap__Bec__beNDMWStatusSelectE1__vfunc_22(beNDMWStatusSelectE1 *arg0) {
     int *temp_a0;
     int *temp_s0;
 
-    if (DAT_00586f20[0] == 0) {
+    if (g_stringPool[0] == 0) {
         var_v0 = FUN_002eb010(0x10);
         if (var_v0 != 0) {
             var_v0 = StringPool_Construct(var_v0);
         }
-        DAT_00586f20[0] = var_v0;
+        g_stringPool[0] = var_v0;
     }
-    temp_s0 = (int *)StringPool_Intern(DAT_00586f20[0], &DAT_0051aa68[0]);
+    temp_s0 = (int *)StringPool_Intern(g_stringPool[0], &DAT_0051aa68[0]);
     temp_a0 = (int *)arg0->_infoName;
     if (temp_a0 != 0) {
         temp_a1 = temp_a0 - 2;

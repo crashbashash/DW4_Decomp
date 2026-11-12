@@ -1,8 +1,8 @@
-int FUN_00130310(void) {
-    if (DAT_0055ebd0[0] == 0) {
-        DAT_0055ebd0[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(DAT_00587040[0]));
+igMetaObject *FUN_00130310(void) {
+    if (g_igVisualAttribute_metaObject[0] == 0) {
+        g_igVisualAttribute_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
     }
-    return DAT_0055ebd0[0];
+    return g_igVisualAttribute_metaObject[0];
 }
 
 igMetaObject *igVisualAttribute_GetMetaObject(void)
@@ -39,7 +39,7 @@ void thunk_igVisualAttribute_GetMetaObject(void) {
     igVisualAttribute_GetMetaObject();
 }
 
-int FUN_00130430(void) {
-    return DAT_0055f468[0];
+igMetaObject *FUN_00130430(void) {
+    return g_igAttr_metaObject[0];
 }
 

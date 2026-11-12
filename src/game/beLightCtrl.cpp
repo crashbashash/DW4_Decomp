@@ -14,7 +14,7 @@ extern "C" int g_beLightCtrlInfo_metaObject[4];
 extern "C" int g_beLightCtrl_metaObject[4];
 extern "C" char DAT_00510838[];
 extern "C" void Gap__Bec__beLightCtrl__vfunc_29(beLightCtrl * p0, int p1, char * p2);
-extern "C" int DAT_00585be0[4];
+extern "C" int g_propertyNameField[4];
 struct Light {
     virtual void d0();
     virtual void d1();
@@ -89,7 +89,7 @@ int Gap__Bec__beLightCtrl__vfunc_33(beLightCtrl *arg0, beBaseInfoRam *arg1, int 
         beMessenger_GetVec3(&a, arg0->_messenger, 0);
         beMessenger_GetVec3(&b, arg0->_messenger, 1);
         beMessenger_GetVec3(&c, arg0->_messenger, 2);
-        r = (igLightSet *)igProperty_FindByName(s1->_lightSetList, DAT_00585be0[0], name);
+        r = (igLightSet *)igProperty_FindByName(s1->_lightSetList, g_propertyNameField[0], name);
         if (r != 0) {
             lp = (Light **)((igLightList *)r->_lights)->_data;
             l = *lp;

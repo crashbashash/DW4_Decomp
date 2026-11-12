@@ -20,7 +20,7 @@ int igPsx2EnvironmentMapShader_GetVTable(void) {
     FUN_0019ac20((int *)p1);
     p2 = &u.b[120];
     FUN_001ab480((int *)p2);
-    temp_s2 = *(int *)&u.b[*(int *)((char *)(DAT_00586dc8[0]) + 916)];
+    temp_s2 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.vt = &DAT_00528170[0];
     FUN_001ab400((ObjectRefWord *)p2, -1);
     FUN_0019aa90((void * *)p1, -1);
@@ -167,8 +167,8 @@ void igPsx2EnvironmentMapShader_Register(void) {
     );
 }
 
-int FUN_001ab5d0(void) {
-    return DAT_00561a98[0];
+igMetaObject *FUN_001ab5d0(void) {
+    return g_igEnvironmentMapShader2_metaObject[0];
 }
 
 void igPsx2EnvironmentMapShader_InitFields(void) {
@@ -178,7 +178,7 @@ void igPsx2EnvironmentMapShader_InitFields(void) {
     void *temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)(DAT_005624f8[0]);
+    temp_s0 = (void *)(g_igPsx2EnvironmentMapShader_metaObject[0]);
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_0048d880[0], 3);
     temp_s1 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s2)));
@@ -191,7 +191,7 @@ void igPsx2EnvironmentMapShader_InitFields(void) {
     ((igObjectRefMetaField *)temp_s1_3)->_metaObject = FUN_001351d0();
     ((igMetaField *)temp_s1_3)->_persistent = 0;
     igMetaObject_NameFields(temp_s0, &DAT_0048d890[0], &DAT_0048d8a0[0], &DAT_0048d8b0[0], temp_s2);
-    ((igMetaObject *)(DAT_005624f8[0]))->_writeProxy = (int)thunk_igEnvironmentMapShader2_GetMetaObject;
+    ((igMetaObject *)(g_igPsx2EnvironmentMapShader_metaObject[0]))->_writeProxy = (int)thunk_igEnvironmentMapShader2_GetMetaObject;
 }
 
 int FUN_001ab6c0(S_1ab6c0 *arg0, int arg1) {
@@ -202,7 +202,7 @@ int FUN_001ab6c0(S_1ab6c0 *arg0, int arg1) {
     n = arg0->f20->count;
     for (i = 0; i < n; i++) {
         s = arg0->f20->data[i]->f8;
-        s = s != 0 ? s : &DAT_004e0858[0];
+        s = s != 0 ? s : &emptyString[0];
         if (strcmp(s, arg1) == 0) {
             return i;
         }

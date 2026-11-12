@@ -21,8 +21,8 @@ extern int g_allocatorFailureStatus[4];
 extern int g_statusSucceeded[4];
 /* Vtable image of igAliasMemoryPool; the array form keeps the address load absolute. */
 extern int g_igAliasMemoryPool_vtable[4];
-extern int DAT_004fb410[4];
-extern int DAT_004fb418[4];
+extern int g_statusSucceeded[4];
+extern int g_allocatorFailureStatus[4];
 extern int DAT_004f90b0[4];
 extern int DAT_004f90b8[4];
 extern int DAT_004f90c0[4];
@@ -201,7 +201,7 @@ int igAliasMemoryPool_OwnsAllocation(void *arg0) {
     igAliasMemoryPool *s = (igAliasMemoryPool *)arg0;
     int u;
     int sp3C;
-    if (s->_isReassignable != 0) { int t = s->_poolIndex; if (t == ((P *)s->_aliasedMemoryPool)->vX()) return 1; } else { int x = FUN_002f0180(u, &sp3C).get(); if (x == DAT_004fb410[0]) { return sp3C == (int)arg0; } }
+    if (s->_isReassignable != 0) { int t = s->_poolIndex; if (t == ((P *)s->_aliasedMemoryPool)->vX()) return 1; } else { int x = FUN_002f0180(u, &sp3C).get(); if (x == g_statusSucceeded[0]) { return sp3C == (int)arg0; } }
     return 0;
 }
 

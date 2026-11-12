@@ -1,12 +1,12 @@
 void *FUN_003535b0(void) {
     bool ok;
-    if (DAT_00588be8[0] == 0) goto make;
-    ok = !!(DAT_00588be8[0]->f & 4);
+    if (g_beModelCtrlInfoDataSeq_metaObject[0] == 0) goto make;
+    ok = !!(g_beModelCtrlInfoDataSeq_metaObject[0]->_validity & 4);
     if (ok != false) goto done;
 make:
     FUN_003536e0();
 done:;
-    return DAT_00588be8[0];
+    return g_beModelCtrlInfoDataSeq_metaObject[0];
 }
 
 int beModelCtrlInfoDataSeq_GetVTable(void) {
@@ -25,7 +25,7 @@ int beModelCtrlInfoDataSeq_GetVTable(void) {
     u.vt = (int)&DAT_00537af0[0];
     q16 = (int *)&u.b[16];
     *q16 = 0;
-    t = *(int *)&u.b[*(int *)((char *)(DAT_00586dc8[0]) + 916)];
+    t = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.vt = (int)&DAT_00537af0[0];
     if (q16 != 0) {
         o = (char *)*q16;
@@ -86,7 +86,7 @@ void beModelCtrlInfoDataSeq_InitFields(void) {
     void *temp_s1;
     S_ref *temp_v0_2;
 
-    temp_s1 = (void *)(((void * *)DAT_00588be8)[0]);
+    temp_s1 = (void *)(((void * *)g_beModelCtrlInfoDataSeq_metaObject)[0]);
     temp_s2 = igMetaObject_GetFieldCount(temp_s1);
     igMetaObject_CreateFields(temp_s1, &DAT_004c54d0[0], 1);
     temp_v0 = (void **)(igMetaObject_FindFieldByName(temp_s1, &DAT_00502218[0]));

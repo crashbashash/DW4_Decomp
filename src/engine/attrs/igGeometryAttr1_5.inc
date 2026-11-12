@@ -66,7 +66,7 @@ int igGeometryAttr1_5_GetVTable(void) {
     o.f[10] = 0;
     o.vt = DAT_005238c0;
     o.f[11] = 0;
-    r = *(int *)((char *)&o + *(int *)(DAT_00586dc8[0] + 916));
+    r = *(int *)((char *)&o + *(int *)(g_objectSystem[0] + 916));
     o.vt = DAT_005238c0;
     FUN_00137260((void **)&o.f[11], -1);
     FUN_00137530((O_137530 *)&o, 0);
@@ -136,8 +136,8 @@ void thunk_igGeometryAttr1_5_GetMetaObject(void) {
     igGeometryAttr1_5_GetMetaObject();
 }
 
-int FUN_00137770(void) {
-    return DAT_0055f170[0];
+igMetaObject *FUN_00137770(void) {
+    return g_igGeometryAttr_metaObject[0];
 }
 
 void igGeometryAttr1_5_InitFields(void) {
@@ -145,7 +145,7 @@ void igGeometryAttr1_5_InitFields(void) {
     void *temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)DAT_0055f160[0];
+    temp_s0 = (void *)g_igGeometryAttr1_5_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_00486558[0], 1);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));

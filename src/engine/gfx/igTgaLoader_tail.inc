@@ -155,19 +155,19 @@ void FUN_001690d0(Arg0d0 *arg0) {
     int *s3;
     Buf860 *b;
     sp5C = 4;
-    thunk_FUN_003065f0(*(int *)((char *)(DAT_00586dc8[0]) + 56), 4, &DAT_004df350[0], &sp5C, 4, 0);
+    thunk_FUN_003065f0(*(int *)((char *)(g_objectSystem[0]) + 56), 4, &DAT_004df350[0], &sp5C, 4, 0);
     p = (P_1690d0 *)Memory_AllocateBufferDirect(20, FUN_00165d10((int *)arg0));
     if (p != 0) {
         n = sp5C;
         p->f8 = 0;
-        if (DAT_00586f20[0] == 0) {
+        if (g_stringPool[0] == 0) {
             v = FUN_002eb010(16);
             if (v != 0) {
                 v = StringPool_Construct(v);
             }
-            DAT_00586f20[0] = v;
+            g_stringPool[0] = v;
         }
-        s3 = (int *)StringPool_Intern(DAT_00586f20[0], &DAT_004df350[0]);
+        s3 = (int *)StringPool_Intern(g_stringPool[0], &DAT_004df350[0]);
         old = p->f8;
         if (old != 0) {
             int *a1 = old - 2;

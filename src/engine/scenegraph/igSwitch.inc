@@ -3,11 +3,11 @@ void FUN_001968f0(int arg0) {
     igMetaObject_CreateInstance(*(int *)0x561308, arg0);
 }
 
-int FUN_00196930(void) {
-    if (DAT_00561308[0] == 0) {
-        DAT_00561308[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(DAT_00587040[0]));
+igMetaObject *FUN_00196930(void) {
+    if (g_igSwitch_metaObject[0] == 0) {
+        g_igSwitch_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
     }
-    return DAT_00561308[0];
+    return g_igSwitch_metaObject[0];
 }
 
 igMetaObject *igSwitch_GetMetaObject(void)
@@ -30,7 +30,7 @@ int igSwitch_GetVTable(void) {
     u.vt = (int)&DAT_00528590[0];
     ps = &u.b[32];
     *(int *)ps = 0;
-    temp_s0 = *(int *)&u.b[*(int *)((char *)(DAT_00586dc8[0]) + 916)];
+    temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.vt = (int)&DAT_00528590[0];
     FUN_00196a50((struct R * *)ps, -1);
     FUN_00195a90((struct T_195a90 *)u.b, 0);
@@ -86,11 +86,11 @@ void igSwitch_InitFields(void) {
     void *temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)DAT_00561308[0];
+    temp_s0 = (void *)g_igSwitch_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_0048b218[0], 1);
     temp_s1 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s2)));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = FUN_001a4d90();
+    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_001a4d90();
     ((igRefMetaField *)temp_s1)->_construct = 1;
     igMetaObject_NameFields(temp_s0, &DAT_0048b220[0], &DAT_0048b228[0], &DAT_0048b230[0], temp_s2);
 }

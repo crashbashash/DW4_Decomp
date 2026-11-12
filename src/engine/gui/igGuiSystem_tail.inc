@@ -51,7 +51,7 @@ void FUN_004569c0(O_4569c0 *arg0, int arg1) {
         return;
     }
     temp_a0 = arg0->m->t;
-    temp_a0->f24 = DAT_004e1170[0];
+    temp_a0->f24 = g_vec4Zero[0];
     temp_a0->f28 = DAT_004e1174[0];
     temp_a0->f32 = DAT_004e1178[0];
     temp_a0->f36 = DAT_004e117c[0];

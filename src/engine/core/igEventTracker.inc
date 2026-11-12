@@ -3,11 +3,11 @@ void * FUN_002c5780(int arg0) {
     return (void *)(igMetaObject_CreateInstance((CreateMeta *)(*(int *)0x586480), (MemoryPool *)arg0));
 }
 
-int FUN_002c57c0(void) {
-    if (DAT_00586480[0] == 0) {
-        DAT_00586480[0] = ((int)igMetaObject_Create(((int)Memory_GetAllocatorBySelector(DAT_00587040[0]))));
+igMetaObject *FUN_002c57c0(void) {
+    if (g_igEventTracker_metaObject[0] == 0) {
+        g_igEventTracker_metaObject[0] = (igMetaObject *)igMetaObject_Create(((int)Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0])));
     }
-    return DAT_00586480[0];
+    return g_igEventTracker_metaObject[0];
 }
 
 igMetaObject *igEventTracker_GetMetaObject(void)
@@ -39,7 +39,7 @@ int igEventTracker_GetVTable(void) {
     obj.w20 = 0;
     obj.w21 = 0;
     obj.w23 = 0;
-    t = *(int *)((char *)&obj + *(int *)((char *)(((void * *)DAT_00586dc8)[0]) + 916));
+    t = *(int *)((char *)&obj + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
     obj.vt = &DAT_00530420[0];
     FUN_002ba7f0((ObjectRefWord *)&obj.w23, -1);
     FUN_002b86c0((void **)&obj.w21, -1);
@@ -83,7 +83,7 @@ void thunk_igEventTracker_GetMetaObject(void) {
 }
 
 void igEventTracker_InitFields(void) {
-    int temp_s0;
+    igMetaObject *temp_s0;
     int temp_s1;
     igMetaField *temp_s2;
     igMetaField *temp_s2_10;
@@ -104,7 +104,7 @@ void igEventTracker_InitFields(void) {
     igMetaField *temp_v0_5;
     igMetaField *temp_v0_6;
 
-    temp_s0 = DAT_00586480[0];
+    temp_s0 = g_igEventTracker_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
     igMetaObject_CreateFields((igMetaObject *)temp_s0, (igMetaField * (**)(void *))&DAT_004c0d30[0], 0x21);
     FUN_0030e9b0((void **)(((igMetaField *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 1))), -1);
@@ -114,37 +114,37 @@ void igEventTracker_InitFields(void) {
     FUN_0030e9b0((void **)(((igMetaField *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 5))), -1);
     ((igMetaField *)((igMetaField *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 8)))->_persistent = 0;
     temp_s2 = ((igMetaField *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 9));
-    ((igObjectRefMetaField *)temp_s2)->_metaObject = FUN_002b8d90();
+    ((igObjectRefMetaField *)temp_s2)->_metaObject = (int)FUN_002b8d90();
     ((igRefMetaField *)temp_s2)->_construct = 1;
     temp_s2_2 = ((igMetaField *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0xA));
-    ((igObjectRefMetaField *)temp_s2_2)->_metaObject = FUN_002b8d90();
+    ((igObjectRefMetaField *)temp_s2_2)->_metaObject = (int)FUN_002b8d90();
     ((igRefMetaField *)temp_s2_2)->_construct = 1;
     temp_s2_3 = ((igMetaField *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0xB));
-    ((igObjectRefMetaField *)temp_s2_3)->_metaObject = FUN_002b8d90();
+    ((igObjectRefMetaField *)temp_s2_3)->_metaObject = (int)FUN_002b8d90();
     ((igRefMetaField *)temp_s2_3)->_construct = 1;
     temp_s2_4 = ((igMetaField *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0xC));
-    ((igObjectRefMetaField *)temp_s2_4)->_metaObject = FUN_002b8d90();
+    ((igObjectRefMetaField *)temp_s2_4)->_metaObject = (int)FUN_002b8d90();
     ((igRefMetaField *)temp_s2_4)->_construct = 1;
     temp_s2_5 = ((igMetaField *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0xD));
-    ((igObjectRefMetaField *)temp_s2_5)->_metaObject = FUN_002b8d90();
+    ((igObjectRefMetaField *)temp_s2_5)->_metaObject = (int)FUN_002b8d90();
     ((igRefMetaField *)temp_s2_5)->_construct = 1;
     temp_s2_6 = ((igMetaField *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0xE));
-    ((igObjectRefMetaField *)temp_s2_6)->_metaObject = FUN_002b8d90();
+    ((igObjectRefMetaField *)temp_s2_6)->_metaObject = (int)FUN_002b8d90();
     ((igRefMetaField *)temp_s2_6)->_construct = 1;
     temp_s2_7 = ((igMetaField *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0xF));
-    ((igObjectRefMetaField *)temp_s2_7)->_metaObject = FUN_002cc7e0();
+    ((igObjectRefMetaField *)temp_s2_7)->_metaObject = (int)FUN_002cc7e0();
     ((igRefMetaField *)temp_s2_7)->_construct = 1;
     temp_s2_8 = ((igMetaField *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0x10));
-    ((igObjectRefMetaField *)temp_s2_8)->_metaObject = FUN_002c1fa0();
+    ((igObjectRefMetaField *)temp_s2_8)->_metaObject = (int)FUN_002c1fa0();
     ((igRefMetaField *)temp_s2_8)->_construct = 1;
     temp_s2_9 = ((igMetaField *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0x11));
-    ((igObjectRefMetaField *)temp_s2_9)->_metaObject = FUN_002cace0();
+    ((igObjectRefMetaField *)temp_s2_9)->_metaObject = (int)FUN_002cace0();
     ((igRefMetaField *)temp_s2_9)->_construct = 1;
     temp_s2_10 = ((igMetaField *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0x12));
-    ((igObjectRefMetaField *)temp_s2_10)->_metaObject = FUN_002ca8f0();
+    ((igObjectRefMetaField *)temp_s2_10)->_metaObject = (int)FUN_002ca8f0();
     ((igRefMetaField *)temp_s2_10)->_construct = 1;
     temp_s2_11 = ((igMetaField *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0x14));
-    ((igObjectRefMetaField *)temp_s2_11)->_metaObject = FUN_002cc630();
+    ((igObjectRefMetaField *)temp_s2_11)->_metaObject = (int)FUN_002cc630();
     ((igRefMetaField *)temp_s2_11)->_construct = 1;
     temp_s2_11->_persistent = 0;
     { igIntArrayMetaField *q = (igIntArrayMetaField *)((igMetaField *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0x15)); q->_num = 0x20; }
@@ -172,7 +172,7 @@ void igEventTracker_InitFields(void) {
     FUN_002ea4b0((void **)temp_v0_6, -1);
     temp_v0_6->_persistent = 0;
     temp_s2_12 = ((igMetaField *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0x20));
-    ((igObjectRefMetaField *)temp_s2_12)->_metaObject = FUN_002ba690();
+    ((igObjectRefMetaField *)temp_s2_12)->_metaObject = (int)FUN_002ba690();
     temp_s2_12->_persistent = 0;
     igMetaObject_NameFields((igMetaObject *)temp_s0, (const char **)&DAT_004c0dc0[0], (igMetaField ***)&DAT_004c0e50[0], &DAT_004c0ee0[0], temp_s1);
 }

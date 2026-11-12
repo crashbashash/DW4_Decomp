@@ -1,8 +1,8 @@
-int FUN_00152e80(void) {
-    if (DAT_005604f8[0] == 0) {
-        DAT_005604f8[0] = (int)igMetaObject_Create(Memory_GetAllocatorBySelector(DAT_00587040[0]));
+igMetaObject *FUN_00152e80(void) {
+    if (g_igPsx2ScissorExt_metaObject[0] == 0) {
+        g_igPsx2ScissorExt_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
     }
-    return DAT_005604f8[0];
+    return g_igPsx2ScissorExt_metaObject[0];
 }
 
 igMetaObject *igPsx2ScissorExt_GetMetaObject(void)
@@ -27,7 +27,7 @@ int igPsx2ScissorExt_GetVTable(void) {
     q2 = &u.b[16];
     *(int *)q2 = 0;
     u.vt = (int)&DAT_00525480[0];
-    temp_s0 = *(int *)&u.b[*(int *)((char *)(DAT_00586dc8[0]) + 916)];
+    temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.vt = (int)&DAT_00530a10[0];
     if (q2 != 0) {
         a = *(igObject **)q2;
@@ -72,8 +72,8 @@ void igPsx2ScissorExt_Register(void) {
     );
 }
 
-int FUN_00153090(void) {
-    return DAT_0055faf8[0];
+igMetaObject *FUN_00153090(void) {
+    return g_igScissorExt_metaObject[0];
 }
 
 void igPsx2ScissorExt_InitFields(void) {
@@ -81,7 +81,7 @@ void igPsx2ScissorExt_InitFields(void) {
     void *temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)DAT_005604f8[0];
+    temp_s0 = (void *)g_igPsx2ScissorExt_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_00489e10[0], 6);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));

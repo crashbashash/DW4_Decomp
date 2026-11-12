@@ -1,8 +1,8 @@
-int FUN_002265e0(void) {
-    if (DAT_0056d8c8[0] == 0) {
-        DAT_0056d8c8[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(DAT_00587040[0]));
+igMetaObject *FUN_002265e0(void) {
+    if (g_igLogInterface_metaObject[0] == 0) {
+        g_igLogInterface_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
     }
-    return DAT_0056d8c8[0];
+    return g_igLogInterface_metaObject[0];
 }
 
 igMetaObject *igLogInterface_GetMetaObject(void)
@@ -18,7 +18,7 @@ int igLogInterface_GetVTable(void) {
 
     igObject_InitHeader(u.b);
     u.w[0] = (int)(&DAT_0052bfa0[0]);
-    return *(int *)&u.b[*(int *)((char *)(DAT_00586dc8[0]) + 916)];
+    return *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
 }
 
 void FUN_002266c0(void)
@@ -51,7 +51,7 @@ void igLogInterface_InitFields(void) {
     int temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)DAT_0056d8c8[0];
+    temp_s0 = (void *)g_igLogInterface_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_00497c60[0], 1);
     igMetaObject_NameFields(temp_s0, &DAT_00497c68[0], &DAT_00497c70[0], &DAT_00497c78[0], temp_s1);

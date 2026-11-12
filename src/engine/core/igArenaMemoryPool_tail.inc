@@ -1,9 +1,9 @@
 void **FUN_002cdab0(int arg0) {
     void **var_s0;
 
-    if (*DAT_00586dc8[0] != 0) {
+    if (*g_objectSystem[0] != 0) {
         FUN_002cdcf0();
-        var_s0 = (void **)(((void **)igMetaObject_CreateInstance((CreateMeta *)DAT_00586a88[0], (MemoryPool *)arg0)));
+        var_s0 = (void **)(((void **)igMetaObject_CreateInstance((CreateMeta *)g_igArenaMemoryPool_metaObject[0], (MemoryPool *)arg0)));
     } else {
         var_s0 = (void **)(((void **)FUN_002f0040(0xD0, 0, arg0)));
         if (var_s0 != 0) {
@@ -17,7 +17,7 @@ void **FUN_002cdab0(int arg0) {
 
 int Gap__Core__igArenaMemoryPool__vfunc_21(int arg0, int arg1) {
     int temp_v0;
-    if (*DAT_00586dc8[0] != 0) {
+    if (*g_objectSystem[0] != 0) {
         FUN_002cdcf0();
         return igObject_CloneViaMetadata((void **)arg0, arg1);
     }
@@ -47,7 +47,7 @@ int igArenaMemoryPool_GetVTable(void) {
     S_ref *r;
 
     FUN_0031eb90((igArenaMemoryPool *)u.b);
-    temp_s0 = *(int *)&u.b[*(int *)((char *)(((void * *)DAT_00586dc8)[0]) + 916)];
+    temp_s0 = *(int *)&u.b[*(int *)((char *)(((void * *)g_objectSystem)[0]) + 916)];
     u.vt = (int)&DAT_00531030[0];
     p = (S_ref *)&u.b[176];
     if (p != 0) {

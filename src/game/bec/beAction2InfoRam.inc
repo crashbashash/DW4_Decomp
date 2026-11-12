@@ -1,9 +1,9 @@
-G_36c680 *FUN_0036c680(void) {
-    G_36c680 *g = DAT_00589f48[0];
+igMetaObject *FUN_0036c680(void) {
+    igMetaObject *g = g_beAction2InfoRam_metaObject[0];
     int t;
-    if (!g || !(t = (g->f & 4) != 0))
+    if (!g || !(t = (g->_validity & 4) != 0))
         FUN_0036c810();
-    return DAT_00589f48[0];
+    return g_beAction2InfoRam_metaObject[0];
 }
 
 int beAction2InfoRam_GetVTable(void) {
@@ -21,7 +21,7 @@ int beAction2InfoRam_GetVTable(void) {
     *(int *)&u.b[48] = 0;
     *(int *)&u.b[52] = 0;
     *(int *)&u.b[56] = 0;
-    t = *(int *)&u.b[*(int *)((char *)(DAT_00586dc8[0]) + 916)];
+    t = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.vt = (int)&DAT_00534350[0];
     FUN_0036c790((void **)(&u.b[56]), (short)(-1));
     FUN_001aa310(&u.b[52], -1);
@@ -84,11 +84,11 @@ void beAction2InfoRam_InitFields(void) {
     void *temp_s1;
     int temp_s0;
 
-    temp_s1 = (void *)((int *)DAT_00589f48)[0];
+    temp_s1 = (void *)g_beAction2InfoRam_metaObject[0];
     temp_s0 = igMetaObject_GetFieldCount(temp_s1);
     igMetaObject_CreateFields(temp_s1, &DAT_004c8060[0], 4);
     temp_s2 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0));
-    ((igObjectRefMetaField *)temp_s2)->_metaObject = FUN_0034fd40();
+    ((igObjectRefMetaField *)temp_s2)->_metaObject = (int)FUN_0034fd40();
     temp_s2_2 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 1));
     ((igObjectRefMetaField *)temp_s2_2)->_metaObject = FUN_001a5fe0();
     ((igRefMetaField *)temp_s2_2)->_construct = 1;
@@ -96,7 +96,7 @@ void beAction2InfoRam_InitFields(void) {
     ((igObjectRefMetaField *)temp_s2_3)->_metaObject = FUN_001aa5c0();
     ((igRefMetaField *)temp_s2_3)->_construct = 1;
     temp_s2_4 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 3));
-    ((igObjectRefMetaField *)temp_s2_4)->_metaObject = FUN_0036c2e0();
+    ((igObjectRefMetaField *)temp_s2_4)->_metaObject = (int)FUN_0036c2e0();
     igMetaObject_NameFields(temp_s1, &DAT_004c8070[0], &DAT_004c8080[0], &DAT_004c8090[0], temp_s0);
 }
 

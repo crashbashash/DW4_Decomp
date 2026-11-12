@@ -1,5 +1,5 @@
-int Gap__Attrs__igViewportAttr__vfunc_22(void) {
-    return DAT_0055ebd8[0];
+igMetaObject *Gap__Attrs__igViewportAttr__vfunc_22(void) {
+    return g_igViewportAttr_metaObject[0];
 }
 
 void Gap__Attrs__igViewportAttr__vfunc_32(igViewportAttr *arg0, int arg1, int arg2, int arg3, int arg4, float fparg0, float fparg1) {

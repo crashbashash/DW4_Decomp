@@ -15,15 +15,17 @@ extern "C" float __floatdisf(long long);
 extern "C" int igInsightCore_AddInfo(int insight, int info);
 extern "C" void Gap__Bec__beSystem__vfunc_21(beSystem *self, int unusedArg);
 extern "C" void Gap__Bec__beSystem__vfunc_22(beSystem *self, int unusedArg);
-struct GlobalContextRecord { char pad0[8]; char f8; char pad1[47]; igObject *f56; igObject *f60; igObject *f64; };
+/* The engine-wide context object. Of its members only the two allocator references retargeted
+ * before a stage directory is requested are named. */
+struct GlobalContextRecord { char pad0[8]; char f8; char pad1[47]; igObject *f56; igObject *allocator60; igObject *allocator64; };
 extern "C" int igObject_Destroy(igObject *);
 extern "C" void *igObject_GetAllocator(beSystem *);
 extern "C" int DAT_004c22e8[4];
-extern "C" int DAT_0050fb10[4];
-extern "C" struct GlobalContextRecord *DAT_00586dd0[4];
-extern "C" int DAT_00586f20[4];
+extern "C" int ndmw_igb[4];
+extern "C" struct GlobalContextRecord *g_globalContext[4];
+extern "C" int g_stringPool[4];
 extern "C" int DAT_00587060[4];
-extern "C" int DAT_00587108[4];
+extern "C" int g_ndmwAllocatorSelector[4];
 extern "C" unsigned char GPR_00554c14;
 extern "C" void Gap__Bec__beSystem__vfunc_23(beSystem *arg0);
 extern "C" int g_beSystem_metaObject[4];
@@ -31,13 +33,6 @@ extern "C" void Gap__Bec__beSystem__vfunc_26(beSystem *arg0);
 /* Frame clock and staged-directory publication. */
 
 
-/* The engine-wide context object. Only the members this update touches are named: the two
- * allocator references that are retargeted before a stage directory is requested. */
-struct GlobalContextRecord_3a0020 {
-    char unknown0[60];
-    igObject *allocator60;
-    igObject *allocator64;
-};
 /* Header in front of every interned string token: owning chunk, then a full 32-bit reference
  * count. */
 typedef struct StringTokenHeader {
@@ -45,15 +40,14 @@ typedef struct StringTokenHeader {
     int refCount;
 } StringTokenHeader;
 extern "C" int ndmw_igb[4];
-extern "C" struct GlobalContextRecord_3a0020 *g_globalContext[4];
 extern "C" int g_stringPool[4];
 extern "C" int g_ndmwAllocatorSelector[4];
 extern "C" int g_defaultAllocatorSelector[4];
-extern "C" int FUN_00308c80(struct GlobalContextRecord_3a0020 *);
-extern "C" igDirectory *FUN_003092f0(struct GlobalContextRecord_3a0020 *, int name);
-extern "C" int FUN_00309740(struct GlobalContextRecord_3a0020 *, int directory);
-extern "C" int FUN_00309750(struct GlobalContextRecord_3a0020 *, int name);
-extern "C" int FUN_00308e00(struct GlobalContextRecord_3a0020 *);
+extern "C" int FUN_00308c80(struct GlobalContextRecord *);
+extern "C" igDirectory *FUN_003092f0(struct GlobalContextRecord *, int name);
+extern "C" int FUN_00309740(struct GlobalContextRecord *, int directory);
+extern "C" int FUN_00309750(struct GlobalContextRecord *, int name);
+extern "C" int FUN_00308e00(struct GlobalContextRecord *);
 extern "C" void Gap__Bec__beSystem__vfunc_27(beSystem *self);
 struct S { char p[44]; bool a; bool b; };
 extern "C" int FUN_003a0540(S *s);
@@ -92,14 +86,14 @@ void Gap__Bec__beSystem__vfunc_23(beSystem *arg0) {
     igObject *a3;
     arg0->_isFirstTime = 0;
     arg0->_isActive = 1;
-    if (DAT_00586f20[0] == 0) {
+    if (g_stringPool[0] == 0) {
         var_v0 = FUN_002eb010(0x10);
         if (var_v0 != 0) {
             var_v0 = StringPool_Construct(var_v0);
         }
-        DAT_00586f20[0] = var_v0;
+        g_stringPool[0] = var_v0;
     }
-    temp_s0 = (int *)StringPool_Intern(DAT_00586f20[0], &DAT_0050fb10[0]);
+    temp_s0 = (int *)StringPool_Intern(g_stringPool[0], &ndmw_igb[0]);
     temp_v1 = (int *)arg0->_nextStage;
     if (temp_v1 != 0) {
         temp_a1 = temp_v1 - 2;
@@ -119,50 +113,50 @@ void Gap__Bec__beSystem__vfunc_23(beSystem *arg0) {
     }
     arg0->_bootDirectory = 0;
     DAT_004c22e8[0] = 0x186A0;
-    DAT_00586dd0[0]->f8 = 0;
+    g_globalContext[0]->f8 = 0;
     al = igObject_GetAllocator(arg0);
     if (GPR_00554c14 != 0) {
         al = (void *)(int)al;
     } else {
-        al = Memory_GetAllocatorBySelector(DAT_00587108[0]);
+        al = Memory_GetAllocatorBySelector(g_ndmwAllocatorSelector[0]);
     }
-    r = DAT_00586dd0[0];
+    r = g_globalContext[0];
     if (al != 0) {
         ((igObject *)al)->_refCount = (int)((igObject *)al)->_refCount + 1;
     }
-    a = r->f64;
+    a = r->allocator64;
     if (a != 0) {
         a->_refCount = (int)a->_refCount - 1;
         if (((unsigned long long)((long long)(int)a->_refCount << 0x29) >> 0x29) == 0) {
             igObject_Destroy(a);
         }
     }
-    r->f64 = (igObject *)al;
+    r->allocator64 = (igObject *)al;
     al2 = igObject_GetAllocator(arg0);
     if (GPR_00554c14 != 0) {
         al2 = (void *)(int)al2;
     } else {
-        al2 = Memory_GetAllocatorBySelector(DAT_00587108[0]);
+        al2 = Memory_GetAllocatorBySelector(g_ndmwAllocatorSelector[0]);
     }
-    r2 = DAT_00586dd0[0];
+    r2 = g_globalContext[0];
     if (al2 != 0) {
         ((igObject *)al2)->_refCount = (int)((igObject *)al2)->_refCount + 1;
     }
-    a2 = r2->f60;
+    a2 = r2->allocator60;
     if (a2 != 0) {
         a2->_refCount = (int)a2->_refCount - 1;
         if (((unsigned long long)((long long)(int)a2->_refCount << 0x29) >> 0x29) == 0) {
             igObject_Destroy(a2);
         }
     }
-    r2->f60 = (igObject *)al2;
+    r2->allocator60 = (igObject *)al2;
     al2 = igObject_GetAllocator(arg0);
     if (GPR_00554c14 != 0) {
         al2 = (void *)(int)al2;
     } else {
         al2 = Memory_GetAllocatorBySelector(DAT_00587060[0]);
     }
-    r = DAT_00586dd0[0];
+    r = g_globalContext[0];
     if (al2 != 0) {
         ((igObject *)al2)->_refCount = (int)((igObject *)al2)->_refCount + 1;
     }
@@ -201,10 +195,10 @@ void Gap__Bec__beSystem__vfunc_27(beSystem *self) {
     void *ndmwAlloc60;
     void *defaultAlloc64;
     void *defaultAlloc60;
-    struct GlobalContextRecord_3a0020 *ndmwCtx64;
-    struct GlobalContextRecord_3a0020 *ndmwCtx60;
-    struct GlobalContextRecord_3a0020 *defaultCtx64;
-    struct GlobalContextRecord_3a0020 *defaultCtx60;
+    struct GlobalContextRecord *ndmwCtx64;
+    struct GlobalContextRecord *ndmwCtx60;
+    struct GlobalContextRecord *defaultCtx64;
+    struct GlobalContextRecord *defaultCtx60;
     igObject *oldRef;
     igDirectory *directory;
     igObjectList *infos;

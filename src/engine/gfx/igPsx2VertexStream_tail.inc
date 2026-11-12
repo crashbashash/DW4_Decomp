@@ -22,7 +22,7 @@ int igPsx2VertexStream_GetVTable(void) {
     q0 = (S_ref *)&u.b[20];
     *(int *)q0 = 0;
     u.vt = (int)&DAT_005250b0[0];
-    temp_s0 = *(int *)&u.b[*(int *)((char *)(DAT_00586dc8[0]) + 916)];
+    temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.vt = (int)&DAT_005263a0[0];
     if (q0 != 0) {
         q0 = *(S_ref **)q0;
@@ -70,8 +70,8 @@ void igPsx2VertexStream_Register(void) {
     );
 }
 
-int FUN_001520e0(void) {
-    return DAT_0055fa10[0];
+igMetaObject *FUN_001520e0(void) {
+    return g_igVertexStream_metaObject[0];
 }
 
 void igPsx2VertexStream_InitFields(void) {
@@ -81,7 +81,7 @@ void igPsx2VertexStream_InitFields(void) {
     void *temp_s1_2;
     void *temp_s0;
 
-    temp_s0 = (void *)DAT_00560420[0];
+    temp_s0 = (void *)g_igPsx2VertexStream_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_00489c60[0], 0xA);
     FUN_002d3890(igMetaObject_GetFieldAt(temp_s0, temp_s2), 1);

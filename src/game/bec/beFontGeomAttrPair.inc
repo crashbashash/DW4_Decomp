@@ -5,13 +5,13 @@ void FUN_003624f0(int arg0) {
 
 void *FUN_00362530(void) {
     bool ok;
-    if (DAT_005896d8[0] == 0) goto make;
-    ok = !!(DAT_005896d8[0]->f & 4);
+    if (g_beFontGeomAttrPair_metaObject[0] == 0) goto make;
+    ok = !!(g_beFontGeomAttrPair_metaObject[0]->_validity & 4);
     if (ok != false) goto done;
 make:
     FUN_00362690();
 done:;
-    return DAT_005896d8[0];
+    return g_beFontGeomAttrPair_metaObject[0];
 }
 
 int beFontGeomAttrPair_GetVTable(void) {
@@ -33,7 +33,7 @@ int beFontGeomAttrPair_GetVTable(void) {
     *q1 = 0;
     q2 = (S_ref *)&u.b[16];
     *(int *)q2 = 0;
-    temp_s2 = *(int *)&u.b[*(int *)((char *)(DAT_00586dc8[0]) + 916)];
+    temp_s2 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.vt = (int)(&DAT_005358e0[0]);
     if (q2 != 0) {
         q2 = *(S_ref **)q2;
@@ -101,7 +101,7 @@ void beFontGeomAttrPair_InitFields(void) {
     void *temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)((int *)DAT_005896d8)[0];
+    temp_s0 = (void *)g_beFontGeomAttrPair_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_004c6e28[0], 3);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 2));

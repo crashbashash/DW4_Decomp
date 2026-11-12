@@ -1,16 +1,16 @@
-int FUN_0033efe0(void) {
-    if (((int *)DAT_00587a48)[0] == 0) {
-        ((int *)DAT_00587a48)[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(DAT_00587040[0]));
+igMetaObject *FUN_0033efe0(void) {
+    if (g_beWeaponSeqDataList_metaObject[0] == 0) {
+        g_beWeaponSeqDataList_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
     }
-    return ((int *)DAT_00587a48)[0];
+    return g_beWeaponSeqDataList_metaObject[0];
 }
 
 void *FUN_0033f030(void) {
-    struct G *g = DAT_00587a48[0];
-    if (!g || ((g->f & 4) != 0) == false) {
+    igMetaObject *g = g_beWeaponSeqDataList_metaObject[0];
+    if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_0033f0c0();
     }
-    return DAT_00587a48[0];
+    return g_beWeaponSeqDataList_metaObject[0];
 }
 
 int beWeaponSeqDataList_GetVTable(void) {
@@ -18,7 +18,7 @@ int beWeaponSeqDataList_GetVTable(void) {
 
     igObject_InitHeader(u.b);
     u.vt = (int)&DAT_00539ce0[0];
-    return *(int *)&u.b[*(int *)((char *)(DAT_00586dc8[0]) + 916)];
+    return *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
 }
 
 void FUN_0033f0c0(void)

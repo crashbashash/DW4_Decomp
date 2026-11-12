@@ -201,14 +201,14 @@ void FUN_0032e130(MediaPathFields *self, int index, char **path) {
     }
     {
         row = &self->handles->rows[index];
-        if ((*(int *)DAT_00586f20) == 0) {
+        if ((*(int *)g_stringPool) == 0) {
             v = ((int)FUN_002eb010(16));
             if (v != 0) {
                 v = ((int)StringPool_Construct((struct S_2eadf0 *)v));
             }
-            (*(int *)DAT_00586f20) = v;
+            (*(int *)g_stringPool) = v;
         }
-        interned = ((char *)StringPool_Intern((StringPool *)((*(int *)DAT_00586f20)), (const char *)text));
+        interned = ((char *)StringPool_Intern((StringPool *)((*(int *)g_stringPool)), (const char *)text));
         if (row->name != 0) {
             int *hdr = (int *)row->name - 2;
             int r = ((int *)row->name)[-1] - 1;

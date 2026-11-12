@@ -1,7 +1,7 @@
 #include "dw4/reflected.h"
-#define APPENDSTR(list, text) { const char *tok; if ((text) == 0) { tok = 0; } else { if (DAT_00586f20[0] == 0) { int pool = FUN_002eb010(0x10); if (pool != 0) pool = StringPool_Construct(pool); DAT_00586f20[0] = pool; } tok = (const char *)StringPool_Intern(DAT_00586f20[0], (void *)(text)); } StringList_AppendRetained(list, StringRef(tok)); }
+#define APPENDSTR(list, text) { const char *tok; if ((text) == 0) { tok = 0; } else { if (g_stringPool[0] == 0) { int pool = FUN_002eb010(0x10); if (pool != 0) pool = StringPool_Construct(pool); g_stringPool[0] = pool; } tok = (const char *)StringPool_Intern(g_stringPool[0], (void *)(text)); } StringList_AppendRetained(list, StringRef(tok)); }
 #define DEREF(o) if (o) { (o)->rc = (o)->rc - 1; if (((unsigned long long)((long long)(o)->rc << 0x29) >> 0x29) == 0) igObject_Destroy(o); }
-#define NEWWIN(kind, w, ctor, code) int alloc; int a; alloc = ((int)igObject_GetAllocator(self)); a = GPR_00554c14 != 0 ? alloc : ((int)Memory_GetAllocatorBySelector(DAT_00587110[0])); igSmartPointer<kind> w((kind *)ctor(a)); beNDMWWindow_BindContext(w.p, self, self->_insight, self->_playerNo, code); ObjectList_AppendRetained(self->_subWindow, w.p);
+#define NEWWIN(kind, w, ctor, code) int alloc; int a; alloc = ((int)igObject_GetAllocator(self)); a = GPR_00554c14 != 0 ? alloc : ((int)Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0])); igSmartPointer<kind> w((kind *)ctor(a)); beNDMWWindow_BindContext(w.p, self, self->_insight, self->_playerNo, code); ObjectList_AppendRetained(self->_subWindow, w.p);
 #define INC(l, n) { int ix = n; int cnt; int *dp; int *pp; int nv; dp = (int *)(l)->_data; pp = &dp[ix]; cnt = (l)->_count; nv = *pp + 1; if (cnt != 0 && ix < cnt) *pp = nv; }
 #define CEILD(dst, e) { int m = (e); int r = (m - 45) % 5; int q = (m - 45 - r) / 5; dst = q + (r != 0); }
 #define CNT ((igObjectList *)self->_subWindow)->_count
@@ -10,15 +10,15 @@
 #define LCNT(l) (((igObjectList *)(l))->_count)
 #define LDAT(l) ((int *)((igObjectList *)(l))->_data)
 #define REL(o) { igObject *rr = (o); if (rr != 0) { *(int *)&rr->_refCount = *(int *)&rr->_refCount - 1; if (((unsigned long long)((long long)*(int *)&rr->_refCount << 0x29) >> 0x29) == 0) { igObject_Destroy(rr); } } }
-#define FINDWINV(w, i) { w = 0; i = 0; if (0 < LCNT(arg0->_subWindow)) { do { beNDMWStatusCtrlD0 *c = (beNDMWStatusCtrlD0 *)((int *)((igObjectList *)*(int *)&arg0->_subWindow)->_data)[i]; if (c != 0 && igObject_IsKindOf(c, DAT_0058af98[0]) != 0) { w = c; } else { w = 0; } if (w != 0) break; i++; } while (i < LCNT(arg0->_subWindow)); } }
-#define FINDWIN(w, i) { w = 0; i = 0; if (0 < LCNT(((beNDMWShopCtrl30 *)arg0)->_subWindow)) { do { beNDMWStatusCtrlD0 *c = (beNDMWStatusCtrlD0 *)LDAT(arg0->_subWindow)[i]; if (c != 0 && igObject_IsKindOf(c, DAT_0058af98[0]) != 0) { w = c; } else { w = 0; } if (w != 0) break; i++; } while (i < LCNT(arg0->_subWindow)); } }
+#define FINDWINV(w, i) { w = 0; i = 0; if (0 < LCNT(arg0->_subWindow)) { do { beNDMWStatusCtrlD0 *c = (beNDMWStatusCtrlD0 *)((int *)((igObjectList *)*(int *)&arg0->_subWindow)->_data)[i]; if (c != 0 && igObject_IsKindOf(c, g_beNDMWStatusCtrlD0_metaObject[0]) != 0) { w = c; } else { w = 0; } if (w != 0) break; i++; } while (i < LCNT(arg0->_subWindow)); } }
+#define FINDWIN(w, i) { w = 0; i = 0; if (0 < LCNT(((beNDMWShopCtrl30 *)arg0)->_subWindow)) { do { beNDMWStatusCtrlD0 *c = (beNDMWStatusCtrlD0 *)LDAT(arg0->_subWindow)[i]; if (c != 0 && igObject_IsKindOf(c, g_beNDMWStatusCtrlD0_metaObject[0]) != 0) { w = c; } else { w = 0; } if (w != 0) break; i++; } while (i < LCNT(arg0->_subWindow)); } }
 #define RELS(o) { char *rs = (o); if (rs != 0) { int *hd = (int *)rs - 2; int rc = hd[1] - 1; hd[1] = rc; if (rc == 0) { StringChunk_ReleaseHeader(hd[0], hd); } } }
-#define FINDWIN_429630(w, i) { w = 0; i = 0; if (0 < LCNT(((beNDMWShopCtrl30 *)arg0)->_subWindow)) { do { beNDMWWindow *c = (beNDMWWindow *)LDAT(arg0->_subWindow)[i]; if (c != 0 && igObject_IsKindOf(c, DAT_0058af98[0]) != 0) { w = c; } else { w = 0; } if (w != 0) break; i++; } while (i < LCNT(arg0->_subWindow)); } }
+#define FINDWIN_429630(w, i) { w = 0; i = 0; if (0 < LCNT(((beNDMWShopCtrl30 *)arg0)->_subWindow)) { do { beNDMWWindow *c = (beNDMWWindow *)LDAT(arg0->_subWindow)[i]; if (c != 0 && igObject_IsKindOf(c, g_beNDMWStatusCtrlD0_metaObject[0]) != 0) { w = c; } else { w = 0; } if (w != 0) break; i++; } while (i < LCNT(arg0->_subWindow)); } }
 #include "dw4/igSmartPointer.h"
 #define INTERN_APPEND(lst, text) { char *tok = U::InternStr((char *)(text)); StringList_AppendRetained(lst, StringRef(tok)); }
 #define ALLOC(a, self) { \
     a = igObject_GetAllocator(self); \
-    a = GPR_00554c14 ? a : Memory_GetAllocatorBySelector(DAT_00587110[0]); }
+    a = GPR_00554c14 ? a : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]); }
 #define REL_42a2e0(o) { igObject *rr = (o); if (rr != 0) { rr->_refCount = rr->_refCount - 1; if ((rr->_refCount & 0x7FFFFF) == 0) { igObject_Destroy(rr); } } }
 #define VCNT(l) ((l)->_count)
 #define SUBCNT(s) (((beNDMWWindowList *)(s)->_subWindow)->_count)
@@ -27,8 +27,8 @@
     int n = L->_count; int k = 0; \
     if (0 < n) { int off = 0; do { \
         char **e = (char **)((int)L->_data + off); \
-        if (DAT_00586f20[0] == 0) { int pool = FUN_002eb010(0x10); if (pool != 0) pool = StringPool_Construct(pool); DAT_00586f20[0] = pool; } \
-        char *nw = StringPool_Intern(DAT_00586f20[0], 0); char *old = *e; \
+        if (g_stringPool[0] == 0) { int pool = FUN_002eb010(0x10); if (pool != 0) pool = StringPool_Construct(pool); g_stringPool[0] = pool; } \
+        char *nw = StringPool_Intern(g_stringPool[0], 0); char *old = *e; \
         if (old != 0) { int *hd = (int *)old - 2; int cnt = ((int *)old)[-1] - 1; ((int *)old)[-1] = cnt; if (cnt == 0) StringChunk_ReleaseHeader(*hd, hd); } \
         k += 1; *e = nw; off += 4; \
     } while (k < n); } }
@@ -42,17 +42,17 @@
     n = L->_count; k = 0; \
     if (0 < n) { off = 0; do { \
         e = (char **)((int)L->_data + off); \
-        if (DAT_00586f20[0] == 0) { int pool = FUN_002eb010(0x10); if (pool != 0) pool = StringPool_Construct(pool); DAT_00586f20[0] = pool; } \
-        nw = StringPool_Intern(DAT_00586f20[0], 0); old = *e; \
+        if (g_stringPool[0] == 0) { int pool = FUN_002eb010(0x10); if (pool != 0) pool = StringPool_Construct(pool); g_stringPool[0] = pool; } \
+        nw = StringPool_Intern(g_stringPool[0], 0); old = *e; \
         if (old != 0) { int *hd = (int *)old - 2; int cnt = ((int *)old)[-1] - 1; ((int *)old)[-1] = cnt; if (cnt == 0) StringChunk_ReleaseHeader(*hd, hd); } \
         k += 1; *e = nw; off += 4; \
     } while (k < n); } }
 #define REL_42bc70(o) { Rc_42bc70 *rr = (o); if (rr != 0) { rr->_refCount = (int)rr->_refCount - 1; if (((unsigned long long)((long long)(int)rr->_refCount << 0x29) >> 0x29) == 0) { igObject_Destroy(rr); } } }
 #define PUSHB(lp, v) { igBoolList *L = (igBoolList *)(lp); int n = L->_count; if (n < L->_capacity) L->_count = n + 1; else List_Resize(L, n + 1, 1); n[(unsigned char *)L->_data] = (v); }
 #define REL_42eb80(o) { Rc_42eb80 *rr = (o); if (rr != 0) { rr->_refCount = rr->_refCount - 1; if ((rr->_refCount & 0x7FFFFF) == 0) { igObject_Destroy(rr); } } }
-#define CLEAR(L) { igStringRefList *l = (igStringRefList *)(L); int n = l->_count; int i; int *slot; int nw; for (i = 0; i < n; i++) { slot = (int *)l->_data + i; if (DAT_00586f20[0] == 0) { int v = FUN_002eb010(16); if (v != 0) v = StringPool_Construct(v); DAT_00586f20[0] = v; } nw = ((int)StringPool_Intern(DAT_00586f20[0], 0)); { int *old = (int *)*slot; if (old != 0) { int *hdr = old - 2; int c = hdr[1] - 1; hdr[1] = c; if (c == 0) StringChunk_ReleaseHeader(hdr[0], hdr); } } *slot = nw; } l->_count = 0; }
-#define ALLOC_42f710(a, self) { a = igObject_GetAllocator(self); a = GPR_00554c14 ? a : Memory_GetAllocatorBySelector(DAT_00587110[0]); }
-#define APPENDSTR_42f710(list, text) { char *tok; if ((text) == 0) { tok = 0; } else { if (DAT_00586f20[0] == 0) { int pool = FUN_002eb010(0x10); if (pool != 0) pool = StringPool_Construct(pool); DAT_00586f20[0] = pool; } tok = StringPool_Intern(DAT_00586f20[0], (void *)(text)); } StringList_AppendRetained(list, StringRef(tok)); }
+#define CLEAR(L) { igStringRefList *l = (igStringRefList *)(L); int n = l->_count; int i; int *slot; int nw; for (i = 0; i < n; i++) { slot = (int *)l->_data + i; if (g_stringPool[0] == 0) { int v = FUN_002eb010(16); if (v != 0) v = StringPool_Construct(v); g_stringPool[0] = v; } nw = ((int)StringPool_Intern(g_stringPool[0], 0)); { int *old = (int *)*slot; if (old != 0) { int *hdr = old - 2; int c = hdr[1] - 1; hdr[1] = c; if (c == 0) StringChunk_ReleaseHeader(hdr[0], hdr); } } *slot = nw; } l->_count = 0; }
+#define ALLOC_42f710(a, self) { a = igObject_GetAllocator(self); a = GPR_00554c14 ? a : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]); }
+#define APPENDSTR_42f710(list, text) { char *tok; if ((text) == 0) { tok = 0; } else { if (g_stringPool[0] == 0) { int pool = FUN_002eb010(0x10); if (pool != 0) pool = StringPool_Construct(pool); g_stringPool[0] = pool; } tok = StringPool_Intern(g_stringPool[0], (void *)(text)); } StringList_AppendRetained(list, StringRef(tok)); }
 #define APPENDSTRV(list, text) { char *tx = (char *)(text); APPENDSTR_42f710(list, tx) }
 #define SLIST(self) ((beNDMWShinkaObjectList *)((beNDMWShinkaCtrl *)(self)->_shinkaCtrl)->_list)
 #define SUB(self) ((igObjectList *)(self)->_subWindow)
@@ -66,12 +66,12 @@
     if ((text) == 0) { \
         tok = 0; \
     } else { \
-        if (DAT_00586f20[0] == 0) { \
+        if (g_stringPool[0] == 0) { \
             int pool = FUN_002eb010(0x10); \
             if (pool != 0) pool = StringPool_Construct(pool); \
-            DAT_00586f20[0] = pool; \
+            g_stringPool[0] = pool; \
         } \
-        tok = StringPool_Intern(DAT_00586f20[0], (char *)(text)); \
+        tok = StringPool_Intern(g_stringPool[0], (char *)(text)); \
     } \
     StringList_AppendRetained(lst, StringRef(tok)); }
 #define REL_4332d0(o) { Rc_42bc70 *rr = (o); if (rr != 0) { *(int *)&rr->_refCount = *(int *)&rr->_refCount - 1; if (((unsigned long long)((long long)*(int *)&rr->_refCount << 0x29) >> 0x29) == 0) { igObject_Destroy(rr); } } }
@@ -92,12 +92,12 @@
     if ((text) == 0) { \
         tok = 0; \
     } else { \
-        if (DAT_00586f20[0] == 0) { \
+        if (g_stringPool[0] == 0) { \
             int pool = FUN_002eb010(0x10); \
             if (pool != 0) pool = StringPool_Construct(pool); \
-            DAT_00586f20[0] = pool; \
+            g_stringPool[0] = pool; \
         } \
-        tok = (int *)StringPool_Intern(DAT_00586f20[0], (int *)(text)); \
+        tok = (int *)StringPool_Intern(g_stringPool[0], (int *)(text)); \
     } \
     StringList_AppendRetained(field, StringRef(tok)); }
 #define RELEASE_43aae0(t) { \
@@ -107,7 +107,7 @@
     } }
 #define ALLOC_43aae0(al) { \
     al = ((int)igObject_GetAllocator(arg0)); \
-    al = (GPR_00554c14 != 0) ? al : ((int)Memory_GetAllocatorBySelector(DAT_00587110[0])); }
+    al = (GPR_00554c14 != 0) ? al : ((int)Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0])); }
 #define MSG3(group, sel) { \
     beMessenger_SelectGroup(arg0->_messenger, group); \
     beMessenger_AppendInt(arg0->_messenger, arg0->_playerNo); \
@@ -240,7 +240,7 @@ extern "C" int DAT_0051b328[4];
 extern "C" int DAT_0051b338[4];
 extern "C" int DAT_0051b348[4];
 extern "C" int DAT_0051b358[4];
-extern "C" int DAT_00587110[4];
+extern "C" int g_defaultAllocatorSelector[4];
 extern "C" unsigned char GPR_00554c14;
 /* Owning stack reference to a pooled string token (reference count at p[-1], chunk header at
  * p[-2]); releases the token on scope exit. */
@@ -264,8 +264,8 @@ extern "C" int DAT_0051b248[4];
 extern "C" int DAT_0051b398[4];
 extern "C" int DAT_0051b3a0[4];
 extern "C" int DAT_0051b3b0[4];
-extern "C" int DAT_0051b3c0[4];
-extern "C" int DAT_0051b3c8[4];
+extern "C" char TEXTCTL_3[];
+extern "C" char STWINFONT14[];
 extern "C" int DAT_0051b3d8[4];
 extern "C" int DAT_0051b3e8[4];
 extern "C" int DAT_0051b3f8[4];
@@ -279,14 +279,14 @@ extern "C" int DAT_0051b440[4];
 extern "C" int DAT_0051b448[4];
 extern "C" char DAT_0051b458[];
 extern "C" int DAT_0051b460[4];
-extern "C" int DAT_0051b468[4];
-extern "C" int DAT_0051b470[4];
+extern "C" char percent_d[];
+extern "C" char STWINFONT29[];
 extern "C" char DAT_0051b480[];
 extern "C" char DAT_0051b488[];
 extern "C" char DAT_0051b490[];
 extern "C" int DAT_0051b498[4];
 extern "C" int DAT_0051b4a0[4];
-extern "C" int DAT_00586f20[4];
+extern "C" int g_stringPool[4];
 struct Tbl7 { int v[7]; };
 extern "C" Tbl7 DAT_004cf950;
 extern "C" Tbl7 DAT_004cf970;
@@ -297,11 +297,11 @@ struct Fld;
 extern "C" int DAT_0051b528[4];
 extern "C" int DAT_0051b538[4];
 extern "C" int DAT_0051b548[4];
-extern "C" int DAT_0051b550[4];
-extern "C" int DAT_0051b558[4];
+extern "C" char DISPOFF[];
+extern "C" char SWITCH_2[];
 extern "C" int DAT_0051b560[4];
 extern "C" int DAT_0051b568[4];
-extern "C" int DAT_0058af98[4];
+extern "C" int g_beNDMWStatusCtrlD0_metaObject[4];
 struct Rec { int pad[3]; int f12; };
 struct Fld { int pad[3]; igObjectList *f12; };
 extern "C" void Gap__Bec__beNDMWShopCtrl30__vfunc_21(beNDMWShopCtrl30 *arg0);
@@ -318,7 +318,7 @@ extern "C" int DAT_0051b5e8[4];
 extern "C" int DAT_0051b5f8[4];
 extern "C" int DAT_0051b600[4];
 extern "C" int DAT_0051b608[4];
-extern "C" int DAT_0058b028[4];
+extern "C" int g_beNDMWStatus_metaObject[4];
 struct Rc;
 struct Rc { int w0; int references; char pad[101]; char f109; char p110; char f111; };
 struct Lst { int pad[2]; int cnt; int p12; int *data; };
@@ -331,7 +331,7 @@ extern "C" void Gap__Bec__beNDMWShopCtrl40__vfunc_21(beNDMWShopCtrl40 *arg0);
 struct Item_42a2e0 { int p[3]; int f12; int p16; int f20; };
 struct Rec_42a2e0 { int p[3]; igObjectList *f12; };
 extern "C" Rec_42a2e0 * igProperty_GetRecordFolder(...);
-extern "C" const char *DAT_004cf8a0[];
+extern "C" const char *g_fontNames[];
 extern "C" int DAT_0051b610[4];
 extern "C" int DAT_0051b618[4];
 extern "C" int DAT_0051b620[4];
@@ -340,23 +340,23 @@ extern "C" int DAT_0051b640[4];
 extern "C" int DAT_0051b650[4];
 extern "C" int DAT_0051b660[4];
 extern "C" int DAT_0051b668[4];
-extern "C" int DAT_0051b678[4];
-extern "C" int DAT_0051b680[4];
+extern "C" char NAME_2[];
+extern "C" char STWINFONT17[];
 extern "C" int DAT_0051b690[4];
 extern "C" int DAT_0051b698[4];
-extern "C" int DAT_0051b6a8[];
-extern "C" int DAT_0051b6b0[4];
-extern "C" char DAT_0051b6b8[];
+extern "C" char TXT[];
+extern "C" char TEXTSET[];
+extern "C" char DISPON[];
 extern "C" int DAT_0051b6c0[4];
 extern "C" int DAT_0051b6d0[4];
 struct U { static inline char *InternStr(char *text) {
     if (text == 0) return 0;
-    if (DAT_00586f20[0] == 0) {
+    if (g_stringPool[0] == 0) {
         int pool = FUN_002eb010(0x10);
         if (pool != 0) pool = StringPool_Construct(pool);
-        DAT_00586f20[0] = pool;
+        g_stringPool[0] = pool;
     }
-    return StringPool_Intern(DAT_00586f20[0], text);
+    return StringPool_Intern(g_stringPool[0], text);
 } };
 
 extern "C" void Gap__Bec__beNDMWShopCtrl50__vfunc_21(beNDMWShopCtrl50 *self);
@@ -382,7 +382,7 @@ extern "C" int DAT_0051b828[4];
 extern "C" int DAT_0051b838[4];
 struct Tbl_42bc70 { int v[10]; };
 extern "C" Tbl_42bc70 DAT_004cf9c0;
-extern "C" int DAT_00589208[4];
+extern "C" int g_beLua_metaObject[4];
 extern "C" unsigned char GPR_00554a38;
 extern "C" unsigned char GPR_00554a3c;
 extern "C" unsigned char GPR_00554a40;
@@ -397,13 +397,13 @@ extern "C" int DAT_0051b848[4];
 extern "C" int DAT_0051b858[4];
 extern "C" int DAT_0051b868[4];
 extern "C" int DAT_0051b870[4];
-extern "C" int DAT_00587d08[4];
-extern "C" int DAT_0058ab68[4];
+extern "C" int g_beSystem_metaObject[4];
+extern "C" int g_beNDMWStatusTitle01_metaObject[4];
 extern "C" void Gap__Bec__beNDMWShopCtrlA0__vfunc_21(beNDMWShopCtrlA0 *arg0);
 extern "C" igObject *FUN_003b4250(void *);
 extern "C" igObject *FUN_003b7a40(void *);
 extern "C" void *DAT_004cf8a8[4];
-extern "C" float DAT_004e1058[4];
+extern "C" float g_vec3Zero[4];
 extern "C" float DAT_004e105c[4];
 extern "C" float DAT_004e1060[4];
 extern "C" int DAT_0051b1c8[4];
@@ -432,13 +432,13 @@ struct Str { static inline int intern(int *s) {
     if (s == 0) {
         ref = 0;
     } else {
-        if (DAT_00586f20[0] == 0) {
+        if (g_stringPool[0] == 0) {
             pool = FUN_002eb010(16);
             if (pool)
                 pool = StringPool_Construct(pool);
-            DAT_00586f20[0] = pool;
+            g_stringPool[0] = pool;
         }
-        ref = ((int)StringPool_Intern(DAT_00586f20[0], s));
+        ref = ((int)StringPool_Intern(g_stringPool[0], s));
     }
     return ref;
 }
@@ -493,7 +493,7 @@ extern "C" unsigned char GPR_00554a4c;
 struct Rc_42eb80 : public igObject { };
 
 extern "C" void Gap__Bec__beNDMWShopCtrlA2__vfunc_21(beNDMWShopCtrlA2 *arg0);
-extern "C" char *DAT_004cf8a4[];
+extern "C" char *g_fontName1[];
 extern "C" char *DAT_004cf8d0[];
 extern "C" int DAT_0051ba28[4];
 extern "C" int DAT_0051ba38[4];
@@ -508,7 +508,7 @@ extern "C" int DAT_0051bac0[4];
 extern "C" int DAT_0051bad0[4];
 extern "C" int DAT_0051bae8[4];
 extern "C" int DAT_0051baf0[4];
-extern "C" int DAT_0058abd8[4];
+extern "C" int g_beNDMWStatusSelectE1_metaObject[4];
 struct DummyVirtual {
     virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5();
     virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11();
@@ -571,7 +571,7 @@ extern "C" void Gap__Bec__beNDMWShopCtrlSell__vfunc_21(beNDMWShopCtrlSell *self)
 extern "C" Tbl DAT_004cfa40;
 extern "C" char *DAT_004c22f0[4];
 extern "C" int DAT_0051bd50[4];
-extern "C" int DAT_0051bd60[4];
+extern "C" char STWINFONT30[];
 extern "C" int DAT_0051bd70[];
 extern "C" char DAT_0051bd78[];
 extern "C" char DAT_0051bd80[];
@@ -599,7 +599,7 @@ extern "C" void FUN_00438050(beNDMWShopCtrlDiskSell *arg0);
 struct ChipPriceText { char text[5]; } __attribute__((aligned(16)));
 extern "C" ChipPriceText DAT_0051bdc0;
 struct Vec3 { float x, y, z; } __attribute__((aligned(16)));
-struct Pool { static char *Intern(char *s) { if (DAT_00586f20[0] == 0) { int v = FUN_002eb010(16); if (v != 0) v = StringPool_Construct(v); DAT_00586f20[0] = v; } return StringPool_Intern(DAT_00586f20[0], s); } };
+struct Pool { static char *Intern(char *s) { if (g_stringPool[0] == 0) { int v = FUN_002eb010(16); if (v != 0) v = StringPool_Construct(v); g_stringPool[0] = v; } return StringPool_Intern(g_stringPool[0], s); } };
 extern "C" void FUN_004393e0(beNDMWShopCtrlSales *arg0, int arg1, unsigned char arg2);
 extern "C" unsigned char GPR_00554a68;
 extern "C" unsigned char GPR_00554a6c;
@@ -619,7 +619,7 @@ struct SalesChk {
         int a, b;
         if (arg1 == 0) return false;
         if (arg1->_kindNo == 3) return true;
-        rec = ((int)FUN_00236f80(self->_insight, DAT_0058b028[0]));
+        rec = ((int)FUN_00236f80(self->_insight, g_beNDMWStatus_metaObject[0]));
         if (arg1->_kindNo == 0) {
             int sh = ((Rec_439d60 *)((void *)igProperty_GetRecord(obj, &DAT_0051bac0[0])))->f12;
             s3 = (1 << sh) & beNDMWItemBase_GetRecordInt(arg1, rec, &DAT_0051bdc8[0]);
@@ -641,7 +641,7 @@ extern "C" int DAT_0051bdf0[4];
 extern "C" int DAT_0051be00[4];
 /* matching construct: allocator pick kept as an in-class method so it inlines as in the retail unit */
 struct ShopAlloc {
-    static int Pool(beNDMWShopCtrlSales *self) { int a = ((int)igObject_GetAllocator(self)); if (GPR_00554c14 != 0) return a; return ((int)Memory_GetAllocatorBySelector(DAT_00587110[0])); }
+    static int Pool(beNDMWShopCtrlSales *self) { int a = ((int)igObject_GetAllocator(self)); if (GPR_00554c14 != 0) return a; return ((int)Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0])); }
 };
 extern "C" void FUN_00439f30(beNDMWShopCtrlSales *arg0, int arg1);
 struct RC { int p0; unsigned refs; char p8[8]; char f16; };
@@ -653,7 +653,7 @@ extern "C" int *DAT_004cf8ac[4];
 extern "C" int DAT_004cfaa0[8];
 extern "C" int DAT_0051be10[4];
 extern "C" int DAT_0051be20[4];
-extern "C" int DAT_0051be38[4];
+extern "C" char NEXTX[];
 extern "C" int DAT_0051be40[4];
 extern "C" int DAT_0051be50[4];
 extern "C" int DAT_0051be58[4];
@@ -693,24 +693,11 @@ typedef struct ChipRecord {
     char p[12];
     int f12;
 } ChipRecord;
-struct ChipUtil { static inline bool IsChip(beNDMWItemBase *e) { if (e != 0) { return e->_kindNo == 3; } return false; } static inline int *CastSel(int *p) { if (p != 0 && igObject_IsKindOf(p, DAT_0058abd8[0]) != 0) return p; return 0; } };
+struct ChipUtil { static inline bool IsChip(beNDMWItemBase *e) { if (e != 0) { return e->_kindNo == 3; } return false; } static inline int *CastSel(int *p) { if (p != 0 && igObject_IsKindOf(p, g_beNDMWStatusSelectE1_metaObject[0]) != 0) return p; return 0; } };
 extern "C" void Gap__Bec__beNDMWShopCtrlXdataChip__vfunc_21(beNDMWShopCtrlXdataChip *arg0);
 extern "C" int beNDMWShopCtrlXdataChip_UpdatePageCount(beNDMWShopCtrlXdataChip *self);
-extern "C" char *g_fontNames[];
 extern "C" char *g_fontName1[];
-extern "C" char TEXTCTL_3[];
-extern "C" char STWINFONT14[];
-extern "C" char percent_d[];
-extern "C" char STWINFONT29[];
-extern "C" char DISPOFF[];
-extern "C" char SWITCH_2[];
-extern "C" char NAME_2[];
-extern "C" char STWINFONT17[];
-extern "C" char TXT[];
-extern "C" char TEXTSET[];
 extern "C" char DISPON[];
-extern "C" char STWINFONT30[];
-extern "C" char NEXTX[];
 extern "C" int g_beNDMWStatus_metaObject[];
 extern "C" void beNDMWShopCtrlXdataChip_RefreshText(beNDMWShopCtrlXdataChip *self, long long refreshRows, long long refreshDescription);
 extern "C" igObject * FUN_003b7360(...);
@@ -742,27 +729,27 @@ void Gap__Bec__beNDMWShopCtrl00__vfunc_21(beNDMWShopCtrl00 *arg0) {
     switch (arg0->_st0) {
     case 0:
         x = ((int)igObject_GetAllocator(arg0));
-        { igSmartPointer<beNDMWShopTitle00> r1((beNDMWShopTitle00 *)FUN_003b3370(GPR_00554c14 != 0 ? x : ((int)Memory_GetAllocatorBySelector(DAT_00587110[0]))));
+        { igSmartPointer<beNDMWShopTitle00> r1((beNDMWShopTitle00 *)FUN_003b3370(GPR_00554c14 != 0 ? x : ((int)Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]))));
         beNDMWWindow_BindContext(r1.p, arg0, arg0->_insight, arg0->_playerNo, 0);
         ObjectList_AppendRetained(arg0->_subWindow, r1.p);
         }
         x = ((int)igObject_GetAllocator(arg0));
-        { igSmartPointer<beNDMWStatusTitle01> r2((beNDMWStatusTitle01 *)FUN_003b3ac0(GPR_00554c14 != 0 ? x : ((int)Memory_GetAllocatorBySelector(DAT_00587110[0]))));
+        { igSmartPointer<beNDMWStatusTitle01> r2((beNDMWStatusTitle01 *)FUN_003b3ac0(GPR_00554c14 != 0 ? x : ((int)Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]))));
         beNDMWWindow_BindContext(r2.p, arg0, arg0->_insight, arg0->_playerNo, 0);
         ObjectList_AppendRetained(arg0->_subWindow, r2.p);
         }
         x = ((int)igObject_GetAllocator(arg0));
-        { igSmartPointer<beNDMWStatusTitle02> r3((beNDMWStatusTitle02 *)FUN_003b3900(GPR_00554c14 != 0 ? x : ((int)Memory_GetAllocatorBySelector(DAT_00587110[0]))));
+        { igSmartPointer<beNDMWStatusTitle02> r3((beNDMWStatusTitle02 *)FUN_003b3900(GPR_00554c14 != 0 ? x : ((int)Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]))));
         beNDMWWindow_BindContext(r3.p, arg0, arg0->_insight, arg0->_playerNo, 0);
         ObjectList_AppendRetained(arg0->_subWindow, r3.p);
         }
         x = ((int)igObject_GetAllocator(arg0));
-        { igSmartPointer<beNDMWStatusTitle03> r4((beNDMWStatusTitle03 *)FUN_003b36f0(GPR_00554c14 != 0 ? x : ((int)Memory_GetAllocatorBySelector(DAT_00587110[0]))));
+        { igSmartPointer<beNDMWStatusTitle03> r4((beNDMWStatusTitle03 *)FUN_003b36f0(GPR_00554c14 != 0 ? x : ((int)Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]))));
         beNDMWWindow_BindContext(r4.p, arg0, arg0->_insight, arg0->_playerNo, 0);
         ObjectList_AppendRetained(arg0->_subWindow, r4.p);
         }
         x = ((int)igObject_GetAllocator(arg0));
-        { igSmartPointer<beNDMWShopTitle01> r5((beNDMWShopTitle01 *)FUN_003b31b0(GPR_00554c14 != 0 ? x : ((int)Memory_GetAllocatorBySelector(DAT_00587110[0]))));
+        { igSmartPointer<beNDMWShopTitle01> r5((beNDMWShopTitle01 *)FUN_003b31b0(GPR_00554c14 != 0 ? x : ((int)Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]))));
         beNDMWWindow_BindContext(r5.p, arg0, arg0->_insight, arg0->_playerNo, arg0->_entCode);
         ObjectList_AppendRetained(arg0->_subWindow, r5.p);
         }
@@ -785,7 +772,7 @@ void Gap__Bec__beNDMWShopCtrl00__vfunc_21(beNDMWShopCtrl00 *arg0) {
                 switch (arg0->_entCode) {
                 case 1:
                 x = ((int)igObject_GetAllocator(arg0));
-                x = GPR_00554c14 != 0 ? x : ((int)Memory_GetAllocatorBySelector(DAT_00587110[0]));
+                x = GPR_00554c14 != 0 ? x : ((int)Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]));
                 t = (S_ref *)r6.p;
                 if (t != 0) {
                     t->f4 = (int)((int)(t->f4 - 1));
@@ -797,7 +784,7 @@ void Gap__Bec__beNDMWShopCtrl00__vfunc_21(beNDMWShopCtrl00 *arg0) {
                     break;
                 case 3:
                 x = ((int)igObject_GetAllocator(arg0));
-                x = GPR_00554c14 != 0 ? x : ((int)Memory_GetAllocatorBySelector(DAT_00587110[0]));
+                x = GPR_00554c14 != 0 ? x : ((int)Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]));
                 t = (S_ref *)r6.p;
                 if (t != 0) {
                     t->f4 = (int)((int)(t->f4 - 1));
@@ -809,7 +796,7 @@ void Gap__Bec__beNDMWShopCtrl00__vfunc_21(beNDMWShopCtrl00 *arg0) {
                     break;
                 case 4:
                 x = ((int)igObject_GetAllocator(arg0));
-                x = GPR_00554c14 != 0 ? x : ((int)Memory_GetAllocatorBySelector(DAT_00587110[0]));
+                x = GPR_00554c14 != 0 ? x : ((int)Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]));
                 t = (S_ref *)r6.p;
                 if (t != 0) {
                     t->f4 = (int)((int)(t->f4 - 1));
@@ -821,7 +808,7 @@ void Gap__Bec__beNDMWShopCtrl00__vfunc_21(beNDMWShopCtrl00 *arg0) {
                     break;
                 case 5:
                 x = ((int)igObject_GetAllocator(arg0));
-                x = GPR_00554c14 != 0 ? x : ((int)Memory_GetAllocatorBySelector(DAT_00587110[0]));
+                x = GPR_00554c14 != 0 ? x : ((int)Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]));
                 t = (S_ref *)r6.p;
                 if (t != 0) {
                     t->f4 = (int)((int)(t->f4 - 1));
@@ -835,7 +822,7 @@ void Gap__Bec__beNDMWShopCtrl00__vfunc_21(beNDMWShopCtrl00 *arg0) {
                 case 7:
                 case 8:
                 x = ((int)igObject_GetAllocator(arg0));
-                x = GPR_00554c14 != 0 ? x : ((int)Memory_GetAllocatorBySelector(DAT_00587110[0]));
+                x = GPR_00554c14 != 0 ? x : ((int)Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]));
                 t = (S_ref *)r6.p;
                 if (t != 0) {
                     t->f4 = (int)((int)(t->f4 - 1));
@@ -847,7 +834,7 @@ void Gap__Bec__beNDMWShopCtrl00__vfunc_21(beNDMWShopCtrl00 *arg0) {
                     break;
                 case 9:
                 x = ((int)igObject_GetAllocator(arg0));
-                x = GPR_00554c14 != 0 ? x : ((int)Memory_GetAllocatorBySelector(DAT_00587110[0]));
+                x = GPR_00554c14 != 0 ? x : ((int)Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]));
                 t = (S_ref *)r6.p;
                 if (t != 0) {
                     t->f4 = (int)((int)(t->f4 - 1));
@@ -859,7 +846,7 @@ void Gap__Bec__beNDMWShopCtrl00__vfunc_21(beNDMWShopCtrl00 *arg0) {
                     break;
                 default:
                 x = ((int)igObject_GetAllocator(arg0));
-                x = GPR_00554c14 != 0 ? x : ((int)Memory_GetAllocatorBySelector(DAT_00587110[0]));
+                x = GPR_00554c14 != 0 ? x : ((int)Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]));
                 t = (S_ref *)r6.p;
                 if (t != 0) {
                     t->f4 = (int)((int)(t->f4 - 1));
@@ -1005,8 +992,8 @@ void Gap__Bec__beNDMWShopCtrl10__vfunc_21(beNDMWShopCtrl10 *self)
                     i = 0;
                     q = np;
                     for (; i < 7; i++) {
-                        beMessenger_SelectGroup(self->_messenger, ((char *)DAT_0051b3c0));
-                        beMessenger_AppendString(self->_messenger, ((char *)DAT_0051b3c8));
+                        beMessenger_SelectGroup(self->_messenger, ((char *)TEXTCTL_3));
+                        beMessenger_AppendString(self->_messenger, ((char *)STWINFONT14));
                         beMessenger_AppendString(self->_messenger, (void *)*q);
                         beMessenger_DispatchSelected(self->_messenger, ((char *)DAT_0051b3d8));
                         q++;
@@ -1048,7 +1035,7 @@ void Gap__Bec__beNDMWShopCtrl10__vfunc_21(beNDMWShopCtrl10 *self)
                     } else {
                         int j;
                         FUN_003f5410(w356.p, ((char *)DAT_0051b448), ((char *)DAT_0051b220), DAT_0051b458, ((char *)DAT_0051b460));
-                        sprintf(buf, ((char *)DAT_0051b468), have - need);
+                        sprintf(buf, ((char *)percent_d), have - need);
                         FUN_003f5410(w356.p, ((char *)DAT_0051b448), ((char *)DAT_0051b248), buf, ((char *)DAT_0051b460));
                         for (j = 0; j < 4; j++) {
                             APPENDSTR(((beNDMWWindow *)w356.p)->_textCloseTypeList, ((char *)DAT_0051b448))
@@ -1059,7 +1046,7 @@ void Gap__Bec__beNDMWShopCtrl10__vfunc_21(beNDMWShopCtrl10 *self)
                         APPENDSTR(((beNDMWWindow *)w356.p)->_textCloseNameList, ((char *)DAT_0051b220))
                         APPENDSTR(((beNDMWWindow *)w356.p)->_textCloseTypeList, ((char *)DAT_0051b448))
                         APPENDSTR(((beNDMWWindow *)w356.p)->_textCloseNameList, ((char *)DAT_0051b248))
-                        APPENDSTR(((beNDMWWindow *)w356.p)->_textCloseTypeList, ((char *)DAT_0051b470))
+                        APPENDSTR(((beNDMWWindow *)w356.p)->_textCloseTypeList, ((char *)STWINFONT29))
                         { int *t = (int *)names.v[2]; APPENDSTR(((beNDMWWindow *)w356.p)->_textCloseNameList, t) }
                         arr2 = DAT_004cf970;
                         ((beNDMWWindow *)w356.p)->_entCode = arr2.v[self->_retCode];
@@ -1263,7 +1250,7 @@ void Gap__Bec__beNDMWShopCtrl30__vfunc_21(beNDMWShopCtrl30 *arg0) {
             switch (arg0->_st2) {
             case 0:
                 alloc = igObject_GetAllocator(arg0);
-                alloc = GPR_00554c14 ? alloc : Memory_GetAllocatorBySelector(DAT_00587110[0]);
+                alloc = GPR_00554c14 ? alloc : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
                 {
                 igSmartPointer<beNDMWShopSelect01> win((beNDMWShopSelect01 *)FUN_003b4d90(alloc));
                 beNDMWWindow_BindContext(win.p, arg0, arg0->_insight, arg0->_playerNo, 0x546);
@@ -1299,7 +1286,7 @@ void Gap__Bec__beNDMWShopCtrl30__vfunc_21(beNDMWShopCtrl30 *arg0) {
             switch (arg0->_st2) {
             case 0:
                 alloc = igObject_GetAllocator(arg0);
-                alloc = GPR_00554c14 ? alloc : Memory_GetAllocatorBySelector(DAT_00587110[0]);
+                alloc = GPR_00554c14 ? alloc : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
                 {
                 igSmartPointer<beNDMWShopSelect01> win((beNDMWShopSelect01 *)FUN_003b4d90(alloc));
                 beNDMWWindow_BindContext(win.p, arg0, arg0->_insight, arg0->_playerNo, 0x54B);
@@ -1364,7 +1351,7 @@ void Gap__Bec__beNDMWShopCtrl30__vfunc_21(beNDMWShopCtrl30 *arg0) {
             switch (arg0->_st2) {
             case 0:
                 alloc = igObject_GetAllocator(arg0);
-                alloc = GPR_00554c14 ? alloc : Memory_GetAllocatorBySelector(DAT_00587110[0]);
+                alloc = GPR_00554c14 ? alloc : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
                 {
                 igSmartPointer<beNDMWStatusCtrlD0> win((beNDMWStatusCtrlD0 *)FUN_003baf10(alloc));
                 beNDMWWindow_BindContext(win.p, arg0, arg0->_insight, arg0->_playerNo, 0);
@@ -1395,11 +1382,11 @@ void Gap__Bec__beNDMWShopCtrl30__vfunc_21(beNDMWShopCtrl30 *arg0) {
                         wa->_st1 = 0;
                         arg0->_st2 = 5;
                         arg0->_st3 = 0;
-                        beMessenger_SelectGroup(arg0->_messenger, &DAT_0051b3c0[0]);
-                        beMessenger_AppendString(arg0->_messenger, &DAT_0051b470[0]);
+                        beMessenger_SelectGroup(arg0->_messenger, TEXTCTL_3);
+                        beMessenger_AppendString(arg0->_messenger, STWINFONT29);
                         beMessenger_AppendString(arg0->_messenger, &DAT_0051b548[0]);
-                        beMessenger_AppendString(arg0->_messenger, &DAT_0051b550[0]);
-                        beMessenger_DispatchSelected(arg0->_messenger, &DAT_0051b558[0]);
+                        beMessenger_AppendString(arg0->_messenger, DISPOFF);
+                        beMessenger_DispatchSelected(arg0->_messenger, SWITCH_2);
                         return;
                     }
                     if (wa->_st0 == 1 && wa->_st1 == 2) {
@@ -1459,13 +1446,13 @@ void Gap__Bec__beNDMWShopCtrl30__vfunc_21(beNDMWShopCtrl30 *arg0) {
                 }
                 break;
             case 2:
-                beMessenger_SelectGroup(arg0->_messenger, &DAT_0051b3c0[0]);
-                beMessenger_AppendString(arg0->_messenger, &DAT_0051b470[0]);
+                beMessenger_SelectGroup(arg0->_messenger, TEXTCTL_3);
+                beMessenger_AppendString(arg0->_messenger, STWINFONT29);
                 beMessenger_AppendString(arg0->_messenger, &DAT_0051b548[0]);
-                beMessenger_AppendString(arg0->_messenger, &DAT_0051b550[0]);
-                beMessenger_DispatchSelected(arg0->_messenger, &DAT_0051b558[0]);
+                beMessenger_AppendString(arg0->_messenger, DISPOFF);
+                beMessenger_DispatchSelected(arg0->_messenger, SWITCH_2);
                 alloc = igObject_GetAllocator(arg0);
-                alloc = GPR_00554c14 ? alloc : Memory_GetAllocatorBySelector(DAT_00587110[0]);
+                alloc = GPR_00554c14 ? alloc : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
                 {
                 igSmartPointer<beNDMWShopSelect00> win((beNDMWShopSelect00 *)FUN_003b4f50(alloc));
                 beNDMWWindow_BindContext(win.p, arg0, arg0->_insight, arg0->_playerNo, arg0->_st3);
@@ -1504,7 +1491,7 @@ void Gap__Bec__beNDMWShopCtrl30__vfunc_21(beNDMWShopCtrl30 *arg0) {
             switch (arg0->_st2) {
             case 0:
                 alloc = igObject_GetAllocator(arg0);
-                alloc = GPR_00554c14 ? alloc : Memory_GetAllocatorBySelector(DAT_00587110[0]);
+                alloc = GPR_00554c14 ? alloc : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
                 {
                 igSmartPointer<beNDMWShopCtrlEditBit> win((beNDMWShopCtrlEditBit *)FUN_003b7520(alloc));
                 beNDMWWindow_BindContext(win.p, arg0, arg0->_insight, arg0->_playerNo, arg0->_bankMenu);
@@ -1552,7 +1539,7 @@ void Gap__Bec__beNDMWShopCtrl30__vfunc_21(beNDMWShopCtrl30 *arg0) {
             switch (arg0->_st2) {
             case 0:
                 alloc = igObject_GetAllocator(arg0);
-                alloc = GPR_00554c14 ? alloc : Memory_GetAllocatorBySelector(DAT_00587110[0]);
+                alloc = GPR_00554c14 ? alloc : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
                 {
                 igSmartPointer<beNDMWShopSelect00> win((beNDMWShopSelect00 *)FUN_003b4f50(alloc));
                 beNDMWWindow_BindContext(win.p, arg0, arg0->_insight, arg0->_playerNo, arg0->_st3);
@@ -1600,7 +1587,7 @@ void Gap__Bec__beNDMWShopCtrl40__vfunc_21(beNDMWShopCtrl40 *arg0) {
     int ic;
     switch (arg0->_st0) {
     case 0:
-        FUN_003f5410(arg0, &DAT_0051b470[0], &DAT_0051b548[0], &DAT_0051b590[0], &DAT_0051b598[0]);
+        FUN_003f5410(arg0, STWINFONT29, &DAT_0051b548[0], &DAT_0051b590[0], &DAT_0051b598[0]);
         arg0->_st0 = arg0->_st0 + 1;
         arg0->_st3 = 0;
         arg0->_st2 = 0;
@@ -1611,7 +1598,7 @@ void Gap__Bec__beNDMWShopCtrl40__vfunc_21(beNDMWShopCtrl40 *arg0) {
             switch (arg0->_st2) {
             case 0:
                 alloc = igObject_GetAllocator(arg0);
-                alloc = GPR_00554c14 ? alloc : Memory_GetAllocatorBySelector(DAT_00587110[0]);
+                alloc = GPR_00554c14 ? alloc : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
                 {
                     igSmartPointer<beNDMWStatusCtrlD0> spBC((beNDMWStatusCtrlD0 *)FUN_003baf10(alloc));
                     beNDMWWindow_BindContext(spBC.p, arg0, arg0->_insight, arg0->_playerNo, 0);
@@ -1647,11 +1634,11 @@ void Gap__Bec__beNDMWShopCtrl40__vfunc_21(beNDMWShopCtrl40 *arg0) {
                             arg0->_st3 = 0;
                             arg0->_st2 = 0;
                         }
-                        beMessenger_SelectGroup(arg0->_messenger, &DAT_0051b3c0[0]);
-                        beMessenger_AppendString(arg0->_messenger, &DAT_0051b470[0]);
+                        beMessenger_SelectGroup(arg0->_messenger, TEXTCTL_3);
+                        beMessenger_AppendString(arg0->_messenger, STWINFONT29);
                         beMessenger_AppendString(arg0->_messenger, &DAT_0051b548[0]);
-                        beMessenger_AppendString(arg0->_messenger, &DAT_0051b550[0]);
-                        beMessenger_DispatchSelected(arg0->_messenger, &DAT_0051b558[0]);
+                        beMessenger_AppendString(arg0->_messenger, DISPOFF);
+                        beMessenger_DispatchSelected(arg0->_messenger, SWITCH_2);
                         return;
                     }
                 }
@@ -1662,7 +1649,7 @@ void Gap__Bec__beNDMWShopCtrl40__vfunc_21(beNDMWShopCtrl40 *arg0) {
             switch (arg0->_st2) {
             case 0:
                 alloc = igObject_GetAllocator(arg0);
-                alloc = GPR_00554c14 ? alloc : Memory_GetAllocatorBySelector(DAT_00587110[0]);
+                alloc = GPR_00554c14 ? alloc : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
                 {
                     igSmartPointer<beNDMWShopSelect00> spB8((beNDMWShopSelect00 *)FUN_003b4f50(alloc));
                     beNDMWWindow_BindContext(spB8.p, arg0, arg0->_insight, arg0->_playerNo, 0x5AC);
@@ -1674,7 +1661,7 @@ void Gap__Bec__beNDMWShopCtrl40__vfunc_21(beNDMWShopCtrl40 *arg0) {
             case 1:
                 if (LCNT(arg0->_subWindow) != arg0->_nowProcKazu) {
                     alloc = igObject_GetAllocator(arg0);
-                    alloc = GPR_00554c14 ? alloc : Memory_GetAllocatorBySelector(DAT_00587110[0]);
+                    alloc = GPR_00554c14 ? alloc : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
                     {
                         igSmartPointer<beNDMWShopSelect01> spB4((beNDMWShopSelect01 *)FUN_003b4d90(alloc));
                         beNDMWWindow_BindContext(spB4.p, arg0, arg0->_insight, arg0->_playerNo, 0x5AD);
@@ -1717,30 +1704,30 @@ void Gap__Bec__beNDMWShopCtrl40__vfunc_21(beNDMWShopCtrl40 *arg0) {
                             else tier = 6;
                             StringRef spB0(0);
                             if (it->f8 == 0) {
-                                if (DAT_00586f20[0] == 0) {
+                                if (g_stringPool[0] == 0) {
                                     void *o = ((void *)FUN_002eb010(0x10));
                                     if (o != 0) o = ((void *)StringPool_Construct(o));
-                                    DAT_00586f20[0] = (int)o;
+                                    g_stringPool[0] = (int)o;
                                 }
-                                { char *ns = StringPool_Intern((void *)DAT_00586f20[0], &DAT_0051b5a8[0]);
+                                { char *ns = StringPool_Intern((void *)g_stringPool[0], &DAT_0051b5a8[0]);
                                   { char *os = spB0.p; RELS(os) }
                                   spB0.p = ns; }
                             } else if (it->f8 == 1) {
-                                if (DAT_00586f20[0] == 0) {
+                                if (g_stringPool[0] == 0) {
                                     void *o = ((void *)FUN_002eb010(0x10));
                                     if (o != 0) o = ((void *)StringPool_Construct(o));
-                                    DAT_00586f20[0] = (int)o;
+                                    g_stringPool[0] = (int)o;
                                 }
-                                { char *ns = StringPool_Intern((void *)DAT_00586f20[0], &DAT_0051b5b8[0]);
+                                { char *ns = StringPool_Intern((void *)g_stringPool[0], &DAT_0051b5b8[0]);
                                   { char *os = spB0.p; RELS(os) }
                                   spB0.p = ns; }
                             } else if (it->f8 == 2) {
-                                if (DAT_00586f20[0] == 0) {
+                                if (g_stringPool[0] == 0) {
                                     void *o = ((void *)FUN_002eb010(0x10));
                                     if (o != 0) o = ((void *)StringPool_Construct(o));
-                                    DAT_00586f20[0] = (int)o;
+                                    g_stringPool[0] = (int)o;
                                 }
-                                { char *ns = StringPool_Intern((void *)DAT_00586f20[0], &DAT_0051b5c8[0]);
+                                { char *ns = StringPool_Intern((void *)g_stringPool[0], &DAT_0051b5c8[0]);
                                   { char *os = spB0.p; RELS(os) }
                                   spB0.p = ns; }
                             }
@@ -1748,7 +1735,7 @@ void Gap__Bec__beNDMWShopCtrl40__vfunc_21(beNDMWShopCtrl40 *arg0) {
                             db = ((void *)beMessenger_GetObject(arg0->_messenger, 0));
                             base = tier * 100;
                             cnt = beDataBase_GetRecordInt(db, base, &DAT_0051b5f8[0]);
-                            lim = (int)(((P1 *)FUN_00236f80(arg0->_insight, DAT_0058b028[0]))->f16->f48->v22() % 10000U);
+                            lim = (int)(((P1 *)FUN_00236f80(arg0->_insight, g_beNDMWStatus_metaObject[0]))->f16->f48->v22() % 10000U);
                             sum = 0;
                             j = 1;
                             if (cnt > 0) {
@@ -1775,11 +1762,11 @@ void Gap__Bec__beNDMWShopCtrl40__vfunc_21(beNDMWShopCtrl40 *arg0) {
                             arg0->_st3 = 0;
                             wb->_st2 = 1;
                             wb->_st3 = 0;
-                            beMessenger_SelectGroup(arg0->_messenger, &DAT_0051b3c0[0]);
-                            beMessenger_AppendString(arg0->_messenger, &DAT_0051b470[0]);
+                            beMessenger_SelectGroup(arg0->_messenger, TEXTCTL_3);
+                            beMessenger_AppendString(arg0->_messenger, STWINFONT29);
                             beMessenger_AppendString(arg0->_messenger, &DAT_0051b548[0]);
-                            beMessenger_AppendString(arg0->_messenger, &DAT_0051b550[0]);
-                            beMessenger_DispatchSelected(arg0->_messenger, &DAT_0051b558[0]);
+                            beMessenger_AppendString(arg0->_messenger, DISPOFF);
+                            beMessenger_DispatchSelected(arg0->_messenger, SWITCH_2);
                             return;
                         }
                     }
@@ -1791,7 +1778,7 @@ void Gap__Bec__beNDMWShopCtrl40__vfunc_21(beNDMWShopCtrl40 *arg0) {
             switch (arg0->_st2) {
             case 0:
                 alloc = igObject_GetAllocator(arg0);
-                alloc = GPR_00554c14 ? alloc : Memory_GetAllocatorBySelector(DAT_00587110[0]);
+                alloc = GPR_00554c14 ? alloc : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
                 {
                     igSmartPointer<beNDMWShopSelect00> spAC((beNDMWShopSelect00 *)FUN_003b4f50(alloc));
                     beNDMWWindow_BindContext(spAC.p, arg0, arg0->_insight, arg0->_playerNo, 0x5AB);
@@ -1951,17 +1938,17 @@ void Gap__Bec__beNDMWShopCtrl50__vfunc_21(beNDMWShopCtrl50 *self) {
                 beMessenger_SendNamed(self->_messenger, &DAT_0051b5d8[0], &DAT_0051b660[0], 0, &DAT_0051b5e8[0]);
                 obj = beMessenger_GetObject(self->_messenger, 0);
                 INTERN_APPEND(self->_textCloseTypeList, &DAT_0051b668[0])
-                INTERN_APPEND(self->_textCloseNameList, ((char * *)DAT_004cf8a0)[0])
+                INTERN_APPEND(self->_textCloseNameList, ((char * *)g_fontNames)[0])
                 beNDMWWindow_RunMessageScript(self, &DAT_0051b3b0[0], 0x5DD);
                 i = 0;
-                fp = &((char * *)DAT_004cf8a0)[0];
+                fp = &((char * *)g_fontNames)[0];
                 do {
-                    FUN_003f5410(self, &DAT_0051b3c8[0], *fp, beDataBase_GetRecordString(obj, i, &DAT_0051b678[0]), &DAT_0051b598[0]);
-                    FUN_003f5660(self, &DAT_0051b680[0], *fp, beDataBase_GetRecordInt(obj, i, &DAT_0051b690[0]), &DAT_0051b460[0]);
+                    FUN_003f5410(self, STWINFONT14, *fp, beDataBase_GetRecordString(obj, i, NAME_2), &DAT_0051b598[0]);
+                    FUN_003f5660(self, STWINFONT17, *fp, beDataBase_GetRecordInt(obj, i, &DAT_0051b690[0]), &DAT_0051b460[0]);
                     i += 1;
                     fp += 1;
                 } while (i < 10);
-                FUN_003f5410(self, &DAT_0051b470[0], ((char * *)DAT_004cf8a0)[0], &DAT_0051b590[0], &DAT_0051b598[0]);
+                FUN_003f5410(self, STWINFONT29, ((char * *)g_fontNames)[0], &DAT_0051b590[0], &DAT_0051b598[0]);
                 self->_st2 = self->_st2 + 1;
                 self->_st3 = 0;
             case 1:
@@ -1975,7 +1962,7 @@ void Gap__Bec__beNDMWShopCtrl50__vfunc_21(beNDMWShopCtrl50 *self) {
                 { beNDMWWindowSelect *w = (beNDMWWindowSelect *)spC8.p; w->_offsetPos[0] = -121.0f; w->_offsetPos[1] = 128.0f; w->_offsetPos[2] = 0.0f; }
                 ((beNDMWWindowSelect *)spC8.p)->_startPoint = self->_cursor;
                 ((beNDMWWindowSelect *)spC8.p)->_selectMax = 10;
-                INTERN_APPEND(((beNDMWWindow *)spC8.p)->_textCloseTypeList, &DAT_0051b470[0])
+                INTERN_APPEND(((beNDMWWindow *)spC8.p)->_textCloseTypeList, STWINFONT29)
                 INTERN_APPEND(((beNDMWWindow *)spC8.p)->_textCloseNameList, &DAT_0051b548[0])
                 beNDMWWindow_RunMessageScript(spC8.p, &DAT_0051b3b0[0], 0x611);
                 }
@@ -1987,16 +1974,16 @@ void Gap__Bec__beNDMWShopCtrl50__vfunc_21(beNDMWShopCtrl50 *self) {
                 if (self->_retCode != -1) {
                     beMessenger_SendNamed(self->_messenger, &DAT_0051b5d8[0], &DAT_0051b660[0], 0, &DAT_0051b5e8[0]);
                     obj = beMessenger_GetObject(self->_messenger, 0);
-                    beMessenger_SelectGroup(self->_messenger, &DAT_0051b3c0[0]);
-                    beMessenger_AppendString(self->_messenger, &DAT_0051b470[0]);
-                    beMessenger_AppendString(self->_messenger, ((char * *)DAT_004cf8a0)[0]);
-                    { int ms = self->_messenger; beMessenger_AppendString(ms, beDataBase_GetRecordString(obj, self->_retCode, &DAT_0051b6a8[0])); }
-                    beMessenger_DispatchSelected(self->_messenger, &DAT_0051b6b0[0]);
-                    beMessenger_SelectGroup(self->_messenger, &DAT_0051b3c0[0]);
-                    beMessenger_AppendString(self->_messenger, &DAT_0051b470[0]);
-                    beMessenger_AppendString(self->_messenger, ((char * *)DAT_004cf8a0)[0]);
-                    beMessenger_AppendString(self->_messenger, &((int *)DAT_0051b6b8)[0]);
-                    beMessenger_DispatchSelected(self->_messenger, &DAT_0051b558[0]);
+                    beMessenger_SelectGroup(self->_messenger, TEXTCTL_3);
+                    beMessenger_AppendString(self->_messenger, STWINFONT29);
+                    beMessenger_AppendString(self->_messenger, ((char * *)g_fontNames)[0]);
+                    { int ms = self->_messenger; beMessenger_AppendString(ms, beDataBase_GetRecordString(obj, self->_retCode, TXT)); }
+                    beMessenger_DispatchSelected(self->_messenger, TEXTSET);
+                    beMessenger_SelectGroup(self->_messenger, TEXTCTL_3);
+                    beMessenger_AppendString(self->_messenger, STWINFONT29);
+                    beMessenger_AppendString(self->_messenger, ((char * *)g_fontNames)[0]);
+                    beMessenger_AppendString(self->_messenger, &((int *)DISPON)[0]);
+                    beMessenger_DispatchSelected(self->_messenger, SWITCH_2);
                 }
                 self->_st2 = self->_st2 + 1;
                 self->_st3 = 0;
@@ -2063,7 +2050,7 @@ void Gap__Bec__beNDMWShopCtrl50__vfunc_21(beNDMWShopCtrl50 *self) {
                 beNDMWWindow_BindContext(spC4.p, self, self->_insight, self->_playerNo, 9 - self->_diskCnt);
                 ObjectList_AppendRetained(self->_subWindow, spC4.p);
                 { beNDMWWindowSelect *w = (beNDMWWindowSelect *)spC4.p; w->_offsetPos[0] = 52.0f; w->_offsetPos[1] = -69.0f; w->_offsetPos[2] = 0.0f; }
-                INTERN_APPEND(((beNDMWWindow *)spC4.p)->_textCloseTypeList, &DAT_0051b470[0])
+                INTERN_APPEND(((beNDMWWindow *)spC4.p)->_textCloseTypeList, STWINFONT29)
                 INTERN_APPEND(((beNDMWWindow *)spC4.p)->_textCloseNameList, &DAT_0051b548[0])
                 beNDMWWindow_RunMessageScript(self, &DAT_0051b3b0[0], 0x624);
                 beNDMWWindow_RunMessageScript(self, &DAT_0051b3b0[0], 0x5DE);
@@ -2266,36 +2253,36 @@ void FUN_0042b880(beNDMWShopCtrl50 *owner) {
     obj = beMessenger_GetObject(me->_messenger, 0);
     remaining = (9 - me->_diskCnt) - me->_retCode;
     unitCount = beDataBase_GetRecordInt(obj, me->_conItemNo, &DAT_0051b690[0], 9, me->_diskCnt);
-    sprintf(sp40, &DAT_0051b468[0], remaining);
-    beMessenger_SelectGroup(me->_messenger, &DAT_0051b3c0[0]);
+    sprintf(sp40, percent_d, remaining);
+    beMessenger_SelectGroup(me->_messenger, TEXTCTL_3);
     beMessenger_AppendString(me->_messenger, &((const char *)DAT_0051b6f8)[0]);
     beMessenger_AppendString(me->_messenger, &DAT_0051b218[0]);
     beMessenger_AppendString(me->_messenger, sp40);
-    beMessenger_DispatchSelected(me->_messenger, &DAT_0051b6b0[0]);
-    sprintf(sp40, &DAT_0051b468[0], remaining * unitCount);
-    beMessenger_SelectGroup(me->_messenger, &DAT_0051b3c0[0]);
+    beMessenger_DispatchSelected(me->_messenger, TEXTSET);
+    sprintf(sp40, percent_d, remaining * unitCount);
+    beMessenger_SelectGroup(me->_messenger, TEXTCTL_3);
     beMessenger_AppendString(me->_messenger, &((const char *)DAT_0051b6f8)[0]);
     beMessenger_AppendString(me->_messenger, &DAT_0051b288[0]);
     beMessenger_AppendString(me->_messenger, sp40);
-    beMessenger_DispatchSelected(me->_messenger, &DAT_0051b6b0[0]);
+    beMessenger_DispatchSelected(me->_messenger, TEXTSET);
 }
 
 void FUN_0042b9d0(beNDMWShopCtrl50 *arg0) {
-    beMessenger_SelectGroup(arg0->_messenger, &DAT_0051b3c0[0]);
+    beMessenger_SelectGroup(arg0->_messenger, TEXTCTL_3);
     beMessenger_AppendString(arg0->_messenger, &DAT_0051b6f8[0]);
     beMessenger_AppendString(arg0->_messenger, &DAT_0051b278[0]);
-    beMessenger_AppendString(arg0->_messenger, &DAT_0051b550[0]);
-    beMessenger_DispatchSelected(arg0->_messenger, &DAT_0051b558[0]);
-    beMessenger_SelectGroup(arg0->_messenger, &DAT_0051b3c0[0]);
+    beMessenger_AppendString(arg0->_messenger, DISPOFF);
+    beMessenger_DispatchSelected(arg0->_messenger, SWITCH_2);
+    beMessenger_SelectGroup(arg0->_messenger, TEXTCTL_3);
     beMessenger_AppendString(arg0->_messenger, &DAT_0051b6f8[0]);
     beMessenger_AppendString(arg0->_messenger, &((int *)DAT_0051b218)[0]);
-    beMessenger_AppendString(arg0->_messenger, &DAT_0051b550[0]);
-    beMessenger_DispatchSelected(arg0->_messenger, &DAT_0051b558[0]);
-    beMessenger_SelectGroup(arg0->_messenger, &DAT_0051b3c0[0]);
+    beMessenger_AppendString(arg0->_messenger, DISPOFF);
+    beMessenger_DispatchSelected(arg0->_messenger, SWITCH_2);
+    beMessenger_SelectGroup(arg0->_messenger, TEXTCTL_3);
     beMessenger_AppendString(arg0->_messenger, &DAT_0051b6f8[0]);
     beMessenger_AppendString(arg0->_messenger, &((int *)DAT_0051b288)[0]);
-    beMessenger_AppendString(arg0->_messenger, &DAT_0051b550[0]);
-    beMessenger_DispatchSelected(arg0->_messenger, &DAT_0051b558[0]);
+    beMessenger_AppendString(arg0->_messenger, DISPOFF);
+    beMessenger_DispatchSelected(arg0->_messenger, SWITCH_2);
 }
 
 void FUN_0042bae0(int *arg0, int arg1) {
@@ -2351,14 +2338,14 @@ void Gap__Bec__beNDMWShopJunk__vfunc_21(beNDMWShopJunk *arg0) {
             switch (arg0->_st2) {
             case 0:
                 alloc = igObject_GetAllocator(arg0);
-                alloc = GPR_00554c14 ? alloc : Memory_GetAllocatorBySelector(DAT_00587110[0]);
+                alloc = GPR_00554c14 ? alloc : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
                 {
                 igSmartPointer<beNDMWShopSelect01> sp8C((beNDMWShopSelect01 *)FUN_003b4d90(alloc));
                 beNDMWWindow_BindContext(sp8C.p, arg0, arg0->_insight, arg0->_playerNo, 0x79e);
                 ObjectList_AppendRetained((unsigned)arg0->_subWindow, sp8C.p);
                 ((beNDMWShopSelect01 *)sp8C.p)->_startPoint = arg0->_junkMenu;
                 alloc = igObject_GetAllocator(arg0);
-                alloc = GPR_00554c14 ? alloc : Memory_GetAllocatorBySelector(DAT_00587110[0]);
+                alloc = GPR_00554c14 ? alloc : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
                 igSmartPointer<igBoolList> sp88((igBoolList *)FUN_002cb0d0(alloc));
 
                 if (arg0->_totalGift >= 3956000) {
@@ -2376,9 +2363,9 @@ void Gap__Bec__beNDMWShopJunk__vfunc_21(beNDMWShopJunk *arg0) {
                 Rc_42bc70 *src;
                 {
                     for (i = 0; (src = sp88.p, i < ((igBoolList *)src)->_count); i++) {
-                        beMessenger_SelectGroup(arg0->_messenger, DAT_0051b3c0);
-                        beMessenger_AppendString(arg0->_messenger, (const char *)DAT_0051b470);
-                        beMessenger_AppendString(arg0->_messenger, DAT_004cf8a0[i]);
+                        beMessenger_SelectGroup(arg0->_messenger, TEXTCTL_3);
+                        beMessenger_AppendString(arg0->_messenger, (const char *)STWINFONT29);
+                        beMessenger_AppendString(arg0->_messenger, g_fontNames[i]);
                         if (*(unsigned char *)(((igBoolList *)sp88.p)->_data + i) != 0) {
                             beMessenger_DispatchSelected(arg0->_messenger, DAT_0051b3d8);
                         } else {
@@ -2400,11 +2387,11 @@ void Gap__Bec__beNDMWShopJunk__vfunc_21(beNDMWShopJunk *arg0) {
                 if (((beNDMWWindowList *)arg0->_subWindow)->_count != arg0->_nowProcKazu) {
                     {
                         int i = 0;
-                        const char **q = DAT_004cf8a0;
+                        const char **q = g_fontNames;
                         do {
-                            beMessenger_SelectGroup(arg0->_messenger, DAT_0051b3c0);
-                            beMessenger_AppendString(arg0->_messenger, (const char *)DAT_0051b470);
-                            beMessenger_AppendString(arg0->_messenger, DAT_004cf8a0[i]);
+                            beMessenger_SelectGroup(arg0->_messenger, TEXTCTL_3);
+                            beMessenger_AppendString(arg0->_messenger, (const char *)STWINFONT29);
+                            beMessenger_AppendString(arg0->_messenger, g_fontNames[i]);
                             beMessenger_DispatchSelected(arg0->_messenger, DAT_0051b3d8);
                             i++;
                             q++;
@@ -2439,7 +2426,7 @@ void Gap__Bec__beNDMWShopJunk__vfunc_21(beNDMWShopJunk *arg0) {
             switch (arg0->_st2) {
             case 0:
                 alloc = igObject_GetAllocator(arg0);
-                alloc = GPR_00554c14 ? alloc : Memory_GetAllocatorBySelector(DAT_00587110[0]);
+                alloc = GPR_00554c14 ? alloc : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
                 {
                 igSmartPointer<beNDMWShopCtrlEditBit> sp84((beNDMWShopCtrlEditBit *)FUN_003b7520(alloc));
                 beNDMWWindow_BindContext(sp84.p, arg0, arg0->_insight, arg0->_playerNo, 2);
@@ -2481,7 +2468,7 @@ void Gap__Bec__beNDMWShopJunk__vfunc_21(beNDMWShopJunk *arg0) {
                             if (*p != -1) {
                                 do {
                                     if (arg0->_totalGift < *p && !(((int *)l->_data)[1] < *p)) {
-                                        beLua__RunNamedChunk(FUN_00236f80(arg0->_insight, DAT_00589208[0]), DAT_0051b828, DAT_0051b838);
+                                        beLua__RunNamedChunk(FUN_00236f80(arg0->_insight, g_beLua_metaObject[0]), DAT_0051b828, DAT_0051b838);
                                         arg0->_st1 = 3;
                                         arg0->_st3 = 0;
                                         arg0->_st2 = 0;
@@ -2505,7 +2492,7 @@ void Gap__Bec__beNDMWShopJunk__vfunc_21(beNDMWShopJunk *arg0) {
             switch (arg0->_st2) {
             case 0:
                 alloc = igObject_GetAllocator(arg0);
-                alloc = GPR_00554c14 ? alloc : Memory_GetAllocatorBySelector(DAT_00587110[0]);
+                alloc = GPR_00554c14 ? alloc : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
                 {
                 igSmartPointer<beNDMWShopCtrlSales> sp80((beNDMWShopCtrlSales *)FUN_003b6bc0(alloc));
                 beNDMWWindow_BindContext(sp80.p, arg0, arg0->_insight, arg0->_playerNo, 9);
@@ -2528,7 +2515,7 @@ void Gap__Bec__beNDMWShopJunk__vfunc_21(beNDMWShopJunk *arg0) {
             switch (arg0->_st2) {
             case 0:
                 alloc = igObject_GetAllocator(arg0);
-                alloc = GPR_00554c14 ? alloc : Memory_GetAllocatorBySelector(DAT_00587110[0]);
+                alloc = GPR_00554c14 ? alloc : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
                 {
                 igSmartPointer<beNDMWShopSelect00> sp7C((beNDMWShopSelect00 *)FUN_003b4f50(alloc));
                 beNDMWWindow_BindContext(sp7C.p, arg0, arg0->_insight, arg0->_playerNo, 0x7b2);
@@ -2591,12 +2578,12 @@ void Gap__Bec__beNDMWShopCtrlA0__vfunc_21(beNDMWShopCtrlA0 *arg0) {
             beMessenger_DispatchSelected(arg0->_messenger, &DAT_0051b338[0]);
             if ((beMessenger_GetBool(arg0->_messenger, 0) & 0xFF) != 1) {
                 x = ((int)igObject_GetAllocator(arg0));
-                { igSmartPointer<beNDMWShopTitle03> r1((beNDMWShopTitle03 *)FUN_003b2c00(GPR_00554c14 != 0 ? x : ((int)Memory_GetAllocatorBySelector(DAT_00587110[0]))));
+                { igSmartPointer<beNDMWShopTitle03> r1((beNDMWShopTitle03 *)FUN_003b2c00(GPR_00554c14 != 0 ? x : ((int)Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]))));
                 beNDMWWindow_BindContext(r1.p, arg0, arg0->_insight, arg0->_playerNo, 0);
                 ObjectList_AppendRetained(arg0->_subWindow, r1.p);
                 }  
                 x = ((int)igObject_GetAllocator(arg0));
-                { igSmartPointer<beNDMWStatusTitle03> r2((beNDMWStatusTitle03 *)FUN_003b36f0(GPR_00554c14 != 0 ? x : ((int)Memory_GetAllocatorBySelector(DAT_00587110[0]))));
+                { igSmartPointer<beNDMWStatusTitle03> r2((beNDMWStatusTitle03 *)FUN_003b36f0(GPR_00554c14 != 0 ? x : ((int)Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]))));
                 beNDMWWindow_BindContext(r2.p, arg0, arg0->_insight, arg0->_playerNo, 0);
                 ObjectList_AppendRetained(arg0->_subWindow, r2.p);
                 {
@@ -2614,7 +2601,7 @@ void Gap__Bec__beNDMWShopCtrlA0__vfunc_21(beNDMWShopCtrlA0 *arg0) {
                 FUN_00426530(arg0->_account, 0);
                 }  
                 x = ((int)igObject_GetAllocator(arg0));
-                { igSmartPointer<beNDMWShopTitle01> r3((beNDMWShopTitle01 *)FUN_003b31b0(GPR_00554c14 != 0 ? x : ((int)Memory_GetAllocatorBySelector(DAT_00587110[0]))));
+                { igSmartPointer<beNDMWShopTitle01> r3((beNDMWShopTitle01 *)FUN_003b31b0(GPR_00554c14 != 0 ? x : ((int)Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]))));
                 beNDMWWindow_BindContext(r3.p, arg0, arg0->_insight, arg0->_playerNo, arg0->_entCode);
                 ObjectList_AppendRetained(arg0->_subWindow, r3.p);
                 }  
@@ -2638,7 +2625,7 @@ void Gap__Bec__beNDMWShopCtrlA0__vfunc_21(beNDMWShopCtrlA0 *arg0) {
                     i += 1;
                 } while (i < 4);
                 x = ((int)igObject_GetAllocator(arg0));
-                { igSmartPointer<beNDMWStatusTitle01> r4((beNDMWStatusTitle01 *)FUN_003b3ac0(GPR_00554c14 != 0 ? x : ((int)Memory_GetAllocatorBySelector(DAT_00587110[0]))));
+                { igSmartPointer<beNDMWStatusTitle01> r4((beNDMWStatusTitle01 *)FUN_003b3ac0(GPR_00554c14 != 0 ? x : ((int)Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]))));
                 beNDMWWindow_BindContext(r4.p, arg0, arg0->_insight, arg0->_playerNo, 1);
                 ObjectList_AppendRetained(arg0->_subWindow, r4.p);
                 }  
@@ -2668,7 +2655,7 @@ void Gap__Bec__beNDMWShopCtrlA0__vfunc_21(beNDMWShopCtrlA0 *arg0) {
             switch (arg0->_st2) {
             case 0:
                 x = ((int)igObject_GetAllocator(arg0));
-                { igSmartPointer<beNDMWShopSelect02> r5((beNDMWShopSelect02 *)FUN_003b4b10(GPR_00554c14 != 0 ? x : ((int)Memory_GetAllocatorBySelector(DAT_00587110[0]))));
+                { igSmartPointer<beNDMWShopSelect02> r5((beNDMWShopSelect02 *)FUN_003b4b10(GPR_00554c14 != 0 ? x : ((int)Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]))));
                 beNDMWWindow_BindContext(r5.p, arg0, arg0->_insight, arg0->_playerNo, 0x7D3);
                 ObjectList_AppendRetained(arg0->_subWindow, r5.p);
                 FUN_00426530(arg0->_account, 0);
@@ -2691,7 +2678,7 @@ void Gap__Bec__beNDMWShopCtrlA0__vfunc_21(beNDMWShopCtrlA0 *arg0) {
                         arg0->_st3 = 0;
                         arg0->_st2 = 0;
                         arg0->_st1 = 0;
-                        ((beSystem *)FUN_00236f80(arg0->_insight, DAT_00587d08[0]))->_isSResetEnable = 0;
+                        ((beSystem *)FUN_00236f80(arg0->_insight, g_beSystem_metaObject[0]))->_isSResetEnable = 0;
                         return;
                     }
                 }
@@ -2702,7 +2689,7 @@ void Gap__Bec__beNDMWShopCtrlA0__vfunc_21(beNDMWShopCtrlA0 *arg0) {
             switch (arg0->_st2) {
             case 0:
                 x = ((int)igObject_GetAllocator(arg0));
-                { igSmartPointer<beNDMWShopSelect02> r6((beNDMWShopSelect02 *)FUN_003b4b10(GPR_00554c14 != 0 ? x : ((int)Memory_GetAllocatorBySelector(DAT_00587110[0]))));
+                { igSmartPointer<beNDMWShopSelect02> r6((beNDMWShopSelect02 *)FUN_003b4b10(GPR_00554c14 != 0 ? x : ((int)Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]))));
                 beNDMWWindow_BindContext(r6.p, arg0, arg0->_insight, arg0->_playerNo, -1);
                 ObjectList_AppendRetained(arg0->_subWindow, r6.p);
                 i = 0;
@@ -2743,7 +2730,7 @@ void Gap__Bec__beNDMWShopCtrlA0__vfunc_21(beNDMWShopCtrlA0 *arg0) {
                                 int idx;
                                 for (idx = 0; idx < ((igObjectList *)arg0->_subWindow)->_count; idx++) {
                                     obj = (int *)((int *)((igObjectList *)(*(int *)&arg0->_subWindow))->_data)[idx];
-                                    if ((obj != 0) && (igObject_IsKindOf(obj, DAT_0058ab68[0]) != 0)) {
+                                    if ((obj != 0) && (igObject_IsKindOf(obj, g_beNDMWStatusTitle01_metaObject[0]) != 0)) {
                                         found = obj;
                                     } else {
                                         found = 0;
@@ -2757,7 +2744,7 @@ void Gap__Bec__beNDMWShopCtrlA0__vfunc_21(beNDMWShopCtrlA0 *arg0) {
                                 }
                             }
                             x = ((int)igObject_GetAllocator(arg0));
-                            { igSmartPointer<beNDMWShopCtrlA1> r7((beNDMWShopCtrlA1 *)FUN_003b7c00(GPR_00554c14 != 0 ? x : ((int)Memory_GetAllocatorBySelector(DAT_00587110[0]))));
+                            { igSmartPointer<beNDMWShopCtrlA1> r7((beNDMWShopCtrlA1 *)FUN_003b7c00(GPR_00554c14 != 0 ? x : ((int)Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]))));
                             beNDMWWindow_BindContext(r7.p, arg0, arg0->_insight, ((int *)((igIntList *)arg0->_playerNoList)->_data)[arg0->_retCode], 0);
                             ObjectList_AppendRetained(arg0->_subWindow, r7.p);
                             }  
@@ -2847,7 +2834,7 @@ void Gap__Bec__beNDMWShopCtrlA1__vfunc_21(beNDMWShopCtrlA1 *arg0) {
                     return;
                 }
                 alloc = igObject_GetAllocator(arg0);
-                alloc = GPR_00554c14 ? alloc : Memory_GetAllocatorBySelector(DAT_00587110[0]);
+                alloc = GPR_00554c14 ? alloc : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
                 {
                 igSmartPointer<beNDMWShopSelect02> win((beNDMWShopSelect02 *)FUN_003b4b10(alloc));
                 beNDMWWindow_BindContext(win.p, arg0, arg0->_insight, arg0->_playerNo, 0x7D5);
@@ -2899,13 +2886,13 @@ void Gap__Bec__beNDMWShopCtrlA1__vfunc_21(beNDMWShopCtrlA1 *arg0) {
                 }
                 if (s0 > 0) {
                     alloc = igObject_GetAllocator(arg0);
-                    alloc = GPR_00554c14 ? alloc : Memory_GetAllocatorBySelector(DAT_00587110[0]);
+                    alloc = GPR_00554c14 ? alloc : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
                     igSmartPointer<beNDMWShopCtrlA2> win((beNDMWShopCtrlA2 *)FUN_003b7a40(alloc));
                     beNDMWWindow_BindContext(win.p, arg0, arg0->_insight, arg0->_playerNo, s0);
                     ObjectList_AppendRetained(arg0->_subWindow, win.p);
                 } else {
                     alloc = igObject_GetAllocator(arg0);
-                    alloc = GPR_00554c14 ? alloc : Memory_GetAllocatorBySelector(DAT_00587110[0]);
+                    alloc = GPR_00554c14 ? alloc : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
                     igSmartPointer<beNDMWShopSelect03> win((beNDMWShopSelect03 *)FUN_003b4950(alloc));
                     beNDMWWindow_BindContext(win.p, arg0, arg0->_insight, arg0->_playerNo, 0x7D7);
                     ObjectList_AppendRetained(arg0->_subWindow, win.p);
@@ -2945,13 +2932,13 @@ void Gap__Bec__beNDMWShopCtrlA1__vfunc_21(beNDMWShopCtrlA1 *arg0) {
             case 0:
                 beMessenger_SendNamed(arg0->_messenger, DAT_0051b308, DAT_0051b8a8, 0, DAT_0051b620);
                 beMessenger_SendNamed(arg0->_messenger, DAT_0051b308, DAT_0051b318, 0, DAT_0051b620);
-                beMessenger_SelectGroup(arg0->_messenger, DAT_0051b3c0);
+                beMessenger_SelectGroup(arg0->_messenger, TEXTCTL_3);
                 beMessenger_AppendString(arg0->_messenger, DAT_0051b8b8);
                 beMessenger_AppendString(arg0->_messenger, DAT_004cf8a8[0]);
-                beMessenger_AppendString(arg0->_messenger, DAT_0051b550);
-                beMessenger_DispatchSelected(arg0->_messenger, DAT_0051b558);
+                beMessenger_AppendString(arg0->_messenger, DISPOFF);
+                beMessenger_DispatchSelected(arg0->_messenger, SWITCH_2);
                 alloc = igObject_GetAllocator(arg0);
-                alloc = GPR_00554c14 ? alloc : Memory_GetAllocatorBySelector(DAT_00587110[0]);
+                alloc = GPR_00554c14 ? alloc : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
                 {
                 igSmartPointer<beNDMWShopSelectA0> win((beNDMWShopSelectA0 *)FUN_003b4250(alloc));
                 beNDMWWindow_BindContext(win.p, arg0, arg0->_insight, arg0->_playerNo, 0);
@@ -2969,16 +2956,16 @@ void Gap__Bec__beNDMWShopCtrlA1__vfunc_21(beNDMWShopCtrlA1 *arg0) {
                 if ((beMessenger_GetBool(arg0->_messenger, 0) & 0xFF) == 1) {
                     return;
                 }
-                beMessenger_SelectGroup(arg0->_messenger, DAT_0051b3c0);
+                beMessenger_SelectGroup(arg0->_messenger, TEXTCTL_3);
                 beMessenger_AppendString(arg0->_messenger, DAT_0051b8d8);
                 beMessenger_AppendString(arg0->_messenger, DAT_0051b1c8);
                 beMessenger_AppendString(arg0->_messenger, DAT_0051b8e8);
-                beMessenger_DispatchSelected(arg0->_messenger, DAT_0051b6b0);
-                beMessenger_SelectGroup(arg0->_messenger, DAT_0051b3c0);
+                beMessenger_DispatchSelected(arg0->_messenger, TEXTSET);
+                beMessenger_SelectGroup(arg0->_messenger, TEXTCTL_3);
                 beMessenger_AppendString(arg0->_messenger, DAT_0051b8d8);
                 beMessenger_AppendString(arg0->_messenger, DAT_0051b1d0);
                 beMessenger_AppendString(arg0->_messenger, DAT_0051b8f0);
-                beMessenger_DispatchSelected(arg0->_messenger, DAT_0051b6b0);
+                beMessenger_DispatchSelected(arg0->_messenger, TEXTSET);
                 arg0->_st2 = arg0->_st2 + 1;
                 arg0->_st3 = 0;
             case 2:
@@ -2991,21 +2978,21 @@ void Gap__Bec__beNDMWShopCtrlA1__vfunc_21(beNDMWShopCtrlA1 *arg0) {
                 } else {
                     FUN_0042e9e0((beNDMWShopCtrlA1 *)arg0);
                     beNDMWWindow_RunMessageScript(arg0, DAT_0051b8f8, 0);
-                    beMessenger_SelectGroup(arg0->_messenger, DAT_0051b3c0);
+                    beMessenger_SelectGroup(arg0->_messenger, TEXTCTL_3);
                     beMessenger_AppendString(arg0->_messenger, DAT_0051b8b8);
                     beMessenger_AppendString(arg0->_messenger, DAT_004cf8a8[0]);
-                    beMessenger_AppendString(arg0->_messenger, ((int *)DAT_0051b6b8));
-                    beMessenger_DispatchSelected(arg0->_messenger, DAT_0051b558);
+                    beMessenger_AppendString(arg0->_messenger, ((int *)DISPON));
+                    beMessenger_DispatchSelected(arg0->_messenger, SWITCH_2);
                     beMessenger_SelectReceivers(arg0->_messenger, DAT_0051b308, DAT_0051b8a8, 0);
                     beMessenger_AppendString(arg0->_messenger, DAT_0051b868);
-                    sp40[0] = DAT_004e1058[0];
+                    sp40[0] = g_vec3Zero[0];
                     sp40[1] = DAT_004e105c[0];
                     sp40[2] = DAT_004e1060[0];
                     beMessenger_AppendVec3(arg0->_messenger, (float *)sp40);
                     beMessenger_DispatchSelected(arg0->_messenger, ((int *)DAT_0051b7e0));
                     beMessenger_SelectReceivers(arg0->_messenger, DAT_0051b308, DAT_0051b318, 0);
                     beMessenger_AppendString(arg0->_messenger, DAT_0051b868);
-                    sp30[0] = DAT_004e1058[0];
+                    sp30[0] = g_vec3Zero[0];
                     sp30[1] = DAT_004e105c[0];
                     sp30[2] = DAT_004e1060[0];
                     beMessenger_AppendVec3(arg0->_messenger, (float *)sp30);
@@ -3125,11 +3112,11 @@ void FUN_0042e330(beNDMWShopCtrlA1 *self) {
     }
     pageText[1] = 0;
     pageText[0] = page + '1';
-    beMessenger_SelectGroup(self->_messenger, &DAT_0051b3c0[0]);
+    beMessenger_SelectGroup(self->_messenger, TEXTCTL_3);
     beMessenger_AppendString(self->_messenger, &DAT_0051b8d8[0]);
     beMessenger_AppendString(self->_messenger, &DAT_0051b1c8[0]);
     beMessenger_AppendString(self->_messenger, pageText);
-    beMessenger_DispatchSelected(self->_messenger, &DAT_0051b6b0[0]);
+    beMessenger_DispatchSelected(self->_messenger, TEXTSET);
     switch (page) {
     case 0: case 1: case 2: case 3: case 4: case 5: case 6: case 7: case 8:
         for (i = 0; i < 6; i++) {
@@ -3216,14 +3203,14 @@ void FUN_0042e9e0(beNDMWShopCtrlA1 *arg0) {
         var_s1_2 = 0;
         do {
             temp_s3 = (int **)(l2->_data + var_s1_2);
-            if (DAT_00586f20[0] == 0) {
+            if (g_stringPool[0] == 0) {
                 var_v0 = FUN_002eb010(0x10);
                 if (var_v0 != 0) {
                     var_v0 = StringPool_Construct(var_v0);
                 }
-                DAT_00586f20[0] = var_v0;
+                g_stringPool[0] = var_v0;
             }
-            temp_s2 = (int *)StringPool_Intern(DAT_00586f20[0], 0);
+            temp_s2 = (int *)StringPool_Intern(g_stringPool[0], 0);
             temp_a0 = *temp_s3;
             if (temp_a0 != 0) {
                 temp_a1_2 = temp_a0 - 2;
@@ -3284,7 +3271,7 @@ void Gap__Bec__beNDMWShopCtrlA2__vfunc_21(beNDMWShopCtrlA2 *arg0) {
                 }
                 beNDMWWindow_PresentModelAtOrigin(arg0, DAT_0051b9c0, 0, a3, DAT_0051b620);
                 alloc = igObject_GetAllocator(arg0);
-                alloc = GPR_00554c14 ? alloc : Memory_GetAllocatorBySelector(DAT_00587110[0]);
+                alloc = GPR_00554c14 ? alloc : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
                 {
                     igSmartPointer<beNDMWShopSelect03> win((beNDMWShopSelect03 *)FUN_003b4950(alloc));
                     beNDMWWindow_BindContext(win.p, arg0, arg0->_insight, arg0->_playerNo, 0x7DD);
@@ -3301,7 +3288,7 @@ void Gap__Bec__beNDMWShopCtrlA2__vfunc_21(beNDMWShopCtrlA2 *arg0) {
                 break;
             case 2:
                 alloc = igObject_GetAllocator(arg0);
-                alloc = GPR_00554c14 ? alloc : Memory_GetAllocatorBySelector(DAT_00587110[0]);
+                alloc = GPR_00554c14 ? alloc : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
                 {
                     igSmartPointer<beNDMWShopSelect02> win((beNDMWShopSelect02 *)FUN_003b4b10(alloc));
                     beNDMWWindow_BindContext(win.p, arg0, arg0->_insight, arg0->_playerNo, 0x7D8);
@@ -3345,7 +3332,7 @@ void Gap__Bec__beNDMWShopCtrlA2__vfunc_21(beNDMWShopCtrlA2 *arg0) {
             switch (arg0->_st2) {
             case 0:
                 alloc = igObject_GetAllocator(arg0);
-                alloc = GPR_00554c14 ? alloc : Memory_GetAllocatorBySelector(DAT_00587110[0]);
+                alloc = GPR_00554c14 ? alloc : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
                 {
                 igSmartPointer<beNDMWShopSelect03> win((beNDMWShopSelect03 *)FUN_003b4950(alloc));
                 beNDMWWindow_BindContext(win.p, arg0, arg0->_insight, arg0->_playerNo, 0);
@@ -3369,7 +3356,7 @@ void Gap__Bec__beNDMWShopCtrlA2__vfunc_21(beNDMWShopCtrlA2 *arg0) {
                 beMessenger_SendNamed(arg0->_messenger, DAT_0051b5d8, DAT_0051b918, 0, DAT_0051b5e8);
                 {
                 int db = beMessenger_GetObject(arg0->_messenger, 0);
-                ctx = (beNDMWStatus *)FUN_00236f80(arg0->_insight, DAT_0058b028[0]);
+                ctx = (beNDMWStatus *)FUN_00236f80(arg0->_insight, g_beNDMWStatus_metaObject[0]);
                 maxv = 0;
                 names1 = DAT_004cfa00;
                 names2 = DAT_004cfa10;
@@ -3393,7 +3380,7 @@ void Gap__Bec__beNDMWShopCtrlA2__vfunc_21(beNDMWShopCtrlA2 *arg0) {
                         if (ar->_count != 0 && idx >= 0 && idx < ar->_count) ((char *)ar->_data)[idx] = GPR_00554a4c;
                     }
                     if (maxv < beDataBase_GetRecordInt(db, idx, DAT_0051b9e0)) maxv = beDataBase_GetRecordInt(db, idx, DAT_0051b9e0);
-                    FUN_003f5410((beNDMWShopSelect03 *)win, DAT_0051b9e8, names1.p[i], ((void *)beDataBase_GetRecordString(db, idx, DAT_0051b678)), DAT_0051b598);
+                    FUN_003f5410((beNDMWShopSelect03 *)win, DAT_0051b9e8, names1.p[i], ((void *)beDataBase_GetRecordString(db, idx, NAME_2)), DAT_0051b598);
                     beNDMWWindow_PresentModelAtOrigin(win.p, ((void *)beDataBase_GetRecordString(db, idx, DAT_0051b920)), i, names2.p[i], DAT_0051b620);
                     {
                         float x, y, z;
@@ -3402,7 +3389,7 @@ void Gap__Bec__beNDMWShopCtrlA2__vfunc_21(beNDMWShopCtrlA2 *arg0) {
                         case 1: x = 1.0f; y = 1.0f; z = 0.0f; break;
                         default: x = 1.0f; y = 1.0f; z = 1.0f; break;
                         }
-                        beMessenger_SelectGroup(arg0->_messenger, DAT_0051b3c0);
+                        beMessenger_SelectGroup(arg0->_messenger, TEXTCTL_3);
                         beMessenger_AppendString(arg0->_messenger, DAT_0051b9e8);
                         beMessenger_AppendString(arg0->_messenger, names1.p[i]);
                         vec[0] = x; vec[1] = y; vec[2] = z;
@@ -3425,7 +3412,7 @@ void Gap__Bec__beNDMWShopCtrlA2__vfunc_21(beNDMWShopCtrlA2 *arg0) {
                     int k;
                     names3 = DAT_004cfa20;
                     for (k = 0; k < 3; k++) {
-                        beMessenger_SelectGroup(arg0->_messenger, DAT_0051b3c0);
+                        beMessenger_SelectGroup(arg0->_messenger, TEXTCTL_3);
                         beMessenger_AppendString(arg0->_messenger, DAT_0051b9e8);
                         beMessenger_AppendString(arg0->_messenger, names3.p[k]);
                         beMessenger_DispatchSelected(arg0->_messenger, DAT_0051b3d8);
@@ -3497,22 +3484,22 @@ void Gap__Bec__beNDMWShopCtrlEvolve__vfunc_21(beNDMWShopCtrlEvolve *self) {
                     vB[1] = 0x41C80000;
                     vB[2] = 0;
                     ((DummyVirtual *)self)->v24(vB, vA);
-                    FUN_003f5410(self, &DAT_0051ba48[0], ((char * *)DAT_004cf8a0)[0], &DAT_0051b590[0], &DAT_0051b460[0]);
-                    FUN_003f5410(self, &DAT_0051ba48[0], DAT_004cf8a4[0], &DAT_0051b590[0], &DAT_0051b460[0]);
+                    FUN_003f5410(self, &DAT_0051ba48[0], ((char * *)g_fontNames)[0], &DAT_0051b590[0], &DAT_0051b460[0]);
+                    FUN_003f5410(self, &DAT_0051ba48[0], g_fontName1[0], &DAT_0051b590[0], &DAT_0051b460[0]);
                 } else {
                     beNDMWWindow_PresentModelAtOrigin(self, &DAT_0051b610[0], 0, &DAT_0051ba60[0], &DAT_0051b620[0]);
                 }
-                APPENDSTR_42f710(self->_textCloseTypeList, &DAT_0051b470[0])
+                APPENDSTR_42f710(self->_textCloseTypeList, STWINFONT29)
                 APPENDSTR_42f710(self->_textCloseNameList, &DAT_0051b548[0])
                 beNDMWWindow_RunMessageScript(self, &DAT_0051b3b0[0], 0x4E6);
                 APPENDSTR_42f710(self->_textCloseTypeList, &DAT_0051ba70[0])
-                APPENDSTRV(self->_textCloseNameList, ((char * *)DAT_004cf8a0)[0])
+                APPENDSTRV(self->_textCloseNameList, ((char * *)g_fontNames)[0])
                 APPENDSTR_42f710(self->_textCloseTypeList, &DAT_0051ba70[0])
-                APPENDSTRV(self->_textCloseNameList, DAT_004cf8a4[0])
+                APPENDSTRV(self->_textCloseNameList, g_fontName1[0])
                 beNDMWWindow_RunMessageScript(self, &DAT_0051b3b0[0], 0x4C2);
                 {
                 int i = 0;
-                char **fp = ((char * *)DAT_004cf8a0);
+                char **fp = ((char * *)g_fontNames);
                 do {
                     FUN_003f5410(self, &DAT_0051ba80[0], *fp, &DAT_0051b590[0], &DAT_0051b598[0]);
                     FUN_003f5410(self, &DAT_0051ba90[0], *fp, &DAT_0051b590[0], &DAT_0051b598[0]);
@@ -3532,7 +3519,7 @@ void Gap__Bec__beNDMWShopCtrlEvolve__vfunc_21(beNDMWShopCtrlEvolve *self) {
                 } while (j < 16);
                 }
                 beNDMWWindow_RunMessageScript(self, &DAT_0051b3b0[0], 0x4B2);
-                FUN_003f5410(self, &DAT_0051b470[0], ((char * *)DAT_004cf8a0)[0], &DAT_0051b590[0], &DAT_0051b598[0]);
+                FUN_003f5410(self, STWINFONT29, ((char * *)g_fontNames)[0], &DAT_0051b590[0], &DAT_0051b598[0]);
                 self->_st0 = self->_st0 + 1;
                 self->_st3 = 0;
                 self->_st2 = 0;
@@ -3608,7 +3595,7 @@ void Gap__Bec__beNDMWShopCtrlEvolve__vfunc_21(beNDMWShopCtrlEvolve *self) {
                     if (0 < SUB(self)->_count) {
                         do {
                             obj = (int *)((int *)((igObjectList *)*(int *)&self->_subWindow)->_data)[i];
-                            if ((obj != 0) && (igObject_IsKindOf(obj, DAT_0058abd8[0]) != 0)) {
+                            if ((obj != 0) && (igObject_IsKindOf(obj, g_beNDMWStatusSelectE1_metaObject[0]) != 0)) {
                                 found = obj;
                             } else {
                                 found = 0;
@@ -3782,7 +3769,7 @@ void Gap__Bec__beNDMWShopCtrlEvolve__vfunc_21(beNDMWShopCtrlEvolve *self) {
                 igSmartPointer<beNDMWShopSelect00> win((beNDMWShopSelect00 *)FUN_003b4f50(alloc));
                 beNDMWWindow_BindContext(win.p, self, self->_insight, self->_playerNo, 0);
                 ObjectList_AppendRetained(self->_subWindow, win.p);
-                APPENDSTR_42f710(((beNDMWWindowSelect *)win.p)->_textCloseTypeList, &DAT_0051b470[0])
+                APPENDSTR_42f710(((beNDMWWindowSelect *)win.p)->_textCloseTypeList, STWINFONT29)
                 APPENDSTR_42f710(((beNDMWWindowSelect *)win.p)->_textCloseNameList, &DAT_0051b548[0])
                 beNDMWWindow_RunMessageScript(self, &DAT_0051b3b0[0], 0x4EC);
                 }
@@ -3794,16 +3781,16 @@ void Gap__Bec__beNDMWShopCtrlEvolve__vfunc_21(beNDMWShopCtrlEvolve *self) {
                     char *rs;
                     beMessenger_SendNamed(self->_messenger, &DAT_0051b5d8[0], &DAT_0051bae8[0], 0, &DAT_0051b5e8[0]);
                     rs = beDataBase_GetRecordString(beMessenger_GetObject(self->_messenger, 0), e->_id, &DAT_0051baf0[0]);
-                    beMessenger_SelectGroup(self->_messenger, &DAT_0051b3c0[0]);
-                    beMessenger_AppendString(self->_messenger, &DAT_0051b470[0]);
-                    beMessenger_AppendString(self->_messenger, ((char * *)DAT_004cf8a0)[0]);
+                    beMessenger_SelectGroup(self->_messenger, TEXTCTL_3);
+                    beMessenger_AppendString(self->_messenger, STWINFONT29);
+                    beMessenger_AppendString(self->_messenger, ((char * *)g_fontNames)[0]);
                     beMessenger_AppendString(self->_messenger, rs);
-                    beMessenger_DispatchSelected(self->_messenger, &DAT_0051b6b0[0]);
-                    beMessenger_SelectGroup(self->_messenger, &DAT_0051b3c0[0]);
-                    beMessenger_AppendString(self->_messenger, &DAT_0051b470[0]);
-                    beMessenger_AppendString(self->_messenger, ((char * *)DAT_004cf8a0)[0]);
-                    beMessenger_AppendString(self->_messenger, &((int *)DAT_0051b6b8)[0]);
-                    beMessenger_DispatchSelected(self->_messenger, &DAT_0051b558[0]);
+                    beMessenger_DispatchSelected(self->_messenger, TEXTSET);
+                    beMessenger_SelectGroup(self->_messenger, TEXTCTL_3);
+                    beMessenger_AppendString(self->_messenger, STWINFONT29);
+                    beMessenger_AppendString(self->_messenger, ((char * *)g_fontNames)[0]);
+                    beMessenger_AppendString(self->_messenger, &((int *)DISPON)[0]);
+                    beMessenger_DispatchSelected(self->_messenger, SWITCH_2);
                     FUN_004313b0(self);
                 }
                 self->_nowProcKazu = SUB(self)->_count;
@@ -3830,7 +3817,7 @@ void Gap__Bec__beNDMWShopCtrlEvolve__vfunc_21(beNDMWShopCtrlEvolve *self) {
                 igSmartPointer<beNDMWShopSelect00> win((beNDMWShopSelect00 *)FUN_003b4f50(alloc));
                 beNDMWWindow_BindContext(win.p, self, self->_insight, self->_playerNo, 0);
                 ObjectList_AppendRetained(self->_subWindow, win.p);
-                APPENDSTR_42f710(((beNDMWWindowSelect *)win.p)->_textCloseTypeList, &DAT_0051b470[0])
+                APPENDSTR_42f710(((beNDMWWindowSelect *)win.p)->_textCloseTypeList, STWINFONT29)
                 APPENDSTR_42f710(((beNDMWWindowSelect *)win.p)->_textCloseNameList, &DAT_0051b1c8[0])
                 if (self->_st2 == 0) {
                     beNDMWWindow_RunMessageScript(win.p, &DAT_0051b3b0[0], 0x7E4);
@@ -3892,76 +3879,76 @@ void FUN_00430d20(beNDMWShopCtrlEvolve *ctl, int sendNames, int sendStats) {
     struct NamePair *labelPair;
     if (sendNames != 0) {
         itemList = (beNDMWShinkaObjectList *)((beNDMWShinkaCtrl *)ctl->_shinkaCtrl)->_list;
-        for (slot = 0, labelPtr = ((char * *)DAT_004cf8a0); slot < 8; slot++, labelPtr++) {
+        for (slot = 0, labelPtr = ((char * *)g_fontNames); slot < 8; slot++, labelPtr++) {
             listIndex = slot + ctl->_nowPage * 8;
             if (itemList->_count - 1 < listIndex) {
-                beMessenger_SelectGroup(ctl->_messenger, ((char *)DAT_0051b3c0));
+                beMessenger_SelectGroup(ctl->_messenger, ((char *)TEXTCTL_3));
                 beMessenger_AppendString(ctl->_messenger, ((char *)DAT_0051ba80));
                 beMessenger_AppendString(ctl->_messenger, *labelPtr);
-                beMessenger_AppendString(ctl->_messenger, ((char *)DAT_0051b550));
-                beMessenger_DispatchSelected(ctl->_messenger, ((char *)DAT_0051b558));
-                beMessenger_SelectGroup(ctl->_messenger, ((char *)DAT_0051b3c0));
+                beMessenger_AppendString(ctl->_messenger, ((char *)DISPOFF));
+                beMessenger_DispatchSelected(ctl->_messenger, ((char *)SWITCH_2));
+                beMessenger_SelectGroup(ctl->_messenger, ((char *)TEXTCTL_3));
                 beMessenger_AppendString(ctl->_messenger, ((char *)DAT_0051ba90));
                 beMessenger_AppendString(ctl->_messenger, *labelPtr);
-                beMessenger_AppendString(ctl->_messenger, ((char *)DAT_0051b550));
-                beMessenger_DispatchSelected(ctl->_messenger, ((char *)DAT_0051b558));
-                beMessenger_SelectGroup(ctl->_messenger, ((char *)DAT_0051b3c0));
+                beMessenger_AppendString(ctl->_messenger, ((char *)DISPOFF));
+                beMessenger_DispatchSelected(ctl->_messenger, ((char *)SWITCH_2));
+                beMessenger_SelectGroup(ctl->_messenger, ((char *)TEXTCTL_3));
                 beMessenger_AppendString(ctl->_messenger, ((char *)DAT_0051baa0));
                 beMessenger_AppendString(ctl->_messenger, *labelPtr);
-                beMessenger_AppendString(ctl->_messenger, ((char *)DAT_0051b550));
-                beMessenger_DispatchSelected(ctl->_messenger, ((char *)DAT_0051b558));
+                beMessenger_AppendString(ctl->_messenger, ((char *)DISPOFF));
+                beMessenger_DispatchSelected(ctl->_messenger, ((char *)SWITCH_2));
             } else {
                 item = (beNDMWShinkaObject *)((int *)itemList->_data)[listIndex];
                 itemName = (char *)item->_name;
-                beMessenger_SelectGroup(ctl->_messenger, ((char *)DAT_0051b3c0));
+                beMessenger_SelectGroup(ctl->_messenger, ((char *)TEXTCTL_3));
                 beMessenger_AppendString(ctl->_messenger, ((char *)DAT_0051ba80));
                 beMessenger_AppendString(ctl->_messenger, *labelPtr);
                 beMessenger_AppendString(ctl->_messenger, itemName);
-                beMessenger_DispatchSelected(ctl->_messenger, ((char *)DAT_0051b6b0));
-                beMessenger_SelectGroup(ctl->_messenger, ((char *)DAT_0051b3c0));
+                beMessenger_DispatchSelected(ctl->_messenger, ((char *)TEXTSET));
+                beMessenger_SelectGroup(ctl->_messenger, ((char *)TEXTCTL_3));
                 beMessenger_AppendString(ctl->_messenger, ((char *)DAT_0051ba80));
                 beMessenger_AppendString(ctl->_messenger, *labelPtr);
-                beMessenger_AppendString(ctl->_messenger, DAT_0051b6b8);
-                beMessenger_DispatchSelected(ctl->_messenger, ((char *)DAT_0051b558));
-                beMessenger_SelectGroup(ctl->_messenger, ((char *)DAT_0051b3c0));
+                beMessenger_AppendString(ctl->_messenger, DISPON);
+                beMessenger_DispatchSelected(ctl->_messenger, ((char *)SWITCH_2));
+                beMessenger_SelectGroup(ctl->_messenger, ((char *)TEXTCTL_3));
                 beMessenger_AppendString(ctl->_messenger, ((char *)DAT_0051ba90));
                 beMessenger_AppendString(ctl->_messenger, *labelPtr);
                 beMessenger_AppendString(ctl->_messenger, DAT_0051bb20);
-                beMessenger_DispatchSelected(ctl->_messenger, ((char *)DAT_0051b6b0));
-                beMessenger_SelectGroup(ctl->_messenger, ((char *)DAT_0051b3c0));
+                beMessenger_DispatchSelected(ctl->_messenger, ((char *)TEXTSET));
+                beMessenger_SelectGroup(ctl->_messenger, ((char *)TEXTCTL_3));
                 beMessenger_AppendString(ctl->_messenger, ((char *)DAT_0051ba90));
                 beMessenger_AppendString(ctl->_messenger, *labelPtr);
-                beMessenger_AppendString(ctl->_messenger, DAT_0051b6b8);
-                beMessenger_DispatchSelected(ctl->_messenger, ((char *)DAT_0051b558));
-                sprintf(countBuf, ((char *)DAT_0051b468), ((beNDMWShinkaObject *)((int *)itemList->_data)[listIndex])->_level);
-                beMessenger_SelectGroup(ctl->_messenger, ((char *)DAT_0051b3c0));
+                beMessenger_AppendString(ctl->_messenger, DISPON);
+                beMessenger_DispatchSelected(ctl->_messenger, ((char *)SWITCH_2));
+                sprintf(countBuf, ((char *)percent_d), ((beNDMWShinkaObject *)((int *)itemList->_data)[listIndex])->_level);
+                beMessenger_SelectGroup(ctl->_messenger, ((char *)TEXTCTL_3));
                 beMessenger_AppendString(ctl->_messenger, ((char *)DAT_0051baa0));
                 beMessenger_AppendString(ctl->_messenger, *labelPtr);
                 beMessenger_AppendString(ctl->_messenger, countBuf);
-                beMessenger_DispatchSelected(ctl->_messenger, ((char *)DAT_0051b6b0));
-                beMessenger_SelectGroup(ctl->_messenger, ((char *)DAT_0051b3c0));
+                beMessenger_DispatchSelected(ctl->_messenger, ((char *)TEXTSET));
+                beMessenger_SelectGroup(ctl->_messenger, ((char *)TEXTCTL_3));
                 beMessenger_AppendString(ctl->_messenger, ((char *)DAT_0051baa0));
                 beMessenger_AppendString(ctl->_messenger, *labelPtr);
-                beMessenger_AppendString(ctl->_messenger, DAT_0051b6b8);
-                beMessenger_DispatchSelected(ctl->_messenger, ((char *)DAT_0051b558));
+                beMessenger_AppendString(ctl->_messenger, DISPON);
+                beMessenger_DispatchSelected(ctl->_messenger, ((char *)SWITCH_2));
             }
         }
         if (ctl->_maxPage > 1) {
             pageDigits[1] = 0;
             digitChar = ctl->_nowPage; digitChar += 0x31;
             pageDigits[0] = digitChar;
-            beMessenger_SelectGroup(ctl->_messenger, ((char *)DAT_0051b3c0));
+            beMessenger_SelectGroup(ctl->_messenger, ((char *)TEXTCTL_3));
             beMessenger_AppendString(ctl->_messenger, ((char *)DAT_0051ba48));
-            beMessenger_AppendString(ctl->_messenger, ((char * *)DAT_004cf8a0)[0]);
+            beMessenger_AppendString(ctl->_messenger, ((char * *)g_fontNames)[0]);
             beMessenger_AppendString(ctl->_messenger, pageDigits);
-            beMessenger_DispatchSelected(ctl->_messenger, ((char *)DAT_0051b6b0));
+            beMessenger_DispatchSelected(ctl->_messenger, ((char *)TEXTSET));
             digitChar = ctl->_maxPage; digitChar += 0x30;
             pageDigits[0] = digitChar;
-            beMessenger_SelectGroup(ctl->_messenger, ((char *)DAT_0051b3c0));
+            beMessenger_SelectGroup(ctl->_messenger, ((char *)TEXTCTL_3));
             beMessenger_AppendString(ctl->_messenger, ((char *)DAT_0051ba48));
-            beMessenger_AppendString(ctl->_messenger, ((char * *)DAT_004cf8a0)[1]);
+            beMessenger_AppendString(ctl->_messenger, ((char * *)g_fontNames)[1]);
             beMessenger_AppendString(ctl->_messenger, pageDigits);
-            beMessenger_DispatchSelected(ctl->_messenger, ((char *)DAT_0051b6b0));
+            beMessenger_DispatchSelected(ctl->_messenger, ((char *)TEXTSET));
         }
     }
     if (sendStats != 0) {
@@ -3989,25 +3976,25 @@ void FUN_00430d20(beNDMWShopCtrlEvolve *ctl, int sendNames, int sendStats) {
                 statVals[14] = selItem->_heal;
                 statVals[15] = selItem->_force;
                 for (statIdx = 0, valuePtr = statVals, labelPair = ((struct NamePair *)DAT_004cf8d0); statIdx < 16; statIdx++, valuePtr++, labelPair++) {
-                    sprintf(valueBuf, ((char *)DAT_0051b468), *valuePtr);
-                    beMessenger_SelectGroup(ctl->_messenger, ((char *)DAT_0051b3c0));
+                    sprintf(valueBuf, ((char *)percent_d), *valuePtr);
+                    beMessenger_SelectGroup(ctl->_messenger, ((char *)TEXTCTL_3));
                     beMessenger_AppendString(ctl->_messenger, ((char *)DAT_0051bab0));
                     beMessenger_AppendString(ctl->_messenger, labelPair->name);
                     beMessenger_AppendString(ctl->_messenger, valueBuf);
-                    beMessenger_DispatchSelected(ctl->_messenger, ((char *)DAT_0051b6b0));
+                    beMessenger_DispatchSelected(ctl->_messenger, ((char *)TEXTSET));
                 }
                 beMessenger_SendNamed(ctl->_messenger, ((char *)DAT_0051b5d8), ((char *)DAT_0051bae8), 0, ((char *)DAT_0051b5e8));
                 recordName = (char *)((int)beDataBase_GetRecordString(beMessenger_GetObject(ctl->_messenger, 0), selItem->_id, ((char *)DAT_0051baf0)));
-                beMessenger_SelectGroup(ctl->_messenger, ((char *)DAT_0051b3c0));
-                beMessenger_AppendString(ctl->_messenger, ((char *)DAT_0051b470));
-                beMessenger_AppendString(ctl->_messenger, ((char * *)DAT_004cf8a0)[0]);
+                beMessenger_SelectGroup(ctl->_messenger, ((char *)TEXTCTL_3));
+                beMessenger_AppendString(ctl->_messenger, ((char *)STWINFONT29));
+                beMessenger_AppendString(ctl->_messenger, ((char * *)g_fontNames)[0]);
                 beMessenger_AppendString(ctl->_messenger, recordName);
-                beMessenger_DispatchSelected(ctl->_messenger, ((char *)DAT_0051b6b0));
-                beMessenger_SelectGroup(ctl->_messenger, ((char *)DAT_0051b3c0));
-                beMessenger_AppendString(ctl->_messenger, ((char *)DAT_0051b470));
-                beMessenger_AppendString(ctl->_messenger, ((char * *)DAT_004cf8a0)[0]);
-                beMessenger_AppendString(ctl->_messenger, DAT_0051b6b8);
-                beMessenger_DispatchSelected(ctl->_messenger, ((char *)DAT_0051b558));
+                beMessenger_DispatchSelected(ctl->_messenger, ((char *)TEXTSET));
+                beMessenger_SelectGroup(ctl->_messenger, ((char *)TEXTCTL_3));
+                beMessenger_AppendString(ctl->_messenger, ((char *)STWINFONT29));
+                beMessenger_AppendString(ctl->_messenger, ((char * *)g_fontNames)[0]);
+                beMessenger_AppendString(ctl->_messenger, DISPON);
+                beMessenger_DispatchSelected(ctl->_messenger, ((char *)SWITCH_2));
             }
         }
     }
@@ -4228,7 +4215,7 @@ void Gap__Bec__beNDMWShopCtrlDigilabo__vfunc_21(beNDMWShopCtrlDigilabo *self) {
                 if (0 < SUBN(self)) {
                     do {
                         igObject *e = (igObject *)((int *)((igObjectList *)(*(int *)&self->_subWindow))->_data)[i];
-                        if (e != 0 && igObject_IsKindOf(e, DAT_0058ab68[0]) != 0) {
+                        if (e != 0 && igObject_IsKindOf(e, g_beNDMWStatusTitle01_metaObject[0]) != 0) {
                             found = e;
                         } else {
                             found = 0;
@@ -4456,7 +4443,7 @@ void Gap__Bec__beNDMWShopCtrlDigilabo__vfunc_21(beNDMWShopCtrlDigilabo *self) {
                     case 0:
                         self->_st2 = self->_st2 + 1;
                         self->_st3 = 0;
-                        ((beSystem *)FUN_00236f80(self->_insight, DAT_00587d08[0]))->_isSResetEnable = 0;
+                        ((beSystem *)FUN_00236f80(self->_insight, g_beSystem_metaObject[0]))->_isSResetEnable = 0;
                         break;
                     default:
                         self->_st1 = 5;
@@ -4488,7 +4475,7 @@ void Gap__Bec__beNDMWShopCtrlDigilabo__vfunc_21(beNDMWShopCtrlDigilabo *self) {
         self->_st2 = 0;
         self->_st1 = 0;
         if (self->_isDemoRun != 0) {
-            beLua__RunNamedChunk(FUN_00236f80(self->_insight, DAT_00589208[0]), &DAT_0051bbd0[0], &DAT_0051bbe8[0]);
+            beLua__RunNamedChunk(FUN_00236f80(self->_insight, g_beLua_metaObject[0]), &DAT_0051bbd0[0], &DAT_0051bbe8[0]);
             return;
         }
         break;
@@ -4548,7 +4535,7 @@ void FUN_004329d0(beNDMWShopCtrlDigilabo *self) {
             }
             fold = igProperty_GetRecordFolder(obj, &DAT_0051bc48[0])->f12;
             alloc = igObject_GetAllocator(self);
-            alloc = GPR_00554c14 ? alloc : Memory_GetAllocatorBySelector(DAT_00587110[0]);
+            alloc = GPR_00554c14 ? alloc : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
             igSmartPointer<igIntList> lst((igIntList *)((int)FUN_002caa70(alloc)));
             j = 0;
             if (0 < fold->_count) {
@@ -4636,7 +4623,7 @@ int FUN_00432d30(beNDMWShopCtrlDigilabo *arg0) {
                 if (GPR_00554c14 != 0) {
                     al2 = al;
                 } else {
-                    al2 = ((int)Memory_GetAllocatorBySelector(DAT_00587110[0]));
+                    al2 = ((int)Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]));
                 }
                 {
                 igSmartPointer<igIntList> sp((igIntList *)FUN_002caa70(al2));
@@ -4731,7 +4718,7 @@ void FUN_00433120(beNDMWWindow *arg0, int arg1, int arg2) {
         var_s0 = 0;
         do {
             e = (beNDMWWindow *)((int *)((igObjectList *)arg0->_subWindow)->_data)[var_s1];
-            if ((e != 0) && (igObject_IsKindOf(e, DAT_0058ab68[0]) != 0)) {
+            if ((e != 0) && (igObject_IsKindOf(e, g_beNDMWStatusTitle01_metaObject[0]) != 0)) {
                 var_s2 = e;
             } else {
                 var_s2 = 0;
@@ -4746,7 +4733,7 @@ void FUN_00433120(beNDMWWindow *arg0, int arg1, int arg2) {
         if (GPR_00554c14 != 0) {
             w = var_v0;
         } else {
-            w = ((int)Memory_GetAllocatorBySelector(DAT_00587110[0]));
+            w = ((int)Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]));
         }
         /* The new window is owned by the stack reference until the sub-window list has taken its own. */
         igSmartPointer<beNDMWStatusTitle01> created((beNDMWStatusTitle01 *)FUN_003b3ac0(w));
@@ -4797,7 +4784,7 @@ void Gap__Bec__beNDMWShopCtrlEditBit__vfunc_21(beNDMWShopCtrlEditBit *self) {
             INTERN_APPEND_4332d0(self->_textCloseTypeList, &DAT_0051bc70[0])
             INTERN_APPEND_4332d0(self->_textCloseNameList, &DAT_0051b1d0[0])
             beNDMWWindow_RunMessageScript(self, &DAT_0051b3b0[0], 0x515);
-            INTERN_APPEND_4332d0(self->_textCloseTypeList, &DAT_0051b470[0])
+            INTERN_APPEND_4332d0(self->_textCloseTypeList, STWINFONT29)
             INTERN_APPEND_4332d0(self->_textCloseNameList, &DAT_0051b548[0])
             beNDMWWindow_RunMessageScript(self, &DAT_0051b3b0[0], 0x550);
             break;
@@ -4810,7 +4797,7 @@ void Gap__Bec__beNDMWShopCtrlEditBit__vfunc_21(beNDMWShopCtrlEditBit *self) {
             INTERN_APPEND_4332d0(self->_textCloseTypeList, &DAT_0051bc70[0])
             INTERN_APPEND_4332d0(self->_textCloseNameList, &DAT_0051b1d8[0])
             beNDMWWindow_RunMessageScript(self, &DAT_0051b3b0[0], 0x55F);
-            INTERN_APPEND_4332d0(self->_textCloseTypeList, &DAT_0051b470[0])
+            INTERN_APPEND_4332d0(self->_textCloseTypeList, STWINFONT29)
             INTERN_APPEND_4332d0(self->_textCloseNameList, &DAT_0051b548[0])
             beNDMWWindow_RunMessageScript(self, &DAT_0051b3b0[0], 0x557);
             break;
@@ -4947,11 +4934,11 @@ void Gap__Bec__beNDMWShopCtrlEditBit__vfunc_21(beNDMWShopCtrlEditBit *self) {
                     ((beNDMWWindow *)self->_mother)->_retCode = self->_editBit;
                     self->_st2 = self->_st2 + 1;
                     self->_st3 = 0;
-                    beMessenger_SelectGroup(self->_messenger, &DAT_0051b3c0[0]);
-                    beMessenger_AppendString(self->_messenger, &DAT_0051b470[0]);
+                    beMessenger_SelectGroup(self->_messenger, TEXTCTL_3);
+                    beMessenger_AppendString(self->_messenger, STWINFONT29);
                     beMessenger_AppendString(self->_messenger, &DAT_0051b548[0]);
-                    beMessenger_AppendString(self->_messenger, &DAT_0051b550[0]);
-                    beMessenger_DispatchSelected(self->_messenger, &DAT_0051b558[0]);
+                    beMessenger_AppendString(self->_messenger, DISPOFF);
+                    beMessenger_DispatchSelected(self->_messenger, SWITCH_2);
                     return;
                 }
             }
@@ -5028,23 +5015,23 @@ void Gap__Bec__beNDMWShopCtrlEditBit__vfunc_21(beNDMWShopCtrlEditBit *self) {
         self->_st1 = 0;
         do {
             sprintf(&sp50[0], &DAT_0051bca8[0], i);
-            beMessenger_SelectGroup(self->_messenger, &DAT_0051b3c0[0]);
+            beMessenger_SelectGroup(self->_messenger, TEXTCTL_3);
             beMessenger_AppendString(self->_messenger, &DAT_0051bd18[0]);
             beMessenger_AppendString(self->_messenger, &sp50[0]);
-            beMessenger_AppendString(self->_messenger, &DAT_0051b550[0]);
-            beMessenger_DispatchSelected(self->_messenger, &DAT_0051b558[0]);
+            beMessenger_AppendString(self->_messenger, DISPOFF);
+            beMessenger_DispatchSelected(self->_messenger, SWITCH_2);
             sprintf(&sp50[0], &DAT_0051bcb8[0], i);
-            beMessenger_SelectGroup(self->_messenger, &DAT_0051b3c0[0]);
+            beMessenger_SelectGroup(self->_messenger, TEXTCTL_3);
             beMessenger_AppendString(self->_messenger, &DAT_0051bd18[0]);
             beMessenger_AppendString(self->_messenger, &sp50[0]);
-            beMessenger_AppendString(self->_messenger, &DAT_0051b550[0]);
-            beMessenger_DispatchSelected(self->_messenger, &DAT_0051b558[0]);
+            beMessenger_AppendString(self->_messenger, DISPOFF);
+            beMessenger_DispatchSelected(self->_messenger, SWITCH_2);
             sprintf(&sp50[0], &DAT_0051bcc8[0], i);
-            beMessenger_SelectGroup(self->_messenger, &DAT_0051b3c0[0]);
+            beMessenger_SelectGroup(self->_messenger, TEXTCTL_3);
             beMessenger_AppendString(self->_messenger, &DAT_0051bd18[0]);
             beMessenger_AppendString(self->_messenger, &sp50[0]);
-            beMessenger_AppendString(self->_messenger, &DAT_0051b550[0]);
-            beMessenger_DispatchSelected(self->_messenger, &DAT_0051b558[0]);
+            beMessenger_AppendString(self->_messenger, DISPOFF);
+            beMessenger_DispatchSelected(self->_messenger, SWITCH_2);
             i += 1;
         } while (i < 7);
         return;
@@ -5162,13 +5149,13 @@ void Gap__Bec__beNDMWShopCtrlSell__vfunc_21(beNDMWShopCtrlSell *self) {
                 self->_st3 = 0;
             case 1:
                 if (((beNDMWWindowList *)self->_subWindow)->_count != self->_nowProcKazu) {
-                    beMessenger_SelectGroup(self->_messenger, &DAT_0051b3c0[0]);
-                    beMessenger_AppendString(self->_messenger, &DAT_0051b470[0]);
-                    beMessenger_AppendString(self->_messenger, ((char * *)DAT_004cf8a0)[0]);
+                    beMessenger_SelectGroup(self->_messenger, TEXTCTL_3);
+                    beMessenger_AppendString(self->_messenger, STWINFONT29);
+                    beMessenger_AppendString(self->_messenger, ((char * *)g_fontNames)[0]);
                     beMessenger_DispatchSelected(self->_messenger, &DAT_0051b3d8[0]);
-                    beMessenger_SelectGroup(self->_messenger, &DAT_0051b3c0[0]);
-                    beMessenger_AppendString(self->_messenger, &DAT_0051b470[0]);
-                    beMessenger_AppendString(self->_messenger, DAT_004cf8a4[0]);
+                    beMessenger_SelectGroup(self->_messenger, TEXTCTL_3);
+                    beMessenger_AppendString(self->_messenger, STWINFONT29);
+                    beMessenger_AppendString(self->_messenger, g_fontName1[0]);
                     beMessenger_DispatchSelected(self->_messenger, &DAT_0051b3d8[0]);
                     switch (self->_retCode) {
                     case 0:
@@ -5305,27 +5292,27 @@ void Gap__Bec__beNDMWShopCtrlDeviceSell__vfunc_21(beNDMWShopCtrlDeviceSell *self
         vB[1] = 0x41C80000;
         vB[2] = 0;
         ((DummyVirtual *)self)->v24(vB, vA);
-        APPENDSTR(self->_textCloseTypeList, DAT_0051b470)
+        APPENDSTR(self->_textCloseTypeList, STWINFONT29)
         APPENDSTR(self->_textCloseNameList, DAT_0051b548)
         beNDMWWindow_RunMessageScript(self, DAT_0051b3b0, 0x676);
         APPENDSTR(self->_textCloseTypeList, DAT_0051b668)
         {
-            const char *name = DAT_004cf8a0[0];
+            const char *name = g_fontNames[0];
             APPENDSTR(self->_textCloseNameList, name)
         }
         beNDMWWindow_RunMessageScript(self, DAT_0051b3b0, 0x3E8);
         i = 0;
         {
-            const char **p = DAT_004cf8a0;
+            const char **p = g_fontNames;
             do {
-                FUN_003f5410(self, DAT_0051b3c8, *p, DAT_0051b590, DAT_0051b598);
-                FUN_003f5410(self, DAT_0051b680, *p, DAT_0051b590, DAT_0051b460);
+                FUN_003f5410(self, STWINFONT14, *p, DAT_0051b590, DAT_0051b598);
+                FUN_003f5410(self, STWINFONT17, *p, DAT_0051b590, DAT_0051b460);
                 i++;
                 p += 1;
             } while (i < 12);
         }
-        FUN_003f5410(self, DAT_0051bd60, DAT_004cf8a0[0], DAT_0051b590, DAT_0051b460);
-        FUN_003f5410(self, DAT_0051bd60, DAT_004cf8a4[0], DAT_0051b590, DAT_0051b460);
+        FUN_003f5410(self, STWINFONT30, g_fontNames[0], DAT_0051b590, DAT_0051b460);
+        FUN_003f5410(self, STWINFONT30, g_fontName1[0], DAT_0051b590, DAT_0051b460);
         self->_cursor = 0;
         self->_nowPage = 0;
         self->_st0 = self->_st0 + 1;
@@ -5350,7 +5337,7 @@ void Gap__Bec__beNDMWShopCtrlDeviceSell__vfunc_21(beNDMWShopCtrlDeviceSell *self
                     ObjectList_AppendRetained(self->_subWindow, selectWin.p);
                     { beNDMWStatusSelectE1 *w = selectWin.p; w->_offsetPos[0] = -121.0f; w->_offsetPos[1] = 128.0f; w->_offsetPos[2] = 0.0f; }
                     selectWin.p->_startPoint = self->_cursor;
-                    FUN_003f5410(selectWin.p, DAT_0051b470, DAT_004cf8a0[0], DAT_0051b590, DAT_0051b598);
+                    FUN_003f5410(selectWin.p, STWINFONT29, g_fontNames[0], DAT_0051b590, DAT_0051b598);
                     selectWin.p->_selectMax = FUN_004367c0(self);
                     {
                         igObject *d = (igObject *)self->_decideList;
@@ -5481,7 +5468,7 @@ void Gap__Bec__beNDMWShopCtrlDeviceSell__vfunc_21(beNDMWShopCtrlDeviceSell *self
                         fold = (igIntList *)igProperty_GetRecordFolder(obj, DAT_0051b528)->f12;
                         idx = self->_cursor + self->_nowPage * 12;
                         if (idx < fold->_count) {
-                            ins = (int)FUN_00236f80(self->_insight, DAT_0058b028[0]);
+                            ins = (int)FUN_00236f80(self->_insight, g_beNDMWStatus_metaObject[0]);
                             item = ((int *)fold->_data)[idx];
                             price = FUN_00447ed0(item, ins, DAT_0051bd70);
                             money = igProperty_GetRecord(obj, DAT_0051b560)->f12;
@@ -5557,7 +5544,7 @@ void FUN_00436060(beNDMWShopCtrlDeviceSell *self, int full, unsigned char sel)
     beMessenger_AppendInt(self->_messenger, self->_playerNo);
     beMessenger_DispatchSelected(self->_messenger, &DAT_0051b3e8[0]);
     igDataList *folder = ((RecordFolder *)((char *)igProperty_GetRecordFolder(beMessenger_GetObject(self->_messenger, 0), &DAT_0051b528[0])))->list;
-    igSmartPointer<igStringObj> str((igStringObj *)((int *)FUN_00236f80(self->_insight, DAT_00587d08[0]))[18]);
+    igSmartPointer<igStringObj> str((igStringObj *)((int *)FUN_00236f80(self->_insight, g_beSystem_metaObject[0]))[18]);
     if (str.p != 0) str.p->_refCount = str.p->_refCount + 1;
     char numbuf[2];
     char nb2[2];
@@ -5571,14 +5558,14 @@ void FUN_00436060(beNDMWShopCtrlDeviceSell *self, int full, unsigned char sel)
             int idx = i + self->_nowPage * 12;
             const char *s;
             if (idx < folder->_count) {
-                void *c = FUN_00236f80(self->_insight, DAT_0058b028[0]);
+                void *c = FUN_00236f80(self->_insight, g_beNDMWStatus_metaObject[0]);
                 beNDMWItemBase *o = *(beNDMWItemBase **)(folder->_data + idx * 4);
-                FUN_0030b3c0(str.p, beNDMWItemBase_GetRecordString(o, c, &DAT_0051b678[0]));
+                FUN_0030b3c0(str.p, beNDMWItemBase_GetRecordString(o, c, NAME_2));
                 if (o->_isEquip != 0) { igStringObj *t = str.p; FUN_0030b460(t, &DAT_0051bd78[0], 0, strlen(&DAT_0051bd78[0])); }
                 else { igStringObj *t = str.p; FUN_0030b460(t, &DAT_0051bd80[0], 0, strlen(&DAT_0051bd80[0])); }
-                beMessenger_SelectGroup(self->_messenger, &DAT_0051b3c0[0]);
-                beMessenger_AppendString(self->_messenger, &((char *)DAT_0051b3c8)[0]);
-                beMessenger_AppendString(self->_messenger, ((char * *)DAT_004cf8a0)[i]);
+                beMessenger_SelectGroup(self->_messenger, TEXTCTL_3);
+                beMessenger_AppendString(self->_messenger, &((char *)STWINFONT14)[0]);
+                beMessenger_AppendString(self->_messenger, ((char * *)g_fontNames)[i]);
                 {
                     int m = self->_messenger;
                     char *t0 = (char *)str.p->_buffer;
@@ -5586,70 +5573,70 @@ void FUN_00436060(beNDMWShopCtrlDeviceSell *self, int full, unsigned char sel)
                     if (t0 == 0) t = DAT_004c22f0[0]; else t = t0;
                     beMessenger_AppendString(m, t);
                 }
-                beMessenger_DispatchSelected(self->_messenger, &DAT_0051b6b0[0]);
-                sprintf(name, &DAT_0051b468[0], FUN_00447ed0(o, c, &DAT_0051bd70[0]));
-                beMessenger_SelectGroup(self->_messenger, &DAT_0051b3c0[0]);
-                beMessenger_AppendString(self->_messenger, &((char *)DAT_0051b680)[0]);
-                beMessenger_AppendString(self->_messenger, ((char * *)DAT_004cf8a0)[i]);
+                beMessenger_DispatchSelected(self->_messenger, TEXTSET);
+                sprintf(name, percent_d, FUN_00447ed0(o, c, &DAT_0051bd70[0]));
+                beMessenger_SelectGroup(self->_messenger, TEXTCTL_3);
+                beMessenger_AppendString(self->_messenger, &((char *)STWINFONT17)[0]);
+                beMessenger_AppendString(self->_messenger, ((char * *)g_fontNames)[i]);
                 beMessenger_AppendString(self->_messenger, name);
-                beMessenger_DispatchSelected(self->_messenger, &DAT_0051b6b0[0]);
+                beMessenger_DispatchSelected(self->_messenger, TEXTSET);
                 FUN_00447d00(&vA, o);
-                beMessenger_SelectGroup(self->_messenger, &DAT_0051b3c0[0]);
-                beMessenger_AppendString(self->_messenger, &((char *)DAT_0051b3c8)[0]);
-                beMessenger_AppendString(self->_messenger, ((char * *)DAT_004cf8a0)[i]);
+                beMessenger_SelectGroup(self->_messenger, TEXTCTL_3);
+                beMessenger_AppendString(self->_messenger, &((char *)STWINFONT14)[0]);
+                beMessenger_AppendString(self->_messenger, ((char * *)g_fontNames)[i]);
                 vB = vA;
                 beMessenger_AppendVec3(self->_messenger, (float *)&vB);
                 beMessenger_DispatchSelected(self->_messenger, &DAT_0051b9f8[0]);
                 if (*(unsigned char *)(((igUnsignedCharList *)self->_decideList)->_data + i) != 0) {
-                    beMessenger_SelectGroup(self->_messenger, &DAT_0051b3c0[0]);
-                    beMessenger_AppendString(self->_messenger, &((char *)DAT_0051b680)[0]);
-                    beMessenger_AppendString(self->_messenger, ((char * *)DAT_004cf8a0)[i]);
+                    beMessenger_SelectGroup(self->_messenger, TEXTCTL_3);
+                    beMessenger_AppendString(self->_messenger, &((char *)STWINFONT17)[0]);
+                    beMessenger_AppendString(self->_messenger, ((char * *)g_fontNames)[i]);
                     beMessenger_DispatchSelected(self->_messenger, &DAT_0051b3d8[0]);
                 } else {
-                    beMessenger_SelectGroup(self->_messenger, &DAT_0051b3c0[0]);
-                    beMessenger_AppendString(self->_messenger, &((char *)DAT_0051b680)[0]);
-                    beMessenger_AppendString(self->_messenger, ((char * *)DAT_004cf8a0)[i]);
+                    beMessenger_SelectGroup(self->_messenger, TEXTCTL_3);
+                    beMessenger_AppendString(self->_messenger, &((char *)STWINFONT17)[0]);
+                    beMessenger_AppendString(self->_messenger, ((char * *)g_fontNames)[i]);
                     beMessenger_DispatchSelected(self->_messenger, &DAT_0051b800[0]);
                 }
-                s = &DAT_0051b6b8[0];
+                s = &DISPON[0];
             } else {
-                s = &((char *)DAT_0051b550)[0];
+                s = &((char *)DISPOFF)[0];
             }
-            beMessenger_SelectGroup(self->_messenger, &DAT_0051b3c0[0]);
-            beMessenger_AppendString(self->_messenger, &((char *)DAT_0051b3c8)[0]);
-            beMessenger_AppendString(self->_messenger, ((char * *)DAT_004cf8a0)[i]);
+            beMessenger_SelectGroup(self->_messenger, TEXTCTL_3);
+            beMessenger_AppendString(self->_messenger, &((char *)STWINFONT14)[0]);
+            beMessenger_AppendString(self->_messenger, ((char * *)g_fontNames)[i]);
             beMessenger_AppendString(self->_messenger, s);
-            beMessenger_DispatchSelected(self->_messenger, &DAT_0051b558[0]);
-            beMessenger_SelectGroup(self->_messenger, &DAT_0051b3c0[0]);
-            beMessenger_AppendString(self->_messenger, &((char *)DAT_0051b680)[0]);
-            beMessenger_AppendString(self->_messenger, ((char * *)DAT_004cf8a0)[i]);
+            beMessenger_DispatchSelected(self->_messenger, SWITCH_2);
+            beMessenger_SelectGroup(self->_messenger, TEXTCTL_3);
+            beMessenger_AppendString(self->_messenger, &((char *)STWINFONT17)[0]);
+            beMessenger_AppendString(self->_messenger, ((char * *)g_fontNames)[i]);
             beMessenger_AppendString(self->_messenger, s);
-            beMessenger_DispatchSelected(self->_messenger, &DAT_0051b558[0]);
+            beMessenger_DispatchSelected(self->_messenger, SWITCH_2);
             i++;
         } while (i < 12);
         numbuf[1] = 0;
         numbuf[0] = self->_nowPage + 0x31;
-        beMessenger_SelectGroup(self->_messenger, &DAT_0051b3c0[0]);
-        beMessenger_AppendString(self->_messenger, &((char *)DAT_0051bd60)[0]);
-        beMessenger_AppendString(self->_messenger, ((char * *)DAT_004cf8a0)[0]);
+        beMessenger_SelectGroup(self->_messenger, TEXTCTL_3);
+        beMessenger_AppendString(self->_messenger, &((char *)STWINFONT30)[0]);
+        beMessenger_AppendString(self->_messenger, ((char * *)g_fontNames)[0]);
         beMessenger_AppendString(self->_messenger, numbuf);
-        beMessenger_DispatchSelected(self->_messenger, &DAT_0051b6b0[0]);
+        beMessenger_DispatchSelected(self->_messenger, TEXTSET);
         numbuf[0] = self->_maxPage + 0x30;
-        beMessenger_SelectGroup(self->_messenger, &DAT_0051b3c0[0]);
-        beMessenger_AppendString(self->_messenger, &((char *)DAT_0051bd60)[0]);
-        beMessenger_AppendString(self->_messenger, DAT_004cf8a4[0]);
+        beMessenger_SelectGroup(self->_messenger, TEXTCTL_3);
+        beMessenger_AppendString(self->_messenger, &((char *)STWINFONT30)[0]);
+        beMessenger_AppendString(self->_messenger, g_fontName1[0]);
         beMessenger_AppendString(self->_messenger, numbuf);
-        beMessenger_DispatchSelected(self->_messenger, &DAT_0051b6b0[0]);
+        beMessenger_DispatchSelected(self->_messenger, TEXTSET);
     }
     if (sel) {
         int rc = self->_retCode; int pg = self->_nowPage * 12; int idx = pg + rc;
         const char *s;
         if (idx < folder->_count) {
             char *txt;
-            void *c2 = FUN_00236f80(self->_insight, DAT_0058b028[0]);
+            void *c2 = FUN_00236f80(self->_insight, g_beNDMWStatus_metaObject[0]);
             beNDMWItemBase *o = *(beNDMWItemBase **)(folder->_data + idx * 4);
             int kind;
-            txt = beNDMWItemBase_GetRecordString(o, c2, &DAT_0051b6a8[0]);
+            txt = beNDMWItemBase_GetRecordString(o, c2, TXT);
             kind = o->_kindNo;
             if (kind == 0) {
                 if (o->_recNo != 0x114) {
@@ -5674,20 +5661,20 @@ void FUN_00436060(beNDMWShopCtrlDeviceSell *self, int full, unsigned char sel)
                 }
                 { char *x = (char *)str.p->_buffer; txt = (x == 0) ? DAT_004c22f0[0] : x; }
             }
-            beMessenger_SelectGroup(self->_messenger, &DAT_0051b3c0[0]);
-            beMessenger_AppendString(self->_messenger, &((char *)DAT_0051b470)[0]);
-            beMessenger_AppendString(self->_messenger, ((char * *)DAT_004cf8a0)[0]);
+            beMessenger_SelectGroup(self->_messenger, TEXTCTL_3);
+            beMessenger_AppendString(self->_messenger, &((char *)STWINFONT29)[0]);
+            beMessenger_AppendString(self->_messenger, ((char * *)g_fontNames)[0]);
             beMessenger_AppendString(self->_messenger, txt);
-            beMessenger_DispatchSelected(self->_messenger, &DAT_0051b6b0[0]);
-            s = &DAT_0051b6b8[0];
+            beMessenger_DispatchSelected(self->_messenger, TEXTSET);
+            s = &DISPON[0];
         } else {
-            s = &((char *)DAT_0051b550)[0];
+            s = &((char *)DISPOFF)[0];
         }
-        beMessenger_SelectGroup(self->_messenger, &DAT_0051b3c0[0]);
-        beMessenger_AppendString(self->_messenger, &((char *)DAT_0051b470)[0]);
-        beMessenger_AppendString(self->_messenger, ((char * *)DAT_004cf8a0)[0]);
+        beMessenger_SelectGroup(self->_messenger, TEXTCTL_3);
+        beMessenger_AppendString(self->_messenger, &((char *)STWINFONT29)[0]);
+        beMessenger_AppendString(self->_messenger, ((char * *)g_fontNames)[0]);
         beMessenger_AppendString(self->_messenger, s);
-        beMessenger_DispatchSelected(self->_messenger, &DAT_0051b558[0]);
+        beMessenger_DispatchSelected(self->_messenger, SWITCH_2);
     }
 }
 
@@ -5707,7 +5694,7 @@ int FUN_004367c0(beNDMWShopCtrlDeviceSell *self) {
     do {
         idx = i + self->_nowPage * 12;
         if (idx < n) {
-            c = ((int)FUN_00236f80(self->_insight, DAT_0058b028[0]));
+            c = ((int)FUN_00236f80(self->_insight, g_beNDMWStatus_metaObject[0]));
             o = fold->items[idx];
             mark = true;
             if (o->flag != 0) mark = false;
@@ -5724,14 +5711,14 @@ int FUN_004367c0(beNDMWShopCtrlDeviceSell *self) {
 
 void FUN_004369f0(O_4369f0 *arg0) {
     int i;
-    int **p = ((int * *)DAT_004cf8a0);
+    int **p = ((int * *)g_fontNames);
     for (i = 0; i < 12; i++) {
-        beMessenger_SelectGroup(arg0->m, &DAT_0051b3c0[0]);
-        beMessenger_AppendString(arg0->m, &DAT_0051b3c8[0]);
+        beMessenger_SelectGroup(arg0->m, TEXTCTL_3);
+        beMessenger_AppendString(arg0->m, STWINFONT14);
         beMessenger_AppendString(arg0->m, *p);
         beMessenger_DispatchSelected(arg0->m, &DAT_0051b3d8[0]);
-        beMessenger_SelectGroup(arg0->m, &DAT_0051b3c0[0]);
-        beMessenger_AppendString(arg0->m, &DAT_0051b680[0]);
+        beMessenger_SelectGroup(arg0->m, TEXTCTL_3);
+        beMessenger_AppendString(arg0->m, STWINFONT17);
         beMessenger_AppendString(arg0->m, *p);
         beMessenger_DispatchSelected(arg0->m, &DAT_0051b3d8[0]);
         p++;
@@ -5772,10 +5759,10 @@ void Gap__Bec__beNDMWShopCtrlDiskSell__vfunc_21(beNDMWShopCtrlDiskSell *self) {
         vB[1] = 0x41C80000;
         vB[2] = 0;
         beNDMWWindow_PresentModel(self, &DAT_0051b650[0], 0, &DAT_0051b640[0], &DAT_0051b620[0], &vB[0]);
-        INTERN_APPEND(self->_textCloseTypeList, &DAT_0051b470[0])
+        INTERN_APPEND(self->_textCloseTypeList, STWINFONT29)
         INTERN_APPEND(self->_textCloseNameList, &DAT_0051b548[0])
         INTERN_APPEND(self->_textCloseTypeList, &DAT_0051b668[0])
-        INTERN_APPEND(self->_textCloseNameList, ((char * *)DAT_004cf8a0)[0])
+        INTERN_APPEND(self->_textCloseNameList, ((char * *)g_fontNames)[0])
         beNDMWWindow_RunMessageScript(self, &DAT_0051b3b0[0], 0x3E9);
         beMessenger_SelectGroup(self->_messenger, &DAT_0051b398[0]);
         beMessenger_AppendInt(self->_messenger, self->_playerNo);
@@ -5783,11 +5770,11 @@ void Gap__Bec__beNDMWShopCtrlDiskSell__vfunc_21(beNDMWShopCtrlDiskSell *self) {
         temp_s3 = igProperty_GetRecordFolder(beMessenger_GetObject(self->_messenger, 0), &DAT_0051b6c0[0])->f12;
         i = 0;
         if (0 < temp_s3->_count) {
-            fp = &((char * *)DAT_004cf8a0)[0];
+            fp = &((char * *)g_fontNames)[0];
             do {
-                FUN_003f5410(self, &DAT_0051b3c8[0], *fp, &DAT_0051b590[0], &DAT_0051b598[0]);
+                FUN_003f5410(self, STWINFONT14, *fp, &DAT_0051b590[0], &DAT_0051b598[0]);
                 FUN_003f5410(self, &DAT_0051bd88[0], *fp, &DAT_0051b590[0], &DAT_0051bd98[0]);
-                FUN_003f5410(self, &DAT_0051b680[0], *fp, &DAT_0051b590[0], &DAT_0051b460[0]);
+                FUN_003f5410(self, STWINFONT17, *fp, &DAT_0051b590[0], &DAT_0051b460[0]);
                 i += 1;
                 fp += 1;
             } while (i < temp_s3->_count);
@@ -5815,7 +5802,7 @@ void Gap__Bec__beNDMWShopCtrlDiskSell__vfunc_21(beNDMWShopCtrlDiskSell *self) {
                 ObjectList_AppendRetained(self->_subWindow, spBC.p);
                 { beNDMWStatusSelectE1 *w = (beNDMWStatusSelectE1 *)spBC.p; w->_offsetPos[0] = -121.0f; w->_offsetPos[1] = 128.0f; w->_offsetPos[2] = 0.0f; }
                 ((beNDMWStatusSelectE1 *)spBC.p)->_startPoint = self->_cursor;
-                FUN_003f5410(spBC.p, &DAT_0051b470[0], ((char * *)DAT_004cf8a0)[0], &DAT_0051b590[0], &DAT_0051b598[0]);
+                FUN_003f5410(spBC.p, STWINFONT29, ((char * *)g_fontNames)[0], &DAT_0051b590[0], &DAT_0051b598[0]);
                 beMessenger_SelectGroup(self->_messenger, &DAT_0051b398[0]);
                 beMessenger_AppendInt(self->_messenger, self->_playerNo);
                 beMessenger_DispatchSelected(self->_messenger, &DAT_0051b3e8[0]);
@@ -5913,7 +5900,7 @@ void Gap__Bec__beNDMWShopCtrlDiskSell__vfunc_21(beNDMWShopCtrlDiskSell *self) {
                 beNDMWWindow_BindContext(spB4.p, self, self->_insight, self->_playerNo, self->_maxSell);
                 ObjectList_AppendRetained(self->_subWindow, spB4.p);
                 { beNDMWShopSelect52 *w = (beNDMWShopSelect52 *)spB4.p; w->_offsetPos[0] = 52.0f; w->_offsetPos[1] = -104.0f; w->_offsetPos[2] = 0.0f; }
-                INTERN_APPEND(((beNDMWShopSelect52 *)spB4.p)->_textCloseTypeList, &DAT_0051b470[0])
+                INTERN_APPEND(((beNDMWShopSelect52 *)spB4.p)->_textCloseTypeList, STWINFONT29)
                 INTERN_APPEND(((beNDMWShopSelect52 *)spB4.p)->_textCloseNameList, &DAT_0051b548[0])
                 beNDMWWindow_RunMessageScript(self, &DAT_0051b3b0[0], 0x624);
                 beNDMWWindow_RunMessageScript(self, &DAT_0051b3b0[0], 0x5E1);
@@ -6043,48 +6030,48 @@ void FUN_00437ae0(beNDMWShopCtrlDiskSell *arg0, int arg1, int arg2) {
     beMessenger_AppendInt(arg0->_messenger, arg0->_playerNo);
     beMessenger_DispatchSelected(arg0->_messenger, DAT_0051b3e8);
     temp_s6 = *(igObjectList **)((char *)((void *)igProperty_GetRecordFolder(beMessenger_GetObject(arg0->_messenger, 0), DAT_0051b6c0)) + 12);
-    temp_s7 = ((int)FUN_00236f80(arg0->_insight, DAT_0058b028[0]));
+    temp_s7 = ((int)FUN_00236f80(arg0->_insight, g_beNDMWStatus_metaObject[0]));
     if (arg1 != 0) {
         i = 0;
         if (i < temp_s6->_count) {
             off = 0;
-            p = ((char * *)DAT_004cf8a0);
+            p = ((char * *)g_fontNames);
             do {
                 it = *(beNDMWItemDisk **)((char *)temp_s6->_data + off);
-                s = beNDMWItemBase_GetRecordString(it, temp_s7, DAT_0051b678);
-                beMessenger_SelectGroup(arg0->_messenger, DAT_0051b3c0);
-                beMessenger_AppendString(arg0->_messenger, ((char *)DAT_0051b3c8));
+                s = beNDMWItemBase_GetRecordString(it, temp_s7, NAME_2);
+                beMessenger_SelectGroup(arg0->_messenger, TEXTCTL_3);
+                beMessenger_AppendString(arg0->_messenger, ((char *)STWINFONT14));
                 beMessenger_AppendString(arg0->_messenger, *p);
                 beMessenger_AppendString(arg0->_messenger, s);
-                beMessenger_DispatchSelected(arg0->_messenger, DAT_0051b6b0);
+                beMessenger_DispatchSelected(arg0->_messenger, TEXTSET);
                 spBC[0] = it->_kazu + 0x30;
                 spBC[1] = 0;
-                beMessenger_SelectGroup(arg0->_messenger, DAT_0051b3c0);
+                beMessenger_SelectGroup(arg0->_messenger, TEXTCTL_3);
                 beMessenger_AppendString(arg0->_messenger, ((char *)DAT_0051bd88));
                 beMessenger_AppendString(arg0->_messenger, *p);
                 beMessenger_AppendString(arg0->_messenger, spBC);
-                beMessenger_DispatchSelected(arg0->_messenger, DAT_0051b6b0);
-                sprintf(spA0, DAT_0051b468, FUN_00447ed0(it, temp_s7, DAT_0051bd70));
-                beMessenger_SelectGroup(arg0->_messenger, DAT_0051b3c0);
-                beMessenger_AppendString(arg0->_messenger, ((char *)DAT_0051b680));
+                beMessenger_DispatchSelected(arg0->_messenger, TEXTSET);
+                sprintf(spA0, percent_d, FUN_00447ed0(it, temp_s7, DAT_0051bd70));
+                beMessenger_SelectGroup(arg0->_messenger, TEXTCTL_3);
+                beMessenger_AppendString(arg0->_messenger, ((char *)STWINFONT17));
                 beMessenger_AppendString(arg0->_messenger, *p);
                 beMessenger_AppendString(arg0->_messenger, spA0);
-                beMessenger_DispatchSelected(arg0->_messenger, DAT_0051b6b0);
-                beMessenger_SelectGroup(arg0->_messenger, DAT_0051b3c0);
-                beMessenger_AppendString(arg0->_messenger, ((char *)DAT_0051b3c8));
+                beMessenger_DispatchSelected(arg0->_messenger, TEXTSET);
+                beMessenger_SelectGroup(arg0->_messenger, TEXTCTL_3);
+                beMessenger_AppendString(arg0->_messenger, ((char *)STWINFONT14));
                 beMessenger_AppendString(arg0->_messenger, *p);
-                beMessenger_AppendString(arg0->_messenger, DAT_0051b6b8);
-                beMessenger_DispatchSelected(arg0->_messenger, DAT_0051b558);
-                beMessenger_SelectGroup(arg0->_messenger, DAT_0051b3c0);
+                beMessenger_AppendString(arg0->_messenger, DISPON);
+                beMessenger_DispatchSelected(arg0->_messenger, SWITCH_2);
+                beMessenger_SelectGroup(arg0->_messenger, TEXTCTL_3);
                 beMessenger_AppendString(arg0->_messenger, ((char *)DAT_0051bd88));
                 beMessenger_AppendString(arg0->_messenger, *p);
-                beMessenger_AppendString(arg0->_messenger, DAT_0051b6b8);
-                beMessenger_DispatchSelected(arg0->_messenger, DAT_0051b558);
-                beMessenger_SelectGroup(arg0->_messenger, DAT_0051b3c0);
-                beMessenger_AppendString(arg0->_messenger, ((char *)DAT_0051b680));
+                beMessenger_AppendString(arg0->_messenger, DISPON);
+                beMessenger_DispatchSelected(arg0->_messenger, SWITCH_2);
+                beMessenger_SelectGroup(arg0->_messenger, TEXTCTL_3);
+                beMessenger_AppendString(arg0->_messenger, ((char *)STWINFONT17));
                 beMessenger_AppendString(arg0->_messenger, *p);
-                beMessenger_AppendString(arg0->_messenger, DAT_0051b6b8);
-                beMessenger_DispatchSelected(arg0->_messenger, DAT_0051b558);
+                beMessenger_AppendString(arg0->_messenger, DISPON);
+                beMessenger_DispatchSelected(arg0->_messenger, SWITCH_2);
                 i += 1;
                 off += 4;
                 p += 1;
@@ -6098,25 +6085,25 @@ void FUN_00437ae0(beNDMWShopCtrlDiskSell *arg0, int arg1, int arg2) {
             it = ((beNDMWItemDisk **)temp_s6->_data)[idx];
         }
         if (it != 0) {
-            s = beNDMWItemBase_GetRecordString(it, temp_s7, DAT_0051b6a8);
-            beMessenger_SelectGroup(arg0->_messenger, DAT_0051b3c0);
-            beMessenger_AppendString(arg0->_messenger, ((char *)DAT_0051b470));
-            beMessenger_AppendString(arg0->_messenger, ((char * *)DAT_004cf8a0)[0]);
+            s = beNDMWItemBase_GetRecordString(it, temp_s7, TXT);
+            beMessenger_SelectGroup(arg0->_messenger, TEXTCTL_3);
+            beMessenger_AppendString(arg0->_messenger, ((char *)STWINFONT29));
+            beMessenger_AppendString(arg0->_messenger, ((char * *)g_fontNames)[0]);
             beMessenger_AppendString(arg0->_messenger, s);
-            beMessenger_DispatchSelected(arg0->_messenger, DAT_0051b6b0);
-            beMessenger_SelectGroup(arg0->_messenger, DAT_0051b3c0);
-            beMessenger_AppendString(arg0->_messenger, ((char *)DAT_0051b470));
-            beMessenger_AppendString(arg0->_messenger, ((char * *)DAT_004cf8a0)[0]);
-            beMessenger_AppendString(arg0->_messenger, DAT_0051b6b8);
-            beMessenger_DispatchSelected(arg0->_messenger, DAT_0051b558);
+            beMessenger_DispatchSelected(arg0->_messenger, TEXTSET);
+            beMessenger_SelectGroup(arg0->_messenger, TEXTCTL_3);
+            beMessenger_AppendString(arg0->_messenger, ((char *)STWINFONT29));
+            beMessenger_AppendString(arg0->_messenger, ((char * *)g_fontNames)[0]);
+            beMessenger_AppendString(arg0->_messenger, DISPON);
+            beMessenger_DispatchSelected(arg0->_messenger, SWITCH_2);
             arg0->_tanka = FUN_00447ed0(it, temp_s7, DAT_0051bd70);
             return;
         }
-        beMessenger_SelectGroup(arg0->_messenger, DAT_0051b3c0);
-        beMessenger_AppendString(arg0->_messenger, ((char *)DAT_0051b470));
-        beMessenger_AppendString(arg0->_messenger, ((char * *)DAT_004cf8a0)[0]);
-        beMessenger_AppendString(arg0->_messenger, ((char *)DAT_0051b550));
-        beMessenger_DispatchSelected(arg0->_messenger, DAT_0051b558);
+        beMessenger_SelectGroup(arg0->_messenger, TEXTCTL_3);
+        beMessenger_AppendString(arg0->_messenger, ((char *)STWINFONT29));
+        beMessenger_AppendString(arg0->_messenger, ((char * *)g_fontNames)[0]);
+        beMessenger_AppendString(arg0->_messenger, ((char *)DISPOFF));
+        beMessenger_DispatchSelected(arg0->_messenger, SWITCH_2);
     }
 }
 
@@ -6125,36 +6112,36 @@ void FUN_00437f50(beNDMWShopCtrlDiskSell *arg0) {
     int temp_s0;
 
     temp_s0 = arg0->_maxSell - arg0->_retCode;
-    sprintf(sp30, &DAT_0051b468[0], temp_s0);
-    beMessenger_SelectGroup(arg0->_messenger, &DAT_0051b3c0[0]);
-    beMessenger_AppendString(arg0->_messenger, &((const char *)DAT_0051bd60)[0]);
+    sprintf(sp30, percent_d, temp_s0);
+    beMessenger_SelectGroup(arg0->_messenger, TEXTCTL_3);
+    beMessenger_AppendString(arg0->_messenger, &((const char *)STWINFONT30)[0]);
     beMessenger_AppendString(arg0->_messenger, &DAT_0051b218[0]);
     beMessenger_AppendString(arg0->_messenger, sp30);
-    beMessenger_DispatchSelected(arg0->_messenger, &DAT_0051b6b0[0]);
-    sprintf(sp30, &DAT_0051b468[0], temp_s0 * arg0->_tanka);
-    beMessenger_SelectGroup(arg0->_messenger, &DAT_0051b3c0[0]);
-    beMessenger_AppendString(arg0->_messenger, &((const char *)DAT_0051bd60)[0]);
+    beMessenger_DispatchSelected(arg0->_messenger, TEXTSET);
+    sprintf(sp30, percent_d, temp_s0 * arg0->_tanka);
+    beMessenger_SelectGroup(arg0->_messenger, TEXTCTL_3);
+    beMessenger_AppendString(arg0->_messenger, &((const char *)STWINFONT30)[0]);
     beMessenger_AppendString(arg0->_messenger, &DAT_0051b288[0]);
     beMessenger_AppendString(arg0->_messenger, sp30);
-    beMessenger_DispatchSelected(arg0->_messenger, &DAT_0051b6b0[0]);
+    beMessenger_DispatchSelected(arg0->_messenger, TEXTSET);
 }
 
 void FUN_00438050(beNDMWShopCtrlDiskSell *arg0) {
-    beMessenger_SelectGroup(arg0->_messenger, &DAT_0051b3c0[0]);
-    beMessenger_AppendString(arg0->_messenger, &DAT_0051bd60[0]);
+    beMessenger_SelectGroup(arg0->_messenger, TEXTCTL_3);
+    beMessenger_AppendString(arg0->_messenger, STWINFONT30);
     beMessenger_AppendString(arg0->_messenger, &DAT_0051b278[0]);
-    beMessenger_AppendString(arg0->_messenger, &DAT_0051b550[0]);
-    beMessenger_DispatchSelected(arg0->_messenger, &DAT_0051b558[0]);
-    beMessenger_SelectGroup(arg0->_messenger, &DAT_0051b3c0[0]);
-    beMessenger_AppendString(arg0->_messenger, &DAT_0051bd60[0]);
+    beMessenger_AppendString(arg0->_messenger, DISPOFF);
+    beMessenger_DispatchSelected(arg0->_messenger, SWITCH_2);
+    beMessenger_SelectGroup(arg0->_messenger, TEXTCTL_3);
+    beMessenger_AppendString(arg0->_messenger, STWINFONT30);
     beMessenger_AppendString(arg0->_messenger, &((int *)DAT_0051b218)[0]);
-    beMessenger_AppendString(arg0->_messenger, &DAT_0051b550[0]);
-    beMessenger_DispatchSelected(arg0->_messenger, &DAT_0051b558[0]);
-    beMessenger_SelectGroup(arg0->_messenger, &DAT_0051b3c0[0]);
-    beMessenger_AppendString(arg0->_messenger, &DAT_0051bd60[0]);
+    beMessenger_AppendString(arg0->_messenger, DISPOFF);
+    beMessenger_DispatchSelected(arg0->_messenger, SWITCH_2);
+    beMessenger_SelectGroup(arg0->_messenger, TEXTCTL_3);
+    beMessenger_AppendString(arg0->_messenger, STWINFONT30);
     beMessenger_AppendString(arg0->_messenger, &((int *)DAT_0051b288)[0]);
-    beMessenger_AppendString(arg0->_messenger, &DAT_0051b550[0]);
-    beMessenger_DispatchSelected(arg0->_messenger, &DAT_0051b558[0]);
+    beMessenger_AppendString(arg0->_messenger, DISPOFF);
+    beMessenger_DispatchSelected(arg0->_messenger, SWITCH_2);
 }
 
 void FUN_004393e0(beNDMWShopCtrlSales *arg0, int arg1, unsigned char arg2) {
@@ -6162,7 +6149,7 @@ void FUN_004393e0(beNDMWShopCtrlSales *arg0, int arg1, unsigned char arg2) {
     int i;
     beNDMWItemRevisionPocketBase *it;
     char *name;
-    rec = ((int)FUN_00236f80(arg0->_insight, DAT_0058b028[0]));
+    rec = ((int)FUN_00236f80(arg0->_insight, g_beNDMWStatus_metaObject[0]));
     if (arg1 != 0) {
         i = 0;
         do {
@@ -6174,69 +6161,69 @@ void FUN_004393e0(beNDMWShopCtrlSales *arg0, int arg1, unsigned char arg2) {
                 Vec3 pos;
                 Vec3 pos2;
                 ChipPriceText buf;
-                name = beNDMWItemBase_GetRecordString(it, rec, ((char *)DAT_0051b678));
-                beMessenger_SelectGroup(arg0->_messenger, ((char *)DAT_0051b3c0));
-                beMessenger_AppendString(arg0->_messenger, ((char *)DAT_0051b3c8));
-                beMessenger_AppendString(arg0->_messenger, ((char * *)DAT_004cf8a0)[i]);
+                name = beNDMWItemBase_GetRecordString(it, rec, ((char *)NAME_2));
+                beMessenger_SelectGroup(arg0->_messenger, ((char *)TEXTCTL_3));
+                beMessenger_AppendString(arg0->_messenger, ((char *)STWINFONT14));
+                beMessenger_AppendString(arg0->_messenger, ((char * *)g_fontNames)[i]);
                 beMessenger_AppendString(arg0->_messenger, name);
-                beMessenger_DispatchSelected(arg0->_messenger, ((char *)DAT_0051b6b0));
+                beMessenger_DispatchSelected(arg0->_messenger, ((char *)TEXTSET));
                 FUN_00447d00(&pos, it);
-                beMessenger_SelectGroup(arg0->_messenger, ((char *)DAT_0051b3c0));
-                beMessenger_AppendString(arg0->_messenger, ((char *)DAT_0051b3c8));
-                beMessenger_AppendString(arg0->_messenger, ((char * *)DAT_004cf8a0)[i]);
+                beMessenger_SelectGroup(arg0->_messenger, ((char *)TEXTCTL_3));
+                beMessenger_AppendString(arg0->_messenger, ((char *)STWINFONT14));
+                beMessenger_AppendString(arg0->_messenger, ((char * *)g_fontNames)[i]);
                 pos2.x = pos.x; pos2.y = pos.y; pos2.z = pos.z;
                 beMessenger_AppendVec3(arg0->_messenger, (float *)&pos2);
                 beMessenger_DispatchSelected(arg0->_messenger, ((char *)DAT_0051b9f8));
                 if (it->_kindNo == 3 && it->_recNo == 185) {
                     buf = DAT_0051bdc0;
                 } else {
-                    sprintf(&buf, ((char *)DAT_0051b468), FUN_00447ed0(it, rec, ((char *)DAT_0051b690)));
+                    sprintf(&buf, ((char *)percent_d), FUN_00447ed0(it, rec, ((char *)DAT_0051b690)));
                 }
-                beMessenger_SelectGroup(arg0->_messenger, ((char *)DAT_0051b3c0));
-                beMessenger_AppendString(arg0->_messenger, ((char *)DAT_0051b680));
-                beMessenger_AppendString(arg0->_messenger, ((char * *)DAT_004cf8a0)[i]);
+                beMessenger_SelectGroup(arg0->_messenger, ((char *)TEXTCTL_3));
+                beMessenger_AppendString(arg0->_messenger, ((char *)STWINFONT17));
+                beMessenger_AppendString(arg0->_messenger, ((char * *)g_fontNames)[i]);
                 beMessenger_AppendString(arg0->_messenger, (char *)&buf);
-                beMessenger_DispatchSelected(arg0->_messenger, ((char *)DAT_0051b6b0));
-                str.Set(Pool::Intern(DAT_0051b6b8));
+                beMessenger_DispatchSelected(arg0->_messenger, ((char *)TEXTSET));
+                str.Set(Pool::Intern(DISPON));
             } else {
-                str.Set(Pool::Intern(((char *)DAT_0051b550)));
+                str.Set(Pool::Intern(((char *)DISPOFF)));
             }
-            beMessenger_SelectGroup(arg0->_messenger, ((char *)DAT_0051b3c0));
-            beMessenger_AppendString(arg0->_messenger, ((char *)DAT_0051b3c8));
-            beMessenger_AppendString(arg0->_messenger, ((char * *)DAT_004cf8a0)[i]);
+            beMessenger_SelectGroup(arg0->_messenger, ((char *)TEXTCTL_3));
+            beMessenger_AppendString(arg0->_messenger, ((char *)STWINFONT14));
+            beMessenger_AppendString(arg0->_messenger, ((char * *)g_fontNames)[i]);
             beMessenger_AppendString(arg0->_messenger, str.p);
-            beMessenger_DispatchSelected(arg0->_messenger, ((char *)DAT_0051b558));
-            beMessenger_SelectGroup(arg0->_messenger, ((char *)DAT_0051b3c0));
-            beMessenger_AppendString(arg0->_messenger, ((char *)DAT_0051b680));
-            beMessenger_AppendString(arg0->_messenger, ((char * *)DAT_004cf8a0)[i]);
+            beMessenger_DispatchSelected(arg0->_messenger, ((char *)SWITCH_2));
+            beMessenger_SelectGroup(arg0->_messenger, ((char *)TEXTCTL_3));
+            beMessenger_AppendString(arg0->_messenger, ((char *)STWINFONT17));
+            beMessenger_AppendString(arg0->_messenger, ((char * *)g_fontNames)[i]);
             beMessenger_AppendString(arg0->_messenger, str.p);
-            beMessenger_DispatchSelected(arg0->_messenger, ((char *)DAT_0051b558));
+            beMessenger_DispatchSelected(arg0->_messenger, ((char *)SWITCH_2));
         } while (++i < 12);
         char dig[2];
         dig[1] = 0;
         dig[0] = arg0->_nowPage + 49;
-        beMessenger_SelectGroup(arg0->_messenger, ((char *)DAT_0051b3c0));
-        beMessenger_AppendString(arg0->_messenger, ((char *)DAT_0051bd60));
-        beMessenger_AppendString(arg0->_messenger, ((char * *)DAT_004cf8a0)[0]);
+        beMessenger_SelectGroup(arg0->_messenger, ((char *)TEXTCTL_3));
+        beMessenger_AppendString(arg0->_messenger, ((char *)STWINFONT30));
+        beMessenger_AppendString(arg0->_messenger, ((char * *)g_fontNames)[0]);
         beMessenger_AppendString(arg0->_messenger, dig);
-        beMessenger_DispatchSelected(arg0->_messenger, ((char *)DAT_0051b6b0));
+        beMessenger_DispatchSelected(arg0->_messenger, ((char *)TEXTSET));
         dig[0] = arg0->_maxPage + 48;
-        beMessenger_SelectGroup(arg0->_messenger, ((char *)DAT_0051b3c0));
-        beMessenger_AppendString(arg0->_messenger, ((char *)DAT_0051bd60));
-        beMessenger_AppendString(arg0->_messenger, ((char * *)DAT_004cf8a0)[1]);
+        beMessenger_SelectGroup(arg0->_messenger, ((char *)TEXTCTL_3));
+        beMessenger_AppendString(arg0->_messenger, ((char *)STWINFONT30));
+        beMessenger_AppendString(arg0->_messenger, ((char * *)g_fontNames)[1]);
         beMessenger_AppendString(arg0->_messenger, dig);
-        beMessenger_DispatchSelected(arg0->_messenger, ((char *)DAT_0051b6b0));
+        beMessenger_DispatchSelected(arg0->_messenger, ((char *)TEXTSET));
     }
     if (arg2) {
         int base = arg0->_nowPage * 12; it = (beNDMWItemRevisionPocketBase *)((int *)LIST(arg0->_salesItemList)->_data)[base + arg0->_retCode];
         char *label;
         if (it != 0) {
-            name = beNDMWItemBase_GetRecordString(it, rec, ((char *)DAT_0051b6a8));
+            name = beNDMWItemBase_GetRecordString(it, rec, ((char *)TXT));
             if (it->_kindNo == 0 || it->_kindNo == 1) {
                 char dig[2];
                 dig[1] = 0;
                 dig[0] = it->_pocket + 48;
-                igSmartPointer<igStringObj> rc((igStringObj *)(((beSystem *)((int)FUN_00236f80(arg0->_insight, DAT_00587d08[0])))->_globalStrObj));
+                igSmartPointer<igStringObj> rc((igStringObj *)(((beSystem *)((int)FUN_00236f80(arg0->_insight, g_beSystem_metaObject[0])))->_globalStrObj));
                 if (rc.p != 0) rc.p->_refCount = rc.p->_refCount + 1;
                 FUN_0030b3c0(rc.p, name);
                 igStringObj *t = rc.p;
@@ -6244,22 +6231,22 @@ void FUN_004393e0(beNDMWShopCtrlSales *arg0, int arg1, unsigned char arg2) {
                 FUN_0030b460(t, dig, i, strlen(dig));
                 name = (rc.p->_buffer == 0) ? DAT_004c22f0[0] : (char *)rc.p->_buffer;
             }
-            beMessenger_SelectGroup(arg0->_messenger, ((char *)DAT_0051b3c0));
-            beMessenger_AppendString(arg0->_messenger, ((char *)DAT_0051b470));
-            beMessenger_AppendString(arg0->_messenger, ((char * *)DAT_004cf8a0)[0]);
+            beMessenger_SelectGroup(arg0->_messenger, ((char *)TEXTCTL_3));
+            beMessenger_AppendString(arg0->_messenger, ((char *)STWINFONT29));
+            beMessenger_AppendString(arg0->_messenger, ((char * *)g_fontNames)[0]);
             beMessenger_AppendString(arg0->_messenger, name);
-            beMessenger_DispatchSelected(arg0->_messenger, ((char *)DAT_0051b6b0));
-            label = DAT_0051b6b8;
+            beMessenger_DispatchSelected(arg0->_messenger, ((char *)TEXTSET));
+            label = DISPON;
             FUN_00439f30(arg0, 1);
         } else {
-            label = ((char *)DAT_0051b550);
+            label = ((char *)DISPOFF);
             FUN_00439f30(arg0, 0);
         }
-        beMessenger_SelectGroup(arg0->_messenger, ((char *)DAT_0051b3c0));
-        beMessenger_AppendString(arg0->_messenger, ((char *)DAT_0051b470));
-        beMessenger_AppendString(arg0->_messenger, ((char * *)DAT_004cf8a0)[0]);
+        beMessenger_SelectGroup(arg0->_messenger, ((char *)TEXTCTL_3));
+        beMessenger_AppendString(arg0->_messenger, ((char *)STWINFONT29));
+        beMessenger_AppendString(arg0->_messenger, ((char * *)g_fontNames)[0]);
         beMessenger_AppendString(arg0->_messenger, label);
-        beMessenger_DispatchSelected(arg0->_messenger, ((char *)DAT_0051b558));
+        beMessenger_DispatchSelected(arg0->_messenger, ((char *)SWITCH_2));
     }
 }
 
@@ -6612,17 +6599,17 @@ void Gap__Bec__beNDMWShopCtrlXdataChip__vfunc_21(beNDMWShopCtrlXdataChip *arg0) 
         INTERN_APPEND_43aae0(arg0->_textCloseTypeList, &DAT_0051be10[0])
         INTERN_APPEND_43aae0(arg0->_textCloseNameList, &DAT_0051b1c8[0])
         i = 0;
-        p = &((int * *)DAT_004cf8a0)[0];
+        p = &((int * *)g_fontNames)[0];
         do {
-            FUN_003f5410(arg0, &DAT_0051b3c8[0], *p, &DAT_0051b590[0], &DAT_0051b598[0]);
-            FUN_003f5410(arg0, &DAT_0051b680[0], *p, &DAT_0051b590[0], &DAT_0051b460[0]);
+            FUN_003f5410(arg0, STWINFONT14, *p, &DAT_0051b590[0], &DAT_0051b598[0]);
+            FUN_003f5410(arg0, STWINFONT17, *p, &DAT_0051b590[0], &DAT_0051b460[0]);
             i += 1;
             p += 1;
         } while (i < 12);
-        FUN_003f5410(arg0, &DAT_0051b470[0], ((int * *)DAT_004cf8a0)[0], &DAT_0051b590[0], &DAT_0051b598[0]);
-        FUN_003f5410(arg0, &DAT_0051b470[0], &DAT_0051b548[0], &DAT_0051b590[0], &DAT_0051b598[0]);
-        FUN_003f5410(arg0, &DAT_0051bd60[0], ((int * *)DAT_004cf8a0)[0], &DAT_0051b590[0], &DAT_0051bd98[0]);
-        FUN_003f5410(arg0, &DAT_0051bd60[0], ((int * *)DAT_004cf8a4)[0], &DAT_0051b590[0], &DAT_0051bd98[0]);
+        FUN_003f5410(arg0, STWINFONT29, ((int * *)g_fontNames)[0], &DAT_0051b590[0], &DAT_0051b598[0]);
+        FUN_003f5410(arg0, STWINFONT29, &DAT_0051b548[0], &DAT_0051b590[0], &DAT_0051b598[0]);
+        FUN_003f5410(arg0, STWINFONT30, ((int * *)g_fontNames)[0], &DAT_0051b590[0], &DAT_0051bd98[0]);
+        FUN_003f5410(arg0, STWINFONT30, ((int * *)g_fontName1)[0], &DAT_0051b590[0], &DAT_0051bd98[0]);
         arg0->_st0 = arg0->_st0 + 1;
         arg0->_st3 = 0;
         arg0->_st2 = 0;
@@ -6748,7 +6735,7 @@ void Gap__Bec__beNDMWShopCtrlXdataChip__vfunc_21(beNDMWShopCtrlXdataChip *arg0) 
             have = ((ChipRecord *)((int *)igProperty_GetRecord(beMessenger_GetObject(arg0->_messenger, 0), &DAT_0051b440[0])))->f12;
             pages = arg0->_nowPage;
             idx = arg0->_cursor + pages * 0xC;
-            ret = beNDMWItemBase_GetRecordInt(((int *)((igObjectList *)arg0->_itemBaseList)->_data)[idx], ((int)FUN_00236f80(arg0->_insight, DAT_0058b028[0], pages)), &DAT_0051be38[0]);
+            ret = beNDMWItemBase_GetRecordInt(((int *)((igObjectList *)arg0->_itemBaseList)->_data)[idx], ((int)FUN_00236f80(arg0->_insight, g_beNDMWStatus_metaObject[0], pages)), NEXTX);
             if (ret == -1) {
                 arg0->_st1 = 0xB;
                 arg0->_st3 = 0;
@@ -6780,7 +6767,7 @@ void Gap__Bec__beNDMWShopCtrlXdataChip__vfunc_21(beNDMWShopCtrlXdataChip *arg0) 
                 ObjectList_AppendRetained((unsigned)arg0->_subWindow, infoWin.p);
                 int pages0 = arg0->_nowPage;
                 int idx0 = arg0->_cursor + pages0 * 0xC;
-                status = ((int)FUN_00236f80(arg0->_insight, DAT_0058b028[0], pages0));
+                status = ((int)FUN_00236f80(arg0->_insight, g_beNDMWStatus_metaObject[0], pages0));
                 chip = (beNDMWItemBase *)((int *)((igObjectList *)arg0->_itemBaseList)->_data)[idx0];
                 recNo = chip->_recNo;
                 if (chip->_isEquip != 0) {
@@ -6797,11 +6784,11 @@ void Gap__Bec__beNDMWShopCtrlXdataChip__vfunc_21(beNDMWShopCtrlXdataChip *arg0) 
                 ALLOC_43aae0(al)
                 igSmartPointer<beNDMWItemAbilityChip> abilityChip((beNDMWItemAbilityChip *)FUN_003c87f0(al));
                 FUN_00448660(abilityChip.p, recNo + 1);
-                FUN_003f5410(infoWin.p, &DAT_0051b470[0], ((int * *)DAT_004cf8a0)[0], ((int *)beNDMWItemBase_GetRecordString(abilityChip.p, status, &DAT_0051b678[0])), &DAT_0051b598[0]);
-                FUN_003f5410(infoWin.p, &DAT_0051b448[0], ((int * *)DAT_004cf8a4)[0], &DAT_0051b590[0], &DAT_0051b598[0]);
+                FUN_003f5410(infoWin.p, STWINFONT29, ((int * *)g_fontNames)[0], ((int *)beNDMWItemBase_GetRecordString(abilityChip.p, status, NAME_2)), &DAT_0051b598[0]);
+                FUN_003f5410(infoWin.p, &DAT_0051b448[0], ((int * *)g_fontName1)[0], &DAT_0051b590[0], &DAT_0051b598[0]);
                 FUN_003f5410(infoWin.p, &DAT_0051b448[0], ((int * *)DAT_004cf8a8)[0], &DAT_0051b590[0], &DAT_0051b598[0]);
                 FUN_003f5410(infoWin.p, &DAT_0051b448[0], DAT_004cf8ac[0], &DAT_0051b590[0], &DAT_0051b598[0]);
-                FUN_003f5410(infoWin.p, &DAT_0051b470[0], ((int * *)DAT_004cf8a8)[0], &DAT_0051b590[0], &DAT_0051b598[0]);
+                FUN_003f5410(infoWin.p, STWINFONT29, ((int * *)DAT_004cf8a8)[0], &DAT_0051b590[0], &DAT_0051b598[0]);
                 {
                 ALLOC_43aae0(al)
                 igSmartPointer<igStringRefList> statNames((igStringRefList *)FUN_002b90e0(al));
@@ -6817,7 +6804,7 @@ void Gap__Bec__beNDMWShopCtrlXdataChip__vfunc_21(beNDMWShopCtrlXdataChip *arg0) 
                 INTERN_APPEND_43aae0((int)statNames.p, &DAT_0051be88[0])
                 INTERN_APPEND_43aae0((int)statNames.p, &DAT_0051be90[0])
                 INTERN_APPEND_43aae0((int)statNames.p, &DAT_0051be98[0])
-                s1i = ((int)FUN_00236f80(arg0->_insight, DAT_0058b028[0]));
+                s1i = ((int)FUN_00236f80(arg0->_insight, g_beNDMWStatus_metaObject[0]));
                 ALLOC_43aae0(al)
                 igSmartPointer<igIntList> costs = igSmartPointer<igIntList>((igIntList *)FUN_002caa70(al));
                 slist = statNames.p;
@@ -6826,7 +6813,7 @@ void Gap__Bec__beNDMWShopCtrlXdataChip__vfunc_21(beNDMWShopCtrlXdataChip *arg0) 
                     do {
                         cst = beNDMWItemBase_GetRecordInt(abilityChip.p, s1i, (StringList_CopyRetained(slist, li)).p);
                         if (cst > 0) {
-                            sprintf(sp90, &DAT_0051b468[0], cst);
+                            sprintf(sp90, percent_d, cst);
                             FUN_003f5410(infoWin.p, &DAT_0051b448[0], &DAT_0051b220[0], sp90, &DAT_0051b460[0]);
                             if (li >= 8) li = 7;
                             {
@@ -6842,7 +6829,7 @@ void Gap__Bec__beNDMWShopCtrlXdataChip__vfunc_21(beNDMWShopCtrlXdataChip *arg0) 
                 }
                 MSG3(&DAT_0051b398[0], &DAT_0051b3e8[0])
                 s0 = ((ChipRecord *)((int *)igProperty_GetRecord(beMessenger_GetObject(arg0->_messenger, 0), &DAT_0051b440[0])))->f12;
-                sprintf(sp90, &DAT_0051b468[0], s0 - beNDMWItemBase_GetRecordInt(chip, status, &DAT_0051be38[0]));
+                sprintf(sp90, percent_d, s0 - beNDMWItemBase_GetRecordInt(chip, status, NEXTX));
                 FUN_003f5410(infoWin.p, &DAT_0051b448[0], &DAT_0051b248[0], sp90, &DAT_0051b460[0]);
                 }
                 arg0->_nowProcKazu = ((beNDMWWindowList *)(arg0->_subWindow))->_count;
@@ -6872,12 +6859,12 @@ void Gap__Bec__beNDMWShopCtrlXdataChip__vfunc_21(beNDMWShopCtrlXdataChip *arg0) 
                             int cur2;
                             int pages2 = arg0->_nowPage;
                             int idx2 = arg0->_cursor + pages2 * 0xC;
-                            st2 = ((int)FUN_00236f80(arg0->_insight, DAT_0058b028[0], pages2));
+                            st2 = ((int)FUN_00236f80(arg0->_insight, g_beNDMWStatus_metaObject[0], pages2));
                             chip2 = (beNDMWItemBase *)((int *)((igObjectList *)arg0->_itemBaseList)->_data)[idx2];
                             MSG3(&DAT_0051b398[0], &DAT_0051b3e8[0])
                             sel2 = beMessenger_GetObject(arg0->_messenger, 0);
                             cur2 = ((ChipRecord *)((int *)igProperty_GetRecord(sel2, &DAT_0051b440[0])))->f12;
-                            cost2 = beNDMWItemBase_GetRecordInt(chip2, st2, &DAT_0051be38[0]);
+                            cost2 = beNDMWItemBase_GetRecordInt(chip2, st2, NEXTX);
                             ChipRecord *r2 = (ChipRecord *)((int *)igProperty_GetRecord(sel2, &DAT_0051b440[0]));
                             r2->f12 = cur2 - cost2;
                             chip2->_recNo = chip2->_recNo + 1;
@@ -6908,13 +6895,13 @@ void Gap__Bec__beNDMWShopCtrlXdataChip__vfunc_21(beNDMWShopCtrlXdataChip *arg0) 
                 beNDMWWindow_BindContext(refusalWin.p, arg0, arg0->_insight, arg0->_playerNo, arg0->_st3);
                 ObjectList_AppendRetained((unsigned)arg0->_subWindow, refusalWin.p);
                 beNDMWShopSelect00 *w = refusalWin.p;
-                if (DAT_00586f20[0] == 0) {
+                if (g_stringPool[0] == 0) {
                     int pool = FUN_002eb010(0x10);
                     if (pool != 0) pool = StringPool_Construct(pool);
-                    DAT_00586f20[0] = pool;
+                    g_stringPool[0] = pool;
                 }
                 {
-                    int *nw = (int *)StringPool_Intern(DAT_00586f20[0], &DAT_0051b548[0]);
+                    int *nw = (int *)StringPool_Intern(g_stringPool[0], &DAT_0051b548[0]);
                     int *old = (int *)w->_panelName;
                     if (old != 0) {
                         int *hd = old - 2;
@@ -7019,7 +7006,7 @@ void beNDMWShopCtrlXdataChip_RefreshText(beNDMWShopCtrlXdataChip *self, long lon
     /* Status is captured even when neither refresh flag is set. */
     status = ((int)FUN_00236f80(self->_insight, g_beNDMWStatus_metaObject[0]));
     if (refreshRows != 0) {
-        font = (char **)(&g_fontNames[0]);
+        font = (char **)(g_fontNames);
         for (row = 0; row < CHIPS_PER_PAGE; row++, font++) {
             index = row + self->_nowPage * CHIPS_PER_PAGE;
             if (index < ((beNDMWItemBaseList *)self->_itemBaseList)->_count) {
@@ -7027,51 +7014,51 @@ void beNDMWShopCtrlXdataChip_RefreshText(beNDMWShopCtrlXdataChip *self, long lon
                 if (item == 0) {
                     continue;
                 }
-                name = beNDMWItemBase_GetRecordString(item, status, &NAME_2[0]);
-                nextX = beNDMWItemBase_GetRecordInt(item, status, &NEXTX[0]);
-                beMessenger_SelectGroup(self->_messenger, &TEXTCTL_3[0]);
-                beMessenger_AppendString(self->_messenger, &STWINFONT14[0]);
+                name = beNDMWItemBase_GetRecordString(item, status, NAME_2);
+                nextX = beNDMWItemBase_GetRecordInt(item, status, NEXTX);
+                beMessenger_SelectGroup(self->_messenger, TEXTCTL_3);
+                beMessenger_AppendString(self->_messenger, STWINFONT14);
                 beMessenger_AppendString(self->_messenger, *font);
                 beMessenger_AppendString(self->_messenger, name);
-                beMessenger_DispatchSelected(self->_messenger, &TEXTSET[0]);
+                beMessenger_DispatchSelected(self->_messenger, TEXTSET);
                 if (nextX > 0) {
-                    sprintf((char *)&priceText, &percent_d[0], nextX);
+                    sprintf((char *)&priceText, percent_d, nextX);
                 } else {
                     priceText = DAT_0051bdc0;
                 }
-                beMessenger_SelectGroup(self->_messenger, &TEXTCTL_3[0]);
-                beMessenger_AppendString(self->_messenger, &STWINFONT17[0]);
+                beMessenger_SelectGroup(self->_messenger, TEXTCTL_3);
+                beMessenger_AppendString(self->_messenger, STWINFONT17);
                 beMessenger_AppendString(self->_messenger, *font);
                 beMessenger_AppendString(self->_messenger, (char *)&priceText);
-                beMessenger_DispatchSelected(self->_messenger, &TEXTSET[0]);
+                beMessenger_DispatchSelected(self->_messenger, TEXTSET);
                 visibility = &DISPON[0];
             } else {
-                visibility = &DISPOFF[0];
+                visibility = DISPOFF;
             }
-            beMessenger_SelectGroup(self->_messenger, &TEXTCTL_3[0]);
-            beMessenger_AppendString(self->_messenger, &STWINFONT14[0]);
+            beMessenger_SelectGroup(self->_messenger, TEXTCTL_3);
+            beMessenger_AppendString(self->_messenger, STWINFONT14);
             beMessenger_AppendString(self->_messenger, *font);
             beMessenger_AppendString(self->_messenger, visibility);
-            beMessenger_DispatchSelected(self->_messenger, &SWITCH_2[0]);
-            beMessenger_SelectGroup(self->_messenger, &TEXTCTL_3[0]);
-            beMessenger_AppendString(self->_messenger, &STWINFONT17[0]);
+            beMessenger_DispatchSelected(self->_messenger, SWITCH_2);
+            beMessenger_SelectGroup(self->_messenger, TEXTCTL_3);
+            beMessenger_AppendString(self->_messenger, STWINFONT17);
             beMessenger_AppendString(self->_messenger, *font);
             beMessenger_AppendString(self->_messenger, visibility);
-            beMessenger_DispatchSelected(self->_messenger, &SWITCH_2[0]);
+            beMessenger_DispatchSelected(self->_messenger, SWITCH_2);
         }
         page[1] = 0;
         page[0] = self->_nowPage + '1';
-        beMessenger_SelectGroup(self->_messenger, &TEXTCTL_3[0]);
-        beMessenger_AppendString(self->_messenger, &STWINFONT30[0]);
+        beMessenger_SelectGroup(self->_messenger, TEXTCTL_3);
+        beMessenger_AppendString(self->_messenger, STWINFONT30);
         beMessenger_AppendString(self->_messenger, g_fontNames[0]);
         beMessenger_AppendString(self->_messenger, page);
-        beMessenger_DispatchSelected(self->_messenger, &TEXTSET[0]);
+        beMessenger_DispatchSelected(self->_messenger, TEXTSET);
         page[0] = self->_maxPage + '0';
-        beMessenger_SelectGroup(self->_messenger, &TEXTCTL_3[0]);
-        beMessenger_AppendString(self->_messenger, &STWINFONT30[0]);
+        beMessenger_SelectGroup(self->_messenger, TEXTCTL_3);
+        beMessenger_AppendString(self->_messenger, STWINFONT30);
         beMessenger_AppendString(self->_messenger, g_fontName1[0]);
         beMessenger_AppendString(self->_messenger, page);
-        beMessenger_DispatchSelected(self->_messenger, &TEXTSET[0]);
+        beMessenger_DispatchSelected(self->_messenger, TEXTSET);
     }
     if (refreshDescription != 0) {
         /* matching construct: hand sweep — the subtraction of a negation keeps the retail addu operand order */
@@ -7079,17 +7066,17 @@ void beNDMWShopCtrlXdataChip_RefreshText(beNDMWShopCtrlXdataChip *self, long lon
         if (selectedIndex < ((beNDMWItemBaseList *)self->_itemBaseList)->_count) {
             selectedItem = *(int *)(((beNDMWItemBaseList *)self->_itemBaseList)->_data + (selectedIndex * 4));
             if (selectedItem != 0) {
-                description = beNDMWItemBase_GetRecordString(selectedItem, status, &TXT[0]);
-                beMessenger_SelectGroup(self->_messenger, &TEXTCTL_3[0]);
-                beMessenger_AppendString(self->_messenger, &STWINFONT29[0]);
+                description = beNDMWItemBase_GetRecordString(selectedItem, status, TXT);
+                beMessenger_SelectGroup(self->_messenger, TEXTCTL_3);
+                beMessenger_AppendString(self->_messenger, STWINFONT29);
                 beMessenger_AppendString(self->_messenger, g_fontNames[0]);
                 beMessenger_AppendString(self->_messenger, description);
-                beMessenger_DispatchSelected(self->_messenger, &TEXTSET[0]);
-                beMessenger_SelectGroup(self->_messenger, &TEXTCTL_3[0]);
-                beMessenger_AppendString(self->_messenger, &STWINFONT29[0]);
+                beMessenger_DispatchSelected(self->_messenger, TEXTSET);
+                beMessenger_SelectGroup(self->_messenger, TEXTCTL_3);
+                beMessenger_AppendString(self->_messenger, STWINFONT29);
                 beMessenger_AppendString(self->_messenger, g_fontNames[0]);
                 beMessenger_AppendString(self->_messenger, &DISPON[0]);
-                beMessenger_DispatchSelected(self->_messenger, &SWITCH_2[0]);
+                beMessenger_DispatchSelected(self->_messenger, SWITCH_2);
             }
         }
     }
@@ -7114,7 +7101,7 @@ void Gap__Bec__beNDMWShopDevice__vfunc_21(S *arg0) {
             switch (arg0->_st2) {
             case 0:
                 alloc = igObject_GetAllocator(arg0);
-                alloc = GPR_00554c14 ? alloc : Memory_GetAllocatorBySelector(DAT_00587110[0]);
+                alloc = GPR_00554c14 ? alloc : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
                 {
                 igSmartPointer<beNDMWShopSelect01> win((beNDMWShopSelect01 *)FUN_003b4d90(alloc));
                 beNDMWWindow_BindContext(win.p, arg0, arg0->_insight, arg0->_playerNo, 0);
@@ -7157,7 +7144,7 @@ void Gap__Bec__beNDMWShopDevice__vfunc_21(S *arg0) {
             switch (arg0->_st2) {
             case 0:
                 alloc = igObject_GetAllocator(arg0);
-                alloc = GPR_00554c14 ? alloc : Memory_GetAllocatorBySelector(DAT_00587110[0]);
+                alloc = GPR_00554c14 ? alloc : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
                 {
                 igSmartPointer<beNDMWShopCtrlSales> win((beNDMWShopCtrlSales *)FUN_003b6bc0(alloc));
                 beNDMWWindow_BindContext(win.p, arg0, arg0->_insight, arg0->_playerNo, arg0->_entCode);
@@ -7180,7 +7167,7 @@ void Gap__Bec__beNDMWShopDevice__vfunc_21(S *arg0) {
             switch (arg0->_st2) {
             case 0:
                 alloc = igObject_GetAllocator(arg0);
-                alloc = GPR_00554c14 ? alloc : Memory_GetAllocatorBySelector(DAT_00587110[0]);
+                alloc = GPR_00554c14 ? alloc : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
                 {
                 igSmartPointer<beNDMWShopCtrlSell> win((beNDMWShopCtrlSell *)FUN_003b7360(alloc));
                 beNDMWWindow_BindContext(win.p, arg0, arg0->_insight, arg0->_playerNo, 0);

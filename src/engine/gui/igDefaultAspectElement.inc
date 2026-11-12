@@ -31,7 +31,7 @@ int igDefaultAspectElement_GetVTable(void) {
     *q48 = 0;
     *q4c = 0;
     *q50 = 0;
-    t = *(int *)&u.b[*(int *)((char *)(DAT_00586dc8[0]) + 916)];
+    t = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.w[0] = (int)(&DAT_00541840[0]);
     if (q50 != 0) {
         a = (struct Rc *)*q50;
@@ -97,13 +97,13 @@ void igDefaultAspectElement_InitFields(void) {
     void *temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)DAT_0058c5b0[0];
+    temp_s0 = (void *)g_igDefaultAspectElement_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_004d07c0[0], 6);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    *(int *)((char *)(temp_s1) + 56) = FUN_004505b0();
+    *(int *)((char *)(temp_s1) + 56) = (int)FUN_004505b0();
     temp_s1_2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
-    *(int *)((char *)(temp_s1_2) + 56) = FUN_004521d0();
+    *(int *)((char *)(temp_s1_2) + 56) = (int)FUN_004521d0();
     temp_s1_3 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 2));
     *(int *)((char *)(temp_s1_3) + 56) = FUN_00196190();
     *(unsigned char *)((char *)(temp_s1_3) + 52) = 1;

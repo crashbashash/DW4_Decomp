@@ -67,7 +67,7 @@ void **Gap__Core__igPsx2File__vfunc_25(void **arg0, int arg1, int arg2) {
     }
     return 0;
 block_21:
-    return (var_v1 == DAT_004fb418.v) ? (void **)0 : arg0;
+    return (var_v1 == g_allocatorFailureStatus.v) ? (void **)0 : arg0;
 }
 
 void Gap__Core__igPsx2File__vfunc_26(igPsx2FileView *self)

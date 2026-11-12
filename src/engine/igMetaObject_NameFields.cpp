@@ -59,8 +59,8 @@ extern int g_igMetaObject_vtable[4];
 extern int g_stringPool[4];
 extern void *g_objectSystem[4];
 extern igMetaField *g_fieldNameMember[4];
-extern int DAT_004fb410[4];
-extern int DAT_004fb418[4];
+extern int g_statusSucceeded[4];
+extern int g_allocatorFailureStatus[4];
 
 void *igMetaObject_CreateInstanceDefault(void *meta);
 int igMetaObject_CreateInstance(CreateMeta *arg0, MemoryPool *arg1);

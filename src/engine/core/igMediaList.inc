@@ -16,7 +16,7 @@ int igMediaList_GetVTable(void) {
     int off;
     igObject_InitHeader((ObjectHeader *)&tmp[0]);
     tmp[0] = (int)&DAT_005328a0[0];
-    off = *(int *)((char *)(((int * *)DAT_00586dc8)[0]) + 916);
+    off = *(int *)((char *)(((int * *)g_objectSystem)[0]) + 916);
     return *(int *)((char *)tmp + off);
 }
 

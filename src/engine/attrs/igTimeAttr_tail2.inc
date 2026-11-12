@@ -1,4 +1,4 @@
-int Gap__Attrs__igTimeAttr__vfunc_22(void) {
-    return DAT_0055ec80[0];
+igMetaObject *Gap__Attrs__igTimeAttr__vfunc_22(void) {
+    return g_igTimeAttr_metaObject[0];
 }
 

@@ -1,4 +1,4 @@
 int Gap__Gfx__igPsx2ImageConvert__vfunc_22(void) {
-    return (int)DAT_005605d8[0];
+    return (int)g_igPsx2ImageConvert_metaObject[0];
 }
 

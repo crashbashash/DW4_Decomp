@@ -31,7 +31,7 @@ extern "C" void *igProperty_FindByName(...);
 
 typedef struct RefCountedHeader { char pad4[4]; int f4; } RefCountedHeader;
 extern "C" RefCountedHeader * FUN_00236f80(...);
-extern "C" int DAT_00588518[4];
+extern "C" int g_bePadManager_metaObject[4];
 extern "C" void Gap__Bec__beNDMWSaveIntf__vfunc_32(beNDMWSaveIntf *arg0);
 extern "C" int g_beNDMWSaveIntfInfo_metaObject[4];
 extern "C" int g_beNDMWSaveIntf_metaObject[4];
@@ -61,10 +61,10 @@ extern "C" int DAT_00519928[4];
 extern "C" int DAT_00519938[4];
 extern "C" int DAT_00519948[4];
 extern "C" int DAT_00519958[4];
-extern "C" int DAT_00585be0[4];
-extern "C" int DAT_00587110[4];
-extern "C" int DAT_00587d08[4];
-extern "C" int DAT_00589208[4];
+extern "C" int g_propertyNameField[4];
+extern "C" int g_defaultAllocatorSelector[4];
+extern "C" int g_beSystem_metaObject[4];
+extern "C" int g_beLua_metaObject[4];
 extern "C" unsigned char GPR_00554c14;
 /* Owning stack reference to a request or window object; one instantiation per object class (0 the
  * data list, 1 the control data, 2 text order, 3 model control, 4 message window, 5 slot selector,
@@ -78,7 +78,7 @@ template <int kind> struct RP {
 /* matching construct: the holder destructor nested in this inline function is only inlined (as retail has it) with the inline depth raised */
 struct En { static inline void Run(beBaseInfoRam *o) {
     if (o->_dataList == 0) {
-        int base = igObject_GetAllocator(o); int a; if (GPR_00554c14 != 0) { a = base; } else { a = Memory_GetAllocatorBySelector(DAT_00587110[0]); }
+        int base = igObject_GetAllocator(o); int a; if (GPR_00554c14 != 0) { a = base; } else { a = Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]); }
         RP<0> r((RC *)beBaseInfoDataList_Create(a)); RC *n; RC *old;
         n = r.p; if (n != 0) n->rc = n->rc + 1;
         old = (RC *)o->_dataList;
@@ -156,7 +156,7 @@ extern "C" int ObjectRef_Release_003e9110(...);
 extern "C" int beMessenger_AppendString(...);
 extern "C" void *bePadManager_GetPadForPlayer(...);
 extern "C" void *igProperty_GetRecordByte(...);
-extern "C" int * DAT_004cec70[4];
+extern "C" int * g_playerModelRow[4];
 extern "C" int DAT_00519690[4];
 extern "C" int DAT_005196b8[4];
 extern "C" int DAT_005196c8[4];
@@ -188,7 +188,7 @@ struct DW4Vec16 { int a, b, c, d; DW4Vec16(const DW4Vec16 &o); };
 extern "C" int beNDMWLoadIntf2ComMdlCtrl__StartAt(void *, int, void *, void *, DW4Vec16 &, int);
 class RecoveryCopiedRef { public: void *value; RecoveryCopiedRef(const DW4Sret4 &source) : value(beBaseInfoDataList_Create(source.v)) {} ~RecoveryCopiedRef(); };
 extern "C" int *ObjectRef_Assign_003e92b0(void *, const RecoveryCopiedRef &);
-struct DW4Fresh { static int *Assign(void *obj, int alloc) { RecoveryCopiedRef c(FUN_003e9360(Memory_SelectAllocator_003e9370(&DAT_00587110[0], alloc))); return ObjectRef_Assign_003e92b0(obj, c); } };
+struct DW4Fresh { static int *Assign(void *obj, int alloc) { RecoveryCopiedRef c(FUN_003e9360(Memory_SelectAllocator_003e9370(&g_defaultAllocatorSelector[0], alloc))); return ObjectRef_Assign_003e92b0(obj, c); } };
 static inline void EnterState(beNDMWSaveIntfCtrlData *c, int state) { c->_st0 = state; c->_st3 = 0; c->_st2 = 0; c->_st1 = 0; }
 static inline void NextStep(beNDMWSaveIntfCtrlData *c) { c->_st1 = c->_st1 + 1; c->_st3 = 0; c->_st2 = 0; }
 static inline void SetStep(beNDMWSaveIntfCtrlData *c, int step) { c->_st1 = step; c->_st3 = 0; c->_st2 = 0; }
@@ -211,7 +211,7 @@ void Gap__Bec__beNDMWSaveIntf__vfunc_32(beNDMWSaveIntf *arg0) {
     RefCountedHeader *temp_v0;
 
     if (arg0->_padManager == 0) {
-        temp_v0 = FUN_00236f80(arg0->_insight, DAT_00588518[0]);
+        temp_v0 = FUN_00236f80(arg0->_insight, g_bePadManager_metaObject[0]);
         if (temp_v0 != 0) {
             temp_v0->f4 = (int)((int) (temp_v0->f4 + 1));
         }
@@ -425,37 +425,37 @@ void Gap__Bec__beNDMWSaveIntf__vfunc_31(beNDMWSaveIntf *arg0, beBaseInfoRam *arg
         if (tref == 0) {
             DW4Fresh::Assign(&arg1->_dataList, igObject_GetAllocator(arg1));
         }
-        temp_s3 = (beNDMWSaveIntfCtrlData *)(FUN_003e9280(FUN_003e92a0(&arg1->_dataList), DAT_00585be0[0], &DAT_00519670[0]));
+        temp_s3 = (beNDMWSaveIntfCtrlData *)(FUN_003e9280(FUN_003e92a0(&arg1->_dataList), g_propertyNameField[0], &DAT_00519670[0]));
         tref = FUN_003e93b0(&arg1->_dataList);
         if (tref == 0) {
             DW4Fresh::Assign(&arg1->_dataList, igObject_GetAllocator(arg1));
         }
-        temp_s7 = (void *)(FUN_003e9280(FUN_003e92a0(&arg1->_dataList), DAT_00585be0[0], &DAT_00519678[0]));
+        temp_s7 = (void *)(FUN_003e9280(FUN_003e92a0(&arg1->_dataList), g_propertyNameField[0], &DAT_00519678[0]));
         tref = FUN_003e93b0(&arg1->_dataList);
         if (tref == 0) {
             DW4Fresh::Assign(&arg1->_dataList, igObject_GetAllocator(arg1));
         }
-        temp_s2 = (void *)(FUN_003e9280(FUN_003e92a0(&arg1->_dataList), DAT_00585be0[0], &DAT_00519688[0]));
+        temp_s2 = (void *)(FUN_003e9280(FUN_003e92a0(&arg1->_dataList), g_propertyNameField[0], &DAT_00519688[0]));
         tref = FUN_003e93b0(&arg1->_dataList);
         if (tref == 0) {
             DW4Fresh::Assign(&arg1->_dataList, igObject_GetAllocator(arg1));
         }
-        temp_s1 = (beNDMWLoadIntf2SelSlot *)(FUN_003e9280(FUN_003e92a0(&arg1->_dataList), DAT_00585be0[0], &DAT_00519690[0]));
+        temp_s1 = (beNDMWLoadIntf2SelSlot *)(FUN_003e9280(FUN_003e92a0(&arg1->_dataList), g_propertyNameField[0], &DAT_00519690[0]));
         tref = FUN_003e93b0(&arg1->_dataList);
         if (tref == 0) {
             DW4Fresh::Assign(&arg1->_dataList, igObject_GetAllocator(arg1));
         }
-        temp_s0 = (beNDMWLoadCtrl2CommonIntf *)(FUN_003e9280(FUN_003e92a0(&arg1->_dataList), DAT_00585be0[0], &DAT_00519698[0]));
+        temp_s0 = (beNDMWLoadCtrl2CommonIntf *)(FUN_003e9280(FUN_003e92a0(&arg1->_dataList), g_propertyNameField[0], &DAT_00519698[0]));
         tref = FUN_003e93b0(&arg1->_dataList);
         if (tref == 0) {
             DW4Fresh::Assign(&arg1->_dataList, igObject_GetAllocator(arg1));
         }
-        temp_s8 = (beNDMWLoadIntf2DegiStateCtrl *)(FUN_003e9280(FUN_003e92a0(&arg1->_dataList), DAT_00585be0[0], &DAT_005196a8[0]));
+        temp_s8 = (beNDMWLoadIntf2DegiStateCtrl *)(FUN_003e9280(FUN_003e92a0(&arg1->_dataList), g_propertyNameField[0], &DAT_005196a8[0]));
         tref = FUN_003e93b0(&arg1->_dataList);
         if (tref == 0) {
             DW4Fresh::Assign(&arg1->_dataList, igObject_GetAllocator(arg1));
         }
-        temp_s5 = (beNDMWLoadIntf2DataSelIntf *)(FUN_003e9280(FUN_003e92a0(&arg1->_dataList), DAT_00585be0[0], &DAT_005196b8[0]));
+        temp_s5 = (beNDMWLoadIntf2DataSelIntf *)(FUN_003e9280(FUN_003e92a0(&arg1->_dataList), g_propertyNameField[0], &DAT_005196b8[0]));
         beNDMWLoadIntf2ComMdlCtrl__Poll(temp_s7);
         beNDMWLoadIntf2MesWin__Update(temp_s2);
         spB0 = 0;
@@ -520,7 +520,7 @@ void Gap__Bec__beNDMWSaveIntf__vfunc_31(beNDMWSaveIntf *arg0, beBaseInfoRam *arg
                         if (temp_a1 == 0) {
                             beMessenger_SelectGroup(arg0->_messenger, &DAT_005196e0[0]);
                             beMessenger_AppendInt(arg0->_messenger, arg1->_ramNo);
-                            beMessenger_AppendString(arg0->_messenger, DAT_004cec70[0]);
+                            beMessenger_AppendString(arg0->_messenger, g_playerModelRow[0]);
                             beMessenger_AppendString(arg0->_messenger, &DAT_00519710[0]);
                             beMessenger_DispatchSelected(arg0->_messenger, &DAT_00519720[0]);
                             beMessenger_SelectGroup(arg0->_messenger, &DAT_005196e0[0]);
@@ -1944,11 +1944,11 @@ void Gap__Bec__beNDMWSaveIntf__vfunc_31(beNDMWSaveIntf *arg0, beBaseInfoRam *arg
                     break;
                 case 6:
                     {
-                    var_v0 = DW4SelAlloc::Get(&DAT_00587110[0], igObject_GetAllocator(arg0));
+                    var_v0 = DW4SelAlloc::Get(&g_defaultAllocatorSelector[0], igObject_GetAllocator(arg0));
                     RecoveryRef<1> sp11C((void *)(FUN_003c6360(var_v0)));
                     var_s2_5 = 0;
                     do {
-                        var_v0_2 = DW4SelAlloc::Get(&DAT_00587110[0], igObject_GetAllocator(arg0));
+                        var_v0_2 = DW4SelAlloc::Get(&g_defaultAllocatorSelector[0], igObject_GetAllocator(arg0));
                         {
                         RecoveryRef<0> sp118((void *)(beNDMWDegiData_Create(var_v0_2)));
                         ObjectList_AppendRetained(((beNDMWLoadSlotPlayer *)(sp11C.value))->_saveDataList, sp118.value);
@@ -2232,15 +2232,15 @@ int Gap__Bec__beNDMWSaveIntf__vfunc_34(beNDMWSaveIntf *arg0, beBaseInfoRam *arg1
     unsigned int v = beMessenger_ResolveEnumValue(arg0->_messenger, FUN_003bcc20(), arg2->f20);
     if (v == 0) {
         if (arg1->_dataList == 0) {
-            int base = igObject_GetAllocator(arg0); int a; if (GPR_00554c14 != 0) { a = base; } else { a = Memory_GetAllocatorBySelector(DAT_00587110[0]); }
+            int base = igObject_GetAllocator(arg0); int a; if (GPR_00554c14 != 0) { a = base; } else { a = Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]); }
             RP<0> cc((RC *)beBaseInfoDataList_Create(a)); RC *n; RC *old;
             n = cc.p; if (n != 0) n->rc = n->rc + 1;
             old = (RC *)arg1->_dataList;
             if (old != 0) { old->rc = old->rc - 1; if (((unsigned long long)((long long)old->rc << 0x29) >> 0x29) == 0) igObject_Destroy(old); }
             arg1->_dataList = (int)n;
-            arg0->_system_ = ((int)FUN_00236f80(arg0->_insight, DAT_00587d08[0]));
+            arg0->_system_ = ((int)FUN_00236f80(arg0->_insight, g_beSystem_metaObject[0]));
             {
-                int base = igObject_GetAllocator(arg0); int a; if (GPR_00554c14 != 0) { a = base; } else { a = Memory_GetAllocatorBySelector(DAT_00587110[0]); }
+                int base = igObject_GetAllocator(arg0); int a; if (GPR_00554c14 != 0) { a = base; } else { a = Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]); }
                 RP<1> c8((RC *)FUN_003bc940(a));
                 ObjectList_AppendRetained(arg1->_dataList, c8.p);
                 ((beNDMWSaveIntfCtrlData *)c8.p)->_isRun = 1;
@@ -2257,15 +2257,15 @@ int Gap__Bec__beNDMWSaveIntf__vfunc_34(beNDMWSaveIntf *arg0, beBaseInfoRam *arg1
             beMessenger_SendNamed(arg0->_messenger, &DAT_00519928[0], 0, 0, &DAT_00519938[0]);
             ObjectList_AppendRetained(arg1->_dataList, beMessenger_GetObject(arg0->_messenger, 0));
             {
-                int base = igObject_GetAllocator(arg0); int a; if (GPR_00554c14 != 0) { a = base; } else { a = Memory_GetAllocatorBySelector(DAT_00587110[0]); }
+                int base = igObject_GetAllocator(arg0); int a; if (GPR_00554c14 != 0) { a = base; } else { a = Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]); }
                 RP<2> c4((RC *)beNDMWLoadIntf2TextOrder_Create(a));
                 ((beNDMWLoadIntf2TextOrder *)c4.p)->_messenger = arg0->_messenger;
                 beNDMWLoadIntf2TextOrder *o4 = (beNDMWLoadIntf2TextOrder *)c4.p;
-                o4->_lua = ((int)FUN_00236f80(arg0->_insight, DAT_00589208[0]));
+                o4->_lua = ((int)FUN_00236f80(arg0->_insight, g_beLua_metaObject[0]));
                 ObjectList_AppendRetained(arg1->_dataList, c4.p);
             }
             {
-                int base = igObject_GetAllocator(arg0); int a; if (GPR_00554c14 != 0) { a = base; } else { a = Memory_GetAllocatorBySelector(DAT_00587110[0]); }
+                int base = igObject_GetAllocator(arg0); int a; if (GPR_00554c14 != 0) { a = base; } else { a = Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]); }
                 RP<3> c0((RC *)beNDMWLoadIntf2ComMdlCtrl_Create(a));
                 ObjectList_AppendRetained(arg1->_dataList, c0.p);
                 ((beNDMWLoadIntf2ComMdlCtrl *)c0.p)->_messenger = arg0->_messenger;
@@ -2280,70 +2280,70 @@ int Gap__Bec__beNDMWSaveIntf__vfunc_34(beNDMWSaveIntf *arg0, beBaseInfoRam *arg1
                 ((float *)&o0->_pos)[2] = fz;
             }
             {
-                int base = igObject_GetAllocator(arg0); int a; if (GPR_00554c14 != 0) { a = base; } else { a = Memory_GetAllocatorBySelector(DAT_00587110[0]); }
+                int base = igObject_GetAllocator(arg0); int a; if (GPR_00554c14 != 0) { a = base; } else { a = Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]); }
                 RP<4> bc((RC *)FUN_003c6b00(a));
                 ((beNDMWLoadIntf2MesWin *)bc.p)->_ramNo = arg1->_ramNo;
                 ((beNDMWLoadIntf2MesWin *)bc.p)->_messenger = arg0->_messenger;
-                ((beNDMWLoadIntf2MesWin *)bc.p)->_padManager = ((int)FUN_00236f80(arg0->_insight, DAT_00588518[0]));
+                ((beNDMWLoadIntf2MesWin *)bc.p)->_padManager = ((int)FUN_00236f80(arg0->_insight, g_bePadManager_metaObject[0]));
                 ObjectList_AppendRetained(arg1->_dataList, bc.p);
                 En::Run(arg1);
-                ((beNDMWLoadIntf2MesWin *)bc.p)->_textOrder = (int)igProperty_FindByName(arg1->_dataList, DAT_00585be0[0], &DAT_00519948[0]);
+                ((beNDMWLoadIntf2MesWin *)bc.p)->_textOrder = (int)igProperty_FindByName(arg1->_dataList, g_propertyNameField[0], &DAT_00519948[0]);
             }
             {
-                int base = igObject_GetAllocator(arg0); int a; if (GPR_00554c14 != 0) { a = base; } else { a = Memory_GetAllocatorBySelector(DAT_00587110[0]); }
+                int base = igObject_GetAllocator(arg0); int a; if (GPR_00554c14 != 0) { a = base; } else { a = Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]); }
                 RP<5> b8((RC *)FUN_003c2e60(a));
                 ((beNDMWLoadIntf2SelSlot *)b8.p)->_ramNo = arg1->_ramNo;
                 ((beNDMWLoadIntf2SelSlot *)b8.p)->_messenger = arg0->_messenger;
-                ((beNDMWLoadIntf2SelSlot *)b8.p)->_padManager = ((int)FUN_00236f80(arg0->_insight, DAT_00588518[0]));
+                ((beNDMWLoadIntf2SelSlot *)b8.p)->_padManager = ((int)FUN_00236f80(arg0->_insight, g_bePadManager_metaObject[0]));
                 En::Run(arg1);
-                ((beNDMWLoadIntf2SelSlot *)b8.p)->_comMdlCtrl = (int)igProperty_FindByName(arg1->_dataList, DAT_00585be0[0], &DAT_00519678[0]);
+                ((beNDMWLoadIntf2SelSlot *)b8.p)->_comMdlCtrl = (int)igProperty_FindByName(arg1->_dataList, g_propertyNameField[0], &DAT_00519678[0]);
                 En::Run(arg1);
-                ((beNDMWLoadIntf2SelSlot *)b8.p)->_textOrder = (int)igProperty_FindByName(arg1->_dataList, DAT_00585be0[0], &DAT_00519948[0]);
+                ((beNDMWLoadIntf2SelSlot *)b8.p)->_textOrder = (int)igProperty_FindByName(arg1->_dataList, g_propertyNameField[0], &DAT_00519948[0]);
                 En::Run(arg1);
-                ((beNDMWLoadIntf2SelSlot *)b8.p)->_commonIntf = (int)igProperty_FindByName(arg1->_dataList, DAT_00585be0[0], &DAT_00519698[0]);
+                ((beNDMWLoadIntf2SelSlot *)b8.p)->_commonIntf = (int)igProperty_FindByName(arg1->_dataList, g_propertyNameField[0], &DAT_00519698[0]);
                 ObjectList_AppendRetained(arg1->_dataList, b8.p);
             }
             {
-                int base = igObject_GetAllocator(arg0); int a; if (GPR_00554c14 != 0) { a = base; } else { a = Memory_GetAllocatorBySelector(DAT_00587110[0]); }
+                int base = igObject_GetAllocator(arg0); int a; if (GPR_00554c14 != 0) { a = base; } else { a = Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]); }
                 RP<6> b4((RC *)FUN_003c3900(a));
                 {
-                    int base2 = igObject_GetAllocator(arg0); int a2; if (GPR_00554c14 != 0) { a2 = base2; } else { a2 = Memory_GetAllocatorBySelector(DAT_00587110[0]); }
+                    int base2 = igObject_GetAllocator(arg0); int a2; if (GPR_00554c14 != 0) { a2 = base2; } else { a2 = Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]); }
                     RP<7> b0((RC *)FUN_003c3e40(a2));
                     En::Run(arg1);
-                    void *s0 = igProperty_FindByName(arg1->_dataList, DAT_00585be0[0], &DAT_00519698[0]);
+                    void *s0 = igProperty_FindByName(arg1->_dataList, g_propertyNameField[0], &DAT_00519698[0]);
                     En::Run(arg1);
-                    void *s4 = igProperty_FindByName(arg1->_dataList, DAT_00585be0[0], &DAT_00519948[0]);
+                    void *s4 = igProperty_FindByName(arg1->_dataList, g_propertyNameField[0], &DAT_00519948[0]);
                     En::Run(arg1);
-                    FUN_003d9de0(b0.p, arg1->_ramNo, s0, s4, igProperty_FindByName(arg1->_dataList, DAT_00585be0[0], &DAT_00519678[0]), arg0->_messenger, 0);
+                    FUN_003d9de0(b0.p, arg1->_ramNo, s0, s4, igProperty_FindByName(arg1->_dataList, g_propertyNameField[0], &DAT_00519678[0]), arg0->_messenger, 0);
                     ObjectList_AppendRetained(((beNDMWLoadIntf2DegiStateCtrl *)b4.p)->_statDataList, b0.p);
                 }
                 {
-                    int base2 = igObject_GetAllocator(arg0); int a2; if (GPR_00554c14 != 0) { a2 = base2; } else { a2 = Memory_GetAllocatorBySelector(DAT_00587110[0]); }
+                    int base2 = igObject_GetAllocator(arg0); int a2; if (GPR_00554c14 != 0) { a2 = base2; } else { a2 = Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]); }
                     RP<7> ac((RC *)FUN_003c3e40(a2));
                     En::Run(arg1);
-                    void *s0 = igProperty_FindByName(arg1->_dataList, DAT_00585be0[0], &DAT_00519698[0]);
+                    void *s0 = igProperty_FindByName(arg1->_dataList, g_propertyNameField[0], &DAT_00519698[0]);
                     En::Run(arg1);
-                    void *s4 = igProperty_FindByName(arg1->_dataList, DAT_00585be0[0], &DAT_00519948[0]);
+                    void *s4 = igProperty_FindByName(arg1->_dataList, g_propertyNameField[0], &DAT_00519948[0]);
                     En::Run(arg1);
-                    FUN_003d9de0(ac.p, arg1->_ramNo, s0, s4, igProperty_FindByName(arg1->_dataList, DAT_00585be0[0], &DAT_00519678[0]), arg0->_messenger, 1);
+                    FUN_003d9de0(ac.p, arg1->_ramNo, s0, s4, igProperty_FindByName(arg1->_dataList, g_propertyNameField[0], &DAT_00519678[0]), arg0->_messenger, 1);
                     ObjectList_AppendRetained(((beNDMWLoadIntf2DegiStateCtrl *)b4.p)->_statDataList, ac.p);
                 }
                 ObjectList_AppendRetained(arg1->_dataList, b4.p);
             }
             {
-                int base = igObject_GetAllocator(arg0); int a; if (GPR_00554c14 != 0) { a = base; } else { a = Memory_GetAllocatorBySelector(DAT_00587110[0]); }
+                int base = igObject_GetAllocator(arg0); int a; if (GPR_00554c14 != 0) { a = base; } else { a = Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]); }
                 RP<8> a8((RC *)FUN_003c3560(a));
-                ((beNDMWLoadIntf2DataSelIntf *)a8.p)->_padManager = ((int)FUN_00236f80(arg0->_insight, DAT_00588518[0]));
+                ((beNDMWLoadIntf2DataSelIntf *)a8.p)->_padManager = ((int)FUN_00236f80(arg0->_insight, g_bePadManager_metaObject[0]));
                 En::Run(arg1);
-                ((beNDMWLoadIntf2DataSelIntf *)a8.p)->_comMdlCtrl = (int)igProperty_FindByName(arg1->_dataList, DAT_00585be0[0], &DAT_00519678[0]);
+                ((beNDMWLoadIntf2DataSelIntf *)a8.p)->_comMdlCtrl = (int)igProperty_FindByName(arg1->_dataList, g_propertyNameField[0], &DAT_00519678[0]);
                 En::Run(arg1);
-                ((beNDMWLoadIntf2DataSelIntf *)a8.p)->_textOrder = (int)igProperty_FindByName(arg1->_dataList, DAT_00585be0[0], &DAT_00519948[0]);
+                ((beNDMWLoadIntf2DataSelIntf *)a8.p)->_textOrder = (int)igProperty_FindByName(arg1->_dataList, g_propertyNameField[0], &DAT_00519948[0]);
                 En::Run(arg1);
-                ((beNDMWLoadIntf2DataSelIntf *)a8.p)->_commonIntf = (int)igProperty_FindByName(arg1->_dataList, DAT_00585be0[0], &DAT_00519698[0]);
+                ((beNDMWLoadIntf2DataSelIntf *)a8.p)->_commonIntf = (int)igProperty_FindByName(arg1->_dataList, g_propertyNameField[0], &DAT_00519698[0]);
                 En::Run(arg1);
-                ((beNDMWLoadIntf2DataSelIntf *)a8.p)->_mesWin = (int)igProperty_FindByName(arg1->_dataList, DAT_00585be0[0], &DAT_00519688[0]);
+                ((beNDMWLoadIntf2DataSelIntf *)a8.p)->_mesWin = (int)igProperty_FindByName(arg1->_dataList, g_propertyNameField[0], &DAT_00519688[0]);
                 En::Run(arg1);
-                ((beNDMWLoadIntf2DataSelIntf *)a8.p)->_statDisp = (int)igProperty_FindByName(arg1->_dataList, DAT_00585be0[0], &DAT_005196a8[0]);
+                ((beNDMWLoadIntf2DataSelIntf *)a8.p)->_statDisp = (int)igProperty_FindByName(arg1->_dataList, g_propertyNameField[0], &DAT_005196a8[0]);
                 ObjectList_AppendRetained(arg1->_dataList, a8.p);
             }
         }
@@ -2353,7 +2353,7 @@ int Gap__Bec__beNDMWSaveIntf__vfunc_34(beNDMWSaveIntf *arg0, beBaseInfoRam *arg1
         return 1;
     }
     En::Run(arg1);
-    beNDMWSaveIntfCtrlData *p = (beNDMWSaveIntfCtrlData *)igProperty_FindByName(arg1->_dataList, DAT_00585be0[0], &DAT_00519670[0]);
+    beNDMWSaveIntfCtrlData *p = (beNDMWSaveIntfCtrlData *)igProperty_FindByName(arg1->_dataList, g_propertyNameField[0], &DAT_00519670[0]);
     switch (v) {
     case 1:
         ObjectList_AppendRetained(arg1->_dataList, beMessenger_GetObject(arg0->_messenger, 0));
@@ -2383,7 +2383,7 @@ int Gap__Bec__beNDMWSaveIntf__vfunc_34(beNDMWSaveIntf *arg0, beBaseInfoRam *arg1
     case 6:
         En::Run(arg1);
         {
-            PropX *q = (PropX *)igProperty_FindByName(arg1->_dataList, DAT_00585be0[0], &DAT_00519698[0]);
+            PropX *q = (PropX *)igProperty_FindByName(arg1->_dataList, g_propertyNameField[0], &DAT_00519698[0]);
             if (q->f40->f16[arg1->_ramNo]->f13 != 1) {
                 beMessenger_SelectGroup(arg0->_messenger, &DAT_005196e0[0]);
                 beMessenger_AppendInt(arg0->_messenger, arg1->_ramNo);

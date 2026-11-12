@@ -20,7 +20,7 @@ int igPsx2DecalExt_GetVTable(void) {
     q2 = (S_ref *)&u.b[16];
     *(int *)q2 = 0;
     u.w[0] = (int)(&DAT_005256f0[0]);
-    temp_s1 = *(int *)&u.b[*(int *)((char *)(DAT_00586dc8[0]) + 916)];
+    temp_s1 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.w[0] = (int)(&DAT_00530a10[0]);
     if (q2 != 0) {
         q2 = *(S_ref **)q2;
@@ -66,7 +66,7 @@ void igPsx2DecalExt_Register(void) {
 }
 
 int FUN_00154340(void) {
-    return (int)DAT_0055fea8[0];
+    return (int)g_igDecalExt_metaObject[0];
 }
 
 void igPsx2DecalExt_InitFields(void) {
@@ -74,7 +74,7 @@ void igPsx2DecalExt_InitFields(void) {
     void *temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)DAT_005605f8[0];
+    temp_s0 = (void *)g_igPsx2DecalExt_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_0048a0b8[0], 2);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));

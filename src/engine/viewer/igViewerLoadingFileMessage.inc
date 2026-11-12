@@ -3,10 +3,10 @@ void FUN_0045a680(int arg0) {
     igMetaObject_CreateInstance(*(int *)0x58C910, arg0);
 }
 
-struct G_45a680 *igViewerLoadingFileMessage_GetMetaObject(void) {
-    struct G_45a680 *g = g_igViewerLoadingFileMessage_metaObject[0];
+igMetaObject *igViewerLoadingFileMessage_GetMetaObject(void) {
+    igMetaObject *g = g_igViewerLoadingFileMessage_metaObject[0];
     int t;
-    if (!g || !(t = (g->f & 4) != 0))
+    if (!g || !(t = (g->_validity & 4) != 0))
         FUN_0045a7a0();
     return g_igViewerLoadingFileMessage_metaObject[0];
 }
@@ -20,7 +20,7 @@ int igViewerLoadingFileMessage_GetVTable(void) {
     igObject_InitHeader(&obj);
     obj.vt = &DAT_00542100[0];
     obj.m = 0;
-    t = *(int *)((char *)&obj + *(int *)((char *)(((void *)DAT_00586dc8[0])) + 916));
+    t = *(int *)((char *)&obj + *(int *)((char *)(((void *)g_objectSystem[0])) + 916));
     obj.vt = &DAT_00542100[0];
     if (&obj.m != 0) {
         o = obj.m;
@@ -66,7 +66,7 @@ void igViewerLoadingFileMessage_InitFields(void) {
     int temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)DAT_0058c910[0];
+    temp_s0 = (void *)g_igViewerLoadingFileMessage_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_004d0e38[0], 2);
     igStringMetaField_SetDefaultText(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 1), &DAT_0051eef0[0]);

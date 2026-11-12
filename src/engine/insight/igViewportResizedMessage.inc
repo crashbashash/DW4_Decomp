@@ -16,7 +16,7 @@ int igViewportResizedMessage_GetVTable(void) {
 
     igObject_InitHeader(&obj);
     obj.vt = &DAT_0052cc80[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 
 void FUN_00233380(void)
@@ -49,7 +49,7 @@ void igViewportResizedMessage_InitFields(void) {
     int temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)DAT_0056dc10[0];
+    temp_s0 = (void *)g_igViewportResizedMessage_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_00498218[0], 2);
     igMetaObject_NameFields(temp_s0, &DAT_00498220[0], &DAT_00498228[0], &DAT_00498230[0], temp_s1);

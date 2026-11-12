@@ -3,9 +3,9 @@ void FUN_003ba260(int arg0) {
     igMetaObject_CreateInstance(*(int *)0x58AF18, arg0);
 }
 
-SFUN_003ba2a0 *FUN_003ba2a0(void) {
-    if (DAT_0058af18[0] == 0 || !DAT_0058af18[0]->ok()) FUN_003ba6a0();
-    return DAT_0058af18[0];
+igMetaObject *FUN_003ba2a0(void) {
+    if (g_beNDMWStatusSubSlot_metaObject[0] == 0 || !isValid(g_beNDMWStatusSubSlot_metaObject[0])) FUN_003ba6a0();
+    return g_beNDMWStatusSubSlot_metaObject[0];
 }
 
 int beNDMWStatusSubSlot_GetVTable(void) {
@@ -14,7 +14,7 @@ int beNDMWStatusSubSlot_GetVTable(void) {
 
     beNDMWStatusCtrlBaseEquip_Construct((beNDMWStatusCtrlBaseEquip *)u.b);
     u.vt = (int)&DAT_0053ef40[0];
-    t = *(int *)&u.b[*(int *)((char *)(DAT_00586dc8[0]) + 916)];
+    t = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.vt = (int)&DAT_0053ef40[0];
     FUN_003ba3d0((S_arg0 *)u.b, (long long)0);
     return t;
@@ -47,7 +47,7 @@ void *FUN_003ba3d0(S_arg0 *arg0, long long arg1) {
     S_temp_a0_7 *temp_a0_7;
 
     if (arg0 != 0) {
-        arg0->f0 = (int)(&DAT_0053f150[0]);
+        arg0->f0 = (int)(&g_beNDMWStatusCtrlBaseEquip_vtable[0]);
         if (((char *)arg0 + 0x78) != 0) {
             temp_a0 = (S_temp_a0_3ba3d0 *)(arg0->f120);
             if (temp_a0 != 0) {
@@ -112,7 +112,7 @@ void *FUN_003ba3d0(S_arg0 *arg0, long long arg1) {
             }
         }
         if (arg0 != 0) {
-            arg0->f0 = (int)(&DAT_0053daa0[0]);
+            arg0->f0 = (int)(&g_beNDMWWindowCtrl_vtable[0]);
             FUN_003b2d10((beNDMWWindowCtrl *)arg0, (short)0);
         }
         if (((long long) (arg1 << 0x30) >> 0x30) > 0) {

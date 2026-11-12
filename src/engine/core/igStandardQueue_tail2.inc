@@ -33,20 +33,20 @@ R_3286e0 Gap__Core__igStandardQueue__vfunc_26(Self_3286e0 *self, int val, int bl
     unsigned a;
     unsigned b;
     if (self->v27() != 0 && self->v26() > self->f40 && block == 0) {
-        return R_3286e0(DAT_004fb418.v);
+        return R_3286e0(g_allocatorFailureStatus.v);
     }
     while (((self->v27() != 0) ^ 1) == 0 && self->v26() > self->f40) {
         Q23 *t = (Q23 *)**(int **)(*(int *)((char *)((int * *)DAT_005871d0)[0] + 8) + 16);
         t->v23(0x05F5E100);
     }
     int c = self->q12->v31(block).Code();
-    if (c != DAT_004fb410.v) {
-        return R_3286e0(DAT_004fb418.v);
+    if (c != g_statusSucceeded.v) {
+        return R_3286e0(g_allocatorFailureStatus.v);
     }
     if (self->v27() != 0) {
         int c2 = self->q16->v31(block).Code();
-        if (c2 != DAT_004fb410.v) {
-            return R_3286e0(DAT_004fb418.v);
+        if (c2 != g_statusSucceeded.v) {
+            return R_3286e0(g_allocatorFailureStatus.v);
         }
         if (self->v27() != 0) {
             a = self->f40;
@@ -59,7 +59,7 @@ R_3286e0 Gap__Core__igStandardQueue__vfunc_26(Self_3286e0 *self, int val, int bl
     self->head = (self->head + 1) % self->cap;
     self->q12->v29();
     self->q20->v29();
-    return R_3286e0(DAT_004fb410.v);
+    return R_3286e0(g_statusSucceeded.v);
 }
 
 int Gap__Core__igStandardQueue__vfunc_29(igStandardQueue *self) {
@@ -72,17 +72,17 @@ int Gap__Core__igStandardQueue__vfunc_29(igStandardQueue *self) {
 R_328970 Gap__Core__igStandardQueue__vfunc_27(Self_328970 *self, int *out, int block)
 {
     int c = ((Q33 *)self->q20)->v33(block).Code();
-    if (c != DAT_004fb410.v) {
-        return R_328970(DAT_004fb418.v);
+    if (c != g_statusSucceeded.v) {
+        return R_328970(g_allocatorFailureStatus.v);
     }
     int c2 = ((Q33 *)self->q16)->v33(block).Code();
-    if (c2 != DAT_004fb410.v) {
-        return R_328970(DAT_004fb418.v);
+    if (c2 != g_statusSucceeded.v) {
+        return R_328970(g_allocatorFailureStatus.v);
     }
     *out = self->buf[self->tail];
     self->tail = (self->tail + 1) % self->cap;
     ((Q31 *)self->q16)->v31();
-    return R_328970(DAT_004fb410.v);
+    return R_328970(g_statusSucceeded.v);
 }
 
 void Gap__Core__igStandardQueue__vfunc_28(igStandardQueueView *self)
@@ -119,7 +119,7 @@ void FUN_00328ab0(Q_328ab0 *arg0, int arg1) {
 R_328ba0 Gap__Core__igStandardQueue__vfunc_30(Self_328ba0 *o, unsigned n)
 {
     if (n > o->f40 || n < o->v26()) {
-        return R_328ba0(DAT_004fb418.v);
+        return R_328ba0(g_allocatorFailureStatus.v);
     }
     if (o->f36 == 0) {
         o->f24 = n;
@@ -130,7 +130,7 @@ R_328ba0 Gap__Core__igStandardQueue__vfunc_30(Self_328ba0 *o, unsigned n)
         o->q12->v29();
         o->q16->v29();
     }
-    return R_328ba0(DAT_004fb410.v);
+    return R_328ba0(g_statusSucceeded.v);
 }
 
 /* Accessor: returns the queue's current `_capacity` (igUnsignedIntMetaField, +24). */
@@ -142,19 +142,19 @@ void Gap__Core__igStandardQueue__vfunc_32(int *out, Q_328cb0 *q, unsigned a) {
     R_328cb0 t[5];
     if (a >= q->cap || q->f36 == 0) {
         q->f40 = a;
-        *out = DAT_004fb410.v;
+        *out = g_statusSucceeded.v;
     } else {
         t[4] = q->s3->v31(1);
         if (a < q->v26()) {
             t[3] = q->s3->v29();
-            *out = DAT_004fb418.v;
+            *out = g_allocatorFailureStatus.v;
         } else {
             t[2] = q->s4->v31(1);
             FUN_00328ab0((Q_328ab0 *)q, a);
             q->f40 = q->cap;
             t[1] = q->s3->v29();
             t[0] = q->s4->v29();
-            *out = DAT_004fb410.v;
+            *out = g_statusSucceeded.v;
         }
     }
 }
@@ -165,7 +165,7 @@ int Gap__Core__igStandardQueue__vfunc_33(igStandardQueue *self) {
 }
 
 int **FUN_00328de0(int **arg0) {
-    *arg0 = &DAT_0052dd30[0];
+    *arg0 = &g_vtable[0];
     return arg0;
 }
 

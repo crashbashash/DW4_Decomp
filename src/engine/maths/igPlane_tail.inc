@@ -1,22 +1,22 @@
 void FUN_0018c660(void) {
-    FUN_0018fbc0((void *)DAT_00560fe0[0], igAABox_GetMetaObject(), (int)&FUN_0018c920);
-    FUN_0018fbc0((void *)DAT_00560fe0[0], (void *)DAT_00560fe0[0], (int)FUN_0018ca00);
-    FUN_0018fbc0((void *)DAT_00560fe0[0], igSphere_GetMetaObject(), (int)FUN_0018c990);
-    FUN_0018fca0((PairKeyedItem *)DAT_00560fe0[0], (PairKeyedItem *)DAT_005610e0[0], (int)FUN_0018cc10);
-    FUN_0018fca0((PairKeyedItem *)DAT_00560fe0[0], (PairKeyedItem *)DAT_00560fe0[0], (int)&FUN_0018cb10);
-    FUN_0018fca0((PairKeyedItem *)DAT_00560fe0[0], (PairKeyedItem *)DAT_00560fa0[0], (int)FUN_0018cf20);
-    FUN_0018fc30((IndexedWordPairKey *)DAT_00560fe0[0], (IndexedWordPairKey *)DAT_00560fe0[0], (int)FUN_0018d100);
-    FUN_0018fc30((IndexedWordPairKey *)DAT_00560fe0[0], (IndexedWordPairKey *)DAT_005610e0[0], (int)FUN_0018d110);
-    FUN_0018fc30((IndexedWordPairKey *)DAT_00560fe0[0], (IndexedWordPairKey *)DAT_00560fa0[0], (int)FUN_0018d160);
-    FUN_0018fd10((int *)DAT_00560fe0[0], (int)FUN_0018ca80);
-    FUN_0018fd90((IndexedWordKey *)DAT_00560fe0[0], (int)&FUN_0018cfb0);
-    FUN_0018fd50((IndexedSlotKey *)DAT_00560fe0[0], (int)&FUN_0018d1d0);
-    FUN_0018fe10((int *)DAT_00560fe0[0], (int)&FUN_0018d060);
-    FUN_0018fdd0(DAT_00560fe0[0], (int)&FUN_0018d0b0);
-    FUN_0018fe50((IndexedSlotKey *)DAT_00560fe0[0], (int)thunk_FUN_0018c820);
-    FUN_0018fe90((IndexedWordKey *)DAT_00560fe0[0], (int)FUN_0018d260);
-    FUN_0018fed0(DAT_00560fe0[0], (int)FUN_0018d270);
-    FUN_0018ff10((int *)DAT_00560fe0[0], (int)FUN_0018d280);
+    FUN_0018fbc0((void *)g_igPlane_metaObject[0], igAABox_GetMetaObject(), (int)&FUN_0018c920);
+    FUN_0018fbc0((void *)g_igPlane_metaObject[0], (void *)g_igPlane_metaObject[0], (int)FUN_0018ca00);
+    FUN_0018fbc0((void *)g_igPlane_metaObject[0], igSphere_GetMetaObject(), (int)FUN_0018c990);
+    FUN_0018fca0((PairKeyedItem *)g_igPlane_metaObject[0], (PairKeyedItem *)g_igAABox_metaObject[0], (int)FUN_0018cc10);
+    FUN_0018fca0((PairKeyedItem *)g_igPlane_metaObject[0], (PairKeyedItem *)g_igPlane_metaObject[0], (int)&FUN_0018cb10);
+    FUN_0018fca0((PairKeyedItem *)g_igPlane_metaObject[0], (PairKeyedItem *)g_igSphere_metaObject[0], (int)FUN_0018cf20);
+    FUN_0018fc30((IndexedWordPairKey *)g_igPlane_metaObject[0], (IndexedWordPairKey *)g_igPlane_metaObject[0], (int)FUN_0018d100);
+    FUN_0018fc30((IndexedWordPairKey *)g_igPlane_metaObject[0], (IndexedWordPairKey *)g_igAABox_metaObject[0], (int)FUN_0018d110);
+    FUN_0018fc30((IndexedWordPairKey *)g_igPlane_metaObject[0], (IndexedWordPairKey *)g_igSphere_metaObject[0], (int)FUN_0018d160);
+    FUN_0018fd10((int *)g_igPlane_metaObject[0], (int)FUN_0018ca80);
+    FUN_0018fd90((IndexedWordKey *)g_igPlane_metaObject[0], (int)&FUN_0018cfb0);
+    FUN_0018fd50((IndexedSlotKey *)g_igPlane_metaObject[0], (int)&FUN_0018d1d0);
+    FUN_0018fe10((int *)g_igPlane_metaObject[0], (int)&FUN_0018d060);
+    FUN_0018fdd0(g_igPlane_metaObject[0], (int)&FUN_0018d0b0);
+    FUN_0018fe50((IndexedSlotKey *)g_igPlane_metaObject[0], (int)thunk_FUN_0018c820);
+    FUN_0018fe90((IndexedWordKey *)g_igPlane_metaObject[0], (int)FUN_0018d260);
+    FUN_0018fed0(g_igPlane_metaObject[0], (int)FUN_0018d270);
+    FUN_0018ff10((int *)g_igPlane_metaObject[0], (int)FUN_0018d280);
 }
 
 void FUN_0018c820(igPlane *plane, const void *matrix) {

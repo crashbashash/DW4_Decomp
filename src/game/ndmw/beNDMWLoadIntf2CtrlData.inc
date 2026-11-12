@@ -5,13 +5,13 @@ void FUN_003c43c0(int arg0) {
 
 void *beNDMWLoadIntf2CtrlData_ResolveMetaObject(void) {
     bool ok;
-    if (DAT_0058ba30[0] == 0) goto make;
-    ok = !!(DAT_0058ba30[0]->f & 4);
+    if (g_beNDMWLoadIntf2CtrlData_metaObject[0] == 0) goto make;
+    ok = !!(g_beNDMWLoadIntf2CtrlData_metaObject[0]->_validity & 4);
     if (ok != false) goto done;
 make:
     FUN_003c44e0();
 done:;
-    return DAT_0058ba30[0];
+    return g_beNDMWLoadIntf2CtrlData_metaObject[0];
 }
 
 int beNDMWLoadIntf2CtrlData_GetVTable(void) {
@@ -27,7 +27,7 @@ int beNDMWLoadIntf2CtrlData_GetVTable(void) {
     *(int *)ps = 0;
     u.vt = (int)&DAT_00524950[0];
     u.vt = (int)&DAT_0053ced0[0];
-    s0 = *(int *)&u.b[*(int *)((char *)(DAT_00586dc8[0]) + 916)];
+    s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.vt = (int)&DAT_00524950[0];
     if (ps != 0) {
         v1 = *(int **)ps;
@@ -77,7 +77,7 @@ void beNDMWLoadIntf2CtrlData_InitFields(void) {
     void *temp_s1;
     void *temp_v0_2;
 
-    temp_s1 = (void *)(((void * *)DAT_0058ba30)[0]);
+    temp_s1 = (void *)(((void * *)g_beNDMWLoadIntf2CtrlData_metaObject)[0]);
     temp_s2 = igMetaObject_GetFieldCount(temp_s1);
     igMetaObject_CreateFields(temp_s1, &DAT_004cb610[0], 0x10);
     temp_v0 = (void **)(igMetaObject_FindFieldByName(temp_s1, &DAT_00510cd8[0]));
@@ -95,7 +95,7 @@ void beNDMWLoadIntf2CtrlData_InitFields(void) {
 
 int FUN_003c46a0(void) {
     if (DAT_0058bac0[0] == 0) {
-        DAT_0058bac0[0] = igMetaEnum_Create(&DAT_00510d58[0], &DAT_004cb710[0], &DAT_004cb730[0], 8);
+        DAT_0058bac0[0] = igMetaEnum_Create(Message, &DAT_004cb710[0], &DAT_004cb730[0], 8);
     }
     return DAT_0058bac0[0];
 }

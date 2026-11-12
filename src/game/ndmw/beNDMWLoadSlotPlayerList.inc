@@ -1,16 +1,16 @@
-int FUN_003c61d0(void) {
-    if (((int *)DAT_0058bcf8)[0] == 0) {
-        ((int *)DAT_0058bcf8)[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(DAT_00587040[0]));
+igMetaObject *FUN_003c61d0(void) {
+    if (g_beNDMWLoadSlotPlayerList_metaObject[0] == 0) {
+        g_beNDMWLoadSlotPlayerList_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
     }
-    return ((int *)DAT_0058bcf8)[0];
+    return g_beNDMWLoadSlotPlayerList_metaObject[0];
 }
 
 void *beNDMWLoadSlotPlayerList_GetReadyMetaObject(void) {
-    struct G *g = DAT_0058bcf8[0];
-    if (!g || ((g->f & 4) != 0) == false) {
+    igMetaObject *g = g_beNDMWLoadSlotPlayerList_metaObject[0];
+    if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_003c62b0();
     }
-    return DAT_0058bcf8[0];
+    return g_beNDMWLoadSlotPlayerList_metaObject[0];
 }
 
 int beNDMWLoadSlotPlayerList_GetVTable(void) {
@@ -18,7 +18,7 @@ int beNDMWLoadSlotPlayerList_GetVTable(void) {
 
     igObject_InitHeader(&obj);
     obj.vt = &DAT_0053cad0[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 
 void FUN_003c62b0(void)

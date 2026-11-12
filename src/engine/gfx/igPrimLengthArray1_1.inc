@@ -15,7 +15,7 @@ int igPrimLengthArray1_1_GetVTable(void) {
 
     igObject_InitHeader(&obj);
     obj.vt = &DAT_00526590[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 
 void FUN_0014be70(void)
@@ -44,8 +44,8 @@ void thunk_FUN_0014bde0(void) {
     FUN_0014bde0();
 }
 
-int FUN_0014bf00(void) {
-    return DAT_0055fb10[0];
+igMetaObject *FUN_0014bf00(void) {
+    return g_igPrimLengthArray_metaObject[0];
 }
 
 void igPrimLengthArray1_1_InitFields(void) {
@@ -54,7 +54,7 @@ void igPrimLengthArray1_1_InitFields(void) {
     int temp_s2;
     void *temp_s1;
 
-    temp_s1 = (void *)(DAT_0055fb00[0]);
+    temp_s1 = (void *)(g_igPrimLengthArray1_1_metaObject[0]);
     temp_v0 = (void **)(igMetaObject_FindFieldByName(temp_s1, &DAT_004dbec8[0]));
     temp_s2 = ObjectPointerList_FindIndex(*(int *)((char *)(temp_s1) + 40), temp_v0);
     temp_s0 = ((DW4VC_84_1 *)(temp_v0))->vX(1);

@@ -1,8 +1,8 @@
-int FUN_0044e430(void) {
-    if (DAT_0058c320[0] == 0) {
-        DAT_0058c320[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(DAT_00587040[0]));
+igMetaObject *FUN_0044e430(void) {
+    if (g_igMouseCursor_metaObject[0] == 0) {
+        g_igMouseCursor_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
     }
-    return DAT_0058c320[0];
+    return g_igMouseCursor_metaObject[0];
 }
 
 igMetaObject *igMouseCursor_GetMetaObject(void)
@@ -20,7 +20,7 @@ int igMouseCursor_GetVTable(void) {
     igObject_InitHeader(&obj);
     obj.vt = &DAT_00541b10[0];
     obj.m = 0;
-    t = *(int *)((char *)&obj + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+    t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
     obj.vt = &DAT_00541b10[0];
     if (&obj.m != 0) {
         o = obj.m;
@@ -67,11 +67,11 @@ void igMouseCursor_InitFields(void) {
     void *temp_a0;
     int buf[2];
 
-    temp_s0 = (void *)DAT_0058c320[0];
+    temp_s0 = (void *)g_igMouseCursor_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_004d0238[0], 2);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    *(int *)((char *)(temp_s1) + 56) = FUN_004505b0();
+    *(int *)((char *)(temp_s1) + 56) = (int)FUN_004505b0();
     temp_a0 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
     buf[0] = 0;
     buf[1] = 0;

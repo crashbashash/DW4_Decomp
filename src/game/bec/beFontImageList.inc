@@ -1,19 +1,19 @@
-int FUN_00361750(void) {
-    if (((int *)DAT_00589650)[0] == 0) {
-        ((int *)DAT_00589650)[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(DAT_00587040[0]));
+igMetaObject *FUN_00361750(void) {
+    if (g_beFontImageList_metaObject[0] == 0) {
+        g_beFontImageList_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
     }
-    return ((int *)DAT_00589650)[0];
+    return g_beFontImageList_metaObject[0];
 }
 
-S_3617a0 *FUN_003617a0(void) {
-    S_3617a0 *g = DAT_00589650[0];
+igMetaObject *FUN_003617a0(void) {
+    igMetaObject *g = g_beFontImageList_metaObject[0];
     if (g != 0) {
-        int b = !!(g->flags & 4);
+        int b = !!(g->_validity & 4);
         if (b) goto done;
     }
     FUN_00361830();
 done:
-    return DAT_00589650[0];
+    return g_beFontImageList_metaObject[0];
 }
 
 int beFontImageList_GetVTable(void) {
@@ -21,7 +21,7 @@ int beFontImageList_GetVTable(void) {
 
     igObject_InitHeader(&obj);
     obj.vt = &DAT_00535a90[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 
 void FUN_00361830(void)

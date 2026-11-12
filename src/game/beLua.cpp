@@ -59,10 +59,10 @@ public:
     virtual int Run(char *path);
     virtual int RunBuffer(void *data, unsigned size, const char *name);
 };
-extern "C" int DAT_00586f20[4];
+extern "C" int g_stringPool[4];
 extern "C" char DAT_0050ec80[];
 extern "C" char DAT_0050ec88[];
-extern "C" char DAT_004e0858[];
+extern "C" char emptyString[];
 /* stack holder for the interned name: the destructor drops one reference to the pooled string and frees its chunk at zero */
 class LuaStrRef {
 public:
@@ -73,17 +73,17 @@ public:
 extern "C" int beLua__RunNamedChunk(beLua *self, const char *name, const char *given);
 extern "C" igObject *FUN_0035aa20(int);
 extern "C" int igObject_GetAllocator(beLua *);
-extern "C" int DAT_00587110[4];
+extern "C" int g_defaultAllocatorSelector[4];
 extern "C" unsigned char GPR_00554c14;
 extern "C" void FUN_0038a2d0(beLua *arg0);
 extern "C" void Gap__Bec__beLua__vfunc_21(beLua *self, int unusedArg);
 extern "C" void Gap__Bec__beLua__vfunc_22(beLua *self, int unusedArg);
 /* reference-counted engine object header: refcount word at +4 */
 typedef struct RefCountedHeader { char pad4[4]; int f4; } RefCountedHeader;
-extern "C" int DAT_00587d08[4];
+extern "C" int g_beSystem_metaObject[4];
 extern "C" void Gap__Bec__beLua__vfunc_23(beLua *arg0);
 extern "C" int g_beLua_metaObject[4];
-extern "C" int DAT_005891c0[4];
+extern "C" int g_beLuaInfo_metaObject[4];
 extern "C" int Gap__Bec__beLua__vfunc_25(beLua *arg0, int arg1);
 /* Reference count at +4 of an igObject. */
 typedef struct RefCountedObject { char pad[4]; int f4; } RefCountedObject;
@@ -111,12 +111,12 @@ int beLua__RunNamedChunk(beLua *self, const char *name, const char *given)
 
     if (given == 0) {
         sprintf(buf1, DAT_0050ec80, (char *)((beSystem *)self->_system)->_stageName);
-        if (DAT_00586f20[0] == 0) {
+        if (g_stringPool[0] == 0) {
             a = FUN_002eb010(16);
             if (a) a = StringPool_Construct(a);
-            DAT_00586f20[0] = a;
+            g_stringPool[0] = a;
         }
-        s = (char *)StringPool_Intern(DAT_00586f20[0], buf1);
+        s = (char *)StringPool_Intern(g_stringPool[0], buf1);
         old = ref.value;
         if (old) {
             int *hd = (int *)old - 2;
@@ -126,12 +126,12 @@ int beLua__RunNamedChunk(beLua *self, const char *name, const char *given)
         }
         ref.value = s;
     } else {
-        if (DAT_00586f20[0] == 0) {
+        if (g_stringPool[0] == 0) {
             a = FUN_002eb010(16);
             if (a) a = StringPool_Construct(a);
-            DAT_00586f20[0] = a;
+            g_stringPool[0] = a;
         }
-        s = (char *)StringPool_Intern(DAT_00586f20[0], given);
+        s = (char *)StringPool_Intern(g_stringPool[0], given);
         old = ref.value;
         if (old) {
             int *hd = (int *)old - 2;
@@ -149,8 +149,8 @@ int beLua__RunNamedChunk(beLua *self, const char *name, const char *given)
         int j;
         for (j = 0; j < n; j++) {
             beLuaData *d = ((beLuaData **)((beLuaDataList *)info->_dataList_)->_data)[j];
-            const char *nm = d->_name ? (const char *)d->_name : DAT_004e0858;
-            if (nm != 0 && strcmp(d->_name ? (const char *)d->_name : DAT_004e0858, name) == 0) {
+            const char *nm = d->_name ? (const char *)d->_name : emptyString;
+            if (nm != 0 && strcmp(d->_name ? (const char *)d->_name : emptyString, name) == 0) {
                 beLuaDataObject *o = (beLuaDataObject *)d->_dataObject;
                 result = ((LuaStateVt *)self->_luaState)->RunBuffer((void *)o->_data, o->_dataSize, name);
                 break;
@@ -173,7 +173,7 @@ void FUN_0038a2d0(beLua *arg0) {
     if (GPR_00554c14 != 0) {
         var_v0 = alloc;
     } else {
-        var_v0 = Memory_GetAllocatorBySelector(DAT_00587110[0]);
+        var_v0 = Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
     }
     temp_a0 = (igObject *)arg0->_luaState;
     if (temp_a0 != 0) {
@@ -204,7 +204,7 @@ void Gap__Bec__beLua__vfunc_22(beLua *self, int unusedArg)
 
 void Gap__Bec__beLua__vfunc_23(beLua *arg0) {
     RefCountedHeader *temp_a0;
-    arg0->_system = FUN_00236f80(arg0->_insight, DAT_00587d08[0]);
+    arg0->_system = FUN_00236f80(arg0->_insight, g_beSystem_metaObject[0]);
     temp_a0 = (RefCountedHeader *)(arg0->_luaState);
     if (temp_a0 != 0) {
         temp_a0->f4 = (int)((int) (temp_a0->f4 - 1));
@@ -220,7 +220,7 @@ void Gap__Bec__beLua__vfunc_24(void)
 }
 
 int Gap__Bec__beLua__vfunc_25(beLua *arg0, int arg1) {
-    if (igObject_IsKindOf(arg1, DAT_005891c0[0]) != 0) {
+    if (igObject_IsKindOf(arg1, g_beLuaInfo_metaObject[0]) != 0) {
         ObjectList_AppendRetained(arg0->_infoList, arg1);
         return 1;
     }

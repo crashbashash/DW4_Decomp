@@ -1,13 +1,13 @@
 static inline int pool_30cd10(void) {
     int p;
-    if (DAT_00586f20[0] == 0) {
+    if (g_stringPool[0] == 0) {
         p = ((int)FUN_002eb010(0x10));
         if (p != 0) {
             p = ((int)StringPool_Construct((S_2eadf0 *)p));
         }
-        DAT_00586f20[0] = p;
+        g_stringPool[0] = p;
     }
-    return DAT_00586f20[0];
+    return g_stringPool[0];
 }
 
 void Gap__Core__igStringRefList__vfunc_12(void *self0) {
@@ -57,14 +57,14 @@ void StringList_Resize(StringRefListView *arg0, int arg1) {
     {
         for (i = arg1; i < n; i++) {
             slot = &arg0->data[i];
-            if (DAT_00586f20[0] == 0) {
+            if (g_stringPool[0] == 0) {
                 pool_30cd10 = ((int)FUN_002eb010(0x10));
                 if (pool_30cd10 != 0) {
                     pool_30cd10 = ((int)StringPool_Construct((S_2eadf0 *)pool_30cd10));
                 }
-                DAT_00586f20[0] = pool_30cd10;
+                g_stringPool[0] = pool_30cd10;
             }
-            nw = (int *)((int *)StringPool_Intern((StringPool *)DAT_00586f20[0], (const char *)0));
+            nw = (int *)((int *)StringPool_Intern((StringPool *)g_stringPool[0], (const char *)0));
             old = *slot;
             if (old != 0) {
                 a1 = old - 2;

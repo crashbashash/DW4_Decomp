@@ -4,11 +4,11 @@ void FUN_003ba760(int arg0) {
 }
 
 void *FUN_003ba7a0(void) {
-    struct G *g = DAT_0058af20[0];
-    if (!g || ((g->f & 4) != 0) == false) {
+    igMetaObject *g = g_beNDMWStatusMainSlot_metaObject[0];
+    if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_003ba850();
     }
-    return DAT_0058af20[0];
+    return g_beNDMWStatusMainSlot_metaObject[0];
 }
 
 int beNDMWStatusMainSlot_GetVTable(void) {
@@ -17,7 +17,7 @@ int beNDMWStatusMainSlot_GetVTable(void) {
 
     beNDMWStatusCtrlBaseEquip_Construct((beNDMWStatusCtrlBaseEquip *)&obj);
     obj.vt = &DAT_0053eff0[0];
-    t = *(int *)((char *)&obj + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+    t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
     obj.vt = &DAT_0053eff0[0];
     FUN_003ba3d0((S_arg0 *)&obj, (long long)0);
     return t;

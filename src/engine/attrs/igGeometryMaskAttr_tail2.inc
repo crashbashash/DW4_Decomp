@@ -1,4 +1,4 @@
-int Gap__Attrs__igGeometryMaskAttr__vfunc_22(void) {
-    return DAT_0055f148[0];
+igMetaObject *Gap__Attrs__igGeometryMaskAttr__vfunc_22(void) {
+    return g_igGeometryMaskAttr_metaObject[0];
 }
 

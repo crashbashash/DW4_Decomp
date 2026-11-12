@@ -154,8 +154,8 @@ void Gap__Sg__igTransformSequence1_5__vfunc_37(igTransformSequence1_5 *t, int id
 void FUN_001ddfd0(void) {
     int temp_v0;
 
-    if (DAT_005611d8[0] != 0) {
-        temp_v0 = igMetaObject_FindFieldByName(DAT_005611d8[0], &DAT_004e13a0[0]);
+    if (g_igTransformSequence1_5_metaObject[0] != 0) {
+        temp_v0 = igMetaObject_FindFieldByName(g_igTransformSequence1_5_metaObject[0], &DAT_004e13a0[0]);
         if (temp_v0 != 0) {
             FUN_002d4c20(temp_v0, 0, 1);
             FUN_002d4c20(temp_v0, 1, 3);
@@ -388,7 +388,7 @@ void Gap__Sg__igTransformSequence1_5__vfunc_25(IgForwardTarget_1dfd60 *o, int a,
 
 
 static inline bool centerOfRotationIsSet(const igTransformSequence1_5 *o) {
-    return o->_centerOfRotation[0] != DAT_004e1058[0] || o->_centerOfRotation[1] != DAT_004e105c[0] || o->_centerOfRotation[2] != DAT_004e1060[0];
+    return o->_centerOfRotation[0] != g_vec3Zero[0] || o->_centerOfRotation[1] != DAT_004e105c[0] || o->_centerOfRotation[2] != DAT_004e1060[0];
 }
 
 bool Gap__Sg__igTransformSequence1_5__vfunc_29(igTransformSequence1_5 *o) {

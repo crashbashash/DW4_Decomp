@@ -3,9 +3,9 @@ void FUN_003b7c00(int arg0) {
     igMetaObject_CreateInstance(*(int *)0x58AD88, arg0);
 }
 
-SFUN_003b7c40 *FUN_003b7c40(void) {
-    if (DAT_0058ad88[0] == 0 || !DAT_0058ad88[0]->ok()) FUN_003b7d30();
-    return DAT_0058ad88[0];
+igMetaObject *FUN_003b7c40(void) {
+    if (g_beNDMWShopCtrlA1_metaObject[0] == 0 || !isValid(g_beNDMWShopCtrlA1_metaObject[0])) FUN_003b7d30();
+    return g_beNDMWShopCtrlA1_metaObject[0];
 }
 
 int beNDMWShopCtrlA1_GetVTable(void) {
@@ -23,7 +23,7 @@ int beNDMWShopCtrlA1_GetVTable(void) {
     obj.vt = &DAT_0053fc10[0];
     obj.w21 = 0;
     obj.w22 = 0;
-    t = *(int *)((char *)&obj + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+    t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
     obj.vt = &DAT_0053fc10[0];
     ObjectRef_Destruct_00150eb0(&obj.w22, -1);
     ObjectRef_Destruct_001c6460(&obj.w21, -1);
@@ -64,7 +64,7 @@ void beNDMWShopCtrlA1_InitFields(void) {
     void *temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)((int *)DAT_0058ad88)[0];
+    temp_s0 = (void *)g_beNDMWShopCtrlA1_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_004c9b20[0], 2);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));

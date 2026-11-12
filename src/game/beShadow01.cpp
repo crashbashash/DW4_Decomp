@@ -26,7 +26,7 @@ extern "C" int FUN_001c5d10(T *, int);
 extern "C" void FUN_0039e090(A *arg0, B *arg1);
 extern "C" int igObject_IsKindOf(beShadow01Info *, int);
 extern "C" int Gap__Core__igObject__vfunc_25(beShadow01 *, beShadow01Info *);
-extern "C" int DAT_00587ef0[4];
+extern "C" int g_beShadow01Info_metaObject[4];
 extern "C" int Gap__Bec__beShadow01__vfunc_25(beShadow01 *arg0, beShadow01Info *arg1);
 
 void Gap__Bec__beShadow01__vfunc_32(beShadow01 *arg0) {
@@ -140,7 +140,7 @@ void FUN_0039e090(A *arg0, B *arg1) {
 int Gap__Bec__beShadow01__vfunc_25(beShadow01 *arg0, beShadow01Info *arg1) {
     igProjectiveShadowShader *t;
 
-    if (igObject_IsKindOf(arg1, DAT_00587ef0[0]) != 0) {
+    if (igObject_IsKindOf(arg1, g_beShadow01Info_metaObject[0]) != 0) {
         t = (igProjectiveShadowShader *)arg1->_projShadowShader;
         if (t != 0) {
             t->_drawReceiver = 0;

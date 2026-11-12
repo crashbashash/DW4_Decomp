@@ -1,9 +1,9 @@
 void *FUN_0035a430(void) {
-    struct G *g = DAT_00589148[0];
-    if (!g || ((g->f & 4) != 0) == false) {
+    igMetaObject *g = g_beMatCtrlData_metaObject[0];
+    if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_0035a560();
     }
-    return DAT_00589148[0];
+    return g_beMatCtrlData_metaObject[0];
 }
 
 int beMatCtrlData_GetVTable(void) {
@@ -21,7 +21,7 @@ int beMatCtrlData_GetVTable(void) {
     u.vt = (int)&DAT_005369d0[0];
     q0 = (S_ref *)&u.b[12];
     *(int *)q0 = 0;
-    temp_s0 = *(int *)&u.b[*(int *)((char *)(DAT_00586dc8[0]) + 916)];
+    temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.vt = (int)&DAT_005369d0[0];
     if (q0 != 0) {
         q0 = *(S_ref **)q0;
@@ -79,7 +79,7 @@ void beMatCtrlData_InitFields(void) {
     void *temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)((int *)DAT_00589148)[0];
+    temp_s0 = (void *)g_beMatCtrlData_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_004c6108[0], 1);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));

@@ -1,4 +1,4 @@
-int Gap__Attrs__igNonRefCountedAttrList__vfunc_22(void) {
-    return DAT_0055f458[0];
+igMetaObject *Gap__Attrs__igNonRefCountedAttrList__vfunc_22(void) {
+    return g_igNonRefCountedAttrList_metaObject[0];
 }
 

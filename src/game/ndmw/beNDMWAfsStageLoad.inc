@@ -20,7 +20,7 @@ int beNDMWAfsStageLoad_GetVTable(void) {
     u.vt = (int)&DAT_0053df40[0];
     ps = &u.b[12];
     *(int *)ps = 0;
-    temp_s0 = *(int *)&u.b[*(int *)((char *)(DAT_00586dc8[0]) + 916)];
+    temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.vt = (int)&DAT_0053df40[0];
     if (ps != 0) {
         temp_a0 = *(int **)ps;
@@ -62,7 +62,7 @@ void beNDMWAfsStageLoad_GetMetaObject(void)
 }
 
 int FUN_003cad30(void) {
-    return DAT_0058c658[0];
+    return g_igAction_metaObject[0];
 }
 
 void beNDMWAfsStageLoad_InitFields(void) {
@@ -71,7 +71,7 @@ void beNDMWAfsStageLoad_InitFields(void) {
     void *temp_s1_2;
     void *temp_s0;
 
-    temp_s0 = (void *)DAT_0058c140[0];
+    temp_s0 = (void *)g_beNDMWAfsStageLoad_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_004cc608[0], 2);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));

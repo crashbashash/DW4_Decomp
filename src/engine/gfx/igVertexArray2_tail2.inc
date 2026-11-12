@@ -1,5 +1,5 @@
-int Gap__Gfx__igVertexArray2__vfunc_22(void) {
-    return DAT_0055f9e0[0];
+igMetaObject *Gap__Gfx__igVertexArray2__vfunc_22(void) {
+    return g_igVertexArray2_metaObject[0];
 }
 
 int FUN_00180ee0(void) {

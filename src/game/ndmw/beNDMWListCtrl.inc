@@ -1,9 +1,9 @@
 void *FUN_003bb400(void) {
-    struct G *g = DAT_0058aff0[0];
-    if (!g || ((g->f & 4) != 0) == false) {
+    igMetaObject *g = g_beNDMWListCtrl_metaObject[0];
+    if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_003bb450();
     }
-    return DAT_0058aff0[0];
+    return g_beNDMWListCtrl_metaObject[0];
 }
 
 void FUN_003bb450(void)
@@ -37,7 +37,7 @@ void beNDMWListCtrl_InitFields(void) {
     int temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)((int *)DAT_0058aff0)[0];
+    temp_s0 = (void *)g_beNDMWListCtrl_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_004ca030[0], 3);
     igMetaObject_NameFields(temp_s0, &DAT_004ca040[0], &DAT_004ca050[0], &DAT_004ca060[0], temp_s1);

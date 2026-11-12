@@ -1,6 +1,6 @@
-SFUN_0035b3d0 *FUN_0035b3d0(void) {
-    if (DAT_005891e8[0] == 0 || !DAT_005891e8[0]->ok()) FUN_0035b460();
-    return DAT_005891e8[0];
+igMetaObject *FUN_0035b3d0(void) {
+    if (g_beLuaDataObjectist_metaObject[0] == 0 || !isValid(g_beLuaDataObjectist_metaObject[0])) FUN_0035b460();
+    return g_beLuaDataObjectist_metaObject[0];
 }
 
 int beLuaDataObjectist_GetVTable(void) {
@@ -8,7 +8,7 @@ int beLuaDataObjectist_GetVTable(void) {
 
     igObject_InitHeader(&obj);
     obj.vt = &DAT_00536820[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 
 void FUN_0035b460(void)

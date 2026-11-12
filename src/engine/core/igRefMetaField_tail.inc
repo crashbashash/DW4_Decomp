@@ -93,12 +93,12 @@ block12:
     if (buf == 0) {
         pi = 0;
     } else {
-        if (DAT_00586f20[0] == 0) {
+        if (g_stringPool[0] == 0) {
             v = ((int)FUN_002eb010(16));
             if (v != 0) v = ((int)StringPool_Construct((struct S_2eadf0 *)v));
-            DAT_00586f20[0] = v;
+            g_stringPool[0] = v;
         }
-        pi = ((int *)StringPool_Intern((StringPool *)DAT_00586f20[0], (const char *)buf));
+        pi = ((int *)StringPool_Intern((StringPool *)g_stringPool[0], (const char *)buf));
     }
     RecoveryString_305800 sp1CC(pi);
     a = ((Alloc_305800 *)igObject_GetAllocator((int)arg1));

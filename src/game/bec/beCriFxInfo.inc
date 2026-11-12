@@ -1,12 +1,12 @@
 void *FUN_00366ca0(void) {
     bool ok;
-    if (DAT_005899f8[0] == 0) goto make;
-    ok = !!(DAT_005899f8[0]->f & 4);
+    if (g_beCriFxInfo_metaObject[0] == 0) goto make;
+    ok = !!(g_beCriFxInfo_metaObject[0]->_validity & 4);
     if (ok != false) goto done;
 make:
     FUN_00366e00();
 done:;
-    return DAT_005899f8[0];
+    return g_beCriFxInfo_metaObject[0];
 }
 
 int beCriFxInfo_GetVTable(void) {
@@ -22,7 +22,7 @@ int beCriFxInfo_GetVTable(void) {
     *pa = 0;
     pb = &obj.f20;
     *pb = 0;
-    r = *(int *)((char *)&obj + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+    r = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
     obj.vt = &DAT_00534ef0[0];
     FUN_00366d80((void **)pb, -1);
     StringRef_Destruct_00130720(pa, -1);
@@ -80,14 +80,14 @@ void beCriFxInfo_InitFields(void) {
     void *temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)((int *)DAT_005899f8)[0];
+    temp_s0 = (void *)g_beCriFxInfo_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_004c74b0[0], 4);
     igStringMetaField_SetDefaultText(igMetaObject_GetFieldAt(temp_s0, temp_s2), 0);
     FUN_002ea4b0(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1), -1);
     FUN_002ea4b0(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 2), -1);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 3));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = FUN_00366fa0();
+    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_00366fa0();
     igMetaObject_NameFields(temp_s0, &DAT_004c74c0[0], &DAT_004c74d0[0], &DAT_004c74e0[0], temp_s2);
 }
 

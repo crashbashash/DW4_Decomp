@@ -1,9 +1,9 @@
 void *beNodeAnim_ResolveMetaObject(void) {
-    struct G *g = DAT_00588700[0];
-    if (!g || ((g->f & 4) != 0) == false) {
+    igMetaObject *g = g_beNodeAnim_metaObject[0];
+    if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_0034e930();
     }
-    return DAT_00588700[0];
+    return g_beNodeAnim_metaObject[0];
 }
 
 int beNodeAnim_GetVTable(void) {
@@ -15,7 +15,7 @@ int beNodeAnim_GetVTable(void) {
     o.f16 = 0;
     o.f28 = 0;
     o.vt = &DAT_005381b0[0];
-    r = *(int *)((char *)&o + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+    r = *(int *)((char *)&o + *(int *)((char *)(g_objectSystem[0]) + 916));
     o.vt = &DAT_005381b0[0];
     
     FUN_00195a90(&o, 0);
@@ -53,7 +53,7 @@ void beNodeAnim_InitFields(void) {
     int temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)((int *)DAT_00588700)[0];
+    temp_s0 = (void *)g_beNodeAnim_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_004c4a70[0], 0xA);
     FUN_002ebc00(igMetaObject_GetFieldAt(temp_s0, temp_s1), 0x13DE4355);

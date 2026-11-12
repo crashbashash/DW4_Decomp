@@ -1,9 +1,9 @@
 void *FUN_00340f30(void) {
-    struct G *g = DAT_00587c00[0];
-    if (!g || ((g->f & 4) != 0) == false) {
+    igMetaObject *g = g_beUnicode_metaObject[0];
+    if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_00340fc0();
     }
-    return DAT_00587c00[0];
+    return g_beUnicode_metaObject[0];
 }
 
 int beUnicode_GetVTable(void) {
@@ -11,7 +11,7 @@ int beUnicode_GetVTable(void) {
 
     igObject_InitHeader(u.b);
     u.w[0] = (int)(&DAT_00539870[0]);
-    return *(int *)&u.b[*(int *)((char *)(DAT_00586dc8[0]) + 916)];
+    return *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
 }
 
 void FUN_00340fc0(void)

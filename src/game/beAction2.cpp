@@ -65,7 +65,7 @@ extern "C" int DAT_0050dfd0[4];
 extern "C" void beAction2FLASHSET_Update(void *arg0, beAction2InfoRam *arg1);
 /* matching construct: dummy-virtual class so ->vX() dispatches through the attribute object's vtable slot */
 struct AttrObjView { virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void vX(void *); char pad[24]; int f28; };
-extern "C" int DAT_00587110[4];
+extern "C" int g_defaultAllocatorSelector[4];
 extern "C" unsigned char GPR_00554c14;
 extern "C" int beAction2FLASHSET_Start(int arg0, beAction2InfoRam *arg1, beAction2FLASHSET *arg2);
 extern "C" int DAT_0050dfd8[4];
@@ -91,7 +91,7 @@ struct FadeColor { int x, y, z; float w; };
 extern "C" int DAT_0050dfe0[4];
 extern "C" void beAction2FADESET_Update(void *arg0, beAction2InfoRam *arg1);
 struct Action2SwitchBits { char pad32[32]; igUnsignedIntList *f32; };
-extern "C" int DAT_004e0858[4];
+extern "C" int emptyString[4];
 /* Owning stack reference to the freshly created attribute (colour 0, blend state 1, lighting state
  * 2, texture state 3); one class per kind so each gets its own out-of-line destructor. */
 template <int kind> struct Ref {
@@ -124,8 +124,8 @@ typedef struct Sys { char p[36]; Tracks *tracks; } Sys;
 typedef struct Ctx { char p[32]; Sys *sys; } Ctx;
 typedef struct Act_377090 { char p[8]; int index; Ctx *ctx; char q[28]; Node_377090 *node; char r[8]; Work_377090 *work; } Act_377090;
 extern "C" void beAction2MOTIONSET_Update(Owner *arg0, Act_377090 *arg1);
-extern "C" int DAT_00561b48[4];
-extern "C" int DAT_00585be0[4];
+extern "C" int g_igEnbayaTransformSource_metaObject[4];
+extern "C" int g_propertyNameField[4];
 extern "C" int beAction2MOTIONSET_Start(beAction2 *arg0, beAction2InfoRam *arg1, beAction2MOTIONSET *arg2);
 extern "C" int g_beAction2FLASHSET_metaObject[4];
 extern "C" int g_beAction2WAITCHECK_metaObject[4];
@@ -259,7 +259,7 @@ int beAction2FLASHSET_Start(int arg0, beAction2InfoRam *arg1, beAction2FLASHSET 
     if (c->_colorAttr == 0) {
         int base = igObject_GetAllocator(arg0);
         int a;
-        if (GPR_00554c14 != 0) { a = base; } else { a = Memory_GetAllocatorBySelector(DAT_00587110[0]); }
+        if (GPR_00554c14 != 0) { a = base; } else { a = Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]); }
         Ref<0> r((igObject *)FUN_00138ee0(a));
         igObject *o;
         igObject *old;
@@ -273,7 +273,7 @@ int beAction2FLASHSET_Start(int arg0, beAction2InfoRam *arg1, beAction2FLASHSET 
     if (c->_textureStateAttr == 0) {
         int base = igObject_GetAllocator(arg0);
         int a;
-        if (GPR_00554c14 != 0) { a = base; } else { a = Memory_GetAllocatorBySelector(DAT_00587110[0]); }
+        if (GPR_00554c14 != 0) { a = base; } else { a = Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]); }
         Ref<3> r((igObject *)FUN_00131390(a));
         igObject *o;
         igObject *old;
@@ -287,7 +287,7 @@ int beAction2FLASHSET_Start(int arg0, beAction2InfoRam *arg1, beAction2FLASHSET 
     if (c->_lightingStateAttr == 0) {
         int base = igObject_GetAllocator(arg0);
         int a;
-        if (GPR_00554c14 != 0) { a = base; } else { a = Memory_GetAllocatorBySelector(DAT_00587110[0]); }
+        if (GPR_00554c14 != 0) { a = base; } else { a = Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]); }
         Ref<2> r((igObject *)FUN_00135e20(a));
         igObject *o;
         igObject *old;
@@ -362,10 +362,10 @@ int beAction2WAITCHECK_Start(beAction2 *mgr, beAction2InfoRam *act, beAction2WAI
     beAction2InfoWork *w = (beAction2InfoWork *)act->_work;
     const char *name = (const char *)comp->_name;
     float secs = comp->_waitTime;
-    const char *s = name ? name : ((char *)DAT_004e0858);
+    const char *s = name ? name : ((char *)emptyString);
     switch (*s) {
     case 'R': {
-        const char *s2 = name ? name : ((char *)DAT_004e0858);
+        const char *s2 = name ? name : ((char *)emptyString);
         unsigned r, d;
         if (s2[3] == 'S') {
             DAT_0058a348[0] = secs;
@@ -470,7 +470,7 @@ int beAction2FADESET_Start(int arg0, beAction2InfoRam *arg1, beAction2FADESET *a
     beAction2InfoWork *c = (beAction2InfoWork *)arg1->_work;
     int list = ((beModelCtrlNode2 *)arg1->_node)->_overrideAttrList;
     char *nm = (char *)arg2->_name;
-    nm = nm != 0 ? nm : (char *)DAT_004e0858;
+    nm = nm != 0 ? nm : (char *)emptyString;
     if (*nm == 0x48) {
         unsigned bit;
         unsigned i;
@@ -495,7 +495,7 @@ int beAction2FADESET_Start(int arg0, beAction2InfoRam *arg1, beAction2FADESET *a
     if (c->_colorAttr == 0) {
         int base = igObject_GetAllocator(arg0);
         int a;
-        if (GPR_00554c14 != 0) { a = base; } else { a = Memory_GetAllocatorBySelector(DAT_00587110[0]); }
+        if (GPR_00554c14 != 0) { a = base; } else { a = Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]); }
                 igObject *o;
         igObject *old;
         Ref<0> r((igObject *)FUN_00138ee0(a));
@@ -509,7 +509,7 @@ int beAction2FADESET_Start(int arg0, beAction2InfoRam *arg1, beAction2FADESET *a
     if (c->_blendStateAttr == 0) {
         int base = igObject_GetAllocator(arg0);
         int a;
-        if (GPR_00554c14 != 0) { a = base; } else { a = Memory_GetAllocatorBySelector(DAT_00587110[0]); }
+        if (GPR_00554c14 != 0) { a = base; } else { a = Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]); }
                 igObject *o;
         igObject *old;
         Ref<1> r((igObject *)FUN_00139600(a));
@@ -523,7 +523,7 @@ int beAction2FADESET_Start(int arg0, beAction2InfoRam *arg1, beAction2FADESET *a
     if (c->_lightingStateAttr == 0) {
         int base = igObject_GetAllocator(arg0);
         int a;
-        if (GPR_00554c14 != 0) { a = base; } else { a = Memory_GetAllocatorBySelector(DAT_00587110[0]); }
+        if (GPR_00554c14 != 0) { a = base; } else { a = Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]); }
                 igObject *o;
         igObject *old;
         Ref<2> r((igObject *)FUN_00135e20(a));
@@ -535,7 +535,7 @@ int beAction2FADESET_Start(int arg0, beAction2InfoRam *arg1, beAction2FADESET *a
         c->_lightingStateAttr = (int)o;
     }
         char *nm2 = (char *)arg2->_name;
-        nm2 = nm2 != 0 ? nm2 : (char *)DAT_004e0858;
+        nm2 = nm2 != 0 ? nm2 : (char *)emptyString;
         if (*nm2 == 0x49) {
             struct { int x, y, z, w; } v3;
             FUN_00193540(&v3, 1, ((igColorAttr *)c->_colorAttr)->_colorPacked);
@@ -698,8 +698,8 @@ int beAction2MOTIONSET_Start(beAction2 *arg0, beAction2InfoRam *arg1, beAction2M
     int names = ((igAnimationDatabase *)info->_animationDatabase)->_animationList;
     int name = arg2->_name;
     int nameOrEmpty;
-    if (name != 0) nameOrEmpty = name; else nameOrEmpty = (int)DAT_004e0858;
-    igAnimation *res = (igAnimation *)igProperty_FindByName(names, DAT_00585be0[0], nameOrEmpty);
+    if (name != 0) nameOrEmpty = name; else nameOrEmpty = (int)emptyString;
+    igAnimation *res = (igAnimation *)igProperty_FindByName(names, g_propertyNameField[0], nameOrEmpty);
     igAnimationCombiner *anim = ((igAnimationCombiner **)((igAnimationCombinerList *)((igAnimationDatabase *)info->_animationDatabase)->_combinerList)->_data)[arg1->_ramNo];
     long biasOld; /* matching construct: decomp-permuter (found on beAction2MOTIONSET_Update) — the saved time bias is a `long` (igLong, 64-bit under mwccps2), not `long long` */
     float zero = 0.0f;
@@ -744,7 +744,7 @@ int beAction2MOTIONSET_Start(beAction2 *arg0, beAction2InfoRam *arg1, beAction2M
     for (j = 0; j < bl->_count; j++) {
         void *tg = (void *)((igAnimationTrack **)bl->_data)[j]->_source;
         if (tg != 0) {
-            if (igObject_IsKindOf(tg, DAT_00561b48[0]) != 0) {
+            if (igObject_IsKindOf(tg, g_igEnbayaTransformSource_metaObject[0]) != 0) {
                 igEnbayaAnimationSource *m = (igEnbayaAnimationSource *)((igEnbayaTransformSource *)tg)->_enbayaAnimationSource;
                 if (isLoop) m->_playMode = 0; else m->_playMode = 4;
                 break;
@@ -895,7 +895,7 @@ int Gap__Bec__beAction2__vfunc_33(beAction2 *arg0, beAction2InfoRam *arg1, void 
         for (i = 0; i < n; i++) {
             void *nm = (void *)((int *)LDATA(l)[i])[2];
             void *nm2;
-            if (nm != 0) nm2 = nm; else nm2 = &DAT_004e0858[0];
+            if (nm != 0) nm2 = nm; else nm2 = &emptyString[0];
             beMessenger_AppendString(arg0->_messenger, nm2);
         }
         break;
@@ -1003,7 +1003,7 @@ int Gap__Bec__beAction2__vfunc_33(beAction2 *arg0, beAction2InfoRam *arg1, void 
         if (spBC.p == 0) {
             void *alloc = ((void *)igObject_GetAllocator(arg0));
             Rc *t;
-            alloc = GPR_00554c14 ? alloc : ((void *)Memory_GetAllocatorBySelector(DAT_00587110[0]));
+            alloc = GPR_00554c14 ? alloc : ((void *)Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]));
             { Rc *o = spBC.p; REL(o) }
             spBC.p = (Rc *)FUN_0036c2a0(alloc);
             t = spBC.p;
@@ -1041,7 +1041,7 @@ int Gap__Bec__beAction2__vfunc_33(beAction2 *arg0, beAction2InfoRam *arg1, void 
             ((beAction2InfoWork *)spBC.p)->_isNoHokan = 0;
         }
         {
-            int prop = (int)igProperty_FindByName(info->_dataList_, DAT_00585be0[0], arg2);
+            int prop = (int)igProperty_FindByName(info->_dataList_, g_propertyNameField[0], arg2);
             beAction2InfoWork *cur = (beAction2InfoWork *)spBC.p;
             if (cur->_comData != prop) {
                 if (prop != 0) ((Rc *)prop)->references = ((Rc *)prop)->references + 1;
@@ -1051,7 +1051,7 @@ int Gap__Bec__beAction2__vfunc_33(beAction2 *arg0, beAction2InfoRam *arg1, void 
                 beAction2_StartComponents((int)arg0, arg1);
                 int rn = arg1->_ramNo;
                 void *pn;
-                if (info->_name != 0) pn = (void *)info->_name; else pn = &DAT_004e0858[0];
+                if (info->_name != 0) pn = (void *)info->_name; else pn = &emptyString[0];
                 beMessenger_SendNamed(arg0->_messenger, &DAT_0050e030[0], pn, rn, arg2);
             }
         }

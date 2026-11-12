@@ -19,7 +19,7 @@ int igCollisionGroup_GetVTable(void) {
     u.vt = (int)&DAT_0052d3c0[0];
     p = (int *)&u.b[32];
     *p = 0;
-    temp_s0 = *(int *)&u.b[*(int *)((char *)(DAT_00586dc8[0]) + 916)];
+    temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.vt = (int)&DAT_0052d3c0[0];
     FUN_001a7580(p, -1);
     FUN_00195a90(u.b, 0);
@@ -57,7 +57,7 @@ void igCollisionGroup_InitFields(void) {
     void *temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)DAT_0056dce0[0];
+    temp_s0 = (void *)g_igCollisionGroup_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_004983c0[0], 8);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));

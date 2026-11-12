@@ -28,11 +28,11 @@ void *FUN_00230f70(struct S *arg0, short arg1) {
 }
 
 int FUN_00231010(void) {
-    return DAT_0058c208[0];
+    return g_igRenderer_metaObject[0];
 }
 
-int FUN_00231020(void) {
-    return DAT_0056dad8[0];
+igMetaObject *FUN_00231020(void) {
+    return g_igMessage_metaObject[0];
 }
 
 void *FUN_00231030(struct S *arg0, short arg1) {
@@ -63,7 +63,7 @@ void *FUN_00231030(struct S *arg0, short arg1) {
     return arg0;
 }
 
-int FUN_002310d0(void) {
-    return DAT_0056dc38[0];
+igMetaObject *FUN_002310d0(void) {
+    return g_igInfoManager_metaObject[0];
 }
 

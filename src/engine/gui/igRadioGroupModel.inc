@@ -1,8 +1,8 @@
-int FUN_0044d170(void) {
-    if (DAT_0058c278[0] == 0) {
-        DAT_0058c278[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(DAT_00587040[0]));
+igMetaObject *FUN_0044d170(void) {
+    if (g_igRadioGroupModel_metaObject[0] == 0) {
+        g_igRadioGroupModel_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
     }
-    return DAT_0058c278[0];
+    return g_igRadioGroupModel_metaObject[0];
 }
 
 igMetaObject *igRadioGroupModel_GetMetaObject(void)
@@ -23,7 +23,7 @@ int igRadioGroupModel_GetVTable(void) {
     *(int *)q0 = 0;
     u.vt = (int)&DAT_00540e30[0];
     u.vt = (int)&DAT_00541ca0[0];
-    temp_s0 = *(int *)&u.b[*(int *)((char *)(DAT_00586dc8[0]) + 916)];
+    temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.vt = (int)&DAT_00540e30[0];
     if (q0 != 0) {
         q0 = *(S_ref **)q0;
@@ -63,15 +63,15 @@ void thunk_igRadioGroupModel_GetMetaObject(void) {
     igRadioGroupModel_GetMetaObject();
 }
 
-int FUN_0044d340(void) {
-    return DAT_0058c298[0];
+igMetaObject *FUN_0044d340(void) {
+    return g_igModel_metaObject[0];
 }
 
 void igRadioGroupModel_InitFields(void) {
     int temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)DAT_0058c278[0];
+    temp_s0 = (void *)g_igRadioGroupModel_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_004d0098[0], 1);
     FUN_002ea4b0(igMetaObject_GetFieldAt(temp_s0, temp_s1), -1);

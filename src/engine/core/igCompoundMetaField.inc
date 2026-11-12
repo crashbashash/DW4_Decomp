@@ -37,11 +37,11 @@ void igCompoundMetaField_InitFields(void) {
     void *temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)DAT_00586918[0];
+    temp_s0 = (void *)g_igCompoundMetaField_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
     igMetaObject_CreateFields((igMetaObject *)temp_s0, (igMetaField * (**)(void *))&DAT_004c14c8[0], 1);
     temp_s1 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2)));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = FUN_002c8b30();
+    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_002c8b30();
     ((igRefMetaField *)temp_s1)->_construct = 1;
     igMetaObject_NameFields((igMetaObject *)temp_s0, (const char **)&DAT_004c14d0[0], (igMetaField ***)&DAT_004c14d8[0], &DAT_004c14e0[0], temp_s2);
 }
@@ -52,7 +52,7 @@ void FUN_002cbe70(void) {
     int t;
 
     if (DAT_00586920[0] == 0) {
-        DAT_00586920[0] = (void *)(((void *)igMetaObject_CreateInstance((CreateMeta *)DAT_00586918[0], (MemoryPool *)(((int)Memory_GetAllocatorBySelector(DAT_00587040[0]))))));
+        DAT_00586920[0] = (void *)(((void *)igMetaObject_CreateInstance((CreateMeta *)g_igCompoundMetaField_metaObject[0], (MemoryPool *)(((int)Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]))))));
         temp_s0 = (void *)(DAT_00586920[0]);
         if (temp_s0 != 0) {
             MetaRefList_AppendRetained((PointerList *)(((void *)FUN_002fc250())), (RefHeader *)temp_s0);

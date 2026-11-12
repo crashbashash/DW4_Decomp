@@ -1,9 +1,9 @@
 void *FUN_00340090(void) {
-    struct G *g = DAT_00587aa8[0];
-    if (!g || ((g->f & 4) != 0) == false) {
+    igMetaObject *g = g_beWaterPlainInfoRam_metaObject[0];
+    if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_003402c0();
     }
-    return DAT_00587aa8[0];
+    return g_beWaterPlainInfoRam_metaObject[0];
 }
 
 int beWaterPlainInfoRam_GetVTable(void) {
@@ -18,7 +18,7 @@ int beWaterPlainInfoRam_GetVTable(void) {
     obj.w23 = 0;
     obj.w38 = 0;
     obj.w44 = 0;
-    t = *(int *)((char *)&obj + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+    t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
     obj.vt = &DAT_00539a70[0];
     FUN_00340240((void **)&obj.w44, (long long)(-1));
     FUN_003401c0((struct Ref **)&obj.w38, (short)(-1));
@@ -96,7 +96,7 @@ void beWaterPlainInfoRam_InitFields(void) {
     void *temp_s1;
     int temp_s0;
 
-    temp_s1 = (void *)((int *)DAT_00587aa8)[0];
+    temp_s1 = (void *)g_beWaterPlainInfoRam_metaObject[0];
     temp_s0 = igMetaObject_GetFieldCount(temp_s1);
     igMetaObject_CreateFields(temp_s1, &DAT_004c30b0[0], 0x1B);
     temp_s2 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 0xA));
@@ -111,7 +111,7 @@ void beWaterPlainInfoRam_InitFields(void) {
     ((igObjectRefMetaField *)temp_s2_4)->_metaObject = FUN_002c95d0();
     ((igRefMetaField *)temp_s2_4)->_construct = 1;
     temp_s2_5 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 0x1A));
-    ((igObjectRefMetaField *)temp_s2_5)->_metaObject = FUN_00340490();
+    ((igObjectRefMetaField *)temp_s2_5)->_metaObject = (int)FUN_00340490();
     igMetaObject_NameFields(temp_s1, &DAT_004c3120[0], &DAT_004c3190[0], &DAT_004c3200[0], temp_s0);
 }
 

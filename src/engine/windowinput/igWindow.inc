@@ -3,11 +3,11 @@ void FUN_00145d00(int arg0) {
     igMetaObject_CreateInstance(*(int *)0x55F5D8, arg0);
 }
 
-int FUN_00145d40(void) {
-    if (DAT_0055f5d8[0] == 0) {
-        DAT_0055f5d8[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(DAT_00587040[0]));
+igMetaObject *FUN_00145d40(void) {
+    if (g_igWindow_metaObject[0] == 0) {
+        g_igWindow_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
     }
-    return DAT_0055f5d8[0];
+    return g_igWindow_metaObject[0];
 }
 
 igMetaObject *igWindow_GetMetaObject(void)
@@ -44,12 +44,12 @@ void thunk_igWindow_GetMetaObject(void) {
     igWindow_GetMetaObject();
 }
 
-int FUN_00145e70(void) {
-    return DAT_0055f600[0];
+igMetaObject *FUN_00145e70(void) {
+    return g_igEventProducer_metaObject[0];
 }
 
 void FUN_00145e80(void) {
-    *(int *)((char *)(DAT_0055f5d8[0]) + 60) = (int)(&thunk_FUN_00146a60);
+    *(int *)((char *)(g_igWindow_metaObject[0]) + 60) = (int)(&thunk_FUN_00146a60);
 }
 
 void thunk_FUN_00146a60(void) {

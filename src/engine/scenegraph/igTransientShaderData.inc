@@ -20,7 +20,7 @@ int igTransientShaderData_GetVTable(void) {
     obj.f10 = 0;
     obj.f14 = 0;
     obj.vt = (&DAT_0052b870[0]);
-    temp_s0 = *(int *)((char *)&obj + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+    temp_s0 = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
     obj.vt = (&DAT_0052b870[0]);
     FUN_00194930((Obj_194930 *)&obj, 0);
     return temp_s0;
@@ -114,8 +114,8 @@ void thunk_igTransientShaderData_GetMetaObject(void) {
     igTransientShaderData_GetMetaObject();
 }
 
-int FUN_00194b30(void) {
-    return DAT_00561548[0];
+igMetaObject *FUN_00194b30(void) {
+    return g_igShaderData_metaObject[0];
 }
 
 void igTransientShaderData_InitFields(void) {
@@ -124,7 +124,7 @@ void igTransientShaderData_InitFields(void) {
     T_194b40 *temp_s0;
     M *temp_s1;
 
-    temp_s1 = (M *)(DAT_005611a8[0]);
+    temp_s1 = (M *)(g_igTransientShaderData_metaObject[0]);
     temp_v0 = (void **)(((void * *)igMetaObject_FindFieldByName(temp_s1, &DAT_004e1298[0])));
     temp_s2 = ObjectPointerList_FindIndex(temp_s1->f40, temp_v0);
     temp_s0 = (T_194b40 *)(((DW4VC_84_1 *)(temp_v0))->vX((int)(1)));
@@ -164,7 +164,7 @@ void igTransientShaderData_InitFields(void) {
     temp_v0 = (void **)(((void * *)igMetaObject_FindFieldByName(temp_s1, &DAT_004e12c8[0])));
     temp_s2 = ObjectPointerList_FindIndex(temp_s1->f40, temp_v0);
     temp_s0 = (T_194b40 *)(((DW4VC_84_1 *)(temp_v0))->vX((int)(1)));
-    temp_s0->f56 = FUN_0019ca30();
+    temp_s0->f56 = (int)FUN_0019ca30();
     temp_s0->f52 = 1;
     temp_s0->f38 = 0;
     temp_s0->f28 = (int)(&DAT_005611c8[0]);

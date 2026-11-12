@@ -1,7 +1,7 @@
 int Gap__Core__igPageMemoryPool__vfunc_21(int arg0, int arg1) {
     int temp_v0;
 
-    if (*DAT_00586dc8[0] != 0) {
+    if (*g_objectSystem[0] != 0) {
         FUN_002cd7c0();
         return igObject_CloneViaMetadata((void **)arg0, arg1);
     }
@@ -30,7 +30,7 @@ int igPageMemoryPool_GetVTable(void) {
     S_ref *q0;
     S_ref *q1;
     FUN_003257d0((igPageMemoryPool *)u.b);
-    temp_s0 = *(int *)&u.b[*(int *)((char *)(((void * *)DAT_00586dc8)[0]) + 916)];
+    temp_s0 = *(int *)&u.b[*(int *)((char *)(((void * *)g_objectSystem)[0]) + 916)];
     u.vt = (int)&DAT_005311f0[0];
     q0 = (S_ref *)&u.b[128];
     if (q0 != 0) {

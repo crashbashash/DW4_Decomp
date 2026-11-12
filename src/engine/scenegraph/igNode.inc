@@ -1,8 +1,8 @@
-int FUN_0019cd50(void) {
-    if (DAT_00561838[0] == 0) {
-        DAT_00561838[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(DAT_00587040[0]));
+igMetaObject *FUN_0019cd50(void) {
+    if (g_igNode_metaObject[0] == 0) {
+        g_igNode_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
     }
-    return DAT_00561838[0];
+    return g_igNode_metaObject[0];
 }
 
 igMetaObject *igNode_GetMetaObject(void)
@@ -31,7 +31,7 @@ int igNode_GetVTable(void) {
     *(int *)q1 = 0;
     q0 = (S_ref *)&u.b[16];
     *(int *)q0 = 0;
-    temp_s0 = *(int *)&u.b[*(int *)((char *)(DAT_00586dc8[0]) + 916)];
+    temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.vt = (int)&DAT_00528a90[0];
     if (q0 != 0) {
         q0 = *(S_ref **)q0;
@@ -99,13 +99,13 @@ void igNode_InitFields(void) {
     void *temp_v0;
     void *temp_s1;
 
-    temp_s1 = (void *)DAT_00561838[0];
+    temp_s1 = (void *)g_igNode_metaObject[0];
     temp_s0 = igMetaObject_GetFieldCount(temp_s1);
     igMetaObject_CreateFields(temp_s1, &DAT_0048bc90[0], 4);
     temp_s2 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s1, temp_s0)));
     ((igObjectRefMetaField *)temp_s2)->_metaObject = FUN_00186a80();
     temp_s2_2 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s1, temp_s0 + 1)));
-    ((igObjectRefMetaField *)temp_s2_2)->_metaObject = FUN_0019c8c0();
+    ((igObjectRefMetaField *)temp_s2_2)->_metaObject = (int)FUN_0019c8c0();
     ((igObjectRefMetaField *)temp_s2_2)->_resetMethod = 3;
     ((igObjectRefMetaField *)temp_s2_2)->_construct = 1;
     ((igObjectRefMetaField *)temp_s2_2)->_persistent = 0;
@@ -158,8 +158,8 @@ void *FUN_0019d120(struct S_19d120 *arg0, short arg1) {
     return arg0;
 }
 
-int FUN_0019d1e0(void) {
-    return DAT_00561a38[0];
+igMetaObject *FUN_0019d1e0(void) {
+    return g_igGeometry_metaObject[0];
 }
 
 int *FUN_0019d1f0(int *p)
@@ -186,10 +186,10 @@ void **FUN_0019d200(void **arg0, int arg1) {
     return arg0;
 }
 
-int FUN_0019d280(void) {
-    if (DAT_00561880[0] == 0) {
-        DAT_00561880[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(DAT_00587040[0]));
+igMetaObject *FUN_0019d280(void) {
+    if (g_igModelViewMatrixBoneSelectList_metaObject_00561880[0] == 0) {
+        g_igModelViewMatrixBoneSelectList_metaObject_00561880[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
     }
-    return DAT_00561880[0];
+    return g_igModelViewMatrixBoneSelectList_metaObject_00561880[0];
 }
 

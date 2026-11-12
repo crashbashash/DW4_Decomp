@@ -1,8 +1,8 @@
-int FUN_00133e50(void) {
-    if (DAT_0055eeb0[0] == 0) {
-        DAT_0055eeb0[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(DAT_00587040[0]));
+igMetaObject *FUN_00133e50(void) {
+    if (g_igRenderListAttr_metaObject[0] == 0) {
+        g_igRenderListAttr_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
     }
-    return DAT_0055eeb0[0];
+    return g_igRenderListAttr_metaObject[0];
 }
 
 igMetaObject *igRenderListAttr_GetMetaObject(void)
@@ -22,7 +22,7 @@ int igRenderListAttr_GetVTable(void) {
     p = (S_ref *)&u.b[16];
     u.vt = (int)&DAT_00522fd0[0];
     *(int *)p = 0;
-    temp_s0 = *(int *)&u.b[*(int *)((char *)(DAT_00586dc8[0]) + 916)];
+    temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.vt = (int)&DAT_00522fd0[0];
     if (p != 0) {
         p = *(S_ref **)p;
@@ -68,7 +68,7 @@ void igRenderListAttr_InitFields(void) {
     struct F_134020 *temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)DAT_0055eeb0[0];
+    temp_s0 = (void *)g_igRenderListAttr_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_00485f68[0], 2);
     temp_v0 = (struct F_134020 *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));

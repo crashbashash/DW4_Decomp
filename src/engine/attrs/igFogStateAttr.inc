@@ -10,7 +10,7 @@ int igFogStateAttr_GetVTable(void) {
     struct Obj o;
     igObject_InitHeader(&o);
     o.vt = &DAT_00523a90[0];
-    return *(int *)((char *)&o + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+    return *(int *)((char *)&o + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 
 void FUN_00137ca0(void)
@@ -43,7 +43,7 @@ void igFogStateAttr_InitFields(void) {
     int temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)DAT_0055f1c8[0];
+    temp_s0 = (void *)g_igFogStateAttr_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_00486660[0], 1);
     igMetaObject_NameFields(temp_s0, &DAT_00486668[0], &DAT_00486670[0], &DAT_00486678[0], temp_s1);

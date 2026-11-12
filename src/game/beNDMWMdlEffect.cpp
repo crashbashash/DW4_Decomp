@@ -15,8 +15,8 @@ extern "C" igObject *beBaseInfoDataList_Create(...);
 struct PropertyRecordRef { char p[20]; igObject *f20; };
 extern "C" PropertyRecordRef *igProperty_FindByName(...);
 extern "C" int DAT_00515db8[4];
-extern "C" int DAT_00585be0[4];
-extern "C" int DAT_00587110[4];
+extern "C" int g_propertyNameField[4];
+extern "C" int g_defaultAllocatorSelector[4];
 extern "C" unsigned char GPR_00554c14;
 /* matching construct: inline static helper reproduces the retail release sequence */
 struct ReleaseRef { static inline void go(igObject *object) {
@@ -74,16 +74,16 @@ void Gap__Bec__beNDMWMdlEffect__vfunc_36(EffectReceiverShim *arg0, beBaseInfoRam
         if (GPR_00554c14 != 0) {
             a = alloc;
         } else {
-            a = Memory_GetAllocatorBySelector(DAT_00587110[0]);
+            a = Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
         }
         DataList::create(arg1, a);
     }
-    s1 = igProperty_FindByName(arg1->_dataList, DAT_00585be0[0], DAT_00515db8);
+    s1 = igProperty_FindByName(arg1->_dataList, g_propertyNameField[0], DAT_00515db8);
     alloc = igObject_GetAllocator(arg0);
     if (GPR_00554c14 != 0) {
         a = alloc;
     } else {
-        a = Memory_GetAllocatorBySelector(DAT_00587110[0]);
+        a = Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
     }
     /* matching construct: the effect holder is a named local and the list holder above an unnamed
      * temporary; named locals take their frame slots before temporaries (effect +0x5c, list +0x58) */

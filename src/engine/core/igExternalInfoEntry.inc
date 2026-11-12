@@ -24,7 +24,7 @@ int igExternalInfoEntry_GetVTable(void) {
     q = (int *)&u.b[36];
     *p = 0;
     *q = 0;
-    temp_s0 = *(int *)&u.b[*(int *)((char *)(((void * *)DAT_00586dc8)[0]) + 916)];
+    temp_s0 = *(int *)&u.b[*(int *)((char *)(((void * *)g_objectSystem)[0]) + 916)];
     u.vt = (int)&DAT_00530200[0];
     FUN_00130720(q, -1);
     FUN_00130720(p, -1);
@@ -62,7 +62,7 @@ void igExternalInfoEntry_InitFields(void) {
     int temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)DAT_005863f8[0];
+    temp_s0 = (void *)g_igExternalInfoEntry_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
     igMetaObject_CreateFields((igMetaObject *)temp_s0, (igMetaField * (**)(void *))&DAT_004c0c00[0], 3);
     igStringMetaField_SetDefaultText((int *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1)), 0);

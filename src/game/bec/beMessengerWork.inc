@@ -1,11 +1,11 @@
-void *beMessengerWork_Create(void *allocator){beMessengerWork_EnsureRegistered();return ((void *)igMetaObject_CreateInstance((void *)((int *)g_beMessengerWork_metaObject)[0],allocator));}
+void *beMessengerWork_Create(void *allocator){beMessengerWork_EnsureRegistered();return ((void *)igMetaObject_CreateInstance((void *)g_beMessengerWork_metaObject[0],allocator));}
 
 void *FUN_003580b0(void) {
-    struct G *g = DAT_00588f88[0];
-    if (!g || ((g->f & 4) != 0) == false) {
+    igMetaObject *g = g_beMessengerWork_metaObject[0];
+    if (!g || ((g->_validity & 4) != 0) == false) {
         beMessengerWork_EnsureRegistered();
     }
-    return DAT_00588f88[0];
+    return g_beMessengerWork_metaObject[0];
 }
 
 int beMessengerWork_GetVTable(void) {
@@ -19,7 +19,7 @@ int beMessengerWork_GetVTable(void) {
     obj._message = 0;
     obj._findRamNoList = 0;
     obj._findRamList = 0;
-    t = *(int *)((char *)&obj + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+    t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
     obj._vtable = (int)&DAT_00536f10[0];
     FUN_0033ec00((igObject **)&obj._findRamList, (short)(-1));
     ObjectRef_Destruct_00150eb0(&obj._findRamNoList, -1);
@@ -59,14 +59,14 @@ void beMessengerWork_InitFields(void) {
     void *temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)((int *)DAT_00588f88)[0];
+    temp_s0 = (void *)g_beMessengerWork_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_004c5ce0[0], 6);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 4));
     ((igObjectRefMetaField *)temp_s1)->_metaObject = igIntList_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s1)->_construct = 1;
     temp_s1_2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 5));
-    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = beBaseInfoRamList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = (int)beBaseInfoRamList_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s1_2)->_construct = 1;
     igMetaObject_NameFields(temp_s0, &DAT_004c5d00[0], &DAT_004c5d20[0], &DAT_004c5d40[0], temp_s2);
 }

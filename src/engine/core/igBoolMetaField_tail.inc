@@ -35,14 +35,14 @@ void Gap__Core__igBoolMetaField__vfunc_57(int *arg0, void *arg1, unsigned char *
     if (sp20 == 0) {
         var_v1 = 0;
     } else {
-        if (DAT_00586f20[0] == 0) {
+        if (g_stringPool[0] == 0) {
             var_v0 = ((int)FUN_002eb010(0x10));
             if (var_v0 != 0) {
                 var_v0 = ((int)StringPool_Construct((S_2eadf0 *)var_v0));
             }
-            DAT_00586f20[0] = var_v0;
+            g_stringPool[0] = var_v0;
         }
-        var_v1 = StringPool_Intern((StringPool *)DAT_00586f20[0], (const char *)sp20);
+        var_v1 = StringPool_Intern((StringPool *)g_stringPool[0], (const char *)sp20);
     }
     *arg0 = var_v1;
 }

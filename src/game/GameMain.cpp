@@ -237,7 +237,7 @@ extern "C" int DAT_00586fd8[4];
 extern "C" int DAT_00586fe0[4];
 extern "C" int DAT_00586fe8[4];
 extern "C" int DAT_00586ff0[4];
-extern "C" int DAT_00587108[4];
+extern "C" int g_ndmwAllocatorSelector[4];
 extern "C" int DAT_00587338[4];
 extern "C" int *DAT_00587340[4];
 extern "C" char GPR_0055499c;
@@ -248,7 +248,7 @@ struct Guard { ~Guard() { FUN_002d1770(); } };
 struct U {
     static inline int alloc(int fallback) {
         if (GPR_00554c14) return fallback;
-        else return ((int)Memory_GetAllocatorBySelector(DAT_00587108[0]));
+        else return ((int)Memory_GetAllocatorBySelector(g_ndmwAllocatorSelector[0]));
     }
     static inline void relg(Obj **g) {
         Obj *o = g[0];
@@ -281,8 +281,8 @@ class DW4VCSR_156_1 { public: virtual void d0(); virtual void d1(); virtual void
 class DW4VCSR_200_1 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void d32(); virtual void d33(); virtual void d34(); virtual void d35(); virtual void d36(); virtual void d37(); virtual void d38(); virtual void d39(); virtual void d40(); virtual void d41(); virtual void d42(); virtual void d43(); virtual void d44(); virtual void d45(); virtual void d46(); virtual void d47(); virtual DW4SR4 vX(int); };
 struct R { int v; R() {} R(int x) { v = x; } R(const R &o) : v(o.v) {} };
 class C { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual int v30(); virtual void d31(); virtual void d32(); virtual void d33(); virtual void d34(); virtual void d35(); virtual void d36(); virtual void d37(); virtual void d38(); virtual void d39(); virtual int v40(); char p4[28]; int f32; int f36; char p40[5]; unsigned char f45; };
-extern "C" int DAT_004fb410[4];
-extern "C" int DAT_004fb418[4];
+extern "C" int g_statusSucceeded[4];
+extern "C" int g_allocatorFailureStatus[4];
 extern "C" R Gap__Core__igPsx2Thread__vfunc_39(C *arg1, int arg2);
 class igResult {
 public:
@@ -303,7 +303,7 @@ typedef struct NamedLists { char pad[36]; NameList *_names; void *_name; } Named
 extern "C" CountedHeader *FUN_002b90e0(int);
 extern "C" NameList *FUN_002caa70(int);
 extern "C" int DAT_00498728[4];
-extern "C" int DAT_00586f20[4];
+extern "C" int g_stringPool[4];
 struct StringRef {
     int *p;
     StringRef() {}
@@ -322,7 +322,7 @@ extern "C" void FUN_0025a550(NamedLists *arg0, int);
 extern "C" int DAT_004ecf60[16];
 struct Fr;
 extern "C" struct A0 *DAT_0056df80[16];
-extern "C" int DAT_00587d08[16];
+extern "C" int g_beSystem_metaObject[16];
 struct Fr {
     void *f0;
     char f4;
@@ -531,10 +531,10 @@ struct Holder { igInsightCore *p; };
 extern "C" Pool * FUN_002f8a20(...);
 extern "C" igAnimationStatePool * DAT_00562540[4];
 extern "C" igEnbayaContextPool * DAT_00562718[4];
-extern "C" int DAT_00587110[4];
-extern "C" int DAT_0058c790[4];
+extern "C" int g_defaultAllocatorSelector[4];
+extern "C" int g_igViewerSceneInfoManager_metaObject[4];
 struct H { static void *castit(void *s) {
-    if (s != 0 && igObject_IsKindOf(s, DAT_0058c790[0]) != 0) return s; else return 0; } };
+    if (s != 0 && igObject_IsKindOf(s, g_igViewerSceneInfoManager_metaObject[0]) != 0) return s; else return 0; } };
 extern "C" void FUN_0025afe0(Holder *arg0);
 
 void FUN_002590c0(void) {
@@ -822,7 +822,7 @@ void FUN_00259b60(void) {
 R Gap__Core__igPsx2Thread__vfunc_39(C *arg1, int arg2) {
     if (arg1->v30() == 0) {
         if (arg2 & 0xF) {
-            return R(DAT_004fb418[0]);
+            return R(g_allocatorFailureStatus[0]);
         }
         arg1->f36 = arg2;
         if (arg1->f45 == 0) {
@@ -833,13 +833,13 @@ R Gap__Core__igPsx2Thread__vfunc_39(C *arg1, int arg2) {
         }
         arg1->f45 = 0;
         arg1->f32 = FUN_00300db0(arg1, arg1->f36, arg1->v40() & 0xFFFF);
-        return R(DAT_004fb410[0]);
+        return R(g_statusSucceeded[0]);
     }
-    return R(DAT_004fb418[0]);
+    return R(g_allocatorFailureStatus[0]);
 }
 
 bool FUN_00259cd0(const char *path) {
-    return GPR_00554bec = FUN_0032d4b0(path) == (*(igResult *)DAT_004fb410);
+    return GPR_00554bec = FUN_0032d4b0(path) == (*(igResult *)g_statusSucceeded);
 }
 
 void FUN_00259d10(void) {
@@ -890,14 +890,14 @@ void FUN_00259dc0(NamedLists *arg0, int arg1, int arg2) {
     if (arg1 == 0) {
         var_v0 = 0;
     } else {
-        if (DAT_00586f20[0] == 0) {
+        if (g_stringPool[0] == 0) {
             obj = FUN_002eb010(0x10);
             if (obj != 0) {
                 obj = StringPool_Construct(obj);
             }
-            DAT_00586f20[0] = obj;
+            g_stringPool[0] = obj;
         }
-        var_v0 = StringPool_Intern(DAT_00586f20[0], arg1);
+        var_v0 = StringPool_Intern(g_stringPool[0], arg1);
     }
     {
         StringRef name(var_v0);
@@ -952,12 +952,12 @@ void FUN_00259f90(struct A *arg0, struct R_259f90 *arg1, struct R_259f90 *arg2) 
 }
 
 static inline int *internString(const char *s) {
-    if (DAT_00586f20[0] == 0) {
+    if (g_stringPool[0] == 0) {
         int pool = FUN_002eb010(16);
         if (pool != 0) pool = StringPool_Construct(pool);
-        DAT_00586f20[0] = pool;
+        g_stringPool[0] = pool;
     }
-    return (int *)StringPool_Intern(DAT_00586f20[0], s);
+    return (int *)StringPool_Intern(g_stringPool[0], s);
 }
 
 static inline void setFolderName(igFolder *folder, const char *name) {
@@ -1051,17 +1051,17 @@ void FUN_0025a580(A0 *arg0) {
         FUN_00463b30(arg0);
         FUN_00259f80((int *)arg0);
         FUN_00463c70(arg0);
-        s0 = (Rd *)FUN_00236f80(arg0->f0, DAT_00587d08[0]);
-        if (DAT_00586f20[0] == 0) {
+        s0 = (Rd *)FUN_00236f80(arg0->f0, g_beSystem_metaObject[0]);
+        if (g_stringPool[0] == 0) {
             int v = FUN_002eb010(0x10);
             if (v != 0) {
                 v = StringPool_Construct(v);
             }
-            DAT_00586f20[0] = v;
+            g_stringPool[0] = v;
         }
         {
             void *old;
-            s2 = ((void *)StringPool_Intern(DAT_00586f20[0], DAT_004ecf60));
+            s2 = ((void *)StringPool_Intern(g_stringPool[0], DAT_004ecf60));
             old = s0->f60;
             if (old != 0) {
                 int *h = (int *)((char *)old - 8);
@@ -1230,12 +1230,12 @@ void FUN_0025ac60(S *arg0) {
                 StringRef s348 = StringList_CopyRetained(arg0->f48, s3);
                 strcpy(buf, s348.p);
                 buf[strlen(buf) - 2] = 0;
-                if (DAT_00586f20[0] == 0) {
+                if (g_stringPool[0] == 0) {
                     int v = FUN_002eb010(0x10);
                     if (v != 0) v = StringPool_Construct(v);
-                    DAT_00586f20[0] = v;
+                    g_stringPool[0] = v;
                 }
-                np = (int *)StringPool_Intern(DAT_00586f20[0], buf);
+                np = (int *)StringPool_Intern(g_stringPool[0], buf);
                 StringRef::Release(s348.p);
                 s348.p = np;
                 lb = arg0->f48;
@@ -1287,22 +1287,22 @@ void FUN_0025afe0(Holder *arg0) {
     Pool *var_v0;
     void *var_s0;
     FUN_00463c80();
-    var_s0 = H::castit(FUN_00236f80(arg0->p, DAT_0058c790[0]));
+    var_s0 = H::castit(FUN_00236f80(arg0->p, g_igViewerSceneInfoManager_metaObject[0]));
     ((Ctl *)((igViewerRenderer *)((igViewerSceneInfoManager *)var_s0)->_viewerRenderer)->_sceneTraversal)->v124();
     ((Sub *)arg0->p->_visualContext)->v140();
     REL_25afe0(DAT_00562718[0]);
     DAT_00562718[0] = 0;
-    { Pool *a_ = FUN_002f8a20(); var_v0 = GPR_00554c14 != 0 ? a_ : Memory_GetAllocatorBySelector(DAT_00587108[0]); }
+    { Pool *a_ = FUN_002f8a20(); var_v0 = GPR_00554c14 != 0 ? a_ : Memory_GetAllocatorBySelector(g_ndmwAllocatorSelector[0]); }
     REL_25afe0(DAT_00562718[0]);
     DAT_00562718[0] = (igEnbayaContextPool *)((void *)igEnbayaContextPool_Create(var_v0));
-    { Pool *a_ = FUN_002f8a20(); var_v0 = GPR_00554c14 != 0 ? a_ : Memory_GetAllocatorBySelector(DAT_00587108[0]); }
+    { Pool *a_ = FUN_002f8a20(); var_v0 = GPR_00554c14 != 0 ? a_ : Memory_GetAllocatorBySelector(g_ndmwAllocatorSelector[0]); }
     REL_25afe0(DAT_00562528[0]);
     DAT_00562528[0] = (igAnimationCombinerBoneInfoPool *)((void *)igAnimationCombinerBoneInfoPool_Create(var_v0));
     DAT_00562528[0]->_resetMode = 0;
-    { Pool *a_ = FUN_002f8a20(); var_v0 = GPR_00554c14 != 0 ? a_ : Memory_GetAllocatorBySelector(DAT_00587108[0]); }
+    { Pool *a_ = FUN_002f8a20(); var_v0 = GPR_00554c14 != 0 ? a_ : Memory_GetAllocatorBySelector(g_ndmwAllocatorSelector[0]); }
     REL_25afe0(DAT_00562540[0]);
     DAT_00562540[0] = (igAnimationStatePool *)((void *)igAnimationStatePool_Create(var_v0));
-    { Pool *a_ = FUN_002f8a20(); var_a0 = GPR_00554c14 != 0 ? a_ : Memory_GetAllocatorBySelector(DAT_00587110[0]); }
+    { Pool *a_ = FUN_002f8a20(); var_a0 = GPR_00554c14 != 0 ? a_ : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]); }
     if (var_a0 != 0) {
         var_a0->v108(0);
     }

@@ -19,7 +19,7 @@ extern "C" int beMatCtrl_IsRideOffPlayer(beMatCtrl *arg0, int arg1);
 extern "C" void beMatCtrl_SetRun(beMatCtrl *self, int value);
 extern "C" int beMatCtrl_GetPlayerMatStat(beMatCtrl *m, int n);
 extern "C" int igObject_Destroy(igDataList *);
-extern "C" int DAT_00589208[4];
+extern "C" int g_beLua_metaObject[4];
 extern "C" void Gap__Bec__beMatCtrl__vfunc_32(beMatCtrl *arg0);
 extern "C" int g_beMatCtrlInfo_metaObject[4];
 extern "C" int g_beMatCtrl_metaObject[4];
@@ -134,7 +134,7 @@ void Gap__Bec__beMatCtrl__vfunc_32(beMatCtrl *arg0) {
     igDataList *temp_v1;
     igDataList *temp_v1_2;
 
-    arg0->_lua = FUN_00236f80(arg0->_insight, DAT_00589208[0]);
+    arg0->_lua = FUN_00236f80(arg0->_insight, g_beLua_metaObject[0]);
     temp_v1 = (igDataList *)(arg0->_wkMatOnList);
     if (temp_v1 != 0) {
         temp_v1->_count = 0;

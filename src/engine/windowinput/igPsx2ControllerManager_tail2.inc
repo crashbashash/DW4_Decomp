@@ -25,7 +25,7 @@ void Gap__igPsx2ControllerManager__vfunc_24(igPsx2ControllerManager *arg0, int a
             al = Memory_GetAllocatorBySelector(DAT_00587060[0]);
         }
         sp8C = (PropertyText *)FUN_002b9500(al);
-        if (FUN_00306770(DAT_00586dc8[0]->f56, 3, &DAT_004d7040[0], &sp8C, &DAT_004d7050[0], 0) != 0) {
+        if (FUN_00306770(g_objectSystem[0]->f56, 3, &DAT_004d7040[0], &sp8C, &DAT_004d7050[0], 0) != 0) {
             s0 = sp8C->chars;
             s0 = (s0 == 0) ? DAT_004c22f0[0] : s0;
             if (strcmp(s0, &DAT_004d6ce0[0]) == 0) {

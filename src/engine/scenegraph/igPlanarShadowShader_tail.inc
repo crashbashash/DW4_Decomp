@@ -136,7 +136,7 @@ void FUN_001d3e20(igPlanarShadowShader *arg0, igCommonTraversal *arg1) {
             FUN_001908f0(sp70, arg1->_viewMatInv);
             FUN_001904f0(sp70, sp70, (char *)m + 12);
             FUN_001904f0(sp70, sp70, arg1->_viewMat);
-            nd = (igAttrStack *)((int *)((igObjectList *)s1->_attrStacks)->_data)[((int *)s1->_attrStackIndexTable)[((igMetaObject * *)DAT_0055ef50)[0]->_id]];
+            nd = (igAttrStack *)((int *)((igObjectList *)s1->_attrStacks)->_data)[((int *)s1->_attrStackIndexTable)[((igMetaObject * *)g_igProjectionMatrixAttr_metaObject)[0]->_id]];
             if (nd->_cachedOverride >= 0) {
                 s5 = (int *)((int *)nd->_data)[nd->_cachedOverride];
             } else if (nd->_count != 0) {

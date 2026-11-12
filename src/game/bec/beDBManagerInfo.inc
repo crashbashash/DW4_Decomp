@@ -1,10 +1,10 @@
 igMetaObject *FUN_00365dc0(void)
 {
-    igMetaObject *g = DAT_00589938[0];
+    igMetaObject *g = g_beDBManagerInfo_metaObject[0];
     bool t;
     if (!g || (t = g->_validity & 4) == 0)
         FUN_00365f10();
-    return DAT_00589938[0];
+    return g_beDBManagerInfo_metaObject[0];
 }
 
 int beDBManagerInfo_GetVTable(void) {
@@ -16,7 +16,7 @@ int beDBManagerInfo_GetVTable(void) {
     o.f24 = 0;
     o.vt = &DAT_005350f0[0];
     o.f28 = 0;
-    r = *(int *)((char *)&o + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+    r = *(int *)((char *)&o + *(int *)((char *)(g_objectSystem[0]) + 916));
     o.vt = &DAT_005350f0[0];
     FUN_00365e90((void **)&o.f28, (long long)(-1));
     FUN_0033ec80((struct S_33ec80 *)&o, (short)0);
@@ -67,11 +67,11 @@ void beDBManagerInfo_InitFields(void) {
     void *temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)((int *)DAT_00589938)[0];
+    temp_s0 = (void *)g_beDBManagerInfo_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_004c7328[0], 1);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = FUN_003658e0();
+    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_003658e0();
     ((igRefMetaField *)temp_s1)->_construct = 1;
     igMetaObject_NameFields(temp_s0, &DAT_004c7330[0], &DAT_004c7338[0], &DAT_004c7340[0], temp_s2);
 }

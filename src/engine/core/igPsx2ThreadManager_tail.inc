@@ -10,7 +10,7 @@ int igPsx2ThreadManager_GetVTable(void) {
     struct Obj_2cf320 o;
     igObject_InitHeader((struct ObjectHeader *)&o);
     o.vt = &DAT_0052d750[0];
-    return *(int *)((char *)&o + *(int *)((char *)(((void * *)DAT_00586dc8)[0]) + 916));
+    return *(int *)((char *)&o + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
 }
 
 void FUN_002cf360(void)
@@ -36,10 +36,10 @@ void igPsx2ThreadManager_Register(void) {
 }
 
 int FUN_002cf3e0(void) {
-    return ((int *)DAT_00585790)[0];
+    return ((int *)g_igThreadManager_metaObject)[0];
 }
 
 void FUN_002cf3f0(void) {
-    *(int *)((char *)(DAT_00586c98[0]) + 64) = (int)(&thunk_igThreadManager_GetMetaObject);
+    *(int *)((char *)(g_igPsx2ThreadManager_metaObject[0]) + 64) = (int)(&thunk_igThreadManager_GetMetaObject);
 }
 

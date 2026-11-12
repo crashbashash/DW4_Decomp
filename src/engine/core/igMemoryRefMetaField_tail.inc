@@ -100,7 +100,7 @@ void igMemoryRefMetaField_DeepCopy(igMemoryRefMetaField *m, int arg1, int arg2) 
         *(int *)(arg1 + m->_offset) = a;
     }
     if (m->_memType != 0) {
-        if (igObject_IsKindOf((void *)m->_memType, (igMetaObject *)DAT_00585b20[0]) != 0) {
+        if (igObject_IsKindOf((void *)m->_memType, (igMetaObject *)g_igObjectRefMetaField_metaObject[0]) != 0) {
             int src = *(int *)(arg2 + m->_offset);
             int dst = *(int *)(arg1 + m->_offset);
             if (src != 0 && dst != 0) {
@@ -113,7 +113,7 @@ void igMemoryRefMetaField_DeepCopy(igMemoryRefMetaField *m, int arg1, int arg2) 
                     *(int *)(dst + i * 4) = r;
                 }
             }
-        } else if (igObject_IsKindOf((void *)m->_memType, (igMetaObject *)(((int *)DAT_00585d80)[0])) != 0) {
+        } else if (igObject_IsKindOf((void *)m->_memType, (igMetaObject *)(((int *)g_igMemoryRefMetaField_metaObject)[0])) != 0) {
             int src = *(int *)(arg2 + m->_offset);
             int dst = *(int *)(arg1 + m->_offset);
             unsigned n = Memory_GetBufferSize((void *)src) >> 2;
@@ -148,7 +148,7 @@ void igMemoryRefMetaField_Print(igMemoryRefMetaField *arg0, int arg1, int arg2, 
     if (arg2 != 0 && base != 0) {
         sz = ((E_2fafb0 *)arg0->_memType)->vX();
         n = Memory_GetBufferSize((void *)base) / sz;
-        if (igObject_IsKindOf((void *)((E_2fafb0 *)arg0->_memType), (igMetaObject *)DAT_00585b20[0]) != 0) {
+        if (igObject_IsKindOf((void *)((E_2fafb0 *)arg0->_memType), (igMetaObject *)g_igObjectRefMetaField_metaObject[0]) != 0) {
             for (i = 0; i < (int)n; i++) {
                 int e = *(int *)(base + i * 4);
                 if (e != 0) {
@@ -164,7 +164,7 @@ void igMemoryRefMetaField_ReleaseElements(igMemoryRefMetaField *arg0, int arg1, 
     unsigned int n;
     int i;
     E_2fb0b0 *e;
-    if (igObject_IsKindOf((void *)arg0->_memType, (igMetaObject *)DAT_00585b20[0]) != 0) {
+    if (igObject_IsKindOf((void *)arg0->_memType, (igMetaObject *)g_igObjectRefMetaField_metaObject[0]) != 0) {
         arr = *(E_2fb0b0 ***)(arg1 + arg0->_offset);
         if (arr != 0) {
             n = Memory_GetBufferSize((void *)arr) >> 2;

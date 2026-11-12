@@ -21,7 +21,7 @@ void **igStringMetaField_Create(int allocator) {
 
 int Gap__Core__igStringMetaField__vfunc_21(int arg0, int arg1) {
     int temp_v0;
-    if (*DAT_00586dc8[0] != 0) {
+    if (*g_objectSystem[0] != 0) {
         igStringMetaField_EnsureRegistered();
         return igObject_CloneViaMetadata((void **)arg0, arg1);
     }
@@ -52,8 +52,8 @@ int igStringMetaField_GetVTable(void) {
     int c;
 
     igStringMetaField_Init((igStringMetaField *)&o);
-    r = *(int *)((char *)&o + *(int *)((char *)(((void * *)DAT_00586dc8)[0]) + 916));
-    o.vt = &DAT_0052f230[0];
+    r = *(int *)((char *)&o + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
+    o.vt = &g_igMetaField_vtable[0];
     if (&o.str != 0) {
         p = o.str;
         if (p != 0) {
@@ -93,8 +93,8 @@ void thunk_igStringMetaField_GetMetaObject(void) {
     igStringMetaField_GetMetaObject();
 }
 
-int FUN_002b99d0(void) {
-    return DAT_00585a60[0];
+igMetaObject *FUN_002b99d0(void) {
+    return g_igRefMetaField_metaObject[0];
 }
 
 void igStringMetaField_InitFields(void) {
@@ -105,7 +105,7 @@ void igStringMetaField_InitFields(void) {
     T_2b99e0 *temp_v0_2;
     T_2b99e0 *temp_v0_4;
 
-    temp_s1 = (M_2b99e0 *)(((void * *)DAT_00585908)[0]);
+    temp_s1 = (M_2b99e0 *)(((void * *)g_igStringMetaField_metaObject)[0]);
     temp_s2 = igMetaObject_GetFieldCount((igMetaObject *)temp_s1);
     igMetaObject_CreateFields((igMetaObject *)temp_s1, (igMetaField * (**)(void *))&DAT_004bf6a0[0], 1);
     temp_v0 = (void **)(((void **)igMetaObject_FindFieldByName((igMetaObject *)temp_s1, (const char *)&DAT_004f5f20[0])));
@@ -137,7 +137,7 @@ void FUN_002b9b90(void) {
     int *o;
 
     if (DAT_00585910[0] == 0) {
-        DAT_00585910[0] = ((int *)igMetaObject_CreateInstance((CreateMeta *)DAT_00585908[0], (MemoryPool *)(((int)Memory_GetAllocatorBySelector(DAT_00587040[0])))));
+        DAT_00585910[0] = ((int *)igMetaObject_CreateInstance((CreateMeta *)g_igStringMetaField_metaObject[0], (MemoryPool *)(((int)Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0])))));
         s0 = DAT_00585910[0];
         if (s0 != 0) {
             MetaRefList_AppendRetained((PointerList *)(((void *)FUN_002fc250())), (RefHeader *)s0);

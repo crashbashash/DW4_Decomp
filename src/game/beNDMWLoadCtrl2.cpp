@@ -9,7 +9,7 @@
 #define DD(p) ((beNDMWDegiData *)(p))
 #define DNAME(d) ((unsigned short *)(d)->_dmNameUni)
 #define REL(o) { Rc *rr = (o); if (rr != 0) { REFS(rr) = REFS(rr) - 1; if (((unsigned long long)((long long)REFS(rr) << 0x29) >> 0x29) == 0) { igObject_Destroy((void *)rr); } } }
-#define ALLOC(a, self) { a = ((void *)igObject_GetAllocator(self)); a = GPR_00554c14 ? a : ((void *)Memory_GetAllocatorBySelector(DAT_00587110[0])); }
+#define ALLOC(a, self) { a = ((void *)igObject_GetAllocator(self)); a = GPR_00554c14 ? a : ((void *)Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0])); }
 #define PLW_3ee250(list, off) (*(beNDMWLoadSavePlWork **)((char *)((beNDMWLoadSavePlWorkList *)(list))->_data + (off)))
 #include "dw4/igSmartPointer.h"
 #include "dw4/igTDataList.h"
@@ -19,7 +19,7 @@
 #define FIND1(DSTV, REC) { igObjectList *l = igProperty_GetRecordFolder(arg1, REC)->v; igTDataList<IdObject *> *t = (igTDataList<IdObject *> *)igProperty_GetRecordFolder(arg1, &DAT_00517ec0[0])->v; IdObject *v = ((IdObject **)l->_data)[0]; if (v == 0) { DSTV = -1; } else { DSTV = t->find(v); } }
 #define FINDV(DST, REC) { igObjectList *l = igProperty_GetRecordFolder(arg1, REC)->v; igTDataList<IdObject *> *t = (igTDataList<IdObject *> *)igProperty_GetRecordFolder(arg1, &DAT_00517ec0[0])->v; int a; for (a = 0; a < l->_count; a++) { IdObject *v = ((IdObject **)l->_data)[a]; if (v == 0) { DST[a] = -1; } else { DST[a] = t->find(v); } } }
 #define INTS(DST, FN, REC) { igIntList *l = FN(arg1, REC)->v; int i = 0; if (0 < l->_count) { do { DST[i] = ((int *)l->_data)[i]; i++; } while (i < l->_count); } }
-#define ALLOC_3f2490(dst, obj) { int alloc = igObject_GetAllocator(obj); if (GPR_00554c14 != 0) { dst = alloc; } else { dst = Memory_GetAllocatorBySelector(DAT_00587110[0]); } }
+#define ALLOC_3f2490(dst, obj) { int alloc = igObject_GetAllocator(obj); if (GPR_00554c14 != 0) { dst = alloc; } else { dst = Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]); } }
 
 extern "C" int beMessenger_AppendString(...);
 extern "C" int beMessenger_DispatchSelected(...);
@@ -82,8 +82,8 @@ extern "C" int DAT_004cda44[4];
 extern "C" int DAT_004cda48[4];
 extern "C" int DAT_00517a18[4];
 extern "C" int DAT_00517a28[4];
-extern "C" int DAT_0058a1e0[4];
-extern "C" int DAT_0058a220[4];
+extern "C" int g_mdlEntity[4];
+extern "C" int g_txtCallNo[4];
 extern "C" void beNDMWLoadIntf2TextOrder_PublishIdLines(beNDMWLoadIntf2TextOrder *arg0, int arg1, int arg2);
 struct Q { int a; int b; int c; };
 struct E_3ec050 { unsigned int id:20; unsigned int pad:12; int w4; struct Q *list; };
@@ -132,8 +132,8 @@ extern "C" int FUN_003ecdc0(beNDMWLoadCtrl2CommonIntf *arg0, int arg1, int arg2,
 extern "C" int FUN_003ed050(beNDMWLoadCtrl2CommonIntf *arg0, int arg1, int arg2, int arg3, int arg4);
 extern "C" int DAT_00517e38[4];
 extern "C" int FUN_003ed2e0(beNDMWLoadCtrl2CommonIntf *arg0, int arg1, int arg2, int arg3, int arg4);
-extern "C" int DAT_00587110[4];
-extern "C" int DAT_00589678[4];
+extern "C" int g_defaultAllocatorSelector[4];
+extern "C" int g_beFont_metaObject[4];
 extern "C" unsigned char GPR_00554c14;
 typedef igObject Rc;
 /* matching construct: the code reads the reference count as a signed int (igObject._refCount is reflected unsigned) */
@@ -163,7 +163,7 @@ extern "C" int beNDMWLoadCtrl2CommonIntf__StepFormatMemoryCard(beNDMWLoadCtrl2Co
 extern "C" void FUN_003ee190(beNDMWLoadCtrl2CommonIntf *self, int idx);
 extern "C" void FUN_003ee250(beNDMWLoadCtrl2CommonIntf *a, int arg1, int arg2);
 extern "C" void beNDMWLoadCtrl2CommonIntf__RemoveAccessPlayer(beNDMWLoadCtrl2CommonIntf *w, int key);
-extern "C" int DAT_00586f20[4];
+extern "C" int g_stringPool[4];
 typedef struct S { unsigned char b0; char p0[3]; int f4; char p1[32]; unsigned short s40[9]; char p2[14]; int f72, f76, f80, f84, f88; } S;
 extern "C" void beNDMWDegiData__UpdateFieldsFromData(beNDMWDegiData *a);
 extern "C" void FUN_003ee690(beNDMWDegiData *arg0, int arg1);
@@ -309,7 +309,7 @@ struct Host { int w0[7]; Saved *saved; int w1[5]; int dword52; };
 extern "C" Chunk *FUN_003614f0(int);
 extern "C" void beUnicodeObj_AllocateBuffer(Chunk *, int);
 extern "C" ItemRef FUN_003ef1e0(void *owner, int id);
-extern "C" int DAT_00587108[4];
+extern "C" int g_ndmwAllocatorSelector[4];
 extern "C" void beNDMWDegiData__StoreToProperties(Host *arg0, void *arg1, int arg2);
 typedef struct E_3f0d60 { char pad28[28]; int a28; char pad36[4]; int a36; } E_3f0d60;
 typedef struct L { char pad8[8]; int n; char pad12[4]; E_3f0d60 **data; } L;
@@ -383,8 +383,8 @@ extern "C" int DAT_00518250[4];
 extern "C" int DAT_00518260[4];
 extern "C" int DAT_00518270[4];
 extern "C" int DAT_00518280[4];
-extern "C" int DAT_00585be0[4];
-extern "C" int DAT_00589208[4];
+extern "C" int g_propertyNameField[4];
+extern "C" int g_beLua_metaObject[4];
 struct S_ref : public igObject { };
 struct Host_3f1a80 { char pad40[40]; S_ref *f40; };
 extern "C" void Gap__Bec__beNDMWLoadCtrl2__vfunc_31(beNDMWLoadCtrl2 *arg0, Host_3f1a80 *arg1);
@@ -394,7 +394,7 @@ extern "C" igObject *FUN_003c56b0(int);
 struct Rec { char p[12]; unsigned char b12; };
 extern "C" int DAT_005182a0[4];
 extern "C" int DAT_005182b0[4];
-extern "C" int DAT_00587d08[4];
+extern "C" int g_beSystem_metaObject[4];
 /* Owning stack references while the controller list is wired up; each releases its object on scope
  * exit. */
 
@@ -521,8 +521,8 @@ void beNDMWLoadIntf2TextOrder_PublishIdLines(beNDMWLoadIntf2TextOrder *arg0, int
             p += 3;
         }
         s0 = arg1 & 0xF000;
-        DAT_0058a220[0] = *(int *)((char *)DAT_004cda44 + off);
-        DAT_0058a1e0[0] = 0;
+        g_txtCallNo[0] = *(int *)((char *)DAT_004cda44 + off);
+        g_mdlEntity[0] = 0;
         switch (s0) {
         case 0:
             beLua__RunNamedChunk(arg0->_lua, DAT_00517a18, 0);
@@ -534,8 +534,8 @@ void beNDMWLoadIntf2TextOrder_PublishIdLines(beNDMWLoadIntf2TextOrder *arg0, int
             break;
         }
         if (arg2 == 1 && (*(int *)((char *)((int *)DAT_004cda40) + off) & 0x100000)) {
-            DAT_0058a220[0] = *(int *)((char *)DAT_004cda44 + (s2 + 1) * 12);
-            DAT_0058a1e0[0] = 0;
+            g_txtCallNo[0] = *(int *)((char *)DAT_004cda44 + (s2 + 1) * 12);
+            g_mdlEntity[0] = 0;
             switch (s0) {
             case 0:
                 beLua__RunNamedChunk(arg0->_lua, DAT_00517a18, 0);
@@ -1149,7 +1149,7 @@ int beNDMWLoadCtrl2CommonIntf__StepReadMedia(beNDMWLoadCtrl2CommonIntf *self, in
                         Rc *str; /* the unicode text FUN_00382eb0 hands back (declared here: its slot sits below the record reference) */
                         digimonName = (unsigned short *)DD(el.p)->_dmName;
                         {
-                            int insightEntry = FUN_00236f80(self->_insight, DAT_00589678[0]);
+                            int insightEntry = FUN_00236f80(self->_insight, g_beFont_metaObject[0]);
                             FUN_00382eb0(&str, insightEntry, digimonName);
                         }
                         unicodeText = (unsigned short *)((beUnicodeObj *)str)->_buffer;
@@ -1423,12 +1423,12 @@ void beNDMWDegiData__UpdateFieldsFromData(beNDMWDegiData *a) {
     a->_maxHp = s0->f80;
     a->_mp = s0->f84;
     a->_maxMp = s0->f88;
-    if (DAT_00586f20[0] == 0) {
+    if (g_stringPool[0] == 0) {
         v = ((int)FUN_002eb010(16));
         if (v != 0) v = ((int)StringPool_Construct(v));
-        DAT_00586f20[0] = v;
+        g_stringPool[0] = v;
     }
-    s2 = ((int)StringPool_Intern(DAT_00586f20[0], (char *)s0 + 8));
+    s2 = ((int)StringPool_Intern(g_stringPool[0], (char *)s0 + 8));
     old = a->_dmkind;
     if (old != 0) {
         hd = (int *)(old - 8);
@@ -1437,12 +1437,12 @@ void beNDMWDegiData__UpdateFieldsFromData(beNDMWDegiData *a) {
         if (v == 0) StringChunk_ReleaseHeader(*hd, hd);
     }
     a->_dmkind = s2;
-    if (DAT_00586f20[0] == 0) {
+    if (g_stringPool[0] == 0) {
         v = ((int)FUN_002eb010(16));
         if (v != 0) v = ((int)StringPool_Construct(v));
-        DAT_00586f20[0] = v;
+        g_stringPool[0] = v;
     }
-    s2 = ((int)StringPool_Intern(DAT_00586f20[0], (char *)s0 + 40));
+    s2 = ((int)StringPool_Intern(g_stringPool[0], (char *)s0 + 40));
     old = a->_dmName;
     if (old != 0) {
         hd = (int *)(old - 8);
@@ -1558,7 +1558,7 @@ static inline int itemAllocator(void *owner) {
     if (GPR_00554c14 != 0) {
         a = alloc;
     } else {
-        a = Memory_GetAllocatorBySelector(DAT_00587108[0]);
+        a = Memory_GetAllocatorBySelector(g_ndmwAllocatorSelector[0]);
     }
     return a;
 }
@@ -1611,13 +1611,13 @@ void beNDMWDegiData__StoreToProperties(Host *arg0, void *arg1, int arg2) {
     ((RecInt *)igProperty_GetRecord(arg1, DAT_00517e88))->value = s->i88;
     char *nm = s->name;
     RecStr *rs = ((RecStr *)FUN_003a92e0(arg1, DAT_00517ea0));
-    if (((void * *)DAT_00586f20)[0] == 0) {
+    if (((void * *)g_stringPool)[0] == 0) {
         void *p = FUN_002eb010(16);
         if (p != 0)
             p = StringPool_Construct(p);
-        ((void * *)DAT_00586f20)[0] = p;
+        ((void * *)g_stringPool)[0] = p;
     }
-    char *interned = StringPool_Intern(((void * *)DAT_00586f20)[0], nm);
+    char *interned = StringPool_Intern(((void * *)g_stringPool)[0], nm);
     char *old = rs->value;
     if (old != 0) {
         int *hdr = (int *)old - 2;
@@ -1634,7 +1634,7 @@ void beNDMWDegiData__StoreToProperties(Host *arg0, void *arg1, int arg2) {
     if (GPR_00554c14 != 0)
         a = alloc;
     else
-        a = Memory_GetAllocatorBySelector(DAT_00587108[0]);
+        a = Memory_GetAllocatorBySelector(g_ndmwAllocatorSelector[0]);
     {
     ChunkRef sp188((Obj *)FUN_003614f0(a));
     Obj * sp184;
@@ -1871,7 +1871,7 @@ void FUN_003f0ed0(beNDMWMcUtilCtrl *arg0, int arg1, int arg2) {
             if (GPR_00554c14 != 0) {
                 v = (int)v;
             } else {
-                v = Memory_GetAllocatorBySelector(DAT_00587110[0]);
+                v = Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
             }
             SlotRef<0> slot(FUN_003c5ee0(v));
             ObjectList_AppendRetained(arg0->_slot, slot.p);
@@ -1883,7 +1883,7 @@ void FUN_003f0ed0(beNDMWMcUtilCtrl *arg0, int arg1, int arg2) {
             if (GPR_00554c14 != 0) {
                 v = (int)v;
             } else {
-                v = Memory_GetAllocatorBySelector(DAT_00587110[0]);
+                v = Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
             }
             SlotRef<1> slot(FUN_003c5cf0(v));
             ObjectList_AppendRetained(arg0->_slot, slot.p);
@@ -1895,7 +1895,7 @@ void FUN_003f0ed0(beNDMWMcUtilCtrl *arg0, int arg1, int arg2) {
             if (GPR_00554c14 != 0) {
                 v = (int)v;
             } else {
-                v = Memory_GetAllocatorBySelector(DAT_00587110[0]);
+                v = Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
             }
             SlotRef<2> slot(FUN_003c5aa0(v));
             ObjectList_AppendRetained(arg0->_slot, slot.p);
@@ -2149,7 +2149,7 @@ void Gap__Bec__beNDMWLoadCtrl2__vfunc_31(beNDMWLoadCtrl2 *arg0, Host_3f1a80 *arg
             S_ref *old;
             int base = igObject_GetAllocator(arg1);
             int a;
-            if (GPR_00554c14 != 0) { a = base; } else { a = Memory_GetAllocatorBySelector(DAT_00587110[0]); }
+            if (GPR_00554c14 != 0) { a = base; } else { a = Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]); }
             igSmartPointer<igObject> list((igObject *)beBaseInfoDataList_Create(a));
             o = (S_ref *)list.p;
             if (o != 0) o->_refCount = (int)((int) (o->_refCount + 1));
@@ -2162,13 +2162,13 @@ void Gap__Bec__beNDMWLoadCtrl2__vfunc_31(beNDMWLoadCtrl2 *arg0, Host_3f1a80 *arg
             }
             arg1->f40 = o;
         }
-        st = (beNDMWLoadCtrl2CtrlData *)igProperty_FindByName(arg1->f40, DAT_00585be0[0], &DAT_00518130[0]);
+        st = (beNDMWLoadCtrl2CtrlData *)igProperty_FindByName(arg1->f40, g_propertyNameField[0], &DAT_00518130[0]);
         if (arg1->f40 == 0) {
             S_ref *o;
             S_ref *old;
             int base = igObject_GetAllocator(arg1);
             int a;
-            if (GPR_00554c14 != 0) { a = base; } else { a = Memory_GetAllocatorBySelector(DAT_00587110[0]); }
+            if (GPR_00554c14 != 0) { a = base; } else { a = Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]); }
             igSmartPointer<igObject> list((igObject *)beBaseInfoDataList_Create(a));
             o = (S_ref *)list.p;
             if (o != 0) o->_refCount = (int)((int) (o->_refCount + 1));
@@ -2181,7 +2181,7 @@ void Gap__Bec__beNDMWLoadCtrl2__vfunc_31(beNDMWLoadCtrl2 *arg0, Host_3f1a80 *arg
             }
             arg1->f40 = o;
         }
-        ci = (beNDMWLoadCtrl2CommonIntf *)igProperty_FindByName(arg1->f40, DAT_00585be0[0], &DAT_00518138[0]);
+        ci = (beNDMWLoadCtrl2CommonIntf *)igProperty_FindByName(arg1->f40, g_propertyNameField[0], &DAT_00518138[0]);
         switch (st->_st0) {
         case 0:
             break;
@@ -2363,8 +2363,8 @@ void Gap__Bec__beNDMWLoadCtrl2__vfunc_31(beNDMWLoadCtrl2 *arg0, Host_3f1a80 *arg
                         beMessenger_AppendInt(arg0->_messenger, 4);
                         beMessenger_DispatchSelected(arg0->_messenger, &DAT_00518240[0]);
                     } else {
-                        DAT_0058a1e0[0] = 0;
-                        beLua__RunNamedChunk(FUN_00236f80(arg0->_insight, DAT_00589208[0]), &DAT_00518250[0], 0);
+                        g_mdlEntity[0] = 0;
+                        beLua__RunNamedChunk(FUN_00236f80(arg0->_insight, g_beLua_metaObject[0]), &DAT_00518250[0], 0);
                         beMessenger_SelectReceivers(arg0->_messenger, &DAT_00518230[0], 0, -1);
                         beMessenger_AppendInt(arg0->_messenger, 0);
                         beMessenger_DispatchSelected(arg0->_messenger, &DAT_00518240[0]);
@@ -2461,7 +2461,7 @@ int Gap__Bec__beNDMWLoadCtrl2__vfunc_34(beNDMWLoadCtrl2 *arg0, beBaseInfoRam *ar
             ALLOC_3f2490(a, arg0);
             {
             CommonIntfRef common(FUN_003c4be0(a));
-            ((beNDMWLoadCtrl2CommonIntf *)common.p)->_system = FUN_00236f80(arg0->_insight, DAT_00587d08[0]);
+            ((beNDMWLoadCtrl2CommonIntf *)common.p)->_system = FUN_00236f80(arg0->_insight, g_beSystem_metaObject[0]);
             ((beNDMWLoadCtrl2CommonIntf *)common.p)->_inforam = (int)arg1;
             ((beNDMWLoadCtrl2CommonIntf *)common.p)->_insight = arg0->_insight;
             if (e == 1) {
@@ -2502,7 +2502,7 @@ int Gap__Bec__beNDMWLoadCtrl2__vfunc_34(beNDMWLoadCtrl2 *arg0, beBaseInfoRam *ar
         arg1->_dataList = (int)t;
         }
     }
-    igProperty_FindByName(arg1->_dataList, DAT_00585be0[0], &DAT_00518130[0]);
+    igProperty_FindByName(arg1->_dataList, g_propertyNameField[0], &DAT_00518130[0]);
     switch (e) {
     case 2:
         return 1;
@@ -2519,7 +2519,7 @@ int Gap__Bec__beNDMWLoadCtrl2__vfunc_34(beNDMWLoadCtrl2 *arg0, beBaseInfoRam *ar
                 arg1->_dataList = (int)t;
                 }
             }
-            beMessenger_AppendObject(arg0->_messenger, ((int)igProperty_FindByName(arg1->_dataList, DAT_00585be0[0], &DAT_00518138[0])));
+            beMessenger_AppendObject(arg0->_messenger, ((int)igProperty_FindByName(arg1->_dataList, g_propertyNameField[0], &DAT_00518138[0])));
         }
         return 1;
     default:

@@ -1,9 +1,9 @@
 void *FUN_0034b4a0(void) {
-    struct G *g = DAT_00588460[0];
-    if (!g || ((g->f & 4) != 0) == false) {
+    igMetaObject *g = g_beResetNode_metaObject[0];
+    if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_0034b560();
     }
-    return DAT_00588460[0];
+    return g_beResetNode_metaObject[0];
 }
 
 int beResetNode_GetVTable(void) {
@@ -16,7 +16,7 @@ int beResetNode_GetVTable(void) {
     o.w[3] = 0;
     o.w[6] = 0;
     o.vt = DAT_00538810;
-    r = *(int *)((char *)&o + *(int *)(((char * *)DAT_00586dc8)[0] + 916));
+    r = *(int *)((char *)&o + *(int *)(((char * *)g_objectSystem)[0] + 916));
     o.vt = DAT_00538810;
     FUN_00195a90(&o, 0);
     return r;
@@ -53,7 +53,7 @@ void beResetNode_InitFields(void) {
     int temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)((int *)DAT_00588460)[0];
+    temp_s0 = (void *)g_beResetNode_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_004c44f8[0], 2);
     igMetaObject_NameFields(temp_s0, &DAT_004c4500[0], &DAT_004c4508[0], &DAT_004c4510[0], temp_s1);

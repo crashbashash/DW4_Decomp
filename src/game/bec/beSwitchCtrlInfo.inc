@@ -1,9 +1,9 @@
 void *FUN_00343190(void) {
-    struct G *g = DAT_00587de0[0];
-    if (!g || ((g->f & 4) != 0) == false) {
+    igMetaObject *g = g_beSwitchCtrlInfo_metaObject[0];
+    if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_003432e0();
     }
-    return DAT_00587de0[0];
+    return g_beSwitchCtrlInfo_metaObject[0];
 }
 
 int beSwitchCtrlInfo_GetVTable(void) {
@@ -16,7 +16,7 @@ int beSwitchCtrlInfo_GetVTable(void) {
     obj.w[5] = 0;
     obj.vt = &DAT_00539490[0];
     obj.w[6] = 0;
-    r = *(int *)((char *)&obj + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+    r = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
     obj.vt = &DAT_00539490[0];
     FUN_00343260((ObjectRefWord *)(&obj.w[6]), -1);
     FUN_0033ec80((struct S_33ec80 *)&obj, (short)0);
@@ -68,7 +68,7 @@ void beSwitchCtrlInfo_InitFields(void) {
     void *temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)((int *)DAT_00587de0)[0];
+    temp_s0 = (void *)g_beSwitchCtrlInfo_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_004c3760[0], 1);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));

@@ -14,8 +14,8 @@ int igVirtualCFuncMetaField_GetVTable(void) {
 
     igMetaField_Init((igMetaField *)&f);
     f.obj.vt = &DAT_0052e130[0];
-    temp_s0 = *(int *)((char *)&f + *(int *)((char *)(((void * *)DAT_00586dc8)[0]) + 916));
-    f.obj.vt = &DAT_0052f230[0];
+    temp_s0 = *(int *)((char *)&f + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
+    f.obj.vt = &g_igMetaField_vtable[0];
     if (&f.ref != 0) {
         if (f.ref != 0) {
             temp_a1 = f.ref - 2;
@@ -59,7 +59,7 @@ void FUN_002b5f10(void) {
     void *temp_s0;
 
     if (DAT_005856e0[0] == 0) {
-        DAT_005856e0[0] = (void *)(((void *)igMetaObject_CreateInstance((CreateMeta *)DAT_005856d8[0], (MemoryPool *)(((int)Memory_GetAllocatorBySelector(DAT_00587040[0]))))));
+        DAT_005856e0[0] = (void *)(((void *)igMetaObject_CreateInstance((CreateMeta *)g_igVirtualCFuncMetaField_metaObject[0], (MemoryPool *)(((int)Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]))))));
         temp_s0 = (void *)(DAT_005856e0[0]);
         if (temp_s0 != 0) {
             MetaRefList_AppendRetained((PointerList *)(((void *)FUN_002fc250())), (RefHeader *)temp_s0);

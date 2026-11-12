@@ -5,7 +5,7 @@ extern "C" {
 
 int igObject_IsKindOf(...);
 
-extern int DAT_0058cd30[4];
+extern int g_igViewModel_metaObject[4];
 
 class C;
 void FUN_004650a0(void *arg0);
@@ -222,22 +222,21 @@ int FUN_0018d2b0(...);
 int FUN_0018d360(...);
 int FUN_00192fc0(...);
 int FUN_001ce970(...);
-extern int DAT_004e1058[4];
 /* matching construct: dummy virtual slots so v23()/v25() dispatch through the retail vtable offsets (igIntersectTraversal) */
 class VM { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void v23(int); virtual void d24(); virtual void v25(long long); };
 
 extern int g_igPickMode_metaObject[4];
 
-extern int DAT_0058cbf8[4];
+extern int g_igRotateMode_metaObject[4];
 
-extern int DAT_0058cc80[4];
+extern int g_igFlyMode_metaObject[4];
 
-extern int DAT_0058cce0[4];
+extern int g_igCameraMode_metaObject[4];
 
-extern int DAT_0058ccf8[4];
+extern int g_igViewMode_metaObject[4];
 
 void Gap__Bec__beCameraMode__vfunc_21(int arg0, int arg1) {
-    igObject_IsKindOf(arg1, DAT_0058cd30[0]);
+    igObject_IsKindOf(arg1, g_igViewModel_metaObject[0]);
 }
 
 void Gap__Bec__beCameraMode__vfunc_22(C *arg0, int *arg1) {
@@ -736,7 +735,7 @@ void FUN_00466b20(igPickMode *arg0) {
     v[1] = y;
     *(int *)&v[2] = 0x3F800000;
     FUN_00192fc0(v, v, arg0->_inverseProjectionMatrix);
-    FUN_0018d2b0(arg0->_ray, &DAT_004e1058[0], v);
+    FUN_0018d2b0(arg0->_ray, &g_vec3Zero[0], v);
     FUN_0018d360(arg0->_ray, arg0->_inverseMatrix);
     arg0->_impactLength = ((igRay *)arg0->_ray)->_len;
     arg0->_hit = 0;
@@ -776,19 +775,19 @@ int FUN_00466cb0(void) {
 }
 
 int FUN_00466cc0(void) {
-    return DAT_0058cbf8[0];
+    return g_igRotateMode_metaObject[0];
 }
 
 int FUN_00466cd0(void) {
-    return DAT_0058cc80[0];
+    return g_igFlyMode_metaObject[0];
 }
 
 int FUN_00466ce0(void) {
-    return DAT_0058cce0[0];
+    return g_igCameraMode_metaObject[0];
 }
 
 int FUN_00466cf0(void) {
-    return DAT_0058ccf8[0];
+    return g_igViewMode_metaObject[0];
 }
 
 }

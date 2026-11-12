@@ -1,13 +1,13 @@
-int FUN_0045b420(void) {
-    if (DAT_0058c9e8[0] == 0) {
-        DAT_0058c9e8[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(DAT_00587040[0]));
+igMetaObject *FUN_0045b420(void) {
+    if (g_igViewerParameters_metaObject[0] == 0) {
+        g_igViewerParameters_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
     }
-    return DAT_0058c9e8[0];
+    return g_igViewerParameters_metaObject[0];
 }
 
 SigViewerParameters_GetMetaObject *igViewerParameters_GetMetaObject(void) {
-    if (((SigViewerParameters_GetMetaObject *)DAT_0058c9e8[0]) == 0 || !((SigViewerParameters_GetMetaObject *)DAT_0058c9e8[0])->ok()) FUN_0045b590();
-    return ((SigViewerParameters_GetMetaObject *)DAT_0058c9e8[0]);
+    if (((SigViewerParameters_GetMetaObject *)g_igViewerParameters_metaObject[0]) == 0 || !((SigViewerParameters_GetMetaObject *)g_igViewerParameters_metaObject[0])->ok()) FUN_0045b590();
+    return ((SigViewerParameters_GetMetaObject *)g_igViewerParameters_metaObject[0]);
 }
 
 int igViewerParameters_GetVTable(void) {
@@ -25,7 +25,7 @@ int igViewerParameters_GetVTable(void) {
     *(int *)(pi + 204) = 0;
     *(int *)(pi + 220) = 0;
     *(int *)(pi + 240) = 0;
-    temp_s1 = *(int *)&u.b[*(int *)((char *)(((void *)DAT_00586dc8[0])) + 916)];
+    temp_s1 = *(int *)&u.b[*(int *)((char *)(((void *)g_objectSystem[0])) + 916)];
     u.vt = (int)&DAT_00542090[4];
     FUN_001d6560(&u.b[240], -1);
     FUN_0019b1f0(&u.b[220], -1);
@@ -73,7 +73,7 @@ void igViewerParameters_InitFields(void) {
     int sp50[3];
     int sp48[2];
 
-    temp_s0 = (void *)DAT_0058c9e8[0];
+    temp_s0 = (void *)g_igViewerParameters_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_004d1040[0], 0x27);
     temp_s2 = (struct Fld *)igMetaObject_GetFieldAt(temp_s0, temp_s1);

@@ -1,14 +1,14 @@
 void *FUN_00341070(void) {
-    struct G *g = DAT_00587c08[0];
-    if (!g || ((g->f & 4) != 0) == false) {
+    igMetaObject *g = g_beTransformSync_metaObject[0];
+    if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_003411e0();
     }
-    return DAT_00587c08[0];
+    return g_beTransformSync_metaObject[0];
 }
 
 int beTransformSync_GetVTable(void) {
     TransformSyncView transform;
-    return *(int *)((char *)&transform + *(int *)((char *)DAT_00586dc8[0] + 916));
+    return *(int *)((char *)&transform + *(int *)((char *)g_objectSystem[0] + 916));
 }
 
 O *FUN_00341160(O *arg0, short arg1) {
@@ -52,7 +52,7 @@ void beTransformSync_InitFields(void) {
     void *temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)((int *)DAT_00587c08)[0];
+    temp_s0 = (void *)g_beTransformSync_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_004c3358[0], 1);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));

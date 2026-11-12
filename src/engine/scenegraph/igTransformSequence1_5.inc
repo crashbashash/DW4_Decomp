@@ -1,9 +1,9 @@
 igMetaObject *FUN_00194ef0(void)
 {
-    igMetaObject *g = ((igMetaObject * *)DAT_005611d8)[0];
+    igMetaObject *g = ((igMetaObject * *)g_igTransformSequence1_5_metaObject)[0];
     if (!g || ((g->_validity & 4) != 0) == false)
         FUN_00195290();
-    return ((igMetaObject * *)DAT_005611d8)[0];
+    return ((igMetaObject * *)g_igTransformSequence1_5_metaObject)[0];
 }
 
 int igTransformSequence1_5_GetVTable(void) {
@@ -20,7 +20,7 @@ int igTransformSequence1_5_GetVTable(void) {
     obj.w[15] = 0;
     obj.w[16] = 0;
     obj.w[23] = 0;
-    t = *(int *)((char *)&obj + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+    t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
     obj.vt = &DAT_005282c0[0];
     FUN_00195210((ObjectRefWord *)&obj.w[23], -1);
     FUN_001374b0(&obj.w[16], -1);

@@ -28,8 +28,8 @@ extern "C" float FUN_003a68e0(float fparg0);
 extern "C" int FUN_003a6930(void);
 extern "C" void Gap__Bec__beTargetObj__vfunc_21(beTargetObj * self, int unused);
 extern "C" void Gap__Bec__beTargetObj__vfunc_22(beTargetObj * self, int unused);
-extern "C" int DAT_00587ce8[4];
-extern "C" int DAT_00588f38[4];
+extern "C" int g_beTargetObj_metaObject[4];
+extern "C" int g_beMessenger_metaObject[4];
 extern "C" int DAT_0058a578[4];
 extern "C" void Gap__Bec__beTargetObj__vfunc_23(beTargetObj *arg0);
 extern "C" int g_beTargetObj_metaObject[4];
@@ -46,7 +46,7 @@ struct Arr { int pad0; int pad1; int n; int pad3; struct V3_3a5f60 *v; };
 struct Mid { int p0, p1, p2, p3; struct Arr *a; int p5; };
 struct Top { int p0, p1, p2, p3; struct Arr *arr; int p5; };
 extern "C" struct Top *DAT_0058a570[4];
-extern "C" float DAT_004e1058[4];
+extern "C" float g_vec3Zero[4];
 extern "C" float DAT_004e105c[4];
 extern "C" float DAT_004e1060[4];
 extern "C" int DAT_0050ffd0[4];
@@ -81,8 +81,8 @@ void Gap__Bec__beTargetObj__vfunc_22(beTargetObj * self, int unused)
 }
 
 void Gap__Bec__beTargetObj__vfunc_23(beTargetObj *arg0) {
-    ((int *)DAT_0058a570)[0] = FUN_00236f80(arg0->_insight, DAT_00587ce8[0]);
-    DAT_0058a578[0] = FUN_00236f80(arg0->_insight, DAT_00588f38[0]);
+    ((int *)DAT_0058a570)[0] = FUN_00236f80(arg0->_insight, g_beTargetObj_metaObject[0]);
+    DAT_0058a578[0] = FUN_00236f80(arg0->_insight, g_beMessenger_metaObject[0]);
 }
 
 /* Slot 24, empty override. */
@@ -207,7 +207,7 @@ int FUN_003a5f60(float *out) {
         FUN_003a5b40((void *)DAT_0058a570[0], (igVec3fList *)(DAT_0058a570[0]->arr), (igIntList *)(DAT_0058a570[0]->p5), DAT_0050ffd0, DAT_0050ffd8);
         if (DAT_0058a570[0]->arr->n == 0) return 0;
     }
-    out[0] = DAT_004e1058[0];
+    out[0] = g_vec3Zero[0];
     out[1] = DAT_004e105c[0];
     out[2] = DAT_004e1060[0];
     n = DAT_0058a570[0]->arr->n;

@@ -1,9 +1,9 @@
 void *FUN_0034bcc0(void) {
-    struct G *g = DAT_005884a8[0];
-    if (!g || ((g->f & 4) != 0) == false) {
+    igMetaObject *g = g_beParticleCtrl2InfoRam_metaObject[0];
+    if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_0034bec0();
     }
-    return DAT_005884a8[0];
+    return g_beParticleCtrl2InfoRam_metaObject[0];
 }
 
 int beParticleCtrl2InfoRam_GetVTable(void) {
@@ -16,7 +16,7 @@ int beParticleCtrl2InfoRam_GetVTable(void) {
     obj.w[10] = 0;
     obj.w[11] = 0;
     obj.w[12] = 0;
-    t = *(int *)((char *)&obj + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+    t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
     obj.vt = &DAT_00538740[0];
     FUN_0034be40((ObjectRefWord *)(&obj.w[12]), -1);
     FUN_0034bdc0((void **)(&obj.w[11]), (short)(-1));
@@ -90,15 +90,15 @@ void beParticleCtrl2InfoRam_InitFields(void) {
     void *temp_s1_3;
     void *temp_s0;
 
-    temp_s0 = (void *)((int *)DAT_005884a8)[0];
+    temp_s0 = (void *)g_beParticleCtrl2InfoRam_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_004c45c0[0], 3);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
     ((igObjectRefMetaField *)temp_s1)->_metaObject = FUN_00196190();
     temp_s1_2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
-    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = FUN_0036e5c0();
+    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = (int)FUN_0036e5c0();
     temp_s1_3 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 2));
-    ((igObjectRefMetaField *)temp_s1_3)->_metaObject = FUN_0034c080();
+    ((igObjectRefMetaField *)temp_s1_3)->_metaObject = (int)FUN_0034c080();
     igMetaObject_NameFields(temp_s0, &DAT_004c45d0[0], &DAT_004c45e0[0], &DAT_004c45f0[0], temp_s2);
 }
 

@@ -15,7 +15,7 @@ int igShaderData_GetVTable(void) {
     obj.w3 = 0;
     obj.w4 = 0;
     obj.w5 = 0;
-    t = *(int *)((char *)&obj + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+    t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
     obj.vt = &DAT_00528870[0];
     FUN_00194830((struct Ref * *)&obj.w5, -1);
     FUN_001948b0((void * *)&obj.w4, -1);
@@ -58,7 +58,7 @@ void igShaderData_InitFields(void) {
     void *temp_s2_4;
     void *temp_s1;
 
-    temp_s1 = (void *)DAT_00561548[0];
+    temp_s1 = (void *)g_igShaderData_metaObject[0];
     temp_s0 = igMetaObject_GetFieldCount(temp_s1);
     igMetaObject_CreateFields(temp_s1, &DAT_0048b6d0[0], 4);
     temp_s2 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s1, temp_s0)));
@@ -70,7 +70,7 @@ void igShaderData_InitFields(void) {
     temp_s2_3 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s1, temp_s0 + 2)));
     ((igObjectRefMetaField *)temp_s2_3)->_metaObject = FUN_001e5690();
     temp_s2_4 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s1, temp_s0 + 3)));
-    ((igObjectRefMetaField *)temp_s2_4)->_metaObject = FUN_0019ca30();
+    ((igObjectRefMetaField *)temp_s2_4)->_metaObject = (int)FUN_0019ca30();
     ((igRefMetaField *)temp_s2_4)->_construct = 1;
     igMetaObject_NameFields(temp_s1, &DAT_0048b6e0[0], &DAT_0048b6f0[0], &DAT_0048b700[0], temp_s0);
 }

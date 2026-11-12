@@ -29,7 +29,7 @@ int igElfFile_GetVTable(void) {
     q2 = (S_ref *)&u.b[12];
     *(int *)q2 = 0;
     u.vt = (int)&DAT_0052e0a0[0];
-    r = *(int *)&u.b[*(int *)((char *)(((void * *)DAT_00586dc8)[0]) + 916)];
+    r = *(int *)&u.b[*(int *)((char *)(((void * *)g_objectSystem)[0]) + 916)];
     u.vt = (int)&DAT_0052e010[0];
     if (q2 != 0) {
         q2 = *(S_ref **)q2;
@@ -77,7 +77,7 @@ void igElfFile_Register(void) {
 }
 
 int FUN_002cedf0(void) {
-    return ((int *)DAT_00586be8)[0];
+    return ((int *)g_igProgramFile_metaObject)[0];
 }
 
 void igElfFile_InitFields(void) {
@@ -89,8 +89,8 @@ void igElfFile_InitFields(void) {
     int temp_s1;
     void *temp_s0;
 
-    ((igMetaObject *)DAT_00586c00[0])->_persistent = 0;
-    temp_s0 = (void *)(DAT_00586c00[0]);
+    ((igMetaObject *)g_igElfFile_metaObject[0])->_persistent = 0;
+    temp_s0 = (void *)(g_igElfFile_metaObject[0]);
     temp_s1 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
     igMetaObject_CreateFields((igMetaObject *)temp_s0, (igMetaField * (**)(void *))&DAT_004c1b30[0], 9);
     temp_v0 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1)));

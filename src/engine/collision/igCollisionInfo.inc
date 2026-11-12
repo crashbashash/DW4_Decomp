@@ -26,7 +26,7 @@ int igCollisionInfo_GetVTable(void) {
     u.vt = (int)&DAT_0052d4d0[0];
     q0 = (S_ref *)&u.b[20];
     *(int *)q0 = 0;
-    temp_s0 = *(int *)&u.b[*(int *)((char *)(DAT_00586dc8[0]) + 916)];
+    temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.vt = (int)&DAT_0052d4d0[0];
     if (q0 != 0) {
         q0 = *(S_ref **)q0;
@@ -83,11 +83,11 @@ void igCollisionInfo_InitFields(void) {
     void *temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)DAT_0056dcc8[0];
+    temp_s0 = (void *)g_igCollisionInfo_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_00498388[0], 1);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = FUN_0023a080();
+    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_0023a080();
     igMetaObject_NameFields(temp_s0, &DAT_00498390[0], &DAT_00498398[0], &DAT_004983a0[0], temp_s2);
 }
 

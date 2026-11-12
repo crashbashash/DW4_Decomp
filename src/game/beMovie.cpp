@@ -41,7 +41,7 @@ extern "C" int StringPool_Construct(int);
 extern "C" int StringPool_Intern(int, int);
 extern "C" void StringChunk_ReleaseHeader(int, void *);
 extern "C" int FUN_00100610(void *);
-extern "C" int DAT_00587108[4];
+extern "C" int g_ndmwAllocatorSelector[4];
 extern "C" unsigned char GPR_00554c14;
 struct Obj { int w0; unsigned refs; Obj *w8; Obj *w12; int w16; int w20; };
 struct Rel {
@@ -123,8 +123,8 @@ typedef union U { float f; struct { unsigned char p0, p1, p2; unsigned char lo :
 typedef struct A { char p0[8]; int w8; int w12; float f16; float f20; float f24; } A;
 extern "C" int FUN_003a7890(A *arg0, int arg1);
 extern "C" int FUN_003a79a0(beCriVolume *arg0);
-extern "C" int DAT_00585be0[4];
-extern "C" int DAT_00587110[4];
+extern "C" int g_propertyNameField[4];
+extern "C" int g_defaultAllocatorSelector[4];
 typedef igObject Obj_3a7a20;
 struct Rel_3a7a20 {
     static inline void go(Obj_3a7a20 *p) {
@@ -145,7 +145,7 @@ struct ActOps {
     static inline void Ensure(Act *o) {
         if (o->_dataList == 0) {
             int a = igObject_GetAllocator(o);
-            a = GPR_00554c14 ? a : Memory_GetAllocatorBySelector(DAT_00587110[0]);
+            a = GPR_00554c14 ? a : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
             igSmartPointer<igObject> r((igObject *)((void *)beBaseInfoDataList_Create(a)));
             Obj_3a7a20 *s2 = r.p;
             if (s2 != 0) s2->_refCount = s2->_refCount + 1;
@@ -168,8 +168,8 @@ typedef igObject Rc;
 typedef beAction2InfoRam A_3a8140;
 extern "C" float FUN_003a8140(A_3a8140 *arg0, int arg1);
 extern "C" void FUN_003a82f0(beBaseInfoRam *arg0, int arg1, float fparg0);
-extern "C" int DAT_004e0858[4];
-extern "C" int DAT_00589d78[4];
+extern "C" int emptyString[4];
+extern "C" int g_beBaseInfoRamTimer_metaObject[4];
 class E {
 public:
     virtual void d0();
@@ -200,7 +200,7 @@ struct Rc_3a8760 { int vt; int rc; };
 class DW4VC_88_0 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual int vX(); };
 extern "C" void FUN_003a8760(beBaseInfoRam *arg0);
 typedef struct RefObj { char p0[4]; int f4; } RefObj;
-extern "C" int DAT_00587870[4];
+extern "C" int g_igMovieManager_metaObject[4];
 extern "C" void Gap__Bec__beMovie__vfunc_32(beMovie *arg0);
 extern "C" char DAT_00510200[];
 extern "C" void Gap__Bec__beMovie__vfunc_29(beMovie * p0, int p1, char * p2, int p3, int p4);
@@ -244,10 +244,10 @@ public:
 struct ItemPtrList { int pad0[2]; int count; int pad1; int **items; };
 struct InfoHolder { int pad0[5]; ItemPtrList *list; };
 struct MovieInfoArg { int pad0[3]; InfoHolder *inner; };
-extern "C" int DAT_00586f20[4];
-extern "C" int DAT_00588518[4];
-extern "C" int DAT_00588760[4];
-extern "C" int DAT_00589208[4];
+extern "C" int g_stringPool[4];
+extern "C" int g_bePadManager_metaObject[4];
+extern "C" int g_beMovieInfoData_metaObject[4];
+extern "C" int g_beLua_metaObject[4];
 extern "C" void Gap__Bec__beMovie__vfunc_31(beMovie *self, MovieInfoArg *arg1);
 struct S_temp_a0 { char pad4[4]; int f4; };
 struct O_3a9190 { S_temp_a0 *m; };
@@ -256,7 +256,7 @@ extern "C" O_3a9190 *FUN_003a9190(O_3a9190 *arg0, short arg1);
 int FUN_003a6950(Obj *o, int mode) {
     if (mode < 0) {
         int a = igObject_GetAllocator(o);
-        a = GPR_00554c14 ? a : Memory_GetAllocatorBySelector(DAT_00587108[0]);
+        a = GPR_00554c14 ? a : Memory_GetAllocatorBySelector(g_ndmwAllocatorSelector[0]);
         Rel::go(o->w12);
         o->w12 = (Obj *)FUN_00367490(a);
         Rel::go(o->w8);
@@ -264,7 +264,7 @@ int FUN_003a6950(Obj *o, int mode) {
         o->w16 = 3;
     } else {
         int a = igObject_GetAllocator(o);
-        a = GPR_00554c14 ? a : Memory_GetAllocatorBySelector(DAT_00587108[0]);
+        a = GPR_00554c14 ? a : Memory_GetAllocatorBySelector(g_ndmwAllocatorSelector[0]);
         Rel::go(o->w8);
         o->w8 = (Obj *)FUN_003350f0(a);
         Rel::go(o->w12);
@@ -593,15 +593,15 @@ void FUN_003a7a20(Act *arg0, int arg1, long long arg2) {
     float f;
 
     ActOps::Ensure(arg0);
-    var_s2 = (Lst *)((void *)igProperty_FindByName((Obj_3a7a20 *)arg0->_dataList, DAT_00585be0[0], arg1));
+    var_s2 = (Lst *)((void *)igProperty_FindByName((Obj_3a7a20 *)arg0->_dataList, g_propertyNameField[0], arg1));
     if (var_s2 == 0) {
         int a = igObject_GetAllocator(arg0);
-        a = GPR_00554c14 ? a : Memory_GetAllocatorBySelector(DAT_00587110[0]);
+        a = GPR_00554c14 ? a : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
         RefB sp5C(FUN_0036a510(a));
         igNamedObject_SetName(sp5C.p, arg1);
         if (arg0->_dataList == 0) {
             int b = igObject_GetAllocator(arg0);
-            b = GPR_00554c14 ? b : Memory_GetAllocatorBySelector(DAT_00587110[0]);
+            b = GPR_00554c14 ? b : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
             igSmartPointer<igObject> sp58((igObject *)((void *)beBaseInfoDataList_Create(b)));
             Obj_3a7a20 *s2 = sp58.p;
             if (s2 != 0) s2->_refCount = s2->_refCount + 1;
@@ -635,7 +635,7 @@ int FUN_003a7d80(beBaseInfoRam *arg0, int arg1) {
         if (GPR_00554c14 != 0) {
             var_v0 = t;
         } else {
-            var_v0 = Memory_GetAllocatorBySelector(DAT_00587110[0]);
+            var_v0 = Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
         }
         {
             igSmartPointer<igObject> r(beBaseInfoDataList_Create(var_v0));
@@ -654,7 +654,7 @@ int FUN_003a7d80(beBaseInfoRam *arg0, int arg1) {
             arg0->_dataList = (int)p;
         }
     }
-    return ((int)igProperty_FindByName(arg0->_dataList, DAT_00585be0[0], arg1)) != 0;
+    return ((int)igProperty_FindByName(arg0->_dataList, g_propertyNameField[0], arg1)) != 0;
 }
 
 /* Owning stack reference to the freshly created property list; released on scope exit once the ram
@@ -666,7 +666,7 @@ int FUN_003a7e90(beAction2InfoRam *arg0, int arg1) {
         int al;
         igObject *o;
         al = igObject_GetAllocator(arg0);
-        al = GPR_00554c14 != 0 ? al : Memory_GetAllocatorBySelector(DAT_00587110[0]);
+        al = GPR_00554c14 != 0 ? al : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
         igSmartPointer<igObject> created(beBaseInfoDataList_Create(al));
         igObject *s0 = created.p;
         if (s0 != 0) {
@@ -682,7 +682,7 @@ int FUN_003a7e90(beAction2InfoRam *arg0, int arg1) {
         arg0->_dataList = (int)s0;
     }
     {
-        P *p = ((P *)igProperty_FindByName((igObject *)arg0->_dataList, DAT_00585be0[0], arg1));
+        P *p = ((P *)igProperty_FindByName((igObject *)arg0->_dataList, g_propertyNameField[0], arg1));
         if (p == 0) {
             return 1;
         }
@@ -699,7 +699,7 @@ long long FUN_003a7fd0(beBaseInfoRam *arg0, int arg1) {
         if (GPR_00554c14 != 0) {
             var_v0 = base;
         } else {
-            var_v0 = Memory_GetAllocatorBySelector(DAT_00587110[0]);
+            var_v0 = Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
         }
         igSmartPointer<igObject> sp4C((igObject *)((void *)beBaseInfoDataList_Create(var_v0)));
         igObject *o = sp4C.p;
@@ -715,7 +715,7 @@ long long FUN_003a7fd0(beBaseInfoRam *arg0, int arg1) {
         }
         arg0->_dataList = (int)o;
     }
-    temp_s0 = igProperty_FindByName(arg0->_dataList, DAT_00585be0[0], arg1);
+    temp_s0 = igProperty_FindByName(arg0->_dataList, g_propertyNameField[0], arg1);
     int temp_v0 = (int)(((igInsightCore *)((beBaseInfoManager *)arg0->_parentManager)->_insight)->_worldTime >> 0x12);
     float var_f12 = (float)(unsigned int)temp_v0;
     var_f12 = var_f12 * temp_s0->_timeScale;
@@ -734,7 +734,7 @@ float FUN_003a8140(A_3a8140 *arg0, int arg1) {
         if (GPR_00554c14 != 0) {
             var_v0 = base;
         } else {
-            var_v0 = Memory_GetAllocatorBySelector(DAT_00587110[0]);
+            var_v0 = Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
         }
         igSmartPointer<igObject> sp5C((Rc *)((void *)beBaseInfoDataList_Create(var_v0)));
         Rc *o = sp5C.p;
@@ -750,7 +750,7 @@ float FUN_003a8140(A_3a8140 *arg0, int arg1) {
         }
         arg0->_dataList = (int)o;
     }
-    temp_v0 = ((Prop *)igProperty_FindByName(arg0->_dataList, DAT_00585be0[0], arg1));
+    temp_v0 = ((Prop *)igProperty_FindByName(arg0->_dataList, g_propertyNameField[0], arg1));
     temp_s0 = ((igInsightCore *)((beAction2 *)arg0->_parentManager)->_insight)->_worldTime;
     if (temp_s0 != temp_v0->f40) {
         temp_v0_2 = FUN_003a7fd0((beBaseInfoRam *)arg0, arg1);
@@ -782,7 +782,7 @@ void FUN_003a82f0(beBaseInfoRam *arg0, int arg1, float fparg0) {
 
     if (arg0->_dataList == 0) {
         int a = igObject_GetAllocator(arg0);
-        igSmartPointer<igObject> created(beBaseInfoDataList_Create(GPR_00554c14 != 0 ? a : Memory_GetAllocatorBySelector(DAT_00587110[0])));
+        igSmartPointer<igObject> created(beBaseInfoDataList_Create(GPR_00554c14 != 0 ? a : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0])));
         igObject *p = created.p;
         if (p != 0) {
             p->_refCount = p->_refCount + 1;
@@ -796,7 +796,7 @@ void FUN_003a82f0(beBaseInfoRam *arg0, int arg1, float fparg0) {
         }
         arg0->_dataList = (int)p;
     }
-    prop = igProperty_FindByName(arg0->_dataList, DAT_00585be0[0], arg1);
+    prop = igProperty_FindByName(arg0->_dataList, g_propertyNameField[0], arg1);
     cur = prop->_timeScale;
     if (fparg0 != cur) {
         scale = (float)(unsigned int)(int)(((igInsightCore *)((beBaseInfoManager *)arg0->_parentManager)->_insight)->_worldTime >> 0x12);
@@ -822,11 +822,11 @@ void FUN_003a84a0(beBaseInfoRam *t, float f) {
         i = 0;
         if (0 < n) {
             do {
-                s1 = DAT_00589d78[0];
+                s1 = g_beBaseInfoRamTimer_metaObject[0];
                 e = ((E **)((beBaseInfoDataList *)t->_dataList)->_data)[i];
                 if (s1 == e->v20()) {
                     a1 = (int *)((beBaseInfoData *)e)->_name;
-                    a1 = a1 != 0 ? a1 : &DAT_004e0858[0];
+                    a1 = a1 != 0 ? a1 : &emptyString[0];
                     FUN_003a82f0((beBaseInfoRam *)t, (int)a1, f);
                 }
                 i++;
@@ -846,7 +846,7 @@ void FUN_003a8580(beBaseInfoRam *self, char *name) {
     if (self->_dataList != 0) {
         if (self->_dataList == 0) {
             alloc = ((void *)igObject_GetAllocator(self));
-            alloc = GPR_00554c14 ? alloc : ((void *)Memory_GetAllocatorBySelector(DAT_00587110[0]));
+            alloc = GPR_00554c14 ? alloc : ((void *)Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]));
             igSmartPointer<igObject> h(beBaseInfoDataList_Create(alloc));
             cur = h.p;
             if (cur != 0) cur->_refCount = cur->_refCount + 1;
@@ -854,7 +854,7 @@ void FUN_003a8580(beBaseInfoRam *self, char *name) {
             if (old != 0) { old->_refCount = old->_refCount - 1; if ((old->_refCount & 0x7fffff) == 0) igObject_Destroy(old); }
             self->_dataList = (int)cur;
         }
-        found = ((igObject *)igProperty_FindByName((void *)self->_dataList, DAT_00585be0[0], name));
+        found = ((igObject *)igProperty_FindByName((void *)self->_dataList, g_propertyNameField[0], name));
         if (found != 0) {
             l1 = (igTDataList<igObject *> *)self->_dataList;
             idx = l1->find(found);
@@ -889,7 +889,7 @@ void FUN_003a8760(beBaseInfoRam *arg0) {
             do {
                 temp_s0 = var_s2 * 4;
                 temp_a0 = (void **)(*(int *)(((igObjectList *)arg0->_dataList)->_data + temp_s0));
-                temp_s1 = DAT_00589d78[0];
+                temp_s1 = g_beBaseInfoRamTimer_metaObject[0];
                 if (temp_s1 == ((DW4VC_88_0 *)(temp_a0))->vX()) {
                     temp_s1_2 = ((igObjectList *)arg0->_dataList);
                     temp_a0_2 = (Rc_3a8760 *)*(int *)(temp_s1_2->_data + temp_s0);
@@ -919,7 +919,7 @@ void Gap__Bec__beMovie__vfunc_32(beMovie *arg0) {
     RefObj *temp_a0;
     RefObj *temp_v0;
 
-    temp_v0 = (RefObj *)(FUN_00236f80(arg0->_insight, DAT_00587870[0]));
+    temp_v0 = (RefObj *)(FUN_00236f80(arg0->_insight, g_igMovieManager_metaObject[0]));
     if (temp_v0 != 0) {
         temp_v0->f4 = (int)((int) (temp_v0->f4 + 1));
     }
@@ -947,7 +947,7 @@ void Gap__Bec__beMovie__vfunc_31(beMovie *self, MovieInfoArg *arg1) {
     int *pad; int flags; MovieVirtual *o; bool ok; int h; ItemPtrList *l; int i; beMovieInfoData *it; int *name;
     int *t; int ref; int *hdr; int cnt; int off;
     if ((int *)self->_playingName != 0) {
-        pad = bePadManager_GetPadForPlayer(((int)FUN_00236f80(self->_insight, DAT_00588518[0])), 0);
+        pad = bePadManager_GetPadForPlayer(((int)FUN_00236f80(self->_insight, g_bePadManager_metaObject[0])), 0);
         flags = pad[18];
         if ((flags & 8) || (flags & 0x4000)) {
             o = (MovieVirtual *)self->_movie;
@@ -959,26 +959,26 @@ void Gap__Bec__beMovie__vfunc_31(beMovie *self, MovieInfoArg *arg1) {
             if (o->v30((int *)self->_playingName) == 2) ok = true;
         } else ok = true;
         if (ok) {
-            h = ((int)FUN_00236f80(self->_insight, DAT_00589208[0]));
+            h = ((int)FUN_00236f80(self->_insight, g_beLua_metaObject[0]));
             l = arg1->inner->list;
             for (i = 0; i < l->count; i++) {
                 it = (beMovieInfoData *)l->items[i];
-                if (it != 0 && igObject_IsKindOf(it, DAT_00588760[0]) != 0) { it = (beMovieInfoData *)it; } else it = 0;
+                if (it != 0 && igObject_IsKindOf(it, g_beMovieInfoData_metaObject[0]) != 0) { it = (beMovieInfoData *)it; } else it = 0;
                 if (it == 0) goto done;
                 name = (int *)it->_name;
-                if (name != 0) { name = (int *)name; } else name = DAT_004e0858;
+                if (name != 0) { name = (int *)name; } else name = emptyString;
                 if (strcmp((int *)self->_playingName, name) == 0) {
                     beLua__RunNamedChunk(h, it->_callLuaName, 0);
                     break;
                 }
             }
 block25: /* matching construct: unreferenced label kept from the matching draft */
-            if (DAT_00586f20[0] == 0) {
+            if (g_stringPool[0] == 0) {
                 ref = FUN_002eb010(16);
                 if (ref) ref = StringPool_Construct(ref);
-                DAT_00586f20[0] = ref;
+                g_stringPool[0] = ref;
             }
-            ref = StringPool_Intern(DAT_00586f20[0], 0);
+            ref = StringPool_Intern(g_stringPool[0], 0);
             t = (int *)self->_playingName;
             if (t) {
                 hdr = t - 2;

@@ -4,7 +4,7 @@ int FUN_002f8a50(...);
 int FUN_002f8a60(...);
 int FUN_00304430(...);
 int FUN_00304680(...);
-extern int DAT_004e0858[4];
+extern int emptyString[4];
 extern int DAT_004f95c8[4];
 extern int DAT_004fabc0[4];
 void Gap__Core__igMemoryPoolContextInfo__vfunc_27(igInfo *arg0);
@@ -17,7 +17,7 @@ void Gap__Core__igMemoryPoolContextInfo__vfunc_27(igInfo *arg0) {
     int o;
     n = FUN_002f8a50();
     var_a1 = (int *)(arg0->_name);
-    var_a1 = var_a1 != 0 ? var_a1 : (int *)&DAT_004e0858[0];
+    var_a1 = var_a1 != 0 ? var_a1 : (int *)&emptyString[0];
     FUN_00304430(&DAT_004fabc0[0], var_a1);
     FUN_00304680();
     for (i = 0; i < n; i++) {

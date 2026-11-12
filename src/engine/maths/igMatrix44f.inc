@@ -115,7 +115,7 @@ void FUN_00190e50(void *arg0, float *arg1, float fparg0) {
     *(float *)((char *)(arg0) + 52) = (float) DAT_004e11c4[0];
     *(float *)((char *)(arg0) + 56) = (float) DAT_004e11c8[0];
     *(float *)((char *)(arg0) + 60) = (float) DAT_004e11cc[0];
-    *(float *)((char *)(arg0) + 12) = (float) DAT_004e1058[0];
+    *(float *)((char *)(arg0) + 12) = (float) g_vec3Zero[0];
     *(float *)((char *)(arg0) + 28) = (float) DAT_004e105c[0];
     *(float *)((char *)(arg0) + 44) = (float) DAT_004e1060[0];
 }
@@ -126,7 +126,7 @@ void FUN_00190ed0(void *arg0, float x, float y, float z) {
     *(float *)((char *)(arg0) + 52) = (float) DAT_004e11c4[0];
     *(float *)((char *)(arg0) + 56) = (float) DAT_004e11c8[0];
     *(float *)((char *)(arg0) + 60) = (float) DAT_004e11cc[0];
-    *(float *)((char *)(arg0) + 12) = (float) DAT_004e1058[0];
+    *(float *)((char *)(arg0) + 12) = (float) g_vec3Zero[0];
     *(float *)((char *)(arg0) + 28) = (float) DAT_004e105c[0];
     *(float *)((char *)(arg0) + 44) = (float) DAT_004e1060[0];
 }
@@ -254,7 +254,7 @@ void FUN_001916f0(void *arg0, float *arg1) {
     *(float *)((char *)(arg0) + 52) = (float) DAT_004e11c4[0];
     *(float *)((char *)(arg0) + 56) = (float) DAT_004e11c8[0];
     *(float *)((char *)(arg0) + 60) = (float) DAT_004e11cc[0];
-    *(float *)((char *)(arg0) + 12) = (float) DAT_004e1058[0];
+    *(float *)((char *)(arg0) + 12) = (float) g_vec3Zero[0];
     *(float *)((char *)(arg0) + 28) = (float) DAT_004e105c[0];
     *(float *)((char *)(arg0) + 44) = (float) DAT_004e1060[0];
 }
@@ -347,7 +347,7 @@ void FUN_00191e30(int *r, float *o, float *m) {
     o[12] = -(m[12] * o[0] + m[13] * o[4] + m[14] * o[8]);
     o[13] = -(m[12] * o[1] + m[13] * o[5] + m[14] * o[9]);
     o[14] = -(m[12] * o[2] + m[13] * o[6] + m[14] * o[10]);
-    *r = DAT_004fb410[0];
+    *r = g_statusSucceeded[0];
 }
 
 /* The sign bit is cleared through a byte bit-field union. */
@@ -361,7 +361,7 @@ void FUN_00191f30(int *arg0, float *arg1, int arg2) {
     u.f = len;
     u.b.sign = 0;
     if (u.f < 1.1754944e-38f) {
-        *arg0 = DAT_004fb418[0];
+        *arg0 = g_allocatorFailureStatus[0];
     } else {
         float inv = 1.0f / len;
         i = 0;
@@ -376,7 +376,7 @@ void FUN_00191f30(int *arg0, float *arg1, int arg2) {
             } while (j < 4);
             i++;
         } while (i < 4);
-        *arg0 = DAT_004fb410[0];
+        *arg0 = g_statusSucceeded[0];
     }
 }
 

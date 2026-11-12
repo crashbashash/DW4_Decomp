@@ -1,4 +1,4 @@
-int Gap__Attrs__igAttrListList__vfunc_22(void) {
-    return DAT_0055f450[0];
+igMetaObject *Gap__Attrs__igAttrListList__vfunc_22(void) {
+    return g_igAttrListList_metaObject[0];
 }
 

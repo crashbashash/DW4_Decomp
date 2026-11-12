@@ -3,19 +3,19 @@ void FUN_00348170(int arg0) {
     igMetaObject_CreateInstance(*(int *)0x5881D8, arg0);
 }
 
-int FUN_003481b0(void) {
-    if (((int *)DAT_005881d8)[0] == 0) {
-        ((int *)DAT_005881d8)[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(DAT_00587040[0]));
+igMetaObject *FUN_003481b0(void) {
+    if (g_beSvConnectCheck_metaObject[0] == 0) {
+        g_beSvConnectCheck_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
     }
-    return ((int *)DAT_005881d8)[0];
+    return g_beSvConnectCheck_metaObject[0];
 }
 
 void *FUN_00348200(void) {
-    struct G *g = DAT_005881d8[0];
-    if (!g || ((g->f & 4) != 0) == false) {
+    igMetaObject *g = g_beSvConnectCheck_metaObject[0];
+    if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_00348530();
     }
-    return DAT_005881d8[0];
+    return g_beSvConnectCheck_metaObject[0];
 }
 
 int beSvConnectCheck_GetVTable(void) {
@@ -34,7 +34,7 @@ int beSvConnectCheck_GetVTable(void) {
     q0 = (S_ref *)&u.b[56];
     *(int *)q0 = 0;
     u.vt = (int)&DAT_0053bc10[0];
-    temp_s0 = *(int *)&u.b[*(int *)((char *)(DAT_00586dc8[0]) + 916)];
+    temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.vt = (int)&DAT_0053c070[0];
     if (q0 != 0) {
         q0 = *(S_ref **)q0;
@@ -145,7 +145,7 @@ void beSvConnectCheck_GetMetaObject(void)
     FUN_00348200();
 }
 
-int FUN_003485e0(void) {
-    return DAT_00588298[0];
+igMetaObject *FUN_003485e0(void) {
+    return g_beSaveApi_metaObject[0];
 }
 

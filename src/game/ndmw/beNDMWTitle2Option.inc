@@ -5,13 +5,13 @@ void FUN_003b2250(int arg0) {
 
 void *FUN_003b2290(void) {
     bool ok;
-    if (DAT_0058aa58[0] == 0) goto make;
-    ok = !!(DAT_0058aa58[0]->f & 4);
+    if (g_beNDMWTitle2Option_metaObject[0] == 0) goto make;
+    ok = !!(g_beNDMWTitle2Option_metaObject[0]->_validity & 4);
     if (ok != false) goto done;
 make:
     FUN_003b2370();
 done:;
-    return DAT_0058aa58[0];
+    return g_beNDMWTitle2Option_metaObject[0];
 }
 
 int beNDMWTitle2Option_GetVTable(void) {
@@ -27,7 +27,7 @@ int beNDMWTitle2Option_GetVTable(void) {
     q0 = &u.b[8];
     *(int *)q0 = 0;
     u.vt = (int)&DAT_0053dcf0[0];
-    temp_s0 = *(int *)&u.b[*(int *)((char *)(DAT_00586dc8[0]) + 916)];
+    temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.vt = (int)&DAT_00524950[0];
     if (q0 != 0) {
         temp_v1 = *(int **)q0;
@@ -78,7 +78,7 @@ void beNDMWTitle2Option_InitFields(void) {
     void *temp_s1;
     T_temp_v0_2 *temp_v0_2;
 
-    temp_s1 = (void *)(((void * *)DAT_0058aa58)[0]);
+    temp_s1 = (void *)(((void * *)g_beNDMWTitle2Option_metaObject)[0]);
     temp_s2 = igMetaObject_GetFieldCount(temp_s1);
     igMetaObject_CreateFields(temp_s1, &DAT_004c95d0[0], 0xA);
     temp_v0 = (void **)(igMetaObject_FindFieldByName(temp_s1, &DAT_00510cd8[0]));

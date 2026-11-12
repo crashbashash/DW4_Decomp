@@ -14,7 +14,7 @@ int igSerialScheduler_GetVTable(void) {
     obj.vt = &DAT_0052c830[0];
     obj.m8 = 0;
     obj.m12 = 0;
-    r = *(int *)((char *)&obj + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+    r = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
     obj.vt = &DAT_0052c830[0];
     obj.rel12();
     obj.rel8();
@@ -65,8 +65,8 @@ void thunk_igSerialScheduler_GetMetaObject(void) {
     igSerialScheduler_GetMetaObject();
 }
 
-int FUN_00231330(void) {
-    return DAT_0056db48[0];
+igMetaObject *FUN_00231330(void) {
+    return g_igInsightScheduler_metaObject[0];
 }
 
 void igSerialScheduler_InitFields(void) {
@@ -75,14 +75,14 @@ void igSerialScheduler_InitFields(void) {
     void *temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)DAT_0056dab0[0];
+    temp_s0 = (void *)g_igSerialScheduler_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_00497f90[0], 2);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = FUN_00233480();
+    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_00233480();
     ((igRefMetaField *)temp_s1)->_construct = 1;
     temp_s1_2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
-    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = FUN_00233750();
+    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = (int)FUN_00233750();
     ((igRefMetaField *)temp_s1_2)->_construct = 1;
     igMetaObject_NameFields(temp_s0, &DAT_00497f98[0], &DAT_00497fa0[0], &DAT_00497fa8[0], temp_s2);
 }

@@ -1,12 +1,12 @@
 void *FUN_00340af0(void) {
     unsigned char b;
-    if (DAT_00587be0[0] != 0) {
-        b = (*(int *)((char *)(DAT_00587be0[0]) + 36) & 4) != 0;
+    if (g_beWaterPlainInfo_metaObject[0] != 0) {
+        b = (*(int *)((char *)(g_beWaterPlainInfo_metaObject[0]) + 36) & 4) != 0;
         if (b != 0) goto done;
     }
     FUN_00340bb0();
 done:
-    return DAT_00587be0[0];
+    return g_beWaterPlainInfo_metaObject[0];
 }
 
 int beWaterPlainInfo_GetVTable(void) {
@@ -18,7 +18,7 @@ int beWaterPlainInfo_GetVTable(void) {
     o.f[4] = 0;
     o.f[5] = 0;
     o.vt = DAT_005398d0;
-    r = *(int *)((char *)&o + *(int *)(((char * *)DAT_00586dc8)[0] + 916));
+    r = *(int *)((char *)&o + *(int *)(((char * *)g_objectSystem)[0] + 916));
     o.vt = DAT_005398d0;
     FUN_0033ec80((struct S_33ec80 *)&o, (short)0);
     return r;

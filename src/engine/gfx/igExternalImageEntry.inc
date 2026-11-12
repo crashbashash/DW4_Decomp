@@ -19,7 +19,7 @@ int igExternalImageEntry_GetVTable(void) {
     o.f[7] = 0;
     o.f[9] = 0;
     o.vt = DAT_00526930;
-    r = *(int *)((char *)&o + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+    r = *(int *)((char *)&o + *(int *)((char *)(g_objectSystem[0]) + 916));
     o.vt = DAT_00526930;
     FUN_0014f580((W_14f580 *)&o, 0);
     return r;
@@ -101,13 +101,13 @@ void thunk_FUN_0014f420(void) {
 }
 
 int FUN_0014f760(void) {
-    return DAT_00586450[0];
+    return g_igExternalDirEntry_metaObject[0];
 }
 
-int FUN_0014f770(void) {
-    if (DAT_0055fea0[0] == 0) {
-        DAT_0055fea0[0] = (int)igMetaObject_Create(Memory_GetAllocatorBySelector(DAT_00587040[0]));
+igMetaObject *FUN_0014f770(void) {
+    if (g_igDisableExt_metaObject[0] == 0) {
+        g_igDisableExt_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
     }
-    return DAT_0055fea0[0];
+    return g_igDisableExt_metaObject[0];
 }
 

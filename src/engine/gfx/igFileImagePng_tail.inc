@@ -14,8 +14,8 @@ void Gap__Gfx__igFileImagePng__vfunc_23(int dummy0, void **arg1) {
     ((DW4VC_88_0 *)(arg1))->vX();
 }
 
-int FUN_00167400(void) {
-    return DAT_0055fd80[0];
+igMetaObject *FUN_00167400(void) {
+    return g_igImage_metaObject[0];
 }
 
 int FUN_00167410(Owner_167410 *arg0, int arg1, int arg2, int arg3, void *arg4, void *arg5, int arg6, int arg7) {

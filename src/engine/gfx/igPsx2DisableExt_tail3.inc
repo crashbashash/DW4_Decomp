@@ -1,4 +1,4 @@
-int Gap__Gfx__igPsx2DisableExt__vfunc_22(void) {
-    return DAT_005605e8[0];
+igMetaObject *Gap__Gfx__igPsx2DisableExt__vfunc_22(void) {
+    return g_igPsx2DisableExt_metaObject[0];
 }
 

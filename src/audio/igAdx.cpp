@@ -151,7 +151,7 @@ extern "C" void **DAT_005875f0[4];
 typedef struct Obj_332e90 { int w0; int references; } Obj_332e90;
 typedef struct OList { int pad0[2]; int count; int pad1; Obj_332e90 **data; } OList;
 typedef struct SList { int pad0; int references; int count; int pad1; int **data; } SList;
-extern "C" int DAT_00586f20[4];
+extern "C" int g_stringPool[4];
 extern "C" SList *DAT_00587608[4];
 extern "C" OList *DAT_00587620[4];
 /* Owning stack reference to a pooled string token (reference count at p[-1], chunk header at
@@ -191,7 +191,7 @@ extern "C" TextBuffer *DAT_005875e0[4];
 typedef struct N { int p0; int p4; char *name; } N;
 typedef struct L_333630 { int p0; int p4; int count; int pc; N **data; } L_333630;
 typedef struct S_333630 { int p0; int p4; char *name; L_333630 *parents; } S_333630;
-extern "C" int DAT_004e0858[4];
+extern "C" int emptyString[4];
 extern "C" int DAT_004fff70[4];
 extern "C" void FUN_00333630(S_333630 *arg0, char *arg1);
 /* Deleting destructor; the deletion flag is a signed short. */
@@ -632,12 +632,12 @@ void FUN_00332e90(int arg0, char *arg1) {
         if (arg1 == 0) {
             r = 0;
         } else {
-            if (DAT_00586f20[0] == 0) {
+            if (g_stringPool[0] == 0) {
                 v = FUN_002eb010(16);
                 if (v != 0) v = StringPool_Construct(v);
-                DAT_00586f20[0] = v;
+                g_stringPool[0] = v;
             }
-            r = StringPool_Intern(DAT_00586f20[0], arg1);
+            r = StringPool_Intern(g_stringPool[0], arg1);
         }
         {
             StringRef name(r);
@@ -656,12 +656,12 @@ void FUN_00332e90(int arg0, char *arg1) {
         if (0 < n) {
             do {
                 p = &l->data[i];
-                if (DAT_00586f20[0] == 0) {
+                if (g_stringPool[0] == 0) {
                     v = FUN_002eb010(16);
                     if (v != 0) v = StringPool_Construct(v);
-                    DAT_00586f20[0] = v;
+                    g_stringPool[0] = v;
                 }
-                np = (int *)StringPool_Intern(DAT_00586f20[0], 0);
+                np = (int *)StringPool_Intern(g_stringPool[0], 0);
                 old = *p;
                 if (old != 0) {
                     int *hd = old - 2;
@@ -816,7 +816,7 @@ void FUN_00333630(S_333630 *arg0, char *arg1) {
     int off;
     if (arg1 != 0) {
         if (arg0->parents == 0) {
-            strcpy(arg1, arg0->name ? arg0->name : (char *)&DAT_004e0858[0]);
+            strcpy(arg1, arg0->name ? arg0->name : (char *)&emptyString[0]);
             return;
         }
         *arg1 = 0;
@@ -825,13 +825,13 @@ void FUN_00333630(S_333630 *arg0, char *arg1) {
             off = 0;
             do {
                 N *nd = *(N **)((char *)arg0->parents->data + off);
-                strcat(arg1, nd->name ? nd->name : (char *)&DAT_004e0858[0]);
+                strcat(arg1, nd->name ? nd->name : (char *)&emptyString[0]);
                 strcat(arg1, &DAT_004fff70[0]);
                 i += 1;
                 off += 4;
             } while (i < arg0->parents->count);
         }
-        strcat(arg1, arg0->name ? arg0->name : (char *)&DAT_004e0858[0]);
+        strcat(arg1, arg0->name ? arg0->name : (char *)&emptyString[0]);
     }
 }
 

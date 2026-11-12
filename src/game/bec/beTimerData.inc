@@ -1,10 +1,10 @@
 igMetaObject *FUN_00341840(void)
 {
-    igMetaObject *g = DAT_00587c50[0];
+    igMetaObject *g = g_beTimerData_metaObject[0];
     bool t;
     if (!g || (t = g->_validity & 4) == 0)
         FUN_00341950();
-    return DAT_00587c50[0];
+    return g_beTimerData_metaObject[0];
 }
 
 int beTimerData_GetVTable(void) {
@@ -22,7 +22,7 @@ int beTimerData_GetVTable(void) {
     obj._vtable = (int)&DAT_00539700[0];
     obj._resetCondition = 0;
     obj._callLuaFile = 0;
-    t = *(int *)((char *)&obj + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+    t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
     obj._vtable = (int)&DAT_00539700[0];
     if (q2 != 0) {
         o = (char *)*q2;
@@ -80,7 +80,7 @@ void beTimerData_InitFields(void) {
     int temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)((int *)DAT_00587c50)[0];
+    temp_s0 = (void *)g_beTimerData_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_004c3420[0], 4);
     igStringMetaField_SetDefaultText(((int)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 1)), 0);

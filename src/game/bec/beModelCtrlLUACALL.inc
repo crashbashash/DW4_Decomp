@@ -1,10 +1,10 @@
 igMetaObject *FUN_00356450(void)
 {
-    igMetaObject *g = DAT_00588e28[0];
+    igMetaObject *g = g_beModelCtrlLUACALL_metaObject[0];
     bool t;
     if (!g || (t = g->_validity & 4) == 0)
         FUN_00356570();
-    return DAT_00588e28[0];
+    return g_beModelCtrlLUACALL_metaObject[0];
 }
 
 int beModelCtrlLUACALL_GetVTable(void) {
@@ -15,7 +15,7 @@ int beModelCtrlLUACALL_GetVTable(void) {
     obj.m8 = 0;
     obj.vt = &DAT_00537290[0];
     obj.m12 = 0;
-    r = *(int *)((char *)&obj + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+    r = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
     obj.vt = &DAT_00537290[0];
     obj.rel12();
     obj.vt = &DAT_00524950[0];
@@ -54,7 +54,7 @@ void beModelCtrlLUACALL_InitFields(void) {
     int temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)((int *)DAT_00588e28)[0];
+    temp_s0 = (void *)g_beModelCtrlLUACALL_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_004c5898[0], 1);
     igMetaObject_NameFields(temp_s0, &DAT_004c58a0[0], &DAT_004c58a8[0], &DAT_004c58b0[0], temp_s1);

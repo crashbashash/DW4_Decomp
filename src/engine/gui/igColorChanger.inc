@@ -1,8 +1,8 @@
-int FUN_004521d0(void) {
-    if (DAT_0058c608[0] == 0) {
-        DAT_0058c608[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(DAT_00587040[0]));
+igMetaObject *FUN_004521d0(void) {
+    if (g_igColorChanger_metaObject[0] == 0) {
+        g_igColorChanger_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
     }
-    return DAT_0058c608[0];
+    return g_igColorChanger_metaObject[0];
 }
 
 igMetaObject *igColorChanger_GetMetaObject(void)
@@ -17,7 +17,7 @@ int igColorChanger_GetVTable(void) {
     struct Obj_452270 obj;
     igObject_InitHeader(&obj);
     obj.vt = &DAT_005415b0[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 
 void igColorChanger_RunStaticInit(void)

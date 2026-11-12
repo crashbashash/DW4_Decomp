@@ -5,13 +5,13 @@ void FUN_003b4790(int arg0) {
 
 void *FUN_003b47d0(void) {
     unsigned char b;
-    if (DAT_0058aba0[0] != 0) {
-        b = (*(int *)((char *)(DAT_0058aba0[0]) + 36) & 4) != 0;
+    if (g_beNDMWShopSelect11_metaObject[0] != 0) {
+        b = (*(int *)((char *)(g_beNDMWShopSelect11_metaObject[0]) + 36) & 4) != 0;
         if (b != 0) goto done;
     }
     FUN_003b48a0();
 done:
-    return DAT_0058aba0[0];
+    return g_beNDMWShopSelect11_metaObject[0];
 }
 
 int beNDMWShopSelect11_GetVTable(void) {
@@ -29,7 +29,7 @@ int beNDMWShopSelect11_GetVTable(void) {
     obj.w[19] = 0;
     obj.w[26] = 0;
     obj.vt = &DAT_005400d0[0];
-    r = *(int *)((char *)&obj + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+    r = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
     obj.vt = &DAT_005400d0[0];
     FUN_003b4050((struct S_3b4050 *)&obj, (short)0);
     return r;

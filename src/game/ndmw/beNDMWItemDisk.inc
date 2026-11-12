@@ -3,19 +3,19 @@ void FUN_003c85b0(int arg0) {
     igMetaObject_CreateInstance(*(int *)0x58BF38, arg0);
 }
 
-int FUN_003c85f0(void) {
-    if (((int *)DAT_0058bf38)[0] == 0) {
-        ((int *)DAT_0058bf38)[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(DAT_00587040[0]));
+igMetaObject *FUN_003c85f0(void) {
+    if (g_beNDMWItemDisk_metaObject[0] == 0) {
+        g_beNDMWItemDisk_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
     }
-    return ((int *)DAT_0058bf38)[0];
+    return g_beNDMWItemDisk_metaObject[0];
 }
 
 void *beNDMWItemDisk_GetReadyMetaObject(void) {
-    struct G *g = DAT_0058bf38[0];
-    if (!g || ((g->f & 4) != 0) == false) {
+    igMetaObject *g = g_beNDMWItemDisk_metaObject[0];
+    if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_003c86d0();
     }
-    return DAT_0058bf38[0];
+    return g_beNDMWItemDisk_metaObject[0];
 }
 
 int beNDMWItemDisk_GetVTable(void) {
@@ -23,7 +23,7 @@ int beNDMWItemDisk_GetVTable(void) {
 
     igObject_InitHeader(&obj);
     obj.vt = &DAT_005407a0[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 
 void FUN_003c86d0(void)
@@ -57,7 +57,7 @@ void beNDMWItemDisk_InitFields(void) {
     int temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)((int *)DAT_0058bf38)[0];
+    temp_s0 = (void *)g_beNDMWItemDisk_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_004cc0c8[0], 1);
     igMetaObject_NameFields(temp_s0, &DAT_004cc0d0[0], &DAT_004cc0d8[0], &DAT_004cc0e0[0], temp_s1);

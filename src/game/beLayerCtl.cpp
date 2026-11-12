@@ -3,7 +3,7 @@
 #define KIDS(g) ((igNodeList *)(g)->_childList)
 #define SWT(a) ((igSwitch *)(a)->_layerSwt)
 #define ELEM(l, i) ((igGroup *)((int *)(l)->_data)[i])
-#define NAME(n) ((n)->_name ? (char *)(n)->_name : (char *)&DAT_004e0858[0])
+#define NAME(n) ((n)->_name ? (char *)(n)->_name : (char *)&emptyString[0])
 #define LCOUNT(l) ((l) != 0 ? (l)->_count : 0)
 #define RELEASE(o) if (o) { --(o)->_refCount; if (((unsigned long long)((long long)(int)(o)->_refCount << 0x29) >> 0x29) == 0) igObject_Destroy(o); }
 
@@ -44,16 +44,16 @@ extern "C" char DAT_0050ebc0[];
 extern "C" void Gap__Bec__beLayerCtl__vfunc_29(beLayerCtl * p0, int p1, char * p2, int p3, int p4);
 extern "C" int g_beLayerInfo_metaObject[4];
 extern "C" int g_beLayerCtl_metaObject[4];
-extern "C" int DAT_004e0858[4];
+extern "C" int emptyString[4];
 extern "C" int DAT_0050ebd0[4];
 extern "C" int DAT_0050ebe0[4];
 extern "C" int DAT_0050ebf0[4];
 extern "C" int DAT_0050ebf8[4];
 extern "C" int DAT_0050ec08[4];
-extern "C" int DAT_005618d8[4];
-extern "C" int DAT_00587108[4];
-extern "C" int DAT_00587110[4];
-extern "C" int DAT_0058c790[4];
+extern "C" int g_igLightStateSet_metaObject[4];
+extern "C" int g_ndmwAllocatorSelector[4];
+extern "C" int g_defaultAllocatorSelector[4];
+extern "C" int g_igViewerSceneInfoManager_metaObject[4];
 extern "C" unsigned char GPR_00554c14;
 /* matching construct: dummy-virtual class so e->v22() compiles to the retail jalr through vtable slot 22 (a scene-graph node's class-id virtual) */
 class NodeVt {
@@ -133,10 +133,10 @@ int Gap__Bec__beLayerCtl__vfunc_34(beLayerCtl *arg0, beLayerInfoRam *arg1, beMes
     v = beMessenger_ResolveEnumValue(arg0->_messenger, FUN_0035ca40(), (void *)arg2->_message);
     switch (v) {
     case 0: {
-        beLayerInfo *srcl = (beLayerInfo *)((InsightRec *)FUN_00236f80(arg0->_insight, DAT_0058c790[0]))->cur->_parentInfo;
+        beLayerInfo *srcl = (beLayerInfo *)((InsightRec *)FUN_00236f80(arg0->_insight, g_igViewerSceneInfoManager_metaObject[0]))->cur->_parentInfo;
         if (arg0->_isOrdered == 0) {
             void *al = igObject_GetAllocator(arg0);
-            al = GPR_00554c14 ? al : Memory_GetAllocatorBySelector(DAT_00587108[0]);
+            al = GPR_00554c14 ? al : Memory_GetAllocatorBySelector(g_ndmwAllocatorSelector[0]);
             igNamedObject *old = (igNamedObject *)arg0->_layerSwt;
             RELEASE(old)
             arg0->_layerSwt = (int)FUN_001968f0(al);
@@ -145,7 +145,7 @@ int Gap__Bec__beLayerCtl__vfunc_34(beLayerCtl *arg0, beLayerInfoRam *arg1, beMes
             int i;
             for (i = 0; i < LCOUNT(GROUPS(srcl)); i++) {
                 igGroup *e = ELEM(GROUPS(srcl), i);
-                int k = DAT_005618d8[0];
+                int k = g_igLightStateSet_metaObject[0];
                 if (k == ((NodeVt *)e)->v22()) found = e;
             }
             if (found == 0) return 0;
@@ -164,13 +164,13 @@ int Gap__Bec__beLayerCtl__vfunc_34(beLayerCtl *arg0, beLayerInfoRam *arg1, beMes
         int n;
         for (n = 0; n < ml->_count; n++) {
             void *al = igObject_GetAllocator(arg0);
-            al = GPR_00554c14 ? al : Memory_GetAllocatorBySelector(DAT_00587110[0]);
+            al = GPR_00554c14 ? al : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
             Ref held((igNamedObject *)FUN_0019f1d0(al));
             igNamedObject_SetName(held.p, NAME(ELEM(ml, n)));
             FUN_001dc8e0((void *)arg0->_layerSwt, held.p);
         }
         void *al2 = igObject_GetAllocator(arg0);
-        al2 = GPR_00554c14 ? al2 : Memory_GetAllocatorBySelector(DAT_00587110[0]);
+        al2 = GPR_00554c14 ? al2 : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
         Ref held2((igNamedObject *)FUN_0019f1d0(al2));
         igNamedObject_SetName(held2.p, (char *)&DAT_0050ebf0[0]);
         FUN_001dc8e0((void *)arg0->_layerSwt, held2.p);
@@ -184,7 +184,7 @@ int Gap__Bec__beLayerCtl__vfunc_34(beLayerCtl *arg0, beLayerInfoRam *arg1, beMes
         while (idx < LCOUNT(GROUPS(srcl))) {
             el = ELEM(GROUPS(srcl), idx);
             if (NAME(el) == 0) igNamedObject_SetName(el, (char *)&DAT_0050ebf0[0]);
-            if (strcmp((char *)&DAT_0050ebf8[0], NAME(el)) == 0 || DAT_005618d8[0] == ((NodeVt *)el)->v22()) {
+            if (strcmp((char *)&DAT_0050ebf8[0], NAME(el)) == 0 || g_igLightStateSet_metaObject[0] == ((NodeVt *)el)->v22()) {
                 idx += 1;
             } else {
                 nm = NAME(el);

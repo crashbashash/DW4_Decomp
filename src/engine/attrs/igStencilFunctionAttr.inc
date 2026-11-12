@@ -15,7 +15,7 @@ int igStencilFunctionAttr_GetVTable(void) {
     struct Obj_1336a0 obj;
     igObject_InitHeader(&obj);
     obj.vt = &DAT_00522e20[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 
 void FUN_001336e0(void)
@@ -49,7 +49,7 @@ void igStencilFunctionAttr_InitFields(void) {
     int temp_s0;
     void *temp_v0;
 
-    temp_s1 = (void *)DAT_0055ee50[0];
+    temp_s1 = (void *)g_igStencilFunctionAttr_metaObject[0];
     temp_s0 = igMetaObject_GetFieldCount(temp_s1);
     igMetaObject_CreateFields(temp_s1, &DAT_00485e70[0], 7);
     temp_v0 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 1));

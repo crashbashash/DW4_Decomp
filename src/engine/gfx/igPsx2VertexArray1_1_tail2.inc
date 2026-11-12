@@ -372,7 +372,7 @@ void Gap__Gfx__igPsx2VertexArray1_1__vfunc_20(void *arg0, int arg1) {
     unsigned int temp_a4;
 
     FUN_0015e050((S_arg0_15e050 *)arg0);
-    if (DAT_0055fac8[0] == arg1) {
+    if ((int)g_igVertexArray_metaObject[0] == arg1) {
         FUN_0015e2b0((igVertexArray1_1 *)arg0, arg1);
     }
     FUN_0017d170((V_17d170 *)arg0);

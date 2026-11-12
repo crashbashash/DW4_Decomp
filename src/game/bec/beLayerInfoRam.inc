@@ -1,9 +1,9 @@
 void *FUN_0035c280(void) {
-    struct G *g = DAT_00589260[0];
-    if (!g || ((g->f & 4) != 0) == false) {
+    igMetaObject *g = g_beLayerInfoRam_metaObject[0];
+    if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_0035c370();
     }
-    return DAT_00589260[0];
+    return g_beLayerInfoRam_metaObject[0];
 }
 
 int beLayerInfoRam_GetVTable(void) {
@@ -16,7 +16,7 @@ int beLayerInfoRam_GetVTable(void) {
     q0 = (S_ref *)&u.b[40];
     *(int *)q0 = 0;
     u.vt = (int)&DAT_00536680[0];
-    temp_s0 = *(int *)&u.b[*(int *)((char *)(DAT_00586dc8[0]) + 916)];
+    temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.vt = (int)&DAT_00539e90[0];
     if (q0 != 0) {
         q0 = *(S_ref **)q0;

@@ -4,11 +4,11 @@ void FUN_003485f0(int arg0) {
 }
 
 void *FUN_00348630(void) {
-    struct G *g = DAT_005881e0[0];
-    if (!g || ((g->f & 4) != 0) == false) {
+    igMetaObject *g = g_beSvEndApi_metaObject[0];
+    if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_003487c0();
     }
-    return DAT_005881e0[0];
+    return g_beSvEndApi_metaObject[0];
 }
 
 int beSvEndApi_GetVTable(void) {
@@ -21,7 +21,7 @@ int beSvEndApi_GetVTable(void) {
     obj.r2 = 0;
     obj.r3 = 0;
     obj.vt = &DAT_0053bc80[0];
-    r = *(int *)((char *)&obj + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+    r = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
     obj.vt = &DAT_0053c070[0];
     obj.rel(&obj.r3);
     obj.rel(&obj.r2);
@@ -62,7 +62,7 @@ void beSvEndApi_InitFields(void) {
     void *temp_s1;
     void *temp_v0_2;
 
-    temp_s1 = (void *)(((void * *)DAT_005881e0)[0]);
+    temp_s1 = (void *)(((void * *)g_beSvEndApi_metaObject)[0]);
     temp_v0 = (void **)(igMetaObject_FindFieldByName(temp_s1, &DAT_005027d8[0]));
     temp_s2 = ObjectPointerList_FindIndex(*(int *)((char *)(temp_s1) + 40), temp_v0);
     temp_v0_2 = (void *)(((DW4VC_84_1 *)(temp_v0))->vX((int)(1)));

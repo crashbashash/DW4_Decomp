@@ -3,19 +3,19 @@ void FUN_003c0d40(int arg0) {
     igMetaObject_CreateInstance(*(int *)0x58B498, arg0);
 }
 
-int FUN_003c0d80(void) {
-    if (((int *)DAT_0058b498)[0] == 0) {
-        ((int *)DAT_0058b498)[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(DAT_00587040[0]));
+igMetaObject *FUN_003c0d80(void) {
+    if (g_beNDMWMdlMapCursor_metaObject[0] == 0) {
+        g_beNDMWMdlMapCursor_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
     }
-    return ((int *)DAT_0058b498)[0];
+    return g_beNDMWMdlMapCursor_metaObject[0];
 }
 
 void *beNDMWMdlMapCursor_GetReadyMetaObject(void) {
-    struct G *g = DAT_0058b498[0];
-    if (!g || ((g->f & 4) != 0) == false) {
+    igMetaObject *g = g_beNDMWMdlMapCursor_metaObject[0];
+    if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_003c0e80();
     }
-    return DAT_0058b498[0];
+    return g_beNDMWMdlMapCursor_metaObject[0];
 }
 
 int beNDMWMdlMapCursor_GetVTable(void) {
@@ -25,7 +25,7 @@ int beNDMWMdlMapCursor_GetVTable(void) {
     o.f8 = 0;
     o.f24 = 0;
     o.vt = &DAT_00540b40[0];
-    r = *(int *)((char *)&o + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+    r = *(int *)((char *)&o + *(int *)((char *)(g_objectSystem[0]) + 916));
     o.vt = &DAT_00540b40[0];
     
     FUN_003bf2f0((struct NamedRefObject *)&o, (long long)0);

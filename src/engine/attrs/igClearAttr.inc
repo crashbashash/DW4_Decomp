@@ -15,7 +15,7 @@ int igClearAttr_GetVTable(void) {
     struct Obj_139400 obj;
     igObject_InitHeader(&obj);
     obj.vt = &DAT_00524000[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 
 void FUN_00139440(void)
@@ -54,7 +54,7 @@ void igClearAttr_InitFields(void) {
     struct V v1;
     struct V v2;
 
-    temp_s1 = (void *)DAT_0055f308[0];
+    temp_s1 = (void *)g_igClearAttr_metaObject[0];
     temp_s0 = igMetaObject_GetFieldCount(temp_s1);
     igMetaObject_CreateFields(temp_s1, &DAT_00486960[0], 7);
     temp_a0 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 1));

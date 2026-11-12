@@ -65,7 +65,7 @@ void FUN_00140e90(int arg0) {
     int var_a1;
     int idx;
     int temp_a4;
-    temp_a4 = *(int *)((char *)(DAT_0055ed88[0]) + 92);
+    temp_a4 = *(int *)((char *)(g_igTextureBindAttr_metaObject[0]) + 92);
     idx = sp10.b;
     if (GPR_00554b0c == 0) {
         DAT_0055f510[0] = *(int *)(temp_a4 + idx);
@@ -86,7 +86,7 @@ void FUN_00140f40(void) {
     unsigned char sp1F;
 
     sp1F = 0;
-    FUN_00306e50(*(int *)((char *)DAT_00586dc8[0] + 56), 7, DAT_004d5e30, &sp1F, 0, 0);
+    FUN_00306e50(*(int *)((char *)g_objectSystem[0] + 56), 7, DAT_004d5e30, &sp1F, 0, 0);
     FUN_00140e90(sp1F);
 }
 

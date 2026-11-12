@@ -28,7 +28,7 @@ int igPsx2Controller_GetVTable(void) {
     q8 = &u.p[8];
     u.w[0] = (int)(&DAT_00524d00[0]);
     *q8 = 0;
-    temp_s0 = *(int *)&u.b[*(int *)((char *)(DAT_00586dc8[0]) + 916)];
+    temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.w[0] = (int)(&DAT_00524d00[0]);
     if (q8 != 0) {
         temp_a0 = *q8;
@@ -64,8 +64,8 @@ void igPsx2Controller_Register(void) {
     );
 }
 
-int FUN_00147240(void) {
-    return DAT_0055f6b0[0];
+igMetaObject *FUN_00147240(void) {
+    return g_igController_metaObject[0];
 }
 
 void igPsx2Controller_InitFields(void) {
@@ -75,13 +75,13 @@ void igPsx2Controller_InitFields(void) {
     void *temp_v0_2;
     void *temp_s0;
 
-    temp_s0 = (void *)DAT_0055f760[0];
+    temp_s0 = (void *)g_igPsx2Controller_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_004875d0[0], 0x18);
     FUN_002ea4b0(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 3), 0x10);
     FUN_0030eda0(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 4), 2);
     temp_s2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 5));
-    *(int *)((char *)(temp_s2) + 56) = FUN_00145d40();
+    *(int *)((char *)(temp_s2) + 56) = (int)FUN_00145d40();
     { struct Fld *q = igMetaObject_GetFieldAt(temp_s0, temp_s1 + 6); q->f52 = 2; }
     { struct Fld *q = igMetaObject_GetFieldAt(temp_s0, temp_s1 + 7); q->f52 = 2; }
     temp_v0 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 9));

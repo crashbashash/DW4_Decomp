@@ -1,8 +1,8 @@
-int FUN_0019dbb0(void) {
-    if (DAT_005618e8[0] == 0) {
-        DAT_005618e8[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(DAT_00587040[0]));
+igMetaObject *FUN_0019dbb0(void) {
+    if (g_igLightSet_metaObject[0] == 0) {
+        g_igLightSet_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
     }
-    return DAT_005618e8[0];
+    return g_igLightSet_metaObject[0];
 }
 
 igMetaObject *igLightSet_GetMetaObject(void)
@@ -22,7 +22,7 @@ int igLightSet_GetVTable(void) {
     o.f16 = 0;
     o.vt = &DAT_00528c60[0];
     o.f28 = 0;
-    r = *(int *)((char *)&o + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+    r = *(int *)((char *)&o + *(int *)((char *)(g_objectSystem[0]) + 916));
     o.vt = &DAT_00528c60[0];
     FUN_0019c1a0((ObjectRefWord *)&o.f28, -1);
     FUN_00195970((struct T_195970 *)&o, 0);
@@ -55,8 +55,8 @@ void thunk_igLightSet_GetMetaObject(void) {
     igLightSet_GetMetaObject();
 }
 
-int FUN_0019dd70(void) {
-    return DAT_00561838[0];
+igMetaObject *FUN_0019dd70(void) {
+    return g_igNode_metaObject[0];
 }
 
 void igLightSet_InitFields(void) {
@@ -64,7 +64,7 @@ void igLightSet_InitFields(void) {
     void *temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)DAT_005618e8[0];
+    temp_s0 = (void *)g_igLightSet_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_0048bdc0[0], 1);
     temp_s1 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s2)));
@@ -75,12 +75,12 @@ void igLightSet_InitFields(void) {
     igMetaObject_NameFields(temp_s0, &DAT_0048bdc8[0], &DAT_0048bdd0[0], &DAT_0048bdd8[0], temp_s2);
 }
 
-int FUN_0019de30(void) {
-    return DAT_005612b0[0];
+igMetaObject *FUN_0019de30(void) {
+    return g_igTransform_metaObject[0];
 }
 
-int FUN_0019de40(void) {
-    return DAT_005621d8[0];
+igMetaObject *FUN_0019de40(void) {
+    return g_igAnimationSequence_metaObject[0];
 }
 
 void **FUN_0019de50(struct Ref **self, short flag) {

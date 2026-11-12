@@ -1,16 +1,16 @@
-int FUN_00362360(void) {
-    if (((int *)DAT_005896d0)[0] == 0) {
-        ((int *)DAT_005896d0)[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(DAT_00587040[0]));
+igMetaObject *FUN_00362360(void) {
+    if (g_beFontGeomAttrPairList_metaObject[0] == 0) {
+        g_beFontGeomAttrPairList_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
     }
-    return ((int *)DAT_005896d0)[0];
+    return g_beFontGeomAttrPairList_metaObject[0];
 }
 
 void *FUN_003623b0(void) {
-    struct G *g = DAT_005896d0[0];
-    if (!g || ((g->f & 4) != 0) == false) {
+    igMetaObject *g = g_beFontGeomAttrPairList_metaObject[0];
+    if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_00362440();
     }
-    return DAT_005896d0[0];
+    return g_beFontGeomAttrPairList_metaObject[0];
 }
 
 int beFontGeomAttrPairList_GetVTable(void) {
@@ -18,7 +18,7 @@ int beFontGeomAttrPairList_GetVTable(void) {
 
     igObject_InitHeader(&obj);
     obj.vt = &DAT_00535940[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 
 void FUN_00362440(void)

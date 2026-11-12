@@ -1,6 +1,6 @@
-SFUN_003b3e40 *FUN_003b3e40(void) {
-    if (DAT_0058ab78[0] == 0 || !DAT_0058ab78[0]->ok()) FUN_003b3e90();
-    return DAT_0058ab78[0];
+igMetaObject *FUN_003b3e40(void) {
+    if (g_beNDMWWindowTitle_metaObject[0] == 0 || !isValid(g_beNDMWWindowTitle_metaObject[0])) FUN_003b3e90();
+    return g_beNDMWWindowTitle_metaObject[0];
 }
 
 void FUN_003b3e90(void)
@@ -30,7 +30,7 @@ void beNDMWWindowTitle_GetMetaObject(void)
     FUN_003b3e40();
 }
 
-int FUN_003b3f30(void) {
-    return ((int *)DAT_0058a9b8)[0];
+igMetaObject *FUN_003b3f30(void) {
+    return g_beNDMWWindow_metaObject[0];
 }
 

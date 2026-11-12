@@ -4,11 +4,11 @@ void FUN_0045be30(int arg0) {
 }
 
 void *igViewerDataPumpManager_GetMetaObject(void) {
-    struct G *g = ((G *)DAT_0058cb70[0]);
-    if (!g || ((g->f & 4) != 0) == false) {
+    igMetaObject *g = g_igViewerDataPumpManager_metaObject[0];
+    if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_0045bfa0();
     }
-    return ((G *)DAT_0058cb70[0]);
+    return g_igViewerDataPumpManager_metaObject[0];
 }
 
 int igViewerDataPumpManager_GetVTable(void) {
@@ -28,7 +28,7 @@ int igViewerDataPumpManager_GetVTable(void) {
     u.w[0] = (int)(&DAT_00542310[0]);
     q4 = (S_ref *)&u.p[4];
     *(int *)q4 = 0;
-    temp_s1 = *(int *)&u.b[*(int *)((char *)(((void *)DAT_00586dc8[0])) + 916)];
+    temp_s1 = *(int *)&u.b[*(int *)((char *)(((void *)g_objectSystem[0])) + 916)];
     u.w[0] = (int)(&DAT_00542310[0]);
     if (q4 != 0) {
         q4 = *(S_ref **)q4;
@@ -88,7 +88,7 @@ void FUN_0045c040(void) {
     void *temp_s1;
     void *temp_v0_2;
 
-    temp_s1 = (void *)(((void *)DAT_0058cb70[0]));
+    temp_s1 = (void *)(((void *)g_igViewerDataPumpManager_metaObject[0]));
     temp_s2 = igMetaObject_GetFieldCount(temp_s1);
     igMetaObject_CreateFields(temp_s1, &DAT_004d1358[0], 1);
     temp_v0 = (void **)(igMetaObject_FindFieldByName(temp_s1, &DAT_0051ee50[0]));

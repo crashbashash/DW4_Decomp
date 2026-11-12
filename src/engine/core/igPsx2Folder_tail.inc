@@ -18,7 +18,7 @@ int igPsx2Folder_GetVTable(void) {
     *(int *)ps = 0;
     u.vt = (int)&DAT_0052fee0[0];
     u.vt = (int)&DAT_0052db90[0];
-    s0 = *(int *)&u.b[*(int *)((char *)(((void * *)DAT_00586dc8)[0]) + 916)];
+    s0 = *(int *)&u.b[*(int *)((char *)(((void * *)g_objectSystem)[0]) + 916)];
     u.vt = (int)&DAT_0052fee0[0];
     if (ps != 0) {
         v1 = *(int **)ps;
@@ -56,7 +56,7 @@ void igPsx2Folder_Register(void) {
     );
 }
 
-int FUN_002d0190(void) {
-    return DAT_00586368[0];
+igMetaObject *FUN_002d0190(void) {
+    return g_igFolder_metaObject[0];
 }
 

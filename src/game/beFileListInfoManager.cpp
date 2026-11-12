@@ -38,19 +38,19 @@ extern "C" void FUN_00236be0(int, beFileListInfoManager *);
 extern "C" void FUN_00236c40(int, beFileListInfoManager *);
 extern "C" void Gap__Bec__beFileListInfoManager__vfunc_21(beFileListInfoManager *self, int unusedArg);
 extern "C" void Gap__Bec__beFileListInfoManager__vfunc_22(beFileListInfoManager *self, int unusedArg);
-extern "C" int DAT_00587d08[4];
-extern "C" int DAT_00588f38[4];
-extern "C" int DAT_0058c790[4];
+extern "C" int g_beSystem_metaObject[4];
+extern "C" int g_beMessenger_metaObject[4];
+extern "C" int g_igViewerSceneInfoManager_metaObject[4];
 extern "C" void Gap__Bec__beFileListInfoManager__vfunc_23(beFileListInfoManager *arg0);
 extern "C" int g_beFileListInfoManager_metaObject[4];
 extern "C" void FUN_00382df0(void *, igObject *);
 extern "C" void ObjectList_AppendRetained(igObjectList *, igObject *);
-extern "C" int DAT_00585bc0[4];
-extern "C" int DAT_00589678[4];
-extern "C" int DAT_00589760[4];
+extern "C" int g_igNamedObjectInfo_metaObject[4];
+extern "C" int g_beFont_metaObject[4];
+extern "C" int g_beFileListInfo_metaObject[4];
 class MetaVt { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual int getMeta(); };
 extern "C" int Gap__Bec__beFileListInfoManager__vfunc_25(beFileListInfoManager *self, igObject *info);
-extern "C" int DAT_00586f20[4];
+extern "C" int g_stringPool[4];
 extern "C" int igObject_Destroy(igObject *);
 extern "C" void Gap__Bec__beFileListInfoManager__vfunc_26(beFileListInfoManager *arg0);
 extern "C" int igInsightCore_AddInfo(int, igObject *);
@@ -82,9 +82,9 @@ void Gap__Bec__beFileListInfoManager__vfunc_22(beFileListInfoManager *self, int 
 }
 
 void Gap__Bec__beFileListInfoManager__vfunc_23(beFileListInfoManager *arg0) {
-    arg0->_system = ((int)FUN_00236f80(arg0->_insight, DAT_00587d08[0]));
-    arg0->_messenger = ((int)FUN_00236f80(arg0->_insight, DAT_00588f38[0]));
-    arg0->_sceneInfoManager = ((int)FUN_00236f80(arg0->_insight, DAT_0058c790[0]));
+    arg0->_system = ((int)FUN_00236f80(arg0->_insight, g_beSystem_metaObject[0]));
+    arg0->_messenger = ((int)FUN_00236f80(arg0->_insight, g_beMessenger_metaObject[0]));
+    arg0->_sceneInfoManager = ((int)FUN_00236f80(arg0->_insight, g_igViewerSceneInfoManager_metaObject[0]));
 }
 
 void Gap__Bec__beFileListInfoManager__vfunc_24(void)
@@ -101,7 +101,7 @@ static inline void insertWords(igObjectList *l, int at, int n, igObject **src) {
 }
 
 int Gap__Bec__beFileListInfoManager__vfunc_25(beFileListInfoManager *self, igObject *info) {
-    if (DAT_00589760[0] == ((MetaVt *)info)->getMeta()) {
+    if (g_beFileListInfo_metaObject[0] == ((MetaVt *)info)->getMeta()) {
         igObjectList *list = (igObjectList *)self->_infoList;
         if (list->_count > 0) {
             igObject *first = info;
@@ -113,8 +113,8 @@ int Gap__Bec__beFileListInfoManager__vfunc_25(beFileListInfoManager *self, igObj
         ((beSystem *)self->_system)->_isSResetEnable = 0;
         return 1;
     }
-    if (DAT_00585bc0[0] == ((MetaVt *)info)->getMeta()) {
-        void *found = FUN_00236f80(self->_insight, DAT_00589678[0]);
+    if (g_igNamedObjectInfo_metaObject[0] == ((MetaVt *)info)->getMeta()) {
+        void *found = FUN_00236f80(self->_insight, g_beFont_metaObject[0]);
         if (found == 0) return 0;
         FUN_00382df0(found, info);
         return 1;
@@ -140,14 +140,14 @@ void Gap__Bec__beFileListInfoManager__vfunc_26(beFileListInfoManager *arg0) {
         off = 0;
         do {
             slot = (int **)((char *)s5->_data + off);
-            if (DAT_00586f20[0] == 0) {
+            if (g_stringPool[0] == 0) {
                 v = FUN_002eb010(0x10);
                 if (v != 0) {
                     v = StringPool_Construct(v);
                 }
-                DAT_00586f20[0] = v;
+                g_stringPool[0] = v;
             }
-            s1 = (int *)StringPool_Intern(DAT_00586f20[0], 0);
+            s1 = (int *)StringPool_Intern(g_stringPool[0], 0);
             old = *slot;
             if (old != 0) {
                 int *hdr = old - 2;

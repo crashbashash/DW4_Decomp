@@ -46,12 +46,12 @@ int FUN_002d9cf0(igDriverDatabase *arg0, int arg1, int arg2) {
     if (arg2 == 0) {
         v = 0;
     } else {
-        if (DAT_00586f20[0] == 0) {
+        if (g_stringPool[0] == 0) {
             int al = ((int)FUN_002eb010(16));
             if (al != 0) al = ((int)StringPool_Construct((struct S_2eadf0 *)al));
-            DAT_00586f20[0] = al;
+            g_stringPool[0] = al;
         }
-        v = StringPool_Intern((StringPool *)DAT_00586f20[0], (const char *)arg2);
+        v = StringPool_Intern((StringPool *)g_stringPool[0], (const char *)arg2);
     }
     sp54 = v;
     idx = FUN_001cafc0(sp5C.p, &sp54, 0);
@@ -105,13 +105,13 @@ int FUN_002da1c0(igDriverDatabase *arg0, const char *arg1, const char *arg2) {
         tok = 0;
     } else {
         POOL()
-        tok = ((const char *)StringPool_Intern((StringPool *)(((void * *)DAT_00586f20)[0]), arg1));
+        tok = ((const char *)StringPool_Intern((StringPool *)(((void * *)g_stringPool)[0]), arg1));
     }
     StringRef name(tok);
     const char *p5 = name.p;
     if (p5 == 0 || strlen(p5) == 0) {
         POOL()
-        tok = ((const char *)StringPool_Intern((StringPool *)(((void * *)DAT_00586f20)[0]), (const char *)&DAT_004f9698[0]));
+        tok = ((const char *)StringPool_Intern((StringPool *)(((void * *)g_stringPool)[0]), (const char *)&DAT_004f9698[0]));
         releaseString(name.p);
         name.p = tok;
     }
@@ -123,14 +123,14 @@ int FUN_002da1c0(igDriverDatabase *arg0, const char *arg1, const char *arg2) {
     s0 = ((O100 *)arg0->_databaseFile)->vX(name.p, &DAT_004f96a8[0]);
     if (s0 == 0) {
         if (arg2 == 0 || strlen(arg2) == 0) {
-            arg2 = ((const char *)FUN_002d1c20((int *)(((int *)DAT_00586dc8)[0])));
+            arg2 = ((const char *)FUN_002d1c20((int *)(((int *)g_objectSystem)[0])));
         }
         if (arg2 != 0 && strlen(arg2) != 0) {
             BLOCK(FUN_002c43b0, arg2)
         }
     }
     if (s0 == 0) {
-        BLOCK(FUN_002c43b0, ((const char *)FUN_002d1c30((int *)(((int *)DAT_00586dc8)[0]))))
+        BLOCK(FUN_002c43b0, ((const char *)FUN_002d1c30((int *)(((int *)g_objectSystem)[0]))))
     }
     if (s0 == 0) {
         release_2da1c0((T *)arg0->_databaseFile);

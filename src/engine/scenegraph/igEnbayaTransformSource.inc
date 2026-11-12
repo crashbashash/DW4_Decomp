@@ -1,9 +1,9 @@
 igMetaObject *FUN_001a18b0(void)
 {
-    igMetaObject *g = ((igMetaObject * *)DAT_00561b48)[0];
+    igMetaObject *g = ((igMetaObject * *)g_igEnbayaTransformSource_metaObject)[0];
     if (!g || ((g->_validity & 4) != 0) == false)
         FUN_001a1990();
-    return ((igMetaObject * *)DAT_00561b48)[0];
+    return ((igMetaObject * *)g_igEnbayaTransformSource_metaObject)[0];
 }
 
 int igEnbayaTransformSource_GetVTable(void) {
@@ -16,7 +16,7 @@ int igEnbayaTransformSource_GetVTable(void) {
     ps = &o.ref;
     o.vt = &DAT_00529080[0];
     *ps = 0;
-    temp_s0 = *(int *)((char *)&o + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+    temp_s0 = *(int *)((char *)&o + *(int *)((char *)(g_objectSystem[0]) + 916));
     o.vt = &DAT_00529080[0];
     if (ps != 0) {
         temp_a0 = *ps;
@@ -61,12 +61,12 @@ void igEnbayaTransformSource_InitFields(void) {
     void *temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)DAT_00561b48[0];
+    temp_s0 = (void *)g_igEnbayaTransformSource_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_0048c2d0[0], 2);
     FUN_002ea4b0(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s2)), -1);
     temp_s1 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1)));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = FUN_001a2210();
+    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_001a2210();
     igMetaObject_NameFields(temp_s0, &DAT_0048c2d8[0], &DAT_0048c2e0[0], &DAT_0048c2e8[0], temp_s2);
 }
 

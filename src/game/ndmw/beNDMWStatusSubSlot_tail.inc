@@ -25,7 +25,7 @@ void beNDMWStatusSubSlot_GetMetaObject(void)
     FUN_003ba2a0();
 }
 
-int FUN_003ba750(void) {
-    return ((int *)DAT_0058af30)[0];
+igMetaObject *FUN_003ba750(void) {
+    return g_beNDMWStatusCtrlBaseEquip_metaObject[0];
 }
 

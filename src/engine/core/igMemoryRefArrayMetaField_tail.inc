@@ -37,7 +37,7 @@ int igMemoryRefArrayMetaField_GetSize(igMemoryRefArrayMetaField *arg0) {
 
 void igMemoryRefArrayMetaField_ReleaseElements(M_2fa8c0 *arg0, int arg1, int arg2, int arg3) {
     int var_s3;
-    if (igObject_IsKindOf((void *)arg0->f60, (igMetaObject *)DAT_00585b20[0]) != 0) {
+    if (igObject_IsKindOf((void *)arg0->f60, (igMetaObject *)g_igObjectRefMetaField_metaObject[0]) != 0) {
         for (var_s3 = 0; var_s3 < arg0->f80; var_s3++) {
             int temp_s2 = *(int *)(arg1 + arg0->f8 + var_s3 * 4);
             if (temp_s2 != 0) {

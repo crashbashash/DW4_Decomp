@@ -1,14 +1,14 @@
 void beLoadIntf2ComMdlData__Create(int allocator) {
     FUN_003c75a0();
-    igMetaObject_CreateInstance(((int *)g_beLoadIntf2ComMdlData_metaObject)[0], allocator);
+    igMetaObject_CreateInstance(g_beLoadIntf2ComMdlData_metaObject[0], allocator);
 }
 
 void *beLoadIntf2ComMdlData_GetReadyMetaObject(void) {
-    struct G *g = DAT_0058be70[0];
-    if (!g || ((g->f & 4) != 0) == false) {
+    igMetaObject *g = g_beLoadIntf2ComMdlData_metaObject[0];
+    if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_003c75a0();
     }
-    return DAT_0058be70[0];
+    return g_beLoadIntf2ComMdlData_metaObject[0];
 }
 
 int beLoadIntf2ComMdlData_GetVTable(void) {
@@ -26,7 +26,7 @@ int beLoadIntf2ComMdlData_GetVTable(void) {
     *(int *)p3C = 0;
     p40 = &u.b[16];
     *(int *)p40 = 0;
-    r = *(int *)&u.b[*(int *)((char *)(DAT_00586dc8[0]) + 916)];
+    r = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.vt = (int)&DAT_0053c810[0];
     if (p40 != 0) {
         v1 = *(int **)p40;
@@ -84,7 +84,7 @@ void beLoadIntf2ComMdlData_InitFields(void) {
     int temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)((int *)DAT_0058be70)[0];
+    temp_s0 = (void *)g_beLoadIntf2ComMdlData_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_004cbf28[0], 3);
     igMetaObject_NameFields(temp_s0, &DAT_004cbf38[0], &DAT_004cbf48[0], &DAT_004cbf58[0], temp_s1);

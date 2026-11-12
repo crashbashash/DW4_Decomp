@@ -1,8 +1,8 @@
-int FUN_00226340(void) {
-    if (DAT_0056d8b8[0] == 0) {
-        DAT_0056d8b8[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(DAT_00587040[0]));
+igMetaObject *FUN_00226340(void) {
+    if (g_igMessageList_metaObject[0] == 0) {
+        g_igMessageList_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
     }
-    return DAT_0056d8b8[0];
+    return g_igMessageList_metaObject[0];
 }
 
 igMetaObject *igMessageList_GetMetaObject(void)
@@ -18,7 +18,7 @@ int igMessageList_GetVTable(void) {
 
     igObject_InitHeader(&obj);
     obj.vt = &DAT_0052c5a0[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 
 void FUN_00226420(void)

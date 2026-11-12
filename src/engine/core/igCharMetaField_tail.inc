@@ -19,14 +19,14 @@ void Gap__Core__igCharMetaField__vfunc_57(int *arg0, int arg1, char *arg2) {
     if (sp20 == 0) {
         var_v1 = 0;
     } else {
-        if (DAT_00586f20[0] == 0) {
+        if (g_stringPool[0] == 0) {
             var_v0 = ((int)FUN_002eb010(0x10));
             if (var_v0 != 0) {
                 var_v0 = ((int)StringPool_Construct((S_2eadf0 *)var_v0));
             }
-            DAT_00586f20[0] = var_v0;
+            g_stringPool[0] = var_v0;
         }
-        var_v1 = StringPool_Intern((StringPool *)DAT_00586f20[0], (const char *)sp20);
+        var_v1 = StringPool_Intern((StringPool *)g_stringPool[0], (const char *)sp20);
     }
     *arg0 = var_v1;
 }
@@ -369,12 +369,12 @@ int FUN_002d5df0(RecoveryString *out, Ctx *ctx, int a2, int a3) {
     char *r;
     if (buf == 0) r = 0;
     else {
-        if (DAT_00586f20[0] == 0) {
+        if (g_stringPool[0] == 0) {
             int v = ((int)FUN_002eb010(0x10));
             if (v != 0) v = ((int)StringPool_Construct((S_2eadf0 *)v));
-            DAT_00586f20[0] = v;
+            g_stringPool[0] = v;
         }
-        r = (char *)StringPool_Intern((StringPool *)DAT_00586f20[0], (const char *)buf);
+        r = (char *)StringPool_Intern((StringPool *)g_stringPool[0], (const char *)buf);
     }
     RecoveryString res(r);
     FUN_00300f50((int)ctx, (int)buf);
@@ -406,7 +406,7 @@ void FUN_002d60b0(igContext *arg0) {
             if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy((void *)((igObject *)o));
         }
         ((DummyVirtualContext *)arg0)->vX();
-        meta = igObjectSystem_FindMetaByNameDefault((const char *)(&DAT_004f86f8[0]));
+        meta = igObjectSystem_FindMetaByNameDefault(igContextExt_className);
         arg0->_iNumExts = igMetaObject_CountTree((MetaTreeNode *)meta) - 1;
         if (arg0->_iNumExts >= ((igContextExtInfoList *)arg0->_pExtList)->_count) List_Reserve((L_2d6680 *)((igContextExtInfoList *)arg0->_pExtList), arg0->_iNumExts, 4);
         ObjectList_ResizeRetained((L_301ee0 *)((igContextExtInfoList *)arg0->_pExtList), arg0->_iNumExts);
@@ -421,13 +421,13 @@ void FUN_002d60b0(igContext *arg0) {
             Util::rel((igObject *)it->_pMeta);
             it->_pMeta = (int)nd;
             nm = nd->_name;
-            if (DAT_00586f20[0] == 0) {
+            if (g_stringPool[0] == 0) {
                 int al = ((int)FUN_002eb010(16));
                 if (al != 0) al = ((int)StringPool_Construct((struct S_2eadf0 *)al));
-                DAT_00586f20[0] = al;
+                g_stringPool[0] = al;
             }
             {
-                int sv = StringPool_Intern((StringPool *)DAT_00586f20[0], (const char *)nm);
+                int sv = StringPool_Intern((StringPool *)g_stringPool[0], (const char *)nm);
                 int old = it->_pName;
                 if (old != 0) {
                     int *h = (int *)(old - 8);

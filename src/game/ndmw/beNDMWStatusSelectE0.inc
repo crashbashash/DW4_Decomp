@@ -5,11 +5,11 @@ void FUN_003b5370(int arg0) {
 
 igMetaObject *FUN_003b53b0(void)
 {
-    igMetaObject *g = DAT_0058abe0[0];
+    igMetaObject *g = g_beNDMWStatusSelectE0_metaObject[0];
     bool t;
     if (!g || (t = g->_validity & 4) == 0)
         FUN_003b5480();
-    return DAT_0058abe0[0];
+    return g_beNDMWStatusSelectE0_metaObject[0];
 }
 
 int beNDMWStatusSelectE0_GetVTable(void) {
@@ -27,7 +27,7 @@ int beNDMWStatusSelectE0_GetVTable(void) {
     o.f[19] = 0;
     o.f[26] = 0;
     o.vt = DAT_0053f3a0;
-    r = *(int *)((char *)&o + *(int *)(((char * *)DAT_00586dc8)[0] + 916));
+    r = *(int *)((char *)&o + *(int *)(((char * *)g_objectSystem)[0] + 916));
     o.vt = DAT_0053f3a0;
     FUN_003b4050((struct S_3b4050 *)&o, (short)0);
     return r;

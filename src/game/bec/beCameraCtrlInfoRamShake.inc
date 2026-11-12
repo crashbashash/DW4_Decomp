@@ -5,13 +5,13 @@ void FUN_003694a0(int arg0) {
 
 void *FUN_003694e0(void) {
     unsigned char b;
-    if (DAT_00589c38[0] != 0) {
-        b = (*(int *)((char *)(DAT_00589c38[0]) + 36) & 4) != 0;
+    if (g_beCameraCtrlInfoRamShake_metaObject[0] != 0) {
+        b = (*(int *)((char *)(g_beCameraCtrlInfoRamShake_metaObject[0]) + 36) & 4) != 0;
         if (b != 0) goto done;
     }
     FUN_00369600();
 done:
-    return DAT_00589c38[0];
+    return g_beCameraCtrlInfoRamShake_metaObject[0];
 }
 
 int beCameraCtrlInfoRamShake_GetVTable(void) {
@@ -28,7 +28,7 @@ int beCameraCtrlInfoRamShake_GetVTable(void) {
     u.vt = (int)&DAT_00534970[0];
     p1 = (S_ref *)&u.b[44];
     *(int *)p1 = 0;
-    t = *(int *)&u.b[*(int *)((char *)(DAT_00586dc8[0]) + 916)];
+    t = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.vt = (int)&DAT_00534970[0];
     if (p1 != 0) {
         o = *(char **)p1;
@@ -90,7 +90,7 @@ void beCameraCtrlInfoRamShake_InitFields(void) {
     void *temp_s1;
     T_temp_v0_2 *temp_v0_2;
 
-    temp_s1 = (void *)(DAT_00589c38[0]);
+    temp_s1 = (void *)(g_beCameraCtrlInfoRamShake_metaObject[0]);
     temp_s2 = igMetaObject_GetFieldCount(temp_s1);
     igMetaObject_CreateFields(temp_s1, &DAT_004c7950[0], 8);
     temp_v0 = (void **)(igMetaObject_FindFieldByName(temp_s1, &DAT_00502218[0]));

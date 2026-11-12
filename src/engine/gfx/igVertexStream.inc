@@ -17,11 +17,11 @@ int FUN_0014adc0(int arg0) {
     return igMetaObject_CreateInstance(*(int *)0x55FA10, arg0);
 }
 
-int FUN_0014ae00(void) {
-    if (DAT_0055fa10[0] == 0) {
-        DAT_0055fa10[0] = (int)igMetaObject_Create(Memory_GetAllocatorBySelector(DAT_00587040[0]));
+igMetaObject *FUN_0014ae00(void) {
+    if (g_igVertexStream_metaObject[0] == 0) {
+        g_igVertexStream_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
     }
-    return DAT_0055fa10[0];
+    return g_igVertexStream_metaObject[0];
 }
 
 igMetaObject *igVertexStream_GetMetaObject(void)
@@ -49,7 +49,7 @@ int igVertexStream_GetVTable(void) {
     u.vt = (int)(&DAT_005263a0[0]);
     q1 = (S_ref *)&u.b[20];
     *(int *)q1 = 0;
-    temp_s1 = *(int *)&u.b[*(int *)((char *)(DAT_00586dc8[0]) + 916)];
+    temp_s1 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.vt = (int)(&DAT_005263a0[0]);
     if (q1 != 0) {
         q1 = *(S_ref **)q1;
@@ -109,13 +109,13 @@ void igVertexStream_InitFields(void) {
     void *temp_v0_3;
     void *temp_s1;
 
-    temp_s1 = (void *)(DAT_0055fa10[0]);
+    temp_s1 = (void *)(g_igVertexStream_metaObject[0]);
     temp_s0 = igMetaObject_GetFieldCount(temp_s1);
     igMetaObject_CreateFields(temp_s1, &DAT_004885b0[0], 6);
     ((igRawRefMetaField *)igMetaObject_GetFieldAt(temp_s1, temp_s0))->_persistent = 0;
     ((igBoolMetaField *)igMetaObject_GetFieldAt(temp_s1, temp_s0 + 1))->_persistent = 0;
     temp_s2 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 2));
-    ((igObjectRefMetaField *)temp_s2)->_metaObject = FUN_0014b1c0();
+    ((igObjectRefMetaField *)temp_s2)->_metaObject = (int)FUN_0014b1c0();
     temp_v0 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 3));
     FUN_002dc7a0(temp_v0, &DAT_00488628[0]);
     ((igEnumMetaField *)temp_v0)->_getMetaEnumFunction = (int)(&FUN_0014ad60);
@@ -126,6 +126,6 @@ void igVertexStream_InitFields(void) {
     FUN_002dc7a0(temp_v0_3, &DAT_00488638[0]);
     ((igEnumMetaField *)temp_v0_3)->_getMetaEnumFunction = (int)(FUN_0014ad00);
     igMetaObject_NameFields(temp_s1, &DAT_004885d0[0], &DAT_004885f0[0], &DAT_00488610[0], temp_s0);
-    ((igMetaObject *)DAT_0055fa10[0])->_abstractProxy = (int)thunk_igPsx2VertexStream_GetMetaObject;
+    ((igMetaObject *)g_igVertexStream_metaObject[0])->_abstractProxy = (int)thunk_igPsx2VertexStream_GetMetaObject;
 }
 

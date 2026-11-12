@@ -1,16 +1,16 @@
-int FUN_003b1dd0(void) {
-    if (((int *)DAT_0058a9b8)[0] == 0) {
-        ((int *)DAT_0058a9b8)[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(DAT_00587040[0]));
+igMetaObject *FUN_003b1dd0(void) {
+    if (g_beNDMWWindow_metaObject[0] == 0) {
+        g_beNDMWWindow_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
     }
-    return ((int *)DAT_0058a9b8)[0];
+    return g_beNDMWWindow_metaObject[0];
 }
 
 void *FUN_003b1e20(void) {
-    struct G *g = DAT_0058a9b8[0];
-    if (!g || ((g->f & 4) != 0) == false) {
+    igMetaObject *g = g_beNDMWWindow_metaObject[0];
+    if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_003b1e70();
     }
-    return DAT_0058a9b8[0];
+    return g_beNDMWWindow_metaObject[0];
 }
 
 void FUN_003b1e70(void)
@@ -54,7 +54,7 @@ void beNDMWWindow_InitFields(void) {
     void *temp_s2_9;
     void *temp_s1;
 
-    temp_s1 = (void *)((int *)DAT_0058a9b8)[0];
+    temp_s1 = (void *)g_beNDMWWindow_metaObject[0];
     temp_s0 = igMetaObject_GetFieldCount(temp_s1);
     igMetaObject_CreateFields(temp_s1, &DAT_004c9490[0], 0x12);
     temp_s2 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0));
@@ -68,10 +68,10 @@ void beNDMWWindow_InitFields(void) {
     ((igObjectRefMetaField *)temp_s2_3)->_refCounted = 0;
     FUN_002d3890(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 4), 1);
     temp_s2_4 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 0xB));
-    ((igObjectRefMetaField *)temp_s2_4)->_metaObject = FUN_003b1be0();
+    ((igObjectRefMetaField *)temp_s2_4)->_metaObject = (int)FUN_003b1be0();
     ((igRefMetaField *)temp_s2_4)->_construct = 1;
     temp_s2_5 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 0xC));
-    ((igObjectRefMetaField *)temp_s2_5)->_metaObject = FUN_003b1dd0();
+    ((igObjectRefMetaField *)temp_s2_5)->_metaObject = (int)FUN_003b1dd0();
     temp_s2_6 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 0xD));
     ((igObjectRefMetaField *)temp_s2_6)->_metaObject = FUN_002b9120();
     ((igRefMetaField *)temp_s2_6)->_construct = 1;

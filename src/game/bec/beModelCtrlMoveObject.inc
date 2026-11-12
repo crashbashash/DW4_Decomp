@@ -3,12 +3,12 @@ void FUN_00352940(int arg0) {
     igMetaObject_CreateInstance(*(int *)0x588B48, arg0);
 }
 
-G_352980 *FUN_00352980(void) {
-    G_352980 *g = DAT_00588b48[0];
+igMetaObject *FUN_00352980(void) {
+    igMetaObject *g = g_beModelCtrlMoveObject_metaObject[0];
     int t;
-    if (!g || !(t = (g->f & 4) != 0))
+    if (!g || !(t = (g->_validity & 4) != 0))
         FUN_00352a10();
-    return DAT_00588b48[0];
+    return g_beModelCtrlMoveObject_metaObject[0];
 }
 
 int beModelCtrlMoveObject_GetVTable(void) {
@@ -16,7 +16,7 @@ int beModelCtrlMoveObject_GetVTable(void) {
 
     igObject_InitHeader(&obj);
     obj.vt = &DAT_00537cf0[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 
 void FUN_00352a10(void)
@@ -50,7 +50,7 @@ void beModelCtrlMoveObject_InitFields(void) {
     int temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)((int *)DAT_00588b48)[0];
+    temp_s0 = (void *)g_beModelCtrlMoveObject_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_004c5390[0], 9);
     FUN_002e3810((void *)(((int)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 1))), 0.0f);

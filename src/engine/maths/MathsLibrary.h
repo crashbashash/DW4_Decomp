@@ -52,14 +52,13 @@ void FUN_00190370(void);
 
 extern unsigned char DAT_00554b7c;
 
-int igMetaObject_Create(int);
+igMetaObject *igMetaObject_Create(int);
 
 int Memory_GetAllocatorBySelector(...);
 
-extern int DAT_00560f08[4];
-extern int DAT_00587040[4];
-
 extern igMetaObject *g_igVolume_metaObject[4];
+extern int g_metadataAllocatorKey[4];
+
 void FUN_00186b20(void);
 igMetaObject *igVolume_GetMetaObject(void);
 void igVolume_Register(void);
@@ -85,9 +84,8 @@ void FUN_0018f4a0(void);
 void FUN_00186d20(void);
 M *igMetaObject_CreateInstance(...);
 
-extern int DAT_00560f10[4];
-
 extern igMetaObject *g_igVolumeList_metaObject[4];
+
 igMetaObject *igVolumeList_GetMetaObject(void);
 
 struct Obj { int *vt; char pad[28]; };
@@ -96,7 +94,7 @@ int igObject_InitHeader(...);
 
 extern int DAT_00528100[4];
 
-extern void *DAT_00586dc8[4];
+extern void *g_objectSystem[4];
 void igVolumeList_Register(void);
 
 extern char igObjectList_GetPublishedMetaObject[];
@@ -144,7 +142,7 @@ int StringChunk_ReleaseHeader(...);
 int igMetaField_Init(...);
 
 extern int DAT_005271e0[4];
-extern int DAT_0052f230[4];
+extern int g_igMetaField_vtable[4];
 union U { int vt; char b[64]; };
 
 void igVec4ucMetaField_Register(void);
@@ -155,14 +153,13 @@ extern char igMetaField_Register[];
 extern char g_igVec4ucMetaField_callbackList[];
 extern char igVec4ucMetaField_className[];
 
-extern int DAT_00585cc8[4];
+extern int g_igMetaField_metaObject[4];
 
 R *FUN_002fc250(...);
 int MetaRefList_AppendRetained(...);
 int igMetaField_FinalizeDescriptor(...);
 void igObject_Destroy(void *);
 
-extern int DAT_00560f28[4];
 
 extern M *DAT_00560f30[4];
 void FUN_001873c0(void);
@@ -180,9 +177,8 @@ void thunk_igVec4fMetaField_GetMetaObject(void);
 extern char g_igVec4fMetaField_callbackList[];
 extern char igVec4fMetaField_className[];
 
-extern int DAT_00560f38[4];
 
-extern int DAT_00560f40[4];
+extern int g_igVec4fMetaField_descriptor[4];
 void FUN_00187680(void);
 extern igMetaObject *g_igVec4fArrayMetaField_metaObject[4];
 igMetaObject *igVec4fArrayMetaField_GetMetaObject(void);
@@ -207,9 +203,8 @@ extern int DAT_0048ad70[4];
 extern int DAT_0048ad78[4];
 extern int DAT_0048ad80[4];
 extern int DAT_0048ad88[4];
-extern int DAT_00560f48[4];
 
-extern M * DAT_00560f50[4];
+extern M * g_igVec4fArrayMetaField_descriptor[4];
 
 void FUN_001879b0(void);
 extern igMetaObject *g_igVec3fMetaField_metaObject[4];
@@ -224,9 +219,8 @@ void thunk_igVec3fMetaField_GetMetaObject(void);
 extern char g_igVec3fMetaField_callbackList[];
 extern char igVec3fMetaField_className[];
 
-extern int DAT_00560f70[4];
 
-extern int DAT_00560f78[4];
+extern int g_igVec3fMetaField_descriptor[4];
 void FUN_00187c70(void);
 extern igMetaObject *g_igVec2fMetaField_metaObject[4];
 igMetaObject *igVec2fMetaField_GetMetaObject(void);
@@ -240,14 +234,12 @@ void thunk_igVec2fMetaField_GetMetaObject(void);
 extern char g_igVec2fMetaField_callbackList[];
 extern char igVec2fMetaField_className[];
 
-extern int DAT_00560f88[4];
 
-extern int DAT_00560f90[4];
+extern int g_igVec2fMetaField_descriptor[4];
 void FUN_00187f30(void);
 
-extern int DAT_00560fa0[4];
-
 extern igMetaObject *g_igSphere_metaObject[4];
+
 igMetaObject *igSphere_GetMetaObject(void);
 
 extern int DAT_00527fe0[4];
@@ -273,9 +265,8 @@ extern int DAT_0048adb8[4];
 
 void FUN_0018d480(void);
 
-extern int DAT_00560fb8[4];
-
 extern igMetaObject *g_igRayList_metaObject[4];
+
 void FUN_00188190(void);
 igMetaObject *igRayList_GetMetaObject(void);
 
@@ -289,9 +280,8 @@ extern char igRayList_className[];
 
 void FUN_00188340(void);
 
-extern int DAT_00560fc0[4];
-
 extern igMetaObject *g_igRay_metaObject[4];
+
 igMetaObject *igRay_GetMetaObject(void);
 
 struct Obj7 { int *vt; char pad[44]; };
@@ -327,14 +317,12 @@ extern int DAT_0048ae08[4];
 extern int DAT_0048ae18[4];
 extern int DAT_0048ae28[4];
 extern int DAT_0048ae38[4];
-extern int DAT_00560fe0[4];
 
 void FUN_0018c660(void);
 void FUN_00188780(void);
 
-extern int DAT_00561000[4];
-
 extern igMetaObject *g_igMatrix44fMetaField_metaObject[4];
+
 igMetaObject *igMatrix44fMetaField_GetMetaObject(void);
 
 extern int DAT_005276e0[4];
@@ -345,7 +333,7 @@ void thunk_igMatrix44fMetaField_GetMetaObject(void);
 extern char g_igMatrix44fMetaField_callbackList[];
 extern char igMatrix44fMetaField_className[];
 
-extern int DAT_00561008[4];
+extern int g_igMatrix44fMetaField_descriptor[4];
 void FUN_001889f0(void);
 extern igMetaObject *g_igGetCenterFunctionList_metaObject[4];
 igMetaObject *igGetCenterFunctionList_GetMetaObject(void);
@@ -485,7 +473,6 @@ void thunk_igIntersectionFunctionList_GetMetaObject(void);
 
 extern char igIntersectionFunctionList_className[];
 
-extern int DAT_00561078[4];
 extern igMetaObject *g_igMatrix44fList_metaObject[4];
 void FUN_00189a80(void);
 igMetaObject *igMatrix44fList_GetMetaObject(void);
@@ -509,7 +496,6 @@ void FUN_00189b10(void);
 class DW4VC_84_1 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual int vX(int); };
 
 void FUN_00189cf0(void);
-extern int DAT_00561088[4];
 extern igMetaObject *g_igQuaternionfList_metaObject[4];
 igMetaObject *igQuaternionfList_GetMetaObject(void);
 
@@ -536,13 +522,11 @@ void thunk_igVec4ucList_GetMetaObject(void);
 extern char igVec4ucList_className[];
 extern int igVec4ucList_InitFields_00189fa0[4];
 
-extern int DAT_00561098[4];
 
 extern int DAT_005610a0[4];
 
 void FUN_00189fa0(void);
 void FUN_0018a180(void);
-extern int DAT_005610b8[4];
 extern igMetaObject *g_igVec3fList_metaObject[4];
 igMetaObject *igVec3fList_GetMetaObject(void);
 
@@ -569,15 +553,13 @@ void thunk_igVec2fList_GetMetaObject(void);
 extern char igVec2fList_className[];
 extern int igVec2fList_InitFields_0018a430[4];
 
-extern int DAT_005610c8[4];
 
 extern int DAT_005610d0[4];
 
 void FUN_0018a430(void);
 
-extern int DAT_005610d8[4];
-
 extern igMetaObject *g_igAABoxList_metaObject[4];
+
 void FUN_0018a5d0(void);
 igMetaObject *igAABoxList_GetMetaObject(void);
 
@@ -591,9 +573,8 @@ extern char igAABoxList_className[];
 
 void FUN_0018a780(void);
 
-extern int DAT_005610e0[4];
-
 extern igMetaObject *g_igAABox_metaObject[4];
+
 igMetaObject *igAABox_GetMetaObject(void);
 
 extern int DAT_005277e0[4];
@@ -637,11 +618,11 @@ void FUN_0018fca0(struct PairKeyedItem *a, struct PairKeyedItem *b, int v);
 void FUN_0018fd10(int *arg0, int arg1);
 void FUN_0018fd50(struct IndexedSlotKey *arg0, int arg1);
 void FUN_0018fd90(struct IndexedWordKey *arg0, int arg1);
-void FUN_0018fdd0(int arg0, int arg1);
+void FUN_0018fdd0(igMetaObject *meta, int arg1);
 void FUN_0018fe10(int *arg0, int arg1);
 void FUN_0018fe50(struct IndexedSlotKey *arg0, int arg1);
 void FUN_0018fe90(struct IndexedWordKey *arg0, int arg1);
-void FUN_0018fed0(int arg0, int arg1);
+void FUN_0018fed0(igMetaObject *meta, int arg1);
 void FUN_0018ff10(int *arg0, int arg1);
 
 typedef struct S { int pad[2]; float f[6]; } S;
@@ -819,19 +800,19 @@ void *StringPool_Construct(void *pool);
 int StringPool_Intern(void *pool, const char *text);
 
 extern char DAT_004e0db0[];
-extern void *DAT_00586f20[4];
+extern void *g_stringPool[4];
 static inline int internString(const char *text) {
     if (text == 0) {
         return 0;
     }
-    if (DAT_00586f20[0] == 0) {
+    if (g_stringPool[0] == 0) {
         void *pool = FUN_002eb010(16);
         if (pool != 0) {
             pool = StringPool_Construct(pool);
         }
-        DAT_00586f20[0] = pool;
+        g_stringPool[0] = pool;
     }
-    return StringPool_Intern(DAT_00586f20[0], text);
+    return StringPool_Intern(g_stringPool[0], text);
 }
 
 class igVec2fMetaFieldView {
@@ -847,7 +828,6 @@ public:
 void igVec3fMetaField_SwapBytes(igVec3fMetaField *arg0, int arg1, int arg2);
 
 extern char DAT_004e0db8[];
-extern void *g_stringPool;
 
 class igVec3fMetaFieldView {
 public:
@@ -1010,7 +990,7 @@ class ScaleVec { public: float _v[3]; float operator[](int i) const { return _v[
 
 void FUN_00190f50(float *arg0, float *arg1, float fparg0);
 
-extern float DAT_004e1058[4];
+extern float g_vec3Zero[4];
 extern float DAT_004e105c[4];
 extern float DAT_004e1060[4];
 extern float DAT_004e11c0[4];
@@ -1031,10 +1011,10 @@ void FUN_00191770(float *m, float *q);
 float atanf(float);
 float tanf(float);
 
-extern int DAT_004fb410[4];
+extern int g_statusSucceeded[4];
 
 typedef union U6 { float f; struct { unsigned char p0, p1, p2; unsigned char lo : 7; unsigned char sign : 1; } b; } U6;
-extern int DAT_004fb418[4];
+extern int g_allocatorFailureStatus[4];
 int FUN_00192030(int, int, float *);
 
 float FUN_00192290(float *m);
@@ -1046,7 +1026,7 @@ float atan2f(float, float);
 
 struct CurvePoint4 { int a, b, c, d; };
 
-extern float DAT_004e1170[4];
+extern float g_vec4Zero[4];
 extern float D_004e1170[4];
 extern float D_004e1180[4];
 extern float DAT_004e1174[4];
@@ -1062,7 +1042,6 @@ typedef struct Color4f { float x, y, z, w; } Color4f;
 
 extern int g_igVec4fMetaField_descriptor[4];
 
-extern int g_igVec4fArrayMetaField_descriptor[4];
 
 extern int g_igVec3fMetaField_descriptor[4];
 
@@ -1072,19 +1051,5 @@ extern int g_igMatrix44fMetaField_descriptor[4];
 
 int List_Reserve(...);
 
-extern int DAT_00561070[4];
-extern int DAT_00561068[4];
-extern int DAT_00561060[4];
-extern int DAT_00561058[4];
-extern int DAT_00561050[4];
-extern int DAT_00561048[4];
-extern int DAT_00561040[4];
-extern int DAT_00561038[4];
-extern int DAT_00561030[4];
-extern int DAT_00561028[4];
-extern int DAT_00561020[4];
-extern int DAT_00561018[4];
-extern int DAT_00560f20[4];
-extern int DAT_00560f18[4];
 
 #endif

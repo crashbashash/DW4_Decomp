@@ -34,7 +34,7 @@ int FUN_001b3ad0(igCommonTraversal *arg0, int arg1) {
     unsigned w2;
 
     p = (igAttrStackManager *)arg0->_attrStack;
-    a0 = ((igAttrStack **)((igAttrStackList *)p->_attrStacks)->_data)[((int *)p->_attrStackIndexTable)[DAT_0055efe8[0]->_id]];
+    a0 = ((igAttrStack **)((igAttrStackList *)p->_attrStacks)->_data)[((int *)p->_attrStackIndexTable)[g_igModelViewMatrixAttr_metaObject[0]->_id]];
     k = a0->_count;
     km = k - 1;
     if (k == 0) {
@@ -227,7 +227,7 @@ void FUN_001b4220(struct A4220 *arg0, struct B4220 *arg1) {
 void FUN_001b42c0(TravFlattenView *self, int root) {
     int saved[32];
     TravFunctionTable *table = ((TravFunctionTable *)DAT_00562640[0]);
-    int meta = DAT_00561a38[0];
+    int meta = (int)g_igGeometry_metaObject[0];
     int n = igMetaObject_CountTree(meta);
     int i;
     for (i = 0; i < n; i++) {
@@ -258,7 +258,7 @@ int FUN_001b4bb0(igCommonTraversal *arg0, int arg1) {
     int v;
 
     b = (igAttrStackManager *)arg0->_attrStack;
-    l = ((igAttrStack **)((igAttrStackList *)b->_attrStacks)->_data)[((int *)b->_attrStackIndexTable)[DAT_0055efe8[0]->_id]];
+    l = ((igAttrStack **)((igAttrStackList *)b->_attrStacks)->_data)[((int *)b->_attrStackIndexTable)[g_igModelViewMatrixAttr_metaObject[0]->_id]];
     if (l->_count == 0) {
         v = 0;
     } else {
@@ -277,12 +277,12 @@ void FUN_001b68c0(void *self, void *meta) {
     if (FUN_002fe290(meta, ((int)igNode_GetMetaObject())) != 0) {
         NodeProcTable t = DAT_0048d8f0;
         int i;
-        t.e[0].meta = DAT_00562488[0];
-        t.e[1].meta = DAT_00561620[0];
+        t.e[0].meta = (int)g_igActor_metaObject[0];
+        t.e[1].meta = (int)g_igProjectiveShadowShader_metaObject[0];
         t.e[2].meta = DAT_005615d0;
         t.e[3].meta = DAT_00561bd8[0];
-        t.e[4].meta = DAT_005615d8[0];
-        t.e[5].meta = DAT_00561a98[0];
+        t.e[4].meta = (int)g_igSegment_metaObject[0];
+        t.e[5].meta = (int)g_igEnvironmentMapShader2_metaObject[0];
         t.e[6].meta = DAT_00561920;
         t.e[7].meta = DAT_00561908;
         t.e[8].meta = DAT_00561910;
@@ -293,23 +293,23 @@ void FUN_001b68c0(void *self, void *meta) {
         t.e[13].meta = DAT_005618f8[0];
         t.e[14].meta = DAT_00561878;
         t.e[15].meta = DAT_00561870;
-        t.e[16].meta = DAT_00561898[0];
-        t.e[17].meta = DAT_005618d8[0];
-        t.e[18].meta = DAT_005618e8[0];
-        t.e[19].meta = DAT_00561a38[0];
-        t.e[20].meta = DAT_005617a8[0];
+        t.e[16].meta = (int)g_igLod_metaObject[0];
+        t.e[17].meta = (int)g_igLightStateSet_metaObject[0];
+        t.e[18].meta = (int)g_igLightSet_metaObject[0];
+        t.e[19].meta = (int)g_igGeometry_metaObject[0];
+        t.e[20].meta = (int)g_igPlanarShadowShader_metaObject[0];
         t.e[21].meta = DAT_00561578[0];
         t.e[22].meta = DAT_00561570;
-        t.e[23].meta = DAT_00561f38[0];
-        t.e[24].meta = DAT_00561818[0];
-        t.e[25].meta = DAT_00562078[0];
-        t.e[26].meta = DAT_005612b0[0];
-        t.e[27].meta = DAT_00561f68[0];
-        t.e[28].meta = DAT_00561308[0];
-        t.e[29].meta = DAT_00561280[0];
+        t.e[23].meta = (int)g_igBlendMatrixSelect_metaObject[0];
+        t.e[24].meta = (int)g_igOverrideAttrSet_metaObject[0];
+        t.e[25].meta = (int)g_igAttrSet_metaObject[0];
+        t.e[26].meta = (int)g_igTransform_metaObject[0];
+        t.e[27].meta = (int)g_igBillboard_metaObject[0];
+        t.e[28].meta = (int)g_igSwitch_metaObject[0];
+        t.e[29].meta = (int)g_igTransformRecorder_metaObject[0];
         t.e[30].meta = DAT_005612d8[0];
         t.e[31].meta = DAT_00561ca0[0];
-        t.e[32].meta = DAT_00561888[0];
+        t.e[32].meta = (int)g_igModelViewMatrixBoneSelect_metaObject[0];
         t.e[33].meta = DAT_005612e0;
         for (i = 0; i < 34; i++) {
             NodeProcEntry *e = &t.e[i];

@@ -1,8 +1,8 @@
-int FUN_001a4d90(void) {
-    if (DAT_00561f58[0] == 0) {
-        DAT_00561f58[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(DAT_00587040[0]));
+igMetaObject *FUN_001a4d90(void) {
+    if (g_igBitMask_metaObject[0] == 0) {
+        g_igBitMask_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
     }
-    return DAT_00561f58[0];
+    return g_igBitMask_metaObject[0];
 }
 
 igMetaObject *igBitMask_GetMetaObject(void)
@@ -18,7 +18,7 @@ int igBitMask_GetVTable(void) {
 
     igObject_InitHeader(&obj);
     obj.vt = &DAT_0052a340[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 
 void FUN_001a4e70(void)
@@ -48,14 +48,14 @@ void thunk_igBitMask_GetMetaObject(void) {
 }
 
 int FUN_001a4f00(void) {
-    return DAT_00586858[0];
+    return g_igUnsignedIntList_metaObject[0];
 }
 
 void igBitMask_InitFields(void) {
     int temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)DAT_00561f58[0];
+    temp_s0 = (void *)g_igBitMask_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_0048cb98[0], 1);
     igMetaObject_NameFields(temp_s0, &DAT_0048cba0[0], &DAT_0048cba8[0], &DAT_0048cbb0[0], temp_s1);

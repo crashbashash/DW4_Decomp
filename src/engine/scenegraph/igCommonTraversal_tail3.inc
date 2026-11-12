@@ -79,7 +79,7 @@ void FUN_001b6f30(A_1b6f30 *arg0, R_1b6f30 *arg1, R_1b6f30 *arg2) {
         }
     }
     arg0->f36 = arg1;
-    FUN_001b0000((T_1b0000 *)arg0->f52, DAT_0055f468[0], (Obj_1b0000 *)arg0->f36, (Obj_1b0000 *)arg0->f32);
+    FUN_001b0000((T_1b0000 *)arg0->f52, g_igAttr_metaObject[0], (Obj_1b0000 *)arg0->f36, (Obj_1b0000 *)arg0->f32);
 }
 
 void Gap__Sg__igCommonTraversal__vfunc_28(O_1b7010 *arg0, R_1b7010 *arg1) {
@@ -146,7 +146,7 @@ V128 *FUN_001b7330(O_1b7330 *arg0, float *arg1) {
 }
 
 void FUN_001b73d0(struct S_1b73d0 *arg0) {
-    FUN_001b11b0((struct A_1b11b0 *)arg0->x, (struct B_1b11b0 *)((int *)DAT_0055efe8)[0]);
+    FUN_001b11b0((struct A_1b11b0 *)arg0->x, (struct B_1b11b0 *)((int *)g_igModelViewMatrixAttr_metaObject)[0]);
 }
 
 void Gap__Sg__igCommonTraversal__vfunc_23(igCommonTraversalOps *t, int root) {
@@ -379,7 +379,7 @@ int FUN_001b7d70(void *arg0, void *arg1) {
     sp30.y = *(float *)((char *)(arg1) + 80);
     sp30.z = *(float *)((char *)(arg1) + 84);
     temp_a1 = (void *)(*(int *)((char *)(arg0) + 52));
-    temp_a0 = (void *)(*(int *)(*(int *)((char *)(*(int *)((char *)(temp_a1) + 16)) + 16) + (*(int *)(*(int *)((char *)(temp_a1) + 68) + (*(int *)((char *)(((void * *)DAT_0055efe8)[0]) + 8) * 4)) * 4)));
+    temp_a0 = (void *)(*(int *)(*(int *)((char *)(*(int *)((char *)(temp_a1) + 16)) + 16) + (*(int *)(*(int *)((char *)(temp_a1) + 68) + (*(int *)((char *)(((void * *)g_igModelViewMatrixAttr_metaObject)[0]) + 8) * 4)) * 4)));
     temp_v0 = *(int *)((char *)(temp_a0) + 24);
     if (temp_v0 >= 0) {
         var_v0 = *(int *)(*(int *)((char *)(temp_a0) + 16) + (temp_v0 * 4));

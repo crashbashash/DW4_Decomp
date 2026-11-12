@@ -4,11 +4,11 @@ void FUN_003b8f50(int arg0) {
 }
 
 void *FUN_003b8f90(void) {
-    struct G *g = DAT_0058ae38[0];
-    if (!g || ((g->f & 4) != 0) == false) {
+    igMetaObject *g = g_beNDMWStatusSubMenu_metaObject[0];
+    if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_003b9120();
     }
-    return DAT_0058ae38[0];
+    return g_beNDMWStatusSubMenu_metaObject[0];
 }
 
 int beNDMWStatusSubMenu_GetVTable(void) {
@@ -27,7 +27,7 @@ int beNDMWStatusSubMenu_GetVTable(void) {
     u.w[22] = 0;
     u.w[24] = 0;
     u.w[25] = 0;
-    temp_s2 = *(int *)&u.b[*(int *)((char *)(DAT_00586dc8[0]) + 916)];
+    temp_s2 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.w[0] = (int)(&DAT_0053ec20[0]);
     ObjectRef_Destruct_00150eb0(&u.w[25], -1);
     ObjectRef_Destruct_00150eb0(&u.w[24], -1);
@@ -88,11 +88,11 @@ void beNDMWStatusSubMenu_InitFields(void) {
     void *temp_s1_3;
     void *temp_s0;
 
-    temp_s0 = (void *)((int *)DAT_0058ae38)[0];
+    temp_s0 = (void *)g_beNDMWStatusSubMenu_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_004c9c80[0], 5);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = FUN_003bb570();
+    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_003bb570();
     temp_s1_2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 3));
     ((igObjectRefMetaField *)temp_s1_2)->_metaObject = igIntList_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s1_2)->_construct = 1;

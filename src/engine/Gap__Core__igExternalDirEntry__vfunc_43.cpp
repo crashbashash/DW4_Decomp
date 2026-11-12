@@ -11,7 +11,7 @@ int ObjectList_AppendRetained(Obj*, Obj*);
 int igNamedObject_SetName(Obj*, int);
 
 int igObject_GetAllocator(Arg*);
-extern G *DAT_00586dc8[4];
+extern G *g_objectSystem[4];
 }
 
 extern "C" igSmartPointer<Obj> FUN_003087a0(int, int);
@@ -24,7 +24,7 @@ static inline void releaseObject(Obj *object) {
 extern "C" int Gap__Core__igExternalDirEntry__vfunc_43(Arg *arg0, void (*arg1)(Arg *));
 int Gap__Core__igExternalDirEntry__vfunc_43(Arg *arg0, void (*arg1)(Arg *)) {
     int allocator;
-    int directory = DAT_00586dc8[0]->f64;
+    int directory = g_objectSystem[0]->f64;
     igSmartPointer<Obj> list = FUN_003087a0(directory, arg0->f28);
     if (list.get() == 0) {
         allocator = igObject_GetAllocator(arg0);

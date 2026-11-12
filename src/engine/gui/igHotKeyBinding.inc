@@ -18,7 +18,7 @@ int igHotKeyBinding_GetVTable(void) {
     igObject_InitHeader(&o);
     o.vt = &DAT_00541b70[0];
     o.p = 0;
-    r = *(int *)((char *)&o + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+    r = *(int *)((char *)&o + *(int *)((char *)(g_objectSystem[0]) + 916));
     o.vt = &DAT_00541b70[0];
     if (&o.p != 0) {
         t = o.p;
@@ -65,7 +65,7 @@ void igHotKeyBinding_InitFields(void) {
     void *temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)DAT_0058c2c0[0];
+    temp_s0 = (void *)g_igHotKeyBinding_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_004d0138[0], 3);
     temp_v0 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
@@ -75,7 +75,7 @@ void igHotKeyBinding_InitFields(void) {
     FUN_002dc7a0(temp_v0_2, &DAT_004d0180[0]);
     ((igEnumMetaField *)temp_v0_2)->_getMetaEnumFunction = (int)(FUN_00146850);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = FUN_00453250();
+    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_00453250();
     igMetaObject_NameFields(temp_s0, &DAT_004d0148[0], &DAT_004d0158[0], &DAT_004d0168[0], temp_s2);
 }
 

@@ -1,4 +1,4 @@
-int Gap__Gfx__igExternalImageEntry__vfunc_22(void) {
-    return DAT_0055fe98[0];
+igMetaObject *Gap__Gfx__igExternalImageEntry__vfunc_22(void) {
+    return g_igExternalImageEntry_metaObject[0];
 }
 

@@ -12,13 +12,13 @@ void FUN_0045c5a0(int arg0) {
 
 void *igRotateMode_GetMetaObject(void) {
     bool ok;
-    if (((S_45c5e0 *)DAT_0058cbf8[0]) == 0) goto make;
-    ok = !!(((S_45c5e0 *)DAT_0058cbf8[0])->f & 4);
+    if (((S_45c5e0 *)g_igRotateMode_metaObject[0]) == 0) goto make;
+    ok = !!(((S_45c5e0 *)g_igRotateMode_metaObject[0])->f & 4);
     if (ok != false) goto done;
 make:
     FUN_0045c680();
 done:;
-    return ((S_45c5e0 *)DAT_0058cbf8[0]);
+    return ((S_45c5e0 *)g_igRotateMode_metaObject[0]);
 }
 
 int igRotateMode_GetVTable(void) {
@@ -27,7 +27,7 @@ int igRotateMode_GetVTable(void) {
     u.vt = (int)&DAT_00542960[0];
     igMatrix44f_SetIdentity(&u.b[12]);
     u.vt = (int)&DAT_005427b0[0];
-    return *(int *)&u.b[*(int *)((char *)((void *)DAT_00586dc8[0]) + 916)];
+    return *(int *)&u.b[*(int *)((char *)((void *)g_objectSystem[0]) + 916)];
 }
 
 void FUN_0045c680(void)
@@ -69,7 +69,7 @@ void igRotateMode_InitFields(void) {
     void *temp_a0;
     void *temp_s0;
 
-    temp_s0 = (void *)DAT_0058cbf8[0];
+    temp_s0 = (void *)g_igRotateMode_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_004d1480[0], 0x10);
     FUN_002e3810(igMetaObject_GetFieldAt(temp_s0, temp_s2), 1.0f);

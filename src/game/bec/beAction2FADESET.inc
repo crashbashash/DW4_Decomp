@@ -1,12 +1,12 @@
 void *FUN_0036d1a0(void) {
     bool ok;
-    if (DAT_00589fb0[0] == 0) goto make;
-    ok = !!(DAT_00589fb0[0]->f & 4);
+    if (g_beAction2FADESET_metaObject[0] == 0) goto make;
+    ok = !!(g_beAction2FADESET_metaObject[0]->_validity & 4);
     if (ok != false) goto done;
 make:
     FUN_0036d280();
 done:;
-    return DAT_00589fb0[0];
+    return g_beAction2FADESET_metaObject[0];
 }
 
 int beAction2FADESET_GetVTable(void) {
@@ -22,7 +22,7 @@ int beAction2FADESET_GetVTable(void) {
     *(int *)ps = 0;
     u.vt = (int)&DAT_00524950[0];
     u.vt = (int)&DAT_00534150[0];
-    s0 = *(int *)&u.b[*(int *)((char *)(DAT_00586dc8[0]) + 916)];
+    s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.vt = (int)&DAT_00524950[0];
     if (ps != 0) {
         v1 = *(int **)ps;
@@ -69,7 +69,7 @@ void beAction2FADESET_InitFields(void) {
     int temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)((int *)DAT_00589fb0)[0];
+    temp_s0 = (void *)g_beAction2FADESET_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_004c8120[0], 2);
     igMetaObject_NameFields(temp_s0, &DAT_004c8128[0], &DAT_004c8130[0], &DAT_004c8138[0], temp_s1);

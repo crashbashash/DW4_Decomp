@@ -32,7 +32,7 @@ void thunk_igImageLoader_GetMetaObject(void) {
     igImageLoader_GetMetaObject();
 }
 
-int FUN_0014db10(void) {
-    return DAT_0055fd68[0];
+igMetaObject *FUN_0014db10(void) {
+    return g_igImageUtils_metaObject[0];
 }
 

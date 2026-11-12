@@ -1,8 +1,8 @@
-int FUN_0044bce0(void) {
-    if (DAT_0058c1d0[0] == 0) {
-        DAT_0058c1d0[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(DAT_00587040[0]));
+igMetaObject *FUN_0044bce0(void) {
+    if (g_igTextElement_metaObject[0] == 0) {
+        g_igTextElement_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
     }
-    return DAT_0058c1d0[0];
+    return g_igTextElement_metaObject[0];
 }
 
 igMetaObject *igTextElement_GetMetaObject(void)
@@ -25,7 +25,7 @@ int igTextElement_GetVTable(void) {
     u.w[11] = 0;
     u.w[12] = 0;
     u.w[13] = 0;
-    temp_s2 = *(int *)&u.b[*(int *)((char *)(DAT_00586dc8[0]) + 916)];
+    temp_s2 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.w[0] = (int)(&DAT_00540c10[0]);
     StringRef_Destruct_00130720(&u.w[13], -1);
     FUN_001353b0(&u.w[12], -1);
@@ -110,8 +110,8 @@ void thunk_igTextElement_GetMetaObject(void) {
     igTextElement_GetMetaObject();
 }
 
-int FUN_0044c030(void) {
-    return DAT_0058c4e8[0];
+igMetaObject *FUN_0044c030(void) {
+    return g_igGeometryElement_metaObject[0];
 }
 
 void igTextElement_InitFields(void) {
@@ -120,11 +120,11 @@ void igTextElement_InitFields(void) {
     void *temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)DAT_0058c1d0[0];
+    temp_s0 = (void *)g_igTextElement_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_004cff28[0], 3);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = FUN_004507f0();
+    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_004507f0();
     temp_s1_2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
     ((igObjectRefMetaField *)temp_s1_2)->_metaObject = FUN_00137850();
     ((igRefMetaField *)temp_s1_2)->_construct = 1;
@@ -155,8 +155,8 @@ void *FUN_0044c110(struct S *arg0, short arg1) {
     return arg0;
 }
 
-int FUN_0044c1b0(void) {
-    return DAT_0058c438[0];
+igMetaObject *FUN_0044c1b0(void) {
+    return g_igGuiComponentModel_metaObject[0];
 }
 
 void **FUN_0044c1c0(void **arg0, int arg1) {
@@ -177,7 +177,7 @@ void **FUN_0044c1c0(void **arg0, int arg1) {
     return arg0;
 }
 
-int FUN_0044c240(void) {
-    return DAT_0058c480[0];
+igMetaObject *FUN_0044c240(void) {
+    return g_igGuiComponentAspect_metaObject[0];
 }
 

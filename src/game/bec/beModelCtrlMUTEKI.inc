@@ -1,9 +1,9 @@
-G_354ca0 *FUN_00354ca0(void) {
-    G_354ca0 *g = DAT_00588d50[0];
+igMetaObject *FUN_00354ca0(void) {
+    igMetaObject *g = g_beModelCtrlMUTEKI_metaObject[0];
     int t;
-    if (!g || !(t = (g->f & 4) != 0))
+    if (!g || !(t = (g->_validity & 4) != 0))
         FUN_00354d80();
-    return DAT_00588d50[0];
+    return g_beModelCtrlMUTEKI_metaObject[0];
 }
 
 int beModelCtrlMUTEKI_GetVTable(void) {
@@ -19,7 +19,7 @@ int beModelCtrlMUTEKI_GetVTable(void) {
     *(int *)ps = 0;
     u.vt = (int)&DAT_00524950[0];
     u.vt = (int)&DAT_00537770[0];
-    temp_s0 = *(int *)&u.b[*(int *)((char *)(DAT_00586dc8[0]) + 916)];
+    temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.vt = (int)&DAT_00524950[0];
     if (ps != 0) {
         temp_v1 = *(int **)ps;
@@ -66,7 +66,7 @@ void beModelCtrlMUTEKI_InitFields(void) {
     int temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)((int *)DAT_00588d50)[0];
+    temp_s0 = (void *)g_beModelCtrlMUTEKI_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_004c5778[0], 1);
     igMetaObject_NameFields(temp_s0, &DAT_004c5780[0], &DAT_004c5788[0], &DAT_004c5790[0], temp_s1);

@@ -1,8 +1,8 @@
 int Gap__Gfx__igPsx2IndexArray__vfunc_22(void) {
-    return (int)DAT_005605d0[0];
+    return (int)g_igPsx2IndexArray_metaObject[0];
 }
 
-int FUN_00180fd0(void) {
-    return DAT_0055faf0[0];
+igMetaObject *FUN_00180fd0(void) {
+    return g_igUserUCodeExt_metaObject[0];
 }
 

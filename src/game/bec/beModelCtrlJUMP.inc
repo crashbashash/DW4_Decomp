@@ -1,9 +1,9 @@
 void *FUN_00355d60(void) {
-    struct G *g = DAT_00588e00[0];
-    if (!g || ((g->f & 4) != 0) == false) {
+    igMetaObject *g = g_beModelCtrlJUMP_metaObject[0];
+    if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_00355e40();
     }
-    return DAT_00588e00[0];
+    return g_beModelCtrlJUMP_metaObject[0];
 }
 
 int beModelCtrlJUMP_GetVTable(void) {
@@ -19,7 +19,7 @@ int beModelCtrlJUMP_GetVTable(void) {
     *(int *)ps = 0;
     u.vt = (int)&DAT_00524950[0];
     u.vt = (int)&DAT_00537410[0];
-    s0 = *(int *)&u.b[*(int *)((char *)(DAT_00586dc8[0]) + 916)];
+    s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.vt = (int)&DAT_00524950[0];
     if (ps != 0) {
         v1 = *(int **)ps;

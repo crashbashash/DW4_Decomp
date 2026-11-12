@@ -3,11 +3,11 @@ void FUN_0014d070(int arg0) {
     igMetaObject_CreateInstance(*(int *)0x55FCA0, arg0);
 }
 
-int FUN_0014d0b0(void) {
-    if (DAT_0055fca0[0] == 0) {
-        DAT_0055fca0[0] = (int)igMetaObject_Create(Memory_GetAllocatorBySelector(DAT_00587040[0]));
+igMetaObject *FUN_0014d0b0(void) {
+    if (g_igParticleFormat_metaObject[0] == 0) {
+        g_igParticleFormat_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
     }
-    return DAT_0055fca0[0];
+    return g_igParticleFormat_metaObject[0];
 }
 
 igMetaObject *igParticleFormat_GetMetaObject(void)
@@ -22,7 +22,7 @@ int igParticleFormat_GetVTable(void) {
     struct Obj_14d150 obj;
     igObject_InitHeader(&obj);
     obj.vt = &DAT_00526fc0[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 
 void FUN_0014d190(void)
@@ -65,7 +65,7 @@ void igParticleFormat_InitFields(void) {
     int temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)DAT_0055fca0[0];
+    temp_s0 = (void *)g_igParticleFormat_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_00488ba0[0], 0xA);
     temp_v0 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s1));

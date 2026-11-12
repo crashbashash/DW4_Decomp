@@ -16,7 +16,7 @@ int igVertexBlendMatrixAttr_GetVTable(void) {
     igObject_InitHeader(u.b);
     u.w[0] = (int)(&DAT_005226c0[0]);
     igMatrix44f_SetIdentity(&u.w[3]);
-    return *(int *)&u.b[*(int *)((char *)(DAT_00586dc8[0]) + 916)];
+    return *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
 }
 
 void FUN_00130cf0(void)
@@ -56,7 +56,7 @@ void igVertexBlendMatrixAttr_InitFields(void) {
     struct V o4;
     struct V o5;
 
-    temp_s0 = (void *)DAT_0055ec68[0];
+    temp_s0 = (void *)g_igVertexBlendMatrixAttr_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_00485a70[0], 2);
     temp_s1 = (int)igMetaObject_GetFieldAt(temp_s0, temp_s2);

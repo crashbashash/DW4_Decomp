@@ -4,11 +4,11 @@ void FUN_003c8b00(int arg0) {
 }
 
 void *beNDMWItemBlueArmor_GetReadyMetaObject(void) {
-    struct G *g = DAT_0058bf58[0];
-    if (!g || ((g->f & 4) != 0) == false) {
+    igMetaObject *g = g_beNDMWItemBlueArmor_metaObject[0];
+    if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_003c8bd0();
     }
-    return DAT_0058bf58[0];
+    return g_beNDMWItemBlueArmor_metaObject[0];
 }
 
 int beNDMWItemBlueArmor_GetVTable(void) {
@@ -16,7 +16,7 @@ int beNDMWItemBlueArmor_GetVTable(void) {
 
     igObject_InitHeader(&obj);
     obj.vt = &DAT_005408f0[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 
 void FUN_003c8bd0(void)
@@ -46,7 +46,7 @@ void beNDMWItemBlueArmor_GetMetaObject(void)
     beNDMWItemBlueArmor_GetReadyMetaObject();
 }
 
-int FUN_003c8c80(void) {
-    return ((int *)DAT_0058bf68)[0];
+igMetaObject *FUN_003c8c80(void) {
+    return g_beNDMWItemRevisionPocketBase_metaObject[0];
 }
 

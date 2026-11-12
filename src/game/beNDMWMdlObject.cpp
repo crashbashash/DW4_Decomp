@@ -20,9 +20,9 @@ extern "C" void *igProperty_FindByName(...);
 extern "C" int DAT_00515f40[4];
 extern "C" int g_beNDMWMdlObject_metaObject[4];
 extern "C" int DAT_00515f50[4];
-extern "C" int DAT_00585be0[4];
-extern "C" int DAT_00586f20[4];
-extern "C" int DAT_00587110[4];
+extern "C" int g_propertyNameField[4];
+extern "C" int g_stringPool[4];
+extern "C" int g_defaultAllocatorSelector[4];
 extern "C" unsigned char GPR_00554c14;
 /* Property record: reference at +20. */
 struct OneProperty { char pad[20]; igObject *f20; };
@@ -55,16 +55,16 @@ void Gap__Bec__beNDMWMdlObject__vfunc_37(void)
 void Gap__Bec__beNDMWMdlObject__vfunc_36(beNDMWMdlObject *arg0, beBaseInfoRam *arg1) {
     if (arg1->_dataList == 0) {
         int a = igObject_GetAllocator(arg1);
-        int al = GPR_00554c14 != 0 ? a : Memory_GetAllocatorBySelector(DAT_00587110[0]);
+        int al = GPR_00554c14 != 0 ? a : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
         igObject *created = (igObject *)beBaseInfoDataList_Create(al);
         /* matching construct: the new list is a temporary bound to the setter's reference parameter (it
          * takes the stack slot below the named info-work reference, as retail's +0x58 does) */
         DataListSlot::adopt(arg1, created);
     }
-    OneProperty *s3 = (OneProperty *)igProperty_FindByName(arg1->_dataList, DAT_00585be0[0], DAT_00515f50);
+    OneProperty *s3 = (OneProperty *)igProperty_FindByName(arg1->_dataList, g_propertyNameField[0], DAT_00515f50);
     {
         int a2 = igObject_GetAllocator(arg0);
-        int al2 = GPR_00554c14 != 0 ? a2 : Memory_GetAllocatorBySelector(DAT_00587110[0]);
+        int al2 = GPR_00554c14 != 0 ? a2 : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
         InfoWorkRef w((igObject *)FUN_00350020(al2));
         igObject *t2 = w.p;
         if (t2 != 0) t2->_refCount = t2->_refCount + 1;
@@ -74,12 +74,12 @@ void Gap__Bec__beNDMWMdlObject__vfunc_36(beNDMWMdlObject *arg0, beBaseInfoRam *a
             int str = beMessenger_GetString(arg0->_messenger, 0);
             int ns;
             beModelCtrlInfoWork *tg = (beModelCtrlInfoWork *)w.p;
-            if (DAT_00586f20[0] == 0) {
+            if (g_stringPool[0] == 0) {
                 int v = FUN_002eb010(16);
                 if (v != 0) v = StringPool_Construct(v);
-                DAT_00586f20[0] = v;
+                g_stringPool[0] = v;
             }
-            ns = (int)StringPool_Intern(DAT_00586f20[0], str);
+            ns = (int)StringPool_Intern(g_stringPool[0], str);
             int old = tg->_hitParentName;
             if (old != 0) {
                 int *hdr = (int *)(old - 8);

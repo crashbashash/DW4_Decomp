@@ -1,4 +1,4 @@
-int Gap__Attrs__igMatrixOptStateAttr__vfunc_22(void) {
-    return DAT_0055f000[0];
+igMetaObject *Gap__Attrs__igMatrixOptStateAttr__vfunc_22(void) {
+    return g_igMatrixOptStateAttr_metaObject[0];
 }
 

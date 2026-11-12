@@ -1,4 +1,4 @@
-int Gap__Attrs__igLightStateAttr__vfunc_22(void) {
-    return DAT_0055f060[0];
+igMetaObject *Gap__Attrs__igLightStateAttr__vfunc_22(void) {
+    return g_igLightStateAttr_metaObject[0];
 }
 

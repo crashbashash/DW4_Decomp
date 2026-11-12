@@ -14,14 +14,14 @@ int Gap__Core__igFloatMetaField__vfunc_27(void) {
 }
 
 static inline void *pool() {
-    if (((void * *)DAT_00586f20)[0] == 0) {
+    if (((void * *)g_stringPool)[0] == 0) {
         void *o = FUN_002eb010(0x10);
         if (o != 0) {
             o = ((void *)StringPool_Construct((struct S_2eadf0 *)o));
         }
-        ((void * *)DAT_00586f20)[0] = o;
+        ((void * *)g_stringPool)[0] = o;
     }
-    return ((void * *)DAT_00586f20)[0];
+    return ((void * *)g_stringPool)[0];
 }
 
 void FUN_002e3850(Named *self, int key) {

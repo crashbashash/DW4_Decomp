@@ -1,10 +1,10 @@
 igMetaObject *FUN_0036a790(void)
 {
-    igMetaObject *g = DAT_00589db0[0];
+    igMetaObject *g = g_beBaseInfoManagerList_metaObject[0];
     bool t;
     if (!g || (t = g->_validity & 4) == 0)
         FUN_0036a820();
-    return DAT_00589db0[0];
+    return g_beBaseInfoManagerList_metaObject[0];
 }
 
 int beBaseInfoManagerList_GetVTable(void) {
@@ -12,7 +12,7 @@ int beBaseInfoManagerList_GetVTable(void) {
 
     igObject_InitHeader(obj);
     obj[0] = (int)&DAT_005347c0[0];
-    return *(int *)((char *)obj + *(int *)((char *)DAT_00586dc8[0] + 916));
+    return *(int *)((char *)obj + *(int *)((char *)g_objectSystem[0] + 916));
 }
 
 void FUN_0036a820(void)

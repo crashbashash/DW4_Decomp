@@ -44,7 +44,7 @@ extern "C" void beSelectCtrl_RegisterReceiver(beSelectCtrl *self, int info);
 extern "C" char DAT_0050f8b0[];
 extern "C" igObject * beBaseInfoDataList_Create(...);
 extern "C" beSelectCtrlInfoRamData * igProperty_FindByName(...);
-extern "C" int DAT_004e0858[4];
+extern "C" int emptyString[4];
 extern "C" int DAT_0050f800[4];
 extern "C" int DAT_0050f808[4];
 extern "C" int DAT_0050f818[4];
@@ -59,14 +59,14 @@ extern "C" int DAT_0050f888[4];
 extern "C" int DAT_0050f890[4];
 extern "C" int DAT_0050f8a0[4];
 extern "C" int DAT_0050f8c0[4];
-extern "C" int DAT_00585be0[4];
-extern "C" int DAT_00586f20[4];
-extern "C" int DAT_00587110[4];
+extern "C" int g_propertyNameField[4];
+extern "C" int g_stringPool[4];
+extern "C" int g_defaultAllocatorSelector[4];
 extern "C" unsigned char GPR_00554c14;
 typedef struct DecideList { char pad[16]; unsigned char *data; } DecideList;
 extern "C" void Gap__Bec__beSelectCtrl__vfunc_31(beSelectCtrl *self, beBaseInfoRam *ram);
 extern "C" int List_Resize(igBoolList *, int, int);
-extern "C" float DAT_004e1058[4];
+extern "C" float g_vec3Zero[4];
 extern "C" float DAT_004e105c[4];
 extern "C" float DAT_004e1060[4];
 extern "C" int DAT_0050f8d0[4];
@@ -117,7 +117,7 @@ void beSelectCtrl_RegisterReceiver(beSelectCtrl *self, int info)
     beMessenger_RegisterReceiverFromInfo(self->_messenger, info, D_0050f7f0);
 }
 
-#define NAME (info->_name ? info->_name : (int)&DAT_004e0858[0])
+#define NAME (info->_name ? info->_name : (int)&emptyString[0])
 /* Bool flags use daddiu, ram->_ramNo and ram->_svSeqName are hoisted into locals before the NAME
  * ternary, switch(st3) has case 0 and default, info is declared first, the on-demand data list is held by an igSmartPointer<igObject>, and the decide-list
  * byte test uses an unsigned index. */
@@ -160,7 +160,7 @@ void Gap__Bec__beSelectCtrl__vfunc_31(beSelectCtrl *self, beBaseInfoRam *ram) {
         igObject *s3;
         igObject *o;
         allocator = igObject_GetAllocator(ram);
-        allocator = GPR_00554c14 != 0 ? allocator : Memory_GetAllocatorBySelector(DAT_00587110[0]);
+        allocator = GPR_00554c14 != 0 ? allocator : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
         igSmartPointer<igObject> ref(beBaseInfoDataList_Create(allocator));
         s3 = ref.p;
         if (s3 != 0) s3->_refCount = s3->_refCount + 1;
@@ -171,7 +171,7 @@ void Gap__Bec__beSelectCtrl__vfunc_31(beSelectCtrl *self, beBaseInfoRam *ram) {
         }
         ram->_dataList = (int)s3;
     }
-    rd = igProperty_FindByName(ram->_dataList, DAT_00585be0[0], &DAT_0050f800[0]);
+    rd = igProperty_FindByName(ram->_dataList, g_propertyNameField[0], &DAT_0050f800[0]);
     wk = (beSelectCtrlInfoWork *)rd->_work;
     pad = bePadManager_GetPadForPlayer(self->_padManager, ram->_ramNo);
     state = ram->_st0;
@@ -231,12 +231,12 @@ void Gap__Bec__beSelectCtrl__vfunc_31(beSelectCtrl *self, beBaseInfoRam *ram) {
                             cur = cur - 1;
                             moved = true;
                             sprintf(buf2, &DAT_0050f850[0], cur);
-                            if (DAT_00586f20[0] == 0) {
+                            if (g_stringPool[0] == 0) {
                                 v = FUN_002eb010(0x10);
                                 if (v != 0) v = StringPool_Construct(v);
-                                DAT_00586f20[0] = v;
+                                g_stringPool[0] = v;
                             }
-                            s = StringPool_Intern(DAT_00586f20[0], buf2);
+                            s = StringPool_Intern(g_stringPool[0], buf2);
                             old = (int *)wk->_svSeqName;
                             if (old != 0) {
                                 hd = old - 2;
@@ -250,12 +250,12 @@ void Gap__Bec__beSelectCtrl__vfunc_31(beSelectCtrl *self, beBaseInfoRam *ram) {
                         cur = cur + 1;
                         moved = true;
                         sprintf(buf3, &DAT_0050f860[0], cur);
-                        if (DAT_00586f20[0] == 0) {
+                        if (g_stringPool[0] == 0) {
                             v = FUN_002eb010(0x10);
                             if (v != 0) v = StringPool_Construct(v);
-                            DAT_00586f20[0] = v;
+                            g_stringPool[0] = v;
                         }
-                        s = StringPool_Intern(DAT_00586f20[0], buf3);
+                        s = StringPool_Intern(g_stringPool[0], buf3);
                         old = (int *)wk->_svSeqName;
                         if (old != 0) {
                             hd = old - 2;
@@ -307,12 +307,12 @@ void Gap__Bec__beSelectCtrl__vfunc_31(beSelectCtrl *self, beBaseInfoRam *ram) {
                     return;
                 }
                 sprintf(buf4, &DAT_0050f890[0], rd->_selectNo);
-                if (DAT_00586f20[0] == 0) {
+                if (g_stringPool[0] == 0) {
                     v = FUN_002eb010(0x10);
                     if (v != 0) v = StringPool_Construct(v);
-                    DAT_00586f20[0] = v;
+                    g_stringPool[0] = v;
                 }
-                s = StringPool_Intern(DAT_00586f20[0], buf4);
+                s = StringPool_Intern(g_stringPool[0], buf4);
                 old = (int *)wk->_svSeqName;
                 if (old != 0) {
                     hd = old - 2;
@@ -357,12 +357,12 @@ void Gap__Bec__beSelectCtrl__vfunc_31(beSelectCtrl *self, beBaseInfoRam *ram) {
         case 0:
             if (rd->_selectNo != -1) s = (int *)&DAT_0050f8a0[0];
             else s = (int *)DAT_0050f8b0;
-            if (DAT_00586f20[0] == 0) {
+            if (g_stringPool[0] == 0) {
                 v = FUN_002eb010(0x10);
                 if (v != 0) v = StringPool_Construct(v);
-                DAT_00586f20[0] = v;
+                g_stringPool[0] = v;
             }
-            hd = StringPool_Intern(DAT_00586f20[0], s);
+            hd = StringPool_Intern(g_stringPool[0], s);
             old = (int *)wk->_svSeqName;
             if (old != 0) {
                 int *h2 = old - 2;
@@ -446,10 +446,10 @@ int Gap__Bec__beSelectCtrl__vfunc_33(beSelectCtrl *arg0, beBaseInfoRam *arg1, in
     igBoolList *l;
     if (arg1->_dataList == 0) {
         a = igObject_GetAllocator(arg1);
-        a = (GPR_00554c14 != 0) ? a : Memory_GetAllocatorBySelector(DAT_00587110[0]);
+        a = (GPR_00554c14 != 0) ? a : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
         DataList::create(arg1, a);
     }
-    s3 = (beSelectCtrlInfoRamData *)((int)igProperty_FindByName(arg1->_dataList, DAT_00585be0[0], DAT_0050f800));
+    s3 = (beSelectCtrlInfoRamData *)((int)igProperty_FindByName(arg1->_dataList, g_propertyNameField[0], DAT_0050f800));
     s2 = (beSelectCtrlInfoWork *)s3->_work;
     switch (beMessenger_ResolveEnumValue(arg0->_messenger, FUN_003459a0(), arg2)) {
     case 0:
@@ -459,7 +459,7 @@ int Gap__Bec__beSelectCtrl__vfunc_33(beSelectCtrl *arg0, beBaseInfoRam *arg1, in
         arg1->_st2 = 0;
         arg1->_st1 = 0;
         a = igObject_GetAllocator(arg0);
-        a = (GPR_00554c14 != 0) ? a : Memory_GetAllocatorBySelector(DAT_00587110[0]);
+        a = (GPR_00554c14 != 0) ? a : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
         {
             WorkRef work((beSelectCtrlInfoWork *)FUN_00345680(a));
             t = (igObject *)work.p;
@@ -483,7 +483,7 @@ int Gap__Bec__beSelectCtrl__vfunc_33(beSelectCtrl *arg0, beBaseInfoRam *arg1, in
             ((float *)u->_offsetPos)[1] = sp80[1];
             ((float *)u->_offsetPos)[2] = sp80[2];
         } else {
-            ((float *)u->_offsetPos)[0] = DAT_004e1058[0];
+            ((float *)u->_offsetPos)[0] = g_vec3Zero[0];
             ((float *)u->_offsetPos)[1] = DAT_004e105c[0];
             ((float *)u->_offsetPos)[2] = DAT_004e1060[0];
         }
@@ -495,7 +495,7 @@ int Gap__Bec__beSelectCtrl__vfunc_33(beSelectCtrl *arg0, beBaseInfoRam *arg1, in
         n = beMessenger_GetBoolCount(arg0->_messenger);
         if (n != 0 && n == u->_selectMax) {
             a = igObject_GetAllocator(arg0);
-            a = (GPR_00554c14 != 0) ? a : Memory_GetAllocatorBySelector(DAT_00587110[0]);
+            a = (GPR_00554c14 != 0) ? a : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
             BoolListRef decide((igObject *)FUN_002cb0d0(a));
             t = decide.p;
             if (t != 0) t->_refCount = (int)t->_refCount + 1;
@@ -554,7 +554,7 @@ int Gap__Bec__beSelectCtrl__vfunc_33(beSelectCtrl *arg0, beBaseInfoRam *arg1, in
                 n = beMessenger_GetBoolCount(arg0->_messenger);
                 if (n != 0 && n == s2->_selectMax) {
                     a = igObject_GetAllocator(arg0);
-                    a = (GPR_00554c14 != 0) ? a : Memory_GetAllocatorBySelector(DAT_00587110[0]);
+                    a = (GPR_00554c14 != 0) ? a : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
                     BoolListRef decide((igObject *)FUN_002cb0d0(a));
                     t = decide.p;
                     if (t != 0) t->_refCount = (int)t->_refCount + 1;

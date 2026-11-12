@@ -16,7 +16,7 @@ int igVec2fList_GetVTable(void) {
 
     igObject_InitHeader(&obj);
     obj.vt = &DAT_005278b0[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 
 void FUN_0018a3a0(void)
@@ -51,7 +51,7 @@ void FUN_0018a430(void) {
     void *temp_s0;
     void *temp_s1;
 
-    temp_s1 = (void *)(DAT_005610c8[0]);
+    temp_s1 = (void *)(g_igVec2fList_metaObject[0]);
     temp_v0 = (void **)(igMetaObject_FindFieldByName(temp_s1, &DAT_004e0ca0[0]));
     temp_s2 = ObjectPointerList_FindIndex(*(int *)((char *)(temp_s1) + 40), temp_v0);
     temp_s0 = (void *)(((DW4VC_84_1 *)(temp_v0))->vX((int)(1)));

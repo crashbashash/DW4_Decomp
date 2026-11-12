@@ -3,19 +3,19 @@ void FUN_003c1120(int arg0) {
     igMetaObject_CreateInstance(*(int *)0x58B4A8, arg0);
 }
 
-int FUN_003c1160(void) {
-    if (((int *)DAT_0058b4a8)[0] == 0) {
-        ((int *)DAT_0058b4a8)[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(DAT_00587040[0]));
+igMetaObject *FUN_003c1160(void) {
+    if (g_beNDMWMdlItem_metaObject[0] == 0) {
+        g_beNDMWMdlItem_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
     }
-    return ((int *)DAT_0058b4a8)[0];
+    return g_beNDMWMdlItem_metaObject[0];
 }
 
-G_3c11b0 *beNDMWMdlItem_GetReadyMetaObject(void) {
-    G_3c11b0 *g = DAT_0058b4a8[0];
+igMetaObject *beNDMWMdlItem_GetReadyMetaObject(void) {
+    igMetaObject *g = g_beNDMWMdlItem_metaObject[0];
     int t;
-    if (!g || !(t = (g->f & 4) != 0))
+    if (!g || !(t = (g->_validity & 4) != 0))
         FUN_003c1270();
-    return DAT_0058b4a8[0];
+    return g_beNDMWMdlItem_metaObject[0];
 }
 
 int beNDMWMdlItem_GetVTable(void) {
@@ -26,7 +26,7 @@ int beNDMWMdlItem_GetVTable(void) {
     o.f24 = 0;
     o.vt = &DAT_00540450[0];
     o.f48 = 0;
-    r = *(int *)((char *)&o + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+    r = *(int *)((char *)&o + *(int *)((char *)(g_objectSystem[0]) + 916));
     o.vt = &DAT_00540450[0];
     FUN_0014aa70(&o.f48, -1);
     FUN_003bf2f0((struct NamedRefObject *)&o, (long long)0);
@@ -66,7 +66,7 @@ void beNDMWMdlItem_InitFields(void) {
     void *temp_s1_2;
     void *temp_s0;
 
-    temp_s0 = (void *)((int *)DAT_0058b4a8)[0];
+    temp_s0 = (void *)g_beNDMWMdlItem_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_004cab58[0], 2);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));

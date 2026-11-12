@@ -16,7 +16,7 @@ int igGeometryMaskAttr_GetVTable(void) {
 
     igObject_InitHeader(&obj);
     obj.vt = &DAT_00523840[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 
 void FUN_00137140(void)
@@ -49,7 +49,7 @@ void igGeometryMaskAttr_InitFields(void) {
     int temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)DAT_0055f148[0];
+    temp_s0 = (void *)g_igGeometryMaskAttr_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_00486530[0], 1);
     FUN_0030e9b0(igMetaObject_GetFieldAt(temp_s0, temp_s1), -1);

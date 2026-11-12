@@ -1,9 +1,9 @@
 void *beLoadingNode_ResolveMetaObject(void) {
-    struct G *g = DAT_005886e8[0];
-    if (!g || ((g->f & 4) != 0) == false) {
+    igMetaObject *g = g_beLoadingNode_metaObject[0];
+    if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_0034e710();
     }
-    return DAT_005886e8[0];
+    return g_beLoadingNode_metaObject[0];
 }
 
 int beLoadingNode_GetVTable(void) {
@@ -16,7 +16,7 @@ int beLoadingNode_GetVTable(void) {
     obj.f10 = 0;
     obj.f1C = 0;
     obj.vt = (&DAT_00538110[0]);
-    temp_s0 = *(int *)((char *)&obj + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+    temp_s0 = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
     obj.vt = (&DAT_00538110[0]);
     FUN_0034e690((int **)&obj, (long long)0);
     return temp_s0;
@@ -64,15 +64,15 @@ void beLoadingNode_GetMetaObject(void)
     beLoadingNode_ResolveMetaObject();
 }
 
-int FUN_0034e7d0(void) {
-    return ((int *)DAT_00588700)[0];
+igMetaObject *FUN_0034e7d0(void) {
+    return g_beNodeAnim_metaObject[0];
 }
 
 void beLoadingNode_InitFields(void) {
     int temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)((int *)DAT_005886e8)[0];
+    temp_s0 = (void *)g_beLoadingNode_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_004c4a50[0], 2);
     igMetaObject_NameFields(temp_s0, &DAT_004c4a58[0], &DAT_004c4a60[0], &DAT_004c4a68[0], temp_s1);

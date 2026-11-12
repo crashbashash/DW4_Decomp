@@ -1,8 +1,8 @@
-int FUN_001a9bb0(void) {
-    if (DAT_00562400[0] == 0) {
-        DAT_00562400[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(DAT_00587040[0]));
+igMetaObject *FUN_001a9bb0(void) {
+    if (g_igAnimationTransitionParams_metaObject[0] == 0) {
+        g_igAnimationTransitionParams_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
     }
-    return DAT_00562400[0];
+    return g_igAnimationTransitionParams_metaObject[0];
 }
 
 igMetaObject *igAnimationTransitionParams_GetMetaObject(void)
@@ -18,7 +18,7 @@ int igAnimationTransitionParams_GetVTable(void) {
 
     igObject_InitHeader(&obj);
     obj.vt = &DAT_00529900[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 
 void FUN_001a9c90(void)
@@ -51,7 +51,7 @@ void igAnimationTransitionParams_InitFields(void) {
     int temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)DAT_00562400[0];
+    temp_s0 = (void *)g_igAnimationTransitionParams_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_0048d620[0], 4);
     igMetaObject_NameFields(temp_s0, &DAT_0048d630[0], &DAT_0048d640[0], &DAT_0048d650[0], temp_s1);

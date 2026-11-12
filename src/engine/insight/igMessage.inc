@@ -9,7 +9,7 @@ igMetaObject *igMessage_GetMetaObject(void)
 int igMessage_GetVTable(void) {
     struct Obj_2316c0 o; igObject_InitHeader(&o);
     o.vt = &DAT_0052d000[0];
-    return *(int *)((char *)&o + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+    return *(int *)((char *)&o + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 
 void FUN_00231700(void)

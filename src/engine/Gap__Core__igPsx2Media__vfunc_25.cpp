@@ -4,8 +4,8 @@ int strcpy(int, int);
 int strlen(int);
 int FUN_0032e130(void *, int, int **);
 int StringChunk_ReleaseHeader(int, int *);
-extern char DAT_004fb410[];
-extern int DAT_004fb418[4];
+extern char g_statusSucceeded[];
+extern int g_allocatorFailureStatus[4];
 void Gap__Core__igPsx2Media__vfunc_25(int *arg0, igPsx2Media *arg1, int arg2, int **arg3, unsigned int arg4);
 }
 struct R { int a; R() {} R(int x) { a = x; } };
@@ -74,9 +74,9 @@ void Gap__Core__igPsx2Media__vfunc_25(int *arg0, igPsx2Media *arg1, int arg2, in
     }
     R sp70 = ((V *)arg1->_sema)->v124();
     if (s0 < 0) {
-        p = DAT_004fb418;
+        p = g_allocatorFailureStatus;
     } else {
-        p = (int *)DAT_004fb410;
+        p = (int *)g_statusSucceeded;
     }
     *arg0 = *p;
 }

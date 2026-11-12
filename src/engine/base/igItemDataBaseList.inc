@@ -1,8 +1,8 @@
-int FUN_002280b0(void) {
-    if (DAT_0056d9c8[0] == 0) {
-        DAT_0056d9c8[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(DAT_00587040[0]));
+igMetaObject *FUN_002280b0(void) {
+    if (g_igItemDataBaseList_metaObject[0] == 0) {
+        g_igItemDataBaseList_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
     }
-    return DAT_0056d9c8[0];
+    return g_igItemDataBaseList_metaObject[0];
 }
 
 igMetaObject *igItemDataBaseList_GetMetaObject(void)
@@ -18,7 +18,7 @@ int igItemDataBaseList_GetVTable(void) {
 
     igObject_InitHeader(&obj);
     obj.vt = &DAT_0052c340[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 
 void FUN_00228190(void)
@@ -47,8 +47,8 @@ void thunk_igItemDataBaseList_GetMetaObject(void) {
     igItemDataBaseList_GetMetaObject();
 }
 
-int FUN_00228220(void) {
-    return DAT_0056d840[0];
+igMetaObject *FUN_00228220(void) {
+    return g_igCompoundList_metaObject[0];
 }
 
 void igItemDataBaseList_InitFields(void) {
@@ -57,7 +57,7 @@ void igItemDataBaseList_InitFields(void) {
     void **temp_v0;
     S_obj *temp_s0;
 
-    temp_s1 = (void *)(DAT_0056d9c8[0]);
+    temp_s1 = (void *)(g_igItemDataBaseList_metaObject[0]);
     temp_v0 = (void **)(igMetaObject_FindFieldByName(temp_s1, &DAT_004e79a8[0]));
     temp_s2 = ObjectPointerList_FindIndex(*(int *)((char *)(temp_s1) + 40), temp_v0);
     temp_s0 = (S_obj *)(((DW4VC_84_1 *)(temp_v0))->vX((int)(1)));

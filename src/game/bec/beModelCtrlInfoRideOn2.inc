@@ -4,16 +4,16 @@ void FUN_00351ad0(int arg0) {
 }
 
 void *FUN_00351b10(void) {
-    struct G *g = DAT_00588a90[0];
-    if (!g || ((g->f & 4) != 0) == false) {
+    igMetaObject *g = g_beModelCtrlInfoRideOn2_metaObject[0];
+    if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_00351c60();
     }
-    return DAT_00588a90[0];
+    return g_beModelCtrlInfoRideOn2_metaObject[0];
 }
 
 int beModelCtrlInfoRideOn2_GetVTable(void) {
     RideOn2View info;
-    return *(int *)((char *)&info + *(int *)((char *)DAT_00586dc8[0] + 916));
+    return *(int *)((char *)&info + *(int *)((char *)g_objectSystem[0] + 916));
 }
 
 void FUN_00351c60(void)
@@ -50,7 +50,7 @@ void beModelCtrlInfoRideOn2_InitFields(void) {
     void *temp_s1;
     T_351d10 *temp_v0_2;
 
-    temp_s1 = (void *)(((void * *)DAT_00588a90)[0]);
+    temp_s1 = (void *)(((void * *)g_beModelCtrlInfoRideOn2_metaObject)[0]);
     temp_s2 = igMetaObject_GetFieldCount(temp_s1);
     igMetaObject_CreateFields(temp_s1, &DAT_004c5208[0], 1);
     temp_v0 = (void **)(igMetaObject_FindFieldByName(temp_s1, &DAT_00503868[0]));

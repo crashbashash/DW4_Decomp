@@ -1,17 +1,17 @@
-int FUN_0036e5c0(void) {
-    if (((int *)DAT_0058a0a0)[0] == 0) {
-        ((int *)DAT_0058a0a0)[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(DAT_00587040[0]));
+igMetaObject *FUN_0036e5c0(void) {
+    if (g_ParticleTimer_metaObject[0] == 0) {
+        g_ParticleTimer_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
     }
-    return ((int *)DAT_0058a0a0)[0];
+    return g_ParticleTimer_metaObject[0];
 }
 
 igMetaObject *FUN_0036e610(void)
 {
-    igMetaObject *g = DAT_0058a0a0[0];
+    igMetaObject *g = g_ParticleTimer_metaObject[0];
     bool t;
     if (!g || (t = g->_validity & 4) == 0)
         FUN_0036e6d0();
-    return DAT_0058a0a0[0];
+    return g_ParticleTimer_metaObject[0];
 }
 
 int ParticleTimer_GetVTable(void) {
@@ -26,7 +26,7 @@ int ParticleTimer_GetVTable(void) {
     obj.w8 = 0;
     obj.w10 = 0;
     obj.vt = &DAT_0053b7f0[0];
-    t = *(int *)((char *)&obj + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+    t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
     obj.vt = &DAT_0053b7f0[0];
     FUN_0019d120(&obj, 0);
     return t;
@@ -65,7 +65,7 @@ void ParticleTimer_InitFields(void) {
     void *temp_v0;
     void *temp_s0;
 
-    temp_s0 = (void *)((int *)DAT_0058a0a0)[0];
+    temp_s0 = (void *)g_ParticleTimer_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_004c8320[0], 3);
     FUN_002d3890(igMetaObject_GetFieldAt(temp_s0, temp_s2), 1);

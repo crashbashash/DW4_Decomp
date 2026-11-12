@@ -4,11 +4,11 @@ void FUN_0045c170(int arg0) {
 }
 
 void *igPickMode_GetMetaObject(void) {
-    struct G *g = ((G *)DAT_0058cb88[0]);
-    if (!g || ((g->f & 4) != 0) == false) {
+    igMetaObject *g = g_igPickMode_metaObject[0];
+    if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_0045c330();
     }
-    return ((G *)DAT_0058cb88[0]);
+    return g_igPickMode_metaObject[0];
 }
 
 int igPickMode_GetVTable(void) {
@@ -27,7 +27,7 @@ int igPickMode_GetVTable(void) {
     obj.w[24] = 0;
     obj.w[27] = 0;
     igMatrix44f_SetIdentity(&obj.w[28]);
-    r = *(int *)((char *)&obj + *(int *)((char *)(((void *)DAT_00586dc8[0])) + 916));
+    r = *(int *)((char *)&obj + *(int *)((char *)(((void *)g_objectSystem[0])) + 916));
     obj.vt = &DAT_00542720[0];
     FUN_001d6560(&obj.w[27], -1);
     FUN_0019e3c0(&obj.w[24], -1);
@@ -78,11 +78,11 @@ void igPickMode_InitFields(void) {
     int sp48[2];
     void *temp_a0;
 
-    temp_s1 = (void *)DAT_0058cb88[0];
+    temp_s1 = (void *)g_igPickMode_metaObject[0];
     temp_s0 = igMetaObject_GetFieldCount(temp_s1);
     igMetaObject_CreateFields(temp_s1, &DAT_004d13a0[0], 0xC);
     temp_s2 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0));
-    ((igObjectRefMetaField *)temp_s2)->_metaObject = FUN_0045b420();
+    ((igObjectRefMetaField *)temp_s2)->_metaObject = (int)FUN_0045b420();
     temp_s2_2 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 1));
     ((igObjectRefMetaField *)temp_s2_2)->_metaObject = FUN_0044ded0();
     temp_s2_3 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 2));

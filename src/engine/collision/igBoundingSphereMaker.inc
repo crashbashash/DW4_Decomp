@@ -20,7 +20,7 @@ int igBoundingSphereMaker_GetVTable(void) {
     p = (S_ref *)&u.b[8];
     u.vt = (int)&DAT_0052d230[0];
     *(int *)p = 0;
-    temp_s0 = *(int *)&u.b[*(int *)((char *)(DAT_00586dc8[0]) + 916)];
+    temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.vt = (int)&DAT_0052d230[0];
     if (p != 0) {
         p = *(S_ref **)p;
@@ -65,7 +65,7 @@ void igBoundingSphereMaker_InitFields(void) {
     void *temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)DAT_0056de00[0];
+    temp_s0 = (void *)g_igBoundingSphereMaker_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_00498620[0], 1);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
@@ -86,7 +86,7 @@ void FUN_0023b140(struct R *arg0, struct Q *arg1) {
     unsigned int var_s0;
     struct Ls *temp_v0;
 
-    if (igObject_IsKindOf(arg1, DAT_005619f8[0]) != 0) {
+    if (igObject_IsKindOf(arg1, g_igGroup_metaObject[0]) != 0) {
         temp_v0 = arg1->f28;
         var_s1 = 0;
         if (temp_v0 != 0) {
@@ -98,7 +98,7 @@ void FUN_0023b140(struct R *arg0, struct Q *arg1) {
             var_s0 += 1;
         }
     }
-    if (igObject_IsKindOf(arg1, DAT_00561a38[0]) != 0) {
+    if (igObject_IsKindOf(arg1, g_igGeometry_metaObject[0]) != 0) {
         FUN_0023ac20(&sp5C, arg0, arg1);
         FUN_0018de10(arg0->f8, sp5C);
         t = sp5C;
@@ -108,7 +108,7 @@ void FUN_0023b140(struct R *arg0, struct Q *arg1) {
                 igObject_Destroy(t);
             }
         }
-    } else if (igObject_IsKindOf(arg1, DAT_005612b0[0]) != 0) {
+    } else if (igObject_IsKindOf(arg1, g_igTransform_metaObject[0]) != 0) {
         FUN_0023b110(arg0, arg1);
     }
 }

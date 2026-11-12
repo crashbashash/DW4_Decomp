@@ -3,15 +3,15 @@ void FUN_003b7a40(int arg0) {
     igMetaObject_CreateInstance(*(int *)0x58AD80, arg0);
 }
 
-S *FUN_003b7a80(void) {
-    S *g = DAT_0058ad80[0];
+igMetaObject *FUN_003b7a80(void) {
+    igMetaObject *g = g_beNDMWShopCtrlA2_metaObject[0];
     if (g != 0) {
-        int b = !!(g->flags & 4);
+        int b = !!(g->_validity & 4);
         if (b) goto done;
     }
     FUN_003b7b50();
 done:
-    return DAT_0058ad80[0];
+    return g_beNDMWShopCtrlA2_metaObject[0];
 }
 
 int beNDMWShopCtrlA2_GetVTable(void) {
@@ -27,7 +27,7 @@ int beNDMWShopCtrlA2_GetVTable(void) {
     obj.w18 = 0;
     obj.w19 = 0;
     obj.vt = &DAT_0053fbb0[0];
-    t = *(int *)((char *)&obj + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+    t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
     obj.vt = &DAT_0053fbb0[0];
     beNDMWWindowCtrl_Destroy((beNDMWWindowCtrl *)&obj, (long long)0);
     return t;

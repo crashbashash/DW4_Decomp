@@ -31,8 +31,8 @@ void Gap__Attrs__igTextureFunctionAttr__vfunc_12(void **arg0) {
     Gap__Core__igObject__vfunc_10(arg0);
 }
 
-int Gap__Attrs__igTextureFunctionAttr__vfunc_22(void) {
-    return DAT_0055ed00[0];
+igMetaObject *Gap__Attrs__igTextureFunctionAttr__vfunc_22(void) {
+    return g_igTextureFunctionAttr_metaObject[0];
 }
 
 void Gap__Attrs__igTextureFunctionAttr__vfunc_26(igTextureFunctionAttr *arg0, void **arg1) {

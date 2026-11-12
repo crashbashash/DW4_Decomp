@@ -37,7 +37,7 @@ void igController_InitFields(void) {
     void *temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)(DAT_0055f6b0[0]);
+    temp_s0 = (void *)(g_igController_metaObject[0]);
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_00487428[0], 2);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
@@ -46,6 +46,6 @@ void igController_InitFields(void) {
     *(char *)((char *)(temp_s1) + 64) = 1;
     *(char *)((char *)(temp_s1) + 65) = 1;
     igMetaObject_NameFields(temp_s0, &DAT_00487430[0], &DAT_00487438[0], &DAT_00487440[0], temp_s2);
-    *(int *)((char *)(DAT_0055f6b0[0]) + 60) = (int)thunk_igPsx2Controller_GetMetaObject;
+    *(int *)((char *)(g_igController_metaObject[0]) + 60) = (int)thunk_igPsx2Controller_GetMetaObject;
 }
 

@@ -1,16 +1,16 @@
-int FUN_003591e0(void) {
-    if (((int *)DAT_00589090)[0] == 0) {
-        ((int *)DAT_00589090)[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(DAT_00587040[0]));
+igMetaObject *FUN_003591e0(void) {
+    if (g_beMemory_metaObject[0] == 0) {
+        g_beMemory_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
     }
-    return ((int *)DAT_00589090)[0];
+    return g_beMemory_metaObject[0];
 }
 
 void *FUN_00359230(void) {
-    struct G *g = DAT_00589090[0];
-    if (!g || ((g->f & 4) != 0) == false) {
+    igMetaObject *g = g_beMemory_metaObject[0];
+    if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_00359310();
     }
-    return DAT_00589090[0];
+    return g_beMemory_metaObject[0];
 }
 
 int beMemory_GetVTable(void) {
@@ -26,7 +26,7 @@ int beMemory_GetVTable(void) {
     q1 = &u.b[8];
     *(int *)q1 = 0;
     u.vt = (int)&DAT_0053c1e0[0];
-    temp_s0 = *(int *)&u.b[*(int *)((char *)(DAT_00586dc8[0]) + 916)];
+    temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.vt = (int)&DAT_00524950[0];
     if (q1 != 0) {
         temp_v1 = *(int **)q1;
@@ -75,14 +75,14 @@ void beMemory_InitFields(void) {
     void *temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)((int *)DAT_00589090)[0];
+    temp_s0 = (void *)g_beMemory_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_004c5f50[0], 5);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = FUN_00357910();
+    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_00357910();
     ((igObjectRefMetaField *)temp_s1)->_refCounted = 0;
     temp_s1_2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
-    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = FUN_0034c8e0();
+    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = (int)FUN_0034c8e0();
     ((igObjectRefMetaField *)temp_s1_2)->_refCounted = 0;
     igMetaObject_NameFields(temp_s0, &DAT_004c5f70[0], &DAT_004c5f90[0], &DAT_004c5fb0[0], temp_s2);
 }

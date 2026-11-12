@@ -15,14 +15,14 @@ void Gap__Core__igVirtualCFuncMetaField__vfunc_57(int *arg0, int arg1, int *arg2
     if (sp20 == 0) {
         var_v1 = 0;
     } else {
-        if (DAT_00586f20[0] == 0) {
+        if (g_stringPool[0] == 0) {
             var_v0 = ((int)FUN_002eb010(0x10));
             if (var_v0 != 0) {
                 var_v0 = ((int)StringPool_Construct((S_2eadf0 *)var_v0));
             }
-            DAT_00586f20[0] = var_v0;
+            g_stringPool[0] = var_v0;
         }
-        var_v1 = StringPool_Intern((StringPool *)DAT_00586f20[0], (const char *)sp20);
+        var_v1 = StringPool_Intern((StringPool *)g_stringPool[0], (const char *)sp20);
     }
     *arg0 = var_v1;
 }
@@ -34,7 +34,7 @@ int Gap__Core__igVirtualCFuncMetaField__vfunc_25(void) {
 void igVirtualCFuncMetaField_SetToDefault(void *arg0, int arg1) {
  if (arg1 != 0) {
 int a = **(int **)((char *)(arg0) + 32);
- int b = *(int *)(arg1 + *(int *)((char *)(((void * *)DAT_00586dc8)[0]) + 916));
+ int b = *(int *)(arg1 + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
  ((VC_30ef90 *)arg0)->vX(arg1, b + a);
 }
 }
@@ -42,7 +42,7 @@ int a = **(int **)((char *)(arg0) + 32);
 void Gap__Core__igVirtualCFuncMetaField__vfunc_30(int *arg0, int arg1) {
     if (arg1 != 0) {
         int *c = (int *)arg0[8];
-        int u = *(int *)(arg1 + *(int *)((char *)((void * *)DAT_00586dc8)[0] + 916));
+        int u = *(int *)(arg1 + *(int *)((char *)((void * *)g_objectSystem)[0] + 916));
         ((VC_30efe0 *)arg0)->vX(arg1, u + *c);
     }
 }

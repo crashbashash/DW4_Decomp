@@ -1,8 +1,8 @@
-int FUN_00233a40(void) {
-    if (DAT_0056dc48[0] == 0) {
-        DAT_0056dc48[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(DAT_00587040[0]));
+igMetaObject *FUN_00233a40(void) {
+    if (g_igFlushRenderer_metaObject[0] == 0) {
+        g_igFlushRenderer_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
     }
-    return DAT_0056dc48[0];
+    return g_igFlushRenderer_metaObject[0];
 }
 
 /* Registers the class first when the slot is empty or its igMetaObject._validity (+36) lacks the
@@ -30,7 +30,7 @@ int igFlushRenderer_GetVTable(void) {
     q1 = (S_ref *)&u.b[8];
     *(int *)q1 = 0;
     u.w[0] = (int)(&DAT_0052ca80[0]);
-    temp_s0 = *(int *)&u.b[*(int *)((char *)(DAT_00586dc8[0]) + 916)];
+    temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.w[0] = (int)(&DAT_0052d060[0]);
     if (q1 != 0) {
         q1 = *(S_ref **)q1;
@@ -330,14 +330,14 @@ int FUN_002346c0(igStringRefList *arg0, int *arg1, const char *arg2, void **arg3
     sp3C = 0;
     if (FUN_002345b0(arg0, arg1, arg2, &sp3C) != 0) {
         str = (int)sp3C;
-        if (DAT_00586f20[0] == 0) {
+        if (g_stringPool[0] == 0) {
             var_v0 = FUN_002eb010(0x10);
             if (var_v0 != 0) {
                 var_v0 = StringPool_Construct(var_v0);
             }
-            DAT_00586f20[0] = var_v0;
+            g_stringPool[0] = var_v0;
         }
-        temp_s1 = (void *)(StringPool_Intern(DAT_00586f20[0], str));
+        temp_s1 = (void *)(StringPool_Intern(g_stringPool[0], str));
         temp_v1 = (void *)(*arg3);
         if (temp_v1 != 0) {
             temp_a1 = (int *)((char *)temp_v1 - 8);
@@ -827,12 +827,12 @@ void Gap__Insight__igFlushRenderer__vfunc_26(igFlushRendererView *self)
 }
 
 static inline int internedPool(void) {
-    if (DAT_00586f20[0] == 0) {
+    if (g_stringPool[0] == 0) {
         int v = FUN_002eb010(0x10);
         if (v != 0) { v = StringPool_Construct(v); }
-        DAT_00586f20[0] = v;
+        g_stringPool[0] = v;
     }
-    return DAT_00586f20[0];
+    return g_stringPool[0];
 }
 
 void FUN_00236140(void) {
@@ -850,7 +850,7 @@ void FUN_00236140(void) {
     }
     s0->name = (int)s1;
     FUN_002e3850(r.get(), &DAT_004e9748[0]);
-    FUN_00304720(((G *)DAT_00586dc8[0])->f76, &DAT_004e9750[0], r->name, 1);
+    FUN_00304720(((G *)g_objectSystem[0])->f76, &DAT_004e9750[0], r->name, 1);
 }
 
 static inline void describe(const igSmartPointer<TextValue> &text, int value) {

@@ -3,11 +3,11 @@ void FUN_001a5d30(int arg0) {
     igMetaObject_CreateInstance(*(int *)0x562078, arg0);
 }
 
-int FUN_001a5d70(void) {
-    if (DAT_00562078[0] == 0) {
-        DAT_00562078[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(DAT_00587040[0]));
+igMetaObject *FUN_001a5d70(void) {
+    if (g_igAttrSet_metaObject[0] == 0) {
+        g_igAttrSet_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
     }
-    return DAT_00562078[0];
+    return g_igAttrSet_metaObject[0];
 }
 
 igMetaObject *igAttrSet_GetMetaObject(void)
@@ -29,7 +29,7 @@ int igAttrSet_GetVTable(void) {
     o.w[6] = 0;
     o.vt = &DAT_005294b0[0];
     o.s = 0;
-    r = *(int *)((char *)&o + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+    r = *(int *)((char *)&o + *(int *)((char *)(g_objectSystem[0]) + 916));
     o.vt = &DAT_005294b0[0];
     FUN_0013bfe0(&o.s, -1);
     FUN_00195a90((struct T_195a90 *)&o, 0);
@@ -67,7 +67,7 @@ void igAttrSet_InitFields(void) {
     void *temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)DAT_00562078[0];
+    temp_s0 = (void *)g_igAttrSet_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_0048ce18[0], 2);
     temp_s1 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s2)));

@@ -103,7 +103,7 @@ void FUN_00165a80(VisualContextCapabilityManager *self) {
         List_Resize(list, count + 1, 4);
     }
     list->_data[count] = self;
-    properties = ((PropertyRoot *)DAT_00586dc8[0])->properties;
+    properties = ((PropertyRoot *)g_objectSystem[0])->properties;
     showFrameRate = self->showFrameRate;
     commandLineFrame = self->commandLineFrame;
     thunk_FUN_00306e50(properties, 4, DAT_004df0a0, &showFrameRate, showFrameRate, 1);
@@ -285,7 +285,7 @@ void *FUN_00165e50(Self *self, Obj_165e50 *src) {
 
 void FUN_00166400(igVisualContext_166400 *ctx, int flags)
 {
-    void *settings = ((SystemConfig *)DAT_00586dc8[0])->settings;
+    void *settings = ((SystemConfig *)g_objectSystem[0])->settings;
     int shadingMode;
     int cullMode;
     int fillMode;
@@ -409,7 +409,7 @@ void FUN_00166a70(void *arg0_, float fparg0, float fparg1) {
         DAT_005607c0[0] = (1000.0f * DAT_005607a8[0]) / temp_f4;
         temp_s2 = fptodp(1.0f / DAT_00560838[0]);
         temp_s1 = fptodp(1.0f / DAT_0048a470[0]);
-        sprintf(&DAT_005607d0[0], &DAT_004df110[0], temp_s2, temp_s1, fptodp(DAT_005607b8[0]));
+        sprintf((char *)g_gsEventCount, &DAT_004df110[0], temp_s2, temp_s1, fptodp(DAT_005607b8[0]));
         DAT_005607a0[0] = 0.0f;
         DAT_005607a8[0] = 0.0f;
         DAT_005607b0[0] = 0;
@@ -418,11 +418,11 @@ void FUN_00166a70(void *arg0_, float fparg0, float fparg1) {
     }
     if (arg0->f61 != 0) {
         if (DAT_005607b0[0] == 0) {
-            FUN_00304430(&DAT_004df130[0], &DAT_005607d0[0]);
+            FUN_00304430(&DAT_004df130[0], (char *)g_gsEventCount);
             FUN_00304680();
         }
     } else {
-        arg0->vX(0, 0, &DAT_005607d0[0]);
+        arg0->vX(0, 0, (int *)g_gsEventCount);
     }
 }
 
@@ -454,7 +454,7 @@ int FUN_00166d40(void) {
     r = 0;
     if (((L_166d40 *)DAT_00560758) != 0) {
         for (i = 0; i < ((L_166d40 *)DAT_00560758)->count; i++) {
-            if (igObject_IsKindOf(((L_166d40 *)DAT_00560758)->items[i], DAT_0055f8e8[0]) != 0) {
+            if (igObject_IsKindOf(((L_166d40 *)DAT_00560758)->items[i], g_igVisualContext_metaObject[0]) != 0) {
                 r = ((L_166d40 *)DAT_00560758)->items[i];
                 break;
             }
@@ -468,8 +468,8 @@ static inline int countOf(const igIntList *list) { return list->_count; }
 void FUN_00166de0(int value)
 {
     int count;
-    void *registry = ((ShaderSetup *)DAT_00586dc8[0])->registry;
-    void *builder = ((ShaderSetup *)DAT_00586dc8[0])->builder;
+    void *registry = ((ShaderSetup *)g_objectSystem[0])->registry;
+    void *builder = ((ShaderSetup *)g_objectSystem[0])->builder;
     igSmartPointer<igIntList> list(FUN_002cba00((void *)(FUN_00165ce0((int *)value))));
     bool found = false;
 

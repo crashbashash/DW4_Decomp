@@ -1,9 +1,9 @@
 void *beNDMWLogoInfo_GetReadyMetaObject(void) {
-    struct G *g = DAT_0058b528[0];
-    if (!g || ((g->f & 4) != 0) == false) {
+    igMetaObject *g = g_beNDMWLogoInfo_metaObject[0];
+    if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_003c1f50();
     }
-    return DAT_0058b528[0];
+    return g_beNDMWLogoInfo_metaObject[0];
 }
 
 int beNDMWLogoInfo_GetVTable(void) {
@@ -15,7 +15,7 @@ int beNDMWLogoInfo_GetVTable(void) {
     o.f[4] = 0;
     o.f[5] = 0;
     o.vt = DAT_0053d370;
-    r = *(int *)((char *)&o + *(int *)(((char * *)DAT_00586dc8)[0] + 916));
+    r = *(int *)((char *)&o + *(int *)(((char * *)g_objectSystem)[0] + 916));
     o.vt = DAT_0053d370;
     FUN_0033ec80(&o, 0);
     return r;

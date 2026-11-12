@@ -82,7 +82,7 @@ void FUN_0023b820(Grid *arg0, Arg1 *arg1) {
     float r;
     s0 = arg1->f12;
     mnx = -1; mny = -1; mnz = -1; mxx = -1; mxy = -1; mxz = -1;
-    if (DAT_00560fa0[0] == s0->vX()) {
+    if (g_igSphere_metaObject[0] == s0->vX()) {
         r = s0->f20;
         v[0] = s0->f8 - r;
         v[1] = s0->f12 - r;

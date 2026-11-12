@@ -15,7 +15,7 @@ int igSegment_GetVTable(void) {
     obj.w4 = 0;
     obj.w7 = 0;
     obj.vt = &DAT_0052ad10[0];
-    t = *(int *)((char *)&obj + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+    t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
     obj.vt = &DAT_0052ad10[0];
     FUN_00195a90((struct T_195a90 *)&obj, 0);
     return t;

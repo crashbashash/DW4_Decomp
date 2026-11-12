@@ -1,10 +1,10 @@
 igMetaObject *FUN_0034d080(void)
 {
-    igMetaObject *g = DAT_00588608[0];
+    igMetaObject *g = g_beOptInfo_metaObject[0];
     bool t;
     if (!g || (t = g->_validity & 4) == 0)
         FUN_0034d160();
-    return DAT_00588608[0];
+    return g_beOptInfo_metaObject[0];
 }
 
 int beOptInfo_GetVTable(void) {
@@ -16,7 +16,7 @@ int beOptInfo_GetVTable(void) {
     o.vt = &DAT_00538590[0];
     o.a = 0;
     o.b = 0;
-    r = *(int *)((char *)&o + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+    r = *(int *)((char *)&o + *(int *)((char *)(g_objectSystem[0]) + 916));
     o.vt = &DAT_00538590[0];
     StringRef_Destruct_00130720(&o.b, -1);
     StringRef_Destruct_00130720(&o.a, -1);
@@ -55,7 +55,7 @@ void beOptInfo_InitFields(void) {
     int temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)((int *)DAT_00588608)[0];
+    temp_s0 = (void *)g_beOptInfo_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_004c48c0[0], 4);
     igStringMetaField_SetDefaultText(((int)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 2)), 0);

@@ -4,11 +4,11 @@ void FUN_003b45d0(int arg0) {
 }
 
 void *FUN_003b4610(void) {
-    struct G *g = DAT_0058ab98[0];
-    if (!g || ((g->f & 4) != 0) == false) {
+    igMetaObject *g = g_beNDMWShopSelect34_metaObject[0];
+    if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_003b46e0();
     }
-    return DAT_0058ab98[0];
+    return g_beNDMWShopSelect34_metaObject[0];
 }
 
 int beNDMWShopSelect34_GetVTable(void) {
@@ -26,7 +26,7 @@ int beNDMWShopSelect34_GetVTable(void) {
     obj.w[19] = 0;
     obj.w[26] = 0;
     obj.vt = &DAT_00540060[0];
-    r = *(int *)((char *)&obj + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+    r = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
     obj.vt = &DAT_00540060[0];
     FUN_003b4050((struct S_3b4050 *)&obj, (short)0);
     return r;

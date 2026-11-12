@@ -11,7 +11,7 @@ int igPsx2Clut_GetVTable(void) {
 
     igObject_InitHeader(&obj);
     obj.vt = &DAT_00526a60[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 
 void FUN_00154490(void)
@@ -36,15 +36,15 @@ void igPsx2Clut_Register(void) {
     );
 }
 
-int FUN_00154510(void) {
-    return DAT_0055feb8[0];
+igMetaObject *FUN_00154510(void) {
+    return g_igClut_metaObject[0];
 }
 
 void igPsx2Clut_InitFields(void) {
     int temp_s2;
     void *temp_v0;
     void *temp_s0;
-    temp_s0 = (void *)(DAT_00560610[0]);
+    temp_s0 = (void *)(g_igPsx2Clut_metaObject[0]);
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_0048a0d8[0], 2);
     temp_v0 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
@@ -52,6 +52,6 @@ void igPsx2Clut_InitFields(void) {
     *(char *)((char *)(temp_v0) + 38) = 0;
     *(char *)((char *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1)) + 38) = 0;
     igMetaObject_NameFields(temp_s0, &DAT_0048a0e0[0], &DAT_0048a0e8[0], &DAT_0048a0f0[0], temp_s2);
-    *(int *)((char *)(DAT_00560610[0]) + 64) = (int)thunk_igClut_GetMetaObject;
+    *(int *)((char *)(g_igPsx2Clut_metaObject[0]) + 64) = (int)thunk_igClut_GetMetaObject;
 }
 

@@ -14,7 +14,7 @@ void FUN_001b21d0(A_1b21d0 *arg0, V3_1b21d0 *arg1, V3_1b21d0 *arg2) {
     }
     if (s3 != 0) {
         s3 = (igVec3fList *)((igVertexData *)s3)->_data;
-        if (s3 != 0 && igObject_IsKindOf(s3, DAT_005610b8[0]) != 0) {
+        if (s3 != 0 && igObject_IsKindOf(s3, g_igVec3fList_metaObject[0]) != 0) {
             s3 = (igVec3fList *)s3;
         } else {
             s3 = 0;
@@ -85,7 +85,7 @@ bool FUN_001b2600(int arg0, void *arg1) {
     n = l->count;
     for (i = 0; i < n; i++) {
         e = l->data[i];
-        if (igObject_IsKindOf(e, DAT_0055f170[0]) != 0) {
+        if (igObject_IsKindOf(e, g_igGeometryAttr_metaObject[0]) != 0) {
             if (FUN_001b23e0(arg0, (Y *)e) == 0) {
                 ok = false;
             }

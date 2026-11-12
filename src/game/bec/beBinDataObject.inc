@@ -1,9 +1,9 @@
 void *FUN_00343b80(void) {
-    struct G *g = DAT_00587e28[0];
-    if (!g || ((g->f & 4) != 0) == false) {
+    igMetaObject *g = g_beBinDataObject_metaObject[0];
+    if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_00343bd0();
     }
-    return DAT_00587e28[0];
+    return g_beBinDataObject_metaObject[0];
 }
 
 void FUN_00343bd0(void)
@@ -33,8 +33,8 @@ void beBinDataObject_GetMetaObject(void)
     FUN_00343b80();
 }
 
-int FUN_00343c80(void) {
-    return ((int *)DAT_00589e08)[0];
+igMetaObject *FUN_00343c80(void) {
+    return g_beBaseInfoData_metaObject[0];
 }
 
 void beBinDataObject_InitFields(void) {
@@ -42,7 +42,7 @@ void beBinDataObject_InitFields(void) {
     void *temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)((int *)DAT_00587e28)[0];
+    temp_s0 = (void *)g_beBinDataObject_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_004c37c0[0], 2);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));

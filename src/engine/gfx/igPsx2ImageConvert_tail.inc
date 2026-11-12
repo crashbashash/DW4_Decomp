@@ -10,7 +10,7 @@ int igPsx2ImageConvert_GetVTable(void) {
     struct Obj_153c40 obj;
     igObject_InitHeader(&obj);
     obj.vt = &DAT_005255a0[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 
 void FUN_00153c80(void)
@@ -36,10 +36,10 @@ void igPsx2ImageConvert_Register(void) {
 }
 
 int FUN_00153d00(void) {
-    return (int)DAT_0055fd60[0];
+    return (int)g_igImageConvert_metaObject[0];
 }
 
 void FUN_00153d10(void) {
-    *(int *)((char *)(DAT_005605d8[0]) + 64) = (int)(&thunk_igImageConvert_GetMetaObject);
+    *(int *)((char *)(g_igPsx2ImageConvert_metaObject[0]) + 64) = (int)(&thunk_igImageConvert_GetMetaObject);
 }
 

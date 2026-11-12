@@ -1,8 +1,8 @@
-int FUN_00133b70(void) {
-    if (DAT_0055eea0[0] == 0) {
-        DAT_0055eea0[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(DAT_00587040[0]));
+igMetaObject *FUN_00133b70(void) {
+    if (g_igSetRenderDestinationAttr_metaObject[0] == 0) {
+        g_igSetRenderDestinationAttr_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
     }
-    return DAT_0055eea0[0];
+    return g_igSetRenderDestinationAttr_metaObject[0];
 }
 
 igMetaObject *igSetRenderDestinationAttr_GetMetaObject(void)
@@ -23,7 +23,7 @@ int igSetRenderDestinationAttr_GetVTable(void) {
     q3 = &u.p[3];
     u.w[0] = (int)(&DAT_00522f50[0]);
     *q3 = 0;
-    temp_s0 = *(int *)&u.b[*(int *)((char *)(DAT_00586dc8[0]) + 916)];
+    temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.w[0] = (int)(&DAT_00522f50[0]);
     if (q3 != 0) {
         temp_a0 = *q3;
@@ -81,11 +81,11 @@ void igSetRenderDestinationAttr_InitFields(void) {
     void *temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)DAT_0055eea0[0];
+    temp_s0 = (void *)g_igSetRenderDestinationAttr_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_00485f40[0], 1);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = FUN_001341f0();
+    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_001341f0();
     igMetaObject_NameFields(temp_s0, &DAT_00485f48[0], &DAT_00485f50[0], &DAT_00485f58[0], temp_s2);
 }
 

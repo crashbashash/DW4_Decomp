@@ -90,19 +90,19 @@ void Gap__Core__igMemoryDictionary__vfunc_30(int *arg0, D_2ee6d0 *arg1, int arg2
     e = &arg1->f10->f10[arg1->f14];
     if (e->key == arg2) {
         *arg3 = e->val;
-        *arg0 = DAT_004fb410.v;
+        *arg0 = g_statusSucceeded.v;
         return;
     }
     idx = arg1->vX(arg2);
     s = arg1->f10;
     n = s->f8 / 2;
-    res = DAT_004fb418.v;
+    res = g_allocatorFailureStatus.v;
     i = 0;
     e = &s->f10[idx];
     do {
         if (e->key == arg2) {
             *arg3 = e->val;
-            res = DAT_004fb410.v;
+            res = g_statusSucceeded.v;
             arg1->f14 = idx;
             break;
         }
@@ -135,7 +135,7 @@ R_2ee800 Gap__Core__igMemoryDictionary__vfunc_31(D_2ee800 *arg1, int key, int va
         do {
             if (e->key == key) {
                 e->val = val;
-                return R_2ee800(DAT_004fb410.v);
+                return R_2ee800(g_statusSucceeded.v);
             }
             if (e->key == 0) {
                 e->key = key;
@@ -144,7 +144,7 @@ R_2ee800 Gap__Core__igMemoryDictionary__vfunc_31(D_2ee800 *arg1, int key, int va
                 if (probes >= half) {
                     return arg1->v136(cap * 2);
                 }
-                return R_2ee800(DAT_004fb410.v);
+                return R_2ee800(g_statusSucceeded.v);
             }
             idx++;
             if (idx >= cap) {
@@ -156,7 +156,7 @@ R_2ee800 Gap__Core__igMemoryDictionary__vfunc_31(D_2ee800 *arg1, int key, int va
             probes++;
         } while (probes < cap);
     }
-    return R_2ee800(DAT_004fb418.v);
+    return R_2ee800(g_allocatorFailureStatus.v);
 }
 
 R_2ee970 Gap__Core__igMemoryDictionary__vfunc_32(Dict *arg1, int arg2) {
@@ -191,15 +191,15 @@ R_2ee970 Gap__Core__igMemoryDictionary__vfunc_32(Dict *arg1, int arg2) {
                 goto ok;
             }
             if (e->state == -1) {
-                return R_2ee970(DAT_004fb418.v);
+                return R_2ee970(g_allocatorFailureStatus.v);
             }
             i += 1;
             e = next;
         } while (i < half);
-        return R_2ee970(DAT_004fb418.v);
+        return R_2ee970(g_allocatorFailureStatus.v);
     }
 ok:
-    return R_2ee970(DAT_004fb410.v);
+    return R_2ee970(g_statusSucceeded.v);
 }
 
 /* Hash-bucket index for `key`: key modulo the table capacity (`_capacity`), or 0 for an empty
@@ -240,7 +240,7 @@ int Gap__Core__igMemoryDictionary__vfunc_34(int *result, Dict_2eeae0 *dict, int 
     }
     table = dict->t;
     if (table->data == 0) {
-        *result = DAT_004fb418.v;
+        *result = g_allocatorFailureStatus.v;
         return 0;
     }
     words = dict->f8 * 2;
@@ -263,7 +263,7 @@ int Gap__Core__igMemoryDictionary__vfunc_34(int *result, Dict_2eeae0 *dict, int 
             ((VT_2eeae0 *)dict)->vIns(entry[0], entry[1]);
         }
     }
-    *result = DAT_004fb410.v;
+    *result = g_statusSucceeded.v;
     return 0;
 }
 

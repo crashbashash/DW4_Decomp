@@ -22,7 +22,7 @@ int igFileImagePng_GetVTable(void) {
     u.vt = (int)&DAT_00525d20[0];
     p = (int *)&u.b[92];
     *p = 0;
-    temp_s0 = *(int *)&u.b[*(int *)((char *)(DAT_00586dc8[0]) + 916)];
+    temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.vt = (int)&DAT_00525d20[0];
     FUN_00150180((void **)p, -1);
     FUN_00150490((S_150490 *)u.b, 0);
@@ -94,8 +94,8 @@ void thunk_igFileImagePng_GetMetaObject(void) {
     igFileImagePng_GetMetaObject();
 }
 
-int FUN_00150610(void) {
-    return DAT_0055fd78[0];
+igMetaObject *FUN_00150610(void) {
+    return g_igFileImage_metaObject[0];
 }
 
 void igFileImagePng_InitFields(void) {
@@ -103,7 +103,7 @@ void igFileImagePng_InitFields(void) {
     void *temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)DAT_0055ff68[0];
+    temp_s0 = (void *)g_igFileImagePng_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_00489210[0], 1);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));

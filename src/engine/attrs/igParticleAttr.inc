@@ -14,7 +14,7 @@ int igParticleAttr_GetVTable(void) {
      igObject_InitHeader(&o);
      o.vt = &DAT_00523280[0];
      o.s = 0;
-     r = *(int *)((char *)&o + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+     r = *(int *)((char *)&o + *(int *)((char *)(g_objectSystem[0]) + 916));
      o.vt = &DAT_00523280[0];
      if (&o.s != 0) {
          q = o.s;
@@ -60,7 +60,7 @@ void igParticleAttr_InitFields(void) {
     void *temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)DAT_0055ef80[0];
+    temp_s0 = (void *)g_igParticleAttr_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_00486160[0], 7);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));

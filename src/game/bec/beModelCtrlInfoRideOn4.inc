@@ -5,18 +5,18 @@ void FUN_00351420(int arg0) {
 
 void *FUN_00351460(void) {
     unsigned char b;
-    if (DAT_00588a20[0] != 0) {
-        b = (*(int *)((char *)(DAT_00588a20[0]) + 36) & 4) != 0;
+    if (g_beModelCtrlInfoRideOn4_metaObject[0] != 0) {
+        b = (*(int *)((char *)(g_beModelCtrlInfoRideOn4_metaObject[0]) + 36) & 4) != 0;
         if (b != 0) goto done;
     }
     FUN_003515b0();
 done:
-    return DAT_00588a20[0];
+    return g_beModelCtrlInfoRideOn4_metaObject[0];
 }
 
 int beModelCtrlInfoRideOn4_GetVTable(void) {
     RideOn4View info;
-    return *(int *)((char *)&info + *(int *)((char *)DAT_00586dc8[0] + 916));
+    return *(int *)((char *)&info + *(int *)((char *)g_objectSystem[0] + 916));
 }
 
 void FUN_003515b0(void)
@@ -46,8 +46,8 @@ void beModelCtrlInfoRideOn4_GetMetaObject(void)
     FUN_00351460();
 }
 
-int FUN_00351660(void) {
-    return ((int *)DAT_00588aa8)[0];
+igMetaObject *FUN_00351660(void) {
+    return g_beModelCtrlInfoRideOn_metaObject[0];
 }
 
 void beModelCtrlInfoRideOn4_InitFields(void) {
@@ -57,7 +57,7 @@ void beModelCtrlInfoRideOn4_InitFields(void) {
     void *temp_s1;
     T_351670 *temp_v0_2;
 
-    temp_s1 = (void *)(DAT_00588a20[0]);
+    temp_s1 = (void *)(g_beModelCtrlInfoRideOn4_metaObject[0]);
     temp_s2 = igMetaObject_GetFieldCount(temp_s1);
     igMetaObject_CreateFields(temp_s1, &DAT_004c5110[0], 5);
     temp_v0 = (void **)(igMetaObject_FindFieldByName(temp_s1, &DAT_00503868[0]));

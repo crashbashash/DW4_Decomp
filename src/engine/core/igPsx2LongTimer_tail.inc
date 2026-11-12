@@ -10,7 +10,7 @@ int igPsx2LongTimer_GetVTable(void) {
     struct Obj_2cfd30 obj;
     igObject_InitHeader((struct ObjectHeader *)&obj);
     obj.vt = &DAT_0052da90[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(((void * *)DAT_00586dc8)[0]) + 916));
+    return *(int *)((char *)&obj + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
 }
 
 void FUN_002cfd70(void)
@@ -36,7 +36,7 @@ void igPsx2LongTimer_Register(void) {
 }
 
 int FUN_002cfdf0(void) {
-    return ((int *)DAT_00586028)[0];
+    return ((int *)g_igLongTimer_metaObject)[0];
 }
 
 void FUN_002cfe00(void) {

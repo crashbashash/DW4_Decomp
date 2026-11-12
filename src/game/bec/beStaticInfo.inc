@@ -1,9 +1,9 @@
 void *FUN_00343a10(void) {
-    struct G *g = DAT_00587e20[0];
-    if (!g || ((g->f & 4) != 0) == false) {
+    igMetaObject *g = g_beStaticInfo_metaObject[0];
+    if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_00343ad0();
     }
-    return DAT_00587e20[0];
+    return g_beStaticInfo_metaObject[0];
 }
 
 int beStaticInfo_GetVTable(void) {
@@ -15,7 +15,7 @@ int beStaticInfo_GetVTable(void) {
     *(int *)&u.b[20] = 0;
     *(int *)&u.b[24] = 0;
     u.vt = (int)&DAT_00539420[0];
-    t = *(int *)&u.b[*(int *)((char *)(DAT_00586dc8[0]) + 916)];
+    t = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.vt = (int)&DAT_00539420[0];
     FUN_0033ec80((struct S_33ec80 *)u.b, (short)0);
     return t;

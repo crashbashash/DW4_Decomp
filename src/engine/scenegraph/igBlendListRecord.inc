@@ -21,7 +21,7 @@ int igBlendListRecord_GetVTable(void) {
     q2 = &u.p[2];
     u.w[0] = (int)(&DAT_0052a670[0]);
     *q2 = 0;
-    temp_s0 = *(int *)&u.b[*(int *)((char *)(DAT_00586dc8[0]) + 916)];
+    temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.w[0] = (int)(&DAT_0052a670[0]);
     if (q2 != 0) {
         temp_a0 = *q2;
@@ -67,7 +67,7 @@ void igBlendListRecord_InitFields(void) {
     void *temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)DAT_00561ca8[0];
+    temp_s0 = (void *)g_igBlendListRecord_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_0048c5b8[0], 2);
     temp_s1 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s2)));

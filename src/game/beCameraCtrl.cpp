@@ -1,12 +1,12 @@
 #include "dw4/reflected.h"
-#define ALLOC(a, o) { a = igObject_GetAllocator(o); a = GPR_00554c14 ? a : Memory_GetAllocatorBySelector(DAT_00587110[0]); }
+#define ALLOC(a, o) { a = igObject_GetAllocator(o); a = GPR_00554c14 ? a : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]); }
 #define F(x) (*(float *)&(x))
 #define LIST(p) ((igObjectList *)(p))
 #define XFORM(l, i) ((igTransform *)((int *)LIST(l)->_data)[i])
 #define REL(o) { igObject *rr = (o); if (rr != 0) { rr->_refCount = rr->_refCount - 1; if (((unsigned long long)((long long)(int)rr->_refCount << 0x29) >> 0x29) == 0) { igObject_Destroy(rr); } } }
 #define ENSURE_DATA_LIST(act) if ((act)->_dataList == 0) { void *alloc; ALLOC(alloc, act) DataListInstall::go(act, RPD(beBaseInfoDataList_Create(alloc))); }
-#define ALLOC_OF(owner, a) { a = igObject_GetAllocator(owner); a = GPR_00554c14 ? a : Memory_GetAllocatorBySelector(DAT_00587110[0]); }
-#define NAME_OR_EMPTY(n) ((n) != 0 ? (n) : DAT_004e0858)
+#define ALLOC_OF(owner, a) { a = igObject_GetAllocator(owner); a = GPR_00554c14 ? a : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]); }
+#define NAME_OR_EMPTY(n) ((n) != 0 ? (n) : emptyString)
 
 extern "C" int Gap__Bec__beCameraCtrl__vfunc_30(void);
 extern "C" int Gap__Bec__beCameraCtrl__vfunc_20(void);
@@ -66,9 +66,9 @@ extern "C" char DAT_0050e1f0[];
 extern "C" void Gap__Bec__beCameraCtrl__vfunc_29(beCameraCtrl * p0, int p1, char * p2);
 typedef struct RefCountedObject { char pad4[4]; int f4; } RefCountedObject;
 extern "C" void Gap__Bec__beCameraCtrl__vfunc_32(beCameraCtrl *arg0);
-extern "C" int DAT_00589c08[4];
+extern "C" int g_beCameraBoxData_metaObject[4];
 class DW4VC_88_0 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual int vX(); };
-extern "C" int DAT_00589be8[4];
+extern "C" int g_beCameraDemoData_metaObject[4];
 extern "C" void FUN_00378ec0(beCameraCtrl *self, beBaseInfoRam *ram, int on);
 extern "C" int DAT_0050e1f8[4];
 extern "C" int DAT_0050e200[4];
@@ -76,9 +76,9 @@ extern "C" int DAT_0050e210[4];
 extern "C" int DAT_0050e218[4];
 extern "C" int DAT_0050e228[4];
 extern "C" int DAT_0050e238[4];
-extern "C" int DAT_00585be0[4];
-extern "C" int DAT_00587110[4];
-extern "C" int DAT_0058c790[4];
+extern "C" int g_propertyNameField[4];
+extern "C" int g_defaultAllocatorSelector[4];
+extern "C" int g_igViewerSceneInfoManager_metaObject[4];
 extern "C" float DAT_004c8820[4];
 extern "C" float DAT_004c8850[4];
 extern "C" unsigned char GPR_00554c14;
@@ -103,8 +103,8 @@ extern "C" void FUN_00379a90(beCameraCtrl *self, beBaseInfoRam *act);
 extern "C" int FUN_00236be0(int, beCameraCtrl *);
 extern "C" int FUN_00236c40(int, beCameraCtrl *);
 extern "C" void Gap__Bec__beCameraCtrl__vfunc_31(beCameraCtrl *arg0, beBaseInfoRam *arg1);
-extern "C" char DAT_004e0858[];
-extern "C" int DAT_00586f20[4];
+extern "C" char emptyString[];
+extern "C" int g_stringPool[4];
 /* the camera info's box data: +8 is the camera switch node whose +0x20 is the box handle */
 struct SwitchNode { char pad[0x20]; int _handle; };
 struct BoxData { int _vtable; unsigned int _refCount; SwitchNode *_switch; };
@@ -131,7 +131,7 @@ typedef struct Rc { int w0; int refs; } Rc;
 typedef struct O { char p0[76]; Rc *f76; Rc *f80; } O;
 extern "C" Rc *FUN_001c5990(Rc *);
 extern "C" int igObject_IsKindOf(Rc *, int);
-extern "C" int DAT_00561ea0[16];
+extern "C" int g_igCamera_metaObject[16];
 extern "C" void FUN_0037a690(O *arg0, Rc *arg1);
 
 int Gap__Bec__beCameraCtrl__vfunc_30(void)
@@ -167,7 +167,7 @@ int FUN_00378e40(void *arg0, void *arg1) {
     void **temp_a0;
 
     temp_a0 = (void **)(*(int *)((char *)(arg1) + 28));
-    temp_s0 = DAT_00589c08[0];
+    temp_s0 = g_beCameraBoxData_metaObject[0];
     return temp_s0 == ((DW4VC_88_0 *)(temp_a0))->vX();
 }
 
@@ -176,7 +176,7 @@ int FUN_00378e80(int dummy0, void *arg1) {
     void **temp_a0;
 
     temp_a0 = (void **)(*(int *)((char *)(arg1) + 28));
-    temp_s0 = DAT_00589be8[0];
+    temp_s0 = g_beCameraDemoData_metaObject[0];
     return temp_s0 == ((DW4VC_88_0 *)(temp_a0))->vX();
 }
 
@@ -261,7 +261,7 @@ void FUN_00378ed0(beCameraCtrl *self, beBaseInfoRam *act) {
         if (act->_dataList != 0) {
             ENSURE_DATA_LIST(act)
             {
-                beCameraCtrlInfoRamShake *pr = (beCameraCtrlInfoRamShake *)igProperty_FindByName(act->_dataList, DAT_00585be0[0], &DAT_0050e210[0]);
+                beCameraCtrlInfoRamShake *pr = (beCameraCtrlInfoRamShake *)igProperty_FindByName(act->_dataList, g_propertyNameField[0], &DAT_0050e210[0]);
                 if (pr != 0) {
                     if (pr->_isFirst != 0) {
                         pr->_isFirst = 0;
@@ -310,7 +310,7 @@ void FUN_00378ed0(beCameraCtrl *self, beBaseInfoRam *act) {
                     Matrix44_Copy(self->_intMatrix, XFORM(sys->_intPosList, 0)->_m);
                     F(self->_cameraNowFrame) = 0.0f;
                     if (self->_viewerMang == 0) {
-                        igViewerSceneInfoManager *vm = (igViewerSceneInfoManager *)FUN_00236f80(self->_insight, DAT_0058c790[0]);
+                        igViewerSceneInfoManager *vm = (igViewerSceneInfoManager *)FUN_00236f80(self->_insight, g_igViewerSceneInfoManager_metaObject[0]);
                         self->_viewerPara = vm->_parameters;
                         self->_viewerMang = (int)vm;
                     }
@@ -384,7 +384,7 @@ void FUN_00378ed0(beCameraCtrl *self, beBaseInfoRam *act) {
         if (act->_dataList != 0) {
             ENSURE_DATA_LIST(act)
             {
-                beCameraCtrlInfoRamShake *pr = (beCameraCtrlInfoRamShake *)igProperty_FindByName(act->_dataList, DAT_00585be0[0], &DAT_0050e210[0]);
+                beCameraCtrlInfoRamShake *pr = (beCameraCtrlInfoRamShake *)igProperty_FindByName(act->_dataList, g_propertyNameField[0], &DAT_0050e210[0]);
                 if (pr != 0) {
                     float *mp;
                     int k = 0;
@@ -438,14 +438,14 @@ void FUN_00379a90(beCameraCtrl *self, beBaseInfoRam *act) {
     switch (act->_st0) {
     case 0: {
         if (self->_viewerMang == 0) {
-            igViewerSceneInfoManager *vm = (igViewerSceneInfoManager *)FUN_00236f80(self->_insight, DAT_0058c790[0]);
+            igViewerSceneInfoManager *vm = (igViewerSceneInfoManager *)FUN_00236f80(self->_insight, g_igViewerSceneInfoManager_metaObject[0]);
             self->_viewerPara = vm->_parameters;
             self->_viewerMang = (int)vm;
         }
         beCameraMode *cm = (beCameraMode *)self->_cameraMode;
         if (cm == 0) {
             void *alloc = igObject_GetAllocator(self);
-            alloc = GPR_00554c14 ? alloc : Memory_GetAllocatorBySelector(DAT_00587110[0]);
+            alloc = GPR_00554c14 ? alloc : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
             RPE created(((beCameraMode *)FUN_003689f0(alloc)));
             igObject *r = created.p;
             if (r != 0) r->_refCount = r->_refCount + 1;
@@ -608,7 +608,7 @@ int Gap__Bec__beCameraCtrl__vfunc_33(beCameraCtrl *self, beBaseInfoRam *ram, int
                 ram->_dataList = (int)r;
             }
             UP::Ensure(ram, ram);
-            shake = (beCameraCtrlInfoRamShake *)igProperty_FindByName((void *)ram->_dataList, DAT_00585be0[0], &DAT_0050e210[0]);
+            shake = (beCameraCtrlInfoRamShake *)igProperty_FindByName((void *)ram->_dataList, g_propertyNameField[0], &DAT_0050e210[0]);
             if (shake == 0) {
                 void *alloc;
                 ALLOC_OF(self, alloc)
@@ -617,13 +617,13 @@ int Gap__Bec__beCameraCtrl__vfunc_33(beCameraCtrl *self, beBaseInfoRam *ram, int
                 shake = (beCameraCtrlInfoRamShake *)created.p;
             }
             nm = beMessenger_GetString(self->_messenger, 0);
-            if (DAT_00586f20[0] == 0) {
+            if (g_stringPool[0] == 0) {
                 int pool = FUN_002eb010(0x10);
                 if (pool != 0) pool = StringPool_Construct(pool);
-                DAT_00586f20[0] = pool;
+                g_stringPool[0] = pool;
             }
             {
-                char *interned = StringPool_Intern(DAT_00586f20[0], nm);
+                char *interned = StringPool_Intern(g_stringPool[0], nm);
                 char *old = (char *)shake->_moveCode;
                 if (old != 0) {
                     int *hd = (int *)old - 2;
@@ -664,7 +664,7 @@ int Gap__Bec__beCameraCtrl__vfunc_33(beCameraCtrl *self, beBaseInfoRam *ram, int
         if (FUN_00378e40(self, info) != 0) {
             FUN_00378ec0(self, ram, 1);
             if (self->_debugZoom == 1.0f) {
-                int snd = ((int)FUN_00236f80(self->_insight, DAT_0058c790[0]));
+                int snd = ((int)FUN_00236f80(self->_insight, g_igViewerSceneInfoManager_metaObject[0]));
                 int k = 0;
                 do {
                     FUN_00462d20(snd);
@@ -695,7 +695,7 @@ int Gap__Bec__beCameraCtrl__vfunc_20(void)
     return g_beCameraCtrl_metaObject[0];
 }
 
-static inline Rc * cast0(Rc * o) { if (o != 0 && igObject_IsKindOf(o, DAT_00561ea0[0]) != 0) { return o; } return 0; }
+static inline Rc * cast0(Rc * o) { if (o != 0 && igObject_IsKindOf(o, g_igCamera_metaObject[0]) != 0) { return o; } return 0; }
 
 void FUN_0037a690(O *arg0, Rc *arg1) {
     Rc *s0;

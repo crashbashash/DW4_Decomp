@@ -1,8 +1,8 @@
-int FUN_00139820(void) {
-    if (DAT_0055f358[0] == 0) {
-        DAT_0055f358[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(DAT_00587040[0]));
+igMetaObject *FUN_00139820(void) {
+    if (g_igBlendMatrixPaletteAttrList_metaObject[0] == 0) {
+        g_igBlendMatrixPaletteAttrList_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
     }
-    return DAT_0055f358[0];
+    return g_igBlendMatrixPaletteAttrList_metaObject[0];
 }
 
 igMetaObject *igBlendMatrixPaletteAttrList_GetMetaObject(void)
@@ -17,7 +17,7 @@ int igBlendMatrixPaletteAttrList_GetVTable(void) {
     int obj[8];
     igObject_InitHeader(obj);
     obj[0] = (int)&DAT_005246c0[0];
-    return *(int *)((char *)obj + *(int *)((char *)DAT_00586dc8[0] + 916));
+    return *(int *)((char *)obj + *(int *)((char *)g_objectSystem[0] + 916));
 }
 
 void FUN_00139900(void)

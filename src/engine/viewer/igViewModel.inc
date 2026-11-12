@@ -1,16 +1,16 @@
-int FUN_0045d470(void) {
-    if (DAT_0058cd30[0] == 0) {
-        DAT_0058cd30[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(DAT_00587040[0]));
+igMetaObject *FUN_0045d470(void) {
+    if (g_igViewModel_metaObject[0] == 0) {
+        g_igViewModel_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
     }
-    return DAT_0058cd30[0];
+    return g_igViewModel_metaObject[0];
 }
 
 void *igViewModel_GetMetaObject(void) {
-    struct G *g = ((G *)DAT_0058cd30[0]);
-    if (!g || ((g->f & 4) != 0) == false) {
+    igMetaObject *g = g_igViewModel_metaObject[0];
+    if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_0045d5c0();
     }
-    return ((G *)DAT_0058cd30[0]);
+    return g_igViewModel_metaObject[0];
 }
 
 int igViewModel_GetVTable(void) {
@@ -25,7 +25,7 @@ int igViewModel_GetVTable(void) {
     *(int *)p38 = 0;
     u.vt = (int)&DAT_00542040[0];
     igMatrix44f_SetIdentity(&u.b[12]);
-    r = *(int *)&u.b[*(int *)((char *)(((void *)DAT_00586dc8[0])) + 916)];
+    r = *(int *)&u.b[*(int *)((char *)(((void *)g_objectSystem[0])) + 916)];
     u.vt = (int)&DAT_00540e30[0];
     if (p38 != 0) {
         v1 = *(int **)p38;
@@ -76,7 +76,7 @@ void igViewModel_InitFields(void) {
     float v5[4];
     float v6[4];
 
-    temp_s0 = (void *)DAT_0058cd30[0];
+    temp_s0 = (void *)g_igViewModel_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_004d16f0[0], 0xD);
     FUN_002e3810(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 1), 1.0f);

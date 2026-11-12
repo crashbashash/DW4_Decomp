@@ -3,20 +3,20 @@ void FUN_0034ef30(int arg0) {
     igMetaObject_CreateInstance(*(int *)0x588788, arg0);
 }
 
-int FUN_0034ef70(void) {
-    if (((int *)DAT_00588788)[0] == 0) {
-        ((int *)DAT_00588788)[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(DAT_00587040[0]));
+igMetaObject *FUN_0034ef70(void) {
+    if (g_beMovie_metaObject[0] == 0) {
+        g_beMovie_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
     }
-    return ((int *)DAT_00588788)[0];
+    return g_beMovie_metaObject[0];
 }
 
 igMetaObject *FUN_0034efc0(void)
 {
-    igMetaObject *g = DAT_00588788[0];
+    igMetaObject *g = g_beMovie_metaObject[0];
     bool t;
     if (!g || (t = g->_validity & 4) == 0)
         FUN_0034f0a0();
-    return DAT_00588788[0];
+    return g_beMovie_metaObject[0];
 }
 
 int beMovie_GetVTable(void) {
@@ -29,7 +29,7 @@ int beMovie_GetVTable(void) {
     obj.vt = &DAT_0053bad0[0];
     obj.w8 = 0;
     obj.w9 = 0;
-    t = *(int *)((char *)&obj + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+    t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
     obj.vt = &DAT_0053bad0[0];
     StringRef_Destruct_00130720(&obj.w9, -1);
     FUN_003369f0(&obj.w8, -1);
@@ -69,7 +69,7 @@ void beMovie_InitFields(void) {
     void *temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)((int *)DAT_00588788)[0];
+    temp_s0 = (void *)g_beMovie_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_004c4b98[0], 2);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));

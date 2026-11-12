@@ -1,19 +1,19 @@
-int FUN_0034a000(void) {
-    if (DAT_00588298[0] == 0) {
-        DAT_00588298[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(DAT_00587040[0]));
+igMetaObject *FUN_0034a000(void) {
+    if (g_beSaveApi_metaObject[0] == 0) {
+        g_beSaveApi_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
     }
-    return DAT_00588298[0];
+    return g_beSaveApi_metaObject[0];
 }
 
 void *FUN_0034a050(void) {
     unsigned char b;
-    if (((void * *)DAT_00588298)[0] != 0) {
-        b = (*(int *)((char *)(((void * *)DAT_00588298)[0]) + 36) & 4) != 0;
+    if (((void * *)g_beSaveApi_metaObject)[0] != 0) {
+        b = (*(int *)((char *)(((void * *)g_beSaveApi_metaObject)[0]) + 36) & 4) != 0;
         if (b != 0) goto done;
     }
     FUN_0034a0a0();
 done:
-    return ((void * *)DAT_00588298)[0];
+    return ((void * *)g_beSaveApi_metaObject)[0];
 }
 
 void FUN_0034a0a0(void)
@@ -50,15 +50,15 @@ void beSaveApi_InitFields(void) {
     void *temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)DAT_00588298[0];
+    temp_s0 = (void *)g_beSaveApi_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_004c4160[0], 0xD);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 0xA));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = FUN_0034ac90();
+    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_0034ac90();
     temp_s1_2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 0xB));
-    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = FUN_0034ac90();
+    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = (int)FUN_0034ac90();
     temp_s1_3 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 0xC));
-    ((igObjectRefMetaField *)temp_s1_3)->_metaObject = FUN_0034ac90();
+    ((igObjectRefMetaField *)temp_s1_3)->_metaObject = (int)FUN_0034ac90();
     igMetaObject_NameFields(temp_s0, &DAT_004c41a0[0], &DAT_004c41e0[0], &DAT_004c4220[0], temp_s2);
 }
 

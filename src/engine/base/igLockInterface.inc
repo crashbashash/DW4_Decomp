@@ -1,8 +1,8 @@
-int FUN_002267c0(void) {
-    if (DAT_0056d8d8[0] == 0) {
-        DAT_0056d8d8[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(DAT_00587040[0]));
+igMetaObject *FUN_002267c0(void) {
+    if (g_igLockInterface_metaObject[0] == 0) {
+        g_igLockInterface_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
     }
-    return DAT_0056d8d8[0];
+    return g_igLockInterface_metaObject[0];
 }
 
 igMetaObject *igLockInterface_GetMetaObject(void)
@@ -28,7 +28,7 @@ int igLockInterface_GetVTable(void) {
     *(int *)q1 = 0;
     q0 = (S_ref *)&u.b[40];
     *(int *)q0 = 0;
-    temp_s0 = *(int *)&u.b[*(int *)((char *)(DAT_00586dc8[0]) + 916)];
+    temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.vt = (int)&DAT_0052c010[0];
     if (q0 != 0) {
         q0 = *(S_ref **)q0;
@@ -102,7 +102,7 @@ void igLockInterface_InitFields(void) {
     void *temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)DAT_0056d8d8[0];
+    temp_s0 = (void *)g_igLockInterface_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_00497c90[0], 3);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));

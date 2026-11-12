@@ -4,12 +4,12 @@ void Gap__Core__igRegistry__vfunc_11(void *arg0) {
 }
 
 static inline int pool_305d30() {
-    if ((*(int *)DAT_00586f20) == 0) {
+    if ((*(int *)g_stringPool) == 0) {
         int p = ((int)FUN_002eb010(0x10));
         if (p != 0) { p = ((int)StringPool_Construct((struct S_2eadf0 *)p)); }
-        (*(int *)DAT_00586f20) = p;
+        (*(int *)g_stringPool) = p;
     }
-    return (*(int *)DAT_00586f20);
+    return (*(int *)g_stringPool);
 }
 
 static inline void assign_305d30(char **slot, char *text) {
@@ -67,7 +67,7 @@ bool FUN_00305d30(IniReaderView *self, char *name, char *dir) {
     found = self->file->Open(held, ((char *)DAT_004f96a8));
     if (found == 0) {
         if (dir == 0 || strlen(dir) == 0) {
-            dir = ((char *)FUN_002d1c20((int *)((*(void * *)DAT_00586dc8))));
+            dir = ((char *)FUN_002d1c20((int *)((*(void * *)g_objectSystem))));
         }
         if (dir != 0 && strlen(dir) != 0) {
             *(IniPathObject **)&base = ((IniPathObject *)FUN_002c43b0(((int)igObject_GetAllocator((int)self))));
@@ -78,7 +78,7 @@ bool FUN_00305d30(IniReaderView *self, char *name, char *dir) {
     }
     if (found == 0) {
         *(IniPathObject **)&other = ((IniPathObject *)FUN_002c43b0(((int)igObject_GetAllocator((int)self))));
-        second = ((char *)FUN_002d1c30((int *)((*(void * *)DAT_00586dc8))));
+        second = ((char *)FUN_002d1c30((int *)((*(void * *)g_objectSystem))));
         setText(other, second);
         found = tryPath(self, other, held);
         dropPath(other);
@@ -212,14 +212,14 @@ int FUN_00306770(int arg0, int arg1, const char *arg2, T_306770 **arg3, int arg4
 
 static inline int pool_306910(void) {
     int p;
-    if (DAT_00586f20[0] == 0) {
+    if (g_stringPool[0] == 0) {
         p = ((int)FUN_002eb010(0x10));
         if (p != 0) {
             p = ((int)StringPool_Construct((S_2eadf0 *)p));
         }
-        DAT_00586f20[0] = p;
+        g_stringPool[0] = p;
     }
-    return DAT_00586f20[0];
+    return g_stringPool[0];
 }
 
 static inline char *text_306910(ShortStr *s) { char *t = s->text_306910; if (t == 0) { return DAT_004c22f0[0]; } return t; }
@@ -257,14 +257,14 @@ int FUN_00306910(int arg0, int arg1, const char *arg2, int **out, char *def, int
 
 static inline int pool_306aa0(void) {
     int p;
-    if (DAT_00586f20[0] == 0) {
+    if (g_stringPool[0] == 0) {
         p = ((int)FUN_002eb010(0x10));
         if (p != 0) {
             p = ((int)StringPool_Construct((S_2eadf0 *)p));
         }
-        DAT_00586f20[0] = p;
+        g_stringPool[0] = p;
     }
-    return DAT_00586f20[0];
+    return g_stringPool[0];
 }
 
 static inline char *text_306aa0(Str *s) { char *t = s->text_306aa0; if (t == 0) { return DAT_004c22f0[0]; } return t; }
@@ -776,14 +776,14 @@ Hd *FUN_00308a90(O_308a90 *arg0) {
         int old;
         setHeader(arg0, igSmartPointer<Ob_308a90>(((Ob_308a90 *)FUN_002c72c0(FUN_00301000()))));
         s0 = arg0->f12;
-        if (0 == DAT_00586f20[0]) {
+        if (0 == g_stringPool[0]) {
             v = ((int)FUN_002eb010(16));
             if (v != 0) {
                 v = ((int)StringPool_Construct((struct S_2eadf0 *)v));
             }
-            DAT_00586f20[0] = v;
+            g_stringPool[0] = v;
         }
-        s2 = StringPool_Intern((StringPool *)DAT_00586f20[0], (const char *)(((char *)DAT_004fb390)));
+        s2 = StringPool_Intern((StringPool *)g_stringPool[0], (const char *)(((char *)DAT_004fb390)));
         old = s0->f20;
         if (old != 0) {
             hd = (int *)(old - 8);
@@ -805,14 +805,14 @@ void FUN_00308c00(int *arg0, void *arg1) {
     int temp_s0;
 
     if (arg1 == 0) {
-        *arg0 = DAT_004fb418.v;
+        *arg0 = g_allocatorFailureStatus.v;
     } else {
         temp_s0 = *(int *)((char *)(arg1) + 32);
         if (*(int *)((char *)(arg1) + 52) > 1) {
             FUN_00309640((P_309640 *)temp_s0, (P_309640 *)arg1);
             FUN_00309750((W_309750 *)temp_s0, *(int *)((char *)(arg1) + 20));
         }
-        *arg0 = DAT_004fb410.v;
+        *arg0 = g_statusSucceeded.v;
     }
 }
 

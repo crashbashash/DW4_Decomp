@@ -1,5 +1,5 @@
-int FUN_002cae50(void) {
-    return DAT_00586898[0];
+igMetaObject *FUN_002cae50(void) {
+    return g_igCharList_metaObject[0];
 }
 
 void FUN_002cae60(int arg0) {
@@ -7,11 +7,11 @@ void FUN_002cae60(int arg0) {
     igMetaObject_CreateInstance((CreateMeta *)(*(int *)0x586898), (MemoryPool *)arg0);
 }
 
-int FUN_002caea0(void) {
-    if (DAT_00586898[0] == 0) {
-        DAT_00586898[0] = ((int)igMetaObject_Create(((int)Memory_GetAllocatorBySelector(DAT_00587040[0]))));
+igMetaObject *FUN_002caea0(void) {
+    if (g_igCharList_metaObject[0] == 0) {
+        g_igCharList_metaObject[0] = (igMetaObject *)igMetaObject_Create(((int)Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0])));
     }
-    return DAT_00586898[0];
+    return g_igCharList_metaObject[0];
 }
 
 igMetaObject *igCharList_GetMetaObject(void)
@@ -27,7 +27,7 @@ int igCharList_GetVTable(void) {
 
     igObject_InitHeader((struct ObjectHeader *)&obj);
     obj.vt = &DAT_00531ab0[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(((void * *)DAT_00586dc8)[0]) + 916));
+    return *(int *)((char *)&obj + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
 }
 
 void FUN_002caf80(void)
@@ -62,8 +62,8 @@ void FUN_002cb010(void) {
     void *temp_s0;
     void *temp_s1;
 
-    temp_s1 = (void *)(((void * *)DAT_00586898)[0]);
-    temp_v0 = (void **)(((void **)igMetaObject_FindFieldByName((igMetaObject *)temp_s1, (const char *)&DAT_004f5eb0[0])));
+    temp_s1 = (void *)(((void * *)g_igCharList_metaObject)[0]);
+    temp_v0 = (void **)(((void **)igMetaObject_FindFieldByName((igMetaObject *)temp_s1, data)));
     temp_s2 = ObjectPointerList_FindIndex((char *)(*(int *)((char *)(temp_s1) + 40)), (int)temp_v0);
     temp_s0 = (void *)(((DW4VC_84_1 *)(temp_v0))->vX((int)(1)));
     *(int *)((char *)(temp_s0) + 60) = FUN_002cc2c0();

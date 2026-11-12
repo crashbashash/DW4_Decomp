@@ -1,8 +1,8 @@
-int FUN_00197fd0(void) {
-    if (DAT_00561490[0] == 0) {
-        DAT_00561490[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(DAT_00587040[0]));
+igMetaObject *FUN_00197fd0(void) {
+    if (g_igSkin_metaObject[0] == 0) {
+        g_igSkin_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
     }
-    return DAT_00561490[0];
+    return g_igSkin_metaObject[0];
 }
 
 igMetaObject *igSkin_GetMetaObject(void)
@@ -31,7 +31,7 @@ int igSkin_GetVTable(void) {
     *(int *)q2 = 0;
     q3 = (S_ref *)&u.b[16];
     *(int *)q3 = 0;
-    temp_s2 = *(int *)&u.b[*(int *)((char *)(DAT_00586dc8[0]) + 916)];
+    temp_s2 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.w[0] = (int)(&DAT_0052b3b0[0]);
     if (q3 != 0) {
         q3 = *(S_ref **)q3;
@@ -129,11 +129,11 @@ void igSkin_InitFields(void) {
     void *temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)DAT_00561490[0];
+    temp_s0 = (void *)g_igSkin_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_0048b560[0], 2);
     temp_s1 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s2)));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = FUN_0019cd50();
+    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_0019cd50();
     temp_s1_2 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1)));
     ((igObjectRefMetaField *)temp_s1_2)->_metaObject = FUN_0018a6a0();
     igMetaObject_NameFields(temp_s0, &DAT_0048b568[0], &DAT_0048b570[0], &DAT_0048b578[0], temp_s2);

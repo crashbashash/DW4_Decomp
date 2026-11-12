@@ -1,9 +1,9 @@
 void *FUN_003657a0(void) {
-    struct G *g = DAT_005898c8[0];
-    if (!g || ((g->f & 4) != 0) == false) {
+    igMetaObject *g = g_beDataBaseList_metaObject[0];
+    if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_00365830();
     }
-    return DAT_005898c8[0];
+    return g_beDataBaseList_metaObject[0];
 }
 
 int beDataBaseList_GetVTable(void) {
@@ -11,7 +11,7 @@ int beDataBaseList_GetVTable(void) {
 
     igObject_InitHeader(&obj);
     obj.vt = &DAT_005351c0[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 
 void FUN_00365830(void)

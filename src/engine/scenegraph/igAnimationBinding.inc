@@ -26,7 +26,7 @@ int igAnimationBinding_GetVTable(void) {
     *(int *)q1 = 0;
     q0 = (S_ref *)&u.b[24];
     *(int *)q0 = 0;
-    temp_s0 = *(int *)&u.b[*(int *)((char *)(DAT_00586dc8[0]) + 916)];
+    temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.vt = (int)&DAT_00529b70[0];
     if (q0 != 0) {
         q0 = *(S_ref **)q0;
@@ -92,11 +92,11 @@ void igAnimationBinding_InitFields(void) {
     void *temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)DAT_00562338[0];
+    temp_s0 = (void *)g_igAnimationBinding_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_0048d470[0], 5);
     temp_s1 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s2)));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = FUN_001a7100();
+    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_001a7100();
     temp_s1_2 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1)));
     ((igMemoryRefMetaField *)temp_s1_2)->_memType = igIntMetaField_GetDefaultDescriptor();
     ((igRefMetaField *)temp_s1_2)->_destruct = 1;
@@ -105,7 +105,7 @@ void igAnimationBinding_InitFields(void) {
     temp_s1_3 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s2 + 3)));
     ((igObjectRefMetaField *)temp_s1_3)->_metaObject = igIntList_GetOrCreateMetaObject();
     temp_s1_4 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s2 + 4)));
-    ((igObjectRefMetaField *)temp_s1_4)->_metaObject = FUN_001a4d90();
+    ((igObjectRefMetaField *)temp_s1_4)->_metaObject = (int)FUN_001a4d90();
     igMetaObject_NameFields(temp_s0, &DAT_0048d490[0], &DAT_0048d4b0[0], &DAT_0048d4d0[0], temp_s2);
 }
 

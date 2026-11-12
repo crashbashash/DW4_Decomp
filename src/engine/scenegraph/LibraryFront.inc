@@ -4,7 +4,7 @@ void SceneGraphLibrary_MarkRegistered(void) {
     }
 }
 
-int FUN_001943a0(void) {
-    return DAT_005619f8[0];
+igMetaObject *FUN_001943a0(void) {
+    return g_igGroup_metaObject[0];
 }
 

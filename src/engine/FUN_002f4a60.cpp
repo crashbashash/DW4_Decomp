@@ -10,9 +10,9 @@ public:
     bool operator==(const igResult &o) const { return v == o.v; }
     inline bool isFailed(int &f) const;
 };
-extern igResult DAT_004fb410;
-extern igResult DAT_004fb418;
-inline bool igResult::isFailed(int &f) const { f = DAT_004fb418.v; return *this == DAT_004fb418; }
+extern igResult g_statusSucceeded;
+extern igResult g_allocatorFailureStatus;
+inline bool igResult::isFailed(int &f) const { f = g_allocatorFailureStatus.v; return *this == g_allocatorFailureStatus; }
 
 struct PoolDescRecord { int vt; int rc; char *name; char q12[8]; char *alias; char *s24; int a28; int a32; int a36; char *s40; char *s44; char *s48; char *s52; char *s56; char *s60; char *s64; char *s68; char *s72; char *s76; int a80; };
 struct PoolDescSlot { int pool; char name[128]; PoolDescRecord *record; char q136[8]; };
@@ -49,17 +49,16 @@ ContextStackEntry *FUN_002f8760(void);
 void igMemoryPoolContextInfo_DeleteAllocation(void *);
 extern void *DAT_00587000[4];
 extern char DAT_004f7910[];
-extern char *DAT_004c2170[46];
-extern void *DAT_00586dc8;
+extern char *g_memoryContextNames[46];
+extern unsigned char *g_objectSystem[4];
 extern void *DAT_00586fd0;
-extern void *DAT_00586f20;
+extern void *g_stringPool;
 extern void *DAT_00587218[4];
 extern char DAT_004fa530[];
 extern char DAT_004fa550[];
 }
 
 extern "C" int igObject_InitHeader(...);
-extern int DAT_0052f510[4];
 struct Ref { int pad0; int f4; };
 struct BF { unsigned lo : 23; unsigned hi : 9; };
 /* dispatch-only view of the object: 43 vtable slots then the init slot (no fields) */
@@ -300,18 +299,18 @@ struct PoolHandle {
     StringToken *token10;    /* +0x4c */
     int field50;             /* +0x50 */
 };
-extern int DAT_00586a88[4];
+extern int g_igArenaMemoryPool_metaObject[4];
 extern char DAT_004fa3e0[];
 #define ASSIGN_TOKEN(field, source)                                           \
     text = (source);                                                          \
-    if (DAT_00586f20 == 0) {                                               \
+    if (g_stringPool == 0) {                                               \
         poolObj = FUN_002eb010(16);                                           \
         if (poolObj != 0) {                                                   \
             poolObj = StringPool_Construct(poolObj);                          \
         }                                                                     \
-        DAT_00586f20 = poolObj;                                            \
+        g_stringPool = poolObj;                                            \
     }                                                                         \
-    token = StringPool_Intern(DAT_00586f20, text);          \
+    token = StringPool_Intern(g_stringPool, text);          \
     old = (field);                                                            \
     if (old != 0) {                                                           \
         header = (StringTokenHeader *)old - 1;                                \
@@ -323,14 +322,14 @@ extern char DAT_004fa3e0[];
     }                                                                         \
     (field) = token
 #define ASSIGN_TOKEN_DIRECT(field, source)                                           \
-    if (DAT_00586f20 == 0) {                                               \
+    if (g_stringPool == 0) {                                               \
         poolObj = FUN_002eb010(16);                                           \
         if (poolObj != 0) {                                                   \
             poolObj = StringPool_Construct(poolObj);                          \
         }                                                                     \
-        DAT_00586f20 = poolObj;                                            \
+        g_stringPool = poolObj;                                            \
     }                                                                         \
-    token = StringPool_Intern(DAT_00586f20, (source));          \
+    token = StringPool_Intern(g_stringPool, (source));          \
     old = (field);                                                            \
     if (old != 0) {                                                           \
         header = (StringTokenHeader *)old - 1;                                \
@@ -347,21 +346,21 @@ extern char DAT_004fa3e0[];
  * (+0x1c..+0x24, +0x50), and ten interned strings (+0x18, +0x28..+0x4c, each assigned through the
  * shared StringPool with the usual retain/release of the old token). The descriptor's attached
  * object (+0 of the entry) supplies +0x1c when it reports a size; the handle name (+0x14) is built
- * from the table name 'kIGMemoryPoolHandle%s'. The status written through `result` is DAT_004fb410
- * on success and DAT_004fb418 for an out-of-range index. */
+ * from the table name 'kIGMemoryPoolHandle%s'. The status written through `result` is g_statusSucceeded
+ * on success and g_allocatorFailureStatus for an out-of-range index. */
 extern "C" void FUN_002f31b0(int *result, PoolTable *table, int index, PoolHandle *handle);
 
 
-extern char DAT_004e0858[];
-extern int DAT_00587018[4];
+extern char emptyString[];
+extern int g_allocatorSelector[4];
 struct PoolDescString { int chunk; int refs; };
 static inline void *descPool() {
-    if (DAT_00586f20 == 0) {
+    if (g_stringPool == 0) {
         void *p = FUN_002eb010(16);
         if (p != 0) { p = StringPool_Construct(p); }
-        DAT_00586f20 = p;
+        g_stringPool = p;
     }
-    return DAT_00586f20;
+    return g_stringPool;
 }
 static inline void setDescString(char **dst, char *src) {
     char *v = StringPool_Intern(descPool(), src);
@@ -378,7 +377,7 @@ extern "C" PoolDescRecord *FUN_002f8be0(int, char *);
 extern "C" PoolDescRecord *FUN_002f8ca0(int, char *);
 class PoolDescManagerBase { public: virtual void p0(); virtual void p1(); virtual void p2(); virtual void p3(); virtual void p4(); virtual void p5(); virtual void p6(); virtual void p7(); virtual void p8(); virtual void p9(); virtual void p10(); virtual void p11(); virtual void p12(); virtual void p13(); virtual void p14(); virtual void p15(); virtual void p16(); virtual void p17(); virtual void p18(); virtual void p19(); virtual void p20(); virtual void p21(); virtual void p22(); virtual void p23(); virtual void p24(); virtual void p25(); virtual void p26(); virtual void p27(); virtual void p28(); virtual void p29(); virtual void p30(); virtual void p31(); virtual void p32(); virtual void p33(); virtual void p34(); virtual void p35(); virtual void p36(); virtual void p37(); virtual void p38(); virtual void p39(); virtual void p40(); virtual void p41(); virtual void p42(); virtual void p43(); virtual void p44(); virtual void p45(); virtual void p46(); virtual void p47(); virtual void p48(); virtual igResult build(int, int); };
 class PoolDescManager : public PoolDescManagerBase { public: char q4[4]; int nextSlot; char q12[4]; int table; };
-static inline char *descName(PoolDescRecord *r) { char *n = r->name; if (n != 0) { return n; } return DAT_004e0858; }
+static inline char *descName(PoolDescRecord *r) { char *n = r->name; if (n != 0) { return n; } return emptyString; }
 extern "C" igResult FUN_002f3910(PoolDescManager *self, int index, PoolDescRecord *desc, int build);
 
 
@@ -421,8 +420,8 @@ void FUN_002f4340(void **arg0);
 
 
 extern char *DAT_00586de8;
-extern int DAT_004f8b50[4];
-extern int DAT_004f8c80[4];
+extern int igArenaMemoryPool_className[4];
+extern int igMallocMemoryPool_className[4];
 extern int DAT_00586fd8[4];
 extern int DAT_00586fe0[4];
 extern int DAT_00586fe8[4];
@@ -451,7 +450,7 @@ static inline PoolObject *newSmallPool() {
 }
 #define NEW_LARGE_POOL(p) { p = newLargePool(); }
 #define NEW_SMALL(p) { p = newSmallPool(); }
-#define NEW_POOL(p) { if (DAT_00586de8 != 0) { if (strcmp(DAT_00586de8, DAT_004f8b50) == 0) { NEW_LARGE_POOL(p) } else if (strcmp(DAT_00586de8, DAT_004f8c80) == 0) { NEW_SMALL(p) } else { NEW_LARGE_POOL(p) } } else { NEW_LARGE_POOL(p) } }
+#define NEW_POOL(p) { if (DAT_00586de8 != 0) { if (strcmp(DAT_00586de8, igArenaMemoryPool_className) == 0) { NEW_LARGE_POOL(p) } else if (strcmp(DAT_00586de8, igMallocMemoryPool_className) == 0) { NEW_SMALL(p) } else { NEW_LARGE_POOL(p) } } else { NEW_LARGE_POOL(p) } }
 extern "C" void FUN_002f43a0(PoolSlotTable *self);
 
 
@@ -481,7 +480,6 @@ typedef struct ContextPrefixedRecord {
     char header[20];
     ContextRecord2 record;
 } ContextPrefixedRecord;
-extern int g_memoryContextNames[4];
 /* IgMemoryPoolContextInfo slot 180: write the 46 original context names (Bootstrap, Default,
  * Current, NonTracked, ...) into the name field of each 144-byte context record. Each name is
  * copied with a 127-character limit and the 128th byte is cleared explicitly. Called by the
@@ -530,9 +528,9 @@ extern "C" void FUN_002f4a60(int *out, PoolConfigManager *self) {
     int result;
     PoolConfigObject *second;
     int fail;
-    config = ((PoolConfigContext *)DAT_00586dc8)->config;
-    mainPool = ((PoolConfigContext *)DAT_00586dc8)->main;
-    second = ((PoolConfigContext *)DAT_00586dc8)->second;
+    config = ((PoolConfigContext *)g_objectSystem[0])->config;
+    mainPool = ((PoolConfigContext *)g_objectSystem[0])->main;
+    second = ((PoolConfigContext *)g_objectSystem[0])->second;
     options = DAT_004c2370[0];
     mainSize = 0;
     nextSize = 0;
@@ -540,7 +538,7 @@ extern "C" void FUN_002f4a60(int *out, PoolConfigManager *self) {
     optC = DAT_005871f8[0];
     {
     int f = self->flags;
-    result = DAT_004fb410.v;
+    result = g_statusSucceeded.v;
     lockFlag = GPR_00554994;
     useFlag = (f & 4) != 0;
     }
@@ -564,7 +562,7 @@ extern "C" void FUN_002f4a60(int *out, PoolConfigManager *self) {
     DAT_005871f8[0] = optC;
     for (i = 0; i < 46; i++) {
         o = *(PoolConfigObject **)((char *)self + i * 144 + 20);
-        if (o != 0 && igObject_IsKindOf(o, DAT_00586a88[0]) != 0) {
+        if (o != 0 && igObject_IsKindOf(o, g_igArenaMemoryPool_metaObject[0]) != 0) {
             igArenaMemoryPool_SetPoolOptionFlags(o, (options & ~1) | (o->options & 1));
         }
     }
@@ -606,9 +604,9 @@ extern "C" void FUN_002f4a60(int *out, PoolConfigManager *self) {
     }
     self->finish();
     o = self->poolFor(20);
-    if (o != mainPool && o != second) { ((PoolConfigContext *)DAT_00586dc8)->a88 = o; }
+    if (o != mainPool && o != second) { ((PoolConfigContext *)g_objectSystem[0])->a88 = o; }
     o = self->poolFor(7);
-    if (o != mainPool && o != second) { ((PoolConfigContext *)DAT_00586dc8)->a96 = o; }
+    if (o != mainPool && o != second) { ((PoolConfigContext *)g_objectSystem[0])->a96 = o; }
     for (i = 0; i < 46; i++) {
         o = *(PoolConfigObject **)((char *)self + i * 144 + 20);
         if (o != 0 && o->inUse() == 0) { o->finish(); }
@@ -617,7 +615,7 @@ extern "C" void FUN_002f4a60(int *out, PoolConfigManager *self) {
         mainPool->lock(1);
         if (second != mainPool) { second->lock(1); }
     }
-    if (result == DAT_004fb410.v) { self->setFlags(self->flags | 8); }
+    if (result == g_statusSucceeded.v) { self->setFlags(self->flags | 8); }
     *out = result;
 }
 
@@ -719,7 +717,7 @@ struct Mgr {
 extern "C" void FUN_002f50e0(Mgr *arg0);
 
 
-extern int DAT_00585ea0[4];
+extern int g_igMemoryPool_metaObject[4];
 extern "C" int FUN_002f5220(void);
 
 
@@ -940,7 +938,7 @@ extern "C" int igObjectSystem_FindMetaByNameDefault(char *);
 extern "C" void MemoryContext_BuildAllocator(int *out, igMemoryPoolContextInfo *arg1, int idx, int flag);
 extern int DAT_00587020[4];
 extern int DAT_00587030[4];
-extern int DAT_00587040[4];
+extern int g_metadataAllocatorKey[4];
 extern char DAT_004fa2a8[], DAT_004fa2b0[], DAT_004fa5e8[], DAT_004fa5f0[], DAT_004fa600[], DAT_004fa620[], DAT_004fa630[], DAT_004fa638[], DAT_004fa640[], DAT_004fa648[], DAT_004fa658[], DAT_004fa668[], DAT_004fa678[], DAT_004fa680[], DAT_004fa688[], DAT_004fa690[], DAT_004fa698[];
 #define RC(o) ((unsigned long long)(long long)(int)(o)->_refCount & 0x7fffffULL)
 void MemoryContext_BuildAllocator(int *out, igMemoryPoolContextInfo *arg1, int idx, int flag);
@@ -1380,11 +1378,10 @@ extern "C" int igObject_AllocateRawStorageDefault(...);
 extern "C" void FUN_002f87f0(int arg0);
 
 
-extern unsigned char *g_objectSystem[4];
 extern "C" void free(void *allocation);
 extern "C" void thunk_FUN_002ed460__002ff810(void *allocation);
 /* Releases an allocation owned by a pool context. While the object system is active (flag byte at
- * the start of the record behind g_objectSystem) the call goes to Memory_FreeBuffer through its
+ * the start of the record behind g_objectSystem[0]) the call goes to Memory_FreeBuffer through its
  * j-thunk; otherwise it takes the early-boot path free. Neither callee's argument is
  * touched here: `allocation` is passed straight through in the first argument register. */
 /* Object-system record pointer; byte 0 is the "object system active" flag. */

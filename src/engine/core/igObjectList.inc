@@ -6,7 +6,7 @@ void * FUN_002bd680(int arg0) {
 /* Created with allocation only, no field registration, when missing. */
 int igObjectList_GetOrCreateMetaObject(void) {
     if (((int *)g_igObjectList_metaObject)[0] == 0) {
-        ((int *)g_igObjectList_metaObject)[0] = ((int)igMetaObject_Create(((int)Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]))));
+        ((int *)g_igObjectList_metaObject)[0] = (int)igMetaObject_Create(((int)Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0])));
     }
     return ((int *)g_igObjectList_metaObject)[0];
 }
@@ -24,7 +24,7 @@ int igObjectList_GetVTable(void) {
 
     igObject_InitHeader((struct ObjectHeader *)&obj);
     obj._vtable = (int)&DAT_005249b0[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(((void * *)DAT_00586dc8)[0]) + 916));
+    return *(int *)((char *)&obj + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
 }
 
 void igObjectList_EnsureRegistered(void)

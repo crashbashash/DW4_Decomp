@@ -1,9 +1,9 @@
 void *FUN_003691b0(void) {
-    struct G *g = DAT_00589c08[0];
-    if (!g || ((g->f & 4) != 0) == false) {
+    igMetaObject *g = g_beCameraBoxData_metaObject[0];
+    if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_003692d0();
     }
-    return DAT_00589c08[0];
+    return g_beCameraBoxData_metaObject[0];
 }
 
 int beCameraBoxData_GetVTable(void) {
@@ -17,7 +17,7 @@ int beCameraBoxData_GetVTable(void) {
     obj.w[3] = 0;
     obj.w[4] = 0;
     obj.w[5] = 0;
-    r = *(int *)((char *)&obj + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+    r = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
     obj.vt = &DAT_005349d0[0];
     FUN_00341160((O *)(&obj.w[5]), (short)(-1));
     FUN_00341160((O *)(&obj.w[4]), (short)(-1));
@@ -63,7 +63,7 @@ void beCameraBoxData_InitFields(void) {
     void *temp_s2_5;
     void *temp_s1;
 
-    temp_s1 = (void *)((int *)DAT_00589c08)[0];
+    temp_s1 = (void *)g_beCameraBoxData_metaObject[0];
     temp_s0 = igMetaObject_GetFieldCount(temp_s1);
     igMetaObject_CreateFields(temp_s1, &DAT_004c78d0[0], 5);
     temp_s2 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0));

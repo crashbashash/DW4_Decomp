@@ -18,14 +18,14 @@ void Gap__Core__igStringMetaField__vfunc_56(int arg0, int a1, int arg2) {
     void *temp_s0;
 
     arg1 = (void **)a1;
-    if (DAT_00586f20[0] == 0) {
+    if (g_stringPool[0] == 0) {
         var_v0 = ((int)FUN_002eb010(0x10));
         if (var_v0 != 0) {
             var_v0 = ((int)StringPool_Construct((S_2eadf0 *)var_v0));
         }
-        DAT_00586f20[0] = var_v0;
+        g_stringPool[0] = var_v0;
     }
-    temp_s0 = (void *)(((void *)StringPool_Intern((StringPool *)DAT_00586f20[0], (const char *)arg2)));
+    temp_s0 = (void *)(((void *)StringPool_Intern((StringPool *)g_stringPool[0], (const char *)arg2)));
     temp_v1 = (void *)(*arg1);
     if (temp_v1 != 0) {
         temp_a1 = (int *)((char *)temp_v1 - 8);
@@ -102,14 +102,14 @@ void igStringMetaField_SetDefaultText(int *arg0, int arg1) {
     void *temp_s0;
 
     temp_s1 = (void **)arg0[8];
-    if (DAT_00586f20[0] == 0) {
+    if (g_stringPool[0] == 0) {
         var_v0 = ((int)FUN_002eb010(0x10));
         if (var_v0 != 0) {
             var_v0 = ((int)StringPool_Construct((S_2eadf0 *)var_v0));
         }
-        DAT_00586f20[0] = var_v0;
+        g_stringPool[0] = var_v0;
     }
-    temp_s0 = (void *)(((void *)StringPool_Intern((StringPool *)DAT_00586f20[0], (const char *)arg1)));
+    temp_s0 = (void *)(((void *)StringPool_Intern((StringPool *)g_stringPool[0], (const char *)arg1)));
     temp_a0 = (void *)(*temp_s1);
     if (temp_a0 != 0) {
         temp_a1 = (int *)((char *)temp_a0 - 8);
@@ -182,14 +182,14 @@ void igStringMetaField_ResetValue(int *arg0, int arg1) {
     if (s0 == 0) {
         t = 0;
     } else {
-        if (DAT_00586f20[0] == 0) {
+        if (g_stringPool[0] == 0) {
             p = ((int)FUN_002eb010(16));
             if (p != 0) {
                 p = ((int)StringPool_Construct((S_2eadf0 *)p));
             }
-            DAT_00586f20[0] = p;
+            g_stringPool[0] = p;
         }
-        t = ((char *)StringPool_Intern((StringPool *)DAT_00586f20[0], (const char *)s0));
+        t = ((char *)StringPool_Intern((StringPool *)g_stringPool[0], (const char *)s0));
     }
     tok = t;
     igStringMetaField_AssignRetainedToken(arg0, arg1, &tok);
@@ -332,7 +332,7 @@ void *igStringMetaField_Init(igStringMetaField *self) {
 
 void *FUN_0030b2c0(void *arg0, void *arg1) {
     igRefMetaField_CopyConstruct((igRefMetaField *)arg0, (igRefMetaField *)arg1);
-    *(int *)((char *)(arg0) + 0) = (int)(&DAT_00533180[0]);
+    *(int *)((char *)(arg0) + 0) = (int)(&g_igStringMetaField_vtable[0]);
     *(unsigned char *)((char *)(arg0) + 56) = (unsigned char) *(unsigned char *)((char *)(arg1) + 56);
     return arg0;
 }
@@ -626,12 +626,12 @@ void FUN_0030bce0(SrcStr *src, long long delim, List_30bce0 *list) {
     int n = list->count;
     for (int i = 0; i < n; i++) {
         void **slot = (void **)((char *)list->items + i * 4);
-        if (DAT_00586f20[0] == 0) {
+        if (g_stringPool[0] == 0) {
             int v = ((int)FUN_002eb010(0x10));
             if (v != 0) v = ((int)StringPool_Construct((S_2eadf0 *)v));
-            DAT_00586f20[0] = v;
+            g_stringPool[0] = v;
         }
-        void *ni = ((void *)StringPool_Intern((StringPool *)DAT_00586f20[0], (const char *)0));
+        void *ni = ((void *)StringPool_Intern((StringPool *)g_stringPool[0], (const char *)0));
         Rel_30bce0::go(*slot);
         *slot = ni;
     }
@@ -646,12 +646,12 @@ void FUN_0030bce0(SrcStr *src, long long delim, List_30bce0 *list) {
             void *s;
             if (p == 0) s = 0;
             else {
-                if (DAT_00586f20[0] == 0) {
+                if (g_stringPool[0] == 0) {
                     int v = ((int)FUN_002eb010(0x10));
                     if (v != 0) v = ((int)StringPool_Construct((S_2eadf0 *)v));
-                    DAT_00586f20[0] = v;
+                    g_stringPool[0] = v;
                 }
-                s = ((void *)StringPool_Intern((StringPool *)DAT_00586f20[0], (const char *)p));
+                s = ((void *)StringPool_Intern((StringPool *)g_stringPool[0], (const char *)p));
             }
             void *sp = s;
             StringList_AppendRetained(list, &sp);

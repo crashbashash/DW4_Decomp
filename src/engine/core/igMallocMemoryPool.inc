@@ -12,7 +12,7 @@ void Gap__Core__igMallocMemoryPool__vfunc_11(int extra0) {
 
 void *Gap__Core__igMallocMemoryPool__vfunc_21(void *self, void *src) {
     void *o;
-    if (*DAT_00586dc8[0] != 0) {
+    if (*g_objectSystem[0] != 0) {
         FUN_002ce3c0();
         return ((void *)igObject_CloneViaMetadata((void **)self, (int)src));
     }
@@ -41,7 +41,7 @@ int igMallocMemoryPool_GetVTable(void) {
     S_ref *q0;
     S_ref *q1;
     FUN_003235c0((igMallocMemoryPool *)u.b);
-    temp_s0 = *(int *)&u.b[*(int *)((char *)(((void * *)DAT_00586dc8)[0]) + 916)];
+    temp_s0 = *(int *)&u.b[*(int *)((char *)(((void * *)g_objectSystem)[0]) + 916)];
     u.vt = (int)&DAT_00530e90[0];
     q0 = (S_ref *)&u.b[148];
     if (q0 != 0) {

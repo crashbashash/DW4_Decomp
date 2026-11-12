@@ -10,22 +10,22 @@ void FUN_00459340(int arg0) {
     igMetaObject_CreateInstance(*(int *)0x58C790, arg0);
 }
 
-int FUN_00459380(void) {
-    if (DAT_0058c790[0] == 0) {
-        DAT_0058c790[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(DAT_00587040[0]));
+igMetaObject *FUN_00459380(void) {
+    if (g_igViewerSceneInfoManager_metaObject[0] == 0) {
+        g_igViewerSceneInfoManager_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
     }
-    return DAT_0058c790[0];
+    return g_igViewerSceneInfoManager_metaObject[0];
 }
 
 void *igViewerSceneInfoManager_GetMetaObject(void) {
     bool ok;
-    if (DAT_0058c790[0] == 0) goto make;
-    ok = !!(((MetaObjectFlags *)DAT_0058c790[0])->f & 4);
+    if (g_igViewerSceneInfoManager_metaObject[0] == 0) goto make;
+    ok = !!(((MetaObjectFlags *)g_igViewerSceneInfoManager_metaObject[0])->f & 4);
     if (ok != false) goto done;
 make:
     FUN_00459e40();
 done:;
-    return (void *)DAT_0058c790[0];
+    return (void *)g_igViewerSceneInfoManager_metaObject[0];
 }
 
 int igViewerSceneInfoManager_GetVTable(void) {
@@ -89,7 +89,7 @@ int igViewerSceneInfoManager_GetVTable(void) {
     FUN_00459d60((int *)p344);
     p352 = &u.b[192];
     FUN_00458600(p352);
-    r = *(int *)&u.b[*(int *)((char *)(((void *)DAT_00586dc8[0])) + 916)];
+    r = *(int *)&u.b[*(int *)((char *)(((void *)g_objectSystem[0])) + 916)];
     *(int **)u.b = &DAT_005424c0[0];
     FUN_003cafa0(p352, -1);
     FUN_00459ce0((void **)p344, -1);
@@ -457,7 +457,7 @@ void FUN_00459ee0(void) {
     void *temp_v0_2;
     void *temp_v0_3;
 
-    temp_s1 = (void *)(DAT_0058c790[0]);
+    temp_s1 = (void *)(g_igViewerSceneInfoManager_metaObject[0]);
     temp_s2 = igMetaObject_GetFieldCount(temp_s1);
     igMetaObject_CreateFields(temp_s1, &DAT_004d0b50[0], 0x2B);
     temp_v0 = (void **)(igMetaObject_FindFieldByName(temp_s1, &DAT_0051ee50[0]));
@@ -471,19 +471,19 @@ void FUN_00459ee0(void) {
         igObject_Destroy(temp_v0_2);
     }
     temp_s0 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s2));
-    *(int *)((char *)(temp_s0) + 56) = FUN_0045a8c0();
+    *(int *)((char *)(temp_s0) + 56) = (int)FUN_0045a8c0();
     *(char *)((char *)(temp_s0) + 52) = 1;
     temp_s0_2 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s2 + 1));
-    *(int *)((char *)(temp_s0_2) + 56) = FUN_0045b420();
+    *(int *)((char *)(temp_s0_2) + 56) = (int)FUN_0045b420();
     *(char *)((char *)(temp_s0_2) + 52) = 1;
     temp_s0_3 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s2 + 2));
-    *(int *)((char *)(temp_s0_3) + 56) = FUN_0045aaf0();
+    *(int *)((char *)(temp_s0_3) + 56) = (int)FUN_0045aaf0();
     *(char *)((char *)(temp_s0_3) + 52) = 1;
     temp_s0_4 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s2 + 3));
-    *(int *)((char *)(temp_s0_4) + 56) = FUN_0045de90();
+    *(int *)((char *)(temp_s0_4) + 56) = (int)FUN_0045de90();
     *(char *)((char *)(temp_s0_4) + 52) = 1;
     temp_s0_5 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s2 + 4));
-    *(int *)((char *)(temp_s0_5) + 56) = FUN_0045d830();
+    *(int *)((char *)(temp_s0_5) + 56) = (int)FUN_0045d830();
     *(char *)((char *)(temp_s0_5) + 52) = 1;
     temp_s0_6 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s2 + 5));
     *(int *)((char *)(temp_s0_6) + 56) = FUN_00233a40();
@@ -493,7 +493,7 @@ void FUN_00459ee0(void) {
     *(int *)((char *)(temp_s0_7) + 56) = FUN_0044ded0();
     *(char *)((char *)(temp_s0_7) + 52) = 1;
     temp_s0_8 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s2 + 8));
-    *(int *)((char *)(temp_s0_8) + 56) = FUN_0045b8d0();
+    *(int *)((char *)(temp_s0_8) + 56) = (int)FUN_0045b8d0();
     *(char *)((char *)(temp_s0_8) + 52) = 1;
     temp_s0_9 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s2 + 9));
     *(int *)((char *)(temp_s0_9) + 56) = FUN_00452340();
@@ -528,21 +528,21 @@ void FUN_00459ee0(void) {
     temp_s0_24 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s2 + 0x18));
     *(int *)((char *)(temp_s0_24) + 56) = FUN_00452340();
     temp_s0_25 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s2 + 0x19));
-    *(int *)((char *)(temp_s0_25) + 56) = FUN_00458c50();
+    *(int *)((char *)(temp_s0_25) + 56) = (int)FUN_00458c50();
     temp_s0_26 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s2 + 0x1A));
-    *(int *)((char *)(temp_s0_26) + 56) = FUN_00458c50();
+    *(int *)((char *)(temp_s0_26) + 56) = (int)FUN_00458c50();
     temp_s0_27 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s2 + 0x1B));
-    *(int *)((char *)(temp_s0_27) + 56) = FUN_00458c50();
+    *(int *)((char *)(temp_s0_27) + 56) = (int)FUN_00458c50();
     temp_s0_28 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s2 + 0x1C));
-    *(int *)((char *)(temp_s0_28) + 56) = FUN_00458c50();
+    *(int *)((char *)(temp_s0_28) + 56) = (int)FUN_00458c50();
     temp_s0_29 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s2 + 0x1D));
     *(int *)((char *)(temp_s0_29) + 56) = FUN_0044d840();
     *(char *)((char *)(temp_s0_29) + 52) = 1;
     temp_s0_30 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s2 + 0x1E));
-    *(int *)((char *)(temp_s0_30) + 56) = FUN_0045d100();
+    *(int *)((char *)(temp_s0_30) + 56) = (int)FUN_0045d100();
     *(char *)((char *)(temp_s0_30) + 52) = 1;
     temp_s0_31 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s2 + 0x1F));
-    *(int *)((char *)(temp_s0_31) + 56) = FUN_004586a0();
+    *(int *)((char *)(temp_s0_31) + 56) = (int)FUN_004586a0();
     *(char *)((char *)(temp_s0_31) + 52) = 1;
     temp_s0_32 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s2 + 0x20));
     *(int *)((char *)(temp_s0_32) + 56) = FUN_0044fdd0();
@@ -563,7 +563,7 @@ void FUN_00459ee0(void) {
     *(int *)((char *)(temp_s0_36) + 56) = FUN_0013a360();
     *(char *)((char *)(temp_s0_36) + 52) = 1;
     temp_s0_37 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s2 + 0x28));
-    *(int *)((char *)(temp_s0_37) + 56) = FUN_0045a450();
+    *(int *)((char *)(temp_s0_37) + 56) = (int)FUN_0045a450();
     *(char *)((char *)(temp_s0_37) + 52) = 1;
     temp_s0_38 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s2 + 0x2A));
     *(int *)((char *)(temp_s0_38) + 56) = FUN_0044ff40();

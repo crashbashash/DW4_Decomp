@@ -1,9 +1,9 @@
 void *FUN_0036e2c0(void) {
-    struct G *g = DAT_0058a040[0];
-    if (!g || ((g->f & 4) != 0) == false) {
+    igMetaObject *g = g_ParticleArray_metaObject[0];
+    if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_0036e3b0();
     }
-    return DAT_0058a040[0];
+    return g_ParticleArray_metaObject[0];
 }
 
 int ParticleArray_GetVTable(void) {
@@ -19,7 +19,7 @@ int ParticleArray_GetVTable(void) {
     obj.vt = &DAT_0053b740[0];
     obj.w28 = 0;
     obj.w29 = 0;
-    t = *(int *)((char *)&obj + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+    t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
     obj.vt = &DAT_0053b740[0];
     FUN_001338d0(&obj.w29, -1);
     FUN_001338d0(&obj.w28, -1);
@@ -60,7 +60,7 @@ void ParticleArray_InitFields(void) {
     void *temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)((int *)DAT_0058a040)[0];
+    temp_s0 = (void *)g_ParticleArray_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_004c8260[0], 0xB);
     FUN_002e3810(igMetaObject_GetFieldAt(temp_s0, temp_s2), 1.0f);

@@ -31,8 +31,8 @@ void FUN_001c0f00(int mode) {
     }
 }
 
-int FUN_001c10e0(void) {
-    return DAT_00561b80[0];
+igMetaObject *FUN_001c10e0(void) {
+    return g_igEnbayaAnimationState_metaObject[0];
 }
 
 void FUN_001c10f0(void) {
@@ -61,7 +61,7 @@ void Gap__Sg__igEnbayaAnimationState__vfunc_23(igEnbayaAnimationState *arg0) {
     n = l->_count;
     for (i = 0; i < n; i++) {
         e = (igAnimationTrack *)((int *)l->_data)[i];
-        if (e != 0 && (c = (igEnbayaTransformSource *)e->_source) != 0 && igObject_IsKindOf(c, DAT_00561b48[0]) != 0) {
+        if (e != 0 && (c = (igEnbayaTransformSource *)e->_source) != 0 && igObject_IsKindOf(c, g_igEnbayaTransformSource_metaObject[0]) != 0) {
             found = ((igEnbayaAnimationSource *)c->_enbayaAnimationSource)->_enbayaAnimationStream;
             break;
         }

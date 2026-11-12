@@ -32,7 +32,7 @@ void thunk_igIterator_GetMetaObject(void) {
     igIterator_GetMetaObject();
 }
 
-int FUN_00227450(void) {
-    return DAT_0056d940[0];
+igMetaObject *FUN_00227450(void) {
+    return g_igIterator_metaObject[0];
 }
 

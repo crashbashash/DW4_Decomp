@@ -25,7 +25,7 @@ void FUN_00304b10(void *self) {
     char *string;
     char *text;
     IniValueList *held;
-    ini = (*(IniSystemTables * *)DAT_00586dc8)->ini;
+    ini = (*(IniSystemTables * *)g_objectSystem)->ini;
     section = FUN_00306360((IniSectionsView *)ini, DAT_004fafc8, 1);
     if (section >= 0) {
         n = ((unsigned int)FUN_003064b0((int)ini, section));
@@ -83,7 +83,7 @@ int FUN_00304e60(Args *args) {
     it = args->it;
     fn = args->fn;
     Memory_FreeBuffer((void *)args);
-    for (it->vNext(&key, 1); fn(key) == (*(igResult_304e60 *)&DAT_004fb410); it->vNext(&key, 1)) {
+    for (it->vNext(&key, 1); fn(key) == (*(igResult_304e60 *)&g_statusSucceeded); it->vNext(&key, 1)) {
     }
     return 0;
 }
@@ -98,7 +98,7 @@ void **FUN_00304f00(void *arg0, int arg1, int arg2) {
     ((DW4VCSR_132_1 *)(a))->vX((int (*)(...))FUN_00304e60);
     ((DW4VCSR_140_1 *)(a))->vX((int)(b));
     ((DW4VCSR_156_1 *)(a))->vX((int)(arg2));
-    if (((DW4VCSR_120_0 *)(a))->vX() == (*(DW4SR4_304f00 *)&DAT_004fb410)) {
+    if (((DW4VCSR_120_0 *)(a))->vX() == (*(DW4SR4_304f00 *)&g_statusSucceeded)) {
         ObjectList_AppendRetained((igObjectList *)(*(int *)((char *)(arg0) + 8)), (igObject *)a);
     }
     return a;

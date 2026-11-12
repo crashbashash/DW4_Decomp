@@ -3,12 +3,12 @@ void FUN_00363c20(int arg0) {
     igMetaObject_CreateInstance(*(int *)0x5897F8, arg0);
 }
 
-G_363c60 *FUN_00363c60(void) {
-    G_363c60 *g = DAT_005897f8[0];
+igMetaObject *FUN_00363c60(void) {
+    igMetaObject *g = g_beDemoKeepMes_metaObject[0];
     int t;
-    if (!g || !(t = (g->f & 4) != 0))
+    if (!g || !(t = (g->_validity & 4) != 0))
         FUN_00363d60();
-    return DAT_005897f8[0];
+    return g_beDemoKeepMes_metaObject[0];
 }
 
 int beDemoKeepMes_GetVTable(void) {
@@ -24,7 +24,7 @@ int beDemoKeepMes_GetVTable(void) {
     *(int *)&u.b[28] = 0;
     *(int *)&u.b[36] = 0;
     *(int *)&u.b[40] = 0;
-    r = *(int *)&u.b[*(int *)((char *)(DAT_00586dc8[0]) + 916)];
+    r = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.vt = (int)&DAT_00535610[0];
     StringRef_Destruct_00130720(&u.b[40], -1);
     StringRef_Destruct_00130720(&u.b[36], -1);
@@ -64,7 +64,7 @@ void beDemoKeepMes_InitFields(void) {
     int temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)((int *)DAT_005897f8)[0];
+    temp_s0 = (void *)g_beDemoKeepMes_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_004c7080[0], 7);
     igMetaObject_NameFields(temp_s0, &DAT_004c70a0[0], &DAT_004c70c0[0], &DAT_004c70e0[0], temp_s1);

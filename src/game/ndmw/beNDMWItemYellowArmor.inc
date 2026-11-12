@@ -5,13 +5,13 @@ void FUN_003c8970(int arg0) {
 
 void *beNDMWItemYellowArmor_GetReadyMetaObject(void) {
     bool ok;
-    if (DAT_0058bf50[0] == 0) goto make;
-    ok = !!(DAT_0058bf50[0]->f & 4);
+    if (g_beNDMWItemYellowArmor_metaObject[0] == 0) goto make;
+    ok = !!(g_beNDMWItemYellowArmor_metaObject[0]->_validity & 4);
     if (ok != false) goto done;
 make:
     FUN_003c8a40();
 done:;
-    return DAT_0058bf50[0];
+    return g_beNDMWItemYellowArmor_metaObject[0];
 }
 
 int beNDMWItemYellowArmor_GetVTable(void) {
@@ -19,7 +19,7 @@ int beNDMWItemYellowArmor_GetVTable(void) {
 
     igObject_InitHeader(&obj);
     obj.vt = &DAT_00540880[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 
 void FUN_003c8a40(void)
@@ -49,7 +49,7 @@ void beNDMWItemYellowArmor_GetMetaObject(void)
     beNDMWItemYellowArmor_GetReadyMetaObject();
 }
 
-int FUN_003c8af0(void) {
-    return ((int *)DAT_0058bf78)[0];
+igMetaObject *FUN_003c8af0(void) {
+    return g_beNDMWItemRevisionBase_metaObject[0];
 }
 

@@ -4,11 +4,11 @@ void FUN_003b4b10(int arg0) {
 }
 
 void *FUN_003b4b50(void) {
-    struct G *g = DAT_0058abb0[0];
-    if (!g || ((g->f & 4) != 0) == false) {
+    igMetaObject *g = g_beNDMWShopSelect02_metaObject[0];
+    if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_003b4c30();
     }
-    return DAT_0058abb0[0];
+    return g_beNDMWShopSelect02_metaObject[0];
 }
 
 int beNDMWShopSelect02_GetVTable(void) {
@@ -26,7 +26,7 @@ int beNDMWShopSelect02_GetVTable(void) {
     o.f108 = 0;
     o.vt = &DAT_005401b0[0];
     o.f112 = 0;
-    r = *(int *)((char *)&o + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+    r = *(int *)((char *)&o + *(int *)((char *)(g_objectSystem[0]) + 916));
     o.vt = &DAT_005401b0[0];
     ObjectRef_Destruct_00150eb0(&o.f112, -1);
     FUN_003b4050((struct S_3b4050 *)&o, (short)0);
@@ -65,7 +65,7 @@ void beNDMWShopSelect02_InitFields(void) {
     void *temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)((int *)DAT_0058abb0)[0];
+    temp_s0 = (void *)g_beNDMWShopSelect02_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_004c9778[0], 1);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));

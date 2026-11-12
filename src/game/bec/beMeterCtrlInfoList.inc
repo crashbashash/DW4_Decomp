@@ -1,9 +1,9 @@
 void *FUN_00356f60(void) {
-    struct G *g = DAT_00588e98[0];
-    if (!g || ((g->f & 4) != 0) == false) {
+    igMetaObject *g = g_beMeterCtrlInfoList_metaObject[0];
+    if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_00356ff0();
     }
-    return DAT_00588e98[0];
+    return g_beMeterCtrlInfoList_metaObject[0];
 }
 
 int beMeterCtrlInfoList_GetVTable(void) {
@@ -11,7 +11,7 @@ int beMeterCtrlInfoList_GetVTable(void) {
 
     igObject_InitHeader(obj);
     obj[0] = (int)&DAT_005370b0[0];
-    return *(int *)((char *)obj + *(int *)((char *)DAT_00586dc8[0] + 916));
+    return *(int *)((char *)obj + *(int *)((char *)g_objectSystem[0] + 916));
 }
 
 void FUN_00356ff0(void)

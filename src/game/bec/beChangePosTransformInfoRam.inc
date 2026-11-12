@@ -1,9 +1,9 @@
-G_368310 *FUN_00368310(void) {
-    G_368310 *g = DAT_00589b68[0];
+igMetaObject *FUN_00368310(void) {
+    igMetaObject *g = g_beChangePosTransformInfoRam_metaObject[0];
     int t;
-    if (!g || !(t = (g->f & 4) != 0))
+    if (!g || !(t = (g->_validity & 4) != 0))
         FUN_00368450();
-    return DAT_00589b68[0];
+    return g_beChangePosTransformInfoRam_metaObject[0];
 }
 
 int beChangePosTransformInfoRam_GetVTable(void) {
@@ -14,7 +14,7 @@ int beChangePosTransformInfoRam_GetVTable(void) {
     obj.m40 = 0;
     obj.vt = &DAT_00534b70[0];
     obj.m44 = 0;
-    r = *(int *)((char *)&obj + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+    r = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
     obj.vt = &DAT_00534b70[0];
     obj.rel44();
     obj.vt = &DAT_00539e90[0];
@@ -54,7 +54,7 @@ void beChangePosTransformInfoRam_InitFields(void) {
     void *temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)((int *)DAT_00589b68)[0];
+    temp_s0 = (void *)g_beChangePosTransformInfoRam_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_004c7778[0], 1);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));

@@ -1,6 +1,6 @@
-SFUN_0033ff50 *FUN_0033ff50(void) {
-    if (DAT_00587aa0[0] == 0 || !DAT_00587aa0[0]->ok()) FUN_0033ffe0();
-    return DAT_00587aa0[0];
+igMetaObject *FUN_0033ff50(void) {
+    if (g_igModelViewMatrixBoneSelectList_metaObject_00587aa0[0] == 0 || !isValid(g_igModelViewMatrixBoneSelectList_metaObject_00587aa0[0])) FUN_0033ffe0();
+    return g_igModelViewMatrixBoneSelectList_metaObject_00587aa0[0];
 }
 
 int igModelViewMatrixBoneSelectList_587aa0_GetVTable(void) {
@@ -8,7 +8,7 @@ int igModelViewMatrixBoneSelectList_587aa0_GetVTable(void) {
 
     igObject_InitHeader(&obj);
     obj.vt = &DAT_00539ad0[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 
 void FUN_0033ffe0(void)

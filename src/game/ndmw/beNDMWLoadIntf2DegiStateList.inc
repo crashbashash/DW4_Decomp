@@ -1,13 +1,13 @@
-int FUN_003c3cb0(void) {
-    if (((int *)DAT_0058b970)[0] == 0) {
-        ((int *)DAT_0058b970)[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(DAT_00587040[0]));
+igMetaObject *FUN_003c3cb0(void) {
+    if (g_beNDMWLoadIntf2DegiStateList_metaObject[0] == 0) {
+        g_beNDMWLoadIntf2DegiStateList_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
     }
-    return ((int *)DAT_0058b970)[0];
+    return g_beNDMWLoadIntf2DegiStateList_metaObject[0];
 }
 
-SFUN_003c3d00 *beNDMWLoadIntf2DegiStateList_ResolveMetaObject(void) {
-    if (DAT_0058b970[0] == 0 || !DAT_0058b970[0]->ok()) FUN_003c3d90();
-    return DAT_0058b970[0];
+igMetaObject *beNDMWLoadIntf2DegiStateList_ResolveMetaObject(void) {
+    if (g_beNDMWLoadIntf2DegiStateList_metaObject[0] == 0 || !isValid(g_beNDMWLoadIntf2DegiStateList_metaObject[0])) FUN_003c3d90();
+    return g_beNDMWLoadIntf2DegiStateList_metaObject[0];
 }
 
 int beNDMWLoadIntf2DegiStateList_GetVTable(void) {
@@ -16,7 +16,7 @@ int beNDMWLoadIntf2DegiStateList_GetVTable(void) {
 
     igObject_InitHeader(&tmp[0]);
     tmp[0] = (int)&DAT_0053cff0[0];
-    off = *(int *)((char *)(((int * *)DAT_00586dc8)[0]) + 916);
+    off = *(int *)((char *)(((int * *)g_objectSystem)[0]) + 916);
     return *(int *)((char *)tmp + off);
 }
 

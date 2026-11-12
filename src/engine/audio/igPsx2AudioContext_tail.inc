@@ -6,12 +6,11 @@ void Gap__igPsx2AudioContext__vfunc_23(ContextView *arg0, int arg1) {
 }
 
 void Gap__igPsx2AudioContext__vfunc_11(void) {
-    extern struct RefCountedList * g_audioTableOwner[4];
     int temp_s0;
     struct RefCountedList *old;
 
     temp_s0 = igObject_GetAllocator();
-    old = g_audioTableOwner[0];
+    old = ((struct RefCountedList *)g_audioTableOwner[0]);
     if (old != 0) {
         old->rc = old->rc - 1;
         if ((old->rc & 0x7FFFFF) == 0) {
@@ -23,8 +22,7 @@ void Gap__igPsx2AudioContext__vfunc_11(void) {
 
 void FUN_00143800(AudioVoiceHandle *h)
 {
-    extern AudioVoiceTable *g_audioTableOwner;
-    g_audioTableOwner->entries[h->voice].active = 0;
+    ((AudioVoiceTable *)g_audioTableOwner[0])->entries[h->voice].active = 0;
 }
 
 void FUN_00143840(void *arg0) {
@@ -65,10 +63,9 @@ void Gap__igPsx2AudioContext__vfunc_25(igPsx2AudioContext *context) {
 }
 
 void Gap__igPsx2AudioContext__vfunc_12(void **arg0) {
-    extern SignedRefList * g_audioTableOwner[4];
     SignedRefList *p;
     ((DW4VC_100_0 *)(arg0))->vX();
-    p = g_audioTableOwner[0];
+    p = ((SignedRefList *)g_audioTableOwner[0]);
     if (p != 0) {
         p->refs = p->refs - 1;
         if (((unsigned long long) ((long long) p->refs << 0x29) >> 0x29) == 0) {
@@ -94,12 +91,11 @@ static inline RpcStatus CallRpc(InitRef *conn, int command, unsigned int value, 
 }
 
 void Gap__igPsx2AudioContext__vfunc_24(int *arg0, struct InitContext *arg1) {
-    extern struct VoiceList *g_audioTableOwner[4];
     struct InitRef *o;
     int s0; int *buf; int n; struct VoiceList *l;
     if (sceSifSearchModuleByName(DAT_004d5f80) < 0) {
-        if (FUN_0032cf50(DAT_004d5f98, 2, 0, 0) != *(RpcStatus *)DAT_004fb410) {
-            *arg0 = DAT_004fb418[0];
+        if (FUN_0032cf50(DAT_004d5f98, 2, 0, 0) != *(RpcStatus *)g_statusSucceeded) {
+            *arg0 = g_allocatorFailureStatus[0];
             return;
         }
     }
@@ -118,15 +114,15 @@ void Gap__igPsx2AudioContext__vfunc_24(int *arg0, struct InitContext *arg1) {
     buf[1] = arg1->f32;
     buf[2] = arg1->f36;
     n = arg1->f32 + arg1->f36;
-    if (n >= g_audioTableOwner[0]->count) List_Reserve(g_audioTableOwner[0], n, 0x24);
+    if (n >= ((struct VoiceList *)g_audioTableOwner[0])->count) List_Reserve(((struct VoiceList *)g_audioTableOwner[0]), n, 0x24);
     n = arg1->f32 + arg1->f36;
-    l = g_audioTableOwner[0];
+    l = ((struct VoiceList *)g_audioTableOwner[0]);
     if (n >= 0) {
         if (n <= l->cap) l->count = n;
         else List_Resize(l, n, 0x24);
     }
-    n = g_audioTableOwner[0]->count;
-    if (n != 0) memset((void *)g_audioTableOwner[0]->data, 0, n * 0x24);
+    n = ((struct VoiceList *)g_audioTableOwner[0])->count;
+    if (n != 0) memset((void *)((struct VoiceList *)g_audioTableOwner[0])->data, 0, n * 0x24);
     SendRpc(arg1->conn, 0x20000, s0, 0x10, 0, 0, 0);
     FUN_00300f50(arg1, s0);
     CallRpc(arg1->conn, 0x40000, 0x3FFF3FFFu, 0, 0);
@@ -135,24 +131,22 @@ void Gap__igPsx2AudioContext__vfunc_24(int *arg0, struct InitContext *arg1) {
     FUN_00113f20();
     sceSifAddCmdHandler(3, FUN_00143800, 0);
     FUN_00113f78();
-    *arg0 = DAT_004fb410[0];
+    *arg0 = g_statusSucceeded[0];
 }
 }
 
 extern "C" {
 void Gap__igPsx2AudioContext__vfunc_61(void *arg0, int arg1, int arg2) {
-    extern struct VoiceTable61 *g_audioTableOwner[4];
-    g_audioTableOwner[0]->e[arg1].a4 = arg2;
-    g_audioTableOwner[0]->e[arg1].b4 = 1;
+    ((struct VoiceTable61 *)g_audioTableOwner[0])->e[arg1].a4 = arg2;
+    ((struct VoiceTable61 *)g_audioTableOwner[0])->e[arg1].b4 = 1;
 }
 
 int Gap__igPsx2AudioContext__vfunc_28(void) {
-    extern struct VoiceSlotTable *g_audioTableOwner[4];
     int cnt;
     struct VoiceSlotTable *t;
     int i;
     struct VoiceSlot *e;
-    t = g_audioTableOwner[0];
+    t = ((struct VoiceSlotTable *)g_audioTableOwner[0]);
     cnt = t->cnt;
     i = 0;
     for (; i < cnt; i++) {
@@ -176,7 +170,6 @@ int Gap__igPsx2AudioContext__vfunc_28(void) {
 }
 
 void Gap__igPsx2AudioContext__vfunc_29(int *arg0, void *arg1, int arg2) {
-    extern void * g_audioTableOwner[4];
     /* matching construct: variant search — decl order [3, 2, 1, 0]; the unit compiler (combat build -O3 -Iinclude) assigns stack slots and registers in declaration order, the reverse of the 2001 default */
     void *temp_s0;
     int temp_a3;
@@ -191,13 +184,12 @@ void Gap__igPsx2AudioContext__vfunc_29(int *arg0, void *arg1, int arg2) {
     }
     FUN_0032d9b0(&sp3C, *(int *)((char *)(arg1) + 12), arg2 | 0x90000, 0);
     ((VoiceUsedFlag *)temp_s0)->b0 = 0;
-    *arg0 = DAT_004fb410[0];
+    *arg0 = g_statusSucceeded[0];
 }
 
 /* matching construct: a small sweep of spellings */
 void Gap__igPsx2AudioContext__vfunc_30(void *self, int index, struct PlayRequest *req) {
-    extern struct VoiceTable *g_audioTableOwner[4];
-    struct Voice *v = &g_audioTableOwner[0]->items[index];
+    struct Voice *v = &((struct VoiceTable *)g_audioTableOwner[0])->items[index];
     if (req->channels > 1) {
         v->stereo = 1;
     }
@@ -236,7 +228,6 @@ void Gap__igPsx2AudioContext__vfunc_31(int *a0, UploadContext *a1, int a2, int a
 }
 
 void FUN_00144030(int *arg0, UploadContext *arg1, int arg2, int arg3, int arg4, int arg5, unsigned char arg6, int arg7, unsigned char arg8) {
-    extern UploadTable *g_audioTableOwner[4];
     unsigned char k;
     int v;
     int spAC;
@@ -249,12 +240,12 @@ void FUN_00144030(int *arg0, UploadContext *arg1, int arg2, int arg3, int arg4, 
 
     s3 = arg6;
     if (arg3 & 0xF) {
-        *arg0 = DAT_004fb418[0];
+        *arg0 = g_allocatorFailureStatus[0];
         return;
     }
-    e = (UploadEntry *)((char *)g_audioTableOwner[0]->tab + arg2 * 36);
+    e = (UploadEntry *)((char *)((UploadTable *)g_audioTableOwner[0])->tab + arg2 * 36);
     if (e->c0) {
-        *arg0 = DAT_004fb418[0];
+        *arg0 = g_allocatorFailureStatus[0];
         return;
     }
     p = FUN_00300db0(arg1, 16, 16);
@@ -297,10 +288,10 @@ void FUN_00144030(int *arg0, UploadContext *arg1, int arg2, int arg3, int arg4, 
             e->b3 = 1;
         }
         FUN_00300f50(arg1, q);
-        *arg0 = DAT_004fb410[0];
+        *arg0 = g_statusSucceeded[0];
     } else {
         FUN_00300f50(arg1, q);
-        *arg0 = DAT_004fb418[0];
+        *arg0 = g_allocatorFailureStatus[0];
     }
 }
 
@@ -311,9 +302,9 @@ void Gap__igPsx2AudioContext__vfunc_48(int *arg0, void *arg1, int arg2, int arg3
 
     FUN_0032d850(&sp28, *(int *)((char *)(arg1) + 12), arg2 | 0x80000, arg3, &sp2C, 1);
     if (sp2C == 2) {
-        *arg0 = DAT_004fb410[0];
+        *arg0 = g_statusSucceeded[0];
     } else {
-        *arg0 = DAT_004fb418[0];
+        *arg0 = g_allocatorFailureStatus[0];
     }
 }
 
@@ -347,7 +338,6 @@ void Gap__igPsx2AudioContext__vfunc_52(igPsx2AudioContext *arg0, int *arg1, int 
 }
 
 void Gap__igPsx2AudioContext__vfunc_34(int *arg0, void *arg1, int arg2, float fparg0) {
-    extern void * g_audioTableOwner[4];
     int sp4C;
     int temp_s2;
     void *temp_a2;
@@ -362,18 +352,17 @@ void Gap__igPsx2AudioContext__vfunc_34(int *arg0, void *arg1, int arg2, float fp
     } else {
         ((B11 *)temp_a2)->f = 1;
     }
-    *arg0 = DAT_004fb410[0];
+    *arg0 = g_statusSucceeded[0];
 }
 }
 
 extern "C" {
 PanResult Gap__igPsx2AudioContext__vfunc_35(char *arg1, int arg2, float fparg0) {
-    extern VoiceTable35 *g_audioTableOwner[4];
     PanResult status;
     VoiceFlags35 *e;
     int s2;
 
-    e = g_audioTableOwner[0]->arr + arg2;
+    e = ((VoiceTable35 *)g_audioTableOwner[0])->arr + arg2;
     if (fparg0 == 0.0f) {
         e->g16 = 1.0f;
         e->g20 = 1.0f;
@@ -390,21 +379,20 @@ PanResult Gap__igPsx2AudioContext__vfunc_35(char *arg1, int arg2, float fparg0) 
     } else {
         e->b0 = 1;
     }
-    return PanResult(DAT_004fb410[0]);
+    return PanResult(g_statusSucceeded[0]);
 }
 }
 
 extern "C" {
 void Gap__igPsx2AudioContext__vfunc_36(int *arg0, ContextView *arg1, int arg2, float arg3) {
-    extern VoiceTable40 *g_audioTableOwner[4];
     int sp8C;
     VoiceFlags40 *e;
     int whole;
     int packed;
 
-    e = &g_audioTableOwner[0]->arr[arg2];
+    e = &((VoiceTable40 *)g_audioTableOwner[0])->arr[arg2];
     if (e->a3) {
-        *arg0 = DAT_004fb418[0];
+        *arg0 = g_allocatorFailureStatus[0];
         return;
     }
     whole = (int)floor(arg3);
@@ -416,11 +404,10 @@ void Gap__igPsx2AudioContext__vfunc_36(int *arg0, ContextView *arg1, int arg2, f
     } else {
         e->c1 = 1;
     }
-    *arg0 = DAT_004fb410[0];
+    *arg0 = g_statusSucceeded[0];
 }
 
 void Gap__igPsx2AudioContext__vfunc_42(int arg0, int arg1, unsigned char arg2) {
-    extern void * g_audioTableOwner[4];
     VoiceFlags42 *p;
     p = (VoiceFlags42 *)(*(int *)((char *)(g_audioTableOwner[0]) + 16) + arg1 * 0x24);
     if ((p->b3 != arg2) && ((p->b1 == 0) || (p->b4 != 0))) {
@@ -430,7 +417,6 @@ void Gap__igPsx2AudioContext__vfunc_42(int arg0, int arg1, unsigned char arg2) {
 }
 
 void Gap__igPsx2AudioContext__vfunc_49(igPsx2AudioContext *arg0, int arg1, int arg2) {
-    extern void * g_audioTableOwner[4];
     int sp1C;
     *(int *)((char *)((*(int *)((char *)(g_audioTableOwner[0]) + 16) + (arg1 * 0x24))) + 32) = arg2;
     *(int *)((char *)((*(int *)((char *)(g_audioTableOwner[0]) + 16) + (arg2 * 0x24))) + 32) = arg1;
@@ -438,12 +424,11 @@ void Gap__igPsx2AudioContext__vfunc_49(igPsx2AudioContext *arg0, int arg1, int a
 }
 
 void Gap__igPsx2AudioContext__vfunc_41(ContextView *arg0, int arg1) {
-    extern VoiceTable41 *g_audioTableOwner[4];
     int sp4C;
     int temp_s2;
     VoiceFlags41 *temp_s0;
 
-    temp_s0 = &g_audioTableOwner[0]->arr[arg1];
+    temp_s0 = &((VoiceTable41 *)g_audioTableOwner[0])->arr[arg1];
     if (arg0->f8 == 0) {
         temp_s0->f11 = 1;
         return;
@@ -454,7 +439,6 @@ void Gap__igPsx2AudioContext__vfunc_41(ContextView *arg0, int arg1) {
 }
 
 void Gap__igPsx2AudioContext__vfunc_40(ContextView *arg0, int arg1) {
-    extern VoiceTable40 *g_audioTableOwner[4];
     int sp40[5];
     int sp5C; /* matching construct: declaration order — the two status words are declared high slot first so the unit compiler (combat build) assigns sp+0x5c/sp+0x58 as retail does */
     int sp58;
@@ -462,13 +446,13 @@ void Gap__igPsx2AudioContext__vfunc_40(ContextView *arg0, int arg1) {
     VoiceFlags40 *e2;
     int idx;
 
-    e = &g_audioTableOwner[0]->arr[arg1];
+    e = &((VoiceTable40 *)g_audioTableOwner[0])->arr[arg1];
     if (e->a5 == 0 || e->b6 != 0) {
         e->a5 = 1;
         e->b6 = 0 & 1;
         idx = e->next;
         if (idx >= 0) {
-            e2 = &g_audioTableOwner[0]->arr[idx];
+            e2 = &((VoiceTable40 *)g_audioTableOwner[0])->arr[idx];
             e2->a5 = 1;
             e2->b6 = 0 & 1;
         }
@@ -489,17 +473,16 @@ void Gap__igPsx2AudioContext__vfunc_40(ContextView *arg0, int arg1) {
 }
 
 void Gap__igPsx2AudioContext__vfunc_43(ContextView *arg0, int arg1) {
-    extern VoiceTable43 *g_audioTableOwner[4];
     int sp1C;
     VoiceFlags43 *e;
     VoiceFlags43 *e2;
     int idx;
 
-    e = &g_audioTableOwner[0]->arr[arg1];
+    e = &((VoiceTable43 *)g_audioTableOwner[0])->arr[arg1];
     e->f8 = 0 & 1;
     idx = e->next;
     if (idx >= 0) {
-        e2 = &g_audioTableOwner[0]->arr[idx];
+        e2 = &((VoiceTable43 *)g_audioTableOwner[0])->arr[idx];
         e2->f8 = 0 & 1;
     }
     if (arg0->f8 != 0) {
@@ -510,13 +493,12 @@ void Gap__igPsx2AudioContext__vfunc_43(ContextView *arg0, int arg1) {
 }
 
 void Gap__igPsx2AudioContext__vfunc_50(ContextView *arg0, int arg1) {
-    extern VoiceTable40 *g_audioTableOwner[4];
     int sp1C;
     VoiceFlags40 *e;
     VoiceFlags40 *e2;
     int idx;
 
-    e = &g_audioTableOwner[0]->arr[arg1];
+    e = &((VoiceTable40 *)g_audioTableOwner[0])->arr[arg1];
     /* matching construct: spelling sweep — the redundant !e->a5 test keeps retail's second branch on the same flag */
     if (!(e->a5 || (!e->a5 && e->c3))) {
         return;
@@ -524,7 +506,7 @@ void Gap__igPsx2AudioContext__vfunc_50(ContextView *arg0, int arg1) {
     e->b6 = 1;
     idx = e->next;
     if (idx >= 0) {
-        e2 = &g_audioTableOwner[0]->arr[idx];
+        e2 = &((VoiceTable40 *)g_audioTableOwner[0])->arr[idx];
         e2->b6 = 1;
     }
     if (arg0->f8 != 0) {
@@ -535,9 +517,8 @@ void Gap__igPsx2AudioContext__vfunc_50(ContextView *arg0, int arg1) {
 }
 
 void Gap__igPsx2AudioContext__vfunc_53(int unusedReceiver, int entryIndex, int value) {
-    extern AudioTableOwner *g_audioTableOwner[4];
     if (!(value & 0x3F)) {
-        ((AudioTableEntry *)(g_audioTableOwner[0]->entries + entryIndex * 0x24))->word1 = value & ~0x3F;
+        ((AudioTableEntry *)(((AudioTableOwner *)g_audioTableOwner[0])->entries + entryIndex * 0x24))->word1 = value & ~0x3F;
     }
 }
 

@@ -6,8 +6,8 @@ void Gap__Bec__beHitLandModelTraversal__vfunc_25(beHitLandModelTraversal *arg0, 
     arg0->_timeLong = arg1;
 }
 
-int Gap__Sg__igTransformSequence1_5__vfunc_22(void) {
-    return DAT_005611d8[0];
+igMetaObject *Gap__Sg__igTransformSequence1_5__vfunc_22(void) {
+    return g_igTransformSequence1_5_metaObject[0];
 }
 
 void Gap__Sg__igTransformSequence1_5__vfunc_53(IgForwardTarget_1e28b0 *o) { o->slot23(); }
@@ -180,8 +180,8 @@ void FUN_001e2cf0(void *arg0) {
     *(int *)((char *)(arg0) + 40) = 1;
 }
 
-int FUN_001e2d00(void) {
-    return DAT_00561230[0];
+igMetaObject *FUN_001e2d00(void) {
+    return g_igTransformSequence_metaObject[0];
 }
 
 int FUN_001e2d10(void **arg0, int arg1) {
@@ -227,8 +227,8 @@ int Gap__Sg__igSorter__vfunc_22(void) {
     return ((int *)g_igSorter_metaObject)[0];
 }
 
-int Gap__Sg__igSkeleton__vfunc_22(void) {
-    return DAT_005614b0[0];
+igMetaObject *Gap__Sg__igSkeleton__vfunc_22(void) {
+    return g_igSkeleton_metaObject[0];
 }
 
 int Gap__Sg__igSkeleton__vfunc_25(void *arg0) {
@@ -242,31 +242,31 @@ int *Gap__Sg__igSkeleton__vfunc_26(void *arg0, int arg1) {
     if (temp_v0 != 0) {
         return temp_v0;
     }
-    return &DAT_004e0858[0];
+    return &emptyString[0];
 }
 
 int Gap__Sg__igSkeleton__vfunc_28(void *arg0, int arg1) {
     return *(int *)((char *)((*(int *)(*(int *)((char *)(*(int *)((char *)(arg0) + 16)) + 16) + (arg1 * 4)))) + 12);
 }
 
-int Gap__Sg__igShaderInfo__vfunc_22(void) {
-    return DAT_00561500[0];
+igMetaObject *Gap__Sg__igShaderInfo__vfunc_22(void) {
+    return g_igShaderInfo_metaObject[0];
 }
 
-int Gap__Sg__igShaderFactory__vfunc_22(void) {
-    return DAT_00561528[0];
+igMetaObject *Gap__Sg__igShaderFactory__vfunc_22(void) {
+    return g_igShaderFactory_metaObject[0];
 }
 
 void Gap__Sg__igShaderFactory__vfunc_27(void) {
 
 }
 
-int Gap__Sg__igShaderData__vfunc_22(void) {
-    return DAT_00561548[0];
+igMetaObject *Gap__Sg__igShaderData__vfunc_22(void) {
+    return g_igShaderData_metaObject[0];
 }
 
-int Gap__Sg__igSceneInfo__vfunc_22(void) {
-    return DAT_005615e0[0];
+igMetaObject *Gap__Sg__igSceneInfo__vfunc_22(void) {
+    return g_igSceneInfo_metaObject[0];
 }
 
 void Gap__Sg__igPlanarShadowShader__vfunc_31(Shader *arg0) {
@@ -293,8 +293,8 @@ int Gap__Bec__ParticleTimer__vfunc_34(void)
     return 1;
 }
 
-int Gap__Sg__igLod__vfunc_22(void) {
-    return DAT_00561898[0];
+igMetaObject *Gap__Sg__igLod__vfunc_22(void) {
+    return g_igLod_metaObject[0];
 }
 
 int Gap__Sg__igLod__vfunc_36(void) {
@@ -316,16 +316,16 @@ int Gap__Sg__igLightSet__vfunc_22(void) {
     return ((int *)g_igLightSet_metaObject)[0];
 }
 
-int Gap__Sg__igIntersectTraversal__vfunc_22(void) {
-    return DAT_00561930[0];
+igMetaObject *Gap__Sg__igIntersectTraversal__vfunc_22(void) {
+    return g_igIntersectTraversal_metaObject[0];
 }
 
-int Gap__Sg__igIniShaderFactory__vfunc_22(void) {
-    return DAT_005619a8[0];
+igMetaObject *Gap__Sg__igIniShaderFactory__vfunc_22(void) {
+    return g_igIniShaderFactory_metaObject[0];
 }
 
-int Gap__Sg__igGroup__vfunc_22(void) {
-    return DAT_005619f8[0];
+igMetaObject *Gap__Sg__igGroup__vfunc_22(void) {
+    return g_igGroup_metaObject[0];
 }
 
 int Gap__Sg__igFrustCullTraversal__vfunc_22(void) {
@@ -364,15 +364,15 @@ int Gap__Sg__igEnbayaTransformSource__vfunc_22(void) {
 }
 
 int Gap__Sg__igEnbayaContextPool__vfunc_22(void) {
-    return DAT_00561b60[0];
+    return g_igEnbayaContextPool_metaObject[0];
 }
 
-int Gap__Sg__igEnbayaAnimationState__vfunc_22(void) {
-    return DAT_00561b80[0];
+igMetaObject *Gap__Sg__igEnbayaAnimationState__vfunc_22(void) {
+    return g_igEnbayaAnimationState_metaObject[0];
 }
 
-int Gap__Sg__igEnbayaAnimationSource__vfunc_22(void) {
-    return DAT_00561ba0[0];
+igMetaObject *Gap__Sg__igEnbayaAnimationSource__vfunc_22(void) {
+    return g_igEnbayaAnimationSource_metaObject[0];
 }
 
 /* Getter for the reflected `_channels` member (igUnsignedCharMetaField at +56). */
@@ -432,40 +432,40 @@ int Gap__Sg__igCompressedAnimationSequenceQS__vfunc_26(void **arg0, int arg1) {
     return temp_s0;
 }
 
-int Gap__Sg__igCompressedAnimationSequenceQS__vfunc_22(void) {
-    return DAT_00561c38[0];
+igMetaObject *Gap__Sg__igCompressedAnimationSequenceQS__vfunc_22(void) {
+    return g_igCompressedAnimationSequenceQS_metaObject[0];
 }
 
 int Gap__Sg__igCompileTraversal__vfunc_22(void) {
     return ((int *)g_igCompileTraversal_metaObject)[0];
 }
 
-int Gap__Sg__igCommonTraversal__vfunc_22(void) {
-    return DAT_00561d78[0];
+igMetaObject *Gap__Sg__igCommonTraversal__vfunc_22(void) {
+    return g_igCommonTraversal_metaObject[0];
 }
 
 int Gap__Sg__igCamera__vfunc_26(void) {
     return 0;
 }
 
-int Gap__Sg__igAttrStackManager__vfunc_22(void) {
-    return DAT_00561f98[0];
+igMetaObject *Gap__Sg__igAttrStackManager__vfunc_22(void) {
+    return g_igAttrStackManager_metaObject[0];
 }
 
-int Gap__Sg__igAttrSet__vfunc_22(void) {
-    return DAT_00562078[0];
+igMetaObject *Gap__Sg__igAttrSet__vfunc_22(void) {
+    return g_igAttrSet_metaObject[0];
 }
 
 int Gap__Sg__igAnimationState__vfunc_22(void) {
     return ((int *)g_igAnimationState_metaObject)[0];
 }
 
-int Gap__Sg__igAnimationDatabase__vfunc_22(void) {
-    return DAT_00562220[0];
+igMetaObject *Gap__Sg__igAnimationDatabase__vfunc_22(void) {
+    return g_igAnimationDatabase_metaObject[0];
 }
 
 int Gap__Sg__igAnimationCombiner__vfunc_22(void) {
-    return DAT_005622b8[0];
+    return g_igAnimationCombiner_metaObject[0];
 }
 
 unsigned char Gap__Sg__igAnimationCombiner__vfunc_25(void *arg0) {
@@ -500,48 +500,48 @@ int Gap__Sg__igActorList__vfunc_22(void) {
     return ((int *)g_igActorList_metaObject)[0];
 }
 
-int Gap__Sg__igActorInfo__vfunc_22(void) {
-    return DAT_00562450[0];
+igMetaObject *Gap__Sg__igActorInfo__vfunc_22(void) {
+    return g_igActorInfo_metaObject[0];
 }
 
-int Gap__Sg__igAnimationTrack__vfunc_22(void) {
-    return DAT_00562430[0];
+igMetaObject *Gap__Sg__igAnimationTrack__vfunc_22(void) {
+    return g_igAnimationTrack_metaObject[0];
 }
 
-int Gap__Sg__igAnimationTrackList__vfunc_22(void) {
-    return DAT_00562428[0];
+igMetaObject *Gap__Sg__igAnimationTrackList__vfunc_22(void) {
+    return g_igAnimationTrackList_metaObject[0];
 }
 
-int Gap__Sg__igAnimationTransitionParams__vfunc_22(void) {
-    return DAT_00562400[0];
+igMetaObject *Gap__Sg__igAnimationTransitionParams__vfunc_22(void) {
+    return g_igAnimationTransitionParams_metaObject[0];
 }
 
-int Gap__Sg__igAnimationTransitionPoint__vfunc_22(void) {
-    return DAT_005623e8[0];
+igMetaObject *Gap__Sg__igAnimationTransitionPoint__vfunc_22(void) {
+    return g_igAnimationTransitionPoint_metaObject[0];
 }
 
-int Gap__Sg__igAnimationTransitionPointList__vfunc_22(void) {
-    return DAT_005623e0[0];
+igMetaObject *Gap__Sg__igAnimationTransitionPointList__vfunc_22(void) {
+    return g_igAnimationTransitionPointList_metaObject[0];
 }
 
-int Gap__Sg__igAnimationTransitionDefinition__vfunc_22(void) {
-    return DAT_005623c0[0];
+igMetaObject *Gap__Sg__igAnimationTransitionDefinition__vfunc_22(void) {
+    return g_igAnimationTransitionDefinition_metaObject[0];
 }
 
-int Gap__Sg__igAnimationTransitionDefinitionList__vfunc_22(void) {
-    return DAT_005623b8[0];
+igMetaObject *Gap__Sg__igAnimationTransitionDefinitionList__vfunc_22(void) {
+    return g_igAnimationTransitionDefinitionList_metaObject[0];
 }
 
-int Gap__Sg__igAnimationList__vfunc_22(void) {
-    return DAT_00562368[0];
+igMetaObject *Gap__Sg__igAnimationList__vfunc_22(void) {
+    return g_igAnimationList_metaObject[0];
 }
 
-int Gap__Sg__igAnimationBinding__vfunc_22(void) {
-    return DAT_00562338[0];
+igMetaObject *Gap__Sg__igAnimationBinding__vfunc_22(void) {
+    return g_igAnimationBinding_metaObject[0];
 }
 
-int Gap__Sg__igAnimationBindingList__vfunc_22(void) {
-    return DAT_00562330[0];
+igMetaObject *Gap__Sg__igAnimationBindingList__vfunc_22(void) {
+    return g_igAnimationBindingList_metaObject[0];
 }
 
 /* Returns the metaobject slot of igAnimationSystem, not of the binding list. */
@@ -557,64 +557,64 @@ int Gap__Sg__igAnimationCombinerList__vfunc_22(void) {
     return ((int *)g_igAnimationCombinerList_metaObject)[0];
 }
 
-int Gap__Sg__igAnimationCombinerBoneInfo__vfunc_22(void) {
-    return DAT_00562268[0];
+igMetaObject *Gap__Sg__igAnimationCombinerBoneInfo__vfunc_22(void) {
+    return g_igAnimationCombinerBoneInfo_metaObject[0];
 }
 
-int Gap__Sg__igAnimationCombinerBoneInfoList__vfunc_22(void) {
-    return DAT_00562260[0];
+igMetaObject *Gap__Sg__igAnimationCombinerBoneInfoList__vfunc_22(void) {
+    return g_igAnimationCombinerBoneInfoList_metaObject[0];
 }
 
-int Gap__Sg__igAnimationCombinerBoneInfoListList__vfunc_22(void) {
-    return DAT_00562258[0];
+igMetaObject *Gap__Sg__igAnimationCombinerBoneInfoListList__vfunc_22(void) {
+    return g_igAnimationCombinerBoneInfoListList_metaObject[0];
 }
 
 int Gap__Sg__igAnimationCombinerBoneInfoPool__vfunc_22(void) {
-    return DAT_00562250[0];
+    return g_igAnimationCombinerBoneInfoPool_metaObject[0];
 }
 
-int Gap__Sg__igObjectPool__vfunc_22(void) {
-    return DAT_005612e8[0];
+igMetaObject *Gap__Sg__igObjectPool__vfunc_22(void) {
+    return g_igObjectPool_metaObject[0];
 }
 
-int Gap__Sg__igAnimationModifier__vfunc_22(void) {
-    return DAT_00562200[0];
+igMetaObject *Gap__Sg__igAnimationModifier__vfunc_22(void) {
+    return g_igAnimationModifier_metaObject[0];
 }
 
-int Gap__Sg__igAnimationModifierList__vfunc_22(void) {
-    return DAT_005621f0[0];
+igMetaObject *Gap__Sg__igAnimationModifierList__vfunc_22(void) {
+    return g_igAnimationModifierList_metaObject[0];
 }
 
-int Gap__Sg__igAnimationStateList__vfunc_22(void) {
-    return DAT_005620e0[0];
+igMetaObject *Gap__Sg__igAnimationStateList__vfunc_22(void) {
+    return g_igAnimationStateList_metaObject[0];
 }
 
 int Gap__Sg__igAnimationStatePool__vfunc_22(void) {
-    return DAT_005620d8[0];
+    return g_igAnimationStatePool_metaObject[0];
 }
 
-int Gap__Sg__igAppearance__vfunc_22(void) {
-    return DAT_00562098[0];
+igMetaObject *Gap__Sg__igAppearance__vfunc_22(void) {
+    return g_igAppearance_metaObject[0];
 }
 
-int Gap__Sg__igAppearanceList__vfunc_22(void) {
-    return DAT_00562090[0];
+igMetaObject *Gap__Sg__igAppearanceList__vfunc_22(void) {
+    return g_igAppearanceList_metaObject[0];
 }
 
-int Gap__Sg__igAttrStack__vfunc_22(void) {
-    return DAT_00562030[0];
+igMetaObject *Gap__Sg__igAttrStack__vfunc_22(void) {
+    return g_igAttrStack_metaObject[0];
 }
 
-int Gap__Sg__igAttrStackList__vfunc_22(void) {
-    return DAT_00562028[0];
+igMetaObject *Gap__Sg__igAttrStackList__vfunc_22(void) {
+    return g_igAttrStackList_metaObject[0];
 }
 
-int Gap__Sg__igNonRefCountedAttrStackManagerList__vfunc_22(void) {
-    return DAT_00561f90[0];
+igMetaObject *Gap__Sg__igNonRefCountedAttrStackManagerList__vfunc_22(void) {
+    return g_igNonRefCountedAttrStackManagerList_metaObject[0];
 }
 
-int Gap__Sg__igBillboard__vfunc_22(void) {
-    return DAT_00561f68[0];
+igMetaObject *Gap__Sg__igBillboard__vfunc_22(void) {
+    return g_igBillboard_metaObject[0];
 }
 
 int Gap__Sg__igBillboard__vfunc_26(void) {
@@ -626,19 +626,19 @@ int Gap__Sg__igBitMask__vfunc_22(void) {
 }
 
 int Gap__Core__igUnsignedIntList__vfunc_22(void) {
-    return DAT_00586858[0];
+    return g_igUnsignedIntList_metaObject[0];
 }
 
-int Gap__Sg__igBlendMatrixSelect__vfunc_22(void) {
-    return DAT_00561f38[0];
+igMetaObject *Gap__Sg__igBlendMatrixSelect__vfunc_22(void) {
+    return g_igBlendMatrixSelect_metaObject[0];
 }
 
 int Gap__Sg__igBoundingBoxesMaker__vfunc_22(void) {
     return ((int *)g_igBoundingBoxesMaker_metaObject)[0];
 }
 
-int Gap__Sg__igCamera__vfunc_22(void) {
-    return DAT_00561ea0[0];
+igMetaObject *Gap__Sg__igCamera__vfunc_22(void) {
+    return g_igCamera_metaObject[0];
 }
 
 void Gap__Sg__igCamera__vfunc_35(void) {
@@ -653,68 +653,68 @@ int Gap__Sg__igCompiledTransform__vfunc_22(void) {
     return ((int *)g_igCompiledTransform_metaObject)[0];
 }
 
-int Gap__Sg__igCompiledTransformList__vfunc_22(void) {
-    return DAT_00561d28[0];
+igMetaObject *Gap__Sg__igCompiledTransformList__vfunc_22(void) {
+    return g_igCompiledTransformList_metaObject[0];
 }
 
-int Gap__Sg__igBlendListRecord__vfunc_22(void) {
-    return DAT_00561ca8[0];
+igMetaObject *Gap__Sg__igBlendListRecord__vfunc_22(void) {
+    return g_igBlendListRecord_metaObject[0];
 }
 
-int Gap__Sg__igCompressedTransformSequence1_5Data__vfunc_22(void) {
-    return DAT_00561be0[0];
+igMetaObject *Gap__Sg__igCompressedTransformSequence1_5Data__vfunc_22(void) {
+    return g_igCompressedTransformSequence1_5Data_metaObject[0];
 }
 
-int Gap__Sg__igEnvironmentMapShader2List__vfunc_22(void) {
-    return DAT_00561a90[0];
+igMetaObject *Gap__Sg__igEnvironmentMapShader2List__vfunc_22(void) {
+    return g_igEnvironmentMapShader2List_metaObject[0];
 }
 
-int Gap__Sg__igGeometryList__vfunc_22(void) {
-    return DAT_00561a30[0];
+igMetaObject *Gap__Sg__igGeometryList__vfunc_22(void) {
+    return g_igGeometryList_metaObject[0];
 }
 
-int Gap__Sg__igGraphPath__vfunc_22(void) {
-    return DAT_00561a10[0];
+igMetaObject *Gap__Sg__igGraphPath__vfunc_22(void) {
+    return g_igGraphPath_metaObject[0];
 }
 
-int Gap__Sg__igGraphPathList__vfunc_22(void) {
-    return DAT_00561a08[0];
+igMetaObject *Gap__Sg__igGraphPathList__vfunc_22(void) {
+    return g_igGraphPathList_metaObject[0];
 }
 
-int Gap__Sg__igInterpretedShaderData__vfunc_22(void) {
-    return DAT_00561990[0];
+igMetaObject *Gap__Sg__igInterpretedShaderData__vfunc_22(void) {
+    return g_igInterpretedShaderData_metaObject[0];
 }
 
-int Gap__Sg__igProbe__vfunc_22(void) {
-    return DAT_00561970[0];
+igMetaObject *Gap__Sg__igProbe__vfunc_22(void) {
+    return g_igProbe_metaObject[0];
 }
 
-int Gap__Sg__igAnimation__vfunc_22(void) {
-    return DAT_00562370[0];
+igMetaObject *Gap__Sg__igAnimation__vfunc_22(void) {
+    return g_igAnimation_metaObject[0];
 }
 
 int Gap__Sg__igModelViewMatrixBoneSelect__vfunc_22(void) {
     return ((int *)g_igModelViewMatrixBoneSelect_metaObject)[0];
 }
 
-int FUN_001e3840(void) {
-    return DAT_00561880[0];
+igMetaObject *FUN_001e3840(void) {
+    return g_igModelViewMatrixBoneSelectList_metaObject_00561880[0];
 }
 
-int Gap__Sg__igNodeList__vfunc_22(void) {
-    return DAT_00561830[0];
+igMetaObject *Gap__Sg__igNodeList__vfunc_22(void) {
+    return g_igNodeList_metaObject[0];
 }
 
-int Gap__Sg__igNodeListList__vfunc_22(void) {
-    return DAT_00561828[0];
+igMetaObject *Gap__Sg__igNodeListList__vfunc_22(void) {
+    return g_igNodeListList_metaObject[0];
 }
 
-int Gap__Sg__igNonRefCountedNodeList__vfunc_22(void) {
-    return DAT_00561820[0];
+igMetaObject *Gap__Sg__igNonRefCountedNodeList__vfunc_22(void) {
+    return g_igNonRefCountedNodeList_metaObject[0];
 }
 
-int Gap__Sg__igOverrideAttrSet__vfunc_22(void) {
-    return DAT_00561818[0];
+igMetaObject *Gap__Sg__igOverrideAttrSet__vfunc_22(void) {
+    return g_igOverrideAttrSet_metaObject[0];
 }
 
 int Gap__Sg__igSegment__vfunc_22(void) {
@@ -729,116 +729,116 @@ int Gap__Sg__igTraversalFunctionList__vfunc_22(void) {
     return ((int *)g_igTraversalFunctionList_metaObject)[0];
 }
 
-int Gap__Sg__igLightStateAttrPool__vfunc_22(void) {
-    return DAT_005615c0[0];
+igMetaObject *Gap__Sg__igLightStateAttrPool__vfunc_22(void) {
+    return g_igLightStateAttrPool_metaObject[0];
 }
 
-int Gap__Sg__igModelViewMatrixAttrPool__vfunc_22(void) {
-    return DAT_005615b8[0];
+igMetaObject *Gap__Sg__igModelViewMatrixAttrPool__vfunc_22(void) {
+    return g_igModelViewMatrixAttrPool_metaObject[0];
 }
 
-int Gap__Sg__igTimeAttrPool__vfunc_22(void) {
-    return DAT_005615b0[0];
+igMetaObject *Gap__Sg__igTimeAttrPool__vfunc_22(void) {
+    return g_igTimeAttrPool_metaObject[0];
 }
 
-int Gap__Sg__igProjectionMatrixAttrPool__vfunc_22(void) {
-    return DAT_005615a8[0];
+igMetaObject *Gap__Sg__igProjectionMatrixAttrPool__vfunc_22(void) {
+    return g_igProjectionMatrixAttrPool_metaObject[0];
 }
 
-int Gap__Sg__igVertexBlendMatrixAttrPool__vfunc_22(void) {
-    return DAT_005615a0[0];
+igMetaObject *Gap__Sg__igVertexBlendMatrixAttrPool__vfunc_22(void) {
+    return g_igVertexBlendMatrixAttrPool_metaObject[0];
 }
 
-int Gap__Sg__igVertexBlendMatrixListAttrPool__vfunc_22(void) {
-    return DAT_00561598[0];
+igMetaObject *Gap__Sg__igVertexBlendMatrixListAttrPool__vfunc_22(void) {
+    return g_igVertexBlendMatrixListAttrPool_metaObject[0];
 }
 
-int Gap__Sg__igMatrixObjectPool__vfunc_22(void) {
-    return DAT_00561590[0];
+igMetaObject *Gap__Sg__igMatrixObjectPool__vfunc_22(void) {
+    return g_igMatrixObjectPool_metaObject[0];
 }
 
-int Gap__Sg__igTextureMatrixAttrPool__vfunc_22(void) {
-    return DAT_00561588[0];
+igMetaObject *Gap__Sg__igTextureMatrixAttrPool__vfunc_22(void) {
+    return g_igTextureMatrixAttrPool_metaObject[0];
 }
 
-int Gap__Sg__igBlendMatricesAttrPool__vfunc_22(void) {
-    return DAT_00561580[0];
+igMetaObject *Gap__Sg__igBlendMatricesAttrPool__vfunc_22(void) {
+    return g_igBlendMatricesAttrPool_metaObject[0];
 }
 
-int Gap__Sg__igShaderFactoryList__vfunc_22(void) {
-    return DAT_00561518[0];
+igMetaObject *Gap__Sg__igShaderFactoryList__vfunc_22(void) {
+    return g_igShaderFactoryList_metaObject[0];
 }
 
-int Gap__Sg__igSkeletonBoneInfo__vfunc_22(void) {
-    return DAT_005614d8[0];
+igMetaObject *Gap__Sg__igSkeletonBoneInfo__vfunc_22(void) {
+    return g_igSkeletonBoneInfo_metaObject[0];
 }
 
-int Gap__Sg__igSkeletonBoneInfoList__vfunc_22(void) {
-    return DAT_005614d0[0];
+igMetaObject *Gap__Sg__igSkeletonBoneInfoList__vfunc_22(void) {
+    return g_igSkeletonBoneInfoList_metaObject[0];
 }
 
-int Gap__Sg__igSkeletonList__vfunc_22(void) {
-    return DAT_005614a8[0];
+igMetaObject *Gap__Sg__igSkeletonList__vfunc_22(void) {
+    return g_igSkeletonList_metaObject[0];
 }
 
-int Gap__Sg__igSkin__vfunc_22(void) {
-    return DAT_00561490[0];
+igMetaObject *Gap__Sg__igSkin__vfunc_22(void) {
+    return g_igSkin_metaObject[0];
 }
 
-int Gap__Sg__igSkinList__vfunc_22(void) {
-    return DAT_00561488[0];
+igMetaObject *Gap__Sg__igSkinList__vfunc_22(void) {
+    return g_igSkinList_metaObject[0];
 }
 
-int Gap__Sg__igRenderPackage__vfunc_22(void) {
-    return DAT_00561450[0];
+igMetaObject *Gap__Sg__igRenderPackage__vfunc_22(void) {
+    return g_igRenderPackage_metaObject[0];
 }
 
-int Gap__Sg__igRenderPackagePool__vfunc_22(void) {
-    return DAT_00561448[0];
+igMetaObject *Gap__Sg__igRenderPackagePool__vfunc_22(void) {
+    return g_igRenderPackagePool_metaObject[0];
 }
 
-int Gap__Sg__igRenderPackageList__vfunc_22(void) {
-    return DAT_00561440[0];
+igMetaObject *Gap__Sg__igRenderPackageList__vfunc_22(void) {
+    return g_igRenderPackageList_metaObject[0];
 }
 
 int Gap__Core__igDoubleList__vfunc_22(void) {
-    return DAT_005867f0[0];
+    return g_igDoubleList_metaObject[0];
 }
 
-int Gap__Sg__igTransformStack__vfunc_22(void) {
-    return DAT_005612a8[0];
+igMetaObject *Gap__Sg__igTransformStack__vfunc_22(void) {
+    return g_igTransformStack_metaObject[0];
 }
 
-int Gap__Sg__igTransformList__vfunc_22(void) {
-    return DAT_005612a0[0];
+igMetaObject *Gap__Sg__igTransformList__vfunc_22(void) {
+    return g_igTransformList_metaObject[0];
 }
 
-int Gap__Sg__igNonRefCountedTransformList__vfunc_22(void) {
-    return DAT_00561298[0];
+igMetaObject *Gap__Sg__igNonRefCountedTransformList__vfunc_22(void) {
+    return g_igNonRefCountedTransformList_metaObject[0];
 }
 
-int Gap__Sg__igTransformRecorder__vfunc_22(void) {
-    return DAT_00561280[0];
+igMetaObject *Gap__Sg__igTransformRecorder__vfunc_22(void) {
+    return g_igTransformRecorder_metaObject[0];
 }
 
 int Gap__Sg__igTransientShaderData__vfunc_22(void) {
     return ((int *)g_igTransientShaderData_metaObject)[0];
 }
 
-int Gap__Sg__igRenderPackageList__vfunc_24(void) {
-    return DAT_00561450[0];
+igMetaObject *Gap__Sg__igRenderPackageList__vfunc_24(void) {
+    return g_igRenderPackage_metaObject[0];
 }
 
-int Gap__Sg__igNonRefCountedAttrStackManagerList__vfunc_24(void) {
-    return DAT_00561f98[0];
+igMetaObject *Gap__Sg__igNonRefCountedAttrStackManagerList__vfunc_24(void) {
+    return g_igAttrStackManager_metaObject[0];
 }
 
-int Gap__Sg__igNonRefCountedTransformList__vfunc_24(void) {
-    return DAT_005612b0[0];
+igMetaObject *Gap__Sg__igNonRefCountedTransformList__vfunc_24(void) {
+    return g_igTransform_metaObject[0];
 }
 
-int Gap__Sg__igNonRefCountedNodeList__vfunc_24(void) {
-    return DAT_00561838[0];
+igMetaObject *Gap__Sg__igNonRefCountedNodeList__vfunc_24(void) {
+    return g_igNode_metaObject[0];
 }
 
 int Gap__Sg__igTraversalFunctionList__vfunc_23(igTraversalFunctionList *self) {
@@ -891,48 +891,48 @@ int Gap__Sg__igAnimationCombinerList__vfunc_24(void) {
     return g_igAnimationCombiner_metaObject[0];
 }
 
-int Gap__Sg__igAppearanceList__vfunc_24(void) {
-    return DAT_00562098[0];
+igMetaObject *Gap__Sg__igAppearanceList__vfunc_24(void) {
+    return g_igAppearance_metaObject[0];
 }
 
-int Gap__Sg__igAnimationStateList__vfunc_24(void) {
-    return DAT_00562100[0];
+igMetaObject *Gap__Sg__igAnimationStateList__vfunc_24(void) {
+    return g_igAnimationState_metaObject[0];
 }
 
-int Gap__Sg__igAnimationCombinerBoneInfoListList__vfunc_24(void) {
-    return DAT_00562260[0];
+igMetaObject *Gap__Sg__igAnimationCombinerBoneInfoListList__vfunc_24(void) {
+    return g_igAnimationCombinerBoneInfoList_metaObject[0];
 }
 
-int Gap__Sg__igAnimationCombinerBoneInfoList__vfunc_24(void) {
-    return DAT_00562268[0];
+igMetaObject *Gap__Sg__igAnimationCombinerBoneInfoList__vfunc_24(void) {
+    return g_igAnimationCombinerBoneInfo_metaObject[0];
 }
 
-int Gap__Sg__igEnvironmentMapShader2List__vfunc_24(void) {
-    return DAT_00561a98[0];
+igMetaObject *Gap__Sg__igEnvironmentMapShader2List__vfunc_24(void) {
+    return g_igEnvironmentMapShader2_metaObject[0];
 }
 
-int Gap__Sg__igGraphPathList__vfunc_24(void) {
-    return DAT_00561a10[0];
+igMetaObject *Gap__Sg__igGraphPathList__vfunc_24(void) {
+    return g_igGraphPath_metaObject[0];
 }
 
-int Gap__Sg__igAnimationList__vfunc_24(void) {
-    return DAT_00562370[0];
+igMetaObject *Gap__Sg__igAnimationList__vfunc_24(void) {
+    return g_igAnimation_metaObject[0];
 }
 
-int Gap__Sg__igAnimationTransitionDefinitionList__vfunc_24(void) {
-    return DAT_005623c0[0];
+igMetaObject *Gap__Sg__igAnimationTransitionDefinitionList__vfunc_24(void) {
+    return g_igAnimationTransitionDefinition_metaObject[0];
 }
 
-int Gap__Sg__igAnimationTransitionPointList__vfunc_24(void) {
-    return DAT_005623e8[0];
+igMetaObject *Gap__Sg__igAnimationTransitionPointList__vfunc_24(void) {
+    return g_igAnimationTransitionPoint_metaObject[0];
 }
 
-int Gap__Sg__igAnimationTrackList__vfunc_24(void) {
-    return DAT_00562430[0];
+igMetaObject *Gap__Sg__igAnimationTrackList__vfunc_24(void) {
+    return g_igAnimationTrack_metaObject[0];
 }
 
-int Gap__Sg__igAnimationBindingList__vfunc_24(void) {
-    return DAT_00562338[0];
+igMetaObject *Gap__Sg__igAnimationBindingList__vfunc_24(void) {
+    return g_igAnimationBinding_metaObject[0];
 }
 
 int Gap__Bec__igModelViewMatrixBoneSelectList__vfunc_22(void)
@@ -940,48 +940,48 @@ int Gap__Bec__igModelViewMatrixBoneSelectList__vfunc_22(void)
     return ((int *)g_igModelViewMatrixBoneSelect_metaObject)[0];
 }
 
-int Gap__Sg__igShaderFactoryList__vfunc_24(void) {
-    return DAT_00561528[0];
+igMetaObject *Gap__Sg__igShaderFactoryList__vfunc_24(void) {
+    return g_igShaderFactory_metaObject[0];
 }
 
-int Gap__Sg__igSkeletonList__vfunc_24(void) {
-    return DAT_005614b0[0];
+igMetaObject *Gap__Sg__igSkeletonList__vfunc_24(void) {
+    return g_igSkeleton_metaObject[0];
 }
 
-int Gap__Sg__igSkeletonBoneInfoList__vfunc_24(void) {
-    return DAT_005614d8[0];
+igMetaObject *Gap__Sg__igSkeletonBoneInfoList__vfunc_24(void) {
+    return g_igSkeletonBoneInfo_metaObject[0];
 }
 
-int Gap__Sg__igAnimationModifierList__vfunc_24(void) {
-    return DAT_00562200[0];
+igMetaObject *Gap__Sg__igAnimationModifierList__vfunc_24(void) {
+    return g_igAnimationModifier_metaObject[0];
 }
 
-int Gap__Sg__igSkinList__vfunc_24(void) {
-    return DAT_00561490[0];
+igMetaObject *Gap__Sg__igSkinList__vfunc_24(void) {
+    return g_igSkin_metaObject[0];
 }
 
 int Gap__Sg__igCompiledTransformList__vfunc_24(void) {
     return ((int *)g_igCompiledTransform_metaObject)[0];
 }
 
-int Gap__Sg__igGeometryList__vfunc_24(void) {
-    return DAT_00561a38[0];
+igMetaObject *Gap__Sg__igGeometryList__vfunc_24(void) {
+    return g_igGeometry_metaObject[0];
 }
 
-int Gap__Sg__igAttrStackList__vfunc_24(void) {
-    return DAT_00562030[0];
+igMetaObject *Gap__Sg__igAttrStackList__vfunc_24(void) {
+    return g_igAttrStack_metaObject[0];
 }
 
-int Gap__Sg__igTransformList__vfunc_24(void) {
-    return DAT_005612b0[0];
+igMetaObject *Gap__Sg__igTransformList__vfunc_24(void) {
+    return g_igTransform_metaObject[0];
 }
 
-int Gap__Sg__igNodeListList__vfunc_24(void) {
-    return DAT_00561830[0];
+igMetaObject *Gap__Sg__igNodeListList__vfunc_24(void) {
+    return g_igNodeList_metaObject[0];
 }
 
-int Gap__Sg__igNodeList__vfunc_24(void) {
-    return DAT_00561838[0];
+igMetaObject *Gap__Sg__igNodeList__vfunc_24(void) {
+    return g_igNode_metaObject[0];
 }
 
 void Gap__Core__igUnsignedIntList__vfunc_18(void *arg0) {

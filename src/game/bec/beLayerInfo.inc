@@ -1,9 +1,9 @@
 void *FUN_0035c420(void) {
-    struct G *g = DAT_00589268[0];
-    if (!g || ((g->f & 4) != 0) == false) {
+    igMetaObject *g = g_beLayerInfo_metaObject[0];
+    if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_0035c570();
     }
-    return DAT_00589268[0];
+    return g_beLayerInfo_metaObject[0];
 }
 
 int beLayerInfo_GetVTable(void) {
@@ -18,7 +18,7 @@ int beLayerInfo_GetVTable(void) {
     u.vt = (int)&DAT_00536610[0];
     ps = &u.b[28];
     *(int *)ps = 0;
-    t = *(int *)&u.b[*(int *)((char *)(DAT_00586dc8[0]) + 916)];
+    t = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.vt = (int)&DAT_00536610[0];
     FUN_0035c4f0((ObjectRefWord *)ps, -1);
     FUN_0033ec80((struct S_33ec80 *)u.b, (short)0);
@@ -70,11 +70,11 @@ void beLayerInfo_InitFields(void) {
     void *temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)((int *)DAT_00589268)[0];
+    temp_s0 = (void *)g_beLayerInfo_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_004c6380[0], 1);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = FUN_0035c6c0();
+    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_0035c6c0();
     igMetaObject_NameFields(temp_s0, &DAT_004c6388[0], &DAT_004c6390[0], &DAT_004c6398[0], temp_s2);
 }
 

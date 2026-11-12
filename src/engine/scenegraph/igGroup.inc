@@ -3,11 +3,11 @@ void FUN_0019f1d0(int arg0) {
     igMetaObject_CreateInstance(*(int *)0x5619F8, arg0);
 }
 
-int FUN_0019f210(void) {
-    if (DAT_005619f8[0] == 0) {
-        DAT_005619f8[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(DAT_00587040[0]));
+igMetaObject *FUN_0019f210(void) {
+    if (g_igGroup_metaObject[0] == 0) {
+        g_igGroup_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
     }
-    return DAT_005619f8[0];
+    return g_igGroup_metaObject[0];
 }
 
 igMetaObject *igGroup_GetMetaObject(void)
@@ -28,7 +28,7 @@ int igGroup_GetVTable(void) {
     obj.f10 = 0;
     obj.vt = (&DAT_00528dd0[0]);
     obj.f1C = 0;
-    temp_s0 = *(int *)((char *)&obj + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+    temp_s0 = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
     obj.vt = (&DAT_00528dd0[0]);
     FUN_001958f0((void * *)&obj.f1C, -1);
     FUN_00195970((struct T_195970 *)&obj, 0);
@@ -66,11 +66,11 @@ void igGroup_InitFields(void) {
     void *temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)DAT_005619f8[0];
+    temp_s0 = (void *)g_igGroup_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_0048bfe0[0], 1);
     temp_s1 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s2)));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = FUN_0019cbe0();
+    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_0019cbe0();
     ((igMetaField *)temp_s1)->_resetMethod = 3;
     ((igRefMetaField *)temp_s1)->_construct = 1;
     ((igMetaField *)temp_s1)->_deepCopyMethod = 0;

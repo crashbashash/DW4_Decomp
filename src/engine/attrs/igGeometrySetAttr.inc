@@ -25,7 +25,7 @@ int igGeometrySetAttr_GetVTable(void) {
     *(int *)q1 = 0;
     q0 = (S_ref *)&u.b[20];
     *(int *)q0 = 0;
-    temp_s0 = *(int *)&u.b[*(int *)((char *)(DAT_00586dc8[0]) + 916)];
+    temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.vt = (int)&DAT_005237b0[0];
     if (q0 != 0) {
         q0 = *(S_ref **)q0;
@@ -100,7 +100,7 @@ void igGeometrySetAttr_InitFields(void) {
     struct F_136f30 *temp_v0_2;
     void *temp_s1;
 
-    temp_s1 = (void *)DAT_0055f118[0];
+    temp_s1 = (void *)g_igGeometrySetAttr_metaObject[0];
     temp_s0 = igMetaObject_GetFieldCount(temp_s1);
     igMetaObject_CreateFields(temp_s1, &DAT_004864b0[0], 5);
     temp_s2 = (struct F_136f30 *)(igMetaObject_GetFieldAt(temp_s1, temp_s0));
@@ -116,7 +116,7 @@ void igGeometrySetAttr_InitFields(void) {
     temp_v0->f39 = 4;
     temp_v0->f44 = 3;
     temp_s2_2 = (struct F_136f30 *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 2));
-    temp_s2_2->f56 = FUN_0013a4d0();
+    temp_s2_2->f56 = (int)FUN_0013a4d0();
     temp_v0_2 = (struct F_136f30 *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 3));
     FUN_002dc7a0(temp_v0_2, &DAT_00486528[0]);
     temp_v0_2->f38 = 0;

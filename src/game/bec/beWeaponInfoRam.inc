@@ -1,9 +1,9 @@
 void *FUN_0033e830(void) {
-    struct G *g = DAT_00587a20[0];
-    if (!g || ((g->f & 4) != 0) == false) {
+    igMetaObject *g = g_beWeaponInfoRam_metaObject[0];
+    if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_0033ea40();
     }
-    return DAT_00587a20[0];
+    return g_beWeaponInfoRam_metaObject[0];
 }
 
 int beWeaponInfoRam_GetVTable(void) {
@@ -16,7 +16,7 @@ int beWeaponInfoRam_GetVTable(void) {
     p = (S_ref *)&u.b[40];
     *(int *)p = 0;
     u.vt = (int)&DAT_00539e30[0];
-    temp_s0 = *(int *)&u.b[*(int *)((char *)(DAT_00586dc8[0]) + 916)];
+    temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.vt = (int)&DAT_00539e90[0];
     if (p != 0) {
         p = *(S_ref **)p;
@@ -91,7 +91,7 @@ void beWeaponInfoRam_GetMetaObject(void)
     FUN_0033e830();
 }
 
-int FUN_0033eaf0(void) {
-    return ((int *)DAT_00589d28)[0];
+igMetaObject *FUN_0033eaf0(void) {
+    return g_beBaseInfoRam_metaObject[0];
 }
 

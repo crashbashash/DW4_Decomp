@@ -22,7 +22,7 @@ int igIterateField_GetVTable(void) {
     u.vt = (int)&DAT_0052c400[0];
     ps = &u.b[8];
     *(int *)ps = 0;
-    t = *(int *)&u.b[*(int *)((char *)(DAT_00586dc8[0]) + 916)];
+    t = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.vt = (int)&DAT_0052c400[0];
     if (ps != 0) {
         p = *(int **)ps;
@@ -68,7 +68,7 @@ void igIterateField_InitFields(void) {
     void *temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)DAT_0056d968[0];
+    temp_s0 = (void *)g_igIterateField_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_00497d88[0], 2);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));

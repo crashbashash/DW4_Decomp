@@ -1,14 +1,14 @@
 void *beNDMWMdlPEBaseInfoWork_ResolveMetaObject(void) {
-    struct G *g = DAT_0058b430[0];
-    if (!g || ((g->f & 4) != 0) == false) {
+    igMetaObject *g = g_beNDMWMdlPEBaseInfoWork_metaObject[0];
+    if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_003c0770();
     }
-    return DAT_0058b430[0];
+    return g_beNDMWMdlPEBaseInfoWork_metaObject[0];
 }
 
 int beNDMWMdlPEBaseInfoWork_GetVTable(void) {
     PEBaseInfoWorkObj work;
-    return *(int *)((char *)&work + *(int *)((char *)DAT_00586dc8[0] + 916));
+    return *(int *)((char *)&work + *(int *)((char *)g_objectSystem[0] + 916));
 }
 
 int *FUN_003c0760(int *p)
@@ -55,7 +55,7 @@ void beNDMWMdlPEBaseInfoWork_InitFields(void) {
     void *temp_s1;
     int temp_s0;
 
-    temp_s1 = (void *)((int *)DAT_0058b430)[0];
+    temp_s1 = (void *)g_beNDMWMdlPEBaseInfoWork_metaObject[0];
     temp_s0 = igMetaObject_GetFieldCount(temp_s1);
     igMetaObject_CreateFields(temp_s1, &DAT_004caa90[0], 0xA);
     temp_s2 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 1));

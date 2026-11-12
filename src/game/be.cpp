@@ -199,7 +199,7 @@ extern "C" int *PLAYERgetDataStr(int arg0, int arg1, float fparg0);
 extern "C" int beMessenger_GetMatrixCount(int);
 extern "C" int *PLAYERgetPosStr(int arg0, float fparg0, float fparg1, float fparg2);
 extern "C" void ShutDown(void);
-extern "C" void beMessenger_AppendObject(int, int);
+extern "C" void beMessenger_AppendObject(int, ...);
 extern "C" int BLTisPlayerBullet(void);
 extern "C" int BLTisHitCheck(void);
 extern "C" int BLTgetDamageValue(int criticalFlag);
@@ -241,14 +241,13 @@ extern "C" int DAT_00539ef0[4];
 extern "C" int DAT_004c8560[4];
 extern "C" int DAT_0050cfc0[4];
 extern "C" int g_be_metaObject[4];
-extern "C" int DAT_00587d08[4];
-extern "C" int DAT_00588f38[4];
-extern "C" int DAT_00589160[4];
-extern "C" int DAT_00589790[4];
-extern "C" int DAT_0058a1c0[4];
-extern "C" int DAT_0058a1c8[4];
+extern "C" int g_beSystem_metaObject[4];
+extern "C" int g_beMessenger_metaObject[4];
+extern "C" int g_beMatCtrl_metaObject[4];
+extern "C" int g_beDemoManager_metaObject[4];
+extern "C" int g_beMessenger[4];
 extern "C" void Gap__Bec__be__vfunc_23(be *arg0);
-extern "C" int DAT_00586f20[4];
+extern "C" int g_stringPool[4];
 extern "C" be *DAT_0058a1d8[4];
 extern "C" char GAMERAM[];
 extern "C" char *g_getRecordCommands[5];
@@ -296,7 +295,6 @@ extern "C" char E2PPOWDWNTIME[];
 extern "C" char P2PKOUKAMAGIC[];
 extern "C" char LOADINTF2[];
 extern "C" char SETDIFFICULTMAX[];
-extern "C" int g_beSystem[4];
 extern "C" int g_mdlRamNo[4];
 extern "C" int g_mdlMaxHp[4];
 extern "C" int g_mdlHp[4];
@@ -311,13 +309,8 @@ extern "C" int g_attackZokusei[4];
 struct T { char pad[12]; igStringRefList *list; };
 extern "C" struct T *FUN_003a9310(int, int *);
 extern "C" int DAT_0050d960[4];
-extern "C" beSystem *DAT_0058a1b8[4];
+extern "C" beSystem *g_beSystem[4];
 class DW4VC_96_0 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual int vX(); };
-extern "C" int DAT_0050d8f0[4];
-extern "C" int DAT_0050d940[4];
-extern "C" int DAT_0050d9a8[4];
-extern "C" int DAT_0050d9b8[4];
-extern "C" int DAT_0050d9c8[4];
 typedef struct R { char p[12]; int *f12; } R;
 extern "C" int DAT_0050da18[4];
 typedef struct CardFolderFlags { int pad0; int pad1; int count; int pad3; unsigned char *flags; } CardFolderFlags;
@@ -335,7 +328,6 @@ extern "C" int DAT_0050da78[4];
 extern "C" int DAT_0050da88[4];
 extern "C" unsigned char GPR_005549c4;
 typedef struct L { char p[8]; int n; char q[4]; int **data; } L;
-typedef struct G { char p[52]; L *f52; } G;
 /* Owning stack reference to a pooled string token (reference count at p[-1], chunk header at
  * p[-2]); releases the token on scope exit. */
 class StringRef {
@@ -363,7 +355,6 @@ extern "C" int DAT_0050dae8[4];
 extern "C" int DAT_0050daf0[4];
 typedef struct { char pad[28]; struct { char pad[8]; int f8; } *f1c; } O;
 extern "C" O *DAT_0058a1d0[4];
-extern "C" int DAT_0050d9f0[4];
 /* Bounds-checked byte set chosen by the current byte. */
 
 
@@ -378,7 +369,6 @@ extern "C" char DAT_0058a230[32];
 extern "C" int DAT_0058a270[];
 extern "C" int DAT_0050db10[4];
 extern "C" int DAT_004c873c[4];
-extern "C" unsigned int DAT_0058a1fc[4];
 struct DmgVec { float x; float y; float z; };
 struct DmgRow { int w[7]; };
 extern "C" struct DmgRow DAT_004c8770[];
@@ -394,14 +384,13 @@ extern "C" int DAT_0050db00[4];
 extern "C" V3 * DAT_0058a218[4];
 extern "C" igObject *beBaseInfoDataList_Create(...);
 extern "C" beModelCtrlInfoRamData *igProperty_FindByName(...);
-extern "C" beBaseInfoRam *DAT_0058a1e0[4];
-extern "C" int DAT_00585be0[4];
-extern "C" int DAT_00587110[4];
+extern "C" beBaseInfoRam *g_mdlEntity[4];
+extern "C" int g_propertyNameField[4];
+extern "C" int g_defaultAllocatorSelector[4];
 extern "C" int DAT_0050dd40[4];
 extern "C" unsigned char GPR_00554c14;
 extern "C" int DAT_0050dd48[4];
 extern "C" int DAT_004e1098[4];
-extern "C" int DAT_0050dd58[4];
 extern "C" int DAT_0050dd80[4];
 extern "C" int DAT_0050dd90[4];
 extern "C" int DAT_0058a2b0[4];
@@ -421,7 +410,6 @@ extern "C" char P2EPOWDWNTIME[];
 extern "C" char E2PDAMAGE[];
 extern "C" char E2PDAMAGERANK[];
 extern "C" char E2PSTUNTIME[];
-extern "C" int g_mdlEntity[4];
 extern "C" int g_statusFieldA[4];
 extern "C" int g_damageResult[4];
 extern "C" int g_damageFlag[4];
@@ -709,10 +697,10 @@ void Gap__Bec__be__vfunc_22(void)
 void Gap__Bec__be__vfunc_23(be *arg0) {
     int temp_v0;
 
-    ((int *)DAT_0058a1b8)[0] = FUN_00236f80(arg0->_insight, DAT_00587d08[0]);
-    DAT_0058a1c0[0] = FUN_00236f80(arg0->_insight, DAT_00588f38[0]);
-    DAT_0058a1c8[0] = FUN_00236f80(arg0->_insight, DAT_00589160[0]);
-    temp_v0 = FUN_00236f80(arg0->_insight, DAT_00589790[0]);
+    g_beSystem[0] = (beSystem *)FUN_00236f80(arg0->_insight, g_beSystem_metaObject[0]);
+    g_beMessenger[0] = FUN_00236f80(arg0->_insight, g_beMessenger_metaObject[0]);
+    g_matCtrl[0] = (beMatCtrl *)FUN_00236f80(arg0->_insight, g_beMatCtrl_metaObject[0]);
+    temp_v0 = FUN_00236f80(arg0->_insight, g_beDemoManager_metaObject[0]);
     ((void * *)DAT_0058a1d8)[0] = (void *)(arg0);
     ((int *)DAT_0058a1d0)[0] = temp_v0;
 }
@@ -744,14 +732,14 @@ void Gap__Bec__be__vfunc_26(void) {
         off = 0;
         do {
             slot = (int **)((char *)s5->_data + off);
-            if (DAT_00586f20[0] == 0) {
+            if (g_stringPool[0] == 0) {
                 v = FUN_002eb010(0x10);
                 if (v != 0) {
                     v = StringPool_Construct(v);
                 }
-                DAT_00586f20[0] = v;
+                g_stringPool[0] = v;
             }
-            s1 = (int *)StringPool_Intern(DAT_00586f20[0], 0);
+            s1 = (int *)StringPool_Intern(g_stringPool[0], 0);
             old = *slot;
             if (old != 0) {
                 int *hdr = old - 2;
@@ -856,7 +844,7 @@ int SYSgetIsPackOnly(void)
 unsigned int SYSgetRandom(unsigned int arg0) {
     DW4VC_96_0 *temp_a0;
 
-    temp_a0 = (DW4VC_96_0 *)DAT_0058a1b8[0]->_random;
+    temp_a0 = (DW4VC_96_0 *)g_beSystem[0]->_random;
     return temp_a0->vX() % arg0;
 }
 
@@ -869,19 +857,19 @@ void SYSsetGateStage(int *arg0, int arg1) {
     int *hd;
     int v1;
 
-    beMessenger_SendGroup(DAT_0058a1c0[0], &DAT_0050d940[0], &DAT_0050d8f0[0]);
-    obj = beMessenger_GetObject(DAT_0058a1c0[0], 0);
-    *(int *)((char *)igProperty_GetRecord(obj, &DAT_0050d9a8[0]) + 12) = arg1;
+    beMessenger_SendGroup(g_beMessenger[0], GAMERAM, GETCOMMON);
+    obj = beMessenger_GetObject(g_beMessenger[0], 0);
+    *(int *)((char *)igProperty_GetRecord(obj, GATESTAGENO) + 12) = arg1;
     if (arg0 == 0) {
-        rec = (R *)FUN_003a92e0(obj, &DAT_0050d9b8[0]);
-        if (DAT_00586f20[0] == 0) {
+        rec = (R *)FUN_003a92e0(obj, GATESTAGENAME);
+        if (g_stringPool[0] == 0) {
             v = FUN_002eb010(0x10);
             if (v != 0) {
                 v = StringPool_Construct(v);
             }
-            DAT_00586f20[0] = v;
+            g_stringPool[0] = v;
         }
-        s0 = (int *)StringPool_Intern(DAT_00586f20[0], &DAT_0050d9c8[0]);
+        s0 = (int *)StringPool_Intern(g_stringPool[0], EMPTY);
         old = rec->f12;
         if (old != 0) {
             hd = old - 2;
@@ -894,15 +882,15 @@ void SYSsetGateStage(int *arg0, int arg1) {
         rec->f12 = s0;
         return;
     }
-    rec = (R *)FUN_003a92e0(obj, &DAT_0050d9b8[0]);
-    if (DAT_00586f20[0] == 0) {
+    rec = (R *)FUN_003a92e0(obj, GATESTAGENAME);
+    if (g_stringPool[0] == 0) {
         v = FUN_002eb010(0x10);
         if (v != 0) {
             v = StringPool_Construct(v);
         }
-        DAT_00586f20[0] = v;
+        g_stringPool[0] = v;
     }
-    s0 = (int *)StringPool_Intern(DAT_00586f20[0], arg0);
+    s0 = (int *)StringPool_Intern(g_stringPool[0], arg0);
     old = rec->f12;
     if (old != 0) {
         hd = old - 2;
@@ -1061,21 +1049,21 @@ void CFLclear(void) {
     int off;
     int *old;
     int v;
-    s5 = ((G * *)DAT_0058a1b8)[0]->f52;
+    s5 = (L *)g_beSystem[0]->_readFileList;
     s4 = s5->n;
     i = 0;
     if (0 < s4) {
         off = 0;
         do {
             slot = (int **)((char *)s5->data + off);
-            if (DAT_00586f20[0] == 0) {
+            if (g_stringPool[0] == 0) {
                 v = FUN_002eb010(0x10);
                 if (v != 0) {
                     v = StringPool_Construct(v);
                 }
-                DAT_00586f20[0] = v;
+                g_stringPool[0] = v;
             }
-            s1 = (int *)StringPool_Intern(DAT_00586f20[0], 0);
+            s1 = (int *)StringPool_Intern(g_stringPool[0], 0);
             old = *slot;
             if (old != 0) {
                 int *hdr = old - 2;
@@ -1092,7 +1080,7 @@ void CFLclear(void) {
     }
     s5->n = 0;
     {
-        L *l2 = ((G * *)DAT_0058a1b8)[0]->f52;
+        L *l2 = (L *)g_beSystem[0]->_readFileList;
         if (!(0 < l2->n)) {
             List_Reserve(l2, 0, 4);
         }
@@ -1108,7 +1096,7 @@ void CFLsetName(int arg0) {
     int i;
 
     found = false;
-    list = (igStringRefList *)DAT_0058a1b8[0]->_readFileList;
+    list = (igStringRefList *)g_beSystem[0]->_readFileList;
     n = list->_count;
     i = 0;
     if (0 < n) {
@@ -1127,14 +1115,14 @@ void CFLsetName(int arg0) {
         if (arg0 == 0) {
             v = 0;
         } else {
-            if (DAT_00586f20[0] == 0) {
+            if (g_stringPool[0] == 0) {
                 v2 = FUN_002eb010(16);
                 if (v2 != 0) {
                     v2 = StringPool_Construct(v2);
                 }
-                DAT_00586f20[0] = v2;
+                g_stringPool[0] = v2;
             }
-            v = StringPool_Intern(DAT_00586f20[0], arg0);
+            v = StringPool_Intern(g_stringPool[0], arg0);
         }
         {
             StringRef fresh(v);
@@ -1144,7 +1132,7 @@ void CFLsetName(int arg0) {
 }
 
 int CFLgetFolderName(void) {
-    return ((beSystem *)g_beSystem[0])->_stageName;
+    return g_beSystem[0]->_stageName;
 }
 
 void Lua_sd_OptionalArg(int arg0) {
@@ -1196,7 +1184,7 @@ void Lua_sd_OptionalArg(int arg0) {
             for (i = 0; i < n; i++, pp++) {
                 s = *pp;
                 if (s[1] != 0x3C) {
-                    beMessenger_AppendString(DAT_0058a1c0[0], s);
+                    beMessenger_AppendString(g_beMessenger[0], s);
                 } else {
                     switch (s[0]) {
                     case 0x49:
@@ -1213,7 +1201,7 @@ void Lua_sd_OptionalArg(int arg0) {
                             k++;
                         }
                         if (sign) iv = -iv;
-                        beMessenger_AppendInt(DAT_0058a1c0[0], iv);
+                        beMessenger_AppendInt(g_beMessenger[0], iv);
                         break;
                     case 0x4C:
                         lv = 0;
@@ -1223,21 +1211,21 @@ void Lua_sd_OptionalArg(int arg0) {
                             lv += s[k] - 0x30;
                             k++;
                         }
-                        beMessenger_AppendLong(DAT_0058a1c0[0], lv);
+                        beMessenger_AppendLong(g_beMessenger[0], lv);
                         break;
                     case 0x56:
                         FUN_001e6d30(s + 1, tmp, &DAT_0050dab0[0]);
                         vec[0] = tmp[0];
                         vec[1] = tmp[1];
                         vec[2] = tmp[2];
-                        beMessenger_AppendVec3(DAT_0058a1c0[0], vec);
+                        beMessenger_AppendVec3(g_beMessenger[0], vec);
                         break;
                     case 0x46:
-                        seq = (igStringObj *)DAT_0058a1b8[0]->_globalStrObj;
+                        seq = (igStringObj *)g_beSystem[0]->_globalStrObj;
                         FUN_0030b3c0(seq, s + 2);
                         FUN_0030bbf0(seq, seq->_length - 1, 1);
                         FUN_0030b630(seq, &fv);
-                        beMessenger_AppendFloat(DAT_0058a1c0[0], fv);
+                        beMessenger_AppendFloat(g_beMessenger[0], fv);
                         break;
                     default:
                         break;
@@ -1249,27 +1237,27 @@ void Lua_sd_OptionalArg(int arg0) {
 }
 
 void sd_29(int arg0, int arg1, int arg2, int arg3, int arg4) {
-    beMessenger_SelectReceivers(DAT_0058a1c0[0], arg0, arg1, arg2);
+    beMessenger_SelectReceivers(g_beMessenger[0], arg0, arg1, arg2);
     if (arg4 != 0) {
         Lua_sd_OptionalArg(arg4);
     }
-    beMessenger_DispatchSelected(DAT_0058a1c0[0], arg3);
+    beMessenger_DispatchSelected(g_beMessenger[0], arg3);
 }
 
 void sd_30(int arg0, int arg1, int arg2, int arg3) {
-    beMessenger_SendNamed(DAT_0058a1c0[0], arg0, arg1, arg2, arg3);
+    beMessenger_SendNamed(g_beMessenger[0], arg0, arg1, arg2, arg3);
 }
 
 void sd_31(int arg0, int arg1, int arg2, int arg3, int arg4, long long arg5) {
-    beMessenger_PrepareDelayedSelection(DAT_0058a1c0[0], arg0, arg1, arg2);
+    beMessenger_PrepareDelayedSelection(g_beMessenger[0], arg0, arg1, arg2);
     if (arg4 != 0) {
         Lua_sd_OptionalArg(arg4);
     }
-    beMessenger_EnqueueSelected(DAT_0058a1c0[0], arg3, arg5);
+    beMessenger_EnqueueSelected(g_beMessenger[0], arg3, arg5);
 }
 
 void sd_32(int arg0, int arg1, int arg2, int arg3, long long arg4) {
-    beMessenger_SendDelayedNamed(DAT_0058a1c0[0], arg0, arg1, arg2, arg3, arg4);
+    beMessenger_SendDelayedNamed(g_beMessenger[0], arg0, arg1, arg2, arg3, arg4);
 }
 
 unsigned char MATisPlayer(void) { return beMatCtrl_IsPlayer(g_matCtrl[0]); }
@@ -1355,9 +1343,9 @@ int DMgetCount(void) {
     int temp_v0;
     temp_v0 = DAT_0058a1d0[0]->f1c->f8;
     if (temp_v0 != 0) { return temp_v0; }
-    beMessenger_SendNamed(DAT_0058a1c0[0], &DAT_0050dae8[0], 0, 0, &DAT_0050daf0[0]);
-    if (beMessenger_GetBoolCount(DAT_0058a1c0[0]) == 0) { return 0; }
-    temp_v0 = beMessenger_GetBool(DAT_0058a1c0[0], 0);
+    beMessenger_SendNamed(g_beMessenger[0], &DAT_0050dae8[0], 0, 0, &DAT_0050daf0[0]);
+    if (beMessenger_GetBoolCount(g_beMessenger[0]) == 0) { return 0; }
+    temp_v0 = beMessenger_GetBool(g_beMessenger[0], 0);
     temp_v0 = (temp_v0 & 0xFF) != 0;
     return -temp_v0;
 }
@@ -1366,12 +1354,12 @@ unsigned char FLGisOn(int arg0) {
     int temp_v0;
     int *r;
 
-    beMessenger_SendNamed(DAT_0058a1c0[0], &DAT_0050d940[0], 0, 0, &DAT_0050d8f0[0]);
-    temp_v0 = beMessenger_GetObject(DAT_0058a1c0[0], 0);
+    beMessenger_SendNamed(g_beMessenger[0], GAMERAM, 0, 0, GETCOMMON);
+    temp_v0 = beMessenger_GetObject(g_beMessenger[0], 0);
     if (arg0 == 0x3E8) {
         return SYSgetPlayerNinzu() != 0;
     }
-    r = ((int *)igProperty_GetRecordArray(temp_v0, &DAT_0050d9f0[0]));
+    r = ((int *)igProperty_GetRecordArray(temp_v0, FLAG));
     return *(unsigned char *)(((igDataList *)r[3])->_data + arg0);
 }
 
@@ -1379,8 +1367,8 @@ void FLGset(int arg0, unsigned char arg1) {
     igDataList *temp_a0;
     int temp_v1;
 
-    beMessenger_SendNamed(DAT_0058a1c0[0], &DAT_0050d940[0], 0, 0, &DAT_0050d8f0[0]);
-    temp_a0 = (igDataList *)(*(int *)((char *)(igProperty_GetRecordArray(beMessenger_GetObject(DAT_0058a1c0[0], 0), &DAT_0050d9f0[0])) + 12));
+    beMessenger_SendNamed(g_beMessenger[0], GAMERAM, 0, 0, GETCOMMON);
+    temp_a0 = (igDataList *)(*(int *)((char *)(igProperty_GetRecordArray(beMessenger_GetObject(g_beMessenger[0], 0), FLAG)) + 12));
     temp_v1 = temp_a0->_count;
     if ((temp_v1 != 0) && (arg0 >= 0) && (arg0 < temp_v1)) {
         *(char *)(arg0 + temp_a0->_data) = arg1;
@@ -1392,17 +1380,17 @@ void FLGflip(int arg0) {
     igUnsignedCharList *a;
     int cnt;
     unsigned char *p;
-    beMessenger_SendNamed(DAT_0058a1c0[0], &DAT_0050d940[0], 0, 0, &DAT_0050d8f0[0]);
-    obj = beMessenger_GetObject(DAT_0058a1c0[0], 0);
-    p = (unsigned char *)((struct Rec *)igProperty_GetRecordArray(obj, &DAT_0050d9f0[0]))->f12->_data;
+    beMessenger_SendNamed(g_beMessenger[0], GAMERAM, 0, 0, GETCOMMON);
+    obj = beMessenger_GetObject(g_beMessenger[0], 0);
+    p = (unsigned char *)((struct Rec *)igProperty_GetRecordArray(obj, FLAG))->f12->_data;
     if (p[arg0] != 0) {
-        a = ((struct Rec *)igProperty_GetRecordArray(obj, &DAT_0050d9f0[0]))->f12;
+        a = ((struct Rec *)igProperty_GetRecordArray(obj, FLAG))->f12;
         cnt = a->_count;
         if (cnt != 0 && arg0 >= 0 && arg0 < cnt) {
             ((unsigned char *)a->_data)[arg0] = GPR_005549c8;
         }
     } else {
-        a = ((struct Rec *)igProperty_GetRecordArray(obj, &DAT_0050d9f0[0]))->f12;
+        a = ((struct Rec *)igProperty_GetRecordArray(obj, FLAG))->f12;
         cnt = a->_count;
         if (cnt != 0 && arg0 >= 0 && arg0 < cnt) {
             ((unsigned char *)a->_data)[arg0] = GPR_005549cc;
@@ -1413,8 +1401,8 @@ void FLGflip(int arg0) {
 void COUNTERset(int arg0, int arg1) {
     igIntList *temp_a1;
     int temp_v1;
-    beMessenger_SendNamed(DAT_0058a1c0[0], &DAT_0050d940[0], 0, 0, &DAT_0050d8f0[0]);
-    temp_a1 = (igIntList *)(*(int *)((char *)(FUN_003a9250(beMessenger_GetObject(DAT_0058a1c0[0], 0), &DAT_0050daf8[0])) + 12));
+    beMessenger_SendNamed(g_beMessenger[0], GAMERAM, 0, 0, GETCOMMON);
+    temp_a1 = (igIntList *)(*(int *)((char *)(FUN_003a9250(beMessenger_GetObject(g_beMessenger[0], 0), &DAT_0050daf8[0])) + 12));
     temp_v1 = temp_a1->_count;
     if ((temp_v1 != 0) && (arg0 >= 0) && (arg0 < temp_v1)) {
         *(int *)(temp_a1->_data + (arg0 * 4)) = arg1;
@@ -1424,8 +1412,8 @@ void COUNTERset(int arg0, int arg1) {
 int COUNTERget(int arg0)
 {
   int *new_var;
-  beMessenger_SendNamed(DAT_0058a1c0[0, 0], &DAT_0050d940[0], 0, 0, &DAT_0050d8f0[0]);
-  new_var = (int *) (((char *) FUN_003a9250(beMessenger_GetObject(DAT_0058a1c0[0], 0), &DAT_0050daf8[0])) + 12);
+  beMessenger_SendNamed(g_beMessenger[0, 0], GAMERAM, 0, 0, GETCOMMON);
+  new_var = (int *) (((char *) FUN_003a9250(beMessenger_GetObject(g_beMessenger[0], 0), &DAT_0050daf8[0])) + 12);
   return *((int *) ((*((int *) (((char *) (*new_var)) + 16))) + (arg0 * 4)));
 }
 
@@ -1506,11 +1494,11 @@ bool MDLisLive(int arg0, int arg1) {
     int n;
     bool r;
     int i;
-    beMessenger_SendNamed(DAT_0058a1c0[0], DAT_0050db10, arg0, arg1, DAT_0050daf0);
-    n = beMessenger_GetBoolCount(DAT_0058a1c0[0]);
+    beMessenger_SendNamed(g_beMessenger[0], DAT_0050db10, arg0, arg1, DAT_0050daf0);
+    n = beMessenger_GetBoolCount(g_beMessenger[0]);
     r = false;
     for (i = 0; i < n; i++) {
-        if (beMessenger_GetBool(DAT_0058a1c0[0], i)) {
+        if (beMessenger_GetBool(g_beMessenger[0], i)) {
             r = true;
             break;
         }
@@ -1524,7 +1512,7 @@ int MDLgetBulletKind(void)
 }
 
 int MDLgetBulletName(void) {
-    return DAT_004c873c[(int) DAT_0058a1fc[0] / 10000];
+    return DAT_004c873c[(int) g_mdlBulletKind[0] / 10000];
 }
 
 int MDLgetBulletBoxNo(void)
@@ -1540,9 +1528,9 @@ void FloatingNumber_Spawn(int dmg, int row) {
     int s;
     struct DmgVec v;
     struct DmgVec w;
-    beMessenger_SendNamed(DAT_0058a1c0[0], DAT_0050db10, a, -1, DAT_0050dd00);
-    if (beMessenger_GetObjectCount(DAT_0058a1c0[0]) != 0) {
-        obj = ((beBaseInfoRam *)beMessenger_GetObject(DAT_0058a1c0[0], 0));
+    beMessenger_SendNamed(g_beMessenger[0], DAT_0050db10, a, -1, DAT_0050dd00);
+    if (beMessenger_GetObjectCount(g_beMessenger[0]) != 0) {
+        obj = ((beBaseInfoRam *)beMessenger_GetObject(g_beMessenger[0], 0));
         if (dmg < 10) idx = 0;
         else if (dmg < 100) idx = 1;
         else if (dmg < 1000) idx = 2;
@@ -1550,15 +1538,15 @@ void FloatingNumber_Spawn(int dmg, int row) {
         else if (dmg < 100000) idx = 4;
         else { idx = 4; dmg = 99999; }
         s = DAT_004c8778[row].w[idx];
-        beMessenger_SelectReceivers(DAT_0058a1c0[0], DAT_0050db10, a, obj->_ramNo);
-        beMessenger_AppendString(DAT_0058a1c0[0], s);
+        beMessenger_SelectReceivers(g_beMessenger[0], DAT_0050db10, a, obj->_ramNo);
+        beMessenger_AppendString(g_beMessenger[0], s);
         Matrix44_GetTranslation(DAT_0058a1e8[0], (float *)&v);
         w.x = v.x; w.y = v.y; w.z = v.z;
-        beMessenger_AppendVec3(DAT_0058a1c0[0], (float *)&w);
-        beMessenger_DispatchSelected(DAT_0058a1c0[0], DAT_0050dd10);
-        beMessenger_SelectReceivers(DAT_0058a1c0[0], DAT_0050dd20, b, obj->_ramNo);
-        beMessenger_AppendInt(DAT_0058a1c0[0], dmg);
-        beMessenger_DispatchSelected(DAT_0058a1c0[0], DAT_0050dd30);
+        beMessenger_AppendVec3(g_beMessenger[0], (float *)&w);
+        beMessenger_DispatchSelected(g_beMessenger[0], DAT_0050dd10);
+        beMessenger_SelectReceivers(g_beMessenger[0], DAT_0050dd20, b, obj->_ramNo);
+        beMessenger_AppendInt(g_beMessenger[0], dmg);
+        beMessenger_DispatchSelected(g_beMessenger[0], DAT_0050dd30);
     }
 }
 
@@ -1633,12 +1621,12 @@ int MDLgetRecNo(void)
  * in the low 23 bits of _refCount). */
 
 int MDLisSeqName(char *arg0) {
-    beBaseInfoRam *h = DAT_0058a1e0[0];
+    beBaseInfoRam *h = g_mdlEntity[0];
     if (h->_dataList == 0) {
         int al;
         igObject *o;
         al = igObject_GetAllocator(h);
-        al = GPR_00554c14 != 0 ? al : Memory_GetAllocatorBySelector(DAT_00587110[0]);
+        al = GPR_00554c14 != 0 ? al : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
         igSmartPointer<igObject> ref(beBaseInfoDataList_Create(al));
         igObject *s0 = ref.get();
         if (s0 != 0) {
@@ -1653,16 +1641,16 @@ int MDLisSeqName(char *arg0) {
         }
         h->_dataList = (int)s0;
     }
-    beModelCtrlInfoRamData *p = igProperty_FindByName(h->_dataList, DAT_00585be0[0], &DAT_0050dd40[0]);
+    beModelCtrlInfoRamData *p = igProperty_FindByName(h->_dataList, g_propertyNameField[0], &DAT_0050dd40[0]);
     return strcmp((const char *)((beModelCtrlInfoWork *)p->_work)->_seqCodeName, arg0) == 0;
 }
 
 int MDLisStatus(int arg0, int arg1, int arg2) {
-    beMessenger_SelectReceivers(DAT_0058a1c0[0], &DAT_0050db10[0], arg0, arg1);
-    beMessenger_AppendString(DAT_0058a1c0[0], arg2);
-    beMessenger_DispatchSelected(DAT_0058a1c0[0], &DAT_0050dd48[0]);
-    if (beMessenger_GetBoolCount(DAT_0058a1c0[0]) == 1) {
-        return beMessenger_GetBool(DAT_0058a1c0[0], 0);
+    beMessenger_SelectReceivers(g_beMessenger[0], &DAT_0050db10[0], arg0, arg1);
+    beMessenger_AppendString(g_beMessenger[0], arg2);
+    beMessenger_DispatchSelected(g_beMessenger[0], &DAT_0050dd48[0]);
+    if (beMessenger_GetBoolCount(g_beMessenger[0]) == 1) {
+        return beMessenger_GetBool(g_beMessenger[0], 0);
     }
     return 0;
 }
@@ -1679,11 +1667,11 @@ int *PLAYERgetDataStr(int arg0, int arg1, float fparg0) {
     float t[3];
     int c, b, a;
 
-    beMessenger_SelectGroup(DAT_0058a1c0[0], &DAT_0050dd58[0]);
-    beMessenger_AppendInt(DAT_0058a1c0[0], arg0);
-    beMessenger_AppendInt(DAT_0058a1c0[0], arg1);
-    beMessenger_DispatchSelected(DAT_0058a1c0[0], &DAT_0050dd80[0]);
-    beMessenger_GetMatrix(mat, DAT_0058a1c0[0], 0);
+    beMessenger_SelectGroup(g_beMessenger[0], PLAYERPOINT);
+    beMessenger_AppendInt(g_beMessenger[0], arg0);
+    beMessenger_AppendInt(g_beMessenger[0], arg1);
+    beMessenger_DispatchSelected(g_beMessenger[0], &DAT_0050dd80[0]);
+    beMessenger_GetMatrix(mat, g_beMessenger[0], 0);
     Matrix44_GetTranslation((int)mat, t);
     FUN_00192f50(v, &DAT_004e1098[0], mat);
     ang = atan2f(v[0], v[2]);
@@ -1698,9 +1686,9 @@ int *PLAYERgetPosStr(int arg0, float fparg0, float fparg1, float fparg2) {
     long long temp_s1;
     long long temp_s0;
 
-    beMessenger_SendNamed(DAT_0058a1c0[0], &DAT_0050dda8[0], 0, arg0, &DAT_0050ddb0[0]);
-    if (beMessenger_GetMatrixCount(DAT_0058a1c0[0]) != 0) {
-        beMessenger_GetMatrix(sp40, DAT_0058a1c0[0], 0);
+    beMessenger_SendNamed(g_beMessenger[0], &DAT_0050dda8[0], 0, arg0, &DAT_0050ddb0[0]);
+    if (beMessenger_GetMatrixCount(g_beMessenger[0]) != 0) {
+        beMessenger_GetMatrix(sp40, g_beMessenger[0], 0);
         sp90[0] = fparg0;
         sp90[1] = fparg1;
         sp90[2] = fparg2;
@@ -1725,17 +1713,17 @@ void ShutDown(void) {
     int *hdr;
     int v;
     int obj;
-    s0 = DAT_0058a1b8[0];
+    s0 = g_beSystem[0];
     s0->_isShutDown = 1;
     s0->_isStageLoop = 0;
-    if (DAT_00586f20[0] == 0) {
+    if (g_stringPool[0] == 0) {
         obj = FUN_002eb010(0x10);
         if (obj != 0) {
             obj = StringPool_Construct(obj);
         }
-        DAT_00586f20[0] = obj;
+        g_stringPool[0] = obj;
     }
-    s1 = ((int)StringPool_Intern(DAT_00586f20[0], 0));
+    s1 = ((int)StringPool_Intern(g_stringPool[0], 0));
     a0 = (int *)s0->_nextStage;
     if (a0 != 0) {
         hdr = a0 - 2;
@@ -1756,7 +1744,6 @@ int TXTgetCallNo(void)
 /* True below 1000, for 10000..59999 and for 80000..89999. The cached code is signed and not range-
  * checked, so a negative code also counts. */
 int BLTisPlayerBullet(void) {
-    extern int g_mdlBulletKind[4];
     if (g_mdlBulletKind[0] < BULLET_KIND_GROUP_SIZE) {
         if (g_mdlBulletKind[0] < PLAYER_BULLET_WEAPON_END) {
             return 1;
@@ -1784,7 +1771,6 @@ int BLTgetShootRamNo(void)
  * object argument. */
 int BLTisHitCheck(void) {
     extern int g_mdlRecNo[4];
-    extern int g_mdlBulletKind[4];
     extern int g_bltShootRamNo[4];
     int baseWork;
 
@@ -1822,7 +1808,6 @@ int BLTisCritical(void) {
  * BLTgetAttributeStr, and the damage is returned. */
 int BLTgetDamageValue(int criticalFlag) {
     extern int g_mdlRecNo[4];
-    extern int g_mdlBulletKind[4];
     extern int g_bltShootRamNo[4];
     int baseWork;
 
@@ -1853,7 +1838,6 @@ int BLTgetDamageValue(int criticalFlag) {
  * raised by one when the cached rank flag is 1 (rank 0 only), when `rankBonus` is set, or for
  * attack groups 2 and 3. */
 int BLTgetDamageRank(int currentHp, unsigned char rankBonus) {
-    extern int g_mdlBulletKind[4];
     float damageFraction;
     int group;
     int rank;
@@ -1913,7 +1897,6 @@ int BLTgetStunTime(int intArg, unsigned char byteArg) {
 /* Poison duration (P2EPOISONTIME). */
 int BLTgetPoisonTime(const char *effectKey) {
     extern int g_mdlRecNo[4];
-    extern int g_mdlBulletKind[4];
     extern int g_bltShootRamNo[4];
     if (((int) g_mdlBulletKind[0] / BULLET_KIND_GROUP_SIZE) != BULLET_KIND_TECHNIQUE_GROUP) {
         return 0;
@@ -1934,7 +1917,6 @@ int BLTgetPoisonTime(const char *effectKey) {
 /* Sleep duration (P2ESLEEPTIME). */
 int BLTgetSleepTime(void) {
     extern int g_mdlRecNo[4];
-    extern int g_mdlBulletKind[4];
     extern int g_bltShootRamNo[4];
     if (((int) g_mdlBulletKind[0] / BULLET_KIND_GROUP_SIZE) != BULLET_KIND_TECHNIQUE_GROUP) {
         return 0;
@@ -1954,7 +1936,6 @@ int BLTgetSleepTime(void) {
 /* Bind duration (P2EBINDTIME). */
 int BLTgetBindTime(void) {
     extern int g_mdlRecNo[4];
-    extern int g_mdlBulletKind[4];
     extern int g_bltShootRamNo[4];
     if (((int) g_mdlBulletKind[0] / BULLET_KIND_GROUP_SIZE) != BULLET_KIND_TECHNIQUE_GROUP) {
         return 0;
@@ -1974,7 +1955,6 @@ int BLTgetBindTime(void) {
 /* Attack-down duration (P2EATKDWNTIME). */
 int BLTgetAttackDownTime(const char *effectKey) {
     extern int g_mdlRecNo[4];
-    extern int g_mdlBulletKind[4];
     extern int g_bltShootRamNo[4];
     if (((int) g_mdlBulletKind[0] / BULLET_KIND_GROUP_SIZE) != BULLET_KIND_TECHNIQUE_GROUP) {
         return 0;
@@ -1995,7 +1975,6 @@ int BLTgetAttackDownTime(const char *effectKey) {
 /* Power-down duration (P2EPOWDWNTIME). */
 int BLTgetPowerDownTime(const char *effectKey) {
     extern int g_mdlRecNo[4];
-    extern int g_mdlBulletKind[4];
     extern int g_bltShootRamNo[4];
     if (((int) g_mdlBulletKind[0] / BULLET_KIND_GROUP_SIZE) != BULLET_KIND_TECHNIQUE_GROUP) {
         return 0;
@@ -2049,7 +2028,6 @@ int BLPisHitCheck(void) {
 /* E2PDAMAGE, the enemy-to-player counterpart of BLTgetDamageValue. Same caching of the reply
  * (damage, attribute, rank flag); the argument order differs from the P2E command. */
 int BLPgetDamageValue(void) {
-    extern int g_mdlBulletKind[4];
     extern int g_bltShootRamNo[4];
     int baseWork;
 
@@ -2087,7 +2065,6 @@ int BLPgetAttackZokusei(void) {
 /* E2PDAMAGERANK. The reply's rank is raised from 0 to 1 when the cached rank flag from the last
  * E2PDAMAGE is 1. The two integers are the script's arguments, appended unchanged. */
 int BLPgetDamageRank(int scriptArg1, int scriptArg2) {
-    extern int g_mdlBulletKind[4];
     int rank;
 
     beMessenger_SelectGroup(g_beMessenger[0], GAMERAM);
@@ -2108,7 +2085,6 @@ int BLPgetDamageRank(int scriptArg1, int scriptArg2) {
 /* E2PSTUNTIME. `scriptArg1`/`scriptArg2` are appended unchanged; the reply's first integer is the
  * stun duration. */
 int BLPgetStunTime(int scriptArg1, int scriptArg2) {
-    extern int g_mdlBulletKind[4];
     extern int g_bltShootRamNo[4];
     int baseWork;
 

@@ -133,7 +133,7 @@ int FUN_001774c0(igPsx2VisualContext *vc, Geometry1774 *geom, unsigned char *use
         } else {
             attrs = geom->attrs;
             node = (AttrNode1774 *)FUN_0015f4a0((S_15f430 *)attrs, 6, 0);
-            int m1 = DAT_00586818[0]; /* matching construct: spelling sweep — the compared metas are locals, spilled with sw */
+            int m1 = g_igUnsignedCharList_metaObject[0]; /* matching construct: spelling sweep — the compared metas are locals, spilled with sw */
             if (m1 == node->obj->meta()) {
                 matrices = node->obj->f16;
                 levels = node->f24;
@@ -143,7 +143,7 @@ int FUN_001774c0(igPsx2VisualContext *vc, Geometry1774 *geom, unsigned char *use
                     matrices = node->obj->f16;
                     levels = 3;
                 } else {
-                    int m3 = DAT_00561098[0];
+                    int m3 = g_igVec4ucList_metaObject[0];
                     if (m3 == node->obj->meta()) {
                         levels = 3;
                         matrices = node->obj->f16;
@@ -153,22 +153,22 @@ int FUN_001774c0(igPsx2VisualContext *vc, Geometry1774 *geom, unsigned char *use
             node = (AttrNode1774 *)FUN_0015f4a0((S_15f430 *)attrs, 5, 0);
             if (node != 0) {
                 value = node->obj;
-                if (value->meta() == DAT_00586898[0]) {
+                if (value->meta() == g_igCharList_metaObject[0]) {
                     int a = node->f32;
                     FUN_001eb5e0(3, 1, 7 - a, a);
                     texture = value->f16;
                     *useTexture = 1;
-                } else if (node->obj->meta() == DAT_00586818[0]) {
+                } else if (node->obj->meta() == g_igUnsignedCharList_metaObject[0]) {
                     int a = node->f32;
                     FUN_001eb5e0(3, 0, 8 - a, a);
                     texture = value->f16;
                     *useTexture = 1;
-                } else if (node->obj->meta() == DAT_00586830[0]) {
+                } else if (node->obj->meta() == g_igShortList_metaObject[0]) {
                     int a = node->f32;
                     FUN_001eb5e0(3, 1, 0xF - a, a);
                     texture = value->f16;
                     *useTexture = 1;
-                } else if (node->obj->meta() == DAT_00586840[0]) {
+                } else if (node->obj->meta() == g_igUnsignedShortList_metaObject[0]) {
                     int a = node->f32;
                     FUN_001eb5e0(3, 0, 0x10 - a, a);
                     texture = value->f16;
@@ -436,12 +436,12 @@ bool Gap__Gfx__igPsx2VisualContext__vfunc_255(igPsx2VisualContextStats *self, un
 
 void Gap__Gfx__igPsx2VisualContext__vfunc_258(void) {
     if (DAT_0048ac30[0] != 0) {
-        memset(&DAT_00560d20[0], 0, 0x1C8);
+        memset(&g_gsStatCurrent, 0, 0x1C8);
         DAT_00560ee8[0] = 0;
         DAT_0048ac30[0] = 0;
     }
     DAT_00560ef0[0] = DAT_00560ee8[0];
-    DAT_00560b50[0] = DAT_00560d20[0];
+    g_gsStatPrevious.c[0] = g_gsStatCurrent.c[0];
     DAT_00560b58[0] = DAT_00560d28[0];
     DAT_00560b60[0] = DAT_00560d30[0];
     DAT_00560b68[0] = DAT_00560d38[0];
@@ -498,7 +498,7 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_258(void) {
     DAT_00560d00[0] = DAT_00560ed0[0];
     DAT_00560d08[0] = DAT_00560ed8[0];
     DAT_00560d10[0] = DAT_00560ee0[0];
-    FUN_001f6f50(&DAT_00560d20[0], DAT_00560ed0[0], DAT_00560ec8[0], DAT_00560ea0[0]);
+    FUN_001f6f50(&g_gsStatCurrent, DAT_00560ed0[0], DAT_00560ec8[0], DAT_00560ea0[0]);
 }
 
 float Gap__Gfx__igPsx2VisualContext__vfunc_259(void *unused, int id) {
@@ -616,7 +616,7 @@ void FUN_00179e00(StatContext *arg0) {
     int a1;
     Ref_1778e0 sp6C((O_1778e0 *)FUN_002b9500(FUN_00165d00((int *)arg0)));
     Ref_1778e0 sp68((O_1778e0 *)FUN_002b9500(FUN_00165d00((int *)arg0)));
-    s3 = ((G_1778e0 *)DAT_00586dc8[0])->f56;
+    s3 = ((G_1778e0 *)g_objectSystem[0])->f56;
     s2 = 0;
     FUN_0030b3c0((O_1778e0 *)sp6C, DAT_004e07b0);
     FUN_0030b720(sp68, 0, DAT_004de6a8);
@@ -751,7 +751,7 @@ void FUN_0017a300(Self_17a070 *self) {
     T *o;
     int i;
     sp5C = 0x40;
-    thunk_FUN_003065f0(*(int *)((char *)DAT_00586dc8[0] + 56), 4, DAT_004e0800, &sp5C, 0x40, 0);
+    thunk_FUN_003065f0(*(int *)((char *)g_objectSystem[0] + 56), 4, DAT_004e0800, &sp5C, 0x40, 0);
     Buf_17a070 *r = (Buf_17a070 *)Memory_AllocateBufferDirect(0x14, FUN_00165d10((int *)self));
     if (r != 0) {
         bi = (int)r;
@@ -762,12 +762,12 @@ void FUN_0017a300(Self_17a070 *self) {
         int *old;
         int *tok;
         b->f8 = 0;
-        if (DAT_00586f20[0] == 0) {
+        if (g_stringPool[0] == 0) {
             int pool = FUN_002eb010(0x10);
             if (pool != 0) pool = StringPool_Construct(pool);
-            DAT_00586f20[0] = pool;
+            g_stringPool[0] = pool;
         }
-        tok = (int *)StringPool_Intern(DAT_00586f20[0], DAT_004e0800);
+        tok = (int *)StringPool_Intern(g_stringPool[0], DAT_004e0800);
         old = (int *)b->f8;
         if (old != 0) {
             int *h = old - 2;
@@ -947,10 +947,10 @@ int FUN_0017aa20(TexContext *context, int width, int height, int format, int kin
         entry->buffers[i] = 0;
     }
     if (format < 0x10000) {
-        DAT_00560ef8 += (unsigned int)(DAT_0048ac70[format] * (width * height));
+        g_gsRawCounter[0] += (unsigned int)(DAT_0048ac70[format] * (width * height));
     }
     if (format >= 0x10000) {
-        DAT_00560ef8 += (DAT_0048aca0[format - 0x10000] * (width * height)) >> 1;
+        g_gsRawCounter[0] += (DAT_0048aca0[format - 0x10000] * (width * height)) >> 1;
     }
     if (entry->kind == 2) {
         adoptNewImage(entry->image, AdoptReference());
@@ -1198,10 +1198,10 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_131(TexContext *context, int index)
         }
     }
     if (entry->format < 0x10000) {
-        DAT_00560ef8 += -(DAT_0048ac70[entry->format] * (entry->width * entry->height));
+        g_gsRawCounter[0] += -(DAT_0048ac70[entry->format] * (entry->width * entry->height));
     }
     if (entry->format >= 0x10000) {
-        DAT_00560ef8 += (int)-((DAT_0048aca0[entry->format - 0x10000] * (entry->width * entry->height)) >> 1);
+        g_gsRawCounter[0] += (int)-((DAT_0048aca0[entry->format - 0x10000] * (entry->width * entry->height)) >> 1);
     }
     FUN_0017a180(entry);
     list = context->texList;

@@ -1,12 +1,12 @@
 void *FUN_00355a40(void) {
     unsigned char b;
-    if (DAT_00588df0[0] != 0) {
-        b = (*(int *)((char *)(DAT_00588df0[0]) + 36) & 4) != 0;
+    if (g_beModelCtrlMSGBOX_metaObject[0] != 0) {
+        b = (*(int *)((char *)(g_beModelCtrlMSGBOX_metaObject[0]) + 36) & 4) != 0;
         if (b != 0) goto done;
     }
     FUN_00355b20();
 done:
-    return DAT_00588df0[0];
+    return g_beModelCtrlMSGBOX_metaObject[0];
 }
 
 int beModelCtrlMSGBOX_GetVTable(void) {
@@ -21,7 +21,7 @@ int beModelCtrlMSGBOX_GetVTable(void) {
     *(int *)q1 = 0;
     u.w[0] = (int)(&DAT_00524950[0]);
     u.w[0] = (int)(&DAT_005374d0[0]);
-    temp_s0 = *(int *)&u.b[*(int *)((char *)(DAT_00586dc8[0]) + 916)];
+    temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.w[0] = (int)(&DAT_00524950[0]);
     if (q1 != 0) {
         tv1 = *(int **)q1;

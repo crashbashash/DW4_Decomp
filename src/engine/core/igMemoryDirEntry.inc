@@ -24,7 +24,7 @@ int igMemoryDirEntry_GetVTable(void) {
     q1 = &u.b[8];
     *(int *)q1 = 0;
     u.w[0] = (int)(&DAT_0052f860[0]);
-    temp_s0 = *(int *)&u.b[*(int *)((char *)(((void * *)DAT_00586dc8)[0]) + 916)];
+    temp_s0 = *(int *)&u.b[*(int *)((char *)(((void * *)g_objectSystem)[0]) + 916)];
     u.w[0] = (int)(&DAT_00524950[0]);
     if (q1 != 0) {
         tv1 = *(int **)q1;
@@ -72,14 +72,14 @@ void igMemoryDirEntry_InitFields(void) {
     void *temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)DAT_00585f60[0];
+    temp_s0 = (void *)g_igMemoryDirEntry_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
     igMetaObject_CreateFields((igMetaObject *)temp_s0, (igMetaField * (**)(void *))&DAT_004c0300[0], 7);
     temp_v0 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 1)));
     FUN_002ea4b0((void **)temp_v0, -1);
     *(char *)((char *)(temp_v0) + 38) = 0;
     temp_s1 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 2)));
-    *(int *)((char *)(temp_s1) + 56) = FUN_002beca0();
+    *(int *)((char *)(temp_s1) + 56) = (int)FUN_002beca0();
     FUN_00303460((igObjectRefMetaField *)temp_s1, (igObject *)(FUN_002cc2c0()));
     *(char *)((char *)(temp_s1) + 60) = 0;
     *(char *)((char *)(temp_s1) + 38) = 0;

@@ -3,19 +3,19 @@ void FUN_0035dbd0(int arg0) {
     igMetaObject_CreateInstance(*(int *)0x589380, arg0);
 }
 
-int FUN_0035dc10(void) {
-    if (((int *)DAT_00589380)[0] == 0) {
-        ((int *)DAT_00589380)[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(DAT_00587040[0]));
+igMetaObject *FUN_0035dc10(void) {
+    if (g_beHitLandModelTraversal_metaObject[0] == 0) {
+        g_beHitLandModelTraversal_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
     }
-    return ((int *)DAT_00589380)[0];
+    return g_beHitLandModelTraversal_metaObject[0];
 }
 
 void *FUN_0035dc60(void) {
-    struct G *g = DAT_00589380[0];
-    if (!g || ((g->f & 4) != 0) == false) {
+    igMetaObject *g = g_beHitLandModelTraversal_metaObject[0];
+    if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_0035dd30();
     }
-    return DAT_00589380[0];
+    return g_beHitLandModelTraversal_metaObject[0];
 }
 
 int beHitLandModelTraversal_GetVTable(void) {
@@ -33,7 +33,7 @@ int beHitLandModelTraversal_GetVTable(void) {
     u.vt = (int)&DAT_00536360[0];
     ps = &u.b[64];
     *(int *)ps = 0;
-    t = *(int *)&u.b[*(int *)((char *)(DAT_00586dc8[0]) + 916)];
+    t = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.vt = (int)&DAT_00536360[0];
     FUN_0035d930((void **)ps, -1);
     FUN_0019e150(u.b, 0);
@@ -68,7 +68,7 @@ void beHitLandModelTraversal_GetMetaObject(void)
 }
 
 int FUN_0035ddf0(void) {
-    return DAT_00561930[0];
+    return g_igIntersectTraversal_metaObject[0];
 }
 
 void beHitLandModelTraversal_InitFields(void) {
@@ -76,11 +76,11 @@ void beHitLandModelTraversal_InitFields(void) {
     void *temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)((int *)DAT_00589380)[0];
+    temp_s0 = (void *)g_beHitLandModelTraversal_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_004c6670[0], 1);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = FUN_0035ded0();
+    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_0035ded0();
     igMetaObject_NameFields(temp_s0, &DAT_004c6678[0], &DAT_004c6680[0], &DAT_004c6688[0], temp_s2);
 }
 

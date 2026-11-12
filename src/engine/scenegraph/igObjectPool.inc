@@ -11,7 +11,7 @@ int igObjectPool_GetVTable(void) {
 
     igObject_InitHeader(&obj);
     obj.vt = &DAT_0052b5c0[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 
 void FUN_001967c0(void)
@@ -44,7 +44,7 @@ void igObjectPool_InitFields(void) {
     int temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)DAT_005612e8[0];
+    temp_s0 = (void *)g_igObjectPool_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_0048b1d0[0], 3);
     FUN_002ea4b0(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 1), 0x32);

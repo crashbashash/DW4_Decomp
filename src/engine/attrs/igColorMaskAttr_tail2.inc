@@ -1,4 +1,4 @@
-int Gap__Attrs__igColorMaskAttr__vfunc_22(void) {
-    return DAT_0055f2b0[0];
+igMetaObject *Gap__Attrs__igColorMaskAttr__vfunc_22(void) {
+    return g_igColorMaskAttr_metaObject[0];
 }
 

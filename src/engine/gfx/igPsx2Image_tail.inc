@@ -18,7 +18,7 @@ int igPsx2Image_GetVTable(void) {
     ps = &u.b[88];
     *(int *)ps = 0;
     u.vt = (int)&DAT_00525630[0];
-    r = *(int *)&u.b[*(int *)((char *)(DAT_00586dc8[0]) + 916)];
+    r = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.vt = (int)&DAT_00526800[0];
     if (ps != 0) {
         v1 = *(int **)ps;
@@ -65,11 +65,11 @@ void igPsx2Image_Register(void) {
     );
 }
 
-int FUN_00153ee0(void) {
-    return DAT_0055fd70[0];
+igMetaObject *FUN_00153ee0(void) {
+    return g_igMemoryImage_metaObject[0];
 }
 
 void FUN_00153ef0(void) {
-    *(int *)((char *)(DAT_005605e0[0]) + 64) = (int)(&thunk_igImage_GetMetaObject);
+    *(int *)((char *)(g_igPsx2Image_metaObject[0]) + 64) = (int)(&thunk_igImage_GetMetaObject);
 }
 

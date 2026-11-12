@@ -3,12 +3,12 @@
 #define SET_KEYNAME(w, text) { \
     const char *tok_; \
     int *old_; \
-    if (((void * *)DAT_00586f20)[0] == 0) { \
+    if (((void * *)g_stringPool)[0] == 0) { \
         void *pool_ = FUN_002eb010(0x10); \
         if (pool_ != 0) pool_ = StringPool_Construct(pool_); \
-        ((void * *)DAT_00586f20)[0] = pool_; \
+        ((void * *)g_stringPool)[0] = pool_; \
     } \
-    tok_ = StringPool_Intern(((void * *)DAT_00586f20)[0], (text)); \
+    tok_ = StringPool_Intern(((void * *)g_stringPool)[0], (text)); \
     old_ = (int *)(w)->_keyEventName; \
     if (old_ != 0) { \
         int *hdr_ = old_ - 2; \
@@ -78,9 +78,9 @@ extern "C" void beMessenger_AppendVec3(int, int *);
 extern "C" void beMessenger_AppendBool(int, int);
 extern "C" void *FUN_003bf830(void);
 extern "C" int Gap__Bec__beNDMWMdlPlayer__vfunc_20(void);
-extern "C" int DAT_00588518[4];
-extern "C" int DAT_0058c0a0[4];
-extern "C" int DAT_0058c790[4];
+extern "C" int g_bePadManager_metaObject[4];
+extern "C" int g_beNDMWGameRam_metaObject[4];
+extern "C" int g_igViewerSceneInfoManager_metaObject[4];
 extern "C" void Gap__Bec__beNDMWMdlPlayer__vfunc_23(beNDMWMdlPlayer *arg0);
 extern "C" int DAT_00516028[4];
 extern "C" char DAT_00516038[];
@@ -131,8 +131,8 @@ extern "C" int DAT_00516248[4];
 extern "C" int DAT_00516250[4];
 extern "C" int DAT_00516258[4];
 extern "C" int DAT_00516260[4];
-extern "C" int DAT_00585be0[4];
-extern "C" int DAT_00587110[4];
+extern "C" int g_propertyNameField[4];
+extern "C" int g_defaultAllocatorSelector[4];
 extern "C" unsigned char GPR_00554c14;
 struct NamedRef {
     RefHdr *p;
@@ -149,7 +149,7 @@ struct Locals {
         RefHdr *rr;
         RefHdr *old;
         alloc = ((void *)igObject_GetAllocator(arg1));
-        alloc = GPR_00554c14 ? alloc : ((void *)Memory_GetAllocatorBySelector(DAT_00587110[0]));
+        alloc = GPR_00554c14 ? alloc : ((void *)Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]));
         {
             igSmartPointer<igObject> obj(beBaseInfoDataList_Create(alloc));
             rr = (RefHdr *)obj.p;
@@ -170,14 +170,14 @@ extern "C" void Gap__Bec__beNDMWMdlPlayer__vfunc_38(beNDMWMdlPlayer *arg0, Playe
 extern "C" igObject * beBaseInfoDataList_Create(...);
 struct PropertyRecord { char header[20]; beNDMWMdlPlayerInfoWork *value; };
 extern "C" PropertyRecord * igProperty_FindByName(...);
-extern "C" int DAT_004e0858[4];
+extern "C" int emptyString[4];
 extern "C" int DAT_00516270[4];
 extern "C" int DAT_00516278[4];
 extern "C" int DAT_00516280[4];
 extern "C" int DAT_00516290[4];
 extern "C" int DAT_00516298[4];
 extern "C" int DAT_005162a0[4];
-extern "C" int DAT_00586f20[4];
+extern "C" int g_stringPool[4];
 /* matching construct: inline release helper reproduces the retail release sequence */
 struct ReleaseRef { static inline void go(igObject *object) {
     if (object) {
@@ -301,7 +301,7 @@ extern "C" void FUN_00445200(void *, Msg *);
 extern "C" char DAT_005164b8[];
 extern "C" char DAT_005164c8[];
 extern "C" char DAT_005164d8[];
-extern "C" igResult DAT_004fb410;
+extern "C" igResult g_statusSucceeded;
 extern "C" void Gap__Bec__beNDMWMdlPlayer__vfunc_44(beNDMWMdlPlayer *self, Msg *msg);
 struct PropertyRecord_3d45f0 { char p[16]; int f16; PropertyData *q; };
 extern "C" int DAT_004cc810[4];
@@ -327,9 +327,9 @@ extern "C" int g_beNDMWMdlPlayer_metaObject[4];
 
 void Gap__Bec__beNDMWMdlPlayer__vfunc_23(beNDMWMdlPlayer *arg0) {
     Gap__Core__igObject__vfunc_23();
-    arg0->_gameRam = FUN_00236f80(arg0->_insight, DAT_0058c0a0[0]);
-    arg0->_padManager = FUN_00236f80(arg0->_insight, DAT_00588518[0]);
-    arg0->_viewerSIManager = FUN_00236f80(arg0->_insight, DAT_0058c790[0]);
+    arg0->_gameRam = FUN_00236f80(arg0->_insight, g_beNDMWGameRam_metaObject[0]);
+    arg0->_padManager = FUN_00236f80(arg0->_insight, g_bePadManager_metaObject[0]);
+    arg0->_viewerSIManager = FUN_00236f80(arg0->_insight, g_igViewerSceneInfoManager_metaObject[0]);
 }
 
 int Gap__Bec__beNDMWMdlPlayer__vfunc_35(int dummy0, int arg1) {
@@ -359,7 +359,7 @@ void Gap__Bec__beNDMWMdlPlayer__vfunc_38(beNDMWMdlPlayer *arg0, PlayerArg *arg1)
     float spE8[3];
 
     if (arg1->props == 0) Locals::CreateProps(arg1);
-    w = ((PropRec *)igProperty_FindByName(arg1->props, DAT_00585be0[0], DAT_00516110))->work;
+    w = ((PropRec *)igProperty_FindByName(arg1->props, g_propertyNameField[0], DAT_00516110))->work;
     pad = bePadManager_GetPadForPlayer(arg0->_padManager, arg1->id);
     lStk = pad->_lStk;
     stickX = *(float *)&pad->_LStick[0];
@@ -489,7 +489,7 @@ void Gap__Bec__beNDMWMdlPlayer__vfunc_38(beNDMWMdlPlayer *arg0, PlayerArg *arg1)
                 if (w->_isMainLobby != 0) {
                     int *o;
                     void *al2 = ((void *)igObject_GetAllocator(arg0));
-                    al2 = GPR_00554c14 ? al2 : ((void *)Memory_GetAllocatorBySelector(DAT_00587110[0]));
+                    al2 = GPR_00554c14 ? al2 : ((void *)Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]));
                     {
                         NamedRef nobj((RefHdr *)FUN_00354a60(al2));
                         igNamedObject_SetName((void *)nobj.p, DAT_005161d0);
@@ -569,7 +569,7 @@ void Gap__Bec__beNDMWMdlPlayer__vfunc_39(beNDMWMdlPlayer *arg0, beBaseInfoRam *a
         if (GPR_00554c14 != 0) {
             a = alloc;
         } else {
-            a = Memory_GetAllocatorBySelector(DAT_00587110[0]);
+            a = Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
         }
         igSmartPointer<igObject> created(beBaseInfoDataList_Create(a));
         t0 = created.p;
@@ -579,7 +579,7 @@ void Gap__Bec__beNDMWMdlPlayer__vfunc_39(beNDMWMdlPlayer *arg0, beBaseInfoRam *a
         ReleaseRef::go((igObject *)arg1->_dataList);
         arg1->_dataList = (int)t0;
     }
-    s0 = igProperty_FindByName((void *)arg1->_dataList, DAT_00585be0[0], DAT_00516110)->value;
+    s0 = igProperty_FindByName((void *)arg1->_dataList, g_propertyNameField[0], DAT_00516110)->value;
     s4 = 0;
     if (s0->_isOnCtrl != 0) {
         s4 = bePadManager_GetPadForPlayer(arg0->_padManager, arg1->_ramNo)->_button;
@@ -595,15 +595,15 @@ void Gap__Bec__beNDMWMdlPlayer__vfunc_39(beNDMWMdlPlayer *arg0, beBaseInfoRam *a
             }
             a2 = (int *)s1->_name;
             a3 = arg1->_ramNo;
-            a2 = a2 ? a2 : DAT_004e0858;
+            a2 = a2 ? a2 : emptyString;
             beMessenger_SendNamed(arg0->_messenger, DAT_00516278, a2, a3, DAT_00516280);
             if (beMessenger_GetBool(arg0->_messenger, 0) != 0) {
-                if (DAT_00586f20[0] == 0) {
+                if (g_stringPool[0] == 0) {
                     int n = ((int)FUN_002eb010(16));
                     if (n != 0) n = ((int)StringPool_Construct(n));
-                    DAT_00586f20[0] = n;
+                    g_stringPool[0] = n;
                 }
-                ni1 = ((int *)StringPool_Intern(DAT_00586f20[0], 0));
+                ni1 = ((int *)StringPool_Intern(g_stringPool[0], 0));
                 old1 = (int *)s0->_wCheckName;
                 if (old1 != 0) {
                     int *hd = old1 - 2;
@@ -628,15 +628,15 @@ void Gap__Bec__beNDMWMdlPlayer__vfunc_39(beNDMWMdlPlayer *arg0, beBaseInfoRam *a
         }
         a2 = (int *)s1->_name;
         a3 = arg1->_ramNo;
-        a2 = a2 ? a2 : DAT_004e0858;
+        a2 = a2 ? a2 : emptyString;
         beMessenger_SendNamed(arg0->_messenger, DAT_00516278, a2, a3, DAT_00516280);
         if (beMessenger_GetBool(arg0->_messenger, 0) != 0) {
-            if (DAT_00586f20[0] == 0) {
+            if (g_stringPool[0] == 0) {
                 int n = ((int)FUN_002eb010(16));
                 if (n != 0) n = ((int)StringPool_Construct(n));
-                DAT_00586f20[0] = n;
+                g_stringPool[0] = n;
             }
-            ni2 = ((int *)StringPool_Intern(DAT_00586f20[0], 0));
+            ni2 = ((int *)StringPool_Intern(g_stringPool[0], 0));
             old2 = (int *)s0->_wCheckName;
             if (old2 != 0) {
                 int *hd = old2 - 2;
@@ -648,12 +648,12 @@ void Gap__Bec__beNDMWMdlPlayer__vfunc_39(beNDMWMdlPlayer *arg0, beBaseInfoRam *a
             FUN_00395250(arg0, s1, arg1, s0);
         }
     } else if (strcmp(s0->_wCheckName, DAT_005162a0) == 0 && !(s4 & 0x4000)) {
-        if (DAT_00586f20[0] == 0) {
+        if (g_stringPool[0] == 0) {
             int n = ((int)FUN_002eb010(16));
             if (n != 0) n = ((int)StringPool_Construct(n));
-            DAT_00586f20[0] = n;
+            g_stringPool[0] = n;
         }
-        ni3 = ((int *)StringPool_Intern(DAT_00586f20[0], 0));
+        ni3 = ((int *)StringPool_Intern(g_stringPool[0], 0));
         old3 = (int *)s0->_wCheckName;
         if (old3 != 0) {
             int *hd = old3 - 2;
@@ -681,21 +681,21 @@ void Gap__Bec__beNDMWMdlPlayer__vfunc_36(beNDMWMdlPlayer *arg0, beBaseInfoRam *a
         if (GPR_00554c14 != 0) {
             a = alloc;
         } else {
-            a = Memory_GetAllocatorBySelector(DAT_00587110[0]);
+            a = Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
         }
         igObject *created = beBaseInfoDataList_Create(a);
         /* matching construct: the new list is a temporary bound to the setter's reference parameter (it
          * takes the stack slot below the named references, as retail's +0x100 does) */
         Slot::adopt(arg1, created);
     }
-    s3 = ((PropertyRecord_3d3640 *)igProperty_FindByName((void *)arg1->_dataList, DAT_00585be0[0], DAT_00516110));
+    s3 = ((PropertyRecord_3d3640 *)igProperty_FindByName((void *)arg1->_dataList, g_propertyNameField[0], DAT_00516110));
     {
         int alloc = igObject_GetAllocator(arg0);
         int a;
         if (GPR_00554c14 != 0) {
             a = alloc;
         } else {
-            a = Memory_GetAllocatorBySelector(DAT_00587110[0]);
+            a = Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
         }
         InfoWorkRef work(FUN_003bfc80(a));
         s0o = work.p;
@@ -715,7 +715,7 @@ void Gap__Bec__beNDMWMdlPlayer__vfunc_36(beNDMWMdlPlayer *arg0, beBaseInfoRam *a
             if (GPR_00554c14 != 0) {
                 a = alloc;
             } else {
-                a = Memory_GetAllocatorBySelector(DAT_00587110[0]);
+                a = Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
             }
             IntListRef timer(FUN_002caa70(a));
             {
@@ -808,7 +808,7 @@ void Gap__Bec__beNDMWMdlPlayer__vfunc_36(beNDMWMdlPlayer *arg0, beBaseInfoRam *a
         beMessenger_SelectGroup(arg0->_messenger, DAT_00516388);
         beMessenger_AppendInt(arg0->_messenger, arg1->_ramNo);
         a1 = s6->name;
-        a1 = a1 ? a1 : DAT_004e0858;
+        a1 = a1 ? a1 : emptyString;
         beMessenger_AppendString(arg0->_messenger, a1);
         beMessenger_AppendString(arg0->_messenger, DAT_004cc7d0[arg1->_ramNo]);
         beMessenger_DispatchSelected(arg0->_messenger, DAT_005163e0);
@@ -871,7 +871,7 @@ void Gap__Bec__beNDMWMdlPlayer__vfunc_40(beNDMWMdlPlayer *arg0, struct Unidentif
 
     if (arg1->f40 == 0) {
         int al = igObject_GetAllocator(arg1);
-        igSmartPointer<igObject> created(beBaseInfoDataList_Create(GPR_00554c14 != 0 ? al : Memory_GetAllocatorBySelector(DAT_00587110[0])));
+        igSmartPointer<igObject> created(beBaseInfoDataList_Create(GPR_00554c14 != 0 ? al : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0])));
         igObject *t = created.p;
         if (t != 0) {
             t->_refCount = t->_refCount + 1;
@@ -885,7 +885,7 @@ void Gap__Bec__beNDMWMdlPlayer__vfunc_40(beNDMWMdlPlayer *arg0, struct Unidentif
         }
         arg1->f40 = t;
     }
-    q = (struct PropertyPayload *)((struct PropertyRecord_3d40f0 *)igProperty_FindByName(arg1->f40, DAT_00585be0[0], &DAT_00516110[0]))->f20;
+    q = (struct PropertyPayload *)((struct PropertyRecord_3d40f0 *)igProperty_FindByName(arg1->f40, g_propertyNameField[0], &DAT_00516110[0]))->f20;
     if (q->f292 != 0) {
         q->f292 = 0U;
         beMessenger_SendNamed(arg0->_messenger, &DAT_00516148[0], 0, arg1->f8, &DAT_005164b0[0]);
@@ -901,7 +901,7 @@ void Gap__Bec__beNDMWMdlPlayer__vfunc_41(beNDMWMdlPlayer *arg0, beBaseInfoRam *a
         if (GPR_00554c14 != 0) {
             a = alloc;
         } else {
-            a = Memory_GetAllocatorBySelector(DAT_00587110[0]);
+            a = Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
         }
         igSmartPointer<igObject> ref(beBaseInfoDataList_Create(a));
         s0 = ref.p;
@@ -915,7 +915,7 @@ void Gap__Bec__beNDMWMdlPlayer__vfunc_41(beNDMWMdlPlayer *arg0, beBaseInfoRam *a
         }
         arg1->_dataList = (int)s0;
     }
-    PropertyData *q = ((PropertyRecord_3d4240 *)igProperty_FindByName(arg1->_dataList, DAT_00585be0[0], DAT_00516110))->q;
+    PropertyData *q = ((PropertyRecord_3d4240 *)igProperty_FindByName(arg1->_dataList, g_propertyNameField[0], DAT_00516110))->q;
     if (q->f292 != 0) {
         q->f292 = 0;
         beMessenger_SendNamed(arg0->_messenger, DAT_00516148, 0, arg1->_ramNo, DAT_005164b0);
@@ -930,7 +930,7 @@ static inline void ensureCache(Msg *msg)
         if (GPR_00554c14 != 0) {
             al2 = al;
         } else {
-            al2 = ((void *)Memory_GetAllocatorBySelector(DAT_00587110[0]));
+            al2 = ((void *)Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]));
         }
         igSmartPointer<igObject> t(beBaseInfoDataList_Create(al2));
         Ref *r = (Ref *)t.p;
@@ -954,11 +954,11 @@ void Gap__Bec__beNDMWMdlPlayer__vfunc_44(beNDMWMdlPlayer *self, Msg *msg)
     int tmp;
     ensureCache(msg);
     Ref *c0 = msg->cache;
-    pinfo = igProperty_FindByName(c0, DAT_00585be0[0], ((char *)DAT_00516110))->value;
+    pinfo = igProperty_FindByName(c0, g_propertyNameField[0], ((char *)DAT_00516110))->value;
     if (strcmp(pinfo->_seqCodeName, ((char *)DAT_00516290)) == 0) {
         const char *who = *(char **)(minfo + 8);
         int num = msg->number;
-        const char *w2 = who ? who : ((char *)DAT_004e0858);
+        const char *w2 = who ? who : ((char *)emptyString);
         beMessenger_SelectReceivers(self->_messenger, ((char *)DAT_00516228), w2, num);
         beMessenger_AppendString(self->_messenger, DAT_005164b8);
         sprintf(name, DAT_005164c8, msg->number);
@@ -971,7 +971,7 @@ void Gap__Bec__beNDMWMdlPlayer__vfunc_44(beNDMWMdlPlayer *self, Msg *msg)
         beMessenger_DispatchSelected(self->_messenger, DAT_005164d8);
     }
     if (pinfo->_isPanel != 0) {
-        if (igMetaEnum_GetValueByName(FUN_003bf830(), pinfo->_seqCodeName, &tmp) == DAT_004fb410) {
+        if (igMetaEnum_GetValueByName(FUN_003bf830(), pinfo->_seqCodeName, &tmp) == g_statusSucceeded) {
             pinfo->_isPanel = 0;
             beMessenger_SendNamed(self->_messenger, ((char *)DAT_00516148), 0, msg->number, ((char *)DAT_005164b0));
         }
@@ -989,7 +989,7 @@ void Gap__Bec__beNDMWMdlPlayer__vfunc_43(beNDMWMdlPlayer *arg0, RamInfoArg *arg1
         if (GPR_00554c14 != 0) {
             a = alloc;
         } else {
-            a = Memory_GetAllocatorBySelector(DAT_00587110[0]);
+            a = Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
         }
         {
             igSmartPointer<igObject> r(beBaseInfoDataList_Create(a));
@@ -1001,7 +1001,7 @@ void Gap__Bec__beNDMWMdlPlayer__vfunc_43(beNDMWMdlPlayer *arg0, RamInfoArg *arg1
             arg1->m40 = s0;
         }
     }
-    s3 = ((PropertyRecord_3d45f0 *)igProperty_FindByName(arg1->m40, DAT_00585be0[0], DAT_00516110));
+    s3 = ((PropertyRecord_3d45f0 *)igProperty_FindByName(arg1->m40, g_propertyNameField[0], DAT_00516110));
     q = s3->q;
     beMessenger_SelectReceivers(arg0->_messenger, DAT_00516228, DAT_00516528, arg1->f8);
     beMessenger_AppendMatrix(arg0->_messenger, s3->f16 + 32);
@@ -1030,7 +1030,7 @@ void Gap__Bec__beNDMWMdlPlayer__vfunc_42(beNDMWMdlPlayer *arg0, beBaseInfoRam *a
         if (GPR_00554c14 != 0) {
             a = alloc;
         } else {
-            a = Memory_GetAllocatorBySelector(DAT_00587110[0]);
+            a = Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
         }
         igSmartPointer<igObject> created(beBaseInfoDataList_Create(a));
         s0 = created.p;
@@ -1040,7 +1040,7 @@ void Gap__Bec__beNDMWMdlPlayer__vfunc_42(beNDMWMdlPlayer *arg0, beBaseInfoRam *a
         Rel::go(((igObject *)arg1->_dataList));
         arg1->_dataList = (int)s0;
     }
-    PropertyValueView *q = ((PropertyRecordView *)igProperty_FindByName(((igObject *)arg1->_dataList), DAT_00585be0[0], DAT_00516110))->q;
+    PropertyValueView *q = ((PropertyRecordView *)igProperty_FindByName(((igObject *)arg1->_dataList), g_propertyNameField[0], DAT_00516110))->q;
     if (q->f292 != 0) {
         q->f292 = 0;
         beMessenger_SendNamed(arg0->_messenger, DAT_00516148, 0, arg1->_ramNo, DAT_005164b0);

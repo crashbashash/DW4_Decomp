@@ -4,11 +4,11 @@ void FUN_003b6e60(int arg0) {
 }
 
 void *FUN_003b6ea0(void) {
-    struct G *g = DAT_0058ace0[0];
-    if (!g || ((g->f & 4) != 0) == false) {
+    igMetaObject *g = g_beNDMWShopCtrlDiskSell_metaObject[0];
+    if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_003b6f80();
     }
-    return DAT_0058ace0[0];
+    return g_beNDMWShopCtrlDiskSell_metaObject[0];
 }
 
 int beNDMWShopCtrlDiskSell_GetVTable(void) {
@@ -25,7 +25,7 @@ int beNDMWShopCtrlDiskSell_GetVTable(void) {
     u.w[19] = 0;
     u.w[0] = (int)(&DAT_0053f950[0]);
     u.w[21] = 0;
-    temp_s0 = *(int *)&u.b[*(int *)((char *)(DAT_00586dc8[0]) + 916)];
+    temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.w[0] = (int)(&DAT_0053f950[0]);
     ObjectRef_Destruct_00150eb0(&u.w[21], -1);
     beNDMWWindowCtrl_Destroy((beNDMWWindowCtrl *)(&u.w[0]), (long long)0);
@@ -64,7 +64,7 @@ void beNDMWShopCtrlDiskSell_InitFields(void) {
     void *temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)((int *)DAT_0058ace0)[0];
+    temp_s0 = (void *)g_beNDMWShopCtrlDiskSell_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_004c99c0[0], 5);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));

@@ -5,13 +5,13 @@ void FUN_003647c0(int arg0) {
 
 void *FUN_00364800(void) {
     bool ok;
-    if (DAT_00589868[0] == 0) goto make;
-    ok = !!(DAT_00589868[0]->f & 4);
+    if (g_beDataObjStringList_metaObject[0] == 0) goto make;
+    ok = !!(g_beDataObjStringList_metaObject[0]->_validity & 4);
     if (ok != false) goto done;
 make:
     FUN_00364930();
 done:;
-    return DAT_00589868[0];
+    return g_beDataObjStringList_metaObject[0];
 }
 
 int beDataObjStringList_GetVTable(void) {
@@ -22,7 +22,7 @@ int beDataObjStringList_GetVTable(void) {
     obj.m8 = 0;
     obj.vt = &DAT_00535410[0];
     obj.m12 = 0;
-    r = *(int *)((char *)&obj + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+    r = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
     obj.vt = &DAT_00535410[0];
     obj.rel12();
     obj.vt = &DAT_00524950[0];
@@ -62,7 +62,7 @@ void beDataObjStringList_InitFields(void) {
     void *temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)((int *)DAT_00589868)[0];
+    temp_s0 = (void *)g_beDataObjStringList_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_004c7168[0], 1);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));

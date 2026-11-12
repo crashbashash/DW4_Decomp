@@ -1,9 +1,9 @@
 void *FUN_003b5bb0(void) {
-    struct G *g = DAT_0058ac38[0];
-    if (!g || ((g->f & 4) != 0) == false) {
+    igMetaObject *g = g_beNDMWStatusInfoRam_metaObject[0];
+    if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_003b5d70();
     }
-    return DAT_0058ac38[0];
+    return g_beNDMWStatusInfoRam_metaObject[0];
 }
 
 int beNDMWStatusInfoRam_GetVTable(void) {
@@ -21,7 +21,7 @@ int beNDMWStatusInfoRam_GetVTable(void) {
     u.vt = (int)&DAT_0053db60[0];
     p5C = &u.b[44];
     *(int *)p5C = 0;
-    r = *(int *)&u.b[*(int *)((char *)(DAT_00586dc8[0]) + 916)];
+    r = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.vt = (int)&DAT_0053db60[0];
     if (p5C != 0) {
         v1 = *(int **)p5C;
@@ -90,11 +90,11 @@ void beNDMWStatusInfoRam_InitFields(void) {
     void *temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)((int *)DAT_0058ac38)[0];
+    temp_s0 = (void *)g_beNDMWStatusInfoRam_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_004c9840[0], 1);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = FUN_003b5f00();
+    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_003b5f00();
     igMetaObject_NameFields(temp_s0, &DAT_004c9848[0], &DAT_004c9850[0], &DAT_004c9858[0], temp_s2);
 }
 

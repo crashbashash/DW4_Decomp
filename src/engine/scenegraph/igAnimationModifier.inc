@@ -20,7 +20,7 @@ int igAnimationModifier_GetVTable(void) {
     igObject_InitHeader(&obj);
     obj.vt = &DAT_00529ee0[0];
     obj.m = 0;
-    t = *(int *)((char *)&obj + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+    t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
     obj.vt = &DAT_00529ee0[0];
     if (&obj.m != 0) {
         o = obj.m;
@@ -75,12 +75,12 @@ void igAnimationModifier_InitFields(void) {
     void *temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)DAT_00562200[0];
+    temp_s0 = (void *)g_igAnimationModifier_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_0048d1b8[0], 3);
     FUN_002ea4b0(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s2)), -1);
     temp_s1 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1)));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = FUN_00196190();
+    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_00196190();
     temp_v0 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s2 + 2)));
     FUN_002dc7a0(temp_v0, &DAT_0048d1f8[0]);
     ((igEnumMetaField *)temp_v0)->_getMetaEnumFunction = (int)(FUN_001a7440);

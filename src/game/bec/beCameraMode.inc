@@ -3,19 +3,19 @@ void FUN_003689f0(int arg0) {
     igMetaObject_CreateInstance(*(int *)0x589B90, arg0);
 }
 
-int FUN_00368a30(void) {
-    if (((int *)DAT_00589b90)[0] == 0) {
-        ((int *)DAT_00589b90)[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(DAT_00587040[0]));
+igMetaObject *FUN_00368a30(void) {
+    if (g_beCameraMode_metaObject[0] == 0) {
+        g_beCameraMode_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
     }
-    return ((int *)DAT_00589b90)[0];
+    return g_beCameraMode_metaObject[0];
 }
 
 void *FUN_00368a80(void) {
-    struct G *g = DAT_00589b90[0];
-    if (!g || ((g->f & 4) != 0) == false) {
+    igMetaObject *g = g_beCameraMode_metaObject[0];
+    if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_00368bc0();
     }
-    return DAT_00589b90[0];
+    return g_beCameraMode_metaObject[0];
 }
 
 int beCameraMode_GetVTable(void) {
@@ -29,7 +29,7 @@ int beCameraMode_GetVTable(void) {
     o.vt = &DAT_0053a2b0[0];
     o.r1 = 0;
     o.r2 = 0;
-    r = *(int *)((char *)&o + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+    r = *(int *)((char *)&o + *(int *)((char *)(g_objectSystem[0]) + 916));
     o.vt = &DAT_0053a2b0[0];
     if (&o.r2 != 0) {
         t = o.r2;
@@ -80,7 +80,7 @@ void beCameraMode_GetMetaObject(void)
 }
 
 int FUN_00368c80(void) {
-    return DAT_0058ccf8[0];
+    return g_igViewMode_metaObject[0];
 }
 
 void beCameraMode_InitFields(void) {
@@ -90,7 +90,7 @@ void beCameraMode_InitFields(void) {
     void *temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)((int *)DAT_00589b90)[0];
+    temp_s0 = (void *)g_beCameraMode_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_004c77d0[0], 8);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));

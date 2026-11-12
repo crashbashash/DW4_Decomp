@@ -4,8 +4,8 @@ void FUN_0045dbe0(int arg0) {
 }
 
 SigLogoRenderer_GetMetaObject *igLogoRenderer_GetMetaObject(void) {
-    if (((SigLogoRenderer_GetMetaObject *)DAT_0058cdf0[0]) == 0 || !((SigLogoRenderer_GetMetaObject *)DAT_0058cdf0[0])->ok()) FUN_0045dd20();
-    return ((SigLogoRenderer_GetMetaObject *)DAT_0058cdf0[0]);
+    if (((SigLogoRenderer_GetMetaObject *)g_igLogoRenderer_metaObject[0]) == 0 || !((SigLogoRenderer_GetMetaObject *)g_igLogoRenderer_metaObject[0])->ok()) FUN_0045dd20();
+    return ((SigLogoRenderer_GetMetaObject *)g_igLogoRenderer_metaObject[0]);
 }
 
 int igLogoRenderer_GetVTable(void) {
@@ -17,7 +17,7 @@ int igLogoRenderer_GetVTable(void) {
     obj.w6 = 0;
     obj.w7 = 0;
     obj.w8 = 0;
-    t = *(int *)((char *)&obj + *(int *)((char *)(((void *)DAT_00586dc8[0])) + 916));
+    t = *(int *)((char *)&obj + *(int *)((char *)(((void *)g_objectSystem[0])) + 916));
     obj.vt = &DAT_00542230[0];
     FUN_0013bfe0(&obj.w8, -1);
     FUN_0019ab10(&obj.w7, -1);
@@ -59,7 +59,7 @@ void igLogoRenderer_InitFields(void) {
     void *temp_s1_3;
     void *temp_s0;
 
-    temp_s0 = (void *)DAT_0058cdf0[0];
+    temp_s0 = (void *)g_igLogoRenderer_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_004d18e0[0], 4);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));

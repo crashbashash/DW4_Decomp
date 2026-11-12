@@ -36,7 +36,7 @@ int igSearchSceneGraph_GetVTable(void) {
     obj.fC = 0;
     obj.f10 = 0;
     obj.f14 = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)DAT_00586dc8[0] + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem[0] + 916));
     obj.vt = &DAT_0052d0d0[0];
     FUN_0019c840(&obj.f14, -1);
     StringRef_Destruct_00130720(&obj.f10, -1);

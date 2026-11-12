@@ -24,7 +24,7 @@ int igPsx2ControllerManager_GetVTable(void) {
     q1 = (S_ref *)&u.b[8];
     *(int *)q1 = 0;
     u.w[0] = (int)(&DAT_00524c90[0]);
-    temp_s0 = *(int *)&u.b[*(int *)((char *)(DAT_00586dc8[0]) + 916)];
+    temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.w[0] = (int)(&DAT_00524f00[0]);
     if (q1 != 0) {
         q1 = *(S_ref **)q1;
@@ -60,8 +60,8 @@ void igPsx2ControllerManager_Register(void) {
     );
 }
 
-int FUN_00146f60(void) {
-    return DAT_0055f698[0];
+igMetaObject *FUN_00146f60(void) {
+    return g_igControllerManager_metaObject[0];
 }
 
 void igPsx2ControllerManager_InitFields(void) {
@@ -69,7 +69,7 @@ void igPsx2ControllerManager_InitFields(void) {
     void *temp_v0;
     void *temp_s0;
 
-    temp_s0 = (void *)DAT_0055f738[0];
+    temp_s0 = (void *)g_igPsx2ControllerManager_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_00487530[0], 3);
     temp_v0 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));

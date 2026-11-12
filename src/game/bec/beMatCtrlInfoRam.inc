@@ -1,12 +1,12 @@
 void *FUN_003597c0(void) {
     bool ok;
-    if (DAT_005890d8[0] == 0) goto make;
-    ok = !!(DAT_005890d8[0]->f & 4);
+    if (g_beMatCtrlInfoRam_metaObject[0] == 0) goto make;
+    ok = !!(g_beMatCtrlInfoRam_metaObject[0]->_validity & 4);
     if (ok != false) goto done;
 make:
     FUN_00359980();
 done:;
-    return DAT_005890d8[0];
+    return g_beMatCtrlInfoRam_metaObject[0];
 }
 
 int beMatCtrlInfoRam_GetVTable(void) {
@@ -17,7 +17,7 @@ int beMatCtrlInfoRam_GetVTable(void) {
     obj.r9 = 0;
     obj.vt = &DAT_00536be0[0];
     obj.r10 = 0;
-    r = *(int *)((char *)&obj + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+    r = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
     obj.vt = &DAT_00536be0[0];
     obj.rel10();
     obj.vt = &DAT_00539e90[0];
@@ -66,11 +66,11 @@ void beMatCtrlInfoRam_InitFields(void) {
     void *temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)((int *)DAT_005890d8)[0];
+    temp_s0 = (void *)g_beMatCtrlInfoRam_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_004c6000[0], 1);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = FUN_003594c0();
+    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_003594c0();
     igMetaObject_NameFields(temp_s0, &DAT_004c6008[0], &DAT_004c6010[0], &DAT_004c6018[0], temp_s2);
 }
 

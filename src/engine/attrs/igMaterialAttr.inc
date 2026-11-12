@@ -11,7 +11,7 @@ int igMaterialAttr_GetVTable(void) {
 
     igObject_InitHeader(&obj);
     obj.vt = &DAT_00523540[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 
 void FUN_00135c70(void)
@@ -52,7 +52,7 @@ void igMaterialAttr_InitFields(void) {
     struct V v3;
     struct V v4;
 
-    temp_s0 = (void *)DAT_0055f010[0];
+    temp_s0 = (void *)g_igMaterialAttr_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_00486270[0], 6);
     temp_a0 = (int)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 1);

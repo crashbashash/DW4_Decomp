@@ -1,8 +1,8 @@
-int FUN_00146660(void) {
-    if (DAT_0055f698[0] == 0) {
-        DAT_0055f698[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(DAT_00587040[0]));
+igMetaObject *FUN_00146660(void) {
+    if (g_igControllerManager_metaObject[0] == 0) {
+        g_igControllerManager_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
     }
-    return DAT_0055f698[0];
+    return g_igControllerManager_metaObject[0];
 }
 
 igMetaObject *igControllerManager_GetMetaObject(void)
@@ -44,13 +44,13 @@ void igControllerManager_InitFields(void) {
     void *temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)(DAT_0055f698[0]);
+    temp_s0 = (void *)(g_igControllerManager_metaObject[0]);
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_00487268[0], 1);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    *(int *)((char *)(temp_s1) + 56) = FUN_00146300();
+    *(int *)((char *)(temp_s1) + 56) = (int)FUN_00146300();
     *(char *)((char *)(temp_s1) + 52) = 1;
     igMetaObject_NameFields(temp_s0, &DAT_00487270[0], &DAT_00487278[0], &DAT_00487280[0], temp_s2);
-    *(int *)((char *)(DAT_0055f698[0]) + 60) = (int)(&thunk_igPsx2ControllerManager_GetMetaObject);
+    *(int *)((char *)(g_igControllerManager_metaObject[0]) + 60) = (int)(&thunk_igPsx2ControllerManager_GetMetaObject);
 }
 

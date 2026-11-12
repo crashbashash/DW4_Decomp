@@ -1,5 +1,5 @@
-int Gap__Attrs__igRenderListAttr__vfunc_22(void) {
-    return DAT_0055eeb0[0];
+igMetaObject *Gap__Attrs__igRenderListAttr__vfunc_22(void) {
+    return g_igRenderListAttr_metaObject[0];
 }
 
 /* slot 32 of igRenderListAttr: set the _vc reference (+16). Reference-counted assignment: retain

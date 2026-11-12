@@ -1,5 +1,5 @@
-int Gap__Attrs__igColorAttr__vfunc_22(void) {
-    return DAT_0055f2e0[0];
+igMetaObject *Gap__Attrs__igColorAttr__vfunc_22(void) {
+    return g_igColorAttr_metaObject[0];
 }
 
 void Gap__Attrs__igColorAttr__vfunc_32(igColorAttr *arg0, float *arg1) {

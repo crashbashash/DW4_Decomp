@@ -40,7 +40,7 @@ unsigned char Gap__Core__igStackMemoryPool__vfunc_33(igStackMemoryPool *self) {
  * current failure-status word (the one an allocation failure publishes) through the output-first
  * argument. */
 void Gap__Core__igStackMemoryPool__vfunc_35(int *status_out) {
-    *status_out = g_allocatorFailureStatus[0];
+    *status_out = g_allocatorFailureStatus.v;
 }
 
 /* Slot 36 getter: returns the pool's _totalSize field (an int widened to 64 bits). */
@@ -52,7 +52,7 @@ long long Gap__Core__igStackMemoryPool__vfunc_36(igStackMemoryPool *self) {
  * vfunc_38 is the matching getter. */
 void Gap__Core__igStackMemoryPool__vfunc_37(int *status, igStackMemoryPool *self, short alignment) {
     self->_alignment = alignment;
-    *status = g_statusSucceeded[0];
+    *status = g_statusSucceeded.v;
 }
 
 /* IgStackMemoryPool slot 38, returns the reflected _alignment (+112, unsigned short). */
@@ -63,7 +63,7 @@ unsigned short Gap__Core__igStackMemoryPool__vfunc_38(igStackMemoryPool *self) {
 /* Set the pool's element size (`_elementSize`, +128) and report success through the status word. */
 void Gap__Core__igStackMemoryPool__vfunc_39(int *status, igStackMemoryPool *self, int elementSize) {
     self->_elementSize = elementSize;
-    *status = g_statusSucceeded[0];
+    *status = g_statusSucceeded.v;
 }
 
 /* Getter: the pool's _elementSize (+128, reflected as igUnsignedIntMetaField). */
@@ -76,9 +76,9 @@ void Gap__Core__igStackMemoryPool__vfunc_24(int *arg0, void *arg1, int arg2, lon
         *(int *)((char *)(arg1) + 116) = arg2;
         *(long long *)((char *)(arg1) + 120) = arg3;
         *(char *)((char *)(arg1) + 141) = arg4;
-        *arg0 = DAT_004fb410.v;
+        *arg0 = g_statusSucceeded.v;
     } else {
-        *arg0 = DAT_004fb418.v;
+        *arg0 = g_allocatorFailureStatus.v;
     }
 }
 
@@ -335,7 +335,7 @@ void Gap__Core__igStackMemoryPool__vfunc_62(int *result, StackPoolFields *pool, 
             end--;
         }
         pool->end = end;
-        *result = DAT_004fb410.v;
+        *result = g_statusSucceeded.v;
         return;
     }
     if (total - mask * count <= avail) {
@@ -355,14 +355,14 @@ void Gap__Core__igStackMemoryPool__vfunc_62(int *result, StackPoolFields *pool, 
         if (k == count) {
             pool->top = low;
             pool->end = end;
-            *result = DAT_004fb410.v;
+            *result = g_statusSucceeded.v;
             return;
         }
     }
     for (l = 0; l < count; l++) {
         out[l] = 0;
     }
-    *result = DAT_004fb418.v;
+    *result = g_allocatorFailureStatus.v;
 }
 
 void Gap__Core__igStackMemoryPool__vfunc_63(int *result, StackPoolFields *pool, int n, unsigned *sizes, unsigned *out, unsigned short *aligns) {
@@ -412,7 +412,7 @@ void Gap__Core__igStackMemoryPool__vfunc_63(int *result, StackPoolFields *pool, 
             end--;
         }
         pool->end = end;
-        *result = DAT_004fb410.v;
+        *result = g_statusSucceeded.v;
         return;
     }
     if (total - padding <= avail) {
@@ -435,14 +435,14 @@ void Gap__Core__igStackMemoryPool__vfunc_63(int *result, StackPoolFields *pool, 
         if (k == count) {
             pool->top = low;
             pool->end = end;
-            *result = DAT_004fb410.v;
+            *result = g_statusSucceeded.v;
             return;
         }
     }
     for (l = 0; l < count; l++) {
         out[l] = 0;
     }
-    *result = DAT_004fb418.v;
+    *result = g_allocatorFailureStatus.v;
 }
 
 int Gap__Core__igStackMemoryPool__vfunc_84(DW4VC_340_0 *arg0, unsigned int arg1) {

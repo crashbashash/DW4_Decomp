@@ -10,7 +10,7 @@ int igFloatObject_GetVTable(void) {
     struct Obj_1e5010 obj;
     igObject_InitHeader(&obj);
     obj.vt = &DAT_0052bb50[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 
 void FUN_001e5050(void)
@@ -43,7 +43,7 @@ void igFloatObject_InitFields(void) {
     int temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)DAT_00562be0[0];
+    temp_s0 = (void *)g_igFloatObject_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_0048db60[0], 1);
     igMetaObject_NameFields(temp_s0, &DAT_0048db68[0], &DAT_0048db70[0], &DAT_0048db78[0], temp_s1);

@@ -1,9 +1,9 @@
 void *FUN_00361130(void) {
-    struct G *g = DAT_005895f8[0];
-    if (!g || ((g->f & 4) != 0) == false) {
+    igMetaObject *g = g_beFontInfoData_metaObject[0];
+    if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_00361210();
     }
-    return DAT_005895f8[0];
+    return g_beFontInfoData_metaObject[0];
 }
 
 int beFontInfoData_GetVTable(void) {
@@ -15,7 +15,7 @@ int beFontInfoData_GetVTable(void) {
     f.vt = &DAT_00535b70[0];
     f.w[3] = 0;
     f.w[9] = 0;
-    temp_s0 = *(int *)((char *)&f + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+    temp_s0 = *(int *)((char *)&f + *(int *)((char *)(g_objectSystem[0]) + 916));
     f.vt = &DAT_00535b70[0];
     FUN_00130720(&f.w[9], -1);
     FUN_001d97f0(&f.w[3], -1);
@@ -55,7 +55,7 @@ void beFontInfoData_InitFields(void) {
     void *temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)((int *)DAT_005895f8)[0];
+    temp_s0 = (void *)g_beFontInfoData_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_004c6bf0[0], 7);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));

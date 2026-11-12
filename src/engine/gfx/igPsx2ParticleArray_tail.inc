@@ -16,7 +16,7 @@ int igPsx2ParticleArray_GetVTable(void) {
     *(int *)&u.b[48] = 0;
     *(int *)&u.b[68] = 0;
     u.vt = (int)&DAT_005253e0[0];
-    t = *(int *)&u.b[*(int *)((char *)(DAT_00586dc8[0]) + 916)];
+    t = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.vt = (int)&DAT_005253e0[0];
     FUN_0014caf0((igParticleArray *)u.b, 0);
     return t;
@@ -44,15 +44,15 @@ void igPsx2ParticleArray_Register(void) {
     );
 }
 
-int FUN_001534e0(void) {
-    return DAT_0055fbe0[0];
+igMetaObject *FUN_001534e0(void) {
+    return g_igParticleArray_metaObject[0];
 }
 
 void igPsx2ParticleArray_InitFields(void) {
     int temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)(DAT_00560540[0]);
+    temp_s0 = (void *)(g_igPsx2ParticleArray_metaObject[0]);
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_00489eb0[0], 5);
     *(char *)((char *)(igMetaObject_GetFieldAt(temp_s0, temp_s1)) + 38) = 0;
@@ -61,6 +61,6 @@ void igPsx2ParticleArray_InitFields(void) {
     FUN_002d3890(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 3), 1);
     *(char *)((char *)(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 4)) + 38) = 0;
     igMetaObject_NameFields(temp_s0, &DAT_00489ed0[0], &DAT_00489ef0[0], &DAT_00489f10[0], temp_s1);
-    *(int *)((char *)(DAT_00560540[0]) + 64) = (int)(&thunk_igParticleArray_GetMetaObject);
+    *(int *)((char *)(g_igPsx2ParticleArray_metaObject[0]) + 64) = (int)(&thunk_igParticleArray_GetMetaObject);
 }
 

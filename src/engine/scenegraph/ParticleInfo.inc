@@ -14,7 +14,7 @@ void FUN_001d6410(TraversedNode *collector, TraversedNode *node, void *path) {
     int child;
     NodeList *children;
     if (node != 0) {
-        if (igObject_IsKindOf(node, DAT_005619f8[0]) != 0) {
+        if (igObject_IsKindOf(node, g_igGroup_metaObject[0]) != 0) {
             children = node->children;
             count = 0;
             if (children != 0) {
@@ -27,7 +27,7 @@ void FUN_001d6410(TraversedNode *collector, TraversedNode *node, void *path) {
                 FUN_001c58c0((T_1c58c0 *)path);
             }
         }
-        if (igObject_IsKindOf(node, DAT_00561ea0[0]) != 0) {
+        if (igObject_IsKindOf(node, g_igCamera_metaObject[0]) != 0) {
             igSmartPointer<PathEntry> entry(((PathEntry *)FUN_0019f630(igObject_GetAllocator(collector))));
             FUN_001c5740((U_1c5740 *)entry.p, (T_1c5740 *)path);
             ObjectList_AppendRetained(collector->children, entry.p);
@@ -92,12 +92,12 @@ void FUN_001d6790(OO_1d6790 *arg0, AA *arg1) {
     var_s2 = 0;
     while (var_s2 < temp_s3) {
         temp_v0 = FUN_002d7e90(arg1, var_s2);
-        if (0 != igObject_IsKindOf(temp_v0, DAT_00585b70[0])) {
+        if (0 != igObject_IsKindOf(temp_v0, g_igObjectDirEntry_metaObject[0])) {
             temp_s6 = temp_v0->f24;
-            if (igObject_IsKindOf(temp_s6, DAT_005611d0[0]) != 0) {
+            if (igObject_IsKindOf(temp_s6, g_igTransformSource_metaObject[0]) != 0) {
                 temp_s1 = ((DW4VC_124_0_1d6790 *)(temp_s6))->vX();
                 var_s0 = ((DW4VC_128_0 *)(temp_s6))->vX();
-                if (igObject_IsKindOf(temp_s6, DAT_005611d8[0]) != 0) {
+                if (igObject_IsKindOf(temp_s6, g_igTransformSequence1_5_metaObject[0]) != 0) {
                     temp_v1 = temp_s1 + ((DW4VC_260_0 *)(temp_s6))->vX();
                     if (var_s0 < temp_v1) {
                         var_s0 = temp_v1;
@@ -386,8 +386,8 @@ void FUN_001d7910(void) {
     FUN_00300c00(((void *)DAT_005628e0[0]), ((void *)DAT_00562640[0]), 1);
     FUN_00300c00(((void *)DAT_005628e8[0]), ((void *)DAT_00562640[0]), 1);
     clearBytes((char *)metas, 28);
-    metas[0] = ((void *)DAT_005618d8[0]);
-    metas[1] = ((void *)DAT_00561a98[0]);
+    metas[0] = ((void *)g_igLightStateSet_metaObject[0]);
+    metas[1] = ((void *)g_igEnvironmentMapShader2_metaObject[0]);
     metas[2] = ((void *)DAT_00561860[0]);
     metas[3] = ((void *)DAT_00561e98[0]);
     metas[4] = ((void *)DAT_00561ee8[0]);
@@ -404,7 +404,7 @@ void FUN_001d7910(void) {
     pairs._pairs[0]._meta = ((void *)DAT_00561860[0]);
     pairs._pairs[1]._meta = ((void *)DAT_00561e98[0]);
     pairs._pairs[2]._meta = ((void *)DAT_00561ee8[0]);
-    pairs._pairs[3]._meta = ((void *)DAT_00561a98[0]);
+    pairs._pairs[3]._meta = ((void *)g_igEnvironmentMapShader2_metaObject[0]);
     for (i = 0; i < 4; i++) {
         p = &pairs._pairs[i];
         n = igMetaObject_CountTree(p->_meta);
@@ -572,7 +572,7 @@ int FUN_001d81e0(void) {
     int temp_s0;
 
     if (DAT_0048dae0[0] == -1) {
-        temp_s0 = *(int *)((char *)DAT_00586dc8[0] + 56);
+        temp_s0 = *(int *)((char *)g_objectSystem[0] + 56);
         FUN_003065f0(temp_s0, 7, &DAT_004e4830[0], &DAT_0048dae0[0], 0x100, 1);
         FUN_00306e50(temp_s0, 7, &DAT_004e4850[0], &GPR_00554b9c, 0, 1);
     }
@@ -580,10 +580,10 @@ int FUN_001d81e0(void) {
 }
 
 int FUN_001d8270(int arg0) {
-    if (arg0 == DAT_0055f088[0]) {
+    if (arg0 == g_igLightAttr_metaObject[0]) {
         return 1;
     }
-    if (arg0 == ((int *)DAT_0055f060)[0]) {
+    if (arg0 == ((int *)g_igLightStateAttr_metaObject)[0]) {
         return FUN_001d81e0();
     }
     return 0;

@@ -32,7 +32,7 @@ int igVisualContextCapabilityManager_GetVTable(void) {
     igObject_InitHeader(&obj);
     obj.vt = &DAT_00525de0[0];
     obj.ref = 0;
-    r = *(int *)((char *)&obj + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+    r = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
     obj.vt = &DAT_00525de0[0];
     obj.release();
     return r;
@@ -64,8 +64,8 @@ void thunk_igVisualContextCapabilityManager_GetMetaObject(void) {
     igVisualContextCapabilityManager_GetMetaObject();
 }
 
-int FUN_00149df0(void) {
-    return DAT_0055fef8[0];
+igMetaObject *FUN_00149df0(void) {
+    return g_igCapabilityManager_metaObject[0];
 }
 
 void igVisualContextCapabilityManager_InitFields(void) {
@@ -73,11 +73,11 @@ void igVisualContextCapabilityManager_InitFields(void) {
     void *temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)DAT_0055f8d0[0];
+    temp_s0 = (void *)g_igVisualContextCapabilityManager_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_004882d8[0], 1);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = FUN_0014a040();
+    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_0014a040();
     ((igMetaField *)temp_s1)->_persistent = 0;
     igMetaObject_NameFields(temp_s0, &DAT_004882e0[0], &DAT_004882e8[0], &DAT_004882f0[0], temp_s2);
 }

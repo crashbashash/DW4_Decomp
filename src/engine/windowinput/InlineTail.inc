@@ -1,5 +1,5 @@
-int FUN_00149320(void) {
-    return DAT_0055f5e8[0];
+igMetaObject *FUN_00149320(void) {
+    return g_igInterfaceManager_metaObject[0];
 }
 
 void FUN_00149330(int a0) {
@@ -10,8 +10,8 @@ int Gap__igDefaultInterfaceManager__vfunc_22(void) {
     return (int)g_igDefaultInterfaceManager_metaObject[0];
 }
 
-int FUN_00149350(void) {
-    return DAT_0055f698[0];
+igMetaObject *FUN_00149350(void) {
+    return g_igControllerManager_metaObject[0];
 }
 
 int Gap__igControllerList__vfunc_22(void) {
@@ -19,19 +19,19 @@ int Gap__igControllerList__vfunc_22(void) {
 }
 
 int Gap__igNonRefCountedObjectStack__vfunc_22(void) {
-    return DAT_00562b78[0];
+    return g_igNonRefCountedObjectStack_metaObject[0];
 }
 
-int Gap__igEventProducerList__vfunc_22(void) {
-    return DAT_0055f5f8[0];
+igMetaObject *Gap__igEventProducerList__vfunc_22(void) {
+    return g_igEventProducerList_metaObject[0];
 }
 
 int Gap__igControllerList__vfunc_24(void) {
     return (int)g_igController_metaObject[0];
 }
 
-int Gap__igEventProducerList__vfunc_24(void) {
-    return DAT_0055f600[0];
+igMetaObject *Gap__igEventProducerList__vfunc_24(void) {
+    return g_igEventProducer_metaObject[0];
 }
 
 void Gap__igNonRefCountedObjectStack__vfunc_18(igDataList *arg0) {

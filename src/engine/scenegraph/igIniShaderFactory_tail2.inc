@@ -145,9 +145,9 @@ int FUN_001cd150(IniDocument **out, IniFactoryState *self, char *name) {
     }
     if (self->mode != 0) {
         if (self->mode == 3) {
-            IniSourceList *source = (IniSourceList *)FUN_00309a60(((void *)DAT_00586dd0[0]), DAT_004fb3a8, DAT_004e1b58, 0);
+            IniSourceList *source = (IniSourceList *)FUN_00309a60(((void *)g_globalContext[0]), DAT_004fb3a8, igShaderInfo_className, 0);
             IniFieldEntry *entry;
-            if (source == 0 || igObject_IsKindOf(source, ((void * *)DAT_00561500)[0]) == 0) {
+            if (source == 0 || igObject_IsKindOf(source, ((void * *)g_igShaderInfo_metaObject)[0]) == 0) {
                 SET_OUT(result);
                 FINISH();
             }
@@ -162,7 +162,7 @@ int FUN_001cd150(IniDocument **out, IniFactoryState *self, char *name) {
         }
         SLOT(IniDocument, found) = ((IniDocument *)FUN_00303d70(cache, name));
         { IniDocument *a_ = found; ADD(a_); }
-        if (found != 0 && igObject_IsKindOf(found, DAT_00585a08[0]) != 0) {
+        if (found != 0 && igObject_IsKindOf(found, g_igRegistry_metaObject[0]) != 0) {
             IniDocument *keep = found;
             ADD(keep);
             DROP(IniDocument, parsed);
@@ -226,7 +226,7 @@ SectionRef FUN_001cd9f0(IniShaderFactoryView *self, char *name) {
         char *text;
         result.release();
         result.p = FUN_002c6750(allocator);
-        FUN_003006a0(result.get(), ((IniTypeTable *)DAT_00586dc8[0])->meta);
+        FUN_003006a0(result.get(), ((IniTypeTable *)g_objectSystem[0])->meta);
         IniSectionObject *created = result.get();
         text = section.get()->text;
         text = (text == 0) ? DAT_004c22f0[0] : text;
@@ -248,9 +248,9 @@ igSmartPointer<IniSectionText> FUN_001cdbb0(IniFactoryView *self, char *name) {
     if (self->mode != 0) {
         IniSectionText *found;
         if (self->mode == 3) {
-            IniSourceList *source = (IniSourceList *)FUN_00309a60(((void *)DAT_00586dd0[0]), DAT_004fb3a8, DAT_004e1b58, 0);
+            IniSourceList *source = (IniSourceList *)FUN_00309a60(((void *)g_globalContext[0]), DAT_004fb3a8, igShaderInfo_className, 0);
             IniFieldEntry_1cdbb0 *entry;
-            if (source == 0 || igObject_IsKindOf(source, ((void * *)DAT_00561500)[0]) == 0) {
+            if (source == 0 || igObject_IsKindOf(source, ((void * *)g_igShaderInfo_metaObject)[0]) == 0) {
                 return igSmartPointer<IniSectionText>((IniSectionText *)0, kRetainReference);
             }
             entry = ((IniFieldEntry_1cdbb0 *)FUN_003022c0(source->entries, DAT_005619b0[0], name));
@@ -263,7 +263,7 @@ igSmartPointer<IniSectionText> FUN_001cdbb0(IniFactoryView *self, char *name) {
             cache = self->cache;
         }
         found = ((IniSectionText *)FUN_00303d70(cache.p, name));
-        if (found != 0 && igObject_IsKindOf(found, DAT_005858f0[0]) != 0) {
+        if (found != 0 && igObject_IsKindOf(found, g_igStringObj_metaObject[0]) != 0) {
             result = found;
         }
     }

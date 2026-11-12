@@ -1,8 +1,8 @@
-int FUN_0019ea00(void) {
-    if (DAT_00561990[0] == 0) {
-        DAT_00561990[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(DAT_00587040[0]));
+igMetaObject *FUN_0019ea00(void) {
+    if (g_igInterpretedShaderData_metaObject[0] == 0) {
+        g_igInterpretedShaderData_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
     }
-    return DAT_00561990[0];
+    return g_igInterpretedShaderData_metaObject[0];
 }
 
 igMetaObject *igInterpretedShaderData_GetMetaObject(void)
@@ -24,7 +24,7 @@ int igInterpretedShaderData_GetVTable(void) {
     obj.vt = &DAT_0052a8e0[0];
     obj.w6 = 0;
     obj.w7 = 0;
-    t = *(int *)((char *)&obj + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+    t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
     obj.vt = &DAT_0052a8e0[0];
     FUN_0014dd40(&obj.w7, -1);
     FUN_0019eb40((ObjectRefWord *)&obj.w6, -1);
@@ -72,7 +72,7 @@ void thunk_igInterpretedShaderData_GetMetaObject(void) {
 }
 
 int FUN_0019ec60(void) {
-    return ((int *)DAT_005611a8)[0];
+    return ((int *)g_igTransientShaderData_metaObject)[0];
 }
 
 void igInterpretedShaderData_InitFields(void) {
@@ -81,11 +81,11 @@ void igInterpretedShaderData_InitFields(void) {
     void *temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)DAT_00561990[0];
+    temp_s0 = (void *)g_igInterpretedShaderData_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_0048bee0[0], 2);
     temp_s1 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s2)));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = FUN_00199170();
+    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_00199170();
     temp_s1_2 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1)));
     ((igObjectRefMetaField *)temp_s1_2)->_metaObject = FUN_002bcbb0();
     ((igRefMetaField *)temp_s1_2)->_construct = 1;

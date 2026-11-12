@@ -1,8 +1,8 @@
-int FUN_001e5530(void) {
-    if (DAT_00562c08[0] == 0) {
-        DAT_00562c08[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(DAT_00587040[0]));
+igMetaObject *FUN_001e5530(void) {
+    if (g_igDataPumpInterface_metaObject[0] == 0) {
+        g_igDataPumpInterface_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
     }
-    return DAT_00562c08[0];
+    return g_igDataPumpInterface_metaObject[0];
 }
 
 igMetaObject *igDataPumpInterface_GetMetaObject(void)

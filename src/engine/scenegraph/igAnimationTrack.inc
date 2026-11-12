@@ -21,7 +21,7 @@ int igAnimationTrack_GetVTable(void) {
     u.vt = (int)&DAT_00529830[0];
     q0 = (S_ref *)&u.b[12];
     *(int *)q0 = 0;
-    temp_s0 = *(int *)&u.b[*(int *)((char *)(DAT_00586dc8[0]) + 916)];
+    temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.vt = (int)&DAT_00529830[0];
     if (q0 != 0) {
         q0 = *(S_ref **)q0;
@@ -78,11 +78,11 @@ void igAnimationTrack_InitFields(void) {
     void *temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)DAT_00562430[0];
+    temp_s0 = (void *)g_igAnimationTrack_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_0048d670[0], 3);
     temp_s1 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s2)));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = FUN_00194dd0();
+    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_00194dd0();
     igMetaObject_NameFields(temp_s0, &DAT_0048d680[0], &DAT_0048d690[0], &DAT_0048d6a0[0], temp_s2);
 }
 

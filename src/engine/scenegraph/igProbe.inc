@@ -3,11 +3,11 @@ void FUN_0019e680(int arg0) {
     igMetaObject_CreateInstance(*(int *)0x561970, arg0);
 }
 
-int FUN_0019e6c0(void) {
-    if (DAT_00561970[0] == 0) {
-        DAT_00561970[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(DAT_00587040[0]));
+igMetaObject *FUN_0019e6c0(void) {
+    if (g_igProbe_metaObject[0] == 0) {
+        g_igProbe_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
     }
-    return DAT_00561970[0];
+    return g_igProbe_metaObject[0];
 }
 
 igMetaObject *igProbe_GetMetaObject(void)
@@ -33,7 +33,7 @@ int igProbe_GetVTable(void) {
     *(int *)q1 = 0;
     q0 = (S_ref *)&u.b[16];
     *(int *)q0 = 0;
-    temp_s0 = *(int *)&u.b[*(int *)((char *)(DAT_00586dc8[0]) + 916)];
+    temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.vt = (int)&DAT_0052a950[0];
     if (q0 != 0) {
         q0 = *(S_ref **)q0;
@@ -98,7 +98,7 @@ void igProbe_InitFields(void) {
     void *temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)DAT_00561970[0];
+    temp_s0 = (void *)g_igProbe_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_0048be90[0], 3);
     temp_s1 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s2)));

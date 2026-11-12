@@ -8,7 +8,7 @@ int Gap__Core__igEnumMetaField__vfunc_56(void *arg0, int *arg1, int arg2) {
     temp_v0 = sscanf(arg2, &DAT_004f9588[0], arg1, &sp4C);
     if (((temp_v0 == 0) || (temp_v0 == -1)) && (arg2 != 0)) {
         igMetaEnum_GetValueByName(&sp44, (igMetaEnum *)(((int (*)())*(int *)((char *)(arg0) + 52))()), (const char *)arg2, &sp48);
-        if (DAT_004fb410.v == sp44) {
+        if (g_statusSucceeded.v == sp44) {
             *arg1 = sp48;
             sp4C = strlen(arg2);
         }
@@ -75,7 +75,7 @@ void FUN_002dc9c0(void) {
 }
 
 int FUN_002dca20(void) {
-    if ((((int *)DAT_00586df8)[0] == 0) && (DAT_00586590[0] != 0) && (DAT_00554bfc == 0)) {
+    if ((((int *)DAT_00586df8)[0] == 0) && (g_igErrorHandler_metaObject[0] != 0) && (DAT_00554bfc == 0)) {
         ((int *)DAT_00586df8)[0] = FUN_002c5e10(((int)Memory_GetAllocatorBySelector(DAT_00587038[0])));
     }
     return ((int *)DAT_00586df8)[0];
