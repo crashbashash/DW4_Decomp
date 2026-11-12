@@ -26,6 +26,11 @@
 #define SWV(h) ((igObjectList *)*(int *)&(h))
 #define FIND(W) { int i_; (W) = 0; for (i_ = 0; i_ < ((igObjectList *)p->_subWindow)->_count; i_++) { (W) = ((int *)SWV(p->_subWindow)->_data)[i_]; if ((W) && igObject_IsKindOf((W), DAT_0058af98[0])) { (W) = (int)(int *)(W); } else { (W) = 0; } if ((W)) break; } }
 #define SETSLOT(L, IDX, V_) { Obj *v_ = (V_); Obj *old_; if (v_ != 0) { v_->_refCount = v_->_refCount + 1; } old_ = ((Obj **)(L)->_data)[(IDX)]; if (old_ != 0) { --old_->_refCount; if (((unsigned long long)(long long)(int)old_->_refCount & 0x7fffffULL) == 0) igObject_Destroy(old_); } if ((L)->_count != 0 && (IDX) >= 0 && (IDX) < (L)->_count) { ((Obj **)(L)->_data)[(IDX)] = v_; } }
+/* matching construct: cxx_sweep — the item is read inside its retain test */
+#define SET_ITEM(IDX, ITEM) { Obj *v; int r = (IDX); igObjectList *l = (igObjectList *)p->_powerSocket; \
+    if ((v = (ITEM).p) != 0) { v->_refCount = v->_refCount + 1; } \
+    ReleaseObject(((Obj **)l->_data)[r]); \
+    if (l->_count != 0 && r >= 0 && r < l->_count) { ((Obj **)l->_data)[r] = v; } }
 #define V(p) ((VC *)(p))
 #define ADV() { p->_st0 = p->_st0 + 1; p->_st3 = 0; p->_st2 = 0; p->_st1 = 0; }
 #define SETST(a, b) { p->_st0 = a; p->_st3 = 0; p->_st2 = 0; p->_st1 = 0; p->_st1 = b; p->_st3 = 0; p->_st2 = 0; }
@@ -177,7 +182,7 @@ extern "C" int igObject_IsKindOf(...);
 extern "C" int FUN_003a9310(...);
 extern "C" void * FUN_003b4f50(...);
 extern "C" void * FUN_003b51b0(...);
-extern "C" int FUN_00411180(...);
+extern "C" void FUN_00411180(beNDMWStatusCtrlBaseEquip *p);
 extern "C" int List_Resize(...);
 extern "C" void StringChunk_ReleaseHeader(...);
 extern "C" int beMessenger_AppendInt(...);
@@ -316,6 +321,7 @@ extern "C" int DAT_00519c50[4];
 extern "C" int DAT_00519c60[4];
 extern "C" int DAT_00519c70[4];
 extern "C" int DAT_00519c80[4];
+extern "C" int DAT_00519cb8[4];
 extern "C" int DAT_0058af98[4];
 extern "C" unsigned char GPR_005549f8;
 extern "C" unsigned char GPR_005549fc;
@@ -902,6 +908,7 @@ static inline void AppendBoth(ItemListRef &dst, igObjectList *a, igObjectList *b
 };
 struct RemovedSlot { int index; };
 extern "C" RemovedSlot ObjectList_RemoveFirstRetained(void *, int, int);
+extern "C" void List_RemoveWordAt(void *, int);
 class ItemListRef;
 class DeviceRef;
 extern "C" void FUN_00422c00(void *, const ItemListRef &);
@@ -1621,6 +1628,25 @@ void Gap__Bec__beNDMWStatusCtrlBaseEquip__vfunc_21(beNDMWStatusCtrlBaseEquip *p)
     case 3:
         if (beNDMWWindow_PollCloseComplete() != 0) { p->_isRun = 0; }
         break;
+    }
+}
+
+/* Swaps the power-socket items at the kind-list and return positions, publishes, then swaps them back and
+ * publishes again. A swap with itself, or one that would leave slot 0 empty, only refreshes. */
+void FUN_00411180(beNDMWStatusCtrlBaseEquip *p)
+{
+    MovedItemRef kindItem(((void **)((igObjectList *)p->_powerSocket)->_data)[p->_kindListPos]);
+    MovedItemRef retItem(((void **)((igObjectList *)p->_powerSocket)->_data)[p->_retCode]);
+    if (p->_kindListPos == p->_retCode || ((p->_kindListPos == 0 || p->_retCode == 0) && (kindItem.p == 0 || retItem.p == 0))) {
+        REFRESH();
+    } else {
+        SET_ITEM(p->_kindListPos, retItem)
+        SET_ITEM(p->_retCode, kindItem)
+        beMessenger_SelectReceivers(p->_messenger, DAT_00519ba0, 0, 0); API(p->_playerNo); DSP(DAT_00519c40);
+        SEL(DAT_00519c10); API(p->_playerNo); DSP(DAT_00519cb8);
+        SET_ITEM(p->_kindListPos, kindItem)
+        SET_ITEM(p->_retCode, retItem)
+        beMessenger_SelectReceivers(p->_messenger, DAT_00519ba0, 0, 0); API(p->_playerNo); DSP(DAT_00519c40);
     }
 }
 
@@ -6002,6 +6028,94 @@ void Gap__Bec__beNDMWStatusSubMenu__vfunc_21(beNDMWStatusSubMenu *self)
             self->_isRun = 0;
         }
         break;
+    }
+}
+
+/* Releases entry i of an object list and closes the gap, clearing the vacated last word. */
+static inline void RemoveItemAt(igObjectList *l, int i)
+{
+    ReleaseObject(((igObject **)l->_data)[i]);
+    List_RemoveWordAt(l, i);
+    ((int *)l->_data)[l->_count] = 0;
+}
+
+/* Sorts the items by revision, highest first: the best remaining one moves to a scratch list until none
+ * is left, and the scratch list moves back. The placeholder records (kind 0 record 276, kind 1 record 31,
+ * kind 2 record 44) then go to the end. */
+void FUN_00422c00(void *self, const ItemListRef &items)
+{
+    void *al;
+    igObjectList *l;
+    igObjectList *src;
+    beNDMWItemRevisionBase *best;
+    int i;
+    beNDMWItemRevisionBase *t;
+    /* matching construct: variant sweep — one counter and bound per loop, declared in this order */
+    int n, i2;
+    int c, j;
+    int k;
+    GET_ALLOC(al)
+    ItemListRef sorted(FUN_003c90f0(al));
+    /* matching construct: variant sweep — the list is re-read from the holder in each loop test, so its count loads on every pass */
+    while ((l = (igObjectList *)items.p)->_count > 0) {
+        best = ((beNDMWItemRevisionBase **)l->_data)[0];
+        for (i = 1; i < (l = (igObjectList *)items.p)->_count; i++) {
+            t = ((beNDMWItemRevisionBase **)l->_data)[i];
+            if (t->_revision > best->_revision) best = t;
+        }
+        ObjectList_AppendRetained(sorted.p, best);
+        ObjectList_RemoveFirstRetained(items.p, (int)best, 0);
+    }
+    n = l->_count;
+    for (i2 = 0; i2 < n; i2++) ReleaseObject(((igObject **)l->_data)[i2]);
+    c = l->_count;
+    for (j = 0; j < c; j++) ((int *)l->_data)[j] = 0;
+    l->_count = 0;
+    while ((src = (igObjectList *)sorted.p)->_count > 0) {
+        ObjectList_AppendRetained(items.p, ((int *)src->_data)[0]);
+        RemoveItemAt((igObjectList *)sorted.p, 0);
+    }
+    for (k = ((igObjectList *)items.p)->_count - 1; k > -1; k--) {
+        beNDMWItemBase *e = ((beNDMWItemBase **)((igObjectList *)items.p)->_data)[k];
+        if ((e->_kindNo == 0 && e->_recNo == 276) || (e->_kindNo == 1 && e->_recNo == 31) || (e->_kindNo == 2 && e->_recNo == 44)) {
+            ObjectList_AppendRetained(items.p, e);
+            RemoveItemAt((igObjectList *)items.p, k);
+        }
+    }
+}
+
+/* Sorts the items by record number, lowest first, the same way. */
+void FUN_00423000(void *self, const ItemListRef &items)
+{
+    void *al;
+    igObjectList *l;
+    igObjectList *src;
+    beNDMWItemBase *best;
+    int i;
+    beNDMWItemBase *t;
+    /* matching construct: variant sweep — one counter and bound per loop, declared in this order */
+    int n, i2;
+    int c, j;
+    GET_ALLOC(al)
+    ItemListRef sorted(FUN_003c90f0(al));
+    /* matching construct: variant sweep — the list is re-read from the holder in each loop test, so its count loads on every pass */
+    while ((l = (igObjectList *)items.p)->_count > 0) {
+        best = ((beNDMWItemBase **)l->_data)[0];
+        for (i = 1; i < (l = (igObjectList *)items.p)->_count; i++) {
+            t = ((beNDMWItemBase **)l->_data)[i];
+            if (t->_recNo < best->_recNo) best = t;
+        }
+        ObjectList_AppendRetained(sorted.p, best);
+        ObjectList_RemoveFirstRetained(items.p, (int)best, 0);
+    }
+    n = l->_count;
+    for (i2 = 0; i2 < n; i2++) ReleaseObject(((igObject **)l->_data)[i2]);
+    c = l->_count;
+    for (j = 0; j < c; j++) ((int *)l->_data)[j] = 0;
+    l->_count = 0;
+    while ((src = (igObjectList *)sorted.p)->_count > 0) {
+        ObjectList_AppendRetained(items.p, ((int *)src->_data)[0]);
+        RemoveItemAt((igObjectList *)sorted.p, 0);
     }
 }
 
