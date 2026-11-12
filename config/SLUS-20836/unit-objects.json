@@ -1107,36 +1107,6 @@
       "__dl__FPv": "0x00100610"
     }
   },
-  "0x003d4a20": {
-    "duplicates": {
-      "__dt__9StringRefFv": "0x00130720",
-      "__dt__25igSmartPointer<8igObject>Fv": "0x0033e9c0"
-    },
-    "emitted": {
-      "__dt__8ValueRefFv": "0x003d4e20"
-    },
-    "exceptions": {
-      "index": "0x00553388",
-      "table": "0x00544640",
-      "table_size": "0x000028"
-    },
-    "externals": {
-      "__dl__FPv": "0x00100610"
-    }
-  },
-  "0x003d4ea0": {
-    "duplicates": {
-      "__dt__25igSmartPointer<8igObject>Fv": "0x0033e9c0"
-    },
-    "exceptions": {
-      "index": "0x005533a0",
-      "table": "0x00544668",
-      "table_size": "0x000010"
-    },
-    "externals": {
-      "__dl__FPv": "0x00100610"
-    }
-  },
   "0x003dcc60": {
     "duplicates": {
       "__dt__30igSmartPointer<12beUnicodeObj>Fv": "0x003832d0"
@@ -30757,6 +30727,45 @@
       "__dt__9StringRefFv": "0x00130720"
     },
     "symbol": "FUN_003b04e0"
+  },
+  "0x003d4980": {
+    "whole_file": true,
+    "emitted": {
+      "Gap__Bec__beNDMWMdlPlayer2__vfunc_35": "0x003d49c0",
+      "Gap__Bec__beNDMWMdlPlayer2__vfunc_37": "0x003d49f0",
+      "Gap__Bec__beNDMWMdlPlayer2__vfunc_36": "0x003d4a20",
+      "__dt__8ValueRefFv": "0x003d4e20",
+      "Gap__Bec__beNDMWMdlPlayer2__vfunc_38": "0x003d4ea0",
+      "Gap__Bec__beNDMWMdlPlayer2__vfunc_20": "0x003d58e0"
+    },
+    "data": {
+      "DAT_005165b0": "0x005165b0",
+      "DAT_005165c0": "0x005165c0",
+      "DAT_005165c8": "0x005165c8",
+      "DAT_005165d0": "0x005165d0",
+      "DAT_005165d8": "0x005165d8",
+      "DAT_005165e8": "0x005165e8",
+      "DAT_005165f8": "0x005165f8",
+      "DAT_00516608": "0x00516608",
+      "DAT_00516610": "0x00516610",
+      "DAT_00516618": "0x00516618",
+      "DAT_00516620": "0x00516620",
+      "DAT_00516630": "0x00516630",
+      "DAT_00585be0": "0x00585be0",
+      "DAT_00586f20": "0x00586f20",
+      "DAT_00587110": "0x00587110",
+      "GPR_00554c14": "0x00554c14",
+      "g_beNDMWMdlPlayer2_metaObject": "0x0058b368",
+      "g_bePadManager_metaObject": "0x00588518"
+    },
+    "duplicates": {
+      "__dt__25igSmartPointer<8igObject>Fv": "0x0033e9c0",
+      "__dt__9StringRefFv": "0x00130720"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    },
+    "symbol": "Gap__Bec__beNDMWMdlPlayer2__vfunc_23"
   },
   "0x003d2230": {
     "whole_file": true,
