@@ -92,8 +92,8 @@
     "functions": 0
    },
    "match": {
-    "bytes": 2817064,
-    "functions": 19518
+    "bytes": 2814564,
+    "functions": 19506
    },
    "mismatch": {
     "bytes": 0,
@@ -104,8 +104,8 @@
     "functions": 0
    },
    "unapproved": {
-    "bytes": 18856,
-    "functions": 33
+    "bytes": 21356,
+    "functions": 45
    }
   },
   "code_only_by_exc": {
@@ -128,12 +128,12 @@
   },
   "foreign_orphan_bytes": 32,
   "fully_matched": {
-   "bytes": 2822420,
-   "functions": 19602
+   "bytes": 2819920,
+   "functions": 19590
   },
   "fully_verified": {
-   "bytes": 2817064,
-   "functions": 19518
+   "bytes": 2814564,
+   "functions": 19506
   },
   "recorded": true,
   "source": "data/check-categories.tsv",
@@ -142,8 +142,8 @@
  "code_bytes": {
   "asm_body": 0,
   "assembly": 5356,
-  "fully_matched": 2822420,
-  "fully_verified": 2817064,
+  "fully_matched": 2819920,
+  "fully_verified": 2814564,
   "functions_asm_body": 0,
   "functions_assembly": 84,
   "matched": 2844720,
@@ -301,12 +301,12 @@
     "value": 68
    },
    "unapproved.bytes": {
-    "reason": null,
-    "value": 18856
+    "reason": "owner revoked 13 CRI/ADX approvals with thin evidence after the Fable review; FUN_0027e0d0 gained a row",
+    "value": 21356
    },
    "unapproved.functions": {
-    "reason": null,
-    "value": 33
+    "reason": "owner revoked 13 CRI/ADX approvals with thin evidence after the Fable review; FUN_0027e0d0 gained a row",
+    "value": 45
    },
    "unmatched.bytes": {
     "reason": null,
@@ -352,15 +352,15 @@
    "struct.a": 48,
    "struct.b": 0,
    "struct.c": 68,
-   "unapproved.bytes": 18856,
-   "unapproved.functions": 33,
+   "unapproved.bytes": 21356,
+   "unapproved.functions": 45,
    "unmatched.bytes": 625336,
    "unmatched.functions": 933
   }
  },
  "functions": {
-  "fully_matched": 19602,
-  "fully_verified": 19518,
+  "fully_matched": 19590,
+  "fully_verified": 19506,
   "matched": 19567,
   "named": 10938,
   "named_semantic": 3517,
@@ -455,8 +455,8 @@
   "bytes": 1249884,
   "failing": {
    "addresses": {
-    "bytes": 1239408,
-    "functions": 8887
+    "bytes": 1236908,
+    "functions": 8875
    },
    "fields": {
     "bytes": 233288,
@@ -467,16 +467,16 @@
     "functions": 904
    },
    "name": {
-    "bytes": 1340748,
-    "functions": 12431
+    "bytes": 1339404,
+    "functions": 12424
    },
    "placed": {
-    "bytes": 183668,
-    "functions": 1518
+    "bytes": 183764,
+    "functions": 1519
    },
    "references": {
-    "bytes": 540132,
-    "functions": 2767
+    "bytes": 537632,
+    "functions": 2755
    },
    "types": {
     "bytes": 201108,
@@ -488,7 +488,7 @@
    }
   },
   "functions": 6653,
-  "matched_functions": 19602
+  "matched_functions": 19590
  },
  "regions": [
   {
