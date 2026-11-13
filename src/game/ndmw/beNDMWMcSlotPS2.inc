@@ -1,4 +1,4 @@
-void FUN_003c5ee0(int arg0) {
+void beNDMWMcSlotPS2_Create(int arg0) {
     FUN_003c5fb0();
     igMetaObject_CreateInstance(*(int *)0x58BCC0, arg0);
 }

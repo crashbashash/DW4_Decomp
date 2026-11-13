@@ -1,4 +1,4 @@
-void FUN_003c56b0(int arg0) {
+void beNDMWLoadSavePlWork_Create(int arg0) {
     FUN_003c5780();
     igMetaObject_CreateInstance(*(int *)0x58BC18, arg0);
 }

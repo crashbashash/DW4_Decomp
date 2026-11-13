@@ -7,7 +7,7 @@
 #define AREAS(common, pl) (((beNDMWDegiData **)((beNDMWDegiDataList *)((beNDMWLoadSlotPlayer *)PLW(common, pl)->_haveSaveData)->_saveDataList)->_data))
 #define SLOT_DEGI(bk, pl, i) \
     ((beNDMWDegiData *)((int *)((beNDMWDegiDataList *)((beNDMWLoadSlotPlayer *)((beNDMWLoadSavePlWork *)((int *)((beNDMWLoadSavePlWorkList *)(bk)->_flagWork)->_data)[pl])->_haveSaveData)->_saveDataList)->_data)[i])
-#define BIND(P, I, F) do { int a = igObject_GetAllocator(arg0); a = GPR_00554c14 ? a : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]); igSmartPointer<Obj> r(((Obj *)beUnicodeObj_Create(a))); beUnicodeObj_AllocateBuffer(r.p, 1); *(unsigned short *)r.p->_buffer = arg0->t.name[I]; FUN_003ec120(arg0->n._textOrder, P, arg0->n._ramNo, I, r.p, 1, F); } while (0)
+#define BIND(P, I, F) do { int a = igObject_GetAllocator(arg0); a = GPR_00554c14 ? a : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]); igSmartPointer<Obj> r(((Obj *)beUnicodeObj_Create(a))); beUnicodeObj_AllocateBuffer(r.p, 1); *(unsigned short *)r.p->_buffer = arg0->t.name[I]; TextOrder_ConfigureUnicode(arg0->n._textOrder, P, arg0->n._ramNo, I, r.p, 1, F); } while (0)
 #define MC_UTIL(owner) ((beNDMWMcUtilCtrl *)(owner)->_mcUtilCtrl)
 #define MC_SLOTS(owner) ((beNDMWMcSlotList *)MC_UTIL(owner)->_slot)
 #define MC_SLOT(list, i) (((beNDMWMcSlot **)(list)->_data)[i])
@@ -20,7 +20,7 @@ extern "C" int beUnicodeObj_AllocateBuffer(...);
 extern "C" int sprintf(...);
 extern "C" int TextOrder_ConfigureFont(...);
 extern "C" int beNDMWLoadIntf2TextOrder_PublishIdLines(...);
-extern "C" int FUN_003ec120(...);
+extern "C" int TextOrder_ConfigureUnicode(...);
 extern "C" int Memory_GetAllocatorBySelector(...);
 extern "C" int *beDataBase_GetRecordString(...);
 extern "C" int beMessenger_GetObject(...);
@@ -123,7 +123,7 @@ extern "C" void *DAT_004cc840[4];
 extern "C" void *DAT_004cc850[4];
 extern "C" void *g_stringPool[4];
 extern "C" bePadData * bePadManager_GetPadForPlayer(...);
-extern "C" int FUN_003ee190(beNDMWLoadCtrl2CommonIntf *, int);
+extern "C" int beNDMWLoadCtrl2CommonIntf__GiveCtrlTo(beNDMWLoadCtrl2CommonIntf *, int);
 extern "C" unsigned char beNDMWLoadIntf2DataSelIntf__UpdateSelection(beNDMWLoadIntf2DataSelIntf *c, int sel);
 typedef struct M { void *f0; void *f4; } M;
 typedef struct L { char p[16]; M *n16; } L;
@@ -2914,7 +2914,7 @@ void FUN_003d9ec0(SlotPanel *arg0) {
                 for (; iA < 8; iA++) {
                     dA[iA] = 0;
                 }
-                FUN_003ec120(arg0->textCtrl, DAT_00516c40, arg0->player, 0, text.p, 0, 0);
+                TextOrder_ConfigureUnicode(arg0->textCtrl, DAT_00516c40, arg0->player, 0, text.p, 0, 0);
             }
             beMessenger_SendNamed(arg0->messenger, DATABASE, shinka, 0, GETDATABASE);
             s4 = beMessenger_GetObject(arg0->messenger, 0);
@@ -2969,7 +2969,7 @@ void FUN_003d9ec0(SlotPanel *arg0) {
                 for (; iB < 8; iB++) {
                     dB[iB] = 0;
                 }
-                FUN_003ec120(arg0->textCtrl, DAT_00516c40, arg0->player, 10, text.p, 0, 0);
+                TextOrder_ConfigureUnicode(arg0->textCtrl, DAT_00516c40, arg0->player, 10, text.p, 0, 0);
             }
             beMessenger_SendNamed(arg0->messenger, DATABASE, shinka, 0, GETDATABASE);
             s4 = beMessenger_GetObject(arg0->messenger, 0);
@@ -3403,7 +3403,7 @@ unsigned char beNDMWLoadIntf2DataSelIntf__OpenSaveArea(beNDMWLoadIntf2DataSelInt
                         v1++;
                     }
                     for (; n < 8; n++) a2[n] = 0;
-                    FUN_003ec120(s2, DAT_00516dc8, arg0->_plNo, s4, text.p, 1, 0);
+                    TextOrder_ConfigureUnicode(s2, DAT_00516dc8, arg0->_plNo, s4, text.p, 1, 0);
                 } else {
                     it->_isUse = 0;
                     beNDMWLoadIntf2TextOrder_PublishIdLines(s2, (arg0->_plNo << 16) | 0x300 | s4, 0);
@@ -3549,7 +3549,7 @@ unsigned char beNDMWLoadIntf2DataSelIntf__UpdateSelection(beNDMWLoadIntf2DataSel
                     }
                 }
             } else {
-                FUN_003ee190(host, c->_plNo);
+                beNDMWLoadCtrl2CommonIntf__GiveCtrlTo(host, c->_plNo);
                 c->_isCancel = 0;
                 v = 2;
             }
@@ -3805,7 +3805,7 @@ unsigned char beNDMWLoadIntf2DataSelIntf__RestoreSaveArea(beNDMWLoadIntf2DataSel
                         if (dst[n] == 0) break;
                     }
                     for (; n < 8; n++) dst[n] = 0;
-                    FUN_003ec120(snd, DAT_00516dc8, arg0->_plNo, i, rp.p, 1, 0);
+                    TextOrder_ConfigureUnicode(snd, DAT_00516dc8, arg0->_plNo, i, rp.p, 1, 0);
                 } else {
                     beNDMWLoadIntf2TextOrder_PublishIdLines(snd, (arg0->_plNo << 16) | 0x300 | i, 0);
                 }
@@ -3959,7 +3959,7 @@ unsigned char beNDMWLoadIntf2DataSelIntf__OpenSlotSaveArea(beNDMWLoadIntf2DataSe
                         dst++;
                     }
                     for (; n < 8; n++) dst0[n] = 0;
-                    FUN_003ec120(s2, DAT_00516dc8, arg0->_plNo, i, rcs.p, 1, 0);
+                    TextOrder_ConfigureUnicode(s2, DAT_00516dc8, arg0->_plNo, i, rcs.p, 1, 0);
                 } else {
                     beNDMWLoadIntf2TextOrder_PublishIdLines(s2, (arg0->_plNo << 0x10) | 0x300 | i, 0);
                 }
@@ -4164,7 +4164,7 @@ int beNDMWLoadIntf2DataSelIntf__ShowAccessPlayers(beNDMWLoadIntf2DataSelIntf *ar
                         dp++;
                     }
                     for (; n < 8; n++) base[n] = 0;
-                    FUN_003ec120(s8, DAT_00516dc8, s3, j, r.p, 1, 0);
+                    TextOrder_ConfigureUnicode(s8, DAT_00516dc8, s3, j, r.p, 1, 0);
                 } else {
                     beNDMWLoadIntf2ComMdlCtrl__Play((beNDMWLoadIntf2ComMdlCtrl *)s4, s3, (int *)DAT_004cc830[j], DAT_00516cf8, 0);
                     beNDMWLoadIntf2TextOrder_PublishIdLines(s8, (s3 << 16) | 0x300 | j, 0);
@@ -4424,7 +4424,7 @@ void FUN_003de480(beNDMWLoadIntf2NameSel *arg0, int arg1) {
         igSmartPointer<Obj> r0(((Obj *)beUnicodeObj_Create(a)));
         beUnicodeObj_AllocateBuffer(r0.p, 1);
         *(unsigned short *)r0.p->_buffer = DAT_004cc860[s0].v[0];
-        FUN_003ec120(arg0->_textOrder, DAT_00516f10, arg0->_ramNo, 0, r0.p, 1, 0);
+        TextOrder_ConfigureUnicode(arg0->_textOrder, DAT_00516f10, arg0->_ramNo, 0, r0.p, 1, 0);
         }
         {
         s0 = arg0->_tatePoint;
@@ -4433,7 +4433,7 @@ void FUN_003de480(beNDMWLoadIntf2NameSel *arg0, int arg1) {
         igSmartPointer<Obj> r1(((Obj *)beUnicodeObj_Create(a)));
         beUnicodeObj_AllocateBuffer(r1.p, 1);
         *(unsigned short *)r1.p->_buffer = DAT_004cc860[s0].v[0];
-        FUN_003ec120(arg0->_textOrder, DAT_00516f10, arg0->_ramNo, 1, r1.p, 1, 0);
+        TextOrder_ConfigureUnicode(arg0->_textOrder, DAT_00516f10, arg0->_ramNo, 1, r1.p, 1, 0);
         }
         {
         int n = arg0->_tatePoint + 1;
@@ -4443,7 +4443,7 @@ void FUN_003de480(beNDMWLoadIntf2NameSel *arg0, int arg1) {
         igSmartPointer<Obj> r2(((Obj *)beUnicodeObj_Create(a)));
         beUnicodeObj_AllocateBuffer(r2.p, 1);
         *(unsigned short *)r2.p->_buffer = DAT_004cc860[s0].v[0];
-        FUN_003ec120(arg0->_textOrder, DAT_00516f10, arg0->_ramNo, 2, r2.p, 1, 0);
+        TextOrder_ConfigureUnicode(arg0->_textOrder, DAT_00516f10, arg0->_ramNo, 2, r2.p, 1, 0);
         }
     }
     }
@@ -4474,7 +4474,7 @@ void FUN_003de7a0(beNDMWLoadIntf2NameSel *arg0, int arg1) {
             igSmartPointer<beUnicodeObj> r(beUnicodeObj_Create(a));
             beUnicodeObj_AllocateBuffer(r.p, 1);
             *(unsigned short *)r.p->_buffer = DAT_004cc860[arg0->_tatePoint].v[s3];
-            FUN_003ec120(arg0->_textOrder, DAT_00516f20, arg0->_ramNo, i, r.p, 1, 0);
+            TextOrder_ConfigureUnicode(arg0->_textOrder, DAT_00516f20, arg0->_ramNo, i, r.p, 1, 0);
         }
     }
 }
@@ -5404,7 +5404,7 @@ unsigned char beNDMWLoadIntf2SelSlot__UpdateSelection(beNDMWLoadIntf2SelSlot *se
                 } else if (held & 0x4000) {
                     ls = (beNDMWMcSlotList *)((beNDMWMcUtilCtrl *)owner->_mcUtilCtrl)->_slot;
                     if (((beNDMWMcSlot **)ls->_data)[tbl[self->_selPoint].idx]->_isConnect == 1) {
-                        FUN_003ee190(owner, self->_ramNo);
+                        beNDMWLoadCtrl2CommonIntf__GiveCtrlTo(owner, self->_ramNo);
                         self->_mcSelPoint = tbl[self->_selPoint].idx;
                         beNDMWLoadIntf2ComMdlCtrl__Play((beNDMWLoadIntf2ComMdlCtrl *)self->_comMdlCtrl, self->_ramNo, DAT_00517160, DAT_005171f0, 1);
                         self->_st1 = 2;
@@ -5421,7 +5421,7 @@ unsigned char beNDMWLoadIntf2SelSlot__UpdateSelection(beNDMWLoadIntf2SelSlot *se
             } else if (held & 0x4000) {
                 ls = (beNDMWMcSlotList *)((beNDMWMcUtilCtrl *)owner->_mcUtilCtrl)->_slot;
                 if (((beNDMWMcSlot **)ls->_data)[tbl[self->_selPoint].idx]->_isConnect == 1) {
-                    FUN_003ee190(owner, self->_ramNo);
+                    beNDMWLoadCtrl2CommonIntf__GiveCtrlTo(owner, self->_ramNo);
                     self->_mcSelPoint = tbl[self->_selPoint].idx;
                     beNDMWLoadIntf2ComMdlCtrl__Play((beNDMWLoadIntf2ComMdlCtrl *)self->_comMdlCtrl, self->_ramNo, DAT_00517160, DAT_005171f0, 1);
                     self->_st1 = 2;

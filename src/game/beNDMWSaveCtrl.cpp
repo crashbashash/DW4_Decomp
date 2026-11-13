@@ -8,7 +8,7 @@ extern "C" void beMessenger_RegisterReceiverFromInfo(int, int, char *);
 extern "C" int Memory_GetAllocatorBySelector(...);
 extern "C" int igObject_GetAllocator(...);
 extern "C" int FUN_003bd390(...);
-extern "C" int FUN_003f0ed0(...);
+extern "C" int beNDMWMcUtilCtrl__Init(...);
 extern "C" int ObjectList_AppendRetained(int, int);
 extern "C" int beMessenger_AppendObject(...);
 extern "C" int beMessenger_GetObjectCount(...);
@@ -23,8 +23,8 @@ extern "C" char DAT_005194c0[];
 extern "C" void Gap__Bec__beNDMWSaveCtrl__vfunc_29(beNDMWSaveCtrl *p0, int p1, char *p2);
 extern "C" igObject *beBaseInfoDataList_Create(int);
 extern "C" igObject *FUN_003bd0b0(int);
-extern "C" igObject *FUN_003c4be0(int);
-extern "C" igObject *FUN_003c56b0(int);
+extern "C" igObject *beNDMWLoadCtrl2CommonIntf_Create(int);
+extern "C" igObject *beNDMWLoadSavePlWork_Create(int);
 extern "C" igObject *beNDMWDegiData_Create(int);
 extern "C" int DAT_005194e0[4];
 extern "C" int DAT_005194e8[4];
@@ -130,7 +130,7 @@ int Gap__Bec__beNDMWSaveCtrl__vfunc_34(beNDMWSaveCtrl *arg0, beBaseInfoRam *arg1
             }
             ALLOC(a, arg0);
             {
-            CommonIntfRef common(FUN_003c4be0(a));
+            CommonIntfRef common(beNDMWLoadCtrl2CommonIntf_Create(a));
             ((beNDMWLoadCtrl2CommonIntf *)common.p)->_system = ((int)FUN_00236f80(arg0->_insight, g_beSystem_metaObject[0]));
             ((beNDMWLoadCtrl2CommonIntf *)common.p)->_inforam = (int)arg1;
             ((beNDMWLoadCtrl2CommonIntf *)common.p)->_insight = arg0->_insight;
@@ -143,13 +143,13 @@ int Gap__Bec__beNDMWSaveCtrl__vfunc_34(beNDMWSaveCtrl *arg0, beBaseInfoRam *arg1
                 }
                 ALLOC(a, arg0);
                 {
-                FlagWorkRef flag(FUN_003c56b0(a));
+                FlagWorkRef flag(beNDMWLoadSavePlWork_Create(a));
                 ObjectList_AppendRetained(((beNDMWLoadCtrl2CommonIntf *)common.p)->_flagWork, (int)flag.p);
                 }
                 i++;
             } while (i < 4);
             ((beNDMWLoadCtrl2CommonIntf *)common.p)->_kindHard = 0;
-            FUN_003f0ed0(((beNDMWLoadCtrl2CommonIntf *)common.p)->_mcUtilCtrl, arg0->_messenger, 0);
+            beNDMWMcUtilCtrl__Init(((beNDMWLoadCtrl2CommonIntf *)common.p)->_mcUtilCtrl, arg0->_messenger, 0);
             ObjectList_AppendRetained(arg1->_dataList, (int)common.p);
             }
             }

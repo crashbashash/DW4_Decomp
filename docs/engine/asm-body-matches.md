@@ -126,7 +126,7 @@ General shapes:
 Shapes found on one function:
 
 * `beNDMWStatusCtrlSendBit::vfunc_21`: the dispatch needs `case 1: default:` as one arm.
-* `beNDMWLoadCtrl2::vfunc_31`: a loop-carried base reload and a goto-form count loop with the preheader written after the return.
+* `beNDMWLoadCtrl2::Update`: a loop-carried base reload and a goto-form count loop with the preheader written after the return.
 * `beNDMWShopCtrlDeviceSell::vfunc_21`: `default: return;` first in the outer switch. In `-O3,p` the scheduler stops hoisting
   successor instructions into delay slots for the whole function once the post-RA jump optimiser deletes a jump to the next block.
   The effect needs a default with a real body, laid out first so the compare chain falls into it: `default: return;` triggers it,

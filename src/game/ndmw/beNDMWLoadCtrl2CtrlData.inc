@@ -1,4 +1,4 @@
-void FUN_003c7a40(int arg0) {
+void beNDMWLoadCtrl2CtrlData_Create(int arg0) {
     FUN_003c7b60();
     igMetaObject_CreateInstance(*(int *)0x58BEB0, arg0);
 }
@@ -91,7 +91,7 @@ void beNDMWLoadCtrl2CtrlData_InitFields(void) {
     igMetaObject_NameFields(temp_s1, &DAT_004cbfc0[0], &DAT_004cbfe0[0], &DAT_004cc000[0], temp_s2);
 }
 
-int FUN_003c7d40(void) {
+int LoadCtrl2Message_GetMetaEnum(void) {
     if (DAT_0058bee8[0] == 0) {
         DAT_0058bee8[0] = igMetaEnum_Create(Message, &DAT_004cc020[0], &DAT_004cc030[0], 4);
     }

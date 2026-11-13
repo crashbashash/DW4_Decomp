@@ -58,7 +58,7 @@ over these, which is why the same names appear in it.
   and the input gate `be:sd("STAGECTL", nil, -2, "PADINPUT", "ENABLE", 29)`. Seen with
   `stagis09` 0 (bandai-logo), `stagis10` 0 (opening) and `stagML11` 9 (title / menu-database /
   bandai-logo tails).
-- **`beNDMWLoadCtrl2::vfunc_31` @ `0x3f1a80`** (2,512 B): the front-end **load controller**. Its
+- **`beNDMWLoadCtrl2::Update` @ `0x3f1a80`** (2,512 B): the front-end **load controller**. Its
   name table (`0x518130…`) is the sequence of things it loads and does: `COMMONINTF`,
   `LOADINTF2_ALL`, `j_chrselback`, `SQ_OPEN` / `SQ_WTIN60` / `SQ_BLOUT30` / `SQ_CLOSE`,
   `SETSELECT_DATA`, `GAMERAM`, `GETCOMMON`, `NINZU`, `DIFFICULTY`, `CAMERAMODE`, `LIGHTMODE`,

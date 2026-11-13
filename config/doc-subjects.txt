@@ -22,6 +22,7 @@ docs/engine/game-state.md
 docs/engine/igbinary-format.md
 docs/engine/igvertexarray2helper.md
 docs/engine/item-database.md
+docs/engine/load-ctrl2.md
 docs/engine/load-intf2.md
 docs/engine/lua-dependencies.md
 docs/engine/material-contact.md

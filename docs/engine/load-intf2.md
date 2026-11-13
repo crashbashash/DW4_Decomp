@@ -194,8 +194,8 @@ effect when the record has no data list:
 
 `beNDMWLoadCtrl2`'s update drives the sub-controller at
 `beNDMWLoadCtrl2CommonIntf._mcUtilCtrl` (`+0x34`) through
-`FUN_003f1270`/`FUN_003f12f0`/`FUN_003f1380`/`FUN_003f13d0` (start / wait /
-close / done), and `FUN_003ecc60` is the release path the load controller calls
+`beNDMWMcUtilCtrl__Generate`/`beNDMWMcUtilCtrl__CheckReady`/`beNDMWMcUtilCtrl__Remove`/`beNDMWMcUtilCtrl__IsRemoved` (start / wait /
+close / done), and `beNDMWLoadCtrl2CommonIntf__UpdateCutConnect` is the release path the load controller calls
 when the selector reports `_intfStat == 0`. Those four model-controller wrappers
 are the seam between the load controller and this interface. All five are
 in `src/unmatched/`.
@@ -376,7 +376,7 @@ The two CommMdlCtrl queue queries and the confirm selection.
 |---|---:|---|---|
 | `0x003e4280` | 20 | `beNDMWLoadIntf2ComMdlCtrl__IsOpenQueueEmpty`, `src/game/beNDMWLoadIntf2.cpp` | `CommMdlCtrl(a0)._openDataList(+0x14).count(+8) <= 0` (an `igObjectList`: `+8` count, `+0x10` data) |
 | `0x003e44d0` | 20 | `beNDMWLoadIntf2ComMdlCtrl__IsCloseQueueEmpty`, `src/game/beNDMWLoadIntf2.cpp` | the same predicate on `_closeDataList(+0x18)` |
-| `0x003ee190` | 184 | `FUN_003ee190`, `src/game/beNDMWLoadCtrl2.cpp` | over the four per-player `beNDMWLoadSavePlWork` records of `COMMONINTF._flagWork` (`+0x28 → +0x10 → [i*4]`): arm rows 0–3 (`_sysStat0` `+0x24` = 1, `+0x28`/`+0x2c`/`+0x30` = 0, `_isCtrl` `+0xf` = 0, `_sysCount0` `+8` = `0x3c`), then clear the selected row (`+0x24` = 0, `+0xf` = 1, `+8` = 0) |
+| `0x003ee190` | 184 | `beNDMWLoadCtrl2CommonIntf__GiveCtrlTo`, `src/game/beNDMWLoadCtrl2.cpp` | over the four per-player `beNDMWLoadSavePlWork` records of `COMMONINTF._flagWork` (`+0x28 → +0x10 → [i*4]`): arm rows 0–3 (`_sysStat0` `+0x24` = 1, `+0x28`/`+0x2c`/`+0x30` = 0, `_isCtrl` `+0xf` = 0, `_sysCount0` `+8` = `0x3c`), then clear the selected row (`+0x24` = 0, `+0xf` = 1, `+8` = 0) |
 
 `0x3e4280`/`0x3e44d0` are called with the `COMMDLCTRL` record; `0x3ee190` is
 called with the `COMMONINTF` record. The queues these predicates read are filled
@@ -441,10 +441,10 @@ reads the reflected receivers listed under
 | `0x003ee6d0` | 2,824 | `beNDMWDegiData__LoadFromProperties`, `src/game/beNDMWLoadCtrl2.cpp` | the property loader: takes a `beNDMWDegiData` record and fills the block at its `_data` field (`+28`) |
 
 The other helpers of the master update in this range:
-`0x003ec120` (`FUN_003ec120`, `src/unmatched/`), `0x003ec450`
+`0x003ec120` (`TextOrder_ConfigureUnicode`, `src/unmatched/`), `0x003ec450`
 (`beNDMWLoadIntf2MesWin__Update`, `src/game/`), `0x003ecdc0` (`beNDMWLoadCtrl2CommonIntf__StepNoticeQuestion`,
 `src/unmatched/`), `0x003ee4d0` (`beNDMWDegiData__UpdateFieldsFromData`,
-`src/game/`), `0x003ef1e0` (`FUN_003ef1e0`, `src/unmatched/`) and `0x003ef5d0`
+`src/game/`), `0x003ef1e0` (`beNDMWDegiData__CreateItem`, `src/unmatched/`) and `0x003ef5d0`
 (`beNDMWDegiData__StoreToProperties`, `src/game/`).
 
 ## Call and Create flows
