@@ -42,7 +42,7 @@ int igProperty_GetRecordFolder(...);
 int igProperty_GetRecord(...);
 int beDataBase_GetRecordString(...);
 int beNDMWWindow_QueueText(...);
-int FUN_003f56d0(...);
+int beNDMWWindow_QueueObjectText(...);
 int igObject_Destroy(...);
 }
 /* matching construct: inline helper struct reproduces the retail string-pool intern/release sequences */
@@ -130,7 +130,7 @@ void Gap__Bec__beNDMWShopSelect02__vfunc_22(beNDMWShopSelect02 *arg0) {
                 b = a;
                 tt = (igObject *)b;
                 if (tt) tt->_refCount = tt->_refCount + 1;
-                FUN_003f56d0(arg0, &DAT_0051c530[0], (int)*p, (int *)&b, &DAT_0051c540[0]);
+                beNDMWWindow_QueueObjectText(arg0, &DAT_0051c530[0], (int)*p, (int *)&b, &DAT_0051c540[0]);
                 tt = (igObject *)b;
                 if (tt) {
                     tt->_refCount = tt->_refCount - 1;

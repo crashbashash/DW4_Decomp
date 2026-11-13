@@ -486,6 +486,8 @@
 0x003ee6d0	beNDMWDegiData::LoadFromProperties	game
 0x003ef5d0	beNDMWDegiData::StoreToProperties	game
 0x003f5410	beNDMWWindow_QueueText	game
+0x003f5660	beNDMWWindow_QueueNumberText	game
+0x003f56d0	beNDMWWindow_QueueObjectText	game
 0x00408100	beNDMWSaveIntf_AcquirePadManager	game
 0x004081a0	beNDMWSaveIntf_Update	game
 0x0040c180	NewDataListRef_Construct_0040c180	game

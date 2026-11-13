@@ -4676,8 +4676,15 @@
 0x00518630	GENERATE_TITLE	string-literal
 0x005186a8	TITLE2	string-literal
 0x00518700	TEXTCTL_2	string-literal
+0x00518708	ALIGN_3	string-literal
+0x00518710	TEXTSET_5	string-literal
+0x00518718	SET_4	string-literal
 0x00518720	SWITCH	string-literal
+0x00518728	percent_d_2	string-literal
 0x00518730	CLR	string-literal
+0x00518738	MODELCTRL_17	string-literal
+0x00518748	ISRUN_8	string-literal
+0x00518750	GENERATE_11	string-literal
 0x00518848	DIGIMONNO_2	string-literal
 0x00518858	LEVEL_2	string-literal
 0x00518860	SKILL	string-literal

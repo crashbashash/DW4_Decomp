@@ -522,8 +522,8 @@
   "0x003f5410": {
     "whole_file": true,
     "emitted": {
-      "FUN_003f5660": "0x003f5660",
-      "FUN_003f56d0": "0x003f56d0",
+      "beNDMWWindow_QueueNumberText": "0x003f5660",
+      "beNDMWWindow_QueueObjectText": "0x003f56d0",
       "beNDMWWindow_RunMessageScript": "0x003f5920",
       "beNDMWWindow_ClearTextElement": "0x003f59b0",
       "beNDMWWindow_ClearQueuedText": "0x003f5a40",

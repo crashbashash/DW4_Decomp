@@ -22,13 +22,13 @@ extern "C" void StringChunk_ReleaseHeader(...);
 extern "C" int beMessenger_AppendString(...);
 extern "C" int beMessenger_DispatchSelected(int, int *);
 extern "C" int beMessenger_SelectReceivers(...);
-extern "C" int sprintf(int *, int *, int);
-extern "C" void FUN_003f5660(int arg0, int arg1, int arg2, int arg3, int arg4);
+extern "C" int sprintf(char *, const char *, int);
+extern "C" void beNDMWWindow_QueueNumberText(beNDMWWindow *self, const char *textType, const char *textName, int number, const char *align);
 extern "C" int beMessenger_AppendObject(int, int);
 extern "C" int FUN_00236f80(int, int);
 extern "C" int igObject_IsKindOf(int, int);
 extern "C" int beLua__RunNamedChunk(int, int, int);
-extern "C" void beNDMWWindow_RunMessageScript(int *arg0, int arg1, int arg2);
+extern "C" void beNDMWWindow_RunMessageScript(beNDMWWindow *self, int chunk, int callNo);
 extern "C" int StringList_CopyRetained(...);
 extern "C" int List_Resize(void *, int, int);
 extern "C" int beMessenger_AppendVec3(int, float *);
@@ -37,9 +37,9 @@ extern "C" int beMessenger_SendNamed(...);
 extern "C" int igObject_Destroy(...);
 extern "C" void List_RemoveWordAt(void *, int);
 extern "C" int TEXTCTL_2[4];
-extern "C" int DAT_00518708[4];
-extern "C" int DAT_00518710[4];
-extern "C" int DAT_00518718[4];
+extern "C" int ALIGN_3[4];
+extern "C" int TEXTSET_5[4];
+extern "C" int SET_4[4];
 extern "C" int SWITCH[4];
 extern "C" void *g_stringPool[4];
 /* Owning stack reference to a pooled string token (reference count at p[-1], chunk header at
@@ -51,13 +51,11 @@ public:
     ~StringRef() { if (p) { int *h = (int *)p - 2; int r = ((int *)p)[-1] - 1; ((int *)p)[-1] = r; if (r == 0) StringChunk_ReleaseHeader(*h, h); } }
 };
 extern "C" int StringList_AppendRetained(int, StringRef *);
-extern "C" void beNDMWWindow_QueueText(beNDMWWindow *arg0, int *arg1, int *arg2, int *arg3, int *arg4);
-extern "C" int DAT_00518728[4];
-extern "C" void FUN_003f56d0(beNDMWWindow *arg0, const char *arg1, const char *arg2, int *arg3, const char *arg4);
+extern "C" void beNDMWWindow_QueueText(beNDMWWindow *self, const char *textType, const char *textName, const char *text, const char *align);
+extern "C" char percent_d_2[];
+extern "C" void beNDMWWindow_QueueObjectText(beNDMWWindow *self, const char *textType, const char *textName, int *textObject, const char *align);
 extern "C" int g_beLua_metaObject[4];
 extern "C" int g_txtCallNo[4];
-extern "C" int TEXTCTL_2[4];
-extern "C" int SWITCH[4];
 extern "C" int CLR[4];
 extern "C" void beNDMWWindow_ClearTextElement(beNDMWWindow *self, int *textType, int *textName);
 struct Clr { static inline void ClearList(igStringRefList *l) {
@@ -79,71 +77,68 @@ struct Clr { static inline void ClearList(igStringRefList *l) {
     l->_count = 0;
 } };
 extern "C" void beNDMWWindow_ClearQueuedText(beNDMWWindow *self);
-extern "C" int DAT_00518738[4];
-extern "C" int DAT_00518748[4];
-extern "C" int DAT_00518750[4];
-extern "C" void beNDMWWindow_PresentModel(beNDMWWindow *arg0, const char *arg1, int arg2, const char *arg3, const char *arg4, float *arg5);
-extern "C" float D_004e1058[];
-extern "C" float D_004e105c[];
-extern "C" float D_004e1060[];
-extern "C" char D_00518738[];
+extern "C" int MODELCTRL_17[4];
+extern "C" int ISRUN_8[4];
+extern "C" int GENERATE_11[4];
+extern "C" void beNDMWWindow_PresentModel(beNDMWWindow *self, const char *model, int id, const char *sequence, const char *close, float *position);
+extern "C" const float g_vec3Zero[4];
 extern "C" void beNDMWWindow_PresentModelAtOrigin(beNDMWWindow *self,const char *model,int id,const char *sequence,const char *close);
 extern "C" void beNDMWWindow_SendModelSequence(beNDMWWindow *self,int model,int id,int sequence);
 extern "C" void beNDMWWindow_PlayQueuedModelClose(beNDMWWindow *w);
 extern "C" int beMessenger_GetBoolCount(int);
 extern "C" int beNDMWWindow_PollCloseComplete(beNDMWWindow *self);
-extern "C" void beNDMWWindow_RequestChildrenClose(beNDMWWindow *arg0);
+extern "C" void beNDMWWindow_RequestChildrenClose(beNDMWWindow *self);
 extern "C" int g_bePadManager_metaObject[4];
 extern "C" int g_beMessenger_metaObject[4];
-extern "C" void beNDMWWindow_BindContext(beNDMWWindow *arg0, igObject *arg1, int arg2, int arg3, int arg4);
+extern "C" void beNDMWWindow_BindContext(beNDMWWindow *self, igObject *mother, int insight, int playerNo, int entCode);
 /* matching construct: dummy-virtual view so ->f21() dispatches through vtable slot 21 of the window */
 struct WinView { virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void f21(); };
 extern "C" void beNDMWWindow_UpdateTree(beNDMWWindow *w);
 
-void beNDMWWindow_QueueText(beNDMWWindow *arg0, int *arg1, int *arg2, int *arg3, int *arg4) {
-    beMessenger_SelectReceivers(arg0->_messenger, TEXTCTL_2, 0, -1);
-    beMessenger_AppendString(arg0->_messenger, arg1);
-    beMessenger_AppendString(arg0->_messenger, arg2);
-    beMessenger_AppendString(arg0->_messenger, arg4);
-    beMessenger_DispatchSelected(arg0->_messenger, DAT_00518708);
-    beMessenger_SelectReceivers(arg0->_messenger, TEXTCTL_2, 0, -1);
-    beMessenger_AppendString(arg0->_messenger, arg1);
-    beMessenger_AppendString(arg0->_messenger, arg2);
-    beMessenger_AppendString(arg0->_messenger, arg3);
-    beMessenger_DispatchSelected(arg0->_messenger, DAT_00518710);
-    beMessenger_SelectReceivers(arg0->_messenger, TEXTCTL_2, 0, -1);
-    beMessenger_AppendString(arg0->_messenger, arg1);
-    beMessenger_AppendString(arg0->_messenger, arg2);
-    beMessenger_AppendString(arg0->_messenger, DAT_00518718);
-    beMessenger_DispatchSelected(arg0->_messenger, SWITCH);
-    INTERN_APPEND(arg0->_textCloseTypeList, arg1)
-    INTERN_APPEND(arg0->_textCloseNameList, arg2)
+void beNDMWWindow_QueueText(beNDMWWindow *self, const char *textType, const char *textName, const char *text, const char *align) {
+    beMessenger_SelectReceivers(self->_messenger, TEXTCTL_2, 0, -1);
+    beMessenger_AppendString(self->_messenger, textType);
+    beMessenger_AppendString(self->_messenger, textName);
+    beMessenger_AppendString(self->_messenger, align);
+    beMessenger_DispatchSelected(self->_messenger, ALIGN_3);
+    beMessenger_SelectReceivers(self->_messenger, TEXTCTL_2, 0, -1);
+    beMessenger_AppendString(self->_messenger, textType);
+    beMessenger_AppendString(self->_messenger, textName);
+    beMessenger_AppendString(self->_messenger, text);
+    beMessenger_DispatchSelected(self->_messenger, TEXTSET_5);
+    beMessenger_SelectReceivers(self->_messenger, TEXTCTL_2, 0, -1);
+    beMessenger_AppendString(self->_messenger, textType);
+    beMessenger_AppendString(self->_messenger, textName);
+    beMessenger_AppendString(self->_messenger, SET_4);
+    beMessenger_DispatchSelected(self->_messenger, SWITCH);
+    INTERN_APPEND(self->_textCloseTypeList, textType)
+    INTERN_APPEND(self->_textCloseNameList, textName)
 }
 
-void FUN_003f5660(int arg0, int arg1, int arg2, int arg3, int arg4) {
-    int sp50[4];
-    sprintf(sp50, &DAT_00518728[0], arg3);
-    beNDMWWindow_QueueText((beNDMWWindow *)arg0, (int *)arg1, (int *)arg2, sp50, (int *)arg4);
+void beNDMWWindow_QueueNumberText(beNDMWWindow *self, const char *textType, const char *textName, int number, const char *align) {
+    char text[16];
+    sprintf(text, percent_d_2, number);
+    beNDMWWindow_QueueText(self, textType, textName, text, align);
 }
 
-void FUN_003f56d0(beNDMWWindow *arg0, const char *arg1, const char *arg2, int *arg3, const char *arg4) {
-    beMessenger_SelectReceivers(arg0->_messenger, &TEXTCTL_2[0], 0, -1);
-    beMessenger_AppendString(arg0->_messenger, arg1);
-    beMessenger_AppendString(arg0->_messenger, arg2);
-    beMessenger_AppendString(arg0->_messenger, arg4);
-    beMessenger_DispatchSelected(arg0->_messenger, &DAT_00518708[0]);
-    beMessenger_SelectReceivers(arg0->_messenger, &TEXTCTL_2[0], 0, -1);
-    beMessenger_AppendString(arg0->_messenger, arg1);
-    beMessenger_AppendString(arg0->_messenger, arg2);
-    beMessenger_AppendObject(arg0->_messenger, *arg3);
-    beMessenger_DispatchSelected(arg0->_messenger, &DAT_00518710[0]);
-    beMessenger_SelectReceivers(arg0->_messenger, &TEXTCTL_2[0], 0, -1);
-    beMessenger_AppendString(arg0->_messenger, arg1);
-    beMessenger_AppendString(arg0->_messenger, arg2);
-    beMessenger_AppendString(arg0->_messenger, (const char *)&DAT_00518718[0]);
-    beMessenger_DispatchSelected(arg0->_messenger, &SWITCH[0]);
-    INTERN_APPEND(arg0->_textCloseTypeList, arg1)
-    INTERN_APPEND(arg0->_textCloseNameList, arg2)
+void beNDMWWindow_QueueObjectText(beNDMWWindow *self, const char *textType, const char *textName, int *textObject, const char *align) {
+    beMessenger_SelectReceivers(self->_messenger, TEXTCTL_2, 0, -1);
+    beMessenger_AppendString(self->_messenger, textType);
+    beMessenger_AppendString(self->_messenger, textName);
+    beMessenger_AppendString(self->_messenger, align);
+    beMessenger_DispatchSelected(self->_messenger, ALIGN_3);
+    beMessenger_SelectReceivers(self->_messenger, TEXTCTL_2, 0, -1);
+    beMessenger_AppendString(self->_messenger, textType);
+    beMessenger_AppendString(self->_messenger, textName);
+    beMessenger_AppendObject(self->_messenger, *textObject);
+    beMessenger_DispatchSelected(self->_messenger, TEXTSET_5);
+    beMessenger_SelectReceivers(self->_messenger, TEXTCTL_2, 0, -1);
+    beMessenger_AppendString(self->_messenger, textType);
+    beMessenger_AppendString(self->_messenger, textName);
+    beMessenger_AppendString(self->_messenger, SET_4);
+    beMessenger_DispatchSelected(self->_messenger, SWITCH);
+    INTERN_APPEND(self->_textCloseTypeList, textType)
+    INTERN_APPEND(self->_textCloseNameList, textName)
 }
 
 static inline int castToLuaManager(int object) {
@@ -153,10 +148,10 @@ static inline int castToLuaManager(int object) {
     return 0;
 }
 
-void beNDMWWindow_RunMessageScript(int *arg0, int arg1, int arg2) {
-    int manager = castToLuaManager(FUN_00236f80(arg0[2], g_beLua_metaObject[0]));
-    g_txtCallNo[0] = arg2;
-    beLua__RunNamedChunk(manager, arg1, 0);
+void beNDMWWindow_RunMessageScript(beNDMWWindow *self, int chunk, int callNo) {
+    int manager = castToLuaManager(FUN_00236f80(self->_insight, g_beLua_metaObject[0]));
+    g_txtCallNo[0] = callNo;
+    beLua__RunNamedChunk(manager, chunk, 0);
 }
 
 void beNDMWWindow_ClearTextElement(beNDMWWindow *self, int *textType, int *textName) {
@@ -168,23 +163,23 @@ void beNDMWWindow_ClearTextElement(beNDMWWindow *self, int *textType, int *textN
 }
 
 void beNDMWWindow_ClearQueuedText(beNDMWWindow *self) {
-    int *sp1;
-    int *t2;
-    int *sp2;
+    int *typeCopy;
+    int *name;
+    int *nameCopy;
     int n;
-    int *a1;
+    int *header;
     int i;
-    int *t1;
-    int c;
+    int *type;
+    int refs;
     n = ((igStringRefList *)self->_textCloseTypeList)->_count;
     for (i = 0; i < n; i++) {
-        StringList_CopyRetained(&sp1, (igStringRefList *)self->_textCloseTypeList, i);
-        t1 = sp1;
-        if (t1) { a1 = t1 - 2; c = t1[-1] - 1; t1[-1] = c; if (c == 0) StringChunk_ReleaseHeader(*a1, a1); }
-        StringList_CopyRetained(&sp2, (igStringRefList *)self->_textCloseNameList, i);
-        t2 = sp2;
-        if (t2) { a1 = t2 - 2; c = t2[-1] - 1; t2[-1] = c; if (c == 0) StringChunk_ReleaseHeader(*a1, a1); }
-        beNDMWWindow_ClearTextElement(self, t1, t2);
+        StringList_CopyRetained(&typeCopy, (igStringRefList *)self->_textCloseTypeList, i);
+        type = typeCopy;
+        if (type) { header = type - 2; refs = type[-1] - 1; type[-1] = refs; if (refs == 0) StringChunk_ReleaseHeader(*header, header); }
+        StringList_CopyRetained(&nameCopy, (igStringRefList *)self->_textCloseNameList, i);
+        name = nameCopy;
+        if (name) { header = name - 2; refs = name[-1] - 1; name[-1] = refs; if (refs == 0) StringChunk_ReleaseHeader(*header, header); }
+        beNDMWWindow_ClearTextElement(self, type, name);
     }
     Clr::ClearList((igStringRefList *)self->_textCloseTypeList);
     Clr::ClearList((igStringRefList *)self->_textCloseNameList);
@@ -192,39 +187,42 @@ void beNDMWWindow_ClearQueuedText(beNDMWWindow *self) {
 
 static inline int count(const igDataList *list) { return list->_count; }
 
-void beNDMWWindow_PresentModel(beNDMWWindow *arg0, const char *arg1, int arg2, const char *arg3, const char *arg4, float *arg5) {
-    float v[3];
-    beMessenger_SendNamed(arg0->_messenger, DAT_00518738, arg1, arg2, (const char *)DAT_00518748);
-    if (beMessenger_GetBool(arg0->_messenger, 0) != 0) {
-        beMessenger_SendNamed(arg0->_messenger, DAT_00518738, arg1, arg2, arg3);
+void beNDMWWindow_PresentModel(beNDMWWindow *self, const char *model, int id, const char *sequence, const char *close, float *position) {
+    float at[3];
+    beMessenger_SendNamed(self->_messenger, MODELCTRL_17, model, id, (const char *)ISRUN_8);
+    if (beMessenger_GetBool(self->_messenger, 0) != 0) {
+        beMessenger_SendNamed(self->_messenger, MODELCTRL_17, model, id, sequence);
     } else {
-        beMessenger_SelectReceivers(arg0->_messenger, DAT_00518738, arg1, arg2);
-        beMessenger_AppendString(arg0->_messenger, arg3);
-        v[0] = arg5[0];
-        v[1] = arg5[1];
-        v[2] = arg5[2];
-        beMessenger_AppendVec3(arg0->_messenger, v);
-        beMessenger_DispatchSelected(arg0->_messenger, DAT_00518750);
+        beMessenger_SelectReceivers(self->_messenger, MODELCTRL_17, model, id);
+        beMessenger_AppendString(self->_messenger, sequence);
+        at[0] = position[0];
+        at[1] = position[1];
+        at[2] = position[2];
+        beMessenger_AppendVec3(self->_messenger, at);
+        beMessenger_DispatchSelected(self->_messenger, GENERATE_11);
     }
-    if (arg4 != 0) {
-        INTERN_APPEND(arg0->_modelCloseInfoNameList, arg1)
+    if (close != 0) {
+        INTERN_APPEND(self->_modelCloseInfoNameList, model)
         {
-            int n; igDataList *l = (igDataList *)arg0->_modelCloseRamNoList;
+            int n; igDataList *l = (igDataList *)self->_modelCloseRamNoList;
             n = l->_count;
             if (n < l->_capacity) l->_count = count(l) + 1; else List_Resize(l, n + 1, 4);
-            ((int *)l->_data)[n] = arg2;
+            ((int *)l->_data)[n] = id;
         }
-        INTERN_APPEND(arg0->_modelCloseSeqNameList, arg4)
+        INTERN_APPEND(self->_modelCloseSeqNameList, close)
     }
 }
 
-void beNDMWWindow_PresentModelAtOrigin(beNDMWWindow *self,const char *model,int id,const char *sequence,const char *close){
-    float origin[3];origin[0]=D_004e1058[0];origin[1]=D_004e105c[0];origin[2]=D_004e1060[0];
-    beNDMWWindow_PresentModel(self, (const char *)model, (int)id, (const char *)sequence, (const char *)close, (float *)origin);
+void beNDMWWindow_PresentModelAtOrigin(beNDMWWindow *self, const char *model, int id, const char *sequence, const char *close) {
+    float origin[3];
+    origin[0] = g_vec3Zero[0];
+    origin[1] = g_vec3Zero[1];
+    origin[2] = g_vec3Zero[2];
+    beNDMWWindow_PresentModel(self, model, id, sequence, close, origin);
 }
 
-void beNDMWWindow_SendModelSequence(beNDMWWindow *self,int model,int id,int sequence){
-    beMessenger_SendNamed((void *)self->_messenger,D_00518738,model,id,sequence);
+void beNDMWWindow_SendModelSequence(beNDMWWindow *self, int model, int id, int sequence) {
+    beMessenger_SendNamed(self->_messenger, MODELCTRL_17, model, id, sequence);
 }
 
 void beNDMWWindow_PlayQueuedModelClose(beNDMWWindow *w) {
@@ -254,25 +252,25 @@ void beNDMWWindow_PlayQueuedModelClose(beNDMWWindow *w) {
 }
 
 int beNDMWWindow_PollCloseComplete(beNDMWWindow *self) {
-    int *sp1;
-    int *sp2;
-    int *a1;
-    int c;
+    int *modelCopy;
+    int *sequenceCopy;
+    int *header;
+    int refs;
     int i;
-    int v;
+    int id;
     int n;
-    int *t1;
-    int *t2;
+    int *model;
+    int *sequence;
     n = ((igStringRefList *)self->_modelCloseInfoNameList)->_count;
     for (i = 0; i < n; i++) {
-        StringList_CopyRetained(&sp1, (igStringRefList *)self->_modelCloseInfoNameList, i);
+        StringList_CopyRetained(&modelCopy, (igStringRefList *)self->_modelCloseInfoNameList, i);
         /* matching construct: cxx_sweep — the token copy moved into the release test */
-        if ((t1 = sp1)) { a1 = t1 - 2; c = t1[-1] - 1; t1[-1] = c; if (c == 0) StringChunk_ReleaseHeader(*a1, a1); }
-        v = ((int *)((igStringRefList *)self->_modelCloseRamNoList)->_data)[i];
-        StringList_CopyRetained(&sp2, (igStringRefList *)self->_modelCloseSeqNameList, i);
-        t2 = sp2;
-        if (t2) { a1 = t2 - 2; c = t2[-1] - 1; t2[-1] = c; if (c == 0) StringChunk_ReleaseHeader(*a1, a1); }
-        beMessenger_SendNamed(self->_messenger, DAT_00518738, t1, v, DAT_00518748);
+        if ((model = modelCopy)) { header = model - 2; refs = model[-1] - 1; model[-1] = refs; if (refs == 0) StringChunk_ReleaseHeader(*header, header); }
+        id = ((int *)((igStringRefList *)self->_modelCloseRamNoList)->_data)[i];
+        StringList_CopyRetained(&sequenceCopy, (igStringRefList *)self->_modelCloseSeqNameList, i);
+        sequence = sequenceCopy;
+        if (sequence) { header = sequence - 2; refs = sequence[-1] - 1; sequence[-1] = refs; if (refs == 0) StringChunk_ReleaseHeader(*header, header); }
+        beMessenger_SendNamed(self->_messenger, MODELCTRL_17, model, id, ISRUN_8);
         if (beMessenger_GetBoolCount(self->_messenger) > 0 && beMessenger_GetBool(self->_messenger, 0)) return 0;
     }
     if (((igStringRefList *)self->_subWindow)->_count) return 0;
@@ -282,43 +280,42 @@ int beNDMWWindow_PollCloseComplete(beNDMWWindow *self) {
     return 1;
 }
 
-void beNDMWWindow_RequestChildrenClose(beNDMWWindow *arg0) {
+void beNDMWWindow_RequestChildrenClose(beNDMWWindow *self) {
     int n;
     int i;
-    beNDMWWindow *t;
+    beNDMWWindow *child;
 
-    n = ((igDataList *)arg0->_subWindow)->_count;
+    n = ((igDataList *)self->_subWindow)->_count;
     for (i = 0; i < n; i++) {
-        t = ((beNDMWWindow **)((igDataList *)arg0->_subWindow)->_data)[i];
-        if (t->_st0 < 2) {
-            t->_st0 = 2;
-            t->_st3 = 0;
-            t->_st2 = 0;
-            t->_st1 = 0;
+        child = ((beNDMWWindow **)((igDataList *)self->_subWindow)->_data)[i];
+        if (child->_st0 < 2) {
+            child->_st0 = 2;
+            child->_st3 = 0;
+            child->_st2 = 0;
+            child->_st1 = 0;
         }
     }
 }
 
-/* igObject header: vtable, packed refcount */
-void beNDMWWindow_BindContext(beNDMWWindow *arg0, igObject *arg1, int arg2, int arg3, int arg4) {
-    igObject *t;
+void beNDMWWindow_BindContext(beNDMWWindow *self, igObject *mother, int insight, int playerNo, int entCode) {
+    igObject *old;
 
-    if (arg1 != 0) {
-        arg1->_refCount = arg1->_refCount + 1;
+    if (mother != 0) {
+        mother->_refCount = mother->_refCount + 1;
     }
-    t = (igObject *)arg0->_mother;
-    if (t != 0) {
-        t->_refCount = t->_refCount - 1;
-        if ((t->_refCount & 0x7FFFFF) == 0) {
-            igObject_Destroy(t);
+    old = (igObject *)self->_mother;
+    if (old != 0) {
+        old->_refCount = old->_refCount - 1;
+        if ((old->_refCount & 0x7FFFFF) == 0) {
+            igObject_Destroy(old);
         }
     }
-    arg0->_mother = (int)arg1;
-    arg0->_insight = arg2;
-    arg0->_messenger = FUN_00236f80(arg2, g_beMessenger_metaObject[0]);
-    arg0->_padManager = FUN_00236f80(arg2, g_bePadManager_metaObject[0]);
-    arg0->_playerNo = arg3;
-    arg0->_entCode = arg4;
+    self->_mother = (int)mother;
+    self->_insight = insight;
+    self->_messenger = FUN_00236f80(insight, g_beMessenger_metaObject[0]);
+    self->_padManager = FUN_00236f80(insight, g_bePadManager_metaObject[0]);
+    self->_playerNo = playerNo;
+    self->_entCode = entCode;
 }
 
 void beNDMWWindow_UpdateTree(beNDMWWindow *w) {

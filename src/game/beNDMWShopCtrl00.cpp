@@ -165,7 +165,7 @@ extern "C" int beDataBase_GetRecordInt(...);
 extern "C" void * FUN_00236f80(...);
 extern "C" int FUN_003b4410(...);
 extern "C" int FUN_003b51b0(...);
-extern "C" int FUN_003f5660(...);
+extern "C" int beNDMWWindow_QueueNumberText(...);
 extern "C" char * beDataBase_GetRecordString(...);
 extern "C" int beNDMWWindow_PresentModel(...);
 extern "C" int beNDMWWindow_PresentModelAtOrigin(...);
@@ -1944,7 +1944,7 @@ void Gap__Bec__beNDMWShopCtrl50__vfunc_21(beNDMWShopCtrl50 *self) {
                 fp = &((char * *)g_fontNames)[0];
                 do {
                     beNDMWWindow_QueueText(self, STWINFONT14, *fp, beDataBase_GetRecordString(obj, i, NAME_2), &DAT_0051b598[0]);
-                    FUN_003f5660(self, STWINFONT17, *fp, beDataBase_GetRecordInt(obj, i, &DAT_0051b690[0]), &DAT_0051b460[0]);
+                    beNDMWWindow_QueueNumberText(self, STWINFONT17, *fp, beDataBase_GetRecordInt(obj, i, &DAT_0051b690[0]), &DAT_0051b460[0]);
                     i += 1;
                     fp += 1;
                 } while (i < 10);

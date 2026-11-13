@@ -707,7 +707,7 @@ public:
     DeviceRef(const DeviceRef &r) : p(r.p) { if (p != 0) p->_refCount = p->_refCount + 1; }
     ~DeviceRef() { ReleaseObject((igObject *)p); }
 };
-extern "C" void FUN_003f56d0(void *, void *, const char *, const DeviceRef &, void *);
+extern "C" void beNDMWWindow_QueueObjectText(void *, void *, const char *, const DeviceRef &, void *);
 struct Q48 { Q128 q[3]; };
 extern "C" void Gap__Bec__beNDMWStatusCtrlDisk__vfunc_21(beNDMWStatusCtrlDisk *self);
 extern "C" void FUN_0041d2c0(igStringRefList *arg0, int arg1, int arg2);
@@ -4474,7 +4474,7 @@ void Gap__Bec__beNDMWStatusCtrlDisk__vfunc_21(beNDMWStatusCtrlDisk *self)
                     l2 = (igObjectList *)((int *)igProperty_GetRecordFolder(beMessenger_GetObject(self->_messenger, 0), DAT_0051a1e8))[3];
                     if (l2->_count > 0) {
                         DeviceRef firstDevice((void *)*(int *)l2->_data, kRetainReference);
-                        FUN_003f56d0(self, DAT_0051a060, names.v[i], DeviceRef(firstDevice), DAT_00519b68);
+                        beNDMWWindow_QueueObjectText(self, DAT_0051a060, names.v[i], DeviceRef(firstDevice), DAT_00519b68);
                     }
                     bufC[0] = ((beNDMWItemDisk *)((int *)((igObjectList *)self->_diskList)->_data)[i])->_kazu + 0x30;
                     bufC[1] = 0;
@@ -5910,7 +5910,7 @@ void Gap__Bec__beNDMWStatusSubMenu__vfunc_21(beNDMWStatusSubMenu *self)
                         lst = (igObjectList *)((int *)igProperty_GetRecordFolder(obj, DAT_0051a1e8))[3];
                         if (lst->_count > 0) {
                             DeviceRef firstDevice((void *)*(int *)lst->_data, kRetainReference);
-                            FUN_003f56d0(self, DAT_0051a060, names.v[i], DeviceRef(firstDevice), DAT_00519b68);
+                            beNDMWWindow_QueueObjectText(self, DAT_0051a060, names.v[i], DeviceRef(firstDevice), DAT_00519b68);
                         }
                         c = folder->_count;
                         LIST_ADD_4207a0(self->_playerDeviceCnt, c)

@@ -22,6 +22,24 @@ The run extends backward with the 144-byte
 at3f5920. The current presentation/title boundary is nine bodies /2,772 bytes;
 the added body is `src/game/beNDMWWindow.cpp`.
 
+## Text requests
+
+`beNDMWWindow_QueueText` (3f5410) addresses one text element of the window's
+TEXTCTL receivers by text type and text name, and sends three messages to it through
+the window messenger: ALIGN with the alignment string, TEXTSET with the text, and
+SWITCH with the literal SET. It then interns the type and the name and appends them
+to `_textCloseTypeList`60 and `_textCloseNameList`64, so that
+`beNDMWWindow_ClearQueuedText` can later clear every element the window showed.
+
+`beNDMWWindow_QueueNumberText` (3f5660) formats an integer with `%d` into a
+16-byte local buffer and forwards it to `beNDMWWindow_QueueText`; the shop
+controller uses it for record counts.
+
+`beNDMWWindow_QueueObjectText` (3f56d0) is the same three-message sequence, but
+TEXTSET carries an object reference (appended with `beMessenger_AppendObject`)
+instead of a string. The list controller passes the first device of a player's
+record folder. It records the type and name in the same close lists.
+
 ## Text close requests
 
 ClearTextElement3f59b0 selects TEXTCTL with no named receiver and id-1, appends the

@@ -19148,8 +19148,8 @@
 003f5350 0000a8 Gap__Bec__beNDMWTitle2__vfunc_34 Gap::Bec::beNDMWTitle2::vfunc_34
 003f5400 00000c Gap__Bec__beNDMWTitle2__vfunc_20 Gap::Bec::beNDMWTitle2::vfunc_20
 003f5410 000248 beNDMWWindow_QueueText
-003f5660 000070 FUN_003f5660
-003f56d0 000248 FUN_003f56d0
+003f5660 000070 beNDMWWindow_QueueNumberText
+003f56d0 000248 beNDMWWindow_QueueObjectText
 003f5920 000090 beNDMWWindow_RunMessageScript
 003f59b0 000088 beNDMWWindow_ClearTextElement
 003f5a40 000244 beNDMWWindow_ClearQueuedText
