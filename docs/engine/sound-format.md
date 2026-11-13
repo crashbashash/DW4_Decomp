@@ -223,7 +223,7 @@ A positive playback handle adds a row with `deadline = now + 0x02faf07e`
 (**49,999,998 ns**). Equal time permits playback; unrelated sounds do not block
 one another. Expired row cleanup is separate from admission.
 
-Stream types 1/2 follow the `beCriAudio` stream path at `0x0037c2c0`, adding
+Stream types 1/2 follow the stream player `beCri_PlayStream`, adding
 `beSoundInfo._baseVolume` to signed `beSoundData._volume`. Volume routes through
 `beCriAudio_SetVolume`, `igAdxAudio_SetOutVolume` and `0x0026c660`; the latter also adds an optional
 CRI channel adjustment. `0x0027ae18` clamps enabled-driver levels to `[-999,0]`.
@@ -266,13 +266,13 @@ Read from the byte-matched `beSound::vfunc_34` (`0x0039ec10`) and the matched `b
 
 **PLAY (2) and PLAYatPAUSE (3, which first sets `_pauseOnetime`).** The cue is found by name in the info's data list, then by
 `_type`: type 1 (music) returns without restarting when the name equals `_currentBGM`, otherwise starts in the stream player
-(`0x0037c2c0`) and stores the name as the current BGM; when the player returns 0 a delayed PLAY retry is enqueued (also for type 2,
+(`beCri_PlayStream`) and stores the name as the current BGM; when the player returns 0 a delayed PLAY retry is enqueued (also for type 2,
 ambience, which never records a current name). Every other type is searched in the playing-SE list for a row with the same
 *record index* and a deadline still ahead, which suppresses the play (replying handle 0); otherwise the resident-effect
-player (`0x0037c4c0`) plays it and, for a positive handle, a row with deadline now + 49,999,998 ns is stored.
+player (`beCri_PlayEffect`) plays it and, for a positive handle, a row with deadline now + 49,999,998 ns is stored.
 
 **Stop and fade.** `BGMSTOP`, `ENVSTOP` and `SESTOP` read no name: they stop the BGM handle, the ambience handle or the
-resident-effect handles (`0x0037cc50`, kinds 1, 2, 4), and only `BGMSTOP` clears the current-BGM name. `VOLUMECTL` UP/DOWN fades
+resident-effect handles (`beCri_StopGroup`, kinds 1, 2, 4), and only `BGMSTOP` clears the current-BGM name. `VOLUMECTL` UP/DOWN fades
 by handle number or by name over 10.0 (the ten-frame fade); a DOWN of the current BGM clears the name. `VOLUMECTL2 name a b c`
 ramps the carrier of that name from `a` to `b` over `c`.
 
@@ -285,14 +285,14 @@ position by `(last - first) / frames` entries and yields the level `base + volum
 `(int)(127 * factor)`), finishing as soon as the target level is reached and returning -999 (silence) for a target of 0: a 10-frame
 fade to 0 is silent on frame 9.
 
-**Music change.** `FUN_0037c2c0` takes the BGM slot for type 1 and the ambience slot for type 2 (memory index -1 only). If the slot's
+**Music change.** `beCri_PlayStream` takes the BGM slot for type 1 and the ambience slot for type 2 (memory index -1 only). If the slot's
 voice is still playing it arms the 1.0 -> 0.0 over 10.0 ramp (only when none runs) and returns 0; `beSound::vfunc_34` then enqueues the PLAY
 again with delay 0xB. The per-frame update (`beCri::vfunc_27`) steps the ramp and stops the voice when a fade to 0 passes -209 (ADX) or
 127 * factor < 13 (sound bank), after which the retry starts the new track at `_volume + _baseVolume`. A music PLAY of the current BGM is
 ignored before any of this.
 
-**Voice pool.** `FUN_0037d310` appends 4 ADX handles (24 kHz) and 48 sound-bank handles to the effect list; the BGM and
-ambience streams are separate 48 kHz ADX handles. `FUN_0037c130(kind, priority)` returns the first idle capable handle
+**Voice pool.** `beCri_CreateEffectVoices` appends 4 ADX handles (24 kHz) and 48 sound-bank handles to the effect list; the BGM and
+ambience streams are separate 48 kHz ADX handles. `beCri_AcquireVoice(kind, priority)` returns the first idle capable handle
 (kind 1 needs an ADX object, kind 0 a sound-bank object), else stops and reuses the lowest-priority handle whose priority is
 not above the request's, oldest first; a play stores the cue's type, priority and an increasing request id in the handle. Only
 30 of the 8,855 cue records have a priority other than 0 (all 1).
@@ -308,7 +308,7 @@ to (`beCriAudio_ReportError`) is empty in retail. `beCriAudio_Pause` and `beCriA
 clears: suspend saves the ADX output level in `_errVolume`, mutes and pauses the voice; resume restores the level, unpauses and
 sets `_errVolume` back to -999. A sound-bank voice only records 127 (suspend) or -999 (resume).
 
-**ISREADY.** `ISREADY <name>` (case 12, `FUN_0037dd10`) answers 1 unless the named BGM, ambience or live effect handle has an ADX state other
+**ISREADY.** `ISREADY <name>` (case 12, `beCri_IsReady`) answers 1 unless the named BGM, ambience or live effect handle has an ADX state other
 than 3 (playing), which answers 0. A name no handle holds answers 1, and the special name `ALL` (`0x50e488`) tests the live ADX handles
 together. Boss intros send `PLAYatPAUSE BT_SBOSS` and then wait on `DMchkSD ISREADY BT_SBOSS "==0"` while the answer is 0. How long a retail
 stream takes to reach state 3 is not measured.
@@ -319,3 +319,44 @@ sequence number, then command 2; volume = command 4), so the event byte, the `00
 interpreted on the IOP side and are not recoverable from the EE program. `beSoundData._channel` (+24) is 1 for resident effects and 2 for
 streamed tracks in all 8,855 cue records, except three type 3 ADX effects that carry 2. The EE program reads cue records only at offsets 8,
 16, 18, 20, 26 and 28, so `_channel` is a data-side tag there; whether the sound IOP module uses it is not known.
+
+## The beCri controller
+
+`src/game/beCri.cpp` holds the controller that owns the voices above, after the traversal callbacks of
+the two copy nodes that share its file (`beCopyModelCtrl2_Traverse`, which copies its `beModelCtrlNode2`
+source's matrix and clock and pushes a model-view matrix and a time attribute for its children, and
+`beCopyTransform_Traverse`, which copies an `igTransform`'s matrix; `beCopyModelCtrl2_RegisterTraversal`
+and `beCopyTransform_RegisterTraversal` register them as the classes' registration callbacks).
+
+**Lifecycle.** Slot 21 reads `AdxModulePath` from the `BECRUNTIME` ini section into `igAdx_SetModulePath`;
+without it the path is the CRI default the library version selects (`C:/cri/ps2/iop/modules` when
+`9.31s281` equals `9.18`, else `C:/usr/local/cri/mwlib/iop/drv`, the same test `igAdx` makes for its own
+IRX path). It then sets `g_adxUseFileInfoCache` (which makes `igAdx` set up the `cdvd.fic` file-info
+cache), DVD media (`g_adxMediaMode` 2, passed to `sceCdMmode`), starts the ADX library and replaces
+`igFile`'s `_abstractProxy` with `beCri_AdxFileProxy`, so every `igFile` opens as an `igAdxFile`; slot 22
+puts the saved proxy back. Slot 23 creates the BGM and ambience handles (two-channel ADX) and the
+effect pool, slot 24 stops and releases them, slot 25 takes a `beCriFxInfo` into `_infoList`, slot 26
+empties that list and frees the sound banks, and slot 27 is the per-frame update described above.
+
+**Partitions.** `beNDMWAfsSetup` hands the controller its AFS partitions: `beCri_SetupPartitions` sets
+their count and the inside-file list, `beCri_LoadPartition` loads one archive (synchronously, through
+`igAdx_LoadPartition`), and `beCri_ReleasePartitions` clears the names and lists again.
+
+**Sound banks (`_dataType` 1).** `MAKEBINLIST` (`beCri_StartSfpTransfers`) numbers every untransferred
+`beCriSfpData` with its port and starts the first transfer (`beCri_TransferSfp`: the bank's table and PCM
+sizes go into the two 32-entry tables `g_sfpPortSizes` hands the sound IOP module, then its data);
+`g_sfpTransferState` holds 1 while a port waits or transfers and 2 once it is done. `ISDONETRANS`
+(`beCri_IsTransferDone`) polls the running ports, frees a finished bank's buffer, marks it transferred
+and starts the next bank. `FREESFPDATA` (`beCri_FreeSfpData`) frees the ports and empties the list. A
+bank's `_dataBuffer` is allocated with the 32-byte `sndfBuffer` alignment
+(`beCriSfpData_SetupBufferAlignment`).
+
+**Other messages.** `FXCTL` (`beCri_SetFx`) sends the first `beCriFxInfo`'s `_reverb` when the name is
+that info's, else 127; `NONE` turns it off. `PAUSEOFF` unpauses by name (`beCri_UnpauseByName`), the
+fades go through `beCri_FadeByName` and `beCri_FadeByID`, `STOP` through `beCri_StopByID`. `ONFREEZE` and
+`OFFREEZE` (`beCri_SetFreezeAudible` with 0 and 1) silence or restore the playing type 4 effects.
+`SNDFVOLUME` (`beCri_SetSndfVolume`) sets the sound-bank master level once.
+
+Open questions: what type 4 cues are (only they follow the freeze); the insight calls of slots 21 and 22
+(`FUN_00236be0`, `FUN_00236c40`) are read as joining and leaving the insight from their pairing, not from
+their bodies.

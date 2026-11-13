@@ -1,6 +1,6 @@
 #include "dw4/reflected.h"
 
-extern "C" int FUN_0037d2f0(int);
+extern "C" int beCri_ReleasePartitions(int);
 extern "C" void Gap__Bec__beNDMWAfsSetup__vfunc_21(void);
 extern "C" void Gap__Bec__beNDMWAfsSetup__vfunc_22(void);
 extern "C" void Gap__Bec__beNDMWAfsSetup__vfunc_23(void);
@@ -18,8 +18,8 @@ extern "C" int g_beNDMWAfsSetup_metaObject[4];
 extern "C" void Gap__Bec__beNDMWAfsSetup__vfunc_24(beNDMWAfsSetup *self);
 extern "C" int igObject_IsKindOf(igObject *, int);
 extern "C" void FUN_00236be0(int, beNDMWAfsSetup *);
-extern "C" void FUN_0037d270(beCri *, int, int);
-extern "C" void FUN_0037d2a0(beCri *, int, const char *, int);
+extern "C" void beCri_SetupPartitions(beCri *, int, int);
+extern "C" void beCri_LoadPartition(beCri *, int, const char *, int);
 extern "C" void ObjectList_AppendRetained(int, igObject *);
 extern "C" void *g_stringPool[4];
 extern "C" int g_beNDMWAfsSetupInfo_metaObject[4];
@@ -49,10 +49,10 @@ void Gap__Bec__beNDMWAfsSetup__vfunc_23(void)
 {
 }
 
-/* Finds the insight's beCri component (CRI sound middleware owner) and hands it to FUN_0037d2f0,
+/* Finds the insight's beCri component (CRI sound middleware owner) and hands it to beCri_ReleasePartitions,
  * which tears down the global string/object lists. */
 void Gap__Bec__beNDMWAfsSetup__vfunc_24(beNDMWAfsSetup *self) {
-    FUN_0037d2f0(((int)FUN_00236f80(self->_insight, g_beCri_metaObject[0])));
+    beCri_ReleasePartitions(((int)FUN_00236f80(self->_insight, g_beCri_metaObject[0])));
 }
 
 int Gap__Bec__beNDMWAfsSetup__vfunc_25(beNDMWAfsSetup *self, igObject *info) {
@@ -63,12 +63,12 @@ int Gap__Bec__beNDMWAfsSetup__vfunc_25(beNDMWAfsSetup *self, igObject *info) {
         FUN_00236be0(self->_insight, self);
         beNDMWAfsSetupInfo *setup = (beNDMWAfsSetupInfo *)info;
         igObjectList *files = (igObjectList *)setup->_dataList;
-        FUN_0037d270(cri, files->_count, setup->_insideFiles);
+        beCri_SetupPartitions(cri, files->_count, setup->_insideFiles);
         int i;
         for (i = 0; i < files->_count; i++) {
             beNDMWAfsSetupData *data = ((beNDMWAfsSetupData **)files->_data)[i];
             int count = data->_fileCount;
-            FUN_0037d2a0(cri, i, data->_name ? (const char *)data->_name : emptyString, count);
+            beCri_LoadPartition(cri, i, data->_name ? (const char *)data->_name : emptyString, count);
         }
         beSystem *system = (beSystem *)FUN_00236f80(self->_insight, g_beSystem_metaObject[0]);
         if (g_stringPool[0] == 0) {

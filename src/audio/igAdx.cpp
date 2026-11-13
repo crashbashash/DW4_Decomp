@@ -43,7 +43,7 @@ extern "C" int Gap__Core__igObject__vfunc_08__002ff0f0(...);
 extern "C" void Gap__igAdx__vfunc_08(void **arg0);
 extern "C" void FUN_003327b0(void);
 extern "C" int strcpy(...);
-extern "C" void FUN_003327c0(int arg0);
+extern "C" void igAdx_SetModulePath(int arg0);
 extern "C" void FUN_00332810(int arg0);
 extern "C" int AddIntcHandler(int, int (*)(), int);
 extern "C" int ADXM_ExecVint(void);
@@ -73,18 +73,18 @@ extern "C" void ADXM_ExecVsyncFrame(void);
 extern "C" void FUN_00332cd0(void);
 extern "C" int ADXM_ExecMain(...);
 extern "C" int FUN_00282038(...);
-extern "C" void FUN_00332cf0(int);
+extern "C" void igAdx_ExecServer(int);
 extern "C" void *FUN_002b90e0(int);
-extern "C" void FUN_00332d20(int arg0);
+extern "C" void igAdx_SetPartitionCount(int arg0);
 extern "C" int FUN_002eb010(int);
 extern "C" int List_Reserve(void *, int, int);
 extern "C" int StringChunk_ReleaseHeader(int, int *);
 extern "C" int StringPool_Construct(int);
 extern "C" char *StringPool_Intern(int, char *);
-extern "C" void FUN_00332e90(int arg0, char *arg1);
+extern "C" void igAdx_AddPartitionName(int arg0, char *arg1);
 extern "C" void FUN_00260de8(int stream, const char *name, int mode, void *buffer);
 extern "C" int FUN_002612c0(int stream);
-extern "C" int FUN_003332b0(int stream, const char *path, int mode, int length);
+extern "C" int igAdx_LoadPartition(int stream, const char *path, int mode, int length);
 extern "C" unsigned int strlen(const char *);
 extern "C" char *strncpy(char *, const char *, unsigned int);
 extern "C" int FUN_00333440(const char *name);
@@ -114,11 +114,11 @@ typedef struct Obj { int w0; unsigned refs; } Obj;
 extern "C" int DAT_005873a8[4];
 extern "C" int DAT_005873b8[4];
 extern "C" int DAT_005873c0[4];
-extern "C" int DAT_005873c8[4];
+extern "C" int g_adxMediaMode[4];
 extern "C" int DAT_005874d0[4];
-extern "C" int DAT_005875e8[4];
+extern "C" int g_adxPartitionCount[4];
 typedef struct T_332670 { int w0; int refs; } T_332670;
-extern "C" char GPR_00554de4;
+extern "C" char g_adxUseFileInfoCache;
 extern "C" unsigned char GPR_00554de8;
 extern "C" char GPR_00554dec;
 class DW4VC_88_0 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual int vX(); };
@@ -165,7 +165,7 @@ public:
 };
 extern "C" int StringList_AppendRetained(void *, StringRef *);
 struct R_333230 { int vt; unsigned int rc; };
-extern "C" void FUN_00333230(R_333230 *arg0);
+extern "C" void igAdx_SetInsideFiles(R_333230 *arg0);
 extern "C" StringRef StringList_CopyRetained(int list, int index);
 struct WaitResult { int code; };
 class AdxThread {
@@ -361,7 +361,7 @@ void FUN_00332530(void) {
     int temp_s0;
     Obj *o;
 
-    FUN_00332d20(0);
+    igAdx_SetPartitionCount(0);
     o = ((Obj * *)DAT_00587620)[0];
     if (o != 0) {
         o->refs = o->refs - 1;
@@ -405,8 +405,8 @@ void Gap__igAdx__vfunc_11(void) {
     DAT_005873c0[0] = 0;
     (*(char *)&GPR_00554de8) = 0;
     GPR_00554dec = 0;
-    DAT_005873c8[0] = 0;
-    GPR_00554de4 = 0;
+    g_adxMediaMode[0] = 0;
+    g_adxUseFileInfoCache = 0;
     memset(&DAT_005874d0[0], 0, 0x100);
     p = ((T_332670 * *)DAT_00587620)[0];
     if (p != 0) {
@@ -416,7 +416,7 @@ void Gap__igAdx__vfunc_11(void) {
         }
     }
     ((T_332670 * *)DAT_00587620)[0] = 0;
-    DAT_005875e8[0] = 0;
+    g_adxPartitionCount[0] = 0;
 }
 
 void Gap__igAdx__vfunc_07(void **arg0) {
@@ -442,7 +442,7 @@ void FUN_003327b0(void) {
 
 }
 
-void FUN_003327c0(int arg0) {
+void igAdx_SetModulePath(int arg0) {
     if (arg0 != 0) {
         strcpy(&((int *)DAT_005873d0)[0], arg0);
         return;
@@ -472,7 +472,7 @@ int FUN_00332860(void) {
     sceSifInitRpc(0);
     sceSifInitIopHeap();
     FUN_00116fb0(0);
-    switch (DAT_005873c8[0]) {
+    switch (g_adxMediaMode[0]) {
     case 1:
         sceCdMmode(1);
         break;
@@ -517,7 +517,7 @@ int FUN_00332860(void) {
         FUN_0026b008(0);
     }
     temp_s0 = Memory_GetAllocatorByName(&DAT_004ffe68[0]);
-    if ((*(unsigned char *)&GPR_00554de4) != 0) {
+    if ((*(unsigned char *)&g_adxUseFileInfoCache) != 0) {
         memset(&DAT_005873a0[0], 0, 0x10);
         DAT_005873a0[0] = (int)&DAT_004fff60[0];
         DAT_005873a4[0] = 0x20;
@@ -525,9 +525,9 @@ int FUN_00332860(void) {
         DAT_005873a8[0] = Memory_AllocateAlignedWithAllocator(DAT_005873ac[0], 0x10, temp_s0);
         FUN_0026b120(&DAT_005873a0[0]);
     }
-    if (DAT_005873c8[0] != 0) {
+    if (g_adxMediaMode[0] != 0) {
         FUN_0026ac50(0);
-        if ((*(unsigned char *)&GPR_00554de4) != 0) {
+        if ((*(unsigned char *)&g_adxUseFileInfoCache) != 0) {
             memset(&DAT_005873b0[0], 0, 0x10);
             DAT_005873b0[0] = (int)&DAT_004fff60[0];
             DAT_005873b4[0] = 0x20;
@@ -567,12 +567,12 @@ void FUN_00332cd0(void)
     ADXM_ExecVsyncFrame();
 }
 
-void FUN_00332cf0(int) {
+void igAdx_ExecServer(int) {
     ADXM_ExecMain();
     FUN_00282038();
 }
 
-void FUN_00332d20(int arg0) {
+void igAdx_SetPartitionCount(int arg0) {
     int temp_a0;
     int temp_s2;
     int var_a0;
@@ -583,9 +583,9 @@ void FUN_00332d20(int arg0) {
 
     temp_s2 = Memory_GetAllocatorByName(&DAT_004ffe68[0]);
     if (((int *)DAT_005875f0)[0] != 0) {
-        if (DAT_005875e8[0] > 0) {
+        if (g_adxPartitionCount[0] > 0) {
             var_s1 = 0;
-            if (0 < DAT_005875e8[0]) {
+            if (0 < g_adxPartitionCount[0]) {
                 var_s0 = 0;
                 do {
                     temp_a0 = *(int *)(((int *)DAT_005875f0)[0] + var_s0);
@@ -594,22 +594,22 @@ void FUN_00332d20(int arg0) {
                     }
                     var_s1 += 1;
                     var_s0 += 4;
-                } while (var_s1 < DAT_005875e8[0]);
+                } while (var_s1 < g_adxPartitionCount[0]);
             }
         }
         Memory_FreeBufferWithAllocator(((int *)DAT_005875f0)[0], temp_s2);
     }
-    DAT_005875e8[0] = arg0;
+    g_adxPartitionCount[0] = arg0;
     if (arg0 > 0) {
         ((int *)DAT_005875f0)[0] = Memory_AllocateAlignedWithAllocator(arg0 * 4, 0x10, temp_s2);
         var_v1 = 0;
-        if (0 < DAT_005875e8[0]) {
+        if (0 < g_adxPartitionCount[0]) {
             var_a0 = 0;
             do {
                 var_v1 += 1;
                 *(int *)(((int *)DAT_005875f0)[0] + var_a0) = 0;
                 var_a0 += 4;
-            } while (var_v1 < DAT_005875e8[0]);
+            } while (var_v1 < g_adxPartitionCount[0]);
         }
         object = ((T_332d20 * *)DAT_00587608)[0];
         if (object != 0) {
@@ -622,7 +622,7 @@ void FUN_00332d20(int arg0) {
     }
 }
 
-void FUN_00332e90(int arg0, char *arg1) {
+void igAdx_AddPartitionName(int arg0, char *arg1) {
     int v;
     int ok;
     SList *t;
@@ -714,7 +714,7 @@ void FUN_00332e90(int arg0, char *arg1) {
     }
 }
 
-void FUN_00333230(R_333230 *arg0) {
+void igAdx_SetInsideFiles(R_333230 *arg0) {
     R_333230 *old;
     if (arg0 != 0) {
         if (arg0 != 0) {
@@ -731,7 +731,7 @@ void FUN_00333230(R_333230 *arg0) {
     }
 }
 
-int FUN_003332b0(int stream, const char *path, int mode, int length)
+int igAdx_LoadPartition(int stream, const char *path, int mode, int length)
 {
     int size;
     char *name;
@@ -742,7 +742,7 @@ int FUN_003332b0(int stream, const char *path, int mode, int length)
     if (size > 0) {
         DAT_005875f0[0][stream] = ((void *)Memory_AllocateAlignedWithAllocator(size, 16, ((void *)Memory_GetAllocatorByName(((char *)DAT_004ffe68)))));
     }
-    FUN_00332e90(stream, (char *)path);
+    igAdx_AddPartitionName(stream, (char *)path);
     name = StringList_CopyRetained(((int *)DAT_00587608)[0], stream).p;
     FUN_00260de8(stream, name, mode, DAT_005875f0[0][stream]);
     waiting = true;
@@ -754,7 +754,7 @@ int FUN_003332b0(int stream, const char *path, int mode, int length)
         case 4:
             return 0;
         default:
-            FUN_00332cf0(0);
+            igAdx_ExecServer(0);
             break;
         }
         DAT_005871d0[0]->threads->data[0]->sleep(3333333);

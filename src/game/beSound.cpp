@@ -5,7 +5,7 @@ extern "C" int List_Reserve(...);
 extern "C" void igObject_Destroy(void *);
 extern "C" int FUN_002eb010(...);
 extern "C" int strcmp(...);
-extern "C" int FUN_0037e020(...);
+extern "C" int beCri_SetSndfVolume(...);
 extern "C" int StringChunk_ReleaseHeader(...);
 extern "C" int StringPool_Construct(...);
 extern "C" char * StringPool_Intern(...);
@@ -14,7 +14,7 @@ extern "C" int Gap__Bec__beSound__vfunc_20(void);
 extern "C" int beMessenger_SendGroup(...);
 extern "C" int beMessenger_GetObjectCount(...);
 extern "C" int List_RemoveWordAt(...);
-extern "C" int FUN_0037dc60(...);
+extern "C" int beCri_SetFx(...);
 extern "C" int ObjectList_RemoveFirstRetained(...);
 extern "C" void *FUN_002b90e0(...);
 extern "C" int FUN_0030b3c0(...);
@@ -24,18 +24,18 @@ extern "C" int FUN_0030ba20(...);
 extern "C" int FUN_0030bbf0(...);
 extern "C" int FUN_00344250(...);
 extern "C" void *FUN_003447c0(...);
-extern "C" int FUN_0037c2c0(...);
-extern "C" int FUN_0037c4c0(...);
-extern "C" int FUN_0037cb80(...);
-extern "C" int FUN_0037cc50(...);
-extern "C" int FUN_0037cd90(...);
-extern "C" int FUN_0037cf30(int, char *, float, float, float);
-extern "C" int FUN_0037d160(int, int, float, float, float);
-extern "C" int FUN_0037d570(...);
-extern "C" int FUN_0037d780(...);
-extern "C" int FUN_0037d870(...);
-extern "C" int FUN_0037daf0(...);
-extern "C" int FUN_0037dd10(...);
+extern "C" int beCri_PlayStream(...);
+extern "C" int beCri_PlayEffect(...);
+extern "C" int beCri_StopByID(...);
+extern "C" int beCri_StopGroup(...);
+extern "C" int beCri_UnpauseByName(...);
+extern "C" int beCri_FadeByName(int, char *, float, float, float);
+extern "C" int beCri_FadeByID(int, int, float, float, float);
+extern "C" int beCri_SetFreezeAudible(...);
+extern "C" int beCri_StartSfpTransfers(...);
+extern "C" int beCri_FreeSfpData(...);
+extern "C" int beCri_IsTransferDone(...);
+extern "C" int beCri_IsReady(...);
 extern "C" void *Memory_GetAllocatorBySelector(...);
 extern "C" int ObjectList_AppendRetained(...);
 extern "C" int beMessenger_AppendBool(...);
@@ -171,7 +171,7 @@ void Gap__Bec__beSound__vfunc_29(beSound *arg0, SoundInfoPointerView *arg1) {
     beMessenger_RegisterReceiver(arg0->_messenger, arg1, &DAT_0050f9a0[0], 0, -1);
     arg1 = arg1->f12;
     ((K *)arg0->_cri)->f52 = ((beSoundInfo *)arg1)->_baseVolume;
-    FUN_0037e020(arg0->_cri, ((beSoundInfo *)arg1)->_sndfVolume);
+    beCri_SetSndfVolume(arg0->_cri, ((beSoundInfo *)arg1)->_sndfVolume);
     if (arg1->f32 == 0) {
         if (g_stringPool[0] == 0) {
             var_v0 = FUN_002eb010(0x10);
@@ -246,7 +246,7 @@ void Gap__Bec__beSound__vfunc_31(beSound *self, beBaseInfoRam *arg1) {
                 List_RemoveWordAt(objs, i);
                 ((int *)objs->_data)[objs->_count] = 0;
             } while (i < objs->_count);
-        FUN_0037dc60(self->_cri, &DAT_0050f9d8[0]);
+        beCri_SetFx(self->_cri, &DAT_0050f9d8[0]);
         arg1->_st0 = arg1->_st0 + 1;
         arg1->_st3 = 0;
         arg1->_st2 = 0;
@@ -319,7 +319,7 @@ int Gap__Bec__beSound__vfunc_34(beSound *self, beBaseInfoRam *arg1, Arg2 *arg2) 
     switch (beMessenger_ResolveEnumValue(self->_messenger, FUN_00344250(), arg2->f20)) {
     case 1:
         if (beMessenger_GetLongCount(self->_messenger) == 0) return 0;
-        FUN_0037cb80(self->_cri, beMessenger_GetLong(self->_messenger, 0));
+        beCri_StopByID(self->_cri, beMessenger_GetLong(self->_messenger, 0));
         break;
     case 3:
         ((beCri *)self->_cri)->_pauseOnetime = 1;
@@ -333,7 +333,7 @@ int Gap__Bec__beSound__vfunc_34(beSound *self, beBaseInfoRam *arg1, Arg2 *arg2) 
                 nm = e->_name ? (char *)e->_name : emptyString;
                 if (strcmp(nm, self->_currentBGM) == 0) return 1;
             }
-            if (FUN_0037c2c0(self->_cri, info->_fnameList, e) == 0) {
+            if (beCri_PlayStream(self->_cri, info->_fnameList, e) == 0) {
                 beMessenger_PrepareDelayedGroup(self->_messenger, &DAT_0050f9a0[0]);
                 nm = e->_name ? (char *)e->_name : emptyString;
                 beMessenger_AppendString(self->_messenger, nm);
@@ -347,7 +347,7 @@ int Gap__Bec__beSound__vfunc_34(beSound *self, beBaseInfoRam *arg1, Arg2 *arg2) 
             }
             break;
         case 2:
-            if (FUN_0037c2c0(self->_cri, info->_fnameList, e) == 0) {
+            if (beCri_PlayStream(self->_cri, info->_fnameList, e) == 0) {
                 beMessenger_PrepareDelayedGroup(self->_messenger, &DAT_0050f9a0[0]);
                 nm = e->_name ? (char *)e->_name : emptyString;
                 beMessenger_AppendString(self->_messenger, nm);
@@ -373,7 +373,7 @@ int Gap__Bec__beSound__vfunc_34(beSound *self, beBaseInfoRam *arg1, Arg2 *arg2) 
                     pl2 = pl;
                 } while (i < pl->_count);
             }
-            k = FUN_0037c4c0(self->_cri, info->_fnameList, e, i);
+            k = beCri_PlayEffect(self->_cri, info->_fnameList, e, i);
             beMessenger_AppendInt(self->_messenger, e->_type);
             beMessenger_AppendLong(self->_messenger, k);
             if (k > 0) {
@@ -388,26 +388,26 @@ int Gap__Bec__beSound__vfunc_34(beSound *self, beBaseInfoRam *arg1, Arg2 *arg2) 
         break;
     case 4:
         cri = self->_cri;
-        FUN_0037cd90(cri, beMessenger_GetString(self->_messenger, 0));
+        beCri_UnpauseByName(cri, beMessenger_GetString(self->_messenger, 0));
         break;
     case 5:
         s1 = beMessenger_GetString(self->_messenger, 0);
         if (beMessenger_GetLongCount(self->_messenger) > 0) {
             if (strcmp(s1, &DAT_0050f9e8[0]) == 0) {
                 cri = self->_cri;
-                FUN_0037d160(cri, beMessenger_GetLong(self->_messenger, 0), 0.0f, 1.0f, 10.0f);
+                beCri_FadeByID(cri, beMessenger_GetLong(self->_messenger, 0), 0.0f, 1.0f, 10.0f);
             } else if (strcmp(s1, &DAT_0050f9f0[0]) == 0) {
                 cri = self->_cri;
-                FUN_0037d160(cri, beMessenger_GetLong(self->_messenger, 0), 1.0f, 0.0f, 10.0f);
+                beCri_FadeByID(cri, beMessenger_GetLong(self->_messenger, 0), 1.0f, 0.0f, 10.0f);
             }
             break;
         }
         if (beMessenger_GetStringCount(self->_messenger) <= 1) break;
         s2 = beMessenger_GetString(self->_messenger, 1);
         if (strcmp(s1, &DAT_0050f9e8[0]) == 0) {
-            FUN_0037cf30(self->_cri, s2, 0.0f, 1.0f, 10.0f);
+            beCri_FadeByName(self->_cri, s2, 0.0f, 1.0f, 10.0f);
         } else if (strcmp(s1, &DAT_0050f9f0[0]) == 0) {
-            FUN_0037cf30(self->_cri, s2, 1.0f, 0.0f, 10.0f);
+            beCri_FadeByName(self->_cri, s2, 1.0f, 0.0f, 10.0f);
         }
         if (self->_currentBGM != 0 && strcmp(s2, self->_currentBGM) == 0) {
             s1 = U::Intern(0);
@@ -424,23 +424,23 @@ int Gap__Bec__beSound__vfunc_34(beSound *self, beBaseInfoRam *arg1, Arg2 *arg2) 
         fb = beMessenger_GetFloat(self->_messenger, 1);
         fc = beMessenger_GetFloat(self->_messenger, 2);
         Abs(fa - fb);
-        FUN_0037cf30(self->_cri, s1, fa, fb, fc);
+        beCri_FadeByName(self->_cri, s1, fa, fb, fc);
         break;
     case 6:
-        FUN_0037cc50(self->_cri, 1);
+        beCri_StopGroup(self->_cri, 1);
         s1 = U::Intern(0);
         old = (char *)self->_currentBGM;
         SREL(old)
         self->_currentBGM = (int)s1;
         break;
     case 7:
-        FUN_0037cc50(self->_cri, 2);
+        beCri_StopGroup(self->_cri, 2);
         break;
     case 8:
-        FUN_0037cc50(self->_cri, 4);
+        beCri_StopGroup(self->_cri, 4);
         break;
     case 11:
-        FUN_0037dc60(self->_cri, beMessenger_GetString(self->_messenger, 0));
+        beCri_SetFx(self->_cri, beMessenger_GetString(self->_messenger, 0));
         break;
     case 9:
         l9 = (igObjectList *)info->_dataList;
@@ -461,24 +461,24 @@ int Gap__Bec__beSound__vfunc_34(beSound *self, beBaseInfoRam *arg1, Arg2 *arg2) 
         } else {
             s1 = beMessenger_GetString(self->_messenger, 0);
         }
-        beMessenger_AppendBool(self->_messenger, FUN_0037dd10(self->_cri, s1) & 0xFF);
+        beMessenger_AppendBool(self->_messenger, beCri_IsReady(self->_cri, s1) & 0xFF);
         break;
     case 13:
         nm = ((beCriHandle *)((beCri *)self->_cri)->_hdBGM)->_name ? (char *)((beCriHandle *)((beCri *)self->_cri)->_hdBGM)->_name : emptyString;
-        beMessenger_AppendBool(self->_messenger, FUN_0037dd10(self->_cri, nm) & 0xFF);
+        beMessenger_AppendBool(self->_messenger, beCri_IsReady(self->_cri, nm) & 0xFF);
         break;
     case 14:
         nm = ((beCriHandle *)((beCri *)self->_cri)->_hdENV)->_name ? (char *)((beCriHandle *)((beCri *)self->_cri)->_hdENV)->_name : emptyString;
-        beMessenger_AppendBool(self->_messenger, FUN_0037dd10(self->_cri, nm) & 0xFF);
+        beMessenger_AppendBool(self->_messenger, beCri_IsReady(self->_cri, nm) & 0xFF);
         break;
     case 17:
-        FUN_0037e020(self->_cri, beMessenger_GetInt(self->_messenger, 0));
+        beCri_SetSndfVolume(self->_cri, beMessenger_GetInt(self->_messenger, 0));
         break;
     case 19:
-        FUN_0037d570(self->_cri, 0);
+        beCri_SetFreezeAudible(self->_cri, 0);
         break;
     case 18:
-        FUN_0037d570(self->_cri, 1);
+        beCri_SetFreezeAudible(self->_cri, 1);
         break;
     case 20:
         if (info->_dataType == 0) return 0;
@@ -557,14 +557,14 @@ int Gap__Bec__beSound__vfunc_34(beSound *self, beBaseInfoRam *arg1, Arg2 *arg2) 
             } while (ib < ((igStringRefList *)names.p)->_count);
         }
         }
-        FUN_0037d780(self->_cri);
+        beCri_StartSfpTransfers(self->_cri);
         break;
     case 21:
-        beMessenger_AppendBool(self->_messenger, FUN_0037daf0(self->_cri) & 0xFF);
+        beMessenger_AppendBool(self->_messenger, beCri_IsTransferDone(self->_cri) & 0xFF);
         break;
     case 22:
         if (((beCri *)self->_cri)->_dataType == 1) {
-            FUN_0037d870(self->_cri, 1);
+            beCri_FreeSfpData(self->_cri, 1);
         }
         break;
     default:

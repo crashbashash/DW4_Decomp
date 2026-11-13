@@ -4388,6 +4388,17 @@
 0x0050df60	P2PKOUKAMAGIC	string-literal
 0x0050df70	LOADINTF2	string-literal
 0x0050df80	SETDIFFICULTMAX	string-literal
+0x0050e400	BECRUNTIME	string-literal
+0x0050e410	AdxModulePath	string-literal
+0x0050e420	g_adxModulePathDefault	recovered-global
+0x0050e428	text_9_31s281	string-literal
+0x0050e438	text_9_18	string-literal
+0x0050e440	C_cri_ps2_iop_modules	string-literal
+0x0050e460	C_usr_local_cri_mwlib_iop_drv	string-literal
+0x0050e480	NONE	string-literal
+0x0050e488	ALL	string-literal
+0x0050e490	sndfBuffer	string-literal
+0x0050e4a0	_dataBuffer	string-literal
 0x0050e728	TEXTCTL	string-literal
 0x0050ed58	MATCTRL	string-literal
 0x0050f410	ONE	string-literal
@@ -4958,6 +4969,7 @@
 0x00554bdc	g_LuaLibrary_registered	recovered-global
 0x00554be4	g_luaStatePerThread	recovered-global
 0x00554c14	g_useOwnerAllocator	recovered-global
+0x00554de4	g_adxUseFileInfoCache	recovered-global
 0x00554df0	g_igAdxFile_ignoreReadModeWarning	recovered-global
 0x00554df4	g_igAdxFile_ignoreWriteWarning	recovered-global
 0x00554df8	g_igAdxFile_ignoreOpenModeWarning	recovered-global
@@ -5738,6 +5750,8 @@
 0x00587198	g_igObject_metaObject	class-handle
 0x005871d0	g_threadManager	recovered-global
 0x00587320	g_rangeEnd	recovered-global
+0x005873c8	g_adxMediaMode	recovered-global
+0x005875e8	g_adxPartitionCount	recovered-global
 0x00587628	g_igAdx_metaObject	class-handle
 0x00587630	g_igAdxAfsFileList_metaObject	class-handle
 0x00587638	g_igAdxAfsFile_metaObject	class-handle
@@ -6079,6 +6093,9 @@
 0x0058a330	g_damageResult	recovered-global
 0x0058a338	g_attackZokusei	recovered-global
 0x0058a340	g_damageFlag	recovered-global
+0x0058a350	g_savedIgFileAbstractProxy	recovered-global
+0x0058a360	g_sfpPortSizes	recovered-global
+0x0058a460	g_sfpTransferState	recovered-global
 0x0058a540	g_hitBoxDebugColors	recovered-global
 0x0058a570	g_targetObj	recovered-global
 0x0058a578	g_targetMessenger	recovered-global

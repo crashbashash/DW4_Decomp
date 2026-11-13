@@ -75,6 +75,6 @@ void beCriSfpData_InitFields(void) {
 
 void FUN_00366760(void)
 {
-    FUN_0037e070();
+    beCriSfpData_SetupBufferAlignment();
 }
 

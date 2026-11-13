@@ -50,7 +50,7 @@ int FUN_00304430(const char *format, ...);  /* prints */
 int FUN_00304680(...);
 int FUN_00333440(int fileName);  /* the file's index in the AFS file list, or -1 */
 void FUN_00332cd0(void);
-void FUN_00332cf0(int);
+void igAdx_ExecServer(int);
 int strcmp(const char *, const char *);
 int strcpy(char *, int);
 int memcpy(char *, char *, int);
@@ -158,7 +158,7 @@ int igAdxFile_WaitForReadEnd(igAdxFile *self)
         } else {
             FUN_00332cd0();
         }
-        FUN_00332cf0(0);
+        igAdx_ExecServer(0);
     }
     return ADXF_STAT_READEND;
 }

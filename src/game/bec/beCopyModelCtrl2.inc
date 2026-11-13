@@ -54,6 +54,6 @@ void beCopyModelCtrl2_InitFields(void) {
 
 void FUN_003682f0(void)
 {
-    FUN_0037b460();
+    beCopyModelCtrl2_RegisterTraversal();
 }
 

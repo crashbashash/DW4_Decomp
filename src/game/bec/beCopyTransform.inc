@@ -53,6 +53,6 @@ void beCopyTransform_InitFields(void) {
 
 void FUN_00368090(void)
 {
-    FUN_0037b760();
+    beCopyTransform_RegisterTraversal();
 }
 
