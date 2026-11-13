@@ -101,7 +101,7 @@ void beNDMWMdlPlayer2InfoWork_InitFields(void) {
     igMetaObject_NameFields(temp_s0, &DAT_004ca7f0[0], &DAT_004ca800[0], &DAT_004ca810[0], temp_s1);
 }
 
-int FUN_003bf830(void) {
+int PanelCloseSeqList_GetMetaEnum(void) {
     if (DAT_0058b3a0[0] == 0) {
         DAT_0058b3a0[0] = igMetaEnum_Create(&DAT_00512120[0], &DAT_004ca820[0], &DAT_004ca840[0], 7);
     }

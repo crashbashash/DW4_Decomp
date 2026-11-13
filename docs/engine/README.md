@@ -110,6 +110,7 @@ Related: game systems and data are in [`../systems/`](../systems); the analysis 
 | [`title-menu-controller.md`](title-menu-controller.md) | Title runtime: nine functions, scoped references, three switch tables and exception metadata; remaining frontend modules |
 | [`load-ctrl2.md`](load-ctrl2.md) | **The load controller (`beNDMWLoadCtrl2`)**: the Game Start load sequence, the per-player memory-card steps of its common interface, the message window and text order, the save-utility controller and the Digimon save block |
 | [`load-intf2.md`](load-intf2.md) | **The Game Start slot/character/name/difficulty/card family (`beNDMWLoadIntf2`)**: runtime block, object model, named working set, and message protocol; the master update/message handler and the slot-selection, text-order and completion/selection helpers, with the other controllers still open |
+| [`mdl-player.md`](mdl-player.md) | **The player model controller (`beNDMWMdlPlayer`)**: its `beModelCtrl` slots, the pad (turn and body attacks, guard, panel buttons, attack delay), the combo wait check, `GENERATE` and the player-number badge |
 | [`action2-jointset.md`](action2-jointset.md) | **`beAction2` actions and the JOINTSET contract**: the unit's functions and messages, reflected field layout, 60-fps frame-to-nanosecond conversion, loop/clamp behavior, and the recovered node-clock rebasing used by the title animations |
 | [`action2-timing.md`](action2-timing.md) | **When an ACTION completes**: the node clock (2^18 ns quantum, EE round-toward-zero float math), the named `WAIT` timer, WAITCHECK start/update, JOINTSET strictness, the component walker/driver and the `ISCOMEND` predicate, with the logo OPEN/CLOSE thresholds and the unverified clock boundary |
 | [`movie-controller.md`](movie-controller.md) | **The movie controller (`beMovie`)**: skip buttons, finish test, the Lua chunk run when a movie ends, and what else its unit holds |
@@ -129,7 +130,6 @@ Related: game systems and data are in [`../systems/`](../systems); the analysis 
 
 - [Hard/Soft lighting](light-modes.md): LIGHTMODE handoff, authored versus overridden rigs, paired texture packs and unchanged Main Lobby shadows, verified against both retail modes.
 - [Register allocation](register-allocation.md): how the pinned MWCC colours registers (simplify/select, vreg ids from declaration order), the trace/replay tools, and the source forms that move a colour.
-- [beNDMWMdlPlayer::vfunc_44 recovery](near-miss-shapes-player-vfunc44.md): the idle player-number-badge handler, typed, and the 5-word cluster its C leaves different.
 - [CRI cvFs](cri-cvfs.md): CRI's file-system layer: its extent, the device vtbl, handle and volume-request layouts, the owner-approved `int`-typed slots and the condition they meet, and the open questions about names.
 - [CRI ADXT-side files](cri-adxt-files.md): the ADX header, ADXT init, seamless-entry, message and ADXRNA files; their extents and open questions.
 - [CRI DTR and DTX](cri-dtr-dtx.md): the EE–IOP data-transfer modules; their extents, objects and open questions.

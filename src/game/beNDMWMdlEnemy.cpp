@@ -20,7 +20,7 @@ extern "C" int beMessenger_PushArgContext(...);
 extern "C" int beMessenger_SendNamed(...);
 extern "C" int igObject_GetAllocator(...);
 extern "C" void *igProperty_FindByName(...);
-extern "C" void FUN_00445200(void);
+extern "C" void beNDMWMdlPEBase_OnSequenceChange(void);
 extern "C" void Gap__Bec__beNDMWMdlEnemy__vfunc_44(void);
 extern "C" int Gap__Bec__beNDMWMdlEnemy__vfunc_20(void);
 extern "C" int DAT_00515e18[4];
@@ -122,7 +122,7 @@ void Gap__Bec__beNDMWMdlEnemy__vfunc_36(beNDMWMdlEnemy *arg0, beBaseInfoRam *arg
 
 void Gap__Bec__beNDMWMdlEnemy__vfunc_44(void)
 {
-    FUN_00445200();
+    beNDMWMdlPEBase_OnSequenceChange();
 }
 
 int Gap__Bec__beNDMWMdlEnemy__vfunc_20(void)

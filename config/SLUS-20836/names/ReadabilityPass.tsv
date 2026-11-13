@@ -293,6 +293,7 @@
 0x00333a50	igAdxFile_SetUseAsync	audio
 0x00334370	igAdxFile_GetFileSize	audio
 0x003350f0	igAdxAudio_Create	movie
+0x00354a60	beModelCtrlHITBOX_Create	game
 0x003614f0	beUnicodeObj_Create	game
 0x00363e80	beDataObjListList_Create	game
 0x00364050	beDataObjList_Create	game
@@ -342,6 +343,8 @@
 0x00382eb0	beFont_ConvertToUnicode	game
 0x003843c0	beUnicodeObj_AllocateBuffer	game
 0x00389ff0	beLua::RunNamedChunk	game
+0x00393c80	beModelCtrlInfoWork_SetSeqLabel	game
+0x00395250	beModelCtrl_RunCommands	game
 0x0039fd30	beSystem_AddToScheduler	game
 0x0039fd50	beSystem_RemoveFromScheduler	game
 0x0039fd70	beSystem_Start	game
@@ -393,7 +396,9 @@
 0x003bef20	beNDMWPanelWaza_ResolveMetaObject	game
 0x003bf240	beNDMWMdlPlayer2_ResolveMetaObject	game
 0x003bf5a0	beNDMWMdlPlayer2InfoWork_ResolveMetaObject	game
+0x003bf830	PanelCloseSeqList_GetMetaEnum	game
 0x003bf920	beNDMWMdlPlayer_ResolveMetaObject	game
+0x003bfc80	beNDMWMdlPlayerInfoWork_Create	game
 0x003bfd10	beNDMWMdlPlayerInfoWork_ResolveMetaObject	game
 0x003c0500	beNDMWMdlPEBase_ResolveMetaObject	game
 0x003c05f0	beNDMWMdlPEBaseInfoWork_ResolveMetaObject	game
@@ -492,6 +497,18 @@
 0x003ca990	beNDMWAfsSetupData_ResolveMetaObject	game
 0x003cab90	beNDMWAfsStageLoad_ResolveMetaObject	game
 0x003cae90	beNDMWAfsSetup_ResolveMetaObject	game
+0x003d2230	beNDMWMdlPlayer::ResolveManagers	game
+0x003d2290	beNDMWMdlPlayer::IsKind	game
+0x003d22c0	beNDMWMdlPlayer::RegisterReceiver	game
+0x003d22f0	beNDMWMdlPlayer::UpdateControl	game
+0x003d31f0	beNDMWMdlPlayer::UpdateWaitCheck	game
+0x003d3640	beNDMWMdlPlayer::OnGenerate	game
+0x003d40f0	beNDMWMdlPlayer::OnControlOff	game
+0x003d4240	beNDMWMdlPlayer::OnFreeze	game
+0x003d4390	beNDMWMdlPlayer::OnSequenceChange	game
+0x003d45f0	beNDMWMdlPlayer::OnErase	game
+0x003d4820	beNDMWMdlPlayer::OnRemove	game
+0x003d4970	beNDMWMdlPlayer::GetMeta	game
 0x003d9de0	beNDMWLoadIntf2DegiState::Init	game
 0x003d9e10	beNDMWLoadIntf2DegiState::RequestOpen	game
 0x003d9e70	beNDMWLoadIntf2DegiState::RequestClose	game
@@ -673,6 +690,7 @@
 0x00424130	beNDMWStatusSelect01_GetMeta	game
 0x00424140	beNDMWStatusSelect00_GetMeta	game
 0x00424150	beNDMWWindowSelect_GetMeta	game
+0x00445200	beNDMWMdlPEBase_OnSequenceChange	game
 0x00447d00	beNDMWItemBase_GetRevisionColor	game
 0x00447ed0	beNDMWItemRevisionPocketBase_GetPrice	game
 0x00448050	beNDMWItemBase_IndexOfRecNo	game

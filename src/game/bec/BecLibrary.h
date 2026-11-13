@@ -1036,7 +1036,7 @@ extern "C" void FUN_00354940(void);
 extern "C" void *beModelCtrlAIData_Register(void);
 extern "C" void beModelCtrlAIData_GetMetaObject(void);
 extern "C" void beModelCtrlAIData_InitFields(void);
-extern "C" void FUN_00354a60(int arg0);
+extern "C" void beModelCtrlHITBOX_Create(int arg0);
 extern "C" int beModelCtrlHITBOX_GetVTable(void);
 extern "C" void FUN_00354b80(void);
 extern "C" void *beModelCtrlHITBOX_Register(void);

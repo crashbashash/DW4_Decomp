@@ -138,10 +138,10 @@ Evidence is the class's `_InitFields` metaobject getter (handle resolved through
 | `beNDMWMdlPEBaseInfoWork._messenger` | `beMessenger` | InitFields field 9 metaobject getter FUN_00357910 reads class handle 0x588f38 (beMessenger) |
 | `beNDMWMdlPEBaseInfoWork._timerList` | `igIntList` | InitFields field 3 igIntList_GetOrCreateMetaObject |
 | `beNDMWMdlPEBaseInfoWork._upDataList` | `igIntList` | InitFields field 8 igIntList_GetOrCreateMetaObject |
-| `beNDMWMdlPlayer._gameRam` | `beNDMWGameRam` | class handle DAT_0058c0a0 (vfunc_23) |
-| `beNDMWMdlPlayer._messenger` | `beMessenger` | beMessenger_* callees (vfunc_41/43) |
-| `beNDMWMdlPlayer._padManager` | `bePadManager` | class handle DAT_00588518 (vfunc_23) |
-| `beNDMWMdlPlayer._viewerSIManager` | `igViewerSceneInfoManager` | class handle DAT_0058c790 (vfunc_23) |
+| `beNDMWMdlPlayer._gameRam` | `beNDMWGameRam` | class handle g_beNDMWGameRam_metaObject (beNDMWMdlPlayer__ResolveManagers) |
+| `beNDMWMdlPlayer._messenger` | `beMessenger` | beMessenger_* callees (beNDMWMdlPlayer__OnFreeze/OnErase) |
+| `beNDMWMdlPlayer._padManager` | `bePadManager` | class handle g_bePadManager_metaObject (beNDMWMdlPlayer__ResolveManagers) |
+| `beNDMWMdlPlayer._viewerSIManager` | `igViewerSceneInfoManager` | class handle g_igViewerSceneInfoManager_metaObject (beNDMWMdlPlayer__ResolveManagers) |
 | `beNDMWMdlPlayer2._padManager` | `bePadManager` | argument of bePadManager_GetPadForPlayer; same handle 0x588518 in the matched vfunc_23 |
 | `beNDMWPanelObjectWaza._messenger` | `beMessenger` | arguments of beMessenger_* callees in Gap__Bec__beNDMWPanelObjectWaza__vfunc_22 |
 | `beNDMWSaveCtrl._messenger` | `beMessenger` | same call (vfunc_29) |

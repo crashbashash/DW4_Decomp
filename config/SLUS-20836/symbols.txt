@@ -15305,7 +15305,7 @@
 00354960 00006c beModelCtrlAIData_Register
 003549d0 00001c beModelCtrlAIData_GetMetaObject
 003549f0 000070 beModelCtrlAIData_InitFields
-00354a60 000034 FUN_00354a60
+00354a60 000034 beModelCtrlHITBOX_Create
 00354aa0 00004c FUN_00354aa0
 00354af0 00008c beModelCtrlHITBOX_GetVTable
 00354b80 000020 FUN_00354b80
@@ -18284,7 +18284,7 @@
 003bf790 00001c beNDMWMdlPlayer2InfoWork_GetMetaObject
 003bf7b0 00000c FUN_003bf7b0
 003bf7c0 000070 beNDMWMdlPlayer2InfoWork_InitFields
-003bf830 000054 FUN_003bf830
+003bf830 000054 PanelCloseSeqList_GetMetaEnum
 003bf890 000034 FUN_003bf890
 003bf8d0 000044 FUN_003bf8d0
 003bf920 00004c beNDMWMdlPlayer_ResolveMetaObject
@@ -18295,7 +18295,7 @@
 003bfb80 00001c beNDMWMdlPlayer_GetMetaObject
 003bfba0 00000c FUN_003bfba0
 003bfbb0 0000cc beNDMWMdlPlayer_InitFields
-003bfc80 000034 FUN_003bfc80
+003bfc80 000034 beNDMWMdlPlayerInfoWork_Create
 003bfcc0 000044 FUN_003bfcc0
 003bfd10 00004c beNDMWMdlPlayerInfoWork_ResolveMetaObject
 003bfd60 000078 beNDMWMdlPlayerInfoWork_GetVTable
@@ -18967,19 +18967,19 @@
 003d2020 000008 Gap__Bec__beNDMWMdlPBullet__vfunc_37 Gap::Bec::beNDMWMdlPBullet::vfunc_37
 003d2030 0001ec Gap__Bec__beNDMWMdlPBullet__vfunc_36 Gap::Bec::beNDMWMdlPBullet::vfunc_36
 003d2220 00000c Gap__Bec__beNDMWMdlPBullet__vfunc_20 Gap::Bec::beNDMWMdlPBullet::vfunc_20
-003d2230 000060 Gap__Bec__beNDMWMdlPlayer__vfunc_23 Gap::Bec::beNDMWMdlPlayer::vfunc_23
-003d2290 00002c Gap__Bec__beNDMWMdlPlayer__vfunc_35 Gap::Bec::beNDMWMdlPlayer::vfunc_35
-003d22c0 000024 Gap__Bec__beNDMWMdlPlayer__vfunc_37 Gap::Bec::beNDMWMdlPlayer::vfunc_37
-003d22f0 000e74 Gap__Bec__beNDMWMdlPlayer__vfunc_38 Gap::Bec::beNDMWMdlPlayer::vfunc_38
+003d2230 000060 beNDMWMdlPlayer__ResolveManagers beNDMWMdlPlayer::ResolveManagers
+003d2290 00002c beNDMWMdlPlayer__IsKind beNDMWMdlPlayer::IsKind
+003d22c0 000024 beNDMWMdlPlayer__RegisterReceiver beNDMWMdlPlayer::RegisterReceiver
+003d22f0 000e74 beNDMWMdlPlayer__UpdateControl beNDMWMdlPlayer::UpdateControl
 003d3170 000080 FUN_003d3170
-003d31f0 000450 Gap__Bec__beNDMWMdlPlayer__vfunc_39 Gap::Bec::beNDMWMdlPlayer::vfunc_39
-003d3640 000ab0 Gap__Bec__beNDMWMdlPlayer__vfunc_36 Gap::Bec::beNDMWMdlPlayer::vfunc_36
-003d40f0 000148 Gap__Bec__beNDMWMdlPlayer__vfunc_40 Gap::Bec::beNDMWMdlPlayer::vfunc_40
-003d4240 000148 Gap__Bec__beNDMWMdlPlayer__vfunc_41 Gap::Bec::beNDMWMdlPlayer::vfunc_41
-003d4390 000260 Gap__Bec__beNDMWMdlPlayer__vfunc_44 Gap::Bec::beNDMWMdlPlayer::vfunc_44
-003d45f0 00022c Gap__Bec__beNDMWMdlPlayer__vfunc_43 Gap::Bec::beNDMWMdlPlayer::vfunc_43
-003d4820 000148 Gap__Bec__beNDMWMdlPlayer__vfunc_42 Gap::Bec::beNDMWMdlPlayer::vfunc_42
-003d4970 00000c Gap__Bec__beNDMWMdlPlayer__vfunc_20 Gap::Bec::beNDMWMdlPlayer::vfunc_20
+003d31f0 000450 beNDMWMdlPlayer__UpdateWaitCheck beNDMWMdlPlayer::UpdateWaitCheck
+003d3640 000ab0 beNDMWMdlPlayer__OnGenerate beNDMWMdlPlayer::OnGenerate
+003d40f0 000148 beNDMWMdlPlayer__OnControlOff beNDMWMdlPlayer::OnControlOff
+003d4240 000148 beNDMWMdlPlayer__OnFreeze beNDMWMdlPlayer::OnFreeze
+003d4390 000260 beNDMWMdlPlayer__OnSequenceChange beNDMWMdlPlayer::OnSequenceChange
+003d45f0 00022c beNDMWMdlPlayer__OnErase beNDMWMdlPlayer::OnErase
+003d4820 000148 beNDMWMdlPlayer__OnRemove beNDMWMdlPlayer::OnRemove
+003d4970 00000c beNDMWMdlPlayer__GetMeta beNDMWMdlPlayer::GetMeta
 003d4980 000038 Gap__Bec__beNDMWMdlPlayer2__vfunc_23 Gap::Bec::beNDMWMdlPlayer2::vfunc_23
 003d49c0 00002c Gap__Bec__beNDMWMdlPlayer2__vfunc_35 Gap::Bec::beNDMWMdlPlayer2::vfunc_35
 003d49f0 000024 Gap__Bec__beNDMWMdlPlayer2__vfunc_37 Gap::Bec::beNDMWMdlPlayer2::vfunc_37
@@ -19520,7 +19520,7 @@
 004435c0 000340 FUN_004435c0
 00443900 0002c8 FUN_00443900
 00443bd0 00162c Gap__Bec__beNDMWMdlPEBase__vfunc_46 Gap::Bec::beNDMWMdlPEBase::vfunc_46
-00445200 0004c0 FUN_00445200
+00445200 0004c0 beNDMWMdlPEBase_OnSequenceChange
 004456c0 0002c8 FUN_004456c0
 00445990 0002c8 FUN_00445990
 00445c60 0000ac FUN_00445c60

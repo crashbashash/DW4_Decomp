@@ -1,4 +1,4 @@
-void FUN_003bfc80(int arg0) {
+void beNDMWMdlPlayerInfoWork_Create(int arg0) {
     FUN_003c0280();
     igMetaObject_CreateInstance(*(int *)0x58B3C8, arg0);
 }
