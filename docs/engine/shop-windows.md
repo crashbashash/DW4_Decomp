@@ -82,7 +82,13 @@ literal appends through one inline whose `true`/`false` argument binds a `const 
 an MWCC one-byte `.sdata` temporary the code loads. The inline declares the count before the list
 pointer it casts from its argument: MWCC numbers the locals in declaration order, which is what puts
 the list in the lower saved register in `beNDMWShopCtrlDiskSell_Update` and
-`beNDMWShopCtrlSales_UpdatePageCount`.
+`beNDMWShopCtrlSales_UpdatePageCount`. Disk stacks are read through a const getter (`DiskCount`); a
+purchase stores `DiskCount(disk) + bought` and a sale `DiskCount(disk) - sold`. The inlined getter's
+result is a value of its own rather than a second field load, which is what fixes the operand order
+of the purchase's `addu` and the registers of the sale. `beNDMWShopCtrlXdataChip_RefreshText` reads the
+select window's answer through `SelectedRow` the same way. A record's text goes to a messenger through
+`AppendRecordString(messenger, database, record, key)`, whose arguments (the messenger first) are read
+before the record lookup is called.
 
 - **Sell** (`beNDMWShopCtrlSell_Update`): greys out devices or disks when the player has none to sell,
   then opens `beNDMWShopCtrlDeviceSell` or `beNDMWShopCtrlDiskSell`. Selling adds the KAITORI price to
@@ -109,7 +115,12 @@ the list in the lower saved register in `beNDMWShopCtrlDiskSell_Update` and
   leaving, a changed party (`_HasPartyChanged`) disables soft reset and runs `demo_digilab.lua`.
   Evolve lists the shinka entries eight to a page (`beNDMWShopCtrlEvolve_RefreshText`) and
   `beNDMWShopCtrlEvolve_ApplyEvolution` keeps the current stats as the base, switches the model,
-  re-equips the strongest weapons and empties the four item slot lists.
+  re-equips the strongest weapons and empties the four item slot lists. Int lists grow through one
+  `IntList_Append`, which takes the list as a pointer or as a reflected field, reads the value
+  through a `const int &` after the list has grown and re-reads the grown count through `countOf`, the
+  same shape as the int-list appends in other units. `_HasPartyChanged`'s final check walks the list
+  with `countOf(unmatched)` and `IntList_Get(unmatched, m)`; passing the smart pointer to the two
+  getters on each pass is what keeps retail's count reload and separate byte offset.
 - **EditBit** (`beNDMWShopCtrlEditBit_Update`): a seven-digit entry; the limit is the carried or banked
   amount, bounded so neither side exceeds 9,999,999 (999,999,999 for junk donations).
 
@@ -117,3 +128,7 @@ the list in the lower saved register in `beNDMWShopCtrlDiskSell_Update` and
 
 - Message codes are `txt_shop.lua` indices; what each says is inferred from where it is used.
 - `beNDMWShopCtrlSales_Update` has no source.
+- Two Digilab loops keep shapes with no explanation yet: the child search's guard reads
+  `_subWindow` through an accessor that the loop body does not use, and `_HasPartyChanged` strikes a
+  weapon off the list by walking an index and a byte offset with a re-read list pointer. Natural `for`
+  loops and the getters that fit the final check do not reproduce either one.

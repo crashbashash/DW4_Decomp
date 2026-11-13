@@ -1808,8 +1808,13 @@ enum DiskPurchaseSubstep { PURCHASE_CHECK_BITS, PURCHASE_ANNOUNCE, PURCHASE_CONF
         } while (slotIndex < count); \
     } }
 
-/* matching construct: try.sh — reading the count through an inline orders the addu operands of
- * the purchase's stack update; a direct `_kazu +=` swaps them. */
+/* Appends field `key` of `database` record `record` to the selected message. */
+static inline void AppendRecordString(int messenger, int database, int record, const char *key)
+{
+    beMessenger_AppendString(messenger, beDataBase_GetRecordString(database, record, key));
+}
+
+/* How many of a disk item the player holds. */
 static inline int DiskCount(const beNDMWItemDisk *disk) { return disk->_kazu; }
 
 void beNDMWShopCtrl50_Update(beNDMWShopCtrl50 *self) {
@@ -1935,11 +1940,7 @@ void beNDMWShopCtrl50_Update(beNDMWShopCtrl50 *self) {
                     beMessenger_SelectGroup(self->_messenger, TEXTCTL_3);
                     beMessenger_AppendString(self->_messenger, STWINFONT29);
                     beMessenger_AppendString(self->_messenger, g_fontNames[0]);
-                    {
-                        /* matching construct: try.sh — the messenger is read before the record call */
-                        int messenger = self->_messenger;
-                        beMessenger_AppendString(messenger, beDataBase_GetRecordString(conItems, self->_retCode, TXT));
-                    }
+                    AppendRecordString(self->_messenger, conItems, self->_retCode, TXT);
                     beMessenger_DispatchSelected(self->_messenger, TEXTSET);
                     beMessenger_SelectGroup(self->_messenger, TEXTCTL_3);
                     beMessenger_AppendString(self->_messenger, STWINFONT29);
@@ -1970,7 +1971,7 @@ void beNDMWShopCtrl50_Update(beNDMWShopCtrl50 *self) {
                             do {
                                 disk = ((beNDMWItemDisk **)heldDisks->_data)[slot];
                                 if (disk != 0 && self->_conItemNo == disk->_recNo) {
-                                    heldCount = disk->_kazu;
+                                    heldCount = DiskCount(disk);
                                     break;
                                 }
                                 slot += 1;
@@ -2094,7 +2095,7 @@ void beNDMWShopCtrl50_Update(beNDMWShopCtrl50 *self) {
                             do {
                                 ownedDisk = ((beNDMWItemDisk **)ownedDisks->_data)[ownedSlot];
                                 if (ownedDisk != 0 && self->_conItemNo == ownedDisk->_recNo) {
-                                    ownedDisk->_kazu = self->_kazu + DiskCount(ownedDisk);
+                                    ownedDisk->_kazu = DiskCount(ownedDisk) + self->_kazu;
                                     break;
                                 }
                                 ownedSlot += 1;
@@ -2443,13 +2444,13 @@ void beNDMWShopJunk_Update(beNDMWShopJunk *self) {
 /* Reads the count again instead of reusing a value already loaded. */
 static inline int countOf(const igIntList *l) { return l->_count; }
 
-/* Appends to the igIntList held in a reflected object-reference field; `value` is read after the
- * list has grown. */
-static inline void IntList_Append(int listField, const int &value)
+/* Appends `value` to an igIntList, given as a pointer or as a reflected object-reference field;
+ * `value` is read after the list has grown. */
+template <class ListRef> static inline void IntList_Append(ListRef listRef, const int &value)
 {
     int count;
     igIntList *list;
-    list = (igIntList *)listField;
+    list = (igIntList *)listRef;
     count = list->_count;
     if (count < list->_capacity) {
         list->_count = countOf(list) + 1;
@@ -2459,6 +2460,12 @@ static inline void IntList_Append(int listField, const int &value)
     ((int *)list->_data)[count] = value;
 }
 
+static inline const int &IntList_Get(const igIntList *list, int index)
+{
+    return ((int *)list->_data)[index];
+}
+
+/* The same, for the igIntList held in a reflected object-reference field. */
 static inline const int &IntList_Get(int listField, int index)
 {
     return ((int *)((igIntList *)listField)->_data)[index];
@@ -2723,7 +2730,7 @@ void beNDMWShopCtrlA1_Update(beNDMWShopCtrlA1 *self) {
                 while (i < disks->_count) {
                     disk = ((beNDMWItemDisk **)disks->_data)[i];
                     if (disk != 0 && disk->_recNo == CARD_BOOSTER_REC_NO) {
-                        boosters = disk->_kazu;
+                        boosters = DiskCount(disk);
                         break;
                     }
                     i++;
@@ -2939,8 +2946,6 @@ void beNDMWShopCtrlA1_ShowAlbumPage(beNDMWShopCtrlA1 *self) {
     int page;
     int database;
     int slot;
-    int ramNo;
-    int cardNo;
     beMessenger_SelectGroup(self->_messenger, GAMERAM_14);
     beMessenger_AppendInt(self->_messenger, self->_playerNo);
     beMessenger_DispatchSelected(self->_messenger, GETPLAYER_10);
@@ -2963,9 +2968,8 @@ void beNDMWShopCtrlA1_ShowAlbumPage(beNDMWShopCtrlA1 *self) {
     case 0: case 1: case 2: case 3: case 4: case 5: case 6: case 7: case 8:
         for (slot = 0; slot < CARDS_PER_PAGE; slot++) {
             StringRef shown = StringList_CopyRetained(((igStringRefList *)self->_cardInfoList), slot);
-            /* matching construct: variant search — `cardNo` before the ram-number load (induction register order) */
-            cardNo = page * CARDS_PER_PAGE + slot;
-            ramNo = ((int *)((igIntList *)self->_cardRamNoList)->_data)[slot];
+            int cardNo = page * CARDS_PER_PAGE + slot;
+            int ramNo = IntList_Get(self->_cardRamNoList, slot);
             if (cardNo > LAST_CARD_NO) {
                 beNDMWWindow_SendModelSequence(self, shown.p, ramNo, SQ_CLOSE_10);
                 StringList_SetRetained(self->_cardInfoList, slot, StringRef(InternString(blank)));
@@ -3002,7 +3006,7 @@ void beNDMWShopCtrlA1_CloseAlbumPage(beNDMWShopCtrlA1 *self) {
     for (slot = 0; slot < names->_count; slot++) {
         {
             StringRef name = StringList_CopyRetained(names, slot);
-            int ramNo = ((int *)((igIntList *)self->_cardRamNoList)->_data)[slot];
+            int ramNo = IntList_Get(self->_cardRamNoList, slot);
             if (ramNo != NO_MODEL) {
                 beNDMWWindow_SendModelSequence(self, name.p, ramNo, SQ_CLOSE_10);
             }
@@ -3206,7 +3210,7 @@ void beNDMWShopCtrlA2_Update(beNDMWShopCtrlA2 *self) {
                         for (slot = 0; slot < disks->_count; slot++) {
                             beNDMWItemDisk *disk = ((beNDMWItemDisk **)disks->_data)[slot];
                             if (disk != 0 && disk->_recNo == BOOSTER_PACK_REC_NO) {
-                                if (disk->_kazu > 0) disk->_kazu = disk->_kazu - 1;
+                                if (DiskCount(disk) > 0) disk->_kazu = DiskCount(disk) - 1;
                                 break;
                             }
                         }
@@ -3728,7 +3732,6 @@ void beNDMWShopCtrlEvolve_RefreshText(beNDMWShopCtrlEvolve *self, int refreshLis
  * the four item slot lists and refreshes the status windows. */
 void beNDMWShopCtrlEvolve_ApplyEvolution(beNDMWShopCtrlEvolve *self) {
     int player;
-    int messenger;
     int shinkaDataBase;
     beNDMWShinkaObject *evolution;
 
@@ -3739,8 +3742,7 @@ void beNDMWShopCtrlEvolve_ApplyEvolution(beNDMWShopCtrlEvolve *self) {
     SEND_PLAYER_MESSAGE(self, GAMERAM_14, CURRENT2BASE_2);
     beMessenger_SelectGroup(self->_messenger, GAMERAM_14);
     beMessenger_AppendInt(self->_messenger, self->_playerNo);
-    messenger = self->_messenger;
-    beMessenger_AppendString(messenger, beDataBase_GetRecordString(shinkaDataBase, evolution->_id, MODEL_NAME_2));
+    AppendRecordString(self->_messenger, shinkaDataBase, evolution->_id, MODEL_NAME_2);
     beMessenger_DispatchSelected(self->_messenger, BASE2CURRENT_2);
     beMessenger_SelectReceivers(self->_messenger, GAMERAM_14, 0, 0);
     beMessenger_AppendInt(self->_messenger, self->_playerNo);
@@ -3805,20 +3807,6 @@ template <class Window> static inline igObjectList *SubWindows(const Window *win
             i += 1; \
         } while (i < CHILD_COUNT(window)); \
     } }
-
-static inline int IntList_Count(const igIntList *list) { return list->_count; }
-
-/* matching construct: the grown count is re-read through IntList_Count */
-#define INT_LIST_APPEND(target, value) { \
-    int appendIndex; \
-    igIntList *appendList = (igIntList *)(target); \
-    appendIndex = appendList->_count; \
-    if (appendIndex < appendList->_capacity) { \
-        appendList->_count = IntList_Count(appendList) + 1; \
-    } else { \
-        List_Resize(appendList, appendIndex + 1, 4); \
-    } \
-    ((int *)appendList->_data)[appendIndex] = (value); }
 
 /* Creates a child window of `Type` for this window's player and adds it to the sub-windows. */
 #define OPEN_CHILD(Type, entCode) { \
@@ -4030,7 +4018,7 @@ void beNDMWShopCtrlDigilabo_Update(beNDMWShopCtrlDigilabo *self) {
                         choices = (igIntList *)chooser.p->_playerNoList;
                         index = choices->_count;
                         if (index < choices->_capacity) {
-                            choices->_count = IntList_Count(choices) + 1;
+                            choices->_count = countOf(choices) + 1;
                         } else {
                             List_Resize(choices, index + 1, 4);
                         }
@@ -4068,8 +4056,8 @@ void beNDMWShopCtrlDigilabo_Update(beNDMWShopCtrlDigilabo *self) {
                         beMessenger_SelectGroup(self->_messenger, GAMERAM_14);
                         beMessenger_AppendInt(self->_messenger, PLAYER_NO(self, p));
                         beMessenger_DispatchSelected(self->_messenger, GETPLAYER_10);
-                        /* matching construct: the copied token is an expression temporary; a named local would take a higher stack slot than retail's */
-                        beMessenger_SendNamed(self->_messenger, PLAYERARMS_4, (StringList_CopyRetained((igStringRefList *)igProperty_GetRecordStringList(beMessenger_GetObject(self->_messenger, 0), POWERSOCKETNAME_5)->_data, 0)).p, PLAYER_NO(self, p), GENERATE_13);
+                        igStringRefList *socketNames = (igStringRefList *)igProperty_GetRecordStringList(beMessenger_GetObject(self->_messenger, 0), POWERSOCKETNAME_5)->_data;
+                        beMessenger_SendNamed(self->_messenger, PLAYERARMS_4, StringList_CopyRetained(socketNames, 0).p, PLAYER_NO(self, p), GENERATE_13);
                         p += 1;
                     } while (p < PLAYER_COUNT(self));
                 }
@@ -4149,9 +4137,9 @@ void beNDMWShopCtrlDigilabo_SnapshotParty(beNDMWShopCtrlDigilabo *self) {
         beMessenger_DispatchSelected(self->_messenger, GETPLAYER_10);
         player = beMessenger_GetObject(self->_messenger, 0);
         if (igProperty_GetRecordByte(player, ISUSE_9)->_data != 0) {
-            INT_LIST_APPEND(self->_playerNoList, playerNo)
+            IntList_Append(self->_playerNoList, playerNo);
             digimonNo = igProperty_GetRecord(player, DIGIMONNO_6)->_data;
-            INT_LIST_APPEND(self->_digimonNoList, digimonNo)
+            IntList_Append(self->_digimonNoList, digimonNo);
             sockets = (igObjectList *)igProperty_GetRecordFolder(player, POWERSOCKET_4)->_data;
             PICK_ALLOCATOR(allocator, self)
             igSmartPointer<igIntList> weaponNos((igIntList *)igIntList_Create(allocator));
@@ -4159,7 +4147,7 @@ void beNDMWShopCtrlDigilabo_SnapshotParty(beNDMWShopCtrlDigilabo *self) {
                 beNDMWItemBase *weapon = ((beNDMWItemBase **)sockets->_data)[i];
                 if (weapon != 0) {
                     weaponNo = weapon->_recNo;
-                    INT_LIST_APPEND(weaponNos.p, weaponNo)
+                    IntList_Append(weaponNos.p, weaponNo);
                 }
             }
             ObjectList_AppendRetained((igObjectList *)self->_wpuNoListList, weaponNos.p);
@@ -4207,7 +4195,7 @@ int beNDMWShopCtrlDigilabo_HasPartyChanged(beNDMWShopCtrlDigilabo *self) {
             igSmartPointer<igIntList> unmatched((igIntList *)igIntList_Create(allocator));
             for (i = 0; i < savedWeaponNos->_count; i++) {
                 const int &savedWeaponNo = ((int *)savedWeaponNos->_data)[i];
-                INT_LIST_APPEND(unmatched.p, savedWeaponNo)
+                IntList_Append(unmatched.p, savedWeaponNo);
             }
             /* Strike every equipped weapon off the saved list. */
             weaponCount = 0;
@@ -4236,18 +4224,8 @@ int beNDMWShopCtrlDigilabo_HasPartyChanged(beNDMWShopCtrlDigilabo *self) {
                 }
             }
             if (weaponCount != savedWeaponNos->_count) return 1;
-            igIntList *remaining = unmatched.p;
-            m = 0;
-            if (0 < remaining->_count) {
-                /* matching construct: as above */
-                int offset = 0;
-                igIntList *current = remaining;
-                do {
-                    if (*(int *)(current->_data + offset) != NO_WEAPON) return 1;
-                    m++;
-                    offset += 4;
-                    current = remaining;
-                } while (m < remaining->_count);
+            for (m = 0; m < countOf(unmatched); m++) {
+                if (IntList_Get(unmatched, m) != NO_WEAPON) return 1;
             }
         }
     }
@@ -4572,7 +4550,7 @@ void beNDMWShopCtrlSell_Update(beNDMWShopCtrlSell *self) {
         hasDisk = false;
         for (i = 0; i < disks->_count; i++) {
             disk = ((beNDMWItemDisk **)disks->_data)[i];
-            if (disk != 0 && disk->_kazu > 0) {
+            if (disk != 0 && DiskCount(disk) > 0) {
                 hasDisk = true;
                 break;
             }
@@ -5230,7 +5208,7 @@ void beNDMWShopCtrlDiskSell_Update(beNDMWShopCtrlDiskSell *self) {
                 PICK_ALLOCATOR(allocator, self)
                 igSmartPointer<igBoolList> sellable((igBoolList *)igBoolList_Create(allocator));
                 for (j = 0; j < offered->_count; j++) {
-                    if (((beNDMWItemDisk **)offered->_data)[j]->_kazu > 0) {
+                    if (DiskCount(((beNDMWItemDisk **)offered->_data)[j]) > 0) {
                         BoolList_Append(sellable.p, true);
                     } else {
                         BoolList_Append(sellable.p, false);
@@ -5267,7 +5245,7 @@ void beNDMWShopCtrlDiskSell_Update(beNDMWShopCtrlDiskSell *self) {
                         ENTER_STEP(self, DISKSELL_PICK_QUANTITY)
                         self->_cursor = self->_retCode;
                         beNDMWShopCtrlSell_MoveRowCursor((beNDMWWindow *)self->_mother, self->_cursor);
-                        self->_maxSell = ((beNDMWItemDisk **)PlayerFolder(GetPlayer(self), DISKFOLDER_5)->_data)[self->_cursor]->_kazu;
+                        self->_maxSell = DiskCount(((beNDMWItemDisk **)PlayerFolder(GetPlayer(self), DISKFOLDER_5)->_data)[self->_cursor]);
                         if (self->_maxSell == 0) {
                             ENTER_STEP(self, DISKSELL_PICK_DISK)
                             return;
@@ -5369,10 +5347,7 @@ void beNDMWShopCtrlDiskSell_Update(beNDMWShopCtrlDiskSell *self) {
                         beMessenger_AppendInt(self->_messenger, self->_playerNo);
                         beMessenger_DispatchSelected(self->_messenger, UPDATE_3);
                         disk = ((beNDMWItemDisk **)stock->_data)[self->_cursor];
-                        {
-                            unsigned int owned = disk->_kazu;
-                            disk->_kazu = owned - self->_kazu;
-                        }
+                        disk->_kazu = DiskCount(disk) - self->_kazu;
                         break;
                     case ANSWER_NO:
                         break;
@@ -5417,7 +5392,7 @@ void beNDMWShopCtrlDiskSell_RefreshText(beNDMWShopCtrlDiskSell *self, int refres
             disk = ((beNDMWItemDisk **)disks->_data)[i];
             text = beNDMWItemBase_GetRecordString(disk, status, NAME_2);
             SET_TEXT(self, STWINFONT14, g_fontNames[i], text)
-            count[0] = '0' + disk->_kazu;
+            count[0] = '0' + DiskCount(disk);
             count[1] = 0;
             SET_TEXT(self, STWINFONT15_2, g_fontNames[i], count)
             sprintf(price, percent_d, beNDMWItemRevisionPocketBase_GetPrice(disk, status, KAITORI_2));
@@ -6207,6 +6182,9 @@ void beNDMWShopCtrlXdataChip_Update(beNDMWShopCtrlXdataChip *self) {
     }
 }
 
+/* The row the page's select window reported in _retCode. */
+static inline int SelectedRow(const beNDMWShopCtrlXdataChip *self) { return self->_retCode; }
+
 /* Recomputes _maxPage and returns how many chips the current page shows (at least one). */
 int beNDMWShopCtrlXdataChip_UpdatePageCount(beNDMWShopCtrlXdataChip *self)
 {
@@ -6293,8 +6271,7 @@ void beNDMWShopCtrlXdataChip_RefreshText(beNDMWShopCtrlXdataChip *self, long lon
         SEND_TEXT(self, STWINFONT30, g_fontName1[0], pageDigit, TEXTSET)
     }
     if (refreshDescription != 0) {
-        /* matching construct: hand sweep — the subtraction of a negation keeps the retail addu operand order */
-        selectedIndex = self->_nowPage * CHIPS_PER_PAGE - -self->_retCode;
+        selectedIndex = self->_nowPage * CHIPS_PER_PAGE + SelectedRow(self);
         if (selectedIndex < ((beNDMWItemBaseList *)self->_itemBaseList)->_count) {
             selectedItem = CHIP_AT(self, selectedIndex);
             if (selectedItem != 0) {
