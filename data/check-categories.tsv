@@ -2701,8 +2701,8 @@
 0016cc60	FUN_0016cc60	match	-
 0016cd10	FUN_0016cd10	match	-
 0016cd40	Gap__Gfx__igPsx2VisualContext__vfunc_27	match	-
-0016cdd0	FUN_0016cdd0	match	-
-0016cde0	FUN_0016cde0	match	-
+0016cdd0	igPsx2VisualContext_CallDmaChain	match	-
+0016cde0	igPsx2VisualContext_IsDisplayingFirstBuffer	match	-
 0016cdf0	Gap__Gfx__igPsx2DisableExt__vfunc_29	match	-
 0016ce00	Gap__Gfx__igPsx2DisableExt__vfunc_30	match	-
 0016ce90	Gap__Gfx__igPsx2DisableExt__vfunc_31	match	-
@@ -5522,79 +5522,79 @@
 001e7440	Gap__igMatrixObjectList__vfunc_24	match	-
 001e7450	Gap__igLongStack__vfunc_18	match	-
 001e7480	Gap__igMatrixStack__vfunc_18	match	-
-001e74b0	FUN_001e74b0	match	-
-001e7500	FUN_001e7500	match	-
-001e7560	FUN_001e7560	match	-
-001e7590	FUN_001e7590	match	-
-001e7870	FUN_001e7870	match	-
-001e83e0	FUN_001e83e0	match	-
-001e84f0	FUN_001e84f0	match	-
-001e8550	FUN_001e8550	match	-
-001e8730	FUN_001e8730	match	-
-001e8850	FUN_001e8850	match	-
-001e8990	FUN_001e8990	match	-
-001e8a90	FUN_001e8a90	match	-
-001e8b40	FUN_001e8b40	match	-
-001e8b80	FUN_001e8b80	match	-
-001e8be0	FUN_001e8be0	match	-
-001e8d10	FUN_001e8d10	match	-
-001e9090	FUN_001e9090	match	-
-001e9600	FUN_001e9600	match	-
-001e96d0	FUN_001e96d0	match	-
-001e9720	FUN_001e9720	match	-
-001e9730	FUN_001e9730	match	-
-001e9740	FUN_001e9740	match	-
-001e99c0	FUN_001e99c0	match	-
-001e99d0	FUN_001e99d0	match	-
-001e99f0	FUN_001e99f0	match	-
-001ea3f0	FUN_001ea3f0	match	-
-001ea420	FUN_001ea420	match	-
-001ea430	FUN_001ea430	match	-
-001ea5d0	FUN_001ea5d0	match	-
-001ea8a0	FUN_001ea8a0	match	-
-001ea8c0	FUN_001ea8c0	match	-
-001ea9c0	FUN_001ea9c0	match	-
-001eaa50	FUN_001eaa50	match	-
-001eadf0	FUN_001eadf0	match	-
-001eae10	FUN_001eae10	match	-
-001eb310	FUN_001eb310	match	-
-001eb380	FUN_001eb380	match	-
-001eb3b0	FUN_001eb3b0	match	-
-001eb3f0	FUN_001eb3f0	match	-
-001eb410	FUN_001eb410	match	-
-001eb490	FUN_001eb490	match	-
-001eb500	FUN_001eb500	match	-
-001eb570	FUN_001eb570	match	-
-001eb5e0	FUN_001eb5e0	match	-
-001eb650	FUN_001eb650	match	-
-001eb6a0	FUN_001eb6a0	match	-
-001eb730	FUN_001eb730	match	-
-001eb810	FUN_001eb810	match	-
-001ebaf0	FUN_001ebaf0	match	-
-001ebb10	FUN_001ebb10	match	-
-001ebb70	FUN_001ebb70	match	-
-001ebc00	FUN_001ebc00	match	-
-001edbc0	FUN_001edbc0	match	-
-001edcb0	FUN_001edcb0	match	-
-001edcc0	FUN_001edcc0	match	-
-001edf10	FUN_001edf10	match	-
-001edf20	FUN_001edf20	match	-
-001ee1a0	FUN_001ee1a0	match	-
-001ee1c0	FUN_001ee1c0	match	-
-001ee250	FUN_001ee250	match	-
-001ee270	FUN_001ee270	match	-
-001ee3f0	FUN_001ee3f0	match	-
-001ee600	FUN_001ee600	match	-
-001ee730	FUN_001ee730	match	-
-001ee740	FUN_001ee740	match	-
-001eec80	FUN_001eec80	match	-
-001eed50	FUN_001eed50	match	-
-001eeda0	FUN_001eeda0	match	-
-001eedf0	FUN_001eedf0	match	-
-001eee30	FUN_001eee30	match	-
-001eee40	FUN_001eee40	match	-
-001eeed0	FUN_001eeed0	match	-
-001eef20	FUN_001eef20	match	-
+001e74b0	p2EnableCapability	match	-
+001e7500	p2DisableCapability	match	-
+001e7560	p2IsCapabilityEnabled	match	-
+001e7590	p2UpdateDepthTest	match	-
+001e7870	p2InitCapabilities	match	-
+001e83e0	p2SetFrameBufferAlpha	match	-
+001e84f0	p2SetPixelAlphaBlend	match	-
+001e8550	p2SetAlphaTest	match	-
+001e8730	p2SetDestinationAlphaMode	match	-
+001e8850	p2SetFogColour	match	-
+001e8990	p2UploadFog	match	-
+001e8a90	p2SetFog	match	-
+001e8b40	p2SetDitherMatrix	match	-
+001e8b80	p2SetColourClamp	match	-
+001e8be0	p2SetColorScaler	match	-
+001e8d10	p2SetScissor	match	-
+001e9090	p2SetSoftwareBlendSource	match	-
+001e9600	p2SoftwareBlend	match	-
+001e96d0	p2SetBlendWeightCount	match	-
+001e9720	p2SetBlendWeightArray	match	-
+001e9730	p2SetBlendIndexArray	match	-
+001e9740	p2SetBlendMatrices	match	-
+001e99c0	p2SetClearWidth	match	-
+001e99d0	p2SetClearPasses	match	-
+001e99f0	p2Clear	match	-
+001ea3f0	p2InitImagePool	match	-
+001ea420	p2GetImageTexture	match	-
+001ea430	p2CreateImage	match	-
+001ea5d0	p2SetClut	match	-
+001ea8a0	p2FreeImage	match	-
+001ea8c0	p2InitVuPrograms	match	-
+001ea9c0	p2UnloadVuPrograms	match	-
+001eaa50	p2LoadVuPrograms	match	-
+001eadf0	p2GetVuProgramAddress	match	-
+001eae10	p2AliasVuProgram	match	-
+001eb310	p2SetVuProgramName	match	-
+001eb380	p2GetVuProgramName	match	-
+001eb3b0	p2SetVuProgram	match	-
+001eb3f0	p2IsVuProgramLoaded	match	-
+001eb410	p2FindVuProgram	match	-
+001eb490	p2FindVuProgramVariants	match	-
+001eb500	p2FindVuProgramByBitCount	match	-
+001eb570	p2FreeVuProgramNames	match	-
+001eb5e0	p2SetComponentLayout	match	-
+001eb650	p2GetComponentFixedScale	match	-
+001eb6a0	p2GetComponentScale	match	-
+001eb730	p2GetComponentSize	match	-
+001eb810	p2UploadComponentScales	match	-
+001ebaf0	p2SetFrameMode	match	-
+001ebb10	p2SetDisplayFrameCount	match	-
+001ebb70	p2SetDisplayFlag	match	-
+001ebc00	p2GetDisplayFlags	match	-
+001edbc0	p2GetDisplaySize	match	-
+001edcb0	p2GetTextureBase	match	-
+001edcc0	p2SetColourMask	match	-
+001edf10	p2EnableWatchdog	match	-
+001edf20	p2CloseDisplay	match	-
+001ee1a0	p2FreeDisplayListBlock	match	-
+001ee1c0	p2AllocDisplayList	match	-
+001ee250	p2InitDisplayListPool	match	-
+001ee270	p2BeginDisplayList	match	-
+001ee3f0	p2EndDisplayList	match	-
+001ee600	p2GrowDisplayList	match	-
+001ee730	p2GetDisplayListBlendWeightCount	match	-
+001ee740	p2GetDisplayListBlendMatrixCount	match	-
+001eec80	p2PatchDisplayListTextures	match	-
+001eed50	p2FreeDisplayList	match	-
+001eeda0	p2ReleaseDisplayList	match	-
+001eedf0	p2GetDisplayListSize	match	-
+001eee30	p2GetDisplayListData	match	-
+001eee40	p2CopyDisplayListData	match	-
+001eeed0	p2CopyDisplayList	match	-
+001eef20	p2RebaseDisplayList	match	-
 001ef4c0	p2Vif0DmaHandler	match	-
 001ef9b0	p2InitDmaChannel	match	-
 001efb40	p2InitDmaChannels	match	-
@@ -7757,7 +7757,7 @@
 0026ba68	FUN_0026ba68	match	-
 0026bb38	FUN_0026bb38	match	-
 0026bbc0	FUN_0026bbc0	match	-
-0026bc60	FUN_0026bc60	match	-
+0026bc60	ADXT_Stop	match	-
 0026bd20	FUN_0026bd20	match	-
 0026bd88	FUN_0026bd88	match	-
 0026be50	FUN_0026be50	match	-
@@ -7797,8 +7797,8 @@
 0026cdb0	FUN_0026cdb0	match	-
 0026cde0	FUN_0026cde0	match	-
 0026ce10	FUN_0026ce10	match	-
-0026ce40	FUN_0026ce40	match	-
-0026cf70	FUN_0026cf70	match	-
+0026ce40	ADXT_Pause	match	-
+0026cf70	ADXT_GetStatPause	match	-
 0026cfa0	FUN_0026cfa0	match	-
 0026cfb8	FUN_0026cfb8	match	-
 0026cfd0	FUN_0026cfd0	match	-
@@ -8677,7 +8677,7 @@
 00293118	FUN_00293118	match	-
 00293230	FUN_00293230	match	-
 002933f8	FUN_002933f8	match	-
-002934c0	FUN_002934c0	match	-
+002934c0	MWSFD_SetMallocFunc	match	-
 00293508	FUN_00293508	match	-
 002935a8	FUN_002935a8	match	-
 002935e0	FUN_002935e0	match	-
@@ -8743,7 +8743,7 @@
 00295358	FUN_00295358	match	-
 00295398	FUN_00295398	match	-
 00295438	FUN_00295438	match	-
-00295468	FUN_00295468	match	-
+00295468	mwPlyIsPause	match	-
 002954b0	FUN_002954b0	match	-
 002954c8	FUN_002954c8	match	-
 002955c0	FUN_002955c0	match	-
@@ -11651,7 +11651,7 @@
 002ed200	Memory_AllocateDefaultBuffer	match	-
 002ed240	Memory_AllocateBufferDirect	match	-
 002ed260	FUN_002ed260	match	-
-002ed2b0	FUN_002ed2b0	match	-
+002ed2b0	Memory_AllocateAlignedWithAllocator	match	-
 002ed2e0	FUN_002ed2e0	match	-
 002ed330	Memory_ReallocateBuffer	match	-
 002ed3b0	FUN_002ed3b0	match	-
@@ -13154,18 +13154,18 @@
 00331f30	Gap__igAdxAudio__vfunc_07	match	-
 00331f80	Gap__igAdxAudio__vfunc_20	match	-
 00331f90	Gap__igAdxAudio__vfunc_08	match	-
-00331fb0	FUN_00331fb0	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-003320d0	FUN_003320d0	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-00332160	FUN_00332160	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
+00331fb0	igAdxAudio_Initialize	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
+003320d0	igAdxAudio_CreateHandle	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
+00332160	igAdxAudio_StartMemory	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
 003321f0	FUN_003321f0	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-00332290	FUN_00332290	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-00332340	FUN_00332340	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-00332370	FUN_00332370	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-003323a0	FUN_003323a0	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-003323d0	FUN_003323d0	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-00332430	FUN_00332430	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-00332460	FUN_00332460	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-00332490	FUN_00332490	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
+00332290	igAdxAudio_StartFile	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
+00332340	igAdxAudio_Stop	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
+00332370	igAdxAudio_Pause	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
+003323a0	igAdxAudio_GetPauseState	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
+003323d0	igAdxAudio_Shutdown	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
+00332430	igAdxAudio_SetOutVolume	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
+00332460	igAdxAudio_GetOutVolume	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
+00332490	igAdxAudio_GetStatus	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
 003324c0	FUN_003324c0	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
 00332530	FUN_00332530	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
 00332650	Gap__igAdx__vfunc_01	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
@@ -13261,7 +13261,7 @@
 00334f80	igAdxFile_InitFields	match	-
 003350b0	FUN_003350b0	match	-
 003350d0	FUN_003350d0	match	-
-003350f0	FUN_003350f0	match	-
+003350f0	igAdxAudio_Create	match	-
 00335130	FUN_00335130	match	-
 00335180	FUN_00335180	match	-
 003351d0	igAdxAudio_GetVTable	match	-
@@ -13363,29 +13363,29 @@
 003373e0	Gap__igTextureBindAttrList__vfunc_22	match	-
 003373f0	Gap__igAdxAfsFileList__vfunc_22	match	-
 00337400	Gap__igFileNameList__vfunc_22	match	-
-00337410	FUN_00337410	match	-
-00337480	FUN_00337480	match	-
-003374e0	FUN_003374e0	match	-
-00337520	FUN_00337520	match	-
-00337570	FUN_00337570	match	-
-003375c0	FUN_003375c0	match	-
-00337600	FUN_00337600	match	-
-003378e0	FUN_003378e0	match	-
+00337410	Dma_SetTag	match	-
+00337480	Gif_SetTag	match	-
+003374e0	Gif_SetAd	match	-
+00337520	Gif_SetBitbltbuf	match	-
+00337570	Gif_SetTrxpos	match	-
+003375c0	Gif_SetTrxreg	match	-
+00337600	Gif_SetTrxdir	match	-
+003378e0	CriMovie_BuildFrameUpload	match	-
 00337920	Gap__igCriMovieCodec__vfunc_28	match	-
 00337a50	Gap__igCriMovieCodec__vfunc_29	match	-
-00337aa0	FUN_00337aa0	match	-
+00337aa0	CriMovie_SubmitFrame	match	-
 00337b80	Gap__igCriMovieData__vfunc_11	match	-
 00337bb0	Gap__igCriMovieCodec__vfunc_01	match	-
 00337bf0	Gap__igCriMovieCodec__vfunc_02	match	-
 00337c10	Gap__igCriMovieCodec__vfunc_21	match	-
-003387d0	FUN_003387d0	match	-
+003387d0	CriMovie_DestroyObjectRef	match	-
 00338850	Gap__igCriMovieCodec__vfunc_24	match	-
 00338920	Gap__igCriMovieCodec__vfunc_25	match	-
 00338a00	Gap__igCriMovieCodec__vfunc_26	match	-
 00338ae0	Gap__igCriMovieCodec__vfunc_30	match	-
-00338d60	FUN_00338d60	match	-
-00338da0	FUN_00338da0	match	-
-00338df0	FUN_00338df0	match	-
+00338d60	CriMovie_Allocate	match	-
+00338da0	CriMovie_AllocateAligned	match	-
+00338df0	CriMovie_Free	match	-
 00338e30	Gap__igCriMovieCodec__vfunc_20	match	-
 00338e40	Gap__igCriMovieData__vfunc_20	match	-
 00338e50	FUN_00338e50	match	-
@@ -14238,7 +14238,7 @@
 0034f360	beModelCtrlSubCom_Register	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
 0034f3e0	beModelCtrlSubCom_GetMetaObject	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
 0034f400	beModelCtrlSubCom_InitFields	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
-0034f4a0	FUN_0034f4a0	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
+0034f4a0	beModelCtrlSCSound_Create	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
 0034f4e0	FUN_0034f4e0	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
 0034f530	beModelCtrlSCSound_GetVTable	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
 0034f5c0	FUN_0034f5c0	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
@@ -14246,14 +14246,14 @@
 0034f650	beModelCtrlSCSound_GetMetaObject	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
 0034f670	FUN_0034f670	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
 0034f680	beModelCtrlSCSound_InitFields	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
-0034f6f0	FUN_0034f6f0	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
+0034f6f0	beModelCtrlSCHitBox_Create	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
 0034f730	FUN_0034f730	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
 0034f780	beModelCtrlSCHitBox_GetVTable	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
 0034f7c0	FUN_0034f7c0	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
 0034f7e0	beModelCtrlSCHitBox_Register	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
 0034f850	beModelCtrlSCHitBox_GetMetaObject	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
 0034f870	beModelCtrlSCHitBox_InitFields	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
-0034f8e0	FUN_0034f8e0	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
+0034f8e0	beModelCtrlSCEffect_Create	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
 0034f920	FUN_0034f920	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
 0034f970	beModelCtrlSCEffect_GetVTable	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
 0034fa30	FUN_0034fa30	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
@@ -14267,7 +14267,7 @@
 0034fc70	beModelCtrlSubComBase_InitFields	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
 0034fd00	FUN_0034fd00	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
 0034fd40	FUN_0034fd40	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
-0034fd90	FUN_0034fd90	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
+0034fd90	beModelCtrlNode2_ResolveMetaObject	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
 0034fde0	beModelCtrlNode2_GetVTable	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
 0034fe80	FUN_0034fe80	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
 0034fea0	beModelCtrlNode2_Register	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
@@ -15258,7 +15258,7 @@
 00367340	beCriAudio_Register	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
 003673c0	beCriAudio_GetMetaObject	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
 003673e0	beCriAudio_InitFields	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
-00367490	FUN_00367490	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
+00367490	beCriSndf_Create	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
 003674d0	FUN_003674d0	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
 00367520	FUN_00367520	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
 00367570	beCriSndf_GetVTable	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
@@ -15390,7 +15390,7 @@
 0036a380	beBaseInfoRam_Register	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
 0036a400	beBaseInfoRam_GetMetaObject	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
 0036a420	beBaseInfoRam_InitFields	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
-0036a510	FUN_0036a510	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
+0036a510	beBaseInfoRamTimer_Create	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
 0036a550	FUN_0036a550	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
 0036a5a0	beBaseInfoRamTimer_GetVTable	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
 0036a630	FUN_0036a630	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
@@ -16319,7 +16319,7 @@
 003902e0	Gap__Bec__beMeterCtrl__vfunc_20	match	-
 003902f0	FUN_003902f0	match	DEFERRED duplicate 0x1c6460 __dt__12LabelListRefFv 128B (compared under the profile of its retail unit)
 00390890	FUN_00390890	match	DEFERRED duplicate 0x1c6460 __dt__12LabelListRefFv 128B (compared under the profile of its retail unit)
-003908d0	FUN_003908d0	match	DEFERRED duplicate 0x1c6460 __dt__12LabelListRefFv 128B (compared under the profile of its retail unit)
+003908d0	beModelCtrl_DrawDebugHitBox	match	DEFERRED duplicate 0x1c6460 __dt__12LabelListRefFv 128B (compared under the profile of its retail unit)
 003908e0	FUN_003908e0	match	DEFERRED duplicate 0x1c6460 __dt__12LabelListRefFv 128B (compared under the profile of its retail unit)
 00390d70	FUN_00390d70	match	DEFERRED duplicate 0x1c6460 __dt__12LabelListRefFv 128B (compared under the profile of its retail unit)
 00390dd0	Gap__Core__igObject__vfunc_30	match	DEFERRED duplicate 0x1c6460 __dt__12LabelListRefFv 128B (compared under the profile of its retail unit)
@@ -16379,29 +16379,29 @@
 00398e20	Gap__Bec__beModelCtrlInfoRideOn3__vfunc_20	match	DEFERRED duplicate 0x1c6460 __dt__12LabelListRefFv 128B (compared under the profile of its retail unit)
 00398e30	Gap__Bec__beModelCtrlInfoRideOn2__vfunc_20	match	DEFERRED duplicate 0x1c6460 __dt__12LabelListRefFv 128B (compared under the profile of its retail unit)
 00398e40	Gap__Bec__beModelCtrl__vfunc_20	match	DEFERRED duplicate 0x1c6460 __dt__12LabelListRefFv 128B (compared under the profile of its retail unit)
-00398e50	FUN_00398e50	match	DEFERRED duplicate 0x198190 __dt__3RefFv 128B (compared under the profile of its retail unit)
-00398e80	FUN_00398e80	match	DEFERRED duplicate 0x198190 __dt__3RefFv 128B (compared under the profile of its retail unit)
-00398ef0	FUN_00398ef0	match	DEFERRED duplicate 0x198190 __dt__3RefFv 128B (compared under the profile of its retail unit)
-003993a0	FUN_003993a0	match	DEFERRED duplicate 0x198190 __dt__3RefFv 128B (compared under the profile of its retail unit)
-003993e0	Gap__Bec__beModelCtrlSCHitBox__vfunc_21	match	DEFERRED duplicate 0x198190 __dt__3RefFv 128B (compared under the profile of its retail unit)
-003998f0	Gap__Bec__beModelCtrlSCHitBox__vfunc_22	match	DEFERRED duplicate 0x198190 __dt__3RefFv 128B (compared under the profile of its retail unit)
-00399940	Gap__Bec__beModelCtrlSCEffect__vfunc_21	match	DEFERRED duplicate 0x198190 __dt__3RefFv 128B (compared under the profile of its retail unit)
-00399bf0	Gap__Bec__beModelCtrlSCEffect__vfunc_23	match	DEFERRED duplicate 0x198190 __dt__3RefFv 128B (compared under the profile of its retail unit)
-00399c50	Gap__Bec__beModelCtrlSCSound__vfunc_21	match	DEFERRED duplicate 0x198190 __dt__3RefFv 128B (compared under the profile of its retail unit)
-00399d10	Gap__Bec__beModelCtrlSCSound__vfunc_23	match	DEFERRED duplicate 0x198190 __dt__3RefFv 128B (compared under the profile of its retail unit)
-00399d90	FUN_00399d90	match	DEFERRED duplicate 0x198190 __dt__3RefFv 128B (compared under the profile of its retail unit)
-00399e20	FUN_00399e20	match	DEFERRED duplicate 0x198190 __dt__3RefFv 128B (compared under the profile of its retail unit)
-00399f20	FUN_00399f20	match	DEFERRED duplicate 0x198190 __dt__3RefFv 128B (compared under the profile of its retail unit)
-0039a130	FUN_0039a130	match	DEFERRED duplicate 0x198190 __dt__3RefFv 128B (compared under the profile of its retail unit)
-0039a250	FUN_0039a250	match	DEFERRED duplicate 0x198190 __dt__3RefFv 128B (compared under the profile of its retail unit)
-0039a480	FUN_0039a480	match	DEFERRED duplicate 0x198190 __dt__3RefFv 128B (compared under the profile of its retail unit)
-0039a500	FUN_0039a500	match	DEFERRED duplicate 0x198190 __dt__3RefFv 128B (compared under the profile of its retail unit)
-0039a6d0	FUN_0039a6d0	match	DEFERRED duplicate 0x198190 __dt__3RefFv 128B (compared under the profile of its retail unit)
-0039a750	FUN_0039a750	match	DEFERRED duplicate 0x198190 __dt__3RefFv 128B (compared under the profile of its retail unit)
-0039a880	FUN_0039a880	match	DEFERRED duplicate 0x198190 __dt__3RefFv 128B (compared under the profile of its retail unit)
-0039a900	Gap__Bec__beModelCtrlSCSound__vfunc_20	match	DEFERRED duplicate 0x198190 __dt__3RefFv 128B (compared under the profile of its retail unit)
-0039a910	Gap__Bec__beModelCtrlSCEffect__vfunc_20	match	DEFERRED duplicate 0x198190 __dt__3RefFv 128B (compared under the profile of its retail unit)
-0039a920	Gap__Bec__beModelCtrlSCHitBox__vfunc_20	match	DEFERRED duplicate 0x198190 __dt__3RefFv 128B (compared under the profile of its retail unit)
+00398e50	beModelCtrlNode2_TraversalFunction	match	DEFERRED duplicate 0x198190 __dt__24igSmartPointer<7igAABox>Fv 128B (compared under the profile of its retail unit)
+00398e80	beModelCtrlNode2_LocalTime	match	DEFERRED duplicate 0x198190 __dt__24igSmartPointer<7igAABox>Fv 128B (compared under the profile of its retail unit)
+00398ef0	beModelCtrlNode2_Traverse	match	DEFERRED duplicate 0x198190 __dt__24igSmartPointer<7igAABox>Fv 128B (compared under the profile of its retail unit)
+003993a0	beModelCtrlNode2_RegisterTraversalFunction	match	DEFERRED duplicate 0x198190 __dt__24igSmartPointer<7igAABox>Fv 128B (compared under the profile of its retail unit)
+003993e0	Gap__Bec__beModelCtrlSCHitBox__vfunc_21	match	DEFERRED duplicate 0x198190 __dt__24igSmartPointer<7igAABox>Fv 128B (compared under the profile of its retail unit)
+003998f0	Gap__Bec__beModelCtrlSCHitBox__vfunc_22	match	DEFERRED duplicate 0x198190 __dt__24igSmartPointer<7igAABox>Fv 128B (compared under the profile of its retail unit)
+00399940	Gap__Bec__beModelCtrlSCEffect__vfunc_21	match	DEFERRED duplicate 0x198190 __dt__24igSmartPointer<7igAABox>Fv 128B (compared under the profile of its retail unit)
+00399bf0	Gap__Bec__beModelCtrlSCEffect__vfunc_23	match	DEFERRED duplicate 0x198190 __dt__24igSmartPointer<7igAABox>Fv 128B (compared under the profile of its retail unit)
+00399c50	Gap__Bec__beModelCtrlSCSound__vfunc_21	match	DEFERRED duplicate 0x198190 __dt__24igSmartPointer<7igAABox>Fv 128B (compared under the profile of its retail unit)
+00399d10	Gap__Bec__beModelCtrlSCSound__vfunc_23	match	DEFERRED duplicate 0x198190 __dt__24igSmartPointer<7igAABox>Fv 128B (compared under the profile of its retail unit)
+00399d90	beModelCtrlSubComBase_Update	match	DEFERRED duplicate 0x198190 __dt__24igSmartPointer<7igAABox>Fv 128B (compared under the profile of its retail unit)
+00399e20	beModelCtrlSubCom_Update	match	DEFERRED duplicate 0x198190 __dt__24igSmartPointer<7igAABox>Fv 128B (compared under the profile of its retail unit)
+00399f20	beModelCtrlSubCom_StopAll	match	DEFERRED duplicate 0x198190 __dt__24igSmartPointer<7igAABox>Fv 128B (compared under the profile of its retail unit)
+0039a130	beModelCtrlSubCom_StopType	match	DEFERRED duplicate 0x198190 __dt__24igSmartPointer<7igAABox>Fv 128B (compared under the profile of its retail unit)
+0039a250	beModelCtrlSubCom_AddEffect	match	DEFERRED duplicate 0x198190 __dt__24igSmartPointer<7igAABox>Fv 128B (compared under the profile of its retail unit)
+0039a480	FUN_0039a480	match	DEFERRED duplicate 0x198190 __dt__24igSmartPointer<7igAABox>Fv 128B (compared under the profile of its retail unit)
+0039a500	beModelCtrlSubCom_AddHitBox	match	DEFERRED duplicate 0x198190 __dt__24igSmartPointer<7igAABox>Fv 128B (compared under the profile of its retail unit)
+0039a6d0	FUN_0039a6d0	match	DEFERRED duplicate 0x198190 __dt__24igSmartPointer<7igAABox>Fv 128B (compared under the profile of its retail unit)
+0039a750	beModelCtrlSubCom_AddSound	match	DEFERRED duplicate 0x198190 __dt__24igSmartPointer<7igAABox>Fv 128B (compared under the profile of its retail unit)
+0039a880	FUN_0039a880	match	DEFERRED duplicate 0x198190 __dt__24igSmartPointer<7igAABox>Fv 128B (compared under the profile of its retail unit)
+0039a900	Gap__Bec__beModelCtrlSCSound__vfunc_20	match	DEFERRED duplicate 0x198190 __dt__24igSmartPointer<7igAABox>Fv 128B (compared under the profile of its retail unit)
+0039a910	Gap__Bec__beModelCtrlSCEffect__vfunc_20	match	DEFERRED duplicate 0x198190 __dt__24igSmartPointer<7igAABox>Fv 128B (compared under the profile of its retail unit)
+0039a920	Gap__Bec__beModelCtrlSCHitBox__vfunc_20	match	DEFERRED duplicate 0x198190 __dt__24igSmartPointer<7igAABox>Fv 128B (compared under the profile of its retail unit)
 0039a930	beNodeAnim_TraversalFunction	match	-
 0039a960	beNodeAnim_SetTime	match	-
 0039a9e0	beNodeAnim_UpdateTime	match	-
@@ -16537,48 +16537,48 @@
 003a5a70	Gap__Bec__beTargetObj__vfunc_25	match	-
 003a5a80	Gap__Bec__beTargetObj__vfunc_26	match	-
 003a5b20	Gap__Bec__beTargetObj__vfunc_27	match	-
-003a5b40	FUN_003a5b40	match	-
-003a5cc0	FUN_003a5cc0	match	-
-003a5d70	FUN_003a5d70	match	-
-003a5f60	FUN_003a5f60	match	-
-003a63b0	FUN_003a63b0	match	-
-003a64d0	FUN_003a64d0	match	-
-003a65f0	FUN_003a65f0	match	-
-003a6750	FUN_003a6750	match	-
-003a6840	FUN_003a6840	match	-
-003a6850	FUN_003a6850	match	-
-003a68c0	FUN_003a68c0	match	-
-003a68d0	FUN_003a68d0	match	-
-003a68e0	FUN_003a68e0	match	-
-003a6930	FUN_003a6930	match	-
+003a5b40	beTargetObj_GatherPositions	match	-
+003a5cc0	beTargetObj_FindNearest	match	-
+003a5d70	beTargetObj_FindFacing	match	-
+003a5f60	beTargetObj_GetPlayerCentre	match	-
+003a63b0	beTargetObj_TargetPlayer	match	-
+003a64d0	beTargetObj_TargetEnemy	match	-
+003a65f0	beTargetObj_SelectTarget	match	-
+003a6750	beTargetObj_SetTarget	match	-
+003a6840	beTargetObj_GetOrigin	match	-
+003a6850	beTargetObj_GetOriginHeading	match	-
+003a68c0	beTargetObj_GetTargetPosition	match	-
+003a68d0	beTargetObj_GetTargetDistanceSq	match	-
+003a68e0	beTargetObj_GetTargetBearing	match	-
+003a6930	beTargetObj_GetTargetRamNo	match	-
 003a6940	Gap__Bec__beTargetObj__vfunc_20	match	-
-003a6950	FUN_003a6950	match	-
-003a6b50	FUN_003a6b50	match	-
-003a6c00	FUN_003a6c00	match	-
-003a6c80	FUN_003a6c80	match	-
-003a6ce0	FUN_003a6ce0	match	-
-003a6e00	FUN_003a6e00	match	-
-003a6f70	FUN_003a6f70	match	-
-003a70c0	FUN_003a70c0	match	-
-003a7260	FUN_003a7260	match	-
-003a7300	FUN_003a7300	match	-
-003a73b0	FUN_003a73b0	match	-
-003a74b0	FUN_003a74b0	match	-
-003a7580	FUN_003a7580	match	-
-003a7590	FUN_003a7590	match	-
-003a7810	FUN_003a7810	match	-
-003a7890	FUN_003a7890	match	-
-003a79a0	FUN_003a79a0	match	-
-003a7a20	FUN_003a7a20	match	-
+003a6950	beCriAudio_Setup	match	-
+003a6b50	beCriAudio_Release	match	-
+003a6c00	beCriAudio_PlayFile	match	-
+003a6c80	beCriAudio_PlayMemory	match	-
+003a6ce0	beCriAudio_PlaySfp	match	-
+003a6e00	beCriAudio_Stop	match	-
+003a6f70	beCriAudio_SetVolume	match	-
+003a70c0	beCriAudio_GetStatus	match	-
+003a7260	beCriAudio_Pause	match	-
+003a7300	beCriAudio_IsPaused	match	-
+003a73b0	beCriAudio_Suspend	match	-
+003a74b0	beCriAudio_Resume	match	-
+003a7580	beCriAudio_ReportError	match	-
+003a7590	beCriVolume_StartFade	match	-
+003a7810	beCriVolume_StepFade	match	-
+003a7890	beCriVolume_StepAdxLevel	match	-
+003a79a0	beCriVolume_StepSndfLevel	match	-
+003a7a20	beBaseInfoRam_StartTimer	match	-
 003a7d00	FUN_003a7d00	match	-
-003a7d80	FUN_003a7d80	match	-
-003a7e90	FUN_003a7e90	match	-
-003a7fd0	FUN_003a7fd0	match	-
-003a8140	FUN_003a8140	match	-
-003a82f0	FUN_003a82f0	match	-
-003a84a0	FUN_003a84a0	match	-
-003a8580	FUN_003a8580	match	-
-003a8760	FUN_003a8760	match	-
+003a7d80	beBaseInfoRam_HasTimer	match	-
+003a7e90	beBaseInfoRam_IsTimerExpired	match	-
+003a7fd0	beBaseInfoRam_GetTimerElapsed	match	-
+003a8140	beBaseInfoRam_GetTimerFrameDelta	match	-
+003a82f0	beBaseInfoRam_SetTimerScale	match	-
+003a84a0	beBaseInfoRam_SetAllTimerScales	match	-
+003a8580	beBaseInfoRam_RemoveTimer	match	-
+003a8760	beBaseInfoRam_RemoveAllTimers	match	-
 003a8880	Gap__Bec__beMovie__vfunc_32	match	-
 003a8910	Gap__Bec__beMovie__vfunc_29	match	-
 003a8940	Gap__Bec__beMovie__vfunc_30	match	-
@@ -18613,42 +18613,42 @@
 00447c10	beNDMWItemBase_GetRecordInt	match	-
 00447c60	beNDMWItemBase_GetRecordBool	match	-
 00447cb0	beNDMWItemBase_GetRecordString	match	-
-00447d00	FUN_00447d00	code-only	exception metadata: retail keeps an index record at 0x554678 (packed) that the object does not produce (its unit was C++ with exceptions on)
-00447ed0	FUN_00447ed0	match	-
-00448050	FUN_00448050	match	-
-004480a0	FUN_004480a0	match	-
-00448190	FUN_00448190	match	-
+00447d00	beNDMWItemBase_GetRevisionColor	match	-
+00447ed0	beNDMWItemRevisionPocketBase_GetPrice	match	-
+00448050	beNDMWItemBase_IndexOfRecNo	match	-
+004480a0	beNDMWItemRevisionBase_RollRevision	match	-
+00448190	beNDMWItemRevisionPocketBase_RollPocket	match	-
 004482a0	Gap__Bec__beNDMWItemWeapon__vfunc_21	match	-
-004482c0	FUN_004482c0	match	-
-004482e0	FUN_004482e0	match	-
+004482c0	beNDMWItemWeapon_Set	match	-
+004482e0	beNDMWItemWeapon_SetRandom	match	-
 00448360	Gap__Bec__beNDMWItemWeapon__vfunc_23	match	-
 004483b0	Gap__Bec__beNDMWItemWeapon__vfunc_24	match	-
 004483f0	Gap__Bec__beNDMWItemBlueArmor__vfunc_21	match	-
-00448410	FUN_00448410	match	-
-00448430	FUN_00448430	match	-
+00448410	beNDMWItemBlueArmor_Set	match	-
+00448430	beNDMWItemBlueArmor_SetRandom	match	-
 004484b0	Gap__Bec__beNDMWItemBlueArmor__vfunc_23	match	-
 00448500	Gap__Bec__beNDMWItemBlueArmor__vfunc_24	match	-
 00448540	Gap__Bec__beNDMWItemYellowArmor__vfunc_21	match	-
-00448560	FUN_00448560	match	-
-00448580	FUN_00448580	match	-
+00448560	beNDMWItemYellowArmor_Set	match	-
+00448580	beNDMWItemYellowArmor_SetRandom	match	-
 004485d0	Gap__Bec__beNDMWItemYellowArmor__vfunc_23	match	-
 00448610	Gap__Bec__beNDMWItemYellowArmor__vfunc_24	match	-
 00448640	Gap__Bec__beNDMWItemAbilityChip__vfunc_21	match	-
-00448660	FUN_00448660	match	-
+00448660	beNDMWItemAbilityChip_Set	match	-
 00448680	Gap__Bec__beNDMWItemAbilityChip__vfunc_23	match	-
 004486c0	Gap__Bec__beNDMWItemAbilityChip__vfunc_24	match	-
 004486f0	Gap__Bec__beNDMWItemDisk__vfunc_21	match	-
-00448710	FUN_00448710	match	-
+00448710	beNDMWItemDisk_Set	match	-
 00448730	Gap__Bec__beNDMWItemDisk__vfunc_23	match	-
 00448770	Gap__Bec__beNDMWItemDisk__vfunc_24	match	-
 004487a0	Gap__Bec__beNDMWItemDisk__vfunc_22	match	-
 00448ab0	Gap__Bec__beNDMWItemInstant__vfunc_21	match	-
-00448ad0	FUN_00448ad0	match	-
+00448ad0	beNDMWItemInstant_Set	match	-
 00448ae0	Gap__Bec__beNDMWItemInstant__vfunc_22	match	-
 00448ee0	Gap__Bec__beNDMWItemImportant__vfunc_21	match	-
-00448f00	FUN_00448f00	match	-
+00448f00	beNDMWItemImportant_Set	match	-
 00448f10	Gap__Bec__beNDMWItemWaza__vfunc_21	match	-
-00448f30	FUN_00448f30	match	-
+00448f30	beNDMWItemWaza_Set	match	-
 00448f50	Gap__Bec__beNDMWItemWaza__vfunc_20	match	-
 00448f60	Gap__Bec__beNDMWItemImportant__vfunc_20	match	-
 00448f70	Gap__Bec__beNDMWItemInstant__vfunc_20	match	-
