@@ -18,10 +18,7 @@ class TraversalTimeOps { public:
     virtual void popTime();
 };
 /* The attribute list of one stack: count and storage of the pushed attributes. */
-struct AttrList : igTDataList<igAttr *> {
-    const int &getCount() const { return _count; }
-    void set(int index, igAttr *const *attr) { _data[index] = *attr; }
-};
+typedef igTDataList<igAttr *> AttrList;
 /* matching construct: the 4-byte reference fields (_attrStack, _timePool, _attrStacks, _data, _popProc, ...) are viewed through pointer casts; no layout effect */
 extern "C" int beNodeAnim_Traverse(beNodeAnim *node, igCommonTraversal *traversal)
 {

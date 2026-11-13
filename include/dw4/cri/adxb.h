@@ -30,6 +30,8 @@ enum {
     ADXB_FORMAT_AC3 = 15
 };
 
+struct Pl2Enc;
+
 typedef struct AdxbObj AdxbObj;
 struct AdxbObj {
     short used;             /* 0x00 */
@@ -68,7 +70,7 @@ struct AdxbObj {
     int f148;
     short format;           /* 0x98: ADXB_FORMAT_* */
     unsigned short def_format;
-    short f156;
+    short pcmfmt;           /* 0x9c: the WAV/AIFF/AU readers' sample format */
     short f158;
     short f160;
     short f162;
@@ -78,17 +80,20 @@ struct AdxbObj {
     unsigned short f170;
     unsigned short dly1[2];
     unsigned short dly2[2];
-    int f180;
-    char pad184[8];
+    void *ahx;              /* 0xb4: AHX decoder handle */
+    int ahx_dec_nsmpl;      /* 0xb8 */
+    int ahx_dec_nfrm;       /* 0xbc: ahx_dec_nsmpl / 96 */
     void *ac3;              /* 0xc0: AC-3 decoder handle */
-    char pad196[8];
+    int ac3_dec_nsmpl;      /* 0xc4 */
+    int ac3_dec_nfrm;       /* 0xc8: ac3_dec_nsmpl / 1536 */
     int f204;
     char f208[16];
     short f224;
     short f226[2];
     char pad230[2];
-    int mono_to_stereo;
-    char pad236[8];
+    struct Pl2Enc *pl2;     /* 0xe8: the attached Pro Logic II encoder, which turns mono into surround stereo */
+    int pl2_x;              /* 0xec: its position, -127 (left) to 127 (right) */
+    int pl2_y;              /* 0xf0: -127 (front) to 127 (back) */
     int f244;
     int f248;
     void (*f252)(void *context, int count, int bytes);

@@ -1,4 +1,4 @@
-void FUN_0014a000(int arg0) {
+void igVisualContext_CreateInstance(int arg0) {
     FUN_0014a0e0();
     igMetaObject_CreateInstance(*(int *)0x55F8E8, arg0);
 }

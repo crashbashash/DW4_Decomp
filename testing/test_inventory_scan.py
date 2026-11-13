@@ -44,7 +44,7 @@ class Image:
         return b"\0" * S.FILE_BASE + b"".join(struct.pack("<I", w) for w in self.words)
 
 
-def scan(img, syms, hi):
+def scan(img, syms, hi, data_rows=()):
     units, cur = [], S.VADDR_BASE
     for va, sz, nm in syms:
         if va > cur:
@@ -53,7 +53,7 @@ def scan(img, syms, hi):
         cur = va + sz
     if cur < hi:
         units.append((cur, hi - cur, "data", "data_%08x" % cur))
-    return inv.Scan(img.bytes(), syms, units, {}, (), section_hi=hi)
+    return inv.Scan(img.bytes(), syms, units, {}, (), section_hi=hi, data_rows=data_rows)
 
 
 class Classes(unittest.TestCase):
@@ -99,6 +99,13 @@ class Classes(unittest.TestCase):
         self.assertIn("dataword(dataword@1000f0)", ev["C"])
         self.assertIn("falls-through-from:short", ev["A"])
         self.assertIn("prologue", ev["G"])
+
+    def test_data_rows_are_neither_code_nor_references(self):
+        B = S.VADDR_BASE
+        rows = scan(self.img, self.syms, B + 0x200, [(B + 0x80, B + 0x98), (B + 0xf0, B + 0xf8)]).rows
+        got = {va: cls for va, _size, cls, _ev in rows}
+        self.assertNotIn(B + 0x80, got)              # the framed body inside the first row
+        self.assertEqual(got[B + 0xc0], "G")         # its only reference lies in the second row
 
     def test_data_words_and_table_text_are_not_code(self):
         # a string and a float table decode to nothing the scan accepts

@@ -513,19 +513,19 @@ void Gap__Core__igAliasMemoryPool__vfunc_02(igAliasMemoryPool *self){
     Gap__Core__igObject__vfunc_00((int)self);
 }
 
-int thunk_FUN_001029d0()
+int __do_global_ctors()
 {
-    return FUN_001029d0();
+    return __init_cpp();
 }
 
-int thunk_FUN_00100bc0__002d1650()
+int __do_global_dtors()
 {
-    return thunk_FUN_00100bc0();
+    return __fini_cpp();
 }
 
 void FUN_002d1660(void) {
-    thunk_FUN_001029d0();
-    thunk_FUN_00100bc0__002d1650();
+    __do_global_ctors();
+    __do_global_dtors();
 }
 
 void FUN_002d1690(int extra0)

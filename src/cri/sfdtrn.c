@@ -34,7 +34,7 @@ typedef struct SfdTrnModules {
 } SfdTrnModules;
 
 int sfd_ReportError();
-void FUN_002ada78(SfdHn *hn, int index, int value);
+void sfd_SetCond(SfdHn *hn, int index, int value);
 
 int FUN_002afcb8(SfdTrnModules *modules, int k);
 void FUN_002afdf0(SfdTrnSlot *slot, SfdTrnFn *fns);
@@ -50,13 +50,13 @@ void FUN_002b0208(SfdHn *hn, int from, int to);
 void FUN_002b0228(char *ctx, int from, int slot, int to);
 void FUN_002b0268(char *ctx, int from, int to);
 
-void FUN_002afc08(SfdTrnModules *dst, SfdTrnModules *src)
+void sftrn_Init(SfdTrnModules *dst, SfdTrnModules *src)
 {
     *dst = *src;
     FUN_002afcb8(src, 0);
 }
 
-void FUN_002afca0(SfdTrnModules *modules)
+void sftrn_Finish(SfdTrnModules *modules)
 {
     FUN_002afcb8(modules, 1);
 }
@@ -110,18 +110,18 @@ int FUN_002afe38(SfdHn *hn, SfdTrnConfig *config)
     } else if (config->fns[2] != 0) {
         FUN_002b01a8(hn, 0, 1);
         FUN_002b0048(hn, config);
-        FUN_002ada78(hn, 6, 0);
+        sfd_SetCond(hn, 6, 0);
         hn->cond2[6] = 0;
     } else if (config->fns[3] != 0) {
         FUN_002b01a8(hn, 0, 2);
         FUN_002b00e8(hn, config);
-        FUN_002ada78(hn, 5, 0);
+        sfd_SetCond(hn, 5, 0);
         hn->cond2[5] = 0;
     } else if (config->fns[8] != 0) {
         FUN_002b01a8(hn, 0, 7);
         FUN_002b0188(hn, config);
-        FUN_002ada78(hn, 6, 0);
-        FUN_002ada78(hn, 5, 0);
+        sfd_SetCond(hn, 6, 0);
+        sfd_SetCond(hn, 5, 0);
         hn->cond2[6] = 0;
         hn->cond2[5] = 0;
     } else {
@@ -137,14 +137,14 @@ void FUN_002aff58(SfdHn *hn, SfdTrnConfig *config)
         FUN_002b01c8(hn, 1, 1);
         FUN_002b0048(hn, config);
     } else {
-        FUN_002ada78(hn, 5, 0);
+        sfd_SetCond(hn, 5, 0);
         hn->cond2[5] = 0;
     }
     if (config->fns[3] != 0) {
         FUN_002b01e8(hn, 1, 2);
         FUN_002b00e8(hn, config);
     } else {
-        FUN_002ada78(hn, 6, 0);
+        sfd_SetCond(hn, 6, 0);
         hn->cond2[6] = 0;
     }
     if (config->fns[8] != 0) {
@@ -246,7 +246,7 @@ int FUN_002b0338(SfdHn *hn, int index, int k, int a, int b)
     return fns[k](hn, a, b, 0);
 }
 
-void FUN_002b0388(SfdHn *hn, int index, int value)
+void sftrn_SetFlagA(SfdHn *hn, int index, int value)
 {
     hn = (SfdHn *)((char *)hn + index * 0x44);
     hn->trn[0].f0 = value;
@@ -258,7 +258,7 @@ int sftrn_GetFlagA(SfdHn *hn, int index)
     return hn->trn[0].f0;
 }
 
-void FUN_002b03b8(SfdHn *hn, int index, int value)
+void sftrn_SetFlagB(SfdHn *hn, int index, int value)
 {
     hn = (SfdHn *)((char *)hn + index * 0x44);
     hn->trn[0].f4 = value;

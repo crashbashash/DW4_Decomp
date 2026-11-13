@@ -19,5 +19,7 @@ cast at use, as the owner approved for the cvFs, HTCI and DVCI pointers on the s
 ## Open questions
 
 - Whether the function at `0x2b3780` (returns 17) starts the SFX file or ends the conversion file before it.
-- The free-handle searches at `0x2b39e0` and `0x2b42c8` leave a delay slot empty that plain C fills; with a
-  `volatile` read of the in-use field the loop matches but its set-up still differs.
+- The free-handle searches at `0x2b39e0` and `0x2b42c8` match with a `volatile`-qualified read of the in-use
+  word. Retail leaves the loop branch's delay slot empty where the compiler fills it, plain C cannot fill the
+  slot differently under this compiler, and both are `unapproved`; the same holds for the one in the SFH file
+  ([CRI SFH](cri-sfh-files.md#open-questions)).

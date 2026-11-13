@@ -106,53 +106,53 @@ float logf(float);
 int strncmp();
 int memcmp(const void *a, const void *b, unsigned int n);
 int FUN_002632c0();
-int FUN_00263470();
+int ADXT_Finish();
 void FUN_00263548();
 int FUN_00265f28();
 int FUN_00265f40();
 int ADXT_Create();
 int ADXT_Destroy();
-void FUN_0026bb38();
+void ADXT_StartSj();
 int ADXT_Stop();
-int FUN_0026bd20();
+int ADXT_GetStat();
 int ADXT_GetTime();
-int FUN_0026c2d8();
-int FUN_0026c328();
-int FUN_0026c378();
-int FUN_0026c468();
-int FUN_0026c568();
-int FUN_0026c660();
-int FUN_0026c6c8();
-void FUN_0026c7b0();
-int FUN_0026cb98();
-int FUN_0026cce0();
+int ADXT_GetNumSmpl();
+int ADXT_GetSfreq();
+int ADXT_GetNumChan();
+int ADXT_SetOutPan();
+int ADXT_GetOutPan();
+int ADXT_SetOutVol();
+int ADXT_GetOutVol();
+void ADXT_SetSvrFreq();
+int ADXT_SetAutoRcvr();
+int ADXT_GetErrCode();
 void ADXT_Pause();
 void ADXT_SetFx();
-void FUN_0026cfe8();
-int FUN_0026d048();
-void FUN_0026d138();
-int FUN_0026d250();
+void ADXT_TermSupply();
+int ADXT_DiscardSmpl();
+void ADXT_SetTimeOfst();
+int adxt_IsHeader();
 int adxt_IsFooter();
-int FUN_0026d328();
+int ADXT_InsertSilence();
 SfdSj *SJRBF_Create();
 int SJ_SplitChunk();
-void FUN_0028b0c0();
-int FUN_0028b530();
+void UTY_MemCpy();
+int mpsutl_FillWords();
 int UTY_MulDiv();
-int FUN_0029dd98();
-int FUN_0029de70();
+int sfbuf_GetReadStat();
+int sfbuf_AddReadLen();
 int FUN_0029e370();
-void FUN_0029ea28();
-int FUN_0029ea48();
-int FUN_0029ea68();
-int FUN_0029ea88();
-int FUN_0029eaf8();
-long FUN_0029ecb0();
-void FUN_0029ee80();
+void sfbuf_SetFlagA();
+int sfbuf_GetFlagA();
+int sfbuf_SetFlagB();
+int sfbuf_GetFlagB();
+int sfbuf_GetSjPos();
+long sfbuf_MergeTotal();
+void sfsync_PushPts();
 int sfd_GetStmVersion();
 int sfd_ReportError();
 int FUN_002abf68();
-int FUN_002ada78();
+int sfd_SetCond();
 int SFD_GetCond();
 int sftim_IsPlaying();
 int FUN_002af060();
@@ -219,7 +219,7 @@ void FUN_0029cd18();
 void FUN_0029cd58(void *blk, int *result, int target);
 SfdAdxInfo *FUN_0029ceb8(SfdAdxHn *h);
 
-int FUN_0029b3a8(unsigned char *header, int length, int *headerSize) {
+int sfadx_IsHdr(unsigned char *header, int length, int *headerSize) {
     *headerSize = 288;
     if (length < 288) {
         return 0;
@@ -245,19 +245,19 @@ int FUN_0029b408(unsigned char *header, int length, int *headerSize) {
 }
 
 void FUN_0029b448(SfdAdxHn *h) {
-    FUN_0026c468(((SfdAdxCtx *)h->sub.ctx)->adxt);
+    ADXT_SetOutPan(((SfdAdxCtx *)h->sub.ctx)->adxt);
 }
 
 void FUN_0029b468(SfdAdxHn *h) {
-    FUN_0026c568(((SfdAdxCtx *)h->sub.ctx)->adxt);
+    ADXT_GetOutPan(((SfdAdxCtx *)h->sub.ctx)->adxt);
 }
 
 void FUN_0029b488(SfdAdxHn *h) {
-    FUN_0026c660(((SfdAdxCtx *)h->sub.ctx)->adxt);
+    ADXT_SetOutVol(((SfdAdxCtx *)h->sub.ctx)->adxt);
 }
 
 void FUN_0029b4a8(SfdAdxHn *h) {
-    FUN_0026c6c8(((SfdAdxCtx *)h->sub.ctx)->adxt);
+    ADXT_GetOutVol(((SfdAdxCtx *)h->sub.ctx)->adxt);
 }
 
 void FUN_0029b4c8(SfdAdxHn *h, int volume) {
@@ -293,13 +293,13 @@ void FUN_0029b580(SfdAdxCfg *cfg) {
 int FUN_0029b5d8(void) {
     FUN_002632c0();
     FUN_00265f28();
-    FUN_0028b530(&DAT_0057fa90, 0, 7);
+    mpsutl_FillWords(&DAT_0057fa90, 0, 7);
     return 0;
 }
 
 int FUN_0029b618(void) {
     FUN_00265f40();
-    FUN_00263470();
+    ADXT_Finish();
     return 0;
 }
 
@@ -309,10 +309,10 @@ void FUN_0029b640(SfdAdxHn *h) {
     int w;
     int ht;
     if (d28->f500 == d28->f504) {
-        w = FUN_0026c2d8(adxt);
-        ht = FUN_0026c328(adxt);
+        w = ADXT_GetNumSmpl(adxt);
+        ht = ADXT_GetSfreq(adxt);
         if (w > 0 && ht > 0) {
-            FUN_0029ee80(h, w, ht);
+            sfsync_PushPts(h, w, ht);
             return;
         }
     }
@@ -389,7 +389,7 @@ void FUN_0029b8d8(SfdAdxHn *h, char *dst, int max, int *out) {
         n = max;
     if (n > 0x19000)
         n = 0x19000;
-    FUN_0028b0c0(ck.data, dst, n);
+    UTY_MemCpy(ck.data, dst, n);
     FUN_0029b850(sj, n, &ck);
     ctx->total += n;
     *out = n;
@@ -410,7 +410,7 @@ int FUN_0029bbf8(char *records, int length, int *found) {
 }
 
 int FUN_0029bc80(SfdAdxHn *h, int nch, int size) {
-    return FUN_0026d328(((SfdAdxCtx *)h->sub.ctx)->adxt);
+    return ADXT_InsertSilence(((SfdAdxCtx *)h->sub.ctx)->adxt);
 }
 
 void sfadx_ExecSearchHeader(SfdAdxHn *h, char *buf, int size, int *used) {
@@ -421,7 +421,7 @@ void sfadx_ExecSearchHeader(SfdAdxHn *h, char *buf, int size, int *used) {
     ctx = (SfdAdxCtx *)h->sub.ctx;
     if (size < 288)
         return;
-    if (FUN_0026d250(buf, size, &len) != 0)
+    if (adxt_IsHeader(buf, size, &len) != 0)
         n = len;
     else if (sfd_GetStmVersion(h) < 108)
         n = sfadx_FindBlockAlign(h, buf, size) - buf;
@@ -504,13 +504,13 @@ void FUN_0029bfe8(SfdAdxHn *h) {
     SfdAdxSub *sub = &h->sub;
     int sidx2 = sub->sidx2;
     int sidx = sub->sidx;
-    if (FUN_0029ea48(h, sidx2) != 1 && FUN_0029ea48(h, sidx) == 1 && FUN_0029c090(h) != 0) {
-        FUN_0029ea28(h, sidx2, 1);
+    if (sfbuf_GetFlagA(h, sidx2) != 1 && sfbuf_GetFlagA(h, sidx) == 1 && FUN_0029c090(h) != 0) {
+        sfbuf_SetFlagA(h, sidx2, 1);
     }
 }
 
 int FUN_0029c090(SfdAdxHn *h) {
-    return FUN_0026bd20(((SfdAdxCtx *)h->sub.ctx)->adxt) == 3;
+    return ADXT_GetStat(((SfdAdxCtx *)h->sub.ctx)->adxt) == 3;
 }
 
 void FUN_0029c0b8(SfdAdxHn *h, int flag) {
@@ -519,8 +519,8 @@ void FUN_0029c0b8(SfdAdxHn *h, int flag) {
     void *blk = h->blk4120;
     int st;
     int err;
-    st = FUN_0026bd20(adxt);
-    err = FUN_0026cce0(adxt);
+    st = ADXT_GetStat(adxt);
+    err = ADXT_GetErrCode(adxt);
     if (err != 0)
         DAT_0057faac = err;
     if (SFD_GetCond(h, 26) == 0)
@@ -544,7 +544,7 @@ void FUN_0029c0b8(SfdAdxHn *h, int flag) {
         FUN_0029c398(h, 1);
     if (FUN_0029c368(h) != 1 || flag != 0)
         return;
-    FUN_0026cfe8(adxt);
+    ADXT_TermSupply(adxt);
     if (ctx->total != 0)
         return;
     FUN_0029c398(h, 1);
@@ -552,14 +552,14 @@ void FUN_0029c0b8(SfdAdxHn *h, int flag) {
 
 int FUN_0029c258(SfdAdxHn *h, char **addr, int *size) {
     SfdBufStat stat;
-    int ret = FUN_0029dd98(h, h->sub.sidx, &stat);
+    int ret = sfbuf_GetReadStat(h, h->sub.sidx, &stat);
     *addr = stat.ck0.data;
     *size = stat.ck0.len;
     return ret;
 }
 
 int FUN_0029c2a0(SfdAdxHn *h, int n) {
-    int ret = FUN_0029de70(h, h->sub.sidx, n);
+    int ret = sfbuf_AddReadLen(h, h->sub.sidx, n);
     if (ret != 0)
         return ret;
     return 0;
@@ -573,25 +573,25 @@ void FUN_0029c2c0(SfdAdxHn *h) {
     int b;
     FUN_0029e370(h, sub->sidx, &entry);
     if (entry != 0) {
-        FUN_0029eaf8(entry, &a, &b);
-        h->f2480 = FUN_0029ecb0(h->f2480, a);
-        h->f2488 = FUN_0029ecb0(h->f2488, b);
-        FUN_0029eaf8(other->sj, &a, &b);
-        h->f2504 = FUN_0029ecb0(h->f2504, a);
-        h->f2512 = FUN_0029ecb0(h->f2512, b);
+        sfbuf_GetSjPos(entry, &a, &b);
+        h->f2480 = sfbuf_MergeTotal(h->f2480, a);
+        h->f2488 = sfbuf_MergeTotal(h->f2488, b);
+        sfbuf_GetSjPos(other->sj, &a, &b);
+        h->f2504 = sfbuf_MergeTotal(h->f2504, a);
+        h->f2512 = sfbuf_MergeTotal(h->f2512, b);
     }
 }
 
 int FUN_0029c368(SfdAdxHn *h) {
-    FUN_0029ea88(h, h->sub.sidx);
+    sfbuf_GetFlagB(h, h->sub.sidx);
 }
 
 int FUN_0029c380(SfdAdxHn *h) {
-    FUN_0029ea88(h, h->sub.sidx2);
+    sfbuf_GetFlagB(h, h->sub.sidx2);
 }
 
 void FUN_0029c398(SfdAdxHn *h, int value) {
-    FUN_0029ea68(h, h->sub.sidx2, value);
+    sfbuf_SetFlagB(h, h->sub.sidx2, value);
 }
 
 void FUN_0029c3b8(SfdAdxHn *h) {
@@ -601,9 +601,9 @@ void FUN_0029c3b8(SfdAdxHn *h) {
     if (info != 0 && info->ready == 0) {
         adxt = ((SfdAdxCtx *)h->sub.ctx)->adxt;
         if (FUN_0029c470(adxt) != 0) {
-            info->f16 = FUN_0026c328(adxt);
-            info->f20 = FUN_0026c2d8(adxt);
-            info->f12 = FUN_0026c378(adxt);
+            info->f16 = ADXT_GetSfreq(adxt);
+            info->f20 = ADXT_GetNumSmpl(adxt);
+            info->f12 = ADXT_GetNumChan(adxt);
             n = info->f16 * info->f12 * 9 / 16;
             info->valid = 1;
             info->ready = 1;
@@ -613,7 +613,7 @@ void FUN_0029c3b8(SfdAdxHn *h) {
 }
 
 int FUN_0029c470(int adxt) {
-    if ((unsigned int)FUN_0026bd20(adxt) < 2) {
+    if ((unsigned int)ADXT_GetStat(adxt) < 2) {
         return 0;
     }
     return 1;
@@ -625,7 +625,7 @@ void FUN_0029c498(SfdAdxHn *h) {
     int value = SFD_GetCond(h, 27);
     if (ctx->opt27 != value) {
         ctx->opt27 = value;
-        FUN_0026c7b0(adxt, value);
+        ADXT_SetSvrFreq(adxt, value);
     }
 }
 
@@ -639,7 +639,7 @@ int FUN_0029c810(SfdAdxCfg *cfg) {
     }
     ret = 0;
     if (adxt != 0) {
-        FUN_0026cb98(adxt, 0);
+        ADXT_SetAutoRcvr(adxt, 0);
         ret = adxt;
     }
     return ret;
@@ -651,7 +651,7 @@ int FUN_0029c880(void) {
 
 void FUN_0029c890(SfdAdxHn *h) {
     FUN_002af060(h, sfadx_GetTime, 2);
-    FUN_002ada78(h, 15, 2);
+    sfd_SetCond(h, 15, 2);
 }
 
 int sfadx_GetTime(SfdAdxHn *h, int *time, int *unit) {
@@ -682,7 +682,7 @@ void sfadx_GetAdxtTime(void *blk, int adxt, int *out0, int *out1) {
     SfdAdxPair result;
     int width;
     int height;
-    DAT_004be8b8 = FUN_0026bd20(adxt);
+    DAT_004be8b8 = ADXT_GetStat(adxt);
     ADXT_GetTime(adxt, &width, &height);
     size.b = height;
     size.a = width;
@@ -758,10 +758,10 @@ int FUN_0029cb90(SfdAdxHn *h, unsigned int mode) {
     case 2:
         if (FUN_0029c470(adxt) == 0)
             break;
-        size = FUN_0026c328(adxt);
+        size = ADXT_GetSfreq(adxt);
         FUN_0029cd58(h, &pos, size);
         at = pos + ctx->carry;
-        carry = at - FUN_0026d048(adxt, at);
+        carry = at - ADXT_DiscardSmpl(adxt, at);
         pair.a = pos;
         pair.b = size;
         ctx->carry = carry;
@@ -833,7 +833,7 @@ int FUN_0029ce28(SfdAdxHn *h) {
     if (info->ready == 0)
         return 0;
     FUN_00263548(adxt, info->f12, info->f16, info->f20);
-    FUN_0026d138(adxt, 0);
+    ADXT_SetTimeOfst(adxt, 0);
     ctx->started = 1;
     ctx->step = sfadx_SkipSilence;
     return 0;

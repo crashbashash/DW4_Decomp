@@ -7,10 +7,11 @@ matchable as C. The Sony-built units
 rebuild with it through `tools/cc.py` / `tools/eegcc_compile.py`, pinned per unit in `config/SLUS-20836/unit-compilers.tsv` (see
 [the Sony compiler](#the-sony-libraries-compiler)).
 
-* **Population:** 1,698-1,701 non-leaf functions (about 417 KB) in six contiguous blocks that hold 3,304 functions / 530 KB in total:
+* **Population:** 1,690-1,694 non-leaf functions (about 415 KB) in five contiguous blocks that hold 3,295 functions / 527 KB in total:
   `0x1029f8..0x130000` (Sony libgraph to libmc, newlib), `0x2252d8..0x225770` (libmtap), `0x22e4b8..0x230f50`
-  (libgcc), `0x25b248..0x27ede0` (CRI ADX/AFS/ADXF), `0x280b98..0x2b5d50` (CRI CFT/M2V/MPS/MPV/Sofdec), `0x4820d0..0x4833c8` (Sony kernel-mode code,
-  linked at `0x80074000` and up). `config/SLUS-20836/regions.tsv` holds these bounds.
+  (libgcc), `0x25b248..0x27ede0` (CRI ADX/AFS/ADXF), `0x280b98..0x2b5d50` (CRI CFT/M2V/MPS/MPV/Sofdec).
+  `config/SLUS-20836/regions.tsv` holds these bounds. libkernl's kernel patches (`0x481f28..0x4834c8`) are
+  EE GCC code too, but linked at `0x80074000` and up and kept as data.
 * **Evidence:** the ELF carries `GCC2096 SCE2810` stamps beside each CRI library's build string; no `sq` saves and no `slt/sltu` into `at` inside the
   blocks; branch-likely instructions at 13.8 per 1000 words in the blocks and none in the 15,568 game functions; half the function starts are 8 mod 16
   (MWCC aligns to 16); `movn/movz` use 228 against 8 in the MWCC reference set.
@@ -36,8 +37,7 @@ after other work, unfilled delay slots, real `mult` for small constants, `lwu` z
 `__muldf3`-style libcalls. Every function of those libraries that matched under 2.96 still matches
 under it apart from a few in libmpeg and libkernl, and raw m2c drafts match under it where none match
 under 2.96. Its release keeps the assembler at `ee/bin/as`, which `tools/eegcc_compile.py` falls back
-to. CRI, newlib and libgcc fail under 2.9-ee and stay on 2.96, as does the kernel-mode code until it is
-tested further.
+to. CRI, newlib and libgcc fail under 2.9-ee and stay on 2.96.
 
 ### Sony's prebuilt libraries
 
@@ -170,7 +170,9 @@ It reproduces the `sd` callee-saved prologue, so the functions above are matchab
 * ee-gcc truncates decimal float literals, so a literal is written as the float's exact decimal
   value, such as `-25.0879993438720703125f`.
 * Empty delay loops are plain C: `for (i = 0; i < 64; i++);` unrolls by 32,
-  `i = 10000; while (i--);` gives the step-4 form, and `ee-as` pads short loops itself.
+  `i = 10000; while (i--);` gives the step-4 form. The compiler, not `ee-as`, pads a short loop: before a
+  backward branch closing fewer than five counted instructions it writes `nop`s up to five, and an `asm`
+  statement counts as one however many lines it holds, so the pad count tells how many statements a loop had.
 * Locals spaced 8 bytes apart on the stack are `long long`. A struct of ints assigned whole gives
   the `ldl`/`ldr` copy.
 * Three symbols used to count the alignment `nop`

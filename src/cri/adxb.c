@@ -1,7 +1,7 @@
 #include "dw4/cri/adxb.h"
 
-extern void (*DAT_00498c6c)(AdxbObj *obj, int v, short *src, short *dst);
-extern void (*DAT_00498c70)(void);
+extern void (*adxb_pl2_exec_func)(AdxbObj *obj, int v, short *src, short *dst);
+extern void (*adxb_pl2_reset_func)(AdxbObj *obj);
 extern unsigned short DAT_00498c74;
 extern unsigned short DAT_00498c76;
 extern unsigned short DAT_00498c78;
@@ -12,11 +12,11 @@ void *memset(void *dst, int value, unsigned int size);
 unsigned int strlen(const char *string);
 int sprintf(char *dst, const char *format, ...);
 
-void FUN_0025d078(void);
-void FUN_0025d098(void);
-void FUN_0025d0b8(const char *text, unsigned int length, unsigned short *first, unsigned short *second,
+void SKG_Init(void);
+void SKG_Finish(void);
+void SKG_GenerateKey(const char *text, unsigned int length, unsigned short *first, unsigned short *second,
                   unsigned short *third);
-int FUN_0025f588(unsigned short *hdr, int size, short *hdrlen, signed char *type, signed char *bits,
+int ADX_DecodeHeader(unsigned short *hdr, int size, short *hdrlen, signed char *type, signed char *bits,
                  signed char *blksize, signed char *nch, int *rate, int *total, int *f16);
 int ADX_DecodeInfoExVer(unsigned short *hdr, int size, unsigned char *ver, unsigned char *flag);
 int FUN_0025f688(unsigned short *hdr, int size, short *out);
@@ -25,7 +25,7 @@ void ADX_DecodeInfoExLoop(unsigned short *hdr, int size, int *f32, short *f36, s
                   int *f52);
 void ADX_DecodeInfoAinf(unsigned short *hdr, int size, int *f204, char *f208, short *f224, short *f226);
 void ADXERR_CallErrFunc2(const char *code, const char *message);
-extern void (*DAT_00498c68)(int ahx, unsigned short *keys);
+extern void (*DAT_00498c68)(void *ahx, unsigned short *keys);
 extern char DAT_004ed800[];
 extern char DAT_004ed820[];
 
@@ -36,19 +36,19 @@ int ADXB_CheckSpsd(unsigned short *hdr);
 int ADXB_DecodeHeaderSpsd(AdxbObj *dec, unsigned short *hdr, int size);
 int ADXB_CheckWav(unsigned short *hdr);
 int ADXB_DecodeHeaderWav(AdxbObj *dec, unsigned short *hdr, int size);
-int FUN_0025bfd0(unsigned short *hdr);
-int FUN_0025c148(AdxbObj *dec, unsigned short *hdr, int size);
-int FUN_0025c8b8(unsigned short *hdr);
-int FUN_0025ca20(AdxbObj *dec, unsigned short *hdr, int size);
-int FUN_0025bac8(unsigned short *hdr);
+int ADXB_CheckAiff(unsigned short *hdr);
+int ADXB_DecodeHeaderAiff(AdxbObj *dec, unsigned short *hdr, int size);
+int ADXB_CheckAu(unsigned short *hdr);
+int ADXB_DecodeHeaderAu(AdxbObj *dec, unsigned short *hdr, int size);
+int ADXB_CheckAc3(unsigned short *hdr);
 int ADXB_DecodeHeaderAc3(AdxbObj *dec, unsigned short *hdr, int size);
 
-void FUN_0025bbe8(AdxbObj *obj);
+void ADXB_ExecOneAhx(AdxbObj *obj);
 void ADXB_ExecOneSpsd(AdxbObj *obj);
-void FUN_0025c578(AdxbObj *obj);
-void FUN_0025cfe0(AdxbObj *obj);
+void ADXB_ExecOneAiff(AdxbObj *obj);
+void ADXB_ExecOneAu(AdxbObj *obj);
 void ADXB_ExecOneWav(AdxbObj *obj);
-void FUN_0025b9e8(AdxbObj *obj);
+void ADXB_ExecOneAc3(AdxbObj *obj);
 
 short *adxb_get_wr(AdxbObj *obj, int *wpos, int *room, int *rest);
 void FUN_0025d4f8(AdxbObj *p);
@@ -60,14 +60,14 @@ void FUN_0025e5a0(AdxbObj *obj);
 void FUN_0025d300(void)
 {
     ADXPD_Init();
-    FUN_0025d078();
+    SKG_Init();
     memset(DAT_00498c80, 0, 0x1040);
 }
 
 void FUN_0025d338(void)
 {
     ADXPD_Finish();
-    FUN_0025d098();
+    SKG_Finish();
     memset(DAT_00498c80, 0, 0x1040);
 }
 
@@ -145,12 +145,12 @@ int FUN_0025d540(AdxbObj *obj, unsigned short *hdr, int size)
     short k1;
     short k2;
     obj->hdr_set = 1;
-    if (FUN_0025f588(hdr, size, &hdrlen, &obj->hdrtype, &obj->fmtbps, &obj->blklen, &obj->nch, &obj->sfreq, &obj->total_nsmpl,
+    if (ADX_DecodeHeader(hdr, size, &hdrlen, &obj->hdrtype, &obj->fmtbps, &obj->blklen, &obj->nch, &obj->sfreq, &obj->total_nsmpl,
                      &obj->blksmpl) < 0) {
         return 0;
     }
     if (obj->hdrtype >= 5) {
-        if (obj->f180 == 0) {
+        if (obj->ahx == 0) {
             ADXERR_CallErrFunc2(DAT_004ed800, DAT_004ed820);
             return -1;
         }
@@ -175,7 +175,7 @@ int FUN_0025d540(AdxbObj *obj, unsigned short *hdr, int size)
             return -1;
         }
         if (DAT_00498c68 != 0) {
-            DAT_00498c68(obj->f180, keys);
+            DAT_00498c68(obj->ahx, keys);
         }
     } else {
         if (ADX_DecodeInfoExVer(hdr, size, &ver, &flag) < 0) {
@@ -252,13 +252,13 @@ int ADXB_DecodeHeader(AdxbObj *dec, unsigned short *hdr, int size)
     if (ADXB_CheckWav(hdr) != 0) {
         return ADXB_DecodeHeaderWav(dec, hdr, size);
     }
-    if (FUN_0025bfd0(hdr) != 0) {
-        return FUN_0025c148(dec, hdr, size);
+    if (ADXB_CheckAiff(hdr) != 0) {
+        return ADXB_DecodeHeaderAiff(dec, hdr, size);
     }
-    if (FUN_0025c8b8(hdr) != 0) {
-        return FUN_0025ca20(dec, hdr, size);
+    if (ADXB_CheckAu(hdr) != 0) {
+        return ADXB_DecodeHeaderAu(dec, hdr, size);
     }
-    if (FUN_0025bac8(hdr) != 0) {
+    if (ADXB_CheckAc3(hdr) != 0) {
         return ADXB_DecodeHeaderAc3(dec, hdr, size);
     }
     return -1;
@@ -294,7 +294,7 @@ int FUN_0025da70(AdxbObj *obj)
 
 int ADXB_GetNumChan(AdxbObj *obj)
 {
-    if (obj->nch == 1 && obj->mono_to_stereo != 0) {
+    if (obj->nch == 1 && obj->pl2 != 0) {
         return 2;
     }
     return obj->nch;
@@ -312,16 +312,16 @@ int FUN_0025dab0(AdxbObj *block)
         return 16;
     }
     if (mode == 2) {
-        if (block->f156 == 2) {
+        if (block->pcmfmt == 2) {
             return 4;
         }
-        if (block->f156 == 1) {
+        if (block->pcmfmt == 1) {
             return 8;
         }
         return 16;
     }
     if (mode == 1) {
-        if (block->f156 == 2) {
+        if (block->pcmfmt == 2) {
             return 4;
         }
         return 16;
@@ -423,7 +423,7 @@ void FUN_0025dc18(AdxbObj *block, const char *text)
     unsigned short first;
     unsigned short second;
     unsigned short third;
-    FUN_0025d0b8(text, strlen(text), &first, &second, &third);
+    SKG_GenerateKey(text, strlen(text), &first, &second, &third);
     block->f160 = first;
     block->f162 = second;
     block->f164 = third;
@@ -431,7 +431,7 @@ void FUN_0025dc18(AdxbObj *block, const char *text)
 
 void FUN_0025dc80(const char *text)
 {
-    FUN_0025d0b8(text, strlen(text), &DAT_00498c74, &DAT_00498c76, &DAT_00498c78);
+    SKG_GenerateKey(text, strlen(text), &DAT_00498c74, &DAT_00498c76, &DAT_00498c78);
 }
 
 int FUN_0025dcc8(AdxbObj *adx, unsigned char ver, unsigned char type, int name,
@@ -444,7 +444,7 @@ int FUN_0025dcc8(AdxbObj *adx, unsigned char ver, unsigned char type, int name,
         *k2 = 0;
     } else if (type >= 16) {
         sprintf(buf, DAT_004ed848, name);
-        FUN_0025d0b8(buf, 8, k0, k1, k2);
+        SKG_GenerateKey(buf, 8, k0, k1, k2);
     } else if (type >= 8) {
         if (adx->f160 == 0 && adx->f162 == 0 && adx->f164 == 0) {
             adx->f160 = DAT_00498c74;
@@ -493,8 +493,8 @@ void ADXB_Start(AdxbObj *obj)
 
 void FUN_0025de68(AdxbObj *rec)
 {
-    if (rec->mono_to_stereo) {
-        DAT_00498c70();
+    if (rec->pl2) {
+        adxb_pl2_reset_func(rec);
     }
     ADXPD_Stop(rec->adxpd);
     rec->stat = 0;
@@ -618,7 +618,7 @@ void FUN_0025e1e0(AdxbObj *d)
     d->f144 = n;
     if (pos >= size) {
         pos -= size;
-        if (b->nch == 2 || d->mono_to_stereo != 0) {
+        if (b->nch == 2 || d->pl2 != 0) {
             FUN_0025e150(dst, size, a, pos);
         } else {
             FUN_0025e1c0(dst, size, a, pos);
@@ -640,11 +640,11 @@ void FUN_0025e368(AdxbObj *w)
     if (w->stat == 2) {
         ADXPD_ExecHndl(w->adxpd);
         if (ADXPD_GetStat(w->adxpd) == 3) {
-            if (w->mono_to_stereo != 0) {
+            if (w->pl2 != 0) {
                 pd = w->adxpd;
                 ADXCRS_Lock();
                 for (i = 0; i < pd->nblk_decoded * 32; i++) {
-                    DAT_00498c6c(w, pd->obufl[i], &pd->obufl[i], &pd->obufr[i]);
+                    adxb_pl2_exec_func(w, pd->obufl[i], &pd->obufl[i], &pd->obufr[i]);
                 }
                 ADXCRS_Unlock();
             }
@@ -661,17 +661,17 @@ void FUN_0025e4b8(AdxbObj *v)
     if (v->format == 0) {
         FUN_0025e368(v);
     } else if (v->format == 10) {
-        FUN_0025bbe8(v);
+        ADXB_ExecOneAhx(v);
     } else if (v->format == 2) {
         ADXB_ExecOneSpsd(v);
     } else if (v->format == 3) {
-        FUN_0025c578(v);
+        ADXB_ExecOneAiff(v);
     } else if (v->format == 4) {
-        FUN_0025cfe0(v);
+        ADXB_ExecOneAu(v);
     } else if (v->format == 1) {
         ADXB_ExecOneWav(v);
     } else if (v->format == 15) {
-        FUN_0025b9e8(v);
+        ADXB_ExecOneAc3(v);
     }
     if (v->f252 != 0) {
         FUN_0025e5a0(v);

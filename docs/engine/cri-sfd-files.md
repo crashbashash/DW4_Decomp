@@ -55,3 +55,8 @@ guesses from what each file does.
   link from the retail image.
 - The free-slot claim at `0x2a85a0` reads a slot's state and reference count in one 64-bit load. No plain C
   with the slot's shared `int` fields reproduces that, so it has no source.
+- Medium confidence: `SFTIM_Init`, `SFTIM_Finish`, `SFTIM_InitHn`, `SFTIM_InitTtu` and `SFTIM_InitTcode` (`0x2ae010`, `0x2ae020`,
+  `0x2ae028`, `0x2ae248`, `0x2ae290`) come from the order of the Persona 3 FES PlayStation 2 symbol list (provenance not stated) and the
+  GameCube library's map (`sfd_tim.c`), which has the same five in the same sequence; the bodies of `SFTIM_Init` agree with the
+  GameCube source. `SFD_SetUsrTimeFn`, `SFD_SetExtClockFn` and `SFD_UpdateTime` (`0x2aed78`, `0x2aee00`, `0x2aeef0`) come from the same
+  list: eight consecutive function sizes from `0x2aed60` match.

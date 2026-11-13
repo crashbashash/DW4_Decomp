@@ -20,7 +20,7 @@ void FUN_0032db00(MediaRpcCompletion *c) {
             memmove(head + headSize, head + headSize + gap, tail - (head + headSize));
         }
         memcpy(tail, DAT_00587360->buffer + headSize, tailSize);
-        FUN_0010b858(DAT_00587360->buffer, DAT_00587360->buffer + 128);
+        iSyncDCache(DAT_00587360->buffer, DAT_00587360->buffer + 128);
         break;
     case 2:
         callback = c->u.wait.callback;
@@ -45,7 +45,7 @@ void Gap__Core__igPsx2Media__vfunc_03(O_32dc10 *arg0, int extra1) {
     arg0->f8 = FUN_00300db0((int)arg0, 0x80, 0x40);
     arg0->f20 = FUN_00300db0((int)arg0, 0x90, 0x10);
     a = arg0->f8;
-    FUN_0010b7d8(a, a + 0x80);
+    SyncDCache(a, a + 0x80);
     t = ((T_32dc10 *)Memory_AllocateDefaultBuffer(0x10));
     if (t != 0) {
         t->a0 = 8;
@@ -237,9 +237,9 @@ int FUN_0032e950(struct Z_32e950 *arg0, int arg1, int arg2, int arg3, int arg4, 
     temp_s1->f20 = arg4;
     temp_s1->f24 = arg6;
     temp_s1->f28 = arg7;
-    FUN_0010b7d8(arg2, arg2 + arg3);
+    SyncDCache(arg2, arg2 + arg3);
     temp_a0 = arg0->f8;
-    FUN_0010b7d8(temp_a0, temp_a0 + 0x80);
+    SyncDCache(temp_a0, temp_a0 + 0x80);
     FUN_0032d6d0(&sp4C, (Ob_32d6d0 *)arg0->f12, 6, (int)temp_s1, 0x20, (int)p, 0x10, 1);
     return *p;
 }

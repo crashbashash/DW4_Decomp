@@ -224,7 +224,7 @@ entry points), e.g. `iResumeThread` = 65478, `_iEnableIntc` = 65510; the rest ar
 bytes; the *name* comes from the SDK's published syscall table. The ELF has no symbol
 table, so the names are inferred, the numbers are not.
 
-Five copies of syscall 90, five of 116 (`RFU116_SetSyscall`) and three of 91 exist at
+Five copies of syscall 90, five of 116 (`setup_tlbfunc`) and three of 91 exist at
 different addresses (`0x001137b8`, `0x001141b8`, `0x00114220`, …): the game links the same
 stub in more than once, which is also why `tools/split.py` suffixes duplicate names with
 `__<va>`.

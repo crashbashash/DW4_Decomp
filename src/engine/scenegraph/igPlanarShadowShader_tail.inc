@@ -127,7 +127,7 @@ void FUN_001d3e20(igPlanarShadowShader *arg0, igCommonTraversal *arg1) {
     }
     FUN_001d3c60(arg0, arg1);
     for (i = 0; i < ((igDataList *)arg0->_lights)->_count; i++) {
-        if (FUN_001b0ea0(s1, ((int *)((igDataList *)arg0->_lights)->_data)[i]) != 0) {
+        if (igAttrStackManager_IsLightEnabled((igAttrStackManager *)s1, ((igLightAttr **)((igDataList *)arg0->_lights)->_data)[i]) != 0) {
             int *m = (int *)((int *)((igDataList *)arg0->_mvmList)->_data)[i];
             igAttrStack *nd;
             int *s5;

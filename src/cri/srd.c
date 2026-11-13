@@ -40,8 +40,8 @@ extern volatile int DAT_004a92f0;
 extern volatile int DAT_004a92f4;
 extern int srd_host_mode;
 extern int DAT_004a92fc;
-extern int DAT_004a9300;
-extern unsigned char DAT_004a9304;
+extern int srd_spindlctrl_sw;
+extern unsigned char srd_spindlctrl;
 
 extern char DAT_004efbc0[];
 extern char DAT_004efc00[];
@@ -74,19 +74,19 @@ int sceCdRead(int lsn, int sectors, void *buf, void *mode);
 int sceCdBreak(void);
 int sceCdSeek(int lsn);
 int sceCdGetError(void);
-int FUN_0010fe90(int fd, int cmd, void *arg);
-int FUN_0010f330(int name, int flags);
-int FUN_0010f5b8(int fd);
-int FUN_0010f970(int fd, void *buf, int size);
+int sceIoctl(int fd, int cmd, void *arg);
+int sceOpen(int name, int flags);
+int sceClose(int fd);
+int sceRead(int fd, void *buf, int size);
 long sceLseek64(int fd, long offset, int whence);
 int sceLseek(int fd, int offset, int whence);
-void FUN_0027e1c0(void);
-void FUN_0027e1d8(void);
-void FUN_0027e1f0(void);
-void FUN_0027e268(void);
-void FUN_0027e220(void);
-void FUN_0027e298(void);
-int FUN_0027eca8(int *lock);
+void SVM_Lock(void);
+void SVM_Unlock(void);
+void SVM_LockVar(void);
+void SVM_UnlockVar(void);
+void SVM_LockDev(void);
+void SVM_UnlockDev(void);
+int SVM_TestAndSet(int *lock);
 
 void FUN_002725a0(int value);
 void srd_Lock(void);
@@ -105,7 +105,7 @@ SrdObj *FUN_00271670(void)
 {
     SrdObj *srd = 0;
 
-    FUN_0027e1f0();
+    SVM_LockVar();
     if (DAT_004a9288.used == 0) {
         FUN_00271640();
         DAT_004a9288.used = 1;
@@ -115,13 +115,13 @@ SrdObj *FUN_00271670(void)
         DAT_004a9288.abort_request = 0;
         srd = &DAT_004a9288;
     }
-    FUN_0027e268();
+    SVM_UnlockVar();
     return srd;
 }
 
 void FUN_002716f8(SrdObj *h)
 {
-    FUN_0027e1f0();
+    SVM_LockVar();
     if (h != &DAT_004a9288) {
         scePrintf(DAT_004efbc0, h, &DAT_004a9288);
     } else {
@@ -132,7 +132,7 @@ void FUN_002716f8(SrdObj *h)
         DAT_004a9288.used = 0;
         DAT_004a92ec++;
     }
-    FUN_0027e268();
+    SVM_UnlockVar();
 }
 
 int FUN_00271798(SrdObj *srd, int lsn, int sectors, void *buf, CdReadMode *mode)
@@ -147,7 +147,7 @@ int FUN_00271798(SrdObj *srd, int lsn, int sectors, void *buf, CdReadMode *mode)
     if (busy == 1) {
         return 0;
     }
-    FUN_0027e1f0();
+    SVM_LockVar();
     if (srd->stat == 0 || srd->stat == 3 || srd->stat == 9) {
         srd->devtype = 1;
         srd->stat = 1;
@@ -158,7 +158,7 @@ int FUN_00271798(SrdObj *srd, int lsn, int sectors, void *buf, CdReadMode *mode)
         srd->abort_request = 0;
         ret = 1;
     }
-    FUN_0027e268();
+    SVM_UnlockVar();
     return ret;
 }
 
@@ -166,7 +166,7 @@ int FUN_00271888(SrdObj *srd, int fd, long sector, long size, void *buf)
 {
     int queued = 0;
 
-    FUN_0027e1f0();
+    SVM_LockVar();
     /* matching construct: permuter — the request store follows the state bytes (register allocation) */
     if (srd->stat == 0 || srd->stat == 3 || srd->stat == 9) {
         srd->devtype = 2;
@@ -178,7 +178,7 @@ int FUN_00271888(SrdObj *srd, int fd, long sector, long size, void *buf)
         srd->host_sector = sector;
         srd->abort_request = 0;
     }
-    FUN_0027e268();
+    SVM_UnlockVar();
     return queued;
 }
 
@@ -237,14 +237,14 @@ void FUN_00271a68(SrdObj *h)
     SrdObj *srd;
 
     for (i = 0; i < 1000; i++) {
-        FUN_0027e1c0();
+        SVM_Lock();
         if (DAT_004a92c4 == 1) {
-            FUN_0027e1d8();
+            SVM_Unlock();
             FUN_00271940();
             continue;
         }
         DAT_004a92c4 = 1;
-        FUN_0027e1d8();
+        SVM_Unlock();
         break;
     }
     stat = h->stat;
@@ -271,7 +271,7 @@ void FUN_00271b78(void)
 
 void FUN_00271b98(SrdObj *object)
 {
-    FUN_0027e1f0();
+    SVM_LockVar();
     if (object == 0) {
         scePrintf(DAT_004efc40);
     } else if (object->abort_request == 1) {
@@ -279,7 +279,7 @@ void FUN_00271b98(SrdObj *object)
     } else {
         object->abort_request = 1;
     }
-    FUN_0027e268();
+    SVM_UnlockVar();
 }
 
 int FUN_00271c00(SrdObj *h)
@@ -294,11 +294,11 @@ int FUN_00271c00(SrdObj *h)
     }
     DAT_004a92dc = 1;
     if (DAT_004a92d0 == 1) {
-        FUN_0027e220();
+        SVM_LockDev();
         FUN_002725a0(0x1400);
         err = sceCdGetError();
         FUN_002725a0(0x1401);
-        FUN_0027e298();
+        SVM_UnlockDev();
     } else {
         FUN_002725a0(0x1500);
         err = sceCdGetError();
@@ -317,22 +317,22 @@ int FUN_00271c00(SrdObj *h)
 
 void FUN_00271d10(unsigned char value)
 {
-    DAT_004a9304 = value;
+    srd_spindlctrl = value;
 }
 
 void FUN_00271d20(int value)
 {
-    DAT_004a9300 = value;
+    srd_spindlctrl_sw = value;
 }
 
 unsigned char FUN_00271d30(void)
 {
-    return DAT_004a9304;
+    return srd_spindlctrl;
 }
 
 int FUN_00271d40(void)
 {
-    return DAT_004a9300;
+    return srd_spindlctrl_sw;
 }
 
 void FUN_00271d50(SrdObj *srd)
@@ -371,8 +371,8 @@ void FUN_00271d50(SrdObj *srd)
     }
     if (srd->stat == 1) {
         FUN_002725a0(0x1800);
-        if (DAT_004a9300 == 1)
-            srd->rmode.spindlctrl = DAT_004a9304;
+        if (srd_spindlctrl_sw == 1)
+            srd->rmode.spindlctrl = srd_spindlctrl;
         busy = sceCdRead(srd->lsn, srd->sectors, srd->buf, &srd->rmode);
         FUN_002725a0(0x1801);
         if (busy == 1) {
@@ -466,25 +466,25 @@ void FUN_00272118(void)
 {
     SrdObj *srd = &DAT_004a9288;
 
-    if (FUN_0027eca8(&DAT_004a92c4) == 0) {
+    if (SVM_TestAndSet(&DAT_004a92c4) == 0) {
         return;
     }
     if (srd->devtype == 1) {
         if (DAT_004a92c8 == 1) {
-            FUN_0027e220();
+            SVM_LockDev();
         }
         FUN_00271d50(srd);
         if (DAT_004a92c8 == 1) {
-            FUN_0027e298();
+            SVM_UnlockDev();
         }
     }
     if (srd->devtype == 2) {
         if (DAT_004a92cc == 1) {
-            FUN_0027e220();
+            SVM_LockDev();
         }
         FUN_00271f38(srd);
         if (DAT_004a92cc == 1) {
-            FUN_0027e298();
+            SVM_UnlockDev();
         }
     }
     DAT_004a92c4 = 0;
@@ -556,18 +556,18 @@ int FUN_002723c0(void)
     int status;
 
     if (DAT_004a9288.stat == 2) {
-        FUN_0027e1c0();
+        SVM_Lock();
         FUN_002725a0(0x2400);
         if (FUN_00272838(DAT_004a9288.fd, 1, &status) < 0) {
             FUN_002725a0(0x2401);
         } else {
             FUN_002725a0(0x2402);
             if (status != 0) {
-                FUN_0027e1d8();
+                SVM_Unlock();
                 return 1;
             }
         }
-        FUN_0027e1d8();
+        SVM_Unlock();
     }
     return 0;
 }
@@ -650,14 +650,14 @@ int FUN_00272678(void)
 void srd_Lock(void)
 {
     if (DAT_004a92fc == 1) {
-        FUN_0027e220();
+        SVM_LockDev();
     }
 }
 
 void srd_Unlock(void)
 {
     if (DAT_004a92fc == 1) {
-        FUN_0027e298();
+        SVM_UnlockDev();
     }
 }
 
@@ -667,7 +667,7 @@ int FUN_002726f8(int lsn)
     int err;
     int ret;
 
-    ret = FUN_0027eca8(&DAT_004a92c4);
+    ret = SVM_TestAndSet(&DAT_004a92c4);
     err = 0;
     if (ret != 0) {
         FUN_002725a0(0x9600);
@@ -709,7 +709,7 @@ int FUN_00272838(int fd, int cmd, int *result)
     int ret;
 
     srd_Lock();
-    ret = FUN_0010fe90(fd, cmd, result);
+    ret = sceIoctl(fd, cmd, result);
     if (ret < 0) {
         scePrintf(DAT_004efea0, ret);
     }
@@ -722,7 +722,7 @@ int FUN_002728b0(int name, int flags)
     int ret;
 
     srd_Lock();
-    ret = FUN_0010f330(name, flags);
+    ret = sceOpen(name, flags);
     if (ret < 0) {
         scePrintf(DAT_004efec0, ret);
     }
@@ -735,7 +735,7 @@ int FUN_00272918(int fd)
     int ret;
 
     srd_Lock();
-    ret = FUN_0010f5b8(fd);
+    ret = sceClose(fd);
     if (ret < 0) {
         scePrintf(DAT_004efee0, ret);
     }
@@ -748,7 +748,7 @@ int FUN_00272970(int fd, void *buf, int size)
     int ret;
 
     srd_Lock();
-    ret = FUN_0010f970(fd, buf, size);
+    ret = sceRead(fd, buf, size);
     if (ret < 0) {
         scePrintf(DAT_004eff00, ret);
     }

@@ -1,7 +1,111 @@
+/* Opens the file in `mode` (0-3 text, 4-7 binary: read, write, append, read-write; 8 the mode it
+ * was last opened in). A relative name is tried under each entry of the search path list in turn.
+ * A text file is read whole into the buffer. */
+void Gap__Core__igPsx2File__vfunc_23(int *result, igPsx2FileView *file, unsigned int mode) {
+    char *searchPaths;
+    char path[512];
+    bool absolute;
+    int flags;
+    unsigned char more;
+    int attempt;
+    int retries;
+    char *devicePath;
+    int hasDirectory;
+    int fd;
+    char *p;
+    unsigned int n;
+    int size;
+    flags = 0;
+    if (mode == 8) mode = file->_openMode;
+    if (file->_isOpen == 1 && file->_openMode == mode) {
+        *result = g_statusSucceeded.v;
+    } else {
+        switch (mode) {
+        case 0: case 1: case 2: case 3: case 8:
+            file->_isBinary = 0;
+            break;
+        case 4: case 5: case 6: case 7:
+            file->_isBinary = 1;
+            break;
+        }
+        switch (mode) {
+        case 1: case 5: flags = SCE_TRUNC | SCE_CREAT | SCE_WRONLY; break;
+        case 2: case 6: flags = SCE_CREAT | SCE_APPEND; break;
+        case 3: case 7: flags = SCE_CREAT | SCE_RDWR; break;
+        case 0: case 4: case 8: flags = SCE_RDONLY; break;
+        }
+        file->_bufSize = 0;
+        p = path;
+        file->_bufPos = 0;
+        n = sizeof(path);
+        file->_isOpen = 0;
+        if (p != 0) {
+            do {
+                *p = 0;
+                n -= 1;
+                p += 1;
+            } while (n != 0);
+        }
+        more = 1;
+        absolute = FilePath_IsAbsolute(file->_fileName);
+        hasDirectory = FilePath_HasDirectory(file->_fileName);
+        searchPaths = (char *)FUN_002e34a0();
+        attempt = 0;
+        while (more && attempt < 0x100) {
+            if (absolute) {
+                path[0] = 0;
+                more = 0;
+                goto open;
+            }
+            if (hasDirectory != 0) {
+                path[0] = 0;
+                hasDirectory = 0;
+                goto open;
+            }
+            more = FUN_002e34d0(&searchPaths, path, sizeof(path));
+            if (more) {
+open:
+                strcat(path, file->_fileName);
+                devicePath = file->makeCompleteFilename(path);
+                if (*devicePath == 'c') {
+                    retries = 10;
+                    while ((fd = sceOpen(devicePath, flags)) < 0 && retries != 0) {
+                        retries -= 1;
+                    }
+                } else {
+                    fd = sceOpen(devicePath, flags, 0666);
+                }
+                file->_fileHandle = fd;
+                if (!(0 > fd)) break;
+            }
+            attempt += 1;
+        }
+        if (file->_fileHandle < 0) {
+            *result = g_allocatorFailureStatus.v;
+        } else {
+            if (mode == 6) sceLseek(file->_fileHandle, 0, SCE_SEEK_END);
+            if (file->_isBinary == 0) {
+                size = sceLseek(file->_fileHandle, 0, SCE_SEEK_END);
+                FUN_0032b5b0((struct S_32b5b0 *)file, size);
+                sceLseek(file->_fileHandle, 0, SCE_SEEK_SET);
+                if (size > 0) {
+                    fd = sceRead(file->_fileHandle, file->_fBuf, size);
+                    if (fd != size) FUN_0032b5b0((struct S_32b5b0 *)file, fd);
+                }
+                if (mode == 2) file->_bufPos = size;
+                else file->_bufPos = 0;
+            }
+            file->_openMode = mode;
+            file->_isOpen = 1;
+            *result = g_statusSucceeded.v;
+        }
+    }
+}
+
 void Gap__Core__igPsx2File__vfunc_24(int *arg0) {
     if (arg0[6] >= 0) {
         ((Obj_32b2e0 *)arg0)->vX();
-        FUN_0010f5b8(arg0[6]);
+        sceClose(arg0[6]);
         arg0[6] = -1;
         if (arg0[11] != 0) {
             FUN_00300f50((int)arg0, arg0[11]);
@@ -105,7 +209,7 @@ int Gap__Core__igPsx2File__vfunc_27(A_32b640 *arg0, int arg1, int arg2, int arg3
     }
     base = arg0->vX();
     if (arg0->f3c == 1) {
-        r = FUN_0010f970(arg0->f18, arg1, arg3 * arg2);
+        r = sceRead(arg0->f18, arg1, arg3 * arg2);
         arg3 = r / arg2;
         q = arg3 * arg2;
         if (r != q) {
@@ -133,7 +237,7 @@ int Gap__Core__igPsx2File__vfunc_29(F_32b760 *arg0, int arg1, int arg2, int arg3
         if (arg0->f20 == 6) {
             sceLseek(arg0->f24, 0, 2);
         }
-        return FUN_0010fbd0(arg0->f24, arg1, arg3 * arg2) / arg2;
+        return sceWrite(arg0->f24, arg1, arg3 * arg2) / arg2;
     }
     s0 = arg2 * arg3;
     if (arg0->f20 == 2) {
@@ -146,7 +250,7 @@ int Gap__Core__igPsx2File__vfunc_29(F_32b760 *arg0, int arg1, int arg2, int arg3
 }
 
 int Gap__Core__igPsx2File__vfunc_32(S_32b870 *arg0) {
-    if (arg0->d != 0) return 0; sceLseek(arg0->a, 0, 0); FUN_0010fbd0(arg0->a, arg0->b, arg0->c); return 0;
+    if (arg0->d != 0) return 0; sceLseek(arg0->a, 0, 0); sceWrite(arg0->a, arg0->b, arg0->c); return 0;
 }
 
 int Gap__Core__igPsx2File__vfunc_31(struct S_32bba0 *arg0, int arg1, ...) {
@@ -175,7 +279,7 @@ int Gap__Core__igPsx2File__vfunc_33(S0_32bc80 *arg0) {
     int i;
 
     if (arg0->f60 != 0) {
-        FUN_0010f970(arg0->f24, &sp1C, 1);
+        sceRead(arg0->f24, &sp1C, 1);
         return sp1C;
     }
     i = arg0->f52;

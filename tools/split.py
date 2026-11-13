@@ -28,9 +28,9 @@ Usage:
 
 Notes / limits:
   * Function boundaries start from Ghidra and are repaired here: the reviewed rows of
-    config/SLUS-20836/extent-overrides.tsv (growth, shrink, `cut`, `merge`) and the promotion rules
-    that give the code Ghidra never made a function a symbol of its own. The rules, their
-    evidence and the inventory they produce: docs/engine/function-inventory.md. The run
+    config/SLUS-20836/extent-overrides.tsv (growth, shrink, `cut`, `merge`, `start`, `data`) and
+    the promotion rules that give the code Ghidra never made a function a symbol of its own. The
+    rules, their evidence and the inventory they produce: docs/engine/function-inventory.md. The run
     prints every rule with its count; a replay reproduces config/SLUS-20836/symbols.txt bit for bit.
     `tools/check.py` catches a bad split, because it compares the assembled bytes against
     the retail image; `scripts/inventory_scan.py` reports the code still outside the map.
@@ -91,8 +91,8 @@ def apply_function_extents(fns, path):
 
 
 def load_extent_overrides(path):
-    """config/SLUS-20836/extent-overrides.tsv -> {va: (size, name, kind)}; kind is "", "cut", "merge"
-    or "start"."""
+    """config/SLUS-20836/extent-overrides.tsv -> {va: (size, name, kind)}; kind is "", "cut", "merge",
+    "start" or "data"."""
     rows = {}
     if not path or not os.path.exists(path):
         return rows
@@ -104,10 +104,47 @@ def load_extent_overrides(path):
             va, size = int(p[0], 0), int(p[1])
             name = p[2] if len(p) > 2 else None
             kind = p[3] if len(p) > 3 else ""
-            if va in rows or size <= 0 or size % 4 or kind not in ("", "cut", "merge", "start"):
+            if va in rows or size <= 0 or size % 4 or kind not in ("", "cut", "merge", "start", "data"):
                 raise ValueError("invalid/duplicate extent override at %#x" % va)
             rows[va] = (size, name, kind)
     return rows
+
+
+def data_rows(rows):
+    """The `data` rows of `load_extent_overrides` as sorted [(va, end)]."""
+    return sorted((va, va + r[0]) for va, r in rows.items() if r[2] == "data")
+
+
+def _data_row_at(data, lo, hi):
+    """The `data` row [lo, hi) overlaps, or None."""
+    return next((d for d in data if lo < d[1] and d[0] < hi), None)
+
+
+def drop_data_rows(fns, data):
+    """The `data` rows: bytes that decode as code but are no function of this program, such as a
+    kernel patch the program copies to another address and runs there. Every dump function that
+    lies inside a row is dropped; one that crosses a row's edge fails the run, because then the
+    row or the dump is wrong. Rows may not overlap. Returns the remaining functions."""
+    for a, b in zip(data, data[1:]):
+        if b[0] < a[1]:
+            raise ValueError("data rows at %#x and %#x overlap" % (a[0], b[0]))
+    out = []
+    for f in fns:
+        row = _data_row_at(data, f[0], f[0] + f[1])
+        if row is None:
+            out.append(f)
+        elif not (row[0] <= f[0] and f[0] + f[1] <= row[1]):
+            raise ValueError("function %s at %#x crosses the edge of the data row at %#x"
+                             % (f[2], f[0], row[0]))
+    return out
+
+
+def check_data_rows(fns, data):
+    """No function may lie in a `data` row: raises if a reviewed start or a promotion put one there."""
+    for f in fns:
+        row = _data_row_at(data, f[0], f[0] + f[1])
+        if row is not None:
+            raise ValueError("function %s at %#x lies in the data row at %#x" % (f[2], f[0], row[0]))
 
 
 def apply_extent_overrides(fns, img, path):
@@ -116,7 +153,7 @@ def apply_extent_overrides(fns, img, path):
     A row is a reviewed correction of the dump (see the file header). It may shrink a function
     whose recorded extent ran past its own return, or grow one that stops short of it, but never cuts
     into a neighbour: a growth stops at the next function, and a plain shrink may leave only zero
-    words before the next function. Two reviewed keywords in the fourth column go further:
+    words before the next function. Reviewed keywords in the fourth column go further:
 
     * ``cut``   — the shrink leaves *code* behind: the dump had glued a second function onto this
                   one. The remainder is not a function yet; a promotion rule must claim it, and
@@ -124,14 +161,20 @@ def apply_extent_overrides(fns, img, path):
     * ``merge`` — the function at `va` absorbs every dump function that starts inside its new
                   extent and takes the row's name: Ghidra had split one body into a `thunk_` and a
                   fragment (`FUN_002fe2ac`), and only one symbol may own those bytes.
+    * ``start`` — a function no rule can walk, added at `va` (`add_reviewed_starts`).
+    * ``data``  — `size` bytes at `va` are data, not functions (`drop_data_rows`); the promotion
+                  rules treat the row as occupied, and the reference scan ignores its words.
 
-    Returns (functions, cuts) — `cuts` is `[(va, new_end)]` for `check_cuts`.
+    Returns (functions, cuts, data) — `cuts` is `[(va, new_end)]` for `check_cuts`, `data` the
+    sorted `[(va, end)]` of the `data` rows.
     """
     rows = load_extent_overrides(path)
     if not rows:
-        return fns, []
+        return fns, [], []
+    data = data_rows(rows)
+    fns = drop_data_rows(fns, data)
     fns = add_reviewed_starts(fns, img, {va: r for va, r in rows.items() if r[2] == "start"})
-    rows = {va: r for va, r in rows.items() if r[2] != "start"}
+    rows = {va: r for va, r in rows.items() if r[2] not in ("start", "data")}
     # merges first: they delete dump entries, so sizes and neighbours are settled before the cuts
     merged = set()
     for va, (size, name, kind) in rows.items():
@@ -164,7 +207,8 @@ def apply_extent_overrides(fns, img, path):
         out.append((va, size, name, original))
     if rows:
         raise ValueError("extent override has no function: %s" % sorted(hex(v) for v in rows))
-    return out, cuts
+    check_data_rows(out, data)
+    return out, cuts, data
 
 
 def add_reviewed_starts(fns, img, rows):
@@ -549,18 +593,25 @@ def _thunk_target(img, va, size, by_va):
     return None
 
 
-def _promote_in_gaps(fns, img, candidates, strong, strong_data, accept, min_size=8, overlay=None):
+def _occupied(fns, data=()):
+    """(starts, ends) of what no promotion may claim, sorted: the functions and the `data` rows."""
+    spans = sorted([(f[0], f[0] + f[1]) for f in fns] + list(data))
+    return [s for s, _ in spans], [e for _, e in spans]
+
+
+def _promote_in_gaps(fns, img, candidates, strong, strong_data, accept, min_size=8, overlay=None,
+                     data=()):
     """Promote the sorted `candidates` that start a self-contained body in an unclaimed gap.
 
-    Shared by every structural rule: a candidate is taken when it lies outside every function,
-    nothing falls into it, `_claim` finds its extent, `accept(va, size)` agrees on the
-    shape, and the body does not reach the next candidate (the earlier one is kept; the later
-    one is then inside a function and skipped). Nothing moves: every byte stays where it was.
-    An 8-byte `j <function>; nop` body is named after its target like `promote_j_thunks`
-    does (`thunk_<target>`), so the rule that finds a stub does not decide its name.
+    Shared by every structural rule: a candidate is taken when it lies outside every function
+    and every `data` row, nothing falls into it, `_claim` finds its extent inside the gap,
+    `accept(va, size)` agrees on the shape, and the body does not reach the next candidate (the
+    earlier one is kept; the later one is then inside a function and skipped). Nothing moves:
+    every byte stays where it was. An 8-byte `j <function>; nop` body is named after its target
+    like `promote_j_thunks` does (`thunk_<target>`), so the rule that finds a stub does not
+    decide its name.
     """
-    starts = [f[0] for f in fns]
-    ends = [f[0] + f[1] for f in fns]
+    starts, ends = _occupied(fns, data)
     by_va = {f[0]: f[2] for f in fns}
     overlay = overlay or {}
     out, added = list(fns), []
@@ -675,7 +726,7 @@ def load_gap_labels(path):
     return sorted(out)
 
 
-def promote_gap_labels(fns, img, labels, strong, strong_data):
+def promote_gap_labels(fns, img, labels, strong, strong_data, data=()):
     """Rule 1 — turn frame-opening `LAB_` labels in unclaimed gaps into functions.
 
     `data/functions.json` is Ghidra's *function* list, but Ghidra also records
@@ -698,10 +749,11 @@ def promote_gap_labels(fns, img, labels, strong, strong_data):
     Nothing is invented: every byte stays where it was, so the relink is unaffected.
     """
     cands = [L for L in labels if VADDR_BASE + 8 <= L < SECTION_HI and _is_prologue(_word(img, L))]
-    return _promote_in_gaps(fns, img, cands, strong, strong_data, lambda va, size: True, min_size=16)
+    return _promote_in_gaps(fns, img, cands, strong, strong_data, lambda va, size: True, min_size=16,
+                            data=data)
 
 
-def promote_call_targets(fns, img, strong, strong_data, overlay=None):
+def promote_call_targets(fns, img, strong, strong_data, overlay=None, data=()):
     """Rule 3 — a `jal`/`j` target with no symbol is a function.
 
     A call from known code is the strongest evidence of a function start there is, and
@@ -718,10 +770,10 @@ def promote_call_targets(fns, img, strong, strong_data, overlay=None):
             if _is_jal(w) or (_is_j(w) and not (va <= _j_target(va + 4 * k, w) < va + sz)):
                 calls.add(_j_target(va + 4 * k, w))
     return _promote_in_gaps(fns, img, sorted(calls), strong, strong_data, lambda va, size: True,
-                            overlay=overlay)
+                            overlay=overlay, data=data)
 
 
-def promote_referenced_starts(fns, img, strong, strong_data, overlay=None):
+def promote_referenced_starts(fns, img, strong, strong_data, overlay=None, data=()):
     """Rule 4 — code a vtable, a function-pointer table or a literal points at.
 
     Same evidence the leaf rule (`promote_data_labels`) uses, without its two limits: the
@@ -731,7 +783,7 @@ def promote_referenced_starts(fns, img, strong, strong_data, overlay=None):
     in `strong`; the body comes from `_sweep_extent`.
     """
     return _promote_in_gaps(fns, img, strong, strong, strong_data, lambda va, size: True,
-                            overlay=overlay)
+                            overlay=overlay, data=data)
 
 
 def _framed(img, va, size):
@@ -745,7 +797,7 @@ def _framed(img, va, size):
     return _word(img, va + size - 4) == restore or _word(img, va + size - 8) == restore
 
 
-def promote_framed_bodies(fns, img, strong, strong_data):
+def promote_framed_bodies(fns, img, strong, strong_data, data=()):
     """Rule 5 — an unreferenced body that opens and closes its own frame.
 
     Static functions the linker kept although nothing calls them (EE GCC emits every
@@ -766,10 +818,10 @@ def promote_framed_bodies(fns, img, strong, strong_data):
             o += 4
         prev_end = max(prev_end, va + sz)
     return _promote_in_gaps(fns, img, cands, strong, strong_data,
-                            lambda va, size: _framed(img, va, size), min_size=16)
+                            lambda va, size: _framed(img, va, size), min_size=16, data=data)
 
 
-def promote_code_bodies(fns, img, strong, strong_data):
+def promote_code_bodies(fns, img, strong, strong_data, data=()):
     """Rule 6 — any self-contained body in a gap of the compiled code.
 
     Below `CODE_HI` the image holds nothing but functions, their padding and constants inside
@@ -789,7 +841,7 @@ def promote_code_bodies(fns, img, strong, strong_data):
                 cands.append(o)
             o += 4
         prev_end = max(prev_end, va + sz)
-    return _promote_in_gaps(fns, img, cands, strong, strong_data, lambda va, size: True)
+    return _promote_in_gaps(fns, img, cands, strong, strong_data, lambda va, size: True, data=data)
 
 
 def _is_end_word(word):
@@ -818,7 +870,7 @@ def referenced_code_addresses(img, fns):
             if VADDR_BASE <= w < SECTION_HI}
 
 
-def promote_data_labels(fns, img, labels):
+def promote_data_labels(fns, img, labels, data=()):
     """Promote *leaf* `LAB_` gap labels — the ones a vtable points at.
 
     `promote_gap_labels` recognises a function by its frame (`addiu sp,sp,-N`), which
@@ -834,18 +886,17 @@ def promote_data_labels(fns, img, labels):
     address appears as a word in the image (a code pointer), and the bytes from it
     form a leaf body — exactly one terminating `j`/`jr`, never a prologue, and not
     reachable by fallthrough (the preceding word is padding, or a `jr ra`/its delay
-    slot). Its size runs to that terminator's delay slot; a sibling start bounds it.
+    slot). Its size runs to that terminator's delay slot; a sibling start bounds it. A gap ends
+    at the next function or `data` row.
     Nothing is invented and no existing symbol changes size, so the relink is
     unaffected — the bytes it claims were already linked as raw data (
     precedent).
     """
     refs = referenced_code_addresses(img, fns)
-    out, added = [], 0
-    for i, f in enumerate(fns):
-        va, sz = f[0], f[1]
-        out.append(f)
-        gap_lo = va + sz
-        gap_hi = fns[i + 1][0] if i + 1 < len(fns) else SECTION_HI
+    occ_starts, occ_ends = _occupied(fns, data)
+    out, added = list(fns), 0
+    for i, gap_lo in enumerate(occ_ends):
+        gap_hi = occ_starts[i + 1] if i + 1 < len(occ_starts) else SECTION_HI
         if gap_hi <= gap_lo:
             continue
         inside = []
@@ -964,7 +1015,7 @@ def _jr_ra_extent(img, va, stop):
     return None
 
 
-def promote_sdk_starts(fns, img, starts, refs):
+def promote_sdk_starts(fns, img, starts, refs, data=()):
     """Promote (and, where needed, split for) the starts a descriptor declares.
 
     This is the first pass that *shrinks* a symbol, so it moves carefully: it only
@@ -972,7 +1023,8 @@ def promote_sdk_starts(fns, img, starts, refs):
     takes an unclaimed address whose value some 4-byte word in the image holds (the
     descriptor's own table), and it asserts that every byte the old symbol had is
     still in exactly one piece. `make check` is the backstop: it round-trips every
-    byte of the image, so a cut in the middle of an instruction cannot survive.
+    byte of the image, so a cut in the middle of an instruction cannot survive. A `data` row
+    is never claimed, and bounds a walk like a function does.
     """
     starts = [s for s in starts if s in refs]
     out, added, splits = [], 0, 0
@@ -994,7 +1046,7 @@ def promote_sdk_starts(fns, img, starts, refs):
         # The last piece inherits the swallowing symbol's end, and that end was Ghidra's guess for
         # a different function: `FUN_001044f0`'s loop and return lie 84 bytes past it. The body
         # walk gives the piece its own extent, growing only into the unclaimed gap that follows.
-        nxt = next((g[0] for g in fns if g[0] > va), SECTION_HI)
+        nxt = next((g for g in _occupied(fns, data)[0] if g > va), SECTION_HI)
         s, size = pieces[-1]
         walked = _sweep_extent(img, s, nxt)
         if walked is not None and walked > size:
@@ -1012,7 +1064,8 @@ def promote_sdk_starts(fns, img, starts, refs):
         if j >= 0 and out[j][0] + out[j][1] > s:
             continue                            # covered: the split above handled it
         stop = out[j + 1][0] if j + 1 < len(out) else s + 0x400
-        if not _clean_start(img, s):
+        stop = min([stop] + [lo for lo, _hi in data if lo > s])
+        if not _clean_start(img, s) or _data_row_at(data, s, s + 4):
             continue
         size = _jr_ra_extent(img, s, stop)
         if not size or s + size > stop:
@@ -1063,7 +1116,7 @@ def literal_code_addresses(img, fns):
     return out
 
 
-def promote_j_thunks(fns, img, refs, names=None):
+def promote_j_thunks(fns, img, refs, names=None, data=()):
     """Promote `j <target>; nop` stubs in unclaimed gaps, and name them.
 
     The class registrars pass a function pointer per class, and for 572 classes
@@ -1074,8 +1127,8 @@ def promote_j_thunks(fns, img, refs, names=None):
 
     Evidence is shape *and* reference: the stub's address is formed as a code literal
     (or held in a data word), the bytes there are exactly `j X; nop` with X an
-    existing function, and the address is not inside any function. The name follows
-    from the target, which is what the stub means. It sits in the middle of a data
+    existing function, and the address is not inside any function or `data` row. The name
+    follows from the target, which is what the stub means. It sits in the middle of a data
     region rather than in an eight-byte gap between two functions, so a gap-skewed
     rule sees nothing -- the reference is what identifies it.
     """
@@ -1088,8 +1141,8 @@ def promote_j_thunks(fns, img, refs, names=None):
         if va % 4:
             continue
         i = bisect.bisect_right(starts, va) - 1
-        if i >= 0 and va < ends[i]:
-            continue                            # inside a function: not a stub
+        if (i >= 0 and va < ends[i]) or _data_row_at(data, va, va + 8):
+            continue                            # inside a function or a data row: not a stub
         off = va - VADDR_BASE + FILE_BASE
         if off < 0 or off + 8 > len(img):
             continue
@@ -1343,12 +1396,16 @@ def main(argv=None):
         print("extended %d switch dispatchers over their jump-table bodies (+%d bytes)"
               % (jgrown, jadded))
     # the default table describes the PS2 USA image only; other targets pass their own extents
-    cuts = []
+    cuts, data = [], []
     if a.extent_overrides != OVERRIDES_DEFAULT or a.function_extents == EXTENTS_DEFAULT:
-        fns, cuts = apply_extent_overrides(fns, img, a.extent_overrides)
+        dump = fns
+        fns, cuts, data = apply_extent_overrides(fns, img, a.extent_overrides)
         if cuts:
             print("cut %d functions the dump had glued to a neighbour (config/SLUS-20836/extent-overrides.tsv)"
                   % len(cuts))
+        if data:
+            print("dropped %d dump functions inside %d data rows (config/SLUS-20836/extent-overrides.tsv)"
+                  % (sum(1 for f in dump if _data_row_at(data, f[0], f[0] + f[1])), len(data)))
 
     def summary(rule, added):
         if added:
@@ -1358,23 +1415,24 @@ def main(argv=None):
     # The label rules see the calls and tables of the Ghidra functions (plus the reviewed
     # extents); the later rules see those of the promoted functions too, and the literals
     # they form. Each set is a pure function of the image and the inputs before it, so a
-    # replay reproduces the symbol table exactly.
+    # replay reproduces the symbol table exactly. A `data` row is occupied for every rule,
+    # and its words are no references.
     cfg = os.path.dirname(os.path.abspath(a.symbols_out))
     exclude = non_entry_tables(os.path.join(cfg, "exceptions.txt"),
-                               os.path.join(cfg, "jumptables.txt"))
+                               os.path.join(cfg, "jumptables.txt")) + data
     overlay = load_names(a.names)
     strong, strong_data = strong_reference_starts(img, fns, exclude=exclude)
     if a.gap_labels is not None:
         labels = load_gap_labels(a.gap_labels)
-        fns, dadded = promote_data_labels(fns, img, labels)
+        fns, dadded = promote_data_labels(fns, img, labels, data)
         if dadded:
             print("rule 2 referenced leaf LAB_ label in a gap: promoted %d functions" % dadded)
-        fns, gadded = promote_gap_labels(fns, img, labels, strong, strong_data)
+        fns, gadded = promote_gap_labels(fns, img, labels, strong, strong_data, data)
         summary("1 framed LAB_ label in a gap", gadded)
     refs = referenced_code_addresses(img, fns)
     if a.sdk_starts:
         starts = load_sdk_starts(a.sdk_starts)
-        fns, sadded, ssplit = promote_sdk_starts(fns, img, starts, refs)
+        fns, sadded, ssplit = promote_sdk_starts(fns, img, starts, refs, data)
         if sadded:
             print("promoted %d SDK-descriptor starts (%d of them by splitting a function "
                   "Ghidra's tail-call fallthrough had swallowed)" % (sadded, ssplit))
@@ -1383,7 +1441,7 @@ def main(argv=None):
     lit = literal_code_addresses(img, fns)
     if lit:
         print("resolved %d code addresses formed as literals" % len(lit))
-    fns, tadded = promote_j_thunks(fns, img, refs | lit, overlay)
+    fns, tadded = promote_j_thunks(fns, img, refs | lit, overlay, data)
     if tadded:
         print("promoted %d `j <target>; nop` stubs in unclaimed gaps" % tadded)
     # Rules 3-5 feed each other: a function rule 5 finds calls a stub only rule 3 can see, and a
@@ -1394,14 +1452,14 @@ def main(argv=None):
     while True:
         before = len(fns)
         strong, strong_data = strong_reference_starts(img, fns, lit, exclude)
-        fns, c = promote_call_targets(fns, img, strong, strong_data, overlay)
-        fns, r = promote_referenced_starts(fns, img, strong, strong_data, overlay)
-        fns, f = promote_framed_bodies(fns, img, strong, strong_data)
+        fns, c = promote_call_targets(fns, img, strong, strong_data, overlay, data)
+        fns, r = promote_referenced_starts(fns, img, strong, strong_data, overlay, data)
+        fns, f = promote_framed_bodies(fns, img, strong, strong_data, data)
         cadded, radded, fadded = cadded + c, radded + r, fadded + f
         if len(fns) == before:
             # rule 6 runs once the evidence-driven rules are done, so it never takes a body
             # they would have bounded or named differently; what it adds feeds another round
-            fns, b = promote_code_bodies(fns, img, strong, strong_data)
+            fns, b = promote_code_bodies(fns, img, strong, strong_data, data)
             badded += b
             if not b:
                 break
@@ -1411,6 +1469,7 @@ def main(argv=None):
     summary("5 unreferenced framed body", fadded)
     summary("6 unreferenced body in the code", badded)
     check_cuts(fns, img, cuts)
+    check_data_rows(fns, data)
     if a.region:
         lo, hi = (int(x, 0) for x in a.region.split(","))
         fns = [f for f in fns if lo <= f[0] < hi]

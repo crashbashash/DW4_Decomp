@@ -14,7 +14,7 @@ extern "C" int igResource_UnloadDirectory(...);
 extern "C" int igStringObj_Set(...);
 extern "C" int igStringObj_Insert(...);
 extern "C" int igStringObj_Erase(...);
-extern "C" int FUN_003810c0(...);
+extern "C" int beFileListInfoManager_LoadNextFile(...);
 extern "C" int FUN_003817d0(...);
 extern "C" int beLua__RunNamedChunk(...);
 extern "C" int FUN_0038a2d0(...);
@@ -307,7 +307,7 @@ extern "C" void Gap__Bec__beFileListInfoManager__vfunc_27(beFileListInfoManager 
             igStringRefList *s6;
             int n;
             int k;
-            if (FUN_003810c0(arg0, arg0->_fnames) == 0) {
+            if (beFileListInfoManager_LoadNextFile(arg0, arg0->_fnames) == 0) {
                 break;
             }
             FUN_003817d0(arg0);
@@ -376,7 +376,7 @@ extern "C" void Gap__Bec__beFileListInfoManager__vfunc_27(beFileListInfoManager 
             break;
         }
         case 2:
-            if (FUN_003810c0(arg0, arg0->_fnames) != 0) {
+            if (beFileListInfoManager_LoadNextFile(arg0, arg0->_fnames) != 0) {
                 arg0->_loaded = 0;
                 arg0->_proc = 3;
                 break;
@@ -413,7 +413,7 @@ extern "C" void Gap__Bec__beFileListInfoManager__vfunc_27(beFileListInfoManager 
             } else {
                 s3 = 1;
             }
-            v1 = FUN_003810c0(arg0, s0) & 0xFF;
+            v1 = beFileListInfoManager_LoadNextFile(arg0, s0) & 0xFF;
             if (s3 && v1) {
                 arg0->_loaded = 0;
                 arg0->_proc = 0x14;

@@ -63,8 +63,8 @@ extern char E0092101_DTX_Init_bind_errr[];
 void *memset(void *dst, int value, unsigned int n);
 int sprintf(char *buffer, const char *format, ...);
 void ADXMSG_PrintErr(const char *format, ...);
-void FUN_0010b7d8(char *start, char *end);
-void FUN_0010b918(char *start, char *end);
+void SyncDCache(char *start, char *end);
+void InvalidDCache(char *start, char *end);
 unsigned int sceSifSetDma(SifDmaData *sdd, int len);
 int sceSifCallRpc(SifClientData *cd, int fno, int mode, void *send, int ssize, void *recv, int rsize,
                  void *end, void *endarg);
@@ -73,15 +73,15 @@ int GetThreadId(void);
 void sceSifSetRpcQueue(void *queue, int thread_id);
 void sceSifRegisterRpc(void *server, int command, void *handler, void *buffer, void *cancel_handler,
                        void *cancel_buffer, void *queue);
-void FUN_0010e990(void *queue);
-void FUN_0027b2b0(void);
-void FUN_0027b2c8(void);
-void FUN_0027e1c0(void);
-void FUN_0027e1d8(void);
+void sceSifRpcLoop(void *queue);
+void SJCRS_Lock(void);
+void SJCRS_Unlock(void);
+void SVM_Lock(void);
+void SVM_Unlock(void);
 
-DtxObj *FUN_00273338(unsigned int id, char *eewk, int iopwk, int wklen);
-void FUN_002734d0(DtxObj *dtx);
-void FUN_00273928(void);
+DtxObj *DTX_Create(unsigned int id, char *eewk, int iopwk, int wklen);
+void DTX_Destroy(DtxObj *dtx);
+void DTX_ExecServer(void);
 
 int *FUN_00273078(unsigned int command, int *data, unsigned int size)
 {
@@ -90,10 +90,10 @@ int *FUN_00273078(unsigned int command, int *data, unsigned int size)
     case 1:
         break;
     case 2:
-        data[0] = (int)FUN_00273338(data[0], (char *)data[1], data[2], data[3]);
+        data[0] = (int)DTX_Create(data[0], (char *)data[1], data[2], data[3]);
         break;
     case 3:
-        FUN_002734d0((DtxObj *)data[0]);
+        DTX_Destroy((DtxObj *)data[0]);
         break;
     default:
         if (command - 0x400 < 64 && DAT_004aa540[command - 0x400] != 0) {
@@ -109,7 +109,7 @@ int FUN_00273128(void)
     sceSifSetRpcQueue(DAT_004aa420, GetThreadId());
     sceSifRegisterRpc(DAT_004aa3d8, dtx_rpc_id, FUN_00273078, DAT_004aa440, 0, 0, DAT_004aa420);
     DAT_004a9b18 = 1;
-    FUN_0010e990(DAT_004aa420);
+    sceSifRpcLoop(DAT_004aa420);
     return 0;
 }
 
@@ -160,7 +160,7 @@ void FUN_00273320(DtxObj *dtx)
     dtx->send_obj = 0;
 }
 
-DtxObj *FUN_00273338(unsigned int id, char *eewk, int iopwk, int wklen)
+DtxObj *DTX_Create(unsigned int id, char *eewk, int iopwk, int wklen)
 {
     DtxObj *dtx;
     int size;
@@ -198,8 +198,8 @@ DtxObj *FUN_00273338(unsigned int id, char *eewk, int iopwk, int wklen)
     dtx->eewk = eewk;
     dtx->state = 0;
     memset(eewk, 0, size);
-    FUN_0010b7d8(dtx->eewk, dtx->eewk + dtx->size + 63);
-    FUN_0010b918(dtx->eewk, dtx->eewk + dtx->size + 63);
+    SyncDCache(dtx->eewk, dtx->eewk + dtx->size + 63);
+    InvalidDCache(dtx->eewk, dtx->eewk + dtx->size + 63);
     /* matching construct: statement-order sweep — order of the final field stores */
     dtx->recv = FUN_00273268;
     dtx->send = FUN_00273280;
@@ -210,24 +210,24 @@ DtxObj *FUN_00273338(unsigned int id, char *eewk, int iopwk, int wklen)
     return dtx;
 }
 
-void FUN_002734d0(DtxObj *dtx)
+void DTX_Destroy(DtxObj *dtx)
 {
     dtx->flag = 0;
     while (dtx->state == 1) {
-        FUN_00273928();
+        DTX_ExecServer();
     }
     FUN_00273218(dtx->server);
     memset(dtx, 0, sizeof(DtxObj));
 }
 
-void FUN_00273538(DtxObj *dtx, void (*recv)(int obj, char *buf, int size), int obj)
+void DTX_SetRcvCbf(DtxObj *dtx, void (*recv)(int obj, char *buf, int size), int obj)
 {
     /* matching construct: variant search — stmt order [1, 0]; the unit compiler (Sony EE GCC 2.96 -O2 -G0) keeps independent stores in source order, so the statements follow the retail store order */
     dtx->recv = recv;
     dtx->recv_obj = obj;
 }
 
-void FUN_00273548(DtxObj *dtx, void (*send)(int obj, char *buf, int size), int obj)
+void DTX_SetSndCbf(DtxObj *dtx, void (*send)(int obj, char *buf, int size), int obj)
 {
     /* matching construct: variant search — stmt order [1, 0]; the unit compiler (Sony EE GCC 2.96 -O2 -G0) keeps independent stores in source order, so the statements follow the retail store order */
     dtx->send = send;
@@ -240,7 +240,7 @@ void FUN_00273558(DtxObj *dtx)
     DAT_004a9b28++;
     if (dtx->state == 1) {
         if (dtx->count < dtx->peer->count) {
-            FUN_0010b918(dtx->eewk, dtx->eewk + dtx->size - 1);
+            InvalidDCache(dtx->eewk, dtx->eewk + dtx->size - 1);
             dtx->recv(dtx->recv_obj, dtx->eewk, dtx->size);
             dtx->count = dtx->peer->count;
             dtx->state = 0;
@@ -251,8 +251,8 @@ void FUN_00273558(DtxObj *dtx)
             dtx->send(dtx->send_obj, dtx->eewk, dtx->size);
             dtx->count++;
             dtx->peer->count = dtx->count;
-            FUN_0010b7d8(dtx->eewk, dtx->eewk + dtx->size - 1);
-            FUN_0010b918(dtx->eewk, dtx->eewk + dtx->size + 63);
+            SyncDCache(dtx->eewk, dtx->eewk + dtx->size - 1);
+            InvalidDCache(dtx->eewk, dtx->eewk + dtx->size + 63);
             dtx->dma.data = (unsigned int)dtx->eewk & 0x0fffffff;
             dtx->dma.addr = dtx->iopwk;
             dtx->dma.size = dtx->wklen;
@@ -287,7 +287,7 @@ void DTX_Init(void)
     dtx_init_cnt++;
 }
 
-void FUN_002737a8(void)
+void DTX_Finish(void)
 {
     DtxObj *dtx;
     int i;
@@ -295,7 +295,7 @@ void FUN_002737a8(void)
         dtx = DAT_004a9b30;
         for (i = 0; i < 16; i++, dtx++) {
             if (dtx->used == 1) {
-                FUN_002734d0(dtx);
+                DTX_Destroy(dtx);
             }
         }
     }
@@ -304,7 +304,7 @@ void FUN_002737a8(void)
 int DTX_CallUrpc(int fno, int *send, int nsend, int *recv, int nrecv)
 {
     int i;
-    FUN_0027e1c0();
+    SVM_Lock();
     for (i = 0; i < nsend; i++) {
         DAT_0056e580[i] = send[i];
     }
@@ -312,20 +312,20 @@ int DTX_CallUrpc(int fno, int *send, int nsend, int *recv, int nrecv)
     for (i = 0; i < nrecv; i++) {
         recv[i] = DAT_0056e680[i];
     }
-    FUN_0027e1d8();
+    SVM_Unlock();
     return DAT_0056e680[0];
 }
 
-void FUN_00273928(void)
+void DTX_ExecServer(void)
 {
     DtxObj *dtx;
     int i;
-    FUN_0027b2b0();
+    SJCRS_Lock();
     dtx = DAT_004a9b30;
     for (i = 0; i < 16; i++, dtx++) {
         if (dtx->used == 1) {
             FUN_00273558(dtx);
         }
     }
-    FUN_0027b2c8();
+    SJCRS_Unlock();
 }

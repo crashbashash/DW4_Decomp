@@ -349,7 +349,7 @@ void FUN_001d7630(void *arg0, float *arg1) {
     }
     t->f92->vX(m1);
     t->f96->vX(m2);
-    s2 = (float *)(t->f100 + DAT_0055ece0[0]->f8);
+    s2 = (float *)(t->f100 + g_igTextureMatrixAttr_mField[0]->_offset);
     FUN_001908f0(s2, arg1);
     FUN_001904f0(s2, s2, m1);
     FUN_001904f0(s2, s2, m2);

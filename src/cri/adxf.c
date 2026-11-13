@@ -57,6 +57,7 @@ typedef struct AdxfLogEntry {
 
 #define ADXF_HANDLE_COUNT 16
 
+extern char *volatile adxf_build;
 extern int DAT_00499de4;
 extern AdxfHandle DAT_00499de8[ADXF_HANDLE_COUNT];
 extern AdxfPtInfo *adxf_ptinfo[256];
@@ -113,29 +114,29 @@ extern char DAT_004edf98[];
 void *memset(void *dst, int value, unsigned int size);
 int memcmp(const void *a, const void *b, unsigned int size);
 char *strncpy(char *dst, const char *src, unsigned int n);
-void FUN_0010b918(void *start, void *last);
+void InvalidDCache(void *start, void *last);
 void ADXCRS_Lock(void);
 void ADXCRS_Unlock(void);
 void ADXERR_CallErrFunc1(const char *message);
 void ADXM_ExecMain(void);
 void *ADXSTM_Create(int a, int size);
 void ADXSTM_Destroy(void *stm);
-void FUN_0026a068(void *stm, const char *fname, void *dir, int ofst, int nsct);
-void FUN_0026a0e0(void *stm);
+void ADXSTM_BindFile(void *stm, const char *fname, void *dir, int ofst, int nsct);
+void ADXSTM_ReleaseFile(void *stm);
 char ADXSTM_GetStat(void *stm);
-void FUN_0026a140(void *stm, int ofst);
-int FUN_0026a160(void *stm);
-void FUN_0026a1f0(void *stm, int nsct);
-void FUN_0026a238(void *stm);
-void FUN_0026a2a0(void *stm);
+void ADXSTM_Seek(void *stm, int ofst);
+int ADXSTM_Tell(void *stm);
+void ADXSTM_Start2(void *stm, int nsct);
+void ADXSTM_StopNw(void *stm);
+void ADXSTM_Stop(void *stm);
 void ADXSTM_SetEos(void *stm, int a);
-int FUN_0026a9e8(void *stm, int nsct);
-int FUN_0026aa00(void *stm);
-int FUN_0026aa08(void *stm);
-void FUN_0026aa10(void *stm, int a);
-void FUN_0026aae8(void *stm, AdxfSj *sj);
+int ADXSTM_SetReqRdSize(void *stm, int nsct);
+int ADXSTM_GetFileLen(void *stm);
+int ADXSTM_GetFileSct(void *stm);
+void ADXSTM_SetPause(void *stm, int a);
+void ADXSTM_SetSj(void *stm, AdxfSj *sj);
 int ADXSTM_GetStatRead(void *stm);
-void FUN_0026abb0(void *stm);
+void ADXSTM_OpenFile(void *stm);
 AdxfSj *SJRBF_Create(void *buf, int size, int a);
 int cvFsGetFileSize();
 
@@ -147,7 +148,26 @@ int ADXF_GetStat(AdxfHandle *adxf);
 int ADXF_GetFnameRangeEx(int ptid, int flid, char *fname, void **dir, int *ofst, int *nsct);
 
 void FUN_00260a40(void *base, int length) {
-    FUN_0010b918(base, (char *)base + length - 1);
+    InvalidDCache(base, (char *)base + length - 1);
+}
+
+void FUN_00260a60(void)
+{
+    /* The discarded read keeps the build string in the link. */
+    (void)adxf_build;
+    if (DAT_00499de4 == 0) {
+        memset(DAT_00499de8, 0, sizeof(DAT_00499de8));
+        memset(adxf_ptinfo, 0, sizeof(adxf_ptinfo));
+        memset(DAT_0049a630, 0xFF, sizeof(DAT_0049a630));
+        memset(DAT_0049a730, 0, sizeof(DAT_0049a730));
+        DAT_0049a750 = 0;
+        DAT_0049a628 = 0;
+        adxf_ldptnw_nfile = 0;
+        adxf_ldptnw_hn = 0;
+        adxf_ldptnw_ptid = -1;
+        adxf_ldptnw_stat = 1;
+    }
+    DAT_00499de4++;
 }
 
 void FUN_00260b30(void)
@@ -280,7 +300,7 @@ int FUN_00260f50(int ptid, int afsid, int flid, AdxfPtInfo *ptinfo, void *tmpbuf
     return FUN_00260f88(ptid, afsid, flid, 0, 0, ptinfo, tmpbuf, tbsize, 1);
 }
 
-AdxfHandle *FUN_002618c0(const char *fname, void *dir);
+AdxfHandle *ADXF_Open(const char *fname, void *dir);
 AdxfHandle *FUN_00261b78(int afsid, int flid);
 int ADXF_ReadNw(AdxfHandle *adxf, int nsct, void *buf);
 
@@ -342,7 +362,7 @@ int FUN_00260f88(int ptid, int afsid, int flid, const char *fname, void *dir, Ad
         }
         ptinfo->base = ofst;
     } else {
-        adxf_ldptnw_hn = FUN_002618c0(fname, dir);
+        adxf_ldptnw_hn = ADXF_Open(fname, dir);
         if (adxf_ldptnw_hn == 0) {
             ADXERR_CallErrFunc1(DAT_004eda30);
             adxf_ldptnw_stat = 4;
@@ -539,20 +559,20 @@ int FUN_00261810(AdxfHandle *adxf, const char *fname, void *dir) {
     adxf->dir = dir;
     adxf->fname = fname;
     adxf->ofst = 0;
-    FUN_0026a068(adxf->stm, fname, dir, 0, 0xfffff);
+    ADXSTM_BindFile(adxf->stm, fname, dir, 0, 0xfffff);
     if (ADXSTM_GetStat(adxf->stm) == 4) {
-        FUN_0026a0e0(adxf->stm);
+        ADXSTM_ReleaseFile(adxf->stm);
         return -1;
     }
-    adxf->fsize_byte = FUN_0026aa00(adxf->stm);
-    size = FUN_0026aa08(adxf->stm);
+    adxf->fsize_byte = ADXSTM_GetFileLen(adxf->stm);
+    size = ADXSTM_GetFileSct(adxf->stm);
     adxf->stm_ofst = 0;
     adxf->fsize_sct = size;
     adxf->stm_nsct = size;
     return 0;
 }
 
-AdxfHandle *FUN_002618c0(const char *fname, void *dir) {
+AdxfHandle *ADXF_Open(const char *fname, void *dir) {
     AdxfHandle *temp_a0;
     AdxfHandle *var_s0;
     FUN_00260c20(1, 0, (int)fname, (int)dir, -1);
@@ -575,9 +595,9 @@ int FUN_00261960(AdxfHandle *adxf, const char *fname, void *dir, int ofst, int n
     adxf->stm_ofst = ofst;
     adxf->stm_nsct = nsct;
     adxf->ofst = 0;
-    FUN_0026a068(adxf->stm, fname, dir, ofst, nsct);
+    ADXSTM_BindFile(adxf->stm, fname, dir, ofst, nsct);
     if (ADXSTM_GetStat(adxf->stm) == 4) {
-        FUN_0026a0e0(adxf->stm);
+        ADXSTM_ReleaseFile(adxf->stm);
         return -1;
     }
     adxf->fsize_sct = nsct;
@@ -621,9 +641,9 @@ int FUN_00261aa0(AdxfHandle *adxf, int afsid, int flid)
     adxf->fname = ptname;
     adxf->stm_nsct = nsct;
     adxf->stm_ofst = ofst;
-    FUN_0026a068(adxf->stm, ptname, adxf->dir, ofst, nsct);
+    ADXSTM_BindFile(adxf->stm, ptname, adxf->dir, ofst, nsct);
     if (ADXSTM_GetStat(adxf->stm) == 4) {
-        FUN_0026a0e0(adxf->stm);
+        ADXSTM_ReleaseFile(adxf->stm);
         return -1;
     }
     adxf->fsize_sct = nsct;
@@ -670,7 +690,7 @@ void FUN_00261c88(AdxfHandle *adxf) {
         if (stm != 0) {
             adxf->used = 0;
             adxf->stm = 0;
-            FUN_0026a0e0(stm);
+            ADXSTM_ReleaseFile(stm);
             ADXSTM_Destroy(stm);
         }
         memset(adxf, 0, sizeof(AdxfHandle));
@@ -696,7 +716,7 @@ int FUN_00261da0(AdxfHandle *adxf, int nsct, AdxfSj *sj) {
     int remaining;
     int count;
     if (ADXSTM_GetStat(adxf->stm) != 1) {
-        FUN_0026a2a0(adxf->stm);
+        ADXSTM_Stop(adxf->stm);
     }
     ADXCRS_Lock();
     remaining = adxf->fsize_sct - adxf->ofst;
@@ -711,13 +731,13 @@ int FUN_00261da0(AdxfHandle *adxf, int nsct, AdxfSj *sj) {
         count = 0;
     } else {
         ADXSTM_SetEos(adxf->stm, -1);
-        FUN_0026aae8(adxf->stm, sj);
-        FUN_0026a9e8(adxf->stm, adxf->rqrdsct);
+        ADXSTM_SetSj(adxf->stm, sj);
+        ADXSTM_SetReqRdSize(adxf->stm, adxf->rqrdsct);
         adxf->stat = 2;
         adxf->stopnw = 0;
-        FUN_0026aa10(adxf->stm, 0);
-        FUN_0026a140(adxf->stm, adxf->ofst);
-        FUN_0026a1f0(adxf->stm, adxf->rqsct);
+        ADXSTM_SetPause(adxf->stm, 0);
+        ADXSTM_Seek(adxf->stm, adxf->ofst);
+        ADXSTM_Start2(adxf->stm, adxf->rqsct);
         count = adxf->rqsct;
     }
     ADXCRS_Unlock();
@@ -823,9 +843,9 @@ int FUN_00262118(AdxfHandle *adxf) {
                 ADXERR_CallErrFunc1(DAT_004edd90);
                 return -1;
             }
-            FUN_0026a2a0(adxf->stm);
+            ADXSTM_Stop(adxf->stm);
             ADXCRS_Lock();
-            adxf->rdsct = FUN_0026a160(adxf->stm) - adxf->ofst;
+            adxf->rdsct = ADXSTM_Tell(adxf->stm) - adxf->ofst;
             FUN_00261c18(adxf);
             adxf->stat = 1;
             ADXCRS_Unlock();
@@ -849,7 +869,7 @@ int FUN_00262208(AdxfHandle *adxf) {
                 ADXERR_CallErrFunc1(DAT_004edde8);
                 return -1;
             }
-            FUN_0026a238(adxf->stm);
+            ADXSTM_StopNw(adxf->stm);
             adxf->stopnw = 1;
             FUN_00260c20(7, 1, (int)adxf, -1, -1);
         }
@@ -865,7 +885,7 @@ void FUN_002622d0(AdxfHandle *adxf)
 
     if (adxf->stat == 2) {
         adxf->stat = ADXSTM_GetStat(adxf->stm);
-        n = FUN_0026a160(adxf->stm) - adxf->ofst;
+        n = ADXSTM_Tell(adxf->stm) - adxf->ofst;
         adxf->rdsct = n;
         if ((unsigned char)adxf->stat == 3 || (unsigned char)adxf->stat == 4) {
             adxf->ofst += n;
@@ -876,7 +896,7 @@ void FUN_002622d0(AdxfHandle *adxf)
     if (req == 1) {
         st = ADXSTM_GetStat(adxf->stm);
         if (st == req) {
-            adxf->rdsct = FUN_0026a160(adxf->stm) - adxf->ofst;
+            adxf->rdsct = ADXSTM_Tell(adxf->stm) - adxf->ofst;
             FUN_00261c18(adxf);
             adxf->stat = st;
             adxf->stopnw = 0;
@@ -949,12 +969,12 @@ int FUN_00262580(AdxfHandle *adxf) {
         return -3;
     }
     if (adxf->fsize_byte > 0x7ffff7ff) {
-        FUN_0026abb0(adxf->stm);
+        ADXSTM_OpenFile(adxf->stm);
         if (ADXSTM_GetStat(adxf->stm) == 4) {
             return -5;
         }
     }
-    adxf->fsize_byte = FUN_0026aa00(adxf->stm);
+    adxf->fsize_byte = ADXSTM_GetFileLen(adxf->stm);
     return adxf->fsize_byte;
 }
 

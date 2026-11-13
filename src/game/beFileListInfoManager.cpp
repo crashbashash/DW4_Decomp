@@ -55,6 +55,52 @@ extern "C" int igObject_Destroy(igObject *);
 extern "C" void Gap__Bec__beFileListInfoManager__vfunc_26(beFileListInfoManager *arg0);
 extern "C" int igInsightCore_AddInfo(int, igObject *);
 extern "C" int FUN_003817d0(beFileListInfoManager *arg0);
+extern "C" int igObject_IsKindOf(igObject *object, int meta);
+extern "C" int igResource_IsDirectoryLoaded(int resource, igDirectory *directory);
+extern "C" void igResource_UnloadDirectory(int resource, int name);
+extern "C" igObject *igResource_LoadDirectory(int resource, int *name);
+extern "C" int igObject_GetAllocator(...);
+extern "C" int Memory_GetAllocatorBySelector(int key);
+extern "C" unsigned char g_useOwnerAllocator;
+extern "C" int g_globalContext[4];
+extern "C" int g_igSceneInfo_metaObject[4];
+extern "C" int g_beLuaInfo_metaObject[4];
+extern "C" int g_ndmwAllocatorSelector[4];
+extern "C" int g_defaultAllocatorSelector[4];
+extern "C" char emptyString[];
+extern "C" char DAT_0050e6c8[];
+extern "C" int beFileListInfoManager_LoadNextFile(beFileListInfoManager *self, igStringRefList *fileNames);
+
+/* A pooled string held by reference: the count sits at p[-1], the chunk header at p[-2]. */
+struct StringRef {
+    int *p;
+    StringRef() {}
+    StringRef(const StringRef &other) : p(other.p) {}
+    ~StringRef() {
+        int *s = p;
+        if (s != 0) {
+            int *header = s - 2;
+            int count = s[-1] - 1;
+            s[-1] = count;
+            if (count == 0) StringChunk_ReleaseHeader(*header, header);
+        }
+    }
+};
+extern "C" StringRef StringList_CopyRetained(igStringRefList *list, int index);
+
+/* The one-word list entry List_InsertWords copies from. */
+struct InfoWord {
+    int *p;
+    InfoWord(int *info) : p(info) {}
+};
+
+static inline void insertReadInfo(beFileListInfoManager *self, int at, const InfoWord &entry) {
+    const InfoWord *word = (const InfoWord *)(int)&entry; /* matching construct: manual - the int round trip keeps the entry addressed through memory */
+    int *info = word->p;
+    int list = self->_readInfoList;
+    if (info != 0) info[1] = info[1] + 1;
+    List_InsertWords((void *)list, at, 1, (void *)word);
+}
 
 int FUN_0037f1b0(S *arg0, int arg1) {
     if (((VA *)arg0->o)->vX(arg1, (int)&DAT_0050e558[0]) != 0) {
@@ -190,6 +236,134 @@ void Gap__Bec__beFileListInfoManager__vfunc_26(beFileListInfoManager *arg0) {
         }
     }
     arg0->_loaded = 0;
+}
+
+/* Points one pool of the global context at the allocator `selector` names (the owner's allocator
+ * when g_useOwnerAllocator is set), holding a reference to it. */
+#define SET_POOL(pool, selector) { \
+    igResource *context; \
+    int allocator; \
+    int ownerAllocator = igObject_GetAllocator(self); \
+    igObject *old; \
+    if (g_useOwnerAllocator != 0) { allocator = ownerAllocator; } else { allocator = Memory_GetAllocatorBySelector(selector); } \
+    context = (igResource *)g_globalContext[0]; \
+    if (allocator != 0) ((igObject *)allocator)->_refCount = ((igObject *)allocator)->_refCount + 1; \
+    old = (igObject *)context->pool; \
+    if (old != 0) { \
+        old->_refCount = old->_refCount - 1; \
+        if (((unsigned long long)((long long)(int)old->_refCount << 0x29) >> 0x29) == 0) igObject_Destroy(old); \
+    } \
+    context->pool = allocator; }
+
+/* One step of loading the file list, called each frame until it returns 1 (every file loaded).
+ * With no directory pending it starts loading the next file, the first times switching the global
+ * context's pools to the ndmw allocator and then to the default one. Once that directory is loaded
+ * it sorts its infos: a Lua info goes straight to the insight core, a scene with cameras or whose
+ * scene graph is named ROOTATTR is important, any other scene is a plain info, and every other
+ * info is a read info. */
+int beFileListInfoManager_LoadNextFile(beFileListInfoManager *self, igStringRefList *fileNames) {
+    igDirectory *dir;
+    igInfoList *infos;
+    int offset;
+    int i;
+    int readIndex;
+    int j;
+    MetaVt *info;
+    int meta;
+    int *rootName;
+    igDirectoryList *dirs;
+    int fileCount = fileNames->_count;
+    if (self->_loaded >= fileCount) return 1;
+    dirs = (igDirectoryList *)self->_dirList;
+    if (dirs->_count != 0) {
+        dir = ((igDirectory **)dirs->_data)[0];
+        if (igResource_IsDirectoryLoaded(g_globalContext[0], dir) != 0) {
+            if (DAT_0050e6c8 == 0) {
+                rootName = 0;
+            } else {
+                if (g_stringPool[0] == 0) {
+                    int pool = StringPool_Allocate(0x10);
+                    if (pool != 0) { pool = StringPool_Construct(pool); }
+                    g_stringPool[0] = pool;
+                }
+                rootName = (int *)StringPool_Intern(g_stringPool[0], (int)DAT_0050e6c8);
+            }
+            StringRef rootAttr;
+            rootAttr.p = rootName;
+            infos = (igInfoList *)dir->_infoList;
+            i = 0;
+            if (i < infos->_count) {
+                offset = 0;
+                do {
+                    meta = g_beLuaInfo_metaObject[0];
+                    info = *(MetaVt **)(infos->_data + offset);
+                    if (meta == info->getMeta()) {
+                        igInsightCore_AddInfo(self->_insight, (igObject *)info);
+                    } else {
+                        meta = g_igSceneInfo_metaObject[0];
+                        if (meta == info->getMeta()) {
+                            igSceneInfo *scene;
+                            if (info != 0 && igObject_IsKindOf((igObject *)info, g_igSceneInfo_metaObject[0]) != 0) {
+                                scene = (igSceneInfo *)info;
+                            } else {
+                                scene = 0;
+                            }
+                            if (scene->_cameras != 0 && ((igObjectList *)scene->_cameras)->_count > 0) {
+                                ObjectList_AppendRetained((igObjectList *)self->_importantInfoList, (igObject *)info);
+                            } else {
+                                int *name = (int *)((igInfo *)scene->_sceneGraph)->_name;
+                                int *rootText = name ? name : (int *)emptyString;
+                                if (rootText == rootAttr.p) {
+                                    ObjectList_AppendRetained((igObjectList *)self->_importantInfoList, (igObject *)info);
+                                } else {
+                                    ObjectList_AppendRetained((igObjectList *)self->_infoList, (igObject *)info);
+                                }
+                            }
+                        } else {
+                            /* the test reads the new info's own type, so it never holds here */
+                            readIndex = -1;
+                            j = 0;
+                            if (j < ((igInfoList *)self->_readInfoList)->_count) {
+                                do {
+                                    int sceneMeta = g_igSceneInfo_metaObject[0];
+                                    if (sceneMeta == info->getMeta()) {
+                                        readIndex = j;
+                                        break;
+                                    }
+                                    j += 1;
+                                } while (j < ((igInfoList *)self->_readInfoList)->_count);
+                            }
+                            if (readIndex == -1) {
+                                ObjectList_AppendRetained((igObjectList *)self->_readInfoList, (igObject *)info);
+                            } else {
+                                insertReadInfo(self, readIndex, InfoWord((int *)info));
+                            }
+                        }
+                    }
+                    i += 1;
+                    offset += 4;
+                } while (i < infos->_count);
+            }
+            igResource_UnloadDirectory(g_globalContext[0], dir->_name);
+            CLEAR(igDirectoryList, self->_dirList)
+            self->_loaded = self->_loaded + 1;
+        }
+    } else {
+        int remaining = self->_onetimeCount;
+        if (remaining > -1) {
+            if (remaining == 2) {
+                SET_POOL(_objectMemoryPool, g_ndmwAllocatorSelector[0])
+                SET_POOL(_dataMemoryPool, g_ndmwAllocatorSelector[0])
+            } else if (remaining == 0) {
+                SET_POOL(_objectMemoryPool, g_defaultAllocatorSelector[0])
+                SET_POOL(_dataMemoryPool, g_defaultAllocatorSelector[0])
+            }
+            self->_onetimeCount = self->_onetimeCount - 1;
+        }
+        StringRef fileName(StringList_CopyRetained(fileNames, self->_loaded));
+        ObjectList_AppendRetained((igObjectList *)self->_dirList, igResource_LoadDirectory(g_globalContext[0], fileName.p));
+    }
+    return 0;
 }
 
 int FUN_003817d0(beFileListInfoManager *arg0) {

@@ -1,7 +1,7 @@
 extern int (*DAT_00481e64)(int c);
 unsigned long __fixunsdfdi(double value);
 int FUN_0010c8d8(unsigned long bits);
-int FUN_0010d0d0(const char *format, ...);
+int kprintf(const char *format, ...);
 void FUN_0010c970(double value) {
     double zero = 0.0;
     int exponent = 0;
@@ -22,10 +22,10 @@ void FUN_0010c970(double value) {
         }
     }
     digits = FUN_0010c8d8(__fixunsdfdi(value * 1000000.0));
-    FUN_0010d0d0("0.%d", digits);
+    kprintf("0.%d", digits);
     if (exponent >= 0) {
-        FUN_0010d0d0("e+%d", exponent);
+        kprintf("e+%d", exponent);
     } else {
-        FUN_0010d0d0("e%d", exponent);
+        kprintf("e%d", exponent);
     }
 }

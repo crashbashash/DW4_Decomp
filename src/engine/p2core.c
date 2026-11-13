@@ -185,8 +185,8 @@ int DeleteThread();
 int RemoveDmacHandler();
 int RemoveIntcHandler();
 int TerminateThread();
-int FUN_0010b9c0();
-int FUN_0010ba90();
+int DisableIntc();
+int DisableDmac();
 int FUN_001f76f0();
 int FUN_00202300();
 int FUN_00203500();
@@ -1486,13 +1486,13 @@ void p2CloseDisplay(void) {
     if (p2FirstOpen == 0) {
         printf("Alchemy display closed\n");
         p2DisplayClosing = 1;
-        if (FUN_0010ba90(P2_DMA_VIF1) == 0) {
+        if (DisableDmac(P2_DMA_VIF1) == 0) {
             printf(" VIF1 already disabled\n");
         }
-        if (FUN_0010ba90(P2_DMA_VIF0) == 0) {
+        if (DisableDmac(P2_DMA_VIF0) == 0) {
             printf(" VIF0 already disabled\n");
         }
-        if (FUN_0010ba90(P2_DMA_GIF) == 0) {
+        if (DisableDmac(P2_DMA_GIF) == 0) {
             printf(" GIF already disabled\n");
         }
         if (RemoveDmacHandler(P2_DMA_VIF1, p2DmaHandlerIds[P2_DMA_VIF1]) == -1) {
@@ -1505,14 +1505,14 @@ void p2CloseDisplay(void) {
             printf("Error removing GIF dmac handler\n");
         }
         p2ShutdownTimer();
-        FUN_0010b9c0(P2_INTC_GS);
+        DisableIntc(P2_INTC_GS);
         RemoveIntcHandler(P2_INTC_GS, p2GsIntcHandlerId);
         if (p2VblankStartIntcHandlerId != -1) {
-            FUN_0010b9c0(P2_INTC_VBLANK_START);
+            DisableIntc(P2_INTC_VBLANK_START);
             RemoveIntcHandler(P2_INTC_VBLANK_START, p2VblankStartIntcHandlerId);
         }
         if (p2Vif1IntcHandlerId != -1) {
-            FUN_0010b9c0(P2_INTC_VIF1);
+            DisableIntc(P2_INTC_VIF1);
             RemoveIntcHandler(P2_INTC_VIF1, p2Vif1IntcHandlerId);
         }
         TerminateThread(p2WatchdogThread);

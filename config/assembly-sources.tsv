@@ -21,10 +21,10 @@ strncpy	src/newlib/strncpy.S	#the-r5900-string-and-memory-routines
 SetGsCrt	src/sony/libkernl/klib.S	#libkernl-syscall-stubs
 _Exit	src/sony/libkernl/klib.S	#libkernl-syscall-stubs
 _LoadExecPS2	src/sony/libkernl/klib.S	#libkernl-syscall-stubs
-FUN_0010ab30	src/sony/libkernl/klib.S	#libkernl-syscall-stubs
+_ExecPS2	src/sony/libkernl/klib.S	#libkernl-syscall-stubs
 SetVTLBRefillHandler	src/sony/libkernl/klib.S	#libkernl-syscall-stubs
 AddIntcHandler	src/sony/libkernl/klib.S	#libkernl-syscall-stubs
-AddIntcHandler__0010abd0	src/sony/libkernl/klib.S	#libkernl-syscall-stubs
+AddIntcHandler2	src/sony/libkernl/klib.S	#libkernl-syscall-stubs
 RemoveIntcHandler	src/sony/libkernl/klib.S	#libkernl-syscall-stubs
 AddDmacHandler	src/sony/libkernl/klib.S	#libkernl-syscall-stubs
 AddDmacHandler__0010ac00	src/sony/libkernl/klib.S	#libkernl-syscall-stubs
@@ -84,3 +84,6 @@ _ExecOSD	src/sony/libkernl/klib.S	#libkernl-syscall-stubs
 Deci2Call	src/sony/libkernl/klib.S	#libkernl-syscall-stubs
 GetMemorySize	src/sony/libkernl/klib.S	#libkernl-syscall-stubs
 _InitTLB	src/sony/libkernl/klib.S	#libkernl-syscall-stubs
+_start	src/runtime/crt0.S	#the-start-up-file
+_exit	src/runtime/crt0.S	#the-start-up-file
+_root	src/runtime/crt0.S	#the-start-up-file

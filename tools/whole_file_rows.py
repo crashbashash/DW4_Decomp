@@ -8,19 +8,24 @@ unit's profile, then:
   members    each `.text` function is found in the retail range by its bytes, relocated fields
              masked; a name symbols.txt already places wins, and a `--at name=va` settles a
              function that fits more than one retail start
-  duplicates a compiled function outside the range that a member still calls or names in its
-             exception table: the retail linker kept another file's copy, found at the address
-             the retail call or table word holds. A copy kept from a unit of another profile (a
-             profile twin) must be reproduced as tools/verify.py checks it: the same source
-             compiled under that unit's profile, at the retail extent
+  duplicates a compiled function outside the range that a member still calls, that a vtable or
+             other datum the file keeps names, or that an exception table names: the retail
+             linker kept another file's copy, found at the address the retail call, data or table
+             word holds, and what that copy reaches is walked in turn. A copy kept from a unit of
+             another profile (a profile twin) must be reproduced as tools/verify.py checks it: the
+             same source compiled under that unit's profile, at the retail extent
   stripped   any other compiled function with no retail copy: the retail linker dropped it
-  data       each referenced datum's address, read back from the retail relocation fields. A float
-             or double literal has no row: each reference reads the pool entry its retail
-             instruction names, which must hold the literal's bytes (verify.fold_literals), and
-             one literal may be read at several entries
+  data       each datum a member, a duplicate, a kept datum or an exception table references (a
+             type string only a `throw()` specification names), its address read back from the
+             retail relocation fields. A float or double literal has no row: each reference reads
+             the pool entry its retail instruction names, which must hold the literal's bytes
+             (verify.fold_literals), and one literal may be read at several entries
   externals  each call out of the file, read from the retail `jal` of a member or of a duplicate's
-             retail copy, and each function out of the file a member's exception table names (a
-             cleanup destructor no member calls), read from the retail table word
+             retail copy, and each function out of the file an exception table names (a cleanup
+             destructor no member calls), read from the retail table word
+  symbol     the owner's compiler name when symbols.txt names it otherwise: a C++ file's mangled
+             owner, or a `static` several files define (`setup`, which symbols.txt calls
+             `setup_libosd`)
 
 A retail function in the range that no compiled function reproduces stops the run with its name:
 the compile is wrong, and writing rows would hide it behind `stripped`. A source file that is still
@@ -35,8 +40,10 @@ a start another function owns: stock `lua_dofile` and `lua_dobuffer` fit one ret
 a call target tells them apart; two inline destructors of one shape do too, and the one a member
 still reaches becomes a duplicate.
 
-The rows go to stdout as JSON. `--write` merges them into unit-objects.json and replaces the
-units.tsv rows inside the range with one per file. `--names` writes a `.tsv` for
+The rows go to stdout as JSON. `--write` merges them into unit-objects.json, replacing the
+whole-file rows inside the range and each row of a function the file now places (a row of a
+function the file leaves out stays), and replaces the units.tsv rows inside the range with one per
+file. `--names` writes a `.tsv` for
 tools/apply_names.py, which is what moves `FUN_` names to the library's own.
 
 Usage:
@@ -200,51 +207,109 @@ def locate(functions, retail, starts, placed, dropped=()):
     return found
 
 
-def data_rows(function_at, retail, syms, headers, obj, functions, names, hi):
-    """(data, externals) of one file, walking from its kept functions through the data they reach."""
-    data, externals, seen = {}, {}, set()
-    work = [(va, functions[name].section) for name, va in function_at.items()]
+def reach(function_at, retail, syms, headers, obj, functions, records, names, hi, twins=None):
+    """(data, duplicates, externals) of one file: what its placed members reach in retail.
+
+    The walk starts at each member's body and its retail exception table and follows every
+    relocation, as verify keeps a section live (verify.dead_data):
+      a compiled function outside the file is a duplicate: an inline destructor a member calls, a
+      virtual function a reached vtable names, a cleanup an exception table names. The retail
+      linker kept another file's copy, at the address the retail `jal`, `lui`/`addiu` pair or data
+      word holds, and that copy must fit there: the compiled one, or the profile twin
+      `twins(name, address)` returns when another unit's profile built it. Its body and table are
+      walked in turn, so a body a kept vtable names is never `stripped` (verify.unreferenced)
+      a datum is read back from the retail relocation fields and its section walked in turn: a
+      vtable, an RTTI record, a type string only an exception table names
+      a call out of the file is an external, read from the retail `jal`; a call only a duplicate
+      makes (`operator delete` in an inline destructor) has no member's `jal` to be read from
+    A twin is read for its calls and the functions it reaches only: its data are the twin object's,
+    compared under that profile. A function an exception table names and nothing in the file
+    defines is table_externals'."""
+    tables = exception_tables(syms, headers, obj, functions)
+    data, duplicates, externals, seen, work = {}, {}, {}, set(), []
+
+    def walk_section(base, index):
+        work.append((base, verify.object_section(obj, headers[index][0], index),
+                     verify.object_relocs(obj, target_section=index),
+                     "table" if headers[index][0] == ".exception" else "data", index))
+
+    def walk_body(name, address, copy):
+        own = copy is functions[name]
+        work.append((address, copy.raw, copy.relocs, "data" if own else "twin", (name, address)))
+        if own:     # a twin's record and table belong to its unit's compile, as in verify
+            for table_va, index in table_fields({name: address}, tables, records):
+                walk_section(table_va, index)
+
+    for name, va in function_at.items():
+        walk_body(name, va, functions[name])
     while work:
-        base, section = work.pop()
-        if section in seen:
+        base, raw, relocs, mode, key = work.pop()
+        if key in seen:
             continue
-        seen.add(section)
-        raw = verify.object_section(obj, headers[section][0], section)
-        relocs = verify.object_relocs(obj, target_section=section)
+        seen.add(key)
         for index, (_section, offset, kind, name, _addend) in enumerate(relocs):
-            if name in functions or (name in names and (kind == R_26 or names[name] < hi)):
+            if name in function_at or kind == R_LO16:
                 continue
-            home = syms.get(name, (None,))[0]
-            if isinstance(home, int) and headers[home][0] in verify.LITERAL_SECTIONS:
-                continue        # a literal has no row: literals() proves each reference
             field = retail.word(base + offset)
             own = struct.unpack_from("<I", raw, offset)[0]
+            if name in functions:
+                if kind == R_26:
+                    address = (base & 0xf0000000) | ((field & 0x3ffffff) << 2)
+                elif kind == R_32:
+                    address = (field - own) & 0xffffffff
+                elif kind == R_HI16:
+                    address = pair_address(retail, base, raw, relocs, index, field, own)
+                else:
+                    sys.exit("%s: relocation type %d against function %s" % (obj, kind, name))
+                if duplicates.get(name, address) != address:
+                    sys.exit("%s: %s reads as 0x%x and 0x%x" % (obj, name, duplicates[name], address))
+                if name not in duplicates:
+                    copy = (twins(name, address) if twins else None) or functions[name]
+                    if not copy.fits(retail, address):
+                        sys.exit("%s: %s is reached at 0x%x, which holds other code" % (obj, name, address))
+                    duplicates[name] = address
+                    walk_body(name, address, copy)
+                continue
+            home = syms.get(name, (None,))[0]
+            if (mode == "twin" and kind != R_26) or (mode == "table" and not isinstance(home, int)):
+                continue
+            if name in names and (kind == R_26 or names[name] < hi):
+                continue
+            if isinstance(home, int) and headers[home][0] in verify.LITERAL_SECTIONS:
+                continue        # a literal has no row: literals() proves each reference
             if kind == R_26:
-                externals[name] = (base & 0xf0000000) | ((field & 0x3ffffff) << 2)
+                target = (base & 0xf0000000) | ((field & 0x3ffffff) << 2)
+                if externals.get(name, target) != target:
+                    sys.exit("%s: %s reads as 0x%x and 0x%x" % (obj, name, externals[name], target))
+                externals[name] = target
                 continue
             if kind == R_HI16:
-                low = next(r for r in relocs[index + 1:] if r[2] == R_LO16 and r[3] == name)
-                retail_low = retail.word(base + low[1])
-                own_low = struct.unpack_from("<I", raw, low[1])[0]
-                address = (((field & 0xffff) << 16) + sext(retail_low & 0xffff)
-                           - ((own & 0xffff) << 16) - sext(own_low & 0xffff))
-            elif kind == R_LO16:
-                continue
+                address = pair_address(retail, base, raw, relocs, index, field, own)
             elif kind == R_GPREL16:
-                address = retail.gp + sext(field & 0xffff) - sext(own & 0xffff)
+                address = (retail.gp + sext(field & 0xffff) - sext(own & 0xffff)) & 0xffffffff
             elif kind == R_32:
-                address = field - own
+                address = (field - own) & 0xffffffff
             else:
                 sys.exit("%s: relocation type %d against %s" % (obj, kind, name))
-            address &= 0xffffffff
             if name in names:
                 continue
             if data.get(name, address) != address:
                 sys.exit("%s: %s reads as 0x%x and 0x%x" % (obj, name, data[name], address))
             data[name] = address
             if isinstance(home, int):
-                work.append((address - syms[name][1], home))
-    return data, externals
+                walk_section(address - syms[name][1], home)
+    return data, duplicates, externals
+
+
+def pair_address(retail, base, raw, relocs, index, field, own):
+    """The address the `lui` of relocation `index` and its low half name in retail, less the
+    compiled addend."""
+    name = relocs[index][3]
+    low = next(r for r in relocs[index + 1:] if r[2] == R_LO16 and r[3] == name)
+    retail_low = retail.word(base + low[1])
+    own_low = struct.unpack_from("<I", raw, low[1])[0]
+    return (((field & 0xffff) << 16) + sext(retail_low & 0xffff)
+            - ((own & 0xffff) << 16) - sext(own_low & 0xffff)) & 0xffffffff
 
 
 def literals(function_at, duplicates, retail, syms, headers, obj, functions, data, deferred=()):
@@ -268,72 +333,27 @@ def literals(function_at, duplicates, retail, syms, headers, obj, functions, dat
         sys.exit("%s: %s" % (obj, errors[0]))
 
 
-def table_fields(function_at, syms, headers, obj, functions, records):
-    """[(retail table va, `.exception` section)] of the placed members whose retail record has a table."""
-    compiled = {name: (function_at.get(name), f.section, len(f.raw)) for name, f in functions.items()}
-    return [(records[function_at[name]][1], table)
-            for name, (_index, table) in verify.group_exception_sections(obj, headers, syms, compiled).items()
-            if table is not None and name in function_at and function_at[name] in records
-            and records[function_at[name]][1]]
+def exception_tables(syms, headers, obj, functions):
+    """{name: `.exception` section} of the compiled functions that have a table."""
+    compiled = {name: (None, f.section, len(f.raw)) for name, f in functions.items()}
+    return {name: table for name, (_index, table)
+            in verify.group_exception_sections(obj, headers, syms, compiled).items() if table is not None}
 
 
-def duplicate_rows(function_at, retail, syms, headers, obj, functions, records, twins=None):
-    """{name: va} for the compiled functions outside the file's retail range that a placed member
-    still reaches: an inline destructor or helper the retail linker kept from another file.
-    The address is read from the retail field that reaches it, a `jal` of a placed body or a
-    word of the member's retail exception table, and the body must fit there: the compiled one,
-    or the profile twin `twins(name, address)` returns when another unit's profile built it."""
-    fields = [(va, functions[name].section) for name, va in function_at.items()]
-    fields += table_fields(function_at, syms, headers, obj, functions, records)
-    out = {}
-    for base, section in fields:
-        raw = verify.object_section(obj, headers[section][0], section)
-        for _section, offset, kind, name, _addend in verify.object_relocs(obj, target_section=section):
-            if name not in functions or name in function_at:
-                continue
-            field = retail.word(base + offset)
-            if kind == R_26:
-                address = (base & 0xf0000000) | ((field & 0x3ffffff) << 2)
-            elif kind == R_32:
-                address = (field - struct.unpack_from("<I", raw, offset)[0]) & 0xffffffff
-            else:
-                continue
-            if out.get(name, address) != address:
-                sys.exit("%s: %s reads as 0x%x and 0x%x" % (obj, name, out[name], address))
-            copy = (twins(name, address) if twins else None) or functions[name]
-            if not copy.fits(retail, address):
-                sys.exit("%s: %s is reached at 0x%x, which holds other code" % (obj, name, address))
-            out[name] = address
-    return out
+def table_fields(placed, tables, records):
+    """[(retail table va, `.exception` section)] of the placed bodies whose retail record has a table."""
+    return [(records[va][1], tables[name]) for name, va in placed.items()
+            if name in tables and va in records and records[va][1]]
 
 
-def duplicate_externals(duplicates, retail, functions, names, externals, twins=None):
-    """`externals` with the calls out of the file that the duplicates make, read from the `jal`
-    of retail's copy: the copy is relocated with the row's externals when it is checked, and a
-    call only a duplicate makes (`operator delete` in an inline destructor) has no member's `jal`
-    to be read from."""
+def table_externals(placed, retail, syms, headers, obj, functions, records, names, data, externals, starts):
+    """`externals` with the functions out of the file that an exception table of a member or
+    duplicate names and nothing in the file defines: a cleanup destructor that is declared only and
+    that no member calls (`__dt__10igNodeViewFv` in a GetVTable whose base subobject is torn down on
+    unwind). The address is the retail table word less the compiled addend, as verify resolves the
+    table word, and it must start a retail function in `starts`; verify then compares the table bytes."""
     out = dict(externals)
-    for name, address in duplicates.items():
-        copy = (twins(name, address) if twins else None) or functions[name]
-        for _section, offset, kind, symbol, _addend in copy.relocs:
-            if kind != R_26 or symbol in functions or symbol in names:
-                continue
-            target = (address & 0xf0000000) | ((retail.word(address + offset) & 0x3ffffff) << 2)
-            if out.get(symbol, target) != target:
-                sys.exit("%s: %s reads as 0x%x and 0x%x" % (name, symbol, out[symbol], target))
-            out[symbol] = target
-    return out
-
-
-def table_externals(function_at, retail, syms, headers, obj, functions, records, names, data, externals,
-                    starts):
-    """`externals` with the functions out of the file that a member's exception table names and
-    nothing in the file defines: a cleanup destructor that is declared only and that no member
-    calls (`__dt__10igNodeViewFv` in a GetVTable whose base subobject is torn down on unwind).
-    The address is the retail table word less the compiled addend, as verify resolves the table
-    word, and it must start a retail function in `starts`; verify then compares the table bytes."""
-    out = dict(externals)
-    for base, section in table_fields(function_at, syms, headers, obj, functions, records):
+    for base, section in table_fields(placed, exception_tables(syms, headers, obj, functions), records):
         raw = verify.object_section(obj, headers[section][0], section)
         for _section, offset, kind, name, _addend in verify.object_relocs(obj, target_section=section):
             if (name in functions or name in names or name in data
@@ -387,6 +407,21 @@ def units_rows(path, lo, hi, rows):
                 line = "\t".join(fields)
         out.append(line)
     open(path, "w").writelines(out)
+
+
+def merge_rows(overlay, lo, hi, rows):
+    """unit-objects.json `overlay` with `rows` in place of the rows they supersede inside [lo, hi):
+    each whole-file row, and each row that places a function the new rows place (a function's own
+    row before it joined its file). A row of a function the file does not define, such as a held-out
+    function a partial file leaves to its own source, stays."""
+    placed = {int(key, 16) for key in rows} | {int(va, 16) for row in rows.values()
+                                               for va in row.get("emitted", {}).values()}
+    for key in [k for k in overlay if lo <= int(k, 16) < hi]:
+        row = overlay[key]
+        if row.get("whole_file") or placed & ({int(key, 16)} | {int(va, 16) for va in row.get("emitted", {}).values()}):
+            del overlay[key]
+    overlay.update(rows)
+    return overlay
 
 
 def main(argv=None):
@@ -454,12 +489,12 @@ def main(argv=None):
             if not at:
                 print("%-10s no retail function: the linker dropped the file" % stem, file=sys.stderr)
                 continue
-            data, externals = data_rows(at, retail, syms, headers, obj, functions, known, hi)
-            duplicates = duplicate_rows(at, retail, syms, headers, obj, functions, records, twins)
-            literals(at, duplicates, retail, syms, headers, obj, functions, data,
-                     {name for name, va in duplicates.items() if twins(name, va)})
-            externals = duplicate_externals(duplicates, retail, functions, known, externals, twins)
-            externals = table_externals(at, retail, syms, headers, obj, functions, records, known, data,
+            data, duplicates, externals = reach(at, retail, syms, headers, obj, functions, records, known, hi,
+                                                twins)
+            twinned = {name for name, va in duplicates.items() if twins(name, va)}
+            literals(at, duplicates, retail, syms, headers, obj, functions, data, twinned)
+            externals = table_externals({**at, **{n: v for n, v in duplicates.items() if n not in twinned}},
+                                        retail, syms, headers, obj, functions, records, known, data,
                                         externals, by_va)
             members = sorted((va, name) for name, va in at.items())
             row = {"whole_file": True,
@@ -472,7 +507,8 @@ def main(argv=None):
                 row["stripped"] = stripped
             if externals:
                 row["externals"] = {k: "0x%08x" % v for k, v in sorted(externals.items())}
-            if a.cxx:
+            if a.cxx or by_va.get(members[0][0], (members[0][1],))[0] != members[0][1]:
+                # a mangled owner, or a `static` several files define that symbols.txt names apart
                 row["symbol"] = members[0][1]
             rows["0x%08x" % members[0][0]] = row
             last = members[-1]
@@ -492,10 +528,7 @@ def main(argv=None):
                 fh.write("0x%08x\t%s\n" % (va, name.split("__F")[0] if a.cxx else name))
     if a.write:
         path = os.path.join(a.config, "unit-objects.json")
-        overlay = json.load(open(path))
-        for key in [k for k in overlay if lo <= int(k, 16) < hi]:
-            del overlay[key]
-        overlay.update(rows)
+        overlay = merge_rows(json.load(open(path)), lo, hi, rows)
         with open(path, "w") as fh:
             json.dump(overlay, fh, indent=2)
             fh.write("\n")

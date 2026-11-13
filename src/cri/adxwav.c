@@ -155,11 +155,11 @@ int ADXB_CheckWav(unsigned char *hdr)
 
 void ADXB_ExecOneWav(AdxbObj *obj)
 {
-    if (obj->f156 == ADXB_PCM_4) {
+    if (obj->pcmfmt == ADXB_PCM_4) {
         ADXB_ExecOneWav16Le(obj);
-    } else if (obj->f156 == ADXB_PCM_8) {
+    } else if (obj->pcmfmt == ADXB_PCM_8) {
         ADXB_ExecOneWav8(obj);
-    } else if (obj->f156 == ADXB_PCM_16) {
+    } else if (obj->pcmfmt == ADXB_PCM_16) {
         ADXB_ExecOneWav16(obj);
     }
 }

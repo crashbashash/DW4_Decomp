@@ -29,7 +29,7 @@ int strncmp(const char *a, const char *b, unsigned int count);
 int memcmp(const void *a, const void *b, unsigned int count);
 int atoi(const char *text);
 unsigned long strtoul(const char *text, char **end, int radix);
-int FUN_0026f4b0(const char *name, int *value);
+int CRICFG_Read(const char *name, int *value);
 
 extern char DAT_004f59c0[];
 extern char DAT_004f59f8[];
@@ -227,7 +227,7 @@ unsigned long FUN_002b5758(char *text, char **end, int radix) {
 
 int FUN_002b5838(char *header);
 
-void FUN_002b5770(char *text, int length, char **found, int *value) {
+void SUD_FindTag(char *text, int length, char **found, int *value) {
     int i;
     *value = 0;
     *found = 0;
@@ -248,7 +248,7 @@ int FUN_002b5838(char *header) {
 
 void FUN_002b5848(int channel) {
     int value;
-    if (FUN_0026f4b0(DAT_004f5a90, &value) == 0) {
+    if (CRICFG_Read(DAT_004f5a90, &value) == 0) {
         channel = value;
     }
     DAT_004bf290++;
@@ -260,7 +260,7 @@ void FUN_002b5848(int channel) {
         FUN_002b5ce0(1);
         return;
     }
-    FUN_002b5ce0(FUN_0026f4b0(DAT_004f5a98, &value) == 0 ? (unsigned int)value : 0x8CA00);
+    FUN_002b5ce0(CRICFG_Read(DAT_004f5a98, &value) == 0 ? (unsigned int)value : 0x8CA00);
     DAT_004bf298 = *DAT_004f5a70[channel];
     if ((DAT_004bf298 & 0xC7) != 0x82) {
         *DAT_004f5a80[channel] = 0;

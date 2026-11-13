@@ -7,8 +7,8 @@ struct FolderStringRef;
 extern "C" {
 extern int DAT_00586f20;
 int sceDopen(int);
-int FUN_00110bf8(int);
-int FUN_00110d60(int, FolderEntry *);
+int sceDclose(int);
+int sceDread(int, FolderEntry *);
 int StringPool_Allocate(int);
 int StringPool_Construct(int);
 char *StringPool_Intern(int, char *);
@@ -16,7 +16,7 @@ void StringChunk_ReleaseHeader(int, int *);
 FolderObject *igStringRefList_Create(int);
 FolderPathText *FUN_002b9500(int);
 int FUN_0030b7e0(FolderPathText *, const char *, int, char *);
-int FUN_00110eb8(const char *, FolderFileStat *);
+int sceGetstat(const char *, FolderFileStat *);
 extern char DAT_004f9a78[];
 extern char *DAT_004c22f0;
 int igObject_GetAllocator(FolderSelf *);
@@ -64,11 +64,11 @@ FolderObjectRef Gap__Core__igPsx2Folder__vfunc_24(FolderSelf *self) {
     list.obj = igStringRefList_Create(igObject_GetAllocator(self));
     FolderObjectRef path;
     path.obj = FUN_002b9500(igObject_GetAllocator(self));
-    while (FUN_00110d60(handle, &entry) != 0) {
+    while (sceDread(handle, &entry) != 0) {
         FUN_0030b7e0((FolderPathText *)path.obj, DAT_004f9a78, self->path, (char *)&entry + 64);
         char *full = ((FolderPathText *)path.obj)->text;
         full = (full == 0) ? DAT_004c22f0 : full;
-        if (FUN_00110eb8(full, &st) != 0) {
+        if (sceGetstat(full, &st) != 0) {
             continue;
         }
         if ((st.mode & 0xf000) == 0x1000) {
@@ -91,6 +91,6 @@ FolderObjectRef Gap__Core__igPsx2Folder__vfunc_24(FolderSelf *self) {
         FolderStringRef text(interned);
         StringList_AppendRetained(list.obj, &text);
     }
-    FUN_00110bf8(handle);
+    sceDclose(handle);
     return list;
 }

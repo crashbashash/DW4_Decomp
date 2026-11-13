@@ -91,7 +91,7 @@ Index: [`../README.md`](../README.md).
 | `m2c-bulk.md` | **The bulk decompilation pipeline**: the vendored `m2c` over the functions templates cannot reach: the driver, the mechanical cleaner, the address-form problem, what it measured, the symbolizer's `%lo` bug, the measured negatives, and the pitfalls. |
 | `naming.md` | **Naming and the module loop**: the committed `config/SLUS-20836/names/` overlay, `tools/apply_names.py`, why names live in the repo rather than only in Ghidra, and what counts as a recovered name |
 | `progress-metrics.md` | **The two progress numbers**: what "code bytes matched" and "data bytes identified" each mean, the classification behind the data figure (strings, RTTI vtables, jump tables, class handles, the unclassified remainder), and how `PROGRESS.md` / `docs/progress.json` / the README block are generated |
-| `function-inventory.md` | **The function inventory (the denominator)**: how `config/SLUS-20836/symbols.txt` is built (the instruction model, the eight promotion rules and their counts, the `cut`/`merge`/`start` extent rows), the scan that keeps unowned code from growing back (`scripts/inventory_scan.py`, `make inventory-check`, debt counter `inventory.unsymbolised_bytes`), the residual classes and the before/after numbers |
+| `function-inventory.md` | **The function inventory (the denominator)**: how `config/SLUS-20836/symbols.txt` is built (the instruction model, the eight promotion rules and their counts, the `cut`/`merge`/`start`/`data` extent rows), the scan that keeps unowned code from growing back (`scripts/inventory_scan.py`, `make inventory-check`, debt counter `inventory.unsymbolised_bytes`), the residual classes and the before/after numbers |
 | `debt-ratchet.md` | **The debt counters that may only go down**: code-only/name-defect/inventory-gap units, asm bodies, unmatched functions, struct-report groups, m2c idioms, raw reflected casts, `FUN_`/`DAT_` references, orphan bytes; `tools/progress.py --debt-check` against `config/debt-baseline.json`, and how an increase is recorded with its reason |
 | `typed-coverage.md` | **How much of the matched C speaks in recovered structs**: current global measurement, completed 316-file typing pass, receiver hypotheses, descriptor validation and the recovery methods |
 | `typed-game-layer.md` | **Struct recovery for the game layer**: current scoped measurement and the reference-field target table |
@@ -105,7 +105,7 @@ Related: game systems and data are in [`../systems/`](../systems); the analysis 
 [`../../scripts/`](../../scripts), and the build tooling in [`../../tools/`](../../tools).
 
 | [`platform-seam.md`](platform-seam.md) | The platform seam as an inventory: 32 `igPsx2*` classes, 31 of them under 30 generic interfaces with 153 fields (`igPsx2IopRpcConnection` derives from `igObject`; it is the RPC seam and is deleted), recovered from the class hierarchy + reflection |
-| [`engine-boot.md`](engine-boot.md) | **The boot chain**: the CRT entry (`0x100008`) → the game's `main` (`FUN_002595e0`) → the managers and the frame loop (`FUN_0025a580`/`FUN_0025a8c0`) |
+| [`engine-boot.md`](engine-boot.md) | **The boot chain**: the CRT entry (`_start`, `0x100008`) → the game's `main` (`0x002595e0`) → the managers and the frame loop (`FUN_0025a580`/`FUN_0025a8c0`) |
 | [`front-end-boot.md`](front-end-boot.md) | **The front-end boot, power-on to the title menu**: the logos → opening FMV → title → menu sequence is a chain of `NDMW.AFS` stage entries (800…814) that drive the scene stages `stagIS08/09/10/12`, switched by the Lua `STAGECTL NEXTSTAGE` API; and the controllers (`beNDMWStageCtl`, `beNDMWLoadCtrl2`, `beNDMWTitle2`, `beNDMWLogo`) |
 | [`common-model-controller.md`](common-model-controller.md) | Common-model submission, reference lifetime and newest-first completion queues |
 | [`title-menu-controller.md`](title-menu-controller.md) | Title runtime: nine functions, scoped references, three switch tables and exception metadata; remaining frontend modules |
@@ -156,6 +156,28 @@ Related: game systems and data are in [`../systems/`](../systems); the analysis 
 - [CRI MPEG start-code scanner](cri-startcode.md): the Sofdec file that classifies and finds MPEG start codes; its extent, why it compiles whole, and what is still unknown.
 - [CRI MWSFD frame conversion over SFX](cri-mwsfsfx.md): the Sofdec player's front end over CRI SFX; its extent, why it compiles whole, the enum-typed chroma values, and what is still unknown.
 - [sd-prologue](sd-prologue.md): the `sd` callee-saved prologue is Sony EE GCC output (the SDK and CRI blocks); census, evidence, and how the Sony compiler builds these units.
+- [CRI ADX before ADXB](cri-adxamp-readers-skg.md): ADXAMP, the AC-3/AHX glue, the AIFF/AU readers and SKG as whole files; extents, evidence, open questions.
+- [CRI ADXSTM and the PS2 file-system setup](cri-adxstm.md): the file-stream module and the disc, host and memory setup files; extents, the stream object, open questions.
+- [CRI ADXT](cri-adxt.md): the ADXT playback handle and its server (state machine, loop and link traps, error checks); extents, evidence, open questions.
+- [CRI PL2ENC, ADXT Pro Logic II, PS2RNA, SJCRS/SJERR/SJMEM](cri-ps2rna-sj.md): the Pro Logic II encoder and its ADXT attach, the IOP renderer and the SJ critical section, error report and memory joint.
+- [CRI SJ and SVM](cri-sj-svm.md): SJRBF, SJUNI, the SJ tag utilities, SJRMT, SJX and the server manager; extents, evidence, open questions.
+- [CRI MPS and MPV front files](cri-mps-mpv-files.md): the MPS demultiplexer and MPV header files; extents and evidence.
+- [CRI MPV core and MWSFD player creation](cri-mpv-mwsfcre.md): src/cri/mpv.c and src/cri/mwsfcre.c; extents, the shared types, open questions.
+- [CRI MWSFD core, frame side and player control](cri-mwsfd-core.md): the MWSFD frame file, core and player control; extents, evidence, what still links from retail.
+- [CRI MWSFD settings, scratchpad swap and player getters](cri-mwsfd-settings.md): the two files before mwsfsfx.c; extents from the mwPly string run, the scratchpad swap, open parameter names.
+- [CRI MWSFD seamless, SST, server and stream files](cri-mwsfd-files.md): the four files between the SFX front end and SFADX; extents, evidence, open questions.
+- [CRI SFD core](cri-sfd-core.md): sync queues, stream analysis, header, library core, supply and MPS handlers; extents, evidence, open questions.
+- [CRI SFD output handlers, SFH and SFX alpha](cri-sfh-files.md): the output handler, SFH header and SFX alpha files; extents, evidence, open questions.
+- [Metrowerks runtime](runtime-metrowerks.md): start-up, double support, new/delete and the C++ exception handler at the front of the image; the eight files, the exception record format, open questions.
+- [Viewer GUI factory](viewer-gui-factory.md): igViewerGuiFactory's actions and default colour-changer colours; extent and open questions.
+- [Sony libdma](sony-libdma.md): libdma as one file; extent from the SDK member, its data.
+- [Sony libmpeg decoding files](sony-libmpeg-decoding.md): libmpeg's mpc, ext and picture files; extents, evidence, the hand-written MMI kernels.
+- [Sony libmpeg output to default handlers](sony-libmpeg-files.md): libmpeg's output, CSC, public-interface (mpeg.c), error, sequence-header and default-handler files.
+- [Sony libkernl klib to deci2](sony-libkernl-files.md): libkernl's klib, glue, cache, intr, thread and deci2 members as whole files; extents, evidence, data.
+- [Sony libkernl SIF](sony-libkernl-sif.md): libkernl's SIF command and RPC files; extents and shared types.
+- [Sony libkernl IOP clients](sony-libkernl-iop-clients.md): libkernl's filestub, iopheap and eeloadfile files; extents from the SDK member layout, the shared request buffers.
+- [Sony libkernl system files](sony-libkernl-sys.md): libkernl's IOP reset, kernel patches, timer and alarms as whole files.
+- [Sony libpad](sony-libpad.md): libpad as one whole file (the padman.irx RPC clients, pad DMA frames, send_to_iop, port open); extent evidence, why the stores compile in retail's order.
 - [getvtable-fold](getvtable-fold.md): the plain-family `*_GetVTable` stack-offset fold: the measured MWCC wall behind the 983 accessors, what was tried, and the family's generators.
 - [assembly-sources](assembly-sources.md): hand-written `.S` routines the owner approved (`config/assembly-sources.tsv`), the evidence each needs, and the candidates still open.
 - [source-approvals](source-approvals.md): inline `asm` and `volatile` the owner approved (`config/source-approvals.tsv`), and the `unapproved` category for the rest.

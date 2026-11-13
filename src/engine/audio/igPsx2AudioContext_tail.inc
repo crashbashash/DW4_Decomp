@@ -264,7 +264,7 @@ void FUN_00144030(int *arg0, UploadContext *arg1, int arg2, int arg3, int arg4, 
     p[1] = arg5;
     p[2] = arg4;
     p[3] = arg3 & 0xDFFFFFFF;
-    FUN_0010b7d8(arg3, arg3 + arg5);
+    SyncDCache(arg3, arg3 + arg5);
     if (s3) {
         FUN_0032d6d0(&spAC, arg1->h, arg2 | 0x70000, p, 16, 0, 0, 0);
         if (arg8 != 0) {

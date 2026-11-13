@@ -422,11 +422,18 @@ def main(argv=None):
                 kind = "assembly"
             elif kind == "match":
                 # read after the cache: approving a row changes the category, not the compile
+                src_path, row = src_index[nm], None
                 owner = unitobjects.source_owner(nm, a.symbols, a.unit_objects)
-                if owner != nm and sourceapprovals.defines(src_index[nm], nm):
+                if sourceapprovals.defines(src_path, nm):
                     # a whole-file member is its own definition: it answers for its own uses
                     owner = nm
-                why = sourceapprovals.problem(src_index[nm], owner, approvals)
+                else:
+                    # a static the symbol map names apart (`Copy_tlbfunc` for the source's `Copy`): its
+                    # uses are counted under the source's name, and its row names the symbol
+                    member = unitobjects.source_name(nm, a.symbols, a.unit_objects)
+                    if member != nm and sourceapprovals.defines(src_path, member):
+                        owner, row = member, nm
+                why = sourceapprovals.problem(src_path, owner, approvals, row=row)
                 if why:
                     kind, diagnostic = "unapproved", "unapproved: " + why
             categories[nm] = (kind, diagnostic)

@@ -65,9 +65,9 @@ int FUN_00272838(int fd, int cmd, int *result);
 int FUN_002728b0(const char *name, int flags);
 int FUN_00272918(int fd);
 int FUN_00272970(int fd, void *buf, int size);
-void FUN_0027e1f0(void);
-void FUN_0027e268(void);
-int FUN_0027eca8(int *flag);
+void SVM_LockVar(void);
+void SVM_UnlockVar(void);
+int SVM_TestAndSet(int *flag);
 
 long FUN_00275740(const char *fname);
 void FUN_00275e50(HtCiFile *h);
@@ -79,13 +79,13 @@ int FUN_00276740(HtCiFileLoc *files, int n);
 int FUN_002768f8(void);
 void FUN_00276af0(void);
 void FUN_00276b18(const char *name, HtCiFileLoc *loc);
-void FUN_00276d18(const char *path);
+void htCiSetRootDir(const char *path);
 void FUN_00276da8(const char *prefix);
 
-int *FUN_00275370(void)
+int *htCiGetInterface(void)
 {
     DAT_004ab5d8;
-    FUN_00276d18(0);
+    htCiSetRootDir(0);
     FUN_00276da8(0);
     return DAT_004ab5e8;
 }
@@ -145,7 +145,7 @@ void FUN_00275520(HtCiFile *h)
 {
     if (h->stm == 0)
         return;
-    FUN_0027e1f0();
+    SVM_LockVar();
     switch (FUN_00271938(h->stm)) {
     case 9:
         h->state = 3;
@@ -167,13 +167,13 @@ void FUN_00275520(HtCiFile *h)
     case 1: case 2: case 4: case 5: case 6: case 7: case 8:
         break;
     }
-    FUN_0027e268();
+    SVM_UnlockVar();
 }
 
 void FUN_002755e8(void)
 {
     int i;
-    if (FUN_0027eca8(&DAT_004ab5e4) != 0) {
+    if (SVM_TestAndSet(&DAT_004ab5e4) != 0) {
         for (i = 0; i < 13; i++) {
             if (DAT_004ab650[i].used == 1) {
                 FUN_00275520(&DAT_004ab650[i]);
@@ -864,7 +864,7 @@ void FUN_00276b18(const char *name, HtCiFileLoc *loc)
     }
 }
 
-int FUN_00276b68(const char *path, void *buf, unsigned int size, int nameLen)
+int htCiLoadDirInfo(const char *path, void *buf, unsigned int size, int nameLen)
 {
     int n;
     int found;
@@ -897,7 +897,7 @@ int FUN_00276b68(const char *path, void *buf, unsigned int size, int nameLen)
     return size / (nameLen + 9) * 8 + found * stride;
 }
 
-int FUN_00276cc0(const char *name)
+int htCiIsExistFile(const char *name)
 {
     HtCiFileLoc loc;
     FUN_00276b18(name, &loc);
@@ -905,7 +905,7 @@ int FUN_00276cc0(const char *name)
 }
 
 /* matching construct: switch — retail tests mode 0 separately before mode 1, which an if/else does not emit. */
-void FUN_00276ce8(int mode)
+void htCiSetOpenMode(int mode)
 {
     switch (mode) {
     case 0:
@@ -920,7 +920,7 @@ void FUN_00276ce8(int mode)
     }
 }
 
-void FUN_00276d18(const char *path)
+void htCiSetRootDir(const char *path)
 {
     if (path == 0) {
         DAT_004aba08[0] = 0;

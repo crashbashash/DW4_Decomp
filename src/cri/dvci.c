@@ -69,7 +69,7 @@ int strcasecmp(const char *a, const char *b);
 unsigned long strtoul(const char *s, char **end, int base);
 void FUN_00265928(const char *format, ...);
 void ADXMSG_PrintErr(const char *format, ...);
-void FUN_0010b918(void *start, void *end);
+void InvalidDCache(void *start, void *end);
 int sceCdSync(int mode);
 int sceCdRead(unsigned int lsn, unsigned int sectors, void *buf, CdReadMode *mode);
 int FUN_00116740(sceCdlFILE *fp, const char *name, int layer);
@@ -84,9 +84,9 @@ void FUN_00272118(void);
 void FUN_00272228(void);
 void FUN_002725a0(int marker);
 int FUN_002765e0(const char *name, void *buf);
-void FUN_0027e1f0(void);
-void FUN_0027e268(void);
-int FUN_0027eca8(int *flag);
+void SVM_LockVar(void);
+void SVM_UnlockVar(void);
+int SVM_TestAndSet(int *flag);
 
 void FUN_00273be8(char *path);
 void FUN_00274248(DvCiFile *h);
@@ -94,12 +94,12 @@ int FUN_00274330(DvCiFile *h);
 void FUN_002745c0(const char *name, char *path);
 void FUN_00274c40(sceCdlFILE *out, const char *name, DvCiFileLoc *files, int n);
 int FUN_00274e30(const char *name, sceCdlFILE *fp);
-void FUN_00275220(const char *path);
+void dvCiSetRootDir(const char *path);
 
-int *FUN_00273988(void)
+int *dvCiGetInterface(void)
 {
     DAT_004aa740;
-    FUN_00275220(0);
+    dvCiSetRootDir(0);
     return DAT_004aa758;
 }
 
@@ -134,7 +134,7 @@ void FUN_00273a90(DvCiFile *h)
 {
     if (h->stm == 0)
         return;
-    FUN_0027e1f0();
+    SVM_LockVar();
     switch (FUN_00271938(h->stm)) {
     case 9:
         h->state = 3;
@@ -156,13 +156,13 @@ void FUN_00273a90(DvCiFile *h)
     case 1: case 2: case 4: case 5: case 6: case 7: case 8:
         break;
     }
-    FUN_0027e268();
+    SVM_UnlockVar();
 }
 
 void FUN_00273b58(void)
 {
     int i;
-    if (FUN_0027eca8(&DAT_004aa750) != 0) {
+    if (SVM_TestAndSet(&DAT_004aa750) != 0) {
         for (i = 0; i < 40; i++) {
             if (DAT_004aa7c0[i].used == 1) {
                 FUN_00273a90(&DAT_004aa7c0[i]);
@@ -376,7 +376,7 @@ int FUN_002740a0(DvCiFile *h, int nsct, char *buf)
     h->rmode.datapattern = DAT_004ab440.datapattern;
     h->buf = buf;
     h->req = n;
-    FUN_0010b918(buf, buf + (n << 11) - 1);
+    InvalidDCache(buf, buf + (n << 11) - 1);
     if (FUN_00271798(h->stm, h->fp.lsn + h->pos, h->req, h->buf, &h->rmode) == 0) {
         FUN_002716f8(h->stm);
         return 0;
@@ -464,7 +464,7 @@ int FUN_002743d0(void)
     return DAT_004ab448;
 }
 
-void FUN_002743e0(unsigned int layer)
+void dvCiSetLayer(unsigned int layer)
 {
     DAT_004aa74c = layer;
     if (layer >= 2) {
@@ -472,7 +472,7 @@ void FUN_002743e0(unsigned int layer)
     }
 }
 
-int FUN_00274400(void)
+int dvCiGetLayer(void)
 {
     return DAT_004aa74c;
 }
@@ -787,7 +787,7 @@ int FUN_00274e30(const char *name, sceCdlFILE *fp)
     return 0;
 }
 
-int FUN_00274f10(const char *path, char *buf, unsigned int size, int nameLen)
+int dvCiLoadDirInfo(const char *path, char *buf, unsigned int size, int nameLen)
 {
     int n;
     int found;
@@ -820,7 +820,7 @@ int FUN_00274f10(const char *path, char *buf, unsigned int size, int nameLen)
     return size / (nameLen + 9) * 8 + found * (nameLen + 1);
 }
 
-int FUN_00275090(char *list, int listlen, char *buf, unsigned int size, int nameLen)
+int dvCiLoadDirInfoMem(char *list, int listlen, char *buf, unsigned int size, int nameLen)
 {
     int n;
     int found;
@@ -847,14 +847,14 @@ int FUN_00275090(char *list, int listlen, char *buf, unsigned int size, int name
     return size / (nameLen + 9) * 8 + found * (nameLen + 1);
 }
 
-int FUN_002751d8(const char *name)
+int dvCiIsExistFile(const char *name)
 {
     sceCdlFILE fp;
     FUN_00274e30(name, &fp);
     return fp.lsn != 0;
 }
 
-void FUN_00275200(int trycount, int spindlctrl, int datapattern, int mode)
+void dvCiSetRdMode(int trycount, int spindlctrl, int datapattern, int mode)
 {
     DAT_004ab440.trycount = trycount;
     DAT_004ab440.spindlctrl = spindlctrl;
@@ -862,7 +862,7 @@ void FUN_00275200(int trycount, int spindlctrl, int datapattern, int mode)
     DAT_004ab444 = mode;
 }
 
-void FUN_00275220(const char *path)
+void dvCiSetRootDir(const char *path)
 {
     char c;
     if (path == 0) {

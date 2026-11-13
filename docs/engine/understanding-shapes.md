@@ -105,6 +105,14 @@ makes them runs. So registers follow the order values come into existence, and a
 the caller's declared variable, not an inline's local. A whole-file unit with code outside the function is refused;
 copy the function into a test file.
 
+### EE GCC's scheduler trace
+
+**When:** the instructions are right and only their order differs (a store or load issued earlier or later, a
+move in place of a recomputed sum). Compile the unit with `-da -fsched-verbose-5`: the compiler writes the
+dependence table, each instruction's priority and the ready list of every cycle to the `.sched` dump (before
+register allocation) and `.sched2` (after it). Read the two together to see which dependence, or which missing
+one, lets an instruction move.
+
 ### The strip test, for data and for `asm`
 
 **When:** a `volatile`, a cast or an `asm` statement is in the source and the question is whether it does anything.
@@ -237,7 +245,22 @@ Units are named by their source file.
   `src/game/beAction2.cpp`.
 - **A `const` reference getter reloads.** `const int &getCount() const { return _count; }` loads through the
   returned reference, so a later `_count + 1` reads memory again, and the value lands in the caller's declared
-  variable with its early id. It replaced a `volatile` count. *Unit:* `src/game/beNodeAnim_Traverse.cpp`.
+  variable with its early id. It replaced a `volatile` count. The getter is `igTDataList<T>::getCount` in
+  `include/dw4/igTDataList.h`. *Units:* `src/game/beNodeAnim_Traverse.cpp`,
+  `src/engine/scenegraph/SceneGraphLibrary.cpp`.
+- **A sorted search copies its key through a pointer.**
+  - *Symptom:* before a binary search the key is stored to one stack slot, loaded, stored to a second slot, and the
+    second slot is loaded again for the final equality test after the loop.
+  - *Cause:* the caller's key is a local whose address is passed, and the search copies `*item` into a local of its
+    own and reads that copy through a pointer, so both locals live in memory.
+  - *Spelling:* `T key = light; index = list->sortedFind(&key);` with `igTDataList<T>::sortedFind(const T *item)`,
+    whose body starts `value = *item; p = &value; key = *p;`. The order of its locals was found by a declaration-order
+    search and is marked as such.
+  - *Unit:* `src/engine/scenegraph/SceneGraphLibrary.cpp`.
+- **An index passed on stays an `addiu`.** `addiu v1,v0,-1; sll; addu; lw 0(v0)` for the top of a stack, where
+  `_data[_count - 1]` written in place folds the `- 1` into the load as `lw -4(v0)`. The index as an inline
+  accessor's argument (`stack->get(stack->_count - 1)` with `T get(int index) const`) or as a named local
+  (`int last = count - 1;`) keeps the subtraction. *Unit:* `src/engine/scenegraph/SceneGraphLibrary.cpp`.
 
 ### Control flow
 
@@ -249,6 +272,10 @@ Units are named by their source file.
 - **A statement macro stops a tail call under GCC 2.96.** `j` where retail keeps `jal` and the frame: under 2.96 a
   loop statement around or after the call prevents the sibling call, and `do { ... } while (0)` is one.
   *Spelling:* `#define LOCK() do { lock(); } while (0)`. *Unit:* `src/cri/lsc.c`.
+- **A statement macro also pins store order under GCC 2.96.** Independent stores stay in source order where the
+  first scheduling pass would move the argument's store first: a loop statement's notes are a scheduling barrier,
+  and an empty `do { } while (0)` at function entry is enough. An `if (0)` or an empty block is not.
+  *Unit:* `src/cri/sftim.c`.
 - **An `else if` chain with an empty first arm.** `beq x,1` past the arm then `bne x,2`: MWCC keeps the empty arm's
   compare. *Spelling:* `if (x == 1) { } else if (x == 2) { ... }`. *Unit:* `src/movie/igCriMovieCodec.cpp`.
 - **A switch with an explicit empty case.** A compare chain `beq 2; beq 1; beqz end; b end` is a switch with
@@ -276,13 +303,56 @@ Units are named by their source file.
 - **A local whose address goes to a pointer parameter gets a stack slot.** A value stored to the stack and loaded
   back for a store, with no `volatile`: `pushed = item; ... set(count, &pushed);` with
   `void set(int i, T *const *v) { _data[i] = *v; }`. A reference parameter, a by-value parameter with an internal
-  `&value`, or a one-field struct are scalarised and lose the slot. *Unit:* `src/game/beNodeAnim_Traverse.cpp`.
+  `&value`, or a one-field struct are scalarised and lose the slot. The setter is `igTDataList<T>::set` in
+  `include/dw4/igTDataList.h`. *Units:* `src/game/beNodeAnim_Traverse.cpp`,
+  `src/engine/scenegraph/SceneGraphLibrary.cpp`.
+- **A negated flag passed to a `bool` parameter normalises first.** `sltu v0,zero,v0; xori a1,v0,0x1` before a
+  call is `!attr->_enabled` passed to a virtual taking `bool`; with an `int` parameter `!x` compiles to a different
+  sequence, and only the explicit `(x != 0) ^ 1` reproduces it. *Unit:* `src/engine/scenegraph/SceneGraphLibrary.cpp`.
 - **A class-scope placement `delete` makes the constructor-throws cleanup.** `new (pool) T` with a matching
   `operator delete(void *, Pool *)` in the class gives the landing pad and exception table retail has around the
   constructor call. *Unit:* `src/game/be.cpp`.
 - **An aggregate initializer copy gives a struct's real size.** A local initialised from a `.data` template is
   copied whole (`lq`/`sq` loop), and the template's size in retail is the struct's size; that settled a 48-byte
   Sony struct a 36-byte header had cut short. *Unit:* `src/cri/adxps2.c`.
+
+### Scheduling (EE GCC)
+
+- **EE GCC orders stores only within one alias set; a field's or read's type decides the schedule.** Two memory
+  accesses are kept in order when they may alias, and the alias set comes from the lvalue's type. Before register
+  allocation only same-type accesses through the same base are ordered; after it the base registers are set more
+  than once, so every pair in one alias set is ordered, and an access of another type (a pointer read among integer
+  stores) is outside that chain, gets low priority and is issued ahead of the first store. Giving a field the same
+  pointer type as another, or reading a reply through its true type, changes the order of the instructions around
+  it. *Unit:* `src/sony/libpad/libpad.c`.
+- **In a run of independent stores, the one that ends a register's life is issued first.** Before register
+  allocation the scheduler breaks a tie between equally ready instructions in favour of the one that frees
+  registers. Stores of one value through one pointer all become ready together, so the last statement, which holds
+  the last use of the pointer and of the value, comes out first and the others follow in source order; a store
+  that ends only one register's life (the second of two 64-bit fields among 32-bit ones, which has the last use of
+  the 64-bit constant) comes right after it. Retail's `+28, +0, +4, ... +24` is therefore a struct reset written in
+  field order, and a source transcribed in retail's order is rotated once more. MWCC emits stores in source order,
+  so such a transcription matches under MWCC and reads as a function built by the other compiler. The `.sched`
+  dump shows it: every store has the same priority and the one carrying the `REG_DEAD` notes heads the ready
+  list. *Unit:* `src/cri/mps.c`.
+
+### Delay slots (EE GCC)
+
+- **A register whose last use fills a delay slot stays live for the filler until the next barrier.** A loop's closing
+  branch carries the loop-head compare in its slot and leaves a `move a0,…` behind it, where another spelling of the
+  same statements puts that move in the slot and pads the loop head. The filler asks what is live on a branch's
+  other path before it takes an instruction that sets a register, and at a label with no barrier before it the
+  answer is a scan from the start of the function in which a register dies only at a `REG_DEAD` note
+  (`mark_target_live_regs`). An instruction moved into a slot loses those notes (`emit_delay_sequence`). So when a
+  register's last use is the instruction that fills an earlier branch's slot, the register counts as live at every
+  later label, an instruction that sets it cannot leave a branch's fall-through (MIPS has no annul-if-true slot),
+  and the filler copies from the branch target instead, whatever the branch's predicted direction. Which register
+  that is follows from the locals: in the unit below, three fields of one global read into three locals in field
+  order put the global's address in `a0` and the second field in `v1`, and testing the second field straight from
+  the global swaps the two.
+  The compiler binary keeps its symbols, so gdb breakpoints on `fill_slots_from_thread`, `mostly_true_jump`,
+  `own_thread_p` and `mark_target_live_regs` print each decision and the live set behind it. *Unit:*
+  `src/cri/sfh.c`.
 
 ### Declaration order and evaluation order
 
@@ -298,6 +368,11 @@ Units are named by their source file.
   coloured before the slot pointer; an index loop over `&data[i]` lets the compiler make the offset itself, with
   retail's registers. Rewrite m2c's strength-reduced loops as index loops first. *Unit:*
   `src/game/beNDMWWindowTitle.cpp`.
+- **A derived view of a base-class parameter keeps the argument register.** A traversal function that takes
+  `igTraversal *traversal`, works through `igCompileTraversal *self = (igCompileTraversal *)traversal;` and passes
+  `traversal` on to the next traversal function keeps the incoming `a0` live for that call: the code between avoids
+  `a0` and the call has no `move a0,s0`. One pointer used for both gives the move and shifts every temporary.
+  *Unit:* `src/engine/scenegraph/SceneGraphLibrary.cpp`.
 - **Inline virtuals are emitted in reverse declaration order.** Declare them in the reverse of retail's address
   order. *Unit:* `src/engine/lua/LuaRegistration.cpp`.
 

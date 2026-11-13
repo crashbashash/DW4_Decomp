@@ -20,15 +20,15 @@ extern int SignalSema(int sema);
 extern int DeleteSema(int sema);
 extern int sceMpegInit(void);
 extern void *memcpy(void *dst, const void *src, unsigned int size);
-void FUN_00108f88(SfdMpegCtx *mpeg);
-void FUN_00109118(void);
+void sceMpegDelete(SfdMpegCtx *mpeg);
+void sceMpegReset(void);
 void DIntr(void);
 void EIntr(void);
-void FUN_0028b180(void *dst, void *src, int size);
-void FUN_0028b460(void *dst, int value, int size);
+void mpsutl_CopyBytes(void *dst, void *src, int size);
+void mpsutl_FillBytes(void *dst, int value, int size);
 int sfd_ReportError();
 int FUN_002abf68(void);
-void sceMpegClearRefBuff(SfdMpegCtx *mpeg);
+void sceMpegGetPictureAbort(SfdMpegCtx *mpeg);
 
 extern char sfmpv_seqend_codes[16];
 
@@ -138,7 +138,7 @@ int FUN_002a96e0(SfdPlayer *player) {
 void FUN_002a96f0(void) {
     if (DAT_004beb10 != 0) {
         sceMpegInit();
-        FUN_0028b460(&DAT_00585630, 0, 0x48);
+        mpsutl_FillBytes(&DAT_00585630, 0, 0x48);
     }
 }
 
@@ -183,7 +183,7 @@ int sfmpvps2_ExecIpu(int unused0, int unused1, SfdPlayer *player) {
     SfdIpuCtl *ctl = &mpv->ipu;
     SfdIpuStream *stream = &mpv->stream;
     if (ctl->endSent == 1) {
-        sceMpegClearRefBuff(&mpv->mpeg);
+        sceMpegGetPictureAbort(&mpv->mpeg);
         return 1;
     }
     sfmpvps2_SendIpu(stream);
@@ -215,9 +215,9 @@ void FUN_002a9bc8(SfdPlayer *player)
         mpv = player->streams.mpv;
         FUN_002a9628(&mpv->stream);
         if (FUN_002abf68() != 1) {
-            FUN_00108f88(&mpv->mpeg);
+            sceMpegDelete(&mpv->mpeg);
         } else {
-            FUN_00109118();
+            sceMpegReset();
             FUN_002a9c50(player);
         }
     }
@@ -225,12 +225,12 @@ void FUN_002a9bc8(SfdPlayer *player)
 
 void FUN_002a9c50(SfdPlayer *player) {
     SfdMpv *mpv = player->streams.mpv;
-    FUN_0028b180(&DAT_00585630, &mpv->mpeg, 0x48);
+    mpsutl_CopyBytes(&DAT_00585630, &mpv->mpeg, 0x48);
 }
 
 void FUN_002a9c78(SfdPlayer *player) {
     SfdMpv *mpv = player->streams.mpv;
-    FUN_0028b180(&mpv->mpeg, &DAT_00585630, 0x48);
+    mpsutl_CopyBytes(&mpv->mpeg, &DAT_00585630, 0x48);
 }
 
 int FUN_002a9ca0(SfdPlayer *player, char *src, int pos) {
@@ -251,7 +251,7 @@ int FUN_002a9d10(SfdPlayer *player, int count) {
     return FUN_002a8f90(&mpv->stream, count);
 }
 
-void FUN_002a9d70(SfdPlayer *player, int value) {
+void sfmpvps2_StopIpu(SfdPlayer *player, int value) {
     SfdMpv *mpv = player->streams.mpv;
     SfdIpuCtl *ctl = &mpv->ipu;
     if (ctl->stopped != 1) {

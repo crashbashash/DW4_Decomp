@@ -92,7 +92,7 @@ void FUN_001bb550(int arg0, int arg1) {
         return;
     }
     if (FUN_002fe290(arg1, g_unlinkedTransformClass_metaObject[0]) != 0) {
-        igTraversal_RegisterFunction((struct L_1e06c0 *)arg0, (struct X_1e06c0 *)arg1, (void *)FUN_001bc0e0);
+        igTraversal_RegisterFunction((struct L_1e06c0 *)arg0, (struct X_1e06c0 *)arg1, (void *)igCompileTraversal_TraverseJointTransform);
         return;
     }
     if (FUN_002fe290(arg1, g_igTransform_metaObject[0]) != 0) {
@@ -164,8 +164,38 @@ void Gap__Sg__igCompileTraversal__vfunc_24(igCompileTraversal *arg0, int arg1) {
     Gap__Sg__igTraversal__vfunc_24((void *)arg0, arg1);
 }
 
-void FUN_001bbae0(int arg0, int arg1) {
-    FUN_001bc050(FUN_001bbb30(arg1, arg0), arg1, arg0);
+int FUN_001bbae0(int arg0, int arg1) {
+    return igTransform_CompileChildrenAndPopMatrix((float *)FUN_001bbb30(arg1, arg0), (igTransform *)arg1, (igCompileTraversal *)arg0);
+}
+
+int igTransform_CompileChildrenAndPopMatrix(float *matrix, igTransform *self, igCompileTraversal *traversal) {
+    int result;
+    igAttrStackManager *manager;
+    int target;
+    manager = (igAttrStackManager *)traversal->_attrStack;
+    target = self->_target;
+    result = igTraversal_TraverseChildren((int)traversal, (S_1e07a0 *)self);
+    if (target == 0) {
+        FUN_001b11b0((A_1b11b0 *)manager, (B_1b11b0 *)g_igModelViewMatrixAttr_metaObject[0]);
+    } else {
+        FUN_001b1250((A_1b1250 *)manager, (B_1b1250 *)g_igVertexBlendMatrixAttr_metaObject[0], target - 1);
+    }
+    return result == 2 ? 2 : 0;
+}
+
+int igCompileTraversal_TraverseJointTransform(igTraversal *traversal, igTransform *node) {
+    int result;
+    igCompileTraversal *self = (igCompileTraversal *)traversal;
+    self->_jointChainCount_++;
+    if (self->_jointChainCount_ == 1) {
+        igAttrStackManager *manager = (igAttrStackManager *)self->_attrStack;
+        igObject *top = topAttr(((AttrObjectStackList *)manager->_attrStacks)->_data[((int *)manager->_attrStackIndexTable)[g_igModelViewMatrixAttr_metaObject[0]->_id]]);
+        igTDataList<igObject *> *mvms = (igTDataList<igObject *> *)self->_mvmList;
+        self->_jointBaseMvmIndex = mvms->find(top);
+    }
+    result = FUN_001bbae0((int)traversal, (int)node);
+    self->_jointChainCount_--;
+    return result;
 }
 
 int FUN_001bcd60(int arg0, int arg1) {
@@ -269,7 +299,7 @@ int FUN_001bcf70(A_1bcf70 *arg0, B_1bcf70 *arg1) {
         i++;
     }
     FUN_001b1030((igAttrStackManager *)s0, (igAttr *)o);
-    int r = FUN_001b9320(arg0, arg1);
+    int r = igCommonTraversal_TraverseAttrSet((igCommonTraversal *)arg0, (igAttrSet *)arg1);
     FUN_001b1100((struct A_1b1100 *)s0, (struct B_1b1100 *)o);
     if (r == 2) return 2;
     return 0;

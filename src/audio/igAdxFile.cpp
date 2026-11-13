@@ -27,7 +27,7 @@ struct igResult {
 
 extern "C" {
 /* CRI ADXF, on the handle in `_adxf` */
-int FUN_002618c0(char *fname, int dir);   /* open by name */
+int ADXF_Open(char *fname, int dir);   /* open by name */
 int FUN_00261b78(int ptid, int flid);     /* open an AFS partition entry */
 void FUN_00261c88(int adxf);              /* close */
 int ADXF_ReadNw(int adxf, int nsct, char *buf); /* start a read of nsct sectors */
@@ -235,7 +235,7 @@ void Gap__igAdxFile__vfunc_21(igResult *result, igAdxFile *self, OpenMode mode)
             self->_adxf = FUN_00261b78(entry->_ptNumber, entry->_fileNumber);
         } else {
             strcpy(fileName, self->_fileName);
-            self->_adxf = FUN_002618c0(fileName, 0);
+            self->_adxf = ADXF_Open(fileName, 0);
         }
         if (self->_adxf == 0) {
             result->value = g_allocatorFailureStatus[0];

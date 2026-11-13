@@ -244,6 +244,81 @@ void Gap__Core__igEventTracker__vfunc_29(int *arg0, char *arg1, char *arg2, int 
     }
 }
 
+/* An unaligned little-endian word of an event record. */
+static inline void readWord(const char *p, void *out) {
+    *(int *)out = ((unsigned char)p[0]) | ((((unsigned char)p[1]) << 8) | ((((unsigned char)p[3]) << 24) | (((unsigned char)p[2]) << 16)));
+}
+
+static inline void readVarint(const char *p, int *out) {
+    int shift = 0;
+    *out = 0;
+    for (;;) {
+        *out |= (*p & 0x7F) << shift;
+        if ((*p++ & 0x80) == 0) break;
+        shift += 7;
+    }
+}
+
+/* The varint that follows the word slot 29 reads: the record starts with its type (a varint below
+ * 32), a version byte no newer than the tracker's and a flags varint whose bit 0 says the two
+ * values are present. The word itself is read and dropped. */
+void Gap__Core__igEventTracker__vfunc_30(int *result, igEventTracker *self, char *record, int *value) {
+    int flags;
+    int type;
+    int byte;
+    int shift;
+    int flagShift;
+    int flagByte;
+    int bits;
+    int flagBits;
+    shift = 0;
+    type = 0;
+    record = (char *)(((igCharList *)self->_eventRecords)->_data + (int)record);
+    do {
+        byte = *record;
+        bits = byte & 0x7F;
+        record++;
+        bits = bits << shift;
+        byte = byte & 0x80;
+        type |= bits;
+        if (byte == 0) break;
+        shift += 7;
+    } while (1);
+    if (type >= 0x20) {
+        *result = g_allocatorFailureStatus.v;
+        return;
+    }
+    {
+    char *q = record + 1;
+    byte = *record;
+    if (byte > DAT_004c1ea8[0]) {
+        *result = g_allocatorFailureStatus.v;
+        return;
+    }
+    flags = 0;
+    flagShift = 0;
+    do {
+        flagByte = *q;
+        flagBits = flagByte & 0x7F;
+        q++;
+        flagBits = flagBits << flagShift;
+        flagByte = flagByte & 0x80;
+        flags |= flagBits;
+        if (flagByte == 0) break;
+        flagShift += 7;
+    } while (1);
+    if (flags & 1) {
+        int word;
+        readWord(q, &word);
+        readVarint(q + 4, value);
+    } else {
+        *result = g_allocatorFailureStatus.v;
+        return;
+    }
+    *result = g_statusSucceeded.v;
+    }
+}
+
 void Gap__Core__igEventTracker__vfunc_33(T_2df6d0 *arg0, int arg1, int arg2, int arg3, int *arg4, int *arg5, int *arg6, int *arg7)
 {
     int var_s1;

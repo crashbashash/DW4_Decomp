@@ -16,7 +16,8 @@ Three CRI ADX files after the SPSD and WAV readers, each compiled as one whole f
 - The cache-sync wrapper at `0x260a40` is placed in ADXF; its callers match either way.
 - The sync-code search at `0x25f460` compares through a local holding the code, which keeps the constant
   out of the loop; the spelling was found by trial.
-- ADXF's init (`0x260a60`) reads its build-string pointer and discards it, the shape of an approved
-  `volatile` read ([source approvals](source-approvals.md#build-string-reads)); it has no row, so it has no
-  source. The three ADPCM block decoders (`0x25fdf0`, `0x25ffd0`, `0x260398`) have drafts whose control flow
-  is right but whose register allocation is not.
+- ADXF's init (`0x260a60`) reads its build-string pointer through a `const volatile`-compatible word and discards
+  it: retail performs the discarded read in the PS2, GameCube and Xbox builds alike, and the keyword is approved
+  ([source approvals](source-approvals.md#build-string-reads)). Its six stores follow retail's order, which is
+  also the GameCube build's. The three ADPCM block decoders (`0x25fdf0`, `0x25ffd0`, `0x260398`) have drafts
+  whose control flow is right but whose register allocation is not.

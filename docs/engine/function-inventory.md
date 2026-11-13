@@ -86,7 +86,7 @@ a switch dispatch (`jr v1; nop`): it had turned the first case body of four swit
 ## 3. Reviewed extents (`config/SLUS-20836/extent-overrides.tsv`)
 
 A row sets a function's size. Plain rows grow to the next function or shrink over zero words only.
-Two keywords go further, each reviewed against the bytes:
+Four keywords go further, each reviewed against the bytes:
 
 - `cut`: the shrink leaves code behind: the dump glued a second function onto this one. The head
   keeps the bytes up to its own return or tail call; the remainder must be claimed by a promotion
@@ -95,21 +95,27 @@ Two keywords go further, each reviewed against the bytes:
   the row's name.
 - `start`: a function no rule can walk, added at the row's address and size. The row must lie in a
   gap of the code below `CODE_HI`, start at a fresh start and not begin with padding.
+- `data`: the row's bytes decode as code but are no function of this program, and its third column
+  names the data. Every dump function inside it is dropped, and one that crosses its edge fails the
+  run. Every promotion rule treats the row as occupied, so none starts in it or walks into it, and
+  its words are no references (`strong_reference_starts`, `scripts/inventory_scan.py`).
+  `check_data_rows` fails the run if a function still lies inside one.
 
 The rows this pass added, by evidence class:
 
 | class | rows | what the bytes show |
 | --- | --- | --- |
 | epilogue growth | 159 (all functions of the EE GCC blocks) + `SetT2` (`eret` then `jr ra; nop`) | the dump stopped 3–5 words before `ld ra; jr ra; addiu sp,+N`; the walk from the symbol start ends there |
-| `cut`: tail-call wrapper + framed body | 20 (`_getpid_r`, `FUN_00269878`, `FUN_00297f30`, `FUN_002980c0`, `FUN_0017c880`, `FUN_00260d48`, `FUN_002a1110`, `FUN_00109c88`, `vfiprintf`, `Gap__Gfx__igPsx2VisualContext__vfunc_172`, `FUN_00299110`, `FUN_002997c0`, `FUN_0029b6d0`, `FUN_002a3730`, `FUN_002b2ee8`, `FUN_002b3300`, `FUN_002b4210`, …) | the head ends in `j <body>` to a fresh frame prologue under the same symbol (a function never jumps to its own frame-opening word) |
-| `cut`: wrapper + leaf body | 12 (`FUN_002612c0`, `FUN_002854b0`, `FUN_0028abc0`, `FUN_00293788`, `mwply_IsCurPicItemTypeThree/8b8/938`, `FUN_002ad2e0`, `FUN_002ad3e0`, `FUN_002b3530`, `FUN_002b4630`, `Memory_AllocateBufferViaSharedTail`) | the head's walk ends at its `j` to a fresh start that follows after padding; the body is claimed by rule 3 |
+| `cut`: tail-call wrapper + framed body | 20 (`_getpid_r`, `FUN_00269878`, `mwsfsfx_SetOutModeByPic`, `FUN_002980c0`, `FUN_0017c880`, `FUN_00260d48`, `sfmps_ExecServer`, `_sequenceHeader`, `vfiprintf`, `Gap__Gfx__igPsx2VisualContext__vfunc_172`, `mwPlyReleaseLp`, `MWSST_SetStmNo`, `FUN_0029b6d0`, `FUN_002a3730`, `sfxa_Init`, `FUN_002b3300`, `FUN_002b4210`, …) | the head ends in `j <body>` to a fresh frame prologue under the same symbol (a function never jumps to its own frame-opening word) |
+| `cut`: wrapper + leaf body | 12 (`FUN_002612c0`, `FUN_002854b0`, `FUN_0028abc0`, `mwPlyGetFrmSync`, `mwply_IsCurPicItemTypeThree/8b8/938`, `FUN_002ad2e0`, `FUN_002ad3e0`, `FUN_002b3530`, `FUN_002b4630`, `Memory_AllocateBufferViaSharedTail`) | the head's walk ends at its `j` to a fresh start that follows after padding; the body is claimed by rule 3 |
 | `cut`: span reached a referenced leaf | 5 (`Gap__Core__igCallStackTable__findCallStack`, `FUN_00155340`, `FUN_00159320`, `igMemoryFile::vfunc_23`, `FUN_004657b0`) | `data/function-extents.json` ran to a vtable-referenced leaf after the function's own `jr ra` |
-| `cut`: verifier extent corrections | `FUN_001b4c40` (7296 → 7276: `DAT_001b68b0` is a 16-byte wrapper, `move a1,a0; lui; j 0x1b68c0; lw`, after the function's `jr ra` and a nop; `FUN_001a44d0` now passes it as a function pointer), `FUN_00267438` (96 → 88: `FUN_00267490` is the 8-byte getter `jr ra; lw v0,152(a0)` that `FUN_0026c3c8` calls), `FUN_00453a20` (8-byte `j` wrapper + referenced 12-byte leaf at `0x453a30`), `FUN_0018edb0` (1768 → 1576: twelve 8-byte default stubs at `0x18f3e0..0x18f490`, 16-byte aligned after its `jr ra`, whose addresses it builds with `lui`/`addiu` and stores into its tables; claimed by rule 4) | the inner address is a fresh start after the container's return |
+| `cut`: verifier extent corrections | `FUN_001b4c40` (7296 → 7276: `DAT_001b68b0` is a 16-byte wrapper, `move a1,a0; lui; j 0x1b68c0; lw`, after the function's `jr ra` and a nop; `FUN_001a44d0` now passes it as a function pointer), `ADXSJD_GetDataId` (96 → 88: `ADXSJD_GetHdrLen` is the 8-byte getter `jr ra; lw v0,152(a0)` that `ADXT_GetHdrLen` calls), `FUN_00453a20` (8-byte `j` wrapper + referenced 12-byte leaf at `0x453a30`), `FUN_0018edb0` (1768 → 1576: twelve 8-byte default stubs at `0x18f3e0..0x18f490`, 16-byte aligned after its `jr ra`, whose addresses it builds with `lui`/`addiu` and stores into its tables; claimed by rule 4) | the inner address is a fresh start after the container's return |
 | `merge` | `FUN_002fe290` (44 bytes) | `thunk_FUN_002fe2ac` (`b 0x2fe2ac; nop`) was the entry of a list-search loop whose other half Ghidra called `FUN_002fe2ac`; one leaf, its callers now name `FUN_002fe290` |
-| `start` | `FUN_00100230` (8), `FUN_001051c8` (96), `FUN_00113bc0` (284), `FUN_00113d00` (244), `_debugHandlerEntry` (288), `FUN_001c5130` (36), `FUN_00265d30` (52) | bodies the sweep cannot end: a thread entry whose `syscall` (ExitThread) does not return; an MMI clamp loop that a `j` from `FUN_00104258` enters, with its 16-byte `lq` constant inline (each word writes `$zero`, so falling through is harmless) before `jr ra`; three kernel exception handlers ending in `eret`, `syscall` and `break` (the syscall table at `0x4822a8` installs `0x113d00` as call 0x54); a tail call through `jr v0`; an error call followed by an idle `b` loop |
+| `start` | `_root` (8), `FUN_001051c8` (96), `_kTLBException` (284), `_kExitTLBHandler` (244), `_kDebugException` (288), `FUN_001c5130` (36), `FUN_00265d30` (52) | bodies the sweep cannot end: a thread entry whose `syscall` (ExitThread) does not return; an MMI clamp loop that a `j` from `_cscMacroblock` enters, with its 16-byte `lq` constant inline (each word writes `$zero`, so falling through is harmless) before `jr ra`; three kernel exception handlers ending in `eret`, `syscall` and `break` (the syscall table at `0x4822a8` installs `0x113d00` as call 0x54); a tail call through `jr v0`; an error call followed by an idle `b` loop |
+| `data` | `tlbsrc` (816), `osdsrc` (1,960), `srcfile` (1,856) | libkernl's kernel patches: byte arrays that `tlbfunc.c`, `libosd.c` and `alarm.c` copy to `0x80075000`, `0x80074000` and `0x80076000` (`TLB_PATCH_SIZE`, `OSD_PATCH_SIZE`, `ALARM_PATCH_SIZE`) and the kernel runs there, so their calls and literals point at `0x8007xxxx` and no EE code calls into them. The dump had made nine functions of their bytes; without the rows, rule 5 takes one of them back |
 | plain shrink | `_outputFrame` (312 → 272), `FUN_001e6130` (584 → 248) | the dump's extent ran into the next symbol; both now end at their own transfer. `FUN_001e6130` remains a block of an earlier function (its `j 0x1e5fe0` lands inside `FUN_001e5f00`), a matter for the EE GCC blocks |
 
-`FUN_0029a210` (56 → 20) is not a row: it is a rule-1 promotion whose walk now stops at its tail
+`mwsfsvr_VsyncEnd` (56 → 20) is not a row: it is a rule-1 promotion whose walk now stops at its tail
 call; the framed body after it (`0x29a228`) is a rule-5 promotion. `FUN_001044f0` (64 → 148) is the
 SDK-descriptor split piece that now takes the walk's extent. `abort` keeps its 24 bytes: it
 ends in a call to a non-returning function and has no epilogue. `FUN_001eba30` and `__throw`
@@ -131,10 +137,8 @@ symbol: **A** continuation of the preceding symbol, **B** `jal` target, **C** da
 `inventory.unsymbolised_bytes` (`tools/progress.py --debt-check`), and `make inventory-check` fails
 when the table is stale or the total exceeds `config/debt-baseline.json`.
 
-Residual: **14 bodies, 1,020 bytes**, all class G and all in the Sony kernel-mode block
-(`0x4820d0..0x4833c8`, `config/SLUS-20836/regions.tsv`). That code runs at another address, so its calls and
-literals point outside the image and nothing in the image references its pieces; it lies above
-`CODE_HI`, so rule 6 does not reach it. Below `CODE_HI` every non-zero word belongs to a symbol; the
+Residual: **none.** The scan skips the `data` rows of section 3, libkernl's kernel patches, whose
+code is linked for kernel memory. Below `CODE_HI` every non-zero word belongs to a symbol; the
 `data` units left there are zero padding.
 
 ## 5. Before and after

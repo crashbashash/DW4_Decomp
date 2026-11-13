@@ -8,17 +8,17 @@ extern void (*DAT_004beb24)(SfdPly *h, int value);
 extern SfdPly *sfply_handles[8];
 extern int sfply_sys_stat;
 extern unsigned int DAT_004beb20;
-extern SfdCond DAT_004be8d8;
+extern SfdCond sfd_lib;
 extern int DAT_004bead4;
 extern void (*DAT_004beb18)(SfdTriple *tc);
 
 int sfd_ReportError();
-int sfd_CheckHn(SfdPly *h);
+int SFLIB_CheckHn(SfdPly *h);
 int FUN_002b0338();
 void FUN_002af428(void);
 int FUN_002afb98(SfdPly *h, int value);
 int FUN_0029d0e0(SfdPly *h, int value);
-void FUN_002ad950(SfdPly *h, int id, int value);
+void SFD_SetCond(SfdPly *h, int id, int value);
 void FUN_002ae398(void);
 long FUN_002b5a10(void);
 void FUN_002afbc8(void *acc, long time);
@@ -28,28 +28,28 @@ int sftrn_GetFlagA(SfdPly *h, int id);
 int sftrn_GetFlagB(SfdPly *h, int id);
 int FUN_002b03e8(SfdPly *h, int id);
 int FUN_0029e2b0(SfdPly *h, int ch);
-int FUN_0029e2d0(SfdPly *h, int ch);
+int sfbuf_GetNumData(SfdPly *h, int ch);
 void FUN_002ace60(SfdPly *h, int req1, int req2);
-void FUN_002ada78(SfdPly *h, int id, int value);
+void sfd_SetCond(SfdPly *h, int id, int value);
 int SFD_GetCond(SfdPly *h, int id);
 int FUN_002b5b38(void);
 void sfd_Lock(void *lock);
 void sfd_Unlock(void *lock);
 int UTY_MulDiv(int a, int b, int c);
 int FUN_0029eaa8(SfdPly *h, int id);
-int FUN_0029ea88(SfdPly *h, int id);
-void FUN_0029ea68(SfdPly *h, int id, int value);
+int sfbuf_GetFlagB(SfdPly *h, int id);
+void sfbuf_SetFlagB(SfdPly *h, int id, int value);
 int FUN_002ae968(SfdPly *h, int *pos, int *len);
 int sftim_GetTime(SfdPly *h, int *pos, int *len);
 int sftim_ChkTimeOver(SfdPly *h);
 int sftim_IsTimeReached(int a, int b, int c, int d);
 int FUN_00285118(int a, int b, int c, int d);
-void FUN_0028b530(void *dst, int value, int n);
-void FUN_0028b0c0(void *dst, void *src, int n);
-void FUN_0029feb8(void *blk);
-void FUN_0029fed0(void *blk);
-void FUN_002a0ba0(SfdErrBlk *err);
-void FUN_002ae028(SfdPly *h, SfdD28 *d);
+void mpsutl_FillWords(void *dst, int value, int n);
+void UTY_MemCpy(void *dst, void *src, int n);
+void sfhdr_InitInf(void *blk);
+void sfhdr_ResetInf(void *blk);
+void sfd_ClearErr(SfdErrBlk *err);
+void SFTIM_InitHn(SfdPly *h, SfdD28 *d);
 int FUN_0029d4c0(SfdPly *h, SfdStmEnt *ent, SfdCrePrm *prm);
 void FUN_002afd38(SfdPly *h, SfdF28 *f, SfdCrePrm *prm, int arg);
 void FUN_002acb30(SfdRecSlot *slot);
@@ -57,9 +57,9 @@ void FUN_002afba8(void *acc);
 void FUN_0029d790(SfdPly *h);
 int FUN_002a32b8(SfdPly *h, char *buf, int size);
 void FUN_002a3340(SfdPly *h, char *buf, int size);
-void FUN_002a0c68(SfdPly *h, int a, int b);
-void FUN_002aed78(SfdPly *h, int a);
-void FUN_002aee00(SfdPly *h, int a, int b, int c);
+void SFD_SetErrFn(SfdPly *h, int a, int b);
+void SFD_SetUsrTimeFn(SfdPly *h, int a);
+void SFD_SetExtClockFn(SfdPly *h, int a, int b, int c);
 void FUN_002aed08(SfdPly *h, int a);
 int FUN_002accc0(SfdPly *h, SfdRec *rec);
 void FUN_002ad668(SfdPly *h, int a);
@@ -74,7 +74,7 @@ long FUN_002aa460(SfdPly *h, int mode);
 long FUN_002aa4c8(SfdPly *h, int value);
 int FUN_002aa538(SfdPly *h);
 void FUN_002aa6c0(void);
-int FUN_002aa728(SfdPly *h);
+int SFD_IsHnSvrDone(SfdPly *h);
 void FUN_002aa868(SfdPly *h);
 void FUN_002aa980(SfdPly *h);
 int FUN_002aa9a8(SfdPly *h);
@@ -118,11 +118,11 @@ void FUN_002abf58(int on);
 int FUN_002abf78(SfdPly *h);
 int FUN_002abfd8(SfdPly *h);
 int SFD_GetInputBufStat(SfdPly *h, int value);
-int FUN_002ac418(SfdPly *h, int a, int b);
-int FUN_002ac498(SfdPly *h);
+int SFD_SetReadIndex(SfdPly *h, int a, int b);
+int SFD_TermSupply(SfdPly *h);
 
-int FUN_002aa2f0(SfdPly *h) {
-    if (sfd_CheckHn(h) != 0) {
+int SFD_GetPaStat(SfdPly *h) {
+    if (SFLIB_CheckHn(h) != 0) {
         sfd_ReportError(0, 0xFF000141);
         return 0;
     }
@@ -159,8 +159,8 @@ long FUN_002aa4c8(SfdPly *h, int value) {
     return FUN_002b0338(h, 7, 8, value, 0);
 }
 
-void FUN_002aa4f0(SfdPly *h) {
-    if (sfd_CheckHn(h) != 0) {
+void SFD_Standby(SfdPly *h) {
+    if (SFLIB_CheckHn(h) != 0) {
         sfd_ReportError(0, 0xFF000143);
         return;
     }
@@ -172,8 +172,8 @@ int FUN_002aa538(SfdPly *h) {
     return 0;
 }
 
-int FUN_002aa548(SfdPly *h, int value) {
-    if (sfd_CheckHn(h) != 0) {
+int SFD_SetSpeed(SfdPly *h, int value) {
+    if (SFLIB_CheckHn(h) != 0) {
         return sfd_ReportError(0, 0xFF000144);
     }
     FUN_002afb98(h, value);
@@ -181,23 +181,23 @@ int FUN_002aa548(SfdPly *h, int value) {
     return 0;
 }
 
-int FUN_002aa5b8(SfdPly *h, int value) {
-    if (sfd_CheckHn(h) != 0) {
+int SFD_SetAudioCh(SfdPly *h, int value) {
+    if (SFLIB_CheckHn(h) != 0) {
         return sfd_ReportError(0, 0xFF000145, value);
     }
-    FUN_002ad950(h, 30, value);
+    SFD_SetCond(h, 30, value);
     return 0;
 }
 
-int FUN_002aa628(SfdPly *h, int value) {
-    if (sfd_CheckHn(h) != 0) {
+int SFD_SetVideoCh(SfdPly *h, int value) {
+    if (SFLIB_CheckHn(h) != 0) {
         return sfd_ReportError(0, 0xFF000146, value);
     }
-    FUN_002ad950(h, 29, value);
+    SFD_SetCond(h, 29, value);
     return 0;
 }
 
-void FUN_002aa698(void) {
+void sfmpvps2_Init(void) {
     FUN_002aa6c0();
     DAT_004beb24 = 0;
 }
@@ -208,32 +208,32 @@ void FUN_002aa6c0(void) {
     }
 }
 
-void FUN_002aa708(void) {
+void SFD_VsyncSvr(void) {
     FUN_002ae398();
 }
 
 void FUN_002aa720(void) {
 }
 
-int FUN_002aa728(SfdPly *h) {
+int SFD_IsHnSvrDone(SfdPly *h) {
     if (h->stat < 1 || h->stat > 4) return 1;
     return h->pending == 0;
 }
 
-int FUN_002aa750(void) {
+int SFD_IsSvrDone(void) {
     SfdPly **slot = sfply_handles;
     int i;
     for (i = 0; i < 8; i++) {
         SfdPly *h = *slot++;
-        if (h != 0 && FUN_002aa728(h) == 0) {
+        if (h != 0 && SFD_IsHnSvrDone(h) == 0) {
             return 0;
         }
     }
     return 1;
 }
 
-int FUN_002aa7b8(SfdPly *h) {
-    if (sfd_CheckHn(h) != 0) {
+int SFD_ExecOne(SfdPly *h) {
+    if (SFLIB_CheckHn(h) != 0) {
         return sfd_ReportError(0, 0xFF000138);
     }
     FUN_002aa868(h);
@@ -323,10 +323,10 @@ void FUN_002aab60(SfdPly *h) {
 
 void FUN_002aab90(SfdPly *h) {
     SfdCond *c = &h->cond;
-    if (c->req1 == 1 && FUN_0029e2d0(h, 1) == 0 && FUN_0029e2b0(h, 1) == 0) {
+    if (c->req1 == 1 && sfbuf_GetNumData(h, 1) == 0 && FUN_0029e2b0(h, 1) == 0) {
         c->req1 = 0;
     }
-    if (c->req2 == 1 && FUN_0029e2d0(h, 2) == 0 && FUN_0029e2b0(h, 2) == 0) {
+    if (c->req2 == 1 && sfbuf_GetNumData(h, 2) == 0 && FUN_0029e2b0(h, 2) == 0) {
         c->req2 = 0;
     }
     FUN_002ace60(h, c->req1, c->req2);
@@ -335,10 +335,10 @@ void FUN_002aab90(SfdPly *h) {
 void FUN_002aac38(SfdPly *h) {
     SfdCond *c = &h->cond;
     if (c->req2 == 0 && c->mode == 2) {
-        FUN_002ada78(h, 15, 1);
+        sfd_SetCond(h, 15, 1);
     }
     if (c->req1 == 0 && c->mode == 1) {
-        FUN_002ada78(h, 15, 2);
+        sfd_SetCond(h, 15, 2);
     }
 }
 
@@ -367,7 +367,7 @@ void FUN_002aacc0(SfdPly *h) {
         value = 3;
         break;
     }
-    FUN_002ada78(h, 25, value);
+    sfd_SetCond(h, 25, value);
 }
 
 int FUN_002aad88(SfdPly *h) {
@@ -490,7 +490,7 @@ int FUN_002ab218(SfdPly *h) {
         return 1;
     }
     for (ch = 0; ch < 8; ch++) {
-        result = FUN_0029ea88(h, ch);
+        result = sfbuf_GetFlagB(h, ch);
         if (result != 0) {
             return 1;
         }
@@ -671,7 +671,7 @@ int FUN_002ab878(void) {
 }
 
 void FUN_002abae0(SfdRec48 *rec) {
-    FUN_0028b530(rec, 0, 16);
+    mpsutl_FillWords(rec, 0, 16);
     rec->f0 = 0;
     rec->f4 = 0;
     rec->f8 = 0;
@@ -687,7 +687,7 @@ void FUN_002abae0(SfdRec48 *rec) {
 }
 
 void FUN_002abb48(SfdTimer *tmr) {
-    FUN_0028b530(tmr, 0, 40);
+    mpsutl_FillWords(tmr, 0, 40);
     tmr->count = 0;
     tmr->count2 = 0;
     tmr->f8 = 0;
@@ -715,7 +715,7 @@ void FUN_002abbc0(SfdSub24 *sub) {
 void FUN_002abbd0(SfdTable *tbl) {
     SfdTblEnt *e;
     int i;
-    FUN_0028b530(tbl, 0, 48);
+    mpsutl_FillWords(tbl, 0, 48);
     e = tbl->ent;
     for (i = 4; i >= 0; i--) {
         FUN_002afba8(e++);
@@ -747,14 +747,14 @@ int FUN_002abd00(SfdPly *h) {
     return FUN_002b02a0(h, 3);
 }
 
-int FUN_002abd18(SfdPly *h) {
+int SFD_Destroy(SfdPly *h) {
     int result;
     int i;
-    if (sfd_CheckHn(h) != 0) {
+    if (SFLIB_CheckHn(h) != 0) {
         return sfd_ReportError(0, 0xFF000131);
     }
     FUN_002abef0(h);
-    FUN_0029fed0(h->blk120);
+    sfhdr_ResetInf(h->blk120);
     FUN_0029d790(h);
     result = FUN_002abdb8(h);
     for (i = 0; i < 8; i++) {
@@ -771,8 +771,8 @@ int FUN_002abdb8(SfdPly *h) {
     return FUN_002b02a0(h, 4);
 }
 
-int FUN_002abde0(SfdPly *h) {
-    if (sfd_CheckHn(h) != 0) {
+int SFD_Start(SfdPly *h) {
+    if (SFLIB_CheckHn(h) != 0) {
         return sfd_ReportError(0, 0xFF000132);
     }
     if (SFD_GetCond(h, 47) == 1) {
@@ -795,8 +795,8 @@ long FUN_002abe70(SfdPly *h) {
 }
 
 /* matching construct: implicit-int return (declared int, no value returned) — epilogue order */
-int FUN_002abe98(SfdPly *h) {
-    if (sfd_CheckHn(h) != 0) {
+int SFD_Stop(SfdPly *h) {
+    if (SFLIB_CheckHn(h) != 0) {
         sfd_ReportError(0, 0xFF000133);
         return;
     }
@@ -843,42 +843,42 @@ int FUN_002abf78(SfdPly *h) {
 }
 
 int SFD_GetInputBufStat(SfdPly *h, int value) {
-    if (sfd_CheckHn(h) != 0) {
+    if (SFLIB_CheckHn(h) != 0) {
         return sfd_ReportError(0, 0xFF000134);
     }
     return FUN_002b0338(h, 0, 9, value, 0);
 }
 
-int FUN_002ac418(SfdPly *h, int a, int b) {
-    if (sfd_CheckHn(h) != 0) {
+int SFD_SetReadIndex(SfdPly *h, int a, int b) {
+    if (SFLIB_CheckHn(h) != 0) {
         return sfd_ReportError(0, 0xFF000135);
     }
     return FUN_002b0338(h, 0, 10, a, b);
 }
 
-int FUN_002ac498(SfdPly *h) {
+int SFD_TermSupply(SfdPly *h) {
     int id;
-    if (sfd_CheckHn(h) != 0) {
+    if (SFLIB_CheckHn(h) != 0) {
         return sfd_ReportError(0, 0xFF000135);
     }
     id = h->f28.f20;
-    if (FUN_0029ea88(h, id) == 1) {
+    if (sfbuf_GetFlagB(h, id) == 1) {
         return 0;
     }
-    FUN_0029ea68(h, id, 1);
+    sfbuf_SetFlagB(h, id, 1);
     h->pending = 1;
     return 0;
 }
 
 int FUN_002ac528(SfdPly *h) {
-    return FUN_0029ea88(h, h->f28.f20) != 0;
+    return sfbuf_GetFlagB(h, h->f28.f20) != 0;
 }
 
 int FUN_002ac548(SfdPly *h, int *out) {
     int result;
     int value;
     *out = 0;
-    if (sfd_CheckHn(h) != 0) {
+    if (SFLIB_CheckHn(h) != 0) {
         return sfd_ReportError(0, 0xFF000136, 11, out, 0);
     }
     result = FUN_002b0338(h, 6, 11, out, 0);
@@ -892,8 +892,8 @@ int FUN_002ac548(SfdPly *h, int *out) {
     return result;
 }
 
-void FUN_002ac600(SfdPly *h, int value) {
-    if (sfd_CheckHn(h) != 0) {
+void SFD_RelFrm(SfdPly *h, int value) {
+    if (SFLIB_CheckHn(h) != 0) {
         sfd_ReportError(0, 0xFF000137);
         return;
     }
@@ -902,7 +902,7 @@ void FUN_002ac600(SfdPly *h, int value) {
 }
 
 void FUN_002ac670(SfdPly *h, int value) {
-    if (sfd_CheckHn(h) != 0) {
+    if (SFLIB_CheckHn(h) != 0) {
         sfd_ReportError(0, 0xFF000139);
         return;
     }

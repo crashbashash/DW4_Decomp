@@ -82,24 +82,24 @@ void FUN_002e31b0(int a0, int a1)
     *(int *)((char *)a0 + 20) = a1;
 }
 
-int FUN_002e31c0(char *arg0) {
+bool FilePath_IsAbsolute(const char *path) {
     char c;
 
-    if (arg0 == 0) {
+    if (path == 0) {
         return 0;
     }
-    c = *arg0;
-    if (c == 0x2F || c == 0x5C) {
+    c = *path;
+    if (c == '/' || c == '\\') {
         return 1;
     }
-    return ((int)strchr(arg0, 0x3A)) != 0;
+    return ((int)strchr(path, ':')) != 0;
 }
 
-int FUN_002e3220(int arg0) {
-    if (arg0 == 0) {
+bool FilePath_HasDirectory(const char *path) {
+    if (path == 0) {
         return 0;
     }
-    if ((((int)strchr(arg0, 0x2F)) == 0) && (((int)strchr(arg0, 0x5C)) == 0)) {
+    if ((((int)strchr(path, '/')) == 0) && (((int)strchr(path, '\\')) == 0)) {
         return 0;
     }
     return 1;

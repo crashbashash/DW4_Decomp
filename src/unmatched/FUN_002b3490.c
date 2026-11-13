@@ -1,5 +1,5 @@
 typedef struct Obj { char pad[52]; int f52; int pad2; int f60; } Obj;
-extern int FUN_002b30e8(int);
+extern int SFXA_IsNeedUpdateLumiTbl(int);
 int FUN_002b3490(Obj *o, unsigned int k)
 {
     int ret = 1;
@@ -8,7 +8,7 @@ int FUN_002b3490(Obj *o, unsigned int k)
     if (o->f60 == k) {
         switch (k) {
         case 2:
-            if (FUN_002b30e8(o->f52) == 1)
+            if (SFXA_IsNeedUpdateLumiTbl(o->f52) == 1)
                 break;
         case 1:
         case 4:

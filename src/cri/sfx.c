@@ -41,14 +41,14 @@ void FUN_00283090();
 int FUN_002830a8();
 void FUN_002830d0();
 void FUN_002830f0(void);
-void FUN_002b2ee8(void);
-int FUN_002b2f40();
-void *FUN_002b2f48(void);
-int FUN_002b3030();
-int FUN_002b30f0();
-int FUN_002b3110();
-int FUN_002b3130();
-int FUN_002b3148();
+void sfxa_Init(void);
+int sfxa_Finish();
+void *SFXA_Create(void);
+int SFXA_Destroy();
+int SFXA_SetLumiPrm();
+int SFXA_GetLumiPrm();
+int SFXA_SetAlp3Prm();
+int SFXA_GetAlp3Prm();
 void FUN_002b4330();
 int FUN_002b50e8();
 int FUN_002b5148();
@@ -86,7 +86,7 @@ void FUN_002b3788(void) {
     FUN_002b3808();
     FUN_002b4080();
     FUN_002b4210();
-    FUN_002b2ee8();
+    sfxa_Init();
     DAT_004bec24 = 0;
     (*initialised)++;
 }
@@ -106,7 +106,7 @@ void FUN_002b3808(void) {
 void FUN_002b3858(void) {
     if (DAT_004bec20 > 0) {
         FUN_002b4268();
-        FUN_002b2f40();
+        sfxa_Finish();
         FUN_002b4098();
         FUN_00283090();
         DAT_004bec20--;
@@ -137,7 +137,7 @@ SfxHn *FUN_002b38c8(int work, int wksize, int a2, int a3) {
         return 0;
     }
     hn->zhn = zhn;
-    ahn = FUN_002b2f48();
+    ahn = SFXA_Create();
     if (ahn == 0) {
         FUN_002b3b38(0, 0, DAT_004f5840);
         FUN_002b3ae8(hn);
@@ -146,6 +146,22 @@ SfxHn *FUN_002b38c8(int work, int wksize, int a2, int a3) {
     hn->ahn = ahn;
     DAT_004bec28.nhn++;
     return hn;
+}
+
+/* matching construct: manual — the in-use word is read through a volatile pointer; retail leaves the loop branch's delay slot empty */
+SfxHn *FUN_002b39e0(void) {
+    int maxhn = DAT_004bec28.maxhn;
+    SfxHn *tbl = DAT_004bec28.hn;
+    volatile SfxHn *hn;
+    int i;
+
+    for (i = 0; i < maxhn; i++) {
+        hn = &tbl[i];
+        if (hn->used == 0) {
+            return (SfxHn *)hn;
+        }
+    }
+    return 0;
 }
 
 void FUN_002b3a30(SfxHn *hn, int work, int wksize) {
@@ -180,7 +196,7 @@ void FUN_002b3ae8(SfxHn *hn) {
         ahn = hn->ahn;
         hn->used = 0;
         FUN_002b4330(hn->zhn);
-        FUN_002b3030(ahn);
+        SFXA_Destroy(ahn);
         DAT_004bec28.nhn -= 1;
     }
 }
@@ -332,20 +348,20 @@ void FUN_002b3db0(SfxHn *hn, SfxPicInf *pic, int *first, int *second) {
 }
 
 void FUN_002b3dd0(SfxHn *hn) {
-    FUN_002b30f0(hn->ahn);
+    SFXA_SetLumiPrm(hn->ahn);
 }
 
 void FUN_002b3de8(SfxHn *hn) {
-    FUN_002b3110(hn->ahn);
+    SFXA_GetLumiPrm(hn->ahn);
 }
 
 void FUN_002b3e00(SfxHn *hn, int a, int b, int c) {
-    FUN_002b3130(hn->ahn, a & 0xFF, b & 0xFF, c & 0xFF);
+    SFXA_SetAlp3Prm(hn->ahn, a & 0xFF, b & 0xFF, c & 0xFF);
     FUN_002b3c88(hn, 0);
 }
 
 void FUN_002b3e40(SfxHn *hn) {
-    FUN_002b3148(hn->ahn);
+    SFXA_GetAlp3Prm(hn->ahn);
 }
 
 void FUN_002b3e58(SfxHn *hn, int value) {
@@ -401,7 +417,7 @@ void FUN_002b3f20(SfxFrame *frm, int height) {
     frm->plane[2].height = height >> 1;
 }
 
-void FUN_002b3f48(SfxFrame *frm, int second, int first) {
+void sfx_ClipFrame(SfxFrame *frm, int second, int first) {
     first = first / 2 * 2;
     second = second / 2 * 2;
     FUN_002b3fd0(&frm->plane[0], first, second);

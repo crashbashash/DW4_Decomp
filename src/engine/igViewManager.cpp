@@ -60,7 +60,7 @@ extern int DAT_0058cd80[4];
 int Gap__Viewer__igViewManager__vfunc_23(void *arg0);
 class DW4VC_100_0 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual int vX(); };
 
-int FUN_001007e0(...);
+int __nw__FUi(...);
 int FUN_00238110(...);
 int FUN_00464170(...);
 int StringChunk_ReleaseHeader(...);
@@ -159,7 +159,7 @@ ViewerSetup::ViewerSetup(igObject *w)
         InsightCore *c = core.p;
         c->window = next;
         if (DAT_0056dc50[0] == 0) {
-            Frame *f = (Frame *)FUN_001007e0(240);
+            Frame *f = (Frame *)__nw__FUi(240);
             if (f != 0) f = (Frame *)FUN_00238110(f);
             DAT_0056dc50[0] = f;
         }
@@ -319,7 +319,7 @@ void FUN_00464540(Arg *arg0, int arg1) {
     int rc;
     FUN_00464170(arg1, sp60, &sp6C, 1, -1);
     if (DAT_0056dc50[0] == 0) {
-        f = (Frame *)FUN_001007e0(240);
+        f = (Frame *)__nw__FUi(240);
         if (f != 0) f = (Frame *)FUN_00238110(f);
         DAT_0056dc50[0] = f;
     }

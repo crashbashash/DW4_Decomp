@@ -482,7 +482,7 @@ struct FlushSettings *FUN_00234900(struct FlushSettings *s) {
     s->f232 = igIntList_Create(renderAllocator());
     s->f236 = igStringRefList_Create(renderAllocator());
     if (DAT_0056dc50[0] == 0) {
-        struct FlushShared *shared = FUN_001007e0(240);
+        struct FlushShared *shared = __nw__FUi(240);
         if (shared) {
             shared = (struct FlushShared *)FUN_00238110(shared);
         }
@@ -501,7 +501,7 @@ void *FUN_00234b90(struct App *arg0, short arg1) {
     int rc;
 
     if (arg0 != 0) {
-        FUN_00234ca0();
+        ViewerOptions_ReleaseShared();
         if (&arg0->f236) {
             p = arg0->f236;
             if (p != 0) {
@@ -540,7 +540,8 @@ void *FUN_00234b90(struct App *arg0, short arg1) {
     return arg0;
 }
 
-void FUN_00234ca0(void) {
+/* Drops a reference to the shared viewer options, freeing them with the last one. */
+static inline void releaseSharedOptions(void) {
     struct FlushShared *f;
     void *p;
     int *h;
@@ -577,6 +578,10 @@ void FUN_00234ca0(void) {
             DAT_0056dc50[0] = 0;
         }
     }
+}
+
+void ViewerOptions_ReleaseShared(void) {
+    releaseSharedOptions();
 }
 
 void FUN_00234d70(int self, int count, int *names) {
@@ -867,36 +872,115 @@ static inline const char *textOf(const TextValue *value) {
     return s;
 }
 
-ShadowSettings FUN_00236260(ShadowConfig *config) {
+FrameBufferFormat ViewerOptions_GetRequestedFormat(ViewerOptions_2382e0 *options) {
     igSmartPointer<TextValue> text(FUN_002b9500(Memory_GetAllocatorBySelector(DAT_00587048[0])));
-    ShadowSettings settings;
-    settings.enabled = 1;
-    settings.width = config->width;
-    settings.height = config->height;
-    if (config->verbose) {
+    FrameBufferFormat format;
+    format.enabled = 1;
+    format.width = options->width;
+    format.height = options->height;
+    if (options->reportVideoFormat) {
         printf(text_Requested_format);
     }
-    describe(text, config->left);
-    if (config->verbose) {
+    describe(text, options->colorBits);
+    if (options->reportVideoFormat) {
         printf(text_color_s, textOf(text.p));
     }
-    describe(text, config->top);
-    if (config->verbose) {
+    describe(text, options->alphaBits);
+    if (options->reportVideoFormat) {
         printf(text_alpha_s, textOf(text.p));
     }
-    describe(text, config->right);
-    if (config->verbose) {
+    describe(text, options->depthBits);
+    if (options->reportVideoFormat) {
         printf(text_depth_s, textOf(text.p));
     }
-    describe(text, config->bottom);
-    if (config->verbose) {
+    describe(text, options->stencilBits);
+    if (options->reportVideoFormat) {
         printf(DAT_004e97b8, textOf(text.p));
     }
-    settings.left = config->left;
-    settings.top = config->top;
-    settings.right = config->right;
-    settings.bottom = config->bottom;
-    settings.scale = 1.0f;
-    return settings;
+    format.colorBits = options->colorBits;
+    format.alphaBits = options->alphaBits;
+    format.depthBits = options->depthBits;
+    format.stencilBits = options->stencilBits;
+    format.scale = 1.0f;
+    return format;
+}
+
+/* Creates the display from the shared viewer options: a window and a visual context (in the
+ * scratchpad allocator when the options ask for it) set to the NTSC or PAL video mode, with a
+ * frame buffer of the requested format and the options' clear colour. A window that cannot be
+ * created ends the program. */
+igSmartPointer<igWindowView> Viewer_CreateDisplay(int allocator) {
+    int windowAllocator;
+    int frameBuffer;
+    ViewerOptions_2382e0 *options;
+    int contextAllocator;
+    const igVisualContextView *context;
+    int colorBits;
+    int alphaBits;
+    int depthBits;
+    if (allocator == 0) allocator = Memory_GetAllocatorBySelector(DAT_00587028[0]);
+    windowAllocator = allocator;
+    if (DAT_0056dc50[0] == 0) {
+        struct FlushShared *shared = __nw__FUi(240);
+        if (shared != 0) shared = (struct FlushShared *)FUN_00238110(shared);
+        DAT_0056dc50[0] = shared;
+    }
+    DAT_0056dc50[0]->refs++;
+    options = (ViewerOptions_2382e0 *)DAT_0056dc50[0];
+    igSmartPointer<igWindowView> window(igWindow_CreateInstance(windowAllocator));
+    if (window.p == 0) {
+        if (GPR_00554bd0 == 0) {
+            int answer = FUN_00308320(DAT_004e97d0);
+            if (answer != 1 && answer == 2) GPR_00554bd0 = 1;
+        }
+        exit(1);
+    }
+    if (options->allocateVisualContextInScratchPad != 0) {
+        int scratchpad;
+        if (g_useOwnerAllocator != 0) scratchpad = Memory_GetAllocatorBySelector(DAT_00587028[0]);
+        else scratchpad = Memory_GetAllocatorBySelector(DAT_00587050[0]);
+        contextAllocator = scratchpad;
+        if (scratchpad == 0) contextAllocator = windowAllocator;
+    } else {
+        contextAllocator = windowAllocator;
+    }
+    igSmartPointer<igVisualContextView> visualContext(igVisualContext_CreateInstance(contextAllocator));
+    VideoMode mode;
+    mode.pal = 0;
+    mode.interlace = 0;
+    mode.refreshRate = 0.0f;
+    mode.swapInterval = 0;
+    mode.enable = 1;
+    mode.swapInterval = options->swapInterval;
+    mode.interlace = 0;
+    mode.refreshRate = 59.9399986f;
+    mode.outputFormat = 2;
+    mode.fullHeight = 1;
+    mode.pal = 0;
+    mode.interlace = 1;
+    if (options->palVideoMode != 0) {
+        mode.refreshRate = 50.0f;
+        mode.pal = 1;
+    }
+    if (options->halfBuffer != 0) mode.fullHeight = 0;
+    visualContext->setVideoMode(&mode);
+    FrameBufferFormat requested = ViewerOptions_GetRequestedFormat(options);
+    frameBuffer = visualContext->addFrameBuffer(&requested);
+    window->setVisualContext(visualContext);
+    if (window->open(DAT_004e96f8, options->width, options->height) == 0) {
+        return igSmartPointer<igWindowView>(0, kRetainReference);
+    }
+    if (options->reportVideoFormat != 0) {
+        context = visualContext.p;
+        colorBits = context->getColorBits(frameBuffer);
+        alphaBits = context->getAlphaBits(frameBuffer);
+        depthBits = context->getDepthBits(frameBuffer);
+        printf(DAT_004e9800, colorBits, alphaBits, depthBits, context->getStencilBits(frameBuffer));
+    }
+    fflush(_impure_ptr->_stdout);
+    visualContext->setClearColor(&options->clearColor);
+    visualContext->setCapability0(1);
+    releaseSharedOptions();
+    return window;
 }
 

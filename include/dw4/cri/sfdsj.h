@@ -1,3 +1,6 @@
+#ifndef SFDSJ_H
+#define SFDSJ_H
+
 typedef struct SfdSj SfdSj;
 
 typedef struct SfdSjChunk {
@@ -30,3 +33,5 @@ typedef struct SfdBufStat {
     int tailFlag;
     int pad28;
 } SfdBufStat;
+
+#endif

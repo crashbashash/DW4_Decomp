@@ -25,49 +25,49 @@ typedef struct AdxRna {
 
 extern char DAT_004ee378[];
 
-int FUN_00279218();
-int FUN_00279b00();
-int FUN_00279dd0();
-int FUN_00279f68();
-int FUN_00279fd8();
-int FUN_0027a040();
-int FUN_0027a090();
-int FUN_0027a0e0();
-int FUN_0027a0e8();
-int FUN_0027a178();
-int FUN_0027a200();
-int FUN_0027a228();
-int FUN_0027a2e8();
-int FUN_0027a688();
-int FUN_0027a770();
-int FUN_0027a7b8();
-int FUN_0027a818();
-int FUN_0027a8b0();
-int FUN_0027a8e0();
-int FUN_0027a910();
-int FUN_0027aa08();
-int FUN_0027aa40();
-int FUN_0027aaa8();
-int FUN_0027acc8();
-int FUN_0027ad70();
-int FUN_0027adb8();
-int FUN_0027ade8();
-int FUN_0027ae18();
-int FUN_0027ae58();
-int FUN_0027aea8();
-int FUN_0027aed8();
-int FUN_0027af70();
-int FUN_0027afa0();
-int FUN_0027afd0();
-int FUN_0027b008();
-int FUN_0027b038();
-int FUN_0027b0f8();
-int FUN_0027b188();
+int PS2RNA_SetupVoice();
+int PS2RNA_Init();
+int PS2RNA_SendOutMode();
+int PS2RNA_StartAux();
+int PS2RNA_StopAux();
+int PS2RNA_SetAuxSw();
+int PS2RNA_SetDualSw();
+int PS2RNA_GetDualSw();
+int PS2RNA_OpenPort();
+int PS2RNA_ClosePort();
+int PS2RNA_IsPortOpen();
+int PS2RNA_Finish();
+int PS2RNA_Create();
+int PS2RNA_Destroy();
+int PS2RNA_Start();
+int PS2RNA_Stop();
+int PS2RNA_SetTransSw();
+int PS2RNA_SetPlaySw();
+int PS2RNA_SetOutMode();
+int PS2RNA_GetOutMode();
+int PS2RNA_GetTime();
+int PS2RNA_GetNumData();
+int PS2RNA_GetNumRoom();
+int PS2RNA_ExecServer();
+int PS2RNA_SetStartSmpl();
+int PS2RNA_SetNumChan();
+int PS2RNA_SetSfreq();
+int PS2RNA_SetOutVol();
+int PS2RNA_SetOutPan();
+int PS2RNA_SetOutBalance();
+int PS2RNA_SetBitPerSmpl();
+int PS2RNA_GetSfreq();
+int PS2RNA_GetOutVol();
+int PS2RNA_GetOutPan();
+int PS2RNA_GetOutBalance();
+int PS2RNA_GetBitPerSmpl();
+int PS2RNA_DiscardData();
+int PS2RNA_SetStmHdInfo();
 unsigned int SJRMT_GetNumData(void *handle, int mode);
 void ADXMSG_PrintErr(const char *format, ...);
 
 void FUN_00265a20(void) {
-    FUN_00279218();
+    PS2RNA_SetupVoice();
 }
 
 unsigned int FUN_00265a38(AdxRna *rna, int ch)
@@ -90,48 +90,48 @@ unsigned int FUN_00265af0(AdxRna *rna, int index) {
 }
 
 void FUN_00265b28(void) {
-    FUN_00279dd0();
+    PS2RNA_SendOutMode();
 }
 
 void FUN_00265b40(void) {
-    FUN_00279f68();
+    PS2RNA_StartAux();
 }
 
 void FUN_00265b58(void) {
-    FUN_00279fd8();
+    PS2RNA_StopAux();
 }
 
 void FUN_00265b70(AdxRna *rna) {
-    FUN_0027a040(rna->tracks);
+    PS2RNA_SetAuxSw(rna->tracks);
 }
 
 void FUN_00265b88(AdxRna *rna) {
-    FUN_0027a090(rna->tracks);
+    PS2RNA_SetDualSw(rna->tracks);
 }
 
 void FUN_00265ba0(AdxRna *rna)
 {
-    FUN_0027a0e0(rna->tracks);
+    PS2RNA_GetDualSw(rna->tracks);
 }
 
 void FUN_00265bb8(void) {
-    FUN_0027a0e8();
+    PS2RNA_OpenPort();
 }
 
 void FUN_00265bd0(void) {
-    FUN_0027a178();
+    PS2RNA_ClosePort();
 }
 
 void FUN_00265be8(void) {
-    FUN_0027a200();
+    PS2RNA_IsPortOpen();
 }
 
 void FUN_00265c00(void) {
-    FUN_00279b00();
+    PS2RNA_Init();
 }
 
 void FUN_00265c18(void) {
-    FUN_0027a228();
+    PS2RNA_Finish();
 }
 
 void FUN_00265c30(void)
@@ -139,41 +139,41 @@ void FUN_00265c30(void)
 }
 
 void ADXRNA_Create(void) {
-    FUN_0027a2e8();
+    PS2RNA_Create();
 }
 
 void ADXRNA_Destroy(void *handle) {
-    FUN_0027a8b0(handle, 0);
-    FUN_0027a818(handle, 0);
-    FUN_0027a688(handle);
+    PS2RNA_SetPlaySw(handle, 0);
+    PS2RNA_SetTransSw(handle, 0);
+    PS2RNA_Destroy(handle);
 }
 
 void FUN_00265c88(void) {
-    FUN_0027a770();
+    PS2RNA_Start();
 }
 
 void FUN_00265ca0(void) {
-    FUN_0027a7b8();
+    PS2RNA_Stop();
 }
 
 void ADXRNA_SetTransSw(void) {
-    FUN_0027a818();
+    PS2RNA_SetTransSw();
 }
 
 void ADXRNA_SetPlaySw(void) {
-    FUN_0027a8b0();
+    PS2RNA_SetPlaySw();
 }
 
-void FUN_00265ce8(void) {
-    FUN_0027aa08();
+void ADXRNA_GetTime(void) {
+    PS2RNA_GetTime();
 }
 
 void ADXRNA_GetNumData(void) {
-    FUN_0027aa40();
+    PS2RNA_GetNumData();
 }
 
-void FUN_00265d18(void) {
-    FUN_0027aaa8();
+void ADXRNA_GetNumRoom(void) {
+    PS2RNA_GetNumRoom();
 }
 
 void FUN_00265d30(void) {
@@ -182,60 +182,60 @@ void FUN_00265d30(void) {
     }
 }
 
-void FUN_00265d68(void) {
-    FUN_0027acc8();
+void ADXRNA_ExecServer(void) {
+    PS2RNA_ExecServer();
 }
 
 void FUN_00265d80(void) {
-    FUN_0027ad70();
+    PS2RNA_SetStartSmpl();
 }
 
 void ADXRNA_SetNumChan(void) {
-    FUN_0027adb8();
+    PS2RNA_SetNumChan();
 }
 
 void ADXRNA_SetSfreq(void) {
-    FUN_0027ade8();
+    PS2RNA_SetSfreq();
 }
 
 void ADXRNA_SetOutVol(void) {
-    FUN_0027ae18();
+    PS2RNA_SetOutVol();
 }
 
-void FUN_00265de0(void) {
-    FUN_0027ae58();
+void ADXRNA_SetOutPan(void) {
+    PS2RNA_SetOutPan();
 }
 
-void FUN_00265df8(void) {
-    FUN_0027aea8();
+void ADXRNA_SetOutBalance(void) {
+    PS2RNA_SetOutBalance();
 }
 
 void ADXRNA_SetBitPerSmpl(void) {
-    FUN_0027aed8();
+    PS2RNA_SetBitPerSmpl();
 }
 
 void FUN_00265e28(void) {
-    FUN_0027af70();
+    PS2RNA_GetSfreq();
 }
 
 void FUN_00265e40(void) {
-    FUN_0027afa0();
+    PS2RNA_GetOutVol();
 }
 
 void FUN_00265e58(void) {
-    FUN_0027afd0();
+    PS2RNA_GetOutPan();
 }
 
 void FUN_00265e70(void) {
-    FUN_0027b008();
+    PS2RNA_GetOutBalance();
 }
 
 void FUN_00265e88(void) {
-    FUN_0027b038();
+    PS2RNA_GetBitPerSmpl();
 }
 
-void FUN_00265ea0(void) {
-    FUN_0027b0f8();
+void ADXRNA_DiscardData(void) {
+    PS2RNA_DiscardData();
 }
 
 void FUN_00265eb8(void)
@@ -246,12 +246,12 @@ void FUN_00265ec0(void)
 {
 }
 
-void FUN_00265ec8(void) {
-    FUN_0027a8e0();
+void ADXRNA_SetOutMode(void) {
+    PS2RNA_SetOutMode();
 }
 
-void FUN_00265ee0(void) {
-    FUN_0027a910();
+void ADXRNA_GetOutMode(void) {
+    PS2RNA_GetOutMode();
 }
 
 void ADXRNA_SetTotalNumSmpl(void)
@@ -263,6 +263,6 @@ void FUN_00265f00(void)
 }
 
 int ADXRNA_SetStmHdInfo(void) {
-    FUN_0027b188();
+    PS2RNA_SetStmHdInfo();
     return 0;
 }

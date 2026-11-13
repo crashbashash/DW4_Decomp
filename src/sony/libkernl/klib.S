@@ -30,14 +30,14 @@ _LoadExecPS2:
 	nop
 	.end	_LoadExecPS2
 
-	.globl	FUN_0010ab30
-	.ent	FUN_0010ab30
-FUN_0010ab30:
+	.globl	_ExecPS2
+	.ent	_ExecPS2
+_ExecPS2:
 	li	$3,7
 	syscall
 	jr	$31
 	nop
-	.end	FUN_0010ab30
+	.end	_ExecPS2
 
 	.globl	SetVTLBRefillHandler
 	.ent	SetVTLBRefillHandler
@@ -57,14 +57,14 @@ AddIntcHandler:
 	nop
 	.end	AddIntcHandler
 
-	.globl	AddIntcHandler__0010abd0
-	.ent	AddIntcHandler__0010abd0
-AddIntcHandler__0010abd0:
+	.globl	AddIntcHandler2
+	.ent	AddIntcHandler2
+AddIntcHandler2:
 	li	$3,16
 	syscall
 	jr	$31
 	nop
-	.end	AddIntcHandler__0010abd0
+	.end	AddIntcHandler2
 
 	.globl	RemoveIntcHandler
 	.ent	RemoveIntcHandler

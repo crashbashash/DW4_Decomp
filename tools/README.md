@@ -12,7 +12,7 @@ Run everything from the repository root. The Makefile calls the build tools; the
 | [`linkcheck.py`](linkcheck.py) | compare a relinked section against the retail binary |
 | [`make_iso.py`](make_iso.py) | `make iso`: write the built executable into a copy of your disc image, in `build/` |
 | [`layout.py`](layout.py) | turn the symbol map into a DISJOINT, ordered tiling of the section |
-| [`whole_file_rows.py`](whole_file_rows.py) | measure a stock library's whole-file rows from retail: members, duplicates (profile twins included), stripped functions, data and externals |
+| [`whole_file_rows.py`](whole_file_rows.py) | measure a stock library's whole-file rows from retail: members, duplicates (reached by call, vtable or exception table; profile twins included), stripped functions, data, externals and the owner's `symbol` |
 | [`split.py`](split.py) | lay out the retail code and emit one assembly unit per function |
 | [`buildcache.py`](buildcache.py) | a content-addressed result cache for tools/check.py and tools/linkgen.py |
 | [`units.py`](units.py) | resolve a symbol to its definition in a multi-function source file |

@@ -32,6 +32,7 @@ import asmsources  # noqa: E402
 import inline_asm  # noqa: E402
 import units  # noqa: E402
 import unitprofiles  # noqa: E402
+import unitobjects  # noqa: E402
 
 TABLE = os.path.join(ROOT, "config", "source-approvals.tsv")
 INCLUDE = os.path.join(ROOT, "include")
@@ -43,6 +44,8 @@ _WORD = re.compile(r"[A-Za-z_]\w*")
 _USE_WORD = re.compile(r"asm|volatile|__I_")
 # an MWCC instruction builtin (`__I_mfc0(3, 12)`, `__I_nop()`): inline assembly by another name
 _BUILTIN = re.compile(r"(?<!\w)__I_\w+\s*\(")
+# `inline`, or GCC's `__inline` and `__inline__`, which Sony's headers spell
+_INLINE = re.compile(r"\b(?:__)?inline(?:__)?\b")
 _header_cache = {}
 _defined_cache = {}
 _source_cache = {}
@@ -93,7 +96,7 @@ def _text_count(text):
 
 def _reachable_text(text, name):
     """The text of function `name` with every other top-level definition blanked, except the inline
-    helpers it reaches by name: those are compiled into it. A file-scope declaration holding a `volatile`
+    helpers it reaches by name: those are compiled into it. A file-scope declaration or macro
     stays only when the function or a kept helper names something it declares, directly or through
     a type definition or macro it reaches (C keywords aside, so a shared type name keeps it): a `volatile`
     global reaches the functions that use it, and a `volatile` member the functions that reach its type."""
@@ -109,7 +112,7 @@ def _reachable_text(text, name):
         for word in set(_WORD.findall(_blank(text[s:e]))):
             if word in bodies and word not in keep:
                 s2, _e2 = bodies[word]
-                if re.search(r"\binline\b", text[s2:text.index("{", s2)]):
+                if _INLINE.search(text[s2:text.index("{", s2)]):
                     keep.add(word)
                     pending.append(word)
     out = list(text)
@@ -130,7 +133,10 @@ def _reachable_text(text, name):
         if _TYPE_DEF.match(body):
             keys, passes = set(_NAME.findall(_unnest(body, "{}"))) - _C_KEYWORDS, words
         elif _PROPAGATES.match(body):
-            keys, passes = words, words
+            # a macro is reached by its name, and passes on the names it uses, its parameters aside
+            macro = _MACRO.match(body)
+            keys = {macro.group(1)}
+            passes = words - keys - set(_NAME.findall(macro.group(2) or ""))
         else:
             # a variable or function declaration passes on its type names, not its parameter names
             keys, passes = words, set(_NAME.findall(_unnest(body, "()"))) - _C_KEYWORDS
@@ -144,7 +150,7 @@ def _reachable_text(text, name):
                 used |= passes
                 grew = True
     for k, (s, e, _keys, _passes) in enumerate(statements):
-        if k not in reached and _VOLATILE.search(_blank(text[s:e])):
+        if k not in reached:
             for j in range(s, e):
                 if out[j] != "\n":
                     out[j] = " "
@@ -154,14 +160,15 @@ def _reachable_text(text, name):
 _C_KEYWORDS = frozenset(
     "auto break case char const continue default do double else enum extern float for goto if inline int long "
     "register restrict return short signed sizeof static struct switch typedef union unsigned void volatile while "
-    "__volatile__ __inline__ __inline __attribute__ __restrict__ __extension__ bool class "
+    "__volatile__ __inline__ __inline __attribute__ __restrict__ __extension__ bool class asm __asm__ __asm "
     "define undef include ifdef ifndef elif endif pragma defined".split())
 _NAME = re.compile(r"(?<![\w])[A-Za-z_]\w*")
 # A type definition is reached by its tag or typedef name and passes on every name it uses (a member's
-# type); a macro is reached by and passes on its names; a variable or function declaration is reached
+# type); a macro is reached by its name and passes on the names it uses, its parameters aside; a variable or function declaration is reached
 # by its names and passes on only those outside parentheses, so a parameter's name links nothing.
 _TYPE_DEF = re.compile(r"\s*(?:typedef\b|struct\b|union\b|enum\b)")
 _PROPAGATES = re.compile(r"\s*#\s*define\b")
+_MACRO = re.compile(r"\s*#\s*define\s+(\w+)(\([^)]*\))?")
 
 
 def _unnest(text, pair):
@@ -235,11 +242,10 @@ def _read(path):
 
 
 def _header(path):
-    """(asm, volatile, the headers it includes) of one project header, read once per run."""
+    """(text, the headers it includes) of one project header, read once per run."""
     if path not in _header_cache:
         text = _read(path)
-        a, v = _count(text)
-        _header_cache[path] = (a, v, _includes(text, os.path.dirname(path)))
+        _header_cache[path] = (text, _includes(text, os.path.dirname(path)))
     return _header_cache[path]
 
 
@@ -254,17 +260,18 @@ def _includes(text, directory):
     return found
 
 
-def _header_counts(includes, seen):
-    """(asm, volatile) over project headers and what they include, each counted once."""
-    asm = vol = 0
+def _header_texts(includes, seen):
+    """[(path, text)] of the project headers a source includes and what they include, each once, a
+    header's own includes ahead of it as the preprocessor reads them."""
+    out = []
     for path in includes:
         if path in seen:
             continue
         seen.add(path)
-        a, v, nested = _header(path)
-        a2, v2 = _header_counts(nested, seen)
-        asm, vol = asm + a + a2, vol + v + v2
-    return asm, vol
+        text, nested = _header(path)
+        out += _header_texts(nested, seen)
+        out.append((path, text))
+    return out
 
 
 def defines(path, name):
@@ -279,24 +286,31 @@ def uses(path, name):
     """{"asm": n, "volatile": n} reaching function `name` as defined in `path`."""
     if not in_scope(path):
         return {"asm": 0, "volatile": 0, "asm-function": 0}
-    text, counted, a2, v2 = _source(path)
+    text, counted, _offsets = _source(path)
     # blanking only removes text, so a source with nothing to count has nothing to count for any of its
     # functions; a whole library unit holds thousands, and its reachable text is costly to build
     a, v = _count(_reachable_text(text, name)) if counted else (0, 0)
-    return {"asm": a + a2, "volatile": v + v2, "asm-function": int(name in unitprofiles.asm_body_names(path))}
+    return {"asm": a, "volatile": v, "asm-function": int(name in unitprofiles.asm_body_names(path))}
 
 
 def _source(path):
-    """(text, whether it has anything to count, asm and volatile its project headers bring) of one source, read
-    once per version of the file: a library unit's thousands of members would each expand and scan it again."""
+    """(text, whether it has anything to count, {header: offset}) of one source, read once per version of
+    the file: its project headers come first, as the preprocessor reads them, so a header's helpers,
+    macros and declarations reach a function the same way the file's own do, and the offsets place each
+    header in the text. A library unit's thousands of members would each expand and scan it again."""
     st = os.stat(path)
     stamp = (st.st_mtime_ns, st.st_size)
     hit = _source_cache.get(path)
     if hit is None or hit[0] != stamp:
-        text = _read(path)
+        own = _read(path)
+        parts, offsets, at = [], {}, 0
+        for header, header_text in _header_texts(_includes(own, os.path.dirname(os.path.abspath(path))), set()):
+            offsets[header] = at
+            parts.append(header_text + "\n")
+            at += len(header_text) + 1
+        text = "".join(parts) + own
         counted = bool(_USE_WORD.search(text)) and _text_count(text) != (0, 0)
-        a2, v2 = _header_counts(_includes(text, os.path.dirname(os.path.abspath(path))), set())
-        hit = _source_cache[path] = (stamp, (text, counted, a2, v2))
+        hit = _source_cache[path] = (stamp, (text, counted, offsets))
     return hit[1]
 
 
@@ -307,9 +321,10 @@ def approved_asm_function(path, name, rows=None):
     return row is not None and row[0] == 1 and name in unitprofiles.asm_body_names(path)
 
 
-def problem(path, name, rows=None):
+def problem(path, name, rows=None, row=None):
     """Why function `name` is not approved, or None. `name` is the definition in the source: an
-    emitted member's owner."""
+    emitted member's owner. `row` is the symbol its approval row names when that differs (a static
+    the symbol map names apart)."""
     rows = load() if rows is None else rows
     found = uses(path, name)
     missing = []
@@ -317,41 +332,47 @@ def problem(path, name, rows=None):
         count = found[kind]
         if not count:
             continue
-        row = rows.get((kind, name))
-        if row is None:
+        row_found = rows.get((kind, row or name))
+        if row_found is None:
             missing.append("%d %s without an approval row" % (count, kind))
-        elif row[0] != count:
-            missing.append("%d %s, but its approval row covers %d" % (count, kind, row[0]))
+        elif row_found[0] != count:
+            missing.append("%d %s, but its approval row covers %d" % (count, kind, row_found[0]))
     return "; ".join(missing) or None
 
 
-def _covered(path, name, rows):
-    """Whether an `asm` row names function `name` and still counts what reaches it."""
-    row = rows.get(("asm", name))
+def _covered(path, name, rows, aliases=None):
+    """Whether an `asm` row names function `name` (or the symbol `aliases` gives the static it is in `path`)
+    and still counts what reaches it."""
+    row = rows.get(("asm", (aliases or {}).get((os.path.abspath(path), name), name)))
     return row is not None and row[0] == uses(path, name)["asm"]
+
+
+def _aliases(rows):
+    """{(path, definition): symbol} for rows naming a static by the symbol the symbol map gives it
+    (`Copy_tlbfunc` for `tlbfunc.c`'s `Copy`)."""
+    index, out = None, {}
+    for _kind, symbol in rows:
+        name = unitobjects.source_name(symbol)
+        if name == symbol:
+            continue
+        index = _index() if index is None else index
+        path = index.get(symbol)
+        if path is not None:
+            out[(os.path.abspath(path), name)] = symbol
+    return out
 
 
 def _callers(text):
     """The definitions in a source that a row can name: an inline helper is compiled into its callers."""
     return [name for name, start, _end in units.definitions(text)
-            if not re.search(r"\binline\b", text[start:text.index("{", start)])]
-
-
-def _includes_header(includes, header, seen):
-    for path in includes:
-        if path == header:
-            return True
-        if path not in seen:
-            seen.add(path)
-            if _includes_header(_header(path)[2], header, seen):
-                return True
-    return False
+            if not _INLINE.search(text[start:text.index("{", start)])]
 
 
 def approved_statements(paths, rows=None):
     """{(path, offset)} of the `asm` statements C could spell whose every function has a current row.
     A statement that reaches no function, or one function without a row, stays out."""
     rows = load() if rows is None else rows
+    aliases = _aliases(rows)
     sources = [(path, _read(path)) for path in paths]
     approved = set()
     for path, text in sources:
@@ -359,19 +380,25 @@ def approved_statements(paths, rows=None):
         if not found:
             continue
         if path.endswith((".h", ".hpp")):
-            header = os.path.normpath(path)
-            reach = []
-            for source, source_text in sources:
-                if not source.endswith((".h", ".hpp")) and _INCLUDE.search(source_text) and _includes_header(
-                        _includes(source_text, os.path.dirname(os.path.abspath(source))), header, set()):
-                    reach += [(source, name) for name in _callers(source_text)]
-            if reach and all(_covered(source, name, rows) for source, name in reach):
-                approved.update((path, start) for start in found)
+            header = os.path.normpath(os.path.abspath(path))
+            for start in found:
+                reach = []
+                for source, source_text in sources:
+                    if source.endswith((".h", ".hpp")) or not in_scope(source):
+                        continue
+                    combined, _counted, offsets = _source(source)
+                    at = offsets.get(header)
+                    if at is None:
+                        continue
+                    reach += [(source, name) for name in _callers(source_text)
+                              if _reachable_text(combined, name)[at + start:at + start + 3] == text[start:start + 3]]
+                if reach and all(_covered(source, name, rows, aliases) for source, name in reach):
+                    approved.add((path, start))
             continue
         callers = _callers(text)
         for start in found:
             reach = [name for name in callers if _reachable_text(text, name)[start:start + 3] == text[start:start + 3]]
-            if reach and all(_covered(path, name, rows) for name in reach):
+            if reach and all(_covered(path, name, rows, aliases) for name in reach):
                 approved.add((path, start))
     return approved
 
@@ -386,11 +413,15 @@ def stale(rows=None, index=None):
     index = _index() if index is None else index
     out = []
     for (kind, symbol), (count, _evidence) in sorted(rows.items()):
-        path = index.get(symbol)
+        path = index.get(symbol) or index.get(unitobjects.source_owner(symbol))
         if path is None:
             out.append("%s %s: no definition in src/" % (kind, symbol))
             continue
-        found = uses(path, symbol)[kind]
+        name = symbol if defines(path, symbol) else unitobjects.source_name(symbol)
+        if not defines(path, name):
+            out.append("%s %s: no definition in %s" % (kind, symbol, path))
+            continue
+        found = uses(path, name)[kind]
         if found != count:
             out.append("%s %s: the row covers %d, the source has %d" % (kind, symbol, count, found))
     return out
@@ -409,7 +440,16 @@ def main(argv=None):
         return 1 if lines else 0
     if a.list:
         rows = load()
-        waiting = [(name, path, problem(path, name, rows)) for name, path in sorted(index.items())]
+        waiting = []
+        for name, path in sorted(index.items()):
+            if defines(path, name):
+                waiting.append((name, path, problem(path, name, rows)))
+                continue
+            # a static the symbol map names apart is counted under its source name; an emitted copy
+            # answers through its owner, which the index lists itself
+            member = unitobjects.source_name(name)
+            if member != name and defines(path, member):
+                waiting.append((name, path, problem(path, member, rows, row=name)))
         waiting = [w for w in waiting if w[2]]
         for name, path, why in waiting:
             print("%s\t%s\t%s" % (name, path, why))

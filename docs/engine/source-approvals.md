@@ -12,7 +12,9 @@ Each approved use has a row in `config/source-approvals.tsv`: `kind` (`asm`, `vo
 function, one written in assembly in the original source; its count is 1. Without it, such a function is
 an asm body ([asm-body matches](asm-body-matches.md)), which counts in no matched figure. Only the owner approves a row. An agent may write one only
 when the owner has explicitly told it to add that function, after reviewing its evidence. It never adds
-one on its own initiative or as part of a broader request. The table is one of the oracle's own files
+one on its own initiative or as part of a broader request. The owner's one standing instruction: a use a
+Fable 5.2 check recommends approving with high confidence is written without a separate question, listed in
+the report, and revocable by the owner. The table is one of the oracle's own files
 (`.githooks/oracle-files.txt`).
 
 A function using either without a row is filed by `make check` as **`unapproved`**. Its source stays and
@@ -27,13 +29,16 @@ python3 tools/sourceapprovals.py --stale   # rows that no longer describe their 
 ## What reaches a function
 
 `tools/sourceapprovals.py` counts the uses in the function's own definition, the inline helpers it reaches
-by name, the file-scope declarations it reaches, and the project headers the file includes. A file-scope
+by name, and the file-scope declarations it reaches, in the file and in the project headers it includes:
+a header's helpers, macros and declarations reach a function the same way the file's own do, so a function
+answers for a header's `asm` or `volatile` only when it uses the helper, macro or declaration holding it. A file-scope
 declaration is reached when the function or one of those helpers names something it declares, directly or
 through another declaration it reaches; C keywords are not names, but a type name is. So a `volatile` global
 reaches the functions that use it, and a struct member declared `volatile` reaches the functions that name
 the struct or a type built on it. A whole-file source declares its module's words once, and each function
 answers only for the ones it touches. The count voids an approval when another use appears, which files the
-function as `unapproved` again. A call of one of MWCC's `__I_<mnemonic>` instruction builtins (`__I_mfc0(3, 12)`,
+function as `unapproved` again. A header statement is approved once every function reaching it has its row.
+A call of one of MWCC's `__I_<mnemonic>` instruction builtins (`__I_mfc0(3, 12)`,
 `__I_nop()`) emits the instruction it names from C, so it counts as an `asm` use.
 
 Three things need no row:
@@ -76,6 +81,14 @@ The `lui`, `addiu`, `lw 0` address form is not evidence for a `volatile` global 
 match without one have it too, nearly always because the address register has a second use. Under ee-gcc 2.96 a
 single-use access in that form, with no call or block boundary before it, has no plain spelling that has been found.
 That points to a `volatile`-qualified access, not to state shared between contexts, so it does not make a case alone.
+
+The form comes from the combiner. The address is expanded as a high part and a low part, and the combiner folds
+the low part into the access, except in three cases: the access is `volatile` (it recognises no instruction with a
+volatile memory operand), the address is computed in another basic block than the access, or the address register
+is used a second time. Each plain spelling of the last two leaves the branch, the load or the second access in
+the function, so a single-use access in this form with nothing of the kind around it was compiled as `volatile`,
+through the object's declaration or through a cast on that one access: the two give the same bytes. The
+compiler's `-fvolatile`, `-fvolatile-global` and `-fvolatile-static` options change nothing here.
 
 Confirmed shared state can make the case by itself when the evidence for it is good: a writer shown running in another
 thread or an interrupt, and the variable read where that writer's change has to be seen, such as a wait or exit flag
@@ -197,9 +210,23 @@ clock pointer (`0x5856d0`), the nesting count (`0x5856d4`), and the two tables o
 * Every access to the RAM words, in every function, uses the `lui`, `addiu`, `0(reg)` form, and nothing outside
   the timer functions touches them.
 * The saved clock (`0x5856c0`) and the pointee qualifier of the clock pointer lose no access when stripped: the
-  first only reorders the stores of the clock copy, the second drops one duplicated `addiu`. So the timer init
-  (the function at `0x2b5848`) and the timer read (the function at `0x2b5a10`), which reach them, have no row (see
-  [Open questions](#open-questions)); the tick (the function at `0x2b59a0`) does.
+  first only reorders the stores of the clock copy, the second drops one duplicated `addiu`. Neither is an
+  independent pin. The pointee qualifier follows from the clock's own: the pointer is assigned the clock's address,
+  and without the qualifier ee-gcc warns that each of the three assignments discards it. The saved clock is the
+  word a nested call reads: the timer read's other path runs only when it is entered again between its increment
+  and decrement of the nesting count, and then reads through the pointer the outer call has aimed at the saved
+  copy. So the timer init (the function at `0x2b5848`), the timer read (the function at `0x2b5a10`) and the tick
+  (the function at `0x2b59a0`) have rows. No interrupt-context caller is shown; the nested entry is read from the
+  code's shape.
+
+### mwsfd-handle-used
+
+The MWSFD player handle's in-use word, which the server pass reads (`mwPlyExecSvrHndl`) while the application side
+clears it when it destroys a player (`mwsfcre_DestroyPly`). The server pass runs as an SVM server callback, and the
+read is the server half of the destroy handshake, so it reads the word where the other side's change must be seen.
+Written as a `volatile` cast at the read, as the DMA channels' shared words are ([dma-channel-shared-words](#dma-channel-shared-words)). The
+keyword keeps no extra load (stripped, the read moves into a branch delay slot), so the row rests on the shared
+state alone.
 
 ### build-string-stores
 
@@ -211,17 +238,34 @@ These inits have no row (see [Open questions](#open-questions)).
 
 ### adxt-ready-count
 
-ADXT's tick count at `0x49c8f0`, which the init file declares `volatile`.
+ADXT's tick count at `0x49c8f0`, which some ADXT files declare `volatile` and others plain.
 
 * ADXT's init clears it, the server entry and `adxm_exec_vint` increment it, and the handle code copies it into a
-  handle as a start time. `adxm_exec_vint` is the vertical-blank interrupt path, reached from `ADXM_ExecVint`.
+  handle as a start time. `adxm_exec_vint` is the vertical-blank interrupt path, reached from `ADXM_ExecVint`
+  (registered through `AddIntcHandler`), and needs the keyword itself: stripped, it comes out 8 bytes short.
 * The same statement, a handle's start time set from the count, compiles in the `lui`, `addiu`, `0(reg)` form
-  in one ADXT file and folded into `%lo` in another, which one declaration cannot give: the original declared
-  the word `volatile` in some files and plain in others. The init's single store has the first form, and no
-  plain spelling tried reproduces it.
-* No matched function re-reads the word. Stripping changes only the init's store by its address form, and the
-  server entry's `+= 1` not at all. The init (the function at `0x2632c0`, whose count of 2 also takes in its build-string word
-  `0x56dfa8`) and the server entry (the function at `0x263208`) have no row (see [Open questions](#open-questions)).
+  in one ADXT file and folded into `%lo` in another, which one declaration cannot give. `adxtinit.c` declares the
+  word plain and qualifies only the init's store with a cast; the server entry needs no keyword. `adxtsvr.c`
+  redeclares the word `volatile` after the shared header's plain declaration, which ee-gcc accepts, so the
+  functions after it keep the unfolded form `adxt_stat_prep` has: there combine folds the low part into the
+  load for any plain spelling, and the registers rule out taking the address earlier.
+* No matched function re-reads the word; each keyword decides the address form only. The second build is the
+  Street Fighter III: 3rd Strike decompilation (CRI ADX built Sep 2003), which declares the count `volatile` in the
+  same files and plain in another, and in `adxtinit` also declares the build string `volatile` and reads it once,
+  the [build-string read](#build-string-reads) mechanism. On that, the owner approved the init's two keywords (the
+  count and its build-string word `0x56dfa8`) and `adxt_stat_prep`'s one.
+
+### adx-server-guards
+
+Entry guards of ADX servers that run on one thread and are waited on or entered from another.
+
+* ADXSTM's server busy word (`0x4a7f00`) is taken through `SVM_TestAndSet` on the file-system thread and polled in
+  `ADXSTM_OpenFile`'s wait loop on the main thread. The keyword is on the server's clearing store: stripped, the
+  function is 4 bytes short. The 3rd Strike decompilation declares the same word `volatile`.
+* ADXT's server phase word is the entry guard of `ADXT_ExecServer`, which runs on the V-sync server thread and on
+  the main thread (through `ADXT_DiscardSmpl`). Only the last store's keyword matters, and stripped it changes one
+  delay slot (`beq` with a `nop` against `beql` with the store); every access is under `ADXCRS_Lock`, so this row
+  rests on the two threads alone.
 
 ### build-string-reads
 
@@ -232,20 +276,36 @@ the value.
 * This is not shared state. The evidence is the mechanism: the word is the string's only reference, none of the GCC
   functions that match with no keyword has a load whose result goes unused, and every plain spelling tried drops it.
 * That the source reads the word to keep the string linked is inference. The owner accepted these on that basis.
+* ADXF 7.18 is in the PS2, GameCube and Xbox builds, and each performs the same discarded read of its build-string
+  word. Compiled with a probe, only `const volatile` fits all three, by the read and by the section the word sits in:
+
+  | declaration | ee-gcc 2.96 | MWCC GameCube 2.0 | MSVC 13.10 (Xbox) |
+  |---|---|---|---|
+  | plain | no read, `.data` | no read, `.data` | no read, `_DATA` |
+  | `volatile` | read, `.data` | read, `.data` | read, `_DATA` |
+  | `const` | no read, `.rdata` | no read, `.rodata` | no read, `CONST` |
+  | `const volatile` | read, `.data` | read, `.rodata` | read, `CONST` |
+  | retail | read, `.data` | read, `.rodata` (after its string) | read, `.rdata` (before its string) |
+
+  The source keeps the `char *volatile` spelling of the other CRI files.
 
 ### metrowerks-runtime-asm-functions
 
-`__ptmf_scall` and `__TransferControl`, from the Metrowerks C++ runtime: `src/runtime/__ptmf.c` and
-`src/runtime/ExceptionHandlerTS.c`.
+`__ptmf_scall`, `__TransferControl` and `__throw`, from the Metrowerks C++ runtime: `src/runtime/__ptmf.c` and
+`src/runtime/ExceptionHandlerTS.cpp`.
 
-* Metrowerks' own runtime source, shipped with CodeWarrior for PlayStation 2 R3.04, writes both as MWCC `asm`
-  functions: the pointer-to-member call in `__ptmf.c`, the restore of a catcher's registers in
-  `ExceptionHandlerTS.cp`. The executable's instructions follow that source one for one.
+* Metrowerks' own runtime source, shipped with CodeWarrior for PlayStation 2 R3.04, writes all three as MWCC `asm`
+  functions: the pointer-to-member call in `__ptmf.c`, the restore of a catcher's registers and the capture of a
+  thrower's in `ExceptionHandlerTS.cp`. The executable's instructions follow that source one for one.
 * The sources here are written from the runtime's data layouts (`PTMF`, `ThrowContext`) and its instructions,
   with no comments or other text of Metrowerks' copied. `__TransferControl` starts with `.set reorder`, as the
   original does, so the assembler moves the final stack adjustment into the jump's delay slot.
-* No C can write either: one takes its argument in `t9` and leaves through a jump on it, and the other loads
-  another frame's saved registers and returns into it.
+* `__throw` copies `sp` with `qmove` (the original's register-copy macro on a 128-bit CPU), which assembles to
+  `paddub`; under `.set reorder` the last copy lands in the delay slot of the call to `__ThrowHandler`. The
+  function is 124 bytes; the word after it is alignment before the next function.
+* No C can write any of them: one takes its argument in `t9` and leaves through a jump on it, and the other two
+  read or load another frame's registers: one captures its caller's `sp`, `ra` and saved registers before any
+  prologue and never returns, the other returns into another frame.
 
 ### sony-libkernl-cop0-and-syscall
 
@@ -265,8 +325,8 @@ Sony libkernl functions written in C with instructions C has no spelling for: re
   `FindAddress` and `_SetTLBEntry` frame register 29 and return register 31, as for their C neighbours, while the
   stubs of `klib.o` have 0 and 0 and carry line numbers. In retail each sits among its member's functions in that
   member's order. So each is a C function holding one `syscall`.
-* `di` appears only in `sbrk`, through `DI()`; the cache and interrupt functions disable interrupts by calling
-  the function at `0x113f20` (`DIntr`).
+* `di` appears in `sbrk`, through `DI()`, and in `DIntr`, whose loop holds `DI()`'s three instructions as one
+  statement; the cache and interrupt functions disable interrupts by calling `DIntr`.
 * A `volatile` in a function's own text stays only where stripping it changes the bytes: on the nine
   `mfc0 %0, $12` Status reads, which it keeps below the register saves and out of a delay slot. `sbrk` also counts
   the five of `DI()` and `EI()`, which `eekernel_intr.h` carries as Sony's header text (only the loop's `mfc0` one
@@ -297,28 +357,38 @@ thread calls and `GetTimerSystemTime`.
 * The `sw $28` stores are written in Sony's input form, `: : "m"(word)`, which has no output and needs no `volatile`.
   The keyword on `GetTimerSystemTime`'s block and on the thread calls' inline syscall was inert and is left out; the
   thread calls carry a `"memory"` clobber, as every asm helper in Sony's `eekernel.h` does, which orders their two
-  prologue saves. The `volatile` rows left are the two in `eekernel_gp.h`, counted against every function of a file
-  that includes it.
+  prologue saves. The `volatile` rows left are those of `eekernel_gp.h`'s `GetGp()` and `SetGp()`, counted against
+  each function that reaches them.
 * A `"memory"` clobber is what makes the values around a swap reload, as retail does: `_request_end` and
   `sceSifExecNotifyHandler` mismatch without it, and `sceSifAddCmdHandler`'s read needs it. `sceSdRemote`'s swap
   matches either way.
+* libmpeg's callback dispatch swaps `$gp` with the header's `SetGp()` and restores it with one `move $28, %0`. SDK
+  3.0.3's `mpeg.o` is this function with `SetGp()` for both and is one `move v0,gp` longer than DW4's 2.8.0. Sony's
+  `tracert.c`, `ping.c` and `iopgcovout.c` write the one-move restore as `asm volatile ("move $gp,%0" : : "r" (gp) :
+  "memory")`; its keyword and clobber are inert here and left out.
 
 ### sony-interrupt-shared-state
 
 Sony library state shared between interrupt-time code and thread code. These rows also count register and
 `__asm__ volatile` keywords, which rest on #sony-hardware-registers.
 
-* `VSync2` passes its flag and time block to the EE kernel through `SetVSyncFlag` (syscall 115). The kernel's
-  vertical-blank interrupt writes the block; no handler in the executable does. Retail reloads `flag` in a call-free
-  poll loop, and the keyword gives that reload. `time` is read once: its keyword only keeps that load out of a branch
-  delay slot, and no plain spelling found matches.
+* `VSync2` passes its flag and time block to the EE kernel through `SetVSyncFlag` (syscall 115), as one `volatile`
+  struct. The kernel's vertical-blank interrupt writes the block; no handler in the executable does. Retail reloads
+  `flag` in a call-free poll loop, and the keyword gives that reload. `time` is read once: its keyword only keeps that
+  load out of a branch delay slot, and no plain spelling of it alone matches; one qualified block gives both.
 * `_ch3dmaCSC` is itself the channel-3 DMA handler. The waiter is the function at `0x1087a8`, which keeps the state on its stack,
   registers `_ch3dmaCSC` for channel 3 and polls `count` in a call-free loop. Retail loads `count` four times in the
   handler, and the keyword gives those reloads.
-* `sceTtyInit` sets up the DECI2 block it shares with `sceTtyHandler`, which it registers through `sceDeci2Open`. The
-  handler writes `len`, `rlen` and `busy`, and reads `len` twice with no call between. `sceTtyInit` only stores zero
-  to those three, so there their keywords fix the store order only. `id` is qualified because `sceTtyInit` stores it
-  and loads it back, which the keyword gives; the handler only reads it.
+* `tty.c` keeps the DECI2 console's state in one block, `TtyInfo`, shared between the protocol handler
+  (`sceTtyHandler`, registered through `sceDeci2Open`) and the callers that write and read. Sony's own DECI2
+  protocol-driver samples in SDK 3.0.3 (`r04466:19-26`, `r04455:18-25`) declare the same block, `volatile int s;
+  volatile u_int wlen; volatile u_int rlen; … volatile int rbytes;`, and use the same statements, including the
+  empty wait loop. Stripping each keyword: `wlen` lets the handler merge two loads with no call between and
+  narrow a `lw`+`andi` to `lhu`; `rlen` forwards the handler's second load from a register; `s` drops
+  `sceTtyInit`'s store-and-load-back; the queue's `count` loses its reload in `sceTtyRead`'s empty poll loop, and
+  `QueuePeekWriteDone`, called from the handler, raises it. `writing`, the busy flag the handler clears while
+  `sceTtyWrite` polls it, only reorders stores. Each function reaching the block counts all five keywords; the
+  three queue helpers count the queue's one.
 
 ### adxm-thread-flags
 
@@ -338,6 +408,11 @@ the requests and wait on the exit words, so the state really is shared between t
 * Retail reads every one of these words through a full address in a register. Under ee-gcc 2.96 a single plain access
   is never written that way, which supports a `volatile`-qualified access in the source.
 * One server thread also writes the GS background colour register at its fixed address, a hardware access.
+* `adxm_exec_vint` is that interrupt path, registered through `AddIntcHandler` behind its wrapper `ADXM_ExecVint`.
+  It reads the three busy flags and three thread ids, increments ADXT's tick count
+  ([adxt-ready-count](#adxt-ready-count)) and guards itself with a re-entry flag. Each of its eight keywords is
+  needed: stripped, it comes out 8 bytes short. The busy flags are single reads in the full-address form, beside a
+  plain read of the set-up count folded into `%lo` in the same function.
 * The server thread bodies (`adxm_vsync_thrd`, `adxm_fs_thrd`, `adxm_usridle_thrd`, `adxm_mwidle_thrd`,
   `adxm_usrvsync_thrd`) have no row: each also reaches its tick count, and the MW-idle and user-idle bodies their
   busy flags, which only their own thread touches and whose keywords only reorder a store (see
@@ -346,10 +421,9 @@ the requests and wait on the exit words, so the state really is shared between t
 ### sony-hardware-registers
 
 Accesses to EE and GS registers in Sony's libraries, and in the CRI code that drives the same registers. Each
-keyword is on a fixed register address, or for the DMA channels on a register reached through a channel pointer,
-except the `__asm__ volatile` on `sync` and `ei` in `VSync`, `VSync2`, `_ch4dma` and `_ch3dmaCSC`. Those change no
-bytes and follow Sony's own spelling: SDK 3.0.3 `eekernel.h` defines `EI()` as `__asm__ volatile("ei")` and
-`ExitHandler()` as `__asm__ volatile("sync.l; ei")`.
+keyword is on a fixed register address, or for the DMA channels on a register reached through a channel pointer.
+The `sync` and `ei` statements in these functions are written without the qualifier, which changes no bytes there,
+although SDK 3.0.3 `eekernel.h` writes `EI()` as `__asm__ volatile("ei")`, by the rule in "Testing a `volatile`".
 
 * Sony's `eeregs.h` in SDK 3.0.3 defines the registers as `volatile` pointers to their fixed addresses, and its
   access macros go through them, so code using the header is `volatile` without writing the word. The header's
@@ -391,6 +465,9 @@ also uses.
   helpers for the timer registers, compile to retail's bytes for these functions, and to different bytes once the
   qualifiers are removed.
 * The functions are also byte-identical to the `libkernl.a` member in the SDK's archives.
+* The functions that program Timer 2 itself (its start-up, the pre-scale read and the compare update) also reach
+  the `T2_COUNT` and `T2_MODE` register macros, `volatile` as in Sony's `eeregs.h` (`r03615:2811-2812`); their rows
+  cite this anchor and count those keywords with the members.
 
 ### sony-vu-and-gp-asm
 
@@ -537,7 +614,7 @@ hold one GCC-style `__asm__` statement of VU0 macro-mode code.
 
 ## Open questions
 
-* **Revoked CRI rows.** Thirteen CRI functions match only with a `volatile` whose keyword keeps no memory access
+* **Revoked CRI rows.** Eleven CRI functions match only with a `volatile` whose keyword keeps no memory access
   and guards no state another context touches. Their rows were revoked, and they stay `unapproved` until there is
   evidence that the original declared the words `volatile`, such as an upstream CRI source or a second build:
   * the ADXM server thread bodies `adxm_vsync_thrd`, `adxm_fs_thrd`, `adxm_usridle_thrd`, `adxm_mwidle_thrd` and
@@ -545,12 +622,22 @@ hold one GCC-style `__asm__` statement of VU0 macro-mode code.
     `adxm_usridle_busy` are touched by their own thread only, and their keywords only reorder a store;
   * the function at `0x271670`, the SRD create count `0x4a92e8`: touched only by this increment; the keyword only leaves a
     delay slot unfilled;
-  * the function at `0x2b5848` and the function at `0x2b5a10`, the SUD saved clock `0x5856c0` and the pointee qualifier of `0x5856d0`: no
-    access is lost when stripped;
-  * the function at `0x2632c0` and the function at `0x263208`, the ADXT tick count `0x49c8f0`: no matched function re-reads it;
-  * the function at `0x2632c0`, the function at `0x2b50e8`, the function at `0x2b3788` and the function at `0x283058`, the build-string stores (`0x56dfa8`,
-    `0x5856a8`, `0x5856a0`, `0x573ea8`): each store is its word's only access, and the keyword changes only its
-    address form and position.
+  * the function at `0x273128`, a DTX word whose single store is its only access; the keyword moves it out of a
+    call's delay slot;
+  * the function at `0x2b50e8`, the function at `0x2b3788` and the function at `0x283058`, the build-string stores (`0x5856a8`,
+    `0x5856a0`, `0x573ea8`): each store is its word's only access, and the keyword changes only its
+    address form and position;
+  * `CRICFG_Init`, its build-string word `0x56dfd0`: the same, and no other build can decide a store, as the
+    GameCube and Xbox builds carry no CRI CFG string and their compilers emit the same store either way.
+
+* **libcdvd's semaphore ids.** Two command pre-checks and `sceCdBreak` match only with a `volatile` on the command
+  semaphore ids (`0x483568`, `0x48356c`), which keeps a load out of a call's delay slot and gains or loses no
+  access; the ids are written only at start-up. A file-scope declaration cannot be what Sony wrote: SDK 3.0.3's
+  `cdvd000.o`, one translation unit, reads the same words with the slot filled in some functions and empty in
+  others, and declaring them `volatile` breaks the functions that fill it. Only a block-scope `extern volatile`
+  reproduces both, so what made these functions see the words as `volatile` is not known, and they have no row.
+  `sceCdBreak`'s other keyword, on the callback number (`0x483598`), which the CD interrupt callback writes, is
+  genuinely shared, but cannot be approved apart from the first.
 
 * **The stack slot `volatile` stands in for.** Some inlined list searches take a value that retail stores
   to the stack and reads back. Locals, structs, arrays,

@@ -27,8 +27,8 @@ void FUN_0032cac0(FolderObject *);
 unsigned int strlen(const char *);
 int sprintf(char *, const char *, ...);
 char *FUN_0032c110(char *);
-int FUN_0010f330(char *, int);
-void FUN_0010f5b8(int);
+int sceOpen(char *, int);
+void sceClose(int);
 void Memory_FreeBufferAliasA(char *);
 void igObject_Destroy(FolderObject *);
 char *FUN_0032cb50(char *name, int kind);
@@ -96,12 +96,12 @@ char *FUN_0032cb50(char *name, int kind) {
                     int file;
                     sprintf(candidate, DAT_004f9a78, dirs[i], name);
                     resolved = FUN_0032c110(candidate);
-                    file = FUN_0010f330(resolved, 1);
+                    file = sceOpen(resolved, 1);
                     if (file < 0) {
                         Memory_FreeBufferAliasA(resolved);
                         continue;
                     }
-                    FUN_0010f5b8(file);
+                    sceClose(file);
                     break;
                 }
             }

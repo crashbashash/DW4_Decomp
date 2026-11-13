@@ -6,17 +6,34 @@ typedef struct MwsfdPly MwsfdPly;
 
 typedef struct MwsfdPlyVtbl {
     void *slot[8];
-    int (*getStat)(MwsfdPly *ply); /* 32 */
+    int (*getStat)(MwsfdPly *ply);             /* 32 */
+    void *slot36[6];
+    void (*setSj)(MwsfdPly *ply, struct SfdSj *sj); /* 60: given the input SJ before a file start */
 } MwsfdPlyVtbl;
 
-/* the creation parameters, kept in the handle */
+/* the creation parameters (mwPlyCreateSofdec's cprm), copied into the handle */
 typedef struct MwsfdCreInf {
     int type;        /* 0 */
-    char pad4[12];
+    int maxBps;      /* 4: scaled into the input byte rate, capped by inputBufSize */
+    int maxWidth;    /* 8 */
+    int maxHeight;   /* 12 */
     int nfrmPoolWk;  /* 16: frames in the work pool */
-    char pad20[12];
+    int nfrm;        /* 20: input size multiplier, at least 1 */
+    char *work;      /* 24: the player's malloc pool; 0 needs malloc functions */
+    int workSize;    /* 28 */
     int f32;         /* 32 */
+    int bufFmt;      /* 36: below 3 */
+    int f40;         /* 40 */
+    int f44;         /* 44 */
 } MwsfdCreInf;
+
+/* the player's own allocation pool */
+typedef struct MwsfdMemPool {
+    char *base;
+    int size;
+    char *cur;
+    int used;
+} MwsfdMemPool;
 
 typedef enum MwsfdChromaFmt {
     MWSFD_CHROMA_FMT_0,
@@ -38,6 +55,7 @@ typedef struct MwsfdPicInf {
     int f16;
     MwsfdChromaPos chromaPosH;     /* 20 */
     MwsfdChromaPos chromaPosV;     /* 24 */
+    int f28;                       /* 28: cleared when the information is taken */
 } MwsfdPicInf;
 
 /* one entry of the per-picture log ring (8 entries, slot = position % 8) */
@@ -68,30 +86,48 @@ typedef struct MwsfdAddInf {
     int size;   /* 8 */
 } MwsfdAddInf;
 
+/* the MWSST input: an SJ ring over a work buffer fed by the input callback table */
+typedef struct MwsfdSst {
+    int created;            /* 0: 1 once MWSST_Create succeeded */
+    char *work;             /* 4 */
+    int workSize;           /* 8 */
+    struct SfdSj *sj;       /* 12: SJRBF over work */
+    int stmNo;              /* 16: video stream number; SFD_SetStmObject id = 0xC0 + stmNo */
+    int extHn;              /* 20: handle from the callback table's create */
+} MwsfdSst;
+
 struct MwsfdPly {
     MwsfdPlyVtbl *vtbl;             /* 0 */
     int used;                       /* 4 */
     int stat;                       /* 8: 2 while playing */
     MwsfdCreInf cre;                /* 12 */
-    char pad48[16];
+    char pad60[4];
     void *sfd;                      /* 64: the SFD player handle */
     void *stm;                      /* 68: the MWSTM (ADXSTM) file stream */
-    char pad72[4];
+    void *adxt;                     /* 72: the ADXT handle, mwPlyGetAdxtHn */
     struct LscObj *lsc;             /* 76: the link stream controller of seamless playback */
     int compoSet;                   /* 80 */
     int compoMode;                  /* 84 */
-    char pad88[8];
+    int frmSync;                    /* 88: mwPlySetFrmSync */
+    char pad92[4];
     int waitingSvr;                 /* 96: set while a caller waits for the server */
-    char pad100[4];
+    int svrBusy;                    /* 100: set by the server around a pass */
     int inSfdExec;                  /* 104: set by the server around its SFD execution */
-    char pad108[20];
+    int execFlg;                    /* 108: the server pass's used-state */
+    char pad112[4];
+    signed char linkReq;            /* 116: mwPlyLinkStm's switch */
+    signed char linkPrev;           /* 117: set on a 1 -> 0 link switch: a term is pending */
+    signed char pause;              /* 118: the pause switch, re-applied on start */
+    char pad119;
+    int nEntry;                     /* 120: files entered by mwPlyEntryFname, cleared by mwSfdStop */
+    int curFrm;                     /* 124: the frame held by mwPlyGetCurFrm */
     int limit;                      /* 128 */
     int count;                      /* 132 */
-    char pad136[4];
+    int numSkipDisp;                /* 136 */
     MwsfdPicInf pic;                /* 140 */
-    char pad168[4];
     void *sfx;                      /* 172 */
-    char pad176[8];
+    char *sfxWork;                  /* 176 */
+    int sfxWorkSize;                /* 180 */
     int picCount;                   /* 184 */
     int logPos;                     /* 188 */
     int logWrite;                   /* 192 */
@@ -110,22 +146,29 @@ struct MwsfdPly {
     MwsfdAddInf addInf;             /* 424 */
     char pad436[4];
     char *fname;                    /* 440 */
-    char pad444[4];
+    int fnameMax;                   /* 444: capacity of fname */
     int stmReq;                     /* 448: a file read is still to be started on stm */
     void *stmDir;                   /* 452 */
     int stmOfst;                    /* 456 */
     int stmNsct;                    /* 460 */
-    char pad464[8];
+    struct SfdSj *sj;               /* 464: the SJ the SFD reads from */
+    struct SfdSj *defSj;            /* 468: the player's own input SJ, mwPlyGetInputSj */
     char *inputBuf;                 /* 472: the input ring buffer */
     int inputBufSize;               /* 476 */
     int inputXSize;                 /* 480 */
-    char pad484[176];
-    int inputType;                  /* 660: 1 when the input is an SJ */
-    char pad664[8];
-    struct SfdSj *inputSj;          /* 672 */
-    char pad676[4];
-    int inputExtHn;                 /* 680: released through the input callback table */
-    char pad684[12];
+    int srcType;                    /* 484: 2 for a caller's SJ */
+    int src488;                     /* 488 */
+    int src492;                     /* 492 */
+    int src496;                     /* 496 */
+    struct SfdSj *memSj;            /* 500: the SJ made over mwSfdStartMem's buffer */
+    char *memBuf;                   /* 504 */
+    int memSize;                    /* 508 */
+    MwsfdMemPool pool;              /* 512 */
+    int mallocCnt;                  /* 528 */
+    void *mallocBlk[32];            /* 532: MWSFD_Malloc's blocks, freed together */
+    MwsfdSst sst;                   /* 660: the SST input */
+    char pad684[8];
+    int f692;                       /* 692: cleared by the SFD stop */
 };
 
 #endif

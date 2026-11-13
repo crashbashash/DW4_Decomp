@@ -2,25 +2,11 @@
 # Instruction-shaped bodies that no symbol of config/SLUS-20836/symbols.txt owns, one per line, with the
 # class of evidence (docs/engine/function-inventory.md) and the references that reach them.
 # The byte total is the debt counter `inventory.unsymbolised_bytes` (tools/progress.py).
-# inventory: 14 unsymbolised code bodies, 1020 bytes
+# inventory: 0 unsymbolised code bodies, 0 bytes
 #   A continuation of the preceding symbol (its extent is short)                 0 bodies       0 bytes
 #   B jal target of a known function                                             0 bodies       0 bytes
 #   C address held in a data word outside every function                         0 bodies       0 bytes
 #   D j target of a known function (tail call)                                   0 bodies       0 bytes
 #   E branch target of a non-adjacent symbol or of unsymbolised code             0 bodies       0 bytes
-#   G no incoming reference                                                     14 bodies    1020 bytes
+#   G no incoming reference                                                      0 bodies       0 bytes
 #   H unreferenced 8-byte `jr ra` stub                                           0 bodies       0 bytes
-00481f18	72	G	label:DAT_00481f18
-00481f9c	84	G	-
-00481ff0	60	G	-
-00482030	76	G	-
-004820a4	40	G	-
-004825fc	32	G	label:LAB_004825fc
-00482620	172	G	-
-004826d0	172	G	-
-004828b4	48	G	-
-00482910	76	G	-
-00482d84	20	G	label:LAB_00482d84
-00482d98	28	G	-
-004831c0	36	G	-
-004833e0	104	G	-

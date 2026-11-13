@@ -175,14 +175,14 @@ extern "C" int FUN_00165d20(int);
 extern "C" int FUN_002d16a0(int);
 extern "C" int FUN_002d1770(...);
 extern "C" int StringChunk_ReleaseHeader(...);
-extern "C" int FUN_002595e0(int arg0, int *arg1);
+extern "C" int main(int arg0, int *arg1);
 extern "C" int *FUN_00259a10(void);
 extern "C" int FUN_002d18c0(int);
 extern "C" void FUN_00259a20(void);
-extern "C" int FUN_0010f330(int *, int);
-extern "C" int FUN_0010f5b8(int);
-extern "C" int FUN_0010f970(int, void *, int);
-extern "C" int FUN_0010fbd0(int, int *, int);
+extern "C" int sceOpen(int *, int);
+extern "C" int sceClose(int);
+extern "C" int sceRead(int, void *, int);
+extern "C" int sceWrite(int, int *, int);
 extern "C" char *FUN_002ee430(int);
 extern "C" void FUN_00259a60(void);
 extern "C" void **FUN_002b7f40(...);
@@ -223,7 +223,7 @@ typedef igObject Obj;
 /* matching construct: out-of-line ctor/dtor classes reproduce the retail unwind table (retail 0x2595e0 table 0x542b5c: App dtor 0x234b90, Blk dtor 0x25a330, scope guard dtor 0x2599b0) */
 struct App { char p[232]; int f232; int f236; App(); ~App(); };
 struct G { int f0; char p[212]; unsigned char f216; char p2[15]; int f232; int f236; };
-extern "C" G * FUN_001007e0(...);
+extern "C" G * __nw__FUi(...);
 extern "C" int FUN_00234d70(App *, int, int *);
 extern "C" G * FUN_00238110(...);
 extern "C" Pool *Memory_GetAllocatorBySelector(int);
@@ -393,7 +393,7 @@ struct Ref {
 };
 extern "C" void FUN_0025a8c0(App_25a8c0 *arg0);
 struct R_25ac60 { int w0; int refs; int f8; int w12; int *f16; };
-extern "C" igSmartPointer<igPsx2Window> FUN_002364e0(int);
+extern "C" igSmartPointer<igPsx2Window> Viewer_CreateDisplay(int);
 extern "C" igFolder *FUN_002c43b0(int);
 extern "C" igViewerLoadingFileMessage *FUN_0045a680(int);
 struct Blk {
@@ -701,7 +701,7 @@ void FUN_002590c0(void) {
     FUN_001a3dd0();
 }
 
-int FUN_002595e0(int arg0, int *arg1) {
+int main(int arg0, int *arg1) {
     int a;
     G *s0;
     FUN_00259a20();
@@ -738,7 +738,7 @@ int FUN_002595e0(int arg0, int *arg1) {
     Blk sp30;
     FUN_00259f90((struct A *)&sp30, (struct R_259f90 *)sp70.f236, (struct R_259f90 *)sp70.f232);
     if (DAT_0056dc50[0] == 0) {
-        G *v = FUN_001007e0(240);
+        G *v = __nw__FUi(240);
         if (v != 0) v = FUN_00238110(v);
         DAT_0056dc50[0] = v;
     }
@@ -781,17 +781,17 @@ void FUN_00259a60(void) {
 
     buf = FUN_002ee430(0x200);
     while (1) {
-        h = FUN_0010f330(&text_atstream_5150[0], 3);
-        if (FUN_0010f970(h, &hdr, 8) < 0) {
-            FUN_0010f5b8(h);
+        h = sceOpen(&text_atstream_5150[0], 3);
+        if (sceRead(h, &hdr, 8) < 0) {
+            sceClose(h);
             continue;
         }
         if (hdr.type == 0) {
-            FUN_0010f5b8(h);
+            sceClose(h);
             continue;
         }
         if (hdr.len > 0) {
-            FUN_0010f970(h, buf, hdr.len);
+            sceRead(h, buf, hdr.len);
         }
         if (hdr.type == 1) {
             DAT_0056df78[0] = buf;
@@ -800,8 +800,8 @@ void FUN_00259a60(void) {
         }
         hdr.len = 0;
         hdr.type = 0;
-        FUN_0010fbd0(h, &DAT_004ecf50[0], 2);
-        FUN_0010f5b8(h);
+        sceWrite(h, &DAT_004ecf50[0], 2);
+        sceClose(h);
     }
 }
 
@@ -967,7 +967,7 @@ static inline void setFolderName(igFolder *folder, const char *name) {
 }
 
 Blk::Blk()
-    : viewer(FUN_002364e0(0)), f28(0, kRetainReference), f32(0, kRetainReference), f36(0, kRetainReference),
+    : viewer(Viewer_CreateDisplay(0)), f28(0, kRetainReference), f32(0, kRetainReference), f36(0, kRetainReference),
       f40(0, kRetainReference), f44(false), f48(0, kRetainReference), folder(FUN_002c43b0(0), AdoptReference()),
       loadingMessage(FUN_0045a680(0), AdoptReference()) {
     setFolderName(folder, "cdrom0:");
@@ -989,7 +989,7 @@ void FUN_0025a580(A0 *arg0) {
     if (arg0->f24 != 0) {
         DAT_0056df80[0] = arg0;
         if (((struct Fr * *)DAT_0056dc50)[0] == 0) {
-            void **v = ((void **)FUN_001007e0(0xF0));
+            void **v = ((void **)__nw__FUi(0xF0));
             if (v != 0) {
                 v = ((void **)FUN_00238110(v));
             }
@@ -1137,7 +1137,7 @@ void FUN_0025a8c0(App_25a8c0 *arg0) {
         e2.a = 2; e2.b = 0; e2.c = DAT_0058cac8[0];
         igModel_NotifyViews(obj, &e2);
         if (((Frame * *)DAT_0056dc50)[0] == 0) {
-            Frame *v = ((Frame *)FUN_001007e0(240));
+            Frame *v = ((Frame *)__nw__FUi(240));
             if (v != 0) v = ((Frame *)FUN_00238110(v));
             ((Frame * *)DAT_0056dc50)[0] = v;
         }

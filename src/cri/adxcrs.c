@@ -1,7 +1,7 @@
 /* CRI ADXCRS: the critical section the ADX libraries take around shared state. */
 
-void FUN_0027e1c0(void);
-void FUN_0027e1d8(void);
+void SVM_Lock(void);
+void SVM_Unlock(void);
 
 extern int adxcrs_lock_cnt;
 
@@ -12,10 +12,10 @@ void ADXCRS_Init(void)
 
 void ADXCRS_Lock(void)
 {
-    FUN_0027e1c0();
+    SVM_Lock();
 }
 
 void ADXCRS_Unlock(void)
 {
-    FUN_0027e1d8();
+    SVM_Unlock();
 }

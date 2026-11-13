@@ -106,7 +106,7 @@ int Gap__igPsx2Window__vfunc_24(igPsx2Window *self, const char *name, int width,
         self->_width = w;
         self->_height = h;
     } else {
-        VisualContext *created = FUN_0014a000(igObject_GetAllocator(self));
+        VisualContext *created = igVisualContext_CreateInstance(igObject_GetAllocator(self));
         if (created != 0) created->_refCount = created->_refCount + 1;
         igRelease((igObject *)self->_vc);
         self->_vc = (int)created;

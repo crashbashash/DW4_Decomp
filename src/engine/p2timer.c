@@ -48,7 +48,7 @@ typedef union p2TimerCount {
     unsigned short value;
 } p2TimerCount;
 
-int FUN_0010b9c0(int cause);
+int DisableIntc(int cause);
 int EnableIntc(int cause);
 int fprintf(struct __sFILE *stream, const char *format, ...);
 void p2StartTimers(void);
@@ -80,8 +80,8 @@ void p2InitTimer(void) {
 
 /* Stops both timer interrupts and wakes every thread still asleep. */
 void p2StopTimers(void) {
-    FUN_0010b9c0(INTC_TIM0);
-    FUN_0010b9c0(INTC_TIM1);
+    DisableIntc(INTC_TIM0);
+    DisableIntc(INTC_TIM1);
     RemoveIntcHandler(INTC_TIM0, p2Timer0HandlerId);
     RemoveIntcHandler(INTC_TIM1, p2Timer1HandlerId);
     while (p2PendingAlarms != 0) {

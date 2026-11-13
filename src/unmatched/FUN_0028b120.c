@@ -1,5 +1,5 @@
-int FUN_0028b0c0();
+int UTY_MemCpy();
 
 void FUN_0028b120(void) {
-    FUN_0028b0c0();
+    UTY_MemCpy();
 }

@@ -2061,7 +2061,7 @@
 0x0045ec60	Gap::Viewer::igViewerDataPumpManager::vfunc_26	engine
 0x0045ec70	Gap::Viewer::igViewerDataPumpManager::vfunc_23	engine
 0x0045ec80	Gap::Viewer::igViewerDataPumpManager::vfunc_24	engine
-0x0045edd0	Gap::Viewer::igViewerGuiFactory::vfunc_13	engine
+0x0045edd0	Gap__Viewer__igViewerGuiFactory__resetFields	engine
 0x0045f1d0	Gap::Viewer::igViewerGuiFactory::vfunc_22	engine
 0x0045f430	Gap::Viewer::igViewerRenderer::vfunc_25	engine
 0x0045f690	Gap::Viewer::igViewerRenderer::vfunc_23	engine

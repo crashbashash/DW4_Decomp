@@ -17,7 +17,7 @@ void Gap__igPsx2ControllerManager__vfunc_24(igPsx2ControllerManager *arg0, int a
             FUN_0032cf50(&text_sio2man_irx[0], 1, 0, 0);
             FUN_0032cf50(&text_padman_irx[0], 1, 0, 0);
         }
-        FUN_00117c78(0);
+        scePadInit(0);
         base = igObject_GetAllocator(arg0);
         if (g_useOwnerAllocator != 0) {
             al = base;

@@ -65,7 +65,7 @@ int igModel_NotifyViews(...);
 int Gap__Core__igObject__vfunc_11(...);
 
 int __dl__FPv(...);
-void **FUN_001007e0(...);
+void **__nw__FUi(...);
 
 int FUN_001b1e50(...);
 
@@ -238,7 +238,7 @@ Binding *FUN_0045c170(int);
 Camera *FUN_0045c5a0(int);
 Camera *FUN_0045c8e0(int);
 Effect *FUN_0045cc40(int);
-Fetched FUN_0045eda0(int, int);
+Fetched igViewerGuiFactory_CreateEmpty(int, int);
 int igViewManager_SetViewMode(int, igObject *);
 int FUN_00465260(Effect *, int);
 struct Tag { };
@@ -436,7 +436,7 @@ void FUN_004612b0(igViewerSceneInfoManager *self) {
 void Gap__Viewer__igViewerSceneInfoManager__vfunc_13(igViewerSceneInfoManager *arg0) {
     Gap__Core__igObject__vfunc_11(arg0);
     if (DAT_0056dc50[0] == 0) {
-        void **v = FUN_001007e0(0xF0);
+        void **v = __nw__FUi(0xF0);
         if (v != 0) {
             v = FUN_00238110(v);
         }
@@ -757,7 +757,7 @@ int Gap__Viewer__igViewerSceneInfoManager__vfunc_27(igViewerSceneInfoManager *ar
             return 0;
         }
         if (DAT_0056dc50[0] == 0) {
-            void **v = FUN_001007e0(0xF0);
+            void **v = __nw__FUi(0xF0);
             if (v != 0) {
                 v = FUN_00238110(v);
             }
@@ -939,7 +939,7 @@ void FUN_00462ac0(igViewerSceneInfoManager *arg0) {
     sp40[2] = DAT_0058cb08[0];
     igModel_NotifyViews(arg0->_parameters, sp40);
     if (DAT_0056dc50[0] == 0) {
-        f = (Frame *)FUN_001007e0(240);
+        f = (Frame *)__nw__FUi(240);
         if (f != 0) f = (Frame *)FUN_00238110(f);
         DAT_0056dc50[0] = f;
     }
@@ -1111,7 +1111,7 @@ extern "C" void FUN_00462fb0(ViewSelector *self) {
     switch (mode) {
     case 0: {
         igSmartPointer<Binding> binding(create45c170());
-        takeValue(binding, FUN_0045eda0(self->f48, 1));
+        takeValue(binding, igViewerGuiFactory_CreateEmpty(self->f48, 1));
         setSource(binding, self->f20);
         setTarget(binding, self->f44);
         igViewManager_SetViewMode(self->f136, binding.p);

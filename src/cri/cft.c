@@ -175,7 +175,7 @@ void FUN_00283148(unsigned char **src, CftImage *img, int *table)
     }
 }
 
-void FUN_002846c0(int mode, int lo, int hi, CftEntry *t)
+void cft_MakeYccTbl(int mode, int lo, int hi, CftEntry *t)
 {
     int max;
     int i;

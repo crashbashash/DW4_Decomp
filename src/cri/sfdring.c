@@ -2,7 +2,7 @@
 
 extern void *memset(void *dst, int value, unsigned int size);
 int sfd_ReportError();
-int sfd_CheckHn(SfdPly *h);
+int SFLIB_CheckHn(SfdPly *h);
 
 void FUN_002ac770(SfdRing *ring, char *buffer, int size);
 int sfring_Push(SfdRing *ring, SfdItem *item, int *full);
@@ -22,7 +22,7 @@ int FUN_002ac6e8(SfdPly *h, void *data, int size) {
     if (data == 0 || size <= 0) {
         return 0;
     }
-    if (sfd_CheckHn(h) != 0) {
+    if (SFLIB_CheckHn(h) != 0) {
         return sfd_ReportError(0, 0xFF000165);
     }
     FUN_002ac770(&h->ent[1].ring, data, size);
@@ -40,7 +40,7 @@ void FUN_002ac770(SfdRing *ring, char *buffer, int size) {
     ring->rd = 0;
 }
 
-int FUN_002ac7f0(SfdPly *h, int index, SfdItem *item, int *full) {
+int sfring_PutItem(SfdPly *h, int index, SfdItem *item, int *full) {
     SfdRing *ring;
     *full = 0;
     if (item->pos < 0) {
@@ -138,7 +138,7 @@ int sfring_FindPos(SfdRing *ring, unsigned int pos, unsigned int base, unsigned 
     return -1;
 }
 
-int FUN_002acaf0(SfdPly *h, int index) {
+int sfring_IsFull(SfdPly *h, int index) {
     SfdRing *ring = &h->ent[index].ring;
     if (ring->items == 0) {
         return 0;

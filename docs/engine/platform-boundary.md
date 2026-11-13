@@ -104,7 +104,7 @@ The named half of that list is the OS API surface: `SignalSema`
 `AddIntcHandler`, `CreateThread`.
 
 **Not all of the block is platform code**:
-`FUN_001007e0` and `FUN_00101380` materialise the typeinfo names `std::bad_alloc` and
+`__nw__FUi` and `__unexpected` materialise the typeinfo names `std::bad_alloc` and
 `std::bad_exception`, i.e. the block also holds the **C++ runtime**.
 150 of the 177 head functions have no string evidence at all,
 so the rest is unmeasured by this method.
@@ -159,7 +159,7 @@ same map finds it again in clusters:
 | 0x1efb40..0x1f8350 | 4,700 | dmac, dma_spr, dmac_ctrl, vif1, vu1_regs, gs | the DMA/VIF/GS driver (5 functions) |
 | 0x20cd10..0x20e080 | 3,200 | timer, vif1 | a second timer cluster (7 functions) |
 | 0x2a9210 | 500 | ipu | IPU helpers |
-| 0x482ec0..0x4831e8 | 900 | timer | **inside a data region**; see [`data-regions.md`](data-regions.md): unclaimed code hides in data |
+| 0x482ec0..0x4831e8 | 900 | timer | libkernl's alarm kernel patch (`srcfile`): data copied to `0x80076000` and run by the kernel, not a function of the image ([`sony-libkernl-sys.md`](sony-libkernl-sys.md#the-kernel-patches)) |
 
 ## The platform-side inventory
 
@@ -204,11 +204,11 @@ decodes them into `data/sdk-bindings.json`.
 
 **One table is still useful.** libdma's fifteen entries are real entry points, and **three of
 them are boundaries a function tiling without the table misses**: `0x104478` and `0x1044f0` sit inside
-the 728 bytes that otherwise read as one `FUN_00104258` and are actually three functions (every
+the 728 bytes that otherwise read as one `_cscMacroblock` and are actually three functions (every
 boundary lands exactly where the
 next begins), and `0x105050` begins exactly at `FUN_00104f30`'s end, with MMI ops rather than a
 prologue. The descriptor is therefore a **split oracle**, and the tiling carries those three
-boundaries: `FUN_00104258`, `FUN_00104478` and `FUN_001044f0` are separate functions and `0x105050`
+boundaries: `_cscMacroblock`, `FUN_00104478` and `FUN_001044f0` are separate functions and `0x105050`
 is `FUN_00105050`.
 
 
@@ -232,7 +232,7 @@ it**, which is how a live dispatch table reads as dead code. Resolve `lui`/`addi
 before concluding a table is unreachable.
 
 Disassembly also confirms what the pointer alone suggested: `0x104478` follows
-`FUN_00104258`'s stack restore and begins with `a0`-relative descriptor loads plus `mtsab`/`lq`
+`_cscMacroblock`'s stack restore and begins with `a0`-relative descriptor loads plus `mtsab`/`lq`
 (unaligned quad access, the MMI idiom for a block move), and `0x105050` follows a `jr ra; nop`
 with an MMI mask idiom (`pnor`/`psrlh`/`psllh`). Both are argument-taking MMI block-copy kernels of
 the kind a DMA driver has, not data tables.

@@ -138,6 +138,22 @@ class CompileError(unittest.TestCase):
     def test_silence_is_reported(self):
         self.assertEqual(verify.compile_error(""),"no output")
 
+class JumpAddend(unittest.TestCase):
+    """REL R_MIPS_26: the in-place field holds the addend (a jump to a local label keeps its offset there)."""
+    def test_in_place_offset_is_added_to_the_target(self):
+        text = struct.pack("<I", 0x08000000 | (0x40 >> 2))       # j .text+0x40
+        patched, _, unresolved = verify.apply_relocs(text, [(".text", 0, verify.R_26, ".text", 0)],
+                                                     lambda name: 0x100000, None)
+        self.assertEqual(unresolved, [])
+        self.assertEqual(struct.unpack("<I", patched)[0], 0x08000000 | ((0x100000 + 0x40) >> 2))
+
+    def test_symbol_addend_and_in_place_offset_add(self):
+        text = struct.pack("<I", 0x0c000000 | (0x10 >> 2))      # jal sym+0x10 (REL field), reloc addend 0x20
+        patched, _, _ = verify.apply_relocs(text, [(".text", 0, verify.R_26, "sym", 0x20)],
+                                            lambda name: 0x200000, None)
+        self.assertEqual(struct.unpack("<I", patched)[0], 0x0c000000 | ((0x200000 + 0x20 + 0x10) >> 2))
+
+
 class SplitAddend(unittest.TestCase):
     """REL HI16/LO16: the addend is (AHI << 16) + sign-extended ALO, as GNU ld reads it."""
     LUI, ADDIU = 0x3c020000, 0x24420000          # lui v0,AHI / addiu v0,v0,ALO

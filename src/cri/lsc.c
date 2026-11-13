@@ -31,18 +31,18 @@ void *memset(void *dst, int value, unsigned int size);
 unsigned int strlen(const char *s);
 int vsprintf(char *buf, const char *format, va_list args);
 
-void FUN_0027b2b0(void);
-void FUN_0027b2c8(void);
-void FUN_00269ff0(void *stm, char *fname, void *dir, int ofst, int nsct);
-void FUN_0026a0a0(void *stm);
+void SJCRS_Lock(void);
+void SJCRS_Unlock(void);
+void ADXSTM_BindFileNw(void *stm, char *fname, void *dir, int ofst, int nsct);
+void ADXSTM_ReleaseFileNw(void *stm);
 int ADXSTM_GetStat(void *stm);
-void FUN_0026a140(void *stm, int pos);
-int FUN_0026a160(void *stm);
-int FUN_0026a1b0(void *stm);
-void FUN_0026a238(void *stm);
-void FUN_0026a2a0(void *stm);
+void ADXSTM_Seek(void *stm, int pos);
+int ADXSTM_Tell(void *stm);
+int ADXSTM_Start(void *stm);
+void ADXSTM_StopNw(void *stm);
+void ADXSTM_Stop(void *stm);
 void ADXSTM_SetEos(void *stm, int size);
-void FUN_0026a9d8(void *stm, int min, int max);
+void ADXSTM_SetBufSize(void *stm, int min, int max);
 
 extern char E0001_Illigal_parameter_sj_LSC_Create[];
 extern char E0002_Not_enough_instance_LSC_Create[];
@@ -67,7 +67,7 @@ extern LscObj lsc_objs[LSC_MAX_OBJ];
 void lsc_Lock(LscCrs *crs);
 void lsc_Unlock(LscCrs *crs);
 void lsc_CallErrFunc(const char *format, ...);
-void FUN_00277278(LscObj *lsc);
+void LSC_Stop(LscObj *lsc);
 void lsc_ExecHndl(LscObj *lsc);
 int LSC_EntryFileRange(LscObj *lsc, char *fname, void *dir, int ofst, int nsct);
 
@@ -118,7 +118,7 @@ LscObj *LSC_Create(SfdSj *sj)
 void LSC_Destroy(LscObj *lsc)
 {
     if (lsc != 0) {
-        FUN_00277278(lsc);
+        LSC_Stop(lsc);
         lsc->used = 0;
         memset(lsc, 0, sizeof(LscObj));
     }
@@ -129,7 +129,7 @@ void LSC_SetStmHndl(LscObj *lsc, void *stm)
     lsc->stm = stm;
 }
 
-int FUN_00277010(LscObj *lsc, char *fname)
+int LSC_EntryFname(LscObj *lsc, char *fname)
 {
     return LSC_EntryFileRange(lsc, fname, 0, 0, 0xFFFFF);
 }
@@ -194,14 +194,14 @@ void LSC_ResetEntry(LscObj *lsc)
     }
 }
 
-void FUN_00277210(LscObj *lsc)
+void LSC_Start(LscObj *lsc)
 {
     if (lsc == 0) {
         lsc_CallErrFunc(E0003_Illigal_parameter_lsc_NULL);
         return;
     }
     if (lsc->stat != LSC_STAT_STOP) {
-        FUN_00277278(lsc);
+        LSC_Stop(lsc);
     }
     if (lsc->nstm > 0) {
         lsc->stat = LSC_STAT_EXEC;
@@ -210,7 +210,7 @@ void FUN_00277210(LscObj *lsc)
     }
 }
 
-void FUN_00277278(LscObj *lsc)
+void LSC_Stop(LscObj *lsc)
 {
     if (lsc == 0) {
         lsc_CallErrFunc(E0003_Illigal_parameter_lsc_NULL);
@@ -219,7 +219,7 @@ void FUN_00277278(LscObj *lsc)
     if (lsc->stat != LSC_STAT_STOP) {
         lsc->stat = LSC_STAT_STOP;
         if (lsc->stm != 0 && lsc->reading == 1) {
-            FUN_0026a2a0(lsc->stm);
+            ADXSTM_Stop(lsc->stm);
             lsc->reading = 0;
         }
         lsc->stm_size = 0;
@@ -253,7 +253,7 @@ void LSC_ExecServer(void)
     }
 }
 
-int FUN_002773a0(LscObj *lsc)
+int LSC_GetStat(LscObj *lsc)
 {
     if (lsc == 0) {
         lsc_CallErrFunc(E0003_Illigal_parameter_lsc_NULL);
@@ -262,7 +262,7 @@ int FUN_002773a0(LscObj *lsc)
     return lsc->stat;
 }
 
-int FUN_002773d0(LscObj *lsc)
+int LSC_GetNumStm(LscObj *lsc)
 {
     if (lsc == 0) {
         lsc_CallErrFunc(E0003_Illigal_parameter_lsc_NULL);
@@ -271,7 +271,7 @@ int FUN_002773d0(LscObj *lsc)
     return lsc->nstm;
 }
 
-int FUN_00277400(LscObj *lsc, int no)
+int LSC_GetStmId(LscObj *lsc, int no)
 {
     int slot;
 
@@ -287,7 +287,7 @@ int FUN_00277400(LscObj *lsc, int no)
     return lsc->stms[slot].id;
 }
 
-char *FUN_00277490(LscObj *lsc, int id)
+char *LSC_GetStmFname(LscObj *lsc, int id)
 {
     int i;
 
@@ -307,7 +307,7 @@ char *FUN_00277490(LscObj *lsc, int id)
     return lsc->stms[i].fname;
 }
 
-int FUN_00277528(LscObj *lsc, int id)
+int LSC_GetStmStat(LscObj *lsc, int id)
 {
     int i;
 
@@ -327,7 +327,7 @@ int FUN_00277528(LscObj *lsc, int id)
     return lsc->stms[i].stat;
 }
 
-int FUN_002775c0(LscObj *lsc, int id)
+int LSC_GetStmRdSct(LscObj *lsc, int id)
 {
     int i;
 
@@ -347,7 +347,7 @@ int FUN_002775c0(LscObj *lsc, int id)
     return lsc->stms[i].rdsct;
 }
 
-void FUN_00277658(LscObj *lsc, int min)
+void LSC_SetFlowLimit(LscObj *lsc, int min)
 {
     if (lsc == 0) {
         lsc_CallErrFunc(E0003_Illigal_parameter_lsc_NULL);
@@ -360,7 +360,7 @@ void FUN_00277658(LscObj *lsc, int min)
     lsc->flow_min = min;
 }
 
-int FUN_002776c0(LscObj *lsc)
+int LSC_GetFlowLimit(LscObj *lsc)
 {
     if (lsc == 0) {
         lsc_CallErrFunc(E0003_Illigal_parameter_lsc_NULL);
@@ -389,7 +389,7 @@ void lsc_CallStatFunc(void)
     }
 }
 
-void FUN_00277768(LscObj *lsc, int loop)
+void LSC_SetLpFlg(LscObj *lsc, int loop)
 {
     if (lsc == 0) {
         lsc_CallErrFunc(E0003_Illigal_parameter_lsc_NULL);
@@ -401,7 +401,7 @@ void FUN_00277768(LscObj *lsc, int loop)
 /* The lock is a statement macro. GCC 2.96 does not make a call inside a loop statement, even
  * do-while(0), a sibling call, so lsc_Lock keeps its frame and jal while lsc_Unlock's bare call
  * becomes a jump. */
-#define LSC_LOCK() do { FUN_0027b2b0(); } while (0)
+#define LSC_LOCK() do { SJCRS_Lock(); } while (0)
 
 void lsc_Lock(LscCrs *crs)
 {
@@ -410,7 +410,7 @@ void lsc_Lock(LscCrs *crs)
 
 void lsc_Unlock(LscCrs *crs)
 {
-    FUN_0027b2c8();
+    SJCRS_Unlock();
 }
 
 void LSC_EntryErrFunc(LscErrFunc func, void *obj)
@@ -459,7 +459,7 @@ void LSC_Init(void)
     lsc_Unlock(&crs);
 }
 
-void FUN_00277918(void)
+void LSC_Finish(void)
 {
     LscObj *lsc;
     int i;
@@ -488,8 +488,8 @@ void lsc_StartStm(LscObj *lsc)
     if (lsc->nstm <= 0) {
         return;
     }
-    FUN_0026a238(lsc->stm);
-    FUN_0026a0a0(lsc->stm);
+    ADXSTM_StopNw(lsc->stm);
+    ADXSTM_ReleaseFileNw(lsc->stm);
     fname = stm->fname;
     len = strlen(fname);
     sum = 0;
@@ -500,14 +500,14 @@ void lsc_StartStm(LscObj *lsc)
         lsc_CallErrFunc(E0013_s_is_different_from_entry_file_name_LSC_ExecServer, stm->fname);
         return;
     }
-    FUN_00269ff0(lsc->stm, stm->fname, stm->dir, stm->ofst, stm->nsct);
+    ADXSTM_BindFileNw(lsc->stm, stm->fname, stm->dir, stm->ofst, stm->nsct);
     ADXSTM_SetEos(lsc->stm, stm->nsct);
     lsc->stm_size = stm->nsct;
     stm->rdsct = 0;
     lsc->reading = 0;
-    FUN_0026a9d8(lsc->stm, lsc->flow_min, lsc->flow_max);
-    FUN_0026a140(lsc->stm, 0);
-    FUN_0026a1b0(lsc->stm);
+    ADXSTM_SetBufSize(lsc->stm, lsc->flow_min, lsc->flow_max);
+    ADXSTM_Seek(lsc->stm, 0);
+    ADXSTM_Start(lsc->stm);
     lsc->reading = 1;
     stm->stat = LSC_STM_STAT_READ;
 }
@@ -523,7 +523,7 @@ void lsc_StatRead(LscObj *lsc)
     stm = &lsc->stms[lsc->rpos];
     switch (ADXSTM_GetStat(lsc->stm)) {
     case 2:
-        stm->rdsct = FUN_0026a160(lsc->stm);
+        stm->rdsct = ADXSTM_Tell(lsc->stm);
         break;
     case 3:
         stm->rdsct = lsc->stm_size;

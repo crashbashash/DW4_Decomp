@@ -1,3 +1,9 @@
+/* Prints `<indent><field> = 0x<value>`: a raw reference is a pointer, shown as its address. */
+void Gap__Core__igRawRefMetaField__vfunc_41(igRawRefMetaField *self, char *object, int unusedArg, const char *indent) {
+    FUN_00304430(DAT_004faef0, indent, self->_fieldName, (int)*(void **)(object + self->_offset));
+    FUN_00304680();
+}
+
 int Gap__Core__igRawRefMetaField__vfunc_43(igRawRefArrayMetaField *arg0, int arg1, int arg2) {
     if (arg0->_persistent == 1) {
         return FUN_002d8d00((Lst8d00 *)arg2, *(int *)(arg1 + arg0->_offset), 0, 0);

@@ -220,7 +220,7 @@ void FUN_001b4220(struct A4220 *arg0, struct B4220 *arg1) {
         n = 8;
     }
     for (i = 0; i < n; i++) {
-        FUN_001b4090((T_1b2fa0 *)arg0, i, FUN_001b0ea0(temp_s2, arg0->f144->data[i]));
+        FUN_001b4090((T_1b2fa0 *)arg0, i, igAttrStackManager_IsLightEnabled((igAttrStackManager *)temp_s2, (igLightAttr *)arg0->f144->data[i]));
     }
 }
 

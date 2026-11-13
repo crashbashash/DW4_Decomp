@@ -328,6 +328,79 @@ void FUN_001b0450(A_1b0450 *arg0, Rc_1b0450 *arg1) {
     arg0->f8 = 0;
 }
 
+void igAttrStackManager_PopLightStateAttr(igAttrStackManager *self, LightStateAttrView *attr, int isOverride) {
+    igLightAttr *key;
+    int slot;
+    AttrObjectStack *stack;
+    int index;
+    igLightAttr *light = attr->_light;
+    if (light == 0) {
+        return;
+    }
+    if (self->_simpleLightMgr == 1) {
+        LightStateAttrView *undo = (LightStateAttrView *)takePooled((igObjectPool *)self->_lightDisableAttrPool, (void *)FUN_001361b0);
+        int n;
+        igTDataList<LightStateAttrView *> *updates;
+        light = attr->_light;
+        if (light != 0) {
+            light->_refCount = light->_refCount + 1;
+        }
+        if (undo->_light != 0) {
+            igLightAttr *old = undo->_light;
+            old->_refCount = old->_refCount - 1;
+            if (((unsigned long long)((long long)(int)old->_refCount << 0x29) >> 0x29) == 0) {
+                igObject_Destroy(old);
+            }
+        }
+        undo->_light = light;
+        undo->setEnabled(!attr->_enabled);
+        updates = (igTDataList<LightStateAttrView *> *)self->_updateLightAttrs;
+        n = updates->getCount();
+        if (n < updates->_capacity) {
+            updates->_count = updates->_count + 1;
+        } else {
+            List_Resize(updates, n + 1, 4);
+        }
+        updates->_data[n] = undo;
+        return;
+    }
+    key = light;
+    {
+        igTDataList<igLightAttr *> *lights = (igTDataList<igLightAttr *> *)self->_lightAttrAddrs;
+        index = lights->sortedFind(&key);
+    }
+    if (index == -1) {
+        return;
+    }
+    slot = ((int *)((igIntList *)self->_lightAttrStackAddrs)->_data)[index] + ((int *)self->_attrStackIndexTable)[attr->_cachedAttrIndex];
+    if (isOverride != 0) {
+        igObject *top;
+        void (*pop)(igObject *, int);
+        stack = ((AttrObjectStackList *)self->_attrStacks)->_data[slot];
+        top = stack->get(stack->_count - 1);
+        pop = stack->_popProc;
+        if (pop != 0 && top == (igObject *)attr) {
+            pop(top, self->_popProcData);
+        }
+        stack->_count = stack->_count - 1;
+        if (stack->_count == stack->_cachedOverride) {
+            stack->_cachedOverride = -1;
+        }
+        igAttrStackManager_MarkStackChanged((A_1b1490 *)self, (B_1b1490 *)stack, slot);
+    } else {
+        igObject *top;
+        void (*pop)(igObject *, int);
+        stack = ((AttrObjectStackList *)self->_attrStacks)->_data[slot];
+        top = stack->get(stack->_count - 1);
+        pop = stack->_popProc;
+        if (pop != 0) {
+            pop(top, self->_popProcData);
+        }
+        stack->_count = stack->_count - 1;
+        igAttrStackManager_MarkStackChanged((A_1b1490 *)self, (B_1b1490 *)stack, slot);
+    }
+}
+
 void FUN_001b0dc0(O_1b0dc0 *arg0) {
     int n, i;
     n = arg0->c24->n;
@@ -345,6 +418,36 @@ void FUN_001b0dc0(O_1b0dc0 *arg0) {
     }
     arg0->c24->n = 0;
     arg0->c28->n = 0;
+}
+
+int igAttrStackManager_IsLightEnabled(igAttrStackManager *self, igLightAttr *light) {
+    if (light == 0) {
+        return 0;
+    }
+    int index;
+    igLightAttr *key = light;
+    igTDataList<igLightAttr *> *lights = (igTDataList<igLightAttr *> *)self->_lightAttrAddrs;
+    index = lights->sortedFind(&key);
+    if (index != -1) {
+        int base = ((int *)((igIntList *)self->_lightAttrStackAddrs)->_data)[index];
+        igMetaObject *meta = igLightStateAttr_GetMetaObject();
+        AttrObjectStack *stack = ((AttrObjectStackList *)self->_attrStacks)->_data[base + ((int *)self->_attrStackIndexTable)[meta->_id]];
+        igLightStateAttr *state;
+        int current = stack->_cachedOverride;
+        if (current >= 0) {
+            state = (igLightStateAttr *)stack->_data[current];
+        } else {
+            int count = stack->_count;
+            if (count != 0) {
+                int last = count - 1;
+                state = (igLightStateAttr *)stack->_data[last];
+            } else {
+                state = (igLightStateAttr *)stack->_default;
+            }
+        }
+        return state->_enabled;
+    }
+    return 0;
 }
 
 void FUN_001b1030(igAttrStackManager *self, igAttr *attr) {

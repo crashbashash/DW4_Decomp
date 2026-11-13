@@ -130,15 +130,24 @@ measures the rows from retail and stops if a retail function in its range has no
 docstring gives the command, and [`src/third_party/`](../../src/third_party/README.md) holds the
 sources. A recovered source file that still lacks some of its functions is measured with `--partial`:
 the retail functions it does not define keep linking from the retail image between its members, and
-each gains its place in the file when its C is written. A function a member reaches outside the
-range becomes a `duplicates` row at the address the retail field holds; when that copy is a
+each gains its place in the file when its C is written; `--write` keeps the rows of such a function
+that still builds from its own source. The tool follows what `verify` keeps live: each member's body
+and retail exception table, then every datum and function they reach in turn. A function out of the
+range that is reached this way, whether a member calls it, passes its address, a kept vtable names
+it or an exception table names it, becomes a `duplicates` row at the address the retail field holds
+(an inline virtual function the retail linker kept from another file is never `stripped`: `verify`
+rejects a stripped body anything kept still names). When that copy is a
 [profile twin](#duplicates-switch-tables-and-exception-data), the tool compiles the same source
 under the twin's unit profile, as `verify_emitted_unit` does, and requires that copy at the retail
-extent there. A call out of the file that only a duplicate makes (`operator delete` in an inline
-destructor) is an `externals` row too, read from the `jal` of retail's copy. So is a function out of
-the file that only a member's exception table names, such as a base-class destructor that is
-declared but never called and appears only as a cleanup pointer. It is read from the retail table
-word and must start a retail function, and `verify` still compares the whole table with retail.
+extent there. A datum only an exception table names, such as the type string of a `throw()`
+specification, is a `data` row like any other. A call out of the file that only a duplicate makes
+(`operator delete` in an inline destructor) is an `externals` row too, read from the `jal` of
+retail's copy. So is a function out of the file that only an exception table names, such as a
+base-class destructor that is declared but never called and appears only as a cleanup pointer. It
+is read from the retail table word and must start a retail function, and `verify` still compares
+the whole table with retail. An owner the source defines under another name than symbols.txt's (a
+C++ file's mangled name, or a `static` that several files define and symbols.txt tells apart by a
+file suffix) keeps that name in the row's `symbol`.
 Recovered files of both compilers are whole-file units: the CRI middleware and the Sony libraries
 under EE GCC in `src/cri/` and `src/sony/`, and game classes under MWCC, such as `src/game/`'s, in
 C++ with exceptions on.

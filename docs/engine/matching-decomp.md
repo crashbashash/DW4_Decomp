@@ -56,7 +56,7 @@ do so when the tree is missing or stale (`tools/split.py --ensure`, about half a
 minute). Never hand-edit it. It is not committed because publishing it publishes the game's code.
 
 Eight names occur at several distinct addresses (SDK-style stubs: `AddDmacHandler`,
-`RFU116_SetSyscall`, …); `tools/split.py` suffixes the repeats with `__<va>` so nothing is lost and
+`setup_tlbfunc`, …); `tools/split.py` suffixes the repeats with `__<va>` so nothing is lost and
 linker symbols stay unique.
 
 ## Cached gates

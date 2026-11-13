@@ -1,4 +1,4 @@
-int FUN_00100c20();
+int __register_global_object();
 int FUN_0032f260();
 extern int DAT_004fb410[4];
 extern int DAT_004fb418[4];
@@ -57,7 +57,7 @@ int FUN_00331eb0();
 
 void FUN_00521360(void) {
     DAT_00586f40[0] = 0;
-    FUN_00100c20(&DAT_00586f40[0], &FUN_00331eb0, &DAT_00586f30[0]);
+    __register_global_object(&DAT_00586f40[0], &FUN_00331eb0, &DAT_00586f30[0]);
     DAT_00587018[0] = 0;
     DAT_00587020[0] = 1;
     DAT_00587028[0] = 2;
@@ -107,5 +107,5 @@ void FUN_00521360(void) {
     DAT_004fb418[0] = 1;
     DAT_004fb410[0] = 0;
     FUN_0032f260(&DAT_00587380[0]);
-    FUN_00100c20(&DAT_00587380[0], &FUN_0032f2a0, &DAT_00587370[0]);
+    __register_global_object(&DAT_00587380[0], &FUN_0032f2a0, &DAT_00587370[0]);
 }

@@ -19,14 +19,19 @@ with Sony EE GCC 2.96 at `-O2 -G0` (their rows in `units.tsv` and `unit-objects.
   in the init file on that layout alone.
 - The message helpers could belong to ADXPS2 or ADXRNA: they have no strings or pool of their own to place
   them.
-- `ADXT_Init` (`0x2632c0`) declares its build-string word
-  and its tick count `volatile`, which it needs to match; it has no approval row, so it is `unapproved`
-  ([build-string stores](source-approvals.md#build-string-stores),
-  [ADXT tick count](source-approvals.md#adxt-ready-count)); the stream file reads the count plain.
-- ADXPS2 declares its thread words `volatile` at file scope. The functions that use them either have owner
-  approval ([source approvals](source-approvals.md#adxm-thread-ids)) or stay `unapproved`; its init and V-sync
-  functions (`ADXM_SetupThrd`, `adxm_exec_vint`, `ADXM_SetupThrdEx`) need words `volatile` that matched functions
-  read plain, so they have no source and link from the retail image.
+- `ADXT_Init` (`0x2632c0`) declares its build-string word `volatile`, which it needs to match
+  ([build-string stores](source-approvals.md#build-string-stores)); the V-sync tick count `adxt_vsync_cnt`
+  is declared plain, and `ADXT_Init` clears it through a `volatile int` cast of its address. The stream
+  file reads the count plain.
+- ADXPS2 declares its thread words `volatile` at file scope; the functions that use them rely on owner
+  approval ([source approvals](source-approvals.md#adxm-thread-ids)). `adxm_exec_vint` (`0x2650a8`) is the
+  V-blank reader of the ADXM busy flags and thread ids and of `adxt_vsync_cnt`: it counts the tick, and while
+  its re-entry word `adxps2_exec_vint` is clear it wakes the V-sync, FS and user V-sync threads whose busy
+  flags are not set, counts `adxm_vint_cnt`, runs `SVM_ExecSvrVint` and calls the callback in `adxm_old_cbf`.
+  `ADXM_ExecVint` is a wrapper that returns its result. `adxm_vint_cnt` (the wake counter),
+  `adxps2_exec_vint` and `adxm_old_cbf` take their names from the Street Fighter III decomp. The two
+  thread-setup functions (`ADXM_SetupThrd`, `ADXM_SetupThrdEx`) still have no source and link from the
+  retail image.
 - ADXPS2's names: `adxm_goto_svr_border` is named by its own internal-error message, and the user V-sync and
   user idle threads by the messages that print their stacks. The other threads are named from the server
   type each runs through SVM (`0x27e910`): 1 user V-sync, 2 V-sync (woken from the V-blank handler

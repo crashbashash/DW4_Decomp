@@ -42,7 +42,7 @@ int iSignalSema();
 int WaitSema(int);
 int CreateSema(struct SemaParam *param);
 int AddDmacHandler(int channel, int (*handler)(int channel), int next);
-int FUN_0010baf8(int channel);
+int EnableDmac(int channel);
 
 void p2CompleteDmaPacket(int channel, p2DmaPacket *packet);
 int p2Vif1DmaHandler(int channel);
@@ -121,7 +121,7 @@ void p2InitDmaChannel(int channel) {
     } else if (channel == P2_DMA_VIF0) {
         p2DmaHandlerIds[channel] = AddDmacHandler(channel, p2Vif0DmaHandler, 0);
     }
-    FUN_0010baf8(channel);
+    EnableDmac(channel);
 }
 
 /* Creates the wait semaphores, sets the pool sizes and brings up VIF1, GIF and (when it has packets)

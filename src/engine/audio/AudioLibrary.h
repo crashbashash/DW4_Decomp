@@ -294,7 +294,7 @@ ThreadRef *FUN_002b7f40(...);
 int DIntr(...);
 int sceSifAddCmdHandler(...);
 int EIntr(...);
-void FUN_0010b7d8(int, int);
+void SyncDCache(int, int);
 void *memset(void *, int, unsigned int);
 double floor(double);
 int sceSifSearchModuleByName(int *);

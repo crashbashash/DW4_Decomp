@@ -6,7 +6,7 @@
 # tools/split.py `_sweep_extent`, checked against the retail bytes by tools/verify.py). split.py
 # accepts a row only when it never cuts into another function: a growth must stop at the next
 # function; a plain shrink must leave nothing but zero words (alignment nops) before the next
-# function. Three reviewed keywords in the fourth column go further (docs/engine/function-inventory.md):
+# function. Four reviewed keywords in the fourth column go further (docs/engine/function-inventory.md):
 #
 #   cut    the shrink leaves code behind — the dump glued a second function onto this one. The
 #          remainder is claimed by a promotion rule (a `j`/`jal` target, a referenced start or a framed
@@ -15,8 +15,12 @@
 #          starts inside that extent (Ghidra split one 40-byte leaf into a `thunk_` and a fragment).
 #   start  a function no rule can walk (it ends in `eret`, a `syscall` that does not return, an idle
 #          loop or a `jr` through a register): added at <va> with <size>, inside a gap of the code.
+#   data   <size> bytes at <va> are data that decodes as code but is no function of this program (a
+#          kernel patch the program copies elsewhere and runs there); the third column names the data.
+#          Every dump function inside is dropped (one crossing the row's edge fails the run), no
+#          promotion rule claims a byte of it, and its words are no references.
 #
-# <va>	<size>	<function>	[cut|merge|start]
+# <va>	<size>	<function or data>	[cut|merge|start|data]
 #
 # --- EE GCC sizes verified by the matching C source (tools/verify.py) ---------------------------
 0x00262900	52	FUN_00262900
@@ -321,3 +325,10 @@
 0x00113e00	288	FUN_00113e00	start
 0x001c5130	36	FUN_001c5130	start
 0x00265d30	52	FUN_00265d30	start
+0x00102550	124	__throw
+#
+# --- data: libkernl's kernel patches, byte arrays that tlbfunc.c, libosd.c and alarm.c copy to
+# --- 0x80075000, 0x80074000 and 0x80076000 (TLB_PATCH_SIZE, OSD_PATCH_SIZE, ALARM_PATCH_SIZE) -----
+0x00481f28	816	tlbsrc	data
+0x00482598	1960	osdsrc	data
+0x00482d60	1856	srcfile	data

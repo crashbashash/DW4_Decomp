@@ -59,7 +59,7 @@ extern "C" void Gap__igPsx2Controller__vfunc_23(igPsx2Controller *self, Controll
     bool firstConnect;
     int id;
 
-    state = FUN_00118390(self->_port, self->_slot);
+    state = scePadGetState(self->_port, self->_slot);
     if (state == 0 || self->_userReset) {
         if (self->_connected || self->_userReset) {
             analog = self->_analogState;
@@ -77,9 +77,9 @@ extern "C" void Gap__igPsx2Controller__vfunc_23(igPsx2Controller *self, Controll
     switch (self->_phase) {
     case 0:
         if (state == 6 || state == 2) {
-            self->_curr_id = FUN_00118770(self->_port, self->_slot, 1, 0);
+            self->_curr_id = scePadInfoMode(self->_port, self->_slot, 1, 0);
             if (self->_curr_id) {
-                id = FUN_00118770(self->_port, self->_slot, 2, 0);
+                id = scePadInfoMode(self->_port, self->_slot, 2, 0);
                 if (id > 0) {
                     self->_curr_id = id;
                 }
@@ -112,7 +112,7 @@ extern "C" void Gap__igPsx2Controller__vfunc_23(igPsx2Controller *self, Controll
         break;
     case 1:
         self->_reseting = 0;
-        if (FUN_00118770(self->_port, self->_slot, 2, 0) == 0) {
+        if (scePadInfoMode(self->_port, self->_slot, 2, 0) == 0) {
             self->_analogState = 0;
         } else {
             scePadSetMainMode(self->_port, self->_slot, 1, self->_lockState ? 3 : 2);
@@ -121,15 +121,15 @@ extern "C" void Gap__igPsx2Controller__vfunc_23(igPsx2Controller *self, Controll
         self->_phase = 2;
         break;
     case 2:
-        if (FUN_001184a8(self->_port, self->_slot) == 1) {
+        if (scePadGetReqState(self->_port, self->_slot) == 1) {
             self->_phase = 1;
         }
-        if (FUN_001184a8(self->_port, self->_slot) == 0) {
+        if (scePadGetReqState(self->_port, self->_slot) == 0) {
             self->_phase = 0;
         }
         break;
     case 3:
-        if (FUN_00118530(self->_port, self->_slot, -1, 0) == 0) {
+        if (scePadInfoComb(self->_port, self->_slot, -1, 0) == 0) {
             self->_phase = 7;
         } else {
             PadActAlign align = DAT_00487760;
@@ -138,15 +138,15 @@ extern "C" void Gap__igPsx2Controller__vfunc_23(igPsx2Controller *self, Controll
         }
         break;
     case 4:
-        if (FUN_001184a8(self->_port, self->_slot) == 1) {
+        if (scePadGetReqState(self->_port, self->_slot) == 1) {
             self->_phase = 3;
         }
-        if (FUN_001184a8(self->_port, self->_slot) == 0) {
+        if (scePadGetReqState(self->_port, self->_slot) == 0) {
             self->_phase = 5;
         }
         break;
     case 5:
-        if (FUN_00118c60(self->_port, self->_slot) == 0) {
+        if (scePadInfoPressMode(self->_port, self->_slot) == 0) {
             self->_hasPressure = 0;
             self->_phase = 7;
         } else {
@@ -160,10 +160,10 @@ extern "C" void Gap__igPsx2Controller__vfunc_23(igPsx2Controller *self, Controll
         }
         break;
     case 6:
-        if (FUN_001184a8(self->_port, self->_slot) == 1) {
+        if (scePadGetReqState(self->_port, self->_slot) == 1) {
             self->_phase = 5;
         }
-        if (FUN_001184a8(self->_port, self->_slot) == 0) {
+        if (scePadGetReqState(self->_port, self->_slot) == 0) {
             self->_phase = 7;
         }
         break;
@@ -188,7 +188,7 @@ extern "C" void Gap__igPsx2Controller__vfunc_23(igPsx2Controller *self, Controll
 void Gap__igPsx2Controller__vfunc_37(C *arg0, int arg1, float fparg0) {
     if ((arg1 >= 0) && (arg1 < 6)) {
         arg0->b91[arg1] = (unsigned char)(255.0f * fparg0);
-        FUN_00118960(arg0->f64, arg0->f60, &arg0->b91[0]);
+        scePadSetActDirect(arg0->f64, arg0->f60, &arg0->b91[0]);
     }
 }
 

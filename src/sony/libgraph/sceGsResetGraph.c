@@ -7,7 +7,7 @@ typedef struct {
     int vsync_id;
 } GsGParam;
 GsGParam *FUN_00102b88(void);
-int FUN_0010b9c0(int cause);
+int DisableIntc(int cause);
 int GsPutIMR(unsigned long long imr);
 int RemoveIntcHandler(int cause, int id);
 void SetGsCrt(short interlace, short omode, short ffmd);
@@ -24,7 +24,7 @@ void sceGsResetGraph(short mode, short inter, short omode, short ffmode) {
         GsPutIMR(0xFF00);
         gp->ffmode = ffmode ? 1 : 0;
         if (gp->vsync_set) {
-            FUN_0010b9c0(2);
+            DisableIntc(2);
             RemoveIntcHandler(2, gp->vsync_id);
             gp->vsync_set = 0;
             gp->vsync_id = 0;

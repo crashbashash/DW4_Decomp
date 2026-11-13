@@ -148,7 +148,7 @@ int FUN_001bae20(CompileTraversalHead *o, BlendNodeView *node) {
         Matrix44_Copy(out, palette + (node->_boneIndices->_data[i] << 6));
     }
     FUN_001b1030((igAttrStackManager *)state, (igAttr *)frame);
-    r = FUN_001b9320(o, node);
+    r = igCommonTraversal_TraverseAttrSet((igCommonTraversal *)o, (igAttrSet *)node);
     FUN_001b1100((struct A_1b1100 *)state, (struct B_1b1100 *)frame);
     if (r == 2) {
         return 2;

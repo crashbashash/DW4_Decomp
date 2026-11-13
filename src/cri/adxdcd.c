@@ -75,7 +75,7 @@ int ADX_IsCopyrightHeader(unsigned char *hdr, int size, short *ofst)
     return 1;
 }
 
-int FUN_0025f588(unsigned char *hdr, int len, short *ofst, signed char *type, signed char *bsize,
+int ADX_DecodeHeader(unsigned char *hdr, int len, short *ofst, signed char *type, signed char *bsize,
                  signed char *bits, signed char *nch, int *sfreq, int *nsmpl, int *blksmpl)
 {
     if (len < 16) {

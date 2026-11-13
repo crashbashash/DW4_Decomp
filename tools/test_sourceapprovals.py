@@ -165,10 +165,14 @@ class SourceApprovals(unittest.TestCase):
         self.assertIn("1 volatile", sa.problem(path, "f", {}))
         self.assertIsNone(sa.problem(path, "g", {}))
 
-    def test_project_header_counts(self):
-        self.write("h.h", '#define M(x) asm("multu %1,%1" : : "d"(x))\n')
-        path = self.write("a.c", '#include "h.h"\nvoid f(int x) { M(x); }\n')
-        self.assertIn("1 asm", sa.problem(path, "f", {}))
+    def test_project_header_counts_only_where_reached(self):
+        self.write("h.h", '#define M(x) asm("multu %1,%1" : : "d"(x))\n'
+                          'static inline void di(void) { asm volatile("di"); }\n')
+        path = self.write("a.c", '#include "h.h"\nvoid f(int x) { M(x); }\nvoid g(void) { di(); }\n'
+                                 "int h(int x) { return x; }\n")
+        self.assertEqual(sa.problem(path, "f", {}), "1 asm without an approval row")
+        self.assertEqual(sa.problem(path, "g", {}), "1 asm without an approval row; 1 volatile without an approval row")
+        self.assertIsNone(sa.problem(path, "h", {}))
 
     def test_table_rows_are_checked(self):
         path = self.write("t.tsv", "volatile\tf\t1\t#x\n")

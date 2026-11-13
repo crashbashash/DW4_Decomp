@@ -73,6 +73,22 @@ SfxZHn *FUN_002b4270(void) {
     return zhn;
 }
 
+/* matching construct: manual — the in-use word is read through a volatile pointer; retail leaves the loop branch's delay slot empty */
+SfxZHn *FUN_002b42c8(void) {
+    int maxhn = DAT_004bf010.maxhn;
+    SfxZHn *tbl = DAT_004bf010.hn;
+    volatile SfxZHn *zhn;
+    int i;
+
+    for (i = 0; i < maxhn; i++) {
+        zhn = &tbl[i];
+        if (zhn->used == 0) {
+            return (SfxZHn *)zhn;
+        }
+    }
+    return 0;
+}
+
 /* matching construct: variant search — statement order; the unit compiler (Sony EE GCC 2.96 -O2 -G0) schedules the last independent store of the body into the return delay slot and keeps the rest in source order, so the stores are written in retail's emitted order */
 void FUN_002b4318(SfxZHn *zhn) {
     zhn->zmin = 0;

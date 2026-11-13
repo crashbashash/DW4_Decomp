@@ -86,15 +86,14 @@ void Gap__Insight__igInsightCore__vfunc_13(struct A_237300 *arg0) {
 }
 
 void FUN_00237530(OO *arg0) {
-    R_237530 *sp4C;
     int temp_s1;
     int var_s0;
     R_237530 *t;
     R_237530 *s0;
 
     if (arg0->f20 == 0) {
-        FUN_002364e0(&sp4C, 0);
-        s0 = sp4C;
+        igSmartPointer<igWindowView> display = Viewer_CreateDisplay(0);
+        s0 = (R_237530 *)display.p;
         if (s0 != 0) {
             s0->rc = s0->rc + 1;
         }
@@ -106,12 +105,6 @@ void FUN_00237530(OO *arg0) {
             }
         }
         arg0->f20 = (DW4VC_152 *)s0;
-        if (sp4C != 0) {
-            sp4C->rc = sp4C->rc - 1;
-            if ((sp4C->rc & 0x7FFFFF) == 0) {
-                igObject_Destroy(sp4C);
-            }
-        }
     }
     s0 = arg0->f20->vX();
     if (s0 != 0) {

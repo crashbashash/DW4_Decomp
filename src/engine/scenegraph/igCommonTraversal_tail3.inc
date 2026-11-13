@@ -421,6 +421,144 @@ int FUN_001b7d70(void *arg0, void *arg1) {
     return FUN_001b9530(arg0, arg1);
 }
 
+static inline void pushMatrixAttr(igAttrStackManager *manager, MatrixAttrView *attr) {
+    int n;
+    AttrObjectStack *stack;
+    int slot;
+    slot = attr->_cachedUnitID + ((int *)manager->_attrStackIndexTable)[attr->_cachedAttrIndex];
+    stack = ((AttrObjectStackList *)manager->_attrStacks)->_data[slot];
+    igObject *pushed = (igObject *)attr;
+    n = stack->getCount();
+    if (n < stack->_capacity) {
+        stack->_count = stack->_count + 1;
+    } else {
+        List_Resize(stack, n + 1, 4);
+    }
+    stack->set(n, &pushed);
+    igAttrStackManager_MarkStackChanged((A_1b1490 *)manager, (B_1b1490 *)stack, slot);
+}
+static inline void setTransformMvm(TransformView *transform, MatrixAttrView *attr) {
+    if (attr != 0) {
+        attr->_refCount = attr->_refCount + 1;
+    }
+    {
+        MatrixAttrView *old = transform->_mvm;
+        IG_OBJECT_RELEASE(old);
+    }
+    transform->_mvm = attr;
+}
+
+float *igTransform_PushMatrix(TransformView *self, CommonTraversalView *traversal) {
+    /* matching construct: declaration-order search — the order of these locals */
+    int unit;
+    int blendIndex;
+    float *parent;
+    MatrixAttrView *top;
+    MatrixAttrView *attr;
+    igAttrStackManager *manager;
+    int target;
+    self->update(traversal->getTime());
+    target = self->_target;
+    parent = 0;
+    manager = traversal->_attrStack;
+    switch (target) {
+    case 0:
+        top = (MatrixAttrView *)topAttr(((AttrObjectStackList *)manager->_attrStacks)->_data[((int *)manager->_attrStackIndexTable)[g_igModelViewMatrixAttr_metaObject[0]->_id]]);
+        if (top != 0) {
+            parent = top->_m;
+        }
+        attr = (MatrixAttrView *)takePooled(traversal->_matrixPool, (void *)FUN_001356b0);
+        if (parent != 0) {
+            FUN_001904f0(attr->_m, self->_m, parent);
+        } else {
+            attr->setMatrix(self->_m);
+        }
+        pushMatrixAttr(manager, attr);
+        setTransformMvm(self, attr);
+        return attr->_m;
+    case 9: case 10: case 11: case 12: case 13: case 14: case 15: case 16:
+        unit = target - 9;
+        top = (MatrixAttrView *)topAttr(((AttrObjectStackList *)manager->_attrStacks)->_data[unit + ((int *)manager->_attrStackIndexTable)[g_igTextureMatrixAttr_metaObject[0]->_id]]);
+        if (top != 0) {
+            parent = top->_m;
+        }
+        attr = (MatrixAttrView *)takePooled(traversal->_texMatPool, (void *)FUN_001317c0);
+        ((TextureMatrixAttrView *)attr)->_outputElementCount = -1;
+        ((TextureMatrixAttrView *)attr)->_isProjective = 0;
+        attr->setUnitID((short)unit);
+        if (parent != 0) {
+            FUN_001904f0((char *)attr + g_igTextureMatrixAttr_mField[0]->_offset, self->_m, parent);
+        } else {
+            attr->setMatrix(self->_m);
+        }
+        pushMatrixAttr(manager, attr);
+        setTransformMvm(self, attr);
+        return (float *)((char *)attr + g_igTextureMatrixAttr_mField[0]->_offset);
+    default:
+        blendIndex = target - 1;
+        top = (MatrixAttrView *)topAttr(((AttrObjectStackList *)manager->_attrStacks)->_data[blendIndex + ((int *)manager->_attrStackIndexTable)[g_igVertexBlendMatrixAttr_metaObject[0]->_id]]);
+        if (top != 0) {
+            parent = (float *)((char *)top + g_igVertexBlendMatrixAttr_mField[0]->_offset);
+        }
+        attr = (MatrixAttrView *)takePooled(traversal->_blendMatrixPool, (void *)FUN_00130c10);
+        attr->setUnitID((short)blendIndex);
+        if (parent != 0) {
+            FUN_001904f0((char *)attr + g_igVertexBlendMatrixAttr_mField[0]->_offset, self->_m, parent);
+        } else {
+            attr->setMatrix(self->_m);
+        }
+        pushMatrixAttr(manager, attr);
+        setTransformMvm(self, attr);
+        return (float *)((char *)attr + g_igVertexBlendMatrixAttr_mField[0]->_offset);
+    }
+}
+
+int igTransform_TraverseChildrenAndPopMatrix(float *matrix, igTransform *self, igCommonTraversal *traversal) {
+    int target;
+    int result;
+    igAttrStackManager *manager;
+    int slot;
+    int unit;
+    igMetaObject *meta;
+    AttrObjectStack *stack;
+    void (*pop)(igObject *, int);
+    manager = (igAttrStackManager *)traversal->_attrStack;
+    target = self->_target;
+    result = igTraversal_TraverseChildren((int)traversal, (S_1e07a0 *)self);
+    unit = 0;
+    switch (target) {
+    case 0:
+        meta = g_igModelViewMatrixAttr_metaObject[0];
+        break;
+    case 9: case 10: case 11: case 12: case 13: case 14: case 15: case 16:
+        meta = g_igTextureMatrixAttr_metaObject[0];
+        unit = target - 9;
+        break;
+    default:
+        unit = target - 1;
+        meta = g_igVertexBlendMatrixAttr_metaObject[0];
+        break;
+    }
+    slot = unit + ((int *)manager->_attrStackIndexTable)[meta->_id];
+    stack = ((AttrObjectStackList *)manager->_attrStacks)->_data[slot];
+    {
+        int last = stack->_count - 1;
+        igObject **data = stack->_data;
+        igObject *top;
+        pop = stack->_popProc;
+        top = data[last];
+        if (pop != 0) {
+            pop(top, manager->_popProcData);
+        }
+    }
+    stack->_count = stack->_count - 1;
+    igAttrStackManager_MarkStackChanged((A_1b1490 *)manager, (B_1b1490 *)stack, slot);
+    if (result == 2) {
+        return 2;
+    }
+    return 0;
+}
+
 int FUN_001b8720(void *arg0, ForwardTarget *arg1) {
     return arg1->vX(arg0);
 }

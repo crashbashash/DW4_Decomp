@@ -1,0 +1,12 @@
+# SceneGraphLibrary.cpp: attribute-stack light state, transform matrix push/pop and the attribute-set,
+# projective-shadow and joint-transform traversal functions.
+# <va>	<name>	<module>
+0x001b0aa0	igAttrStackManager_PopLightStateAttr	engine
+0x001b0ea0	igAttrStackManager_IsLightEnabled	engine
+0x001b7f50	igTransform_PushMatrix	engine
+0x001b85c0	igTransform_TraverseChildrenAndPopMatrix	engine
+0x001b90e0	igCommonTraversal_TraverseOverrideAttrSet	engine
+0x001b9320	igCommonTraversal_TraverseAttrSet	engine
+0x001ba6e0	igCommonTraversal_TraverseProjectiveShadowShader	engine
+0x001bc050	igTransform_CompileChildrenAndPopMatrix	engine
+0x001bc0e0	igCompileTraversal_TraverseJointTransform	engine

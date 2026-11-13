@@ -101,12 +101,12 @@ extern char DAT_004f45c0[];
 SjObj *SJRBF_Create(char *buf, int size, int flags);
 void *memcpy(void *dst, const void *src, unsigned int size);
 int SJ_SearchTag(SjChunk *in, const char *start, const char *end, SjChunk *out);
-void FUN_00293118(MwsfdPly *ply);
-void FUN_00293f60(int addr, int width, int height, int *out);
-int FUN_002944b0(MwsfdPly *ply);
-int FUN_002968c0(MwsfdPly *ply);
+void mwsfcre_DestroyPly(MwsfdPly *ply);
+void mwply_GetPlanes(int addr, int width, int height, int *out);
+int mwPlyGetCurPicCompoMode(MwsfdPly *ply);
+int MWSFD_IsEnableHndl(MwsfdPly *ply);
 void mwsfd_Error(const char *msg);
-int FUN_002b0ff8(void *sfd, int index, SjObj *sj, int b);
+int SFD_SetAinfSj(void *sfd, int index, SjObj *sj, int b);
 void FUN_002b3690(void *sfx, MwsfdCnvPrm *prm);
 void FUN_002b3708(void *sfx, MwsfdCnvPrm *prm);
 void FUN_002b3788(void);
@@ -190,12 +190,12 @@ void FUN_002977a8(void *ctx, const char *msg)
     mwsfd_Error(msg);
 }
 
-void FUN_002977c0(void)
+void mwsfsfx_Finish(void)
 {
     FUN_002b3858();
 }
 
-int FUN_002977d8(void)
+int mwsfsfx_CalcWorkSize(void)
 {
     return 6175;
 }
@@ -205,7 +205,7 @@ void FUN_002977e0(void)
     FUN_002b38c8();
 }
 
-void FUN_002977f8(void)
+void mwsfsfx_Destroy(void)
 {
     FUN_002b3ae8();
 }
@@ -271,7 +271,7 @@ void FUN_00297910(MwsfdFrm *frm, MwsfdCnvPrm *prm)
         FUN_002979d8(&prm->plane[0], frm->addr, width, height);
         return;
     }
-    FUN_00293f60(frm->addr, width, height, out);
+    mwply_GetPlanes(frm->addr, width, height, out);
     FUN_002979d8(&prm->plane[0], out[0], out[3], height);
     FUN_002979d8(&prm->plane[1], out[1], out[4], height);
     FUN_002979d8(&prm->plane[2], out[2], out[5], height);
@@ -392,7 +392,7 @@ void FUN_00297c08(MwsfdPly *ply, MwsfdFrm *frm, int arg)
     MwsfdCnvPrm prm;
     void *sfx;
 
-    if (FUN_002968c0(ply) == 0) {
+    if (MWSFD_IsEnableHndl(ply) == 0) {
         mwsfd_Error(DAT_004f40c0);
     } else if (frm->addr == 0) {
         mwsfd_Error(DAT_004f40f0);
@@ -408,7 +408,7 @@ void FUN_00297cb0(MwsfdPly *ply, MwsfdFrm *frm, int arg)
     MwsfdCnvPrm prm;
     void *sfx;
 
-    if (FUN_002968c0(ply) == 0) {
+    if (MWSFD_IsEnableHndl(ply) == 0) {
         mwsfd_Error(DAT_004f4120);
     } else if (frm->addr == 0) {
         mwsfd_Error(DAT_004f4150);
@@ -423,7 +423,7 @@ void FUN_00297d58(MwsfdPly *ply, int mode)
 {
     int compo = mode;
 
-    if (FUN_002968c0(ply) == 0) {
+    if (MWSFD_IsEnableHndl(ply) == 0) {
         mwsfd_Error(DAT_004f4180);
         return;
     }
@@ -439,7 +439,7 @@ void FUN_00297d58(MwsfdPly *ply, int mode)
     }
     compo = mode;
     if (ply->vtbl->getStat(ply) == 2 && compo == 0) {
-        compo = FUN_002944b0(ply);
+        compo = mwPlyGetCurPicCompoMode(ply);
         if (compo == -1) {
             compo = 17;
         }
@@ -454,7 +454,7 @@ void FUN_00297e58(MwsfdPly *ply, int mode)
 
 int FUN_00297e88(MwsfdPly *ply)
 {
-    if (FUN_002968c0(ply) == 0) {
+    if (MWSFD_IsEnableHndl(ply) == 0) {
         mwsfd_Error(DAT_004f4250);
         return 0;
     }
@@ -466,14 +466,14 @@ void FUN_00297ee8(MwsfdPly *ply, int value)
     FUN_002b3be8(FUN_00297810(ply), value);
 }
 
-void FUN_00297f18(MwsfdPly *ply)
+void mwsfsfx_SetOutMode(MwsfdPly *ply)
 {
     FUN_002b3e58(ply->sfx);
 }
 
-void FUN_00297f30(MwsfdPly *ply)
+void mwsfsfx_SetOutModeByPic(MwsfdPly *ply)
 {
-    FUN_00297f18(ply);
+    mwsfsfx_SetOutMode(ply);
 }
 
 void FUN_00297f48(MwsfdPly *ply)
@@ -488,7 +488,7 @@ void FUN_00297f60(MwsfdPly *ply, int a, int b)
 
 void FUN_00297f78(MwsfdPly *ply, int a, int b)
 {
-    if (FUN_002968c0(ply) == 0) {
+    if (MWSFD_IsEnableHndl(ply) == 0) {
         mwsfd_Error(DAT_004f4288);
         return;
     }
@@ -509,7 +509,7 @@ void FUN_00298028(MwsfdPly *ply, int a, int b, int c)
 {
     void *sfx;
 
-    if (!FUN_002968c0(ply)) {
+    if (!MWSFD_IsEnableHndl(ply)) {
         mwsfd_Error(DAT_004f42c8);
         return;
     }
@@ -520,7 +520,7 @@ void FUN_00298028(MwsfdPly *ply, int a, int b, int c)
 
 void FUN_002980c0(MwsfdPly *ply, int value)
 {
-    if (FUN_002968c0(ply) == 0) {
+    if (MWSFD_IsEnableHndl(ply) == 0) {
         mwsfd_Error(DAT_004f4300);
         return;
     }
@@ -529,7 +529,7 @@ void FUN_002980c0(MwsfdPly *ply, int value)
 
 int FUN_00298128(MwsfdPly *ply)
 {
-    if (FUN_002968c0(ply) == 0) {
+    if (MWSFD_IsEnableHndl(ply) == 0) {
         mwsfd_Error(DAT_004f4338);
         return 0;
     }
@@ -538,7 +538,7 @@ int FUN_00298128(MwsfdPly *ply)
 
 void FUN_00298188(MwsfdPly *ply, int value)
 {
-    if (FUN_002968c0(ply) == 0) {
+    if (MWSFD_IsEnableHndl(ply) == 0) {
         mwsfd_Error(DAT_004f4370);
         return;
     }
@@ -547,7 +547,7 @@ void FUN_00298188(MwsfdPly *ply, int value)
 
 int FUN_002981f0(MwsfdPly *ply)
 {
-    if (FUN_002968c0(ply) == 0) {
+    if (MWSFD_IsEnableHndl(ply) == 0) {
         mwsfd_Error(DAT_004f43a8);
         return 0;
     }
@@ -559,7 +559,7 @@ int FUN_00298250(MwsfdPly *ply)
     return ply->cre.type == 2;
 }
 
-int FUN_00298260(MwsfdCreInf *cre)
+int mwsfd_IsAddInfOn(MwsfdCreInf *cre)
 {
     int result;
 
@@ -579,19 +579,19 @@ SjObj *FUN_00298288(MwsfdPly *ply)
 {
     SjObj *sj;
 
-    if (FUN_00298260(&ply->cre) == 0) {
+    if (mwsfd_IsAddInfOn(&ply->cre) == 0) {
         return 0;
     }
     sj = SJRBF_Create(ply->addInfBase, ply->addInfSize, 0);
     if (sj == 0) {
         mwsfd_Error(DAT_004f43e0);
-        FUN_00293118(ply);
+        mwsfcre_DestroyPly(ply);
         return 0;
     }
     return sj;
 }
 
-void FUN_002982e8(MwsfdPly *ply)
+void mwsfd_DestroyAddInfSj(MwsfdPly *ply)
 {
     SjObj *sj = ply->addInfSj;
 
@@ -600,7 +600,7 @@ void FUN_002982e8(MwsfdPly *ply)
     }
 }
 
-int FUN_00298318(MwsfdPly *ply)
+int mwsfsfx_SetAddInfSj(MwsfdPly *ply)
 {
     SjObj *sj;
 
@@ -611,13 +611,13 @@ int FUN_00298318(MwsfdPly *ply)
     if (sj == 0) {
         return 0;
     }
-    if (FUN_002b0ff8(ply->sfd, 2, sj, 0) != 0) {
+    if (SFD_SetAinfSj(ply->sfd, 2, sj, 0) != 0) {
         return -1;
     }
     return 0;
 }
 
-void FUN_00298378(MwsfdPly *ply)
+void mwsfsfx_ResetAddInf(MwsfdPly *ply)
 {
     MwsfdAddInf *inf = &ply->addInf;
 
@@ -627,7 +627,7 @@ void FUN_00298378(MwsfdPly *ply)
     ply->usrBuf.f8 = -1;
 }
 
-void FUN_00298398(MwsfdPly *ply)
+void mwsfsfx_ResetAddInfSj(MwsfdPly *ply)
 {
     SjObj *sj = ply->addInfSj;
 
@@ -646,7 +646,7 @@ void FUN_002983c8(MwsfdPly *ply)
     }
 }
 
-void FUN_00298420(MwsfdPly *ply)
+void mwsfsfx_UpdateAddInf(MwsfdPly *ply)
 {
     if (ply->addInfSj == 0) {
         return;
@@ -736,7 +736,7 @@ int mwsfd_RequestAddInf(MwsfdPly *ply)
     if (ply->addInfSj == 0) {
         return 0;
     }
-    if (FUN_002b0ff8(ply->sfd, 2, 0, 0) != 0) {
+    if (SFD_SetAinfSj(ply->sfd, 2, 0, 0) != 0) {
         return -1;
     }
     return 0;
@@ -798,7 +798,7 @@ void FUN_00298990(MwsfdPly *ply, MwsfdFrm *frm)
     MwsfdCnvPrm prm;
     void *sfx;
 
-    if (FUN_002968c0(ply) == 0) {
+    if (MWSFD_IsEnableHndl(ply) == 0) {
         mwsfd_Error(DAT_004f4468);
         return;
     }
@@ -816,7 +816,7 @@ void FUN_00298a30(MwsfdPly *ply, MwsfdFrm *frm)
     MwsfdCnvPrm prm;
     void *sfx;
 
-    if (FUN_002968c0(ply) == 0) {
+    if (MWSFD_IsEnableHndl(ply) == 0) {
         mwsfd_Error(DAT_004f44c8);
         return;
     }
@@ -829,12 +829,12 @@ void FUN_00298a30(MwsfdPly *ply, MwsfdFrm *frm)
     FUN_002b3708(sfx, &prm);
 }
 
-void FUN_00298ad0(MwsfdPly *ply)
+void mwsfsfx_SetPicUsr(MwsfdPly *ply)
 {
     FUN_002b40b0(ply->sfx);
 }
 
-void FUN_00298ae8(MwsfdPly *ply)
+void mwsfsfx_GetPicUsrItem3(MwsfdPly *ply)
 {
     FUN_002b4110(ply->sfx);
 }
@@ -844,14 +844,14 @@ void FUN_00298b00(MwsfdPly *ply)
     FUN_002b40d0(ply->sfx);
 }
 
-void FUN_00298b18(MwsfdPly *ply)
+void mwsfsfx_GetPicUsrFrmType(MwsfdPly *ply)
 {
     FUN_002b40f0(ply->sfx);
 }
 
 void FUN_00298b30(MwsfdPly *ply)
 {
-    FUN_00298ae8(ply);
+    mwsfsfx_GetPicUsrItem3(ply);
 }
 
 void FUN_00298b48(MwsfdPly *ply)
@@ -921,7 +921,7 @@ void FUN_00298c68(void)
 
 void FUN_00298c80(MwsfdPly *ply, int value)
 {
-    if (FUN_002968c0(ply) == 0) {
+    if (MWSFD_IsEnableHndl(ply) == 0) {
         mwsfd_Error(DAT_004f4528);
         return;
     }
@@ -930,7 +930,7 @@ void FUN_00298c80(MwsfdPly *ply, int value)
 
 int FUN_00298ce8(MwsfdPly *ply)
 {
-    if (FUN_002968c0(ply) == 0) {
+    if (MWSFD_IsEnableHndl(ply) == 0) {
         mwsfd_Error(DAT_004f4558);
         return 0;
     }
@@ -942,12 +942,12 @@ void FUN_00298d48(MwsfdPly *ply, int value)
     FUN_002b3bb8(FUN_00297810(ply), value);
 }
 
-void FUN_00298d78(MwsfdPly *ply)
+void mwsfsfx_SetCompoMode(MwsfdPly *ply)
 {
     int mode;
 
     if (ply->compoSet == 0) {
-        mode = FUN_002944b0(ply);
+        mode = mwPlyGetCurPicCompoMode(ply);
         if (mode != -1) {
             ply->compoMode = mode;
         } else {
@@ -959,7 +959,7 @@ void FUN_00298d78(MwsfdPly *ply)
 
 void FUN_00298de0(MwsfdPly *ply, int value)
 {
-    if (FUN_002968c0(ply) == 0) {
+    if (MWSFD_IsEnableHndl(ply) == 0) {
         mwsfd_Error(DAT_004f4588);
         return;
     }
@@ -968,7 +968,7 @@ void FUN_00298de0(MwsfdPly *ply, int value)
 
 int FUN_00298e48(MwsfdPly *ply)
 {
-    if (FUN_002968c0(ply) == 0) {
+    if (MWSFD_IsEnableHndl(ply) == 0) {
         mwsfd_Error(DAT_004f45c0);
         return 0;
     }

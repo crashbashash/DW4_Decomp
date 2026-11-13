@@ -132,16 +132,16 @@ extern int DAT_004beb38;
 int FUN_00285118();
 int UTY_MulDiv(int value, int scale, int divisor);
 int sfd_ReportError();
-int sfd_CheckHn(void *handle);
+int SFLIB_CheckHn(void *handle);
 void sfd_Lock(void *guard);
 void sfd_Unlock(void *guard);
 int SFD_GetCond();
-void FUN_002ada78();
+void sfd_SetCond();
 long __muldi3(long a, long b);
 long __divdi3(long a, long b);
 
-void FUN_002ae248(SfdTimeRec *rec, int time);
-void sftim_ClearTimeCode(SfdTimeCode *tc);
+void SFTIM_InitTtu(SfdTimeRec *rec, int time);
+void SFTIM_InitTcode(SfdTimeCode *tc);
 void FUN_002ae408(SfdHn *hn);
 void FUN_002ae458(SfdHn *hn);
 int FUN_002ae4c8(SfdHn *hn);
@@ -169,19 +169,29 @@ void FUN_002af848(SfdHn *hn, int time, int unit, int *decision, int delay);
 void FUN_002af998(SfdHn *hn, int time, int unit, int *decision);
 void FUN_002afa10(SfdHn *hn, int *decision, float t, float ref);
 
-void FUN_002ae020(void)
+/* matching construct: hand search — an empty statement macro at entry is a scheduling barrier: the first store stays first and the argument's store moves ahead of the second clear */
+#define EMPTY_MACRO() do { } while (0)
+void SFTIM_Init(SfdLib *lib, int rate)
+{
+    EMPTY_MACRO();
+    lib->counter = 0;
+    lib->f4 = 0;
+    lib->rate = rate;
+}
+
+void SFTIM_Finish(void)
 {
 }
 
-void FUN_002ae248(SfdTimeRec *rec, int time)
+void SFTIM_InitTtu(SfdTimeRec *rec, int time)
 {
     rec->valid = 0;
-    sftim_ClearTimeCode(&rec->tc);
+    SFTIM_InitTcode(&rec->tc);
     rec->time = time;
     rec->unit = 1;
 }
 
-void sftim_ClearTimeCode(SfdTimeCode *tc)
+void SFTIM_InitTcode(SfdTimeCode *tc)
 {
     tc->rate = 0;
     tc->drop = 0;
@@ -349,9 +359,9 @@ void FUN_002ae7a0(SfdTim *tim, int a, int b)
     tim->f328 = b;
 }
 
-int FUN_002ae7b0(SfdHn *hn, int *time, int *unit)
+int SFD_GetTime(SfdHn *hn, int *time, int *unit)
 {
-    if (sfd_CheckHn(hn) != 0) {
+    if (SFLIB_CheckHn(hn) != 0) {
         return sfd_ReportError(0, 0xFF000121);
     }
     return sftim_GetTime(hn, time, unit);
@@ -374,7 +384,7 @@ int sftim_GetTime(SfdHn *hn, int *time, int *unit)
 
 int FUN_002ae8d8(SfdHn *hn, int *time, int *unit)
 {
-    if (sfd_CheckHn(hn) != 0) {
+    if (SFLIB_CheckHn(hn) != 0) {
         return sfd_ReportError(0, 0xFF000127);
     }
     return FUN_002ae950(hn, time, unit);
@@ -395,7 +405,7 @@ int FUN_002ae968(SfdHn *hn, int *time, int *unit)
 
 int FUN_002ae988(SfdHn *hn, int *time, int *unit)
 {
-    if (sfd_CheckHn(hn) != 0) {
+    if (SFLIB_CheckHn(hn) != 0) {
         return sfd_ReportError(0, 0xFF000128);
     }
     return FUN_002aea00(hn, time, unit);
@@ -461,7 +471,7 @@ int sftim_IsPlaying(SfdHn *hn, int *time, int *unit)
 int FUN_002aeca8(SfdHn *hn)
 {
     SfdTim *tim;
-    int r = sfd_CheckHn(hn);
+    int r = SFLIB_CheckHn(hn);
     if (r != 0) {
         return sfd_ReportError(0, 0xFF000122);
     }
@@ -473,7 +483,7 @@ int FUN_002aeca8(SfdHn *hn)
 
 int FUN_002aed08(SfdHn *hn, int value)
 {
-    if (sfd_CheckHn(hn) != 0) {
+    if (SFLIB_CheckHn(hn) != 0) {
         return sfd_ReportError(0, 0xFF000124);
     }
     hn->tim.f24 = value;
@@ -485,22 +495,22 @@ void sftim_IsTimeReached(void)
     FUN_00285118();
 }
 
-int FUN_002aed78(SfdHn *hn, SfdTimeFn fn)
+int SFD_SetUsrTimeFn(SfdHn *hn, SfdTimeFn fn)
 {
-    if (sfd_CheckHn(hn) != 0) {
+    if (SFLIB_CheckHn(hn) != 0) {
         return sfd_ReportError(0, 0xFF000123, 4);
     }
     FUN_002af060(hn, fn, 4);
     if (fn != 0) {
-        FUN_002ada78(hn, 0xF, 4);
+        sfd_SetCond(hn, 0xF, 4);
     }
     return 0;
 }
 
-int FUN_002aee00(SfdHn *hn, int (*get)(int ctx, int *time, int *unit), int wrap, int ctx)
+int SFD_SetExtClockFn(SfdHn *hn, int (*get)(int ctx, int *time, int *unit), int wrap, int ctx)
 {
     SfdTim *tim;
-    if (sfd_CheckHn(hn) != 0) {
+    if (SFLIB_CheckHn(hn) != 0) {
         return sfd_ReportError(0, 0xFF000129);
     }
     tim = &hn->tim;
@@ -508,11 +518,11 @@ int FUN_002aee00(SfdHn *hn, int (*get)(int ctx, int *time, int *unit), int wrap,
         tim->clock_get = get;
         tim->clock_wrap = wrap;
         tim->clock_ctx = ctx;
-        FUN_002ada78(hn, 15, 5);
-        FUN_002ada78(hn, 71, 0);
+        sfd_SetCond(hn, 15, 5);
+        sfd_SetCond(hn, 71, 0);
     } else {
-        FUN_002ada78(hn, 71, 1);
-        FUN_002ada78(hn, 15, 1);
+        sfd_SetCond(hn, 71, 1);
+        sfd_SetCond(hn, 15, 1);
         tim->clock_ctx = ctx;
         tim->clock_wrap = wrap;
         tim->clock_get = 0;
@@ -520,7 +530,7 @@ int FUN_002aee00(SfdHn *hn, int (*get)(int ctx, int *time, int *unit), int wrap,
     return 0;
 }
 
-int FUN_002aeef0(SfdHn *hn)
+int SFD_UpdateTime(SfdHn *hn)
 {
     int result;
     int status;
@@ -543,7 +553,7 @@ int FUN_002aeef0(SfdHn *hn)
 
 int FUN_002aef78(SfdHn *hn)
 {
-    if (sfd_CheckHn(hn) != 0) {
+    if (SFLIB_CheckHn(hn) != 0) {
         return sfd_ReportError(0, 0xFF00012A);
     }
     if (SFD_GetCond(hn, 71) == 1) {
@@ -683,7 +693,7 @@ int FUN_002af580(SfdHn *hn, int *rate)
 {
     int index;
     *rate = -1;
-    if (sfd_CheckHn(hn) != 0) {
+    if (SFLIB_CheckHn(hn) != 0) {
         return sfd_ReportError(0, 0xFF00011B);
     }
     index = hn->rate_index;
@@ -698,7 +708,7 @@ int FUN_002af5f8(SfdHn *hn, int *out)
     SfdTim *tim;
     int type;
     *out = -1;
-    if (sfd_CheckHn(hn) != 0) {
+    if (SFLIB_CheckHn(hn) != 0) {
         return sfd_ReportError(0, 0xFF000118);
     }
     type = hn->rate_index;
@@ -716,7 +726,7 @@ typedef struct SfdTimeSpan {
     int unit;
 } SfdTimeSpan;
 
-int FUN_002af688(SfdHn *hn, SfdTimeSpan *span)
+int sftim_IsSpanReached(SfdHn *hn, SfdTimeSpan *span)
 {
     if (span == 0) {
         return 0;
@@ -738,7 +748,7 @@ int FUN_002af6c0(SfdHn *hn, int time, int unit)
 int FUN_002af6f8(SfdHn *hn, int a, int b)
 {
     SfdTim *tim;
-    int r = sfd_CheckHn(hn);
+    int r = SFLIB_CheckHn(hn);
     if (r != 0) {
         return sfd_ReportError(0, 0xFF000125);
     }
@@ -755,7 +765,7 @@ int FUN_002af780(SfdHn *hn, int time, int unit, int *verdict)
     int refused;
     int *cond;
     *verdict = 0;
-    refused = sfd_CheckHn(hn);
+    refused = SFLIB_CheckHn(hn);
     cond = hn->cond;
     if (refused != 0) {
         return sfd_ReportError(0, 0xFF000126);
@@ -831,7 +841,7 @@ void FUN_002afa10(SfdHn *hn, int *decision, float t, float ref)
     tim->sync_last = *decision;
 }
 
-int FUN_002afb00(SfdHn *hn)
+int sftim_IsReady(SfdHn *hn)
 {
     SfdTim *tim = &hn->tim;
     int base = tim->base;

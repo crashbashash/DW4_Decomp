@@ -35,16 +35,16 @@ extern char DAT_004ee270[];
 void ADXERR_CallErrFunc1(const char *message);
 void ADXERR_CallErrFunc2(const char *message, const char *detail);
 int LSC_EntryFileRange(void *stm, const char *name, void *dir, int ofst, int nsct);
-void FUN_00277278(void *stm);
-void FUN_00277768(void *stm, int enable);
-int FUN_002773d0(void *stm);
+void LSC_Stop(void *stm);
+void LSC_SetLpFlg(void *stm, int enable);
+int LSC_GetNumStm(void *stm);
 void LSC_ResetEntry(void *stm);
-void FUN_00277210(void *stm);
-void FUN_00277658(void *stm, int bytes);
-void FUN_0026bbc0(void);
+void LSC_Start(void *stm);
+void LSC_SetFlowLimit(void *stm, int bytes);
+void ADXT_StopWithoutLsc(void);
 void ADXCRS_Lock(void);
 void ADXCRS_Unlock(void);
-void FUN_0026b978(AdxtHandle *adxt, int value);
+void adxt_start_sj(AdxtHandle *adxt, int value);
 void ADXT_SetLnkSw(AdxtHandle *adxt, int value);
 void ADXERR_ItoA2(int value, int extra, char *text, int size);
 int ADXF_GetFnameRangeEx(int ptid, int flid, char *fname, void **dir, int *ofst, int *nsct);
@@ -93,15 +93,15 @@ void FUN_002638a0(AdxtHandle *adxt) {
         ADXERR_CallErrFunc1(DAT_004ee178);
         return;
     }
-    FUN_0026bbc0();
+    ADXT_StopWithoutLsc();
     ADXCRS_Lock();
-    FUN_0026b978(adxt, adxt->f16);
+    adxt_start_sj(adxt, adxt->f16);
     sji = adxt->sji;
     sji->vt->slot[5](sji);
     adxt->state = 4;
-    FUN_00277658(stm, adxt->sectors << 11);
+    LSC_SetFlowLimit(stm, adxt->sectors << 11);
     ADXCRS_Unlock();
-    FUN_00277210(stm);
+    LSC_Start(stm);
     ADXT_SetLnkSw(adxt, 1);
 }
 
@@ -110,12 +110,12 @@ void FUN_00263950(AdxtHandle *adxt, int enable) {
         ADXERR_CallErrFunc1(DAT_004ee1a8);
         return;
     }
-    FUN_00277768(adxt->stm, enable);
+    LSC_SetLpFlg(adxt->stm, enable);
 }
 
 void FUN_002639a0(AdxtHandle *adxt, const char *name, int first, int last);
 
-void FUN_00263980(AdxtHandle *adxt, const char *name)
+void ADXT_EntryFname(AdxtHandle *adxt, const char *name)
 {
     FUN_002639a0(adxt, name, 0, 0xfffff);
 }
@@ -127,9 +127,9 @@ void FUN_002639a0(AdxtHandle *adxt, const char *name, int first, int last) {
         return;
     }
     stm = adxt->stm;
-    FUN_00277278(stm);
+    LSC_Stop(stm);
     FUN_00263768(adxt, name, first, last);
-    FUN_00277768(stm, 1);
+    LSC_SetLpFlg(stm, 1);
     FUN_002638a0(adxt);
 }
 
@@ -140,9 +140,9 @@ void FUN_00263a50(AdxtHandle *adxt, int afs, unsigned int fid) {
         return;
     }
     stm = adxt->stm;
-    FUN_00277278(stm);
+    LSC_Stop(stm);
     ADXT_EntryAfs(adxt, afs, fid);
-    FUN_00277768(stm, 1);
+    LSC_SetLpFlg(stm, 1);
     FUN_002638a0(adxt);
 }
 
@@ -155,7 +155,7 @@ int FUN_00263b08(AdxtHandle *adxt) {
         ADXERR_CallErrFunc1(DAT_004ee240);
         return -1;
     }
-    return FUN_002773d0(adxt->stm);
+    return LSC_GetNumStm(adxt->stm);
 }
 
 void FUN_00263b40(AdxtHandle *adxt) {

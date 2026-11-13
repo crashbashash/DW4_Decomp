@@ -1,10 +1,10 @@
-/* Once FUN_0028b098 accepts the handle, polls `stream` with FUN_00290898 (advancing with
- * FUN_00290ac0 while it returns 4) until a status in mask 0xCC appears, then reports 0 or
+/* Once FUN_0028b098 accepts the handle, polls `stream` with mpv_SkipToStartCode (advancing with
+ * mpv_SkipBytes while it returns 4) until a status in mask 0xCC appears, then reports 0 or
  * 0xFF030305 through FUN_002855d8. */
 int FUN_0028b098(void *handle); /* 0 when handle is non-null and in state 2, else -1 */
 void FUN_002855d8(void *handle, int error);
-int FUN_00290898(void *stream);
-int FUN_00290ac0(void *stream, int a, int b);
+int mpv_SkipToStartCode(void *stream);
+int mpv_SkipBytes(void *stream, int a, int b);
 
 void FUN_00285660(void *handle, void *stream) {
     int error;
@@ -16,7 +16,7 @@ void FUN_00285660(void *handle, void *stream) {
     }
     error = 0xFF030305;
     for (;;) {
-        status = FUN_00290898(stream);
+        status = mpv_SkipToStartCode(stream);
         if (status == 0) {
             break;
         }
@@ -24,7 +24,7 @@ void FUN_00285660(void *handle, void *stream) {
             error = 0;
             break;
         }
-        if (FUN_00290ac0(stream, 1, 4) != 4) {
+        if (mpv_SkipBytes(stream, 1, 4) != 4) {
             break;
         }
     }

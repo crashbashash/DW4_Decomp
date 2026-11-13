@@ -56,12 +56,12 @@ extern char DAT_004f0068[];
 void *memset(void *dst, int value, unsigned int n);
 void ADXMSG_PrintErr(const char *format, ...);
 void SJ_SplitChunk(SjChunk *ck, int nbyte, SjChunk *ck1, SjChunk *ck2);
-void FUN_0010b7d8(char *start, char *end);
+void SyncDCache(char *start, char *end);
 int sceSifDmaStat(unsigned int id);
 unsigned int sceSifSetDma(SifDmaData *sdd, int len);
-void FUN_0027b2b0(void);
-void FUN_0027b2c8(void);
-void FUN_00273928(void);
+void SJCRS_Lock(void);
+void SJCRS_Unlock(void);
+void DTX_ExecServer(void);
 
 void FUN_002729e8(DtrObj *dtr)
 {
@@ -120,7 +120,7 @@ void FUN_002729e8(DtrObj *dtr)
         for (;;) {
         }
     }
-    FUN_0010b7d8(cks.data, cks.data + cks.len - 1);
+    SyncDCache(cks.data, cks.data + cks.len - 1);
     dtr->dma.data = (unsigned int)cks.data & 0x0fffffff;
     dtr->dma.addr = (unsigned int)ckd.data;
     dtr->dma.size = cks.len;
@@ -142,7 +142,7 @@ signed char FUN_00272d58(DtrObj *dtr)
     return dtr->stat;
 }
 
-void FUN_00272d60(void)
+void DTR_ExecServer(void)
 {
     int i;
     for (i = 0; i < 32; i++) {
@@ -157,7 +157,7 @@ void FUN_00272d60(void)
             FUN_002729e8(&DAT_004a9310[i]);
         }
     }
-    FUN_00273928();
+    DTX_ExecServer();
 }
 
 void FUN_00272e20(void)
@@ -179,7 +179,7 @@ DtrObj *FUN_00272ea0(SjObj *sjs, SjObj *sjd)
 {
     DtrObj *dtr;
     int i;
-    FUN_0027b2b0();
+    SJCRS_Lock();
     for (i = 0; i < 32; i++) {
         dtr = &DAT_004a9310[i];
         if (dtr->used == 0) {
@@ -201,15 +201,15 @@ DtrObj *FUN_00272ea0(SjObj *sjs, SjObj *sjd)
         dtr->used = 1;
         dtr->f52 = 0;
     }
-    FUN_0027b2c8();
+    SJCRS_Unlock();
     return dtr;
 }
 
-void FUN_00272f90(DtrObj *dtr)
+void DTR_Destroy(DtrObj *dtr)
 {
-    FUN_0027b2b0();
+    SJCRS_Lock();
     dtr->used = 0;
-    FUN_0027b2c8();
+    SJCRS_Unlock();
 }
 
 void FUN_00272fb8(DtrObj *dtr)
@@ -218,7 +218,7 @@ void FUN_00272fb8(DtrObj *dtr)
     dtr->stat = 1;
 }
 
-void FUN_00272fc8(DtrObj *dtr)
+void DTR_Stop(DtrObj *dtr)
 {
     dtr->stat = 0;
     if (dtr->transfer == 1) {

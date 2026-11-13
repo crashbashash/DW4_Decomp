@@ -1,4 +1,4 @@
-void FUN_00453a40(igBasicColorChanger *arg0, int arg1, int arg2, int arg3, void *arg4) {
+void igBasicColorChanger_SetColor(igBasicColorChanger *arg0, int arg1, int arg2, int arg3, void *arg4) {
     int var_v1;
     igBasicColorChanger *temp_v1;
     int idx;

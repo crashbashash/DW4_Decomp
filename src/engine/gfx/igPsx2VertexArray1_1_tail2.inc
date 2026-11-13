@@ -252,7 +252,7 @@ int Gap__Gfx__igPsx2VertexArray1_1__vfunc_52(igPsx2VertexArray1_1 *self, int ind
 
 void Gap__Gfx__igPsx2VertexArray1_1__vfunc_57(VertexArrayView_17d910 *arg0, int arg1, float x) {
     float t = fmodf(x, 6.2831855f);
-    if (FUN_001002f0(fptodp(t), 0) != 0) {
+    if (_dpflt(fptodp(t), 0) != 0) {
         t += 6.2831855f;
     }
     if (!(x < 0.0f) && x <= 1.5707964f) {

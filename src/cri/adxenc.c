@@ -107,7 +107,7 @@ extern int DAT_004a5d68;
 extern AdxEnc DAT_004a5d70[8];
 extern AdxEncPredictor DAT_004a7530[16];
 extern AdxEncFilter DAT_004a75f0[16];
-extern const short DAT_004ecff8[1024];
+extern const short skg_tbl[1024];
 extern const char DAT_004ee3e8[];
 extern const char DAT_004ee428[];
 
@@ -117,7 +117,7 @@ unsigned int strlen(const char *s);
 int abs(int value);
 char *strncpy(char *dst, const char *src, unsigned int size);
 int ADX_GetCoefficient(short id, int arg, short *first, short *second);
-int FUN_0025f588(unsigned short *data, int size, short *out_a, char *out_b, char *out_c, char *out_d, char *out_e, int *out_f, int *out_g, int *out_h);
+int ADX_DecodeHeader(unsigned short *data, int size, short *out_a, char *out_b, char *out_c, char *out_d, char *out_e, int *out_f, int *out_g, int *out_h);
 
 int adxenc_EncodeBlock(AdxEnc *e, int ch);
 void FUN_002683e8(AdxEnc *e, int ch);
@@ -171,17 +171,17 @@ int FUN_00267580(const char *str, int len, unsigned short *k0, unsigned short *k
     if (str == 0 && len <= 0) {
         return 0;
     }
-    a = DAT_004ecff8[256];
+    a = skg_tbl[256];
     for (i = 0; i < len; i++) {
-        a = DAT_004ecff8[a * DAT_004ecff8[128 + str[i]] % 1024];
+        a = skg_tbl[a * skg_tbl[128 + str[i]] % 1024];
     }
-    b = DAT_004ecff8[512];
+    b = skg_tbl[512];
     for (i = 0; i < len; i++) {
-        b = DAT_004ecff8[b * DAT_004ecff8[128 + str[i]] % 1024];
+        b = skg_tbl[b * skg_tbl[128 + str[i]] % 1024];
     }
-    c = DAT_004ecff8[768];
+    c = skg_tbl[768];
     for (i = 0; i < len; i++) {
-        c = DAT_004ecff8[c * DAT_004ecff8[128 + str[i]] % 1024];
+        c = skg_tbl[c * skg_tbl[128 + str[i]] % 1024];
     }
     *k0 = a;
     *k1 = b;
@@ -229,7 +229,7 @@ int FUN_00267968(unsigned short *data, int size, int *out_c, int *out_e, int *ou
     int value_h;
     int result;
 
-    result = FUN_0025f588(data, size, &value_a, &value_b, &value_c, &value_d, &value_e, out_f, out_g, &value_h);
+    result = ADX_DecodeHeader(data, size, &value_a, &value_b, &value_c, &value_d, &value_e, out_f, out_g, &value_h);
     *out_e = value_e;
     *out_c = value_c;
     return result;

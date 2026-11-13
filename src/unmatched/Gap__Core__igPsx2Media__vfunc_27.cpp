@@ -3,7 +3,7 @@
  * separate slots in call order; the table index is computed after the scratch allocation. */
 #include "dw4/reflected.h"
 extern "C" {
-int FUN_0010b7d8(int, int);
+int SyncDCache(int, int);
 int memcpy(int, int, int);
 int FUN_00300db0(void *, int, int);
 }
@@ -47,7 +47,7 @@ extern "C" int Gap__Core__igPsx2Media__vfunc_27(igPsx2Media *arg0, int arg1, int
             temp_s3->w4 = arg0->_writeBuffer;
             temp_s3->w8 = var_s0;
             temp_s3->w12 = 0;
-            FUN_0010b7d8(arg0->_writeBuffer, arg0->_writeBuffer + var_s0);
+            SyncDCache(arg0->_writeBuffer, arg0->_writeBuffer + var_s0);
             FUN_0032d6d0(arg0->_connection, 7, temp_s3, 0x10, temp_s2, 0x10, 1).Code();
             temp_v0 = *temp_s2;
             if (temp_v0 != var_s0) {
@@ -68,7 +68,7 @@ extern "C" int Gap__Core__igPsx2Media__vfunc_27(igPsx2Media *arg0, int arg1, int
     temp_s3->w4 = var_s4;
     temp_s3->w8 = arg3;
     temp_s3->w12 = 0;
-    FUN_0010b7d8(var_s4, var_s4 + arg3);
+    SyncDCache(var_s4, var_s4 + arg3);
     FUN_0032d6d0(arg0->_connection, 7, temp_s3, 0x10, temp_s2, 0x10, 1).Code();
     temp_s0 = *temp_s2;
     ((Q *)arg0->_sema)->v29().Code();

@@ -64,9 +64,9 @@ void sfd_Lock(int *lock);
 void sfd_Unlock(int *lock);
 void FUN_002ac6d0(void *ring);
 SfdSj *SJRBF_Create(void *work, int size, int extra);
-SfdSj *FUN_0027b408(void *work, int size);
-int FUN_0027c760(SfdSj *sj, int a, int b);
-int FUN_0027bc30(SfdSj *sj);
+SfdSj *SJMEM_Create(void *work, int size);
+int SJRBF_GetFlowCnt(SfdSj *sj, int a, int b);
+int SJMEM_GetBufSize(SfdSj *sj);
 int FUN_002b0338();
 int FUN_002b03e8(SfdBufHn *h, int n);
 
@@ -92,11 +92,11 @@ int FUN_0029e160(SfdSj *sj, int id, int len);
 int FUN_0029ec40(SfdSj *sj);
 int FUN_0029ec78(SfdSj *sj);
 
-void FUN_0029d4a0(void) {
+void sfbuf_Init(void) {
     FUN_0029ebb0();
 }
 
-void FUN_0029d4b8(void) {
+void sfbuf_Finish(void) {
 }
 
 int FUN_0029d4c0(SfdBufHn *h, SfdBufEnt *ents, SfdBufCrePrm *prm) {
@@ -349,7 +349,7 @@ void FUN_0029dcb8(SfdBufCur *cur) {
     cur->len = 0;
 }
 
-void FUN_0029dcc8(SfdBufHn *h, int index, int slot, void *uoch) {
+void sfbuf_SetUoch(SfdBufHn *h, int index, int slot, void *uoch) {
     SfdBufEnt *ents = h->ent;
     SfdBufEnt *ent = &ents[index];
     char *slots = (char *)&ent->body;
@@ -357,7 +357,7 @@ void FUN_0029dcc8(SfdBufHn *h, int index, int slot, void *uoch) {
     memcpy(slots, uoch, 16);
 }
 
-void FUN_0029dd10(SfdBufHn *h, int index, int slot, void *uoch) {
+void sfbuf_GetUoch(SfdBufHn *h, int index, int slot, void *uoch) {
     SfdBufEnt *ents = h->ent;
     SfdBufEnt *ent = &ents[index];
     char *slots = (char *)&ent->body;
@@ -397,19 +397,19 @@ int sfbuf_GetStat(SfdBufHn *h, int index, SfdBufStat *stat, int id) {
     return 0;
 }
 
-void FUN_0029dd80(SfdBufHn *h, int index, SfdBufStat *stat) {
+void sfbuf_GetWriteStat(SfdBufHn *h, int index, SfdBufStat *stat) {
     sfbuf_GetStat(h, index, stat, 0);
 }
 
-void FUN_0029dd98(SfdBufHn *h, int index, SfdBufStat *stat) {
+void sfbuf_GetReadStat(SfdBufHn *h, int index, SfdBufStat *stat) {
     sfbuf_GetStat(h, index, stat, 1);
 }
 
-void FUN_0029de58(SfdBufHn *h, int index, int len) {
+void sfbuf_AddWriteLen(SfdBufHn *h, int index, int len) {
     FUN_0029de88(h, index, len, 0);
 }
 
-void FUN_0029de70(SfdBufHn *h, int index, int len) {
+void sfbuf_AddReadLen(SfdBufHn *h, int index, int len) {
     FUN_0029de88(h, index, len, 1);
 }
 
@@ -480,7 +480,7 @@ int FUN_0029e2b0(SfdBufHn *h, int index) {
     return ent->body.f36;
 }
 
-int FUN_0029e2d0(SfdBufHn *h, int index) {
+int sfbuf_GetNumData(SfdBufHn *h, int index) {
     int lock;
     SfdBufBody *body = &h->ent[index].body;
     int count;
@@ -573,7 +573,7 @@ int FUN_0029e948(void) {
     return 0;
 }
 
-int FUN_0029e960(SfdBufHn *h, int index, int value) {
+int sfbuf_GetRead(SfdBufHn *h, int index, int value) {
     SfdBufEnt *ents = h->ent;
     SfdBufEnt *ent = &ents[index];
     if (ent->valid == 0) {
@@ -582,7 +582,7 @@ int FUN_0029e960(SfdBufHn *h, int index, int value) {
     return 0;
 }
 
-int FUN_0029e9b8(SfdBufHn *h, int index, int value) {
+int sfbuf_AddRead(SfdBufHn *h, int index, int value) {
     SfdBufEnt *ents = h->ent;
     SfdBufEnt *ent = &ents[index];
     int result = 0;
@@ -593,25 +593,25 @@ int FUN_0029e9b8(SfdBufHn *h, int index, int value) {
     return result;
 }
 
-int FUN_0029ea28(SfdBufHn *h, int index, int value) {
+int sfbuf_SetFlagA(SfdBufHn *h, int index, int value) {
     SfdBufEnt *ents = h->ent;
     SfdBufEnt *ent = &ents[index];
     ent->f8 = value;
 }
 
-int FUN_0029ea48(SfdBufHn *h, int index) {
+int sfbuf_GetFlagA(SfdBufHn *h, int index) {
     SfdBufEnt *ents = h->ent;
     SfdBufEnt *ent = &ents[index];
     return ent->f8;
 }
 
-void FUN_0029ea68(SfdBufHn *h, int index, int value) {
+void sfbuf_SetFlagB(SfdBufHn *h, int index, int value) {
     SfdBufEnt *ents = h->ent;
     SfdBufEnt *ent = &ents[index];
     ent->f12 = value;
 }
 
-int FUN_0029ea88(SfdBufHn *h, int index) {
+int sfbuf_GetFlagB(SfdBufHn *h, int index) {
     SfdBufEnt *ents = h->ent;
     SfdBufEnt *ent = &ents[index];
     return ent->f12;
@@ -619,22 +619,22 @@ int FUN_0029ea88(SfdBufHn *h, int index) {
 
 int FUN_0029eaa8(SfdBufHn *h, int index) {
     SfdBufStat stat;
-    FUN_0029dd98(h, index, &stat);
+    sfbuf_GetReadStat(h, index, &stat);
     return stat.ck0.len + stat.ck1.len;
 }
 
 int FUN_0029ead0(SfdBufHn *h, int index) {
     SfdBufStat stat;
-    FUN_0029dd80(h, index, &stat);
+    sfbuf_GetWriteStat(h, index, &stat);
     return stat.ck0.len + stat.ck1.len;
 }
 
-void FUN_0029eaf8(SfdSj *sj, int *first, int *second) {
+void sfbuf_GetSjPos(SfdSj *sj, int *first, int *second) {
     if (FUN_0029ec40(sj) != 0) {
-        *first = FUN_0027c760(sj, 1, 1);
-        *second = FUN_0027c760(sj, 0, 1);
+        *first = SJRBF_GetFlowCnt(sj, 1, 1);
+        *second = SJRBF_GetFlowCnt(sj, 0, 1);
     } else if (FUN_0029ec78(sj) != 0) {
-        *first = FUN_0027bc30(sj);
+        *first = SJMEM_GetBufSize(sj);
         *second = *first - sj->vtbl->getNumData(sj, 1);
     } else {
         *first = 0;
@@ -648,7 +648,7 @@ void FUN_0029ebb0(void) {
     sj = SJRBF_Create(work, 8, 0);
     DAT_0057fab0 = sj->vtbl->getUuid(sj);
     sj->vtbl->destroy(sj);
-    sj = FUN_0027b408(work, 8);
+    sj = SJMEM_Create(work, 8);
     DAT_0057fab4 = sj->vtbl->getUuid(sj);
     sj->vtbl->destroy(sj);
 }
@@ -661,7 +661,7 @@ int FUN_0029ec78(SfdSj *sj) {
     return sj->vtbl->getUuid(sj) == DAT_0057fab4;
 }
 
-long FUN_0029ecb0(long total, unsigned int low) {
+long sfbuf_MergeTotal(long total, unsigned int low) {
     long high = total >> 32;
     unsigned int carry = low < (unsigned int)total;
     high += carry;

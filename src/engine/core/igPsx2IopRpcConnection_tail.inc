@@ -66,7 +66,7 @@ int FUN_0032d850(int *arg0, Ob_32d850 *arg1, int arg2, int arg3, int *arg4, int 
     *(int *)arg1->f12 = arg3;
     if (arg4 == 0) {
         p = arg1->f12;
-        FUN_0010b7d8(p, p + 0xF);
+        SyncDCache(p, p + 0xF);
         if (arg5 != 0) {
             var_s0 = sceSifCallRpc(arg1->f8, arg2, 2, arg1->f12, 0x10, 0, 0, 0, 0);
             SignalSema(arg1->f16);

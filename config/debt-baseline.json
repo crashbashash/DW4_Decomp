@@ -14,36 +14,36 @@
   "code_only.other.functions": 2,
   "compile.bytes": 0,
   "compile.functions": 0,
-  "foreign_profile.bytes": 288,
-  "foreign_profile.functions": 10,
-  "fun_dat_refs": 18484,
+  "foreign_profile.bytes": 0,
+  "foreign_profile.functions": 0,
+  "fun_dat_refs": 9743,
   "inline_asm.other": 0,
-  "inventory.unsymbolised_bytes": 1020,
+  "inventory.unsymbolised_bytes": 0,
   "inventory_gap.bytes": 0,
   "inventory_gap.functions": 0,
-  "m2c_idiom.units": 542,
+  "m2c_idiom.units": 193,
   "mismatch.bytes": 0,
   "mismatch.functions": 0,
   "name_defect.bytes": 0,
   "name_defect.functions": 0,
   "opt_pragma.statements": 0,
-  "orphan.bytes": 32,
-  "profile_split.bytes": 18924,
-  "profile_split.units": 2,
-  "raw_casts.reflected": 372,
-  "struct.a": 48,
+  "orphan.bytes": 0,
+  "profile_split.bytes": {
+   "reason": "profile_split +1 unit (568 B): src/runtime/crt0.S, the owner-approved start-up assembly source, sits in the Metrowerks runtime region but is assembled, not compiled under the region's MWCC profile",
+   "value": 19492
+  },
+  "profile_split.units": {
+   "reason": "profile_split +1 unit (568 B): src/runtime/crt0.S, the owner-approved start-up assembly source, sits in the Metrowerks runtime region but is assembled, not compiled under the region's MWCC profile",
+   "value": 3
+  },
+  "raw_casts.reflected": 379,
+  "struct.a": 32,
   "struct.b": 0,
-  "struct.c": 68,
-  "unapproved.bytes": {
-   "reason": "owner revoked 13 CRI/ADX approvals with thin evidence after the Fable review; FUN_0027e0d0 gained a row",
-   "value": 21356
-  },
-  "unapproved.functions": {
-   "reason": "owner revoked 13 CRI/ADX approvals with thin evidence after the Fable review; FUN_0027e0d0 gained a row",
-   "value": 45
-  },
-  "unmatched.bytes": 625336,
-  "unmatched.functions": 933
+  "struct.c": 66,
+  "unapproved.bytes": 9472,
+  "unapproved.functions": 22,
+  "unmatched.bytes": 529384,
+  "unmatched.functions": 603
  },
  "note": "Debt ratchet baseline for tools/progress.py --debt-check: every counter may only go down. Re-record with --debt-baseline; an increase needs --allow-increase \"<reason>\" and the reason is kept next to the value. See docs/engine/debt-ratchet.md."
 }

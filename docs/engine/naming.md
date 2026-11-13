@@ -52,16 +52,46 @@ adding an overlay never reduces coverage: it is merged, not substituted.
    python3 tools/apply_names.py             # dry run: what would change
    python3 tools/apply_names.py --apply --check
    ```
-   `apply_names.py` rewrites every `<old>` occurrence in `src/` (definition and
-   call sites), moves each unit to `src/<module>/`, removes the stale `asm/<old>.s`,
+   `apply_names.py` rewrites every reference to `<old>` in `src/` and `include/` (definition,
+   declarations and call sites), the function columns of `config/source-approvals.tsv` and
+   `config/assembly-sources.tsv`, and the function keys of `config/SLUS-20836/unit-objects.json`;
+   moves a one-function unit to `src/<module>/`, removes the stale `asm/<old>.s`,
    regenerates `config/SLUS-20836/symbols.txt` + `asm/`, and then runs `make check` and
    `make link`. Renaming one function by hand is a multi-file edit; a whole module
-   at once is one verified commit.
+   at once is one verified commit. The dry run lists the files it would rewrite, the files it
+   leaves because they already use the new names, and every refusal; a refused batch writes nothing.
 
 A one-function file's **filename is its symbol**; a named function is resolved at
 any depth, so moving it between modules never touches a build tool. One-function files are
 legacy drafts: a function now lands inside its whole file, and the one-function files of a
 range go when the range is folded.
+
+### How a rename is applied
+
+A reference is an identifier that names the function, told apart by reading the C around it. The
+tool never rewrites:
+
+- a string or character literal, or an `#include` path. A string is retail data: a library error
+  string naming its own function must stay byte-exact in `.rodata`. An inline-`asm` operand is code,
+  so the symbols in it are rewritten;
+- a member (`.x`, `->x`, `Class::x`), a field, tag, label or macro name, a name used as an object
+  (`x->`, `x.`), and a local, parameter, `typedef` or file `static` of the same name, with every use
+  inside its scope;
+- a comment word, when the old name is a plain lower-case word or is also an ordinary identifier.
+
+Each file is rewritten in one pass, so a swap never renames its own result. A
+`unit-objects.json` key (`emitted`, `duplicates`, `externals`, and a row's `symbol`) is renamed by
+address: only when the address it holds is the renamed function's and the key is still the old name.
+`data` keys are data names, `tools/apply_data_names.py`'s.
+
+The tool refuses the batch when:
+
+| Refusal | Why | Way out |
+|---|---|---|
+| an old name is also an ordinary identifier in the tree: a member, field, local, parameter, label, tag or macro (the error lists every file and use) | a generic word, such as the start-up symbol's, would be rewritten in every local, member, comment and string that spells it | rename those uses first, or `--generic <old>` to rewrite only the references the reading above finds |
+| a batch reuses a name (one name moves to another address, and its old address takes a new one: a swap or a chain) and a file's text does not say which names it uses | text already written with the new names would be renamed a second time | the evidence is the file's other batch names (an old-only name: not yet renamed; a new-only name: already renamed) and whether its definitions are in address order under the old or the new names. A file on the new names is left as it is; `--assume-old <path>` or `--assume-new <path>` settles a file nothing decides |
+| a file mixes old-only and new-only names around a reused one | it was half renamed by hand | finish it by hand, or `--assume-old`/`--assume-new` |
+| a rewritten reference would fall in the scope of a local, parameter or C++ member of the new name, or a C++ file has a member of the old name used unqualified | the name would bind to the other entity | rename the local, or qualify the use |
 
 ### Folding a module into a translation unit
 

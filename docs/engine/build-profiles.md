@@ -250,7 +250,8 @@ whose frameless sibling calls 2.96 cannot produce
 ([the `sd` prologue](sd-prologue.md)).
 
 **3.0b52 with `-sdatathreshold 2` builds most of the game.** Alchemy is `-O4,s`, and the Metrowerks
-runtime, `main`, AdxMovie, Viewer, Ndmw and Bec are `-O4,p`. Bec and Ndmw also take `-inline level=8,bottomup`:
+runtime, `main`, AdxMovie, Viewer, Ndmw and Bec are `-O4,p`; the runtime is the exception to the threshold and
+builds at `-sdatathreshold 0` ([Metrowerks runtime](runtime-metrowerks.md)). Bec and Ndmw also take `-inline level=8,bottomup`:
 holder destructors inside inlined helpers are expanded in retail, which needs an inline depth of at
 least 2, and every Bec and Ndmw function that matched without it still matches at depth 8 (depth 2
 breaks four `GetVTable` functions). The `inline_depth` pragmas written before were standing in for

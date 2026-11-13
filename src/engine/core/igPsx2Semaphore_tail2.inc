@@ -175,9 +175,9 @@ void FUN_0032f380(ThreadStackOwner *self, ThreadMemoryMap *map) {
     map->stackSize = size;
     map->textStart = (unsigned)(DAT_000ffff0 + 16);
     map->textSize = (unsigned)(Gap__Bec__beFont__vfunc_32 + 0x90);
-    map->dataStart = (unsigned)DAT_00481c00;
-    map->dataSize = end - (unsigned)DAT_00481c00;
-    map->bssStart = (unsigned)DAT_00481c00;
+    map->dataStart = (unsigned)__new_handler;
+    map->dataSize = end - (unsigned)__new_handler;
+    map->bssStart = (unsigned)__new_handler;
     map->bssSize = (unsigned)DAT_000d2c64;
     map->gp = (unsigned)DAT_00554e81;
     map->sbssSize = (unsigned)DAT_000383ff;

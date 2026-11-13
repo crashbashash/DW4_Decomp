@@ -99,6 +99,17 @@ name them (`config/SLUS-20836/names/newlib.tsv`).
 * The files keep the archive objects' own local labels (`$Ln`) and their `noreorder` delay slots,
   and assemble to the archive's bytes.
 
+### The start-up file
+
+`_start` (`0x100008`), `_exit` and `_root`: `src/runtime/crt0.S`.
+
+* Sony ships the start-up file as assembly, `crt0.s`, and a CodeWarrior project assembles it as its first file: the stationery linker file places `crt0.s (.text)` first and aligns to 16 after it. The image has that shape: two `nop`s, the entry point, `_exit` and `_root` each after `.align 3`, zero fill to the next 16-byte boundary.
+* From the main-thread setup to `_root` the instructions are Sony's file one for one; a register-clearing head, a byte/quadword/byte `.bss` clear, `_InitSys`, and the static constructor and destructor calls around `main` are added.
+* No compiler writes it: it zeroes every register including `sp`, `gp` and `ra`, sets `gp` and `sp` from system-call results, and `_root` ends in a system call with no return.
+* Register copies are encoded as `or`, which is how CodeWarrior's assembler writes `move` (its listing of Sony's file shows it); MWCC's inline assembler writes `addu` and `ee-as` writes `daddu`. The file spells them `or` so `ee-as` reproduces the bytes.
+* The two leading `nop`s and the `_args` block stay outside the file: a function's object may hold only its own code.
+* `tools/check.py` needed one fix for it: an `R_MIPS_26` jump to a local label keeps its offset in the instruction field (ELF REL), and `verify.apply_relocs` now adds that in-place addend.
+
 ## Open questions
 
 * **Which compiler generated the R5900 `.S` files** before they were edited. Their `lui`/`ori` -1

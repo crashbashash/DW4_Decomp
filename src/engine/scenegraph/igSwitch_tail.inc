@@ -96,11 +96,11 @@ int FUN_001dcc80(KeyTrackView *o, double t) {
     double q;
     int k;
     double v;
-    if (FUN_001002f0(o->_startTime, 0.0)) { o->_startTime = t; }
+    if (_dpflt(o->_startTime, 0.0)) { o->_startTime = t; }
     n = o->_values->_count;
     if (n == 0) { return 0; }
     rel = dpsub(t, o->_startTime);
-    if (FUN_001002f0(rel, 0.0)) { rel = 0.0; }
+    if (_dpflt(rel, 0.0)) { rel = 0.0; }
     {
         KeyTimeListView *tl = o->_times;
         int last = n - 1;
@@ -144,14 +144,14 @@ int FUN_001dce70(struct S_1dce70 *arg0, double arg1) {
     var_s2 = temp_s0 - 1;
     while (var_s3 < var_s2) {
         temp_s1 = (var_s2 + var_s3 + 1) >> 1;
-        if (FUN_001002f0(arg1, arg0->f16[temp_s1]) != 0) {
+        if (_dpflt(arg1, arg0->f16[temp_s1]) != 0) {
             var_s2 = temp_s1 - 1;
         } else {
             var_s3 = temp_s1;
         }
     }
     if (temp_s0 != 0) {
-        if (FUN_001002f0(arg0->f16[var_s3], arg1) != 0) {
+        if (_dpflt(arg0->f16[var_s3], arg1) != 0) {
             var_s3 += 1;
         }
     }

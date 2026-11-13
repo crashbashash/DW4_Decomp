@@ -21,8 +21,10 @@ A body is *code* when every non-zero word decodes as an EE instruction a compile
 emit (tools/split.py `_code_shaped`), it ends in an unconditional transfer plus delay
 slot, and it carries one hard sign: a frame prologue, a `jal`/`j` to a symbol, or a
 `jr ra` return with at least one more word. Segments one unit's branches connect are
-merged into one candidate. Everything is read from committed files and the retail
-image — no Ghidra, no objdump — so a replay reproduces the table exactly.
+merged into one candidate. The `data` rows of config/SLUS-20836/extent-overrides.tsv are
+reviewed data, not code: the scan skips their bytes and does not count their words as
+references. Everything is read from committed files and the retail image — no Ghidra,
+no objdump — so a replay reproduces the table exactly.
 
 Usage:
   inventory_scan.py --write     # regenerate data/inventory-scan.tsv and print the summary
@@ -93,19 +95,36 @@ def load_labels(path):
     return out
 
 
-class Scan:
-    """One scan over an image: `rows` is the list of candidate functions with their class."""
+def _outside(lo, hi, rows):
+    """[lo, hi) less the sorted `rows` [(va, end)], as [(lo, hi)] pieces."""
+    out = []
+    for a, b in rows:
+        if b <= lo or a >= hi:
+            continue
+        if a > lo:
+            out.append((lo, a))
+        lo = max(lo, b)
+    if lo < hi:
+        out.append((lo, hi))
+    return out
 
-    def __init__(self, img, syms, units, labels=None, exclude=(), section_hi=S.SECTION_HI):
+
+class Scan:
+    """One scan over an image: `rows` is the list of candidate functions with their class.
+    `data_rows` are the reviewed data spans [(va, end)] the scan leaves alone."""
+
+    def __init__(self, img, syms, units, labels=None, exclude=(), section_hi=S.SECTION_HI,
+                 data_rows=()):
         self.img, self.syms, self.labels = img, syms, labels or {}
         self.starts = [s[0] for s in syms]
         self.by_va = {s[0]: s for s in syms}
         self.section_hi = section_hi
         self.data_units = [u for u in units if u[2] == "data"]
-        self.incoming = self._incoming(exclude)
+        self.incoming = self._incoming(list(exclude) + list(data_rows))
         segs = []
         for va, sz, _k, _n in self.data_units:
-            segs.extend(self._segments(va, sz))
+            for lo, hi in _outside(va, va + sz, data_rows):
+                segs.extend(self._segments(lo, hi - lo))
         self.rows = self._classify(self._merge(segs))
 
     # ---- helpers ------------------------------------------------------------------
@@ -335,7 +354,8 @@ def run(elf, layout, symbols, labels):
     units = load_layout(layout)
     cfg = os.path.dirname(os.path.abspath(symbols))
     exclude = S.non_entry_tables(os.path.join(cfg, "exceptions.txt"), os.path.join(cfg, "jumptables.txt"))
-    return Scan(img, syms, units, load_labels(labels), exclude).rows
+    data = S.data_rows(S.load_extent_overrides(os.path.join(cfg, "extent-overrides.tsv")))
+    return Scan(img, syms, units, load_labels(labels), exclude, data_rows=data).rows
 
 
 def main(argv=None):

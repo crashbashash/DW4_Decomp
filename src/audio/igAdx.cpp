@@ -2,9 +2,9 @@
 extern "C" int igObject_GetAllocator(...);
 extern "C" int Memory_AllocateAlignedWithAllocator(...);
 extern "C" int ADXT_Create(int, int, int);
-extern "C" int FUN_0026d8b8(int, int, int);
+extern "C" int ADXT_StartMemIdx(int, int, int);
 extern "C" int ADXT_StartAfs(int, short, short);
-extern "C" int FUN_0026d7a0(int, int);
+extern "C" int ADXT_StartFname(int, int);
 extern "C" int ADXT_Stop(int);
 extern "C" void igAdxAudio_Stop(void *arg0);
 extern "C" int ADXT_Pause(int);
@@ -13,20 +13,20 @@ extern "C" int ADXT_GetStatPause(int);
 extern "C" int igAdxAudio_GetPauseState(void *arg0);
 extern "C" int ADXT_Destroy(...);
 extern "C" int Memory_FreeBufferWithAllocator(...);
-extern "C" int FUN_0026c660(int);
+extern "C" int ADXT_SetOutVol(int);
 extern "C" void igAdxAudio_SetOutVolume(void *arg0);
-extern "C" int FUN_0026c6c8(int);
+extern "C" int ADXT_GetOutVol(int);
 extern "C" int igAdxAudio_GetOutVolume(void *arg0);
-extern "C" int FUN_0026bd20(int);
+extern "C" int ADXT_GetStat(int);
 extern "C" int igAdxAudio_GetStatus(void *arg0);
 extern "C" void *FUN_002b9500(int);
 extern "C" int Memory_GetAllocatorByName(...);
 extern "C" int igObject_Destroy(...);
 extern "C" void FUN_003324c0(void);
-extern "C" int FUN_0010b9c0(int);
+extern "C" int DisableIntc(int);
 extern "C" int ADXM_ShutdownThrd(...);
 extern "C" int FUN_00280d20(...);
-extern "C" int FUN_00294df8(...);
+extern "C" int mwPlyFinishSfdFx(...);
 extern "C" int RemoveIntcHandler(int, int);
 extern "C" void FUN_00332530(void);
 extern "C" void Gap__Core__igObject__vfunc_01(void);
@@ -55,11 +55,11 @@ extern "C" int sceCdMmode(int);
 extern "C" int sceSdRemoteInit(...);
 extern "C" int sceSdRemote(...);
 extern "C" int sprintf(...);
-extern "C" int FUN_0026ac50(int);
-extern "C" int FUN_0026ad50(int *);
-extern "C" int FUN_0026b008(int *);
-extern "C" int FUN_0026b120(int *);
-extern "C" int FUN_0026b1f0(int);
+extern "C" int ADXPS2_SetupDvdFs(int);
+extern "C" int ADXPS2_LoadFcacheDvd(int *);
+extern "C" int ADXPS2_SetupHostFs(int *);
+extern "C" int ADXPS2_LoadFcacheHst(int *);
+extern "C" int ADXPS2_SetupMfs(int);
 extern "C" int FUN_0032cf50(...);
 extern "C" int strcmp(...);
 extern "C" int FUN_00332860(void);
@@ -242,7 +242,7 @@ int igAdxAudio_StartMemory(S_332160 *arg0, int arg1, int arg2) {
             return 0;
         }
     }
-    FUN_0026d8b8(arg0->f44, arg1, arg2);
+    ADXT_StartMemIdx(arg0->f44, arg1, arg2);
     return 1;
 }
 
@@ -256,7 +256,7 @@ int FUN_003321f0(struct S_3321f0 *arg0, int arg1, int arg2, int arg3, int arg4, 
         temp_v0_2 = ((struct T_3321f0 * *)DAT_00587620)[0]->f16[temp_v0];
         ADXT_StartAfs(arg0->f44, temp_v0_2->f16, temp_v0_2->f18);
     } else {
-        FUN_0026d7a0(arg0->f44, arg1);
+        ADXT_StartFname(arg0->f44, arg1);
     }
     return 1;
 }
@@ -271,7 +271,7 @@ int igAdxAudio_StartFile(struct A *arg0, int arg1) {
             e = (struct E *)((struct L *)((void * *)DAT_00587620)[0])->tab[temp_v0];
             ADXT_StartAfs(arg0->f44, e->s16, e->s18);
         } else {
-            FUN_0026d7a0(arg0->f44, arg1);
+            ADXT_StartFname(arg0->f44, arg1);
         }
         return 1;
     }
@@ -318,7 +318,7 @@ void igAdxAudio_SetOutVolume(void *arg0) {
 
     temp_a0 = *(int *)((char *)(arg0) + 44);
     if (temp_a0 != 0) {
-        FUN_0026c660(temp_a0);
+        ADXT_SetOutVol(temp_a0);
     }
 }
 
@@ -329,7 +329,7 @@ int igAdxAudio_GetOutVolume(void *arg0) {
     if (temp_a0 == 0) {
         return 0;
     }
-    return FUN_0026c6c8(temp_a0);
+    return ADXT_GetOutVol(temp_a0);
 }
 
 int igAdxAudio_GetStatus(void *arg0) {
@@ -339,7 +339,7 @@ int igAdxAudio_GetStatus(void *arg0) {
     if (temp_a0 == 0) {
         return -1;
     }
-    return FUN_0026bd20(temp_a0);
+    return ADXT_GetStat(temp_a0);
 }
 
 void FUN_003324c0(void) {
@@ -378,9 +378,9 @@ void FUN_00332530(void) {
         }
     }
     ((Obj * *)DAT_005875e0)[0] = 0;
-    FUN_00294df8();
+    mwPlyFinishSfdFx();
     FUN_00280d20();
-    FUN_0010b9c0(2);
+    DisableIntc(2);
     RemoveIntcHandler(2, DAT_005873c0[0]);
     temp_s0 = Memory_GetAllocatorByName(&text_User0[0]);
     if (DAT_005873a8[0] != 0) {
@@ -508,13 +508,13 @@ int FUN_00332860(void) {
     sp20.c = 0;
     sp20.d = 0;
     FUN_00280b98(&sp20);
-    FUN_0026b1f0(0);
+    ADXPS2_SetupMfs(0);
     if (((char *)DAT_005874d0)[0] != 0) {
         memset(&DAT_00587390[0], 0, 0x10);
         DAT_00587390[0] = (int)&((char *)DAT_005874d0)[0];
-        FUN_0026b008(&DAT_00587390[0]);
+        ADXPS2_SetupHostFs(&DAT_00587390[0]);
     } else {
-        FUN_0026b008(0);
+        ADXPS2_SetupHostFs(0);
     }
     temp_s0 = Memory_GetAllocatorByName(&text_User0[0]);
     if ((*(unsigned char *)&g_adxUseFileInfoCache) != 0) {
@@ -523,20 +523,20 @@ int FUN_00332860(void) {
         DAT_005873a4[0] = 0x20;
         DAT_005873ac[0] = ((DAT_005873a4[0] + 1) * 0xD) + 0x68;
         DAT_005873a8[0] = Memory_AllocateAlignedWithAllocator(DAT_005873ac[0], 0x10, temp_s0);
-        FUN_0026b120(&DAT_005873a0[0]);
+        ADXPS2_LoadFcacheHst(&DAT_005873a0[0]);
     }
     if (g_adxMediaMode[0] != 0) {
-        FUN_0026ac50(0);
+        ADXPS2_SetupDvdFs(0);
         if ((*(unsigned char *)&g_adxUseFileInfoCache) != 0) {
             memset(&DAT_005873b0[0], 0, 0x10);
             DAT_005873b0[0] = (int)&text_cdvd_fic[0];
             DAT_005873b4[0] = 0x20;
             DAT_005873bc[0] = ((DAT_005873b4[0] + 1) * 0xD) + 0x68;
             DAT_005873b8[0] = Memory_AllocateAlignedWithAllocator(DAT_005873bc[0], 0x10, temp_s0);
-            FUN_0026ad50(&DAT_005873b0[0]);
+            ADXPS2_LoadFcacheDvd(&DAT_005873b0[0]);
         }
     }
-    FUN_0010b9c0(2);
+    DisableIntc(2);
     DAT_005873c0[0] = AddIntcHandler(2, &ADXM_ExecVint, 0);
     EnableIntc(2);
     GPR_00554de8 = 1;

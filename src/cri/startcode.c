@@ -1,4 +1,4 @@
-int FUN_0028dc78(const unsigned char *p) {
+int mpvsc_GetKind(const unsigned char *p) {
     unsigned int code = p[0];
     int type;
     code <<= 8;
@@ -29,7 +29,7 @@ int FUN_0028dc78(const unsigned char *p) {
     return type;
 }
 
-char *FUN_0028dd10(char *end, int len, int mask)
+char *mpvsc_SearchBack(char *end, int len, int mask)
 {
     char c;
     unsigned int state = 0;
@@ -54,7 +54,7 @@ char *FUN_0028dd10(char *end, int len, int mask)
             break;
         case 3:
             if (c == 0) {
-                if (mask & FUN_0028dc78((const unsigned char *)p))
+                if (mask & mpvsc_GetKind((const unsigned char *)p))
                     return p;
                 state = 0;
             } else
@@ -65,7 +65,7 @@ char *FUN_0028dd10(char *end, int len, int mask)
     return 0;
 }
 
-char *FUN_0028de10(char *buf, int len, int mask)
+char *MPV_SearchDelim(char *buf, int len, int mask)
 {
     char *p = buf;
     char *end = buf + len;
@@ -90,7 +90,7 @@ char *FUN_0028de10(char *buf, int len, int mask)
             break;
         case 3:
             hit = p - 4;
-            if (mask & FUN_0028dc78((const unsigned char *)hit))
+            if (mask & mpvsc_GetKind((const unsigned char *)hit))
                 return hit;
             state = 0;
             break;
@@ -99,7 +99,7 @@ char *FUN_0028de10(char *buf, int len, int mask)
     return 0;
 }
 
-char *FUN_0028df18(char *dst, char *src, int len, int mask)
+char *mpvsc_SearchFrom(char *dst, char *src, int len, int mask)
 {
     char *p = src;
     char *end = src + len;
@@ -123,7 +123,7 @@ char *FUN_0028df18(char *dst, char *src, int len, int mask)
                 state = 0;
             break;
         case 3:
-            if (mask & FUN_0028dc78((const unsigned char *)(p - 4)))
+            if (mask & mpvsc_GetKind((const unsigned char *)(p - 4)))
                 return p;
             state = 0;
             break;

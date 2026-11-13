@@ -286,18 +286,18 @@ typedef struct SfdEntry44 {
     int f32;
 } SfdEntry44;
 
-int FUN_0028b530();
+int mpsutl_FillWords();
 int UTY_MulDiv(int value, int scale, int divisor);
-void FUN_0029feb8(void *blk);
-int FUN_0029ed48(SfdPly *hn);
+void sfhdr_InitInf(void *blk);
+int sfd_IsLnkStm(SfdPly *hn);
 int sfd_GetStmVersion(SfdPly *hn);
 int sfd_ReportError();
-int sfd_CheckHn(SfdPly *hn);
+int SFLIB_CheckHn(SfdPly *hn);
 int FUN_002aa538(SfdPly *hn);
 int FUN_002abef0(SfdPly *hn);
-void FUN_002ada78(SfdPly *hn, int index, int value);
+void sfd_SetCond(SfdPly *hn, int index, int value);
 int SFD_GetCond();
-void FUN_002ae248(void *blk, int value);
+void SFTIM_InitTtu(void *blk, int value);
 int FUN_002b02a0(SfdPly *hn, int command);
 int FUN_002b03e8();
 
@@ -336,7 +336,7 @@ void FUN_002acb50(SfdRec *recs, int count) {
 }
 
 void FUN_002acb98(SfdRec *rec) {
-    FUN_0028b530(rec, 0, 886);
+    mpsutl_FillWords(rec, 0, 886);
     FUN_002acc08(rec);
     rec->derived = 0;
     rec->default_value = 0;
@@ -359,7 +359,7 @@ void FUN_002acc08(SfdRec *rec) {
     rec->state = 0;
     rec->time = 0;
     rec->unit = 0;
-    FUN_0029feb8(&rec->hdrInf);
+    sfhdr_InitInf(&rec->hdrInf);
     a->set = 0;
     a->time = 0;
     a->unit = 0;
@@ -372,7 +372,7 @@ void FUN_002acc08(SfdRec *rec) {
     b->set = 0;
     b->time = 0;
     b->unit = 0;
-    FUN_002ae248(rec->blk2780, 0x7FFFFFFF);
+    SFTIM_InitTtu(rec->blk2780, 0x7FFFFFFF);
     c->set = 0;
     c->time = 0;
     c->f12 = 0;
@@ -382,7 +382,7 @@ void FUN_002acc08(SfdRec *rec) {
 }
 
 int FUN_002accc0(SfdPly *h, SfdRec *rec) {
-    if (sfd_CheckHn(h) != 0) {
+    if (SFLIB_CheckHn(h) != 0) {
         return sfd_ReportError(0, 0xFF000151);
     }
     h->recSlot.rec = rec;
@@ -390,7 +390,7 @@ int FUN_002accc0(SfdPly *h, SfdRec *rec) {
 }
 
 int FUN_002acd18(SfdPly *h, int value) {
-    if (sfd_CheckHn(h) != 0) {
+    if (SFLIB_CheckHn(h) != 0) {
         return sfd_ReportError(0, 0xFF000152);
     }
     h->recSlot.rec->delegate = value;
@@ -398,18 +398,18 @@ int FUN_002acd18(SfdPly *h, int value) {
 }
 
 void FUN_002acd78(SfdPly *h) {
-    if (sfd_CheckHn(h) != 0) {
+    if (SFLIB_CheckHn(h) != 0) {
         sfd_ReportError(0, 0xFF000153, 1);
         return;
     }
-    FUN_002ada78(h, 47, 1);
+    sfd_SetCond(h, 47, 1);
     FUN_002aa538(h);
 }
 
 int FUN_002acdd8(SfdPly *hn, int *running)
 {
     *running = 0;
-    if (sfd_CheckHn(hn) != 0) {
+    if (SFLIB_CheckHn(hn) != 0) {
         return sfd_ReportError(0, 0xFF000154);
     }
     FUN_002ace48(hn->recSlot.rec, running);
@@ -535,7 +535,7 @@ int sfrec_HasSysTrn(SfdPly *hn)
 int FUN_002ad160(SfdPly *hn, int *ready)
 {
     *ready = 0;
-    if (sfd_CheckHn(hn) != 0) {
+    if (SFLIB_CheckHn(hn) != 0) {
         return sfd_ReportError(0, 0xFF000155);
     }
     FUN_002ad1d0(hn->recSlot.rec, ready);
@@ -562,7 +562,7 @@ int FUN_002ad240(SfdPly *hn, int scale, int divisor, int *out)
     SfdRec **timing;
     int ready;
     *out = 0;
-    if (sfd_CheckHn(hn) != 0) {
+    if (SFLIB_CheckHn(hn) != 0) {
         return sfd_ReportError(0, 0xFF000156);
     }
     /* matching construct: the record address is taken after the guard */
@@ -596,7 +596,7 @@ int FUN_002ad338(SfdPly *hn, int value, int *out, int *pending)
     int ready;
     *out = 0;
     *pending = 1;
-    if (sfd_CheckHn(hn) != 0) {
+    if (SFLIB_CheckHn(hn) != 0) {
         return sfd_ReportError(0, 0xFF000157);
     }
     /* matching construct: the record address is taken after the guard */
@@ -636,7 +636,7 @@ void FUN_002ad468(int delegate, int value, int *out, int *out_scale)
 void FUN_002ad478(SfdPly *hn, SfdRecSub *settings)
 {
     SfdRec *timing;
-    if (sfd_CheckHn(hn) != 0) {
+    if (SFLIB_CheckHn(hn) != 0) {
         sfd_ReportError(0, 0xFF000158);
         return;
     }
@@ -647,12 +647,12 @@ void FUN_002ad478(SfdPly *hn, SfdRecSub *settings)
     if (FUN_002abef0(hn) != 0) {
         return;
     }
-    FUN_002ada78(hn, 47, 0);
+    sfd_SetCond(hn, 47, 0);
     if (timing->id3512 == 0) {
-        FUN_002ada78(hn, 5, 0);
+        sfd_SetCond(hn, 5, 0);
     }
     if (timing->id3516 == 0) {
-        FUN_002ada78(hn, 6, 0);
+        sfd_SetCond(hn, 6, 0);
     }
     hn->recSlot.sub = *settings;
     FUN_002b02a0(hn, 13);
@@ -661,7 +661,7 @@ void FUN_002ad478(SfdPly *hn, SfdRecSub *settings)
 int FUN_002ad570(SfdPly *hn, int value)
 {
     SfdRec *record;
-    if (sfd_CheckHn(hn) != 0) {
+    if (SFLIB_CheckHn(hn) != 0) {
         return sfd_ReportError(0, 0xFF000159);
     }
     record = hn->recSlot.rec;
@@ -676,7 +676,7 @@ int FUN_002ad570(SfdPly *hn, int value)
 int FUN_002ad5e0(SfdPly *hn, int divisor, int scale)
 {
     SfdRec *timing;
-    if (sfd_CheckHn(hn) != 0) {
+    if (SFLIB_CheckHn(hn) != 0) {
         return sfd_ReportError(0, 0xFF00015A);
     }
     timing = hn->recSlot.rec;
@@ -692,7 +692,7 @@ int FUN_002ad5e0(SfdPly *hn, int divisor, int scale)
 int FUN_002ad668(SfdPly *hn, int value)
 {
     SfdRec *record;
-    if (sfd_CheckHn(hn) != 0) {
+    if (SFLIB_CheckHn(hn) != 0) {
         return sfd_ReportError(0, 0xFF00015B);
     }
     record = hn->recSlot.rec;
@@ -707,7 +707,7 @@ int FUN_002ad668(SfdPly *hn, int value)
 void FUN_002ad6d8(SfdPly *hn, int offset)
 {
     SfdRec *record;
-    if (sfd_CheckHn(hn) != 0) {
+    if (SFLIB_CheckHn(hn) != 0) {
         sfd_ReportError(0, 0xFF00015C);
         return;
     }
@@ -723,7 +723,7 @@ void FUN_002ad738(SfdPly *hn)
     SfdRecSub *settings = &hn->recSlot.sub;
     SfdRec *s = hn->recSlot.rec;
     int changed, base, t;
-    if (FUN_0029ed48(hn) == 0) {
+    if (sfd_IsLnkStm(hn) == 0) {
     changed = 0;
     if (s->default_value <= 0) {
         base = 0;

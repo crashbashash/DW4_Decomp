@@ -1,5 +1,5 @@
 # The engine's Insight managers and their class registration thunks.
-# `FUN_002595e0` (the game's main) constructs three managers, one per class: it runs the class's
+# `main` (the game's main) constructs three managers, one per class: it runs the class's
 # static init and then `igMetaObject_CreateInstance(<Class> MetaObject, owner)`.  The class is
 # recovered from both ends -- the `_Register` function the thunk tail-calls and the MetaObject
 # global the `_GetMetaObject` accessor lazily fills:

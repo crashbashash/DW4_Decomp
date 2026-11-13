@@ -2,7 +2,13 @@
 #ifndef DW4_RUNTIME_EXCEPTION_H
 #define DW4_RUNTIME_EXCEPTION_H
 
-typedef struct ExceptionTableIndex ExceptionTableIndex;
+/* One function's entry in the image's exception index, sorted by address: the low bit of function_size set means
+ * exception_table holds the (short) exception record itself. */
+typedef struct ExceptionTableIndex {
+    char *function_address;
+    unsigned int function_size;
+    char *exception_table;
+} ExceptionTableIndex;
 
 /* The exception table of the function a frame belongs to, and the current position in its action list. */
 typedef struct MWExceptionInfo {
@@ -33,7 +39,7 @@ typedef struct TargetContext {
     int has_flushback;              /* 0x20c */
     int has_frame_ptr;              /* 0x210 */
     unsigned int n_saved_FPRs;      /* 0x214 */
-    float FPR[32];                  /* 0x218 */
+    unsigned int FPR[32];           /* 0x218: f0-f31, as their bits */
 } TargetContext;
 
 typedef struct ThrowContext {
@@ -86,10 +92,37 @@ enum {
     EXACTION_SPECIFICATION
 };
 
+/* The other bits of an action's first byte: the last action of a list, and a condition or object pointer held in a
+ * saved register (the record gives its number in place of a frame offset). */
+enum {
+    EXACTION_ENDBIT = 0x80,
+    EXACTION_REGCOND = 0x40,
+    EXACTION_REGPTR = 0x20,
+    EXACTION_MASK = 0x1F
+};
+
 #ifdef __cplusplus
 extern "C" {
 #endif
+/* A static initializer the start-up code runs before main (the linker's table runs __ctors_start__ to __ctors_end__). */
+typedef void (*StaticInitializer)(void);
+extern StaticInitializer __ctors_start__[];
+extern StaticInitializer __ctors_end__[];
+void __call_static_initializers(StaticInitializer *begin, StaticInitializer *end, ExceptionTableIndex *extab_begin, ExceptionTableIndex *extab_end);
+void __destroy_global_chain(void);
+
+/* The image's exception index, sorted by function address (placed by the linker). */
+extern ExceptionTableIndex __exception_table_start__[];
+extern ExceptionTableIndex __exception_table_end__[];
+
 void __terminate(void);
+void __call_unexpected_handler(void);
+void __end__catch(CatchInfo *catchinfo);
+void __unexpected(CatchInfo *catchinfo);
+void __throw(char *throwtype, void *location, void *dtor);
+void __ThrowHandler(ThrowContext *context);
+int __GetExceptionIndexBounds(MWExceptionInfo *info, char *return_address);
+unsigned char *__SkipFrameInfo(char *exception_record);
 unsigned char *__DecodeUnsignedNumber(unsigned char *p, unsigned int *value);
 unsigned char *__DecodeSignedNumber(unsigned char *p, int *value);
 char __throw_catch_compare(const char *throwtype, const char *catchtype, long *offset_result);
@@ -99,7 +132,7 @@ char *__PopStackFrame(ThrowContext *context, MWExceptionInfo *info);
 unsigned char NextAction(ActionIterator *iter);
 CatchInfo *FindMostRecentException(ThrowContext *context, MWExceptionInfo *info);
 unsigned char *FindExceptionHandler(ThrowContext *context, MWExceptionInfo *info, long *result_offset);
-void UnwindStack(ThrowContext *context, MWExceptionInfo *info, unsigned char *action);
+void UnwindStack(ThrowContext *context, MWExceptionInfo *info, unsigned char *catcher);
 void __TransferControl(ThrowContext *context, MWExceptionInfo *info, char *address);
 #ifdef __cplusplus
 }

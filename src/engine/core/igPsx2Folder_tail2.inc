@@ -6,7 +6,7 @@ FolderObjectRef Gap__Core__igPsx2Folder__vfunc_26(FolderSelf *self) {
     }
     FolderObjectRef list;
     list.obj = ((FolderObject *)igStringRefList_Create(((int)igObject_GetAllocator((int)self))));
-    while (FUN_00110d60(handle, &entry) != 0) {
+    while (sceDread(handle, &entry) != 0) {
         char *name = (entry.bytes + 64);
         char *interned;
         if (name == 0) {
@@ -24,7 +24,7 @@ FolderObjectRef Gap__Core__igPsx2Folder__vfunc_26(FolderSelf *self) {
         FolderStringRef text(interned);
         StringList_AppendRetained(list.obj, &text);
     }
-    FUN_00110bf8(handle);
+    sceDclose(handle);
     return list;
 }
 
@@ -76,10 +76,10 @@ int FUN_0032cf70(int *arg0, int arg1, int arg2, int arg3, int arg4, int *arg5) {
     }
     if (*temp_v0 == 0x63) {
         do {
-            var_v0 = FUN_00113038(temp_v0, arg3, arg4);
+            var_v0 = sceSifLoadModule(temp_v0, arg3, arg4);
         } while (var_v0 < 0);
     } else {
-        var_v0 = FUN_00113038(temp_v0, arg3, arg4);
+        var_v0 = sceSifLoadModule(temp_v0, arg3, arg4);
     }
     if (var_v0 < 0) {
         Memory_FreeBufferAliasA(temp_v0);
@@ -105,7 +105,7 @@ void FUN_0032d080(void) {
             FUN_00116fb0(0);
         }
         if (DAT_00587348[0] != 0) {
-            while (FUN_00113038(DAT_00587348[0], 0, 0) < 0) {
+            while (sceSifLoadModule(DAT_00587348[0], 0, 0) < 0) {
             }
         }
         while (((sceSifRebootIop(DAT_00587340[0]) != 0) ^ 1)) {
@@ -117,9 +117,9 @@ void FUN_0032d080(void) {
     if (DAT_005549b8 != 0) {
         sceSifInitRpc(0);
         if (DAT_00587348[0] != 0) {
-            FUN_001127c8();
+            sceSifLoadFileReset();
         }
-        FUN_0010f2f8();
+        sceFsReset();
         v = DAT_00587338[0];
         if (v == 1 || v == 0) {
             FUN_00116fb0(0);
@@ -130,7 +130,7 @@ void FUN_0032d080(void) {
         }
         sceSifInitCmd();
         n = DAT_004c2628[0];
-        FUN_0010d498(((int)FUN_002ee430(n * 12)), n);
+        sceSifSetCmdBuffer(((int)FUN_002ee430(n * 12)), n);
     }
 }
 

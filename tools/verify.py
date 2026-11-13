@@ -1048,7 +1048,7 @@ def apply_relocs(text, relocs, resolve, gp):
             pend_hi = [(o, n) for o, n in pend_hi if n != name]
         elif rtype == R_26:
             w = struct.unpack_from("<I", buf, off)[0]
-            patch(off, ((target + addend) >> 2) & 0x3FFFFFF, 0x3FFFFFF, 0)
+            patch(off, ((target + addend + ((w & 0x3FFFFFF) << 2)) >> 2) & 0x3FFFFFF, 0x3FFFFFF, 0)
         elif rtype == R_32:
             # MIPS relocatable objects are REL, not RELA: the addend lives in the
             # field itself (this is how a jump table entry points at a case body).

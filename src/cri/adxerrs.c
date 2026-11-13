@@ -4,8 +4,8 @@ void *memset(void *dst, int c, unsigned int n);
 char *strncpy(char *dst, const char *src, unsigned int n);
 char *strncat(char *dst, const char *src, unsigned int n);
 unsigned int strlen(const char *s);
-void FUN_0027e8a0(void);
-void FUN_0027e2f0(char *msg);
+void SVM_SetCbErr(void);
+void SVM_CallErr(char *msg);
 
 extern AdxErrFunc DAT_00499cd8;
 extern int DAT_00499cdc;
@@ -27,11 +27,11 @@ void FUN_00260788(void)
     DAT_00499cdc = 0;
 }
 
-void FUN_002607c0(AdxErrFunc func, int obj)
+void ADXERR_EntryErrFunc(AdxErrFunc func, int obj)
 {
     DAT_00499cd8 = func;
     DAT_00499cdc = obj;
-    FUN_0027e8a0();
+    SVM_SetCbErr();
 }
 
 void ADXERR_CallErrFunc1(const char *msg)
@@ -40,7 +40,7 @@ void ADXERR_CallErrFunc1(const char *msg)
     if (DAT_00499cd8 != 0) {
         DAT_00499cd8(DAT_00499cdc, DAT_00499ce0);
     }
-    FUN_0027e2f0(DAT_00499ce0);
+    SVM_CallErr(DAT_00499ce0);
 }
 
 void ADXERR_CallErrFunc2(const char *code, const char *msg)
@@ -50,7 +50,7 @@ void ADXERR_CallErrFunc2(const char *code, const char *msg)
     if (DAT_00499cd8 != 0) {
         DAT_00499cd8(DAT_00499cdc, DAT_00499ce0);
     }
-    FUN_0027e2f0(DAT_00499ce0);
+    SVM_CallErr(DAT_00499ce0);
 }
 
 void FUN_002608b0(int value, char *dst, int size)

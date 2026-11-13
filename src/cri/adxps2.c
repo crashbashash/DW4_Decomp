@@ -96,24 +96,24 @@ extern char _gp[];
 extern AdxmCallback adxm_vsync_frame_cb;
 extern AdxmCallback adxm_mwidle_sleep_cb;
 
-int FUN_0027e8e0();
-void FUN_0027e8f8(int a, int b);
-int FUN_0027ec50();
-void FUN_0027e398(const char *message);
-int FUN_0027e1c0();
-int FUN_0027e1d8();
-int FUN_0027e748();
-int FUN_0027e860();
-int FUN_0027e8a0();
-int FUN_0027ea98();
-int FUN_0027eab0();
-int FUN_0027eae0();
-int FUN_0027eaf8();
-int FUN_0027eb10();
-int FUN_0027eb28();
-int FUN_0027ed80();
-int FUN_0027edb0();
-int FUN_0026cbd8();
+int SVM_SetCbLock();
+void SVM_SetCbUnlock(int a, int b);
+int SVM_Finish();
+void SVM_CallErr1(const char *message);
+int SVM_Lock();
+int SVM_Unlock();
+int SVM_SetCbSvrId();
+int SVM_GotoSvrBorder();
+int SVM_SetCbErr();
+int SVM_ExecSvrUsrVsync();
+int SVM_ExecSvrVsync();
+int SVM_ExecSvrFs();
+int SVM_ExecSvrMain();
+int SVM_ExecSvrMwIdle();
+int SVM_ExecSvrUsrIdle();
+int SVM_ExecVsyncBegin();
+int SVM_ExecVsyncEnd();
+int ADXT_ExecServer();
 int ADXT_ExecFsSvr();
 void ADXMSG_PrintErr(const char *format, ...);
 
@@ -124,7 +124,12 @@ void adxm_sleep_thrd(void);
 int adxm_is_usridle_mode(void);
 void adxm_call_mwidle_sleep_cb(void);
 void adxm_call_vsync_frame_cb(void);
-int adxm_exec_vint();
+extern volatile int adxps2_exec_vint;
+extern long long adxm_vint_cnt;
+extern int (*adxm_old_cbf)(int arg);
+extern volatile int adxt_vsync_cnt;
+int SVM_ExecSvrVint();
+int adxm_exec_vint(int arg);
 int ADXM_SetupThrd(AdxmThreadPrm *tprm);
 void adxm_delete_mwidle_thrd(void);
 void adxm_delete_vsync_thrd(void);
@@ -169,7 +174,7 @@ void adxm_goto_svr_border(int threadId, int priority)
             break;
         }
         if (i > 199999999) {
-            FUN_0027e398(text_1060102_Internal_Error_adxm_goto);
+            SVM_CallErr1(text_1060102_Internal_Error_adxm_goto);
             break;
         }
     }
@@ -200,7 +205,7 @@ void adxm_usrvsync_thrd(void *arg) {
     while (adxm_usrvsync_exit_request == 0) {
         adxm_usrvsync_count++;
         adxm_usrvsync_busy = 1;
-        FUN_0027ea98();
+        SVM_ExecSvrUsrVsync();
         adxm_usrvsync_busy = 0;
         adxm_sleep_thrd();
     }
@@ -222,7 +227,7 @@ void adxm_vsync_thrd(void *arg)
         }
         adxm_wakeup_vsync_waiter();
         adxm_vsync_busy = 1;
-        FUN_0027eab0();
+        SVM_ExecSvrVsync();
         adxm_vsync_busy = 0;
         adxm_sleep_thrd();
     }
@@ -238,7 +243,7 @@ void adxm_fs_thrd(void *arg)
         if (adxm_fs_bgcolor != 0) {
             *(volatile unsigned long long *)0x120000E0 = adxm_fs_bgcolor;
         }
-        FUN_0027eae0();
+        SVM_ExecSvrFs();
         if (adxm_fs_bgcolor != 0) {
             *(volatile unsigned long long *)0x120000E0 = 0;
         }
@@ -255,7 +260,7 @@ void adxm_mwidle_thrd(void *arg)
     while (adxm_mwidle_exit_request == 0) {
         adxm_mwidle_count++;
         adxm_mwidle_busy = 1;
-        busy = FUN_0027eb10();
+        busy = SVM_ExecSvrMwIdle();
         adxm_mwidle_busy = 0;
         if (adxm_border_request == 1) {
             adxm_border_request = 0;
@@ -284,7 +289,7 @@ void adxm_usridle_thrd(void *arg)
     while (adxm_usridle_exit_request == 0) {
         adxm_usridle_count++;
         adxm_usridle_busy = 1;
-        busy = FUN_0027eb28();
+        busy = SVM_ExecSvrUsrIdle();
         adxm_usridle_busy = 0;
         if (adxm_border_request == 1) {
             adxm_border_request = 0;
@@ -449,35 +454,35 @@ int adxm_is_usridle_mode(void) {
 }
 
 void ADXM_ExecSvrUsrVsync(void) {
-    FUN_0027ea98();
+    SVM_ExecSvrUsrVsync();
 }
 
 void ADXM_ExecSvrVsync(void) {
-    FUN_0027eab0();
+    SVM_ExecSvrVsync();
 }
 
 void ADXM_ExecSvrFs(void) {
-    FUN_0027eae0();
+    SVM_ExecSvrFs();
 }
 
 void ADXM_ExecSvrMain(void) {
-    FUN_0027eaf8();
+    SVM_ExecSvrMain();
 }
 
 void ADXM_ExecSvrMwIdle(void) {
-    FUN_0027eb10();
+    SVM_ExecSvrMwIdle();
 }
 
 void ADXM_ExecSvrUsrIdle(void) {
-    FUN_0027eb28();
+    SVM_ExecSvrUsrIdle();
 }
 
 int ADXM_ExecSvrAll(void) {
-    FUN_0027ea98();
-    FUN_0027eab0();
-    FUN_0027eaf8();
-    FUN_0027eb10();
-    FUN_0027eb28();
+    SVM_ExecSvrUsrVsync();
+    SVM_ExecSvrVsync();
+    SVM_ExecSvrMain();
+    SVM_ExecSvrMwIdle();
+    SVM_ExecSvrUsrIdle();
     return 0;
 }
 
@@ -486,7 +491,7 @@ int ADXM_IsSetupThrd(void) {
 }
 
 void ADXM_SetCbErr(void) {
-    FUN_0027e8a0();
+    SVM_SetCbErr();
 }
 
 void adxm_request_thrd_exit(void) {
@@ -506,9 +511,9 @@ void ADXM_ShutdownThrd(void) {
         adxm_delete_vsync_thrd();
         adxm_delete_safe_thrd();
         ChangeThreadPriority(adxm_main_thid, adxm_main_init_prio);
-        FUN_0027e8e0(0, 0);
-        FUN_0027e8f8(0, 0);
-        FUN_0027ec50();
+        SVM_SetCbLock(0, 0);
+        SVM_SetCbUnlock(0, 0);
+        SVM_Finish();
     }
 }
 
@@ -585,23 +590,48 @@ void adxm_delete_safe_thrd(void) {
 }
 
 void ADXM_Lock(void) {
-    FUN_0027e1c0();
+    SVM_Lock();
 }
 
 void ADXM_Unlock(void) {
-    FUN_0027e1d8();
+    SVM_Unlock();
 }
 
 int ADXM_GetLockLevel(void) {
     return adxm_lock_level;
 }
 
-void ADXM_ExecVint(void) {
-    adxm_exec_vint();
+int adxm_exec_vint(int arg) {
+    adxt_vsync_cnt += 1;
+    if (adxps2_exec_vint == 0) {
+        adxps2_exec_vint = 1;
+        if (adxm_setup_count > 0) {
+            if (adxm_vsync_busy != 1) {
+                adxm_iwakeup_thrd(adxm_vsync_thid);
+            }
+            if (adxm_fs_busy != 1) {
+                adxm_iwakeup_thrd(adxm_fs_thid);
+            }
+            if (adxm_is_usridle_mode() == 1 && adxm_usrvsync_busy != 1) {
+                adxm_iwakeup_thrd(adxm_usrvsync_thid);
+            }
+            adxm_vint_cnt += 1;
+        }
+        SVM_ExecSvrVint();
+        adxps2_exec_vint = 0;
+    }
+    if (adxm_old_cbf != 0) {
+        return adxm_old_cbf(arg);
+    }
+    return 0;
+}
+
+int ADXM_ExecVint(int arg) {
+    return adxm_exec_vint(arg);
 }
 
 void ADXM_ExecMain(void) {
-    FUN_0027eaf8();
+    SVM_ExecSvrMain();
 }
 
 void adxm_wakeup_idle_thrds(void) {
@@ -631,11 +661,11 @@ void ADXM_WaitVsync(void) {
 }
 
 void ADXM_ExecVsyncFrame(void) {
-    FUN_0027ed80();
+    SVM_ExecVsyncBegin();
     adxm_wakeup_idle_thrds();
     adxm_call_vsync_frame_cb();
     ADXM_WaitVsync();
-    FUN_0027edb0();
+    SVM_ExecVsyncEnd();
 }
 
 void ADXPS2_ExecVsyncFrame(void) {
@@ -645,7 +675,7 @@ void ADXPS2_ExecVsyncFrame(void) {
 int ADXPS2_ExecServer(void) {
     if (adxps2_server_busy == 0) {
         adxps2_server_busy = 1;
-        FUN_0026cbd8();
+        ADXT_ExecServer();
         ADXT_ExecFsSvr();
         adxps2_server_busy = 0;
     }
@@ -679,7 +709,7 @@ void ADXPS2_ExecServerLocked(void) {
     if (adxps2_server_busy == 0) {
         adxps2_server_busy = 1;
         ADXM_Unlock();
-        FUN_0026cbd8();
+        ADXT_ExecServer();
         ADXT_ExecFsSvr();
         adxps2_server_busy = 0;
     } else {
@@ -688,11 +718,11 @@ void ADXPS2_ExecServerLocked(void) {
 }
 
 void ADXPS2_Lock(void) {
-    FUN_0027e1c0();
+    SVM_Lock();
 }
 
 void ADXPS2_Unlock(void) {
-    FUN_0027e1d8();
+    SVM_Unlock();
 }
 
 void ADXM_ShutdownThrdEx(void) {
@@ -705,23 +735,23 @@ void ADXM_ShutdownThrdEx(void) {
         adxm_delete_usrvsync_thrd();
         adxm_delete_safe_thrd();
         ChangeThreadPriority(adxm_main_thid, adxm_main_init_prio);
-        FUN_0027e8e0(0, 0);
-        FUN_0027e8f8(0, 0);
+        SVM_SetCbLock(0, 0);
+        SVM_SetCbUnlock(0, 0);
         adxm_usridle_mode = 0;
-        FUN_0027ec50();
+        SVM_Finish();
     }
 }
 
 void ADXM_SetCbUsrVsync(int func, int object) {
-    FUN_0027e748(1, 0, func, object);
+    SVM_SetCbSvrId(1, 0, func, object);
 }
 
 void ADXM_SetCbUsrIdle(int func, int object) {
-    FUN_0027e748(7, 0, func, object);
+    SVM_SetCbSvrId(7, 0, func, object);
 }
 
 void ADXM_GotoUsrIdleBorder(void) {
-    FUN_0027e860(7);
+    SVM_GotoSvrBorder(7);
 }
 
 void ADXM_SetCbVsyncFrame(void (*func0)(void *), void *arg0, void (*func1)(void *), void *arg1) {

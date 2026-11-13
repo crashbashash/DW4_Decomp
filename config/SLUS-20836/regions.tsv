@@ -47,8 +47,8 @@
 0x0044b860	0x004583f0	alchemy-gui	Alchemy Gui	Alchemy	mwcc	Gui	GuiLibrary_MarkRegistered	high	latch, 49 registrars; RTTI `Gap::Gui`
 0x004583f0	0x00467120	alchemy-viewer	Alchemy Viewer	Alchemy	mwcc	Viewer	-	high	latch, 24 registrars; RTTI `Gap::Viewer`; `Actor manager`, `Scenes done`; ViewerLibrary_MarkRegistered at 0x458680 follows the library's out-of-line holder destructors at 0x4583f0, which only Viewer calls and which match only Viewer's -O4,p
 0x00467120	0x00481c00	vu-microcode	VU1 microcode	-	data	-	-	high	the 109,184 bytes `UCODE_END` gives, from 0x467178 to 0x481bf8; VU nops, no EE prologues
-0x00481c00	0x004820d0	sony-descriptors	Sony library descriptors	-	data	-	-	medium	`PsIIlibgraph2800`, `PsIIlibdma  2800`, `PsIIlibipu  2800`, `PsIIlibkernl2800`
-0x004820d0	0x004833c8	sony-kernel	Sony kernel-mode code	Sony	gcc	-	-	high	addresses and calls in 0x80074000 and up, so it runs at another address; no EE caller
-0x004833c8	0x0051fd00	data	Constants and initialised data	-	data	-	-	high	one sequence in link order from 0x483400 to 0x4d1c10, another from there on
+0x00481c00	0x00481f28	sony-descriptors	Sony library descriptors	-	data	-	-	medium	`PsIIlibgraph2800`, `PsIIlibdma  2800`, `PsIIlibipu  2800`, `PsIIlibkernl2800`
+0x00481f28	0x004834c8	sony-kernel	Sony kernel patches	-	data	-	-	high	`tlbsrc`, `osdsrc`, `srcfile` and `eenull`, the arrays tlbfunc.c, libosd.c and alarm.c copy to 0x80075000, 0x80074000, 0x80076000 and 0x82000, with their system call tables between them; their code addresses and calls lie at 0x80074000 and up, and no EE code calls into them
+0x004834c8	0x0051fd00	data	Constants and initialised data	-	data	-	-	high	one sequence in link order from 0x483400 to 0x4d1c10, another from there on
 0x0051fd00	0x00522438	static-initialisers	Static initialisers	Static	mwcc	-	-	high	the table at 0x522440 lists all 16 in link order; they serve several libraries
 0x00522438	0x00554b00	vtables	Vtables and later data	-	data	-	-	high	the initialiser table, then runs of code pointers

@@ -121,9 +121,9 @@ int FUN_001b8ba0(void *arg0, int arg1) {
 void FUN_001b8c80(void *self, int arg1) {
     int arg0 = (int)self;
     int temp_v0;
-    temp_v0 = FUN_001b7f50(arg1, arg0);
+    temp_v0 = (int)igTransform_PushMatrix((TransformView *)arg1, (CommonTraversalView *)arg0);
     Matrix44_Copy(arg1 + *(int *)((char *)(DAT_00561928[0]) + 8), temp_v0);
-    FUN_001b85c0(temp_v0, arg1, arg0);
+    igTransform_TraverseChildrenAndPopMatrix((float *)temp_v0, (igTransform *)arg1, (igCommonTraversal *)arg0);
 }
 
 void FUN_001b8cf0(igCommonTraversal *arg0, char *arg1) {
@@ -211,6 +211,132 @@ int FUN_001b8f20(C_1b8f20 *arg0, D *arg1) {
     return 0;
 }
 
+int igCommonTraversal_TraverseOverrideAttrSet(igCommonTraversal *self, igOverrideAttrSet *set) {
+    igAttrStackManager *manager;
+    int result;
+    igAttr **p;
+    int n;
+    int slot;
+    igAttrList *attrs;
+    igAttr **end;
+    int popSlot;
+    AttrObjectStack *stack;
+    AttrObjectStack *popStack;
+    igAttr **begin;
+    attrs = (igAttrList *)set->_attributes;
+    manager = (igAttrStackManager *)self->_attrStack;
+    p = (igAttr **)attrs->_data;
+    end = p + attrs->_count;
+    for (; p < end; p++) {
+        igAttr *attr = *p;
+        slot = attr->_cachedUnitID + ((int *)manager->_attrStackIndexTable)[attr->_cachedAttrIndex];
+        stack = ((AttrObjectStackList *)manager->_attrStacks)->_data[slot];
+        if (stack->_cachedOverride < 0) {
+            stack->_cachedOverride = stack->_count;
+        }
+        {
+            igObject *pushed = attr;
+            n = stack->getCount();
+            if (n < stack->_capacity) {
+                stack->_count++;
+            } else {
+                List_Resize(stack, n + 1, 4);
+            }
+            stack->set(n, &pushed);
+        }
+        igAttrStackManager_MarkStackChanged((A_1b1490 *)manager, (B_1b1490 *)stack, slot);
+    }
+    if (set->_trigger) {
+        FUN_001b0440(self->_attrStack, self->_flushedAttrs);
+        List_AppendWords(*(int *)((char *)((igSorter *)self->_sorter)->_dlist + 12), ((igObjectList *)self->_flushedAttrs)->_count, ((igObjectList *)self->_flushedAttrs)->_data);
+    }
+    result = igTraversal_TraverseChildren((int)self, (S_1e07a0 *)set);
+    if (p != 0) {
+        begin = (igAttr **)attrs->_data;
+        for (p--; p >= begin; p--) {
+            igAttr *attr = *p;
+            igObject *top;
+            void (*pop)(igObject *, int);
+            popSlot = attr->_cachedUnitID + ((int *)manager->_attrStackIndexTable)[attr->_cachedAttrIndex];
+            popStack = ((AttrObjectStackList *)manager->_attrStacks)->_data[popSlot];
+            top = popStack->get(popStack->_count - 1);
+            pop = popStack->_popProc;
+            if (pop != 0 && top == attr) {
+                pop(top, manager->_popProcData);
+            }
+            popStack->_count--;
+            if (popStack->_count == popStack->_cachedOverride) {
+                popStack->_cachedOverride = -1;
+            }
+            igAttrStackManager_MarkStackChanged((A_1b1490 *)manager, (B_1b1490 *)popStack, popSlot);
+        }
+    }
+    if (result == 2) {
+        return 2;
+    }
+    return 0;
+}
+
+int igCommonTraversal_TraverseAttrSet(igCommonTraversal *self, igAttrSet *set) {
+    igAttrStackManager *manager;
+    int result;
+    igAttr **p;
+    int n;
+    int slot;
+    igAttrList *attrs;
+    igAttr **end;
+    int popSlot;
+    AttrObjectStack *stack;
+    AttrObjectStack *popStack;
+    igAttr **begin;
+    attrs = (igAttrList *)set->_attributes;
+    manager = (igAttrStackManager *)self->_attrStack;
+    p = (igAttr **)attrs->_data;
+    end = p + attrs->_count;
+    for (; p < end; p++) {
+        igAttr *attr = *p;
+        slot = attr->_cachedUnitID + ((int *)manager->_attrStackIndexTable)[attr->_cachedAttrIndex];
+        stack = ((AttrObjectStackList *)manager->_attrStacks)->_data[slot];
+        {
+            igObject *pushed = attr;
+            n = stack->getCount();
+            if (n < stack->_capacity) {
+                stack->_count = stack->_count + 1;
+            } else {
+                List_Resize(stack, n + 1, 4);
+            }
+            stack->set(n, &pushed);
+        }
+        igAttrStackManager_MarkStackChanged((A_1b1490 *)manager, (B_1b1490 *)stack, slot);
+    }
+    if (set->_trigger != 0) {
+        FUN_001b0440(self->_attrStack, self->_flushedAttrs);
+        List_AppendWords(*(int *)((char *)((igSorter *)self->_sorter)->_dlist + 12), ((igObjectList *)self->_flushedAttrs)->_count, ((igObjectList *)self->_flushedAttrs)->_data);
+    }
+    result = igTraversal_TraverseChildren((int)self, (S_1e07a0 *)set);
+    if (p != 0) {
+        begin = (igAttr **)attrs->_data;
+        for (p--; p >= begin; p--) {
+            igAttr *attr = *p;
+            igObject *top;
+            void (*pop)(igObject *, int);
+            popSlot = attr->_cachedUnitID + ((int *)manager->_attrStackIndexTable)[attr->_cachedAttrIndex];
+            popStack = ((AttrObjectStackList *)manager->_attrStacks)->_data[popSlot];
+            top = popStack->get(popStack->_count - 1);
+            pop = popStack->_popProc;
+            if (pop != 0) {
+                pop(top, manager->_popProcData);
+            }
+            popStack->_count = popStack->_count - 1;
+            igAttrStackManager_MarkStackChanged((A_1b1490 *)manager, (B_1b1490 *)popStack, popSlot);
+        }
+    }
+    if (result == 2) {
+        return 2;
+    }
+    return 0;
+}
+
 int FUN_001b99d0(DrawTraversalView *o, SwitchGroupView *g) {
     char m[64];
     RefList *set;
@@ -289,7 +415,7 @@ int FUN_001b99d0(DrawTraversalView *o, SwitchGroupView *g) {
 }
 
 void FUN_001b9d40(int arg0, int arg1) {
-    FUN_001b85c0(FUN_001b7f50(arg1, arg0), arg1, arg0);
+    igTransform_TraverseChildrenAndPopMatrix(igTransform_PushMatrix((TransformView *)arg1, (CommonTraversalView *)arg0), (igTransform *)arg1, (igCommonTraversal *)arg0);
 }
 
 int FUN_001b9d90(LightTraversalView *o, LightSceneView *scene) {
@@ -346,7 +472,7 @@ int FUN_001b9fc0(struct A_1b9fc0 *arg0, struct B_1b9fc0 *arg1) {
     }
     igTraversal_TraverseChildren((int)arg0, (S_1e07a0 *)arg1);
     for (s0 = s0 - 1; s0 >= 0; s0--) {
-        FUN_001b0aa0(arg0->f52, arg1->f32->data[s0], 0);
+        igAttrStackManager_PopLightStateAttr((igAttrStackManager *)arg0->f52, (LightStateAttrView *)arg1->f32->data[s0], 0);
     }
     return 0;
 }
@@ -397,6 +523,43 @@ int FUN_001ba650(int a0, int arg1) {
 
 int FUN_001ba6b0(char *arg0, struct S_1d6190 *arg1) {
     FUN_001d6190(arg1, arg0);
+    return 0;
+}
+
+int igCommonTraversal_TraverseProjectiveShadowShader(igCommonTraversal *self, igProjectiveShadowShader *shader) {
+    igObject *pushed;
+    int n;
+    igAttrStackManager *manager;
+    AttrObjectStack *stack;
+    int slot;
+    igAttr *attr;
+    igObject *top;
+
+    attr = (igAttr *)self->_matrixOptimization;
+    manager = (igAttrStackManager *)self->_attrStack;
+    slot = attr->_cachedUnitID + ((int *)manager->_attrStackIndexTable)[attr->_cachedAttrIndex];
+    stack = ((AttrObjectStackList *)manager->_attrStacks)->_data[slot];
+    pushed = attr;
+    n = stack->getCount();
+    if (n < stack->_capacity) {
+        stack->_count = stack->_count + 1;
+    } else {
+        List_Resize(stack, n + 1, 4);
+    }
+    stack->set(n, &pushed);
+    igAttrStackManager_MarkStackChanged((A_1b1490 *)manager, (B_1b1490 *)stack, slot);
+    FUN_001d7b70((S0_1d7b70 *)shader, (S1_1d7b70 *)self);
+    attr = (igAttr *)self->_matrixOptimization;
+    manager = (igAttrStackManager *)self->_attrStack;
+    slot = attr->_cachedUnitID + ((int *)manager->_attrStackIndexTable)[attr->_cachedAttrIndex];
+    stack = ((AttrObjectStackList *)manager->_attrStacks)->_data[slot];
+    n = stack->_count - 1;
+    top = stack->_data[n];
+    if (stack->_popProc != 0) {
+        stack->_popProc(top, manager->_popProcData);
+    }
+    stack->_count = stack->_count - 1;
+    igAttrStackManager_MarkStackChanged((A_1b1490 *)manager, (B_1b1490 *)stack, slot);
     return 0;
 }
 

@@ -16,7 +16,7 @@ typedef struct {
 } Mpeg2Hdr;
 typedef struct { char pad0[352]; Mpeg2Hdr hdr; } Mpeg2Ctx;
 
-int FUN_00290898(SjObj *sj);
+int mpv_SkipToStartCode(SjObj *sj);
 char *FUN_0028a260();
 char *FUN_00289d08();
 char *FUN_00286d28();
@@ -38,7 +38,7 @@ int FUN_00285c78(Mpeg2Ctx *ctx, SjObj *sj) {
     saved = h->error_count;
     h->expected_ext_id = 0;
     h->error_count = 0;
-    while ((code = FUN_00290898(sj)) != 0) {
+    while ((code = mpv_SkipToStartCode(sj)) != 0) {
         sj->vt->getChunk(sj, 1, 0x7FFFFFFF, &ck);
         end = 0;
         switch (code) {

@@ -1,4 +1,6 @@
 """Whole-file units: a stock source compiled whole, its data compared with retail."""
+import contextlib
+import io
 import json
 import os
 from pathlib import Path
@@ -306,9 +308,11 @@ class ExceptionsOn(unittest.TestCase):
     def test_a_reached_copy_elsewhere_is_a_duplicate(self):
         syms, headers, functions = whole_file_rows.text_functions(str(self.obj))
         placed = {name: address for name, address in ((self.group.symbol, self.OWNER),) + self.group.emitted}
-        found = whole_file_rows.duplicate_rows(
+        by_name, by_va = verify.load_symbols(os.path.join(verify.ROOT, "config/SLUS-20836/symbols.txt"))
+        last = max(placed.values())
+        _data, found, _externals = whole_file_rows.reach(
             placed, whole_file_rows.Retail(str(self.elf)), syms, headers, str(self.obj), functions,
-            exceptions.load())
+            exceptions.load(), {name: va for name, (va, _size) in by_name.items()}, last + by_va[last][1])
         self.assertEqual(found, dict(self.group.duplicates))
 
 
@@ -376,8 +380,9 @@ class LiteralAtTwoEntries(unittest.TestCase):
 
     def rows(self, elf):
         retail = whole_file_rows.Retail(str(elf))
-        data, externals = whole_file_rows.data_rows(self.placed, retail, self.syms, self.headers, str(self.obj),
-                                                    self.functions, {}, self.SECOND + 0x100)
+        data, _duplicates, externals = whole_file_rows.reach(self.placed, retail, self.syms, self.headers,
+                                                             str(self.obj), self.functions, {}, {},
+                                                             self.SECOND + 0x100)
         whole_file_rows.literals(self.placed, {}, retail, self.syms, self.headers, str(self.obj),
                                  self.functions, data)
         return data, externals
@@ -452,9 +457,13 @@ class ProfileTwin(unittest.TestCase):
         syms, headers, functions = whole_file_rows.text_functions(str(self.obj))
         twins = whole_file_rows.Twins(self.profile, str(self.SOURCE), str(self.root), str(config),
                                       verify.WIBO_DEFAULT)
-        return whole_file_rows.duplicate_rows(
+        return whole_file_rows.reach(
             {self.NAME: self.OWNER}, whole_file_rows.Retail(str(self.elf)), syms, headers, str(self.obj),
-            functions, exceptions.load(), twins)
+            functions, exceptions.load(), self.names(), self.OWNER + 4, twins)[1]
+
+    def names(self):
+        return {name: address for name, (address, _size) in verify.load_symbols(
+            str(self.CONFIG / "symbols.txt"))[0].items()}
 
     def config(self, flags, mode):
         """The profile tables, with the unit holding the copy built under `flags` and `mode`."""
@@ -487,18 +496,12 @@ class ProfileTwin(unittest.TestCase):
 
     def test_a_call_only_the_duplicates_make_is_an_external(self):
         syms, headers, functions = whole_file_rows.text_functions(str(self.obj))
-        retail = whole_file_rows.Retail(str(self.elf))
-        placed = {self.NAME: self.OWNER}
-        names = {name: address for name, (address, _size) in verify.load_symbols(
-            str(self.CONFIG / "symbols.txt"))[0].items()}
-        _data, externals = whole_file_rows.data_rows(placed, retail, syms, headers, str(self.obj),
-                                                     functions, names, self.OWNER + 4)
-        self.assertNotIn("__dl__FPv", externals)
+        self.assertNotIn("__dl__FPv", {r[3] for r in functions[self.NAME].relocs})
         twins = whole_file_rows.Twins(self.profile, str(self.SOURCE), str(self.root), str(self.CONFIG),
                                       verify.WIBO_DEFAULT)
-        duplicates = whole_file_rows.duplicate_rows(placed, retail, syms, headers, str(self.obj), functions,
-                                                    exceptions.load(), twins)
-        externals = whole_file_rows.duplicate_externals(duplicates, retail, functions, names, externals, twins)
+        _data, _duplicates, externals = whole_file_rows.reach(
+            {self.NAME: self.OWNER}, whole_file_rows.Retail(str(self.elf)), syms, headers, str(self.obj),
+            functions, exceptions.load(), self.names(), self.OWNER + 4, twins)
         self.assertEqual(externals, dict(unitobjects.group_for(self.OWNER).externals))
 
 
@@ -568,10 +571,9 @@ int beTransformSync_GetVTable(void) {
         by_name, by_va = verify.load_symbols(self.symbols)
         names = {name: address for name, (address, _size) in by_name.items()}
         placed, records = {self.NAME: self.OWNER}, exceptions.load()
-        data, externals = whole_file_rows.data_rows(placed, retail, syms, headers, str(self.obj), functions,
-                                                    names, self.OWNER + by_va[self.OWNER][1])
-        duplicates = whole_file_rows.duplicate_rows(placed, retail, syms, headers, str(self.obj), functions,
-                                                    records)
+        data, duplicates, externals = whole_file_rows.reach(placed, retail, syms, headers, str(self.obj),
+                                                            functions, records, names,
+                                                            self.OWNER + by_va[self.OWNER][1])
         self.assertEqual(duplicates, {})
         externals = whole_file_rows.table_externals(placed, retail, syms, headers, str(self.obj), functions,
                                                     records, names, data, externals, by_va)
@@ -604,6 +606,119 @@ int beTransformSync_GetVTable(void) {
         ok, report = self.verify(drop=(self.CLEANUP,))
         self.assertFalse(ok)
         self.assertIn("unresolved relocation '__dt__10igNodeViewFv'", report)
+
+
+class RuntimeRows(unittest.TestCase):
+    """The MWCC runtime files, exceptions on. New.cpp's `throw(std::bad_alloc)` specification names a
+    type string that only its exception table reaches. NMWException.cpp's `operator new` throws a
+    `std::bad_alloc`, passing its destructor's address (a `lui`/`addiu` pair) and storing its vtable;
+    the vtables name the other `std::exception` and `std::bad_alloc` virtual functions, which no member
+    calls. The retail linker kept New.cpp's copies, so all four are duplicates, never `stripped`."""
+    NEW, NMW = (0x100390, 0x1007e0, "New"), (0x1007e0, 0x100cb0, "NMWException")
+
+    def setUp(self):
+        self.elf = Path(verify.ROOT) / "orig/SLUS-20836/SLUS_208.36"
+        if not all(Path(p).exists() for p in (verify.WIBO_DEFAULT, self.elf)):
+            self.skipTest("private compiler or retail image unavailable")
+        self.symbols = os.path.join(verify.ROOT, "config/SLUS-20836/symbols.txt")
+        temp = tempfile.TemporaryDirectory(prefix="dw4-whole-file-runtime-")
+        self.addCleanup(temp.cleanup)
+        self.root = Path(temp.name)
+        unitobjects.load.cache_clear()
+        self.addCleanup(unitobjects.load.cache_clear)
+
+    def reach(self, unit):
+        lo, hi, stem = unit
+        profile = unitprofiles.resolve(lo, verify.FLAGS_DEFAULT, verify.MWCC_DEFAULT).profile
+        self.assertEqual(profile.exceptions, "on")
+        obj = self.root / f"{stem}.o"
+        subprocess.run(cc.compile_argv(verify.WIBO_DEFAULT, profile.compiler, unitprofiles.command_flags(profile),
+                                       os.path.join(verify.ROOT, f"src/runtime/{stem}.cpp"), str(obj)),
+                       cwd=verify.ROOT, check=True, capture_output=True)
+        group = unitobjects.group_for(lo)
+        syms, headers, functions = whole_file_rows.text_functions(str(obj))
+        names = {name: va for name, (va, _size) in verify.load_symbols(self.symbols)[0].items()}
+        placed = {group.symbol: lo, **dict(group.emitted)}
+        rows = whole_file_rows.reach(placed, whole_file_rows.Retail(str(self.elf)), syms, headers, str(obj),
+                                     functions, exceptions.load(), names, hi)
+        return rows, group, obj, syms, headers, functions
+
+    def named_by_text(self, obj, headers):
+        return {r[3] for i, (name, _h) in enumerate(headers) if name == ".text"
+                for r in verify.object_relocs(str(obj), target_section=i)}
+
+    def test_a_datum_only_an_exception_table_names_has_a_row(self):
+        (data, _duplicates, _externals), group, obj, syms, headers, functions = self.reach(self.NEW)
+        table = whole_file_rows.exception_tables(syms, headers, str(obj), functions)["__default_new_handler__3stdFv"]
+        label, = [r[3] for r in verify.object_relocs(str(obj), target_section=table) if r[3].startswith("@")]
+        self.assertNotIn(label, self.named_by_text(obj, headers))
+        self.assertEqual(data[label], 0x4d1c30)
+        self.assertEqual(data, dict(group.data))
+
+    def test_functions_only_a_kept_vtable_names_are_duplicates(self):
+        (data, duplicates, _externals), group, obj, _syms, headers, functions = self.reach(self.NMW)
+        self.assertEqual(duplicates, {"__dt__Q23std9exceptionFv": 0x100670, "what__Q23std9exceptionCFv": 0x1006c0,
+                                      "__dt__Q23std9bad_allocFv": 0x100770, "what__Q23std9bad_allocCFv": 0x1007d0})
+        self.assertEqual(duplicates, dict(group.duplicates))
+        self.assertEqual(data, dict(group.data))
+        members = {name for name, _va in group.emitted} | {group.symbol}
+        named = {(r[3], r[2]) for name in members for r in functions[name].relocs if r[3] in duplicates}
+        self.assertEqual(named, {("__dt__Q23std9bad_allocFv", whole_file_rows.R_HI16),
+                                 ("__dt__Q23std9bad_allocFv", whole_file_rows.R_LO16)})
+
+    def test_a_body_a_kept_vtable_names_cannot_be_stripped(self):
+        _rows, group, obj, *_ = self.reach(self.NMW)
+        overlay = self.root / "objects.json"
+        overlay.write_text(json.dumps({"0x%08x" % group.owner: {
+            "whole_file": True, "symbol": group.symbol,
+            "emitted": {name: "0x%08x" % va for name, va in group.emitted},
+            "stripped": sorted(name for name, _va in group.duplicates),
+            "data": {name: "0x%08x" % va for name, va in group.data}}}))
+        unitobjects.load.cache_clear()
+        stripped, = unitobjects.load(str(overlay))
+        ok, report, _records = verify.verify_emitted_object(str(obj), stripped, str(self.elf), self.symbols)
+        self.assertFalse(ok)
+        self.assertIn("a referenced body cannot have been dead-stripped", report)
+        ok, report, _records = verify.verify_emitted_object(str(obj), group, str(self.elf), self.symbols)
+        self.assertTrue(ok, report)
+
+
+class SharedStaticOwner(unittest.TestCase):
+    """libkernl's libosd.c starts with `static setup`, a name exit.c and alarm.c define too, which
+    symbols.txt calls `setup_libosd`: the row keeps the source's name as `symbol`."""
+    COMPILER = os.path.join(verify.ROOT, "local", "ee-gcc2.9-991111-01", "bin", "ee-gcc")
+
+    def test_the_owners_source_name_is_the_rows_symbol(self):
+        elf = Path(verify.ROOT) / "orig/SLUS-20836/SLUS_208.36"
+        if not all(Path(p).exists() for p in (self.COMPILER, elf)):
+            self.skipTest("private compiler or retail image unavailable")
+        out = io.StringIO()
+        with contextlib.redirect_stdout(out), contextlib.redirect_stderr(io.StringIO()):
+            whole_file_rows.main(["--src", os.path.join(verify.ROOT, "src/sony/libkernl"), "--files", "libosd",
+                                  "--range", "0x114220", "0x1143a0", "--compiler", "ee-gcc-2.9",
+                                  "--flags", "-O2 -G0 -ffunction-sections -Iinclude", "--unit", "sony_libkernl"])
+        row = json.loads(out.getvalue())["0x00114220"]
+        self.assertEqual(row["symbol"], "setup")
+        self.assertEqual(verify.load_symbols(os.path.join(verify.ROOT, "config/SLUS-20836/symbols.txt"))[1][0x114220][0],
+                         "setup_libosd")
+        self.assertEqual(row["emitted"]["Copy"], "0x00114230")
+
+
+class MergeRows(unittest.TestCase):
+    def test_a_held_out_functions_row_survives(self):
+        overlay = {"0x00100000": {"whole_file": True, "emitted": {"b": "0x00100100"}},
+                   "0x00100200": {"emitted": {"held_helper": "0x00100240"}},
+                   "0x00100300": {"emitted": {"joined_helper": "0x00100340"}},
+                   "0x00100800": {"emitted": {"other": "0x00100840"}}}
+        rows = {"0x00100000": {"whole_file": True, "emitted": {"b": "0x00100100", "joined": "0x00100300"}}}
+        merged = whole_file_rows.merge_rows(overlay, 0x100000, 0x100400, rows)
+        self.assertEqual(sorted(merged), ["0x00100000", "0x00100200", "0x00100800"])
+        self.assertEqual(merged["0x00100000"], rows["0x00100000"])
+
+    def test_a_stale_whole_file_row_goes(self):
+        overlay = {"0x00100100": {"whole_file": True, "emitted": {"c": "0x00100200"}}}
+        rows = {"0x00100000": {"whole_file": True, "emitted": {"b": "0x00100100"}}}
+        self.assertEqual(whole_file_rows.merge_rows(overlay, 0x100000, 0x100400, rows), rows)
 
 
 class SharedStatics(unittest.TestCase):

@@ -2,7 +2,7 @@
 
 `main`, the SDK init and both frame functions are C in `src/unmatched/`.  Everything here is in the EE runtime / Alchemy-core region.
 
-## The CRT entry (`entry`, `0x00100008`)
+## The CRT entry (`_start`, `0x00100008`)
 
 ```
 0x100008  _start: clear the GPR file, $f0..$f31, mthi/mtlo/mtsah
@@ -12,20 +12,20 @@
 0x1001e8  jal 0x1141c8                                      the EE runtime init sequence
 0x1001f0  jal 0x10b160(0)                                   FlushCache
 0x1001f8  ei
-0x1001fc  jal 0x2d1640  = thunk_FUN_001029d0                __init_user / C++ static ctors
+0x1001fc  jal 0x2d1640  = __do_global_ctors               __init_user / C++ static ctors
 0x100210  lw a0,[0x554f00] ; a1 = 0x554f04 ; jal 0x2595e0   <-- main
-0x100218  jal 0x2d1650  = thunk_FUN_00100bc0                exit / atexit runner
+0x100218  jal 0x2d1650  = __do_global_dtors               exit / atexit runner
 0x100220  j 0x124d60                                        C++ static destructor runner
 ```
 
 `0x1141c8` calls the runtime init sub-sequence `0x113f90`, `0x1140b8`, `0x1146a8`, `0x114820(2)`,
-`0x114a60`, `0x10bcb8`, `0x1142f0`, `0x1137c8` and tail-jumps `0x115ed8`.  `FUN_001029d0` sets up
+`0x114a60`, `0x10bcb8`, `0x1142f0`, `0x1137c8` and tail-jumps `0x115ed8`.  `__init_cpp` sets up
 four table pointers (`0x522440`, `0x522480`, `0x546fb0`, `0x554858`) and jumps into `0x100c50`
-(the static-initialiser driver).  `FUN_00100bc0` is the atexit list walker
+(the static-initialiser driver).  `__destroy_global_chain` is the atexit list walker
 (`while (e) { next = e->next; e->fn(e->arg, -1); }`).  `exit` walks the C++ static
 destructor list at `0x004854a0` and then re-enters `0x100228`.
 
-## The game's `main` (`FUN_002595e0`, `0x002595e0`, 976 bytes)
+## The game's `main` (`0x002595e0`, 976 bytes)
 
 Read as a sequence of phases:
 
@@ -103,7 +103,7 @@ pipeline split rather than as a variant selector.
   runs the per-frame field setup: byte `+0xb4 = 0`,
   byte `+0xd5 = 0`, byte `+5 = 0`, float `+0x94`/`+0x98`/`+0x9c = 0.1f`, float `+0xa0 = 1.0f`,
   byte `+0x5c = 0`, byte `+0x5e = 1`, byte `+0xa8 = 1`, then decrements `+0xe8` in the release block
-  (`FUN_00234ca0` is that release extracted).  It then runs the per-frame work:
+  (`ViewerOptions_ReleaseShared` is that release extracted).  It then runs the per-frame work:
   `0x239390`, `0x238d40`, `0x3343a0`, `0x33bf50`, `0x3719c0`, `0x3b04e0`, `0x463b30(app)`,
   `0x259f80(app)`, `0x463c70(app)`; builds a list from `0x236f80(app->+0, *(0x587d08))` and, when
   `*(0x586f20)` is NULL, creates it via `0x2eb010(0x10)`/`0x2eadf0`, then releases the old list at
@@ -115,7 +115,7 @@ pipeline split rather than as a variant selector.
   its own lazy frame-object create/release, and further present-side calls
   (`0x463bc0`/`0x463bb0`/`0x22fd70`/`0x230298`/`0x3082b0`/`0x463b70`/`0x2ff820`).
 
-`FUN_002595e0` calls one of them around `0x2598c0`/`0x2598d0`, chosen by byte `+0xd8` of the frame
+`main` calls one of them around `0x2598c0`/`0x2598d0`, chosen by byte `+0xd8` of the frame
 object; the update loop itself is inside the body.
 
 `FUN_0025a580` is in `src/game/GameMain.cpp`.  Retail saves `s0`–`s2` in an 80-byte frame, keeps `arg0` in

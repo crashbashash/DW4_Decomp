@@ -11,9 +11,9 @@ extern int DAT_004ffa98[4];
 extern int DAT_004ffdd0[4];
 extern int DAT_004ffdf0[4];
 extern int DAT_004ffe00[4];
-extern char DAT_00522440[];
+extern char __ctors_start__[];
 extern char DAT_00522480[];
-extern char DAT_00546fb0[];
+extern char __exception_table_start__[];
 extern char DAT_00554974[];
 extern char DAT_0000050d[];
 void FUN_0032f5d0(int arg0, int arg1) {
@@ -27,9 +27,9 @@ void FUN_0032f5d0(int arg0, int arg1) {
         v = FUN_0032a100(v);
     }
     sp3C = v;
-    v->w0 = (int)&DAT_00522440[0];
+    v->w0 = (int)&__ctors_start__[0];
     mid = DAT_00522480;
-    sp3C->w4 = (int)(mid - DAT_00522440);
+    sp3C->w4 = (int)(mid - __ctors_start__);
     FUN_0032a180(sp3C, &DAT_004ffdd0[0]);
     FUN_0032a1b0(sp3C, &DAT_004ffa98[0]);
     List_InsertWords(arg1, FUN_002d6e60(arg1, &sp3C, FUN_0032a260), 1, &sp3C);
@@ -39,7 +39,7 @@ void FUN_0032f5d0(int arg0, int arg1) {
     }
     sp3C = v;
     v->w0 = (int)mid;
-    sp3C->w4 = (int)(DAT_00546fb0 - mid);
+    sp3C->w4 = (int)(__exception_table_start__ - mid);
     FUN_0032a180(sp3C, &DAT_004ffdf0[0]);
     FUN_0032a1b0(sp3C, &DAT_004ffa98[0]);
     List_InsertWords(arg1, FUN_002d6e60(arg1, &sp3C, FUN_0032a260), 1, &sp3C);

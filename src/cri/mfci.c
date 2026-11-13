@@ -41,19 +41,19 @@ char *strcpy(char *dst, const char *src);
 void *memcpy(void *dst, const void *src, unsigned int n);
 void *memset(void *dst, int value, unsigned int n);
 unsigned long strtoul(const char *s, char **end, int base);
-void FUN_0027e1c0(void);
-void FUN_0027e1d8(void);
+void SVM_Lock(void);
+void SVM_Unlock(void);
 
 void FUN_00278410(MfCiFile *fh);
 
 void FUN_00277da0(void)
 {
-    FUN_0027e1c0();
+    SVM_Lock();
 }
 
 void FUN_00277db8(void)
 {
-    FUN_0027e1d8();
+    SVM_Unlock();
 }
 
 void FUN_00277de8(void *detail, const char *message)

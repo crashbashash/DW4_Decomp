@@ -40,6 +40,9 @@
 0x0010bea8	iSuspendThread	sony/libkernl
 0x0010bf40	DelayThread	sony/libkernl
 0x0010c030	sceDeci2Open	sony/libkernl
+0x0010c268	QueueInit	sony/libkernl
+0x0010c290	QueuePeekWriteDone	sony/libkernl
+0x0010c2d0	QueuePeekReadDone	sony/libkernl
 0x0010c310	sceTtyHandler	sony/libkernl
 0x0010c4a8	sceTtyWrite	sony/libkernl
 0x0010c620	sceTtyRead	sony/libkernl
@@ -104,7 +107,7 @@
 0x00114288	PatchIsNeeded	sony/libkernl
 0x001142f0	InitExecPS2	sony/libkernl
 0x001143f0	SetArg	sony/libkernl
-0x00114508	thunk_InitTLB	sony/libkernl
+0x00114508	TerminateLibrary	sony/libkernl
 0x00114510	ExecPS2	sony/libkernl
 0x00114580	LoadExecPS2	sony/libkernl
 0x001145f0	ExecOSD	sony/libkernl

@@ -175,6 +175,22 @@ def source_owner(name, symbols="config/SLUS-20836/symbols.txt", path=None):
     return by_va[group.owner][0] if group else name
 
 
+def source_name(name, symbols="config/SLUS-20836/symbols.txt", path=None):
+    """The name a whole-file source defines function `name` under: the row's `symbol` for its owner, the
+    `emitted` key holding its address for a member (a static the symbol map names apart, `Copy` for
+    `Copy_tlbfunc`), else `name`."""
+    by_name, _ = names(str(symbols))
+    if name not in by_name:
+        return name
+    va = by_name[name][0]
+    group = group_for(va, path)
+    if not group or not group.whole_file:
+        return name
+    if va == group.owner:
+        return group.symbol or name
+    return next((symbol for symbol, address in group.emitted if address == va), name)
+
+
 def is_whole_file(name, symbols="config/SLUS-20836/symbols.txt", path=None):
     by_name, _ = names(str(symbols))
     group = group_for(by_name[name][0], path) if name in by_name else None
@@ -211,9 +227,13 @@ def augment_sources(index, symbols="config/SLUS-20836/symbols.txt", path=None):
             # a C++ owner written as a constructor or destructor is defined under that name, and the
             # row's `symbol` (its mangled name) says which
             special = special_member(group.symbol)
-            if special is None or special not in index:
+            # a whole file whose owner is a `static` other files define too (`setup`) is the file
+            # defining its members
+            places = ({index[special]} if special in index else set()) if special is not None else (
+                {index[symbol] for symbol, _ in group.emitted if symbol in index} if group.whole_file else set())
+            if len(places) != 1:
                 continue
-            index[owner] = index[special]
+            index[owner] = places.pop()
         for _, va in group.emitted:
             name = by_va[va][0]
             if index.get(name, index[owner]) != index[owner]:

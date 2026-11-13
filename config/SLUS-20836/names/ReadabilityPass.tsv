@@ -1015,3 +1015,11 @@
 0x00443bd0	beNDMWMdlPEBase::UpdateStatus	game
 0x00445d10	beNDMWMdlPEBase::OnStatusMessage	game
 0x004477b0	beNDMWMdlPEBaseInfoWork::Destroy	game
+0x002364e0	Viewer_CreateDisplay	engine
+0x003810c0	beFileListInfoManager_LoadNextFile	game
+0x002e31c0	FilePath_IsAbsolute	engine
+0x002e3220	FilePath_HasDirectory	engine
+0x00145d00	igWindow_CreateInstance	engine
+0x0014a000	igVisualContext_CreateInstance	engine
+0x00234ca0	ViewerOptions_ReleaseShared	engine
+0x00236260	ViewerOptions_GetRequestedFormat	engine

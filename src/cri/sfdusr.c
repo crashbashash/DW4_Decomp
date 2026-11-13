@@ -19,23 +19,23 @@ struct SfdUsrHn {
 };
 
 int sfd_ReportError();
-int sfd_CheckHn(SfdUsrHn *h);
+int SFLIB_CheckHn(SfdUsrHn *h);
 int SFD_GetCond(SfdUsrHn *h, int option);
 int FUN_002b0338(SfdUsrHn *h, int group, int event, int a, int b);
-void FUN_002b0388(SfdUsrHn *h, int flag, int value);
+void sftrn_SetFlagA(SfdUsrHn *h, int flag, int value);
 int sftrn_GetFlagA(SfdUsrHn *h, int flag);
-void FUN_002b03b8(SfdUsrHn *h, int flag, int value);
+void sftrn_SetFlagB(SfdUsrHn *h, int flag, int value);
 int sftrn_GetFlagB(SfdUsrHn *h, int flag);
-int FUN_0029ea48(SfdUsrHn *h, int index);
-int FUN_0029ea88(SfdUsrHn *h, int index);
+int sfbuf_GetFlagA(SfdUsrHn *h, int index);
+int sfbuf_GetFlagB(SfdUsrHn *h, int index);
 
 int FUN_0029d188(SfdUsrHn *h);
 void FUN_0029d1b8(SfdUsrHn *h);
 void FUN_0029d228(SfdUsrHn *h);
 void FUN_0029d2d8(SfdUsrIf *iface);
 
-void FUN_0029cee8(SfdUsrHn *h, int a, int b) {
-    if (sfd_CheckHn(h) != 0) {
+void SFD_SetOutPan(SfdUsrHn *h, int a, int b) {
+    if (SFLIB_CheckHn(h) != 0) {
         sfd_ReportError(0, 0xFF0001A1);
         return;
     }
@@ -44,8 +44,8 @@ void FUN_0029cee8(SfdUsrHn *h, int a, int b) {
     }
 }
 
-int FUN_0029cf78(SfdUsrHn *h, int a) {
-    if (sfd_CheckHn(h) != 0) {
+int SFD_GetOutPan(SfdUsrHn *h, int a) {
+    if (SFLIB_CheckHn(h) != 0) {
         sfd_ReportError(0, 0xFF0001A2);
         return 0;
     }
@@ -55,8 +55,8 @@ int FUN_0029cf78(SfdUsrHn *h, int a) {
     return h->iface->f8(h, a);
 }
 
-void FUN_0029cff0(SfdUsrHn *h, int a) {
-    if (sfd_CheckHn(h) != 0) {
+void SFD_SetOutVol(SfdUsrHn *h, int a) {
+    if (SFLIB_CheckHn(h) != 0) {
         sfd_ReportError(0, 0xFF0001A3);
         return;
     }
@@ -65,8 +65,8 @@ void FUN_0029cff0(SfdUsrHn *h, int a) {
     }
 }
 
-int FUN_0029d070(SfdUsrHn *h) {
-    if (sfd_CheckHn(h) != 0) {
+int SFD_GetOutVol(SfdUsrHn *h) {
+    if (SFLIB_CheckHn(h) != 0) {
         sfd_ReportError(0, 0xFF0001A4);
         return 0;
     }
@@ -107,14 +107,14 @@ int FUN_0029d188(SfdUsrHn *h) {
 }
 
 void FUN_0029d1b8(SfdUsrHn *h) {
-    if (sftrn_GetFlagA(h, 7) != 1 && FUN_0029ea48(h, h->stream) == 1) {
-        FUN_002b0388(h, 7, 1);
+    if (sftrn_GetFlagA(h, 7) != 1 && sfbuf_GetFlagA(h, h->stream) == 1) {
+        sftrn_SetFlagA(h, 7, 1);
     }
 }
 
 void FUN_0029d228(SfdUsrHn *h) {
-    if (sftrn_GetFlagB(h, 7) != 1 && FUN_0029ea88(h, h->stream) == 1) {
-        FUN_002b03b8(h, 7, 1);
+    if (sftrn_GetFlagB(h, 7) != 1 && sfbuf_GetFlagB(h, h->stream) == 1) {
+        sftrn_SetFlagB(h, 7, 1);
     }
 }
 

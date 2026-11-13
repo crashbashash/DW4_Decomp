@@ -5,11 +5,26 @@ typedef struct CriCfgEntry {
     int value;
 } CriCfgEntry;
 
+void *memset(void *dst, int value, unsigned int size);
 char *strncpy(char *dst, const char *src, unsigned int size);
 int strncmp(const char *a, const char *b, unsigned int size);
 
+extern char CRI_CFG_PS2EE_Ver_1_002_Build_Oct_6_2004_11_47_45[];
+extern char *volatile cricfg_build;
 extern CriCfgEntry *cricfg_table;
 extern int cricfg_count;
+extern char cricfg_work[256];
+
+void CRICFG_Init(void)
+{
+    int pad;
+
+    cricfg_build = CRI_CFG_PS2EE_Ver_1_002_Build_Oct_6_2004_11_47_45;
+    memset(cricfg_work, 0, sizeof(cricfg_work));
+    cricfg_table = (CriCfgEntry *)(((int)cricfg_work + 3) & ~3);
+    pad = (char *)cricfg_table - cricfg_work;
+    cricfg_count = ((int)sizeof(cricfg_work) - pad) / (int)sizeof(CriCfgEntry);
+}
 
 void CRICFG_Finish(void)
 {
@@ -63,7 +78,7 @@ int CRICFG_Write(const char *name, int value)
     return 0;
 }
 
-int FUN_0026f4b0(const char *name, int *value)
+int CRICFG_Read(const char *name, int *value)
 {
     CriCfgEntry *entry;
 
