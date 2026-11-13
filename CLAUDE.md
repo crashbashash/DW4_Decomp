@@ -232,6 +232,10 @@ Pick the sub-agent's model by the kind of work:
 - **Understanding and readability passes, decompiling a function:** Opus 5.5.
 - **A function or shape Opus 5.5 could not explain:** hand it, with that agent's report, to Fable 5.2.
 
+Name the model with the work. When the integrator starts sub-agents it tells the owner which model each one
+runs on, as a list of sub-agent and model; a sub-agent's report states its model in its first line; and a
+progress or final report that credits a sub-agent's result names the model that produced it.
+
 ## Retail-game work
 
 Read [testing tools](testing/tools.md), the [game reference](docs/reference/game-reference.md),
