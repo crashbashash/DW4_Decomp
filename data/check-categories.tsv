@@ -3409,7 +3409,7 @@
 0018b350	FUN_0018b350	match	-
 0018b450	FUN_0018b450	match	-
 0018b540	FUN_0018b540	match	-
-0018b630	FUN_0018b630	match	-
+0018b630	igAABox_IntersectPoint	match	-
 0018b730	FUN_0018b730	match	-
 0018b7d0	FUN_0018b7d0	match	-
 0018b890	FUN_0018b890	match	-
@@ -14703,7 +14703,7 @@
 0035a580	beMatCtrlData_Register	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
 0035a600	beMatCtrlData_GetMetaObject	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
 0035a620	beMatCtrlData_InitFields	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
-0035a6b0	FUN_0035a6b0	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
+0035a6b0	beMatCtrl_GetMessageEnum	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
 0035a710	beMatCtrl_CreateInstance	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
 0035a750	FUN_0035a750	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
 0035a7a0	FUN_0035a7a0	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
@@ -16253,12 +16253,12 @@
 0038ae30	beMatCtrl_IsRideOffPlayer	match	-
 0038ae90	beMatCtrl_SetRun	match	-
 0038aea0	beMatCtrl_GetPlayerMatStat	match	-
-0038af70	Gap__Bec__beMatCtrl__vfunc_32	match	-
-0038b040	Gap__Bec__beMatCtrl__vfunc_30	match	-
-0038b050	Gap__Bec__beMatCtrl__vfunc_29	match	-
-0038b080	FUN_0038b080	match	-
-0038bdf0	Gap__Bec__beMatCtrl__vfunc_34	match	-
-0038bed0	Gap__Bec__beMatCtrl__vfunc_20	match	-
+0038af70	beMatCtrl_Prepare	match	-
+0038b040	beMatCtrl_GetInfoMeta	match	-
+0038b050	beMatCtrl_RegisterReceiver	match	-
+0038b080	beMatCtrl_MarkContacts	match	-
+0038bdf0	beMatCtrl_OnMessage	match	-
+0038bed0	beMatCtrl_GetMeta	match	-
 0038bee0	beMessenger_InitializeMemory	match	DEFERRED duplicate 0x357a90 __dt__9ObjectRefFv 128B (compared under the profile of its retail unit)
 0038c390	FUN_0038c390	match	DEFERRED duplicate 0x357a90 __dt__9ObjectRefFv 128B (compared under the profile of its retail unit)
 0038c410	FUN_0038c410	match	DEFERRED duplicate 0x357a90 __dt__9ObjectRefFv 128B (compared under the profile of its retail unit)
