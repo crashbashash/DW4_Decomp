@@ -1,0 +1,20 @@
+# beModelCtrlSC.cpp: beModelCtrlNode2 traversal and clock, beModelCtrlSubCom sub-command list; plus the
+# sub-command creators and the node meta-object resolver in BecLibrary, and beModelCtrl's debug hit-box hook.
+# Evidence in docs/engine/model-ctrl-sub-commands.md.
+# <va>	<name>	<module>
+0x0034f4a0	beModelCtrlSCSound_Create	game
+0x0034f6f0	beModelCtrlSCHitBox_Create	game
+0x0034f8e0	beModelCtrlSCEffect_Create	game
+0x0034fd90	beModelCtrlNode2_ResolveMetaObject	game
+0x00398e50	beModelCtrlNode2_TraversalFunction	game
+0x00398e80	beModelCtrlNode2_LocalTime	game
+0x00398ef0	beModelCtrlNode2_Traverse	game
+0x003993a0	beModelCtrlNode2_RegisterTraversalFunction	game
+0x00399d90	beModelCtrlSubComBase_Update	game
+0x00399e20	beModelCtrlSubCom_Update	game
+0x00399f20	beModelCtrlSubCom_StopAll	game
+0x0039a130	beModelCtrlSubCom_StopType	game
+0x0039a250	beModelCtrlSubCom_AddEffect	game
+0x0039a500	beModelCtrlSubCom_AddHitBox	game
+0x0039a750	beModelCtrlSubCom_AddSound	game
+0x003908d0	beModelCtrl_DrawDebugHitBox	game

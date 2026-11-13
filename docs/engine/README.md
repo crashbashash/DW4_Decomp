@@ -118,6 +118,7 @@ Related: game systems and data are in [`../systems/`](../systems); the analysis 
 
 - [Action2 timing and completion](action2-timing.md): timer, WAITCHECK, JOINTSET and `ISCOMEND` with the exact time/float model.
 - [Model-sequence JUMP/WCHECK](model-sequence-waits.md): the four contiguous bodies.
+- [Model-controller node and sub-commands](model-ctrl-sub-commands.md): `beModelCtrlNode2` traversal and clock, and the hit-box, effect and sound sub-commands.
 
 - [System clock investigation](system-clock.md): verified logo WAIT duration, timer lifecycle and normal Action2 scheduling; raw cadence and game-pause/stage routing remain open.
 

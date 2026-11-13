@@ -10,7 +10,7 @@ igMetaObject *FUN_0034fd40(void) {
     return g_beModelCtrlNode2_metaObject[0];
 }
 
-void *FUN_0034fd90(void) {
+void *beModelCtrlNode2_ResolveMetaObject(void) {
     bool ok;
     if (g_beModelCtrlNode2_metaObject[0] == 0) goto make;
     ok = !!(g_beModelCtrlNode2_metaObject[0]->_validity & 4);
@@ -50,7 +50,7 @@ void *beModelCtrlNode2_Register(void) {
 
 void beModelCtrlNode2_GetMetaObject(void)
 {
-    FUN_0034fd90();
+    beModelCtrlNode2_ResolveMetaObject();
 }
 
 void beModelCtrlNode2_InitFields(void) {
@@ -70,6 +70,6 @@ void beModelCtrlNode2_InitFields(void) {
 
 void FUN_00350000(void)
 {
-    FUN_003993a0();
+    beModelCtrlNode2_RegisterTraversalFunction();
 }
 

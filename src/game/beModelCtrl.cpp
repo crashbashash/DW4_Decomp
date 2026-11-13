@@ -7,7 +7,7 @@
 extern "C" int igTraversal_RegisterFunction(int, int, void (*)(void));
 extern "C" int FUN_00356d10(...);
 extern "C" void FUN_00390890(void);
-extern "C" void FUN_003908d0(void);
+extern "C" void beModelCtrl_DrawDebugHitBox(void);
 extern "C" int thunk_FUN_0018ac80(...);
 extern "C" int Memory_GetAllocatorBySelector(...);
 extern "C" int igObject_GetAllocator(...);
@@ -66,7 +66,7 @@ extern "C" int sprintf(...);
 extern "C" int beLua__RunNamedChunk(...);
 extern "C" int FUN_003a8580(...);
 extern "C" unsigned char FUN_00394ad0(int, int, void *, void *);
-extern "C" int FUN_0039a130(int, int, int);
+extern "C" int beModelCtrlSubCom_StopType(int, int, int);
 extern "C" void FUN_003951e0(int a0, int a1, float *a2);
 extern "C" int FUN_00190ed0(int, float, float, float);
 extern "C" int igMatrix44f_SetIdentity(...);
@@ -76,7 +76,7 @@ extern "C" int FUN_00191f30(...);
 class KeyCtrlOwner;
 struct beModelCtrlInfoWork;
 extern "C" void FUN_00391cf0(KeyCtrlOwner *self, int arg1, int arg2, beModelCtrlInfoWork *s);
-extern "C" int FUN_00399e20(...);
+extern "C" int beModelCtrlSubCom_Update(...);
 extern "C" int beMessenger_AppendString(...);
 extern "C" int beMessenger_DispatchSelected(...);
 extern "C" int beMessenger_GetMatrix(...);
@@ -86,7 +86,7 @@ extern "C" int FUN_0018ac80(...);
 extern "C" bool FUN_0018b050(void *, int);
 extern "C" void FUN_00191670(void *, void *, float);
 extern "C" int FUN_00356ab0(void);
-extern "C" void FUN_0039a750(int, const char *, float);
+extern "C" void beModelCtrlSubCom_AddSound(int, const char *, float);
 extern "C" void beMessenger_AppendBool(int, unsigned char);
 extern "C" void beMessenger_AppendInt(int, int);
 extern "C" void beMessenger_AppendMatrix(int, void *);
@@ -331,7 +331,7 @@ class VO_394bf0 { public: virtual void d0(); virtual void d1(); virtual void d2(
 extern "C" void FUN_00394bf0(beModelCtrl *arg0, beModelCtrlInfo *arg1, beBaseInfoRam *arg2, beModelCtrlInfoWork *arg3);
 typedef struct B { char pad[8]; char *f8; } B;
 typedef struct A { char pad[228]; int f228; } A;
-extern "C" int FUN_0039a500(int, B *);
+extern "C" int beModelCtrlSubCom_AddHitBox(int, B *);
 extern "C" char DAT_0050f178[];
 extern "C" char DAT_0050f188[];
 extern "C" int g_beModelCtrlSCHitBox_metaObject[4];
@@ -538,8 +538,8 @@ extern "C" beModelCtrlInfoRideOn3 *FUN_00351780(int);
 extern "C" beModelCtrlInfoRideOn2 *FUN_00351ad0(int);
 extern "C" beModelCtrlInfoAI *FUN_00352140(int);
 extern "C" beModelCtrlInfoHitBody *FUN_003523d0(int);
-extern "C" void FUN_00399f20(int, beBaseInfoRam *);
-extern "C" void FUN_0039a250(int, const char *, const char *, V4 *, V4 *, int, float, int);
+extern "C" void beModelCtrlSubCom_StopAll(int, beBaseInfoRam *);
+extern "C" void beModelCtrlSubCom_AddEffect(int, const char *, const char *, V4 *, V4 *, int, float, int);
 extern "C" void FUN_003a84a0(beBaseInfoRam *, float);
 extern "C" void FUN_003a8760(beBaseInfoRam *);
 extern "C" void Matrix44_FromTranslation(void *, V4 *);
@@ -651,7 +651,7 @@ void FUN_00390890(void) {
     igTraversal_RegisterFunction(DAT_00562640[0], FUN_00356d10(), (void (*)())FUN_003902f0);
 }
 
-void FUN_003908d0(void)
+void beModelCtrl_DrawDebugHitBox(void)
 {
 }
 
@@ -2145,7 +2145,7 @@ int FUN_00394fa0(int arg0, int arg1, A *arg2, B *arg3) {
         var_a0 = ((char *)emptyString);
     }
     if (strcmp(var_a0, DAT_0050f178) == 0) {
-        FUN_0039a130(arg2->f228, arg1, g_beModelCtrlSCHitBox_metaObject[0]);
+        beModelCtrlSubCom_StopType(arg2->f228, arg1, g_beModelCtrlSCHitBox_metaObject[0]);
     } else {
         t = arg3->f8;
         if (t != 0) {
@@ -2154,7 +2154,7 @@ int FUN_00394fa0(int arg0, int arg1, A *arg2, B *arg3) {
             var_a0_2 = ((char *)emptyString);
         }
         if (strcmp(var_a0_2, DAT_0050f188) == 0) {
-            FUN_0039a500(arg2->f228, arg3);
+            beModelCtrlSubCom_AddHitBox(arg2->f228, arg3);
         }
     }
     return 1;
@@ -2455,7 +2455,7 @@ void Gap__Core__igObject__vfunc_31(beModelCtrl *arg0, beBaseInfoRam *arg1) {
         }
         if (q->_wCheckName != 0) FUN_00394bf0(arg0, (beModelCtrlInfo *)s2, arg1, q);
         FUN_003951e0((int)arg0, (int)arg1, (float *)q);
-        FUN_00399e20(q->_subCommand, arg1);
+        beModelCtrlSubCom_Update(q->_subCommand, arg1);
         if (q->_isHitCheck != 0) FUN_003926d0(arg0, (beBaseInfoRam *)s2, arg1, q);
         p = (beModelCtrlInfoRideOn4 *)q->_rideOnData;
         if (p != 0 && p->_modelRamNo == 0x68) {
@@ -2645,7 +2645,7 @@ int Gap__Bec__beModelCtrl__vfunc_33(beModelCtrl *self, beBaseInfoRam *ent, const
             int id = ent->_ramNo;
             NAMEOF(n)
             beMessenger_SendNamed(M, ((char *)DAT_0050eff8), n, id, DAT_0050f1d8);
-            if (d != 0) FUN_00399f20(d->_subCommand, ent);
+            if (d != 0) beModelCtrlSubCom_StopAll(d->_subCommand, ent);
             REL(node->_work)
             node->_work = 0;
             beModelCtrlNode2 *o3 = O3;
@@ -2688,14 +2688,14 @@ int Gap__Bec__beModelCtrl__vfunc_33(beModelCtrl *self, beBaseInfoRam *ent, const
             float f20 = beMessenger_GetFloat(M, 0);
             beMessenger_GetVec3(&c8_258, M, 0);
             int b0 = beMessenger_GetBool(M, 0);
-            FUN_0039a250(sub, s2, s1, &c8_258, &c8_248, b0, f20, beMessenger_GetBool(M, 1));
+            beModelCtrlSubCom_AddEffect(sub, s2, s1, &c8_258, &c8_248, b0, f20, beMessenger_GetBool(M, 1));
         }
         return 1;
     case 9:
         if (ent->_isRun != 0 && d != 0) {
             int sub = d->_subCommand;
             const char *s0 = beMessenger_GetString(M, 0);
-            FUN_0039a750(sub, s0, beMessenger_GetFloat(M, 0));
+            beModelCtrlSubCom_AddSound(sub, s0, beMessenger_GetFloat(M, 0));
         }
         return 1;
     case 32: {
@@ -2941,7 +2941,7 @@ int Gap__Bec__beModelCtrl__vfunc_33(beModelCtrl *self, beBaseInfoRam *ent, const
                 int id = ent->_ramNo;
                 NAMEOF(n)
                 beMessenger_SendNamed(M, ((char *)DAT_0050eff8), n, id, DAT_0050f1d8);
-                if (d != 0) FUN_00399f20(d->_subCommand, ent);
+                if (d != 0) beModelCtrlSubCom_StopAll(d->_subCommand, ent);
                 beModelCtrlNode2 *o3 = O3;
                 REL(o3->_bound)
                 o3->_bound = 0;
@@ -2966,7 +2966,7 @@ int Gap__Bec__beModelCtrl__vfunc_33(beModelCtrl *self, beBaseInfoRam *ent, const
                 d->_ctrlSt1 = 0;
                 ((igDataList *)d->_pdMoveDataList)->_count = 0;
                 SETSTR(_wCheckName, 0)
-                FUN_00399f20(d->_subCommand, ent);
+                beModelCtrlSubCom_StopAll(d->_subCommand, ent);
                 SETSTR(_luaBHit, 0)
                 SETSTR(_luaWHit, 0)
                 SETSTR(_luaFHit, 0)

@@ -38,7 +38,7 @@ extern "C" int __divdi3(long long, int);
 extern "C" void * FUN_002eb010(...);
 extern "C" void *FUN_00354a60(void *);
 extern "C" int FUN_00393c80(void *, void *, void *, void *, void *);
-extern "C" int FUN_0039a500(int, void *, int, int);
+extern "C" int beModelCtrlSubCom_AddHitBox(int, void *, int, int);
 extern "C" int FUN_003a7a20(void *, void *, int);
 extern "C" int FUN_003a7e90(void *, void *);
 extern "C" void StringChunk_ReleaseHeader(...);
@@ -504,7 +504,7 @@ void Gap__Bec__beNDMWMdlPlayer__vfunc_38(beNDMWMdlPlayer *arg0, PlayerArg *arg1)
                         o[9] = 0x40400000;
                         o[10] = 0x40400000;
                         o[11] = 0x40400000;
-                        FUN_0039a500(w->_subCommand, (void *)nobj.p, 0x3F800000, 0xEA60);
+                        beModelCtrlSubCom_AddHitBox(w->_subCommand, (void *)nobj.p, 0x3F800000, 0xEA60);
                     }
                 } else {
                     beMessenger_SelectGroup(arg0->_messenger, DAT_005161d8);

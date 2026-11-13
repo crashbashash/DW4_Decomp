@@ -285,7 +285,7 @@ non-NULL it passes `node+0x20` and the source matrix to that object's `vfunc_0x5
 `MOVETRANS` call this slot.  A skinned actor's bone matrices are `igActor._boneMatrixCacheArray` and
 `_blendMatrixCacheArray`, reset on action start by `beAction2::vfunc_33`.  The runtime bone array is
 `igAnimationState+0x54`, stride 0x40 (getters `0x1e34c0`/`0x1e34d0`).  `GETBONEMATRIX` resolves a joint
-name through the model at action+0x34 and pushes a 0x40-byte matrix.  `FUN_00398ef0` is the candidate
+name through the model at action+0x34 and pushes a 0x40-byte matrix.  `beModelCtrlNode2_Traverse` is the
 per-frame walk: it writes `node._time` and composes parent * local.
 
 ## Skinning, the actor graph, and the node-held material

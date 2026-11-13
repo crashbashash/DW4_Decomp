@@ -53,8 +53,8 @@ time  = ((int64)(f * scale) << 18) + bias       # scale: node +0x78 / timer +0x1
 magnitude of 2^64 or more saturates to 2^64 − 1 (so `-x` becomes 1); magnitudes between
 2^63 and 2^64 wrap as unsigned; denormals and negative zero convert to 0.
 
-`FUN_00398ef0` writes a `beModelCtrlNode2`'s cached time at node `+112` (`_time`) separately,
-from the effective time `0x00398e80` calculates. A paused snapshot can stop mid-update
+`beModelCtrlNode2_Traverse` writes a `beModelCtrlNode2`'s cached time at node `+112` (`_time`) separately,
+from the effective time `beModelCtrlNode2_LocalTime` calculates. A paused snapshot can stop mid-update
 (`0x003f6490` updates child windows recursively within one call), so a partial snapshot does
 not show a cache or delay defect.
 

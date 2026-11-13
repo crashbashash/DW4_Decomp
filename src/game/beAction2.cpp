@@ -21,7 +21,7 @@ extern "C" int FUN_003a7a20(...);
 extern "C" int Memory_GetAllocatorBySelector(...);
 extern "C" int ObjectList_AppendRetained(...);
 extern "C" int igObject_GetAllocator(...);
-extern "C" long long FUN_00398e80(int, long long);
+extern "C" long long beModelCtrlNode2_LocalTime(int, long long);
 extern "C" int FUN_001dd4b0(long long, long long, long long *);
 extern "C" void FUN_001af510(void *, long long);
 extern "C" long long __fixsfdi(float);
@@ -342,7 +342,7 @@ void beAction2WAITCHECK_Update(beAction2 *arg0, beAction2InfoRam *arg1) {
                 FUN_001dd4b0(d - a, b, &t);
                 t += a;
             }
-            FUN_001af510(obj, FUN_00398e80(arg1->_node, ((WcClock *)arg0->_insight)->time));
+            FUN_001af510(obj, beModelCtrlNode2_LocalTime(arg1->_node, ((WcClock *)arg0->_insight)->time));
             if (b <= obj->_localTime) {
                 work->_waitSt0 = 0;
                 beAction2_StartComponents((int)arg0, arg1);
@@ -582,7 +582,7 @@ void beAction2JOINTSET_Update(Owner *arg0, Act *arg1) {
     return;
     body:
     {
-        now = FUN_00398e80((int)arg1->node, arg0->clock->time);
+        now = beModelCtrlNode2_LocalTime((int)arg1->node, arg0->clock->time);
         end = work->end;
         changed = false;
         if (end < now) {
@@ -664,7 +664,7 @@ void beAction2MOTIONSET_Update(Owner *arg0, Act_377090 *arg1) {
         track = arg1->ctx->sys->tracks->items[arg1->index];
         pieces = track->pieces;
         if (pieces->count != 1) {
-            v = FUN_00398e80((int)arg1->node, arg0->clock->time);
+            v = beModelCtrlNode2_LocalTime((int)arg1->node, arg0->clock->time);
             FUN_001ac140((int)track, v);
             n = track->pieces->count;
             i = 0;
@@ -675,7 +675,7 @@ void beAction2MOTIONSET_Update(Owner *arg0, Act_377090 *arg1) {
         }
         if (pieces->count == 1) {
             if (pieces->items[0]->rate != arg1->node->scale) {
-                v = FUN_00398e80((int)arg1->node, arg0->clock->time);
+                v = beModelCtrlNode2_LocalTime((int)arg1->node, arg0->clock->time);
                 node = arg1->node;
                 rate = node->scale;
                 first = pieces->items[0];
@@ -716,7 +716,7 @@ int beAction2MOTIONSET_Start(beAction2 *arg0, beAction2InfoRam *arg1, beAction2M
     if (((igAnimationStateList *)anim->_animationStateList)->_count >= 2) FUN_001ae780(anim, 0);
     int value = res->_priority;
     FUN_001ae660(anim, res, 1, 1, 1, &value, 0, hokanTicks, blend, 1.0f, 0);
-    long long cur = FUN_00398e80(arg1->_node, ((igInsightCore *)arg0->_insight)->_worldTime);
+    long long cur = beModelCtrlNode2_LocalTime(arg1->_node, ((igInsightCore *)arg0->_insight)->_worldTime);
     FUN_001ac140(anim, cur);
     if (((char *)arg2->_hokanMode)[0] == 'S') {
         igAnimationState *tr = ((igAnimationState **)((igAnimationStateList *)anim->_animationStateList)->_data)[0];

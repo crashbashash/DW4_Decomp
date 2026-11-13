@@ -4318,6 +4318,20 @@
 0x0050df80	SETDIFFICULTMAX	string-literal
 0x0050e728	TEXTCTL	string-literal
 0x0050ed58	MATCTRL	string-literal
+0x0050f410	ONE	string-literal
+0x0050f420	HITPLAYERBULLET	string-literal
+0x0050f430	HITPLAYERTALK	string-literal
+0x0050f440	HITENEMYBULLET	string-literal
+0x0050f450	CHKBULLET	string-literal
+0x0050f460	BHit	string-literal
+0x0050f468	MODELCTRL_4	string-literal
+0x0050f478	FIND_SPACE	string-literal
+0x0050f488	GENERATE_3	string-literal
+0x0050f498	SQ_ERAS	string-literal
+0x0050f4a0	SOUND_2	string-literal
+0x0050f4a8	PLAY	string-literal
+0x0050f4b0	DOWN	string-literal
+0x0050f4b8	VOLUMECTL	string-literal
 0x0050fb10	ndmw_igb	string-literal
 0x005108f0	libNdmwRuntimePlugin_className	class-name
 0x00510a40	beNDMWWindowList_className	class-name
@@ -4630,7 +4644,7 @@
 0x0051a000	LVPOINT	string-literal
 0x0051a918	SELECTCTRL	recovered-global
 0x0051a928	NOCANCEL	recovered-global
-0x0051a938	GENERATE_3	recovered-global
+0x0051a938	GENERATE_4	recovered-global
 0x0051a948	GETSELECT	recovered-global
 0x0051a958	ISEND	recovered-global
 0x0051a960	FO2TOP	recovered-global
@@ -4785,6 +4799,7 @@
 0x00554df8	g_igAdxFile_ignoreOpenModeWarning	recovered-global
 0x00554dfc	g_AdxMovieLibrary_registered	recovered-global
 0x00554e50	g_BecLibrary_registered	recovered-global
+0x00554e54	g_hitBoxDebugColorsReady	recovered-global
 0x00554e68	g_NdmwLibrary_registered	recovered-global
 0x00554e70	g_commonSettingsValid	recovered-global
 0x00554e74	g_GuiLibrary_registered	recovered-global
@@ -5742,6 +5757,7 @@
 0x0058a330	g_damageResult	recovered-global
 0x0058a338	g_attackZokusei	recovered-global
 0x0058a340	g_damageFlag	recovered-global
+0x0058a540	g_hitBoxDebugColors	recovered-global
 0x0058a8f8	g_libNdmwRuntimePlugin_metaObject	class-handle
 0x0058a9a8	g_beNDMWWindowList_metaObject	class-handle
 0x0058a9b8	g_beNDMWWindow_metaObject	class-handle

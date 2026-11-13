@@ -15109,7 +15109,7 @@
 0034f360 000074 beModelCtrlSubCom_Register
 0034f3e0 00001c beModelCtrlSubCom_GetMetaObject
 0034f400 000098 beModelCtrlSubCom_InitFields
-0034f4a0 000034 FUN_0034f4a0
+0034f4a0 000034 beModelCtrlSCSound_Create
 0034f4e0 00004c FUN_0034f4e0
 0034f530 000084 beModelCtrlSCSound_GetVTable
 0034f5c0 000020 FUN_0034f5c0
@@ -15117,14 +15117,14 @@
 0034f650 00001c beModelCtrlSCSound_GetMetaObject
 0034f670 00000c FUN_0034f670
 0034f680 000070 beModelCtrlSCSound_InitFields
-0034f6f0 000034 FUN_0034f6f0
+0034f6f0 000034 beModelCtrlSCHitBox_Create
 0034f730 00004c FUN_0034f730
 0034f780 00003c beModelCtrlSCHitBox_GetVTable
 0034f7c0 000020 FUN_0034f7c0
 0034f7e0 00006c beModelCtrlSCHitBox_Register
 0034f850 00001c beModelCtrlSCHitBox_GetMetaObject
 0034f870 000070 beModelCtrlSCHitBox_InitFields
-0034f8e0 000034 FUN_0034f8e0
+0034f8e0 000034 beModelCtrlSCEffect_Create
 0034f920 00004c FUN_0034f920
 0034f970 0000c0 beModelCtrlSCEffect_GetVTable
 0034fa30 000020 FUN_0034fa30
@@ -15138,7 +15138,7 @@
 0034fc70 000088 beModelCtrlSubComBase_InitFields
 0034fd00 000034 FUN_0034fd00
 0034fd40 000044 FUN_0034fd40
-0034fd90 00004c FUN_0034fd90
+0034fd90 00004c beModelCtrlNode2_ResolveMetaObject
 0034fde0 000098 beModelCtrlNode2_GetVTable
 0034fe80 000020 FUN_0034fe80
 0034fea0 00007c beModelCtrlNode2_Register
@@ -17208,7 +17208,7 @@
 003902f0 000028 FUN_003902f0
 00390320 000568 FUN_00390320
 00390890 000034 FUN_00390890
-003908d0 000008 FUN_003908d0
+003908d0 000008 beModelCtrl_DrawDebugHitBox
 003908e0 000484 FUN_003908e0
 00390d70 000060 FUN_00390d70
 00390dd0 00000c Gap__Core__igObject__vfunc_30 Gap::Core::igObject::vfunc_30
@@ -17271,25 +17271,25 @@
 00398e20 00000c Gap__Bec__beModelCtrlInfoRideOn3__vfunc_20 Gap::Bec::beModelCtrlInfoRideOn3::vfunc_20
 00398e30 00000c Gap__Bec__beModelCtrlInfoRideOn2__vfunc_20 Gap::Bec::beModelCtrlInfoRideOn2::vfunc_20
 00398e40 00000c Gap__Bec__beModelCtrl__vfunc_20 Gap::Bec::beModelCtrl::vfunc_20
-00398e50 000024 FUN_00398e50
-00398e80 000070 FUN_00398e80
-00398ef0 0004a8 FUN_00398ef0
-003993a0 000034 FUN_003993a0
+00398e50 000024 beModelCtrlNode2_TraversalFunction
+00398e80 000070 beModelCtrlNode2_LocalTime
+00398ef0 0004a8 beModelCtrlNode2_Traverse
+003993a0 000034 beModelCtrlNode2_RegisterTraversalFunction
 003993e0 00050c Gap__Bec__beModelCtrlSCHitBox__vfunc_21 Gap::Bec::beModelCtrlSCHitBox::vfunc_21
 003998f0 00004c Gap__Bec__beModelCtrlSCHitBox__vfunc_22 Gap::Bec::beModelCtrlSCHitBox::vfunc_22
 00399940 0002b0 Gap__Bec__beModelCtrlSCEffect__vfunc_21 Gap::Bec::beModelCtrlSCEffect::vfunc_21
 00399bf0 000054 Gap__Bec__beModelCtrlSCEffect__vfunc_23 Gap::Bec::beModelCtrlSCEffect::vfunc_23
 00399c50 0000c0 Gap__Bec__beModelCtrlSCSound__vfunc_21 Gap::Bec::beModelCtrlSCSound::vfunc_21
 00399d10 000074 Gap__Bec__beModelCtrlSCSound__vfunc_23 Gap::Bec::beModelCtrlSCSound::vfunc_23
-00399d90 000084 FUN_00399d90
-00399e20 0000fc FUN_00399e20
-00399f20 000204 FUN_00399f20
-0039a130 000120 FUN_0039a130
-0039a250 000228 FUN_0039a250
+00399d90 000084 beModelCtrlSubComBase_Update
+00399e20 0000fc beModelCtrlSubCom_Update
+00399f20 000204 beModelCtrlSubCom_StopAll
+0039a130 000120 beModelCtrlSubCom_StopType
+0039a250 000228 beModelCtrlSubCom_AddEffect
 0039a480 000080 FUN_0039a480
-0039a500 0001c4 FUN_0039a500
+0039a500 0001c4 beModelCtrlSubCom_AddHitBox
 0039a6d0 000080 FUN_0039a6d0
-0039a750 00012c FUN_0039a750
+0039a750 00012c beModelCtrlSubCom_AddSound
 0039a880 000080 FUN_0039a880
 0039a900 00000c Gap__Bec__beModelCtrlSCSound__vfunc_20 Gap::Bec::beModelCtrlSCSound::vfunc_20
 0039a910 00000c Gap__Bec__beModelCtrlSCEffect__vfunc_20 Gap::Bec::beModelCtrlSCEffect::vfunc_20

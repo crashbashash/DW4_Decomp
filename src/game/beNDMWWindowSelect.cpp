@@ -17,7 +17,7 @@ extern "C" void *g_stringPool[4];
 
 extern "C" char SELECTCTRL[];
 extern "C" char NOCANCEL[];
-extern "C" char GENERATE_3[];
+extern "C" char GENERATE_4[];
 extern "C" char GETSELECT[];
 extern "C" char ISEND[];
 extern "C" char FO2TOP[];
@@ -140,7 +140,7 @@ void beNDMWWindowSelect_Update(beNDMWWindowSelectVirtuals *view) {
                 } while (i < ((igDataList *)s->_decideList)->_count);
             }
         }
-        beMessenger_DispatchSelected(s->_messenger, GENERATE_3);
+        beMessenger_DispatchSelected(s->_messenger, GENERATE_4);
         s->_st0 = s->_st0 + 1;
         s->_st3 = 0;
         s->_st2 = 0;

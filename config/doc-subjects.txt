@@ -23,6 +23,7 @@ docs/engine/load-intf2.md
 docs/engine/lua-dependencies.md
 docs/engine/material-contact.md
 docs/engine/messenger-dispatch.md
+docs/engine/model-ctrl-sub-commands.md
 docs/engine/model-format.md
 docs/engine/model-sequence-waits.md
 docs/engine/near-miss-shapes-player-vfunc44.md

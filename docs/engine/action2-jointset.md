@@ -118,7 +118,7 @@ by function VA and consulted through `tools/unitflags.py` by both `tools/verify.
 sweep disable the table; the table is a committed hand-authored overlay like
 `config/SLUS-20836/names/*.tsv`.
 
-`beAction2JOINTSET_Update` calls `FUN_00398e80` (node-time helper) plus `__fixsfdi`
+`beAction2JOINTSET_Update` calls `beModelCtrlNode2_LocalTime` (node-time helper) plus `__fixsfdi`
 (float→nanosecond conversion).
 
 ## What didn't work
