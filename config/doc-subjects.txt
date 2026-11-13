@@ -13,6 +13,7 @@ docs/engine/common-model-controller.md
 docs/engine/cri-cvfs.md
 docs/engine/cri-movie-codec.md
 docs/engine/data-regions.md
+docs/engine/demo-manager.md
 docs/engine/engine-boot.md
 docs/engine/exception-unwind.md
 docs/engine/front-end-boot.md

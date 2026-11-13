@@ -4,6 +4,7 @@
 #include "src/engine/lua/LuaLibrary.h"
 #include "dw4/reflected.h"
 #include "dw4/igSmartPointer.h"
+#include "dw4/beDemoManager.h"
 
 /* bePlayer_GetStruct's record slots: the shared record, then one per player (index + 1). */
 #define PLAYER_SLOT_COMMON 0
@@ -30,13 +31,6 @@
 #define FLAG_PLAYERS_JOINED 1000
 
 #define RADIANS_TO_DEGREES 57.29578f
-
-/* What a demo-manager keep-message does when the demo runs (beDemoKeepMes._kind). */
-enum DemoKeepMesKind {
-    DEMO_MES_SEND,           /* send the message */
-    DEMO_MES_SEND_IF_FALSE,  /* send it when the bool reply is false */
-    DEMO_MES_SEND_IF_TRUE    /* send it when the bool reply is true */
-};
 
 /* Rows of g_floatingNumberStyles. */
 enum FloatingNumberStyle {
@@ -285,13 +279,6 @@ unsigned char beMatCtrl_IsRidePlayer(beMatCtrl *self, int player);
 unsigned char beMatCtrl_IsRideOffPlayer(beMatCtrl *self, int player);
 int beMatCtrl_GetPlayerMatStat(beMatCtrl *self, int player);
 void beMatCtrl_SetRun(beMatCtrl *self, int run);
-void beDemoManager_AddKeepMes(beDemoManager *self, int kind, const char *group, const char *infoName, int ramNo, const char *message, const char *param, long long sendTime);
-void beDemoManager_SwitchSD(beDemoManager *self, const char *group, const char *infoName, int ramNo, const char *message, const char *param);
-void beDemoManager_SwitchEnd(beDemoManager *self);
-void beDemoManager_Case(beDemoManager *self, int ramNo);
-void beDemoManager_SetLua(beDemoManager *self, const char *chunk);
-void beDemoManager_MsgBox(beDemoManager *self, const char *text, int ramNo);
-void beDemoManager_Run(beDemoManager *self);
 void igMatrix44f_SetIdentity(float *matrix);
 void Matrix44_Copy(float *matrix, const float *source);
 void Matrix44_GetTranslation(const float *matrix, float *vector);
@@ -1268,20 +1255,21 @@ void DMsetSD_43(const char *group, const char *infoName, int ramNo, const char *
     beDemoManager_AddKeepMes(g_beDemoManager[0], DEMO_MES_SEND, group, infoName, ramNo, message, 0, 0);
 }
 
-/* A conditional send: "!=0" and "==1" send on a true reply, "==0" and "!=1" on a false one. */
+/* A wait: the message is sent again every update while its bool reply meets the condition ("!=0" and
+ * "==1" wait out a true reply, "==0" and "!=1" a false one). */
 void DMchkSD_44(const char *group, const char *infoName, int ramNo, const char *message, const char *param, const char *condition) {
     if (strcmp(text_ne0, condition) == 0 || strcmp(text_eq1, condition) == 0) {
-        beDemoManager_AddKeepMes(g_beDemoManager[0], DEMO_MES_SEND_IF_TRUE, group, infoName, ramNo, message, param, 0);
+        beDemoManager_AddKeepMes(g_beDemoManager[0], DEMO_MES_SEND_UNTIL_FALSE, group, infoName, ramNo, message, param, 0);
     } else if (strcmp(text_eq0, condition) == 0 || strcmp(text_ne1, condition) == 0) {
-        beDemoManager_AddKeepMes(g_beDemoManager[0], DEMO_MES_SEND_IF_FALSE, group, infoName, ramNo, message, param, 0);
+        beDemoManager_AddKeepMes(g_beDemoManager[0], DEMO_MES_SEND_UNTIL_TRUE, group, infoName, ramNo, message, param, 0);
     }
 }
 
 void DMchkSD_45(const char *group, const char *infoName, int ramNo, const char *message, const char *condition) {
     if (strcmp(text_ne0, condition) == 0 || strcmp(text_eq1, condition) == 0) {
-        beDemoManager_AddKeepMes(g_beDemoManager[0], DEMO_MES_SEND_IF_TRUE, group, infoName, ramNo, message, 0, 0);
+        beDemoManager_AddKeepMes(g_beDemoManager[0], DEMO_MES_SEND_UNTIL_FALSE, group, infoName, ramNo, message, 0, 0);
     } else if (strcmp(text_eq0, condition) == 0 || strcmp(text_ne1, condition) == 0) {
-        beDemoManager_AddKeepMes(g_beDemoManager[0], DEMO_MES_SEND_IF_FALSE, group, infoName, ramNo, message, 0, 0);
+        beDemoManager_AddKeepMes(g_beDemoManager[0], DEMO_MES_SEND_UNTIL_TRUE, group, infoName, ramNo, message, 0, 0);
     }
 }
 

@@ -1,470 +1,366 @@
 #include "dw4/reflected.h"
 #include "dw4/igSmartPointer.h"
-#define POOL(v) if (g_stringPool[0] == 0) { v = StringPool_Allocate(16); if (v != 0) v = StringPool_Construct(v); g_stringPool[0] = v; }
-#define SETSTR(fld, arg) { int *nw; beDemoKeepMes *c = e.p; POOL(v) nw = (int *)((void *)StringPool_Intern(g_stringPool[0], arg)); old = (int *)c->fld; if (old != 0) { hd = old - 2; r = old[-1] - 1; old[-1] = r; if (r == 0) StringChunk_ReleaseHeader(*hd, hd); } c->fld = (int)nw; }
-#define WORK(a, i) (((beDemoManagerWork **)((beDemoManagerWorkList *)(a)->_activeDataList)->_data)[i])
-#define ITEMO(a, i, o) (*((beDemoKeepMes **)((char *)((beDemoKeepMesList *)WORK(a, i)->_keepMesList)->_data + (o))))
-#define ITEM(a, i, j) (((beDemoKeepMes **)((beDemoKeepMesList *)WORK(a, i)->_keepMesList)->_data)[j])
+#include "dw4/beDemoManager.h"
 
-extern "C" int Memory_GetAllocatorBySelector(int);
-extern "C" int ObjectList_AppendRetained(...);
-extern "C" int igObject_GetAllocator(...);
-extern "C" int StringPool_Allocate(int);
-extern "C" int StringPool_Construct(int);
-extern "C" void StringChunk_ReleaseHeader(...);
-extern "C" char * StringPool_Intern(...);
-extern "C" int igInsightCore_FindManager(int, int);
-extern "C" void Gap__Bec__beDemoManager__vfunc_24(void);
-extern "C" int Gap__Bec__beDemoManager__vfunc_25(void);
-extern "C" int Gap__Bec__beDemoManager__vfunc_20(void);
-extern "C" int beMessenger_SelectReceivers(...);
-extern "C" int Lua_sd_OptionalArg(...);
-extern "C" int beMessenger_DispatchSelected(...);
-extern "C" int beMessenger_PrepareDelayedSelection(...);
-extern "C" int beMessenger_EnqueueSelected(...);
-extern "C" int beMessenger_GetBoolCount(...);
-extern "C" int beMessenger_GetBool(...);
-extern "C" int beMessenger_GetIntCount(...);
-extern "C" int beMessenger_GetInt(...);
-extern "C" int beLua__RunNamedChunk(...);
-extern "C" int List_RemoveWordAt(...);
-extern "C" void beDemoManager_SwitchSD(beDemoManager *arg0, int arg1, int arg2, int arg3, int arg4, int arg5);
-extern "C" beDemoKeepMes * FUN_00363c20(...);
-extern "C" int g_defaultAllocatorSelector[4];
-extern "C" unsigned char GPR_00554c14;
-extern "C" void beDemoManager_SwitchEnd(beDemoManager *a0);
-extern "C" void beDemoManager_Case(beDemoManager *a0, int ramNo);
-extern "C" int g_stringPool[4];
-extern "C" void beDemoManager_AddKeepMes(beDemoManager *self, int a1, int a2, int a3, int t0, int t1, int t2, long long t3);
-extern "C" beDemoManagerWork * FUN_003637c0(...);
-extern "C" void beDemoManager_SetLua(beDemoManager *arg0, int arg1);
-extern "C" void beDemoManager_MsgBox(beDemoManager *arg0, int arg1, int arg2);
-extern "C" void beDemoManager_Run(beDemoManager *arg0);
-extern "C" void igInsightCore_AddToScheduler(int, beDemoManager *);
-extern "C" void igInsightCore_RemoveFromScheduler(int, beDemoManager *);
-extern "C" void Gap__Bec__beDemoManager__vfunc_21(beDemoManager *self, int unusedArg);
-extern "C" void Gap__Bec__beDemoManager__vfunc_22(beDemoManager *self, int unusedArg);
-extern "C" int g_beMessenger_metaObject[4];
-extern "C" int g_beLua_metaObject[4];
-extern "C" void Gap__Bec__beDemoManager__vfunc_23(beDemoManager *arg0);
-extern "C" int g_beDemoManager_metaObject[4];
-extern "C" int List_Reserve(igObjectList *, int, int);
-extern "C" void Gap__Bec__beDemoManager__vfunc_26(beDemoManager *arg0);
-extern "C" int g_mdlEntity[4];
-struct VO {
-    virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3();
-    virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7();
-    virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11();
-    virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15();
-    virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19();
-    virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23();
-    virtual void d24(); virtual void d25();
-    virtual void vX();
+extern "C" {
+int Memory_GetAllocatorBySelector(int selector);
+int igObject_GetAllocator(void *object);
+void ObjectList_AppendRetained(void *list, void *object);
+int List_Reserve(igObjectList *list, int count, int capacity);
+void List_RemoveWordAt(void *list, int index);
+void *StringPool_Allocate(int size);
+void *StringPool_Construct(void *pool);
+char *StringPool_Intern(void *pool, const char *text);
+void StringChunk_ReleaseHeader(int owner, int *header);
+int igInsightCore_FindManager(int insight, igMetaObject *meta);
+void igInsightCore_AddToScheduler(int insight, void *object);
+void igInsightCore_RemoveFromScheduler(int insight, void *object);
+void beMessenger_SelectReceivers(beMessenger *self, const char *group, const char *infoName, int ramNo);
+void beMessenger_DispatchSelected(beMessenger *self, const char *message);
+void beMessenger_PrepareDelayedSelection(beMessenger *self, const char *group, const char *infoName, int ramNo);
+void beMessenger_EnqueueSelected(beMessenger *self, const char *message, long long delay);
+int beMessenger_GetBoolCount(beMessenger *self);
+unsigned char beMessenger_GetBool(beMessenger *self, int index);
+int beMessenger_GetIntCount(beMessenger *self);
+int beMessenger_GetInt(beMessenger *self, int index);
+void Lua_sd_OptionalArg(const char *args);
+void beLua__RunNamedChunk(beLua *self, const char *chunk, int arg);
+beDemoManagerWork *beDemoManagerWork_CreateInstance(int allocator);
+beDemoKeepMes *beDemoKeepMes_CreateInstance(int allocator);
+void beDemoManager_AddToScheduler(beDemoManager *self, int unused);
+void beDemoManager_RemoveFromScheduler(beDemoManager *self, int unused);
+void beDemoManager_Start(beDemoManager *self);
+void beDemoManager_Stop(void);
+int beDemoManager_AcceptInfo(void);
+void beDemoManager_Reset(beDemoManager *self);
+void beDemoManager_Update(beDemoManager *self);
+igMetaObject *beDemoManager_GetMetaObject_Virtual(void);
+extern int g_defaultAllocatorSelector[4];
+extern unsigned char g_useOwnerAllocator;
+extern void *g_stringPool[4];
+extern igMetaObject *g_beMessenger_metaObject[4];
+extern igMetaObject *g_beLua_metaObject[4];
+extern igMetaObject *g_beDemoManager_metaObject[4];
+extern int g_mdlEntity[4];
+}
+
+/* An insight manager's virtual functions, as far as the demo manager calls them. */
+class InsightManagerSlots {
+public:
+    virtual void slot0(); virtual void slot1(); virtual void slot2(); virtual void slot3();
+    virtual void slot4(); virtual void slot5(); virtual void slot6(); virtual void slot7();
+    virtual void slot8(); virtual void slot9(); virtual void slot10(); virtual void slot11();
+    virtual void slot12(); virtual void slot13(); virtual void slot14(); virtual void slot15();
+    virtual void slot16(); virtual void slot17(); virtual void slot18(); virtual void slot19();
+    virtual void getMetaObject(); virtual void addToScheduler(); virtual void removeFromScheduler();
+    virtual void start(); virtual void stop(); virtual void acceptInfo();
+    virtual void reset();
 };
-extern "C" void Gap__Bec__beDemoManager__vfunc_27(beDemoManager *arg0);
 
-void beDemoManager_SwitchSD(beDemoManager *arg0, int arg1, int arg2, int arg3, int arg4, int arg5) {
-    if (arg0->_turningOK == 0) {
-        arg0->_turningOK = 1;
+/* The allocator an object's new members come from: its own, or the default one. */
+static inline int allocatorFor(void *object) {
+    int allocator = igObject_GetAllocator(object);
+    return g_useOwnerAllocator ? allocator : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
+}
+
+/* The game's string pool, created on first use. */
+static inline void *stringPool(void) {
+    if (g_stringPool[0] == 0) {
+        void *pool = StringPool_Allocate(16);
+        if (pool != 0) pool = StringPool_Construct(pool);
+        g_stringPool[0] = pool;
+    }
+    return g_stringPool[0];
+}
+
+/* A pooled string keeps its chunk owner and reference count in the two words before its text. */
+static inline void releaseString(char *text) {
+    if (text != 0) {
+        int *header = (int *)(text - 8);
+        int count = header[1] - 1;
+        header[1] = count;
+        if (count == 0) StringChunk_ReleaseHeader(header[0], header);
+    }
+}
+
+/* Points a keep-message string field at the pooled copy of `text`, releasing the string it held. */
+static inline void setKeepMesString(beDemoKeepMes *mes, int beDemoKeepMes::*field, const char *text) {
+    char *token = StringPool_Intern(stringPool(), text);
+    releaseString((char *)(mes->*field));
+    mes->*field = (int)token;
+}
+
+/* The build data the DM* calls append keep-messages to, created on first use. */
+static inline void ensureBuildData(beDemoManager *self) {
+    if (self->_buildData == 0) {
+        int allocator = allocatorFor(self);
+        igRelease((igObject *)self->_buildData);
+        self->_buildData = (int)beDemoManagerWork_CreateInstance(allocator);
+        self->_turningOK = 0;
+    }
+}
+
+static inline beDemoManagerWork *activeWork(beDemoManager *self, int index) {
+    return ((beDemoManagerWork **)((beDemoManagerWorkList *)self->_activeDataList)->_data)[index];
+}
+
+static inline beDemoKeepMesList *keepMesList(beDemoManagerWork *work) {
+    return (beDemoKeepMesList *)work->_keepMesList;
+}
+
+/* Opens a switch: the message is sent at play time and its int reply picks the case. Switches do
+ * not nest. */
+void beDemoManager_SwitchSD(beDemoManager *self, const char *group, const char *infoName, int ramNo, const char *message, const char *param) {
+    if (self->_turningOK == 0) {
+        self->_turningOK = 1;
     } else {
         return;
     }
-    beDemoManager_AddKeepMes(arg0, 3, arg1, arg2, arg3, arg4, arg5, (long long)0);
+    beDemoManager_AddKeepMes(self, DEMO_MES_SWITCH, group, infoName, ramNo, message, param, 0);
 }
 
-/* Owning stack reference to a keep-message; its destructor releases the object (reference count in
- * the low 23 bits of _refCount). */
-
-void beDemoManager_SwitchEnd(beDemoManager *a0) {
-    beDemoManagerWork *l;
-    int al;
-    if (a0->_buildData != 0) {
-        if (a0->_turningOK == 1) {
-            a0->_turningOK = 0;
+void beDemoManager_SwitchEnd(beDemoManager *self) {
+    beDemoManagerWork *work;
+    int allocator;
+    if (self->_buildData != 0) {
+        if (self->_turningOK == 1) {
+            self->_turningOK = 0;
         } else {
             return;
         }
         {
-            l = (beDemoManagerWork *)a0->_buildData;
-            al = igObject_GetAllocator(a0);
-            al = GPR_00554c14 ? al : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
-            igSmartPointer<beDemoKeepMes> mes(FUN_00363c20(al));
-            mes.p->_kind = 5;
-            ObjectList_AppendRetained(l->_keepMesList, mes.p);
+            work = (beDemoManagerWork *)self->_buildData;
+            allocator = allocatorFor(self);
+            igSmartPointer<beDemoKeepMes> mes(beDemoKeepMes_CreateInstance(allocator));
+            mes->_kind = DEMO_MES_SWITCH_END;
+            ObjectList_AppendRetained((void *)work->_keepMesList, mes.p);
         }
     }
 }
 
-/* Owning stack reference to a keep-message; its destructor releases the object (reference count in
- * the low 23 bits of _refCount). */
+void beDemoManager_Case(beDemoManager *self, int ramNo) {
+    beDemoManagerWork *work;
+    int allocator;
 
-void beDemoManager_Case(beDemoManager *a0, int ramNo) {
-    beDemoManagerWork *l;
-    int al;
-
-    l = (beDemoManagerWork *)a0->_buildData;
-    if ((l != 0) && (a0->_turningOK != 0)) {
-        al = igObject_GetAllocator(a0);
-        al = GPR_00554c14 ? al : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
-        igSmartPointer<beDemoKeepMes> mes(FUN_00363c20(al));
-        mes.p->_kind = 4;
-        mes.p->_ramNo = ramNo;
-        ObjectList_AppendRetained(l->_keepMesList, mes.p);
+    work = (beDemoManagerWork *)self->_buildData;
+    if ((work != 0) && (self->_turningOK != 0)) {
+        allocator = allocatorFor(self);
+        igSmartPointer<beDemoKeepMes> mes(beDemoKeepMes_CreateInstance(allocator));
+        mes->_kind = DEMO_MES_CASE;
+        mes->_ramNo = ramNo;
+        ObjectList_AppendRetained((void *)work->_keepMesList, mes.p);
     }
 }
 
-void beDemoManager_AddKeepMes(beDemoManager *self, int a1, int a2, int a3, int t0, int t1, int t2, long long t3) {
-    int v;
-    beDemoManagerWork *q;
-    beDemoManagerWork *q2;
-    int *old;
-    int *hd;
-    int r;
-    if (self->_buildData == 0) {
-        v = igObject_GetAllocator(self);
-        v = (GPR_00554c14 != 0) ? v : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
-        q = (beDemoManagerWork *)self->_buildData;
-        if (q != 0) {
-            q->_refCount = q->_refCount - 1;
-            if ((q->_refCount & 0x7fffff) == 0) igObject_Destroy(q);
-        }
-        self->_buildData = (int)FUN_003637c0(v);
+void beDemoManager_AddKeepMes(beDemoManager *self, int kind, const char *group, const char *infoName, int ramNo, const char *message, const char *param, long long sendTime) {
+    ensureBuildData(self);
+    beDemoManagerWork *work = (beDemoManagerWork *)self->_buildData;
+    int allocator = allocatorFor(self);
+    igSmartPointer<beDemoKeepMes> mes(beDemoKeepMes_CreateInstance(allocator));
+    mes->_kind = kind;
+    mes->_sendTime = sendTime;
+    setKeepMesString(mes, &beDemoKeepMes::_groupName, group);
+    setKeepMesString(mes, &beDemoKeepMes::_infoName, infoName);
+    mes->_ramNo = ramNo;
+    setKeepMesString(mes, &beDemoKeepMes::_message, message);
+    setKeepMesString(mes, &beDemoKeepMes::_mesParam, param);
+    ObjectList_AppendRetained((void *)work->_keepMesList, mes.p);
+}
+
+void beDemoManager_SetLua(beDemoManager *self, const char *chunk) {
+    beDemoManagerWork *work;
+    beDemoKeepMes *target;
+    char *token;
+    ensureBuildData(self);
+    work = (beDemoManagerWork *)self->_buildData;
+    igSmartPointer<beDemoKeepMes> mes(beDemoKeepMes_CreateInstance(allocatorFor(self)));
+    mes->_kind = DEMO_MES_LUA;
+    target = mes.p;
+    token = StringPool_Intern(stringPool(), chunk);
+    releaseString((char *)target->_mesParam);
+    target->_mesParam = (int)token;
+    ObjectList_AppendRetained((void *)work->_keepMesList, mes.p);
+}
+
+void beDemoManager_MsgBox(beDemoManager *self, const char *text, int ramNo) {
+    /* matching construct: declaration-order search — the order of the locals picks their registers */
+    char *token;
+    beDemoManagerWork *work;
+    beDemoKeepMes *target;
+    ensureBuildData(self);
+    work = (beDemoManagerWork *)self->_buildData;
+    igSmartPointer<beDemoKeepMes> mes(beDemoKeepMes_CreateInstance(allocatorFor(self)));
+    mes->_kind = DEMO_MES_MSGBOX;
+    target = mes.p;
+    token = StringPool_Intern(stringPool(), text);
+    releaseString((char *)target->_mesParam);
+    target->_mesParam = (int)token;
+    mes->_ramNo = ramNo;
+    ObjectList_AppendRetained((void *)work->_keepMesList, mes.p);
+}
+
+/* Hands the build data over to play, unless a switch is still open. */
+void beDemoManager_Run(beDemoManager *self) {
+    igObject *work = (igObject *)self->_buildData;
+    if ((work != 0) && (self->_turningOK != 1)) {
+        ObjectList_AppendRetained((void *)self->_activeDataList, work);
+        igRelease((igObject *)self->_buildData);
+        self->_buildData = 0;
         self->_turningOK = 0;
     }
-    q2 = (beDemoManagerWork *)self->_buildData;
-    v = igObject_GetAllocator(self);
-    v = (GPR_00554c14 != 0) ? v : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
-    /* matching construct: the holder is declared after the allocation call returns, so retail's protected range starts after the allocator and not at it */
-    beDemoKeepMes *k = (beDemoKeepMes *)((void *)FUN_00363c20(v));
-    igSmartPointer<beDemoKeepMes> e(k);
-    e.p->_kind = a1;
-    e.p->_sendTime = t3;
-    SETSTR(_groupName, a2)
-    SETSTR(_infoName, a3)
-    e.p->_ramNo = t0;
-    SETSTR(_message, t1)
-    SETSTR(_mesParam, t2)
-    ObjectList_AppendRetained((void *)q2->_keepMesList, e.p);
 }
 
-/* Owning stack reference to a keep-message; its destructor releases the object (reference count in
- * the low 23 bits of _refCount). */
-
-void beDemoManager_SetLua(beDemoManager *arg0, int arg1) {
-    beDemoManagerWork *l;
-    beDemoKeepMes *s1;
-    beDemoManagerWork *old;
-    int var_v0;
-    int key;
-    int *temp_v1;
-    int temp_v0;
-    int var_v0_2;
-    int *temp_a1;
-    int var_v0_3;
-
-    key = arg1;
-    if (arg0->_buildData == 0) {
-        var_v0_3 = igObject_GetAllocator(arg0);
-        if (GPR_00554c14 != 0) {
-            var_v0_3 = (int)var_v0_3;
-        } else {
-            var_v0_3 = Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
-        }
-        old = (beDemoManagerWork *)arg0->_buildData;
-        if (old != 0) {
-            old->_refCount = old->_refCount - 1;
-            if ((old->_refCount & 0x7FFFFF) == 0) {
-                igObject_Destroy(old);
-            }
-        }
-        arg0->_buildData = (int)FUN_003637c0(var_v0_3);
-        arg0->_turningOK = 0;
-    }
-    l = (beDemoManagerWork *)arg0->_buildData;
-    var_v0 = igObject_GetAllocator(arg0);
-    if (GPR_00554c14 != 0) {
-        var_v0 = (int)var_v0;
-    } else {
-        var_v0 = Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
-    }
-    igSmartPointer<beDemoKeepMes> mes(FUN_00363c20(var_v0));
-    mes.p->_kind = 7;
-    s1 = mes.p;
-    if (g_stringPool[0] == 0) {
-        var_v0_2 = StringPool_Allocate(0x10);
-        if (var_v0_2 != 0) {
-            var_v0_2 = StringPool_Construct(var_v0_2);
-        }
-        g_stringPool[0] = var_v0_2;
-    }
-    key = (int)StringPool_Intern(g_stringPool[0], key);
-    temp_v1 = (int *)s1->_mesParam;
-    if (temp_v1 != 0) {
-        temp_a1 = temp_v1 - 2;
-        temp_v0 = temp_v1[-1] - 1;
-        temp_v1[-1] = temp_v0;
-        if (temp_v0 == 0) {
-            StringChunk_ReleaseHeader(*temp_a1, temp_a1);
-        }
-    }
-    s1->_mesParam = key;
-    ObjectList_AppendRetained(l->_keepMesList, mes.p);
-}
-
-/* Owning stack reference to a keep-message; its destructor releases the object (reference count in
- * the low 23 bits of _refCount). */
-
-void beDemoManager_MsgBox(beDemoManager *arg0, int arg1, int arg2) {
-    beDemoManagerWork *old;
-    int var_v0;
-    int key;
-    int *temp_v1;
-    beDemoManagerWork *l;
-    int temp_v0;
-    beDemoKeepMes *s1;
-    int var_v0_2;
-    int *temp_a1;
-    int var_v0_3;
-
-    key = arg1;
-    if (arg0->_buildData == 0) {
-        var_v0_3 = igObject_GetAllocator(arg0);
-        if (GPR_00554c14 != 0) {
-            var_v0_3 = (int)var_v0_3;
-        } else {
-            var_v0_3 = Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
-        }
-        old = (beDemoManagerWork *)arg0->_buildData;
-        if (old != 0) {
-            old->_refCount = old->_refCount - 1;
-            if ((old->_refCount & 0x7FFFFF) == 0) {
-                igObject_Destroy(old);
-            }
-        }
-        arg0->_buildData = (int)FUN_003637c0(var_v0_3);
-        arg0->_turningOK = 0;
-    }
-    l = (beDemoManagerWork *)arg0->_buildData;
-    var_v0 = igObject_GetAllocator(arg0);
-    if (GPR_00554c14 != 0) {
-        var_v0 = (int)var_v0;
-    } else {
-        var_v0 = Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
-    }
-    igSmartPointer<beDemoKeepMes> mes(FUN_00363c20(var_v0));
-    mes.p->_kind = 6;
-    s1 = mes.p;
-    if (g_stringPool[0] == 0) {
-        var_v0_2 = StringPool_Allocate(0x10);
-        if (var_v0_2 != 0) {
-            var_v0_2 = StringPool_Construct(var_v0_2);
-        }
-        g_stringPool[0] = var_v0_2;
-    }
-    key = (int)StringPool_Intern(g_stringPool[0], key);
-    temp_v1 = (int *)s1->_mesParam;
-    if (temp_v1 != 0) {
-        temp_a1 = temp_v1 - 2;
-        temp_v0 = temp_v1[-1] - 1;
-        temp_v1[-1] = temp_v0;
-        if (temp_v0 == 0) {
-            StringChunk_ReleaseHeader(*temp_a1, temp_a1);
-        }
-    }
-    s1->_mesParam = key;
-    mes.p->_ramNo = arg2;
-    ObjectList_AppendRetained(l->_keepMesList, mes.p);
-}
-
-void beDemoManager_Run(beDemoManager *arg0) {
-    igObject *temp_a0;
-    igObject *temp_a1;
-
-    temp_a1 = (igObject *)arg0->_buildData;
-    if ((temp_a1 != 0) && (arg0->_turningOK != 1)) {
-        ObjectList_AppendRetained(arg0->_activeDataList, temp_a1);
-        temp_a0 = (igObject *)arg0->_buildData;
-        if (temp_a0 != 0) {
-            temp_a0->_refCount = temp_a0->_refCount - 1;
-            if (((unsigned long long)((long long)(int)temp_a0->_refCount << 0x29) >> 0x29) == 0) {
-                igObject_Destroy(temp_a0);
-            }
-        }
-        arg0->_buildData = 0;
-        arg0->_turningOK = 0;
-    }
-}
-
-/* Hands the object to the insight core's helper igInsightCore_AddToScheduler, which asks the scheduler at +12 of
- * the insight object (_insight) whether it already has the object (scheduler slot 26) and, if not,
- * calls scheduler slot 24 with it. Same body as beMessenger slot 21. The second argument is
- * unused. */
-void Gap__Bec__beDemoManager__vfunc_21(beDemoManager *self, int unusedArg)
+void beDemoManager_AddToScheduler(beDemoManager *self, int unused)
 {
     igInsightCore_AddToScheduler(self->_insight, self);
 }
 
-/* Counterpart of slot 21 through igInsightCore_RemoveFromScheduler, which calls scheduler slot 25 with the object only
- * when scheduler slot 26 reports it present. Same body as beMessenger slot 22. The second argument
- * is unused. */
-void Gap__Bec__beDemoManager__vfunc_22(beDemoManager *self, int unusedArg)
+void beDemoManager_RemoveFromScheduler(beDemoManager *self, int unused)
 {
     igInsightCore_RemoveFromScheduler(self->_insight, self);
 }
 
-void Gap__Bec__beDemoManager__vfunc_23(beDemoManager *arg0) {
-    arg0->_messenger = igInsightCore_FindManager(arg0->_insight, g_beMessenger_metaObject[0]);
-    arg0->_lua = igInsightCore_FindManager(arg0->_insight, g_beLua_metaObject[0]);
+void beDemoManager_Start(beDemoManager *self) {
+    self->_messenger = igInsightCore_FindManager(self->_insight, g_beMessenger_metaObject[0]);
+    self->_lua = igInsightCore_FindManager(self->_insight, g_beLua_metaObject[0]);
 }
 
-void Gap__Bec__beDemoManager__vfunc_24(void)
+void beDemoManager_Stop(void)
 {
 }
 
-int Gap__Bec__beDemoManager__vfunc_25(void) {
+int beDemoManager_AcceptInfo(void) {
     return 0;
 }
 
-void Gap__Bec__beDemoManager__vfunc_26(beDemoManager *arg0) {
-    igObjectList *l;
-    int n;
+/* Drops every playing and building demo. Called while an update plays, it waits for the update's end. */
+void beDemoManager_Reset(beDemoManager *self) {
+    igObjectList *list;
+    int count;
     int i;
-    igObject *o;
-    igObjectList *l2;
-    if (arg0->_disableRemoveAll == 1) {
-        arg0->_calledRemoveAll = 1;
+    igObjectList *active;
+    if (self->_disableRemoveAll == 1) {
+        self->_calledRemoveAll = 1;
         return;
     }
-    l = (igObjectList *)arg0->_activeDataList;
-    n = l->_count;
-    for (i = 0; i < n; i++) {
-        o = ((igObject **)l->_data)[i];
-        if (o != 0) {
-            o->_refCount = (int)o->_refCount - 1;
-            if (((unsigned long long)((long long)(int)o->_refCount << 0x29) >> 0x29) == 0) {
-                igObject_Destroy(o);
-            }
-        }
+    list = (igObjectList *)self->_activeDataList;
+    count = list->_count;
+    for (i = 0; i < count; i++) {
+        igRelease(((igObject **)list->_data)[i]);
     }
     {
         /* matching construct: block-local zero loop */
-        int m = l->_count;
+        int clearCount = list->_count;
         int j;
-        for (j = 0; j < m; j++) {
-            ((igObject **)l->_data)[j] = 0;
+        for (j = 0; j < clearCount; j++) {
+            ((igObject **)list->_data)[j] = 0;
         }
     }
-    l->_count = 0;
-    l2 = (igObjectList *)arg0->_activeDataList;
+    list->_count = 0;
+    active = (igObjectList *)self->_activeDataList;
     /* matching construct: empty then-branch reproduces the retail branch layout */
-    if (0 < l2->_count) {
+    if (0 < active->_count) {
     } else {
-        List_Reserve(l2, 0, 4);
+        List_Reserve(active, 0, 4);
     }
-    o = (igObject *)arg0->_buildData;
-    if (o != 0) {
-        o->_refCount = (int)o->_refCount - 1;
-        if (((unsigned long long)((long long)(int)o->_refCount << 0x29) >> 0x29) == 0) {
-            igObject_Destroy(o);
-        }
-    }
-    arg0->_buildData = 0;
-    arg0->_turningOK = 0;
-    arg0->_calledRemoveAll = 0;
+    igRelease((igObject *)self->_buildData);
+    self->_buildData = 0;
+    self->_turningOK = 0;
+    self->_calledRemoveAll = 0;
 }
 
-void Gap__Bec__beDemoManager__vfunc_27(beDemoManager *arg0) {
-    int n;
+/* Plays each active demo from where it stopped until a wait holds it, then drops the finished ones. */
+void beDemoManager_Update(beDemoManager *self) {
+    int count;
     int i;
-    int idx;
+    int index;
     int end;
-    int rn;
-    unsigned char flag;
-    beDemoKeepMes *item;
+    int label;
+    unsigned char held;
+    beDemoKeepMes *mes;
     long long delay;
     int k;
-    beDemoKeepMes *it4;
-    int off;
-    arg0->_disableRemoveAll = 1;
-    n = ((beDemoManagerWorkList *)arg0->_activeDataList)->_count;
-    for (i = n - 1; i >= 0; i--) {
-        idx = WORK(arg0, i)->_advancec;
-        end = ((beDemoKeepMesList *)WORK(arg0, i)->_keepMesList)->_count;
-        flag = 0;
-        for (; idx < end; idx++) {
-            off = idx * 4;
-            item = ITEMO(arg0, i, off);
-            switch (item->_kind) {
-            case 0: case 1: case 2: case 3:
-                delay = item->_sendTime;
+    beDemoKeepMes *next;
+    int offset;
+    self->_disableRemoveAll = 1;
+    count = ((beDemoManagerWorkList *)self->_activeDataList)->_count;
+    for (i = count - 1; i >= 0; i--) {
+        index = activeWork(self, i)->_advancec;
+        end = keepMesList(activeWork(self, i))->_count;
+        held = 0;
+        for (; index < end; index++) {
+            offset = index * 4;
+            mes = *(beDemoKeepMes **)((char *)keepMesList(activeWork(self, i))->_data + offset);
+            switch (mes->_kind) {
+            case DEMO_MES_SEND:
+            case DEMO_MES_SEND_UNTIL_TRUE:
+            case DEMO_MES_SEND_UNTIL_FALSE:
+            case DEMO_MES_SWITCH:
+                delay = mes->_sendTime;
                 if (delay <= 0) {
-                    beMessenger_SelectReceivers(arg0->_messenger, item->_groupName, item->_infoName, item->_ramNo);
-                    if (item->_mesParam != 0) Lua_sd_OptionalArg(item->_mesParam);
-                    beMessenger_DispatchSelected(arg0->_messenger, item->_message);
+                    beMessenger_SelectReceivers((beMessenger *)self->_messenger, (const char *)mes->_groupName, (const char *)mes->_infoName, mes->_ramNo);
+                    if (mes->_mesParam != 0) Lua_sd_OptionalArg((const char *)mes->_mesParam);
+                    beMessenger_DispatchSelected((beMessenger *)self->_messenger, (const char *)mes->_message);
                 } else {
-                    beMessenger_PrepareDelayedSelection(arg0->_messenger, item->_groupName, item->_infoName, item->_ramNo);
-                    if (item->_mesParam != 0) Lua_sd_OptionalArg(item->_mesParam);
-                    beMessenger_EnqueueSelected(arg0->_messenger, item->_message, delay);
+                    beMessenger_PrepareDelayedSelection((beMessenger *)self->_messenger, (const char *)mes->_groupName, (const char *)mes->_infoName, mes->_ramNo);
+                    if (mes->_mesParam != 0) Lua_sd_OptionalArg((const char *)mes->_mesParam);
+                    beMessenger_EnqueueSelected((beMessenger *)self->_messenger, (const char *)mes->_message, delay);
                 }
-                switch (item->_kind) {
-                case 1:
-                    if (beMessenger_GetBoolCount(arg0->_messenger) == 0) flag = 1;
-                    else if ((beMessenger_GetBool(arg0->_messenger, 0) & 0xff) != 1) flag = 1;
+                switch (mes->_kind) {
+                case DEMO_MES_SEND_UNTIL_TRUE:
+                    if (beMessenger_GetBoolCount((beMessenger *)self->_messenger) == 0) held = 1;
+                    else if ((beMessenger_GetBool((beMessenger *)self->_messenger, 0) & 0xff) != 1) held = 1;
                     break;
-                case 2:
-                    if (beMessenger_GetBoolCount(arg0->_messenger) == 0) flag = 1;
-                    else if ((beMessenger_GetBool(arg0->_messenger, 0) & 0xff) != 0) flag = 1;
+                case DEMO_MES_SEND_UNTIL_FALSE:
+                    if (beMessenger_GetBoolCount((beMessenger *)self->_messenger) == 0) held = 1;
+                    else if ((beMessenger_GetBool((beMessenger *)self->_messenger, 0) & 0xff) != 0) held = 1;
                     break;
-                case 3:
-                    if (beMessenger_GetIntCount(arg0->_messenger) != 0) {
-                        while (idx < end) {
-                            idx++;
-                            off += 4;
-                            beDemoKeepMes *it2 = ITEMO(arg0, i, off);
-                            if (idx >= end) break;
-                            if (it2->_kind == 4) {
-                                rn = it2->_ramNo;
-                                if (rn == beMessenger_GetInt(arg0->_messenger, 0)) break;
-                            } else if (it2->_kind == 5) break;
+                case DEMO_MES_SWITCH:
+                    if (beMessenger_GetIntCount((beMessenger *)self->_messenger) != 0) {
+                        while (index < end) {
+                            index++;
+                            offset += 4;
+                            beDemoKeepMes *branch = *(beDemoKeepMes **)((char *)keepMesList(activeWork(self, i))->_data + offset);
+                            if (index >= end) break;
+                            if (branch->_kind == DEMO_MES_CASE) {
+                                label = branch->_ramNo;
+                                if (label == beMessenger_GetInt((beMessenger *)self->_messenger, 0)) break;
+                            } else if (branch->_kind == DEMO_MES_SWITCH_END) break;
                         }
                     }
                     break;
                 }
                 break;
-            case 4:
-                while (idx < end) {
-                    idx++;
-                    it4 = ITEM(arg0, i, idx);
-                    if (idx >= end) break;
-                    if (it4->_kind == 5) break;
+            case DEMO_MES_CASE:
+                while (index < end) {
+                    index++;
+                    next = ((beDemoKeepMes **)keepMesList(activeWork(self, i))->_data)[index];
+                    if (index >= end) break;
+                    if (next->_kind == DEMO_MES_SWITCH_END) break;
                 }
                 break;
-            case 7:
+            case DEMO_MES_LUA:
                 g_mdlEntity[0] = 0;
-                beLua__RunNamedChunk(arg0->_lua, item->_mesParam, 0);
+                beLua__RunNamedChunk((beLua *)self->_lua, (const char *)mes->_mesParam, 0);
                 break;
             }
-            if (flag) break;
+            if (held) break;
         }
-        WORK(arg0, i)->_advancec = idx;
+        activeWork(self, i)->_advancec = index;
     }
-    for (k = n - 1; k >= 0; k--) {
-        beDemoManagerWorkList *l = (beDemoManagerWorkList *)arg0->_activeDataList;
-        beDemoManagerWork *w = ((beDemoManagerWork **)l->_data)[k];
-        if (w->_advancec < ((beDemoKeepMesList *)w->_keepMesList)->_count) continue;
-        if (w != 0) {
-            w->_refCount = (int)w->_refCount - 1;
-            if (((unsigned long long)((long long)(int)w->_refCount << 0x29) >> 0x29) == 0) igObject_Destroy(w);
-        }
-        List_RemoveWordAt(l, k);
-        ((int *)l->_data)[l->_count] = 0;
+    for (k = count - 1; k >= 0; k--) {
+        beDemoManagerWorkList *list = (beDemoManagerWorkList *)self->_activeDataList;
+        beDemoManagerWork *work = ((beDemoManagerWork **)list->_data)[k];
+        if (work->_advancec < keepMesList(work)->_count) continue;
+        igRelease((igObject *)work);
+        List_RemoveWordAt(list, k);
+        ((int *)list->_data)[list->_count] = 0;
     }
-    arg0->_disableRemoveAll = 0;
-    if (arg0->_calledRemoveAll != 0) ((VO *)arg0)->vX();
+    self->_disableRemoveAll = 0;
+    if (self->_calledRemoveAll != 0) ((InsightManagerSlots *)self)->reset();
 }
 
-int Gap__Bec__beDemoManager__vfunc_20(void)
+igMetaObject *beDemoManager_GetMetaObject_Virtual(void)
 {
     return g_beDemoManager_metaObject[0];
 }
-

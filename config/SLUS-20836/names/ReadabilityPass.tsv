@@ -377,6 +377,14 @@
 0x0037e6e0	beDemoManager_SetLua	game
 0x0037e890	beDemoManager_MsgBox	game
 0x0037ea50	beDemoManager_Run	game
+0x0037ead0	beDemoManager_AddToScheduler	game
+0x0037eaf0	beDemoManager_RemoveFromScheduler	game
+0x0037eb10	beDemoManager_Start	game
+0x0037eb60	beDemoManager_Stop	game
+0x0037eb70	beDemoManager_AcceptInfo	game
+0x0037eb80	beDemoManager_Reset	game
+0x0037ed70	beDemoManager_Update	game
+0x0037f1a0	beDemoManager_GetMetaObject_Virtual	game
 0x00382eb0	beFont_ConvertToUnicode	game
 0x003843c0	beUnicodeObj_AllocateBuffer	game
 0x00389ff0	beLua::RunNamedChunk	game

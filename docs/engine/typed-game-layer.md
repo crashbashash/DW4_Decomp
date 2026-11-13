@@ -78,8 +78,8 @@ Evidence is the class's `_InitFields` metaobject getter (handle resolved through
 | `beDataObjIntList._data` | `igIntList` | beDataObjIntList_InitFields uses igIntList_GetOrCreateMetaObject |
 | `beDataObjObjectList._data` | `igObjectList` | beDataObjObjectList_InitFields uses igObjectList_GetOrCreateMetaObject |
 | `beDataObjStringList._data` | `igStringRefList` | field metaobject getter FUN_002b9120 loads handle 0x5858d8 |
-| `beDemoManager._lua` | `beLua` | handle 0x589208 in beDemoManager vfunc_23 |
-| `beDemoManager._messenger` | `beMessenger` | handle 0x588f38 in beDemoManager vfunc_23 |
+| `beDemoManager._lua` | `beLua` | handle 0x589208 in beDemoManager_Start |
+| `beDemoManager._messenger` | `beMessenger` | handle 0x588f38 in beDemoManager_Start |
 | `beFileListInfoManager._messenger` | `beMessenger` | class handle DAT_00588f38 (data/reflection.json) passed to igInsightCore_FindManager (vfunc_23) |
 | `beFileListInfoManager._sceneInfoManager` | `igViewerSceneInfoManager` | class handle DAT_0058c790 |
 | `beFileListInfoManager._system` | `beSystem` | class handle DAT_00587d08 |

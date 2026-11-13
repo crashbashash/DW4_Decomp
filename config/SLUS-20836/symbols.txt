@@ -15960,7 +15960,7 @@
 00363710 000020 FUN_00363710
 00363730 00006c beDemoManagerWorkList_Register
 003637a0 00001c beDemoManagerWorkList_GetMetaObject
-003637c0 000034 FUN_003637c0
+003637c0 000034 beDemoManagerWork_CreateInstance
 00363800 000044 FUN_00363800
 00363850 00004c FUN_00363850
 003638a0 00008c beDemoManagerWork_GetVTable
@@ -15974,7 +15974,7 @@
 00363b70 000020 FUN_00363b70
 00363b90 00006c beDemoKeepMesList_Register
 00363c00 00001c beDemoKeepMesList_GetMetaObject
-00363c20 000034 FUN_00363c20
+00363c20 000034 beDemoKeepMes_CreateInstance
 00363c60 00004c FUN_00363c60
 00363cb0 0000b0 beDemoKeepMes_GetVTable
 00363d60 000020 FUN_00363d60
@@ -17012,14 +17012,14 @@
 0037e6e0 0001a4 beDemoManager_SetLua
 0037e890 0001b8 beDemoManager_MsgBox
 0037ea50 000080 beDemoManager_Run
-0037ead0 000020 Gap__Bec__beDemoManager__vfunc_21 Gap::Bec::beDemoManager::vfunc_21
-0037eaf0 000020 Gap__Bec__beDemoManager__vfunc_22 Gap::Bec::beDemoManager::vfunc_22
-0037eb10 000048 Gap__Bec__beDemoManager__vfunc_23 Gap::Bec::beDemoManager::vfunc_23
-0037eb60 000008 Gap__Bec__beDemoManager__vfunc_24 Gap::Bec::beDemoManager::vfunc_24
-0037eb70 000008 Gap__Bec__beDemoManager__vfunc_25 Gap::Bec::beDemoManager::vfunc_25
-0037eb80 0001e8 Gap__Bec__beDemoManager__vfunc_26 Gap::Bec::beDemoManager::vfunc_26
-0037ed70 000428 Gap__Bec__beDemoManager__vfunc_27 Gap::Bec::beDemoManager::vfunc_27
-0037f1a0 00000c Gap__Bec__beDemoManager__vfunc_20 Gap::Bec::beDemoManager::vfunc_20
+0037ead0 000020 beDemoManager_AddToScheduler
+0037eaf0 000020 beDemoManager_RemoveFromScheduler
+0037eb10 000048 beDemoManager_Start
+0037eb60 000008 beDemoManager_Stop
+0037eb70 000008 beDemoManager_AcceptInfo
+0037eb80 0001e8 beDemoManager_Reset
+0037ed70 000428 beDemoManager_Update
+0037f1a0 00000c beDemoManager_GetMetaObject_Virtual
 0037f1b0 000068 FUN_0037f1b0
 0037f220 000020 Gap__Bec__beFileListInfoManager__vfunc_21 Gap::Bec::beFileListInfoManager::vfunc_21
 0037f240 000020 Gap__Bec__beFileListInfoManager__vfunc_22 Gap::Bec::beFileListInfoManager::vfunc_22

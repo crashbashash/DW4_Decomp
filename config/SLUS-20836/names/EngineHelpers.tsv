@@ -42,6 +42,8 @@
 0x00361e50	beFont_CreateInstance	game
 0x003627f0	beFileListInfoManager_CreateInstance	game
 0x00363210	beDemoManager_CreateInstance	game
+0x003637c0	beDemoManagerWork_CreateInstance	game
+0x00363c20	beDemoKeepMes_CreateInstance	game
 0x003660d0	beDBManager_CreateInstance	game
 0x00367860	beCri_CreateInstance	game
 0x00368710	beChangePosTransform_CreateInstance	game
