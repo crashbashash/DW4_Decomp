@@ -123,8 +123,36 @@ then advances/reset counters. State3 clears active byte24 after PollCloseComplet
 returns nonzero. Other states do nothing. The tree caller owns the active-byte
 check; no second guard is inserted into this title body.
 
-Title-specific byte96 initialization and concrete text/model receiver services are
-separate dependencies, as are real rendering, animation, input and transactions.
+Byte 96 is vtable slot 22, which the source calls `Setup`. The rest of
+`src/game/beNDMWWindowTitle.cpp` is the slot-22 setup of the five status titles:
+
+- `beNDMWStatusTitle00`: the `i_stback` back plate and the `i_bgclear` background clear.
+- `beNDMWStatusTitle01`: `beNDMWStatusTitle01_ShowDigimonFace` plays and empties the window's queued
+  model closes, sends SUBWND UPDATE and GAMERAM GETPLAYER for the window's player, reads that
+  player's DIGIMONNO and presents `i_stdigiface` at (-410, 240) opening on that Digimon's
+  `SQ_<digimon>OPEN` sequence (0 agumon, 1 vmon, 2 girumon, 3 dorumon, then weregaru, hekabut,
+  wargrey, angelr, beelzeb, alpha, bwargrey, impdrafm, impdrapm, metalgaru, dukecrim, susanoo for
+  4..15; any other value falls back to agumon).
+  `beNDMWStatusTitle01_ShowStatusLayout` adds the `i_stbase` plate and switches every STWINFONT06
+  font of `g_statusLayoutFontNames` and STWINFONT04 font001 to DISPON;
+  `beNDMWStatusTitle01_ShowShopLayout` adds `j_shbase` and switches the same fonts
+  (`g_shopLayoutFontNames`) to DISPOFF.
+- `beNDMWStatusTitle02`: the `i_messwn` message plate.
+- `beNDMWStatusTitle03`: the `i_staccount` account plate; queues STWINFONT34 font000..font002 for
+  closing and runs `txt_status.lua` call 0. `beNDMWStatusTitle03_SetFont002Enabled` colours font002
+  DEFAULTCOLOR or CANCELCOLOR.
+- `beNDMWStatusTitle04`: the `i_sttitle` title plate; queues STWINFONT12 font000 and runs
+  `txt_status.lua` with the window's `_entCode` as the call number.
+
+Concrete text/model receiver services are separate dependencies, as are real rendering, animation,
+input and transactions.
+
+Open questions:
+
+- The two close-list clears in `beNDMWStatusTitle01_ShowDigimonFace` open-code the string-pool
+  creation: the inline helper the rest of the unit uses swaps s0/s1 there. The original is probably
+  an inline list-clear or assignment operator not yet recovered.
+- The Digimon behind each DIGIMONNO is read from its sequence name only.
 
 ## Span evidence
 

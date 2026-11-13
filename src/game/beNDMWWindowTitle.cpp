@@ -1,140 +1,359 @@
+/* The title windows of the status screens: the shared beNDMWWindowTitle update, and the model and
+ * text setup of beNDMWStatusTitle00..04 (background, Digimon face, account and title plates). */
 #include "dw4/reflected.h"
-#define ENSURE_POOL() if (((int *)g_stringPool)[0] == 0) { v = ((int)StringPool_Allocate(0x10)); if (v != 0) { v = ((int)StringPool_Construct(v)); } ((int *)g_stringPool)[0] = v; }
-#define INTERN_APPEND(field, text) { \
-    const char *tok; \
-    if ((text) == 0) { \
-        tok = 0; \
-    } else { \
-        if (g_stringPool[0] == 0) { \
-            void *pool = StringPool_Allocate(0x10); \
-            if (pool != 0) pool = StringPool_Construct(pool); \
-            g_stringPool[0] = pool; \
-        } \
-        tok = StringPool_Intern(g_stringPool[0], (const char *)(text)); \
-    } \
-    StringRef held((int *)tok); \
-    StringList_AppendRetained(field, &held); }
 
-extern "C" int beNDMWWindow_ClearQueuedText(...);
-extern "C" int beNDMWWindow_PlayQueuedModelClose(...);
+extern "C" void beNDMWWindow_ClearQueuedText(beNDMWWindow *self);
+extern "C" void beNDMWWindow_PlayQueuedModelClose(...);
 extern "C" int beNDMWWindow_PollCloseComplete(...);
-extern "C" int beNDMWWindow_RequestChildrenClose(...);
-extern "C" int beNDMWWindow_PresentModelAtOrigin(...);
-extern "C" void Gap__Bec__beNDMWStatusTitle00__vfunc_22(int *arg0);
-extern "C" void * StringPool_Allocate(...);
-extern "C" void StringChunk_ReleaseHeader(int, int *);
-extern "C" void * StringPool_Construct(...);
-extern "C" const char * StringPool_Intern(...);
-extern "C" void beMessenger_AppendInt(int, int);
-extern "C" void beMessenger_DispatchSelected(...);
-extern "C" int beMessenger_GetObject(int, int);
-extern "C" void beMessenger_SelectGroup(...);
-extern "C" void *igProperty_GetRecord(int, int *);
-extern "C" int beMessenger_AppendString(...);
-extern "C" void beNDMWStatusTitle01_ShowStatusLayout(int *arg0);
-extern "C" void Gap__Bec__beNDMWStatusTitle02__vfunc_22(int p0, char * p1, int p2, char * p3, char * p4);
-extern "C" int beNDMWWindow_RunMessageScript(void *, int *, int);
-extern "C" int Gap__Bec__beNDMWStatusTitle04__vfunc_20(void);
-extern "C" int Gap__Bec__beNDMWStatusTitle03__vfunc_20(void);
-extern "C" int Gap__Bec__beNDMWStatusTitle02__vfunc_20(void);
-extern "C" int Gap__Bec__beNDMWStatusTitle01__vfunc_20(void);
-extern "C" int Gap__Bec__beNDMWStatusTitle00__vfunc_20(void);
-extern "C" int Gap__Bec__beNDMWWindowTitle__vfunc_20(void);
-class DW4VC_96 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual int vX(); };
-extern "C" void Gap__Bec__beNDMWWindowTitle__vfunc_21(beNDMWWindowTitle *arg0);
-extern "C" int DAT_0051abf8[4];
-extern "C" int DAT_0051ac08[4];
-extern "C" int DAT_0051ac10[4];
-extern "C" int DAT_0051ac20[4];
-extern "C" int beNDMWWindow_PresentModel(beNDMWWindow *, int *, int, int *, int *, float *);
-extern "C" int DAT_0051ad70[4];
-extern "C" int DAT_0051ad78[4];
-extern "C" int DAT_0051ad80[4];
-extern "C" int DAT_0051ad88[4];
-extern "C" int DAT_0051ad98[4];
-extern "C" int DAT_0051aec0[4];
-extern "C" int DAT_0051ada8[4];
-extern "C" int DAT_0051adb8[4];
-extern "C" int DAT_0051adc8[4];
-extern "C" int DAT_0051add8[4];
-extern "C" int DAT_0051adf0[4];
-extern "C" int DAT_0051ae00[4];
-extern "C" int DAT_0051ae10[4];
-extern "C" int DAT_0051ae20[4];
-extern "C" int DAT_0051ae30[4];
-extern "C" int DAT_0051ae40[4];
-extern "C" int DAT_0051ae50[4];
-extern "C" int DAT_0051ae60[4];
-extern "C" int DAT_0051ae70[4];
-extern "C" int DAT_0051ae80[4];
-extern "C" int DAT_0051aea0[4];
-extern "C" int DAT_0051aeb0[4];
-extern "C" void *g_stringPool[4];
-struct Rec { char pad[12]; unsigned int sel; };
-/* Creates the shared string pool on first use; open-coded in the two clear loops because the
- * inline Str::intern there would change their register allocation. */
+extern "C" void beNDMWWindow_RequestChildrenClose(beNDMWWindow *self);
+extern "C" void beNDMWWindow_PresentModel(beNDMWWindow *self, const char *model, int id, const char *sequence,
+                                          const char *close, float *position);
+extern "C" void beNDMWWindow_PresentModelAtOrigin(void *self, const char *model, int id, const char *sequence,
+                                                  const char *close);
+extern "C" void beNDMWWindow_RunMessageScript(void *self, const char *chunk, int callNo);
+extern "C" void *StringPool_Allocate(int size);
+extern "C" void *StringPool_Construct(void *pool);
+extern "C" const char *StringPool_Intern(void *pool, const char *text);
+extern "C" void StringChunk_ReleaseHeader(int chunk, int *header);
+extern "C" void beMessenger_SelectGroup(int messenger, const char *group);
+extern "C" void beMessenger_AppendInt(int messenger, int value);
+extern "C" void beMessenger_AppendString(int messenger, const char *text);
+extern "C" void beMessenger_DispatchSelected(int messenger, const char *name);
+extern "C" int beMessenger_GetObject(int messenger, int index);
+extern "C" beDataObjInt *igProperty_GetRecord(int record, const char *name);
 
-struct Str {
-    static inline int *intern(const char *s) {
-        if (((int *)g_stringPool)[0] == 0) {
-            int v = ((int)StringPool_Allocate(0x10));
-            if (v != 0) v = ((int)StringPool_Construct(v));
-            ((int *)g_stringPool)[0] = v;
-        }
-        return (int *)StringPool_Intern(((int *)g_stringPool)[0], s);
+extern "C" void *g_stringPool[4];
+
+extern "C" char i_stback_2[];
+extern "C" char SQ_OPEN_9[];
+extern "C" char SQ_CLOSE_9[];
+extern "C" char i_bgclear[];
+extern "C" char STWINFONT06_2[];
+extern "C" char font000_6[];
+extern "C" char STWINFONT04_2[];
+extern "C" char font001_6[];
+extern "C" char txt_status_lua_3[];
+extern "C" char SUBWND_4[];
+extern "C" char UPDATE_2[];
+extern "C" char GAMERAM_11[];
+extern "C" char GETPLAYER_9[];
+extern "C" char DIGIMONNO_5[];
+extern "C" char SQ_agumonOPEN[];
+extern "C" char SQ_vmonOPEN[];
+extern "C" char SQ_girumonOPEN[];
+extern "C" char SQ_dorumonOPEN[];
+extern "C" char SQ_weregaruOPEN[];
+extern "C" char SQ_hekabutOPEN[];
+extern "C" char SQ_wargreyOPEN[];
+extern "C" char SQ_angelrOPEN[];
+extern "C" char SQ_beelzebOPEN[];
+extern "C" char SQ_alphaOPEN[];
+extern "C" char SQ_bwargreyOPEN[];
+extern "C" char SQ_impdrafmOPEN[];
+extern "C" char SQ_impdrapmOPEN[];
+extern "C" char SQ_metalgaruOPEN[];
+extern "C" char SQ_dukecrimOPEN[];
+extern "C" char SQ_susanooOPEN[];
+extern "C" char i_stdigiface[];
+extern "C" char i_stbase[];
+extern "C" char SQ_LOPEN[];
+extern "C" char TEXTCTL_8[];
+extern "C" char DISPON_5[];
+extern "C" char SWITCH_6[];
+extern "C" char j_shbase[];
+extern "C" char DISPOFF_5[];
+extern "C" char i_messwn_2[];
+extern "C" char SQ_STOPEN_2[];
+extern "C" char SQ_STCLOSE[];
+extern "C" char i_staccount[];
+extern "C" char STWINFONT34_3[];
+extern "C" char font002_5[];
+extern "C" char DEFAULTCOLOR_6[];
+extern "C" char CANCELCOLOR_5[];
+extern "C" char i_sttitle_2[];
+extern "C" char STWINFONT12_2[];
+
+/* A null-terminated list of the STWINFONT06 text elements a layout switches (font030..font071). */
+typedef struct FontNameList { const char *name[29]; } FontNameList;
+extern "C" FontNameList g_statusLayoutFontNames;
+extern "C" FontNameList g_shopLayoutFontNames;
+
+/* matching construct: dummy-virtual view (22 slots) so Setup() compiles to the retail vtable call
+ * through slot 22, the per-title model setup; it carries no data. */
+class beNDMWWindowTitleVirtuals { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void Setup(); };
+
+static inline void *SharedStringPool() {
+    if (g_stringPool[0] == 0) {
+        void *pool = StringPool_Allocate(0x10);
+        if (pool != 0) pool = StringPool_Construct(pool);
+        g_stringPool[0] = pool;
     }
-    static inline void release(int *p) {
-        if (p != 0) {
-            int *header = p - 2;
-            int r = p[-1] - 1;
-            p[-1] = r;
-            if (r == 0) StringChunk_ReleaseHeader(*header, header);
-        }
+    return g_stringPool[0];
+}
+
+/* Drops one reference to a pooled string token (reference count at p[-1], chunk header at p[-2]). */
+static inline void ReleaseToken(int *p) {
+    if (p != 0) {
+        int *header = p - 2;
+        int refs = p[-1] - 1;
+        p[-1] = refs;
+        if (refs == 0) StringChunk_ReleaseHeader(*header, header);
     }
-};
-/* Owning stack reference to a pooled string token (reference count at p[-1], chunk header at
- * p[-2]): releases the token on scope exit; set() drops the held token for a new one. */
+}
+
+/* Owning stack reference to a pooled string token: releases it on scope exit; Set() drops the held
+ * token for a new one. */
 class StringRef {
 public:
     int *p;
     StringRef(int *s) : p(s) {}
     ~StringRef() { if (p) { int *h = (int *)p - 2; int r = ((int *)p)[-1] - 1; ((int *)p)[-1] = r; if (r == 0) StringChunk_ReleaseHeader(*h, h); } }
-    void set(int *t) { int *cur = p; Str::release(cur); p = t; }
+    void Set(int *t) { int *cur = p; ReleaseToken(cur); p = t; }
 };
-extern "C" void FUN_00425430(beNDMWWindow *arg0);
-typedef struct Tbl { const char *s[29]; } Tbl;
-extern "C" Tbl DAT_004cf7a0;
-extern "C" char DAT_0051ac30[];
-extern "C" char DAT_0051acc8[];
-extern "C" int DAT_0051ace0[4];
-extern "C" char DAT_0051af10[];
-extern "C" char DAT_0051af20[];
-extern "C" int DAT_0051af30[4];
-extern "C" char DAT_0051af38[];
-extern "C" char DAT_0051af40[];
-typedef struct Tb { int p[29]; } Tb;
-extern "C" Tb DAT_004cf820;
-extern "C" int DAT_0051af48[4];
-extern "C" int DAT_0051af58[4];
-typedef struct W { int p0, p1, p2, f12, p4, f20; } W;
-extern "C" void beNDMWStatusTitle01_ShowShopLayout(W *arg0);
-extern "C" char DAT_0051af60[];
-extern "C" char DAT_0051af70[];
-extern "C" char DAT_0051af80[];
-extern "C" int DAT_0051af90[4];
-extern "C" int DAT_0051acb0[4];
-extern "C" int DAT_0051ad60[4];
-extern "C" int StringList_AppendRetained(int, StringRef *);
-struct Sh { char p[44]; unsigned f44; char q[12]; int f60; int f64; };
-extern "C" int DAT_0051afa0[4];
-extern "C" int DAT_0051afb0[4];
-extern "C" void Gap__Bec__beNDMWStatusTitle03__vfunc_22(Sh *arg0);
-extern "C" int DAT_0051afb8[4];
-extern "C" int DAT_0051afc8[4];
-extern "C" void beNDMWStatusTitle03_SetFont002Enabled(beNDMWStatusTitle03 *arg0, int arg1);
-extern "C" int DAT_0051afd8[4];
-extern "C" int DAT_0051afe8[4];
-extern "C" void Gap__Bec__beNDMWStatusTitle04__vfunc_22(Sh *arg0);
+extern "C" int StringList_AppendRetained(int list, StringRef *text);
+
+/* The pooled copy of `text` (null for null), creating the string pool on first use. */
+static inline int *InternString(const char *text) {
+    if (text == 0) return 0;
+    return (int *)StringPool_Intern(SharedStringPool(), text);
+}
+
+/* InternString for a text that is never null. */
+static inline int *InternLiteral(const char *text) {
+    return (int *)StringPool_Intern(SharedStringPool(), text);
+}
+
+/* Appends the pooled copy of `text` to a string list, which takes its own reference. */
+static inline void AppendInterned(const int &list, const char *text) {
+    StringRef held(InternString(text));
+    StringList_AppendRetained(list, &held);
+}
+
+/* Shared title update: st0 0 runs the title's Setup, 2 plays the queued closes and asks the children
+ * to close, 3 waits for the close to finish and ends the run. */
+extern "C" void Gap__Bec__beNDMWWindowTitle__vfunc_21(beNDMWWindowTitle *self) {
+    switch (self->_st0) {
+    case 0:
+        ((beNDMWWindowTitleVirtuals *)self)->Setup();
+        self->_st0 = self->_st0 + 1;
+        self->_st3 = 0;
+        self->_st2 = 0;
+        self->_st1 = 0;
+        break;
+    case 1:
+        break;
+    case 2:
+        beNDMWWindow_PlayQueuedModelClose();
+        beNDMWWindow_ClearQueuedText((beNDMWWindow *)self);
+        beNDMWWindow_RequestChildrenClose((beNDMWWindow *)self);
+        self->_st0 = self->_st0 + 1;
+        self->_st3 = 0;
+        self->_st2 = 0;
+        self->_st1 = 0;
+        break;
+    case 3:
+        if (beNDMWWindow_PollCloseComplete() != 0) {
+            self->_isRun = 0;
+        }
+        break;
+    }
+}
+
+/* Status background: the back plate and the background clear. */
+extern "C" void Gap__Bec__beNDMWStatusTitle00__vfunc_22(beNDMWStatusTitle00 *self) {
+    beNDMWWindow_PresentModelAtOrigin(self, i_stback_2, 0, SQ_OPEN_9, SQ_CLOSE_9);
+    beNDMWWindow_PresentModelAtOrigin(self, i_bgclear, 0, SQ_OPEN_9, SQ_CLOSE_9);
+}
+
+/* Replaces the window's queued model closes with the face of the current player's Digimon: plays
+ * and empties the close lists, refreshes the sub-window and game RAM for the player, then presents
+ * i_stdigiface opening on the sequence of that Digimon (DIGIMONNO 0..15; anything else Agumon). */
+extern "C" void beNDMWStatusTitle01_ShowDigimonFace(beNDMWWindow *self) {
+    float position[3];
+    igStringRefList *infoNames;
+    igStringRefList *seqNames;
+    int infoCount, seqCount, seqIndex, pool, seqOffset;
+    int *old, *seqBlank;
+    int infoIndex;
+    int **infoSlot;
+    int *infoBlank;
+    int infoOffset;
+    int **seqSlot;
+    unsigned int digimonNo;
+    int player;
+
+    beNDMWWindow_PlayQueuedModelClose(self);
+    /* The two loops open-code SharedStringPool: the inline helper changes their register allocation. */
+    infoNames = (igStringRefList *)self->_modelCloseInfoNameList;
+    infoCount = infoNames->_count;
+    infoIndex = 0;
+    if (infoIndex < infoCount) {
+        infoOffset = 0;
+        do {
+            infoSlot = (int **)((char *)infoNames->_data + infoOffset);
+            if (((int *)g_stringPool)[0] == 0) {
+                pool = (int)StringPool_Allocate(0x10);
+                if (pool != 0) pool = (int)StringPool_Construct((void *)pool);
+                ((int *)g_stringPool)[0] = pool;
+            }
+            infoBlank = (int *)StringPool_Intern((void *)((int *)g_stringPool)[0], 0);
+            old = *infoSlot;
+            ReleaseToken(old);
+            infoIndex += 1;
+            *infoSlot = infoBlank;
+            infoOffset += 4;
+        } while (infoIndex < infoCount);
+    }
+    infoNames->_count = 0;
+    ((igIntList *)self->_modelCloseRamNoList)->_count = 0;
+    seqNames = (igStringRefList *)self->_modelCloseSeqNameList;
+    seqCount = seqNames->_count;
+    seqIndex = 0;
+    if (seqIndex < seqCount) {
+        seqOffset = 0;
+        do {
+            seqSlot = (int **)((char *)seqNames->_data + seqOffset);
+            if (((int *)g_stringPool)[0] == 0) {
+                pool = (int)StringPool_Allocate(0x10);
+                if (pool != 0) pool = (int)StringPool_Construct((void *)pool);
+                ((int *)g_stringPool)[0] = pool;
+            }
+            seqBlank = (int *)StringPool_Intern((void *)((int *)g_stringPool)[0], 0);
+            old = *seqSlot;
+            ReleaseToken(old);
+            seqIndex += 1;
+            *seqSlot = seqBlank;
+            seqOffset += 4;
+        } while (seqIndex < seqCount);
+    }
+    seqNames->_count = 0;
+    beMessenger_SelectGroup(self->_messenger, SUBWND_4);
+    beMessenger_AppendInt(self->_messenger, self->_playerNo);
+    beMessenger_DispatchSelected(self->_messenger, UPDATE_2);
+    beMessenger_SelectGroup(self->_messenger, GAMERAM_11);
+    beMessenger_AppendInt(self->_messenger, self->_playerNo);
+    beMessenger_DispatchSelected(self->_messenger, GETPLAYER_9);
+    player = beMessenger_GetObject(self->_messenger, 0);
+    {
+        StringRef sequence(0);
+        digimonNo = igProperty_GetRecord(player, DIGIMONNO_5)->_data;
+        switch (digimonNo) {
+        default: sequence.Set(InternLiteral(SQ_agumonOPEN)); break;
+        case 1:  sequence.Set(InternLiteral(SQ_vmonOPEN)); break;
+        case 2:  sequence.Set(InternLiteral(SQ_girumonOPEN)); break;
+        case 3:  sequence.Set(InternLiteral(SQ_dorumonOPEN)); break;
+        case 4:  sequence.Set(InternLiteral(SQ_weregaruOPEN)); break;
+        case 5:  sequence.Set(InternLiteral(SQ_hekabutOPEN)); break;
+        case 6:  sequence.Set(InternLiteral(SQ_wargreyOPEN)); break;
+        case 7:  sequence.Set(InternLiteral(SQ_angelrOPEN)); break;
+        case 8:  sequence.Set(InternLiteral(SQ_beelzebOPEN)); break;
+        case 9:  sequence.Set(InternLiteral(SQ_alphaOPEN)); break;
+        case 10: sequence.Set(InternLiteral(SQ_bwargreyOPEN)); break;
+        case 11: sequence.Set(InternLiteral(SQ_impdrafmOPEN)); break;
+        case 12: sequence.Set(InternLiteral(SQ_impdrapmOPEN)); break;
+        case 13: sequence.Set(InternLiteral(SQ_metalgaruOPEN)); break;
+        case 14: sequence.Set(InternLiteral(SQ_dukecrimOPEN)); break;
+        case 15: sequence.Set(InternLiteral(SQ_susanooOPEN)); break;
+        }
+        position[2] = 0.0f;
+        position[0] = -410.0f;
+        position[1] = 240.0f;
+        beNDMWWindow_PresentModel(self, i_stdigiface, self->_playerNo, (const char *)sequence.p, SQ_CLOSE_9,
+                                  position);
+    }
+}
+
+/* Status layout: the Digimon face and the status base plate, with every layout font shown and the
+ * STWINFONT04 font001 element shown. */
+extern "C" void beNDMWStatusTitle01_ShowStatusLayout(beNDMWStatusTitle01 *self) {
+    FontNameList fonts;
+    const char **font;
+    beNDMWStatusTitle01_ShowDigimonFace((beNDMWWindow *)self);
+    beNDMWWindow_PresentModelAtOrigin(self, i_stbase, self->_playerNo, SQ_LOPEN, SQ_CLOSE_9);
+    fonts = g_statusLayoutFontNames;
+    font = fonts.name;
+    if (*font != 0) {
+        do {
+            beMessenger_SelectGroup(self->_messenger, TEXTCTL_8);
+            beMessenger_AppendString(self->_messenger, STWINFONT06_2);
+            beMessenger_AppendString(self->_messenger, *font);
+            beMessenger_AppendString(self->_messenger, DISPON_5);
+            beMessenger_DispatchSelected(self->_messenger, SWITCH_6);
+            font++;
+        } while (*font != 0);
+    }
+    beMessenger_SelectGroup(self->_messenger, TEXTCTL_8);
+    beMessenger_AppendString(self->_messenger, STWINFONT04_2);
+    beMessenger_AppendString(self->_messenger, font001_6);
+    beMessenger_AppendString(self->_messenger, DISPON_5);
+    beMessenger_DispatchSelected(self->_messenger, SWITCH_6);
+}
+
+/* Shop layout: the Digimon face on the shop base plate, with every layout font and the STWINFONT04
+ * font001 element hidden. */
+extern "C" void beNDMWStatusTitle01_ShowShopLayout(beNDMWStatusTitle01 *self) {
+    FontNameList fonts;
+    const char **font;
+    beNDMWStatusTitle01_ShowDigimonFace((beNDMWWindow *)self);
+    beNDMWWindow_PresentModelAtOrigin(self, j_shbase, self->_playerNo, SQ_OPEN_9, SQ_CLOSE_9);
+    fonts = g_shopLayoutFontNames;
+    font = fonts.name;
+    if (fonts.name[0] != 0) {
+        do {
+            beMessenger_SelectGroup(self->_messenger, TEXTCTL_8);
+            beMessenger_AppendString(self->_messenger, STWINFONT06_2);
+            beMessenger_AppendString(self->_messenger, *font);
+            beMessenger_AppendString(self->_messenger, DISPOFF_5);
+            beMessenger_DispatchSelected(self->_messenger, SWITCH_6);
+            font += 1;
+        } while (*font != 0);
+    }
+    beMessenger_SelectGroup(self->_messenger, TEXTCTL_8);
+    beMessenger_AppendString(self->_messenger, STWINFONT04_2);
+    beMessenger_AppendString(self->_messenger, font001_6);
+    beMessenger_AppendString(self->_messenger, DISPOFF_5);
+    beMessenger_DispatchSelected(self->_messenger, SWITCH_6);
+}
+
+/* Message window plate. */
+extern "C" void Gap__Bec__beNDMWStatusTitle02__vfunc_22(beNDMWStatusTitle02 *self) {
+    beNDMWWindow_PresentModelAtOrigin(self, i_messwn_2, 0, SQ_STOPEN_2, SQ_STCLOSE);
+}
+
+/* Account plate: queues its three STWINFONT34 texts (font000, font001, font002) for closing and runs
+ * txt_status.lua call 0. */
+extern "C" void Gap__Bec__beNDMWStatusTitle03__vfunc_22(beNDMWStatusTitle03 *self) {
+    beNDMWWindow_PresentModelAtOrigin(self, i_staccount, 0, SQ_OPEN_9, SQ_CLOSE_9);
+    AppendInterned(self->_textCloseTypeList, STWINFONT34_3);
+    AppendInterned(self->_textCloseNameList, font000_6);
+    AppendInterned(self->_textCloseTypeList, STWINFONT34_3);
+    AppendInterned(self->_textCloseNameList, font001_6);
+    AppendInterned(self->_textCloseTypeList, STWINFONT34_3);
+    AppendInterned(self->_textCloseNameList, font002_5);
+    beNDMWWindow_RunMessageScript(self, txt_status_lua_3, 0);
+}
+
+/* Colours the account plate's font002 text: DEFAULTCOLOR when enabled, CANCELCOLOR otherwise. */
+extern "C" void beNDMWStatusTitle03_SetFont002Enabled(beNDMWStatusTitle03 *self, int enabled) {
+    beMessenger_SelectGroup(self->_messenger, TEXTCTL_8);
+    beMessenger_AppendString(self->_messenger, STWINFONT34_3);
+    beMessenger_AppendString(self->_messenger, font002_5);
+    if (enabled != 0) {
+        beMessenger_DispatchSelected(self->_messenger, DEFAULTCOLOR_6);
+        return;
+    }
+    beMessenger_DispatchSelected(self->_messenger, CANCELCOLOR_5);
+}
+
+/* Title plate: queues its STWINFONT12 font000 text for closing and runs txt_status.lua with the
+ * window's entry code as the call number. */
+extern "C" void Gap__Bec__beNDMWStatusTitle04__vfunc_22(beNDMWStatusTitle04 *self) {
+    beNDMWWindow_PresentModelAtOrigin(self, i_sttitle_2, 0, SQ_OPEN_9, SQ_CLOSE_9);
+    AppendInterned(self->_textCloseTypeList, STWINFONT12_2);
+    AppendInterned(self->_textCloseNameList, font000_6);
+    beNDMWWindow_RunMessageScript(self, txt_status_lua_3, self->_entCode);
+}
+
 extern "C" int g_beNDMWStatusTitle04_metaObject[4];
 extern "C" int g_beNDMWStatusTitle03_metaObject[4];
 extern "C" int g_beNDMWStatusTitle02_metaObject[4];
@@ -142,233 +361,10 @@ extern "C" int g_beNDMWStatusTitle01_metaObject[4];
 extern "C" int g_beNDMWStatusTitle00_metaObject[4];
 extern "C" int g_beNDMWWindowTitle_metaObject[4];
 
-void Gap__Bec__beNDMWWindowTitle__vfunc_21(beNDMWWindowTitle *arg0) {
-    switch (arg0->_st0) {
-    case 0:
-        ((DW4VC_96 *)(arg0))->vX();
-        arg0->_st0 = (int)((int) (arg0->_st0 + 1));
-        arg0->_st3 = 0;
-        arg0->_st2 = 0;
-        arg0->_st1 = 0;
-        break;
-    case 1:
-        break;
-    case 2:
-        beNDMWWindow_PlayQueuedModelClose();
-        beNDMWWindow_ClearQueuedText(arg0);
-        beNDMWWindow_RequestChildrenClose(arg0);
-        arg0->_st0 = (int)((int) (arg0->_st0 + 1));
-        arg0->_st3 = 0;
-        arg0->_st2 = 0;
-        arg0->_st1 = 0;
-        break;
-    case 3:
-        if (beNDMWWindow_PollCloseComplete() != 0) {
-            arg0->_isRun = 0;
-        }
-        break;
-    }
-}
-
-void Gap__Bec__beNDMWStatusTitle00__vfunc_22(int *arg0) {
-    beNDMWWindow_PresentModelAtOrigin(arg0, &DAT_0051abf8[0], 0, &DAT_0051ac08[0], &DAT_0051ac10[0]);
-    beNDMWWindow_PresentModelAtOrigin(arg0, &DAT_0051ac20[0], 0, &DAT_0051ac08[0], &DAT_0051ac10[0]);
-}
-
-void FUN_00425430(beNDMWWindow *arg0) {
-    float sp80[3];
-    igStringRefList *l1;
-    igStringRefList *l3;
-    int n1, n3, i3, v, off3;
-    int *t, *a2;
-    int i1;
-    int **e1;
-    int *a2b;
-    int off1;
-    int **e;
-    unsigned int sel;
-    int obj;
-
-    beNDMWWindow_PlayQueuedModelClose(arg0);
-    l1 = (igStringRefList *)arg0->_modelCloseInfoNameList;
-    n1 = l1->_count;
-    i1 = 0;
-    if (i1 < n1) {
-        off1 = 0;
-        do {
-            e1 = (int **)((char *)l1->_data + off1);
-            ENSURE_POOL();
-            a2b = (int *)StringPool_Intern(((int *)g_stringPool)[0], 0);
-            t = *e1;
-            Str::release(t);
-            i1 += 1;
-            *e1 = a2b;
-            off1 += 4;
-        } while (i1 < n1);
-    }
-    l1->_count = 0;
-    ((igIntList *)arg0->_modelCloseRamNoList)->_count = 0;
-    l3 = (igStringRefList *)arg0->_modelCloseSeqNameList;
-    n3 = l3->_count;
-    i3 = 0;
-    if (i3 < n3) {
-        off3 = 0;
-        do {
-            e = (int **)((char *)l3->_data + off3);
-            ENSURE_POOL();
-            a2 = (int *)StringPool_Intern(((int *)g_stringPool)[0], 0);
-            t = *e;
-            Str::release(t);
-            i3 += 1;
-            *e = a2;
-            off3 += 4;
-        } while (i3 < n3);
-    }
-    l3->_count = 0;
-    beMessenger_SelectGroup(arg0->_messenger, &DAT_0051ad70[0]);
-    beMessenger_AppendInt(arg0->_messenger, arg0->_playerNo);
-    beMessenger_DispatchSelected(arg0->_messenger, &DAT_0051ad78[0]);
-    beMessenger_SelectGroup(arg0->_messenger, &DAT_0051ad80[0]);
-    beMessenger_AppendInt(arg0->_messenger, arg0->_playerNo);
-    beMessenger_DispatchSelected(arg0->_messenger, &DAT_0051ad88[0]);
-    obj = beMessenger_GetObject(arg0->_messenger, 0);
-    {
-        StringRef modelName(0);
-        sel = ((struct Rec *)igProperty_GetRecord(obj, &DAT_0051ad98[0]))->sel;
-        switch (sel) {
-        default: modelName.set(Str::intern((const char *)&DAT_0051ada8[0])); break;
-        case 1:  modelName.set(Str::intern((const char *)&DAT_0051adb8[0])); break;
-        case 2:  modelName.set(Str::intern((const char *)&DAT_0051adc8[0])); break;
-        case 3:  modelName.set(Str::intern((const char *)&DAT_0051add8[0])); break;
-        case 4:  modelName.set(Str::intern((const char *)&DAT_0051adf0[0])); break;
-        case 5:  modelName.set(Str::intern((const char *)&DAT_0051ae00[0])); break;
-        case 6:  modelName.set(Str::intern((const char *)&DAT_0051ae10[0])); break;
-        case 7:  modelName.set(Str::intern((const char *)&DAT_0051ae20[0])); break;
-        case 8:  modelName.set(Str::intern((const char *)&DAT_0051ae30[0])); break;
-        case 9:  modelName.set(Str::intern((const char *)&DAT_0051ae40[0])); break;
-        case 10: modelName.set(Str::intern((const char *)&DAT_0051ae50[0])); break;
-        case 11: modelName.set(Str::intern((const char *)&DAT_0051ae60[0])); break;
-        case 12: modelName.set(Str::intern((const char *)&DAT_0051ae70[0])); break;
-        case 13: modelName.set(Str::intern((const char *)&DAT_0051ae80[0])); break;
-        case 14: modelName.set(Str::intern((const char *)&DAT_0051aea0[0])); break;
-        case 15: modelName.set(Str::intern((const char *)&DAT_0051aeb0[0])); break;
-        }
-        sp80[2] = 0.0f;
-        sp80[0] = -410.0f;
-        sp80[1] = 240.0f;
-        beNDMWWindow_PresentModel(arg0, &DAT_0051aec0[0], arg0->_playerNo, modelName.p, &DAT_0051ac10[0], &sp80[0]);
-    }
-}
-
-void beNDMWStatusTitle01_ShowStatusLayout(int *arg0) {
-    Tbl sp30;
-    const char **p;
-    FUN_00425430((beNDMWWindow *)arg0);
-    beNDMWWindow_PresentModelAtOrigin(arg0, DAT_0051af10, arg0[5], DAT_0051af20, ((char *)DAT_0051ac10));
-    sp30 = DAT_004cf7a0;
-    p = sp30.s;
-    if (*p != 0) {
-        do {
-            beMessenger_SelectGroup(arg0[3], ((char *)DAT_0051af30));
-            beMessenger_AppendString(arg0[3], DAT_0051ac30);
-            beMessenger_AppendString(arg0[3], *p);
-            beMessenger_AppendString(arg0[3], DAT_0051af38);
-            beMessenger_DispatchSelected(arg0[3], DAT_0051af40);
-            p++;
-        } while (*p != 0);
-    }
-    beMessenger_SelectGroup(arg0[3], ((char *)DAT_0051af30));
-    beMessenger_AppendString(arg0[3], DAT_0051acc8);
-    beMessenger_AppendString(arg0[3], ((char *)DAT_0051ace0));
-    beMessenger_AppendString(arg0[3], DAT_0051af38);
-    beMessenger_DispatchSelected(arg0[3], DAT_0051af40);
-}
-
-void beNDMWStatusTitle01_ShowShopLayout(W *arg0) {
-    Tb sp30;
-    int *s1;
-    FUN_00425430((beNDMWWindow *)arg0);
-    beNDMWWindow_PresentModelAtOrigin((int *)arg0, DAT_0051af48, arg0->f20, DAT_0051ac08, DAT_0051ac10);
-    sp30 = DAT_004cf820;
-    s1 = sp30.p;
-    if (sp30.p[0] != 0) {
-        do {
-            beMessenger_SelectGroup(arg0->f12, DAT_0051af30);
-            beMessenger_AppendString(arg0->f12, ((int *)DAT_0051ac30));
-            beMessenger_AppendString(arg0->f12, (void *)*s1);
-            beMessenger_AppendString(arg0->f12, DAT_0051af58);
-            beMessenger_DispatchSelected(arg0->f12, ((int *)DAT_0051af40));
-            s1 += 1;
-        } while (*s1 != 0);
-    }
-    beMessenger_SelectGroup(arg0->f12, DAT_0051af30);
-    beMessenger_AppendString(arg0->f12, ((int *)DAT_0051acc8));
-    beMessenger_AppendString(arg0->f12, DAT_0051ace0);
-    beMessenger_AppendString(arg0->f12, DAT_0051af58);
-    beMessenger_DispatchSelected(arg0->f12, ((int *)DAT_0051af40));
-}
-
-void Gap__Bec__beNDMWStatusTitle02__vfunc_22(int p0, char * p1, int p2, char * p3, char * p4)
-{
-    beNDMWWindow_PresentModelAtOrigin(p0, DAT_0051af60, 0, DAT_0051af70, DAT_0051af80);
-}
-
-void Gap__Bec__beNDMWStatusTitle03__vfunc_22(Sh *arg0) {
-    beNDMWWindow_PresentModelAtOrigin(arg0, DAT_0051af90, 0, DAT_0051ac08, DAT_0051ac10);
-    INTERN_APPEND(arg0->f60, DAT_0051afa0)
-    INTERN_APPEND(arg0->f64, DAT_0051acb0)
-    INTERN_APPEND(arg0->f60, DAT_0051afa0)
-    INTERN_APPEND(arg0->f64, DAT_0051ace0)
-    INTERN_APPEND(arg0->f60, DAT_0051afa0)
-    INTERN_APPEND(arg0->f64, DAT_0051afb0)
-    beNDMWWindow_RunMessageScript(arg0, DAT_0051ad60, 0);
-}
-
-void beNDMWStatusTitle03_SetFont002Enabled(beNDMWStatusTitle03 *arg0, int arg1) {
-    beMessenger_SelectGroup(arg0->_messenger, &DAT_0051af30[0]);
-    beMessenger_AppendString(arg0->_messenger, &DAT_0051afa0[0]);
-    beMessenger_AppendString(arg0->_messenger, &DAT_0051afb0[0]);
-    if (arg1 != 0) {
-        beMessenger_DispatchSelected(arg0->_messenger, &DAT_0051afb8[0]);
-        return;
-    }
-    beMessenger_DispatchSelected(arg0->_messenger, &DAT_0051afc8[0]);
-}
-
-void Gap__Bec__beNDMWStatusTitle04__vfunc_22(Sh *arg0) {
-    beNDMWWindow_PresentModelAtOrigin(arg0, DAT_0051afd8, 0, DAT_0051ac08, DAT_0051ac10);
-    INTERN_APPEND(arg0->f60, DAT_0051afe8)
-    INTERN_APPEND(arg0->f64, DAT_0051acb0)
-    beNDMWWindow_RunMessageScript(arg0, DAT_0051ad60, arg0->f44);
-}
-
-int Gap__Bec__beNDMWStatusTitle04__vfunc_20(void)
-{
-    return g_beNDMWStatusTitle04_metaObject[0];
-}
-
-int Gap__Bec__beNDMWStatusTitle03__vfunc_20(void)
-{
-    return g_beNDMWStatusTitle03_metaObject[0];
-}
-
-int Gap__Bec__beNDMWStatusTitle02__vfunc_20(void)
-{
-    return g_beNDMWStatusTitle02_metaObject[0];
-}
-
-int Gap__Bec__beNDMWStatusTitle01__vfunc_20(void)
-{
-    return g_beNDMWStatusTitle01_metaObject[0];
-}
-
-int Gap__Bec__beNDMWStatusTitle00__vfunc_20(void)
-{
-    return g_beNDMWStatusTitle00_metaObject[0];
-}
-
-int Gap__Bec__beNDMWWindowTitle__vfunc_20(void)
-{
-    return g_beNDMWWindowTitle_metaObject[0];
-}
-
+/* vfunc_20 of each title class returns its class meta object. */
+extern "C" int Gap__Bec__beNDMWStatusTitle04__vfunc_20(void) { return g_beNDMWStatusTitle04_metaObject[0]; }
+extern "C" int Gap__Bec__beNDMWStatusTitle03__vfunc_20(void) { return g_beNDMWStatusTitle03_metaObject[0]; }
+extern "C" int Gap__Bec__beNDMWStatusTitle02__vfunc_20(void) { return g_beNDMWStatusTitle02_metaObject[0]; }
+extern "C" int Gap__Bec__beNDMWStatusTitle01__vfunc_20(void) { return g_beNDMWStatusTitle01_metaObject[0]; }
+extern "C" int Gap__Bec__beNDMWStatusTitle00__vfunc_20(void) { return g_beNDMWStatusTitle00_metaObject[0]; }
+extern "C" int Gap__Bec__beNDMWWindowTitle__vfunc_20(void) { return g_beNDMWWindowTitle_metaObject[0]; }

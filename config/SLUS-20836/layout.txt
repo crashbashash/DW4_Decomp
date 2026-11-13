@@ -33689,7 +33689,7 @@
 00424230 000064 code Gap__Bec__beNDMWStatusTitle00__vfunc_22
 00424294 00000c data data_00424294
 004242a0 001190 code Gap__Bec__beNDMWStatusTitle01__vfunc_22
-00425430 000a30 code FUN_00425430
+00425430 000a30 code beNDMWStatusTitle01_ShowDigimonFace
 00425e60 000144 code beNDMWStatusTitle01_ShowStatusLayout
 00425fa4 00000c data data_00425fa4
 00425fb0 000144 code beNDMWStatusTitle01_ShowShopLayout
@@ -36161,7 +36161,7 @@
 00519ff8 000228 data data_00519ff8
 0051a220 000050 jtbl jtbl_0051a220 beNDMWStatusCtrlDisk_Update
 0051a270 000c60 data data_0051a270
-0051aed0 000040 jtbl jtbl_0051aed0 FUN_00425430
+0051aed0 000040 jtbl jtbl_0051aed0 beNDMWStatusTitle01_ShowDigimonFace
 0051af10 000460 data data_0051af10
 0051b370 000028 jtbl jtbl_0051b370 beNDMWShopCtrl00_Update
 0051b398 000118 data data_0051b398

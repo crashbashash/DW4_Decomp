@@ -25,6 +25,7 @@
 0x003b8630	beNDMWShopCtrl30_Create	game
 0x003b8860	beNDMWShopCtrlEvolve_Create	game
 0x003b8b60	beNDMWShopCtrl10_Create	game
+0x00425430	beNDMWStatusTitle01_ShowDigimonFace	game
 0x00425e60	beNDMWStatusTitle01_ShowStatusLayout	game
 0x00425fb0	beNDMWStatusTitle01_ShowShopLayout	game
 0x00426530	beNDMWStatusTitle03_SetFont002Enabled	game

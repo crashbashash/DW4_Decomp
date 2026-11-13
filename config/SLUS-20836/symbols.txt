@@ -19376,7 +19376,7 @@
 00424160 0000d0 Gap__Bec__beNDMWWindowTitle__vfunc_21 Gap::Bec::beNDMWWindowTitle::vfunc_21
 00424230 000064 Gap__Bec__beNDMWStatusTitle00__vfunc_22 Gap::Bec::beNDMWStatusTitle00::vfunc_22
 004242a0 001190 Gap__Bec__beNDMWStatusTitle01__vfunc_22 Gap::Bec::beNDMWStatusTitle01::vfunc_22
-00425430 000a30 FUN_00425430
+00425430 000a30 beNDMWStatusTitle01_ShowDigimonFace
 00425e60 000144 beNDMWStatusTitle01_ShowStatusLayout
 00425fb0 000144 beNDMWStatusTitle01_ShowShopLayout
 00426100 000034 Gap__Bec__beNDMWStatusTitle02__vfunc_22 Gap::Bec::beNDMWStatusTitle02::vfunc_22
