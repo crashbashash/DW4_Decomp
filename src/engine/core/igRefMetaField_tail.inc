@@ -81,12 +81,12 @@ block12:
         if (arg4 != 0) {
             Rec *r = ((Rec *)FUN_002d7c50((O7c50 *)arg4, (unsigned)(*arg2)));
             if (r != 0) {
-                sprintf(w, Reference_d, r->name);
+                sprintf(w, text_Reference_d, r->name);
             } else {
-                sprintf(w, Reference_1);
+                sprintf(w, text_Reference_1);
             }
         } else {
-            sprintf(w, Reference_1);
+            sprintf(w, text_Reference_1);
         }
     }
     int *pi;

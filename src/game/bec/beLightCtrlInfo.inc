@@ -84,7 +84,7 @@ void beLightCtrlInfo_InitFields(void) {
 
 int FUN_0035bfb0(void) {
     if (DAT_00589248[0] == 0) {
-        DAT_00589248[0] = igMetaEnum_Create(&MsgAction[0], &DAT_004c6370[0], &DAT_00589250[0], 1);
+        DAT_00589248[0] = igMetaEnum_Create(&text_MsgAction[0], &DAT_004c6370[0], &DAT_00589250[0], 1);
     }
     return DAT_00589248[0];
 }

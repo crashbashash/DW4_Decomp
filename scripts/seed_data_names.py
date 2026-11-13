@@ -124,7 +124,7 @@ def ident(cls):
     return re.sub(r"\W", "_", cls)
 
 
-# names a string's text cannot take as they are: C and C++ keywords and the literals they spell
+# C and C++ keywords and the literals they spell, which no name can take
 KEYWORDS = frozenset(
     "asm auto bool break case catch char class const const_cast continue default delete do double "
     "dynamic_cast else enum explicit export extern false float for friend goto if inline int long "
@@ -134,12 +134,13 @@ KEYWORDS = frozenset(
 
 
 def string_name(text, syms, types):
-    """A string's name is its text, unless that cannot name it: a leading digit, a keyword, a function's
-    name, a reflected type's name (a string "igInfoManager" next to the class igInfoManager), or a word
-    that starts lower-case (`size`, `showFrameRate`), the spelling of the parameters and locals that
-    would hide it."""
-    taken = (not text[0].isupper() or text in KEYWORDS or text in syms.values() or text in types)
-    return "text_" + text if taken else text
+    """A string's name is its text when that text is upper case (`SQ_OPEN`, `GAMERAM`), a spelling the
+    game's own identifiers do not take. Any other text is named `text_<text>`: a lower-case or capitalised
+    word (`size`, `showFrameRate`, `Zero`) is how a parameter, local or file-static is spelled, and the
+    string's name would hide it or clash with it; so would a keyword, a function's or a type's name."""
+    plain = (text[0].isupper() and text == text.upper() and text not in KEYWORDS
+             and text not in syms.values() and text not in types)
+    return text if plain else "text_" + text
 
 
 def unique(name, va, rows, copies=False):

@@ -98,7 +98,7 @@ void beAction2Data_InitFields(void) {
 
 int beAction2_GetMessageEnum(void) {
     if (DAT_0058a020[0] == 0) {
-        DAT_0058a020[0] = igMetaEnum_Create(&MsgAction[0], &DAT_004c81f0[0], &DAT_004c8210[0], 7);
+        DAT_0058a020[0] = igMetaEnum_Create(&text_MsgAction[0], &DAT_004c81f0[0], &DAT_004c8210[0], 7);
     }
     return DAT_0058a020[0];
 }

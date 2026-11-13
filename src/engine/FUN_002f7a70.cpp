@@ -53,8 +53,8 @@ extern char *g_memoryContextNames[46];
 extern void *DAT_00586fd0;
 extern void *g_stringPool;
 extern void *DAT_00587218[4];
-extern char InhibitEventTracker[];
-extern char UseEventTracker[];
+extern char text_InhibitEventTracker[];
+extern char text_UseEventTracker[];
 }
 
 extern "C" int igObject_InitHeader(...);
@@ -619,9 +619,9 @@ extern char text_defaultPoolPreSize[];
 extern char text_systemPoolPreSize[];
 extern char text_scratchPoolSize[];
 extern char text_scratchPadPoolSize[];
-extern char Fixed[];
-extern char HighSpeed[];
-extern char OnDemand[];
+extern char text_Fixed[];
+extern char text_HighSpeed[];
+extern char text_OnDemand[];
 extern char text_driverPoolSize[];
 class PoolDescTable { public: virtual void p0(); virtual void p1(); virtual void p2(); virtual void p3(); virtual void p4(); virtual void p5(); virtual void p6(); virtual void p7(); virtual void p8(); virtual void p9(); virtual void p10(); virtual void p11(); virtual void p12(); virtual void p13(); virtual void p14(); virtual void p15(); virtual void p16(); virtual void p17(); virtual void p18(); virtual void p19(); virtual void p20(); virtual void p21(); virtual void p22(); virtual igResult load(int, char *); int rc; };
 class PoolDescSetupBase { public: virtual void p0(); virtual void p1(); virtual void p2(); virtual void p3(); virtual void p4(); virtual void p5(); virtual void p6(); virtual void p7(); virtual void p8(); virtual void p9(); virtual void p10(); virtual void p11(); virtual void p12(); virtual void p13(); virtual void p14(); virtual void p15(); virtual void p16(); virtual void p17(); virtual void p18(); virtual void p19(); virtual void p20(); virtual void p21(); virtual void p22(); virtual void p23(); virtual char *recordName(int); };
@@ -833,7 +833,7 @@ extern "C" void MemoryContext_BuildAllocator(int *out, igMemoryPoolContextInfo *
 extern int DAT_00587020[4];
 extern int DAT_00587030[4];
 extern int g_metadataAllocatorKey[4];
-extern char Level[], Frame[], Fixed[], HighSpeed[], OnDemand[], LongTerm[], Create[], Reset[], Dynamic[], ONDEMAND[], text_ondemand[], SystemMemory[], Low[], High[], Virtual[], Raw[], Custom[];
+extern char text_Level[], text_Frame[], text_Fixed[], text_HighSpeed[], text_OnDemand[], text_LongTerm[], text_Create[], text_Reset[], text_Dynamic[], ONDEMAND[], text_ondemand[], text_SystemMemory[], text_Low[], text_High[], text_Virtual[], text_Raw[], text_Custom[];
 #define RC(o) ((unsigned long long)(long long)(int)(o)->_refCount & 0x7fffffULL)
 void MemoryContext_BuildAllocator(int *out, igMemoryPoolContextInfo *arg1, int idx, int flag);
 
@@ -1259,7 +1259,7 @@ extern "C" void FUN_002f8280(Slot6 *arg0, int arg1, int arg2, int arg3);
 void FUN_002f8280(Slot6 *arg0, int arg1, int arg2, int arg3);
 
 
-extern char Pool_statistics[], DAT_004fab20[], DAT_004f90b0[], DAT_004fab30[];
+extern char text_Pool_statistics[], DAT_004fab20[], DAT_004f90b0[], DAT_004fab30[];
 class VB2 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void * v88(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void d32(); virtual void d33(); virtual void d34(); virtual void d35(); virtual void d36(); virtual void d37(); virtual void d38(); virtual void d39(); virtual void d40(); virtual void d41(); virtual void d42(); virtual void d43(); virtual void d44(); virtual void d45(); virtual void d46(); virtual void d47(); virtual void d48(); virtual void d49(); virtual void d50(); virtual void d51(); virtual void d52(); virtual void d53(); virtual void d54(); virtual void d55(); virtual void d56(); virtual void d57(); virtual void d58(); virtual void d59(); virtual void d60(); virtual void d61(); virtual void d62(); virtual void d63(); virtual void d64(); virtual void d65(); virtual void d66(); virtual void d67(); virtual void d68(); virtual void d69(); virtual void d70(); virtual void d71(); virtual void d72(); virtual void d73(); virtual void d74(); virtual void d75(); virtual void d76(); virtual void d77(); virtual void d78(); virtual void d79(); virtual void d80(); virtual void d81(); virtual void d82(); virtual void d83(); virtual void d84(); virtual void v348(int); };
 struct Z { int w[7]; int f28; };
 extern "C" void FUN_002f8420(VA *arg0, char *arg1, VB2 *arg2);
@@ -1269,7 +1269,7 @@ void FUN_002f8420(VA *arg0, char *arg1, VB2 *arg2);
 extern "C" int FUN_002f0a60(...);
 extern int DAT_004f95c8[4];
 extern int DAT_004fab70[4];
-extern int Combined_pool_statistics[4];
+extern int text_Combined_pool_statistics[4];
 struct E3 { char p[20]; int f20; char q[120]; };
 extern "C" void FUN_002f8580(E3 *arg0, int *arg1);
 class DW4VC_144_0 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void d32(); virtual void d33(); virtual int vX(); };

@@ -72,7 +72,7 @@ void beHitLandModelInfo_InitFields(void) {
 
 int FUN_0035d720(void) {
     if (DAT_00589348[0] == 0) {
-        DAT_00589348[0] = igMetaEnum_Create(&Message_2[0], &DAT_004c65a0[0], &DAT_004c65c0[0], 5);
+        DAT_00589348[0] = igMetaEnum_Create(&text_Message[0], &DAT_004c65a0[0], &DAT_004c65c0[0], 5);
     }
     return DAT_00589348[0];
 }

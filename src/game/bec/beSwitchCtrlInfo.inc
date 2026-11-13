@@ -78,7 +78,7 @@ void beSwitchCtrlInfo_InitFields(void) {
 
 int beSwitchCtrl_GetMessageEnum(void) {
     if (DAT_00587df0[0] == 0) {
-        DAT_00587df0[0] = igMetaEnum_Create(&MsgAction[0], &DAT_004c3780[0], &DAT_004c3788[0], 2);
+        DAT_00587df0[0] = igMetaEnum_Create(&text_MsgAction[0], &DAT_004c3780[0], &DAT_004c3788[0], 2);
     }
     return DAT_00587df0[0];
 }

@@ -169,21 +169,21 @@ int FUN_00361d20(void) {
 
 int beFont_GetAlignEnum(void) {
     if (DAT_00589660[0] == 0) {
-        DAT_00589660[0] = igMetaEnum_Create(&Align[0], &DAT_004c6ca0[0], &DAT_004c6cb0[0], 3);
+        DAT_00589660[0] = igMetaEnum_Create(&text_Align[0], &DAT_004c6ca0[0], &DAT_004c6cb0[0], 3);
     }
     return DAT_00589660[0];
 }
 
 int beFont_GetSwitchEnum(void) {
     if (DAT_00589668[0] == 0) {
-        DAT_00589668[0] = igMetaEnum_Create(&SwtCtl[0], &DAT_004c6cc0[0], &DAT_004c6cd0[0], 4);
+        DAT_00589668[0] = igMetaEnum_Create(&text_SwtCtl[0], &DAT_004c6cc0[0], &DAT_004c6cd0[0], 4);
     }
     return DAT_00589668[0];
 }
 
 int beFont_GetMessageEnum(void) {
     if (DAT_00589670[0] == 0) {
-        DAT_00589670[0] = igMetaEnum_Create(&Message_2[0], &DAT_004c6ce0[0], &DAT_004c6d10[0], 9);
+        DAT_00589670[0] = igMetaEnum_Create(&text_Message[0], &DAT_004c6ce0[0], &DAT_004c6d10[0], 9);
     }
     return DAT_00589670[0];
 }

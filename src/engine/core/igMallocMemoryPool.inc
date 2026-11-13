@@ -1,6 +1,6 @@
 int FUN_002ce1b0(void) {
     if (DAT_00586b78[0] == 0) {
-        DAT_00586b78[0] = ((int)igMetaEnum_Create((char *)&MessageLevel[0], (char **)&DAT_004c1a10[0], &DAT_004c1a20[0], 4));
+        DAT_00586b78[0] = ((int)igMetaEnum_Create((char *)&text_MessageLevel[0], (char **)&DAT_004c1a10[0], &DAT_004c1a20[0], 4));
     }
     return DAT_00586b78[0];
 }

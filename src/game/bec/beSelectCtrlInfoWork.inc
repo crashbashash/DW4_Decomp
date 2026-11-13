@@ -102,7 +102,7 @@ void beSelectCtrlInfoWork_InitFields(void) {
 
 int beSelectCtrl_GetMessageEnum(void) {
     if (DAT_00587f90[0] == 0) {
-        DAT_00587f90[0] = igMetaEnum_Create(&MsgAction[0], &DAT_004c3b40[0], &DAT_004c3b60[0], 7);
+        DAT_00587f90[0] = igMetaEnum_Create(&text_MsgAction[0], &DAT_004c3b40[0], &DAT_004c3b60[0], 7);
     }
     return DAT_00587f90[0];
 }

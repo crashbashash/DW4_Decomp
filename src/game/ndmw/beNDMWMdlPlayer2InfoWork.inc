@@ -103,7 +103,7 @@ void beNDMWMdlPlayer2InfoWork_InitFields(void) {
 
 int PanelCloseSeqList_GetMetaEnum(void) {
     if (DAT_0058b3a0[0] == 0) {
-        DAT_0058b3a0[0] = igMetaEnum_Create(&PanelCloseSeqList[0], &DAT_004ca820[0], &DAT_004ca840[0], 7);
+        DAT_0058b3a0[0] = igMetaEnum_Create(&text_PanelCloseSeqList[0], &DAT_004ca820[0], &DAT_004ca840[0], 7);
     }
     return DAT_0058b3a0[0];
 }

@@ -1,6 +1,6 @@
 int FUN_00147030(void) {
     if (DAT_0055f758[0] == 0) {
-        DAT_0055f758[0] = igMetaEnum_Create(&ControllerPhase[0], &DAT_00487580[0], &DAT_004875a0[0], 8);
+        DAT_0055f758[0] = igMetaEnum_Create(&text_ControllerPhase[0], &DAT_00487580[0], &DAT_004875a0[0], 8);
     }
     return DAT_0055f758[0];
 }

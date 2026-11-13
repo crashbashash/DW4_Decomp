@@ -233,8 +233,8 @@ int FUN_001562d0(struct A_1562d0 *arg0, int arg1) {
 }
 
 void FUN_00156300(void) {
-    FUN_00308860(g_globalContext[0], &ImageData[0], 0x10);
-    igMemoryRefMetaField_SetAlignmentType(DAT_0055fde0[0], &ImageData[0]);
+    FUN_00308860(g_globalContext[0], &text_ImageData[0], 0x10);
+    igMemoryRefMetaField_SetAlignmentType(DAT_0055fde0[0], &text_ImageData[0]);
 }
 
 void FUN_00156340(S0_156340 *arg0, void **arg1) {

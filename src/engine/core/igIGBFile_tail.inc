@@ -1568,7 +1568,7 @@ int igIGBFile_ReadFile(File *self, int path) {
   self->loaded = 1;
   self->loading = 0;
   if (!GPR_00554c0c) {
-    int answer = FUN_00308240(Total_Time_to_load_s_f_seconds, path, dpsub(DAT_005871d8[0]->now(), startTime));
+    int answer = FUN_00308240(text_Total_Time_to_load_s_f_seconds, path, dpsub(DAT_005871d8[0]->now(), startTime));
     if (answer != 1 && answer == 2) GPR_00554c0c = 1;
   }
   return self->result;

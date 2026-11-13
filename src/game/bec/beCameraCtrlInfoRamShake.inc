@@ -108,7 +108,7 @@ void beCameraCtrlInfoRamShake_InitFields(void) {
 
 int beCameraCtrl_GetMessageEnum(void) {
     if (DAT_00589c88[0] == 0) {
-        DAT_00589c88[0] = igMetaEnum_Create(&MsgAction[0], &DAT_004c79d0[0], &DAT_004c7a10[0], 0xF);
+        DAT_00589c88[0] = igMetaEnum_Create(&text_MsgAction[0], &DAT_004c79d0[0], &DAT_004c7a10[0], 0xF);
     }
     return DAT_00589c88[0];
 }

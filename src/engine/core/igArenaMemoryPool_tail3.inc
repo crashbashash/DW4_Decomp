@@ -201,14 +201,14 @@ void Gap__Core__igArenaMemoryPool__vfunc_45(int *out, igArenaMemoryPool *pool, s
     messages = request->messages;
     if (options) {
         flags = 0;
-        if (strstr(options, ((char *)Fill))) flags |= 2;
-        if (strstr(options, ((char *)Zero))) flags |= 4;
-        if (strstr(options, Sentinels)) flags |= 1;
-        if (strstr(options, Contiguous)) flags |= 0x10;
-        if (strstr(options, ((char *)AutoLock))) flags |= 8;
-        if (strstr(options, ((char *)SystemMemoryExhausted))) flags |= 0x80;
-        if (strstr(options, PreSizeReached)) flags |= 0x40;
-        if (strstr(options, ((char *)MaxSizeReached))) flags |= 0x20;
+        if (strstr(options, ((char *)text_Fill))) flags |= 2;
+        if (strstr(options, ((char *)text_Zero))) flags |= 4;
+        if (strstr(options, text_Sentinels)) flags |= 1;
+        if (strstr(options, text_Contiguous)) flags |= 0x10;
+        if (strstr(options, ((char *)text_AutoLock))) flags |= 8;
+        if (strstr(options, ((char *)text_SystemMemoryExhausted))) flags |= 0x80;
+        if (strstr(options, text_PreSizeReached)) flags |= 0x40;
+        if (strstr(options, ((char *)text_MaxSizeReached))) flags |= 0x20;
         if (pool == ((struct CoreGlobals * *)g_objectSystem)[0]->defaultPool && (flags & 1) != (pool->_poolOptionFlags & 1)) {
             flags ^= 1;
         }
@@ -216,26 +216,26 @@ void Gap__Core__igArenaMemoryPool__vfunc_45(int *out, igArenaMemoryPool *pool, s
     }
     if (integrityCheck) {
         int level = pool->_heapIntegrityCheckLevel;
-        if (strstr(integrityCheck, NoChecking)) {
+        if (strstr(integrityCheck, text_NoChecking)) {
             level = 0;
-        } else if (strstr(integrityCheck, LightChecking)) {
+        } else if (strstr(integrityCheck, text_LightChecking)) {
             level = 1;
-        } else if (strstr(integrityCheck, ModerateChecking)) {
+        } else if (strstr(integrityCheck, text_ModerateChecking)) {
             level = 2;
-        } else if (strstr(integrityCheck, HeavyChecking)) {
+        } else if (strstr(integrityCheck, text_HeavyChecking)) {
             level = 3;
         }
         pool->_heapIntegrityCheckLevel = level;
     }
     if (messages) {
         int level = pool->_messageLevel;
-        if (strstr(messages, ((char *)NoMessages))) {
+        if (strstr(messages, ((char *)text_NoMessages))) {
             level = 0;
-        } else if (strstr(messages, ((char *)ErrorMessages))) {
+        } else if (strstr(messages, ((char *)text_ErrorMessages))) {
             level = 1;
-        } else if (strstr(messages, ((char *)WarningMessages))) {
+        } else if (strstr(messages, ((char *)text_WarningMessages))) {
             level = 2;
-        } else if (strstr(messages, ((char *)Notifications))) {
+        } else if (strstr(messages, ((char *)text_Notifications))) {
             level = 3;
         }
         pool->_messageLevel = level;
@@ -584,7 +584,7 @@ void Gap__Core__igArenaMemoryPool__vfunc_97(Pool97 *self) {
     ((char *)self)[7] = 0;
     self->arena = (Arena97 *)((SystemAllocator_3125d0 * *)DAT_00587218)[0]->Alloc(0x814);
     if (self->arena == 0 && GPR_00554d64 == 0) {
-        v = FUN_00308320(Unable_to_allocate_memory_for_ar);
+        v = FUN_00308320(text_Unable_to_allocate_memory_for_ar);
         if (v != 1) {
             if (v == 2)
                 GPR_00554d64 = 1;
@@ -614,7 +614,7 @@ void Gap__Core__igArenaMemoryPool__vfunc_97(Pool97 *self) {
     if (self->arena->f2020 == 0) {
         self->arena->f2020 = (int)((SystemAllocator_3125d0 * *)DAT_00587218)[0]->AllocAligned(0x200, 4);
         if (self->arena->f2020 == 0 && GPR_00554d68 == 0) {
-            v = FUN_00308320(Unable_to_allocate_memory_for_ar);
+            v = FUN_00308320(text_Unable_to_allocate_memory_for_ar);
             if (v != 1) {
                 if (v == 2)
                     GPR_00554d68 = 1;
@@ -921,7 +921,7 @@ void Gap__Core__igArenaMemoryPool__vfunc_03(Pool03 *arg0, int arg1) {
     if (arg0->f70->f7e4 == 0) {
         arg0->f70->f7e4 = ((SystemAllocator_3125d0 * *)DAT_00587218)[0]->AllocAligned(0x200, 4);
         if (arg0->f70->f7e4 == 0 && GPR_00554d7c == 0) {
-            t = FUN_00308320(Unable_to_allocate_memory_for_ar);
+            t = FUN_00308320(text_Unable_to_allocate_memory_for_ar);
             if (t != 1 && t == 2) {
                 GPR_00554d7c = 1;
             }

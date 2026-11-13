@@ -109,7 +109,7 @@ extern "C" int igAdxAudio_StartFile(struct A *arg0, int arg1);
 struct S_3323d0 { char pad[8]; int f8; char pad2[32]; int f44; };
 extern "C" void igAdxAudio_Shutdown(S_3323d0 *arg0);
 typedef struct R { char pad4[4]; int f4; } R;
-extern "C" int User0[4];
+extern "C" int text_User0[4];
 typedef struct Obj { int w0; unsigned refs; } Obj;
 extern "C" int DAT_005873a8[4];
 extern "C" int DAT_005873b8[4];
@@ -346,7 +346,7 @@ void FUN_003324c0(void) {
     int temp_s0;
     R *old;
 
-    temp_s0 = Memory_GetAllocatorByName(&User0[0]);
+    temp_s0 = Memory_GetAllocatorByName(&text_User0[0]);
     old = ((R * *)DAT_005875e0)[0];
     if (old != 0) {
         old->f4 = old->f4 - 1;
@@ -382,7 +382,7 @@ void FUN_00332530(void) {
     FUN_00280d20();
     FUN_0010b9c0(2);
     RemoveIntcHandler(2, DAT_005873c0[0]);
-    temp_s0 = Memory_GetAllocatorByName(&User0[0]);
+    temp_s0 = Memory_GetAllocatorByName(&text_User0[0]);
     if (DAT_005873a8[0] != 0) {
         Memory_FreeBufferWithAllocator(DAT_005873a8[0], temp_s0);
         DAT_005873a8[0] = 0;
@@ -516,7 +516,7 @@ int FUN_00332860(void) {
     } else {
         FUN_0026b008(0);
     }
-    temp_s0 = Memory_GetAllocatorByName(&User0[0]);
+    temp_s0 = Memory_GetAllocatorByName(&text_User0[0]);
     if ((*(unsigned char *)&g_adxUseFileInfoCache) != 0) {
         memset(&DAT_005873a0[0], 0, 0x10);
         DAT_005873a0[0] = (int)&text_cdvd_fic[0];
@@ -581,7 +581,7 @@ void igAdx_SetPartitionCount(int arg0) {
     int var_v1;
     T_332d20 *object;
 
-    temp_s2 = Memory_GetAllocatorByName(&User0[0]);
+    temp_s2 = Memory_GetAllocatorByName(&text_User0[0]);
     if (((int *)DAT_005875f0)[0] != 0) {
         if (g_adxPartitionCount[0] > 0) {
             var_s1 = 0;
@@ -740,7 +740,7 @@ int igAdx_LoadPartition(int stream, const char *path, int mode, int length)
     if (!GPR_00554de8) return 0;
     size = ((length + 1) * 2 + 282) & ~3;
     if (size > 0) {
-        DAT_005875f0[0][stream] = ((void *)Memory_AllocateAlignedWithAllocator(size, 16, ((void *)Memory_GetAllocatorByName(((char *)User0)))));
+        DAT_005875f0[0][stream] = ((void *)Memory_AllocateAlignedWithAllocator(size, 16, ((void *)Memory_GetAllocatorByName(((char *)text_User0)))));
     }
     igAdx_AddPartitionName(stream, (char *)path);
     name = StringList_CopyRetained(((int *)DAT_00587608)[0], stream).p;

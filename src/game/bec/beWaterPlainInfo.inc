@@ -53,7 +53,7 @@ void beWaterPlainInfo_GetMetaObject(void)
 
 int FUN_00340c60(void) {
     if (DAT_00587be8[0] == 0) {
-        DAT_00587be8[0] = igMetaEnum_Create(&Message_2[0], &DAT_004c3348[0], &DAT_00587bf0[0], 1);
+        DAT_00587be8[0] = igMetaEnum_Create(&text_Message[0], &DAT_004c3348[0], &DAT_00587bf0[0], 1);
     }
     return DAT_00587be8[0];
 }

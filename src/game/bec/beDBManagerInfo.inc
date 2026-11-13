@@ -78,7 +78,7 @@ void beDBManagerInfo_InitFields(void) {
 
 int FUN_00366070(void) {
     if (DAT_00589948[0] == 0) {
-        DAT_00589948[0] = igMetaEnum_Create(&MsgAction[0], &DAT_004c7348[0], &DAT_00589950[0], 1);
+        DAT_00589948[0] = igMetaEnum_Create(&text_MsgAction[0], &DAT_004c7348[0], &DAT_00589950[0], 1);
     }
     return DAT_00589948[0];
 }

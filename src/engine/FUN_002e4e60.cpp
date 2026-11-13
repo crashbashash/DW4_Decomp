@@ -66,7 +66,7 @@ extern int text_forceWriteMemoryPoolInfoFromMeta[4];
 extern int text_blindObjects[4];
 extern int text_readFile_s[4];
 extern int DAT_004f9af0[4];
-extern int Total_Time_to_load_s_f_seconds[4];
+extern int text_Total_Time_to_load_s_f_seconds[4];
 extern int g_igObjectDirEntry_metaObject[4];
 extern int g_igIGBFile_metaObject[4];
 extern FieldOffsetInfo *DAT_00586280[4];

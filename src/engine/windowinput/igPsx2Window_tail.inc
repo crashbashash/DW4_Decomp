@@ -80,7 +80,7 @@ static inline void setWindowName(igPsx2Window *self, const char *name) {
 
 int Gap__igPsx2Window__vfunc_24(igPsx2Window *self, const char *name, int width, int height) {
     if (name == 0) {
-        setWindowName(self, Alchemy);
+        setWindowName(self, text_Alchemy);
     } else {
         setWindowName(self, name);
     }

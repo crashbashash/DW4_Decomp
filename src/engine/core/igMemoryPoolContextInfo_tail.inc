@@ -733,11 +733,11 @@ void FUN_002f5230(int *out, PoolDescSetup *self, int config, char *name) {
             } else {
                 buf[0] = 0;
             }
-            if (strstr(buf, InhibitEventTracker) == 0 && strstr(buf, UseEventTracker) == 0) {
+            if (strstr(buf, text_InhibitEventTracker) == 0 && strstr(buf, text_UseEventTracker) == 0) {
                 if (buf[0] != 0) {
                     __memcpy(buf, (void *)" | InhibitEventTracker", 23);
                 } else {
-                    strncpy(buf, InhibitEventTracker, 255);
+                    strncpy(buf, text_InhibitEventTracker, 255);
                 }
                 setDescString(&rec->s60, buf);
             }
@@ -776,13 +776,13 @@ void FUN_002f5230(int *out, PoolDescSetup *self, int config, char *name) {
                 if (scratchSize > 16384) { scratchSize = 16384; }
                 rec->a36 = 0x70000000;
                 rec->a28 = 16384;
-                setDescString(&rec->s44, Fixed);
-                setDescString(&rec->s48, HighSpeed);
+                setDescString(&rec->s44, text_Fixed);
+                setDescString(&rec->s48, text_HighSpeed);
                 rec->a28 = scratchSize;
             } else {
                 setDescString(&rec->s24, g_memoryContextNames[1]);
             }
-            if (rec->s52 == 0 || *rec->s52 == 0) { setDescString(&rec->s52, OnDemand); }
+            if (rec->s52 == 0 || *rec->s52 == 0) { setDescString(&rec->s52, text_OnDemand); }
             break;
         case 20:
             if (self == (*(void * *)DAT_00586fd0)) {
@@ -797,10 +797,10 @@ void FUN_002f5230(int *out, PoolDescSetup *self, int config, char *name) {
             } else {
                 setDescString(&rec->s24, g_memoryContextNames[1]);
             }
-            if (rec->s52 == 0 || *rec->s52 == 0) { setDescString(&rec->s52, OnDemand); }
+            if (rec->s52 == 0 || *rec->s52 == 0) { setDescString(&rec->s52, text_OnDemand); }
             break;
         default:
-            if (rec->s52 == 0 || *rec->s52 == 0) { setDescString(&rec->s52, OnDemand); }
+            if (rec->s52 == 0 || *rec->s52 == 0) { setDescString(&rec->s52, text_OnDemand); }
             setDescString(&rec->s24, g_memoryContextNames[1]);
             break;
         }
@@ -884,13 +884,13 @@ void MemoryContext_BuildAllocator(int *out, igMemoryPoolContextInfo *arg1, int i
     }
     if (cfg->_scope != 0) {
         slot->f140 = 0;
-        if (strstr((char *)cfg->_scope, LongTerm) == 0) {
-            if (strstr((char *)cfg->_scope, Level) != 0) slot->f140 = slot->f140 | 1;
-            else if (strstr((char *)cfg->_scope, Frame) != 0) slot->f140 = slot->f140 | 2;
+        if (strstr((char *)cfg->_scope, text_LongTerm) == 0) {
+            if (strstr((char *)cfg->_scope, text_Level) != 0) slot->f140 = slot->f140 | 1;
+            else if (strstr((char *)cfg->_scope, text_Frame) != 0) slot->f140 = slot->f140 | 2;
         }
-        if (strstr((char *)cfg->_scope, Create) != 0) slot->f140 = slot->f140 | 0x01000000;
-        if (strstr((char *)cfg->_scope, Reset) != 0) slot->f140 = slot->f140 | 0x02000000;
-        if (strstr((char *)cfg->_scope, OnDemand) != 0) slot->f140 = slot->f140 | 0x04000000;
+        if (strstr((char *)cfg->_scope, text_Create) != 0) slot->f140 = slot->f140 | 0x01000000;
+        if (strstr((char *)cfg->_scope, text_Reset) != 0) slot->f140 = slot->f140 | 0x02000000;
+        if (strstr((char *)cfg->_scope, text_OnDemand) != 0) slot->f140 = slot->f140 | 0x04000000;
         if (flag == 0) {
             int f = slot->f140;
             if ((((unsigned long long)((long long)f << 0x28)) >> 0x28) != 0 && (f & 0x05000000) != 0) {
@@ -901,7 +901,7 @@ void MemoryContext_BuildAllocator(int *out, igMemoryPoolContextInfo *arg1, int i
     }
     if (obj != 0) {
         int size = cfg->_size;
-        if (size != 0 && (cfg->_arenaType == 0 || strcmp((char *)cfg->_arenaType, Dynamic) == 0)) {
+        if (size != 0 && (cfg->_arenaType == 0 || strcmp((char *)cfg->_arenaType, text_Dynamic) == 0)) {
             r0 = ((OV *)obj)->v172(size);
         }
     } else {
@@ -923,7 +923,7 @@ void MemoryContext_BuildAllocator(int *out, igMemoryPoolContextInfo *arg1, int i
                 int refMode = !!(ctx->flags & 4);
                 if (refMode) {
                     if (cfg->_scope != 0) {
-                        if ((strstr((char *)cfg->_scope, OnDemand) != 0 || strstr((char *)cfg->_scope, ONDEMAND) != 0 || strstr((char *)cfg->_scope, text_ondemand) != 0) && flag == 0) {
+                        if ((strstr((char *)cfg->_scope, text_OnDemand) != 0 || strstr((char *)cfg->_scope, ONDEMAND) != 0 || strstr((char *)cfg->_scope, text_ondemand) != 0) && flag == 0) {
                             *out = (*(igResult_2f25d0 *)&g_statusSucceeded).v;
                             return;
                         }
@@ -966,25 +966,25 @@ void MemoryContext_BuildAllocator(int *out, igMemoryPoolContextInfo *arg1, int i
         aligned = al & ~(((Gl *)((void * *)DAT_00587218)[0])->v84() - 1);
         if (size != 0) {
             char *kind = (char *)cfg->_arenaType;
-            if (kind == 0 || strcmp(kind, Dynamic) == 0) {
+            if (kind == 0 || strcmp(kind, text_Dynamic) == 0) {
                 r2 = ((OV *)o2)->v172(size);
-            } else if (strcmp((char *)cfg->_arenaType, Fixed) == 0) {
+            } else if (strcmp((char *)cfg->_arenaType, text_Fixed) == 0) {
                 sub = (char *)cfg->_source;
                 if (sub == 0 || *sub == 0) { a = allocB; goto common; }
-                if (strcmp(sub, SystemMemory) == 0) {
+                if (strcmp(sub, text_SystemMemory) == 0) {
 b78:
                     int v = ((Gl *)((void * *)DAT_00587218)[0])->v68(0, aligned);
                     r3 = ((OV *)o2)->v96(v, aligned, 0);
                     slot->f136 = slot->f136 | 2;
-                } else if (strcmp(sub, Low) == 0 || strcmp(sub, High) == 0 || strcmp(sub, Virtual) == 0) {
+                } else if (strcmp(sub, text_Low) == 0 || strcmp(sub, text_High) == 0 || strcmp(sub, text_Virtual) == 0) {
                     goto b78;
-                } else if (strcmp(sub, HighSpeed) == 0) {
+                } else if (strcmp(sub, text_HighSpeed) == 0) {
                     int dfl = cfg->_address;
                     int a2;
                     if (dfl != 0) a2 = dfl;
                     else a2 = 0x70000000;
                     r4 = ((OV *)o2)->v96(a2, (long long)size, 0);
-                } else if (strcmp(sub, Raw) != 0 && strcmp(sub, Custom) != 0) {
+                } else if (strcmp(sub, text_Raw) != 0 && strcmp(sub, text_Custom) != 0) {
                     a = ctx->v96(sub);
                     if (a == 0) a = allocB;
 common:
@@ -1022,9 +1022,9 @@ void MemoryContext_BuildAndAttachEventTracker(R4 *out, Ctx3 *self, int idx) {
         ty = 0;
         ps = &slot->sub; igMemoryPoolInfo *sub = *ps;
         if (sub != 0) ty = (void *)sub->_releaseOptions;
-        if (ty == 0 || strstr(ty, &InhibitEventTracker[0]) == 0) {
+        if (ty == 0 || strstr(ty, &text_InhibitEventTracker[0]) == 0) {
             int h2 = (self->flags & 2) != 0;
-            if ((h2 && idx != 1) || (ty != 0 && strstr(ty, &UseEventTracker[0]) != 0)) {
+            if ((h2 && idx != 1) || (ty != 0 && strstr(ty, &text_UseEventTracker[0]) != 0)) {
                 o = (Obj5 *)FUN_002c5780((int)(self->v92(3)));
                 void *b = ((Gl2 *)(*(void * *)g_objectSystem))->f124;
                 void *f = (void *)(*ps)->_eventTrackerCapacity;
@@ -1043,7 +1043,7 @@ void MemoryContext_BuildAndAttachEventTracker(R4 *out, Ctx3 *self, int idx) {
         void *ty2 = 0;
         ps2 = &slot->sub; igMemoryPoolInfo *sub2 = *ps2;
         if (sub2 != 0) ty2 = (void *)sub2->_releaseOptions;
-        if (ty2 != 0 && strstr(ty2, &UseEventTracker[0]) != 0) {
+        if (ty2 != 0 && strstr(ty2, &text_UseEventTracker[0]) != 0) {
             o2 = (Obj5 *)FUN_002c5780((int)(self->v92(3)));
             void *b2 = ((Gl2 *)(*(void * *)g_objectSystem))->f124;
             void *f2 = (void *)(*ps2)->_eventTrackerCapacity;
@@ -1551,7 +1551,7 @@ void FUN_002f8580(E3 *arg0, int *arg1) {
     } while (i < 0x2E);
     FUN_00304430(DAT_004f95c8);
     FUN_00304680();
-    FUN_002f0a60((char *)&Combined_pool_statistics[0]);
+    FUN_002f0a60((char *)&text_Combined_pool_statistics[0]);
     ((DW4VC_144_0 *)((void **)((void * *)DAT_00587218)[0]))->vX();
 }
 
@@ -1745,7 +1745,7 @@ struct Item_2f8ca0 *FUN_002f8ca0(struct Own_2f8ca0 *arg0, char *arg1) {
     if (strncmp(arg1, ((char *)text_kIGMemoryPool), 0xD) == 0) {
         arg1 += 0xD;
     }
-    if (strncmp(arg1, Handle, 6) == 0) {
+    if (strncmp(arg1, text_Handle, 6) == 0) {
         if (strlen(arg1) != 6) {
             arg1 += 6;
         }
@@ -1758,7 +1758,7 @@ struct Item_2f8ca0 *FUN_002f8ca0(struct Own_2f8ca0 *arg0, char *arg1) {
                 if (strncmp(s, ((char *)text_kIGMemoryPool), 0xD) == 0) {
                     s += 0xD;
                 }
-                if (strncmp(s, Handle, 6) == 0) {
+                if (strncmp(s, text_Handle, 6) == 0) {
                     if (strlen(arg1) != 6) {
                         s += 6;
                     }

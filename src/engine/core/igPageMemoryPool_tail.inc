@@ -63,39 +63,39 @@ void Gap__Core__igPageMemoryPool__vfunc_45(int *arg0, struct A1_325850 *arg1, st
     temp_s3 = arg2->f48;
     if (temp_s5 != 0) {
         var_s6 = 0;
-        if (((int)strstr(temp_s5, &Fill[0])) != 0) {
+        if (((int)strstr(temp_s5, &text_Fill[0])) != 0) {
             var_s6 |= 1;
         }
-        if (((int)strstr(temp_s5, &Zero[0])) != 0) {
+        if (((int)strstr(temp_s5, &text_Zero[0])) != 0) {
             var_s6 |= 2;
         }
-        if (((int)strstr(temp_s5, &Physical[0])) != 0) {
+        if (((int)strstr(temp_s5, &text_Physical[0])) != 0) {
             var_s6 |= 8;
         }
-        if (((int)strstr(temp_s5, &AutoLock[0])) != 0) {
+        if (((int)strstr(temp_s5, &text_AutoLock[0])) != 0) {
             var_s6 |= 4;
         }
-        if (((int)strstr(temp_s5, &SystemMemoryExhausted[0])) != 0) {
+        if (((int)strstr(temp_s5, &text_SystemMemoryExhausted[0])) != 0) {
             var_s6 |= 0x20;
         }
         var_a1 = var_s6;
-        if (((int)strstr(temp_s5, &MaxSizeReached[0])) != 0) {
+        if (((int)strstr(temp_s5, &text_MaxSizeReached[0])) != 0) {
             var_a1 = var_s6 | 0x10;
         }
         FUN_00326330(arg1, var_a1);
     }
-    if ((temp_s3 != 0) && (((int)strstr(temp_s3, &Physical[0])) != 0)) {
+    if ((temp_s3 != 0) && (((int)strstr(temp_s3, &text_Physical[0])) != 0)) {
         FUN_00326330(arg1, arg1->f140 | 8);
     }
     if (temp_s4 != 0) {
         var_s3 = arg1->f136;
-        if (((int)strstr(temp_s4, &NoMessages[0])) != 0) {
+        if (((int)strstr(temp_s4, &text_NoMessages[0])) != 0) {
             var_s3 = 0;
-        } else if (((int)strstr(temp_s4, &ErrorMessages[0])) != 0) {
+        } else if (((int)strstr(temp_s4, &text_ErrorMessages[0])) != 0) {
             var_s3 = 1;
-        } else if (((int)strstr(temp_s4, &WarningMessages[0])) != 0) {
+        } else if (((int)strstr(temp_s4, &text_WarningMessages[0])) != 0) {
             var_s3 = 2;
-        } else if (((int)strstr(temp_s4, &Notifications[0])) != 0) {
+        } else if (((int)strstr(temp_s4, &text_Notifications[0])) != 0) {
             var_s3 = 3;
         }
         arg1->f136 = var_s3;

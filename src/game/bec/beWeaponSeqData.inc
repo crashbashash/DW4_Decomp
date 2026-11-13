@@ -61,7 +61,7 @@ void beWeaponSeqData_InitFields(void) {
 
 int FUN_0033f3b0(void) {
     if (DAT_00587a60[0] == 0) {
-        DAT_00587a60[0] = igMetaEnum_Create(&MsgAction[0], &DAT_004c2ff8[0], &DAT_004c3008[0], 3);
+        DAT_00587a60[0] = igMetaEnum_Create(&text_MsgAction[0], &DAT_004c2ff8[0], &DAT_004c3008[0], 3);
     }
     return DAT_00587a60[0];
 }

@@ -1,13 +1,13 @@
 int FUN_002c7720(void) {
     if (DAT_00586700[0] == 0) {
-        DAT_00586700[0] = ((int)igMetaEnum_Create((char *)&RefType[0], (char **)&DAT_004c1248[0], &DAT_004c1258[0], 3));
+        DAT_00586700[0] = ((int)igMetaEnum_Create((char *)&text_RefType[0], (char **)&DAT_004c1248[0], &DAT_004c1258[0], 3));
     }
     return DAT_00586700[0];
 }
 
 int FUN_002c7780(void) {
     if (DAT_00586708[0] == 0) {
-        DAT_00586708[0] = ((int)igMetaEnum_Create((char *)&ResolveMethod[0], (char **)&DAT_004c1268[0], &DAT_004c1278[0], 3));
+        DAT_00586708[0] = ((int)igMetaEnum_Create((char *)&text_ResolveMethod[0], (char **)&DAT_004c1268[0], &DAT_004c1278[0], 3));
     }
     return DAT_00586708[0];
 }

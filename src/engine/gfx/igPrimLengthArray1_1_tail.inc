@@ -34,8 +34,8 @@ void FUN_0015df80(S0_15df80 *arg0) {
 }
 
 void FUN_0015e010(void) {
-    FUN_00308860(g_globalContext[0], &VertexArrayData[0], 0x10);
-    igMemoryRefMetaField_SetAlignmentType(DAT_0055faa0[0], &VertexArrayData[0]);
+    FUN_00308860(g_globalContext[0], &text_VertexArrayData[0], 0x10);
+    igMemoryRefMetaField_SetAlignmentType(DAT_0055faa0[0], &text_VertexArrayData[0]);
 }
 
 void FUN_0015e050(struct S_arg0_15e050 *arg0) {

@@ -1,20 +1,20 @@
 int FUN_001a6a90(void) {
     if (DAT_005620e8[0] == 0) {
-        DAT_005620e8[0] = igMetaEnum_Create(&Status[0], &DAT_0048cf10[0], &DAT_0048cf20[0], 4);
+        DAT_005620e8[0] = igMetaEnum_Create(&text_Status[0], &DAT_0048cf10[0], &DAT_0048cf20[0], 4);
     }
     return DAT_005620e8[0];
 }
 
 int FUN_001a6af0(void) {
     if (DAT_005620f0[0] == 0) {
-        DAT_005620f0[0] = igMetaEnum_Create(&TransitionMode[0], &DAT_0048cf30[0], &DAT_0048cf50[0], 6);
+        DAT_005620f0[0] = igMetaEnum_Create(&text_TransitionMode[0], &DAT_0048cf30[0], &DAT_0048cf50[0], 6);
     }
     return DAT_005620f0[0];
 }
 
 int FUN_001a6b50(void) {
     if (DAT_005620f8[0] == 0) {
-        DAT_005620f8[0] = igMetaEnum_Create(&CombineMode[0], &DAT_0048cf68[0], &DAT_0048cf78[0], 3);
+        DAT_005620f8[0] = igMetaEnum_Create(&text_CombineMode[0], &DAT_0048cf68[0], &DAT_0048cf78[0], 3);
     }
     return DAT_005620f8[0];
 }

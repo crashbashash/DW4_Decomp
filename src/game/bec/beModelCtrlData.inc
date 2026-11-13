@@ -75,7 +75,7 @@ void beModelCtrlData_InitFields(void) {
 
 int beModelCtrl_GetMessageEnum(void) {
     if (DAT_00588e50[0] == 0) {
-        DAT_00588e50[0] = igMetaEnum_Create(&MsgAction[0], &DAT_004c58f0[0], &DAT_004c5980[0], 0x21);
+        DAT_00588e50[0] = igMetaEnum_Create(&text_MsgAction[0], &DAT_004c58f0[0], &DAT_004c5980[0], 0x21);
     }
     return DAT_00588e50[0];
 }

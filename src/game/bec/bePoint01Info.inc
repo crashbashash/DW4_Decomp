@@ -84,7 +84,7 @@ void bePoint01Info_InitFields(void) {
 
 int FUN_0034b980(void) {
     if (DAT_00588490[0] == 0) {
-        DAT_00588490[0] = igMetaEnum_Create(&MsgAction[0], &DAT_004c4550[0], &DAT_004c4570[0], 7);
+        DAT_00588490[0] = igMetaEnum_Create(&text_MsgAction[0], &DAT_004c4550[0], &DAT_004c4570[0], 7);
     }
     return DAT_00588490[0];
 }

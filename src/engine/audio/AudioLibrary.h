@@ -303,7 +303,7 @@ int FUN_00301000(InitContext *);
 int FUN_002cfe10(int);
 RpcStatus FUN_0032d640(InitRef *, int);
 void List_Resize(VoiceList *, int, int);
-extern int Intrinsic_Sound_Module[4];
+extern int text_Intrinsic_Sound_Module[4];
 extern int text_igAudio_irx[4];
 extern int g_statusSucceeded[4];
 extern int g_allocatorFailureStatus[4];

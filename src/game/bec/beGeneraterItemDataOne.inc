@@ -74,7 +74,7 @@ void beGeneraterItemDataOne_InitFields(void) {
 
 int FUN_00360b10(void) {
     if (DAT_005895c8[0] == 0) {
-        DAT_005895c8[0] = igMetaEnum_Create(&MsgAction[0], &DAT_004c6b50[0], &DAT_004c6b70[0], 8);
+        DAT_005895c8[0] = igMetaEnum_Create(&text_MsgAction[0], &DAT_004c6b50[0], &DAT_004c6b70[0], 8);
     }
     return DAT_005895c8[0];
 }

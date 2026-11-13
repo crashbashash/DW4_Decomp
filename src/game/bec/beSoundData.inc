@@ -105,7 +105,7 @@ void beSoundData_InitFields(void) {
 
 int beSound_GetMessageEnum(void) {
     if (DAT_00587ea0[0] == 0) {
-        DAT_00587ea0[0] = igMetaEnum_Create(&Message_2[0], &DAT_004c38b0[0], &DAT_004c3910[0], 0x17);
+        DAT_00587ea0[0] = igMetaEnum_Create(&text_Message[0], &DAT_004c38b0[0], &DAT_004c3910[0], 0x17);
     }
     return DAT_00587ea0[0];
 }

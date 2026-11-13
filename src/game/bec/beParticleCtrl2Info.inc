@@ -70,7 +70,7 @@ void beParticleCtrl2Info_InitFields(void) {
 
 int FUN_0034c5d0(void) {
     if (DAT_00588508[0] == 0) {
-        DAT_00588508[0] = igMetaEnum_Create(&Message_2[0], &DAT_004c4670[0], &DAT_004c4690[0], 8);
+        DAT_00588508[0] = igMetaEnum_Create(&text_Message[0], &DAT_004c4670[0], &DAT_004c4690[0], 8);
     }
     return DAT_00588508[0];
 }

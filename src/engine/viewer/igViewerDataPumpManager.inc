@@ -94,7 +94,7 @@ void FUN_0045c040(void) {
     temp_v0 = (void **)(igMetaObject_FindFieldByName(temp_s1, &text_name_3[0]));
     temp_s3 = ObjectPointerList_FindIndex(*(int *)((char *)(temp_s1) + 40), temp_v0);
     temp_v0_2 = (void *)(((DW4VC_84_1 *)(temp_v0))->vX((int)(1)));
-    igStringMetaField_SetDefaultText(temp_v0_2, &Viewer_data_pump_manager[0]);
+    igStringMetaField_SetDefaultText(temp_v0_2, &text_Viewer_data_pump_manager[0]);
     *(int *)((char *)(temp_v0_2) + 28) = (int)(&DAT_0058cb78[0]);
     igMetaObject_FinalizeAndReplaceField(temp_s1, temp_s3, temp_v0_2);
     *(int *)((char *)(temp_v0_2) + 4) = (int)((int) (*(int *)((char *)(temp_v0_2) + 4) - 1));

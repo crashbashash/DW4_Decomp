@@ -1,13 +1,13 @@
 int FUN_002c4be0(void) {
     if (DAT_005863a0[0] == 0) {
-        DAT_005863a0[0] = ((int)igMetaEnum_Create((char *)(&ReadMode[0]), (char **)(&DAT_004c0ae8[0]), &DAT_004c0af8[0], 3));
+        DAT_005863a0[0] = ((int)igMetaEnum_Create((char *)(&text_ReadMode[0]), (char **)(&DAT_004c0ae8[0]), &DAT_004c0af8[0], 3));
     }
     return DAT_005863a0[0];
 }
 
 int FUN_002c4c40(void) {
     if (DAT_005863a8[0] == 0) {
-        DAT_005863a8[0] = ((int)igMetaEnum_Create((char *)(&OpenMode[0]), (char **)(&DAT_004c0b10[0]), &DAT_004c0b40[0], 9));
+        DAT_005863a8[0] = ((int)igMetaEnum_Create((char *)(&text_OpenMode[0]), (char **)(&DAT_004c0b10[0]), &DAT_004c0b40[0], 9));
     }
     return DAT_005863a8[0];
 }
@@ -63,7 +63,7 @@ void igFile_InitFields(void) {
     temp_s0 = (void *)(((void * *)g_igFile_metaObject)[0]);
     temp_s2 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
     igMetaObject_CreateFields((igMetaObject *)temp_s0, (igMetaField * (**)(void *))&g_igFile_ctorTable[0], 8);
-    igStringMetaField_SetDefaultText((int *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2))), (int)&DefaultFileName[0]);
+    igStringMetaField_SetDefaultText((int *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2))), (int)&text_DefaultFileName[0]);
     temp_v0 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 1)));
     FUN_002dc7a0((igEnumMetaFieldView *)temp_v0, (const int *)&DAT_004c0bf0[0]);
     *(int *)((char *)(temp_v0) + 52) = (int)(&FUN_002c4be0);

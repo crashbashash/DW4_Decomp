@@ -1,27 +1,27 @@
 int FUN_002b7dc0(void) {
     if (DAT_005857a8[0] == 0) {
-        DAT_005857a8[0] = ((int)igMetaEnum_Create((char *)&Priority[0], (char **)&DAT_004bf3a0[0], &DAT_004bf3c0[0], 6));
+        DAT_005857a8[0] = ((int)igMetaEnum_Create((char *)&text_Priority[0], (char **)&DAT_004bf3a0[0], &DAT_004bf3c0[0], 6));
     }
     return DAT_005857a8[0];
 }
 
 int FUN_002b7e20(void) {
     if (DAT_005857b0[0] == 0) {
-        DAT_005857b0[0] = ((int)igMetaEnum_Create((char *)&State[0], (char **)&DAT_004bf3d8[0], &DAT_004bf3e0[0], 2));
+        DAT_005857b0[0] = ((int)igMetaEnum_Create((char *)&text_State[0], (char **)&DAT_004bf3d8[0], &DAT_004bf3e0[0], 2));
     }
     return DAT_005857b0[0];
 }
 
 int FUN_002b7e80(void) {
     if (DAT_005857b8[0] == 0) {
-        DAT_005857b8[0] = ((int)igMetaEnum_Create((char *)&Scope[0], (char **)&DAT_004bf3e8[0], &DAT_004bf3f8[0], 3));
+        DAT_005857b8[0] = ((int)igMetaEnum_Create((char *)&text_Scope[0], (char **)&DAT_004bf3e8[0], &DAT_004bf3f8[0], 3));
     }
     return DAT_005857b8[0];
 }
 
 int FUN_002b7ee0(void) {
     if (DAT_005857c0[0] == 0) {
-        DAT_005857c0[0] = ((int)igMetaEnum_Create((char *)&Type[0], (char **)&DAT_004bf408[0], &DAT_004bf410[0], 2));
+        DAT_005857c0[0] = ((int)igMetaEnum_Create((char *)&text_Type[0], (char **)&DAT_004bf408[0], &DAT_004bf410[0], 2));
     }
     return DAT_005857c0[0];
 }

@@ -139,7 +139,7 @@ void FUN_002382e0(ViewerOptions_2382e0 *opt, int, int, int, int, int, int, int) 
   int props = ((PropertySet *)g_objectSystem[0])->props;
   group = FUN_00306360(props, INSIGHT, 0);
   if (group < 0) {
-    group = FUN_00306360(props, Viewer, 0);
+    group = FUN_00306360(props, text_Viewer, 0);
     if (group < 0) return;
   }
   if (text_extraCommandLine) thunk_FUN_00306910(props, group, text_extraCommandLine, &opt->extraCommandLine, opt->extraCommandLine, 0);

@@ -53,7 +53,7 @@ void beNumberCtrlInfo_GetMetaObject(void)
 
 int FUN_0034e300(void) {
     if (DAT_005886d8[0] == 0) {
-        DAT_005886d8[0] = igMetaEnum_Create(&Message_2[0], &DAT_004c4a30[0], &DAT_004c4a40[0], 4);
+        DAT_005886d8[0] = igMetaEnum_Create(&text_Message[0], &DAT_004c4a30[0], &DAT_004c4a40[0], 4);
     }
     return DAT_005886d8[0];
 }

@@ -76,7 +76,7 @@ void igCamera_InitFields(void) {
 
 int FUN_001a47d0(void) {
     if (DAT_00561ee0[0] == 0) {
-        DAT_00561ee0[0] = igMetaEnum_Create(&CameraType[0], &DAT_0048ca98[0], &DAT_0048caa0[0], 2);
+        DAT_00561ee0[0] = igMetaEnum_Create(&text_CameraType[0], &DAT_0048ca98[0], &DAT_0048caa0[0], 2);
     }
     return DAT_00561ee0[0];
 }

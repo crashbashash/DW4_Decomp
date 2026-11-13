@@ -120,21 +120,21 @@ void beNDMWMdlPlayerInfoWork_InitFields(void) {
 
 int DamageSeq_GetMetaEnum(void) {
     if (DAT_0058b410[0] == 0) {
-        DAT_0058b410[0] = igMetaEnum_Create(&DamageSeq[0], &DAT_004ca940[0], &DAT_004ca970[0], 0xA);
+        DAT_0058b410[0] = igMetaEnum_Create(&text_DamageSeq[0], &DAT_004ca940[0], &DAT_004ca970[0], 0xA);
     }
     return DAT_0058b410[0];
 }
 
 int StatusName_GetMetaEnum(void) {
     if (DAT_0058b418[0] == 0) {
-        DAT_0058b418[0] = igMetaEnum_Create(&StatusName[0], &DAT_004ca9a0[0], &DAT_004ca9d0[0], 0xB);
+        DAT_0058b418[0] = igMetaEnum_Create(&text_StatusName[0], &DAT_004ca9a0[0], &DAT_004ca9d0[0], 0xB);
     }
     return DAT_0058b418[0];
 }
 
 int MsgAction_GetMetaEnum(void) {
     if (DAT_0058b420[0] == 0) {
-        DAT_0058b420[0] = igMetaEnum_Create(&MsgAction_2[0], &DAT_004caa00[0], &DAT_004caa40[0], 0x10);
+        DAT_0058b420[0] = igMetaEnum_Create(&text_MsgAction_2[0], &DAT_004caa00[0], &DAT_004caa40[0], 0x10);
     }
     return DAT_0058b420[0];
 }

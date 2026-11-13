@@ -98,7 +98,7 @@ int FUN_001c66c0(Node *self, int force)
     REL_STR(self->f36)
     self->f36 = s;
     self->f40 = -1;
-    idx = FUN_00306360(self->f28, (char *)&Interface[0], 0);
+    idx = FUN_00306360(self->f28, (char *)&text_Interface[0], 0);
     if (idx < 0) {
         return 0;
     }

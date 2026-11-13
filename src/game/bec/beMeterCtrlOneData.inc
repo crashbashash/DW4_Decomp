@@ -93,7 +93,7 @@ void beMeterCtrlOneData_InitFields(void) {
 
 int FUN_00357600(void) {
     if (DAT_00588f28[0] == 0) {
-        DAT_00588f28[0] = igMetaEnum_Create(&MsgAction[0], &DAT_004c5be0[0], &DAT_004c5c00[0], 8);
+        DAT_00588f28[0] = igMetaEnum_Create(&text_MsgAction[0], &DAT_004c5be0[0], &DAT_004c5c00[0], 8);
     }
     return DAT_00588f28[0];
 }

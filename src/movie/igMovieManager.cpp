@@ -41,10 +41,10 @@ extern "C" int FUN_00236ee0(...);
 extern "C" int FUN_002d6f50(...);
 extern "C" int FUN_002d7690(...);
 extern "C" int emptyString[4];
-extern "C" int Could_not_create_a_codec_of_type[4];
-extern "C" int Failed_to_start_movie_s[4];
-extern "C" int Failed_to_create_the_scene_for_m[4];
-extern "C" int Failed_to_play_movie_info_s[4];
+extern "C" int text_Could_not_create_a_codec_of_type[4];
+extern "C" int text_Failed_to_start_movie_s[4];
+extern "C" int text_Failed_to_create_the_scene_for_m[4];
+extern "C" int text_Failed_to_play_movie_info_s[4];
 extern "C" int g_defaultAllocatorSelector[4];
 extern "C" int g_igMovieCodec_metaObject[4];
 extern "C" int g_igMovieInfo_metaObject[4];
@@ -233,7 +233,7 @@ int Gap__igMovieManager__vfunc_25(igMovieManager *self, void *arg1) {
         void *meta = igObjectSystem_FindMetaByNameDefault(codecName);
         if (meta == 0) {
             if (GPR_00554e30 == 0) {
-                int r = FUN_00308320(&Could_not_create_a_codec_of_type[0], codecName);
+                int r = FUN_00308320(&text_Could_not_create_a_codec_of_type[0], codecName);
                 if (r != 1) { if (r == 2) GPR_00554e30 = 1; }
             }
             return 0;
@@ -279,7 +279,7 @@ int Gap__igMovieManager__vfunc_25(igMovieManager *self, void *arg1) {
                     const char *nm = movie->name;
                     const char *shown;
                     if (nm != 0) { shown = nm; } else { shown = (const char *)&emptyString[0]; }
-                    int r = FUN_00308320(&Failed_to_start_movie_s[0], shown);
+                    int r = FUN_00308320(&text_Failed_to_start_movie_s[0], shown);
                     if (r != 1) { if (r == 2) GPR_00554e34 = 1; }
                 }
                 return 0;
@@ -318,7 +318,7 @@ int Gap__igMovieManager__vfunc_25(igMovieManager *self, void *arg1) {
             const char *nm = movie->name;
             const char *shown;
             if (nm != 0) { shown = nm; } else { shown = (const char *)&emptyString[0]; }
-            int r = FUN_00308320(&Failed_to_create_the_scene_for_m[0], shown);
+            int r = FUN_00308320(&text_Failed_to_create_the_scene_for_m[0], shown);
             if (r != 1) { if (r == 2) GPR_00554e38 = 1; }
         }
         return 0;
@@ -327,7 +327,7 @@ int Gap__igMovieManager__vfunc_25(igMovieManager *self, void *arg1) {
         const char *nm = movie->name;
         const char *shown;
         if (nm != 0) { shown = nm; } else { shown = (const char *)&emptyString[0]; }
-        int r = FUN_00308320(&Failed_to_play_movie_info_s[0], shown);
+        int r = FUN_00308320(&text_Failed_to_play_movie_info_s[0], shown);
         if (r != 1) { if (r == 2) GPR_00554e3c = 1; }
     }
     return 0;

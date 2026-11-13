@@ -63,7 +63,7 @@ void igImage_InitFields(void) {
     FUN_002ea4b0(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 0xA), -2);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 0xB));
     *(int *)((char *)(temp_s1) + 60) = igUnsignedCharMetaField_GetDefaultDescriptor();
-    igMemoryRefMetaField_SetPoolName(temp_s1, &Image[0]);
+    igMemoryRefMetaField_SetPoolName(temp_s1, &text_Image[0]);
     temp_s1_2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 0xC));
     *(int *)((char *)(temp_s1_2) + 60) = FUN_002cc2c0();
     FUN_002d3890(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 0xD), 1);

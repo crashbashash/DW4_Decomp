@@ -1,6 +1,6 @@
 int FUN_00146d90(void) {
     if (DAT_0055f730[0] == 0) {
-        DAT_0055f730[0] = igMetaEnum_Create(&MultitapPort[0], &DAT_00487510[0], &DAT_00487520[0], 4);
+        DAT_0055f730[0] = igMetaEnum_Create(&text_MultitapPort[0], &DAT_00487510[0], &DAT_00487520[0], 4);
     }
     return DAT_0055f730[0];
 }

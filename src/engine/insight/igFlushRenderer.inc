@@ -850,7 +850,7 @@ void FUN_00236140(void) {
     }
     s0->name = (int)s1;
     FUN_002e3850(r.get(), &text_insight[0]);
-    FUN_00304720(((G *)g_objectSystem[0])->f76, &Insight[0], r->name, 1);
+    FUN_00304720(((G *)g_objectSystem[0])->f76, &text_Insight[0], r->name, 1);
 }
 
 static inline void describe(const igSmartPointer<TextValue> &text, int value) {
@@ -874,7 +874,7 @@ ShadowSettings FUN_00236260(ShadowConfig *config) {
     settings.width = config->width;
     settings.height = config->height;
     if (config->verbose) {
-        printf(Requested_format);
+        printf(text_Requested_format);
     }
     describe(text, config->left);
     if (config->verbose) {
