@@ -323,7 +323,7 @@ extern "C" void *beSwitchCtrlInfo_Register(void);
 extern "C" void beSwitchCtrlInfo_GetMetaObject(void);
 extern "C" int FUN_00196930(void);
 extern "C" void beSwitchCtrlInfo_InitFields(void);
-extern "C" int FUN_00343430(void);
+extern "C" int beSwitchCtrl_GetMessageEnum(void);
 extern "C" void beSwitchCtrl_CreateInstance(int arg0);
 extern "C" igMetaObject *FUN_003434d0(void);
 extern "C" void *FUN_00343520(void);

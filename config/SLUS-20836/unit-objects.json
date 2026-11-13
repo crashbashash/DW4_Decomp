@@ -21999,7 +21999,7 @@
       "beSwitchCtrlInfo_Register": "0x00343300",
       "beSwitchCtrlInfo_GetMetaObject": "0x00343380",
       "beSwitchCtrlInfo_InitFields": "0x003433a0",
-      "FUN_00343430": "0x00343430",
+      "beSwitchCtrl_GetMessageEnum": "0x00343430",
       "beSwitchCtrl_CreateInstance": "0x00343490",
       "FUN_003434d0": "0x003434d0",
       "FUN_00343520": "0x00343520",
@@ -31287,18 +31287,18 @@
   "0x0039fc30": {
     "whole_file": true,
     "emitted": {
-      "Gap__Bec__beSwitchCtrl__vfunc_30": "0x0039fc40",
-      "Gap__Bec__beSwitchCtrl__vfunc_29": "0x0039fc50",
-      "Gap__Bec__beSwitchCtrl__vfunc_31": "0x0039fc80",
-      "Gap__Bec__beSwitchCtrl__vfunc_33": "0x0039fc90",
-      "Gap__Bec__beSwitchCtrl__vfunc_20": "0x0039fd20"
+      "beSwitchCtrl__GetInfoMeta": "0x0039fc40",
+      "beSwitchCtrl__RegisterReceiver": "0x0039fc50",
+      "beSwitchCtrl__Update": "0x0039fc80",
+      "beSwitchCtrl__OnMessage": "0x0039fc90",
+      "beSwitchCtrl__GetMeta": "0x0039fd20"
     },
     "data": {
-      "DAT_0050fab0": "0x0050fab0",
+      "SWITCHCTRL": "0x0050fab0",
       "g_beSwitchCtrlInfo_metaObject": "0x00587de0",
       "g_beSwitchCtrl_metaObject": "0x00587df8"
     },
-    "symbol": "Gap__Bec__beSwitchCtrl__vfunc_32"
+    "symbol": "beSwitchCtrl__Prepare"
   },
   "0x0039e540": {
     "whole_file": true,

@@ -4666,6 +4666,7 @@
 0x0050f9e8	UP_2	string-literal
 0x0050f9f0	DOWN_2	string-literal
 0x0050f9f8	ALL_2	string-literal
+0x0050fab0	SWITCHCTRL	string-literal
 0x0050fb10	ndmw_igb	string-literal
 0x0050ffd0	PLAYER_5	string-literal
 0x0050ffd8	GETMATRIX_6	string-literal

@@ -1,57 +1,61 @@
 #include "dw4/reflected.h"
 
-extern "C" void Gap__Bec__beSwitchCtrl__vfunc_32(void);
-extern "C" int Gap__Bec__beSwitchCtrl__vfunc_30(void);
-extern "C" void Gap__Bec__beSwitchCtrl__vfunc_31(void);
-extern "C" int Gap__Bec__beSwitchCtrl__vfunc_20(void);
-extern "C" void beMessenger_RegisterReceiverFromInfo(int, int, char *);
-extern "C" int igSwitch_EnableAllChildren(int);
-extern "C" int igSwitch_DisableAllChildren(int);
-extern "C" int FUN_00343430(...);
-extern "C" int beMessenger_ResolveEnumValue(int, int, int);
+/* beSwitchCtrl shows or hides a whole igSwitch, its info's _switchNode: the MsgAction message ALLON
+ * enables every child of the switch and ALLOF disables every child. */
+
+enum MsgAction { MSG_ALLON, MSG_ALLOF };
+
+extern "C" int beSwitchCtrl_GetMessageEnum(void);
+extern "C" void beMessenger_RegisterReceiverFromInfo(int messenger, beBaseInfoRam *ram, char *group);
+extern "C" int beMessenger_ResolveEnumValue(int messenger, int messageEnum, int message);
+extern "C" int igSwitch_EnableAllChildren(igSwitch *node);
+extern "C" int igSwitch_DisableAllChildren(igSwitch *node);
+extern "C" char SWITCHCTRL[];
 extern "C" int g_beSwitchCtrlInfo_metaObject[4];
 extern "C" int g_beSwitchCtrl_metaObject[4];
-extern "C" char DAT_0050fab0[];
-extern "C" void Gap__Bec__beSwitchCtrl__vfunc_29(beSwitchCtrl * p0, int p1, char * p2);
-extern "C" int Gap__Bec__beSwitchCtrl__vfunc_33(beSwitchCtrl *arg0, beBaseInfoRam *arg1, int arg2);
 
-void Gap__Bec__beSwitchCtrl__vfunc_32(void)
+extern "C" void beSwitchCtrl__Prepare(void);
+extern "C" int beSwitchCtrl__GetInfoMeta(void);
+extern "C" void beSwitchCtrl__RegisterReceiver(beSwitchCtrl *self, beBaseInfoRam *ram);
+extern "C" void beSwitchCtrl__Update(void);
+extern "C" int beSwitchCtrl__OnMessage(beSwitchCtrl *self, beBaseInfoRam *ram, int message);
+extern "C" int beSwitchCtrl__GetMeta(void);
+
+void beSwitchCtrl__Prepare(void)
 {
 }
 
-int Gap__Bec__beSwitchCtrl__vfunc_30(void)
+int beSwitchCtrl__GetInfoMeta(void)
 {
     return g_beSwitchCtrlInfo_metaObject[0];
 }
 
-void Gap__Bec__beSwitchCtrl__vfunc_29(beSwitchCtrl * p0, int p1, char * p2)
+void beSwitchCtrl__RegisterReceiver(beSwitchCtrl *self, beBaseInfoRam *ram)
 {
-    beMessenger_RegisterReceiverFromInfo(p0->_messenger, p1, DAT_0050fab0);
+    beMessenger_RegisterReceiverFromInfo(self->_messenger, ram, SWITCHCTRL);
 }
 
-void Gap__Bec__beSwitchCtrl__vfunc_31(void)
+void beSwitchCtrl__Update(void)
 {
 }
 
-int Gap__Bec__beSwitchCtrl__vfunc_33(beSwitchCtrl *arg0, beBaseInfoRam *arg1, int arg2) {
-    int temp_v0;
-    void *temp_s0;
+int beSwitchCtrl__OnMessage(beSwitchCtrl *self, beBaseInfoRam *ram, int message)
+{
+    beSwitchCtrlInfo *info = (beSwitchCtrlInfo *)ram->_parentInfo;
 
-    temp_s0 = (void *)(arg1->_parentInfo);
-    temp_v0 = beMessenger_ResolveEnumValue(arg0->_messenger, FUN_00343430(), arg2);
-    switch (temp_v0) {
-    case 0:
-        igSwitch_EnableAllChildren(*(int *)((char *)(temp_s0) + 28));
+    switch (beMessenger_ResolveEnumValue(self->_messenger, beSwitchCtrl_GetMessageEnum(), message)) {
+    case MSG_ALLON:
+        igSwitch_EnableAllChildren((igSwitch *)info->_switchNode);
         return 1;
-    case 1:
-        igSwitch_DisableAllChildren(*(int *)((char *)(temp_s0) + 28));
+    case MSG_ALLOF:
+        igSwitch_DisableAllChildren((igSwitch *)info->_switchNode);
         return 1;
     default:
         return 0;
     }
 }
 
-int Gap__Bec__beSwitchCtrl__vfunc_20(void)
+int beSwitchCtrl__GetMeta(void)
 {
     return g_beSwitchCtrl_metaObject[0];
 }

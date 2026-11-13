@@ -76,7 +76,7 @@ void beSwitchCtrlInfo_InitFields(void) {
     igMetaObject_NameFields(temp_s0, &DAT_004c3768[0], &DAT_004c3770[0], &DAT_004c3778[0], temp_s2);
 }
 
-int FUN_00343430(void) {
+int beSwitchCtrl_GetMessageEnum(void) {
     if (DAT_00587df0[0] == 0) {
         DAT_00587df0[0] = igMetaEnum_Create(&DAT_005016f0[0], &DAT_004c3780[0], &DAT_004c3788[0], 2);
     }

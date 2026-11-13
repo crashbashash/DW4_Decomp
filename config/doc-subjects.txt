@@ -55,6 +55,7 @@ docs/engine/status-list-windows.md
 docs/engine/subwindow-command.md
 docs/engine/subwindow-lifecycle.md
 docs/engine/subwindow-preparation.md
+docs/engine/switch-control.md
 docs/engine/system-clock.md
 docs/engine/target-object.md
 docs/engine/title-menu-controller.md

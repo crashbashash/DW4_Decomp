@@ -1,0 +1,10 @@
+# beSwitchCtrl.cpp: the switch controller's virtuals and its MsgAction enum getter.
+# Evidence in docs/engine/switch-control.md.
+# <va>	<name>	<module>
+0x00343430	beSwitchCtrl_GetMessageEnum	game
+0x0039fc30	beSwitchCtrl::Prepare	game
+0x0039fc40	beSwitchCtrl::GetInfoMeta	game
+0x0039fc50	beSwitchCtrl::RegisterReceiver	game
+0x0039fc80	beSwitchCtrl::Update	game
+0x0039fc90	beSwitchCtrl::OnMessage	game
+0x0039fd20	beSwitchCtrl::GetMeta	game

@@ -131,6 +131,7 @@ Related: game systems and data are in [`../systems/`](../systems); the analysis 
 
 - [Stage loading cards and node animation](stage-loading.md): localized preview/title selection and the complete nine-body runtime, verified against retail instructions.
 - [Layer control](layer-control.md): `beLayerCtl` sorts the scene root's children into a named-layer `igSwitch` (ORDER) and shows, hides, removes and fetches layers by name.
+- [Switch control](switch-control.md): `beSwitchCtrl` enables (ALLON) or disables (ALLOF) every child of its info's `igSwitch`.
 
 - [Hard/Soft lighting](light-modes.md): LIGHTMODE handoff, authored versus overridden rigs, paired texture packs and unchanged Main Lobby shadows, verified against both retail modes.
 - [Register allocation](register-allocation.md): how the pinned MWCC colours registers (simplify/select, vreg ids from declaration order), the trace/replay tools, and the source forms that move a colour.
