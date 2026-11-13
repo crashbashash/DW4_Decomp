@@ -61,21 +61,39 @@ def segments():
     phentsize, phnum = struct.unpack_from("<HH", data, 0x2a)
     segs = []
     for i in range(phnum):
-        t, off, va, _pa, filesz, _memsz, _fl, _al = struct.unpack_from("<8I", data, phoff + i * phentsize)
+        t, off, va, _pa, filesz, memsz, _fl, _al = struct.unpack_from("<8I", data, phoff + i * phentsize)
         if t == 1:
-            segs.append((va, off, filesz))
+            segs.append((va, off, filesz, memsz))
     return data, segs
+
+
+def word_at(image, addr):
+    data, segs = image
+    for va, off, filesz, _ in segs:
+        if va <= addr <= va + filesz - 4:
+            return struct.unpack_from("<I", data, off + addr - va)[0]
+    return None
+
+
+def is_pointer(image, addr):
+    """`addr` holds an aligned address inside the loaded image (.bss included)."""
+    w = word_at(image, addr)
+    return w is not None and w % 4 == 0 and any(v <= w < v + m for v, _, _, m in image[1])
 
 
 def c_string(image, addr):
     data, segs = image
-    for va, off, filesz in segs:
+    for va, off, filesz, _ in segs:
         if va <= addr < va + filesz:
             raw = data[off + addr - va: off + min(filesz, addr - va + 96)]
             end = raw.find(b"\0")
             if end < MIN_SLUG:
                 return None
             text = raw[:end]
+            # an aligned address in the image reads as three printable bytes and a NUL ("xUM" is
+            # 0x004d5578); a real three-letter string that happens to look like one stays unnamed
+            if end == 3 and is_pointer(image, addr):
+                return None
             return text.decode() if all(32 <= c < 127 for c in text) else None
     return None
 
@@ -86,7 +104,7 @@ LUI_AT, JR_RA, LW_V0_AT = 0x3c010000, 0x03e00008, 0x8c220000
 def returned_slot(image, addr):
     """The address a `lui at; jr ra; lw v0,lo(at)` leaf loads from, or None."""
     data, segs = image
-    for va, off, filesz in segs:
+    for va, off, filesz, _ in segs:
         if va <= addr < va + filesz - 12:
             w = struct.unpack_from("<3I", data, off + addr - va)
             if w[0] & 0xffff0000 == LUI_AT and w[1] == JR_RA and w[2] & 0xffff0000 == LW_V0_AT:
@@ -106,9 +124,11 @@ def ident(cls):
     return re.sub(r"\W", "_", cls)
 
 
-def string_name(text, syms):
-    """A string's name is its text, unless that cannot name it: a leading digit, or a function's name."""
-    return "text_" + text if text[0].isdigit() or text in syms.values() else text
+def string_name(text, syms, types):
+    """A string's name is its text, unless that cannot name it: a leading digit, a function's name, or a
+    reflected type's name (a string "igInfoManager" next to the class igInfoManager)."""
+    taken = text[0].isdigit() or text in syms.values() or text in types
+    return "text_" + text if taken else text
 
 
 def unique(name, va, rows, copies=False):
@@ -159,7 +179,10 @@ def main():
     print("# <va>\t<name>\t<rule>")
     for va, cls in sorted(handle.items()):      # also read by absolute address: `*(int *)0x58a0e0`
         rows.setdefault(va, (unique("g_%s_metaObject" % ident(cls), va, rows), "class-handle"))
+    types = {c["class"] for c in classes}
     for va in referenced():
+        if va in rows and rows[va][1] != "function-symbol":
+            continue    # a recorded name (seeded earlier or recovered by hand) stays; a function's follows its symbol
         sym = syms.get(va)
         if sym:
             name, rule = sym, "function-symbol"
@@ -178,7 +201,7 @@ def main():
             s = slug(text) if text else None
             if not s:
                 continue
-            name, rule = unique(string_name(s, syms), va, rows, copies=True), "string-literal"
+            name, rule = unique(string_name(s, syms, types), va, rows, copies=True), "string-literal"
         rows[va] = (name, rule)
     for va in sorted(rows):
         print("0x%08x\t%s\t%s" % (va, rows[va][0], rows[va][1]))

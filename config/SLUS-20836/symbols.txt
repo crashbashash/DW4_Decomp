@@ -19519,13 +19519,13 @@
 00443540 000080 FUN_00443540
 004435c0 000340 beNDMWShinkaObject_Load
 00443900 0002c8 beNDMWMdlPEBase_ShowStatusIcon
-00443bd0 00162c Gap__Bec__beNDMWMdlPEBase__vfunc_46 Gap::Bec::beNDMWMdlPEBase::vfunc_46
+00443bd0 00162c beNDMWMdlPEBase__UpdateStatus beNDMWMdlPEBase::UpdateStatus
 00445200 0004c0 beNDMWMdlPEBase_OnSequenceChange
 004456c0 0002c8 beNDMWMdlPEBase_LoadDownData
 00445990 0002c8 beNDMWMdlPEBase_LoadUpData
 00445c60 0000ac beNDMWMdlPEBase_RecalcPlayer
-00445d10 001aa0 Gap__Bec__beNDMWMdlPEBase__vfunc_47 Gap::Bec::beNDMWMdlPEBase::vfunc_47
-004477b0 000344 Gap__Bec__beNDMWMdlPEBaseInfoWork__vfunc_8 Gap::Bec::beNDMWMdlPEBaseInfoWork::vfunc_8
+00445d10 001aa0 beNDMWMdlPEBase__OnStatusMessage beNDMWMdlPEBase::OnStatusMessage
+004477b0 000344 beNDMWMdlPEBaseInfoWork__Destroy beNDMWMdlPEBaseInfoWork::Destroy
 00447b00 000038 beNDMWMdlPEBaseInfoWork_IsPoisoned
 00447b40 000058 beNDMWMdlPEBaseInfoWork_CurePoison
 00447ba0 00000c beNDMWMdlPEBaseInfoWork__GetMeta beNDMWMdlPEBaseInfoWork::GetMeta

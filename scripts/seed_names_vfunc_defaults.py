@@ -34,7 +34,9 @@ template instantiation (`igTObjectList<…>`, `igTDataList<…>`) that has no Me
 and therefore no entry in the hierarchy at all.
 
 Reads data/vtables.json (the referrer sets) and data/class-hierarchy.tsv (the
-hierarchy); writes the curated overlay config/SLUS-20836/names/Vtables.tsv.
+hierarchy); writes the curated overlay config/SLUS-20836/names/Vtables.tsv. A body
+that another names overlay already names (a readability pass found what it does)
+keeps that name: the seed writes no default row for it.
 
   python3 scripts/seed_names_vfunc_defaults.py            # write config/SLUS-20836/names/Vtables.tsv
   python3 scripts/seed_names_vfunc_defaults.py --report   # print the census only
@@ -48,6 +50,20 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 VTABLES = os.path.join(ROOT, "data", "vtables.json")
 HIER = os.path.join(ROOT, "data", "class-hierarchy.tsv")
 OUT = os.path.join(ROOT, "config", "SLUS-20836", "names", "Vtables.tsv")
+NAMES = os.path.dirname(OUT)
+
+
+def named_elsewhere():
+    """Addresses another overlay in config/SLUS-20836/names/ names."""
+    named = set()
+    for entry in sorted(os.listdir(NAMES)):
+        path = os.path.join(NAMES, entry)
+        if not entry.endswith(".tsv") or path == OUT:
+            continue
+        for ln in open(path):
+            if ln.startswith("0x"):
+                named.add(int(ln.split("\t", 1)[0], 16))
+    return named
 
 
 def short(fqn):
@@ -120,10 +136,11 @@ def main():
     hier = load_hierarchy(HIER)
     closure = descendants(hier)
     named, unresolved = resolve(ambiguous, hier, closure, fqn_of)
-
-    named.sort(key=lambda t: int(t[0], 16))
-    print("ambiguous bodies: %d; resolved: %d; unresolved: %d"
-          % (len(ambiguous), len(named), len(unresolved)))
+    taken = named_elsewhere()
+    kept = [t for t in named if int(t[0], 16) not in taken]
+    print("ambiguous bodies: %d; resolved: %d (%d named by another overlay); unresolved: %d"
+          % (len(ambiguous), len(named), len(named) - len(kept), len(unresolved)))
+    named = sorted(kept, key=lambda t: int(t[0], 16))
 
     missing_fqn = [t for t in named if not t[3]]
     if missing_fqn:

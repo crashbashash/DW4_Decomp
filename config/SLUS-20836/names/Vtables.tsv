@@ -25,6 +25,3 @@
 0x0040dd30	Gap::Bec::beNDMWListCtrl::vfunc_24	game
 0x0040f720	Gap::Bec::beNDMWStatusCtrlBaseEquip::vfunc_21	game
 0x00424160	Gap::Bec::beNDMWWindowTitle::vfunc_21	game
-0x00443bd0	Gap::Bec::beNDMWMdlPEBase::vfunc_46	game
-0x00445d10	Gap::Bec::beNDMWMdlPEBase::vfunc_47	game
-0x004477b0	Gap::Bec::beNDMWMdlPEBaseInfoWork::vfunc_8	game

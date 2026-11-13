@@ -20,13 +20,13 @@ digivolution forms.
 | `0x004432a0` | 664 | `beNDMWShinkaCtrl_BuildFormList` | empties `_list`, then adds one `beNDMWShinkaObject` per form set in `BASE_ISUSE`; form 3 (Dorumon) goes to the front |
 | `0x004435c0` | 832 | `beNDMWShinkaObject_Load` | a form's name (`shinka` database `NAME`), level (`BASE_LEVEL`), HP/MP maxima and attributes (game RAM), and its nine weapon skills (`BASE_SKILL`, nine per form) |
 | `0x00443900` | 712 | `beNDMWMdlPEBase_ShowStatusIcon` | places a status icon model at the model's position (below) |
-| `0x00443bd0` | 5,676 | `Gap__Bec__beNDMWMdlPEBase__vfunc_46` | slot 46: the per-frame status update |
+| `0x00443bd0` | 5,676 | `beNDMWMdlPEBase__UpdateStatus` | slot 46: the per-frame status update |
 | `0x00445200` | 1,216 | `beNDMWMdlPEBase_OnSequenceChange` | slot 44 body, called by both subclasses after a new sequence starts |
 | `0x004456c0` | 712 | `beNDMWMdlPEBase_LoadDownData` | the work's `_downDataList`: the player's `DOWNDATA`, or six zeroes for an enemy |
 | `0x00445990` | 712 | `beNDMWMdlPEBase_LoadUpData` | the work's `_upDataList`: the player's `UPDATA`, or seven zeroes for an enemy |
 | `0x00445c60` | 172 | `beNDMWMdlPEBase_RecalcPlayer` | for a player: `GAMERAM RECALCPLAYER`, then `GAMERAM ADDHP` 0 |
-| `0x00445d10` | 6,816 | `Gap__Bec__beNDMWMdlPEBase__vfunc_47` | slot 47: the status message handler |
-| `0x004477b0` | 836 | `Gap__Bec__beNDMWMdlPEBaseInfoWork__vfunc_8` | the work's slot 8 (destruction): clears a player's up/down data, erases the icons, drops the four status lists |
+| `0x00445d10` | 6,816 | `beNDMWMdlPEBase__OnStatusMessage` | slot 47: the status message handler |
+| `0x004477b0` | 836 | `beNDMWMdlPEBaseInfoWork__Destroy` | the work's slot 8 (destruction): clears a player's up/down data, erases the icons, drops the four status lists |
 | `0x00447b00` | 56 | `beNDMWMdlPEBaseInfoWork_IsPoisoned` | the poison timer is running |
 | `0x00447b40` | 88 | `beNDMWMdlPEBaseInfoWork_CurePoison` | removes the `POISON` timer and zeroes its count (the item cure) |
 | `0x00447ba0` | 12 | `beNDMWMdlPEBaseInfoWork__GetMeta` | the meta object |

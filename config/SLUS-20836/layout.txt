@@ -33935,7 +33935,7 @@
 004435c0 000340 code beNDMWShinkaObject_Load
 00443900 0002c8 code beNDMWMdlPEBase_ShowStatusIcon
 00443bc8 000008 data data_00443bc8
-00443bd0 00162c code Gap__Bec__beNDMWMdlPEBase__vfunc_46
+00443bd0 00162c code beNDMWMdlPEBase__UpdateStatus
 004451fc 000004 data data_004451fc
 00445200 0004c0 code beNDMWMdlPEBase_OnSequenceChange
 004456c0 0002c8 code beNDMWMdlPEBase_LoadDownData
@@ -33944,8 +33944,8 @@
 00445c58 000008 data data_00445c58
 00445c60 0000ac code beNDMWMdlPEBase_RecalcPlayer
 00445d0c 000004 data data_00445d0c
-00445d10 001aa0 code Gap__Bec__beNDMWMdlPEBase__vfunc_47
-004477b0 000344 code Gap__Bec__beNDMWMdlPEBaseInfoWork__vfunc_8
+00445d10 001aa0 code beNDMWMdlPEBase__OnStatusMessage
+004477b0 000344 code beNDMWMdlPEBaseInfoWork__Destroy
 00447af4 00000c data data_00447af4
 00447b00 000038 code beNDMWMdlPEBaseInfoWork_IsPoisoned
 00447b38 000008 data data_00447b38
@@ -36191,7 +36191,7 @@
 0051d0a8 000068 data data_0051d0a8
 0051d110 00003c jtbl jtbl_0051d110 Gap__Bec__beNDMWMdlItem__vfunc_45
 0051d14c 0003c4 data data_0051d14c
-0051d510 000040 jtbl jtbl_0051d510 Gap__Bec__beNDMWMdlPEBase__vfunc_47
+0051d510 000040 jtbl jtbl_0051d510 beNDMWMdlPEBase__OnStatusMessage
 0051d550 000150 data data_0051d550
 0051d6a0 0000c8 jtbl jtbl_0051d6a0 Gap__Bec__beNDMWItemInstant__vfunc_22
 0051d768 000328 data data_0051d768

@@ -58,13 +58,13 @@ extern "C" void beNDMWShinkaCtrl_Setup(beNDMWShinkaCtrl *self, int insight, int 
 extern "C" void beNDMWShinkaCtrl_BuildFormList(beNDMWShinkaCtrl *self);
 extern "C" void beNDMWShinkaObject_Load(beNDMWShinkaObject *self, beNDMWGameRam *gameRam, int playerNo, int form);
 extern "C" int beNDMWMdlPEBase_ShowStatusIcon(beNDMWMdlPEBase *self, beBaseInfoRam *ram, const char *iconName, int iconRamNo, int slot, bool restart);
-extern "C" void Gap__Bec__beNDMWMdlPEBase__vfunc_46(beNDMWMdlPEBase *self, beBaseInfoRam *ram);
+extern "C" void beNDMWMdlPEBase__UpdateStatus(beNDMWMdlPEBase *self, beBaseInfoRam *ram);
 extern "C" void beNDMWMdlPEBase_OnSequenceChange(beNDMWMdlPEBase *self, beBaseInfoRam *ram);
 extern "C" void beNDMWMdlPEBase_LoadDownData(beNDMWMdlPEBase *self, beBaseInfoRam *ram, beNDMWMdlPEBaseInfoWork *work);
 extern "C" void beNDMWMdlPEBase_LoadUpData(beNDMWMdlPEBase *self, beBaseInfoRam *ram, beNDMWMdlPEBaseInfoWork *work);
 extern "C" void beNDMWMdlPEBase_RecalcPlayer(beNDMWMdlPEBase *self, beBaseInfoRam *ram, beNDMWMdlPEBaseInfoWork *work);
-extern "C" int Gap__Bec__beNDMWMdlPEBase__vfunc_47(beNDMWMdlPEBase *self, beBaseInfoRam *ram, int message);
-extern "C" void Gap__Bec__beNDMWMdlPEBaseInfoWork__vfunc_8(beNDMWMdlPEBaseInfoWork *self);
+extern "C" int beNDMWMdlPEBase__OnStatusMessage(beNDMWMdlPEBase *self, beBaseInfoRam *ram, int message);
+extern "C" void beNDMWMdlPEBaseInfoWork__Destroy(beNDMWMdlPEBaseInfoWork *self);
 extern "C" int beNDMWMdlPEBaseInfoWork_IsPoisoned(beNDMWMdlPEBaseInfoWork *self);
 extern "C" void beNDMWMdlPEBaseInfoWork_CurePoison(beNDMWMdlPEBaseInfoWork *self, beBaseInfoRam *ram);
 extern "C" int beNDMWMdlPEBaseInfoWork__GetMeta(void);
@@ -392,7 +392,7 @@ fail:
     return -1;
 }
 
-void Gap__Bec__beNDMWMdlPEBase__vfunc_46(beNDMWMdlPEBase *self, beBaseInfoRam *ram) {
+void beNDMWMdlPEBase__UpdateStatus(beNDMWMdlPEBase *self, beBaseInfoRam *ram) {
     beNDMWMdlPEBaseInfoWork *work;
     int damageSeq;
     EnsureDataList(ram);
@@ -727,7 +727,7 @@ void beNDMWMdlPEBase_RecalcPlayer(beNDMWMdlPEBase *self, beBaseInfoRam *ram, beN
     }
 }
 
-int Gap__Bec__beNDMWMdlPEBase__vfunc_47(beNDMWMdlPEBase *self, beBaseInfoRam *ram, int message) {
+int beNDMWMdlPEBase__OnStatusMessage(beNDMWMdlPEBase *self, beBaseInfoRam *ram, int message) {
     beNDMWMdlPEBaseInfoWork *work;
     int action;
     EnsureDataList(ram);
@@ -977,7 +977,7 @@ int Gap__Bec__beNDMWMdlPEBase__vfunc_47(beNDMWMdlPEBase *self, beBaseInfoRam *ra
     }
 }
 
-void Gap__Bec__beNDMWMdlPEBaseInfoWork__vfunc_8(beNDMWMdlPEBaseInfoWork *self) {
+void beNDMWMdlPEBaseInfoWork__Destroy(beNDMWMdlPEBaseInfoWork *self) {
     igIntList *up;
     igIntList *down;
     int i;
