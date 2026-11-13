@@ -1068,7 +1068,7 @@
 00137760	thunk_igGeometryAttr1_5_GetMetaObject	match	-
 00137770	FUN_00137770	match	-
 00137780	igGeometryAttr1_5_InitFields	match	-
-00137810	FUN_00137810	match	-
+00137810	igGeometryAttr_Create	match	-
 00137850	FUN_00137850	match	-
 001378a0	igGeometryAttr_GetMetaObject	match	-
 001378f0	FUN_001378f0	match	-
@@ -1993,7 +1993,7 @@
 0014b7c0	igVertexArray1_1_InitFields	match	-
 0014b920	thunk_igPsx2VertexArray1_1_GetMetaObject	match	-
 0014b930	thunk_FUN_0015e010	match	-
-0014b940	FUN_0014b940	match	-
+0014b940	igVertexArray_Create	match	-
 0014b980	FUN_0014b980	match	-
 0014b9d0	igVertexArray_GetMetaObject	match	-
 0014ba20	FUN_0014ba20	match	-
@@ -2488,7 +2488,7 @@
 0015db40	FUN_0015db40	match	-
 0015db60	FUN_0015db60	match	-
 0015db80	Gap__Gfx__igPrimLengthArray1_1__vfunc_20	match	-
-0015db90	FUN_0015db90	match	-
+0015db90	igVertexArrayLock_Init	match	-
 0015df80	FUN_0015df80	match	-
 0015e010	FUN_0015e010	match	-
 0015e050	FUN_0015e050	match	-
@@ -5089,9 +5089,9 @@
 001db5d0	Gap__Sg__igSorter__vfunc_24	match	-
 001dc400	FUN_001dc400	match	-
 001dc500	FUN_001dc500	match	-
-001dc820	FUN_001dc820	match	-
+001dc820	igSwitch_EnableChild	match	-
 001dc870	FUN_001dc870	match	-
-001dc880	FUN_001dc880	match	-
+001dc880	igSwitch_DisableChild	match	-
 001dc8d0	FUN_001dc8d0	match	-
 001dc8e0	FUN_001dc8e0	match	-
 001dc940	Gap__Sg__igSwitch__vfunc_35	match	-
@@ -12317,7 +12317,7 @@
 0030b310	Gap__Core__igStringMetaField__vfunc_02	match	-
 0030b320	FUN_0030b320	match	-
 0030b3c0	FUN_0030b3c0	match	-
-0030b420	FUN_0030b420	match	-
+0030b420	igStringObj_Clear	match	-
 0030b460	FUN_0030b460	match	-
 0030b5c0	FUN_0030b5c0	match	-
 0030b5f0	FUN_0030b5f0	match	-
@@ -15033,9 +15033,9 @@
 00361c90	beFontImage_Register	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
 00361d00	beFontImage_GetMetaObject	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
 00361d20	FUN_00361d20	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
-00361d30	FUN_00361d30	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
-00361d90	FUN_00361d90	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
-00361df0	FUN_00361df0	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
+00361d30	beFont_GetAlignEnum	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
+00361d90	beFont_GetSwitchEnum	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
+00361df0	beFont_GetMessageEnum	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
 00361e50	beFont_CreateInstance	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
 00361e90	FUN_00361e90	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
 00361ee0	FUN_00361ee0	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
@@ -15052,7 +15052,7 @@
 00362440	FUN_00362440	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
 00362460	beFontGeomAttrPairList_Register	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
 003624d0	beFontGeomAttrPairList_GetMetaObject	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
-003624f0	FUN_003624f0	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
+003624f0	beFontGeomAttrPair_Create	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
 00362530	FUN_00362530	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
 00362580	beFontGeomAttrPair_GetVTable	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
 00362690	FUN_00362690	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
@@ -15101,7 +15101,7 @@
 00363710	FUN_00363710	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
 00363730	beDemoManagerWorkList_Register	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
 003637a0	beDemoManagerWorkList_GetMetaObject	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
-003637c0	FUN_003637c0	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
+003637c0	beDemoManagerWork_CreateInstance	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
 00363800	FUN_00363800	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
 00363850	FUN_00363850	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
 003638a0	beDemoManagerWork_GetVTable	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
@@ -15115,7 +15115,7 @@
 00363b70	FUN_00363b70	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
 00363b90	beDemoKeepMesList_Register	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
 00363c00	beDemoKeepMesList_GetMetaObject	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
-00363c20	FUN_00363c20	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
+00363c20	beDemoKeepMes_CreateInstance	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
 00363c60	FUN_00363c60	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
 00363cb0	beDemoKeepMes_GetVTable	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
 00363d60	FUN_00363d60	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
@@ -16151,14 +16151,14 @@
 0037e6e0	beDemoManager_SetLua	match	-
 0037e890	beDemoManager_MsgBox	match	-
 0037ea50	beDemoManager_Run	match	-
-0037ead0	Gap__Bec__beDemoManager__vfunc_21	match	-
-0037eaf0	Gap__Bec__beDemoManager__vfunc_22	match	-
-0037eb10	Gap__Bec__beDemoManager__vfunc_23	match	-
-0037eb60	Gap__Bec__beDemoManager__vfunc_24	match	-
-0037eb70	Gap__Bec__beDemoManager__vfunc_25	match	-
-0037eb80	Gap__Bec__beDemoManager__vfunc_26	match	-
-0037ed70	Gap__Bec__beDemoManager__vfunc_27	match	-
-0037f1a0	Gap__Bec__beDemoManager__vfunc_20	match	-
+0037ead0	beDemoManager_AddToScheduler	match	-
+0037eaf0	beDemoManager_RemoveFromScheduler	match	-
+0037eb10	beDemoManager_Start	match	-
+0037eb60	beDemoManager_Stop	match	-
+0037eb70	beDemoManager_AcceptInfo	match	-
+0037eb80	beDemoManager_Reset	match	-
+0037ed70	beDemoManager_Update	match	-
+0037f1a0	beDemoManager_GetMetaObject_Virtual	match	-
 0037f1b0	FUN_0037f1b0	match	-
 0037f220	Gap__Bec__beFileListInfoManager__vfunc_21	match	-
 0037f240	Gap__Bec__beFileListInfoManager__vfunc_22	match	-
@@ -16178,18 +16178,18 @@
 00381d60	Gap__Bec__beFont__vfunc_31	match	DEFERRED duplicate 0x1338d0 __dt__31igSmartPointer<13igVertexArray>Fv 128B (compared under the profile of its retail unit)
 00381d70	Gap__Bec__beFont__vfunc_34	match	DEFERRED duplicate 0x1338d0 __dt__31igSmartPointer<13igVertexArray>Fv 128B (compared under the profile of its retail unit)
 00382d70	FUN_00382d70	match	DEFERRED duplicate 0x1338d0 __dt__31igSmartPointer<13igVertexArray>Fv 128B (compared under the profile of its retail unit)
-00382df0	FUN_00382df0	match	DEFERRED duplicate 0x1338d0 __dt__31igSmartPointer<13igVertexArray>Fv 128B (compared under the profile of its retail unit)
+00382df0	beFont_AddFontImages	match	DEFERRED duplicate 0x1338d0 __dt__31igSmartPointer<13igVertexArray>Fv 128B (compared under the profile of its retail unit)
 00382eb0	beFont_ConvertToUnicode	match	DEFERRED duplicate 0x1338d0 __dt__31igSmartPointer<13igVertexArray>Fv 128B (compared under the profile of its retail unit)
 003832d0	FUN_003832d0	match	DEFERRED duplicate 0x1338d0 __dt__31igSmartPointer<13igVertexArray>Fv 128B (compared under the profile of its retail unit)
-00383350	FUN_00383350	match	DEFERRED duplicate 0x1338d0 __dt__31igSmartPointer<13igVertexArray>Fv 128B (compared under the profile of its retail unit)
-00383420	FUN_00383420	match	DEFERRED duplicate 0x1338d0 __dt__31igSmartPointer<13igVertexArray>Fv 128B (compared under the profile of its retail unit)
-00383910	FUN_00383910	match	DEFERRED duplicate 0x1338d0 __dt__31igSmartPointer<13igVertexArray>Fv 128B (compared under the profile of its retail unit)
-00383ab0	FUN_00383ab0	match	DEFERRED duplicate 0x1338d0 __dt__31igSmartPointer<13igVertexArray>Fv 128B (compared under the profile of its retail unit)
-00383bf0	FUN_00383bf0	match	DEFERRED duplicate 0x1338d0 __dt__31igSmartPointer<13igVertexArray>Fv 128B (compared under the profile of its retail unit)
-00383ed0	FUN_00383ed0	code-only	exception metadata: retail keeps an index record at 0x54e954 (packed) that the object does not produce (its unit was C++ with exceptions on)
-00384010	FUN_00384010	match	DEFERRED duplicate 0x1338d0 __dt__31igSmartPointer<13igVertexArray>Fv 128B (compared under the profile of its retail unit)
-003840a0	FUN_003840a0	match	DEFERRED duplicate 0x1338d0 __dt__31igSmartPointer<13igVertexArray>Fv 128B (compared under the profile of its retail unit)
-003841d0	FUN_003841d0	match	DEFERRED duplicate 0x1338d0 __dt__31igSmartPointer<13igVertexArray>Fv 128B (compared under the profile of its retail unit)
+00383350	beFont_FindFontIndex	match	DEFERRED duplicate 0x1338d0 __dt__31igSmartPointer<13igVertexArray>Fv 128B (compared under the profile of its retail unit)
+00383420	beFont_SetText	match	DEFERRED duplicate 0x1338d0 __dt__31igSmartPointer<13igVertexArray>Fv 128B (compared under the profile of its retail unit)
+00383910	beFont_ReplaceVertexArray	match	DEFERRED duplicate 0x1338d0 __dt__31igSmartPointer<13igVertexArray>Fv 128B (compared under the profile of its retail unit)
+00383ab0	beFont_PrepareGeometry	match	DEFERRED duplicate 0x1338d0 __dt__31igSmartPointer<13igVertexArray>Fv 128B (compared under the profile of its retail unit)
+00383bf0	beFont_LayoutLines	match	DEFERRED duplicate 0x1338d0 __dt__31igSmartPointer<13igVertexArray>Fv 128B (compared under the profile of its retail unit)
+00383ed0	beFont_AlignLines	code-only	exception metadata: retail keeps an index record at 0x54e954 (packed) that the object does not produce (its unit was C++ with exceptions on)
+00384010	beFont_LockVertexArray	match	DEFERRED duplicate 0x1338d0 __dt__31igSmartPointer<13igVertexArray>Fv 128B (compared under the profile of its retail unit)
+003840a0	beFont_FindFirstLayoutEntry	match	DEFERRED duplicate 0x1338d0 __dt__31igSmartPointer<13igVertexArray>Fv 128B (compared under the profile of its retail unit)
+003841d0	beFont_FindNextLayoutEntry	match	DEFERRED duplicate 0x1338d0 __dt__31igSmartPointer<13igVertexArray>Fv 128B (compared under the profile of its retail unit)
 00384370	Gap__Bec__beUnicodeObj__vfunc_08	match	DEFERRED duplicate 0x1338d0 __dt__31igSmartPointer<13igVertexArray>Fv 128B (compared under the profile of its retail unit)
 003843c0	beUnicodeObj_AllocateBuffer	match	DEFERRED duplicate 0x1338d0 __dt__31igSmartPointer<13igVertexArray>Fv 128B (compared under the profile of its retail unit)
 00384480	Gap__Bec__beUnicodeObj__vfunc_20	match	DEFERRED duplicate 0x1338d0 __dt__31igSmartPointer<13igVertexArray>Fv 128B (compared under the profile of its retail unit)
@@ -19080,8 +19080,8 @@
 004551a0	FUN_004551a0	match	-
 004551f0	FUN_004551f0	match	-
 004552e0	FUN_004552e0	match	-
-00455370	FUN_00455370	match	-
-004553e0	FUN_004553e0	match	-
+00455370	beFontImage_CountTriangles	match	-
+004553e0	beFontImage_CountTrianglesWide	match	-
 00455440	Gap__Gui__igGuiComponent__vfunc_13	match	-
 00455470	FUN_00455470	match	-
 004554d0	Gap__Gui__igGuiComponent__vfunc_10	match	-
