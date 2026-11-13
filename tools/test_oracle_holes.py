@@ -53,9 +53,9 @@ int igObjectSystem_FindMetaByNameDefault(const char *name){return igObjectSystem
 
 
 # a body that reads one compiler float literal, the retail pool's entry at 0x5548b8
-LITERAL_VA, LITERAL_NAME = 0x20d290, "FUN_0020d290"
+LITERAL_VA, LITERAL_NAME = 0x20d290, "p2ReadNanoseconds"
 LITERAL_BODY = """extern long long DAT_0056c190[];
-void FUN_0020d290(long long *arg0) {
+void p2ReadNanoseconds(long long *arg0) {
     unsigned int t;
     float f;
     unsigned int u;
@@ -305,11 +305,14 @@ class Counterexamples(unittest.TestCase):
         with tempfile.TemporaryDirectory(prefix="dw4-oracle-") as td:
             path = Path(td) / "cand.c"
             path.write_text(source)
+            # verified alone, like `verify`: the live table folds this address into a whole-file unit
+            ungrouped = Path(td) / "unit-objects.json"
+            ungrouped.write_text("{}")
             return verify.verify_one(LITERAL_VA, str(path), symbols=str(ROOT / "config/SLUS-20836/symbols.txt"),
                                      flags="-O4,s -sdatathreshold 2 -Iinclude -Cpp_exceptions off",
                                      mwcc=str(ROOT / "local/mwcps2/3.0b52-030722/mwccps2.exe"),
                                      units="/dev/null", unit_flags="/dev/null", unit_compilers="/dev/null",
-                                     unit_objects=None)
+                                     unit_objects=str(ungrouped))
 
     def test_honest_literal_matches(self):
         ok, report = self.verify_literal(LITERAL_HONEST)
