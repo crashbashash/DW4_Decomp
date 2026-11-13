@@ -252,7 +252,7 @@ int FUN_00463c80(int *p)
     return FUN_002370c0(*(int *)((char *)p + 0));
 }
 
-void FUN_00463fd0(S2 *arg0, R *arg1) {
+void igViewManager_SetViewMode(S2 *arg0, R *arg1) {
     R *temp_a0;
     R *temp_a0_2;
 

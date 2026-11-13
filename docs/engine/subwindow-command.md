@@ -1,71 +1,51 @@
 # SUBWND command receiver
 
-The entire **3d60e0..3d873c / 9,820-byte** receiver is recovered, with **2,434
-executable instruction addresses**. Its21 internal alignment NOPs are excluded
-from Ghidra's actual body ranges; a further zero word at3d873c separates the
-function from [preparation](subwindow-preparation.md) at3d8740.
-
-Together with the [lifecycle](subwindow-lifecycle.md) and preparation, this makes up
-the11-body SUBWND manager region /17,616 code
-bytes (`src/game/beNDMWStatus.cpp`).
+`beNDMWStatus__OnMessage` is the SUBWND manager's message receiver (`src/game/beNDMWStatus.cpp`).
+With the [lifecycle](subwindow-lifecycle.md) and the [work preparation](subwindow-preparation.md)
+it makes up the manager.
 
 ## Dispatch and command contract
 
-The receiver obtains command enumeration3bb730, then resolves the message's word20
-through38d4a0 using the current owner messenger20. The original name/value tables
-at4ca090/4ca0b0 contain seven consecutive values0..6. The independent seven-entry
-jump table516b30 maps those values to the following bodies. Unknown/full-width
-out-of-range enum results return0; recognized commands return1 even when their
-state condition performs no work.
+The receiver resolves the message's `_dataList` against the retail message enumeration
+(`StatusMessage_GetMetaEnum`), whose seven names take the values 0..6. A value outside them returns
+0; every recognised command returns 1, even when its state condition leaves it nothing to do.
 
-| Value | Literal | Behavior |
+| Value | Name | Behaviour |
 | --- | --- | --- |
-| 0 | GENERATE | Start only when RAM `_isRun` byte20 is zero; record owning player and service mode, clear state/counters and freeze the world |
-| 1 | REMOVE | Only byte20 exactly1 requests root closure; without a root, release message hold and queue SUBWND REMOVE with argument1 |
-| 2 | UPDATE | Ensure work, rebuild the parameter snapshot and publish player/status text |
-| 3 | GETSHOPDATA | Return the requested WPU/APU/CHIP/JUNK list; JUNK also returns `_junkGift` |
-| 4 | ONPREVIEW | Publish current stats colored against the saved parameter baseline |
-| 5 | OFPREVIEW | Restore baseline text/default colors and write the saved HP/MP back to player records |
-| 6 | ISRUN | Append the current run byte through38f150 |
+| 0 | GENERATE | Only while `_isRun` is 0: record the opening player and the service mode, start the state machine and freeze the world |
+| 1 | REMOVE | Only while `_isRun` is exactly 1: ask the root window to close; without a root, release the freeze and queue SUBWND REMOVE |
+| 2 | UPDATE | Ensure the work, rebuild the parameter snapshot and publish the player's status text |
+| 3 | GETSHOPDATA | Return the WPU/APU/CHIP/JUNK sales list; JUNK also returns `_junkGift` |
+| 4 | ONPREVIEW | Show the current stats coloured against the snapshot |
+| 5 | OFPREVIEW | Restore the snapshot text and default colours and write the snapshot HP/MP back |
+| 6 | ISRUN | Append `_isRun` |
 
-`OFPREVIEW` is the shipped spelling. Generate reads integer argument0 for the
-owning player, string argument0 for the service name and resolves mode enumeration
-3b1d70. Its name/value tables4c9410/4c9440 bind STATUS,XDATA,LABO,BANK,CNOS,DISK,
-WPU,APU,CHIP,JUNK,CARD to0..10. It writes active/state/counters first, then mode40
-and player36, sends MODELCTRL and GENERATER ONFREEZE, enables the message hold
-through38d470(1), then sends SOUND ONFREEZE. An already nonzero run byte leaves
-these untouched. No extra mode-validity check is introduced after lookup.
+`OFPREVIEW` is the shipped spelling. GENERATE reads the opening player as integer argument 0 and the
+service name as string argument 0, resolved through `SubWnd_GetMetaEnum` (STATUS, XDATA, LABO, BANK,
+CNOS, DISK, WPU, APU, CHIP, JUNK, CARD = 0..10). It sets `_isRun` and clears the state words first,
+then stores `_subWndNo` and `_whoGenerate`, sends MODELCTRL and GENERATER **ONFREEZE**, sets the
+message freeze and sends SOUND **ONFREEZE**. The mode is not validated.
 
-Remove writes root state28=2 and clears40,36,32 in that order. With a null root
-it sends the delayed/remove command through38ecf0; it does not directly clear the
-run byte. Run values2..255 satisfy Generate's already-active condition but do not
-satisfy Remove's exact1 condition.
+REMOVE sets the root window's `_st0` to 2 and clears `_st3`, `_st2` and `_st1`. With no root it
+sends the delayed SUBWND **REMOVE** through `beMessenger_SendDelayedGroup`; it never clears
+`_isRun` itself. An `_isRun` of 2..255 blocks GENERATE but does not satisfy REMOVE.
 
-GETSHOPDATA caches RAM work **before** fetching its argument; it never invokes
-preparation. Mode6 returns work16,7 returns20,8 returns24 and9 returns28 followed
-by the live word32. The gift word is fetched after the object-result callback.
-Other requested modes produce no result but still return handled1.
+GETSHOPDATA reads the work before its argument and never prepares it. Modes 6..9 return
+`_weaponSalesList`, `_armorSalesList`, `_chipSalesList` and `_junkSalesList`; JUNK then appends
+`_junkGift`. Any other mode returns nothing but is still handled.
 
-## Status text and baseline capture
+## Status text and snapshot
 
-UPDATE similarly caches work before retrieving the selected player argument.
-Only a null cached work invokes preparation and reloads RAM44. It resets the
-current work `_parameter` list8 count, then asks GAMERAM GETPLAYER for the selected
-slot. This differs from stock preparation's unconditional player-zero level.
+UPDATE also reads the work before the player argument, and only a missing work runs
+`beNDMWStatus__PrepareWork`. It empties the work's `_parameter` list and asks GAMERAM
+**GETPLAYER** for the selected player, which differs from the preparation's fixed player 0.
 
-PLAYERNAME is a reference object reached through the property/list/data graph.
-It is placed in private frame word396, retained and appended to TEXTCTL's
-STWINFONT02/font000. The temporary is reloaded **after** the text-prefix callbacks
-and again for final release. Capturing its value before those callbacks changes
-the original behavior. The routine uses a400-byte private frame holding
-all text buffers, reference cells and preview-vector addresses.
+The **PLAYERNAME** record is held in an `igSmartPointer`, retained and shown in STWINFONT02/font000.
+LEVEL is capped at 999 for display. The shinka database maps **DIGIMONNO** to **NAME** for
+STWINFONT04/font001. Current HP and MP go to STWINFONT06 font000 and font001. Eleven stats follow,
+each shown and appended to the snapshot:
 
-LEVEL is signed and capped above999 for display. The shinka database maps
-DIGIMONNO / NAME to STWINFONT04/font001. Current HP/MP are displayed in
-STWINFONT06/font000/font001. Eleven following stats are displayed, then appended
-to the parameter snapshot in this order:
-
-| Snapshot index | Property | STWINFONT06 font |
+| Snapshot index | Record | STWINFONT06 label |
 | --- | --- | --- |
 | 0 | MHP | font010 |
 | 1 | MMP | font011 |
@@ -79,54 +59,30 @@ to the parameter snapshot in this order:
 | 9 | KAMINARITEIKO | font047 |
 | 10 | YAMITEIKO | font048 |
 
-XDATA/font049 and BIT/font070 are displayed without adding snapshot entries.
-NEXTEXP minus EXP wraps as a32-bit subtraction. At displayed level999, font071
-shows `----`; otherwise a negative wrapped result displays `0`, or the signed
-remaining number is formatted. It uses the original formatting service129e60
-with literal `%d`. The independently captured HP and MP are appended at indices11
-and12 after all text work. Each append reloads the work list; resize2d6790 can
-relocate storage, so the backing pointer is loaded after that callback.
+XDATA (font049) and BIT (font070) are shown without entering the snapshot. font071 shows the
+experience to the next level, NEXTEXP minus EXP as a wrapping 32-bit subtraction: `----` at level
+999, `0` when the difference is negative, otherwise the number formatted with `%d`. The HP and MP
+read earlier are appended last, at indices 11 and 12. Each append reloads the list, since
+`List_Resize` can move its storage.
 
 ## Preview and restoration
 
-ONPREVIEW obtains the selected player's live eleven stats and compares each
-signed value with the corresponding saved baseline. It displays the live value,
-then sends TEXTCTL COLOR using these exact RGB bit patterns:
+ONPREVIEW reads the selected player's eleven stats, compares each signed value with its snapshot
+entry, shows the value and sends TEXTCTL **COLOR** with:
 
 | Comparison | Red | Green | Blue |
 | --- | --- | --- | --- |
-| Equal | 3f666666 | 3f666666 | 3f666666 |
-| Lower | 3f70a3d7 | 3ecccccd | 3e800000 |
-| Higher | 00000000 | 3f75c28f | 3f800000 |
+| Equal | 0.9 | 0.9 | 0.9 |
+| Lower | 0.94 | 0.4 | 0.25 |
+| Higher | 0.0 | 0.96 | 1.0 |
 
-Their
-private vector cells are384,368,...,224 in the400-byte frame. Values/colors are
-captured before formatting callbacks; the baseline pointer is reloaded for each
-stat. This receiver does not apply equipment or purchase anything.
+Nothing is equipped or bought here.
 
-OFPREVIEW displays the eleven saved baseline values with DEFAULTCOLOR, then
-captures saved HP/MP from indices11/12, resolves the selected player and writes
-those two properties. It does not restore the other eleven stat records here.
-Both paths cache work before their first argument callback and keep reloading
-the parameter list through that cached work.
+OFPREVIEW shows the eleven snapshot values with **DEFAULTCOLOR**, then writes snapshot entries 11
+and 12 back to the selected player's HP and MP. The other eleven stat records are not restored
+here.
 
-## Matching and remaining work
+## Open questions
 
-```sh
-python3 testing/test_lua_engine_dependencies.py
-python3 tools/test_function_extents.py
-make check
-make link
-make typed-check
-```
-
-Live UI, transactions and persistence are not established by this body.
-
-The generated extent gives the actual9,820-byte return span; the final padding word is ordinary data.
-Existing RTTI/slot names are retained.
-
-The 72-byte init at 3d5960 and the adjacent 92-byte scoped cleanup at 3d58f0 are in
-(`src/game/beNDMWStatus.cpp`). Continue
-the concrete [hub service-controller and result dependencies](../systems/hub-recovery.md),
-including price/stock services, transactions, bank/appraisal/lab/X Data and the
-separate Save Keeper stagIS12 route.
+- Which callers send ONPREVIEW/OFPREVIEW, and whether the eleven stats are restored elsewhere, is
+  in the shop controllers' scripts, not here.

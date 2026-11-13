@@ -123,7 +123,7 @@ void FUN_0018aaa0(S *arg0, float *arg1) {
     arg1[23] = arg0->f[5];
 }
 
-void FUN_0018ab70(igAABox *arg0, unsigned int arg1, V3 *arg2) {
+void igAABox_GetCorner(igAABox *arg0, unsigned int arg1, V3 *arg2) {
     float c, b, a;
     switch (arg1) {
     case 7:
@@ -262,7 +262,7 @@ int FUN_0018b110(void *arg0, void *arg1) {
     if (!(*(float *)((char *)(arg0) + 8) <= *(float *)((char *)(arg0) + 20))) {
         return 0;
     }
-    FUN_0018ab70((igAABox *)arg0, ~*(int *)((char *)(arg1) + 24) & 7, (V3 *)sp20);
+    igAABox_GetCorner((igAABox *)arg0, ~*(int *)((char *)(arg1) + 24) & 7, (V3 *)sp20);
     return FUN_0018d060((P2 *)arg1, (float *)sp20) == 2;
 }
 

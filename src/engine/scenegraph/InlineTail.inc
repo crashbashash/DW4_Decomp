@@ -189,7 +189,7 @@ int FUN_001e2d10(void **arg0, int arg1) {
     int temp_s0;
 
     temp_s0 = ((DW4VC_96_1 *)(arg0))->vX((int)(&sp30[0])) & 0xFF;
-    FUN_001925f0(arg1, &sp30[0]);
+    Matrix44_GetQuaternion(arg1, &sp30[0]);
     return temp_s0;
 }
 
@@ -428,7 +428,7 @@ int Gap__Sg__igCompressedAnimationSequenceQS__vfunc_26(void **arg0, int arg1) {
     int temp_s0;
 
     temp_s0 = ((DW4VC_96_1 *)(arg0))->vX((int)(sp30)) & 0xFF;
-    FUN_001925f0(arg1, sp30);
+    Matrix44_GetQuaternion(arg1, sp30);
     return temp_s0;
 }
 

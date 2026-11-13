@@ -249,7 +249,7 @@ void FUN_001916b0(int arg0, float *arg1, float fparg0) {
 }
 
 void FUN_001916f0(void *arg0, float *arg1) {
-    FUN_00191770((float *)arg0, arg1);
+    Matrix44_SetQuaternion((float *)arg0, arg1);
     *(float *)((char *)(arg0) + 48) = (float) DAT_004e11c0[0];
     *(float *)((char *)(arg0) + 52) = (float) DAT_004e11c4[0];
     *(float *)((char *)(arg0) + 56) = (float) DAT_004e11c8[0];
@@ -259,7 +259,7 @@ void FUN_001916f0(void *arg0, float *arg1) {
     *(float *)((char *)(arg0) + 44) = (float) DAT_004e1060[0];
 }
 
-void FUN_00191770(float *m, float *q) {
+void Matrix44_SetQuaternion(float *m, float *q) {
     float x = q[0], y = q[1], z = q[2], w = q[3];
     float n = 1.0f / sqrtf(z * z + (x * x + y * y) + w * w);
     y = y * n;
@@ -444,7 +444,7 @@ void FUN_00192510(S6 *a, float *arg1, float *arg2, float *arg3, float *arg4, flo
     *arg4 = t1 + t0;
 }
 
-void FUN_001925f0(float *q, float *m) {
+void Matrix44_GetQuaternion(float *q, float *m) {
     float tr = m[10] + (m[0] + m[5]);
     if (!(tr < 0.0f)) {
         float s, r; s = sqrtf(1.0f + tr);

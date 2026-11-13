@@ -41,7 +41,7 @@ struct CameraTargetLink { char pad[8]; struct CameraTarget *f8; };
 struct R { int w0; int references; };
 struct O { char pad[76]; struct R *f76; struct R *f80; };
 
-struct R* FUN_001c5990(...);
+struct R* igGraphPath_GetTail(...);
 void igObject_Destroy(void *);
 
 extern int DAT_00561EA0[4];
@@ -323,7 +323,7 @@ void FUN_00465260(struct O *self, struct R *arg1) {
             }
         }
         self->f76 = arg1;
-        v = FUN_001c5990(arg1);
+        v = igGraphPath_GetTail(arg1);
         v = (struct R *)cast0(v);
         if (v != 0) {
             v->references = v->references + 1;

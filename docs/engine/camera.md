@@ -64,7 +64,28 @@ view is the inverse of the live eye world matrix. Passing an identity world as t
 | +0x54 | `_eyeMatrix` |
 | +0x94 | `_intMatrix` |
 
-`beCameraCtrl::vfunc_31` (`0x379c40`) is the per-frame update: `FUN_00378ed0` is the box path when the camera mode is valid, else `FUN_00379a90` is the demo path.
+`src/game/beCameraCtrl.cpp` (unit `bec_beCameraCtrl`, `0x378d80`-`0x37a7b0`) holds it. `beCameraCtrl::vfunc_31`
+(`0x379c40`) is the per-frame update: `beCameraCtrl_UpdateBoxCamera` when the info's data is a `beCameraBoxData`
+(`beCameraCtrl_IsBoxCamera`), else `beCameraCtrl_UpdateDemoCamera` (`beCameraCtrl_IsDemoCamera`).
+
+The box camera sends GETMATRIX to the PLAYER group and averages the player positions. When the average moves, it looks
+for the first box (`_geometryList` entries 1..n, the bound's corners from `igAABox_GetCorner`) holding it; a new box
+starts a `beCameraMode` on the viewer (`beCameraMode_Create`, `beCameraMode_SetCameraPath`,
+`igViewManager_SetViewMode`) and the eye and interest transforms (entry 0 of `_eyePosList`/`_intPosList`) blend from
+the saved matrices to the new box's entry over 120 frames under the CAMHOKAN timer: translations by `Vec3_Lerp`,
+rotations through `Matrix44_GetQuaternion`, `Quaternion_Lerp` and `Matrix44_SetQuaternion`. The demo camera starts its
+`_cameraPath` once and plays it for `_endTime`.
+
+A shake is a `beCameraCtrlInfoRamShake` (`SHK`) in the ram's data list. Each frame offsets the eye and interest
+positions by `_value` times the entries of `g_cameraShakeOffsetX`/`g_cameraShakeOffsetY` picked by the current digit
+of `_moveCode`; the SHAKEONE timer (`_oneTime` seconds) steps `_movePoint`, and the SHAKEALL timer (`_endTime`) restores
+the saved positions and removes the shake.
+
+`beCameraCtrl_GetMessageEnum` names the 15 messages `beCameraCtrl::vfunc_33` answers (SHOWPOLYGON ... DBGZOOMOUT,
+enum `beCameraCtrlMessage` in the source). SHOWPOLYGON and HIDEPOLYGON set or clear the box switch's child mask
+(`igBitMask_SetAll`, `igBitMask_ClearAll`); SETBOXCAMERA and SETDEMOCAMERA pick which info runs (the box camera stops
+while a demo camera of the given name exists); SHAKE creates the shake; ONFREEZE/OFFREEZE set the mode's `_isFreeze`.
+The DBGZOOM messages step `_debugZoom` by 0.2.
 
 `beCameraCtrlInfo._data` (+0x1c) is a `beCameraBoxData` (`_switch` +8, `_geometryList` +0xc, `_transformList` +0x10,
 `_eyePosList` +0x14, `_intPosList` +0x18) or a `beCameraDemoData`.
@@ -72,4 +93,13 @@ view is the inverse of the live eye world matrix. Passing an identity world as t
 `beCameraMode` has `_cameraPath` +0x4c, `_camera` +0x50, `_insight` +0x54, `_svWorldTimeL` +0x58, `_nowTimeL` +0x60,
 `_timeLength` +0x68, `_isEnd` +0x70, `_isFreeze` +0x71. `vfunc_29` (`0x37a7f0`) copies `_camera`'s position
 (+0x2c/+0x30/+0x34) into the Insight object (`beCameraMode`+8) at +0x50/+0x58/+0x54 and sets fov, near and far. `vfunc_28`
-(`0x37a900`) advances the camera path by `_nowTimeL`/`_timeLength` and pushes transforms.
+(`0x37a900`) advances the camera path by `_nowTimeL`/`_timeLength` and pushes transforms. `beCameraMode_SetCameraPath`
+stores an `igGraphPath` as `_cameraPath` and its last node (`igGraphPath_GetTail`), when an `igCamera`, as `_camera`.
+
+## Open questions
+
+- `beCameraCtrl_EnableDebugZoom` and `igViewerSceneInfoManager_DebugZoomOut` are empty in retail; their names come from
+  the DBGZOOM messages that call them.
+- `igViewerSceneInfoManager_ResetOperationMode` sets the viewer parameters' `_operationMode` to 1 and posts a change;
+  what mode 1 is has not been traced.
+- `Quaternion_Lerp` has no square root or trigonometry; whether it normalises its result is not checked.

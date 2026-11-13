@@ -1,0 +1,24 @@
+# beCameraCtrl.cpp: the beCameraCtrl box/demo camera update and message handler, the beCameraMode
+# path setter emitted in the same file; the BecLibrary creators and message enum it calls, and the
+# maths, bit-mask and viewer helpers it calls. Evidence in docs/engine/camera.md.
+# <va>	<name>	<module>
+0x0018ab70	igAABox_GetCorner	engine
+0x00191770	Matrix44_SetQuaternion	engine
+0x001925f0	Matrix44_GetQuaternion	engine
+0x00192cc0	Quaternion_Lerp	engine
+0x00192f00	Vec3_Lerp	engine
+0x001b1cf0	igBitMask_SetAll	engine
+0x001b1dc0	igBitMask_ClearAll	engine
+0x001c5990	igGraphPath_GetTail	engine
+0x00462d20	igViewerSceneInfoManager_DebugZoomOut	engine
+0x00462dc0	igViewerSceneInfoManager_ResetOperationMode	engine
+0x00463fd0	igViewManager_SetViewMode	engine
+0x003689f0	beCameraMode_Create	game
+0x003694a0	beCameraCtrlInfoRamShake_Create	game
+0x003697c0	beCameraCtrl_GetMessageEnum	game
+0x00378e40	beCameraCtrl_IsBoxCamera	game
+0x00378e80	beCameraCtrl_IsDemoCamera	game
+0x00378ec0	beCameraCtrl_EnableDebugZoom	game
+0x00378ed0	beCameraCtrl_UpdateBoxCamera	game
+0x00379a90	beCameraCtrl_UpdateDemoCamera	game
+0x0037a690	beCameraMode_SetCameraPath	game

@@ -220,7 +220,7 @@ int FUN_001ad310(void **arg0, int arg1, int arg2, int arg3, int arg4, int arg5) 
     int temp_s0;
 
     temp_s0 = ((DW4VC_96_4 *)(arg0))->vX((int)(sp40), (int)(arg3), (int)(arg4), (int)(arg5)) & 0xFF;
-    FUN_001925f0(arg1, sp40);
+    Matrix44_GetQuaternion(arg1, sp40);
     Matrix44_GetTranslation(sp40, arg2);
     return temp_s0;
 }

@@ -1,4 +1,4 @@
-void FUN_003694a0(int arg0) {
+void beCameraCtrlInfoRamShake_Create(int arg0) {
     FUN_00369600();
     igMetaObject_CreateInstance(*(int *)0x589C38, arg0);
 }
@@ -106,7 +106,7 @@ void beCameraCtrlInfoRamShake_InitFields(void) {
     igMetaObject_NameFields(temp_s1, &DAT_004c7970[0], &DAT_004c7990[0], &DAT_004c79b0[0], temp_s2);
 }
 
-int FUN_003697c0(void) {
+int beCameraCtrl_GetMessageEnum(void) {
     if (DAT_00589c88[0] == 0) {
         DAT_00589c88[0] = igMetaEnum_Create(&DAT_005016f0[0], &DAT_004c79d0[0], &DAT_004c7a10[0], 0xF);
     }

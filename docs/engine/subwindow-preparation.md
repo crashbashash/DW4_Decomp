@@ -1,96 +1,70 @@
 # SUBWND work and shop-stock preparation
 
-The complete **3d8740..3d9bd0 / 5,264-byte** preparation body called by the
-[service-menu lifecycle](subwindow-lifecycle.md) is recovered, with **1,222 executable
-instructions**. The94 remaining words are zero padding excluded by Ghidra's address ranges
-in the generated [reviewed extents](../../data/function-extents.json).
-
-It matches as `src/game/beNDMWStatus.cpp`. Database access,
-record lookup, item construction/initialization, list operations, allocation and
-destruction are separate services. It does not implement prices, buy/sell,
-service transactions or NPC menus.
+`beNDMWStatus__PrepareWork` creates the SUBWND manager's work, caps the party's BIT and X Data and
+fills the shop stock lists (`src/game/beNDMWStatus.cpp`). The [lifecycle](subwindow-lifecycle.md)
+calls it when a menu opens and the [command receiver](subwindow-command.md) when UPDATE finds no
+work. It does not implement prices, buying, selling or the service transactions.
 
 ## Work, currency and player selection
 
-Missing RAM `_work`44 is constructed through3b5ec0. Allocation first queries
-301000, then uses the default selector587110 when byte554c14 is zero. The
-224-byte private frame's temporary at220 holds a retained reference; the old
-RAM work is released before publication and the current temporary is released
-afterward. The published work is cached before that last release. Destruction
-callbacks may change RAM or temporary storage between these steps.
+A missing RAM `_work` is created through `beNDMWStatusInfoWork_Create`, with the object's own
+allocator when `g_useOwnerAllocator` is set and the default selector's otherwise. The new work is
+held in an `igSmartPointer`, retained, the old RAM work is released and the new one published.
 
-Every mode queries GAMERAM GETPLAYER separately for all four slots. A nonzero
-**ISUSE byte** includes the player in the participant count and caps signed BIT
-at9,999,999 and XDATA at9,999. Negative values are retained; unjoined records
-are untouched. When capping, the property is looked up again before writing;
-the second result need not equal the first. Player zero is queried again for
-LEVEL even for a non-stock mode or an already populated stock list. The manager
-uses player zero's level rather than the `_whoGenerate` player.
+Each of the four player slots is fetched through GAMERAM **GETPLAYER**. A set **ISUSE** flag
+counts the player into the party and caps BIT at 9,999,999 and XDATA at 9,999; negative values are
+kept and slots not in use are untouched. A capped record is looked up again before it is written.
+Player 0's **LEVEL** is then read for every mode, even one without stock or with a list already
+filled: the stock follows player 0, not `_whoGenerate`.
 
-Reflection names the work's list fields `_weaponSalesList`16,
-`_armorSalesList`20, `_chipSalesList`24 and `_junkSalesList`28, followed by
-`_junkGift`32. Only signed counts below1 trigger rebuilding. The routine asks
-2d6680 for36 elements of4 bytes, resets the current list through301c90, then
-builds columns `00` through `35`. It reloads each work list field after service
-calls; the work pointer itself remains cached.
+The work's lists are `_weaponSalesList`, `_armorSalesList`, `_chipSalesList` and `_junkSalesList`,
+followed by `_junkGift`. Only an empty list (count below 1) is rebuilt: `List_Reserve` makes room
+for 36 entries, `ObjectList_FillRetained` resets it, and columns `00` through `35` are read from
+the shop database.
 
 ## Stock selection
 
-| Mode | Database | Row | Missing numeric entry (full64-bit -1) |
+| Mode | Database | Row | Missing entry (-1) |
 | --- | --- | --- | --- |
-| 6 WPU | shopWeapon | Species base + level tier, capped at24 | Append null |
-| 7 APU | shopArmor | Level tier, capped at29 | Columns00–11 still construct blue armor;12–35 append null |
-| 8 CHIP | shopChip | Level tier, capped at29 | Append null |
-| 9 JUNK | shopJunk | Common investment tier -1..8 | Omit entry; no placeholder |
+| 6 WPU | shopWeapon | species base + level tier, tier capped at 24 | append null |
+| 7 APU | shopArmor | level tier, capped at 29 | columns 00–11 still create blue armor; 12–35 append null |
+| 8 CHIP | shopChip | level tier, capped at 29 | append null |
+| 9 JUNK | shopJunk | common counter tier -1..8 | skipped, no placeholder |
 
-The level thresholds, in row order, are
+The level tiers start at these levels:
 `10,17,22,27,32,37,42,47,52,61,68,73,78,83,88,93,98,103,108,113,118,128,138,148,158,168,178,188,198`.
-A level below10 selects tier0. WPU uses only the first24 thresholds; APU and CHIP
-use all29. Comparisons are signed.
+A level below 10 is tier 0. WPU uses the first 24 thresholds; APU and CHIP use all 29. The
+comparisons are signed.
 
-WPU selects base150 with two or more joined players and does not query species
-in that branch. Otherwise player zero's DIGIMONNO selects:
+WPU uses base row 150 when two or more players are in the party, without reading the species.
+Otherwise player 0's DIGIMONNO selects:
 
 | DIGIMONNO | Base |
 | --- | --- |
-| 1,4,12 | 25 |
-| 2,7,14 | 50 |
-| 3,9 | 75 |
-| 6,10 | 100 |
-| 8,11,13 | 125 |
-| Other | 0 |
+| 1, 4, 12 | 25 |
+| 2, 7, 14 | 50 |
+| 3, 9 | 75 |
+| 6, 10 | 100 |
+| 8, 11, 13 | 125 |
+| other | 0 |
 
-JUNK fetches GAMERAM GETCOMMON / COUNTER through the property's list/data chain.
-Its signed investment thresholds are
-`1000,6000,26000,86000,206000,456000,956000,1956000,3956000`.
-Below1,000, row-1 produces no stock. When rebuilding it stores the investment
-in `_junkGift`; an existing list skips that write even though common investment
-was fetched. For each present numeric entry it queries the same row's literal
-`kind`:0 weapon,1 blue armor,2 yellow armor. Other kinds skip the entry. This is
-one kind per row, not an independently numbered kind column per item.
+JUNK reads entry 1 of GAMERAM **GETCOMMON**'s **COUNTER** list. Its tiers start at
+`1000,6000,26000,86000,206000,456000,956000,1956000,3956000`; below 1,000 the row is -1 and no
+stock is made. A rebuild stores the counter in `_junkGift`; a filled list skips that write. For each
+present entry the column's `kind` entry (the column key with `kind` appended) chooses 0 weapon,
+1 blue armor or 2 yellow armor; any other kind skips the entry.
 
 ## Items and ownership
 
-| Item | Factory | Initializer | Private temporary |
-| --- | --- | --- | --- |
-| Weapon | 3c8c90 | 4482e0 | 216 WPU;200 JUNK |
-| Blue armor | 3c8b00 | 448430 | 212 APU;196 JUNK |
-| Yellow armor | 3c8970 | 448580 | 208 APU;192 JUNK |
-| Ability chip | 3c87f0 | 448660 | 204 |
+| Item | Factory | Initialiser |
+| --- | --- | --- |
+| Weapon | `beNDMWItemWeapon_Create` | `beNDMWItemWeapon_SetRandom` |
+| Blue armor | `beNDMWItemBlueArmor_Create` | `beNDMWItemBlueArmor_SetRandom` |
+| Yellow armor | `beNDMWItemYellowArmor_Create` | `beNDMWItemYellowArmor_SetRandom` |
+| Ability chip | `beNDMWItemAbilityChip_Create` | `beNDMWItemAbilityChip_Set` |
 
-Item allocation uses selector587108 after the same object/default allocator
-choice. Weapon/armor initialization receives item,id,owner,player-zero level;
-chip initialization receives item,id only. The current temporary is appended
-through301e30, then the current temporary is released with the low23-bit rule.
-Callbacks can replace the temporary between initialization, append and release.
-The database result is used at full width, so
-`0xffffffff` is distinct from the64-bit missing sentinel.
-
-## Verification and remaining work
-
-```sh
-python3 tools/test_function_extents.py
-```
-
-Continue the concrete service-controller/result paths and stock
-services, against the [full hub completion contract](../systems/hub-recovery.md).
+Items are allocated through the NDMW allocator selector after the same owner/default choice.
+Weapon and armor initialisers receive the item, the id, the manager and player 0's level; the chip
+initialiser receives the item and the id. Each new item is held by an owning reference, appended
+through `ObjectList_AppendRetained` and released when the holder goes out of scope. Every item kind
+has its own holder class, which is why four holder destructors are emitted.

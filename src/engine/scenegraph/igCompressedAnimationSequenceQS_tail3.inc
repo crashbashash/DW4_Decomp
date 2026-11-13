@@ -122,7 +122,7 @@ void Gap__Sg__igCompressedAnimationSequenceQS__vfunc_48(struct S_1bfe90 *arg0, i
     }
     FUN_001bf560((QSView *)arg0, (int)(arg2), (float *)sp60);
     FUN_001bf560((QSView *)arg0, (int)(arg3), (float *)sp50);
-    FUN_00192cc0((float *)arg1, fparg0, (void *)sp60, (void *)sp50);
+    Quaternion_Lerp((float *)arg1, fparg0, (void *)sp60, (void *)sp50);
 }
 
 void Gap__Sg__igCompressedAnimationSequenceQS__vfunc_47(void *arg0, int *arg1, int arg2, int arg3, float fparg0) {
@@ -135,7 +135,7 @@ void Gap__Sg__igCompressedAnimationSequenceQS__vfunc_47(void *arg0, int *arg1, i
     }
     ((DW4VC_184_2 *)(((char *)(arg0) + 0)))->vX(arg2, &sp60[0]);
     ((DW4VC_184_2 *)(((char *)(arg0) + 0)))->vX(arg3, &sp50[0]);
-    FUN_00192f00((float *)arg1, fparg0, (void *)&sp60[0], (void *)&sp50[0]);
+    Vec3_Lerp((float *)arg1, fparg0, (void *)&sp60[0], (void *)&sp50[0]);
 }
 
 int Gap__Sg__igCompressedAnimationSequenceQS__vfunc_25(S_1c0010 *arg0, int arg1, long long arg2) {

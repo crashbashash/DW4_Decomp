@@ -1,950 +1,575 @@
 #include "dw4/reflected.h"
 #include "dw4/igSmartPointer.h"
-#define RELEASE_WIN(p_) { beNDMWWindow *rw = (p_); if (rw) { --rw->_refCount; if (!(rw->_refCount & 0x7fffff)) igObject_Destroy(rw); } }
-#define GET_ALLOC(v) { void *ga = igObject_GetAllocator(self); if (GPR_00554c14 != 0) { v = ga; } else { v = Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]); } }
-#define NEXT() { info->_st0 = info->_st0 + 1; info->_st3 = 0; info->_st2 = 0; info->_st1 = 0; }
-#define MK(fn) { void *al; GET_ALLOC(al) RELEASE_WIN(w.p) w.p = fn(al); }
-#define RELEASE_REF(q) { igObject *rr = (igObject *)(q); if (rr) { --rr->_refCount; if (!(rr->_refCount & 0x7fffff)) igObject_Destroy(rr); } }
+
+/* The SUBWND service menu: beNDMWStatus opens one window per _subWndNo (status, XDATA, lab, bank,
+ * CNOS, disk, the four shops and the card window), shows the selected player's parameters, and
+ * prepares the shop stock lists in its beNDMWStatusInfoWork. */
+
+enum SubWnd {
+    SUBWND_STATUS, SUBWND_XDATA, SUBWND_LABO, SUBWND_BANK, SUBWND_CNOS, SUBWND_DISK,
+    SUBWND_WPU, SUBWND_APU, SUBWND_CHIP, SUBWND_JUNK, SUBWND_CARD
+};
+
+enum StatusMessage {
+    MESSAGE_GENERATE, MESSAGE_REMOVE, MESSAGE_UPDATE, MESSAGE_GETSHOPDATA, MESSAGE_ONPREVIEW,
+    MESSAGE_OFPREVIEW, MESSAGE_ISRUN
+};
+
+#define RELEASE(type, object) { type *released = (object); if (released) { --released->_refCount; if (!(released->_refCount & 0x7fffff)) igObject_Destroy(released); } }
+#define NEXT_STATE(ram) { (ram)->_st0 = (ram)->_st0 + 1; (ram)->_st3 = 0; (ram)->_st2 = 0; (ram)->_st1 = 0; }
+#define REPLACE_WINDOW(window, create) { \
+    void *allocator; \
+    void *ownerAllocator = igObject_GetAllocator(self); \
+    if (g_useOwnerAllocator != 0) { allocator = ownerAllocator; } else { allocator = Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]); } \
+    RELEASE(beNDMWWindow, (window).p) \
+    (window).p = create(allocator); }
+/* The 5 and 2 byte copies are the compiler's __memcpy intrinsic, which only the alternate compiler has. */
 #if __MWERKS__ >= 0x3000
 #define COPY_BYTES(d, s, n) __memcpy(d, s, n)
 #else
 #define COPY_BYTES(d, s, n) { char *cd_ = (char *)(d); const char *cs_ = (const char *)(s); int k_; for (k_ = 0; k_ < (n); k_++) cd_[k_] = cs_[k_]; }
 #endif
-#define M (arg0->_messenger)
-#define SEL(g) beMessenger_SelectGroup(M, g)
-#define APS(s) beMessenger_AppendString(M, s)
-#define DSP(d) beMessenger_DispatchSelected(M, d)
-#define REC(o, s) (igProperty_GetRecord(o, &s[0])[3])
-#define APPENDL(val) { igIntList *lst = (igIntList *)work->_parameter; idx = lst->_count; if (idx < lst->_capacity) lst->_count = countOf(lst) + 1; else List_Resize(lst, idx + 1, 4); ((int *)lst->_data)[idx] = (val); }
-#define APPEND(val) { int idx; igIntList *lst = (igIntList *)work->_parameter; idx = lst->_count; if (idx < lst->_capacity) lst->_count = countOf(lst) + 1; else List_Resize(lst, idx + 1, 4); ((int *)lst->_data)[idx] = (val); }
-#define LISTDATA(i) (((int *)((igIntList *)work->_parameter)->_data)[i])
-#define COLOR(a, ref) { if (a == ref) { r = 0.9f; g = 0.9f; b = 0.9f; } else if (a < ref) { r = 0.94f; g = 0.4f; b = 0.25f; } else { g = 0.96f; b = 1.0f; r = 0.0f; } }
-#define WL(f) ((igObjectList *)work->f)
-#define REL(o) { igObject *rr = (o); if (rr != 0) { rr->_refCount = rr->_refCount - 1; if ((rr->_refCount & 0x7FFFFF) == 0) { igObject_Destroy(rr); } } }
-#define ALLOC(a, sel) { a = igObject_GetAllocator(owner); a = GPR_00554c14 ? a : Memory_GetAllocatorBySelector(sel); }
-#define ITEM4(K, sp, fac, init, lst, id) { ALLOC(alloc, g_ndmwAllocatorSelector[0]) ItemRef<K> sp((igObject *)fac(alloc)); init(sp.p, id, owner, level); ObjectList_AppendRetained(lst, sp.p); }
-#define ITEM2(K, sp, fac, init, lst, id) { ALLOC(alloc, g_ndmwAllocatorSelector[0]) ItemRef<K> sp((igObject *)fac(alloc)); init(sp.p, id); ObjectList_AppendRetained(lst, sp.p); }
+#define PARAMETERS ((igIntList *)work->_parameter)
+#define PARAMETER(i) (((int *)PARAMETERS->_data)[i])
+#define APPEND_PARAMETER(idx, value) { igIntList *list = PARAMETERS; idx = list->_count; if (idx < list->_capacity) list->_count = countOf(list) + 1; else List_Resize(list, idx + 1, 4); ((int *)list->_data)[idx] = (value); }
+#define SET_TEXT(font, label, text) { \
+    beMessenger_SelectGroup(self->_messenger, TEXTCTL_7); \
+    beMessenger_AppendString(self->_messenger, font); \
+    beMessenger_AppendString(self->_messenger, label); \
+    beMessenger_AppendString(self->_messenger, text); \
+    beMessenger_DispatchSelected(self->_messenger, TEXTSET_6); }
+#define SELECT_TEXT_COLOR(label) \
+    beMessenger_SelectGroup(self->_messenger, TEXTCTL_7); \
+    beMessenger_AppendString(self->_messenger, STWINFONT06); \
+    beMessenger_AppendString(self->_messenger, label);
+/* Shows a parameter row and records the shown value, the base the preview colours compare against. */
+#define SHOW_PARAMETER(record, label) { \
+    int idx; int value = igProperty_GetRecord(player, record)->_data; \
+    sprintf(text, percent_d_5, value); \
+    SET_TEXT(STWINFONT06, label, text) \
+    APPEND_PARAMETER(idx, value) }
+#define SHOW_VALUE(record, label) { \
+    int value = igProperty_GetRecord(player, record)->_data; \
+    sprintf(text, percent_d_5, value); \
+    SET_TEXT(STWINFONT06, label, text) }
+/* Equal: grey; lower than the shown base: red; higher: blue. */
+#define PREVIEW_COLOR(value, base) { if (value == base) { r = 0.9f; g = 0.9f; b = 0.9f; } else if (value < base) { r = 0.94f; g = 0.4f; b = 0.25f; } else { g = 0.96f; b = 1.0f; r = 0.0f; } }
+#define SHOW_PREVIEW(record, label, index, color) { \
+    int value = igProperty_GetRecord(player, record)->_data; \
+    int base = PARAMETER(index); \
+    PREVIEW_COLOR(value, base) \
+    sprintf(previewText, percent_d_5, value); \
+    SET_TEXT(STWINFONT06, label, previewText) \
+    SELECT_TEXT_COLOR(label) \
+    color[0] = r; color[1] = g; color[2] = b; \
+    beMessenger_AppendVec3(self->_messenger, color); \
+    beMessenger_DispatchSelected(self->_messenger, COLOR_3); }
+#define RESTORE_PARAMETER(index, label) \
+    sprintf(restoreText, percent_d_5, PARAMETER(index)); \
+    SET_TEXT(STWINFONT06, label, restoreText) \
+    SELECT_TEXT_COLOR(label) \
+    beMessenger_DispatchSelected(self->_messenger, DEFAULTCOLOR_3);
+#define SALES_LIST(field) ((igObjectList *)work->field)
+#define PICK_ALLOCATOR(allocator, selector) { allocator = igObject_GetAllocator(owner); allocator = g_useOwnerAllocator ? allocator : Memory_GetAllocatorBySelector(selector); }
+#define STOCK_ITEM(K, holder, create, setRandom, list, id) { \
+    PICK_ALLOCATOR(allocator, g_ndmwAllocatorSelector[0]) \
+    ItemRef<K> holder((igObject *)create(allocator)); \
+    setRandom(holder.p, id, owner, level); \
+    ObjectList_AppendRetained(list, holder.p); }
+#define STOCK_CHIP(holder, list, id) { \
+    PICK_ALLOCATOR(allocator, g_ndmwAllocatorSelector[0]) \
+    ItemRef<4> holder((igObject *)beNDMWItemAbilityChip_Create(allocator)); \
+    beNDMWItemAbilityChip_Set(holder.p, id); \
+    ObjectList_AppendRetained(list, holder.p); }
+#define COLUMN_KEY(key, column) { key[0] = column / 10 + '0'; key[1] = column % 10 + '0'; key[2] = 0; }
 
 extern "C" void igObject_Destroy(void *);
-extern "C" int Gap__Bec__beNDMWStatus__vfunc_30(void);
-extern "C" int Gap__Bec__beNDMWStatus__vfunc_20(void);
-extern "C" int beMessenger_RegisterReceiverFromInfo(int, void *, int *);
-extern "C" void * igObject_GetAllocator(...);
-extern "C" void * Memory_GetAllocatorBySelector(...);
+extern "C" void *igObject_GetAllocator(...);
+extern "C" void *Memory_GetAllocatorBySelector(...);
 extern "C" int igInsightCore_FindManager(int, int);
 extern "C" int beLua__RunNamedChunk(int, int *, int);
+extern "C" int beMessenger_RegisterReceiverFromInfo(int, void *, int *);
 extern "C" void beMessenger_SelectGroup(...);
 extern "C" void beMessenger_AppendString(...);
 extern "C" void beMessenger_AppendInt(...);
-extern "C" void beMessenger_DispatchSelected(...);
-extern "C" void beMessenger_SendGroup(...);
-extern "C" void beMessenger_SetFreezeTime(int, int);
-extern "C" int beMessenger_GetObject(...);
-extern "C" int beMessenger_GetBool(int, int);
-extern "C" void beNDMWWindow_UpdateTree(int);
-extern "C" int sprintf(...);
-extern "C" int FUN_003b1d70(void);
-extern "C" int FUN_003bb730(void);
-extern "C" int List_Resize(void *, int, int);
-extern "C" int *beDataBase_GetRecordString(int, int, const void *);
 extern "C" void beMessenger_AppendBool(int, unsigned char);
 extern "C" void beMessenger_AppendObject(int, void *);
 extern "C" void beMessenger_AppendVec3(int, const void *);
+extern "C" void beMessenger_DispatchSelected(...);
+extern "C" void beMessenger_SendGroup(...);
+extern "C" void beMessenger_SendNamed(...);
+extern "C" void beMessenger_SendDelayedGroup(int, const void *, const void *, int);
+extern "C" void beMessenger_SetFreezeTime(int, int);
+extern "C" int beMessenger_GetObject(...);
+extern "C" int beMessenger_GetBool(int, int);
 extern "C" int beMessenger_GetInt(int, int);
 extern "C" int beMessenger_GetString(int, int);
 extern "C" unsigned int beMessenger_ResolveEnumValue(int, int, int);
-extern "C" void beMessenger_SendDelayedGroup(int, const void *, const void *, int);
-extern "C" void beMessenger_SendNamed(...);
-extern "C" int * igProperty_GetRecord(...);
-extern "C" void *FUN_003b5ec0(...);
-extern "C" void *beNDMWItemAbilityChip_Create(...);
-extern "C" void *beNDMWItemYellowArmor_Create(...);
-extern "C" void *beNDMWItemBlueArmor_Create(...);
+extern "C" beDataObjInt *igProperty_GetRecord(...);
+extern "C" beDataObjBool *igProperty_GetRecordByte(...);
+extern "C" beDataObjObjectList *igProperty_GetRecordFolder(int, const void *);
+extern "C" beDataObjIntList *igProperty_GetRecordIntList(...);
+extern "C" int *beDataBase_GetRecordString(int, int, const void *);
+extern "C" int beDataBase_GetRecordInt(...);
+extern "C" int List_Resize(void *, int, int);
+extern "C" int List_Reserve(...);
+extern "C" int ObjectList_FillRetained(...);
+extern "C" int ObjectList_AppendRetained(...);
+extern "C" int sprintf(...);
+extern "C" int strcat(...);
+extern "C" void beNDMWWindow_UpdateTree(int);
+extern "C" void beNDMWWindow_BindContext(beNDMWWindow *, int, int, int, int);
+extern "C" int SubWnd_GetMetaEnum(void);
+extern "C" int StatusMessage_GetMetaEnum(void);
+extern "C" beNDMWWindow *beNDMWStatusCtrl00_Create(void *);
+extern "C" beNDMWWindow *beNDMWShopCtrl00_Create(void *);
+extern "C" beNDMWWindow *beNDMWShopCtrlDigilabo_Create(void *);
+extern "C" beNDMWWindow *beNDMWShopCtrlA0_Create(void *);
+extern "C" void *beNDMWStatusInfoWork_Create(...);
 extern "C" void *beNDMWItemWeapon_Create(...);
+extern "C" void *beNDMWItemBlueArmor_Create(...);
+extern "C" void *beNDMWItemYellowArmor_Create(...);
+extern "C" void *beNDMWItemAbilityChip_Create(...);
 extern "C" int beNDMWItemWeapon_SetRandom(...);
 extern "C" int beNDMWItemBlueArmor_SetRandom(...);
 extern "C" int beNDMWItemYellowArmor_SetRandom(...);
 extern "C" int beNDMWItemAbilityChip_Set(...);
-extern "C" int strcat(...);
-extern "C" int List_Reserve(...);
-extern "C" int ObjectList_FillRetained(...);
-extern "C" int ObjectList_AppendRetained(...);
-extern "C" int beDataBase_GetRecordInt(...);
-typedef struct RefCountedObject { char pad4[4]; int f4; } RefCountedObject;
-extern "C" void Gap__Bec__beNDMWStatus__vfunc_32(beNDMWStatus *arg0);
+extern "C" unsigned char g_useOwnerAllocator;
+extern "C" int g_defaultAllocatorSelector[4];
+extern "C" int g_ndmwAllocatorSelector[4];
+extern "C" int g_beLua_metaObject[4];
 extern "C" int g_beNDMWStatusInfo_metaObject[4];
 extern "C" int g_beNDMWStatus_metaObject[4];
-extern "C" int DAT_00516788[4];
-extern "C" void Gap__Bec__beNDMWStatus__vfunc_29(beNDMWStatus *arg0, void *arg1);
-extern "C" beNDMWWindow *FUN_003b7750(void *);
-extern "C" beNDMWWindow *FUN_003b7eb0(void *);
-extern "C" beNDMWWindow *FUN_003bb1d0(void *);
-extern "C" beNDMWWindow *beNDMWShopCtrl00_Create(void *);
-extern "C" beDataObjBool * igProperty_GetRecordByte(...);
-extern "C" void beNDMWWindow_BindContext(beNDMWWindow *, int, int, int, int);
-extern "C" int DAT_00516790[4];
-extern "C" int DAT_005167a0[4];
-extern "C" int DAT_005167a8[4];
-extern "C" int DAT_005167b8[4];
-extern "C" int DAT_005167c8[4];
-extern "C" int DAT_005167d0[4];
-extern "C" int DAT_005167d8[4];
-extern "C" int DAT_005167e0[4];
-extern "C" int DAT_005167e8[4];
-extern "C" int DAT_005167f0[4];
-extern "C" int DAT_005167f8[4];
-extern "C" int DAT_00516800[4];
-extern "C" int DAT_00516810[4];
-extern "C" int DAT_00516818[4];
-extern "C" int DAT_00516828[4];
-extern "C" int DAT_00516838[4];
-extern "C" int DAT_00516848[4];
-extern "C" int DAT_00516850[4];
-extern "C" int DAT_00516860[4];
-extern "C" int DAT_00516868[4];
-extern "C" int DAT_00516870[4];
-extern "C" int DAT_00516878[4];
-extern "C" int DAT_00516888[4];
-extern "C" int DAT_00516898[4];
-extern "C" int DAT_005168a8[4];
-extern "C" int DAT_005168b8[4];
-extern "C" int DAT_005168c8[4];
-extern "C" int DAT_005168d0[4];
-extern "C" int g_defaultAllocatorSelector[4];
-extern "C" int g_beLua_metaObject[4];
-extern "C" unsigned char GPR_00554c14;
-extern "C" void Gap__Bec__beNDMWStatus__vfunc_31(beNDMWStatus *self, beNDMWStatusInfoRam *info);
-struct Folder { int pad[3]; igObjectList *list; };
-extern "C" Folder *igProperty_GetRecordFolder(int, const void *);
-extern "C" int DAT_00516910[4];
-extern "C" int DAT_00516920[4];
-extern "C" int DAT_00516928[4];
-extern "C" int DAT_00516938[4];
-extern "C" int DAT_00516940[4];
-extern "C" int DAT_00516950[4];
-extern "C" int DAT_00516958[4];
-extern "C" int DAT_00516960[4];
-extern "C" int DAT_00516968[4];
-extern "C" int DAT_00516970[4];
-extern "C" int DAT_00516980[4];
-extern "C" int DAT_00516990[4];
-extern "C" int DAT_00516998[4];
-extern "C" int DAT_005169a8[4];
-extern "C" int DAT_005169b8[4];
-extern "C" int DAT_005169c0[4];
-extern "C" int DAT_005169c8[4];
-extern "C" int DAT_005169d0[4];
-extern "C" int DAT_005169e0[4];
-extern "C" int DAT_005169e8[4];
-extern "C" int DAT_005169f0[4];
-extern "C" int DAT_005169f8[4];
-extern "C" int DAT_00516a00[4];
-extern "C" int DAT_00516a08[4];
-extern "C" int DAT_00516a10[4];
-extern "C" int DAT_00516a18[4];
-extern "C" int DAT_00516a20[4];
-extern "C" int DAT_00516a28[4];
-extern "C" int DAT_00516a38[4];
-extern "C" int DAT_00516a40[4];
-extern "C" int DAT_00516a48[4];
-extern "C" int DAT_00516a50[4];
-extern "C" int DAT_00516a60[4];
-extern "C" int DAT_00516a68[4];
-extern "C" int DAT_00516a78[4];
-extern "C" int DAT_00516a80[4];
-extern "C" int DAT_00516a90[4];
-extern "C" int DAT_00516a98[4];
-extern "C" int DAT_00516aa8[4];
-extern "C" int DAT_00516ab0[4];
-extern "C" int DAT_00516ac0[4];
-extern "C" int DAT_00516ac8[4];
-extern "C" int DAT_00516ad0[4];
-extern "C" int DAT_00516ad8[4];
-extern "C" int DAT_00516ae0[4];
-extern "C" int DAT_00516ae8[4];
-extern "C" int DAT_00516af0[4];
-extern "C" int DAT_00516af8[4];
-extern "C" int DAT_00516b00[4];
-extern "C" int DAT_00516b08[4];
-extern "C" int DAT_00516b10[4];
-extern "C" int DAT_00516b18[4];
-/* Owning stack reference to the first record of the selected folder: constructed from the object
- * (then retained) and released on scope exit (reference count in the low 23 bits of _refCount). */
+/* Strings are declared int[4]: an object of 8 bytes or less would be addressed gp-relative, which
+ * changes the register allocation of every function here. */
+extern "C" int SUBWND_6[4];
+extern "C" int STAGECTL_4[4];
+extern "C" int ENABLE_2[4];
+extern "C" int PADINPUT[4];
+extern "C" int LAYERCTL_5[4];
+extern "C" int WN01[4];
+extern "C" int DISPOFF_4[4];
+extern "C" int SWITCH_7[4];
+extern "C" int WN00[4];
+extern "C" int SOUND_9[4];
+extern "C" int BGMSTOP_3[4];
+extern "C" int ENVSTOP_3[4];
+extern "C" int RM_NSHOP[4];
+extern "C" int PLAY_7[4];
+extern "C" int OFFREEZE_2[4];
+extern "C" int GENERATER_3[4];
+extern "C" int MODELCTRL_18[4];
+extern "C" int GAMERAM_12[4];
+extern "C" int GETPLAYER_8[4];
+extern "C" int ISUSE_8[4];
+extern "C" int ADDHP[4];
+extern "C" int ADDMP[4];
+extern "C" int ISRESETSTART[4];
+extern "C" int PLAYERPOINT_5[4];
+extern "C" int SETGENERATEPOS_2[4];
+extern "C" int stagML12[4];
+extern "C" int NEXTSTAGE_4[4];
+extern "C" int DISPON_3[4];
+extern "C" int shopexit_lua[4];
+extern "C" int ONFREEZE_3[4];
+extern "C" int REMOVE_5[4];
+extern "C" int PLAYERNAME_4[4];
+extern "C" int TEXTCTL_7[4];
+extern "C" int STWINFONT02[4];
+extern "C" int font000_3[4];
+extern "C" int TEXTSET_6[4];
+extern "C" int LEVEL_7[4];
+extern "C" int percent_d_5[4];
+extern "C" int STWINFONT04[4];
+extern "C" int DATABASE_10[4];
+extern "C" int shinka_4[4];
+extern "C" int GETDATABASE_9[4];
+extern "C" int DIGIMONNO_4[4];
+extern "C" int NAME_5[4];
+extern "C" int font001_3[4];
+extern "C" int HP_5[4];
+extern "C" int STWINFONT06[4];
+extern "C" int MP_5[4];
+extern "C" int MHP_4[4];
+extern "C" int font010_2[4];
+extern "C" int MMP_5[4];
+extern "C" int font011_2[4];
+extern "C" int TSUYOSA_3[4];
+extern "C" int font040[4];
+extern "C" int MAMORI_2[4];
+extern "C" int font041[4];
+extern "C" int KASHIKOSA_3[4];
+extern "C" int font042[4];
+extern "C" int SEISHIN_3[4];
+extern "C" int font043[4];
+extern "C" int SUBAYASA_3[4];
+extern "C" int font044[4];
+extern "C" int HONOOTEIKO_2[4];
+extern "C" int font045[4];
+extern "C" int KOORITEIKO_2[4];
+extern "C" int font046[4];
+extern "C" int KAMINARITEIKO_2[4];
+extern "C" int font047[4];
+extern "C" int YAMITEIKO_2[4];
+extern "C" int font048[4];
+extern "C" int XDATA_3[4];
+extern "C" int font049[4];
+extern "C" int BIT_6[4];
+extern "C" int font070[4];
+extern "C" int EXP_2[4];
+extern "C" int NEXTEXP_2[4];
+extern "C" int dashdashdashdash[4];
+extern "C" int text_0_2[4];
+extern "C" int font071[4];
+extern "C" int COLOR_3[4];
+extern "C" int DEFAULTCOLOR_3[4];
+extern "C" int shopWeapon[4];
+extern "C" int shopArmor[4];
+extern "C" int shopChip[4];
+extern "C" int GETCOMMON_9[4];
+extern "C" int COUNTER_3[4];
+extern "C" int shopJunk[4];
+extern "C" int kind[4];
 
-struct MsgArg { int pad[5]; int f20; };
-extern "C" int Gap__Bec__beNDMWStatus__vfunc_34(beNDMWStatus *arg0, beNDMWStatusInfoRam *arg1, MsgArg *arg2);
-/* SUBWND service-menu work creation, BIT/XDATA caps and shop-stock list preparation. owner is
- * beNDMWStatus (the SUBWND manager) and ram is its beNDMWStatusInfoRam; _subWndNo 6..9 selects
- * weapon / armor / chip / junk stock (WPU / APU / CHIP / JUNK). U::Reserve takes a const list
- * so the count is re-read for the reserve test; the caps use '>' compares and a separate record local; the level
- * tier chains are else-if chains; row8 is declared before the loop counters; each item holder is
- * constructed at its use site from the new object and released by its destructor at scope exit;
- * the dispatch switches list their arms in ascending order. */
+extern "C" void beNDMWStatus__ReleaseWindow(beNDMWStatus *self);
+extern "C" int beNDMWStatus__GetInfoMeta(void);
+extern "C" void beNDMWStatus__RegisterReceiver(beNDMWStatus *self, beNDMWStatusInfoRam *ram);
+extern "C" void beNDMWStatus__Update(beNDMWStatus *self, beNDMWStatusInfoRam *ram);
+extern "C" int beNDMWStatus__OnMessage(beNDMWStatus *self, beNDMWStatusInfoRam *ram, beBaseInfo *info);
+extern "C" void beNDMWStatus__PrepareWork(beNDMWStatus *owner, beNDMWStatusInfoRam *ram);
+extern "C" int beNDMWStatus__GetMeta(void);
 
-
-struct Rec { int p[3]; int f12; };
-struct RecB { char p[12]; unsigned char f12; };
-struct IRec { int p[3]; igDataList *f12; };
-extern "C" IRec *igProperty_GetRecordIntList(...);
-extern "C" int DAT_00516b50[4];
-extern "C" int DAT_00516b60[4];
-extern "C" int DAT_00516b70[4];
-extern "C" int DAT_00516b80[4];
-extern "C" int DAT_00516b90[4];
-extern "C" int DAT_00516b98[4];
-extern "C" int DAT_00516ba8[4];
-extern "C" int g_ndmwAllocatorSelector[4];
-/* Owning reference to a freshly created object: the destructor drops one reference and destroys at
- * zero. Every item kind is its own class, so the compiler emits one destructor per kind. */
-
+/* Owning reference to a freshly created shop item: the destructor drops one reference and destroys
+ * at zero. Each item kind is its own class, so one destructor is emitted per kind. */
 template <int K> struct ItemRef { igObject *p; ItemRef(igObject *o) : p(o) {} ~ItemRef() { igObject *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } } };
-struct U { static inline void Reserve(const igObjectList *l) { if (l->_count < 37) List_Reserve(l, 36, 4); } };
-extern "C" void FUN_003d8740(beNDMWStatus *owner, beNDMWStatusInfoRam *ram);
 
-void Gap__Bec__beNDMWStatus__vfunc_32(beNDMWStatus *arg0) {
-    RefCountedObject *temp_a0;
+/* A sales list holds 36 slots. */
+struct SalesList { static inline void Reserve(const igObjectList *list) { if (list->_count < 37) List_Reserve(list, 36, 4); } };
 
-    temp_a0 = (RefCountedObject *)arg0->_windowPro;
-    if (temp_a0 != 0) {
-        temp_a0->f4 = (int)((int) (temp_a0->f4 - 1));
-        if (((unsigned long long) ((long long) temp_a0->f4 << 0x29) >> 0x29) == 0) {
-            igObject_Destroy(temp_a0);
+static inline int countOf(const igIntList *list) { return list->_count; }
+
+void beNDMWStatus__ReleaseWindow(beNDMWStatus *self) {
+    igObject *window = (igObject *)self->_windowPro;
+    if (window != 0) {
+        window->_refCount = window->_refCount - 1;
+        if ((window->_refCount & 0x7fffff) == 0) {
+            igObject_Destroy(window);
         }
     }
-    arg0->_windowPro = 0;
+    self->_windowPro = 0;
 }
 
-int Gap__Bec__beNDMWStatus__vfunc_30(void)
+int beNDMWStatus__GetInfoMeta(void)
 {
     return g_beNDMWStatusInfo_metaObject[0];
 }
 
-void Gap__Bec__beNDMWStatus__vfunc_29(beNDMWStatus *arg0, void *arg1) {
-    if (((beBaseInfoList *)arg0->_infoList)->_count == 1) {
-        beMessenger_RegisterReceiverFromInfo(arg0->_messenger, arg1, &DAT_00516788[0]);
-        *(char *)((char *)(arg1) + 20) = 0;
+void beNDMWStatus__RegisterReceiver(beNDMWStatus *self, beNDMWStatusInfoRam *ram) {
+    if (((beBaseInfoList *)self->_infoList)->_count == 1) {
+        beMessenger_RegisterReceiverFromInfo(self->_messenger, ram, SUBWND_6);
+        ram->_isRun = 0;
     }
 }
 
-void Gap__Bec__beNDMWStatus__vfunc_31(beNDMWStatus *self, beNDMWStatusInfoRam *info)
+void beNDMWStatus__Update(beNDMWStatus *self, beNDMWStatusInfoRam *ram)
 {
-    int st;
-    if (info->_isRun == 0) return;
-    st = info->_st0;
-    switch (st) {
+    int state;
+    if (ram->_isRun == 0) return;
+    state = ram->_st0;
+    switch (state) {
     case 0:
-        FUN_003d8740((beNDMWStatus *)self, (beNDMWStatusInfoRam *)info);
-        beMessenger_SelectGroup(self->_messenger, DAT_00516790);
-        beMessenger_AppendString(self->_messenger, DAT_005167a0);
-        beMessenger_DispatchSelected(self->_messenger, DAT_005167a8);
+        beNDMWStatus__PrepareWork(self, ram);
+        beMessenger_SelectGroup(self->_messenger, STAGECTL_4);
+        beMessenger_AppendString(self->_messenger, ENABLE_2);
+        beMessenger_DispatchSelected(self->_messenger, PADINPUT);
         {
-        igSmartPointer<beNDMWWindow> w(0);
+        igSmartPointer<beNDMWWindow> window(0);
         switch (self->_subWndNo) {
-        case 0:
-            beMessenger_SelectGroup(self->_messenger, DAT_005167b8);
-            beMessenger_AppendString(self->_messenger, DAT_005167c8);
-            beMessenger_AppendString(self->_messenger, DAT_005167d0);
-            beMessenger_DispatchSelected(self->_messenger, DAT_005167d8);
-            beMessenger_SelectGroup(self->_messenger, DAT_005167b8);
-            beMessenger_AppendString(self->_messenger, DAT_005167e0);
-            beMessenger_AppendString(self->_messenger, DAT_005167d0);
-            beMessenger_DispatchSelected(self->_messenger, DAT_005167d8);
-            MK(FUN_003bb1d0)
+        case SUBWND_STATUS:
+            beMessenger_SelectGroup(self->_messenger, LAYERCTL_5);
+            beMessenger_AppendString(self->_messenger, WN01);
+            beMessenger_AppendString(self->_messenger, DISPOFF_4);
+            beMessenger_DispatchSelected(self->_messenger, SWITCH_7);
+            beMessenger_SelectGroup(self->_messenger, LAYERCTL_5);
+            beMessenger_AppendString(self->_messenger, WN00);
+            beMessenger_AppendString(self->_messenger, DISPOFF_4);
+            beMessenger_DispatchSelected(self->_messenger, SWITCH_7);
+            REPLACE_WINDOW(window, beNDMWStatusCtrl00_Create)
             break;
-        case 1: case 3: case 4: case 5: case 6: case 7: case 8: case 9:
-            MK(beNDMWShopCtrl00_Create)
+        case SUBWND_XDATA: case SUBWND_BANK: case SUBWND_CNOS: case SUBWND_DISK:
+        case SUBWND_WPU: case SUBWND_APU: case SUBWND_CHIP: case SUBWND_JUNK:
+            REPLACE_WINDOW(window, beNDMWShopCtrl00_Create)
             break;
-        case 2:
-            MK(FUN_003b7750)
+        case SUBWND_LABO:
+            REPLACE_WINDOW(window, beNDMWShopCtrlDigilabo_Create)
             break;
-        case 10:
-            MK(FUN_003b7eb0)
+        case SUBWND_CARD:
+            REPLACE_WINDOW(window, beNDMWShopCtrlA0_Create)
             break;
         }
-        beNDMWWindow_BindContext(w.p, 0, self->_insight, self->_whoGenerate, 0);
-        w.p->_entCode = self->_subWndNo;
+        beNDMWWindow_BindContext(window.p, 0, self->_insight, self->_whoGenerate, 0);
+        window.p->_entCode = self->_subWndNo;
         {
-            beNDMWWindow *s2 = w.p;
-            if (s2) ++s2->_refCount;
-            RELEASE_WIN((beNDMWWindow *)self->_windowPro)
-            self->_windowPro = (int)s2;
+            beNDMWWindow *retained = window.p;
+            if (retained) ++retained->_refCount;
+            RELEASE(beNDMWWindow, (beNDMWWindow *)self->_windowPro)
+            self->_windowPro = (int)retained;
         }
-        if (self->_subWndNo != 0) {
-            beMessenger_SendGroup(self->_messenger, DAT_005167e8, DAT_005167f0);
-            beMessenger_SendGroup(self->_messenger, DAT_005167e8, DAT_005167f8);
-            beMessenger_SelectGroup(self->_messenger, DAT_005167e8);
-            beMessenger_AppendString(self->_messenger, DAT_00516800);
-            beMessenger_DispatchSelected(self->_messenger, DAT_00516810);
+        if (self->_subWndNo != SUBWND_STATUS) {
+            beMessenger_SendGroup(self->_messenger, SOUND_9, BGMSTOP_3);
+            beMessenger_SendGroup(self->_messenger, SOUND_9, ENVSTOP_3);
+            beMessenger_SelectGroup(self->_messenger, SOUND_9);
+            beMessenger_AppendString(self->_messenger, RM_NSHOP);
+            beMessenger_DispatchSelected(self->_messenger, PLAY_7);
         }
         }
-        NEXT()
+        NEXT_STATE(ram)
     case 1:
         if (self->_windowPro != 0) beNDMWWindow_UpdateTree(self->_windowPro);
         if (((beNDMWWindow *)self->_windowPro)->_isRun != 0) return;
-        NEXT()
+        NEXT_STATE(ram)
     default:
         {
-            int i;
-            RELEASE_WIN((beNDMWWindow *)self->_windowPro)
+            int player;
+            RELEASE(beNDMWWindow, (beNDMWWindow *)self->_windowPro)
             self->_windowPro = 0;
-            beMessenger_SendGroup(self->_messenger, DAT_005167e8, DAT_00516818);
-            beMessenger_SendGroup(self->_messenger, DAT_00516828, DAT_00516818);
-            beMessenger_SendGroup(self->_messenger, DAT_00516838, DAT_00516818);
+            beMessenger_SendGroup(self->_messenger, SOUND_9, OFFREEZE_2);
+            beMessenger_SendGroup(self->_messenger, GENERATER_3, OFFREEZE_2);
+            beMessenger_SendGroup(self->_messenger, MODELCTRL_18, OFFREEZE_2);
             beMessenger_SetFreezeTime(self->_messenger, 0);
-            info->_isRun = 0;
-            i = 0;
+            ram->_isRun = 0;
+            player = 0;
             do {
-                beMessenger_SelectGroup(self->_messenger, DAT_00516848);
-                beMessenger_AppendInt(self->_messenger, i);
-                beMessenger_DispatchSelected(self->_messenger, DAT_00516850);
-                if (igProperty_GetRecordByte(beMessenger_GetObject(self->_messenger, 0), DAT_00516860)->_data != 0) {
-                    beMessenger_SelectGroup(self->_messenger, DAT_00516848);
-                    beMessenger_AppendInt(self->_messenger, i);
+                beMessenger_SelectGroup(self->_messenger, GAMERAM_12);
+                beMessenger_AppendInt(self->_messenger, player);
+                beMessenger_DispatchSelected(self->_messenger, GETPLAYER_8);
+                if (igProperty_GetRecordByte(beMessenger_GetObject(self->_messenger, 0), ISUSE_8)->_data != 0) {
+                    beMessenger_SelectGroup(self->_messenger, GAMERAM_12);
+                    beMessenger_AppendInt(self->_messenger, player);
                     beMessenger_AppendInt(self->_messenger, 0);
-                    beMessenger_DispatchSelected(self->_messenger, DAT_00516868);
-                    beMessenger_SelectGroup(self->_messenger, DAT_00516848);
-                    beMessenger_AppendInt(self->_messenger, i);
+                    beMessenger_DispatchSelected(self->_messenger, ADDHP);
+                    beMessenger_SelectGroup(self->_messenger, GAMERAM_12);
+                    beMessenger_AppendInt(self->_messenger, player);
                     beMessenger_AppendInt(self->_messenger, 0);
-                    beMessenger_DispatchSelected(self->_messenger, DAT_00516870);
+                    beMessenger_DispatchSelected(self->_messenger, ADDMP);
                 }
-                i++;
-            } while (i < 4);
-            if (self->_subWndNo == 10) {
-                beMessenger_SendGroup(self->_messenger, DAT_00516790, DAT_00516878);
+                player++;
+            } while (player < 4);
+            if (self->_subWndNo == SUBWND_CARD) {
+                beMessenger_SendGroup(self->_messenger, STAGECTL_4, ISRESETSTART);
                 if ((beMessenger_GetBool(self->_messenger, 0) & 0xff) == 0) {
-                    beMessenger_SelectGroup(self->_messenger, DAT_00516888);
+                    beMessenger_SelectGroup(self->_messenger, PLAYERPOINT_5);
                     beMessenger_AppendInt(self->_messenger, 4);
-                    beMessenger_DispatchSelected(self->_messenger, DAT_00516898);
-                    beMessenger_SelectGroup(self->_messenger, DAT_00516790);
-                    beMessenger_AppendString(self->_messenger, DAT_005168a8);
-                    beMessenger_DispatchSelected(self->_messenger, DAT_005168b8);
+                    beMessenger_DispatchSelected(self->_messenger, SETGENERATEPOS_2);
+                    beMessenger_SelectGroup(self->_messenger, STAGECTL_4);
+                    beMessenger_AppendString(self->_messenger, stagML12);
+                    beMessenger_DispatchSelected(self->_messenger, NEXTSTAGE_4);
                 }
             } else {
-                beMessenger_SelectGroup(self->_messenger, DAT_005167b8);
-                beMessenger_AppendString(self->_messenger, DAT_005167c8);
-                beMessenger_AppendString(self->_messenger, DAT_005168c8);
-                beMessenger_DispatchSelected(self->_messenger, DAT_005167d8);
-                beMessenger_SelectGroup(self->_messenger, DAT_005167b8);
-                beMessenger_AppendString(self->_messenger, DAT_005167e0);
-                beMessenger_AppendString(self->_messenger, DAT_005168c8);
-                beMessenger_DispatchSelected(self->_messenger, DAT_005167d8);
-                if (self->_subWndNo != 0)
-                    beLua__RunNamedChunk(igInsightCore_FindManager(self->_insight, g_beLua_metaObject[0]), DAT_005168d0, 0);
+                beMessenger_SelectGroup(self->_messenger, LAYERCTL_5);
+                beMessenger_AppendString(self->_messenger, WN01);
+                beMessenger_AppendString(self->_messenger, DISPON_3);
+                beMessenger_DispatchSelected(self->_messenger, SWITCH_7);
+                beMessenger_SelectGroup(self->_messenger, LAYERCTL_5);
+                beMessenger_AppendString(self->_messenger, WN00);
+                beMessenger_AppendString(self->_messenger, DISPON_3);
+                beMessenger_DispatchSelected(self->_messenger, SWITCH_7);
+                if (self->_subWndNo != SUBWND_STATUS)
+                    beLua__RunNamedChunk(igInsightCore_FindManager(self->_insight, g_beLua_metaObject[0]), shopexit_lua, 0);
             }
         }
     }
 }
 
-/* Message handler of the status screen (enum-dispatched). Every DAT_ string is declared int[4] on
- * purpose: a small object (<= 8 bytes) is addressed gp-relative, which makes gp a live physical
- * neighbour of every node and shifts the whole s-register colouring. The block-local order `int
- * idx; int v = ...; { igIntList *lst = ...; idx = ...; }` gives the per-row nodes the ids idx < v
- * < lst, the push order needed (colours idx s5, v s4, lst s3). beMessenger_AppendBool takes an
- * unsigned char and beMessenger_AppendObject a pointer: the argument type decides which of the two
- * argument loads lands in the delay slot. The 5 and 2 byte copies are the compiler's __memcpy
- * intrinsic (alternate compiler only; the default compiler crashes on it). */
-
-static inline int countOf(const igIntList *l) { return l->_count; }
-
-int Gap__Bec__beNDMWStatus__vfunc_34(beNDMWStatus *arg0, beNDMWStatusInfoRam *arg1, MsgArg *arg2) {
-    unsigned int kind = beMessenger_ResolveEnumValue(arg0->_messenger, FUN_003bb730(), arg2->f20);
-    float v0[3];
-    float v1[3];
-    float v2[3];
-    float v3[3];
-    float v4[3];
-    float v5[3];
-    float v6[3];
-    float v7[3];
-    float v8[3];
-    float v9[3];
-    float v10[3];
-    char b2[16];
-    char b4[16];
-    char b5[16];
-    int s3;
-    int cnt;
-    int s7;
-    int s8;
+int beNDMWStatus__OnMessage(beNDMWStatus *self, beNDMWStatusInfoRam *ram, beBaseInfo *info) {
+    unsigned int message = beMessenger_ResolveEnumValue(self->_messenger, StatusMessage_GetMetaEnum(), info->_dataList);
+    float maxHpColor[3];
+    float maxMpColor[3];
+    float strengthColor[3];
+    float defenseColor[3];
+    float wisdomColor[3];
+    float spiritColor[3];
+    float speedColor[3];
+    float fireResistColor[3];
+    float iceResistColor[3];
+    float thunderResistColor[3];
+    float darkResistColor[3];
+    char text[16];
+    char previewText[16];
+    char restoreText[16];
+    int playerNo;
+    int level;
+    int hp;
+    int mp;
     beNDMWStatusInfoWork *work;
-    int obj;
-    switch (kind) {
-    case 6:
-        beMessenger_AppendBool(M, arg1->_isRun);
+    int player;
+    switch (message) {
+    case MESSAGE_ISRUN:
+        beMessenger_AppendBool(self->_messenger, ram->_isRun);
         return 1;
-    case 0:
-        if (arg1->_isRun == 0) {
-            int a = beMessenger_GetInt(M, 0);
-            int b = beMessenger_GetString(M, 0);
-            unsigned int c = beMessenger_ResolveEnumValue(M, FUN_003b1d70(), b);
-            arg1->_isRun = 1;
-            arg1->_st0 = 0;
-            arg1->_st3 = 0;
-            arg1->_st2 = 0;
-            arg1->_st1 = 0;
-            arg0->_subWndNo = c;
-            arg0->_whoGenerate = a;
-            beMessenger_SendGroup(M, &DAT_00516838[0], &DAT_00516910[0]);
-            beMessenger_SendGroup(M, &DAT_00516828[0], &DAT_00516910[0]);
-            beMessenger_SetFreezeTime(M, 1);
-            beMessenger_SendGroup(M, &DAT_005167e8[0], &DAT_00516910[0]);
+    case MESSAGE_GENERATE:
+        if (ram->_isRun == 0) {
+            int whoGenerate = beMessenger_GetInt(self->_messenger, 0);
+            int subWndName = beMessenger_GetString(self->_messenger, 0);
+            unsigned int subWndNo = beMessenger_ResolveEnumValue(self->_messenger, SubWnd_GetMetaEnum(), subWndName);
+            ram->_isRun = 1;
+            ram->_st0 = 0;
+            ram->_st3 = 0;
+            ram->_st2 = 0;
+            ram->_st1 = 0;
+            self->_subWndNo = subWndNo;
+            self->_whoGenerate = whoGenerate;
+            beMessenger_SendGroup(self->_messenger, MODELCTRL_18, ONFREEZE_3);
+            beMessenger_SendGroup(self->_messenger, GENERATER_3, ONFREEZE_3);
+            beMessenger_SetFreezeTime(self->_messenger, 1);
+            beMessenger_SendGroup(self->_messenger, SOUND_9, ONFREEZE_3);
         }
         return 1;
-    case 1:
-        if (arg1->_isRun == 1) {
-            beNDMWWindow *wp = (beNDMWWindow *)arg0->_windowPro;
-            if (wp != 0) {
-                wp->_st0 = 2;
-                wp->_st3 = 0;
-                wp->_st2 = 0;
-                wp->_st1 = 0;
+    case MESSAGE_REMOVE:
+        if (ram->_isRun == 1) {
+            beNDMWWindow *window = (beNDMWWindow *)self->_windowPro;
+            if (window != 0) {
+                window->_st0 = 2;
+                window->_st3 = 0;
+                window->_st2 = 0;
+                window->_st1 = 0;
             } else {
-                beMessenger_SetFreezeTime(M, 0);
-                beMessenger_SendDelayedGroup(M, &DAT_00516788[0], &DAT_00516920[0], 1);
+                beMessenger_SetFreezeTime(self->_messenger, 0);
+                beMessenger_SendDelayedGroup(self->_messenger, SUBWND_6, REMOVE_5, 1);
             }
         }
         return 1;
-    case 2: {
-        work = (beNDMWStatusInfoWork *)arg1->_work;
-        s3 = beMessenger_GetInt(M, 0);
+    case MESSAGE_UPDATE: {
+        work = (beNDMWStatusInfoWork *)ram->_work;
+        playerNo = beMessenger_GetInt(self->_messenger, 0);
         if (work == 0) {
-            FUN_003d8740((beNDMWStatus *)arg0, (beNDMWStatusInfoRam *)arg1);
-            work = (beNDMWStatusInfoWork *)arg1->_work;
+            beNDMWStatus__PrepareWork(self, ram);
+            work = (beNDMWStatusInfoWork *)ram->_work;
         }
-        ((igIntList *)work->_parameter)->_count = 0;
-        SEL(&DAT_00516848[0]);
-        beMessenger_AppendInt(M, s3);
-        DSP(&DAT_00516850[0]);
-        obj = beMessenger_GetObject(M, 0);
-        igSmartPointer<igObject> ref(((igObject **)igProperty_GetRecordFolder(obj, &DAT_00516928[0])->list->_data)[0]);
-        if (ref.p != 0) ref.p->_refCount = ref.p->_refCount + 1;
-        SEL(&DAT_00516938[0]);
-        APS(&DAT_00516940[0]);
-        APS(&DAT_00516950[0]);
-        beMessenger_AppendObject(M, ref.p);
-        DSP(&DAT_00516958[0]);
-        cnt = REC(obj, DAT_00516960);
-        if (cnt > 999) cnt = 999;
-        sprintf(b2, &DAT_00516968[0], cnt);
-        SEL(&DAT_00516938[0]);
-        APS(&DAT_00516970[0]);
-        APS(&DAT_00516950[0]);
-        APS(b2);
-        DSP(&DAT_00516958[0]);
-        beMessenger_SendNamed(M, &DAT_00516980[0], &DAT_00516990[0], 0, &DAT_00516998[0]);
+        PARAMETERS->_count = 0;
+        beMessenger_SelectGroup(self->_messenger, GAMERAM_12);
+        beMessenger_AppendInt(self->_messenger, playerNo);
+        beMessenger_DispatchSelected(self->_messenger, GETPLAYER_8);
+        player = beMessenger_GetObject(self->_messenger, 0);
+        igSmartPointer<igObject> name(((igObject **)((igObjectList *)igProperty_GetRecordFolder(player, PLAYERNAME_4)->_data)->_data)[0]);
+        if (name.p != 0) name.p->_refCount = name.p->_refCount + 1;
+        beMessenger_SelectGroup(self->_messenger, TEXTCTL_7);
+        beMessenger_AppendString(self->_messenger, STWINFONT02);
+        beMessenger_AppendString(self->_messenger, font000_3);
+        beMessenger_AppendObject(self->_messenger, name.p);
+        beMessenger_DispatchSelected(self->_messenger, TEXTSET_6);
+        level = igProperty_GetRecord(player, LEVEL_7)->_data;
+        if (level > 999) level = 999;
+        sprintf(text, percent_d_5, level);
+        SET_TEXT(STWINFONT04, font000_3, text)
+        beMessenger_SendNamed(self->_messenger, DATABASE_10, shinka_4, 0, GETDATABASE_9);
         {
-            int db = beMessenger_GetObject(M, 0);
-            int *str = beDataBase_GetRecordString(db, REC(obj, DAT_005169a8), &DAT_005169b8[0]);
-            SEL(&DAT_00516938[0]);
-            APS(&DAT_00516970[0]);
-            APS(&DAT_005169c0[0]);
-            APS(str);
-            DSP(&DAT_00516958[0]);
+            int database = beMessenger_GetObject(self->_messenger, 0);
+            int *digimonName = beDataBase_GetRecordString(database, igProperty_GetRecord(player, DIGIMONNO_4)->_data, NAME_5);
+            SET_TEXT(STWINFONT04, font001_3, digimonName)
         }
-        s7 = REC(obj, DAT_005169c8);
-        sprintf(b2, &DAT_00516968[0], s7);
-        SEL(&DAT_00516938[0]);
-        APS(&DAT_005169d0[0]);
-        APS(&DAT_00516950[0]);
-        APS(b2);
-        DSP(&DAT_00516958[0]);
-        s8 = REC(obj, DAT_005169e0);
-        sprintf(b2, &DAT_00516968[0], s8);
-        SEL(&DAT_00516938[0]);
-        APS(&DAT_005169d0[0]);
-        APS(&DAT_005169c0[0]);
-        APS(b2);
-        DSP(&DAT_00516958[0]);
+        hp = igProperty_GetRecord(player, HP_5)->_data;
+        sprintf(text, percent_d_5, hp);
+        SET_TEXT(STWINFONT06, font000_3, text)
+        mp = igProperty_GetRecord(player, MP_5)->_data;
+        sprintf(text, percent_d_5, mp);
+        SET_TEXT(STWINFONT06, font001_3, text)
+        SHOW_PARAMETER(MHP_4, font010_2)
+        SHOW_PARAMETER(MMP_5, font011_2)
+        SHOW_PARAMETER(TSUYOSA_3, font040)
+        SHOW_PARAMETER(MAMORI_2, font041)
+        SHOW_PARAMETER(KASHIKOSA_3, font042)
+        SHOW_PARAMETER(SEISHIN_3, font043)
+        SHOW_PARAMETER(SUBAYASA_3, font044)
+        SHOW_PARAMETER(HONOOTEIKO_2, font045)
+        SHOW_PARAMETER(KOORITEIKO_2, font046)
+        SHOW_PARAMETER(KAMINARITEIKO_2, font047)
+        SHOW_PARAMETER(YAMITEIKO_2, font048)
+        SHOW_VALUE(XDATA_3, font049)
+        SHOW_VALUE(BIT_6, font070)
         {
-            int idx; int v = REC(obj, DAT_005169e8);
-            sprintf(b2, &DAT_00516968[0], v);
-            SEL(&DAT_00516938[0]);
-            APS(&DAT_005169d0[0]);
-            APS(&DAT_005169f0[0]);
-            APS(b2);
-            DSP(&DAT_00516958[0]);
-            APPENDL(v);
-        }
-        {
-            int idx; int v = REC(obj, DAT_005169f8);
-            sprintf(b2, &DAT_00516968[0], v);
-            SEL(&DAT_00516938[0]);
-            APS(&DAT_005169d0[0]);
-            APS(&DAT_00516a00[0]);
-            APS(b2);
-            DSP(&DAT_00516958[0]);
-            APPENDL(v);
-        }
-        {
-            int idx; int v = REC(obj, DAT_00516a08);
-            sprintf(b2, &DAT_00516968[0], v);
-            SEL(&DAT_00516938[0]);
-            APS(&DAT_005169d0[0]);
-            APS(&DAT_00516a10[0]);
-            APS(b2);
-            DSP(&DAT_00516958[0]);
-            APPENDL(v);
-        }
-        {
-            int idx; int v = REC(obj, DAT_00516a18);
-            sprintf(b2, &DAT_00516968[0], v);
-            SEL(&DAT_00516938[0]);
-            APS(&DAT_005169d0[0]);
-            APS(&DAT_00516a20[0]);
-            APS(b2);
-            DSP(&DAT_00516958[0]);
-            APPENDL(v);
-        }
-        {
-            int idx; int v = REC(obj, DAT_00516a28);
-            sprintf(b2, &DAT_00516968[0], v);
-            SEL(&DAT_00516938[0]);
-            APS(&DAT_005169d0[0]);
-            APS(&DAT_00516a38[0]);
-            APS(b2);
-            DSP(&DAT_00516958[0]);
-            APPENDL(v);
-        }
-        {
-            int idx; int v = REC(obj, DAT_00516a40);
-            sprintf(b2, &DAT_00516968[0], v);
-            SEL(&DAT_00516938[0]);
-            APS(&DAT_005169d0[0]);
-            APS(&DAT_00516a48[0]);
-            APS(b2);
-            DSP(&DAT_00516958[0]);
-            APPENDL(v);
-        }
-        {
-            int idx; int v = REC(obj, DAT_00516a50);
-            sprintf(b2, &DAT_00516968[0], v);
-            SEL(&DAT_00516938[0]);
-            APS(&DAT_005169d0[0]);
-            APS(&DAT_00516a60[0]);
-            APS(b2);
-            DSP(&DAT_00516958[0]);
-            APPENDL(v);
-        }
-        {
-            int idx; int v = REC(obj, DAT_00516a68);
-            sprintf(b2, &DAT_00516968[0], v);
-            SEL(&DAT_00516938[0]);
-            APS(&DAT_005169d0[0]);
-            APS(&DAT_00516a78[0]);
-            APS(b2);
-            DSP(&DAT_00516958[0]);
-            APPENDL(v);
-        }
-        {
-            int idx; int v = REC(obj, DAT_00516a80);
-            sprintf(b2, &DAT_00516968[0], v);
-            SEL(&DAT_00516938[0]);
-            APS(&DAT_005169d0[0]);
-            APS(&DAT_00516a90[0]);
-            APS(b2);
-            DSP(&DAT_00516958[0]);
-            APPENDL(v);
-        }
-        {
-            int idx; int v = REC(obj, DAT_00516a98);
-            sprintf(b2, &DAT_00516968[0], v);
-            SEL(&DAT_00516938[0]);
-            APS(&DAT_005169d0[0]);
-            APS(&DAT_00516aa8[0]);
-            APS(b2);
-            DSP(&DAT_00516958[0]);
-            APPENDL(v);
-        }
-        {
-            int idx; int v = REC(obj, DAT_00516ab0);
-            sprintf(b2, &DAT_00516968[0], v);
-            SEL(&DAT_00516938[0]);
-            APS(&DAT_005169d0[0]);
-            APS(&DAT_00516ac0[0]);
-            APS(b2);
-            DSP(&DAT_00516958[0]);
-            APPENDL(v);
-        }
-        {
-            int idx; int v = REC(obj, DAT_00516ac8);
-            sprintf(b2, &DAT_00516968[0], v);
-            SEL(&DAT_00516938[0]);
-            APS(&DAT_005169d0[0]);
-            APS(&DAT_00516ad0[0]);
-            APS(b2);
-            DSP(&DAT_00516958[0]);
-        }
-        {
-            int idx; int v = REC(obj, DAT_00516ad8);
-            sprintf(b2, &DAT_00516968[0], v);
-            SEL(&DAT_00516938[0]);
-            APS(&DAT_005169d0[0]);
-            APS(&DAT_00516ae0[0]);
-            APS(b2);
-            DSP(&DAT_00516958[0]);
-        }
-        {
-            int lo = REC(obj, DAT_00516ae8);
-            int diff = REC(obj, DAT_00516af0) - lo;
-            if (cnt >= 999) {
-                COPY_BYTES(b2, DAT_00516af8, 5);
-            } else if (diff < 0) {
-                COPY_BYTES(b2, DAT_00516b00, 2);
+            int exp = igProperty_GetRecord(player, EXP_2)->_data;
+            int toNext = igProperty_GetRecord(player, NEXTEXP_2)->_data - exp;
+            if (level >= 999) {
+                COPY_BYTES(text, dashdashdashdash, 5);
+            } else if (toNext < 0) {
+                COPY_BYTES(text, text_0_2, 2);
             } else {
-                sprintf(b2, &DAT_00516968[0], diff);
+                sprintf(text, percent_d_5, toNext);
             }
-            SEL(&DAT_00516938[0]);
-            APS(&DAT_005169d0[0]);
-            APS(&DAT_00516b08[0]);
-            APS(b2);
-            DSP(&DAT_00516958[0]);
+            SET_TEXT(STWINFONT06, font071, text)
         }
-        APPEND(s7);
-        APPEND(s8);
+        { int idx; APPEND_PARAMETER(idx, hp) }
+        { int idx; APPEND_PARAMETER(idx, mp) }
         return 1;
     }
-    case 4: {
-        int s1;
-        int obj;
-        beNDMWStatusInfoWork *work = (beNDMWStatusInfoWork *)arg1->_work;
-        s1 = beMessenger_GetInt(M, 0);
+    case MESSAGE_ONPREVIEW: {
+        int playerNo;
+        int player;
+        beNDMWStatusInfoWork *work = (beNDMWStatusInfoWork *)ram->_work;
+        playerNo = beMessenger_GetInt(self->_messenger, 0);
         float r, g, b;
-        SEL(&DAT_00516848[0]);
-        beMessenger_AppendInt(M, s1);
-        DSP(&DAT_00516850[0]);
-        obj = beMessenger_GetObject(M, 0);
-        {
-            int a2 = REC(obj, DAT_005169e8);
-            int ref = LISTDATA(0);
-            COLOR(a2, ref)
-            sprintf(b4, &DAT_00516968[0], a2);
-            SEL(&DAT_00516938[0]);
-            APS(&DAT_005169d0[0]);
-            APS(&DAT_005169f0[0]);
-            APS(b4);
-            DSP(&DAT_00516958[0]);
-            SEL(&DAT_00516938[0]);
-            APS(&DAT_005169d0[0]);
-            APS(&DAT_005169f0[0]);
-            v0[0] = r; v0[1] = g; v0[2] = b;
-            beMessenger_AppendVec3(M, v0);
-            DSP(&DAT_00516b10[0]);
-        }
-        {
-            int a2 = REC(obj, DAT_005169f8);
-            int ref = LISTDATA(1);
-            COLOR(a2, ref)
-            sprintf(b4, &DAT_00516968[0], a2);
-            SEL(&DAT_00516938[0]);
-            APS(&DAT_005169d0[0]);
-            APS(&DAT_00516a00[0]);
-            APS(b4);
-            DSP(&DAT_00516958[0]);
-            SEL(&DAT_00516938[0]);
-            APS(&DAT_005169d0[0]);
-            APS(&DAT_00516a00[0]);
-            v1[0] = r; v1[1] = g; v1[2] = b;
-            beMessenger_AppendVec3(M, v1);
-            DSP(&DAT_00516b10[0]);
-        }
-        {
-            int a2 = REC(obj, DAT_00516a08);
-            int ref = LISTDATA(2);
-            COLOR(a2, ref)
-            sprintf(b4, &DAT_00516968[0], a2);
-            SEL(&DAT_00516938[0]);
-            APS(&DAT_005169d0[0]);
-            APS(&DAT_00516a10[0]);
-            APS(b4);
-            DSP(&DAT_00516958[0]);
-            SEL(&DAT_00516938[0]);
-            APS(&DAT_005169d0[0]);
-            APS(&DAT_00516a10[0]);
-            v2[0] = r; v2[1] = g; v2[2] = b;
-            beMessenger_AppendVec3(M, v2);
-            DSP(&DAT_00516b10[0]);
-        }
-        {
-            int a2 = REC(obj, DAT_00516a18);
-            int ref = LISTDATA(3);
-            COLOR(a2, ref)
-            sprintf(b4, &DAT_00516968[0], a2);
-            SEL(&DAT_00516938[0]);
-            APS(&DAT_005169d0[0]);
-            APS(&DAT_00516a20[0]);
-            APS(b4);
-            DSP(&DAT_00516958[0]);
-            SEL(&DAT_00516938[0]);
-            APS(&DAT_005169d0[0]);
-            APS(&DAT_00516a20[0]);
-            v3[0] = r; v3[1] = g; v3[2] = b;
-            beMessenger_AppendVec3(M, v3);
-            DSP(&DAT_00516b10[0]);
-        }
-        {
-            int a2 = REC(obj, DAT_00516a28);
-            int ref = LISTDATA(4);
-            COLOR(a2, ref)
-            sprintf(b4, &DAT_00516968[0], a2);
-            SEL(&DAT_00516938[0]);
-            APS(&DAT_005169d0[0]);
-            APS(&DAT_00516a38[0]);
-            APS(b4);
-            DSP(&DAT_00516958[0]);
-            SEL(&DAT_00516938[0]);
-            APS(&DAT_005169d0[0]);
-            APS(&DAT_00516a38[0]);
-            v4[0] = r; v4[1] = g; v4[2] = b;
-            beMessenger_AppendVec3(M, v4);
-            DSP(&DAT_00516b10[0]);
-        }
-        {
-            int a2 = REC(obj, DAT_00516a40);
-            int ref = LISTDATA(5);
-            COLOR(a2, ref)
-            sprintf(b4, &DAT_00516968[0], a2);
-            SEL(&DAT_00516938[0]);
-            APS(&DAT_005169d0[0]);
-            APS(&DAT_00516a48[0]);
-            APS(b4);
-            DSP(&DAT_00516958[0]);
-            SEL(&DAT_00516938[0]);
-            APS(&DAT_005169d0[0]);
-            APS(&DAT_00516a48[0]);
-            v5[0] = r; v5[1] = g; v5[2] = b;
-            beMessenger_AppendVec3(M, v5);
-            DSP(&DAT_00516b10[0]);
-        }
-        {
-            int a2 = REC(obj, DAT_00516a50);
-            int ref = LISTDATA(6);
-            COLOR(a2, ref)
-            sprintf(b4, &DAT_00516968[0], a2);
-            SEL(&DAT_00516938[0]);
-            APS(&DAT_005169d0[0]);
-            APS(&DAT_00516a60[0]);
-            APS(b4);
-            DSP(&DAT_00516958[0]);
-            SEL(&DAT_00516938[0]);
-            APS(&DAT_005169d0[0]);
-            APS(&DAT_00516a60[0]);
-            v6[0] = r; v6[1] = g; v6[2] = b;
-            beMessenger_AppendVec3(M, v6);
-            DSP(&DAT_00516b10[0]);
-        }
-        {
-            int a2 = REC(obj, DAT_00516a68);
-            int ref = LISTDATA(7);
-            COLOR(a2, ref)
-            sprintf(b4, &DAT_00516968[0], a2);
-            SEL(&DAT_00516938[0]);
-            APS(&DAT_005169d0[0]);
-            APS(&DAT_00516a78[0]);
-            APS(b4);
-            DSP(&DAT_00516958[0]);
-            SEL(&DAT_00516938[0]);
-            APS(&DAT_005169d0[0]);
-            APS(&DAT_00516a78[0]);
-            v7[0] = r; v7[1] = g; v7[2] = b;
-            beMessenger_AppendVec3(M, v7);
-            DSP(&DAT_00516b10[0]);
-        }
-        {
-            int a2 = REC(obj, DAT_00516a80);
-            int ref = LISTDATA(8);
-            COLOR(a2, ref)
-            sprintf(b4, &DAT_00516968[0], a2);
-            SEL(&DAT_00516938[0]);
-            APS(&DAT_005169d0[0]);
-            APS(&DAT_00516a90[0]);
-            APS(b4);
-            DSP(&DAT_00516958[0]);
-            SEL(&DAT_00516938[0]);
-            APS(&DAT_005169d0[0]);
-            APS(&DAT_00516a90[0]);
-            v8[0] = r; v8[1] = g; v8[2] = b;
-            beMessenger_AppendVec3(M, v8);
-            DSP(&DAT_00516b10[0]);
-        }
-        {
-            int a2 = REC(obj, DAT_00516a98);
-            int ref = LISTDATA(9);
-            COLOR(a2, ref)
-            sprintf(b4, &DAT_00516968[0], a2);
-            SEL(&DAT_00516938[0]);
-            APS(&DAT_005169d0[0]);
-            APS(&DAT_00516aa8[0]);
-            APS(b4);
-            DSP(&DAT_00516958[0]);
-            SEL(&DAT_00516938[0]);
-            APS(&DAT_005169d0[0]);
-            APS(&DAT_00516aa8[0]);
-            v9[0] = r; v9[1] = g; v9[2] = b;
-            beMessenger_AppendVec3(M, v9);
-            DSP(&DAT_00516b10[0]);
-        }
-        {
-            int a2 = REC(obj, DAT_00516ab0);
-            int ref = LISTDATA(10);
-            COLOR(a2, ref)
-            sprintf(b4, &DAT_00516968[0], a2);
-            SEL(&DAT_00516938[0]);
-            APS(&DAT_005169d0[0]);
-            APS(&DAT_00516ac0[0]);
-            APS(b4);
-            DSP(&DAT_00516958[0]);
-            SEL(&DAT_00516938[0]);
-            APS(&DAT_005169d0[0]);
-            APS(&DAT_00516ac0[0]);
-            v10[0] = r; v10[1] = g; v10[2] = b;
-            beMessenger_AppendVec3(M, v10);
-            DSP(&DAT_00516b10[0]);
-        }
+        beMessenger_SelectGroup(self->_messenger, GAMERAM_12);
+        beMessenger_AppendInt(self->_messenger, playerNo);
+        beMessenger_DispatchSelected(self->_messenger, GETPLAYER_8);
+        player = beMessenger_GetObject(self->_messenger, 0);
+        SHOW_PREVIEW(MHP_4, font010_2, 0, maxHpColor)
+        SHOW_PREVIEW(MMP_5, font011_2, 1, maxMpColor)
+        SHOW_PREVIEW(TSUYOSA_3, font040, 2, strengthColor)
+        SHOW_PREVIEW(MAMORI_2, font041, 3, defenseColor)
+        SHOW_PREVIEW(KASHIKOSA_3, font042, 4, wisdomColor)
+        SHOW_PREVIEW(SEISHIN_3, font043, 5, spiritColor)
+        SHOW_PREVIEW(SUBAYASA_3, font044, 6, speedColor)
+        SHOW_PREVIEW(HONOOTEIKO_2, font045, 7, fireResistColor)
+        SHOW_PREVIEW(KOORITEIKO_2, font046, 8, iceResistColor)
+        SHOW_PREVIEW(KAMINARITEIKO_2, font047, 9, thunderResistColor)
+        SHOW_PREVIEW(YAMITEIKO_2, font048, 10, darkResistColor)
         return 1;
     }
-    case 5: {
-        int s1;
-        beNDMWStatusInfoWork *work = (beNDMWStatusInfoWork *)arg1->_work;
-        s1 = beMessenger_GetInt(M, 0);
-        int *pv;
-        int s4, s3, obj;
-        sprintf(b5, &DAT_00516968[0], LISTDATA(0));
-        SEL(&DAT_00516938[0]);
-        APS(&DAT_005169d0[0]);
-        APS(&DAT_005169f0[0]);
-        APS(b5);
-        DSP(&DAT_00516958[0]);
-        SEL(&DAT_00516938[0]);
-        APS(&DAT_005169d0[0]);
-        APS(&DAT_005169f0[0]);
-        DSP(&DAT_00516b18[0]);
-        sprintf(b5, &DAT_00516968[0], LISTDATA(1));
-        SEL(&DAT_00516938[0]);
-        APS(&DAT_005169d0[0]);
-        APS(&DAT_00516a00[0]);
-        APS(b5);
-        DSP(&DAT_00516958[0]);
-        SEL(&DAT_00516938[0]);
-        APS(&DAT_005169d0[0]);
-        APS(&DAT_00516a00[0]);
-        DSP(&DAT_00516b18[0]);
-        sprintf(b5, &DAT_00516968[0], LISTDATA(2));
-        SEL(&DAT_00516938[0]);
-        APS(&DAT_005169d0[0]);
-        APS(&DAT_00516a10[0]);
-        APS(b5);
-        DSP(&DAT_00516958[0]);
-        SEL(&DAT_00516938[0]);
-        APS(&DAT_005169d0[0]);
-        APS(&DAT_00516a10[0]);
-        DSP(&DAT_00516b18[0]);
-        sprintf(b5, &DAT_00516968[0], LISTDATA(3));
-        SEL(&DAT_00516938[0]);
-        APS(&DAT_005169d0[0]);
-        APS(&DAT_00516a20[0]);
-        APS(b5);
-        DSP(&DAT_00516958[0]);
-        SEL(&DAT_00516938[0]);
-        APS(&DAT_005169d0[0]);
-        APS(&DAT_00516a20[0]);
-        DSP(&DAT_00516b18[0]);
-        sprintf(b5, &DAT_00516968[0], LISTDATA(4));
-        SEL(&DAT_00516938[0]);
-        APS(&DAT_005169d0[0]);
-        APS(&DAT_00516a38[0]);
-        APS(b5);
-        DSP(&DAT_00516958[0]);
-        SEL(&DAT_00516938[0]);
-        APS(&DAT_005169d0[0]);
-        APS(&DAT_00516a38[0]);
-        DSP(&DAT_00516b18[0]);
-        sprintf(b5, &DAT_00516968[0], LISTDATA(5));
-        SEL(&DAT_00516938[0]);
-        APS(&DAT_005169d0[0]);
-        APS(&DAT_00516a48[0]);
-        APS(b5);
-        DSP(&DAT_00516958[0]);
-        SEL(&DAT_00516938[0]);
-        APS(&DAT_005169d0[0]);
-        APS(&DAT_00516a48[0]);
-        DSP(&DAT_00516b18[0]);
-        sprintf(b5, &DAT_00516968[0], LISTDATA(6));
-        SEL(&DAT_00516938[0]);
-        APS(&DAT_005169d0[0]);
-        APS(&DAT_00516a60[0]);
-        APS(b5);
-        DSP(&DAT_00516958[0]);
-        SEL(&DAT_00516938[0]);
-        APS(&DAT_005169d0[0]);
-        APS(&DAT_00516a60[0]);
-        DSP(&DAT_00516b18[0]);
-        sprintf(b5, &DAT_00516968[0], LISTDATA(7));
-        SEL(&DAT_00516938[0]);
-        APS(&DAT_005169d0[0]);
-        APS(&DAT_00516a78[0]);
-        APS(b5);
-        DSP(&DAT_00516958[0]);
-        SEL(&DAT_00516938[0]);
-        APS(&DAT_005169d0[0]);
-        APS(&DAT_00516a78[0]);
-        DSP(&DAT_00516b18[0]);
-        sprintf(b5, &DAT_00516968[0], LISTDATA(8));
-        SEL(&DAT_00516938[0]);
-        APS(&DAT_005169d0[0]);
-        APS(&DAT_00516a90[0]);
-        APS(b5);
-        DSP(&DAT_00516958[0]);
-        SEL(&DAT_00516938[0]);
-        APS(&DAT_005169d0[0]);
-        APS(&DAT_00516a90[0]);
-        DSP(&DAT_00516b18[0]);
-        sprintf(b5, &DAT_00516968[0], LISTDATA(9));
-        SEL(&DAT_00516938[0]);
-        APS(&DAT_005169d0[0]);
-        APS(&DAT_00516aa8[0]);
-        APS(b5);
-        DSP(&DAT_00516958[0]);
-        SEL(&DAT_00516938[0]);
-        APS(&DAT_005169d0[0]);
-        APS(&DAT_00516aa8[0]);
-        DSP(&DAT_00516b18[0]);
-        sprintf(b5, &DAT_00516968[0], LISTDATA(10));
-        SEL(&DAT_00516938[0]);
-        APS(&DAT_005169d0[0]);
-        APS(&DAT_00516ac0[0]);
-        APS(b5);
-        DSP(&DAT_00516958[0]);
-        SEL(&DAT_00516938[0]);
-        APS(&DAT_005169d0[0]);
-        APS(&DAT_00516ac0[0]);
-        DSP(&DAT_00516b18[0]);
-        pv = (int *)((igIntList *)work->_parameter)->_data;
-        s4 = pv[11];
-        s3 = pv[12];
-        SEL(&DAT_00516848[0]);
-        beMessenger_AppendInt(M, s1);
-        DSP(&DAT_00516850[0]);
-        obj = beMessenger_GetObject(M, 0);
-        REC(obj, DAT_005169c8) = s4;
-        REC(obj, DAT_005169e0) = s3;
+    case MESSAGE_OFPREVIEW: {
+        int playerNo;
+        beNDMWStatusInfoWork *work = (beNDMWStatusInfoWork *)ram->_work;
+        playerNo = beMessenger_GetInt(self->_messenger, 0);
+        int *parameters;
+        int shownHp, shownMp, player;
+        RESTORE_PARAMETER(0, font010_2)
+        RESTORE_PARAMETER(1, font011_2)
+        RESTORE_PARAMETER(2, font040)
+        RESTORE_PARAMETER(3, font041)
+        RESTORE_PARAMETER(4, font042)
+        RESTORE_PARAMETER(5, font043)
+        RESTORE_PARAMETER(6, font044)
+        RESTORE_PARAMETER(7, font045)
+        RESTORE_PARAMETER(8, font046)
+        RESTORE_PARAMETER(9, font047)
+        RESTORE_PARAMETER(10, font048)
+        parameters = (int *)PARAMETERS->_data;
+        shownHp = parameters[11];
+        shownMp = parameters[12];
+        beMessenger_SelectGroup(self->_messenger, GAMERAM_12);
+        beMessenger_AppendInt(self->_messenger, playerNo);
+        beMessenger_DispatchSelected(self->_messenger, GETPLAYER_8);
+        player = beMessenger_GetObject(self->_messenger, 0);
+        igProperty_GetRecord(player, HP_5)->_data = shownHp;
+        igProperty_GetRecord(player, MP_5)->_data = shownMp;
         return 1;
     }
-    case 3: {
-        beNDMWStatusInfoWork *work = (beNDMWStatusInfoWork *)arg1->_work;
-        int what = beMessenger_GetInt(M, 0);
-                switch (what) {
-        case 6:
-            beMessenger_AppendObject(M, (void *)work->_weaponSalesList);
+    case MESSAGE_GETSHOPDATA: {
+        beNDMWStatusInfoWork *work = (beNDMWStatusInfoWork *)ram->_work;
+        int subWndNo = beMessenger_GetInt(self->_messenger, 0);
+        switch (subWndNo) {
+        case SUBWND_WPU:
+            beMessenger_AppendObject(self->_messenger, (void *)work->_weaponSalesList);
             break;
-        case 7:
-            beMessenger_AppendObject(M, (void *)work->_armorSalesList);
+        case SUBWND_APU:
+            beMessenger_AppendObject(self->_messenger, (void *)work->_armorSalesList);
             break;
-        case 8:
-            beMessenger_AppendObject(M, (void *)work->_chipSalesList);
+        case SUBWND_CHIP:
+            beMessenger_AppendObject(self->_messenger, (void *)work->_chipSalesList);
             break;
-        case 9:
-            beMessenger_AppendObject(M, (void *)work->_junkSalesList);
-            beMessenger_AppendInt(M, work->_junkGift);
+        case SUBWND_JUNK:
+            beMessenger_AppendObject(self->_messenger, (void *)work->_junkSalesList);
+            beMessenger_AppendInt(self->_messenger, work->_junkGift);
             break;
         }
         return 1;
@@ -954,80 +579,80 @@ int Gap__Bec__beNDMWStatus__vfunc_34(beNDMWStatus *arg0, beNDMWStatusInfoRam *ar
     }
 }
 
-void FUN_003d8740(beNDMWStatus *owner, beNDMWStatusInfoRam *ram) {
-    char buf6[8];
-    char buf7[8];
-    char buf8[8];
-    char buf9[8];
+void beNDMWStatus__PrepareWork(beNDMWStatus *owner, beNDMWStatusInfoRam *ram) {
+    char weaponKey[8];
+    char armorKey[8];
+    char chipKey[8];
+    char junkKey[8];
     beNDMWStatusInfoWork *work;
-    void *alloc;
-    int joined;
-    int pl;
-    int folder;
+    void *allocator;
+    int partySize;
+    int playerNo;
+    int player;
     int level;
-    int base;
+    int baseRow;
     int row;
-    int data;
-    int row8;
-    int i6, i7a, i7b, i8, i9;
+    int database;
+    int chipRow;
+    int weaponColumn, blueColumn, yellowColumn, chipColumn, junkColumn;
     int id;
-    int kind;
-    int rowIdx;
+    int itemKind;
+    int weaponRow;
     int common;
-    int invested;
-    int jrow;
-    IRec *prop;
+    int junkCounter;
+    int junkRow;
+    beDataObjIntList *counters;
 
     work = (beNDMWStatusInfoWork *)ram->_work;
     if (work == 0) {
-        ALLOC(alloc, g_defaultAllocatorSelector[0])
-        igSmartPointer<beNDMWStatusInfoWork> spWork((beNDMWStatusInfoWork *)FUN_003b5ec0(alloc));
-        igObject *w = spWork.p;
-        if (w != 0) w->_refCount = w->_refCount + 1;
-        { igObject *old = (igObject *)ram->_work; REL(old) }
-        ram->_work = (int)w;
+        PICK_ALLOCATOR(allocator, g_defaultAllocatorSelector[0])
+        igSmartPointer<beNDMWStatusInfoWork> created((beNDMWStatusInfoWork *)beNDMWStatusInfoWork_Create(allocator));
+        igObject *retained = created.p;
+        if (retained != 0) retained->_refCount = retained->_refCount + 1;
+        RELEASE(igObject, (igObject *)ram->_work)
+        ram->_work = (int)retained;
         work = (beNDMWStatusInfoWork *)ram->_work;
     }
-    joined = 0;
-    pl = 0;
+    partySize = 0;
+    playerNo = 0;
     do {
-        beMessenger_SelectGroup(owner->_messenger, &DAT_00516848[0]);
-        beMessenger_AppendInt(owner->_messenger, pl);
-        beMessenger_DispatchSelected(owner->_messenger, &DAT_00516850[0]);
-        folder = beMessenger_GetObject(owner->_messenger, 0);
-        if (((RecB *)igProperty_GetRecordByte(folder, &DAT_00516860[0]))->f12 != 0) {
-            joined += 1;
-            if (((Rec *)igProperty_GetRecord(folder, &DAT_00516ad8[0]))->f12 > 9999999) {
-                Rec *r1 = ((Rec *)igProperty_GetRecord(folder, &DAT_00516ad8[0]));
-                r1->f12 = 9999999;
+        beMessenger_SelectGroup(owner->_messenger, GAMERAM_12);
+        beMessenger_AppendInt(owner->_messenger, playerNo);
+        beMessenger_DispatchSelected(owner->_messenger, GETPLAYER_8);
+        player = beMessenger_GetObject(owner->_messenger, 0);
+        if (igProperty_GetRecordByte(player, ISUSE_8)->_data != 0) {
+            partySize += 1;
+            if (igProperty_GetRecord(player, BIT_6)->_data > 9999999) {
+                beDataObjInt *bit = igProperty_GetRecord(player, BIT_6);
+                bit->_data = 9999999;
             }
-            if (((Rec *)igProperty_GetRecord(folder, &DAT_00516ac8[0]))->f12 > 9999) {
-                Rec *r2 = ((Rec *)igProperty_GetRecord(folder, &DAT_00516ac8[0]));
-                r2->f12 = 9999;
+            if (igProperty_GetRecord(player, XDATA_3)->_data > 9999) {
+                beDataObjInt *xdata = igProperty_GetRecord(player, XDATA_3);
+                xdata->_data = 9999;
             }
         }
-        pl += 1;
-    } while (pl < 4);
-    beMessenger_SelectGroup(owner->_messenger, &DAT_00516848[0]);
+        playerNo += 1;
+    } while (playerNo < 4);
+    beMessenger_SelectGroup(owner->_messenger, GAMERAM_12);
     beMessenger_AppendInt(owner->_messenger, 0);
-    beMessenger_DispatchSelected(owner->_messenger, &DAT_00516850[0]);
-    folder = beMessenger_GetObject(owner->_messenger, 0);
-    level = ((Rec *)igProperty_GetRecord(folder, &DAT_00516960[0]))->f12;
+    beMessenger_DispatchSelected(owner->_messenger, GETPLAYER_8);
+    player = beMessenger_GetObject(owner->_messenger, 0);
+    level = igProperty_GetRecord(player, LEVEL_7)->_data;
     switch (owner->_subWndNo) {
-    case 6:
-        if (WL(_weaponSalesList)->_count <= 0) {
-            U::Reserve(WL(_weaponSalesList));
-            ObjectList_FillRetained(WL(_weaponSalesList), 0);
-            if (joined > 1) {
-                base = 150;
+    case SUBWND_WPU:
+        if (SALES_LIST(_weaponSalesList)->_count <= 0) {
+            SalesList::Reserve(SALES_LIST(_weaponSalesList));
+            ObjectList_FillRetained(SALES_LIST(_weaponSalesList), 0);
+            if (partySize > 1) {
+                baseRow = 150;
             } else {
-                switch (((Rec *)igProperty_GetRecord(folder, &DAT_005169a8[0]))->f12) {
-                case 15: default: base = 0; break;
-                case 1: case 4: case 12: base = 25; break;
-                case 2: case 7: case 14: base = 50; break;
-                case 3: case 9: base = 75; break;
-                case 8: case 11: case 13: base = 125; break;
-                case 6: case 10: base = 100; break;
+                switch (igProperty_GetRecord(player, DIGIMONNO_4)->_data) {
+                case 15: default: baseRow = 0; break;
+                case 1: case 4: case 12: baseRow = 25; break;
+                case 2: case 7: case 14: baseRow = 50; break;
+                case 3: case 9: baseRow = 75; break;
+                case 8: case 11: case 13: baseRow = 125; break;
+                case 6: case 10: baseRow = 100; break;
                 }
             }
             if (level < 10) row = 0;
@@ -1055,26 +680,26 @@ void FUN_003d8740(beNDMWStatus *owner, beNDMWStatusInfoRam *ram) {
             else if (level < 138) row = 22;
             else if (level < 148) row = 23;
             else row = 24;
-            beMessenger_SendNamed(owner->_messenger, &DAT_00516980[0], &DAT_00516b50[0], 0, &DAT_00516998[0]);
-            data = beMessenger_GetObject(owner->_messenger, 0);
-            rowIdx = base + row;
-            i6 = 0;
+            beMessenger_SendNamed(owner->_messenger, DATABASE_10, shopWeapon, 0, GETDATABASE_9);
+            database = beMessenger_GetObject(owner->_messenger, 0);
+            weaponRow = baseRow + row;
+            weaponColumn = 0;
             do {
-                buf6[0] = i6 / 10 + 48; buf6[1] = i6 % 10 + 48; buf6[2] = 0;
-                id = beDataBase_GetRecordInt(data, rowIdx, buf6);
+                COLUMN_KEY(weaponKey, weaponColumn)
+                id = beDataBase_GetRecordInt(database, weaponRow, weaponKey);
                 if (id != -1) {
-                    ITEM4(1, spWpn, beNDMWItemWeapon_Create, beNDMWItemWeapon_SetRandom, WL(_weaponSalesList), id)
+                    STOCK_ITEM(1, weapon, beNDMWItemWeapon_Create, beNDMWItemWeapon_SetRandom, SALES_LIST(_weaponSalesList), id)
                 } else {
-                    ObjectList_AppendRetained(WL(_weaponSalesList), 0);
+                    ObjectList_AppendRetained(SALES_LIST(_weaponSalesList), 0);
                 }
-                i6 += 1;
-            } while (i6 < 36);
+                weaponColumn += 1;
+            } while (weaponColumn < 36);
         }
         break;
-    case 7:
-        if (WL(_armorSalesList)->_count <= 0) {
-            U::Reserve(WL(_armorSalesList));
-            ObjectList_FillRetained(WL(_armorSalesList), 0);
+    case SUBWND_APU:
+        if (SALES_LIST(_armorSalesList)->_count <= 0) {
+            SalesList::Reserve(SALES_LIST(_armorSalesList));
+            ObjectList_FillRetained(SALES_LIST(_armorSalesList), 0);
             if (level < 10) row = 0;
             else if (level < 17) row = 1;
             else if (level < 22) row = 2;
@@ -1105,127 +730,127 @@ void FUN_003d8740(beNDMWStatus *owner, beNDMWStatusInfoRam *ram) {
             else if (level < 188) row = 27;
             else if (level < 198) row = 28;
             else row = 29;
-            beMessenger_SendNamed(owner->_messenger, &DAT_00516980[0], &DAT_00516b60[0], 0, &DAT_00516998[0]);
-            data = beMessenger_GetObject(owner->_messenger, 0);
-            i7a = 0;
+            beMessenger_SendNamed(owner->_messenger, DATABASE_10, shopArmor, 0, GETDATABASE_9);
+            database = beMessenger_GetObject(owner->_messenger, 0);
+            blueColumn = 0;
             do {
-                buf7[0] = i7a / 10 + 48; buf7[1] = i7a % 10 + 48; buf7[2] = 0;
-                id = beDataBase_GetRecordInt(data, row, buf7);
-                ITEM4(2, spBlue, beNDMWItemBlueArmor_Create, beNDMWItemBlueArmor_SetRandom, WL(_armorSalesList), id)
-                i7a += 1;
-            } while (i7a < 12);
-            i7b = 12;
+                COLUMN_KEY(armorKey, blueColumn)
+                id = beDataBase_GetRecordInt(database, row, armorKey);
+                STOCK_ITEM(2, blueArmor, beNDMWItemBlueArmor_Create, beNDMWItemBlueArmor_SetRandom, SALES_LIST(_armorSalesList), id)
+                blueColumn += 1;
+            } while (blueColumn < 12);
+            yellowColumn = 12;
             do {
-                buf7[0] = i7b / 10 + 48; buf7[1] = i7b % 10 + 48; buf7[2] = 0;
-                kind = beDataBase_GetRecordInt(data, row, buf7);
-                if (kind != -1) {
-                    ITEM4(3, spYel, beNDMWItemYellowArmor_Create, beNDMWItemYellowArmor_SetRandom, WL(_armorSalesList), kind)
+                COLUMN_KEY(armorKey, yellowColumn)
+                itemKind = beDataBase_GetRecordInt(database, row, armorKey);
+                if (itemKind != -1) {
+                    STOCK_ITEM(3, yellowArmor, beNDMWItemYellowArmor_Create, beNDMWItemYellowArmor_SetRandom, SALES_LIST(_armorSalesList), itemKind)
                 } else {
-                    ObjectList_AppendRetained(WL(_armorSalesList), 0);
+                    ObjectList_AppendRetained(SALES_LIST(_armorSalesList), 0);
                 }
-                i7b += 1;
-            } while (i7b < 36);
+                yellowColumn += 1;
+            } while (yellowColumn < 36);
         }
         break;
-    case 8:
-        if (WL(_chipSalesList)->_count <= 0) {
-            U::Reserve(WL(_chipSalesList));
-            ObjectList_FillRetained(WL(_chipSalesList), 0);
-            if (level < 10) row8 = 0;
-            else if (level < 17) row8 = 1;
-            else if (level < 22) row8 = 2;
-            else if (level < 27) row8 = 3;
-            else if (level < 32) row8 = 4;
-            else if (level < 37) row8 = 5;
-            else if (level < 42) row8 = 6;
-            else if (level < 47) row8 = 7;
-            else if (level < 52) row8 = 8;
-            else if (level < 61) row8 = 9;
-            else if (level < 68) row8 = 10;
-            else if (level < 73) row8 = 11;
-            else if (level < 78) row8 = 12;
-            else if (level < 83) row8 = 13;
-            else if (level < 88) row8 = 14;
-            else if (level < 93) row8 = 15;
-            else if (level < 98) row8 = 16;
-            else if (level < 103) row8 = 17;
-            else if (level < 108) row8 = 18;
-            else if (level < 113) row8 = 19;
-            else if (level < 118) row8 = 20;
-            else if (level < 128) row8 = 21;
-            else if (level < 138) row8 = 22;
-            else if (level < 148) row8 = 23;
-            else if (level < 158) row8 = 24;
-            else if (level < 168) row8 = 25;
-            else if (level < 178) row8 = 26;
-            else if (level < 188) row8 = 27;
-            else if (level < 198) row8 = 28;
-            else row8 = 29;
-            beMessenger_SendNamed(owner->_messenger, &DAT_00516980[0], &DAT_00516b70[0], 0, &DAT_00516998[0]);
-            data = beMessenger_GetObject(owner->_messenger, 0);
-            i8 = 0;
+    case SUBWND_CHIP:
+        if (SALES_LIST(_chipSalesList)->_count <= 0) {
+            SalesList::Reserve(SALES_LIST(_chipSalesList));
+            ObjectList_FillRetained(SALES_LIST(_chipSalesList), 0);
+            if (level < 10) chipRow = 0;
+            else if (level < 17) chipRow = 1;
+            else if (level < 22) chipRow = 2;
+            else if (level < 27) chipRow = 3;
+            else if (level < 32) chipRow = 4;
+            else if (level < 37) chipRow = 5;
+            else if (level < 42) chipRow = 6;
+            else if (level < 47) chipRow = 7;
+            else if (level < 52) chipRow = 8;
+            else if (level < 61) chipRow = 9;
+            else if (level < 68) chipRow = 10;
+            else if (level < 73) chipRow = 11;
+            else if (level < 78) chipRow = 12;
+            else if (level < 83) chipRow = 13;
+            else if (level < 88) chipRow = 14;
+            else if (level < 93) chipRow = 15;
+            else if (level < 98) chipRow = 16;
+            else if (level < 103) chipRow = 17;
+            else if (level < 108) chipRow = 18;
+            else if (level < 113) chipRow = 19;
+            else if (level < 118) chipRow = 20;
+            else if (level < 128) chipRow = 21;
+            else if (level < 138) chipRow = 22;
+            else if (level < 148) chipRow = 23;
+            else if (level < 158) chipRow = 24;
+            else if (level < 168) chipRow = 25;
+            else if (level < 178) chipRow = 26;
+            else if (level < 188) chipRow = 27;
+            else if (level < 198) chipRow = 28;
+            else chipRow = 29;
+            beMessenger_SendNamed(owner->_messenger, DATABASE_10, shopChip, 0, GETDATABASE_9);
+            database = beMessenger_GetObject(owner->_messenger, 0);
+            chipColumn = 0;
             do {
-                buf8[0] = i8 / 10 + 48; buf8[1] = i8 % 10 + 48; buf8[2] = 0;
-                id = beDataBase_GetRecordInt(data, row8, buf8);
+                COLUMN_KEY(chipKey, chipColumn)
+                id = beDataBase_GetRecordInt(database, chipRow, chipKey);
                 if (id != -1) {
-                    ITEM2(4, spChip, beNDMWItemAbilityChip_Create, beNDMWItemAbilityChip_Set, WL(_chipSalesList), id)
+                    STOCK_CHIP(chip, SALES_LIST(_chipSalesList), id)
                 } else {
-                    ObjectList_AppendRetained(WL(_chipSalesList), 0);
+                    ObjectList_AppendRetained(SALES_LIST(_chipSalesList), 0);
                 }
-                i8 += 1;
-            } while (i8 < 36);
+                chipColumn += 1;
+            } while (chipColumn < 36);
         }
         break;
-    case 9:
-        beMessenger_SendGroup(owner->_messenger, &DAT_00516848[0], &DAT_00516b80[0]);
+    case SUBWND_JUNK:
+        beMessenger_SendGroup(owner->_messenger, GAMERAM_12, GETCOMMON_9);
         common = beMessenger_GetObject(owner->_messenger, 0);
-        prop = igProperty_GetRecordIntList(common, &DAT_00516b90[0]);
-        invested = ((int *)prop->f12->_data)[1];
-        if (invested >= 3956000) jrow = 8;
-        else if (invested >= 1956000) jrow = 7;
-        else if (invested >= 956000) jrow = 6;
-        else if (invested >= 456000) jrow = 5;
-        else if (invested >= 206000) jrow = 4;
-        else if (invested >= 86000) jrow = 3;
-        else if (invested >= 26000) jrow = 2;
-        else if (invested >= 6000) jrow = 1;
-        else if (invested >= 1000) jrow = 0;
-        else jrow = -1;
-        if (WL(_junkSalesList)->_count <= 0) {
-            work->_junkGift = invested;
-            U::Reserve(WL(_junkSalesList));
-            ObjectList_FillRetained(WL(_junkSalesList), 0);
-            if (jrow != -1) {
-                beMessenger_SendNamed(owner->_messenger, &DAT_00516980[0], &DAT_00516b98[0], 0, &DAT_00516998[0]);
-                data = beMessenger_GetObject(owner->_messenger, 0);
-                i9 = 0;
+        counters = igProperty_GetRecordIntList(common, COUNTER_3);
+        junkCounter = ((int *)((igIntList *)counters->_data)->_data)[1];
+        if (junkCounter >= 3956000) junkRow = 8;
+        else if (junkCounter >= 1956000) junkRow = 7;
+        else if (junkCounter >= 956000) junkRow = 6;
+        else if (junkCounter >= 456000) junkRow = 5;
+        else if (junkCounter >= 206000) junkRow = 4;
+        else if (junkCounter >= 86000) junkRow = 3;
+        else if (junkCounter >= 26000) junkRow = 2;
+        else if (junkCounter >= 6000) junkRow = 1;
+        else if (junkCounter >= 1000) junkRow = 0;
+        else junkRow = -1;
+        if (SALES_LIST(_junkSalesList)->_count <= 0) {
+            work->_junkGift = junkCounter;
+            SalesList::Reserve(SALES_LIST(_junkSalesList));
+            ObjectList_FillRetained(SALES_LIST(_junkSalesList), 0);
+            if (junkRow != -1) {
+                beMessenger_SendNamed(owner->_messenger, DATABASE_10, shopJunk, 0, GETDATABASE_9);
+                database = beMessenger_GetObject(owner->_messenger, 0);
+                junkColumn = 0;
                 do {
-                    buf9[0] = i9 / 10 + 48; buf9[1] = i9 % 10 + 48; buf9[2] = 0;
-                    id = beDataBase_GetRecordInt(data, jrow, buf9);
+                    COLUMN_KEY(junkKey, junkColumn)
+                    id = beDataBase_GetRecordInt(database, junkRow, junkKey);
                     if (id != -1) {
-                        strcat(buf9, &DAT_00516ba8[0]);
-                        kind = beDataBase_GetRecordInt(data, jrow, buf9);
-                        switch (kind) {
+                        strcat(junkKey, kind);
+                        itemKind = beDataBase_GetRecordInt(database, junkRow, junkKey);
+                        switch (itemKind) {
                         case 0:
-                            ITEM4(1, spJWpn, beNDMWItemWeapon_Create, beNDMWItemWeapon_SetRandom, WL(_junkSalesList), id)
+                            STOCK_ITEM(1, junkWeapon, beNDMWItemWeapon_Create, beNDMWItemWeapon_SetRandom, SALES_LIST(_junkSalesList), id)
                             break;
                         case 1:
-                            ITEM4(2, spJBlue, beNDMWItemBlueArmor_Create, beNDMWItemBlueArmor_SetRandom, WL(_junkSalesList), id)
+                            STOCK_ITEM(2, junkBlueArmor, beNDMWItemBlueArmor_Create, beNDMWItemBlueArmor_SetRandom, SALES_LIST(_junkSalesList), id)
                             break;
                         case 2:
-                            ITEM4(3, spJYel, beNDMWItemYellowArmor_Create, beNDMWItemYellowArmor_SetRandom, WL(_junkSalesList), id)
+                            STOCK_ITEM(3, junkYellowArmor, beNDMWItemYellowArmor_Create, beNDMWItemYellowArmor_SetRandom, SALES_LIST(_junkSalesList), id)
                             break;
                         }
                     }
-                    i9 += 1;
-                } while (i9 < 36);
+                    junkColumn += 1;
+                } while (junkColumn < 36);
             }
         }
         break;
     }
 }
 
-int Gap__Bec__beNDMWStatus__vfunc_20(void)
+int beNDMWStatus__GetMeta(void)
 {
     return g_beNDMWStatus_metaObject[0];
 }

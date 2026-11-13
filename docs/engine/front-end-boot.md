@@ -358,8 +358,8 @@ an `igGraphPath` through `animCamera01_60`, `cameraanim_GP1` (+600), `cameraanim
 `_transformInput` NULL and a static `_m`, so `beCameraMode::vfunc_28` (`0x37a900`, via
 `FUN_001c5b30`/`FUN_001c59f0`) composes the same matrix at every time: an on-axis eye at (0,~0,730) with
 about 0.04 degrees of tilt. It is not a dolly; `_totalSec` only runs `_nowTimeL` to its end and latches
-`_isEnd`. `beCameraCtrl::vfunc_31` (`0x379c40`) selects the box path `FUN_00378ed0` or the demo path
-`FUN_00379a90`. The `stagML11` box camera is the wrong camera for this layer: it gives an off-axis arc.
+`_isEnd`. `beCameraCtrl::vfunc_31` (`0x379c40`) selects the box path `beCameraCtrl_UpdateBoxCamera` or the demo path
+`beCameraCtrl_UpdateDemoCamera`. The `stagML11` box camera is the wrong camera for this layer: it gives an off-axis arc.
 
 ### Render state in the pack
 

@@ -74,10 +74,10 @@ void Gap__Sg__igTransformSequence1_5__vfunc_34(KeySequenceView *o, int index, Ke
         Matrix44_Copy(rot, m);
     }
     if (o->_drivenChannels & 2) {
-        FUN_001925f0(&o->_quatList->_data[index], rot);
+        Matrix44_GetQuaternion(&o->_quatList->_data[index], rot);
     } else if (o->_drivenChannels & 4) {
         off = index * 16;
-        FUN_001925f0((char *)o->_quatList->_data + off, rot);
+        Matrix44_GetQuaternion((char *)o->_quatList->_data + off, rot);
         pz = &euler[2];
         py = &euler[1];
         FUN_00192990((char *)o->_quatList->_data + off, euler, py, pz);
@@ -331,7 +331,7 @@ void FUN_001deb50(igTransformSequence1_5 *self, float *out, int from, int to, fl
     }
     if (method == 1) {
         int keys = ((igVec3fList *)self->_xlateList)->_data;
-        FUN_00192f00(out, t, (void *)(keys + from * 12), (void *)(keys + to * 12));
+        Vec3_Lerp(out, t, (void *)(keys + from * 12), (void *)(keys + to * 12));
         return;
     }
     FUN_001930f0(out, (float *)(((igVec3fList *)self->_xlateList)->_data + from * 12),
@@ -357,7 +357,7 @@ void FUN_001def90(igTransformSequence1_5 *self, float *out, int from, int to, fl
     }
     {
         int keys = ((igQuaternionfList *)self->_quatList)->_data;
-        FUN_00192cc0(out, t, (void *)(keys + from * 16), (void *)(keys + to * 16));
+        Quaternion_Lerp(out, t, (void *)(keys + from * 16), (void *)(keys + to * 16));
     }
 }
 

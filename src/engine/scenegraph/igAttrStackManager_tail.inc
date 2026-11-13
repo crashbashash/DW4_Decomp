@@ -470,7 +470,7 @@ void igAttrStackManager_MarkStackChanged(struct A_1b1490 *arg0, struct B_1b1490 
     arg0->f8 = 1;
 }
 
-void FUN_001b1cf0(igDataList *arg0) {
+void igBitMask_SetAll(igDataList *arg0) {
     unsigned int temp_a2;
     int *temp_a0;
 
@@ -533,7 +533,7 @@ void FUN_001b1cf0(igDataList *arg0) {
     }
 }
 
-void FUN_001b1dc0(igDataList *arg0) {
+void igBitMask_ClearAll(igDataList *arg0) {
     unsigned int temp_a2;
     int *temp_a0;
 

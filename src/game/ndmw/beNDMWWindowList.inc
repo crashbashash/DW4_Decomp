@@ -45,7 +45,7 @@ void beNDMWWindowList_GetMetaObject(void)
     FUN_003b1c30();
 }
 
-int FUN_003b1d70(void) {
+int SubWnd_GetMetaEnum(void) {
     if (DAT_0058a9b0[0] == 0) {
         DAT_0058a9b0[0] = igMetaEnum_Create(&DAT_00510ab0[0], &DAT_004c9410[0], &DAT_004c9440[0], 0xB);
     }

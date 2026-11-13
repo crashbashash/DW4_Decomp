@@ -927,3 +927,16 @@
 0x001af510	igAnimationState_UpdateLocalTime	engine
 0x001dd4b0	UnsignedDivMod64_Cached	engine
 0x00239070	igActor_SetAnimationSystem	engine
+0x003b1d70	SubWnd_GetMetaEnum	game
+0x003b5ec0	beNDMWStatusInfoWork_Create	game
+0x003b7750	beNDMWShopCtrlDigilabo_Create	game
+0x003b7eb0	beNDMWShopCtrlA0_Create	game
+0x003bb1d0	beNDMWStatusCtrl00_Create	game
+0x003bb730	StatusMessage_GetMetaEnum	game
+0x003d58f0	beNDMWStatus::ReleaseWindow	game
+0x003d5950	beNDMWStatus::GetInfoMeta	game
+0x003d5960	beNDMWStatus::RegisterReceiver	game
+0x003d59b0	beNDMWStatus::Update	game
+0x003d60e0	beNDMWStatus::OnMessage	game
+0x003d8740	beNDMWStatus::PrepareWork	game
+0x003d9dd0	beNDMWStatus::GetMeta	game

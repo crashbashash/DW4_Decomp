@@ -1,4 +1,4 @@
-void FUN_003689f0(int arg0) {
+void beCameraMode_Create(int arg0) {
     FUN_00368bc0();
     igMetaObject_CreateInstance(*(int *)0x589B90, arg0);
 }

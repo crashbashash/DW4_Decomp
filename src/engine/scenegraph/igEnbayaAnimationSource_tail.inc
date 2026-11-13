@@ -64,7 +64,7 @@ int Gap__Sg__igEnbayaAnimationSource__vfunc_25(EnbayaSourceView *o, float *out, 
     blend = (t - ka->_translation[3]) / decoder->_interval;
     switch (o->_interpolationMethod[1]) {
     case 3: FUN_00192ab0(out, blend, (void *)ka, (void *)kb); break;
-    case 1: FUN_00192cc0(out, blend, (void *)ka, (void *)kb); break;
+    case 1: Quaternion_Lerp(out, blend, (void *)ka, (void *)kb); break;
     case 0: out[0] = kb->_quaternion[0]; out[1] = kb->_quaternion[1]; out[2] = kb->_quaternion[2]; out[3] = kb->_quaternion[3]; break;
     case 2: break;
     }
@@ -135,13 +135,13 @@ int Gap__Sg__igEnbayaAnimationSource__vfunc_27(EnbayaSourceView *o, float *out, 
     ta = ka->_translation;
     tb = kb->_translation;
     switch (o->_interpolationMethod[0]) {
-    case 1: FUN_00192f00(pos, blend, (void *)ta, (void *)tb); break;
+    case 1: Vec3_Lerp(pos, blend, (void *)ta, (void *)tb); break;
     case 0: pos[0] = tb[0]; pos[1] = tb[1]; pos[2] = tb[2]; pos[3] = tb[3]; break;
     case 3: case 2: break;
     }
     switch (o->_interpolationMethod[1]) {
     case 3: FUN_00192ab0(out, blend, (void *)ka, (void *)kb); break;
-    case 1: FUN_00192cc0(out, blend, (void *)ka, (void *)kb); break;
+    case 1: Quaternion_Lerp(out, blend, (void *)ka, (void *)kb); break;
     case 0: out[0] = kb->_quaternion[0]; out[1] = kb->_quaternion[1]; out[2] = kb->_quaternion[2]; out[3] = kb->_quaternion[3]; break;
     case 2: break;
     }

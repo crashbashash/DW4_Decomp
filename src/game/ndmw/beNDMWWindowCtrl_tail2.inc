@@ -50,7 +50,7 @@ void beNDMWWindowCtrl_InitFields(void) {
     igMetaObject_NameFields(temp_s0, &DAT_004ca078[0], &DAT_004ca080[0], &DAT_004ca088[0], temp_s1);
 }
 
-int FUN_003bb730(void) {
+int StatusMessage_GetMetaEnum(void) {
     if (DAT_0058b020[0] == 0) {
         DAT_0058b020[0] = igMetaEnum_Create(Message, &DAT_004ca090[0], &DAT_004ca0b0[0], 7);
     }

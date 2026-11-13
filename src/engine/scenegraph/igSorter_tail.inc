@@ -238,7 +238,7 @@ void FUN_001dc820(void *arg0, unsigned int arg1) {
 
 void FUN_001dc870(int *p)
 {
-    FUN_001b1cf0((igDataList *)(*(int *)((char *)p + 32)));
+    igBitMask_SetAll((igDataList *)(*(int *)((char *)p + 32)));
 }
 
 void FUN_001dc880(void *arg0, unsigned int arg1) {
@@ -260,7 +260,7 @@ void FUN_001dc880(void *arg0, unsigned int arg1) {
 
 void FUN_001dc8d0(int *p)
 {
-    FUN_001b1dc0((igDataList *)(*(int *)((char *)p + 32)));
+    igBitMask_ClearAll((igDataList *)(*(int *)((char *)p + 32)));
 }
 
 int FUN_001dc8e0(void *arg0, int arg1) {

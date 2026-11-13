@@ -35,7 +35,7 @@ void FUN_001dd0e0(TransformSampleView *o, int index, float (*m)[4]) {
         inv[1] = y;
     }
     FUN_00190cb0(rot, inv);
-    FUN_001925f0(o->_quatList->_data[index], rot);
+    Matrix44_GetQuaternion(o->_quatList->_data[index], rot);
 }
 
 void FUN_001dd250(A_1dd250 *arg0, int arg1, char *arg2) {

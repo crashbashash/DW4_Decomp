@@ -1,4 +1,4 @@
-void FUN_00192f00(void *arg0, float fparg0, void *arg1, void *arg2) {
+void Vec3_Lerp(void *arg0, float fparg0, void *arg1, void *arg2) {
     float temp_f1;
     float temp_f1_2;
     float temp_f1_3;
@@ -37,11 +37,11 @@ void FUN_00192fc0(float *out, float *v, float *m) {
 
 void FUN_001930f0(struct CurvePoint4 *out, struct CurvePoint4 *p1, struct CurvePoint4 *p2, struct CurvePoint4 *p3, struct CurvePoint4 *p4, float t) {
     struct CurvePoint4 v1, v2, v3, v4, v5;
-    FUN_00192f00(&v1, t, p1, p2);
-    FUN_00192f00(&v2, t, p2, p3);
-    FUN_00192f00(&v3, t, p3, p4);
-    FUN_00192f00(&v4, t, &v1, &v2);
-    FUN_00192f00(&v5, t, &v2, &v3);
-    FUN_00192f00(out, t, &v4, &v5);
+    Vec3_Lerp(&v1, t, p1, p2);
+    Vec3_Lerp(&v2, t, p2, p3);
+    Vec3_Lerp(&v3, t, p3, p4);
+    Vec3_Lerp(&v4, t, &v1, &v2);
+    Vec3_Lerp(&v5, t, &v2, &v3);
+    Vec3_Lerp(out, t, &v4, &v5);
 }
 

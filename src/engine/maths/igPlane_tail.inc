@@ -44,7 +44,7 @@ int FUN_0018c920(void *arg0, void *arg1) {
     if (!(*(float *)((char *)(arg1) + 8) <= *(float *)((char *)(arg1) + 20))) {
         return 0;
     }
-    FUN_0018ab70((igAABox *)arg1, ~*(int *)((char *)(arg0) + 24) & 7, (V3 *)buf);
+    igAABox_GetCorner((igAABox *)arg1, ~*(int *)((char *)(arg0) + 24) & 7, (V3 *)buf);
     return FUN_0018d060((P2 *)arg0, (float *)buf) == 2;
 }
 

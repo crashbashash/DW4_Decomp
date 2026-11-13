@@ -1006,7 +1006,7 @@ float sinf(float);
 
 int FUN_001906d0(...);
 int FUN_001904f0(...);
-void FUN_00191770(float *m, float *q);
+void Matrix44_SetQuaternion(float *m, float *q);
 
 float atanf(float);
 float tanf(float);

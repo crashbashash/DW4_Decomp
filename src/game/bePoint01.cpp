@@ -7,8 +7,8 @@ extern "C" int Gap__Bec__bePoint01__vfunc_20(void);
 extern "C" void beMessenger_RegisterReceiverFromInfo(int, int, char *);
 extern "C" int Matrix44_Copy(int *, int *);
 extern "C" int beMessenger_AppendMatrix(int, void *);
-extern "C" int FUN_001b1cf0(int);
-extern "C" int FUN_001b1dc0(int);
+extern "C" int igBitMask_SetAll(int);
+extern "C" int igBitMask_ClearAll(int);
 extern "C" int FUN_0034b980(...);
 extern "C" int beMessenger_AppendInt(int, int);
 extern "C" int beMessenger_AppendString(int, int *);
@@ -66,10 +66,10 @@ int Gap__Bec__bePoint01__vfunc_34(bePoint01 *arg0, beBaseInfoRam *arg1, void *ar
     v = beMessenger_ResolveEnumValue(arg0->_messenger, FUN_0034b980(), *(int *)((char *)arg2 + 20));
     switch (v) {
     case 0:
-        FUN_001b1cf0(*(int *)((char *)s0->_switch + 32));
+        igBitMask_SetAll(*(int *)((char *)s0->_switch + 32));
         return 1;
     case 1:
-        FUN_001b1dc0(*(int *)((char *)s0->_switch + 32));
+        igBitMask_ClearAll(*(int *)((char *)s0->_switch + 32));
         return 1;
     case 2: {
         int t = arg0->_pointNo;

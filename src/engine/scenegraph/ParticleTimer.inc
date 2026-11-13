@@ -175,7 +175,7 @@ void FUN_001c5790(Obj_1c5790 *arg0, int arg1) {
 
 void FUN_001c5870(void *arg0, int arg1) {
     int idx, tbl;
-    tbl = *(int *)(*(int *)((char *)((void *)FUN_001c5990(arg0)) + 28) + 16);
+    tbl = *(int *)(*(int *)((char *)((void *)igGraphPath_GetTail(arg0)) + 28) + 16);
     idx = arg1 * 4;
     ObjectList_AppendRetained(*(int *)((char *)(arg0) + 8), *(int *)(tbl + idx));
 }
@@ -203,7 +203,7 @@ int FUN_001c58c0(T_1c58c0 *arg0) {
     return 0;
 }
 
-int FUN_001c5990(void *arg0) {
+int igGraphPath_GetTail(void *arg0) {
     void *temp_v0;
 
     temp_v0 = (void *)(*(int *)((char *)(arg0) + 8));
