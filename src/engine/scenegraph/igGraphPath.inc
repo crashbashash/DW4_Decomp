@@ -1,4 +1,4 @@
-int FUN_0019f630(int arg0) {
+int igGraphPath_Create(int arg0) {
     FUN_0019f7a0();
     return igMetaObject_CreateInstance(*(int *)0x561A10, arg0);
 }

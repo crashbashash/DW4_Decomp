@@ -235,17 +235,17 @@ int FUN_00260d48(int ptid, const char *fname, AdxfPtInfo *ptinfo) {
     return FUN_00260d68(ptid, fname, 0, ptinfo);
 }
 
-int FUN_00260de8(int ptid, const char *fname, void *dir, AdxfPtInfo *ptinfo);
-int FUN_002612c0(int ptid);
+int ADXF_LoadPartitionNw(int ptid, const char *fname, void *dir, AdxfPtInfo *ptinfo);
+int ADXF_GetPtStatEx(int ptid);
 
 int FUN_00260d68(int ptid, const char *fname, void *dir, AdxfPtInfo *ptinfo) {
-    int result = FUN_00260de8(ptid, fname, dir, ptinfo);
+    int result = ADXF_LoadPartitionNw(ptid, fname, dir, ptinfo);
     int status;
     if (result < 0) {
         return result;
     }
     for (;;) {
-        status = FUN_002612c0(ptid);
+        status = ADXF_GetPtStatEx(ptid);
         if (status == 3) {
             result = 0;
             break;
@@ -265,7 +265,7 @@ int FUN_00260ed0(int ptid, int afsid, int flid, AdxfPtInfo *ptinfo, void *tmpbuf
 int FUN_00260f08(int ptid, const char *fname, void *dir, AdxfPtInfo *ptinfo, void *tmpbuf, int tbsize);
 int FUN_00260f50(int ptid, int afsid, int flid, AdxfPtInfo *ptinfo, void *tmpbuf, int tbsize);
 
-int FUN_00260de8(int ptid, const char *fname, void *dir, AdxfPtInfo *ptinfo) {
+int ADXF_LoadPartitionNw(int ptid, const char *fname, void *dir, AdxfPtInfo *ptinfo) {
     return FUN_00260e88(ptid, fname, dir, ptinfo, (void *)((int)DAT_0049a800 & ~0x3F), 0x800);
 }
 
@@ -402,7 +402,7 @@ void FUN_00261258(void) {
     }
 }
 
-int FUN_002612c0(int ptid) {
+int ADXF_GetPtStatEx(int ptid) {
     return ADXF_GetPtStat(ptid);
 }
 

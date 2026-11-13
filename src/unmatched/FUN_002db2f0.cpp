@@ -2,7 +2,7 @@ struct ConfigValueToken { int vt; unsigned int _refCount; char *text; int kind; 
 struct ConfigValueResolver { char pad[20]; void *table; void *scope; int mode; };
 extern "C" {
 void *igObject_GetAllocator(void *);
-ConfigValueToken *FUN_002b9500(void *);
+ConfigValueToken *igStringObj_Create(void *);
 void FUN_0030b320(ConfigValueToken *, char *, int);
 int FUN_00306770(void *, void *, char *, ConfigValueToken **, char *, int);
 int FUN_00306360(int, char *, int);
@@ -32,7 +32,7 @@ int FUN_002db2f0(ConfigValueResolver *self, ConfigValueToken *token, int key, in
         }
         return fallback;
     }
-    tmp = FUN_002b9500(igObject_GetAllocator(self));
+    tmp = igStringObj_Create(igObject_GetAllocator(self));
     if (self->table == 0) {
         ConfigValueToken *held = tmp;
         char *s = token->text;

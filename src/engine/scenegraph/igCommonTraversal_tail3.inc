@@ -50,7 +50,7 @@ void FUN_001b6ee0(int arg0, int *arg1) {
     int sp3C;
 
     Matrix44_Copy(arg0 + 0x64);
-    FUN_00191f30(&sp3C, arg0 + 0xA4, arg1);
+    Matrix44_Invert(&sp3C, arg0 + 0xA4, arg1);
 }
 
 void FUN_001b6f30(A_1b6f30 *arg0, R_1b6f30 *arg1, R_1b6f30 *arg2) {
@@ -251,7 +251,7 @@ void FUN_001b7770(igCommonTraversal *self, int name, int value) {
     int pos;
     int al = igObject_GetAllocator(self);
     al = g_useOwnerAllocator ? al : Memory_GetAllocatorBySelector(g_temporaryAllocatorSelector[0]);
-    str = ((igObject *)FUN_002b9500(al));
+    str = ((igObject *)igStringObj_Create(al));
     igStringObj_Set(str, name);
     igStringObj_ToLower(str);
     { int first = self->_segmentOverrideNames; searchKey = str;

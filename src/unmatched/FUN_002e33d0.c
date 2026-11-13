@@ -1,4 +1,4 @@
-void *FUN_002b9500();
+void *igStringObj_Create();
 int FUN_002e3280();
 int FUN_00306770();
 int Memory_GetAllocatorBySelector();
@@ -23,7 +23,7 @@ void FUN_002e33d0(void) {
     temp_s1 = DAT_004c2128[0];
     temp_s0 = *(int *)((char *)(DAT_00586dc8[0]) + 56);
     if (temp_s0 != 0) {
-        sp3C = (R *)FUN_002b9500(Memory_GetAllocatorBySelector(DAT_00587048[0]));
+        sp3C = (R *)igStringObj_Create(Memory_GetAllocatorBySelector(DAT_00587048[0]));
         FUN_00306770(temp_s0, 2, &DAT_004f9a58[0], &sp3C, temp_s1, 0);
         var_a0 = sp3C->f8;
         if (var_a0 == 0) {

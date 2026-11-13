@@ -10,7 +10,7 @@ extern "C" int Gap__Core__igObject__vfunc_23(...);
 extern "C" int igInsightCore_FindManager(int, int);
 extern "C" void *StringPool_Allocate(...);
 extern "C" igIntList *igIntList_Create(int);
-extern "C" int FUN_00191f30(void *, void *, int);
+extern "C" int Matrix44_Invert(void *, void *, int);
 extern "C" int Vec3f_TransformDirection(void *, void *, void *);
 extern "C" void beModelCtrl__OnGenerate(...);
 extern "C" int strcmp(...);
@@ -279,7 +279,7 @@ struct Locals {
         }
     }
     static inline void Project(void *matrix, int view, const Scratch &result) {
-        FUN_00191f30((void *)&result, matrix, view);
+        Matrix44_Invert((void *)&result, matrix, view);
     }
 };
 /* matching construct: the new list is a temporary bound to the setter's reference parameter (it

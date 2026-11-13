@@ -56,8 +56,8 @@ void Gap__Core__igSymbolTable__vfunc_24(int *arg0, struct T_30db60 *arg1, int ar
     *arg0 = g_resultSuccess.v;
 }
 
-igResult_30dbc0 Gap__Core__igSymbolTable__vfunc_25(Table *self, int idx, char *name, int nameSize, int *a, int *b, char *path, int pathSize) {
-    igResult_30dbc0 result = g_resultFailure;
+igResult Gap__Core__igSymbolTable__vfunc_25(Table *self, int idx, char *name, int nameSize, int *a, int *b, char *path, int pathSize) {
+    igResult result = g_resultFailure;
     Entry_30dbc0 *e;
     char *s;
 

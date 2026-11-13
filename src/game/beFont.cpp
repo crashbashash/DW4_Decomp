@@ -138,7 +138,7 @@ int Gap__Bec__beUnicodeObj__vfunc_20(void);
 
 void Gap__Core__igObject__vfunc_23(void);
 int Gap__Core__igObject__vfunc_24(beFont *);
-int Gap__Core__igObject__vfunc_08__002ff0f0(beUnicodeObj *);
+int Gap__Core__igObject__userDestruct(beUnicodeObj *);
 void *igObject_GetAllocator(...);
 void *Memory_GetAllocatorBySelector(...);
 int igObject_IsKindOf(void *, int);
@@ -1132,7 +1132,7 @@ void Gap__Bec__beUnicodeObj__vfunc_08(beUnicodeObj *self) {
     if (self->_buffer != 0) {
         Memory_FreeBufferWithAllocator(self->_buffer, ((int)igObject_GetAllocator()));
     }
-    Gap__Core__igObject__vfunc_08__002ff0f0(self);
+    Gap__Core__igObject__userDestruct(self);
 }
 
 /* Makes the buffer hold `length` UTF-16 characters and a terminator, and clears it. */

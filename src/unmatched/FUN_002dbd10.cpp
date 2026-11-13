@@ -3,7 +3,7 @@
 struct R : public igObject { };
 extern "C" {
 extern int sscanf(int, int *, void *);
-extern R *FUN_002b9500(int);
+extern R *igStringObj_Create(int);
 extern int FUN_002dbfb0(int, int, int, int);
 extern int FUN_002dc050(int, int, int, int);
 extern int FUN_002dc0a0(int, int, float, float);
@@ -37,7 +37,7 @@ extern "C" unsigned char FUN_002dbd10(int arg0, int arg1, int arg2, int arg3, in
     case 3: {
         unsigned char first = 0;
         unsigned char second = 0;
-        igSmartPointer<R> text(FUN_002b9500(igObject_GetAllocator()));
+        igSmartPointer<R> text(igStringObj_Create(igObject_GetAllocator()));
         igStringObj_Set(text.get(), arg2);
         if (FUN_0030b670(text.get(), &first) == 0) return 0;
         igStringObj_Set(text.get(), arg4);

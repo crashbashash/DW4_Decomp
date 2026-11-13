@@ -1448,7 +1448,7 @@ extern "C" int FUN_00155340(FieldTypeTable *table, unsigned int type);
 extern "C" int g_igMetaField_metaObject[4];
 extern "C" int FUN_00155490(void);
 struct Ref_1554a0 : public igObject { char *str; int len; };
-extern "C" Ref_1554a0* FUN_002b9500(...);
+extern "C" Ref_1554a0* igStringObj_Create(...);
 extern "C" int igStringObj_Set(...);
 extern "C" int igStringObj_ToLower(...);
 extern "C" int igStringObj_Erase(...);
@@ -1968,7 +1968,7 @@ extern "C" void Gap__Gfx__igPrimLengthArray1_1__vfunc_20(igPrimLengthArray1_1 *s
 extern "C" void *igVertexArrayLock_Init(void *arg0);
 typedef struct S0_15df80 { char pad24[24]; int f18; } S0_15df80;
 typedef struct S_temp_v0 { char pad4[4]; int f4; } S_temp_v0;
-extern "C" int Gap__Core__igObject__vfunc_11(...);
+extern "C" int Gap__Core__igObject__resetFields(...);
 extern "C" void FUN_0015df80(S0_15df80 *arg0);
 extern "C" int text_VertexArrayData[4];
 extern "C" int DAT_0055faa0[4];
@@ -2624,7 +2624,7 @@ struct igVisualContextCapabilityManager_164f50 {
     igObjectSlotView *helper304;
     igObjectSlotView *helper308;
 };
-extern "C" void Gap__Core__igObject__vfunc_01(void *self);
+extern "C" void Gap__Core__igObject__constructFields(void *self);
 extern "C" igObjectSlotView *FUN_002b79d0(int arg);
 extern "C" igObjectSlotView *g_pool_00560760[4];
 extern "C" igObjectSlotView *g_pool_00560768[4];
@@ -2654,7 +2654,7 @@ struct VisualContextCapabilityManager {
     unsigned char commandLineFrame;
 };
 typedef igTDataList<VisualContextCapabilityManager *> ManagerList;
-extern "C" void Gap__Core__igObject__vfunc_07(VisualContextCapabilityManager *self);
+extern "C" void Gap__Core__igObject__userConstruct(VisualContextCapabilityManager *self);
 extern "C" int thunk_FUN_00306e50(...);
 extern "C" int DAT_00587038;
 extern "C" char text_showFrameRate[];
@@ -2692,7 +2692,7 @@ class V1 { public: virtual void a0(); virtual void a1(); virtual void a2(); virt
 class V2_165d30 { public: virtual void b0(); virtual void b1(); virtual void b2(); virtual void b3(); virtual void b4(); virtual void b5(); virtual void b6(); virtual void b7(); virtual void b8(); virtual void b9(); virtual void b10(); virtual void b11(); virtual void b12(); virtual void b13(); virtual void b14(); virtual void b15(); virtual void b16(); virtual void b17(); virtual void b18(); virtual void b19(); virtual void b20(); virtual void b21(); virtual void b22(); virtual void b23(); virtual void b24(); virtual void b25(); virtual void b26(); virtual void b27(); virtual void b28(); virtual void b29(); virtual void b30(); virtual void b31(); virtual void b32(); virtual void b33(); virtual void b34(); virtual void b35(); virtual void b36(); virtual void b37(); virtual void b38(); virtual void b39(); virtual void b40(); virtual void b41(); virtual void b42(); virtual void b43(); virtual void b44(); virtual void b45(); virtual void b46(); virtual void b47(); virtual void b48(); virtual void b49(); virtual void b50(); virtual void b51(); virtual void b52(); virtual void *v220(unsigned int, int); };
 struct O_165d30 { char p72_[72]; unsigned int f72; int f76; void *f80; int f84; unsigned int f88; };
 extern "C" int FUN_001903d0(...);
-extern "C" int FUN_00191f30(...);
+extern "C" int Matrix44_Invert(...);
 extern "C" int Matrix44_SetTranslation(...);
 extern "C" void FUN_00165d30(O_165d30 *arg0, unsigned int arg1, int arg2);
 extern "C" int FUN_00165e40(void *arg0);

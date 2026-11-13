@@ -29,7 +29,7 @@ int FUN_001ce400(IniStringObject **out, char *path) {
     if (opened != 0) {
         void *stringAllocator = ((void *)Memory_GetAllocatorBySelector(DAT_00587048[0]));
         release_1ce400(result.p);
-        result.p = ((IniStringObject *)FUN_002b9500(stringAllocator));
+        result.p = ((IniStringObject *)igStringObj_Create(stringAllocator));
         igStringObj_Set(result.p, file->handle);
         file->close();
     }

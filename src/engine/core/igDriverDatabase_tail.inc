@@ -73,7 +73,7 @@ static inline char *textOf(const igSmartPointer<ConfigPlatformText> &ref) {
 
 void FUN_002da010(void *self, ConfigPlatformSourceList *list) {
     int i;
-    igSmartPointer<ConfigPlatformText> text(((ConfigPlatformText *)FUN_002b9500((int)(((void *)igObject_GetAllocator((int)self))))));
+    igSmartPointer<ConfigPlatformText> text(((ConfigPlatformText *)igStringObj_Create((int)(((void *)igObject_GetAllocator((int)self))))));
     if (FUN_002dac30((void *)(text.get())) != 0) {
         FUN_002d96f0(self, 0, (int)(textOf(text)));
     }
@@ -355,7 +355,7 @@ bool FUN_002db540(S_2db540 *arg0, int *arg1) {
     FUN_002db480((int *)arg0);
     if (sscanf(arg0->f52, &text_abcdefghijklmnopqrstuvwxyzABCDEF[0], sp40) == 1) {
         arg0->f52 = arg0->f52 + strlen(sp40);
-        *arg1 = ((int)FUN_002b9500(((int)igObject_GetAllocator((int)arg0))));
+        *arg1 = ((int)igStringObj_Create(((int)igObject_GetAllocator((int)arg0))));
         igStringObj_Set(*arg1, (int)sp40);
         var_s0 = 1;
     }
@@ -371,7 +371,7 @@ bool FUN_002db5e0(char *arg0, int *arg1) {
     if (sscanf(*(int *)(arg0 + 52), &DAT_004f9718[0], buf) == 1) {
         *(int *)(arg0 + 52) = *(int *)(arg0 + 52) + strlen(buf);
         FUN_002db4e0((int)arg0, (char *)buf);
-        *arg1 = ((int)FUN_002b9500(((int)igObject_GetAllocator((int)arg0))));
+        *arg1 = ((int)igStringObj_Create(((int)igObject_GetAllocator((int)arg0))));
         igStringObj_Set(*arg1, (int)buf);
         var_s0 = true;
     }
@@ -470,8 +470,8 @@ int FUN_002dc120(int p, unsigned char a, int m, unsigned char b) { switch (m) { 
 
 void *FUN_002dc180(void *arg0) {
     *(int *)((char *)(arg0) + 8) = (int)(&DAT_00530608[0]);
-    *(int *)((char *)(arg0) + 0) = ((int)FUN_002b9500(((int)Memory_GetAllocatorBySelector(g_memoryContextString))));
-    *(int *)((char *)(arg0) + 4) = ((int)FUN_002b9500(((int)Memory_GetAllocatorBySelector(g_memoryContextString))));
+    *(int *)((char *)(arg0) + 0) = ((int)igStringObj_Create(((int)Memory_GetAllocatorBySelector(g_memoryContextString))));
+    *(int *)((char *)(arg0) + 4) = ((int)igStringObj_Create(((int)Memory_GetAllocatorBySelector(g_memoryContextString))));
     return arg0;
 }
 
@@ -507,7 +507,7 @@ void *FUN_002dc2a0(void *arg0) {
         var_v0 = ((int)Memory_GetAllocatorBySelector(g_memoryContextList));
     }
     *(int *)((char *)(arg0) + 8) = ((int)FUN_002c8450(var_v0));
-    *(int *)((char *)(arg0) + 12) = ((int)FUN_002b9500(((int)Memory_GetAllocatorBySelector(g_memoryContextString))));
+    *(int *)((char *)(arg0) + 12) = ((int)igStringObj_Create(((int)Memory_GetAllocatorBySelector(g_memoryContextString))));
     return arg0;
 }
 
@@ -559,7 +559,7 @@ void *FUN_002dc490(void *arg0, int arg1) {
     *(int *)((char *)(arg0) + 8) = arg1;
     *(int *)((char *)(arg0) + 20) = 0;
     *(int *)((char *)(arg0) + 24) = 0;
-    *(int *)((char *)(arg0) + 12) = ((int)FUN_002b9500(((int)Memory_GetAllocatorBySelector(g_memoryContextString))));
+    *(int *)((char *)(arg0) + 12) = ((int)igStringObj_Create(((int)Memory_GetAllocatorBySelector(g_memoryContextString))));
     if (g_useOwnerAllocator != 0) {
         var_v0 = ((int)Memory_GetAllocatorBySelector(g_memoryContextCurrent));
     } else {

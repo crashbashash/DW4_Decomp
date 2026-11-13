@@ -26,7 +26,7 @@ void FUN_00180060(O_180060 *arg0) {
         for (i = 0; i < arg0->f72; i++) {
             off = i << 6;
             s2 = arg0->f80 + off;
-            FUN_00191f30(&sp5C, s2, arg0->f84 + off);
+            Matrix44_Invert(&sp5C, s2, arg0->f84 + off);
             v[0] = 0;
             v[1] = 0;
             v[2] = 0;

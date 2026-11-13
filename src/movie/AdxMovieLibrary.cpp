@@ -14,9 +14,9 @@ extern "C" void *igAdx_Register(void);
 extern "C" void igAdx_GetMetaObject(void);
 extern "C" void FUN_002fe480(...);
 extern "C" void igAdx_InitFields(void);
-extern "C" void FUN_003324c0(void);
+extern "C" void igAdx_CreateScratchString(void);
 extern "C" void FUN_003345d0(void);
-extern "C" void FUN_00332530(void);
+extern "C" void igAdx_Shutdown(void);
 extern "C" void FUN_003345f0(void);
 extern "C" int Memory_GetAllocatorBySelector(int);
 extern "C" igMetaObject *igMetaObject_Create(int);
@@ -66,9 +66,9 @@ extern "C" int FUN_002ea4b0(...);
 extern "C" int FUN_0030ec10(int, int);
 extern "C" int thunk_igFile_GetMetaObject(void);
 extern "C" void igAdxFile_InitFields(void);
-extern "C" void FUN_003337e0(void);
+extern "C" void igAdxFile_StaticInitialize(void);
 extern "C" void FUN_003350b0(void);
-extern "C" void FUN_003337f0(void);
+extern "C" void igAdxFile_StaticFinalize(void);
 extern "C" void FUN_003350d0(void);
 extern "C" void igAdxAudio_Create(int arg0);
 extern "C" igMetaObject *FUN_00335130(void);
@@ -468,12 +468,12 @@ void igAdx_InitFields(void)
 
 void FUN_003345d0(void)
 {
-    FUN_003324c0();
+    igAdx_CreateScratchString();
 }
 
 void FUN_003345f0(void)
 {
-    FUN_00332530();
+    igAdx_Shutdown();
 }
 
 igMetaObject *FUN_00334610(void) {
@@ -829,12 +829,12 @@ void igAdxFile_InitFields(void) {
 
 void FUN_003350b0(void)
 {
-    FUN_003337e0();
+    igAdxFile_StaticInitialize();
 }
 
 void FUN_003350d0(void)
 {
-    FUN_003337f0();
+    igAdxFile_StaticFinalize();
 }
 
 void igAdxAudio_Create(int arg0) {

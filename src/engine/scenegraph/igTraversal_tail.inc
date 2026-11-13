@@ -16,7 +16,7 @@ void Gap__Sg__igTraversal__vfunc_09(A_1e0380 *arg0, int arg1) {
     T_1e0380 *temp_a0;
     T_1e0380 *temp_s0;
 
-    Gap__Core__igObject__vfunc_07();
+    Gap__Core__igObject__userConstruct();
     if (arg1 == 0) {
         temp_s0 = DAT_00562a38[0];
         if (temp_s0 != 0) {

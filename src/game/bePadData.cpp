@@ -9,8 +9,8 @@ float atan2f(float, float);
 void *beNodeAnim_ResolveMetaObject(void);
 void *beLoadingNode_ResolveMetaObject(void);
 int igTraversal_RegisterFunction(int functionList, void *meta, TraversalFunction function);
-void Gap__Core__igObject__vfunc_07(void *self);
-void Gap__Core__igObject__vfunc_08__002ff0f0(void);
+void Gap__Core__igObject__userConstruct(void *self);
+void Gap__Core__igObject__userDestruct(void);
 extern int DAT_00562640[4];
 extern int g_bePadData_metaObject[4];
 
@@ -108,7 +108,7 @@ extern "C" void beLoadingNode_RegisterTraversalFunction(void)
 
 extern "C" void Gap__Bec__bePadData__vfunc_07(bePadData *pad)
 {
-    Gap__Core__igObject__vfunc_07(pad);
+    Gap__Core__igObject__userConstruct(pad);
     /* the dead zone is the length of the vector (0.4, 0) */
     pad->_enaLen = 0.4f;
     float x = pad->_enaLen;
@@ -125,7 +125,7 @@ extern "C" void Gap__Bec__bePadData__vfunc_07(bePadData *pad)
 
 extern "C" void Gap__Bec__bePadData__vfunc_08(void)
 {
-    Gap__Core__igObject__vfunc_08__002ff0f0();
+    Gap__Core__igObject__userDestruct();
 }
 
 /* Button edges and auto-repeat: the first repeat after _1sttime frames, then every _2ndtime. */

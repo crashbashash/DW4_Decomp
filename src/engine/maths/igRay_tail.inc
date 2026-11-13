@@ -15,7 +15,7 @@ void FUN_0018d280(void *arg0, void *arg1) {
     *(float *)((char *)(arg1) + 8) = (float) (temp_f1 * *(float *)((char *)(arg0) + 16));
 }
 
-void FUN_0018d2b0(S3 *s, V33 *a, V33 *b) {
+void igRay_SetFromPoints(S3 *s, V33 *a, V33 *b) {
     float len, inv;
     s->p.x = a->x;
     s->p.y = a->y;
@@ -33,7 +33,7 @@ void FUN_0018d2b0(S3 *s, V33 *a, V33 *b) {
     }
 }
 
-void FUN_0018d360(igRay *ray, const void *matrix) {
+void igRay_Transform(igRay *ray, const void *matrix) {
     igVec3f2 end;
     float len;
     float scale;

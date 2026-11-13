@@ -50,7 +50,7 @@ void Gap__Gui__igDefaultAspect__vfunc_26(A_453f70 *arg0) {
 
     var_s0 = arg0->f40->count - 1;
     while (var_s0 >= 0) {
-        FUN_001c5eb0(&sp4C, arg0->f12, var_s0);
+        igGroup_RemoveChildAt(&sp4C, arg0->f12, var_s0);
         if (sp4C != 0) {
             sp4C->refs = sp4C->refs - 1;
             if (((unsigned long long)((long long)sp4C->refs << 0x29) >> 0x29) == 0) {
@@ -124,7 +124,7 @@ void igEventDispatcher_AddReceiver(void *arg0, int arg1) {
     igRendererOrderedList_Append(*(int *)((char *)(arg0) + 12), arg1, 0);
 }
 
-void FUN_004542a0(Obj_4542a0 *arg0, int arg1) {
+void igEventDispatcher_RemoveReceiver(Obj_4542a0 *arg0, int arg1) {
     int sp1C;
     FUN_002d7750(&sp1C, arg0->f12, arg1);
 }

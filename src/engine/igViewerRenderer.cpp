@@ -39,22 +39,22 @@ void Gap__Viewer__igViewerRenderer__vfunc_25(Q *arg0);
 
 class V2 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void *v104(void *); virtual void d25(); virtual void v112(int); };
 struct Q2 { char pad8[8]; V2 *f8; char pad12[60]; V2 *f72; char pad76[4]; V2 *f80; char pad84[4]; Rc *f88; };
-void FUN_004601e0(igViewerRenderer *arg0);
+void igViewerRenderer_UpdateProjection(igViewerRenderer *arg0);
 struct CameraLink;
-void FUN_00460260(CameraLink *arg0);
+void igViewerRenderer_UpdateViewMatrix(CameraLink *arg0);
 struct FogOwner;
-void FUN_004602c0(struct FogOwner *arg0);
+void igViewerRenderer_UpdateSorting(struct FogOwner *arg0);
 struct LightOwner;
-void FUN_00460330(LightOwner *arg0);
-void FUN_004608a0(igViewerRenderer *arg0);
+void igViewerRenderer_UpdateScene(LightOwner *arg0);
+void igViewerRenderer_UpdateLighting(igViewerRenderer *arg0);
 struct OptionPanelView;
-void FUN_00460ac0(OptionPanelView *arg0);
+void igViewerRenderer_UpdateRenderStates(OptionPanelView *arg0);
 extern int text_igDisableExt[4];
 void Gap__Viewer__igViewerRenderer__vfunc_23(Q2 *arg0);
 
 int __dl__FPv(...);
 void *__nw__FUi(...);
-void *FUN_00238110(...);
+void *ViewerOptions_Construct(...);
 int igModel_NotifyViews(...);
 int StringChunk_ReleaseHeader(...);
 
@@ -192,7 +192,7 @@ struct RemovedRef {
         release(p);
     }
 };
-extern "C" RemovedRef FUN_001c5eb0(Hold *, int);
+extern "C" RemovedRef igGroup_RemoveChildAt(Hold *, int);
 struct ItemType {};
 static inline Obj *createItem(ItemType) { return FUN_001361b0(0); }
 
@@ -355,12 +355,12 @@ void Gap__Viewer__igViewerRenderer__vfunc_23(Q2 *arg0) {
     arg0->f88 = temp_v0;
     arg0->f72->v112((int)arg0->f8);
     arg0->f80->v112((int)arg0->f8);
-    FUN_004601e0((igViewerRenderer *)arg0);
-    FUN_00460260((CameraLink *)arg0);
-    FUN_004602c0((FogOwner *)arg0);
-    FUN_004608a0((igViewerRenderer *)arg0);
-    FUN_00460ac0((OptionPanelView *)arg0);
-    FUN_00460330((LightOwner *)arg0);
+    igViewerRenderer_UpdateProjection((igViewerRenderer *)arg0);
+    igViewerRenderer_UpdateViewMatrix((CameraLink *)arg0);
+    igViewerRenderer_UpdateSorting((FogOwner *)arg0);
+    igViewerRenderer_UpdateLighting((igViewerRenderer *)arg0);
+    igViewerRenderer_UpdateRenderStates((OptionPanelView *)arg0);
+    igViewerRenderer_UpdateScene((LightOwner *)arg0);
 }
 
 /* The matrix setter of the visual context; IG_GFX_MATRIX_PROJECTION is the type the projection
@@ -406,7 +406,7 @@ void Gap__Viewer__igViewerRenderer__Render(igViewerRenderer *self) {
     }
 }
 
-void FUN_0045f930(Arg *arg0) {
+void igViewerRenderer_ApplyOptions(Arg *arg0) {
     int sp0[3];
     int sp1[3];
     int sp2[3];
@@ -433,7 +433,7 @@ void FUN_0045f930(Arg *arg0) {
     int rc;
     if (DAT_0056dc50[0] == 0) {
         f = (Frame *)__nw__FUi(240);
-        if (f != 0) f = (Frame *)FUN_00238110(f);
+        if (f != 0) f = (Frame *)ViewerOptions_Construct(f);
         DAT_0056dc50[0] = f;
     }
     DAT_0056dc50[0]->f232 = DAT_0056dc50[0]->f232 + 1;
@@ -568,7 +568,7 @@ void Gap__Viewer__igViewerRenderer__vfunc_13(P *arg0) {
     ((A2 *)first.p)->vX(&sp40);
     if (DAT_0056dc50[0] == 0) {
         Frame *f = (Frame *)__nw__FUi(240);
-        if (f != 0) f = (Frame *)FUN_00238110(f);
+        if (f != 0) f = (Frame *)ViewerOptions_Construct(f);
         DAT_0056dc50[0] = f;
     }
     DAT_0056dc50[0]->f232 = DAT_0056dc50[0]->f232 + 1;
@@ -668,7 +668,7 @@ void FUN_004601c0(void *arg0) {
     FUN_001b0000(*(int *)((char *)(temp_v0) + 52), g_igViewportAttr_metaObject[0], *(int *)((char *)(temp_v0) + 36), *(int *)((char *)(temp_v0) + 32));
 }
 
-void FUN_004601e0(igViewerRenderer *arg0) {
+void igViewerRenderer_UpdateProjection(igViewerRenderer *arg0) {
     int sp[3];
     igViewerParameters *temp_v1;
     temp_v1 = (igViewerParameters *)arg0->_parameters;
@@ -680,7 +680,7 @@ void FUN_004601e0(igViewerRenderer *arg0) {
     igModel_NotifyViews((void *)arg0->_parameters, sp);
 }
 
-void FUN_00460260(CameraLink *arg0) {
+void igViewerRenderer_UpdateViewMatrix(CameraLink *arg0) {
     int m[16];
 
     Matrix44_Copy(m, arg0->f12 + 0x6C);
@@ -689,7 +689,7 @@ void FUN_00460260(CameraLink *arg0) {
     arg0->f52->vX(arg0->f80 + 0xA4);
 }
 
-void FUN_004602c0(struct FogOwner *arg0) {
+void igViewerRenderer_UpdateSorting(struct FogOwner *arg0) {
     int var_a3;
     struct FogAttr *temp_a2;
     struct FogConfig *temp_a1;
@@ -711,7 +711,7 @@ void FUN_004602c0(struct FogOwner *arg0) {
     temp_a2->f76 = arg0->f12->f188;
 }
 
-extern "C" void FUN_00460330(LightOwner *arg0) {
+extern "C" void igViewerRenderer_UpdateScene(LightOwner *arg0) {
     int s5;
     int n3;
     Obj *s3;
@@ -726,7 +726,7 @@ extern "C" void FUN_00460330(LightOwner *arg0) {
         var_v1 = 0;
     }
     if (var_v1 > 0) {
-        FUN_001c5eb0(a1, 0);
+        igGroup_RemoveChildAt(a1, 0);
     }
     CLEAR(arg0->f64)
     CLEAR(arg0->f60)
@@ -787,7 +787,7 @@ void FUN_00460790(igViewerRenderer *arg0, igGroup *arg1) {
     }
 }
 
-void FUN_004608a0(igViewerRenderer *arg0) {
+void igViewerRenderer_UpdateLighting(igViewerRenderer *arg0) {
     bool a1 = true;
     bool a0 = true;
     igViewerParameters *x = (igViewerParameters *)arg0->_parameters;
@@ -800,7 +800,7 @@ void FUN_004608a0(igViewerRenderer *arg0) {
         if (((igViewerParameters *)arg0->_parameters)->_useHeadLightSpecular != 0) {
             if (DAT_0056dc50[0] == 0) {
                 Frame *f = (Frame *)__nw__FUi(240);
-                if (f != 0) f = (Frame *)FUN_00238110(f);
+                if (f != 0) f = (Frame *)ViewerOptions_Construct(f);
                 DAT_0056dc50[0] = f;
             }
             DAT_0056dc50[0]->f232 = DAT_0056dc50[0]->f232 + 1;
@@ -847,7 +847,7 @@ void FUN_004608a0(igViewerRenderer *arg0) {
     FUN_00460f20(arg0, (int)(V3 *)arg0->_lightingAttr, ((bool)arg0->_lightingState) ^ 1);
 }
 
-void FUN_00460ac0(OptionPanelView *arg0) {
+void igViewerRenderer_UpdateRenderStates(OptionPanelView *arg0) {
     arg0->f20->vX(arg0->f12->b195);
     FUN_00460e00((int *)arg0, arg0->f20);
     FUN_00460f20(arg0, (int)arg0->f20, arg0->f12->b196);

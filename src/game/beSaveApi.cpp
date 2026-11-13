@@ -94,7 +94,7 @@ extern "C" int sceMcSeek(int, int, int);
 extern "C" int sceMcWrite(int, int, int);
 extern "C" int sceMcFlush(int);
 extern "C" int sceMcInit(...);
-extern "C" int FUN_0032cf50(int *, const char *, int, int, int);
+extern "C" int igPsx2_LoadIopModule(int *, const char *, int, int, int);
 extern "C" int sceMtapGetConnection(int);
 extern "C" int sceMtapPortOpen(int);
 extern "C" int sceMtapPortClose(int);
@@ -106,10 +106,10 @@ extern "C" void Gap__Bec__beSvConnectCheck__vfunc_21(void);
 extern "C" int Gap__Bec__beSvConnectCheck__vfunc_22(void);
 extern "C" void Gap__Bec__beSvConnectCheck__vfunc_23(void);
 extern "C" int Gap__Bec__beSvConnectCheck__vfunc_20(void);
-extern "C" int Gap__Core__igObject__vfunc_07(...);
+extern "C" int Gap__Core__igObject__userConstruct(...);
 extern "C" void Gap__Bec__beSvConnectCheck__vfunc_07(igObjectVirtuals *self);
 extern "C" int Gap__Bec__beSaveApi__vfunc_20(void);
-extern "C" void Gap__Core__igObject__vfunc_08__002ff0f0(...);
+extern "C" void Gap__Core__igObject__userDestruct(...);
 extern "C" void Gap__Bec__beSvConnectCheck__vfunc_08(void);
 extern "C" int Gap__Bec__beSvEndApi__vfunc_20(void);
 extern "C" void Gap__Bec__beSvEndApi__vfunc_07(igObjectVirtuals *self);
@@ -302,7 +302,7 @@ void beSaveMemoryObj_Free(beSaveMemoryObj *self) {
 void Gap__Bec__beSaveMemoryObj__vfunc_08(beSaveMemoryObj *self) {
     beSaveMemoryObj_Free(self);
     igMetaObject_CountInstances(((igObjectVirtuals *)self)->getMetaObject(), 1);
-    Gap__Core__igObject__vfunc_08__002ff0f0(self);
+    Gap__Core__igObject__userDestruct(self);
 }
 
 int Gap__Bec__beSaveMemoryObj__vfunc_20(void)
@@ -985,8 +985,8 @@ void Gap__Bec__beSvStartApi__vfunc_21(beSvApiWork *self, beSvDeliver *deliver) {
 
     self->_isEnd = 0;
     if (g_svMcModulesLoaded == 0) {
-        FUN_0032cf50(&mcmanId, mcman_irx, 1, 0, 0);
-        FUN_0032cf50(&mcservId, mcserv_irx, 1, 0, 0);
+        igPsx2_LoadIopModule(&mcmanId, mcman_irx, 1, 0, 0);
+        igPsx2_LoadIopModule(&mcservId, mcserv_irx, 1, 0, 0);
         sceMcInit();
         g_svMcModulesLoaded = 1;
     }
@@ -1256,7 +1256,7 @@ int Gap__Bec__beSvConnectCheck__vfunc_20(void)
 }
 
 void Gap__Bec__beSvConnectCheck__vfunc_07(igObjectVirtuals *self) {
-    Gap__Core__igObject__vfunc_07();
+    Gap__Core__igObject__userConstruct();
     igMetaObject_CountInstances(self->getMetaObject(), 1);
     igMetaObject_CountInstances(self->getMetaObject(), 1);
 }
@@ -1268,7 +1268,7 @@ int Gap__Bec__beSaveApi__vfunc_20(void)
 
 void Gap__Bec__beSvConnectCheck__vfunc_08(void)
 {
-    Gap__Core__igObject__vfunc_08__002ff0f0();
+    Gap__Core__igObject__userDestruct();
 }
 
 int Gap__Bec__beSvEndApi__vfunc_20(void)
@@ -1277,14 +1277,14 @@ int Gap__Bec__beSvEndApi__vfunc_20(void)
 }
 
 void Gap__Bec__beSvEndApi__vfunc_07(igObjectVirtuals *self) {
-    Gap__Core__igObject__vfunc_07();
+    Gap__Core__igObject__userConstruct();
     igMetaObject_CountInstances(self->getMetaObject(), 1);
     igMetaObject_CountInstances(self->getMetaObject(), 1);
 }
 
 void Gap__Bec__beSvEndApi__vfunc_08(void)
 {
-    Gap__Core__igObject__vfunc_08__002ff0f0();
+    Gap__Core__igObject__userDestruct();
 }
 
 int Gap__Bec__beSvStartApi__vfunc_20(void)
@@ -1293,14 +1293,14 @@ int Gap__Bec__beSvStartApi__vfunc_20(void)
 }
 
 void Gap__Bec__beSvStartApi__vfunc_07(igObjectVirtuals *self) {
-    Gap__Core__igObject__vfunc_07();
+    Gap__Core__igObject__userConstruct();
     igMetaObject_CountInstances(self->getMetaObject(), 1);
     igMetaObject_CountInstances(self->getMetaObject(), 1);
 }
 
 void Gap__Bec__beSvStartApi__vfunc_08(void)
 {
-    Gap__Core__igObject__vfunc_08__002ff0f0();
+    Gap__Core__igObject__userDestruct();
 }
 
 int Gap__Bec__beSvGetFreeSizeApi__vfunc_20(void)
@@ -1309,14 +1309,14 @@ int Gap__Bec__beSvGetFreeSizeApi__vfunc_20(void)
 }
 
 void Gap__Bec__beSvGetFreeSizeApi__vfunc_07(igObjectVirtuals *self) {
-    Gap__Core__igObject__vfunc_07();
+    Gap__Core__igObject__userConstruct();
     igMetaObject_CountInstances(self->getMetaObject(), 1);
     igMetaObject_CountInstances(self->getMetaObject(), 1);
 }
 
 void Gap__Bec__beSvGetFreeSizeApi__vfunc_08(void)
 {
-    Gap__Core__igObject__vfunc_08__002ff0f0();
+    Gap__Core__igObject__userDestruct();
 }
 
 int Gap__Bec__beSvWriteMediaApi__vfunc_20(void)
@@ -1325,7 +1325,7 @@ int Gap__Bec__beSvWriteMediaApi__vfunc_20(void)
 }
 
 void Gap__Bec__beSvWriteMediaApi__vfunc_07(igObjectVirtuals *self) {
-    Gap__Core__igObject__vfunc_07();
+    Gap__Core__igObject__userConstruct();
     igMetaObject_CountInstances(self->getMetaObject(), 1);
     igMetaObject_CountInstances(self->getMetaObject(), 1);
 }
@@ -1338,7 +1338,7 @@ void Gap__Bec__beSvWriteMediaApi__vfunc_08(beSvWriteMediaApi *self) {
         IG_OBJECT_RELEASE(saveWork);
         self->_saveWork = 0;
     }
-    Gap__Core__igObject__vfunc_08__002ff0f0(self);
+    Gap__Core__igObject__userDestruct(self);
 }
 
 int Gap__Bec__beSvReadMediaApi__vfunc_20(void)
@@ -1347,7 +1347,7 @@ int Gap__Bec__beSvReadMediaApi__vfunc_20(void)
 }
 
 void Gap__Bec__beSvReadMediaApi__vfunc_07(igObjectVirtuals *self) {
-    Gap__Core__igObject__vfunc_07();
+    Gap__Core__igObject__userConstruct();
     igMetaObject_CountInstances(self->getMetaObject(), 1);
     igMetaObject_CountInstances(self->getMetaObject(), 1);
 }
@@ -1373,7 +1373,7 @@ void Gap__Bec__beSvReadMediaApi__vfunc_08(beSvReadMediaApi *self) {
         }
         l->_count = 0;
     }
-    Gap__Core__igObject__vfunc_08__002ff0f0(self);
+    Gap__Core__igObject__userDestruct(self);
 }
 
 int Gap__Bec__beSvUseCheckApi__vfunc_20(void)
@@ -1383,11 +1383,11 @@ int Gap__Bec__beSvUseCheckApi__vfunc_20(void)
 
 void Gap__Bec__beSvUseCheckApi__vfunc_08(void)
 {
-    Gap__Core__igObject__vfunc_08__002ff0f0();
+    Gap__Core__igObject__userDestruct();
 }
 
 void Gap__Bec__beSaveApi__vfunc_07(igObjectVirtuals *self) {
-    Gap__Core__igObject__vfunc_07();
+    Gap__Core__igObject__userConstruct();
     igMetaObject_CountInstances(self->getMetaObject(), 1);
 }
 
@@ -1398,7 +1398,7 @@ int Gap__Bec__beSvFormatApi__vfunc_20(void)
 
 void Gap__Bec__beSvFormatApi__vfunc_08(void)
 {
-    Gap__Core__igObject__vfunc_08__002ff0f0();
+    Gap__Core__igObject__userDestruct();
 }
 
 int Gap__Bec__beSvFileFindApi__vfunc_20(void)
@@ -1408,7 +1408,7 @@ int Gap__Bec__beSvFileFindApi__vfunc_20(void)
 
 void Gap__Bec__beSvFileFindApi__vfunc_08(void)
 {
-    Gap__Core__igObject__vfunc_08__002ff0f0();
+    Gap__Core__igObject__userDestruct();
 }
 
 int Gap__Bec__beSvFileMakeApi__vfunc_20(void)
@@ -1417,7 +1417,7 @@ int Gap__Bec__beSvFileMakeApi__vfunc_20(void)
 }
 
 void Gap__Bec__beSvFileMakeApi__vfunc_07(igObjectVirtuals *self) {
-    Gap__Core__igObject__vfunc_07();
+    Gap__Core__igObject__userConstruct();
     igMetaObject_CountInstances(self->getMetaObject(), 1);
     igMetaObject_CountInstances(self->getMetaObject(), 1);
 }
@@ -1430,15 +1430,15 @@ void Gap__Bec__beSvFileMakeApi__vfunc_08(beSvFileMakeApi *self) {
         IG_OBJECT_RELEASE(saveWork);
         self->_saveWork = 0;
     }
-    Gap__Core__igObject__vfunc_08__002ff0f0(self);
+    Gap__Core__igObject__userDestruct(self);
 }
 
 void Gap__Bec__beSaveApi__vfunc_08(void)
 {
-    Gap__Core__igObject__vfunc_08__002ff0f0();
+    Gap__Core__igObject__userDestruct();
 }
 
 void Gap__Bec__beSaveMemoryObj__vfunc_07(igObjectVirtuals *self) {
-    Gap__Core__igObject__vfunc_07();
+    Gap__Core__igObject__userConstruct();
     igMetaObject_CountInstances(self->getMetaObject(), 1);
 }

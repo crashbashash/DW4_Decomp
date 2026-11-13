@@ -40,17 +40,22 @@ typedef struct igObjectRef {
     igObject *object;
 } igObjectRef;
 
-/* The codec's own slots that it calls on itself. */
+/* The codec's virtual functions from slot 20 on, for the slots it calls on itself; slots 0-19 are igObject's. */
 class igCriMovieCodecView {
 public:
     virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7();
     virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15();
-    virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23();
-    virtual void d24();
-    virtual int resume(igMovieInfo *movie);              /* slot 25 */
-    virtual int pause(igMovieInfo *movie, int state);    /* slot 26 */
-    virtual void d27(); virtual void d28(); virtual void d29();
-    virtual int syncPauseState(igMovieInfo *movie);      /* slot 30 */
+    virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19();
+    virtual int getMeta();
+    virtual int isReusable();
+    virtual void d22(); virtual void d23();
+    virtual int close(igMovieInfo *movie);
+    virtual int resume(igMovieInfo *movie);
+    virtual int pause(igMovieInfo *movie, int state);
+    virtual int update(igMovieInfo *movie);
+    virtual int initializeDrawing(igMovieInfo *movie, igObject **visualContext);
+    virtual int releaseDrawing();
+    virtual int syncPauseState(igMovieInfo *movie);
 };
 
 extern "C" {
@@ -69,30 +74,30 @@ void *CriMovie_Allocate(igCriMovieCodec *codec, unsigned int size);
 void *CriMovie_AllocateAligned(igCriMovieCodec *codec, unsigned int size, unsigned char alignment);
 void CriMovie_Free(igCriMovieCodec *codec, void *block);
 
-int Gap__igCriMovieCodec__vfunc_28(igCriMovieCodec *self, igMovieInfo *movie, igObject **visualContext);
-int Gap__igCriMovieCodec__vfunc_29(igCriMovieCodec *self);
-void Gap__igCriMovieData__vfunc_11(igCriMovieData *self);
-void Gap__igCriMovieCodec__vfunc_01(igCriMovieCodec *self);
-void Gap__igCriMovieCodec__vfunc_02(void);
-int Gap__igCriMovieCodec__vfunc_21(void);
-int Gap__igCriMovieCodec__vfunc_24(igCriMovieCodec *self, igMovieInfo *movie);
-int Gap__igCriMovieCodec__vfunc_25(igCriMovieCodec *self, igMovieInfo *movie);
-int Gap__igCriMovieCodec__vfunc_26(igCriMovieCodec *self, igMovieInfo *movie, int state);
-int Gap__igCriMovieCodec__vfunc_30(igCriMovieCodecView *self, igMovieInfo *movie);
+int igCriMovieCodec_InitializeDrawing(igCriMovieCodec *self, igMovieInfo *movie, igObject **visualContext);
+int igCriMovieCodec_ReleaseDrawing(igCriMovieCodec *self);
+void Gap__igCriMovieData__resetFields(igCriMovieData *self);
+void Gap__igCriMovieCodec__constructFields(igCriMovieCodec *self);
+void Gap__igCriMovieCodec__destructFields(void);
+int igCriMovieCodec_IsReusable(void);
+int igCriMovieCodec_Close(igCriMovieCodec *self, igMovieInfo *movie);
+int igCriMovieCodec_Play(igCriMovieCodec *self, igMovieInfo *movie);
+int igCriMovieCodec_Pause(igCriMovieCodec *self, igMovieInfo *movie, int state);
+int igCriMovieCodec_SyncPauseState(igCriMovieCodecView *self, igMovieInfo *movie);
 int igCriMovieCodec_Update(igCriMovieCodecView *self, igMovieInfo *movie);
-int Gap__igCriMovieCodec__vfunc_20(void);
-int Gap__igCriMovieData__vfunc_20(void);
+int igCriMovieCodec_GetMeta(void);
+int igCriMovieData_GetMeta(void);
 
-void Gap__Core__igObject__vfunc_01(void);
-void Gap__Core__igObject__vfunc_02(void);
-void Gap__Core__igObject__vfunc_11(void);
+void Gap__Core__igObject__constructFields(void);
+void Gap__Core__igObject__destructFields(void);
+void Gap__Core__igObject__resetFields(void);
 int igObject_IsKindOf(void *object, int metaObject);
 igMemoryPoolView *igObject_GetAllocator(void *object);
 igMemoryPoolView *Memory_GetAllocatorBySelector(int selector);
 void *Memory_AllocateAlignedWithAllocator(unsigned int size, unsigned int alignment, igMemoryPoolView *pool);
 int Memory_FreeBufferWithAllocator(void *block, igMemoryPoolView *pool);
 void __dl__FPv(void *storage);
-int FUN_00308320(const char *format, ...);
+int igReportError(const char *format, ...);
 void igPsx2VisualContext_CallDmaChain(igObject *self, void *packet, int size, int flush);
 int igPsx2VisualContext_IsDisplayingFirstBuffer(igObject *self);
 void MWSFD_SetMallocFunc(void *(*allocate)(igCriMovieCodec *, unsigned int),
@@ -251,7 +256,7 @@ int CriMovie_BuildFrameUpload(void *packet, void *image, int x, int y, int width
 
 /* Allocates the upload packet for the movie's frame size (six quadwords per 16x16 tile plus the
  * chain's head and tail) and takes a reference to the visual context it is sent through. */
-int Gap__igCriMovieCodec__vfunc_28(igCriMovieCodec *self, igMovieInfo *movie, igObject **visualContext) {
+int igCriMovieCodec_InitializeDrawing(igCriMovieCodec *self, igMovieInfo *movie, igObject **visualContext) {
     igMemoryPoolView *pool;
     unsigned int columns;
     unsigned int rows;
@@ -273,7 +278,7 @@ int Gap__igCriMovieCodec__vfunc_28(igCriMovieCodec *self, igMovieInfo *movie, ig
     return 1;
 }
 
-int Gap__igCriMovieCodec__vfunc_29(igCriMovieCodec *self) {
+int igCriMovieCodec_ReleaseDrawing(igCriMovieCodec *self) {
     igMemoryPoolView *pool;
 
     pool = igObject_GetAllocator(self);
@@ -294,7 +299,7 @@ int CriMovie_SubmitFrame(igMovieInfo *movie, void *image) {
     width = movie->_width;
     height = movie->_height;
     if (g_criMovieUploadPacket == 0 && g_criMovieDmaWarningMuted == 0) {
-        answer = FUN_00308320(You_probably_didn_t_open_the_DMA);
+        answer = igReportError(You_probably_didn_t_open_the_DMA);
         /* 1 has no action in this build; only 2 mutes the warning, and the empty arm keeps its compare. */
         if (answer == 1) {
         } else if (answer == 2) {
@@ -306,25 +311,25 @@ int CriMovie_SubmitFrame(igMovieInfo *movie, void *image) {
     return 1;
 }
 
-void Gap__igCriMovieData__vfunc_11(igCriMovieData *self) {
-    Gap__Core__igObject__vfunc_11();
+void Gap__igCriMovieData__resetFields(igCriMovieData *self) {
+    Gap__Core__igObject__resetFields();
     self->_mwply = 0;
     self->_adxt = 0;
     self->_macroFunction = 0;
 }
 
 /* Routes MWSFD's allocations through the codec's memory pool. */
-void Gap__igCriMovieCodec__vfunc_01(igCriMovieCodec *self) {
-    Gap__Core__igObject__vfunc_01();
+void Gap__igCriMovieCodec__constructFields(igCriMovieCodec *self) {
+    Gap__Core__igObject__constructFields();
     MWSFD_SetMallocFunc(&CriMovie_Allocate, &CriMovie_Free, self);
 }
 
-void Gap__igCriMovieCodec__vfunc_02(void)
+void Gap__igCriMovieCodec__destructFields(void)
 {
-    Gap__Core__igObject__vfunc_02();
+    Gap__Core__igObject__destructFields();
 }
 
-int Gap__igCriMovieCodec__vfunc_21(void)
+int igCriMovieCodec_IsReusable(void)
 {
     return 1;
 }
@@ -343,7 +348,7 @@ igObjectRef *CriMovie_DestroyObjectRef(igObjectRef *ref, int deleteStorage) {
 }
 
 /* Stops the movie and destroys its ADXT and MWPLY handles, returning their work areas. */
-int Gap__igCriMovieCodec__vfunc_24(igCriMovieCodec *self, igMovieInfo *movie) {
+int igCriMovieCodec_Close(igCriMovieCodec *self, igMovieInfo *movie) {
     igCriMovieData *data;
 
     data = AsCriMovieData((void *)movie->_userdata);
@@ -364,7 +369,7 @@ int Gap__igCriMovieCodec__vfunc_24(igCriMovieCodec *self, igMovieInfo *movie) {
     return 0;
 }
 
-int Gap__igCriMovieCodec__vfunc_25(igCriMovieCodec *self, igMovieInfo *movie) {
+int igCriMovieCodec_Play(igCriMovieCodec *self, igMovieInfo *movie) {
     igCriMovieData *data;
 
     data = AsCriMovieData((void *)movie->_userdata);
@@ -382,7 +387,7 @@ int Gap__igCriMovieCodec__vfunc_25(igCriMovieCodec *self, igMovieInfo *movie) {
     return 0;
 }
 
-int Gap__igCriMovieCodec__vfunc_26(igCriMovieCodec *self, igMovieInfo *movie, int state) {
+int igCriMovieCodec_Pause(igCriMovieCodec *self, igMovieInfo *movie, int state) {
     igCriMovieData *data;
 
     data = AsCriMovieData((void *)movie->_userdata);
@@ -401,7 +406,7 @@ int Gap__igCriMovieCodec__vfunc_26(igCriMovieCodec *self, igMovieInfo *movie, in
 }
 
 /* Brings the player's pause state in line with the movie's requested state. */
-int Gap__igCriMovieCodec__vfunc_30(igCriMovieCodecView *self, igMovieInfo *movie) {
+int igCriMovieCodec_SyncPauseState(igCriMovieCodecView *self, igMovieInfo *movie) {
     igCriMovieData *data = AsCriMovieData((void *)movie->_userdata);
     if (data != 0) {
         bool paused;
@@ -479,12 +484,12 @@ void CriMovie_Free(igCriMovieCodec *codec, void *block) {
     pool->Free(block);
 }
 
-int Gap__igCriMovieCodec__vfunc_20(void)
+int igCriMovieCodec_GetMeta(void)
 {
     return g_igCriMovieCodec_metaObject[0];
 }
 
-int Gap__igCriMovieData__vfunc_20(void)
+int igCriMovieData_GetMeta(void)
 {
     return g_igCriMovieData_metaObject[0];
 }

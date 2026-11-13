@@ -69,7 +69,7 @@ void FUN_00237280(int *arg0) {
 }
 
 void Gap__Insight__igInsightCore__vfunc_13(struct A_237300 *arg0) {
-    Gap__Core__igObject__vfunc_11();
+    Gap__Core__igObject__resetFields();
     StringRef_237300 first(&text_Clear_done[0]);
     StringRef_237300 second(&text_Scenes_done[0]);
     StringRef_237300 third(&text_Overlays_done[0]);

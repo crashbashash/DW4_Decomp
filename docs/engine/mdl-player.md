@@ -90,7 +90,7 @@ it closes the panel (`NDMWPANEL REMOVE`).
 
 - The slot names are best guesses from the message each slot answers; slot 39's caller is not
   traced.
-- `igInsightCore_FindManager`, `StringPool_Allocate`, `igIntList_Create` (`igIntList` creation), `FUN_00191f30`,
+- `igInsightCore_FindManager`, `StringPool_Allocate`, `igIntList_Create` (`igIntList` creation),
   `Vec3f_TransformDirection` (matrix product and vector transform) and the zero vector `DAT_004e1098` keep their
   address names: each is used across many files. The base `beModelCtrl__OnGenerate` places the
   model from the message's start position.

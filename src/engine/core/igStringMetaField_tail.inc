@@ -416,7 +416,7 @@ void igStringObj_ToLower(void *arg0) {
     }
 }
 
-int FUN_0030b5f0(void *arg0, int arg1) {
+int igStringObj_ToInt(void *arg0, int arg1) {
     int var_a0;
 
     var_a0 = *(int *)((char *)(arg0) + 8);
@@ -608,7 +608,7 @@ int igStringObj_Erase(Str_30bbf0 *self, unsigned int pos, unsigned int len) {
     if (pos > self->length - 1 || (end = pos + len) > self->length) {
         return 0;
     }
-    *(Str_30bbf0 **)&tmp = (Str_30bbf0 *)(FUN_002b9500(((int)igObject_GetAllocator((int)self))));
+    *(Str_30bbf0 **)&tmp = (Str_30bbf0 *)(igStringObj_Create(((int)igObject_GetAllocator((int)self))));
     igStringObj_Set((int)tmp, (int)(self->text_30bbf0 + end));
     igStringObj_Insert((IniStringView *)tmp, self->text_30bbf0, 0, pos);
     igStringObj_Set((int)self, (int)(text_30bbf0(tmp)));

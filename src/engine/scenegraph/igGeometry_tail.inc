@@ -79,7 +79,7 @@ int FUN_001ceab0(HitTraversal *self, HitNode *node) {
             int n = stack->count;
             matrix = &stack->data[n - 1];
             if (n > 1) {
-                FUN_00191f30(&determinant, &inverse, matrix);
+                Matrix44_Invert(&determinant, &inverse, matrix);
             }
             attrs = node->attrs;
             attrCount = attrs->count;
@@ -91,7 +91,7 @@ int FUN_001ceab0(HitTraversal *self, HitNode *node) {
                 unsigned int a;
                 if (self->matrices->count > 1) {
                     FUN_00300c00(self->scratch, volume, 1);
-                    FUN_0018d360(self->scratch, &inverse);
+                    igRay_Transform(self->scratch, &inverse);
                     volume = self->scratch;
                 }
                 for (a = 0; a < attrCount; a++) {

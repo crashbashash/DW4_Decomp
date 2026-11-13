@@ -539,8 +539,8 @@ void FUN_002d16a0(int arg0) {
     if (DAT_00586dd8[0]++ == 0) {
         /* The first set-up writes the two status constants again, with the values the static initialiser
          * gives them. */
-        const_cast<igResult_2e3a10 &>(g_resultSuccess).v = 0;
-        const_cast<igResult_2e3a10 &>(g_resultFailure).v = 1;
+        const_cast<igResult &>(g_resultSuccess).v = 0;
+        const_cast<igResult &>(g_resultFailure).v = 1;
         FUN_0032d1f0();
         var_v0 = thunk_malloc(0x3A0);
         if (var_v0 != 0) {
@@ -617,7 +617,7 @@ void FUN_002d18d0(void *arg0, int arg1) {
     int temp_v0;
 
     if ((arg1 != 0xC80) && (*(unsigned char *)((char *)(arg0) + 121) == 1) && (GPR_00554bf8 == 0)) {
-        temp_v0 = FUN_00308320(DAT_004f9300, 0xC80, arg1);
+        temp_v0 = igReportError(DAT_004f9300, 0xC80, arg1);
         if ((temp_v0 != 1) && (temp_v0 == 2)) {
             GPR_00554bf8 = 1;
         }

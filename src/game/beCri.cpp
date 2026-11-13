@@ -41,7 +41,7 @@ int igInsightCore_RemoveFromScheduler(...);
 int igInsightCore_FindManager(int insight, int meta);
 int FUN_00306360(int registry, const char *section, int create);
 int FUN_00306770(int registry, int section, const char *key, igSmartPointer<igStringObj> *value, const char *fallback, int flags);
-igStringObj *FUN_002b9500(void *allocator);
+igStringObj *igStringObj_Create(void *allocator);
 void igStringObj_Set(...);
 int igStringObj_StripDirectory(igNamedObject *);
 int igStringObj_ToLower(igNamedObject *);
@@ -57,8 +57,8 @@ extern char emptyString[];
 
 /* the ADX library */
 void igAdx_SetModulePath(const char *path);
-void FUN_00332810(int);
-void FUN_00332c50(int);
+void igAdx_SetHostRootPath(int);
+void igAdx_Initialize(int);
 int igAdx_ExecServer(...);
 int igAdx_SetPartitionCount(int count);
 int igAdx_SetInsideFiles(int files);
@@ -412,7 +412,7 @@ void Gap__Bec__beCri__vfunc_21(beCri *self) {
     if (section == -1) return;
     void *allocator = igObject_GetAllocator(self);
     allocator = g_useOwnerAllocator ? allocator : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
-    igSmartPointer<igStringObj> path(FUN_002b9500(allocator));
+    igSmartPointer<igStringObj> path(igStringObj_Create(allocator));
     if (FUN_00306770(registry, section, AdxModulePath, &path, g_adxModulePathDefault, 0) == 0) {
         if (strcmp(text_9_31s281, text_9_18) == 0)
             igStringObj_Set((igStringObj *)path, C_cri_ps2_iop_modules);
@@ -422,9 +422,9 @@ void Gap__Bec__beCri__vfunc_21(beCri *self) {
     char *text = (char *)path->_buffer;
     igAdx_SetModulePath(text == 0 ? g_stringObjEmptyText[0] : text);
     g_adxUseFileInfoCache = 1;
-    FUN_00332810(0);
+    igAdx_SetHostRootPath(0);
     g_adxMediaMode[0] = 2;
-    FUN_00332c50(1);
+    igAdx_Initialize(1);
     igMetaObject *file = g_igFile_metaObject[0];
     g_savedIgFileAbstractProxy[0] = file->_abstractProxy;
     file->_abstractProxy = (int)beCri_AdxFileProxy;

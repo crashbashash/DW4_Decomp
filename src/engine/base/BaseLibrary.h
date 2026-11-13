@@ -272,7 +272,7 @@ int FUN_001d36d0(...);
 int FUN_002c3820(...);
 int FUN_002c7300(...);
 int FUN_002f00c0(...);
-int Gap__Core__igObject__vfunc_11(...);
+int Gap__Core__igObject__resetFields(...);
 int FUN_002fe290(void *meta, void *base);
 int FUN_002fdef0(void *meta, void *field);
 int List_InsertWords(...);
@@ -299,7 +299,7 @@ int igStringMetaField_AssignRetainedToken(...);
 int igObjectRefMetaField_Assign(...);
 int FUN_00300e50(...);
 int FUN_00300f50(...);
-int Gap__Core__igObject__vfunc_02(...);
+int Gap__Core__igObject__destructFields(...);
 }
 
 struct S {
@@ -537,7 +537,7 @@ typedef struct S_5 { char pad8[8]; int f8; int fC; int f10; } S_5;
 typedef struct S_6 { char pad8[8]; int f8; int fC; unsigned int f10; } S_6;
 
 extern "C" {
-Rc_2 * FUN_002b9500(...);
+Rc_2 * igStringObj_Create(...);
 int igStringObj_Set(Rc_2 *, char *);
 void BaseLibrary_MarkRegistered(void);
 void *FUN_00225790(struct S *arg0, short arg1);

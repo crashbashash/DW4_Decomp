@@ -313,7 +313,7 @@ extern "C" int igStringObjList_GetVTable(void);
 extern "C" void FUN_002b9470(void);
 extern "C" void igStringObjList_Register(void);
 extern "C" void thunk_igStringObjList_GetMetaObject(void);
-extern "C" void * FUN_002b9500(int arg0);
+extern "C" void * igStringObj_Create(int arg0);
 extern "C" igMetaObject *FUN_002b9540(void);
 extern "C" int igStringObj_GetVTable(void);
 extern "C" void FUN_002b9620(void);
@@ -1657,15 +1657,15 @@ extern "C" void FUN_002fe5a0(int arg0);
 extern "C" int FUN_002fe730(int arg0);
 extern "C" int igMetaObject_GetPoolName(int *p);
 extern "C" int Gap__Core__igObject__vfunc_00__002ff0a0(int extra0);
-extern "C" void Gap__Core__igObject__vfunc_01(int extra0, int extra1);
-extern "C" void Gap__Core__igObject__vfunc_02(int extra0);
+extern "C" void Gap__Core__igObject__constructFields(int extra0, int extra1);
+extern "C" void Gap__Core__igObject__destructFields(int extra0);
 extern "C" void Gap__Core__igObject__vfunc_03(void);
-extern "C" void Gap__Core__igObject__vfunc_07(void);
-extern "C" void Gap__Core__igObject__vfunc_08__002ff0f0(void);
+extern "C" void Gap__Core__igObject__userConstruct(void);
+extern "C" void Gap__Core__igObject__userDestruct(void);
 extern "C" void Gap__Core__igObject__vfunc_04(void);
 extern "C" int Gap__Core__igObject__vfunc_05(void);
 extern "C" int Gap__Core__igObject__vfunc_06(void);
-extern "C" void Gap__Core__igObject__vfunc_11(int extra0, int extra1);
+extern "C" void Gap__Core__igObject__resetFields(int extra0, int extra1);
 extern "C" void Gap__Core__igObject__vfunc_09(int extra0);
 extern "C" void Gap__Core__igObject__vfunc_10(int extra0);
 extern "C" void Gap__Core__igObject__vfunc_12(void);
@@ -1778,7 +1778,7 @@ extern "C" int FUN_00307f80(void *arg0, int arg1);
 extern "C" int igReportNotice(const char *arg0, ...);
 extern "C" int FUN_00308240(const char *arg0, ...);
 extern "C" void FUN_003082b0(const char *arg0, ...);
-extern "C" int FUN_00308320(const char *arg0, ...);
+extern "C" int igReportError(const char *arg0, ...);
 extern "C" int FUN_00308390(const char *arg0, ...);
 extern "C" int FUN_00308400(int arg0, int arg1);
 extern "C" int FUN_00308540(int arg0, const char *arg1, int arg2);
@@ -1817,7 +1817,7 @@ extern "C" void Gap__Core__igStringMetaField__vfunc_02(void);
 extern "C" void igStringObj_Set(int arg0, int arg1);
 extern "C" int strlwr(int);
 extern "C" void igStringObj_ToLower(void *arg0);
-extern "C" int FUN_0030b5f0(void *arg0, int arg1);
+extern "C" int igStringObj_ToInt(void *arg0, int arg1);
 extern "C" int igStringObj_ToFloat(void *arg0, int arg1);
 extern "C" void FUN_0030b720(int arg0, int arg1, int arg2);
 extern "C" void FUN_0030b770(int arg0, int arg1, int arg2);
@@ -1955,7 +1955,7 @@ extern "C" void Gap__Core__igMallocMemoryPool__vfunc_92(void *arg0, int arg1);
 extern "C" int Gap__Core__igMallocMemoryPool__vfunc_94(void *arg0, void **arg1);
 extern "C" int Gap__Core__igMallocMemoryPool__vfunc_95(int arg0, char *arg1);
 extern "C" void Gap__Core__igPageMemoryPool__vfunc_02(int extra0);
-extern "C" void thunk_Gap__Core__igObject__vfunc_01(int extra0, int extra1);
+extern "C" void thunk_Gap__Core__igObject__constructFields(int extra0, int extra1);
 extern "C" void Gap__Core__igPageMemoryPool__vfunc_31(void **arg0);
 extern "C" void Gap__Core__igPageMemoryPool__vfunc_24(int *statusOut);
 extern "C" void Gap__Core__igPageMemoryPool__vfunc_35(int *statusOut);
@@ -2054,7 +2054,7 @@ enum { SCE_RDONLY = 0x1, SCE_WRONLY = 0x2, SCE_RDWR = 0x3, SCE_APPEND = 0x100, S
 enum { SCE_SEEK_SET = 0, SCE_SEEK_CUR = 1, SCE_SEEK_END = 2 };
 extern "C" int sceOpen(const char *path, int flags, ...);
 extern "C" char *FUN_0032cb50(char *name, int kind);
-extern "C" int FUN_0032cf50(int a, int b, int c, int d, int e);
+extern "C" int igPsx2_LoadIopModule(int a, int b, int c, int d, int e);
 extern "C" int sceSifLoadModule(...);
 extern "C" int FUN_0032cf70(int *arg0, int arg1, int arg2, int arg3, int arg4, int *arg5);
 extern "C" void FUN_0032d070(void);
@@ -2066,7 +2066,7 @@ extern "C" int sceFsReset(...);
 extern "C" int sceSifLoadFileReset(...);
 extern "C" int sceSifSyncIop(...);
 extern "C" int sceSifRebootIop(...);
-extern "C" int FUN_00116fb0(...);
+extern "C" int sceCdInit(...);
 extern "C" int sceCdMmode(...);
 extern "C" void FUN_0032d080(void);
 extern "C" void FUN_0032d1f0(void);
@@ -4542,29 +4542,27 @@ struct T_2d40f0 {
 extern "C" void Gap__Core__igCallStackTable__vfunc_31(T_2d40f0 *self, int arg1);
 extern "C" int DAT_004c1ea0[4];
 class DW4VC_92_0 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual int vX(); };
-struct R_2d43a0 { int v; R_2d43a0() {} R_2d43a0(const R_2d43a0 &o) : v(o.v) {} };
+class igResult {
+public:
+    int v;
+    igResult() {}
+    igResult(int x) : v(x) {}
+    igResult(const igResult &o) : v(o.v) {}
+    bool operator==(const igResult &o) const { return v == o.v; }
+    bool operator!=(const igResult &o) const { return v != o.v; }
+    inline bool failed() const;
+};
 struct VC_2d43a0 {
  virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7();
  virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15();
  virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23();
  virtual void d24();
- virtual R_2d43a0 vX1(int, char *, int, int *, char *, int, int *);
- virtual R_2d43a0 vX2(int, char *, int, char *, int, int, long long, long long);
+ virtual igResult vX1(int, char *, int, int *, char *, int, int *);
+ virtual igResult vX2(int, char *, int, char *, int, int, long long, long long);
 };
 extern "C" void Gap__Core__igCallStackTracer__vfunc_26(int *arg0, VC_2d43a0 *arg1, int arg2, int arg3, long long arg4, long long arg5);
-class igResult_2e3a10 {
-public:
-    int v;
-    igResult_2e3a10() {}
-    igResult_2e3a10(int x) : v(x) {}
-    igResult_2e3a10(const igResult_2e3a10 &o) : v(o.v) {}
-    bool operator==(const igResult_2e3a10 &o) const { return v == o.v; }
-    bool operator!=(const igResult_2e3a10 &o) const { return v != o.v; }
-    inline bool failed() const;
-};
-extern "C" const igResult_2e3a10 g_resultSuccess;
-extern "C" const igResult_2e3a10 g_resultFailure;
-typedef igResult_2e3a10 R_2d4470;
+extern "C" const igResult g_resultSuccess;
+extern "C" const igResult g_resultFailure;
 class Resolver { public:
     virtual void s0();
     virtual void s1();
@@ -4591,9 +4589,9 @@ class Resolver { public:
     virtual void s22();
     virtual void s23();
     virtual void s24();
-    virtual R_2d4470 Lookup(int addr, char *buf, int size, int *base, int *other, char *name, int nameSize, int *line);
+    virtual igResult Lookup(int addr, char *buf, int size, int *base, int *other, char *name, int nameSize, int *line);
 };
-extern "C" R_2d4470 Gap__Core__igCallStackTracer__vfunc_27(void *self, int addr, char *buf, int size, int *offset, char *name, int nameSize, int *line);
+extern "C" igResult Gap__Core__igCallStackTracer__vfunc_27(void *self, int addr, char *buf, int size, int *offset, char *name, int nameSize, int *line);
 extern "C" void Gap__Core__igCharArrayMetaField__vfunc_52(igCharArrayMetaField *self, int buffer, int count);
 extern "C" unsigned short Gap__Core__igCharArrayMetaField__vfunc_25(igCharArrayMetaField *self);
 extern "C" int DAT_004f95c0[4];
@@ -5115,16 +5113,14 @@ extern "C" int DAT_00532430[4];
 extern "C" void * DAT_00586df8[4];
 extern "C" char GPR_00554bfc;
 extern "C" unsigned char DAT_00554bfc;
-struct PoolStatus { int a; };
 class RefPool : public igVirtualObject { public:
     virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20();
-    virtual PoolStatus open();
-    virtual PoolStatus close();
+    virtual igResult open();
+    virtual igResult close();
     
 };
 struct PoolOwner { char p[8]; RefPool *pool; };
 extern "C" void FUN_002dcaa0(PoolOwner *self, int open);
-struct igResult { int value; };
 struct Lockable { virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual igResult unlock(); virtual void d30(); virtual igResult lock(int); };
 struct ScopedLock {
     Lockable *lockable;
@@ -5328,7 +5324,6 @@ class O_2dff30 { public:
  virtual void v48(int);
  char p4[80]; TB *tab; };
 extern "C" void Gap__Core__igEventTracker__vfunc_49(O_2dff30 *self, int arg1, int arg2);
-typedef igResult_2e3a10 EventLookupResult;
 struct EventSlotList { int vt; int rc; int count; int capacity; int *data; };
 struct EventByteStream { int vt; int rc; int count; int capacity; char *data; };
 class EventTrackerSlots { public:
@@ -5359,7 +5354,7 @@ class EventTrackerSlots { public:
     virtual void t24();
     virtual void t25();
     virtual void t26();
-    virtual EventLookupResult Lookup(int offset, int *out);
+    virtual igResult Lookup(int offset, int *out);
     virtual void t28();
     virtual void t29();
     virtual void t30();
@@ -5470,15 +5465,12 @@ extern "C" int DAT_00586e00[4];
 extern "C" int DAT_00586e08[4];
 extern "C" int DAT_00586e10[4];
 extern "C" R_2e1710 Gap__Core__igEventTracker__vfunc_40(T_2e1710 *arg1, int arg2, int arg3, int arg4, int *arg5, int arg6, int arg7, int *arg8);
-class igResult_2e18f0;
-class igResult_2e18f0 { public: int v; igResult_2e18f0(const igResult_2e18f0 &o) : v(o.v) {}
-    bool operator!=(const igResult_2e18f0 &o) const { return v != o.v; } };
 struct TrackerBuffer { char bytes[160]; };
-class TrackerLockable { public: virtual void p0(); virtual void p1(); virtual void p2(); virtual void p3(); virtual void p4(); virtual void p5(); virtual void p6(); virtual void p7(); virtual void p8(); virtual void p9(); virtual void p10(); virtual void p11(); virtual void p12(); virtual void p13(); virtual void p14(); virtual void p15(); virtual void p16(); virtual void p17(); virtual void p18(); virtual void p19(); virtual void p20(); virtual void p21(); virtual void p22(); virtual void p23(); virtual void p24(); virtual void p25(); virtual void p26(); virtual void p27(); virtual void p28(); virtual igResult_2e18f0 unlock(); virtual void p30(); virtual igResult_2e18f0 lock(int); };
+class TrackerLockable { public: virtual void p0(); virtual void p1(); virtual void p2(); virtual void p3(); virtual void p4(); virtual void p5(); virtual void p6(); virtual void p7(); virtual void p8(); virtual void p9(); virtual void p10(); virtual void p11(); virtual void p12(); virtual void p13(); virtual void p14(); virtual void p15(); virtual void p16(); virtual void p17(); virtual void p18(); virtual void p19(); virtual void p20(); virtual void p21(); virtual void p22(); virtual void p23(); virtual void p24(); virtual void p25(); virtual void p26(); virtual void p27(); virtual void p28(); virtual igResult unlock(); virtual void p30(); virtual igResult lock(int); };
 class TrackerLockHold { public: TrackerLockable *m;
   TrackerLockHold(TrackerLockable *x) : m(x) { if (m != 0) { m->lock(1); } }
   ~TrackerLockHold() { if (m != 0) { m->unlock(); } } };
-class EventTrackerText { public: virtual void p0(); virtual void p1(); virtual void p2(); virtual void p3(); virtual void p4(); virtual void p5(); virtual void p6(); virtual void p7(); virtual void p8(); virtual void p9(); virtual void p10(); virtual void p11(); virtual void p12(); virtual void p13(); virtual void p14(); virtual void p15(); virtual void p16(); virtual void p17(); virtual void p18(); virtual void p19(); virtual void p20(); virtual void p21(); virtual void p22(); virtual void p23(); virtual void p24(); virtual igResult_2e18f0 fill(int, TrackerBuffer *); virtual void p26(); virtual void p27(); virtual void p28(); virtual void p29(); virtual void p30(); virtual void p31(); virtual void p32(); virtual void p33(); virtual void p34(); virtual void p35(); virtual void format(TrackerBuffer *, char *, int);
+class EventTrackerText { public: virtual void p0(); virtual void p1(); virtual void p2(); virtual void p3(); virtual void p4(); virtual void p5(); virtual void p6(); virtual void p7(); virtual void p8(); virtual void p9(); virtual void p10(); virtual void p11(); virtual void p12(); virtual void p13(); virtual void p14(); virtual void p15(); virtual void p16(); virtual void p17(); virtual void p18(); virtual void p19(); virtual void p20(); virtual void p21(); virtual void p22(); virtual void p23(); virtual void p24(); virtual igResult fill(int, TrackerBuffer *); virtual void p26(); virtual void p27(); virtual void p28(); virtual void p29(); virtual void p30(); virtual void p31(); virtual void p32(); virtual void p33(); virtual void p34(); virtual void p35(); virtual void format(TrackerBuffer *, char *, int);
   char q4[4]; TrackerLockable *lockable; char q12[792]; char text[1]; };
 extern "C" void Gap__Core__igEventTracker__vfunc_41(EventTrackerText *self, int arg);
 class V_2e1a40 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual int vY(int); virtual void d33(); virtual void d34(); virtual void d35(); virtual void d36(); virtual void d37(); virtual void d38(); virtual void vX(int); };
@@ -5488,9 +5480,8 @@ struct Tk_2e1bb0 { virtual void d0(); virtual void d1(); virtual void d2(); virt
 struct Ob : public igVirtualObject { virtual void e1(); virtual void e2(); virtual void e3(); virtual void e4(); virtual void e5(); virtual void e6(); virtual void e7(); virtual void e8(); virtual void e9(); virtual void e10(); virtual void e11(); virtual void e12(); virtual void e13(); virtual void e14(); virtual void e15(); virtual void e16(); virtual void e17(); virtual void e18(); virtual void e19(); virtual void e20(); virtual void e21(); virtual void e22(); virtual void e23(); virtual void e24(); virtual void e25();  virtual int v112(int); char pad0[57]; char f65; char pad1[214]; igObject *f280; igObject *f284; igObject *f288; };
 extern "C" int DAT_004c1ed8[4];
 extern "C" R_2e1bb0 Gap__Core__igEventTracker__vfunc_44(Tk_2e1bb0 *arg1, int arg2);
-class igResult_2e1df0 { public: int v; igResult_2e1df0(const igResult_2e1df0 &o) : v(o.v) {} };
 class TrackerCommandTable { public: virtual void p0(); virtual void p1(); virtual void p2(); virtual void p3(); virtual void p4(); virtual void p5(); virtual void p6(); virtual void p7(); virtual void p8(); virtual void p9(); virtual void p10(); virtual void p11(); virtual void p12(); virtual void p13(); virtual void p14(); virtual void p15(); virtual void p16(); virtual void p17(); virtual void p18(); virtual void p19(); virtual void p20(); virtual int rowCount(); virtual void p22(); virtual int *rows(int); };
-class EventTrackerRunner { public: virtual void p0(); virtual void p1(); virtual void p2(); virtual void p3(); virtual void p4(); virtual void p5(); virtual void p6(); virtual void p7(); virtual void p8(); virtual void p9(); virtual void p10(); virtual void p11(); virtual void p12(); virtual void p13(); virtual void p14(); virtual void p15(); virtual void p16(); virtual void p17(); virtual void p18(); virtual void p19(); virtual void p20(); virtual void p21(); virtual void p22(); virtual void p23(); virtual void p24(); virtual void p25(); virtual void p26(); virtual void p27(); virtual void p28(); virtual void p29(); virtual void p30(); virtual void p31(); virtual void p32(); virtual void p33(); virtual void p34(); virtual void p35(); virtual void p36(); virtual void p37(); virtual igResult_2e1df0 run(int, char *, int, int *, char *, int, int *);
+class EventTrackerRunner { public: virtual void p0(); virtual void p1(); virtual void p2(); virtual void p3(); virtual void p4(); virtual void p5(); virtual void p6(); virtual void p7(); virtual void p8(); virtual void p9(); virtual void p10(); virtual void p11(); virtual void p12(); virtual void p13(); virtual void p14(); virtual void p15(); virtual void p16(); virtual void p17(); virtual void p18(); virtual void p19(); virtual void p20(); virtual void p21(); virtual void p22(); virtual void p23(); virtual void p24(); virtual void p25(); virtual void p26(); virtual void p27(); virtual void p28(); virtual void p29(); virtual void p30(); virtual void p31(); virtual void p32(); virtual void p33(); virtual void p34(); virtual void p35(); virtual void p36(); virtual void p37(); virtual igResult run(int, char *, int, int *, char *, int, int *);
   char q4[8]; int flags; char q16[56]; TrackerCommandTable *table; int getFlags() const { return flags; } };
 extern "C" void Gap__Core__igEventTracker__vfunc_45(EventTrackerRunner *self);
 class igCallStackTracerView {
@@ -5657,8 +5648,8 @@ extern "C" char GPR_00554c04;
 extern "C" unsigned char GPR_00554c08;
 extern "C" unsigned char GPR_00554c0c;
 extern "C" unsigned char g_useOwnerAllocator;
-extern "C" igResult_2e3a10 FUN_002e4f60(void *);
-extern "C" igResult_2e3a10 FUN_002e63e0(void *);
+extern "C" igResult FUN_002e4f60(void *);
+extern "C" igResult FUN_002e63e0(void *);
 class DW4VC_208_2_2e3a10 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void d32(); virtual void d33(); virtual void d34(); virtual void d35(); virtual void d36(); virtual void d37(); virtual void d38(); virtual void d39(); virtual void d40(); virtual void d41(); virtual void d42(); virtual void d43(); virtual void d44(); virtual void d45(); virtual void d46(); virtual void d47(); virtual void d48(); virtual void d49(); virtual int vX(int *, int); };
 class MediaStream { public:
     virtual void s0();
@@ -5682,19 +5673,19 @@ class MediaStream { public:
     virtual void s18();
     virtual void s19();
     virtual void s20();
-    virtual igResult_2e3a10 Open(int mode);
+    virtual igResult Open(int mode);
     virtual void Close();
     unsigned int _refCount;
 };
 struct StreamHolder { MediaStream *p; StreamHolder(MediaStream *v) { p = v; } ~StreamHolder(); };
 struct MediaStreamOwner { char pad[104]; MediaStream *stream; char pad108[172]; void *source; };
-extern "C" igResult_2e3a10 FUN_002e3a60(MediaStreamOwner *self, int data, int mode);
+extern "C" igResult FUN_002e3a60(MediaStreamOwner *self, int data, int mode);
 struct Ref3 { virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3(); virtual void v4(); virtual void v5(); virtual void v6(); virtual void v7(); virtual void v8(); virtual void v9(); virtual void v10(); virtual void v11(); virtual void v12(); virtual void v13(); virtual void v14(); virtual void v15(); virtual void v16(); virtual void v17(); virtual void v18(); virtual void v19(); virtual void v20(); virtual void v21(); virtual void v22(); union { int w; struct { unsigned cnt:23; unsigned f:9; } b; } u; };
 struct S3 { int pad[26]; Ref3 *ref; };
 extern "C" void FUN_002e3cb0(S3 *self);
 struct Ref5 { int vt; unsigned int _refCount; };
 struct RecordFile { char pad[104]; Ref5 *handle; char pad2[88]; int open; };
-extern "C" igResult_2e3a10 FUN_002e3e30(RecordFile *f, int mode);
+extern "C" igResult FUN_002e3e30(RecordFile *f, int mode);
 /* The holder keeps its address taken through the release method while the release body reads the
  * field directly. */
 struct T6 { int word0; int references; };
@@ -5712,17 +5703,17 @@ struct Holder_2e3a10 {
     }
 };
 struct Owner_2e3a10 { char p[192]; T6 *f192; char p2[84]; int f280; };
-extern "C" igResult_2e3a10 FUN_002e3f50(Owner_2e3a10 *arg1);
+extern "C" igResult FUN_002e3f50(Owner_2e3a10 *arg1);
 class E7 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void d32(); virtual void d33(); virtual void d34(); virtual void d35(); virtual int vX(void *); int pad[2]; int f12; };
 struct L7 { char pad[8]; int count; char pad1[4]; E7 **data; };
-extern "C" igResult_2e3a10 FUN_002e4090(L7 *arg1);
+extern "C" igResult FUN_002e4090(L7 *arg1);
 struct S8;
 class A8 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void d32(); virtual void d33(); virtual void d34(); virtual void d35(); virtual void d36(); virtual void d37(); virtual void d38(); virtual void d39(); virtual void d40(); virtual void d41(); virtual void d42(); virtual void d43(); virtual void d44(); virtual void d45(); virtual void d46(); virtual void d47(); virtual void d48(); virtual void d49(); virtual void d50(); virtual void d51(); virtual int *v52(int); };
 class B8 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void d32(); virtual void d33(); virtual void d34(); virtual void d35(); virtual void d36(); virtual void d37(); virtual void d38(); virtual void d39(); virtual void d40(); virtual void d41(); virtual void d42(); virtual void d43(); virtual void d44(); virtual void d45(); virtual void d46(); virtual void d47(); virtual void d48(); virtual void d49(); virtual void v50(int *, int); };
 struct S8 { char p0[168]; unsigned char f168; char p1[35]; B8 *f204; char p2[72]; A8 *f280; char p3[12]; int f296; int *f300; };
-extern "C" igResult_2e3a10 FUN_002e4120(S8 *o);
+extern "C" igResult FUN_002e4120(S8 *o);
 class C156 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void d32(); virtual void d33(); virtual void d34(); virtual void d35(); virtual void d36(); virtual int vX(void *); };
-extern "C" igResult_2e3a10 FUN_002e4240(igIGBFile *arg1);
+extern "C" igResult FUN_002e4240(igIGBFile *arg1);
 struct MetaTableField { char p0[18]; short size; unsigned short offset; char p22[15]; unsigned char inherited; unsigned char persistent; };
 struct MetaTableFieldList { char p0[8]; MetaTableField **data; int count; };
 struct MetaTableType { char p0[16]; int a16; int a20; char p24[4]; char *name; char p32[8]; MetaTableFieldList *fields; char p44[12]; int parent; };
@@ -5735,20 +5726,20 @@ struct MetaTableWriter { char p0[128]; int count; int size; char p136[32]; unsig
 class Ref10 { public: MetaTableWords *p; Ref10(MetaTableWords *o) : p(o) { }
  ~Ref10() { MetaTableWords *object = p; if (object) { --object->rc; if (((unsigned long long)(long long)object->rc & 0x7fffffULL) == 0) igObject_Destroy(object); } } };
 struct MetaTableKey { int v; };
-extern "C" igResult_2e3a10 FUN_002e42d0(MetaTableWriter *self);
+extern "C" igResult FUN_002e42d0(MetaTableWriter *self);
 struct R11 { char p0[16]; int f16; int f20; char p1[4]; int f28; };
 class O11 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual R11 *vX(); };
 struct T11 { char p[8]; O11 **data; int cnt; };
 class W_2e3a10 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void d32(); virtual void d33(); virtual void d34(); virtual void d35(); virtual void d36(); virtual void d37(); virtual void d38(); virtual void d39(); virtual void d40(); virtual void d41(); virtual void d42(); virtual void d43(); virtual void d44(); virtual void d45(); virtual void d46(); virtual void d47(); virtual void d48(); virtual void d49(); virtual int vX(int, int); };
 class A11 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void d32(); virtual void d33(); virtual void d34(); virtual void d35(); virtual void d36(); virtual void d37(); virtual void d38(); virtual void d39(); virtual void d40(); virtual void d41(); virtual void d42(); virtual void d43(); virtual void d44(); virtual void d45(); virtual void d46(); virtual void d47(); virtual void d48(); virtual void d49(); virtual void d50(); virtual void d51(); virtual void d52(); virtual int vX(int, int); };
 struct S11 { char p0[136]; int f136; int f140; char p1[24]; unsigned char f168; char p2[15]; int f184; char p3[16]; W_2e3a10 *f204; char p4[72]; A11 *f280; };
-extern "C" igResult_2e3a10 FUN_002e47f0(S11 *arg1);
+extern "C" igResult FUN_002e47f0(S11 *arg1);
 class Ref12 { public: ReflectedNameList *p; Ref12(ReflectedNameList *o) : p(o) { if (p != 0) { p->rc = p->rc + 1; } }
  ~Ref12() { ReflectedNameList *object = p; if (object) { --object->rc; if (((unsigned long long)(long long)object->rc & 0x7fffffULL) == 0) igObject_Destroy(object); } } };
 class IgbNamePool { public: virtual void p0(); virtual void p1(); virtual void p2(); virtual void p3(); virtual void p4(); virtual void p5(); virtual void p6(); virtual void p7(); virtual void p8(); virtual void p9(); virtual void p10(); virtual void p11(); virtual void p12(); virtual void p13(); virtual void p14(); virtual void p15(); virtual void p16(); virtual void p17(); virtual void p18(); virtual void p19(); virtual void p20(); virtual void p21(); virtual void p22(); virtual void p23(); virtual void p24(); virtual void p25(); virtual void p26(); virtual void p27(); virtual void p28(); virtual void p29(); virtual void p30(); virtual void p31(); virtual void p32(); virtual void p33(); virtual void p34(); virtual void p35(); virtual void p36(); virtual void p37(); virtual void p38(); virtual void p39(); virtual void p40(); virtual void p41(); virtual void p42(); virtual void p43(); virtual void p44(); virtual void p45(); virtual void p46(); virtual void p47(); virtual void p48(); virtual void p49(); virtual void p50(); virtual void p51(); virtual void p52(); virtual int *alloc(int, int); };
 class IgbNameSwapper { public: virtual void p0(); virtual void p1(); virtual void p2(); virtual void p3(); virtual void p4(); virtual void p5(); virtual void p6(); virtual void p7(); virtual void p8(); virtual void p9(); virtual void p10(); virtual void p11(); virtual void p12(); virtual void p13(); virtual void p14(); virtual void p15(); virtual void p16(); virtual void p17(); virtual void p18(); virtual void p19(); virtual void p20(); virtual void p21(); virtual void p22(); virtual void p23(); virtual void p24(); virtual void p25(); virtual void p26(); virtual void p27(); virtual void p28(); virtual void p29(); virtual void p30(); virtual void p31(); virtual void p32(); virtual void p33(); virtual void p34(); virtual void p35(); virtual void p36(); virtual void p37(); virtual void p38(); virtual void p39(); virtual void p40(); virtual void p41(); virtual void p42(); virtual void p43(); virtual void p44(); virtual void p45(); virtual void p46(); virtual void p47(); virtual void p48(); virtual void p49(); virtual void swap(void *, int); };
 struct IgbNameWriter { char p0[168]; unsigned char swapped; char p169[35]; IgbNameSwapper *swapper; char p208[28]; int *block; int blockSize; char p244[4]; int count; char p252[28]; IgbNamePool *pool; };
-extern "C" igResult_2e3a10 FUN_002e4a40(IgbNameWriter *self);
+extern "C" igResult FUN_002e4a40(IgbNameWriter *self);
 class Alloc {
 public:
     virtual void v0();
@@ -5870,11 +5861,11 @@ struct Self_2e3a10 {
     char p4[10]; int *buf224; int size228;
     char p5[48]; Alloc *alloc280;
 };
-extern "C" igResult_2e3a10 FUN_002e4c90(Self_2e3a10 *self);
+extern "C" igResult FUN_002e4c90(Self_2e3a10 *self);
 class VC220 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void d32(); virtual void d33(); virtual void d34(); virtual void d35(); virtual void d36(); virtual void d37(); virtual void d38(); virtual void d39(); virtual void d40(); virtual void d41(); virtual void d42(); virtual void d43(); virtual void d44(); virtual void d45(); virtual void d46(); virtual void d47(); virtual void d48(); virtual void d49(); virtual void d50(); virtual void d51(); virtual void d52(); virtual int vX(int, int); };
 struct Lst_2e3a10 { char pad8[8]; int n; };
 struct Cx { char pad40[40]; Lst_2e3a10 *f40; char pad44[68]; int f112; char pad116[8]; int f124; char pad128[40]; unsigned char f168; char pad169[3]; char pad172[4]; int f176; char pad180[12]; int f192; char pad196[84]; VC220 *f280; };
-extern "C" igResult_2e3a10 FUN_002e4e60(Cx *arg1);
+extern "C" igResult FUN_002e4e60(Cx *arg1);
 struct IgbFixReader;
 class IgbFixObject { public: virtual void p0(); virtual void p1(); virtual void p2(); virtual void p3(); virtual void p4(); virtual void p5(); virtual void p6(); virtual void p7(); virtual void p8(); virtual void p9(); virtual void p10(); virtual void p11(); virtual void p12(); virtual void p13(); virtual void p14(); virtual void p15(); virtual void p16(); virtual void p17(); virtual void p18(); virtual void p19(); virtual void p20(); virtual void reset(int); virtual void p22(); virtual void p23(); virtual IgbFixObject *replacement(IgbFixReader *); virtual void attach(int); int rc; char q8[4]; int index; char q16[8]; int word; };
 struct IgbFixWords { int vt; int rc; int count; int cap; int *data; };
@@ -5882,7 +5873,7 @@ struct IgbFixPlain { int vt; int rc; };
 struct IgbFixRetain { IgbFixObject *p; IgbFixRetain(IgbFixObject *o) : p(o) { if (p != 0) { p->rc = p->rc + 1; } } };
 struct IgbFixReader { char p0[8]; int count; char p12[4]; IgbFixObject **data; char p20[20]; IgbFixPlain *sorted; IgbFixWords *words; char p48[44]; IgbFixPlain *map; char p96[118]; unsigned char fixed; char p215[65]; int pool; };
 extern "C" int FUN_00142bb0(IgbFixPlain *, IgbFixRetain *);
-extern "C" igResult_2e3a10 FUN_002e5110(IgbFixReader *self);
+extern "C" igResult FUN_002e5110(IgbFixReader *self);
 class VC16 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void d32(); virtual void d33(); virtual void d34(); virtual void d35(); virtual void d36(); virtual void d37(); virtual void d38(); virtual void d39(); virtual void d40(); virtual void d41(); virtual void d42(); virtual void d43(); virtual void d44(); virtual void d45(); virtual void d46(); virtual void d47(); virtual void d48(); virtual void d49(); virtual void d50(); virtual void d51(); virtual void d52(); virtual int v220(int, int); };
 struct O16 {
     char pad0[8];
@@ -5902,18 +5893,18 @@ struct O16 {
     char pad7[84];
     VC16 *f280;
 };
-extern "C" igResult_2e3a10 FUN_002e53f0(void *arg1);
+extern "C" igResult FUN_002e53f0(void *arg1);
 class A17 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void d32(); virtual void d33(); virtual void d34(); virtual void d35(); virtual void d36(); virtual void d37(); virtual void d38(); virtual void d39(); virtual void d40(); virtual void d41(); virtual void d42(); virtual void d43(); virtual void d44(); virtual void d45(); virtual void d46(); virtual void d47(); virtual void d48(); virtual void d49(); virtual void d50(); virtual void d51(); virtual void d52(); virtual int a(int,int); };
 class B17 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void d32(); virtual void d33(); virtual void d34(); virtual void d35(); virtual void d36(); virtual void d37(); virtual void b(void *); };
 struct O17 { char pad[8]; int n; char pad2[136]; unsigned f148; char pad3[28]; int f180; char pad4[68]; int f252; char pad5[24]; A17 *f280; };
-extern "C" igResult_2e3a10 FUN_002e54e0(O17 *o);
+extern "C" igResult FUN_002e54e0(O17 *o);
 class Mgr18 { public: virtual void p0(); virtual void p1(); virtual void p2(); virtual void p3(); virtual void p4(); virtual void p5(); virtual void p6(); virtual void p7(); virtual void p8(); virtual void p9(); virtual void p10(); virtual void p11(); virtual void p12(); virtual void p13(); virtual void p14(); virtual void p15(); virtual void p16(); virtual void p17(); virtual void p18(); virtual void p19(); virtual void p20(); virtual void p21(); virtual void p22(); virtual void p23(); virtual void p24(); virtual void p25(); virtual void p26(); virtual void p27(); virtual void p28(); virtual void p29(); virtual void p30(); virtual void p31(); virtual void p32(); virtual void p33(); virtual void p34(); virtual void p35(); virtual void p36(); virtual void p37(); virtual void p38(); virtual void p39(); virtual void p40(); virtual void p41(); virtual void p42(); virtual void p43(); virtual void p44(); virtual void p45(); virtual void p46(); virtual void p47(); virtual void p48(); virtual void p49(); virtual void p50(); virtual void p51(); virtual void p52(); virtual void *alloc(int, int); virtual void p54(); virtual void p55(); virtual void p56(); virtual void p57(); virtual void p58(); virtual void p59(); virtual void p60(); virtual void p61(); virtual void p62(); virtual void p63(); virtual void rel(void *); };
 class Z18 { public: virtual void p0(); virtual void p1(); virtual void p2(); virtual void p3(); virtual void p4(); virtual void p5(); virtual void p6(); virtual void p7(); virtual void p8(); virtual void p9(); virtual void p10(); virtual void p11(); virtual void p12(); virtual void p13(); virtual void p14(); virtual void p15(); virtual void p16(); virtual void p17(); virtual void p18(); virtual void p19(); virtual void p20(); virtual void p21(); virtual void p22(); virtual void p23(); virtual void p24(); virtual void p25(); virtual void p26(); virtual void p27(); virtual void p28(); virtual void p29(); virtual void p30(); virtual void p31(); virtual void p32(); virtual void p33(); virtual void p34(); virtual void p35(); virtual void p36(); virtual void p37(); virtual void p38(); virtual void p39(); virtual void p40(); virtual void p41(); virtual void p42(); virtual void p43(); virtual void p44(); virtual void p45(); virtual void p46(); virtual void p47(); virtual void p48(); virtual void p49(); virtual void a(void *, int); };
 class Q18 { public: virtual void p0(); virtual void p1(); virtual void p2(); virtual void p3(); virtual void p4(); virtual void p5(); virtual void p6(); virtual void p7(); virtual void p8(); virtual void p9(); virtual void p10(); virtual void p11(); virtual void p12(); virtual void p13(); virtual void p14(); virtual void p15(); virtual void p16(); virtual void p17(); virtual void p18(); virtual void p19(); virtual void p20(); virtual void p21(); virtual void p22(); virtual void p23(); virtual void p24(); virtual void p25(); virtual void p26(); virtual void b(void *, int, int); };
 struct O18 {
  char p0[36]; unsigned char b36; char p1[28]; unsigned char b65; char p2[30]; int f96; int f100; Q18 *f104; char p3[4]; int f112; char p4[8]; int f124; int f128; int f132; int f136; int f140; int f144; int f148; int f152; int f156; char p5[8]; unsigned char b168; char p6[35]; Z18 *f204; char p7[4]; unsigned char b212; unsigned char b213; char p8[66]; Mgr18 *mgr;
 };
-extern "C" igResult_2e3a10 FUN_002e5590(O18 *o);
+extern "C" igResult FUN_002e5590(O18 *o);
 class Rd {
 public:
     virtual void d0();
@@ -6138,24 +6129,24 @@ public:
     int f296;
     int f300;
 };
-extern "C" igResult_2e3a10 FUN_002e56f0(Obj19 *arg1);
-extern "C" igResult_2e3a10 FUN_002e5950(void *arg1);
+extern "C" igResult FUN_002e56f0(Obj19 *arg1);
+extern "C" igResult FUN_002e5950(void *arg1);
 class Mgr21 { public: virtual void p0(); virtual void p1(); virtual void p2(); virtual void p3(); virtual void p4(); virtual void p5(); virtual void p6(); virtual void p7(); virtual void p8(); virtual void p9(); virtual void p10(); virtual void p11(); virtual void p12(); virtual void p13(); virtual void p14(); virtual void p15(); virtual void p16(); virtual void p17(); virtual void p18(); virtual void p19(); virtual void p20(); virtual void p21(); virtual void p22(); virtual void p23(); virtual void p24(); virtual void p25(); virtual void p26(); virtual void p27(); virtual void p28(); virtual void p29(); virtual void p30(); virtual void p31(); virtual void p32(); virtual void p33(); virtual void p34(); virtual void p35(); virtual void p36(); virtual void p37(); virtual void p38(); virtual void p39(); virtual void p40(); virtual void p41(); virtual void p42(); virtual void p43(); virtual void p44(); virtual void p45(); virtual void p46(); virtual void p47(); virtual void p48(); virtual void p49(); virtual void p50(); virtual void p51(); virtual void p52(); virtual void p53(); virtual void p54(); virtual void p55(); virtual void p56(); virtual void p57(); virtual void p58(); virtual void p59(); virtual void p60(); virtual void p61(); virtual void p62(); virtual void p63(); virtual void rel(int); };
 struct Rc_2e3a10 { int p; int f4; };
 struct T21 {
     char pad0[120]; int f120; char pad1[48]; int f172; int f176; int f180; int f184; char pad2[48]; int f236;
     char pad3[40]; Mgr21 *mgr; char pad4[12]; int f296; int f300; Rc_2e3a10 *f304;
 };
-extern "C" igResult_2e3a10 FUN_002e5990(T21 *o);
-extern "C" igResult_2e3a10 FUN_002e5ac0(void *arg1);
+extern "C" igResult FUN_002e5990(T21 *o);
+extern "C" igResult FUN_002e5ac0(void *arg1);
 struct Rel23 { int p; int rc; };
 class C23 { public:
-virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual igResult_2e3a10 v128();
+virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual igResult v128();
  char pad[4]; int f8; char pad2[24]; unsigned char f36; char pad3[167]; Rel23 *f204; Rel23 *f208; char pad4[66]; unsigned char f278; };
 extern "C" int Gap__Core__igIGBFile__vfunc_28(C23 *arg0, int arg1);
 struct Obj24 { char p0[4]; int refs; };
 struct T24 { char p0[104]; Obj24 *f104; char p108[88]; int f196; };
-extern "C" igResult_2e3a10 FUN_002e5f70(T24 *arg1, int arg2);
+extern "C" igResult FUN_002e5f70(T24 *arg1, int arg2);
 struct H_2e3a10 { int f0, f4, f8, f12, f16, f20, f24, f28, f32, f36, f40, f44; };
 class Dev { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual int v27(void *, int, int); };
 class Obj25_2e3a10 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void d32(); virtual void d33(); virtual void d34(); virtual void d35(); virtual void d36(); virtual void d37(); virtual void d38(); virtual void d39(); virtual void d40(); virtual void d41(); virtual void d42(); virtual void d43(); virtual void d44(); virtual void d45(); virtual void d46(); virtual void d47(); virtual void d48(); virtual void d49(); virtual int v52(H_2e3a10 *, int); int rc; };
@@ -6165,16 +6156,16 @@ struct S25 {
     char p3[8]; char f168; char p4[35]; Obj25_2e3a10 *f204; Obj25_2e3a10 *f208;
     char f212, f213, f214; unsigned char f215; int f216; char p5[44]; H_2e3a10 *f264; char p6[24]; char f292;
 };
-extern "C" igResult_2e3a10 igIGBFile_ReadHeader(S25 *arg1);
+extern "C" igResult igIGBFile_ReadHeader(S25 *arg1);
 class DW4VC_108_1 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual int vX(int, int, int); };
 struct P26 { char pad[104]; DW4VC_108_1 *f104; };
 struct Q26 { char pad[132]; int f132; char pad2[36]; int f172; char pad3[88]; int f264; };
-extern "C" igResult_2e3a10 FUN_002e6330(Q26 *arg1);
+extern "C" igResult FUN_002e6330(Q26 *arg1);
 class VC27 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void d32(); virtual void d33(); virtual void d34(); virtual void d35(); virtual void d36(); virtual void d37(); virtual void d38(); virtual void d39(); virtual void d40(); virtual void d41(); virtual void d42(); virtual void d43(); virtual void d44(); virtual void d45(); virtual void d46(); virtual void d47(); virtual void d48(); virtual void d49(); virtual void d50(); virtual void d51(); virtual void d52(); virtual void d53(); virtual void d54(); virtual void d55(); virtual void d56(); virtual void d57(); virtual int vX(int); };
-extern "C" igResult_2e3a10 FUN_002e6f50(int *arg1);
+extern "C" igResult FUN_002e6f50(int *arg1);
 class V_2e3a10 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual int vX(int, int, int); };
 struct Z29 { char pad0[80]; int f80; int f84; int f88; char pad1[12]; V_2e3a10 *f104; char pad2[152]; int f260; int f264; };
-extern "C" igResult_2e3a10 FUN_002e7030(Z29 *arg1);
+extern "C" igResult FUN_002e7030(Z29 *arg1);
 struct T30 : public igObject {
     
     void release() {
@@ -6218,16 +6209,16 @@ struct IGBReader31 {
     char pad284[20];
     SectionPoolTable *poolTable;
 };
-extern "C" igResult_2e3a10 igIGBFile_ReadObjectSection(IGBReader31 *file);
+extern "C" igResult igIGBFile_ReadObjectSection(IGBReader31 *file);
 struct IgbSectionObject { int vt; int rc; };
 struct IgbObjectSection { char p0[8]; int count; char p12[4]; IgbSectionObject **data; char p20[20]; int source; char p44[60];
   IgbSectionStream *stream; char p108[8]; int size; char p120[48]; unsigned char swapped; char p169[35]; IgbSectionSwapper *swapper; IgbSectionSwapper *swapper16; char p212[48]; int bufferCap; short *buffer; };
-extern "C" igResult_2e3a10 FUN_002e7640(IgbObjectSection *self);
+extern "C" igResult FUN_002e7640(IgbObjectSection *self);
 struct O33;
 class E33 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void vX(O33 *); };
 struct T33 { int word0; int references; int n; int cap; };
 struct O33 { int p0; int p1; int n; char pad[32]; T33 *list; char pad2[232]; int f280; };
-extern "C" igResult_2e3a10 FUN_002e78b0(O33 *arg1);
+extern "C" igResult FUN_002e78b0(O33 *arg1);
 struct IndexList : public igObject {
     int _count;
     int _capacity;
@@ -6285,20 +6276,20 @@ struct IGBReader34 : public igObject {
         }
     }
 };
-extern "C" igResult_2e3a10 igIGBFile_ReadObjectSectionOld(IGBReader34 *file);
+extern "C" igResult igIGBFile_ReadObjectSectionOld(IGBReader34 *file);
 struct IgbBlockStream { char p0[20]; int mode; };
 struct IgbBlockCursor { char p0[80]; int offset; int done; int total; char p92[12]; IgbBlockStream *stream; char p108[108]; int pending; char p220[32]; int mark; char p256[4]; int cap; int base; };
 extern "C" void Gap__Core__igIGBFile__vfunc_26(IgbBlockCursor *self, int at);
 class VC264 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void d32(); virtual void d33(); virtual void d34(); virtual void d35(); virtual void d36(); virtual void d37(); virtual void d38(); virtual void d39(); virtual void d40(); virtual void d41(); virtual void d42(); virtual void d43(); virtual void d44(); virtual void d45(); virtual void d46(); virtual void d47(); virtual void d48(); virtual void d49(); virtual void d50(); virtual void d51(); virtual void d52(); virtual void d53(); virtual void d54(); virtual void d55(); virtual void d56(); virtual void d57(); virtual void d58(); virtual void d59(); virtual void d60(); virtual void d61(); virtual void d62(); virtual void d63(); virtual int vX(int); };
 struct S37 { char p0[200]; int f200; char p1[76]; VC264 *f280; };
-extern "C" igResult_2e3a10 FUN_002e7ed0(S37 *arg1);
+extern "C" igResult FUN_002e7ed0(S37 *arg1);
 struct IgbRegistryObject;
 class IgbRegistryMeta { public: char p0[28]; char *name; };
 class IgbRegistryType { public: virtual void p0(); virtual void p1(); virtual void p2(); virtual void p3(); virtual void p4(); virtual void p5(); virtual void p6(); virtual void p7(); virtual void p8(); virtual void p9(); virtual void p10(); virtual void p11(); virtual void p12(); virtual void p13(); virtual void p14(); virtual void p15(); virtual void p16(); virtual void p17(); virtual void p18(); virtual void p19(); virtual IgbRegistryMeta *meta(); };
 struct IgbRegistryTable { char p0[8]; IgbRegistryType **data; int count; };
 struct IgbTypeRefList { int vt; int rc; int count; };
 struct IgbMetaSection { char p0[104]; IgbSectionStream *stream; char p108[28]; int entries; int bytes; char p144[24]; unsigned char swapped; char p169[15]; int *buffer; IgbTypeRefList *types; char p192[12]; IgbSectionSwapper *swapper; char p208[56]; int *work; char p268[12]; int pool; };
-extern "C" igResult_2e3a10 FUN_002e7f20(IgbMetaSection *self);
+extern "C" igResult FUN_002e7f20(IgbMetaSection *self);
 struct T39 { int word0; int references; };
 struct Rel39 { static inline void go(T39 *object) {
     if (object) {
@@ -6319,7 +6310,7 @@ class IgbWordSwapper { public: virtual void p0(); virtual void p1(); virtual voi
 struct IgbTypeReader { char p0[104]; IgbStreamReader *stream; char p108[60]; unsigned char swapped; char p169[35]; IgbWordSwapper *swapper; char p208[28];
   int *buffer; int bufferSize; ReflectedTypeList *types; int typeCount; char p252[12]; int *work; char p268[12]; int pool; };
 struct IgbTypeHeader { int size; int pad; int count; };
-extern "C" igResult_2e3a10 FUN_002e82a0(IgbTypeReader *self);
+extern "C" igResult FUN_002e82a0(IgbTypeReader *self);
 struct T41 { char p0[8]; int count; char p12[4]; void **data; char p20[60]; int f80; int f84; int f88; char p92[8]; int f100; char p104[44]; int f148; char p152[28]; int f180; char p184[68]; int f252; char p256[4]; int f260; };
 class E41 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void v128(T41 *); virtual void v132(T41 *); virtual void v136(T41 *); };
 class EE : public E41 { public: int refs; };
@@ -6335,7 +6326,7 @@ struct Ref41 {
         }
     }
 };
-extern "C" igResult_2e3a10 FUN_002e8670(T41 *arg1);
+extern "C" igResult FUN_002e8670(T41 *arg1);
 struct L42;
 class O42 {
 public:
@@ -6345,7 +6336,7 @@ public:
     virtual void v32(L42 *);
 };
 struct L42 { int p0, p4; int n; int p12; void **arr; char pad[80]; int f100; };
-extern "C" igResult_2e3a10 FUN_002e8880(L42 *arg1);
+extern "C" igResult FUN_002e8880(L42 *arg1);
 struct R44 { int vt; int rc; };
 struct Al44 { virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3(); virtual void v4(); virtual void v5(); virtual void v6(); virtual void v7(); virtual void v8(); virtual void v9(); virtual void v10(); virtual void v11(); virtual void v12(); virtual void v13(); virtual void v14(); virtual void v15(); virtual void v16(); virtual void v17(); virtual void v18(); virtual void v19(); virtual void v20(); virtual void v21(); virtual void v22(); virtual void v23(); virtual void v24(); virtual void v25(); virtual void v26(); virtual void v27(); virtual void v28(); virtual void v29(); virtual void v30(); virtual void v31(); virtual void v32(); virtual void v33(); virtual void v34(); virtual void v35(); virtual void v36(); virtual void v37(); virtual void v38(); virtual void v39(); virtual void v40(); virtual void v41(); virtual void v42(); virtual void v43(); virtual void v44(); virtual void v45(); virtual void v46(); virtual void v47(); virtual void v48(); virtual void v49(); virtual void v50(); virtual void v51(); virtual void v52(); virtual void v53(); virtual void v54(); virtual void v55(); virtual void v56(); virtual void v57(); virtual void v58(); virtual void v59(); virtual void v60(); virtual void v61(); virtual void v62(); virtual void v63(); virtual void v64(int); };
 struct T44 {
@@ -6362,7 +6353,7 @@ class VC_208_2 { public: virtual void d0(); virtual void d1(); virtual void d2()
 struct R46 { char pad[4]; int f4; };
 struct Q46 { char pad[24]; R46 *f24; };
 struct A46 { char pad[28]; R46 *f28; char pad2[72]; VC_108_3 *f104; char pad3[60]; unsigned char f168; char pad4[35]; VC_208_2 *f204; char pad5[4]; unsigned char f212; char pad6[7]; int f220; };
-extern "C" igResult_2e3a10 FUN_002e8d40(A46 *arg1);
+extern "C" igResult FUN_002e8d40(A46 *arg1);
 struct PooledStringHead { int chunk; int refs; };
 struct IgbExternalDir { char p0[20]; char *path; };
 class IgbExternalStream { public: virtual void p0(); virtual void p1(); virtual void p2(); virtual void p3(); virtual void p4(); virtual void p5(); virtual void p6(); virtual void p7(); virtual void p8(); virtual void p9(); virtual void p10(); virtual void p11(); virtual void p12(); virtual void p13(); virtual void p14(); virtual void p15(); virtual void p16(); virtual void p17(); virtual void p18(); virtual void p19(); virtual void p20(); virtual void p21(); virtual void p22(); virtual void p23(); virtual void p24(); virtual int read(void *, int, int); };
@@ -6370,19 +6361,19 @@ class IgbExternalSwapper { public: virtual void p0(); virtual void p1(); virtual
 class IgbExternalPool { public: virtual void p0(); virtual void p1(); virtual void p2(); virtual void p3(); virtual void p4(); virtual void p5(); virtual void p6(); virtual void p7(); virtual void p8(); virtual void p9(); virtual void p10(); virtual void p11(); virtual void p12(); virtual void p13(); virtual void p14(); virtual void p15(); virtual void p16(); virtual void p17(); virtual void p18(); virtual void p19(); virtual void p20(); virtual void p21(); virtual void p22(); virtual void p23(); virtual void p24(); virtual void p25(); virtual void p26(); virtual void p27(); virtual void p28(); virtual void p29(); virtual void p30(); virtual void p31(); virtual void p32(); virtual void p33(); virtual void p34(); virtual void p35(); virtual void p36(); virtual void p37(); virtual void p38(); virtual void p39(); virtual void p40(); virtual void p41(); virtual void p42(); virtual void p43(); virtual void p44(); virtual void p45(); virtual void p46(); virtual void p47(); virtual void p48(); virtual void p49(); virtual void p50(); virtual void p51(); virtual void p52(); virtual int *alloc(int, int); virtual void p54(); virtual void p55(); virtual void p56(); virtual void p57(); virtual void p58(); virtual void p59(); virtual void p60(); virtual void p61(); virtual void p62(); virtual void p63(); virtual void release(int *); };
 struct IgbExternalHeader { int size; int pad; int count; };
 struct IgbExternalReader { char p0[24]; int list; char p28[4]; IgbExternalDir *dir; char p36[68]; IgbExternalStream *stream; char p108[60]; unsigned char swapped; char p169[31]; char *name; IgbExternalSwapper *swapper; char p208[5]; unsigned char hasExternals; char p214[10]; int *buffer; int bytes; char *savedPath; char p236[44]; IgbExternalPool *pool; };
-extern "C" igResult_2e3a10 FUN_002e8e50(IgbExternalReader *self);
+extern "C" igResult FUN_002e8e50(IgbExternalReader *self);
 struct IgbNameList { int vt; int rc; int count; int cap; int *data; int getCount() const { return count; } };
 class IgbStream { public: virtual void p0(); virtual void p1(); virtual void p2(); virtual void p3(); virtual void p4(); virtual void p5(); virtual void p6(); virtual void p7(); virtual void p8(); virtual void p9(); virtual void p10(); virtual void p11(); virtual void p12(); virtual void p13(); virtual void p14(); virtual void p15(); virtual void p16(); virtual void p17(); virtual void p18(); virtual void p19(); virtual void p20(); virtual void p21(); virtual void p22(); virtual void p23(); virtual void p24(); virtual int read(void *, int, int); };
 class IgbSwapper { public: virtual void p0(); virtual void p1(); virtual void p2(); virtual void p3(); virtual void p4(); virtual void p5(); virtual void p6(); virtual void p7(); virtual void p8(); virtual void p9(); virtual void p10(); virtual void p11(); virtual void p12(); virtual void p13(); virtual void p14(); virtual void p15(); virtual void p16(); virtual void p17(); virtual void p18(); virtual void p19(); virtual void p20(); virtual void p21(); virtual void p22(); virtual void p23(); virtual void p24(); virtual void p25(); virtual void p26(); virtual void p27(); virtual void p28(); virtual void p29(); virtual void p30(); virtual void p31(); virtual void p32(); virtual void p33(); virtual void p34(); virtual void p35(); virtual void p36(); virtual void p37(); virtual void p38(); virtual void p39(); virtual void p40(); virtual void p41(); virtual void p42(); virtual void p43(); virtual void p44(); virtual void p45(); virtual void p46(); virtual void p47(); virtual void p48(); virtual void p49(); virtual void swap(void *, int); };
 class IgbPool { public: virtual void p0(); virtual void p1(); virtual void p2(); virtual void p3(); virtual void p4(); virtual void p5(); virtual void p6(); virtual void p7(); virtual void p8(); virtual void p9(); virtual void p10(); virtual void p11(); virtual void p12(); virtual void p13(); virtual void p14(); virtual void p15(); virtual void p16(); virtual void p17(); virtual void p18(); virtual void p19(); virtual void p20(); virtual void p21(); virtual void p22(); virtual void p23(); virtual void p24(); virtual void p25(); virtual void p26(); virtual void p27(); virtual void p28(); virtual void p29(); virtual void p30(); virtual void p31(); virtual void p32(); virtual void p33(); virtual void p34(); virtual void p35(); virtual void p36(); virtual void p37(); virtual void p38(); virtual void p39(); virtual void p40(); virtual void p41(); virtual void p42(); virtual void p43(); virtual void p44(); virtual void p45(); virtual void p46(); virtual void p47(); virtual void p48(); virtual void p49(); virtual void p50(); virtual void p51(); virtual char *alloc(int); virtual void p53(); virtual void p54(); virtual void p55(); virtual void p56(); virtual void p57(); virtual void p58(); virtual void p59(); virtual void p60(); virtual void p61(); virtual void p62(); virtual void p63(); virtual void release(char *); };
 struct NameHeader { int size; int count; };
 struct IgbNameReader { char p0[104]; IgbStream *stream; char p108[60]; unsigned char swapped; char p169[35]; IgbSwapper *swapper; char p208[72]; IgbPool *pool; char p284[20]; IgbNameList *names; };
-extern "C" igResult_2e3a10 FUN_002e91e0(IgbNameReader *self);
+extern "C" igResult FUN_002e91e0(IgbNameReader *self);
 class E50 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void d32(); virtual void d33(); virtual void vX(int); };
 struct O50 { int p0; int p1; int n; char pad[44]; unsigned char f56; };
-extern "C" igResult_2e3a10 FUN_002e94b0(O50 *arg1);
+extern "C" igResult FUN_002e94b0(O50 *arg1);
 class DW4VC_148_2e3a10 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void d32(); virtual void d33(); virtual void d34(); virtual int vX(void *); };
-extern "C" igResult_2e3a10 FUN_002e9560(void *arg1);
+extern "C" igResult FUN_002e9560(void *arg1);
 /* ReadFile(path): the Alchemy .igb loader driver. Logs "readFile(%s)", notes the clock, then runs
  * the section readers in file order (header, then the version-dependent tables, then the object
  * sections). A reader that fails sends the loader to its error path FUN_002e9470. After the last
@@ -6395,10 +6386,10 @@ struct Device { int pad[3]; int name; };
 
 struct File {
   virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27();
-  virtual igResult_2e3a10 v30();             /* +120 */
+  virtual igResult v30();             /* +120 */
   virtual void v31();
   virtual void v32();
-  virtual igResult_2e3a10 readTail();        /* +132 */
+  virtual igResult readTail();        /* +132 */
   int pad4;
   int result;                         /* +8, returned on success */
   char pad12[36];
@@ -6420,13 +6411,13 @@ struct File {
 extern "C" int igIGBFile_ReadFile(File *self, int path);
 struct S54 { char pad0[20]; int f20; char pad1[8]; int f32; char pad2[243]; unsigned char f279; };
 extern "C" void Gap__Core__igIGBFile__vfunc_30(int *arg0, struct S54 *arg1);
-class IgbInfoBase { public: virtual void p0(); virtual void p1(); virtual void p2(); virtual void p3(); virtual void p4(); virtual void p5(); virtual void p6(); virtual void p7(); virtual void p8(); virtual void p9(); virtual void p10(); virtual void p11(); virtual void p12(); virtual void p13(); virtual void p14(); virtual void p15(); virtual void p16(); virtual void p17(); virtual void p18(); virtual void p19(); virtual void p20(); virtual void p21(); virtual void p22(); virtual void p23(); virtual void p24(); virtual void p25(); virtual void p26(); virtual void p27(); virtual void p28(); virtual igResult_2e3a10 check(); };
+class IgbInfoBase { public: virtual void p0(); virtual void p1(); virtual void p2(); virtual void p3(); virtual void p4(); virtual void p5(); virtual void p6(); virtual void p7(); virtual void p8(); virtual void p9(); virtual void p10(); virtual void p11(); virtual void p12(); virtual void p13(); virtual void p14(); virtual void p15(); virtual void p16(); virtual void p17(); virtual void p18(); virtual void p19(); virtual void p20(); virtual void p21(); virtual void p22(); virtual void p23(); virtual void p24(); virtual void p25(); virtual void p26(); virtual void p27(); virtual void p28(); virtual igResult check(); };
 class IgbInfoObject : public IgbInfoBase { public: int rc; };
 struct IgbInfoList { int vt; int rc; int count; int cap; IgbInfoObject **data; };
 class Ref55 { public: IgbInfoObject *p; Ref55(IgbInfoObject *o) : p(o) { if (p != 0) { p->rc = p->rc + 1; } }
  ~Ref55() { IgbInfoObject *object = p; if (object) { --object->rc; if (((unsigned long long)(long long)object->rc & 0x7fffffULL) == 0) igObject_Destroy(object); } } };
-class IgbFileInfoView { public: virtual void p0(); virtual void p1(); virtual void p2(); virtual void p3(); virtual void p4(); virtual void p5(); virtual void p6(); virtual void p7(); virtual void p8(); virtual void p9(); virtual void p10(); virtual void p11(); virtual void p12(); virtual void p13(); virtual void p14(); virtual void p15(); virtual void p16(); virtual void p17(); virtual void p18(); virtual void p19(); virtual void p20(); virtual void p21(); virtual void p22(); virtual void p23(); virtual void p24(); virtual void p25(); virtual void p26(); virtual void p27(); virtual igResult_2e3a10 finish(); char pad[20]; IgbInfoList *list; };
-extern "C" igResult_2e3a10 Gap__Core__igIGBFile__vfunc_31(IgbFileInfoView *self);
+class IgbFileInfoView { public: virtual void p0(); virtual void p1(); virtual void p2(); virtual void p3(); virtual void p4(); virtual void p5(); virtual void p6(); virtual void p7(); virtual void p8(); virtual void p9(); virtual void p10(); virtual void p11(); virtual void p12(); virtual void p13(); virtual void p14(); virtual void p15(); virtual void p16(); virtual void p17(); virtual void p18(); virtual void p19(); virtual void p20(); virtual void p21(); virtual void p22(); virtual void p23(); virtual void p24(); virtual void p25(); virtual void p26(); virtual void p27(); virtual igResult finish(); char pad[20]; IgbInfoList *list; };
+extern "C" igResult Gap__Core__igIGBFile__vfunc_31(IgbFileInfoView *self);
 struct IGB;
 class VCa_2e3a10 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void d32(); virtual void d33(); virtual void d34(); virtual void d35(); virtual void d36(); virtual void d37(); virtual void d38(); virtual void d39(); virtual void d40(); virtual void d41(); virtual void d42(); virtual void d43(); virtual void d44(); virtual void d45(); virtual void d46(); virtual void d47(); virtual void d48(); virtual void d49(); virtual void d50(); virtual void d51(); virtual void d52(); virtual int v220(int, int); virtual void d54(); virtual void d55(); virtual void d56(); virtual void d57(); virtual void d58(); virtual void d59(); virtual void d60(); virtual void d61(); virtual void d62(); virtual void d63(); virtual int v264(int); };
 class VCb { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void d32(); virtual void d33(); virtual void d34(); virtual void d35(); virtual void d36(); virtual void d37(); virtual void d38(); virtual int v164(void *); };
@@ -6436,7 +6427,7 @@ extern "C" int Gap__Core__igIGBFile__vfunc_34(IGB *o);
 class P57 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void d32(); virtual void d33(); virtual void d34(); virtual void d35(); virtual void d36(); virtual void d37(); virtual void d38(); virtual void d39(); virtual void d40(); virtual void d41(); virtual void d42(); virtual void d43(); virtual void d44(); virtual void d45(); virtual void d46(); virtual void d47(); virtual void d48(); virtual void d49(); virtual void d50(); virtual void d51(); virtual void d52(); virtual int vB(int, unsigned short); virtual void d54(); virtual void d55(); virtual void d56(); virtual void d57(); virtual void d58(); virtual void d59(); virtual void d60(); virtual void d61(); virtual void d62(); virtual void d63(); virtual void vA(int); };
 struct Inf { char p0[28]; int f28; char p1[4]; unsigned short f36; };
 struct IgbSectionBufferOwner { char p0[104]; Inf *f104; char p1[56]; int f164; char p2[92]; int f260; int f264; char p3[12]; P57 *f280; };
-extern "C" igResult_2e3a10 igIGBFile_GetSectionBuffer(IgbSectionBufferOwner *arg1, int arg2);
+extern "C" igResult igIGBFile_GetSectionBuffer(IgbSectionBufferOwner *arg1, int arg2);
 class VC58 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void d32(); virtual int vX(void *); };
 struct S58 { char pad8[8]; int cnt; char pad[244]; int f100; char pad2[8]; int f10c; int f110; };
 extern "C" void Gap__Core__igIGBFile__vfunc_33(int *arg0, S58 *arg1);
@@ -7005,7 +6996,6 @@ extern "C" long long DAT_00586fa0[4];
 extern "C" long long DAT_00586fa8[4];
 extern "C" long long DAT_00586fc0[4];
 extern "C" long long DAT_00586fc8[4];
-typedef igResult_2e3a10 igResult_2f25d0;
 struct PoolDescRecord { int vt; int rc; char *name; char q12[8]; char *alias; char *s24; int a28; int a32; int a36; char *s40; char *s44; char *s48; char *s52; char *s56; char *s60; char *s64; char *s68; char *s72; char *s76; int a80; };
 struct PoolDescSlot { int pool; char name[128]; PoolDescRecord *record; char q136[8]; };
 struct ContextStackEntry;
@@ -7095,14 +7085,14 @@ extern "C" R2 FUN_002f2d20(OB *arg1, int arg2, int arg3);
 class Child2 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual R2 vA(int, int); };
 extern "C" R2 FUN_002f2e30(OB *arg1, int arg2, int arg3);
 struct igRefHead { int vt; int rc; };
-class SlotReadTable { public: virtual void p0(); virtual void p1(); virtual void p2(); virtual void p3(); virtual void p4(); virtual void p5(); virtual void p6(); virtual void p7(); virtual void p8(); virtual void p9(); virtual void p10(); virtual void p11(); virtual void p12(); virtual void p13(); virtual void p14(); virtual void p15(); virtual void p16(); virtual void p17(); virtual void p18(); virtual void p19(); virtual void p20(); virtual void p21(); virtual void p22(); virtual void p23(); virtual void p24(); virtual void p25(); virtual void p26(); virtual void p27(); virtual void p28(); virtual void p29(); virtual void p30(); virtual void p31(); virtual void p32(); virtual void p33(); virtual igResult_2f25d0 readOne(int, igRefHead *);
+class SlotReadTable { public: virtual void p0(); virtual void p1(); virtual void p2(); virtual void p3(); virtual void p4(); virtual void p5(); virtual void p6(); virtual void p7(); virtual void p8(); virtual void p9(); virtual void p10(); virtual void p11(); virtual void p12(); virtual void p13(); virtual void p14(); virtual void p15(); virtual void p16(); virtual void p17(); virtual void p18(); virtual void p19(); virtual void p20(); virtual void p21(); virtual void p22(); virtual void p23(); virtual void p24(); virtual void p25(); virtual void p26(); virtual void p27(); virtual void p28(); virtual void p29(); virtual void p30(); virtual void p31(); virtual void p32(); virtual void p33(); virtual igResult readOne(int, igRefHead *);
 };
-extern "C" igResult_2f25d0 FUN_002f2f40(SlotReadTable *self, int file);
+extern "C" igResult FUN_002f2f40(SlotReadTable *self, int file);
 struct DirSlotObject { int vt; int rc; };
 struct DirSourceRecord { char p0[20]; int id; };
-class DirSlotTable { public: virtual void p0(); virtual void p1(); virtual void p2(); virtual void p3(); virtual void p4(); virtual void p5(); virtual void p6(); virtual void p7(); virtual void p8(); virtual void p9(); virtual void p10(); virtual void p11(); virtual void p12(); virtual void p13(); virtual void p14(); virtual void p15(); virtual void p16(); virtual void p17(); virtual void p18(); virtual void p19(); virtual void p20(); virtual void p21(); virtual void p22(); virtual void p23(); virtual void p24(); virtual void p25(); virtual void p26(); virtual void p27(); virtual int slotFor(int); virtual void p29(); virtual void p30(); virtual void p31(); virtual void p32(); virtual void p33(); virtual void p34(); virtual igResult_2f25d0 fillSlot(int, DirSourceRecord *, int);
+class DirSlotTable { public: virtual void p0(); virtual void p1(); virtual void p2(); virtual void p3(); virtual void p4(); virtual void p5(); virtual void p6(); virtual void p7(); virtual void p8(); virtual void p9(); virtual void p10(); virtual void p11(); virtual void p12(); virtual void p13(); virtual void p14(); virtual void p15(); virtual void p16(); virtual void p17(); virtual void p18(); virtual void p19(); virtual void p20(); virtual void p21(); virtual void p22(); virtual void p23(); virtual void p24(); virtual void p25(); virtual void p26(); virtual void p27(); virtual int slotFor(int); virtual void p29(); virtual void p30(); virtual void p31(); virtual void p32(); virtual void p33(); virtual void p34(); virtual igResult fillSlot(int, DirSourceRecord *, int);
   char q4[12]; DirSlotObject *slots; };
-extern "C" igResult_2f25d0 FUN_002f3060(DirSlotTable *self, int file, int arg);
+extern "C" igResult FUN_002f3060(DirSlotTable *self, int file, int arg);
 /* Header stored in front of every interned string token. */
 struct StringTokenHeader { int owner; int refCount; };
 typedef void StringToken;
@@ -7181,9 +7171,9 @@ struct PoolHandle {
 extern "C" char text_kIGMemoryPoolHandle_s[];
 extern "C" void FUN_002f31b0(int *result, PoolTable *table, int index, PoolHandle *handle);
 struct PoolDescString { int chunk; int refs; };
-class PoolDescManagerBase { public: virtual void p0(); virtual void p1(); virtual void p2(); virtual void p3(); virtual void p4(); virtual void p5(); virtual void p6(); virtual void p7(); virtual void p8(); virtual void p9(); virtual void p10(); virtual void p11(); virtual void p12(); virtual void p13(); virtual void p14(); virtual void p15(); virtual void p16(); virtual void p17(); virtual void p18(); virtual void p19(); virtual void p20(); virtual void p21(); virtual void p22(); virtual void p23(); virtual void p24(); virtual void p25(); virtual void p26(); virtual void p27(); virtual void p28(); virtual void p29(); virtual void p30(); virtual void p31(); virtual void p32(); virtual void p33(); virtual void p34(); virtual void p35(); virtual void p36(); virtual void p37(); virtual void p38(); virtual void p39(); virtual void p40(); virtual void p41(); virtual void p42(); virtual void p43(); virtual void p44(); virtual void p45(); virtual void p46(); virtual void p47(); virtual void p48(); virtual igResult_2f25d0 build(int, int); };
+class PoolDescManagerBase { public: virtual void p0(); virtual void p1(); virtual void p2(); virtual void p3(); virtual void p4(); virtual void p5(); virtual void p6(); virtual void p7(); virtual void p8(); virtual void p9(); virtual void p10(); virtual void p11(); virtual void p12(); virtual void p13(); virtual void p14(); virtual void p15(); virtual void p16(); virtual void p17(); virtual void p18(); virtual void p19(); virtual void p20(); virtual void p21(); virtual void p22(); virtual void p23(); virtual void p24(); virtual void p25(); virtual void p26(); virtual void p27(); virtual void p28(); virtual void p29(); virtual void p30(); virtual void p31(); virtual void p32(); virtual void p33(); virtual void p34(); virtual void p35(); virtual void p36(); virtual void p37(); virtual void p38(); virtual void p39(); virtual void p40(); virtual void p41(); virtual void p42(); virtual void p43(); virtual void p44(); virtual void p45(); virtual void p46(); virtual void p47(); virtual void p48(); virtual igResult build(int, int); };
 class PoolDescManager : public PoolDescManagerBase { public: char q4[4]; int nextSlot; char q12[4]; int table; };
-extern "C" igResult_2f25d0 FUN_002f3910(PoolDescManager *self, int index, PoolDescRecord *desc, int build);
+extern "C" igResult FUN_002f3910(PoolDescManager *self, int index, PoolDescRecord *desc, int build);
 class DW4VC_120_0 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual int vX(); };
 class DW4VC_132_0 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual int vX(); };
 class DW4VC_152_1 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void d32(); virtual void d33(); virtual void d34(); virtual void d35(); virtual int vX(int); };
@@ -7199,7 +7189,7 @@ extern "C" int DAT_00586fd8[4];
 extern "C" int DAT_00586fe0[4];
 extern "C" int DAT_00586fe8[4];
 extern "C" int DAT_00586ff0[4];
-class PoolObjectBase { public: virtual void p0(); virtual void p1(); virtual void p2(); virtual void p3(); virtual void p4(); virtual void p5(); virtual void p6(); virtual void p7(); virtual void p8(); virtual void p9(); virtual void p10(); virtual void p11(); virtual void p12(); virtual void p13(); virtual void p14(); virtual void p15(); virtual void p16(); virtual void p17(); virtual void p18(); virtual void p19(); virtual void p20(); virtual void p21(); virtual void p22(); virtual void p23(); virtual void p24(); virtual void p25(); virtual void p26(); virtual void p27(); virtual void finish(); virtual void p29(); virtual void p30(); virtual void p31(); virtual void p32(); virtual void p33(); virtual void p34(); virtual void p35(); virtual void p36(); virtual void p37(); virtual void p38(); virtual void p39(); virtual void p40(); virtual igResult_2f25d0 setName(int); virtual void p42(); virtual void p43(); virtual void p44(); virtual void p45(); virtual void p46(); virtual void p47(); virtual void p48(); virtual void p49(); virtual void p50(); virtual void p51(); virtual void p52(); virtual void p53(); virtual void p54(); virtual void p55(); virtual void p56(); virtual void p57(); virtual void p58(); virtual void p59(); virtual void p60(); virtual void p61(); virtual void p62(); virtual void p63(); virtual void p64(); virtual void p65(); virtual void p66(); virtual void p67(); virtual void p68(); virtual void p69(); virtual void p70(); virtual void p71(); virtual void p72(); virtual void p73(); virtual void p74(); virtual void p75(); virtual void p76(); virtual void p77(); virtual void p78(); virtual void p79(); virtual void p80(); virtual void p81(); virtual void p82(); virtual void p83(); virtual void p84(); virtual void p85(); virtual void p86(); virtual void p87(); virtual void p88(); virtual void p89(); virtual void p90(); virtual void p91(); virtual void p92(); virtual void p93(); virtual void p94(); virtual void prepare(); };
+class PoolObjectBase { public: virtual void p0(); virtual void p1(); virtual void p2(); virtual void p3(); virtual void p4(); virtual void p5(); virtual void p6(); virtual void p7(); virtual void p8(); virtual void p9(); virtual void p10(); virtual void p11(); virtual void p12(); virtual void p13(); virtual void p14(); virtual void p15(); virtual void p16(); virtual void p17(); virtual void p18(); virtual void p19(); virtual void p20(); virtual void p21(); virtual void p22(); virtual void p23(); virtual void p24(); virtual void p25(); virtual void p26(); virtual void p27(); virtual void finish(); virtual void p29(); virtual void p30(); virtual void p31(); virtual void p32(); virtual void p33(); virtual void p34(); virtual void p35(); virtual void p36(); virtual void p37(); virtual void p38(); virtual void p39(); virtual void p40(); virtual igResult setName(int); virtual void p42(); virtual void p43(); virtual void p44(); virtual void p45(); virtual void p46(); virtual void p47(); virtual void p48(); virtual void p49(); virtual void p50(); virtual void p51(); virtual void p52(); virtual void p53(); virtual void p54(); virtual void p55(); virtual void p56(); virtual void p57(); virtual void p58(); virtual void p59(); virtual void p60(); virtual void p61(); virtual void p62(); virtual void p63(); virtual void p64(); virtual void p65(); virtual void p66(); virtual void p67(); virtual void p68(); virtual void p69(); virtual void p70(); virtual void p71(); virtual void p72(); virtual void p73(); virtual void p74(); virtual void p75(); virtual void p76(); virtual void p77(); virtual void p78(); virtual void p79(); virtual void p80(); virtual void p81(); virtual void p82(); virtual void p83(); virtual void p84(); virtual void p85(); virtual void p86(); virtual void p87(); virtual void p88(); virtual void p89(); virtual void p90(); virtual void p91(); virtual void p92(); virtual void p93(); virtual void p94(); virtual void prepare(); };
 class PoolObject : public PoolObjectBase { public: int rc; };
 struct PoolContext { char p0[48]; PoolObject *main; PoolObject *second; };
 struct PoolSlot { char p0[144]; };
@@ -7229,9 +7219,9 @@ extern "C" int text_arenaMemoryPoolMessageLevelRelea[4];
 extern "C" int text_arenaMemoryPoolHeapIntegrityChec[4];
 extern "C" int text_inhibitArenaCountMessage[4];
 extern "C" int text_nonTrackedPoolPreSize[4];
-class PoolConfigObject { public: virtual void p0(); virtual void p1(); virtual void p2(); virtual void p3(); virtual void p4(); virtual void p5(); virtual void p6(); virtual void p7(); virtual void p8(); virtual void p9(); virtual void p10(); virtual void p11(); virtual void p12(); virtual void p13(); virtual void p14(); virtual void p15(); virtual void p16(); virtual void p17(); virtual void p18(); virtual void p19(); virtual void p20(); virtual void p21(); virtual void p22(); virtual void p23(); virtual void p24(); virtual void p25(); virtual void p26(); virtual void p27(); virtual void finish(); virtual void p29(); virtual void p30(); virtual int inUse(); virtual igResult_2f25d0 lock(int); virtual void p33(); virtual void p34(); virtual void p35(); virtual void p36(); virtual void p37(); virtual void p38(); virtual void p39(); virtual void p40(); virtual igResult_2f25d0 setName(int); int rc; char q8[184]; int options; };
+class PoolConfigObject { public: virtual void p0(); virtual void p1(); virtual void p2(); virtual void p3(); virtual void p4(); virtual void p5(); virtual void p6(); virtual void p7(); virtual void p8(); virtual void p9(); virtual void p10(); virtual void p11(); virtual void p12(); virtual void p13(); virtual void p14(); virtual void p15(); virtual void p16(); virtual void p17(); virtual void p18(); virtual void p19(); virtual void p20(); virtual void p21(); virtual void p22(); virtual void p23(); virtual void p24(); virtual void p25(); virtual void p26(); virtual void p27(); virtual void finish(); virtual void p29(); virtual void p30(); virtual int inUse(); virtual igResult lock(int); virtual void p33(); virtual void p34(); virtual void p35(); virtual void p36(); virtual void p37(); virtual void p38(); virtual void p39(); virtual void p40(); virtual igResult setName(int); int rc; char q8[184]; int options; };
 struct PoolConfigContext { char p0[48]; PoolConfigObject *main; PoolConfigObject *second; int config; char p60[28]; PoolConfigObject *a88; char p92[4]; PoolConfigObject *a96; };
-class PoolConfigManagerBase { public: virtual void p0(); virtual void p1(); virtual void p2(); virtual void p3(); virtual void p4(); virtual void p5(); virtual void p6(); virtual void p7(); virtual void p8(); virtual void p9(); virtual void p10(); virtual void p11(); virtual void p12(); virtual void p13(); virtual void p14(); virtual void p15(); virtual void p16(); virtual void p17(); virtual void p18(); virtual void p19(); virtual void p20(); virtual PoolConfigObject *poolFor(int); virtual void p22(); virtual void setPool(int, PoolConfigObject *); virtual void p24(); virtual void p25(); virtual void p26(); virtual void p27(); virtual void p28(); virtual void p29(); virtual void p30(); virtual void p31(); virtual void p32(); virtual igResult_2f25d0 setDefault(int, int); virtual void p34(); virtual void p35(); virtual void setFlags(int); virtual void p37(); virtual void p38(); virtual void p39(); virtual void p40(); virtual void p41(); virtual void p42(); virtual void p43(); virtual void p44(); virtual void p45(); virtual igResult_2f25d0 readConfig(int, int); virtual void p47(); virtual igResult_2f25d0 apply(); virtual igResult_2f25d0 build(int, int); virtual void p50(); virtual void p51(); virtual void finish(); };
+class PoolConfigManagerBase { public: virtual void p0(); virtual void p1(); virtual void p2(); virtual void p3(); virtual void p4(); virtual void p5(); virtual void p6(); virtual void p7(); virtual void p8(); virtual void p9(); virtual void p10(); virtual void p11(); virtual void p12(); virtual void p13(); virtual void p14(); virtual void p15(); virtual void p16(); virtual void p17(); virtual void p18(); virtual void p19(); virtual void p20(); virtual PoolConfigObject *poolFor(int); virtual void p22(); virtual void setPool(int, PoolConfigObject *); virtual void p24(); virtual void p25(); virtual void p26(); virtual void p27(); virtual void p28(); virtual void p29(); virtual void p30(); virtual void p31(); virtual void p32(); virtual igResult setDefault(int, int); virtual void p34(); virtual void p35(); virtual void setFlags(int); virtual void p37(); virtual void p38(); virtual void p39(); virtual void p40(); virtual void p41(); virtual void p42(); virtual void p43(); virtual void p44(); virtual void p45(); virtual igResult readConfig(int, int); virtual void p47(); virtual igResult apply(); virtual igResult build(int, int); virtual void p50(); virtual void p51(); virtual void finish(); };
 class PoolConfigManager : public PoolConfigManagerBase { public: char q4[8]; int flags; int defaultSize; PoolConfigObject *first; char q24[140]; PoolConfigObject *third; char q168[284]; PoolConfigObject *fallback; };
 extern "C" void FUN_002f4a60(int *out, PoolConfigManager *self);
 struct Cnt { int pad[11]; int count; };
@@ -7334,7 +7324,7 @@ extern "C" char text_Fixed[];
 extern "C" char text_HighSpeed[];
 extern "C" char text_OnDemand[];
 extern "C" char text_driverPoolSize[];
-class PoolDescTable { public: virtual void p0(); virtual void p1(); virtual void p2(); virtual void p3(); virtual void p4(); virtual void p5(); virtual void p6(); virtual void p7(); virtual void p8(); virtual void p9(); virtual void p10(); virtual void p11(); virtual void p12(); virtual void p13(); virtual void p14(); virtual void p15(); virtual void p16(); virtual void p17(); virtual void p18(); virtual void p19(); virtual void p20(); virtual void p21(); virtual void p22(); virtual igResult_2f25d0 load(int, char *); int rc; };
+class PoolDescTable { public: virtual void p0(); virtual void p1(); virtual void p2(); virtual void p3(); virtual void p4(); virtual void p5(); virtual void p6(); virtual void p7(); virtual void p8(); virtual void p9(); virtual void p10(); virtual void p11(); virtual void p12(); virtual void p13(); virtual void p14(); virtual void p15(); virtual void p16(); virtual void p17(); virtual void p18(); virtual void p19(); virtual void p20(); virtual void p21(); virtual void p22(); virtual igResult load(int, char *); int rc; };
 class PoolDescSetupBase { public: virtual void p0(); virtual void p1(); virtual void p2(); virtual void p3(); virtual void p4(); virtual void p5(); virtual void p6(); virtual void p7(); virtual void p8(); virtual void p9(); virtual void p10(); virtual void p11(); virtual void p12(); virtual void p13(); virtual void p14(); virtual void p15(); virtual void p16(); virtual void p17(); virtual void p18(); virtual void p19(); virtual void p20(); virtual void p21(); virtual void p22(); virtual void p23(); virtual char *recordName(int); };
 class PoolDescSetup : public PoolDescSetupBase { public: char q4[12]; PoolDescTable *table; PoolDescSlot slots[46]; };
 struct PoolDescContext { char p0[56]; int config; };
@@ -7560,7 +7550,7 @@ struct RefCount { union { int w; struct { unsigned cnt : 23; unsigned f : 9; } b
 struct StringHeader { int chunk; int refs; };
 class EventTracker { public: virtual void p0(); virtual void p1(); virtual void p2(); virtual void p3(); virtual void p4(); virtual void p5(); virtual void p6(); virtual void p7(); virtual void p8(); virtual void p9(); virtual void p10(); virtual void p11(); virtual void p12(); virtual void p13(); virtual void p14(); virtual void p15(); virtual void p16(); virtual void p17(); virtual void p18(); virtual void p19(); virtual void p20(); virtual void start();
     RefCount rc; char q8[36]; int users; };
-class PoolLoader { public: virtual void p0(); virtual void p1(); virtual void p2(); virtual void p3(); virtual void p4(); virtual void p5(); virtual void p6(); virtual void p7(); virtual void p8(); virtual void p9(); virtual void p10(); virtual void p11(); virtual void p12(); virtual void p13(); virtual void p14(); virtual void p15(); virtual void p16(); virtual void p17(); virtual void p18(); virtual void p19(); virtual void p20(); virtual void p21(); virtual igResult_2f25d0 load(char *); virtual igResult_2f25d0 finish(); virtual void p24(); virtual void p25(); virtual igResult_2f25d0 attach(void *, int); virtual void p27(); virtual void p28(); virtual void optionA(); virtual void optionB();
+class PoolLoader { public: virtual void p0(); virtual void p1(); virtual void p2(); virtual void p3(); virtual void p4(); virtual void p5(); virtual void p6(); virtual void p7(); virtual void p8(); virtual void p9(); virtual void p10(); virtual void p11(); virtual void p12(); virtual void p13(); virtual void p14(); virtual void p15(); virtual void p16(); virtual void p17(); virtual void p18(); virtual void p19(); virtual void p20(); virtual void p21(); virtual igResult load(char *); virtual igResult finish(); virtual void p24(); virtual void p25(); virtual igResult attach(void *, int); virtual void p27(); virtual void p28(); virtual void optionA(); virtual void optionB();
     RefCount rc; };
 struct LoadedObject { int vt; RefCount rc; };
 class TrackedPool { public: virtual void p0(); virtual void p1(); virtual void p2(); virtual void p3(); virtual void p4(); virtual void p5(); virtual void p6(); virtual void p7(); virtual void p8(); virtual void p9(); virtual void p10(); virtual void p11(); virtual void p12(); virtual void p13(); virtual void p14(); virtual void p15(); virtual void p16(); virtual void p17(); virtual void p18(); virtual void p19(); virtual void p20(); virtual void p21(); virtual void p22(); virtual void p23(); virtual void p24(); virtual void p25(); virtual void p26(); virtual void p27(); virtual void p28(); virtual void p29(); virtual void p30(); virtual void p31(); virtual void p32(); virtual void p33(); virtual void p34(); virtual void p35(); virtual void p36(); virtual void p37(); virtual void p38(); virtual void p39(); virtual void p40(); virtual void p41(); virtual void p42(); virtual void p43(); virtual void p44(); virtual void p45(); virtual void p46(); virtual void p47(); virtual void p48(); virtual void p49(); virtual void p50(); virtual void p51(); virtual void p52(); virtual void p53(); virtual void p54(); virtual void p55(); virtual void p56(); virtual void p57(); virtual void p58(); virtual void p59(); virtual void p60(); virtual void p61(); virtual void p62(); virtual void p63(); virtual void p64(); virtual void p65(); virtual void p66(); virtual void p67(); virtual void p68(); virtual void p69(); virtual void p70(); virtual void p71(); virtual void p72(); virtual void p73(); virtual void p74(); virtual void p75(); virtual void p76(); virtual void p77(); virtual void p78(); virtual void p79(); virtual void p80(); virtual void p81(); virtual void p82(); virtual void p83(); virtual void p84(); virtual void p85(); virtual void p86(); virtual int hasTracker(); virtual void setTracker(EventTracker *); };
@@ -7618,12 +7608,12 @@ class SlotOwnerObject { public:
 };
 class SlotPool { public:
  virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void d32(); virtual void d33(); virtual void d34(); virtual void d35(); virtual void d36(); virtual void d37(); virtual void d38(); virtual void d39(); virtual void d40(); virtual void d41(); virtual void d42(); virtual void d43(); virtual void d44(); virtual void d45(); virtual void d46(); virtual void d47(); virtual void d48();
- virtual igResult_2f25d0 vRelease(int, int);
+ virtual igResult vRelease(int, int);
  virtual void e51();
  virtual void vFree(int);
 };
 struct PoolSlotEntry { SlotOwnerObject *owner; char pad[136]; unsigned int flags; };
-extern "C" igResult_2f25d0 FUN_002f7a70(SlotPool *self, unsigned int kind, int free);
+extern "C" igResult FUN_002f7a70(SlotPool *self, unsigned int kind, int free);
 struct Ent_2f25d0 { char pad[20]; DW4VC_356_0 *obj; char pad2[120]; };
 extern "C" void FUN_002f7bc0(Ent_2f25d0 *arg0, int arg1);
 struct E2 { char pad[20]; DW4VC_356_0 *f20; char pad2[120]; };
@@ -7861,7 +7851,7 @@ class DW4VC_144_0 { public: virtual void d0(); virtual void d1(); virtual void d
 class DW4VC_260_2 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void d32(); virtual void d33(); virtual void d34(); virtual void d35(); virtual void d36(); virtual void d37(); virtual void d38(); virtual void d39(); virtual void d40(); virtual void d41(); virtual void d42(); virtual void d43(); virtual void d44(); virtual void d45(); virtual void d46(); virtual void d47(); virtual void d48(); virtual void d49(); virtual void d50(); virtual void d51(); virtual void d52(); virtual void d53(); virtual void d54(); virtual void d55(); virtual void d56(); virtual void d57(); virtual void d58(); virtual void d59(); virtual void d60(); virtual void d61(); virtual void d62(); virtual int vX(int, int); };
 extern "C" void FUN_002f8580(E3 *arg0, int *arg1);
 extern "C" int DAT_00586ffc[4];
-extern "C" igResult_2f25d0 FUN_002f86e0(void *arg1);
+extern "C" igResult FUN_002f86e0(void *arg1);
 struct ContextStackEntry {
     int pad;
     union {
@@ -8337,11 +8327,6 @@ class ElementWriteView { public: virtual void d0(); virtual void d1(); virtual v
 extern "C" int FUN_002fcce0(ElementWriteView *arg0, int arg1, int arg2, int arg3, int arg4);
 class FieldValueView { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void d32(); virtual void d33(); virtual void d34(); virtual void d35(); virtual void d36(); virtual void d37(); virtual void d38(); virtual void d39(); virtual void d40(); virtual void d41(); virtual void d42(); virtual void d43(); virtual void d44(); virtual void d45(); virtual void d46(); virtual void d47(); virtual void d48(); virtual void d49(); virtual void d50(); virtual void d51(); virtual void d52(); virtual void d53(); virtual int vX(int); };
 extern "C" int FUN_002fcdb0(igMetaField *arg0, int arg1);
-class igResult_2fbf90 {
-public:
-    int v;
-    igResult_2fbf90(const igResult_2fbf90 &o) : v(o.v) {}
-};
 class igMetaFieldResultView {
 public:
     virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7();
@@ -8351,11 +8336,11 @@ public:
     virtual void d32(); virtual void d33(); virtual void d34(); virtual void d35(); virtual void d36(); virtual void d37(); virtual void d38(); virtual void d39();
     virtual void d40(); virtual void d41(); virtual void d42(); virtual void d43(); virtual void d44(); virtual void d45(); virtual void d46(); virtual void d47();
     virtual void d48(); virtual void d49(); virtual void d50(); virtual void d51(); virtual void d52(); virtual void d53(); virtual void d54();
-    virtual igResult_2fbf90 vfunc_55(void *value);
+    virtual igResult vfunc_55(void *value);
     unsigned int _refCount;
     int _offset;
 };
-extern "C" igResult_2fbf90 FUN_002fcdf0(igMetaFieldResultView *self, char *object);
+extern "C" igResult FUN_002fcdf0(igMetaFieldResultView *self, char *object);
 extern "C" int igMetaField_Write(igMetaField *arg0);
 class IsAlikeExactlyView { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void d32(); virtual void d33(); virtual void d34(); virtual void d35(); virtual void d36(); virtual void d37(); virtual void d38(); virtual void d39(); virtual void d40(); virtual void d41(); virtual void d42(); virtual int vX(); };
 class IsAlikeDeepView { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void d32(); virtual void d33(); virtual void d34(); virtual void d35(); virtual void d36(); virtual void d37(); virtual void d38(); virtual void d39(); virtual void d40(); virtual void d41(); virtual void d42(); virtual void d43(); virtual int vX(); };
@@ -8906,10 +8891,9 @@ extern "C" void ObjectList_AppendRetainedList(int arg0, L_301e90 *arg1);
 typedef struct { char pad[4]; int f4; } R_301ee0;
 typedef struct { char pad[8]; int cnt; int cap; R_301ee0 **data; } L_301ee0;
 extern "C" void ObjectList_ResizeRetained(L_301ee0 *arg0, int arg1);
-typedef igResult_2e3a10 igResult_302000;
 struct ObjectListItem { int vt; int _refCount; };
 struct ObjectListView { char pad[8]; int count; int cap; ObjectListItem **data; };
-extern "C" igResult_302000 ObjectList_RemoveFirstRetained(ObjectListView *self, ObjectListItem *value, int start, int extra3);
+extern "C" igResult ObjectList_RemoveFirstRetained(ObjectListView *self, ObjectListItem *value, int start, int extra3);
 extern "C" int ObjectList_RemoveAllRetained(igTDataList<igObject *> *list, igObject *object, int start);
 extern "C" int ObjectList_AppendUniqueRetained(igTDataList<igObject *> *list, igObject *object);
 struct L_3022c0 { char pad[8]; int n; int p12; int *arr; };
@@ -9051,15 +9035,13 @@ class VC_304d90 { public: virtual void d0(); virtual void d1(); virtual void d2(
 struct L_304d90 { char pad8[8]; int cnt; char pad12[4]; R_304d90 **arr; };
 struct S_304d90 { char pad16[16]; VC_304d90 *f10; L_304d90 *f14; };
 extern "C" void Gap__Core__igPluginHelper__vfunc_10(S_304d90 *arg0);
-typedef igResult_2e3a10 igResult_304e60;
-class Iter { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual igResult_304e60 vNext(int *, int); };
-struct Args { igResult_304e60 (*fn)(int); Iter *it; };
+class Iter { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual igResult vNext(int *, int); };
+struct Args { igResult (*fn)(int); Iter *it; };
 extern "C" int FUN_00304e60(Args *args);
-typedef igResult_2e3a10 DW4SR4_304f00;
-class DW4VCSR_120_0 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual DW4SR4_304f00 vX(); };
-class DW4VCSR_132_1 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual DW4SR4_304f00 vX(int (*)(...)); };
-class DW4VCSR_140_1 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void d32(); virtual DW4SR4_304f00 vX(int); };
-class DW4VCSR_156_1 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void d32(); virtual void d33(); virtual void d34(); virtual void d35(); virtual void d36(); virtual DW4SR4_304f00 vX(int); };
+class DW4VCSR_120_0 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual igResult vX(); };
+class DW4VCSR_132_1 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual igResult vX(int (*)(...)); };
+class DW4VCSR_140_1 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void d32(); virtual igResult vX(int); };
+class DW4VCSR_156_1 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void d32(); virtual void d33(); virtual void d34(); virtual void d35(); virtual void d36(); virtual igResult vX(int); };
 class O_305000;
 struct R_305000 { int w; };
 class Z_305000 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual R_305000 v22(O_305000 *); };
@@ -9236,8 +9218,6 @@ extern "C" int FUN_00306aa0(void *self, int section, const char *key, SL *list, 
 extern "C" char DAT_004d3d11[16];
 extern "C" char DAT_004fb198[16];
 extern "C" char text_0x_x[16];
-struct igResult_306f10 { int w0; igResult_306f10() {} igResult_306f10(const igResult_306f10 &o) { w0 = o.w0; } bool operator==(const igResult_306f10 &o) const { return w0 == o.w0; } };
-struct igResult_307200 { int w0; igResult_307200() {} igResult_307200(const igResult_307200 &o) { w0 = o.w0; } bool operator==(const igResult_307200 &o) const { return w0 == o.w0; } };
 struct O_3076b0 { int pad[3]; int f12; };
 typedef struct R_3077a0 { int w0; int refs; } R_3077a0;
 typedef struct L_3077a0 { char pad[8]; int cnt; char pad2[4]; R_3077a0 **arr; } L_3077a0;
@@ -9658,11 +9638,10 @@ extern "C" int Gap__Core__igSymbolTable__vfunc_23(igSymbolTable *self);
 struct L_30db60 { int pad[2]; int len; int cap; };
 struct T_30db60 { int pad[7]; struct L_30db60 *list; };
 extern "C" void Gap__Core__igSymbolTable__vfunc_24(int *arg0, struct T_30db60 *arg1, int arg2);
-typedef igResult_2e3a10 igResult_30dbc0;
 struct Entry_30dbc0 { int name; int a; int b; int path; };
 struct List_30dbc0 { char pad[8]; int count; int capacity; Entry_30dbc0 *data; };
 struct Table { char pad[28]; List_30dbc0 *entries; int pad2; void *names; void *paths; };
-extern "C" igResult_30dbc0 Gap__Core__igSymbolTable__vfunc_25(Table *self, int idx, char *name, int nameSize, int *a, int *b, char *path, int pathSize);
+extern "C" igResult Gap__Core__igSymbolTable__vfunc_25(Table *self, int idx, char *name, int nameSize, int *a, int *b, char *path, int pathSize);
 struct L_30dcf0 { int p[2]; int cnt; int cap; int *arr; };
 struct E_30dcf0 { int pad; unsigned start; int len; int w; };
 struct L2 { int p[2]; int cnt; int cap; unsigned *arr; };
@@ -9839,7 +9818,6 @@ struct VC_312520 {
  virtual R_312520 vX();
 };
 extern "C" void Gap__Core__igArenaMemoryPool__vfunc_102(int *arg0, VC_312520 *arg1);
-typedef igResult_2e3a10 igResult_3125d0;
 struct RefObject { int word0; int references; };
 struct TagByte { unsigned char lo:7; unsigned char flag:1; };
 class SetFlagsPool;
@@ -9863,7 +9841,7 @@ extern "C" unsigned char GPR_00554cf0;
 struct CheckHeapArena { char pad[2020]; int *blocks; int capacity; int count; };
 struct CheckHeapPool { char pad[112]; CheckHeapArena *arena; char pad2[72]; int verbosity; };
 class HeapBoundsPool;
-extern "C" igResult_3125d0 igArenaMemoryPool_CheckHeap(CheckHeapPool *self);
+extern "C" igResult igArenaMemoryPool_CheckHeap(CheckHeapPool *self);
 extern "C" char DAT_004fc490[];
 extern "C" char DAT_004fc500[];
 extern "C" char DAT_004fc570[];
@@ -9902,12 +9880,12 @@ class HeapBoundsPool { public:
     virtual char *HeapEnd();
     char pad4[184]; int messageLevel; char pad192[8]; int minBlockSize;
 };
-extern "C" igResult_3125d0 FUN_00312790(HeapBoundsPool *self, int index, char *cur, char *end);
+extern "C" igResult FUN_00312790(HeapBoundsPool *self, int index, char *cur, char *end);
 extern "C" unsigned char GPR_00554d1c;
 extern "C" char text_igArenaMemoryPool_trim_E76_Arena[];
 struct TrimArena { char p0[1992]; int top; char p1[24]; int *blocks; int capacity; int count; };
 struct TrimPool { char p0[112]; TrimArena *arena; char p1[44]; long long locked; char p2[20]; int debug; };
-extern "C" igResult_3125d0 igArenaMemoryPool_TrimArenaBlock(TrimPool *, int, int, int);
+extern "C" igResult igArenaMemoryPool_TrimArenaBlock(TrimPool *, int, int, int);
 extern "C" bool igArenaMemoryPool_Trim(TrimPool *self, int pad);
 /* The link pair sits at +4 or +12 depending on the top bit of the node's byte 3; `b7 == 0 ? 4 :
  * 12` gives the movn form. */
@@ -10206,10 +10184,9 @@ extern "C" unsigned int DAT_00587210[4];
 extern "C" unsigned char GPR_00554d6c;
 extern "C" unsigned char GPR_00554d70;
 extern "C" unsigned char GPR_00554d74;
-struct igResult98 { int v; igResult98() {} };
 struct Arena98 { char pad[2020]; int f2020; int f2024; int f2028; int f2032; };
 class Pool98 { public:
- virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual int v25(int); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void d32(); virtual void d33(); virtual void d34(); virtual void d35(); virtual void d36(); virtual void d37(); virtual void d38(); virtual void d39(); virtual void d40(); virtual void d41(); virtual void d42(); virtual void d43(); virtual void d44(); virtual void d45(); virtual void d46(); virtual void d47(); virtual void d48(); virtual void d49(); virtual void d50(); virtual void d51(); virtual void d52(); virtual void d53(); virtual void d54(); virtual void d55(); virtual void d56(); virtual void d57(); virtual void d58(); virtual void d59(); virtual void d60(); virtual void d61(); virtual void d62(); virtual void d63(); virtual void d64(); virtual void d65(); virtual void d66(); virtual void d67(); virtual void d68(); virtual void d69(); virtual void d70(); virtual void d71(); virtual void d72(); virtual void d73(); virtual void d74(); virtual void d75(); virtual void d76(); virtual void d77(); virtual void d78(); virtual void d79(); virtual void d80(); virtual void d81(); virtual void d82(); virtual void d83(); virtual void d84(); virtual void d85(); virtual int v86(); virtual void d87(); virtual void d88(); virtual void d89(); virtual void d90(); virtual void d91(); virtual void d92(); virtual void d93(); virtual void d94(); virtual void d95(); virtual void d96(); virtual void d97(); virtual void d98(); virtual void d99(); virtual igResult98 v100();
+ virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual int v25(int); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void d32(); virtual void d33(); virtual void d34(); virtual void d35(); virtual void d36(); virtual void d37(); virtual void d38(); virtual void d39(); virtual void d40(); virtual void d41(); virtual void d42(); virtual void d43(); virtual void d44(); virtual void d45(); virtual void d46(); virtual void d47(); virtual void d48(); virtual void d49(); virtual void d50(); virtual void d51(); virtual void d52(); virtual void d53(); virtual void d54(); virtual void d55(); virtual void d56(); virtual void d57(); virtual void d58(); virtual void d59(); virtual void d60(); virtual void d61(); virtual void d62(); virtual void d63(); virtual void d64(); virtual void d65(); virtual void d66(); virtual void d67(); virtual void d68(); virtual void d69(); virtual void d70(); virtual void d71(); virtual void d72(); virtual void d73(); virtual void d74(); virtual void d75(); virtual void d76(); virtual void d77(); virtual void d78(); virtual void d79(); virtual void d80(); virtual void d81(); virtual void d82(); virtual void d83(); virtual void d84(); virtual void d85(); virtual int v86(); virtual void d87(); virtual void d88(); virtual void d89(); virtual void d90(); virtual void d91(); virtual void d92(); virtual void d93(); virtual void d94(); virtual void d95(); virtual void d96(); virtual void d97(); virtual void d98(); virtual void d99(); virtual igResult v100();
  char p4[20]; long long f24; char p32[24]; int f56; char p60[28]; long long f88; char p96[16]; Arena98 * f112; char p116[44]; long long f160; char p168[12]; int f180; char p184[4]; int f188; unsigned int f192;
 };
 extern "C" void Gap__Core__igArenaMemoryPool__vfunc_98(Pool98 *arg0);
@@ -10792,17 +10769,16 @@ extern "C" unsigned igPageMemoryPool_GetBlockSize(PoolGBS *self, unsigned addr);
 class V88_325850 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void d32(); virtual void d33(); virtual void d34(); virtual void d35(); virtual void d36(); virtual void d37(); virtual void d38(); virtual void d39(); virtual void d40(); virtual void d41(); virtual void d42(); virtual void d43(); virtual void d44(); virtual void d45(); virtual void d46(); virtual void d47(); virtual void d48(); virtual void d49(); virtual void d50(); virtual void d51(); virtual void d52(); virtual void d53(); virtual void d54(); virtual void d55(); virtual void d56(); virtual void d57(); virtual void d58(); virtual void d59(); virtual void d60(); virtual void d61(); virtual void d62(); virtual void d63(); virtual void d64(); virtual void d65(); virtual void d66(); virtual void d67(); virtual void d68(); virtual void d69(); virtual void d70(); virtual void d71(); virtual void d72(); virtual void d73(); virtual void d74(); virtual void d75(); virtual void d76(); virtual void d77(); virtual void d78(); virtual void d79(); virtual void d80(); virtual void d81(); virtual void d82(); virtual void d83(); virtual void d84(); virtual void d85(); virtual void d86(); virtual void d87(); virtual void d88(); virtual void d89(); virtual void d90(); virtual void d91(); virtual void d92(); virtual void d93(); virtual void d94(); virtual void d95(); virtual void d96(); virtual void d97(); virtual void d98(); virtual void d99(); virtual void d100(); virtual void d101(); virtual void d102(); virtual int vX(int); };
 struct O88 { V88_325850 *vt; char p4[140]; unsigned int *tab[32]; };
 extern "C" void Gap__Core__igPageMemoryPool__vfunc_88(O88 *arg0);
-typedef igResult_2e3a10 R_327140;
 extern "C" int DAT_004ff4f0[4];
 extern "C" char DAT_004ff510[];
 extern "C" char DAT_004ff540[];
 typedef struct T_327140 { int word0; int references; } T_327140;
 extern "C" void Gap__Core__igProgramFile__vfunc_23(igProgramFile *arg0);
 class VA_327140 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void vX(); };
-class VB_327140 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual R_327140 vX(int); };
+class VB_327140 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual igResult vX(int); };
 struct Rc_327140 { int w0; int refs; };
 struct PF_327140 { char pad[8]; const char *f8; Rc_327140 *f12; };
-extern "C" R_327140 Gap__Core__igProgramFile__vfunc_24(void *arg1, void *arg2);
+extern "C" igResult Gap__Core__igProgramFile__vfunc_24(void *arg1, void *arg2);
 class DW4VC_96_0 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual int vX(); };
 struct SR4 { int w0; };
 class Strm { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual int v27(int, int, int); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void d32(); virtual void d33(); virtual void d34(); virtual void d35(); virtual int v38(int, int); };

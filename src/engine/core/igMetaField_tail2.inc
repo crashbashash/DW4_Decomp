@@ -410,7 +410,7 @@ int FUN_002fcdb0(igMetaField *arg0, int arg1) {
     return 0;
 }
 
-igResult_2fbf90 FUN_002fcdf0(igMetaFieldResultView *self, char *object)
+igResult FUN_002fcdf0(igMetaFieldResultView *self, char *object)
 {
     return self->vfunc_55(object + self->_offset);
 }

@@ -484,7 +484,7 @@ struct FlushSettings *FUN_00234900(struct FlushSettings *s) {
     if (DAT_0056dc50[0] == 0) {
         struct FlushShared *shared = __nw__FUi(240);
         if (shared) {
-            shared = (struct FlushShared *)FUN_00238110(shared);
+            shared = (struct FlushShared *)ViewerOptions_Construct(shared);
         }
         DAT_0056dc50[0] = shared;
     }
@@ -873,7 +873,7 @@ static inline const char *textOf(const TextValue *value) {
 }
 
 FrameBufferFormat ViewerOptions_GetRequestedFormat(ViewerOptions_2382e0 *options) {
-    igSmartPointer<TextValue> text(FUN_002b9500(Memory_GetAllocatorBySelector(DAT_00587048[0])));
+    igSmartPointer<TextValue> text(igStringObj_Create(Memory_GetAllocatorBySelector(DAT_00587048[0])));
     FrameBufferFormat format;
     format.enabled = 1;
     format.width = options->width;
@@ -922,7 +922,7 @@ igSmartPointer<igWindowView> Viewer_CreateDisplay(int allocator) {
     windowAllocator = allocator;
     if (DAT_0056dc50[0] == 0) {
         struct FlushShared *shared = __nw__FUi(240);
-        if (shared != 0) shared = (struct FlushShared *)FUN_00238110(shared);
+        if (shared != 0) shared = (struct FlushShared *)ViewerOptions_Construct(shared);
         DAT_0056dc50[0] = shared;
     }
     DAT_0056dc50[0]->refs++;
@@ -930,7 +930,7 @@ igSmartPointer<igWindowView> Viewer_CreateDisplay(int allocator) {
     igSmartPointer<igWindowView> window(igWindow_CreateInstance(windowAllocator));
     if (window.p == 0) {
         if (GPR_00554bd0 == 0) {
-            int answer = FUN_00308320(DAT_004e97d0);
+            int answer = igReportError(DAT_004e97d0);
             if (answer != 1 && answer == 2) GPR_00554bd0 = 1;
         }
         exit(1);

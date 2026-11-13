@@ -7,12 +7,12 @@ extern "C" void *FUN_0034ce50(...);
 extern "C" int igEventDispatcher_AddReceiver(...);
 extern "C" int igEventDispatcher_AddReceiverOrder(...);
 extern "C" int FUN_004574f0(...);
-extern "C" int FUN_00462e90(...);
+extern "C" int igViewerSceneInfoManager_CycleGuiVisibility(...);
 extern "C" int Memory_GetAllocatorBySelector(...);
 extern "C" int ObjectList_AppendRetained(...);
 extern "C" int igObject_Destroy(...);
 extern "C" int igObject_GetAllocator(...);
-extern "C" int FUN_004542a0(int, int);
+extern "C" int igEventDispatcher_RemoveReceiver(int, int);
 extern "C" int FUN_004542e0(int, int, int);
 extern "C" int Gap__Bec__bePadManager__vfunc_25(void);
 extern "C" void Gap__Bec__bePadManager__vfunc_26(void);
@@ -97,7 +97,7 @@ void Gap__Bec__bePadManager__vfunc_23(O *o) {
     FUN_004574f0(s, 1);
     FUN_004574f0(s, 2);
     FUN_004574f0(s, 12);
-    FUN_00462e90(v);
+    igViewerSceneInfoManager_CycleGuiVisibility(v);
 }
 
 void Gap__Bec__bePadManager__vfunc_24(bePadManager *arg0) {
@@ -107,7 +107,7 @@ void Gap__Bec__bePadManager__vfunc_24(bePadManager *arg0) {
     temp_v0 = (void *)arg0->_insight;
     temp_s0 = *(int *)((char *)(temp_v0) + 32);
     FUN_004542e0(temp_s0, arg0->_kbReceiver, *(int *)((char *)(temp_v0) + 36));
-    FUN_004542a0(temp_s0, arg0->_kbReceiver);
+    igEventDispatcher_RemoveReceiver(temp_s0, arg0->_kbReceiver);
 }
 
 int Gap__Bec__bePadManager__vfunc_25(void) {

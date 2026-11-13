@@ -78,7 +78,7 @@ void Gap__Core__igPluginHelper__vfunc_10(S_304d90 *arg0) {
 int FUN_00304e60(Args *args) {
     int key;
     Iter *it;
-    igResult_304e60 (*fn)(int);
+    igResult (*fn)(int);
 
     it = args->it;
     fn = args->fn;

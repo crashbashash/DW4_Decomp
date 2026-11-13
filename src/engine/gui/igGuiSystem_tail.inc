@@ -13,21 +13,21 @@ static inline void set(R_456780 *&field, R_456780 *value) {
 }
 
 void Gap__Gui__igGuiSystem__vfunc_13(A_456780 *self) {
-    Gap__Core__igObject__vfunc_11(self);
+    Gap__Core__igObject__resetFields(self);
     igSmartPointer<R_456780> first(0);
     int allocator = igObject_GetAllocator(self);
     first.release();
     first.p = (R_456780 *)FUN_0044f0b0(allocator);
-    FUN_00457e90((S0_457e90 *)(first.get()), self->f12);
+    igView_SetModel((S0_457e90 *)(first.get()), self->f12);
     ObjectList_AppendRetained(self->f16, first.get());
     igSmartPointer<R_456780> second((R_456780 *)FUN_0044ecb0(igObject_GetAllocator(self)));
     second.get()->wc = (int)self;
-    FUN_00457e90((S0_457e90 *)(second.get()), self->f12);
+    igView_SetModel((S0_457e90 *)(second.get()), self->f12);
     ObjectList_AppendRetained(self->f16, second.get());
     allocator = igObject_GetAllocator(self);
     first.release();
     first.p = (R_456780 *)FUN_0044e990(allocator);
-    FUN_00457e90((S0_457e90 *)(first.get()), self->f12);
+    igView_SetModel((S0_457e90 *)(first.get()), self->f12);
     ObjectList_AppendRetained(self->f16, first.get());
     igGroup_AppendChild(self->f20, self->f28);
     R_456780 *value = self->f20;
@@ -38,7 +38,7 @@ void Gap__Gui__igGuiSystem__vfunc_13(A_456780 *self) {
     set(x->f16, value);
 }
 
-void FUN_004569c0(O_4569c0 *arg0, int arg1) {
+void igGuiSystem_SetMouseCursorVisible(O_4569c0 *arg0, int arg1) {
     T_4569c0 *temp_a0;
     arg0->f32 = arg1;
     if (arg1 != 0) {
@@ -58,7 +58,7 @@ void FUN_004569c0(O_4569c0 *arg0, int arg1) {
     temp_a0->vX();
 }
 
-void FUN_00456a60(A_456a60 *arg0, R_456a60 *arg1) {
+void igGuiSystem_SetMouseCursor(A_456a60 *arg0, R_456a60 *arg1) {
     Rc_456a60 *sp4C;
     V3 sp30;
     int var_v0;
@@ -85,7 +85,7 @@ void FUN_00456a60(A_456a60 *arg0, R_456a60 *arg1) {
         var_v0 = 0;
     }
     if (var_v0 > 0) {
-        FUN_001c5eb0(&sp4C, temp_a1, 0);
+        igGroup_RemoveChildAt(&sp4C, temp_a1, 0);
         if (sp4C != 0) {
             sp4C->rc = sp4C->rc - 1;
             if (((unsigned long long)((long long)sp4C->rc << 0x29) >> 0x29) == 0) {
@@ -96,7 +96,7 @@ void FUN_00456a60(A_456a60 *arg0, R_456a60 *arg1) {
     if (arg1 != 0) {
         igGroup_AppendChild(arg0->f28, arg1->f8->f8);
     }
-    FUN_004569c0((O_4569c0 *)arg0, arg0->f32);
+    igGuiSystem_SetMouseCursorVisible((O_4569c0 *)arg0, arg0->f32);
     sp30.a = 2;
     sp30.b = 0;
     sp30.c = g_igGuiSystemModelMousePositionField[0];
@@ -162,7 +162,7 @@ void igGuiSystem_SetRootComponent(W *arg0, T_456cc0 *arg1) {
     l = arg0->f20->f28;
     if (l != 0) { v = l->f8; } else { v = 0; }
     if (v > 1) {
-        FUN_001c5eb0(&sp5C, arg0->f20, 0);
+        igGroup_RemoveChildAt(&sp5C, arg0->f20, 0);
         if (sp5C != 0) {
         --sp5C->references;
         if (((unsigned long long)(long long)sp5C->references & 0x7fffffULL) == 0) { igObject_Destroy(sp5C); }

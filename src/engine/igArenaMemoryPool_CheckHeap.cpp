@@ -17,7 +17,7 @@ class SetFlagsPool;
 extern "C" {
 int Memory_PrintPoolStatistics(...);
 int igReportNotice(...);
-int FUN_00308320(...);
+int igReportError(...);
 int memset(...);
 void *memcpy(void *, void *, int);
 int igObject_Destroy(...);
@@ -756,7 +756,7 @@ int Gap__Core__igArenaMemoryPool__vfunc_95(int arg0, unsigned char *p);
 
 }
 extern "C" {
-int Gap__Core__igObject__vfunc_01(...);
+int Gap__Core__igObject__constructFields(...);
 struct Arena03 { char pad[2020]; void *f7e4; int f7e8; int f7ec; int f7f0; char pad2[24]; int f80c; int f810; };
 struct Pool03 { char pad[112]; Arena03 *f70; };
 extern unsigned char GPR_00554d7c;
@@ -767,7 +767,7 @@ void Gap__Core__igArenaMemoryPool__vfunc_03(Pool03 *arg0, int arg1);
 /* Pool hook: runs the class's virtual slot 392 on the receiver, then the igObject default for this
  * slot (an empty stub). */
 extern "C" {
-int Gap__Core__igObject__vfunc_02(...);
+int Gap__Core__igObject__destructFields(...);
 void Gap__Core__igArenaMemoryPool__vfunc_04(igArenaMemoryPool *self);
 }
 /* ABI dispatch view of virtual slot 392 (96 leading virtuals); never instantiated. */
@@ -793,7 +793,7 @@ extern "C" {
 /* Reset the pool after the base-class reset, restoring _poolOptionFlags to the default registered
  * for that field in igArenaMemoryPool_InitFields (the igMallocMemoryPool counterpart is
  * Gap__Core__igMallocMemoryPool__vfunc_13). */
-int Gap__Core__igObject__vfunc_11();
+int Gap__Core__igObject__resetFields();
 extern int g_poolOptionFlagsDefault_004c2370[4];
 
 void Gap__Core__igArenaMemoryPool__vfunc_13(igArenaMemoryPool *self);

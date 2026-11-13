@@ -14,7 +14,7 @@ int StringPool_Construct(int);
 char *StringPool_Intern(int, char *);
 void StringChunk_ReleaseHeader(int, int *);
 FolderObject *igStringRefList_Create(int);
-FolderPathText *FUN_002b9500(int);
+FolderPathText *igStringObj_Create(int);
 int FUN_0030b7e0(FolderPathText *, const char *, int, char *);
 int sceGetstat(const char *, FolderFileStat *);
 extern char DAT_004f9a78[];
@@ -63,7 +63,7 @@ FolderObjectRef Gap__Core__igPsx2Folder__vfunc_25(FolderSelf *self) {
     FolderObjectRef list;
     list.obj = igStringRefList_Create(igObject_GetAllocator(self));
     FolderObjectRef path;
-    path.obj = FUN_002b9500(igObject_GetAllocator(self));
+    path.obj = igStringObj_Create(igObject_GetAllocator(self));
     while (sceDread(handle, &entry) != 0) {
         FUN_0030b7e0((FolderPathText *)path.obj, DAT_004f9a78, self->path, (char *)&entry + 64);
         char *full = ((FolderPathText *)path.obj)->text;

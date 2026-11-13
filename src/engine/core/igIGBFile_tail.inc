@@ -1,4 +1,4 @@
-inline bool igResult_2e3a10::failed() const { return v == g_resultFailure.v; }
+inline bool igResult::failed() const { return v == g_resultFailure.v; }
 
 int FUN_002e3a10(void *arg0, int arg1) {
     int sp1C;
@@ -27,7 +27,7 @@ static inline void assign(MediaStreamOwner *self, const StreamHolder &h) {
     self->stream = v;
 }
 
-igResult_2e3a10 FUN_002e3a60(MediaStreamOwner *self, int data, int mode) {
+igResult FUN_002e3a60(MediaStreamOwner *self, int data, int mode) {
     if (data == 0 && self->stream == 0) {
         return g_resultFailure;
     }
@@ -106,7 +106,7 @@ void FUN_002e3d30(int *arg0) {
     }
 }
 
-igResult_2e3a10 FUN_002e3e30(RecordFile *f, int mode) {
+igResult FUN_002e3e30(RecordFile *f, int mode) {
     if (f->handle == 0 && mode == 0) {
         return g_resultFailure;
     }
@@ -134,7 +134,7 @@ igResult_2e3a10 FUN_002e3e30(RecordFile *f, int mode) {
     return g_resultSuccess;
 }
 
-igResult_2e3a10 FUN_002e3f50(Owner_2e3a10 *arg1) {
+igResult FUN_002e3f50(Owner_2e3a10 *arg1) {
     igMetaObject *meta;
     Holder_2e3a10 h;
     T6 *np;
@@ -163,7 +163,7 @@ igResult_2e3a10 FUN_002e3f50(Owner_2e3a10 *arg1) {
     return g_resultSuccess;
 }
 
-igResult_2e3a10 FUN_002e4090(L7 *arg1) {
+igResult FUN_002e4090(L7 *arg1) {
     int i;
 
     for (i = 0; i < arg1->count; i++) {
@@ -173,7 +173,7 @@ igResult_2e3a10 FUN_002e4090(L7 *arg1) {
     return g_resultSuccess;
 }
 
-igResult_2e3a10 FUN_002e4120(S8 *o) {
+igResult FUN_002e4120(S8 *o) {
     int i; int s; char *p; int j; int n; int a;
     o->f296 = 8;
     i = 0;
@@ -199,7 +199,7 @@ igResult_2e3a10 FUN_002e4120(S8 *o) {
     return g_resultSuccess;
 }
 
-igResult_2e3a10 FUN_002e4240(igIGBFile *arg1) {
+igResult FUN_002e4240(igIGBFile *arg1) {
     int var_s0;
     void *temp_a0;
 
@@ -229,7 +229,7 @@ static inline int indexOfParent(MetaTableTypeList *l, const MetaTableKey &key) {
     return -1;
 }
 
-igResult_2e3a10 FUN_002e42d0(MetaTableWriter *self) {
+igResult FUN_002e42d0(MetaTableWriter *self) {
     int base;
     int i;
     self->count = self->types->count;
@@ -343,7 +343,7 @@ igResult_2e3a10 FUN_002e42d0(MetaTableWriter *self) {
     }
 }
 
-igResult_2e3a10 FUN_002e47f0(S11 *arg1) {
+igResult FUN_002e47f0(S11 *arg1) {
     int i;
     int j;
     int s5;
@@ -382,7 +382,7 @@ static inline char *nameOf(const Ref12 &r, int i) {
     return n;
 }
 
-igResult_2e3a10 FUN_002e4a40(IgbNameWriter *self) {
+igResult FUN_002e4a40(IgbNameWriter *self) {
     Ref12 names(g_globalContext->names);
     int i;
     int *lengths;
@@ -413,7 +413,7 @@ igResult_2e3a10 FUN_002e4a40(IgbNameWriter *self) {
     return g_resultSuccess;
 }
 
-igResult_2e3a10 FUN_002e4c90(Self_2e3a10 *self) {
+igResult FUN_002e4c90(Self_2e3a10 *self) {
     IList_2e3a10 *l = self->list;
     int n, i, k;
     if (l != 0) { n = l->count; if (n > 0) {
@@ -446,7 +446,7 @@ igResult_2e3a10 FUN_002e4c90(Self_2e3a10 *self) {
     return g_resultSuccess;
 }
 
-igResult_2e3a10 FUN_002e5110(IgbFixReader *self) {
+igResult FUN_002e5110(IgbFixReader *self) {
     int n;
     int i;
     if (self->fixed != 0) { return g_resultSuccess; }
@@ -505,7 +505,7 @@ igResult_2e3a10 FUN_002e5110(IgbFixReader *self) {
     return g_resultSuccess;
 }
 
-igResult_2e3a10 FUN_002e54e0(O17 *o) {
+igResult FUN_002e54e0(O17 *o) {
     int i;
     int n;
     A17 *p = o->f280; int x = o->f148;
@@ -518,7 +518,7 @@ igResult_2e3a10 FUN_002e54e0(O17 *o) {
     return g_resultSuccess;
 }
 
-igResult_2e3a10 FUN_002e5590(O18 *o) {
+igResult FUN_002e5590(O18 *o) {
     int *t = (int *)o->mgr->alloc(48, 16);
     memset(t, 0, 48);
     t[0] = o->f124; t[1] = o->f112; t[2] = o->f132; t[3] = o->f128; t[4] = o->f148; t[5] = o->f144;
@@ -535,7 +535,7 @@ igResult_2e3a10 FUN_002e5590(O18 *o) {
     return g_resultSuccess;
 }
 
-igResult_2e3a10 FUN_002e56f0(Obj19 *arg1) {
+igResult FUN_002e56f0(Obj19 *arg1) {
     int s4 = arg1->f104->v116(arg1->f184, arg1->f140, 1);
     int s3 = arg1->f104->v116(arg1->f236, arg1->f240, 1);
     int s2 = arg1->f104->v116(arg1->f172, arg1->f132, 1);
@@ -568,14 +568,14 @@ igResult_2e3a10 FUN_002e56f0(Obj19 *arg1) {
     }
 }
 
-igResult_2e3a10 FUN_002e5950(void *arg1) {
+igResult FUN_002e5950(void *arg1) {
     if (*(int *)((char *)arg1 + 196) != 0) {
         FUN_002e3cb0((S3 *)arg1);
     }
-    return igResult_2e3a10(*(int *)0x4FB410);
+    return igResult(*(int *)0x4FB410);
 }
 
-igResult_2e3a10 FUN_002e5990(T21 *o) {
+igResult FUN_002e5990(T21 *o) {
     o->mgr->rel(o->f172); o->f172 = 0;
     o->mgr->rel(o->f176); o->f176 = 0;
     o->mgr->rel(o->f180); o->f180 = 0;
@@ -590,7 +590,7 @@ igResult_2e3a10 FUN_002e5990(T21 *o) {
     return g_resultSuccess;
 }
 
-igResult_2e3a10 FUN_002e5ac0(void *arg1) {
+igResult FUN_002e5ac0(void *arg1) {
     void *temp_a1;
 
     temp_a1 = (void *)(*(int *)((char *)(arg1) + 28));
@@ -604,10 +604,10 @@ igResult_2e3a10 FUN_002e5ac0(void *arg1) {
 int Gap__Core__igIGBFile__vfunc_28(C23 *arg0, int arg1) {
     int *pp; Rel23 *t; Rel23 *t2; Rel23 *a; Rel23 *b;
     FUN_00306e50(((LogContext * *)g_objectSystem)[0]->f56, 2, (const char *)text_forceWriteMemoryPoolInfoFromMeta, (char *)((char *)arg0 + 0x42), 0, 0);
-    igResult_2e3a10 sp7C = FUN_002e3e30((RecordFile *)arg0, arg1);
+    igResult sp7C = FUN_002e3e30((RecordFile *)arg0, arg1);
     pp = (int *)((int)&sp7C + 0);
     if (*pp == g_resultFailure.v) return 0;
-    igResult_2e3a10 sp78 = FUN_002e5ac0(arg0);
+    igResult sp78 = FUN_002e5ac0(arg0);
     pp = (int *)((int)&sp78 + 0);
     if (*pp == g_resultFailure.v) return 0;
     FUN_00302540((L_302540 *)arg0, (Field *)DAT_00586730[0]);
@@ -621,72 +621,72 @@ int Gap__Core__igIGBFile__vfunc_28(C23 *arg0, int arg1) {
     t2 = arg0->f208;
     REL23(t2)
     arg0->f208 = b;
-    igResult_2e3a10 sp74 = FUN_002e3f50((Owner_2e3a10 *)arg0);
+    igResult sp74 = FUN_002e3f50((Owner_2e3a10 *)arg0);
     pp = (int *)((int)&sp74 + 0);
     if (*pp == g_resultFailure.v) return 0;
-    igResult_2e3a10 sp70 = FUN_002e4090((L7 *)arg0);
+    igResult sp70 = FUN_002e4090((L7 *)arg0);
     pp = (int *)((int)&sp70 + 0);
     if (*pp == g_resultFailure.v) return 0;
-    igResult_2e3a10 sp6C = FUN_002e4120((S8 *)arg0);
+    igResult sp6C = FUN_002e4120((S8 *)arg0);
     pp = (int *)((int)&sp6C + 0);
     if (*pp == g_resultFailure.v) return 0;
-    igResult_2e3a10 sp68 = FUN_002e4240((igIGBFile *)arg0);
+    igResult sp68 = FUN_002e4240((igIGBFile *)arg0);
     pp = (int *)((int)&sp68 + 0);
     if (*pp == g_resultFailure.v) return 0;
-    igResult_2e3a10 sp64 = FUN_002e42d0((MetaTableWriter *)arg0);
+    igResult sp64 = FUN_002e42d0((MetaTableWriter *)arg0);
     pp = (int *)((int)&sp64 + 0);
     if (*pp == g_resultFailure.v) return 0;
-    igResult_2e3a10 sp60 = FUN_002e47f0((S11 *)arg0);
+    igResult sp60 = FUN_002e47f0((S11 *)arg0);
     pp = (int *)((int)&sp60 + 0);
     if (*pp == g_resultFailure.v) return 0;
-    igResult_2e3a10 sp5C = FUN_002e4a40((IgbNameWriter *)arg0);
+    igResult sp5C = FUN_002e4a40((IgbNameWriter *)arg0);
     pp = (int *)((int)&sp5C + 0);
     if (*pp == g_resultFailure.v) return 0;
-    igResult_2e3a10 sp58 = FUN_002e4c90((Self_2e3a10 *)arg0);
+    igResult sp58 = FUN_002e4c90((Self_2e3a10 *)arg0);
     pp = (int *)((int)&sp58 + 0);
     if (*pp == g_resultFailure.v) return 0;
     if (arg0->f36 == 0) {
-    igResult_2e3a10 sp54 = FUN_002e53f0(arg0);
+    igResult sp54 = FUN_002e53f0(arg0);
     pp = (int *)((int)&sp54 + 0);
     if (*pp == g_resultFailure.v) return 0;
     } else {
-    igResult_2e3a10 sp50 = FUN_002e5110((IgbFixReader *)arg0);
+    igResult sp50 = FUN_002e5110((IgbFixReader *)arg0);
     pp = (int *)((int)&sp50 + 0);
     if (*pp == g_resultFailure.v) return 0;
-    igResult_2e3a10 sp4C = FUN_002e4e60((Cx *)arg0);
+    igResult sp4C = FUN_002e4e60((Cx *)arg0);
     pp = (int *)((int)&sp4C + 0);
     if (*pp == g_resultFailure.v) return 0;
-    igResult_2e3a10 sp48 = FUN_002e4f60(arg0);
+    igResult sp48 = FUN_002e4f60(arg0);
     pp = (int *)((int)&sp48 + 0);
     if (*pp == g_resultFailure.v) return 0;
     }
-    igResult_2e3a10 sp44 = FUN_002e54e0((O17 *)arg0);
+    igResult sp44 = FUN_002e54e0((O17 *)arg0);
     pp = (int *)((int)&sp44 + 0);
     if (*pp == g_resultFailure.v) return 0;
-    igResult_2e3a10 sp40 = FUN_002e5590((O18 *)arg0);
+    igResult sp40 = FUN_002e5590((O18 *)arg0);
     pp = (int *)((int)&sp40 + 0);
     if (*pp == g_resultFailure.v) return 0;
-    igResult_2e3a10 sp3C = FUN_002e56f0((Obj19 *)arg0);
+    igResult sp3C = FUN_002e56f0((Obj19 *)arg0);
     pp = (int *)((int)&sp3C + 0);
     if (*pp == g_resultFailure.v) return 0;
-    igResult_2e3a10 sp38 = FUN_002e5950(arg0);
+    igResult sp38 = FUN_002e5950(arg0);
     pp = (int *)((int)&sp38 + 0);
     if (*pp == g_resultFailure.v) return 0;
-    igResult_2e3a10 sp34 = FUN_002e5990((T21 *)arg0);
+    igResult sp34 = FUN_002e5990((T21 *)arg0);
     pp = (int *)((int)&sp34 + 0);
     if (*pp == g_resultFailure.v) return 0;
-    if (arg0->f278 == 1) { igResult_2e3a10 sp30 = arg0->v128(); }
+    if (arg0->f278 == 1) { igResult sp30 = arg0->v128(); }
     return arg0->f8;
 }
 
-igResult_2e3a10 FUN_002e5f70(T24 *arg1, int arg2) {
+igResult FUN_002e5f70(T24 *arg1, int arg2) {
     Obj24 *o;
     int *pp;
     if ((arg1->f104 == 0) && (arg2 == 0)) {
         return g_resultFailure;
     }
     if (arg1->f104 == 0) {
-        igResult_2e3a10 r = FUN_002e3a60((MediaStreamOwner *)arg1, arg2, 4);
+        igResult r = FUN_002e3a60((MediaStreamOwner *)arg1, arg2, 4);
         pp = (int *)((int)&r + 0);
         if (*pp == g_resultFailure.v) {
             if (arg2 != 0) {
@@ -711,7 +711,7 @@ igResult_2e3a10 FUN_002e5f70(T24 *arg1, int arg2) {
     return g_resultSuccess;
 }
 
-igResult_2e3a10 igIGBFile_ReadHeader(S25 *arg1) {
+igResult igIGBFile_ReadHeader(S25 *arg1) {
     H_2e3a10 *h;
     Obj25_2e3a10 *o;
     Obj25_2e3a10 *t;
@@ -785,7 +785,7 @@ igResult_2e3a10 igIGBFile_ReadHeader(S25 *arg1) {
     }
 }
 
-igResult_2e3a10 FUN_002e6330(Q26 *arg1) {
+igResult FUN_002e6330(Q26 *arg1) {
     bool var_a0;
     int var_v1;
 
@@ -801,10 +801,10 @@ igResult_2e3a10 FUN_002e6330(Q26 *arg1) {
     if (!(int)var_a0) {
         var_v1 = g_resultFailure.v;
     }
-    return igResult_2e3a10(var_v1);
+    return igResult(var_v1);
 }
 
-igResult_2e3a10 FUN_002e6f50(int *arg1) {
+igResult FUN_002e6f50(int *arg1) {
     int n;
     char *p;
     char c;
@@ -828,7 +828,7 @@ void FUN_002e7000(void) {
     FUN_00306e50(*(int *)((char *)(((LogContext * *)g_objectSystem)[0]) + 56), 2, (const char *)text_blindObjects, (char *)&GPR_00554c04, 0, 0);
 }
 
-igResult_2e3a10 FUN_002e7030(Z29 *arg1) {
+igResult FUN_002e7030(Z29 *arg1) {
     int hi;
     int a2;
     hi = (arg1->f260 - arg1->f80) % arg1->f260;
@@ -854,7 +854,7 @@ static inline T30 *castToKind(T30 *object) {
     return 0;
 }
 
-igResult_2e3a10 igIGBFile_ReadObjectSection(IGBReader31 *file) {
+igResult igIGBFile_ReadObjectSection(IGBReader31 *file) {
     int pool;
     igObjectList *list;
     int i;
@@ -903,7 +903,7 @@ igResult_2e3a10 igIGBFile_ReadObjectSection(IGBReader31 *file) {
     return g_resultSuccess;
 }
 
-igResult_2e3a10 FUN_002e7640(IgbObjectSection *self) {
+igResult FUN_002e7640(IgbObjectSection *self) {
     int count = 0;
     int pos;
     int chunk;
@@ -945,7 +945,7 @@ igResult_2e3a10 FUN_002e7640(IgbObjectSection *self) {
     return g_resultSuccess;
 }
 
-igResult_2e3a10 FUN_002e78b0(O33 *arg1) {
+igResult FUN_002e78b0(O33 *arg1) {
     int temp_s1;
     int temp_s0;
     int i;
@@ -975,7 +975,7 @@ igResult_2e3a10 FUN_002e78b0(O33 *arg1) {
     return g_resultSuccess;
 }
 
-igResult_2e3a10 igIGBFile_ReadObjectSectionOld(IGBReader34 *file) {
+igResult igIGBFile_ReadObjectSectionOld(IGBReader34 *file) {
     int pool;
     int i;
     file->position = file->bufferSize;
@@ -1064,13 +1064,13 @@ void Gap__Core__igIGBFile__vfunc_26(IgbBlockCursor *self, int at) {
     }
 }
 
-igResult_2e3a10 FUN_002e7ed0(S37 *arg1) {
+igResult FUN_002e7ed0(S37 *arg1) {
     arg1->f280->vX(arg1->f200);
     arg1->f200 = 0;
     return g_resultSuccess;
 }
 
-igResult_2e3a10 FUN_002e7f20(IgbMetaSection *self) {
+igResult FUN_002e7f20(IgbMetaSection *self) {
     IgbRegistryTable *table;
     int count;
     int *sizes;
@@ -1147,7 +1147,7 @@ static inline void addType(ReflectedTypeList *l, int v) {
     l->data[idx] = v;
 }
 
-igResult_2e3a10 FUN_002e82a0(IgbTypeReader *self) {
+igResult FUN_002e82a0(IgbTypeReader *self) {
     IgbTypeHeader hdr;
     int *sizes;
     char *name;
@@ -1196,7 +1196,7 @@ igResult_2e3a10 FUN_002e82a0(IgbTypeReader *self) {
     }
 }
 
-igResult_2e3a10 FUN_002e8670(T41 *arg1) {
+igResult FUN_002e8670(T41 *arg1) {
     int n;
     int i;
 
@@ -1230,7 +1230,7 @@ igResult_2e3a10 FUN_002e8670(T41 *arg1) {
     return g_resultSuccess;
 }
 
-igResult_2e3a10 FUN_002e8880(L42 *arg1) {
+igResult FUN_002e8880(L42 *arg1) {
     int i;
     for (i = 0; i < arg1->n; i++) {
         if (((igObject_IsKindOf(arg1->arr[i], (igMetaObject *)g_igObjectDirEntry_metaObject[0]) != 0) ^ 1) != 0) {
@@ -1319,10 +1319,10 @@ void Gap__Core__igIGBFile__vfunc_04(S_arg0 *arg0) {
         }
     }
     arg0->f44 = 0;
-    Gap__Core__igObject__vfunc_02((int)arg0);
+    Gap__Core__igObject__destructFields((int)arg0);
 }
 
-igResult_2e3a10 FUN_002e8d40(A46 *arg1) {
+igResult FUN_002e8d40(A46 *arg1) {
     R46 *temp_s0;
     R46 *t;
 
@@ -1370,7 +1370,7 @@ static inline void setPooled(char **dst, char *src) {
     *dst = v;
 }
 
-igResult_2e3a10 FUN_002e8e50(IgbExternalReader *self) {
+igResult FUN_002e8e50(IgbExternalReader *self) {
     if (self->hasExternals != 0) {
         IgbExternalHeader hdr;
         int count;
@@ -1413,7 +1413,7 @@ static inline void addName(IgbNameList *l, const int &v) {
     l->data[idx] = v;
 }
 
-igResult_2e3a10 FUN_002e91e0(IgbNameReader *self) {
+igResult FUN_002e91e0(IgbNameReader *self) {
     NameHeader hdr;
     char *buf;
     char *name;
@@ -1454,7 +1454,7 @@ int FUN_002e9470(void *arg0) {
     return -1;
 }
 
-igResult_2e3a10 FUN_002e94b0(O50 *arg1) {
+igResult FUN_002e94b0(O50 *arg1) {
     int i;
     int n;
     int flag;
@@ -1473,7 +1473,7 @@ igResult_2e3a10 FUN_002e94b0(O50 *arg1) {
     return g_resultSuccess;
 }
 
-igResult_2e3a10 FUN_002e9560(void *arg1) {
+igResult FUN_002e9560(void *arg1) {
     int i;
     void **temp_v0;
     for (i = 0; i < *(int *)((char *)(arg1) + 8); i++) {
@@ -1494,7 +1494,7 @@ int igIGBFile_ReadFile(File *self, int path) {
   if (igIGBFile_ReadHeader((S25 *)self).failed()) return FUN_002e9470(self);
   if (self->version < 5 && self->hasExternalRefs) {
     if (!GPR_00554c08) {
-      int answer = FUN_00308320(DAT_004f9af0, self->device->name, self->device->name);
+      int answer = igReportError(DAT_004f9af0, self->device->name, self->device->name);
       if (answer != 1 && answer == 2) GPR_00554c08 = 1;
     }
     return FUN_002e9470(self);
@@ -1559,7 +1559,7 @@ void Gap__Core__igIGBFile__vfunc_32(int *arg0, void *arg1) {
 
 void Gap__Core__igIGBFile__vfunc_30(int *arg0, struct S54 *arg1) {
     if (arg1->f279 == 0) {
-        igResult_2e3a10 sp3C = FUN_002e9560(arg1);
+        igResult sp3C = FUN_002e9560(arg1);
         if (arg1->f32 != 0) {
             FUN_0030a260((Z_30a260 *)arg1->f32, arg1->f20);
         }
@@ -1572,8 +1572,8 @@ void Gap__Core__igIGBFile__vfunc_30(int *arg0, struct S54 *arg1) {
 
 static inline IgbInfoObject *castInfo(IgbInfoObject *o) { if (o != 0 && igObject_IsKindOf((void *)o, (igMetaObject *)(((int *)g_igIGBFile_metaObject)[0])) != 0) { return o; } return 0; }
 
-igResult_2e3a10 Gap__Core__igIGBFile__vfunc_31(IgbFileInfoView *self) {
-    igResult_2e3a10 result = g_resultSuccess;
+igResult Gap__Core__igIGBFile__vfunc_31(IgbFileInfoView *self) {
+    igResult result = g_resultSuccess;
     int i;
     for (i = 0; i < self->list->count; i++) {
         Ref55 o(castInfo(self->list->data[i]));
@@ -1610,7 +1610,7 @@ int Gap__Core__igIGBFile__vfunc_34(IGB *o) {
     return 1;
 }
 
-igResult_2e3a10 igIGBFile_GetSectionBuffer(IgbSectionBufferOwner *arg1, int arg2) {
+igResult igIGBFile_GetSectionBuffer(IgbSectionBufferOwner *arg1, int arg2) {
     int a1;
     a1 = arg1->f264;
     if (a1 != 0 && arg1->f260 >= arg2) {

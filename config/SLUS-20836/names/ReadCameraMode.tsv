@@ -1,0 +1,32 @@
+# Gap::Viewer view modes (igViewMode, igCameraMode, igFlyMode, igRotateMode, igPickMode) and the
+# matrix, ray, graph-path and GUI helpers they call; from reflected field layouts and the code.
+0x004650a0	igViewMode_UpdateInverseMatrix	engine
+0x004650d0	igViewMode_UpdateModelVectors	engine
+0x004651e0	igViewMode_UpdateViewMatrix	engine
+0x00465260	igCameraMode_SetCameraPath	engine
+0x004658c0	igFlyMode_AimingChanged	engine
+0x004658d0	igFlyMode_ApplyTranslation	engine
+0x00465a40	igFlyMode_ApplyRotation	engine
+0x00465b90	igFlyMode_ApplyAim	engine
+0x004665e0	igPickMode_HitProc	engine
+0x00466a10	igPickMode_RecordHit	engine
+0x00466b20	igPickMode_Pick	engine
+0x00466cb0	igPickMode_GetMeta	engine
+0x00466cc0	igRotateMode_GetMeta	engine
+0x00466cd0	igFlyMode_GetMeta	engine
+0x00466ce0	igCameraMode_GetMeta	engine
+0x00466cf0	igViewMode_GetMeta	engine
+0x00191f30	Matrix44_Invert	engine
+0x00191e30	Matrix44_InvertOrthonormal	engine
+0x00190ed0	Matrix44_MakeEulerRotation	engine
+0x00191230	Matrix44_GetEulerAngles	engine
+0x00191b10	Matrix44_MakeLookAt	engine
+0x001c5b30	igGraphPath_GetTransform	engine
+0x001c5790	igGraphPath_SetNodes	engine
+0x0019f630	igGraphPath_Create	engine
+0x0019e680	igProbe_Create	engine
+0x004569c0	igGuiSystem_SetMouseCursorVisible	engine
+0x00456a60	igGuiSystem_SetMouseCursor	engine
+0x0018d2b0	igRay_SetFromPoints	engine
+0x0018d360	igRay_Transform	engine
+0x001ce970	igIntersectTraversal_ResetStacks	engine

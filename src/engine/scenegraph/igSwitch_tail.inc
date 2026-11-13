@@ -12,7 +12,7 @@ int Gap__Sg__igSwitch__vfunc_35(S_1dc940 *arg0, int arg1, void *arg2) {
     } else {
         var_a1 = 0;
     }
-    FUN_001b1e50((void *)a0v, var_a1);
+    igBitMask_SetBitCount((void *)a0v, var_a1);
     return temp_s0;
 }
 
@@ -20,7 +20,7 @@ Obj_1c5eb0 *igSwitch_RemoveChildAt(S_1dc940 *arg0, int arg1) {
     Obj_1c5eb0 *removed;
     int var_a1;
 
-    removed = FUN_001c5eb0((S_1c5eb0 *)arg0, arg1).p;
+    removed = igGroup_RemoveChildAt((S_1c5eb0 *)arg0, arg1).p;
     {
         int a0v = arg0->f32;
         if (arg0->f28 != 0) {
@@ -28,7 +28,7 @@ Obj_1c5eb0 *igSwitch_RemoveChildAt(S_1dc940 *arg0, int arg1) {
         } else {
             var_a1 = 0;
         }
-        FUN_001b1e50((void *)a0v, var_a1);
+        igBitMask_SetBitCount((void *)a0v, var_a1);
     }
     return removed;
 }

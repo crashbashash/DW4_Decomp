@@ -161,11 +161,11 @@ extern "C" int beBaseInfoRam_RemoveTimer(...);
 
 extern "C" int beModelCtrlSubCom_StopType(int, int, int);
 extern "C" void beModelCtrl_UpdateMuteki(beModelCtrl *self, beBaseInfoRam *ram, beModelCtrlInfoWork *work);
-extern "C" int FUN_00190ed0(int, float, float, float);
+extern "C" int Matrix44_MakeEulerRotation(int, float, float, float);
 extern "C" int igMatrix44f_SetIdentity(...);
 extern "C" int FUN_001904f0(...);
 extern "C" int FUN_001906d0(...);
-extern "C" int FUN_00191f30(...);
+extern "C" int Matrix44_Invert(...);
 extern "C" void beModelCtrl_UpdateKeyCtrl(beModelCtrl *self, beBaseInfo *info, beBaseInfoRam *ram, beModelCtrlInfoWork *work);
 extern "C" int beModelCtrlSubCom_Update(...);
 extern "C" int beMessenger_AppendString(...);
@@ -2152,7 +2152,7 @@ void beModelCtrl_UpdateDirection(beModelCtrl *self, beBaseInfo *info, beBaseInfo
     }
     matrix = ((beModelCtrlInfoRamData *)igProperty_FindByName(((igObject *)ram->_dataList), g_propertyNameField[0], ONE_3))->_node + 32;
     Matrix44_GetTranslation(matrix, translation);
-    FUN_00190ed0(matrix, rotation.x, ((float*)&rotation)[1], ((float*)&rotation)[2]);
+    Matrix44_MakeEulerRotation(matrix, rotation.x, ((float*)&rotation)[1], ((float*)&rotation)[2]);
     Matrix44_SetTranslation((float *)matrix, (void *)translation);
     work->_direction[0] = rotation.x;
     work->_direction[1] = rotation.y;
@@ -2265,7 +2265,7 @@ void Gap__Core__igObject__vfunc_31(beModelCtrl *self, beBaseInfoRam *ram) {
             Matrix44_Copy(oldRotation, rideOn->_oldMatrix);
             Matrix44_Copy(offset, ramData->_node + 32);
             Matrix44_SetTranslation((float *)oldRotation, (void *)&g_vec3Zero[0]);
-            FUN_00191f30(&inverted, oldRotation, oldRotation);
+            Matrix44_Invert(&inverted, oldRotation, oldRotation);
             Matrix44_SetTranslation((float *)offset, (void *)delta);
             igMatrix44f_SetIdentity(local);
             FUN_001904f0(local, offset, oldRotation);

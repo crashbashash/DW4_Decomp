@@ -857,7 +857,7 @@ public:
 };
 extern "C" igWindowView *igWindow_CreateInstance(int allocator);
 extern "C" igVisualContextView *igVisualContext_CreateInstance(int allocator);
-extern "C" int FUN_00308320(const char *format, ...);
+extern "C" int igReportError(const char *format, ...);
 extern "C" unsigned char GPR_00554bd0;
 extern "C" char DAT_004e96f8[];
 extern "C" char DAT_004e97d0[];
@@ -885,7 +885,7 @@ extern "C" int DAT_00587038[4];
 struct G { char p[76]; int f76; };
 extern "C" void FUN_00236140(void);
 struct TextValue : public igObject { char *text; };
-extern "C" TextValue *FUN_002b9500(int allocator);
+extern "C" TextValue *igStringObj_Create(int allocator);
 extern "C" void igStringObj_Set(TextValue *value, const char *text);
 extern "C" void FUN_0030b720(TextValue *value, int number, const char *format);
 extern "C" int DAT_00587048[4];
@@ -938,7 +938,7 @@ extern "C" int FUN_00457ca0(...);
 extern "C" void igInsightCore_AddRenderer(void *arg0, int arg1);
 extern "C" int g_statusSucceeded[4];
 typedef struct Obj_236f30 { char pad[28]; int f28; } Obj_236f30;
-extern "C" void FUN_00236f30(Obj_236f30 *arg0, int arg1);
+extern "C" void igInsightCore_RemoveRenderer(Obj_236f30 *arg0, int arg1);
 struct Obj_236f80 { virtual int a0(); virtual int a1(); virtual int a2(); virtual int a3(); virtual int a4(); virtual int a5(); virtual int a6(); virtual int a7(); virtual int a8(); virtual int a9(); virtual int a10(); virtual int a11(); virtual int a12(); virtual int a13(); virtual int a14(); virtual int a15(); virtual int a16(); virtual int a17(); virtual int a18(); virtual int a19(); virtual int v20(); };
 struct List { int pad[2]; unsigned int count; int pad2; Obj_236f80 **arr; };
 struct Mid { int pad[2]; List *list; };
@@ -967,7 +967,7 @@ extern "C" void FUN_00237280(int *arg0);
 extern "C" int FUN_002d7090(...);
 extern "C" int FUN_002d78e0(...);
 extern "C" int igEventDispatcher_AddReceiver(...);
-extern "C" int Gap__Core__igObject__vfunc_11(...);
+extern "C" int Gap__Core__igObject__resetFields(...);
 extern "C" int text_Clear_done[4];
 extern "C" int text_Scenes_done[4];
 extern "C" int text_Overlays_done[4];
@@ -1116,7 +1116,7 @@ extern "C" float DAT_004e1060[4];
 extern "C" float DAT_004e1174[4];
 extern "C" float DAT_004e1178[4];
 extern "C" float DAT_004e117c[4];
-extern "C" void *FUN_00238110(void *arg0);
+extern "C" void *ViewerOptions_Construct(void *arg0);
 /* Saves the Alchemy viewer (INSIGHT) options into the property tree: the INSIGHT group is looked
  * up in the property set held by the global (+56), falling back to 'Viewer', and each option is
  * written under its string name. Every write is guarded by its name pointer (the original option

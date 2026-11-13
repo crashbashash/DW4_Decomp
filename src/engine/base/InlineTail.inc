@@ -136,7 +136,7 @@ void FUN_00229980(void) {
 }
 
 void Gap__igItemInterface__vfunc_13(igInterface *arg0) {
-    Gap__Core__igObject__vfunc_11();
+    Gap__Core__igObject__resetFields();
     arg0->_itemInterface = (int)(arg0);
 }
 
@@ -419,7 +419,7 @@ void FUN_0022b0a0(int arg0, int *arg1) {
 }
 
 void Gap__igListenerInterface__vfunc_13(igInterface *arg0) {
-    Gap__Core__igObject__vfunc_11();
+    Gap__Core__igObject__resetFields();
     arg0->_listenerInterface = (int)(arg0);
 }
 
@@ -477,7 +477,7 @@ igMetaObject *Gap__Core__igInfo__vfunc_22(void) {
  * message-interface member. */
 
 void Gap__igMessageInterface__vfunc_13(igMessageInterface *self) {
-    Gap__Core__igObject__vfunc_11();
+    Gap__Core__igObject__resetFields();
     self->_messageInterface = (int)(self);
 }
 
@@ -623,7 +623,7 @@ void thunk_Gap__Core__igObject__vfunc_09__0022bbc0(void) {
 }
 
 void Gap__igOptInterface__vfunc_13(void *arg0) {
-    Gap__Core__igObject__vfunc_11();
+    Gap__Core__igObject__resetFields();
     *(int *)((char *)(arg0) + 8) = (int)(arg0);
 }
 
@@ -697,7 +697,7 @@ extern "C" int FUN_0022c7f0(A_2 *arg0, int arg1, B_2 *arg2, int arg3) {
     unsigned int i;
     char *nm;
     Ent *e;
-    igSmartPointer<Rc_2> buffer(FUN_002b9500(0), AdoptReference());
+    igSmartPointer<Rc_2> buffer(igStringObj_Create(0), AdoptReference());
     l = arg0->getObj()->lst;
     found = 0;
     i = 0;
@@ -1414,6 +1414,6 @@ void Gap__igItemDataBaseList__vfunc_04(S_6 *arg0) {
         FUN_002297f0((S_3 *)p, -1);
         p += 0xC;
     }
-    Gap__Core__igObject__vfunc_02(arg0);
+    Gap__Core__igObject__destructFields(arg0);
 }
 

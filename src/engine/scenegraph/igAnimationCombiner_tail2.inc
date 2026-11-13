@@ -490,7 +490,7 @@ int igAnimationCombiner_AddAnimationBlend(CombinerBlendView *c, CombinerAnimatio
 void Gap__Sg__igAnimationCombiner__vfunc_10(void **arg0) {
     if (((DW4VC_92_0 *)(arg0))->vX() != 0) {
         igAnimationCombiner_RemoveAllStates((CombinerResetView *)arg0);
-        Gap__Core__igObject__vfunc_08__002ff0f0(arg0);
+        Gap__Core__igObject__userDestruct(arg0);
     }
 }
 

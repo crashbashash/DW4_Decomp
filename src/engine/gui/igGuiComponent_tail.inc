@@ -1,5 +1,5 @@
 void Gap__Gui__igGuiComponent__vfunc_13(void *arg0) {
-    Gap__Core__igObject__vfunc_11();
+    Gap__Core__igObject__resetFields();
     *(int *)((char *)(*(int *)((char *)(arg0) + 28)) + 32) = (int)(arg0);
 }
 
@@ -9,17 +9,17 @@ void FUN_00455470(A_455470 *arg0) {
     if (arg0->f20 != 0) {
         temp_a0 = arg0->f14;
         if (temp_a0 != 0) {
-            FUN_00457e90((S0_457e90 *)temp_a0, 0);
+            igView_SetModel((S0_457e90 *)temp_a0, 0);
             arg0->f14->f0c = 0;
         }
-        FUN_00457e90((S0_457e90 *)arg0->f0c, 0);
+        igView_SetModel((S0_457e90 *)arg0->f0c, 0);
         arg0->f10->f20 = 0;
         arg0->f20 = 0;
     }
 }
 
 void Gap__Gui__igGuiComponent__vfunc_10(void *arg0) {
-    Gap__Core__igObject__vfunc_08__002ff0f0();
+    Gap__Core__igObject__userDestruct();
     if (*(unsigned char *)((char *)(arg0) + 32) != 0) {
         FUN_00455470((A_455470 *)arg0);
     }

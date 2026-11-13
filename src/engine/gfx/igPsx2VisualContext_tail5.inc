@@ -614,8 +614,8 @@ void FUN_00179e00(StatContext *arg0) {
     int idx;
     StatNode *n;
     int a1;
-    Ref_1778e0 sp6C((O_1778e0 *)FUN_002b9500(FUN_00165d00((int *)arg0)));
-    Ref_1778e0 sp68((O_1778e0 *)FUN_002b9500(FUN_00165d00((int *)arg0)));
+    Ref_1778e0 sp6C((O_1778e0 *)igStringObj_Create(FUN_00165d00((int *)arg0)));
+    Ref_1778e0 sp68((O_1778e0 *)igStringObj_Create(FUN_00165d00((int *)arg0)));
     s3 = ((G_1778e0 *)g_objectSystem[0])->f56;
     s2 = 0;
     igStringObj_Set((O_1778e0 *)sp6C, STATISTICS_CAPTURE);
@@ -631,7 +631,7 @@ void FUN_00179e00(StatContext *arg0) {
         n->f0 = s2;
         thunk_FUN_003065f0(s3, idx, text_numCapture, &n->f4, 1, 0);
         thunk_FUN_003065f0(s3, idx, text_startCapture, &n->f8, -1 - n->f4, 0);
-        n->f12 = (O_1778e0 *)((O_1778e0 *)FUN_002b9500(FUN_00165d00((int *)arg0)));
+        n->f12 = (O_1778e0 *)((O_1778e0 *)igStringObj_Create(FUN_00165d00((int *)arg0)));
         thunk_FUN_00306770(s3, idx, text_stringCapture, &n->f12, DAT_004dc870, 0);
         s2 += 1;
         n->f952 = arg0->f1552;

@@ -6,7 +6,7 @@ igMetaObject *Gap__Bec__ParticleInfo__vfunc_20(void)
 /* Runs the igObject base step, then (when `clearControls` is set) zeroes the particle control
  * data: `_points` (192 words) and `_numControls` (32 words). */
 void Gap__Bec__ParticleInfo__vfunc_11(ParticleInfo *self, int clearControls) {
-    Gap__Core__igObject__vfunc_11();
+    Gap__Core__igObject__resetFields();
     if (clearControls != 0) {
         memset((int)self->_points, 0, sizeof(self->_points));
         memset((int)self->_numControls, 0, sizeof(self->_numControls));
@@ -188,7 +188,7 @@ void Gap__Bec__beBinDataObject__vfunc_8(beBinDataObject *arg0) {
         Memory_FreeBuffer((void *)arg0->_dataBuffer);
         arg0->_dataBuffer = 0;
     }
-    Gap__Core__igObject__vfunc_08__002ff0f0(arg0);
+    Gap__Core__igObject__userDestruct(arg0);
 }
 
 igMetaObject *Gap__Bec__beCriSndf__vfunc_20(void)
@@ -516,7 +516,7 @@ void Gap__Bec__beLuaDataObject__vfunc_08(beLuaDataObject *arg0) {
         Memory_FreeBuffer(temp_a0);
     }
     arg0->_data = 0;
-    Gap__Core__igObject__vfunc_08__002ff0f0(arg0);
+    Gap__Core__igObject__userDestruct(arg0);
 }
 
 igMetaObject *Gap__Bec__beLuaDataObjectist__vfunc_20(void)
@@ -880,7 +880,7 @@ igMetaObject *Gap__Bec__beNumVerData__vfunc_20(void)
 void Gap__Bec__beNumVerData__vfunc_07(Obj_36f970 *arg0, int arg1) {
     int i;
     void *alloc;
-    Gap__Core__igObject__vfunc_07(arg0, arg1);
+    Gap__Core__igObject__userConstruct(arg0, arg1);
     igMetaObject_CountInstances(arg0->v88(), 1);
     if (!(arg1 & 0xFF)) {
         i = 0;
@@ -946,7 +946,7 @@ void Gap__Bec__beNumVerData__vfunc_08(Obj_36fae0 *arg0) {
     l->_count = 0;
     }
     igMetaObject_CountInstances(arg0->v88(), 1);
-    Gap__Core__igObject__vfunc_08__002ff0f0(arg0);
+    Gap__Core__igObject__userDestruct(arg0);
 }
 
 igMetaObject *Gap__Bec__beNumVerDataList__vfunc_20(void)
@@ -1010,7 +1010,7 @@ igMetaObject *Gap__Bec__beSaveDataDeliver__vfunc_20(void)
 }
 
 void Gap__Bec__beSaveDataDeliver__vfunc_07(void **arg0) {
-    Gap__Core__igObject__vfunc_07();
+    Gap__Core__igObject__userConstruct();
     igMetaObject_CountInstances(((DW4VC_88_0 *)(arg0))->vX(), 1);
 }
 
@@ -1024,7 +1024,7 @@ void Gap__Bec__beSaveDataDeliver__vfunc_08(DW4VC_88_0_36fd80 *arg0) {
     arg0->f8 = 0;
     arg0->f12 = 0;
     igMetaObject_CountInstances(arg0->vX(), 1);
-    Gap__Core__igObject__vfunc_08__002ff0f0(arg0);
+    Gap__Core__igObject__userDestruct(arg0);
 }
 
 igMetaObject *Gap__Bec__beSvSlotXbox__vfunc_20(void)
@@ -1053,7 +1053,7 @@ igMetaObject *Gap__Bec__beSvPlatDataGC__vfunc_20(void)
 }
 
 void Gap__Bec__beSvPlatDataGC__vfunc_07(void **arg0) {
-    Gap__Core__igObject__vfunc_07();
+    Gap__Core__igObject__userConstruct();
     igMetaObject_CountInstances(((DW4VC_88_0 *)(arg0))->vX(), 1);
 }
 
@@ -1067,7 +1067,7 @@ void Gap__Bec__beSvPlatDataGC__vfunc_08(beSvPlatDataGC *arg0) {
     arg0->_banTplData = 0;
     arg0->_iconTplData = 0;
     igMetaObject_CountInstances(((SvPlatDataGCVirtualSlots *)arg0)->vX(), 1);
-    Gap__Core__igObject__vfunc_08__002ff0f0(arg0);
+    Gap__Core__igObject__userDestruct(arg0);
 }
 
 igMetaObject *Gap__Bec__beSvPs2McImage128k__vfunc_20(void)
@@ -1076,7 +1076,7 @@ igMetaObject *Gap__Bec__beSvPs2McImage128k__vfunc_20(void)
 }
 
 void Gap__Bec__beSvPs2McImage128k__vfunc_07(beSvPs2McImage128k *arg0, int arg1) {
-    Gap__Core__igObject__vfunc_07();
+    Gap__Core__igObject__userConstruct();
     igMetaObject_CountInstances(((DW4VC_88_0 *)(((char *)(arg0) + 0)))->vX(), 1);
     if (!(arg1 & 0xFF)) {
         arg0->_data = Memory_AllocateDefaultBuffer(0x20000);
@@ -1090,7 +1090,7 @@ void Gap__Bec__beSvPs2McImage128k__vfunc_08(void *arg0) {
     }
     o->_data = 0;
     igMetaObject_CountInstances(((SvPs2McImageVirtualSlots *)(((char *)(arg0) + 0)))->vX(), 1);
-    Gap__Core__igObject__vfunc_08__002ff0f0(arg0);
+    Gap__Core__igObject__userDestruct(arg0);
 }
 
 igMetaObject *Gap__Bec__beSvPlatDataPS2__vfunc_20(void)
@@ -1104,7 +1104,7 @@ igMetaObject *Gap__Bec__beXboxImage24k__vfunc_20(void)
 }
 
 void Gap__Bec__beXboxImage24k__vfunc_07(beXboxImage24k *arg0, int arg1) {
-    Gap__Core__igObject__vfunc_07();
+    Gap__Core__igObject__userConstruct();
     igMetaObject_CountInstances(((DW4VC_88_0 *)(((char *)(arg0) + 0)))->vX(), 1);
     if (!(arg1 & 0xFF)) {
         arg0->_data = Memory_AllocateDefaultBuffer(0x6000);
@@ -1121,7 +1121,7 @@ void Gap__Bec__beXboxImage24k__vfunc_08(DW4VC_88_0_370070 *arg0) {
     }
     arg0->f8 = 0;
     igMetaObject_CountInstances(arg0->vX(), 1);
-    Gap__Core__igObject__vfunc_08__002ff0f0(arg0);
+    Gap__Core__igObject__userDestruct(arg0);
 }
 
 igMetaObject *Gap__Bec__beSvPlatDataXbox__vfunc_20(void)

@@ -36,10 +36,10 @@ int FUN_00262510(int adxf);               /* tell, in sectors */
 int FUN_00262540(int adxf);               /* file size in sectors */
 int ADXF_GetStat(int adxf);               /* status */
 
-void Gap__Core__igObject__vfunc_01(igObject *self);
-void Gap__Core__igObject__vfunc_07(igObject *self);
-void Gap__Core__igObject__vfunc_08__002ff0f0(igObject *self);
-void Gap__Core__igObject__vfunc_11(igObject *self);
+void Gap__Core__igObject__constructFields(igObject *self);
+void Gap__Core__igObject__userConstruct(igObject *self);
+void Gap__Core__igObject__userDestruct(igObject *self);
+void Gap__Core__igObject__resetFields(igObject *self);
 void *igObject_GetAllocator(igObject *self);
 int igMetaObject_CountInstances(int meta, int recursive);
 char *Memory_AllocateAlignedWithAllocator(int size, int align, void *allocator); /* aligned allocation */
@@ -48,8 +48,8 @@ void FUN_002e30b0(igObject *file, const char *fileName); /* sets igFile::_fileNa
 int FUN_003082b0(const char *format, ...);  /* reports a warning */
 int FUN_00304430(const char *format, ...);  /* prints */
 int FUN_00304680(...);
-int FUN_00333440(int fileName);  /* the file's index in the AFS file list, or -1 */
-void FUN_00332cd0(void);
+int igAdx_FindAfsFile(int fileName);  /* the file's index in the AFS file list, or -1 */
+void igAdx_ExecVsync(void);
 void igAdx_ExecServer(int);
 int strcmp(const char *, const char *);
 int strcpy(char *, int);
@@ -99,12 +99,12 @@ extern igAdxAfsFileList *DAT_00587620[4]; /* the files the AFS partitions hold *
 
 void Gap__igAdxFile__vfunc_01(igAdxFile *self)
 {
-    Gap__Core__igObject__vfunc_01(self);
+    Gap__Core__igObject__constructFields(self);
 }
 
 void Gap__igAdxFile__vfunc_11(igAdxFile *self)
 {
-    Gap__Core__igObject__vfunc_11(self);
+    Gap__Core__igObject__resetFields(self);
     self->_pBufferPtr = self->_pBuffer;
     self->_bBufferFilled = 0;
     self->_iBufferPos = 0;
@@ -113,7 +113,7 @@ void Gap__igAdxFile__vfunc_11(igAdxFile *self)
 
 void Gap__igAdxFile__vfunc_07(igAdxFile *self)
 {
-    Gap__Core__igObject__vfunc_07(self);
+    Gap__Core__igObject__userConstruct(self);
     igMetaObject_CountInstances(((igAdxFileVirtuals *)self)->vfunc_20(), 1);
     self->_pBuffer = (int)Memory_AllocateAlignedWithAllocator(self->_iBufferSize, 0x40, igObject_GetAllocator(self));
     /* matching construct: hand search — the failed-allocation return folds into the epilogue, leaving the reload of
@@ -142,7 +142,7 @@ void Gap__igAdxFile__vfunc_02(igAdxFile *self)
 void Gap__igAdxFile__vfunc_08(igAdxFile *self)
 {
     igMetaObject_CountInstances(((igAdxFileVirtuals *)self)->vfunc_20(), 1);
-    Gap__Core__igObject__vfunc_08__002ff0f0(self);
+    Gap__Core__igObject__userDestruct(self);
 }
 
 int igAdxFile_GetReadStatus(igAdxFile *self)
@@ -156,7 +156,7 @@ int igAdxFile_WaitForReadEnd(igAdxFile *self)
         if (self->_bUseAsync && self->_bUseAlchemyAsync) {
             g_threadManager->_threads->_data[0]->sleep(self->_lSleepTime);
         } else {
-            FUN_00332cd0();
+            igAdx_ExecVsync();
         }
         igAdx_ExecServer(0);
     }
@@ -229,7 +229,7 @@ void Gap__igAdxFile__vfunc_21(igResult *result, igAdxFile *self, OpenMode mode)
         return;
     case kReadBinary:
     open:
-        index = FUN_00333440(self->_fileName);
+        index = igAdx_FindAfsFile(self->_fileName);
         if (index != -1) {
             entry = ((igAdxAfsFile **)DAT_00587620[0]->_data)[index];
             self->_adxf = FUN_00261b78(entry->_ptNumber, entry->_fileNumber);

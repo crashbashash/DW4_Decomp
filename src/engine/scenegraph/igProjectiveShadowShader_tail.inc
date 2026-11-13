@@ -383,7 +383,7 @@ void FUN_001d6060(O_1d6060 *arg0, char *arg1) {
     spF0[0] = arg0->f32 + arg0->f44;
     spF0[1] = arg0->f36 + arg0->f48;
     spF0[2] = arg0->f40 + arg0->f52;
-    FUN_00191b10(&spB0, &arg0->f32, spF0, (char *)arg0 + 132);
+    Matrix44_MakeLookAt(&spB0, &arg0->f32, spF0, (char *)arg0 + 132);
     if (arg0->f208 != 0) {
         FUN_00191860(&sp70, arg0->f224, arg0->f220, arg0->f216, arg0->f212, arg0->f124, arg0->f128);
     } else {

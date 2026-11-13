@@ -105,7 +105,7 @@ extern int DAT_004bead8[4];
 float logf(float);
 int strncmp();
 int memcmp(const void *a, const void *b, unsigned int n);
-int FUN_002632c0();
+int ADXT_Init();
 int ADXT_Finish();
 void FUN_00263548();
 int FUN_00265f28();
@@ -291,7 +291,7 @@ void FUN_0029b580(SfdAdxCfg *cfg) {
 }
 
 int FUN_0029b5d8(void) {
-    FUN_002632c0();
+    ADXT_Init();
     FUN_00265f28();
     mpsutl_FillWords(&DAT_0057fa90, 0, 7);
     return 0;

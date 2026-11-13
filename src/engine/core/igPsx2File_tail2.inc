@@ -443,7 +443,7 @@ StringRef_32c240 FUN_0032c240(char *prefix, char *path, int extra2) {
     char *chars;
     int limit, i;
     char c;
-    igSmartPointer<Text> text(((Text *)FUN_002b9500(((int)Memory_GetAllocatorBySelector(g_memoryContextString)))));
+    igSmartPointer<Text> text(((Text *)igStringObj_Create(((int)Memory_GetAllocatorBySelector(g_memoryContextString)))));
     if (prefix == 0) {
         igStringObj_Set((int)(text.get()), (int)path);
     } else if (*prefix == 0x63) {

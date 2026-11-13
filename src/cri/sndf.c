@@ -161,7 +161,7 @@ int sndf_SendMessage(unsigned int message);
 #define SWAP32_B(x) (((x) << 24) | ((x) >> 24) | ((((x) >> 8) & 0xFF00) | (((x) & 0xFF00) << 8)))
 #define SWAP32_C(x) ((((x) & 0xFF) << 24) | (((x) & 0xFF00) << 8) | (((x) & 0xFF0000) >> 8) | (((x) & 0xFF000000) >> 24))
 
-int FUN_00280d20(void)
+int SNDF_Finish(void)
 {
     int var_a0;
 
@@ -173,7 +173,7 @@ int FUN_00280d20(void)
     return var_a0;
 }
 
-int FUN_00280d48(void)
+int SNDF_Start(void)
 {
     int result = -1;
     int req[1];

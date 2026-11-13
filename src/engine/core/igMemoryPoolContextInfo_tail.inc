@@ -246,8 +246,8 @@ R2 FUN_002f2e30(OB *arg1, int arg2, int arg3) {
     return sp6C;
 }
 
-igResult_2f25d0 FUN_002f2f40(SlotReadTable *self, int file) {
-    igResult_2f25d0 result = g_resultSuccess;
+igResult FUN_002f2f40(SlotReadTable *self, int file) {
+    igResult result = g_resultSuccess;
     int i;
     FUN_002f8b20((void *)file);
     for (i = 0; i < 46; i++) {
@@ -265,9 +265,9 @@ igResult_2f25d0 FUN_002f2f40(SlotReadTable *self, int file) {
     return result;
 }
 
-igResult_2f25d0 FUN_002f3060(DirSlotTable *self, int file, int arg) {
+igResult FUN_002f3060(DirSlotTable *self, int file, int arg) {
     int count = FUN_002f8a50((void *)file);
-    igResult_2f25d0 result = g_resultSuccess;
+    igResult result = g_resultSuccess;
     int i;
     if (self->slots == 0) {
         int allocator = ((int)igObject_GetAllocator((int)self));
@@ -373,8 +373,8 @@ static inline void setDescString(char **dst, char *src) {
 
 static inline char *descName(PoolDescRecord *r) { char *n = r->name; if (n != 0) { return n; } return ((char *)emptyString); }
 
-igResult_2f25d0 FUN_002f3910(PoolDescManager *self, int index, PoolDescRecord *desc, int build) {
-    igResult_2f25d0 result = g_resultSuccess;
+igResult FUN_002f3910(PoolDescManager *self, int index, PoolDescRecord *desc, int build) {
+    igResult result = g_resultSuccess;
     PoolDescSlot *slot;
     if (index == -1) {
         index = self->nextSlot;
@@ -497,13 +497,13 @@ void FUN_002f4250(void **arg0) {
 void FUN_002f42e0(void **arg0, int arg1) {
     memset((char *)arg0 + 0x14, 0, 0x19E0);
     ((DW4VC_180_0 *)(arg0))->vX();
-    Gap__Core__igObject__vfunc_11((int)arg0, arg1);
+    Gap__Core__igObject__resetFields((int)arg0, arg1);
 }
 
 void FUN_002f4340(void **arg0) {
     int var_s0;
 
-    Gap__Core__igObject__vfunc_02((int)arg0);
+    Gap__Core__igObject__destructFields((int)arg0);
     var_s0 = 0x2D;
     do {
         ((DW4VC_212_1 *)(arg0))->vX((int)(var_s0));
@@ -1560,7 +1560,7 @@ int Memory_GetCurrentContext(void) {
     return 0;
 }
 
-igResult_2f25d0 FUN_002f86e0(void *arg1) {
+igResult FUN_002f86e0(void *arg1) {
 
     if ((arg1 != 0) && (DAT_00587010[0] >= 0) && (DAT_00587010[0] < 4)) {
         DAT_00587000[DAT_00587010[0]] = arg1;

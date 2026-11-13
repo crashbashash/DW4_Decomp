@@ -221,7 +221,7 @@ void Gap__Core__igMallocMemoryPool__vfunc_64(MallocPoolFreeView *self, unsigned 
 }
 
 void Gap__Core__igMallocMemoryPool__vfunc_13(igMallocMemoryPool *self, int extra1) {
-    Gap__Core__igObject__vfunc_11((int)self, extra1);
+    Gap__Core__igObject__resetFields((int)self, extra1);
     self->_poolOptionFlags = (int) g_poolOptionFlagsDefault_004c25f8[0];
 }
 

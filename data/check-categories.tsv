@@ -3508,8 +3508,8 @@
 0018d260	FUN_0018d260	match	-
 0018d270	FUN_0018d270	match	-
 0018d280	FUN_0018d280	match	-
-0018d2b0	FUN_0018d2b0	match	-
-0018d360	FUN_0018d360	match	-
+0018d2b0	igRay_SetFromPoints	match	-
+0018d360	igRay_Transform	match	-
 0018d480	FUN_0018d480	match	-
 0018d700	FUN_0018d700	match	-
 0018d7b0	FUN_0018d7b0	match	-
@@ -3613,7 +3613,7 @@
 00190cb0	FUN_00190cb0	match	-
 00190d80	FUN_00190d80	match	-
 00190e50	FUN_00190e50	match	-
-00190ed0	FUN_00190ed0	match	-
+00190ed0	Matrix44_MakeEulerRotation	match	-
 00190f50	FUN_00190f50	match	-
 001910c0	FUN_001910c0	match	-
 00191670	FUN_00191670	match	-
@@ -3623,8 +3623,8 @@
 00191860	FUN_00191860	match	-
 00191910	FUN_00191910	match	-
 001919d0	igMatrix44f_MakePerspective	match	-
-00191e30	FUN_00191e30	match	-
-00191f30	FUN_00191f30	match	-
+00191e30	Matrix44_InvertOrthonormal	match	-
+00191f30	Matrix44_Invert	match	-
 00192030	Matrix44_Adjugate	match	-
 00192290	FUN_00192290	match	-
 00192510	FUN_00192510	match	-
@@ -4150,7 +4150,7 @@
 0019e4f0	igIntersectTraversal_InitFields	match	-
 0019e640	FUN_0019e640	match	-
 0019e670	thunk_FUN_001ce740	match	-
-0019e680	FUN_0019e680	match	-
+0019e680	igProbe_Create	match	-
 0019e6c0	FUN_0019e6c0	match	-
 0019e710	igProbe_GetMetaObject	match	-
 0019e760	igProbe_GetVTable	match	-
@@ -4191,7 +4191,7 @@
 0019f5a0	FUN_0019f5a0	match	-
 0019f5b0	igGraphPathList_Register	match	-
 0019f620	thunk_igGraphPathList_GetMetaObject	match	-
-0019f630	FUN_0019f630	match	-
+0019f630	igGraphPath_Create	match	-
 0019f670	FUN_0019f670	match	-
 0019f6c0	igGraphPath_GetMetaObject	match	-
 0019f710	igGraphPath_GetVTable	match	-
@@ -4756,7 +4756,7 @@
 001b1490	igAttrStackManager_MarkStackChanged	match	-
 001b1cf0	igBitMask_SetAll	match	-
 001b1dc0	igBitMask_ClearAll	match	-
-001b1e50	FUN_001b1e50	match	-
+001b1e50	igBitMask_SetBitCount	match	-
 001b21d0	FUN_001b21d0	match	-
 001b23b0	FUN_001b23b0	match	-
 001b23e0	FUN_001b23e0	match	-
@@ -4974,7 +4974,7 @@
 001c5660	FUN_001c5660	match	-
 001c5730	FUN_001c5730	match	-
 001c5740	FUN_001c5740	match	-
-001c5790	FUN_001c5790	match	-
+001c5790	igGraphPath_SetNodes	match	-
 001c5870	FUN_001c5870	match	-
 001c58c0	FUN_001c58c0	match	-
 001c5990	igGraphPath_GetTail	match	-
@@ -4982,12 +4982,12 @@
 001c59e0	FUN_001c59e0	match	-
 001c59f0	FUN_001c59f0	match	-
 001c5b20	Gap__Sg__igNode__vfunc_22	match	-
-001c5b30	FUN_001c5b30	match	-
+001c5b30	igGraphPath_GetTransform	match	-
 001c5b80	FUN_001c5b80	match	-
 001c5d10	igGroup_AppendChild	match	-
 001c5d70	FUN_001c5d70	match	-
 001c5e20	FUN_001c5e20	match	-
-001c5eb0	FUN_001c5eb0	match	-
+001c5eb0	igGroup_RemoveChildAt	match	-
 001c6050	igGroup_RemoveChild	match	-
 001c6110	FUN_001c6110	match	-
 001c6230	FUN_001c6230	match	-
@@ -5035,7 +5035,7 @@
 001ce740	FUN_001ce740	match	-
 001ce790	FUN_001ce790	match	-
 001ce890	Gap__Bec__beHitLandModelTraversal__vfunc_11	match	-
-001ce970	FUN_001ce970	match	-
+001ce970	igIntersectTraversal_ResetStacks	match	-
 001cea90	Gap__Bec__beHitLandModelTraversal__vfunc_21	match	-
 001ceaa0	Gap__Bec__beHitLandModelTraversal__vfunc_22	match	-
 001ceab0	FUN_001ceab0	match	-
@@ -5107,8 +5107,8 @@
 001d63c0	Gap__Bec__ParticleInfo__vfunc_22	match	-
 001d6410	FUN_001d6410	match	-
 001d6560	FUN_001d6560	match	-
-001d65e0	FUN_001d65e0	match	-
-001d6700	FUN_001d6700	match	-
+001d65e0	igSceneInfo_CollectCameras	match	-
+001d6700	igSceneInfo_ComputeAnimationRange	match	-
 001d6790	FUN_001d6790	match	-
 001d68e0	FUN_001d68e0	match	-
 001d68f0	FUN_001d68f0	match	-
@@ -6550,7 +6550,7 @@
 00236e20	FUN_00236e20	match	-
 00236e80	FUN_00236e80	match	-
 00236ee0	igInsightCore_AddRenderer	match	-
-00236f30	FUN_00236f30	match	-
+00236f30	igInsightCore_RemoveRenderer	match	-
 00236f80	igInsightCore_FindManager	match	-
 00237010	FUN_00237010	match	-
 00237020	igInsightCore_AddRendererOrder	match	-
@@ -6581,7 +6581,7 @@
 002380c0	Gap__Insight__igSerialScheduler__vfunc_27	match	-
 002380d0	Gap__Insight__igSerialScheduler__vfunc_28	match	-
 00238100	Gap__Insight__igSerialScheduler__vfunc_29	match	-
-00238110	FUN_00238110	match	-
+00238110	ViewerOptions_Construct	match	-
 002382e0	FUN_002382e0	match	-
 00238af0	Gap__Insight__igSerialScheduler__vfunc_22	match	-
 00238b00	Gap__Insight__igFilterMessageDispatcher__vfunc_22	match	-
@@ -7504,7 +7504,7 @@
 00260d00	FUN_00260d00	match	-
 00260d48	FUN_00260d48	match	-
 00260d68	FUN_00260d68	match	-
-00260de8	FUN_00260de8	match	-
+00260de8	ADXF_LoadPartitionNw	match	-
 00260e10	FUN_00260e10	match	-
 00260e38	FUN_00260e38	match	-
 00260e60	FUN_00260e60	match	-
@@ -7515,7 +7515,7 @@
 00260f88	FUN_00260f88	match	-
 00261218	adxf_CloseLdptnwHn	match	-
 00261258	FUN_00261258	match	-
-002612c0	FUN_002612c0	match	-
+002612c0	ADXF_GetPtStatEx	match	-
 002612d8	ADXF_GetPtStat	match	-
 00261708	FUN_00261708	match	-
 00261720	FUN_00261720	match	-
@@ -7575,7 +7575,7 @@
 00263250	FUN_00263250	match	-
 00263280	FUN_00263280	match	-
 002632a0	FUN_002632a0	match	-
-002632c0	FUN_002632c0	match	-
+002632c0	ADXT_Init	match	-
 00263450	FUN_00263450	match	-
 00263470	ADXT_Finish	match	-
 00263548	FUN_00263548	match	-
@@ -8643,8 +8643,8 @@
 00280b70	FUN_00280b70	match	-
 00280b80	FUN_00280b80	match	-
 00280b90	FUN_00280b90	match	-
-00280d20	FUN_00280d20	match	-
-00280d48	FUN_00280d48	match	-
+00280d20	SNDF_Finish	match	-
+00280d48	SNDF_Start	match	-
 00280e38	FUN_00280e38	match	-
 00280f10	FUN_00280f10	match	-
 00280f60	FUN_00280f60	match	-
@@ -10409,7 +10409,7 @@
 002b9470	FUN_002b9470	match	-
 002b9480	igStringObjList_Register	match	-
 002b94f0	thunk_igStringObjList_GetMetaObject	match	-
-002b9500	FUN_002b9500	match	-
+002b9500	igStringObj_Create	match	-
 002b9540	FUN_002b9540	match	-
 002b9590	igStringObj_GetMetaObject	match	-
 002b95e0	igStringObj_GetVTable	match	-
@@ -12323,15 +12323,15 @@
 002fef70	igObject_CopyConstructHeader	match	-
 002ff010	igObject_ConstructHeader	match	-
 002ff0a0	Gap__Core__igObject__vfunc_00__002ff0a0	match	-
-002ff0b0	Gap__Core__igObject__vfunc_01	match	-
-002ff0c0	Gap__Core__igObject__vfunc_02	match	-
+002ff0b0	Gap__Core__igObject__constructFields	match	-
+002ff0c0	Gap__Core__igObject__destructFields	match	-
 002ff0d0	Gap__Core__igObject__vfunc_03	match	-
-002ff0e0	Gap__Core__igObject__vfunc_07	match	-
-002ff0f0	Gap__Core__igObject__vfunc_08__002ff0f0	match	-
+002ff0e0	Gap__Core__igObject__userConstruct	match	-
+002ff0f0	Gap__Core__igObject__userDestruct	match	-
 002ff100	Gap__Core__igObject__vfunc_04	match	-
 002ff110	Gap__Core__igObject__vfunc_05	match	-
 002ff120	Gap__Core__igObject__vfunc_06	match	-
-002ff130	Gap__Core__igObject__vfunc_11	match	-
+002ff130	Gap__Core__igObject__resetFields	match	-
 002ff140	Gap__Core__igObject__vfunc_09	match	-
 002ff150	Gap__Core__igObject__vfunc_10	match	-
 002ff160	Gap__Core__igObject__vfunc_12	match	-
@@ -12548,7 +12548,7 @@
 003081d0	igReportNotice	match	-
 00308240	FUN_00308240	match	-
 003082b0	FUN_003082b0	match	-
-00308320	FUN_00308320	match	-
+00308320	igReportError	match	-
 00308390	FUN_00308390	match	-
 00308400	FUN_00308400	match	-
 00308540	FUN_00308540	match	-
@@ -12619,7 +12619,7 @@
 0030b420	igStringObj_Clear	match	-
 0030b460	igStringObj_Insert	match	-
 0030b5c0	igStringObj_ToLower	match	-
-0030b5f0	FUN_0030b5f0	match	-
+0030b5f0	igStringObj_ToInt	match	-
 0030b630	igStringObj_ToFloat	match	-
 0030b670	FUN_0030b670	match	-
 0030b720	FUN_0030b720	match	-
@@ -12911,7 +12911,7 @@
 003257d0	FUN_003257d0	match	-
 00325810	FUN_00325810	match	-
 00325850	Gap__Core__igPageMemoryPool__vfunc_02	match	-
-00325860	thunk_Gap__Core__igObject__vfunc_01	match	-
+00325860	thunk_Gap__Core__igObject__constructFields	match	-
 00325870	Gap__Core__igPageMemoryPool__vfunc_04	match	-
 00325900	Gap__Core__igPageMemoryPool__vfunc_13	match	-
 00325940	Gap__Core__igPageMemoryPool__vfunc_45	match	-
@@ -13120,7 +13120,7 @@
 0032c930	Gap__Core__igPsx2Folder__vfunc_26	match	-
 0032cac0	FUN_0032cac0	match	-
 0032cb50	FUN_0032cb50	match	-
-0032cf50	FUN_0032cf50	match	-
+0032cf50	igPsx2_LoadIopModule	match	-
 0032cf70	FUN_0032cf70	match	-
 0032d070	FUN_0032d070	match	-
 0032d080	FUN_0032d080	match	-
@@ -13470,7 +13470,7 @@
 00331fb0	igAdxAudio_Initialize	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
 003320d0	igAdxAudio_CreateHandle	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
 00332160	igAdxAudio_StartMemory	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-003321f0	FUN_003321f0	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
+003321f0	igAdxAudio_CreateHandleAndStartFile	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
 00332290	igAdxAudio_StartFile	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
 00332340	igAdxAudio_Stop	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
 00332370	igAdxAudio_Pause	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
@@ -13479,31 +13479,31 @@
 00332430	igAdxAudio_SetOutVolume	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
 00332460	igAdxAudio_GetOutVolume	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
 00332490	igAdxAudio_GetStatus	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-003324c0	FUN_003324c0	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-00332530	FUN_00332530	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-00332650	Gap__igAdx__vfunc_01	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-00332670	Gap__igAdx__vfunc_11	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-00332710	Gap__igAdx__vfunc_07	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-00332750	Gap__igAdx__vfunc_20	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-00332760	Gap__igAdx__vfunc_02	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-00332770	Gap__igAdx__vfunc_08	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-003327b0	FUN_003327b0	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
+003324c0	igAdx_CreateScratchString	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
+00332530	igAdx_Shutdown	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
+00332650	Gap__igAdx__constructFields	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
+00332670	Gap__igAdx__resetFields	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
+00332710	Gap__igAdx__userConstruct	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
+00332750	Gap__igAdx__getMeta	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
+00332760	Gap__igAdx__destructFields	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
+00332770	Gap__igAdx__userDestruct	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
+003327b0	igAdx_ErrorCallback	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
 003327c0	igAdx_SetModulePath	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-00332810	FUN_00332810	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-00332860	FUN_00332860	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-00332c40	FUN_00332c40	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-00332c50	FUN_00332c50	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-00332cd0	FUN_00332cd0	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
+00332810	igAdx_SetHostRootPath	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
+00332860	igAdx_SetupIop	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
+00332c40	igAdx_SetupOptional	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
+00332c50	igAdx_Initialize	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
+00332cd0	igAdx_ExecVsync	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
 00332cf0	igAdx_ExecServer	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
 00332d20	igAdx_SetPartitionCount	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
 00332e90	igAdx_AddPartitionName	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
 00333230	igAdx_SetInsideFiles	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
 003332b0	igAdx_LoadPartition	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-00333440	FUN_00333440	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-00333630	FUN_00333630	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
+00333440	igAdx_FindAfsFile	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
+00333630	igAdxAfsFile_GetPath	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
 00333760	FUN_00333760	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-003337e0	FUN_003337e0	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-003337f0	FUN_003337f0	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
+003337e0	igAdxFile_StaticInitialize	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
+003337f0	igAdxFile_StaticFinalize	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
 00333800	Gap__igAdxFile__vfunc_01	match	-
 00333820	Gap__igAdxFile__vfunc_11	match	-
 00333860	Gap__igAdxFile__vfunc_07	match	-
@@ -13685,24 +13685,24 @@
 00337600	Gif_SetTrxdir	match	-
 00337630	CriMovie_BuildTileUpload	match	-
 003378e0	CriMovie_BuildFrameUpload	match	-
-00337920	Gap__igCriMovieCodec__vfunc_28	match	-
-00337a50	Gap__igCriMovieCodec__vfunc_29	match	-
+00337920	igCriMovieCodec_InitializeDrawing	match	-
+00337a50	igCriMovieCodec_ReleaseDrawing	match	-
 00337aa0	CriMovie_SubmitFrame	match	-
-00337b80	Gap__igCriMovieData__vfunc_11	match	-
-00337bb0	Gap__igCriMovieCodec__vfunc_01	match	-
-00337bf0	Gap__igCriMovieCodec__vfunc_02	match	-
-00337c10	Gap__igCriMovieCodec__vfunc_21	match	-
+00337b80	Gap__igCriMovieData__resetFields	match	-
+00337bb0	Gap__igCriMovieCodec__constructFields	match	-
+00337bf0	Gap__igCriMovieCodec__destructFields	match	-
+00337c10	igCriMovieCodec_IsReusable	match	-
 003387d0	CriMovie_DestroyObjectRef	match	-
-00338850	Gap__igCriMovieCodec__vfunc_24	match	-
-00338920	Gap__igCriMovieCodec__vfunc_25	match	-
-00338a00	Gap__igCriMovieCodec__vfunc_26	match	-
-00338ae0	Gap__igCriMovieCodec__vfunc_30	match	-
+00338850	igCriMovieCodec_Close	match	-
+00338920	igCriMovieCodec_Play	match	-
+00338a00	igCriMovieCodec_Pause	match	-
+00338ae0	igCriMovieCodec_SyncPauseState	match	-
 00338c00	igCriMovieCodec_Update	match	-
 00338d60	CriMovie_Allocate	match	-
 00338da0	CriMovie_AllocateAligned	match	-
 00338df0	CriMovie_Free	match	-
-00338e30	Gap__igCriMovieCodec__vfunc_20	match	-
-00338e40	Gap__igCriMovieData__vfunc_20	match	-
+00338e30	igCriMovieCodec_GetMeta	match	-
+00338e40	igCriMovieData_GetMeta	match	-
 00338e50	FUN_00338e50	match	-
 00338ed0	Gap__igMovieCodec__vfunc_21	match	-
 00338ee0	Gap__igMovieCodec__vfunc_22	match	-
@@ -19359,7 +19359,7 @@
 00453860	Gap__Bec__beFontImage__vfunc_11	match	-
 00453980	FUN_00453980	match	-
 00453990	FUN_00453990	match	-
-00453a20	FUN_00453a20	match	-
+00453a20	igGuiComponent_AppendChild	match	-
 00453a30	Gap__Gui__igColorChanger__vfunc_23	match	-
 00453a40	igBasicColorChanger_SetColor	match	-
 00453ac0	Gap__Gui__igBasicColorChanger__vfunc_23	match	-
@@ -19375,7 +19375,7 @@
 00454180	FUN_00454180	match	-
 004541f0	FUN_004541f0	match	-
 00454290	igEventDispatcher_AddReceiver	match	-
-004542a0	FUN_004542a0	match	-
+004542a0	igEventDispatcher_RemoveReceiver	match	-
 004542d0	igEventDispatcher_AddReceiverOrder	match	-
 004542e0	FUN_004542e0	match	-
 00454310	Gap__Gui__igEventDispatcher__vfunc_26	match	-
@@ -19442,8 +19442,8 @@
 00456670	Gap__Gui__igGuiSystemRenderer__vfunc_25	match	-
 00456730	Gap__Gui__igGuiSystemRenderer__vfunc_26	match	-
 00456780	Gap__Gui__igGuiSystem__vfunc_13	match	-
-004569c0	FUN_004569c0	match	-
-00456a60	FUN_00456a60	match	-
+004569c0	igGuiSystem_SetMouseCursorVisible	match	-
+00456a60	igGuiSystem_SetMouseCursor	match	-
 00456b80	FUN_00456b80	match	-
 00456c20	FUN_00456c20	match	-
 00456cc0	igGuiSystem_SetRootComponent	match	-
@@ -19458,9 +19458,9 @@
 00457220	Gap__Gui__igGuiSystem__vfunc_25	match	-
 004572a0	Gap__Gui__igGuiSystem__vfunc_27	match	-
 004573b0	Gap__Gui__igGuiSystem__vfunc_26	match	-
-004573c0	FUN_004573c0	match	-
-004573d0	FUN_004573d0	match	-
-004573f0	FUN_004573f0	match	-
+004573c0	igHotKeyEventReceiver_AddKey	match	-
+004573d0	igHotKeyEventReceiver_AddButton	match	-
+004573f0	igHotKeyEventReceiver_AddBinding	match	-
 004574f0	FUN_004574f0	match	-
 004575d0	Gap__Gui__igHotKeyEventReceiver__vfunc_23	match	-
 00457650	Gap__Gui__igHotKeyEventReceiver__vfunc_27	match	-
@@ -19479,7 +19479,7 @@
 00457de0	Gap__Gui__igClearRenderer__vfunc_26	match	-
 00457e00	Gap__Gui__igTextElement__vfunc_23	match	-
 00457e10	Gap__Gui__igTextElement__vfunc_24	match	-
-00457e90	FUN_00457e90	match	-
+00457e90	igView_SetModel	match	-
 00457ef0	Gap__Bec__beCameraMode__vfunc_08	match	-
 00457f30	Gap__Gui__igTextElement__vfunc_22	match	-
 00457f40	Gap__Gui__igClearRenderer__vfunc_22	match	-
@@ -19686,7 +19686,7 @@
 0045bfb0	igViewerDataPumpManager_Register	match	-
 0045c030	thunk_igViewerDataPumpManager_GetMetaObject	match	-
 0045c040	FUN_0045c040	match	-
-0045c170	FUN_0045c170	match	-
+0045c170	igPickMode_Create	match	-
 0045c1b0	igPickMode_GetMetaObject	match	-
 0045c200	igPickMode_GetVTable	match	-
 0045c330	FUN_0045c330	match	-
@@ -19694,21 +19694,21 @@
 0045c3c0	thunk_igPickMode_GetMetaObject	match	-
 0045c3d0	igPickMode_InitFields	match	-
 0045c540	FUN_0045c540	match	-
-0045c5a0	FUN_0045c5a0	match	-
+0045c5a0	igRotateMode_Create	match	-
 0045c5e0	igRotateMode_GetMetaObject	match	-
 0045c630	igRotateMode_GetVTable	match	-
 0045c680	FUN_0045c680	match	-
 0045c690	igRotateMode_Register	match	-
 0045c700	thunk_igRotateMode_GetMetaObject	match	-
 0045c710	igRotateMode_InitFields	match	-
-0045c8e0	FUN_0045c8e0	match	-
+0045c8e0	igFlyMode_Create	match	-
 0045c920	igFlyMode_GetMetaObject	match	-
 0045c970	igFlyMode_GetVTable	match	-
 0045ca20	FUN_0045ca20	match	-
 0045ca30	igFlyMode_Register	match	-
 0045cab0	thunk_igFlyMode_GetMetaObject	match	-
 0045cac0	igFlyMode_InitFields	match	-
-0045cc40	FUN_0045cc40	match	-
+0045cc40	igCameraMode_Create	match	-
 0045cc80	igCameraMode_GetMetaObject	match	-
 0045ccd0	igCameraMode_GetVTable	match	-
 0045cdc0	FUN_0045cdc0	match	-
@@ -19800,7 +19800,7 @@
 0045ec90	igViewerGuiFactory_CreateAction	match	DEFERRED duplicate 0x19ace0 __ct__7igVec3fFv 8B (compared under the profile of its retail unit)
 0045eda0	igViewerGuiFactory_CreateEmpty	match	DEFERRED duplicate 0x19ace0 __ct__7igVec3fFv 8B (compared under the profile of its retail unit)
 0045edd0	Gap__Viewer__igViewerGuiFactory__resetFields	match	DEFERRED duplicate 0x19ace0 __ct__7igVec3fFv 8B (compared under the profile of its retail unit)
-0045f1d0	Gap__Viewer__igViewerGuiFactory__vfunc_22	match	DEFERRED duplicate 0x19ace0 __ct__7igVec3fFv 8B (compared under the profile of its retail unit)
+0045f1d0	igViewerGuiFactory_GetMeta	match	DEFERRED duplicate 0x19ace0 __ct__7igVec3fFv 8B (compared under the profile of its retail unit)
 0045f1e0	igVec2f_Set	match	DEFERRED duplicate 0x19ace0 __ct__7igVec3fFv 8B (compared under the profile of its retail unit)
 0045f1f0	igVec2f_Construct	match	DEFERRED duplicate 0x19ace0 __ct__7igVec3fFv 8B (compared under the profile of its retail unit)
 0045f200	FUN_0045f200	match	-
@@ -19809,16 +19809,16 @@
 0045f430	Gap__Viewer__igViewerRenderer__vfunc_25	match	-
 0045f690	Gap__Viewer__igViewerRenderer__vfunc_23	match	-
 0045f780	Gap__Viewer__igViewerRenderer__Render	match	-
-0045f930	FUN_0045f930	match	-
+0045f930	igViewerRenderer_ApplyOptions	match	-
 0045fd70	Gap__Viewer__igViewerRenderer__vfunc_13	match	-
 004601c0	FUN_004601c0	match	-
-004601e0	FUN_004601e0	match	-
-00460260	FUN_00460260	match	-
-004602c0	FUN_004602c0	match	-
-00460330	FUN_00460330	match	-
+004601e0	igViewerRenderer_UpdateProjection	match	-
+00460260	igViewerRenderer_UpdateViewMatrix	match	-
+004602c0	igViewerRenderer_UpdateSorting	match	-
+00460330	igViewerRenderer_UpdateScene	match	-
 00460790	FUN_00460790	match	-
-004608a0	FUN_004608a0	match	-
-00460ac0	FUN_00460ac0	match	-
+004608a0	igViewerRenderer_UpdateLighting	match	-
+00460ac0	igViewerRenderer_UpdateRenderStates	match	-
 00460be0	FUN_00460be0	match	-
 00460c80	FUN_00460c80	match	-
 00460d90	FUN_00460d90	match	-
@@ -19826,47 +19826,47 @@
 00460f20	FUN_00460f20	match	-
 00460f70	Gap__Viewer__igViewerRenderer__vfunc_22	match	-
 00460f80	Gap__Viewer__igViewerRenderer__vfunc_24	match	-
-00460f90	Gap__Viewer__igViewerSceneInfoManagerController__vfunc_24	match	-
-004612a0	FUN_004612a0	match	-
-004612b0	FUN_004612b0	match	-
-004614b0	Gap__Viewer__igViewerSceneInfoManager__vfunc_13	match	-
+00460f90	Gap__Viewer__igViewerSceneInfoManagerController__OnModelChange	match	-
+004612a0	igViewerSceneInfoManager_OnPlaybackChanged	match	-
+004612b0	igViewerSceneInfoManager_UpdateTime	match	-
+004614b0	Gap__Viewer__igViewerSceneInfoManager__resetFields	match	-
 00461c70	Gap__Viewer__igViewerSceneInfoManager__Activate	match	-
-00462090	Gap__Viewer__igViewerSceneInfoManager__vfunc_24	match	-
-00462100	FUN_00462100	match	-
-00462200	FUN_00462200	match	-
-00462240	Gap__Viewer__igViewerSceneInfoManager__vfunc_29	match	-
-004622a0	Gap__Viewer__igViewerSceneInfoManager__vfunc_28	match	-
-00462670	Gap__Viewer__igViewerSceneInfoManager__vfunc_27	match	-
+00462090	Gap__Viewer__igViewerSceneInfoManager__Deactivate	match	-
+00462100	igViewerSceneInfoManager_HasGeometry	match	-
+00462200	igViewerSceneInfoManager_CheckClipping	match	-
+00462240	Gap__Viewer__igViewerSceneInfoManager__Update	match	-
+004622a0	Gap__Viewer__igViewerSceneInfoManager__RemoveAllInfo	match	-
+00462670	Gap__Viewer__igViewerSceneInfoManager__AddInfo	match	-
 004629c0	igViewerSceneInfoManager_HideGui	match	-
-00462a10	FUN_00462a10	match	-
-00462a20	FUN_00462a20	match	-
-00462a30	FUN_00462a30	match	-
-00462a40	FUN_00462a40	match	-
-00462a50	FUN_00462a50	match	-
-00462ac0	FUN_00462ac0	match	-
-00462cf0	FUN_00462cf0	match	-
-00462d00	FUN_00462d00	match	-
-00462d10	FUN_00462d10	match	-
+00462a10	igViewerSceneInfoManager_RemoveNormalsRenderer	match	-
+00462a20	igViewerSceneInfoManager_RemoveBoundingBoxRenderer	match	-
+00462a30	igViewerSceneInfoManager_RemoveFlushRenderer	match	-
+00462a40	igViewerSceneInfoManager_OnSelectionChanged	match	-
+00462a50	igViewerSceneInfoManager_HomeView	match	-
+00462ac0	igViewerSceneInfoManager_ResetView	match	-
+00462cf0	igViewerSceneInfoManager_OnButton1	match	-
+00462d00	igViewerSceneInfoManager_OnButton2	match	-
+00462d10	igViewerSceneInfoManager_OnSceneClipped	match	-
 00462d20	igViewerSceneInfoManager_DebugZoomOut	match	-
-00462d30	FUN_00462d30	match	-
-00462d80	FUN_00462d80	match	-
+00462d30	igViewerSceneInfoManager_Play	match	-
+00462d80	igViewerSceneInfoManager_Pause	match	-
 00462dc0	igViewerSceneInfoManager_ResetOperationMode	match	-
-00462e10	FUN_00462e10	match	-
-00462e20	FUN_00462e20	match	-
-00462e30	FUN_00462e30	match	-
-00462e40	FUN_00462e40	match	-
-00462e50	FUN_00462e50	match	-
-00462e60	FUN_00462e60	match	-
-00462e70	FUN_00462e70	match	-
-00462e80	FUN_00462e80	match	-
-00462e90	FUN_00462e90	match	-
-00462fa0	FUN_00462fa0	match	-
-00462fb0	FUN_00462fb0	match	-
+00462e10	igViewerSceneInfoManager_OnHotKeyT	match	-
+00462e20	igViewerSceneInfoManager_OnHotKeyP	match	-
+00462e30	igViewerSceneInfoManager_OnHotKeyM	match	-
+00462e40	igViewerSceneInfoManager_OnHotKeyW	match	-
+00462e50	igViewerSceneInfoManager_OnGuiShown	match	-
+00462e60	igViewerSceneInfoManager_CenterSelection	match	-
+00462e70	igViewerSceneInfoManager_FitSelection	match	-
+00462e80	igViewerSceneInfoManager_PrintViewMatrix	match	-
+00462e90	igViewerSceneInfoManager_CycleGuiVisibility	match	-
+00462fa0	igViewerSceneInfoManager_OnDisablesChanged	match	-
+00462fb0	igViewerSceneInfoManager_ApplyOperationMode	match	-
 004633d0	Gap__Viewer__igViewerSceneInfoManager__vfunc_25	match	-
 004633e0	Gap__Viewer__igViewerSceneInfoManager__vfunc_26	match	-
 004633f0	igViewerSceneInfoManager_OnActivate	match	-
-00463400	FUN_00463400	match	-
-00463410	Gap__Viewer__igViewerAction__vfunc_23	match	-
+00463400	igViewerSceneInfoManager_OnCamerasChanged	match	-
+00463410	Gap__Viewer__igViewerAction__Execute	match	-
 00463450	Gap__Viewer__igViewerAction__vfunc_22	match	-
 00463460	Gap__Viewer__igViewerSceneInfoManager__vfunc_22	match	-
 00463470	Gap__Viewer__igViewerSceneInfoManagerController__vfunc_22	match	-
@@ -19891,28 +19891,28 @@
 00463c70	FUN_00463c70	match	-
 00463c80	FUN_00463c80	match	-
 00463fd0	igViewManager_SetViewMode	match	-
-00464080	FUN_00464080	match	-
+00464080	igViewManager_SetFrameTime	match	-
 00464100	FUN_00464100	match	-
-00464110	FUN_00464110	match	-
+00464110	igViewManager_SetSceneUpVector	match	-
 00464370	Gap__Viewer__igViewManager__vfunc_23	match	-
-00464540	FUN_00464540	match	-
+00464540	igViewManager_ApplyOptions	match	-
 00464a90	Gap__Viewer__igViewManager__vfunc_24	match	-
 00464ac0	Gap__Viewer__igViewManager__vfunc_25	match	-
 00464af0	FUN_00464af0	match	-
 00464b70	Gap__Viewer__igViewManager__vfunc_26	match	-
 00464bd0	Gap__Viewer__igViewManager__vfunc_27	match	-
 00464c00	Gap__Viewer__igViewManager__vfunc_32	match	-
-00464c60	FUN_00464c60	match	-
+00464c60	igViewManager_PrintViewMatrix	match	-
 00464f70	Gap__Viewer__igViewManager__vfunc_13	match	-
 00464f80	Gap__Viewer__igViewManager__vfunc_22	match	-
 00464f90	Gap__Bec__beCameraMode__vfunc_21	match	-
 00464fa0	Gap__Bec__beCameraMode__vfunc_22	match	-
 00465080	FUN_00465080	match	-
 00465090	FUN_00465090	match	-
-004650a0	FUN_004650a0	match	-
-004650d0	FUN_004650d0	match	-
-004651e0	FUN_004651e0	match	-
-00465260	FUN_00465260	match	-
+004650a0	igViewMode_UpdateInverseMatrix	match	-
+004650d0	igViewMode_UpdateModelVectors	match	-
+004651e0	igViewMode_UpdateViewMatrix	match	-
+00465260	igCameraMode_SetCameraPath	match	-
 00465380	FUN_00465380	match	-
 004653c0	FUN_004653c0	match	-
 004654d0	FUN_004654d0	match	-
@@ -19920,7 +19920,7 @@
 004657b0	FUN_004657b0	match	-
 00465870	FUN_00465870	match	-
 00465880	FUN_00465880	match	-
-004658c0	FUN_004658c0	match	-
+004658c0	igFlyMode_AimingChanged	match	-
 00465cc0	FUN_00465cc0	match	-
 00465d40	FUN_00465d40	match	-
 00465dc0	FUN_00465dc0	match	-
@@ -19930,20 +19930,20 @@
 004660f0	FUN_004660f0	match	-
 004661e0	FUN_004661e0	match	-
 00466220	FUN_00466220	match	-
-004665e0	FUN_004665e0	match	-
+004665e0	igPickMode_HitProc	match	-
 00466610	Gap__Viewer__igPickMode__MoveCursor	match	-
 004666c0	FUN_004666c0	match	-
 004666e0	FUN_004666e0	match	-
 004667a0	FUN_004667a0	match	-
 004667d0	FUN_004667d0	match	-
 004669d0	FUN_004669d0	match	-
-00466a10	FUN_00466a10	match	-
-00466b20	FUN_00466b20	match	-
-00466cb0	FUN_00466cb0	match	-
-00466cc0	FUN_00466cc0	match	-
-00466cd0	FUN_00466cd0	match	-
-00466ce0	FUN_00466ce0	match	-
-00466cf0	FUN_00466cf0	match	-
+00466a10	igPickMode_RecordHit	match	-
+00466b20	igPickMode_Pick	match	-
+00466cb0	igPickMode_GetMeta	match	-
+00466cc0	igRotateMode_GetMeta	match	-
+00466cd0	igFlyMode_GetMeta	match	-
+00466ce0	igCameraMode_GetMeta	match	-
+00466cf0	igViewMode_GetMeta	match	-
 00466d00	Gap__Viewer__igActorManager__vfunc_25	match	-
 00466df0	Gap__Viewer__igActorManager__vfunc_26	match	-
 00466e00	Gap__Viewer__igActorManager__vfunc_23	match	-

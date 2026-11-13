@@ -411,3 +411,36 @@ fades go through `beCri_FadeByName` and `beCri_FadeByID`, `STOP` through `beCri_
 Open questions: what type 4 cues are (only they follow the freeze); the insight calls of slots 21 and 22
 (`igInsightCore_AddToScheduler`, `igInsightCore_RemoveFromScheduler`) are read as joining and leaving the insight from their pairing, not from
 their bodies.
+
+## The igAdx layer
+
+`src/audio/igAdx.cpp` (`0x331fb0` up to `0x333800`) wraps CRI ADX for the engine. `igAdxAudio` is one ADX voice:
+`igAdxAudio_Initialize` sizes and allocates the work area from the channel count, stream count and frequency,
+`igAdxAudio_CreateHandle` creates the ADXT handle in `_adxt` (the unreflected word at `+44`,
+`config/SLUS-20836/authoritative-fields.tsv`), and the start, stop, pause, volume and status calls pass that handle
+to ADXT. `igAdxAudio_StartFile` plays an AFS entry when `igAdx_FindAfsFile` finds the name in the inside-file list
+(`g_adxAfsFileList`, an `igAdxAfsFileList`) and the named file otherwise; without a handle it goes through
+`igAdxAudio_CreateHandleAndStartFile`. Entry 0 of that list is the direct entry: a name `[p,f]` sets its
+`_ptNumber`/`_fileNumber`. Every other entry is compared by `igAdxAfsFile_GetPath`, its `_pathList` names and its own
+joined by `/`, against the lower-cased name.
+
+`igAdx_Initialize` runs `igAdx_SetupIop` once (`g_adxIopReady`): SIF and CD initialisation in `g_adxMediaMode`, the
+`sdrdrv`, `cri_adxi` and `sndfi` IOP modules (from `g_adxModulePath`, else the CRI default path), SNDF, the host file
+system rooted at `g_adxHostRootPath` (`igAdx_SetHostRootPath`), the `cdvd.fic` file-info caches when
+`g_adxUseFileInfoCache` is set, and the V-blank handler that runs `ADXM_ExecVint`. It clears `g_iopResetPending`
+(0x5549b8), which `main` sets and the IOP reset at `0x32d080` reads, so the loaded modules are not reset away. Then it
+starts the ADXM threads with the empty `igAdx_ErrorCallback`, `ADXT_Init` and `SNDF_Start`. `igAdx_ExecServer` runs
+`ADXM_ExecMain` and `SNDF_ExecServer`. `igAdx_Shutdown`, the release hook `igAdx_InitFields` registers, undoes all of
+it; `igAdx_CreateScratchString`, igAdx's registration callback item, creates the scratch `igStringObj`. igAdx's
+own slots are `constructFields` (1), `destructFields` (2), `userConstruct` (7), `userDestruct` (8), `resetFields`
+(11) and `getMeta` (20), the vocabulary the Lua sources use for igObject's slots.
+
+Open questions: these names come from what the functions do, not from strings. `igAdx_SetupOptional` (`0x332c40`)
+only returns 1, and `igAdx_Initialize` calls it when its argument is set; what it stood for is not known.
+`g_adxUnusedFlag` (`0x554dec`) is cleared by `resetFields` and read by nothing in the image.
+`igAdxFile_StaticInitialize` and `igAdxFile_StaticFinalize` (`0x3337e0`, `0x3337f0`) are empty; igAdxFile's
+registration callback item and release hook call them. The CRI names `ADXF_LoadPartitionNw` (`0x260de8`, the
+no-wait partition load through ADXF's 2048-byte sector buffer), `ADXF_GetPtStatEx` (`0x2612c0`, which forwards to
+`ADXF_GetPtStat`), `SNDF_Finish` (`0x280d20`, clears SNDF's initialised word), `SNDF_Start` (`0x280d48`, opens the
+IOP session `0x280f10` closes) and `SNDF_ExecServer` (`0x282038`, polled after `ADXM_ExecMain`) follow CRI's naming
+for what each does; no string names them.

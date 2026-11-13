@@ -53,7 +53,7 @@ int FUN_001b3ad0(igCommonTraversal *arg0, int arg1) {
     }
     b = ((H_1b2fa0 *)DAT_005625f0)->f184;
     s2 = b->_bitCount;
-    FUN_001b1e50((void *)b, s2 + 1);
+    igBitMask_SetBitCount((void *)b, s2 + 1);
     b2 = ((H_1b2fa0 *)DAT_005625f0)->f184;
     if (flag) {
         idx = s2 >> 5;

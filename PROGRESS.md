@@ -41,18 +41,18 @@ The `code-only` debt by exception-metadata reason (from each unit's diagnostic):
 
 Matching proves the bytes; it does not make the source readable. A matched function counts as **readable** when it also passes every test below. The tests are mechanical, so this is a floor: a function can pass them all and still be hard to follow. An owner-approved assembly source counts as readable when it has a recovered name, because its approval records that no C reproduces it. A static initialiser (`__sinit_<file>`) has no source text of its own, so the tests read its file's global definitions: the file without its function definitions.
 
-**7,713** of the 19,947 matched functions are readable: **1,404,268** code bytes, **40.4 %** of the code.
+**8,752** of the 19,947 matched functions are readable: **1,543,308** code bytes, **44.4 %** of the code.
 
 | A matched function is readable when | matched functions failing it | code bytes |
 | --- | ---: | ---: |
-| the function has a recovered name, not `FUN_<address>` or a numbered virtual slot | 10,798 | 1,178,072 |
-| no name holds an address: not the function's own, nor any function, variable or type it uses | 9,174 | 1,264,596 |
-| the types it uses have real names, not a placeholder such as `S`, `Obj`, `Info176` or `DW4VC_232_2` | 321 | 183,884 |
+| the function has a recovered name, not `FUN_<address>` or a numbered virtual slot | 10,666 | 1,153,924 |
+| no name holds an address: not the function's own, nor any function, variable or type it uses | 7,083 | 1,041,700 |
+| the types it uses have real names, not a placeholder such as `S`, `Obj`, `Info176` or `DW4VC_232_2` | 287 | 175,476 |
 | it sits in its class or module file, not `src/unmatched/` | 185 | 51,876 |
-| what it calls and reads is named: no `FUN_`/`DAT_` references | 1,367 | 381,968 |
-| no decompiler leftovers: `temp_*`, `var_*`, `argN`, stack-offset locals such as `sp5C` | 572 | 202,912 |
-| fields are reached through named struct members: no `fNN`/`unkNN` members, no cast of a pointer plus an offset | 599 | 188,740 |
-| virtual calls go through a named method, not a slot number such as `v216` or a cast function pointer | 257 | 126,544 |
+| what it calls and reads is named: no `FUN_`/`DAT_` references | 1,294 | 363,404 |
+| no decompiler leftovers: `temp_*`, `var_*`, `argN`, stack-offset locals such as `sp5C` | 487 | 188,396 |
+| fields are reached through named struct members: no `fNN`/`unkNN` members, no cast of a pointer plus an offset | 554 | 178,900 |
+| virtual calls go through a named method, not a slot number such as `v216` or a cast function pointer | 227 | 122,036 |
 
 ## Debt
 
@@ -83,12 +83,12 @@ The debt ratchet ([`docs/engine/debt-ratchet.md`](docs/engine/debt-ratchet.md)):
 | `inline_asm.other` | 0 | 0 | 0 | `asm` statements other than `sync` and `ei` without an owner's approval row for each function they reach (tools/inline_asm.py) |
 | `unmatched.functions` | 603 | 600 | -3 | functions in the layout with no definition in src/ |
 | `unmatched.bytes` | 529,384 | 523,548 | -5836 | bytes of those |
-| `struct.a` | 32 | 32 | 0 | struct-report groups: same view name, clashing layouts across units (scripts/check_struct_conflicts.py) |
+| `struct.a` | 32 | 30 | -2 | struct-report groups: same view name, clashing layouts across units (scripts/check_struct_conflicts.py) |
 | `struct.b` | 0 | 0 | 0 | struct-report groups: receiver view disagrees with the reflected class |
-| `struct.c` | 66 | 66 | 0 | struct-report groups: offset-named member whose number is not its offset |
-| `m2c_idiom.units` | 193 | 191 | -2 | source files (asm bodies excluded) still carrying m2c idioms: `temp_*`, `var_*` or `argN` |
-| `raw_casts.reflected` | 379 | 379 | 0 | raw offset casts on a named receiver where reflection names the field (tools/typed_coverage.py `typeable`) |
-| `fun_dat_refs` | 9,743 | 8,946 | -797 | FUN_/DAT_-named references in matched units' code (comments and strings excluded, definitions subtracted) |
+| `struct.c` | 66 | 63 | -3 | struct-report groups: offset-named member whose number is not its offset |
+| `m2c_idiom.units` | 193 | 188 | -5 | source files (asm bodies excluded) still carrying m2c idioms: `temp_*`, `var_*` or `argN` |
+| `raw_casts.reflected` | 379 | 378 | -1 | raw offset casts on a named receiver where reflection names the field (tools/typed_coverage.py `typeable`) |
+| `fun_dat_refs` | 9,743 | 8,452 | -1291 | FUN_/DAT_-named references in matched units' code (comments and strings excluded, definitions subtracted) |
 | `foreign_profile.functions` | 0 | 0 | 0 | code bytes match only under a provisional per-function override that differs from the unit's profile in config/SLUS-20836/units.tsv (data/check-categories.tsv) |
 | `foreign_profile.bytes` | 0 | 0 | 0 | bytes of those |
 | `unapproved.functions` | 22 | 22 | 0 | code bytes match, but the source uses inline `asm` or `volatile` with no owner approval (config/source-approvals.tsv) |
@@ -171,14 +171,14 @@ The section in 16 equal parts. `0x00100000` is the start of everything.
 
 | | |
 | --- | --- |
-| functions with a recovered name (any: role names included) | 12,952 of 20,575 |
-| functions with a **semantic** name (not `FUN_`/`thunk_`, not `::vfunc_NN`, not `*_GetMetaObject`/`_GetVTable`/`_Register`/`_InitFields`) | 5,556 of 20,575 (5,297 of them matched) |
+| functions with a recovered name (any: role names included) | 13,065 of 20,575 |
+| functions with a **semantic** name (not `FUN_`/`thunk_`, not `::vfunc_NN`, not `*_GetMetaObject`/`_GetVTable`/`_Register`/`_InitFields`) | 5,700 of 20,575 (5,429 of them matched) |
 | RTTI records / vtables / vfunc names | 579 / 478 / 1,286 |
 | reflection MetaObjects (with fields) | 1,075 (659) |
 | reflection fields with offset and type | 3,680 |
 | switch jump tables recovered | 209 tables, 4,147 entries, in 172 functions |
 | Lua chunks decompiled | 5,291 |
-| field accesses using a **recovered** type (not an offset cast) | 24,786 of 65,449 (37.87 %) |
+| field accesses using a **recovered** type (not an offset cast) | 25,183 of 65,484 (38.46 %) |
 | functions in the retail split (`asm/`, generated) | 20,575 |
 
 ## How these numbers are produced

@@ -163,18 +163,18 @@ extern "C" igObject *igObject_ConstructHeader(igObject *self);
 extern "C" void Gap__Core__igObject__vfunc_00__002ff0a0(void);
 
 /* Slot 1 default: empty. */
-extern "C" void Gap__Core__igObject__vfunc_01(void);
+extern "C" void Gap__Core__igObject__constructFields(void);
 
 /* Slot 2 default: empty. */
-extern "C" void Gap__Core__igObject__vfunc_02(void);
+extern "C" void Gap__Core__igObject__destructFields(void);
 
 /* Slot 3 default: empty. */
 extern "C" void Gap__Core__igObject__vfunc_03(void);
 
 /* Slot 7 default: empty. */
-extern "C" void Gap__Core__igObject__vfunc_07(void);
+extern "C" void Gap__Core__igObject__userConstruct(void);
 
-extern "C" void Gap__Core__igObject__vfunc_08__002ff0f0(void);
+extern "C" void Gap__Core__igObject__userDestruct(void);
 
 /* Slot 4 default: empty. */
 extern "C" void Gap__Core__igObject__vfunc_04(void);
@@ -186,7 +186,7 @@ extern "C" int Gap__Core__igObject__vfunc_05(void);
 extern "C" int Gap__Core__igObject__vfunc_06(void);
 
 /* Slot 11 default: empty. */
-extern "C" void Gap__Core__igObject__vfunc_11(void);
+extern "C" void Gap__Core__igObject__resetFields(void);
 
 /* Slot 9 default: empty. */
 extern "C" void Gap__Core__igObject__vfunc_09(void);

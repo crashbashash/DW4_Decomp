@@ -41,7 +41,7 @@ void Gap__Core__igPsx2Media__vfunc_03(O_32dc10 *arg0, int extra1) {
     int a;
     T_32dc10 *t;
 
-    Gap__Core__igObject__vfunc_01((int)arg0, extra1);
+    Gap__Core__igObject__constructFields((int)arg0, extra1);
     arg0->f8 = FUN_00300db0((int)arg0, 0x80, 0x40);
     arg0->f20 = FUN_00300db0((int)arg0, 0x90, 0x10);
     a = arg0->f8;
@@ -71,11 +71,11 @@ void Gap__Core__igPsx2Media__vfunc_04(S0_32dcf0 *arg0) {
     }
     arg0->f1C = 0;
     ((int *)&DAT_00587360)[0] = 0;
-    Gap__Core__igObject__vfunc_02((int)arg0);
+    Gap__Core__igObject__destructFields((int)arg0);
 }
 
 void Gap__Core__igPsx2Media__vfunc_09(int arg0) {
-    Gap__Core__igObject__vfunc_07();
+    Gap__Core__igObject__userConstruct();
     FUN_002ebdd0(arg0);
 }
 

@@ -5,117 +5,126 @@
 
 extern "C" {
 
-extern int DAT_0058ca00[4];
-extern int DAT_0058ca08[4];
-extern int DAT_0058ca10[4];
-extern int DAT_0058ca18[4];
-extern int DAT_0058ca28[4];
-extern int DAT_0058ca30[4];
-extern int DAT_0058ca38[4];
-extern int DAT_0058ca40[4];
-extern int DAT_0058ca48[4];
-extern int DAT_0058ca50[4];
-extern int DAT_0058ca58[4];
-extern int DAT_0058ca60[4];
-extern int DAT_0058ca68[4];
-extern int DAT_0058ca70[4];
-extern int DAT_0058ca78[4];
-extern int DAT_0058ca80[4];
-extern int DAT_0058ca88[4];
-extern int DAT_0058ca90[4];
-extern int DAT_0058ca98[4];
-extern int DAT_0058caa0[4];
-extern int DAT_0058caa8[4];
-extern int DAT_0058cab0[4];
-extern int DAT_0058cab8[4];
-extern int DAT_0058cac0[4];
-extern int DAT_0058cac8[4];
-extern int DAT_0058cad0[4];
-extern int DAT_0058cad8[4];
+/* The igMetaField handles of igViewerParameters' fields; a change notification names its field by one. */
+extern int g_igViewerParameters_sceneMetaField[4];
+extern int g_igViewerParameters_upVectorMetaField[4];
+extern int g_igViewerParameters_ratioMetaField[4];
+extern int g_igViewerParameters_hfovMetaField[4];
+extern int g_igViewerParameters_nearPlaneMetaField[4];
+extern int g_igViewerParameters_farPlaneMetaField[4];
+extern int g_igViewerParameters_viewMatrixMetaField[4];
+extern int g_igViewerParameters_drawTimeMetaField[4];
+extern int g_igViewerParameters_sortTextureMetaField[4];
+extern int g_igViewerParameters_sortTransparentMetaField[4];
+extern int g_igViewerParameters_sortTransparentDistanceMetaField[4];
+extern int g_igViewerParameters_transparencyModeMetaField[4];
+extern int g_igViewerParameters_useSceneLightsMetaField[4];
+extern int g_igViewerParameters_useHeadLightMetaField[4];
+extern int g_igViewerParameters_useHeadLightSpecularMetaField[4];
+extern int g_igViewerParameters_alphaTestMetaField[4];
+extern int g_igViewerParameters_alphaTestForceMetaField[4];
+extern int g_igViewerParameters_backFaceCullingMetaField[4];
+extern int g_igViewerParameters_backFaceCullingForceMetaField[4];
+extern int g_igViewerParameters_wireframeMetaField[4];
+extern int g_igViewerParameters_wireframeForceMetaField[4];
+extern int g_igViewerParameters_flatShadingMetaField[4];
+extern int g_igViewerParameters_flatShadingForceMetaField[4];
+extern int g_igViewerParameters_disablesMetaField[4];
+extern int g_igViewerParameters_showGuiMetaField[4];
+extern int g_igViewerParameters_showBoundingBoxMetaField[4];
+extern int g_igViewerParameters_showNormalsMetaField[4];
+extern int g_igViewerParameters_flushFramesMetaField[4];
+extern int g_igViewerParameters_operationModeMetaField[4];
+extern int g_igViewerParameters_camerasMetaField[4];
+extern int g_igViewerParameters_beginTimeMetaField[4];
+extern int g_igViewerParameters_endTimeMetaField[4];
+extern int g_igViewerParameters_selectedObjectMetaField[4];
+extern int g_igViewerParameters_timeOperationMetaField[4];
+extern int g_igViewerParameters_speedMetaField[4];
 
-extern int DAT_0058cae8[4];
+int igViewerRenderer_UpdateProjection(...);
+int igViewerRenderer_UpdateViewMatrix(...);
+int igViewerRenderer_UpdateSorting(...);
+int igViewerRenderer_UpdateLighting(...);
+int igViewerRenderer_UpdateRenderStates(...);
 
-extern int DAT_0058cb00[4];
-extern int DAT_0058cb08[4];
-extern int DAT_0058cb18[4];
+void igViewerSceneInfoManager_OnPlaybackChanged(igViewerSceneInfoManager *self);
+void igViewerSceneInfoManager_HideGui(igViewerSceneInfoManager *self);
+void igViewerSceneInfoManager_RemoveNormalsRenderer(igViewerSceneInfoManager *self);
+void igViewerSceneInfoManager_RemoveBoundingBoxRenderer(igViewerSceneInfoManager *self);
+void igViewerSceneInfoManager_RemoveFlushRenderer(igViewerSceneInfoManager *self);
+void igViewerSceneInfoManager_OnSelectionChanged(igViewerSceneInfoManager *self);
+void igViewerSceneInfoManager_OnDisablesChanged(igViewerSceneInfoManager *self, int index);
+void igViewerSceneInfoManager_ApplyOperationMode(igViewerSceneInfoManager *self);
+void igViewerSceneInfoManager_OnCamerasChanged(igViewerSceneInfoManager *self);
 
-int FUN_004601e0(...);
-int FUN_00460260(...);
-int FUN_004602c0(...);
-int FUN_004608a0(...);
-int FUN_00460ac0(...);
+/* What an igModel tells its views: the kind of change (2: a field was set), the field's handle and,
+ * for a list field, the element. */
+struct ModelChange {
+    int kind;
+    int flags;
+    int field;
+    int index;
+};
 
-void FUN_004612a0(int arg0);
-struct SceneSelection;
-void igViewerSceneInfoManager_HideGui(SceneSelection *arg0);
-void FUN_00462a10(int *arg0);
-void FUN_00462a20(int *arg0);
-void FUN_00462a30(int *arg0);
-void FUN_00462a40(int arg0);
-void FUN_00462fa0(int arg0, int arg1);
-struct ViewSelector;
-void FUN_00462fb0(ViewSelector *self);
-void FUN_00463400(int arg0);
-struct ControllerMessage { int f0; int p4; int f8; int f12; };
-struct ControllerLink { char p0[12]; int f12; int f16; };
-
-typedef struct ViewerMessage { int kind; int arg; int id; } ViewerMessage;
+typedef struct ViewerMessage { int kind; int flags; int field; } ViewerMessage;
 
 int igModel_NotifyViews(...);
 
-int Gap__Core__igObject__vfunc_11(...);
+int Gap__Core__igObject__resetFields(...);
 
 int __dl__FPv(...);
 void **__nw__FUi(...);
 
-int FUN_001b1e50(...);
+int igBitMask_SetBitCount(...);
 
-void **FUN_00238110(...);
+void **ViewerOptions_Construct(...);
 
-int FUN_004573c0(...);
-int FUN_004573d0(...);
-int FUN_004573f0(...);
-int FUN_00457e90(...);
+int igHotKeyEventReceiver_AddKey(...);
+int igHotKeyEventReceiver_AddButton(...);
+int igHotKeyEventReceiver_AddBinding(...);
+int igView_SetModel(...);
 int igViewerGuiFactory_CreateAction(...);
-int FUN_00463c90(...);
+int igViewManager_SynchronizeParameters(...);
 
 int StringChunk_ReleaseHeader(...);
 void igObject_Destroy(void *);
 
 void *memset(void *, int, unsigned int);
-extern char DAT_004d1ac8[16];
-extern char DAT_004d1ad8[16];
-extern char DAT_004d1ae8[16];
-extern char DAT_004d1af8[16];
-extern char DAT_004d1b08[16];
-extern char DAT_004d1b18[16];
-extern char DAT_004d1b28[16];
-extern char DAT_004d1b38[16];
-extern char DAT_004d1b48[16];
-extern char DAT_004d1b58[16];
-extern char DAT_004d1b68[16];
-extern char DAT_004d1b78[16];
-extern char DAT_004d1b88[16];
-struct Frame {
-    void *f0;
-    unsigned char f4;
-    unsigned char f5;
+
+/* The scene-info manager's hot-key handlers, as the member-function pointers igViewerAction calls. */
+extern char g_fitSelectionHandler[16];
+extern char g_printViewMatrixHandler[16];
+extern char g_centerSelectionHandler[16];
+extern char g_cycleGuiVisibilityHandler[16];
+extern char g_playHandler[16];
+extern char g_pauseHandler[16];
+extern char g_hotKeyMHandler[16];
+extern char g_hotKeyWHandler[16];
+extern char g_resetOperationModeHandler[16];
+extern char g_hotKeyTHandler[16];
+extern char g_hotKeyPHandler[16];
+extern char g_button1Handler[16];
+extern char g_button2Handler[16];
+
+/* The viewer options every viewer object shares, reference counted and created on first use. */
+struct SharedViewerOptions {
+    void *extraCommandLine;
+    unsigned char showBBox;
+    unsigned char showNormals;
     char pad6[54];
-    unsigned char f60;
+    unsigned char autoSelectCamera;
     char pad61[19];
-    float f80;
-    float f84;
-    float f88;
+    float upVector[3];
     char pad92[122];
-    unsigned char f214;
+    unsigned char showUI;
     char pad215[17];
-    int f232;
+    int refCount;
     void *f236;
 };
 
-extern Frame *DAT_0056dc50[4];
+extern SharedViewerOptions *g_sharedViewerOptions[4];
 
-void Gap__Viewer__igViewerSceneInfoManager__vfunc_13(igViewerSceneInfoManager *arg0);
 /* igViewerRenderer-family objects: the shared parameters reference sits at +12 */
 struct RendererLink {
     char pad[12];
@@ -123,19 +132,14 @@ struct RendererLink {
 };
 #define BIND(setter, receiver, name, ...)                                                 \
     {                                                                                     \
-        igObject *sp;                                                                     \
-        igViewerGuiFactory_CreateAction(&sp, arg0->_guiFactory, arg0, name);                                 \
-        setter(receiver, __VA_ARGS__, sp);                                                \
-        IG_OBJECT_RELEASE(sp);                                                                \
+        igObject *action;                                                                 \
+        igViewerGuiFactory_CreateAction(&action, self->_guiFactory, self, name);          \
+        setter(receiver, __VA_ARGS__, action);                                            \
+        IG_OBJECT_RELEASE(action);                                                        \
     }
 
-typedef struct S0 { char pad12[12]; int fC; char pad24[8]; int f18; int f1C; int f20; int f24; } S0;
-
 int igInsightCore_RemoveFromScheduler(...);
-int FUN_00236f30(...);
-
-typedef struct NodeList { char pad[8]; int f8; char pad2[4]; int *f10; } NodeList;
-typedef struct NodeEntry { char pad[12]; NodeList *fc; } NodeEntry;
+int igInsightCore_RemoveRenderer(...);
 
 int igObject_IsKindOf(...);
 
@@ -143,192 +147,156 @@ extern int g_igParticleAttr_metaObject[4];
 extern void *g_igGeometryAttr_metaObject[4];
 extern int g_igDisplayListAttr_metaObject[4];
 
-void FUN_00462d10(void *arg0);
+void igViewerSceneInfoManager_OnSceneClipped(igViewerSceneInfoManager *self);
 
-int FUN_00464080(...);
+int igViewManager_SetFrameTime(...);
 
-typedef struct Obj { int w0; int references; } Obj;
-typedef struct List { int pad0[2]; int count; int pad1; Obj **data; } List;
-typedef struct Hold { char pad[28]; List *l28; } Hold;
-typedef struct X { char pad[12]; Hold *f12; } X;
-typedef struct Y { char pad[220]; List *f220; long long f224; long long f232; } Y;
-typedef struct Q { int a; int b; int c; int d; } Q;
-typedef struct A { char pad[20]; Y *f20; int f24; char pad2[152]; List *f180; } A;
-int FUN_001c5eb0(Obj **, Hold *, int);
+int igGroup_RemoveChildAt(igObject **removed, igGroup *group, int index);
 
-int FUN_00460330(...);
-extern int DAT_0058c9f0[4];
-extern int DAT_0058caf0[4];
-extern int DAT_0058caf8[4];
+int igViewerRenderer_UpdateScene(...);
 
-#define CLEAR(src) { \
-    List *l = (src); \
-    int n = l->count; \
+/* Releases every object of `list` and empties it. */
+#define RELEASE_ALL(list) { \
+    igObjectList *l = (igObjectList *)(list); \
+    int n = l->_count; \
     int i; \
     int m; \
     int j; \
-    Obj *o; \
+    igObject *o; \
     for (i = 0; i < n; i++) { \
-        o = l->data[i]; \
-        if (o != 0) { \
-            o->references = o->references - 1; \
-            if (((unsigned long long)((long long)o->references << 0x29) >> 0x29) == 0) igObject_Destroy(o); \
-        } \
+        o = ((igObject **)l->_data)[i]; \
+        IG_OBJECT_RELEASE(o); \
     } \
-    m = l->count; \
+    m = l->_count; \
     for (j = 0; j < m; j++) { \
-        l->data[j] = 0; \
+        ((igObject **)l->_data)[j] = 0; \
     } \
-    l->count = 0; }
+    l->_count = 0; }
 
 int igGroup_AppendChild(...);
-int FUN_001d65e0(...);
-int FUN_001d6700(...);
+int igSceneInfo_CollectCameras(...);
+int igSceneInfo_ComputeAnimationRange(...);
 int ObjectList_AppendRetainedList(...);
 int igSceneInfo_GetMetaObject(...);
 
 extern float g_vec3Zero[4];
-extern float DAT_004e105c[4];
-extern float DAT_004e1060[4];
-extern int DAT_0058c9f8[4];
 
-struct T3 { int a; int b; int c; };
+int igEventDispatcher_RemoveReceiver(...);
+int igViewManager_SetSceneUpVector(...);
+int igViewManager_FrameObject(...);
 
-typedef struct SceneSelection { char pad12[12]; int fC; char pad44[28]; int f2C; char pad176[128]; int fB0; } SceneSelection;
+int igViewerRenderer_ApplyOptions(...);
 
-int FUN_004542a0(...);
-int FUN_00464110(...);
-int FUN_004643a0(...);
+void igViewerSceneInfoManager_OnButton1(igViewerSceneInfoManager *self);
 
-typedef struct { int p0[3]; } ViewSyncMessage;
-typedef struct { char p[12]; int f12; char q[196]; int f212; } ViewSyncParameters;
-typedef struct { char p[20]; ViewSyncParameters *f20; char q[112]; int f136; } ViewSync;
+int igViewManager_ApplyOptions(...);
 
-int FUN_0045f930(...);
+void igViewManager_CenterSelection(int, int);
 
-void FUN_00462cf0(igViewerSceneInfoManager *arg0);
+void igViewManager_FitSelection(int);
 
-int FUN_00464540(...);
+void igViewManager_PrintViewMatrix(int);
 
-struct S { int a; int b; int c; };
+int igGuiComponent_AppendChild(int, int);
 
-struct Y2 { char p[20]; struct YT *t; };
-struct YT { char p[244]; int f244; };
-
-struct ViewManagerLink { char pad[136]; int viewManager; };
-void FUN_00464760(int, int);
-
-void FUN_004648b0(int);
-
-void FUN_00464c60(int);
-
-typedef struct M { int a; int b; int c; } M;
-typedef struct T { char p[208]; char f208; } T;
-typedef struct S2 { char p0[20]; T *f20; char p1[28]; int f52; int f56; int f60; int pad; int f68; char p2[104]; int f176; } S2;
-int FUN_00453a20(int, int);
-
-struct Binding : igObject { char p0[68]; igObject *source; igObject *target; igObject *value; };
-struct Camera : igObject { char p0[109]; char follow; char p1[18]; igObject *object; };
-struct Effect : igObject { };
-struct ViewSource { char p[20]; igObject *f20; char q[28]; int f52; };
-struct ViewConfig { char p[16]; int *f16; };
-struct ViewState : igObject { char p[204]; int f212; int f216; ViewConfig *f220; };
-struct ViewSelector { char p0[12]; ViewSource *f12; int pad16; ViewState *f20; char p1[16]; int f40; igObject *f44; int f48; char p2[84]; int f136; };
-struct Fetched { igObject *object; };
-Binding *FUN_0045c170(int);
-Camera *FUN_0045c5a0(int);
-Camera *FUN_0045c8e0(int);
-Effect *FUN_0045cc40(int);
-Fetched igViewerGuiFactory_CreateEmpty(int, int);
+/* The view mode objects igViewManager_SetViewMode installs; references are counted. */
+struct WidgetRef { igObject *object; };
+igPickMode *igPickMode_Create(int);
+igRotateMode *igRotateMode_Create(int);
+igFlyMode *igFlyMode_Create(int);
+igCameraMode *igCameraMode_Create(int);
+WidgetRef igViewerGuiFactory_CreateEmpty(int, int);
 int igViewManager_SetViewMode(int, igObject *);
-int FUN_00465260(Effect *, int);
+int igCameraMode_SetCameraPath(igCameraMode *, int);
 struct Tag { };
-static inline Binding *create45c170() {
+static inline igPickMode *createPickMode() {
     Tag tag = Tag();
-    return FUN_0045c170(0);
+    return igPickMode_Create(0);
 }
-static inline Camera *create45c8e0() {
+static inline igFlyMode *createFlyMode() {
     Tag tag = Tag();
-    return FUN_0045c8e0(0);
+    return igFlyMode_Create(0);
 }
-static inline Camera *create45c5a0() {
+static inline igRotateMode *createRotateMode() {
     Tag tag = Tag();
-    return FUN_0045c5a0(0);
+    return igRotateMode_Create(0);
 }
-static inline Effect *create45cc40() {
+static inline igCameraMode *createCameraMode() {
     Tag tag = Tag();
-    return FUN_0045cc40(0);
+    return igCameraMode_Create(0);
 }
-static inline void takeValue(const igSmartPointer<Binding> &ref, const Fetched &fetched) {
-    igObject *value = fetched.object;
-    Binding *owner = ref.p;
+static inline void setCursor(const igSmartPointer<igPickMode> &ref, const WidgetRef &cursor) {
+    igObject *value = cursor.object;
+    igPickMode *owner = ref.p;
     igObject *previous;
     if (value != 0) {
         value->_refCount = value->_refCount + 1;
     }
-    previous = owner->value;
+    previous = (igObject *)owner->_cursor;
     if (previous != 0) {
         previous->_refCount = previous->_refCount - 1;
         if ((previous->_refCount & 0x7FFFFF) == 0) {
             igObject_Destroy(previous);
         }
     }
-    owner->value = value;
-    if (fetched.object != 0) {
-        fetched.object->_refCount = fetched.object->_refCount - 1;
-        if ((fetched.object->_refCount & 0x7FFFFF) == 0) {
-            igObject_Destroy(fetched.object);
+    owner->_cursor = (int)value;
+    if (cursor.object != 0) {
+        cursor.object->_refCount = cursor.object->_refCount - 1;
+        if ((cursor.object->_refCount & 0x7FFFFF) == 0) {
+            igObject_Destroy(cursor.object);
         }
     }
 }
-static inline void setSource(const igSmartPointer<Binding> &ref, igObject *value) {
-    Binding *owner = ref.p;
+static inline void setParameters(const igSmartPointer<igPickMode> &ref, igObject *value) {
+    igPickMode *owner = ref.p;
     igObject *previous;
     if (value != 0) {
         value->_refCount = value->_refCount + 1;
     }
-    previous = owner->source;
+    previous = (igObject *)owner->_parameters;
     if (previous != 0) {
         previous->_refCount = previous->_refCount - 1;
         if ((previous->_refCount & 0x7FFFFF) == 0) {
             igObject_Destroy(previous);
         }
     }
-    owner->source = value;
+    owner->_parameters = (int)value;
 }
-static inline void setTarget(const igSmartPointer<Binding> &ref, igObject *value) {
-    Binding *owner = ref.p;
+static inline void setGuiSystem(const igSmartPointer<igPickMode> &ref, igObject *value) {
+    igPickMode *owner = ref.p;
     igObject *previous;
     if (value != 0) {
         value->_refCount = value->_refCount + 1;
     }
-    previous = owner->target;
+    previous = (igObject *)owner->_guiSystem;
     if (previous != 0) {
         previous->_refCount = previous->_refCount - 1;
         if ((previous->_refCount & 0x7FFFFF) == 0) {
             igObject_Destroy(previous);
         }
     }
-    owner->target = value;
+    owner->_guiSystem = (int)value;
 }
-static inline void setObject(const igSmartPointer<Camera> &ref, igObject *value) {
-    Camera *owner = ref.p;
+static inline void setWindow(const igSmartPointer<igFlyMode> &ref, igObject *value) {
+    igFlyMode *owner = ref.p;
     igObject *previous;
     if (value != 0) {
         value->_refCount = value->_refCount + 1;
     }
-    previous = owner->object;
+    previous = (igObject *)owner->_window;
     if (previous != 0) {
         previous->_refCount = previous->_refCount - 1;
         if ((previous->_refCount & 0x7FFFFF) == 0) {
             igObject_Destroy(previous);
         }
     }
-    owner->object = value;
+    owner->_window = (int)value;
 }
 
-struct T2 { void f(); };
-struct O { int p0, p1; T2 *t; void (T2::*pmf)(); };
+/* igViewerAction: calls a member function of the object it holds. */
+struct ActionTarget { void run(); };
+typedef void (ActionTarget::*ActionFunction)();
+struct ViewerActionBinding : igObject { ActionTarget *target; ActionFunction function; };
 
 extern int g_igViewerAction_metaObject[4];
 
@@ -344,36 +312,36 @@ extern int g_igStatisticsItem_metaObject[4];
 
 int igOnOffModel_GetMetaObject(...);
 
-void Gap__Viewer__igViewerSceneInfoManagerController__vfunc_24(struct ControllerLink *arg0, struct ControllerMessage *arg1)
+void Gap__Viewer__igViewerSceneInfoManagerController__OnModelChange(igViewerSceneInfoManagerController *self, ModelChange *change)
 {
-  int a0 = arg0->f12;
-  int v1;
-  if (a0 == 0) return;
-  v1 = arg1->f8;
-  if (v1 == DAT_0058ca30[0]) return;
-  if (v1 == DAT_0058ca00[0] || v1 == DAT_0058ca08[0] || v1 == DAT_0058ca10[0] || v1 == DAT_0058ca18[0]) { FUN_004601e0(arg0->f16); return; }
-  if (v1 == DAT_0058ca28[0]) { FUN_00460260(arg0->f16); return; }
-  if (v1 == DAT_0058ca38[0] || v1 == DAT_0058ca40[0] || v1 == DAT_0058ca48[0] || v1 == DAT_0058ca50[0]) { FUN_004602c0(arg0->f16); return; }
-  if (v1 == DAT_0058ca58[0] || v1 == DAT_0058ca60[0] || v1 == DAT_0058ca68[0]) { FUN_004608a0(arg0->f16); return; }
-  if (v1 == DAT_0058ca70[0] || v1 == DAT_0058ca78[0] || v1 == DAT_0058ca80[0] || v1 == DAT_0058ca88[0] || v1 == DAT_0058ca90[0] || v1 == DAT_0058ca98[0] || v1 == DAT_0058caa0[0] || v1 == DAT_0058caa8[0]) { FUN_00460ac0(arg0->f16); return; }
-  if (v1 == DAT_0058cab0[0]) { FUN_00462fa0(a0, arg1->f12); return; }
-  if (v1 == DAT_0058cab8[0]) { igViewerSceneInfoManager_HideGui((SceneSelection *)a0); return; }
-  if (v1 == DAT_0058cac0[0]) { FUN_00462a20((int *)a0); return; }
-  if (v1 == DAT_0058cac8[0]) { FUN_00462a10((int *)a0); return; }
-  if (v1 == DAT_0058cad0[0]) { FUN_00462a30((int *)a0); return; }
-  if (v1 == DAT_0058cad8[0]) { FUN_00462fb0((ViewSelector *)a0); return; }
-  if (v1 == DAT_0058cb18[0] || v1 == DAT_0058cb08[0]) { FUN_004612a0(a0); return; }
-  if (v1 == DAT_0058cae8[0]) { FUN_00463400(a0); return; }
-  if (arg1->f0 == 0) { FUN_00462fb0((ViewSelector *)a0); FUN_004612a0(arg0->f12); FUN_00463400(arg0->f12); return; }
-  if (v1 == DAT_0058cb00[0]) { FUN_00462a40(a0); }
+  igViewerSceneInfoManager *manager = (igViewerSceneInfoManager *)self->_application;
+  int field;
+  if (manager == 0) return;
+  field = change->field;
+  if (field == g_igViewerParameters_drawTimeMetaField[0]) return;
+  if (field == g_igViewerParameters_ratioMetaField[0] || field == g_igViewerParameters_hfovMetaField[0] || field == g_igViewerParameters_nearPlaneMetaField[0] || field == g_igViewerParameters_farPlaneMetaField[0]) { igViewerRenderer_UpdateProjection(self->_viewerRenderer); return; }
+  if (field == g_igViewerParameters_viewMatrixMetaField[0]) { igViewerRenderer_UpdateViewMatrix(self->_viewerRenderer); return; }
+  if (field == g_igViewerParameters_sortTextureMetaField[0] || field == g_igViewerParameters_sortTransparentMetaField[0] || field == g_igViewerParameters_sortTransparentDistanceMetaField[0] || field == g_igViewerParameters_transparencyModeMetaField[0]) { igViewerRenderer_UpdateSorting(self->_viewerRenderer); return; }
+  if (field == g_igViewerParameters_useSceneLightsMetaField[0] || field == g_igViewerParameters_useHeadLightMetaField[0] || field == g_igViewerParameters_useHeadLightSpecularMetaField[0]) { igViewerRenderer_UpdateLighting(self->_viewerRenderer); return; }
+  if (field == g_igViewerParameters_alphaTestMetaField[0] || field == g_igViewerParameters_alphaTestForceMetaField[0] || field == g_igViewerParameters_backFaceCullingMetaField[0] || field == g_igViewerParameters_backFaceCullingForceMetaField[0] || field == g_igViewerParameters_wireframeMetaField[0] || field == g_igViewerParameters_wireframeForceMetaField[0] || field == g_igViewerParameters_flatShadingMetaField[0] || field == g_igViewerParameters_flatShadingForceMetaField[0]) { igViewerRenderer_UpdateRenderStates(self->_viewerRenderer); return; }
+  if (field == g_igViewerParameters_disablesMetaField[0]) { igViewerSceneInfoManager_OnDisablesChanged(manager, change->index); return; }
+  if (field == g_igViewerParameters_showGuiMetaField[0]) { igViewerSceneInfoManager_HideGui(manager); return; }
+  if (field == g_igViewerParameters_showBoundingBoxMetaField[0]) { igViewerSceneInfoManager_RemoveBoundingBoxRenderer(manager); return; }
+  if (field == g_igViewerParameters_showNormalsMetaField[0]) { igViewerSceneInfoManager_RemoveNormalsRenderer(manager); return; }
+  if (field == g_igViewerParameters_flushFramesMetaField[0]) { igViewerSceneInfoManager_RemoveFlushRenderer(manager); return; }
+  if (field == g_igViewerParameters_operationModeMetaField[0]) { igViewerSceneInfoManager_ApplyOperationMode(manager); return; }
+  if (field == g_igViewerParameters_speedMetaField[0] || field == g_igViewerParameters_timeOperationMetaField[0]) { igViewerSceneInfoManager_OnPlaybackChanged(manager); return; }
+  if (field == g_igViewerParameters_camerasMetaField[0]) { igViewerSceneInfoManager_OnCamerasChanged(manager); return; }
+  if (change->kind == 0) { igViewerSceneInfoManager_ApplyOperationMode(manager); igViewerSceneInfoManager_OnPlaybackChanged((igViewerSceneInfoManager *)self->_application); igViewerSceneInfoManager_OnCamerasChanged((igViewerSceneInfoManager *)self->_application); return; }
+  if (field == g_igViewerParameters_selectedObjectMetaField[0]) { igViewerSceneInfoManager_OnSelectionChanged(manager); }
 }
 
-void FUN_004612a0(int arg0)
+void igViewerSceneInfoManager_OnPlaybackChanged(igViewerSceneInfoManager *self)
 {
 }
 
 /* matching construct: 360 declaration and 120 statement orders */
-void FUN_004612b0(igViewerSceneInfoManager *self) {
+void igViewerSceneInfoManager_UpdateTime(igViewerSceneInfoManager *self) {
     ViewerMessage rising;
     ViewerMessage falling;
     ViewerMessage changed;
@@ -410,8 +378,8 @@ void FUN_004612b0(igViewerSceneInfoManager *self) {
                 time = end * 2 - time;
                 *operation = 2;
                 rising.kind = 2;
-                rising.arg = 0;
-                rising.id = DAT_0058cb08[0];
+                rising.flags = 0;
+                rising.field = g_igViewerParameters_timeOperationMetaField[0];
                 igModel_NotifyViews((igViewerParameters *)self->_parameters, &rising);
             }
             operation = &((igViewerParameters *)self->_parameters)->_timeOperation;
@@ -419,8 +387,8 @@ void FUN_004612b0(igViewerSceneInfoManager *self) {
                 time = begin * 2 - time;
                 *operation = 1;
                 falling.kind = 2;
-                falling.arg = 0;
-                falling.id = DAT_0058cb08[0];
+                falling.flags = 0;
+                falling.field = g_igViewerParameters_timeOperationMetaField[0];
                 igModel_NotifyViews((igViewerParameters *)self->_parameters, &falling);
             }
             break;
@@ -428,36 +396,36 @@ void FUN_004612b0(igViewerSceneInfoManager *self) {
     }
     ((igViewerParameters *)self->_parameters)->_drawTime = time;
     changed.kind = 2;
-    changed.arg = 0;
-    changed.id = DAT_0058ca30[0];
+    changed.flags = 0;
+    changed.field = g_igViewerParameters_drawTimeMetaField[0];
     igModel_NotifyViews((igViewerParameters *)self->_parameters, &changed);
     ((igInsightCore *)self->_insight)->_worldTime = time;
 }
 
-void Gap__Viewer__igViewerSceneInfoManager__vfunc_13(igViewerSceneInfoManager *arg0) {
-    Gap__Core__igObject__vfunc_11(arg0);
-    if (DAT_0056dc50[0] == 0) {
+void Gap__Viewer__igViewerSceneInfoManager__resetFields(igViewerSceneInfoManager *self) {
+    Gap__Core__igObject__resetFields(self);
+    if (g_sharedViewerOptions[0] == 0) {
         void **v = __nw__FUi(0xF0);
         if (v != 0) {
-            v = FUN_00238110(v);
+            v = ViewerOptions_Construct(v);
         }
-        DAT_0056dc50[0] = (Frame *)v;
+        g_sharedViewerOptions[0] = (SharedViewerOptions *)v;
     }
-    DAT_0056dc50[0]->f232 = DAT_0056dc50[0]->f232 + 1;
+    g_sharedViewerOptions[0]->refCount = g_sharedViewerOptions[0]->refCount + 1;
     {
-        Frame *frame = DAT_0056dc50[0];
-        ((igViewerParameters *)arg0->_parameters)->_showBoundingBox = frame->f4;
-        ((igViewerParameters *)arg0->_parameters)->_showNormals = frame->f5;
-        ((igViewerParameters *)arg0->_parameters)->_showGui = frame->f214;
-        if (frame->f214 == 0) {
-            arg0->_guiVisibility = 2;
+        SharedViewerOptions *options = g_sharedViewerOptions[0];
+        ((igViewerParameters *)self->_parameters)->_showBoundingBox = options->showBBox;
+        ((igViewerParameters *)self->_parameters)->_showNormals = options->showNormals;
+        ((igViewerParameters *)self->_parameters)->_showGui = options->showUI;
+        if (options->showUI == 0) {
+            self->_guiVisibility = 2;
         }
     }
-    if (DAT_0056dc50[0] != 0) {
-        int rc = DAT_0056dc50[0]->f232 - 1;
-        DAT_0056dc50[0]->f232 = rc;
+    if (g_sharedViewerOptions[0] != 0) {
+        int rc = g_sharedViewerOptions[0]->refCount - 1;
+        g_sharedViewerOptions[0]->refCount = rc;
         if (rc <= 0) {
-            Frame *f = DAT_0056dc50[0];
+            SharedViewerOptions *f = g_sharedViewerOptions[0];
             if (f != 0) {
                 if (&f->f236) {
                     void *p = f->f236;
@@ -471,7 +439,7 @@ void Gap__Viewer__igViewerSceneInfoManager__vfunc_13(igViewerSceneInfoManager *a
                     }
                 }
                 if (f != 0) {
-                    void *p = f->f0;
+                    void *p = f->extraCommandLine;
                     if (p != 0) {
                         int *h = (int *)((char *)p - 8);
                         int r = *(int *)((char *)p - 4) - 1;
@@ -483,13 +451,13 @@ void Gap__Viewer__igViewerSceneInfoManager__vfunc_13(igViewerSceneInfoManager *a
                 }
                 __dl__FPv(f);
             }
-            DAT_0056dc50[0] = 0;
+            g_sharedViewerOptions[0] = 0;
         }
     }
-    FUN_00463c90(arg0->_viewManager, arg0->_parameters);
+    igViewManager_SynchronizeParameters(self->_viewManager, self->_parameters);
     {
-        igObject *s2 = (igObject *)arg0->_parameters;
-        RendererLink *s1 = (RendererLink *)arg0->_viewerRenderer;
+        igObject *s2 = (igObject *)self->_parameters;
+        RendererLink *s1 = (RendererLink *)self->_viewerRenderer;
         if (s2 != 0) {
             s2->_refCount = (int)s2->_refCount + 1;
         }
@@ -498,8 +466,8 @@ void Gap__Viewer__igViewerSceneInfoManager__vfunc_13(igViewerSceneInfoManager *a
         s1->parameters = s2;
     }
     {
-        igObject *s2 = (igObject *)arg0->_parameters;
-        RendererLink *s1 = (RendererLink *)arg0->_bboxRenderer;
+        igObject *s2 = (igObject *)self->_parameters;
+        RendererLink *s1 = (RendererLink *)self->_bboxRenderer;
         if (s2 != 0) {
             s2->_refCount = (int)s2->_refCount + 1;
         }
@@ -508,8 +476,8 @@ void Gap__Viewer__igViewerSceneInfoManager__vfunc_13(igViewerSceneInfoManager *a
         s1->parameters = s2;
     }
     {
-        igObject *s2 = (igObject *)arg0->_parameters;
-        RendererLink *s1 = (RendererLink *)arg0->_normalsRenderer;
+        igObject *s2 = (igObject *)self->_parameters;
+        RendererLink *s1 = (RendererLink *)self->_normalsRenderer;
         if (s2 != 0) {
             s2->_refCount = (int)s2->_refCount + 1;
         }
@@ -517,27 +485,27 @@ void Gap__Viewer__igViewerSceneInfoManager__vfunc_13(igViewerSceneInfoManager *a
         IG_OBJECT_RELEASE(a0);
         s1->parameters = s2;
     }
-    *(int *)((char *)arg0->_applicationController + 16) = arg0->_viewerRenderer;
-    *(igViewerSceneInfoManager **)((char *)arg0->_applicationController + 12) = arg0;
-    FUN_00457e90(arg0->_applicationController, arg0->_parameters);
-    FUN_001b1e50(((igViewerParameters *)arg0->_parameters)->_disables, 0xC);
+    ((igViewerSceneInfoManagerController *)self->_applicationController)->_viewerRenderer = self->_viewerRenderer;
+    ((igViewerSceneInfoManagerController *)self->_applicationController)->_application = (int)self;
+    igView_SetModel(self->_applicationController, self->_parameters);
+    igBitMask_SetBitCount(((igViewerParameters *)self->_parameters)->_disables, 0xC);
     {
-        int *list = (int *)((igViewerParameters *)arg0->_parameters)->_disables;
-        memset((void *)list[4], 0, list[2] * 4);
+        igBitMask *disables = (igBitMask *)((igViewerParameters *)self->_parameters)->_disables;
+        memset((void *)disables->_data, 0, disables->_count * 4);
     }
-    BIND(FUN_004573c0, arg0->_hotKeyReceiver, DAT_004d1ac8, 0x46)
-    BIND(FUN_004573c0, arg0->_hotKeyReceiver, DAT_004d1ad8, 0x44)
-    BIND(FUN_004573f0, arg0->_hotKeyReceiver, DAT_004d1ae8, 0x43, 0xF)
-    BIND(FUN_004573f0, arg0->_hotKeyReceiver, DAT_004d1af8, 0x48, 0xC)
-    BIND(FUN_004573d0, arg0->_hotKeyReceiver, DAT_004d1b08, 3)
-    BIND(FUN_004573d0, arg0->_hotKeyReceiver, DAT_004d1b18, 0)
-    BIND(FUN_004573c0, arg0->_hotKeyReceiver, DAT_004d1b28, 0x4D)
-    BIND(FUN_004573c0, arg0->_hotKeyReceiver, DAT_004d1b38, 0x57)
-    BIND(FUN_004573f0, arg0->_hotKeyReceiver, DAT_004d1b48, 0x52, 0xA)
-    BIND(FUN_004573f0, arg0->_hotKeyReceiver, DAT_004d1b58, 0x54, 0xB)
-    BIND(FUN_004573c0, arg0->_hotKeyReceiver, DAT_004d1b68, 0x50)
-    BIND(FUN_004573d0, arg0->_hotKeyReceiver, DAT_004d1b78, 1)
-    BIND(FUN_004573d0, arg0->_hotKeyReceiver, DAT_004d1b88, 2)
+    BIND(igHotKeyEventReceiver_AddKey, self->_hotKeyReceiver, g_fitSelectionHandler, 'F')
+    BIND(igHotKeyEventReceiver_AddKey, self->_hotKeyReceiver, g_printViewMatrixHandler, 'D')
+    BIND(igHotKeyEventReceiver_AddBinding, self->_hotKeyReceiver, g_centerSelectionHandler, 'C', 0xF)
+    BIND(igHotKeyEventReceiver_AddBinding, self->_hotKeyReceiver, g_cycleGuiVisibilityHandler, 'H', 0xC)
+    BIND(igHotKeyEventReceiver_AddButton, self->_hotKeyReceiver, g_playHandler, 3)
+    BIND(igHotKeyEventReceiver_AddButton, self->_hotKeyReceiver, g_pauseHandler, 0)
+    BIND(igHotKeyEventReceiver_AddKey, self->_hotKeyReceiver, g_hotKeyMHandler, 'M')
+    BIND(igHotKeyEventReceiver_AddKey, self->_hotKeyReceiver, g_hotKeyWHandler, 'W')
+    BIND(igHotKeyEventReceiver_AddBinding, self->_hotKeyReceiver, g_resetOperationModeHandler, 'R', 0xA)
+    BIND(igHotKeyEventReceiver_AddBinding, self->_hotKeyReceiver, g_hotKeyTHandler, 'T', 0xB)
+    BIND(igHotKeyEventReceiver_AddKey, self->_hotKeyReceiver, g_hotKeyPHandler, 'P')
+    BIND(igHotKeyEventReceiver_AddButton, self->_hotKeyReceiver, g_button1Handler, 1)
+    BIND(igHotKeyEventReceiver_AddButton, self->_hotKeyReceiver, g_button2Handler, 2)
 }
 
 void igViewerSceneInfoManager_OnActivate(void);
@@ -644,40 +612,41 @@ void Gap__Viewer__igViewerSceneInfoManager__Activate(igViewerSceneInfoManager *s
     if (((igViewerParameters *)self->_parameters)->_flushFrames != 0) {
         igInsightCore_AddRenderer(self->_insight, self->_flushRenderer);
     }
-    igViewerSceneInfoManager_HideGui((SceneSelection *)self);
+    igViewerSceneInfoManager_HideGui(self);
     igInsightCore_AddToScheduler(self->_insight, self);
 }
 
-void Gap__Viewer__igViewerSceneInfoManager__vfunc_24(S0 *arg0) {
-    FUN_00236f30(arg0->fC, *(int *)((char *)(*(int *)((char *)(arg0) + 44)) + 8));
-    FUN_00236f30(arg0->fC, arg0->f1C);
-    FUN_00236f30(arg0->fC, arg0->f20);
-    FUN_00236f30(arg0->fC, arg0->f18);
-    FUN_00236f30(arg0->fC, arg0->f24);
-    igInsightCore_RemoveFromScheduler(arg0->fC, arg0);
+void Gap__Viewer__igViewerSceneInfoManager__Deactivate(igViewerSceneInfoManager *self) {
+    igInsightCore_RemoveRenderer(self->_insight, ((igGuiSystem *)self->_gui)->_renderer);
+    igInsightCore_RemoveRenderer(self->_insight, self->_bboxRenderer);
+    igInsightCore_RemoveRenderer(self->_insight, self->_normalsRenderer);
+    igInsightCore_RemoveRenderer(self->_insight, self->_viewerRenderer);
+    igInsightCore_RemoveRenderer(self->_insight, self->_flushRenderer);
+    igInsightCore_RemoveFromScheduler(self->_insight, self);
 }
 
-int FUN_00462100(NodeEntry *arg0) {
+/* True when `attr` draws geometry: a geometry or particle attribute, or a display list holding one. */
+int igViewerSceneInfoManager_HasGeometry(igDisplayListAttr *attr) {
     int i;
     int n;
     int off;
 
-    if (arg0 == 0) {
+    if (attr == 0) {
         return 0;
     }
-    if (igObject_IsKindOf(arg0, g_igGeometryAttr_metaObject[0]) != 0) {
+    if (igObject_IsKindOf(attr, g_igGeometryAttr_metaObject[0]) != 0) {
         return 1;
     }
-    if (igObject_IsKindOf(arg0, g_igParticleAttr_metaObject[0]) != 0) {
+    if (igObject_IsKindOf(attr, g_igParticleAttr_metaObject[0]) != 0) {
         return 1;
     }
-    if (igObject_IsKindOf(arg0, g_igDisplayListAttr_metaObject[0]) != 0) {
-        n = arg0->fc->f8;
+    if (igObject_IsKindOf(attr, g_igDisplayListAttr_metaObject[0]) != 0) {
+        n = ((igObjectList *)attr->_contents)->_count;
         i = 0;
         if (0 < n) {
             off = 0;
             do {
-                if (!!FUN_00462100(*(NodeEntry **)((char *)arg0->fc->f10 + off))) {
+                if (!!igViewerSceneInfoManager_HasGeometry(*(igDisplayListAttr **)((char *)((igObjectList *)attr->_contents)->_data + off))) {
                     return 1;
                 }
                 i += 1;
@@ -688,150 +657,150 @@ int FUN_00462100(NodeEntry *arg0) {
     return 0;
 }
 
-void FUN_00462200(void *arg0) {
-    if (FUN_00462100(*(NodeEntry **)((char *)(*(int *)((char *)(arg0) + 24)) + 84)) == 0) {
-        FUN_00462d10(arg0);
+void igViewerSceneInfoManager_CheckClipping(igViewerSceneInfoManager *self) {
+    if (igViewerSceneInfoManager_HasGeometry((igDisplayListAttr *)((igViewerRenderer *)self->_viewerRenderer)->_sceneOutput) == 0) {
+        igViewerSceneInfoManager_OnSceneClipped(self);
     }
 }
 
-void Gap__Viewer__igViewerSceneInfoManager__vfunc_29(igViewerSceneInfoManager *arg0) {
-    long long temp_s0;
-    igInsightCore *temp_v0;
+void Gap__Viewer__igViewerSceneInfoManager__Update(igViewerSceneInfoManager *self) {
+    long long frameTime;
+    igInsightCore *insight;
 
-    FUN_004612b0(arg0);
-    temp_v0 = (igInsightCore *)arg0->_insight;
-    temp_s0 = temp_v0->_frameTime;
-    if (arg0->_clippingCheckFrame == temp_v0->_frames) {
-        FUN_00462200(arg0);
+    igViewerSceneInfoManager_UpdateTime(self);
+    insight = (igInsightCore *)self->_insight;
+    frameTime = insight->_frameTime;
+    if (self->_clippingCheckFrame == insight->_frames) {
+        igViewerSceneInfoManager_CheckClipping(self);
     }
-    FUN_00464080(arg0->_viewManager, temp_s0);
+    igViewManager_SetFrameTime(self->_viewManager, frameTime);
 }
 
-void Gap__Viewer__igViewerSceneInfoManager__vfunc_28(A *arg0) {
-    Hold *s2;
-    int s0;
-    Obj *spAC;
-    Obj *t;
-    Q q1, q2, q3, q4;
-    s2 = (Hold *)((X *)arg0->f20)->f12;
-    s0 = (s2->l28 != 0 ? s2->l28->count : 0) - 1;
-    while (s0 >= 0) {
-        FUN_001c5eb0((Obj **)&spAC, s2, s0);
-        t = spAC;
-        if (t != 0) {
-            t->references = t->references - 1;
-            t = spAC;
-            if (((unsigned long long)((long long)t->references << 0x29) >> 0x29) == 0) igObject_Destroy(t);
+void Gap__Viewer__igViewerSceneInfoManager__RemoveAllInfo(igViewerSceneInfoManager *self) {
+    igGroup *scene;
+    int index;
+    igObject *removed;
+    igObject *child;
+    ModelChange sceneChanged, camerasChanged, beginChanged, endChanged;
+    scene = (igGroup *)((igViewerParameters *)self->_parameters)->_scene;
+    index = (scene->_childList != 0 ? ((igNodeList *)scene->_childList)->_count : 0) - 1;
+    while (index >= 0) {
+        igGroup_RemoveChildAt(&removed, scene, index);
+        child = removed;
+        if (child != 0) {
+            child->_refCount = (int)child->_refCount - 1;
+            child = removed;
+            if (((unsigned long long)((long long)(int)child->_refCount << 0x29) >> 0x29) == 0) igObject_Destroy(child);
         }
-        s0 -= 1;
+        index -= 1;
     }
-    q1.b = 0;
-    q1.a = 2;
-    q1.c = DAT_0058c9f0[0];
-    igModel_NotifyViews(arg0->f20, &q1);
-    FUN_00460330(arg0->f24);
-    CLEAR(arg0->f20->f220)
-    q2.a = 2;
-    q2.b = 0;
-    q2.c = DAT_0058cae8[0];
-    igModel_NotifyViews(arg0->f20, &q2);
-    arg0->f20->f224 = 0;
-    q3.a = 2;
-    q3.b = 0;
-    q3.c = DAT_0058caf0[0];
-    igModel_NotifyViews(arg0->f20, &q3);
-    arg0->f20->f232 = 0;
-    q4.a = 2;
-    q4.b = 0;
-    q4.c = DAT_0058caf8[0];
-    igModel_NotifyViews(arg0->f20, &q4);
-    CLEAR(arg0->f180)
+    sceneChanged.flags = 0;
+    sceneChanged.kind = 2;
+    sceneChanged.field = g_igViewerParameters_sceneMetaField[0];
+    igModel_NotifyViews(self->_parameters, &sceneChanged);
+    igViewerRenderer_UpdateScene(self->_viewerRenderer);
+    RELEASE_ALL(((igViewerParameters *)self->_parameters)->_cameras)
+    camerasChanged.kind = 2;
+    camerasChanged.flags = 0;
+    camerasChanged.field = g_igViewerParameters_camerasMetaField[0];
+    igModel_NotifyViews(self->_parameters, &camerasChanged);
+    ((igViewerParameters *)self->_parameters)->_beginTime = 0;
+    beginChanged.kind = 2;
+    beginChanged.flags = 0;
+    beginChanged.field = g_igViewerParameters_beginTimeMetaField[0];
+    igModel_NotifyViews(self->_parameters, &beginChanged);
+    ((igViewerParameters *)self->_parameters)->_endTime = 0;
+    endChanged.kind = 2;
+    endChanged.flags = 0;
+    endChanged.field = g_igViewerParameters_endTimeMetaField[0];
+    igModel_NotifyViews(self->_parameters, &endChanged);
+    RELEASE_ALL(self->_textureList)
 }
 
-int Gap__Viewer__igViewerSceneInfoManager__vfunc_27(igViewerSceneInfoManager *arg0, igSceneInfo *arg1) {
-    T3 t0, t1, t2, t3, t4;
-    Frame *s0;
-    bool b;
-    bool a;
-    if (igObject_IsKindOf(arg1, igSceneInfo_GetMetaObject()) != 0) {
-        if (arg1->_sceneGraph == 0) {
+int Gap__Viewer__igViewerSceneInfoManager__AddInfo(igViewerSceneInfoManager *self, igSceneInfo *info) {
+    ViewerMessage sceneChanged, upVectorChanged, camerasChanged, beginChanged, endChanged;
+    SharedViewerOptions *options;
+    bool useSceneUpVector;
+    bool upVectorUnset;
+    if (igObject_IsKindOf(info, igSceneInfo_GetMetaObject()) != 0) {
+        if (info->_sceneGraph == 0) {
             return 0;
         }
-        if (DAT_0056dc50[0] == 0) {
+        if (g_sharedViewerOptions[0] == 0) {
             void **v = __nw__FUi(0xF0);
             if (v != 0) {
-                v = FUN_00238110(v);
+                v = ViewerOptions_Construct(v);
             }
-            DAT_0056dc50[0] = (Frame *)v;
+            g_sharedViewerOptions[0] = (SharedViewerOptions *)v;
         }
-        DAT_0056dc50[0]->f232 = DAT_0056dc50[0]->f232 + 1;
-        s0 = DAT_0056dc50[0];
-        if (arg1 != 0 && arg1->_animationBegin == 0 && arg1->_animationEnd == 0) {
-            FUN_001d6700(arg1);
+        g_sharedViewerOptions[0]->refCount = g_sharedViewerOptions[0]->refCount + 1;
+        options = g_sharedViewerOptions[0];
+        if (info != 0 && info->_animationBegin == 0 && info->_animationEnd == 0) {
+            igSceneInfo_ComputeAnimationRange(info);
         }
-        if (arg1->_cameras == 0) {
-            FUN_001d65e0(arg1);
+        if (info->_cameras == 0) {
+            igSceneInfo_CollectCameras(info);
         }
-        igGroup_AppendChild(((igViewerParameters *)arg0->_parameters)->_scene, arg1->_sceneGraph);
-        t0.a = 2;
-        t0.b = 0;
-        t0.c = DAT_0058c9f0[0];
-        igModel_NotifyViews(arg0->_parameters, &t0);
-        FUN_00460330(arg0->_viewerRenderer);
-        b = false;
-        float f2 = s0->f80;
-        a = false;
-        if (!(f2 != g_vec3Zero[0])) { if (!(s0->f84 != DAT_004e105c[0])) { a = true; } }
-        if (a && s0->f88 == DAT_004e1060[0]) {
-            b = true;
+        igGroup_AppendChild(((igViewerParameters *)self->_parameters)->_scene, info->_sceneGraph);
+        sceneChanged.kind = 2;
+        sceneChanged.flags = 0;
+        sceneChanged.field = g_igViewerParameters_sceneMetaField[0];
+        igModel_NotifyViews(self->_parameters, &sceneChanged);
+        igViewerRenderer_UpdateScene(self->_viewerRenderer);
+        useSceneUpVector = false;
+        float x = options->upVector[0];
+        upVectorUnset = false;
+        if (!(x != g_vec3Zero[0])) { if (!(options->upVector[1] != g_vec3Zero[1])) { upVectorUnset = true; } }
+        if (upVectorUnset && options->upVector[2] == g_vec3Zero[2]) {
+            useSceneUpVector = true;
         }
-        if (b) {
-            igViewerParameters *o = (igViewerParameters *)arg0->_parameters;
-            *(float *)&o->_upVector[0] = *(float *)&arg1->_upVector[0];
-            *(float *)&o->_upVector[1] = *(float *)&arg1->_upVector[1];
-            *(float *)&o->_upVector[2] = *(float *)&arg1->_upVector[2];
+        if (useSceneUpVector) {
+            igViewerParameters *parameters = (igViewerParameters *)self->_parameters;
+            *(float *)&parameters->_upVector[0] = *(float *)&info->_upVector[0];
+            *(float *)&parameters->_upVector[1] = *(float *)&info->_upVector[1];
+            *(float *)&parameters->_upVector[2] = *(float *)&info->_upVector[2];
         } else {
-            igViewerParameters *o = (igViewerParameters *)arg0->_parameters;
-            *(float *)&o->_upVector[0] = f2;
-            *(float *)&o->_upVector[1] = s0->f84;
-            *(float *)&o->_upVector[2] = s0->f88;
+            igViewerParameters *parameters = (igViewerParameters *)self->_parameters;
+            *(float *)&parameters->_upVector[0] = x;
+            *(float *)&parameters->_upVector[1] = options->upVector[1];
+            *(float *)&parameters->_upVector[2] = options->upVector[2];
         }
-        t1.a = 2;
-        t1.b = 0;
-        t1.c = DAT_0058c9f8[0];
-        igModel_NotifyViews(arg0->_parameters, &t1);
-        ObjectList_AppendRetainedList(((igViewerParameters *)arg0->_parameters)->_cameras, arg1->_cameras);
-        t2.a = 2;
-        t2.b = 0;
-        t2.c = DAT_0058cae8[0];
-        igModel_NotifyViews(arg0->_parameters, &t2);
+        upVectorChanged.kind = 2;
+        upVectorChanged.flags = 0;
+        upVectorChanged.field = g_igViewerParameters_upVectorMetaField[0];
+        igModel_NotifyViews(self->_parameters, &upVectorChanged);
+        ObjectList_AppendRetainedList(((igViewerParameters *)self->_parameters)->_cameras, info->_cameras);
+        camerasChanged.kind = 2;
+        camerasChanged.flags = 0;
+        camerasChanged.field = g_igViewerParameters_camerasMetaField[0];
+        igModel_NotifyViews(self->_parameters, &camerasChanged);
         {
-            igViewerParameters *o = (igViewerParameters *)arg0->_parameters;
-            long long *q = &o->_beginTime;
-            if (o->_beginTime == 0) {
-                *q = arg1->_animationBegin;
+            igViewerParameters *parameters = (igViewerParameters *)self->_parameters;
+            long long *time = &parameters->_beginTime;
+            if (parameters->_beginTime == 0) {
+                *time = info->_animationBegin;
             }
         }
-        t3.a = 2;
-        t3.b = 0;
-        t3.c = DAT_0058caf0[0];
-        igModel_NotifyViews(arg0->_parameters, &t3);
+        beginChanged.kind = 2;
+        beginChanged.flags = 0;
+        beginChanged.field = g_igViewerParameters_beginTimeMetaField[0];
+        igModel_NotifyViews(self->_parameters, &beginChanged);
         {
-            igViewerParameters *o = (igViewerParameters *)arg0->_parameters;
-            long long *q = &o->_endTime;
-            if (o->_endTime == 0) {
-                *q = arg1->_animationEnd;
+            igViewerParameters *parameters = (igViewerParameters *)self->_parameters;
+            long long *time = &parameters->_endTime;
+            if (parameters->_endTime == 0) {
+                *time = info->_animationEnd;
             }
         }
-        t4.a = 2;
-        t4.b = 0;
-        t4.c = DAT_0058caf8[0];
-        igModel_NotifyViews(arg0->_parameters, &t4);
-        if (DAT_0056dc50[0] != 0) {
-            int rc = DAT_0056dc50[0]->f232 - 1;
-            DAT_0056dc50[0]->f232 = rc;
+        endChanged.kind = 2;
+        endChanged.flags = 0;
+        endChanged.field = g_igViewerParameters_endTimeMetaField[0];
+        igModel_NotifyViews(self->_parameters, &endChanged);
+        if (g_sharedViewerOptions[0] != 0) {
+            int rc = g_sharedViewerOptions[0]->refCount - 1;
+            g_sharedViewerOptions[0]->refCount = rc;
             if (rc <= 0) {
-                Frame *f = DAT_0056dc50[0];
+                SharedViewerOptions *f = g_sharedViewerOptions[0];
                 if (f != 0) {
                     if (&f->f236) {
                         void *p = f->f236;
@@ -845,7 +814,7 @@ int Gap__Viewer__igViewerSceneInfoManager__vfunc_27(igViewerSceneInfoManager *ar
                         }
                     }
                     if (f != 0) {
-                        void *p = f->f0;
+                        void *p = f->extraCommandLine;
                         if (p != 0) {
                             int *h = (int *)((char *)p - 8);
                             int r = *(int *)((char *)p - 4) - 1;
@@ -857,7 +826,7 @@ int Gap__Viewer__igViewerSceneInfoManager__vfunc_27(igViewerSceneInfoManager *ar
                     }
                     __dl__FPv(f);
                 }
-                DAT_0056dc50[0] = 0;
+                g_sharedViewerOptions[0] = 0;
             }
         }
         return 1;
@@ -865,100 +834,94 @@ int Gap__Viewer__igViewerSceneInfoManager__vfunc_27(igViewerSceneInfoManager *ar
     return 0;
 }
 
-void igViewerSceneInfoManager_HideGui(SceneSelection *arg0) {
-    void *temp_a0;
+void igViewerSceneInfoManager_HideGui(igViewerSceneInfoManager *self) {
+    igInsightCore *insight;
 
-    temp_a0 = (void *)(arg0->fC);
-    if (temp_a0 != 0) {
-        FUN_00236f30(temp_a0, *(int *)((char *)(*(int *)((char *)(arg0) + 44)) + 8));
-        FUN_004542a0(*(int *)((char *)(*(int *)((char *)(arg0) + 12)) + 32), arg0->f2C);
-        arg0->fB0 = 2;
+    insight = (igInsightCore *)self->_insight;
+    if (insight != 0) {
+        igInsightCore_RemoveRenderer(insight, ((igGuiSystem *)self->_gui)->_renderer);
+        igEventDispatcher_RemoveReceiver(((igInsightCore *)self->_insight)->_dispatcher, self->_gui);
+        self->_guiVisibility = 2;
     }
 }
 
-void FUN_00462a10(int *arg0) {
-    FUN_00236f30(arg0[3], arg0[8]);
+void igViewerSceneInfoManager_RemoveNormalsRenderer(igViewerSceneInfoManager *self) {
+    igInsightCore_RemoveRenderer(self->_insight, self->_normalsRenderer);
 }
 
-void FUN_00462a20(int *arg0) {
-    FUN_00236f30(arg0[3], arg0[7]);
+void igViewerSceneInfoManager_RemoveBoundingBoxRenderer(igViewerSceneInfoManager *self) {
+    igInsightCore_RemoveRenderer(self->_insight, self->_bboxRenderer);
 }
 
-void FUN_00462a30(int *arg0) {
-    FUN_00236f30(arg0[3], arg0[9]);
+void igViewerSceneInfoManager_RemoveFlushRenderer(igViewerSceneInfoManager *self) {
+    igInsightCore_RemoveRenderer(self->_insight, self->_flushRenderer);
 }
 
-void FUN_00462a40(int arg0)
+void igViewerSceneInfoManager_OnSelectionChanged(igViewerSceneInfoManager *self)
 {
 }
 
-void FUN_00462a50(ViewSync *arg0) {
-    int buf[3];
-    arg0->f20->f212 = 1;
-    buf[0] = 2;
-    buf[1] = 0;
-    buf[2] = DAT_0058cad8[0];
-    igModel_NotifyViews(arg0->f20, buf, 1);
-    FUN_00464110(arg0->f136, (int)arg0->f20 + 0x10);
-    FUN_004643a0(arg0->f136, arg0->f20->f12);
+void igViewerSceneInfoManager_HomeView(igViewerSceneInfoManager *self) {
+    ViewerMessage modeChanged;
+    ((igViewerParameters *)self->_parameters)->_operationMode = 1;
+    modeChanged.kind = 2;
+    modeChanged.flags = 0;
+    modeChanged.field = g_igViewerParameters_operationModeMetaField[0];
+    igModel_NotifyViews(self->_parameters, &modeChanged, 1);
+    igViewManager_SetSceneUpVector(self->_viewManager, ((igViewerParameters *)self->_parameters)->_upVector);
+    igViewManager_FrameObject(self->_viewManager, ((igViewerParameters *)self->_parameters)->_scene);
 }
 
-void FUN_00462ac0(igViewerSceneInfoManager *arg0) {
-    int sp50[3];
-    int sp40[3];
-    int sp30[3];
-    Frame *f;
-    Frame *g;
-    Frame *s0;
-    igViewerParameters *v;
-    igObject *a;
-    int *pp;
+void igViewerSceneInfoManager_ResetView(igViewerSceneInfoManager *self) {
+    ViewerMessage selectionChanged;
+    ViewerMessage playbackChanged;
+    ViewerMessage modeChanged;
+    SharedViewerOptions *f;
+    SharedViewerOptions *options;
+    igViewerParameters *parameters;
+    igObject *selected;
+    int *slot;
     void *p;
     int *h;
     int rc;
-    FUN_00462a50((ViewSync *)arg0);
-    FUN_00464540(arg0->_viewManager, ((igViewerParameters *)arg0->_parameters)->_scene);
-    FUN_00462cf0(arg0);
-    FUN_0045f930(arg0->_viewerRenderer);
-    v = (igViewerParameters *)arg0->_parameters;
-    pp = &v->_selectedObject;
-    a = (igObject *)*pp;
-    if (a != 0) {
-        a->_refCount = (int)a->_refCount - 1;
-        if (((unsigned long long)((long long)(int)a->_refCount << 0x29) >> 0x29) == 0) {
-            igObject_Destroy(a);
-        }
+    igViewerSceneInfoManager_HomeView(self);
+    igViewManager_ApplyOptions(self->_viewManager, ((igViewerParameters *)self->_parameters)->_scene);
+    igViewerSceneInfoManager_OnButton1(self);
+    igViewerRenderer_ApplyOptions(self->_viewerRenderer);
+    parameters = (igViewerParameters *)self->_parameters;
+    slot = &parameters->_selectedObject;
+    selected = (igObject *)*slot;
+    IG_OBJECT_RELEASE(selected);
+    *slot = 0;
+    selectionChanged.kind = 2;
+    selectionChanged.flags = 0;
+    selectionChanged.field = g_igViewerParameters_selectedObjectMetaField[0];
+    igModel_NotifyViews(self->_parameters, &selectionChanged);
+    ((igViewerParameters *)self->_parameters)->_timeOperation = 1;
+    playbackChanged.kind = 2;
+    playbackChanged.flags = 0;
+    playbackChanged.field = g_igViewerParameters_timeOperationMetaField[0];
+    igModel_NotifyViews(self->_parameters, &playbackChanged);
+    if (g_sharedViewerOptions[0] == 0) {
+        f = (SharedViewerOptions *)__nw__FUi(240);
+        if (f != 0) f = (SharedViewerOptions *)ViewerOptions_Construct(f);
+        g_sharedViewerOptions[0] = f;
     }
-    *pp = 0;
-    sp50[0] = 2;
-    sp50[1] = 0;
-    sp50[2] = DAT_0058cb00[0];
-    igModel_NotifyViews(arg0->_parameters, sp50);
-    ((igViewerParameters *)arg0->_parameters)->_timeOperation = 1;
-    sp40[0] = 2;
-    sp40[1] = 0;
-    sp40[2] = DAT_0058cb08[0];
-    igModel_NotifyViews(arg0->_parameters, sp40);
-    if (DAT_0056dc50[0] == 0) {
-        f = (Frame *)__nw__FUi(240);
-        if (f != 0) f = (Frame *)FUN_00238110(f);
-        DAT_0056dc50[0] = f;
-    }
-    DAT_0056dc50[0]->f232 = DAT_0056dc50[0]->f232 + 1;
-    v = (igViewerParameters *)arg0->_parameters;
-    g = DAT_0056dc50[0];
-    if (((igObjectList *)v->_cameras)->_count > 0 && g->f60 != 0) {
-        v->_operationMode = v->_firstCameraMode;
+    g_sharedViewerOptions[0]->refCount = g_sharedViewerOptions[0]->refCount + 1;
+    parameters = (igViewerParameters *)self->_parameters;
+    options = g_sharedViewerOptions[0];
+    if (((igObjectList *)parameters->_cameras)->_count > 0 && options->autoSelectCamera != 0) {
+        parameters->_operationMode = parameters->_firstCameraMode;
     } else {
-        v->_operationMode = 1;
+        parameters->_operationMode = 1;
     }
-    sp30[1] = 0;
-    sp30[0] = 2;
-    sp30[2] = DAT_0058cad8[0];
-    igModel_NotifyViews(arg0->_parameters, sp30);
-    if (DAT_0056dc50[0] != 0) {
-        if (--DAT_0056dc50[0]->f232 <= 0) {
-            f = DAT_0056dc50[0];
+    modeChanged.flags = 0;
+    modeChanged.kind = 2;
+    modeChanged.field = g_igViewerParameters_operationModeMetaField[0];
+    igModel_NotifyViews(self->_parameters, &modeChanged);
+    if (g_sharedViewerOptions[0] != 0) {
+        if (--g_sharedViewerOptions[0]->refCount <= 0) {
+            f = g_sharedViewerOptions[0];
             if (f != 0) {
                 if (&f->f236) {
                     p = f->f236;
@@ -972,7 +935,7 @@ void FUN_00462ac0(igViewerSceneInfoManager *arg0) {
                     }
                 }
                 if (f != 0) {
-                    p = f->f0;
+                    p = f->extraCommandLine;
                     if (p != 0) {
                         h = (int *)((char *)(p) - 8);
                         rc = *(int *)((char *)(p) - 4) - 1;
@@ -984,20 +947,20 @@ void FUN_00462ac0(igViewerSceneInfoManager *arg0) {
                 }
                 __dl__FPv(f);
             }
-            DAT_0056dc50[0] = 0;
+            g_sharedViewerOptions[0] = 0;
         }
     }
 }
 
-void FUN_00462cf0(igViewerSceneInfoManager *arg0)
+void igViewerSceneInfoManager_OnButton1(igViewerSceneInfoManager *self)
 {
 }
 
-void FUN_00462d00(void *arg0)
+void igViewerSceneInfoManager_OnButton2(igViewerSceneInfoManager *self)
 {
 }
 
-void FUN_00462d10(void *arg0)
+void igViewerSceneInfoManager_OnSceneClipped(igViewerSceneInfoManager *self)
 {
 }
 
@@ -1005,144 +968,146 @@ void igViewerSceneInfoManager_DebugZoomOut(void)
 {
 }
 
-void FUN_00462d30(void *arg0) {
-    struct S s;
-    *(int *)((char *)(*(int *)((char *)(arg0) + 20)) + 244) = 1;
-    s.a = 2;
-    s.b = 0;
-    s.c = DAT_0058cb08[0];
-    igModel_NotifyViews(*(void **)((char *)(arg0) + 20), &s);
+void igViewerSceneInfoManager_Play(igViewerSceneInfoManager *self) {
+    ViewerMessage playbackChanged;
+    ((igViewerParameters *)self->_parameters)->_timeOperation = 1;
+    playbackChanged.kind = 2;
+    playbackChanged.flags = 0;
+    playbackChanged.field = g_igViewerParameters_timeOperationMetaField[0];
+    igModel_NotifyViews(self->_parameters, &playbackChanged);
 }
 
-void FUN_00462d80(struct Y2 *arg0) {
-    int buf[3];
+void igViewerSceneInfoManager_Pause(igViewerSceneInfoManager *self) {
+    ViewerMessage playbackChanged;
 
-    arg0->t->f244 = 0;
-    buf[0] = 2;
-    buf[1] = 0;
-    buf[2] = DAT_0058cb08[0];
-    igModel_NotifyViews(arg0->t, buf);
+    ((igViewerParameters *)self->_parameters)->_timeOperation = 0;
+    playbackChanged.kind = 2;
+    playbackChanged.flags = 0;
+    playbackChanged.field = g_igViewerParameters_timeOperationMetaField[0];
+    igModel_NotifyViews(self->_parameters, &playbackChanged);
 }
 
-void igViewerSceneInfoManager_ResetOperationMode(void *arg0) {
-    int buf[3];
+void igViewerSceneInfoManager_ResetOperationMode(igViewerSceneInfoManager *self) {
+    ViewerMessage modeChanged;
 
-    *(int *)((char *)(*(int *)((char *)(arg0) + 20)) + 212) = 1;
-    buf[0] = 2;
-    buf[1] = 0;
-    buf[2] = DAT_0058cad8[0];
-    igModel_NotifyViews(*(int *)((char *)(arg0) + 20), buf, 1);
+    ((igViewerParameters *)self->_parameters)->_operationMode = 1;
+    modeChanged.kind = 2;
+    modeChanged.flags = 0;
+    modeChanged.field = g_igViewerParameters_operationModeMetaField[0];
+    igModel_NotifyViews(self->_parameters, &modeChanged, 1);
 }
 
-void FUN_00462e10(void *arg0)
+void igViewerSceneInfoManager_OnHotKeyT(igViewerSceneInfoManager *self)
 {
 }
 
-void FUN_00462e20(void *arg0)
+void igViewerSceneInfoManager_OnHotKeyP(igViewerSceneInfoManager *self)
 {
 }
 
-void FUN_00462e30(void *arg0)
+void igViewerSceneInfoManager_OnHotKeyM(igViewerSceneInfoManager *self)
 {
 }
 
-void FUN_00462e40(void *arg0)
+void igViewerSceneInfoManager_OnHotKeyW(igViewerSceneInfoManager *self)
 {
 }
 
-void FUN_00462e50(void *arg0)
+void igViewerSceneInfoManager_OnGuiShown(igViewerSceneInfoManager *self)
 {
 }
 
-void FUN_00462e60(struct ViewManagerLink *arg0) {
-    FUN_00464760(arg0->viewManager, 0);
+void igViewerSceneInfoManager_CenterSelection(igViewerSceneInfoManager *self) {
+    igViewManager_CenterSelection(self->_viewManager, 0);
 }
 
-void FUN_00462e70(struct ViewManagerLink *arg0) {
-    FUN_004648b0(arg0->viewManager);
+void igViewerSceneInfoManager_FitSelection(igViewerSceneInfoManager *self) {
+    igViewManager_FitSelection(self->_viewManager);
 }
 
-void FUN_00462e80(struct ViewManagerLink *arg0) {
-    FUN_00464c60(arg0->viewManager);
+void igViewerSceneInfoManager_PrintViewMatrix(igViewerSceneInfoManager *self) {
+    igViewManager_PrintViewMatrix(self->_viewManager);
 }
 
-void FUN_00462e90(S2 *arg0) {
-    switch (arg0->f176) {
+void igViewerSceneInfoManager_CycleGuiVisibility(igViewerSceneInfoManager *self) {
+    switch (self->_guiVisibility) {
     case 0: {
-        M m;
-        arg0->f20->f208 = 0;
-        m.a = 2;
-        m.b = 0;
-        m.c = DAT_0058cab8[0];
-        igModel_NotifyViews(arg0->f20, &m);
+        ViewerMessage guiChanged;
+        ((igViewerParameters *)self->_parameters)->_showGui = 0;
+        guiChanged.kind = 2;
+        guiChanged.flags = 0;
+        guiChanged.field = g_igViewerParameters_showGuiMetaField[0];
+        igModel_NotifyViews(self->_parameters, &guiChanged);
         break;
     }
     case 1: {
-        M m;
-        FUN_00453a20(arg0->f52, arg0->f60);
-        FUN_00453a20(arg0->f52, arg0->f68);
-        FUN_00453a20(arg0->f52, arg0->f56);
-        arg0->f20->f208 = 0;
-        m.a = 2;
-        m.b = 0;
-        m.c = DAT_0058cab8[0];
-        igModel_NotifyViews(arg0->f20, &m);
+        ViewerMessage guiChanged;
+        igGuiComponent_AppendChild(self->_rootComponent, self->_operationBoxHolder);
+        igGuiComponent_AppendChild(self->_rootComponent, self->_timeBoxHolder);
+        igGuiComponent_AppendChild(self->_rootComponent, self->_menuHolder);
+        ((igViewerParameters *)self->_parameters)->_showGui = 0;
+        guiChanged.kind = 2;
+        guiChanged.flags = 0;
+        guiChanged.field = g_igViewerParameters_showGuiMetaField[0];
+        igModel_NotifyViews(self->_parameters, &guiChanged);
         break;
     }
     case 2: {
-        M m;
-        arg0->f20->f208 = 1;
-        m.a = 2;
-        m.b = 0;
-        m.c = DAT_0058cab8[0];
-        igModel_NotifyViews(arg0->f20, &m);
-        FUN_00462e50(arg0);
+        ViewerMessage guiChanged;
+        ((igViewerParameters *)self->_parameters)->_showGui = 1;
+        guiChanged.kind = 2;
+        guiChanged.flags = 0;
+        guiChanged.field = g_igViewerParameters_showGuiMetaField[0];
+        igModel_NotifyViews(self->_parameters, &guiChanged);
+        igViewerSceneInfoManager_OnGuiShown(self);
         break;
     }
     }
 }
 
-void FUN_00462fa0(int arg0, int arg1)
+void igViewerSceneInfoManager_OnDisablesChanged(igViewerSceneInfoManager *self, int index)
 {
 }
 
-extern "C" void FUN_00462fb0(ViewSelector *self) {
-    ViewState *s = self->f20;
-    int mode = s->f212;
+/* Installs the view mode `_operationMode` selects: 0 picks, 1 rotates, 2 flies, 3 rotates the Maya way,
+ * and from `_firstCameraMode` on, follows the scene's cameras in order. */
+void igViewerSceneInfoManager_ApplyOperationMode(igViewerSceneInfoManager *self) {
+    igViewerParameters *parameters = (igViewerParameters *)self->_parameters;
+    int mode = parameters->_operationMode;
     switch (mode) {
     case 0: {
-        igSmartPointer<Binding> binding(create45c170());
-        takeValue(binding, igViewerGuiFactory_CreateEmpty(self->f48, 1));
-        setSource(binding, self->f20);
-        setTarget(binding, self->f44);
-        igViewManager_SetViewMode(self->f136, binding.p);
+        igSmartPointer<igPickMode> pick(createPickMode());
+        setCursor(pick, igViewerGuiFactory_CreateEmpty(self->_guiFactory, 1));
+        setParameters(pick, (igObject *)self->_parameters);
+        setGuiSystem(pick, (igObject *)self->_gui);
+        igViewManager_SetViewMode(self->_viewManager, pick.p);
         break;
     }
     case 2: {
-        igSmartPointer<Camera> camera(create45c8e0());
-        setObject(camera, self->f12->f20);
-        igViewManager_SetViewMode(self->f136, camera.p);
+        igSmartPointer<igFlyMode> fly(createFlyMode());
+        setWindow(fly, (igObject *)((igInsightCore *)self->_insight)->_window);
+        igViewManager_SetViewMode(self->_viewManager, fly.p);
         break;
     }
     case 1: {
-        igSmartPointer<Camera> camera(create45c5a0());
-        igViewManager_SetViewMode(self->f136, camera.p);
+        igSmartPointer<igRotateMode> rotate(createRotateMode());
+        igViewManager_SetViewMode(self->_viewManager, rotate.p);
         break;
     }
     case 3: {
-        igSmartPointer<Camera> camera(create45c5a0());
-        camera.p->follow = 1;
-        igViewManager_SetViewMode(self->f136, camera.p);
+        igSmartPointer<igRotateMode> rotate(createRotateMode());
+        rotate.p->_maya = 1;
+        igViewManager_SetViewMode(self->_viewManager, rotate.p);
         break;
     }
     default: {
-        int first = s->f216;
+        int first = parameters->_firstCameraMode;
         if (mode >= first) {
                 first = mode - first;
-            igSmartPointer<Effect> effect(create45cc40());
-            FUN_00465260(effect.p, self->f20->f220->f16[first]);
-            igViewManager_SetViewMode(self->f136, effect.p);
-            self->f40 = self->f12->f52 + 1;
+            igSmartPointer<igCameraMode> camera(createCameraMode());
+            igCameraMode_SetCameraPath(camera.p, ((int *)((igObjectList *)((igViewerParameters *)self->_parameters)->_cameras)->_data)[first]);
+            igViewManager_SetViewMode(self->_viewManager, camera.p);
+            self->_clippingCheckFrame = ((igInsightCore *)self->_insight)->_frames + 1;
         }
         break;
     }
@@ -1161,13 +1126,13 @@ void igViewerSceneInfoManager_OnActivate(void)
 {
 }
 
-void FUN_00463400(int arg0)
+void igViewerSceneInfoManager_OnCamerasChanged(igViewerSceneInfoManager *self)
 {
 }
 
-extern "C" void Gap__Viewer__igViewerAction__vfunc_23(O *o) {
-    void (T2::*m)() = o->pmf;
-    (o->t->*m)();
+void Gap__Viewer__igViewerAction__Execute(ViewerActionBinding *action) {
+    ActionFunction function = action->function;
+    (action->target->*function)();
 }
 
 int Gap__Viewer__igViewerAction__vfunc_22(void) {
@@ -1182,8 +1147,8 @@ int Gap__Viewer__igViewerSceneInfoManagerController__vfunc_22(void) {
     return g_igViewerSceneInfoManagerController_metaObject[0];
 }
 
-void Gap__Viewer__igViewerSceneInfoManagerController__vfunc_23(int arg0, int arg1) {
-    igObject_IsKindOf(arg1, g_igViewerParameters_metaObject);
+void Gap__Viewer__igViewerSceneInfoManagerController__vfunc_23(igViewerSceneInfoManagerController *self, igObject *model) {
+    igObject_IsKindOf(model, g_igViewerParameters_metaObject);
 }
 
 void Gap__Viewer__igStatisticsItem__vfunc_24(void) {
@@ -1226,8 +1191,8 @@ int Gap__Viewer__igStatisticsItem__vfunc_22(void) {
     return g_igStatisticsItem_metaObject[0];
 }
 
-void Gap__Viewer__igStatisticsItem__vfunc_23(void *arg0, int arg1) {
-    igObject_IsKindOf(arg1, igOnOffModel_GetMetaObject());
+void Gap__Viewer__igStatisticsItem__vfunc_23(igStatisticsItem *self, igObject *model) {
+    igObject_IsKindOf(model, igOnOffModel_GetMetaObject());
 }
 
 }

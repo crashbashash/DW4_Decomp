@@ -20,8 +20,8 @@ void Gap__Core__igPageMemoryPool__vfunc_02(int extra0) {
     Gap__Core__igObject__vfunc_00(extra0);
 }
 
-void thunk_Gap__Core__igObject__vfunc_01(int extra0, int extra1) {
-    Gap__Core__igObject__vfunc_01(extra0, extra1);
+void thunk_Gap__Core__igObject__constructFields(int extra0, int extra1) {
+    Gap__Core__igObject__constructFields(extra0, extra1);
 }
 
 void Gap__Core__igPageMemoryPool__vfunc_04(Pool04 *self) {
@@ -33,14 +33,14 @@ void Gap__Core__igPageMemoryPool__vfunc_04(Pool04 *self) {
             self->slots[i] = 0;
         }
     }
-    Gap__Core__igObject__vfunc_02((int)self);
+    Gap__Core__igObject__destructFields((int)self);
 }
 
 /* Initialise the pool: run the igObject base step (an empty stub), take the default
  * `_poolOptionFlags` from a global word (6 in the retail image) and clear the 128 bytes that
  * follow the reflected fields (+0x90). */
 void Gap__Core__igPageMemoryPool__vfunc_13(igPageMemoryPool *self, int extra1) {
-    Gap__Core__igObject__vfunc_11((int)self, extra1);
+    Gap__Core__igObject__resetFields((int)self, extra1);
     self->_poolOptionFlags = g_igPageMemoryPool_defaultPoolOptionFlags[0];
     memset((char *)self + 0x90, 0, 0x80);
 }

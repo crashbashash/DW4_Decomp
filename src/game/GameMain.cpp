@@ -225,7 +225,7 @@ struct App { char p[232]; int f232; int f236; App(); ~App(); };
 struct G { int f0; char p[212]; unsigned char f216; char p2[15]; int f232; int f236; };
 extern "C" G * __nw__FUi(...);
 extern "C" int FUN_00234d70(App *, int, int *);
-extern "C" G * FUN_00238110(...);
+extern "C" G * ViewerOptions_Construct(...);
 extern "C" Pool *Memory_GetAllocatorBySelector(int);
 extern "C" igAnimationCombinerBoneInfoPool * igAnimationCombinerBoneInfoPool_Create(...);
 extern "C" igAnimationStatePool * igAnimationStatePool_Create(...);
@@ -739,7 +739,7 @@ int main(int arg0, int *arg1) {
     FUN_00259f90((struct A *)&sp30, (struct R_259f90 *)sp70.f236, (struct R_259f90 *)sp70.f232);
     if (DAT_0056dc50[0] == 0) {
         G *v = __nw__FUi(240);
-        if (v != 0) v = FUN_00238110(v);
+        if (v != 0) v = ViewerOptions_Construct(v);
         DAT_0056dc50[0] = v;
     }
     DAT_0056dc50[0]->f232 = DAT_0056dc50[0]->f232 + 1;
@@ -991,7 +991,7 @@ void FUN_0025a580(A0 *arg0) {
         if (((struct Fr * *)DAT_0056dc50)[0] == 0) {
             void **v = ((void **)__nw__FUi(0xF0));
             if (v != 0) {
-                v = ((void **)FUN_00238110(v));
+                v = ((void **)ViewerOptions_Construct(v));
             }
             ((struct Fr * *)DAT_0056dc50)[0] = (Fr *)v;
         }
@@ -1138,7 +1138,7 @@ void FUN_0025a8c0(App_25a8c0 *arg0) {
         igModel_NotifyViews(obj, &e2);
         if (((Frame * *)DAT_0056dc50)[0] == 0) {
             Frame *v = ((Frame *)__nw__FUi(240));
-            if (v != 0) v = ((Frame *)FUN_00238110(v));
+            if (v != 0) v = ((Frame *)ViewerOptions_Construct(v));
             ((Frame * *)DAT_0056dc50)[0] = v;
         }
         ((Frame * *)DAT_0056dc50)[0]->f232 = ((Frame * *)DAT_0056dc50)[0]->f232 + 1;

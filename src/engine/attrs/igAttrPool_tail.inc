@@ -16,7 +16,7 @@ static inline void clearBytes(char *p, unsigned int n) {
 void Gap__Attrs__igAttrPool__vfunc_13(igAttrPool *self) {
     void *metas[4];
     int i;
-    Gap__Core__igObject__vfunc_11((igObject *)self);
+    Gap__Core__igObject__resetFields((igObject *)self);
     clearBytes((char *)metas, sizeof(metas));
     metas[0] = igTextureBindAttr_GetMetaObject();
     metas[1] = igTextureAttr_GetMetaObject();

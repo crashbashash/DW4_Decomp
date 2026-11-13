@@ -293,7 +293,7 @@ void SyncDCache(int, int);
 void *memset(void *, int, unsigned int);
 double floor(double);
 int sceSifSearchModuleByName(int *);
-RpcStatus FUN_0032cf50(int *, int, int, int);
+RpcStatus igPsx2_LoadIopModule(int *, int, int, int);
 int FUN_00301000(InitContext *);
 int FUN_002cfe10(int);
 RpcStatus FUN_0032d640(InitRef *, int);

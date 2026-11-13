@@ -170,6 +170,7 @@ Related: game systems and data are in [`../systems/`](../systems); the analysis 
 - [CRI SFD output handlers, SFH and SFX alpha](cri-sfh-files.md): the output handler, SFH header and SFX alpha files; extents, evidence, open questions.
 - [Metrowerks runtime](runtime-metrowerks.md): start-up, double support, new/delete and the C++ exception handler at the front of the image; the eight files, the exception record format, open questions.
 - [Viewer GUI factory](viewer-gui-factory.md): igViewerGuiFactory's actions and default colour-changer colours; extent and open questions.
+- [Viewer scene-info manager](viewer-scene-info-manager.md): igViewerSceneInfoManager, its controller and hot keys, the igViewerParameters field handles and shared viewer options; open questions.
 - [Sony libdma](sony-libdma.md): libdma as one file; extent from the SDK member, its data.
 - [Sony libmpeg decoding files](sony-libmpeg-decoding.md): libmpeg's mpc, ext and picture files; extents, evidence, the hand-written MMI kernels.
 - [Sony libmpeg output to default handlers](sony-libmpeg-files.md): libmpeg's output, CSC, public-interface (mpeg.c), error, sequence-header and default-handler files.

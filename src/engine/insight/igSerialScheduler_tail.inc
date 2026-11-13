@@ -54,7 +54,7 @@ void Gap__Insight__igSerialScheduler__vfunc_29(int a0) {
     FUN_002d7840(*(int *)((char *)a0 + 8));
 }
 
-void *FUN_00238110(void *arg0) {
+void *ViewerOptions_Construct(void *arg0) {
     *(int *)((char *)(arg0) + 0) = 0;
     *(char *)((char *)(arg0) + 4) = 1;
     *(char *)((char *)(arg0) + 5) = 0;

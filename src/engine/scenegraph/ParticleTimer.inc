@@ -189,7 +189,7 @@ void FUN_001c5740(U_1c5740 *arg0, T_1c5740 *arg1) {
     FUN_00300c00(arg0->f, arg1->f, 0);
 }
 
-void FUN_001c5790(Obj_1c5790 *arg0, int arg1) {
+void igGraphPath_SetNodes(Obj_1c5790 *arg0, int arg1) {
     List_1c5790 *l = arg0->list;
     int n = l->n;
     int i;

@@ -1,5 +1,5 @@
 void Gap__Sg__igNode__vfunc_09(void **arg0, int arg1) {
-    Gap__Core__igObject__vfunc_07();
+    Gap__Core__igObject__userConstruct();
     if (arg1 == 0) {
         ((DW4VC_112_2 *)(arg0))->vX((int)(((DW4VC_120_0 *)(arg0))->vX()), (int)(1));
     }
@@ -27,7 +27,7 @@ void FUN_001d3410(NodeSlots *o, void *with) {
 }
 
 void FUN_001d3550(void *arg0) {
-    Gap__Core__igObject__vfunc_11();
+    Gap__Core__igObject__resetFields();
     *(int *)((char *)(arg0) + 24) = (int)((int) *(int *)((char *)(((DW4VC_88_0 *)(((char *)(arg0) + 0)))->vX()) + 8));
 }
 

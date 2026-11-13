@@ -264,7 +264,7 @@ Units are named by their source file.
     because `int` and `const int` reads never merge); and a store ahead of the copy in the branch drops the
     temporary, leaving one read before the branch and one after.
   - *Spelling:* `if (call() == g_resultFailure) return g_resultFailure;`, or `result = g_resultFailure;` as the
-    branch's first statement, with the object declared as the result class.
+    branch's first statement, with the object declared as the result class (`igResult`).
   - *Unit:* `src/engine/core/CoreLibrary.cpp`.
 - **A sorted search copies its key through a pointer.**
   - *Symptom:* before a binary search the key is stored to one stack slot, loaded, stored to a second slot, and the

@@ -5,7 +5,7 @@ int FUN_0045c540(void) {
     return DAT_0058cbf0[0];
 }
 
-void FUN_0045c5a0(int arg0) {
+void igRotateMode_Create(int arg0) {
     FUN_0045c680();
     igMetaObject_CreateInstance(*(int *)0x58CBF8, arg0);
 }

@@ -19,7 +19,7 @@ void FUN_001cb010(void *self, IniValueTarget *target, IniValueList *list) {
     int i;
     IniValueObject *value;
     char *s;
-    igSmartPointer<IniValueObject> text(((IniValueObject *)FUN_002b9500(((void *)igObject_GetAllocator(self)))));
+    igSmartPointer<IniValueObject> text(((IniValueObject *)igStringObj_Create(((void *)igObject_GetAllocator(self)))));
     for (i = 0; i < FUN_00303e50(list); i++) {
         value = FUN_00303e60(list, i);
         if (igObject_IsKindOf(value, FUN_001e4e30()) != 0) {
@@ -133,8 +133,8 @@ int FUN_001cb340(ShaderProcessorView *self, ShaderTarget *target, int arg) {
         info = igSmartPointer<ShaderObject_1ca6c0>(FUN_001ca6c0(self, infoName.p, 1));
         igSmartPointer<ShaderNameList> pending(igStringRefList_Create((void *)igObject_GetAllocator(self)));
         FUN_00306aa0(self->ini, infoSection, text_fields, pending.p, 0);
-        igSmartPointer<ShaderStringObject> value((ShaderStringObject *)FUN_002b9500((void *)igObject_GetAllocator(self)));
-        igSmartPointer<ShaderStringObject> key((ShaderStringObject *)FUN_002b9500((void *)igObject_GetAllocator(self)));
+        igSmartPointer<ShaderStringObject> value((ShaderStringObject *)igStringObj_Create((void *)igObject_GetAllocator(self)));
+        igSmartPointer<ShaderStringObject> key((ShaderStringObject *)igStringObj_Create((void *)igObject_GetAllocator(self)));
         while (pending.p->count != 0) {
             int ok;
             igStringObj_Set(key.p, FUN_001ccb20((igStringRefList *)pending.p).p);

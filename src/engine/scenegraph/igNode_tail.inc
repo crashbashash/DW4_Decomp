@@ -2,7 +2,7 @@ int Gap__Sg__igNode__vfunc_22(void) {
     return ((int *)g_igNode_metaObject)[0];
 }
 
-void FUN_001c5b30(int arg0, int arg1, int arg2) {
+void igGraphPath_GetTransform(int arg0, int arg1, int arg2) {
     FUN_001c59f0((OO *)arg0, FUN_001c59e0((void *)arg0), arg1, arg2);
 }
 
@@ -106,7 +106,7 @@ void FUN_001c5e20(T_1c5e20 *arg0) {
     Gap__Core__igObject__vfunc_08__001d3390((void *)arg0);
 }
 
-Ref_1c5eb0 FUN_001c5eb0(S_1c5eb0 *host, int idx) {
+Ref_1c5eb0 igGroup_RemoveChildAt(S_1c5eb0 *host, int idx) {
     List_1c5eb0 *l0 = host->getList();
     int n = l0 ? l0->n : 0;
     if (idx < n) {
@@ -144,7 +144,7 @@ unsigned int igGroup_RemoveChild(S_1c5eb0 *host, Obj_1c5eb0 *child) {
         }
     }
     if (found) {
-        FUN_001c5eb0(host, i);
+        igGroup_RemoveChildAt(host, i);
         return i;
     }
     return -1U;

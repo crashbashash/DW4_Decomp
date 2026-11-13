@@ -91,7 +91,7 @@ int strcmp(...);
 int sprintf(...);
 int dpsub(...);
 int FUN_00308240(...);
-int FUN_00308320(...);
+int igReportError(...);
 void *StringPool_Allocate(int);
 void *StringPool_Construct(void *);
 char *StringPool_Intern(void *, const char *);
@@ -971,7 +971,7 @@ typedef struct S_ref { char p0[4]; int references; } S_ref;
 typedef struct S_list { char p0[8]; int f8; char p1[4]; int *f16; } S_list;
 class IObj { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25();  virtual int vX(int); };
 typedef struct S_arg0 { char p0[16]; IObj **f16; char p1[24]; S_list *f44; } S_arg0;
-extern "C" int Gap__Core__igObject__vfunc_02(...);
+extern "C" int Gap__Core__igObject__destructFields(...);
 extern "C" void Gap__Core__igIGBFile__vfunc_04(S_arg0 *arg0);
 
 class VC_108_3 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual int vX(int, int, int); };

@@ -14,8 +14,8 @@ void Gap__igPsx2ControllerManager__vfunc_24(igPsx2ControllerManager *arg0, int a
         GPR_00554b18 = 1;
         arg0->_validControllerManager = 1;
         if (arg0->_loadIRXs != 0) {
-            FUN_0032cf50(&text_sio2man_irx[0], 1, 0, 0);
-            FUN_0032cf50(&text_padman_irx[0], 1, 0, 0);
+            igPsx2_LoadIopModule(&text_sio2man_irx[0], 1, 0, 0);
+            igPsx2_LoadIopModule(&text_padman_irx[0], 1, 0, 0);
         }
         scePadInit(0);
         base = igObject_GetAllocator(arg0);
@@ -24,7 +24,7 @@ void Gap__igPsx2ControllerManager__vfunc_24(igPsx2ControllerManager *arg0, int a
         } else {
             al = Memory_GetAllocatorBySelector(g_temporaryAllocatorSelector[0]);
         }
-        sp8C = (PropertyText *)FUN_002b9500(al);
+        sp8C = (PropertyText *)igStringObj_Create(al);
         if (FUN_00306770(g_objectSystem[0]->f56, 3, &text_supportMultitap[0], &sp8C, &DAT_004d7050[0], 0) != 0) {
             s0 = sp8C->chars;
             s0 = (s0 == 0) ? g_stringObjEmptyText[0] : s0;
@@ -47,7 +47,7 @@ void Gap__igPsx2ControllerManager__vfunc_24(igPsx2ControllerManager *arg0, int a
         s3 = 0;
         if (arg0->_multitap != 0) {
             if (arg0->_loadIRXs != 0) {
-                if (FUN_0032cf50(&text_mtapman_irx[0], 1, 0, 0).ok()) {
+                if (igPsx2_LoadIopModule(&text_mtapman_irx[0], 1, 0, 0).ok()) {
                     sceMtapInit();
                     if (arg0->_multitap & 1) sceMtapPortOpen(0);
                     if (arg0->_multitap & 2) sceMtapPortOpen(1);

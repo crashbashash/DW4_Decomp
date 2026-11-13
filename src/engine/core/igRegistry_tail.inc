@@ -178,7 +178,7 @@ bool FUN_003065f0(int arg0, int arg1, const char *arg2, int *arg3, int arg4, int
 
     var_s0 = false;
     temp_v0 = ((void *)FUN_00307c10((igRegistry *)arg0, arg1, arg2, 0));
-    if ((temp_v0 != 0) && (FUN_0030b5f0((void *)(*(int *)((char *)(temp_v0) + 12)), (int)arg3) != 0)) {
+    if ((temp_v0 != 0) && (igStringObj_ToInt((void *)(*(int *)((char *)(temp_v0) + 12)), (int)arg3) != 0)) {
         var_s0 = true;
     }
     if (!var_s0) {
@@ -227,7 +227,7 @@ int FUN_00306770(int arg0, int arg1, const char *arg2, T_306770 **arg3, int arg4
         }
         *arg3 = t;
     } else {
-    h.ref = ((T_306770 *)FUN_002b9500(((int)igObject_GetAllocator(arg0))));
+    h.ref = ((T_306770 *)igStringObj_Create(((int)igObject_GetAllocator(arg0))));
     igStringObj_Set((int)h.ref, arg4);
     t = h.ref;
     if (t) {
@@ -356,7 +356,7 @@ int FUN_00306aa0(void *self, int section, const char *key, SL *list, int create)
     p = (Pair_306aa0 *)(((void *)FUN_00307c10((igRegistry *)self, section, key, 0)));
     if (p != 0) {
         FUN_0030bce0((SrcStr *)p->value, 0x2C, (List_30bce0 *)list);
-        *(Str **)&a = (Str *)(FUN_002b9500(((int)igObject_GetAllocator((int)self))));
+        *(Str **)&a = (Str *)(igStringObj_Create(((int)igObject_GetAllocator((int)self))));
         for (i = 0; i < list->count; i++) {
             StringList_CopyRetained(&r1, list, i);
             igStringObj_Set((int)a, (int)r1);
@@ -374,7 +374,7 @@ int FUN_00306aa0(void *self, int section, const char *key, SL *list, int create)
             }
         }
     } else if (create != 0) {
-        *(Str **)&b = (Str *)(FUN_002b9500(((int)igObject_GetAllocator((int)self))));
+        *(Str **)&b = (Str *)(igStringObj_Create(((int)igObject_GetAllocator((int)self))));
         n = list->count;
         if (n != 0) {
             StringList_CopyRetained(&r2, list, 0);
@@ -656,7 +656,7 @@ void FUN_003082b0(const char *arg0, ...) {
     FUN_00308540(5, arg0, (int)((char *)__builtin_next_arg(arg0) - off));
 }
 
-int FUN_00308320(const char *arg0, ...) {
+int igReportError(const char *arg0, ...) {
     int n = __builtin_args_info(2);
     int off;
     if (n >= 8) off = 0; else off = (8 - n) * 8;
@@ -780,7 +780,7 @@ void FUN_00308860(Self_308860 *self, int name, int value) {
         setNames(self, MemberRef((Obj_308860 *)FUN_002b9350((int)(((void *)igObject_GetAllocator((int)self))))));
         setValues(self, MemberRef((Obj_308860 *)igIntList_Create((int)(((void *)igObject_GetAllocator((int)self))))));
     }
-    igSmartPointer<Obj_308860> entry((Obj_308860 *)FUN_002b9500((int)(((void *)igObject_GetAllocator((int)self)))));
+    igSmartPointer<Obj_308860> entry((Obj_308860 *)igStringObj_Create((int)(((void *)igObject_GetAllocator((int)self)))));
     igStringObj_Set((int)entry.p, name);
     ObjectList_AppendRetained((igObjectList *)self->names, (igObject *)entry.p);
     List_308860 *values = self->values;

@@ -8,7 +8,7 @@ void Gap__Bec__beCameraMode__vfunc_08(beCameraMode *self) {
     if (model != 0) {
         FUN_004577f0((igModel *)model, (OV *)self);
     }
-    Gap__Core__igObject__vfunc_08__002ff0f0(self);
+    Gap__Core__igObject__userDestruct(self);
 }
 
 int Gap__Gui__igTextElement__vfunc_22(void) {

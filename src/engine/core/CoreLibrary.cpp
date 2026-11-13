@@ -331,7 +331,7 @@ igMemoryContext g_memoryContextUser12(42);
 igMemoryContext g_memoryContextUser13(43);
 igMemoryContext g_memoryContextUser14(44);
 igMemoryContext g_memoryContextUser15(45);
-const igResult_2e3a10 g_resultSuccess(0);
-const igResult_2e3a10 g_resultFailure(1);
+const igResult g_resultSuccess(0);
+const igResult g_resultFailure(1);
 ThreadStackOwner g_threadStackOwner;
 }

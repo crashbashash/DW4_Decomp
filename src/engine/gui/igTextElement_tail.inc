@@ -13,7 +13,7 @@ void Gap__Gui__igTextElement__vfunc_24(O_457e10 *arg0) {
     }
 }
 
-void FUN_00457e90(S0_457e90 *arg0, int arg1) {
+void igView_SetModel(S0_457e90 *arg0, int arg1) {
     int temp_a0;
     int temp_a0_2;
 

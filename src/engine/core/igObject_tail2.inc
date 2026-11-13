@@ -46,12 +46,12 @@ int Gap__Core__igObject__vfunc_00__002ff0a0(int extra0)
 }
 
 /* Slot 1 default: empty. */
-void Gap__Core__igObject__vfunc_01(int extra0, int extra1)
+void Gap__Core__igObject__constructFields(int extra0, int extra1)
 {
 }
 
 /* Slot 2 default: empty. */
-void Gap__Core__igObject__vfunc_02(int extra0)
+void Gap__Core__igObject__destructFields(int extra0)
 {
 }
 
@@ -61,11 +61,11 @@ void Gap__Core__igObject__vfunc_03(void)
 }
 
 /* Slot 7 default: empty. */
-void Gap__Core__igObject__vfunc_07(void)
+void Gap__Core__igObject__userConstruct(void)
 {
 }
 
-void Gap__Core__igObject__vfunc_08__002ff0f0(void)
+void Gap__Core__igObject__userDestruct(void)
 {
 }
 
@@ -87,7 +87,7 @@ int Gap__Core__igObject__vfunc_06(void)
 }
 
 /* Slot 11 default: empty. */
-void Gap__Core__igObject__vfunc_11(int extra0, int extra1)
+void Gap__Core__igObject__resetFields(int extra0, int extra1)
 {
 }
 

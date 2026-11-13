@@ -221,7 +221,7 @@ volatile	FUN_00260a60	1	#build-string-reads
 volatile	adxt_stat_prep	1	#adxt-ready-count
 volatile	ADXSTM_ExecServer	1	#adx-server-guards
 volatile	adxm_exec_vint	8	#adxm-thread-flags
-volatile	FUN_002632c0	2	#adxt-ready-count
+volatile	ADXT_Init	2	#adxt-ready-count
 asm-function	__throw	1	#metrowerks-runtime-asm-functions
 asm	_sceMpegDispatchMpegCallback	2	#sony-gp-and-syscall-asm
 volatile	_sceMpegDispatchMpegCallback	1	#sony-gp-and-syscall-asm

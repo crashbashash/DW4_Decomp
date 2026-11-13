@@ -39,7 +39,7 @@ void FUN_004551f0(void *arg0v, int arg1, void *arg2v) {
         }
     }
     t->f16 = (int)arg2;
-    FUN_00457e90((S0_457e90 *)sp4C.p, arg1);
+    igView_SetModel((S0_457e90 *)sp4C.p, arg1);
 }
 
 void FUN_004552e0(int *arg0, int *arg1) {

@@ -25,11 +25,11 @@ struct GuiFactory : public igObject {
 #include "dw4/igVec3f.h"
 #include "dw4/igMath.h"
 
-/* Two igVec2f: a cell of the viewer's 128x128 icon sheet (corner, then extent) by the values the
- * initialiser gives them; nothing in retail reads one. */
+/* A cell of the viewer's 128x128 icon sheet by the values the initialiser gives it: a corner and the
+ * extent from it, which together never pass 128. */
 struct ViewerRect {
-    igVec2f f0;
-    igVec2f f8;
+    igVec2f corner;
+    igVec2f extent;
     ViewerRect() {}
 };
 
@@ -92,64 +92,64 @@ struct ViewerGuiStyle {
     igVec4f f676;
 
     ViewerGuiStyle() {
-        f0.f0.set(0.0f, 0.0f);
-        f0.f8.set(128.0f, 128.0f);
-        f16.f0.set(35.0f, 103.0f);
-        f16.f8.set(1.0f, 1.0f);
-        f32.f0.set(0.0f, 73.0f);
-        f32.f8.set(10.0f, 25.0f);
-        f48.f0.set(11.0f, 73.0f);
-        f48.f8.set(10.0f, 25.0f);
-        f96.f0.set(123.0f, 93.0f);
-        f96.f8.set(2.0f, 21.0f);
-        f112.f0.set(126.0f, 93.0f);
-        f112.f8.set(2.0f, 10.0f);
-        f128.f0.set(0.0f, 110.0f);
-        f128.f8.set(100.0f, 2.0f);
-        f176.f0.set(24.0f, 73.0f);
-        f176.f8.set(20.0f, 21.0f);
-        f144.f0.set(35.0f, 103.0f);
-        f144.f8.set(1.0f, 1.0f);
-        f160.f0.set(73.0f, 99.0f);
-        f160.f8.set(3.0f, 7.0f);
-        f192.f0.set(65.0f, 74.0f);
-        f192.f8.set(13.0f, 15.0f);
-        f208.f0.set(14.0f, 113.0f);
-        f208.f8.set(17.0f, 15.0f);
-        f224.f0.set(87.0f, 76.0f);
-        f224.f8.set(15.0f, 15.0f);
-        f240.f0.set(109.0f, 75.0f);
-        f240.f8.set(17.0f, 17.0f);
-        f256.f0.set(65.0f, 75.0f);
-        f256.f8.set(13.0f, 15.0f);
+        f0.corner.set(0.0f, 0.0f);
+        f0.extent.set(128.0f, 128.0f);
+        f16.corner.set(35.0f, 103.0f);
+        f16.extent.set(1.0f, 1.0f);
+        f32.corner.set(0.0f, 73.0f);
+        f32.extent.set(10.0f, 25.0f);
+        f48.corner.set(11.0f, 73.0f);
+        f48.extent.set(10.0f, 25.0f);
+        f96.corner.set(123.0f, 93.0f);
+        f96.extent.set(2.0f, 21.0f);
+        f112.corner.set(126.0f, 93.0f);
+        f112.extent.set(2.0f, 10.0f);
+        f128.corner.set(0.0f, 110.0f);
+        f128.extent.set(100.0f, 2.0f);
+        f176.corner.set(24.0f, 73.0f);
+        f176.extent.set(20.0f, 21.0f);
+        f144.corner.set(35.0f, 103.0f);
+        f144.extent.set(1.0f, 1.0f);
+        f160.corner.set(73.0f, 99.0f);
+        f160.extent.set(3.0f, 7.0f);
+        f192.corner.set(65.0f, 74.0f);
+        f192.extent.set(13.0f, 15.0f);
+        f208.corner.set(14.0f, 113.0f);
+        f208.extent.set(17.0f, 15.0f);
+        f224.corner.set(87.0f, 76.0f);
+        f224.extent.set(15.0f, 15.0f);
+        f240.corner.set(109.0f, 75.0f);
+        f240.extent.set(17.0f, 17.0f);
+        f256.corner.set(65.0f, 75.0f);
+        f256.extent.set(13.0f, 15.0f);
         f272.set(6.0f, 6.0f, 0.0f);
-        f284.f0.set(2.0f, 113.0f);
-        f284.f8.set(8.0f, 14.0f);
+        f284.corner.set(2.0f, 113.0f);
+        f284.extent.set(8.0f, 14.0f);
         f300.set(0.0f, 0.0f, 0.0f);
-        f80.f0.set(106.0f, 96.0f);
-        f80.f8.set(5.0f, 10.0f);
-        f64.f0.set(81.0f, 97.0f);
-        f64.f8.set(11.0f, 8.0f);
-        f312.f0.set(3.0f, 100.0f);
-        f312.f8.set(10.0f, 7.0f);
-        f328.f0.set(16.0f, 100.0f);
-        f328.f8.set(7.0f, 7.0f);
-        f344.f0.set(26.0f, 100.0f);
-        f344.f8.set(6.0f, 7.0f);
-        f360.f0.set(34.0f, 100.0f);
-        f360.f8.set(6.0f, 7.0f);
-        f376.f0.set(42.0f, 100.0f);
-        f376.f8.set(6.0f, 7.0f);
-        f392.f0.set(50.0f, 100.0f);
-        f392.f8.set(7.0f, 7.0f);
-        f408.f0.set(59.0f, 100.0f);
-        f408.f8.set(10.0f, 7.0f);
-        f424.f0.set(46.0f, 74.0f);
-        f424.f8.set(17.0f, 19.0f);
-        f440.f0.set(114.0f, 98.0f);
-        f440.f8.set(7.0f, 4.0f);
-        f456.f0.set(114.0f, 106.0f);
-        f456.f8.set(7.0f, 4.0f);
+        f80.corner.set(106.0f, 96.0f);
+        f80.extent.set(5.0f, 10.0f);
+        f64.corner.set(81.0f, 97.0f);
+        f64.extent.set(11.0f, 8.0f);
+        f312.corner.set(3.0f, 100.0f);
+        f312.extent.set(10.0f, 7.0f);
+        f328.corner.set(16.0f, 100.0f);
+        f328.extent.set(7.0f, 7.0f);
+        f344.corner.set(26.0f, 100.0f);
+        f344.extent.set(6.0f, 7.0f);
+        f360.corner.set(34.0f, 100.0f);
+        f360.extent.set(6.0f, 7.0f);
+        f376.corner.set(42.0f, 100.0f);
+        f376.extent.set(6.0f, 7.0f);
+        f392.corner.set(50.0f, 100.0f);
+        f392.extent.set(7.0f, 7.0f);
+        f408.corner.set(59.0f, 100.0f);
+        f408.extent.set(10.0f, 7.0f);
+        f424.corner.set(46.0f, 74.0f);
+        f424.extent.set(17.0f, 19.0f);
+        f440.corner.set(114.0f, 98.0f);
+        f440.extent.set(7.0f, 4.0f);
+        f456.corner.set(114.0f, 106.0f);
+        f456.extent.set(7.0f, 4.0f);
         f472 = 23.0f;
         f476 = 15.0f;
         f480 = 2.0f;
@@ -243,6 +243,6 @@ extern "C" void Gap__Viewer__igViewerGuiFactory__resetFields(GuiFactory *self) {
     igOnOffColorChanger_SetColor(self->_smallIconOnOffColor, 0, 0, 1, &g_viewerGuiStyle.disabledTextColor);
 }
 
-extern "C" int Gap__Viewer__igViewerGuiFactory__vfunc_22(void) {
+extern "C" int igViewerGuiFactory_GetMeta(void) {
     return g_igViewerGuiFactory_metaObject[0];
 }

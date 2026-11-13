@@ -2,7 +2,7 @@
 #include "dw4/igSmartPointer.h"
 
 extern "C" int FUN_00386030(void *arg0, int arg1, int arg2);
-extern "C" int FUN_00190ed0(void *, float, float, float);
+extern "C" int Matrix44_MakeEulerRotation(void *, float, float, float);
 extern "C" int Gap__Bec__beHitLandModel__vfunc_30(void);
 extern "C" void Gap__Bec__beHitLandModel__vfunc_31(void);
 extern "C" int Gap__Bec__beHitLandModel__vfunc_20(void);
@@ -18,7 +18,7 @@ extern "C" void ObjectList_AppendRetained(...);
 extern "C" void * Memory_GetAllocatorBySelector(...);
 extern "C" void * igObject_GetAllocator(...);
 extern "C" void *FUN_00388e60(void *arg0, void *arg1);
-extern "C" int FUN_0018d2b0(int, int, int);
+extern "C" int igRay_SetFromPoints(int, int, int);
 extern "C" int Gap__Bec__beHitLandModelOrder__vfunc_20(void);
 class DW4VC_96_1 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual int vX(int); };
 typedef struct { char vtable[4]; int refs; } RefCountedObject;
@@ -115,7 +115,7 @@ void Gap__Bec__beHitLandModel__vfunc_32(beHitLandModel *arg0) {
         arg0->_probe = 0;
     }
     arg0->_isHitWall = 1;
-    FUN_00190ed0((char *)arg0 + 0x30, 0.0f, 1.5707964f, 0.0f);
+    Matrix44_MakeEulerRotation((char *)arg0 + 0x30, 0.0f, 1.5707964f, 0.0f);
 }
 
 int Gap__Bec__beHitLandModel__vfunc_30(void)
@@ -368,7 +368,7 @@ void Gap__Bec__beHitLandModelOrder__vfunc_21(beHitLandModelOrder *self, int a1, 
         /* matching construct: the (void *)(long) cast fixes the argument evaluation order of the append */
         ObjectList_AppendRetained((void *)(long)self->_rayList, ray.p);
     }
-    FUN_0018d2b0(((int *)((igRayList *)self->_rayList)->_data)[self->_rayCount], a1, a2);
+    igRay_SetFromPoints(((int *)((igRayList *)self->_rayList)->_data)[self->_rayCount], a1, a2);
     self->_rayCount = self->_rayCount + 1;
 }
 

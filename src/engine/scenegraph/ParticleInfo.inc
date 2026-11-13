@@ -28,7 +28,7 @@ void FUN_001d6410(TraversedNode *collector, TraversedNode *node, void *path) {
             }
         }
         if (igObject_IsKindOf(node, g_igCamera_metaObject[0]) != 0) {
-            igSmartPointer<PathEntry> entry(((PathEntry *)FUN_0019f630(igObject_GetAllocator(collector))));
+            igSmartPointer<PathEntry> entry(((PathEntry *)igGraphPath_Create(igObject_GetAllocator(collector))));
             FUN_001c5740((U_1c5740 *)entry.p, (T_1c5740 *)path);
             ObjectList_AppendRetained(collector->children, entry.p);
         }
@@ -48,7 +48,7 @@ ObjectRefWord *FUN_001d6560(ObjectRefWord *self,int delete_storage) {
     return self;
 }
 
-void FUN_001d65e0(O_1d65e0 *self) {
+void igSceneInfo_CollectCameras(O_1d65e0 *self) {
     igObject *created = ((igObject *)FUN_0019f480(igObject_GetAllocator(self)));
     if (created != 0) {
         created->_refCount = created->_refCount + 1;
@@ -66,12 +66,12 @@ void FUN_001d65e0(O_1d65e0 *self) {
     if ((held->_refCount & 0x7FFFFF) == 0) {
         igObject_Destroy(held);
     }
-    igSmartPointer<igObject> second(((igObject *)FUN_0019f630(igObject_GetAllocator(self))));
+    igSmartPointer<igObject> second(((igObject *)igGraphPath_Create(igObject_GetAllocator(self))));
     FUN_001c5730((int *)(second.get()), self->f20);
     FUN_001d6410((TraversedNode *)self, (TraversedNode *)self->f20, (void *)(second.get()));
 }
 
-void FUN_001d6700(ChildOwner *self) {
+void igSceneInfo_ComputeAnimationRange(ChildOwner *self) {
     igSmartPointer<ChildObject> created(FUN_002c72c0(igObject_GetAllocator(self)));
     FUN_002d8620(created.get(), self->f20, 0, 0);
     FUN_001d6790((OO_1d6790 *)self, (AA *)(created.get()));
@@ -240,7 +240,7 @@ void FUN_001d6a70(void) {
   up.x = 0.0f; up.y = 1.0f; up.z = 0.0f;
   origin.x = 0.0f; origin.y = 0.0f; origin.z = 0.0f;
   eye.x = 0.0f; eye.y = 0.0f; eye.z = 5.0f;
-  FUN_00191b10((char *)DAT_005629b0[0] + 12, &eye, &origin, &up);
+  Matrix44_MakeLookAt((char *)DAT_005629b0[0] + 12, &eye, &origin, &up);
   {
     Ref_1d6a70 *o = scratch;
     if (o != 0) {
@@ -340,7 +340,7 @@ void FUN_001d7630(void *arg0, float *arg1) {
     v1[0] = t->p[0] + t->q[0];
     v1[1] = t->p[1] + t->q[1];
     v1[2] = t->p[2] + t->q[2];
-    FUN_00191b10(m1, t->p, v1, t->f72);
+    Matrix44_MakeLookAt(m1, t->p, v1, t->f72);
     if (t->f208 != 0) {
         FUN_00191860((void *)m2, t->f224, t->f220, t->f216, t->f212, t->f64, t->f68);
     } else {

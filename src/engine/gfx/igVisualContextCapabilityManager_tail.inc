@@ -8,7 +8,7 @@ void FUN_00164f50(igVisualContextCapabilityManager_164f50 *self)
     igObjectSlotView *p;
     int arg;
 
-    Gap__Core__igObject__vfunc_01(self);
+    Gap__Core__igObject__constructFields(self);
 
     p = g_pool_00560760[0];
     if (p != 0) {
@@ -133,7 +133,7 @@ void FUN_00165a80(VisualContextCapabilityManager *self) {
     ManagerList *list;
     int count;
 
-    Gap__Core__igObject__vfunc_07(self);
+    Gap__Core__igObject__userConstruct(self);
     if (DAT_00560758 == 0) {
         DAT_00560758 = (igTDataList<VisualContextCapabilityManager *> *)FUN_00149ea0((int)(Memory_GetAllocatorBySelector(DAT_00587038)));
     }
@@ -241,7 +241,7 @@ void FUN_00165d30(O_165d30 *arg0, unsigned int arg1, int arg2) {
     s1 = (char *)arg0->f80;
     for (i = 0; i < arg1; i++) {
         off = i << 6;
-        FUN_00191f30(&sp5C, s1, arg0->f84 + off);
+        Matrix44_Invert(&sp5C, s1, arg0->f84 + off);
         v[0] = 0;
         v[1] = 0;
         v[2] = 0;
@@ -301,7 +301,7 @@ void *FUN_00165e50(Self *self, Obj_165e50 *src) {
         buf = getAlloc(self)->v216(self->matCount << 6);
         for (i = 0; i < self->matCount; i++) {
             Mat *b = buf + i;
-            FUN_00191f30(&scratch, b, self->mats + i);
+            Matrix44_Invert(&scratch, b, self->mats + i);
             FUN_001903d0(b);
         }
         for (k = 0; k < n; k++) {
@@ -582,7 +582,7 @@ void FUN_001671a0(char * arg0, int arg1) {
 void FUN_001671b0(MatrixInverseCache *self, float *out) {
     if (self->inverseDirty) {
         igResult result;
-        FUN_00191f30(&result, self->inverse, self->matrix);
+        Matrix44_Invert(&result, self->inverse, self->matrix);
         self->inverseDirty = 0;
     }
     Matrix44_Copy(out, self->inverse);

@@ -1,0 +1,24 @@
+# igCriMovieCodec's virtual slots, the igObject field hooks they chain to, and the error report it calls.
+# igObject slot 1 is the hook igObject_ConstructFields calls after constructing the field values, slot 2
+# the hook igObject_DestructFieldValues calls before destructing them, slot 11 the hook
+# igObject_ResetFields calls after resetting them (the same slot as igViewerGuiFactory's resetFields).
+# The codec slots are named by what the movie manager and renderer call them for
+# (docs/engine/cri-movie-codec.md); 0x308320 is the level-1 ("ERROR") sibling of igReportNotice.
+# <va>	<name>	<module>
+0x002ff0b0	Gap__Core__igObject__constructFields	engine
+0x002ff0c0	Gap__Core__igObject__destructFields	engine
+0x002ff130	Gap__Core__igObject__resetFields	engine
+0x00325860	thunk_Gap__Core__igObject__constructFields	engine
+0x00308320	igReportError	engine
+0x00337920	igCriMovieCodec_InitializeDrawing	movie
+0x00337a50	igCriMovieCodec_ReleaseDrawing	movie
+0x00337b80	Gap__igCriMovieData__resetFields	movie
+0x00337bb0	Gap__igCriMovieCodec__constructFields	movie
+0x00337bf0	Gap__igCriMovieCodec__destructFields	movie
+0x00337c10	igCriMovieCodec_IsReusable	movie
+0x00338850	igCriMovieCodec_Close	movie
+0x00338920	igCriMovieCodec_Play	movie
+0x00338a00	igCriMovieCodec_Pause	movie
+0x00338ae0	igCriMovieCodec_SyncPauseState	movie
+0x00338e30	igCriMovieCodec_GetMeta	movie
+0x00338e40	igCriMovieData_GetMeta	movie

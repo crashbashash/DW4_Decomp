@@ -118,7 +118,7 @@ int FUN_00453830(beFontImage *arg0, int arg1) {
 }
 
 void Gap__Bec__beFontImage__vfunc_11(FontImage *self, int enable) {
-    Gap__Core__igObject__vfunc_11(self);
+    Gap__Core__igObject__resetFields(self);
     if (enable != 0) {
         ObjectList_AppendRetained((unsigned)self->layers, (void *)self->base);
         igSmartPointer<FillLayer> first((FillLayer *)igBlendStateAttr_CreateInstance(igObject_GetAllocator(self)));
@@ -154,7 +154,7 @@ void FUN_00453990(struct FontLayers_453990 *self, int index, struct FontLayerIte
     igModel_NotifyViews((S_4578c0 *)self, (S_4578c0 *)msg);
 }
 
-void FUN_00453a20(void *arg0, int arg1) {
+void igGuiComponent_AppendChild(void *arg0, int arg1) {
     FUN_00453980(*(int *)((char *)arg0 + 16), arg1);
 }
 

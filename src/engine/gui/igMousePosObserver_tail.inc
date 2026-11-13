@@ -21,8 +21,8 @@ void Gap__Gui__igMousePosObserver__vfunc_13(MousePosObserverView *self) {
     ObserverEventView *created;
     ObserverIntListView *list;
     int top;
-    Gap__Core__igObject__vfunc_11(self);
-    igSmartPointer<ObserverEventView> event(FUN_0019e680(igObject_GetAllocator(self)));
+    Gap__Core__igObject__resetFields(self);
+    igSmartPointer<ObserverEventView> event(igProbe_Create(igObject_GetAllocator(self)));
     created = event.get();
     ObjectList_AppendRetained(created->a, self->f20);
     list = created->list;
@@ -55,7 +55,7 @@ void Gap__Gui__igMousePosObserver__vfunc_24(igMousePosObserver *self, struct Gui
         FUN_00456050(self, model);
     } else if (type == DAT_0058c3f0[0]) {
         int result;
-        FUN_00191f30(&result, self->_inverseProjectionMatrix, model->_projectionMatrix);
+        Matrix44_Invert(&result, self->_inverseProjectionMatrix, model->_projectionMatrix);
     } else if (type == DAT_0058c3e0[0]) {
         igObject *under;
         int m[4];
@@ -79,7 +79,7 @@ void Gap__Gui__igMousePosObserver__vfunc_24(igMousePosObserver *self, struct Gui
         igModel_NotifyViews((S_4578c0 *)model, (S_4578c0 *)m);
     } else if (msg->handled == 0) {
         int result;
-        FUN_00191f30(&result, self->_inverseProjectionMatrix, model->_projectionMatrix);
+        Matrix44_Invert(&result, self->_inverseProjectionMatrix, model->_projectionMatrix);
     }
 }
 
@@ -100,8 +100,8 @@ void FUN_00455f50(Z *arg0, Y *arg1) {
     if (arg1->f20 <= arg0->f24) {
         arg0->f28 = 1;
         arg0->f24 = arg1->f20;
-        setPick(arg0, igSmartPointer<Obj_455f50>(FUN_0019f630(igObject_GetAllocator(arg0))));
-        FUN_001c5790(arg0->f32, s1);
+        setPick(arg0, igSmartPointer<Obj_455f50>(igGraphPath_Create(igObject_GetAllocator(arg0))));
+        igGraphPath_SetNodes(arg0->f32, s1);
     }
 }
 
@@ -114,13 +114,13 @@ void FUN_00456050(igMousePosObserver *a, igGuiSystemModel *b) {
     if (b->_rootComponent != 0) {
         float x, y;
         igObject *t;
-        FUN_001ce970((void *)a->_intersectTraversal);
+        igIntersectTraversal_ResetStacks((void *)a->_intersectTraversal);
         x = ((float *)b->_mousePosition)[0];
         y = ((float *)b->_mousePosition)[1];
         v2[0] = x; v2[1] = y; v2[2] = -10.0f;
         v1[0] = x; v1[1] = y; v1[2] = 10.0f;
-        FUN_0018d2b0((void *)a->_ray, v2, v1);
-        FUN_0018d360((void *)a->_ray, &a->_inverseProjectionMatrix);
+        igRay_SetFromPoints((void *)a->_ray, v2, v1);
+        igRay_Transform((void *)a->_ray, &a->_inverseProjectionMatrix);
         a->_impactLength = ((igRay *)a->_ray)->_len;
         a->_hit = 0;
         t = (igObject *)a->_hitPath;

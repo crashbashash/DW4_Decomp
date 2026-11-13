@@ -2,7 +2,7 @@ void Gap__Gui__igGuiSystemModel__vfunc_13(int arg0, int arg1) {
     int args[4];
     float vec[3];
 
-    Gap__Core__igObject__vfunc_11();
+    Gap__Core__igObject__resetFields();
     if (arg1 != 0) {
         igMatrix44f_SetIdentity(arg0 + 0x20);
         vec[0] = 0.375f;

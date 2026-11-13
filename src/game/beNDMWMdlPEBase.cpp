@@ -7,7 +7,7 @@
 extern "C" int igInsightCore_FindManager(int, int);
 extern "C" int igObject_GetAllocator(void *);
 extern "C" int Memory_GetAllocatorBySelector(int);
-extern "C" int Gap__Core__igObject__vfunc_08__002ff0f0(beNDMWMdlPEBaseInfoWork *);
+extern "C" int Gap__Core__igObject__userDestruct(beNDMWMdlPEBaseInfoWork *);
 extern "C" int beMessenger_SendNamed(...);
 extern "C" int beMessenger_SelectGroup(...);
 extern "C" int beMessenger_SelectReceivers(...);
@@ -1009,7 +1009,7 @@ void beNDMWMdlPEBaseInfoWork__Destroy(beNDMWMdlPEBaseInfoWork *self) {
         IG_OBJECT_RELEASE(list);
         self->_isFirstList = 0;
     }
-    Gap__Core__igObject__vfunc_08__002ff0f0(self);
+    Gap__Core__igObject__userDestruct(self);
 }
 
 int beNDMWMdlPEBaseInfoWork_IsPoisoned(beNDMWMdlPEBaseInfoWork *self)

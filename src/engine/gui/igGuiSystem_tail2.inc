@@ -175,12 +175,12 @@ int Gap__Gui__igGuiSystem__vfunc_26(void) {
     return 0;
 }
 
-void FUN_004573c0(int arg0, int arg1, int arg2) {
-    FUN_004573f0((AttrEntryOwner *)arg0, arg1, 32, (igObject *)arg2);
+void igHotKeyEventReceiver_AddKey(int arg0, int arg1, int arg2) {
+    igHotKeyEventReceiver_AddBinding((AttrEntryOwner *)arg0, arg1, 32, (igObject *)arg2);
 }
 
-void FUN_004573d0(int arg0, int arg1, int arg2) {
-    FUN_004573f0((AttrEntryOwner *)arg0, 0, arg1, (igObject *)arg2);
+void igHotKeyEventReceiver_AddButton(int arg0, int arg1, int arg2) {
+    igHotKeyEventReceiver_AddBinding((AttrEntryOwner *)arg0, 0, arg1, (igObject *)arg2);
 }
 
 static inline void assign(igObject **slot, igObject *value) {
@@ -198,7 +198,7 @@ static inline void assign(igObject **slot, igObject *value) {
     *slot = value;
 }
 
-void FUN_004573f0(AttrEntryOwner *owner, int a, int b, igObject *value) {
+void igHotKeyEventReceiver_AddBinding(AttrEntryOwner *owner, int a, int b, igObject *value) {
     igSmartPointer<Entry> entry((Entry *)FUN_0044dc20(igObject_GetAllocator(owner)));
     entry->a = a;
     entry->b = b;

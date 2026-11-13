@@ -647,7 +647,7 @@
 00116d20 00006c sceCdSyncS
 00116d90 000170 FUN_00116d90
 00116f00 0000b0 FUN_00116f00
-00116fb0 0002e0 FUN_00116fb0
+00116fb0 0002e0 sceCdInit
 00117290 0001f8 FUN_00117290
 00117488 000204 FUN_00117488
 00117690 0001e0 sceCdRead
@@ -3730,8 +3730,8 @@
 0018d260 000008 FUN_0018d260
 0018d270 000008 FUN_0018d270
 0018d280 00002c FUN_0018d280
-0018d2b0 0000b0 FUN_0018d2b0
-0018d360 000114 FUN_0018d360
+0018d2b0 0000b0 igRay_SetFromPoints
+0018d360 000114 igRay_Transform
 0018d480 0001a4 FUN_0018d480
 0018d630 0000cc FUN_0018d630
 0018d700 0000ac FUN_0018d700
@@ -3846,10 +3846,10 @@
 00190cb0 0000c4 FUN_00190cb0
 00190d80 0000c4 FUN_00190d80
 00190e50 000078 FUN_00190e50
-00190ed0 000078 FUN_00190ed0
+00190ed0 000078 Matrix44_MakeEulerRotation
 00190f50 00016c FUN_00190f50
 001910c0 000164 FUN_001910c0
-00191230 00043c FUN_00191230
+00191230 00043c Matrix44_GetEulerAngles
 00191670 000034 FUN_00191670
 001916b0 000038 FUN_001916b0
 001916f0 000078 FUN_001916f0
@@ -3857,9 +3857,9 @@
 00191860 0000a8 FUN_00191860
 00191910 0000b4 FUN_00191910
 001919d0 000138 igMatrix44f_MakePerspective
-00191b10 000318 FUN_00191b10
-00191e30 0000fc FUN_00191e30
-00191f30 0000fc FUN_00191f30
+00191b10 000318 Matrix44_MakeLookAt
+00191e30 0000fc Matrix44_InvertOrthonormal
+00191f30 0000fc Matrix44_Invert
 00192030 00025c Matrix44_Adjugate
 00192290 0000d0 FUN_00192290
 00192360 0000d0 FUN_00192360
@@ -4389,7 +4389,7 @@
 0019e4f0 00014c igIntersectTraversal_InitFields
 0019e640 000028 FUN_0019e640
 0019e670 000008 thunk_FUN_001ce740
-0019e680 000034 FUN_0019e680
+0019e680 000034 igProbe_Create
 0019e6c0 000048 FUN_0019e6c0
 0019e710 000048 igProbe_GetMetaObject
 0019e760 000124 igProbe_GetVTable
@@ -4430,7 +4430,7 @@
 0019f5a0 00000c FUN_0019f5a0
 0019f5b0 00006c igGraphPathList_Register
 0019f620 000008 thunk_igGraphPathList_GetMetaObject
-0019f630 000034 FUN_0019f630
+0019f630 000034 igGraphPath_Create
 0019f670 000048 FUN_0019f670
 0019f6c0 000048 igGraphPath_GetMetaObject
 0019f710 00008c igGraphPath_GetVTable
@@ -5000,7 +5000,7 @@
 001b1aa0 00024c FUN_001b1aa0
 001b1cf0 0000d0 igBitMask_SetAll
 001b1dc0 000090 igBitMask_ClearAll
-001b1e50 00014c FUN_001b1e50
+001b1e50 00014c igBitMask_SetBitCount
 001b1fa0 00022c FUN_001b1fa0
 001b21d0 0001d8 FUN_001b21d0
 001b23b0 000028 FUN_001b23b0
@@ -5234,7 +5234,7 @@
 001c5660 0000c8 FUN_001c5660
 001c5730 000008 FUN_001c5730
 001c5740 00004c FUN_001c5740
-001c5790 0000e0 FUN_001c5790
+001c5790 0000e0 igGraphPath_SetNodes
 001c5870 00004c FUN_001c5870
 001c58c0 0000c4 FUN_001c58c0
 001c5990 000020 igGraphPath_GetTail
@@ -5242,12 +5242,12 @@
 001c59e0 00000c FUN_001c59e0
 001c59f0 000124 FUN_001c59f0
 001c5b20 00000c Gap__Sg__igNode__vfunc_22 Gap::Sg::igNode::vfunc_22
-001c5b30 000050 FUN_001c5b30
+001c5b30 000050 igGraphPath_GetTransform
 001c5b80 000190 FUN_001c5b80
 001c5d10 000058 igGroup_AppendChild
 001c5d70 0000a4 FUN_001c5d70
 001c5e20 000088 FUN_001c5e20
-001c5eb0 000198 FUN_001c5eb0
+001c5eb0 000198 igGroup_RemoveChildAt
 001c6050 0000c0 igGroup_RemoveChild
 001c6110 000120 FUN_001c6110
 001c6230 000030 FUN_001c6230
@@ -5298,7 +5298,7 @@
 001ce740 00004c FUN_001ce740
 001ce790 0000fc FUN_001ce790
 001ce890 0000d4 Gap__Bec__beHitLandModelTraversal__vfunc_11 Gap::Bec::beHitLandModelTraversal::vfunc_11
-001ce970 000114 FUN_001ce970
+001ce970 000114 igIntersectTraversal_ResetStacks
 001cea90 000008 Gap__Bec__beHitLandModelTraversal__vfunc_21 Gap::Bec::beHitLandModelTraversal::vfunc_21
 001ceaa0 000008 Gap__Bec__beHitLandModelTraversal__vfunc_22 Gap::Bec::beHitLandModelTraversal::vfunc_22
 001ceab0 0004bc FUN_001ceab0
@@ -5378,8 +5378,8 @@
 001d63c0 000050 Gap__Bec__ParticleInfo__vfunc_22 Gap::Bec::ParticleInfo::vfunc_22
 001d6410 000144 FUN_001d6410
 001d6560 000080 FUN_001d6560
-001d65e0 000114 FUN_001d65e0
-001d6700 000084 FUN_001d6700
+001d65e0 000114 igSceneInfo_CollectCameras
+001d6700 000084 igSceneInfo_ComputeAnimationRange
 001d6790 000144 FUN_001d6790
 001d68e0 000008 FUN_001d68e0
 001d68f0 000008 FUN_001d68f0
@@ -6899,7 +6899,7 @@
 00236e20 000054 FUN_00236e20
 00236e80 000060 FUN_00236e80
 00236ee0 000048 igInsightCore_AddRenderer
-00236f30 000050 FUN_00236f30
+00236f30 000050 igInsightCore_RemoveRenderer
 00236f80 000090 igInsightCore_FindManager
 00237010 00000c FUN_00237010
 00237020 000008 igInsightCore_AddRendererOrder
@@ -6931,7 +6931,7 @@
 002380c0 000008 Gap__Insight__igSerialScheduler__vfunc_27 Gap::Insight::igSerialScheduler::vfunc_27
 002380d0 00002c Gap__Insight__igSerialScheduler__vfunc_28 Gap::Insight::igSerialScheduler::vfunc_28
 00238100 000008 Gap__Insight__igSerialScheduler__vfunc_29 Gap::Insight::igSerialScheduler::vfunc_29
-00238110 0001c8 FUN_00238110
+00238110 0001c8 ViewerOptions_Construct
 002382e0 000804 FUN_002382e0
 00238af0 00000c Gap__Insight__igSerialScheduler__vfunc_22 Gap::Insight::igSerialScheduler::vfunc_22
 00238b00 00000c Gap__Insight__igFilterMessageDispatcher__vfunc_22 Gap::Insight::igFilterMessageDispatcher::vfunc_22
@@ -7868,7 +7868,7 @@
 00260d00 000048 FUN_00260d00
 00260d48 00001c FUN_00260d48
 00260d68 00007c FUN_00260d68
-00260de8 000028 FUN_00260de8
+00260de8 000028 ADXF_LoadPartitionNw
 00260e10 000028 FUN_00260e10
 00260e38 000028 FUN_00260e38
 00260e60 000028 FUN_00260e60
@@ -7879,7 +7879,7 @@
 00260f88 00028c FUN_00260f88
 00261218 000040 adxf_CloseLdptnwHn
 00261258 000068 FUN_00261258
-002612c0 000014 FUN_002612c0
+002612c0 000014 ADXF_GetPtStatEx
 002612d8 00042c ADXF_GetPtStat
 00261708 000018 FUN_00261708
 00261720 000058 FUN_00261720
@@ -7940,7 +7940,7 @@
 00263250 000030 FUN_00263250
 00263280 000020 FUN_00263280
 002632a0 000020 FUN_002632a0
-002632c0 00018c FUN_002632c0
+002632c0 00018c ADXT_Init
 00263450 00001c FUN_00263450
 00263470 0000d8 ADXT_Finish
 00263548 0001fc FUN_00263548
@@ -9030,9 +9030,9 @@
 00280b70 00000c FUN_00280b70
 00280b80 00000c FUN_00280b80
 00280b90 000008 FUN_00280b90
-00280b98 000188 FUN_00280b98
-00280d20 000024 FUN_00280d20
-00280d48 0000ec FUN_00280d48
+00280b98 000188 SNDF_Init
+00280d20 000024 SNDF_Finish
+00280d48 0000ec SNDF_Start
 00280e38 0000d4 FUN_00280e38
 00280f10 000050 FUN_00280f10
 00280f60 0000b4 FUN_00280f60
@@ -9063,7 +9063,7 @@
 00281cf8 000084 FUN_00281cf8
 00281d80 00006c FUN_00281d80
 00281df0 000244 FUN_00281df0
-00282038 0003b4 FUN_00282038
+00282038 0003b4 SNDF_ExecServer
 002823f0 00009c sndf_SendMessage
 00282490 0000a4 FUN_00282490
 00282538 0000a8 FUN_00282538
@@ -10912,7 +10912,7 @@
 002b9470 00000c FUN_002b9470
 002b9480 00006c igStringObjList_Register
 002b94f0 000008 thunk_igStringObjList_GetMetaObject
-002b9500 000034 FUN_002b9500
+002b9500 000034 igStringObj_Create
 002b9540 000048 FUN_002b9540
 002b9590 000048 igStringObj_GetMetaObject
 002b95e0 00003c igStringObj_GetVTable
@@ -12849,15 +12849,15 @@
 002fef70 0000a0 igObject_CopyConstructHeader
 002ff010 00008c igObject_ConstructHeader
 002ff0a0 000008 Gap__Core__igObject__vfunc_00__002ff0a0 Gap::Core::igObject::vfunc_00
-002ff0b0 000008 Gap__Core__igObject__vfunc_01 Gap::Core::igObject::vfunc_01
-002ff0c0 000008 Gap__Core__igObject__vfunc_02 Gap::Core::igObject::vfunc_02
+002ff0b0 000008 Gap__Core__igObject__constructFields
+002ff0c0 000008 Gap__Core__igObject__destructFields
 002ff0d0 000008 Gap__Core__igObject__vfunc_03 Gap::Core::igObject::vfunc_03
-002ff0e0 000008 Gap__Core__igObject__vfunc_07 Gap::Core::igObject::vfunc_07
-002ff0f0 000008 Gap__Core__igObject__vfunc_08__002ff0f0 Gap::Core::igObject::vfunc_08
+002ff0e0 000008 Gap__Core__igObject__userConstruct Gap::Core::igObject::userConstruct
+002ff0f0 000008 Gap__Core__igObject__userDestruct Gap::Core::igObject::userDestruct
 002ff100 000008 Gap__Core__igObject__vfunc_04 Gap::Core::igObject::vfunc_04
 002ff110 000008 Gap__Core__igObject__vfunc_05 Gap::Core::igObject::vfunc_05
 002ff120 000008 Gap__Core__igObject__vfunc_06 Gap::Core::igObject::vfunc_06
-002ff130 000008 Gap__Core__igObject__vfunc_11 Gap::Core::igObject::vfunc_11
+002ff130 000008 Gap__Core__igObject__resetFields
 002ff140 000008 Gap__Core__igObject__vfunc_09 Gap::Core::igObject::vfunc_09
 002ff150 000008 Gap__Core__igObject__vfunc_10 Gap::Core::igObject::vfunc_10
 002ff160 000008 Gap__Core__igObject__vfunc_12 Gap::Core::igObject::vfunc_12
@@ -13075,7 +13075,7 @@
 003081d0 000068 igReportNotice
 00308240 000068 FUN_00308240
 003082b0 000068 FUN_003082b0
-00308320 000068 FUN_00308320
+00308320 000068 igReportError
 00308390 000068 FUN_00308390
 00308400 000138 FUN_00308400
 00308540 000074 FUN_00308540
@@ -13147,7 +13147,7 @@
 0030b420 000038 igStringObj_Clear
 0030b460 000160 igStringObj_Insert
 0030b5c0 000028 igStringObj_ToLower
-0030b5f0 00003c FUN_0030b5f0
+0030b5f0 00003c igStringObj_ToInt
 0030b630 00003c igStringObj_ToFloat
 0030b670 0000a8 FUN_0030b670
 0030b720 000010 FUN_0030b720
@@ -13458,7 +13458,7 @@
 003257d0 00003c FUN_003257d0
 00325810 00003c FUN_00325810
 00325850 000008 Gap__Core__igPageMemoryPool__vfunc_02 Gap::Core::igPageMemoryPool::vfunc_02
-00325860 000008 thunk_Gap__Core__igObject__vfunc_01
+00325860 000008 thunk_Gap__Core__igObject__constructFields
 00325870 000084 Gap__Core__igPageMemoryPool__vfunc_04 Gap::Core::igPageMemoryPool::vfunc_04
 00325900 000040 Gap__Core__igPageMemoryPool__vfunc_13 Gap::Core::igPageMemoryPool::vfunc_13
 00325940 0001c8 Gap__Core__igPageMemoryPool__vfunc_45 Gap::Core::igPageMemoryPool::vfunc_45
@@ -13669,7 +13669,7 @@
 0032c930 000188 Gap__Core__igPsx2Folder__vfunc_26 Gap::Core::igPsx2Folder::vfunc_26
 0032cac0 000088 FUN_0032cac0
 0032cb50 000400 FUN_0032cb50
-0032cf50 00001c FUN_0032cf50
+0032cf50 00001c igPsx2_LoadIopModule
 0032cf70 000100 FUN_0032cf70
 0032d070 000008 FUN_0032d070
 0032d080 000170 FUN_0032d080
@@ -14022,7 +14022,7 @@
 00331fb0 000118 igAdxAudio_Initialize
 003320d0 000088 igAdxAudio_CreateHandle
 00332160 000088 igAdxAudio_StartMemory
-003321f0 0000a0 FUN_003321f0
+003321f0 0000a0 igAdxAudio_CreateHandleAndStartFile
 00332290 0000a4 igAdxAudio_StartFile
 00332340 00002c igAdxAudio_Stop
 00332370 00002c igAdxAudio_Pause
@@ -14031,31 +14031,31 @@
 00332430 00002c igAdxAudio_SetOutVolume
 00332460 000030 igAdxAudio_GetOutVolume
 00332490 000030 igAdxAudio_GetStatus
-003324c0 000070 FUN_003324c0
-00332530 000120 FUN_00332530
-00332650 00001c Gap__igAdx__vfunc_01 Gap::igAdx::vfunc_01
-00332670 000094 Gap__igAdx__vfunc_11 Gap::igAdx::vfunc_11
-00332710 000040 Gap__igAdx__vfunc_07 Gap::igAdx::vfunc_07
-00332750 00000c Gap__igAdx__vfunc_20 Gap::igAdx::vfunc_20
-00332760 000008 Gap__igAdx__vfunc_02 Gap::igAdx::vfunc_02
-00332770 000040 Gap__igAdx__vfunc_08 Gap::igAdx::vfunc_08
-003327b0 000008 FUN_003327b0
+003324c0 000070 igAdx_CreateScratchString
+00332530 000120 igAdx_Shutdown
+00332650 00001c Gap__igAdx__constructFields Gap::igAdx::constructFields
+00332670 000094 Gap__igAdx__resetFields Gap::igAdx::resetFields
+00332710 000040 Gap__igAdx__userConstruct Gap::igAdx::userConstruct
+00332750 00000c Gap__igAdx__getMeta Gap::igAdx::getMeta
+00332760 000008 Gap__igAdx__destructFields Gap::igAdx::destructFields
+00332770 000040 Gap__igAdx__userDestruct Gap::igAdx::userDestruct
+003327b0 000008 igAdx_ErrorCallback
 003327c0 00004c igAdx_SetModulePath
-00332810 00004c FUN_00332810
-00332860 0003e0 FUN_00332860
-00332c40 000008 FUN_00332c40
-00332c50 000078 FUN_00332c50
-00332cd0 00001c FUN_00332cd0
+00332810 00004c igAdx_SetHostRootPath
+00332860 0003e0 igAdx_SetupIop
+00332c40 000008 igAdx_SetupOptional
+00332c50 000078 igAdx_Initialize
+00332cd0 00001c igAdx_ExecVsync
 00332cf0 000024 igAdx_ExecServer
 00332d20 00016c igAdx_SetPartitionCount
 00332e90 00039c igAdx_AddPartitionName
 00333230 000080 igAdx_SetInsideFiles
 003332b0 000184 igAdx_LoadPartition
-00333440 0001f0 FUN_00333440
-00333630 000124 FUN_00333630
+00333440 0001f0 igAdx_FindAfsFile
+00333630 000124 igAdxAfsFile_GetPath
 00333760 000080 FUN_00333760
-003337e0 000008 FUN_003337e0
-003337f0 000008 FUN_003337f0
+003337e0 000008 igAdxFile_StaticInitialize
+003337f0 000008 igAdxFile_StaticFinalize
 00333800 00001c Gap__igAdxFile__vfunc_01 Gap::igAdxFile::vfunc_01
 00333820 000038 Gap__igAdxFile__vfunc_11 Gap::igAdxFile::vfunc_11
 00333860 000060 Gap__igAdxFile__vfunc_07 Gap::igAdxFile::vfunc_07
@@ -14237,26 +14237,26 @@
 00337600 000024 Gif_SetTrxdir
 00337630 0002a4 CriMovie_BuildTileUpload
 003378e0 00003c CriMovie_BuildFrameUpload
-00337920 000124 Gap__igCriMovieCodec__vfunc_28 Gap::igCriMovieCodec::vfunc_28
-00337a50 00004c Gap__igCriMovieCodec__vfunc_29 Gap::igCriMovieCodec::vfunc_29
+00337920 000124 igCriMovieCodec_InitializeDrawing
+00337a50 00004c igCriMovieCodec_ReleaseDrawing
 00337aa0 0000e0 CriMovie_SubmitFrame
-00337b80 000030 Gap__igCriMovieData__vfunc_11 Gap::igCriMovieData::vfunc_11
-00337bb0 00003c Gap__igCriMovieCodec__vfunc_01 Gap::igCriMovieCodec::vfunc_01
-00337bf0 00001c Gap__igCriMovieCodec__vfunc_02 Gap::igCriMovieCodec::vfunc_02
-00337c10 000008 Gap__igCriMovieCodec__vfunc_21 Gap::igCriMovieCodec::vfunc_21
+00337b80 000030 Gap__igCriMovieData__resetFields
+00337bb0 00003c Gap__igCriMovieCodec__constructFields
+00337bf0 00001c Gap__igCriMovieCodec__destructFields
+00337c10 000008 igCriMovieCodec_IsReusable
 00337c20 0001d0 Gap__igCriMovieCodec__vfunc_22 Gap::igCriMovieCodec::vfunc_22
 00337df0 0009e0 Gap__igCriMovieCodec__vfunc_23 Gap::igCriMovieCodec::vfunc_23
 003387d0 000080 CriMovie_DestroyObjectRef
-00338850 0000cc Gap__igCriMovieCodec__vfunc_24 Gap::igCriMovieCodec::vfunc_24
-00338920 0000d4 Gap__igCriMovieCodec__vfunc_25 Gap::igCriMovieCodec::vfunc_25
-00338a00 0000e0 Gap__igCriMovieCodec__vfunc_26 Gap::igCriMovieCodec::vfunc_26
-00338ae0 000118 Gap__igCriMovieCodec__vfunc_30 Gap::igCriMovieCodec::vfunc_30
+00338850 0000cc igCriMovieCodec_Close
+00338920 0000d4 igCriMovieCodec_Play
+00338a00 0000e0 igCriMovieCodec_Pause
+00338ae0 000118 igCriMovieCodec_SyncPauseState
 00338c00 000158 igCriMovieCodec_Update
 00338d60 000038 CriMovie_Allocate
 00338da0 000048 CriMovie_AllocateAligned
 00338df0 000038 CriMovie_Free
-00338e30 00000c Gap__igCriMovieCodec__vfunc_20 Gap::igCriMovieCodec::vfunc_20
-00338e40 00000c Gap__igCriMovieData__vfunc_20 Gap::igCriMovieData::vfunc_20
+00338e30 00000c igCriMovieCodec_GetMeta
+00338e40 00000c igCriMovieData_GetMeta
 00338e50 000080 FUN_00338e50
 00338ed0 000008 Gap__igMovieCodec__vfunc_21 Gap::igMovieCodec::vfunc_21
 00338ee0 000008 Gap__igMovieCodec__vfunc_22 Gap::igMovieCodec::vfunc_22
@@ -19953,7 +19953,7 @@
 00453860 000120 Gap__Bec__beFontImage__vfunc_11 Gap::Bec::beFontImage::vfunc_11
 00453980 000010 FUN_00453980
 00453990 000088 FUN_00453990
-00453a20 000008 FUN_00453a20
+00453a20 000008 igGuiComponent_AppendChild
 00453a30 00000c Gap__Gui__igColorChanger__vfunc_23 Gap::Gui::igColorChanger::vfunc_23
 00453a40 000074 igBasicColorChanger_SetColor
 00453ac0 000048 Gap__Gui__igBasicColorChanger__vfunc_23 Gap::Gui::igBasicColorChanger::vfunc_23
@@ -19969,7 +19969,7 @@
 00454180 000064 FUN_00454180
 004541f0 000098 FUN_004541f0
 00454290 00000c igEventDispatcher_AddReceiver
-004542a0 000028 FUN_004542a0
+004542a0 000028 igEventDispatcher_RemoveReceiver
 004542d0 000008 igEventDispatcher_AddReceiverOrder
 004542e0 00002c FUN_004542e0
 00454310 0001c0 Gap__Gui__igEventDispatcher__vfunc_26 Gap::Gui::igEventDispatcher::vfunc_26
@@ -20036,8 +20036,8 @@
 00456670 0000b4 Gap__Gui__igGuiSystemRenderer__vfunc_25 Gap::Gui::igGuiSystemRenderer::vfunc_25
 00456730 000050 Gap__Gui__igGuiSystemRenderer__vfunc_26 Gap::Gui::igGuiSystemRenderer::vfunc_26
 00456780 000240 Gap__Gui__igGuiSystem__vfunc_13 Gap::Gui::igGuiSystem::vfunc_13
-004569c0 000098 FUN_004569c0
-00456a60 000120 FUN_00456a60
+004569c0 000098 igGuiSystem_SetMouseCursorVisible
+00456a60 000120 igGuiSystem_SetMouseCursor
 00456b80 00009c FUN_00456b80
 00456c20 000098 FUN_00456c20
 00456cc0 00014c igGuiSystem_SetRootComponent
@@ -20052,9 +20052,9 @@
 00457220 000078 Gap__Gui__igGuiSystem__vfunc_25 Gap::Gui::igGuiSystem::vfunc_25
 004572a0 000110 Gap__Gui__igGuiSystem__vfunc_27 Gap::Gui::igGuiSystem::vfunc_27
 004573b0 000008 Gap__Gui__igGuiSystem__vfunc_26 Gap::Gui::igGuiSystem::vfunc_26
-004573c0 00000c FUN_004573c0
-004573d0 000014 FUN_004573d0
-004573f0 0000f4 FUN_004573f0
+004573c0 00000c igHotKeyEventReceiver_AddKey
+004573d0 000014 igHotKeyEventReceiver_AddButton
+004573f0 0000f4 igHotKeyEventReceiver_AddBinding
 004574f0 0000dc FUN_004574f0
 004575d0 000078 Gap__Gui__igHotKeyEventReceiver__vfunc_23 Gap::Gui::igHotKeyEventReceiver::vfunc_23
 00457650 000078 Gap__Gui__igHotKeyEventReceiver__vfunc_27 Gap::Gui::igHotKeyEventReceiver::vfunc_27
@@ -20073,7 +20073,7 @@
 00457de0 000018 Gap__Gui__igClearRenderer__vfunc_26 Gap::Gui::igClearRenderer::vfunc_26
 00457e00 000008 Gap__Gui__igTextElement__vfunc_23 Gap::Gui::igTextElement::vfunc_23
 00457e10 000074 Gap__Gui__igTextElement__vfunc_24 Gap::Gui::igTextElement::vfunc_24
-00457e90 000054 FUN_00457e90
+00457e90 000054 igView_SetModel
 00457ef0 00003c Gap__Bec__beCameraMode__vfunc_08 Gap::Bec::beCameraMode::vfunc_08
 00457f30 00000c Gap__Gui__igTextElement__vfunc_22 Gap::Gui::igTextElement::vfunc_22
 00457f40 00000c Gap__Gui__igClearRenderer__vfunc_22 Gap::Gui::igClearRenderer::vfunc_22
@@ -20280,7 +20280,7 @@
 0045bfb0 000074 igViewerDataPumpManager_Register
 0045c030 000008 thunk_igViewerDataPumpManager_GetMetaObject
 0045c040 000130 FUN_0045c040
-0045c170 000034 FUN_0045c170
+0045c170 000034 igPickMode_Create
 0045c1b0 00004c igPickMode_GetMetaObject
 0045c200 00012c igPickMode_GetVTable
 0045c330 00000c FUN_0045c330
@@ -20288,21 +20288,21 @@
 0045c3c0 000008 thunk_igPickMode_GetMetaObject
 0045c3d0 000168 igPickMode_InitFields
 0045c540 000054 FUN_0045c540
-0045c5a0 000034 FUN_0045c5a0
+0045c5a0 000034 igRotateMode_Create
 0045c5e0 00004c igRotateMode_GetMetaObject
 0045c630 000050 igRotateMode_GetVTable
 0045c680 00000c FUN_0045c680
 0045c690 00006c igRotateMode_Register
 0045c700 000008 thunk_igRotateMode_GetMetaObject
 0045c710 0001c8 igRotateMode_InitFields
-0045c8e0 000034 FUN_0045c8e0
+0045c8e0 000034 igFlyMode_Create
 0045c920 00004c igFlyMode_GetMetaObject
 0045c970 0000a4 igFlyMode_GetVTable
 0045ca20 00000c FUN_0045ca20
 0045ca30 000074 igFlyMode_Register
 0045cab0 000008 thunk_igFlyMode_GetMetaObject
 0045cac0 00017c igFlyMode_InitFields
-0045cc40 000034 FUN_0045cc40
+0045cc40 000034 igCameraMode_Create
 0045cc80 00004c igCameraMode_GetMetaObject
 0045ccd0 0000f0 igCameraMode_GetVTable
 0045cdc0 00000c FUN_0045cdc0
@@ -20394,7 +20394,7 @@
 0045ec90 000110 igViewerGuiFactory_CreateAction
 0045eda0 000028 igViewerGuiFactory_CreateEmpty
 0045edd0 0003f4 Gap__Viewer__igViewerGuiFactory__resetFields
-0045f1d0 00000c Gap__Viewer__igViewerGuiFactory__vfunc_22 Gap::Viewer::igViewerGuiFactory::vfunc_22
+0045f1d0 00000c igViewerGuiFactory_GetMeta
 0045f1e0 00000c igVec2f_Set
 0045f1f0 000008 igVec2f_Construct
 0045f200 0000a4 FUN_0045f200
@@ -20403,16 +20403,16 @@
 0045f430 00025c Gap__Viewer__igViewerRenderer__vfunc_25 Gap::Viewer::igViewerRenderer::vfunc_25
 0045f690 0000f0 Gap__Viewer__igViewerRenderer__vfunc_23 Gap::Viewer::igViewerRenderer::vfunc_23
 0045f780 0001ac Gap__Viewer__igViewerRenderer__Render Gap::Viewer::igViewerRenderer::Render
-0045f930 000440 FUN_0045f930
+0045f930 000440 igViewerRenderer_ApplyOptions
 0045fd70 000450 Gap__Viewer__igViewerRenderer__vfunc_13 Gap::Viewer::igViewerRenderer::vfunc_13
 004601c0 00001c FUN_004601c0
-004601e0 00007c FUN_004601e0
-00460260 000060 FUN_00460260
-004602c0 000068 FUN_004602c0
-00460330 000460 FUN_00460330
+004601e0 00007c igViewerRenderer_UpdateProjection
+00460260 000060 igViewerRenderer_UpdateViewMatrix
+004602c0 000068 igViewerRenderer_UpdateSorting
+00460330 000460 igViewerRenderer_UpdateScene
 00460790 000110 FUN_00460790
-004608a0 00021c FUN_004608a0
-00460ac0 000114 FUN_00460ac0
+004608a0 00021c igViewerRenderer_UpdateLighting
+00460ac0 000114 igViewerRenderer_UpdateRenderStates
 00460be0 000098 FUN_00460be0
 00460c80 00010c FUN_00460c80
 00460d90 000070 FUN_00460d90
@@ -20420,47 +20420,47 @@
 00460f20 000044 FUN_00460f20
 00460f70 00000c Gap__Viewer__igViewerRenderer__vfunc_22 Gap::Viewer::igViewerRenderer::vfunc_22
 00460f80 000008 Gap__Viewer__igViewerRenderer__vfunc_24 Gap::Viewer::igViewerRenderer::vfunc_24
-00460f90 000308 Gap__Viewer__igViewerSceneInfoManagerController__vfunc_24 Gap::Viewer::igViewerSceneInfoManagerController::vfunc_24
-004612a0 000008 FUN_004612a0
-004612b0 0001f8 FUN_004612b0
-004614b0 0007b8 Gap__Viewer__igViewerSceneInfoManager__vfunc_13 Gap::Viewer::igViewerSceneInfoManager::vfunc_13
+00460f90 000308 Gap__Viewer__igViewerSceneInfoManagerController__OnModelChange Gap::Viewer::igViewerSceneInfoManagerController::OnModelChange
+004612a0 000008 igViewerSceneInfoManager_OnPlaybackChanged
+004612b0 0001f8 igViewerSceneInfoManager_UpdateTime
+004614b0 0007b8 Gap__Viewer__igViewerSceneInfoManager__resetFields Gap::Viewer::igViewerSceneInfoManager::resetFields
 00461c70 000418 Gap__Viewer__igViewerSceneInfoManager__Activate Gap::Viewer::igViewerSceneInfoManager::Activate
-00462090 00006c Gap__Viewer__igViewerSceneInfoManager__vfunc_24 Gap::Viewer::igViewerSceneInfoManager::vfunc_24
-00462100 0000fc FUN_00462100
-00462200 000040 FUN_00462200
-00462240 000058 Gap__Viewer__igViewerSceneInfoManager__vfunc_29 Gap::Viewer::igViewerSceneInfoManager::vfunc_29
-004622a0 0003c4 Gap__Viewer__igViewerSceneInfoManager__vfunc_28 Gap::Viewer::igViewerSceneInfoManager::vfunc_28
-00462670 000350 Gap__Viewer__igViewerSceneInfoManager__vfunc_27 Gap::Viewer::igViewerSceneInfoManager::vfunc_27
+00462090 00006c Gap__Viewer__igViewerSceneInfoManager__Deactivate Gap::Viewer::igViewerSceneInfoManager::Deactivate
+00462100 0000fc igViewerSceneInfoManager_HasGeometry
+00462200 000040 igViewerSceneInfoManager_CheckClipping
+00462240 000058 Gap__Viewer__igViewerSceneInfoManager__Update Gap::Viewer::igViewerSceneInfoManager::Update
+004622a0 0003c4 Gap__Viewer__igViewerSceneInfoManager__RemoveAllInfo Gap::Viewer::igViewerSceneInfoManager::RemoveAllInfo
+00462670 000350 Gap__Viewer__igViewerSceneInfoManager__AddInfo Gap::Viewer::igViewerSceneInfoManager::AddInfo
 004629c0 000050 igViewerSceneInfoManager_HideGui
-00462a10 00000c FUN_00462a10
-00462a20 00000c FUN_00462a20
-00462a30 00000c FUN_00462a30
-00462a40 000008 FUN_00462a40
-00462a50 000070 FUN_00462a50
-00462ac0 000224 FUN_00462ac0
-00462cf0 000008 FUN_00462cf0
-00462d00 000008 FUN_00462d00
-00462d10 000008 FUN_00462d10
+00462a10 00000c igViewerSceneInfoManager_RemoveNormalsRenderer
+00462a20 00000c igViewerSceneInfoManager_RemoveBoundingBoxRenderer
+00462a30 00000c igViewerSceneInfoManager_RemoveFlushRenderer
+00462a40 000008 igViewerSceneInfoManager_OnSelectionChanged
+00462a50 000070 igViewerSceneInfoManager_HomeView
+00462ac0 000224 igViewerSceneInfoManager_ResetView
+00462cf0 000008 igViewerSceneInfoManager_OnButton1
+00462d00 000008 igViewerSceneInfoManager_OnButton2
+00462d10 000008 igViewerSceneInfoManager_OnSceneClipped
 00462d20 000008 igViewerSceneInfoManager_DebugZoomOut
-00462d30 000044 FUN_00462d30
-00462d80 000040 FUN_00462d80
+00462d30 000044 igViewerSceneInfoManager_Play
+00462d80 000040 igViewerSceneInfoManager_Pause
 00462dc0 000044 igViewerSceneInfoManager_ResetOperationMode
-00462e10 000008 FUN_00462e10
-00462e20 000008 FUN_00462e20
-00462e30 000008 FUN_00462e30
-00462e40 000008 FUN_00462e40
-00462e50 000008 FUN_00462e50
-00462e60 00000c FUN_00462e60
-00462e70 000008 FUN_00462e70
-00462e80 000008 FUN_00462e80
-00462e90 000108 FUN_00462e90
-00462fa0 000008 FUN_00462fa0
-00462fb0 000418 FUN_00462fb0
+00462e10 000008 igViewerSceneInfoManager_OnHotKeyT
+00462e20 000008 igViewerSceneInfoManager_OnHotKeyP
+00462e30 000008 igViewerSceneInfoManager_OnHotKeyM
+00462e40 000008 igViewerSceneInfoManager_OnHotKeyW
+00462e50 000008 igViewerSceneInfoManager_OnGuiShown
+00462e60 00000c igViewerSceneInfoManager_CenterSelection
+00462e70 000008 igViewerSceneInfoManager_FitSelection
+00462e80 000008 igViewerSceneInfoManager_PrintViewMatrix
+00462e90 000108 igViewerSceneInfoManager_CycleGuiVisibility
+00462fa0 000008 igViewerSceneInfoManager_OnDisablesChanged
+00462fb0 000418 igViewerSceneInfoManager_ApplyOperationMode
 004633d0 000008 Gap__Viewer__igViewerSceneInfoManager__vfunc_25 Gap::Viewer::igViewerSceneInfoManager::vfunc_25
 004633e0 000008 Gap__Viewer__igViewerSceneInfoManager__vfunc_26 Gap::Viewer::igViewerSceneInfoManager::vfunc_26
 004633f0 000008 igViewerSceneInfoManager_OnActivate
-00463400 000008 FUN_00463400
-00463410 000038 Gap__Viewer__igViewerAction__vfunc_23 Gap::Viewer::igViewerAction::vfunc_23
+00463400 000008 igViewerSceneInfoManager_OnCamerasChanged
+00463410 000038 Gap__Viewer__igViewerAction__Execute Gap::Viewer::igViewerAction::Execute
 00463450 00000c Gap__Viewer__igViewerAction__vfunc_22 Gap::Viewer::igViewerAction::vfunc_22
 00463460 00000c Gap__Viewer__igViewerSceneInfoManager__vfunc_22 Gap::Viewer::igViewerSceneInfoManager::vfunc_22
 00463470 00000c Gap__Viewer__igViewerSceneInfoManagerController__vfunc_22 Gap::Viewer::igViewerSceneInfoManagerController::vfunc_22
@@ -20484,34 +20484,34 @@
 00463bc0 0000b0 FUN_00463bc0
 00463c70 000008 FUN_00463c70
 00463c80 000008 FUN_00463c80
-00463c90 000334 FUN_00463c90
+00463c90 000334 igViewManager_SynchronizeParameters
 00463fd0 0000a4 igViewManager_SetViewMode
-00464080 000074 FUN_00464080
+00464080 000074 igViewManager_SetFrameTime
 00464100 000008 FUN_00464100
-00464110 000054 FUN_00464110
+00464110 000054 igViewManager_SetSceneUpVector
 00464170 000200 FUN_00464170
 00464370 00002c Gap__Viewer__igViewManager__vfunc_23 Gap::Viewer::igViewManager::vfunc_23
-004643a0 000194 FUN_004643a0
-00464540 000214 FUN_00464540
-00464760 00014c FUN_00464760
-004648b0 0001d4 FUN_004648b0
+004643a0 000194 igViewManager_FrameObject
+00464540 000214 igViewManager_ApplyOptions
+00464760 00014c igViewManager_CenterSelection
+004648b0 0001d4 igViewManager_FitSelection
 00464a90 00002c Gap__Viewer__igViewManager__vfunc_24 Gap::Viewer::igViewManager::vfunc_24
 00464ac0 00002c Gap__Viewer__igViewManager__vfunc_25 Gap::Viewer::igViewManager::vfunc_25
 00464af0 000078 FUN_00464af0
 00464b70 00005c Gap__Viewer__igViewManager__vfunc_26 Gap::Viewer::igViewManager::vfunc_26
 00464bd0 00002c Gap__Viewer__igViewManager__vfunc_27 Gap::Viewer::igViewManager::vfunc_27
 00464c00 000058 Gap__Viewer__igViewManager__vfunc_32 Gap::Viewer::igViewManager::vfunc_32
-00464c60 000310 FUN_00464c60
+00464c60 000310 igViewManager_PrintViewMatrix
 00464f70 00000c Gap__Viewer__igViewManager__vfunc_13 Gap::Viewer::igViewManager::vfunc_13
 00464f80 00000c Gap__Viewer__igViewManager__vfunc_22 Gap::Viewer::igViewManager::vfunc_22
 00464f90 000010 Gap__Bec__beCameraMode__vfunc_21 Gap::Bec::beCameraMode::vfunc_21
 00464fa0 0000e0 Gap__Bec__beCameraMode__vfunc_22 Gap::Bec::beCameraMode::vfunc_22
 00465080 000008 FUN_00465080
 00465090 000008 FUN_00465090
-004650a0 000028 FUN_004650a0
-004650d0 000108 FUN_004650d0
-004651e0 00007c FUN_004651e0
-00465260 000114 FUN_00465260
+004650a0 000028 igViewMode_UpdateInverseMatrix
+004650d0 000108 igViewMode_UpdateModelVectors
+004651e0 00007c igViewMode_UpdateViewMatrix
+00465260 000114 igCameraMode_SetCameraPath
 00465380 000034 FUN_00465380
 004653c0 00010c FUN_004653c0
 004654d0 0000cc FUN_004654d0
@@ -20519,10 +20519,10 @@
 004657b0 0000bc FUN_004657b0
 00465870 00000c FUN_00465870
 00465880 000038 FUN_00465880
-004658c0 000008 FUN_004658c0
-004658d0 000170 FUN_004658d0
-00465a40 00014c FUN_00465a40
-00465b90 00012c FUN_00465b90
+004658c0 000008 igFlyMode_AimingChanged
+004658d0 000170 igFlyMode_ApplyTranslation
+00465a40 00014c igFlyMode_ApplyRotation
+00465b90 00012c igFlyMode_ApplyAim
 00465cc0 000080 FUN_00465cc0
 00465d40 00007c FUN_00465d40
 00465dc0 00002c FUN_00465dc0
@@ -20534,20 +20534,20 @@
 004661e0 000038 FUN_004661e0
 00466220 00009c FUN_00466220
 004662c0 000314 FUN_004662c0
-004665e0 000030 FUN_004665e0
+004665e0 000030 igPickMode_HitProc
 00466610 0000a4 Gap__Viewer__igPickMode__MoveCursor Gap::Viewer::igPickMode::MoveCursor
 004666c0 000020 FUN_004666c0
 004666e0 0000b4 FUN_004666e0
 004667a0 00002c FUN_004667a0
 004667d0 000200 FUN_004667d0
 004669d0 000040 FUN_004669d0
-00466a10 000108 FUN_00466a10
-00466b20 000190 FUN_00466b20
-00466cb0 00000c FUN_00466cb0
-00466cc0 00000c FUN_00466cc0
-00466cd0 00000c FUN_00466cd0
-00466ce0 00000c FUN_00466ce0
-00466cf0 00000c FUN_00466cf0
+00466a10 000108 igPickMode_RecordHit
+00466b20 000190 igPickMode_Pick
+00466cb0 00000c igPickMode_GetMeta
+00466cc0 00000c igRotateMode_GetMeta
+00466cd0 00000c igFlyMode_GetMeta
+00466ce0 00000c igCameraMode_GetMeta
+00466cf0 00000c igViewMode_GetMeta
 00466d00 0000ec Gap__Viewer__igActorManager__vfunc_25 Gap::Viewer::igActorManager::vfunc_25
 00466df0 000008 Gap__Viewer__igActorManager__vfunc_26 Gap::Viewer::igActorManager::vfunc_26
 00466e00 00000c Gap__Viewer__igActorManager__vfunc_23 Gap::Viewer::igActorManager::vfunc_23

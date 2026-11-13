@@ -4,7 +4,7 @@ struct KeyValuePairList { int vt; int rc; int count; int cap; KeyValuePair **dat
 struct RefHolderObject { int vt; unsigned int _refCount; };
 extern "C" {
 void *igObject_GetAllocator(void *);
-RefHolderObject *FUN_002b9500(void *);
+RefHolderObject *igStringObj_Create(void *);
 void FUN_00306770(void *, void *, char *, RefHolderObject **, int *, int);
 void FUN_00307700(void *, void *, char *, char *);
 void igObject_Destroy(void *);
@@ -24,7 +24,7 @@ void FUN_002db1d0(void *self, KeyValuePairList *list, void *a, void *b) {
     int i;
     KeyValuePair *p;
     char *v;
-    RefHolderObject *tmp = FUN_002b9500(igObject_GetAllocator(self));
+    RefHolderObject *tmp = igStringObj_Create(igObject_GetAllocator(self));
     for (i = 0; i < list->count; i++) {
         p = list->data[i];
         k = p->key->text;

@@ -5,14 +5,14 @@
 extern "C" {
 
 int FUN_002377c0(...);
-int FUN_00462ac0(...);
+int igViewerSceneInfoManager_ResetView(...);
 int FUN_002370c0(...);
 
 int __dl__FPv(...);
 
 extern "C" int igInsightCore_RemoveManager(void *, void *);
 
-int FUN_00236f30(...);
+int igInsightCore_RemoveRenderer(...);
 
 
 int FUN_00236ca0(int);
@@ -40,7 +40,7 @@ struct S {
 };
 extern "C" void FUN_00237730(igInsightCore *);
 
-int FUN_00457e90(...);
+int igView_SetModel(...);
 
 typedef struct R { int w0; int refs; } R;
 typedef struct S2 { char pad[8]; R *obj; int f12; } S2;
@@ -51,7 +51,7 @@ public:
     virtual void setSeconds(float seconds);
 };
 struct ViewerViewManager { int _vtable; unsigned int _refCount; ViewerClock *clock; };
-void FUN_00464080(ViewerViewManager *manager, long long frameTime);
+void igViewManager_SetFrameTime(ViewerViewManager *manager, long long frameTime);
 
 int igModel_NotifyViews(...);
 
@@ -61,7 +61,7 @@ int Gap__Viewer__igViewManager__vfunc_23(void *arg0);
 class DW4VC_100_0 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual int vX(); };
 
 int __nw__FUi(...);
-int FUN_00238110(...);
+int ViewerOptions_Construct(...);
 int FUN_00464170(...);
 int StringChunk_ReleaseHeader(...);
 
@@ -104,7 +104,7 @@ extern int DAT_0058cd40;
 extern int g_igViewManager_metaObject[4];
 int FUN_003082b0(...);
 void igMatrix44f_SetIdentity(float *);
-int FUN_00191f30(int *, float *, float *);
+int Matrix44_Invert(int *, float *, float *);
 extern unsigned char GPR_00554e7c;
 extern unsigned char GPR_00554e80;
 class V { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void vX(int, int, float, float); };
@@ -160,7 +160,7 @@ ViewerSetup::ViewerSetup(igObject *w)
         c->window = next;
         if (DAT_0056dc50[0] == 0) {
             Frame *f = (Frame *)__nw__FUi(240);
-            if (f != 0) f = (Frame *)FUN_00238110(f);
+            if (f != 0) f = (Frame *)ViewerOptions_Construct(f);
             DAT_0056dc50[0] = f;
         }
         DAT_0056dc50[0]->f232 = DAT_0056dc50[0]->f232 + 1;
@@ -201,7 +201,7 @@ ViewerSetup::~ViewerSetup() {
         igInsightCore_RemoveManager(core.p, actors.p);
         igInsightCore_RemoveManager(core.p, sceneInfo.p);
         if (showLogo != 0) {
-            FUN_00236f30(core.p, logo.p);
+            igInsightCore_RemoveRenderer(core.p, logo.p);
         }
     }
 }
@@ -229,7 +229,7 @@ extern "C" int FUN_00463bc0(S *s) {
         igInsightCore *t = s->a;
         long long v = t->_currentTime;
         if (v > 4000000000LL) {
-            FUN_00236f30(t, s->b20);
+            igInsightCore_RemoveRenderer(t, s->b20);
             s->f16 = 0;
         } else {
             s->b20->ll16 = v;
@@ -244,7 +244,7 @@ extern "C" int FUN_00463bc0(S *s) {
 
 int FUN_00463c70(int *p)
 {
-    return FUN_00462ac0(*(int *)((char *)p + 4));
+    return igViewerSceneInfoManager_ResetView(*(int *)((char *)p + 4));
 }
 
 int FUN_00463c80(int *p)
@@ -258,7 +258,7 @@ void igViewManager_SetViewMode(S2 *arg0, R *arg1) {
 
     temp_a0 = arg0->obj;
     if (temp_a0 != 0) {
-        FUN_00457e90(temp_a0, 0);
+        igView_SetModel(temp_a0, 0);
     }
     if (arg1 != 0) {
         arg1->refs = arg1->refs + 1;
@@ -272,11 +272,11 @@ void igViewManager_SetViewMode(S2 *arg0, R *arg1) {
     }
     arg0->obj = arg1;
     if (arg1 != 0) {
-        FUN_00457e90(arg1, arg0->f12);
+        igView_SetModel(arg1, arg0->f12);
     }
 }
 
-void FUN_00464080(ViewerViewManager *manager, long long frameTime) {
+void igViewManager_SetFrameTime(ViewerViewManager *manager, long long frameTime) {
     int units = frameTime / 0x40000; manager->clock->setSeconds(262144.0f * (1e-9f * units));
 }
 
@@ -284,7 +284,7 @@ void FUN_00464100(void) {
 
 }
 
-void FUN_00464110(void *arg0, void *arg1) {
+void igViewManager_SetSceneUpVector(void *arg0, void *arg1) {
     int buf[3];
     void *temp_v1;
 
@@ -306,7 +306,7 @@ int Gap__Viewer__igViewManager__vfunc_23(void *arg0) {
     return 1;
 }
 
-void FUN_00464540(Arg *arg0, int arg1) {
+void igViewManager_ApplyOptions(Arg *arg0, int arg1) {
     int sp60[3];
     float sp6C;
     Rec r1;
@@ -320,7 +320,7 @@ void FUN_00464540(Arg *arg0, int arg1) {
     FUN_00464170(arg1, sp60, &sp6C, 1, -1);
     if (DAT_0056dc50[0] == 0) {
         f = (Frame *)__nw__FUi(240);
-        if (f != 0) f = (Frame *)FUN_00238110(f);
+        if (f != 0) f = (Frame *)ViewerOptions_Construct(f);
         DAT_0056dc50[0] = f;
     }
     DAT_0056dc50[0]->f232 = DAT_0056dc50[0]->f232 + 1;
@@ -448,7 +448,7 @@ int Gap__Viewer__igViewManager__vfunc_32(igViewManager *self, int width, int hei
     return 0;
 }
 
-void FUN_00464c60(igViewManager *self) {
+void igViewManager_PrintViewMatrix(igViewManager *self) {
     float inverse[16];
     int status;
     float *m;
@@ -462,7 +462,7 @@ void FUN_00464c60(igViewManager *self) {
         if (r != 1 && r == 2) GPR_00554e7c = 1;
     }
     igMatrix44f_SetIdentity(inverse);
-    FUN_00191f30(&status, inverse, ((igViewModel *)self->_viewModel)->_viewMatrix);
+    Matrix44_Invert(&status, inverse, ((igViewModel *)self->_viewModel)->_viewMatrix);
     m = inverse;
     if (GPR_00554e80 == 0) {
         r = FUN_003082b0("current inverse view matrix :\n%.8f,\t%.8f,\t%.8f,\t%.8f,\n%.8f,\t%.8f,\t%.8f,\t%.8f,\n%.8f,\t%.8f,\t%.8f,\t%.8f,\n%.8f,\t%.8f,\t%.8f,\t%.8f\n",
@@ -472,7 +472,7 @@ void FUN_00464c60(igViewManager *self) {
     }
 }
 
-void Gap__Viewer__igViewManager__vfunc_13(int *a) { FUN_00457e90(a[2], a[3]); }
+void Gap__Viewer__igViewManager__vfunc_13(int *a) { igView_SetModel(a[2], a[3]); }
 
 int Gap__Viewer__igViewManager__vfunc_22(void) {
     return g_igViewManager_metaObject[0];

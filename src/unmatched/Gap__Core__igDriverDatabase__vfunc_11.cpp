@@ -1,7 +1,7 @@
 #include "dw4/reflected.h"
 extern "C" {
 void igObject_Destroy(igObject *);
-igObject *FUN_002b9500(int);
+igObject *igStringObj_Create(int);
 int FUN_00306e50(...);
 int Gap__Core__igObject__vfunc_09(...);
 int ObjectList_ResizeRetained(...);
@@ -47,7 +47,7 @@ extern "C" void Gap__Core__igDriverDatabase__vfunc_11(igDriverDatabase *database
     ObjectList_ResizeRetained(database->_subPropertyValues, 13);
     i = 0;
     do { {
-        PropertyRef property(FUN_002b9500(igObject_GetAllocator(database)));
+        PropertyRef property(igStringObj_Create(igObject_GetAllocator(database)));
         setAt(database, i, property);
         } i++;
     } while (i < 13);

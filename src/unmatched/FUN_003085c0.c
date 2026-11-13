@@ -1,4 +1,4 @@
-void *FUN_002b9500();
+void *igStringObj_Create();
 int FUN_002f8a20();
 int FUN_00306770();
 int FUN_00306e50();
@@ -46,7 +46,7 @@ void FUN_003085c0(void) {
     cur = DAT_00586dc8->cur;
     if (cur != 0) {
         FUN_00306e50(cur, 2, DAT_004fb350, &GPR_005549b0, 1, 0);
-        name = FUN_002b9500(allocator());
+        name = igStringObj_Create(allocator());
         if (FUN_00306770(cur, 2, DAT_004fb360, &name, DAT_004f7910, 0) != 0) {
             t = text(name);
             if (strcmp(t, DAT_004fb378) == 0) {

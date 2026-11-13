@@ -21,7 +21,7 @@ extern char DAT_004f9a78[];
 extern char *DAT_004c22f0;
 FolderAllocator *Memory_GetAllocatorBySelector(int);
 char *FUN_002ed5a0(char *, FolderAllocator *);
-FolderObject *FUN_002b9500(FolderAllocator *);
+FolderObject *igStringObj_Create(FolderAllocator *);
 int FUN_00306770(char *, int, char *, void *, char *, int);
 void FUN_0032cac0(FolderObject *);
 unsigned int strlen(const char *);
@@ -61,7 +61,7 @@ char *FUN_0032cb50(char *name, int kind) {
         FolderObjectRef path;
         char *dirs[3];
         char *key;
-        path.obj = FUN_002b9500(currentAllocator());
+        path.obj = igStringObj_Create(currentAllocator());
         if (kind == 1) {
             key = DAT_004ffbf8;
         } else {

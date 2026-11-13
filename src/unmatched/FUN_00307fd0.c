@@ -1,5 +1,5 @@
 int sscanf();
-void *FUN_002b9500();
+void *igStringObj_Create();
 void *FUN_002baff0();
 int FUN_00305d30();
 int FUN_003061c0();
@@ -38,7 +38,7 @@ if (open != '"' && open != '<') return; if ((open == '"' && close != '"') || (op
         DAT_005871c0 += 1;
         *(IniIncludeObject **)&include = FUN_002baff0(igObject_GetAllocator(self));
         found = 0;
-        *(IniIncludeText **)&dir = FUN_002b9500(igObject_GetAllocator(self));
+        *(IniIncludeText **)&dir = igStringObj_Create(igObject_GetAllocator(self));
         igStringObj_Set(dir, file->dir);
         FUN_0030b980(dir);
         if (dir->length != 0) {

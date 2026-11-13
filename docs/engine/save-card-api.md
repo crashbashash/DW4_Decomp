@@ -53,5 +53,4 @@ and `_size`; `beSaveMemoryObj_Allocate` (optionally aligned, zero-filled) and
   is not identified.
 - `g_svSlotAbsent` is the value written for every connection before presence flags are copied;
   it is 0 in the image and nothing in this unit writes it.
-- `FUN_0032cf50` loads an IOP module (`mcman.irx`, `mcserv.irx`); its name belongs to the units that
-  define it.
+- `igPsx2_LoadIopModule` loads an IOP module (`mcman.irx`, `mcserv.irx`).

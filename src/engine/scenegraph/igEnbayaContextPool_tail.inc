@@ -9,11 +9,11 @@ void Gap__Sg__igEnbayaContextPool__vfunc_13(int arg0) {
     int sp54;
     int var_v0;
 
-    Gap__Core__igObject__vfunc_11();
+    Gap__Core__igObject__resetFields();
     temp_s2 = *(int *)((char *)(g_objectSystem[0]) + 56);
     var_v0 = igObject_GetAllocator(arg0);
     var_v0 = g_useOwnerAllocator != 0 ? var_v0 : Memory_GetAllocatorBySelector(g_temporaryAllocatorSelector[0]);
-    sp5C = (void *)(FUN_002b9500(var_v0));
+    sp5C = (void *)(igStringObj_Create(var_v0));
     temp_s0 = FUN_003064b0(temp_s2, 7);
     var_s1 = 0;
     while (var_s1 < temp_s0) {
@@ -64,7 +64,7 @@ void Gap__Sg__igEnbayaContextPool__vfunc_04(Obj_1c1450 *arg0) {
             al->vX(x);
         }
     }
-    Gap__Core__igObject__vfunc_02(arg0);
+    Gap__Core__igObject__destructFields(arg0);
 }
 
 int FUN_001c1560(T_1c1560 *arg0, int arg1) {

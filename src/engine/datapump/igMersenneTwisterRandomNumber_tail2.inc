@@ -3,7 +3,7 @@ void Gap__igMersenneTwisterRandomNumber__vfunc_23(igMersenneTwisterRandomNumber 
 }
 
 void Gap__igMersenneTwisterRandomNumber__vfunc_13(void **arg0) {
-    Gap__Core__igObject__vfunc_11();
+    Gap__Core__igObject__resetFields();
     ((DW4VC_92_1 *)(arg0))->vX((int)(0x141E));
 }
 
@@ -51,7 +51,7 @@ int FUN_001e6de0(int *result, Vector3f *value, int *format) {
     int name;
     int res;
     int pool;
-    igSmartPointer<FormattedObject> formatted((FormattedObject *)FUN_002b9500(0), AdoptReference());
+    igSmartPointer<FormattedObject> formatted((FormattedObject *)igStringObj_Create(0), AdoptReference());
     int x = fptodp(value->x);
     int y = fptodp(value->y);
     FUN_0030b7e0(formatted.p, format, x, y, fptodp(value->z));
@@ -81,7 +81,7 @@ int FUN_001e6f10(int *result, Quad *quad, int *kind) {
     int res;
     int obj;
     Tag tag = Tag();
-    igSmartPointer<QuadNamed> named((QuadNamed *)FUN_002b9500(0));
+    igSmartPointer<QuadNamed> named((QuadNamed *)igStringObj_Create(0));
     s3 = fptodp(quad->x);
     s2 = fptodp(quad->y);
     s1 = fptodp(quad->z);

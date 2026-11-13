@@ -408,12 +408,12 @@ class DW4VC_220_0 { public: virtual void d0(); virtual void d1(); virtual void d
 void FUN_002f4250(void **arg0);
 
 
-extern "C" int Gap__Core__igObject__vfunc_11(...);
+extern "C" int Gap__Core__igObject__resetFields(...);
 extern "C" void FUN_002f42e0(void **arg0, int arg1);
 void FUN_002f42e0(void **arg0, int arg1);
 
 
-extern "C" int Gap__Core__igObject__vfunc_02(...);
+extern "C" int Gap__Core__igObject__destructFields(...);
 extern "C" void FUN_002f4340(void **arg0);
 void FUN_002f4340(void **arg0);
 

@@ -56,7 +56,7 @@ static inline FolderAllocator *currentAllocator(void) {
     return ((FolderAllocator *)Memory_GetAllocatorBySelector(g_memoryContextTemporary));
 }
 
-int FUN_0032cf50(int a, int b, int c, int d, int e) {
+int igPsx2_LoadIopModule(int a, int b, int c, int d, int e) {
     int sp1C;
     return FUN_0032cf70((int *)a, b, c, d, e, &sp1C);
 }
@@ -102,7 +102,7 @@ void FUN_0032d080(void) {
     if (DAT_00587340[0] != 0) {
         sceSifInitRpc(0);
         if (DAT_00587338[0] != 0) {
-            FUN_00116fb0(0);
+            sceCdInit(0);
         }
         if (DAT_00587348[0] != 0) {
             while (sceSifLoadModule(DAT_00587348[0], 0, 0) < 0) {
@@ -122,10 +122,10 @@ void FUN_0032d080(void) {
         sceFsReset();
         v = DAT_00587338[0];
         if (v == 1 || v == 0) {
-            FUN_00116fb0(0);
+            sceCdInit(0);
             sceCdMmode(1);
         } else if (v == 2) {
-            FUN_00116fb0(0);
+            sceCdInit(0);
             sceCdMmode(2);
         }
         sceSifInitCmd();

@@ -754,7 +754,7 @@ struct igVec3f2 {
     void subtractInto(float *out, const float *o) const { out[0] = x - o[0]; out[1] = y - o[1]; out[2] = z - o[2]; }
 };
 
-void FUN_0018d360(igRay *ray, const void *matrix);
+void igRay_Transform(igRay *ray, const void *matrix);
 Intersection FUN_0018d9b0(igSphere *sphere, void *other);
 void FUN_0018dd20(struct S4 *p, struct S4 *q);
 void thunk_FUN_0018d630(void);

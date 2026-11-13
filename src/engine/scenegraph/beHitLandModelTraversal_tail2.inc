@@ -38,7 +38,7 @@ void Gap__Bec__beHitLandModelTraversal__vfunc_11(beHitLandModelTraversal *arg0) 
     igObject *s0;
     igObject *old;
 
-    Gap__Core__igObject__vfunc_11();
+    Gap__Core__igObject__resetFields();
     FUN_0018f760(&sp3C, igObject_GetAllocator(arg0));
     s0 = sp3C;
     if (s0 != 0) {
@@ -58,10 +58,10 @@ void Gap__Bec__beHitLandModelTraversal__vfunc_11(beHitLandModelTraversal *arg0) 
             igObject_Destroy((void *)sp3C);
         }
     }
-    FUN_001ce970((TraversalMatrixState *)arg0);
+    igIntersectTraversal_ResetStacks((TraversalMatrixState *)arg0);
 }
 
-void FUN_001ce970(TraversalMatrixState *self) {
+void igIntersectTraversal_ResetStacks(TraversalMatrixState *self) {
     ReleasableList *o;
     int cnt;
     int idx;

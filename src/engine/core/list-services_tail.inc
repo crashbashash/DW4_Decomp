@@ -60,7 +60,7 @@ static inline int find(ObjectListView *l, ObjectListItem **vp, int i) {
 
 static inline void release_302000(ObjectListItem *o) { if (o != 0) { o->_refCount = o->_refCount - 1; if (((unsigned long long)((long long)o->_refCount << 0x29) >> 0x29) == 0) { igObject_Destroy(o); } } }
 
-igResult_302000 ObjectList_RemoveFirstRetained(ObjectListView *self, ObjectListItem *value, int start, int extra3) {
+igResult ObjectList_RemoveFirstRetained(ObjectListView *self, ObjectListItem *value, int start, int extra3) {
     ObjectListItem *v;
     int i;
     *(ObjectListItem **)&v = value;

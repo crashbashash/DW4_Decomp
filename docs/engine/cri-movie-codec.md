@@ -12,21 +12,30 @@ ADXT, and copies each decoded frame into the GS frame buffer. Each open movie ke
 
 ## Slots
 
-The `igMovieCodec` base returns 0 from every slot from 21 to 29; the codec overrides them.
+The `igMovieCodec` base returns 0 from every slot from 21 to 29; the codec overrides them. Slots 1, 2 and 11 are
+igObject's field hooks: `igObject_ConstructFields` calls slot 1 (`constructFields`) once the field values are
+constructed, `igObject_DestructFieldValues` calls slot 2 (`destructFields`) before destructing them, and
+`igObject_ResetFields` calls slot 11 (`resetFields`) after resetting them. The codec slots are named by their
+callers: the movie manager keeps a codec for reuse when slot 21 says so and opens, starts, pauses and closes
+movies through slots 23–26; `igMovieRenderer_InitializeDrawing` hands each movie and its visual context to
+slot 28, and the renderer's slots 24 and 22 run slot 27 and slot 29 on every movie.
 
 | slot | function | what it does |
 | --- | --- | --- |
-| 1 | `Gap__igCriMovieCodec__vfunc_01` | after the `igObject` step, installs `CriMovie_Allocate` / `CriMovie_Free` with the codec as context through `MWSFD_SetMallocFunc`, so MWSFD's work areas come from the codec's pool |
-| 21 | `Gap__igCriMovieCodec__vfunc_21` | returns 1; the manager keeps a codec in its list only when this slot says so |
+| 1 | `Gap__igCriMovieCodec__constructFields` | after igObject's hook, installs `CriMovie_Allocate` / `CriMovie_Free` with the codec as context through `MWSFD_SetMallocFunc`, so MWSFD's work areas come from the codec's pool |
+| 2 | `Gap__igCriMovieCodec__destructFields` | igObject's hook only |
+| 11 | `Gap__igCriMovieData__resetFields` | `igCriMovieData`'s: after igObject's hook, clears `_mwply`, `_adxt` and `_macroFunction` |
+| 20 | `igCriMovieCodec_GetMeta` / `igCriMovieData_GetMeta` | the class's meta object |
+| 21 | `igCriMovieCodec_IsReusable` | returns 1; the manager keeps a codec in its list, for later movies naming the same codec, only when this slot says so |
 | 22 | `Gap__igCriMovieCodec__vfunc_22` | not matched; calls `mwPlyInitSfdFx` |
 | 23 | `Gap__igCriMovieCodec__vfunc_23` | not matched; opens a movie: creates the ADXT or MWPLY handle and its `igCriMovieData` |
-| 24 | `Gap__igCriMovieCodec__vfunc_24` | closes a movie: stops and destroys the ADXT handle if there is one, destroys the MWPLY handle, frees both work areas through `CriMovie_Free` and clears the fields |
-| 25 | `Gap__igCriMovieCodec__vfunc_25` | resumes: sets `_state` to 0, then releases the ADXT pause (`ADXT_GetStatPause` / `ADXT_Pause`) or the MWPLY pause (`mwPlyIsPause`, then the handle's pause entry) |
-| 26 | `Gap__igCriMovieCodec__vfunc_26` | pauses: stores the requested `_state`, then pauses whichever player is running |
+| 24 | `igCriMovieCodec_Close` | closes a movie: stops and destroys the ADXT handle if there is one, destroys the MWPLY handle, frees both work areas through `CriMovie_Free` and clears the fields |
+| 25 | `igCriMovieCodec_Play` | starts or resumes: sets `_state` to 0, then releases the ADXT pause (`ADXT_GetStatPause` / `ADXT_Pause`) or the MWPLY pause (`mwPlyIsPause`, then the handle's pause entry) |
+| 26 | `igCriMovieCodec_Pause` | stores the requested `_state`, then pauses whichever player is running |
 | 27 | `igCriMovieCodec_Update` | per-frame update (`mwPlyGetCurFrm` / `mwPlyRelCurFrm`) |
-| 28 | `Gap__igCriMovieCodec__vfunc_28` | allocates the upload packet for the movie's size and takes a reference to the `igPsx2VisualContext` it is sent through |
-| 29 | `Gap__igCriMovieCodec__vfunc_29` | frees the upload packet |
-| 30 | `Gap__igCriMovieCodec__vfunc_30` | reconciles the player with `_state`: a movie marked paused whose player runs goes through slot 26, a movie marked playing whose player is paused through slot 25 |
+| 28 | `igCriMovieCodec_InitializeDrawing` | allocates the upload packet for the movie's size and takes a reference to the `igPsx2VisualContext` it is sent through |
+| 29 | `igCriMovieCodec_ReleaseDrawing` | frees the upload packet |
+| 30 | `igCriMovieCodec_SyncPauseState` | reconciles the player with `_state`: a movie marked paused whose player runs goes through slot 26, a movie marked playing whose player is paused through slot 25 |
 
 `igMovieInfo::_type` 2 selects the ADXT path; `_state` 1 is paused and 0 playing. Both pools (the packet's and
 the work areas') are the codec's own when `g_useOwnerAllocator` is set and the `g_ndmwAllocatorSelector` pool
@@ -61,6 +70,10 @@ destructor of a held `igObject` reference that slot 23 uses.
 ## Open questions
 
 - `mwPlyIsPause` and `MWSFD_SetMallocFunc` are named from behaviour; the library's own spellings are unknown.
+- The slot names (`constructFields`, `destructFields`, `IsReusable`, `Play`, `ReleaseDrawing` and the rest) come
+  from their callers and what they do; no string spells Alchemy's own. Slot 25 both starts a movie (the manager's
+  "Failed to start movie" follows it) and resumes a paused one; `Play` covers both.
+  `igReportError` is the level-1 (`ERROR`) report, the sibling of `igReportNotice`.
 - `igPsx2VisualContext_IsDisplayingFirstBuffer` returns whether the GS buffer index the flip toggles is 0;
   whether that index is the displayed or the drawn buffer is not settled.
 - The meaning of `igMovieInfo::_type` 2 beyond "uses ADXT" is not confirmed by a movie table.

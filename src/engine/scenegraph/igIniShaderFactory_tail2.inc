@@ -279,7 +279,7 @@ igSmartPointer<IniSectionText> FUN_001cdbb0(IniFactoryView *self, char *name) {
             char *buffer;
             IniFileHandle *opening;
             result.release();
-            result.p = ((IniSectionText *)FUN_002b9500(allocator));
+            result.p = ((IniSectionText *)igStringObj_Create(allocator));
             igSmartPointer<IniFileHandle> file((IniFileHandle *)igFile_Create(((void *)igObject_GetAllocator(self))));
             text = path.p->text;
             opening = file.p;

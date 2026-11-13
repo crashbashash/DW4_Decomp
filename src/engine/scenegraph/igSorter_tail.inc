@@ -277,7 +277,7 @@ int igSwitch_AppendChild(void *arg0, int arg1) {
     } else {
         var_a1 = 0;
     }
-    FUN_001b1e50((void *)a0v, var_a1);
+    igBitMask_SetBitCount((void *)a0v, var_a1);
     return temp_s0;
 }
 

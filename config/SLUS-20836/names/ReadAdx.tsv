@@ -1,0 +1,35 @@
+# Function names recovered in the readability pass over src/audio/igAdx.cpp, from what each function
+# does and the slot vocabulary the tree already uses (docs/engine/sound-format.md, docs/engine/script-engine-lua.md).
+# <va>	<name>	<module>
+0x002ff0e0	Gap::Core::igObject::userConstruct	engine
+0x002ff0f0	Gap::Core::igObject::userDestruct	engine
+0x00332650	Gap::igAdx::constructFields	audio
+0x00332670	Gap::igAdx::resetFields	audio
+0x00332710	Gap::igAdx::userConstruct	audio
+0x00332750	Gap::igAdx::getMeta	audio
+0x00332760	Gap::igAdx::destructFields	audio
+0x00332770	Gap::igAdx::userDestruct	audio
+0x003321f0	igAdxAudio_CreateHandleAndStartFile	audio
+0x003324c0	igAdx_CreateScratchString	audio
+0x00332530	igAdx_Shutdown	audio
+0x003327b0	igAdx_ErrorCallback	audio
+0x00332810	igAdx_SetHostRootPath	audio
+0x00332860	igAdx_SetupIop	audio
+0x00332c40	igAdx_SetupOptional	audio
+0x00332c50	igAdx_Initialize	audio
+0x00332cd0	igAdx_ExecVsync	audio
+0x00333440	igAdx_FindAfsFile	audio
+0x00333630	igAdxAfsFile_GetPath	audio
+0x003337e0	igAdxFile_StaticInitialize	audio
+0x003337f0	igAdxFile_StaticFinalize	audio
+0x00116fb0	sceCdInit	sony/libcdvd
+0x00260de8	ADXF_LoadPartitionNw	cri
+0x002612c0	ADXF_GetPtStatEx	cri
+0x002632c0	ADXT_Init	cri
+0x00280b98	SNDF_Init	cri
+0x00280d20	SNDF_Finish	cri
+0x00280d48	SNDF_Start	cri
+0x00282038	SNDF_ExecServer	cri
+0x002b9500	igStringObj_Create	engine
+0x0030b5f0	igStringObj_ToInt	engine
+0x0032cf50	igPsx2_LoadIopModule	engine

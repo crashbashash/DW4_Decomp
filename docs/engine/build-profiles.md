@@ -375,8 +375,10 @@ reads it back through its address. Such a function matches only when written tha
 way, with `operator!=` as a member. 132 source files use that constant and may hide the same shape.
 
 The two status objects, `g_resultSuccess` (`0x4fb410`) and `g_resultFailure` (`0x4fb418`), are `const` objects of
-the result class. The Core library's static initialiser constructs them, and the object system's first set-up
-writes them again. Writing a `const` object takes a `const_cast`, the one cast on them in the library's source.
+the result class, `igResult` in `src/engine/core/CoreLibrary.h`: one `int` with a copy constructor and `operator==`/
+`operator!=` taking `const igResult &`, the one class every Core function returning a status uses. The Core
+library's static initialiser constructs them, and the object system's first set-up writes them again. Writing a
+`const` object takes a `const_cast`, the one cast on them in the library's source.
 MWCC refuses a plain assignment and a non-`const` redeclaration; a `mutable` member compiles, but the code that
 reads the constants then loads them once where retail loads twice; a placement `new` adds null tests retail
 lacks. Retail keeps them in `.rodata`: MWCC gives each `const` object it constructs at start-up a `.rodata`

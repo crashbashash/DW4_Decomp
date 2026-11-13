@@ -60,7 +60,7 @@ void Gap__Gui__igModel__vfunc_10(struct O_457950 *arg0) {
     for (i = 0; i < n; i++) {
         p = arg0->l->arr[i];
         if (p != 0) {
-            FUN_00457e90((S0_457e90 *)p, 0);
+            igView_SetModel((S0_457e90 *)p, 0);
         }
     }
 }

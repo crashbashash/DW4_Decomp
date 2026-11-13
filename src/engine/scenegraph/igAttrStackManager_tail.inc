@@ -24,7 +24,7 @@ void Gap__Sg__igAttrStackManager__vfunc_23(struct O_1af890 *arg0) {
 void Gap__Sg__igAttrStackManager__vfunc_09(unsigned char *arg0, int arg1) {
     unsigned char sp4F;
     int al; int idx; int z; struct L_1af920 *l;
-    Gap__Core__igObject__vfunc_07(arg0);
+    Gap__Core__igObject__userConstruct(arg0);
     if (arg1 == 0) {
         if (DAT_00562580[0] == 0) {
             al = igObject_GetAllocator(arg0);
@@ -58,7 +58,7 @@ void Gap__Sg__igAttrStackManager__vfunc_10(int arg0) {
         }
         ((AttrStackList * *)DAT_00562580)[0] = 0;
     }
-    Gap__Core__igObject__vfunc_08__002ff0f0(arg0);
+    Gap__Core__igObject__userDestruct(arg0);
 }
 
 void FUN_001afb00(void) {
@@ -698,7 +698,7 @@ void igBitMask_ClearAll(igDataList *arg0) {
     }
 }
 
-void FUN_001b1e50(void *arg, unsigned int bits) {
+void igBitMask_SetBitCount(void *arg, unsigned int bits) {
     igBitMaskWords *m;
     unsigned int old;
     int partial;

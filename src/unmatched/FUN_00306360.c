@@ -1,5 +1,5 @@
 extern char *DAT_004fb160[];
-void *FUN_002b9500();
+void *igStringObj_Create();
 int igStringObj_Set();
 int ObjectList_AppendRetained();
 int igObject_Destroy();
@@ -29,7 +29,7 @@ int FUN_00306360(IniSectionsView *self, char *name, int create) {
         }
     }
     if (create != 0) {
-        *(IniNameText **)&s = FUN_002b9500(igObject_GetAllocator(self));
+        *(IniNameText **)&s = igStringObj_Create(igObject_GetAllocator(self));
         igStringObj_Set(s, name);
         held = s;
         ObjectList_AppendRetained(self->sections, held);

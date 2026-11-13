@@ -127,7 +127,7 @@ void FUN_00190e50(void *arg0, float *arg1, float fparg0) {
     *(float *)((char *)(arg0) + 44) = (float) g_vec3Zero.z;
 }
 
-void FUN_00190ed0(void *arg0, float x, float y, float z) {
+void Matrix44_MakeEulerRotation(void *arg0, float x, float y, float z) {
     FUN_001910c0((float *)arg0, x, y, z);
     *(float *)((char *)(arg0) + 48) = (float) g_vec4WAxis.x;
     *(float *)((char *)(arg0) + 52) = (float) g_vec4WAxis.y;
@@ -345,7 +345,7 @@ void igMatrix44f_MakePerspective(int arg0, float a, float b, float c, float d, f
     FUN_00191910((float *)arg0, t23, -t23, t14, -t14, d, e);
 }
 
-void FUN_00191e30(int *r, float *o, float *m) {
+void Matrix44_InvertOrthonormal(int *r, float *o, float *m) {
     o[0] = m[0]; o[1] = m[4]; o[2] = m[8];
     o[4] = m[1]; o[5] = m[5]; o[6] = m[9];
     o[8] = m[2]; o[9] = m[6]; o[10] = m[10];
@@ -358,7 +358,7 @@ void FUN_00191e30(int *r, float *o, float *m) {
 }
 
 /* The sign bit is cleared through a byte bit-field union. */
-void FUN_00191f30(int *arg0, float *arg1, int arg2) {
+void Matrix44_Invert(int *arg0, float *arg1, int arg2) {
     float tmp[16];
     U6 u;
     float len;

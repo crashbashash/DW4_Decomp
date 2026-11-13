@@ -18,7 +18,7 @@ void *igVertexArrayLock_Init(void *arg0) {
 void FUN_0015df80(S0_15df80 *arg0) {
     S_temp_a0 *temp_a0;
     S_temp_v0 *temp_v0;
-    Gap__Core__igObject__vfunc_11();
+    Gap__Core__igObject__resetFields();
     temp_v0 = (S_temp_v0 *)((void *)(igObject_GetAllocator(arg0)));
     if (temp_v0 != 0) {
         temp_v0->f4 = (int)((int) (temp_v0->f4 + 1));

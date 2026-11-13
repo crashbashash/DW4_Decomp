@@ -83,7 +83,7 @@ void igInsightCore_AddRenderer(void *arg0, int arg1) {
     igRendererOrderedList_Append(*(int *)((char *)arg0 + 28), arg1, 0);
 }
 
-void FUN_00236f30(Obj_236f30 *arg0, int arg1) {
+void igInsightCore_RemoveRenderer(Obj_236f30 *arg0, int arg1) {
     int sp2C;
     FUN_002d7750(&sp2C, arg0->f28, arg1);
     if (sp2C == g_statusSucceeded[0]) {

@@ -37,7 +37,7 @@ int ADXT_ExecServer();
 int ADXT_ExecFsSvr();
 int LSC_ExecServer();
 void *memcpy(void *dst, const void *src, unsigned int n);
-void FUN_002632c0(void);
+void ADXT_Init(void);
 void ADXT_DestroyAll(void);
 void FUN_00265c18(void);
 void FUN_00260b30(void);
@@ -127,7 +127,7 @@ int FUN_002632a0(void *arg) {
     return 0;
 }
 
-void FUN_002632c0(void)
+void ADXT_Init(void)
 {
     DAT_0056dfa8 = DAT_004ee080;
     if (DAT_0049c8d8 == 0) {
@@ -163,7 +163,7 @@ void FUN_002632c0(void)
 
 void FUN_00263450(void) {
     DAT_0049c8d8 = 0;
-    FUN_002632c0();
+    ADXT_Init();
 }
 
 void ADXT_Finish(void) {
