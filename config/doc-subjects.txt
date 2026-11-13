@@ -37,6 +37,7 @@ docs/engine/reflection-metadata.md
 docs/engine/registry-bootstrap.md
 docs/engine/rtti-and-vtables.md
 docs/engine/runtime-plugins.md
+docs/engine/save-card-api.md
 docs/engine/save-interface.md
 docs/engine/selectctrl.md
 docs/engine/shop-selectors.md

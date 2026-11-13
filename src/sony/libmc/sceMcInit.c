@@ -41,7 +41,7 @@ void sceSifInitRpc(int mode);
 int FUN_0010e0d8(void *cd, unsigned int id, int mode);
 int FUN_0010d108(const char *fmt, ...);
 int sceMcSync(int mode, int *cmd, int *result);
-int FUN_001194c0(void) {
+int sceMcInit(void) {
     Sema s;
     int r;
     int i;

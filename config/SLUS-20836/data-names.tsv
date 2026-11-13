@@ -3055,6 +3055,9 @@
 0x004c8804	g_attributeNames	recovered-global
 0x004c8fc0	g_fadeInCurve	recovered-global
 0x004c90b0	g_fadeOutCurve	recovered-global
+0x004c91a0	g_svConnectMax	recovered-global
+0x004c91b0	g_svCardSlots	recovered-global
+0x004c91f0	g_svSlotAbsent	recovered-global
 0x004c9230	g_libNdmwRuntimePlugin_callbackList	callback-list
 0x004c9408	g_beNDMWWindowList_callbackList	callback-list
 0x004c9470	g_beNDMWWindow_callbackList	callback-list
@@ -4403,6 +4406,9 @@
 0x00510190	getStatus_REQUESTID	string-literal
 0x005101b0	getStatus_SNDF_SEQ_GETSTATUS	string-literal
 0x00510200	MOVIE	string-literal
+0x00510310	slash_percent_s_slash_percent_s	string-literal
+0x00510428	mcman_irx	string-literal
+0x00510438	mcserv_irx	string-literal
 0x005108f0	libNdmwRuntimePlugin_className	class-name
 0x00510a40	beNDMWWindowList_className	class-name
 0x00510ab8	beNDMWWindow_className	class-name
@@ -4909,6 +4915,7 @@
 0x0053dc30	g_beNDMWWindow_vtable	recovered-global
 0x0053f150	g_beNDMWStatusCtrlBaseEquip_vtable	recovered-global
 0x00540520	g_beNDMWMdlPEBaseInfoWork_vtable	recovered-global
+0x005549dc	g_svMultitapState	recovered-global
 0x00554b00	g_AttrsLibrary_registered	recovered-global
 0x00554b10	g_AudioLibrary_registered	recovered-global
 0x00554b14	g_WindowInputLibrary_registered	recovered-global
@@ -4930,6 +4937,10 @@
 0x00554e00	g_criMovieDmaWarningMuted	recovered-global
 0x00554e50	g_BecLibrary_registered	recovered-global
 0x00554e54	g_hitBoxDebugColorsReady	recovered-global
+0x00554e58	g_svMcModulesLoaded	recovered-global
+0x00554e5c	g_svMultitapChanged	recovered-global
+0x00554e60	g_svCardBusy	recovered-global
+0x00554e64	g_svConnectCheckPending	recovered-global
 0x00554e68	g_NdmwLibrary_registered	recovered-global
 0x00554e70	g_commonSettingsValid	recovered-global
 0x00554e74	g_GuiLibrary_registered	recovered-global
@@ -6020,6 +6031,14 @@
 0x0058a5e0	g_targetPosition	recovered-global
 0x0058a5f0	g_targetDistanceSq	recovered-global
 0x0058a5f8	g_targetRamNo	recovered-global
+0x0058a600	g_svPlatformData	recovered-global
+0x0058a608	g_svSaveVersion	recovered-global
+0x0058a800	g_svMultitapPollCount	recovered-global
+0x0058a808	g_svSaveFd	recovered-global
+0x0058a810	g_svSlotPresent	recovered-global
+0x0058a830	g_svMcRequestState	recovered-global
+0x0058a890	g_svMcRequestResult	recovered-global
+0x0058a8f0	g_svMultitapPollSuspended	recovered-global
 0x0058a8f8	g_libNdmwRuntimePlugin_metaObject	class-handle
 0x0058a9a8	g_beNDMWWindowList_metaObject	class-handle
 0x0058a9b8	g_beNDMWWindow_metaObject	class-handle

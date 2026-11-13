@@ -689,29 +689,29 @@
 00119090 000084 sceSdTransToIOP
 00119118 00001c FUN_00119118
 00119138 000388 sceSdRemote
-001194c0 0001cc FUN_001194c0
+001194c0 0001cc sceMcInit
 00119690 00004c FUN_00119690
 001196e0 000030 FUN_001196e0
 00119710 00000c FUN_00119710
 00119720 0000bc FUN_00119720
 001197e0 0000c4 FUN_001197e0
-001198a8 000128 FUN_001198a8
+001198a8 000128 sceMcOpen
 001199d0 000034 FUN_001199d0
-00119a08 0000bc FUN_00119a08
-00119ac8 0000e0 FUN_00119ac8
+00119a08 0000bc sceMcClose
+00119ac8 0000e0 sceMcSeek
 00119ba8 000098 FUN_00119ba8
 00119c40 000114 FUN_00119c40
-00119d58 000178 FUN_00119d58
+00119d58 000178 sceMcWrite
 00119ed0 0000c4 sceMcSync
 00119f98 000058 mceGetInfoApdx
-00119ff0 00017c FUN_00119ff0
+00119ff0 00017c sceMcGetInfo
 0011a170 000070 sceMcUdCheckNewCard
 0011a1e0 00014c FUN_0011a1e0
 0011a330 00008c mceStorePwd
 0011a3c0 000140 FUN_0011a3c0
-0011a500 0000cc FUN_0011a500
+0011a500 0000cc sceMcFormat
 0011a5d0 00011c FUN_0011a5d0
-0011a6f0 0000bc FUN_0011a6f0
+0011a6f0 0000bc sceMcFlush
 0011a7b0 0001cc FUN_0011a7b0
 0011a980 00015c FUN_0011a980
 0011aae0 0000cc FUN_0011aae0
@@ -17508,10 +17508,10 @@
 003a9760 000020 Gap__Bec__beDBManager__vfunc_31 Gap::Bec::beDBManager::vfunc_31
 003a9780 000080 Gap__Bec__beDBManager__vfunc_33 Gap::Bec::beDBManager::vfunc_33
 003a9800 00000c Gap__Bec__beDBManager__vfunc_20 Gap::Bec::beDBManager::vfunc_20
-003a9810 000060 FUN_003a9810
-003a9870 000060 FUN_003a9870
-003a98d0 0000c0 FUN_003a98d0
-003a9990 00005c FUN_003a9990
+003a9810 000060 beSaveDataDeliver_AllocateData
+003a9870 000060 beSaveDataDeliver_FreeData
+003a98d0 0000c0 beSaveMemoryObj_Allocate
+003a9990 00005c beSaveMemoryObj_Free
 003a99f0 000048 Gap__Bec__beSaveMemoryObj__vfunc_08 Gap::Bec::beSaveMemoryObj::vfunc_08
 003a9a40 00000c Gap__Bec__beSaveMemoryObj__vfunc_20 Gap::Bec::beSaveMemoryObj::vfunc_20
 003a9a50 0000c0 Gap__Bec__beSaveApi__vfunc_24 Gap::Bec::beSaveApi::vfunc_24
@@ -17542,11 +17542,11 @@
 003ad700 000044 Gap__Bec__beSvEndApi__vfunc_21 Gap::Bec::beSvEndApi::vfunc_21
 003ad750 000030 Gap__Bec__beSvEndApi__vfunc_22 Gap::Bec::beSvEndApi::vfunc_22
 003ad780 000014 Gap__Bec__beSvEndApi__vfunc_23 Gap::Bec::beSvEndApi::vfunc_23
-003ad7a0 0000a8 FUN_003ad7a0
-003ad850 0000fc FUN_003ad850
-003ad950 000110 FUN_003ad950
-003ada60 0002d8 FUN_003ada60
-003add40 0001d8 FUN_003add40
+003ad7a0 0000a8 beSvConnectCheck_ProbeSlot
+003ad850 0000fc beSvConnectCheck_ProbeSlots
+003ad950 000110 beSvConnectCheck_PollMultitap
+003ada60 0002d8 beSvConnectCheck_Poll
+003add40 0001d8 beSvConnectCheck_FillDeliver
 003adf20 000008 Gap__Bec__beSvConnectCheck__vfunc_21 Gap::Bec::beSvConnectCheck::vfunc_21
 003adf30 000008 Gap__Bec__beSvConnectCheck__vfunc_22 Gap::Bec::beSvConnectCheck::vfunc_22
 003adf40 000008 Gap__Bec__beSvConnectCheck__vfunc_23 Gap::Bec::beSvConnectCheck::vfunc_23
@@ -17571,7 +17571,7 @@
 003ae2f0 000180 Gap__Bec__beSvReadMediaApi__vfunc_08 Gap::Bec::beSvReadMediaApi::vfunc_08
 003ae470 00000c Gap__Bec__beSvUseCheckApi__vfunc_20 Gap::Bec::beSvUseCheckApi::vfunc_20
 003ae480 00001c Gap__Bec__beSvUseCheckApi__vfunc_08 Gap::Bec::beSvUseCheckApi::vfunc_08
-003ae4a0 000040 FUN_003ae4a0
+003ae4a0 000040 Gap__Bec__beSaveApi__vfunc_07 Gap::Bec::beSaveApi::vfunc_07
 003ae4e0 00000c Gap__Bec__beSvFormatApi__vfunc_20 Gap::Bec::beSvFormatApi::vfunc_20
 003ae4f0 00001c Gap__Bec__beSvFormatApi__vfunc_08 Gap::Bec::beSvFormatApi::vfunc_08
 003ae510 00000c Gap__Bec__beSvFileFindApi__vfunc_20 Gap::Bec::beSvFileFindApi::vfunc_20

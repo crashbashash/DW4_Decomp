@@ -23,28 +23,16 @@ int FUN_0010af30(int sema);
 void FUN_0010b160(int mode);
 int FUN_0010e2a8(void *cd, int fno, int mode, void *send, int ssize, void *recv, int rsize, void (*end)(void *), void *arg);
 void FUN_00119710(void *arg);
-int FUN_00119d58(int port, unsigned char *buf, int size) {
-    unsigned int n;
-    unsigned int i;
+int sceMcSeek(int port, int a, int b) {
     int r;
     if (DAT_0055d5c0.server == 0) return -100;
     if (FUN_0010af30(DAT_00485194) < 0) return -200;
     DAT_0055d640.port = port;
-    if (size < 17) {
-        DAT_0055d640.head = size;
-        DAT_0055d640.rest = 0;
-        DAT_0055d640.body = 0;
-    } else {
-        n = (((int)buf - 1) & 0xfffffff0) + 16 - (int)buf;
-        DAT_0055d640.head = n;
-        DAT_0055d640.rest = size - n;
-        DAT_0055d640.body = buf + n;
-    }
-    for (i = 0; i < DAT_0055d640.head; i++) DAT_0055d640.bytes[i] = buf[i];
-    FUN_0010b160(0);
-    r = FUN_0010e2a8(&DAT_0055d5c0, 6, 1, &DAT_0055d640, 48, &DAT_0055eb80, 4, FUN_00119710, 0);
+    DAT_0055d640.f16 = a;
+    DAT_0055d640.head = b;
+    r = FUN_0010e2a8(&DAT_0055d5c0, 4, 1, &DAT_0055d640, 48, &DAT_0055eb80, 4, FUN_00119710, 0);
     if (r == 0) {
-        DAT_00485190 = 6;
+        DAT_00485190 = 4;
     } else {
         FUN_0010af00(DAT_00485194);
     }

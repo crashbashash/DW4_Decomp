@@ -1,124 +1,164 @@
 #include "dw4/reflected.h"
+#include "dw4/igobject_release.h"
+
+/* The registered fields every save request shares, with the retry counter each one keeps in the
+ * word the metadata leaves unlisted at +60. */
+struct beSvApiWork : igObject {
+    int _dummyCount;
+    int _orderType;
+    unsigned char _isConAllChk;
+    int _connect;
+    int _result;
+    unsigned char _isEnd;
+    int _st0;
+    int _st1;
+    int _st2;
+    int _st3;
+    int _imageWork;
+    int _mountWork;
+    int _iconWork;
+    int _retryCount;
+};
+
+/* beSvUseCheckApi's unlisted tail: the card type and format flag sceMcGetInfo fills. */
+struct beSvUseCheckApiWork : beSvApiWork {
+    int _cardType;
+    int _unused68;
+    int _format;
+};
+
+/* beSvGetFreeSizeApi's registered capacities plus the sceMcGetInfo outputs after them. */
+struct beSvGetFreeSizeApiWork : beSvApiWork {
+    int _memNeed;
+    int _memCapa;
+    int _fileCapa;
+    int _cardType;
+    int _freeKb;
+    int _format;
+};
+
+/* beSvConnectCheck's unlisted tail: per-slot free size and format flag, the slot being probed and
+ * the outputs of its sceMcGetInfo request. */
+struct beSvConnectCheckWork : beSvApiWork {
+    int _freeSizes[8];
+    int _formats[8];
+    int _slot;
+    int _unused132;
+    int _free;
+    int _format;
+};
+
+/* libmc request numbers: sceMcSync reports the number of the request that finished. */
+enum SceMcFuncNo {
+    SCE_MC_FUNC_GET_INFO = 1,
+    SCE_MC_FUNC_OPEN = 2,
+    SCE_MC_FUNC_CLOSE = 3,
+    SCE_MC_FUNC_SEEK = 4,
+    SCE_MC_FUNC_WRITE = 6,
+    SCE_MC_FUNC_FLUSH = 10,
+    SCE_MC_FUNC_FORMAT = 16
+};
+
+/* Request state per libmc request number: 1 while issued, 2 once beSvConnectCheck_Poll stores its
+ * result. */
+enum { SV_MC_REQUEST_ISSUED = 1, SV_MC_REQUEST_DONE = 2 };
+
+class igObjectVirtuals {
+public:
+    virtual void slot00(); virtual void slot01(); virtual void slot02(); virtual void slot03();
+    virtual void slot04(); virtual void slot05(); virtual void slot06(); virtual void slot07();
+    virtual void slot08(); virtual void slot09(); virtual void slot10(); virtual void slot11();
+    virtual void slot12(); virtual void slot13(); virtual void slot14(); virtual void slot15();
+    virtual void slot16(); virtual void slot17(); virtual void slot18(); virtual void slot19();
+    virtual int getMetaObject();
+};
+
+struct CardSlot { int port; int slot; };
 
 extern "C" int Memory_AllocateBufferDirect(int, int);
 extern "C" int Memory_GetAllocatorBySelector(int);
 extern "C" int igObject_GetAllocator(...);
-extern "C" void FUN_003a9810(void *arg0, int arg1);
+extern "C" void beSaveDataDeliver_AllocateData(beSaveDataDeliver *deliver, int size);
 extern "C" int Memory_FreeBufferWithAllocator(int, int);
 extern "C" int memset(void *, int, int);
 extern "C" int Memory_AllocateAlignedWithAllocator(int, int, int);
 extern "C" int igMetaObject_CountInstances(...);
-extern "C" void Gap__Bec__beSaveMemoryObj__vfunc_08(void **arg0);
+extern "C" void Gap__Bec__beSaveMemoryObj__vfunc_08(beSaveMemoryObj *self);
 extern "C" int Gap__Bec__beSaveMemoryObj__vfunc_20(void);
-extern "C" int FUN_0011a500(int, int);
-extern "C" int FUN_00119ff0(...);
+extern "C" int sceMcFormat(int, int);
+extern "C" int sceMcGetInfo(...);
 extern "C" int sprintf(char *, const char *, ...);
-extern "C" int FUN_001198a8(int, int, char *, int);
-extern "C" int FUN_00119a08(int);
-extern "C" int FUN_00119ac8(int, int, int);
-extern "C" int FUN_00119d58(int, int, int);
-extern "C" int FUN_0011a6f0(int);
-extern "C" int FUN_001194c0(...);
-extern "C" int FUN_0032cf50(int *, int *, int, int, int);
+extern "C" int sceMcOpen(int, int, char *, int);
+extern "C" int sceMcClose(int);
+extern "C" int sceMcSeek(int, int, int);
+extern "C" int sceMcWrite(int, int, int);
+extern "C" int sceMcFlush(int);
+extern "C" int sceMcInit(...);
+extern "C" int FUN_0032cf50(int *, const char *, int, int, int);
 extern "C" int sceMtapGetConnection(int);
 extern "C" int sceMtapPortOpen(int);
 extern "C" int sceMtapPortClose(int);
 extern "C" int sceMcSync(...);
-extern "C" int FUN_003ad7a0(int arg0, int arg1);
-extern "C" int FUN_003ad850(int port, int onlyPresent);
-extern "C" void FUN_003ad950(int arg0, void *arg1);
+extern "C" int beSvConnectCheck_ProbeSlot(int check, int slot);
+extern "C" int beSvConnectCheck_ProbeSlots(int check, int onlyPresent);
+extern "C" void beSvConnectCheck_PollMultitap(int check, beSvDeliver *deliver);
 extern "C" void Gap__Bec__beSvConnectCheck__vfunc_21(void);
 extern "C" int Gap__Bec__beSvConnectCheck__vfunc_22(void);
 extern "C" void Gap__Bec__beSvConnectCheck__vfunc_23(void);
 extern "C" int Gap__Bec__beSvConnectCheck__vfunc_20(void);
 extern "C" int Gap__Core__igObject__vfunc_07(...);
-extern "C" void Gap__Bec__beSvConnectCheck__vfunc_07(void **arg0);
+extern "C" void Gap__Bec__beSvConnectCheck__vfunc_07(igObjectVirtuals *self);
 extern "C" int Gap__Bec__beSaveApi__vfunc_20(void);
 extern "C" void Gap__Core__igObject__vfunc_08__002ff0f0(...);
 extern "C" void Gap__Bec__beSvConnectCheck__vfunc_08(void);
 extern "C" int Gap__Bec__beSvEndApi__vfunc_20(void);
-extern "C" void Gap__Bec__beSvEndApi__vfunc_07(void **arg0);
+extern "C" void Gap__Bec__beSvEndApi__vfunc_07(igObjectVirtuals *self);
 extern "C" void Gap__Bec__beSvEndApi__vfunc_08(void);
 extern "C" int Gap__Bec__beSvStartApi__vfunc_20(void);
-extern "C" void Gap__Bec__beSvStartApi__vfunc_07(void **arg0);
+extern "C" void Gap__Bec__beSvStartApi__vfunc_07(igObjectVirtuals *self);
 extern "C" void Gap__Bec__beSvStartApi__vfunc_08(void);
 extern "C" int Gap__Bec__beSvGetFreeSizeApi__vfunc_20(void);
-extern "C" void Gap__Bec__beSvGetFreeSizeApi__vfunc_07(void **arg0);
+extern "C" void Gap__Bec__beSvGetFreeSizeApi__vfunc_07(igObjectVirtuals *self);
 extern "C" void Gap__Bec__beSvGetFreeSizeApi__vfunc_08(void);
 extern "C" int Gap__Bec__beSvWriteMediaApi__vfunc_20(void);
-extern "C" void Gap__Bec__beSvWriteMediaApi__vfunc_07(void **arg0);
+extern "C" void Gap__Bec__beSvWriteMediaApi__vfunc_07(igObjectVirtuals *self);
 extern "C" int igObject_Destroy(...);
 extern "C" int Gap__Bec__beSvReadMediaApi__vfunc_20(void);
-extern "C" void Gap__Bec__beSvReadMediaApi__vfunc_07(void **arg0);
+extern "C" void Gap__Bec__beSvReadMediaApi__vfunc_07(igObjectVirtuals *self);
 extern "C" int Gap__Bec__beSvUseCheckApi__vfunc_20(void);
 extern "C" void Gap__Bec__beSvUseCheckApi__vfunc_08(void);
-extern "C" void FUN_003ae4a0(void **arg0);
+extern "C" void Gap__Bec__beSaveApi__vfunc_07(igObjectVirtuals *self);
 extern "C" int Gap__Bec__beSvFormatApi__vfunc_20(void);
 extern "C" void Gap__Bec__beSvFormatApi__vfunc_08(void);
 extern "C" int Gap__Bec__beSvFileFindApi__vfunc_20(void);
 extern "C" void Gap__Bec__beSvFileFindApi__vfunc_08(void);
 extern "C" int Gap__Bec__beSvFileMakeApi__vfunc_20(void);
-extern "C" void Gap__Bec__beSvFileMakeApi__vfunc_07(void **arg0);
+extern "C" void Gap__Bec__beSvFileMakeApi__vfunc_07(igObjectVirtuals *self);
 extern "C" void Gap__Bec__beSaveApi__vfunc_08(void);
-extern "C" void Gap__Bec__beSaveMemoryObj__vfunc_07(void **arg0);
+extern "C" void Gap__Bec__beSaveMemoryObj__vfunc_07(igObjectVirtuals *self);
 extern "C" int g_defaultAllocatorSelector[4];
-extern "C" unsigned char GPR_00554c14;
-struct S { char pad[8]; int f8; int fc; };
-extern "C" void FUN_003a9870(struct S *arg0);
-struct O {
-    char pad[8];
-    void *buf;
-};
-extern "C" void FUN_003a98d0(struct O *arg0, int arg1, int arg2);
-struct S_3a9990 { int pad[2]; int f8; };
-extern "C" void FUN_003a9990(struct S_3a9990 *arg0);
-class DW4VC_88_0 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual int vX(); };
+extern "C" unsigned char g_useOwnerAllocator;
+extern "C" void beSaveDataDeliver_FreeData(beSaveDataDeliver *deliver);
+extern "C" void beSaveMemoryObj_Allocate(beSaveMemoryObj *self, int size, int alignment);
+extern "C" void beSaveMemoryObj_Free(beSaveMemoryObj *self);
 extern "C" int g_beSaveMemoryObj_metaObject[4];
-extern "C" void Gap__Bec__beSvFileMakeApi__vfunc_23(beSvFileMakeApi *arg0, beSvDeliver *arg1);
-extern "C" char GPR_00554e60;
-extern "C" void Gap__Bec__beSvFileFindApi__vfunc_21(beSvFileFindApi *arg0, beSvDeliver *arg1);
-extern "C" void Gap__Bec__beSvFileFindApi__vfunc_23(beSvFileFindApi *arg0, beSvDeliver *arg1);
-extern "C" void Gap__Bec__beSvFormatApi__vfunc_21(beSvFormatApi *arg0, void *arg1);
-extern "C" int DAT_004c91b4[4];
-extern "C" int DAT_0058a870[4];
-extern "C" int DAT_0058a8d0[4];
-extern "C" unsigned char GPR_00554e64;
-extern "C" unsigned char Gap__Bec__beSvFormatApi__vfunc_22(beSvFormatApi *arg0);
-extern "C" void Gap__Bec__beSvFormatApi__vfunc_23(beSvFormatApi *arg0, void *arg1);
-extern "C" void Gap__Bec__beSvUseCheckApi__vfunc_21(beSvUseCheckApi *arg0, beSvDeliver *arg1);
-extern "C" int DAT_0058a834[4];
-extern "C" int DAT_0058a894[4];
-typedef struct beSvUseCheckApiTail { char pad0[60]; int f60; int f64; char p68[4]; int f72; } beSvUseCheckApiTail;
-extern "C" unsigned char Gap__Bec__beSvUseCheckApi__vfunc_22(beSvUseCheckApi *arg0);
-extern "C" void Gap__Bec__beSvUseCheckApi__vfunc_23(beSvUseCheckApi *arg0, beSvDeliver *arg1);
-extern "C" void Gap__Bec__beSvReadMediaApi__vfunc_23(beSvReadMediaApi *arg0, void *arg1);
-/* Memory-card write state machine, polled once per frame by the save-data pipeline. _phase (_st0)
- * selects the phase and _step (_st1) the step inside it. Every phase runs three steps: 0 clears
- * the retry counter, 1 issues one asynchronous memory-card request and raises its in-flight flag,
- * 2 polls the flag (returning 0 while it is set) and reads the result code. A failed request is
- * retried up to three times, then the machine ends with _isEnd = 1 and _result = 3 for the card-
- * unusable codes (-2, -4, -5, ...) or 12 for anything else. Phases: 0 opens the save directory, 1
- * resets the image pass, 2 selects the image offset for the pass, 3 writes the save buffer and
- * flushes it, 4 commits and closes (_result = 2, saved). Returns 1 when already finished, 0 while
- * a request is pending, else _isEnd. getPhase and getStep are const because retail reloads the fields at
- * those uses; the retry test goes through a local because retail does not fold the comparison into
- * the branch. */
-struct SvSaveWork;
-typedef struct SvCardContext {
-    char pad0[0x10];
-    int dataSize;            /* +0x10 */
-    char pad14[4];
-    int volumeNumber;        /* +0x18 */
-    char pad1c[0xa8];
-    int imageOffsets[2];     /* +0xc4 */
-} SvCardContext;
-typedef struct SvSaveWork {
-    char pad0[8];
-    int buffer;              /* +8 */
-} SvSaveWork;
-/* beSvWriteMediaApi plus the two members the registered metadata does not list (+60 retry count,
- * +72 image pass). */
-typedef struct beSvWriteMediaApiRun {
+extern "C" void Gap__Bec__beSvFileMakeApi__vfunc_23(beSvFileMakeApi *self, beSvDeliver *deliver);
+extern "C" unsigned char g_svCardBusy;
+extern "C" void Gap__Bec__beSvFileFindApi__vfunc_21(beSvApiWork *self, beSvDeliver *deliver);
+extern "C" void Gap__Bec__beSvFileFindApi__vfunc_23(beSvFileFindApi *self, beSvDeliver *deliver);
+extern "C" void Gap__Bec__beSvFormatApi__vfunc_21(beSvApiWork *self, beSvDeliver *deliver);
+extern "C" int g_svMcRequestState[24];
+extern "C" int g_svMcRequestResult[24];
+extern "C" unsigned char g_svConnectCheckPending;
+extern "C" unsigned char Gap__Bec__beSvFormatApi__vfunc_22(beSvApiWork *self);
+extern "C" void Gap__Bec__beSvFormatApi__vfunc_23(beSvFormatApi *self, beSvDeliver *deliver);
+extern "C" void Gap__Bec__beSvUseCheckApi__vfunc_21(beSvApiWork *self, beSvDeliver *deliver);
+extern "C" unsigned char Gap__Bec__beSvUseCheckApi__vfunc_22(beSvUseCheckApiWork *self);
+extern "C" void Gap__Bec__beSvUseCheckApi__vfunc_23(beSvUseCheckApi *self, beSvDeliver *deliver);
+extern "C" void Gap__Bec__beSvReadMediaApi__vfunc_23(beSvReadMediaApi *self, beSvDeliver *deliver);
+/* beSvWriteMediaApi with the retry counter at +60 and the image pass at +72, which the registered
+ * metadata does not list. */
+typedef struct beSvWriteMediaApiWork {
     int _vtable;
     unsigned int _refCount;
     int _dummyCount;
@@ -129,8 +169,8 @@ typedef struct beSvWriteMediaApiRun {
     int _result;
     unsigned char _isEnd;
     char _pad29[3];
-    int _phase;             /* +32 (_st0) */
-    int _step;              /* +36 (_st1) */
+    int _phase;             /* _st0 */
+    int _step;              /* _st1 */
     int getPhase() const { return _phase; }
     int getStep() const { return _step; }
     int _st2;
@@ -138,141 +178,109 @@ typedef struct beSvWriteMediaApiRun {
     int _imageWork;
     int _mountWork;
     int _iconWork;
-    int _retryCount;         /* +60 */
+    int _retryCount;
     int _nowGamedata;
-    SvSaveWork *_saveWork;   /* +68 */
-    int _imagePass;          /* +72 */
-} beSvWriteMediaApiRun;
-struct CardSlot { int port; int slot; };
-extern "C" SvCardContext *DAT_0058a600[4];
-extern "C" CardSlot DAT_004c91b0[];
-extern "C" char DAT_00510310[];
-extern "C" int DAT_0058a808[4];
-extern "C" int DAT_0058a838[4];
-extern "C" int DAT_0058a83c[4];
-extern "C" int DAT_0058a840[4];
-extern "C" int DAT_0058a848[4];
-extern "C" int DAT_0058a858[4];
-extern "C" int DAT_0058a898[4];
-extern "C" int DAT_0058a89c[4];
-extern "C" int DAT_0058a8a0[4];
-extern "C" int DAT_0058a8a8[4];
-extern "C" int DAT_0058a8b8[4];
-extern "C" int Gap__Bec__beSvWriteMediaApi__vfunc_22(beSvWriteMediaApiRun *self);
-extern "C" void Gap__Bec__beSvWriteMediaApi__vfunc_23(beSvWriteMediaApi *arg0, void *arg1);
-extern "C" void Gap__Bec__beSvGetFreeSizeApi__vfunc_21(beSvGetFreeSizeApi *arg0, void *arg1);
-extern "C" unsigned char Gap__Bec__beSvGetFreeSizeApi__vfunc_22(beSvGetFreeSizeApi *arg0);
-struct UnidentifiedFreeSizeGlobal { char pad[20]; unsigned int f20; };
-struct beSvGetFreeSizeApiTail { char pad[84]; int f84; };
-/* word past the reflected beSvGetFreeSizeApi layout */
-struct UnidentifiedResultObject {  /* arg1; class not identified */
-  char pad[24]; int f24; char pad2[4]; unsigned int f32; int f36; unsigned char b40; unsigned char b41; unsigned char b42; unsigned char b43; unsigned char b44; };
-extern "C" void Gap__Bec__beSvGetFreeSizeApi__vfunc_23(beSvGetFreeSizeApi *arg0, UnidentifiedResultObject *arg1);
-extern "C" int DAT_004c91a0[4];
-extern "C" int DAT_00510428[4];
-extern "C" int DAT_00510438[4];
-extern "C" int DAT_0058a608[4];
-extern "C" char GPR_005549dc;
-extern "C" unsigned char GPR_00554e58;
-extern "C" char GPR_00554e5c;
-extern "C" void Gap__Bec__beSvStartApi__vfunc_21(beSvStartApi *arg0, void *arg1);
-extern "C" int Gap__Bec__beSvStartApi__vfunc_22(beSvStartApi *arg0);
-extern "C" void Gap__Bec__beSvStartApi__vfunc_23(beSvStartApi *arg0, void *arg1);
-extern "C" void Gap__Bec__beSvEndApi__vfunc_21(beSvEndApi *arg0);
-extern "C" int Gap__Bec__beSvEndApi__vfunc_22(beSvEndApi *arg0);
-extern "C" void Gap__Bec__beSvEndApi__vfunc_23(beSvEndApi *arg0, void *arg1);
-extern "C" int DAT_0058a810[8];
-extern "C" int DAT_0058a800[4];
-extern "C" int DAT_0058a8f0[4];
-typedef struct ConnectCheckState {
-    char header[64];
-    int types[8];            /* +64 */
-    int frees[8];            /* +96 */
-    int slot;                /* +128 */
-    int pad132;
-    int type;                /* +136 */
-    int free;                /* +140 */
-} ConnectCheckState;
-extern "C" int DAT_0058a830[];
-extern "C" int DAT_0058a890[];
-extern "C" void FUN_003ada60(ConnectCheckState *check);
-extern "C" int DAT_004c91f0[4];
-typedef struct L { char p8[8]; int n; int p12; int *d; } L;
-typedef struct A { char p0[12]; L *l12; char p16[32]; L *l48; char p52[4]; L *l56; } A;
-typedef struct B { int w[64]; } B;
-extern "C" int FUN_003add40(int *arg0, A *arg1);
+    beSaveMemoryObj *_saveWork;
+    int _imagePass;
+} beSvWriteMediaApiWork;
+extern "C" beSvPlatDataPS2 *g_svPlatformData[1];
+extern "C" CardSlot g_svCardSlots[8];
+extern "C" char slash_percent_s_slash_percent_s[];
+extern "C" int g_svSaveFd[1];
+extern "C" int Gap__Bec__beSvWriteMediaApi__vfunc_22(beSvWriteMediaApiWork *self);
+extern "C" void Gap__Bec__beSvWriteMediaApi__vfunc_23(beSvWriteMediaApi *self, beSvDeliver *deliver);
+extern "C" void Gap__Bec__beSvGetFreeSizeApi__vfunc_21(beSvApiWork *self, beSvDeliver *deliver);
+extern "C" unsigned char Gap__Bec__beSvGetFreeSizeApi__vfunc_22(beSvGetFreeSizeApiWork *self);
+extern "C" void Gap__Bec__beSvGetFreeSizeApi__vfunc_23(beSvGetFreeSizeApiWork *self, beSvDeliver *deliver);
+extern "C" int g_svConnectMax[1];
+extern "C" char mcman_irx[];
+extern "C" char mcserv_irx[];
+extern "C" int g_svSaveVersion[1];
+extern "C" char g_svMultitapState;
+extern "C" unsigned char g_svMcModulesLoaded;
+extern "C" char g_svMultitapChanged;
+extern "C" void Gap__Bec__beSvStartApi__vfunc_21(beSvApiWork *self, beSvDeliver *deliver);
+extern "C" int Gap__Bec__beSvStartApi__vfunc_22(beSvStartApi *self);
+extern "C" void Gap__Bec__beSvStartApi__vfunc_23(beSvStartApi *self, beSvDeliver *deliver);
+extern "C" void Gap__Bec__beSvEndApi__vfunc_21(beSvEndApi *self);
+extern "C" int Gap__Bec__beSvEndApi__vfunc_22(beSvEndApi *self);
+extern "C" void Gap__Bec__beSvEndApi__vfunc_23(beSvEndApi *self, beSvDeliver *deliver);
+extern "C" int g_svSlotPresent[8];
+extern "C" int g_svMultitapPollCount[1];
+extern "C" int g_svMultitapPollSuspended[1];
+extern "C" void beSvConnectCheck_Poll(beSvConnectCheckWork *check);
+extern "C" int g_svSlotAbsent[1];
+extern "C" int beSvConnectCheck_FillDeliver(int *slotWords, beSvDeliver *deliver);
 extern "C" int g_beSvConnectCheck_metaObject[4];
 extern "C" int g_beSaveApi_metaObject[4];
 extern "C" int g_beSvEndApi_metaObject[4];
 extern "C" int g_beSvStartApi_metaObject[4];
 extern "C" int g_beSvGetFreeSizeApi_metaObject[4];
 extern "C" int g_beSvWriteMediaApi_metaObject[4];
-extern "C" void Gap__Bec__beSvWriteMediaApi__vfunc_08(beSvWriteMediaApi *arg0);
+extern "C" void Gap__Bec__beSvWriteMediaApi__vfunc_08(beSvWriteMediaApi *self);
 extern "C" int g_beSvReadMediaApi_metaObject[4];
-extern "C" void Gap__Bec__beSvReadMediaApi__vfunc_08(beSvReadMediaApi *arg0);
+extern "C" void Gap__Bec__beSvReadMediaApi__vfunc_08(beSvReadMediaApi *self);
 extern "C" int g_beSvUseCheckApi_metaObject[4];
 extern "C" int g_beSvFormatApi_metaObject[4];
 extern "C" int g_beSvFileFindApi_metaObject[4];
 extern "C" int g_beSvFileMakeApi_metaObject[4];
-/* igObject header: the reference count at +4 is not a reflected field */
-typedef struct RefCountedHeader { char pad4[4]; int references; } RefCountedHeader;
-extern "C" void Gap__Bec__beSvFileMakeApi__vfunc_08(beSvFileMakeApi *arg0);
+extern "C" void Gap__Bec__beSvFileMakeApi__vfunc_08(beSvFileMakeApi *self);
 
-void FUN_003a9810(void *arg0, int arg1) {
-    int t;
-    int a;
-    *(int *)((char *)(arg0) + 12) = arg1;
-    t = igObject_GetAllocator(arg0);
-    if (GPR_00554c14 != 0) {
-        a = t;
+void beSaveDataDeliver_AllocateData(beSaveDataDeliver *deliver, int size) {
+    int own;
+    int allocator;
+    deliver->_size = size;
+    own = igObject_GetAllocator(deliver);
+    if (g_useOwnerAllocator != 0) {
+        allocator = own;
     } else {
-        a = Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
+        allocator = Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
     }
-    *(int *)((char *)(arg0) + 8) = Memory_AllocateBufferDirect(arg1, a);
+    deliver->_data = Memory_AllocateBufferDirect(size, allocator);
 }
 
-void FUN_003a9870(struct S *arg0) {
-    int var_v0;
+void beSaveDataDeliver_FreeData(beSaveDataDeliver *deliver) {
+    int allocator;
 
-    if (arg0->f8 != 0) {
-        var_v0 = igObject_GetAllocator(arg0);
-        var_v0 = (GPR_00554c14 != 0) ? var_v0 : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
-        Memory_FreeBufferWithAllocator(arg0->f8, var_v0);
+    if (deliver->_data != 0) {
+        allocator = igObject_GetAllocator(deliver);
+        allocator = (g_useOwnerAllocator != 0) ? allocator : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
+        Memory_FreeBufferWithAllocator(deliver->_data, allocator);
     }
-    arg0->f8 = 0;
-    arg0->fc = 0;
+    deliver->_data = 0;
+    deliver->_size = 0;
 }
 
-void FUN_003a98d0(struct O *arg0, int arg1, int arg2) {
-    int a, b;
+void beSaveMemoryObj_Allocate(beSaveMemoryObj *self, int size, int alignment) {
+    int own, allocator;
 
-    if (arg2 == 0) {
-        a = igObject_GetAllocator(arg0);
-        b = GPR_00554c14 != 0 ? a : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
-        arg0->buf = (void *)Memory_AllocateBufferDirect(arg1, b);
+    if (alignment == 0) {
+        own = igObject_GetAllocator(self);
+        allocator = g_useOwnerAllocator != 0 ? own : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
+        self->_mem = Memory_AllocateBufferDirect(size, allocator);
     } else {
-        a = igObject_GetAllocator(arg0);
-        b = GPR_00554c14 != 0 ? a : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
-        arg0->buf = (void *)Memory_AllocateAlignedWithAllocator(arg1, arg2 & 0xFFFF, b);
+        own = igObject_GetAllocator(self);
+        allocator = g_useOwnerAllocator != 0 ? own : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
+        self->_mem = Memory_AllocateAlignedWithAllocator(size, alignment & 0xFFFF, allocator);
     }
-    memset(arg0->buf, 0, arg1);
+    memset((void *)self->_mem, 0, size);
 }
 
-void FUN_003a9990(struct S_3a9990 *arg0) {
-    int var_v0;
+void beSaveMemoryObj_Free(beSaveMemoryObj *self) {
+    int allocator;
 
-    if (arg0->f8 != 0) {
-        var_v0 = igObject_GetAllocator();
-        var_v0 = (GPR_00554c14 != 0) ? var_v0 : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
-        Memory_FreeBufferWithAllocator(arg0->f8, var_v0);
+    if (self->_mem != 0) {
+        allocator = igObject_GetAllocator();
+        allocator = (g_useOwnerAllocator != 0) ? allocator : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
+        Memory_FreeBufferWithAllocator(self->_mem, allocator);
     }
-    arg0->f8 = 0;
+    self->_mem = 0;
 }
 
-void Gap__Bec__beSaveMemoryObj__vfunc_08(void **arg0) {
-    FUN_003a9990((S_3a9990 *)arg0);
-    igMetaObject_CountInstances(((DW4VC_88_0 *)(arg0))->vX(), 1);
-    Gap__Core__igObject__vfunc_08__002ff0f0(arg0);
+void Gap__Bec__beSaveMemoryObj__vfunc_08(beSaveMemoryObj *self) {
+    beSaveMemoryObj_Free(self);
+    igMetaObject_CountInstances(((igObjectVirtuals *)self)->getMetaObject(), 1);
+    Gap__Core__igObject__vfunc_08__002ff0f0(self);
 }
 
 int Gap__Bec__beSaveMemoryObj__vfunc_20(void)
@@ -280,98 +288,97 @@ int Gap__Bec__beSaveMemoryObj__vfunc_20(void)
     return g_beSaveMemoryObj_metaObject[0];
 }
 
-void Gap__Bec__beSvFileMakeApi__vfunc_23(beSvFileMakeApi *arg0, beSvDeliver *arg1) {
-    arg1->_result = (int)((int) arg0->_result);
-    arg1->_isEndOperat = 1;
+void Gap__Bec__beSvFileMakeApi__vfunc_23(beSvFileMakeApi *self, beSvDeliver *deliver) {
+    deliver->_result = self->_result;
+    deliver->_isEndOperat = 1;
 }
 
-void Gap__Bec__beSvFileFindApi__vfunc_21(beSvFileFindApi *arg0, beSvDeliver *arg1) {
-    int temp_a2;
+void Gap__Bec__beSvFileFindApi__vfunc_21(beSvApiWork *self, beSvDeliver *deliver) {
+    int target;
 
-    temp_a2 = arg1->_targetConnect;
-    if (temp_a2 == -1) {
-        arg0->_connect = 0;
-        arg0->_isConAllChk = 1;
+    target = deliver->_targetConnect;
+    if (target == -1) {
+        self->_connect = 0;
+        self->_isConAllChk = 1;
     } else {
-        arg0->_connect = temp_a2;
-        arg0->_isConAllChk = 0;
+        self->_connect = target;
+        self->_isConAllChk = 0;
     }
-    arg0->_isEnd = 0;
-    arg0->_result = 1;
-    ((int *)DAT_0058a600)[0] = arg1->_platformData;
-    arg0->_st0 = 0;
-    arg0->_st3 = 0;
-    arg0->_st2 = 0;
-    arg0->_st1 = 0;
-    GPR_00554e60 = 1;
-    *(int *)((char *)(arg0) + 60) = 0;
+    self->_isEnd = 0;
+    self->_result = 1;
+    g_svPlatformData[0] = (beSvPlatDataPS2 *)deliver->_platformData;
+    self->_st0 = 0;
+    self->_st3 = 0;
+    self->_st2 = 0;
+    self->_st1 = 0;
+    g_svCardBusy = 1;
+    self->_retryCount = 0;
 }
 
-void Gap__Bec__beSvFileFindApi__vfunc_23(beSvFileFindApi *arg0, beSvDeliver *arg1) {
-    arg1->_result = (int)((int) arg0->_result);
-    arg1->_isEndOperat = 1;
+void Gap__Bec__beSvFileFindApi__vfunc_23(beSvFileFindApi *self, beSvDeliver *deliver) {
+    deliver->_result = self->_result;
+    deliver->_isEndOperat = 1;
 }
 
-void Gap__Bec__beSvFormatApi__vfunc_21(beSvFormatApi *arg0, void *arg1) {
-    arg0->_isEnd = 0;
-    arg0->_connect = (int)((int) *(int *)((char *)(arg1) + 16));
-    arg0->_result = 1;
-    arg0->_st0 = 0;
-    arg0->_st3 = 0;
-    arg0->_st2 = 0;
-    arg0->_st1 = 0;
-    GPR_00554e60 = 1;
-    *(int *)((char *)(arg0) + 60) = 0;
+void Gap__Bec__beSvFormatApi__vfunc_21(beSvApiWork *self, beSvDeliver *deliver) {
+    self->_isEnd = 0;
+    self->_connect = deliver->_targetConnect;
+    self->_result = 1;
+    self->_st0 = 0;
+    self->_st3 = 0;
+    self->_st2 = 0;
+    self->_st1 = 0;
+    g_svCardBusy = 1;
+    self->_retryCount = 0;
 }
 
-unsigned char Gap__Bec__beSvFormatApi__vfunc_22(beSvFormatApi *arg0) {
-    int a0;
-    int v;
-    int t;
-    unsigned char tc;
-    if (arg0->_isEnd != 0) return 1;
-    if (GPR_00554e64 == 1) return 0;
-    switch (arg0->_st0) {
+unsigned char Gap__Bec__beSvFormatApi__vfunc_22(beSvApiWork *self) {
+    int connect;
+    int res;
+    unsigned char retry;
+    if (self->_isEnd != 0) return 1;
+    if (g_svConnectCheckPending == 1) return 0;
+    switch (self->_st0) {
     case 0:
-        *(int *)((char *)arg0 + 60) /* unreflected field past the last reflected member */ = 0;
-        arg0->_st0 = arg0->_st0 + 1;
-        arg0->_st3 = 0;
-        arg0->_st2 = 0;
-        arg0->_st1 = 0;
+        self->_retryCount = 0;
+        self->_st0 = self->_st0 + 1;
+        self->_st3 = 0;
+        self->_st2 = 0;
+        self->_st1 = 0;
         break;
     case 1:
-        a0 = arg0->_connect * 8;
-        if (FUN_0011a500(*(int *)((char *)((int *)DAT_004c91b0) + a0), *(int *)((char *)DAT_004c91b4 + a0)) >= 0) {
-            DAT_0058a870[0] = 1;
-            arg0->_st0 = arg0->_st0 + 1;
-            arg0->_st3 = 0;
-            arg0->_st2 = 0;
-            arg0->_st1 = 0;
+        connect = self->_connect;
+        if (sceMcFormat(g_svCardSlots[connect].port, g_svCardSlots[connect].slot) >= 0) {
+            g_svMcRequestState[SCE_MC_FUNC_FORMAT] = SV_MC_REQUEST_ISSUED;
+            self->_st0 = self->_st0 + 1;
+            self->_st3 = 0;
+            self->_st2 = 0;
+            self->_st1 = 0;
         }
         break;
     case 2:
-        if (DAT_0058a870[0] == 1) return 0;
-        v = DAT_0058a8d0[0];
-        if (v >= 0) {
-            arg0->_isEnd = 1;
-            arg0->_result = 2;
+        if (g_svMcRequestState[SCE_MC_FUNC_FORMAT] == SV_MC_REQUEST_ISSUED) return 0;
+        res = g_svMcRequestResult[SCE_MC_FUNC_FORMAT];
+        if (res >= 0) {
+            self->_isEnd = 1;
+            self->_result = 2;
         } else {
-            *(int *)((char *)arg0 + 60) /* unreflected field past the last reflected member */ = *(int *)((char *)arg0 + 60) /* unreflected field past the last reflected member */ + 1;
-            tc = *(int *)((char *)arg0 + 60) /* unreflected field past the last reflected member */ < 3;
-            if (tc == 1) {
-                arg0->_st0 = 1;
-                arg0->_st3 = 0;
-                arg0->_st2 = 0;
-                arg0->_st1 = 0;
+            self->_retryCount = self->_retryCount + 1;
+            retry = self->_retryCount < 3;
+            if (retry == 1) {
+                self->_st0 = 1;
+                self->_st3 = 0;
+                self->_st2 = 0;
+                self->_st1 = 0;
             } else {
-                switch (v) {
+                switch (res) {
                 case -5:
-                    arg0->_result = 12;
-                    arg0->_isEnd = 1;
+                    self->_result = 12;
+                    self->_isEnd = 1;
                     break;
                 default:
-                    arg0->_result = 12;
-                    arg0->_isEnd = 1;
+                    self->_result = 12;
+                    self->_isEnd = 1;
                     break;
                 }
             }
@@ -380,129 +387,136 @@ unsigned char Gap__Bec__beSvFormatApi__vfunc_22(beSvFormatApi *arg0) {
     default:
         break;
     }
-    if (arg0->_isEnd != 0) GPR_00554e60 = 0;
-    return arg0->_isEnd;
+    if (self->_isEnd != 0) g_svCardBusy = 0;
+    return self->_isEnd;
 }
 
-void Gap__Bec__beSvFormatApi__vfunc_23(beSvFormatApi *arg0, void *arg1) {
-    *(int *)((char *)(arg1) + 24) = (int)((int) arg0->_result);
-    *(char *)((char *)(arg1) + 44) = 1;
+void Gap__Bec__beSvFormatApi__vfunc_23(beSvFormatApi *self, beSvDeliver *deliver) {
+    deliver->_result = self->_result;
+    deliver->_isEndOperat = 1;
 }
 
-void Gap__Bec__beSvUseCheckApi__vfunc_21(beSvUseCheckApi *arg0, beSvDeliver *arg1) {
-    arg0->_connect = (int)((int) arg1->_targetConnect);
-    arg0->_isEnd = 0;
-    arg0->_result = 1;
-    arg0->_st0 = 0;
-    arg0->_st3 = 0;
-    arg0->_st2 = 0;
-    arg0->_st1 = 0;
-    GPR_00554e60 = 1;
-    *(int *)((char *)(arg0) + 60) = 0;
+void Gap__Bec__beSvUseCheckApi__vfunc_21(beSvApiWork *self, beSvDeliver *deliver) {
+    self->_connect = deliver->_targetConnect;
+    self->_isEnd = 0;
+    self->_result = 1;
+    self->_st0 = 0;
+    self->_st3 = 0;
+    self->_st2 = 0;
+    self->_st1 = 0;
+    g_svCardBusy = 1;
+    self->_retryCount = 0;
 }
 
-unsigned char Gap__Bec__beSvUseCheckApi__vfunc_22(beSvUseCheckApi *arg0) {
-    /* fields past the reflected beSvUseCheckApi layout (+60 retry count, +64/+72 out words) */
-    beSvUseCheckApiTail *x = (beSvUseCheckApiTail *)arg0;
-    int a0;
-    int v;
-    unsigned char tc;
-    if (arg0->_isEnd != 0) return 1;
-    if (GPR_00554e64 == 1) return 0;
-    switch (arg0->_st0) {
+unsigned char Gap__Bec__beSvUseCheckApi__vfunc_22(beSvUseCheckApiWork *self) {
+    int connect;
+    int res;
+    unsigned char retry;
+    if (self->_isEnd != 0) return 1;
+    if (g_svConnectCheckPending == 1) return 0;
+    switch (self->_st0) {
     case 0:
-        x->f60 = 0;
-        arg0->_st0 = arg0->_st0 + 1;
-        arg0->_st3 = 0;
-        arg0->_st2 = 0;
-        arg0->_st1 = 0;
+        self->_retryCount = 0;
+        self->_st0 = self->_st0 + 1;
+        self->_st3 = 0;
+        self->_st2 = 0;
+        self->_st1 = 0;
         break;
     case 1:
-        a0 = arg0->_connect * 8;
-        if (FUN_00119ff0(*(int *)((char *)((int *)DAT_004c91b0) + a0), *(int *)((char *)DAT_004c91b4 + a0), &x->f64, 0, &x->f72) >= 0) {
-            DAT_0058a834[0] = 1;
-            arg0->_st0 = arg0->_st0 + 1;
-            arg0->_st3 = 0;
-            arg0->_st2 = 0;
-            arg0->_st1 = 0;
+        connect = self->_connect;
+        if (sceMcGetInfo(g_svCardSlots[connect].port, g_svCardSlots[connect].slot, &self->_cardType, 0, &self->_format) >= 0) {
+            g_svMcRequestState[SCE_MC_FUNC_GET_INFO] = SV_MC_REQUEST_ISSUED;
+            self->_st0 = self->_st0 + 1;
+            self->_st3 = 0;
+            self->_st2 = 0;
+            self->_st1 = 0;
         }
         break;
     case 2:
-        if (DAT_0058a834[0] == 1) return 0;
-        v = DAT_0058a894[0];
-        if (v >= 0) {
-            switch (x->f64) {
+        if (g_svMcRequestState[SCE_MC_FUNC_GET_INFO] == SV_MC_REQUEST_ISSUED) return 0;
+        res = g_svMcRequestResult[SCE_MC_FUNC_GET_INFO];
+        if (res >= 0) {
+            switch (self->_cardType) {
             case 2:
-                if (x->f72 == 1) {
-                    arg0->_result = 2;
+                if (self->_format == 1) {
+                    self->_result = 2;
                 } else {
-                    arg0->_result = 7;
+                    self->_result = 7;
                 }
                 break;
             case 0:
             case 1:
             case 3:
-                arg0->_result = 12;
+                self->_result = 12;
                 break;
             }
-            arg0->_isEnd = 1;
+            self->_isEnd = 1;
         } else {
-            x->f60 = x->f60 + 1;
-            tc = x->f60 < 3;
-            if (tc == 1) {
-                arg0->_st0 = 1;
-                arg0->_st3 = 0;
-                arg0->_st2 = 0;
-                arg0->_st1 = 0;
+            self->_retryCount = self->_retryCount + 1;
+            retry = self->_retryCount < 3;
+            if (retry == 1) {
+                self->_st0 = 1;
+                self->_st3 = 0;
+                self->_st2 = 0;
+                self->_st1 = 0;
             } else {
-                switch (v) {
+                switch (res) {
                 case -5:
-                    arg0->_result = 5;
+                    self->_result = 5;
                     break;
                 case -1:
                 case -2:
                 default:
-                    arg0->_result = 12;
+                    self->_result = 12;
                     break;
                 }
-                arg0->_isEnd = 1;
+                self->_isEnd = 1;
             }
         }
         break;
     default:
         break;
     }
-    if (arg0->_isEnd != 0) GPR_00554e60 = 0;
-    return arg0->_isEnd;
+    if (self->_isEnd != 0) g_svCardBusy = 0;
+    return self->_isEnd;
 }
 
-void Gap__Bec__beSvUseCheckApi__vfunc_23(beSvUseCheckApi *arg0, beSvDeliver *arg1) {
-    arg1->_result = (int)((int) arg0->_result);
-    arg1->_isEndOperat = 1;
+void Gap__Bec__beSvUseCheckApi__vfunc_23(beSvUseCheckApi *self, beSvDeliver *deliver) {
+    deliver->_result = self->_result;
+    deliver->_isEndOperat = 1;
 }
 
-void Gap__Bec__beSvReadMediaApi__vfunc_23(beSvReadMediaApi *arg0, void *arg1) {
-    *(int *)((char *)(arg1) + 24) = (int)((int) arg0->_result);
-    *(char *)((char *)(arg1) + 44) = 1;
+void Gap__Bec__beSvReadMediaApi__vfunc_23(beSvReadMediaApi *self, beSvDeliver *deliver) {
+    deliver->_result = self->_result;
+    deliver->_isEndOperat = 1;
 }
 
 #define SV_NEXT_STEP(self)  ((self)->_step = (self)->getStep() + 1, (self)->_st3 = 0, (self)->_st2 = 0)
 #define SV_FIRST_STEP(self) ((self)->_st3 = 0, (self)->_st2 = 0, (self)->_step = 0)
 #define SV_RETRY_STEP(self) ((self)->_step = 1, (self)->_st3 = 0, (self)->_st2 = 0)
-int Gap__Bec__beSvWriteMediaApi__vfunc_22(beSvWriteMediaApiRun *self)
+/* Memory-card write state machine, polled once per frame by the save-data pipeline. _phase (_st0)
+ * selects the phase and _step (_st1) the step inside it. Every phase runs three steps: 0 clears
+ * the retry counter, 1 issues one asynchronous memory-card request and raises its in-flight flag,
+ * 2 polls the flag (returning 0 while it is set) and reads the result code. A failed request is
+ * retried up to three times, then the machine ends with _isEnd = 1 and _result = 3 for the card-
+ * unusable codes (-2, -4, -5, ...) or 12 for anything else. Phases: 0 opens /<dir>/<dir>, 1
+ * resets the image pass, 2 seeks to the pass's data offset, 3 writes the save buffer and flushes
+ * it (then repeats phases 2-3 for the second pass), 4 closes the file (_result = 2, saved).
+ * Returns 1 when already finished, 0 while a request is pending, else _isEnd. */
+int Gap__Bec__beSvWriteMediaApi__vfunc_22(beSvWriteMediaApiWork *self)
 {
     char path[256];
     int ok;
     int res;
-    SvCardContext *ctx;
+    beSvPlatDataPS2 *platform;
 
     if (self->_isEnd != 0) {
         return 1;
     }
-    if (GPR_00554e64 == 1) {
+    if (g_svConnectCheckPending == 1) {
         return 0;
     }
-    ctx = DAT_0058a600[0];
+    platform = g_svPlatformData[0];
     switch (self->getPhase()) {
     case 0:
         switch (self->_step) {
@@ -511,19 +525,19 @@ int Gap__Bec__beSvWriteMediaApi__vfunc_22(beSvWriteMediaApiRun *self)
             SV_NEXT_STEP(self);
             break;
         case 1:
-            sprintf(path, DAT_00510310, ctx->volumeNumber, ctx->volumeNumber);
-            if (FUN_001198a8(DAT_004c91b0[self->_connect].port, DAT_004c91b0[self->_connect].slot, path, 3) >= 0) {
-                DAT_0058a838[0] = 1;
+            sprintf(path, slash_percent_s_slash_percent_s, platform->_dirName, platform->_dirName);
+            if (sceMcOpen(g_svCardSlots[self->_connect].port, g_svCardSlots[self->_connect].slot, path, 3) >= 0) {
+                g_svMcRequestState[SCE_MC_FUNC_OPEN] = SV_MC_REQUEST_ISSUED;
                 SV_NEXT_STEP(self);
             }
             break;
         case 2:
-            if (DAT_0058a838[0] == 1) {
+            if (g_svMcRequestState[SCE_MC_FUNC_OPEN] == SV_MC_REQUEST_ISSUED) {
                 return 0;
             }
-            res = DAT_0058a898[0];
+            res = g_svMcRequestResult[SCE_MC_FUNC_OPEN];
             if (res >= 0) {
-                DAT_0058a808[0] = res;
+                g_svSaveFd[0] = res;
                 self->_phase = self->_phase + 1;
                 SV_FIRST_STEP(self);
             } else {
@@ -562,16 +576,16 @@ int Gap__Bec__beSvWriteMediaApi__vfunc_22(beSvWriteMediaApiRun *self)
             SV_NEXT_STEP(self);
             break;
         case 1:
-            if (FUN_00119ac8(DAT_0058a808[0], ctx->imageOffsets[self->_imagePass], 0) >= 0) {
-                DAT_0058a840[0] = 1;
+            if (sceMcSeek(g_svSaveFd[0], platform->_dataOffSet[self->_imagePass], 0) >= 0) {
+                g_svMcRequestState[SCE_MC_FUNC_SEEK] = SV_MC_REQUEST_ISSUED;
                 SV_NEXT_STEP(self);
             }
             break;
         case 2:
-            if (DAT_0058a840[0] == 1) {
+            if (g_svMcRequestState[SCE_MC_FUNC_SEEK] == SV_MC_REQUEST_ISSUED) {
                 return 0;
             }
-            res = DAT_0058a8a0[0];
+            res = g_svMcRequestResult[SCE_MC_FUNC_SEEK];
             if (res >= 0) {
                 self->_phase = self->_phase + 1;
                 SV_FIRST_STEP(self);
@@ -604,16 +618,16 @@ int Gap__Bec__beSvWriteMediaApi__vfunc_22(beSvWriteMediaApiRun *self)
             SV_NEXT_STEP(self);
             break;
         case 1:
-            if (FUN_00119d58(DAT_0058a808[0], self->_saveWork->buffer, ctx->dataSize) >= 0) {
-                DAT_0058a848[0] = 1;
+            if (sceMcWrite(g_svSaveFd[0], self->_saveWork->_mem, platform->_dataSize) >= 0) {
+                g_svMcRequestState[SCE_MC_FUNC_WRITE] = SV_MC_REQUEST_ISSUED;
                 SV_NEXT_STEP(self);
             }
             break;
         case 2:
-            if (DAT_0058a848[0] == 1) {
+            if (g_svMcRequestState[SCE_MC_FUNC_WRITE] == SV_MC_REQUEST_ISSUED) {
                 return 0;
             }
-            res = DAT_0058a8a8[0];
+            res = g_svMcRequestResult[SCE_MC_FUNC_WRITE];
             if (res >= 0) {
                 SV_NEXT_STEP(self);
             } else {
@@ -642,16 +656,16 @@ int Gap__Bec__beSvWriteMediaApi__vfunc_22(beSvWriteMediaApiRun *self)
             SV_NEXT_STEP(self);
             break;
         case 4:
-            if (FUN_0011a6f0(DAT_0058a808[0]) >= 0) {
-                DAT_0058a858[0] = 1;
+            if (sceMcFlush(g_svSaveFd[0]) >= 0) {
+                g_svMcRequestState[SCE_MC_FUNC_FLUSH] = SV_MC_REQUEST_ISSUED;
                 SV_NEXT_STEP(self);
             }
             break;
         case 5:
-            if (DAT_0058a858[0] == 1) {
+            if (g_svMcRequestState[SCE_MC_FUNC_FLUSH] == SV_MC_REQUEST_ISSUED) {
                 return 0;
             }
-            res = DAT_0058a8b8[0];
+            res = g_svMcRequestResult[SCE_MC_FUNC_FLUSH];
             if (res >= 0) {
                 if (self->_imagePass == 0) {
                     self->_imagePass = 1;
@@ -666,15 +680,15 @@ int Gap__Bec__beSvWriteMediaApi__vfunc_22(beSvWriteMediaApiRun *self)
                 ok = self->_retryCount < 3; if (ok == 1) {
                     SV_RETRY_STEP(self);
                 } else switch (res) {
- case -2:
-     self->_result = 3;
-     self->_isEnd = 1;
-     break;
- default:
-     self->_result = 12;
-     self->_isEnd = 1;
-     break;
- }
+                case -2:
+                    self->_result = 3;
+                    self->_isEnd = 1;
+                    break;
+                default:
+                    self->_result = 12;
+                    self->_isEnd = 1;
+                    break;
+                }
             }
             break;
         }
@@ -686,16 +700,16 @@ int Gap__Bec__beSvWriteMediaApi__vfunc_22(beSvWriteMediaApiRun *self)
             SV_NEXT_STEP(self);
             break;
         case 1:
-            if (FUN_00119a08(DAT_0058a808[0]) >= 0) {
-                DAT_0058a83c[0] = 1;
+            if (sceMcClose(g_svSaveFd[0]) >= 0) {
+                g_svMcRequestState[SCE_MC_FUNC_CLOSE] = SV_MC_REQUEST_ISSUED;
                 SV_NEXT_STEP(self);
             }
             break;
         case 2:
-            if (DAT_0058a83c[0] == 1) {
+            if (g_svMcRequestState[SCE_MC_FUNC_CLOSE] == SV_MC_REQUEST_ISSUED) {
                 return 0;
             }
-            res = DAT_0058a89c[0];
+            res = g_svMcRequestResult[SCE_MC_FUNC_CLOSE];
             if (res >= 0) {
                 self->_isEnd = 1;
                 self->_result = 2;
@@ -728,8 +742,8 @@ int Gap__Bec__beSvWriteMediaApi__vfunc_22(beSvWriteMediaApiRun *self)
         break;
     }
     if (self->_isEnd != 0) {
-        FUN_003a9990((struct S_3a9990 *)self->_saveWork);
-        (*(unsigned char *)&GPR_00554e60) = 0;
+        beSaveMemoryObj_Free(self->_saveWork);
+        g_svCardBusy = 0;
     }
     return self->_isEnd;
 }
@@ -738,277 +752,276 @@ int Gap__Bec__beSvWriteMediaApi__vfunc_22(beSvWriteMediaApiRun *self)
 #undef SV_FIRST_STEP
 #undef SV_NEXT_STEP
 
-void Gap__Bec__beSvWriteMediaApi__vfunc_23(beSvWriteMediaApi *arg0, void *arg1) {
-    *(int *)((char *)(arg1) + 24) = (int)((int) arg0->_result);
-    *(char *)((char *)(arg1) + 44) = 1;
+void Gap__Bec__beSvWriteMediaApi__vfunc_23(beSvWriteMediaApi *self, beSvDeliver *deliver) {
+    deliver->_result = self->_result;
+    deliver->_isEndOperat = 1;
 }
 
-void Gap__Bec__beSvGetFreeSizeApi__vfunc_21(beSvGetFreeSizeApi *arg0, void *arg1) {
-    arg0->_connect = (int)((int) *(int *)((char *)(arg1) + 16));
-    arg0->_isEnd = 0;
-    arg0->_result = 1;
-    ((int *)DAT_0058a600)[0] = *(int *)((char *)(arg1) + 64);
-    arg0->_st0 = 0;
-    arg0->_st3 = 0;
-    arg0->_st2 = 0;
-    arg0->_st1 = 0;
-    GPR_00554e60 = 1;
-    *(int *)((char *)(arg0) + 60) = 0;
+void Gap__Bec__beSvGetFreeSizeApi__vfunc_21(beSvApiWork *self, beSvDeliver *deliver) {
+    self->_connect = deliver->_targetConnect;
+    self->_isEnd = 0;
+    self->_result = 1;
+    g_svPlatformData[0] = (beSvPlatDataPS2 *)deliver->_platformData;
+    self->_st0 = 0;
+    self->_st3 = 0;
+    self->_st2 = 0;
+    self->_st1 = 0;
+    g_svCardBusy = 1;
+    self->_retryCount = 0;
 }
 
-unsigned char Gap__Bec__beSvGetFreeSizeApi__vfunc_22(beSvGetFreeSizeApi *arg0) {
-    int temp_a0;
-    int v;
-    beSvPlatBaseData *q;
-    int e;
+unsigned char Gap__Bec__beSvGetFreeSizeApi__vfunc_22(beSvGetFreeSizeApiWork *self) {
+    int connect;
+    beSvPlatDataPS2 *platform;
+    int res;
 
-    if (arg0->_isEnd != 0) {
+    if (self->_isEnd != 0) {
         return 1U;
     }
-    if (GPR_00554e64 == 1) {
+    if (g_svConnectCheckPending == 1) {
         return 0U;
     }
-    q = ((beSvPlatBaseData * *)DAT_0058a600)[0];
-    switch (arg0->_st0) {
+    platform = g_svPlatformData[0];
+    switch (self->_st0) {
     case 0:
-        *(int *)((char *)arg0 + 60) = 0;
-        arg0->_st0 = arg0->_st0 + 1;
-        arg0->_st3 = 0;
-        arg0->_st2 = 0;
-        arg0->_st1 = 0;
+        self->_retryCount = 0;
+        self->_st0 = self->_st0 + 1;
+        self->_st3 = 0;
+        self->_st2 = 0;
+        self->_st1 = 0;
         break;
     case 1:
-        temp_a0 = arg0->_connect * 8;
-        if (FUN_00119ff0(*(int *)((char *)((int *)DAT_004c91b0) + temp_a0), *(int *)((char *)DAT_004c91b4 + temp_a0), (int *)((char *)arg0 + 76), (int *)((char *)arg0 + 80), (int *)((char *)arg0 + 84)) >= 0) {
-            DAT_0058a834[0] = 1;
-            arg0->_st0 = arg0->_st0 + 1;
-            arg0->_st3 = 0;
-            arg0->_st2 = 0;
-            arg0->_st1 = 0;
+        connect = self->_connect;
+        if (sceMcGetInfo(g_svCardSlots[connect].port, g_svCardSlots[connect].slot, &self->_cardType, &self->_freeKb, &self->_format) >= 0) {
+            g_svMcRequestState[SCE_MC_FUNC_GET_INFO] = SV_MC_REQUEST_ISSUED;
+            self->_st0 = self->_st0 + 1;
+            self->_st3 = 0;
+            self->_st2 = 0;
+            self->_st1 = 0;
         }
         break;
     case 2:
-        if (DAT_0058a834[0] == 1) {
+        if (g_svMcRequestState[SCE_MC_FUNC_GET_INFO] == SV_MC_REQUEST_ISSUED) {
             return 0U;
         }
-        e = DAT_0058a894[0];
-        if (e >= 0) {
-            switch (*(int *)((char *)arg0 + 76)) {
+        res = g_svMcRequestResult[SCE_MC_FUNC_GET_INFO];
+        if (res >= 0) {
+            switch (self->_cardType) {
             case 2:
-                arg0->_result = 2;
-                arg0->_fileCapa = 0x80;
-                arg0->_isEnd = 1U;
-                switch (*(int *)((char *)arg0 + 84)) {
+                self->_result = 2;
+                self->_fileCapa = 0x80;
+                self->_isEnd = 1U;
+                switch (self->_format) {
                 case 0:
-                    arg0->_memCapa = 0x04E00000U;
+                    self->_memCapa = 0x04E00000U;
                     break;
                 case 1:
-                    arg0->_memCapa = *(int *)((char *)arg0 + 80) << 0xA;
+                    self->_memCapa = self->_freeKb << 0xA;
                     break;
                 }
-                if (!(q->_memNeed > (unsigned int) arg0->_memCapa)) {
-                    arg0->_result = 2;
+                if (!(platform->_memNeed > (unsigned int)self->_memCapa)) {
+                    self->_result = 2;
                 } else {
-                    arg0->_result = 9;
+                    self->_result = 9;
                 }
                 break;
             case 0:
             case 3:
             case 1:
-                arg0->_result = 0xC;
+                self->_result = 0xC;
                 break;
             }
-            arg0->_isEnd = 1U;
+            self->_isEnd = 1U;
             break;
         }
-        *(int *)((char *)arg0 + 60) = *(int *)((char *)arg0 + 60) + 1;
-        if ((unsigned char)(*(int *)((char *)arg0 + 60) < 3) == 1) {
-            arg0->_st0 = 1;
-            arg0->_st3 = 0;
-            arg0->_st2 = 0;
-            arg0->_st1 = 0;
+        self->_retryCount = self->_retryCount + 1;
+        if ((unsigned char)(self->_retryCount < 3) == 1) {
+            self->_st0 = 1;
+            self->_st3 = 0;
+            self->_st2 = 0;
+            self->_st1 = 0;
         } else {
-            switch (e) {
+            switch (res) {
             case -2:
-                arg0->_memCapa = 0x04E00000U;
-                arg0->_fileCapa = 0x80;
-                arg0->_result = 2;
-                arg0->_isEnd = 1U;
+                self->_memCapa = 0x04E00000U;
+                self->_fileCapa = 0x80;
+                self->_result = 2;
+                self->_isEnd = 1U;
                 break;
             case -5:
-                arg0->_result = 5;
-                arg0->_isEnd = 1U;
+                self->_result = 5;
+                self->_isEnd = 1U;
                 break;
             default:
             case -1:
-                arg0->_result = 0xC;
-                arg0->_isEnd = 1U;
+                self->_result = 0xC;
+                self->_isEnd = 1U;
                 break;
             }
         }
         break;
     }
-    if (arg0->_isEnd == 1) {
-        GPR_00554e60 = 0;
+    if (self->_isEnd == 1) {
+        g_svCardBusy = 0;
     }
-    return arg0->_isEnd;
+    return self->_isEnd;
 }
 
-void Gap__Bec__beSvGetFreeSizeApi__vfunc_23(beSvGetFreeSizeApi *arg0, UnidentifiedResultObject *arg1) {
-    UnidentifiedFreeSizeGlobal *g = ((UnidentifiedFreeSizeGlobal * *)DAT_0058a600)[0];
+void Gap__Bec__beSvGetFreeSizeApi__vfunc_23(beSvGetFreeSizeApiWork *self, beSvDeliver *deliver) {
+    beSvPlatDataPS2 *platform = g_svPlatformData[0];
 
-    arg1->f24 = arg0->_result;
-    arg1->b44 = 1;
-    if (((beSvGetFreeSizeApiTail *)arg0)->f84 == 1) {
-        arg1->f32 = (unsigned int)arg0->_memCapa;
+    deliver->_result = self->_result;
+    deliver->_isEndOperat = 1;
+    if (self->_format == 1) {
+        deliver->_memCapa = self->_memCapa;
     } else {
-        arg1->f32 = 0x04E00000;
+        deliver->_memCapa = 0x04E00000;
     }
-    arg1->f36 = arg0->_fileCapa;
-    if (!(g->f20 > (unsigned int)arg0->_memCapa)) {
-        arg1->b42 = 1;
+    deliver->_fileCapa = self->_fileCapa;
+    if (!(platform->_memNeed > (unsigned int)self->_memCapa)) {
+        deliver->_isMemCapaOK = 1;
     } else {
-        arg1->b42 = 0;
+        deliver->_isMemCapaOK = 0;
     }
-    arg1->b43 = 1;
+    deliver->_isfileCapaOK = 1;
 }
 
-void Gap__Bec__beSvStartApi__vfunc_21(beSvStartApi *arg0, void *arg1) {
-    int sp3C;
-    int sp38;
+void Gap__Bec__beSvStartApi__vfunc_21(beSvApiWork *self, beSvDeliver *deliver) {
+    int mcmanId;
+    int mcservId;
 
-    arg0->_isEnd = 0;
-    if (GPR_00554e58 == 0) {
-        FUN_0032cf50(&sp3C, &DAT_00510428[0], 1, 0, 0);
-        FUN_0032cf50(&sp38, &DAT_00510438[0], 1, 0, 0);
-        FUN_001194c0();
-        GPR_00554e58 = 1;
+    self->_isEnd = 0;
+    if (g_svMcModulesLoaded == 0) {
+        FUN_0032cf50(&mcmanId, mcman_irx, 1, 0, 0);
+        FUN_0032cf50(&mcservId, mcserv_irx, 1, 0, 0);
+        sceMcInit();
+        g_svMcModulesLoaded = 1;
     }
     sceMtapPortOpen(2);
-    DAT_004c91a0[0] = 5;
-    DAT_0058a608[0] = *(int *)((char *)(arg1) + 20);
+    g_svConnectMax[0] = 5;
+    g_svSaveVersion[0] = deliver->_saveVer;
     if (sceMtapGetConnection(2) == 1) {
-        GPR_005549dc = 1;
-        GPR_00554e5c = 0;
+        g_svMultitapState = 1;
+        g_svMultitapChanged = 0;
     } else {
-        GPR_00554e5c = 0;
-        GPR_005549dc = -1;
+        g_svMultitapChanged = 0;
+        g_svMultitapState = -1;
     }
-    GPR_00554e60 = 0;
-    (*(char *)&GPR_00554e64) = 0;
-    *(int *)((char *)(arg0) + 60) = 0;
-    arg0->_result = 1;
-    arg0->_st0 = 0;
-    arg0->_st3 = 0;
-    arg0->_st2 = 0;
-    arg0->_st1 = 0;
+    g_svCardBusy = 0;
+    g_svConnectCheckPending = 0;
+    self->_retryCount = 0;
+    self->_result = 1;
+    self->_st0 = 0;
+    self->_st3 = 0;
+    self->_st2 = 0;
+    self->_st1 = 0;
 }
 
-int Gap__Bec__beSvStartApi__vfunc_22(beSvStartApi *arg0) {
-    if (arg0->_isEnd != 0) {
+int Gap__Bec__beSvStartApi__vfunc_22(beSvStartApi *self) {
+    if (self->_isEnd != 0) {
         return 1;
     }
-    arg0->_isEnd = 1;
+    self->_isEnd = 1;
     return 1;
 }
 
-void Gap__Bec__beSvStartApi__vfunc_23(beSvStartApi *arg0, void *arg1) {
-    *(int *)((char *)(arg1) + 24) = (int)((int) arg0->_result);
-    *(char *)((char *)(arg1) + 44) = 1;
+void Gap__Bec__beSvStartApi__vfunc_23(beSvStartApi *self, beSvDeliver *deliver) {
+    deliver->_result = self->_result;
+    deliver->_isEndOperat = 1;
 }
 
-void Gap__Bec__beSvEndApi__vfunc_21(beSvEndApi *arg0) {
-    arg0->_isEnd = 0;
-    arg0->_result = 1;
+void Gap__Bec__beSvEndApi__vfunc_21(beSvEndApi *self) {
+    self->_isEnd = 0;
+    self->_result = 1;
     sceMtapPortClose(2);
-    arg0->_st0 = 0;
-    arg0->_st3 = 0;
-    arg0->_st2 = 0;
-    arg0->_st1 = 0;
+    self->_st0 = 0;
+    self->_st3 = 0;
+    self->_st2 = 0;
+    self->_st1 = 0;
 }
 
-int Gap__Bec__beSvEndApi__vfunc_22(beSvEndApi *arg0) {
-    if (arg0->_isEnd != 0) {
+int Gap__Bec__beSvEndApi__vfunc_22(beSvEndApi *self) {
+    if (self->_isEnd != 0) {
         return 1;
     }
-    arg0->_isEnd = 1;
-    arg0->_result = 2;
+    self->_isEnd = 1;
+    self->_result = 2;
     return 1;
 }
 
-void Gap__Bec__beSvEndApi__vfunc_23(beSvEndApi *arg0, void *arg1) {
-    *(int *)((char *)(arg1) + 24) = (int)((int) arg0->_result);
-    *(char *)((char *)(arg1) + 44) = 1;
+void Gap__Bec__beSvEndApi__vfunc_23(beSvEndApi *self, beSvDeliver *deliver) {
+    deliver->_result = self->_result;
+    deliver->_isEndOperat = 1;
 }
 
-int FUN_003ad7a0(int arg0, int arg1) {
-    int sp2C;
+int beSvConnectCheck_ProbeSlot(int check, int slot) {
+    int cardType;
 
-    sp2C = 0;
-    FUN_00119ff0(DAT_004c91b0[arg1].port, DAT_004c91b0[arg1].slot, &sp2C, 0, 0);
+    cardType = 0;
+    sceMcGetInfo(g_svCardSlots[slot].port, g_svCardSlots[slot].slot, &cardType, 0, 0);
     sceMcSync(0, 0, 0);
-    if (sp2C == 2) {
-        DAT_0058a810[arg1] = 1;
+    if (cardType == 2) {
+        g_svSlotPresent[slot] = 1;
         return 1;
     }
-    DAT_0058a810[arg1] = 0;
+    g_svSlotPresent[slot] = 0;
     return 0;
 }
 
-int FUN_003ad850(int port, int onlyPresent) {
+int beSvConnectCheck_ProbeSlots(int check, int onlyPresent) {
     int count;
     int i;
     count = 5;
-    if (GPR_005549dc == -1)
+    if (g_svMultitapState == -1)
         count = 2;
-    else if (GPR_005549dc == 1)
+    else if (g_svMultitapState == 1)
         count = 5;
     for (i = 0; i < count; i++) {
-        if (!onlyPresent || DAT_0058a810[i] == 1)
-            FUN_003ad7a0(port, i);
+        if (!onlyPresent || g_svSlotPresent[i] == 1)
+            beSvConnectCheck_ProbeSlot(check, i);
     }
     for (i = count; i < 8; i++)
-        DAT_0058a810[i] = 0;
+        g_svSlotPresent[i] = 0;
     return count;
 }
 
-void FUN_003ad950(int arg0, void *arg1) {
-    if (DAT_0058a8f0[0] != 0) {
-        if (DAT_0058a800[0] > 0) {
-            goto block_3;
+void beSvConnectCheck_PollMultitap(int check, beSvDeliver *deliver) {
+    if (g_svMultitapPollSuspended[0] != 0) {
+        if (g_svMultitapPollCount[0] > 0) {
+            goto poll;
         }
     } else {
-block_3:
+poll:
         if (sceMtapGetConnection(2) == 1) {
-            if (GPR_005549dc == 1) {
-                GPR_00554e5c = 0;
-                DAT_0058a800[0] = 0;
+            if (g_svMultitapState == 1) {
+                g_svMultitapChanged = 0;
+                g_svMultitapPollCount[0] = 0;
             } else {
-                DAT_0058a800[0] += 1;
-                if (DAT_0058a800[0] >= 3) {
-                    DAT_0058a800[0] = 0;
-                    GPR_00554e5c = 1;
-                    GPR_005549dc = 1;
+                g_svMultitapPollCount[0] += 1;
+                if (g_svMultitapPollCount[0] >= 3) {
+                    g_svMultitapPollCount[0] = 0;
+                    g_svMultitapChanged = 1;
+                    g_svMultitapState = 1;
                 }
             }
-        } else if (GPR_005549dc == -1) {
-            GPR_00554e5c = 0;
-            DAT_0058a800[0] = 0;
+        } else if (g_svMultitapState == -1) {
+            g_svMultitapChanged = 0;
+            g_svMultitapPollCount[0] = 0;
         } else {
-            DAT_0058a800[0] += 1;
-            if (DAT_0058a800[0] >= 3) {
-                DAT_0058a800[0] = 0;
-                GPR_00554e5c = -1;
-                GPR_005549dc = -1;
+            g_svMultitapPollCount[0] += 1;
+            if (g_svMultitapPollCount[0] >= 3) {
+                g_svMultitapPollCount[0] = 0;
+                g_svMultitapChanged = -1;
+                g_svMultitapState = -1;
             }
         }
-        *(char *)((char *)(arg1) + 40) = (char) GPR_005549dc;
-        *(char *)((char *)(arg1) + 41) = (char) GPR_00554e5c;
+        deliver->_useMtap = g_svMultitapState;
+        deliver->_chgUseMtap = g_svMultitapChanged;
     }
 }
 
-void FUN_003ada60(ConnectCheckState *check) {
-    if (GPR_00554e64 == 1) {
+void beSvConnectCheck_Poll(beSvConnectCheckWork *check) {
+    if (g_svConnectCheckPending == 1) {
         int result;
         int cmd;
         result = 0;
@@ -1019,115 +1032,117 @@ void FUN_003ada60(ConnectCheckState *check) {
             case 0:
             case -2:
             case -1:
-                DAT_0058a810[check->slot] = 1;
-                check->types[check->slot] = check->type;
-                check->frees[check->slot] = check->free;
+                g_svSlotPresent[check->_slot] = 1;
+                check->_freeSizes[check->_slot] = check->_free;
+                check->_formats[check->_slot] = check->_format;
                 break;
             default:
-                DAT_0058a810[check->slot] = 0;
+                g_svSlotPresent[check->_slot] = 0;
                 break;
             }
-            GPR_00554e64 = 0;
-            if (!(*(unsigned char *)&GPR_00554e60)) {
-                int count = FUN_003ad850((int)check, 1);
+            g_svConnectCheckPending = 0;
+            if (!g_svCardBusy) {
+                int count = beSvConnectCheck_ProbeSlots((int)check, 1);
                 bool found = false;
                 int tries;
                 for (tries = 1; tries < count + 1; tries++) {
-                    int s = (check->slot + tries) % count;
-                    if (DAT_0058a810[s] == 0) {
-                        check->slot = s;
+                    int s = (check->_slot + tries) % count;
+                    if (g_svSlotPresent[s] == 0) {
+                        check->_slot = s;
                         found = true;
                         break;
                     }
                 }
                 if (found == true) {
-                    FUN_00119ff0(DAT_004c91b0[check->slot].port, DAT_004c91b0[check->slot].slot, 0, &check->type, &check->free);
-                    GPR_00554e64 = 1;
+                    sceMcGetInfo(g_svCardSlots[check->_slot].port, g_svCardSlots[check->_slot].slot, 0, &check->_free, &check->_format);
+                    g_svConnectCheckPending = 1;
                 }
             }
         }
-    } else if ((*(unsigned char *)&GPR_00554e60) == 1) {
+    } else if (g_svCardBusy == 1) {
         int result;
         int cmd;
         result = 0;
         cmd = 0;
         int done = sceMcSync(1, &cmd, &result);
         if (done != 0 && done == 1) {
-            if (cmd > 0 && cmd < 22 && DAT_0058a830[cmd] == 1) {
-                DAT_0058a890[cmd] = result;
-                DAT_0058a830[cmd] = 2;
+            if (cmd > 0 && cmd < 22 && g_svMcRequestState[cmd] == SV_MC_REQUEST_ISSUED) {
+                g_svMcRequestResult[cmd] = result;
+                g_svMcRequestState[cmd] = SV_MC_REQUEST_DONE;
             }
         }
     } else {
-        int count = FUN_003ad850((int)check, 0);
-        check->slot = 0;
+        int count = beSvConnectCheck_ProbeSlots((int)check, 0);
+        check->_slot = 0;
         bool found = false;
         int s;
         for (s = 0; s < count; s++) {
-            if (DAT_0058a810[s] == 0) {
-                check->slot = s;
+            if (g_svSlotPresent[s] == 0) {
+                check->_slot = s;
                 found = true;
                 break;
             }
         }
         if (found == true) {
-            FUN_00119ff0(DAT_004c91b0[check->slot].port, DAT_004c91b0[check->slot].slot, 0, &check->type, &check->free);
-            GPR_00554e64 = 1;
+            sceMcGetInfo(g_svCardSlots[check->_slot].port, g_svCardSlots[check->_slot].slot, 0, &check->_free, &check->_format);
+            g_svConnectCheckPending = 1;
         }
     }
 }
 
-int FUN_003add40(int *arg0, A *arg1) {
-    L *a4;
-    L *a3;
-    L *a2;
+/* slotWords walks beSvConnectCheckWork one word per slot, so slotWords[16] and slotWords[24] are
+ * that slot's _freeSizes and _formats entries. */
+int beSvConnectCheck_FillDeliver(int *slotWords, beSvDeliver *deliver) {
+    igIntList *connected;
+    igIntList *freeSizes;
+    igIntList *formats;
     int i;
     int n;
-    int *d;
-    int *p;
-    int cnt;
+    int *data;
+    int *present;
+    int found;
     int j;
-    int c;
+    int count;
     int off;
-    a4 = arg1->l12;
-    a3 = arg1->l48;
-    a2 = arg1->l56;
-    cnt = 0;
-    if (DAT_0058a800[0] == 0) {
-        *(char *)((char *)arg1 + 40) = GPR_005549dc;
+    connected = (igIntList *)deliver->_actConnect;
+    freeSizes = (igIntList *)deliver->_freeSizeList;
+    formats = (igIntList *)deliver->_formatList;
+    found = 0;
+    if (g_svMultitapPollCount[0] == 0) {
+        deliver->_useMtap = g_svMultitapState;
     }
-    n = a4->n;
-    d = a4->d;
+    n = connected->_count;
+    data = (int *)connected->_data;
     for (j = 0; j < n; j++) {
-        d[j] = DAT_004c91f0[0];
+        data[j] = g_svSlotAbsent[0];
     }
     i = 0;
-    if (0 < a4->n) {
+    if (0 < connected->_count) {
         off = 0;
-        p = &DAT_0058a810[0];
+        present = &g_svSlotPresent[0];
         do {
-            c = *(int *)&a4->n;
-            if (c != 0 && i >= 0 && i < c) {
-                *(int *)((char *)a4->d + off) = *p;
+            count = *(int *)&connected->_count;
+            if (count != 0 && i >= 0 && i < count) {
+                *(int *)((char *)connected->_data + off) = *present;
             }
-            if (*p == 1) {
-                c = a3->n;
-                if (c != 0 && i >= 0 && i < c) {
-                    *(int *)((char *)a3->d + off) = arg0[16];
+            if (*present == 1) {
+                count = freeSizes->_count;
+                if (count != 0 && i >= 0 && i < count) {
+                    *(int *)((char *)freeSizes->_data + off) = slotWords[16];
                 }
-                c = a2->n;
-                if (c != 0 && i >= 0 && i < c) {
-                    *(int *)((char *)a2->d + off) = arg0[24];
+                count = formats->_count;
+                if (count != 0 && i >= 0 && i < count) {
+                    *(int *)((char *)formats->_data + off) = slotWords[24];
                 }
-                cnt++;
+                found++;
             }
             i++;
-            p++;
+            present++;
             off += 4;
-            arg0++;
-        } while (i < a4->n);
+            slotWords++;
+        } while (i < connected->_count);
     }
-    return cnt;
+    return found;
 }
 
 void Gap__Bec__beSvConnectCheck__vfunc_21(void)
@@ -1147,10 +1162,10 @@ int Gap__Bec__beSvConnectCheck__vfunc_20(void)
     return g_beSvConnectCheck_metaObject[0];
 }
 
-void Gap__Bec__beSvConnectCheck__vfunc_07(void **arg0) {
+void Gap__Bec__beSvConnectCheck__vfunc_07(igObjectVirtuals *self) {
     Gap__Core__igObject__vfunc_07();
-    igMetaObject_CountInstances(((DW4VC_88_0 *)(arg0))->vX(), 1);
-    igMetaObject_CountInstances(((DW4VC_88_0 *)(arg0))->vX(), 1);
+    igMetaObject_CountInstances(self->getMetaObject(), 1);
+    igMetaObject_CountInstances(self->getMetaObject(), 1);
 }
 
 int Gap__Bec__beSaveApi__vfunc_20(void)
@@ -1168,10 +1183,10 @@ int Gap__Bec__beSvEndApi__vfunc_20(void)
     return g_beSvEndApi_metaObject[0];
 }
 
-void Gap__Bec__beSvEndApi__vfunc_07(void **arg0) {
+void Gap__Bec__beSvEndApi__vfunc_07(igObjectVirtuals *self) {
     Gap__Core__igObject__vfunc_07();
-    igMetaObject_CountInstances(((DW4VC_88_0 *)(arg0))->vX(), 1);
-    igMetaObject_CountInstances(((DW4VC_88_0 *)(arg0))->vX(), 1);
+    igMetaObject_CountInstances(self->getMetaObject(), 1);
+    igMetaObject_CountInstances(self->getMetaObject(), 1);
 }
 
 void Gap__Bec__beSvEndApi__vfunc_08(void)
@@ -1184,10 +1199,10 @@ int Gap__Bec__beSvStartApi__vfunc_20(void)
     return g_beSvStartApi_metaObject[0];
 }
 
-void Gap__Bec__beSvStartApi__vfunc_07(void **arg0) {
+void Gap__Bec__beSvStartApi__vfunc_07(igObjectVirtuals *self) {
     Gap__Core__igObject__vfunc_07();
-    igMetaObject_CountInstances(((DW4VC_88_0 *)(arg0))->vX(), 1);
-    igMetaObject_CountInstances(((DW4VC_88_0 *)(arg0))->vX(), 1);
+    igMetaObject_CountInstances(self->getMetaObject(), 1);
+    igMetaObject_CountInstances(self->getMetaObject(), 1);
 }
 
 void Gap__Bec__beSvStartApi__vfunc_08(void)
@@ -1200,10 +1215,10 @@ int Gap__Bec__beSvGetFreeSizeApi__vfunc_20(void)
     return g_beSvGetFreeSizeApi_metaObject[0];
 }
 
-void Gap__Bec__beSvGetFreeSizeApi__vfunc_07(void **arg0) {
+void Gap__Bec__beSvGetFreeSizeApi__vfunc_07(igObjectVirtuals *self) {
     Gap__Core__igObject__vfunc_07();
-    igMetaObject_CountInstances(((DW4VC_88_0 *)(arg0))->vX(), 1);
-    igMetaObject_CountInstances(((DW4VC_88_0 *)(arg0))->vX(), 1);
+    igMetaObject_CountInstances(self->getMetaObject(), 1);
+    igMetaObject_CountInstances(self->getMetaObject(), 1);
 }
 
 void Gap__Bec__beSvGetFreeSizeApi__vfunc_08(void)
@@ -1216,26 +1231,21 @@ int Gap__Bec__beSvWriteMediaApi__vfunc_20(void)
     return g_beSvWriteMediaApi_metaObject[0];
 }
 
-void Gap__Bec__beSvWriteMediaApi__vfunc_07(void **arg0) {
+void Gap__Bec__beSvWriteMediaApi__vfunc_07(igObjectVirtuals *self) {
     Gap__Core__igObject__vfunc_07();
-    igMetaObject_CountInstances(((DW4VC_88_0 *)(arg0))->vX(), 1);
-    igMetaObject_CountInstances(((DW4VC_88_0 *)(arg0))->vX(), 1);
+    igMetaObject_CountInstances(self->getMetaObject(), 1);
+    igMetaObject_CountInstances(self->getMetaObject(), 1);
 }
 
-void Gap__Bec__beSvWriteMediaApi__vfunc_08(beSvWriteMediaApi *arg0) {
-    igObject *temp_a0;
+void Gap__Bec__beSvWriteMediaApi__vfunc_08(beSvWriteMediaApi *self) {
+    igObject *saveWork;
 
-    temp_a0 = (igObject *)arg0->_saveWork;
-    if (temp_a0 != 0) {
-        if (temp_a0 != 0) {
-            temp_a0->_refCount = (int)temp_a0->_refCount - 1;
-            if (((unsigned long long) ((long long) (int)temp_a0->_refCount << 0x29) >> 0x29) == 0) {
-                igObject_Destroy(temp_a0);
-            }
-        }
-        arg0->_saveWork = 0;
+    saveWork = (igObject *)self->_saveWork;
+    if (saveWork != 0) {
+        IG_OBJECT_RELEASE(saveWork);
+        self->_saveWork = 0;
     }
-    Gap__Core__igObject__vfunc_08__002ff0f0(arg0);
+    Gap__Core__igObject__vfunc_08__002ff0f0(self);
 }
 
 int Gap__Bec__beSvReadMediaApi__vfunc_20(void)
@@ -1243,30 +1253,23 @@ int Gap__Bec__beSvReadMediaApi__vfunc_20(void)
     return g_beSvReadMediaApi_metaObject[0];
 }
 
-void Gap__Bec__beSvReadMediaApi__vfunc_07(void **arg0) {
+void Gap__Bec__beSvReadMediaApi__vfunc_07(igObjectVirtuals *self) {
     Gap__Core__igObject__vfunc_07();
-    igMetaObject_CountInstances(((DW4VC_88_0 *)(arg0))->vX(), 1);
-    igMetaObject_CountInstances(((DW4VC_88_0 *)(arg0))->vX(), 1);
+    igMetaObject_CountInstances(self->getMetaObject(), 1);
+    igMetaObject_CountInstances(self->getMetaObject(), 1);
 }
-
-/* igObject header: the reference count at +4 is not a reflected field */
 
 static inline int countOf(const igObjectList *l) { return l->_count; }
 
-void Gap__Bec__beSvReadMediaApi__vfunc_08(beSvReadMediaApi *arg0) {
-    igObjectList *l = (igObjectList *)arg0->_loadWorkList;
+void Gap__Bec__beSvReadMediaApi__vfunc_08(beSvReadMediaApi *self) {
+    igObjectList *l = (igObjectList *)self->_loadWorkList;
     if (countOf(l) != 0) {
         int n = l->_count;
         int i;
         igObject *t;
         for (i = 0; i < n; i++) {
             t = ((igObject **)l->_data)[i];
-            if (t != 0) {
-                t->_refCount = (int)t->_refCount - 1;
-                if (((unsigned long long) ((long long) (int)t->_refCount << 0x29) >> 0x29) == 0) {
-                    igObject_Destroy(t);
-                }
-            }
+            IG_OBJECT_RELEASE(t);
         }
         {
             int m = l->_count;
@@ -1277,7 +1280,7 @@ void Gap__Bec__beSvReadMediaApi__vfunc_08(beSvReadMediaApi *arg0) {
         }
         l->_count = 0;
     }
-    Gap__Core__igObject__vfunc_08__002ff0f0(arg0);
+    Gap__Core__igObject__vfunc_08__002ff0f0(self);
 }
 
 int Gap__Bec__beSvUseCheckApi__vfunc_20(void)
@@ -1290,9 +1293,9 @@ void Gap__Bec__beSvUseCheckApi__vfunc_08(void)
     Gap__Core__igObject__vfunc_08__002ff0f0();
 }
 
-void FUN_003ae4a0(void **arg0) {
+void Gap__Bec__beSaveApi__vfunc_07(igObjectVirtuals *self) {
     Gap__Core__igObject__vfunc_07();
-    igMetaObject_CountInstances(((DW4VC_88_0 *)(arg0))->vX(), 1);
+    igMetaObject_CountInstances(self->getMetaObject(), 1);
 }
 
 int Gap__Bec__beSvFormatApi__vfunc_20(void)
@@ -1320,26 +1323,21 @@ int Gap__Bec__beSvFileMakeApi__vfunc_20(void)
     return g_beSvFileMakeApi_metaObject[0];
 }
 
-void Gap__Bec__beSvFileMakeApi__vfunc_07(void **arg0) {
+void Gap__Bec__beSvFileMakeApi__vfunc_07(igObjectVirtuals *self) {
     Gap__Core__igObject__vfunc_07();
-    igMetaObject_CountInstances(((DW4VC_88_0 *)(arg0))->vX(), 1);
-    igMetaObject_CountInstances(((DW4VC_88_0 *)(arg0))->vX(), 1);
+    igMetaObject_CountInstances(self->getMetaObject(), 1);
+    igMetaObject_CountInstances(self->getMetaObject(), 1);
 }
 
-void Gap__Bec__beSvFileMakeApi__vfunc_08(beSvFileMakeApi *arg0) {
-    RefCountedHeader *temp_a0;
+void Gap__Bec__beSvFileMakeApi__vfunc_08(beSvFileMakeApi *self) {
+    igObject *saveWork;
 
-    temp_a0 = (RefCountedHeader *)arg0->_saveWork;
-    if (temp_a0 != 0) {
-        if (temp_a0 != 0) {
-            temp_a0->references = temp_a0->references - 1;
-            if (((unsigned long long) ((long long) temp_a0->references << 0x29) >> 0x29) == 0) {
-                igObject_Destroy(temp_a0);
-            }
-        }
-        arg0->_saveWork = 0;
+    saveWork = (igObject *)self->_saveWork;
+    if (saveWork != 0) {
+        IG_OBJECT_RELEASE(saveWork);
+        self->_saveWork = 0;
     }
-    Gap__Core__igObject__vfunc_08__002ff0f0(arg0);
+    Gap__Core__igObject__vfunc_08__002ff0f0(self);
 }
 
 void Gap__Bec__beSaveApi__vfunc_08(void)
@@ -1347,7 +1345,7 @@ void Gap__Bec__beSaveApi__vfunc_08(void)
     Gap__Core__igObject__vfunc_08__002ff0f0();
 }
 
-void Gap__Bec__beSaveMemoryObj__vfunc_07(void **arg0) {
+void Gap__Bec__beSaveMemoryObj__vfunc_07(igObjectVirtuals *self) {
     Gap__Core__igObject__vfunc_07();
-    igMetaObject_CountInstances(((DW4VC_88_0 *)(arg0))->vX(), 1);
+    igMetaObject_CountInstances(self->getMetaObject(), 1);
 }

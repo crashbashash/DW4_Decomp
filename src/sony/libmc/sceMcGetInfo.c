@@ -29,7 +29,7 @@ extern int *DAT_0055d5ec;
 extern int *DAT_0055d5f0;
 void sceSifWriteBackDCache(void *p, int size);
 void mceGetInfoApdx(void *arg);
-int FUN_00119ff0(int port, int slot, int *type, int *free, int *format) {
+int sceMcGetInfo(int port, int slot, int *type, int *free, int *format) {
     int r;
     if (DAT_0055d5c0.server == 0) return -100;
     if (FUN_0010af30(DAT_00485194) < 0) return -200;

@@ -1,9 +1,9 @@
 #include "dw4/reflected.h"
 
 extern "C" int igObject_Destroy(...);
-extern "C" int FUN_003ad950(int, int);
-extern "C" int FUN_003ada60(int);
-extern "C" int FUN_003add40(int, int);
+extern "C" int beSvConnectCheck_PollMultitap(int, int);
+extern "C" int beSvConnectCheck_Poll(int);
+extern "C" int beSvConnectCheck_FillDeliver(int, int);
 extern "C" void FUN_00100610(...);
 extern "C" void **FUN_003af090(void **arg0, short arg1);
 extern "C" int Gap__Bec__beSaveUtil__vfunc_30(void);
@@ -112,9 +112,9 @@ unsigned char FUN_003ae680(A *arg0, B *arg1, R *arg2) {
 }
 
 void FUN_003ae770(S0 *arg0, S1 *arg1) {
-    FUN_003ad950(arg0->f24, arg1->f30);
-    FUN_003ada60(arg0->f24);
-    FUN_003add40(arg0->f24, arg1->f30);
+    beSvConnectCheck_PollMultitap(arg0->f24, arg1->f30);
+    beSvConnectCheck_Poll(arg0->f24);
+    beSvConnectCheck_FillDeliver(arg0->f24, arg1->f30);
 }
 
 void Gap__Bec__beSaveUtil__vfunc_32(beSaveUtil *arg0) {

@@ -1,0 +1,13 @@
+# libmc entry points named from the save API's use of them: each call stores its in-flight flag at the
+# request number sceMcSync reports for it (1 GetInfo, 2 Open, 3 Close, 4 Seek, 6 Write, 10 Flush,
+# 16 Format), and its arguments are that function's (port, slot, ...) or (fd, ...). sceMcInit runs
+# once after mcman.irx and mcserv.irx are loaded.
+# <va>	<name>	<module>
+0x001194c0	sceMcInit	sony/libmc
+0x001198a8	sceMcOpen	sony/libmc
+0x00119a08	sceMcClose	sony/libmc
+0x00119ac8	sceMcSeek	sony/libmc
+0x00119d58	sceMcWrite	sony/libmc
+0x00119ff0	sceMcGetInfo	sony/libmc
+0x0011a500	sceMcFormat	sony/libmc
+0x0011a6f0	sceMcFlush	sony/libmc

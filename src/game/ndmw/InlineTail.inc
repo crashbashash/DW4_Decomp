@@ -237,11 +237,11 @@ igMetaObject *Gap__Bec__beNDMWMcUtilCtrl__vfunc_20(void)
 void Gap__Bec__beNDMWMcUtilCtrl__vfunc_07(beNDMWMcUtilCtrl *arg0) {
     Gap__Core__igObject__vfunc_07();
     igMetaObject_CountInstances(((DW4VC_88_0 *)(((char *)(arg0) + 0)))->vX(), 1);
-    FUN_003a9810(arg0->_svData, 0x8000);
+    beSaveDataDeliver_AllocateData(arg0->_svData, 0x8000);
 }
 
 void Gap__Bec__beNDMWMcUtilCtrl__vfunc_08(beNDMWMcUtilCtrl *arg0) {
-    FUN_003a9870(arg0->_svData);
+    beSaveDataDeliver_FreeData(arg0->_svData);
     igMetaObject_CountInstances(((DW4VC_88_0 *)(((char *)(arg0) + 0)))->vX(), 1);
     Gap__Core__igObject__vfunc_08__002ff0f0(arg0);
 }

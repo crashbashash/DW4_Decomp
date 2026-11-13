@@ -1,0 +1,11 @@
+# Bec save API: the memory-card request objects (beSv*Api), beSvConnectCheck and the save buffers.
+0x003a9810	beSaveDataDeliver_AllocateData	game
+0x003a9870	beSaveDataDeliver_FreeData	game
+0x003a98d0	beSaveMemoryObj_Allocate	game
+0x003a9990	beSaveMemoryObj_Free	game
+0x003ad7a0	beSvConnectCheck_ProbeSlot	game
+0x003ad850	beSvConnectCheck_ProbeSlots	game
+0x003ad950	beSvConnectCheck_PollMultitap	game
+0x003ada60	beSvConnectCheck_Poll	game
+0x003add40	beSvConnectCheck_FillDeliver	game
+0x003ae4a0	Gap::Bec::beSaveApi::vfunc_07	game
