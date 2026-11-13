@@ -28,18 +28,18 @@ extern "C" int beMessenger_GetIntCount(...);
 extern "C" int beMessenger_GetInt(...);
 extern "C" int beLua__RunNamedChunk(...);
 extern "C" int List_RemoveWordAt(...);
-extern "C" void FUN_0037e110(beDemoManager *arg0, int arg1, int arg2, int arg3, int arg4, int arg5);
+extern "C" void beDemoManager_SwitchSD(beDemoManager *arg0, int arg1, int arg2, int arg3, int arg4, int arg5);
 extern "C" beDemoKeepMes * FUN_00363c20(...);
 extern "C" int g_defaultAllocatorSelector[4];
 extern "C" unsigned char GPR_00554c14;
-extern "C" void FUN_0037e180(beDemoManager *a0);
-extern "C" void FUN_0037e2d0(beDemoManager *a0, int ramNo);
+extern "C" void beDemoManager_SwitchEnd(beDemoManager *a0);
+extern "C" void beDemoManager_Case(beDemoManager *a0, int ramNo);
 extern "C" int g_stringPool[4];
-extern "C" void FUN_0037e3a0(beDemoManager *self, int a1, int a2, int a3, int t0, int t1, int t2, long long t3);
+extern "C" void beDemoManager_AddKeepMes(beDemoManager *self, int a1, int a2, int a3, int t0, int t1, int t2, long long t3);
 extern "C" beDemoManagerWork * FUN_003637c0(...);
-extern "C" void FUN_0037e6e0(beDemoManager *arg0, int arg1);
-extern "C" void FUN_0037e890(beDemoManager *arg0, int arg1, int arg2);
-extern "C" void FUN_0037ea50(beDemoManager *arg0);
+extern "C" void beDemoManager_SetLua(beDemoManager *arg0, int arg1);
+extern "C" void beDemoManager_MsgBox(beDemoManager *arg0, int arg1, int arg2);
+extern "C" void beDemoManager_Run(beDemoManager *arg0);
 extern "C" void igInsightCore_AddToScheduler(int, beDemoManager *);
 extern "C" void igInsightCore_RemoveFromScheduler(int, beDemoManager *);
 extern "C" void Gap__Bec__beDemoManager__vfunc_21(beDemoManager *self, int unusedArg);
@@ -63,19 +63,19 @@ struct VO {
 };
 extern "C" void Gap__Bec__beDemoManager__vfunc_27(beDemoManager *arg0);
 
-void FUN_0037e110(beDemoManager *arg0, int arg1, int arg2, int arg3, int arg4, int arg5) {
+void beDemoManager_SwitchSD(beDemoManager *arg0, int arg1, int arg2, int arg3, int arg4, int arg5) {
     if (arg0->_turningOK == 0) {
         arg0->_turningOK = 1;
     } else {
         return;
     }
-    FUN_0037e3a0(arg0, 3, arg1, arg2, arg3, arg4, arg5, (long long)0);
+    beDemoManager_AddKeepMes(arg0, 3, arg1, arg2, arg3, arg4, arg5, (long long)0);
 }
 
 /* Owning stack reference to a keep-message; its destructor releases the object (reference count in
  * the low 23 bits of _refCount). */
 
-void FUN_0037e180(beDemoManager *a0) {
+void beDemoManager_SwitchEnd(beDemoManager *a0) {
     beDemoManagerWork *l;
     int al;
     if (a0->_buildData != 0) {
@@ -98,7 +98,7 @@ void FUN_0037e180(beDemoManager *a0) {
 /* Owning stack reference to a keep-message; its destructor releases the object (reference count in
  * the low 23 bits of _refCount). */
 
-void FUN_0037e2d0(beDemoManager *a0, int ramNo) {
+void beDemoManager_Case(beDemoManager *a0, int ramNo) {
     beDemoManagerWork *l;
     int al;
 
@@ -113,7 +113,7 @@ void FUN_0037e2d0(beDemoManager *a0, int ramNo) {
     }
 }
 
-void FUN_0037e3a0(beDemoManager *self, int a1, int a2, int a3, int t0, int t1, int t2, long long t3) {
+void beDemoManager_AddKeepMes(beDemoManager *self, int a1, int a2, int a3, int t0, int t1, int t2, long long t3) {
     int v;
     beDemoManagerWork *q;
     beDemoManagerWork *q2;
@@ -150,7 +150,7 @@ void FUN_0037e3a0(beDemoManager *self, int a1, int a2, int a3, int t0, int t1, i
 /* Owning stack reference to a keep-message; its destructor releases the object (reference count in
  * the low 23 bits of _refCount). */
 
-void FUN_0037e6e0(beDemoManager *arg0, int arg1) {
+void beDemoManager_SetLua(beDemoManager *arg0, int arg1) {
     beDemoManagerWork *l;
     beDemoKeepMes *s1;
     beDemoManagerWork *old;
@@ -214,7 +214,7 @@ void FUN_0037e6e0(beDemoManager *arg0, int arg1) {
 /* Owning stack reference to a keep-message; its destructor releases the object (reference count in
  * the low 23 bits of _refCount). */
 
-void FUN_0037e890(beDemoManager *arg0, int arg1, int arg2) {
+void beDemoManager_MsgBox(beDemoManager *arg0, int arg1, int arg2) {
     beDemoManagerWork *old;
     int var_v0;
     int key;
@@ -276,7 +276,7 @@ void FUN_0037e890(beDemoManager *arg0, int arg1, int arg2) {
     ObjectList_AppendRetained(l->_keepMesList, mes.p);
 }
 
-void FUN_0037ea50(beDemoManager *arg0) {
+void beDemoManager_Run(beDemoManager *arg0) {
     igObject *temp_a0;
     igObject *temp_a1;
 

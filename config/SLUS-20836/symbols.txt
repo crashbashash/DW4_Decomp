@@ -5856,7 +5856,7 @@
 001e6b20 00005c Gap__igMersenneTwisterRandomNumber__vfunc_23 Gap::igMersenneTwisterRandomNumber::vfunc_23
 001e6b80 000038 Gap__igMersenneTwisterRandomNumber__vfunc_13 Gap::igMersenneTwisterRandomNumber::vfunc_13
 001e6bc0 000168 FUN_001e6bc0
-001e6d30 000050 FUN_001e6d30
+001e6d30 000050 Vec3f_FromString
 001e6d80 000054 FUN_001e6d80
 001e6de0 000124 FUN_001e6de0
 001e6f10 00013c FUN_001e6f10
@@ -16435,7 +16435,7 @@
 0036dfe0 000044 FUN_0036dfe0
 0036e030 00004c FUN_0036e030
 0036e080 0000d8 be_GetVTable
-0036e160 000020 FUN_0036e160
+0036e160 000020 be_EnsureRegistered
 0036e180 000074 be_Register
 0036e200 00001c be_GetMetaObject
 0036e220 000098 be_InitFields
@@ -16768,19 +16768,19 @@
 00370760 00000c Gap__Bec__beBaseInfoList__vfunc_22 Gap::Bec::beBaseInfoList::vfunc_22
 00370770 00000c Gap__Bec__beBaseInfoDataList__vfunc_22 Gap::Bec::beBaseInfoDataList::vfunc_22
 00370780 00105c LuaAPI_Dispatch
-003717e0 000058 FUN_003717e0
-00371840 00008c FUN_00371840
-003718d0 000054 FUN_003718d0
-00371930 000084 FUN_00371930
-003719c0 000008 FUN_003719c0
+003717e0 000058 LuaAPIClass_Construct
+00371840 00008c LuaAPIClass_Create
+003718d0 000054 BecLuaClass_Construct
+00371930 000084 BecLuaClass_Create
+003719c0 000008 LuaAPI_RegisterClasses
 003719d0 00003c LuaAPI_Register
-00371a10 000008 Gap__Bec__be__vfunc_21 Gap::Bec::be::vfunc_21
-00371a20 000008 Gap__Bec__be__vfunc_22 Gap::Bec::be::vfunc_22
-00371a30 000088 Gap__Bec__be__vfunc_23 Gap::Bec::be::vfunc_23
-00371ac0 000008 Gap__Bec__be__vfunc_24 Gap::Bec::be::vfunc_24
-00371ad0 000008 Gap__Bec__be__vfunc_25 Gap::Bec::be::vfunc_25
-00371ae0 000114 Gap__Bec__be__vfunc_26 Gap::Bec::be::vfunc_26
-00371c00 000008 Gap__Bec__be__vfunc_27 Gap::Bec::be::vfunc_27
+00371a10 000008 be_AddToScheduler
+00371a20 000008 be_RemoveFromScheduler
+00371a30 000088 be_Start
+00371ac0 000008 be_Stop
+00371ad0 000008 be_AcceptInfo
+00371ae0 000114 be_Reset
+00371c00 000008 be_Update
 00371c10 000054 bePlayer_GetStruct
 00371c70 000030 SYSisJoinPlayer
 00371ca0 000030 SYSgetPlayerName
@@ -16900,7 +16900,7 @@
 00375c30 0000b8 BLPgetPowerDownTime
 00375cf0 00009c BLPcalcKoukaMagic
 00375d90 000060 LISsetDifficultMax
-00375df0 00000c Gap__Bec__be__vfunc_20 Gap::Bec::be::vfunc_20
+00375df0 00000c be_GetMetaObject_Virtual
 00375e00 000008 beAction2_Prepare
 00375e10 00000c beAction2_GetInfoMeta
 00375e20 000044 beAction2_RegisterReceiver
@@ -17004,14 +17004,14 @@
 0037e020 00004c beCri_SetSndfVolume
 0037e070 000088 beCriSfpData_SetupBufferAlignment
 0037e100 00000c Gap__Bec__beCri__vfunc_20 Gap::Bec::beCri::vfunc_20
-0037e110 000064 FUN_0037e110
-0037e180 0000c8 FUN_0037e180
+0037e110 000064 beDemoManager_SwitchSD
+0037e180 0000c8 beDemoManager_SwitchEnd
 0037e250 000080 FUN_0037e250
-0037e2d0 0000c4 FUN_0037e2d0
-0037e3a0 000340 FUN_0037e3a0
-0037e6e0 0001a4 FUN_0037e6e0
-0037e890 0001b8 FUN_0037e890
-0037ea50 000080 FUN_0037ea50
+0037e2d0 0000c4 beDemoManager_Case
+0037e3a0 000340 beDemoManager_AddKeepMes
+0037e6e0 0001a4 beDemoManager_SetLua
+0037e890 0001b8 beDemoManager_MsgBox
+0037ea50 000080 beDemoManager_Run
 0037ead0 000020 Gap__Bec__beDemoManager__vfunc_21 Gap::Bec::beDemoManager::vfunc_21
 0037eaf0 000020 Gap__Bec__beDemoManager__vfunc_22 Gap::Bec::beDemoManager::vfunc_22
 0037eb10 000048 Gap__Bec__beDemoManager__vfunc_23 Gap::Bec::beDemoManager::vfunc_23

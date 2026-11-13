@@ -201,7 +201,7 @@ extern "C" int FUN_00239390(...);
 extern "C" int FUN_00238d40(...);
 extern "C" int FUN_003343a0(...);
 extern "C" int FUN_0033bf50(...);
-extern "C" int FUN_003719c0(...);
+extern "C" int LuaAPI_RegisterClasses(...);
 extern "C" int FUN_003b04e0(...);
 extern "C" int FUN_00463b30(...);
 extern "C" int FUN_00463b70(...);
@@ -1046,7 +1046,7 @@ void FUN_0025a580(A0 *arg0) {
         FUN_00238d40();
         FUN_003343a0();
         FUN_0033bf50();
-        FUN_003719c0();
+        LuaAPI_RegisterClasses();
         FUN_003b04e0();
         FUN_00463b30(arg0);
         FUN_00259f80((int *)arg0);

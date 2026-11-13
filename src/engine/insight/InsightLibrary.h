@@ -531,7 +531,7 @@ extern "C" int exit(int status);
 extern "C" int fptodp(float);
 extern "C" float dptofp(long long);
 extern "C" struct FlushShared *FUN_001007e0(int size);
-extern "C" int FUN_001e6d30(...);
+extern "C" int Vec3f_FromString(...);
 extern "C" int FUN_001e6d80(...);
 extern "C" void *igIntList_Create(int allocator);
 extern "C" InternedStringList *FUN_002b90e0(int allocator);

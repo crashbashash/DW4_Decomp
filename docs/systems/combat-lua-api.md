@@ -71,3 +71,27 @@ allocation leaves the cache null so a later call retries. The semantic name is
 generated with the other combat dependency names. Neither that helper nor the
 Lua API closes the calculation dispatcher. The callback itself is
 `src/game/beNDMWGameRam.cpp`.
+
+## The rest of `be.cpp`
+
+The file is the Lua class `be`: `LuaAPIClass` (name `be`, meta name `igInfoManager`) whose
+registerFunctions slot `LuaAPI_Register` binds the 116 names in `g_luaApiFunctionNames` with the
+type codes in `g_luaApiFunctionCodes` to `LuaAPI_Dispatch`, and the namespace class `BecLuaClass`
+(`Bec`). A code's low byte is the binding kind plus 512: 5 int, 9 bool, 11 float, 13 string, 7
+long, 15 void. The dispatcher reads each argument from the `LuaValue` array; a bool result is
+pushed through an unsigned conversion, an int result through a signed one. The C++ class `be`
+is an insight manager: `be_Start` finds the system, messenger, material controller and demo
+manager into `g_beSystem`, `g_beMessenger`, `g_matCtrl` and `g_beDemoManager` and stores itself in
+`g_be`; `be_Reset` empties its string list. The DM functions queue keep-messages on the demo
+manager (`beDemoManager_AddKeepMes` kinds 0 send, 1 send on a false reply, 2 on a true one).
+
+## Open questions
+
+- `be`'s slots 21 to 27 take beSystem's names (same insight-manager interface); `be_AddToScheduler`,
+  `be_RemoveFromScheduler`, `be_Stop` and `be_Update` are empty in `be`.
+- `LuaAPI_RegisterClasses` is the empty per-library registration called at boot between the Bec
+  and NDMW libraries' ones; the name is from that position.
+- The overload suffixes (`sd_29`..`sd_32`, `DMsetSD_40`.., `MDLsetWorldPosTarget_78/79`) are API ids.
+- The bytes `g_cardFolderSetValue` .. `g_flagFlipOnValue` are small-data constants (1 or 0) the
+  setters store; whether the source spelled them as named constants is not established.
+- `text_igInfoManager` takes `text_` because `igInfoManager` is a type name.

@@ -1,5 +1,5 @@
 void be_CreateInstance(int arg0) {
-    FUN_0036e160();
+    be_EnsureRegistered();
     igMetaObject_CreateInstance(*(int *)0x58A030, arg0);
 }
 
@@ -13,7 +13,7 @@ igMetaObject *FUN_0036dfe0(void) {
 void *FUN_0036e030(void) {
     igMetaObject *g = g_be_metaObject[0];
     if (!g || ((g->_validity & 4) != 0) == false) {
-        FUN_0036e160();
+        be_EnsureRegistered();
     }
     return g_be_metaObject[0];
 }
@@ -34,7 +34,7 @@ int be_GetVTable(void) {
     return r;
 }
 
-void FUN_0036e160(void)
+void be_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(be_Register);
 }

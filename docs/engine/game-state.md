@@ -3,16 +3,16 @@
 All addresses are in the ELF's BSS (`0x00554b00`–`0x0058d280`) and are stable.
 
 ## The Game singleton (`0x0058a1b8` …)
-`Gap__Bec__be__vfunc_23` is the constructor. It allocates sub-objects with
-`0x236f80(allocator, typeinfo)` and stores the pointers in adjacent globals:
+`be_Start` (the `be` manager's start slot) finds the other managers with
+`igInsightCore_FindManager(insight, meta-object)` and stores them in adjacent globals:
 
 | Global | Type | Meaning | Class typeinfo |
 | --- | --- | --- | --- |
-| `0x0058a1b8` | ptr | object #1 | `0x00587d08` |
+| `0x0058a1b8` | ptr | `g_beSystem` | `0x00587d08` |
 | `0x0058a1c0` | ptr | **main game / GAMERAM object** (property root); the instance it points at is a `Gap::Bec::beMessenger` (its `+0` vtable is `0x0053ab70`) | `0x00588f38` |
-| `0x0058a1c8` | ptr | object #3 | `0x00589160` |
-| `0x0058a1d0` | ptr | object #4 | `0x00589790` |
-| `0x0058a1d8` | ptr | the Game `this` pointer | - |
+| `0x0058a1c8` | ptr | `g_matCtrl` | `0x00589160` |
+| `0x0058a1d0` | ptr | `g_beDemoManager` | `0x00589790` |
+| `0x0058a1d8` | ptr | `g_be`, the be itself | - |
 
 Disassembly:
 ```
@@ -44,9 +44,9 @@ the `MDL*`/`BLT*`/`BLP*` script functions.
 | `0x0058a1f8` | u32 | MDL **InfoName** | `MDLgetInfoName` (0x00373b30) |
 | `0x0058a1fc` | u32 | MDL **BulletKind** | `MDLgetBulletKind` (0x00373e80) |
 | `0x0058a200` | u32 | MDL **BulletBoxNo** | `MDLgetBulletBoxNo` (0x00373ee0) |
-| `0x0058a204` | u32 | BLP status field | `BLPgetDamageValue`, `BLPgetStunTime` |
+| `0x0058a204` | ptr | `g_hitterInfoName`: info name of the bullet's hitter | `BLPgetDamageValue`, `BLPgetStunTime` |
 | `0x0058a208` | u32 | BLT/BLP status field | many BLT/BLP; read by `BLTcalcEXPUp` as arg |
-| `0x0058a20c` | u32 | BLP status field | `BLPisHitCheck` etc. |
+| `0x0058a20c` | u32 | `g_hitterRecNo`: rec number of the hitter | `BLPisHitCheck` etc. |
 | `0x0058a210` | u8 | MDL **DMGTurn** flag | `MDLsetDMGTurn` (`sb v1,-24048(at)`) |
 | `0x0058a214` | ptr | MDL call-name object ptr | `MDLisCallName` (loaded as `a0`) |
 | `0x0058a218` | u32 | world-pos target | `MDLsetWorldPosTarget` (0x003741d0/0x00374200) |

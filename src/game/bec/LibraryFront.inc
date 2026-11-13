@@ -298,7 +298,7 @@ void FUN_0033bf50(void) {
     FUN_0036cc80();
     FUN_0036ca50();
     FUN_0036def0();
-    FUN_0036e160();
+    be_EnsureRegistered();
     FUN_0036eaf0();
     FUN_0036e6d0();
     FUN_0036e3b0();

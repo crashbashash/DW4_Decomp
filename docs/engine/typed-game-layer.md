@@ -58,7 +58,7 @@ Evidence is the class's `_InitFields` metaobject getter (handle resolved through
 | class.field | target class | evidence |
 | --- | --- | --- |
 | `ParticleTimer._attributes` | `igObjectList` | by shape (count +8, data +16) |
-| `be._stringRefList` | `igStringRefList` | DAT_0058a1d8 is the Game this (docs/engine/game-state.md); Gap__Bec__be__vfunc_26 clears it as a string list |
+| `be._stringRefList` | `igStringRefList` | g_be is the be itself (docs/engine/game-state.md); be_Reset clears it as a string list |
 | `beAction2._system` | `beSystem` | slot-96 draw on field +48 = beSystem._random (beNDMWGameRam._system -> beSystem); applied in beAction2WAITCHEC |
 | `beAction2Data._comList` | `igObjectList` | shaped list: docs/engine/action2-jointset.md |
 | `beAction2InfoRam._parentInfo` | `beAction2Info` | reflection field pairing (ram/info), _switch read at +28 |

@@ -2164,7 +2164,7 @@ extern "C" void be_CreateInstance(int arg0);
 extern "C" igMetaObject *FUN_0036dfe0(void);
 extern "C" void *FUN_0036e030(void);
 extern "C" int be_GetVTable(void);
-extern "C" void FUN_0036e160(void);
+extern "C" void be_EnsureRegistered(void);
 extern "C" void *be_Register(void);
 extern "C" void be_GetMetaObject(void);
 extern "C" void be_InitFields(void);

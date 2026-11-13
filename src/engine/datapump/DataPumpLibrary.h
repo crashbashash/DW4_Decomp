@@ -351,7 +351,7 @@ class DW4VC_92_1 { public: virtual void d0(); virtual void d1(); virtual void d2
 extern "C" void Gap__igMersenneTwisterRandomNumber__vfunc_13(void **arg0);
 extern "C" int sscanf(...);
 extern "C" int FUN_0018be80(...);
-extern "C" int FUN_001e6d30(int arg0, int *arg1, int arg2);
+extern "C" int Vec3f_FromString(int arg0, int *arg1, int arg2);
 extern "C" int FUN_001e6d80(int arg0, int *arg1, int arg2);
 typedef struct FormattedObject : public igObject { int f8; } FormattedObject;
 typedef struct Vector3f { float x, y, z; } Vector3f;
