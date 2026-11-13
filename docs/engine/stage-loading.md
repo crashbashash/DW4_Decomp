@@ -79,6 +79,15 @@ traversal time, pushes the attribute on its attribute stack
 `igTraversal_TraverseChildren`, runs the stack's pop procedure on the top entry and
 pops. It returns 2 when the children stopped the traversal, otherwise 0.
 
+The push is the list append written out: the attribute is first copied into an
+addressable local, the count is read once through a `const int &` accessor, the
+list grows (`List_Resize(stack, count + 1, 4)`) or bumps `_count`, and the entry is
+stored through the local's address. Because the local's address is taken, MWCC
+gives it the stack slot `156(sp)` (`sw s5,156(sp)` before the count read,
+`lw a3,156(sp)` for the store), which frees `s5` for the count across the
+`List_Resize` call; the accessor keeps the count a declared local and makes the
+`_count + 1` branch re-read memory, as retail does.
+
 The USA ML11 asset serializes start 16,666,666 ns, loop1 1,666,666,666 ns,
 loop2 4,666,666,666 ns, lock 4,733,333,333 ns, and play limit
 1,666,666,666 ns.
