@@ -12,7 +12,7 @@ enum {
 
 void *memcpy(void *dst, const void *src, unsigned int size);
 float sqrtf(float x);
-void FUN_001e7500(int capability);
+void p2DisableCapability(int capability);
 
 extern int p2DirtyFlags;
 extern unsigned int p2ProgramFlags[];
@@ -52,7 +52,7 @@ void p2InitLighting(void) {
     p2Materials[0] = 0;
     p2Materials[1] = 0;
     p2DirtyFlags |= P2_DIRTY_LIGHTING;
-    FUN_001e7500(12);
+    p2DisableCapability(12);
     p2LightsChanged = 1;
     p2LightsNeedTransform = 0;
     p2LightingProgramBits = 0;

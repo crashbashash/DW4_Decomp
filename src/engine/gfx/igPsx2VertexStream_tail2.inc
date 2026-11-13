@@ -16,9 +16,9 @@ void Gap__Gfx__igPsx2VertexStream__vfunc_15(S0_17f630 *arg0) {
     if (arg0->f10 != 0) {
         temp_a0 = arg0->f80;
         if ((temp_a0 != 0) && ((temp_a1 = arg0->f18, (temp_a1 == 3)) || (temp_a1 == 2)) && (arg0->f84 == 0)) {
-            arg0->f84 = FUN_00300db0(arg0, FUN_001eedf0(temp_a0, temp_a1), 0x10);
-            FUN_001eee40(arg0->f80, arg0->f84);
-            arg0->f88 = FUN_001eeed0(arg0->f80);
+            arg0->f84 = FUN_00300db0(arg0, p2GetDisplayListSize(temp_a0, temp_a1), 0x10);
+            p2CopyDisplayListData(arg0->f80, arg0->f84);
+            arg0->f88 = p2CopyDisplayList(arg0->f80);
         }
     }
 }
@@ -27,8 +27,8 @@ void Gap__Gfx__igPsx2VertexStream__vfunc_17(S0_17f6c0 *arg0) {
     Gap__Core__igObject__vfunc_15();
     if ((arg0->f84 != 0) && (arg0->f88 != 0)) {
         arg0->f10 = 1;
-        arg0->f80 = FUN_001eef20(arg0->f84, arg0->f88);
-        arg0->fC = FUN_001eee30(arg0->f80);
+        arg0->f80 = p2RebaseDisplayList(arg0->f84, arg0->f88);
+        arg0->fC = p2GetDisplayListData(arg0->f80);
     }
 }
 

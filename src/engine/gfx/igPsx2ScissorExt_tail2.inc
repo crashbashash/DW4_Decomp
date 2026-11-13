@@ -33,7 +33,7 @@ void Gap__Gfx__igPsx2ScissorExt__vfunc_32(igPsx2ScissorExt *arg0, int arg1, int 
     arg0->_scissorOrgY = arg2;
     arg0->_scissorWidth = arg3;
     arg0->_scissorHeight = arg4;
-    FUN_001e8d10(arg1, arg2, arg3, arg4);
+    p2SetScissor(arg1, arg2, arg3, arg4);
 }
 
 /* Getter for the scissor rectangle: origin and size into the four out parameters. */

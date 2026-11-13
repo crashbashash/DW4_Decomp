@@ -78,10 +78,10 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_75(S0_1706d0 *arg0, int arg1) {
     }
     arg0->f1340 = arg1;
     if (arg0->f1340 == 1) {
-        FUN_001e74b0(8, arg1);
+        p2EnableCapability(8, arg1);
         return;
     }
-    FUN_001e7500(8, arg1);
+    p2DisableCapability(8, arg1);
 }
 
 unsigned char Gap__Gfx__igPsx2VisualContext__vfunc_76(void *arg0) {
@@ -682,27 +682,27 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_100(igPsx2VisualContext *self, unsigne
     ((MaterialState *)self->_currentMaterial)->blendMode = mode;
     switch (mode) {
     case 0:
-        FUN_001e7500(12);
+        p2DisableCapability(12);
         p2SetLightingMode(0);
         return;
     case 1:
-        FUN_001e74b0(12);
+        p2EnableCapability(12);
         p2SetLightingMode(1);
         break;
     case 2:
-        FUN_001e74b0(12);
+        p2EnableCapability(12);
         p2SetLightingMode(4);
         break;
     case 3:
-        FUN_001e74b0(12);
+        p2EnableCapability(12);
         p2SetLightingMode(5);
         break;
     case 4:
-        FUN_001e74b0(12);
+        p2EnableCapability(12);
         p2SetLightingMode(3);
         break;
     case 5:
-        FUN_001e74b0(12);
+        p2EnableCapability(12);
         p2SetLightingMode(2);
         break;
     }
@@ -1028,10 +1028,10 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_209(struct O_174030 *arg0, int arg1, i
     }
     arg0->f = arg2;
     if (arg2 != 0) {
-        FUN_001e74b0(0xD);
+        p2EnableCapability(0xD);
         return;
     }
-    FUN_001e7500(0xD);
+    p2DisableCapability(0xD);
 }
 
 void FUN_00174090(void *arg0) {
@@ -1075,7 +1075,7 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_216(void *a0, int arg1) {
     FUN_001754b0((S1754 *)a0, 1);
     FUN_001755e0((S0_1755e0 *)a0, 1);
     FUN_001757c0((igPsx2VisualContext *)a0, 0);
-    FUN_001e7500(23);
+    p2DisableCapability(23);
     FUN_00175640((S_175640 *)a0, 0);
     FUN_00175670((O_175670 *)a0, 0);
     FUN_0017c710((int)a0, 0, 0);
@@ -1094,10 +1094,10 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_113(S0_174300 *arg0, unsigned char arg
     }
     arg0->f55C = arg1;
     if (temp_v1 == 1) {
-        FUN_001e74b0(0x12);
+        p2EnableCapability(0x12);
         return;
     }
-    FUN_001e7500(0x12);
+    p2DisableCapability(0x12);
 }
 
 unsigned char Gap__Gfx__igPsx2VisualContext__vfunc_114(void *arg0) {
@@ -1130,10 +1130,10 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_152(struct S_1743c0 *arg0, int arg1) {
     }
     arg0->f1032 = arg1;
     if (arg0->f1032 != 0) {
-        FUN_001e74b0(2, arg1);
+        p2EnableCapability(2, arg1);
         return;
     }
-    FUN_001e7500(2, arg1);
+    p2DisableCapability(2, arg1);
 }
 
 unsigned char Gap__Gfx__igPsx2VisualContext__vfunc_153(void *arg0) {
@@ -1252,10 +1252,10 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_217(igPsx2VisualContext *self, unsigne
         DAT_0056098c += 1;
     self->_alphaEnable = enable;
     if (enable) {
-        FUN_001e74b0(3);
+        p2EnableCapability(3);
         FUN_001747f0((S_1747f0 *)self);
     } else {
-        FUN_001e7500(3);
+        p2DisableCapability(3);
     }
 }
 
@@ -1287,7 +1287,7 @@ float Gap__Gfx__igPsx2VisualContext__vfunc_222(void *arg0) {
     return *(float *)((char *)arg0 + 1028);
 }
 
-void FUN_001747f0(S_1747f0 *s) { if (s->b == 1) { int a = (int)(128.0f * (float)s->f); FUN_001e8550(DAT_0048a500[s->i], a, 0); } }
+void FUN_001747f0(S_1747f0 *s) { if (s->b == 1) { int a = (int)(128.0f * (float)s->f); p2SetAlphaTest(DAT_0048a500[s->i], a, 0); } }
 
 void FUN_00174850(struct S174 *arg0, int arg1) {
     int temp_v1;
@@ -1300,10 +1300,10 @@ void FUN_00174850(struct S174 *arg0, int arg1) {
     }
     arg0->f = arg1;
     if (temp_v1 == 1) {
-        FUN_001e7500(0x13, arg1);
+        p2DisableCapability(0x13, arg1);
         return;
     }
-    FUN_001e74b0(0x13, arg1);
+    p2EnableCapability(0x13, arg1);
 }
 
 unsigned char FUN_001748c0(int *p)
@@ -1315,8 +1315,8 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_223(O_1748d0 *o, unsigned char a) {
     if (GPR_00554b54 != 0) a = 0;
     if (o->v == a) DAT_005608b8[0] += 1;
     o->v = a;
-    if (a == 1) FUN_001e74b0(6);
-    else FUN_001e7500(6);
+    if (a == 1) p2EnableCapability(6);
+    else p2DisableCapability(6);
 }
 
 unsigned char Gap__Gfx__igPsx2VisualContext__vfunc_224(void *arg0) {
@@ -1325,10 +1325,10 @@ unsigned char Gap__Gfx__igPsx2VisualContext__vfunc_224(void *arg0) {
 
 void FUN_00174950(void *d0, int arg1) {
     if (arg1 == 1) {
-        FUN_001e74b0(0x19);
+        p2EnableCapability(0x19);
         return;
     }
-    FUN_001e7500(0x19);
+    p2DisableCapability(0x19);
 }
 
 void Gap__Gfx__igPsx2VisualContext__vfunc_225(void *arg0, int arg1, int arg2, int arg3, int arg4) {
@@ -1336,7 +1336,7 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_225(void *arg0, int arg1, int arg2, in
     *(char *)((char *)(arg0) + 1253) = arg2;
     *(char *)((char *)(arg0) + 1254) = arg3;
     *(char *)((char *)(arg0) + 1255) = arg4;
-    FUN_001edcc0(arg1 & 0xFF, arg2 & 0xFF, arg3 & 0xFF, arg4 & 0xFF);
+    p2SetColourMask(arg1 & 0xFF, arg2 & 0xFF, arg3 & 0xFF, arg4 & 0xFF);
 }
 
 void Gap__Gfx__igPsx2VisualContext__vfunc_226(void *arg0, unsigned char *arg1, unsigned char *arg2, unsigned char *arg3, unsigned char *arg4) {
@@ -1352,10 +1352,10 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_227(S_1749f0 *arg0, int arg1) {
     }
     arg0->f = arg1;
     if (DAT_0048a530[arg1] == 1) {
-        FUN_001e7500(0x11);
+        p2DisableCapability(0x11);
         return;
     }
-    FUN_001e74b0(0x11);
+    p2EnableCapability(0x11);
 }
 
 int Gap__Gfx__igPsx2VisualContext__vfunc_228(void *arg0) {
@@ -1372,10 +1372,10 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_229(struct S_174a70 *arg0, int arg1) {
     }
     arg0->f1268 = arg1;
     if (arg1 != 0) {
-        FUN_001e74b0(DAT_0048a538[arg0->f1272], arg1);
+        p2EnableCapability(DAT_0048a538[arg0->f1272], arg1);
         return;
     }
-    FUN_001e7500(DAT_0048a538[arg0->f1272], arg1);
+    p2DisableCapability(DAT_0048a538[arg0->f1272], arg1);
 }
 
 unsigned char Gap__Gfx__igPsx2VisualContext__vfunc_230(void *arg0) {
@@ -1387,8 +1387,8 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_231(struct P_174b10 *arg0, int arg1) {
 
     temp_a0 = arg0->f1272;
     if ((temp_a0 != arg1) && (arg0->f1268 != 0)) {
-        FUN_001e7500(DAT_0048a538[temp_a0]);
-        FUN_001e74b0(DAT_0048a538[arg1]);
+        p2DisableCapability(DAT_0048a538[temp_a0]);
+        p2EnableCapability(DAT_0048a538[arg1]);
     }
     if (arg0->f1272 == arg1) {
         DAT_005609a8[0] += 1;
@@ -1412,11 +1412,11 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_233(struct S_174bc0 *s, int v) {
     if (s->f != m) {
         s->f = v;
         if (v != 0) {
-            FUN_001e74b0(0);
+            p2EnableCapability(0);
             FUN_00174db0(s);
             return;
         }
-        FUN_001e7500(0);
+        p2DisableCapability(0);
     }
 }
 
@@ -1455,10 +1455,10 @@ unsigned char Gap__Gfx__igPsx2VisualContext__vfunc_238(void *arg0) {
 
 void FUN_00174db0(void *arg0) {
     if (*(unsigned char *)((char *)(arg0) + 1276) == 1) {
-        FUN_001e81c0(DAT_0048a540[*(int *)((char *)(arg0) + 1280)], 0);
+        p2SetDepthFunction(DAT_0048a540[*(int *)((char *)(arg0) + 1280)], 0);
         return;
     }
-    FUN_001e81c0(DAT_0048a540[*(int *)((char *)(arg0) + 1280)], 1);
+    p2SetDepthFunction(DAT_0048a540[*(int *)((char *)(arg0) + 1280)], 1);
 }
 
 void Gap__Gfx__igPsx2VisualContext__vfunc_159(S_174e20 *arg0, int arg1) {
@@ -1467,9 +1467,9 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_159(S_174e20 *arg0, int arg1) {
     }
     arg0->f1260 = ((unsigned char)arg1);
     if ((arg1 != 0) && (arg0->f1288 != 7)) {
-        FUN_001e74b0(4);
+        p2EnableCapability(4);
     } else {
-        FUN_001e7500(4);
+        p2DisableCapability(4);
     }
 }
 
@@ -1482,7 +1482,7 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_161(int *arg0, int arg1) {
         DAT_005609bc[0] += 1;
     }
     arg0[316] = arg1;
-    FUN_001e8730(arg0[316] & 1);
+    p2SetDestinationAlphaMode(arg0[316] & 1);
 }
 
 int Gap__Gfx__igPsx2VisualContext__vfunc_162(void *arg0) {
@@ -1498,12 +1498,12 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_163(S0_174ee0 *arg0, unsigned int arg1
     case 4:
     case 5:
     case 6:
-        if ((arg0->f4EC != 0) && (FUN_001e7560(4) == 0)) {
-            FUN_001e74b0(4);
+        if ((arg0->f4EC != 0) && (p2IsCapabilityEnabled(4) == 0)) {
+            p2EnableCapability(4);
         }
         break;
     case 7:
-        FUN_001e7500(4);
+        p2DisableCapability(4);
         break;
     }
     if (arg0->f508 == arg1) {
@@ -1574,10 +1574,10 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_241(struct S_1750c0 *arg0, int arg1) {
     }
     arg0->mode = arg1;
     if (arg1 != 0) {
-        FUN_001e74b0(7, arg1);
+        p2EnableCapability(7, arg1);
         return;
     }
-    FUN_001e7500(7, arg1);
+    p2DisableCapability(7, arg1);
 }
 
 unsigned char Gap__Gfx__igPsx2VisualContext__vfunc_242(void *arg0) {
@@ -1591,7 +1591,7 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_243(struct S_175140 *arg0, float fparg
     }
     arg0->f1304 = fparg0;
     i = arg0->f1308;
-    FUN_001e8a90(DAT_0048a560[i], i, arg0->f1328, arg0->f1332, arg0->f1304, 1.0f, 0.0f, 0.0f);
+    p2SetFog(DAT_0048a560[i], i, arg0->f1328, arg0->f1332, arg0->f1304, 1.0f, 0.0f, 0.0f);
 }
 
 float Gap__Gfx__igPsx2VisualContext__vfunc_244(void *arg0) {
@@ -1603,7 +1603,7 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_245(struct S1304 *arg0, int arg1) {
         DAT_005609d4[0] += 1;
     }
     arg0->f1308 = arg1;
-    FUN_001e8a90(DAT_0048a560[arg0->f1308], arg0->f1308, arg0->f1328, arg0->f1332, arg0->f1304, 1.0f, 0.0f, 0.0f);
+    p2SetFog(DAT_0048a560[arg0->f1308], arg0->f1308, arg0->f1328, arg0->f1332, arg0->f1304, 1.0f, 0.0f, 0.0f);
 }
 
 int Gap__Gfx__igPsx2VisualContext__vfunc_246(void *arg0) {
@@ -1641,7 +1641,7 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_247(struct O_175220 *arg0, struct V_17
     arg0->f4 = arg1->f4;
     arg0->f8 = arg1->f8;
     arg0->f12 = arg1->f12;
-    FUN_001e8850(arg1->f0, arg1->f4, arg1->f8);
+    p2SetFogColour(arg1->f0, arg1->f4, arg1->f8);
 }
 
 void Gap__Gfx__igPsx2VisualContext__vfunc_248(void *arg0, void *arg1) {
@@ -1659,7 +1659,7 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_249(struct S_175310 *arg0, float fparg
     }
     arg0->f1328 = fparg0;
     temp_a1 = arg0->i1308;
-    FUN_001e8a90(*(int *)((char *)&DAT_0048a560[0] + (temp_a1 * 4)), temp_a1, arg0->f1328, arg0->f1332, arg0->f1304, 1.0f, 0.0f, 0.0f);
+    p2SetFog(*(int *)((char *)&DAT_0048a560[0] + (temp_a1 * 4)), temp_a1, arg0->f1328, arg0->f1332, arg0->f1304, 1.0f, 0.0f, 0.0f);
 }
 
 float Gap__Gfx__igPsx2VisualContext__vfunc_250(void *arg0) {
@@ -1674,7 +1674,7 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_251(igPsx2VisualContext *arg0, float f
     }
     arg0->_fogFar = fparg0;
     temp_a1 = arg0->_fogMode;
-    FUN_001e8a90(DAT_0048a560[temp_a1], temp_a1, arg0->_fogNear, arg0->_fogFar, arg0->_fogDensity, 1.0f, 0.0f, 0.0f);
+    p2SetFog(DAT_0048a560[temp_a1], temp_a1, arg0->_fogNear, arg0->_fogFar, arg0->_fogDensity, 1.0f, 0.0f, 0.0f);
 }
 
 float Gap__Gfx__igPsx2VisualContext__vfunc_252(void *arg0) {
@@ -1713,7 +1713,7 @@ int FUN_001754b0(struct S1754 *arg0, int arg1) {
         DAT_005609e4[0] += 1;
     }
     arg0->f = arg1;
-    return FUN_001e8be0(DAT_0048a520[arg1], (char *)arg0 + 0x598) != 0;
+    return p2SetColorScaler(DAT_0048a520[arg1], (char *)arg0 + 0x598) != 0;
 }
 
 void FUN_00175510(struct S_175510 *arg0, float *arg1) {
@@ -1729,7 +1729,7 @@ void FUN_00175510(struct S_175510 *arg0, float *arg1) {
     arg0->v[1] = arg1[1];
     arg0->v[2] = arg1[2];
     arg0->v[3] = arg1[3];
-    FUN_001e8be0(DAT_0048a520[arg0->idx], arg0->v);
+    p2SetColorScaler(DAT_0048a520[arg0->idx], arg0->v);
 }
 
 void FUN_001755e0(S0_1755e0 *arg0, int arg1) {
@@ -1738,10 +1738,10 @@ void FUN_001755e0(S0_1755e0 *arg0, int arg1) {
     }
     arg0->f1449 = arg1;
     if (arg1 != 0) {
-        FUN_001e8b80(1);
+        p2SetColourClamp(1);
         return;
     }
-    FUN_001e8b80(0);
+    p2SetColourClamp(0);
 }
 
 void FUN_00175640(struct S_175640 *arg0, int arg1) {
@@ -1749,7 +1749,7 @@ void FUN_00175640(struct S_175640 *arg0, int arg1) {
         DAT_005609f0[0] += 1;
     }
     arg0->v = arg1;
-    FUN_001e84f0(arg1);
+    p2SetPixelAlphaBlend(arg1);
 }
 
 void FUN_00175670(struct O_175670 *arg0, int arg1) {
@@ -1757,7 +1757,7 @@ void FUN_00175670(struct O_175670 *arg0, int arg1) {
         DAT_005609f4[0] += 1;
     }
     arg0->f = arg1;
-    FUN_001e83e0(arg1);
+    p2SetFrameBufferAlpha(arg1);
 }
 
 void Gap__Gfx__igPsx2VisualContext__vfunc_146(igPsx2VisualContext *context, int mode) {
@@ -1766,12 +1766,12 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_146(igPsx2VisualContext *context, int 
     }
     context->_pixelPipelineMode = mode;
     if (context->_bMultiPassNum > 1 && context->_pixelPipelineMode == 3) {
-        if (FUN_001e7560(23) == 0) {
-            FUN_001e74b0(23);
+        if (p2IsCapabilityEnabled(23) == 0) {
+            p2EnableCapability(23);
         }
     } else {
-        if (FUN_001e7560(23) != 0) {
-            FUN_001e7500(23);
+        if (p2IsCapabilityEnabled(23) != 0) {
+            p2DisableCapability(23);
         }
     }
 }
@@ -1782,9 +1782,9 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_145(S_175730 *arg0, int arg1) {
     }
     arg0->f = arg1;
     if (arg1 != 0) {
-        FUN_001e74b0(0xB);
+        p2EnableCapability(0xB);
     } else {
-        FUN_001e7500(0xB);
+        p2DisableCapability(0xB);
     }
 }
 
@@ -1793,7 +1793,7 @@ void FUN_00175790(struct S_175790 *arg0, long long arg1) {
         DAT_00560a00[0] += 1;
     }
     arg0->v = arg1;
-    FUN_001e8b40(arg1);
+    p2SetDitherMatrix(arg1);
 }
 
 void FUN_001757c0(igPsx2VisualContext *arg0, int arg1) {
@@ -1803,11 +1803,11 @@ void FUN_001757c0(igPsx2VisualContext *arg0, int arg1) {
     arg0->_bMultiPassNum = arg1;
     FUN_001fc310(arg0->_bMultiPassNum);
     if (arg0->_bMultiPassNum > 1 && arg0->_pixelPipelineMode == 3) {
-        if (FUN_001e7560(0x17) == 0) {
-            FUN_001e74b0(0x17);
+        if (p2IsCapabilityEnabled(0x17) == 0) {
+            p2EnableCapability(0x17);
         }
-    } else if (FUN_001e7560(0x17) != 0) {
-        FUN_001e7500(0x17);
+    } else if (p2IsCapabilityEnabled(0x17) != 0) {
+        p2DisableCapability(0x17);
     }
 }
 

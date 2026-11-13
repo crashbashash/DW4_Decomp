@@ -11,8 +11,8 @@ int FUN_00177010(igPsx2VisualContext *vc, int *arg1, int *arg2, int arg3, int ar
 
     if (vc->_bVertexBlendingEnabled) {
         if (arg3 > -1) {
-            levels = FUN_001ee730(arg3);
-            limit = FUN_001ee740(arg3);
+            levels = p2GetDisplayListBlendWeightCount(arg3);
+            limit = p2GetDisplayListBlendMatrixCount(arg3);
             if (levels != 0) {
                 enabled = true;
                 if (levels > 0 && levels < 5 && vc->_blendMatricesCount < 121 && !GPR_00554b6c
@@ -29,8 +29,8 @@ int FUN_00177010(igPsx2VisualContext *vc, int *arg1, int *arg2, int arg3, int ar
                 enabled = true;
                 if (levels > 0 && levels < 5 && vc->_blendMatricesCount < 121 && !GPR_00554b6c) {
                     result = 2;
-                    FUN_001e9730(va->f36);
-                    FUN_001e9720(va->f32);
+                    p2SetBlendIndexArray(va->f36);
+                    p2SetBlendWeightArray(va->f32);
                 } else {
                     result = 1;
                     if (vc->_currentDListHandle >= 0) {
@@ -79,13 +79,13 @@ int FUN_00177010(igPsx2VisualContext *vc, int *arg1, int *arg2, int arg3, int ar
     }
     if (enabled) {
         if (result == 2) {
-            FUN_001e96d0(levels, levels);
-            if (!FUN_001e7560(9)) {
-                FUN_001e74b0(9);
+            p2SetBlendWeightCount(levels, levels);
+            if (!p2IsCapabilityEnabled(9)) {
+                p2EnableCapability(9);
             }
         } else if (result == 1) {
-            if (FUN_001e7560(9)) {
-                FUN_001e7500(9);
+            if (p2IsCapabilityEnabled(9)) {
+                p2DisableCapability(9);
             }
             if (vc->_bLightingEnabled || vc->_texCoordSource[0] == 2) {
                 if (vc->_inverseTransposeNeedValidation) {
@@ -96,16 +96,16 @@ int FUN_00177010(igPsx2VisualContext *vc, int *arg1, int *arg2, int arg3, int ar
                 FUN_00180170(vc->_pVertexArray, vc->_blendIndex, vc->_blendMatrices, 0, arg1, arg2, vc->_blendMatricesCount);
             }
         }
-    } else if (FUN_001e7560(9)) {
-        FUN_001e7500(9);
+    } else if (p2IsCapabilityEnabled(9)) {
+        p2DisableCapability(9);
     }
-    if (FUN_001e7560(27)) {
-        FUN_001e7500(27);
-        FUN_001eb5e0(0, 0, 0, 0);
-        FUN_001eb5e0(1, 0, 0, 0);
-        FUN_001eb5e0(2, 0, 0, 0);
-        FUN_001eb5e0(3, 0, 0, 0);
-        FUN_001eb5e0(4, 0, 0, 0);
+    if (p2IsCapabilityEnabled(27)) {
+        p2DisableCapability(27);
+        p2SetComponentLayout(0, 0, 0, 0);
+        p2SetComponentLayout(1, 0, 0, 0);
+        p2SetComponentLayout(2, 0, 0, 0);
+        p2SetComponentLayout(3, 0, 0, 0);
+        p2SetComponentLayout(4, 0, 0, 0);
     }
     return result;
 }
@@ -155,22 +155,22 @@ int FUN_001774c0(igPsx2VisualContext *vc, Geometry1774 *geom, unsigned char *use
                 value = node->obj;
                 if (value->meta() == g_igCharList_metaObject[0]) {
                     int a = node->f32;
-                    FUN_001eb5e0(3, 1, 7 - a, a);
+                    p2SetComponentLayout(3, 1, 7 - a, a);
                     texture = value->f16;
                     *useTexture = 1;
                 } else if (node->obj->meta() == g_igUnsignedCharList_metaObject[0]) {
                     int a = node->f32;
-                    FUN_001eb5e0(3, 0, 8 - a, a);
+                    p2SetComponentLayout(3, 0, 8 - a, a);
                     texture = value->f16;
                     *useTexture = 1;
                 } else if (node->obj->meta() == g_igShortList_metaObject[0]) {
                     int a = node->f32;
-                    FUN_001eb5e0(3, 1, 0xF - a, a);
+                    p2SetComponentLayout(3, 1, 0xF - a, a);
                     texture = value->f16;
                     *useTexture = 1;
                 } else if (node->obj->meta() == g_igUnsignedShortList_metaObject[0]) {
                     int a = node->f32;
-                    FUN_001eb5e0(3, 0, 0x10 - a, a);
+                    p2SetComponentLayout(3, 0, 0x10 - a, a);
                     texture = value->f16;
                     *useTexture = 1;
                 } else {
@@ -182,24 +182,24 @@ int FUN_001774c0(igPsx2VisualContext *vc, Geometry1774 *geom, unsigned char *use
         if (levels > 0 && levels < 5 && vc->_blendMatricesCount < 121 && !GPR_00554b6c && limit >= vc->_blendMatricesCount) {
             result = 2;
             if (!prebuilt) {
-                FUN_001e9730(matrices);
-                FUN_001e9720(texture);
+                p2SetBlendIndexArray(matrices);
+                p2SetBlendWeightArray(texture);
             }
         } else {
             result = 1;
         }
         if (result == 2) {
-            FUN_001e96d0(levels, levels);
-            if (!FUN_001e7560(9)) {
-                FUN_001e74b0(9);
+            p2SetBlendWeightCount(levels, levels);
+            if (!p2IsCapabilityEnabled(9)) {
+                p2EnableCapability(9);
             }
         } else if (result == 1) {
-            if (FUN_001e7560(9)) {
-                FUN_001e7500(9);
+            if (p2IsCapabilityEnabled(9)) {
+                p2DisableCapability(9);
             }
         }
-    } else if (FUN_001e7560(9)) {
-        FUN_001e7500(9);
+    } else if (p2IsCapabilityEnabled(9)) {
+        p2DisableCapability(9);
     }
     if (prebuilt) {
         if (vc->_texEnable[0] && vc->_texCoordIndex[0] != geom->f48[0]) {
@@ -819,7 +819,7 @@ void FUN_0017a7e0(S0_17a070 *arg0) {
     int sp20;
 
     FUN_0017a870(arg0, 0);
-    FUN_001edbc0(&sp2C, &sp28, &sp24, &sp20);
+    p2GetDisplaySize(&sp2C, &sp28, &sp24, &sp20);
     *(int *)((char *)(arg0) + 1524) = p2LoadTexture(0, sp2C, sp28, sp24, 1);
     *(int *)((char *)(arg0) + 1528) = p2LoadTexture(0, sp2C, sp28, sp24, 2);
     *(int *)((char *)(arg0) + 1532) = p2LoadTexture(0, sp2C, sp28, sp20, 3);
@@ -875,9 +875,9 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_117(struct TextureStateView117 *arg0, 
     p2CurrentProgram[0] = n;
     DAT_0056ad80[0] = &DAT_00569340[j];
     if (arg2 != 0) {
-        FUN_001e74b0(1, n);
+        p2EnableCapability(1, n);
     } else {
-        FUN_001e7500(1, n);
+        p2DisableCapability(1, n);
     }
     p2CurrentProgram[0] = 0;
     DAT_0056ad80[0] = DAT_00569340;
@@ -1321,10 +1321,10 @@ void FUN_0017c710(int arg0, int arg1, int arg2) {
     *(char *)(arg1 + arg0 + 540) = arg2;
     if (arg1 == 0) {
         if (arg2 != 0) {
-            FUN_001e74b0(0x1A, arg1);
+            p2EnableCapability(0x1A, arg1);
             return;
         }
-        FUN_001e7500(0x1A, arg1);
+        p2DisableCapability(0x1A, arg1);
     }
 }
 
@@ -1405,22 +1405,22 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_150(struct TextureStageView150 *p, int
     DAT_0056ad80[0] = &DAT_00569340[i];
     switch (x) {
     case 0:
-        FUN_001e7500(10);
+        p2DisableCapability(10);
         break;
     case 2:
-        FUN_001e74b0(10);
+        p2EnableCapability(10);
         FUN_00208170(1);
         break;
     case 1:
-        FUN_001e74b0(10);
+        p2EnableCapability(10);
         FUN_00208170(0);
         break;
     case 3:
-        FUN_001e74b0(10);
+        p2EnableCapability(10);
         FUN_00208170(3);
         break;
     case 5:
-        FUN_001e74b0(10);
+        p2EnableCapability(10);
         FUN_00208170(2);
         break;
     }

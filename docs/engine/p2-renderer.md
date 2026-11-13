@@ -209,6 +209,42 @@ Open questions:
 * `p2SubmitRecordedVertices` passes no index list to `p2SubmitIndexedVertices` when the display-list
   mode is 1. What that mode means is not known.
 
+## State, VU programs, display and display lists
+
+`src/engine/p2core.c` (`0x1e74b0`-`0x1eef70`, types in `include/dw4/p2core.h`) is the layer's front:
+
+* **Capabilities.** `p2EnableCapability`/`p2DisableCapability` set bit `1 << capability` of the current
+  program's `p2ProgramFlags` entry and, on a change, run the switch `p2SetCapability`. Capability 9 is
+  vertex blending and 27 fixed-point vertex data.
+* **GS register images.** `p2GsRegisterSets` holds 15 images of the GS drawing registers, 64-bit each,
+  in GS register order (`SCISSOR_1` is register 32, `ZBUF_2` 47, `SIGNAL` 53); program 0 and 1 share
+  set 0 and program n above 1 uses set n - 1. A setter writes the field of the current program's context
+  (program 0 draws in context 1, the others in context 2), sets bit `0x40` of `p2DirtyFlags` and bit n of
+  `p2GsDirtyRegisters` for register n. With multipass rendering (`p2ExtraPassCount`) context 2 follows
+  what program 0 sets.
+* **VU programs.** `p2VuPrograms` is a 384-entry table read from the built-in program list (lines
+  separated by `.`) and the VU1 symbol table: a key, a size, an address once loaded, flags and a name.
+  `p2LoadVuPrograms` loads what a draw needs and, when VU1 is full, unloads everything not resident and
+  tries once more.
+* **Display.** `p2OpenDisplay` and `p2CloseDisplay` set up and take down the GS, the handlers, the
+  watchdog thread and the pools; `p2Display` keeps the display and antialias buffer sizes.
+* **Display lists.** `p2BeginDisplayList` points the current VIF1 packet at `p2DisplayListPacket`, a
+  packet over a 32 KiB heap block; a full block grows the list by a block ended with a DMA next tag,
+  and `p2EndDisplayList` closes it with a return tag and shrinks the last block. `p2CallDisplayList`
+  calls it with a call tag after `p2PatchDisplayListTextures` fills in the TEX0 writes it left open.
+
+No retail evidence splits the range into several files: its `.data`, `.rodata` and `.bss` each run in
+code order with no other object's data between them, and `scripts/same_file_calls.py` finds no static
+callee in it. So it is one file.
+
+Open questions:
+
+* Register 30 of a register set is marked with every texture or palette change; which GS register it
+  holds is not known (`P2_GS_TEXTURE_30`).
+* `p2Clear` with `p2ClearPasses` set draws three passes whose red channel is the pass number times 32;
+  what those passes are for is not known.
+* `p2ImagePoolSize` (`0x562d80`) is written once and never read.
+
 ## What the engine asks for
 
 At the seam, what the engine asks for and in what units:

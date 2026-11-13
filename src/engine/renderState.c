@@ -30,9 +30,9 @@ struct E { int w0; int w4; };
 extern long long p2VertexArrayMask[4];
 extern int DAT_00562da0[16];
 extern int DAT_0056b490[4];
-int FUN_001eadf0();
-int FUN_001eb490(long long, int *, int);
-int FUN_001eb500();
+int p2GetVuProgramAddress();
+int p2FindVuProgramVariants(long long, int *, int);
+int p2FindVuProgramByBitCount();
 void *FUN_00203000();
 extern int DAT_004915a8[4];
 extern int DAT_0056ae40[4];
@@ -230,7 +230,7 @@ typedef struct GifTag {
     unsigned long long REGS;
 } GifTag;
 extern GsPacketBuffer *DAT_00568f04;
-void FUN_001ee600();
+void p2GrowDisplayList();
 void p2SubmitDmaPacket();
 extern int DAT_00491480;
 extern int DAT_00490d38;
@@ -318,7 +318,7 @@ void FUN_001ffcf0(void) {
     DAT_00568f04->cursor = p + 12;
     if (DAT_00568f04->cursor >= DAT_00568f04->end) {
         if (DAT_00568e50[0] != 0) {
-            FUN_001ee600();
+            p2GrowDisplayList();
         } else {
             p2SubmitDmaPacket(1);
         }
@@ -626,39 +626,39 @@ void FUN_00202300(void) {
     DAT_0056b580[0] = 0;
     DAT_0056b578[0] = 0;
     DAT_0056b4c8[0] = 0;
-    FUN_001eb490(1, &DAT_0056b078[0], 1);
-    FUN_001eb490(2, &DAT_0056b080[0], 4);
-    FUN_001eb490(4, &DAT_0056b110[0], 8);
-    FUN_001eb490(8, &DAT_0056b090[0], 1);
-    FUN_001eb490(0x10, &DAT_0056b098[0], 1);
-    FUN_001eb490(0x40, &DAT_0056b0e0[0], 1);
-    FUN_001eb490(0x20, &DAT_0056b0a0[0], 0x10);
-    FUN_001eb490(0x200, &DAT_0056b0e8[0], 1);
-    FUN_001eb490(0x800, &DAT_0056b0f0[0], 2);
-    FUN_001eb490(0x1000, &DAT_0056b100[0], 4);
-    FUN_001eb490(4, &DAT_0056b110[0], 8);
-    FUN_001eb490(0x2000, &DAT_0056b160[0], 2);
-    FUN_001eb490(0x80, &DAT_0056b130[0], 0xB);
-    FUN_001eb490(0x4000, &DAT_0056b1c0[0], 0x16);
-    FUN_001eb490(0x100, &DAT_0056b170[0], 0x14);
-    FUN_001eb490(0x8000, &DAT_0056b220[0], 0x10);
-    FUN_001eb490(0x40000, &DAT_0056b260[0], 1);
-    FUN_001eb490(0x20000, &DAT_0056b268[0], 2);
-    FUN_001eb490(0x100000, &DAT_0056b270[0], 1);
-    FUN_001eb490(0x01000000, &DAT_0056b278[0], 3);
-    FUN_001eb490(0x80000, &DAT_0056b290[0], 0xE);
-    FUN_001eb490(0x400000, &DAT_0056b2d0[0], 0x10);
-    FUN_001eb490(0x800000, &DAT_0056b310[0], 8);
-    FUN_001eb490(0x02000000, &DAT_0056b330[0], 0x10);
-    FUN_001eb490(0x04000000, &DAT_0056b370[0], 2);
-    FUN_001eb490(0x10000000, &DAT_0056b3a0[0], 2);
-    FUN_001eb490(0x08000000, &DAT_0056b380[0], 8);
-    FUN_001eb490(0x20000000, &DAT_0056b3b0[0], 0xB);
-    FUN_001eb490(0x40000000, &DAT_0056b440[0], 8);
-    FUN_001eb490(0x400, &DAT_0056b3e0[0], 8);
-    FUN_001eb490(0x10000, &DAT_0056b400[0], 8);
-    FUN_001eb490(0x200000, &DAT_0056b420[0], 4);
-    FUN_001eb490(0x80000000LL, &DAT_0056b430[0], 3);
+    p2FindVuProgramVariants(1, &DAT_0056b078[0], 1);
+    p2FindVuProgramVariants(2, &DAT_0056b080[0], 4);
+    p2FindVuProgramVariants(4, &DAT_0056b110[0], 8);
+    p2FindVuProgramVariants(8, &DAT_0056b090[0], 1);
+    p2FindVuProgramVariants(0x10, &DAT_0056b098[0], 1);
+    p2FindVuProgramVariants(0x40, &DAT_0056b0e0[0], 1);
+    p2FindVuProgramVariants(0x20, &DAT_0056b0a0[0], 0x10);
+    p2FindVuProgramVariants(0x200, &DAT_0056b0e8[0], 1);
+    p2FindVuProgramVariants(0x800, &DAT_0056b0f0[0], 2);
+    p2FindVuProgramVariants(0x1000, &DAT_0056b100[0], 4);
+    p2FindVuProgramVariants(4, &DAT_0056b110[0], 8);
+    p2FindVuProgramVariants(0x2000, &DAT_0056b160[0], 2);
+    p2FindVuProgramVariants(0x80, &DAT_0056b130[0], 0xB);
+    p2FindVuProgramVariants(0x4000, &DAT_0056b1c0[0], 0x16);
+    p2FindVuProgramVariants(0x100, &DAT_0056b170[0], 0x14);
+    p2FindVuProgramVariants(0x8000, &DAT_0056b220[0], 0x10);
+    p2FindVuProgramVariants(0x40000, &DAT_0056b260[0], 1);
+    p2FindVuProgramVariants(0x20000, &DAT_0056b268[0], 2);
+    p2FindVuProgramVariants(0x100000, &DAT_0056b270[0], 1);
+    p2FindVuProgramVariants(0x01000000, &DAT_0056b278[0], 3);
+    p2FindVuProgramVariants(0x80000, &DAT_0056b290[0], 0xE);
+    p2FindVuProgramVariants(0x400000, &DAT_0056b2d0[0], 0x10);
+    p2FindVuProgramVariants(0x800000, &DAT_0056b310[0], 8);
+    p2FindVuProgramVariants(0x02000000, &DAT_0056b330[0], 0x10);
+    p2FindVuProgramVariants(0x04000000, &DAT_0056b370[0], 2);
+    p2FindVuProgramVariants(0x10000000, &DAT_0056b3a0[0], 2);
+    p2FindVuProgramVariants(0x08000000, &DAT_0056b380[0], 8);
+    p2FindVuProgramVariants(0x20000000, &DAT_0056b3b0[0], 0xB);
+    p2FindVuProgramVariants(0x40000000, &DAT_0056b440[0], 8);
+    p2FindVuProgramVariants(0x400, &DAT_0056b3e0[0], 8);
+    p2FindVuProgramVariants(0x10000, &DAT_0056b400[0], 8);
+    p2FindVuProgramVariants(0x200000, &DAT_0056b420[0], 4);
+    p2FindVuProgramVariants(0x80000000LL, &DAT_0056b430[0], 3);
     DAT_0056ae40[0] = DAT_0056b440[0];
     DAT_0056b2f0[0] = DAT_0056b2d0[0];
     DAT_0056b2f4[0] = DAT_0056b2d4[0];
@@ -675,8 +675,8 @@ void FUN_00202300(void) {
     DAT_0056b35c[0] = DAT_0056b33c[0];
     DAT_0056b36c[0] = DAT_0056b33c[0];
     if (DAT_004915a8[0] != 0) {
-        DAT_0056b600[0] = FUN_001eadf0(DAT_0056b448[0], DAT_0056b334[0], DAT_0056b2d0[0], DAT_0056b440[0]);
-        DAT_0056b604[0] = FUN_001eadf0(DAT_0056b44c[0]);
+        DAT_0056b600[0] = p2GetVuProgramAddress(DAT_0056b448[0], DAT_0056b334[0], DAT_0056b2d0[0], DAT_0056b440[0]);
+        DAT_0056b604[0] = p2GetVuProgramAddress(DAT_0056b44c[0]);
         var_a0 = 0;
         do {
             temp_v0_25 = (int *)((char *)DAT_0056b460 + (var_a0 * 4));
@@ -690,7 +690,7 @@ void FUN_00202300(void) {
     do {
         var_s2 = 0;
         temp_s1 = (void **)((char *)DAT_0056b460 + (var_s0 * 4));
-        while ((var_s3 = FUN_001eb500(var_s0 + 2, var_s3)) != 0) {
+        while ((var_s3 = p2FindVuProgramByBitCount(var_s0 + 2, var_s3)) != 0) {
             temp_s4 = (char *)DAT_00562da0 + (var_s3 << 6);
             temp_s5 = FUN_00202fa0(*(long long *)((char *)(temp_s4) + 0));
             var_v0 = (void *)(FUN_00202f60(*temp_s1, *(long long *)((char *)(temp_s4) + 0)));
@@ -727,19 +727,19 @@ int FUN_00202e20(int arg0) {
     temp_a1 = ((unsigned int) p2ProgramFlags[0] >> 0xF) & 3;
     if (arg0 == 1) {
         if (p2VertexArrayMask[0] & 0x400) {
-            return FUN_001eadf0(DAT_0056b0f0[DAT_0056b4f8[0]], temp_a1, temp_a2);
+            return p2GetVuProgramAddress(DAT_0056b0f0[DAT_0056b4f8[0]], temp_a1, temp_a2);
         }
         goto block_6;
     }
 block_6:
     if ((arg0 == 1) && (p2VertexArrayMask[0] & 0x10000)) {
-        return FUN_001eadf0(DAT_0056b260[DAT_0056b530[0]], temp_a1, temp_a2);
+        return p2GetVuProgramAddress(DAT_0056b260[DAT_0056b530[0]], temp_a1, temp_a2);
     }
     if ((temp_a2 != 0) || (temp_a1 != 0)) {
-        return FUN_001eadf0(DAT_0056b2d0[DAT_0056b550[0]], temp_a1, temp_a2);
+        return p2GetVuProgramAddress(DAT_0056b2d0[DAT_0056b550[0]], temp_a1, temp_a2);
     }
     if (p2VertexArrayMask[0] & 0x210400) {
-        var_v0 = FUN_001eadf0(DAT_0056b330[DAT_0056b568[0]], temp_a1, temp_a2);
+        var_v0 = p2GetVuProgramAddress(DAT_0056b330[DAT_0056b568[0]], temp_a1, temp_a2);
     }
     return var_v0;
 }

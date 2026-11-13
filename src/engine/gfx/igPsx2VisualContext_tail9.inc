@@ -3,7 +3,7 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_197(struct S_180030 *arg0, int arg1, i
     arg0->f84 = arg2;
     arg0->f1424 = 1;
     arg0->f76 = arg0->f76 + 1;
-    FUN_001e9740(arg0->f84, arg0->f72);
+    p2SetBlendMatrices(arg0->f84, arg0->f72);
 }
 
 void FUN_00180060(O_180060 *arg0) {

@@ -11,14 +11,14 @@ int iReferSemaStatus();
 int iSignalSema();
 long long p2readGSPrivRegister();
 int p2SubmitDmaPacket();
-void FUN_001ea5d0(void *clut);
+void p2SetClut(void *clut);
 int FUN_001fcb00();
-int FUN_001edcb0();
+int p2GetTextureBase();
 int p2RegisterPredicateName();
 void textureDeferredPredicate(void);
 int textureLoadedPredicate();
 int p2DmaSequenceLastCompleted();
-int FUN_001ebc00();
+int p2GetDisplayFlags();
 int FUN_001f76f0();
 int p2AddDmaPredicate();
 void FUN_001f74e0(void);
@@ -246,7 +246,7 @@ void FUN_002082f0(void) {
     DAT_0056c0d0[0] = temp_v0_2;
     temp_v0_2->f24 = 0;
     DAT_0056c0d0[0]->f28 = 0;
-    FUN_001edcb0(&temp_v0_2->f56);
+    p2GetTextureBase(&temp_v0_2->f56);
     temp_v0_2->f64 = DAT_0056c060[0] - temp_v0_2->f56;
     DAT_0056c0d8[0] = DAT_0056c0d0[0];
     DAT_0056c078[0] = temp_v0_2->f56;
@@ -325,7 +325,7 @@ void FUN_002084e0(Texture *texture) {
     void FUN_001fcb00(void);
     if (texture == 0) return;
     if (texture->clut != 0) {
-        FUN_001ea5d0(texture->clut);
+        p2SetClut(texture->clut);
         return;
     }
     DAT_0056c068++;
@@ -714,7 +714,7 @@ void FUN_0020a590(struct A0_20a590 *arg0, int arg1, int arg2, int arg3, int arg4
     int pr;
     int t;
     sp0 = DAT_0056ad80[0]->x355;
-    s0 = (FUN_001ebc00() & 2) != 0;
+    s0 = (p2GetDisplayFlags() & 2) != 0;
     arg0->f72 = 1;
     switch (arg0->f70) {
     case 1:
@@ -908,7 +908,7 @@ void FUN_0020b110(void) {
     S_20b110 *p;
 
     s0 = ((unsigned int) p2ProgramFlags[p2CurrentProgram[0]] >> 0x17) & 1;
-    a1 = (FUN_001ebc00() & 2) != 0;
+    a1 = (p2GetDisplayFlags() & 2) != 0;
     if (DAT_00568e28[0] != -1) {
         DAT_0056ad80[0]->u352.i = DAT_0056c138[0];
         DAT_0056ad80[0]->u368.i = DAT_0056c140[0];

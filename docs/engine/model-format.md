@@ -321,7 +321,7 @@ palette cannot be paired from the object graph and the bind pose stands.
 animation is `karada_Trans1`/`SQ_WALK`.  The live-attr to pack-id content match misses this skinned mesh,
 so its texture has to be resolved by live shape name.
 
-**The skinning-matrix upload.**  `FUN_001e9770` reads an `igBlendMatricesAttr` pool palette and stages it
+**The skinning-matrix upload.**  `p2UploadBlendMatrices` reads an `igBlendMatricesAttr` pool palette and stages it
 for VU1: a loop at `0x001E98F0..0x001E9934` copies 64-byte records.  The upload descriptor is at
 `*(0x568F04)` (cursor at +48), and the stride is `*(0x562D48) << 6`, where `*(0x562D48)` is the matrix
 count (24 for the player palette).  A snapshot of VU1 data memory holds matrices but none of the player's

@@ -24,7 +24,7 @@ recovered. The packs carry serialised `igLightAttr` records, but those are proto
 | `p2SetLight` / `p2SetMaterial` | 108 / 108 | store a light into `p2Lights` (`0x56AF40`) or the material into `p2Materials` (`0x56AF60`) at a caller-supplied slot |
 | `p2SetLightingColor` | 60 | copies a 16-byte colour (the visual context passes its material's `+0x58` vector) into `0x56AEE0`, the block `p2lighting` emits as record 3 |
 | `p2EnableLight` / `p2DisableLight` | 156 / 156 | switch a slot's light on or off, keeping the active-light counts; disabling also empties the slot |
-| `p2EnableLighting` / `p2DisableLighting` | 72 / 100 | the lighting case of the renderer's enable switch `FUN_001e7930`; disabling also drops the normal-array bits from the vertex-array mask |
+| `p2EnableLighting` / `p2DisableLighting` | 72 / 100 | the lighting case of the renderer's capability switch `p2SetCapability`; disabling also drops the normal-array bits from the vertex-array mask |
 | `p2InitLighting` | 148 | empties the light and material slots and turns lighting off (called from the renderer's initialisation) |
 | `p2InvertMatrix` / `p2AdjointMatrix` | 96 / 640 | the light-matrix inverse `p2lighting` uses: the adjoint scaled by one over the value `p2AdjointMatrix` returns |
 
@@ -169,7 +169,7 @@ stag0001 values; the generalisation and the event model are unconfirmed):
 3. **Pending flag.** `FUN_001fbce0` is the single hardware matrix upload (type 0 model-view, 3 projection, 4 texture, 5, 2); every
    type leaves through `0x1fc010..0x1fc018` with `p2LightCalcPending` (`0x56B5F8`) `= 1`. Only the model-view type also calls `FUN_001fb0e0(-1)`, which
    re-emits a **fresh** light block (returning early when `p2DirtyFlags & 4`, the lighting-dirty bit, is set).
-4. **Draw submit.** `FUN_001ee750` (clones `p2SubmitVertices`, `p2SubmitIndexedVertices`, `FUN_001fe390`) tests `p2LightCalcPending == 1`; if set it appends
+4. **Draw submit.** `p2CallDisplayList` (clones `p2SubmitVertices`, `p2SubmitIndexedVertices`, `FUN_001fe390`) tests `p2LightCalcPending == 1`; if set it appends
    a 32-byte record (VIF `6001002b`, one word `DAT_0056b604` = `0x3a` to VU1 `mem[43]`), clears `DAT_0056afc8` and the flag. The flag
    is a boolean consumed by the next draw: two uploads before one draw count once.
 5. **VU1.** `EXECUTE_RENDERLIST` reads `mem[43]`, zeroes it and jumps to `0x3a` (the `EXECUTE_PRE_PATH` chain that runs the `CALC_*`

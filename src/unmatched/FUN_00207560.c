@@ -1,6 +1,6 @@
 int FUN_00113f20();
 int FUN_00113f78();
-int FUN_001ebc00();
+int p2GetDisplayFlags();
 int p2AddDmaPredicate();
 int FUN_001f76c0();
 int FUN_001f8190();
@@ -41,7 +41,7 @@ void FUN_00207560(void) {
     int v;
     Obj *ob;
     /*E*/
-    s0 = FUN_001ebc00();
+    s0 = p2GetDisplayFlags();
     DAT_0056bf78[0] += 1;
     if (s0 != 0) {
         FUN_00207470();

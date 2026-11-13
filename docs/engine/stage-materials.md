@@ -37,6 +37,6 @@ object pointer to them, so a walk of the material graph never joins them to a te
 ## Texture upload
 
 `p2LoadTexture` (`0x20c270`) is called by `igSetRenderDestinationAttr` (`0x140060`), `FUN_0017a7e0`, `FUN_0017b5f0`,
-`FUN_001ea430` (a GS bitfield builder writing `*(0x562D88)`) and `igPsx2VisualContext_vfunc_49` (`0x169840`).
+`p2CreateImage` (a small lookup image taken from the image pool `p2ImagePool`) and `igPsx2VisualContext_vfunc_49` (`0x169840`).
 `igPsx2VisualContext._pTexList` (+0x144) is a table of 0x88-byte VRAM descriptors, 47 entries in the measured frame, with
 `igTextureAttr` at +0x30 and width/height at +0x20/+0x24.

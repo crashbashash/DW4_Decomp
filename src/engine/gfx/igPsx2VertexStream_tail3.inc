@@ -18,7 +18,7 @@ void Gap__Gfx__igPsx2VertexStream__vfunc_27(A_17ff60 *arg0) {
     int temp_a0_2;
 
     if ((arg0->f16 != 0) && (arg0->vX() != 0)) {
-        FUN_001eeda0(arg0->f128);
+        p2ReleaseDisplayList(arg0->f128);
         arg0->f12 = 0;
     } else {
         if (arg0->f40 != 0) {

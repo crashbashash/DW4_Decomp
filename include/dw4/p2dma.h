@@ -47,8 +47,8 @@ typedef struct p2DmaPacket {
     p2DmaCompletion *completions;
     void *memory;                     /* the allocation a packet heading a block owns */
     unsigned int chain;               /* the first DMA tag, where the transfer starts */
-    int f36;
-    int f40;
+    unsigned int end;                 /* the end of the chain buffer */
+    unsigned int limit;               /* past this the packet is full and is handed over */
     int f44;
     unsigned int cursor;              /* where the next chain data goes; equals chain while empty */
     struct p2DmaPacket *next;

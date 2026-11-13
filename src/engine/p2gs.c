@@ -1,4 +1,4 @@
-int FUN_001edcb0();
+int p2GetTextureBase();
 extern long long DAT_00491680[4];
 extern long long DAT_00562cc0[4];
 extern long long DAT_00562d38[4];
@@ -60,14 +60,14 @@ extern GsPacketBuffer *DAT_00568f08;
 extern unsigned int DAT_00490f50, DAT_00490f54, DAT_00490f58, DAT_00490f5c, DAT_00490f60, DAT_00490f68, DAT_00490f70;
 extern unsigned int DAT_00569328;
 extern int DAT_00568e50;
-void FUN_001ee600(void);
+void p2GrowDisplayList(void);
 void p2SubmitDmaPacket(int arg);
 int printf();
 long long p2readGSPrivRegister();
 extern int DAT_004e5110[4];
 extern long long DAT_0056ae38[4];
 void FUN_001f76f0(int count, int *regs);
-unsigned short FUN_001eadf0(int);
+unsigned short p2GetVuProgramAddress(int);
 void FUN_001f7e90(int count, int *regs, int flush);
 int FUN_001f78d0();
 typedef union DmaTag {
@@ -181,7 +181,7 @@ void FUN_001f6f50(void *arg0) {
     *(long long *)((char *)arg0 + 392) = DAT_00569268[0];
     *(long long *)((char *)arg0 + 16) = DAT_0056c068[0];
     *(long long *)((char *)arg0 + 24) = DAT_0056c070[0];
-    FUN_001edcb0((int *)&sp2C);
+    p2GetTextureBase((int *)&sp2C);
     sp2C = (0x4000 - sp2C) << 8;
     *(long long *)((char *)arg0 + 200) = DAT_005690ac[0];
     *(long long *)((char *)arg0 + 208) = DAT_005690b0[0];
@@ -268,7 +268,7 @@ void FUN_001f7370(float value) {
     DAT_00568f04->cursor = p + 12;
     if (DAT_00568f04->cursor >= DAT_00568f04->end) {
         if (DAT_00568e50 != 0) {
-            FUN_001ee600();
+            p2GrowDisplayList();
         } else {
             p2SubmitDmaPacket(1);
         }
@@ -377,7 +377,7 @@ void FUN_001f76f0(int count, int *regs) {
     int n;
 
     if (p2CurrentProgram == 0) {
-        DAT_0056aeb8.f.immediate = FUN_001eadf0(DAT_0056ae40);
+        DAT_0056aeb8.f.immediate = p2GetVuProgramAddress(DAT_0056ae40);
         for (; count > 0; count -= n, regs += n) {
             int i;
             unsigned __int128 *p;
@@ -408,7 +408,7 @@ void FUN_001f76f0(int count, int *regs) {
             DAT_00568f04->cursor = (unsigned int *)(p + 1);
             if (DAT_00568f04->cursor >= DAT_00568f04->end) {
                 if (DAT_00568e50 != 0) {
-                    FUN_001ee600();
+                    p2GrowDisplayList();
                 } else {
                     p2SubmitDmaPacket(1);
                 }
@@ -438,7 +438,7 @@ void FUN_001f7db0(unsigned int addr, int unused, int flush) {
         p2SubmitDmaPacket(2);
     } else if (DAT_00568f08->cursor >= DAT_00568f08->end) {
         if (DAT_00568e50 != 0) {
-            FUN_001ee600();
+            p2GrowDisplayList();
         } else {
             p2SubmitDmaPacket(2);
         }

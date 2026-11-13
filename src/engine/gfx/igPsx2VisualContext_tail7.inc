@@ -29,28 +29,28 @@ bool FUN_0017e590(Self_17e590 *arg0, int arg1, int arg2, int *arg3, int *arg4) {
     if (n != 0) {
         if (n->obj->vX() == g_igFloatList_metaObject[0]) {
             *arg3 = n->obj->f16;
-            FUN_001eb5e0(4, 0, 0, 0);
+            p2SetComponentLayout(4, 0, 0, 0);
         } else if (n->obj->vX() == g_igVec2fList_metaObject[0]) {
             *arg3 = n->obj->f16;
-            FUN_001eb5e0(4, 0, 0, 0);
+            p2SetComponentLayout(4, 0, 0, 0);
         } else {
             VC_17e590 *o = n->obj;
             if (o->vX() == g_igCharList_metaObject[0]) {
                 int a = n->f32;
-                FUN_001eb5e0(4, 1, 7 - a, a);
+                p2SetComponentLayout(4, 1, 7 - a, a);
                 var_s2 = true;
                 *arg3 = o->f16;
             } else if (o->vX() == g_igUnsignedCharList_metaObject[0]) {
                 int a = n->f32;
-                FUN_001eb5e0(4, 0, 8 - a, a);
+                p2SetComponentLayout(4, 0, 8 - a, a);
                 *arg3 = o->f16;
             } else if (o->vX() == g_igShortList_metaObject[0]) {
                 int a = n->f32;
-                FUN_001eb5e0(4, 1, 0xF - a, a);
+                p2SetComponentLayout(4, 1, 0xF - a, a);
                 *arg3 = o->f16;
             } else if (o->vX() == g_igUnsignedShortList_metaObject[0]) {
                 int a = n->f32;
-                FUN_001eb5e0(4, 0, 0x10 - a, a);
+                p2SetComponentLayout(4, 0, 0x10 - a, a);
                 *arg3 = o->f16;
             }
         }
@@ -71,19 +71,19 @@ bool FUN_0017e590(Self_17e590 *arg0, int arg1, int arg2, int *arg3, int *arg4) {
             o2 = n2->obj;
             if (o2->vX() == g_igCharList_metaObject[0]) {
                 int a = n2->f32;
-                FUN_001eb5e0(2, 1, 7 - a, a);
+                p2SetComponentLayout(2, 1, 7 - a, a);
                 *arg4 = o2->f16;
             } else if (o2->vX() == g_igUnsignedCharList_metaObject[0]) {
                 int a = n2->f32;
-                FUN_001eb5e0(2, 0, 8 - a, a);
+                p2SetComponentLayout(2, 0, 8 - a, a);
                 *arg4 = o2->f16;
             } else if (o2->vX() == g_igShortList_metaObject[0]) {
                 int a = n2->f32;
-                FUN_001eb5e0(2, 1, 0xF - a, a);
+                p2SetComponentLayout(2, 1, 0xF - a, a);
                 *arg4 = o2->f16;
             } else if (o2->vX() == g_igUnsignedShortList_metaObject[0]) {
                 int a = n2->f32;
-                FUN_001eb5e0(2, 0, 0x10 - a, a);
+                p2SetComponentLayout(2, 0, 0x10 - a, a);
                 *arg4 = o2->f16;
             }
         }
@@ -120,16 +120,16 @@ void FUN_0017e980(igPsx2VisualContext *h, int arg1, int arg2)
                 } else {
                     o = e->obj;
                     if (g_igCharList_metaObject[0] == o->meta()) {
-                        FUN_001eb5e0(2, 1, 7 - e->f32, e->f32);
+                        p2SetComponentLayout(2, 1, 7 - e->f32, e->f32);
                         v = ((int *)o)[4];
                     } else if (g_igUnsignedCharList_metaObject[0] == o->meta()) {
-                        FUN_001eb5e0(2, 0, 8 - e->f32, e->f32);
+                        p2SetComponentLayout(2, 0, 8 - e->f32, e->f32);
                         v = ((int *)o)[4];
                     } else if (g_igShortList_metaObject[0] == o->meta()) {
-                        FUN_001eb5e0(2, 1, 15 - e->f32, e->f32);
+                        p2SetComponentLayout(2, 1, 15 - e->f32, e->f32);
                         v = ((int *)o)[4];
                     } else if (g_igUnsignedShortList_metaObject[0] == o->meta()) {
-                        FUN_001eb5e0(2, 0, 16 - e->f32, e->f32);
+                        p2SetComponentLayout(2, 0, 16 - e->f32, e->f32);
                         v = ((int *)o)[4];
                     }
                 }
@@ -167,9 +167,9 @@ void FUN_0017eb90(B_17eb90 *arg0, int arg1, int arg2, int arg3, int arg4, int ar
     temp_s7 = FUN_0017df40(arg0, arg1, var_s1, &spBC, &spB8, &spAC, &spB4) & 0xFF;
     FUN_0017e980((igPsx2VisualContext *)arg0, arg1, var_s1);
     if ((temp_s7 != 0) || (arg6 != 0)) {
-        FUN_001e74b0(0x1B);
-    } else if (FUN_001e7560(0x1B) != 0) {
-        FUN_001e7500(0x1B);
+        p2EnableCapability(0x1B);
+    } else if (p2IsCapabilityEnabled(0x1B) != 0) {
+        p2DisableCapability(0x1B);
     }
     switch (arg2) {
     case 0x0:
@@ -210,7 +210,7 @@ void FUN_0017eb90(B_17eb90 *arg0, int arg1, int arg2, int arg3, int arg4, int ar
         break;
     case 0x1000:
         if (FUN_0017e590((Self_17e590 *)arg0, arg1, var_s1, &spA8, &spB0) && (temp_s7 == 0)) {
-            FUN_001e74b0(0x1B);
+            p2EnableCapability(0x1B);
         }
         p2SetTexCoordArray(1, spB0);
         p2SetVertexArrays(spBC, spA8, spAC, spB4);

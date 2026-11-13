@@ -74,7 +74,7 @@ typedef union p2DmaTag {
 
 typedef void (*p2VertexSubmit)(unsigned int count, int first);
 
-int FUN_001eb810(void);
+int p2UploadComponentScales(void);
 int FUN_001fffb0(void);
 int FUN_00200980(void);
 int FUN_00201a90(void);
@@ -326,7 +326,7 @@ static inline void p2BeginDraw(int primitive, int sprites) {
         }
     }
     if (fixedPoint) {
-        FUN_001eb810();
+        p2UploadComponentScales();
     }
 }
 

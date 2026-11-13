@@ -262,10 +262,10 @@ int Gap__Gfx__igPsx2VisualContext__vfunc_51(igPsx2VisualContext *self, int buffe
 
 void FUN_00169be0(void *d0, int arg1) {
     if (arg1 == 1) {
-        FUN_001e99c0(0x40);
+        p2SetClearWidth(0x40);
         return;
     }
-    FUN_001e99c0(0);
+    p2SetClearWidth(0);
 }
 
 void Gap__Gfx__igPsx2VisualContext__vfunc_176(void *arg0, int arg1) {
@@ -278,7 +278,7 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_176(void *arg0, int arg1) {
     if (arg1 & 2) {
         var_a0 |= 2;
     }
-    FUN_001e99f0(var_a0, *(int *)((char *)(arg0) + 896), *(int *)((char *)(arg0) + 900));
+    p2Clear(var_a0, *(int *)((char *)(arg0) + 896), *(int *)((char *)(arg0) + 900));
 }
 
 int Gap__Gfx__igPsx2VisualContext__vfunc_171(igPsx2VisualContext *arg0, int arg1, int arg2, int arg3, int arg4, int arg5, int arg6, int arg7, int arg8) {
@@ -485,7 +485,7 @@ void FUN_0016a520(O520 *o) {
               w = H_1690d0::clampLen(w, hi_x - lo_x);
               a = H_1690d0::clampLow(a, hi_y);
               lo_x = H_1690d0::clampLow(lo_x, hi_x);
-              FUN_001e8d10(lo_x, a, w, c); }
+              p2SetScissor(lo_x, a, w, c); }
         } else {
             int a = o->e4d8; int hi_y = r->y; int c = o->e4e0;
             c = H_1690d0::clampLen(c, hi_y - a);
@@ -493,7 +493,7 @@ void FUN_0016a520(O520 *o) {
               w = H_1690d0::clampLen(w, hi_x - lo_x);
               a = H_1690d0::clampLow(a, hi_y);
               lo_x = H_1690d0::clampLow(lo_x, hi_x);
-              FUN_001e8d10(lo_x, a, w, c); }
+              p2SetScissor(lo_x, a, w, c); }
         }
     }
 }
@@ -762,7 +762,7 @@ void FUN_0016af30(A_1690d0 *arg0, int arg1, RAf30 *arg2) {
         n = 16;
     }
     if (e->f10 != 0 && e->f8 != 0) {
-        p2WaitDmaSequence(2, FUN_0020b270(FUN_001ea420(e->f8)));
+        p2WaitDmaSequence(2, FUN_0020b270(p2GetImageTexture(e->f8)));
     } else if (e->f10 == 0) {
         o = (void **)FUN_00165cf0((int *)arg0);
         e->f10 = ((VC_220 *)o)->vX(n * 4, 128);
@@ -784,19 +784,19 @@ bool FUN_0016b090(Ob *arg0, int arg1) {
     v = true;
     if (s->f8 == 0 || s->f4->f28 != 0) {
         if (s->f8 != 0) {
-            h = FUN_001ea420(s->f8);
+            h = p2GetImageTexture(s->f8);
             FUN_0020c800(h);
             p2WaitDmaSequence(2, FUN_0020b270(h));
             q = s->f4;
             q->f28 = 1;
             FUN_0016aea0((int)arg0, s->f12, (int *)s->f16, (int *)q->f20);
         } else {
-            s->f8 = FUN_001ea430(DAT_0048a4e0[s->f12], 0, DAT_0048a4ec[0], s->f16);
+            s->f8 = p2CreateImage(DAT_0048a4e0[s->f12], 0, DAT_0048a4ec[0], s->f16);
         }
         s->f4->f28 = 0;
     }
     if (s->f20 != 5) {
-        sp5C = FUN_001ea420(s->f8);
+        sp5C = p2GetImageTexture(s->f8);
         v = FUN_0020bb20(&sp5C, 0, 0) != 0;
     }
     s->f20 = 4;
@@ -811,10 +811,10 @@ void FUN_0016b1d0(OB1d0 *arg0, int arg1) {
     if (t->Chk(arg1)) {
         e = t->f16 + arg1;
         if (e->w8 != 0) {
-            h = FUN_001ea420(e->w8);
+            h = p2GetImageTexture(e->w8);
             p2WaitDmaSequence(2, FUN_0020b270(h));
             FUN_0020c9f0(h);
-            FUN_001ea8a0(e->w8);
+            p2FreeImage(e->w8);
         }
         e->w8 = 0;
         arg0->f344 = -1;
@@ -843,7 +843,7 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_10(S10 *arg0) {
     FUN_0016c650((igPsx2VisualContext *)arg0, 0);
     FUN_001788e0((StatContext88 *)arg0, 0);
     if (arg0->f142 != 0) {
-        FUN_001edf20();
+        p2CloseDisplay();
     }
     FUN_00165bb0((char *)arg0);
 }
@@ -1014,7 +1014,7 @@ done:
         s0 = arg1 * 4;
         s2 = a3->f16[arg1]->list;
         for (s1 = 0; s1 < s2->count; s1++) {
-            FUN_001eeda0(s2->data[s1]);
+            p2ReleaseDisplayList(s2->data[s1]);
         }
         --s2->refs;
         if ((s2->refs & 0x7fffff) == 0) {
@@ -1028,7 +1028,7 @@ done:
 void Gap__Gfx__igPsx2VisualContext__vfunc_194(void *arg0, int arg1) {
     *(int *)((char *)(arg0) + 964) = arg1;
     if (*(int *)((char *)(arg0) + 72) < 0x10) {
-        FUN_001e9740(0, 0x10);
+        p2SetBlendMatrices(0, 0x10);
     }
 }
 
@@ -1036,7 +1036,7 @@ int Gap__Gfx__igPsx2VisualContext__vfunc_195(void *arg0) {
     int temp_a1;
     temp_a1 = *(int *)((char *)(arg0) + 72);
     if (temp_a1 > 0) {
-        FUN_001e9740(*(int *)((char *)(arg0) + 84), temp_a1);
+        p2SetBlendMatrices(*(int *)((char *)(arg0) + 84), temp_a1);
     }
     *(int *)((char *)(arg0) + 964) = -1;
     return *(unsigned char *)((char *)(arg0) + 968) == 0;
@@ -1057,14 +1057,14 @@ int Gap__Gfx__igPsx2VisualContext__vfunc_196(igPsx2VisualContext *arg0, int arg1
         }
         var_s2 = 0;
         if (temp_v0 == 2) {
-            var_s2 = FUN_001ee730(temp_s4->a[0]);
+            var_s2 = p2GetDisplayListBlendWeightCount(temp_s4->a[0]);
         }
         for (var_s1 = 0; var_s1 < temp_s4->n; var_s1 += 1) {
-            temp_v0_2 = FUN_001ee730(temp_s4->a[var_s1]);
+            temp_v0_2 = p2GetDisplayListBlendWeightCount(temp_s4->a[var_s1]);
             if ((temp_v0 == 2) && (var_s2 != temp_v0_2)) {
-                FUN_001e96d0(temp_v0_2, temp_v0_2);
+                p2SetBlendWeightCount(temp_v0_2, temp_v0_2);
             }
-            FUN_001ee750(temp_s4->a[var_s1]);
+            p2CallDisplayList(temp_s4->a[var_s1]);
         }
     }
     return 1;
@@ -1085,7 +1085,7 @@ void FUN_0016cc60(char *arg0) {
     idx = *(int *)(arg0 + 964);
     if (idx >= 0) {
         list = **(IntList ***)(*(int *)(*(int *)(arg0 + 960) + 16) + idx * 4);
-        value = FUN_001ee270(*(int *)((char *)DAT_0048a4f0 + *(int *)(arg0 + 1400) * 4));
+        value = p2BeginDisplayList(*(int *)((char *)DAT_0048a4f0 + *(int *)(arg0 + 1400) * 4));
         top = count_of(list);
         if (top < list->_capacity) {
             list->_count = list->_count + 1;
@@ -1098,7 +1098,7 @@ void FUN_0016cc60(char *arg0) {
 
 void FUN_0016cd10(void *arg0) {
     if (*(int *)((char *)arg0 + 964) >= 0) {
-        FUN_001ee3f0();
+        p2EndDisplayList();
     }
 }
 

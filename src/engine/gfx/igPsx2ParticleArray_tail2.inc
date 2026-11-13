@@ -43,8 +43,8 @@ void Gap__Gfx__igPsx2ParticleArray__vfunc_29(PA_175ba0 *arg0) {
     float t = arg0->f28;
     if (!(t <= arg0->f24 + arg0->f84) || t < arg0->f20) return;
         DAT_00560660[0] += arg0->f56;
-        if (FUN_001e7560(0x17) != 0) {
-            FUN_001e7500(0x17);
+        if (p2IsCapabilityEnabled(0x17) != 0) {
+            p2DisableCapability(0x17);
         }
         FUN_001fe390(arg0->f100, arg0->f56, arg0->f52, arg0->f28);
         if (arg0->f104 != 0) {
