@@ -1,5 +1,6 @@
 #include "dw4/reflected.h"
 #include "dw4/igSmartPointer.h"
+#include "dw4/igMath.h"
 
 extern "C" {
 
@@ -840,3 +841,6 @@ int FUN_00466cf0(void) {
 }
 
 }
+
+igVec4f g_whiteColor(1.0f, 1.0f, 1.0f, 1.0f);
+igVec4f g_redColor(1.0f, 0.0f, 0.0f, 1.0f);

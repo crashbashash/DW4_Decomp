@@ -53,11 +53,11 @@ void Gap__Core__igSymbolTable__vfunc_24(int *arg0, struct T_30db60 *arg1, int ar
             List_Resize((void *)l, n, 4);
         }
     }
-    *arg0 = g_statusSucceeded.v;
+    *arg0 = g_resultSuccess.v;
 }
 
 igResult_30dbc0 Gap__Core__igSymbolTable__vfunc_25(Table *self, int idx, char *name, int nameSize, int *a, int *b, char *path, int pathSize) {
-    igResult_30dbc0 result = (*(igResult_30dbc0 *)&g_allocatorFailureStatus);
+    igResult_30dbc0 result = g_resultFailure;
     Entry_30dbc0 *e;
     char *s;
 
@@ -71,7 +71,7 @@ if ((s = FUN_0030d1d0((int *)self->names, e->name)) != 0) { strncpy(name, s, nam
         if (path != 0) {
 if ((s = FUN_0030d1d0((int *)self->paths, e->path)) != 0) { strncpy(path, s, pathSize); } else { *path = 0; }
         }
-        result = (*(igResult_30dbc0 *)&g_statusSucceeded);
+        result = g_resultSuccess;
     } else {
         if (name != 0) {
             *name = 0;
@@ -127,7 +127,7 @@ E_30dcf0 *en1; int len2; int i; int i0; int e1; int len1; unsigned st2; int cnt;
 void Gap__Core__igSymbolTable__vfunc_27(int *out, O_30de90 *o, int a, int b, int c, int d, int e, int f, int g, int *h) {
     S_30de90 r;
     int i = o->v24(a);
-    r.v = g_allocatorFailureStatus.v;
+    r.v = g_resultFailure.v;
     *h = 0;
     if (i != -1) r = o->v23(i, b, c, d, e, f, g);
     *out = r.v;

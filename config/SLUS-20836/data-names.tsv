@@ -4913,12 +4913,6 @@
 0x004e0db8	text_f_f_f	string-literal
 0x004e0dc8	text_f_f_f_f	string-literal
 0x004e0de0	text_uc_uc_uc_uc	string-literal
-0x004e1058	g_vec3Zero	recovered-global
-0x004e1068	g_vec3One	recovered-global
-0x004e1078	g_vec3XAxis	recovered-global
-0x004e1088	g_vec3YAxis	recovered-global
-0x004e1098	g_vec3ZAxis	recovered-global
-0x004e1170	g_vec4Zero	recovered-global
 0x004e1210	igTraversal_className	class-name
 0x004e1280	igTransientShaderData_className	class-name
 0x004e1298	text_attrPushLists	string-literal
@@ -8331,7 +8325,6 @@
 0x0055f540	g_igAudioContext_metaObject	class-handle
 0x0055f550	g_igPsx2AudioContext_metaObject	class-handle
 0x0055f5a8	g_igPsx2AudioSourceList_metaObject	class-handle
-0x0055f5d0	g_audioTableOwner	recovered-global
 0x0055f5d8	g_igWindow_metaObject	class-handle
 0x0055f5e8	g_igInterfaceManager_metaObject	class-handle
 0x0055f5f8	g_igEventProducerList_metaObject	class-handle
@@ -9050,7 +9043,6 @@
 0x005878a8	g_igMoviePlugin_metaObject	class-handle
 0x005878b8	g_criMovieUploadPacketSize	recovered-global
 0x005878c0	g_criMovieUploadPacket	recovered-global
-0x005878d8	g_criMovieVisualContext	recovered-global
 0x005878e0	g_libBecRuntimePlugin_metaObject	class-handle
 0x00587a20	g_beWeaponInfoRam_metaObject	class-handle
 0x00587a28	g_beWeaponInfo_metaObject	class-handle
@@ -9391,7 +9383,6 @@
 0x0058a578	g_targetMessenger	recovered-global
 0x0058a580	g_targetOrigin	recovered-global
 0x0058a590	g_targetOriginHeading	recovered-global
-0x0058a5a0	g_targetOriginMatrix	recovered-global
 0x0058a5e0	g_targetPosition	recovered-global
 0x0058a5f0	g_targetDistanceSq	recovered-global
 0x0058a5f8	g_targetRamNo	recovered-global
@@ -9829,14 +9820,6 @@
 0x0057fa80	mwsfsvr_vint_svr_id	recovered-global
 0x0057fa84	mwsfsvr_vsync_svr_id	recovered-global
 0x0058c3d8	g_igGuiSystemModelMousePositionField	recovered-global
-0x0058d190	g_viewerDisableFeatures	recovered-global
-0x0058d0e4	g_viewerClearColor	recovered-global
-0x0058d0f4	g_viewerTextColor	recovered-global
-0x0058d104	g_viewerDisabledTextColor	recovered-global
-0x0058d114	g_viewerHighlightTextColor	recovered-global
-0x0058d124	g_viewerSelectedColor	recovered-global
-0x0058d154	g_viewerBackColor	recovered-global
-0x0058d164	g_viewerHighlightBackColor	recovered-global
 0x00481c00	__new_handler	recovered-global
 0x00481c08	__throws_bad_alloc	recovered-global
 0x00522440	__ctors_start__	recovered-global

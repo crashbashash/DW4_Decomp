@@ -33,7 +33,7 @@ void * FUN_002b7f40(int arg0) {
 
 igMetaObject *FUN_002b7f80(void) {
     if (g_igThread_metaObject[0] == 0) {
-        g_igThread_metaObject[0] = (igMetaObject *)igMetaObject_Create(((int)Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0])));
+        g_igThread_metaObject[0] = (igMetaObject *)igMetaObject_Create(((int)Memory_GetAllocatorBySelector(g_memoryContextMetaData)));
     }
     return g_igThread_metaObject[0];
 }

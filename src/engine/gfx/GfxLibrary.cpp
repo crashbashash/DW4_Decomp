@@ -157,3 +157,4 @@
 #include "src/engine/gfx/igCustomStateCollectionList_tail2.inc"
 #include "src/engine/gfx/igCustomStateCollection_tail2.inc"
 #include "src/engine/gfx/igVertexDataList_tail2.inc"
+#include "src/engine/gfx/igGfxCapabilityTables.inc"

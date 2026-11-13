@@ -5,7 +5,7 @@ void FUN_002c9bd0(int arg0) {
 
 igMetaObject *FUN_002c9c10(void) {
     if (g_igShortListList_metaObject[0] == 0) {
-        g_igShortListList_metaObject[0] = (igMetaObject *)igMetaObject_Create(((int)Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0])));
+        g_igShortListList_metaObject[0] = (igMetaObject *)igMetaObject_Create(((int)Memory_GetAllocatorBySelector(g_memoryContextMetaData)));
     }
     return g_igShortListList_metaObject[0];
 }

@@ -279,3 +279,59 @@
 #include "src/engine/core/igPsx2Media_tail3.inc"
 #include "src/engine/core/igPsx2LongTimer_tail3.inc"
 #include "src/engine/core/InlineTail.inc"
+
+/* The library's global objects, constructed at start-up in this order: the file-device list, the memory
+ * contexts, the two statuses and the process memory map. The statuses are constants: retail keeps them in
+ * .rodata, success first. */
+extern "C" {
+igSmartPointer<igObjectList> g_fileDeviceList;
+igMemoryContext g_memoryContextBootstrap(0);
+igMemoryContext g_memoryContextDefault(1);
+igMemoryContext g_memoryContextCurrent(2);
+igMemoryContext g_memoryContextNonTracked(3);
+igMemoryContext g_memoryContextSystem(4);
+igMemoryContext g_memoryContextMetaData(5);
+igMemoryContext g_memoryContextString(6);
+igMemoryContext g_memoryContextFast(7);
+igMemoryContext g_memoryContextList(8);
+igMemoryContext g_memoryContextTemporary(9);
+igMemoryContext g_memoryContextVertex(10);
+igMemoryContext g_memoryContextRenderList(11);
+igMemoryContext g_memoryContextTexture(12);
+igMemoryContext g_memoryContextApplication(13);
+igMemoryContext g_memoryContextWorld(14);
+igMemoryContext g_memoryContextActor(15);
+igMemoryContext g_memoryContextLevel(16);
+igMemoryContext g_memoryContextFrame(17);
+igMemoryContext g_memoryContextPhysics(18);
+igMemoryContext g_memoryContextAI(19);
+igMemoryContext g_memoryContextDriverData(20);
+igMemoryContext g_memoryContextClut(21);
+igMemoryContext g_memoryContextDMA(22);
+igMemoryContext g_memoryContextAudio(23);
+igMemoryContext g_memoryContextVideo(24);
+igMemoryContext g_memoryContextHandles(25);
+igMemoryContext g_memoryContextImage(26);
+igMemoryContext g_memoryContextImageObject(27);
+igMemoryContext g_memoryContextAttribute(28);
+igMemoryContext g_memoryContextNode(29);
+igMemoryContext g_memoryContextUser0(30);
+igMemoryContext g_memoryContextUser1(31);
+igMemoryContext g_memoryContextUser2(32);
+igMemoryContext g_memoryContextUser3(33);
+igMemoryContext g_memoryContextUser4(34);
+igMemoryContext g_memoryContextUser5(35);
+igMemoryContext g_memoryContextUser6(36);
+igMemoryContext g_memoryContextUser7(37);
+igMemoryContext g_memoryContextUser8(38);
+igMemoryContext g_memoryContextUser9(39);
+igMemoryContext g_memoryContextUser10(40);
+igMemoryContext g_memoryContextUser11(41);
+igMemoryContext g_memoryContextUser12(42);
+igMemoryContext g_memoryContextUser13(43);
+igMemoryContext g_memoryContextUser14(44);
+igMemoryContext g_memoryContextUser15(45);
+const igResult_2e3a10 g_resultSuccess(0);
+const igResult_2e3a10 g_resultFailure(1);
+ThreadStackOwner g_threadStackOwner;
+}

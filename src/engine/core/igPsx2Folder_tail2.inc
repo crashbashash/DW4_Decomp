@@ -51,9 +51,9 @@ void FUN_0032cac0(struct S_32cac0 *arg0) {
 
 static inline FolderAllocator *currentAllocator(void) {
     if (g_useOwnerAllocator != 0) {
-        return ((FolderAllocator *)Memory_GetAllocatorBySelector((*(int *)DAT_00587028)));
+        return ((FolderAllocator *)Memory_GetAllocatorBySelector(g_memoryContextCurrent));
     }
-    return ((FolderAllocator *)Memory_GetAllocatorBySelector((*(int *)g_temporaryAllocatorSelector)));
+    return ((FolderAllocator *)Memory_GetAllocatorBySelector(g_memoryContextTemporary));
 }
 
 int FUN_0032cf50(int a, int b, int c, int d, int e) {
@@ -66,12 +66,12 @@ int FUN_0032cf70(int *arg0, int arg1, int arg2, int arg3, int arg4, int *arg5) {
     char *temp_v0;
 
     if (arg3 > 0xFB) {
-        *arg0 = g_allocatorFailureStatus.v;
+        *arg0 = g_resultFailure.v;
         return;
     }
     temp_v0 = FUN_0032cb50((char *)arg1, arg2);
     if (temp_v0 == 0) {
-        *arg0 = g_allocatorFailureStatus.v;
+        *arg0 = g_resultFailure.v;
         return;
     }
     if (*temp_v0 == 0x63) {
@@ -83,12 +83,12 @@ int FUN_0032cf70(int *arg0, int arg1, int arg2, int arg3, int arg4, int *arg5) {
     }
     if (var_v0 < 0) {
         Memory_FreeBufferAliasA(temp_v0);
-        *arg0 = g_allocatorFailureStatus.v;
+        *arg0 = g_resultFailure.v;
         return;
     }
     *arg5 = var_v0;
     Memory_FreeBufferAliasA(temp_v0);
-    *arg0 = g_statusSucceeded.v;
+    *arg0 = g_resultSuccess.v;
 }
 
 void FUN_0032d070(void)
@@ -165,7 +165,7 @@ static inline void setName(O_32d220 *object, int name) {
 
 static inline int fileAllocator(void) {
     int a = ((int)FUN_002f8a20());
-    return g_useOwnerAllocator != 0 ? a : ((int)Memory_GetAllocatorBySelector(DAT_00587038[0]));
+    return g_useOwnerAllocator != 0 ? a : ((int)Memory_GetAllocatorBySelector(g_memoryContextSystem));
 }
 
 void FUN_0032d4b0(int *arg0, char *arg1) {
@@ -184,9 +184,9 @@ void FUN_0032d4b0(int *arg0, char *arg1) {
         *(char *)(DAT_00587358[0] + temp_s1) = 0;
         DAT_00587330[0] = DAT_00587358[0];
         FUN_0032ded0(DAT_00587358[0]);
-        *arg0 = g_statusSucceeded.v;
+        *arg0 = g_resultSuccess.v;
     } else {
-        *arg0 = g_allocatorFailureStatus.v;
+        *arg0 = g_resultFailure.v;
     }
 }
 

@@ -204,7 +204,7 @@ void igObject_RegisterInstance(void **arg0, void *arg1) {
 int igObject_CreateEmptyInitCallbacks(void) {
     int callbacks;
 
-    callbacks = ((int)Memory_AllocateBufferDirect(0xC, (igMemoryPool_2ed1c0 *)((igMemoryPool *)(((void **)Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]))))));
+    callbacks = ((int)Memory_AllocateBufferDirect(0xC, (igMemoryPool_2ed1c0 *)((igMemoryPool *)(((void **)Memory_GetAllocatorBySelector(g_memoryContextMetaData))))));
     if (callbacks != 0) {
         callbacks = ((int)igArray_Construct((CallbackArray *)callbacks));
     }
@@ -254,7 +254,7 @@ void igObject_InitFields(void) {
     void *var_v0;
     void *var_v0_3;
 
-    temp_v0 = ((igUnsignedIntMetaField *)igUnsignedIntMetaField_Create((int)(((void **)Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0])))));
+    temp_v0 = ((igUnsignedIntMetaField *)igUnsignedIntMetaField_Create((int)(((void **)Memory_GetAllocatorBySelector(g_memoryContextMetaData)))));
     temp_v0->_offset = 4;
     temp_v0->_externalEnumStorage = (int)(&DAT_005871a0[0]);
     if (&text_refCount[0] == 0) {
@@ -286,7 +286,7 @@ void igObject_InitFields(void) {
     if (((unsigned long long)((long long)(int)temp_v0->_refCount << 0x29) >> 0x29) == 0) {
         igObject_Destroy(temp_v0);
     }
-    temp_v0_3 = ((igUnsignedIntMetaField *)igUnsignedIntMetaField_Create((int)(((void **)Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0])))));
+    temp_v0_3 = ((igUnsignedIntMetaField *)igUnsignedIntMetaField_Create((int)(((void **)Memory_GetAllocatorBySelector(g_memoryContextMetaData)))));
     temp_v0_3->_offset = 4;
     temp_v0_3->_externalEnumStorage = (int)(&DAT_005871a8[0]);
     if (&text_memPoolIndex[0] == 0) {
@@ -327,7 +327,7 @@ char *igObject_AllocateRawStorage(int size, int prefix_size, void **requested_al
     allocator = requested_allocator;
     total_size = size + prefix_size;
     if (allocator == 0) {
-        allocator = (void **)Memory_GetAllocatorBySelector(g_allocatorSelector[0]);
+        allocator = (void **)Memory_GetAllocatorBySelector(g_memoryContextBootstrap);
     }
     if (allocator == 0) {
         /* no allocator at all: the prefix is not added on this path (retail behaviour) */

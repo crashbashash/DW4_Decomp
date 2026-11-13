@@ -152,7 +152,7 @@ void FUN_002f19f0(R_2f19f0 *arg0, F_2f19f0 *arg1, int arg2, int *arg3, int *arg4
     Ctx_2f19f0 *ctx;
 
     R_2f19f0 res = arg1->v248();
-    if ((arg2 != 0) && (arg3 != 0) && (arg4 != 0) && (res.w == g_statusSucceeded.v)) {
+    if ((arg2 != 0) && (arg3 != 0) && (arg4 != 0) && (res.w == g_resultSuccess.v)) {
         first = *arg4;
         total = 0;
         for (i = 0; i < (unsigned int) (arg2 & 0xFFFF); i++) {
@@ -175,7 +175,7 @@ void FUN_002f1b70(R_2f1b70 *arg0, F_2f1b70 *arg1, int arg2, int *arg3, int *arg4
     Ctx_2f1b70 *ctx;
 
     R_2f1b70 res = arg1->v252();
-    if ((arg2 != 0) && (arg3 != 0) && (arg4 != 0) && (res.w == g_statusSucceeded.v)) {
+    if ((arg2 != 0) && (arg3 != 0) && (arg4 != 0) && (res.w == g_resultSuccess.v)) {
         first = *arg4;
         total = 0;
         for (i = 0; i < (unsigned int) (arg2 & 0xFFFF); i++) {
@@ -332,6 +332,6 @@ void FUN_002f2450(long long arg0, long long arg1, int arg2) {
 }
 
 void Gap__Core__igMemoryPool__vfunc_34(int *status_out) {
-    *status_out = g_allocatorFailureStatus.v;
+    *status_out = g_resultFailure.v;
 }
 

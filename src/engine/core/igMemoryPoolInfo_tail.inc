@@ -4,7 +4,7 @@ void Gap__Core__igMemoryPoolInfo__vfunc_26(int *arg0, int *arg1, int arg2, int a
         arg2 = ((struct { char pad[56]; int i56; } * *)g_objectSystem)[0]->i56;
     }
     if (arg2 == 0) {
-        *arg0 = g_allocatorFailureStatus.v;
+        *arg0 = g_resultFailure.v;
     } else {
         FUN_00306910(arg2, arg3, DAT_004c2230, (int **)(&arg1[2]), (char *)arg1[2], 0);
         FUN_00306910(arg2, arg3, DAT_004c2238, (int **)(&arg1[5]), (char *)arg1[5], 0);
@@ -23,7 +23,7 @@ void Gap__Core__igMemoryPoolInfo__vfunc_26(int *arg0, int *arg1, int arg2, int a
         FUN_00306910(arg2, arg3, DAT_004c22a0, (int **)(&arg1[18]), (char *)arg1[18], 0);
         FUN_00306910(arg2, arg3, DAT_004c22a8, (int **)(&arg1[19]), (char *)arg1[19], 0);
         FUN_003065f0(arg2, arg3, DAT_004c22b0, &arg1[20], arg1[20], 0);
-        *arg0 = g_statusSucceeded.v;
+        *arg0 = g_resultSuccess.v;
     }
 }
 

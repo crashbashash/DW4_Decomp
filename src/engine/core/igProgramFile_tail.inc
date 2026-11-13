@@ -40,7 +40,7 @@ void Gap__Core__igProgramFile__vfunc_25(int *arg0, void *arg1) {
     temp_a0 = (void **)(*(int *)((char *)(arg1) + 12));
     ((DW4VC_96_0 *)(temp_a0))->vX();
     ((DW4VC_92_0 *)(((char *)(arg1) + 0)))->vX();
-    *arg0 = (*(R_327140 *)&g_statusSucceeded).v;
+    *arg0 = g_resultSuccess.v;
 }
 
 void Gap__Core__igProgramFile__vfunc_26(int *arg0, OF *arg1, int arg2, int arg3, int *arg4) {
@@ -53,7 +53,7 @@ void Gap__Core__igProgramFile__vfunc_26(int *arg0, OF *arg1, int arg2, int arg3,
         FUN_00304430(DAT_004ff510, arg2, arg1->f8);
         FUN_00304680();
         sp6C = ((Obj_327140 *)arg1)->v25();
-        *arg0 = (*(R_327140 *)&g_allocatorFailureStatus).v;
+        *arg0 = g_resultFailure.v;
         return;
     }
     if (*arg4 == 0) {
@@ -62,7 +62,7 @@ void Gap__Core__igProgramFile__vfunc_26(int *arg0, OF *arg1, int arg2, int arg3,
             FUN_00304430(DAT_004ff540, arg3, arg1->f8);
             FUN_00304680();
             sp68 = ((Obj_327140 *)arg1)->v25();
-            *arg0 = (*(R_327140 *)&g_allocatorFailureStatus).v;
+            *arg0 = g_resultFailure.v;
             return;
         }
     }
@@ -72,27 +72,27 @@ void Gap__Core__igProgramFile__vfunc_26(int *arg0, OF *arg1, int arg2, int arg3,
         FUN_00304430(DAT_004fdda0, arg1->f8);
         FUN_00304680();
         sp64 = ((Obj_327140 *)arg1)->v25();
-        *arg0 = (*(R_327140 *)&g_allocatorFailureStatus).v;
+        *arg0 = g_resultFailure.v;
         return;
     }
-    *arg0 = (*(R_327140 *)&g_statusSucceeded).v;
+    *arg0 = g_resultSuccess.v;
 }
 
 /* igProgramFile vtable slot 27: status leaf. Ignores the object and writes the engine's current
  * failure-status word (the one an allocation failure publishes) through the output-first argument;
  * the same leaf as igPsx2Window slot 40. */
 void Gap__Core__igProgramFile__vfunc_27(int *status_out) {
-    *status_out = g_allocatorFailureStatus.v;
+    *status_out = g_resultFailure.v;
 }
 
 /* igProgramFile vtable slot 28: status leaf, the same body as slot 27. */
 void Gap__Core__igProgramFile__vfunc_28(int *status_out) {
-    *status_out = g_allocatorFailureStatus.v;
+    *status_out = g_resultFailure.v;
 }
 
 /* igProgramFile vtable slot 29: status leaf, the same body as slot 27. */
 void Gap__Core__igProgramFile__vfunc_29(int *status_out) {
-    *status_out = g_allocatorFailureStatus.v;
+    *status_out = g_resultFailure.v;
 }
 
 void Gap__Core__igProgramFile__vfunc_30(igProgramFile *self) {

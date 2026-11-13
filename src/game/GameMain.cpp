@@ -228,10 +228,10 @@ extern "C" int FUN_00234d70(App *, int, int *);
 extern "C" G * FUN_00238110(...);
 extern "C" Pool *Memory_GetAllocatorBySelector(int);
 extern "C" igAnimationCombinerBoneInfoPool * igAnimationCombinerBoneInfoPool_Create(...);
-extern "C" Obj * igAnimationStatePool_Create(...);
-extern "C" Obj * igEnbayaContextPool_Create(...);
+extern "C" igAnimationStatePool * igAnimationStatePool_Create(...);
+extern "C" igEnbayaContextPool * igEnbayaContextPool_Create(...);
 extern "C" int text_cdrom0_MODULES_IOPRP280_IMG_1[4];
-extern "C" igAnimationCombinerBoneInfoPool *DAT_00562528[4];
+extern igSmartPointer<igAnimationCombinerBoneInfoPool> g_igAnimationCombinerBoneInfoPool_instance;
 extern "C" G *DAT_0056dc50[4];
 extern "C" int DAT_00586fd8[4];
 extern "C" int DAT_00586fe0[4];
@@ -529,8 +529,8 @@ public:
 };
 struct Holder { igInsightCore *p; };
 extern "C" Pool * FUN_002f8a20(...);
-extern "C" igAnimationStatePool * DAT_00562540[4];
-extern "C" igEnbayaContextPool * DAT_00562718[4];
+extern igSmartPointer<igAnimationStatePool> g_igAnimationStatePool_instance;
+extern igSmartPointer<igEnbayaContextPool> g_igEnbayaContextPool_instance;
 extern "C" int g_defaultAllocatorSelector[4];
 extern "C" int g_igViewerSceneInfoManager_metaObject[4];
 struct H { static void *castit(void *s) {
@@ -723,18 +723,18 @@ int main(int arg0, int *arg1) {
     FUN_00234d70(&sp70, arg0, arg1);
     a = U::alloc(((int)FUN_002f8a20()));
     FUN_00165d20(a);
-    U::relg(((Obj * *)DAT_00562718));
-    ((Obj * *)DAT_00562718)[0] = 0;
+    U::relg((Obj **)&g_igEnbayaContextPool_instance.p);
+    g_igEnbayaContextPool_instance.p = 0;
     a = U::alloc(((int)FUN_002f8a20()));
-    U::relg(((Obj * *)DAT_00562718));
-    ((Obj * *)DAT_00562718)[0] = igEnbayaContextPool_Create(a);
+    U::relg((Obj **)&g_igEnbayaContextPool_instance.p);
+    g_igEnbayaContextPool_instance.p = igEnbayaContextPool_Create(a);
     a = U::alloc(((int)FUN_002f8a20()));
-    U::relg((Obj **)DAT_00562528);
-    DAT_00562528[0] = igAnimationCombinerBoneInfoPool_Create(a);
-    DAT_00562528[0]->_resetMode = 0;
+    U::relg((Obj **)&g_igAnimationCombinerBoneInfoPool_instance.p);
+    g_igAnimationCombinerBoneInfoPool_instance.p = igAnimationCombinerBoneInfoPool_Create(a);
+    g_igAnimationCombinerBoneInfoPool_instance->_resetMode = 0;
     a = U::alloc(((int)FUN_002f8a20()));
-    U::relg(((Obj * *)DAT_00562540));
-    ((Obj * *)DAT_00562540)[0] = igAnimationStatePool_Create(a);
+    U::relg((Obj **)&g_igAnimationStatePool_instance.p);
+    g_igAnimationStatePool_instance.p = igAnimationStatePool_Create(a);
     Blk sp30;
     FUN_00259f90((struct A *)&sp30, (struct R_259f90 *)sp70.f236, (struct R_259f90 *)sp70.f232);
     if (DAT_0056dc50[0] == 0) {
@@ -1290,18 +1290,18 @@ void FUN_0025afe0(Holder *arg0) {
     var_s0 = H::castit(igInsightCore_FindManager(arg0->p, g_igViewerSceneInfoManager_metaObject[0]));
     ((Ctl *)((igViewerRenderer *)((igViewerSceneInfoManager *)var_s0)->_viewerRenderer)->_sceneTraversal)->v124();
     ((Sub *)arg0->p->_visualContext)->v140();
-    REL_25afe0(DAT_00562718[0]);
-    DAT_00562718[0] = 0;
+    REL_25afe0(g_igEnbayaContextPool_instance.p);
+    g_igEnbayaContextPool_instance.p = 0;
     { Pool *a_ = FUN_002f8a20(); var_v0 = g_useOwnerAllocator != 0 ? a_ : Memory_GetAllocatorBySelector(g_ndmwAllocatorSelector[0]); }
-    REL_25afe0(DAT_00562718[0]);
-    DAT_00562718[0] = (igEnbayaContextPool *)((void *)igEnbayaContextPool_Create(var_v0));
+    REL_25afe0(g_igEnbayaContextPool_instance.p);
+    g_igEnbayaContextPool_instance.p = igEnbayaContextPool_Create(var_v0);
     { Pool *a_ = FUN_002f8a20(); var_v0 = g_useOwnerAllocator != 0 ? a_ : Memory_GetAllocatorBySelector(g_ndmwAllocatorSelector[0]); }
-    REL_25afe0(DAT_00562528[0]);
-    DAT_00562528[0] = (igAnimationCombinerBoneInfoPool *)((void *)igAnimationCombinerBoneInfoPool_Create(var_v0));
-    DAT_00562528[0]->_resetMode = 0;
+    REL_25afe0(g_igAnimationCombinerBoneInfoPool_instance.p);
+    g_igAnimationCombinerBoneInfoPool_instance.p = igAnimationCombinerBoneInfoPool_Create(var_v0);
+    g_igAnimationCombinerBoneInfoPool_instance->_resetMode = 0;
     { Pool *a_ = FUN_002f8a20(); var_v0 = g_useOwnerAllocator != 0 ? a_ : Memory_GetAllocatorBySelector(g_ndmwAllocatorSelector[0]); }
-    REL_25afe0(DAT_00562540[0]);
-    DAT_00562540[0] = (igAnimationStatePool *)((void *)igAnimationStatePool_Create(var_v0));
+    REL_25afe0(g_igAnimationStatePool_instance.p);
+    g_igAnimationStatePool_instance.p = igAnimationStatePool_Create(var_v0);
     { Pool *a_ = FUN_002f8a20(); var_a0 = g_useOwnerAllocator != 0 ? a_ : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]); }
     if (var_a0 != 0) {
         var_a0->v108(0);

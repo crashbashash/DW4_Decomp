@@ -19797,12 +19797,12 @@
 0045ec60	Gap__Viewer__igViewerDataPumpManager__vfunc_26	match	-
 0045ec70	Gap__Viewer__igViewerDataPumpManager__vfunc_23	match	-
 0045ec80	Gap__Viewer__igViewerDataPumpManager__vfunc_24	match	-
-0045ec90	igViewerGuiFactory_CreateAction	match	-
-0045eda0	igViewerGuiFactory_CreateEmpty	match	-
-0045edd0	Gap__Viewer__igViewerGuiFactory__resetFields	match	-
-0045f1d0	Gap__Viewer__igViewerGuiFactory__vfunc_22	match	-
-0045f1e0	igVec2f_Set	match	-
-0045f1f0	igVec2f_Construct	match	-
+0045ec90	igViewerGuiFactory_CreateAction	match	DEFERRED duplicate 0x19ace0 __ct__7igVec3fFv 8B (compared under the profile of its retail unit)
+0045eda0	igViewerGuiFactory_CreateEmpty	match	DEFERRED duplicate 0x19ace0 __ct__7igVec3fFv 8B (compared under the profile of its retail unit)
+0045edd0	Gap__Viewer__igViewerGuiFactory__resetFields	match	DEFERRED duplicate 0x19ace0 __ct__7igVec3fFv 8B (compared under the profile of its retail unit)
+0045f1d0	Gap__Viewer__igViewerGuiFactory__vfunc_22	match	DEFERRED duplicate 0x19ace0 __ct__7igVec3fFv 8B (compared under the profile of its retail unit)
+0045f1e0	igVec2f_Set	match	DEFERRED duplicate 0x19ace0 __ct__7igVec3fFv 8B (compared under the profile of its retail unit)
+0045f1f0	igVec2f_Construct	match	DEFERRED duplicate 0x19ace0 __ct__7igVec3fFv 8B (compared under the profile of its retail unit)
 0045f200	FUN_0045f200	match	-
 0045f2b0	FUN_0045f2b0	match	-
 0045f370	FUN_0045f370	match	-
@@ -19960,14 +19960,17 @@
 00467110	Gap__Viewer__igBoundingBoxRenderer__vfunc_22	match	-
 0051fd00	FUN_0051fd00	match	-
 0051fe40	FUN_0051fe40	match	-
+0051fe80	FUN_0051fe80	match	-
 005208f0	FUN_005208f0	match	-
 00520cf0	FUN_00520cf0	match	-
 005210d0	FUN_005210d0	match	-
 00521150	FUN_00521150	match	-
 00521360	FUN_00521360	match	-
-00521600	FUN_00521600	match	exception index 0x554828: matches retail (packed)
-005216a0	FUN_005216a0	match	exception index 0x554834: matches retail (packed)
-005216e0	FUN_005216e0	match	exception index 0x554840: matches retail (packed)
-00521730	FUN_00521730	match	exception index 0x55484c: matches retail (packed)
+00521600	FUN_00521600	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
+005216a0	FUN_005216a0	match	-
+005216e0	FUN_005216e0	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
+00521730	FUN_00521730	match	-
 00521750	FUN_00521750	match	-
+00521790	FUN_00521790	match	DEFERRED duplicate 0x19ace0 __ct__7igVec3fFv 8B (compared under the profile of its retail unit)
+00522240	FUN_00522240	match	-
 005223f0	FUN_005223f0	match	-

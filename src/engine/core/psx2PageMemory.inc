@@ -182,12 +182,12 @@ R460 FUN_00329460(C_328e00 *arg1, int arg2, int arg3) {
         int t = arg1->v40(-arg3);
         if (t != -1) {
             arg1->v25(0, t, arg3);
-            return R460(g_statusSucceeded.v);
+            return R460(g_resultSuccess.v);
         }
     } else {
         return arg1->v41(arg2, arg3);
     }
-    return R460(g_allocatorFailureStatus.v);
+    return R460(g_resultFailure.v);
 }
 
 /* Result of the virtual call at vtable byte offset 168 (queried with 0), with a zero result mapped
@@ -284,7 +284,7 @@ R460 FUN_003296e0(DW4VC_176_1 *self, int state, unsigned int addr, int len) {
     }
     if (addr < g_rangeStart[0]) g_rangeStart[0] = addr;
     if (g_rangeEnd[0] < end) g_rangeEnd[0] = end;
-    return R460(g_statusSucceeded.v);
+    return R460(g_resultSuccess.v);
 }
 
 int FUN_00329860(void *self, unsigned int addr, unsigned int len) {
@@ -468,14 +468,14 @@ int FUN_0032a1b0(char *arg0, int *arg1) {
 Ent_328e00 *FUN_0032a1e0(int arg0) {
     void **temp_v0;
 
-    temp_v0 = (void **)(((void **)Memory_GetAllocatorBySelector(DAT_00587030[0])));
+    temp_v0 = (void **)(((void **)Memory_GetAllocatorBySelector(g_memoryContextNonTracked)));
     return (Ent_328e00 *)((DW4VC_216_1 *)(temp_v0))->vX((int)(arg0));
 }
 
 void FUN_0032a220(int arg0) {
     void **temp_v0;
 
-    temp_v0 = (void **)(((void **)Memory_GetAllocatorBySelector(DAT_00587030[0])));
+    temp_v0 = (void **)(((void **)Memory_GetAllocatorBySelector(g_memoryContextNonTracked)));
     ((DW4VC_264_1 *)(temp_v0))->vX((int)(arg0));
 }
 
@@ -595,7 +595,7 @@ int FUN_0032aba0(void) {
     return -1;
 }
 
-void FUN_0032abb0(int *arg0, void **arg1, int arg2, int arg3) {DW4SR4 a = ((DW4VCSR_108_3 *)(arg1))->vX(1, arg2, arg3); DW4SR4 b = ((DW4VCSR_184_3 *)(arg1))->vX(arg2, arg3, 0);*arg0 = g_statusSucceeded.v;}
+void FUN_0032abb0(int *arg0, void **arg1, int arg2, int arg3) {DW4SR4 a = ((DW4VCSR_108_3 *)(arg1))->vX(1, arg2, arg3); DW4SR4 b = ((DW4VCSR_184_3 *)(arg1))->vX(arg2, arg3, 0);*arg0 = g_resultSuccess.v;}
 
 void *FUN_0032ac40(CrtHeapView *self, unsigned int size)
 {
@@ -608,7 +608,7 @@ void FUN_0032ac50(CrtHeapView *self, void *block)
 }
 
 void FUN_0032ac60(int *arg0) {
-    *arg0 = g_statusSucceeded.v;
+    *arg0 = g_resultSuccess.v;
 }
 
 int FUN_0032ac70(int arg0, unsigned int arg1) {

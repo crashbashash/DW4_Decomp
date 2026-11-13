@@ -135,7 +135,9 @@ and use `0x151090` with `int f1(int a){return a;}`. A differing move idiom rules
 out that build for this source spelling; agreement does not uniquely identify
 the original toolchain. Complete-function comparisons remain necessary.
 
-Still open: the `main`-section merge and the `.init`/`.ctor` static-init emission.
+Still open: the `main`-section merge. The `.init`/`.ctor` static-init emission is reproduced: `b52` emits a file's
+initialiser into `.init` and its table entry into `.ctor`, as retail laid them out
+([static initialisers](emitted-functions.md#static-initialisers)).
 
 ## Legal note
 

@@ -1,6 +1,7 @@
 #include "dw4/reflected.h"
 #include "dw4/igobject_release.h"
 #include "dw4/igSmartPointer.h"
+#include "dw4/DisableFeature.h"
 
 extern "C" {
 
@@ -1230,3 +1231,18 @@ void Gap__Viewer__igStatisticsItem__vfunc_23(void *arg0, int arg1) {
 }
 
 }
+
+DisableFeature g_viewerDisableFeatures[12] = {
+    DisableFeature(true, 0, "texture"),
+    DisableFeature(true, 1, "lighting"),
+    DisableFeature(true, 2, "blending"),
+    DisableFeature(true, 3, "texture matrix"),
+    DisableFeature(true, 4, "fog"),
+    DisableFeature(true, 5, "depth test"),
+    DisableFeature(true, 6, "vertex blending"),
+    DisableFeature(true, 10, "VU1 vertex blending"),
+    DisableFeature(true, 12, "VU1 particle rendering"),
+    DisableFeature(true, 7, "alpha test"),
+    DisableFeature(true, 8, "clipping"),
+    DisableFeature(true, 9, "cullface")
+};

@@ -38,9 +38,9 @@ R_2d4470 Gap__Core__igCallStackTracer__vfunc_27(void *self, int addr, char *buf,
     if (r != 0 && r->IsReady() != 0) {
         int base = 0;
         int other = 0;
-        if (r->Lookup(addr, buf, size, &base, &other, name, nameSize, line) == ((R_2d4470 *)&g_statusSucceeded)[0]) {
+        if (r->Lookup(addr, buf, size, &base, &other, name, nameSize, line) == g_resultSuccess) {
             *offset = addr - base;
-            return ((R_2d4470 *)&g_statusSucceeded)[0];
+            return g_resultSuccess;
         }
     }
     if (buf != 0) {
@@ -53,7 +53,7 @@ R_2d4470 Gap__Core__igCallStackTracer__vfunc_27(void *self, int addr, char *buf,
         *name = 0;
     }
     *line = 0;
-    return ((R_2d4470 *)&g_allocatorFailureStatus)[0];
+    return g_resultFailure;
 }
 
 void Gap__Core__igCallStackTracer__vfunc_29(void) {

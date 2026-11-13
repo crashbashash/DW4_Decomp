@@ -84,7 +84,7 @@ int FUN_002d9130(int *arg0) {
     }
     a = ((A9130 *)arg0[17])->vX(1);
     v = arg0[13];
-    if (a.w0 == g_statusSucceeded.v) {
+    if (a.w0 == g_resultSuccess.v) {
         v += 1;
         arg0[13] = v;
         b = ((B9130 *)arg0[17])->vX();

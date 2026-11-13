@@ -7,8 +7,8 @@ void Gap__Core__igPsx2ThreadManager__vfunc_11(igPsx2ThreadManager *self) {
 }
 
 void FUN_0030e480(void) {
-    ((void * *)g_threadManager)[0] = FUN_002b7b70(((int)Memory_GetAllocatorBySelector(DAT_00587038[0])));
-    igSmartPointer<R_30e480> added(((R_30e480 *)FUN_002b7f40(((int)Memory_GetAllocatorBySelector(DAT_00587038[0])))));
+    ((void * *)g_threadManager)[0] = FUN_002b7b70(((int)Memory_GetAllocatorBySelector(g_memoryContextSystem)));
+    igSmartPointer<R_30e480> added(((R_30e480 *)FUN_002b7f40(((int)Memory_GetAllocatorBySelector(g_memoryContextSystem)))));
     added.get()->f44 = 1;
     ((VC_220_0 *)added.get())->vX();
     ((VC_96_1_30e480 *)((void * *)g_threadManager)[0])->vX(added.get());

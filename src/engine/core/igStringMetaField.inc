@@ -137,7 +137,7 @@ void FUN_002b9b90(void) {
     int *o;
 
     if (DAT_00585910[0] == 0) {
-        DAT_00585910[0] = ((int *)igMetaObject_CreateInstance((CreateMeta *)g_igStringMetaField_metaObject[0], (MemoryPool *)(((int)Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0])))));
+        DAT_00585910[0] = ((int *)igMetaObject_CreateInstance((CreateMeta *)g_igStringMetaField_metaObject[0], (MemoryPool *)(((int)Memory_GetAllocatorBySelector(g_memoryContextMetaData)))));
         s0 = DAT_00585910[0];
         if (s0 != 0) {
             MetaRefList_AppendRetained((PointerList *)(((void *)FUN_002fc250())), (RefHeader *)s0);

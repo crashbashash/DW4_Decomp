@@ -248,7 +248,7 @@ void Gap__Core__igElfFile__vfunc_29(int *result, void *self, char *mangled, char
         }
         strncpy(out, mangled, nameLength);
         out[nameLength] = 0;
-        *result = g_statusSucceeded.v;
+        *result = g_resultSuccess.v;
         return;
     }
     if (sep[2] == 'Q') {
@@ -335,7 +335,7 @@ void Gap__Core__igElfFile__vfunc_29(int *result, void *self, char *mangled, char
             }
             strncpy(out, scan, nameLength);
             out[nameLength] = 0;
-            *result = g_statusSucceeded.v;
+            *result = g_resultSuccess.v;
             return;
         }
         if (strncmp(mangled, DAT_004fde70, nameLength) == 0) {
@@ -350,7 +350,7 @@ void Gap__Core__igElfFile__vfunc_29(int *result, void *self, char *mangled, char
             }
             strncpy(out, scan, nameLength);
             out[nameLength] = 0;
-            *result = g_statusSucceeded.v;
+            *result = g_resultSuccess.v;
             return;
         }
         for (i = 0; DAT_004c2380[i].mangled != 0; i++) {
@@ -361,7 +361,7 @@ void Gap__Core__igElfFile__vfunc_29(int *result, void *self, char *mangled, char
                 }
                 strncpy(out, DAT_004c2380[i].name, nameLength);
                 out[nameLength] = 0;
-                *result = g_statusSucceeded.v;
+                *result = g_resultSuccess.v;
                 return;
             }
         }
@@ -371,7 +371,7 @@ void Gap__Core__igElfFile__vfunc_29(int *result, void *self, char *mangled, char
     }
     strncpy(out, mangled, nameLength);
     out[nameLength] = 0;
-    *result = g_statusSucceeded.v;
+    *result = g_resultSuccess.v;
 }
 
 int *FUN_00321c10(int arg0, int *arg1) {

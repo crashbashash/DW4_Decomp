@@ -18,7 +18,7 @@ void Gap__Core__igPsx2File__vfunc_23(int *result, igPsx2FileView *file, unsigned
     flags = 0;
     if (mode == 8) mode = file->_openMode;
     if (file->_isOpen == 1 && file->_openMode == mode) {
-        *result = g_statusSucceeded.v;
+        *result = g_resultSuccess.v;
     } else {
         switch (mode) {
         case 0: case 1: case 2: case 3: case 8:
@@ -81,7 +81,7 @@ open:
             attempt += 1;
         }
         if (file->_fileHandle < 0) {
-            *result = g_allocatorFailureStatus.v;
+            *result = g_resultFailure.v;
         } else {
             if (mode == 6) sceLseek(file->_fileHandle, 0, SCE_SEEK_END);
             if (file->_isBinary == 0) {
@@ -97,7 +97,7 @@ open:
             }
             file->_openMode = mode;
             file->_isOpen = 1;
-            *result = g_statusSucceeded.v;
+            *result = g_resultSuccess.v;
         }
     }
 }
@@ -171,7 +171,7 @@ void **Gap__Core__igPsx2File__vfunc_25(void **arg0, int arg1, int arg2) {
     }
     return 0;
 block_21:
-    return (var_v1 == g_allocatorFailureStatus.v) ? (void **)0 : arg0;
+    return (var_v1 == g_resultFailure.v) ? (void **)0 : arg0;
 }
 
 void Gap__Core__igPsx2File__vfunc_26(igPsx2FileView *self)
@@ -443,7 +443,7 @@ StringRef_32c240 FUN_0032c240(char *prefix, char *path, int extra2) {
     char *chars;
     int limit, i;
     char c;
-    igSmartPointer<Text> text(((Text *)FUN_002b9500(((int)Memory_GetAllocatorBySelector(DAT_00587048[0])))));
+    igSmartPointer<Text> text(((Text *)FUN_002b9500(((int)Memory_GetAllocatorBySelector(g_memoryContextString)))));
     if (prefix == 0) {
         igStringObj_Set((int)(text.get()), (int)path);
     } else if (*prefix == 0x63) {

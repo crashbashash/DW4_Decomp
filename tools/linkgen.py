@@ -16,11 +16,15 @@ function pairs overlap in the Ghidra dump) and its units are the exact sizes to
 place. `asm/` stays the human-readable per-function view.
 
 A compiled C++ unit also carries its exception index record (`.exceptix`) and,
-with cleanup actions, its exception table (`.exception`). Retail keeps those in
-the raw data region (config/SLUS-20836/exceptions.txt, tools/exceptions.py), so the data
-unit holding them is carved into raw fragments around the retail slots and the
-compiled sections are pinned there: the relink then reproduces them from the
-source instead of orphaning them, and linkcheck's byte compare covers them.
+with cleanup actions, its exception table (`.exception`); a unit that constructs
+global objects carries its static initializer (`.init`, linked as the code unit at
+the initializer's address) and that initializer's entry in the static-initializer
+table (`.ctor`). Retail keeps the records, tables and the table entries in the raw
+data region (config/SLUS-20836/exceptions.txt, tools/exceptions.py,
+verify.STATIC_INITIALIZERS), so the data unit holding them is carved into raw
+fragments around the retail slots and the compiled sections are pinned there: the
+relink then reproduces them from the source instead of orphaning them, and
+linkcheck's byte compare covers them.
 
 Usage:
   linkgen.py --all          # regenerate everything into build/link/ (slow: ~28k files)
@@ -251,7 +255,8 @@ def main(argv=None):
     records = exception_records.load(exception_records.config_path(a.symbols))
     # C++ exception metadata accounting: how many compiled records/tables are
     # placed at their retail slots, and which units `make check` flags instead.
-    exception_stats = {"placed": 0, "tables": 0, "bytes": 0, "extra": 0, "missing": 0, "differ": 0}
+    exception_stats = {"placed": 0, "tables": 0, "bytes": 0, "extra": 0, "missing": 0, "differ": 0,
+                       "ctors": 0}
     stats_lock = threading.Lock()
 
     def count(what):
@@ -309,18 +314,21 @@ def main(argv=None):
         return {"obj": obj, "undef": [], "use_c": False, "tables": {}}
 
     def group_placement(records_, va):
-        """A group member's reproduced record/table, as `isolate_emitted_body` kept them.
+        """A group member's reproduced record/table and table entry, as `isolate_emitted_body` kept them.
 
         `verify_emitted_unit` returns, per placed member whose metadata equals retail,
         (index section, index va, table section, table va, table size); the sections were
-        renamed `.exceptix.dw4_<index va>` / `.exception.dw4_<table va>` for placement.
+        renamed `.exceptix.dw4_<index va>` / `.exception.dw4_<table va>` for placement. The
+        static initializer's `.ctor` word goes to its retail table entry.
         """
         member = next((name for name, (address, _s, _z) in records_.items() if address == va), None)
         kept = getattr(records_, "exception_placements", {}).get(member)
+        ctor = getattr(records_, "ctor_placements", {}).get(member)
+        placement = {"ctor": [ctor[1], 4, ".ctor"]} if ctor else {}
         if not kept:
-            return {}
+            return placement
         _idx, index_at, table_section, table_at, table_size = kept
-        placement = {"index": [index_at, 12, ".exceptix.dw4_%08x" % index_at]}
+        placement["index"] = [index_at, 12, ".exceptix.dw4_%08x" % index_at]
         if table_section is not None:
             placement["table"] = [table_at, table_size, ".exception.dw4_%08x" % table_at]
         return placement
@@ -452,7 +460,7 @@ def main(argv=None):
                     count(hit["exc_status"])
                 return va, {"obj": obj, "undef": hit["undef"], "use_c": True,
                             "tables": {int(k): v for k, v in hit["tables"].items()},
-                            "exceptions": hit.get("exceptions", {})}
+                            "pinned": hit.get("pinned", {})}
         if group:
             # Every member of a compiler unit compiles the same source and verifies the same
             # bodies (no member is singled out here): a whole-file unit does that once, and each
@@ -531,33 +539,36 @@ def main(argv=None):
         if key:
             store.put(key, {"digest": buildcache.fresh_sha(obj), "undef": undef,
                             "tables": {str(k): v for k, v in table_names.items()},
-                            "exceptions": placement, "exc_status": exc_status})
+                            "pinned": placement, "exc_status": exc_status})
         return va, {"obj": obj, "undef": undef, "use_c": True,
-                    "tables": table_names, "exceptions": placement}
+                    "tables": table_names, "pinned": placement}
 
     to_build = units
     if a.unit_range:
         lo, hi = (int(x, 16) for x in a.unit_range.split(":"))
         to_build = [u for u in units if lo <= u[0] < hi]
-    # Two passes: the C units first, because where their exception metadata lands
-    # decides how the raw data units are carved; then everything else.
+    # Two passes: the C units first, because where their exception metadata and table entries
+    # land decides how the raw data units are carved; then everything else.
     c_units = [u for u in to_build if u[2] == "code" and not a.no_c and u[3] in src_index]
     with concurrent.futures.ThreadPoolExecutor(max_workers=max(1, a.jobs)) as ex:
         for va, info in ex.map(build_one, c_units):
             built[va] = info
 
-    # ---- carve the raw data units around the compiled exception metadata -----
+    # ---- carve the raw data units around the compiled exception metadata and table entries -----
     data_units = sorted((va, sz) for va, sz, kind, _n, _e in units if kind == "data")
     data_starts = [va for va, _ in data_units]
     carve = {}
     for va, info in built.items():
-        for address, size, section in info.get("exceptions", {}).values():
+        for address, size, section in info.get("pinned", {}).values():
             i = bisect.bisect_right(data_starts, address) - 1
             if i < 0 or address + size > data_starts[i] + data_units[i][1]:
-                print(f"linkgen: exception metadata of 0x{va:x} at 0x{address:x} is not inside one "
+                print(f"linkgen: {section} of 0x{va:x} at 0x{address:x} is not inside one "
                       "raw data unit", file=sys.stderr)
                 return 2
             carve.setdefault(data_starts[i], []).append((address, size, info["obj"], section))
+            if section == ".ctor":
+                exception_stats["ctors"] += 1
+                continue
             exception_stats["placed" if section.startswith(".exceptix") else "tables"] += 1
             exception_stats["bytes"] += size
     pieces = {}      # data unit va -> [(start, size)] raw fragments between the carved slots
@@ -766,6 +777,7 @@ def main(argv=None):
           "%d whose shape differs (see make check)"
           % (exception_stats["placed"], exception_stats["tables"], exception_stats["bytes"],
              exception_stats["extra"], exception_stats["missing"], exception_stats["differ"]))
+    print("linkgen: static-initializer table %d entries placed from C" % exception_stats["ctors"])
     return 0
 
 

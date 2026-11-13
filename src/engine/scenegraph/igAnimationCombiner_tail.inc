@@ -22,65 +22,23 @@ int FUN_001abc20(int *arg0, int arg1) {
 }
 
 void FUN_001abca0(void) {
-    int s0;
-    AnimationPoolObject *t;
-    s0 = Memory_GetAllocatorBySelector(DAT_00587038[0]);
-    t = DAT_00562528[0];
-    if (t != 0) {
-        --t->references;
-        if (((unsigned long long)(long long)t->references & 0x7fffffULL) == 0) {
-            igObject_Destroy((void *)t);
-        }
-    }
-    DAT_00562528[0] = ((AnimationPoolObject *)igAnimationCombinerBoneInfoPool_Create(s0));
-    DAT_00562528[0]->f28 = 0;
-    s0 = Memory_GetAllocatorBySelector(DAT_00587038[0]);
-    t = DAT_00562540[0];
-    if (t != 0) {
-        --t->references;
-        if (((unsigned long long)(long long)t->references & 0x7fffffULL) == 0) {
-            igObject_Destroy((void *)t);
-        }
-    }
-    DAT_00562540[0] = ((AnimationPoolObject *)igAnimationStatePool_Create(s0));
-    s0 = Memory_GetAllocatorBySelector(DAT_00587038[0]);
-    t = DAT_00562558[0];
-    if (t != 0) {
-        --t->references;
-        if (((unsigned long long)(long long)t->references & 0x7fffffULL) == 0) {
-            igObject_Destroy((void *)t);
-        }
-    }
-    DAT_00562558[0] = ((AnimationPoolObject *)FUN_001a90f0(s0));
+    int allocator = Memory_GetAllocatorBySelector(DAT_00587038[0]);
+    g_igAnimationCombinerBoneInfoPool_instance.release();
+    g_igAnimationCombinerBoneInfoPool_instance.p = (igAnimationCombinerBoneInfoPool *)igAnimationCombinerBoneInfoPool_Create(allocator);
+    g_igAnimationCombinerBoneInfoPool_instance->_resetMode = 0;
+    allocator = Memory_GetAllocatorBySelector(DAT_00587038[0]);
+    g_igAnimationStatePool_instance.release();
+    g_igAnimationStatePool_instance.p = (igAnimationStatePool *)igAnimationStatePool_Create(allocator);
+    allocator = Memory_GetAllocatorBySelector(DAT_00587038[0]);
+    g_igAnimation_instance.release();
+    g_igAnimation_instance.p = (igAnimation *)FUN_001a90f0(allocator);
     FUN_00306e50(*(int *)((char *)(((int * *)g_objectSystem)[0]) + 56), 7, &text_cleanCombinerStates[0], &GPR_00554b84, 0, 0);
 }
 
 void FUN_001abdf0(void) {
-    struct R_1abdf0 *p;
-    p = ((struct R_1abdf0 * *)DAT_00562528)[0];
-    if (p != 0) {
-        p->f4 = p->f4 - 1;
-        if ((p->f4 & 0x7FFFFF) == 0) {
-            igObject_Destroy((void *)p);
-        }
-    }
-    ((struct R_1abdf0 * *)DAT_00562528)[0] = 0;
-    p = ((struct R_1abdf0 * *)DAT_00562540)[0];
-    if (p != 0) {
-        p->f4 = p->f4 - 1;
-        if ((p->f4 & 0x7FFFFF) == 0) {
-            igObject_Destroy((void *)p);
-        }
-    }
-    ((struct R_1abdf0 * *)DAT_00562540)[0] = 0;
-    p = ((struct R_1abdf0 * *)DAT_00562558)[0];
-    if (p != 0) {
-        p->f4 = p->f4 - 1;
-        if ((p->f4 & 0x7FFFFF) == 0) {
-            igObject_Destroy((void *)p);
-        }
-    }
-    ((struct R_1abdf0 * *)DAT_00562558)[0] = 0;
+    g_igAnimationCombinerBoneInfoPool_instance.clear();
+    g_igAnimationStatePool_instance.clear();
+    g_igAnimation_instance.clear();
 }
 
 void *FUN_001abed0(igCollisionGrid *a0, X *a1, void **out) {

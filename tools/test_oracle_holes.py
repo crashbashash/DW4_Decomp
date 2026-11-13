@@ -94,12 +94,19 @@ class SharedResolver(unittest.TestCase):
     def resolve(self, name):
         return verify.sym_address(name, self.by_name, self.table.name)
 
-    def test_six_to_eight_trailing_hex_digits_behind_a_boundary(self):
+    def test_underscore_and_eight_trailing_hex_digits(self):
         self.assertEqual(verify.address_in_name("D_0056df30"), 0x56df30)
         self.assertEqual(verify.address_in_name("g_objectSystem_00586dc8"), 0x586dc8)
         self.assertIsNone(verify.address_in_name("vfunc_44"))          # two digits
         self.assertIsNone(verify.address_in_name("Register"))
         self.assertIsNone(verify.address_in_name("tbl_a0ff0"))        # five digits are no address
+        self.assertIsNone(verify.address_in_name("D_56df30"))         # an address is spelled with eight
+        # recovered names whose last letters read as hex
+        self.assertIsNone(verify.address_in_name("g_resultSucceeded"))
+        self.assertIsNone(verify.address_in_name("set__7igVec3fFfff"))
+
+    def test_recovered_name_ending_in_hex_letters_resolves_to_nothing(self):
+        self.assertIsNone(self.resolve("g_resultSucceeded"))
 
     def test_mapped_name_wins_and_its_claim_must_agree(self):
         self.assertEqual(self.resolve("Memory_SelectAllocator_003e9370"), 0x3e9370)

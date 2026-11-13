@@ -1,4 +1,11 @@
 #include "src/engine/base/BaseLibrary.h"
+#include "dw4/unregisteredClasses.h"
+
+/* Constructed by __sinit_BaseLibrary.cpp in this order. */
+igSmartPointer<igIntList> g_baseIntList;
+igSmartPointer<igNodeUsageObjectDefinitionList> g_igStatisticsNodeUsage_definitions;
+igSmartPointer<igIntList> g_igStatisticsNodeUsage_intList;
+
 #include "src/engine/base/LibraryFront.inc"
 #include "src/engine/base/igCompoundList.inc"
 #include "src/engine/base/igOptInterface.inc"

@@ -7,7 +7,8 @@ unit's profile, then:
 
   members    each `.text` function is found in the retail range by its bytes, relocated fields
              masked; a name symbols.txt already places wins, and a `--at name=va` settles a
-             function that fits more than one retail start
+             function that fits more than one retail start. The file's static initializer (its
+             `.init`) is the function of the static-initializer table it fits, outside the range
   duplicates a compiled function outside the range that a member still calls, that a vtable or
              other datum the file keeps names, or that an exception table names: the retail
              linker kept another file's copy, found at the address the retail call, data or table
@@ -113,6 +114,7 @@ def compile_file(wibo, compiler, flags, source, out):
     done = subprocess.run(argv, cwd=ROOT, capture_output=True, text=True)
     if done.returncode:
         sys.exit("%s: compile failed\n%s%s" % (source, done.stdout, done.stderr))
+    verify.trim_padded_names(out)
 
 
 def text_functions(obj):
@@ -124,6 +126,27 @@ def text_functions(obj):
                 and value == 0 and size:
             out[name] = Function(name, section, obj, headers)
     return syms, headers, out
+
+
+def static_initializer(obj, syms, headers, retail, forced):
+    """(name, Function, retail address) of the file's static initializer, or None. It is the retail
+    function of the static-initializer table its bytes fit, relocated fields masked, or the one
+    `--at` names."""
+    try:
+        found = verify.static_initializer(obj, headers, syms)
+    except ValueError as error:
+        sys.exit("%s: %s" % (obj, error))
+    if not found:
+        return None
+    name, section, _ctor = found
+    function = Function(name, section, obj, headers)
+    lo, hi = verify.STATIC_INITIALIZERS
+    entries = [forced[name]] if name in forced else [retail.word(at) for at in range(lo, hi, 4)]
+    hits = [va for va in entries if function.fits(retail, va)]
+    if len(hits) != 1:
+        sys.exit("%s fits %s of the static-initializer table: fix the compile or settle with --at %s=VA"
+                 % (name, "/".join("0x%x" % va for va in hits) or "no entry", name))
+    return name, function, hits[0]
 
 
 class Twins:
@@ -491,8 +514,15 @@ def main(argv=None):
             syms, headers, functions = text_functions(obj)
             at = locate(functions, retail, [v for v in starts if v not in owned], placed, a.drop)
             owned.update({va: name for name, va in at.items()})
+            # the static initializer is a member at its retail address, after all `.text`
+            initializer = static_initializer(obj, syms, headers, retail, forced)
+            if initializer and not at:
+                sys.exit("%s: only its static initializer has a retail copy" % source)
+            if initializer:
+                functions[initializer[0]] = initializer[1]
+                at[initializer[0]] = initializer[2]
             compiled.append((stem, obj, syms, headers, functions, at,
-                             Twins(profile, source, tmp, a.config, a.wibo)))
+                             Twins(profile, source, tmp, a.config, a.wibo), initializer and initializer[0]))
         missing = [by_va[v] for v in starts if v not in owned]
         lacking = unrecovered(missing, {n for c in compiled for n in c[4]}) if a.partial else None
         if lacking:
@@ -505,7 +535,7 @@ def main(argv=None):
         known = dict(((n, v) for n, (v, _s) in by_name.items()))
         if not a.cxx:
             known.update({name: va for va, name in owned.items()})
-        for stem, obj, syms, headers, functions, at, twins in compiled:
+        for stem, obj, syms, headers, functions, at, twins, initializer in compiled:
             if not at:
                 print("%-10s no retail function: the linker dropped the file" % stem, file=sys.stderr)
                 continue
@@ -534,9 +564,10 @@ def main(argv=None):
                 # a mangled owner, or a `static` several files define that symbols.txt names apart
                 row["symbol"] = members[0][1]
             rows["0x%08x" % members[0][0]] = row
-            last = members[-1]
+            # the file's code ends with its last `.text` member; its `.init` sits after all `.text`
+            last = max((va, name) for va, name in members if name != initializer)
             spans.append((members[0][0], last[0] + len(functions[last[1]].raw), stem))
-            names.update({name: va for va, name in members})
+            names.update({name: va for va, name in members if name != initializer})
             print("%-10s members %3d duplicates %3d stripped %3d data %3d externals %3d"
                   % (stem, len(members), len(duplicates), len(stripped), len(data), len(externals)),
                   file=sys.stderr)

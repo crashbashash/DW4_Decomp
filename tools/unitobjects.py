@@ -17,6 +17,9 @@ weakening that rule (see docs/engine/emitted-functions.md):
   data the compiler names by a running number (`@183`, `table$14`), which moves
   whenever an included header declares one more thing. tools/verify.py binds each
   such datum to the address its references read in retail.
+* an ``emitted`` member named ``__sinit_<file>`` is the file's static initializer, compiled
+  into `.init` with its static-initializer table entry in `.ctor`; tools/verify.py compares
+  both with retail and the link places them. A translation unit has at most one.
 """
 from dataclasses import dataclass
 from functools import lru_cache
@@ -126,6 +129,9 @@ def load(path=None):
         if any(not symbol or any(c.isspace() for c in symbol)
                for symbol, _ in emitted + duplicates + externals + data):
             raise ValueError("invalid compiler symbol")
+        if sum(symbol.startswith("__sinit_") for symbol, _ in emitted) > 1:
+            raise ValueError("a translation unit has one static initializer: a row places at most one "
+                             "__sinit_ member, and a range retail serves with two is two files")
         numbered = [symbol for symbol, _ in data if is_anonymous(symbol)]
         if numbered:
             raise ValueError(f"data row {numbered[0]} is a numbered compiler label: list its retail "

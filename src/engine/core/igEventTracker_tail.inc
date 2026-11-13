@@ -183,9 +183,9 @@ void Gap__Core__igEventTracker__vfunc_28(int *arg0, char *arg1, char *arg2, int 
     } while (1);
     *arg3 = acc;
     if (*arg3 >= 0x20) {
-        *arg0 = g_allocatorFailureStatus.v;
+        *arg0 = g_resultFailure.v;
     } else {
-        *arg0 = g_statusSucceeded.v;
+        *arg0 = g_resultSuccess.v;
     }
 }
 
@@ -212,14 +212,14 @@ void Gap__Core__igEventTracker__vfunc_29(int *arg0, char *arg1, char *arg2, int 
         sh += 7;
     } while (1);
     if (acc >= 0x20) {
-        *arg0 = g_allocatorFailureStatus.v;
+        *arg0 = g_resultFailure.v;
         return;
     }
     {
     char *q = arg2 + 1;
     c = *arg2;
     if (c > DAT_004c1ea8[0]) {
-        *arg0 = g_allocatorFailureStatus.v;
+        *arg0 = g_resultFailure.v;
         return;
     }
     acc2 = 0;
@@ -237,10 +237,10 @@ void Gap__Core__igEventTracker__vfunc_29(int *arg0, char *arg1, char *arg2, int 
     if (acc2 & 1) {
         *arg3 = ((unsigned char)q[0]) | ((((unsigned char)q[1]) << 8) | ((((unsigned char)q[3]) << 24) | (((unsigned char)q[2]) << 16)));
     } else {
-        *arg0 = g_allocatorFailureStatus.v;
+        *arg0 = g_resultFailure.v;
         return;
     }
-    *arg0 = g_statusSucceeded.v;
+    *arg0 = g_resultSuccess.v;
     }
 }
 
@@ -285,14 +285,14 @@ void Gap__Core__igEventTracker__vfunc_30(int *result, igEventTracker *self, char
         shift += 7;
     } while (1);
     if (type >= 0x20) {
-        *result = g_allocatorFailureStatus.v;
+        *result = g_resultFailure.v;
         return;
     }
     {
     char *q = record + 1;
     byte = *record;
     if (byte > DAT_004c1ea8[0]) {
-        *result = g_allocatorFailureStatus.v;
+        *result = g_resultFailure.v;
         return;
     }
     flags = 0;
@@ -312,10 +312,10 @@ void Gap__Core__igEventTracker__vfunc_30(int *result, igEventTracker *self, char
         readWord(q, &word);
         readVarint(q + 4, value);
     } else {
-        *result = g_allocatorFailureStatus.v;
+        *result = g_resultFailure.v;
         return;
     }
-    *result = g_statusSucceeded.v;
+    *result = g_resultSuccess.v;
     }
 }
 
@@ -341,7 +341,7 @@ void Gap__Core__igEventTracker__vfunc_33(T_2df6d0 *arg0, int arg1, int arg2, int
     }
     for (;;) {
         int c = arg0->v25(var_s0, &ev).Code();
-        if (c != g_statusSucceeded.v) break;
+        if (c != g_resultSuccess.v) break;
         if (ev.str != 0 && *ev.str != 0 && strcmp(ev.str, key) == 0) {
             switch (ev.type) {
             case 6:
@@ -510,7 +510,7 @@ void Gap__Core__igEventTracker__vfunc_50(EventTrackerSlots *self, int n) {
         offset = p - base;
         len = p[1];
         p += 2;
-        if (self->Lookup(offset, &value) == ((EventLookupResult *)&g_statusSucceeded)[0]) {
+        if (self->Lookup(offset, &value) == g_resultSuccess) {
             self->Bind(value, offset);
         }
         p += len;
@@ -586,7 +586,7 @@ R_2e1710 Gap__Core__igEventTracker__vfunc_40(T_2e1710 *arg1, int arg2, int arg3,
     int s0;
     if (FUN_002eb210((void *)arg1->f76) != 0) {
         s0 = arg1->f76->v108(arg2, arg3, arg4, arg5, arg6, arg7, arg8).a;
-        if (s0 == g_allocatorFailureStatus.v) {
+        if (s0 == g_resultFailure.v) {
             if (arg1->f92->v100() != 0) {
                 s0 = arg1->f92->v108(arg2, arg3, arg4, arg5, arg6, arg7, arg8).a;
                 arg1->f76->v116(arg2, arg3, *arg5, arg6, *arg8);

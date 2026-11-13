@@ -248,6 +248,24 @@ Units are named by their source file.
   variable with its early id. It replaced a `volatile` count. The getter is `igTDataList<T>::getCount` in
   `include/dw4/igTDataList.h`. *Units:* `src/game/beNodeAnim_Traverse.cpp`,
   `src/engine/scenegraph/SceneGraphLibrary.cpp`.
+- **A constant compared, then copied in the taken branch, is read twice.**
+  - *Symptom:* after a call, `lw a1,<object>; lw a0,0(v1); lw v1,<object>; bne a0,v1`, and the taken path stores
+    `a1`: one object loaded twice in a row, the first load used only after the branch.
+  - *Cause:* the comparison and the copy both read the member through a `const T &` parameter (`operator==`, the
+    copy constructor), as a `const int`. `IRO_CommonSubs` shares the two reads in a temporary assigned in front of
+    the comparison. The next round's `IRO_ExpressionPropagation` puts the temporary's expression, a plain read of
+    a named object, back into the uses in the temporary's own block. That is the comparison; the copy is in the
+    next block and keeps the temporary. The read put back has lost the `const` mark and the temporary's own read
+    keeps it, so the two are different expressions from then on and each is loaded. `const` on the object plays
+    no part, since the mark comes from the parameters. Four spellings lose the second read: a `mutable` member (or
+    `T &` parameters) makes every read a plain `int`, and one load then serves both; a read through a cast
+    (`*(T *)&object`) is not put back; a helper that reads the value into an `int` before the comparison has both
+    uses in one block, where they are put back and shared again (it gave two reads on a writable object only
+    because `int` and `const int` reads never merge); and a store ahead of the copy in the branch drops the
+    temporary, leaving one read before the branch and one after.
+  - *Spelling:* `if (call() == g_resultFailure) return g_resultFailure;`, or `result = g_resultFailure;` as the
+    branch's first statement, with the object declared as the result class.
+  - *Unit:* `src/engine/core/CoreLibrary.cpp`.
 - **A sorted search copies its key through a pointer.**
   - *Symptom:* before a binary search the key is stored to one stack slot, loaded, stored to a second slot, and the
     second slot is loaded again for the final equality test after the loop.
@@ -261,6 +279,24 @@ Units are named by their source file.
   `_data[_count - 1]` written in place folds the `- 1` into the load as `lw -4(v0)`. The index as an inline
   accessor's argument (`stack->get(stack->_count - 1)` with `T get(int index) const`) or as a named local
   (`int last = count - 1;`) keeps the subtraction. *Unit:* `src/engine/scenegraph/SceneGraphLibrary.cpp`.
+
+### Inlining (b52)
+
+- **Trivial inline members are calls inside an expanded constructor or helper.**
+  - *Symptom:* a constructor or helper is expanded into its caller, yet every inline it uses is a `jal`, down to
+    empty constructors (`jr ra; move v0,a0`) and two-store setters; the same members cost nothing elsewhere.
+  - *Cause:* the unit builds with `-inline bottomup`. Bottom-up inlining expands an inline function's callees
+    first, and when that would take the function past `inline_max_size` (256) it keeps all of them as calls and
+    still expands the function itself. Top-down inlining expands everything, and `-inline level=1` gives the
+    same calls but also in every small helper of the unit.
+  - *Spelling:* the members inline in their one shared header and the unit's row on `-inline level=8,bottomup`.
+    An out-of-line declaration in a private copy of the class gives the same bytes and is not the source. The
+    copies the linker dropped are `duplicates` of the unit, so the unit holding retail's copy is bottom-up too.
+    The reverse case: a hand-made helper that calls inline helpers and is fully expanded in retail was not a
+    function holding inline calls; write the statements in place.
+  - *Units:* `src/engine/igViewerGuiFactory.cpp`; the reverse case in
+    `src/engine/gfx/igVisualContextCapabilityManager_tail.inc`. The measurements are in
+    [build profiles](build-profiles.md).
 
 ### Control flow
 

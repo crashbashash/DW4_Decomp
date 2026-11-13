@@ -6,6 +6,7 @@
 #include "dw4/typecast.h"
 #include "dw4/igobject_release.h"
 #include "dw4/igTDataList.h"
+#include "dw4/igMatrix44f.h"
 
 struct Rc_17f2b0;
 extern "C" int StringChunk_ReleaseHeader(...);
@@ -497,7 +498,6 @@ extern "C" igMetaObject *g_igPointSpriteExt_metaObject[4];
 extern "C" igMetaObject *FUN_0014c2f0(void);
 extern "C" igMetaObject *igPointSpriteExt_GetMetaObject(void);
 extern "C" int FUN_001338d0(...);
-extern "C" int igMatrix44f_SetIdentity(...);
 extern "C" int DAT_00526600[4];
 struct PointSpriteExtInstance { int *vt; int f4; int f8; int f12; int f16; int f20; int f24; int f28; char t[368]; };
 extern "C" int igPointSpriteExt_GetVTable(void);
@@ -2595,11 +2595,10 @@ extern "C" int FUN_00164d60(int arg0, A_164d60 *arg1);
 /* The shared-pool globals are declared as 4-element arrays so they stay out of small data (lui/lw
  * addressing). Each arm of the pool fill stores the slot itself (the store is duplicated). */
 
-/* Reference-counted pool slot helpers shared by the Gap::Core visual-context managers.
- * igObjectSlotView is a local view of igObject that adds the one virtual the manager calls. The 23-bit
+/* igObjectSlotView is a local view of igObject that adds the one virtual the manager calls. The 23-bit
  * reference count lives in the word at +4 (decrement, then destroy when the masked count reaches zero).
  * The 29 dummy virtuals place vfunc_29 at vtable byte +124 = +0x08 + 4*29 (MWCC puts two header words
- * ahead of the slots). The helpers must stay `static inline` in a header so they expand in place. */
+ * ahead of the slots). */
 
 
 class igObjectSlotView {
@@ -2612,15 +2611,15 @@ public:
 struct igVisualContextCapabilityManager_164f50 {
     int vtable;
     int _pad04[5];
-    igObjectSlotView *pool24;
-    igObjectSlotView *pool28;
-    igObjectSlotView *pool32;
-    igObjectSlotView *pool36;
-    igObjectSlotView *pool40;
-    igObjectSlotView *pool44;
-    igObjectSlotView *pool48;
-    igObjectSlotView *pool52;
-    igObjectSlotView *capabilities56;
+    igSmartPointer<igObjectSlotView> pool24;
+    igSmartPointer<igObjectSlotView> pool28;
+    igSmartPointer<igObjectSlotView> pool32;
+    igSmartPointer<igObjectSlotView> pool36;
+    igSmartPointer<igObjectSlotView> pool40;
+    igSmartPointer<igObjectSlotView> pool44;
+    igSmartPointer<igObjectSlotView> pool48;
+    igSmartPointer<igObjectSlotView> pool52;
+    igSmartPointer<igObjectSlotView> capabilities56;
     int _pad60[61];
     igObjectSlotView *helper304;
     igObjectSlotView *helper308;

@@ -261,19 +261,6 @@ void FUN_001d1da0(MorphLevelState *self, float t) {
     }
 }
 
-ObjectRefWord *FUN_001d21b0(ObjectRefWord *self,int delete_storage) {
-    if(self) {
-        ObjectRefTarget *object=self->value;
-        if(object) {
-            --object->references;
-            if(((unsigned long long)(long long)object->references & 0x7fffffULL)==0)
-                igObject_Destroy((void *)object);
-        }
-        if((short)delete_storage>0) __dl__FPv(self);
-    }
-    return self;
-}
-
 int FUN_001d2230(int a0, S_1d2230 *src, S_1d2230 *dst, O_1d2230 *obj, int flag) {
     int r;
     dst->t = src->t;
@@ -301,42 +288,6 @@ int FUN_001d2230(int a0, S_1d2230 *src, S_1d2230 *dst, O_1d2230 *obj, int flag) 
         break;
     }
     return r;
-}
-
-void **FUN_001d3090(void **arg0, int arg1) {
-    int *o;
-
-    if (arg0 != 0) {
-        o = (int *)(*arg0);
-        if (o != 0) {
-            o[1] = o[1] - 1;
-            if ((o[1] & 0x7FFFFF) == 0) {
-                igObject_Destroy((void *)o);
-            }
-        }
-        if ((short)arg1 > 0) {
-            __dl__FPv(arg0);
-        }
-    }
-    return arg0;
-}
-
-void **FUN_001d3110(void **arg0, short arg1) {
-    int *o;
-
-    if (arg0 != 0) {
-        o = (int *)*arg0;
-        if (o != 0) {
-            o[1] = o[1] - 1;
-            if ((o[1] & 0x7FFFFF) == 0) {
-                igObject_Destroy((void *)o);
-            }
-        }
-        if (arg1 > 0) {
-            __dl__FPv(arg0);
-        }
-    }
-    return arg0;
 }
 
 int FUN_001d3190(void *arg0) {

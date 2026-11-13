@@ -114,9 +114,9 @@ void FUN_002d7760(int *arg0, O_2d7760 *arg1, int arg2, int arg3) {
     int var_s2;
     if (idx >= 0) {
         List_RemoveAt((L_2d69a0 *)temp_a0, idx, 8);
-        var_s2 = g_statusSucceeded.v;
+        var_s2 = g_resultSuccess.v;
     } else {
-        var_s2 = g_allocatorFailureStatus.v;
+        var_s2 = g_resultFailure.v;
     }
     if (arg1->f24 != 0) {
         FUN_002d7280(arg1);

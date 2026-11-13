@@ -269,12 +269,75 @@ or the object is rejected as unowned. The data itself is never linked from the o
 body refers to `DAT_<address>`, which `tools/linkgen.py` provides, and retail's bytes stay in place
 after being compared.
 
+## Static initialisers
+
+MWCC compiles the construction of a file's global objects into one function, `__sinit_<file>`, named
+after the source file, in a section of its own named `.init`. A 4-byte `.ctor` word points at it, and with
+exceptions on it has an index record like any function. The retail linker put every object's `.init` after
+all `.text` (`0x51fd00` up to `0x522438`) and every `.ctor` in the table `__init_cpp` walks (`0x522440` up to
+`0x522480`, [Metrowerks runtime](runtime-metrowerks.md)), both in link order, so the table lists the owning
+files in the order they were linked. A function of that range is not code of its own: it is the initialiser
+of the file that defines the objects it constructs, and it compiles from that file.
+
+The owning file's whole-file row names its initialiser in `emitted`, under the compiler name
+`__sinit_<file>`, at the retail initialiser's address; that row is the one record of the pairing, and the
+table entry is the one retail entry holding that address. `tools/whole_file_rows.py` reads the address from
+retail: the table entry whose function the compiled `.init` fits, relocated fields masked (`--at
+__sinit_<file>=<va>` settles a fit to several; a file that still lacks some of its range's functions needs
+`--partial`). The file's `units.tsv` span still ends at its last `.text` function, and the objects the
+initialiser constructs are `data` rows like any datum (a global in `.bss` is compared with the zeros the loader
+fills). A `const` object with a constructor sits in `.rodata`, so retail's initialiser stores into read-only
+data. An object that `data-names.tsv` already names keeps that name, defined by the owning file, and its
+`data-names.tsv` row goes; each other whole-file unit that references it lists it as a `data` row. All sixteen
+initialisers of the range compile from their owning files, so no `units.tsv` row covers `0x51fd00` up to
+`0x522438`. A translation unit has one initialiser, so a row places at most one: a range retail serves with two
+initialisers is two files.
+
+`verify` compares the `.init` body like any member, its index record with `exceptions.txt`, and the `.ctor`
+word, relocated, with its table entry. An object whose `.init` the row does not name is rejected, as is any
+other shape (two `.init` sections, a `.ctor` word that points elsewhere), and an initialiser whose bytes
+differ makes its file a mismatch. MWCC pads the initialiser's names (its own, its table word's, its
+record's) with blanks and leftover bytes that change from one compile to the next, so `verify` cuts each
+name at its first blank before reading the object, and `whole_file_rows.py` does after compiling.
+
+For the link, the initialiser's own object (`isolate_emitted_body`) renames its `.init` to `.text`, which
+`tools/linkgen.py` pins at the initialiser's layout address like any code unit, and keeps the `.ctor` word,
+pinned at its table entry by carving the raw data unit around it as for an exception record. Every other
+member's object drops the `.ctor`.
+
+### The Alchemy library initialisers
+
+Five initialisers construct the static smart pointers of an Alchemy library file, each from its owner's
+whole file. The objects are defined in the library's `.cpp` directly after its header, in the initialiser's
+construction order. Each `igSmartPointer<T>` makes the compiler emit a `__dt__…igSmartPointer<T>Fv` copy, and
+the row's `emitted` (or `duplicates`, for a copy another file places) gives each copy its retail address by name,
+so the order the copies take in the object does not matter.
+
+| initialiser | file | objects (retail address) |
+|---|---|---|
+| `0x51fd00` | `src/engine/attrs/AttrsLibrary.cpp` | `igAttrPool` (`0x55f4b8`), `igCustomVectorStateList` (`0x55f4d8`), `igCustomMatrixStateList` (`0x55f4f0`), `igModelViewMatrixAttr` (`0x55f508`), `igCustomVectorStateList` (`0x55f538`) |
+| `0x51fe40` | `src/engine/audio/AudioLibrary.cpp` | `igPsx2AudioSourceList` (`0x55f5d0`) |
+| `0x520cf0` | `src/engine/scenegraph/SceneGraphLibrary.cpp` | three animation pools, a `(1, 1, 1)` `igVec3f`, the Enbaya context pool, an alpha-state attribute, an `igFolder`, the projective shadow's viewport matrix and the environment-map shader's eleven default attributes (`0x562528` up to `0x562b58`) |
+| `0x5210d0` | `src/engine/base/BaseLibrary.cpp` | `igIntList` (`0x56da78`), `igNodeUsageObjectDefinitionList` (`0x56da90`), `igIntList` (`0x56daa8`) |
+| `0x521750` | `src/engine/gui/GuiLibrary.cpp` | `igGraphPath` (`0x58c670`) |
+
+No PS2 code reads `0x55f4d8`, `0x55f4f0`, `0x55f538`, the three base objects or the gui path. The initialiser only
+constrains which of them share a type (one destructor for `0x55f4d8`/`0x55f538`, one for `0x56da78`/`0x56daa8`). The
+types come from the GameCube `main.dol`, whose initialisers for the attrs and base files construct the same objects in the
+same order with the same sharing. There, the attrs objects are written by virtual functions of
+`igFloatConstantAttr`, `igMatrixConstantAttr` and `igVectorConstantAttr`. Each function creates the list and fills
+it with 128 `igCustomVectorState`/`igCustomMatrixState`. The base pair `0x56da90`/`0x56daa8` is written by
+`igStatisticsNodeUsage`. The GameCube gui object is passed as the path a graph search fills, so it is an `igGraphPath`.
+The PS2 build registers none of the three list classes or their owners, so the lists are declared in
+`include/dw4/unregisteredClasses.h`, with the GameCube registrations' bases. The game's own users of retail
+`0x150eb0` already call it `igSmartPointer<igIntList>`'s destructor.
+
 ## Verification and placement
 
 For a registered compiler object, verification requires:
 
 1. Every declared function symbol exists at offset zero in its own complete
-   `.text` section, with the exact recorded retail size.
+   `.text` section (`.init` for the static initialiser), with the exact recorded retail size.
 2. All nonempty allocated/executable/code sections belong to declared members.
    Unknown code, emitted runtime data and exception tables fail closed.
 3. Retail extents do not overlap, and explicit external aliases cannot conflict
@@ -396,7 +459,10 @@ Run `python3 tools/test_whole_file_units.py` for the whole-file rows: the overla
 generator's placement, and against
 a GNU-linked fixture, a changed datum, a wrong address, an undeclared datum, labels renumbered by one
 more declaration, two references that disagree and the isolated body; the runtime's `NMWException.cpp`
-still verifies against its row with an enum added ahead of it.
+still verifies against its row with an enum added ahead of it. Against retail, a recovered file's static
+initialiser verifies with its table entry and record and links with them, the rows find it in the table, an
+initialiser whose bytes differ makes the file a mismatch, one the row does not name rejects the file, and a
+row naming two is refused.
 
 Implementation: `tools/unitobjects.py`, `tools/units.py`, `tools/verify.py`,
 `tools/check.py` and `tools/linkgen.py`. The full byte-identical retail relink
@@ -437,3 +503,20 @@ no available compiler emits the construct: the combat family uses tag `0x27`/`0x
   (`igTransform_GetVTable` ends with a call to it), `0x1962d0` the `igTransform` destructor, and `0x33f5e0` the
   destructor of an unnamed controller base shared by `beLayerCtl`, `beFont`, `beMovie`,
   `beNDMWLogo`/`SaveCtrl`/`SaveIntf`/`GameRam` and `beShadow01`.
+- **The initialisers' names.** `symbols.txt` keeps the address names of `0x51fd00` up to `0x522438`; the compiler's
+  `__sinit_<file>` is the real name, but a dot in a symbol name is untested in the tools that read `symbols.txt`.
+- **Owners resting on position.** `0x521150` (a 16-colour palette nothing reads) is scene-search's by its place
+  in `.rodata`, and `0x5223f0` (two colours nothing reads) is `beCameraMode`'s or `igViewManager`'s: the bytes are
+  the same either way.
+- **Names of the library initialisers' objects.** A defined object needs a name that spells no address, but most
+  of these names are inferred:
+  - **From the creating function.** `g_<Class>_instance` names the one object a function creates. The three pools
+    `main` creates are in [engine boot](engine-boot.md#the-managers-are-named).
+  - **From the GameCube owner and type.** `g_igFloatConstantAttr_stateList` and its siblings, and
+    `g_igStatisticsNodeUsage_definitions`/`_intList`.
+  - **From what the creator sets.** In `g_envMapTextureUnit1On` the unit and enable values are its creator's
+    `igTextureStateAttr` calls. In `g_envMapBlendOneOneUnit1` the factors are its creator's `igBlendFunctionAttr`
+    calls, and the factor names come from `IG_GFX_BLENDING_FUNCTION`.
+  - **Without an owner.** `g_baseIntList` (`0x56da78`) has no owner in either build. The GameCube build reads
+    `g_guiGraphPath` (`0x58c670`) once, as the path a gui method fills through a graph search, and nothing names
+    that method's class.

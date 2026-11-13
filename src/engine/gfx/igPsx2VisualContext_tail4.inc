@@ -870,28 +870,28 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_203(O_172b00 *arg0, int arg1, char *ar
         FUN_001fbce0(4, t->data + ((t->n - 1) << 6));
         break;
     case 10:
-        igMatrix44f_SetIdentity(sp110);
+        igMatrix44f_SetIdentity((float *)sp110);
         SETB(arg0->s988, arg2)
         FUN_00191f30(&sp15C, sp110, arg2);
         FUN_001903d0(sp110);
         SET(arg0->s1004, sp110)
         break;
     case 11:
-        igMatrix44f_SetIdentity(spD0);
+        igMatrix44f_SetIdentity((float *)spD0);
         SETB(arg0->s992, arg2)
         FUN_00191f30(&sp158, spD0, arg2);
         FUN_001903d0(spD0);
         SET(arg0->s1008, spD0)
         break;
     case 12:
-        igMatrix44f_SetIdentity(sp90);
+        igMatrix44f_SetIdentity((float *)sp90);
         SETB(arg0->s996, arg2)
         FUN_00191f30(&sp154, sp90, arg2);
         FUN_001903d0(sp90);
         SET(arg0->s1012, sp90)
         break;
     case 13:
-        igMatrix44f_SetIdentity(sp50);
+        igMatrix44f_SetIdentity((float *)sp50);
         SETB(arg0->s1000, arg2)
         FUN_00191f30(&sp150, sp50, arg2);
         FUN_001903d0(sp50);

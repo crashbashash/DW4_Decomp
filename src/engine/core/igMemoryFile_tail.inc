@@ -31,7 +31,7 @@ void Gap__Core__igMemoryFile__vfunc_23(int *arg0, struct MemoryFileHead *arg1, u
     int sp38;
 
     if (arg1->open != 0) {
-        *arg0 = g_statusSucceeded.v;
+        *arg0 = g_resultSuccess.v;
         return;
     }
     if (arg2 == 8) {
@@ -43,16 +43,16 @@ void Gap__Core__igMemoryFile__vfunc_23(int *arg0, struct MemoryFileHead *arg1, u
     case 3:
     case 5:
     case 6:
-        *arg0 = g_allocatorFailureStatus.v;
+        *arg0 = g_resultFailure.v;
         return;
     default:
-        *arg0 = g_allocatorFailureStatus.v;
+        *arg0 = g_resultFailure.v;
         return;
     case 0:
     case 4:
         FUN_002efae0(arg1->f12, &sp3C, &sp38);
         if (sp3C == 0) {
-            *arg0 = g_allocatorFailureStatus.v;
+            *arg0 = g_resultFailure.v;
             return;
         }
         arg1->pos = 0;
@@ -60,7 +60,7 @@ void Gap__Core__igMemoryFile__vfunc_23(int *arg0, struct MemoryFileHead *arg1, u
         arg1->size = sp38;
         arg1->open = 1;
         arg1->f24 = sp3C;
-        *arg0 = g_statusSucceeded.v;
+        *arg0 = g_resultSuccess.v;
         return;
     }
 }

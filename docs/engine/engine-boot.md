@@ -69,9 +69,9 @@ and the MetaObject global the class's own `_GetMetaObject` accessor lazily fills
 
 | `main` call | class (`_Create`) | `_RunStaticInit` | MetaObject global | stored at |
 | --- | --- | --- | --- | --- |
-| `0x1a1ae0` | `igEnbayaContextPool_Create` | `0x1a1ca0` | `0x561b60` | `0x562718` |
-| `0x1a7cc0` | `igAnimationCombinerBoneInfoPool_Create` | `0x1a7d90` | `0x562250` | `0x562528` |
-| `0x1a67c0` | `igAnimationStatePool_Create` | `0x1a6890` | `0x5620d8` | `0x562540` |
+| `0x1a1ae0` | `igEnbayaContextPool_Create` | `0x1a1ca0` | `0x561b60` | `0x562718` (`g_igEnbayaContextPool_instance`) |
+| `0x1a7cc0` | `igAnimationCombinerBoneInfoPool_Create` | `0x1a7d90` | `0x562250` | `0x562528` (`g_igAnimationCombinerBoneInfoPool_instance`) |
+| `0x1a67c0` | `igAnimationStatePool_Create` | `0x1a6890` | `0x5620d8` | `0x562540` (`g_igAnimationStatePool_instance`) |
 
 All six are C (`config/SLUS-20836/names/Managers.tsv`, `src/engine/`).  At the semantic level each is
 `igMetaObject_CreateInstance`: allocate the class's reflected size (0x20),

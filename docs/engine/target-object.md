@@ -27,7 +27,7 @@ The result of the last query lives in file-scope globals:
 | Global | Meaning |
 |---|---|
 | `g_targetOrigin` | the asking model's position (translation of its matrix) |
-| `g_targetOriginMatrix` | the asking model's matrix |
+| `g_targetOriginMatrix` | the asking model's matrix, an `igMatrix44f` the file defines and its static initialiser (`0x521730`) sets to the identity at start-up |
 | `g_targetOriginHeading` | yaw of the matrix's forward axis; `-100` until first asked for |
 | `g_targetPosition` | the chosen target's position |
 | `g_targetDistanceSq` | squared distance from origin to target |

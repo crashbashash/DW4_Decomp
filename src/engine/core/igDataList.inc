@@ -6,7 +6,7 @@ void * FUN_002c8450(int arg0) {
 /* Created with allocation only when missing. */
 int igDataList_GetOrCreateMetaObject(void) {
     if (((int *)g_igDataList_metaObject)[0] == 0) {
-        ((int *)g_igDataList_metaObject)[0] = (int)igMetaObject_Create(((int)Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0])));
+        ((int *)g_igDataList_metaObject)[0] = (int)igMetaObject_Create(((int)Memory_GetAllocatorBySelector(g_memoryContextMetaData)));
     }
     return ((int *)g_igDataList_metaObject)[0];
 }

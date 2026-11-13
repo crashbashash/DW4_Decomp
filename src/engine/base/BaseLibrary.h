@@ -842,7 +842,6 @@ int FUN_0022e0a0(void *arg0, int arg1, void *arg2, int arg3, int arg4);
 int FUN_0022e160(struct M *arg0, int arg1, struct M *arg2, int arg3, int arg4);
 void Gap__igItemDataBaseList__vfunc_18(S_5 *arg0);
 void Gap__igItemDataBaseList__vfunc_04(S_6 *arg0);
-void **FUN_0022e3c0(struct Ref **self, short flag);
 }
 
 static inline Iterator *makeIterator(IteratorType) { return (Iterator *)FUN_002279d0(0); }

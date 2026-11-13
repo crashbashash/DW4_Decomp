@@ -6,7 +6,9 @@ ADXT, and copies each decoded frame into the GS frame buffer. Each open movie ke
 `igCriMovieData` object held in `igMovieInfo::_userdata`: the MWPLY handle (`_mwply`) and its work area
 (`_cprmbuf`), the ADXT handle (`_adxt`) and its work area (`_adxwork`). The source is
 `src/movie/igCriMovieCodec.cpp`, one whole-file unit (`movie_igCriMovieCodec` in `units.tsv`, `0x337410` up to
-`0x338e50`; its members in `unit-objects.json`).
+`0x338ed0`; its members in `unit-objects.json`). The visual context frames are sent through is held in
+`g_criMovieVisualContext`, an `igSmartPointer<igPsx2VisualContext>` the file defines: its static initialiser
+(`0x5216a0`) registers the pointer's destructor (`0x338e50`, the last function of the unit) to release it at exit.
 
 ## Slots
 

@@ -1,6 +1,6 @@
 #include "dw4/reflected.h"
 #include "dw4/igMemoryPoolView.h"
-#include "dw4/igobject_release.h"
+#include "dw4/igSmartPointer.h"
 
 /* igMovieInfo::_type: a movie of this type is an ADX audio stream played through ADXT instead of
  * a Sofdec video played through MWPLY. */
@@ -87,7 +87,6 @@ void Gap__Core__igObject__vfunc_01(void);
 void Gap__Core__igObject__vfunc_02(void);
 void Gap__Core__igObject__vfunc_11(void);
 int igObject_IsKindOf(void *object, int metaObject);
-void igObject_Destroy(igObject *object);
 igMemoryPoolView *igObject_GetAllocator(void *object);
 igMemoryPoolView *Memory_GetAllocatorBySelector(int selector);
 void *Memory_AllocateAlignedWithAllocator(unsigned int size, unsigned int alignment, igMemoryPoolView *pool);
@@ -117,8 +116,12 @@ extern int g_igCriMovieCodec_metaObject[4];
 extern int g_igCriMovieData_metaObject[4];
 extern void *g_criMovieUploadPacket;
 extern int g_criMovieUploadPacketSize;
-extern igObject *g_criMovieVisualContext;
 extern char You_probably_didn_t_open_the_DMA[];
+}
+
+/* The visual context the movie draws through, released when the program exits. */
+extern "C" {
+igSmartPointer<igPsx2VisualContext> g_criMovieVisualContext;
 }
 
 static inline void mwPlyDestroy(MwPly *ply)
@@ -254,7 +257,6 @@ int Gap__igCriMovieCodec__vfunc_28(igCriMovieCodec *self, igMovieInfo *movie, ig
     unsigned int rows;
     igObject *object;
     igObject *context;
-    igObject *previous;
 
     columns = (unsigned int)movie->_width >> 4;
     rows = (unsigned int)movie->_height >> 4;
@@ -267,12 +269,7 @@ int Gap__igCriMovieCodec__vfunc_28(igCriMovieCodec *self, igMovieInfo *movie, ig
     } else {
         context = 0;
     }
-    if (context != 0) {
-        context->_refCount = context->_refCount + 1;
-    }
-    previous = g_criMovieVisualContext;
-    IG_OBJECT_RELEASE(previous);
-    g_criMovieVisualContext = context;
+    g_criMovieVisualContext = (igPsx2VisualContext *)context;
     return 1;
 }
 
@@ -293,7 +290,7 @@ int CriMovie_SubmitFrame(igMovieInfo *movie, void *image) {
     int height;
     int answer;
 
-    firstBuffer = igPsx2VisualContext_IsDisplayingFirstBuffer(g_criMovieVisualContext);
+    firstBuffer = igPsx2VisualContext_IsDisplayingFirstBuffer(g_criMovieVisualContext.p);
     width = movie->_width;
     height = movie->_height;
     if (g_criMovieUploadPacket == 0 && g_criMovieDmaWarningMuted == 0) {
@@ -305,7 +302,7 @@ int CriMovie_SubmitFrame(igMovieInfo *movie, void *image) {
         }
     }
     g_criMovieUploadPacketSize = CriMovie_BuildFrameUpload(g_criMovieUploadPacket, image, 0, (firstBuffer != 0) ? 448 : 0, width, height, 1);
-    igPsx2VisualContext_CallDmaChain(g_criMovieVisualContext, g_criMovieUploadPacket, g_criMovieUploadPacketSize, 1);
+    igPsx2VisualContext_CallDmaChain(g_criMovieVisualContext.p, g_criMovieUploadPacket, g_criMovieUploadPacketSize, 1);
     return 1;
 }
 

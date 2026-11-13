@@ -14,7 +14,7 @@ void ***FUN_002e2fb0(void) {
         if (g_useOwnerAllocator != 0) {
             a = al;
         } else {
-            a = (void **)Memory_GetAllocatorBySelector(g_temporaryAllocatorSelector[0]);
+            a = (void **)Memory_GetAllocatorBySelector(g_memoryContextTemporary);
         }
         cell = t = (void **)((VC_216 *)a)->vX(4);
         if (t != 0) { *t = 0; }

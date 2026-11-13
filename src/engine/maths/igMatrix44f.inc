@@ -118,24 +118,24 @@ void FUN_00190d80(float *m, const ScaleVec &v) {
 
 void FUN_00190e50(void *arg0, float *arg1, float fparg0) {
     FUN_00190f50((float *)arg0, arg1, fparg0);
-    *(float *)((char *)(arg0) + 48) = (float) DAT_004e11c0[0];
-    *(float *)((char *)(arg0) + 52) = (float) DAT_004e11c4[0];
-    *(float *)((char *)(arg0) + 56) = (float) DAT_004e11c8[0];
-    *(float *)((char *)(arg0) + 60) = (float) DAT_004e11cc[0];
-    *(float *)((char *)(arg0) + 12) = (float) g_vec3Zero[0];
-    *(float *)((char *)(arg0) + 28) = (float) DAT_004e105c[0];
-    *(float *)((char *)(arg0) + 44) = (float) DAT_004e1060[0];
+    *(float *)((char *)(arg0) + 48) = (float) g_vec4WAxis.x;
+    *(float *)((char *)(arg0) + 52) = (float) g_vec4WAxis.y;
+    *(float *)((char *)(arg0) + 56) = (float) g_vec4WAxis.z;
+    *(float *)((char *)(arg0) + 60) = (float) g_vec4WAxis.w;
+    *(float *)((char *)(arg0) + 12) = (float) g_vec3Zero.x;
+    *(float *)((char *)(arg0) + 28) = (float) g_vec3Zero.y;
+    *(float *)((char *)(arg0) + 44) = (float) g_vec3Zero.z;
 }
 
 void FUN_00190ed0(void *arg0, float x, float y, float z) {
     FUN_001910c0((float *)arg0, x, y, z);
-    *(float *)((char *)(arg0) + 48) = (float) DAT_004e11c0[0];
-    *(float *)((char *)(arg0) + 52) = (float) DAT_004e11c4[0];
-    *(float *)((char *)(arg0) + 56) = (float) DAT_004e11c8[0];
-    *(float *)((char *)(arg0) + 60) = (float) DAT_004e11cc[0];
-    *(float *)((char *)(arg0) + 12) = (float) g_vec3Zero[0];
-    *(float *)((char *)(arg0) + 28) = (float) DAT_004e105c[0];
-    *(float *)((char *)(arg0) + 44) = (float) DAT_004e1060[0];
+    *(float *)((char *)(arg0) + 48) = (float) g_vec4WAxis.x;
+    *(float *)((char *)(arg0) + 52) = (float) g_vec4WAxis.y;
+    *(float *)((char *)(arg0) + 56) = (float) g_vec4WAxis.z;
+    *(float *)((char *)(arg0) + 60) = (float) g_vec4WAxis.w;
+    *(float *)((char *)(arg0) + 12) = (float) g_vec3Zero.x;
+    *(float *)((char *)(arg0) + 28) = (float) g_vec3Zero.y;
+    *(float *)((char *)(arg0) + 44) = (float) g_vec3Zero.z;
 }
 
 /* Axis-angle rotation matrix (Rodrigues); the sign bit is cleared through a byte bit-field union,
@@ -257,13 +257,13 @@ void FUN_001916b0(int arg0, float *arg1, float fparg0) {
 
 void FUN_001916f0(void *arg0, float *arg1) {
     Matrix44_SetQuaternion((float *)arg0, arg1);
-    *(float *)((char *)(arg0) + 48) = (float) DAT_004e11c0[0];
-    *(float *)((char *)(arg0) + 52) = (float) DAT_004e11c4[0];
-    *(float *)((char *)(arg0) + 56) = (float) DAT_004e11c8[0];
-    *(float *)((char *)(arg0) + 60) = (float) DAT_004e11cc[0];
-    *(float *)((char *)(arg0) + 12) = (float) g_vec3Zero[0];
-    *(float *)((char *)(arg0) + 28) = (float) DAT_004e105c[0];
-    *(float *)((char *)(arg0) + 44) = (float) DAT_004e1060[0];
+    *(float *)((char *)(arg0) + 48) = (float) g_vec4WAxis.x;
+    *(float *)((char *)(arg0) + 52) = (float) g_vec4WAxis.y;
+    *(float *)((char *)(arg0) + 56) = (float) g_vec4WAxis.z;
+    *(float *)((char *)(arg0) + 60) = (float) g_vec4WAxis.w;
+    *(float *)((char *)(arg0) + 12) = (float) g_vec3Zero.x;
+    *(float *)((char *)(arg0) + 28) = (float) g_vec3Zero.y;
+    *(float *)((char *)(arg0) + 44) = (float) g_vec3Zero.z;
 }
 
 void Matrix44_SetQuaternion(float *m, float *q) {

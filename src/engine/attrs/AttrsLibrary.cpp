@@ -1,4 +1,13 @@
 #include "src/engine/attrs/AttrsLibrary.h"
+#include "dw4/unregisteredClasses.h"
+
+/* Constructed by __sinit_AttrsLibrary.cpp in this order. */
+igSmartPointer<igAttrPool> g_igAttrPool_instance(0, kRetainReference);
+igSmartPointer<igCustomVectorStateList> g_igFloatConstantAttr_stateList(0, kRetainReference);
+igSmartPointer<igCustomMatrixStateList> g_igMatrixConstantAttr_stateList(0, kRetainReference);
+igSmartPointer<igModelViewMatrixAttr> g_igModelViewMatrixAttr_instance(0, kRetainReference);
+igSmartPointer<igCustomVectorStateList> g_igVectorConstantAttr_stateList(0, kRetainReference);
+
 #include "src/engine/attrs/LibraryFront.inc"
 #include "src/engine/attrs/igVisualContextAttrDefaultManager.inc"
 #include "src/engine/attrs/igVisualAttribute.inc"

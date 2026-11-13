@@ -1,4 +1,26 @@
 #include "src/engine/scenegraph/SceneGraphLibrary.h"
+
+/* Constructed by __sinit_SceneGraphLibrary.cpp in this order. */
+igSmartPointer<igAnimationCombinerBoneInfoPool> g_igAnimationCombinerBoneInfoPool_instance;
+igSmartPointer<igAnimationStatePool> g_igAnimationStatePool_instance;
+igSmartPointer<igAnimation> g_igAnimation_instance;
+igVec3f g_unitScale(1.0f, 1.0f, 1.0f);
+igSmartPointer<igEnbayaContextPool> g_igEnbayaContextPool_instance;
+igSmartPointer<igAlphaStateAttr> g_igAlphaStateAttr_instance(0, kRetainReference);
+igSmartPointer<igFolder> g_igFolder_instance(0, kRetainReference);
+igMatrix44fView g_projectiveShadowViewportMatrix;
+igSmartPointer<igMatrixOptStateAttr> g_envMapMatrixOptStateAttr(0, kRetainReference);
+igSmartPointer<igTextureMatrixStateAttr> g_envMapTextureMatrixStateAttr(0, kRetainReference);
+igSmartPointer<igTextureStateAttr> g_envMapTextureUnit1On(0, kRetainReference);
+igSmartPointer<igTextureStateAttr> g_envMapTextureUnit2On(0, kRetainReference);
+igSmartPointer<igTextureStateAttr> g_envMapTextureUnit1Off(0, kRetainReference);
+igSmartPointer<igTextureStateAttr> g_envMapTextureUnit2Off(0, kRetainReference);
+igSmartPointer<igBlendFunctionAttr> g_envMapBlendOneOneUnit1(0, kRetainReference);
+igSmartPointer<igBlendFunctionAttr> g_envMapBlendOneOneUnit2(0, kRetainReference);
+igSmartPointer<igColorMaskAttr> g_envMapColorMaskAttr(0, kRetainReference);
+igSmartPointer<igPixelPipelineModeAttr> g_envMapPixelPipelineModeAttr(0, kRetainReference);
+igSmartPointer<igBlendFunctionAttr> g_envMapBlendZeroSrcAlphaUnit1(0, kRetainReference);
+
 #include "src/engine/scenegraph/LibraryFront.inc"
 #include "src/engine/scenegraph/igTraversal.inc"
 #include "src/engine/scenegraph/igTransientShaderData.inc"

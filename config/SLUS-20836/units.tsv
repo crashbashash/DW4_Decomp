@@ -96,32 +96,32 @@
 0x0012bfb8	0x0012c474	newlib-libc_12bfb8	ee-gcc	-O2 -G0 -g -fno-builtin -Iinclude	off	-	sony-sdk block 0x1029f8-0x12fef0 (docs/engine/sd-prologue.md, module-map.md) outside any mapped run; `sd` prologues (Sony EE GCC); exceptions off: none of 4 non-leaf functions has a retail index record; 1 asm body not scored; ee-gcc -O2 -G0 -g -Iinclude reproduces 2/2 members; ee-gcc -O2 -G0 -Iinclude 2/2
 0x0012c478	0x0012fef0	newlib-libc_12c478	ee-gcc	-O2 -G0 -g -fno-builtin -Iinclude	off	-	sony-sdk block 0x1029f8-0x12fef0 (docs/engine/sd-prologue.md, module-map.md) cut at module-map run 0x12c478-0x130258; `sd` prologues (Sony EE GCC); exceptions off: none of 20 non-leaf functions has a retail index record; no compiled C member yet; `sd` prologues: Sony EE GCC
 0x0012fef0	0x00130000	newlib-libc_12fef0	ee-gcc	-O2 -G0 -g -fno-builtin -Iinclude	off	-	unlabeled run, no boundary evidence: cut where the retail exception evidence or the pins change; exceptions off: none of 2 non-leaf functions has a retail index record; 1 asm body not scored; default -O3 -Iinclude reproduces 2/2 members
-0x00130000	0x00142f10	alchemy-attrs_AttrsLibrary	b52	-O4,s -sdatathreshold 2 -RTTI off -Iinclude	off	-	whole file
-0x00142f10	0x00145ce0	alchemy-audio_AudioLibrary	b52	-O4,s -sdatathreshold 2 -RTTI off -Iinclude	off	-	whole file
-0x00145ce0	0x001493e0	alchemy-window-input_WindowInputLibrary	b52	-O4,s -sdatathreshold 2 -RTTI off -Iinclude	off	-	whole file
-0x001493e0	0x001869e0	alchemy-gfx_GfxLibrary	b52	-O4,s -sdatathreshold 2 -RTTI off -Iinclude	off	-	whole file
-0x001869e0	0x00194380	alchemy-maths_MathsLibrary	b52	-O4,s -sdatathreshold 2 -RTTI off -Iinclude	off	-	whole file
-0x00194380	0x001e3ff0	alchemy-scene-graph_SceneGraphLibrary	b52	-O4,s -sdatathreshold 2 -RTTI off -Iinclude	off	-	whole file
-0x001e3ff0	0x001e74b0	alchemy-data-pump_DataPumpLibrary	b52	-O4,s -sdatathreshold 2 -RTTI off -Iinclude	off	-	whole file
-0x001e74b0	0x001eef70	engine_p2core	b52	-O4,s -sdatathreshold 2 -RTTI off -Iinclude	off	-	whole file
-0x001eef70	0x001f0d10	engine_dmaChannel	b52	-O4,s -sdatathreshold 2 -RTTI off -Iinclude	off	-	whole file
-0x001f0d10	0x001f6f50	engine_p2draw	b52	-O4,s -sdatathreshold 2 -RTTI off -Iinclude	off	-	whole file
-0x001f6f50	0x001f8784	engine_p2gs	b52	-O4,s -sdatathreshold 2 -RTTI off -Iinclude	off	-	whole file
-0x001f8790	0x001fc310	engine_psx2Lighting	b52	-O4,s -sdatathreshold 2 -RTTI off -Iinclude	off	-	whole file
-0x001fc310	0x001fd5a0	engine_p2multipass	b52	-O4,s -sdatathreshold 2 -RTTI off -Iinclude	off	-	whole file
-0x001fd5a0	0x001ff3b0	engine_psx2ParticleFormat	b52	-O4,s -sdatathreshold 2 -RTTI off -Iinclude	off	-	whole file
-0x001ff3b0	0x00203580	engine_renderState	b52	-O4,s -sdatathreshold 2 -RTTI off -Iinclude	off	-	whole file
-0x00203580	0x002040fc	unlabeled_203580	b52	-O4,s -sdatathreshold 2 -RTTI off -Iinclude	off	-	unlabeled run, no boundary evidence: cut where the retail exception evidence or the pins change; exceptions off: none of 16 non-leaf functions has a retail index record; combat -O3 -Iinclude reproduces 8/8 members
-0x00204100	0x00204e30	engine_p2pool	b52	-O4,s -sdatathreshold 2 -RTTI off -Iinclude	off	-	whole file
-0x00204e30	0x00206570	engine_p2stateCache	b52	-O4,s -sdatathreshold 2 -RTTI off -Iinclude	off	-	whole file
-0x00206570	0x00208170	engine_p2swap	b52	-O4,s -sdatathreshold 2 -RTTI off -Iinclude	off	-	whole file
-0x00208170	0x0020cc10	engine_p2texture	b52	-O4,s -sdatathreshold 2 -RTTI off -Iinclude	off	-	whole file
-0x0020cc10	0x0020d790	engine_p2timer	b52	-O4,s -sdatathreshold 2 -RTTI off -Iinclude	off	-	whole file
-0x0020d790	0x0020d900	engine_p2vu1Symbols	b52	-O4,s -sdatathreshold 2 -RTTI off -Iinclude	off	-	whole file
-0x0020d900	0x0020df00	engine_p2viewport	b52	-O4,s -sdatathreshold 2 -RTTI off -Iinclude	off	-	whole file
-0x0020df00	0x0020e080	engine_p2vu0	b52	-O4,s -sdatathreshold 2 -RTTI off -Iinclude	off	-	whole file
-0x0020e080	0x0020e400	engine_p2vif	b52	-O4,s -sdatathreshold 2 -RTTI off -Iinclude	off	-	whole file
-0x0020e400	0x0020e750	engine_p2watchdog	b52	-O4,s -sdatathreshold 2 -RTTI off -Iinclude	off	-	whole file
+0x00130000	0x00142f10	alchemy-attrs_AttrsLibrary	b52	-O4,s -sdatathreshold 2 -RTTI off -inline level=8,bottomup -Iinclude	off	-	whole file
+0x00142f10	0x00145ce0	alchemy-audio_AudioLibrary	b52	-O4,s -sdatathreshold 2 -RTTI off -inline level=8,bottomup -Iinclude	off	-	whole file
+0x00145ce0	0x001493e0	alchemy-window-input_WindowInputLibrary	b52	-O4,s -sdatathreshold 2 -RTTI off -inline level=8,bottomup -Iinclude	off	-	whole file
+0x001493e0	0x001869e0	alchemy-gfx_GfxLibrary	b52	-O4,s -sdatathreshold 2 -RTTI off -inline level=8,bottomup -Iinclude	off	-	whole file
+0x001869e0	0x00194380	alchemy-maths_MathsLibrary	b52	-O4,s -sdatathreshold 2 -RTTI off -inline level=8,bottomup -Iinclude	off	-	whole file
+0x00194380	0x001e3ff0	alchemy-scene-graph_SceneGraphLibrary	b52	-O4,s -sdatathreshold 2 -RTTI off -inline level=8,bottomup -Iinclude	off	-	whole file
+0x001e3ff0	0x001e74b0	alchemy-data-pump_DataPumpLibrary	b52	-O4,s -sdatathreshold 2 -RTTI off -inline level=8,bottomup -Iinclude	off	-	whole file
+0x001e74b0	0x001eef70	engine_p2core	b52	-O4,s -sdatathreshold 2 -RTTI off -inline level=8,bottomup -Iinclude	off	-	whole file
+0x001eef70	0x001f0d10	engine_dmaChannel	b52	-O4,s -sdatathreshold 2 -RTTI off -inline level=8,bottomup -Iinclude	off	-	whole file
+0x001f0d10	0x001f6f50	engine_p2draw	b52	-O4,s -sdatathreshold 2 -RTTI off -inline level=8,bottomup -Iinclude	off	-	whole file
+0x001f6f50	0x001f8784	engine_p2gs	b52	-O4,s -sdatathreshold 2 -RTTI off -inline level=8,bottomup -Iinclude	off	-	whole file
+0x001f8790	0x001fc310	engine_psx2Lighting	b52	-O4,s -sdatathreshold 2 -RTTI off -inline level=8,bottomup -Iinclude	off	-	whole file
+0x001fc310	0x001fd5a0	engine_p2multipass	b52	-O4,s -sdatathreshold 2 -RTTI off -inline level=8,bottomup -Iinclude	off	-	whole file
+0x001fd5a0	0x001ff3b0	engine_psx2ParticleFormat	b52	-O4,s -sdatathreshold 2 -RTTI off -inline level=8,bottomup -Iinclude	off	-	whole file
+0x001ff3b0	0x00203580	engine_renderState	b52	-O4,s -sdatathreshold 2 -RTTI off -inline level=8,bottomup -Iinclude	off	-	whole file
+0x00203580	0x002040fc	unlabeled_203580	b52	-O4,s -sdatathreshold 2 -RTTI off -inline level=8,bottomup -Iinclude	off	-	unlabeled run, no boundary evidence: cut where the retail exception evidence or the pins change; exceptions off: none of 16 non-leaf functions has a retail index record; combat -O3 -Iinclude reproduces 8/8 members
+0x00204100	0x00204e30	engine_p2pool	b52	-O4,s -sdatathreshold 2 -RTTI off -inline level=8,bottomup -Iinclude	off	-	whole file
+0x00204e30	0x00206570	engine_p2stateCache	b52	-O4,s -sdatathreshold 2 -RTTI off -inline level=8,bottomup -Iinclude	off	-	whole file
+0x00206570	0x00208170	engine_p2swap	b52	-O4,s -sdatathreshold 2 -RTTI off -inline level=8,bottomup -Iinclude	off	-	whole file
+0x00208170	0x0020cc10	engine_p2texture	b52	-O4,s -sdatathreshold 2 -RTTI off -inline level=8,bottomup -Iinclude	off	-	whole file
+0x0020cc10	0x0020d790	engine_p2timer	b52	-O4,s -sdatathreshold 2 -RTTI off -inline level=8,bottomup -Iinclude	off	-	whole file
+0x0020d790	0x0020d900	engine_p2vu1Symbols	b52	-O4,s -sdatathreshold 2 -RTTI off -inline level=8,bottomup -Iinclude	off	-	whole file
+0x0020d900	0x0020df00	engine_p2viewport	b52	-O4,s -sdatathreshold 2 -RTTI off -inline level=8,bottomup -Iinclude	off	-	whole file
+0x0020df00	0x0020e080	engine_p2vu0	b52	-O4,s -sdatathreshold 2 -RTTI off -inline level=8,bottomup -Iinclude	off	-	whole file
+0x0020e080	0x0020e400	engine_p2vif	b52	-O4,s -sdatathreshold 2 -RTTI off -inline level=8,bottomup -Iinclude	off	-	whole file
+0x0020e400	0x0020e750	engine_p2watchdog	b52	-O4,s -sdatathreshold 2 -RTTI off -inline level=8,bottomup -Iinclude	off	-	whole file
 0x0020e750	0x0020f068	libpng_png	combat	-O4,p -sdatathreshold 2 -lang c -I- -Isrc/third_party/libc -Isrc/third_party/zlib -Isrc/third_party/libpng -prefix libpng_prefix.h	off	-	whole file
 0x0020f070	0x0020f340	libpng_pngerror	combat	-O4,p -sdatathreshold 2 -lang c -I- -Isrc/third_party/libc -Isrc/third_party/zlib -Isrc/third_party/libpng -prefix libpng_prefix.h	off	-	whole file
 0x0020f340	0x0020f608	libpng_pngget	combat	-O4,p -sdatathreshold 2 -lang c -I- -Isrc/third_party/libc -Isrc/third_party/zlib -Isrc/third_party/libpng -prefix libpng_prefix.h	off	-	whole file
@@ -144,17 +144,17 @@
 0x002250e0	0x002252a0	zlib_infutil	combat	-O4,p -sdatathreshold 2 -lang c -I- -Isrc/third_party/libc -Isrc/third_party/zlib	off	-	whole file
 0x002252a0	0x002252d8	zlib_zutil	combat	-O4,p -sdatathreshold 2 -lang c -I- -Isrc/third_party/libc -Isrc/third_party/zlib	off	-	whole file
 0x002252d8	0x00225764	sony_libmtap	ee-gcc-2.9	-O2 -G0 -ffunction-sections -Iinclude	off	-	whole file
-0x00225770	0x0022e4b8	alchemy-base_BaseLibrary	b52	-O4,s -sdatathreshold 2 -RTTI off -Iinclude	off	-	whole file
+0x00225770	0x0022e4b8	alchemy-base_BaseLibrary	b52	-O4,s -sdatathreshold 2 -RTTI off -inline level=8,bottomup -Iinclude	off	-	whole file
 0x0022e4b8	0x0022f75c	libgcc_22e4b8	ee-gcc	-O2 -G0 -g -Iinclude	off	-	libgcc region (regions.tsv); `sd` prologues (Sony EE GCC); exceptions off: none of 1 non-leaf functions has a retail index record; no compiled C member yet; `sd` prologues: Sony EE GCC
 0x0022f760	0x00230c78	libgcc_22f760	ee-gcc	-O2 -G0 -g -Iinclude	off	-	libgcc region (regions.tsv); `sd` prologues (Sony EE GCC); exceptions off: none of 13 non-leaf functions has a retail index record; 18 asm bodies not scored; ee-gcc -O2 -G0 -Iinclude reproduces 1/1 members
 0x00230c78	0x00230f50	libgcc_230c78	ee-gcc	-O2 -G0 -g -Iinclude	off	-	unlabeled run, no boundary evidence: cut where the retail exception evidence or the pins change; exceptions off: none of 8 non-leaf functions has a retail index record; 1 asm body not scored; default -O3 -Iinclude reproduces 3/3 members
-0x00230f50	0x00238d40	engine_InsightLibrary	b52	-O4,s -sdatathreshold 2 -RTTI off -Iinclude	off	-	whole file
-0x00238d40	0x0023938c	alchemy-scene-search_SceneSearchLibrary	b52	-O4,s -sdatathreshold 2 -RTTI off -Iinclude	off	-	whole file
-0x00239390	0x0023c440	alchemy-collision_CollisionLibrary	b52	-O4,s -sdatathreshold 2 -RTTI off -Iinclude	off	-	whole file
-0x0023c440	0x0023c858	alchemy-lua_LuaRegistration	b52	-O4,s -sdatathreshold 2 -RTTI off -Iinclude	off	-	whole file
-0x0023c860	0x002442dc	alchemy-lua_LuaBinding	b52	-O4,s -sdatathreshold 2 -RTTI off -Iinclude	off	-	whole file
-0x002442e0	0x0024683c	alchemy-lua_LuaState	b52	-O4,s -sdatathreshold 2 -RTTI off -Iinclude	off	-	whole file
-0x00246840	0x00246d28	alchemy-lua_LuaRuntime	b52	-O4,s -sdatathreshold 2 -RTTI off -Iinclude	off	-	whole file
+0x00230f50	0x00238d40	engine_InsightLibrary	b52	-O4,s -sdatathreshold 2 -RTTI off -inline level=8,bottomup -Iinclude	off	-	whole file
+0x00238d40	0x0023938c	alchemy-scene-search_SceneSearchLibrary	b52	-O4,s -sdatathreshold 2 -RTTI off -inline level=8,bottomup -Iinclude	off	-	whole file
+0x00239390	0x0023c440	alchemy-collision_CollisionLibrary	b52	-O4,s -sdatathreshold 2 -RTTI off -inline level=8,bottomup -Iinclude	off	-	whole file
+0x0023c440	0x0023c858	alchemy-lua_LuaRegistration	b52	-O4,s -sdatathreshold 2 -RTTI off -inline level=8,bottomup -Iinclude	off	-	whole file
+0x0023c860	0x002442dc	alchemy-lua_LuaBinding	b52	-O4,s -sdatathreshold 2 -RTTI off -inline level=8,bottomup -Iinclude	off	-	whole file
+0x002442e0	0x0024683c	alchemy-lua_LuaState	b52	-O4,s -sdatathreshold 2 -RTTI off -inline level=8,bottomup -Iinclude	off	-	whole file
+0x00246840	0x00246d28	alchemy-lua_LuaRuntime	b52	-O4,s -sdatathreshold 2 -RTTI off -inline level=8,bottomup -Iinclude	off	-	whole file
 0x00246d30	0x00247ee8	lua_lapi	b52	-O4,s -sdatathreshold 2 -str readonly -lang c++ -Dlong=int -I- -Isrc/third_party/libc -Isrc/third_party/lua	off	-	whole file
 0x00247ef0	0x00248714	lua_lauxlib	b52	-O4,s -sdatathreshold 2 -str readonly -lang c++ -I- -Isrc/third_party/libc -Isrc/third_party/lua -prefix dw4_lualib_config.h	off	-	whole file
 0x00248720	0x0024a048	lua_lbaselib	b52	-O4,s -sdatathreshold 2 -str readonly -lang c++ -I- -Isrc/third_party/libc -Isrc/third_party/lua -prefix dw4_lualib_config.h	off	-	whole file
@@ -282,13 +282,13 @@
 0x002b3788	0x002b4210	cri_sfx	ee-gcc	-O2 -G0 -ffunction-sections -Iinclude	off	-	whole file
 0x002b4210	0x002b50e4	cri_sfxz	ee-gcc	-O2 -G0 -ffunction-sections -Iinclude	off	-	whole file
 0x002b50e8	0x002b5d4c	cri_sud	ee-gcc	-O2 -G0 -ffunction-sections -Iinclude	off	-	whole file
-0x002b5d50	0x00331f30	alchemy-core_CoreLibrary	b52	-O4,s -sdatathreshold 2 -RTTI off -Iinclude	off	-	whole file
+0x002b5d50	0x00331f30	alchemy-core_CoreLibrary	b52	-O4,s -sdatathreshold 2 -RTTI off -inline level=8,bottomup -Iinclude	off	-	whole file
 0x00331f30	0x00331fb0	movie_igAdxAudio	b52	-O4,p -sdatathreshold 2 -Iinclude	on	-	whole file
 0x00331fb0	0x00333800	movie_igAdx	b52	-O4,p -sdatathreshold 2 -Iinclude	on	-	whole file
 0x00333800	0x003343a0	movie_igAdxFile	b52	-O4,p -sdatathreshold 2 -Iinclude	on	-	whole file
 0x003343a0	0x00337410	movie_AdxMovieLibrary	b52	-O4,p -sdatathreshold 2 -Iinclude	on	-	whole file
-0x00337410	0x00338e50	movie_igCriMovieCodec	b52	-O4,p -sdatathreshold 2 -Iinclude	on	-	whole file
-0x00338e50	0x00338f70	movie_igMovieCodec	b52	-O4,p -sdatathreshold 2 -Iinclude	on	-	whole file
+0x00337410	0x00338ed0	movie_igCriMovieCodec	b52	-O4,p -sdatathreshold 2 -Iinclude	on	-	whole file
+0x00338ed0	0x00338f70	movie_igMovieCodec	b52	-O4,p -sdatathreshold 2 -Iinclude	on	-	whole file
 0x00338f70	0x0033be60	movie_igMovieManager	b52	-O4,p -sdatathreshold 2 -Iinclude	on	-	whole file
 0x0033be60	0x0033bf50	movie_igMoviePlugin	b52	-O4,p -sdatathreshold 2 -Iinclude	on	-	whole file
 0x0033bf50	0x00370780	bec_BecLibrary	b52	-O4,p -sdatathreshold 2 -inline level=8,bottomup -Iinclude	on	-	whole file
@@ -373,23 +373,17 @@
 0x00448fd0	0x0044ac60	ndmw_beNDMWLogo	b52	-O4,p -sdatathreshold 2 -inline level=8,bottomup -Iinclude	on	-	whole file
 0x0044ac60	0x0044b260	ndmw_beNDMWMdlMapBase	b52	-O4,p -sdatathreshold 2 -inline level=8,bottomup -Iinclude	on	-	whole file
 0x0044b260	0x0044b860	ndmw_beNDMWMdlMapCursor	b52	-O4,p -sdatathreshold 2 -inline level=8,bottomup -Iinclude	on	-	whole file
-0x0044b860	0x004583f0	alchemy-gui_GuiLibrary	b52	-O4,s -sdatathreshold 2 -RTTI off -Iinclude	off	-	whole file
-0x004583f0	0x004585f0	unlabeled_4583f0	b52	-O4,p -sdatathreshold 2 -Iinclude	on	-	unlabeled run, no boundary evidence: cut where the retail exception evidence or the pins change; exceptions on: 4/4 functions have retail index records; combat -O3,p -Iinclude reproduces 4/4 members
-0x004585f0	0x00458680	alchemy-viewer_4585f0	b52	-O4,p -sdatathreshold 2 -Iinclude	on	-	unlabeled run, no boundary evidence: cut where the retail exception evidence or the pins change; exceptions on: 1/6 functions have retail index records; default -O3 -Iinclude reproduces 6/6 members
-0x00458680	0x0045e9a0	viewer_ViewerRegistration	b52	-O4,p -sdatathreshold 2 -Iinclude	off	-	whole file
-0x0045e9a0	0x0045e9f0	viewer_igLogoRenderer	b52	-O4,p -sdatathreshold 2 -Iinclude	off	-	whole file
-0x0045e9f0	0x0045ea40	viewer_igNormalsRenderer	b52	-O4,p -sdatathreshold 2 -Iinclude	off	-	whole file
-0x0045ea40	0x0045ec90	viewer_igViewerDataPumpManager	b52	-O4,p -sdatathreshold 2 -Iinclude	off	-	whole file
-0x0045ec90	0x0045f200	viewer_igViewerGuiFactory	b52	-O4,p -sdatathreshold 2 -Iinclude	off	-	whole file
-0x0045f200	0x00460f90	viewer_igViewerRenderer	b52	-O4,p -sdatathreshold 2 -Iinclude	off	-	whole file
-0x00460f90	0x00463560	viewer_igViewerSceneInfoManager	b52	-O4,p -sdatathreshold 2 -Iinclude	off	-	whole file
-0x00463560	0x00464f90	viewer_igViewManager	b52	-O4,p -sdatathreshold 2 -Iinclude	off	-	whole file
-0x00464f90	0x00466d00	viewer_beCameraMode	b52	-O4,p -sdatathreshold 2 -Iinclude	off	-	whole file
-0x00466d00	0x004670d0	viewer_igActorManager	b52	-O4,p -sdatathreshold 2 -Iinclude	off	-	whole file
-0x004670d0	0x00467120	viewer_igBoundingBoxRenderer	b52	-O4,p -sdatathreshold 2 -Iinclude	off	-	whole file
-0x0051fd00	0x005208f0	static-initialisers_51fd00	b52	-O4,s -sdatathreshold 2 -RTTI off -Iinclude	off	-	unlabeled run, no boundary evidence: cut where the retail exception evidence or the pins change; exceptions off: none of 3 non-leaf functions has a retail index record; only asm bodies compiled so far (no profile shapes them); default profile
-0x005208f0	0x00520ce4	unlabeled_5208f0	b52	-O4,s -sdatathreshold 2 -RTTI off -Iinclude	off	-	unlabeled run, no boundary evidence: cut where the retail exception evidence or the pins change; exceptions off: none of 1 non-leaf functions has a retail index record; combat -O3 -Iinclude reproduces 1/1 members
-0x00520cf0	0x005215f4	unlabeled_520cf0	b52	-O4,s -sdatathreshold 2 -RTTI off -Iinclude	off	-	unlabeled run, no boundary evidence: cut where the retail exception evidence or the pins change; exceptions off: none of 3 non-leaf functions has a retail index record; default -O3 -Iinclude reproduces 4/4 members
-0x00521600	0x005216a0	unlabeled_521600	b52	-O4,p -sdatathreshold 2 -Iinclude	on	-	unlabeled run, no boundary evidence: cut where the retail exception evidence or the pins change; exceptions on: 1/1 functions have retail index records; combat -O3,p -Iinclude reproduces 1/1 members
-0x005216a0	0x0052178c	unlabeled_5216a0	b52	-O4,s -sdatathreshold 2 -RTTI off -Iinclude	on	-	unlabeled run, no boundary evidence: cut where the retail exception evidence or the pins change; exceptions on: 3/4 functions have retail index records; default -O3 -Iinclude reproduces 3/3 members
-0x00521790	0x00522438	unlabeled_521790	b52	-O4,s -sdatathreshold 2 -RTTI off -Iinclude	off	-	unlabeled run, no boundary evidence: cut where the retail exception evidence or the pins change; exceptions off: none of 1 non-leaf functions has a retail index record; no compiled member yet; default profile
+0x0044b860	0x004583f0	alchemy-gui_GuiLibrary	b52	-O4,s -sdatathreshold 2 -RTTI off -inline level=8,bottomup -Iinclude	off	-	whole file
+0x004583f0	0x004585f0	unlabeled_4583f0	b52	-O4,p -sdatathreshold 2 -inline level=8,bottomup -Iinclude	on	-	unlabeled run, no boundary evidence: cut where the retail exception evidence or the pins change; exceptions on: 4/4 functions have retail index records; combat -O3,p -Iinclude reproduces 4/4 members
+0x004585f0	0x00458680	alchemy-viewer_4585f0	b52	-O4,p -sdatathreshold 2 -inline level=8,bottomup -Iinclude	on	-	unlabeled run, no boundary evidence: cut where the retail exception evidence or the pins change; exceptions on: 1/6 functions have retail index records; default -O3 -Iinclude reproduces 6/6 members
+0x00458680	0x0045e9a0	viewer_ViewerRegistration	b52	-O4,p -sdatathreshold 2 -inline level=8,bottomup -Iinclude	off	-	whole file
+0x0045e9a0	0x0045e9f0	viewer_igLogoRenderer	b52	-O4,p -sdatathreshold 2 -inline level=8,bottomup -Iinclude	off	-	whole file
+0x0045e9f0	0x0045ea40	viewer_igNormalsRenderer	b52	-O4,p -sdatathreshold 2 -inline level=8,bottomup -Iinclude	off	-	whole file
+0x0045ea40	0x0045ec90	viewer_igViewerDataPumpManager	b52	-O4,p -sdatathreshold 2 -inline level=8,bottomup -Iinclude	off	-	whole file
+0x0045ec90	0x0045f200	viewer_igViewerGuiFactory	b52	-O4,p -sdatathreshold 2 -inline level=8,bottomup -Iinclude	off	-	whole file
+0x0045f200	0x00460f90	viewer_igViewerRenderer	b52	-O4,p -sdatathreshold 2 -inline level=8,bottomup -Iinclude	off	-	whole file
+0x00460f90	0x00463560	viewer_igViewerSceneInfoManager	b52	-O4,p -sdatathreshold 2 -inline level=8,bottomup -Iinclude	off	-	whole file
+0x00463560	0x00464f90	viewer_igViewManager	b52	-O4,p -sdatathreshold 2 -inline level=8,bottomup -Iinclude	off	-	whole file
+0x00464f90	0x00466d00	viewer_beCameraMode	b52	-O4,p -sdatathreshold 2 -inline level=8,bottomup -Iinclude	off	-	whole file
+0x00466d00	0x004670d0	viewer_igActorManager	b52	-O4,p -sdatathreshold 2 -inline level=8,bottomup -Iinclude	off	-	whole file
+0x004670d0	0x00467120	viewer_igBoundingBoxRenderer	b52	-O4,p -sdatathreshold 2 -inline level=8,bottomup -Iinclude	off	-	whole file

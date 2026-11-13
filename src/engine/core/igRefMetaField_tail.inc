@@ -62,7 +62,7 @@ int FUN_00305800(RecoveryString_305800 *arg0, void *arg1, int *arg2, int arg3, i
     if (arg6 == -1) arg6 = strlen(arg5) + 5;
     sprintf(spA0, DAT_004fb0c8, arg6);
     a = ((Alloc_305800 *)igObject_GetAllocator((int)arg1));
-    a = g_useOwnerAllocator ? a : ((Alloc_305800 *)Memory_GetAllocatorBySelector(g_temporaryAllocatorSelector[0]));
+    a = g_useOwnerAllocator ? a : ((Alloc_305800 *)Memory_GetAllocatorBySelector(g_memoryContextTemporary));
     buf = a->alloc(arg3 * (strlen(spA0) + 0x80));
     w = buf;
     for (i = 0; i < arg3; i++) {
@@ -102,7 +102,7 @@ block12:
     }
     RecoveryString_305800 sp1CC(pi);
     a = ((Alloc_305800 *)igObject_GetAllocator((int)arg1));
-    a = g_useOwnerAllocator ? a : ((Alloc_305800 *)Memory_GetAllocatorBySelector(g_temporaryAllocatorSelector[0]));
+    a = g_useOwnerAllocator ? a : ((Alloc_305800 *)Memory_GetAllocatorBySelector(g_memoryContextTemporary));
     a->release(buf);
     int *src = sp1CC.p;
     arg0->p = src;

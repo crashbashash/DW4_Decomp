@@ -31,7 +31,7 @@ void *Gap__Core__igMetaObject__vfunc_21(int arg0, int arg1) {
 
 igMetaObject *FUN_002be610(void) {
     if (g_igMetaObject_metaObject[0] == 0) {
-        g_igMetaObject_metaObject[0] = (igMetaObject *)igMetaObject_Create(((int)Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0])));
+        g_igMetaObject_metaObject[0] = (igMetaObject *)igMetaObject_Create(((int)Memory_GetAllocatorBySelector(g_memoryContextMetaData)));
     }
     return g_igMetaObject_metaObject[0];
 }

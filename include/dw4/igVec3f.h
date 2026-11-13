@@ -19,6 +19,13 @@ struct igVec3f {
         y = other.y;
         z = other.z;
     }
+
+    float dot(const float *o) const { return o[0] * x + o[1] * y + o[2] * z; }
+    void set(float x_, float y_, float z_) {
+        x = x_;
+        y = y_;
+        z = z_;
+    }
 };
 
 #endif

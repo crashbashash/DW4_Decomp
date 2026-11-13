@@ -208,7 +208,7 @@ int *FUN_00151080(int *p)
 int FUN_00151090(int a) { return a; }
 
 int FUN_001510a0(int arg0) {
-    igMatrix44f_SetIdentity();
+    igMatrix44f_SetIdentity((float *)arg0);
     return arg0;
 }
 

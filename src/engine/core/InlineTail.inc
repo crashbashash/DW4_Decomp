@@ -67,7 +67,7 @@ int Gap__Core__igStackMemoryPool__vfunc_29(igStackMemoryPool *self) {
 }
 
 void Gap__Core__igStackMemoryPool__vfunc_41(int *status_out) {
-    *status_out = g_allocatorFailureStatus.v;
+    *status_out = g_resultFailure.v;
 }
 
 int Gap__Core__igStackMemoryPool__vfunc_83(void) {
@@ -410,7 +410,7 @@ void Gap__Core__igMallocMemoryPool__vfunc_32(igMallocMemoryPool *self) {
 }
 
 void Gap__Core__igMallocMemoryPool__vfunc_24(int *statusOut) {
-    *statusOut = g_allocatorFailureStatus.v;
+    *statusOut = g_resultFailure.v;
 }
 
 int Gap__Core__igMallocMemoryPool__vfunc_25(void) {
@@ -995,23 +995,5 @@ void Gap__Core__igDependencyList__vfunc_18(igDependencyList *self) {
     if (count < self->_capacity) {
         List_Reserve((L_2d6680 *)self, count, 8);
     }
-}
-
-struct R_331eb0 **FUN_00331eb0(struct R_331eb0 **arg0, short arg1) {
-    struct R_331eb0 *temp_a0;
-
-    if (arg0 != 0) {
-        temp_a0 = *arg0;
-        if (temp_a0 != 0) {
-            temp_a0->rc = temp_a0->rc - 1;
-            if ((temp_a0->rc & 0x7FFFFF) == 0) {
-                igObject_Destroy(temp_a0);
-            }
-        }
-        if (arg1 > 0) {
-            __dl__FPv(arg0);
-        }
-    }
-    return arg0;
 }
 

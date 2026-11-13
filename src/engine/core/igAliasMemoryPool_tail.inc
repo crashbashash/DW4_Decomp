@@ -58,7 +58,7 @@ int Gap__Core__igAliasMemoryPool__vfunc_26(void) {
 
 /* Slot 24, output the allocator failure-status word. */
 void Gap__Core__igAliasMemoryPool__vfunc_24(int *outStatus) {
-    *outStatus = g_allocatorFailureStatus.v;
+    *outStatus = g_resultFailure.v;
 }
 
 /* Slot 25, fixed result 0. */
@@ -97,19 +97,19 @@ LockStatus Gap__Core__igAliasMemoryPool__vfunc_34(igAliasMemoryPool *pool, int e
         }
     } else if ((enable & 0xFF) == 1) {
         if (pool->_allocationLock != 0) {
-            return g_statusSucceeded.v;
+            return g_resultSuccess.v;
         }
         igSmartPointer<Lock> created((Lock *)FUN_002ba650((int)(((void *)igObject_GetAllocator((int)pool)))));
         created.get()->open();
         setLock(pool, created.get());
     }
-    return g_statusSucceeded.v;
+    return g_resultSuccess.v;
 }
 
 /* IgAliasMemoryPool vtable slot 35: status leaf. Ignores the pool and writes the engine's failure-
  * status word (set to 1 by the engine init) through the output-first argument. */
 void Gap__Core__igAliasMemoryPool__vfunc_35(int *statusOut) {
-    *statusOut = g_allocatorFailureStatus.v;
+    *statusOut = g_resultFailure.v;
 }
 
 int Gap__Core__igAliasMemoryPool__vfunc_36(void) {
@@ -120,7 +120,7 @@ int Gap__Core__igAliasMemoryPool__vfunc_36(void) {
  * setters (vfunc_37 alignment, vfunc_39 element size) share the shape. */
 void Gap__Core__igAliasMemoryPool__vfunc_41(int *status, igAliasMemoryPool *self, long long maxSize) {
     self->_maxSize = maxSize;
-    *status = g_statusSucceeded.v;
+    *status = g_resultSuccess.v;
 }
 
 /* Vtable slot 42: the pool's capacity in bytes (_maxSize). */
@@ -131,7 +131,7 @@ long long Gap__Core__igAliasMemoryPool__vfunc_42(igAliasMemoryPool *self) {
 /* Set the pool's alignment (`_alignment`) and report success through the status word. */
 void Gap__Core__igAliasMemoryPool__vfunc_37(int *status, igAliasMemoryPool *self, short alignment) {
     self->_alignment = alignment;
-    *status = g_statusSucceeded.v;
+    *status = g_resultSuccess.v;
 }
 
 /* IgAliasMemoryPool slot 38, returns the reflected _alignment (+176, unsigned short). */
@@ -141,10 +141,10 @@ unsigned short Gap__Core__igAliasMemoryPool__vfunc_38(igAliasMemoryPool *self) {
 
 /* IgAliasMemoryPool setter for `_elementSize` (+172). Stores the new element size and reports
  * success through the out cell (the cell receives the shared success status word, see
- * g_statusSucceeded). */
+ * g_resultSuccess). */
 void Gap__Core__igAliasMemoryPool__vfunc_39(int *status_out, igAliasMemoryPool *self, int element_size) {
     self->_elementSize = element_size;
-    *status_out = g_statusSucceeded.v;
+    *status_out = g_resultSuccess.v;
 }
 
 /* IgAliasMemoryPool slot 40, returns the reflected _elementSize (+172). */
@@ -155,7 +155,7 @@ int Gap__Core__igAliasMemoryPool__vfunc_40(igAliasMemoryPool *self) {
 /* Output-first status wrapper. The status word is returned through the hidden output pointer (a0).
  * The shared helper also reads a1 (the pool) and a2 (a request descriptor) from its asm, and this
  * wrapper passes both through untouched, which is why only the local cell is named at the call.
- * The helper leaves the success word (g_statusSucceeded) in the cell. */
+ * The helper leaves the success word (g_resultSuccess) in the cell. */
 void Gap__Core__igAliasMemoryPool__vfunc_45(int *outStatus, int extra1, int extra2) {
     int status;
 
@@ -288,7 +288,7 @@ R62 Gap__Core__igAliasMemoryPool__vfunc_62(igAliasMemoryPool *arg1) {
     if (o != 0) {
         return o->vX();
     }
-    return R62(g_allocatorFailureStatus.v);
+    return R62(g_resultFailure.v);
 }
 
 R63 Gap__Core__igAliasMemoryPool__vfunc_63(igAliasMemoryPool *arg1) {
@@ -296,7 +296,7 @@ R63 Gap__Core__igAliasMemoryPool__vfunc_63(igAliasMemoryPool *arg1) {
     if (p != 0) {
         return p->vX();
     }
-    return R63(g_allocatorFailureStatus.v);
+    return R63(g_resultFailure.v);
 }
 
 void Gap__Core__igAliasMemoryPool__vfunc_64(igAliasMemoryPool *arg0) {
@@ -537,8 +537,10 @@ void FUN_002d16a0(int arg0) {
     int var_v0;
 
     if (DAT_00586dd8[0]++ == 0) {
-        g_statusSucceeded.v = 0;
-        g_allocatorFailureStatus.v = 1;
+        /* The first set-up writes the two status constants again, with the values the static initialiser
+         * gives them. */
+        const_cast<igResult_2e3a10 &>(g_resultSuccess).v = 0;
+        const_cast<igResult_2e3a10 &>(g_resultFailure).v = 1;
         FUN_0032d1f0();
         var_v0 = thunk_malloc(0x3A0);
         if (var_v0 != 0) {

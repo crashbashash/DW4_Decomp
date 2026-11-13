@@ -46,7 +46,7 @@ void FUN_002f0760(int arg0, int extra1) {
 }
 
 void FUN_002f0860(int *arg0) {
-    *arg0 = g_allocatorFailureStatus.v;
+    *arg0 = g_resultFailure.v;
 }
 
 int FUN_002f0870(void) {
@@ -61,6 +61,6 @@ void FUN_002f0880(int *arg0, void **arg1, void *arg2) {
     if (temp_v1 != 0) {
         sp2C = ((DW4VCSR_164_1 *)(arg1))->vX((long long)temp_v1);
     }
-    *arg0 = g_statusSucceeded.v;
+    *arg0 = g_resultSuccess.v;
 }
 

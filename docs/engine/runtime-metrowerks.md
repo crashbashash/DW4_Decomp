@@ -22,6 +22,12 @@ The exception types are in `include/dw4/runtime/exception.h`, the C++ library cl
 | `src/runtime/ExceptionHandlerTS.cpp` | `runtime_ExceptionHandlerTS` | `0x1024e0` up to `0x1029c0` | `__TransferControl` (an approved `asm` function), `__throw`, `__SkipFrameInfo`, `__GetExceptionIndexBounds`, `__SetupFrameInfo`, `__PopStackFrame`: the R5900 frame layout and the image's one exception index | the frame-format functions the generic file calls; the original is `ExceptionHandlerTS.cp` ([source approvals](source-approvals.md#metrowerks-runtime-asm-functions)); C++ with exceptions on, as `__SkipFrameInfo` and `__SetupFrameInfo` carry index records |
 | `src/runtime/__init_cpp.c` | `runtime___init_cpp` | `0x1029c0` up to `0x1029f8` | `__fini_cpp` (`__destroy_global_chain`) and `__init_cpp` (the static initializers `0x522440` up to `0x522480`, with the exception index bounds) | called through the thunks at `0x2d1640`/`0x2d1650` from `entry`, around `main`; Sony's libgraph starts at `0x1029f8` |
 
+`__call_static_initializers` calls each entry of the table from `__ctors_start__` (`0x522440`) up to `__ctors_end__`
+(`0x522480`) in turn. An entry is the `.ctor` word of a file that constructs global objects, pointing at that file's
+`__sinit_<file>`, which the linker put with every other file's after all `.text` (`0x51fd00` up to `0x522438`); both runs
+are in link order, and each initialiser and its entry compile from the file that owns them
+([static initialisers](emitted-functions.md#static-initialisers)).
+
 ## The exception handler
 
 `__throw` saves the thrower's callee-saved registers into a `ThrowContext` and calls `__ThrowHandler`. Each

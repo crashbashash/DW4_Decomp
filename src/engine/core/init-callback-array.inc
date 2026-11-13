@@ -13,11 +13,11 @@ void FUN_002d1a00(S_2d1a00 *self) {
         ((P_2d1a00 * *)DAT_00586fd0)[0] = (P_2d1a00 *)m;
     }
     ((P_2d1a00 * *)DAT_00586fd0)[0]->v40();
-    self->f24 = ((L_2d1a00 *)InternalObjectList_Create(((int)Memory_GetAllocatorBySelector(g_allocatorSelector[0]))));
+    self->f24 = ((L_2d1a00 *)InternalObjectList_Create(((int)Memory_GetAllocatorBySelector(g_memoryContextBootstrap))));
     l = self->f24;
     if (l->f8 == 0) n = 0; else n = Memory_GetBufferSize((void *)l->f8) >> 2;
     if ((int)n < 0x401) ObjectPointerList_EnsureIndex((List_2ea4f0 *)l, 0x400);
-    self->f36 = ((L_2d1a00 *)InternalObjectList_Create(((int)Memory_GetAllocatorBySelector(g_allocatorSelector[0]))));
+    self->f36 = ((L_2d1a00 *)InternalObjectList_Create(((int)Memory_GetAllocatorBySelector(g_memoryContextBootstrap))));
     b = ((int)Memory_AllocateDefaultBuffer((unsigned int)12));
     if (b != 0) b = ((int)igArray_Construct((CallbackArray *)b));
     self->f40 = b;

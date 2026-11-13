@@ -1,6 +1,6 @@
 igMetaObject *FUN_002be100(void) {
     if (g_igNamedObjectList_metaObject[0] == 0) {
-        g_igNamedObjectList_metaObject[0] = (igMetaObject *)igMetaObject_Create(((int)Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0])));
+        g_igNamedObjectList_metaObject[0] = (igMetaObject *)igMetaObject_Create(((int)Memory_GetAllocatorBySelector(g_memoryContextMetaData)));
     }
     return g_igNamedObjectList_metaObject[0];
 }

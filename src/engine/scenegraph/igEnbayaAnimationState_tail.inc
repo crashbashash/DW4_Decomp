@@ -1,7 +1,7 @@
 void FUN_001c0f00(int mode) {
     if ((mode & 0xFF) != GPR_00554b90) {
         int saved = 0;
-        List_1c0f00 *list = ((List_1c0f00 * *)DAT_00562540)[0];
+        List_1c0f00 *list = ((List_1c0f00 *)g_igAnimationStatePool_instance.p);
         if (list != 0) {
             saved = list->getCount();
             list->clear();
@@ -11,22 +11,13 @@ void FUN_001c0f00(int mode) {
             Meta *m2 = (Meta *)igAnimationState_GetMetaObject();
             m2->f60 = (void *)FUN_001c10e0;
             int a = Memory_GetAllocatorBySelector(DAT_00587038[0]);
-            Ref *p = ((Ref * *)DAT_00562718)[0];
-            if (p != 0) {
-                p->u.w = p->u.w - 1;
-                if (p->u.b.cnt == 0) igObject_Destroy((void *)p);
-            }
-            ((Ref * *)DAT_00562718)[0] = (Ref *)igEnbayaContextPool_Create(a);
+            g_igEnbayaContextPool_instance.release();
+            g_igEnbayaContextPool_instance.p = (igEnbayaContextPool *)igEnbayaContextPool_Create(a);
         } else {
             ((Meta *)((void *)igAnimationState_GetMetaObject()))->f60 = DAT_00562728[0];
-            Ref *p = ((Ref * *)DAT_00562718)[0];
-            if (p != 0) {
-                p->u.w = p->u.w - 1;
-                if (p->u.b.cnt == 0) igObject_Destroy((void *)p);
-            }
-            ((Ref * *)DAT_00562718)[0] = 0;
+            g_igEnbayaContextPool_instance.clear();
         }
-        if (((List_1c0f00 * *)DAT_00562540)[0] != 0) ObjectList_ResizeRetained(((List_1c0f00 * *)DAT_00562540)[0], saved);
+        if (g_igAnimationStatePool_instance.p != 0) ObjectList_ResizeRetained((List_1c0f00 *)g_igAnimationStatePool_instance.p, saved);
         GPR_00554b90 = mode;
     }
 }
@@ -67,7 +58,7 @@ void Gap__Sg__igEnbayaAnimationState__vfunc_23(igEnbayaAnimationState *arg0) {
         }
     }
     if (found != 0) {
-        arg0->_context = FUN_001c1560((T_1c1560 *)DAT_00562718[0], ((igAnimationTrackList *)((igAnimation *)arg0->_animation)->_trackList)->_count);
+        arg0->_context = FUN_001c1560((T_1c1560 *)g_igEnbayaContextPool_instance.p, ((igAnimationTrackList *)((igAnimation *)arg0->_animation)->_trackList)->_count);
         if (GPR_00554b94 == 0) {
             arg0->_fastCacheDecodingState = 0;
         }
@@ -80,7 +71,7 @@ void Gap__Sg__igEnbayaAnimationState__vfunc_24(void *arg0) {
 
     temp_a1 = *(int *)((char *)(arg0) + 160);
     if (temp_a1 != 0) {
-        FUN_001c16a0(DAT_00562718[0], temp_a1, *(int *)((char *)(*(int *)((char *)(*(int *)((char *)(arg0) + 8)) + 20)) + 8));
+        FUN_001c16a0(g_igEnbayaContextPool_instance.p, temp_a1, *(int *)((char *)(*(int *)((char *)(*(int *)((char *)(arg0) + 8)) + 20)) + 8));
     }
 }
 

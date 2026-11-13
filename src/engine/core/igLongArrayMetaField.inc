@@ -77,7 +77,7 @@ void FUN_002c1ed0(void) {
     T_2c1ed0 *p;
 
     if (g_igLongArrayMetaField_descriptor[0] == 0) {
-        g_igLongArrayMetaField_descriptor[0] = ((T_2c1ed0 *)igMetaObject_CreateInstance((CreateMeta *)g_igLongArrayMetaField_metaObject[0], (MemoryPool *)(((int)Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0])))));
+        g_igLongArrayMetaField_descriptor[0] = ((T_2c1ed0 *)igMetaObject_CreateInstance((CreateMeta *)g_igLongArrayMetaField_metaObject[0], (MemoryPool *)(((int)Memory_GetAllocatorBySelector(g_memoryContextMetaData)))));
         temp_s0 = g_igLongArrayMetaField_descriptor[0];
         if (temp_s0 != 0) {
             MetaRefList_AppendRetained((PointerList *)(((LST *)FUN_002fc250())), (RefHeader *)temp_s0);

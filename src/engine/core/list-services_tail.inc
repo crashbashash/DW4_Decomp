@@ -71,9 +71,9 @@ igResult_302000 ObjectList_RemoveFirstRetained(ObjectListView *self, ObjectListI
         if (o != 0) { o->_refCount = o->_refCount - 1; if (((unsigned long long)((long long)o->_refCount << 0x29) >> 0x29) == 0) { igObject_Destroy(o); } }
         List_RemoveWordAt((L_2d6cf0 *)self, k);
         self->data[self->count] = 0;
-        return (*(igResult_302000 *)&g_statusSucceeded);
+        return g_resultSuccess;
     }
-    return (*(igResult_302000 *)&g_allocatorFailureStatus);
+    return g_resultFailure;
 }
 
 int ObjectList_RemoveAllRetained(igTDataList<igObject *> *list, igObject *object, int start) {

@@ -76,7 +76,7 @@ void Gap__Core__igLocationTable__vfunc_24(int *arg0, void *arg1, int arg2)
       List_Resize(temp_a0, temp_a1, 4);
     }
   }
-  *arg0 = g_statusSucceeded.v;
+  *arg0 = g_resultSuccess.v;
 }
 
 void Gap__Core__igLocationTable__vfunc_25(int *arg0, S_2eb2b0 *arg1, int arg2, int *arg3, char *arg4, int arg5, int *arg6, char *arg7, int arg8, int *arg9) {
@@ -84,7 +84,7 @@ void Gap__Core__igLocationTable__vfunc_25(int *arg0, S_2eb2b0 *arg1, int arg2, i
     Tb *t;
     E_2eb2b0 *e;
     int r;
-    rc = g_allocatorFailureStatus.v;
+    rc = g_resultFailure.v;
     if (arg2 >= 0) {
         t = arg1->f16;
         if (arg2 * 5 < t->n) {
@@ -106,7 +106,7 @@ void Gap__Core__igLocationTable__vfunc_25(int *arg0, S_2eb2b0 *arg1, int arg2, i
                 }
             }
             *arg9 = e->f16;
-            rc = g_statusSucceeded.v;
+            rc = g_resultSuccess.v;
         }
     }
     *arg0 = rc;
@@ -134,7 +134,7 @@ void Gap__Core__igLocationTable__vfunc_27(int *arg0, LT *arg1, int arg2, char *a
 
     h = arg1->v120(arg2);
     d = arg1->f20;
-    res = g_allocatorFailureStatus.v;
+    res = g_resultFailure.v;
     n = d->count;
     idx = d->data;
     i = 0;
@@ -161,7 +161,7 @@ void Gap__Core__igLocationTable__vfunc_27(int *arg0, LT *arg1, int arg2, char *a
                 }
             }
             *arg_sp0 = e->f16;
-            res = g_statusSucceeded.v;
+            res = g_resultSuccess.v;
             break;
         }
         h++;

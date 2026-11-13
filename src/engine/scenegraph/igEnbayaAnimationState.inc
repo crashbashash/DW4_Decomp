@@ -56,19 +56,6 @@ int igEnbayaAnimationState_GetVTable(void) {
     return r;
 }
 
-ObjectRefWord *FUN_001a1fb0(ObjectRefWord *self,int delete_storage) {
-    if(self) {
-        ObjectRefTarget *object=self->value;
-        if(object) {
-            --object->references;
-            if(((unsigned long long)(long long)object->references & 0x7fffffULL)==0)
-                igObject_Destroy((void *)object);
-        }
-        if((short)delete_storage>0) __dl__FPv(self);
-    }
-    return self;
-}
-
 void FUN_001a2030(void)
 {
     igMetaObject_RunStaticInit(igEnbayaAnimationState_Register);

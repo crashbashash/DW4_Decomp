@@ -490,8 +490,8 @@ void igMetaObject_AssignTypeId(igMetaObject *meta){
 }
 
 void FUN_002fe810(int *out, PoolNameMeta *s, MemoryPool *a) {
-    if (s->buf == 0) { *out = g_allocatorFailureStatus.v; return; }
-    if (s->f26 != 0) { *out = g_allocatorFailureStatus.v; return; }
+    if (s->buf == 0) { *out = g_resultFailure.v; return; }
+    if (s->f26 != 0) { *out = g_resultFailure.v; return; }
     if (a == 0) a = ((MemoryPool *)Memory_GetDefaultAllocator());
     int *p; int *base = s->buf;
     p = base;
@@ -499,10 +499,10 @@ void FUN_002fe810(int *out, PoolNameMeta *s, MemoryPool *a) {
     while (*p != 0) p++;
     int n = (char *)p - (char *)base;
     int *nb = (int *)a->vX(n);
-    if (nb == 0) { *out = g_allocatorFailureStatus.v; return; }
+    if (nb == 0) { *out = g_resultFailure.v; return; }
     memcpy(nb, s->buf, n);
     s->buf = nb;
-    *out = g_statusSucceeded.v;
+    *out = g_resultSuccess.v;
 }
 
 int igMetaObject_GetPoolName(int *p)

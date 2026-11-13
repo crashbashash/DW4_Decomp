@@ -82,7 +82,7 @@ void FUN_002b7900(void) {
     struct R *g;
 
     if (g_igUnsignedCharArrayMetaField_descriptor[0] == 0) {
-        g_igUnsignedCharArrayMetaField_descriptor[0] = (R *)(((void *)igMetaObject_CreateInstance((CreateMeta *)g_igUnsignedCharArrayMetaField_metaObject[0], (MemoryPool *)(((int)Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]))))));
+        g_igUnsignedCharArrayMetaField_descriptor[0] = (R *)(((void *)igMetaObject_CreateInstance((CreateMeta *)g_igUnsignedCharArrayMetaField_metaObject[0], (MemoryPool *)(((int)Memory_GetAllocatorBySelector(g_memoryContextMetaData))))));
         temp_s0 = g_igUnsignedCharArrayMetaField_descriptor[0];
         if (temp_s0 != 0) {
             MetaRefList_AppendRetained((PointerList *)(((struct M *)FUN_002fc250())), (RefHeader *)temp_s0);

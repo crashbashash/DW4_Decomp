@@ -247,6 +247,17 @@ inline void igLuaGlue::Class::operator delete(void *memory) {
     Memory_FreeBufferWithAllocator(memory, g_luaGluePool);
 }
 
+/* A class a start-up hook creates when the glue starts: static instances link themselves in. */
+struct LuaStartupHook {
+    int phase;
+    igLuaGlue::Class *(*create)(void);
+    igLuaGlue::Class *luaClass;
+    LuaStartupHook *next;
+    LuaStartupHook *prev;
+
+    LuaStartupHook(igLuaGlue::Class *(*create)(void), int phase);
+};
+
 extern "C" {
 /* Pushes a string as a bound function's result. */
 void LuaType_PushString(LuaType *type, lua_State *L, const char *string);

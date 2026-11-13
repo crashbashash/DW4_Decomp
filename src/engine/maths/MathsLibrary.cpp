@@ -50,3 +50,4 @@
 #include "src/engine/maths/igVec3f.inc"
 #include "src/engine/maths/igVec4f.inc"
 #include "src/engine/maths/InlineTail.inc"
+#include "src/engine/maths/igMathConstants.inc"

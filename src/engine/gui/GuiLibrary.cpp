@@ -1,4 +1,8 @@
 #include "src/engine/gui/GuiLibrary.h"
+
+/* Constructed by __sinit_GuiLibrary.cpp. */
+igSmartPointer<igGraphPath> g_guiGraphPath(0, kRetainReference);
+
 #include "src/engine/gui/LibraryFront.inc"
 #include "src/engine/gui/igNonRefCountedViewList.inc"
 #include "src/engine/gui/igViewList.inc"

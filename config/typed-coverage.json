@@ -512,7 +512,7 @@
   "igNamedObjectInfo": 3,
   "igNode": 7,
   "igNodeList": 8,
-  "igObject": 1153,
+  "igObject": 1125,
   "igObjectDirEntry": 31,
   "igObjectList": 755,
   "igObjectListList": 4,
@@ -646,11 +646,11 @@
   "audio": {
    "files": 3,
    "offset_casts": 10,
-   "other_members": 70,
+   "other_members": 67,
    "recovered": 122,
-   "recovered_pct": 49.39,
+   "recovered_pct": 50.0,
    "synthetic": 45,
-   "total": 247
+   "total": 244
   },
   "cri": {
    "files": 116,
@@ -663,21 +663,21 @@
   },
   "engine": {
    "files": 91,
-   "offset_casts": 4077,
-   "other_members": 12198,
+   "offset_casts": 4070,
+   "other_members": 12185,
    "recovered": 6494,
-   "recovered_pct": 21.75,
-   "synthetic": 7089,
-   "total": 29858
+   "recovered_pct": 21.83,
+   "synthetic": 7001,
+   "total": 29750
   },
   "game": {
    "files": 87,
    "offset_casts": 1095,
-   "other_members": 2192,
+   "other_members": 2194,
    "recovered": 17748,
-   "recovered_pct": 82.34,
+   "recovered_pct": 82.33,
    "synthetic": 519,
-   "total": 21554
+   "total": 21556
   },
   "libgcc": {
    "files": 7,
@@ -700,11 +700,11 @@
   "movie": {
    "files": 5,
    "offset_casts": 36,
-   "other_members": 81,
-   "recovered": 154,
-   "recovered_pct": 46.11,
+   "other_members": 78,
+   "recovered": 152,
+   "recovered_pct": 46.2,
    "synthetic": 63,
-   "total": 334
+   "total": 329
   },
   "newlib": {
    "files": 136,
@@ -743,19 +743,19 @@
    "total": 3776
   },
   "unmatched": {
-   "files": 206,
-   "offset_casts": 88,
+   "files": 193,
+   "offset_casts": 72,
    "other_members": 463,
-   "recovered": 296,
-   "recovered_pct": 26.1,
+   "recovered": 270,
+   "recovered_pct": 24.73,
    "synthetic": 287,
-   "total": 1134
+   "total": 1092
   }
  },
  "note": "Baseline for tools/typed_coverage.py --check. The gate is on the *count* of recovered accesses, never on the percentage: the m2c loop keeps adding matched (and so untyped) C, so the ratio can fall while the count only grows. Update it deliberately with --update-baseline and commit, so every change in coverage is a reviewed diff.",
- "offset_casts": 5320,
- "recovered": 24814,
- "synthetic": 8211,
- "total": 65605,
+ "offset_casts": 5297,
+ "recovered": 24786,
+ "synthetic": 8123,
+ "total": 65449,
  "typeable": 379
 }

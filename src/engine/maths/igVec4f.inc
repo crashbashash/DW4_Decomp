@@ -1,17 +1,16 @@
 int FUN_001931b0(float *arg0, unsigned int arg1) {
     float r, g, b, a;
     int res;
-    float mx = DAT_004e1180[0];
     r = arg0[0]; g = arg0[1]; b = arg0[2]; a = arg0[3];
     res = 0;
-    if (r > D_004e1180[0]) r = mx;
-if (g > DAT_004e1184[0]) g = DAT_004e1184[0];
-if (b > DAT_004e1188[0]) b = DAT_004e1188[0];
-if (a > DAT_004e118c[0]) a = DAT_004e118c[0];
-{ float mn = g_vec4Zero[0]; if (r < D_004e1170[0]) r = mn; }
-if (g < DAT_004e1174[0]) g = DAT_004e1174[0];
-if (b < DAT_004e1178[0]) b = DAT_004e1178[0];
-if (a < DAT_004e117c[0]) a = DAT_004e117c[0];
+    if (r > g_vec4One.x) r = g_vec4One.x;
+    if (g > g_vec4One.y) g = g_vec4One.y;
+    if (b > g_vec4One.z) b = g_vec4One.z;
+    if (a > g_vec4One.w) a = g_vec4One.w;
+    if (r < g_vec4Zero.x) r = g_vec4Zero.x;
+    if (g < g_vec4Zero.y) g = g_vec4Zero.y;
+    if (b < g_vec4Zero.z) b = g_vec4Zero.z;
+    if (a < g_vec4Zero.w) a = g_vec4Zero.w;
     switch (arg1) {
     case 4: res |= (int)(0.5f + 255.0f * r); res |= (int)(0.5f + 255.0f * g) << 8; res |= (int)(0.5f + 255.0f * b) << 16; break;
     case 3: res |= (int)(0.5f + 255.0f * b); res |= (int)(0.5f + 255.0f * g) << 8; res |= (int)(0.5f + 255.0f * r) << 16; break;

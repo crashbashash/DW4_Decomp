@@ -75,24 +75,6 @@ Obj_1aaf80 *FUN_001aaf80(Obj_1aaf80 *arg0, short arg1) {
     return arg0;
 }
 
-void **FUN_001ab380(void **arg0, short arg1) {
-    S_temp_a0_1ab380 *temp_a0;
-
-    if (arg0 != 0) {
-        temp_a0 = (S_temp_a0_1ab380 *)(*arg0);
-        if (temp_a0 != 0) {
-            temp_a0->f4 = (int)((int) (temp_a0->f4 - 1));
-            if ((temp_a0->f4 & 0x7FFFFF) == 0) {
-                igObject_Destroy((void *)temp_a0);
-            }
-        }
-        if (arg1 > 0) {
-            __dl__FPv(arg0);
-        }
-    }
-    return arg0;
-}
-
 ObjectRefWord *FUN_001ab400(ObjectRefWord *self,int delete_storage) {
     if(self) {
         ObjectRefTarget *object=self->value;

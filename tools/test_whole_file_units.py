@@ -1,5 +1,6 @@
 """Whole-file units: a stock source compiled whole, its data compared with retail."""
 import contextlib
+import dataclasses
 import io
 import json
 import os
@@ -109,6 +110,11 @@ class Overlay(unittest.TestCase):
                          {"one": "a.c", "two": "a.c"})
         with self.assertRaisesRegex(ValueError, "explicit and emitted"):
             unitobjects.augment_sources({"one": "a.c", "two": "b.c"}, **arguments)
+
+    def test_a_row_places_one_static_initializer(self):
+        with self.assertRaisesRegex(ValueError, "one static initializer"):
+            self.load({"whole_file": True,
+                       "emitted": {"__sinit_gfx.cpp": "0x00180100", "__sinit_gfx2.cpp": "0x00180200"}})
 
 
 class Objects(unittest.TestCase):
@@ -359,6 +365,90 @@ class ExceptionsOn(unittest.TestCase):
             placed, whole_file_rows.Retail(str(self.elf)), syms, headers, str(self.obj), functions,
             exceptions.load(), {name: va for name, (va, _size) in by_name.items()}, last + by_va[last][1])
         self.assertEqual(found, dict(self.group.duplicates))
+
+
+class StaticInitializer(unittest.TestCase):
+    """A file's global objects are built by its `__sinit_<file>` in `.init`, which the table at
+    STATIC_INITIALIZERS names: the initializer is a member of the file's row, compared with retail with
+    its table entry and exception record, and linked from the file."""
+    OWNER, INITIALIZER, ENTRY, RECORD = 0x370780, 0x5216e0, 0x522468, 0x554840
+    SOURCE = Path(verify.ROOT) / "src/game/be.cpp"
+    HOOKS = ("static LuaStartupHook beLuaStartupHook(beLuaWrapper_Create, 0);\n"
+             "static LuaStartupHook BecLuaStartupHook(BecLuaWrapper_Create, 0);\n")
+
+    def setUp(self):
+        self.elf = Path(verify.ROOT) / "orig/SLUS-20836/SLUS_208.36"
+        if not all(Path(p).exists() for p in (verify.WIBO_DEFAULT, self.elf, self.SOURCE)):
+            self.skipTest("private compiler or retail image unavailable")
+        unitobjects.load.cache_clear()
+        self.addCleanup(unitobjects.load.cache_clear)
+        self.group = unitobjects.group_for(self.OWNER)
+        self.profile = unitprofiles.resolve(self.OWNER, verify.FLAGS_DEFAULT, verify.MWCC_DEFAULT).profile
+        self.deferred = {name for names in verify.duplicate_profiles(self.group, self.profile).values()
+                         for name in names}
+        temp = tempfile.TemporaryDirectory(prefix="dw4-whole-file-sinit-")
+        self.addCleanup(temp.cleanup)
+        self.root = Path(temp.name)
+        self.symbols = os.path.join(verify.ROOT, "config/SLUS-20836/symbols.txt")
+
+    def compile(self, text, name):
+        folder = self.root / name
+        folder.mkdir()
+        # the initializer is named after the file: `__sinit_be.cpp`
+        source, obj = folder / "be.cpp", folder / "be.o"
+        source.write_text(text)
+        subprocess.run(cc.compile_argv(verify.WIBO_DEFAULT, self.profile.compiler,
+                                       unitprofiles.command_flags(self.profile), str(source), str(obj)),
+                       cwd=verify.ROOT, check=True, capture_output=True)
+        return obj
+
+    def verify(self, obj, group=None):
+        return verify.verify_emitted_object(str(obj), group or self.group, str(self.elf), self.symbols,
+                                            deferred=self.deferred)
+
+    def test_the_initializer_is_linked_with_its_table_entry_and_record(self):
+        obj = self.compile(self.SOURCE.read_text(), "kept")
+        ok, report, records = self.verify(obj)
+        self.assertTrue(ok, report)
+        self.assertIn(f"MATCH emitted 0x{self.INITIALIZER:x} __sinit_be.cpp 68B", report)
+        self.assertIn(f"MATCH static-initializer table entry 0x{self.ENTRY:x} 4B", report)
+        self.assertIn(f"MATCH exception index (__sinit_be.cpp) 0x{self.RECORD:x} 12B", report)
+        isolated = self.root / "initializer.o"
+        shutil.copyfile(obj, isolated)
+        verify.isolate_emitted_body(str(isolated), self.INITIALIZER, records, self.group, self.symbols)
+        allocated = [name for name, h in verify.elf_section_headers(str(isolated)) if h[2] & 2 and h[5]]
+        self.assertEqual(sorted(allocated), [".ctor", f".exceptix.dw4_{self.RECORD:08x}", ".text"])
+        owner = self.root / "owner.o"
+        shutil.copyfile(obj, owner)
+        verify.isolate_emitted_body(str(owner), self.OWNER, records, self.group, self.symbols)
+        self.assertNotIn(".ctor", [name for name, _h in verify.elf_section_headers(str(owner))])
+
+    def test_the_rows_find_the_initializer_in_the_table(self):
+        obj = self.compile(self.SOURCE.read_text(), "rows")
+        verify.trim_padded_names(str(obj))
+        syms, headers, functions = whole_file_rows.text_functions(str(obj))
+        self.assertNotIn("__sinit_be.cpp", functions)
+        name, _function, address = whole_file_rows.static_initializer(
+            str(obj), syms, headers, whole_file_rows.Retail(str(self.elf)), {})
+        self.assertEqual((name, address), ("__sinit_be.cpp", self.INITIALIZER))
+
+    def test_an_initializer_that_differs_is_a_mismatch_of_its_file(self):
+        text = self.SOURCE.read_text()
+        self.assertIn(self.HOOKS, text)
+        swapped = "".join(reversed(self.HOOKS.splitlines(keepends=True)))
+        ok, report, records = self.verify(self.compile(text.replace(self.HOOKS, swapped), "swapped"))
+        self.assertFalse(ok)
+        self.assertIsNone(records)
+        self.assertRegex(report.splitlines()[0], r"^DIFFER emitted object: .* cat=mismatch$")
+        self.assertIn(f"DIFFER emitted 0x{self.INITIALIZER:x} __sinit_be.cpp 68B", report)
+
+    def test_an_initializer_the_row_does_not_name_rejects_the_file(self):
+        emitted = tuple((name, va) for name, va in self.group.emitted if va != self.INITIALIZER)
+        group = dataclasses.replace(self.group, emitted=emitted)
+        ok, report, records = self.verify(self.compile(self.SOURCE.read_text(), "unnamed"), group)
+        self.assertFalse(ok)
+        self.assertIsNone(records)
+        self.assertIn("the static initializer __sinit_be.cpp is not a member", report)
 
 
 class LiteralAtTwoEntries(unittest.TestCase):

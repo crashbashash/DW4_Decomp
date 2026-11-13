@@ -1417,16 +1417,3 @@ void Gap__igItemDataBaseList__vfunc_04(S_6 *arg0) {
     Gap__Core__igObject__vfunc_02(arg0);
 }
 
-void **FUN_0022e3c0(struct Ref **self, short flag) {
-    struct Ref *p;
-    if (self != 0) {
-        p = *self;
-        if (p != 0) {
-            p->u.w = p->u.w - 1;
-            if (p->u.b.cnt == 0) igObject_Destroy(p);
-        }
-        if (flag > 0) __dl__FPv(self);
-    }
-    return (void **)self;
-}
-

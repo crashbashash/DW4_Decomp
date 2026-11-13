@@ -3,6 +3,7 @@
 
 #include "dw4/reflected.h"
 #include "dw4/igSmartPointer.h"
+#include "dw4/igVec3f.h"
 
 extern "C" {
 
@@ -714,13 +715,6 @@ int FUN_0018cfb0(void *arg0, struct S2 *arg1);
 void FUN_0018d0b0(struct V4 *a, float *b);
 void FUN_0018d1d0(void *arg0, float *arg1);
 
-struct igVec3f {
-    float x;
-    float y;
-    float z;
-    float dot(const float *o) const { return o[0] * x + o[1] * y + o[2] * z; }
-};
-
 void Vec3f_TransformDirection(float *out, float *v, float *m);
 void Vec3f_TransformProjective(float *out, float *v, float *m);
 
@@ -990,13 +984,45 @@ class ScaleVec { public: float _v[3]; float operator[](int i) const { return _v[
 
 void FUN_00190f50(float *arg0, float *arg1, float fparg0);
 
-extern float g_vec3Zero[4];
-extern float DAT_004e105c[4];
-extern float DAT_004e1060[4];
-extern float DAT_004e11c0[4];
-extern float DAT_004e11c4[4];
-extern float DAT_004e11c8[4];
-extern float DAT_004e11cc[4];
+}
+
+#include "dw4/igMatrix44d.h"
+#include "dw4/igMatrix44f.h"
+
+extern "C" {
+
+extern const igMatrix44d g_matrix44dIdentity;
+extern const igMatrix44d g_matrix44dZero;
+extern const igMatrix44f g_matrix44Identity;
+extern const igMatrix44f g_matrix44Zero;
+extern const igVec2d g_vec2dZero;
+extern const igVec2d g_vec2dXAxis;
+extern const igVec2d g_vec2dYAxis;
+extern const igVec2f g_vec2Zero;
+extern const igVec2f g_vec2XAxis;
+extern const igVec2f g_vec2YAxis;
+extern const igVec3d g_vec3dZero;
+extern const igVec3d g_vec3dOne;
+extern const igVec3d g_vec3dXAxis;
+extern const igVec3d g_vec3dYAxis;
+extern const igVec3d g_vec3dZAxis;
+extern const igVec3f g_vec3Zero;
+extern const igVec3f g_vec3One;
+extern const igVec3f g_vec3XAxis;
+extern const igVec3f g_vec3YAxis;
+extern const igVec3f g_vec3ZAxis;
+extern const igVec4d g_vec4dZero;
+extern const igVec4d g_vec4dOne;
+extern const igVec4d g_vec4dXAxis;
+extern const igVec4d g_vec4dYAxis;
+extern const igVec4d g_vec4dZAxis;
+extern const igVec4d g_vec4dWAxis;
+extern const igVec4f g_vec4Zero;
+extern const igVec4f g_vec4One;
+extern const igVec4f g_vec4XAxis;
+extern const igVec4f g_vec4YAxis;
+extern const igVec4f g_vec4ZAxis;
+extern const igVec4f g_vec4WAxis;
 
 void FUN_001910c0(float *m, float x, float y, float z);
 
@@ -1026,16 +1052,6 @@ float atan2f(float, float);
 
 struct CurvePoint4 { int a, b, c, d; };
 
-extern float g_vec4Zero[4];
-extern float D_004e1170[4];
-extern float D_004e1180[4];
-extern float DAT_004e1174[4];
-extern float DAT_004e1178[4];
-extern float DAT_004e117c[4];
-extern float DAT_004e1180[4];
-extern float DAT_004e1184[4];
-extern float DAT_004e1188[4];
-extern float DAT_004e118c[4];
 
 typedef struct Color4f { float x, y, z, w; } Color4f;
 #define BYTE_TO_UNIT(packed, mask, shift) ((float)(((packed) & (mask)) >> (shift)) / 255.0f)

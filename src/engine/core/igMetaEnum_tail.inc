@@ -21,12 +21,12 @@ int igMetaEnum_GetValueByName(int *status, igMetaEnum *meta, const char *name, i
             }
             if (match) {
                 *value = ((NameList *)meta->_values)->data[index];
-                *status = g_statusSucceeded.v;
+                *status = g_resultSuccess.v;
                 return;
             }
         }
     }
-    *status = g_allocatorFailureStatus.v;
+    *status = g_resultFailure.v;
 }
 
 void igMetaEnum_GetNameByValue(int *arg0, const struct E_2fbb40 *arg1, int arg2) {
@@ -129,16 +129,16 @@ MetaEnumView *igMetaEnum_Create(char *name, char **names, int *values, int count
     MetaEnumValueList *vl;
     int a;
     char **slot;
-    e = ((MetaEnumView *)FUN_002befe0(((int)Memory_GetAllocatorBySelector((*(int *)g_metadataAllocatorKey)))));
+    e = ((MetaEnumView *)FUN_002befe0(((int)Memory_GetAllocatorBySelector(g_memoryContextMetaData))));
     v = ((char *)StringPool_Intern((StringPool *)(pool_2fbc70()), (const char *)name));
     old = e->name;
     dropString(old);
     e->name = v;
-    a = ((int)Memory_GetAllocatorBySelector((*(int *)g_metadataAllocatorKey)));
+    a = ((int)Memory_GetAllocatorBySelector(g_memoryContextMetaData));
     dropNames_2fbc70(e->names);
     e->names = ((MetaEnumNameList *)igStringRefList_Create(a));
     StringList_Resize((StringRefListView *)e->names, count);
-    a = ((int)Memory_GetAllocatorBySelector((*(int *)g_metadataAllocatorKey)));
+    a = ((int)Memory_GetAllocatorBySelector(g_memoryContextMetaData));
     dropValues(e->values);
     e->values = ((MetaEnumValueList *)igIntList_Create(a));
     vl = e->values;

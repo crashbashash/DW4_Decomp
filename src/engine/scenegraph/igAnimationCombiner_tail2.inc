@@ -191,7 +191,7 @@ int FUN_001ad990(CombinerBlendView *c, CombinerAnimation *anim, int combineMode,
     if (c->_animationStateList->_count == 0) {
         combineMode = 0;
     }
-    state = (CombinerBoneState *)poolTake(*(CombinerPool **)((int *)DAT_00562540), (void *)FUN_001a6bb0);
+    state = (CombinerBoneState *)poolTake(((CombinerPool *)g_igAnimationStatePool_instance.p), (void *)FUN_001a6bb0);
     retain(&anim->_base);
     releaseWord(state->_animation);
     state->_animation = &anim->_base;
@@ -210,7 +210,7 @@ int FUN_001ad990(CombinerBlendView *c, CombinerAnimation *anim, int combineMode,
             track = anim->_trackList->_data[t];
         }
         if (track != 0) {
-            b = (CombinerBoneInfo *)poolTake(*(CombinerPool **)((int *)DAT_00562528), (void *)FUN_001a80b0);
+            b = (CombinerBoneInfo *)poolTake(((CombinerPool *)g_igAnimationCombinerBoneInfoPool_instance.p), (void *)FUN_001a80b0);
             source = track->_source;
             if (source != 0) {
                 int useT = useTranslation(anim, binding->_boneMap[i]);
@@ -313,7 +313,7 @@ int igAnimationCombiner_RemoveAllStates(CombinerResetView *c) {
         igPoolObject_1adf70 *s = states->_data[0];
         igPoolObject_1adf70 *o;
         s->reset();
-        FUN_001dcb80((ObjectPool *)((int)DAT_00562540[0]), (igObject *)s);
+        FUN_001dcb80((ObjectPool *)((int)g_igAnimationStatePool_instance.p), (igObject *)s);
         o = states->_data[0];
         if (o != 0) {
             o->_refCount = o->_refCount - 1;
@@ -340,7 +340,7 @@ int igAnimationCombiner_RemoveAllStates(CombinerResetView *c) {
             b->_useTranslation = 0;
             b->_lastKeyframe = 1;
             b->_reflect = -1;
-            FUN_001dcb80((ObjectPool *)((int)DAT_00562528[0]), (igObject *)b);
+            FUN_001dcb80((ObjectPool *)((int)g_igAnimationCombinerBoneInfoPool_instance.p), (igObject *)b);
             o = (igPoolObject_1adf70 *)row->_data[0];
             if (o != 0) {
                 o->_refCount = o->_refCount - 1;
@@ -437,7 +437,7 @@ int FUN_001ae2d0(CombinerStateView *c, igPoolObject *state) {
             CombinerBoneInfo *b = row->_data[j];
             if ((igPoolObject *)b->_animationState == state) {
                 clearBoneInfo(b);
-                FUN_001dcb80((ObjectPool *)((int)DAT_00562528[0]), (igObject *)b);
+                FUN_001dcb80((ObjectPool *)((int)g_igAnimationCombinerBoneInfoPool_instance.p), (igObject *)b);
                 releaseWord((igPoolObject *)row->_data[j]);
                 List_RemoveWordAt(row, j);
                 row->_data[row->_count] = 0;
@@ -462,7 +462,7 @@ int FUN_001ae2d0(CombinerStateView *c, igPoolObject *state) {
         }
     }
     found->reset();
-    FUN_001dcb80((ObjectPool *)((int)DAT_00562540[0]), (igObject *)found);
+    FUN_001dcb80((ObjectPool *)((int)g_igAnimationStatePool_instance.p), (igObject *)found);
     releaseWord(states->_data[si]);
     List_RemoveWordAt(states, si);
     states->_data[states->_count] = 0;
@@ -523,8 +523,8 @@ int igAnimationCombiner_ResetToPose(CombinerStateView_1ae780 *c, CombinerStateVi
     igAnimationCombiner_RemoveAllStates((CombinerResetView *)c);
     c->_cacheValid = 0;
     bones = c->_animHierarchy->reset();
-    state = (CombinerNewState *)poolTake(*(CombinerPool **)((int *)DAT_00562540), (void *)FUN_001a6bb0);
-    anim = ((igPoolObject *)DAT_00562558[0]);
+    state = (CombinerNewState *)poolTake(((CombinerPool *)g_igAnimationStatePool_instance.p), (void *)FUN_001a6bb0);
+    anim = ((igPoolObject *)g_igAnimation_instance.p);
     if (anim != 0) {
         anim->_refCount = anim->_refCount + 1;
     }
@@ -538,7 +538,7 @@ int igAnimationCombiner_ResetToPose(CombinerStateView_1ae780 *c, CombinerStateVi
     state->_blendStartTime = 0;
     ObjectList_AppendRetained(c->_animationStateList, state);
     for (i = 0; i < bones; i++) {
-        CombinerBoneInfo *info = (CombinerBoneInfo *)poolTake(*(CombinerPool **)((int *)DAT_00562528), (void *)FUN_001a80b0);
+        CombinerBoneInfo *info = (CombinerBoneInfo *)poolTake(((CombinerPool *)g_igAnimationCombinerBoneInfoPool_instance.p), (void *)FUN_001a80b0);
         float *m;
         float tx, ty, tz;
         CombinerQuat q;

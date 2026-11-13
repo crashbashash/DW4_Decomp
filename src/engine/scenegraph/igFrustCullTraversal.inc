@@ -217,24 +217,6 @@ ObjectRefWord *FUN_001a0490(ObjectRefWord *self,int delete_storage) {
     return self;
 }
 
-struct R **FUN_001a0510(struct R **arg0, short arg1) {
-    struct R *temp_a0;
-
-    if (arg0 != 0) {
-        temp_a0 = *arg0;
-        if (temp_a0 != 0) {
-            temp_a0->rc = temp_a0->rc - 1;
-            if ((temp_a0->rc & 0x7FFFFF) == 0) {
-                igObject_Destroy(temp_a0);
-            }
-        }
-        if (arg1 > 0) {
-            __dl__FPv(arg0);
-        }
-    }
-    return arg0;
-}
-
 ObjectRefWord *FUN_001a0590(ObjectRefWord *self,int delete_storage) {
     if(self) {
         ObjectRefTarget *object=self->value;

@@ -59,7 +59,7 @@ void FUN_002b5f10(void) {
     void *temp_s0;
 
     if (DAT_005856e0[0] == 0) {
-        DAT_005856e0[0] = (void *)(((void *)igMetaObject_CreateInstance((CreateMeta *)g_igVirtualCFuncMetaField_metaObject[0], (MemoryPool *)(((int)Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]))))));
+        DAT_005856e0[0] = (void *)(((void *)igMetaObject_CreateInstance((CreateMeta *)g_igVirtualCFuncMetaField_metaObject[0], (MemoryPool *)(((int)Memory_GetAllocatorBySelector(g_memoryContextMetaData))))));
         temp_s0 = (void *)(DAT_005856e0[0]);
         if (temp_s0 != 0) {
             MetaRefList_AppendRetained((PointerList *)(((void *)FUN_002fc250())), (RefHeader *)temp_s0);

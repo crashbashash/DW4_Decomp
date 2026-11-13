@@ -100,18 +100,11 @@ void FUN_001c1e10(void) {
         DAT_00562740[0] = (void **)(((void * *)igBlendStateAttr_CreateInstance(Memory_GetAllocatorBySelector(DAT_00587038[0]))));
         ((DW4VC_128_1 *)(DAT_00562740[0]))->vX((int)(0));
     }
-    if (((T_1c1e10 * *)DAT_00562758)[0] == 0) {
-        T_1c1e10 *p;
+    if (g_igAlphaStateAttr_instance.p == 0) {
         temp_s0 = Memory_GetAllocatorBySelector(DAT_00587038[0]);
-        p = ((T_1c1e10 * *)DAT_00562758)[0];
-        if (p != 0) {
-            p->refs = p->refs - 1;
-            if (((unsigned long long) ((long long) p->refs << 0x29) >> 0x29) == 0) {
-                igObject_Destroy((void *)p);
-            }
-        }
-        ((T_1c1e10 * *)DAT_00562758)[0] = (T_1c1e10 *)(((void *)FUN_0013b270(temp_s0)));
-        ((DW4VC_128_1 *)(((T_1c1e10 * *)DAT_00562758)[0]))->vX((int)(0));
+        g_igAlphaStateAttr_instance.release();
+        g_igAlphaStateAttr_instance.p = (igAlphaStateAttr *)FUN_0013b270(temp_s0);
+        ((DW4VC_128_1 *)g_igAlphaStateAttr_instance.p)->vX(0);
     }
 }
 
@@ -135,12 +128,7 @@ void FUN_001c1f90(int) {
         if (((unsigned long long) ((long long) p->f4 << 0x29) >> 0x29) == 0) igObject_Destroy((void *)p);
         ((S_ref * *)DAT_00562740)[0] = 0;
     }
-    p = ((S_ref * *)DAT_00562758)[0];
-    if (p != 0) {
-        p->f4 = p->f4 - 1;
-        if (((unsigned long long) ((long long) p->f4 << 0x29) >> 0x29) == 0) igObject_Destroy((void *)p);
-    }
-    ((S_ref * *)DAT_00562758)[0] = 0;
+    g_igAlphaStateAttr_instance.clear();
 }
 
 void FUN_001c20b0(Controller *self) {

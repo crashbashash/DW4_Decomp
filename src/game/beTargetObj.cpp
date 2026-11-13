@@ -1,5 +1,6 @@
 #include "dw4/reflected.h"
 #include "dw4/igVec3f.h"
+#include "dw4/igMatrix44f.h"
 
 extern "C" void igInsightCore_AddToScheduler(int insight, beTargetObj *object);
 extern "C" void igInsightCore_RemoveFromScheduler(int insight, beTargetObj *object);
@@ -32,7 +33,9 @@ extern "C" beMessenger *g_targetMessenger;
 /* The last target query: where it was asked from, and what it found. */
 extern "C" igVec3f g_targetOrigin;
 extern "C" float g_targetOriginHeading;
-extern "C" float g_targetOriginMatrix[16];
+extern "C" {
+igMatrix44f g_targetOriginMatrix;
+}
 extern "C" igVec3f g_targetPosition;
 extern "C" float g_targetDistanceSq;
 extern "C" int g_targetRamNo;
@@ -318,7 +321,7 @@ extern "C" int beTargetObj_SelectTarget(float *matrix, const char *group, const 
     igVec3f enemyFrom;
     int nearest;
 
-    Matrix44_Copy(g_targetOriginMatrix, matrix);
+    Matrix44_Copy(g_targetOriginMatrix.m, matrix);
     Matrix44_GetTranslation(matrix, (float *)&origin);
     g_targetOrigin.x = origin.x;
     g_targetOrigin.y = origin.y;
@@ -350,7 +353,7 @@ extern "C" int beTargetObj_SetTarget(float *matrix, float *position)
     g_targetOrigin.x = origin[0];
     g_targetOrigin.y = origin[1];
     g_targetOrigin.z = origin[2];
-    Matrix44_Copy(g_targetOriginMatrix, matrix);
+    Matrix44_Copy(g_targetOriginMatrix.m, matrix);
     g_targetOriginHeading = TARGET_HEADING_UNSET;
     g_targetPosition.x = position[0];
     g_targetPosition.y = position[1];
@@ -374,7 +377,7 @@ extern "C" float beTargetObj_GetOriginHeading(beTargetObj *self)
     float forward[4];
 
     if (g_targetOriginHeading == TARGET_HEADING_UNSET) {
-        Vec3f_TransformDirection(forward, g_vec3ZAxis, g_targetOriginMatrix);
+        Vec3f_TransformDirection(forward, g_vec3ZAxis, g_targetOriginMatrix.m);
         g_targetOriginHeading = atan2f(forward[0], forward[2]);
     }
     return g_targetOriginHeading;

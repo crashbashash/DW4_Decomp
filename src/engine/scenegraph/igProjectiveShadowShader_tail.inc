@@ -368,7 +368,7 @@ void FUN_001d5f70(A_1d5f70 *arg0, int arg1, int *arg2, int *arg3, int *arg4) {
     sp90[1] = 0x3F000000;
     Matrix44_SetTranslation(&sp50[0], &sp90[0]);
     if (arg0->f208 != 0) {
-        FUN_001904f0(&sp50[0], &sp50[0], &DAT_00562890[0]);
+        FUN_001904f0(&sp50[0], &sp50[0], g_projectiveShadowViewportMatrix.m);
     }
     FUN_001904f0(arg4, arg4, &sp50[0]);
 }

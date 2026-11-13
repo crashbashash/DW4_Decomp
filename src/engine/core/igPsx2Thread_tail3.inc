@@ -42,7 +42,7 @@ int Gap__Core__igPsx2Thread__vfunc_36(igPsx2Thread *self) {
 R_3308a0 Gap__Core__igPsx2Thread__vfunc_37(C_3308a0 *arg1, int arg2, int arg3) {
     if (arg1->v30() == 0) {
         if (arg2 & 0xF) {
-            return R_3308a0(g_allocatorFailureStatus.v);
+            return R_3308a0(g_resultFailure.v);
         }
         if (arg1->f45 == 0) {
             int a1 = arg1->f32;
@@ -53,9 +53,9 @@ R_3308a0 Gap__Core__igPsx2Thread__vfunc_37(C_3308a0 *arg1, int arg2, int arg3) {
         arg1->f32 = arg2;
         arg1->f45 = 1;
         arg1->f36 = arg3;
-        return R_3308a0(g_statusSucceeded.v);
+        return R_3308a0(g_resultSuccess.v);
     }
-    return R_3308a0(g_allocatorFailureStatus.v);
+    return R_3308a0(g_resultFailure.v);
 }
 
 /* IgPsx2Thread vtable slot 38, a plain getter that returns the reflected field _stack (the raw
@@ -73,14 +73,14 @@ int Gap__Core__igPsx2Thread__vfunc_40(igPsx2Thread *self) {
 }
 
 void Gap__Core__igPsx2Thread__vfunc_52(int *result) {
-    *result = g_allocatorFailureStatus.v;
+    *result = g_resultFailure.v;
 }
 
 void Gap__Core__igPsx2Thread__vfunc_53(int *result) {
-    *result = g_allocatorFailureStatus.v;
+    *result = g_resultFailure.v;
 }
 
 void Gap__Core__igPsx2Thread__vfunc_54(int *result) {
-    *result = g_allocatorFailureStatus.v;
+    *result = g_resultFailure.v;
 }
 

@@ -697,17 +697,6 @@ struct LuaTableWalker {
     }
 };
 
-/* A class a start-up hook creates when the glue starts: static instances link themselves in. */
-struct LuaStartupHook {
-    int phase;
-    igLuaGlue::Class *(*create)(void);
-    igLuaGlue::Class *luaClass;
-    LuaStartupHook *next;
-    LuaStartupHook *prev;
-
-    LuaStartupHook(igLuaGlue::Class *(*create)(void), int phase);
-};
-
 /* The sorted tags of userdata that are Alchemy objects (an igIntList). */
 struct LuaTagList {
     int *vtable;

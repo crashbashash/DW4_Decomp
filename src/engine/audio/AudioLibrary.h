@@ -2,6 +2,7 @@
 #define DW4_AUDIO_LIBRARY_H
 
 #include "dw4/reflected.h"
+#include "dw4/igSmartPointer.h"
 
 union AudioContextProbe { int vt; char b[64]; };
 struct RefCountBits { int pad; union { int w; struct { unsigned cnt:23; unsigned f:9; } b; } u; };
@@ -10,8 +11,6 @@ struct DW4SR4 { int w0; };
 
 struct ContextView { char pad[8]; unsigned char f8; char pad9[3]; int f12; };
 
-struct RefCountedList { int vt; unsigned int rc; };
-struct SignedRefList { int w0; int refs; };
 
 typedef struct AudioVoiceEntry {
     char pad0[8];
@@ -233,8 +232,6 @@ typedef struct VoiceStateBits {
     short pad;
 } VoiceStateBits;
 typedef union VoiceStateWord { VoiceStateBits r; int i; } VoiceStateWord;
-struct S_temp_a0 { char pad4[4]; int f4; };
-struct O { S_temp_a0 *m; };
 
 extern "C" {
 extern unsigned char g_AudioLibrary_registered;
@@ -262,7 +259,6 @@ extern int DAT_00486da0[4];
 extern int DAT_00524a80[4];
 extern int DAT_00524b80[4];
 extern void *g_objectSystem[4];
-extern void *g_audioTableOwner[4];
 
 int igMetaObject_CreateInstance(int, int);
 igMetaObject *igMetaObject_Create(...);
@@ -281,7 +277,6 @@ int igUnsignedIntMetaField_GetDefaultDescriptor(...);
 int FUN_002b7f80(...);
 int FUN_002cfe50(...);
 int FUN_0030e9b0(...);
-int igObject_Destroy(...);
 int igObject_GetAllocator(...);
 int Gap__Core__igObject__vfunc_10(...);
 void FUN_00300f50(...);

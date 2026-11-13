@@ -91,19 +91,19 @@ void FUN_0030d0d0(int *arg0, void *arg1, int arg2) {
     if (arg2 == 0) {
         l->SetCount(0);
         ((igStringTableView *)arg1)->setHashing(((TruncateOwner *)arg1)->f12);
-        *arg0 = g_statusSucceeded.v;
+        *arg0 = g_resultSuccess.v;
     } else {
         for (i = 0; i < n; i++) {
             if (*data == 0) {
                 hits++;
                 if (hits == arg2) {
                     l->SetCount(i + 1);
-                    *arg0 = g_statusSucceeded.v;
+                    *arg0 = g_resultSuccess.v;
                     return;
                 }
             }
         }
-        *arg0 = g_allocatorFailureStatus.v;
+        *arg0 = g_resultFailure.v;
     }
 }
 

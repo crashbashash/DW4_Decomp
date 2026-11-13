@@ -16,11 +16,11 @@ int igPsx2PointSpriteExt_GetVTable(void) {
     o.vt = (int)&DAT_00526600[0];
     o.f16 = 0;
     o.f24 = 0;
-    igMatrix44f_SetIdentity(&o.t[8]);
-    igMatrix44f_SetIdentity(pa + 104);
-    igMatrix44f_SetIdentity(pa + 168);
-    igMatrix44f_SetIdentity(pa + 232);
-    igMatrix44f_SetIdentity(pa + 296);
+    igMatrix44f_SetIdentity((float *)&o.t[8]);
+    igMatrix44f_SetIdentity((float *)(pa + 104));
+    igMatrix44f_SetIdentity((float *)(pa + 168));
+    igMatrix44f_SetIdentity((float *)(pa + 232));
+    igMatrix44f_SetIdentity((float *)(pa + 296));
     o.vt = (int)&DAT_00525320[0];
     temp_s0 = *(int *)((char *)&o + *(int *)((char *)(g_objectSystem[0]) + 916));
     o.vt = (int)&DAT_00525320[0];

@@ -75,11 +75,12 @@ def TMP_TAG():
     return "%d_%d" % (os.getpid(), threading.get_ident())
 TYPES = {"R_MIPS_HI16": R_HI16, "R_MIPS_LO16": R_LO16, "R_MIPS_26": R_26,
          "R_MIPS_32": R_32, "R_MIPS_GPREL16": R_GPREL16, "R_MIPS_LITERAL": R_GPREL16}
-# The one address-in-name rule, shared with tools/linkgen.py (which used to accept
-# `{6,8}` digits without a boundary while this file took `{5,8}` with one): the
-# trailing 6-8 hex digits of a name, separated from the rest by a non-hex
-# character. Every retail address has six to eight digits (0x100000 and up).
-ADDR_IN_NAME = re.compile(r"(?:^|[^0-9a-fA-F])([0-9a-fA-F]{6,8})$")
+# The one address-in-name rule, shared with tools/linkgen.py: an address-bearing name ends in an
+# underscore and the eight hex digits of the address (`FUN_00100240`, `DAT_0056df30`,
+# `g_objectSystem_00586dc8`). A recovered name may end in letters that read as hex
+# (`g_resultSucceeded`, `set__7igVec3fFfff`); without the underscore and the full eight digits
+# they are no address.
+ADDR_IN_NAME = re.compile(r"_([0-9a-fA-F]{8})$")
 # The bootstrap spelling proper: eight digits of an EE address (`_00586dc8`). Only a
 # mapped name in this form is held to its claim; `__adddf3` ends in six hex-looking
 # letters but is the runtime helper's real name.
@@ -110,6 +111,10 @@ COMPARED_SECTIONS = {
                                                    "isolate_emitted_body, renamed by retail address: compared, placed",
     re.compile(r"^\.exception\.dw4_[0-9a-f]{8}$"): "a group member's exception table kept by "
                                                     "isolate_emitted_body, renamed by retail address: compared, placed",
+    ".ctor": "a unit's static-initializer table entry: compared with its slot of the retail table "
+             "(STATIC_INITIALIZERS), placed there",
+    ".rel.ctor": "relocation of the table entry to the unit's static initializer: applied before comparing, "
+                 "consumed by ld",
     ".lit4": "MWCC's float literals: every entry compared with the retail pool by fold_literals, discarded by the link",
     ".lit8": "MWCC's double literals: every entry compared with the retail pool by fold_literals, discarded by the link",
     ".data": "ee-gcc emits it empty; verify fails any content as an unowned allocated section",
@@ -138,6 +143,9 @@ COMPARED_SECTIONS = {
 }
 # The compiler's float and double constants in the retail image, reached through gp.
 LITERAL_POOL = (0x554880, 0x554974)
+# The static-initializer table `__init_cpp` walks (`__ctors_start__` up to `__ctors_end__`): one word per
+# compiler unit that constructs global objects, pointing at that unit's `__sinit_<file>`, in link order.
+STATIC_INITIALIZERS = (0x522440, 0x522480)
 LITERAL_SECTIONS = {".lit4": 4, ".lit8": 8}
 # Sections the oracle knows it does not yet compare. None today: every allocated section
 # of every object is compared or fails verification.
@@ -1268,6 +1276,72 @@ def dead_data(obj, headers, syms, bodies, declared):
             if h[2] & 2 and not h[2] & 4 and h[5] and i not in live}
 
 
+def trim_padded_names(obj):
+    """Cut every symbol name of `obj` that holds a blank at its first blank, in place.
+
+    MWCC names a unit's static initializer after its source file (`__sinit_be.cpp`) and writes that
+    name, its table entry's (`.p__sinit_be.cpp`), its exception record's and its catalogue's padded with
+    blanks and leftover bytes whose length changes from one compile to the next. No other name holds a
+    blank, so the cut gives every compile the same names, which the overlay and the link refer to. A
+    name sharing the string of a cut one starts at or before the cut and holds the blank too.
+    """
+    headers = elf_section_headers(obj)
+    with open(obj, "rb") as fh:
+        data = bytearray(fh.read())
+    cuts = set()
+    for _, header in headers:
+        if header[1] != 2:      # SHT_SYMTAB
+            continue
+        base = headers[header[6]][1][4]
+        for at in range(header[4], header[4] + header[5], header[9]):
+            start = base + struct.unpack_from("<I", data, at)[0]
+            blank = data.find(b" ", start, data.index(0, start))
+            if blank >= 0:
+                cuts.add(blank)
+    if not cuts:
+        return
+    for blank in cuts:
+        data[blank] = 0
+    with open(obj, "wb") as fh:
+        fh.write(data)
+    _forget(obj)
+
+
+def static_initializer(obj, headers, syms):
+    """(name, `.init` section, `.ctor` section) of the unit's static initializer, or None.
+
+    A file defining global objects that need construction compiles their construction into one
+    function, `__sinit_<file>`, in a section of its own named `.init`, and a 4-byte `.ctor` word
+    pointing at it. The retail linker put every unit's `.init` after all `.text` and every `.ctor` in
+    the table `__init_cpp` walks (STATIC_INITIALIZERS), both in link order. Any other shape of the
+    two sections raises ValueError.
+    """
+    inits = [i for i, (name, h) in enumerate(headers) if name == ".init" and h[5]]
+    ctors = [i for i, (name, h) in enumerate(headers) if name == ".ctor" and h[5]]
+    if not inits and not ctors:
+        return None
+    if len(inits) != 1 or len(ctors) != 1 or headers[ctors[0]][1][5] != 4:
+        raise ValueError("a static initializer is one .init function and one 4-byte .ctor word")
+    functions = [name for name, (section, _value, _size) in syms.items()
+                 if section == inits[0] and name.startswith("__sinit_")]
+    if (len(functions) != 1 or syms[functions[0]][1] != 0
+            or syms[functions[0]][2] != headers[inits[0]][1][5]):
+        raise ValueError("the .init section is not one __sinit_ function")
+    pointer = [(offset, kind, symbol) for _s, offset, kind, symbol, _a in object_relocs(obj, target_section=ctors[0])]
+    if pointer != [(0, R_32, functions[0])]:
+        raise ValueError(f"the .ctor word does not point at {functions[0]}")
+    return functions[0], inits[0], ctors[0]
+
+
+def initializer_slot(image, address):
+    """The address of the retail static-initializer table entry that holds `address`."""
+    lo, hi = STATIC_INITIALIZERS
+    slots = [at for at in range(lo, hi, 4) if struct.unpack("<I", va_bytes(image, at, 4))[0] == address]
+    if len(slots) != 1:
+        raise ValueError(f"0x{address:x} is not one entry of the static-initializer table")
+    return slots[0]
+
+
 def retail_references(raw, relocations, retail_word, gp):
     """[(offset, symbol, address)]: for each relocation of a section, the address of its symbol that
     makes the relocated field equal the retail word at that offset (`retail_word(offset)`), the
@@ -1460,10 +1534,13 @@ class Records(dict):
     """The verified members of a compiler unit, {compiler_name: (address, section, size)},
     plus `exception_placements`: {compiler_name: (index_section, index_va, table_section or
     None, table_va or None, table_size)} for every placed member whose retail exception
-    metadata the object reproduces, so `isolate_emitted_body` can keep those sections, and
+    metadata the object reproduces, so `isolate_emitted_body` can keep those sections,
+    `ctor_placements`: {compiler_name: (ctor_section, table entry va)} for the static
+    initializer whose `.ctor` word equals its retail table entry, and
     `data`: {compiler_name: retail address} of a whole-file unit's data, its named rows and
     the anonymous data bound to its `anon` addresses."""
     exception_placements = {}
+    ctor_placements = {}
     data = {}
 
 
@@ -1488,7 +1565,9 @@ def verify_emitted_object(obj, group, elf, symbols, gp_override=None, verbose=Fa
     with an ``exceptions`` declaration the owner's exception index record and table, and
     in a whole-file unit each ``data`` row and each anonymous datum bound to an ``anon``
     address (`bind_anonymous`). Each is compared byte for byte, relocations applied, with
-    retail. A whole-file unit's switch tables are anonymous data too.
+    retail. A whole-file unit's switch tables are anonymous data too. A member may be the
+    unit's static initializer (`static_initializer`), in `.init`; its `.ctor` word is
+    compared with the retail table entry that points at the member's address.
     Runtime data and exception tables without such a declaration fail closed
     rather than becoming unplaced orphan sections.
 
@@ -1500,7 +1579,10 @@ def verify_emitted_object(obj, group, elf, symbols, gp_override=None, verbose=Fa
 
     ``requested_lines``, a list, gets an entry when the report shows a body's words, the one
     part of the report `requested` changes.
+
+    The object's padded names are cut first (`trim_padded_names`), in place.
     """
+    trim_padded_names(obj)
     by_name, by_va = load_symbols(symbols)
     headers = elf_section_headers(obj)
     syms, _ = object_syms(obj)
@@ -1522,6 +1604,8 @@ def verify_emitted_object(obj, group, elf, symbols, gp_override=None, verbose=Fa
             return folded
 
         literal_sections = [] if group.whole_file else fold()
+        initializer = static_initializer(obj, headers, syms)
+        initializer_name = initializer[0] if initializer else None
         records, sections = {}, set()
         for compiler_name, address in members:
             section, value, size = syms.get(compiler_name, (None, None, None))
@@ -1529,12 +1613,21 @@ def verify_emitted_object(obj, group, elf, symbols, gp_override=None, verbose=Fa
                 raise ValueError(f"missing emitted function {compiler_name}")
             label, header = headers[section]
             expected = size if compiler_name in deferred else by_va[address][1]
-            if (label != ".text" or value != 0 or size != expected
+            home = ".init" if compiler_name == initializer_name else ".text"
+            if (label != home or value != 0 or size != expected
                     or header[5] != expected or not header[2] & 4 or section in sections):
                 raise ValueError(f"emitted extent differs for {compiler_name}: object symbol "
                                  f"{size} bytes in a section of {header[5]}, retail {by_va[address][1]}")
             records[compiler_name] = (address, section, size)
             sections.add(section)
+        ctor_section = ctor_slot = None
+        if initializer:
+            if initializer_name not in dict(group.emitted):
+                raise ValueError(f"the static initializer {initializer_name} is not a member: the row's emitted "
+                                 "names it at the address of its retail initializer")
+            ctor_section = initializer[2]
+            ctor_slot = initializer_slot(image, records[initializer_name][0])
+        initializer_sections = {ctor_section} - {None}
         tables = [] if group.whole_file else jump_table_sections(
             obj, sorted(jumptables.get(group.owner, []) + duplicate_tables(group, jumptables)))
         table_sections = {index for index, _, _ in tables}
@@ -1560,7 +1653,7 @@ def verify_emitted_object(obj, group, elf, symbols, gp_override=None, verbose=Fa
                                             if i is not None}
         # a placed member's exception record and table point at it, not the other way round
         exc_live = {i for pair in exc_sections.values() for i in pair if i is not None}
-        dead = (dead_data(obj, headers, syms, sections, set(data_sections) | exc_live)
+        dead = (dead_data(obj, headers, syms, sections, set(data_sections) | exc_live | initializer_sections)
                 if group.whole_file else set())
         dropped |= dead
         if group.whole_file:
@@ -1595,9 +1688,9 @@ def verify_emitted_object(obj, group, elf, symbols, gp_override=None, verbose=Fa
         allocated = {i for i, (_, h) in enumerate(headers) if h[2] & 2 and h[5] and i not in dropped}
         executable = {i for i, (_, h) in enumerate(headers) if h[2] & 4 and h[5] and i not in dropped}
         named_text = {i for i, (name, h) in enumerate(headers)
-                      if name == ".text" and h[5] and i not in dropped}
+                      if name in (".text", ".init") and h[5] and i not in dropped}
         auxiliary = (table_sections | set(data_sections) | set(literal_sections) | set(anon_failed.values())
-                     | {i for pair in exc_sections.values() for i in pair if i is not None})
+                     | {i for pair in exc_sections.values() for i in pair if i is not None} | initializer_sections)
         unbound = sorted(name for name, (section, _value, _size) in syms.items()
                          if unitobjects.is_anonymous(name) and section in allocated - auxiliary - sections)
         if unbound:
@@ -1662,7 +1755,7 @@ def verify_emitted_object(obj, group, elf, symbols, gp_override=None, verbose=Fa
             reports.append(f"DEFERRED duplicate 0x{address:x} {compiler_name} {size}B "
                            "(compared under the profile of its retail unit)")
             continue
-        raw = object_section(obj, ".text", section)
+        raw = object_section(obj, headers[section][0], section)
         relocations = object_relocs(obj, target_section=section)
         patched, _, unresolved = apply_relocs(raw, relocations, resolver(section, address), gp)
         if patched is None:
@@ -1720,6 +1813,12 @@ def verify_emitted_object(obj, group, elf, symbols, gp_override=None, verbose=Fa
     for section, address in sorted(data_sections.items()):
         label, header = headers[section]
         success = compare_data(f"data {label}", section, label, address, header[5]) and success
+    ctor_placements = {}
+    if ctor_section is not None:
+        if compare_data("static-initializer table entry", ctor_section, ".ctor", ctor_slot, 4):
+            ctor_placements[initializer_name] = (ctor_section, ctor_slot)
+        else:
+            success = False
 
     # ---- the exception metadata, member by member (as the standalone path does) -------
     # A placed body (owner, emitted) must reproduce retail's record and table exactly:
@@ -1781,6 +1880,7 @@ def verify_emitted_object(obj, group, elf, symbols, gp_override=None, verbose=Fa
               + f" emitted object: {len(records)} complete bodies{token}\n")
     result = Records(records)
     result.exception_placements = placements
+    result.ctor_placements = ctor_placements
     result.data_sections = set(data_sections) | dead
     result.data = {**dict(group.data), **anon_bound}
     return kind == "match", report + "\n".join(reports), result if success else None
@@ -1937,9 +2037,9 @@ def isolate_emitted_body(obj, requested, records, group, symbols, source=None):
     src = source or obj
     selected = next(name for name, (address, _, _) in records.items() if address == requested)
     selected_section = records[selected][1]
-    payload = object_section(src, ".text", selected_section)
-    relocations = object_relocs(src, target_section=selected_section)
     headers = elf_section_headers(src)
+    payload = object_section(src, headers[selected_section][0], selected_section)
+    relocations = object_relocs(src, target_section=selected_section)
     # stripped bodies (verified unreferenced by verify_emitted_object) are removed with
     # the siblings; their symbols become undefined and nothing relocates against them
     defined, _ = object_syms(src)
@@ -1973,7 +2073,8 @@ def isolate_emitted_body(obj, requested, records, group, symbols, source=None):
     _forget(obj)
     # The selected member's exception record and table are kept when verify_emitted_object
     # found them equal to retail (renamed by retail address so linkgen can pin them there,
-    # like a standalone unit's); every other copy is discarded and retail's bytes stay.
+    # like a standalone unit's); every other copy is discarded and retail's bytes stay. The
+    # static initializer keeps its `.ctor` word the same way, and its `.init` becomes `.text`.
     # Switch tables are placed only with the owner that jumps through them.
     kept = {}
     placement = getattr(records, "exception_placements", {}).get(selected)
@@ -1982,6 +2083,9 @@ def isolate_emitted_body(obj, requested, records, group, symbols, source=None):
         kept[index_section] = ".exceptix.dw4_%08x" % index_at
         if table_section is not None:
             kept[table_section] = ".exception.dw4_%08x" % table_at
+    ctor = getattr(records, "ctor_placements", {}).get(selected)
+    if ctor:
+        kept[ctor[0]] = ".ctor"
     dup_tables = set()
     # a whole-file unit's switch tables are its anonymous data (removed with the data sections above), not
     # tables of its owner: only a function group pairs its .rodata with jumptables.txt here
@@ -1992,7 +2096,7 @@ def isolate_emitted_body(obj, requested, records, group, symbols, source=None):
         dup_tables = {index for index, address, _ in jump_table_sections(obj, owned)
                       if any(address == a for a, _count in dup_addresses)}
     discarded = {i for i, (name, h) in enumerate(headers) if h[5] and i not in kept and (
-        i in stripped_sections or name in (".exceptix", ".exception")
+        i in stripped_sections or name in (".exceptix", ".exception", ".ctor")
         or (name == ".rodata" and (requested != group.owner or i in dup_tables)))}
     rename_object_sections(obj, {**{section: ".text" if section == selected_section
                                     else f".text.owned_{section}"
@@ -2009,6 +2113,7 @@ def isolate_emitted_body(obj, requested, records, group, symbols, source=None):
     renames.update({name: "DAT_%08x" % address for name, address in data_addresses.items()})
     addresses = {name: address for name, (address, _, _) in records.items()}
     addresses.update(dict(group.externals))
+    addresses.update(data_addresses)
     renames = unshared_renames(renames, addresses, keep=selected)
     for old, new in renames.items():
         if old != new:
@@ -2025,8 +2130,9 @@ def isolate_emitted_body(obj, requested, records, group, symbols, source=None):
         raise ValueError("emitted body extraction changed its extent")
     if object_section(obj, ".text", text[0][0]) != payload:
         raise ValueError("emitted body extraction changed instruction bytes")
-    expected = [(section, offset, kind, renames.get(name, name), addend)
-                for section, offset, kind, name, addend in relocations]
+    # the body's section is `.text` now, a static initializer's `.init` included
+    expected = [(".text", offset, kind, renames.get(name, name), addend)
+                for _section, offset, kind, name, addend in relocations]
     if object_relocs(obj, target_section=text[0][0]) != expected:
         raise ValueError("emitted body extraction changed relocation ownership or order")
 

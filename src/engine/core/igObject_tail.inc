@@ -63,15 +63,15 @@ R_2f0180 FUN_002f0180(int arg1, int *arg2) {
     int sp3C;
     O_2f0180 *o = ((O_2f0180 * *)DAT_00586f68)[0];
     if (o != 0) {
-        int x = o->vX(arg1, &sp3C).get(); if (x == g_statusSucceeded.v) {
+        int x = o->vX(arg1, &sp3C).get(); if (x == g_resultSuccess.v) {
             *arg2 = igAllocator_ResolveEncodedIndex(sp3C);
             if (*arg2 != 0) {
-                return R_2f0180(g_statusSucceeded.v);
+                return R_2f0180(g_resultSuccess.v);
             }
         }
     }
     *arg2 = 0;
-    return R_2f0180(g_allocatorFailureStatus.v);
+    return R_2f0180(g_resultFailure.v);
 }
 
 R_2f0320 FUN_002f0320(int arg1, V_2f0220 *pool) {
@@ -79,7 +79,7 @@ R_2f0320 FUN_002f0320(int arg1, V_2f0220 *pool) {
     if (p != 0) {
         return p->vX(arg1);
     }
-    return R_2f0320(g_allocatorFailureStatus.v);
+    return R_2f0320(g_resultFailure.v);
 }
 
 void FUN_002f0370(void **arg0) {
@@ -153,7 +153,7 @@ void *Memory_FindOwningAllocator(int arg0) {
 }
 
 void FUN_002f0620(int *arg0) {
-    *arg0 = g_allocatorFailureStatus.v;
+    *arg0 = g_resultFailure.v;
 }
 
 int FUN_002f0630(void) {

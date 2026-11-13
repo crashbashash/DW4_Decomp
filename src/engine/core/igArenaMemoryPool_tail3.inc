@@ -32,7 +32,7 @@ igResult_3125d0 FUN_00312790(HeapBoundsPool *self, int index, char *cur, char *e
                 }
             }
         }
-        return (*(igResult_3125d0 *)&g_allocatorFailureStatus);
+        return g_resultFailure;
     }
     if (end < lo || hi < end) {
         if (self->messageLevel > 0) {
@@ -44,7 +44,7 @@ igResult_3125d0 FUN_00312790(HeapBoundsPool *self, int index, char *cur, char *e
                 }
             }
         }
-        return (*(igResult_3125d0 *)&g_allocatorFailureStatus);
+        return g_resultFailure;
     }
     if (end < cur) {
         if (self->messageLevel > 0) {
@@ -56,7 +56,7 @@ igResult_3125d0 FUN_00312790(HeapBoundsPool *self, int index, char *cur, char *e
                 }
             }
         }
-        return (*(igResult_3125d0 *)&g_allocatorFailureStatus);
+        return g_resultFailure;
     }
     if (!((ArenaBlockHeader *)cur)->used) {
         if (self->messageLevel > 0) {
@@ -68,7 +68,7 @@ igResult_3125d0 FUN_00312790(HeapBoundsPool *self, int index, char *cur, char *e
                 }
             }
         }
-        return (*(igResult_3125d0 *)&g_allocatorFailureStatus);
+        return g_resultFailure;
     }
     while (cur < end) {
         h = (ArenaBlockHeader *)cur;
@@ -115,9 +115,9 @@ bad:
                 }
             }
         }
-        return (*(igResult_3125d0 *)&g_allocatorFailureStatus);
+        return g_resultFailure;
     }
-    return (*(igResult_3125d0 *)&g_statusSucceeded);
+    return g_resultSuccess;
 }
 
 bool igArenaMemoryPool_Trim(TrimPool *self, int pad) {
@@ -145,7 +145,7 @@ bool igArenaMemoryPool_Trim(TrimPool *self, int pad) {
         return false;
     }
     for (i = a->count - 2; i >= 0; i -= 2) {
-        if (igArenaMemoryPool_TrimArenaBlock(self, i, a->blocks[i], a->blocks[i + 1]) == (*(igResult_3125d0 *)&g_statusSucceeded)) {
+        if (igArenaMemoryPool_TrimArenaBlock(self, i, a->blocks[i], a->blocks[i + 1]) == g_resultSuccess) {
             if (i < a->count - 2) {
                 memcpy(a->blocks + i, a->blocks + (i + 2), (a->count - (i + 2)) * 4);
             }
@@ -184,7 +184,7 @@ void FUN_00315050(int *arg0, igArenaMemoryPool *arg1, unsigned int arg2, unsigne
     if (cur != 0 && cur >= arg2 && cur < arg3) {
         *(int *)(base + 48) = 0;
     }
-    *arg0 = g_statusSucceeded.v;
+    *arg0 = g_resultSuccess.v;
 }
 
 void Gap__Core__igArenaMemoryPool__vfunc_45(int *out, igArenaMemoryPool *pool, struct PoolRequest *request) {
@@ -306,9 +306,9 @@ void Gap__Core__igArenaMemoryPool__vfunc_24(int *out, Pool24 *p, int a2, long lo
         p->v51();
         p->f136 = 0;
         p->f105 = t0;
-        *out = g_statusSucceeded.v;
+        *out = g_resultSuccess.v;
     } else {
-        *out = g_allocatorFailureStatus.v;
+        *out = g_resultFailure.v;
     }
 }
 
@@ -345,7 +345,7 @@ void Gap__Core__igArenaMemoryPool__vfunc_34(int *ret, Pool34 *p, int flag) {
             a.o->v22();
         }
     } else if ((unsigned char)flag == 1) {
-        if (p->f120 != 0) { *ret = g_statusSucceeded.v; return; }
+        if (p->f120 != 0) { *ret = g_resultSuccess.v; return; }
         Ref_3125d0 b;
         b.o = (Tracker34 *)FUN_002ba650((int)(((void *)igObject_GetAllocator((int)p))));
         b.o->v21();
@@ -354,14 +354,14 @@ void Gap__Core__igArenaMemoryPool__vfunc_34(int *ret, Pool34 *p, int flag) {
         p->relp();
         p->f120 = t;
     }
-    *ret = g_statusSucceeded.v;
+    *ret = g_resultSuccess.v;
 }
 
 /* igArenaMemoryPool vtable slot 35: status leaf. Ignores the pool and writes the engine's failure-
  * status word (set to 1 by the engine init) through the output-first argument; same leaf as
  * FUN_002f0620 and igMallocMemoryPool slot 24. */
 void Gap__Core__igArenaMemoryPool__vfunc_35(int *statusOut) {
-    *statusOut = g_allocatorFailureStatus.v;
+    *statusOut = g_resultFailure.v;
 }
 
 long long Gap__Core__igArenaMemoryPool__vfunc_36(igArenaMemoryPool *arg0) {
@@ -380,9 +380,9 @@ void Gap__Core__igArenaMemoryPool__vfunc_41(int *arg0, char *arg1, unsigned long
     unsigned long long lim = *(unsigned long long *)(arg1 + 160);
     if (lim == 0 || arg2 <= lim) {
         *(unsigned long long *)(arg1 + 152) = arg2;
-        *arg0 = g_statusSucceeded.v;
+        *arg0 = g_resultSuccess.v;
     } else {
-        *arg0 = g_allocatorFailureStatus.v;
+        *arg0 = g_resultFailure.v;
     }
 }
 
@@ -397,7 +397,7 @@ void Gap__Core__igArenaMemoryPool__vfunc_43(int *arg0, void *arg1, int arg2) {
     if (((DW4VC_132_0 *)(((char *)(arg1) + 0)))->vX() != 0) {
         ((DW4VC_264_1 *)(((char *)(arg1) + 0)))->vX((int)(((DW4VC_216_1 *)(((char *)(arg1) + 0)))->vX((int)(0x10))));
     }
-    *arg0 = g_statusSucceeded.v;
+    *arg0 = g_resultSuccess.v;
 }
 
 /* IgArenaMemoryPool virtual getter 44. Returns the reflected `_preSize` field
@@ -411,7 +411,7 @@ int Gap__Core__igArenaMemoryPool__vfunc_44(igArenaMemoryPool *self) {
 /* Status word reported on success; array form keeps the load absolute (lui/lw). */
 void Gap__Core__igArenaMemoryPool__vfunc_37(int *outStatus, igArenaMemoryPool *self, short alignment) {
     self->_alignment = alignment;
-    *outStatus = g_statusSucceeded.v;
+    *outStatus = g_resultSuccess.v;
 }
 
 /* Getter for the reflected `_alignment` member (igUnsignedShortMetaField at +172). */
@@ -425,7 +425,7 @@ unsigned short Gap__Core__igArenaMemoryPool__vfunc_38(igArenaMemoryPool *self) {
 /* Status word reported on success; array form keeps the load absolute (lui/lw). */
 void Gap__Core__igArenaMemoryPool__vfunc_39(int *outStatus, igArenaMemoryPool *self, int elementSize) {
     self->_elementSize = elementSize;
-    *outStatus = g_statusSucceeded.v;
+    *outStatus = g_resultSuccess.v;
 }
 
 /* IgArenaMemoryPool slot 40, returns the reflected _elementSize (+144). */
@@ -573,7 +573,7 @@ void *Gap__Core__igArenaMemoryPool__vfunc_59(igArenaMemoryPoolView *self, void *
 }
 
 void Gap__Core__igArenaMemoryPool__vfunc_63(int *arg0) {
-    *arg0 = g_allocatorFailureStatus.v;
+    *arg0 = g_resultFailure.v;
 }
 
 static inline char *blockHeader(char *p) {
@@ -883,7 +883,7 @@ void Gap__Core__igArenaMemoryPool__vfunc_93(int *arg0, Pool93 *arg1, char *arg2,
             if (off < 0x100011) {
                 arg2 = arg2 - off;
             } else {
-                *arg0 = g_allocatorFailureStatus.v;
+                *arg0 = g_resultFailure.v;
                 return;
             }
         }
@@ -896,9 +896,9 @@ void Gap__Core__igArenaMemoryPool__vfunc_93(int *arg0, Pool93 *arg1, char *arg2,
         if (h->flag == 1) {
             h->ext = a >> 5;
         }
-        *arg0 = g_statusSucceeded.v;
+        *arg0 = g_resultSuccess.v;
     } else {
-        *arg0 = g_allocatorFailureStatus.v;
+        *arg0 = g_resultFailure.v;
     }
 }
 
@@ -993,7 +993,7 @@ S_320830 Gap__Core__igArenaMemoryPool__vfunc_106(void *arg1, int arg2, long long
     F_320830 *f = (F_320830 *)arg1;
     if (f->z != 0) {
         S_320830 r;
-        r.v = g_allocatorFailureStatus.v;
+        r.v = g_resultFailure.v;
         return r;
     }
     long long d = (long long)(int)arg3;

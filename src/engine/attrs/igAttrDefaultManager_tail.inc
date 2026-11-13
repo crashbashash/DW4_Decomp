@@ -21,30 +21,18 @@ void **FUN_0013bfe0(void **arg0, short arg1) {
     return arg0;
 }
 
-struct Ref *FUN_0013c060(void) {
-    int a;
-    struct Ref *p;
-    if (DAT_0055f4b8[0] == 0) {
-        if (g_useOwnerAllocator != 0) { int x = Memory_GetAllocatorBySelector(DAT_00587028[0]); a = x; } else { int y = Memory_GetAllocatorBySelector(DAT_005870f8[0]); a = y; }
-        p = DAT_0055f4b8[0];
-        if (p != 0) {
-            p->u.w = p->u.w - 1;
-            if (p->u.b.cnt == 0) igObject_Destroy(p);
-        }
-        DAT_0055f4b8[0] = (struct Ref *)FUN_0013a640(a);
+igAttrPool *FUN_0013c060(void) {
+    int allocator;
+    if (g_igAttrPool_instance == 0) {
+        if (g_useOwnerAllocator != 0) { int owner = Memory_GetAllocatorBySelector(DAT_00587028[0]); allocator = owner; } else { int fallback = Memory_GetAllocatorBySelector(DAT_005870f8[0]); allocator = fallback; }
+        g_igAttrPool_instance.release();
+        g_igAttrPool_instance.p = (igAttrPool *)FUN_0013a640(allocator);
     }
-    return DAT_0055f4b8[0];
+    return g_igAttrPool_instance;
 }
 
 void FUN_0013c110(void) {
-    char *o = (char *)DAT_0055f4b8[0];
-    if (o != 0) {
-        *(int *)(o + 4) = *(int *)(o + 4) - 1;
-        if (((unsigned long long) ((long long) *(int *)(o + 4) << 0x29) >> 0x29) == 0) {
-            igObject_Destroy(o);
-        }
-    }
-    DAT_0055f4b8[0] = 0;
+    g_igAttrPool_instance.clear();
 }
 
 void FUN_0013c170(void) {

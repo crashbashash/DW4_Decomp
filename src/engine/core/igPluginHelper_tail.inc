@@ -83,7 +83,7 @@ int FUN_00304e60(Args *args) {
     it = args->it;
     fn = args->fn;
     Memory_FreeBuffer((void *)args);
-    for (it->vNext(&key, 1); fn(key) == (*(igResult_304e60 *)&g_statusSucceeded); it->vNext(&key, 1)) {
+    for (it->vNext(&key, 1); fn(key) == g_resultSuccess; it->vNext(&key, 1)) {
     }
     return 0;
 }
@@ -98,7 +98,7 @@ void **FUN_00304f00(void *arg0, int arg1, int arg2) {
     ((DW4VCSR_132_1 *)(a))->vX((int (*)(...))FUN_00304e60);
     ((DW4VCSR_140_1 *)(a))->vX((int)(b));
     ((DW4VCSR_156_1 *)(a))->vX((int)(arg2));
-    if (((DW4VCSR_120_0 *)(a))->vX() == (*(DW4SR4_304f00 *)&g_statusSucceeded)) {
+    if (((DW4VCSR_120_0 *)(a))->vX() == g_resultSuccess) {
         ObjectList_AppendRetained((igObjectList *)(*(int *)((char *)(arg0) + 8)), (igObject *)a);
     }
     return a;

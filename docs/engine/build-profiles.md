@@ -251,7 +251,8 @@ whose frameless sibling calls 2.96 cannot produce
 
 **3.0b52 with `-sdatathreshold 2` builds most of the game.** Alchemy is `-O4,s`, and the Metrowerks
 runtime, `main`, AdxMovie, Viewer, Ndmw and Bec are `-O4,p`; the runtime is the exception to the threshold and
-builds at `-sdatathreshold 0` ([Metrowerks runtime](runtime-metrowerks.md)). Bec and Ndmw also take `-inline level=8,bottomup`:
+builds at `-sdatathreshold 0` ([Metrowerks runtime](runtime-metrowerks.md)). Bec, Ndmw and every unit of an
+`alchemy-*` region (`p2` and Viewer included) also take `-inline level=8,bottomup`. In Bec and Ndmw
 holder destructors inside inlined helpers are expanded in retail, which needs an inline depth of at
 least 2, and every Bec and Ndmw function that matched without it still matches at depth 8 (depth 2
 breaks four `GetVTable` functions). The `inline_depth` pragmas written before were standing in for
@@ -261,14 +262,56 @@ counted in expression nodes after inlining, so an inline accessor counts more th
 a function gets the depth-1 shape everywhere: each holder destructor is expanded at the site and the release
 it calls stays out of line, while the small out-of-line copies of the same destructors expand it. Top-down
 inlining has no such limit. In bottom-up mode an inline helper whose own inline callees would take it past
-`inline_max_size` is expanded with those callees left as calls. The runtime, `main`,
-AdxMovie and Viewer match the same with or without `level=8`, so their setting is undetermined. 4,810 of the 4,840 MWCC units are on
+`inline_max_size` (256 by default) is expanded with those callees left as calls, all of them (the next
+paragraph). The runtime, `main` and AdxMovie match the same with or without `level=8`, so their setting is
+undetermined. 4,810 of the 4,840 MWCC units are on
 b52, 13 of them at `-O3` or `-O3,p` because their members pass only there. Viewer starts at `0x4583f0`, not at
 its registrar: four out-of-line holder destructors come first, called only from Viewer and matching
 only Viewer's `-O4,p`. At the other library boundaries such copies also sit just before the next
 registrar, but both sides there share a profile, so those boundaries are not moved. A unit moved only when every member matched under it, so the rest keep their earlier profile;
 `profile_split.units` in the debt ratchet counts them.
 zlib and libpng are the exception that is settled: they build with `combat` and fail under `b52`.
+
+**Alchemy builds bottom-up.** Retail keeps out-of-line copies of Alchemy's smallest inline members, and only
+bottom-up inlining leaves calls to them.
+
+- **The copies.** `igVec3f::igVec3f()` (`0x19ace0`, `jr ra; move v0,a0`), `igVec3f::set` (`0x1ae1a0`) and
+  `igVec4f::set` (`0x1ae1b0`) are in SceneGraph, and `igVec4f::igVec4f()` (`0x151090`) is in Gfx. Each is the one
+  copy the linker kept, from the first unit that emitted it. Game code expands the same constructors (an
+  `igVec3f` local costs nothing in Bec and Ndmw), so they are inline, and a unit emits a copy of an inline
+  function only where it left a call to it.
+- **The constructor that reaches the size limit.** `__sinit_igViewerGuiFactory.cpp` (`0x521790`, Viewer)
+  constructs one global. Its inline constructor has 110 inline callees: 41 member constructors (28
+  `ViewerRect`, 3 `igVec3f`, 10 `igVec4f`) and 69 setters (56 `igVec2f::set`, 3 `igVec3f::set`, 10
+  `igVec4f::set`). Retail expands the constructor into the initialiser and calls every one of the 110, in 2732
+  bytes. With all of them inline in the source:
+
+  | `-inline` | initialiser | rest of the unit |
+  | --- | --- | --- |
+  | none, or `level=8` (top-down) | 1836 bytes, no calls | matches |
+  | `level=1` | 2732 bytes, the 110 calls | `igViewerGuiFactory_CreateAction` 164 bytes for 272: its holder helpers stay calls |
+  | `bottomup`, or `level=8,bottomup` | 2732 bytes, the 110 calls | matches |
+
+  The limit is `inline_max_size`: a test constructor with four two-vector members and one `igVec3f` goes from
+  fully expanded to all calls at 10 setters, at 21 under `#pragma inline_max_size(512)` and at 4 under
+  `inline_max_size(128)`. A local object in an ordinary function behaves the same, so the static initialiser is
+  not special, and top-down inlining never leaves the calls. `-inline level=1` breaks 5 of the 20 Viewer owners
+  and 16 of the 76 Alchemy owners.
+- **The same shape inside Alchemy.** The copies' other callers are class constructors expanded into a function
+  with their member constructors left as calls (`igProjectiveShadowShader_GetVTable`,
+  `igPlanarShadowShader_GetVTable`, `igPsx2VisualContext_GetVTable`) and a reset helper in
+  `igAnimationCombiner_RemoveAllStates` whose three setters are calls. Those sources still call them as free
+  functions, so the flag is not tested on them.
+- **Every owner matches with the flag.** All owners with a source in the `alchemy-*` rows verify under it. One
+  function needed its source respelled: `0x164f50` in Gfx assigned its pool slots through a helper that called
+  inline retain and release helpers, which is over the limit; with the counted assignment written in place in
+  the helper it matches with and without the flag.
+- **A duplicate is compared under its retail unit's profile.** `igViewerGuiFactory.cpp` emits the four copies
+  above and names them `duplicates`; the verifier compiles the file again under the SceneGraph and Gfx profile,
+  which has to be bottom-up for the copies to exist there.
+
+The static-initialiser placeholder rows and `enbaya` keep `-O4,s -sdatathreshold 2 -RTTI off`: an initialiser
+follows its owner when it moves, and `enbaya` matches with and without the flag, so nothing decides it.
 
 **A library is one build, so a unit never crosses a library boundary.** Retail records two of the builds.
 Alchemy carries one stamp, `Intrinsic Alchemy v3.2 -0810 (Static/Release)`, dated 10 August 2004. CRI's
@@ -326,10 +369,28 @@ A unit holding the retail copy of a `duplicates` entry in `unit-objects.json` st
 `tools/check.py` compares every emitted copy under that unit's profile, so moving it changes what
 other units must match.
 
-**Status objects are returned by value.** The functions that yield `g_statusSucceeded` return a one-word
+**Status objects are returned by value.** The functions that yield the success result (`g_resultSuccess`) return a one-word
 class through a hidden pointer, which is why retail passes a stack slot as the first argument and
 reads it back through its address. Such a function matches only when written that
 way, with `operator!=` as a member. 132 source files use that constant and may hide the same shape.
+
+The two status objects, `g_resultSuccess` (`0x4fb410`) and `g_resultFailure` (`0x4fb418`), are `const` objects of
+the result class. The Core library's static initialiser constructs them, and the object system's first set-up
+writes them again. Writing a `const` object takes a `const_cast`, the one cast on them in the library's source.
+MWCC refuses a plain assignment and a non-`const` redeclaration; a `mutable` member compiles, but the code that
+reads the constants then loads them once where retail loads twice; a placement `new` adds null tests retail
+lacks. Retail keeps them in `.rodata`: MWCC gives each `const` object it constructs at start-up a `.rodata`
+section of its own, in definition order. They lie between
+the strings of `igResource` (`"igSceneWrapper"`, `0x4fb400`) and of `igShortMetaField` (`"%hd%n"`, `0x4fb420`),
+success first, so the original defined them in that order at that point of the library's one translation unit,
+most likely in a source named for the result class. The tree defines them in that order with the library's other
+globals at the end of the unit; the initialiser is the same for either order of the two.
+
+Code that tests a call's result against the failure constant and then returns or stores the constant reads it
+twice, the first read ahead of the comparison. That is how MWCC compiles the plain statement
+`if (call() == g_resultFailure) return g_resultFailure;`, for a `const` object and a writable one alike
+([understanding shapes](understanding-shapes.md#loads-shared-or-kept-apart-b52)). It needs the constant read as
+the result class itself: a view of it through a cast to another class shares the two reads.
 
 ## Open questions
 

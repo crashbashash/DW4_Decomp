@@ -9,7 +9,7 @@ void Gap__Core__igFolder__vfunc_25(void **arg0) {
 }
 
 int FUN_001ce400(IniStringObject **out, char *path) {
-    IniPathResolver *resolver = DAT_00562788[0];
+    IniPathResolver *resolver = (IniPathResolver *)g_igFolder_instance.p;
     if (resolver == 0) {
         *out = 0;
         retain_1ce400(*out);

@@ -173,7 +173,7 @@ int Gap__Core__igPageMemoryPool__vfunc_26(igPageMemoryPool *self) {
  * the pool and writes the engine's failure-status word (the one an allocation failure publishes)
  * through the output-first argument. */
 void Gap__Core__igPageMemoryPool__vfunc_24(int *statusOut) {
-    *statusOut = g_allocatorFailureStatus.v;
+    *statusOut = g_resultFailure.v;
 }
 
 int Gap__Core__igPageMemoryPool__vfunc_25(igPageMemoryPool *self) {
@@ -201,20 +201,20 @@ R4_325850 Gap__Core__igPageMemoryPool__vfunc_34(Pool34_325850 *arg1, int arg2) {
         }
     } else if ((arg2 & 0xFF) == 1) {
         if (arg1->f116.p != 0) {
-            return g_statusSucceeded.v;
+            return g_resultSuccess.v;
         }
         igSmartPointer<Ob_325850> created((Ob_325850 *)FUN_002ba650((int)(((void *)igObject_GetAllocator((int)arg1)))));
         created.p->a92();
         arg1->f116 = created;
     }
-    return g_statusSucceeded.v;
+    return g_resultSuccess.v;
 }
 
 /* IgPageMemoryPool vtable slot 35: status leaf. On igMallocMemoryPool this slot sets _size; the
  * page pool has no such field. Ignores the pool and writes the engine's failure-status word (the
  * one an allocation failure publishes) through the output-first argument. */
 void Gap__Core__igPageMemoryPool__vfunc_35(int *statusOut) {
-    *statusOut = g_allocatorFailureStatus.v;
+    *statusOut = g_resultFailure.v;
 }
 
 /* Slot 36 getter: returns the pool's _maxSize field (same field as slot 42). */
@@ -225,7 +225,7 @@ long long Gap__Core__igPageMemoryPool__vfunc_36(igPageMemoryPool *self) {
 /* Set the pool's size limit (`_maxSize`, +120) and report success through the status word. */
 void Gap__Core__igPageMemoryPool__vfunc_41(int *status, igPageMemoryPool *self, long long maxSize) {
     self->_maxSize = maxSize;
-    *status = g_statusSucceeded.v;
+    *status = g_resultSuccess.v;
 }
 
 /* Slot 42 getter: returns the pool's _maxSize field (same field as slot 36). */
@@ -237,7 +237,7 @@ long long Gap__Core__igPageMemoryPool__vfunc_42(igPageMemoryPool *self) {
  * the page pool has no such field. Ignores the pool and writes the engine's failure-status word
  * (the one an allocation failure publishes) through the output-first argument. */
 void Gap__Core__igPageMemoryPool__vfunc_37(int *statusOut) {
-    *statusOut = g_allocatorFailureStatus.v;
+    *statusOut = g_resultFailure.v;
 }
 
 /* igPageMemoryPool slot 38. igAliasMemoryPool fills the same slot with a getter for its
@@ -251,7 +251,7 @@ int Gap__Core__igPageMemoryPool__vfunc_38(igPageMemoryPool *self) {
  * the page pool accepts the call and stores nothing. Ignores the pool and writes the engine's
  * success-status word (zero in the pristine ELF) through the output-first argument. */
 void Gap__Core__igPageMemoryPool__vfunc_39(int *statusOut) {
-    *statusOut = g_statusSucceeded.v;
+    *statusOut = g_resultSuccess.v;
 }
 
 /* igPageMemoryPool slot 40. igAliasMemoryPool fills the same slot with a getter for its
@@ -369,11 +369,11 @@ void *Gap__Core__igPageMemoryPool__vfunc_59(igPageMemoryPoolView *self, void *bl
 }
 
 void Gap__Core__igPageMemoryPool__vfunc_62(int *arg0) {
-    *arg0 = g_allocatorFailureStatus.v;
+    *arg0 = g_resultFailure.v;
 }
 
 void Gap__Core__igPageMemoryPool__vfunc_63(int *arg0) {
-    *arg0 = g_allocatorFailureStatus.v;
+    *arg0 = g_resultFailure.v;
 }
 
 void Gap__Core__igPageMemoryPool__vfunc_64(void) {

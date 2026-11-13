@@ -1,5 +1,6 @@
 #include "dw4/igSmartPointer.h"
 #include "dw4/reflected.h"
+#include "dw4/DisableFeature.h"
 
 extern "C" {
 
@@ -361,11 +362,6 @@ void Gap__Viewer__igViewerRenderer__vfunc_23(Q2 *arg0) {
     FUN_00460ac0((OptionPanelView *)arg0);
     FUN_00460330((LightOwner *)arg0);
 }
-
-/* One entry of the viewer's disable features: whether the feature may be switched off, its
- * igDisableExt feature id and its name ("texture", "lighting", "blending", ...). */
-struct DisableFeature { bool supported; int feature; const char *name; };
-extern DisableFeature g_viewerDisableFeatures[];
 
 /* The matrix setter of the visual context; IG_GFX_MATRIX_PROJECTION is the type the projection
  * matrix attribute passes. */

@@ -1,7 +1,7 @@
 /* Output-first status wrapper. The status word is returned through the hidden output pointer (a0).
  * The shared helper also reads a1 (the pool) and a2 (a request descriptor) from its asm, and this
  * wrapper passes both through untouched, which is why only the local cell is named at the call.
- * The helper leaves the success word (g_statusSucceeded) in the cell. */
+ * The helper leaves the success word (g_resultSuccess) in the cell. */
 void Gap__Core__igStackMemoryPool__vfunc_45(int *outStatus, int extra1, int extra2) {
     int status;
 
@@ -40,7 +40,7 @@ unsigned char Gap__Core__igStackMemoryPool__vfunc_33(igStackMemoryPool *self) {
  * current failure-status word (the one an allocation failure publishes) through the output-first
  * argument. */
 void Gap__Core__igStackMemoryPool__vfunc_35(int *status_out) {
-    *status_out = g_allocatorFailureStatus.v;
+    *status_out = g_resultFailure.v;
 }
 
 /* Slot 36 getter: returns the pool's _totalSize field (an int widened to 64 bits). */
@@ -52,7 +52,7 @@ long long Gap__Core__igStackMemoryPool__vfunc_36(igStackMemoryPool *self) {
  * vfunc_38 is the matching getter. */
 void Gap__Core__igStackMemoryPool__vfunc_37(int *status, igStackMemoryPool *self, short alignment) {
     self->_alignment = alignment;
-    *status = g_statusSucceeded.v;
+    *status = g_resultSuccess.v;
 }
 
 /* IgStackMemoryPool slot 38, returns the reflected _alignment (+112, unsigned short). */
@@ -63,7 +63,7 @@ unsigned short Gap__Core__igStackMemoryPool__vfunc_38(igStackMemoryPool *self) {
 /* Set the pool's element size (`_elementSize`, +128) and report success through the status word. */
 void Gap__Core__igStackMemoryPool__vfunc_39(int *status, igStackMemoryPool *self, int elementSize) {
     self->_elementSize = elementSize;
-    *status = g_statusSucceeded.v;
+    *status = g_resultSuccess.v;
 }
 
 /* Getter: the pool's _elementSize (+128, reflected as igUnsignedIntMetaField). */
@@ -76,9 +76,9 @@ void Gap__Core__igStackMemoryPool__vfunc_24(int *arg0, void *arg1, int arg2, lon
         *(int *)((char *)(arg1) + 116) = arg2;
         *(long long *)((char *)(arg1) + 120) = arg3;
         *(char *)((char *)(arg1) + 141) = arg4;
-        *arg0 = g_statusSucceeded.v;
+        *arg0 = g_resultSuccess.v;
     } else {
-        *arg0 = g_allocatorFailureStatus.v;
+        *arg0 = g_resultFailure.v;
     }
 }
 
@@ -335,7 +335,7 @@ void Gap__Core__igStackMemoryPool__vfunc_62(int *result, StackPoolFields *pool, 
             end--;
         }
         pool->end = end;
-        *result = g_statusSucceeded.v;
+        *result = g_resultSuccess.v;
         return;
     }
     if (total - mask * count <= avail) {
@@ -355,14 +355,14 @@ void Gap__Core__igStackMemoryPool__vfunc_62(int *result, StackPoolFields *pool, 
         if (k == count) {
             pool->top = low;
             pool->end = end;
-            *result = g_statusSucceeded.v;
+            *result = g_resultSuccess.v;
             return;
         }
     }
     for (l = 0; l < count; l++) {
         out[l] = 0;
     }
-    *result = g_allocatorFailureStatus.v;
+    *result = g_resultFailure.v;
 }
 
 void Gap__Core__igStackMemoryPool__vfunc_63(int *result, StackPoolFields *pool, int n, unsigned *sizes, unsigned *out, unsigned short *aligns) {
@@ -412,7 +412,7 @@ void Gap__Core__igStackMemoryPool__vfunc_63(int *result, StackPoolFields *pool, 
             end--;
         }
         pool->end = end;
-        *result = g_statusSucceeded.v;
+        *result = g_resultSuccess.v;
         return;
     }
     if (total - padding <= avail) {
@@ -435,14 +435,14 @@ void Gap__Core__igStackMemoryPool__vfunc_63(int *result, StackPoolFields *pool, 
         if (k == count) {
             pool->top = low;
             pool->end = end;
-            *result = g_statusSucceeded.v;
+            *result = g_resultSuccess.v;
             return;
         }
     }
     for (l = 0; l < count; l++) {
         out[l] = 0;
     }
-    *result = g_allocatorFailureStatus.v;
+    *result = g_resultFailure.v;
 }
 
 int Gap__Core__igStackMemoryPool__vfunc_84(DW4VC_340_0 *arg0, unsigned int arg1) {

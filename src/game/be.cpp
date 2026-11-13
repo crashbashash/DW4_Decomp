@@ -780,6 +780,10 @@ igLuaGlue::Class *BecLuaWrapper_Create(void) {
     return new (g_luaGluePool) Gap::BecLuaWrapper;
 }
 
+/* The glue creates the `be` and `Bec` classes when it starts. */
+static LuaStartupHook beLuaStartupHook(beLuaWrapper_Create, 0);
+static LuaStartupHook BecLuaStartupHook(BecLuaWrapper_Create, 0);
+
 /* The game's per-library class registration; this file registers no reflected class. */
 void LuaAPI_RegisterClasses(void)
 {

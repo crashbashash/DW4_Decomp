@@ -1,4 +1,4 @@
-
+#include "dw4/igSmartPointer.h"
 extern "C" int igObject_GetAllocator(...);
 extern "C" int Memory_AllocateAlignedWithAllocator(...);
 extern "C" int ADXT_Create(int, int, int);
@@ -21,7 +21,6 @@ extern "C" int ADXT_GetStat(int);
 extern "C" int igAdxAudio_GetStatus(void *arg0);
 extern "C" void *FUN_002b9500(int);
 extern "C" int Memory_GetAllocatorByName(...);
-extern "C" int igObject_Destroy(...);
 extern "C" void FUN_003324c0(void);
 extern "C" int DisableIntc(int);
 extern "C" int ADXM_ShutdownThrd(...);
@@ -149,11 +148,9 @@ struct Q_332860 { int a; int b; int c; int d; };
 typedef struct T_332d20 { int w0; int references; } T_332d20;
 extern "C" void **DAT_005875f0[4];
 typedef struct Obj_332e90 { int w0; int references; } Obj_332e90;
-typedef struct OList { int pad0[2]; int count; int pad1; Obj_332e90 **data; } OList;
-typedef struct SList { int pad0; int references; int count; int pad1; int **data; } SList;
+struct OList : igObject { int count; int pad1; Obj_332e90 **data; };
+struct SList : igObject { int count; int pad1; int **data; };
 extern "C" int g_stringPool[4];
-extern "C" SList *DAT_00587608[4];
-extern "C" OList *DAT_00587620[4];
 /* Owning stack reference to a pooled string token (reference count at p[-1], chunk header at
  * p[-2]); releases the token on scope exit. */
 class StringRef {
@@ -179,7 +176,7 @@ public:
 struct ThreadList { char pad[16]; AdxThread **data; };
 struct ThreadManager { char pad[8]; ThreadList *threads; };
 extern "C" ThreadManager *g_threadManager[4];
-struct TextBuffer { int vtable; unsigned int refCount; char *text; };
+struct TextBuffer : igObject { char *text; };
 struct PathEntry { int vtable; unsigned int refCount; char *name; int f12; short left; short right; };
 struct PathEntryList { int vtable; unsigned int refCount; int count; int capacity; PathEntry **data; };
 extern "C" void igStringObj_Set(TextBuffer *buffer, const char *text);
@@ -187,17 +184,18 @@ extern "C" void igStringObj_ToLower(TextBuffer *buffer);
 extern "C" void FUN_0030b5f0(TextBuffer *buffer, int *value);
 extern "C" void igNamedObject_SetName(PathEntry *object, const char *name);
 extern "C" char *g_stringObjEmptyText[4];
-extern "C" TextBuffer *DAT_005875e0[4];
 typedef struct N { int p0; int p4; char *name; } N;
 typedef struct L_333630 { int p0; int p4; int count; int pc; N **data; } L_333630;
 typedef struct S_333630 { int p0; int p4; char *name; L_333630 *parents; } S_333630;
 extern "C" int emptyString[4];
 extern "C" int DAT_004fff70[4];
 extern "C" void FUN_00333630(S_333630 *arg0, char *arg1);
-/* Deleting destructor; the deletion flag is a signed short. */
-typedef struct ObjectRefTarget { int word0; int references; } ObjectRefTarget;
-typedef struct ObjectRefWord { ObjectRefTarget *value; } ObjectRefWord;
-extern "C" ObjectRefWord *FUN_00333760(ObjectRefWord *self,int delete_storage);
+/* The scratch string, the per-partition file names and the AFS files, each released when the program exits. */
+extern "C" {
+igSmartPointer<TextBuffer> g_adxScratchString(0, kRetainReference);
+igSmartPointer<SList> g_adxPartitionNames;
+igSmartPointer<OList> g_adxAfsFileList;
+}
 
 int igAdxAudio_Initialize(struct S *s, int a, int b, int c, int d) {
     if (s->f36 == 0) {
@@ -253,7 +251,7 @@ int FUN_003321f0(struct S_3321f0 *arg0, int arg1, int arg2, int arg3, int arg4, 
     arg0->f44 = igAdxAudio_CreateHandle((T_3320d0 *)arg0, arg2, arg3, arg4, arg5, 1);
     temp_v0 = FUN_00333440((const char *)arg1);
     if (temp_v0 != -1) {
-        temp_v0_2 = ((struct T_3321f0 * *)DAT_00587620)[0]->f16[temp_v0];
+        temp_v0_2 = ((struct T_3321f0 *)g_adxAfsFileList.p)->f16[temp_v0];
         ADXT_StartAfs(arg0->f44, temp_v0_2->f16, temp_v0_2->f18);
     } else {
         ADXT_StartFname(arg0->f44, arg1);
@@ -268,7 +266,7 @@ int igAdxAudio_StartFile(struct A *arg0, int arg1) {
     if (arg0->f44 != 0) {
         temp_v0 = FUN_00333440((const char *)arg1);
         if (temp_v0 != -1) {
-            e = (struct E *)((struct L *)((void * *)DAT_00587620)[0])->tab[temp_v0];
+            e = (struct E *)((struct L *)((void *)g_adxAfsFileList.p))->tab[temp_v0];
             ADXT_StartAfs(arg0->f44, e->s16, e->s18);
         } else {
             ADXT_StartFname(arg0->f44, arg1);
@@ -347,14 +345,14 @@ void FUN_003324c0(void) {
     R *old;
 
     temp_s0 = Memory_GetAllocatorByName(&text_User0[0]);
-    old = ((R * *)DAT_005875e0)[0];
+    old = ((R *)g_adxScratchString.p);
     if (old != 0) {
         old->f4 = old->f4 - 1;
         if ((old->f4 & 0x7FFFFF) == 0) {
             igObject_Destroy(old);
         }
     }
-    ((R * *)DAT_005875e0)[0] = (R *)FUN_002b9500(temp_s0);
+    g_adxScratchString.p = (TextBuffer *)FUN_002b9500(temp_s0);
 }
 
 void FUN_00332530(void) {
@@ -362,22 +360,22 @@ void FUN_00332530(void) {
     Obj *o;
 
     igAdx_SetPartitionCount(0);
-    o = ((Obj * *)DAT_00587620)[0];
+    o = ((Obj *)g_adxAfsFileList.p);
     if (o != 0) {
         o->refs = o->refs - 1;
         if ((o->refs & 0x7FFFFF) == 0) {
             igObject_Destroy(o);
         }
     }
-    ((Obj * *)DAT_00587620)[0] = 0;
-    o = ((Obj * *)DAT_005875e0)[0];
+    g_adxAfsFileList.p = 0;
+    o = ((Obj *)g_adxScratchString.p);
     if (o != 0) {
         o->refs = o->refs - 1;
         if ((o->refs & 0x7FFFFF) == 0) {
             igObject_Destroy(o);
         }
     }
-    ((Obj * *)DAT_005875e0)[0] = 0;
+    g_adxScratchString.p = 0;
     mwPlyFinishSfdFx();
     FUN_00280d20();
     DisableIntc(2);
@@ -408,14 +406,14 @@ void Gap__igAdx__vfunc_11(void) {
     g_adxMediaMode[0] = 0;
     g_adxUseFileInfoCache = 0;
     memset(&DAT_005874d0[0], 0, 0x100);
-    p = ((T_332670 * *)DAT_00587620)[0];
+    p = ((T_332670 *)g_adxAfsFileList.p);
     if (p != 0) {
         p->refs = p->refs - 1;
         if (((unsigned long long) ((long long) p->refs << 0x29) >> 0x29) == 0) {
             igObject_Destroy(p);
         }
     }
-    ((T_332670 * *)DAT_00587620)[0] = 0;
+    g_adxAfsFileList.p = 0;
     g_adxPartitionCount[0] = 0;
 }
 
@@ -611,22 +609,20 @@ void igAdx_SetPartitionCount(int arg0) {
                 var_a0 += 4;
             } while (var_v1 < g_adxPartitionCount[0]);
         }
-        object = ((T_332d20 * *)DAT_00587608)[0];
+        object = ((T_332d20 *)g_adxPartitionNames.p);
         if (object != 0) {
             --object->references;
             if (((unsigned long long)(long long)object->references & 0x7fffffULL) == 0) {
                 igObject_Destroy(object);
             }
         }
-        ((T_332d20 * *)DAT_00587608)[0] = (T_332d20 *)igStringRefList_Create(temp_s2);
+        g_adxPartitionNames.p = (SList *)igStringRefList_Create(temp_s2);
     }
 }
 
 void igAdx_AddPartitionName(int arg0, char *arg1) {
     int v;
     int ok;
-    SList *t;
-    OList *t2;
     if (arg1 != 0) {
         char *r;
         if (arg1 == 0) {
@@ -641,7 +637,7 @@ void igAdx_AddPartitionName(int arg0, char *arg1) {
         }
         {
             StringRef name(r);
-            StringList_AppendRetained(DAT_00587608[0], &name);
+            StringList_AppendRetained(g_adxPartitionNames.p, &name);
         }
     } else {
         SList *l;
@@ -650,7 +646,7 @@ void igAdx_AddPartitionName(int arg0, char *arg1) {
         int *old;
         int **p;
         int *np;
-        l = DAT_00587608[0];
+        l = g_adxPartitionNames.p;
         n = l->count;
         i = 0;
         if (0 < n) {
@@ -674,17 +670,11 @@ void igAdx_AddPartitionName(int arg0, char *arg1) {
             } while (i < n);
         }
         l->count = 0;
-        ok = DAT_00587608[0]->count > 0;
-        if (ok == 0) List_Reserve(DAT_00587608[0], 0, 4);
-        t = DAT_00587608[0];
-        if (t != 0) {
-            t->references = t->references - 1;
-            if (((unsigned long long)((long long)t->references << 0x29) >> 0x29) == 0)
-                igObject_Destroy(t);
-        }
-        DAT_00587608[0] = 0;
+        ok = g_adxPartitionNames.p->count > 0;
+        if (ok == 0) List_Reserve(g_adxPartitionNames.p, 0, 4);
+        g_adxPartitionNames.clear();
         {
-            OList *l2 = DAT_00587620[0];
+            OList *l2 = g_adxAfsFileList.p;
             if (l2 != 0) {
                 int n2 = l2->count;
                 int i2;
@@ -700,15 +690,9 @@ void igAdx_AddPartitionName(int arg0, char *arg1) {
                 m = l2->count;
                 for (j = 0; j < m; j++) l2->data[j] = 0;
                 l2->count = 0;
-                ok = DAT_00587620[0]->count > 0;
-                if (ok == 0) List_Reserve(DAT_00587620[0], 0, 4);
-                t2 = DAT_00587620[0];
-                if (t2 != 0) {
-                    t2->pad0[1] = t2->pad0[1] - 1;
-                    if (((unsigned long long)((long long)t2->pad0[1] << 0x29) >> 0x29) == 0)
-                        igObject_Destroy(t2);
-                }
-                DAT_00587620[0] = 0;
+                ok = g_adxAfsFileList.p->count > 0;
+                if (ok == 0) List_Reserve(g_adxAfsFileList.p, 0, 4);
+                g_adxAfsFileList.clear();
             }
         }
     }
@@ -720,14 +704,14 @@ void igAdx_SetInsideFiles(R_333230 *arg0) {
         if (arg0 != 0) {
             arg0->rc = arg0->rc + 1;
         }
-        old = ((R_333230 * *)DAT_00587620)[0];
+        old = ((R_333230 *)g_adxAfsFileList.p);
         if (old != 0) {
             old->rc = old->rc - 1;
             if ((old->rc & 0x7FFFFF) == 0) {
                 igObject_Destroy(old);
             }
         }
-        ((R_333230 * *)DAT_00587620)[0] = arg0;
+        g_adxAfsFileList.p = (OList *)arg0;
     }
 }
 
@@ -743,7 +727,7 @@ int igAdx_LoadPartition(int stream, const char *path, int mode, int length)
         DAT_005875f0[0][stream] = ((void *)Memory_AllocateAlignedWithAllocator(size, 16, ((void *)Memory_GetAllocatorByName(((char *)text_User0)))));
     }
     igAdx_AddPartitionName(stream, (char *)path);
-    name = StringList_CopyRetained(((int *)DAT_00587608)[0], stream).p;
+    name = StringList_CopyRetained((int)g_adxPartitionNames.p, stream).p;
     FUN_00260de8(stream, name, mode, DAT_005875f0[0][stream]);
     waiting = true;
     do {
@@ -771,7 +755,7 @@ int FUN_00333440(const char *name) {
     unsigned int i;
     int k;
     int n;
-    if (((PathEntryList * *)DAT_00587620)[0]) {
+    if (((PathEntryList *)g_adxAfsFileList.p)) {
         close = -1;
         if (name[0] == '[') {
             for (i = 1; i < strlen(name); i++) {
@@ -784,24 +768,24 @@ int FUN_00333440(const char *name) {
                 PathEntry *entry;
                 memset(digits, 0, 16);
                 strncpy(digits, name + 1, 1);
-                igStringObj_Set(DAT_005875e0[0], digits);
-                FUN_0030b5f0(DAT_005875e0[0], &left);
+                igStringObj_Set(g_adxScratchString.p, digits);
+                FUN_0030b5f0(g_adxScratchString.p, &left);
                 strncpy(digits, name + 3, close - 4);
-                igStringObj_Set(DAT_005875e0[0], digits);
-                FUN_0030b5f0(DAT_005875e0[0], &right);
-                entry = ((PathEntryList * *)DAT_00587620)[0]->data[0];
+                igStringObj_Set(g_adxScratchString.p, digits);
+                FUN_0030b5f0(g_adxScratchString.p, &right);
+                entry = ((PathEntryList *)g_adxAfsFileList.p)->data[0];
                 igNamedObject_SetName(entry, name);
                 entry->left = left;
                 entry->right = right;
                 return 0;
             }
         }
-        n = ((PathEntryList * *)DAT_00587620)[0]->count;
-        igStringObj_Set(DAT_005875e0[0], name);
-        igStringObj_ToLower(DAT_005875e0[0]);
+        n = ((PathEntryList *)g_adxAfsFileList.p)->count;
+        igStringObj_Set(g_adxScratchString.p, name);
+        igStringObj_ToLower(g_adxScratchString.p);
         for (k = 1; k < n; k++) {
-            FUN_00333630((S_333630 *)(((PathEntryList * *)DAT_00587620)[0]->data[k]), path);
-            const char *text = DAT_005875e0[0]->text;
+            FUN_00333630((S_333630 *)(((PathEntryList *)g_adxAfsFileList.p)->data[k]), path);
+            const char *text = g_adxScratchString.p->text;
             text = (text == 0) ? g_stringObjEmptyText[0] : text;
             if (strcmp(text, path) == 0) {
                 return k;
@@ -833,19 +817,6 @@ void FUN_00333630(S_333630 *arg0, char *arg1) {
         }
         strcat(arg1, arg0->name ? arg0->name : (char *)&emptyString[0]);
     }
-}
-
-ObjectRefWord *FUN_00333760(ObjectRefWord *self,int delete_storage) {
-    if(self) {
-        ObjectRefTarget *object=self->value;
-        if(object) {
-            --object->references;
-            if(((unsigned long long)(long long)object->references & 0x7fffffULL)==0)
-                igObject_Destroy(object);
-        }
-        if((short)delete_storage>0) __dl__FPv(self);
-    }
-    return self;
 }
 
 void FUN_003337e0(void)

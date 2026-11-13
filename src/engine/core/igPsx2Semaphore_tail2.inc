@@ -1,9 +1,9 @@
 void Gap__Core__igPsx2Semaphore__vfunc_26(int *arg0, void *arg1, int arg2) {
     if (*(int *)((char *)(arg1) + 12) == -1) {
         *(int *)((char *)(arg1) + 16) = arg2;
-        *arg0 = g_statusSucceeded.v;
+        *arg0 = g_resultSuccess.v;
     } else {
-        *arg0 = g_allocatorFailureStatus.v;
+        *arg0 = g_resultFailure.v;
     }
 }
 
@@ -17,9 +17,9 @@ int Gap__Core__igPsx2Semaphore__vfunc_27(igPsx2Semaphore *self) {
 void Gap__Core__igPsx2Semaphore__vfunc_28(int *arg0, struct S_32ed50 *arg1, int arg2) {
     if (arg1->f12 == -1) {
         arg1->f20 = arg2;
-        *arg0 = g_statusSucceeded.v;
+        *arg0 = g_resultSuccess.v;
     } else {
-        *arg0 = g_allocatorFailureStatus.v;
+        *arg0 = g_resultFailure.v;
     }
 }
 
@@ -46,7 +46,7 @@ void Gap__Core__igPsx2Semaphore__vfunc_23(int *arg0, struct S_arg1 *arg1) {
     char *var_v1_2;
     unsigned int var_v0;
     if (arg1->f12 != -1) {
-        *arg0 = g_allocatorFailureStatus.v;
+        *arg0 = g_resultFailure.v;
     } else {
         var_v1_2 = u.b;
         var_v0 = 0x18;
@@ -62,83 +62,68 @@ void Gap__Core__igPsx2Semaphore__vfunc_23(int *arg0, struct S_arg1 *arg1) {
         arg1->f12 = CreateSema(&u);
         if (arg1->f12 < 0) {
             arg1->f12 = -1;
-            *arg0 = g_allocatorFailureStatus.v;
+            *arg0 = g_resultFailure.v;
         } else {
-            *arg0 = g_statusSucceeded.v;
+            *arg0 = g_resultSuccess.v;
         }
     }
 }
 
 void Gap__Core__igPsx2Semaphore__vfunc_24(int *arg0, int *arg1) {
     int id = arg1[3];
-    int *p;
+    const int *p;
     if (id == -1) {
-        *arg0 = g_allocatorFailureStatus.v;
+        *arg0 = g_resultFailure.v;
         return;
     }
     id = DeleteSema(id);
     arg1[3] = -1;
-    p = id >= 0 ? &g_statusSucceeded.v : &g_allocatorFailureStatus.v;
+    p = id >= 0 ? &g_resultSuccess.v : &g_resultFailure.v;
     *arg0 = *p;
 }
 
 void Gap__Core__igPsx2Semaphore__vfunc_32(int *arg0, void *arg1) {
-    int *p;
+    const int *p;
     int temp_a0;
 
     temp_a0 = *(int *)((char *)(arg1) + 12);
     if (temp_a0 == -1) {
-        *arg0 = g_allocatorFailureStatus.v;
+        *arg0 = g_resultFailure.v;
     } else {
         if (iSignalSema(temp_a0) >= 0) {
-            p = &g_statusSucceeded.v;
+            p = &g_resultSuccess.v;
         } else {
-            p = &g_allocatorFailureStatus.v;
+            p = &g_resultFailure.v;
         }
         *arg0 = *p;
     }
 }
 
 void Gap__Core__igPsx2Semaphore__vfunc_35(int *arg0, void *arg1) {
-    int *p;
+    const int *p;
     int h = *(int *)((char *)(arg1) + 12);
     if (h == -1) {
-        *arg0 = g_allocatorFailureStatus.v;
+        *arg0 = g_resultFailure.v;
     } else {
         if (WaitSema(h) >= 0) {
-            p = &g_statusSucceeded.v;
+            p = &g_resultSuccess.v;
         } else {
-            p = &g_allocatorFailureStatus.v;
+            p = &g_resultFailure.v;
         }
         *arg0 = *p;
     }
 }
 
 void Gap__Core__igPsx2Semaphore__vfunc_34(int *arg0, struct T_32f1f0 *arg1) {
-    int *p;
-    if (arg1->t == -1) { *arg0 = g_allocatorFailureStatus.v; return; } p = (iPollSema(arg1->t) >= 0) ? &g_statusSucceeded.v : &g_allocatorFailureStatus.v; *arg0 = *p;
+    const int *p;
+    if (arg1->t == -1) { *arg0 = g_resultFailure.v; return; } p = (iPollSema(arg1->t) >= 0) ? &g_resultSuccess.v : &g_resultFailure.v; *arg0 = *p;
 }
 
-int **FUN_0032f260(int **arg0) {
-    FUN_00328de0((int **)arg0);
-    *arg0 = &DAT_0052d8b0[0];
-    return arg0;
-}
-
-int **FUN_0032f2a0(int **arg0, long long arg1) {
-    if (arg0 != 0) {
-        *arg0 = &DAT_0052d8b0[0];
-        FUN_00328e00((igObject *)arg0, 0);
-        if (((long long) (arg1 << 0x30) >> 0x30) > 0) {
-            __dl__FPv(arg0);
-        }
-    }
-    return arg0;
-}
+ThreadStackOwner::ThreadStackOwner() {}
 
 void FUN_0032f300(void) {
     if (((int * *)DAT_00587218)[0] == 0) {
-        ((int * *)DAT_00587218)[0] = &DAT_00587380[0];
+        ((void * *)DAT_00587218)[0] = &g_threadStackOwner;
     }
 }
 

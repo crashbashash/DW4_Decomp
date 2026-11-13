@@ -1,4 +1,5 @@
 #include "src/engine/scenesearch/SceneSearchLibrary.h"
+#include "dw4/igMath.h"
 
 /* SceneSearch's register list: the library has one registrar. */
 void thunk_FUN_00238ed0(void) {
@@ -203,3 +204,23 @@ void **FUN_00239300(void **ref, short flags) {
 igMetaObject *Gap__igSearchSceneGraph__vfunc_22(void) {
     return g_igSearchSceneGraph_metaObject[0];
 }
+
+/* A sixteen-colour palette: black, grey, the six half-intensity colours, white, silver, the six full ones. */
+const igVec4f g_colorPalette[16] = {
+    igVec4f(0.0, 0.0, 0.0, 1),
+    igVec4f(0.5, 0.5, 0.5, 1),
+    igVec4f(0.5, 0.0, 0.0, 1),
+    igVec4f(0.5, 0.5, 0.0, 1),
+    igVec4f(0.0, 0.5, 0.0, 1),
+    igVec4f(0.0, 0.5, 0.5, 1),
+    igVec4f(0.0, 0.0, 0.5, 1),
+    igVec4f(0.5, 0.0, 0.5, 1),
+    igVec4f(1.0, 1.0, 1.0, 1),
+    igVec4f(0.75, 0.75, 0.75, 1),
+    igVec4f(1.0, 0.0, 0.0, 1),
+    igVec4f(1.0, 1.0, 0.0, 1),
+    igVec4f(0.0, 1.0, 0.0, 1),
+    igVec4f(0.0, 1.0, 1.0, 1),
+    igVec4f(0.0, 0.0, 1.0, 1),
+    igVec4f(1.0, 0.0, 1.0, 1),
+};

@@ -81,7 +81,7 @@ void FUN_002c3330(void) {
     struct R *g;
 
     if (DAT_00586110[0] == 0) {
-        DAT_00586110[0] = (R *)(((void *)igMetaObject_CreateInstance((CreateMeta *)g_igIntArrayMetaField_metaObject[0], (MemoryPool *)(((int)Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]))))));
+        DAT_00586110[0] = (R *)(((void *)igMetaObject_CreateInstance((CreateMeta *)g_igIntArrayMetaField_metaObject[0], (MemoryPool *)(((int)Memory_GetAllocatorBySelector(g_memoryContextMetaData))))));
         temp_s0 = DAT_00586110[0];
         if (temp_s0 != 0) {
             MetaRefList_AppendRetained((PointerList *)(((struct M *)FUN_002fc250())), (RefHeader *)temp_s0);
