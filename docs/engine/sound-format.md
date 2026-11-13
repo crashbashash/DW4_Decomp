@@ -337,9 +337,12 @@ its directory (`igStringObj_StripDirectory`, `igStringObj_ToLower`) once into a 
 scratch string object. For each collected name the first object of that name in any static info's data list is
 appended to `beCri::_lsBinObjs`, and `beCri_StartSfpTransfers` starts the transfers.
 
-Open questions: `beSound_OnMessage` passes the number of play rows it searched as a fourth argument to
-`beCri_PlayEffect`, which reads three (only the four-argument call reproduces the register choice); the play-row
-search keeps the row and count loads inside the loop only in its decompiler-shaped spelling.
+`beCri_PlayEffect` takes three arguments (the controller, the file-name list and the cue): the Xbox and GameCube
+builds pass two besides the receiver, and the PS2 body never reads `a3`. In the PS2 play-row search the row index
+lands in `a3` through the colouring order of the search's locals, not as an argument. That loop reloads the row
+count every row and keeps a byte offset beside the index; MWCC gives that shape for a list re-read after each row
+(the walk `beSound_Update` does) with an explicit offset, while a plain indexed `for` loop over a local list hoists
+the count and turns the offset into a pointer. `VOLUMECTL2` also computes `|a - b|` and discards it.
 
 ## The beCri controller
 

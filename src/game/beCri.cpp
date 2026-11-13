@@ -263,8 +263,8 @@ static inline void ReleaseAll(igObjectList *list) {
 
 /* Gives an emptied list its first block again. */
 static inline void ReserveIfEmpty(igObjectList *list) {
-    int hasRoom = list->_count > 0;
-    if (hasRoom == 0) {
+    bool hasEntries = list->_count > 0;
+    if (hasEntries == false) {
         List_Reserve(list, 0, 4);
     }
 }

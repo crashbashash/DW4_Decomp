@@ -76,7 +76,7 @@ char *beMessenger_GetString(int messenger, int index);
 int beMessenger_GetStringCount(int messenger);
 
 long long beCri_PlayStream(beCri *self, igObjectList *names, beSoundData *cue);
-long long beCri_PlayEffect(beCri *self, igObjectList *names, beSoundData *cue, int playing);
+long long beCri_PlayEffect(beCri *self, igObjectList *names, beSoundData *cue);
 void beCri_StopByID(beCri *self, long long playID);
 void beCri_StopGroup(beCri *self, int group);
 void beCri_UnpauseByName(beCri *self, const char *name);
@@ -212,8 +212,15 @@ static inline void ReleaseAll(igObjectList *list) {
     list->_count = 0;
 }
 
+/* Gives an emptied list its first block again. */
+static inline void ReserveIfEmpty(igObjectList *list) {
+    bool hasEntries = list->_count > 0;
+    if (hasEntries == false) {
+        List_Reserve(list, 0, 4);
+    }
+}
+
 void beSound_Prepare(beSound *self) {
-    igObjectList *playSEs;
     if (self->_cri == 0) {
         igObject *cri = (igObject *)igInsightCore_FindManager(self->_insight, g_beCri_metaObject[0]);
         if (cri != 0) {
@@ -223,10 +230,7 @@ void beSound_Prepare(beSound *self) {
         self->_cri = (int)cri;
     }
     ReleaseAll((igObjectList *)self->_playSEs);
-    playSEs = (igObjectList *)self->_playSEs;
-    if (!(0 < playSEs->_count)) {
-        List_Reserve(playSEs, 0, 4);
-    }
+    ReserveIfEmpty((igObjectList *)self->_playSEs);
 }
 
 void beSound_RegisterReceiver(beSound *self, beBaseInfoRam *ram) {
@@ -274,9 +278,7 @@ void beSound_Update(beSound *self, beBaseInfoRam *ram) {
                 continue;
             }
             ReleaseAll((igObjectList *)info->_dataList);
-            if (!(0 < ((igObjectList *)info->_dataList)->_count)) {
-                List_Reserve((igObjectList *)info->_dataList, 0, 4);
-            }
+            ReserveIfEmpty((igObjectList *)info->_dataList);
             igRelease(((igObject **)infos->_data)[infoIndex]);
             List_RemoveWordAt(infos, infoIndex);
             ((igObject **)infos->_data)[infos->_count] = 0;
@@ -321,18 +323,17 @@ int beSound_OnMessage(beSound *self, beBaseInfoRam *ram, beMessengerWork *messag
     int knownIndex;
     int objectIndex;
     char *pooled;
-    char *dataType;
     beSoundData *data;
     void *allocator;
     igObjectList *dataList;
     int dataCount;
     int dataIndex;
+    /* matching construct: declaration-order search — rowIndex before playSE and rowOffset gives the play-row search retail's argument registers */
+    int rowIndex;
     bePlaySE *playSE;
-    int offset;
+    int rowOffset;
     bePlaySEList *playSEs;
-    bePlaySEList *rows;
     long long now;
-    int playing;
 
     info = (beSoundInfo *)ram->_parentInfo;
     switch (beMessenger_ResolveEnumValue(self->_messenger, beSound_GetMessageEnum(), message->_message)) {
@@ -365,25 +366,25 @@ int beSound_OnMessage(beSound *self, beBaseInfoRam *ram, beMessengerWork *messag
             break;
         default:
             now = ((igInsightCore *)self->_insight)->_worldTime;
+            /* matching construct: hand search — the list re-read after each row (as beSound_Update walks it) and the
+             * byte offset keep the count load in the loop and the row offset beside the index, as retail has them */
             playSEs = (bePlaySEList *)self->_playSEs;
-            /* matching construct: m2c — the list copy and the int view of _count keep the row and count loads inside the loop */
-            playing = 0;
-            rows = playSEs;
-            if (0 < *(int *)&playSEs->_count) {
-                offset = 0;
+            rowIndex = 0;
+            if (rowIndex < playSEs->_count) {
+                rowOffset = 0;
                 do {
-                    playSE = *(bePlaySE **)((char *)rows->_data + offset);
+                    playSE = *(bePlaySE **)(playSEs->_data + rowOffset);
                     if (playSE->_id == index && now < playSE->_time) {
                         beMessenger_AppendInt(self->_messenger, 0);
                         beMessenger_AppendLong(self->_messenger, 0);
                         return 1;
                     }
-                    playing += 1;
-                    offset += 4;
-                    rows = playSEs;
-                } while (playing < playSEs->_count);
+                    rowIndex++;
+                    rowOffset += 4;
+                    playSEs = (bePlaySEList *)self->_playSEs;
+                } while (rowIndex < playSEs->_count);
             }
-            handle = beCri_PlayEffect((beCri *)self->_cri, (igObjectList *)info->_fnameList, data, playing);
+            handle = beCri_PlayEffect((beCri *)self->_cri, (igObjectList *)info->_fnameList, data);
             beMessenger_AppendInt(self->_messenger, data->_type);
             beMessenger_AppendLong(self->_messenger, handle);
             if (handle > 0) {
@@ -430,7 +431,7 @@ int beSound_OnMessage(beSound *self, beBaseInfoRam *ram, beMessengerWork *messag
         from = beMessenger_GetFloat(self->_messenger, 0);
         to = beMessenger_GetFloat(self->_messenger, 1);
         frames = beMessenger_GetFloat(self->_messenger, 2);
-        span = Abs(from - to);
+        span = Abs(from - to); /* retail computes the size of the change and never uses it */
         beCri_FadeByName((beCri *)self->_cri, name, from, to, frames);
         break;
     case MESSAGE_BGMSTOP:
@@ -491,7 +492,7 @@ int beSound_OnMessage(beSound *self, beBaseInfoRam *ram, beMessengerWork *messag
                 igStringObj_Set(scratch.p, NameOf(((igNamedObject **)fileNames->_data)[fileIndex]->_name));
                 igStringObj_KeepExtension(scratch.p);
                 igStringObj_Erase(scratch.p, 0, 1);
-                dataType = (char *)info->_dataType;
+                char *dataType = (char *)info->_dataType;
                 if (strcmp(dataType, TextOf(scratch.p)) == 0) {
                     igStringObj_Set(scratch.p, NameOf(((igNamedObject **)fileNames->_data)[fileIndex]->_name));
                     igStringObj_StripDirectory(scratch.p);
