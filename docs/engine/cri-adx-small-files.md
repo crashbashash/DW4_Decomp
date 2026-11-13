@@ -32,6 +32,6 @@ format the header parse stored in the handle.
   (it reads it in the `lui`, `addiu`, `0(reg)` form); the word is shared with the ADXM threads. It has no
   source until the owner rules on it.
 - CRI CFG's init (`0x26f2b8`) stores the build string's address in the `lui`, `addiu`, `0(reg)` form, the
-  shape of the approved build-string stores ([source approvals](source-approvals.md#build-string-stores)); it
+  shape of the build-string stores ([source approvals](source-approvals.md#build-string-stores)); it
   has no row, so it has no source. `0x26f4b0` reads a setting by name (`CRICFG_Read`); its rename waits on
   its Sofdec caller.

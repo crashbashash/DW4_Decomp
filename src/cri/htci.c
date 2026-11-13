@@ -28,7 +28,7 @@ typedef struct HtCiTable {
     int namelen;
 } HtCiTable;
 
-extern volatile int DAT_004ab5d8;
+extern char *volatile DAT_004ab5d8;
 extern void (*DAT_004ab5dc)(void *context, const char *message, void *detail);
 extern void *DAT_004ab5e0;
 extern int DAT_004ab5e4;

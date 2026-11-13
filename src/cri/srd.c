@@ -24,7 +24,7 @@ typedef struct SrdObj {
 } SrdObj;
 
 extern SrdObj DAT_004a9288;
-extern volatile int DAT_004a92c0;
+extern char *volatile DAT_004a92c0;
 extern int DAT_004a92c4;
 extern volatile int DAT_004a92c8;
 extern volatile int DAT_004a92cc;

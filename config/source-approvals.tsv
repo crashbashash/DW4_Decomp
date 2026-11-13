@@ -76,6 +76,7 @@ volatile	adxm_goto_usridle_border	1	#adxm-thread-ids
 volatile	adxm_create_usridle_thrd	2	#adxm-thread-ids
 volatile	ADXM_ShutdownThrd	1	#adxm-thread-ids
 volatile	ADXM_ShutdownThrdEx	1	#adxm-thread-ids
+volatile	FUN_0027e0d0	2	#svm-lock-counts
 volatile	FUN_0027e130	2	#svm-lock-counts
 volatile	FUN_00272620	1	#srd-server-words
 volatile	FUN_002a9210	1	#sony-hardware-registers
@@ -172,14 +173,9 @@ volatile	VSync2	9	#sony-interrupt-shared-state
 volatile	_ch3dmaCSC	11	#sony-interrupt-shared-state
 volatile	sceTtyInit	5	#sony-interrupt-shared-state
 volatile	adxm_goto_svr_border	1	#adxm-thread-flags
-volatile	adxm_vsync_thrd	6	#adxm-thread-flags
-volatile	adxm_fs_thrd	6	#adxm-thread-flags
-volatile	adxm_usridle_thrd	5	#adxm-thread-flags
 asm	sceSifWriteBackDCache	1	#sony-libkernl-cop0-and-syscall
 volatile	sceSifWriteBackDCache	1	#sony-libkernl-cop0-and-syscall
-volatile	adxm_mwidle_thrd	7	#adxm-thread-flags
 volatile	adxm_safe_thrd	2	#adxm-thread-flags
-volatile	adxm_usrvsync_thrd	4	#adxm-thread-flags
 volatile	adxm_request_thrd_exit	6	#adxm-thread-flags
 volatile	adxm_delete_safe_thrd	3	#adxm-thread-flags
 volatile	adxm_delete_usrvsync_thrd	3	#adxm-thread-flags
@@ -189,7 +185,6 @@ volatile	adxm_delete_mwidle_thrd	3	#adxm-thread-flags
 volatile	adxm_delete_usridle_thrd	3	#adxm-thread-flags
 volatile	ADXM_WaitVsync	1	#adxm-thread-flags
 volatile	adxm_wakeup_vsync_waiter	2	#adxm-thread-flags
-volatile	FUN_00271670	1	#srd-module-words
 volatile	FUN_00271a68	1	#srd-module-words
 volatile	FUN_00271c00	3	#srd-module-words
 volatile	FUN_00271d50	3	#srd-module-words
@@ -204,14 +199,7 @@ volatile	FUN_00272580	1	#srd-module-words
 volatile	FUN_00272590	1	#srd-module-words
 volatile	FUN_002725a0	2	#srd-module-words
 volatile	FUN_002725c0	1	#srd-module-words
-volatile	FUN_002b5848	8	#sud-timer
 volatile	FUN_002b59a0	2	#sud-timer
-volatile	FUN_002b5a10	7	#sud-timer
-volatile	FUN_002632c0	2	#adxt-ready-count
-volatile	FUN_00263208	1	#adxt-ready-count
-volatile	FUN_002b50e8	1	#build-string-stores
-volatile	FUN_002b3788	1	#build-string-stores
-volatile	FUN_00283058	1	#build-string-stores
 asm	p2AddDmaPredicate	1	#dma-channel-cop0
 volatile	p2AddDmaPredicate	1	#dma-channel-cop0
 asm	p2AddDmaCompletion	1	#dma-channel-cop0

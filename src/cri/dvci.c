@@ -43,7 +43,7 @@ typedef struct DvCiTable {
     int namelen;
 } DvCiTable;
 
-extern volatile int DAT_004aa740;
+extern char *volatile DAT_004aa740;
 extern void (*DAT_004aa744)(void *context, const char *message, void *detail);
 extern void *DAT_004aa748;
 extern int DAT_004aa74c;

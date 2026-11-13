@@ -122,12 +122,23 @@ The ADX manager's thread id words, written at thread creation and cleared at shu
 event callbacks, thread bodies, the idle-border switches and the shutdown functions.
 
 * Retail keeps loads a plain spelling drops: a load right after the store with its result unused, or a second read
-  with no call between. The functions come out shorter without the keyword.
+  with no call between. This holds for the create functions, the lock and unlock callbacks and the idle-thread
+  wakeup, which come out shorter without the keyword.
+* Four rows have a single read of the word and differ from a plain spelling only by the address form: the two
+  idle-border switches and the two shutdown functions. They rest on the file-scope declaration the functions above
+  prove.
+* Three of the ids are also read by `adxm_exec_vint`, the vertical-blank interrupt path, which is the reader in
+  another context.
 
 ### svm-lock-counts
 
-The SVM lock's nesting count and type are globals changed around the lock and unlock callbacks. Retail stores the
-count and immediately loads it back, which a plain spelling forwards from the register.
+The SVM lock's nesting count (`0x4baff8`) and type (`0x4baffc`) are globals changed around the lock and unlock
+callbacks, in the lock (the function at `0x27e0d0`) and the unlock (the function at `0x27e130`).
+
+* Retail reloads the count: the unlock stores it and immediately loads it back, which a plain spelling forwards from
+  the register (8 bytes shorter stripped), and the lock loads it for the test and again for its increment, with
+  only a store to the type word between.
+* The unlock reads the type word twice with no call between; stripped, the reads merge (4 bytes shorter).
 
 ### srd-server-words
 
@@ -157,12 +168,8 @@ the lock switches (`0x4a92c8`, `0x4a92cc`, `0x4a92d0`), the error-check switch (
   counter reloaded on each pass.
 * They are shared state: the module's server step runs under CRI's lock and test-and-set routines, and the words
   it writes are read by setters, getters and the module's debug summary.
-* The create count is touched only by its own increment, and its keyword changes only how a delay slot is filled:
-  without it, the delay-slot pass moves a later register copy into the slot of the call before the increment;
-  with it, the pass stops at the count's load and leaves a `nop`, as retail does. Hand variants and a
-  decomp-permuter search barred from adding qualifiers found no plain spelling. The owner approved it on the
-  declaration context: the module declares its data in file order, and the count sits in a run of four counts of
-  the same role whose read ones are proven `volatile`, followed by a proven `volatile` word.
+* The create count (`0x4a92e8`) is touched only by its own increment in the function at `0x271670`, and its keyword changes only
+  how a delay slot is filled. That function has no row (see [Open questions](#open-questions)).
 
 ### sud-timer
 
@@ -176,32 +183,40 @@ clock pointer (`0x5856d0`), the nesting count (`0x5856d4`), and the two tables o
   negative; the read increments the nesting count and loads it straight back, and re-reads the clock after
   storing it. These are reloads a plain spelling forwards.
 * Every access to the RAM words, in every function, uses the `lui`, `addiu`, `0(reg)` form, and nothing outside
-  the timer functions touches them. Compiled as one file with any one `volatile` removed, the timer init or the
-  timer read no longer matches.
+  the timer functions touches them.
+* The saved clock (`0x5856c0`) and the pointee qualifier of the clock pointer lose no access when stripped: the
+  first only reorders the stores of the clock copy, the second drops one duplicated `addiu`. So the timer init
+  (the function at `0x2b5848`) and the timer read (the function at `0x2b5a10`), which reach them, have no row (see
+  [Open questions](#open-questions)); the tick (the function at `0x2b59a0`) does.
 
 ### build-string-stores
 
 A module's init stores the address of its version string in a word that nothing else reads or points to, in the
-`lui`, `addiu`, `0(reg)` form, ahead of the code a plain spelling would let it sink into. It is the write-side
-counterpart of a build-string read. The owner approved it for the four inits that do it: ADXT (`0x56dfa8`), SUD (`0x5856a8`), SFX
-(`0x5856a0`) and CFT (`0x573ea8`). In each the store is the word's only access in the executable.
+`lui`, `addiu`, `0(reg)` form, ahead of the code a plain spelling would let it sink into. Four inits do it: ADXT
+(`0x56dfa8`), SUD (`0x5856a8`), SFX (`0x5856a0`) and CFT (`0x573ea8`). In each the store is the word's only access in
+the executable, and stripping changes only the address form and where the store sits, never whether it happens.
+These inits have no row (see [Open questions](#open-questions)).
 
 ### adxt-ready-count
 
 ADXT's tick count at `0x49c8f0`, which the init file declares `volatile`.
 
-* It is shared with a thread: ADXT's init clears it, the server entry and ADXPS2's manager-thread callback
-  increment it, and the handle code copies it into a handle as a start time.
+* ADXT's init clears it, the server entry and `adxm_exec_vint` increment it, and the handle code copies it into a
+  handle as a start time. `adxm_exec_vint` is the vertical-blank interrupt path, reached from `ADXM_ExecVint`.
 * The same statement, a handle's start time set from the count, compiles in the `lui`, `addiu`, `0(reg)` form
   in one ADXT file and folded into `%lo` in another, which one declaration cannot give: the original declared
   the word `volatile` in some files and plain in others. The init's single store has the first form, and no
   plain spelling tried reproduces it.
+* No matched function re-reads the word. Stripping changes only the init's store by its address form, and the
+  server entry's `+= 1` not at all. The init (the function at `0x2632c0`, whose count of 2 also takes in its build-string word
+  `0x56dfa8`) and the server entry (the function at `0x263208`) have no row (see [Open questions](#open-questions)).
 
 ### build-string-reads
 
 A function reads a word holding the address of a build string, such as `"\nSRD/PS2EE Ver.2.22 Build:..."`, and never uses
 the value.
 
+* Each word is declared `char *volatile`, since it holds the string's address.
 * This is not shared state. The evidence is the mechanism: the word is the string's only reference, none of the GCC
   functions that match with no keyword has a load whose result goes unused, and every plain spelling tried drops it.
 * That the source reads the word to keep the string linked is inference. The owner accepted these on that basis.
@@ -262,11 +277,22 @@ The ADX manager's server threads and its border wait. Each server thread loops u
 then records that it has exited, and the border wait spins on a flag the server thread clears. Other threads set
 the requests and wait on the exit words, so the state really is shared between threads.
 
+* The rows also cover the border flag (set by the border wait, cleared by the idle threads), the MW-idle thread's
+  slept flag (set by that thread, read and cleared by the V-sync thread), the V-sync waiting flag (set by
+  `ADXM_WaitVsync`, read and cleared by the V-sync thread), the busy flags `adxm_usrvsync_busy`, `adxm_fs_busy` and
+  `adxm_vsync_busy` (read by `adxm_exec_vint`, the vertical-blank interrupt path), and thread-id words whose
+  evidence is under [ADXM thread ids](#adxm-thread-ids).
 * The loops contain calls, so they reload the flags with or without the keyword, and the strip test loses no load.
-  The case rests on the shared state, approved on that basis.
+  It does not leave the functions unchanged: stripping an exit request or exited word shortens the thread bodies,
+  `adxm_request_thrd_exit` and the delete functions by 4 to 20 bytes, through the address form and hoisting. The case
+  rests on the shared state, approved on that basis.
 * Retail reads every one of these words through a full address in a register. Under ee-gcc 2.96 a single plain access
   is never written that way, which supports a `volatile`-qualified access in the source.
 * One server thread also writes the GS background colour register at its fixed address, a hardware access.
+* The server thread bodies (`adxm_vsync_thrd`, `adxm_fs_thrd`, `adxm_usridle_thrd`, `adxm_mwidle_thrd`,
+  `adxm_usrvsync_thrd`) have no row: each also reaches its tick count, and the MW-idle and user-idle bodies their
+  busy flags, which only their own thread touches and whose keywords only reorder a store (see
+  [Open questions](#open-questions)).
 
 ### sony-hardware-registers
 
@@ -423,6 +449,21 @@ hold one GCC-style `__asm__` statement of VU0 macro-mode code.
   assembler fills its delay slot, as retail has it.
 
 ## Open questions
+
+* **Revoked CRI rows.** Thirteen CRI functions match only with a `volatile` whose keyword keeps no memory access
+  and guards no state another context touches. Their rows were revoked, and they stay `unapproved` until there is
+  evidence that the original declared the words `volatile`, such as an upstream CRI source or a second build:
+  * the ADXM server thread bodies `adxm_vsync_thrd`, `adxm_fs_thrd`, `adxm_usridle_thrd`, `adxm_mwidle_thrd` and
+    `adxm_usrvsync_thrd`: the tick counts `0x49d9e8` to `0x49da08` and the busy flags `adxm_mwidle_busy` and
+    `adxm_usridle_busy` are touched by their own thread only, and their keywords only reorder a store;
+  * the function at `0x271670`, the SRD create count `0x4a92e8`: touched only by this increment; the keyword only leaves a
+    delay slot unfilled;
+  * the function at `0x2b5848` and the function at `0x2b5a10`, the SUD saved clock `0x5856c0` and the pointee qualifier of `0x5856d0`: no
+    access is lost when stripped;
+  * the function at `0x2632c0` and the function at `0x263208`, the ADXT tick count `0x49c8f0`: no matched function re-reads it;
+  * the function at `0x2632c0`, the function at `0x2b50e8`, the function at `0x2b3788` and the function at `0x283058`, the build-string stores (`0x56dfa8`,
+    `0x5856a8`, `0x5856a0`, `0x573ea8`): each store is its word's only access, and the keyword changes only its
+    address form and position.
 
 * **The stack slot `volatile` stands in for.** Some inlined list searches take a value that retail stores
   to the stack and reads back. Locals, structs, arrays,

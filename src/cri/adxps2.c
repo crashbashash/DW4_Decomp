@@ -46,7 +46,7 @@ extern int adxm_setup_count;
 extern AdxmThreadPrmEx adxm_tprm;
 extern int adxm_lock_level;
 extern volatile int adxm_border_request;
-extern int adxm_vsync_busy;
+extern volatile int adxm_vsync_busy;
 extern volatile int adxm_fs_busy;
 extern volatile int adxm_mwidle_busy;
 extern volatile int adxm_usridle_busy;
