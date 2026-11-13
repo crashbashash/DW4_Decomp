@@ -225,6 +225,13 @@ the match needs. The integrator re-runs that command before promoting anything a
 claim as unmatched. Brief sub-agents with what matched and readable mean; they never run full builds and never write into the
 repository.
 
+Pick the sub-agent's model by the kind of work:
+
+- **Mechanical work** (renames, applying names or data names, regenerating tables, collecting data):
+  Sonnet 5.5.
+- **Understanding and readability passes, decompiling a function:** Opus 5.5.
+- **A function or shape Opus 5.5 could not explain:** hand it, with that agent's report, to Fable 5.2.
+
 ## Retail-game work
 
 Read [testing tools](testing/tools.md), the [game reference](docs/reference/game-reference.md),
