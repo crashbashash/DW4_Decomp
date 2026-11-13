@@ -1290,7 +1290,7 @@ extern "C" void FUN_0035a560(void);
 extern "C" void *beMatCtrlData_Register(void);
 extern "C" void beMatCtrlData_GetMetaObject(void);
 extern "C" void beMatCtrlData_InitFields(void);
-extern "C" int FUN_0035a6b0(void);
+extern "C" int beMatCtrl_GetMessageEnum(void);
 extern "C" void beMatCtrl_CreateInstance(int arg0);
 extern "C" igMetaObject *FUN_0035a750(void);
 extern "C" void *FUN_0035a7a0(void);

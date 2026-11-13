@@ -1011,3 +1011,4 @@
 0x00447ba0	beNDMWMdlPEBaseInfoWork::GetMeta	game
 0x00447bb0	beNDMWMdlPEBase::GetMeta	game
 0x003c99a0	beNDMWShinkaObject_CreateInstance	game
+0x0018b630	igAABox_IntersectPoint	engine

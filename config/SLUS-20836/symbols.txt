@@ -3693,7 +3693,7 @@
 0018b350 0000f8 FUN_0018b350
 0018b450 0000e4 FUN_0018b450
 0018b540 0000e8 FUN_0018b540
-0018b630 000080 FUN_0018b630
+0018b630 000080 igAABox_IntersectPoint
 0018b6b0 000080 FUN_0018b6b0
 0018b730 000098 FUN_0018b730
 0018b7d0 0000b8 FUN_0018b7d0
@@ -15562,7 +15562,7 @@
 0035a580 000074 beMatCtrlData_Register
 0035a600 00001c beMatCtrlData_GetMetaObject
 0035a620 000090 beMatCtrlData_InitFields
-0035a6b0 000054 FUN_0035a6b0
+0035a6b0 000054 beMatCtrl_GetMessageEnum
 0035a710 000034 beMatCtrl_CreateInstance
 0035a750 000044 FUN_0035a750
 0035a7a0 00004c FUN_0035a7a0
@@ -17125,13 +17125,13 @@
 0038ae30 000060 beMatCtrl_IsRideOffPlayer
 0038ae90 000010 beMatCtrl_SetRun
 0038aea0 0000c8 beMatCtrl_GetPlayerMatStat
-0038af70 0000d0 Gap__Bec__beMatCtrl__vfunc_32 Gap::Bec::beMatCtrl::vfunc_32
-0038b040 00000c Gap__Bec__beMatCtrl__vfunc_30 Gap::Bec::beMatCtrl::vfunc_30
-0038b050 00002c Gap__Bec__beMatCtrl__vfunc_29 Gap::Bec::beMatCtrl::vfunc_29
-0038b080 000170 FUN_0038b080
-0038b1f0 000bf8 Gap__Bec__beMatCtrl__vfunc_31 Gap::Bec::beMatCtrl::vfunc_31
-0038bdf0 0000dc Gap__Bec__beMatCtrl__vfunc_34 Gap::Bec::beMatCtrl::vfunc_34
-0038bed0 00000c Gap__Bec__beMatCtrl__vfunc_20 Gap::Bec::beMatCtrl::vfunc_20
+0038af70 0000d0 beMatCtrl_Prepare
+0038b040 00000c beMatCtrl_GetInfoMeta
+0038b050 00002c beMatCtrl_RegisterReceiver
+0038b080 000170 beMatCtrl_MarkContacts
+0038b1f0 000bf8 beMatCtrl_Update
+0038bdf0 0000dc beMatCtrl_OnMessage
+0038bed0 00000c beMatCtrl_GetMeta
 0038bee0 0004ac beMessenger_InitializeMemory
 0038c390 000080 FUN_0038c390
 0038c410 000080 FUN_0038c410

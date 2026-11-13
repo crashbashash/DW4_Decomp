@@ -1,233 +1,221 @@
+/* beMatCtrl: the material controller. Each update marks, per material, which players stand inside one
+ * of its boxes (a player bit in an igIntList element) and runs the material's Lua script when a
+ * player's bit changes; the Lua MAT bindings read the current and previous masks of the material whose
+ * script is running. The MATCTRL messages show or hide a material's switch graph, toggle the Lua call
+ * trace and pause or restart a RAM. */
 #include "dw4/reflected.h"
+#include "dw4/igSmartPointer.h"
 
-extern "C" int igInsightCore_FindManager(int, int);
-extern "C" int Gap__Bec__beMatCtrl__vfunc_30(void);
-extern "C" int Gap__Bec__beMatCtrl__vfunc_20(void);
-extern "C" int beMessenger_RegisterReceiver(int, int, int, int, int);
-extern "C" int igSwitch_EnableAllChildren(int);
-extern "C" int igSwitch_DisableAllChildren(int);
-extern "C" int FUN_0035a6b0(...);
-extern "C" unsigned int beMessenger_ResolveEnumValue(int, int, int);
-extern "C" bool beMatCtrl_IsPlayer(beMatCtrl *arg0);
-/* beMatCtrl._wkPlExist (+32) is an igBoolArray; the reflected header declares only its first word, so the byte array is spelled by this view.
- * matching construct: an array member keeps retail's addu-then-lbu shape; the view carries the receiver, the other fields are read through beMatCtrl. */
-struct beMatCtrlView { int pad[8]; unsigned char act[8]; int idx; int pad3[3]; int a; int b; };
-extern "C" bool beMatCtrl_IsAllPlayer(beMatCtrlView *c);
-extern "C" int beMatCtrl_GetPlayerNo(beMatCtrl *c);
-extern "C" int beMatCtrl_IsRidePlayer(beMatCtrl *arg0, int arg1);
-extern "C" int beMatCtrl_IsRideOffPlayer(beMatCtrl *arg0, int arg1);
-extern "C" void beMatCtrl_SetRun(beMatCtrl *self, int value);
-extern "C" int beMatCtrl_GetPlayerMatStat(beMatCtrl *m, int n);
-extern "C" int igObject_Destroy(igDataList *);
-extern "C" int g_beLua_metaObject[4];
-extern "C" void Gap__Bec__beMatCtrl__vfunc_32(beMatCtrl *arg0);
-extern "C" int g_beMatCtrlInfo_metaObject[4];
-extern "C" int g_beMatCtrl_metaObject[4];
-extern "C" int MATCTRL[4];
-extern "C" void Gap__Bec__beMatCtrl__vfunc_29(beMatCtrl *self, int selector);
-/* tree is a beMatCtrlSearchList (igObjectList): _count +8, _data +16 = beMatCtrlSearch *[]; node
- * is a beMatCtrlSearch: _minX +8, _maxX +12, _matNO +16, _memberList +24 = child list; cells is a
- * beMatCtrlDataList: _count +8, _data +16 = beMatCtrlData *[], cell->_chkBox +12 = box; flags is
- * an igIntList: _count +8, _data +16 = int[]. Arena references are 4-byte handles in the reflected
- * fields; the casts below widen them to the pointers the code dereferences. */
-struct B;
-struct V;
-extern "C" int FUN_0018b630(struct B *arg0, struct V *arg1);
-extern "C" void FUN_0038b080(int arg0, igIntList *flags, beMatCtrlSearchList *tree, int bit, float *pos, beMatCtrlDataList *cells);
-extern "C" int Gap__Bec__beMatCtrl__vfunc_34(beMatCtrl *arg0, beMatCtrlInfoRam *arg1, beMatCtrlInfo *arg2);
+/* beMessenger_ResolveEnumValue values of the handler's command names. */
+enum MatCtrlMessage {
+    MESSAGE_SHOWMAT, MESSAGE_HIDEMAT, MESSAGE_SHOW_LUACALL, MESSAGE_HIDE_LUACALL, MESSAGE_PAUSE,
+    MESSAGE_RESTART
+};
 
-bool beMatCtrl_IsPlayer(beMatCtrl *arg0)
-{
-    bool r = false;
-    if (*(int *)(((igDataList *)arg0->_wkMatOnList)->_data + arg0->_wkChkMat * 4) != 0) {
-        r = true;
-    }
-    return r;
+/* beMatCtrl_GetPlayerMatStat results. */
+enum PlayerMatStat { MATSTAT_OUTSIDE, MATSTAT_LEAVE, MATSTAT_ENTER, MATSTAT_STAY };
+
+/* igAABox_IntersectPoint result of a point inside the box. */
+#define INTERSECT_INSIDE 2
+
+#define PLAYER_MAX 4
+
+extern "C" {
+int igInsightCore_FindManager(int insight, int meta);
+void beMessenger_RegisterReceiver(int messenger, void *receiver, const char *name, const char *text, int value);
+unsigned int beMessenger_ResolveEnumValue(int messenger, int metaEnum, int name);
+int beMatCtrl_GetMessageEnum(void);
+void igSwitch_EnableAllChildren(int switchgraph);
+void igSwitch_DisableAllChildren(int switchgraph);
+int igAABox_IntersectPoint(igAABox *box, const float *point);
+
+bool beMatCtrl_IsPlayer(beMatCtrl *self);
+bool beMatCtrl_IsAllPlayer(beMatCtrl *self);
+int beMatCtrl_GetPlayerNo(beMatCtrl *self);
+bool beMatCtrl_IsRidePlayer(beMatCtrl *self, int player);
+bool beMatCtrl_IsRideOffPlayer(beMatCtrl *self, int player);
+void beMatCtrl_SetRun(beMatCtrl *self, bool run);
+int beMatCtrl_GetPlayerMatStat(beMatCtrl *self, int player);
+void beMatCtrl_Prepare(beMatCtrl *self);
+int beMatCtrl_GetInfoMeta(void);
+void beMatCtrl_RegisterReceiver(beMatCtrl *self, beMatCtrlInfoRam *ram);
+void beMatCtrl_MarkContacts(beMatCtrl *self, igIntList *masks, beMatCtrlSearchList *nodes, int player, float *point, beMatCtrlDataList *materials);
+int beMatCtrl_OnMessage(beMatCtrl *self, beMatCtrlInfoRam *ram, beMessengerWork *message);
+int beMatCtrl_GetMeta(void);
+
+extern int g_beLua_metaObject[4];
+extern int g_beMatCtrlInfo_metaObject[4];
+extern int g_beMatCtrl_metaObject[4];
+extern const char MATCTRL[];
 }
 
-bool beMatCtrl_IsAllPlayer(beMatCtrlView *c) {
-    bool r = true;
-    beMatCtrl *m = (beMatCtrl *)c;
-    for (int i = 0; i < 4; i++) {
-        if (c->act[i] != 0) {
-            int bit = 1 << i;
-            if (bit != (bit & ((unsigned int *)((igDataList *)m->_wkMatOnList)->_data)[m->_wkChkMat])) { r = false; break; }
+/* The mask lists' memory is addressed by byte offset: the queries scale the running material's index
+ * once and read both lists at that offset. */
+static inline int MaskAt(int masks, int offset) {
+    return *(int *)(((igIntList *)masks)->_data + offset);
+}
+
+static inline bool HasPlayer(int mask, int bit) {
+    return bit == (bit & mask);
+}
+
+bool beMatCtrl_IsPlayer(beMatCtrl *self) {
+    bool onMaterial = false;
+    if (MaskAt(self->_wkMatOnList, self->_wkChkMat * sizeof(int)) != 0) {
+        onMaterial = true;
+    }
+    return onMaterial;
+}
+
+bool beMatCtrl_IsAllPlayer(beMatCtrl *self) {
+    bool all = true;
+    for (int player = 0; player < PLAYER_MAX; player++) {
+        if (self->_wkPlExist[player] != 0) {
+            int bit = 1 << player;
+            if (!HasPlayer(MaskAt(self->_wkMatOnList, self->_wkChkMat * sizeof(int)), bit)) {
+                all = false;
+                break;
+            }
         }
     }
-    return r;
+    return all;
 }
 
-int beMatCtrl_GetPlayerNo(beMatCtrl *c) {
-    unsigned char *p = (unsigned char *)c; /* matching construct: separate local byte base keeps the retail operand order of the byte index add; _wkPlExist (+32) is four inline bool bytes, reflected as one int */
-    int k;
-    int bit;
-    int i;
-    for (i = 0; i < 4; i++) {
-        if (p[i + 32] != 0) {
-            k = c->_wkChkMat * 4;
-            bit = 1 << i;
-            if (bit == (bit & *(unsigned int *)(((igDataList *)c->_wkMatOnList)->_data + k)) && bit != (bit & *(unsigned int *)(((igDataList *)c->_wkMatOldOnList)->_data + k))) return i;
+int beMatCtrl_GetPlayerNo(beMatCtrl *self) {
+    for (int player = 0; player < PLAYER_MAX; player++) {
+        if (self->_wkPlExist[player] != 0) {
+            int offset = self->_wkChkMat * sizeof(int);
+            int bit = 1 << player;
+            if (HasPlayer(MaskAt(self->_wkMatOnList, offset), bit) && !HasPlayer(MaskAt(self->_wkMatOldOnList, offset), bit)) return player;
         }
     }
     return 0;
 }
 
-int beMatCtrl_IsRidePlayer(beMatCtrl *arg0, int arg1) {
-    int idx;
-    int bit;
-
-    idx = arg0->_wkChkMat * 4;
-    bit = 1 << arg1;
-    if ((bit == (bit & *(int *)((char *)((igDataList *)arg0->_wkMatOnList)->_data + idx))) && (bit != (bit & *(int *)((char *)((igDataList *)arg0->_wkMatOldOnList)->_data + idx)))) {
-        return 1;
+bool beMatCtrl_IsRidePlayer(beMatCtrl *self, int player) {
+    int offset = self->_wkChkMat * sizeof(int);
+    int bit = 1 << player;
+    if (HasPlayer(MaskAt(self->_wkMatOnList, offset), bit) && !HasPlayer(MaskAt(self->_wkMatOldOnList, offset), bit)) {
+        return true;
     }
-    return 0;
+    return false;
 }
 
-int beMatCtrl_IsRideOffPlayer(beMatCtrl *arg0, int arg1) {
-    int off = arg0->_wkChkMat * 4;
-    int bit = 1 << arg1;
-    int r;
-    if (bit != (bit & *(int *)(((igDataList *)arg0->_wkMatOnList)->_data + off))
-        && bit == (bit & *(int *)(((igDataList *)arg0->_wkMatOldOnList)->_data + off)))
-        r = 1;
-    else {
-        r = 0;
+bool beMatCtrl_IsRideOffPlayer(beMatCtrl *self, int player) {
+    int offset = self->_wkChkMat * sizeof(int);
+    int bit = 1 << player;
+    if (!HasPlayer(MaskAt(self->_wkMatOnList, offset), bit) && HasPlayer(MaskAt(self->_wkMatOldOnList, offset), bit)) {
+        return true;
     }
-    return r;
+    return false;
 }
 
-/* Deferred material activation request. */
-
-void beMatCtrl_SetRun(beMatCtrl *self, int value) {
+/* Asks the update to set the running material's run flag once its script returns. */
+void beMatCtrl_SetRun(beMatCtrl *self, bool run) {
     self->_wkChgFlagNO = self->_wkChkMat;
-    self->_wkChgFlag = value;
+    self->_wkChgFlag = run;
 }
 
-int beMatCtrl_GetPlayerMatStat(beMatCtrl *m, int n) {
-    igIntList *p56;
-    igIntList *p60;
-    int idx;
-    int mask;
-    unsigned char b;
-    int x;
-    int r;
-    int a;
-    idx = m->_wkChkMat;
-    p60 = (igIntList *)m->_wkMatOldOnList;
-    x = idx * 4;
-    mask = 1 << n;
-    b = mask == (mask & *(int *)((char *)p60->_data + x));
-    p56 = (igIntList *)m->_wkMatOnList;
-    a = mask == (mask & *(int *)((char *)p56->_data + x));
-    r = 0;
-    if (a == 1 && b == 1) r = 3;
-    else if (a == 1 && b != 1) r = 2;
-    else if (a != 1 && b == 1) r = 1;
-    else if (a != 1 && b != 1) r = 0;
-    return r;
+int beMatCtrl_GetPlayerMatStat(beMatCtrl *self, int player) {
+    int bit;
+    int offset;
+    bool wasOn;
+    int isOn;
+    int stat;
+    offset = self->_wkChkMat * sizeof(int);
+    bit = 1 << player;
+    wasOn = bit == (bit & MaskAt(self->_wkMatOldOnList, offset));
+    isOn = bit == (bit & MaskAt(self->_wkMatOnList, offset));
+    stat = MATSTAT_OUTSIDE;
+    if (isOn == 1 && wasOn == 1) stat = MATSTAT_STAY;
+    else if (isOn == 1 && wasOn != 1) stat = MATSTAT_ENTER;
+    else if (isOn != 1 && wasOn == 1) stat = MATSTAT_LEAVE;
+    else if (isOn != 1 && wasOn != 1) stat = MATSTAT_OUTSIDE;
+    return stat;
 }
 
-void Gap__Bec__beMatCtrl__vfunc_32(beMatCtrl *arg0) {
-    igDataList *temp_a0;
-    igDataList *temp_a0_2;
-    igDataList *temp_v1;
-    igDataList *temp_v1_2;
-
-    arg0->_lua = igInsightCore_FindManager(arg0->_insight, g_beLua_metaObject[0]);
-    temp_v1 = (igDataList *)(arg0->_wkMatOnList);
-    if (temp_v1 != 0) {
-        temp_v1->_count = 0;
-        temp_a0 = (igDataList *)(arg0->_wkMatOnList);
-        if (temp_a0 != 0) {
-            temp_a0->_refCount = temp_a0->_refCount - 1;
-            if ((temp_a0->_refCount & 0x7FFFFF) == 0) {
-                igObject_Destroy(temp_a0);
-            }
-        }
-        arg0->_wkMatOnList = 0;
-    }
-    temp_v1_2 = (igDataList *)(arg0->_wkMatOldOnList);
-    if (temp_v1_2 != 0) {
-        temp_v1_2->_count = 0;
-        temp_a0_2 = (igDataList *)(arg0->_wkMatOldOnList);
-        if (temp_a0_2 != 0) {
-            temp_a0_2->_refCount = temp_a0_2->_refCount - 1;
-            if ((temp_a0_2->_refCount & 0x7FFFFF) == 0) {
-                igObject_Destroy(temp_a0_2);
-            }
-        }
-        arg0->_wkMatOldOnList = 0;
+/* Empties a published mask list and drops the controller's reference to it. */
+static inline void DropMaskList(int &masks) {
+    igIntList *list = (igIntList *)masks;
+    if (list != 0) {
+        list->_count = 0;
+        igRelease((igObject *)masks);
+        masks = 0;
     }
 }
 
-int Gap__Bec__beMatCtrl__vfunc_30(void)
-{
+void beMatCtrl_Prepare(beMatCtrl *self) {
+    self->_lua = igInsightCore_FindManager(self->_insight, g_beLua_metaObject[0]);
+    DropMaskList(self->_wkMatOnList);
+    DropMaskList(self->_wkMatOldOnList);
+}
+
+int beMatCtrl_GetInfoMeta(void) {
     return g_beMatCtrlInfo_metaObject[0];
 }
 
-void Gap__Bec__beMatCtrl__vfunc_29(beMatCtrl *self, int selector)
-{
-    beMessenger_RegisterReceiver(self->_messenger, selector, (int)MATCTRL, 0, -1);
+void beMatCtrl_RegisterReceiver(beMatCtrl *self, beMatCtrlInfoRam *ram) {
+    beMessenger_RegisterReceiver(self->_messenger, ram, MATCTRL, 0, -1);
 }
 
-void FUN_0038b080(int arg0, igIntList *flags, beMatCtrlSearchList *tree, int bit, float *pos, beMatCtrlDataList *cells) {
-    int n = tree->_count;
+static inline beMatCtrlSearch *SearchNode(beMatCtrlSearchList *nodes, int i) {
+    return ((beMatCtrlSearch **)nodes->_data)[i];
+}
+
+/* Sets the player's bit in the mask of every material whose box holds the point. A node whose X range
+ * misses the point skips its subtree; a node with material -1 only groups its members. */
+void beMatCtrl_MarkContacts(beMatCtrl *self, igIntList *masks, beMatCtrlSearchList *nodes, int player, float *point, beMatCtrlDataList *materials) {
+    int count = nodes->_count;
     int i;
-    if (n != 0) {
-        for (i = 0; i < n; i++) {
-            float p = *pos;
-            beMatCtrlSearch *b = ((beMatCtrlSearch **)tree->_data)[i];
-            if (b->_minX <= p && !(b->_maxX < p)) {
-                int slot = b->_matNO;
-                if (slot != -1) {
-                    if (FUN_0018b630((struct B *)((beMatCtrlData **)cells->_data)[slot]->_chkBox, (struct V *)pos) == 2) {
-                        int *arr = (int *)flags->_data;
-                        int v = arr[slot];
-                        int fc = flags->_count;
-                        v |= (1 << bit);
-                        if (fc != 0 && slot >= 0 && slot < fc) arr[slot] = v;
+    if (count != 0) {
+        for (i = 0; i < count; i++) {
+            float pointX = *point;
+            beMatCtrlSearch *node = SearchNode(nodes, i);
+            if (node->_minX <= pointX && !(node->_maxX < pointX)) {
+                int material = node->_matNO;
+                if (material != -1) {
+                    beMatCtrlData *data = ((beMatCtrlData **)materials->_data)[material];
+                    if (igAABox_IntersectPoint((igAABox *)data->_chkBox, point) == INTERSECT_INSIDE) {
+                        int *mask = (int *)masks->_data;
+                        int marked = mask[material];
+                        int maskCount = masks->_count;
+                        marked |= (1 << player);
+                        if (maskCount != 0 && material >= 0 && material < maskCount) mask[material] = marked;
                     }
                 }
-                FUN_0038b080(arg0, flags, (beMatCtrlSearchList *)((beMatCtrlSearch **)tree->_data)[i]->_memberList, bit, pos, cells);
+                beMatCtrl_MarkContacts(self, masks, (beMatCtrlSearchList *)SearchNode(nodes, i)->_memberList, player, point, materials);
             }
         }
     }
 }
 
-int Gap__Bec__beMatCtrl__vfunc_34(beMatCtrl *arg0, beMatCtrlInfoRam *arg1, beMatCtrlInfo *arg2) {
-    unsigned int temp_v0;
-    beMatCtrlInfo *temp_s0;
-    temp_s0 = (beMatCtrlInfo *)arg1->_parentInfo;
-    temp_v0 = beMessenger_ResolveEnumValue(arg0->_messenger, FUN_0035a6b0(), arg2->_dataList);
-    switch (temp_v0) {
-    case 0:
-        igSwitch_EnableAllChildren(temp_s0->_switchgraph);
-        goto L;
-    case 1:
-        igSwitch_DisableAllChildren(temp_s0->_switchgraph);
-        goto L;
-    case 2:
-        arg0->_isLuaCallDisp = 1;
-        goto L;
-    case 3:
-        arg0->_isLuaCallDisp = 0;
-        goto L;
-    case 4:
-        arg1->_isRun = 0;
-        goto L;
-    case 5:
-        arg1->_isRun = 1;
-        goto L;
+int beMatCtrl_OnMessage(beMatCtrl *self, beMatCtrlInfoRam *ram, beMessengerWork *message) {
+    beMatCtrlInfo *info = (beMatCtrlInfo *)ram->_parentInfo;
+    switch (beMessenger_ResolveEnumValue(self->_messenger, beMatCtrl_GetMessageEnum(), message->_message)) {
+    case MESSAGE_SHOWMAT:
+        igSwitch_EnableAllChildren(info->_switchgraph);
+        break;
+    case MESSAGE_HIDEMAT:
+        igSwitch_DisableAllChildren(info->_switchgraph);
+        break;
+    case MESSAGE_SHOW_LUACALL:
+        self->_isLuaCallDisp = 1;
+        break;
+    case MESSAGE_HIDE_LUACALL:
+        self->_isLuaCallDisp = 0;
+        break;
+    case MESSAGE_PAUSE:
+        ram->_isRun = 0;
+        break;
+    case MESSAGE_RESTART:
+        ram->_isRun = 1;
+        break;
     default:
         return 0;
     }
-L:
     return 1;
 }
 
-int Gap__Bec__beMatCtrl__vfunc_20(void)
-{
+int beMatCtrl_GetMeta(void) {
     return g_beMatCtrl_metaObject[0];
 }
-

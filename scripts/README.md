@@ -8,7 +8,7 @@ regression tests live in `testing/`.
 | --- | --- |
 | Topic-specific drop and enemy-stat analysis | [Analysis probes](analysis/README.md) |
 | Static recovery and formats | Ghidra `dump_*.py`, `igb_*.py`, `lua_*.py`; see the [script index](../docs/README.md#scripts) |
-| Lua engine dependency recovery | [lua_engine_dependencies.py](lua_engine_dependencies.py) generates [direct coverage/frontiers](../docs/engine/lua-dependencies.md); [seed_names_material_contact.py](seed_names_material_contact.py) supplies verified MAT helper names |
+| Lua engine dependency recovery | [lua_engine_dependencies.py](lua_engine_dependencies.py) generates [direct coverage/frontiers](../docs/engine/lua-dependencies.md); [seed_names_material_contact.py](seed_names_material_contact.py) names the material controller's MAT helpers and methods |
 | Main Lobby recovery scope | [hub_recovery_inventory.py](hub_recovery_inventory.py) records four core script packs, static call sites, SUBWND mode prefixes and the known direct native dependency lower bound; [completion contract](../docs/systems/hub-recovery.md) |
 | Combat calculation recovery scope | [combat_recovery_inventory.py](combat_recovery_inventory.py) reads the retail FIGHTCALC tables, checks their bounds and inventories the contiguous combat Lua helpers and direct callees; [recovery contract](../docs/systems/combat-damage.md) |
 | Combat decompiler ABI context | [gen_combat_context.py](gen_combat_context.py) combines the reflected receiver with reviewed call slots, aggregate widths and tables into flat m2c input |

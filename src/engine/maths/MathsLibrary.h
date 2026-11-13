@@ -601,7 +601,7 @@ int FUN_0018b300(igAABox *box, void *other);
 int FUN_0018b350(struct B2 *arg0, struct B2 *arg1);
 int FUN_0018b450(float *a, float *b);
 int FUN_0018b540(void *parg0, struct P *b);
-int FUN_0018b630(struct B4 *arg0, struct V *arg1);
+int igAABox_IntersectPoint(struct B4 *arg0, struct V *arg1);
 
 void FUN_0018b6b0(void);
 

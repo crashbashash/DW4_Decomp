@@ -87,7 +87,7 @@ void beMatCtrlData_InitFields(void) {
     igMetaObject_NameFields(temp_s0, &DAT_004c6110[0], &DAT_004c6118[0], &DAT_004c6120[0], temp_s2);
 }
 
-int FUN_0035a6b0(void) {
+int beMatCtrl_GetMessageEnum(void) {
     if (DAT_00589158[0] == 0) {
         DAT_00589158[0] = igMetaEnum_Create(&DAT_00501a58[0], &DAT_004c6130[0], &DAT_004c6150[0], 6);
     }

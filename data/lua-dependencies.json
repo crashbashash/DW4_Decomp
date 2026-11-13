@@ -588,23 +588,23 @@
   "reviewed_roots": [
     {
       "address": 3714928,
-      "evidence": "beMatCtrl initialization for the material owner used by Lua MAT; docs/engine/material-contact.md"
+      "evidence": "beMatCtrl_Prepare readies the material owner used by Lua MAT; docs/engine/material-contact.md"
     },
     {
       "address": 3715152,
-      "evidence": "beMatCtrl MATCTRL receiver registration; docs/engine/material-contact.md"
+      "evidence": "beMatCtrl_RegisterReceiver registers MATCTRL receivers; docs/engine/material-contact.md"
     },
     {
       "address": 3715200,
-      "evidence": "Recursive material-mask producer called by beMatCtrl update; docs/engine/material-contact.md"
+      "evidence": "beMatCtrl_MarkContacts, the recursive material-mask producer called by beMatCtrl_Update; docs/engine/material-contact.md"
     },
     {
       "address": 3715568,
-      "evidence": "beMatCtrl vfunc_31 publishes the masks queried by all seven MAT bindings; docs/engine/material-contact.md"
+      "evidence": "beMatCtrl_Update publishes the masks queried by all seven MAT bindings; docs/engine/material-contact.md"
     },
     {
       "address": 3718640,
-      "evidence": "beMatCtrl vfunc_34 handles MATCTRL messages for the Lua material owner; docs/engine/material-contact.md"
+      "evidence": "beMatCtrl_OnMessage handles MATCTRL messages for the Lua material owner; docs/engine/material-contact.md"
     },
     {
       "address": 3159120,
@@ -6034,7 +6034,7 @@
     },
     {
       "address": 1619504,
-      "name": "FUN_0018b630",
+      "name": "igAABox_IntersectPoint",
       "size": 128,
       "source": "src/engine/maths/MathsLibrary.cpp",
       "direct": [],
@@ -6107,7 +6107,7 @@
     },
     {
       "address": 1650512,
-      "name": "FUN_00192f50",
+      "name": "Vec3f_TransformDirection",
       "size": 112,
       "source": "src/engine/maths/MathsLibrary.cpp",
       "direct": [],
@@ -6115,7 +6115,7 @@
     },
     {
       "address": 1776880,
-      "name": "FUN_001b1cf0",
+      "name": "igBitMask_SetAll",
       "size": 208,
       "source": "src/engine/scenegraph/SceneGraphLibrary.cpp",
       "direct": [
@@ -6136,7 +6136,7 @@
     },
     {
       "address": 1777088,
-      "name": "FUN_001b1dc0",
+      "name": "igBitMask_ClearAll",
       "size": 144,
       "source": "src/engine/scenegraph/SceneGraphLibrary.cpp",
       "direct": [
@@ -6222,7 +6222,7 @@
     },
     {
       "address": 1951856,
-      "name": "FUN_001dc870",
+      "name": "igSwitch_EnableAllChildren",
       "size": 8,
       "source": "src/engine/scenegraph/SceneGraphLibrary.cpp",
       "direct": [
@@ -6237,7 +6237,7 @@
     },
     {
       "address": 1951952,
-      "name": "FUN_001dc8d0",
+      "name": "igSwitch_DisableAllChildren",
       "size": 8,
       "source": "src/engine/scenegraph/SceneGraphLibrary.cpp",
       "direct": [
@@ -6252,7 +6252,7 @@
     },
     {
       "address": 1994032,
-      "name": "FUN_001e6d30",
+      "name": "Vec3f_FromString",
       "size": 80,
       "source": "src/engine/datapump/DataPumpLibrary.cpp",
       "direct": [
@@ -6802,7 +6802,7 @@
     },
     {
       "address": 2322304,
-      "name": "FUN_00236f80",
+      "name": "igInsightCore_FindManager",
       "size": 144,
       "source": "src/engine/insight/InsightLibrary.cpp",
       "direct": [],
@@ -9857,7 +9857,7 @@
     },
     {
       "address": 2855136,
-      "name": "FUN_002b90e0",
+      "name": "igStringRefList_Create",
       "size": 52,
       "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [
@@ -10631,7 +10631,7 @@
     },
     {
       "address": 2903200,
-      "name": "FUN_002c4ca0",
+      "name": "igFile_Create",
       "size": 52,
       "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [
@@ -10823,7 +10823,7 @@
     },
     {
       "address": 2927216,
-      "name": "FUN_002caa70",
+      "name": "igIntList_Create",
       "size": 52,
       "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [
@@ -10970,7 +10970,7 @@
     },
     {
       "address": 2928848,
-      "name": "FUN_002cb0d0",
+      "name": "igBoolList_Create",
       "size": 52,
       "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [
@@ -12624,7 +12624,7 @@
     },
     {
       "address": 3059728,
-      "name": "FUN_002eb010",
+      "name": "StringPool_Allocate",
       "size": 64,
       "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [
@@ -17235,7 +17235,7 @@
     },
     {
       "address": 3191744,
-      "name": "FUN_0030b3c0",
+      "name": "igStringObj_Set",
       "size": 88,
       "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [
@@ -17262,7 +17262,7 @@
     },
     {
       "address": 3191840,
-      "name": "FUN_0030b420",
+      "name": "igStringObj_Clear",
       "size": 56,
       "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [
@@ -17277,7 +17277,7 @@
     },
     {
       "address": 3191904,
-      "name": "FUN_0030b460",
+      "name": "igStringObj_Insert",
       "size": 352,
       "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [
@@ -17361,7 +17361,7 @@
     },
     {
       "address": 3192368,
-      "name": "FUN_0030b630",
+      "name": "igStringObj_ToFloat",
       "size": 60,
       "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [
@@ -17427,7 +17427,7 @@
     },
     {
       "address": 3193840,
-      "name": "FUN_0030bbf0",
+      "name": "igStringObj_Erase",
       "size": 232,
       "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [
@@ -18039,7 +18039,7 @@
     },
     {
       "address": 3430016,
-      "name": "FUN_00345680",
+      "name": "beSelectCtrlInfoWork_Create",
       "size": 52,
       "source": "src/game/bec/BecLibrary.cpp",
       "direct": [
@@ -18075,7 +18075,7 @@
     },
     {
       "address": 3430816,
-      "name": "FUN_003459a0",
+      "name": "beSelectCtrl_GetMessageEnum",
       "size": 84,
       "source": "src/game/bec/BecLibrary.cpp",
       "direct": [
@@ -18387,7 +18387,7 @@
     },
     {
       "address": 3516080,
-      "name": "FUN_0035a6b0",
+      "name": "beMatCtrl_GetMessageEnum",
       "size": 84,
       "source": "src/game/bec/BecLibrary.cpp",
       "direct": [
@@ -18402,7 +18402,7 @@
     },
     {
       "address": 3553216,
-      "name": "FUN_003637c0",
+      "name": "beDemoManagerWork_CreateInstance",
       "size": 52,
       "source": "src/game/bec/BecLibrary.cpp",
       "direct": [
@@ -18438,7 +18438,7 @@
     },
     {
       "address": 3554336,
-      "name": "FUN_00363c20",
+      "name": "beDemoKeepMes_CreateInstance",
       "size": 52,
       "source": "src/game/bec/BecLibrary.cpp",
       "direct": [
@@ -24031,7 +24031,7 @@
     },
     {
       "address": 3662096,
-      "name": "FUN_0037e110",
+      "name": "beDemoManager_SwitchSD",
       "size": 100,
       "source": "src/game/beDemoManager.cpp",
       "direct": [
@@ -24046,7 +24046,7 @@
     },
     {
       "address": 3662208,
-      "name": "FUN_0037e180",
+      "name": "beDemoManager_SwitchEnd",
       "size": 200,
       "source": "src/game/beDemoManager.cpp",
       "direct": [
@@ -24085,7 +24085,7 @@
     },
     {
       "address": 3662544,
-      "name": "FUN_0037e2d0",
+      "name": "beDemoManager_Case",
       "size": 196,
       "source": "src/game/beDemoManager.cpp",
       "direct": [
@@ -24124,7 +24124,7 @@
     },
     {
       "address": 3662752,
-      "name": "FUN_0037e3a0",
+      "name": "beDemoManager_AddKeepMes",
       "size": 832,
       "source": "src/game/beDemoManager.cpp",
       "direct": [
@@ -24283,7 +24283,7 @@
     },
     {
       "address": 3663584,
-      "name": "FUN_0037e6e0",
+      "name": "beDemoManager_SetLua",
       "size": 420,
       "source": "src/game/beDemoManager.cpp",
       "direct": [
@@ -24370,7 +24370,7 @@
     },
     {
       "address": 3664016,
-      "name": "FUN_0037e890",
+      "name": "beDemoManager_MsgBox",
       "size": 440,
       "source": "src/game/beDemoManager.cpp",
       "direct": [
@@ -24457,7 +24457,7 @@
     },
     {
       "address": 3664464,
-      "name": "FUN_0037ea50",
+      "name": "beDemoManager_Run",
       "size": 128,
       "source": "src/game/beDemoManager.cpp",
       "direct": [
@@ -24626,7 +24626,7 @@
     },
     {
       "address": 3714928,
-      "name": "Gap__Bec__beMatCtrl__vfunc_32",
+      "name": "beMatCtrl_Prepare",
       "size": 208,
       "source": "src/game/beMatCtrl.cpp",
       "direct": [
@@ -24653,7 +24653,7 @@
     },
     {
       "address": 3715152,
-      "name": "Gap__Bec__beMatCtrl__vfunc_29",
+      "name": "beMatCtrl_RegisterReceiver",
       "size": 44,
       "source": "src/game/beMatCtrl.cpp",
       "direct": [
@@ -24668,7 +24668,7 @@
     },
     {
       "address": 3715200,
-      "name": "FUN_0038b080",
+      "name": "beMatCtrl_MarkContacts",
       "size": 368,
       "source": "src/game/beMatCtrl.cpp",
       "direct": [
@@ -24683,7 +24683,7 @@
     },
     {
       "address": 3715568,
-      "name": "Gap__Bec__beMatCtrl__vfunc_31",
+      "name": "beMatCtrl_Update",
       "size": 3064,
       "source": null,
       "direct": [
@@ -24944,7 +24944,7 @@
     },
     {
       "address": 3718640,
-      "name": "Gap__Bec__beMatCtrl__vfunc_34",
+      "name": "beMatCtrl_OnMessage",
       "size": 220,
       "source": "src/game/beMatCtrl.cpp",
       "direct": [
@@ -26281,7 +26281,7 @@
     },
     {
       "address": 3787760,
-      "name": "Gap__Bec__beSelectCtrl__vfunc_31",
+      "name": "beSelectCtrl_Update",
       "size": 2864,
       "source": "src/game/beSelectCtrl.cpp",
       "direct": [
@@ -26668,7 +26668,7 @@
     },
     {
       "address": 3790624,
-      "name": "Gap__Bec__beSelectCtrl__vfunc_33",
+      "name": "beSelectCtrl_OnMessage",
       "size": 1960,
       "source": "src/game/beSelectCtrl.cpp",
       "direct": [
@@ -26998,7 +26998,7 @@
     },
     {
       "address": 3838544,
-      "name": "FUN_003a9250",
+      "name": "igProperty_GetRecordIntList",
       "size": 36,
       "source": "src/game/beDBManager.cpp",
       "direct": [
@@ -27043,7 +27043,7 @@
     },
     {
       "address": 3838688,
-      "name": "FUN_003a92e0",
+      "name": "igProperty_GetRecordString",
       "size": 36,
       "source": "src/game/beDBManager.cpp",
       "direct": [
@@ -27058,7 +27058,7 @@
     },
     {
       "address": 3838736,
-      "name": "FUN_003a9310",
+      "name": "igProperty_GetRecordStringList",
       "size": 36,
       "source": "src/game/beDBManager.cpp",
       "direct": [
@@ -27153,7 +27153,7 @@
     },
     {
       "address": 3874160,
-      "name": "FUN_003b1d70",
+      "name": "SubWnd_GetMetaEnum",
       "size": 84,
       "source": "src/game/ndmw/NdmwLibrary.cpp",
       "direct": [
@@ -27210,7 +27210,7 @@
     },
     {
       "address": 3879344,
-      "name": "FUN_003b31b0",
+      "name": "beNDMWShopTitle01_Create",
       "size": 52,
       "source": "src/game/ndmw/NdmwLibrary.cpp",
       "direct": [
@@ -27246,7 +27246,7 @@
     },
     {
       "address": 3879792,
-      "name": "FUN_003b3370",
+      "name": "beNDMWShopTitle00_Create",
       "size": 52,
       "source": "src/game/ndmw/NdmwLibrary.cpp",
       "direct": [
@@ -27282,7 +27282,7 @@
     },
     {
       "address": 3880688,
-      "name": "FUN_003b36f0",
+      "name": "beNDMWStatusTitle03_Create",
       "size": 52,
       "source": "src/game/ndmw/NdmwLibrary.cpp",
       "direct": [
@@ -27318,7 +27318,7 @@
     },
     {
       "address": 3881216,
-      "name": "FUN_003b3900",
+      "name": "beNDMWStatusTitle02_Create",
       "size": 52,
       "source": "src/game/ndmw/NdmwLibrary.cpp",
       "direct": [
@@ -27354,7 +27354,7 @@
     },
     {
       "address": 3881664,
-      "name": "FUN_003b3ac0",
+      "name": "beNDMWStatusTitle01_Create",
       "size": 52,
       "source": "src/game/ndmw/NdmwLibrary.cpp",
       "direct": [
@@ -27390,7 +27390,7 @@
     },
     {
       "address": 3884048,
-      "name": "FUN_003b4410",
+      "name": "beNDMWShopSelect52_Create",
       "size": 52,
       "source": "src/game/ndmw/NdmwLibrary.cpp",
       "direct": [
@@ -27426,7 +27426,7 @@
     },
     {
       "address": 3884944,
-      "name": "FUN_003b4790",
+      "name": "beNDMWShopSelect11_Create",
       "size": 52,
       "source": "src/game/ndmw/NdmwLibrary.cpp",
       "direct": [
@@ -27462,7 +27462,7 @@
     },
     {
       "address": 3886480,
-      "name": "FUN_003b4d90",
+      "name": "beNDMWShopSelect01_Create",
       "size": 52,
       "source": "src/game/ndmw/NdmwLibrary.cpp",
       "direct": [
@@ -27498,7 +27498,7 @@
     },
     {
       "address": 3886928,
-      "name": "FUN_003b4f50",
+      "name": "beNDMWShopSelect00_Create",
       "size": 52,
       "source": "src/game/ndmw/NdmwLibrary.cpp",
       "direct": [
@@ -27534,7 +27534,7 @@
     },
     {
       "address": 3887536,
-      "name": "FUN_003b51b0",
+      "name": "beNDMWStatusSelectE1_Create",
       "size": 52,
       "source": "src/game/ndmw/NdmwLibrary.cpp",
       "direct": [
@@ -27570,7 +27570,7 @@
     },
     {
       "address": 3890880,
-      "name": "FUN_003b5ec0",
+      "name": "beNDMWStatusInfoWork_Create",
       "size": 52,
       "source": "src/game/ndmw/NdmwLibrary.cpp",
       "direct": [
@@ -27606,7 +27606,7 @@
     },
     {
       "address": 3891984,
-      "name": "FUN_003b6310",
+      "name": "beNDMWShopJunk_Create",
       "size": 52,
       "source": "src/game/ndmw/NdmwLibrary.cpp",
       "direct": [
@@ -27707,7 +27707,7 @@
     },
     {
       "address": 3892816,
-      "name": "FUN_003b6650",
+      "name": "beNDMWShopDevice_Create",
       "size": 52,
       "source": "src/game/ndmw/NdmwLibrary.cpp",
       "direct": [
@@ -27743,7 +27743,7 @@
     },
     {
       "address": 3893568,
-      "name": "FUN_003b6940",
+      "name": "beNDMWShopCtrlXdataChip_Create",
       "size": 52,
       "source": "src/game/ndmw/NdmwLibrary.cpp",
       "direct": [
@@ -27779,7 +27779,7 @@
     },
     {
       "address": 3894208,
-      "name": "FUN_003b6bc0",
+      "name": "beNDMWShopCtrlSales_Create",
       "size": 52,
       "source": "src/game/ndmw/NdmwLibrary.cpp",
       "direct": [
@@ -27815,7 +27815,7 @@
     },
     {
       "address": 3896160,
-      "name": "FUN_003b7360",
+      "name": "beNDMWShopCtrlSell_Create",
       "size": 52,
       "source": "src/game/ndmw/NdmwLibrary.cpp",
       "direct": [
@@ -27851,7 +27851,7 @@
     },
     {
       "address": 3896608,
-      "name": "FUN_003b7520",
+      "name": "beNDMWShopCtrlEditBit_Create",
       "size": 52,
       "source": "src/game/ndmw/NdmwLibrary.cpp",
       "direct": [
@@ -27887,7 +27887,7 @@
     },
     {
       "address": 3897168,
-      "name": "FUN_003b7750",
+      "name": "beNDMWShopCtrlDigilabo_Create",
       "size": 52,
       "source": "src/game/ndmw/NdmwLibrary.cpp",
       "direct": [
@@ -27923,7 +27923,7 @@
     },
     {
       "address": 3899056,
-      "name": "FUN_003b7eb0",
+      "name": "beNDMWShopCtrlA0_Create",
       "size": 52,
       "source": "src/game/ndmw/NdmwLibrary.cpp",
       "direct": [
@@ -27959,7 +27959,7 @@
     },
     {
       "address": 3899856,
-      "name": "FUN_003b81d0",
+      "name": "beNDMWShopCtrl50_Create",
       "size": 52,
       "source": "src/game/ndmw/NdmwLibrary.cpp",
       "direct": [
@@ -27995,7 +27995,7 @@
     },
     {
       "address": 3900416,
-      "name": "FUN_003b8400",
+      "name": "beNDMWShopCtrl40_Create",
       "size": 52,
       "source": "src/game/ndmw/NdmwLibrary.cpp",
       "direct": [
@@ -28031,7 +28031,7 @@
     },
     {
       "address": 3900976,
-      "name": "FUN_003b8630",
+      "name": "beNDMWShopCtrl30_Create",
       "size": 52,
       "source": "src/game/ndmw/NdmwLibrary.cpp",
       "direct": [
@@ -28067,7 +28067,7 @@
     },
     {
       "address": 3902304,
-      "name": "FUN_003b8b60",
+      "name": "beNDMWShopCtrl10_Create",
       "size": 52,
       "source": "src/game/ndmw/NdmwLibrary.cpp",
       "direct": [
@@ -28211,7 +28211,7 @@
     },
     {
       "address": 3911440,
-      "name": "FUN_003baf10",
+      "name": "beNDMWStatusCtrlD0_Create",
       "size": 52,
       "source": "src/game/ndmw/NdmwLibrary.cpp",
       "direct": [
@@ -28247,7 +28247,7 @@
     },
     {
       "address": 3912144,
-      "name": "FUN_003bb1d0",
+      "name": "beNDMWStatusCtrl00_Create",
       "size": 52,
       "source": "src/game/ndmw/NdmwLibrary.cpp",
       "direct": [
@@ -28283,7 +28283,7 @@
     },
     {
       "address": 3913520,
-      "name": "FUN_003bb730",
+      "name": "StatusMessage_GetMetaEnum",
       "size": 84,
       "source": "src/game/ndmw/NdmwLibrary.cpp",
       "direct": [
@@ -28298,7 +28298,7 @@
     },
     {
       "address": 3966960,
-      "name": "FUN_003c87f0",
+      "name": "beNDMWItemAbilityChip_Create",
       "size": 52,
       "source": "src/game/ndmw/NdmwLibrary.cpp",
       "direct": [
@@ -28334,7 +28334,7 @@
     },
     {
       "address": 3967344,
-      "name": "FUN_003c8970",
+      "name": "beNDMWItemYellowArmor_Create",
       "size": 52,
       "source": "src/game/ndmw/NdmwLibrary.cpp",
       "direct": [
@@ -28370,7 +28370,7 @@
     },
     {
       "address": 3967744,
-      "name": "FUN_003c8b00",
+      "name": "beNDMWItemBlueArmor_Create",
       "size": 52,
       "source": "src/game/ndmw/NdmwLibrary.cpp",
       "direct": [
@@ -28406,7 +28406,7 @@
     },
     {
       "address": 3968144,
-      "name": "FUN_003c8c90",
+      "name": "beNDMWItemWeapon_Create",
       "size": 52,
       "source": "src/game/ndmw/NdmwLibrary.cpp",
       "direct": [
@@ -28442,7 +28442,7 @@
     },
     {
       "address": 4020464,
-      "name": "Gap__Bec__beNDMWStatus__vfunc_32",
+      "name": "beNDMWStatus__ReleaseWindow",
       "size": 92,
       "source": "src/game/beNDMWStatus.cpp",
       "direct": [
@@ -28457,7 +28457,7 @@
     },
     {
       "address": 4020576,
-      "name": "Gap__Bec__beNDMWStatus__vfunc_29",
+      "name": "beNDMWStatus__RegisterReceiver",
       "size": 72,
       "source": "src/game/beNDMWStatus.cpp",
       "direct": [
@@ -28472,7 +28472,7 @@
     },
     {
       "address": 4020656,
-      "name": "Gap__Bec__beNDMWStatus__vfunc_31",
+      "name": "beNDMWStatus__Update",
       "size": 1832,
       "source": "src/game/beNDMWStatus.cpp",
       "direct": [
@@ -28925,7 +28925,7 @@
     },
     {
       "address": 4022496,
-      "name": "Gap__Bec__beNDMWStatus__vfunc_34",
+      "name": "beNDMWStatus__OnMessage",
       "size": 9820,
       "source": "src/game/beNDMWStatus.cpp",
       "direct": [
@@ -31508,7 +31508,7 @@
     },
     {
       "address": 4032320,
-      "name": "FUN_003d8740",
+      "name": "beNDMWStatus__PrepareWork",
       "size": 5264,
       "source": "src/game/beNDMWStatus.cpp",
       "direct": [
@@ -32228,7 +32228,7 @@
     },
     {
       "address": 4150880,
-      "name": "FUN_003f5660",
+      "name": "beNDMWWindow_QueueNumberText",
       "size": 112,
       "source": "src/game/beNDMWWindow.cpp",
       "direct": [
@@ -32842,7 +32842,7 @@
     },
     {
       "address": 4295360,
-      "name": "FUN_00418ac0",
+      "name": "beNDMWStatusCtrlD0_RefreshText",
       "size": 1828,
       "source": "src/game/beNDMWListCtrl.cpp",
       "direct": [
@@ -33484,7 +33484,7 @@
     },
     {
       "address": 4351920,
-      "name": "Gap__Bec__beNDMWShopCtrl00__vfunc_21",
+      "name": "beNDMWShopCtrl00_Update",
       "size": 2020,
       "source": "src/game/beNDMWShopCtrl00.cpp",
       "direct": [
@@ -33919,7 +33919,7 @@
     },
     {
       "address": 4354208,
-      "name": "Gap__Bec__beNDMWShopCtrl10__vfunc_21",
+      "name": "beNDMWShopCtrl10_Update",
       "size": 5484,
       "source": "src/game/beNDMWShopCtrl00.cpp",
       "direct": [
@@ -34789,7 +34789,7 @@
     },
     {
       "address": 4360080,
-      "name": "Gap__Bec__beNDMWShopCtrl30__vfunc_21",
+      "name": "beNDMWShopCtrl30_Update",
       "size": 3608,
       "source": "src/game/beNDMWShopCtrl00.cpp",
       "direct": [
@@ -35326,7 +35326,7 @@
     },
     {
       "address": 4363824,
-      "name": "Gap__Bec__beNDMWShopCtrl40__vfunc_21",
+      "name": "beNDMWShopCtrl40_Update",
       "size": 3240,
       "source": "src/game/beNDMWShopCtrl00.cpp",
       "direct": [
@@ -35815,7 +35815,7 @@
     },
     {
       "address": 4367072,
-      "name": "Gap__Bec__beNDMWShopCtrl50__vfunc_21",
+      "name": "beNDMWShopCtrl50_Update",
       "size": 5400,
       "source": "src/game/beNDMWShopCtrl00.cpp",
       "direct": [
@@ -36700,7 +36700,7 @@
     },
     {
       "address": 4372608,
-      "name": "FUN_0042b880",
+      "name": "beNDMWShopCtrl50_ShowQuantity",
       "size": 332,
       "source": "src/game/beNDMWShopCtrl00.cpp",
       "direct": [
@@ -36799,7 +36799,7 @@
     },
     {
       "address": 4372944,
-      "name": "FUN_0042b9d0",
+      "name": "beNDMWShopCtrl50_HideQuantity",
       "size": 272,
       "source": "src/game/beNDMWShopCtrl00.cpp",
       "direct": [
@@ -36898,7 +36898,7 @@
     },
     {
       "address": 4373216,
-      "name": "FUN_0042bae0",
+      "name": "beNDMWShopCtrl50_MoveRowCursor",
       "size": 396,
       "source": "src/game/beNDMWShopCtrl00.cpp",
       "direct": [
@@ -36967,7 +36967,7 @@
     },
     {
       "address": 4373616,
-      "name": "Gap__Bec__beNDMWShopJunk__vfunc_21",
+      "name": "beNDMWShopJunk_Update",
       "size": 2844,
       "source": "src/game/beNDMWShopCtrl00.cpp",
       "direct": [
@@ -37384,7 +37384,7 @@
     },
     {
       "address": 4434656,
-      "name": "Gap__Bec__beNDMWShopCtrlXdataChip__vfunc_21",
+      "name": "beNDMWShopCtrlXdataChip_Update",
       "size": 7228,
       "source": "src/game/beNDMWShopCtrl00.cpp",
       "direct": [
@@ -38932,7 +38932,7 @@
     },
     {
       "address": 4443168,
-      "name": "Gap__Bec__beNDMWShopDevice__vfunc_21",
+      "name": "beNDMWShopDevice_Update",
       "size": 1168,
       "source": "src/game/beNDMWShopCtrl00.cpp",
       "direct": [
@@ -39073,7 +39073,7 @@
     },
     {
       "address": 4444624,
-      "name": "Gap__Bec__beNDMWShopSelect00__vfunc_22",
+      "name": "beNDMWShopSelect00_Setup",
       "size": 636,
       "source": "src/game/beNDMWShopSelect00.cpp",
       "direct": [
@@ -39184,7 +39184,7 @@
     },
     {
       "address": 4445264,
-      "name": "Gap__Bec__beNDMWShopSelect01__vfunc_22",
+      "name": "beNDMWShopSelect01_Setup",
       "size": 1976,
       "source": "src/game/beNDMWShopSelect00.cpp",
       "direct": [
@@ -39529,7 +39529,7 @@
     },
     {
       "address": 4451520,
-      "name": "Gap__Bec__beNDMWShopSelect11__vfunc_22",
+      "name": "beNDMWShopSelect11_Setup",
       "size": 3752,
       "source": "src/game/beNDMWShopSelect00.cpp",
       "direct": [

@@ -28,11 +28,11 @@ entry points without attributing an invented call edge to a generic dispatcher.
 
 | Address | Evidence |
 | --- | --- |
-| `0x0038af70` | beMatCtrl initialization for the material owner used by Lua MAT; docs/engine/material-contact.md |
-| `0x0038b050` | beMatCtrl MATCTRL receiver registration; docs/engine/material-contact.md |
-| `0x0038b080` | Recursive material-mask producer called by beMatCtrl update; docs/engine/material-contact.md |
-| `0x0038b1f0` | beMatCtrl vfunc_31 publishes the masks queried by all seven MAT bindings; docs/engine/material-contact.md |
-| `0x0038bdf0` | beMatCtrl vfunc_34 handles MATCTRL messages for the Lua material owner; docs/engine/material-contact.md |
+| `0x0038af70` | beMatCtrl_Prepare readies the material owner used by Lua MAT; docs/engine/material-contact.md |
+| `0x0038b050` | beMatCtrl_RegisterReceiver registers MATCTRL receivers; docs/engine/material-contact.md |
+| `0x0038b080` | beMatCtrl_MarkContacts, the recursive material-mask producer called by beMatCtrl_Update; docs/engine/material-contact.md |
+| `0x0038b1f0` | beMatCtrl_Update publishes the masks queried by all seven MAT bindings; docs/engine/material-contact.md |
+| `0x0038bdf0` | beMatCtrl_OnMessage handles MATCTRL messages for the Lua material owner; docs/engine/material-contact.md |
 | `0x00303450` | igObjectRefMetaField vtable 0x532c80 slot 0x64 type size; messenger Work/ArgData reflection fields use igObjectRefMetaField; data/reflection.json, data/vtables-getvtable.json, docs/engine/object-fields.md |
 | `0x00303540` | igObjectRefMetaField vtable 0x532c80 slot 0x7c construct value; messenger Work/ArgData reflection fields use igObjectRefMetaField; data/reflection.json, data/vtables-getvtable.json, docs/engine/object-fields.md |
 | `0x00303620` | igObjectRefMetaField vtable 0x532c80 slot 0x80 destruct value; messenger Work/ArgData reflection fields use igObjectRefMetaField; data/reflection.json, data/vtables-getvtable.json, docs/engine/object-fields.md |
@@ -317,4 +317,4 @@ their indirect frontiers before claiming a subsystem complete.
 
 | Address | Symbol | Bytes | Indirect sites |
 | --- | --- | ---: | ---: |
-| `0x0038b1f0` | `Gap__Bec__beMatCtrl__vfunc_31` | 3064 | 0 |
+| `0x0038b1f0` | `beMatCtrl_Update` | 3064 | 0 |

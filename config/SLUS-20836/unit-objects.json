@@ -22964,7 +22964,6 @@
       "beMatCtrlData_Register": "0x0035a580",
       "beMatCtrlData_GetMetaObject": "0x0035a600",
       "beMatCtrlData_InitFields": "0x0035a620",
-      "FUN_0035a6b0": "0x0035a6b0",
       "beMatCtrl_CreateInstance": "0x0035a710",
       "FUN_0035a750": "0x0035a750",
       "FUN_0035a7a0": "0x0035a7a0",
@@ -24181,7 +24180,8 @@
       "beDemoManagerWork_CreateInstance": "0x003637c0",
       "beDemoKeepMes_CreateInstance": "0x00363c20",
       "beSound_GetMessageEnum": "0x00344250",
-      "bePlaySE_CreateInstance": "0x003447c0"
+      "bePlaySE_CreateInstance": "0x003447c0",
+      "beMatCtrl_GetMessageEnum": "0x0035a6b0"
     },
     "data": {
       "DAT_004c2d00": "0x004c2d00",
@@ -31771,16 +31771,16 @@
       "beMatCtrl_IsRideOffPlayer": "0x0038ae30",
       "beMatCtrl_SetRun": "0x0038ae90",
       "beMatCtrl_GetPlayerMatStat": "0x0038aea0",
-      "Gap__Bec__beMatCtrl__vfunc_32": "0x0038af70",
-      "Gap__Bec__beMatCtrl__vfunc_30": "0x0038b040",
-      "Gap__Bec__beMatCtrl__vfunc_29": "0x0038b050",
-      "FUN_0038b080": "0x0038b080",
-      "Gap__Bec__beMatCtrl__vfunc_34": "0x0038bdf0",
-      "Gap__Bec__beMatCtrl__vfunc_20": "0x0038bed0"
+      "beMatCtrl_Prepare": "0x0038af70",
+      "beMatCtrl_GetInfoMeta": "0x0038b040",
+      "beMatCtrl_RegisterReceiver": "0x0038b050",
+      "beMatCtrl_MarkContacts": "0x0038b080",
+      "beMatCtrl_OnMessage": "0x0038bdf0",
+      "beMatCtrl_GetMeta": "0x0038bed0"
     },
     "data": {
-      "@212": "0x0050eda0",
-      "DAT_00589208": "0x00589208",
+      "@321": "0x0050eda0",
+      "g_beLua_metaObject": "0x00589208",
       "MATCTRL": "0x0050ed58",
       "g_beMatCtrlInfo_metaObject": "0x005890e8",
       "g_beMatCtrl_metaObject": "0x00589160"
@@ -32882,7 +32882,7 @@
       "FUN_0018b350": "0x0018b350",
       "FUN_0018b450": "0x0018b450",
       "FUN_0018b540": "0x0018b540",
-      "FUN_0018b630": "0x0018b630",
+      "igAABox_IntersectPoint": "0x0018b630",
       "FUN_0018b730": "0x0018b730",
       "FUN_0018b7d0": "0x0018b7d0",
       "FUN_0018b890": "0x0018b890",

@@ -93,7 +93,7 @@ void FUN_0018a8f0(void) {
     FUN_0018fd10((int *)g_igAABox_metaObject[0], (int)FUN_0018b170);
     FUN_0018fd90((IndexedWordKey *)g_igAABox_metaObject[0], (int)FUN_0018b540);
     FUN_0018fd50((IndexedSlotKey *)g_igAABox_metaObject[0], (int)FUN_0018b6b0);
-    FUN_0018fe10((int *)g_igAABox_metaObject[0], (int)FUN_0018b630);
+    FUN_0018fe10((int *)g_igAABox_metaObject[0], (int)igAABox_IntersectPoint);
     FUN_0018fdd0(g_igAABox_metaObject[0], (int)FUN_0018b890);
     FUN_0018fe50((IndexedSlotKey *)g_igAABox_metaObject[0], (int)thunk_FUN_0018ac80);
     FUN_0018fe90((IndexedWordKey *)g_igAABox_metaObject[0], (int)FUN_0018b940);
@@ -311,18 +311,18 @@ int FUN_0018b540(void *parg0, P *b) {
     float t;
     int s0, v0;
     if (!(((B3 *)a)->f8 <= ((B3 *)a)->f20)) return 0;
-    s0 = FUN_0018b630((B4 *)a, (V *)&b->f8) != 0;
+    s0 = igAABox_IntersectPoint((B4 *)a, (V *)&b->f8) != 0;
     t = b->f32;
     v[0] = b->f8 + t * b->f20;
     v[1] = b->f12 + t * b->f24;
     v[2] = b->f16 + t * b->f28;
-    v0 = FUN_0018b630((B4 *)a, (V *)v) != 0;
+    v0 = igAABox_IntersectPoint((B4 *)a, (V *)v) != 0;
     if (s0 != 0 && v0 != 0) return 2;
     if (s0 != 0 || v0 != 0 || FUN_0018b170(a, b) != 0) return 1;
     return 0;
 }
 
-int FUN_0018b630(struct B4 *arg0, struct V *arg1) {
+int igAABox_IntersectPoint(struct B4 *arg0, struct V *arg1) {
     float temp_f1;
     float temp_f1_2;
     float temp_f1_3;

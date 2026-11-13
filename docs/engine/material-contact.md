@@ -1,11 +1,14 @@
-# Lua material-contact engine helpers
+# Material controller and Lua material contact
 
-The contiguous helper group at `0x0038aca0..0x0038af70` implements the seven Lua MAT bindings on
-the material controller `beMatCtrl`. The binding wrappers at `0x00373160..0x00373274` are
-C++ in [`src/game/be.cpp`](../../src/game/be.cpp). The adjacent controller methods at
-`0x0038af70..0x0038bed0` (initialization, receiver registration, recursive contact search, the
-per-instance update, message dispatch and two metadata getters) and the box-membership leaf at
-`0x0018b630` belong to the same module; for the update see [Open items](#open-items).
+The material controller `beMatCtrl` marks, per material, which players stand inside one of the
+material's boxes and runs the material's Lua script when a player enters or leaves. Its source is
+`src/game/beMatCtrl.cpp`. The helper group at `0x0038aca0..0x0038af70` implements the seven Lua MAT
+bindings; the binding wrappers at `0x00373160..0x00373274` are C++ in
+[`src/game/be.cpp`](../../src/game/be.cpp). The controller methods at `0x0038af70..0x0038bed0`
+(prepare, receiver registration, recursive contact search, the per-instance update, message
+dispatch and two metadata getters) follow them; the box-membership leaf `igAABox_IntersectPoint`
+and the message enum getter `beMatCtrl_GetMessageEnum` live in the maths and Bec libraries. For the
+update see [Open items](#open-items).
 
 None of this establishes whole-frame or general portal acceptance.
 
@@ -17,8 +20,10 @@ with the helper loads and stores below. The seven helpers occur consecutively be
 `beLuaState` methods and the material controller's constructor/method family. The final helper
 symbol contains eight trailing padding bytes after its return.
 
-Names are semantic recoveries from the Lua API and the verified receiver, not claims about the
-original C++ spelling. Generate them with
+Names are semantic recoveries, not claims about the original C++ spelling: the helper names come
+from the Lua API and the verified receiver, the controller's virtual slots take the names their
+sibling controllers use (`beSound`, `beNDMWStatus`: GetMeta, RegisterReceiver, GetInfoMeta, Update,
+Prepare, OnMessage). Generate them with
 `python3 scripts/seed_names_material_contact.py > config/SLUS-20836/names/MaterialContact.tsv`,
 then use the dry run and `--apply --check` naming workflow.
 
@@ -26,22 +31,23 @@ then use the dry run and `--apply --check` naming workflow.
 
 | Address | Symbol | Role | Source |
 | --- | --- | --- | --- |
-| `0x00373160..0x00373274` | `MATisPlayer`, `MATisAllPlayer`, `MATgetPlayerNo`, `MATisRidePlayer`, `MATisRideOffPlayer`, `MATgetPlayerMatStat`, `MATsetRun` | Lua binding wrappers | matched, [`src/game/be.cpp`](../../src/game/be.cpp) |
-| `0x0038aca0` | `beMatCtrl_IsPlayer` | query helper | matched, `src/game/beMatCtrl.cpp` |
-| `0x0038acd0` | `beMatCtrl_IsAllPlayer` | query helper | matched, `src/game/beMatCtrl.cpp` |
-| `0x0038ad40` | `beMatCtrl_GetPlayerNo` | query helper | matched, `src/game/beMatCtrl.cpp` |
-| `0x0038add0` | `beMatCtrl_IsRidePlayer` | query helper | matched, `src/game/beMatCtrl.cpp` |
-| `0x0038ae30` | `beMatCtrl_IsRideOffPlayer` | query helper | matched, `src/game/beMatCtrl.cpp` |
-| `0x0038ae90` | `beMatCtrl_SetRun` | activation request (16 bytes) | matched, `src/game/beMatCtrl.cpp` |
-| `0x0038aea0` | `beMatCtrl_GetPlayerMatStat` | query helper | matched, `src/game/beMatCtrl.cpp` |
-| `0x0038af70` | `Gap__Bec__beMatCtrl__vfunc_32` | initialization | matched, `src/game/beMatCtrl.cpp` |
-| `0x0038b040` | `Gap__Bec__beMatCtrl__vfunc_30` | metadata getter | matched, `src/game/beMatCtrl.cpp` |
-| `0x0038b050` | `Gap__Bec__beMatCtrl__vfunc_29` | receiver registration (44 bytes) | matched, `src/game/beMatCtrl.cpp` |
-| `0x0038b080` | `FUN_0038b080` | recursive contact search | matched, `src/game/beMatCtrl.cpp` |
-| `0x0038b1f0` | `Gap__Bec__beMatCtrl__vfunc_31` | per-instance update (3,064 bytes) | none |
-| `0x0038bdf0` | `Gap__Bec__beMatCtrl__vfunc_34` | message dispatch (220 bytes) | matched, `src/game/beMatCtrl.cpp` |
-| `0x0038bed0` | `Gap__Bec__beMatCtrl__vfunc_20` | metadata getter | matched, `src/game/beMatCtrl.cpp` |
-| `0x0018b630` | `FUN_0018b630` | box membership | matched, `src/engine/maths/igAABox.inc` |
+| `0x00373160..0x00373274` | `MATisPlayer`, `MATisAllPlayer`, `MATgetPlayerNo`, `MATisRidePlayer`, `MATisRideOffPlayer`, `MATgetPlayerMatStat`, `MATsetRun` | Lua binding wrappers | [`src/game/be.cpp`](../../src/game/be.cpp) |
+| `0x0035a6b0` | `beMatCtrl_GetMessageEnum` | MATCTRL message enum | `src/game/bec/beMatCtrlData.inc` |
+| `0x0038aca0` | `beMatCtrl_IsPlayer` | query helper | `src/game/beMatCtrl.cpp` |
+| `0x0038acd0` | `beMatCtrl_IsAllPlayer` | query helper | `src/game/beMatCtrl.cpp` |
+| `0x0038ad40` | `beMatCtrl_GetPlayerNo` | query helper | `src/game/beMatCtrl.cpp` |
+| `0x0038add0` | `beMatCtrl_IsRidePlayer` | query helper | `src/game/beMatCtrl.cpp` |
+| `0x0038ae30` | `beMatCtrl_IsRideOffPlayer` | query helper | `src/game/beMatCtrl.cpp` |
+| `0x0038ae90` | `beMatCtrl_SetRun` | activation request (16 bytes) | `src/game/beMatCtrl.cpp` |
+| `0x0038aea0` | `beMatCtrl_GetPlayerMatStat` | query helper | `src/game/beMatCtrl.cpp` |
+| `0x0038af70` | `beMatCtrl_Prepare` | Lua owner lookup, mask lists dropped | `src/game/beMatCtrl.cpp` |
+| `0x0038b040` | `beMatCtrl_GetInfoMeta` | metadata getter | `src/game/beMatCtrl.cpp` |
+| `0x0038b050` | `beMatCtrl_RegisterReceiver` | receiver registration (44 bytes) | `src/game/beMatCtrl.cpp` |
+| `0x0038b080` | `beMatCtrl_MarkContacts` | recursive contact search | `src/game/beMatCtrl.cpp` |
+| `0x0038b1f0` | `beMatCtrl_Update` | per-instance update (3,064 bytes) | `asm/` |
+| `0x0038bdf0` | `beMatCtrl_OnMessage` | message dispatch (220 bytes) | `src/game/beMatCtrl.cpp` |
+| `0x0038bed0` | `beMatCtrl_GetMeta` | metadata getter | `src/game/beMatCtrl.cpp` |
+| `0x0018b630` | `igAABox_IntersectPoint` | box membership | `src/engine/maths/igAABox.inc` |
 
 The seven Lua wrappers total 240 code bytes and need C++
 mode. C mode produces tail jumps rather than the original stack frames.
@@ -57,11 +63,11 @@ mode. C mode produces tail jumps rather than the original stack frames.
 | +56 `_wkMatOnList` | Current per-material player-bit masks |
 | +60 `_wkMatOldOnList` | Previous per-material player-bit masks |
 
-Both lists expose their element buffer at +16. The +32 existence bytes are read with `lbu` and a
-stride of one; treating them as four integer elements would read unrelated fields. The generated
-reflection header declares them as `unsigned char _wkPlExist[4]` (an `igBoolArrayMetaField`). The
-`beMatCtrl_IsAllPlayer` and `beMatCtrl_GetPlayerNo` sources read the bytes through a local byte
-view of the receiver.
+Both lists expose their element buffer at +16, and the queries address it by byte offset: each
+scales `_wkChkMat` by four once and reads the current and previous list at that offset. The +32
+existence bytes are read with `lbu` and a stride of one; treating them as four integer elements
+would read unrelated fields. The generated reflection header declares them as
+`unsigned char _wkPlExist[4]` (an `igBoolArrayMetaField`).
 
 The manager's `_isLuaCallDisp` byte enables debug formatting of Lua calls. Each RAM instance has an
 `_isRun` byte at +20 and a state word `_st0` at +24, followed by `_st1`, `_st2` and `_st3`.
@@ -83,24 +89,30 @@ collision. Their variable shifts use the EE's low five shift-count bits. These h
 null, index or player-range checks. SetRun records a request; it does not immediately mutate the
 callback's mask.
 
+`beMatCtrl_GetPlayerMatStat` keeps the previous-mask result as a byte and the current one as an
+int, so only the previous result is masked with `andi 0xff` before each compare. Retail scales the
+loaded `_wkChkMat` into a separate register for the offset. The source declares the locals before
+assigning them, `bit` ahead of the offset; the same statements written as initialised declarations
+scale the index in place and colour the bit, the offset and the previous list differently.
+
 ## Material producer and receiver lifecycle
 
 The sections below cover the five
-nontrivial bodies of the method group `0x0038af70..0x0038bed0`: initialization, receiver
+nontrivial bodies of the method group `0x0038af70..0x0038bed0`: prepare, receiver
 registration, recursive contact accumulation, per-instance update and message dispatch, plus the
 box-membership leaf. The [Lua dependency inventory](lua-dependencies.md) includes the five as
 evidenced runtime roots, without inventing edges from virtual dispatchers to those functions; the
 closure's totals are stated there.
 
-### Initialization and registration
+### Prepare and registration
 
-Initialization (`0x38af70`) constructs a `beLua` owner using handle `0x589208`, clears each
-published mask list's count, releases it and nulls the field.
+`beMatCtrl_Prepare` (`0x38af70`) looks up the `beLua` manager (handle `0x589208`) through the
+insight core and stores it at +36, then for each published mask list clears its count, releases
+it and nulls the field.
 
-Registration (`0x38b050`) registers the incoming receiver selector under `MATCTRL`, with null name
-and index -1. The selector arrives in a1 and is a parameter of the method: a draft that omits it
-shifts every later argument register. The matching C++ method passes all five messenger arguments
-in the original EE registers.
+`beMatCtrl_RegisterReceiver` (`0x38b050`) registers the incoming RAM as a receiver under
+`MATCTRL`, with null text and index -1. The RAM arrives in a1 and is a parameter of the method: a
+draft that omits it shifts every later argument register.
 
 ### Per-instance update
 
@@ -136,14 +148,15 @@ preserved.
 
 ### Recursive contact search
 
-Recursive search (`0x38b080`) admits inclusive X ranges, requires the box query to return exactly 2
-before setting a material/player bit, and visits children even when a parent's box fails. A range
-miss skips its whole subtree. Index -1 is a search-only node. The original reads material/mask
-cells before the mask-store range guard, with no other bounds policy.
+`beMatCtrl_MarkContacts` (`0x38b080`) admits inclusive X ranges, requires the box query to return
+exactly 2 before setting a material/player bit, and visits children even when a parent's box
+fails. A range miss skips its whole subtree. Index -1 is a search-only node. The original reads
+material/mask cells before the mask-store range guard, with no other bounds policy. Its first
+argument, the controller, is passed down the recursion but never read.
 
 ### Box membership
 
-The leaf at `0x18b630` checks point X/Y/Z
+`igAABox_IntersectPoint` (`0x18b630`) checks point X/Y/Z
 against the box's min vector at +8/+12/+16 and max vector at +20/+24/+28, inclusively and in axis
 order. It returns only 0 (outside) or 2 (inside). The comparison follows the
 [EE float rules](action2-timing.md#floating-point-is-not-host-floating-point): signed zeros and
@@ -152,10 +165,11 @@ hardware measurement.
 
 ### Message dispatch
 
-The six enum rows at `0x4c6130/0x4c6150`, loaded by `0x35a6b0`, establish the message order:
-SHOWMAT, HIDEMAT, SHOW_LUACALL, HIDE_LUACALL, PAUSE, RESTART. The first two call the info's
-switchgraph; the next two set the manager debug byte; PAUSE/RESTART change the RAM run byte.
-Recognized commands return 1 and unknown commands return 0.
+The six enum rows at `0x4c6130/0x4c6150`, which `beMatCtrl_GetMessageEnum` builds into the enum
+named `Message`, establish the message order:
+SHOWMAT, HIDEMAT, SHOW_LUACALL, HIDE_LUACALL, PAUSE, RESTART. The first two enable or disable all
+children of the info's switchgraph; the next two set the manager debug byte; PAUSE/RESTART change
+the RAM run byte. Recognized commands return 1 and unknown commands return 0.
 
 The handler spans `0x38bdf0..0x38becc` (220 bytes). Ghidra's address set for it contains 212
 occupied bytes; the span also includes the shared return at `0x38bec4` and its delay slot at
@@ -227,3 +241,6 @@ and their comparison tooling is not in the repository.
   goto-shaped candidate's ten, with the same register gap.
 - **Engine services.** Matrix queries, allocator and list services, formatting, Lua execution,
   receiver registration and the constructor/framework services are not described here.
+- **Names.** `igAABox_IntersectPoint` is named from its 0/2 result, the pattern of the other
+  igAABox intersection tests it is registered beside; `beMatCtrl_Prepare` takes the slot name
+  `beSound` and `beAction2` use for the same virtual slot.
