@@ -1862,8 +1862,10 @@ def isolate_emitted_body(obj, requested, records, group, symbols, source=None):
                                  **{i: f".text.owned_{i}" for i in discarded}, **kept}, headers=headers)
     # Removing the verified siblings preserves undefined symbols in MWCC
     # objects; objcopy's --only-section path incorrectly drops some of them.
+    # An ee-gcc object's `.mdebug` (ECOFF symbols, not loaded) describes the whole file: GNU ld
+    # crashes on its symbols for a `.bss` removed here, so the one kept body goes without it.
     arguments = ["mipsel-linux-gnu-objcopy", "--remove-section=.text.owned_*",
-                 "--remove-section=.mwcats"]
+                 "--remove-section=.mwcats", "--remove-section=.mdebug"]
     renames = {name: by_va[address][0] for name, (address, _, _) in records.items()}
     renames.update({name: by_va[address][0] for name, address in group.externals})
     renames.update({name: "DAT_%08x" % address for name, address in group.data})

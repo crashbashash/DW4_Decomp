@@ -731,6 +731,22 @@ class BssData(unittest.TestCase):
         self.assertFalse(ok)
         self.assertIn(f"DIFFER data .bss 0x{self.OWNER + 0x80:x}", report)
 
+    def test_each_isolated_member_links(self):
+        _ok, _report, records = self.verify(self.DATA)
+        group = unitobjects.group_for(self.OWNER, self.registry)
+        for address, other in ((self.OWNER, "fixture_write"), (self.MEMBER, "fixture_read")):
+            member = self.root / f"member_{address:x}.o"
+            shutil.copyfile(self.obj, member)
+            verify.isolate_emitted_body(str(member), address, records, group, str(self.symbols),
+                                        source=str(self.obj))
+            script = self.root / f"member_{address:x}.ld"
+            script.write_text(f"DAT_{self.DATA:08x} = 0x{self.DATA:x};\n{other} = 0x{self.OWNER + self.MEMBER - address:x};\n"
+                              f"SECTIONS {{\n.text 0x{address:x} : {{ *(.text) }}\n/DISCARD/ : {{ *(.reginfo) }}\n}}\n")
+            linked = subprocess.run(["mipsel-linux-gnu-ld", "-T", str(script), "-G0", "--no-warn-mismatch",
+                                     "-o", str(self.root / f"member_{address:x}.elf"), str(member)],
+                                    capture_output=True, text=True)
+            self.assertEqual(linked.returncode, 0, linked.stderr)
+
 
 if __name__ == "__main__":
     unittest.main()
