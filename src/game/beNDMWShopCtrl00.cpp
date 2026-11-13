@@ -206,15 +206,15 @@ extern "C" void FUN_00435250(int *arg0, int arg1);
 extern "C" int strlen(...);
 extern "C" int FUN_0030b3c0(...);
 extern "C" int FUN_0030b460(...);
-extern "C" int FUN_00447d00(...);
-extern "C" int FUN_00447ed0(...);
+extern "C" int beNDMWItemBase_GetRevisionColor(...);
+extern "C" int beNDMWItemRevisionPocketBase_GetPrice(...);
 extern "C" char * beNDMWItemBase_GetRecordString(...);
 extern "C" int beNDMWItemBase_GetRecordInt(...);
 extern "C" int FUN_003c90f0(...);
 extern "C" void FUN_0043a950(int *arg0, int arg1);
 extern "C" int *FUN_002b90e0(...);
 extern "C" int *FUN_003c87f0(...);
-extern "C" int FUN_00448660(...);
+extern "C" int beNDMWItemAbilityChip_Set(...);
 extern "C" int Gap__Bec__beNDMWShopDevice__vfunc_20(void);
 extern "C" int Gap__Bec__beNDMWShopCtrlXdataChip__vfunc_20(void);
 extern "C" int Gap__Bec__beNDMWShopCtrlSales__vfunc_20(void);
@@ -5470,7 +5470,7 @@ void Gap__Bec__beNDMWShopCtrlDeviceSell__vfunc_21(beNDMWShopCtrlDeviceSell *self
                         if (idx < fold->_count) {
                             ins = (int)FUN_00236f80(self->_insight, g_beNDMWStatus_metaObject[0]);
                             item = ((int *)fold->_data)[idx];
-                            price = FUN_00447ed0(item, ins, DAT_0051bd70);
+                            price = beNDMWItemRevisionPocketBase_GetPrice(item, ins, DAT_0051bd70);
                             money = igProperty_GetRecord(obj, DAT_0051b560)->f12;
                             money = money + price;
                             if (money > 9999999) money = 9999999;
@@ -5574,13 +5574,13 @@ void FUN_00436060(beNDMWShopCtrlDeviceSell *self, int full, unsigned char sel)
                     beMessenger_AppendString(m, t);
                 }
                 beMessenger_DispatchSelected(self->_messenger, TEXTSET);
-                sprintf(name, percent_d, FUN_00447ed0(o, c, &DAT_0051bd70[0]));
+                sprintf(name, percent_d, beNDMWItemRevisionPocketBase_GetPrice(o, c, &DAT_0051bd70[0]));
                 beMessenger_SelectGroup(self->_messenger, TEXTCTL_3);
                 beMessenger_AppendString(self->_messenger, &((char *)STWINFONT17)[0]);
                 beMessenger_AppendString(self->_messenger, ((char * *)g_fontNames)[i]);
                 beMessenger_AppendString(self->_messenger, name);
                 beMessenger_DispatchSelected(self->_messenger, TEXTSET);
-                FUN_00447d00(&vA, o);
+                beNDMWItemBase_GetRevisionColor(&vA, o);
                 beMessenger_SelectGroup(self->_messenger, TEXTCTL_3);
                 beMessenger_AppendString(self->_messenger, &((char *)STWINFONT14)[0]);
                 beMessenger_AppendString(self->_messenger, ((char * *)g_fontNames)[i]);
@@ -5698,7 +5698,7 @@ int FUN_004367c0(beNDMWShopCtrlDeviceSell *self) {
             o = fold->items[idx];
             mark = true;
             if (o->flag != 0) mark = false;
-            else if (FUN_00447ed0(o, c, &DAT_0051bd70[0]) <= 0) mark = false;
+            else if (beNDMWItemRevisionPocketBase_GetPrice(o, c, &DAT_0051bd70[0]) <= 0) mark = false;
             l = (igCharList *)self->_decideList;
             k = l->_count;
             if (k < l->_capacity) l->_count = k + 1; else List_Resize(l, k + 1, 1);
@@ -6051,7 +6051,7 @@ void FUN_00437ae0(beNDMWShopCtrlDiskSell *arg0, int arg1, int arg2) {
                 beMessenger_AppendString(arg0->_messenger, *p);
                 beMessenger_AppendString(arg0->_messenger, spBC);
                 beMessenger_DispatchSelected(arg0->_messenger, TEXTSET);
-                sprintf(spA0, percent_d, FUN_00447ed0(it, temp_s7, DAT_0051bd70));
+                sprintf(spA0, percent_d, beNDMWItemRevisionPocketBase_GetPrice(it, temp_s7, DAT_0051bd70));
                 beMessenger_SelectGroup(arg0->_messenger, TEXTCTL_3);
                 beMessenger_AppendString(arg0->_messenger, ((char *)STWINFONT17));
                 beMessenger_AppendString(arg0->_messenger, *p);
@@ -6096,7 +6096,7 @@ void FUN_00437ae0(beNDMWShopCtrlDiskSell *arg0, int arg1, int arg2) {
             beMessenger_AppendString(arg0->_messenger, ((char * *)g_fontNames)[0]);
             beMessenger_AppendString(arg0->_messenger, DISPON);
             beMessenger_DispatchSelected(arg0->_messenger, SWITCH_2);
-            arg0->_tanka = FUN_00447ed0(it, temp_s7, DAT_0051bd70);
+            arg0->_tanka = beNDMWItemRevisionPocketBase_GetPrice(it, temp_s7, DAT_0051bd70);
             return;
         }
         beMessenger_SelectGroup(arg0->_messenger, TEXTCTL_3);
@@ -6167,7 +6167,7 @@ void FUN_004393e0(beNDMWShopCtrlSales *arg0, int arg1, unsigned char arg2) {
                 beMessenger_AppendString(arg0->_messenger, ((char * *)g_fontNames)[i]);
                 beMessenger_AppendString(arg0->_messenger, name);
                 beMessenger_DispatchSelected(arg0->_messenger, ((char *)TEXTSET));
-                FUN_00447d00(&pos, it);
+                beNDMWItemBase_GetRevisionColor(&pos, it);
                 beMessenger_SelectGroup(arg0->_messenger, ((char *)TEXTCTL_3));
                 beMessenger_AppendString(arg0->_messenger, ((char *)STWINFONT14));
                 beMessenger_AppendString(arg0->_messenger, ((char * *)g_fontNames)[i]);
@@ -6177,7 +6177,7 @@ void FUN_004393e0(beNDMWShopCtrlSales *arg0, int arg1, unsigned char arg2) {
                 if (it->_kindNo == 3 && it->_recNo == 185) {
                     buf = DAT_0051bdc0;
                 } else {
-                    sprintf(&buf, ((char *)percent_d), FUN_00447ed0(it, rec, ((char *)DAT_0051b690)));
+                    sprintf(&buf, ((char *)percent_d), beNDMWItemRevisionPocketBase_GetPrice(it, rec, ((char *)DAT_0051b690)));
                 }
                 beMessenger_SelectGroup(arg0->_messenger, ((char *)TEXTCTL_3));
                 beMessenger_AppendString(arg0->_messenger, ((char *)STWINFONT17));
@@ -6783,7 +6783,7 @@ void Gap__Bec__beNDMWShopCtrlXdataChip__vfunc_21(beNDMWShopCtrlXdataChip *arg0) 
                 }
                 ALLOC_43aae0(al)
                 igSmartPointer<beNDMWItemAbilityChip> abilityChip((beNDMWItemAbilityChip *)FUN_003c87f0(al));
-                FUN_00448660(abilityChip.p, recNo + 1);
+                beNDMWItemAbilityChip_Set(abilityChip.p, recNo + 1);
                 beNDMWWindow_QueueText(infoWin.p, STWINFONT29, ((int * *)g_fontNames)[0], ((int *)beNDMWItemBase_GetRecordString(abilityChip.p, status, NAME_2)), &DAT_0051b598[0]);
                 beNDMWWindow_QueueText(infoWin.p, &DAT_0051b448[0], ((int * *)g_fontName1)[0], &DAT_0051b590[0], &DAT_0051b598[0]);
                 beNDMWWindow_QueueText(infoWin.p, &DAT_0051b448[0], ((int * *)DAT_004cf8a8)[0], &DAT_0051b590[0], &DAT_0051b598[0]);

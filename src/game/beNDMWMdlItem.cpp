@@ -18,13 +18,13 @@ extern "C" int beMessenger_RegisterReceiverFromInfo(int, int, char *);
 extern "C" int FUN_00236f80(int, int);
 extern "C" int Gap__Core__igObject__vfunc_23(...);
 extern "C" int Gap__Bec__beNDMWMdlItem__vfunc_20(void);
-extern "C" int FUN_004482e0(...);
-extern "C" int FUN_00448430(...);
-extern "C" int FUN_00448580(...);
-extern "C" int FUN_00448660(...);
-extern "C" int FUN_00448710(...);
-extern "C" int FUN_00448ad0(...);
-extern "C" int FUN_00448f00(...);
+extern "C" int beNDMWItemWeapon_SetRandom(...);
+extern "C" int beNDMWItemBlueArmor_SetRandom(...);
+extern "C" int beNDMWItemYellowArmor_SetRandom(...);
+extern "C" int beNDMWItemAbilityChip_Set(...);
+extern "C" int beNDMWItemDisk_Set(...);
+extern "C" int beNDMWItemInstant_Set(...);
+extern "C" int beNDMWItemImportant_Set(...);
 extern "C" int FUN_00396740(...);
 extern "C" void * Memory_GetAllocatorBySelector(...);
 extern "C" int beMessenger_GetInt(...);
@@ -42,7 +42,7 @@ extern "C" int beMessenger_GetBoolCount(...);
 extern "C" int beMessenger_GetBool(...);
 extern "C" int beMessenger_SelectGroup(...);
 extern "C" int beMessenger_AppendInt(...);
-extern "C" int FUN_00448050(...);
+extern "C" int beNDMWItemBase_IndexOfRecNo(...);
 extern "C" int ObjectList_AppendRetained(...);
 extern "C" int DAT_004cfb40[4];
 extern "C" int DAT_004cfb44[4];
@@ -256,28 +256,28 @@ void Gap__Bec__beNDMWMdlItem__vfunc_36(beNDMWMdlItem *self, beBaseInfoRam *info)
     case 0: {
         ALLOC(alloc, g_ndmwAllocatorSelector)
         ItemRef h(FUN_003c85b0(alloc));
-        { beNDMWMdlItemInfoWork *w = work.p; FUN_00448710(h.p, w->_recNo); }
+        { beNDMWMdlItemInfoWork *w = work.p; beNDMWItemDisk_Set(h.p, w->_recNo); }
         storeItem(work, h);
         break;
     }
     case 1: {
         ALLOC(alloc, g_ndmwAllocatorSelector)
         ItemRefB h(FUN_003c83c0(alloc));
-        { beNDMWMdlItemInfoWork *w = work.p; FUN_00448ad0(h.p, w->_recNo); }
+        { beNDMWMdlItemInfoWork *w = work.p; beNDMWItemInstant_Set(h.p, w->_recNo); }
         storeItem(work, h);
         break;
     }
     case 2: {
         ALLOC(alloc, g_ndmwAllocatorSelector)
         ItemRefC h(FUN_003c8240(alloc));
-        { beNDMWMdlItemInfoWork *w = work.p; FUN_00448f00(h.p, w->_recNo); }
+        { beNDMWMdlItemInfoWork *w = work.p; beNDMWItemImportant_Set(h.p, w->_recNo); }
         storeItem(work, h);
         break;
     }
     case 6: {
         ALLOC(alloc, g_ndmwAllocatorSelector)
         ItemRefK<4> h(FUN_003c87f0(alloc));
-        { beNDMWMdlItemInfoWork *w = work.p; FUN_00448660(h.p, w->_recNo); }
+        { beNDMWMdlItemInfoWork *w = work.p; beNDMWItemAbilityChip_Set(h.p, w->_recNo); }
         storeItem(work, h);
         break;
     }
@@ -291,21 +291,21 @@ void Gap__Bec__beNDMWMdlItem__vfunc_36(beNDMWMdlItem *self, beBaseInfoRam *info)
         case 3: {
             ALLOC(alloc, g_ndmwAllocatorSelector)
             ItemRefK<1> h(FUN_003c8c90(alloc));
-            { beNDMWMdlItemInfoWork *w = work.p; FUN_004482e0(h.p, w->_recNo, self, roll); }
+            { beNDMWMdlItemInfoWork *w = work.p; beNDMWItemWeapon_SetRandom(h.p, w->_recNo, self, roll); }
             storeItem(work, h);
             break;
         }
         case 4: {
             ALLOC(alloc, g_ndmwAllocatorSelector)
             ItemRefK<2> h(FUN_003c8b00(alloc));
-            { beNDMWMdlItemInfoWork *w = work.p; FUN_00448430(h.p, w->_recNo, self, roll); }
+            { beNDMWMdlItemInfoWork *w = work.p; beNDMWItemBlueArmor_SetRandom(h.p, w->_recNo, self, roll); }
             storeItem(work, h);
             break;
         }
         case 5: {
             ALLOC(alloc, g_ndmwAllocatorSelector)
             ItemRefK<3> h(FUN_003c8970(alloc));
-            { beNDMWMdlItemInfoWork *w = work.p; FUN_00448580(h.p, w->_recNo, self, roll); }
+            { beNDMWMdlItemInfoWork *w = work.p; beNDMWItemYellowArmor_SetRandom(h.p, w->_recNo, self, roll); }
             storeItem(work, h);
             break;
         }
@@ -430,7 +430,7 @@ void Gap__Bec__beNDMWMdlItem__vfunc_45(MdlItemVirtual *arg0, beNDMWGameRamInfoRa
             case 3:
             case 5: {
                 igObjectList *l = igProperty_GetRecordFolder(s3, DAT_0051d0d8)->f12;
-                if (((ItemRecord **)l->_data)[FUN_00448050(l, s5->_recNo)]->f20 >= 9) {
+                if (((ItemRecord **)l->_data)[beNDMWItemBase_IndexOfRecNo(l, s5->_recNo)]->f20 >= 9) {
                     s4 = false;
                 }
                 break;
@@ -449,7 +449,7 @@ void Gap__Bec__beNDMWMdlItem__vfunc_45(MdlItemVirtual *arg0, beNDMWGameRamInfoRa
                 case 3:
                 case 5: {
                     igObjectList *l = igProperty_GetRecordFolder(s3, DAT_0051d0d8)->f12;
-                    ItemRecord *it = ((ItemRecord **)l->_data)[FUN_00448050(l, s5->_recNo)];
+                    ItemRecord *it = ((ItemRecord **)l->_data)[beNDMWItemBase_IndexOfRecNo(l, s5->_recNo)];
                     int v = it->f20;
                     if (v != 9) {
                         it->f20 = v + 1;

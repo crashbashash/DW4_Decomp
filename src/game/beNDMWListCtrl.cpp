@@ -200,7 +200,7 @@ extern "C" int FUN_002caa70(...);
 extern "C" int beNDMWItemBase_GetRecordInt(...);
 extern "C" int beNDMWItemBase_GetRecordString(...);
 extern "C" void beNDMWWindow_PresentModelAtOrigin(...);
-extern "C" int FUN_00447d00(...);
+extern "C" int beNDMWItemBase_GetRevisionColor(...);
 extern "C" int strlen(const void *);
 extern "C" int FUN_0030b3c0(void *, const char *);
 extern "C" int FUN_0030b460(void *, const void *, int, int);
@@ -1906,7 +1906,7 @@ void Gap__Bec__beNDMWStatusPowerSocket__vfunc_24(S *arg0) {
                 beMessenger_AppendString(arg0->w12, *row);
                 beMessenger_AppendString(arg0->w12, rs);
                 beMessenger_DispatchSelected(arg0->w12, DAT_00519f30);
-                FUN_00447d00(&b, item);
+                beNDMWItemBase_GetRevisionColor(&b, item);
                 beMessenger_SelectGroup(arg0->w12, DAT_00519c28);
                 beMessenger_AppendString(arg0->w12, DAT_00519db0);
                 beMessenger_AppendString(arg0->w12, *row);
@@ -2523,7 +2523,7 @@ void Gap__Bec__beNDMWStatusMainSlot__vfunc_24(S_415440 *arg0) {
                 beMessenger_AppendString(arg0->w12, *row);
                 beMessenger_AppendString(arg0->w12, rs);
                 beMessenger_DispatchSelected(arg0->w12, DAT_00519f30);
-                FUN_00447d00(&b, item);
+                beNDMWItemBase_GetRevisionColor(&b, item);
                 beMessenger_SelectGroup(arg0->w12, DAT_00519c28);
                 beMessenger_AppendString(arg0->w12, DAT_00519db0);
                 beMessenger_AppendString(arg0->w12, *row);
@@ -3040,7 +3040,7 @@ void Gap__Bec__beNDMWStatusSubSlot__vfunc_24(S_417350 *arg0) {
                 beMessenger_AppendString(arg0->w12, *row);
                 beMessenger_AppendString(arg0->w12, rs);
                 beMessenger_DispatchSelected(arg0->w12, DAT_00519f30);
-                FUN_00447d00(&b, item);
+                beNDMWItemBase_GetRevisionColor(&b, item);
                 beMessenger_SelectGroup(arg0->w12, DAT_00519c28);
                 beMessenger_AppendString(arg0->w12, DAT_00519db0);
                 beMessenger_AppendString(arg0->w12, *row);
@@ -3588,7 +3588,7 @@ void FUN_00418ac0(beNDMWStatusCtrlD0 *p0, int arg1, int arg2) {
                 beMessenger_AppendString(self->_messenger, DAT_004cf670[i]);
                 if (*(unsigned char *)(((igBoolList *)self->_decideList)->_data + i) != 0) {
                     m = self->_messenger;
-                    FUN_00447d00(vec, item);
+                    beNDMWItemBase_GetRevisionColor(vec, item);
                     beMessenger_AppendVec3(m, (float *)vec);
                     beMessenger_DispatchSelected(self->_messenger, DAT_00519f38);
                 } else {
@@ -5890,7 +5890,7 @@ void Gap__Bec__beNDMWStatusSubMenu__vfunc_21(beNDMWStatusSubMenu *self)
                         item = (beNDMWItemBase *)((int *)dl->_data)[self->_selectDevice];
                         beNDMWWindow_QueueText(self, DAT_0051a060, DAT_005199e0, beNDMWItemBase_GetRecordString(item, cx, DAT_00519f28), DAT_00519b68);
                     }
-                    FUN_00447d00(vec, item);
+                    beNDMWItemBase_GetRevisionColor(vec, item);
                     beMessenger_SelectGroup(self->_messenger, DAT_00519c28);
                     beMessenger_AppendString(self->_messenger, DAT_0051a060);
                     beMessenger_AppendString(self->_messenger, DAT_005199e0);

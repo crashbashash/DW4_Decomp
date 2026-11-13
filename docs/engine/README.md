@@ -39,7 +39,7 @@ Index: [`../README.md`](../README.md).
 | [Window tree and shop-root runtime](window-tree-and-shop-root.md) | Full recursive child ownership/update and generic root widget/service selection, opening gate and close sequencing |
 | [Window presentation and close queues](window-presentation.md) | Full model/text lifetime, close polling and shared title update; default-origin and sequence forwards |
 | [XDATA controller](xdata-controller.md) | Full quote/confirmation/UPCNT debit flow, four-player record selection, script call-number publication and actual txt_shop pack ownership |
-| [Item/database lookup](item-database.md) | Ten bodies /1,168 bytes, explicit value/status ABI and474 original-instruction comparisons |
+| [Items and database lookup](item-database.md) | The `beNDMWItem*` classes, their inventory word, rolls, prices, colours and uses, and the `beDataBase` record lookups |
 | [Chip transaction controller](chip-controller.md) | Full inventory/preview/confirmation/record and XDATA flow at43aae0; original-instruction oracle |
 | [ListCtrl and chip-list view](list-controller-chip-view.md) | Five complete paging/text helpers, 2,196 bytes; 3,149 original-instruction cases and caller ABI boundaries |
 | [Shop selector widgets](shop-selectors.md) | Full selector publication/focus/close loop, XDATA one/two/three/seven-choice initialization, stat costs and exact focus predicate |

@@ -215,8 +215,8 @@ Evidence is the class's `_InitFields` metaobject getter (handle resolved through
 
 ## Notes not resolved to a single field
 
-* DEVICEFOLDER igObjectList elements -> beNDMWItemBase (subclasses beNDMWItemWeapon/BlueArmor/YellowArmor/AbilityChip): creators FUN_003c8c90/8b00/8970/87f0 and initialisers FUN_004482c0/448410/448560/448660
-* DISKFOLDER igObjectList elements -> beNDMWItemDisk: FUN_003f7310 creates and initialises them with FUN_00448710(beNDMWItemDisk *)
+* DEVICEFOLDER igObjectList elements -> beNDMWItemBase (subclasses beNDMWItemWeapon/BlueArmor/YellowArmor/AbilityChip): creators FUN_003c8c90/8b00/8970/87f0 and initialisers beNDMWItemWeapon_Set, beNDMWItemBlueArmor_Set, beNDMWItemYellowArmor_Set and beNDMWItemAbilityChip_Set
+* DISKFOLDER igObjectList elements -> beNDMWItemDisk: FUN_003f7310 creates and initialises them with beNDMWItemDisk_Set(beNDMWItemDisk *)
 * beActionStarter._messenger, beLightCtrl._messenger, beNDMWMdlMapBase._messenger, beSeCtl._messenger -> beMessenger: first argument of beMessenger_RegisterReceiver/FromInfo in their vfunc_29/37
 * beBaseInfoRam._dataList (context +40) -> container of RamData records searched by name (e.g. beSelectCtrlInfoRamData): hypothesis, from selectctrl.md and the shared igProperty_FindByName(DAT_00585be0) key
 * window object built by FUN_003baf10 in beNDMWStatusSubSlot vfunc_29 is a beNDMWWindow subclass: callees beNDMWWindow_BindContext/RunMessageScript; fields _textCloseTypeList/_textCloseNameList at +60/+64

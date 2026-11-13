@@ -99,7 +99,7 @@ Each folder also has its own `README.md` listing what is in it.
 | An `.igb` file, or a reflection (`be*`) structure | [`engine/igbinary-format.md`](engine/igbinary-format.md), [`engine/reflection-metadata.md`](engine/reflection-metadata.md) |
 | The decompiled game scripts | [`engine/lua-decompilation.md`](engine/lua-decompilation.md), [`engine/lua-tree-layout.md`](engine/lua-tree-layout.md) |
 | The save file's byte layout, checksum or level formula | [`systems/save-format.md`](systems/save-format.md) |
-| Item database lookup and returned-value contracts | [Item/database lookup](engine/item-database.md) |
+| Items, their inventory word and database record lookup | [Items and database lookup](engine/item-database.md) |
 | An item, weapon, core or mod ID | [`systems/items.md`](systems/items.md) |
 | A technique, skill or X-Data slot | [`systems/techniques.md`](systems/techniques.md) |
 | Combat calculation rules and matching-source coverage | [Damage/critical recovery](systems/combat-damage.md), [generated combat inventory](systems/combat-inventory.md) |

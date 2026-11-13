@@ -151,11 +151,11 @@ through a different chain:
    | `Gap__Bec__beNDMWShopCtrl40__vfunc_21` `0x429EA0` | `genrand()%10000 <= t`: **probability check** |
    | `FUN_0039BCA0` `0x39BDB0` | `genrand()%6144 / 1000.0`: random float ≤ 6.144 (effect/timer offset) |
    | `FUN_003764C0` `0x376594` | `genrand()%range`: random duration/animation timing |
-   | `FUN_004480A0` `0x4480C8` `0x4480F0` | two rolls `%6000+1` and `%param`: **damage/score variance** |
-   | `FUN_00448190` `0x4481B0` | `genrand()%620` → 6-tier rank (0–5) |
+   | `beNDMWItemRevisionBase_RollRevision` `0x4480C8` `0x4480F0` | two rolls `%6000+1` and `%level`: **item revision** of a new weapon or armour |
+   | `beNDMWItemRevisionPocketBase_RollPocket` `0x4481B0` | `genrand()%620` → pocket count (0–5) of a new weapon or blue armour |
    | `FUN_0042EB80` `0x42F288` | `(genrand()%1000)*1000`: random step |
-   | `FUN_004487A0` `0x4489A8` | `genrand()%10 <= 8-k`: probability check |
-   | `FUN_00448AE0` `0x448CEC` | `genrand()%range` scaled by `(X+100)/100`: value variance |
+   | `Gap__Bec__beNDMWItemDisk__vfunc_22` `0x4489A8` | `genrand()%10 <= 8-k`: poison-cure disk, `k` the poison endurance |
+   | `Gap__Bec__beNDMWItemInstant__vfunc_22` `0x448CEC` | `genrand()%range` scaled by `(BITRITSU+100)/100`: bits paid by consumable 0 |
    | `FUN_00390F80` `0x39129C` | `genrand() & 0xf`: small index/variant roll |
 
 So combat, loot, AI and other systems advance the same stream; the Lua sites

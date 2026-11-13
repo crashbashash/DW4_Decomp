@@ -19534,42 +19534,42 @@
 00447c10 000048 beNDMWItemBase_GetRecordInt
 00447c60 000048 beNDMWItemBase_GetRecordBool
 00447cb0 000048 beNDMWItemBase_GetRecordString
-00447d00 0001c8 FUN_00447d00
-00447ed0 00017c FUN_00447ed0
-00448050 000050 FUN_00448050
-004480a0 0000ec FUN_004480a0
-00448190 000110 FUN_00448190
+00447d00 0001c8 beNDMWItemBase_GetRevisionColor
+00447ed0 00017c beNDMWItemRevisionPocketBase_GetPrice
+00448050 000050 beNDMWItemBase_IndexOfRecNo
+004480a0 0000ec beNDMWItemRevisionBase_RollRevision
+00448190 000110 beNDMWItemRevisionPocketBase_RollPocket
 004482a0 000020 Gap__Bec__beNDMWItemWeapon__vfunc_21 Gap::Bec::beNDMWItemWeapon::vfunc_21
-004482c0 000018 FUN_004482c0
-004482e0 000074 FUN_004482e0
+004482c0 000018 beNDMWItemWeapon_Set
+004482e0 000074 beNDMWItemWeapon_SetRandom
 00448360 00004c Gap__Bec__beNDMWItemWeapon__vfunc_23 Gap::Bec::beNDMWItemWeapon::vfunc_23
 004483b0 00003c Gap__Bec__beNDMWItemWeapon__vfunc_24 Gap::Bec::beNDMWItemWeapon::vfunc_24
 004483f0 000020 Gap__Bec__beNDMWItemBlueArmor__vfunc_21 Gap::Bec::beNDMWItemBlueArmor::vfunc_21
-00448410 00001c FUN_00448410
-00448430 000074 FUN_00448430
+00448410 00001c beNDMWItemBlueArmor_Set
+00448430 000074 beNDMWItemBlueArmor_SetRandom
 004484b0 00004c Gap__Bec__beNDMWItemBlueArmor__vfunc_23 Gap::Bec::beNDMWItemBlueArmor::vfunc_23
 00448500 00003c Gap__Bec__beNDMWItemBlueArmor__vfunc_24 Gap::Bec::beNDMWItemBlueArmor::vfunc_24
 00448540 000020 Gap__Bec__beNDMWItemYellowArmor__vfunc_21 Gap::Bec::beNDMWItemYellowArmor::vfunc_21
-00448560 000018 FUN_00448560
-00448580 000048 FUN_00448580
+00448560 000018 beNDMWItemYellowArmor_Set
+00448580 000048 beNDMWItemYellowArmor_SetRandom
 004485d0 000040 Gap__Bec__beNDMWItemYellowArmor__vfunc_23 Gap::Bec::beNDMWItemYellowArmor::vfunc_23
 00448610 000030 Gap__Bec__beNDMWItemYellowArmor__vfunc_24 Gap::Bec::beNDMWItemYellowArmor::vfunc_24
 00448640 000020 Gap__Bec__beNDMWItemAbilityChip__vfunc_21 Gap::Bec::beNDMWItemAbilityChip::vfunc_21
-00448660 000014 FUN_00448660
+00448660 000014 beNDMWItemAbilityChip_Set
 00448680 000034 Gap__Bec__beNDMWItemAbilityChip__vfunc_23 Gap::Bec::beNDMWItemAbilityChip::vfunc_23
 004486c0 000024 Gap__Bec__beNDMWItemAbilityChip__vfunc_24 Gap::Bec::beNDMWItemAbilityChip::vfunc_24
 004486f0 000020 Gap__Bec__beNDMWItemDisk__vfunc_21 Gap::Bec::beNDMWItemDisk::vfunc_21
-00448710 000018 FUN_00448710
+00448710 000018 beNDMWItemDisk_Set
 00448730 000040 Gap__Bec__beNDMWItemDisk__vfunc_23 Gap::Bec::beNDMWItemDisk::vfunc_23
 00448770 000030 Gap__Bec__beNDMWItemDisk__vfunc_24 Gap::Bec::beNDMWItemDisk::vfunc_24
 004487a0 00030c Gap__Bec__beNDMWItemDisk__vfunc_22 Gap::Bec::beNDMWItemDisk::vfunc_22
 00448ab0 000020 Gap__Bec__beNDMWItemInstant__vfunc_21 Gap::Bec::beNDMWItemInstant::vfunc_21
-00448ad0 000010 FUN_00448ad0
+00448ad0 000010 beNDMWItemInstant_Set
 00448ae0 0003f8 Gap__Bec__beNDMWItemInstant__vfunc_22 Gap::Bec::beNDMWItemInstant::vfunc_22
 00448ee0 000020 Gap__Bec__beNDMWItemImportant__vfunc_21 Gap::Bec::beNDMWItemImportant::vfunc_21
-00448f00 000010 FUN_00448f00
+00448f00 000010 beNDMWItemImportant_Set
 00448f10 000020 Gap__Bec__beNDMWItemWaza__vfunc_21 Gap::Bec::beNDMWItemWaza::vfunc_21
-00448f30 000018 FUN_00448f30
+00448f30 000018 beNDMWItemWaza_Set
 00448f50 00000c Gap__Bec__beNDMWItemWaza__vfunc_20 Gap::Bec::beNDMWItemWaza::vfunc_20
 00448f60 00000c Gap__Bec__beNDMWItemImportant__vfunc_20 Gap::Bec::beNDMWItemImportant::vfunc_20
 00448f70 00000c Gap__Bec__beNDMWItemInstant__vfunc_20 Gap::Bec::beNDMWItemInstant::vfunc_20

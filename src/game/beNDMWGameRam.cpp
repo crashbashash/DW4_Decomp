@@ -100,7 +100,7 @@ extern "C" char * StringPool_Intern(...);
 extern "C" char * beDataBase_GetRecordString(...);
 extern "C" int beMessenger_SendNamed(...);
 extern "C" void *FUN_003c8c90(int);
-extern "C" int FUN_004482c0(void *, int, int, int);
+extern "C" int beNDMWItemWeapon_Set(void *, int, int, int);
 extern "C" int beDataBase_GetRecordInt(...);
 extern "C" int beNDMWItemBase_GetRecordInt(...);
 extern "C" const char * beNDMWItemBase_GetRecordString(...);
@@ -184,7 +184,7 @@ struct Fill {
 };
 extern "C" igObject *FUN_00364050(int);
 extern "C" igObject *FUN_003c85b0(int);
-extern "C" int FUN_00448710(igObject *, int);
+extern "C" int beNDMWItemDisk_Set(igObject *, int);
 extern "C" int DAT_004ced40[4];
 extern "C" int DAT_004cedf0[4];
 extern "C" int DAT_004cf110[4];
@@ -539,7 +539,7 @@ extern "C" char DAT_00519018[];
 extern "C" char DAT_00519448[];
 extern "C" char DAT_00519458[];
 extern "C" char DAT_00519460[];
-extern "C" void FUN_00448f30(igObject *, int, int);
+extern "C" void beNDMWItemWaza_Set(igObject *, int, int);
 extern "C" igObject *FUN_003c8040(int);
 extern "C" const char *DAT_004cf290[6];
 extern "C" const char *DAT_004cf2b0[6];
@@ -813,7 +813,7 @@ void FUN_003f7310(beNDMWGameRam *arg0, int arg1) {
             a1 = Memory_GetAllocatorBySelector(g_ndmwAllocatorSelector[0]);
         }
         ItemRef item(FUN_003c85b0(a1));
-        FUN_00448710(item.p, f);
+        beNDMWItemDisk_Set(item.p, f);
         p7 = data.p;
         s1 = item.p;
         igObject **folder = (igObject **)igProperty_GetRecordFolder(p7, &DAT_00518a50[0]);
@@ -1244,7 +1244,7 @@ void FUN_003f8990(beNDMWGameRam *arg0, int arg1) {
             }
             arg0->_dBShinka = (int)o;
         }
-        FUN_004482c0(hv, beDataBase_GetRecordInt((void *)arg0->_dBShinka, s6, *pt), 0, 0);
+        beNDMWItemWeapon_Set(hv, beDataBase_GetRecordInt((void *)arg0->_dBShinka, s6, *pt), 0, 0);
         ObjectList_AppendRetained(l, sp8C.value);
         }
         j += 1;
@@ -1930,7 +1930,7 @@ void FUN_003fab90(beNDMWGameRam *self, int index, unsigned char apply)
                 for (int rank = 4; rank >= 0; rank--) {
                     if (beDataBase_GetRecordInt(SHINKA_3fab90(self), species, DAT_004cf2d0[slot][rank]) <= skillVal) {
                         IntListRef waza((IntList *)FUN_003c8040(StatHelpers_3fab90::select_allocator(igObject_GetAllocator(self))));
-                        FUN_00448f30((igObject *)waza.value, tech + rank, tech);
+                        beNDMWItemWaza_Set((igObject *)waza.value, tech + rank, tech);
                         ObjectList_AppendRetained(list, (igObject *)waza.value);
                         break;
                     }
@@ -2188,10 +2188,10 @@ DW4Sret4 FUN_003e9360(...);
 int FUN_003e93b0(...);
 int FUN_00447b00(...);
 int FUN_00447b40(...);
-int FUN_00448050(...);
-int FUN_00448410(...);
-int FUN_00448560(...);
-int FUN_00448660(...);
+int beNDMWItemBase_IndexOfRecNo(...);
+int beNDMWItemBlueArmor_Set(...);
+int beNDMWItemYellowArmor_Set(...);
+int beNDMWItemAbilityChip_Set(...);
 int beMessenger_EnqueueSelected(...);
 int beMessenger_PrepareDelayedSelection(...);
 DW4Sret4 igMetaEnum_GetValueByName(...);
@@ -4376,7 +4376,7 @@ int Gap__Bec__beNDMWGameRam__vfunc_34(beNDMWGameRam *arg0, int arg1, void *arg2)
                             temp_ret_132 = Memory_SelectAllocator_003e9370(&g_ndmwAllocatorSelector[0], temp_ret_131);
                             temp_ret_134 = (void *)(FUN_003c8c90(FUN_00406f70(temp_ret_132).v));
                             { RecoveryRef<1> sp4A8((void *)(temp_ret_134), false);
-                            temp_ret_135 = FUN_004482c0(sp4A8.value, temp_v0_21, temp_v0_23, temp_v0_22);
+                            temp_ret_135 = beNDMWItemWeapon_Set(sp4A8.value, temp_v0_21, temp_v0_23, temp_v0_22);
                             temp_ret_136 = ObjectList_AppendRetained(temp_v0_24, sp4A8.value);
                             }
                             break;
@@ -4385,7 +4385,7 @@ int Gap__Bec__beNDMWGameRam__vfunc_34(beNDMWGameRam *arg0, int arg1, void *arg2)
                             temp_ret_138 = Memory_SelectAllocator_003e9370(&g_ndmwAllocatorSelector[0], temp_ret_137);
                             temp_ret_140 = (void *)(FUN_003c8b00(FUN_00406f60(temp_ret_138).v));
                             { RecoveryRef<2> sp4A4((void *)(temp_ret_140), false);
-                            temp_ret_141 = FUN_00448410(sp4A4.value, temp_v0_21, temp_v0_23, temp_v0_22);
+                            temp_ret_141 = beNDMWItemBlueArmor_Set(sp4A4.value, temp_v0_21, temp_v0_23, temp_v0_22);
                             temp_ret_142 = ObjectList_AppendRetained(temp_v0_24, sp4A4.value);
                             }
                             break;
@@ -4394,7 +4394,7 @@ int Gap__Bec__beNDMWGameRam__vfunc_34(beNDMWGameRam *arg0, int arg1, void *arg2)
                             temp_ret_144 = Memory_SelectAllocator_003e9370(&g_ndmwAllocatorSelector[0], temp_ret_143);
                             temp_ret_146 = (void *)(FUN_003c8970(FUN_00406f50(temp_ret_144).v));
                             { RecoveryRef<3> sp4A0((void *)(temp_ret_146), false);
-                            temp_ret_147 = FUN_00448560(sp4A0.value, temp_v0_21, temp_v0_22);
+                            temp_ret_147 = beNDMWItemYellowArmor_Set(sp4A0.value, temp_v0_21, temp_v0_22);
                             temp_ret_148 = ObjectList_AppendRetained(temp_v0_24, sp4A0.value);
                             }
                             break;
@@ -4403,7 +4403,7 @@ int Gap__Bec__beNDMWGameRam__vfunc_34(beNDMWGameRam *arg0, int arg1, void *arg2)
                             temp_ret_150 = Memory_SelectAllocator_003e9370(&g_ndmwAllocatorSelector[0], temp_ret_149);
                             temp_ret_152 = (void *)(FUN_003c87f0(FUN_00406f40(temp_ret_150).v));
                             { RecoveryRef<4> sp49C((void *)(temp_ret_152), false);
-                            temp_ret_153 = FUN_00448660(sp49C.value, temp_v0_21);
+                            temp_ret_153 = beNDMWItemAbilityChip_Set(sp49C.value, temp_v0_21);
                             temp_ret_154 = ObjectList_AppendRetained(temp_v0_24, sp49C.value);
                             }
                             break;
@@ -4481,7 +4481,7 @@ block_129:
                     temp_v0_25 = (void *)(temp_ret_161);
                     switch (var_s0_5) {
                     case 0:
-                        temp_ret_162 = FUN_00448050(temp_v0_25, temp_v0_21);
+                        temp_ret_162 = beNDMWItemBase_IndexOfRecNo(temp_v0_25, temp_v0_21);
                         temp_ret_163 = ObjectList_GetAt_003e9260(temp_v0_25, temp_ret_162);
                         temp_v0_26 = (beNDMWItemDisk *)(temp_ret_163);
                         temp_a0_4 = temp_v0_26->_kazu;
@@ -4498,7 +4498,7 @@ block_129:
                         }
                         break;
                     case 1:
-                        temp_ret_164 = FUN_00448050(temp_v0_25, temp_v0_21);
+                        temp_ret_164 = beNDMWItemBase_IndexOfRecNo(temp_v0_25, temp_v0_21);
                         temp_ret_165 = ObjectList_GetAt_003e9260(temp_v0_25, temp_ret_164);
                         temp_v0_27 = (beNDMWItemDisk *)(temp_ret_165);
                         temp_v1 = temp_v0_27->_kazu;
@@ -4515,7 +4515,7 @@ block_129:
                         }
                         break;
                     case 2:
-                        temp_ret_166 = FUN_00448050(temp_v0_25, temp_v0_21);
+                        temp_ret_166 = beNDMWItemBase_IndexOfRecNo(temp_v0_25, temp_v0_21);
                         temp_ret_167 = ObjectList_GetAt_003e9260(temp_v0_25, temp_ret_166);
                         if (((beNDMWItemDisk *)temp_ret_167)->_kazu != 0) {
                             beMessenger_AppendBool(arg0->_messenger, 1U);
@@ -4524,7 +4524,7 @@ block_129:
                         }
                         break;
                     case 3:
-                        temp_ret_168 = FUN_00448050(temp_v0_25, temp_v0_21);
+                        temp_ret_168 = beNDMWItemBase_IndexOfRecNo(temp_v0_25, temp_v0_21);
                         temp_ret_169 = ObjectList_GetAt_003e9260(temp_v0_25, temp_ret_168);
                         if (((beNDMWItemDisk *)temp_ret_169)->_kazu == 9) {
                             beMessenger_AppendBool(arg0->_messenger, 1U);

@@ -155,10 +155,21 @@ missing lifetime), not of the oracle. A probe of 40 code-only units bears this
 out: `exc=extra` units match fully with `-Cpp_exceptions off`, and 12 of 40
 `exc=missing` units match unchanged when compiled as C++.
 
+### Records of frameless leaves
+
+Seven retail records have a packed summary of `0`: the function has no frame and
+no saved registers, yet the record exists. The compiler keeps one for a leaf when
+its source had, before optimisation, an int/float conversion, a `double`
+operation, an inlined copy constructor or copy assignment of a class, an inlined
+`const` member returning a `float` that is used as a value, or a local of a class
+with a destructor, even when the final code has no frame and no call. A function
+that only stores constants, or copies plain structs, gets none.
+`beNDMWItemBase_GetRevisionColor` keeps its record because it returns an `igVec3f`
+whose copy constructor runs on `return`; the same body returning a plain struct
+compiles to the same instructions without the record.
+
 ## Open questions
 
-- `FUN_00383ed0` and `FUN_00447d00` keep a retail exception record, but the compiler
-  emits none for them as C or C++. About seven spellings of
-  each failed, and neither table has a cleanup scope. Unproven: the original had a
-  frame or call the optimiser removed after the record was scheduled, or an inlined
-  helper left a cleanup scope.
+- `FUN_00383ed0` keeps a retail record with a packed summary of `0`, but the compiler
+  emits none for its current C or C++ spellings. None of the constructs above has
+  been tried on it.

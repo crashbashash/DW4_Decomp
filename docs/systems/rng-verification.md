@@ -204,11 +204,11 @@ Strict scan for the RNG-chain idiom (`lw rX,16(obj)` … `lw rY,48(rX)` …
 | `Gap__Bec__beNDMWShopCtrl40__vfunc_21` `0x429EA0` | `%10000 <= t`: probability check |
 | `FUN_0039BCA0` `0x39BDB0` | `%6144 / 1000.0`: random float ≤ 6.144 |
 | `FUN_003764C0` `0x376594` | `%range`: random duration/timing |
-| `FUN_004480A0` `0x4480C8`, `0x4480F0` | `%6000+1`, `%param`: damage/score variance |
-| `FUN_00448190` `0x4481B0` | `%620`: 6-tier rank |
+| `beNDMWItemRevisionBase_RollRevision` `0x4480C8`, `0x4480F0` | `%6000+1`, `%level`: item revision roll |
+| `beNDMWItemRevisionPocketBase_RollPocket` `0x4481B0` | `%620`: pocket count 0-5 |
 | `FUN_0042EB80` `0x42F288` | `(%1000)*1000`: random step |
-| `FUN_004487A0` `0x4489A8` | `%10 <= 8-k`: probability check |
-| `FUN_00448AE0` `0x448CEC` | `%range` scaled: value variance |
+| `Gap__Bec__beNDMWItemDisk__vfunc_22` `0x4489A8` | `%10 <= 8-k`: poison-cure disk check |
+| `Gap__Bec__beNDMWItemInstant__vfunc_22` `0x448CEC` | `%range` scaled: bits paid by item 0 |
 | `FUN_00390F80` `0x39129C` | `& 0xf`: small variant index |
 
 **No reseed.** The same strict scan for a slot‑23 (`sgenrand`) or slot‑22 call on

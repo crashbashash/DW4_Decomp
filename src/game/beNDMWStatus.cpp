@@ -61,10 +61,10 @@ extern "C" void *FUN_003c87f0(...);
 extern "C" void *FUN_003c8970(...);
 extern "C" void *FUN_003c8b00(...);
 extern "C" void *FUN_003c8c90(...);
-extern "C" int FUN_004482e0(...);
-extern "C" int FUN_00448430(...);
-extern "C" int FUN_00448580(...);
-extern "C" int FUN_00448660(...);
+extern "C" int beNDMWItemWeapon_SetRandom(...);
+extern "C" int beNDMWItemBlueArmor_SetRandom(...);
+extern "C" int beNDMWItemYellowArmor_SetRandom(...);
+extern "C" int beNDMWItemAbilityChip_Set(...);
 extern "C" int strcat(...);
 extern "C" int List_Reserve(...);
 extern "C" int ObjectList_FillRetained(...);
@@ -1063,7 +1063,7 @@ void FUN_003d8740(beNDMWStatus *owner, beNDMWStatusInfoRam *ram) {
                 buf6[0] = i6 / 10 + 48; buf6[1] = i6 % 10 + 48; buf6[2] = 0;
                 id = beDataBase_GetRecordInt(data, rowIdx, buf6);
                 if (id != -1) {
-                    ITEM4(1, spWpn, FUN_003c8c90, FUN_004482e0, WL(_weaponSalesList), id)
+                    ITEM4(1, spWpn, FUN_003c8c90, beNDMWItemWeapon_SetRandom, WL(_weaponSalesList), id)
                 } else {
                     ObjectList_AppendRetained(WL(_weaponSalesList), 0);
                 }
@@ -1111,7 +1111,7 @@ void FUN_003d8740(beNDMWStatus *owner, beNDMWStatusInfoRam *ram) {
             do {
                 buf7[0] = i7a / 10 + 48; buf7[1] = i7a % 10 + 48; buf7[2] = 0;
                 id = beDataBase_GetRecordInt(data, row, buf7);
-                ITEM4(2, spBlue, FUN_003c8b00, FUN_00448430, WL(_armorSalesList), id)
+                ITEM4(2, spBlue, FUN_003c8b00, beNDMWItemBlueArmor_SetRandom, WL(_armorSalesList), id)
                 i7a += 1;
             } while (i7a < 12);
             i7b = 12;
@@ -1119,7 +1119,7 @@ void FUN_003d8740(beNDMWStatus *owner, beNDMWStatusInfoRam *ram) {
                 buf7[0] = i7b / 10 + 48; buf7[1] = i7b % 10 + 48; buf7[2] = 0;
                 kind = beDataBase_GetRecordInt(data, row, buf7);
                 if (kind != -1) {
-                    ITEM4(3, spYel, FUN_003c8970, FUN_00448580, WL(_armorSalesList), kind)
+                    ITEM4(3, spYel, FUN_003c8970, beNDMWItemYellowArmor_SetRandom, WL(_armorSalesList), kind)
                 } else {
                     ObjectList_AppendRetained(WL(_armorSalesList), 0);
                 }
@@ -1168,7 +1168,7 @@ void FUN_003d8740(beNDMWStatus *owner, beNDMWStatusInfoRam *ram) {
                 buf8[0] = i8 / 10 + 48; buf8[1] = i8 % 10 + 48; buf8[2] = 0;
                 id = beDataBase_GetRecordInt(data, row8, buf8);
                 if (id != -1) {
-                    ITEM2(4, spChip, FUN_003c87f0, FUN_00448660, WL(_chipSalesList), id)
+                    ITEM2(4, spChip, FUN_003c87f0, beNDMWItemAbilityChip_Set, WL(_chipSalesList), id)
                 } else {
                     ObjectList_AppendRetained(WL(_chipSalesList), 0);
                 }
@@ -1207,13 +1207,13 @@ void FUN_003d8740(beNDMWStatus *owner, beNDMWStatusInfoRam *ram) {
                         kind = beDataBase_GetRecordInt(data, jrow, buf9);
                         switch (kind) {
                         case 0:
-                            ITEM4(1, spJWpn, FUN_003c8c90, FUN_004482e0, WL(_junkSalesList), id)
+                            ITEM4(1, spJWpn, FUN_003c8c90, beNDMWItemWeapon_SetRandom, WL(_junkSalesList), id)
                             break;
                         case 1:
-                            ITEM4(2, spJBlue, FUN_003c8b00, FUN_00448430, WL(_junkSalesList), id)
+                            ITEM4(2, spJBlue, FUN_003c8b00, beNDMWItemBlueArmor_SetRandom, WL(_junkSalesList), id)
                             break;
                         case 2:
-                            ITEM4(3, spJYel, FUN_003c8970, FUN_00448580, WL(_junkSalesList), id)
+                            ITEM4(3, spJYel, FUN_003c8970, beNDMWItemYellowArmor_SetRandom, WL(_junkSalesList), id)
                             break;
                         }
                     }
