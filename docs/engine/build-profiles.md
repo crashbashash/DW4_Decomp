@@ -285,6 +285,17 @@ Metrowerks runtime, `main`, AdxMovie, Bec, Ndmw and Viewer need `,p`. Only the s
 since each follows its owner. An emitted group cannot be tested this way when a shared copy's retail home
 is in a library of the other mode: forcing one mode everywhere breaks that copy.
 
+**Alchemy, `p2` and `enbaya` build with `-RTTI off`.** Every vtable those libraries emit has a zero first
+word, where MWCC with RTTI writes a pointer to the class's type record. All 478 vtables that carry one
+are emitted by the game's `-O4,p` libraries (Bec, Ndmw, AdxMovie); the type records of Alchemy classes
+such as `Gap::Core::igObject` exist only as the bases those game classes list, and nothing calls a
+`dynamic_cast` or `typeid` runtime. The flag only
+drops the type records and their name strings: every unit of the profile, whole-file and per-function,
+verifies the same with and without it. With it, a whole-file unit compiles its classes' vtables
+instead of keeping them as retail data, and each `.vtables` section is a `data` row of
+`config/SLUS-20836/unit-objects.json`. The game's libraries keep RTTI, so a vtable they compile brings
+its type records, base lists and class-name strings as `data` rows too.
+
 **The data threshold comes from the stock libraries and the small-data block.** zlib, libpng and Lua are
 the only code with its original declarations, and they verify at thresholds 1 and 2 and fail at 4 and
 above. Retail's small data, `0x554880`-`0x554e80`, holds one-byte objects and one `short` in `.sbss`

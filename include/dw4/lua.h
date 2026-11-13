@@ -84,7 +84,25 @@ enum LuaKind {
     LUA_KIND_CHARS
 };
 
-struct LuaClass;
+/* An entry of the binding's hash table for T, chained through its link; N is the table's smallest
+ * bucket shift. */
+template <class T, int N>
+struct Hashed {
+    LuaHashLink link;
+};
+
+namespace Gap {
+namespace Lua {
+/* Alchemy's glue between reflected classes and Lua (an igObject), declared here only as the scope
+ * of the bound-class type. */
+class igLuaGlue {
+public:
+    struct Class;
+};
+}
+}
+/* The bound-class type under the name the binding's functions (`LuaClass_*`) use. */
+typedef Gap::Lua::igLuaGlue::Class LuaClass;
 
 /* A bound value's type: the C++ kind, how many pointers lead to it, and the Lua types a script
  * may pass for it (`1 << LUA_T*`). An object names its meta-object and its Lua class; an enum
@@ -151,15 +169,18 @@ struct LuaFunction {
 };
 
 /* A class exposed to Lua: its tags, its class table and the handlers of its tag methods.
- * Instances a script creates carry `instanceTag`, objects it is handed `referenceTag`. */
-struct LuaClassData {
-    LuaHashLink link;               /* key: the name's hash */
+ * Instances a script creates carry `instanceTag`, objects it is handed `referenceTag`. Its two
+ * virtual functions, which a derived class overrides, bind its functions and constants; the vtable
+ * pointer follows the data. The link's key is the name's hash. */
+namespace Gap {
+namespace Lua {
+struct igLuaGlue::Class : Hashed<igLuaGlue::Class, 7> {
     const char *name;
     igMetaObject *metaObject;
-    LuaClass *base;
-    LuaClass *firstDerived;
-    LuaClass *prevSibling;
-    LuaClass *nextSibling;
+    Class *base;
+    Class *firstDerived;
+    Class *prevSibling;
+    Class *nextSibling;
     const char *metaName;
     int instanceTag;
     int referenceTag;
@@ -172,18 +193,15 @@ struct LuaClassData {
     lua_CFunction getHandler;
     lua_CFunction constructor;
     lua_CFunction peerConstructor;
-    LuaClass *alternate;
-};
+    Class *alternate;
 
-/* The class is polymorphic: its vtable pointer follows the data. The vtables are retail data, as
- * this build's profile would give a compiled one a type-info pointer, so a class's vtable is
- * stored by hand and its virtual functions are called through LuaBoundClass. */
-struct LuaClass : LuaClassData {
-    const void *vtable;
-
-    LuaClass(const char *name, const char *metaName, lua_CFunction gc, lua_CFunction peerConstructor,
-             lua_CFunction get, lua_CFunction set, lua_CFunction construct);
+    Class(const char *name, const char *metaName, lua_CFunction gc, lua_CFunction peerConstructor,
+          lua_CFunction get, lua_CFunction set, lua_CFunction construct);
+    virtual void registerFunctions() {}
+    virtual void registerConstants() {}
 };
+}
+}
 
 /* The pool bound classes are allocated from. */
 extern "C" igObject *g_luaGluePool;

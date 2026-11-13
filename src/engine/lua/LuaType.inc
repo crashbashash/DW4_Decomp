@@ -6,7 +6,7 @@ void LuaBinding_SetGlobalUserdata(lua_State *L, const char *name, void *object, 
     lua_settop(L, -2);
 }
 
-LuaStartupHook::LuaStartupHook(LuaBoundClass *(*create)(void), int phase) {
+LuaStartupHook::LuaStartupHook(LuaClass *(*create)(void), int phase) {
     this->phase = phase;
     this->create = create;
     next = g_luaStartupHooks;

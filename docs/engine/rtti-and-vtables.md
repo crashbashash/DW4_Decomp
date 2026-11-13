@@ -28,23 +28,23 @@ Metrowerks-flavoured rather than Itanium C++ ABI.
 
 ## 2. The layout
 
-Two adjacent rodata structures per class.
+Two adjacent rodata structures per class, plus the class's base list.
 
-### `__RTTI__ClassName`: 16 bytes
+### `__RTTI__ClassName`: 8 bytes
 
 ```
 +0x00  .4byte <ptr to class-name string>   e.g. 0x00508b30 -> "Gap::Bec::beGeneraterInfoWork"
-+0x04  .4byte <base ref>                   0 for a root class; otherwise a pointer to a
-                                           slot that itself holds the base class's __RTTI__ address
-+0x08  .4byte 0
-+0x0c  .4byte 0
++0x04  .4byte <ptr to base list>          0 for a class without bases
 ```
 
-The `+4` indirection is real: for `beGeneraterInfoWork` at `0x00508b60`, `+4` is
-`0x00508b50`, and `*(0x00508b50) == 0x004ffe48` (the `igObject` RTTI record). The
-class-name strings are full C++ identifiers (`Gap::Core::igObject`,
+The base list is `{__RTTI__ of a base, offset of that base}` pairs ending in a zero word, every
+ancestor listed, the root first: `beNDMWMdlEnemy`'s reads `igObject`, `igNamedObject`,
+`igInfoManager`, `beBaseInfoManager`, `beModelCtrl`, `beNDMWMdlPEBase`. For `beGeneraterInfoWork`
+at `0x00508b60`, `+4` is `0x00508b50`, and `*(0x00508b50) == 0x004ffe48` (the `igObject` RTTI
+record). The class-name strings are full C++ identifiers (`Gap::Core::igObject`,
 `Gap::Bec::beModelCtrl`, `Gap::Core::igTObjectList<Gap::Attrs::igTextureBindAttr>`
-), so the **namespace and template arguments come for free**.
+), so the **namespace and template arguments come for free**. MWCC emits the record, the list and the
+string as separate objects, so a compiled vtable of a game class brings all three.
 
 ### `__vt__ClassName`: header plus vfunc array
 
@@ -62,26 +62,27 @@ slot count is recovered. Verified against the docs' live-RAM result:
 the running game.
 
 Word +0 ties a vtable to its class: `beGeneraterData`'s vtable `0x00535eb0` reads
-`0x005089c8`, the `rtti` value in `data/vtables.json`. A vtable whose +0 is zero
-belongs to a class with no RTTI record. The MetaField classes are such classes, which
+`0x005089c8`, the `rtti` value in `data/vtables.json`. A vtable whose +0 is zero belongs to a class with no
+RTTI record: Alchemy, `p2` and `enbaya` are built with `-RTTI off`
+([build profiles](build-profiles.md)). The MetaField classes are such classes, which
 is why none is in the 478-entry dump ([RTTI-less vtables](#rtti-less-vtables-resolved-from-getvtable)).
 
 ### Inheritance, and the important catch
 
-The `+4` field looks like the base class and is **not**. Measured across all 579
-records: **578 point at `Gap::Core::igObject` and one is the root**
-(`igObject` itself). So the field tells you every class derives from `igObject`
-and nothing more: it carries **no immediate-base information**.
+The list's **first** entry is the root, so reading only that word, as the census below did, gives
+**578 records pointing at `Gap::Core::igObject` and one root** (`igObject` itself) and no
+immediate base. The rest of the list holds the whole chain.
 
-The real hierarchy cannot be recovered from the vtables either: intermediate
+The vtables alone do not give the hierarchy: intermediate
 bases such as `Gap::Core::igObjectList` and the
 `Gap::Core::igTObjectList<Gap::Attrs::...>` instantiations **have RTTI records but
 no emitted vtable**. Vtable prefix sharing only ever exposes the ~20-slot
 `igObject` prefix, so `beNDMWMdlEnemy` and `beNDMWMdlObject` are indistinguishable
-from siblings.
+from siblings by their slots.
 
-Practical consequence: a shared vfunc body resolves to `igObject` and no deeper.
-That names the global defaults correctly and cannot name group-specific ones.
+Practical consequence for the census, which used the first entry only: a shared vfunc body resolves
+to `igObject` and no deeper. That names the global defaults correctly and cannot name group-specific
+ones.
 
 **The hierarchy is recovered elsewhere.** The reflection registrar's
 `a3` ("fn2") returns the *base* class's MetaObject and is passed straight to

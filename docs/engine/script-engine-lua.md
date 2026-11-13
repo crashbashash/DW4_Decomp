@@ -51,7 +51,7 @@ file at a time, not as one translation unit: runs of inline methods close files 
 where a library-sized unit would have one run at its end. All four files share
 `src/engine/lua/LuaLibrary.h`, the library's private header. It includes the binding's public surface,
 `include/dw4/lua.h`: stock Lua's API, the bound-value types (`LuaType`, `LuaKind`, `LuaValue`), bound
-functions and classes (`LuaFunction`, `LuaClassData`, `LuaClass`, `LuaHashLink`), the glue's pool and
+functions and classes (`LuaFunction`, `LuaClass`, `LuaHashLink`), the glue's pool and
 the entry points a game class calls (`LuaType_PushString`, `LuaClass_BindFunctions`, `LuaError`). Game
 code such as `src/game/be.cpp` includes only the public header.
 
@@ -63,10 +63,11 @@ code such as `src/game/be.cpp` includes only the public header.
 - **The binding**, `src/engine/lua/LuaBinding.cpp` (`0x23c860`–`0x2442dc`): types and value
   conversion (`LuaType_*`, `LuaValue_*`), bound functions and their overload resolution
   (`LuaFunction_*`), objects and their fields (`LuaObject_*`), classes (`LuaClass_*`), the typed
-  array classes (`Lua<Type>Array_Delete`/`_Get`/`_Set`/`_New`) and `LuaGlue_Initialize`. It ends with
-  the base class's two empty virtual slots, `LuaClass_RegisterConstants` and
-  `LuaClass_RegisterFunctions`: every array class's vtable and the game's `be` class point at them,
-  and MWCC emits inline virtuals after a file's last ordinary function, so they close the file.
+  array classes (`Lua<Type>Array_Delete`/`_Get`/`_Set`/`_New`) and `LuaGlue_Initialize`, which
+  constructs one array class per element kind and so emits their vtables. It ends with the base
+  class's two empty virtual functions, `LuaClass_RegisterConstants` and `LuaClass_RegisterFunctions`:
+  every array class's vtable and the game's two classes point at them, and MWCC emits inline virtuals
+  after a file's last ordinary function, so they close the file.
 - **The state**, `src/engine/lua/LuaState.cpp` (`0x2442e0`–`0x24683c`): `LuaBoolArray_Set`,
   `LuaGlue_Shutdown` and the field-table walker, the script functions `new` and `cast`, the binding's
   hash tables, the thread-local slots, igLuaState's out-of-line methods (`igLuaState_Open`,
@@ -83,10 +84,16 @@ above ends the binding. No retail call crosses any cut with the register knowled
 compiled earlier in the same file gives its caller
 ([emitted functions](emitted-functions.md#whole-file-units)).
 
-The base Lua class's vtables (`g_Lua*ArrayClass_vtable`) stay retail data: under the engine profile
-MWCC writes an RTTI pointer into a class's first vtable word, where retail Alchemy vtables hold 0.
-The array classes store their vtable in an inline constructor, and calls through it go through a view
-class that declares the slots without defining them.
+### The bound-class type
+The game's RTTI names the class the source calls `LuaClass` (a typedef): `Gap::Lua::igLuaGlue::Class`,
+whose one base is `Hashed<Gap::Lua::igLuaGlue::Class, 7>`, a hash-table entry. The 7 is the class
+table's smallest bucket shift, the limit its resize never goes below. The game's two classes derived
+from it are `Gap::Bec::beLuaWrapper`, the `be` class, whose `registerFunctions` binds the native API,
+and `Gap::BecLuaWrapper`, the `Bec` class. The binding is built without RTTI, so its vtables have a
+zero first word, and the array classes' compile from the source. The base class's own (`0x52d650`)
+is retail data: its constructor, which stores it, has no source. The game's library keeps RTTI,
+so `be.cpp` compiles the two game classes' vtables together with their type records, base lists and
+class-name strings, and the base class's and `Hashed`'s records with them.
 
 ### Hash tables
 The binding keeps six chained hash tables: fields, functions, classes, properties, constants and
@@ -406,6 +413,5 @@ OP_LFORLOOP, OP_CLOSURE`.
   strings across files.
 - The hash-table run (`0x244dd0`–`0x245e7c`) and the thread-local table in `LuaRuntime.cpp` follow
   igLuaState's slot-22 getter's file in the way template instances end a file, which would put more
-  cuts in both; the binding calls those functions, so this is unresolved.
-- Whether `-RTTI off` belongs in the Alchemy profile, which would let the array classes' vtables be
-  compiled instead of kept as retail data, is the owner's decision.
+  cuts in both; the binding calls those functions, so this is unresolved. The six tables' identical
+  code fits instances of the `Hashed<T, N>` template the RTTI names, one per entry type.

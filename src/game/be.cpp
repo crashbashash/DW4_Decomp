@@ -109,20 +109,24 @@ public:
     ~StringRef() { if (p) { int *h = (int *)p - 2; int r = ((int *)p)[-1] - 1; ((int *)p)[-1] = r; if (r == 0) StringChunk_ReleaseHeader((void *)*h, h); } }
 };
 
-/* The Lua class `be`, the object scripts call the native API through; its registerFunctions slot
- * is LuaAPI_Register. */
-struct LuaAPIClass : LuaClass {
+namespace Gap {
+namespace Bec {
+/* The Lua class `be`, the object scripts call the native API through. */
+struct beLuaWrapper : Lua::igLuaGlue::Class {
     static void *operator new(unsigned int size, igObject *pool) { return Memory_AllocateBufferDirect(size, pool); }
     static void operator delete(void *memory, igObject *) { Memory_FreeBufferWithAllocator(memory, g_luaGluePool); }
-    LuaAPIClass();
+    beLuaWrapper();
+    void registerFunctions();
 };
+}
 
 /* The Lua class `Bec`, the namespace the game's classes are bound under. */
-struct BecLuaClass : LuaClass {
+struct BecLuaWrapper : Lua::igLuaGlue::Class {
     static void *operator new(unsigned int size, igObject *pool) { return Memory_AllocateBufferDirect(size, pool); }
     static void operator delete(void *memory, igObject *) { Memory_FreeBufferWithAllocator(memory, g_luaGluePool); }
-    BecLuaClass();
+    BecLuaWrapper();
 };
+}
 
 extern "C" {
 /* This file. */
@@ -130,7 +134,6 @@ int LuaAPI_Dispatch(lua_State *L);
 LuaClass *LuaAPIClass_Create(void);
 LuaClass *BecLuaClass_Create(void);
 void LuaAPI_RegisterClasses(void);
-void LuaAPI_Register(LuaClass *luaClass);
 int be_GetMetaObject_Virtual(void);
 void be_AddToScheduler(void);
 void be_RemoveFromScheduler(void);
@@ -354,11 +357,9 @@ extern int g_damageResult[4];
 extern int g_attackZokusei[4];
 extern int g_damageFlag[4];
 
-/* The Lua class tables LuaAPI_Register hands the binding, and the classes' vtables. */
+/* The Lua class tables `be` hands the binding. */
 extern const char *g_luaApiFunctionNames[116];
 extern const unsigned int g_luaApiFunctionCodes[];
-extern const int g_LuaAPIClass_vtable[4];
-extern const int g_BecLuaClass_vtable[4];
 
 extern const char *g_getRecordCommands[5];
 extern const char *g_bulletKindNames[9];
@@ -762,23 +763,21 @@ int LuaAPI_Dispatch(lua_State *L) {
     }
 }
 
-LuaAPIClass::LuaAPIClass() : LuaClass(text_be, text_igInfoManager, 0, 0, 0, 0, 0) {
-    vtable = g_LuaAPIClass_vtable;
+Gap::Bec::beLuaWrapper::beLuaWrapper() : Class(text_be, text_igInfoManager, 0, 0, 0, 0, 0) {
 }
 
 /* The start-up hook's factory for the `be` class. */
 LuaClass *LuaAPIClass_Create(void) {
     be_EnsureRegistered();
-    return new (g_luaGluePool) LuaAPIClass;
+    return new (g_luaGluePool) Gap::Bec::beLuaWrapper;
 }
 
-BecLuaClass::BecLuaClass() : LuaClass(Bec, 0, 0, 0, 0, 0, 0) {
-    vtable = g_BecLuaClass_vtable;
+Gap::BecLuaWrapper::BecLuaWrapper() : Class(::Bec, 0, 0, 0, 0, 0, 0) {
 }
 
 /* The start-up hook's factory for the `Bec` class. */
 LuaClass *BecLuaClass_Create(void) {
-    return new (g_luaGluePool) BecLuaClass;
+    return new (g_luaGluePool) Gap::BecLuaWrapper;
 }
 
 /* The game's per-library class registration; this file registers no reflected class. */
@@ -786,8 +785,8 @@ void LuaAPI_RegisterClasses(void)
 {
 }
 
-void LuaAPI_Register(LuaClass *luaClass) {
-    LuaClass_BindFunctions(luaClass, 0, LuaAPI_Dispatch, g_luaApiFunctionNames,
+void Gap::Bec::beLuaWrapper::registerFunctions() {
+    LuaClass_BindFunctions(this, 0, LuaAPI_Dispatch, g_luaApiFunctionNames,
                            sizeof(g_luaApiFunctionNames) / sizeof(g_luaApiFunctionNames[0]),
                            g_luaApiFunctionCodes, 0);
 }

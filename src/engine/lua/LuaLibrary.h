@@ -212,29 +212,6 @@ public:
     virtual igMetaObject *getMeta();                            /* slot 20 */
 };
 
-/* The two virtual functions, which a derived class overrides to bind its functions and constants;
- * LuaClass_RegisterFunctions and LuaClass_RegisterConstants are LuaClass's own. */
-class LuaBoundClass : public LuaClassData {
-public:
-    virtual void registerFunctions();
-    virtual void registerConstants();
-};
-
-extern "C" const int g_LuaClass_vtable[4];
-extern "C" const int g_LuaCharArrayClass_vtable[4];
-extern "C" const int g_LuaUnsignedCharArrayClass_vtable[4];
-extern "C" const int g_LuaShortArrayClass_vtable[4];
-extern "C" const int g_LuaUnsignedShortArrayClass_vtable[4];
-extern "C" const int g_LuaIntArrayClass_vtable[4];
-extern "C" const int g_LuaUnsignedIntArrayClass_vtable[4];
-extern "C" const int g_LuaLongArrayClass_vtable[4];
-extern "C" const int g_LuaUnsignedLongArrayClass_vtable[4];
-extern "C" const int g_LuaBoolArrayClass_vtable[4];
-extern "C" const int g_LuaFloatArrayClass_vtable[4];
-extern "C" const int g_LuaDoubleArrayClass_vtable[4];
-extern "C" void LuaClass_RegisterConstants(LuaClass *luaClass);
-extern "C" void LuaClass_RegisterFunctions(LuaClass *luaClass);
-
 /* The binding's hash tables, one per kind of entry: bucket count 1 << shift, entry count,
  * buckets, and a busy count that defers resizing while a walk is under way. */
 struct LuaProperty;
@@ -342,12 +319,12 @@ struct LuaFieldIterator {
 /* A class a start-up hook creates when the glue starts: static instances link themselves in. */
 struct LuaStartupHook {
     int phase;
-    LuaBoundClass *(*create)(void);
-    LuaBoundClass *luaClass;
+    LuaClass *(*create)(void);
+    LuaClass *luaClass;
     LuaStartupHook *next;
     LuaStartupHook *prev;
 
-    LuaStartupHook(LuaBoundClass *(*create)(void), int phase);
+    LuaStartupHook(LuaClass *(*create)(void), int phase);
 };
 
 /* The sorted tags of userdata that are Alchemy objects (an igIntList). */
