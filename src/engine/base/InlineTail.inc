@@ -24,7 +24,7 @@ void Gap__igOptConfiguration__vfunc_23(void) {
     FUN_002f00c0();
 }
 
-int FUN_002294f0(int *p)
+int igDataList_GetCount(int *p)
 {
     return *(int *)((char *)p + 8);
 }

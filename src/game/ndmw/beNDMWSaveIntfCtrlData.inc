@@ -1,4 +1,4 @@
-void FUN_003bc940(int arg0) {
+void beNDMWSaveIntfCtrlData_Create(int arg0) {
     FUN_003bca60();
     igMetaObject_CreateInstance(*(int *)0x58B0D0, arg0);
 }
@@ -93,7 +93,7 @@ void beNDMWSaveIntfCtrlData_InitFields(void) {
     igMetaObject_NameFields(temp_s1, &DAT_004ca240[0], &DAT_004ca280[0], &DAT_004ca2c0[0], temp_s2);
 }
 
-int FUN_003bcc20(void) {
+int beNDMWSaveIntf_GetMessageEnum(void) {
     if (DAT_0058b158[0] == 0) {
         DAT_0058b158[0] = igMetaEnum_Create(Message, &DAT_004ca300[0], &DAT_004ca320[0], 7);
     }

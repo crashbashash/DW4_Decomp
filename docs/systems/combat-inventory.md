@@ -117,12 +117,12 @@ their own recovery. Source presence does not substitute for `make check`.
 | `0x003e9110` | `ObjectRef_Release_003e9110` | 68 | [src/game/beNDMWLoadIntf2.cpp](../../src/game/beNDMWLoadIntf2.cpp) |
 | `0x003e9220` | `FUN_003e9220` | 28 | [src/game/beNDMWLoadIntf2.cpp](../../src/game/beNDMWLoadIntf2.cpp) |
 | `0x003e9260` | `ObjectList_GetAt_003e9260` | 20 | [src/game/beNDMWLoadIntf2.cpp](../../src/game/beNDMWLoadIntf2.cpp) |
-| `0x003e9280` | `FUN_003e9280` | 28 | [src/game/beNDMWLoadIntf2.cpp](../../src/game/beNDMWLoadIntf2.cpp) |
-| `0x003e92a0` | `FUN_003e92a0` | 8 | [src/game/beNDMWLoadIntf2.cpp](../../src/game/beNDMWLoadIntf2.cpp) |
+| `0x003e9280` | `DataList_FindProperty_003e9280` | 28 | [src/game/beNDMWLoadIntf2.cpp](../../src/game/beNDMWLoadIntf2.cpp) |
+| `0x003e92a0` | `ObjectRef_Get_003e92a0` | 8 | [src/game/beNDMWLoadIntf2.cpp](../../src/game/beNDMWLoadIntf2.cpp) |
 | `0x003e92b0` | `ObjectRef_Assign_003e92b0` | 124 | [src/game/beNDMWLoadIntf2.cpp](../../src/game/beNDMWLoadIntf2.cpp) |
-| `0x003e9360` | `FUN_003e9360` | 8 | [src/game/beNDMWLoadIntf2.cpp](../../src/game/beNDMWLoadIntf2.cpp) |
+| `0x003e9360` | `AllocatorValue_Make_003e9360` | 8 | [src/game/beNDMWLoadIntf2.cpp](../../src/game/beNDMWLoadIntf2.cpp) |
 | `0x003e9370` | `Memory_SelectAllocator_003e9370` | 56 | [src/game/beNDMWLoadIntf2.cpp](../../src/game/beNDMWLoadIntf2.cpp) |
-| `0x003e93b0` | `FUN_003e93b0` | 8 | [src/game/beNDMWLoadIntf2.cpp](../../src/game/beNDMWLoadIntf2.cpp) |
+| `0x003e93b0` | `ObjectRef_Get_003e93b0` | 8 | [src/game/beNDMWLoadIntf2.cpp](../../src/game/beNDMWLoadIntf2.cpp) |
 | `0x003f8760` | `FUN_003f8760` | 548 | [src/game/beNDMWGameRam.cpp](../../src/game/beNDMWGameRam.cpp) |
 | `0x003f9c80` | `FUN_003f9c80` | 408 | [src/game/beNDMWGameRam.cpp](../../src/game/beNDMWGameRam.cpp) |
 | `0x003f9e20` | `FUN_003f9e20` | 344 | [src/game/beNDMWGameRam.cpp](../../src/game/beNDMWGameRam.cpp) |

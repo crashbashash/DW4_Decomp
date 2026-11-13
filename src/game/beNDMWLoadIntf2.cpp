@@ -29,7 +29,7 @@ extern "C" int igObject_GetAllocator(...);
 extern "C" int strcmp(...);
 extern "C" int TextOrder_ClearFont(...);
 extern "C" int TextOrder_PublishLineListOnly(...);
-extern "C" int FUN_003ecad0(...);
+extern "C" int beNDMWLoadIntf2MesWin__RequestMessage(...);
 extern "C" void *FUN_002eb010(...);
 extern "C" int ObjectList_AppendRetained(...);
 extern "C" int StringChunk_ReleaseHeader(...);
@@ -43,25 +43,25 @@ extern "C" int beMessenger_GetBool(int, int);
 extern "C" void igObject_Destroy(void *);
 extern "C" void FUN_003e9220(void *arg0, void *arg1);
 extern "C" void *igProperty_FindByName(...);
-extern "C" void *FUN_003e9280(int list, int meta, int *name);
-extern "C" int FUN_003e92a0(int *p);
+extern "C" void *DataList_FindProperty_003e9280(int list, int meta, int *name);
+extern "C" int ObjectRef_Get_003e92a0(int *p);
 extern "C" int beBaseInfoDataList_Create(int);
 struct DW4Sret4 {
   int v;
   DW4Sret4(int value) : v(value) {}
   DW4Sret4(const DW4Sret4 &o) : v(o.v) {}
 };
-extern "C" DW4Sret4 FUN_003e9360(int allocator);
+extern "C" DW4Sret4 AllocatorValue_Make_003e9360(int allocator);
 extern "C" int Memory_SelectAllocator_003e9370(const int *selector, int fallback);
-extern "C" int FUN_003e93b0(int *p);
+extern "C" int ObjectRef_Get_003e93b0(int *p);
 extern "C" int Gap__Bec__beNDMWLoadIntf2__vfunc_30(void);
 extern "C" int Gap__Bec__beNDMWLoadIntf2__vfunc_20(void);
 extern "C" int FUN_00100610(...);
-extern "C" void FUN_003d9de0(beNDMWLoadIntf2DegiState *arg0, int arg1, int arg2, int arg3, int arg4, int arg5, int arg6);
-extern "C" void FUN_003d9e10(beNDMWLoadIntf2DegiState *arg0, int arg1, int arg2);
+extern "C" void beNDMWLoadIntf2DegiState__Init(beNDMWLoadIntf2DegiState *arg0, int arg1, int arg2, int arg3, int arg4, int arg5, int arg6);
+extern "C" void beNDMWLoadIntf2DegiState__RequestOpen(beNDMWLoadIntf2DegiState *arg0, int arg1, int arg2);
 extern "C" void FUN_003d9e40(beNDMWLoadIntf2DegiState *arg0, int arg1, int arg2);
-extern "C" void FUN_003d9e70(beNDMWLoadIntf2DegiState *arg0, int arg1);
-extern "C" void FUN_003d9e90(beNDMWLoadIntf2DegiState *arg0);
+extern "C" void beNDMWLoadIntf2DegiState__RequestClose(beNDMWLoadIntf2DegiState *arg0, int arg1);
+extern "C" void beNDMWLoadIntf2DegiState__RequestConfirmClose(beNDMWLoadIntf2DegiState *arg0);
 extern "C" beUnicodeObj * FUN_003614f0(...);
 typedef struct SlotEnt { int name; int val; int val2; } SlotEnt;
 extern "C" int DAT_00516c40[4];
@@ -104,12 +104,12 @@ struct RL { char p[16]; Row **arr; };
 struct Bk { char p[36]; IL *f36; RL *f40; };
 struct Ob { char p[28]; float v28; float v32; float v36; };
 struct V3 { float x; float y; float z; };
-extern "C" unsigned char FUN_003da7c0(beNDMWLoadIntf2DegiState *arg0);
-extern "C" void FUN_003dafb0(beNDMWLoadIntf2DataSelIntf *arg0, int arg1, int arg2);
+extern "C" unsigned char beNDMWLoadIntf2DegiState__Update(beNDMWLoadIntf2DegiState *arg0);
+extern "C" void beNDMWLoadIntf2DataSelIntf__Init(beNDMWLoadIntf2DataSelIntf *arg0, int arg1, int arg2);
 extern "C" void beNDMWLoadIntf2DataSelIntf__ClearStatesFrom(beNDMWLoadIntf2DataSelIntf *arg0, int arg1);
 extern "C" int DAT_00516db0[4];
 extern "C" int DAT_00516dc8[4];
-extern "C" unsigned char FUN_003db060(beNDMWLoadIntf2DataSelIntf *arg0, int arg1);
+extern "C" unsigned char beNDMWLoadIntf2DataSelIntf__OpenSaveArea(beNDMWLoadIntf2DataSelIntf *arg0, int arg1);
 /* Receiver: beNDMWLoadIntf2DataSelIntf; host is its _commonIntf. _flagWork holds the per-player beNDMWLoadSavePlWork records
  * (_isCtrl, _haveSaveData, a beNDMWLoadSlotPlayer whose _saveDataList holds the four save areas); _gameUseData is a
  * beNDMWDegiDataList of the per-player Digimon records. The class behind _statDisp is not reflected. */
@@ -132,30 +132,30 @@ extern "C" int DAT_00516d70[4];
 extern "C" int DAT_00516d80[4];
 extern "C" int DAT_00516d90[4];
 extern "C" int DAT_00516da0[4];
-extern "C" unsigned char FUN_003dbf90(beNDMWLoadIntf2DataSelIntf *c, int sel);
-extern "C" unsigned char FUN_003dc2e0(beNDMWLoadIntf2DataSelIntf *c, int sel);
+extern "C" unsigned char beNDMWLoadIntf2DataSelIntf__CloseAll(beNDMWLoadIntf2DataSelIntf *c, int sel);
+extern "C" unsigned char beNDMWLoadIntf2DataSelIntf__ShowSelectedStatus(beNDMWLoadIntf2DataSelIntf *c, int sel);
 struct Ob_3dc590 { char p[28]; float x; float y; float z; };
 struct Ent_3dc590 { int name; int val; int val2; };
 extern "C" int DAT_004cc830[4];
-extern "C" unsigned char FUN_003dc590(beNDMWLoadIntf2DataSelIntf *arg0, int arg1);
+extern "C" unsigned char beNDMWLoadIntf2DataSelIntf__RestoreSaveArea(beNDMWLoadIntf2DataSelIntf *arg0, int arg1);
 typedef struct Pair { void *a; void *b; } Pair;
 typedef struct Inner { char p[16]; Pair *pair; } Inner;
 typedef struct Link { char p[16]; Inner *inner; } Link;
-extern "C" unsigned char FUN_003dcab0(beNDMWLoadIntf2DataSelIntf *c, int sel);
+extern "C" unsigned char beNDMWLoadIntf2DataSelIntf__CloseStatusWindows(beNDMWLoadIntf2DataSelIntf *c, int sel);
 struct V3_3dcc60 { float x, y, z; };
-extern "C" unsigned char FUN_003dcc60(beNDMWLoadIntf2DataSelIntf *arg0, int arg1);
+extern "C" unsigned char beNDMWLoadIntf2DataSelIntf__OpenSlotSaveArea(beNDMWLoadIntf2DataSelIntf *arg0, int arg1);
 typedef struct P { char p0[28]; float x, y, z; } P;
 extern "C" int DAT_00516e70[4];
 extern "C" int DAT_00516e80[4];
 extern "C" int DAT_00516e90[4];
 extern "C" int DAT_00516ea0[4];
-extern "C" bool FUN_003dd160(beNDMWLoadIntf2DataSelIntf *arg0, int arg1);
-extern "C" unsigned char FUN_003dd440(beNDMWLoadIntf2DataSelIntf *arg0, int arg1);
+extern "C" bool beNDMWLoadIntf2DataSelIntf__OpenAreaCursor(beNDMWLoadIntf2DataSelIntf *arg0, int arg1);
+extern "C" unsigned char beNDMWLoadIntf2DataSelIntf__CloseSaveArea(beNDMWLoadIntf2DataSelIntf *arg0, int arg1);
 /* Arena handles are 4-byte ints and are cast to pointers where followed. */
 
 
 struct Tab { int name; int f4; int *f8; };
-extern "C" int FUN_003dd6d0(beNDMWLoadIntf2DataSelIntf *arg0, int arg1);
+extern "C" int beNDMWLoadIntf2DataSelIntf__ShowAccessPlayers(beNDMWLoadIntf2DataSelIntf *arg0, int arg1);
 extern "C" void beNDMWLoadIntf2Diffselect__Init(beNDMWLoadIntf2Diffselect *arg0, int arg1, int arg2);
 /* The pad object is a bePadData: _lTrg/_lRpt are held, _trigger/_repeat are edges. */
 typedef struct VecSrc { char p0[28]; float x, y, z; } VecSrc;
@@ -203,7 +203,7 @@ extern "C" int DAT_00516f40[4];
 extern "C" void FUN_003de990(NameSelRam *arg0, int arg1);
 extern "C" void beNDMWLoadIntf2NameSel__SetAnswer(beNDMWLoadIntf2NameSel *arg0, char arg1);
 extern "C" int beNDMWLoadIntf2NameSel__Update(NameSelRam *s, int arg1);
-extern "C" void FUN_003e0b80(beNDMWLoadIntf2SelSlot *arg0);
+extern "C" void beNDMWLoadIntf2SelSlot__Reset(beNDMWLoadIntf2SelSlot *arg0);
 extern "C" void beNDMWLoadIntf2SelSlot__Init(beNDMWLoadIntf2SelSlot *arg0);
 typedef struct TE { int *name; int mark; } TE;
 extern "C" TE DAT_004cd060[5];
@@ -280,7 +280,7 @@ extern "C" int DAT_005175d8[4];
 extern "C" int DAT_005175e8[4];
 extern "C" void Gap__Bec__beNDMWLoadIntf2__vfunc_29(beNDMWLoadIntf2 *arg0, beBaseInfoRam *arg1);
 
-void FUN_003d9de0(beNDMWLoadIntf2DegiState *arg0, int arg1, int arg2, int arg3, int arg4, int arg5, int arg6) {
+void beNDMWLoadIntf2DegiState__Init(beNDMWLoadIntf2DegiState *arg0, int arg1, int arg2, int arg3, int arg4, int arg5, int arg6) {
     arg0->_comMdlCtrl = arg4;
     arg0->_commonIntf = arg2;
     arg0->_textOrder = arg3;
@@ -305,26 +305,26 @@ struct LoadVec3 {
   float x, y, z;
 };
 extern "C" int FUN_001ae1a0(void *, float, float, float);
-extern "C" int FUN_002294f0(void *);
+extern "C" int igDataList_GetCount(void *);
 extern "C" int beLua__RunNamedChunk(...);
 extern "C" void *beNDMWDegiData_Create(...);
 extern "C" int beNDMWLoadIntf2MesWin__Update(...);
 extern "C" int beNDMWLoadIntf2MesWin__RequestOpen(...);
 extern "C" int beNDMWLoadIntf2MesWin__RequestClose(...);
-extern "C" int FUN_003ecae0(...);
-extern "C" int FUN_003ecb00(...);
-extern "C" int FUN_003ecb20(...);
+extern "C" int beNDMWLoadIntf2MesWin__RequestQuestion(...);
+extern "C" int beNDMWLoadIntf2MesWin__RequestPrompt(...);
+extern "C" int beNDMWLoadIntf2MesWin__Cancel(...);
 extern "C" int beNDMWLoadIntf2MesWin__GetIsCtrl(...);
-extern "C" int FUN_003ecb80(...);
+extern "C" int beNDMWLoadIntf2MesWin__GetCurPoint(...);
 extern "C" int beNDMWLoadIntf2MesWin__RequestMesErase(...);
-extern "C" int FUN_003ecba0(...);
+extern "C" int beNDMWLoadIntf2MesWin__RequestSystemMessage(...);
 extern "C" int beNDMWLoadIntf2MesWin__EndSystemMessage(...);
-extern "C" int FUN_003ecdc0(...);
-extern "C" int FUN_003ed050(...);
-extern "C" int FUN_003ed2e0(...);
+extern "C" int beNDMWLoadCtrl2CommonIntf__StepNoticeQuestion(...);
+extern "C" int beNDMWLoadCtrl2CommonIntf__StepCheckMemoryCard(...);
+extern "C" int beNDMWLoadCtrl2CommonIntf__StepCreateSaveFile(...);
 extern "C" int beNDMWLoadCtrl2CommonIntf__StepReadMedia(...);
 extern "C" int beNDMWLoadCtrl2CommonIntf__StepFormatMemoryCard(...);
-extern "C" int FUN_003ee250(...);
+extern "C" int beNDMWLoadCtrl2CommonIntf__StartUtilFor(...);
 extern "C" int beNDMWLoadCtrl2CommonIntf__RemoveAccessPlayer(...);
 extern "C" int beNDMWDegiData__LoadFromProperties(...);
 extern "C" int beNDMWDegiData__StoreToProperties(...);
@@ -393,7 +393,7 @@ extern "C" int g_bePadManager_metaObject[4];
 extern "C" int g_beLua_metaObject[4];
 extern "C" int g_beFont_metaObject[4];
 extern "C" int g_mdlEntity[4];
-/* The 4-byte value returned by FUN_003e9360 is copied into a temporary reference before it is
+/* The 4-byte value returned by AllocatorValue_Make_003e9360 is copied into a temporary reference before it is
  * handed to ObjectRef_Assign_003e92b0; these two classes reproduce that copy/destroy pair. */
 class RecoveryCopiedRef {
 public:
@@ -401,11 +401,11 @@ public:
   RecoveryCopiedRef(const DW4Sret4 &source) : value((void *)beBaseInfoDataList_Create(source.v)) {}
   ~RecoveryCopiedRef();
 };
-/* Creates the fresh object for an empty reference (the FUN_003e93b0 == 0
+/* Creates the fresh object for an empty reference (the ObjectRef_Get_003e93b0 == 0
  * test on host->_dataList at the top of the update) and stores it there. */
 struct DW4Fresh {
   static ObjectRefTarget **Assign(void *obj, int alloc) {
-    RecoveryCopiedRef c(FUN_003e9360(Memory_SelectAllocator_003e9370(
+    RecoveryCopiedRef c(AllocatorValue_Make_003e9360(Memory_SelectAllocator_003e9370(
         &g_defaultAllocatorSelector[0], alloc)));
     return ObjectRef_Assign_003e92b0((ObjectRefTarget **)obj, (ObjectRefTarget **)&c);
   }
@@ -467,7 +467,7 @@ static inline int TextId(beBaseInfoRam *h, int token) { return (h->_ramNo << 0x1
 /* Starts the first entry of the Digimon status list on a kind and the player's data number. */
 static inline void OpenDegiState(beNDMWLoadIntf2DegiStateCtrl *status, int kind, int player) {
   beNDMWLoadIntf2DegiState *degiState = (beNDMWLoadIntf2DegiState *)ObjectList_GetAt_003e9260((igDataList *)status->_statDataList, 0);
-  FUN_003d9e10((beNDMWLoadIntf2DegiState *)degiState, kind, player);
+  beNDMWLoadIntf2DegiState__RequestOpen((beNDMWLoadIntf2DegiState *)degiState, kind, player);
 }
 /* The save data the player picked: entry saveIndex of the save-data list of the slot player held by
  * the player's work record. */
@@ -749,81 +749,81 @@ extern "C" void Gap__Bec__beNDMWLoadIntf2__vfunc_31(beNDMWLoadIntf2 *self,
   if (host->_dataList == 0)
     return;
   {
-    dataListRef = FUN_003e93b0(&host->_dataList);
+    dataListRef = ObjectRef_Get_003e93b0(&host->_dataList);
     if (dataListRef == 0) {
       DW4Fresh::Assign(&host->_dataList, igObject_GetAllocator(host));
     }
-    common = (beNDMWLoadCtrl2CommonIntf *)(FUN_003e9280(
-        FUN_003e92a0(&host->_dataList), g_propertyNameField[0],
+    common = (beNDMWLoadCtrl2CommonIntf *)(DataList_FindProperty_003e9280(
+        ObjectRef_Get_003e92a0(&host->_dataList), g_propertyNameField[0],
         &COMMONINTF[0]));
-    dataListRef = FUN_003e93b0(&host->_dataList);
+    dataListRef = ObjectRef_Get_003e93b0(&host->_dataList);
     if (dataListRef == 0) {
       DW4Fresh::Assign(&host->_dataList, igObject_GetAllocator(host));
     }
-    control = (beNDMWLoadIntf2CtrlData *)(FUN_003e9280(
-        FUN_003e92a0(&host->_dataList), g_propertyNameField[0], &CTRL[0]));
-    dataListRef = FUN_003e93b0(&host->_dataList);
+    control = (beNDMWLoadIntf2CtrlData *)(DataList_FindProperty_003e9280(
+        ObjectRef_Get_003e92a0(&host->_dataList), g_propertyNameField[0], &CTRL[0]));
+    dataListRef = ObjectRef_Get_003e93b0(&host->_dataList);
     if (dataListRef == 0) {
       DW4Fresh::Assign(&host->_dataList, igObject_GetAllocator(host));
     }
-    creation = (beNDMWLoadIntf2MakeChr *)(FUN_003e9280(
-        FUN_003e92a0(&host->_dataList), g_propertyNameField[0],
+    creation = (beNDMWLoadIntf2MakeChr *)(DataList_FindProperty_003e9280(
+        ObjectRef_Get_003e92a0(&host->_dataList), g_propertyNameField[0],
         &MAKECHR[0]));
-    dataListRef = FUN_003e93b0(&host->_dataList);
+    dataListRef = ObjectRef_Get_003e93b0(&host->_dataList);
     if (dataListRef == 0) {
       DW4Fresh::Assign(&host->_dataList, igObject_GetAllocator(host));
     }
-    models = (beNDMWLoadIntf2ComMdlCtrl *)(FUN_003e9280(
-        FUN_003e92a0(&host->_dataList), g_propertyNameField[0],
+    models = (beNDMWLoadIntf2ComMdlCtrl *)(DataList_FindProperty_003e9280(
+        ObjectRef_Get_003e92a0(&host->_dataList), g_propertyNameField[0],
         &COMMDLCTRL[0]));
-    dataListRef = FUN_003e93b0(&host->_dataList);
+    dataListRef = ObjectRef_Get_003e93b0(&host->_dataList);
     if (dataListRef == 0) {
       DW4Fresh::Assign(&host->_dataList, igObject_GetAllocator(host));
     }
-    messages = (beNDMWLoadIntf2MesWin *)(FUN_003e9280(
-        FUN_003e92a0(&host->_dataList), g_propertyNameField[0],
+    messages = (beNDMWLoadIntf2MesWin *)(DataList_FindProperty_003e9280(
+        ObjectRef_Get_003e92a0(&host->_dataList), g_propertyNameField[0],
         &MESWIN[0]));
-    dataListRef = FUN_003e93b0(&host->_dataList);
+    dataListRef = ObjectRef_Get_003e93b0(&host->_dataList);
     if (dataListRef == 0) {
       DW4Fresh::Assign(&host->_dataList, igObject_GetAllocator(host));
     }
-    slots = (beNDMWLoadIntf2SelSlot *)(FUN_003e9280(
-        FUN_003e92a0(&host->_dataList), g_propertyNameField[0],
+    slots = (beNDMWLoadIntf2SelSlot *)(DataList_FindProperty_003e9280(
+        ObjectRef_Get_003e92a0(&host->_dataList), g_propertyNameField[0],
         &SELSLOT[0]));
-    dataListRef = FUN_003e93b0(&host->_dataList);
+    dataListRef = ObjectRef_Get_003e93b0(&host->_dataList);
     if (dataListRef == 0) {
       DW4Fresh::Assign(&host->_dataList, igObject_GetAllocator(host));
     }
-    nameEntry = (beNDMWLoadIntf2NameSel *)(FUN_003e9280(
-        FUN_003e92a0(&host->_dataList), g_propertyNameField[0],
+    nameEntry = (beNDMWLoadIntf2NameSel *)(DataList_FindProperty_003e9280(
+        ObjectRef_Get_003e92a0(&host->_dataList), g_propertyNameField[0],
         &NAMESEL[0]));
-    dataListRef = FUN_003e93b0(&host->_dataList);
+    dataListRef = ObjectRef_Get_003e93b0(&host->_dataList);
     if (dataListRef == 0) {
       DW4Fresh::Assign(&host->_dataList, igObject_GetAllocator(host));
     }
-    textOrder = (beNDMWLoadIntf2TextOrder *)(FUN_003e9280(
-        FUN_003e92a0(&host->_dataList), g_propertyNameField[0],
+    textOrder = (beNDMWLoadIntf2TextOrder *)(DataList_FindProperty_003e9280(
+        ObjectRef_Get_003e92a0(&host->_dataList), g_propertyNameField[0],
         &TEXTORDER[0]));
-    dataListRef = FUN_003e93b0(&host->_dataList);
+    dataListRef = ObjectRef_Get_003e93b0(&host->_dataList);
     if (dataListRef == 0) {
       DW4Fresh::Assign(&host->_dataList, igObject_GetAllocator(host));
     }
-    status = (beNDMWLoadIntf2DegiStateCtrl *)(FUN_003e9280(
-        FUN_003e92a0(&host->_dataList), g_propertyNameField[0],
+    status = (beNDMWLoadIntf2DegiStateCtrl *)(DataList_FindProperty_003e9280(
+        ObjectRef_Get_003e92a0(&host->_dataList), g_propertyNameField[0],
         &DEGISTATECTRL[0]));
-    dataListRef = FUN_003e93b0(&host->_dataList);
+    dataListRef = ObjectRef_Get_003e93b0(&host->_dataList);
     if (dataListRef == 0) {
       DW4Fresh::Assign(&host->_dataList, igObject_GetAllocator(host));
     }
-    dataSelection = (beNDMWLoadIntf2DataSelIntf *)(FUN_003e9280(
-        FUN_003e92a0(&host->_dataList), g_propertyNameField[0],
+    dataSelection = (beNDMWLoadIntf2DataSelIntf *)(DataList_FindProperty_003e9280(
+        ObjectRef_Get_003e92a0(&host->_dataList), g_propertyNameField[0],
         &DATASELINTF[0]));
-    dataListRef = FUN_003e93b0(&host->_dataList);
+    dataListRef = ObjectRef_Get_003e93b0(&host->_dataList);
     if (dataListRef == 0) {
       DW4Fresh::Assign(&host->_dataList, igObject_GetAllocator(host));
     }
-    difficulty = (beNDMWLoadIntf2Diffselect *)(FUN_003e9280(
-        FUN_003e92a0(&host->_dataList), g_propertyNameField[0],
+    difficulty = (beNDMWLoadIntf2Diffselect *)(DataList_FindProperty_003e9280(
+        ObjectRef_Get_003e92a0(&host->_dataList), g_propertyNameField[0],
         &DIFFSELECT[0]));
     beNDMWLoadIntf2ComMdlCtrl__Poll(models);
     beNDMWLoadIntf2MesWin__Update(messages);
@@ -875,7 +875,7 @@ extern "C" void Gap__Bec__beNDMWLoadIntf2__vfunc_31(beNDMWLoadIntf2 *self,
                 (igDataList *)common->_flagWork, host->_ramNo));
             EnterPlayerStage(hostWork, 0);
           } else {
-            FUN_003ecba0(messages, TextId(host, 0x51C));
+            beNDMWLoadIntf2MesWin__RequestSystemMessage(messages, TextId(host, 0x51C));
             hostWork_2 = (beNDMWLoadSavePlWork *)(DataList_GetWordAt_003e9240(
                 (igDataList *)common->_flagWork, host->_ramNo));
             SetPlayerStep(hostWork_2, 1);
@@ -1056,9 +1056,9 @@ extern "C" void Gap__Bec__beNDMWLoadIntf2__vfunc_31(beNDMWLoadIntf2 *self,
                 NextSubstep(control);
                 ramNo_2 = host->_ramNo;
                 if (ramNo_2 == 0) {
-                  FUN_003ecad0(messages, (ramNo_2 << 0x10) | 0x523);
+                  beNDMWLoadIntf2MesWin__RequestMessage(messages, (ramNo_2 << 0x10) | 0x523);
                 } else {
-                  FUN_003ecad0(messages, (ramNo_2 << 0x10) | 0x524);
+                  beNDMWLoadIntf2MesWin__RequestMessage(messages, (ramNo_2 << 0x10) | 0x524);
                 }
               }
               if ((beNDMWLoadIntf2ComMdlCtrl__IsOpenQueueEmpty(models) & 0xFF) == 1) {
@@ -1169,7 +1169,7 @@ extern "C" void Gap__Bec__beNDMWLoadIntf2__vfunc_31(beNDMWLoadIntf2 *self,
               beNDMWLoadIntf2ComMdlCtrl__StartAt(models, host->_ramNo, (const char *)&j_namewin02[0],
                            (const char *)&SQ_OPEN[0], (float *)&nameWin02Pos, 1);
               creation->_chaSelDegi = 3;
-              FUN_003ecad0(messages, TextId(host, 0x511));
+              beNDMWLoadIntf2MesWin__RequestMessage(messages, TextId(host, 0x511));
               beMessenger_SendNamed(self->_messenger, &DATABASE[0],
                                     &shinka[0], 0,
                                     &GETDATABASE[0]);
@@ -1478,7 +1478,7 @@ extern "C" void Gap__Bec__beNDMWLoadIntf2__vfunc_31(beNDMWLoadIntf2 *self,
             default:
               nameEntry->_selDataNo = creation->_chaSelDegi;
               NextStep(control);
-              FUN_003ecad0(messages, TextId(host, 0x517));
+              beNDMWLoadIntf2MesWin__RequestMessage(messages, TextId(host, 0x517));
               break;
             case 1:
               if (beNDMWLoadIntf2NameSel__Update((NameSelRam *)nameEntry,
@@ -1495,7 +1495,7 @@ extern "C" void Gap__Bec__beNDMWLoadIntf2__vfunc_31(beNDMWLoadIntf2 *self,
               }
               break;
             case 2:
-              FUN_003ecb00(messages, TextId(host, 0x519));
+              beNDMWLoadIntf2MesWin__RequestPrompt(messages, TextId(host, 0x519));
               NextStep(control);
               break;
             case 3:
@@ -1504,18 +1504,18 @@ extern "C" void Gap__Bec__beNDMWLoadIntf2__vfunc_31(beNDMWLoadIntf2 *self,
               }
               break;
             case 4:
-              FUN_003ecae0(messages, TextId(host, 0x51B), 0);
+              beNDMWLoadIntf2MesWin__RequestQuestion(messages, TextId(host, 0x51B), 0);
               NextStep(control);
               break;
             case 5:
               if (!(beNDMWLoadIntf2MesWin__GetIsCtrl(messages) & 0xFF)) {
-                messageChoice = FUN_003ecb80(messages);
+                messageChoice = beNDMWLoadIntf2MesWin__GetCurPoint(messages);
                 switch ((unsigned int)messageChoice) {
                 case 0:
                   beNDMWLoadIntf2NameSel__SetAnswer(nameEntry, 1);
                   break;
                 case 1:
-                  FUN_003ecad0(messages, TextId(host, 0x517));
+                  beNDMWLoadIntf2MesWin__RequestMessage(messages, TextId(host, 0x517));
                   beNDMWLoadIntf2NameSel__SetAnswer(nameEntry, 0);
                   break;
                 }
@@ -1553,7 +1553,7 @@ extern "C" void Gap__Bec__beNDMWLoadIntf2__vfunc_31(beNDMWLoadIntf2 *self,
                   messageId_10 = TextId(host, 0x3009);
                   break;
                 }
-                FUN_003ecad0(messages, messageId_10);
+                beNDMWLoadIntf2MesWin__RequestMessage(messages, messageId_10);
                 NextSubstep(control);
                 break;
               case 1:
@@ -1600,8 +1600,8 @@ extern "C" void Gap__Bec__beNDMWLoadIntf2__vfunc_31(beNDMWLoadIntf2 *self,
                     messageId_11 = TextId(host, 0x3004);
                     break;
                   }
-                  FUN_003ecad0(messages, messageId_11);
-                  FUN_003ee250(common, host->_ramNo, 5);
+                  beNDMWLoadIntf2MesWin__RequestMessage(messages, messageId_11);
+                  beNDMWLoadCtrl2CommonIntf__StartUtilFor(common, host->_ramNo, 5);
                   control->_st3 = (control->_st3 + 1);
                   break;
                 case 1:
@@ -1625,7 +1625,7 @@ extern "C" void Gap__Bec__beNDMWLoadIntf2__vfunc_31(beNDMWLoadIntf2 *self,
                       messageId_12 = TextId(host, 0x3009);
                       break;
                     }
-                    FUN_003ecad0(messages, messageId_12);
+                    beNDMWLoadIntf2MesWin__RequestMessage(messages, messageId_12);
                     beNDMWLoadIntf2SelSlot__PublishCursor(slots);
                     SetStep(control, 1);
                     break;
@@ -1643,7 +1643,7 @@ extern "C" void Gap__Bec__beNDMWLoadIntf2__vfunc_31(beNDMWLoadIntf2 *self,
                       messageId_13 = TextId(host, 0x3009);
                       break;
                     }
-                    FUN_003ecad0(messages, messageId_13);
+                    beNDMWLoadIntf2MesWin__RequestMessage(messages, messageId_13);
                     beNDMWLoadIntf2SelSlot__PublishCursor(slots);
                     SetStep(control, 1);
                     break;
@@ -1685,7 +1685,7 @@ extern "C" void Gap__Bec__beNDMWLoadIntf2__vfunc_31(beNDMWLoadIntf2 *self,
             st1Now_5 = control->_st1;
             switch ((unsigned int)st1Now_5) {
             case 0x0:
-              FUN_003dafb0(dataSelection, host->_ramNo, 0);
+              beNDMWLoadIntf2DataSelIntf__Init(dataSelection, host->_ramNo, 0);
               NextStep(control);
               break;
             case 0x1:
@@ -1696,7 +1696,7 @@ extern "C" void Gap__Bec__beNDMWLoadIntf2__vfunc_31(beNDMWLoadIntf2 *self,
                 NextSubstep(control);
                 break;
               case 1:
-                if ((FUN_003db060(dataSelection, 0) & 0xFF) == 1) {
+                if ((beNDMWLoadIntf2DataSelIntf__OpenSaveArea(dataSelection, 0) & 0xFF) == 1) {
                   NextSubstep(control);
                 }
                 break;
@@ -1716,7 +1716,7 @@ extern "C" void Gap__Bec__beNDMWLoadIntf2__vfunc_31(beNDMWLoadIntf2 *self,
                 }
                 break;
               case 4:
-                if ((FUN_003dbf90(dataSelection, 0) & 0xFF) == 1) {
+                if ((beNDMWLoadIntf2DataSelIntf__CloseAll(dataSelection, 0) & 0xFF) == 1) {
                   st3Now_2 = control->_st3;
                   switch ((unsigned int)st3Now_2) {
                   case 0:
@@ -1746,7 +1746,7 @@ extern "C" void Gap__Bec__beNDMWLoadIntf2__vfunc_31(beNDMWLoadIntf2 *self,
                 NextSubstep(control);
                 break;
               case 1:
-                if ((FUN_003dbf90(dataSelection, 0) & 0xFF) == 1) {
+                if ((beNDMWLoadIntf2DataSelIntf__CloseAll(dataSelection, 0) & 0xFF) == 1) {
                   allocator = LoadHelpers::Selector(
                       &g_defaultAllocatorSelector[0],
                       igObject_GetAllocator(self));
@@ -1931,7 +1931,7 @@ extern "C" void Gap__Bec__beNDMWLoadIntf2__vfunc_31(beNDMWLoadIntf2 *self,
                 }
                 break;
               case 1:
-                if ((FUN_003da7c0(
+                if ((beNDMWLoadIntf2DegiState__Update(
                          (beNDMWLoadIntf2DegiState *)(ObjectList_GetAt_003e9260((igDataList *)status->_statDataList, 0))) &
                      0xFF) == 1) {
                   LoadHelpers::FlagAt(common, host)->_isRdy = 1;
@@ -1940,7 +1940,7 @@ extern "C" void Gap__Bec__beNDMWLoadIntf2__vfunc_31(beNDMWLoadIntf2 *self,
                     entryCount = 0;
                     workIndex = 0;
                     readyCount = 0;
-                    if (0 < FUN_002294f0(workList)) {
+                    if (0 < igDataList_GetCount(workList)) {
                       do {
                         if ((beNDMWLoadSavePlWork__GetIsEntry((beNDMWLoadSavePlWork *)(DataList_GetWordAt_003e9240(
                                  (igDataList *)workList, workIndex))) &
@@ -1953,7 +1953,7 @@ extern "C" void Gap__Bec__beNDMWLoadIntf2__vfunc_31(beNDMWLoadIntf2 *self,
                           readyCount += 1;
                         }
                         workIndex += 1;
-                      } while (workIndex < FUN_002294f0(workList));
+                      } while (workIndex < igDataList_GetCount(workList));
                     }
                     if ((entryCount == readyCount) == 1) {
                       SetStep(control, 3);
@@ -1972,9 +1972,9 @@ extern "C" void Gap__Bec__beNDMWLoadIntf2__vfunc_31(beNDMWLoadIntf2 *self,
               switch ((unsigned int)st1Now) {
               case 0:
                 if (control->_isRdyCancel == 1) {
-                  FUN_003ecad0(messages, TextId(host, 0x530));
+                  beNDMWLoadIntf2MesWin__RequestMessage(messages, TextId(host, 0x530));
                 } else {
-                  FUN_003ecad0(messages, TextId(host, 0x52F));
+                  beNDMWLoadIntf2MesWin__RequestMessage(messages, TextId(host, 0x52F));
                 }
                 NextSubstep(control);
                 break;
@@ -1987,7 +1987,7 @@ extern "C" void Gap__Bec__beNDMWLoadIntf2__vfunc_31(beNDMWLoadIntf2 *self,
                     entryCount_2 = 0;
                     readyCount_2 = 0;
                     workIndex_2 = 0;
-                    if (0 < FUN_002294f0(workList_2)) {
+                    if (0 < igDataList_GetCount(workList_2)) {
                       do {
                         if ((beNDMWLoadSavePlWork__GetIsEntry((beNDMWLoadSavePlWork *)(DataList_GetWordAt_003e9240(
                                  (igDataList *)workList_2, workIndex_2))) &
@@ -2000,7 +2000,7 @@ extern "C" void Gap__Bec__beNDMWLoadIntf2__vfunc_31(beNDMWLoadIntf2 *self,
                           readyCount_2 += 1;
                         }
                         workIndex_2 += 1;
-                      } while (workIndex_2 < FUN_002294f0(workList_2));
+                      } while (workIndex_2 < igDataList_GetCount(workList_2));
                     }
                     if ((entryCount_2 == readyCount_2) == 1) {
                       SetStep(control, 3);
@@ -2014,7 +2014,7 @@ extern "C" void Gap__Bec__beNDMWLoadIntf2__vfunc_31(beNDMWLoadIntf2 *self,
                     entryCount_3 = 0;
                     readyCount_3 = 0;
                     workIndex_3 = 0;
-                    if (0 < FUN_002294f0(workList_3)) {
+                    if (0 < igDataList_GetCount(workList_3)) {
                       do {
                         if ((beNDMWLoadSavePlWork__GetIsEntry((beNDMWLoadSavePlWork *)(DataList_GetWordAt_003e9240(
                                  (igDataList *)workList_3, workIndex_3))) &
@@ -2027,13 +2027,13 @@ extern "C" void Gap__Bec__beNDMWLoadIntf2__vfunc_31(beNDMWLoadIntf2 *self,
                           readyCount_3 += 1;
                         }
                         workIndex_3 += 1;
-                      } while (workIndex_3 < FUN_002294f0(workList_3));
+                      } while (workIndex_3 < igDataList_GetCount(workList_3));
                     }
                     if ((entryCount_3 == readyCount_3) == 1) {
                       if (control->_isRdyCancel == 1) {
-                        FUN_003ecad0(messages, TextId(host, 0x51F));
+                        beNDMWLoadIntf2MesWin__RequestMessage(messages, TextId(host, 0x51F));
                       } else {
-                        FUN_003ecad0(messages, TextId(host, 0x522));
+                        beNDMWLoadIntf2MesWin__RequestMessage(messages, TextId(host, 0x522));
                       }
                       control->_st3 = (control->_st3 + 1);
                     } else if ((padTrigger & kPadCircle) &&
@@ -2048,7 +2048,7 @@ extern "C" void Gap__Bec__beNDMWLoadIntf2__vfunc_31(beNDMWLoadIntf2 *self,
                   entryCount_4 = 0;
                   readyCount_4 = 0;
                   workIndex_4 = 0;
-                  if (0 < FUN_002294f0(workList_4)) {
+                  if (0 < igDataList_GetCount(workList_4)) {
                     do {
                       if ((beNDMWLoadSavePlWork__GetIsEntry((beNDMWLoadSavePlWork *)(DataList_GetWordAt_003e9240(
                                (igDataList *)workList_4, workIndex_4))) &
@@ -2061,13 +2061,13 @@ extern "C" void Gap__Bec__beNDMWLoadIntf2__vfunc_31(beNDMWLoadIntf2 *self,
                         readyCount_4 += 1;
                       }
                       workIndex_4 += 1;
-                    } while (workIndex_4 < FUN_002294f0(workList_4));
+                    } while (workIndex_4 < igDataList_GetCount(workList_4));
                   }
                   if ((entryCount_4 == readyCount_4) == 0) {
                     if (control->_isRdyCancel == 1) {
-                      FUN_003ecad0(messages, TextId(host, 0x530));
+                      beNDMWLoadIntf2MesWin__RequestMessage(messages, TextId(host, 0x530));
                     } else {
-                      FUN_003ecad0(messages, TextId(host, 0x52F));
+                      beNDMWLoadIntf2MesWin__RequestMessage(messages, TextId(host, 0x52F));
                     }
                     control->_st3 = 0;
                   } else if ((padTrigger & kPadCircle) &&
@@ -2095,12 +2095,12 @@ extern "C" void Gap__Bec__beNDMWLoadIntf2__vfunc_31(beNDMWLoadIntf2 *self,
                 }
                 break;
               case 2:
-                FUN_003d9e70(
+                beNDMWLoadIntf2DegiState__RequestClose(
                     (beNDMWLoadIntf2DegiState *)(ObjectList_GetAt_003e9260((igDataList *)status->_statDataList, 0)), 0);
                 NextSubstep(control);
                 break;
               case 3:
-                if ((FUN_003da7c0(
+                if ((beNDMWLoadIntf2DegiState__Update(
                          (beNDMWLoadIntf2DegiState *)(ObjectList_GetAt_003e9260((igDataList *)status->_statDataList, 0))) &
                      0xFF) == 1) {
                   if (control->_isNewMake == 1) {
@@ -2128,9 +2128,9 @@ extern "C" void Gap__Bec__beNDMWLoadIntf2__vfunc_31(beNDMWLoadIntf2 *self,
               switch ((unsigned int)st2Now_3) {
               case 0:
                 if (control->_isRdyCancel == 1) {
-                  FUN_003ecad0(messages, TextId(host, 0x51D));
+                  beNDMWLoadIntf2MesWin__RequestMessage(messages, TextId(host, 0x51D));
                 } else {
-                  FUN_003ecad0(messages, TextId(host, 0x521));
+                  beNDMWLoadIntf2MesWin__RequestMessage(messages, TextId(host, 0x521));
                 }
                 NextSubstep(control);
                 break;
@@ -2143,7 +2143,7 @@ extern "C" void Gap__Bec__beNDMWLoadIntf2__vfunc_31(beNDMWLoadIntf2 *self,
                   entryCount_5 = 0;
                   readyCount_5 = 0;
                   workIndex_5 = 0;
-                  if (0 < FUN_002294f0(workList_5)) {
+                  if (0 < igDataList_GetCount(workList_5)) {
                     do {
                       if ((beNDMWLoadSavePlWork__GetIsEntry((beNDMWLoadSavePlWork *)(DataList_GetWordAt_003e9240(
                                (igDataList *)workList_5, workIndex_5))) &
@@ -2156,20 +2156,20 @@ extern "C" void Gap__Bec__beNDMWLoadIntf2__vfunc_31(beNDMWLoadIntf2 *self,
                         readyCount_5 += 1;
                       }
                       workIndex_5 += 1;
-                    } while (workIndex_5 < FUN_002294f0(workList_5));
+                    } while (workIndex_5 < igDataList_GetCount(workList_5));
                   }
                   if ((entryCount_5 == readyCount_5) == 1) {
                     if (padTrigger & kPadStart) {
                       workIndex_6 = 0;
                       common->_intfStat = 3;
                       workList_6 = (void *)common->_flagWork;
-                      if (0 < FUN_002294f0(workList_6)) {
+                      if (0 < igDataList_GetCount(workList_6)) {
                         do {
                           beNDMWLoadSavePlWork__SetIsCtrl((beNDMWLoadSavePlWork *)(DataList_GetWordAt_003e9240((igDataList *)workList_6,
                                                                    workIndex_6)),
                                        0);
                           workIndex_6 += 1;
-                        } while (workIndex_6 < FUN_002294f0(workList_6));
+                        } while (workIndex_6 < igDataList_GetCount(workList_6));
                       }
                       ((beSystem *)common->_system)->_isSResetEnable = 0;
                       NextSubstep(control);
@@ -2212,7 +2212,7 @@ extern "C" void Gap__Bec__beNDMWLoadIntf2__vfunc_31(beNDMWLoadIntf2 *self,
             beNDMWLoadIntf2ComMdlCtrl__Close(models, host->_ramNo, (const char *)&j_chrselmesswin[0],
                          (const char *)&SQ_CLOSE[0], 1);
             beNDMWLoadIntf2MesWin__RequestClose(messages);
-            FUN_003d9e90((beNDMWLoadIntf2DegiState *)(ObjectList_GetAt_003e9260((igDataList *)status->_statDataList, 0)));
+            beNDMWLoadIntf2DegiState__RequestConfirmClose((beNDMWLoadIntf2DegiState *)(ObjectList_GetAt_003e9260((igDataList *)status->_statDataList, 0)));
             exitWork = (beNDMWLoadSavePlWork *)(DataList_GetWordAt_003e9240(
                 (igDataList *)common->_flagWork, host->_ramNo));
             SetPlayerStep(exitWork, 2);
@@ -2230,7 +2230,7 @@ extern "C" void Gap__Bec__beNDMWLoadIntf2__vfunc_31(beNDMWLoadIntf2 *self,
           }
           break;
         case 2:
-          if (((FUN_003da7c0(
+          if (((beNDMWLoadIntf2DegiState__Update(
                     (beNDMWLoadIntf2DegiState *)(ObjectList_GetAt_003e9260((igDataList *)status->_statDataList, 0))) &
                 0xFF) == 1) &&
               ((beNDMWLoadIntf2ComMdlCtrl__IsCloseQueueEmpty(models) & 0xFF) == 1)) {
@@ -2254,7 +2254,7 @@ extern "C" void Gap__Bec__beNDMWLoadIntf2__vfunc_31(beNDMWLoadIntf2 *self,
           cardStat1 = cardWork->_sysStat1;
           switch ((unsigned int)cardStat1) {
           case 0:
-            stepResult = FUN_003ed050(common, host->_ramNo, messages,
+            stepResult = beNDMWLoadCtrl2CommonIntf__StepCheckMemoryCard(common, host->_ramNo, messages,
                                       slots->_mcSelPoint, 3);
             switch ((unsigned int)stepResult) {
             case 0:
@@ -2291,7 +2291,7 @@ extern "C" void Gap__Bec__beNDMWLoadIntf2__vfunc_31(beNDMWLoadIntf2 *self,
             if (((beNDMWMcSlot *)ObjectList_GetAt_003e9260(
                      (igDataList *)(LoadHelpers::McUtil(common)->_slot), slots->_mcSelPoint))
                     ->_isConnect != 1) {
-              FUN_003ecb20(messages);
+              beNDMWLoadIntf2MesWin__Cancel(messages);
               EnterPlayerStage(cardWork, 7);
               cardWork->_utilReturn = 2;
             } else {
@@ -2315,7 +2315,7 @@ extern "C" void Gap__Bec__beNDMWLoadIntf2__vfunc_31(beNDMWLoadIntf2 *self,
                 secondTextId = playerTextBase_3 | 0x3002;
                 break;
               }
-              stepResult_2 = FUN_003ecdc0(common, host->_ramNo, messages,
+              stepResult_2 = beNDMWLoadCtrl2CommonIntf__StepNoticeQuestion(common, host->_ramNo, messages,
                                           firstTextId, secondTextId, 0, 3);
               switch ((unsigned int)stepResult_2) {
               case 0:
@@ -2342,7 +2342,7 @@ extern "C" void Gap__Bec__beNDMWLoadIntf2__vfunc_31(beNDMWLoadIntf2 *self,
               cardWork->_sysStat3 = 0;
               break;
             case 1:
-              stepResult_3 = FUN_003ed2e0(common, host->_ramNo, messages,
+              stepResult_3 = beNDMWLoadCtrl2CommonIntf__StepCreateSaveFile(common, host->_ramNo, messages,
                                           slots->_mcSelPoint, 3);
               switch ((unsigned int)stepResult_3) {
               case 0:
@@ -2388,7 +2388,7 @@ extern "C" void Gap__Bec__beNDMWLoadIntf2__vfunc_31(beNDMWLoadIntf2 *self,
             if (((beNDMWMcSlot *)ObjectList_GetAt_003e9260(
                      (igDataList *)(LoadHelpers::McUtil(common)->_slot), slots->_mcSelPoint))
                     ->_isConnect != 1) {
-              FUN_003ecb20(messages);
+              beNDMWLoadIntf2MesWin__Cancel(messages);
               EnterPlayerStage(cardWork, 7);
               cardWork->_utilReturn = 2;
             } else {
@@ -2412,7 +2412,7 @@ extern "C" void Gap__Bec__beNDMWLoadIntf2__vfunc_31(beNDMWLoadIntf2 *self,
                 secondTextId_2 = playerTextBase_6 | 0x3007;
                 break;
               }
-              stepResult_4 = FUN_003ecdc0(common, host->_ramNo, messages,
+              stepResult_4 = beNDMWLoadCtrl2CommonIntf__StepNoticeQuestion(common, host->_ramNo, messages,
                                           firstTextId_2, secondTextId_2, 1, 3);
               switch ((unsigned int)stepResult_4) {
               case 0:
@@ -2444,7 +2444,7 @@ extern "C" void Gap__Bec__beNDMWLoadIntf2__vfunc_31(beNDMWLoadIntf2 *self,
                 messageId_14 = TextId(host, 0x3008);
                 break;
               }
-              FUN_003ecad0(messages, messageId_14);
+              beNDMWLoadIntf2MesWin__RequestMessage(messages, messageId_14);
               if (common->_isTitle == 0) {
                 ((beSystem *)self->_system_)->_isSResetEnable = 0;
               }
@@ -2625,7 +2625,7 @@ extern "C" void Gap__Bec__beNDMWLoadIntf2__vfunc_31(beNDMWLoadIntf2 *self,
                 messageId_15 = TextId(host, 0x300E);
                 break;
               }
-              FUN_003ecb00(messages, messageId_15);
+              beNDMWLoadIntf2MesWin__RequestPrompt(messages, messageId_15);
             } else if (((beNDMWMcSlot *)ObjectList_GetAt_003e9260(
                             (igDataList *)mcUtil->_slot, slots->_mcSelPoint))
                            ->_isConnect == 1) {
@@ -2652,7 +2652,7 @@ extern "C" void Gap__Bec__beNDMWLoadIntf2__vfunc_31(beNDMWLoadIntf2 *self,
                   messageId_16 = TextId(host, 0x3012);
                   break;
                 }
-                FUN_003ecb00(messages, messageId_16);
+                beNDMWLoadIntf2MesWin__RequestPrompt(messages, messageId_16);
                 break;
               case 6:
                 kindHard_9 = common->_kindHard;
@@ -2668,7 +2668,7 @@ extern "C" void Gap__Bec__beNDMWLoadIntf2__vfunc_31(beNDMWLoadIntf2 *self,
                   messageId = TextId(host, 0x3014);
                   break;
                 }
-                FUN_003ecb00(messages, messageId);
+                beNDMWLoadIntf2MesWin__RequestPrompt(messages, messageId);
                 break;
               case 7:
                 kindHard_10 = common->_kindHard;
@@ -2684,7 +2684,7 @@ extern "C" void Gap__Bec__beNDMWLoadIntf2__vfunc_31(beNDMWLoadIntf2 *self,
                   messageId_2 = TextId(host, 0x3015);
                   break;
                 }
-                FUN_003ecb00(messages, messageId_2);
+                beNDMWLoadIntf2MesWin__RequestPrompt(messages, messageId_2);
                 break;
               case 2:
                 kindHard_11 = common->_kindHard;
@@ -2700,7 +2700,7 @@ extern "C" void Gap__Bec__beNDMWLoadIntf2__vfunc_31(beNDMWLoadIntf2 *self,
                   messageId_3 = TextId(host, 0x3010);
                   break;
                 }
-                FUN_003ecb00(messages, messageId_3);
+                beNDMWLoadIntf2MesWin__RequestPrompt(messages, messageId_3);
                 break;
               case 3:
                 kindHard_12 = common->_kindHard;
@@ -2716,7 +2716,7 @@ extern "C" void Gap__Bec__beNDMWLoadIntf2__vfunc_31(beNDMWLoadIntf2 *self,
                   messageId_4 = TextId(host, 0x3011);
                   break;
                 }
-                FUN_003ecb00(messages, messageId_4);
+                beNDMWLoadIntf2MesWin__RequestPrompt(messages, messageId_4);
                 break;
               case 5:
                 kindHard_13 = common->_kindHard;
@@ -2732,7 +2732,7 @@ extern "C" void Gap__Bec__beNDMWLoadIntf2__vfunc_31(beNDMWLoadIntf2 *self,
                   messageId_5 = TextId(host, 0x3013);
                   break;
                 }
-                FUN_003ecb00(messages, messageId_5);
+                beNDMWLoadIntf2MesWin__RequestPrompt(messages, messageId_5);
                 break;
               case 9:
                 kindHard_14 = common->_kindHard;
@@ -2748,7 +2748,7 @@ extern "C" void Gap__Bec__beNDMWLoadIntf2__vfunc_31(beNDMWLoadIntf2 *self,
                   messageId_6 = TextId(host, 0x3016);
                   break;
                 }
-                FUN_003ecb00(messages, messageId_6);
+                beNDMWLoadIntf2MesWin__RequestPrompt(messages, messageId_6);
                 break;
               case 1:
                 kindHard_15 = common->_kindHard;
@@ -2764,7 +2764,7 @@ extern "C" void Gap__Bec__beNDMWLoadIntf2__vfunc_31(beNDMWLoadIntf2 *self,
                   messageId_7 = TextId(host, 0x3028);
                   break;
                 }
-                FUN_003ecb00(messages, messageId_7);
+                beNDMWLoadIntf2MesWin__RequestPrompt(messages, messageId_7);
                 break;
               case 0:
               default:
@@ -2781,7 +2781,7 @@ extern "C" void Gap__Bec__beNDMWLoadIntf2__vfunc_31(beNDMWLoadIntf2 *self,
                   messageId_8 = TextId(host, 0x300D);
                   break;
                 }
-                FUN_003ecb00(messages, messageId_8);
+                beNDMWLoadIntf2MesWin__RequestPrompt(messages, messageId_8);
                 break;
               }
             } else {
@@ -2801,7 +2801,7 @@ extern "C" void Gap__Bec__beNDMWLoadIntf2__vfunc_31(beNDMWLoadIntf2 *self,
                 messageId_9 = TextId(host, 0x3016);
                 break;
               }
-              FUN_003ecb00(messages, messageId_9);
+              beNDMWLoadIntf2MesWin__RequestPrompt(messages, messageId_9);
             }
             resultWork->_sysStat2 = (resultWork->_sysStat2 + 1);
             resultWork->_sysStat3 = 0;
@@ -2843,7 +2843,7 @@ done:
 }
 
 
-void FUN_003d9e10(beNDMWLoadIntf2DegiState *arg0, int arg1, int arg2) {
+void beNDMWLoadIntf2DegiState__RequestOpen(beNDMWLoadIntf2DegiState *arg0, int arg1, int arg2) {
     arg0->_kind = arg1;
     arg0->_dataNo = arg2;
     arg0->_isEnd = 0;
@@ -2863,7 +2863,7 @@ void FUN_003d9e40(beNDMWLoadIntf2DegiState *arg0, int arg1, int arg2) {
     arg0->_st1 = 0;
 }
 
-void FUN_003d9e70(beNDMWLoadIntf2DegiState *arg0, int arg1) {
+void beNDMWLoadIntf2DegiState__RequestClose(beNDMWLoadIntf2DegiState *arg0, int arg1) {
     arg0->_isEnd = 0;
     arg0->_closeKind = arg1;
     arg0->_st0 = 2;
@@ -2872,7 +2872,7 @@ void FUN_003d9e70(beNDMWLoadIntf2DegiState *arg0, int arg1) {
     arg0->_st1 = 0;
 }
 
-void FUN_003d9e90(beNDMWLoadIntf2DegiState *arg0) {
+void beNDMWLoadIntf2DegiState__RequestConfirmClose(beNDMWLoadIntf2DegiState *arg0) {
     arg0->_isEnd = 0;
     arg0->_closeKind = 1;
     arg0->_st0 = 2;
@@ -3025,7 +3025,7 @@ void FUN_003da5f0(beNDMWLoadIntf2DegiState *arg0) {
     TextOrder_PublishLineListOnly(arg0->_textOrder, (arg0->_plNo << 0x10) | 0x110);
 }
 
-unsigned char FUN_003da7c0(beNDMWLoadIntf2DegiState *arg0) {
+unsigned char beNDMWLoadIntf2DegiState__Update(beNDMWLoadIntf2DegiState *arg0) {
 
     if (arg0->_isEnd == 1) {
         return 1;
@@ -3209,7 +3209,7 @@ unsigned char FUN_003da7c0(beNDMWLoadIntf2DegiState *arg0) {
     return arg0->_isEnd;
 }
 
-void FUN_003dafb0(beNDMWLoadIntf2DataSelIntf *arg0, int arg1, int arg2) {
+void beNDMWLoadIntf2DataSelIntf__Init(beNDMWLoadIntf2DataSelIntf *arg0, int arg1, int arg2) {
     arg0->_plNo = arg1;
     arg0->_isEnd = 0;
     arg0->_kind = arg2;
@@ -3250,7 +3250,7 @@ void beNDMWLoadIntf2DataSelIntf__ClearStatesFrom(beNDMWLoadIntf2DataSelIntf *arg
 /* Owning stack reference to the slot's name text; released on scope exit (reference count in the
  * low 23 bits of _refCount). */
 
-unsigned char FUN_003db060(beNDMWLoadIntf2DataSelIntf *arg0, int arg1) {
+unsigned char beNDMWLoadIntf2DataSelIntf__OpenSaveArea(beNDMWLoadIntf2DataSelIntf *arg0, int arg1) {
     int sp11C;
     beNDMWLoadCtrl2CommonIntf *sp100;
     int spF0;
@@ -3363,23 +3363,23 @@ unsigned char FUN_003db060(beNDMWLoadIntf2DataSelIntf *arg0, int arg1) {
             }
             if (fl == 1) {
                 arg0->_mesKind = 0;
-                FUN_003ecad0(spF0, (arg0->_plNo << 16) | 0x513);
+                beNDMWLoadIntf2MesWin__RequestMessage(spF0, (arg0->_plNo << 16) | 0x513);
             } else {
                 arg0->_mesKind = 1;
-                FUN_003ecad0(spF0, (arg0->_plNo << 16) | 0x515);
+                beNDMWLoadIntf2MesWin__RequestMessage(spF0, (arg0->_plNo << 16) | 0x515);
             }
-            FUN_003d9e10((beNDMWLoadIntf2DegiState *)(((int *)((beNDMWLoadIntf2DegiStateList *)spE0->_statDataList)->_data)[0]), 0, (int)arg0->_svDataSelPoint);
+            beNDMWLoadIntf2DegiState__RequestOpen((beNDMWLoadIntf2DegiState *)(((int *)((beNDMWLoadIntf2DegiStateList *)spE0->_statDataList)->_data)[0]), 0, (int)arg0->_svDataSelPoint);
         } else {
             arg0->_mesKind = 0;
-            FUN_003ecad0(spF0, (arg0->_plNo << 16) | 0x503);
-            FUN_003d9e10((beNDMWLoadIntf2DegiState *)(((int *)((beNDMWLoadIntf2DegiStateList *)spE0->_statDataList)->_data)[0]), 1, (int)arg0->_plNo);
+            beNDMWLoadIntf2MesWin__RequestMessage(spF0, (arg0->_plNo << 16) | 0x503);
+            beNDMWLoadIntf2DegiState__RequestOpen((beNDMWLoadIntf2DegiState *)(((int *)((beNDMWLoadIntf2DegiStateList *)spE0->_statDataList)->_data)[0]), 1, (int)arg0->_plNo);
         }
         arg0->_isUpStatWin = 1;
         spC0 = spC0 + 1;
         break;
     }
     case 1:
-        if ((((int)FUN_003da7c0((beNDMWLoadIntf2DegiState *)(((int *)((beNDMWLoadIntf2DegiStateList *)spE0->_statDataList)->_data)[0]))) & 0xFF) == 1 && (beNDMWLoadIntf2ComMdlCtrl__IsOpenQueueEmpty((beNDMWLoadIntf2ComMdlCtrl *)s0) & 0xFF) == 1) {
+        if ((((int)beNDMWLoadIntf2DegiState__Update((beNDMWLoadIntf2DegiState *)(((int *)((beNDMWLoadIntf2DegiStateList *)spE0->_statDataList)->_data)[0]))) & 0xFF) == 1 && (beNDMWLoadIntf2ComMdlCtrl__IsOpenQueueEmpty((beNDMWLoadIntf2ComMdlCtrl *)s0) & 0xFF) == 1) {
             int s4;
             beNDMWDegiData *it;
             int s0c;
@@ -3579,19 +3579,19 @@ unsigned char beNDMWLoadIntf2DataSelIntf__UpdateSelection(beNDMWLoadIntf2DataSel
                     if (strcmp(x, y) == 0) { uniq2 = 0; break; }
                 }
                 if (uniq2 == 1) {
-                    if (c->_mesKind != 0) { c->_mesKind = 0; FUN_003ecad0(h40, (c->_plNo << 16) | 0x513); }
+                    if (c->_mesKind != 0) { c->_mesKind = 0; beNDMWLoadIntf2MesWin__RequestMessage(h40, (c->_plNo << 16) | 0x513); }
                 } else if (c->_mesKind != 1) {
-                    c->_mesKind = 1; FUN_003ecad0(h40, (c->_plNo << 16) | 0x515);
+                    c->_mesKind = 1; beNDMWLoadIntf2MesWin__RequestMessage(h40, (c->_plNo << 16) | 0x515);
                 }
             } else if (c->_mesKind != 0) {
-                c->_mesKind = 0; FUN_003ecad0(h40, (c->_plNo << 16) | 0x513);
+                c->_mesKind = 0; beNDMWLoadIntf2MesWin__RequestMessage(h40, (c->_plNo << 16) | 0x513);
             }
         }
         break;
     }
     case 1:
         if (c->_kind == 0) {
-            if ((((int)FUN_003da7c0((beNDMWLoadIntf2DegiState *)n->n16->n16->f0)) & 0xFF) != 1) break;
+            if ((((int)beNDMWLoadIntf2DegiState__Update((beNDMWLoadIntf2DegiState *)n->n16->n16->f0)) & 0xFF) != 1) break;
         }
         if ((beNDMWLoadIntf2ComMdlCtrl__IsOpenQueueEmpty((beNDMWLoadIntf2ComMdlCtrl *)a) & 0xFF) == 1) {
             beNDMWLoadIntf2ComMdlCtrl__Play((beNDMWLoadIntf2ComMdlCtrl *)a, c->_plNo, (int *)DAT_00516db0, (int *)(DAT_004cc840[c->_svDataSelPoint]), 0);
@@ -3627,7 +3627,7 @@ unsigned char beNDMWLoadIntf2DataSelIntf__UpdateSelection(beNDMWLoadIntf2DataSel
     return r;
 }
 
-unsigned char FUN_003dbf90(beNDMWLoadIntf2DataSelIntf *c, int sel) {
+unsigned char beNDMWLoadIntf2DataSelIntf__CloseAll(beNDMWLoadIntf2DataSelIntf *c, int sel) {
     int a = c->_comMdlCtrl;
     int b = c->_textOrder;
     K *n = (K *)c->_statDisp;
@@ -3653,10 +3653,10 @@ unsigned char FUN_003dbf90(beNDMWLoadIntf2DataSelIntf *c, int sel) {
             c->_isSaveArea = 0;
         }
         if (c->_isUpStatWin == 1) {
-            FUN_003d9e70((beNDMWLoadIntf2DegiState *)n->n16->n16->f0, 0);
+            beNDMWLoadIntf2DegiState__RequestClose((beNDMWLoadIntf2DegiState *)n->n16->n16->f0, 0);
         }
         if (c->_isDownStatWin == 1) {
-            FUN_003d9e70((beNDMWLoadIntf2DegiState *)n->n16->n16->f4, 0);
+            beNDMWLoadIntf2DegiState__RequestClose((beNDMWLoadIntf2DegiState *)n->n16->n16->f4, 0);
         }
         if (c->_isSelCur == 1) {
             beNDMWLoadIntf2ComMdlCtrl__Close((beNDMWLoadIntf2ComMdlCtrl *)a, c->_plNo, (const char *)DAT_00516db0, (const char *)SQ_CLOSE, 1);
@@ -3665,11 +3665,11 @@ unsigned char FUN_003dbf90(beNDMWLoadIntf2DataSelIntf *c, int sel) {
         break;
     case 1:
         if (c->_isUpStatWin == 1) {
-            if ((((int)FUN_003da7c0((beNDMWLoadIntf2DegiState *)n->n16->n16->f0)) & 0xFF) != 1) break;
+            if ((((int)beNDMWLoadIntf2DegiState__Update((beNDMWLoadIntf2DegiState *)n->n16->n16->f0)) & 0xFF) != 1) break;
             c->_isUpStatWin = 0;
         }
         if (c->_isDownStatWin == 1) {
-            if ((((int)FUN_003da7c0((beNDMWLoadIntf2DegiState *)n->n16->n16->f4)) & 0xFF) != 1) break;
+            if ((((int)beNDMWLoadIntf2DegiState__Update((beNDMWLoadIntf2DegiState *)n->n16->n16->f4)) & 0xFF) != 1) break;
             c->_isDownStatWin = 0;
         }
         if ((beNDMWLoadIntf2ComMdlCtrl__IsCloseQueueEmpty((beNDMWLoadIntf2ComMdlCtrl *)a) & 0xFF) == 1) {
@@ -3690,7 +3690,7 @@ unsigned char FUN_003dbf90(beNDMWLoadIntf2DataSelIntf *c, int sel) {
     return r;
 }
 
-unsigned char FUN_003dc2e0(beNDMWLoadIntf2DataSelIntf *c, int sel) {
+unsigned char beNDMWLoadIntf2DataSelIntf__ShowSelectedStatus(beNDMWLoadIntf2DataSelIntf *c, int sel) {
     int a = c->_comMdlCtrl;
     int b = c->_textOrder;
     beNDMWLoadIntf2DegiStateCtrl *n = (beNDMWLoadIntf2DegiStateCtrl *)c->_statDisp;
@@ -3720,12 +3720,12 @@ unsigned char FUN_003dc2e0(beNDMWLoadIntf2DataSelIntf *c, int sel) {
     case 1:
         if ((beNDMWLoadIntf2ComMdlCtrl__IsCloseQueueEmpty((beNDMWLoadIntf2ComMdlCtrl *)a) & 0xFF) == 1) {
             v++;
-            FUN_003d9e10((beNDMWLoadIntf2DegiState *)(((int *)((beNDMWLoadIntf2DegiStateList *)n->_statDataList)->_data)[1]), 0, c->_svDataSelPoint);
+            beNDMWLoadIntf2DegiState__RequestOpen((beNDMWLoadIntf2DegiState *)(((int *)((beNDMWLoadIntf2DegiStateList *)n->_statDataList)->_data)[1]), 0, c->_svDataSelPoint);
             c->_isDownStatWin = 1;
         }
         break;
     case 2:
-        if ((((int)FUN_003da7c0((beNDMWLoadIntf2DegiState *)(((int *)((beNDMWLoadIntf2DegiStateList *)n->_statDataList)->_data)[1]))) & 0xFF) == 1) {
+        if ((((int)beNDMWLoadIntf2DegiState__Update((beNDMWLoadIntf2DegiState *)(((int *)((beNDMWLoadIntf2DegiStateList *)n->_statDataList)->_data)[1]))) & 0xFF) == 1) {
             r = 1;
             v++;
         }
@@ -3741,7 +3741,7 @@ unsigned char FUN_003dc2e0(beNDMWLoadIntf2DataSelIntf *c, int sel) {
     return r;
 }
 
-unsigned char FUN_003dc590(beNDMWLoadIntf2DataSelIntf *arg0, int arg1) {
+unsigned char beNDMWLoadIntf2DataSelIntf__RestoreSaveArea(beNDMWLoadIntf2DataSelIntf *arg0, int arg1) {
     beNDMWLoadCtrl2CommonIntf *bk = (beNDMWLoadCtrl2CommonIntf *)arg0->_commonIntf;
     Ob_3dc590 *ob = (Ob_3dc590 *)arg0->_comMdlCtrl;
     int snd = arg0->_textOrder;
@@ -3756,12 +3756,12 @@ unsigned char FUN_003dc590(beNDMWLoadIntf2DataSelIntf *arg0, int arg1) {
     }
     switch (v) {
     case 0:
-        FUN_003d9e70((beNDMWLoadIntf2DegiState *)(((int *)((beNDMWLoadIntf2DegiStateList *)nd->_statDataList)->_data)[1]), 0);
+        beNDMWLoadIntf2DegiState__RequestClose((beNDMWLoadIntf2DegiState *)(((int *)((beNDMWLoadIntf2DegiStateList *)nd->_statDataList)->_data)[1]), 0);
         arg0->_isDownStatWin = 0;
         v++;
         break;
     case 1:
-        if ((((int)FUN_003da7c0((beNDMWLoadIntf2DegiState *)(((int *)((beNDMWLoadIntf2DegiStateList *)nd->_statDataList)->_data)[1]))) & 0xFF) == 1) v++;
+        if ((((int)beNDMWLoadIntf2DegiState__Update((beNDMWLoadIntf2DegiState *)(((int *)((beNDMWLoadIntf2DegiStateList *)nd->_statDataList)->_data)[1]))) & 0xFF) == 1) v++;
         break;
     case 2: {
         int i;
@@ -3834,7 +3834,7 @@ unsigned char FUN_003dc590(beNDMWLoadIntf2DataSelIntf *arg0, int arg1) {
     return r;
 }
 
-unsigned char FUN_003dcab0(beNDMWLoadIntf2DataSelIntf *c, int sel) {
+unsigned char beNDMWLoadIntf2DataSelIntf__CloseStatusWindows(beNDMWLoadIntf2DataSelIntf *c, int sel) {
     Link *n = (Link *)c->_statDisp;
     unsigned char r = 0;
     int v;
@@ -3846,14 +3846,14 @@ unsigned char FUN_003dcab0(beNDMWLoadIntf2DataSelIntf *c, int sel) {
     }
     switch (v) {
     case 0:
-        FUN_003d9e70((beNDMWLoadIntf2DegiState *)n->inner->pair->a, 0);
-        FUN_003d9e70((beNDMWLoadIntf2DegiState *)n->inner->pair->b, 0);
+        beNDMWLoadIntf2DegiState__RequestClose((beNDMWLoadIntf2DegiState *)n->inner->pair->a, 0);
+        beNDMWLoadIntf2DegiState__RequestClose((beNDMWLoadIntf2DegiState *)n->inner->pair->b, 0);
         c->_isDownStatWin = 0;
         v++;
         c->_isUpStatWin = 0;
         break;
     case 1:
-        if ((((int)FUN_003da7c0((beNDMWLoadIntf2DegiState *)n->inner->pair->a)) & 0xFF) == 1 && (((int)FUN_003da7c0((beNDMWLoadIntf2DegiState *)n->inner->pair->b)) & 0xFF) == 1) {
+        if ((((int)beNDMWLoadIntf2DegiState__Update((beNDMWLoadIntf2DegiState *)n->inner->pair->a)) & 0xFF) == 1 && (((int)beNDMWLoadIntf2DegiState__Update((beNDMWLoadIntf2DegiState *)n->inner->pair->b)) & 0xFF) == 1) {
             v++;
         }
         break;
@@ -3873,7 +3873,7 @@ unsigned char FUN_003dcab0(beNDMWLoadIntf2DataSelIntf *c, int sel) {
 /* Owning stack reference to the area's text object; released on scope exit (reference count in the
  * low 23 bits of _refCount). */
 
-unsigned char FUN_003dcc60(beNDMWLoadIntf2DataSelIntf *arg0, int arg1) {
+unsigned char beNDMWLoadIntf2DataSelIntf__OpenSlotSaveArea(beNDMWLoadIntf2DataSelIntf *arg0, int arg1) {
     beNDMWLoadCtrl2CommonIntf *spF0;
     beNDMWLoadIntf2DegiStateCtrl *spE0;
     unsigned char r;
@@ -3931,13 +3931,13 @@ unsigned char FUN_003dcc60(beNDMWLoadIntf2DataSelIntf *arg0, int arg1) {
             s3 += 1;
         } while (i < 4);
         arg0->_isSaveArea = 1;
-        FUN_003d9e10((beNDMWLoadIntf2DegiState *)(((int *)((beNDMWLoadIntf2DegiStateList *)spE0->_statDataList)->_data)[0]), 1, (int)arg0->_plNo);
+        beNDMWLoadIntf2DegiState__RequestOpen((beNDMWLoadIntf2DegiState *)(((int *)((beNDMWLoadIntf2DegiStateList *)spE0->_statDataList)->_data)[0]), 1, (int)arg0->_plNo);
         arg0->_isUpStatWin = 1;
         mode += 1;
         break;
     }
     case 1:
-        if ((beNDMWLoadIntf2ComMdlCtrl__IsOpenQueueEmpty((beNDMWLoadIntf2ComMdlCtrl *)s0) & 0xFF) == 1 && (((int)FUN_003da7c0((beNDMWLoadIntf2DegiState *)(((int *)((beNDMWLoadIntf2DegiStateList *)spE0->_statDataList)->_data)[0]))) & 0xFF) == 1) {
+        if ((beNDMWLoadIntf2ComMdlCtrl__IsOpenQueueEmpty((beNDMWLoadIntf2ComMdlCtrl *)s0) & 0xFF) == 1 && (((int)beNDMWLoadIntf2DegiState__Update((beNDMWLoadIntf2DegiState *)(((int *)((beNDMWLoadIntf2DegiStateList *)spE0->_statDataList)->_data)[0]))) & 0xFF) == 1) {
             i = 0;
             off = 0;
             mode += 1;
@@ -3981,7 +3981,7 @@ unsigned char FUN_003dcc60(beNDMWLoadIntf2DataSelIntf *arg0, int arg1) {
     return r;
 }
 
-bool FUN_003dd160(beNDMWLoadIntf2DataSelIntf *arg0, int arg1) {
+bool beNDMWLoadIntf2DataSelIntf__OpenAreaCursor(beNDMWLoadIntf2DataSelIntf *arg0, int arg1) {
     float v0[3], v1[3], v2[3], v3[3];
     int s2;
     bool s1;
@@ -4012,8 +4012,8 @@ bool FUN_003dd160(beNDMWLoadIntf2DataSelIntf *arg0, int arg1) {
     case 1:
         if ((beNDMWLoadIntf2ComMdlCtrl__IsOpenQueueEmpty((beNDMWLoadIntf2ComMdlCtrl *)a0) & 0xFF) == 1) {
             s0 += 1;
-            if (arg0->_kind == 0) FUN_003ecad0(s2, (arg0->_plNo << 0x10) | 0x513);
-            else FUN_003ecad0(s2, (arg0->_plNo << 0x10) | 0x503);
+            if (arg0->_kind == 0) beNDMWLoadIntf2MesWin__RequestMessage(s2, (arg0->_plNo << 0x10) | 0x513);
+            else beNDMWLoadIntf2MesWin__RequestMessage(s2, (arg0->_plNo << 0x10) | 0x503);
         }
         break;
     case 2:
@@ -4037,7 +4037,7 @@ bool FUN_003dd160(beNDMWLoadIntf2DataSelIntf *arg0, int arg1) {
     return s1;
 }
 
-unsigned char FUN_003dd440(beNDMWLoadIntf2DataSelIntf *arg0, int arg1) {
+unsigned char beNDMWLoadIntf2DataSelIntf__CloseSaveArea(beNDMWLoadIntf2DataSelIntf *arg0, int arg1) {
     int s3; int s2; bool s1; int s0;
 
     s3 = arg0->_comMdlCtrl;
@@ -4111,7 +4111,7 @@ unsigned char FUN_003dd440(beNDMWLoadIntf2DataSelIntf *arg0, int arg1) {
 /* Owning stack reference to the area's text object; released on scope exit (reference count in the
  * low 23 bits of _refCount). */
 
-int FUN_003dd6d0(beNDMWLoadIntf2DataSelIntf *arg0, int arg1) {
+int beNDMWLoadIntf2DataSelIntf__ShowAccessPlayers(beNDMWLoadIntf2DataSelIntf *arg0, int arg1) {
     beNDMWLoadCtrl2CommonIntf *ctx = (beNDMWLoadCtrl2CommonIntf *)arg0->_commonIntf;
     int s4 = arg0->_comMdlCtrl;
     int s8 = arg0->_textOrder;
@@ -4262,7 +4262,7 @@ unsigned char beNDMWLoadIntf2Diffselect__Update(beNDMWLoadIntf2Diffselect *self,
                 case 0: beNDMWLoadIntf2TextOrder_PublishIdLines(s1, (self->_plNo << 16) | 0x402, 0); break;
                 case 1: beNDMWLoadIntf2TextOrder_PublishIdLines(s1, (self->_plNo << 16) | 0x403, 0); break;
                 }
-                FUN_003ecad0(s0, (self->_plNo << 16) | 0x404);
+                beNDMWLoadIntf2MesWin__RequestMessage(s0, (self->_plNo << 16) | 0x404);
                 self->_st0 = self->_st0 + 1; self->_st3 = 0; self->_st2 = 0; self->_st1 = 0;
             }
             break;
@@ -4900,7 +4900,7 @@ int beNDMWLoadIntf2NameSel__Update(NameSelRam *s, int arg1) {
 #undef SETCH
 #undef NEXT
 
-void FUN_003e0b80(beNDMWLoadIntf2SelSlot *arg0) {
+void beNDMWLoadIntf2SelSlot__Reset(beNDMWLoadIntf2SelSlot *arg0) {
     arg0->_isOpen = 0;
     arg0->_isCansel = 0;
     arg0->_isEnd = 0;
@@ -4917,7 +4917,7 @@ void beNDMWLoadIntf2SelSlot__Init(beNDMWLoadIntf2SelSlot *arg0) {
     beNDMWLoadCtrl2CommonIntf *temp_s0;
 
     temp_s0 = (beNDMWLoadCtrl2CommonIntf *)arg0->_commonIntf;
-    FUN_003e0b80((beNDMWLoadIntf2SelSlot *)((beNDMWLoadIntf2SelSlot *)arg0));
+    beNDMWLoadIntf2SelSlot__Reset((beNDMWLoadIntf2SelSlot *)((beNDMWLoadIntf2SelSlot *)arg0));
     arg0->_selPoint = 0;
     temp_a1 = temp_s0->_kindHard;
     switch (temp_a1) {
@@ -6230,12 +6230,12 @@ int ObjectList_GetAt_003e9260(igDataList *list, int index)
     return *(int *)(list->_data + index * 4);
 }
 
-void *FUN_003e9280(int list, int meta, int *name)
+void *DataList_FindProperty_003e9280(int list, int meta, int *name)
 {
     return igProperty_FindByName(list, meta, name);
 }
 
-int FUN_003e92a0(int *p)
+int ObjectRef_Get_003e92a0(int *p)
 {
     return *(int *)((char *)p + 0);
 }
@@ -6254,7 +6254,7 @@ ObjectRefTarget **ObjectRef_Assign_003e92b0(ObjectRefTarget **destination,Object
     return destination;
 }
 
-DW4Sret4 FUN_003e9360(int allocator)
+DW4Sret4 AllocatorValue_Make_003e9360(int allocator)
 {
     return DW4Sret4(allocator);
 }
@@ -6267,7 +6267,7 @@ int Memory_SelectAllocator_003e9370(const int *selector, int fallback)
         return Memory_GetAllocatorBySelector(*selector);
 }
 
-int FUN_003e93b0(int *p)
+int ObjectRef_Get_003e93b0(int *p)
 {
     return *p;
 }
@@ -6284,15 +6284,15 @@ void Gap__Bec__beNDMWLoadIntf2__vfunc_29(beNDMWLoadIntf2 *arg0, beBaseInfoRam *a
 
 extern "C" {
 void *FUN_003c27c0(...);
-void *FUN_003c2e60(...);
+void *beNDMWLoadIntf2SelSlot_Create(...);
 void *FUN_003c31e0(...);
-void *FUN_003c3560(...);
-void *FUN_003c3900(...);
-void *FUN_003c3e40(...);
+void *beNDMWLoadIntf2DataSelIntf_Create(...);
+void *beNDMWLoadIntf2DegiStateCtrl_Create(...);
+void *beNDMWLoadIntf2DegiState_Create(...);
 void *FUN_003c40c0(...);
 void *FUN_003c43c0(...);
 int FUN_003c46a0(...);
-void *FUN_003c6b00(...);
+void *beNDMWLoadIntf2MesWin_Create(...);
 void *beNDMWLoadIntf2ComMdlCtrl_Create(...);
 void *beNDMWLoadIntf2TextOrder_Create(...);
 int beMessenger_AppendInt(...);
@@ -6474,7 +6474,7 @@ int Gap__Bec__beNDMWLoadIntf2__vfunc_34(beNDMWLoadIntf2 *self, void *ctx, void *
             }
             ALLOC(al, self)
             {
-            SelSlotRef spE8((Rc *)FUN_003c2e60(al));
+            SelSlotRef spE8((Rc *)beNDMWLoadIntf2SelSlot_Create(al));
             ((beNDMWLoadIntf2SelSlot *)spE8.p)->_ramNo = a1->kind;
             ((beNDMWLoadIntf2SelSlot *)spE8.p)->_messenger = self->_messenger;
             ((beNDMWLoadIntf2SelSlot *)spE8.p)->_padManager = (int)FUN_00236f80(self->_insight, g_bePadManager_metaObject[0]);
@@ -6502,7 +6502,7 @@ int Gap__Bec__beNDMWLoadIntf2__vfunc_34(beNDMWLoadIntf2 *self, void *ctx, void *
             }
             ALLOC(al, self)
             {
-            MesWinRef spE0((Rc *)FUN_003c6b00(al));
+            MesWinRef spE0((Rc *)beNDMWLoadIntf2MesWin_Create(al));
             ((beNDMWLoadIntf2MesWin *)spE0.p)->_ramNo = a1->kind;
             ((beNDMWLoadIntf2MesWin *)spE0.p)->_messenger = self->_messenger;
             ((beNDMWLoadIntf2MesWin *)spE0.p)->_padManager = (int)FUN_00236f80(self->_insight, g_bePadManager_metaObject[0]);
@@ -6512,34 +6512,34 @@ int Gap__Bec__beNDMWLoadIntf2__vfunc_34(beNDMWLoadIntf2 *self, void *ctx, void *
             }
             ALLOC(al, self)
             {
-            DegiStateRef spDC((Rc *)FUN_003c3900(al));
+            DegiStateRef spDC((Rc *)beNDMWLoadIntf2DegiStateCtrl_Create(al));
             ALLOC(al, self)
             {
-            StatDataRef spD8((Rc *)FUN_003c3e40(al));
+            StatDataRef spD8((Rc *)beNDMWLoadIntf2DegiState_Create(al));
             if (a1->list == 0) ENSURE(a1)
             s0 = FIND(COMMONINTF);
             if (a1->list == 0) ENSURE(a1)
             s4 = FIND(TEXTORDER);
             if (a1->list == 0) ENSURE(a1)
-            FUN_003d9de0((beNDMWLoadIntf2DegiState *)spD8.p, a1->kind, (int)s0, (int)s4, (int)FIND(COMMDLCTRL), self->_messenger, 0);
+            beNDMWLoadIntf2DegiState__Init((beNDMWLoadIntf2DegiState *)spD8.p, a1->kind, (int)s0, (int)s4, (int)FIND(COMMDLCTRL), self->_messenger, 0);
             ObjectList_AppendRetained(((beNDMWLoadIntf2DegiStateCtrl *)spDC.p)->_statDataList, spD8.p);
             }
             ALLOC(al, self)
             {
-            StatDataRef spD4((Rc *)FUN_003c3e40(al));
+            StatDataRef spD4((Rc *)beNDMWLoadIntf2DegiState_Create(al));
             if (a1->list == 0) ENSURE(a1)
             s0b = FIND(COMMONINTF);
             if (a1->list == 0) ENSURE(a1)
             s4b = FIND(TEXTORDER);
             if (a1->list == 0) ENSURE(a1)
-            FUN_003d9de0((beNDMWLoadIntf2DegiState *)spD4.p, a1->kind, (int)s0b, (int)s4b, (int)FIND(COMMDLCTRL), self->_messenger, 1);
+            beNDMWLoadIntf2DegiState__Init((beNDMWLoadIntf2DegiState *)spD4.p, a1->kind, (int)s0b, (int)s4b, (int)FIND(COMMDLCTRL), self->_messenger, 1);
             ObjectList_AppendRetained(((beNDMWLoadIntf2DegiStateCtrl *)spDC.p)->_statDataList, spD4.p);
             }
             ObjectList_AppendRetained(a1->list, spDC.p);
             }
             ALLOC(al, self)
             {
-            DataSelRef spD0((Rc *)FUN_003c3560(al));
+            DataSelRef spD0((Rc *)beNDMWLoadIntf2DataSelIntf_Create(al));
             ((beNDMWLoadIntf2DataSelIntf *)spD0.p)->_padManager = (int)FUN_00236f80(self->_insight, g_bePadManager_metaObject[0]);
             if (a1->list == 0) ENSURE(a1)
             ((beNDMWLoadIntf2DataSelIntf *)spD0.p)->_comMdlCtrl = (int)FIND(COMMDLCTRL);

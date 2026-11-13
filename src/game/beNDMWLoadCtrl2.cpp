@@ -37,7 +37,7 @@ extern "C" int beBaseInfoRam_StartTimer(int, void *, unsigned long long);
 extern "C" int beBaseInfoRam_IsTimerExpired(int, int *);
 extern "C" int FUN_00236f80(...);
 extern "C" int FUN_00382eb0(...);
-extern "C" void *FUN_003c6360(...);
+extern "C" void *beNDMWLoadSlotPlayer_Create(...);
 extern "C" void * beNDMWDegiData_Create(...);
 extern "C" int List_Resize(void *, int, int);
 extern "C" int ObjectList_AppendRetained(...);
@@ -116,22 +116,22 @@ extern "C" int DAT_00517af8[4];
 extern "C" int FUN_003eca00(beNDMWLoadIntf2MesWin *arg0, int arg1, int arg2, int arg3);
 extern "C" void beNDMWLoadIntf2MesWin__RequestOpen(beNDMWLoadIntf2MesWin *arg0);
 extern "C" void beNDMWLoadIntf2MesWin__RequestClose(beNDMWLoadIntf2MesWin *arg0);
-extern "C" void FUN_003ecad0(beNDMWLoadIntf2MesWin *arg0, int arg1);
-extern "C" void FUN_003ecae0(beNDMWLoadIntf2MesWin *arg0, int arg1, int arg2);
-extern "C" void FUN_003ecb00(beNDMWLoadIntf2MesWin *arg0, int arg1);
+extern "C" void beNDMWLoadIntf2MesWin__RequestMessage(beNDMWLoadIntf2MesWin *arg0, int arg1);
+extern "C" void beNDMWLoadIntf2MesWin__RequestQuestion(beNDMWLoadIntf2MesWin *arg0, int arg1, int arg2);
+extern "C" void beNDMWLoadIntf2MesWin__RequestPrompt(beNDMWLoadIntf2MesWin *arg0, int arg1);
 extern "C" int DAT_00517a60[4];
 extern "C" int DAT_00517af0[4];
-extern "C" void FUN_003ecb20(beNDMWLoadIntf2MesWin *arg0);
+extern "C" void beNDMWLoadIntf2MesWin__Cancel(beNDMWLoadIntf2MesWin *arg0);
 extern "C" unsigned char beNDMWLoadIntf2MesWin__GetIsCtrl(beNDMWLoadIntf2MesWin *p);
-extern "C" int FUN_003ecb80(beNDMWLoadIntf2MesWin *p);
+extern "C" int beNDMWLoadIntf2MesWin__GetCurPoint(beNDMWLoadIntf2MesWin *p);
 extern "C" void beNDMWLoadIntf2MesWin__RequestMesErase(beNDMWLoadIntf2MesWin *arg0);
-extern "C" void FUN_003ecba0(beNDMWLoadIntf2MesWin *arg0, int arg1);
+extern "C" void beNDMWLoadIntf2MesWin__RequestSystemMessage(beNDMWLoadIntf2MesWin *arg0, int arg1);
 extern "C" void beNDMWLoadIntf2MesWin__EndSystemMessage(beNDMWLoadIntf2MesWin *arg0);
 extern "C" void FUN_003ecc60(beNDMWLoadCtrl2CommonIntf *arg0);
-extern "C" int FUN_003ecdc0(beNDMWLoadCtrl2CommonIntf *arg0, int arg1, int arg2, int arg3, int arg4, int arg5, int arg6);
-extern "C" int FUN_003ed050(beNDMWLoadCtrl2CommonIntf *arg0, int arg1, int arg2, int arg3, int arg4);
+extern "C" int beNDMWLoadCtrl2CommonIntf__StepNoticeQuestion(beNDMWLoadCtrl2CommonIntf *arg0, int arg1, int arg2, int arg3, int arg4, int arg5, int arg6);
+extern "C" int beNDMWLoadCtrl2CommonIntf__StepCheckMemoryCard(beNDMWLoadCtrl2CommonIntf *arg0, int arg1, int arg2, int arg3, int arg4);
 extern "C" int DAT_00517e38[4];
-extern "C" int FUN_003ed2e0(beNDMWLoadCtrl2CommonIntf *arg0, int arg1, int arg2, int arg3, int arg4);
+extern "C" int beNDMWLoadCtrl2CommonIntf__StepCreateSaveFile(beNDMWLoadCtrl2CommonIntf *arg0, int arg1, int arg2, int arg3, int arg4);
 extern "C" int g_defaultAllocatorSelector[4];
 extern "C" int g_beFont_metaObject[4];
 extern "C" unsigned char GPR_00554c14;
@@ -158,10 +158,10 @@ public:
 extern "C" int beNDMWLoadCtrl2CommonIntf__StepReadMedia(beNDMWLoadCtrl2CommonIntf *self, int idx, int unused, int val, int mode);
 typedef struct C { char pad0[8]; int f8; } C;
 extern "C" int DAT_00517e48[4];
-extern "C" int FUN_003edc20(beNDMWLoadCtrl2CommonIntf *arg0, int arg1, int arg2, int arg3, int arg4, int arg5);
+extern "C" int beNDMWLoadCtrl2CommonIntf__StepWriteSaveData(beNDMWLoadCtrl2CommonIntf *arg0, int arg1, int arg2, int arg3, int arg4, int arg5);
 extern "C" int beNDMWLoadCtrl2CommonIntf__StepFormatMemoryCard(beNDMWLoadCtrl2CommonIntf *o, int idx, int arg2, int arg3, int mode);
 extern "C" void FUN_003ee190(beNDMWLoadCtrl2CommonIntf *self, int idx);
-extern "C" void FUN_003ee250(beNDMWLoadCtrl2CommonIntf *a, int arg1, int arg2);
+extern "C" void beNDMWLoadCtrl2CommonIntf__StartUtilFor(beNDMWLoadCtrl2CommonIntf *a, int arg1, int arg2);
 extern "C" void beNDMWLoadCtrl2CommonIntf__RemoveAccessPlayer(beNDMWLoadCtrl2CommonIntf *w, int key);
 extern "C" int g_stringPool[4];
 typedef struct S { unsigned char b0; char p0[3]; int f4; char p1[32]; unsigned short s40[9]; char p2[14]; int f72, f76, f80, f84, f88; } S;
@@ -774,12 +774,12 @@ void beNDMWLoadIntf2MesWin__RequestClose(beNDMWLoadIntf2MesWin *arg0) {
     arg0->_isWinClose = 1;
 }
 
-void FUN_003ecad0(beNDMWLoadIntf2MesWin *arg0, int arg1) {
+void beNDMWLoadIntf2MesWin__RequestMessage(beNDMWLoadIntf2MesWin *arg0, int arg1) {
     arg0->_isMesCom = 1;
     arg0->_mesNo = arg1;
 }
 
-void FUN_003ecae0(beNDMWLoadIntf2MesWin *arg0, int arg1, int arg2) {
+void beNDMWLoadIntf2MesWin__RequestQuestion(beNDMWLoadIntf2MesWin *arg0, int arg1, int arg2) {
     arg0->_isMesCom = 1;
     arg0->_isCtrl = 1;
     arg0->_mesNo = arg1;
@@ -788,7 +788,7 @@ void FUN_003ecae0(beNDMWLoadIntf2MesWin *arg0, int arg1, int arg2) {
     arg0->_kindCtrl = 0;
 }
 
-void FUN_003ecb00(beNDMWLoadIntf2MesWin *arg0, int arg1) {
+void beNDMWLoadIntf2MesWin__RequestPrompt(beNDMWLoadIntf2MesWin *arg0, int arg1) {
     arg0->_isMesCom = 1;
     arg0->_isCtrl = 1;
     arg0->_mesNo = arg1;
@@ -796,20 +796,20 @@ void FUN_003ecb00(beNDMWLoadIntf2MesWin *arg0, int arg1) {
     arg0->_kindCtrl = 1;
 }
 
-void FUN_003ecb20(beNDMWLoadIntf2MesWin *arg0) {
+void beNDMWLoadIntf2MesWin__Cancel(beNDMWLoadIntf2MesWin *arg0) {
     arg0->_isCtrl = 0;
     beMessenger_SendNamed(arg0->_messenger, &DAT_00517a48[0], &DAT_00517a60[0], arg0->_ramNo, &DAT_00517af0[0]);
     beNDMWLoadIntf2MesWin__RequestMesErase(arg0);
 }
 
-/* Reads the _isCtrl flag (+34), the byte FUN_003ecae0/FUN_003ecb00 set to 1 when a choice/continue
+/* Reads the _isCtrl flag (+34), the byte beNDMWLoadIntf2MesWin__RequestQuestion/beNDMWLoadIntf2MesWin__RequestPrompt set to 1 when a choice/continue
  * message opens. */
 unsigned char beNDMWLoadIntf2MesWin__GetIsCtrl(beNDMWLoadIntf2MesWin *p)
 {
     return p->_isCtrl;
 }
 
-int FUN_003ecb80(beNDMWLoadIntf2MesWin *p)
+int beNDMWLoadIntf2MesWin__GetCurPoint(beNDMWLoadIntf2MesWin *p)
 {
     return p->_curPoint;
 }
@@ -819,7 +819,7 @@ void beNDMWLoadIntf2MesWin__RequestMesErase(beNDMWLoadIntf2MesWin *arg0) {
     arg0->_isMesCom = 1;
 }
 
-void FUN_003ecba0(beNDMWLoadIntf2MesWin *arg0, int arg1) {
+void beNDMWLoadIntf2MesWin__RequestSystemMessage(beNDMWLoadIntf2MesWin *arg0, int arg1) {
     arg0->_isMesCom = 1;
     arg0->_isSystemMes = 1;
     arg0->_sysMesNo = arg1;
@@ -832,14 +832,14 @@ void beNDMWLoadIntf2MesWin__EndSystemMessage(beNDMWLoadIntf2MesWin *arg0) {
         if (arg0->_isCtrl == 1) {
             switch (arg0->_kindCtrl) {
             case 0:
-                FUN_003ecae0(arg0, arg0->_mesNo, arg0->_curPoint);
+                beNDMWLoadIntf2MesWin__RequestQuestion(arg0, arg0->_mesNo, arg0->_curPoint);
                 return;
             case 1:
-                FUN_003ecb00(arg0, arg0->_mesNo);
+                beNDMWLoadIntf2MesWin__RequestPrompt(arg0, arg0->_mesNo);
                 return;
             }
         } else {
-            FUN_003ecad0(arg0, arg0->_mesNo);
+            beNDMWLoadIntf2MesWin__RequestMessage(arg0, arg0->_mesNo);
         }
     } else {
         beNDMWLoadIntf2MesWin__RequestMesErase(arg0);
@@ -870,7 +870,7 @@ void FUN_003ecc60(beNDMWLoadCtrl2CommonIntf *arg0) {
     }
 }
 
-int FUN_003ecdc0(beNDMWLoadCtrl2CommonIntf *arg0, int arg1, int arg2, int arg3, int arg4, int arg5, int arg6) {
+int beNDMWLoadCtrl2CommonIntf__StepNoticeQuestion(beNDMWLoadCtrl2CommonIntf *arg0, int arg1, int arg2, int arg3, int arg4, int arg5, int arg6) {
     int temp_v0;
     int var_s1;
     int var_s0;
@@ -896,7 +896,7 @@ int FUN_003ecdc0(beNDMWLoadCtrl2CommonIntf *arg0, int arg1, int arg2, int arg3, 
     }
     switch (var_s0) {
     case 0:
-        FUN_003ecb00((beNDMWLoadIntf2MesWin *)arg2, arg3);
+        beNDMWLoadIntf2MesWin__RequestPrompt((beNDMWLoadIntf2MesWin *)arg2, arg3);
         var_s0 += 1;
         break;
     case 1:
@@ -905,12 +905,12 @@ int FUN_003ecdc0(beNDMWLoadCtrl2CommonIntf *arg0, int arg1, int arg2, int arg3, 
         }
         break;
     case 2:
-        FUN_003ecae0((beNDMWLoadIntf2MesWin *)arg2, arg4, arg5);
+        beNDMWLoadIntf2MesWin__RequestQuestion((beNDMWLoadIntf2MesWin *)arg2, arg4, arg5);
         var_s0 += 1;
         break;
     case 3:
         if (!(((int)beNDMWLoadIntf2MesWin__GetIsCtrl((beNDMWLoadIntf2MesWin *)arg2)) & 0xFF)) {
-            temp_v0 = FUN_003ecb80((beNDMWLoadIntf2MesWin *)arg2);
+            temp_v0 = beNDMWLoadIntf2MesWin__GetCurPoint((beNDMWLoadIntf2MesWin *)arg2);
             switch (temp_v0) {
             case 0:
                 var_s1 = 1;
@@ -948,7 +948,7 @@ int FUN_003ecdc0(beNDMWLoadCtrl2CommonIntf *arg0, int arg1, int arg2, int arg3, 
     return var_s1;
 }
 
-int FUN_003ed050(beNDMWLoadCtrl2CommonIntf *arg0, int arg1, int arg2, int arg3, int arg4) {
+int beNDMWLoadCtrl2CommonIntf__StepCheckMemoryCard(beNDMWLoadCtrl2CommonIntf *arg0, int arg1, int arg2, int arg3, int arg4) {
     int s1;
     int s0;
     beNDMWMcUtilCtrl *m;
@@ -1008,7 +1008,7 @@ int FUN_003ed050(beNDMWLoadCtrl2CommonIntf *arg0, int arg1, int arg2, int arg3, 
     return s1;
 }
 
-int FUN_003ed2e0(beNDMWLoadCtrl2CommonIntf *arg0, int arg1, int arg2, int arg3, int arg4) {
+int beNDMWLoadCtrl2CommonIntf__StepCreateSaveFile(beNDMWLoadCtrl2CommonIntf *arg0, int arg1, int arg2, int arg3, int arg4) {
     int s1;
     int s0;
     int a1;
@@ -1030,7 +1030,7 @@ int FUN_003ed2e0(beNDMWLoadCtrl2CommonIntf *arg0, int arg1, int arg2, int arg3, 
         case 1: a1 = (arg1 << 16) | 0x2003; break;
         case 2: a1 = (arg1 << 16) | 0x3003; break;
         }
-        FUN_003ecad0((beNDMWLoadIntf2MesWin *)arg2, a1);
+        beNDMWLoadIntf2MesWin__RequestMessage((beNDMWLoadIntf2MesWin *)arg2, a1);
         FUN_003f1460((beNDMWMcUtilCtrl *)arg0->_mcUtilCtrl, 6, arg3);
         s0 += 1;
         break;
@@ -1128,7 +1128,7 @@ int beNDMWLoadCtrl2CommonIntf__StepReadMedia(beNDMWLoadCtrl2CommonIntf *self, in
             case 2: {
                 ret = 1;
                 ALLOC(alloc, self);
-                SlotPlayerRef grp((Rc *)FUN_003c6360(alloc));
+                SlotPlayerRef grp((Rc *)beNDMWLoadSlotPlayer_Create(alloc));
                 for (i = 0; i < 4; i++) {
                     ALLOC(alloc, self);
                     DegiDataRef tmp((Rc *)beNDMWDegiData_Create(alloc));
@@ -1206,7 +1206,7 @@ storeState:
     return ret;
 }
 
-int FUN_003edc20(beNDMWLoadCtrl2CommonIntf *arg0, int arg1, int arg2, int arg3, int arg4, int arg5) {
+int beNDMWLoadCtrl2CommonIntf__StepWriteSaveData(beNDMWLoadCtrl2CommonIntf *arg0, int arg1, int arg2, int arg3, int arg4, int arg5) {
     int s1;
     int s0;
     beNDMWLoadSavePlWork *r;
@@ -1342,7 +1342,7 @@ void FUN_003ee190(beNDMWLoadCtrl2CommonIntf *self, int idx) {
     ((beNDMWLoadSavePlWork **)((beNDMWLoadSavePlWorkList *)self->_flagWork)->_data)[idx]->_sysCount0 = 0;
 }
 
-void FUN_003ee250(beNDMWLoadCtrl2CommonIntf *a, int arg1, int arg2) {
+void beNDMWLoadCtrl2CommonIntf__StartUtilFor(beNDMWLoadCtrl2CommonIntf *a, int arg1, int arg2) {
     int temp_a4;
     int var_a7;
     int var_a6;

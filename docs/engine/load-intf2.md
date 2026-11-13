@@ -48,13 +48,13 @@ The accessors and per-controller helpers:
 | `0x003e9220` | 28 | `FUN_003e9220` (three-float copy, `+0/+4/+8`) | `src/game/beNDMWLoadIntf2.cpp` |
 | `0x003e9240` | 20 | `DataList_GetWordAt_003e9240` | `src/game/beNDMWLoadIntf2.cpp` |
 | `0x003e9260` | 20 | `ObjectList_GetAt_003e9260` | `src/game/beNDMWLoadIntf2.cpp` |
-| `0x003e9280` | 28 | `FUN_003e9280` | `src/game/beNDMWLoadIntf2.cpp` |
-| `0x003e92a0` | 8 | `FUN_003e92a0` | `src/game/beNDMWLoadIntf2.cpp` |
+| `0x003e9280` | 28 | `DataList_FindProperty_003e9280` | `src/game/beNDMWLoadIntf2.cpp` |
+| `0x003e92a0` | 8 | `ObjectRef_Get_003e92a0` | `src/game/beNDMWLoadIntf2.cpp` |
 | `0x003e92b0` | 124 | `ObjectRef_Assign_003e92b0` | `src/game/beNDMWLoadIntf2.cpp` |
 | `0x003e9330` | 48 | `FUN_003e9330` | `src/game/beNDMWLoadIntf2.cpp` |
-| `0x003e9360` | 8 | `FUN_003e9360` | `src/game/beNDMWLoadIntf2.cpp` |
+| `0x003e9360` | 8 | `AllocatorValue_Make_003e9360` | `src/game/beNDMWLoadIntf2.cpp` |
 | `0x003e9370` | 56 | `Memory_SelectAllocator_003e9370` | `src/game/beNDMWLoadIntf2.cpp` |
-| `0x003e93b0` | 8 | `FUN_003e93b0` | `src/game/beNDMWLoadIntf2.cpp` |
+| `0x003e93b0` | 8 | `ObjectRef_Get_003e93b0` | `src/game/beNDMWLoadIntf2.cpp` |
 
 ## Object model
 
@@ -312,7 +312,7 @@ manager, `+0x18` CommMdlCtrl, `+0x1c` TextOrder, `+0x20` the common interface.
 
 | Entry | Bytes | Symbol / source | Contract |
 |---|---:|---|---|
-| `0x003e0b80` | 40 | `FUN_003e0b80`, `src/game/beNDMWLoadIntf2.cpp` | clears `+0x34`/`+0x35`/`+0x36`/`+0x38` and `+0x4c..+0x58` |
+| `0x003e0b80` | 40 | `beNDMWLoadIntf2SelSlot__Reset`, `src/game/beNDMWLoadIntf2.cpp` | clears `+0x34`/`+0x35`/`+0x36`/`+0x38` and `+0x4c..+0x58` |
 | `0x003e0bb0` | 140 | `beNDMWLoadIntf2SelSlot__Init`, `src/game/beNDMWLoadIntf2.cpp` | reads the manager's `+0x38` mode → SELSLOT `+0x24`/`+0x2c` (0→5, 1→2, 2→9) |
 | `0x003e0c40` | 2,848 | `beNDMWLoadIntf2SelSlot__Open`, `src/game/beNDMWLoadIntf2.cpp` | open/refresh: publishes `j_slotbase`/`j_memoryiconwin`, the `j_slotcursor` line and the marks, reconciles `+0x48`; returns `+0x34` |
 | `0x003e1760` | 4,888 | `beNDMWLoadIntf2SelSlot__UpdateSelection`, `src/game/beNDMWLoadIntf2.cpp` | samples the pad through `+0x14`, moves the `+0x3c` cursor on the direction bits (`0x10` up / `0x40` down / `0x20`,`0x80` cross), cancels on `0x2000` (`+0x36`), commits/selects on `0x4000` via `0x3ee190` (`+0x40`), publishes the marks; returns `+0x35` |
@@ -432,17 +432,17 @@ reads the reflected receivers listed under
 | Entry | Bytes | Symbol / source | Note |
 |---|---:|---|---|
 | `0x003db780` | 2,052 | `beNDMWLoadIntf2DataSelIntf__UpdateSelection`, `src/game/beNDMWLoadIntf2.cpp` | data selection; reads the `bePadData` words |
-| `0x003dbf90` | 844 | `FUN_003dbf90`, `src/game/beNDMWLoadIntf2.cpp` | |
-| `0x003dcab0` | 428 | `FUN_003dcab0`, `src/game/beNDMWLoadIntf2.cpp` | |
-| `0x003ed050` | 644 | `FUN_003ed050`, `src/game/beNDMWLoadCtrl2.cpp` | |
-| `0x003ed2e0` | 872 | `FUN_003ed2e0`, `src/game/beNDMWLoadCtrl2.cpp` | |
-| `0x003edc20` | 828 | `FUN_003edc20`, `src/game/beNDMWLoadCtrl2.cpp` | |
+| `0x003dbf90` | 844 | `beNDMWLoadIntf2DataSelIntf__CloseAll`, `src/game/beNDMWLoadIntf2.cpp` | |
+| `0x003dcab0` | 428 | `beNDMWLoadIntf2DataSelIntf__CloseStatusWindows`, `src/game/beNDMWLoadIntf2.cpp` | |
+| `0x003ed050` | 644 | `beNDMWLoadCtrl2CommonIntf__StepCheckMemoryCard`, `src/game/beNDMWLoadCtrl2.cpp` | |
+| `0x003ed2e0` | 872 | `beNDMWLoadCtrl2CommonIntf__StepCreateSaveFile`, `src/game/beNDMWLoadCtrl2.cpp` | |
+| `0x003edc20` | 828 | `beNDMWLoadCtrl2CommonIntf__StepWriteSaveData`, `src/game/beNDMWLoadCtrl2.cpp` | |
 | `0x003edf60` | 556 | `beNDMWLoadCtrl2CommonIntf__StepFormatMemoryCard`, `src/game/beNDMWLoadCtrl2.cpp` | sets `_isFormatRun`: the card-format step |
 | `0x003ee6d0` | 2,824 | `beNDMWDegiData__LoadFromProperties`, `src/game/beNDMWLoadCtrl2.cpp` | the property loader: takes a `beNDMWDegiData` record and fills the block at its `_data` field (`+28`) |
 
 The other helpers of the master update in this range:
 `0x003ec120` (`FUN_003ec120`, `src/unmatched/`), `0x003ec450`
-(`beNDMWLoadIntf2MesWin__Update`, `src/game/`), `0x003ecdc0` (`FUN_003ecdc0`,
+(`beNDMWLoadIntf2MesWin__Update`, `src/game/`), `0x003ecdc0` (`beNDMWLoadCtrl2CommonIntf__StepNoticeQuestion`,
 `src/unmatched/`), `0x003ee4d0` (`beNDMWDegiData__UpdateFieldsFromData`,
 `src/game/`), `0x003ef1e0` (`FUN_003ef1e0`, `src/unmatched/`) and `0x003ef5d0`
 (`beNDMWDegiData__StoreToProperties`, `src/game/`).
@@ -462,12 +462,14 @@ The title's two character flows run these states:
 
 - **Names and placement.** The functions in `src/unmatched/` named on this page
   keep `FUN_` or `vfunc_NN` symbols: the message handler `0x003e9430`,
-  `vfunc_32`, `vfunc_29`, the eleven destructor copies, `0x003e0b80`,
+  `vfunc_32`, `vfunc_29`, the eleven destructor copies,
   `0x003ee190`, the name-entry text helpers `0x003de480`/`0x003de7a0`/
-  `0x003de990`, the card-utility steps `0x003dbf90`/`0x003dcab0`/`0x003ed050`/
-  `0x003ed2e0`/`0x003edc20`, `0x003ec120`, `0x003ecdc0`, `0x003ef1e0`, the
+  `0x003de990`, `0x003ec120`, `0x003ef1e0`, the
   hand-off wrappers `0x003f1270`–`0x003f13d0` and `0x003ecc60`, and the child
-  constructors `0x003c27c0`–`0x003c6b00`.
+  constructors in `0x003c27c0`–`0x003c6b00` other than the `_Create` ones the
+  save interface calls. The card-utility and data-select step names come from
+  what each step does as the save interface drives it
+  ([save interface](save-interface.md)).
 - **Unidentified objects.** The object behind `_statDisp`, the property
   block `0x003ee6d0` fills and `_svData`'s object have no reflected class.
 - **Not described.** The `making`/`GAMEREMOVE` transitions and the interaction

@@ -2182,10 +2182,10 @@ int FUN_0033e9c0(...);
 void *FUN_003c87f0(...);
 void *FUN_003c8970(...);
 void *FUN_003c8b00(...);
-int FUN_003e9280(...);
-int FUN_003e92a0(...);
-DW4Sret4 FUN_003e9360(...);
-int FUN_003e93b0(...);
+int DataList_FindProperty_003e9280(...);
+int ObjectRef_Get_003e92a0(...);
+DW4Sret4 AllocatorValue_Make_003e9360(...);
+int ObjectRef_Get_003e93b0(...);
 int FUN_00447b00(...);
 int FUN_00447b40(...);
 int beNDMWItemBase_IndexOfRecNo(...);
@@ -2286,7 +2286,7 @@ extern "C" int FUN_00229fb0(void *, const StringRef &);
 /* matching construct: inline helper reproduces the retail arithmetic shape */ struct DW4Curve { static int g(int d, int x) { return d * 0xC8 + (x + 0x8B) * (d * d); } static int f(int x) { int d = x - 1; return d * 0xC8 + (x + 0x8B) * (d * d); } };
 /* matching construct: RAII copied-reference local reproduces the retail unwind table */ class RecoveryCopiedRef { public: void *value; RecoveryCopiedRef(const DW4Sret4 &source); ~RecoveryCopiedRef(); };
 extern "C" int *ObjectRef_Assign_003e92b0(void *, const RecoveryCopiedRef &);
-/* matching construct: out-of-line helper reproduces the retail call shape */ struct DW4Fresh { static int *Assign(void *obj, int alloc) { RecoveryCopiedRef c(FUN_003e9360(Memory_SelectAllocator_003e9370(&g_defaultAllocatorSelector[0], alloc))); return ObjectRef_Assign_003e92b0(obj, c); } };
+/* matching construct: out-of-line helper reproduces the retail call shape */ struct DW4Fresh { static int *Assign(void *obj, int alloc) { RecoveryCopiedRef c(AllocatorValue_Make_003e9360(Memory_SelectAllocator_003e9370(&g_defaultAllocatorSelector[0], alloc))); return ObjectRef_Assign_003e92b0(obj, c); } };
 /* matching construct: out-of-line helper that reproduces the retail call shape of the BKCHIPNAME string-list store */
 struct DW4StrListOps { static void SetAt(igStringRefList *list, int idx, const StringRef &v) { if (list->_count != 0 && idx >= 0 && idx < list->_count) FUN_00229fb0((void *)((char *)FUN_00406da0((igDataList *)list) + idx * 4), v); } };
 /* matching construct: RAII list local reproduces the retail unwind table */ class RecoveryList { public:
@@ -6400,13 +6400,13 @@ loop_449:
                 /* obj+0x28 is recomputed at each of the three uses (no common subexpression); the
                  * integer-sum form of the first use, and a plain byte-offset form for the others,
                  * keeps the compiler from hoisting it into a saved register. */
-                temp_ret_781 = FUN_003e93b0((void *)((int)temp_v0_128 + 0x28));
+                temp_ret_781 = ObjectRef_Get_003e93b0((void *)((int)temp_v0_128 + 0x28));
                 if (temp_ret_781 == 0) {
                     temp_ret_782 = igObject_GetAllocator(temp_v0_128);
                     temp_ret_786 = DW4Fresh::Assign((char *)temp_v0_128 + 0x28, temp_ret_782);
                 }
-                temp_ret_788 = FUN_003e92a0((char *)temp_v0_128 + 0x28);
-                temp_ret_789 = FUN_003e9280(temp_ret_788, g_propertyNameField[0], &DAT_005191e8[0]);
+                temp_ret_788 = ObjectRef_Get_003e92a0((char *)temp_v0_128 + 0x28);
+                temp_ret_789 = DataList_FindProperty_003e9280(temp_ret_788, g_propertyNameField[0], &DAT_005191e8[0]);
                 temp_ret_790 = FUN_00406e00((int *)(temp_ret_789 + 0x14));
                 temp_ret_791 = (void *)(FUN_00406df0((int *)(temp_ret_790 + 0xC8)));
                 temp_v0_130 = (void *)(temp_ret_791);

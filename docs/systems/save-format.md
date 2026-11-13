@@ -288,7 +288,7 @@ Save class field offsets (from reflection tables):
 `_data@+8`, `_dataSize@+12`, `_dataOffSet@+24`, `_imageSize@+32`,
 `_image@+36`, `_saveDataSize@+40`.
 
-Save/load code regions: **`Gap__Bec__beNDMWLoadIntf2__vfunc_31`** (save, 18 KB), **`Gap__Bec__beNDMWSaveIntf__vfunc_31`**
+Save/load code regions: **`Gap__Bec__beNDMWLoadIntf2__vfunc_31`** (save, 18 KB), **`beNDMWSaveIntf_Update`**
 (load, 15.8 KB), **`beNDMWDegiData__LoadFromProperties`** (per-player record builder, 2.7 KB).
 PS2 MC access is via libmc (`mcman.irx`, `mcserv.irx`).
 

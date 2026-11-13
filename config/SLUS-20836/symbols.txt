@@ -6566,7 +6566,7 @@
 00229450 000008 Gap__igOptInterface__vfunc_29 Gap::igOptInterface::vfunc_29
 00229460 000080 FUN_00229460
 002294e0 000008 Gap__igOptConfiguration__vfunc_23 Gap::igOptConfiguration::vfunc_23
-002294f0 000008 FUN_002294f0
+002294f0 000008 igDataList_GetCount
 00229500 00006c FUN_00229500
 00229570 000010 FUN_00229570
 00229580 000014 FUN_00229580
@@ -18167,14 +18167,14 @@
 003bc840 00006c beSaveIntfComMdlData_Register
 003bc8b0 00001c beSaveIntfComMdlData_GetMetaObject
 003bc8d0 000070 beSaveIntfComMdlData_InitFields
-003bc940 000034 FUN_003bc940
+003bc940 000034 beNDMWSaveIntfCtrlData_Create
 003bc980 00004c FUN_003bc980
 003bc9d0 00008c beNDMWSaveIntfCtrlData_GetVTable
 003bca60 000020 FUN_003bca60
 003bca80 00006c beNDMWSaveIntfCtrlData_Register
 003bcaf0 00001c beNDMWSaveIntfCtrlData_GetMetaObject
 003bcb10 000110 beNDMWSaveIntfCtrlData_InitFields
-003bcc20 000054 FUN_003bcc20
+003bcc20 000054 beNDMWSaveIntf_GetMessageEnum
 003bcc80 000034 FUN_003bcc80
 003bccc0 000044 FUN_003bccc0
 003bcd10 00004c FUN_003bcd10
@@ -18431,7 +18431,7 @@
 003c2c40 000074 beNDMWLoadIntf2ChrDataSel_Register
 003c2cc0 00001c beNDMWLoadIntf2ChrDataSel_GetMetaObject
 003c2ce0 000180 beNDMWLoadIntf2ChrDataSel_InitFields
-003c2e60 000034 FUN_003c2e60
+003c2e60 000034 beNDMWLoadIntf2SelSlot_Create
 003c2ea0 00004c beNDMWLoadIntf2SelSlot_ResolveMetaObject
 003c2ef0 00008c beNDMWLoadIntf2SelSlot_GetVTable
 003c2f80 000020 FUN_003c2f80
@@ -18445,14 +18445,14 @@
 003c3320 000074 beNDMWLoadIntf2Diffselect_Register
 003c33a0 00001c beNDMWLoadIntf2Diffselect_GetMetaObject
 003c33c0 00019c beNDMWLoadIntf2Diffselect_InitFields
-003c3560 000034 FUN_003c3560
+003c3560 000034 beNDMWLoadIntf2DataSelIntf_Create
 003c35a0 00004c beNDMWLoadIntf2DataSelIntf_ResolveMetaObject
 003c35f0 00008c beNDMWLoadIntf2DataSelIntf_GetVTable
 003c3680 000020 FUN_003c3680
 003c36a0 000074 beNDMWLoadIntf2DataSelIntf_Register
 003c3720 00001c beNDMWLoadIntf2DataSelIntf_GetMetaObject
 003c3740 0001b8 beNDMWLoadIntf2DataSelIntf_InitFields
-003c3900 000034 FUN_003c3900
+003c3900 000034 beNDMWLoadIntf2DegiStateCtrl_Create
 003c3940 000044 FUN_003c3940
 003c3990 00004c beNDMWLoadIntf2DegiStateCtrl_ResolveMetaObject
 003c39e0 0000d8 beNDMWLoadIntf2DegiStateCtrl_GetVTable
@@ -18466,7 +18466,7 @@
 003c3d90 000020 FUN_003c3d90
 003c3db0 00006c beNDMWLoadIntf2DegiStateList_Register
 003c3e20 00001c beNDMWLoadIntf2DegiStateList_GetMetaObject
-003c3e40 000034 FUN_003c3e40
+003c3e40 000034 beNDMWLoadIntf2DegiState_Create
 003c3e80 00004c beNDMWLoadIntf2DegiState_ResolveMetaObject
 003c3ed0 00003c beNDMWLoadIntf2DegiState_GetVTable
 003c3f10 000020 FUN_003c3f10
@@ -18572,7 +18572,7 @@
 003c62b0 000020 FUN_003c62b0
 003c62d0 00006c beNDMWLoadSlotPlayerList_Register
 003c6340 00001c beNDMWLoadSlotPlayerList_GetMetaObject
-003c6360 000034 FUN_003c6360
+003c6360 000034 beNDMWLoadSlotPlayer_Create
 003c63a0 000044 FUN_003c63a0
 003c63f0 00004c beNDMWLoadSlotPlayer_GetReadyMetaObject
 003c6440 0000e0 beNDMWLoadSlotPlayer_GetVTable
@@ -18593,7 +18593,7 @@
 003c69a0 000074 beNDMWDegiData_Register
 003c6a20 00001c beNDMWDegiData_GetMetaObject
 003c6a40 0000c0 beNDMWDegiData_InitFields
-003c6b00 000034 FUN_003c6b00
+003c6b00 000034 beNDMWLoadIntf2MesWin_Create
 003c6b40 000044 FUN_003c6b40
 003c6b90 00004c beNDMWLoadIntf2MesWin_GetReadyMetaObject
 003c6be0 00008c beNDMWLoadIntf2MesWin_GetVTable
@@ -18999,26 +18999,26 @@
 003d9cd0 000080 ObjectRef_Destruct_003d9cd0
 003d9d50 000080 ObjectRef_Destruct_003d9d50
 003d9dd0 00000c Gap__Bec__beNDMWStatus__vfunc_20 Gap::Bec::beNDMWStatus::vfunc_20
-003d9de0 000030 FUN_003d9de0
-003d9e10 000024 FUN_003d9e10
+003d9de0 000030 beNDMWLoadIntf2DegiState__Init beNDMWLoadIntf2DegiState::Init
+003d9e10 000024 beNDMWLoadIntf2DegiState__RequestOpen beNDMWLoadIntf2DegiState::RequestOpen
 003d9e40 000024 FUN_003d9e40
-003d9e70 000020 FUN_003d9e70
-003d9e90 000024 FUN_003d9e90
+003d9e70 000020 beNDMWLoadIntf2DegiState__RequestClose beNDMWLoadIntf2DegiState::RequestClose
+003d9e90 000024 beNDMWLoadIntf2DegiState__RequestConfirmClose beNDMWLoadIntf2DegiState::RequestConfirmClose
 003d9ec0 000724 FUN_003d9ec0
 003da5f0 0001c8 FUN_003da5f0
-003da7c0 0007e8 FUN_003da7c0
-003dafb0 000034 FUN_003dafb0
+003da7c0 0007e8 beNDMWLoadIntf2DegiState__Update beNDMWLoadIntf2DegiState::Update
+003dafb0 000034 beNDMWLoadIntf2DataSelIntf__Init beNDMWLoadIntf2DataSelIntf::Init
 003daff0 000070 beNDMWLoadIntf2DataSelIntf__ClearStatesFrom beNDMWLoadIntf2DataSelIntf::ClearStatesFrom
-003db060 000718 FUN_003db060
+003db060 000718 beNDMWLoadIntf2DataSelIntf__OpenSaveArea beNDMWLoadIntf2DataSelIntf::OpenSaveArea
 003db780 000804 beNDMWLoadIntf2DataSelIntf__UpdateSelection beNDMWLoadIntf2DataSelIntf::UpdateSelection
-003dbf90 00034c FUN_003dbf90
-003dc2e0 0002ac FUN_003dc2e0
-003dc590 000520 FUN_003dc590
-003dcab0 0001ac FUN_003dcab0
-003dcc60 000500 FUN_003dcc60
-003dd160 0002d4 FUN_003dd160
-003dd440 000288 FUN_003dd440
-003dd6d0 000440 FUN_003dd6d0
+003dbf90 00034c beNDMWLoadIntf2DataSelIntf__CloseAll beNDMWLoadIntf2DataSelIntf::CloseAll
+003dc2e0 0002ac beNDMWLoadIntf2DataSelIntf__ShowSelectedStatus beNDMWLoadIntf2DataSelIntf::ShowSelectedStatus
+003dc590 000520 beNDMWLoadIntf2DataSelIntf__RestoreSaveArea beNDMWLoadIntf2DataSelIntf::RestoreSaveArea
+003dcab0 0001ac beNDMWLoadIntf2DataSelIntf__CloseStatusWindows beNDMWLoadIntf2DataSelIntf::CloseStatusWindows
+003dcc60 000500 beNDMWLoadIntf2DataSelIntf__OpenSlotSaveArea beNDMWLoadIntf2DataSelIntf::OpenSlotSaveArea
+003dd160 0002d4 beNDMWLoadIntf2DataSelIntf__OpenAreaCursor beNDMWLoadIntf2DataSelIntf::OpenAreaCursor
+003dd440 000288 beNDMWLoadIntf2DataSelIntf__CloseSaveArea beNDMWLoadIntf2DataSelIntf::CloseSaveArea
+003dd6d0 000440 beNDMWLoadIntf2DataSelIntf__ShowAccessPlayers beNDMWLoadIntf2DataSelIntf::ShowAccessPlayers
 003ddb10 000070 beNDMWLoadIntf2Diffselect__Init beNDMWLoadIntf2Diffselect::Init
 003ddb80 0006d4 beNDMWLoadIntf2Diffselect__Update beNDMWLoadIntf2Diffselect::Update
 003de260 00021c beNDMWLoadIntf2NameSel__Init beNDMWLoadIntf2NameSel::Init
@@ -19027,7 +19027,7 @@
 003de990 0005d4 FUN_003de990
 003def70 000010 beNDMWLoadIntf2NameSel__SetAnswer beNDMWLoadIntf2NameSel::SetAnswer
 003def80 001c00 beNDMWLoadIntf2NameSel__Update beNDMWLoadIntf2NameSel::Update
-003e0b80 000028 FUN_003e0b80
+003e0b80 000028 beNDMWLoadIntf2SelSlot__Reset beNDMWLoadIntf2SelSlot::Reset
 003e0bb0 00008c beNDMWLoadIntf2SelSlot__Init beNDMWLoadIntf2SelSlot::Init
 003e0c40 000b20 beNDMWLoadIntf2SelSlot__Open beNDMWLoadIntf2SelSlot::Open
 003e1760 001318 beNDMWLoadIntf2SelSlot__UpdateSelection beNDMWLoadIntf2SelSlot::UpdateSelection
@@ -19058,13 +19058,13 @@
 003e9220 00001c FUN_003e9220
 003e9240 000014 DataList_GetWordAt_003e9240
 003e9260 000014 ObjectList_GetAt_003e9260
-003e9280 00001c FUN_003e9280
-003e92a0 000008 FUN_003e92a0
+003e9280 00001c DataList_FindProperty_003e9280
+003e92a0 000008 ObjectRef_Get_003e92a0
 003e92b0 00007c ObjectRef_Assign_003e92b0
 003e9330 000030 FUN_003e9330
-003e9360 000008 FUN_003e9360
+003e9360 000008 AllocatorValue_Make_003e9360
 003e9370 000038 Memory_SelectAllocator_003e9370
-003e93b0 000008 FUN_003e93b0
+003e93b0 000008 ObjectRef_Get_003e93b0
 003e93c0 00000c Gap__Bec__beNDMWLoadIntf2__vfunc_30 Gap::Bec::beNDMWLoadIntf2::vfunc_30
 003e93d0 000058 Gap__Bec__beNDMWLoadIntf2__vfunc_29 Gap::Bec::beNDMWLoadIntf2::vfunc_29
 003e9430 002050 Gap__Bec__beNDMWLoadIntf2__vfunc_34 Gap::Bec::beNDMWLoadIntf2::vfunc_34
@@ -19091,25 +19091,25 @@
 003eca00 000068 FUN_003eca00
 003eca70 000024 beNDMWLoadIntf2MesWin__RequestOpen beNDMWLoadIntf2MesWin::RequestOpen
 003ecaa0 00002c beNDMWLoadIntf2MesWin__RequestClose beNDMWLoadIntf2MesWin::RequestClose
-003ecad0 000010 FUN_003ecad0
-003ecae0 000020 FUN_003ecae0
-003ecb00 00001c FUN_003ecb00
-003ecb20 000050 FUN_003ecb20
+003ecad0 000010 beNDMWLoadIntf2MesWin__RequestMessage beNDMWLoadIntf2MesWin::RequestMessage
+003ecae0 000020 beNDMWLoadIntf2MesWin__RequestQuestion beNDMWLoadIntf2MesWin::RequestQuestion
+003ecb00 00001c beNDMWLoadIntf2MesWin__RequestPrompt beNDMWLoadIntf2MesWin::RequestPrompt
+003ecb20 000050 beNDMWLoadIntf2MesWin__Cancel beNDMWLoadIntf2MesWin::Cancel
 003ecb70 000008 beNDMWLoadIntf2MesWin__GetIsCtrl beNDMWLoadIntf2MesWin::GetIsCtrl
-003ecb80 000008 FUN_003ecb80
+003ecb80 000008 beNDMWLoadIntf2MesWin__GetCurPoint beNDMWLoadIntf2MesWin::GetCurPoint
 003ecb90 000010 beNDMWLoadIntf2MesWin__RequestMesErase beNDMWLoadIntf2MesWin::RequestMesErase
-003ecba0 000018 FUN_003ecba0
+003ecba0 000018 beNDMWLoadIntf2MesWin__RequestSystemMessage beNDMWLoadIntf2MesWin::RequestSystemMessage
 003ecbc0 000094 beNDMWLoadIntf2MesWin__EndSystemMessage beNDMWLoadIntf2MesWin::EndSystemMessage
 003ecc60 000160 FUN_003ecc60
-003ecdc0 000288 FUN_003ecdc0
-003ed050 000284 FUN_003ed050
-003ed2e0 000368 FUN_003ed2e0
+003ecdc0 000288 beNDMWLoadCtrl2CommonIntf__StepNoticeQuestion beNDMWLoadCtrl2CommonIntf::StepNoticeQuestion
+003ed050 000284 beNDMWLoadCtrl2CommonIntf__StepCheckMemoryCard beNDMWLoadCtrl2CommonIntf::StepCheckMemoryCard
+003ed2e0 000368 beNDMWLoadCtrl2CommonIntf__StepCreateSaveFile beNDMWLoadCtrl2CommonIntf::StepCreateSaveFile
 003ed650 00054c beNDMWLoadCtrl2CommonIntf__StepReadMedia beNDMWLoadCtrl2CommonIntf::StepReadMedia
 003edba0 000080 FUN_003edba0
-003edc20 00033c FUN_003edc20
+003edc20 00033c beNDMWLoadCtrl2CommonIntf__StepWriteSaveData beNDMWLoadCtrl2CommonIntf::StepWriteSaveData
 003edf60 00022c beNDMWLoadCtrl2CommonIntf__StepFormatMemoryCard beNDMWLoadCtrl2CommonIntf::StepFormatMemoryCard
 003ee190 0000b8 FUN_003ee190
-003ee250 0000d0 FUN_003ee250
+003ee250 0000d0 beNDMWLoadCtrl2CommonIntf__StartUtilFor beNDMWLoadCtrl2CommonIntf::StartUtilFor
 003ee320 00016c beNDMWLoadCtrl2CommonIntf__RemoveAccessPlayer beNDMWLoadCtrl2CommonIntf::RemoveAccessPlayer
 003ee490 000038 FUN_003ee490
 003ee4d0 0001b8 beNDMWDegiData__UpdateFieldsFromData beNDMWDegiData::UpdateFieldsFromData
@@ -19236,14 +19236,14 @@
 00407aa0 0005cc Gap__Bec__beNDMWSaveCtrl__vfunc_34 Gap::Bec::beNDMWSaveCtrl::vfunc_34
 00408070 000080 FUN_00408070
 004080f0 00000c Gap__Bec__beNDMWSaveCtrl__vfunc_20 Gap::Bec::beNDMWSaveCtrl::vfunc_20
-00408100 00009c Gap__Bec__beNDMWSaveIntf__vfunc_32 Gap::Bec::beNDMWSaveIntf::vfunc_32
-004081a0 003fe0 Gap__Bec__beNDMWSaveIntf__vfunc_31 Gap::Bec::beNDMWSaveIntf::vfunc_31
-0040c180 000030 FUN_0040c180
-0040c1b0 00000c Gap__Bec__beNDMWSaveIntf__vfunc_30 Gap::Bec::beNDMWSaveIntf::vfunc_30
-0040c1c0 000058 Gap__Bec__beNDMWSaveIntf__vfunc_29 Gap::Bec::beNDMWSaveIntf::vfunc_29
-0040c220 001828 Gap__Bec__beNDMWSaveIntf__vfunc_34 Gap::Bec::beNDMWSaveIntf::vfunc_34
-0040da50 000080 FUN_0040da50
-0040dad0 00000c Gap__Bec__beNDMWSaveIntf__vfunc_20 Gap::Bec::beNDMWSaveIntf::vfunc_20
+00408100 00009c beNDMWSaveIntf_AcquirePadManager
+004081a0 003fe0 beNDMWSaveIntf_Update
+0040c180 000030 NewDataListRef_Construct_0040c180
+0040c1b0 00000c beNDMWSaveIntf_GetInfoMeta
+0040c1c0 000058 beNDMWSaveIntf_RegisterReceivers
+0040c220 001828 beNDMWSaveIntf_OnMessage
+0040da50 000080 CtrlDataRef_Destruct_0040da50
+0040dad0 00000c beNDMWSaveIntf_GetMeta
 0040dae0 000104 Gap__Bec__beNDMWListCtrl__vfunc_22 Gap::Bec::beNDMWListCtrl::vfunc_22
 0040dbf0 000140 Gap__Bec__beNDMWListCtrl__vfunc_23 Gap::Bec::beNDMWListCtrl::vfunc_23
 0040dd30 000150 Gap__Bec__beNDMWListCtrl__vfunc_24 Gap::Bec::beNDMWListCtrl::vfunc_24

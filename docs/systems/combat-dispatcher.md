@@ -76,7 +76,7 @@ The dispatcher's offset accesses are written as typed members, and the full veri
 match with them: 61 `(char *)` occurrences remain and raw `*(int *)((char *)` loads **0**. Of the 61 left, 58 are casts on string-returning calls
 (`beMessenger_GetString`, `beDataBase_GetRecordString`, `StringPool_Intern`, ...), not offsets; the three offset-style accesses that stay raw are
 `(char *)arg2 + 0x14` (the callback's message argument has no recovered class) and two `(char *)obj + 0x28` member addresses of an object whose class is
-not determined (passed to `DW4Fresh::Assign` and `FUN_003e92a0`). The property records (`+12` value), `igDataList` (`_count`), the byte list, the folder-list slots (`+20`
+not determined (passed to `DW4Fresh::Assign` and `ObjectRef_Get_003e92a0`). The property records (`+12` value), `igDataList` (`_count`), the byte list, the folder-list slots (`+20`
 value) and `beSystem._random` (`+0x30`) are written as members. Several small identical record views (`DW4Property`, `DW4PropRec`,
 `DW4IntProperty`, ...) exist side by side and can be merged into one when the shared types are promoted to
 `include/dw4/reflected.h`.

@@ -710,7 +710,7 @@ void **FUN_002293d0(void **arg0, int arg1);
 int Gap__igOptInterface__vfunc_29(void);
 void **FUN_00229460(void **arg0, short arg1);
 void Gap__igOptConfiguration__vfunc_23(void);
-int FUN_002294f0(int *p);
+int igDataList_GetCount(int *p);
 void FUN_00229500(void *arg0, int arg1, ...);
 void FUN_00229570(void *arg0);
 void FUN_00229580(igInterfaceView *self);
