@@ -1,10 +1,32 @@
 /* be: the game object scripts call as `be:<function>(...)`. The Lua class `be` binds the 116
  * native functions below to one dispatcher; the C++ class `be` is the insight manager that
  * finds the other managers those functions talk to. */
-#include "src/engine/lua/LuaLibrary.h"
+#include "dw4/lua.h"
 #include "dw4/reflected.h"
 #include "dw4/igSmartPointer.h"
 #include "dw4/beDemoManager.h"
+
+/* The C runtime and the Alchemy memory services this file uses. */
+extern "C" unsigned int strlen(const char *s);
+extern "C" int strcmp(const char *a, const char *b);
+extern "C" int sprintf(char *buffer, const char *format, ...);
+extern "C" void StringChunk_ReleaseHeader(void *owner, void *header);
+extern "C" int Memory_GetAllocatorBySelector(int key);
+extern "C" void *Memory_AllocateBufferDirect(unsigned int size, igObject *pool);
+extern "C" void Memory_FreeBufferWithAllocator(void *buffer, igObject *pool);
+extern "C" igObject *igObject_GetAllocator(void *object);
+
+/* A reference-counted string: the text follows its chunk owner and its count. */
+static inline void releaseString(char *text) {
+    if (text != 0) {
+        int *header = (int *)(text - 8);
+        int count = header[1] - 1;
+        header[1] = count;
+        if (count == 0) {
+            StringChunk_ReleaseHeader((void *)header[0], header);
+        }
+    }
+}
 
 /* bePlayer_GetStruct's record slots: the shared record, then one per player (index + 1). */
 #define PLAYER_SLOT_COMMON 0

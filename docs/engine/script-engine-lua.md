@@ -49,7 +49,11 @@ with reason codes `LUA_ERRRUN`, `LUA_ERRFILE`, `LUA_ERRSYNTAX`, `LUA_ERRMEM`,
 The Alchemy Lua binding library (`0x23c440`–`0x246d28`, before stock Lua's `lapi.c`) was compiled one
 file at a time, not as one translation unit: runs of inline methods close files in the middle of it,
 where a library-sized unit would have one run at its end. All four files share
-`src/engine/lua/LuaLibrary.h`.
+`src/engine/lua/LuaLibrary.h`, the library's private header. It includes the binding's public surface,
+`include/dw4/lua.h`: stock Lua's API, the bound-value types (`LuaType`, `LuaKind`, `LuaValue`), bound
+functions and classes (`LuaFunction`, `LuaClassData`, `LuaClass`, `LuaHashLink`), the glue's pool and
+the entry points a game class calls (`LuaType_PushString`, `LuaClass_BindFunctions`, `LuaError`). Game
+code such as `src/game/be.cpp` includes only the public header.
 
 - **The library front**, `src/engine/lua/LuaRegistration.cpp` (`0x23c440`–`0x23c858`): the
   `LuaLibrary` registration latch, igLuaState's and igLuaGlue's metadata (meta-object getters, vtable

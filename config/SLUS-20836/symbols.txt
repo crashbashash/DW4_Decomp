@@ -19381,7 +19381,7 @@
 00425fb0 000144 beNDMWStatusTitle01_ShowShopLayout
 00426100 000034 Gap__Bec__beNDMWStatusTitle02__vfunc_22 Gap::Bec::beNDMWStatusTitle02::vfunc_22
 00426140 0003e4 Gap__Bec__beNDMWStatusTitle03__vfunc_22 Gap::Bec::beNDMWStatusTitle03::vfunc_22
-00426530 00008c beNDMWStatusTitle03_SetFont002Enabled
+00426530 00008c beNDMWStatusTitle03_SetCancelPromptEnabled
 004265c0 000184 Gap__Bec__beNDMWStatusTitle04__vfunc_22 Gap::Bec::beNDMWStatusTitle04::vfunc_22
 00426750 00000c Gap__Bec__beNDMWStatusTitle04__vfunc_20 Gap::Bec::beNDMWStatusTitle04::vfunc_20
 00426760 00000c Gap__Bec__beNDMWStatusTitle03__vfunc_20 Gap::Bec::beNDMWStatusTitle03::vfunc_20

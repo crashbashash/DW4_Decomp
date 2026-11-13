@@ -283,8 +283,8 @@ extern "C" void Gap__Bec__beNDMWStatusTitle02__vfunc_22(beNDMWStatusTitle02 *sel
     beNDMWWindow_PresentModelAtOrigin(self, i_messwn_2, 0, SQ_STOPEN_2, SQ_STCLOSE);
 }
 
-/* Account plate: queues its three STWINFONT34 texts (font000, font001, font002) for closing and runs
- * txt_status.lua call 0. */
+/* Button-guide plate: queues its three STWINFONT34 texts (font000 Select, font001 Confirm, font002
+ * Cancel) for closing and runs txt_status.lua call 0, which fills them. */
 extern "C" void Gap__Bec__beNDMWStatusTitle03__vfunc_22(beNDMWStatusTitle03 *self) {
     beNDMWWindow_PresentModelAtOrigin(self, i_staccount, 0, SQ_OPEN_9, SQ_CLOSE_9);
     AppendInterned(self->_textCloseTypeList, STWINFONT34_3);
@@ -296,8 +296,8 @@ extern "C" void Gap__Bec__beNDMWStatusTitle03__vfunc_22(beNDMWStatusTitle03 *sel
     beNDMWWindow_RunMessageScript(self, txt_status_lua_3, 0);
 }
 
-/* Colours the account plate's font002 text: DEFAULTCOLOR when enabled, CANCELCOLOR otherwise. */
-extern "C" void beNDMWStatusTitle03_SetFont002Enabled(beNDMWStatusTitle03 *self, int enabled) {
+/* Colours the plate's Cancel prompt (font002): DEFAULTCOLOR when enabled, CANCELCOLOR otherwise. */
+extern "C" void beNDMWStatusTitle03_SetCancelPromptEnabled(beNDMWStatusTitle03 *self, int enabled) {
     beMessenger_SelectGroup(self->_messenger, TEXTCTL_8);
     beMessenger_AppendString(self->_messenger, STWINFONT34_3);
     beMessenger_AppendString(self->_messenger, font002_5);

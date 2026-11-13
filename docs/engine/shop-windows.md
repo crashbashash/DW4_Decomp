@@ -111,7 +111,6 @@ with `beNDMWListCtrl`) and put the `beNDMWWindowSelect` into its reload state. T
 ## Open questions
 
 - Message codes are `txt_shop.lua` indices; what each says is inferred from where it is used.
-- `beNDMWStatusTitle03_SetFont002Enabled`: what `font002` of the account window shows is unchecked.
 - The two decide-list fills in `beNDMWShopCtrlDiskSell_Update` and `beNDMWShopCtrlSales_UpdatePageCount`
   still read the compiler's bool constants by address: the `BoolList_Append(list, true)` spelling the
   other windows use swaps two registers there.

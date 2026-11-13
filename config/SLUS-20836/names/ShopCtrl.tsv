@@ -28,7 +28,7 @@
 0x00425430	beNDMWStatusTitle01_ShowDigimonFace	game
 0x00425e60	beNDMWStatusTitle01_ShowStatusLayout	game
 0x00425fb0	beNDMWStatusTitle01_ShowShopLayout	game
-0x00426530	beNDMWStatusTitle03_SetFont002Enabled	game
+0x00426530	beNDMWStatusTitle03_SetCancelPromptEnabled	game
 0x004267b0	beNDMWShopCtrl00_Update	game
 0x004270a0	beNDMWShopCtrl10_Update	game
 0x00428790	beNDMWShopCtrl30_Update	game

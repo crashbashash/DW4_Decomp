@@ -29490,14 +29490,14 @@
       "beNDMWStatusTitle01_ShowShopLayout": "0x00425fb0",
       "Gap__Bec__beNDMWStatusTitle02__vfunc_22": "0x00426100",
       "Gap__Bec__beNDMWStatusTitle03__vfunc_22": "0x00426140",
-      "beNDMWStatusTitle03_SetFont002Enabled": "0x00426530",
       "Gap__Bec__beNDMWStatusTitle04__vfunc_22": "0x004265c0",
       "Gap__Bec__beNDMWStatusTitle04__vfunc_20": "0x00426750",
       "Gap__Bec__beNDMWStatusTitle03__vfunc_20": "0x00426760",
       "Gap__Bec__beNDMWStatusTitle02__vfunc_20": "0x00426770",
       "Gap__Bec__beNDMWStatusTitle01__vfunc_20": "0x00426780",
       "Gap__Bec__beNDMWStatusTitle00__vfunc_20": "0x00426790",
-      "Gap__Bec__beNDMWWindowTitle__vfunc_20": "0x004267a0"
+      "Gap__Bec__beNDMWWindowTitle__vfunc_20": "0x004267a0",
+      "beNDMWStatusTitle03_SetCancelPromptEnabled": "0x00426530"
     },
     "data": {
       "@632": "0x0051aed0",
@@ -29888,7 +29888,7 @@
       "beNDMWLoadCtrl2__GetMeta": "0x003f2d40"
     },
     "data": {
-      "@3364": "0x00518110",
+      "@3377": "0x00518110",
       "g_loadMessageTable": "0x004cda40",
       "g_loadFontNames": "0x004ceb30",
       "CHRSELFONT06": "0x005176a0",
@@ -32433,7 +32433,6 @@
       "be_GetMetaObject_Virtual": "0x00375df0"
     },
     "data": {
-      "@359": "0x0050d620",
       "BIT": "0x0050d9f8",
       "CAMERAMODE": "0x0050d988",
       "CTRLITEM": "0x0050d9d8",
@@ -32570,7 +32569,8 @@
       "g_hitterInfoName": "0x0058a204",
       "g_txtCallNo": "0x0058a220",
       "ONE_7": "0x0050dd40",
-      "PLAYER_7": "0x0050dda8"
+      "PLAYER_7": "0x0050dda8",
+      "@251": "0x0050d620"
     },
     "duplicates": {
       "__dt__25igSmartPointer<8igObject>Fv": "0x0033e9c0",

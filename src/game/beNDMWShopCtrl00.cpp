@@ -73,7 +73,7 @@ extern "C" void *beNDMWShopTitle03_Create(...);
 extern "C" void * beNDMWShopSelect02_Create(...);
 extern "C" void *beNDMWShopCtrlA1_Create(...);
 extern "C" int beNDMWStatusTitle01_ShowShopLayout(...);
-extern "C" int beNDMWStatusTitle03_SetFont002Enabled(...);
+extern "C" int beNDMWStatusTitle03_SetCancelPromptEnabled(...);
 extern "C" void * beNDMWShopSelect03_Create(...);
 extern "C" int igProperty_GetRecordArray(...);
 extern "C" int beNDMWWindow_SendModelSequence(...);
@@ -2546,7 +2546,7 @@ void beNDMWShopCtrlA0_Update(beNDMWShopCtrlA0 *self) {
                     beNDMWWindow_BindContext(account.p, self, self->_insight, self->_playerNo, 0);
                     ObjectList_AppendRetained(self->_subWindow, account.p);
                     SET_OBJECT_REF(self->_account, account.p);
-                    beNDMWStatusTitle03_SetFont002Enabled(self->_account, 0);
+                    beNDMWStatusTitle03_SetCancelPromptEnabled(self->_account, 0);
                 }
                 PICK_ALLOCATOR(allocator, self);
                 {
@@ -2593,7 +2593,7 @@ void beNDMWShopCtrlA0_Update(beNDMWShopCtrlA0 *self) {
                     igSmartPointer<beNDMWShopSelect02> menu((beNDMWShopSelect02 *)beNDMWShopSelect02_Create(allocator));
                     beNDMWWindow_BindContext(menu.p, self, self->_insight, self->_playerNo, 0x7D3);
                     ObjectList_AppendRetained(self->_subWindow, menu.p);
-                    beNDMWStatusTitle03_SetFont002Enabled(self->_account, 0);
+                    beNDMWStatusTitle03_SetCancelPromptEnabled(self->_account, 0);
                 }
                 self->_nowProcKazu = CHILD_COUNT(self);
                 NEXT_PHASE(self);
@@ -2628,7 +2628,7 @@ void beNDMWShopCtrlA0_Update(beNDMWShopCtrlA0 *self) {
                         }
                     }
                 }
-                beNDMWStatusTitle03_SetFont002Enabled(self->_account, 1);
+                beNDMWStatusTitle03_SetCancelPromptEnabled(self->_account, 1);
                 self->_nowProcKazu = CHILD_COUNT(self);
                 NEXT_PHASE(self);
             case CHILD_WAIT:

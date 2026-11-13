@@ -28,9 +28,9 @@ extern "C" int beMessenger_AppendInt(...);
 extern "C" int beMessenger_AppendObject(...);
 extern "C" int beMessenger_SelectGroup(...);
 extern "C" int beMessenger_SendNamed(...);
-extern "C" int beMessenger_GetBool(int, int);
+extern "C" unsigned char beMessenger_GetBool(int, int);
 extern "C" int beBaseInfoRam_StartTimer(int, const char *, unsigned long long);
-extern "C" int beBaseInfoRam_IsTimerExpired(int, const char *);
+extern "C" unsigned char beBaseInfoRam_IsTimerExpired(int, const char *);
 extern "C" int igInsightCore_FindManager(...);
 extern "C" int beFont_ConvertToUnicode(...);
 extern "C" void *beNDMWLoadSlotPlayer_Create(...);
@@ -108,7 +108,7 @@ extern "C" char SQ_NEXTON00[];
 extern "C" void beNDMWLoadIntf2MesWin__Update(beNDMWLoadIntf2MesWin *win);
 extern "C" char MODELCTRL_6[];
 extern "C" char ISSEQNAME_3[];
-extern "C" int beNDMWLoadIntf2MesWin__IsSequencePlaying(beNDMWLoadIntf2MesWin *win, int player, const char *target, const char *sequence);
+extern "C" unsigned char beNDMWLoadIntf2MesWin__IsSequencePlaying(beNDMWLoadIntf2MesWin *win, int player, const char *target, const char *sequence);
 extern "C" void beNDMWLoadIntf2MesWin__RequestOpen(beNDMWLoadIntf2MesWin *win);
 extern "C" void beNDMWLoadIntf2MesWin__RequestClose(beNDMWLoadIntf2MesWin *win);
 extern "C" void beNDMWLoadIntf2MesWin__RequestMessage(beNDMWLoadIntf2MesWin *win, int messageNo);
@@ -629,19 +629,19 @@ void beNDMWLoadIntf2MesWin__Update(beNDMWLoadIntf2MesWin *win) {
                         break;
                     }
                     case 2:
-                        if (!(beNDMWLoadIntf2MesWin__IsSequencePlaying(win, win->_ramNo, j_chrselmesswin_3, SQ_LINEUP00_3) & 0xFF)) win->_statCtrl = 1;
+                        if (beNDMWLoadIntf2MesWin__IsSequencePlaying(win, win->_ramNo, j_chrselmesswin_3, SQ_LINEUP00_3) == 0) win->_statCtrl = 1;
                         break;
                     case 3:
-                        if (!(beNDMWLoadIntf2MesWin__IsSequencePlaying(win, win->_ramNo, j_chrselmesswin_3, SQ_LINEDW01_3) & 0xFF)) win->_statCtrl = 1;
+                        if (beNDMWLoadIntf2MesWin__IsSequencePlaying(win, win->_ramNo, j_chrselmesswin_3, SQ_LINEDW01_3) == 0) win->_statCtrl = 1;
                         break;
                     case 4:
                         if (win->_curPoint == 0) {
-                            if (!(beNDMWLoadIntf2MesWin__IsSequencePlaying(win, win->_ramNo, j_chrselmesswin_3, SQ_LINEON00_3) & 0xFF)) {
+                            if (beNDMWLoadIntf2MesWin__IsSequencePlaying(win, win->_ramNo, j_chrselmesswin_3, SQ_LINEON00_3) == 0) {
                                 beNDMWLoadIntf2MesWin__RequestMesErase(win);
                                 win->_isSelect = 1;
                                 win->_isCtrl = 0;
                             }
-                        } else if (!(beNDMWLoadIntf2MesWin__IsSequencePlaying(win, win->_ramNo, j_chrselmesswin_3, SQ_LINEON01_3) & 0xFF)) {
+                        } else if (beNDMWLoadIntf2MesWin__IsSequencePlaying(win, win->_ramNo, j_chrselmesswin_3, SQ_LINEON01_3) == 0) {
                             beNDMWLoadIntf2MesWin__RequestMesErase(win);
                             win->_isSelect = 1;
                             win->_isCtrl = 0;
@@ -662,7 +662,7 @@ void beNDMWLoadIntf2MesWin__Update(beNDMWLoadIntf2MesWin *win) {
                         }
                         break;
                     case 2:
-                        if (!(beNDMWLoadIntf2MesWin__IsSequencePlaying(win, win->_ramNo, j_chrselmesswin_3, SQ_NEXTON00) & 0xFF)) {
+                        if (beNDMWLoadIntf2MesWin__IsSequencePlaying(win, win->_ramNo, j_chrselmesswin_3, SQ_NEXTON00) == 0) {
                             beNDMWLoadIntf2MesWin__RequestMesErase(win);
                             win->_isSelect = 1;
                             win->_isCtrl = 0;
@@ -710,7 +710,7 @@ void beNDMWLoadIntf2MesWin__Update(beNDMWLoadIntf2MesWin *win) {
     }
 }
 
-int beNDMWLoadIntf2MesWin__IsSequencePlaying(beNDMWLoadIntf2MesWin *win, int player, const char *target, const char *sequence) {
+unsigned char beNDMWLoadIntf2MesWin__IsSequencePlaying(beNDMWLoadIntf2MesWin *win, int player, const char *target, const char *sequence) {
     beMessenger_SelectReceivers(win->_messenger, MODELCTRL_6, target, player);
     beMessenger_AppendString(win->_messenger, sequence);
     beMessenger_DispatchSelected(win->_messenger, ISSEQNAME_3);
@@ -813,7 +813,9 @@ void beNDMWLoadCtrl2CommonIntf__UpdateCutConnect(beNDMWLoadCtrl2CommonIntf *intf
     PLW(intf, 1)->_isCutConnect = 0;
     PLW(intf, 2)->_isCutConnect = 0;
     PLW(intf, 3)->_isCutConnect = 0;
-    for (slot = 0; slot < ((beNDMWMcSlotList *)((beNDMWMcUtilCtrl *)*(int *)&intf->_mcUtilCtrl)->_slot)->_count; slot++) {
+    /* The guard reads _mcUtilCtrl through its smart pointer and the body reads the field directly, so the
+     * body reloads the slot list instead of reusing the guard's load. */
+    for (slot = 0; slot < ((beNDMWMcSlotList *)((igSmartPointer<beNDMWMcUtilCtrl> &)intf->_mcUtilCtrl)->_slot)->_count; slot++) {
         if (((beNDMWMcSlotPS2 **)((beNDMWMcSlotList *)((beNDMWMcUtilCtrl *)intf->_mcUtilCtrl)->_slot)->_data)[slot]->_isConnect == 0) {
             for (slotPlayer = 0; slotPlayer < ((beNDMWLoadSlotPlayerList *)intf->_slotSaveData)->_count; slotPlayer++) {
                 if (slot == ((beNDMWLoadSlotPlayer **)((beNDMWLoadSlotPlayerList *)intf->_slotSaveData)->_data)[slotPlayer]->_connectNO) {
@@ -855,7 +857,7 @@ int beNDMWLoadCtrl2CommonIntf__StepNoticeQuestion(beNDMWLoadCtrl2CommonIntf *int
         state += 1;
         break;
     case 1:
-        if (!(beNDMWLoadIntf2MesWin__GetIsCtrl(mesWin) & 0xFF)) {
+        if (beNDMWLoadIntf2MesWin__GetIsCtrl(mesWin) == 0) {
             state += 1;
         }
         break;
@@ -864,7 +866,7 @@ int beNDMWLoadCtrl2CommonIntf__StepNoticeQuestion(beNDMWLoadCtrl2CommonIntf *int
         state += 1;
         break;
     case 3:
-        if (!(beNDMWLoadIntf2MesWin__GetIsCtrl(mesWin) & 0xFF)) {
+        if (beNDMWLoadIntf2MesWin__GetIsCtrl(mesWin) == 0) {
             point = beNDMWLoadIntf2MesWin__GetCurPoint(mesWin);
             switch (point) {
             case 0:
@@ -1005,7 +1007,7 @@ int beNDMWLoadCtrl2CommonIntf__StepCreateSaveFile(beNDMWLoadCtrl2CommonIntf *int
         break;
     case 3:
         if (MCSLOT(intf, slot)->_isConnect == 1) {
-            if ((beBaseInfoRam_IsTimerExpired(intf->_inforam, MakeDataTime) & 0xFF) == 1) {
+            if (beBaseInfoRam_IsTimerExpired(intf->_inforam, MakeDataTime) == 1) {
                 state += 1;
                 goto waitResult;
             }
@@ -1180,7 +1182,7 @@ int beNDMWLoadCtrl2CommonIntf__StepWriteSaveData(beNDMWLoadCtrl2CommonIntf *intf
         break;
     case 1:
         if (MCSLOT(intf, slot)->_isConnect == 1) {
-            if ((beBaseInfoRam_IsTimerExpired(intf->_inforam, SaveDataTime) & 0xFF) == 1) {
+            if (beBaseInfoRam_IsTimerExpired(intf->_inforam, SaveDataTime) == 1) {
                 state += 1;
                 goto waitResult;
             }
@@ -1805,7 +1807,6 @@ void beNDMWLoadSlotPlayer__ReadFromBuffer(beNDMWLoadSlotPlayer *slotPlayer, int 
 
 void beNDMWMcUtilCtrl__Init(beNDMWMcUtilCtrl *util, int messenger, int kindHard) {
     int i;
-    int alloc;
 
     util->_messenger = messenger;
     util->_isRun = 0;
@@ -1814,36 +1815,24 @@ void beNDMWMcUtilCtrl__Init(beNDMWMcUtilCtrl *util, int messenger, int kindHard)
     switch (kindHard) {
     case 0:
         for (i = 0; i < 5; i++) {
-            alloc = igObject_GetAllocator(util);
-            if (g_useOwnerAllocator != 0) {
-                alloc = (int)alloc;
-            } else {
-                alloc = Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
-            }
+            int owner = igObject_GetAllocator(util);
+            int alloc = g_useOwnerAllocator ? owner : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
             SlotRef<0> slot(beNDMWMcSlotPS2_Create(alloc));
             ObjectList_AppendRetained(util->_slot, slot.p);
         }
         return;
     case 1:
         for (i = 0; i < 2; i++) {
-            alloc = igObject_GetAllocator(util);
-            if (g_useOwnerAllocator != 0) {
-                alloc = (int)alloc;
-            } else {
-                alloc = Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
-            }
+            int owner = igObject_GetAllocator(util);
+            int alloc = g_useOwnerAllocator ? owner : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
             SlotRef<1> slot(beNDMWMcSlotGC_Create(alloc));
             ObjectList_AppendRetained(util->_slot, slot.p);
         }
         return;
     case 2:
         for (i = 0; i < 9; i++) {
-            alloc = igObject_GetAllocator(util);
-            if (g_useOwnerAllocator != 0) {
-                alloc = (int)alloc;
-            } else {
-                alloc = Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
-            }
+            int owner = igObject_GetAllocator(util);
+            int alloc = g_useOwnerAllocator ? owner : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
             SlotRef<2> slot(beNDMWMcSlotXbox_Create(alloc));
             ObjectList_AppendRetained(util->_slot, slot.p);
         }
@@ -1863,19 +1852,16 @@ void beNDMWMcUtilCtrl__Generate(beNDMWMcUtilCtrl *util) {
 }
 
 unsigned char beNDMWMcUtilCtrl__CheckReady(beNDMWMcUtilCtrl *util) {
-    unsigned char ready;
-    unsigned char one = 1;
-
-    ready = 0;
-    if (util->_isUseUtil == one) {
+    unsigned char ready = 0;
+    if (util->_isUseUtil == 1) {
         beMessenger_SendNamed(util->_messenger, SAVEUTILITY, 0, -1, ISRDY);
-        if ((beMessenger_GetBool(util->_messenger, 0) & 0xFF) == one) {
-            util->_isRdy = one;
-            ready = one;
+        if (beMessenger_GetBool(util->_messenger, 0) == 1) {
+            util->_isRdy = 1;
+            ready = 1;
         }
     } else {
-        util->_isRdy = one;
-        ready = one;
+        util->_isRdy = 1;
+        ready = 1;
     }
     return ready;
 }
@@ -1890,7 +1876,7 @@ bool beNDMWMcUtilCtrl__IsRemoved(beNDMWMcUtilCtrl *util) {
     bool removed = false;
     if (util->_isUseUtil == 1) {
         beMessenger_SendNamed(util->_messenger, SAVEUTILITY, 0, -1, ISRDY);
-        if (!(beMessenger_GetBool(util->_messenger, 0) & 0xFF)) {
+        if (beMessenger_GetBool(util->_messenger, 0) == 0) {
             removed = true;
         }
     } else {
@@ -2027,7 +2013,7 @@ void beNDMWMcUtilCtrl__Update(beNDMWMcUtilCtrl *util) {
                 break;
             case 1:
                 beMessenger_SendNamed(util->_messenger, SAVEUTILITY, 0, -1, ISBUSY);
-                if ((beMessenger_GetBool(util->_messenger, 0) & 0xFF) == 0) {
+                if (beMessenger_GetBool(util->_messenger, 0) == 0) {
                     util->_st0 = util->_st0 + 1;
                     util->_st3 = 0;
                     util->_st2 = 0;
@@ -2139,7 +2125,7 @@ void beNDMWLoadCtrl2__Update(beNDMWLoadCtrl2 *self, beBaseInfoRam *ram) {
                 ctrl->_st2 = 0;
                 break;
             case 1:
-                if ((((int)beNDMWMcUtilCtrl__CheckReady((beNDMWMcUtilCtrl *)intf->_mcUtilCtrl)) & 0xFF) == 1) {
+                if (beNDMWMcUtilCtrl__CheckReady((beNDMWMcUtilCtrl *)intf->_mcUtilCtrl) == 1) {
                     ctrl->_st0 = 2;
                     ctrl->_st3 = 0;
                     ctrl->_st2 = 0;
@@ -2163,7 +2149,7 @@ void beNDMWLoadCtrl2__Update(beNDMWLoadCtrl2 *self, beBaseInfoRam *ram) {
                     beMessenger_SelectReceivers(self->_messenger, MODELCTRL_6, j_chrselback, 0);
                     beMessenger_AppendString(self->_messenger, SQ_OPEN_4);
                     beMessenger_DispatchSelected(self->_messenger, ISSEQNAME_3);
-                    if (!(beMessenger_GetBool(self->_messenger, 0) & 0xFF)) {
+                    if (beMessenger_GetBool(self->_messenger, 0) == 0) {
                         if (ctrl->_isTitle == 1) {
                             ctrl->_st2 = ctrl->_st2 + 1;
                             ctrl->_st3 = 0;
@@ -2176,7 +2162,7 @@ void beNDMWLoadCtrl2__Update(beNDMWLoadCtrl2 *self, beBaseInfoRam *ram) {
                     break;
                 case 1:
                     beMessenger_SendNamed(self->_messenger, MODELCTRL_6, i_fadewn01_2, 0, ISRUN_3);
-                    if ((beMessenger_GetBool(self->_messenger, 0) & 0xFF) == 1) {
+                    if (beMessenger_GetBool(self->_messenger, 0) == 1) {
                         beMessenger_SendNamed(self->_messenger, MODELCTRL_6, i_fadewn01_2, 0, SQ_WTIN60);
                     }
                     ctrl->_st2 = ctrl->_st2 + 1;
@@ -2184,7 +2170,7 @@ void beNDMWLoadCtrl2__Update(beNDMWLoadCtrl2 *self, beBaseInfoRam *ram) {
                     break;
                 case 2:
                     beMessenger_SendNamed(self->_messenger, MODELCTRL_6, i_fadewn01_2, 0, ISRUN_3);
-                    if (!(beMessenger_GetBool(self->_messenger, 0) & 0xFF)) {
+                    if (beMessenger_GetBool(self->_messenger, 0) == 0) {
                         ctrl->_st1 = ctrl->_st1 + 1;
                         ctrl->_st3 = 0;
                         ctrl->_st2 = 0;
@@ -2213,7 +2199,7 @@ void beNDMWLoadCtrl2__Update(beNDMWLoadCtrl2 *self, beBaseInfoRam *ram) {
                 }
                 break;
             case 4:
-                switch (*(int *)&ctrl->_st2) {
+                switch (ctrl->_st2) {
                 case 0:
                     i = 0;
                     do {
@@ -2238,7 +2224,7 @@ void beNDMWLoadCtrl2__Update(beNDMWLoadCtrl2 *self, beBaseInfoRam *ram) {
                         j++;
                         flagWork = (beNDMWLoadSavePlWorkList *)intf->_flagWork;
                     } while (j < 4);
-                    if ((allClosed & 0xFF) == 1) {
+                    if (allClosed == 1) {
                         ctrl->_st2 = ctrl->_st2 + 1;
                         ctrl->_st3 = 0;
                     }
@@ -2252,7 +2238,7 @@ void beNDMWLoadCtrl2__Update(beNDMWLoadCtrl2 *self, beBaseInfoRam *ram) {
                     break;
                 case 3:
                     beMessenger_SendNamed(self->_messenger, MODELCTRL_6, j_chrselback, 0, ISRUN_3);
-                    if (!(beMessenger_GetBool(self->_messenger, 0) & 0xFF)) {
+                    if (beMessenger_GetBool(self->_messenger, 0) == 0) {
                         ctrl->_st2 = ctrl->_st2 + 1;
                         ctrl->_st3 = 0;
                     }
@@ -2302,7 +2288,7 @@ void beNDMWLoadCtrl2__Update(beNDMWLoadCtrl2 *self, beBaseInfoRam *ram) {
                 ctrl->_st2 = 0;
                 break;
             case 1:
-                if ((((int)beNDMWMcUtilCtrl__IsRemoved((beNDMWMcUtilCtrl *)intf->_mcUtilCtrl)) & 0xFF) == 1) {
+                if (beNDMWMcUtilCtrl__IsRemoved((beNDMWMcUtilCtrl *)intf->_mcUtilCtrl) == 1) {
                     if (ctrl->_isTitle == 0) {
                         beMessenger_SelectReceivers(self->_messenger, PLAYERPOINT_2, 0, -1);
                         beMessenger_AppendInt(self->_messenger, 4);

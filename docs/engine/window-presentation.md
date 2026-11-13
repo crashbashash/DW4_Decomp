@@ -138,9 +138,11 @@ Byte 96 is vtable slot 22, which the source calls `Setup`. The rest of
   `beNDMWStatusTitle01_ShowShopLayout` adds `j_shbase` and switches the same fonts
   (`g_shopLayoutFontNames`) to DISPOFF.
 - `beNDMWStatusTitle02`: the `i_messwn` message plate.
-- `beNDMWStatusTitle03`: the `i_staccount` account plate; queues STWINFONT34 font000..font002 for
-  closing and runs `txt_status.lua` call 0. `beNDMWStatusTitle03_SetFont002Enabled` colours font002
-  DEFAULTCOLOR or CANCELCOLOR.
+- `beNDMWStatusTitle03`: the `i_staccount` plate; queues STWINFONT34 font000..font002 for closing
+  and runs `txt_status.lua` call 0, which fills them with the button guide: in every USA stage text
+  pack the `mswkPRG0000`..`mswkPRG0002` strings the script indexes are "≡∇ Select", "≪ Confirm" and
+  "≫ Cancel" (glyph codes for the pad icons). `beNDMWStatusTitle03_SetCancelPromptEnabled` colours
+  the Cancel prompt (font002) DEFAULTCOLOR or CANCELCOLOR (greyed).
 - `beNDMWStatusTitle04`: the `i_sttitle` title plate; queues STWINFONT12 font000 and runs
   `txt_status.lua` with the window's `_entCode` as the call number.
 
