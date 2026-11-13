@@ -39,20 +39,20 @@ The `code-only` debt by exception-metadata reason (from each unit's diagnostic):
 
 ## Readable
 
-Matching proves the bytes; it does not make the source readable. A matched function counts as **readable** when it also passes every test below. The tests are mechanical, so this is a floor: a function can pass them all and still be hard to follow. An owner-approved assembly source counts as readable when it has a recovered name, because its approval records that no C reproduces it.
+Matching proves the bytes; it does not make the source readable. A matched function counts as **readable** when it also passes every test below. The tests are mechanical, so this is a floor: a function can pass them all and still be hard to follow. An owner-approved assembly source counts as readable when it has a recovered name, because its approval records that no C reproduces it. A static initialiser (`__sinit_<file>`) has no source text of its own, so the tests read its file's global definitions: the file without its function definitions.
 
-**7,703** of the 19,947 matched functions are readable: **1,398,404** code bytes, **40.3 %** of the code.
+**7,713** of the 19,947 matched functions are readable: **1,404,268** code bytes, **40.4 %** of the code.
 
 | A matched function is readable when | matched functions failing it | code bytes |
 | --- | ---: | ---: |
-| the function has a recovered name, not `FUN_<address>` or a numbered virtual slot | 10,814 | 1,188,048 |
-| no name holds an address: not the function's own, nor any function, variable or type it uses | 9,185 | 1,273,192 |
+| the function has a recovered name, not `FUN_<address>` or a numbered virtual slot | 10,798 | 1,178,072 |
+| no name holds an address: not the function's own, nor any function, variable or type it uses | 9,174 | 1,264,596 |
 | the types it uses have real names, not a placeholder such as `S`, `Obj`, `Info176` or `DW4VC_232_2` | 321 | 183,884 |
 | it sits in its class or module file, not `src/unmatched/` | 185 | 51,876 |
-| what it calls and reads is named: no `FUN_`/`DAT_` references | 1,368 | 382,496 |
+| what it calls and reads is named: no `FUN_`/`DAT_` references | 1,367 | 381,968 |
 | no decompiler leftovers: `temp_*`, `var_*`, `argN`, stack-offset locals such as `sp5C` | 572 | 202,912 |
-| fields are reached through named struct members: no `fNN`/`unkNN` members, no cast of a pointer plus an offset | 603 | 189,932 |
-| virtual calls go through a named method, not a slot number such as `v216` or a cast function pointer | 260 | 129,836 |
+| fields are reached through named struct members: no `fNN`/`unkNN` members, no cast of a pointer plus an offset | 599 | 188,740 |
+| virtual calls go through a named method, not a slot number such as `v216` or a cast function pointer | 257 | 126,544 |
 
 ## Debt
 
@@ -171,8 +171,8 @@ The section in 16 equal parts. `0x00100000` is the start of everything.
 
 | | |
 | --- | --- |
-| functions with a recovered name (any: role names included) | 12,936 of 20,575 |
-| functions with a **semantic** name (not `FUN_`/`thunk_`, not `::vfunc_NN`, not `*_GetMetaObject`/`_GetVTable`/`_Register`/`_InitFields`) | 5,540 of 20,575 (5,281 of them matched) |
+| functions with a recovered name (any: role names included) | 12,952 of 20,575 |
+| functions with a **semantic** name (not `FUN_`/`thunk_`, not `::vfunc_NN`, not `*_GetMetaObject`/`_GetVTable`/`_Register`/`_InitFields`) | 5,556 of 20,575 (5,297 of them matched) |
 | RTTI records / vtables / vfunc names | 579 / 478 / 1,286 |
 | reflection MetaObjects (with fields) | 1,075 (659) |
 | reflection fields with offset and type | 3,680 |

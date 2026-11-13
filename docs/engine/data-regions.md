@@ -65,8 +65,8 @@ Two consequences worth stating:
 
 Two of the biggest regions **start with code**. `0x521750` disassembles cleanly (a
 `lui at,0x59 / sw zero,-14736(at)` guard, then a tail `j 0x100c20` with its arguments set, the
-static-initialiser idiom) and is `FUN_00521750` in `config/SLUS-20836/symbols.txt`, directly after
-`FUN_00521730`.
+static-initialiser idiom) and is `__sinit_GuiLibrary.cpp` in `config/SLUS-20836/symbols.txt`, directly after
+`__sinit_beTargetObj.cpp`.
 
 Ghidra's labels miss verified leaf functions in the same way:
 

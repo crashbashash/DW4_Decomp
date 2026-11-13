@@ -782,19 +782,25 @@ _READABLE = {}
 
 
 def _function_texts(path):
-    """{name: source text of that definition} for one file, comments and strings blanked."""
+    """({name: source text of that definition}, whole file, the file's global definitions) for one
+    file, comments and strings blanked; the global definitions are the file minus every function
+    definition."""
     from typed_coverage import strip_comments_and_strings
     try:
         raw = open(path, errors="replace").read()
     except OSError:
-        return {}, ""
+        return {}, "", ""
     out = {}
+    whole = strip_comments_and_strings(raw)
+    globals_, at = [], 0
     try:
         for name, start, end in units.definitions(raw):
             out[name] = strip_comments_and_strings(raw[start:end])
+            globals_.append(whole[at:start])
+            at = end
     except Exception:                       # an unparsable file is judged whole, which is the stricter reading
-        pass
-    return out, strip_comments_and_strings(raw)
+        globals_, at = [], 0
+    return out, whole, " ".join(globals_ + [whole[at:]])
 
 
 def readable_failures(name, path, cache):
@@ -805,8 +811,9 @@ def readable_failures(name, path, cache):
         return []
     if path not in cache:
         cache[path] = _function_texts(path)
-    texts, whole = cache[path]
-    text = texts.get(name, whole)
+    texts, whole, globals_ = cache[path]
+    # a static initialiser has no source text of its own: it is the file's global definitions
+    text = globals_ if name.startswith("__sinit_") else texts.get(name, whole)
     body = re.sub(r"\b%s\b" % re.escape(name), " ", text)            # its own name is not a reference
     failed = []
     if not named(name) or SLOT_NAME_RE.search(name):
@@ -1039,7 +1046,8 @@ def render_md(d):
       "**readable** when it also passes every test below. The tests are mechanical, so this is a floor: "
       "a function can pass them all and still be hard to follow. An owner-approved assembly source "
       "counts as readable when it has a recovered name, because its approval records that no C "
-      "reproduces it.")
+      "reproduces it. A static initialiser (`__sinit_<file>`) has no source text of its own, so the "
+      "tests read its file's global definitions: the file without its function definitions.")
     A("")
     A("**%s** of the %s matched functions are readable: **%s** code bytes, **%.1f %%** of the code."
       % (format(rd["functions"], ","), format(rd["matched_functions"], ","), format(rd["bytes"], ","),

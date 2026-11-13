@@ -20562,19 +20562,19 @@
 004670f0 000008 Gap__Viewer__igBoundingBoxRenderer__vfunc_24 Gap::Viewer::igBoundingBoxRenderer::vfunc_24
 00467100 000008 Gap__Viewer__igBoundingBoxRenderer__vfunc_26 Gap::Viewer::igBoundingBoxRenderer::vfunc_26
 00467110 00000c Gap__Viewer__igBoundingBoxRenderer__vfunc_22 Gap::Viewer::igBoundingBoxRenderer::vfunc_22
-0051fd00 000140 FUN_0051fd00
-0051fe40 00003c FUN_0051fe40
-0051fe80 000a70 FUN_0051fe80
-005208f0 0003f4 FUN_005208f0
-00520cf0 0003d8 FUN_00520cf0
-005210d0 000080 FUN_005210d0
-00521150 000210 FUN_00521150
-00521360 000294 FUN_00521360
-00521600 0000a0 FUN_00521600
-005216a0 000038 FUN_005216a0
-005216e0 000044 FUN_005216e0
-00521730 000020 FUN_00521730
-00521750 00003c FUN_00521750
-00521790 000aac FUN_00521790
-00522240 0001b0 FUN_00522240
-005223f0 000048 FUN_005223f0
+0051fd00 000140 __sinit_AttrsLibrary.cpp
+0051fe40 00003c __sinit_AudioLibrary.cpp
+0051fe80 000a70 __sinit_GfxLibrary.cpp
+005208f0 0003f4 __sinit_MathsLibrary.cpp
+00520cf0 0003d8 __sinit_SceneGraphLibrary.cpp
+005210d0 000080 __sinit_BaseLibrary.cpp
+00521150 000210 __sinit_SceneSearchLibrary.cpp
+00521360 000294 __sinit_CoreLibrary.cpp
+00521600 0000a0 __sinit_igAdx.cpp
+005216a0 000038 __sinit_igCriMovieCodec.cpp
+005216e0 000044 __sinit_be.cpp
+00521730 000020 __sinit_beTargetObj.cpp
+00521750 00003c __sinit_GuiLibrary.cpp
+00521790 000aac __sinit_igViewerGuiFactory.cpp
+00522240 0001b0 __sinit_igViewerSceneInfoManager.cpp
+005223f0 000048 __sinit_beCameraMode.cpp

@@ -362,9 +362,9 @@
   "fully_matched": 19947,
   "fully_verified": 19860,
   "matched": 19888,
-  "named": 12936,
-  "named_semantic": 5540,
-  "named_semantic_matched": 5281,
+  "named": 12952,
+  "named_semantic": 5556,
+  "named_semantic_matched": 5297,
   "total": 20575
  },
  "largest": [
@@ -452,42 +452,42 @@
   "vtables": 478
  },
  "readable": {
-  "bytes": 1398404,
+  "bytes": 1404268,
   "failing": {
    "addresses": {
-    "bytes": 1273192,
-    "functions": 9185
+    "bytes": 1264596,
+    "functions": 9174
    },
    "fields": {
-    "bytes": 189932,
-    "functions": 603
+    "bytes": 188740,
+    "functions": 599
    },
    "idioms": {
     "bytes": 202912,
     "functions": 572
    },
    "name": {
-    "bytes": 1188048,
-    "functions": 10814
+    "bytes": 1178072,
+    "functions": 10798
    },
    "placed": {
     "bytes": 51876,
     "functions": 185
    },
    "references": {
-    "bytes": 382496,
-    "functions": 1368
+    "bytes": 381968,
+    "functions": 1367
    },
    "types": {
     "bytes": 183884,
     "functions": 321
    },
    "virtuals": {
-    "bytes": 129836,
-    "functions": 260
+    "bytes": 126544,
+    "functions": 257
    }
   },
-  "functions": 7703,
+  "functions": 7713,
   "matched_functions": 19947
  },
  "regions": [

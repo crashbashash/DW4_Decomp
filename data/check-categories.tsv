@@ -19958,19 +19958,19 @@
 004670f0	Gap__Viewer__igBoundingBoxRenderer__vfunc_24	match	-
 00467100	Gap__Viewer__igBoundingBoxRenderer__vfunc_26	match	-
 00467110	Gap__Viewer__igBoundingBoxRenderer__vfunc_22	match	-
-0051fd00	FUN_0051fd00	match	-
-0051fe40	FUN_0051fe40	match	-
-0051fe80	FUN_0051fe80	match	-
-005208f0	FUN_005208f0	match	-
-00520cf0	FUN_00520cf0	match	-
-005210d0	FUN_005210d0	match	-
-00521150	FUN_00521150	match	-
-00521360	FUN_00521360	match	-
-00521600	FUN_00521600	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-005216a0	FUN_005216a0	match	-
-005216e0	FUN_005216e0	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-00521730	FUN_00521730	match	-
-00521750	FUN_00521750	match	-
-00521790	FUN_00521790	match	DEFERRED duplicate 0x19ace0 __ct__7igVec3fFv 8B (compared under the profile of its retail unit)
-00522240	FUN_00522240	match	-
-005223f0	FUN_005223f0	match	-
+0051fd00	__sinit_AttrsLibrary.cpp	match	-
+0051fe40	__sinit_AudioLibrary.cpp	match	-
+0051fe80	__sinit_GfxLibrary.cpp	match	-
+005208f0	__sinit_MathsLibrary.cpp	match	-
+00520cf0	__sinit_SceneGraphLibrary.cpp	match	-
+005210d0	__sinit_BaseLibrary.cpp	match	-
+00521150	__sinit_SceneSearchLibrary.cpp	match	-
+00521360	__sinit_CoreLibrary.cpp	match	-
+00521600	__sinit_igAdx.cpp	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
+005216a0	__sinit_igCriMovieCodec.cpp	match	-
+005216e0	__sinit_be.cpp	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
+00521730	__sinit_beTargetObj.cpp	match	-
+00521750	__sinit_GuiLibrary.cpp	match	-
+00521790	__sinit_igViewerGuiFactory.cpp	match	DEFERRED duplicate 0x19ace0 __ct__7igVec3fFv 8B (compared under the profile of its retail unit)
+00522240	__sinit_igViewerSceneInfoManager.cpp	match	-
+005223f0	__sinit_beCameraMode.cpp	match	-

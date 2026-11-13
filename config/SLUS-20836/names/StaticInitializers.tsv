@@ -1,0 +1,20 @@
+# The static initialisers at 0x51fd00 up to 0x522438: MWCC names each `__sinit_<file>` after the source file
+# whose global objects it constructs, and the owning file's whole-file row in unit-objects.json names it in
+# `emitted` at this address. Evidence in docs/engine/emitted-functions.md (Static initialisers).
+# <va>	<name>	<module>
+0x0051fd00	__sinit_AttrsLibrary.cpp	engine/attrs
+0x0051fe40	__sinit_AudioLibrary.cpp	engine/audio
+0x0051fe80	__sinit_GfxLibrary.cpp	engine/gfx
+0x005208f0	__sinit_MathsLibrary.cpp	engine/maths
+0x00520cf0	__sinit_SceneGraphLibrary.cpp	engine/scenegraph
+0x005210d0	__sinit_BaseLibrary.cpp	engine/base
+0x00521150	__sinit_SceneSearchLibrary.cpp	engine/scenesearch
+0x00521360	__sinit_CoreLibrary.cpp	engine/core
+0x00521600	__sinit_igAdx.cpp	audio
+0x005216a0	__sinit_igCriMovieCodec.cpp	movie
+0x005216e0	__sinit_be.cpp	game
+0x00521730	__sinit_beTargetObj.cpp	game
+0x00521750	__sinit_GuiLibrary.cpp	engine/gui
+0x00521790	__sinit_igViewerGuiFactory.cpp	engine
+0x00522240	__sinit_igViewerSceneInfoManager.cpp	engine
+0x005223f0	__sinit_beCameraMode.cpp	engine

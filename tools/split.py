@@ -264,7 +264,13 @@ def sanitize(name):
     written out or decompiled. Every other non-identifier character goes too, and
     the original is preserved in config/SLUS-20836/symbols.txt's fourth column and in the asm
     header comment.
+
+    A static initialiser keeps its compiler name, `__sinit_<file>` with the file's
+    dot (`__sinit_be.cpp`): C never spells it, GNU as accepts the dot in a label, and
+    the owning file's `emitted` key in unit-objects.json is the same string.
     """
+    if name.startswith("__sinit_"):
+        return re.sub(r"[^A-Za-z0-9_.]", "_", name)
     return re.sub(r"[^A-Za-z0-9_]", "_", name)
 
 

@@ -293,6 +293,12 @@ initialisers of the range compile from their owning files, so no `units.tsv` row
 `0x522438`. A translation unit has one initialiser, so a row places at most one: a range retail serves with two
 initialisers is two files.
 
+`symbols.txt` names each initialiser of the range by that same string, dot included (`__sinit_be.cpp`), from
+`config/SLUS-20836/names/StaticInitializers.tsv`: `tools/split.py` keeps the dot of a `__sinit_` name, which C
+never spells and GNU as accepts in a label, so the generated `asm/__sinit_be.cpp.s` and the `emitted` key agree.
+An initialiser has no source text of its own, so `tools/progress.py` judges its readability on its file's global
+definitions: the file, comments and strings blanked, without its function definitions.
+
 `verify` compares the `.init` body like any member, its index record with `exceptions.txt`, and the `.ctor`
 word, relocated, with its table entry. An object whose `.init` the row does not name is rejected, as is any
 other shape (two `.init` sections, a `.ctor` word that points elsewhere), and an initialiser whose bytes
@@ -503,8 +509,6 @@ no available compiler emits the construct: the combat family uses tag `0x27`/`0x
   (`igTransform_GetVTable` ends with a call to it), `0x1962d0` the `igTransform` destructor, and `0x33f5e0` the
   destructor of an unnamed controller base shared by `beLayerCtl`, `beFont`, `beMovie`,
   `beNDMWLogo`/`SaveCtrl`/`SaveIntf`/`GameRam` and `beShadow01`.
-- **The initialisers' names.** `symbols.txt` keeps the address names of `0x51fd00` up to `0x522438`; the compiler's
-  `__sinit_<file>` is the real name, but a dot in a symbol name is untested in the tools that read `symbols.txt`.
 - **Owners resting on position.** `0x521150` (a 16-colour palette nothing reads) is scene-search's by its place
   in `.rodata`, and `0x5223f0` (two colours nothing reads) is `beCameraMode`'s or `igViewManager`'s: the bytes are
   the same either way.

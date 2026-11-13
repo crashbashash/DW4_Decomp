@@ -16,8 +16,8 @@ readable source that rebuilds the retail executable byte for byte.
 | newlib | 84 KB | 100.0 % | 100.0 % |
 | libgcc | 11 KB | 100.0 % | 100.0 % |
 | Metrowerks runtime | 10 KB | 100.0 % | 100.0 % |
-| Static initialisers | 10 KB | 100.0 % | 0.0 % |
-| **Total** | **3391 KB** | **84.4 %** | **40.3 %** |
+| Static initialisers | 10 KB | 100.0 % | 58.8 % |
+| **Total** | **3391 KB** | **84.4 %** | **40.4 %** |
 
 The full figures and the verification debt are in [PROGRESS.md](PROGRESS.md).
 <!-- progress:end -->
