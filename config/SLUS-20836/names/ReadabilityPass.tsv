@@ -997,3 +997,17 @@
 0x00452870	igCharMetricsList_RunStaticInit	engine
 0x00452ae0	igCharMetricsMetaField_RunStaticInit	engine
 0x004532f0	igAction_RunStaticInit	engine
+0x003c03e0	DamageSeq_GetMetaEnum	game
+0x003c0440	StatusName_GetMetaEnum	game
+0x003c04a0	MsgAction_GetMetaEnum	game
+0x004432a0	beNDMWShinkaCtrl_BuildFormList	game
+0x004435c0	beNDMWShinkaObject_Load	game
+0x00443900	beNDMWMdlPEBase_ShowStatusIcon	game
+0x004456c0	beNDMWMdlPEBase_LoadDownData	game
+0x00445990	beNDMWMdlPEBase_LoadUpData	game
+0x00445c60	beNDMWMdlPEBase_RecalcPlayer	game
+0x00447b00	beNDMWMdlPEBaseInfoWork_IsPoisoned	game
+0x00447b40	beNDMWMdlPEBaseInfoWork_CurePoison	game
+0x00447ba0	beNDMWMdlPEBaseInfoWork::GetMeta	game
+0x00447bb0	beNDMWMdlPEBase::GetMeta	game
+0x003c99a0	beNDMWShinkaObject_CreateInstance	game

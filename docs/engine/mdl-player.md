@@ -23,7 +23,7 @@ it is missing.
 | `0x003d3640` | 2,736 | `beNDMWMdlPlayer__OnGenerate` | 36 | `GENERATE`: the info work, start matrix, stats and HUD |
 | `0x003d40f0` | 328 | `beNDMWMdlPlayer__OnControlOff` | 40 | `OFCTRL`: closes the panel |
 | `0x003d4240` | 328 | `beNDMWMdlPlayer__OnFreeze` | 41 | `ONFREEZE`: closes the panel |
-| `0x003d4390` | 608 | `beNDMWMdlPlayer__OnSequenceChange` | 44 | a new sequence: the player-number badge, panel close, then `beNDMWMdlPEBase_OnSequenceChange` |
+| `0x003d4390` | 608 | `beNDMWMdlPlayer__OnSequenceChange` | 44 | a new sequence: the player-number badge, panel close, then `beNDMWMdlPEBase_OnSequenceChange` ([player/enemy base](mdl-pe-base.md)) |
 | `0x003d45f0` | 556 | `beNDMWMdlPlayer__OnErase` | 43 | `SQ_ERAS`: the entry effect and panel close |
 | `0x003d4820` | 328 | `beNDMWMdlPlayer__OnRemove` | 42 | `REMOVE`: closes the panel |
 | `0x003d4970` | 12 | `beNDMWMdlPlayer__GetMeta` | 20 | the meta object |

@@ -28,6 +28,7 @@ docs/engine/load-ctrl2.md
 docs/engine/load-intf2.md
 docs/engine/lua-dependencies.md
 docs/engine/material-contact.md
+docs/engine/mdl-pe-base.md
 docs/engine/mdl-player.md
 docs/engine/messenger-dispatch.md
 docs/engine/model-controller.md

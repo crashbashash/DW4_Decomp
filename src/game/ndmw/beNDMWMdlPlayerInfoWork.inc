@@ -118,21 +118,21 @@ void beNDMWMdlPlayerInfoWork_InitFields(void) {
     igMetaObject_NameFields(temp_s0, &DAT_004ca8e0[0], &DAT_004ca900[0], &DAT_004ca920[0], temp_s2);
 }
 
-int FUN_003c03e0(void) {
+int DamageSeq_GetMetaEnum(void) {
     if (DAT_0058b410[0] == 0) {
         DAT_0058b410[0] = igMetaEnum_Create(&DAT_00512258[0], &DAT_004ca940[0], &DAT_004ca970[0], 0xA);
     }
     return DAT_0058b410[0];
 }
 
-int FUN_003c0440(void) {
+int StatusName_GetMetaEnum(void) {
     if (DAT_0058b418[0] == 0) {
         DAT_0058b418[0] = igMetaEnum_Create(&DAT_005122d0[0], &DAT_004ca9a0[0], &DAT_004ca9d0[0], 0xB);
     }
     return DAT_0058b418[0];
 }
 
-int FUN_003c04a0(void) {
+int MsgAction_GetMetaEnum(void) {
     if (DAT_0058b420[0] == 0) {
         DAT_0058b420[0] = igMetaEnum_Create(&DAT_005123d0[0], &DAT_004caa00[0], &DAT_004caa40[0], 0x10);
     }

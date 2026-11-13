@@ -144,8 +144,8 @@ their own recovery. Source presence does not substitute for `make check`.
 | `0x00407030` | `ObjectRef_Get_00407030` | 8 | [src/game/beNDMWGameRam.cpp](../../src/game/beNDMWGameRam.cpp) |
 | `0x00407040` | `ObjectRef_Get_00407040` | 8 | [src/game/beNDMWGameRam.cpp](../../src/game/beNDMWGameRam.cpp) |
 | `0x00407050` | `ObjectRef_Get_00407050` | 8 | [src/game/beNDMWGameRam.cpp](../../src/game/beNDMWGameRam.cpp) |
-| `0x00447b00` | `FUN_00447b00` | 56 | [src/game/beNDMWMdlPEBase.cpp](../../src/game/beNDMWMdlPEBase.cpp) |
-| `0x00447b40` | `FUN_00447b40` | 88 | [src/game/beNDMWMdlPEBase.cpp](../../src/game/beNDMWMdlPEBase.cpp) |
+| `0x00447b00` | `beNDMWMdlPEBaseInfoWork_IsPoisoned` | 56 | [src/game/beNDMWMdlPEBase.cpp](../../src/game/beNDMWMdlPEBase.cpp) |
+| `0x00447b40` | `beNDMWMdlPEBaseInfoWork_CurePoison` | 88 | [src/game/beNDMWMdlPEBase.cpp](../../src/game/beNDMWMdlPEBase.cpp) |
 
 The region also contains **29 indirect call sites**
 (`jalr`); these are listed in `data/combat-recovery.json`. The switch's

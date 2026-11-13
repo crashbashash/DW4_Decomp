@@ -49,8 +49,8 @@ extern "C" int igInsightCore_FindManager(...);
 extern "C" int beLua__RunNamedChunk(...);
 extern "C" int beNDMWGameRam_ChangeHp(...);
 extern "C" int beNDMWGameRam_ChangeMp(...);
-extern "C" int FUN_00447b00(...);
-extern "C" int FUN_00447b40(...);
+extern "C" int beNDMWMdlPEBaseInfoWork_IsPoisoned(...);
+extern "C" int beNDMWMdlPEBaseInfoWork_CurePoison(...);
 extern "C" int SYSsetGateStage(...);
 extern "C" void *igProperty_GetRecordIntList(...);
 extern "C" void *igProperty_GetRecord(...);
@@ -554,10 +554,10 @@ int Gap__Bec__beNDMWItemDisk__vfunc_22(beNDMWItemDisk *self, beNDMWGameRam *game
         beMessenger_SendNamed(messenger, PLAYER, 0, playerNo, GETPEBASEWORK_2);
         void *model = beMessenger_GetObject(messenger, 0);
         beNDMWMdlPEBaseInfoWork *work = (beNDMWMdlPEBaseInfoWork *)beMessenger_GetObject(messenger, 1);
-        if (FUN_00447b00(work) != 0) {
+        if (beNDMWMdlPEBaseInfoWork_IsPoisoned(work) != 0) {
             int endurance = work->_poisonEndurance;
             if ((8 - endurance) >= (int)(systemRandom(gameRam->_system)->genrand() % 10U)) {
-                FUN_00447b40(work, model);
+                beNDMWMdlPEBaseInfoWork_CurePoison(work, model);
             }
         }
         return 0;

@@ -2017,8 +2017,8 @@ int DataList_FindProperty_003e9280(...);
 int ObjectRef_Get_003e92a0(...);
 AllocatorValue AllocatorValue_Make_003e9360(...);
 int ObjectRef_Get_003e93b0(...);
-int FUN_00447b00(...);
-int FUN_00447b40(...);
+int beNDMWMdlPEBaseInfoWork_IsPoisoned(...);
+int beNDMWMdlPEBaseInfoWork_CurePoison(...);
 int beNDMWItemBase_IndexOfRecNo(...);
 int beNDMWItemBlueArmor_Set(...);
 int beNDMWItemYellowArmor_Set(...);
@@ -7009,14 +7009,14 @@ temp_ret_1118 = (int)igProperty_GetRecordString(temp_v0_165, DIGIMONNAME_2);
                     temp_ret_1120 = (void *)(beMessenger_GetObject(self->_messenger, 0));
                     temp_ret_1121 = (void *)(beMessenger_GetObject(self->_messenger, 1));
                     temp_v0_168 = (void *)(temp_ret_1121);
-                    temp_ret_1122 = FUN_00447b00(temp_v0_168);
+                    temp_ret_1122 = beNDMWMdlPEBaseInfoWork_IsPoisoned(temp_v0_168);
                     if (temp_ret_1122 != 0) {
                         temp_s6_3 = ((sp430 - temp_s5_4) + 5) - ((beNDMWMdlPEBaseInfoWork *)temp_v0_168)->_poisonEndurance;
                         temp_ret_1123 = (void **)(ObjectRef_Get_00406e50((int *)(self->_system + 0x30)));
                         temp_v0_169 = (void **)(temp_ret_1123);
                         temp_v0_170 = ((DW4VC_96_0 *)(temp_v0_169))->vX() % 10U;
                         if (temp_s6_3 >= (int) temp_v0_170) {
-                            temp_ret_1124 = FUN_00447b40(temp_v0_168, temp_ret_1120);
+                            temp_ret_1124 = beNDMWMdlPEBaseInfoWork_CurePoison(temp_v0_168, temp_ret_1120);
                         }
                     }
                     if (temp_s5_4 == 0x3C) {
@@ -7040,14 +7040,14 @@ temp_ret_1118 = (int)igProperty_GetRecordString(temp_v0_165, DIGIMONNAME_2);
                                 temp_ret_1132 = (void *)(beMessenger_GetObject(self->_messenger, 0));
                                 temp_ret_1133 = (void *)(beMessenger_GetObject(self->_messenger, 1));
                                 temp_v0_173 = (void *)(temp_ret_1133);
-                                temp_ret_1134 = FUN_00447b00(temp_v0_173);
+                                temp_ret_1134 = beNDMWMdlPEBaseInfoWork_IsPoisoned(temp_v0_173);
                                 if (temp_ret_1134 != 0) {
                                     temp_s8_2 = ((sp430 - temp_s5_4) + 5) - ((beNDMWMdlPEBaseInfoWork *)temp_v0_173)->_poisonEndurance;
                                     temp_ret_1135 = (void **)(ObjectRef_Get_00406e50((int *)(self->_system + 0x30)));
                                     temp_v0_174 = (void **)(temp_ret_1135);
                                     temp_v0_175 = ((DW4VC_96_0 *)(temp_v0_174))->vX() % 10U;
                                     if (temp_s8_2 >= (int) temp_v0_175) {
-                                        temp_ret_1136 = FUN_00447b40(temp_v0_173, temp_ret_1132);
+                                        temp_ret_1136 = beNDMWMdlPEBaseInfoWork_CurePoison(temp_v0_173, temp_ret_1132);
                                     }
                                 }
                                 temp_ret_1137 = (int)igProperty_GetRecordString(temp_v0_172, DIGIMONNAME_2);

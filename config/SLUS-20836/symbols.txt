@@ -18306,9 +18306,9 @@
 003c0320 00001c beNDMWMdlPlayerInfoWork_GetMetaObject
 003c0340 00000c FUN_003c0340
 003c0350 000090 beNDMWMdlPlayerInfoWork_InitFields
-003c03e0 000054 FUN_003c03e0
-003c0440 000054 FUN_003c0440
-003c04a0 000054 FUN_003c04a0
+003c03e0 000054 DamageSeq_GetMetaEnum
+003c0440 000054 StatusName_GetMetaEnum
+003c04a0 000054 MsgAction_GetMetaEnum
 003c0500 00004c beNDMWMdlPEBase_ResolveMetaObject
 003c0550 000020 FUN_003c0550
 003c0570 000060 beNDMWMdlPEBase_Register
@@ -18738,7 +18738,7 @@
 003c98f0 000020 FUN_003c98f0
 003c9910 00006c beNDMWShinkaObjectList_Register
 003c9980 00001c beNDMWShinkaObjectList_GetMetaObject
-003c99a0 000034 FUN_003c99a0
+003c99a0 000034 beNDMWShinkaObject_CreateInstance
 003c99e0 00004c beNDMWShinkaObject_ResolveMetaObject
 003c9a30 000084 beNDMWShinkaObject_GetVTable
 003c9ac0 000020 FUN_003c9ac0
@@ -19515,21 +19515,21 @@
 00442d10 0003e4 Gap__Bec__beNDMWMdlItem__vfunc_45 Gap::Bec::beNDMWMdlItem::vfunc_45
 00443100 00000c Gap__Bec__beNDMWMdlItem__vfunc_20 Gap::Bec::beNDMWMdlItem::vfunc_20
 00443110 000184 beNDMWShinkaCtrl_Setup
-004432a0 000298 FUN_004432a0
+004432a0 000298 beNDMWShinkaCtrl_BuildFormList
 00443540 000080 FUN_00443540
-004435c0 000340 FUN_004435c0
-00443900 0002c8 FUN_00443900
+004435c0 000340 beNDMWShinkaObject_Load
+00443900 0002c8 beNDMWMdlPEBase_ShowStatusIcon
 00443bd0 00162c Gap__Bec__beNDMWMdlPEBase__vfunc_46 Gap::Bec::beNDMWMdlPEBase::vfunc_46
 00445200 0004c0 beNDMWMdlPEBase_OnSequenceChange
-004456c0 0002c8 FUN_004456c0
-00445990 0002c8 FUN_00445990
-00445c60 0000ac FUN_00445c60
+004456c0 0002c8 beNDMWMdlPEBase_LoadDownData
+00445990 0002c8 beNDMWMdlPEBase_LoadUpData
+00445c60 0000ac beNDMWMdlPEBase_RecalcPlayer
 00445d10 001aa0 Gap__Bec__beNDMWMdlPEBase__vfunc_47 Gap::Bec::beNDMWMdlPEBase::vfunc_47
 004477b0 000344 Gap__Bec__beNDMWMdlPEBaseInfoWork__vfunc_8 Gap::Bec::beNDMWMdlPEBaseInfoWork::vfunc_8
-00447b00 000038 FUN_00447b00
-00447b40 000058 FUN_00447b40
-00447ba0 00000c Gap__Bec__beNDMWMdlPEBaseInfoWork__vfunc_20 Gap::Bec::beNDMWMdlPEBaseInfoWork::vfunc_20
-00447bb0 00000c Gap__Bec__beNDMWMdlPEBase__vfunc_20 Gap::Bec::beNDMWMdlPEBase::vfunc_20
+00447b00 000038 beNDMWMdlPEBaseInfoWork_IsPoisoned
+00447b40 000058 beNDMWMdlPEBaseInfoWork_CurePoison
+00447ba0 00000c beNDMWMdlPEBaseInfoWork__GetMeta beNDMWMdlPEBaseInfoWork::GetMeta
+00447bb0 00000c beNDMWMdlPEBase__GetMeta beNDMWMdlPEBase::GetMeta
 00447bc0 000048 beNDMWItemBase_RequestDataBase
 00447c10 000048 beNDMWItemBase_GetRecordInt
 00447c60 000048 beNDMWItemBase_GetRecordBool

@@ -1,392 +1,308 @@
 #include "dw4/reflected.h"
 #include "dw4/igSmartPointer.h"
-#define W(f) ((List *)w->f)
-#define SETI(L, I, V) if (((List *)(L))->size != 0 && (I) >= 0 && (I) < ((List *)(L))->size) ((List *)(L))->data[I] = (V);
-#define SETB(L, I, V) if (((BList *)(L))->size != 0 && (I) >= 0 && (I) < ((BList *)(L))->size) ((BList *)(L))->data[I] = (V);
-#define MS(t) __divdi3((long long)(t) * 1000000000, 60)
-#define CALLV(name) ((VC140 *)self)->vX(obj, name)
-#define RELEASE(o) if ((o) != 0) { (o)->_refCount = (o)->_refCount - 1; if (((o)->_refCount & 0x7FFFFF) == 0) igObject_Destroy(o); }
-#define SETI_445200(L, I, V) if ((L)->_count != 0 && (I) >= 0 && (I) < (L)->_count) ((int *)(L)->_data)[I] = (V);
-#define SETB_445200(L, I, V) if ((L)->_count != 0 && (I) >= 0 && (I) < (L)->_count) ((unsigned char *)(L)->_data)[I] = (V);
-#define GI(i) beMessenger_GetInt(self->_messenger, i)
-#define MKLIST(H, F, CT) { int a = igObject_GetAllocator(self); a = GPR_00554c14 != 0 ? a : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]); { List *u = H.p; RELEASE(u) } H.p = (List *)CT(a); { List *c = H.p; if (c != 0) c->_refCount = c->_refCount + 1; { List *old = W(F); RELEASE(old) } w->F = (int)c; } }
-#define SIZEIT(F, N, ES) { List *l = W(F); if (l->size < (N) + 1) List_Reserve(l, N, ES); } { List *l = W(F); if (l->cap >= (N)) l->size = N; else List_Resize(l, N, ES); }
-#define FILLI(F, DAT) { int n = W(F)->size; int *d = W(F)->data; int j; for (j = 0; j < n; j++) d[j] = DAT[0]; }
-#define FILLB(F, DAT) { BList *l = (BList *)w->F; int n = l->size; unsigned char *d = l->data; int j; for (j = 0; j < n; j++) d[j] = DAT; }
-#define VC(name) ((VC140 *)self)->vX(obj, name)
+#include "dw4/igTDataList.h"
+#include "dw4/igVec3f.h"
+#include "dw4/igobject_release.h"
 
 extern "C" int igInsightCore_FindManager(int, int);
-extern "C" int beMessenger_AppendInt(...);
-extern "C" int beMessenger_DispatchSelected(...);
-extern "C" void * beMessenger_GetObject(...);
-extern "C" int beMessenger_SelectGroup(...);
+extern "C" int igObject_GetAllocator(void *);
+extern "C" int Memory_GetAllocatorBySelector(int);
+extern "C" int Gap__Core__igObject__vfunc_08__002ff0f0(beNDMWMdlPEBaseInfoWork *);
 extern "C" int beMessenger_SendNamed(...);
-extern "C" int FUN_00100610(void **);
-extern "C" int StringPool_Allocate(int);
-extern "C" void * igProperty_GetRecordIntList(...);
-extern "C" int StringChunk_ReleaseHeader(int, int *);
-extern "C" int StringPool_Construct(int);
-extern "C" int StringPool_Intern(int, int);
-extern "C" int beDataBase_GetRecordString(int, int, int *);
-extern "C" int Memory_GetAllocatorBySelector(...);
+extern "C" int beMessenger_SelectGroup(...);
 extern "C" int beMessenger_SelectReceivers(...);
+extern "C" int beMessenger_AppendInt(...);
+extern "C" int beMessenger_AppendFloat(int, float);
+extern "C" int beMessenger_AppendBool(int, bool);
 extern "C" int beMessenger_AppendString(...);
 extern "C" int beMessenger_AppendVec3(...);
-extern "C" int beMessenger_GetObjectCount(...);
-extern "C" int igObject_GetAllocator(...);
-extern "C" int Matrix44_GetTranslation(...);
-extern "C" int beBaseInfoRam_StartTimer(...);
-extern "C" int beBaseInfoRam_IsTimerExpired(...);
-extern "C" int beBaseInfoRam_RemoveTimer(...);
-extern "C" long long __divdi3(...);
-extern "C" int FUN_003c03e0(...);
-extern "C" int strcmp(...);
-extern "C" int beMessenger_AppendFloat(int, float);
-extern "C" void * igIntList_Create(...);
-extern "C" int List_Reserve(...);
-extern "C" int List_Resize(...);
-extern "C" int beMessenger_PopArgContext(...);
-extern "C" int beMessenger_PushArgContext(...);
-extern "C" void *igBoolList_Create(...);
-extern "C" int FUN_003c04a0(...);
-extern "C" int FUN_003c0440(...);
-extern "C" int beMessenger_ResolveEnumValue(...);
-extern "C" int beMessenger_ClearObjects(...);
 extern "C" int beMessenger_AppendObject(...);
+extern "C" int beMessenger_ClearObjects(...);
+extern "C" int beMessenger_DispatchSelected(...);
+extern "C" void *beMessenger_GetObject(...);
+extern "C" int beMessenger_GetObjectCount(...);
 extern "C" int beMessenger_GetInt(...);
 extern "C" int beMessenger_GetIntCount(...);
 extern "C" int beMessenger_GetString(...);
-extern "C" int beMessenger_AppendBool(int, bool);
-extern "C" int Gap__Bec__beNDMWMdlPEBaseInfoWork__vfunc_20(void);
-extern "C" int Gap__Bec__beNDMWMdlPEBase__vfunc_20(void);
-extern "C" void FUN_004432a0(beNDMWShinkaCtrl *self);
+extern "C" int beMessenger_PushArgContext(...);
+extern "C" int beMessenger_PopArgContext(...);
+extern "C" int beMessenger_ResolveEnumValue(...);
+extern "C" int beBaseInfoRam_StartTimer(...);
+extern "C" int beBaseInfoRam_IsTimerExpired(...);
+extern "C" int beBaseInfoRam_RemoveTimer(...);
+extern "C" beBaseInfoDataList *beBaseInfoDataList_Create(...);
+extern "C" beModelCtrlInfoRamData *igProperty_FindByName(int list, int nameField, const char *name);
+extern "C" beDataObjInt *igProperty_GetRecord(...);
+extern "C" void *igProperty_GetRecordIntList(...);
 extern "C" beDataObjBoolList *igProperty_GetRecordArray(...);
-extern "C" igObject *FUN_003c99a0(...);
+extern "C" const char *beDataBase_GetRecordString(int, int, const char *);
+extern "C" int StringPool_Allocate(int);
+extern "C" int StringPool_Construct(int);
+extern "C" int StringPool_Intern(int, const char *);
+extern "C" int StringChunk_ReleaseHeader(int, int *);
+extern "C" void *igIntList_Create(...);
+extern "C" void *igBoolList_Create(...);
+extern "C" int List_Reserve(...);
 extern "C" int List_InsertWords(...);
 extern "C" int ObjectList_AppendRetained(...);
-extern "C" int DAT_0051d1e8[4];
-extern "C" int DAT_0051d1a8[4];
-extern "C" int DAT_0051d1b8[4];
-extern "C" int DAT_0051d1c0[4];
-extern "C" int DAT_0051d1d0[4];
-extern "C" int DAT_0051d1d8[4];
-extern "C" int g_beMessenger_metaObject[4];
-extern "C" int g_beNDMWGameRam_metaObject[4];
-extern "C" void beNDMWShinkaCtrl_Setup(beNDMWShinkaCtrl *arg0, int arg1, int arg2);
+extern "C" int Matrix44_GetTranslation(...);
+extern "C" int strcmp(...);
 extern "C" int beNDMWGameRam_CalcMaxPoints(beNDMWGameRam *, int, int, int);
 extern "C" int beNDMWGameRam_CalcAttribute(beNDMWGameRam *, int, int, int);
-extern "C" int GETDATABASE_3[4];
-extern "C" int shinka_2[4];
-extern "C" int DATABASE_3[4];
-extern "C" int DAT_0051d1f8[4];
-extern "C" int DAT_0051d208[4];
-extern "C" int DAT_0051d210[4];
-extern "C" int g_stringPool[4];
-/* Property record returned by igProperty_GetRecordIntList: its int list sits at +12. */
-struct PropertyIntArray { char pad[12]; igIntList *list; };
-extern "C" void FUN_004435c0(beNDMWShinkaObject *out, beNDMWGameRam *ctx, int arg2, int arg3);
-struct R { char p[16]; int f16; };
-extern "C" int DAT_004cfc80[4];
-extern "C" int DAT_004cfca0[4];
-extern "C" int DAT_0051d3a0[4];
-extern "C" int DAT_0051d3a8[4];
-extern "C" int DAT_0051d3b8[4];
-extern "C" int DAT_0051d3c8[4];
-extern "C" int DAT_0051d3d8[4];
-extern "C" float g_vec3Zero[4];
-extern "C" float DAT_004e105c[4];
-extern "C" float DAT_004e1060[4];
+extern "C" beNDMWShinkaObject *beNDMWShinkaObject_CreateInstance(int allocator);
+extern "C" int DamageSeq_GetMetaEnum(...);
+extern "C" int StatusName_GetMetaEnum(...);
+extern "C" int MsgAction_GetMetaEnum(void);
+
+extern "C" void beNDMWShinkaCtrl_Setup(beNDMWShinkaCtrl *self, int insight, int playerNo);
+extern "C" void beNDMWShinkaCtrl_BuildFormList(beNDMWShinkaCtrl *self);
+extern "C" void beNDMWShinkaObject_Load(beNDMWShinkaObject *self, beNDMWGameRam *gameRam, int playerNo, int form);
+extern "C" int beNDMWMdlPEBase_ShowStatusIcon(beNDMWMdlPEBase *self, beBaseInfoRam *ram, const char *iconName, int iconRamNo, int slot, bool restart);
+extern "C" void Gap__Bec__beNDMWMdlPEBase__vfunc_46(beNDMWMdlPEBase *self, beBaseInfoRam *ram);
+extern "C" void beNDMWMdlPEBase_OnSequenceChange(beNDMWMdlPEBase *self, beBaseInfoRam *ram);
+extern "C" void beNDMWMdlPEBase_LoadDownData(beNDMWMdlPEBase *self, beBaseInfoRam *ram, beNDMWMdlPEBaseInfoWork *work);
+extern "C" void beNDMWMdlPEBase_LoadUpData(beNDMWMdlPEBase *self, beBaseInfoRam *ram, beNDMWMdlPEBaseInfoWork *work);
+extern "C" void beNDMWMdlPEBase_RecalcPlayer(beNDMWMdlPEBase *self, beBaseInfoRam *ram, beNDMWMdlPEBaseInfoWork *work);
+extern "C" int Gap__Bec__beNDMWMdlPEBase__vfunc_47(beNDMWMdlPEBase *self, beBaseInfoRam *ram, int message);
+extern "C" void Gap__Bec__beNDMWMdlPEBaseInfoWork__vfunc_8(beNDMWMdlPEBaseInfoWork *self);
+extern "C" int beNDMWMdlPEBaseInfoWork_IsPoisoned(beNDMWMdlPEBaseInfoWork *self);
+extern "C" void beNDMWMdlPEBaseInfoWork_CurePoison(beNDMWMdlPEBaseInfoWork *self, beBaseInfoRam *ram);
+extern "C" int beNDMWMdlPEBaseInfoWork__GetMeta(void);
+extern "C" int beNDMWMdlPEBase__GetMeta(void);
+
+extern "C" int g_beMessenger_metaObject[4];
+extern "C" int g_beNDMWGameRam_metaObject[4];
+extern "C" int g_beNDMWMdlPEBaseInfoWork_metaObject[4];
+extern "C" int g_beNDMWMdlPEBase_metaObject[4];
 extern "C" int g_propertyNameField[4];
 extern "C" int g_defaultAllocatorSelector[4];
-extern "C" unsigned char GPR_00554c14;
-struct Rel { static inline void go(igObject *object) {
-    if (object) {
-        --object->_refCount;
-        if (((unsigned long long)(long long)object->_refCount & 0x7fffffULL) == 0)
-            igObject_Destroy(object);
-    }
-} };
-struct V3 { float x, y, z; };
-extern "C" int FUN_00443900(beNDMWMdlPEBase *arg0, beBaseInfoRam *arg1, int arg2, int arg3, int arg4, bool arg5);
-struct igResult { int w0; bool operator==(const igResult &o) const { return w0 == o.w0; } };
-typedef struct List : public igObject { int size; int cap; int *data; } List;
-extern "C" List *beBaseInfoDataList_Create(...);
-typedef struct BList : public igObject { int size; int cap; unsigned char *data; } BList;
-typedef struct OList : public igObject { int size; int cap; beModelCtrlMoveObject **data; } OList;
-typedef struct Param : public igObject { int pad8; int value; } Param;
-typedef struct Entry { int w0, w1, w2, w3, w4; beNDMWMdlPEBaseInfoWork *work; } Entry;
-typedef struct Model : public igObject { int id; char pad12[28]; List *props; } Model;
-extern "C" Entry * igProperty_FindByName(...);
-extern "C" Param *igProperty_GetRecord(...);
+extern "C" int g_stringPool[4];
+extern "C" unsigned char g_useOwnerAllocator;
+extern "C" igVec3f g_vec3Zero;
+/* Per status icon: its model, and the open and loop sequences by display slot. */
+extern "C" const char *g_statusIconModelNames[];
+extern "C" const char *g_statusIconOpenSequences[];
+extern "C" const char *g_statusIconLoopSequences[];
+
+extern "C" char DATABASE_12[];
+extern "C" char shinka_6[];
+extern "C" char GETDATABASE_11[];
+extern "C" char GAMERAM_17[];
+extern "C" char GETPLAYER_13[];
+extern "C" char BASE_ISUSE_5[];
+extern "C" char BASE_LEVEL_4[];
+extern "C" char DATABASE_3[];
+extern "C" char shinka_2[];
+extern "C" char GETDATABASE_3[];
+extern "C" char NAME_6[];
+extern "C" char BASE_SKILL_3[];
+extern "C" char ONE_15[];
+extern "C" char MODELCTRL_20[];
+extern "C" char FIND_SPACE_4[];
+extern "C" char GENERATE_14[];
+extern "C" char MOVETRANS_2[];
+extern "C" char SQ_ERAS_4[];
+extern "C" char POISON[];
+extern "C" char METERCTRL_5[];
+extern "C" char hpmt_3[];
+extern "C" char SETPERCENT_4[];
+extern "C" char NUMBERCTRL_6[];
+extern "C" char hpnm_3[];
+extern "C" char SETVALUE_5[];
+extern "C" char SQ_DEAD[];
+extern "C" char SLEEP[];
+extern "C" char SQ_SLEP_2[];
+extern "C" char SQ_WAIT_6[];
+extern "C" char SQ_STUN[];
+extern "C" char STUN[];
+extern "C" char BIND[];
+extern "C" char ATKDOWN[];
+extern "C" char POWDOWN[];
+extern "C" char SPEEDUP[];
+extern "C" char POWERUP[];
+extern "C" char REFRACT[];
+extern "C" char METAL[];
+extern "C" char GAMERAM_18[];
+extern "C" char GETPLAYER_14[];
+extern "C" char ATTACKDELAY_3[];
+extern "C" char DOWNDATA_3[];
+extern "C" char UPDATA_3[];
+extern "C" char RECALCPLAYER_7[];
+extern "C" char ADDHP_2[];
+
+/* The sixteen species a player can digivolve into, in the order of the BASE_* arrays. */
+enum { FORM_DORUMON = 3, FORM_COUNT = 16 };
+/* Weapon-type skill levels stored per form in BASE_SKILL: blunt, slash, stab, bash, shot, crush,
+ * blast, heal, force. */
+enum { SKILL_COUNT = 9 };
+/* The StatusName enum: one timer, first-tick flag and icon per status. STATUS_ANY is the icon shown
+ * while any of the first eight runs. */
+enum {
+    STATUS_POISON, STATUS_ATTACKDOWN, STATUS_POWERDOWN, STATUS_BIND, STATUS_REFRACT, STATUS_SPEEDUP,
+    STATUS_POWERUP, STATUS_METAL, STATUS_SLEEP, STATUS_STUN, STATUS_RARE, STATUS_ANY, STATUS_ICON_COUNT
+};
+/* The MsgAction enum: the messages the status handler answers. */
+enum {
+    MSG_SETPOISON, MSG_SETSLEEP, MSG_SETSTUN, MSG_SETBIND, MSG_SETATTACKDOWN, MSG_SETPOWERDOWN,
+    MSG_SETRAREICON, MSG_SETSPEEDUP, MSG_SETPOWERUP, MSG_SETREFRACT, MSG_SETMETAL, MSG_CLEARMETAL,
+    MSG_CHECKSTATUS, MSG_CLEARSTATUS, MSG_ALLCLEARSTATUS, MSG_GETPEBASEWORK
+};
+/* Ranges of the down and up data lists each status fills. */
+enum { DOWN_ATTACK = 0, DOWN_POWER = 4, DOWN_METAL = 6, DOWN_DATA_COUNT = 6, UP_SPEED = 0, UP_POWER = 4, UP_REFRACT = 7, UP_DATA_COUNT = 7 };
+/* SETPOISON gives a duration in frames; the poison then ticks every two seconds. */
+enum { POISON_TICK_FRAMES = 120, POISON_TICK_TIME = 2000000000 };
+/* METAL raises its down-data entry by four every ATTACKDELAY * 120 frames. */
+enum { METAL_STEP = 4, METAL_DELAY_SCALE = 120 };
+
+/* Timers run in nanoseconds; durations arrive in frames at 60 per second. */
+static inline long long FramesToTime(int frames) { return (long long)frames * 1000000000 / 60; }
+
+/* The result igMetaEnum_GetValueByName returns, compared with g_statusSucceeded. */
+struct igResult { int value; bool operator==(const igResult &other) const { return value == other.value; } };
 extern "C" igResult igMetaEnum_GetValueByName(...);
-extern "C" int DAT_004cfc50[4];
-extern "C" int DAT_004cfcb8[4];
-extern "C" int DAT_004cfcc0[4];
-extern "C" int DAT_004cfcc8[4];
-extern "C" int DAT_004cfcd0[4];
-extern "C" int DAT_004cfcd8[4];
-extern "C" int DAT_004cfce0[4];
-extern "C" int DAT_004cfce8[4];
-extern "C" int DAT_004cfcf0[4];
-extern "C" int DAT_004cfcf8[4];
-extern "C" int DAT_004cfd00[4];
-extern "C" int DAT_004cfd08[4];
-extern "C" int DAT_004cfd10[4];
-extern "C" int DAT_004cfd18[4];
-extern "C" int DAT_004cfd20[4];
-extern "C" int DAT_004cfd28[4];
-extern "C" int DAT_004cfd30[4];
-extern "C" int DAT_004cfd38[4];
-extern "C" int DAT_004cfd40[4];
-extern "C" int DAT_004cfd48[4];
-extern "C" int DAT_004cfd50[4];
-extern "C" int DAT_004cfd58[4];
-extern "C" int DAT_004cfd60[4];
-extern "C" int DAT_004cfd68[4];
-extern "C" int DAT_004cfd70[4];
-extern "C" int DAT_004cfd78[4];
-extern "C" int DAT_004cfd80[4];
-extern "C" int DAT_004cfd88[4];
-extern "C" int DAT_004cfd90[4];
-extern "C" int DAT_004cfd98[4];
-extern "C" int DAT_004cfda0[4];
-extern "C" int DAT_004cfda8[4];
-extern "C" int DAT_004cfdb0[4];
 extern "C" igResult g_statusSucceeded;
-extern "C" int DAT_0051d3e8[4];
-extern "C" int DAT_0051d3f0[4];
-extern "C" int DAT_0051d3f8[4];
-extern "C" int DAT_0051d408[4];
-extern "C" int DAT_0051d410[4];
-extern "C" int DAT_0051d420[4];
-extern "C" int DAT_0051d430[4];
-extern "C" int DAT_0051d438[4];
-extern "C" int DAT_0051d448[4];
-extern "C" int DAT_0051d450[4];
-extern "C" int DAT_0051d458[4];
-extern "C" int DAT_0051d460[4];
-extern "C" int DAT_0051d468[4];
-extern "C" int DAT_0051d470[4];
-extern "C" int DAT_0051d478[4];
-extern "C" int DAT_0051d480[4];
-extern "C" int DAT_0051d488[4];
-extern "C" int DAT_0051d490[4];
-extern "C" int DAT_0051d498[4];
-extern "C" int DAT_0051d4a0[4];
-extern "C" int DAT_0051d4a8[4];
-extern "C" int DAT_0051d4b0[4];
-extern "C" int DAT_0051d4b8[4];
-extern "C" int DAT_0051d4c8[4];
-extern "C" unsigned char GPR_00554a78;
-extern "C" unsigned char GPR_00554a7c;
-extern "C" unsigned char GPR_00554a80;
-extern "C" unsigned char GPR_00554a84;
-extern "C" unsigned char GPR_00554a88;
-extern "C" unsigned char GPR_00554a8c;
-extern "C" unsigned char GPR_00554a90;
-extern "C" unsigned char GPR_00554a94;
-extern "C" unsigned char GPR_00554a98;
-extern "C" unsigned char GPR_00554a9c;
-/* Owning stack reference to the freshly created property list; released on scope exit (reference
- * count in the low 23 bits of _refCount). */
 
-class VC140 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void d32(); virtual void vX(Model *, void *); };
-extern "C" void Gap__Bec__beNDMWMdlPEBase__vfunc_46(beNDMWMdlPEBase *self, Model *obj);
-extern "C" int DAT_004cfc74[4];
-extern "C" int DAT_004cfdb8[4];
-extern "C" int DAT_004cfdc0[4];
-extern "C" int DAT_004cfdc8[4];
-extern "C" int DAT_004cfdd0[4];
-extern "C" unsigned char GPR_00554aa0;
-extern "C" unsigned char GPR_00554aa4;
-struct HpWord { char pad[12]; int f12; };
-class MessengerVirt { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void d32(); virtual int vX(void *, void *); };
-extern "C" void beNDMWMdlPEBase_OnSequenceChange(beNDMWMdlPEBase *arg0, beBaseInfoRam *arg1);
-typedef struct Obj { char pad[12]; igObject *f12; } Obj;
-extern "C" int DAT_004cfdd8[4];
-extern "C" int DAT_0051d4d8[4];
-extern "C" void FUN_004456c0(beNDMWMdlPEBase *arg0, beBaseInfoRam *arg1, beNDMWMdlPEBaseInfoWork *arg2);
-extern "C" int DAT_004cfde0[4];
-extern "C" int DAT_0051d4e8[4];
-extern "C" void FUN_00445990(beNDMWMdlPEBase *arg0, beBaseInfoRam *arg1, beNDMWMdlPEBaseInfoWork *arg2);
-struct A1 { char pad[8]; int f8; };
-extern "C" int DAT_0051d4f0[4];
-extern "C" int DAT_0051d500[4];
-extern "C" void FUN_00445c60(beNDMWMdlPEBase *arg0, struct A1 *arg1, beNDMWMdlPEBaseInfoWork *arg2);
-class igResult;
-extern "C" int DAT_004cfde8[4];
-extern "C" int DAT_004cfdf0[4];
-extern "C" int DAT_004cfdf8[4];
-extern "C" int DAT_004cfe00[4];
-extern "C" int DAT_004cfe08[4];
-extern "C" int DAT_004cfe10[4];
-extern "C" int DAT_004cfe18[4];
-extern "C" int DAT_004cfe20[4];
-extern "C" int DAT_004cfe28[4];
-extern "C" int DAT_004cfe30[4];
-extern "C" int DAT_004cfe38[4];
-extern "C" int DAT_004cfe40[4];
-extern "C" int DAT_004cfe48[4];
-extern "C" int DAT_004cfe50[4];
-extern "C" int DAT_004cfe58[4];
-extern "C" int DAT_004cfe60[4];
-extern "C" int DAT_004cfe68[4];
-extern "C" unsigned char GPR_00554aa8;
-extern "C" unsigned char GPR_00554aac;
-extern "C" unsigned char GPR_00554ab0;
-extern "C" unsigned char GPR_00554ab4;
-extern "C" unsigned char GPR_00554ab8;
-extern "C" unsigned char GPR_00554abc;
-extern "C" unsigned char GPR_00554ac0;
-extern "C" unsigned char GPR_00554ac4;
-extern "C" unsigned char GPR_00554ac8;
-extern "C" unsigned char GPR_00554acc;
-extern "C" unsigned char GPR_00554ad0;
-extern "C" unsigned char GPR_00554ad4;
-extern "C" unsigned char GPR_00554ad8;
-extern "C" unsigned char GPR_00554adc;
-extern "C" unsigned char GPR_00554ae0;
-extern "C" unsigned char GPR_00554ae4;
-extern "C" unsigned char GPR_00554ae8;
-extern "C" unsigned char GPR_00554aec;
-extern "C" unsigned char GPR_00554af0;
-extern "C" unsigned char GPR_00554af4;
-extern "C" unsigned char GPR_00554af8;
-extern "C" unsigned char GPR_00554afc;
-/* Owning stack reference to the freshly created property data list; released at the end of the
- * full expression that stores it (reference count in the low 23 bits of _refCount). */
+/* beModelCtrl's vtable up to its message handler (slot 33). */
+class beModelCtrlSlots {
+public:
+    virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void d32();
+    virtual int handleMessage(beBaseInfoRam *ram, const char *message);
+};
 
-/* Owning stack reference that carries each new int list of the work while it is sized and filled:
- * starts empty, is handed one created list after another (MKLIST drops the previous one first) and
- * releases the last on scope exit. */
+/* Stores a new reference to `object` in an object-reference field, releasing the one it held. */
+static inline void AssignReference(int &field, igObject *object) {
+    igObject *old;
+    if (object != 0) object->_refCount = object->_refCount + 1;
+    old = (igObject *)field;
+    igRelease(old);
+    field = (int)object;
+}
+
+static inline int OwnAllocator(void *object) {
+    int allocator = igObject_GetAllocator(object);
+    return g_useOwnerAllocator != 0 ? allocator : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
+}
+
+/* Creates the ram's data list when it has none. */
+static inline void EnsureDataList(beBaseInfoRam *ram) {
+    if (ram->_dataList == 0) {
+        int allocator = igObject_GetAllocator(ram);
+        igSmartPointer<beBaseInfoDataList> created(beBaseInfoDataList_Create(g_useOwnerAllocator != 0 ? allocator : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0])));
+        AssignReference(ram->_dataList, created.p);
+    }
+}
+
+/* The int list of a player's data-list record `name`. */
+static inline igIntList *PlayerIntList(beNDMWGameRam *gameRam, int playerNo, const char *name) {
+    beDataObjIntList *record = (beDataObjIntList *)igProperty_GetRecordIntList(((int *)((igIntList *)gameRam->_playerDataListList)->_data)[playerNo], name);
+    return (igIntList *)record->_data;
+}
+
+/* Element access to the work's int and bool lists, which it holds as object-reference fields. */
+static inline int &IntAt(int list, int index) { return ((int *)((igIntList *)list)->_data)[index]; }
+static inline unsigned char &BoolAt(int list, int index) { return ((unsigned char *)((igBoolList *)list)->_data)[index]; }
+static inline void IntList_Set(igIntList *list, int index, const int &value) {
+    if (list->_count != 0 && index >= 0 && index < list->_count) ((int *)list->_data)[index] = value;
+}
+static inline void BoolList_Set(igBoolList *list, int index, const bool &value) {
+    if (list->_count != 0 && index >= 0 && index < list->_count) ((unsigned char *)list->_data)[index] = value;
+}
+static inline void IntList_Fill(igIntList *list, const int &value) {
+    int count = list->_count;
+    int *data = (int *)list->_data;
+    int i;
+    for (i = 0; i < count; i++) data[i] = value;
+}
+/* IntList_Fill on the list an object-reference field holds, reading the field at each use. */
+static inline void IntList_FillField(const int &list, const int &value) {
+    int count = ((igIntList *)list)->_count;
+    int *data = (int *)((igIntList *)list)->_data;
+    int i;
+    for (i = 0; i < count; i++) data[i] = value;
+}
+static inline void BoolList_Fill(igBoolList *list, const bool &value) {
+    int count = list->_count;
+    unsigned char *data = (unsigned char *)list->_data;
+    int i;
+    for (i = 0; i < count; i++) data[i] = value;
+}
+/* Sets the count of the data list a field holds, growing its storage first. */
+static inline void List_SetCount(const int &list, int count, int elementSize) {
+    if (((igDataList *)list)->_count < count + 1) List_Reserve((igDataList *)list, count, elementSize);
+    if (((igDataList *)list)->_capacity >= count) ((igDataList *)list)->_count = count;
+    else List_Resize((igDataList *)list, count, elementSize);
+}
+
+/* Owning stack reference to each new int list of a work while it is sized and filled; releases the
+ * last one on scope exit. */
 class IntListRef {
 public:
-    List *p;
-    IntListRef(List *o) : p(o) {}
-    ~IntListRef() { List *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
+    igIntList *p;
+    IntListRef(igIntList *list) : p(list) {}
+    void release() { igIntList *held = p; if (held != 0) { --held->_refCount; if ((held->_refCount & 0x7fffff) == 0) igObject_Destroy(held); } }
+    ~IntListRef() { igIntList *held = p; if (held != 0) { --held->_refCount; if ((held->_refCount & 0x7fffff) == 0) igObject_Destroy(held); } }
 };
 /* Same role for the work's bool list. */
 class BoolListRef {
 public:
-    List *p;
-    BoolListRef(List *o) : p(o) {}
-    ~BoolListRef() { List *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
+    igBoolList *p;
+    BoolListRef(igBoolList *list) : p(list) {}
+    void release() { igBoolList *held = p; if (held != 0) { --held->_refCount; if ((held->_refCount & 0x7fffff) == 0) igObject_Destroy(held); } }
+    ~BoolListRef() { igBoolList *held = p; if (held != 0) { --held->_refCount; if ((held->_refCount & 0x7fffff) == 0) igObject_Destroy(held); } }
 };
-/* Store a freshly created data list in the model, taking the model's share and dropping the previous
- * list; the caller passes the list as a temporary holder that gives up the creating share at the end of
- * the full expression (matching construct: a temporary takes its frame slot after the named locals). */
-struct DataList { static inline void store(Model *obj, const igSmartPointer<List> &list) {
-    List *created = list.p;
-    List *old;
-    if (created != 0) created->_refCount = created->_refCount + 1;
-    old = obj->props;
-    RELEASE(old)
-    obj->props = created;
-} };
-extern "C" int Gap__Bec__beNDMWMdlPEBase__vfunc_47(beNDMWMdlPEBase *self, Model *obj, int name);
-extern "C" int Gap__Core__igObject__vfunc_08__002ff0f0(beNDMWMdlPEBaseInfoWork *);
-extern "C" int DAT_004cfe70[4];
-extern "C" int DAT_004cfe78[4];
-extern "C" void Gap__Bec__beNDMWMdlPEBaseInfoWork__vfunc_8(beNDMWMdlPEBaseInfoWork *arg0);
-extern "C" int FUN_00447b00(beNDMWMdlPEBaseInfoWork *owner);
-extern "C" int DAT_004cfe80[4];
-extern "C" void FUN_00447b40(beNDMWMdlPEBaseInfoWork *owner, void *arg);
-extern "C" int g_beNDMWMdlPEBaseInfoWork_metaObject[4];
-extern "C" int g_beNDMWMdlPEBase_metaObject[4];
 
-void beNDMWShinkaCtrl_Setup(beNDMWShinkaCtrl *arg0, int arg1, int arg2) {
-    igObject *t;
-    igObject *a0;
-    arg0->_playerNo = arg2;
-    arg0->_messenger = igInsightCore_FindManager(arg1, g_beMessenger_metaObject[0]);
-    arg0->_gameRam = igInsightCore_FindManager(arg1, g_beNDMWGameRam_metaObject[0]);
-    beMessenger_SendNamed(arg0->_messenger, DAT_0051d1a8, DAT_0051d1b8, 0, DAT_0051d1c0);
-    t = (igObject *)((int *)beMessenger_GetObject(arg0->_messenger, 0));
-    if (t != 0) {
-        t->_refCount = t->_refCount + 1;
-    }
-    a0 = (igObject *)arg0->_dBShinka;
-    if (a0 != 0) {
-        a0->_refCount = a0->_refCount - 1;
-        if ((a0->_refCount & 0x7FFFFF) == 0) {
-            igObject_Destroy(a0);
-        }
-    }
-    arg0->_dBShinka = (int)t;
-    beMessenger_SelectGroup(arg0->_messenger, DAT_0051d1d0);
-    beMessenger_AppendInt(arg0->_messenger, arg2);
-    beMessenger_DispatchSelected(arg0->_messenger, DAT_0051d1d8);
-    t = (igObject *)((int *)beMessenger_GetObject(arg0->_messenger, 0));
-    if (t != 0) {
-        t->_refCount = t->_refCount + 1;
-    }
-    a0 = (igObject *)arg0->_playerParameter;
-    if (a0 != 0) {
-        a0->_refCount = a0->_refCount - 1;
-        if ((a0->_refCount & 0x7FFFFF) == 0) {
-            igObject_Destroy(a0);
-        }
-    }
-    arg0->_playerParameter = (int)t;
-    FUN_004432a0(arg0);
+void beNDMWShinkaCtrl_Setup(beNDMWShinkaCtrl *self, int insight, int playerNo) {
+    self->_playerNo = playerNo;
+    self->_messenger = igInsightCore_FindManager(insight, g_beMessenger_metaObject[0]);
+    self->_gameRam = igInsightCore_FindManager(insight, g_beNDMWGameRam_metaObject[0]);
+    beMessenger_SendNamed(self->_messenger, DATABASE_12, shinka_6, 0, GETDATABASE_11);
+    AssignReference(self->_dBShinka, (igObject *)beMessenger_GetObject(self->_messenger, 0));
+    beMessenger_SelectGroup(self->_messenger, GAMERAM_17);
+    beMessenger_AppendInt(self->_messenger, playerNo);
+    beMessenger_DispatchSelected(self->_messenger, GETPLAYER_13);
+    AssignReference(self->_playerParameter, (igObject *)beMessenger_GetObject(self->_messenger, 0));
+    beNDMWShinkaCtrl_BuildFormList(self);
 }
 
-/* Owning stack reference to the evolution entry under construction; released on scope exit
- * (reference count in the low 23 bits of _refCount). */
-
-void FUN_004432a0(beNDMWShinkaCtrl *self) {
-    int ia;
-    igObject *obj;
-    igObjectList *l4;
-    igObject *o3;
-    igBoolList *s2;
-    igObjectList *lst;
-    int n;
+void beNDMWShinkaCtrl_BuildFormList(beNDMWShinkaCtrl *self) {
+    igObject *object;
+    igObjectList *list;
+    igObject *retained;
+    igTDataList<unsigned char> *isUse;
+    igObjectList *forms;
+    int count;
     int i;
-    int cnt;
+    int cleared;
     int j;
-    int idx;
-    int base;
-    int alloc;
+    int form;
 
-    lst = (igObjectList *)self->_list;
-    n = lst->_count;
-    for (i = 0; i < n; i++) {
-        obj = ((igObject **)lst->_data)[i];
-        if (obj != 0) {
-            obj->_refCount = obj->_refCount - 1;
-            if ((obj->_refCount & 0x7FFFFF) == 0) {
-                igObject_Destroy(obj);
-            }
-        }
+    forms = (igObjectList *)self->_list;
+    count = forms->_count;
+    for (i = 0; i < count; i++) {
+        object = ((igObject **)forms->_data)[i];
+        igRelease(object);
     }
-    cnt = lst->_count;
-    for (j = 0; j < cnt; j++) {
-        ((igObject **)lst->_data)[j] = 0;
+    cleared = forms->_count;
+    for (j = 0; j < cleared; j++) {
+        ((igObject **)forms->_data)[j] = 0;
     }
-    lst->_count = 0;
-    s2 = (igBoolList *)igProperty_GetRecordArray(self->_playerParameter, &DAT_0051d1e8[0])->_data;
-    igProperty_GetRecordIntList(self->_playerParameter, &DAT_0051d1f8[0]);
-    for (idx = 0; idx < 16; idx++) {
-        if ((*(unsigned char **)&s2->_data)[idx] != 0) {
-            base = igObject_GetAllocator(self);
-            if (GPR_00554c14 != 0) {
-                alloc = base;
-            } else {
-                alloc = Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
-            }
-            igSmartPointer<igObject> entry(FUN_003c99a0(alloc));
-            igObject *slotB[1];
-            FUN_004435c0((beNDMWShinkaObject *)entry.p, (beNDMWGameRam *)self->_gameRam, self->_playerNo, idx);
-            if (idx == 3) {
-                l4 = (igObjectList *)self->_list;
-                o3 = (igObject *)slotB; /* matching construct: hand spelling — one-element array, the retained word is re-read through its address */
-                slotB[0] = entry.p;
-                o3 = *(igObject **)o3;
-                if (o3 != 0) {
-                    o3->_refCount = o3->_refCount + 1;
+    forms->_count = 0;
+    isUse = (igTDataList<unsigned char> *)igProperty_GetRecordArray(self->_playerParameter, BASE_ISUSE_5)->_data;
+    igProperty_GetRecordIntList(self->_playerParameter, BASE_LEVEL_4);
+    for (form = 0; form < FORM_COUNT; form++) {
+        if (isUse->_data[form] != 0) {
+            igSmartPointer<beNDMWShinkaObject> entry(beNDMWShinkaObject_CreateInstance(OwnAllocator(self)));
+            igObject *inserted[1];
+            beNDMWShinkaObject_Load(entry.p, (beNDMWGameRam *)self->_gameRam, self->_playerNo, form);
+            if (form == FORM_DORUMON) {
+                list = (igObjectList *)self->_list;
+                retained = (igObject *)inserted; /* matching construct: hand spelling — one-element array, the retained word is re-read through its address */
+                inserted[0] = entry.p;
+                retained = *(igObject **)retained;
+                if (retained != 0) {
+                    retained->_refCount = retained->_refCount + 1;
                 }
-                List_InsertWords(l4, 0, 1, slotB);
+                List_InsertWords(list, 0, 1, inserted);
             } else {
                 ObjectList_AppendRetained((igObjectList *)self->_list, entry.p);
             }
@@ -394,765 +310,666 @@ void FUN_004432a0(beNDMWShinkaCtrl *self) {
     }
 }
 
-void FUN_004435c0(beNDMWShinkaObject *out, beNDMWGameRam *ctx, int arg2, int arg3) {
-    igObject *o;
-    igObject *old;
-    int s;
+void beNDMWShinkaObject_Load(beNDMWShinkaObject *self, beNDMWGameRam *gameRam, int playerNo, int form) {
+    const char *name;
     int pool;
-    int ref;
-    int oldref;
-    int *hdr;
-    int cnt;
-    struct PropertyIntArray *t1;
-    struct PropertyIntArray *t2;
-    igIntList *sd;
-    out->_id = arg3;
-    if (ctx->_dBShinka == 0) {
-        beMessenger_SendNamed(ctx->_messenger, &DATABASE_3[0], &shinka_2[0], 0, &GETDATABASE_3[0]);
-        o = ((igObject *)beMessenger_GetObject(ctx->_messenger, 0));
-        if (o != 0) {
-            o->_refCount = o->_refCount + 1;
-        }
-        old = (igObject *)ctx->_dBShinka;
-        if (old != 0) {
-            old->_refCount = old->_refCount - 1;
-            if ((old->_refCount & 0x7FFFFF) == 0) {
-                igObject_Destroy(old);
-            }
-        }
-        ctx->_dBShinka = (int)o;
+    int token;
+    int old;
+    int *header;
+    int references;
+    igIntList *skills;
+    self->_id = form;
+    if (gameRam->_dBShinka == 0) {
+        beMessenger_SendNamed(gameRam->_messenger, DATABASE_3, shinka_2, 0, GETDATABASE_3);
+        AssignReference(gameRam->_dBShinka, (igObject *)beMessenger_GetObject(gameRam->_messenger, 0));
     }
-    s = beDataBase_GetRecordString(ctx->_dBShinka, arg3, &DAT_0051d208[0]);
+    name = beDataBase_GetRecordString(gameRam->_dBShinka, form, NAME_6);
     if (g_stringPool[0] == 0) {
         pool = StringPool_Allocate(16);
         if (pool != 0)
             pool = StringPool_Construct(pool);
         g_stringPool[0] = pool;
     }
-    ref = StringPool_Intern(g_stringPool[0], s);
-    oldref = out->_name;
-    if (oldref != 0) {
-        hdr = (int *)(oldref - 8);
-        cnt = *(int *)(oldref - 4) - 1;
-        *(int *)(oldref - 4) = cnt;
-        if (cnt == 0)
-            StringChunk_ReleaseHeader(*hdr, hdr);
+    token = StringPool_Intern(g_stringPool[0], name);
+    old = self->_name;
+    if (old != 0) {
+        header = (int *)(old - 8);
+        references = *(int *)(old - 4) - 1;
+        *(int *)(old - 4) = references;
+        if (references == 0)
+            StringChunk_ReleaseHeader(*header, header);
     }
-    out->_name = ref;
-    t1 = ((struct PropertyIntArray *)igProperty_GetRecordIntList(((int *)((igIntList *)ctx->_playerDataListList)->_data)[arg2], &DAT_0051d1f8[0]));
-    out->_level = ((int *)t1->list->_data)[arg3];
-    out->_hpMax = beNDMWGameRam_CalcMaxPoints(ctx, arg2, arg3, 1);
-    out->_mpMax = beNDMWGameRam_CalcMaxPoints(ctx, arg2, arg3, 0);
-    out->_tsuyosa = beNDMWGameRam_CalcAttribute(ctx, arg2, arg3, 0);
-    out->_mamori = beNDMWGameRam_CalcAttribute(ctx, arg2, arg3, 1);
-    out->_kashikosa = beNDMWGameRam_CalcAttribute(ctx, arg2, arg3, 2);
-    out->_seishin = beNDMWGameRam_CalcAttribute(ctx, arg2, arg3, 3);
-    out->_subayasa = beNDMWGameRam_CalcAttribute(ctx, arg2, arg3, 4);
-    t2 = ((struct PropertyIntArray *)igProperty_GetRecordIntList(((int *)((igIntList *)ctx->_playerDataListList)->_data)[arg2], &DAT_0051d210[0]));
-    sd = t2->list;
-    out->_blunt = *(int *)(sd->_data + arg3 * 36);
-    out->_slash = *(int *)(sd->_data + (arg3 * 9 + 1) * 4);
-    out->_stab = *(int *)(sd->_data + (arg3 * 9 + 2) * 4);
-    out->_bash = *(int *)(sd->_data + (arg3 * 9 + 3) * 4);
-    out->_shot = *(int *)(sd->_data + (arg3 * 9 + 4) * 4);
-    out->_crush = *(int *)(sd->_data + (arg3 * 9 + 5) * 4);
-    out->_blast = *(int *)(sd->_data + (arg3 * 9 + 6) * 4);
-    out->_heal = *(int *)(sd->_data + (arg3 * 9 + 7) * 4);
-    out->_force = *(int *)(sd->_data + (arg3 * 9 + 8) * 4);
+    self->_name = token;
+    self->_level = ((int *)PlayerIntList(gameRam, playerNo, BASE_LEVEL_4)->_data)[form];
+    self->_hpMax = beNDMWGameRam_CalcMaxPoints(gameRam, playerNo, form, 1);
+    self->_mpMax = beNDMWGameRam_CalcMaxPoints(gameRam, playerNo, form, 0);
+    self->_tsuyosa = beNDMWGameRam_CalcAttribute(gameRam, playerNo, form, 0);
+    self->_mamori = beNDMWGameRam_CalcAttribute(gameRam, playerNo, form, 1);
+    self->_kashikosa = beNDMWGameRam_CalcAttribute(gameRam, playerNo, form, 2);
+    self->_seishin = beNDMWGameRam_CalcAttribute(gameRam, playerNo, form, 3);
+    self->_subayasa = beNDMWGameRam_CalcAttribute(gameRam, playerNo, form, 4);
+    skills = PlayerIntList(gameRam, playerNo, BASE_SKILL_3);
+    self->_blunt = *(int *)(skills->_data + (form * SKILL_COUNT + 0) * 4);
+    self->_slash = *(int *)(skills->_data + (form * SKILL_COUNT + 1) * 4);
+    self->_stab = *(int *)(skills->_data + (form * SKILL_COUNT + 2) * 4);
+    self->_bash = *(int *)(skills->_data + (form * SKILL_COUNT + 3) * 4);
+    self->_shot = *(int *)(skills->_data + (form * SKILL_COUNT + 4) * 4);
+    self->_crush = *(int *)(skills->_data + (form * SKILL_COUNT + 5) * 4);
+    self->_blast = *(int *)(skills->_data + (form * SKILL_COUNT + 6) * 4);
+    self->_heal = *(int *)(skills->_data + (form * SKILL_COUNT + 7) * 4);
+    self->_force = *(int *)(skills->_data + (form * SKILL_COUNT + 8) * 4);
 }
 
-/* Owning stack reference to the freshly created property list; released on scope exit once the ram
- * holds its own reference (reference count in the low 23 bits of _refCount). */
-
-int FUN_00443900(beNDMWMdlPEBase *arg0, beBaseInfoRam *arg1, int arg2, int arg3, int arg4, bool arg5) {
-    igObject *s0;
-    R *r;
-    beBaseInfoRam *o;
-    V3 t, c1, c2, c3;
-    if (arg1->_dataList == 0) {
-        int alloc = igObject_GetAllocator(arg1);
-        int a;
-        if (GPR_00554c14 != 0) {
-            a = alloc;
-        } else {
-            a = Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
-        }
-        igSmartPointer<List> created(beBaseInfoDataList_Create(a));
-        s0 = created.p;
-        if (s0 != 0) {
-            s0->_refCount++;
-        }
-        Rel::go((igObject *)arg1->_dataList);
-        arg1->_dataList = (int)s0;
+int beNDMWMdlPEBase_ShowStatusIcon(beNDMWMdlPEBase *self, beBaseInfoRam *ram, const char *iconName, int iconRamNo, int slot, bool restart) {
+    beModelCtrlInfoRamData *data;
+    beBaseInfoRam *icon;
+    igVec3f position, openPosition, movePosition, moveOffset;
+    EnsureDataList(ram);
+    data = igProperty_FindByName(ram->_dataList, g_propertyNameField[0], ONE_15);
+    Matrix44_GetTranslation(((igTransform *)data->_node)->_m, &position);
+    if (iconRamNo == -1) {
+        beMessenger_SendNamed(self->_messenger, MODELCTRL_20, iconName, -1, FIND_SPACE_4);
+        if (beMessenger_GetObjectCount(self->_messenger) == 0) goto fail;
+        icon = (beBaseInfoRam *)beMessenger_GetObject(self->_messenger, 0);
+        beMessenger_SelectReceivers(self->_messenger, MODELCTRL_20, iconName, icon->_ramNo);
+        beMessenger_AppendString(self->_messenger, g_statusIconOpenSequences[slot]);
+        openPosition = position;
+        beMessenger_AppendVec3(self->_messenger, &openPosition);
+        beMessenger_DispatchSelected(self->_messenger, GENERATE_14);
+        return icon->_ramNo;
     }
-    r = ((R *)igProperty_FindByName((void *)arg1->_dataList, g_propertyNameField[0], DAT_0051d3a0));
-    Matrix44_GetTranslation(r->f16 + 32, &t);
-    if (arg3 == -1) {
-        beMessenger_SendNamed(arg0->_messenger, DAT_0051d3a8, arg2, -1, DAT_0051d3b8);
-        if (beMessenger_GetObjectCount(arg0->_messenger) == 0) goto fail;
-        {
-            o = ((beBaseInfoRam *)beMessenger_GetObject(arg0->_messenger, 0));
-            beMessenger_SelectReceivers(arg0->_messenger, DAT_0051d3a8, arg2, o->_ramNo);
-            beMessenger_AppendString(arg0->_messenger, DAT_004cfc80[arg4]);
-            c1 = t;
-            beMessenger_AppendVec3(arg0->_messenger, &c1);
-            beMessenger_DispatchSelected(arg0->_messenger, DAT_0051d3c8);
-            return o->_ramNo;
-        }
-        goto fail;
+    if (restart) {
+        beMessenger_SendNamed(self->_messenger, MODELCTRL_20, iconName, iconRamNo, g_statusIconLoopSequences[slot]);
     }
-    if (arg5) {
-        beMessenger_SendNamed(arg0->_messenger, DAT_0051d3a8, arg2, arg3, DAT_004cfca0[arg4]);
-    }
-    beMessenger_SelectReceivers(arg0->_messenger, DAT_0051d3a8, arg2, arg3);
-    c2 = t;
-    beMessenger_AppendVec3(arg0->_messenger, &c2);
-    c3.x = g_vec3Zero[0];
-    c3.y = DAT_004e105c[0];
-    c3.z = DAT_004e1060[0];
-    beMessenger_AppendVec3(arg0->_messenger, &c3);
-    beMessenger_DispatchSelected(arg0->_messenger, DAT_0051d3d8);
-    return arg3;
+    beMessenger_SelectReceivers(self->_messenger, MODELCTRL_20, iconName, iconRamNo);
+    movePosition = position;
+    beMessenger_AppendVec3(self->_messenger, &movePosition);
+    moveOffset = g_vec3Zero;
+    beMessenger_AppendVec3(self->_messenger, &moveOffset);
+    beMessenger_DispatchSelected(self->_messenger, MOVETRANS_2);
+    return iconRamNo;
 fail:
     return -1;
 }
 
-static inline void ensureProps(Model *obj)
-{
-    if (obj->props == 0) {
-        int allocator = igObject_GetAllocator(obj);
-        igSmartPointer<List> holder(beBaseInfoDataList_Create(GPR_00554c14 != 0 ? allocator : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0])));
-        List *created = holder.p;
-        if (created != 0) created->_refCount = created->_refCount + 1;
-        List *old = obj->props;
-        RELEASE(old)
-        obj->props = created;
-    }
-}
-
-void Gap__Bec__beNDMWMdlPEBase__vfunc_46(beNDMWMdlPEBase *self, Model *obj) {
-    beNDMWMdlPEBaseInfoWork *w;
-    List *l;
-    int n;
-    int *d;
-    int j;
-    int enumExtra;
-    ensureProps(obj);
-    w = igProperty_FindByName(obj->props, g_propertyNameField[0], &DAT_0051d3a0[0])->work;
-    if (w->_timerList != 0) {
-        if (((Param *)w->_hp)->value == 0) {
-            int i = 0;
-            int off = 0;
-            int *p = &DAT_004cfc50[0];
-            do {
-                int v = *(int *)&((BList *)w->_dispRamNoList)->data[off];
-                if (v != -1) beMessenger_SendNamed(self->_messenger, &DAT_0051d3a8[0], *p, v, &DAT_0051d3e8[0]);
-                i++;
-                off += 4;
-                p += 1;
-            } while (i < 12);
-            { List *l1 = W(_timerList); int n1 = l1->size; int *d1 = l1->data; int j1;
-              for (j1 = 0; j1 < n1; j1++) { d1[j1] = DAT_004cfcb8[0]; } }
-            { List *l2 = W(_dispRamNoList); int n2 = l2->size; int *d2 = l2->data; int j2;
-              for (j2 = 0; j2 < n2; j2++) { d2[j2] = DAT_004cfcc0[0]; } }
+void Gap__Bec__beNDMWMdlPEBase__vfunc_46(beNDMWMdlPEBase *self, beBaseInfoRam *ram) {
+    beNDMWMdlPEBaseInfoWork *work;
+    int damageSeq;
+    EnsureDataList(ram);
+    work = (beNDMWMdlPEBaseInfoWork *)igProperty_FindByName(ram->_dataList, g_propertyNameField[0], ONE_15)->_work;
+    if (work->_timerList != 0) {
+        if (((beDataObjInt *)work->_hp)->_data == 0) {
+            int i;
+            for (i = 0; i < STATUS_ICON_COUNT; i++) {
+                int iconRamNo = IntAt(work->_dispRamNoList, i);
+                if (iconRamNo != -1) beMessenger_SendNamed(self->_messenger, MODELCTRL_20, g_statusIconModelNames[i], iconRamNo, SQ_ERAS_4);
+            }
+            IntList_Fill((igIntList *)work->_timerList, 0);
+            IntList_Fill((igIntList *)work->_dispRamNoList, -1);
             return;
         }
-        if (w->_messenger == 0) w->_messenger = self->_messenger;
-        if (w->_isOnCtrl != 0 && W(_timerList)->data[0] != 0) {
-            if (((BList *)w->_isFirstList)->data[0] != 0) {
-                beBaseInfoRam_StartTimer(obj, &DAT_0051d3f0[0], 2000000000);
-                { int v_ = W(_timerList)->data[0] - 1; SETI(w->_timerList, 0, v_) }
-                SETB(w->_isFirstList, 0, GPR_00554a78)
-            }
-            if (beBaseInfoRam_IsTimerExpired(obj, &DAT_0051d3f0[0]) != 0) {
-                Param *hp = (Param *)w->_hp;
-                int v = hp->value - w->_poisonDamage;
-                if (v >= 0) { v = (int)v; } else { v = 0; } hp->value = v;
-                if (w->_isPlayer != 0) {
-                    beMessenger_SelectReceivers(self->_messenger, &DAT_0051d3f8[0], &DAT_0051d408[0], obj->id);
-                    beMessenger_AppendFloat(self->_messenger, 100.0f * (float)((Param *)w->_hp)->value / (float)((Param *)w->_mHp)->value);
-                    beMessenger_DispatchSelected(self->_messenger, &DAT_0051d410[0]);
-                    beMessenger_SelectReceivers(self->_messenger, &DAT_0051d420[0], &DAT_0051d430[0], obj->id);
-                    beMessenger_AppendInt(self->_messenger, ((Param *)w->_hp)->value);
-                    beMessenger_DispatchSelected(self->_messenger, &DAT_0051d438[0]);
+        if (work->_messenger == 0) work->_messenger = self->_messenger;
+        if (work->_isOnCtrl != 0 && IntAt(work->_timerList, STATUS_POISON) != 0) {
+            if (BoolAt(work->_isFirstList, STATUS_POISON) != 0) {
+                beBaseInfoRam_StartTimer(ram, POISON, POISON_TICK_TIME);
+                {
+                    int ticks = IntAt(work->_timerList, STATUS_POISON) - 1;
+                    IntList_Set((igIntList *)work->_timerList, STATUS_POISON, ticks);
                 }
-                hp = (Param *)w->_hp;
-                if (hp->value <= 0) {
-                    if (w->_isPlayer != 0) {
-                        CALLV(&DAT_0051d448[0]);
-                        beBaseInfoRam_RemoveTimer(obj, &DAT_0051d3f0[0]);
-                        SETI(w->_timerList, 0, DAT_004cfcc8[0])
+                BoolList_Set((igBoolList *)work->_isFirstList, STATUS_POISON, false);
+            }
+            if (beBaseInfoRam_IsTimerExpired(ram, POISON) != 0) {
+                beDataObjInt *hp = (beDataObjInt *)work->_hp;
+                int left = hp->_data - work->_poisonDamage;
+                hp->_data = left >= 0 ? left : 0;
+                if (work->_isPlayer != 0) {
+                    beMessenger_SelectReceivers(self->_messenger, METERCTRL_5, hpmt_3, ram->_ramNo);
+                    beMessenger_AppendFloat(self->_messenger, 100.0f * (float)((beDataObjInt *)work->_hp)->_data / (float)((beDataObjInt *)work->_mHp)->_data);
+                    beMessenger_DispatchSelected(self->_messenger, SETPERCENT_4);
+                    beMessenger_SelectReceivers(self->_messenger, NUMBERCTRL_6, hpnm_3, ram->_ramNo);
+                    beMessenger_AppendInt(self->_messenger, ((beDataObjInt *)work->_hp)->_data);
+                    beMessenger_DispatchSelected(self->_messenger, SETVALUE_5);
+                }
+                hp = (beDataObjInt *)work->_hp;
+                if (hp->_data <= 0) {
+                    if (work->_isPlayer != 0) {
+                        ((beModelCtrlSlots *)self)->handleMessage(ram, SQ_DEAD);
+                        beBaseInfoRam_RemoveTimer(ram, POISON);
+                        IntList_Set((igIntList *)work->_timerList, STATUS_POISON, 0);
                     } else {
-                        hp->value = 1;
-                        beBaseInfoRam_RemoveTimer(obj, &DAT_0051d3f0[0]);
-                        SETI(w->_timerList, 0, DAT_004cfcd0[0])
+                        hp->_data = 1;
+                        beBaseInfoRam_RemoveTimer(ram, POISON);
+                        IntList_Set((igIntList *)work->_timerList, STATUS_POISON, 0);
                     }
                 } else {
-                    { int v_ = W(_timerList)->data[0] - 1; SETI(w->_timerList, 0, v_) }
-                    if (W(_timerList)->data[0] <= 0) {
-                        beBaseInfoRam_RemoveTimer(obj, &DAT_0051d3f0[0]);
-                        SETI(w->_timerList, 0, DAT_004cfcd8[0])
+                    {
+                    int ticks = IntAt(work->_timerList, STATUS_POISON) - 1;
+                    IntList_Set((igIntList *)work->_timerList, STATUS_POISON, ticks);
+                }
+                    if (IntAt(work->_timerList, STATUS_POISON) <= 0) {
+                        beBaseInfoRam_RemoveTimer(ram, POISON);
+                        IntList_Set((igIntList *)work->_timerList, STATUS_POISON, 0);
                     } else {
-                        beBaseInfoRam_StartTimer(obj, &DAT_0051d3f0[0], 2000000000);
+                        beBaseInfoRam_StartTimer(ram, POISON, POISON_TICK_TIME);
                     }
                 }
             }
         }
-        if (w->_isOnCtrl != 0 && W(_timerList)->data[8] != 0) {
-            if (((BList *)w->_isFirstList)->data[8] != 0) {
-                beBaseInfoRam_StartTimer(obj, &DAT_0051d450[0], MS(W(_timerList)->data[8]));
-                if (strcmp(w->_seqCodeName, &DAT_0051d458[0]) != 0) CALLV(&DAT_0051d458[0]);
-                SETB(w->_isFirstList, 8, GPR_00554a7c)
+        if (work->_isOnCtrl != 0 && IntAt(work->_timerList, STATUS_SLEEP) != 0) {
+            if (BoolAt(work->_isFirstList, STATUS_SLEEP) != 0) {
+                beBaseInfoRam_StartTimer(ram, SLEEP, FramesToTime(IntAt(work->_timerList, STATUS_SLEEP)));
+                if (strcmp((const char *)work->_seqCodeName, SQ_SLEP_2) != 0) ((beModelCtrlSlots *)self)->handleMessage(ram, SQ_SLEP_2);
+                BoolList_Set((igBoolList *)work->_isFirstList, STATUS_SLEEP, false);
             }
-            if (beBaseInfoRam_IsTimerExpired(obj, &DAT_0051d450[0]) != 0) {
-                CALLV(&DAT_0051d460[0]);
-                beBaseInfoRam_RemoveTimer(obj, &DAT_0051d450[0]);
-                SETI(w->_timerList, 8, DAT_004cfce0[0])
-            }
-        }
-        if (w->_isOnCtrl != 0 && W(_timerList)->data[9] != 0 && strcmp(w->_seqCodeName, &DAT_0051d468[0]) == 0) {
-            if (((BList *)w->_isFirstList)->data[9] != 0) {
-                beBaseInfoRam_StartTimer(obj, &DAT_0051d470[0], MS(W(_timerList)->data[9]));
-                SETB(w->_isFirstList, 9, GPR_00554a80)
-            }
-            if (beBaseInfoRam_IsTimerExpired(obj, &DAT_0051d470[0]) != 0) {
-                SETI(w->_timerList, 9, DAT_004cfce8[0])
-                beBaseInfoRam_RemoveTimer(obj, &DAT_0051d470[0]);
-                CALLV(&DAT_0051d460[0]);
+            if (beBaseInfoRam_IsTimerExpired(ram, SLEEP) != 0) {
+                ((beModelCtrlSlots *)self)->handleMessage(ram, SQ_WAIT_6);
+                beBaseInfoRam_RemoveTimer(ram, SLEEP);
+                IntList_Set((igIntList *)work->_timerList, STATUS_SLEEP, 0);
             }
         }
-        if (w->_isOnCtrl != 0 && W(_timerList)->data[3] != 0) {
-            if (((BList *)w->_isFirstList)->data[3] != 0) {
-                beBaseInfoRam_StartTimer(obj, &DAT_0051d478[0], MS(W(_timerList)->data[3]));
-                SETB(w->_isFirstList, 3, GPR_00554a84)
+        if (work->_isOnCtrl != 0 && IntAt(work->_timerList, STATUS_STUN) != 0 && strcmp((const char *)work->_seqCodeName, SQ_STUN) == 0) {
+            if (BoolAt(work->_isFirstList, STATUS_STUN) != 0) {
+                beBaseInfoRam_StartTimer(ram, STUN, FramesToTime(IntAt(work->_timerList, STATUS_STUN)));
+                BoolList_Set((igBoolList *)work->_isFirstList, STATUS_STUN, false);
             }
-            if (beBaseInfoRam_IsTimerExpired(obj, &DAT_0051d478[0]) != 0) {
-                beBaseInfoRam_RemoveTimer(obj, &DAT_0051d478[0]);
-                SETI(w->_timerList, 3, DAT_004cfcf0[0])
-                CALLV(&DAT_0051d460[0]);
+            if (beBaseInfoRam_IsTimerExpired(ram, STUN) != 0) {
+                IntList_Set((igIntList *)work->_timerList, STATUS_STUN, 0);
+                beBaseInfoRam_RemoveTimer(ram, STUN);
+                ((beModelCtrlSlots *)self)->handleMessage(ram, SQ_WAIT_6);
+            }
+        }
+        if (work->_isOnCtrl != 0 && IntAt(work->_timerList, STATUS_BIND) != 0) {
+            if (BoolAt(work->_isFirstList, STATUS_BIND) != 0) {
+                beBaseInfoRam_StartTimer(ram, BIND, FramesToTime(IntAt(work->_timerList, STATUS_BIND)));
+                BoolList_Set((igBoolList *)work->_isFirstList, STATUS_BIND, false);
+            }
+            if (beBaseInfoRam_IsTimerExpired(ram, BIND) != 0) {
+                beBaseInfoRam_RemoveTimer(ram, BIND);
+                IntList_Set((igIntList *)work->_timerList, STATUS_BIND, 0);
+                ((beModelCtrlSlots *)self)->handleMessage(ram, SQ_WAIT_6);
             } else {
-                if (!(igMetaEnum_GetValueByName(FUN_003c03e0(), w->_seqCodeName, &enumExtra) == g_statusSucceeded)) {
-                    OList *moves = (OList *)w->_moveObjectList;
-                    int n = moves->size;
+                if (!(igMetaEnum_GetValueByName(DamageSeq_GetMetaEnum(), (const char *)work->_seqCodeName, &damageSeq) == g_statusSucceeded)) {
+                    igObjectList *moves = (igObjectList *)work->_moveObjectList;
+                    int count = moves->_count;
                     int i;
-                    for (i = 0; i < n; i++) {
+                    for (i = 0; i < count; i++) {
                         if (i != 1) {
-                            beModelCtrlMoveObject *o = moves->data[i];
-                            o->_isRun = 0;
-                            o->_speed = 0;
+                            beModelCtrlMoveObject *move = ((beModelCtrlMoveObject **)moves->_data)[i];
+                            move->_isRun = 0;
+                            move->_speed = 0;
                         }
                     }
                 }
             }
         }
-        if (w->_isOnCtrl != 0 && W(_timerList)->data[1] != 0) {
-            if (((BList *)w->_isFirstList)->data[1] != 0) {
-                beBaseInfoRam_StartTimer(obj, &DAT_0051d480[0], MS(W(_timerList)->data[1]));
-                SETB(w->_isFirstList, 1, GPR_00554a88)
+        if (work->_isOnCtrl != 0 && IntAt(work->_timerList, STATUS_ATTACKDOWN) != 0) {
+            if (BoolAt(work->_isFirstList, STATUS_ATTACKDOWN) != 0) {
+                beBaseInfoRam_StartTimer(ram, ATKDOWN, FramesToTime(IntAt(work->_timerList, STATUS_ATTACKDOWN)));
+                BoolList_Set((igBoolList *)work->_isFirstList, STATUS_ATTACKDOWN, false);
             }
-            if (beBaseInfoRam_IsTimerExpired(obj, &DAT_0051d480[0]) != 0) {
-                beBaseInfoRam_RemoveTimer(obj, &DAT_0051d480[0]);
-                SETI(w->_timerList, 1, DAT_004cfcf8[0])
-                SETI(w->_downDataList, 0, DAT_004cfd00[0])
-                SETI(w->_downDataList, 1, DAT_004cfd08[0])
-                SETI(w->_downDataList, 2, DAT_004cfd10[0])
-                SETI(w->_downDataList, 3, DAT_004cfd18[0])
-                FUN_00445c60(self, (A1 *)obj, w);
-            }
-        }
-        if (w->_isOnCtrl != 0 && W(_timerList)->data[2] != 0) {
-            if (((BList *)w->_isFirstList)->data[2] != 0) {
-                beBaseInfoRam_StartTimer(obj, &DAT_0051d488[0], MS(W(_timerList)->data[2]));
-                SETB(w->_isFirstList, 2, GPR_00554a8c)
-            }
-            if (beBaseInfoRam_IsTimerExpired(obj, &DAT_0051d488[0]) != 0) {
-                beBaseInfoRam_RemoveTimer(obj, &DAT_0051d488[0]);
-                SETI(w->_timerList, 2, DAT_004cfd20[0])
-                SETI(w->_downDataList, 4, DAT_004cfd28[0])
-                SETI(w->_downDataList, 5, DAT_004cfd30[0])
-                FUN_00445c60(self, (A1 *)obj, w);
+            if (beBaseInfoRam_IsTimerExpired(ram, ATKDOWN) != 0) {
+                beBaseInfoRam_RemoveTimer(ram, ATKDOWN);
+                IntList_Set((igIntList *)work->_timerList, STATUS_ATTACKDOWN, 0);
+                IntList_Set((igIntList *)work->_downDataList, DOWN_ATTACK + 0, 0);
+                IntList_Set((igIntList *)work->_downDataList, DOWN_ATTACK + 1, 0);
+                IntList_Set((igIntList *)work->_downDataList, DOWN_ATTACK + 2, 0);
+                IntList_Set((igIntList *)work->_downDataList, DOWN_ATTACK + 3, 0);
+                beNDMWMdlPEBase_RecalcPlayer(self, ram, work);
             }
         }
-        if (w->_isOnCtrl != 0 && W(_timerList)->data[5] != 0) {
-            if (((BList *)w->_isFirstList)->data[5] != 0) {
-                beBaseInfoRam_StartTimer(obj, &DAT_0051d490[0], MS(W(_timerList)->data[5]));
-                SETB(w->_isFirstList, 5, GPR_00554a90)
+        if (work->_isOnCtrl != 0 && IntAt(work->_timerList, STATUS_POWERDOWN) != 0) {
+            if (BoolAt(work->_isFirstList, STATUS_POWERDOWN) != 0) {
+                beBaseInfoRam_StartTimer(ram, POWDOWN, FramesToTime(IntAt(work->_timerList, STATUS_POWERDOWN)));
+                BoolList_Set((igBoolList *)work->_isFirstList, STATUS_POWERDOWN, false);
             }
-            if (beBaseInfoRam_IsTimerExpired(obj, &DAT_0051d490[0]) != 0) {
-                beBaseInfoRam_RemoveTimer(obj, &DAT_0051d490[0]);
-                SETI(w->_timerList, 5, DAT_004cfd38[0])
-                SETI(w->_upDataList, 0, DAT_004cfd40[0])
-                SETI(w->_upDataList, 1, DAT_004cfd48[0])
-                SETI(w->_upDataList, 2, DAT_004cfd50[0])
-                SETI(w->_upDataList, 3, DAT_004cfd58[0])
-                FUN_00445c60(self, (A1 *)obj, w);
+            if (beBaseInfoRam_IsTimerExpired(ram, POWDOWN) != 0) {
+                beBaseInfoRam_RemoveTimer(ram, POWDOWN);
+                IntList_Set((igIntList *)work->_timerList, STATUS_POWERDOWN, 0);
+                IntList_Set((igIntList *)work->_downDataList, DOWN_POWER + 0, 0);
+                IntList_Set((igIntList *)work->_downDataList, DOWN_POWER + 1, 0);
+                beNDMWMdlPEBase_RecalcPlayer(self, ram, work);
             }
         }
-        if (w->_isOnCtrl != 0 && W(_timerList)->data[6] != 0) {
-            if (((BList *)w->_isFirstList)->data[6] != 0) {
-                beBaseInfoRam_StartTimer(obj, &DAT_0051d498[0], MS(W(_timerList)->data[6]));
-                SETB(w->_isFirstList, 6, GPR_00554a94)
+        if (work->_isOnCtrl != 0 && IntAt(work->_timerList, STATUS_SPEEDUP) != 0) {
+            if (BoolAt(work->_isFirstList, STATUS_SPEEDUP) != 0) {
+                beBaseInfoRam_StartTimer(ram, SPEEDUP, FramesToTime(IntAt(work->_timerList, STATUS_SPEEDUP)));
+                BoolList_Set((igBoolList *)work->_isFirstList, STATUS_SPEEDUP, false);
             }
-            if (beBaseInfoRam_IsTimerExpired(obj, &DAT_0051d498[0]) != 0) {
-                beBaseInfoRam_RemoveTimer(obj, &DAT_0051d498[0]);
-                SETI(w->_timerList, 6, DAT_004cfd60[0])
-                SETI(w->_upDataList, 4, DAT_004cfd68[0])
-                SETI(w->_upDataList, 5, DAT_004cfd70[0])
-                SETI(w->_upDataList, 6, DAT_004cfd78[0])
-                FUN_00445c60(self, (A1 *)obj, w);
-            }
-        }
-        if (w->_isOnCtrl != 0 && W(_timerList)->data[4] != 0) {
-            if (((BList *)w->_isFirstList)->data[4] != 0) {
-                beBaseInfoRam_StartTimer(obj, &DAT_0051d4a0[0], MS(W(_timerList)->data[4]));
-                SETB(w->_isFirstList, 4, GPR_00554a98)
-            }
-            if (beBaseInfoRam_IsTimerExpired(obj, &DAT_0051d4a0[0]) != 0) {
-                beBaseInfoRam_RemoveTimer(obj, &DAT_0051d4a0[0]);
-                SETI(w->_timerList, 4, DAT_004cfd80[0])
-                SETI(w->_upDataList, 7, DAT_004cfd88[0])
-                SETI(w->_upDataList, 8, DAT_004cfd90[0])
-                SETI(w->_upDataList, 9, DAT_004cfd98[0])
-                SETI(w->_upDataList, 10, DAT_004cfda0[0])
-                FUN_00445c60(self, (A1 *)obj, w);
+            if (beBaseInfoRam_IsTimerExpired(ram, SPEEDUP) != 0) {
+                beBaseInfoRam_RemoveTimer(ram, SPEEDUP);
+                IntList_Set((igIntList *)work->_timerList, STATUS_SPEEDUP, 0);
+                IntList_Set((igIntList *)work->_upDataList, UP_SPEED + 0, 0);
+                IntList_Set((igIntList *)work->_upDataList, UP_SPEED + 1, 0);
+                IntList_Set((igIntList *)work->_upDataList, UP_SPEED + 2, 0);
+                IntList_Set((igIntList *)work->_upDataList, UP_SPEED + 3, 0);
+                beNDMWMdlPEBase_RecalcPlayer(self, ram, work);
             }
         }
-        if (w->_isOnCtrl != 0 && W(_timerList)->data[7] != 0) {
-            if (((BList *)w->_isFirstList)->data[7] != 0) {
-                SETI(w->_downDataList, 6, DAT_004cfda8[0])
-                beBaseInfoRam_StartTimer(obj, &DAT_0051d4a8[0], 0);
-                SETB(w->_isFirstList, 7, GPR_00554a9c)
+        if (work->_isOnCtrl != 0 && IntAt(work->_timerList, STATUS_POWERUP) != 0) {
+            if (BoolAt(work->_isFirstList, STATUS_POWERUP) != 0) {
+                beBaseInfoRam_StartTimer(ram, POWERUP, FramesToTime(IntAt(work->_timerList, STATUS_POWERUP)));
+                BoolList_Set((igBoolList *)work->_isFirstList, STATUS_POWERUP, false);
             }
-            if (beBaseInfoRam_IsTimerExpired(obj, &DAT_0051d4a8[0]) != 0) {
-                int t120;
-                { List *L_ = W(_downDataList); int v_ = L_->data[6] + 4; SETI(L_, 6, v_) }
-                beMessenger_SelectGroup(self->_messenger, &DAT_0051d4b0[0]);
-                beMessenger_AppendInt(self->_messenger, obj->id);
-                beMessenger_DispatchSelected(self->_messenger, &DAT_0051d4b8[0]);
-                t120 = igProperty_GetRecord(((int)beMessenger_GetObject(self->_messenger, 0)), &DAT_0051d4c8[0])->value * 120;
-                beBaseInfoRam_StartTimer(obj, &DAT_0051d4a8[0], MS(t120));
-                FUN_00445c60(self, (A1 *)obj, w);
+            if (beBaseInfoRam_IsTimerExpired(ram, POWERUP) != 0) {
+                beBaseInfoRam_RemoveTimer(ram, POWERUP);
+                IntList_Set((igIntList *)work->_timerList, STATUS_POWERUP, 0);
+                IntList_Set((igIntList *)work->_upDataList, UP_POWER + 0, 0);
+                IntList_Set((igIntList *)work->_upDataList, UP_POWER + 1, 0);
+                IntList_Set((igIntList *)work->_upDataList, UP_POWER + 2, 0);
+                beNDMWMdlPEBase_RecalcPlayer(self, ram, work);
+            }
+        }
+        if (work->_isOnCtrl != 0 && IntAt(work->_timerList, STATUS_REFRACT) != 0) {
+            if (BoolAt(work->_isFirstList, STATUS_REFRACT) != 0) {
+                beBaseInfoRam_StartTimer(ram, REFRACT, FramesToTime(IntAt(work->_timerList, STATUS_REFRACT)));
+                BoolList_Set((igBoolList *)work->_isFirstList, STATUS_REFRACT, false);
+            }
+            if (beBaseInfoRam_IsTimerExpired(ram, REFRACT) != 0) {
+                beBaseInfoRam_RemoveTimer(ram, REFRACT);
+                IntList_Set((igIntList *)work->_timerList, STATUS_REFRACT, 0);
+                IntList_Set((igIntList *)work->_upDataList, UP_REFRACT + 0, 0);
+                IntList_Set((igIntList *)work->_upDataList, UP_REFRACT + 1, 0);
+                IntList_Set((igIntList *)work->_upDataList, UP_REFRACT + 2, 0);
+                IntList_Set((igIntList *)work->_upDataList, UP_REFRACT + 3, 0);
+                beNDMWMdlPEBase_RecalcPlayer(self, ram, work);
+            }
+        }
+        if (work->_isOnCtrl != 0 && IntAt(work->_timerList, STATUS_METAL) != 0) {
+            if (BoolAt(work->_isFirstList, STATUS_METAL) != 0) {
+                IntList_Set((igIntList *)work->_downDataList, DOWN_METAL, 0);
+                beBaseInfoRam_StartTimer(ram, METAL, 0);
+                BoolList_Set((igBoolList *)work->_isFirstList, STATUS_METAL, false);
+            }
+            if (beBaseInfoRam_IsTimerExpired(ram, METAL) != 0) {
+                int delay;
+                {
+                    int metal = IntAt(work->_downDataList, DOWN_METAL) + METAL_STEP;
+                    IntList_Set((igIntList *)work->_downDataList, DOWN_METAL, metal);
+                }
+                beMessenger_SelectGroup(self->_messenger, GAMERAM_18);
+                beMessenger_AppendInt(self->_messenger, ram->_ramNo);
+                beMessenger_DispatchSelected(self->_messenger, GETPLAYER_14);
+                delay = ((beDataObjInt *)igProperty_GetRecord((int)beMessenger_GetObject(self->_messenger, 0), ATTACKDELAY_3))->_data * METAL_DELAY_SCALE;
+                beBaseInfoRam_StartTimer(ram, METAL, FramesToTime(delay));
+                beNDMWMdlPEBase_RecalcPlayer(self, ram, work);
             }
         }
         {
-            bool flag = false;
-            int count = 0;
+            bool anyShown = false;
+            int slot = 0;
             int i = 0;
             do {
-                int r;
-                if (i == 11) { int fv = flag; SETI(w->_timerList, i, fv) }
-                if (W(_timerList)->data[i] != 0) {
-                    if (i < 8) {
-                        bool changed = false;
-                        if (count != W(_dispPosNoList)->data[i]) {
-                            SETI(w->_dispPosNoList, i, count)
-                            changed = true;
+                int iconRamNo;
+                if (i == STATUS_ANY) IntList_Set((igIntList *)work->_timerList, i, anyShown);
+                if (IntAt(work->_timerList, i) != 0) {
+                    if (i <= STATUS_METAL) {
+                        bool moved = false;
+                        if (slot != IntAt(work->_dispPosNoList, i)) {
+                            IntList_Set((igIntList *)work->_dispPosNoList, i, slot);
+                            moved = true;
                         }
-                        r = FUN_00443900((beNDMWMdlPEBase *)self, (beBaseInfoRam *)obj, DAT_004cfc50[i], W(_dispRamNoList)->data[i], count, changed);
-                        count++;
-                    } else if (i != 10) {
-                        r = FUN_00443900((beNDMWMdlPEBase *)self, (beBaseInfoRam *)obj, DAT_004cfc50[i], W(_dispRamNoList)->data[i], 0, 0);
+                        iconRamNo = beNDMWMdlPEBase_ShowStatusIcon(self, ram, g_statusIconModelNames[i], IntAt(work->_dispRamNoList, i), slot, moved);
+                        slot++;
+                    } else if (i != STATUS_RARE) {
+                        iconRamNo = beNDMWMdlPEBase_ShowStatusIcon(self, ram, g_statusIconModelNames[i], IntAt(work->_dispRamNoList, i), 0, 0);
                     } else {
-                        r = FUN_00443900((beNDMWMdlPEBase *)self, (beBaseInfoRam *)obj, DAT_004cfc50[i], W(_dispRamNoList)->data[i], W(_timerList)->data[10] - 1, 0);
+                        iconRamNo = beNDMWMdlPEBase_ShowStatusIcon(self, ram, g_statusIconModelNames[i], IntAt(work->_dispRamNoList, i), IntAt(work->_timerList, STATUS_RARE) - 1, 0);
                     }
-                    SETI(w->_dispRamNoList, i, r)
-                    if (i < 8) flag = true;
+                    IntList_Set((igIntList *)work->_dispRamNoList, i, iconRamNo);
+                    if (i <= STATUS_METAL) anyShown = true;
                 } else {
-                    int v = W(_dispRamNoList)->data[i];
-                    if (v != -1) {
-                        beMessenger_SendNamed(self->_messenger, &DAT_0051d3a8[0], DAT_004cfc50[i], v, &DAT_0051d3e8[0]);
-                        SETI(w->_dispRamNoList, i, DAT_004cfdb0[0])
+                    int iconRamNo = IntAt(work->_dispRamNoList, i);
+                    if (iconRamNo != -1) {
+                        beMessenger_SendNamed(self->_messenger, MODELCTRL_20, g_statusIconModelNames[i], iconRamNo, SQ_ERAS_4);
+                        IntList_Set((igIntList *)work->_dispRamNoList, i, -1);
                     }
                 }
                 i++;
-            } while (i < 12);
+            } while (i < STATUS_ICON_COUNT);
         }
     }
 }
 
-/* Owning stack reference to the freshly created data list; released on scope exit (reference count
- * in the low 23 bits of _refCount). */
-
-
-
-void beNDMWMdlPEBase_OnSequenceChange(beNDMWMdlPEBase *arg0, beBaseInfoRam *arg1) {
-    void *al;
-    beNDMWMdlPEBaseInfoWork *st;
-    igObject *s1;
-    igObject *old;
-    if (arg1->_dataList == 0) {
-        al = ((void *)igObject_GetAllocator(arg1));
-        if (GPR_00554c14 != 0) {
-            al = (void *)(int)al;
-        } else {
-            al = ((void *)Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]));
-        }
-        igSmartPointer<List> ref(beBaseInfoDataList_Create(al));
-        s1 = ref.p;
-        if (s1 != 0) s1->_refCount = s1->_refCount + 1;
-        old = (igObject *)arg1->_dataList;
-        if (old != 0) {
-            old->_refCount = old->_refCount - 1;
-            if ((old->_refCount & 0x7FFFFF) == 0) igObject_Destroy(old);
-        }
-        arg1->_dataList = (int)s1;
-    }
-    st = *(beNDMWMdlPEBaseInfoWork **)((char *)((void *)igProperty_FindByName((igObject *)arg1->_dataList, g_propertyNameField[0], &DAT_0051d3a0[0])) + 20);
-    if (st->_dispRamNoList != 0) {
-        if (((igIntList *)st->_dispRamNoList)->_count != 0 && ((HpWord *)st->_hp)->f12 == 0) {
+void beNDMWMdlPEBase_OnSequenceChange(beNDMWMdlPEBase *self, beBaseInfoRam *ram) {
+    beNDMWMdlPEBaseInfoWork *work;
+    EnsureDataList(ram);
+    work = (beNDMWMdlPEBaseInfoWork *)igProperty_FindByName(ram->_dataList, g_propertyNameField[0], ONE_15)->_work;
+    if (work->_dispRamNoList != 0) {
+        if (((igIntList *)work->_dispRamNoList)->_count != 0 && ((beDataObjInt *)work->_hp)->_data == 0) {
             int i;
-            for (i = 0; i < 12; i++) {
-                int v = ((int *)((igIntList *)st->_dispRamNoList)->_data)[i];
-                if (v != -1) beMessenger_SendNamed(arg0->_messenger, &DAT_0051d3a8[0], DAT_004cfc50[i], v, &DAT_0051d3e8[0]);
+            for (i = 0; i < STATUS_ICON_COUNT; i++) {
+                int iconRamNo = IntAt(work->_dispRamNoList, i);
+                if (iconRamNo != -1) beMessenger_SendNamed(self->_messenger, MODELCTRL_20, g_statusIconModelNames[i], iconRamNo, SQ_ERAS_4);
             }
-            {
-                igIntList *l = (igIntList *)st->_timerList;
-                int n = l->_count;
-                int *q = (int *)l->_data;
-                int j;
-                for (j = 0; j < n; j++) q[j] = DAT_004cfdb8[0];
-            }
-            {
-                igIntList *l2 = (igIntList *)st->_dispRamNoList;
-                int n2 = l2->_count;
-                int *q2 = (int *)l2->_data;
-                int k;
-                for (k = 0; k < n2; k++) q2[k] = DAT_004cfdc0[0];
-            }
+            IntList_FillField(work->_timerList, 0);
+            IntList_FillField(work->_dispRamNoList, -1);
             return;
         }
-        if (((igIntList *)st->_timerList)->_count != 0) {
-            if (((int *)((igIntList *)st->_timerList)->_data)[8] != 0 && strcmp((char *)st->_seqCodeName, &DAT_0051d458[0]) != 0) {
-                beBaseInfoRam_RemoveTimer(arg1, &DAT_0051d450[0]);
-                SETB_445200((igUnsignedCharList *)st->_isFirstList, 8, GPR_00554aa0)
-                SETI_445200((igIntList *)st->_timerList, 8, DAT_004cfdc8[0])
+        if (((igIntList *)work->_timerList)->_count != 0) {
+            if (IntAt(work->_timerList, STATUS_SLEEP) != 0 && strcmp((const char *)work->_seqCodeName, SQ_SLEP_2) != 0) {
+                beBaseInfoRam_RemoveTimer(ram, SLEEP);
+                BoolList_Set((igBoolList *)work->_isFirstList, STATUS_SLEEP, false);
+                IntList_Set((igIntList *)work->_timerList, STATUS_SLEEP, 0);
             }
-            if (((int *)((igIntList *)st->_timerList)->_data)[9] != 0) {
-                if (strcmp((char *)st->_seqCodeName, &DAT_0051d460[0]) == 0) {
-                    ((MessengerVirt *)arg0)->vX(arg1, &DAT_0051d468[0]);
+            if (IntAt(work->_timerList, STATUS_STUN) != 0) {
+                if (strcmp((const char *)work->_seqCodeName, SQ_WAIT_6) == 0) {
+                    ((beModelCtrlSlots *)self)->handleMessage(ram, SQ_STUN);
                     return;
                 }
-                if (strcmp((char *)st->_seqCodeName, &DAT_0051d468[0]) != 0) {
-                    beBaseInfoRam_RemoveTimer(arg1, &DAT_0051d470[0]);
-                    SETB_445200((igUnsignedCharList *)st->_isFirstList, 9, GPR_00554aa4)
-                    SETI_445200((igIntList *)st->_timerList, 9, DAT_004cfdd0[0])
-                    beMessenger_SendNamed(arg0->_messenger, &DAT_0051d3a8[0], DAT_004cfc74[0], ((int *)((igIntList *)st->_dispRamNoList)->_data)[9], &DAT_0051d3e8[0]);
+                if (strcmp((const char *)work->_seqCodeName, SQ_STUN) != 0) {
+                    beBaseInfoRam_RemoveTimer(ram, STUN);
+                    BoolList_Set((igBoolList *)work->_isFirstList, STATUS_STUN, false);
+                    IntList_Set((igIntList *)work->_timerList, STATUS_STUN, 0);
+                    beMessenger_SendNamed(self->_messenger, MODELCTRL_20, g_statusIconModelNames[STATUS_STUN], IntAt(work->_dispRamNoList, STATUS_STUN), SQ_ERAS_4);
                 }
             }
         }
     }
 }
 
-/* Owning stack reference to the freshly created down-data list, released on scope exit (reference
- * count in the low 23 bits of _refCount). */
-
-void FUN_004456c0(beNDMWMdlPEBase *arg0, beBaseInfoRam *arg1, beNDMWMdlPEBaseInfoWork *arg2) {
-    if (arg2->_isPlayer != 0) {
-        igObject *s0;
-        igObject *old;
-        beMessenger_PushArgContext(arg0->_messenger);
-        beMessenger_SelectGroup(arg0->_messenger, &DAT_0051d4b0[0]);
-        beMessenger_AppendInt(arg0->_messenger, arg1->_ramNo);
-        beMessenger_DispatchSelected(arg0->_messenger, &DAT_0051d4b8[0]);
-        s0 = ((Obj *)igProperty_GetRecordIntList(beMessenger_GetObject(arg0->_messenger, 0), &DAT_0051d4d8[0]))->f12;
-        if (s0 != 0) s0->_refCount = s0->_refCount + 1;
-        old = (igObject *)arg2->_downDataList;
-        if (old != 0) {
-            old->_refCount = old->_refCount - 1;
-            if ((old->_refCount & 0x7FFFFF) == 0) igObject_Destroy(old);
-        }
-        arg2->_downDataList = (int)s0;
-        beMessenger_PopArgContext(arg0->_messenger);
+void beNDMWMdlPEBase_LoadDownData(beNDMWMdlPEBase *self, beBaseInfoRam *ram, beNDMWMdlPEBaseInfoWork *work) {
+    if (work->_isPlayer != 0) {
+        beMessenger_PushArgContext(self->_messenger);
+        beMessenger_SelectGroup(self->_messenger, GAMERAM_18);
+        beMessenger_AppendInt(self->_messenger, ram->_ramNo);
+        beMessenger_DispatchSelected(self->_messenger, GETPLAYER_14);
+        AssignReference(work->_downDataList, (igObject *)((beDataObjIntList *)igProperty_GetRecordIntList(beMessenger_GetObject(self->_messenger, 0), DOWNDATA_3))->_data);
+        beMessenger_PopArgContext(self->_messenger);
         return;
     }
     {
-        int alloc;
-        int n;
-        int *data;
-        int j;
-        igObject *s0;
-        igObject *old;
-        alloc = igObject_GetAllocator(); /* matching construct: a0 still holds arg0, retail passes it without a move */
-        /* The six-entry list is owned by the stack reference until the work record has taken its own. */
-        IntListRef created((List *)igIntList_Create(GPR_00554c14 != 0 ? alloc : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0])));
-        if (created.p->size < 7) List_Reserve(created.p, 6, 4);
-        if (created.p->cap >= 6) created.p->size = 6;
-        else List_Resize(created.p, 6, 4);
-        n = created.p->size;
-        data = created.p->data;
-        for (j = 0; j < n; j++) data[j] = DAT_004cfdd8[0];
-        s0 = (igObject *)created.p;
-        if (s0 != 0) s0->_refCount = s0->_refCount + 1;
-        old = (igObject *)arg2->_downDataList;
-        if (old != 0) {
-            old->_refCount = old->_refCount - 1;
-            if ((old->_refCount & 0x7FFFFF) == 0) igObject_Destroy(old);
-        }
-        arg2->_downDataList = (int)s0;
+        int ownAllocator;
+        ownAllocator = igObject_GetAllocator(self);
+        /* An enemy starts from zeroes, owned by the stack reference until the work holds its own. */
+        IntListRef created((igIntList *)igIntList_Create(g_useOwnerAllocator != 0 ? ownAllocator : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0])));
+        if (created.p->_count < DOWN_DATA_COUNT + 1) List_Reserve(created.p, DOWN_DATA_COUNT, sizeof(int));
+        if (created.p->_capacity >= DOWN_DATA_COUNT) created.p->_count = DOWN_DATA_COUNT;
+        else List_Resize(created.p, DOWN_DATA_COUNT, sizeof(int));
+        IntList_Fill(created.p, 0);
+        AssignReference(work->_downDataList, created.p);
     }
 }
 
-void FUN_00445990(beNDMWMdlPEBase *arg0, beBaseInfoRam *arg1, beNDMWMdlPEBaseInfoWork *arg2) {
-    if (arg2->_isPlayer != 0) {
-        igObject *s0;
-        igObject *old;
-        beMessenger_PushArgContext(arg0->_messenger);
-        beMessenger_SelectGroup(arg0->_messenger, &DAT_0051d4b0[0]);
-        beMessenger_AppendInt(arg0->_messenger, arg1->_ramNo);
-        beMessenger_DispatchSelected(arg0->_messenger, &DAT_0051d4b8[0]);
-        s0 = ((Obj *)igProperty_GetRecordIntList(beMessenger_GetObject(arg0->_messenger, 0), &DAT_0051d4e8[0]))->f12;
-        if (s0 != 0) s0->_refCount = s0->_refCount + 1;
-        old = (igObject *)arg2->_upDataList;
-        if (old != 0) {
-            old->_refCount = old->_refCount - 1;
-            if ((old->_refCount & 0x7FFFFF) == 0) igObject_Destroy(old);
-        }
-        arg2->_upDataList = (int)s0;
-        beMessenger_PopArgContext(arg0->_messenger);
+void beNDMWMdlPEBase_LoadUpData(beNDMWMdlPEBase *self, beBaseInfoRam *ram, beNDMWMdlPEBaseInfoWork *work) {
+    if (work->_isPlayer != 0) {
+        beMessenger_PushArgContext(self->_messenger);
+        beMessenger_SelectGroup(self->_messenger, GAMERAM_18);
+        beMessenger_AppendInt(self->_messenger, ram->_ramNo);
+        beMessenger_DispatchSelected(self->_messenger, GETPLAYER_14);
+        AssignReference(work->_upDataList, (igObject *)((beDataObjIntList *)igProperty_GetRecordIntList(beMessenger_GetObject(self->_messenger, 0), UPDATA_3))->_data);
+        beMessenger_PopArgContext(self->_messenger);
         return;
     }
     {
-        int alloc;
-        int n;
-        int *data;
-        int j;
-        igObject *s0;
-        igObject *old;
-        alloc = igObject_GetAllocator(); /* matching construct: a0 still holds arg0, retail passes it without a move */
-        /* The seven-entry list is owned by the stack reference until the work record has taken its own. */
-        IntListRef created((List *)igIntList_Create(GPR_00554c14 != 0 ? alloc : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0])));
-        if (created.p->size < 8) List_Reserve(created.p, 7, 4);
-        if (created.p->cap >= 7) created.p->size = 7;
-        else List_Resize(created.p, 7, 4);
-        n = created.p->size;
-        data = created.p->data;
-        for (j = 0; j < n; j++) data[j] = DAT_004cfde0[0];
-        s0 = (igObject *)created.p;
-        if (s0 != 0) s0->_refCount = s0->_refCount + 1;
-        old = (igObject *)arg2->_upDataList;
-        if (old != 0) {
-            old->_refCount = old->_refCount - 1;
-            if ((old->_refCount & 0x7FFFFF) == 0) igObject_Destroy(old);
-        }
-        arg2->_upDataList = (int)s0;
+        int ownAllocator;
+        ownAllocator = igObject_GetAllocator(self);
+        /* An enemy starts from zeroes, owned by the stack reference until the work holds its own. */
+        IntListRef created((igIntList *)igIntList_Create(g_useOwnerAllocator != 0 ? ownAllocator : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0])));
+        if (created.p->_count < UP_DATA_COUNT + 1) List_Reserve(created.p, UP_DATA_COUNT, sizeof(int));
+        if (created.p->_capacity >= UP_DATA_COUNT) created.p->_count = UP_DATA_COUNT;
+        else List_Resize(created.p, UP_DATA_COUNT, sizeof(int));
+        IntList_Fill(created.p, 0);
+        AssignReference(work->_upDataList, created.p);
     }
 }
 
-void FUN_00445c60(beNDMWMdlPEBase *arg0, struct A1 *arg1, beNDMWMdlPEBaseInfoWork *arg2) {
-    if (arg2->_isPlayer != 0) {
-        beMessenger_PushArgContext(arg0->_messenger);
-        beMessenger_SelectGroup(arg0->_messenger, &DAT_0051d4b0[0]);
-        beMessenger_AppendInt(arg0->_messenger, arg1->f8);
-        beMessenger_DispatchSelected(arg0->_messenger, &DAT_0051d4f0[0]);
-        beMessenger_SelectGroup(arg0->_messenger, &DAT_0051d4b0[0]);
-        beMessenger_AppendInt(arg0->_messenger, arg1->f8);
-        beMessenger_AppendInt(arg0->_messenger, 0);
-        beMessenger_DispatchSelected(arg0->_messenger, &DAT_0051d500[0]);
-        beMessenger_PopArgContext(arg0->_messenger);
+void beNDMWMdlPEBase_RecalcPlayer(beNDMWMdlPEBase *self, beBaseInfoRam *ram, beNDMWMdlPEBaseInfoWork *work) {
+    if (work->_isPlayer != 0) {
+        beMessenger_PushArgContext(self->_messenger);
+        beMessenger_SelectGroup(self->_messenger, GAMERAM_18);
+        beMessenger_AppendInt(self->_messenger, ram->_ramNo);
+        beMessenger_DispatchSelected(self->_messenger, RECALCPLAYER_7);
+        beMessenger_SelectGroup(self->_messenger, GAMERAM_18);
+        beMessenger_AppendInt(self->_messenger, ram->_ramNo);
+        beMessenger_AppendInt(self->_messenger, 0);
+        beMessenger_DispatchSelected(self->_messenger, ADDHP_2);
+        beMessenger_PopArgContext(self->_messenger);
     }
 }
 
-int Gap__Bec__beNDMWMdlPEBase__vfunc_47(beNDMWMdlPEBase *self, Model *obj, int name) {
-    beNDMWMdlPEBaseInfoWork *w;
-    int e;
-    ensureProps(obj);
-    w = igProperty_FindByName(obj->props, g_propertyNameField[0], &DAT_0051d3a0[0])->work;
-    e = beMessenger_ResolveEnumValue(self->_messenger, FUN_003c04a0(), name);
-    switch (e) {
+int Gap__Bec__beNDMWMdlPEBase__vfunc_47(beNDMWMdlPEBase *self, beBaseInfoRam *ram, int message) {
+    beNDMWMdlPEBaseInfoWork *work;
+    int action;
+    EnsureDataList(ram);
+    work = (beNDMWMdlPEBaseInfoWork *)igProperty_FindByName(ram->_dataList, g_propertyNameField[0], ONE_15)->_work;
+    action = beMessenger_ResolveEnumValue(self->_messenger, MsgAction_GetMetaEnum(), message);
+    switch (action) {
     default:
-    if (w != 0 && w->_dispRamNoList == 0) {
-        IntListRef h9C(0);
-        BoolListRef h98(0);
-        MKLIST(h9C, _dispRamNoList, igIntList_Create)
-        SIZEIT(_dispRamNoList, 12, 4)
-        FILLI(_dispRamNoList, DAT_004cfde8)
-        MKLIST(h9C, _dispPosNoList, igIntList_Create)
-        SIZEIT(_dispPosNoList, 12, 4)
-        FILLI(_dispPosNoList, DAT_004cfdf0)
-        MKLIST(h9C, _timerList, igIntList_Create)
-        SIZEIT(_timerList, 12, 4)
-        FILLI(_timerList, DAT_004cfdf8)
-        MKLIST(h98, _isFirstList, igBoolList_Create)
-        SIZEIT(_isFirstList, 11, 1)
-        FILLB(_isFirstList, GPR_00554aa8)
-    }
-    break;
-    case 12:
-    case 13:
+        if (work != 0 && work->_dispRamNoList == 0) {
+            IntListRef intList(0);
+            BoolListRef boolList(0);
+            int allocator;
+            allocator = OwnAllocator(self);
+            intList.release();
+            intList.p = (igIntList *)igIntList_Create(allocator);
+            AssignReference(work->_dispRamNoList, intList.p);
+            List_SetCount(work->_dispRamNoList, STATUS_ICON_COUNT, sizeof(int));
+            IntList_FillField(work->_dispRamNoList, -1);
+            allocator = OwnAllocator(self);
+            intList.release();
+            intList.p = (igIntList *)igIntList_Create(allocator);
+            AssignReference(work->_dispPosNoList, intList.p);
+            List_SetCount(work->_dispPosNoList, STATUS_ICON_COUNT, sizeof(int));
+            IntList_FillField(work->_dispPosNoList, -1);
+            allocator = OwnAllocator(self);
+            intList.release();
+            intList.p = (igIntList *)igIntList_Create(allocator);
+            AssignReference(work->_timerList, intList.p);
+            List_SetCount(work->_timerList, STATUS_ICON_COUNT, sizeof(int));
+            IntList_FillField(work->_timerList, 0);
+            allocator = OwnAllocator(self);
+            boolList.release();
+            boolList.p = (igBoolList *)igBoolList_Create(allocator);
+            AssignReference(work->_isFirstList, boolList.p);
+            List_SetCount(work->_isFirstList, STATUS_ANY, sizeof(bool));
+            BoolList_Fill((igBoolList *)work->_isFirstList, false);
+        }
+        break;
+    case MSG_CHECKSTATUS:
+    case MSG_CLEARSTATUS:
         break;
     case -1:
         return 0;
     }
-    switch (e) {
-    case 15:
-        if (w != 0) {
+    switch (action) {
+    case MSG_GETPEBASEWORK:
+        if (work != 0) {
             beMessenger_ClearObjects(self->_messenger);
-            beMessenger_AppendObject(self->_messenger, obj);
-            beMessenger_AppendObject(self->_messenger, w);
+            beMessenger_AppendObject(self->_messenger, ram);
+            beMessenger_AppendObject(self->_messenger, work);
         }
         return 1;
-    case 0:
-        if (w != 0) {
-            int v = GI(0) / 120 + 1;
-            SETI(w->_timerList, 0, v)
-            SETB(w->_isFirstList, 0, GPR_00554aac)
-            w->_poisonDamage = GI(1);
-            if (beMessenger_GetIntCount(self->_messenger) == 3) w->_poisonEndurance = GI(2);
+    case MSG_SETPOISON:
+        if (work != 0) {
+            int ticks = beMessenger_GetInt(self->_messenger, 0) / POISON_TICK_FRAMES + 1;
+            IntList_Set((igIntList *)work->_timerList, STATUS_POISON, ticks);
+            BoolList_Set((igBoolList *)work->_isFirstList, STATUS_POISON, true);
+            work->_poisonDamage = beMessenger_GetInt(self->_messenger, 1);
+            if (beMessenger_GetIntCount(self->_messenger) == 3) work->_poisonEndurance = beMessenger_GetInt(self->_messenger, 2);
         }
         return 1;
-    case 1:
-        if (w != 0) {
-            int v = GI(0);
-            SETI(w->_timerList, 8, v)
-            SETB(w->_isFirstList, 8, GPR_00554ab0)
+    case MSG_SETSLEEP:
+        if (work != 0) {
+            int frames = beMessenger_GetInt(self->_messenger, 0);
+            IntList_Set((igIntList *)work->_timerList, STATUS_SLEEP, frames);
+            BoolList_Set((igBoolList *)work->_isFirstList, STATUS_SLEEP, true);
         }
         return 1;
-    case 2:
-        if (w != 0) {
-            int v = GI(0);
-            SETI(w->_timerList, 9, v)
-            SETB(w->_isFirstList, 9, GPR_00554ab4)
+    case MSG_SETSTUN:
+        if (work != 0) {
+            int frames = beMessenger_GetInt(self->_messenger, 0);
+            IntList_Set((igIntList *)work->_timerList, STATUS_STUN, frames);
+            BoolList_Set((igBoolList *)work->_isFirstList, STATUS_STUN, true);
         }
         return 1;
-    case 3:
-        if (w != 0) {
-            int v = GI(0);
-            SETI(w->_timerList, 3, v)
-            SETB(w->_isFirstList, 3, GPR_00554ab8)
+    case MSG_SETBIND:
+        if (work != 0) {
+            int frames = beMessenger_GetInt(self->_messenger, 0);
+            IntList_Set((igIntList *)work->_timerList, STATUS_BIND, frames);
+            BoolList_Set((igBoolList *)work->_isFirstList, STATUS_BIND, true);
         }
         return 1;
-    case 4:
-        if (w != 0) {
-            SETB(w->_isFirstList, 1, GPR_00554abc)
-            { int v = GI(0); SETI(w->_timerList, 1, v) }
-            int a = GI(1); int b = GI(2); int c = GI(3); int d = GI(4);
-            if (w->_downDataList == 0) FUN_004456c0(self, (beBaseInfoRam *)obj, w);
-            SETI(w->_downDataList, 0, a)
-            SETI(w->_downDataList, 1, b)
-            SETI(w->_downDataList, 2, c)
-            SETI(w->_downDataList, 3, d)
-            FUN_00445c60(self, (A1 *)obj, w);
+    case MSG_SETATTACKDOWN:
+        if (work != 0) {
+            BoolList_Set((igBoolList *)work->_isFirstList, STATUS_ATTACKDOWN, true);
+            {
+                int frames = beMessenger_GetInt(self->_messenger, 0);
+                IntList_Set((igIntList *)work->_timerList, STATUS_ATTACKDOWN, frames);
+            }
+            int value0 = beMessenger_GetInt(self->_messenger, 1);
+            int value1 = beMessenger_GetInt(self->_messenger, 2);
+            int value2 = beMessenger_GetInt(self->_messenger, 3);
+            int value3 = beMessenger_GetInt(self->_messenger, 4);
+            if (work->_downDataList == 0) beNDMWMdlPEBase_LoadDownData(self, ram, work);
+            IntList_Set((igIntList *)work->_downDataList, DOWN_ATTACK + 0, value0);
+            IntList_Set((igIntList *)work->_downDataList, DOWN_ATTACK + 1, value1);
+            IntList_Set((igIntList *)work->_downDataList, DOWN_ATTACK + 2, value2);
+            IntList_Set((igIntList *)work->_downDataList, DOWN_ATTACK + 3, value3);
+            beNDMWMdlPEBase_RecalcPlayer(self, ram, work);
         }
         return 1;
-    case 5:
-        if (w != 0) {
-            SETB(w->_isFirstList, 2, GPR_00554ac0)
-            { int v = GI(0); SETI(w->_timerList, 2, v) }
-            int a = GI(1); int b = GI(2);
-            if (w->_downDataList == 0) FUN_004456c0(self, (beBaseInfoRam *)obj, w);
-            SETI(w->_downDataList, 4, a)
-            SETI(w->_downDataList, 5, b)
-            FUN_00445c60(self, (A1 *)obj, w);
+    case MSG_SETPOWERDOWN:
+        if (work != 0) {
+            BoolList_Set((igBoolList *)work->_isFirstList, STATUS_POWERDOWN, true);
+            {
+                int frames = beMessenger_GetInt(self->_messenger, 0);
+                IntList_Set((igIntList *)work->_timerList, STATUS_POWERDOWN, frames);
+            }
+            int value0 = beMessenger_GetInt(self->_messenger, 1);
+            int value1 = beMessenger_GetInt(self->_messenger, 2);
+            if (work->_downDataList == 0) beNDMWMdlPEBase_LoadDownData(self, ram, work);
+            IntList_Set((igIntList *)work->_downDataList, DOWN_POWER + 0, value0);
+            IntList_Set((igIntList *)work->_downDataList, DOWN_POWER + 1, value1);
+            beNDMWMdlPEBase_RecalcPlayer(self, ram, work);
         }
         return 1;
-    case 7:
-        if (w != 0) {
-            SETB(w->_isFirstList, 5, GPR_00554ac4)
-            { int v = GI(0); SETI(w->_timerList, 5, v) }
-            int a = GI(1); int b = GI(2); int c = GI(3); int d = GI(4);
-            if (w->_upDataList == 0) FUN_00445990(self, (beBaseInfoRam *)obj, w);
-            SETI(w->_upDataList, 0, a)
-            SETI(w->_upDataList, 1, b)
-            SETI(w->_upDataList, 2, c)
-            SETI(w->_upDataList, 3, d)
-            FUN_00445c60(self, (A1 *)obj, w);
+    case MSG_SETSPEEDUP:
+        if (work != 0) {
+            BoolList_Set((igBoolList *)work->_isFirstList, STATUS_SPEEDUP, true);
+            {
+                int frames = beMessenger_GetInt(self->_messenger, 0);
+                IntList_Set((igIntList *)work->_timerList, STATUS_SPEEDUP, frames);
+            }
+            int value0 = beMessenger_GetInt(self->_messenger, 1);
+            int value1 = beMessenger_GetInt(self->_messenger, 2);
+            int value2 = beMessenger_GetInt(self->_messenger, 3);
+            int value3 = beMessenger_GetInt(self->_messenger, 4);
+            if (work->_upDataList == 0) beNDMWMdlPEBase_LoadUpData(self, ram, work);
+            IntList_Set((igIntList *)work->_upDataList, UP_SPEED + 0, value0);
+            IntList_Set((igIntList *)work->_upDataList, UP_SPEED + 1, value1);
+            IntList_Set((igIntList *)work->_upDataList, UP_SPEED + 2, value2);
+            IntList_Set((igIntList *)work->_upDataList, UP_SPEED + 3, value3);
+            beNDMWMdlPEBase_RecalcPlayer(self, ram, work);
         }
         return 1;
-    case 8:
-        if (w != 0) {
-            SETB(w->_isFirstList, 6, GPR_00554ac8)
-            { int v = GI(0); SETI(w->_timerList, 6, v) }
-            int a = GI(1); int b = GI(2); int c = GI(3);
-            if (w->_upDataList == 0) FUN_00445990(self, (beBaseInfoRam *)obj, w);
-            SETI(w->_upDataList, 4, a)
-            SETI(w->_upDataList, 5, b)
-            SETI(w->_upDataList, 6, c)
-            FUN_00445c60(self, (A1 *)obj, w);
+    case MSG_SETPOWERUP:
+        if (work != 0) {
+            BoolList_Set((igBoolList *)work->_isFirstList, STATUS_POWERUP, true);
+            {
+                int frames = beMessenger_GetInt(self->_messenger, 0);
+                IntList_Set((igIntList *)work->_timerList, STATUS_POWERUP, frames);
+            }
+            int value0 = beMessenger_GetInt(self->_messenger, 1);
+            int value1 = beMessenger_GetInt(self->_messenger, 2);
+            int value2 = beMessenger_GetInt(self->_messenger, 3);
+            if (work->_upDataList == 0) beNDMWMdlPEBase_LoadUpData(self, ram, work);
+            IntList_Set((igIntList *)work->_upDataList, UP_POWER + 0, value0);
+            IntList_Set((igIntList *)work->_upDataList, UP_POWER + 1, value1);
+            IntList_Set((igIntList *)work->_upDataList, UP_POWER + 2, value2);
+            beNDMWMdlPEBase_RecalcPlayer(self, ram, work);
         }
         return 1;
-    case 9:
-        if (w != 0) {
-            SETB(w->_isFirstList, 4, GPR_00554acc)
-            { int v = GI(0); SETI(w->_timerList, 4, v) }
-            int a = GI(1); int b = GI(2); int c = GI(3); int d = GI(4);
-            if (w->_upDataList == 0) FUN_00445990(self, (beBaseInfoRam *)obj, w);
-            SETI(w->_upDataList, 7, a)
-            SETI(w->_upDataList, 8, b)
-            SETI(w->_upDataList, 9, c)
-            SETI(w->_upDataList, 10, d)
-            FUN_00445c60(self, (A1 *)obj, w);
+    case MSG_SETREFRACT:
+        if (work != 0) {
+            BoolList_Set((igBoolList *)work->_isFirstList, STATUS_REFRACT, true);
+            {
+                int frames = beMessenger_GetInt(self->_messenger, 0);
+                IntList_Set((igIntList *)work->_timerList, STATUS_REFRACT, frames);
+            }
+            int value0 = beMessenger_GetInt(self->_messenger, 1);
+            int value1 = beMessenger_GetInt(self->_messenger, 2);
+            int value2 = beMessenger_GetInt(self->_messenger, 3);
+            int value3 = beMessenger_GetInt(self->_messenger, 4);
+            if (work->_upDataList == 0) beNDMWMdlPEBase_LoadUpData(self, ram, work);
+            IntList_Set((igIntList *)work->_upDataList, UP_REFRACT + 0, value0);
+            IntList_Set((igIntList *)work->_upDataList, UP_REFRACT + 1, value1);
+            IntList_Set((igIntList *)work->_upDataList, UP_REFRACT + 2, value2);
+            IntList_Set((igIntList *)work->_upDataList, UP_REFRACT + 3, value3);
+            beNDMWMdlPEBase_RecalcPlayer(self, ram, work);
         }
         return 1;
-    case 10:
-        if (w != 0) {
-            SETB(w->_isFirstList, 7, GPR_00554ad0)
-            SETI(w->_timerList, 7, DAT_004cfe00[0])
-            if (w->_downDataList == 0) FUN_004456c0(self, (beBaseInfoRam *)obj, w);
+    case MSG_SETMETAL:
+        if (work != 0) {
+            BoolList_Set((igBoolList *)work->_isFirstList, STATUS_METAL, true);
+            IntList_Set((igIntList *)work->_timerList, STATUS_METAL, 1);
+            if (work->_downDataList == 0) beNDMWMdlPEBase_LoadDownData(self, ram, work);
         }
         return 1;
-    case 11:
-        if (w != 0) {
-            SETB(w->_isFirstList, 7, GPR_00554ad4)
-            SETI(w->_timerList, 7, DAT_004cfe08[0])
-            if (w->_downDataList != 0) {
-                SETI(w->_downDataList, 6, DAT_004cfe10[0])
+    case MSG_CLEARMETAL:
+        if (work != 0) {
+            BoolList_Set((igBoolList *)work->_isFirstList, STATUS_METAL, false);
+            IntList_Set((igIntList *)work->_timerList, STATUS_METAL, 0);
+            if (work->_downDataList != 0) {
+                IntList_Set((igIntList *)work->_downDataList, DOWN_METAL, 0);
             }
         }
         return 1;
-    case 6:
-        if (w != 0) {
-            SETB(w->_isFirstList, 10, GPR_00554ad8)
-            { int v = GI(0); SETI(w->_timerList, 10, v) }
+    case MSG_SETRAREICON:
+        if (work != 0) {
+            BoolList_Set((igBoolList *)work->_isFirstList, STATUS_RARE, true);
+            {
+                int frames = beMessenger_GetInt(self->_messenger, 0);
+                IntList_Set((igIntList *)work->_timerList, STATUS_RARE, frames);
+            }
         }
         return 1;
-    case 12: {
-        /* matching construct: the enum result pair is declared after the list holders so the holders
-         * take the higher frame slots (+0x9c/+0x98), as in retail */
-        int e2;
-        bool r = false;
-        if (w != 0 && w->_dispRamNoList != 0 && w->_timerList != 0) {
-            int s = beMessenger_GetString(self->_messenger, 0);
-            if (igMetaEnum_GetValueByName(FUN_003c0440(), s, &e2) == g_statusSucceeded && W(_timerList)->data[e2] != 0) r = 1;
+    case MSG_CHECKSTATUS: {
+        int status;
+        bool running = false;
+        if (work != 0 && work->_dispRamNoList != 0 && work->_timerList != 0) {
+            const char *name = (const char *)beMessenger_GetString(self->_messenger, 0);
+            if (igMetaEnum_GetValueByName(StatusName_GetMetaEnum(), name, &status) == g_statusSucceeded && IntAt(work->_timerList, status) != 0) running = true;
         }
-        beMessenger_AppendBool(self->_messenger, r);
+        beMessenger_AppendBool(self->_messenger, running);
         return 1;
     }
-    case 14:
-        if (w != 0 && w->_dispRamNoList != 0) {
-            beBaseInfoRam_RemoveTimer(obj, &DAT_0051d3f0[0]);
-            SETB(w->_isFirstList, 0, GPR_00554adc)
-            SETI(w->_timerList, 0, DAT_004cfe18[0])
-            beBaseInfoRam_RemoveTimer(obj, &DAT_0051d480[0]);
-            SETB(w->_isFirstList, 1, GPR_00554ae0)
-            SETI(w->_timerList, 1, DAT_004cfe20[0])
-            beBaseInfoRam_RemoveTimer(obj, &DAT_0051d488[0]);
-            SETB(w->_isFirstList, 2, GPR_00554ae4)
-            SETI(w->_timerList, 2, DAT_004cfe28[0])
-            beBaseInfoRam_RemoveTimer(obj, &DAT_0051d490[0]);
-            SETB(w->_isFirstList, 5, GPR_00554ae8)
-            SETI(w->_timerList, 5, DAT_004cfe30[0])
-            beBaseInfoRam_RemoveTimer(obj, &DAT_0051d498[0]);
-            SETB(w->_isFirstList, 6, GPR_00554aec)
-            SETI(w->_timerList, 6, DAT_004cfe38[0])
-            beBaseInfoRam_RemoveTimer(obj, &DAT_0051d4a0[0]);
-            SETB(w->_isFirstList, 4, GPR_00554af0)
-            SETI(w->_timerList, 4, DAT_004cfe40[0])
-            if (w->_upDataList != 0) { FILLI(_upDataList, DAT_004cfe48) }
-            if (w->_downDataList != 0) { FILLI(_downDataList, DAT_004cfe50) }
-            if (w->_upDataList != 0 || w->_downDataList != 0) FUN_00445c60(self, (A1 *)obj, w);
+    case MSG_ALLCLEARSTATUS:
+        if (work != 0 && work->_dispRamNoList != 0) {
+            beBaseInfoRam_RemoveTimer(ram, POISON);
+            BoolList_Set((igBoolList *)work->_isFirstList, STATUS_POISON, false);
+            IntList_Set((igIntList *)work->_timerList, STATUS_POISON, 0);
+            beBaseInfoRam_RemoveTimer(ram, ATKDOWN);
+            BoolList_Set((igBoolList *)work->_isFirstList, STATUS_ATTACKDOWN, false);
+            IntList_Set((igIntList *)work->_timerList, STATUS_ATTACKDOWN, 0);
+            beBaseInfoRam_RemoveTimer(ram, POWDOWN);
+            BoolList_Set((igBoolList *)work->_isFirstList, STATUS_POWERDOWN, false);
+            IntList_Set((igIntList *)work->_timerList, STATUS_POWERDOWN, 0);
+            beBaseInfoRam_RemoveTimer(ram, SPEEDUP);
+            BoolList_Set((igBoolList *)work->_isFirstList, STATUS_SPEEDUP, false);
+            IntList_Set((igIntList *)work->_timerList, STATUS_SPEEDUP, 0);
+            beBaseInfoRam_RemoveTimer(ram, POWERUP);
+            BoolList_Set((igBoolList *)work->_isFirstList, STATUS_POWERUP, false);
+            IntList_Set((igIntList *)work->_timerList, STATUS_POWERUP, 0);
+            beBaseInfoRam_RemoveTimer(ram, REFRACT);
+            BoolList_Set((igBoolList *)work->_isFirstList, STATUS_REFRACT, false);
+            IntList_Set((igIntList *)work->_timerList, STATUS_REFRACT, 0);
+            if (work->_upDataList != 0) { IntList_Fill((igIntList *)work->_upDataList, 0); }
+            if (work->_downDataList != 0) { IntList_Fill((igIntList *)work->_downDataList, 0); }
+            if (work->_upDataList != 0 || work->_downDataList != 0) beNDMWMdlPEBase_RecalcPlayer(self, ram, work);
         }
-    case 13:
-        if (w != 0 && w->_dispRamNoList != 0) {
-            beBaseInfoRam_RemoveTimer(obj, &DAT_0051d450[0]);
-            SETB(w->_isFirstList, 8, GPR_00554af4)
-            SETI(w->_timerList, 8, DAT_004cfe58[0])
-            beBaseInfoRam_RemoveTimer(obj, &DAT_0051d470[0]);
-            SETB(w->_isFirstList, 9, GPR_00554af8)
-            SETI(w->_timerList, 9, DAT_004cfe60[0])
-            beBaseInfoRam_RemoveTimer(obj, &DAT_0051d478[0]);
-            SETB(w->_isFirstList, 3, GPR_00554afc)
-            SETI(w->_timerList, 3, DAT_004cfe68[0])
-            VC(&DAT_0051d460[0]);
+        /* ALLCLEARSTATUS goes on to clear what CLEARSTATUS clears */
+    case MSG_CLEARSTATUS:
+        if (work != 0 && work->_dispRamNoList != 0) {
+            beBaseInfoRam_RemoveTimer(ram, SLEEP);
+            BoolList_Set((igBoolList *)work->_isFirstList, STATUS_SLEEP, false);
+            IntList_Set((igIntList *)work->_timerList, STATUS_SLEEP, 0);
+            beBaseInfoRam_RemoveTimer(ram, STUN);
+            BoolList_Set((igBoolList *)work->_isFirstList, STATUS_STUN, false);
+            IntList_Set((igIntList *)work->_timerList, STATUS_STUN, 0);
+            beBaseInfoRam_RemoveTimer(ram, BIND);
+            BoolList_Set((igBoolList *)work->_isFirstList, STATUS_BIND, false);
+            IntList_Set((igIntList *)work->_timerList, STATUS_BIND, 0);
+            ((beModelCtrlSlots *)self)->handleMessage(ram, SQ_WAIT_6);
         }
         return 1;
     default:
@@ -1160,103 +977,61 @@ int Gap__Bec__beNDMWMdlPEBase__vfunc_47(beNDMWMdlPEBase *self, Model *obj, int n
     }
 }
 
-void Gap__Bec__beNDMWMdlPEBaseInfoWork__vfunc_8(beNDMWMdlPEBaseInfoWork *arg0) {
-    igIntList *l;
-    igIntList *l2;
-    int n;
-    int n2;
-    int *d;
-    int *d2;
-    int j;
-    int j2;
+void Gap__Bec__beNDMWMdlPEBaseInfoWork__vfunc_8(beNDMWMdlPEBaseInfoWork *self) {
+    igIntList *up;
+    igIntList *down;
     int i;
-    int off;
-    int *p;
-    igObject *o;
+    igObject *list;
 
-    if (arg0->_messenger != 0 && arg0->_dispRamNoList != 0) {
-        if (arg0->_isPlayer != 0) {
-            l = (igIntList *)arg0->_upDataList;
-            if (l != 0) {
-                n = l->_count;
-                d = (int *)l->_data;
-                for (j = 0; j < n; j++) d[j] = DAT_004cfe70[0];
-            }
-            l2 = (igIntList *)arg0->_downDataList;
-            if (l2 != 0) {
-                n2 = l2->_count;
-                d2 = (int *)l2->_data;
-                for (j2 = 0; j2 < n2; j2++) d2[j2] = DAT_004cfe78[0];
+    if (self->_messenger != 0 && self->_dispRamNoList != 0) {
+        if (self->_isPlayer != 0) {
+            up = (igIntList *)self->_upDataList;
+            if (up != 0) IntList_Fill(up, 0);
+            down = (igIntList *)self->_downDataList;
+            if (down != 0) IntList_Fill(down, 0);
+        }
+        for (i = 0; i < STATUS_ICON_COUNT; i++) {
+            int iconRamNo = IntAt(self->_dispRamNoList, i);
+            if (iconRamNo != -1) {
+                beMessenger_SendNamed(self->_messenger, MODELCTRL_20, g_statusIconModelNames[i], iconRamNo, SQ_ERAS_4);
             }
         }
-        i = 0;
-        off = 0;
-        p = &DAT_004cfc50[0];
-        do {
-            int v = *(int *)((char *)((igIntList *)arg0->_dispRamNoList)->_data + off);
-            if (v != -1) {
-                beMessenger_SendNamed(arg0->_messenger, &DAT_0051d3a8[0], *p, v, &DAT_0051d3e8[0]);
-            }
-            i++;
-            off += 4;
-            p += 1;
-        } while (i < 12);
-        o = (igObject *)arg0->_dispRamNoList;
-        if (o != 0) {
-            o->_refCount = (int)o->_refCount - 1;
-            if (((unsigned long long)((long long)(int)o->_refCount << 0x29) >> 0x29) == 0) igObject_Destroy(o);
-        }
-        arg0->_dispRamNoList = 0;
-        o = (igObject *)arg0->_dispPosNoList;
-        if (o != 0) {
-            o->_refCount = (int)o->_refCount - 1;
-            if (((unsigned long long)((long long)(int)o->_refCount << 0x29) >> 0x29) == 0) igObject_Destroy(o);
-        }
-        arg0->_dispPosNoList = 0;
-        o = (igObject *)arg0->_timerList;
-        if (o != 0) {
-            o->_refCount = (int)o->_refCount - 1;
-            if (((unsigned long long)((long long)(int)o->_refCount << 0x29) >> 0x29) == 0) igObject_Destroy(o);
-        }
-        arg0->_timerList = 0;
-        o = (igObject *)arg0->_isFirstList;
-        if (o != 0) {
-            o->_refCount = (int)o->_refCount - 1;
-            if (((unsigned long long)((long long)(int)o->_refCount << 0x29) >> 0x29) == 0) igObject_Destroy(o);
-        }
-        arg0->_isFirstList = 0;
+        list = (igObject *)self->_dispRamNoList;
+        IG_OBJECT_RELEASE(list);
+        self->_dispRamNoList = 0;
+        list = (igObject *)self->_dispPosNoList;
+        IG_OBJECT_RELEASE(list);
+        self->_dispPosNoList = 0;
+        list = (igObject *)self->_timerList;
+        IG_OBJECT_RELEASE(list);
+        self->_timerList = 0;
+        list = (igObject *)self->_isFirstList;
+        IG_OBJECT_RELEASE(list);
+        self->_isFirstList = 0;
     }
-    Gap__Core__igObject__vfunc_08__002ff0f0(arg0);
+    Gap__Core__igObject__vfunc_08__002ff0f0(self);
 }
 
-/* Written as C++ with the short-circuit `||` shape. */
-int FUN_00447b00(beNDMWMdlPEBaseInfoWork *owner)
+int beNDMWMdlPEBaseInfoWork_IsPoisoned(beNDMWMdlPEBaseInfoWork *self)
 {
-    if (owner->_timerList == 0 || *(int *)((igDataList *)owner->_timerList)->_data == 0) {
+    if (self->_timerList == 0 || IntAt(self->_timerList, STATUS_POISON) == 0) {
         return 0;
     }
     return 1;
 }
 
-void FUN_00447b40(beNDMWMdlPEBaseInfoWork *owner, void *arg)
+void beNDMWMdlPEBaseInfoWork_CurePoison(beNDMWMdlPEBaseInfoWork *self, beBaseInfoRam *ram)
 {
-    igDataList *list;
-    int n;
-
-    beBaseInfoRam_RemoveTimer(arg, ((const char *)DAT_0051d3f0));
-    list = (igDataList *)owner->_timerList;
-    n = list->_count;
-    if (n != 0 && 0 < n) {
-        *(int *)list->_data = DAT_004cfe80[0];
-    }
+    beBaseInfoRam_RemoveTimer(ram, POISON);
+    IntList_Set((igIntList *)self->_timerList, STATUS_POISON, 0);
 }
 
-int Gap__Bec__beNDMWMdlPEBaseInfoWork__vfunc_20(void)
+int beNDMWMdlPEBaseInfoWork__GetMeta(void)
 {
     return g_beNDMWMdlPEBaseInfoWork_metaObject[0];
 }
 
-int Gap__Bec__beNDMWMdlPEBase__vfunc_20(void)
+int beNDMWMdlPEBase__GetMeta(void)
 {
     return g_beNDMWMdlPEBase_metaObject[0];
 }
