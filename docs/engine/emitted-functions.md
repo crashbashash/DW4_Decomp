@@ -119,7 +119,8 @@ are whole-file units too, from `src/lua/`:
     "emitted": {"inflateEnd": "0x00223f30", "inflate": "0x00224150"},
     "stripped": ["inflateSync"],
     "externals": {"calloc": "0x00123730"},
-    "data": {"@183": "0x004e7490", "inflate_mask": "0x00497b20"}
+    "data": {"inflate_mask": "0x00497b20"},
+    "anon": ["0x004e7490"]
   }
 }
 ```
@@ -140,7 +141,7 @@ rejects a stripped body anything kept still names). When that copy is a
 [profile twin](#duplicates-switch-tables-and-exception-data), the tool compiles the same source
 under the twin's unit profile, as `verify_emitted_unit` does, and requires that copy at the retail
 extent there. A datum only an exception table names, such as the type string of a `throw()`
-specification, is a `data` row like any other. A call out of the file that only a duplicate makes
+specification, is listed like any other. A call out of the file that only a duplicate makes
 (`operator delete` in an inline destructor) is an `externals` row too, read from the `jal` of
 retail's copy. So is a function out of the file that only an exception table names, such as a
 base-class destructor that is declared but never called and appears only as a cleanup pointer. It
@@ -230,14 +231,27 @@ retail function. Four things differ from an ordinary group:
   a complete `.text` section that nothing kept references. The search for a retail copy is skipped:
   a stock getter matches any getter once its relocated words are masked, and a stripped name earns
   no credit and is never linked.
-- **`data` gives each datum a retail address.** A row is a compiler symbol (`@183` is a string
-  literal; the numbering is stable for one source and profile) defined by the object, or a name it
-  only references. Each defined section is compared byte for byte with retail, relocations applied,
-  and references resolve to the row. Switch tables are `data` rows here too, since they belong to a
-  member rather than the owner, and their retail `jtbl` units stay. A float or double literal is
-  not a row: as in a group, each reference reads the pool entry its retail instruction names
-  (`verify.fold_literals`), so one literal may sit at several entries; the literals only stripped
-  bodies reach go with them.
+- **`data` and `anon` give each datum a retail address.** A named datum is a `data` row: a symbol
+  the object defines, or a name it only references. An anonymous datum (`@183`, a string, a switch
+  table, a type name) or function-local static (`watchNames$14`, and its guard
+  `@GUARD@translation$16608`) has no name to key a row: MWCC numbers these by a counter that every
+  declaration of the translation unit advances, headers included, so one more enum in a shared header
+  renumbers them all. Such a datum is listed by its retail address alone, in `anon` (ascending), and a
+  numbered label is refused as a `data` row. `verify` binds each compiled one from its references
+  (`verify.bind_anonymous`): the placed bodies and named data are read first, then the exception
+  tables; a reference names the address that makes its relocated field equal retail, the first binds
+  the datum and its own references are read from there. Every reference of the bodies and data must
+  name the same address, it must be in `anon`, and no two anonymous data may share it; otherwise the
+  datum is a `DIFFER anonymous datum` line, its references stay unresolved and the unit is a mismatch.
+  An anonymous datum the object keeps that nothing compared refers to rejects the object. Each
+  defined section is then compared byte for byte with retail, relocations applied, and references
+  resolve to its address. A table that disagrees with a body is left to the table comparison
+  (`exc=differ`). Switch tables are anonymous data here, since they belong to a member rather than
+  the owner, and their retail `jtbl` units stay. A float or double literal is not a row: as in a
+  group, each reference reads the pool entry its retail instruction names (`verify.fold_literals`),
+  so one literal may sit at several entries; the literals only stripped bodies reach go with them.
+  `@STRING@<function>` strings keep `data` rows: MWCC names them after the function, and the linker
+  merges the copies of one name across files.
 - **`duplicates` are read from retail.** An inline destructor or helper the file emits whose kept
   copy is in another file is a duplicate when a member still calls it or names it in its exception
   table: its address is the one the retail `jal` or table word holds, and its body must fit there.
@@ -380,7 +394,9 @@ multiple-switch-table and permuter tests remain applicable.
 
 Run `python3 tools/test_whole_file_units.py` for the whole-file rows: the overlay rules, the row
 generator's placement, and against
-a GNU-linked fixture, a changed datum, a wrong address, an undeclared datum and the isolated body.
+a GNU-linked fixture, a changed datum, a wrong address, an undeclared datum, labels renumbered by one
+more declaration, two references that disagree and the isolated body; the runtime's `NMWException.cpp`
+still verifies against its row with an enum added ahead of it.
 
 Implementation: `tools/unitobjects.py`, `tools/units.py`, `tools/verify.py`,
 `tools/check.py` and `tools/linkgen.py`. The full byte-identical retail relink

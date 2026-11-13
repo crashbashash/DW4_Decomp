@@ -17,9 +17,12 @@ unit's profile, then:
   stripped   any other compiled function with no retail copy: the retail linker dropped it
   data       each datum a member, a duplicate, a kept datum or an exception table references (a
              type string only a `throw()` specification names), its address read back from the
-             retail relocation fields. A float or double literal has no row: each reference reads
-             the pool entry its retail instruction names, which must hold the literal's bytes
-             (verify.fold_literals), and one literal may be read at several entries
+             retail relocation fields. A named datum is a `data` row; an anonymous one (`@183`,
+             `table$14`: MWCC numbers them across the whole translation unit, headers included)
+             is its address in `anon`, and tools/verify.py binds it from its references. A float
+             or double literal has no row: each reference reads the pool entry its retail
+             instruction names, which must hold the literal's bytes (verify.fold_literals), and
+             one literal may be read at several entries
   externals  each call out of the file, read from the retail `jal` of a member or of a duplicate's
              retail copy, and each function out of the file an exception table names (a cleanup
              destructor no member calls), read from the retail table word
@@ -65,6 +68,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import cc
 import exceptions
 import unitprofiles
+import unitobjects
 import verify
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -301,6 +305,22 @@ def reach(function_at, retail, syms, headers, obj, functions, records, names, hi
     return data, duplicates, externals
 
 
+def data_rows(data):
+    """A row's `data` and `anon` from reach's {name: address}: a named datum keeps its name, an
+    anonymous one is listed by its retail address alone, as verify.bind_anonymous binds it."""
+    anon = collections.defaultdict(list)
+    for name, address in data.items():
+        if unitobjects.is_anonymous(name):
+            anon[address].append(name)
+    shared = {address: names for address, names in anon.items() if len(names) > 1}
+    if shared:
+        address, names = sorted(shared.items())[0]
+        sys.exit("anonymous data %s are all read at 0x%x" % (" and ".join(sorted(names)), address))
+    return ({name: "0x%08x" % address for name, address in sorted(data.items())
+             if not unitobjects.is_anonymous(name)},
+            ["0x%08x" % address for address in sorted(anon)])
+
+
 def pair_address(retail, base, raw, relocs, index, field, own):
     """The address the `lui` of relocation `index` and its low half name in retail, less the
     compiled addend."""
@@ -497,9 +517,12 @@ def main(argv=None):
                                         retail, syms, headers, obj, functions, records, known, data,
                                         externals, by_va)
             members = sorted((va, name) for name, va in at.items())
+            named, anon = data_rows(data)
             row = {"whole_file": True,
                    "emitted": {name: "0x%08x" % va for va, name in members[1:]},
-                   "data": {k: "0x%08x" % v for k, v in sorted(data.items())}}
+                   "data": named}
+            if anon:
+                row["anon"] = anon
             if duplicates:
                 row["duplicates"] = {k: "0x%08x" % v for k, v in sorted(duplicates.items())}
             stripped = sorted(n for n in functions if n not in at and n not in duplicates)

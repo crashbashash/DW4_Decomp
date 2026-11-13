@@ -1268,6 +1268,113 @@ def dead_data(obj, headers, syms, bodies, declared):
             if h[2] & 2 and not h[2] & 4 and h[5] and i not in live}
 
 
+def retail_references(raw, relocations, retail_word, gp):
+    """[(offset, symbol, address)]: for each relocation of a section, the address of its symbol that
+    makes the relocated field equal the retail word at that offset (`retail_word(offset)`), the
+    inverse of `apply_relocs`. A `lui` and its low half are read as one address, reported at the
+    `lui`; a `jal` field and a half without its pair name no whole address and are left out."""
+    def sext(value):
+        value &= 0xffff
+        return value - 0x10000 if value & 0x8000 else value
+
+    out, pending = [], []
+    for _section, offset, kind, name, addend in relocations:
+        if offset + 4 > len(raw):
+            continue
+        own, = struct.unpack_from("<I", raw, offset)
+        if kind == R_HI16:
+            pending.append((offset, name))
+        elif kind == R_32:
+            out.append((offset, name, (retail_word(offset) - own - addend) & 0xffffffff))
+        elif kind == R_GPREL16 and gp is not None:
+            out.append((offset, name, (gp + sext(retail_word(offset)) - addend) & 0xffffffff))
+        elif kind == R_LO16:
+            low = addend + sext(own)
+            for high, _name in [p for p in pending if p[1] == name]:
+                ahi = struct.unpack_from("<I", raw, high)[0] & 0xffff
+                whole = ((retail_word(high) & 0xffff) << 16) + sext(retail_word(offset))
+                out.append((high, name, (whole - (ahi << 16) - low) & 0xffffffff))
+            pending = [p for p in pending if p[1] != name]
+    return out
+
+
+def bind_anonymous(obj, headers, syms, sources, image, gp, listed, dropped=()):
+    """Bind each anonymous datum of a whole-file unit to the retail address its references read.
+
+    MWCC numbers its anonymous data (`@183`) and function-local statics (`table$14`) by a counter
+    that every declaration of the translation unit advances, headers included, so the row lists
+    their retail addresses (`anon`) rather than their names. `sources` are the sections already
+    placed in retail, [(section, retail address, label, strong)]: the compared bodies and named
+    data (strong) and the exception tables (weak). Each reference to an anonymous datum names the
+    address that makes its field equal retail (`retail_references`); the first one binds the datum,
+    whose own references are read in turn from there. The weak sources are read only after every
+    strong one, so an exception table binds only a datum no body or datum reaches: a table that
+    disagrees with a body is an exception-metadata difference the table comparison reports.
+
+    -> (bound {name: address}, failed {name: section}, report lines). A datum fails when two
+    references of the class that bound it disagree, when its address is not in `listed` (the row's
+    `anon`), or when another anonymous datum is bound to the same address. A datum no source
+    reaches is in neither map.
+    """
+    candidates = {}
+    for name, (section, value, size) in syms.items():
+        if not (unitobjects.is_anonymous(name) and isinstance(section, int) and 0 < section < len(headers)):
+            continue
+        label, header = headers[section]
+        if (header[2] & 2 and not header[2] & 4 and section not in dropped
+                and label not in LITERAL_SECTIONS and label not in (".exceptix", ".exception")):
+            candidates[name] = (section, value, size)
+    first, disagree, bases = {}, {}, {}
+    queue = collections.deque(source for source in sources if source[3])
+    weak = collections.deque(source for source in sources if not source[3])
+    visited = set()
+    while queue or weak:
+        section, base, label, strong = (queue or weak).popleft()
+        if section in visited:
+            continue
+        visited.add(section)
+        raw = object_section(obj, headers[section][0], section)
+        relocations = object_relocs(obj, target_section=section)
+        word = lambda offset: struct.unpack("<I", va_bytes(image, base + offset, 4))[0]
+        for offset, name, address in retail_references(raw, relocations, word, gp):
+            if name not in candidates:
+                continue
+            where = f"{label}+0x{offset:x}"
+            if name in first:
+                if first[name][0] == strong and first[name][1] != address:
+                    disagree.setdefault(name, [first[name][1:]]).append((address, where))
+                continue
+            first[name] = (strong, address, where)
+            datum, value, _size = candidates[name]
+            if bases.setdefault(datum, address - value) != address - value:
+                # another anonymous datum of its section was bound first
+                disagree[name] = [(bases[datum] + value, "its section"), (address, where)]
+                continue
+            queue.append((datum, address - value, name, True))
+    bound, failed, lines = {}, {}, []
+
+    def fail(name, why):
+        section, _value, size = candidates[name]
+        failed[name] = section
+        lines.append(f"DIFFER anonymous datum {name} ({headers[section][0]} {size}B): {why}")
+
+    owners = collections.defaultdict(list)
+    for name, (_strong, address, where) in first.items():
+        if name in disagree:
+            fail(name, "read as " + " and ".join(f"0x{a:x} by {w}" for a, w in disagree[name]))
+        elif address not in listed:
+            fail(name, f"read as 0x{address:x} by {where}, an address the row's anon does not list")
+        else:
+            owners[address].append(name)
+    for address, names in owners.items():
+        if len(names) > 1:
+            for name in names:
+                fail(name, f"read at 0x{address:x}, as is {' and '.join(n for n in names if n != name)}")
+        else:
+            bound[names[0]] = address
+    return bound, failed, lines
+
+
 def unreferenced(obj, headers, names, dropped):
     """Reject a stripped body that any kept section of the object still references."""
     if not names:
@@ -1353,8 +1460,11 @@ class Records(dict):
     """The verified members of a compiler unit, {compiler_name: (address, section, size)},
     plus `exception_placements`: {compiler_name: (index_section, index_va, table_section or
     None, table_va or None, table_size)} for every placed member whose retail exception
-    metadata the object reproduces, so `isolate_emitted_body` can keep those sections."""
+    metadata the object reproduces, so `isolate_emitted_body` can keep those sections, and
+    `data`: {compiler_name: retail address} of a whole-file unit's data, its named rows and
+    the anonymous data bound to its `anon` addresses."""
     exception_placements = {}
+    data = {}
 
 
 def duplicate_tables(group, jumptables):
@@ -1376,8 +1486,9 @@ def verify_emitted_object(obj, group, elf, symbols, gp_override=None, verbose=Fa
     verify-only duplicates. Other allocated data is accepted only when the overlay
     gives it a retail identity: the owner's switch tables (config/SLUS-20836/jumptables.txt),
     with an ``exceptions`` declaration the owner's exception index record and table, and
-    in a whole-file unit each ``data`` row. Each is compared byte for byte, relocations
-    applied, with retail. A whole-file unit's switch tables are ``data`` rows too.
+    in a whole-file unit each ``data`` row and each anonymous datum bound to an ``anon``
+    address (`bind_anonymous`). Each is compared byte for byte, relocations applied, with
+    retail. A whole-file unit's switch tables are anonymous data too.
     Runtime data and exception tables without such a declaration fail closed
     rather than becoming unplaced orphan sections.
 
@@ -1429,6 +1540,7 @@ def verify_emitted_object(obj, group, elf, symbols, gp_override=None, verbose=Fa
         table_sections = {index for index, _, _ in tables}
         data_addresses = dict(group.data)
         data_sections = {}      # section -> retail address of its first byte
+        data_labels = {}        # section -> the row naming its first byte, for report lines
         for name, address in group.data:
             section, value, _ = syms.get(name, (None, None, None))
             if isinstance(section, int) and headers[section][0] in LITERAL_SECTIONS:
@@ -1436,6 +1548,8 @@ def verify_emitted_object(obj, group, elf, symbols, gp_override=None, verbose=Fa
                                  "entry its retail instruction names, so a literal has no row")
             if isinstance(section, int) and data_sections.setdefault(section, address - value) != address - value:
                 raise ValueError(f"data symbol {name} disagrees with its section's retail address")
+            if isinstance(section, int) and value == 0:
+                data_labels.setdefault(section, name)
         stripped = stripped_bodies(obj, headers, syms, group, sections, image, by_va)
         # Every exception record and table belongs to a member; they are compared with
         # config/SLUS-20836/exceptions.txt below (never a reason to reject before the byte compare).
@@ -1455,12 +1569,40 @@ def verify_emitted_object(obj, group, elf, symbols, gp_override=None, verbose=Fa
             literal_sections = fold(dropped)
         unreferenced(obj, headers, set(stripped), dropped)
         exc_expected = expected_exception_records(group, symbols)
+        # the retail table address of every .exception section the object carries, for the resolver
+        exc_table_va = {table: exc_expected[records[name][0]][1]
+                        for name, (_index, table) in exc_sections.items()
+                        if table is not None and records[name][0] in exc_expected
+                        and exc_expected[records[name][0]][1] is not None}
+        gp = gp_override if gp_override is not None else reginfo_gp(elf)
+        anon_bound, anon_failed, anon_lines = {}, {}, []
+        if group.whole_file:
+            # the anonymous data take the addresses their references read in retail
+            sources = ([(section, address, name, True) for name, (address, section, _size) in records.items()
+                        if name not in deferred]
+                       + [(section, address, data_labels.get(section, f"data 0x{address:x}"), True)
+                          for section, address in data_sections.items()]
+                       + [(exc_sections[name][1], address, f"exception table of {name}", False)
+                          for name in exc_sections if name not in deferred
+                          for address in [exc_table_va.get(exc_sections[name][1])] if address is not None])
+            anon_bound, anon_failed, anon_lines = bind_anonymous(obj, headers, syms, sources, image, gp,
+                                                                 set(group.anon), dropped)
+            for name, address in anon_bound.items():
+                section, value, _ = syms[name]
+                data_addresses[name] = address
+                if data_sections.setdefault(section, address - value) != address - value:
+                    raise ValueError(f"anonymous datum {name} disagrees with its section's retail address")
         allocated = {i for i, (_, h) in enumerate(headers) if h[2] & 2 and h[5] and i not in dropped}
         executable = {i for i, (_, h) in enumerate(headers) if h[2] & 4 and h[5] and i not in dropped}
         named_text = {i for i, (name, h) in enumerate(headers)
                       if name == ".text" and h[5] and i not in dropped}
-        auxiliary = (table_sections | set(data_sections) | set(literal_sections)
+        auxiliary = (table_sections | set(data_sections) | set(literal_sections) | set(anon_failed.values())
                      | {i for pair in exc_sections.values() for i in pair if i is not None})
+        unbound = sorted(name for name, (section, _value, _size) in syms.items()
+                         if unitobjects.is_anonymous(name) and section in allocated - auxiliary - sections)
+        if unbound:
+            raise ValueError(f"anonymous datum {unbound[0]} is kept, but no compared body, datum or exception "
+                             "table refers to it")
         if (allocated != sections | auxiliary or executable != sections
                 or named_text != sections):
             raise ValueError("unowned code or runtime data in emitted object")
@@ -1480,14 +1622,8 @@ def verify_emitted_object(obj, group, elf, symbols, gp_override=None, verbose=Fa
                              "reference that datum)")
     except (KeyError, ValueError) as error:
         return False, f"emitted object rejected: {error}", None
-    # the retail table address of every .exception section the object carries, for the resolver
-    exc_table_va = {table: exc_expected[records[name][0]][1]
-                    for name, (_index, table) in exc_sections.items()
-                    if table is not None and records[name][0] in exc_expected
-                    and exc_expected[records[name][0]][1] is not None}
 
-    gp = gp_override if gp_override is not None else reginfo_gp(elf)
-    success, reports = True, []
+    success, reports = not anon_lines, list(anon_lines)
     requested = group.owner if requested is None else requested
 
     table_addresses = {index: address for index, address, _ in tables}
@@ -1646,6 +1782,7 @@ def verify_emitted_object(obj, group, elf, symbols, gp_override=None, verbose=Fa
     result = Records(records)
     result.exception_placements = placements
     result.data_sections = set(data_sections) | dead
+    result.data = {**dict(group.data), **anon_bound}
     return kind == "match", report + "\n".join(reports), result if success else None
 
 
@@ -1809,7 +1946,8 @@ def isolate_emitted_body(obj, requested, records, group, symbols, source=None):
     stripped_sections = {defined[name][0] for name in group.stripped
                          if name in defined and isinstance(defined[name][0], int)}
     # a whole-file unit's data stays retail's: the object keeps references to it, not copies
-    data_names = {name for name, _ in group.data}
+    data_addresses = getattr(records, "data", None) or dict(group.data)
+    data_names = set(data_addresses)
     stripped_sections |= getattr(records, "data_sections", set())
     with open(obj, "rb") as original:
         data = bytearray(original.read())
@@ -1845,7 +1983,7 @@ def isolate_emitted_body(obj, requested, records, group, symbols, source=None):
         if table_section is not None:
             kept[table_section] = ".exception.dw4_%08x" % table_at
     dup_tables = set()
-    # a whole-file unit's switch tables are `data` rows (removed with the data sections above), not
+    # a whole-file unit's switch tables are its anonymous data (removed with the data sections above), not
     # tables of its owner: only a function group pairs its .rodata with jumptables.txt here
     if group.duplicates and not group.whole_file:
         jumptables = load_jumptables(jumptables_path(symbols))
@@ -1868,7 +2006,7 @@ def isolate_emitted_body(obj, requested, records, group, symbols, source=None):
                  "--remove-section=.mwcats", "--remove-section=.mdebug"]
     renames = {name: by_va[address][0] for name, (address, _, _) in records.items()}
     renames.update({name: by_va[address][0] for name, address in group.externals})
-    renames.update({name: "DAT_%08x" % address for name, address in group.data})
+    renames.update({name: "DAT_%08x" % address for name, address in data_addresses.items()})
     addresses = {name: address for name, (address, _, _) in records.items()}
     addresses.update(dict(group.externals))
     renames = unshared_renames(renames, addresses, keep=selected)

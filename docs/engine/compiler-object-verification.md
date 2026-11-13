@@ -124,6 +124,21 @@ section must be used by a proven reference, so a literal cannot carry data in. T
 emitted group folds across all its bodies, and a whole-file unit across its placed bodies, once the
 stripped bodies and the literals only they reach are dropped; a literal is never a `data` row.
 
+### Anonymous data of a whole-file unit
+
+MWCC names a string, switch table or type name `@<n>` and a function-local static `<name>$<n>`, with
+one counter for the whole translation unit: a header that declares one more thing renumbers every
+such label after it. A whole-file row therefore lists these data by retail address only (`anon`,
+[whole-file units](emitted-functions.md#whole-file-units)), and `unitobjects.load` refuses a numbered
+label as a `data` row. `verify.bind_anonymous` gives each compiled one the address its references
+read in retail, as `fold_literals` does for a literal: the address that makes each relocated field of
+a placed body, a named datum or (only for a datum nothing else reaches) an exception table equal the
+retail word. The references of the bodies and data must agree, the address must be listed and no
+other anonymous datum may hold it, or the unit is a mismatch with a `DIFFER anonymous datum` line; an
+anonymous datum the object keeps and nothing compared refers to rejects the object. The bound datum is
+then compared byte for byte like a named one, so a reference cannot name an address whose bytes
+differ, and every other reference is checked by the byte comparison of its own section.
+
 ### Symbol identity
 
 A relocation symbol's name is a claim about retail, and `verify.sym_address`

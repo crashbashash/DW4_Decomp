@@ -13,6 +13,10 @@ weakening that rule (see docs/engine/emitted-functions.md):
   the retail body, but is never placed or given source ownership.
 * ``exceptions`` binds the unit's exception index record and exception table to
   their retail addresses so that data is verified byte for byte.
+* ``anon`` lists the retail addresses of a whole-file unit's anonymous data: the
+  data the compiler names by a running number (`@183`, `table$14`), which moves
+  whenever an included header declares one more thing. tools/verify.py binds each
+  such datum to the address its references read in retail.
 """
 from dataclasses import dataclass
 from functools import lru_cache
@@ -22,6 +26,15 @@ import re
 
 ROOT = Path(__file__).resolve().parent.parent
 DEFAULT_PATH = "config/SLUS-20836/unit-objects.json"
+# MWCC's numbered labels: an anonymous datum (`@183`, a string, a switch table, a type name) or a
+# function-local static and its guard (`watchNames$14`, `@GUARD@translation$16608`). The number
+# counts everything the translation unit declared before it, headers included.
+ANONYMOUS = re.compile(r"@\d+|\S+\$\d+")
+
+
+def is_anonymous(name):
+    """True for a compiler label whose number depends on the whole translation unit."""
+    return bool(ANONYMOUS.fullmatch(name))
 
 
 @dataclass(frozen=True)
@@ -36,13 +49,15 @@ class Group:
     # accepts them only unreferenced, absent from retail and complete; they are never linked.
     stripped: tuple = ()
     # A stock library file: the source compiles whole, never split per function. Its `stripped`
-    # names are any functions the retail linker dropped, and its `data` rows are the (symbol,
-    # retail address) of each datum it defines or references (docs/engine/emitted-functions.md).
+    # names are any functions the retail linker dropped, its `data` rows are the (symbol,
+    # retail address) of each named datum it defines or references, and `anon` the retail
+    # addresses of its anonymous data (docs/engine/emitted-functions.md).
     whole_file: bool = False
     data: tuple = ()
     # The owner's compiler symbol when it differs from symbols.txt: a C++ whole-file unit's names
     # are mangled, while the symbol map keeps the plain name that its source and callers use.
     symbol: str = ""
+    anon: tuple = ()
 
     @property
     def addresses(self):
@@ -85,10 +100,11 @@ def load(path=None):
     for key, row in data.items():
         if (not isinstance(row, dict)
                 or set(row) - {"emitted", "externals", "duplicates", "exceptions", "stripped",
-                               "whole_file", "data", "symbol"}
+                               "whole_file", "data", "anon", "symbol"}
                 or not isinstance(row.get("whole_file", False), bool)
                 or not isinstance(row.get("data", {}), dict)
-                or ("data" in row and not row.get("whole_file"))
+                or not isinstance(row.get("anon", []), list)
+                or (("data" in row or "anon" in row) and not row.get("whole_file"))
                 or not isinstance(row.get("stripped", []), list)
                 or not isinstance(row.get("emitted", {}), dict)
                 or not isinstance(row.get("duplicates", {}), dict)
@@ -110,6 +126,16 @@ def load(path=None):
         if any(not symbol or any(c.isspace() for c in symbol)
                for symbol, _ in emitted + duplicates + externals + data):
             raise ValueError("invalid compiler symbol")
+        numbered = [symbol for symbol, _ in data if is_anonymous(symbol)]
+        if numbered:
+            raise ValueError(f"data row {numbered[0]} is a numbered compiler label: list its retail "
+                             "address under anon")
+        if not all(isinstance(value, str) for value in row.get("anon", [])):
+            raise ValueError("anon lists retail addresses")
+        anon = tuple(int(value, 0) for value in row.get("anon", []))
+        if (any(not 0 < value <= 0xffffffff for value in anon) or len(set(anon)) != len(anon)
+                or list(anon) != sorted(anon)):
+            raise ValueError("anon lists distinct retail addresses in ascending order")
         exceptions = ()
         if "exceptions" in row:
             record = row["exceptions"]
@@ -125,7 +151,7 @@ def load(path=None):
                or any(c.isspace() for c in symbol) for symbol in stripped):
             raise ValueError("a stripped symbol must be a compiler destructor name (__dt__...)")
         group = Group(owner, emitted, externals, duplicates, exceptions, stripped, whole_file, data,
-                      row.get("symbol", ""))
+                      row.get("symbol", ""), anon)
         if len(set(group.members)) != len(group.members) or owned.intersection(group.addresses):
             raise ValueError("function belongs to multiple compiler bodies")
         names = [symbol for symbol, _ in emitted + duplicates + externals + data] + list(stripped)

@@ -4,6 +4,7 @@ import io
 import json
 import os
 from pathlib import Path
+import re
 import shutil
 import struct
 import subprocess
@@ -32,10 +33,10 @@ char *fixture_drop(v)
     return v ? "dropped string" : 0;
 }
 
-int fixture_second(a)
+char *fixture_second(a)
     int a;
 {
-    return a + 1;
+    return a ? 0 : "kept string";
 }
 '''
 
@@ -65,14 +66,24 @@ class Overlay(unittest.TestCase):
             self.load({"emitted": {"two": "0x00180100"}, "stripped": ["zError"]})
 
     def test_data_belongs_to_a_whole_file_unit(self):
-        group, = self.load({"whole_file": True, "data": {"@45": "0x00190000"}})
-        self.assertEqual(group.data, (("@45", 0x190000),))
-        with self.assertRaises(ValueError):
-            self.load({"emitted": {"two": "0x00180100"}, "data": {"@45": "0x00190000"}})
+        group, = self.load({"whole_file": True, "data": {"inflate_mask": "0x00190000"}, "anon": ["0x00190010"]})
+        self.assertEqual((group.data, group.anon), ((("inflate_mask", 0x190000),), (0x190010,)))
+        for field, value in (("data", {"inflate_mask": "0x00190000"}), ("anon", ["0x00190010"])):
+            with self.assertRaises(ValueError):
+                self.load({"emitted": {"two": "0x00180100"}, field: value})
 
     def test_a_datum_can_start_on_any_byte(self):
-        group, = self.load({"whole_file": True, "data": {"@45": "0x00190001"}})
-        self.assertEqual(group.data, (("@45", 0x190001),))
+        group, = self.load({"whole_file": True, "data": {"inflate_mask": "0x00190001"}, "anon": ["0x00190003"]})
+        self.assertEqual((group.data, group.anon), ((("inflate_mask", 0x190001),), (0x190003,)))
+
+    def test_a_numbered_label_is_listed_by_address_only(self):
+        for label in ("@45", "watchNames$14", "@GUARD@translation$16608"):
+            with self.assertRaisesRegex(ValueError, f"data row {re.escape(label)} is a numbered compiler label"):
+                self.load({"whole_file": True, "data": {label: "0x00190000"}})
+        self.assertEqual(self.load({"whole_file": True, "data": {"@rodata": "0x00190000"}})[0].anon, ())
+        for anon in (["0x00190010", "0x00190000"], ["0x00190000", "0x00190000"], [0x190000]):
+            with self.assertRaises(ValueError):
+                self.load({"whole_file": True, "anon": anon})
 
     def test_ifdef_alternatives_are_one_definition(self):
         (self.root / "lib.c").write_text("#ifdef A\nint one(void) { return 1; }\n#else\n"
@@ -155,6 +166,7 @@ class Objects(unittest.TestCase):
         struct.pack_into("<HHH", image, 0x2e, 40, 3, 1)
         self.image = self.root / "fixture.elf"
         self.image.write_bytes(image)
+        self.image_bytes = bytes(image)
         self.symbols = self.root / "symbols.txt"
         self.symbols.write_text(f"{self.OWNER:08x} {syms['fixture_keep'][2]:06x} fixture_keep\n"
                                 f"{self.MEMBER:08x} {syms['fixture_second'][2]:06x} fixture_second\n")
@@ -169,20 +181,23 @@ class Objects(unittest.TestCase):
                        check=True, capture_output=True, env=dict(os.environ, MWCIncludes=str(self.root)))
         return obj
 
-    def group(self, data=None):
+    def group(self, anon=None):
         self.registry.write_text(json.dumps({hex(self.OWNER): {
             "whole_file": True, "emitted": {"fixture_second": hex(self.MEMBER)},
-            "stripped": ["fixture_drop"],
-            "data": {self.datum: hex(self.DATA)} if data is None else data}}))
+            "stripped": ["fixture_drop"], "data": {},
+            "anon": [hex(self.DATA)] if anon is None else [hex(a) for a in anon]}}))
+        unitobjects.load.cache_clear()
         return unitobjects.group_for(self.OWNER, self.registry)
 
-    def verify(self, obj, group):
-        return verify.verify_emitted_object(str(obj), group, str(self.image), str(self.symbols), jumptables={})
+    def verify(self, obj, group, image=None):
+        return verify.verify_emitted_object(str(obj), group, str(image or self.image), str(self.symbols),
+                                            jumptables={})
 
     def test_declared_data_matches_and_dead_data_needs_no_row(self):
         ok, report, records = self.verify(self.obj, self.group())
         self.assertTrue(ok, report)
         self.assertIn(f"MATCH data .data 0x{self.DATA:x}", report)
+        self.assertEqual(records.data, {self.datum: self.DATA})
 
     def test_a_changed_datum_differs(self):
         obj = self.compile(SOURCE.replace("kept string", "kept strinG"), "changed")
@@ -190,14 +205,44 @@ class Objects(unittest.TestCase):
         self.assertFalse(ok)
         self.assertIn(f"DIFFER data .data 0x{self.DATA:x}", report)
 
-    def test_a_wrong_address_differs(self):
-        ok, report, _records = self.verify(self.obj, self.group({self.datum: hex(self.DATA + 16)}))
-        self.assertFalse(ok, report)
+    def test_renumbered_labels_bind_to_the_same_address(self):
+        # one more declaration ahead of the file (a header's enum) moves every numbered label
+        obj = self.compile("enum { fixture_extra };\n" + SOURCE, "renumbered")
+        syms, _ = verify.object_syms(str(obj))
+        self.assertNotIn(self.datum, syms)
+        ok, report, records = self.verify(obj, self.group())
+        self.assertTrue(ok, report)
+        self.assertEqual(list(records.data.values()), [self.DATA])
 
-    def test_a_reached_datum_must_be_declared(self):
-        ok, report, _records = self.verify(self.obj, self.group({}))
+    def test_an_address_the_row_does_not_list_differs(self):
+        ok, report, _records = self.verify(self.obj, self.group([self.DATA + 16]))
+        self.assertFalse(ok, report)
+        self.assertIn(f"DIFFER anonymous datum {self.datum} (.data 12B): read as 0x{self.DATA:x} by "
+                      "fixture_keep+0x", report)
+        self.assertIn("an address the row's anon does not list", report)
+
+    def test_a_reached_datum_must_be_listed(self):
+        ok, report, _records = self.verify(self.obj, self.group([]))
         self.assertFalse(ok)
-        self.assertIn("unowned code or runtime data", report)
+        self.assertIn("an address the row's anon does not list", report)
+
+    def test_references_that_disagree_differ(self):
+        # retail's fixture_second reads the string 16 bytes on: no one address for the datum
+        syms, _ = verify.object_syms(str(self.obj))
+        low = next(r[1] for r in verify.object_relocs(str(self.obj), target_section=syms["fixture_second"][0])
+                   if r[3] == self.datum and r[2] == verify.R_LO16)
+        image = bytearray(self.image_bytes)
+        at = self.MEMBER + low - verify.VADDR_BASE + verify.FILE_BASE
+        struct.pack_into("<I", image, at, struct.unpack_from("<I", image, at)[0] + 16)
+        conflicting = self.root / "conflicting.elf"
+        conflicting.write_bytes(image)
+        ok, report, records = self.verify(self.obj, self.group([self.DATA, self.DATA + 16]), conflicting)
+        self.assertFalse(ok)
+        self.assertIsNone(records)
+        self.assertRegex(report, rf"DIFFER anonymous datum {re.escape(self.datum)} \(\.data 12B\): read as "
+                                 rf"0x{self.DATA:x} by fixture_keep\+0x[0-9a-f]+ and 0x{self.DATA + 16:x} by "
+                                 r"fixture_second\+0x[0-9a-f]+")
+        self.assertIn("unresolved relocation", report)
 
     def test_isolated_body_references_retail_data(self):
         group = self.group()
@@ -424,9 +469,8 @@ class LiteralAtTwoEntries(unittest.TestCase):
 
     def test_a_literal_has_no_data_row(self):
         name = next(r[3] for r in self.functions["lit_first"].relocs)
-        ok, report, _records, _group, _obj = self.verify(self.retail(), {name: hex(self.ENTRY_A)})
-        self.assertFalse(ok)
-        self.assertIn("is a compiler literal", report)
+        with self.assertRaisesRegex(ValueError, "is a numbered compiler label"):
+            self.verify(self.retail(), {name: hex(self.ENTRY_A)})
 
 
 class ProfileTwin(unittest.TestCase):
@@ -585,10 +629,10 @@ int beTransformSync_GetVTable(void) {
 
     def verify(self, drop=()):
         data, externals, stripped = self.rows()
+        named, anon = whole_file_rows.data_rows(data)
         overlay = self.root / "objects.json"
         overlay.write_text(json.dumps({"0x%08x" % self.OWNER: {
-            "whole_file": True, "symbol": self.NAME, "stripped": stripped,
-            "data": {k: "0x%08x" % v for k, v in data.items()},
+            "whole_file": True, "symbol": self.NAME, "stripped": stripped, "data": named, "anon": anon,
             "externals": {k: "0x%08x" % v for k, v in externals.items() if k not in drop}}}))
         unitobjects.load.cache_clear()
         self.addCleanup(unitobjects.load.cache_clear)
@@ -627,14 +671,18 @@ class RuntimeRows(unittest.TestCase):
         unitobjects.load.cache_clear()
         self.addCleanup(unitobjects.load.cache_clear)
 
-    def reach(self, unit):
-        lo, hi, stem = unit
+    def compile(self, lo, source, stem):
         profile = unitprofiles.resolve(lo, verify.FLAGS_DEFAULT, verify.MWCC_DEFAULT).profile
         self.assertEqual(profile.exceptions, "on")
         obj = self.root / f"{stem}.o"
         subprocess.run(cc.compile_argv(verify.WIBO_DEFAULT, profile.compiler, unitprofiles.command_flags(profile),
-                                       os.path.join(verify.ROOT, f"src/runtime/{stem}.cpp"), str(obj)),
+                                       str(source), str(obj)),
                        cwd=verify.ROOT, check=True, capture_output=True)
+        return obj
+
+    def reach(self, unit):
+        lo, hi, stem = unit
+        obj = self.compile(lo, os.path.join(verify.ROOT, f"src/runtime/{stem}.cpp"), stem)
         group = unitobjects.group_for(lo)
         syms, headers, functions = whole_file_rows.text_functions(str(obj))
         names = {name: va for name, (va, _size) in verify.load_symbols(self.symbols)[0].items()}
@@ -642,6 +690,10 @@ class RuntimeRows(unittest.TestCase):
         rows = whole_file_rows.reach(placed, whole_file_rows.Retail(str(self.elf)), syms, headers, str(obj),
                                      functions, exceptions.load(), names, hi)
         return rows, group, obj, syms, headers, functions
+
+    def rows(self, group):
+        """A row's `data` and `anon` as whole_file_rows writes them."""
+        return {name: "0x%08x" % va for name, va in group.data}, ["0x%08x" % va for va in group.anon]
 
     def named_by_text(self, obj, headers):
         return {r[3] for i, (name, _h) in enumerate(headers) if name == ".text"
@@ -653,14 +705,14 @@ class RuntimeRows(unittest.TestCase):
         label, = [r[3] for r in verify.object_relocs(str(obj), target_section=table) if r[3].startswith("@")]
         self.assertNotIn(label, self.named_by_text(obj, headers))
         self.assertEqual(data[label], 0x4d1c30)
-        self.assertEqual(data, dict(group.data))
+        self.assertEqual(whole_file_rows.data_rows(data), self.rows(group))
 
     def test_functions_only_a_kept_vtable_names_are_duplicates(self):
         (data, duplicates, _externals), group, obj, _syms, headers, functions = self.reach(self.NMW)
         self.assertEqual(duplicates, {"__dt__Q23std9exceptionFv": 0x100670, "what__Q23std9exceptionCFv": 0x1006c0,
                                       "__dt__Q23std9bad_allocFv": 0x100770, "what__Q23std9bad_allocCFv": 0x1007d0})
         self.assertEqual(duplicates, dict(group.duplicates))
-        self.assertEqual(data, dict(group.data))
+        self.assertEqual(whole_file_rows.data_rows(data), self.rows(group))
         members = {name for name, _va in group.emitted} | {group.symbol}
         named = {(r[3], r[2]) for name in members for r in functions[name].relocs if r[3] in duplicates}
         self.assertEqual(named, {("__dt__Q23std9bad_allocFv", whole_file_rows.R_HI16),
@@ -669,11 +721,11 @@ class RuntimeRows(unittest.TestCase):
     def test_a_body_a_kept_vtable_names_cannot_be_stripped(self):
         _rows, group, obj, *_ = self.reach(self.NMW)
         overlay = self.root / "objects.json"
+        named, anon = self.rows(group)
         overlay.write_text(json.dumps({"0x%08x" % group.owner: {
             "whole_file": True, "symbol": group.symbol,
             "emitted": {name: "0x%08x" % va for name, va in group.emitted},
-            "stripped": sorted(name for name, _va in group.duplicates),
-            "data": {name: "0x%08x" % va for name, va in group.data}}}))
+            "stripped": sorted(name for name, _va in group.duplicates), "data": named, "anon": anon}}))
         unitobjects.load.cache_clear()
         stripped, = unitobjects.load(str(overlay))
         ok, report, _records = verify.verify_emitted_object(str(obj), stripped, str(self.elf), self.symbols)
@@ -681,6 +733,25 @@ class RuntimeRows(unittest.TestCase):
         self.assertIn("a referenced body cannot have been dead-stripped", report)
         ok, report, _records = verify.verify_emitted_object(str(obj), group, str(self.elf), self.symbols)
         self.assertTrue(ok, report)
+
+    def test_a_header_that_declares_more_keeps_the_row(self):
+        """One more anonymous enum ahead of the file's code, as when the exception header gained one,
+        moves every numbered label after it (`@247` becomes `@248`). The row lists the anonymous data
+        by address, so the file still verifies, each datum bound where retail reads it."""
+        lo, _hi, stem = self.NMW
+        wrapper = self.root / "renumbered.cpp"
+        wrapper.write_text(f'enum {{ RenumberingProbe }};\n#include "src/runtime/{stem}.cpp"\n')
+        group = unitobjects.group_for(lo)
+        bound = []
+        for obj in (self.compile(lo, os.path.join(verify.ROOT, f"src/runtime/{stem}.cpp"), "plain"),
+                    self.compile(lo, wrapper, "renumbered")):
+            ok, report, records = verify.verify_emitted_object(str(obj), group, str(self.elf), self.symbols)
+            self.assertTrue(ok, report)
+            bound.append({name: va for name, va in records.data.items() if unitobjects.is_anonymous(name)})
+        plain, renumbered = bound
+        self.assertNotEqual(set(plain), set(renumbered))
+        self.assertEqual(sorted(plain.values()), sorted(renumbered.values()))
+        self.assertEqual(sorted(plain.values()), list(group.anon))
 
 
 class SharedStaticOwner(unittest.TestCase):

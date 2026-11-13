@@ -15,7 +15,7 @@ readable source that rebuilds the retail executable byte for byte.
 | Sony SDK | 97 KB | 71.1 % | 59.5 % |
 | newlib | 84 KB | 100.0 % | 100.0 % |
 | libgcc | 11 KB | 100.0 % | 100.0 % |
-| Metrowerks runtime | 10 KB | 100.0 % | 97.5 % |
+| Metrowerks runtime | 10 KB | 100.0 % | 100.0 % |
 | Static initialisers | 10 KB | 41.5 % | 0.0 % |
 | **Total** | **3391 KB** | **84.2 %** | **43.6 %** |
 

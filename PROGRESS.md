@@ -41,7 +41,7 @@ The `code-only` debt by exception-metadata reason (from each unit's diagnostic):
 
 Matching proves the bytes; it does not make the source readable. A matched function counts as **readable** when it also passes every test below. The tests are mechanical, so this is a floor: a function can pass them all and still be hard to follow. An owner-approved assembly source counts as readable when it has a recovered name, because its approval records that no C reproduces it.
 
-**8,598** of the 19,944 matched functions are readable: **1,513,784** code bytes, **43.6 %** of the code.
+**8,600** of the 19,944 matched functions are readable: **1,514,044** code bytes, **43.6 %** of the code.
 
 | A matched function is readable when | matched functions failing it | code bytes |
 | --- | ---: | ---: |
@@ -51,7 +51,7 @@ Matching proves the bytes; it does not make the source readable. A matched funct
 | it sits in its class or module file, not `src/unmatched/` | 198 | 56,016 |
 | what it calls and reads is named: no `FUN_`/`DAT_` references | 1,376 | 386,184 |
 | no decompiler leftovers: `temp_*`, `var_*`, `argN`, stack-offset locals such as `sp5C` | 570 | 203,260 |
-| fields are reached through named struct members: no `fNN`/`unkNN` members, no cast of a pointer plus an offset | 598 | 186,248 |
+| fields are reached through named struct members: no `fNN`/`unkNN` members, no cast of a pointer plus an offset | 596 | 185,988 |
 | virtual calls go through a named method, not a slot number such as `v216` or a cast function pointer | 249 | 125,548 |
 
 ## Debt

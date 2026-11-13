@@ -84,7 +84,10 @@ extern "C" asm void __throw(register char *throwtype, register void *location, r
 extern "C" unsigned char *__SkipFrameInfo(char *exception_record) {
     unsigned int value;
     int has_fprs = *exception_record & EXFRAME_SAVED_FPRS;
-    unsigned char *p = __DecodeUnsignedNumber(__DecodeUnsignedNumber((unsigned char *)exception_record + 1, &value), &value);
+    unsigned char *p = (unsigned char *)exception_record;
+
+    p = __DecodeUnsignedNumber(p + 1, &value); /* past the flag byte: the frame size */
+    p = __DecodeUnsignedNumber(p, &value);     /* the argument size */
 
     if (has_fprs) {
         p = __DecodeUnsignedNumber(p, &value);
@@ -108,7 +111,9 @@ extern "C" void __SetupFrameInfo(ThrowContext *context, MWExceptionInfo *info) {
     context->target.has_frame_ptr = *record & EXFRAME_FRAME_POINTER;
     context->target.has_flushback = *record & EXFRAME_FLUSHBACK;
     context->target.n_saved_GPRs = *record & EXFRAME_SAVED_GPRS;
-    p = __DecodeUnsignedNumber(__DecodeUnsignedNumber((unsigned char *)record + 1, &context->target.frame_size), &context->target.argument_size);
+    p = (unsigned char *)record;
+    p = __DecodeUnsignedNumber(p + 1, &context->target.frame_size); /* past the flag byte */
+    p = __DecodeUnsignedNumber(p, &context->target.argument_size);
     if (context->target.has_frame_ptr) {
         context->FP = (char *)(int)context->target.GPR[30];
     } else {
