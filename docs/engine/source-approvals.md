@@ -119,7 +119,7 @@ The 7-bit state field at +70 of a stream slot.
 ### adxm-thread-ids
 
 The ADX manager's thread id words, written at thread creation and cleared at shutdown, and read by lock callbacks,
-event callbacks and thread bodies.
+event callbacks, thread bodies, the idle-border switches and the shutdown functions.
 
 * Retail keeps loads a plain spelling drops: a load right after the store with its result unused, or a second read
   with no call between. The functions come out shorter without the keyword.
@@ -361,6 +361,9 @@ frame count at `0x56bf70` and the watchdog's tick counter at `0x56d680`.
   `0x56bf70` until it passes a target. A GS interrupt handler, registered with `AddIntcHandler`, advances that
   count. The loop calls a function, so it reloads with or without the keyword; the keyword keeps the order of
   the accesses, and the interrupt writer makes it the source's own.
+* The finish-sequence wait sets and clears its own bit in the flag words the same way and waits on the finish
+  semaphore at `0x56bf80`, whose id it reads twice (to record it and to wait on it); the GS SIGNAL handler
+  signals that semaphore. Without the keyword the two reads merge.
 * A watchdog thread, whose entry, 4 KB stack and `gp` sit in a thread parameter block at `0x4965d4`, copies the
   first flag word into the second on each tick and aborts if the bits it copied last time are still set: the
   DMA handler clears them when the work completes. It reads the second word twice, and retail loads it twice.
