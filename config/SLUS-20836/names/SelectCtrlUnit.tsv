@@ -1,0 +1,9 @@
+# beSelectCtrl.cpp: the beSelectCtrl info-meta getter, update, message handler and meta getter, and the
+# BecLibrary work creator and message enum they call. Evidence in docs/engine/selectctrl.md.
+# <va>	<name>	<module>
+0x00345680	beSelectCtrlInfoWork_Create	game
+0x003459a0	beSelectCtrl_GetMessageEnum	game
+0x0039cbb0	beSelectCtrl_GetInfoMeta	game
+0x0039cbf0	beSelectCtrl_Update	game
+0x0039d720	beSelectCtrl_OnMessage	game
+0x0039ded0	beSelectCtrl_GetMeta	game

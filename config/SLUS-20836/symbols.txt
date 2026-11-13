@@ -14681,7 +14681,7 @@
 003454b0 000074 beSelectCtrlInfoRamData_Register
 00345530 00001c beSelectCtrlInfoRamData_GetMetaObject
 00345550 000128 beSelectCtrlInfoRamData_InitFields
-00345680 000034 FUN_00345680
+00345680 000034 beSelectCtrlInfoWork_Create
 003456c0 000044 FUN_003456c0
 00345710 00004c FUN_00345710
 00345760 0000d0 beSelectCtrlInfoWork_GetVTable
@@ -14689,7 +14689,7 @@
 00345850 000074 beSelectCtrlInfoWork_Register
 003458d0 00001c beSelectCtrlInfoWork_GetMetaObject
 003458f0 0000a8 beSelectCtrlInfoWork_InitFields
-003459a0 000054 FUN_003459a0
+003459a0 000054 beSelectCtrl_GetMessageEnum
 00345a00 000034 beSelectCtrl_CreateInstance
 00345a40 000044 FUN_00345a40
 00345a90 00004c FUN_00345a90
@@ -17343,11 +17343,11 @@
 0039c990 0001d0 Gap__Bec__beSeCtl__vfunc_34 Gap::Bec::beSeCtl::vfunc_34
 0039cb60 00000c Gap__Bec__beSeCtl__vfunc_20 Gap::Bec::beSeCtl::vfunc_20
 0039cb70 000040 beSelectCtrl_EnsurePadManager
-0039cbb0 00000c Gap__Bec__beSelectCtrl__vfunc_30 Gap::Bec::beSelectCtrl::vfunc_30
+0039cbb0 00000c beSelectCtrl_GetInfoMeta
 0039cbc0 000024 beSelectCtrl_RegisterReceiver
-0039cbf0 000b30 Gap__Bec__beSelectCtrl__vfunc_31 Gap::Bec::beSelectCtrl::vfunc_31
-0039d720 0007a8 Gap__Bec__beSelectCtrl__vfunc_33 Gap::Bec::beSelectCtrl::vfunc_33
-0039ded0 00000c Gap__Bec__beSelectCtrl__vfunc_20 Gap::Bec::beSelectCtrl::vfunc_20
+0039cbf0 000b30 beSelectCtrl_Update
+0039d720 0007a8 beSelectCtrl_OnMessage
+0039ded0 00000c beSelectCtrl_GetMeta
 0039dee0 000194 Gap__Bec__beShadow01__vfunc_32 Gap::Bec::beShadow01::vfunc_32
 0039e080 00000c Gap__Bec__beShadow01__vfunc_30 Gap::Bec::beShadow01::vfunc_30
 0039e090 0001fc FUN_0039e090

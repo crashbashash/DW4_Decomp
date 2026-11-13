@@ -1,4 +1,4 @@
-void FUN_00345680(int arg0) {
+void beSelectCtrlInfoWork_Create(int arg0) {
     FUN_00345830();
     igMetaObject_CreateInstance(*(int *)0x587F60, arg0);
 }
@@ -100,7 +100,7 @@ void beSelectCtrlInfoWork_InitFields(void) {
     igMetaObject_NameFields(temp_s0, &DAT_004c3ae0[0], &DAT_004c3b00[0], &DAT_004c3b20[0], temp_s2);
 }
 
-int FUN_003459a0(void) {
+int beSelectCtrl_GetMessageEnum(void) {
     if (DAT_00587f90[0] == 0) {
         DAT_00587f90[0] = igMetaEnum_Create(&DAT_005016f0[0], &DAT_004c3b40[0], &DAT_004c3b60[0], 7);
     }

@@ -1,20 +1,23 @@
 # SELECTCTRL manager and pad input
 
 This page covers the concrete `beSelectCtrl` receiver used by the
-[shop selectors](shop-selectors.md). Its two entry bodies are
-`beSelectCtrl_EnsurePadManager` at `0x0039cb70` (64 bytes) and
-`beSelectCtrl_RegisterReceiver` at `0x0039cbc0` (36 bytes).
-The metadata getter is at `0x0039cbb0` (12 bytes) and the inherited dispatch check at
-`0x00378410` (8 bytes).
-The complete update (2,864 bytes) and general handler (1,960 bytes) are in
-[beSelectCtrl.cpp](../../src/game/beSelectCtrl.cpp).
+[shop selectors](shop-selectors.md). All six of its bodies are in
+[beSelectCtrl.cpp](../../src/game/beSelectCtrl.cpp), in address order:
+`beSelectCtrl_EnsurePadManager` (`0x0039cb70`, 64 bytes), `beSelectCtrl_GetInfoMeta`
+(`0x0039cbb0`, 12 bytes), `beSelectCtrl_RegisterReceiver` (`0x0039cbc0`, 36 bytes),
+`beSelectCtrl_Update` (`0x0039cbf0`, 2,864 bytes), `beSelectCtrl_OnMessage`
+(`0x0039d720`, 1,960 bytes) and `beSelectCtrl_GetMeta` (`0x0039ded0`, 12 bytes).
+The inherited dispatch check is at `0x00378410` (8 bytes). The work creator
+`beSelectCtrlInfoWork_Create` (`0x00345680`) and the message enum
+`beSelectCtrl_GetMessageEnum` (`0x003459a0`) are in the Bec library.
 
 ## Entry methods and ownership
 
-The RTTI-headed table at `0x0053b290` stores the receiver initializer at raw byte
-124, info-class getter at128, update at132, pad-manager acquisition at136,
-general handler at140 and inherited check at144. These are raw offsets from
-the table header, not an index into a headerless function list.
+The RTTI-headed table at `0x0053b290` stores `beSelectCtrl_RegisterReceiver` at raw byte
+124, `beSelectCtrl_GetInfoMeta` at128, `beSelectCtrl_Update` at132,
+`beSelectCtrl_EnsurePadManager` at136, `beSelectCtrl_OnMessage` at140 and the inherited
+check at144. These are raw offsets from the table header, not an index into a
+headerless function list.
 
 The method at raw136 is **not cleanup**. It tests the reflected `_padManager`
 word32 and, only when absent, calls `0x00236f80` with `_insight` word12 and the
@@ -48,12 +51,13 @@ must not be merged into a single state layout: all three have meaningful words
 
 The manager lazily allocates its registry if context40 is absent, then uses
 `0x003022c0` and literal `ONE` (`0x0050f800`) to find its data. Update obtains pad state
-through `0x0039b810(manager->_padManager, context.player)` and reads words36,
-68 and72. Recovered shop-owner selection state is a separate record again.
+through `bePadManager_GetPadForPlayer(manager->_padManager, context.player)` and reads the
+`bePadData` fields `_lStk` (word36), `_button` (word68, masked to the D-pad bits `0xF0`) and
+`_trigger` (word72). Recovered shop-owner selection state is a separate record again.
 
 ## Original command contract
 
-The enum getter at `0x003459a0` uses name/value tables `0x004c3b40/0x004c3b60`.
+`beSelectCtrl_GetMessageEnum` (`0x003459a0`) uses name/value tables `0x004c3b40/0x004c3b60`.
 The handler's jump table is `0x0050f8e0`.
 
 | Value | Command | Observed effect |
@@ -77,12 +81,14 @@ Primary state0 generates the model at its saved offset, starts the opening
 sequence, then waits before entering state1. The opening result specifically
 compares its **low byte against1**; later sequence waits compare the full return
 against zero. State1/substate0 handles directional movement and choice actions.
-Orientation selects which pair of direction masks is used. Movement stops at
-both ends rather than wrapping, and the negative direction has precedence when
+Each direction is the stick bit or the D-pad bit: up `0x1`/`0x10`, right `0x2`/`0x20`,
+down `0x4`/`0x40`, left `0x8`/`0x80`. A vertical selector (`_isTateSelect`) moves with up
+and down, a horizontal one with left and right. Movement stops at
+both ends rather than wrapping, and the backward direction has precedence when
 both direction conditions hold. The selected result is published before the
 movement sequence is sent.
 
-The pad word72's `0x2000` branch precedes `0x4000`. The first requests
+The `_trigger` circle bit `0x2000` is tested before cross `0x4000`. The first requests
 cancellation: a nonzero cancellation byte publishes -1 and enters state2; zero
 runs the rejection path. The second accepts the current choice only if no
 decision list exists or its indexed byte is nonzero. A rejected action runs a

@@ -25432,7 +25432,7 @@
 0034554c 000004 data data_0034554c
 00345550 000128 code beSelectCtrlInfoRamData_InitFields
 00345678 000008 data data_00345678
-00345680 000034 code FUN_00345680
+00345680 000034 code beSelectCtrlInfoWork_Create
 003456b4 00000c data data_003456b4
 003456c0 000044 code FUN_003456c0
 00345704 00000c data data_00345704
@@ -25446,7 +25446,7 @@
 003458ec 000004 data data_003458ec
 003458f0 0000a8 code beSelectCtrlInfoWork_InitFields
 00345998 000008 data data_00345998
-003459a0 000054 code FUN_003459a0
+003459a0 000054 code beSelectCtrl_GetMessageEnum
 003459f4 00000c data data_003459f4
 00345a00 000034 code beSelectCtrl_CreateInstance
 00345a34 00000c data data_00345a34
@@ -30146,14 +30146,14 @@
 0039cb60 00000c code Gap__Bec__beSeCtl__vfunc_20
 0039cb6c 000004 data data_0039cb6c
 0039cb70 000040 code beSelectCtrl_EnsurePadManager
-0039cbb0 00000c code Gap__Bec__beSelectCtrl__vfunc_30
+0039cbb0 00000c code beSelectCtrl_GetInfoMeta
 0039cbbc 000004 data data_0039cbbc
 0039cbc0 000024 code beSelectCtrl_RegisterReceiver
 0039cbe4 00000c data data_0039cbe4
-0039cbf0 000b30 code Gap__Bec__beSelectCtrl__vfunc_31
-0039d720 0007a8 code Gap__Bec__beSelectCtrl__vfunc_33
+0039cbf0 000b30 code beSelectCtrl_Update
+0039d720 0007a8 code beSelectCtrl_OnMessage
 0039dec8 000008 data data_0039dec8
-0039ded0 00000c code Gap__Bec__beSelectCtrl__vfunc_20
+0039ded0 00000c code beSelectCtrl_GetMeta
 0039dedc 000004 data data_0039dedc
 0039dee0 000194 code Gap__Bec__beShadow01__vfunc_32
 0039e074 00000c data data_0039e074
@@ -36103,7 +36103,7 @@
 0050f690 000060 data data_0050f690
 0050f6f0 00001c jtbl jtbl_0050f6f0 Gap__Bec__bePoint01__vfunc_34
 0050f70c 0001d4 data data_0050f70c
-0050f8e0 00001c jtbl jtbl_0050f8e0 Gap__Bec__beSelectCtrl__vfunc_33
+0050f8e0 00001c jtbl jtbl_0050f8e0 beSelectCtrl_OnMessage
 0050f8fc 000104 data data_0050f8fc
 0050fa00 00005c jtbl jtbl_0050fa00 Gap__Bec__beSound__vfunc_34
 0050fa5c 000784 data data_0050fa5c
