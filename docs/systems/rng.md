@@ -148,7 +148,7 @@ through a different chain:
    | function / site | what it does |
    |---|---|
    | `FUN_00384800` `0x3849AC` | `genrand()%10000`: **item-drop roll** (walks the `OneList`, subtracting `_rate`) |
-   | `Gap__Bec__beNDMWShopCtrl40__vfunc_21` `0x429EA0` | `genrand()%10000 <= t`: **probability check** |
+   | `beNDMWShopCtrl40_Update` `0x429EA0` | `genrand()%10000 <= t`: **probability check** |
    | `FUN_0039BCA0` `0x39BDB0` | `genrand()%6144 / 1000.0`: random float ≤ 6.144 (effect/timer offset) |
    | `FUN_003764C0` `0x376594` | `genrand()%range`: random duration/animation timing |
    | `beNDMWItemRevisionBase_RollRevision` `0x4480C8` `0x4480F0` | two rolls `%6000+1` and `%level`: **item revision** of a new weapon or armour |

@@ -31,7 +31,7 @@ extern "C" int beMessenger_GetObject(int, int);
 extern "C" void beMessenger_SelectGroup(...);
 extern "C" void *igProperty_GetRecord(int, int *);
 extern "C" int beMessenger_AppendString(...);
-extern "C" void FUN_00425e60(int *arg0);
+extern "C" void beNDMWStatusTitle01_ShowStatusLayout(int *arg0);
 extern "C" void Gap__Bec__beNDMWStatusTitle02__vfunc_22(int p0, char * p1, int p2, char * p3, char * p4);
 extern "C" int beNDMWWindow_RunMessageScript(void *, int *, int);
 extern "C" int Gap__Bec__beNDMWStatusTitle04__vfunc_20(void);
@@ -117,7 +117,7 @@ extern "C" Tb DAT_004cf820;
 extern "C" int DAT_0051af48[4];
 extern "C" int DAT_0051af58[4];
 typedef struct W { int p0, p1, p2, f12, p4, f20; } W;
-extern "C" void FUN_00425fb0(W *arg0);
+extern "C" void beNDMWStatusTitle01_ShowShopLayout(W *arg0);
 extern "C" char DAT_0051af60[];
 extern "C" char DAT_0051af70[];
 extern "C" char DAT_0051af80[];
@@ -131,7 +131,7 @@ extern "C" int DAT_0051afb0[4];
 extern "C" void Gap__Bec__beNDMWStatusTitle03__vfunc_22(Sh *arg0);
 extern "C" int DAT_0051afb8[4];
 extern "C" int DAT_0051afc8[4];
-extern "C" void FUN_00426530(beNDMWStatusTitle03 *arg0, int arg1);
+extern "C" void beNDMWStatusTitle03_SetFont002Enabled(beNDMWStatusTitle03 *arg0, int arg1);
 extern "C" int DAT_0051afd8[4];
 extern "C" int DAT_0051afe8[4];
 extern "C" void Gap__Bec__beNDMWStatusTitle04__vfunc_22(Sh *arg0);
@@ -260,7 +260,7 @@ void FUN_00425430(beNDMWWindow *arg0) {
     }
 }
 
-void FUN_00425e60(int *arg0) {
+void beNDMWStatusTitle01_ShowStatusLayout(int *arg0) {
     Tbl sp30;
     const char **p;
     FUN_00425430((beNDMWWindow *)arg0);
@@ -284,7 +284,7 @@ void FUN_00425e60(int *arg0) {
     beMessenger_DispatchSelected(arg0[3], DAT_0051af40);
 }
 
-void FUN_00425fb0(W *arg0) {
+void beNDMWStatusTitle01_ShowShopLayout(W *arg0) {
     Tb sp30;
     int *s1;
     FUN_00425430((beNDMWWindow *)arg0);
@@ -324,7 +324,7 @@ void Gap__Bec__beNDMWStatusTitle03__vfunc_22(Sh *arg0) {
     beNDMWWindow_RunMessageScript(arg0, DAT_0051ad60, 0);
 }
 
-void FUN_00426530(beNDMWStatusTitle03 *arg0, int arg1) {
+void beNDMWStatusTitle03_SetFont002Enabled(beNDMWStatusTitle03 *arg0, int arg1) {
     beMessenger_SelectGroup(arg0->_messenger, &DAT_0051af30[0]);
     beMessenger_AppendString(arg0->_messenger, &DAT_0051afa0[0]);
     beMessenger_AppendString(arg0->_messenger, &DAT_0051afb0[0]);

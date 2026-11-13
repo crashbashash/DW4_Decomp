@@ -38,6 +38,7 @@ Index: [`../README.md`](../README.md).
 | [Window object cleanup](window-object-lifetime.md) | Complete exact192-byte base-controller cleanup, inherited member order and signed deletion flag |
 | [Window tree and shop-root runtime](window-tree-and-shop-root.md) | Full recursive child ownership/update and generic root widget/service selection, opening gate and close sequencing |
 | [Window presentation and close queues](window-presentation.md) | Full model/text lifetime, close polling and shared title update; default-origin and sequence forwards |
+| [Shop windows](shop-windows.md) | The shop service windows of beNDMWShopCtrl00.cpp: root, XDATA, BANK, CNOS, DISK, device shops, JUNK, card shop, Digilab, sell/stock lists and chip upgrades |
 | [XDATA controller](xdata-controller.md) | Full quote/confirmation/UPCNT debit flow, four-player record selection, script call-number publication and actual txt_shop pack ownership |
 | [Items and database lookup](item-database.md) | The `beNDMWItem*` classes, their inventory word, rolls, prices, colours and uses, and the `beDataBase` record lookups |
 | [Chip transaction controller](chip-controller.md) | Full inventory/preview/confirmation/record and XDATA flow at43aae0; original-instruction oracle |

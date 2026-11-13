@@ -1,131 +1,21 @@
 #include "dw4/reflected.h"
-#define APPENDSTR(list, text) { const char *tok; if ((text) == 0) { tok = 0; } else { if (g_stringPool[0] == 0) { int pool = StringPool_Allocate(0x10); if (pool != 0) pool = StringPool_Construct(pool); g_stringPool[0] = pool; } tok = (const char *)StringPool_Intern(g_stringPool[0], (void *)(text)); } StringList_AppendRetained(list, StringRef(tok)); }
-#define DEREF(o) if (o) { (o)->rc = (o)->rc - 1; if (((unsigned long long)((long long)(o)->rc << 0x29) >> 0x29) == 0) igObject_Destroy(o); }
-#define NEWWIN(kind, w, ctor, code) int alloc; int a; alloc = ((int)igObject_GetAllocator(self)); a = GPR_00554c14 != 0 ? alloc : ((int)Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0])); igSmartPointer<kind> w((kind *)ctor(a)); beNDMWWindow_BindContext(w.p, self, self->_insight, self->_playerNo, code); ObjectList_AppendRetained(self->_subWindow, w.p);
-#define INC(l, n) { int ix = n; int cnt; int *dp; int *pp; int nv; dp = (int *)(l)->_data; pp = &dp[ix]; cnt = (l)->_count; nv = *pp + 1; if (cnt != 0 && ix < cnt) *pp = nv; }
-#define CEILD(dst, e) { int m = (e); int r = (m - 45) % 5; int q = (m - 45 - r) / 5; dst = q + (r != 0); }
-#define CNT ((igObjectList *)self->_subWindow)->_count
-#define BUMP(sub) self->_st2 = self->_st2 + 1; self->_st3 = 0;
-#define PRICE(rec, key, lim) { }
-#define LCNT(l) (((igObjectList *)(l))->_count)
-#define LDAT(l) ((int *)((igObjectList *)(l))->_data)
-#define REL(o) { igObject *rr = (o); if (rr != 0) { *(int *)&rr->_refCount = *(int *)&rr->_refCount - 1; if (((unsigned long long)((long long)*(int *)&rr->_refCount << 0x29) >> 0x29) == 0) { igObject_Destroy(rr); } } }
-#define FINDWINV(w, i) { w = 0; i = 0; if (0 < LCNT(arg0->_subWindow)) { do { beNDMWStatusCtrlD0 *c = (beNDMWStatusCtrlD0 *)((int *)((igObjectList *)*(int *)&arg0->_subWindow)->_data)[i]; if (c != 0 && igObject_IsKindOf(c, g_beNDMWStatusCtrlD0_metaObject[0]) != 0) { w = c; } else { w = 0; } if (w != 0) break; i++; } while (i < LCNT(arg0->_subWindow)); } }
-#define FINDWIN(w, i) { w = 0; i = 0; if (0 < LCNT(((beNDMWShopCtrl30 *)arg0)->_subWindow)) { do { beNDMWStatusCtrlD0 *c = (beNDMWStatusCtrlD0 *)LDAT(arg0->_subWindow)[i]; if (c != 0 && igObject_IsKindOf(c, g_beNDMWStatusCtrlD0_metaObject[0]) != 0) { w = c; } else { w = 0; } if (w != 0) break; i++; } while (i < LCNT(arg0->_subWindow)); } }
 #define RELS(o) { char *rs = (o); if (rs != 0) { int *hd = (int *)rs - 2; int rc = hd[1] - 1; hd[1] = rc; if (rc == 0) { StringChunk_ReleaseHeader(hd[0], hd); } } }
-#define FINDWIN_429630(w, i) { w = 0; i = 0; if (0 < LCNT(((beNDMWShopCtrl30 *)arg0)->_subWindow)) { do { beNDMWWindow *c = (beNDMWWindow *)LDAT(arg0->_subWindow)[i]; if (c != 0 && igObject_IsKindOf(c, g_beNDMWStatusCtrlD0_metaObject[0]) != 0) { w = c; } else { w = 0; } if (w != 0) break; i++; } while (i < LCNT(arg0->_subWindow)); } }
 #include "dw4/igSmartPointer.h"
-#define INTERN_APPEND(lst, text) { char *tok = U::InternStr((char *)(text)); StringList_AppendRetained(lst, StringRef(tok)); }
-#define ALLOC(a, self) { \
-    a = igObject_GetAllocator(self); \
-    a = GPR_00554c14 ? a : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]); }
-#define REL_42a2e0(o) { igObject *rr = (o); if (rr != 0) { rr->_refCount = rr->_refCount - 1; if ((rr->_refCount & 0x7FFFFF) == 0) { igObject_Destroy(rr); } } }
-#define VCNT(l) ((l)->_count)
-#define SUBCNT(s) (((beNDMWWindowList *)(s)->_subWindow)->_count)
-#define W(p, off) (*(int *)((int)(p) + (off)))
-#define CLEAR_LIST(L, lst) { \
-    int n = L->_count; int k = 0; \
-    if (0 < n) { int off = 0; do { \
-        char **e = (char **)((int)L->_data + off); \
-        if (g_stringPool[0] == 0) { int pool = StringPool_Allocate(0x10); if (pool != 0) pool = StringPool_Construct(pool); g_stringPool[0] = pool; } \
-        char *nw = StringPool_Intern(g_stringPool[0], 0); char *old = *e; \
-        if (old != 0) { int *hd = (int *)old - 2; int cnt = ((int *)old)[-1] - 1; ((int *)old)[-1] = cnt; if (cnt == 0) StringChunk_ReleaseHeader(*hd, hd); } \
-        k += 1; *e = nw; off += 4; \
-    } while (k < n); } }
-#define CLEAR1(L, lst) { \
-    int n; \
-    int k; \
-    char **e; \
-    char *nw; \
-    int off; \
-    char *old; \
-    n = L->_count; k = 0; \
-    if (0 < n) { off = 0; do { \
-        e = (char **)((int)L->_data + off); \
-        if (g_stringPool[0] == 0) { int pool = StringPool_Allocate(0x10); if (pool != 0) pool = StringPool_Construct(pool); g_stringPool[0] = pool; } \
-        nw = StringPool_Intern(g_stringPool[0], 0); old = *e; \
-        if (old != 0) { int *hd = (int *)old - 2; int cnt = ((int *)old)[-1] - 1; ((int *)old)[-1] = cnt; if (cnt == 0) StringChunk_ReleaseHeader(*hd, hd); } \
-        k += 1; *e = nw; off += 4; \
-    } while (k < n); } }
-#define REL_42bc70(o) { Rc_42bc70 *rr = (o); if (rr != 0) { rr->_refCount = (int)rr->_refCount - 1; if (((unsigned long long)((long long)(int)rr->_refCount << 0x29) >> 0x29) == 0) { igObject_Destroy(rr); } } }
-#define PUSHB(lp, v) { igBoolList *L = (igBoolList *)(lp); int n = L->_count; if (n < L->_capacity) L->_count = n + 1; else List_Resize(L, n + 1, 1); n[(unsigned char *)L->_data] = (v); }
-#define REL_42eb80(o) { Rc_42eb80 *rr = (o); if (rr != 0) { rr->_refCount = rr->_refCount - 1; if ((rr->_refCount & 0x7FFFFF) == 0) { igObject_Destroy(rr); } } }
-#define CLEAR(L) { igStringRefList *l = (igStringRefList *)(L); int n = l->_count; int i; int *slot; int nw; for (i = 0; i < n; i++) { slot = (int *)l->_data + i; if (g_stringPool[0] == 0) { int v = StringPool_Allocate(16); if (v != 0) v = StringPool_Construct(v); g_stringPool[0] = v; } nw = ((int)StringPool_Intern(g_stringPool[0], 0)); { int *old = (int *)*slot; if (old != 0) { int *hdr = old - 2; int c = hdr[1] - 1; hdr[1] = c; if (c == 0) StringChunk_ReleaseHeader(hdr[0], hdr); } } *slot = nw; } l->_count = 0; }
-#define ALLOC_42f710(a, self) { a = igObject_GetAllocator(self); a = GPR_00554c14 ? a : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]); }
-#define APPENDSTR_42f710(list, text) { char *tok; if ((text) == 0) { tok = 0; } else { if (g_stringPool[0] == 0) { int pool = StringPool_Allocate(0x10); if (pool != 0) pool = StringPool_Construct(pool); g_stringPool[0] = pool; } tok = StringPool_Intern(g_stringPool[0], (void *)(text)); } StringList_AppendRetained(list, StringRef(tok)); }
-#define APPENDSTRV(list, text) { char *tx = (char *)(text); APPENDSTR_42f710(list, tx) }
-#define SLIST(self) ((beNDMWShinkaObjectList *)((beNDMWShinkaCtrl *)(self)->_shinkaCtrl)->_list)
-#define SUB(self) ((igObjectList *)(self)->_subWindow)
-#define SUBN(self) (((igObjectList *)(self)->_subWindow)->_count)
-#define PLN(self) (((igIntList *)(self)->_playerNoList)->_count)
-#define PL(self, i) (((int *)((igIntList *)(self)->_playerNoList)->_data)[i])
-#define CNT_432d30(x) ((x)->_count)
-#define REL_432d30(t) if ((t) != 0) { (t)->_refCount = (t)->_refCount - 1; if (((t)->_refCount & 0x7FFFFF) == 0) igObject_Destroy(t); }
-#define INTERN_APPEND_4332d0(lst, text) { \
-    char *tok; \
-    if ((text) == 0) { \
-        tok = 0; \
-    } else { \
-        if (g_stringPool[0] == 0) { \
-            int pool = StringPool_Allocate(0x10); \
-            if (pool != 0) pool = StringPool_Construct(pool); \
-            g_stringPool[0] = pool; \
-        } \
-        tok = StringPool_Intern(g_stringPool[0], (char *)(text)); \
-    } \
-    StringList_AppendRetained(lst, StringRef(tok)); }
-#define REL_4332d0(o) { Rc_42bc70 *rr = (o); if (rr != 0) { *(int *)&rr->_refCount = *(int *)&rr->_refCount - 1; if (((unsigned long long)((long long)*(int *)&rr->_refCount << 0x29) >> 0x29) == 0) { igObject_Destroy(rr); } } }
 #include "dw4/igobject_release.h"
 #define RELEASE(p) IG_OBJECT_RELEASE((igObject *)(p));
-#define PUSH_BOOL(list, value) { int idx = (list)->_count; \
-    if (idx < (list)->_capacity) { (list)->_count = idx + 1; } else { List_Resize(list, idx + 1, 1); } \
-    ((unsigned char *)(list)->_data)[idx] = (value); }
-#define RELEASE_436ac0(p) { if ((p) != 0) { \
-        ((igObject *)(p))->_refCount = ((igObject *)(p))->_refCount - 1; \
-        if (((unsigned long long) ((long long) ((igObject *)(p))->_refCount << 0x29) >> 0x29) == 0) { \
-            igObject_Destroy(p); \
-        } \
-    } }
-#define LIST(p) ((igObjectList *)(p))
-#define INTERN_APPEND_43aae0(field, text) { \
-    int *tok; \
-    if ((text) == 0) { \
-        tok = 0; \
-    } else { \
-        if (g_stringPool[0] == 0) { \
-            int pool = StringPool_Allocate(0x10); \
-            if (pool != 0) pool = StringPool_Construct(pool); \
-            g_stringPool[0] = pool; \
-        } \
-        tok = (int *)StringPool_Intern(g_stringPool[0], (int *)(text)); \
-    } \
-    StringList_AppendRetained(field, StringRef(tok)); }
-#define RELEASE_43aae0(t) { \
-    if ((t) != 0) { \
-        (t)->_refCount = (t)->_refCount - 1; \
-        if (((unsigned long long)((long long)(int)(t)->_refCount << 0x29) >> 0x29) == 0) igObject_Destroy(t); \
-    } }
-#define ALLOC_43aae0(al) { \
-    al = ((int)igObject_GetAllocator(arg0)); \
-    al = (GPR_00554c14 != 0) ? al : ((int)Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0])); }
-#define MSG3(group, sel) { \
-    beMessenger_SelectGroup(arg0->_messenger, group); \
-    beMessenger_AppendInt(arg0->_messenger, arg0->_playerNo); \
-    beMessenger_DispatchSelected(arg0->_messenger, sel); }
 #define CHIPS_PER_PAGE 12
-#define LST(d) ((igObjectList *)(d)->_subWindow)
 
-extern "C" void *FUN_003b31b0(...);
-extern "C" void *FUN_003b3370(...);
+extern "C" void *beNDMWShopTitle01_Create(...);
+extern "C" void *beNDMWShopTitle00_Create(...);
 extern "C" void *beNDMWStatusTitle03_Create(...);
 extern "C" void *beNDMWStatusTitle02_Create(...);
 extern "C" void * beNDMWStatusTitle01_Create(...);
-extern "C" void *FUN_003b6310(...);
-extern "C" void *FUN_003b6650(...);
-extern "C" void *FUN_003b81d0(...);
-extern "C" void *FUN_003b8400(...);
-extern "C" void *FUN_003b8630(...);
-extern "C" void *FUN_003b8b60(...);
+extern "C" void *beNDMWShopJunk_Create(...);
+extern "C" void *beNDMWShopDevice_Create(...);
+extern "C" void *beNDMWShopCtrl50_Create(...);
+extern "C" void *beNDMWShopCtrl40_Create(...);
+extern "C" void *beNDMWShopCtrl30_Create(...);
+extern "C" void *beNDMWShopCtrl10_Create(...);
 extern "C" void * Memory_GetAllocatorBySelector(...);
 extern "C" int ObjectList_AppendRetained(...);
 extern "C" int beMessenger_AppendString(...);
@@ -139,17 +29,16 @@ extern "C" int beNDMWWindow_PlayQueuedModelClose(...);
 extern "C" int beNDMWWindow_PollCloseComplete(...);
 extern "C" int beNDMWWindow_RequestChildrenClose(...);
 extern "C" void * igObject_GetAllocator(...);
-extern "C" int FUN_00100610(...);
 extern "C" int StringPool_Allocate(...);
 extern "C" int StringPool_Construct(...);
 extern "C" char * StringPool_Intern(...);
 extern "C" int StringChunk_ReleaseHeader(...);
 extern "C" int beNDMWWindow_RunMessageScript(...);
 extern "C" int beNDMWWindow_QueueText(...);
-extern "C" void * FUN_003b4d90(...);
-extern "C" void *FUN_003b4790(int);
+extern "C" void * beNDMWShopSelect01_Create(...);
+extern "C" void *beNDMWShopSelect11_Create(int);
 extern "C" void * beNDMWShopSelect00_Create(...);
-extern "C" void *FUN_003b6940(int);
+extern "C" void *beNDMWShopCtrlXdataChip_Create(int);
 extern "C" int beMessenger_SelectGroup(...);
 extern "C" int beMessenger_AppendInt(...);
 extern "C" void beMessenger_AppendBool(int, int);
@@ -157,52 +46,52 @@ extern "C" int beMessenger_GetObject(...);
 extern "C" int sprintf(...);
 extern "C" int igObject_IsKindOf(...);
 extern "C" void *beNDMWStatusCtrlD0_Create(void *);
-extern "C" void *FUN_003b7520(void *);
+extern "C" void *beNDMWShopCtrlEditBit_Create(void *);
 extern "C" int beNDMWStatusCtrlD0_RefreshText(void *, int, int);
 struct igResult { int value; };
 extern "C" igResult ObjectList_RemoveFirstRetained(void *, void *, int);
 extern "C" int beDataBase_GetRecordInt(...);
 extern "C" void * igInsightCore_FindManager(...);
 extern "C" int beNDMWShopSelect52_Create(...);
+extern "C" int beNDMWShopSelect34_Create(...);
+extern "C" void *beNDMWShopCtrlEvolve_Create(...);
 extern "C" int beNDMWStatusSelectE1_Create(...);
 extern "C" int beNDMWWindow_QueueNumberText(...);
 extern "C" char * beDataBase_GetRecordString(...);
 extern "C" int beNDMWWindow_PresentModel(...);
 extern "C" int beNDMWWindow_PresentModelAtOrigin(...);
 extern "C" void beMessenger_AppendVec3(int, float *);
-extern "C" void FUN_0042bae0(int *arg0, int arg1);
-extern "C" void * FUN_003b6bc0(...);
+extern "C" void beNDMWShopCtrl50_MoveRowCursor(int *, int);
+extern "C" void * beNDMWShopCtrlSales_Create(...);
 extern "C" void * igBoolList_Create(...);
 extern "C" int beLua__RunNamedChunk(...);
 extern "C" int List_Resize(...);
 extern "C" int beMessenger_GetObjectCount(...);
 extern "C" int beMessenger_GetInt(int, int);
 extern "C" int beMessenger_SendGroup(...);
-extern "C" void *FUN_003b2c00(...);
-extern "C" void * FUN_003b4b10(...);
-extern "C" void *FUN_003b7c00(...);
-extern "C" int FUN_00425fb0(...);
-extern "C" int FUN_00426530(...);
-extern "C" void * FUN_003b4950(...);
+extern "C" void *beNDMWShopTitle03_Create(...);
+extern "C" void * beNDMWShopSelect02_Create(...);
+extern "C" void *beNDMWShopCtrlA1_Create(...);
+extern "C" int beNDMWStatusTitle01_ShowShopLayout(...);
+extern "C" int beNDMWStatusTitle03_SetFont002Enabled(...);
+extern "C" void * beNDMWShopSelect03_Create(...);
 extern "C" int igProperty_GetRecordArray(...);
 extern "C" int beNDMWWindow_SendModelSequence(...);
 extern "C" int strcmp(...);
 extern "C" int beDataBase_GetRecordCount(int);
-extern "C" int FUN_00443110(...);
+extern "C" int beNDMWShinkaCtrl_Setup(...);
 extern "C" int beNDMWWindowSelect_CanRequestFO2TOP(...);
 extern "C" void *igProperty_GetRecordStringList(...);
-extern "C" void *FUN_003b8860(...);
 extern "C" void *beNDMWStatusCtrlEquip_Create(...);
-extern "C" int FUN_00425e60(...);
+extern "C" int beNDMWStatusTitle01_ShowStatusLayout(...);
 extern "C" void * igIntList_Create(...);
-extern "C" void FUN_00433290(void *window);
-extern "C" int beNDMWShopSelect34_Create(...);
+extern "C" void beNDMWShopCtrlDigilabo_PresentMessageWindow(void *window);
 extern "C" int FUN_00440110(...);
 extern "C" int FUN_004402e0(...);
-extern "C" void *FUN_003b3f40(...);
-extern "C" void *FUN_003b6e60(...);
-extern "C" void *FUN_003b70e0(...);
-extern "C" void FUN_00435250(int *arg0, int arg1);
+extern "C" void *beNDMWShopSelectB0_Create(...);
+extern "C" void *beNDMWShopCtrlDiskSell_Create(...);
+extern "C" void *beNDMWShopCtrlDeviceSell_Create(...);
+extern "C" void beNDMWShopCtrlSell_MoveRowCursor(int *, int);
 extern "C" int strlen(...);
 extern "C" int FUN_0030b3c0(...);
 extern "C" int FUN_0030b460(...);
@@ -211,37 +100,36 @@ extern "C" int beNDMWItemRevisionPocketBase_GetPrice(...);
 extern "C" char * beNDMWItemBase_GetRecordString(...);
 extern "C" int beNDMWItemBase_GetRecordInt(...);
 extern "C" int beNDMWItemBaseList_Create(...);
-extern "C" void FUN_0043a950(int *arg0, int arg1);
+extern "C" void beNDMWShopCtrlSales_MoveRowCursor(int *, int);
 extern "C" int *FUN_002b90e0(...);
 extern "C" int *beNDMWItemAbilityChip_Create(...);
 extern "C" int beNDMWItemAbilityChip_Set(...);
-extern "C" int Gap__Bec__beNDMWShopDevice__vfunc_20(void);
-extern "C" int Gap__Bec__beNDMWShopCtrlXdataChip__vfunc_20(void);
-extern "C" int Gap__Bec__beNDMWShopCtrlSales__vfunc_20(void);
-extern "C" int Gap__Bec__beNDMWShopCtrlDiskSell__vfunc_20(void);
-extern "C" int Gap__Bec__beNDMWShopCtrlDeviceSell__vfunc_20(void);
-extern "C" int Gap__Bec__beNDMWShopCtrlSell__vfunc_20(void);
-extern "C" int Gap__Bec__beNDMWShopCtrlEditBit__vfunc_20(void);
-extern "C" int Gap__Bec__beNDMWShopCtrlDigilabo__vfunc_20(void);
-extern "C" int Gap__Bec__beNDMWShopCtrlEvolve__vfunc_20(void);
-extern "C" int Gap__Bec__beNDMWShopCtrlA2__vfunc_20(void);
-extern "C" int Gap__Bec__beNDMWShopCtrlA1__vfunc_20(void);
-extern "C" int Gap__Bec__beNDMWShopCtrlA0__vfunc_20(void);
-extern "C" int Gap__Bec__beNDMWShopJunk__vfunc_20(void);
-extern "C" int Gap__Bec__beNDMWShopCtrl50__vfunc_20(void);
-extern "C" int Gap__Bec__beNDMWShopCtrl40__vfunc_20(void);
-extern "C" int Gap__Bec__beNDMWShopCtrl30__vfunc_20(void);
-extern "C" int Gap__Bec__beNDMWShopCtrl10__vfunc_20(void);
-extern "C" int Gap__Bec__beNDMWShopCtrl00__vfunc_20(void);
-typedef struct S_ref { char pad4[4]; int f4; } S_ref;
-extern "C" int DAT_0051b308[4];
-extern "C" int DAT_0051b318[4];
-extern "C" int DAT_0051b328[4];
-extern "C" int DAT_0051b338[4];
-extern "C" int DAT_0051b348[4];
-extern "C" int DAT_0051b358[4];
+extern "C" int beNDMWShopDevice_GetMeta(void);
+extern "C" int beNDMWShopCtrlXdataChip_GetMeta(void);
+extern "C" int beNDMWShopCtrlSales_GetMeta(void);
+extern "C" int beNDMWShopCtrlDiskSell_GetMeta(void);
+extern "C" int beNDMWShopCtrlDeviceSell_GetMeta(void);
+extern "C" int beNDMWShopCtrlSell_GetMeta(void);
+extern "C" int beNDMWShopCtrlEditBit_GetMeta(void);
+extern "C" int beNDMWShopCtrlDigilabo_GetMeta(void);
+extern "C" int beNDMWShopCtrlEvolve_GetMeta(void);
+extern "C" int beNDMWShopCtrlA2_GetMeta(void);
+extern "C" int beNDMWShopCtrlA1_GetMeta(void);
+extern "C" int beNDMWShopCtrlA0_GetMeta(void);
+extern "C" int beNDMWShopJunk_GetMeta(void);
+extern "C" int beNDMWShopCtrl50_GetMeta(void);
+extern "C" int beNDMWShopCtrl40_GetMeta(void);
+extern "C" int beNDMWShopCtrl30_GetMeta(void);
+extern "C" int beNDMWShopCtrl10_GetMeta(void);
+extern "C" int beNDMWShopCtrl00_GetMeta(void);
+extern "C" int MODELCTRL_16[4];
+extern "C" int i_messwn_3[4];
+extern "C" int SQ_STOPEN_3[4];
+extern "C" int ISSEQNAME_6[4];
+extern "C" int i_bgclear_2[4];
+extern "C" int OFFREEZE_3[4];
 extern "C" int g_defaultAllocatorSelector[4];
-extern "C" unsigned char GPR_00554c14;
+extern "C" unsigned char g_useOwnerAllocator;
 /* Owning stack reference to a pooled string token (reference count at p[-1], chunk header at
  * p[-2]); releases the token on scope exit. */
 class StringRef {
@@ -253,202 +141,156 @@ public:
     StringRef(void *s) : p((char *)s) {}
     ~StringRef() { release(); }
     void release() { if (p) { int *h = (int *)p - 2; int r = ((int *)p)[-1] - 1; ((int *)p)[-1] = r; if (r == 0) StringChunk_ReleaseHeader(*h, h); } }
-    void Set(char *n) { release(); p = n; }
+    void Set(const char *n) { release(); p = (char *)n; }
 };
 extern "C" int StringList_AppendRetained(int, const StringRef &);
 extern "C" StringRef StringList_CopyRetained(...);
-extern "C" void Gap__Bec__beNDMWShopCtrl00__vfunc_21(beNDMWShopCtrl00 *arg0);
+extern "C" void beNDMWShopCtrl00_Update(beNDMWShopCtrl00 *);
 
-extern "C" int DAT_0051b220[4];
-extern "C" int DAT_0051b248[4];
-extern "C" int DAT_0051b398[4];
-extern "C" int DAT_0051b3a0[4];
-extern "C" int DAT_0051b3b0[4];
+extern "C" int font011_3[4];
+extern "C" int font012[4];
+extern "C" int GAMERAM_14[4];
+extern "C" int RECALCPLAYER_5[4];
+extern "C" int txt_shop_lua_2[4];
 extern "C" char TEXTCTL_3[];
 extern "C" char STWINFONT14[];
-extern "C" int DAT_0051b3d8[4];
-extern "C" int DAT_0051b3e8[4];
-extern "C" int DAT_0051b3f8[4];
-extern "C" char DAT_0051b400[];
-extern "C" int DAT_0051b408[4];
-extern "C" int DAT_0051b418[4];
-extern "C" int DAT_0051b420[4];
-extern "C" char DAT_0051b430[];
-extern "C" char DAT_0051b438[];
-extern "C" int DAT_0051b440[4];
-extern "C" int DAT_0051b448[4];
-extern "C" char DAT_0051b458[];
-extern "C" int DAT_0051b460[4];
+extern "C" int DEFAULTCOLOR_5[4];
+extern "C" int GETPLAYER_10[4];
+extern "C" int TSUYOSA_4[4];
+extern "C" char MAMORI_3[];
+extern "C" int KASHIKOSA_4[4];
+extern "C" int SEISHIN_4[4];
+extern "C" int SUBAYASA_4[4];
+extern "C" char MHP_5[];
+extern "C" char MMP_6[];
+extern "C" int XDATA_4[4];
+extern "C" int STWINFONT41[4];
+extern "C" char plus1[];
+extern "C" int RIGHT_3[4];
 extern "C" char percent_d[];
 extern "C" char STWINFONT29[];
-extern "C" char DAT_0051b480[];
-extern "C" char DAT_0051b488[];
-extern "C" char DAT_0051b490[];
-extern "C" int DAT_0051b498[4];
-extern "C" int DAT_0051b4a0[4];
+extern "C" char UPCNT_3[];
+extern "C" char HP_6[];
+extern "C" char MP_6[];
+extern "C" int SUBWND_8[4];
+extern "C" int UPDATE_3[4];
 extern "C" int g_stringPool[4];
 struct Tbl7 { int v[7]; };
-extern "C" Tbl7 DAT_004cf950;
-extern "C" Tbl7 DAT_004cf970;
-extern "C" void Gap__Bec__beNDMWShopCtrl10__vfunc_21(beNDMWShopCtrl10 *self);
+extern "C" Tbl7 g_xdataStatFontNames;
+extern "C" Tbl7 g_xdataStatPromptIds;
+extern "C" void beNDMWShopCtrl10_Update(beNDMWShopCtrl10 *self);
 struct Rec;
 extern "C" Rec * igProperty_GetRecord(...);
 struct Fld;
-extern "C" int DAT_0051b528[4];
-extern "C" int DAT_0051b538[4];
-extern "C" int DAT_0051b548[4];
+extern "C" int DEVICEFOLDER_4[4];
+extern "C" int BANKDEVICE_3[4];
+extern "C" int font100_3[4];
 extern "C" char DISPOFF[];
 extern "C" char SWITCH_2[];
-extern "C" int DAT_0051b560[4];
-extern "C" int DAT_0051b568[4];
+extern "C" int BIT_7[4];
+extern "C" int BANKBIT_2[4];
 extern "C" int g_beNDMWStatusCtrlD0_metaObject[4];
 struct Rec { int pad[3]; int f12; };
 struct Fld { int pad[3]; igObjectList *f12; };
-extern "C" void Gap__Bec__beNDMWShopCtrl30__vfunc_21(beNDMWShopCtrl30 *arg0);
+extern "C" void beNDMWShopCtrl30_Update(beNDMWShopCtrl30 *);
 struct Fld_429630;
 struct P1;
-extern "C" int DAT_0051b590[4];
-extern "C" int DAT_0051b598[4];
-extern "C" int DAT_0051b5a0[4];
-extern "C" int DAT_0051b5a8[4];
-extern "C" int DAT_0051b5b8[4];
-extern "C" int DAT_0051b5c8[4];
-extern "C" int DAT_0051b5d8[4];
-extern "C" int DAT_0051b5e8[4];
-extern "C" int DAT_0051b5f8[4];
-extern "C" int DAT_0051b600[4];
-extern "C" int DAT_0051b608[4];
+extern "C" int space_2[4];
+extern "C" int LEFT_4[4];
+extern "C" int LEVEL_8[4];
+extern "C" int coweapon[4];
+extern "C" int coarmor1[4];
+extern "C" int coarmor2[4];
+extern "C" int DATABASE_11[4];
+extern "C" int GETDATABASE_10[4];
+extern "C" int ID[4];
+extern "C" int RATE[4];
+extern "C" int RANK[4];
 extern "C" int g_beNDMWStatus_metaObject[4];
 struct Rc;
 struct Rc { int w0; int references; char pad[101]; char f109; char p110; char f111; };
 struct Lst { int pad[2]; int cnt; int p12; int *data; };
 struct Fld_429630 { int pad[3]; Lst *f12; };
-struct Item { int pad[2]; int f8; int f12; };
 class V { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual unsigned v22(); };
 struct P2 { int pad[12]; V *f48; };
 struct P1 { int pad[4]; P2 *f16; };
-extern "C" void Gap__Bec__beNDMWShopCtrl40__vfunc_21(beNDMWShopCtrl40 *arg0);
-struct Item_42a2e0 { int p[3]; int f12; int p16; int f20; };
+extern "C" void beNDMWShopCtrl40_Update(beNDMWShopCtrl40 *);
 struct Rec_42a2e0 { int p[3]; igObjectList *f12; };
 extern "C" Rec_42a2e0 * igProperty_GetRecordFolder(...);
 extern "C" const char *g_fontNames[];
-extern "C" int DAT_0051b610[4];
-extern "C" int DAT_0051b618[4];
-extern "C" int DAT_0051b620[4];
-extern "C" int DAT_0051b630[4];
-extern "C" int DAT_0051b640[4];
-extern "C" int DAT_0051b650[4];
-extern "C" int DAT_0051b660[4];
-extern "C" int DAT_0051b668[4];
+extern "C" int j_shwin[4];
+extern "C" int SQ_WAIT_5[4];
+extern "C" int SQ_CLOSE_10[4];
+extern "C" int i_stcursorleft_2[4];
+extern "C" int SQ_HIDE_2[4];
+extern "C" int i_stcursorright_2[4];
+extern "C" int conItem_2[4];
+extern "C" int STWINFONT13_2[4];
 extern "C" char NAME_2[];
 extern "C" char STWINFONT17[];
-extern "C" int DAT_0051b690[4];
-extern "C" int DAT_0051b698[4];
+extern "C" int HANBAI_2[4];
+extern "C" int SQ_CWINOPEN[4];
 extern "C" char TXT[];
 extern "C" char TEXTSET[];
 extern "C" char DISPON[];
-extern "C" int DAT_0051b6c0[4];
-extern "C" int DAT_0051b6d0[4];
-struct U { static inline char *InternStr(char *text) {
-    if (text == 0) return 0;
-    if (g_stringPool[0] == 0) {
-        int pool = StringPool_Allocate(0x10);
-        if (pool != 0) pool = StringPool_Construct(pool);
-        g_stringPool[0] = pool;
-    }
-    return StringPool_Intern(g_stringPool[0], text);
-} };
+extern "C" int DISKFOLDER_5[4];
+extern "C" int SQ_DWINOPEN[4];
 
-extern "C" void Gap__Bec__beNDMWShopCtrl50__vfunc_21(beNDMWShopCtrl50 *self);
-extern "C" const char DAT_0051b218[];
-extern "C" const char DAT_0051b288[];
-extern "C" int DAT_0051b6f8[4];
-extern "C" void FUN_0042b880(beNDMWShopCtrl50 *owner);
-extern "C" int DAT_0051b278[4];
-extern "C" void FUN_0042b9d0(beNDMWShopCtrl50 *arg0);
+extern "C" void beNDMWShopCtrl50_Update(beNDMWShopCtrl50 *self);
+extern "C" const char font010_3[];
+extern "C" const char font021[];
+extern "C" int STWINFONT32[4];
+extern "C" void beNDMWShopCtrl50_ShowQuantity(beNDMWShopCtrl50 *owner);
+extern "C" int font020[4];
+extern "C" void beNDMWShopCtrl50_HideQuantity(beNDMWShopCtrl50 *);
 typedef struct Tbl { const char *s[12]; } __attribute__((aligned(16))) Tbl;
-extern "C" Tbl DAT_004cf990;
-extern "C" char DAT_0051b7c8[];
-extern "C" char DAT_0051b7d8[];
-extern "C" char DAT_0051b7e0[];
-typedef igObject Rc_42bc70;
+extern "C" Tbl g_diskListCursorSequences;
+extern "C" char i_stcursor04_2[];
+extern "C" char ISRUN_10[];
+extern "C" char GENERATE_13[];
 struct P { int pad[3]; igIntList *f12; };
 extern "C" P * igProperty_GetRecordIntList(...);
-extern "C" int DAT_0051b7f0[4];
-extern "C" int DAT_0051b800[];
-extern "C" int DAT_0051b810[4];
-extern "C" int DAT_0051b820[4];
-extern "C" int DAT_0051b828[4];
-extern "C" int DAT_0051b838[4];
-struct Tbl_42bc70 { int v[10]; };
-extern "C" Tbl_42bc70 DAT_004cf9c0;
+extern "C" int GETSHOPDATA[4];
+extern "C" int CANCELCOLOR_4[];
+extern "C" int GETCOMMON_10[4];
+extern "C" int COUNTER_4[4];
+extern "C" int junkexit_lua[4];
+extern "C" int stagML13_lua[4];
 extern "C" int g_beLua_metaObject[4];
-extern "C" unsigned char GPR_00554a38;
-extern "C" unsigned char GPR_00554a3c;
-extern "C" unsigned char GPR_00554a40;
-extern "C" unsigned char GPR_00554a44;
-extern "C" unsigned char GPR_00554a48;
-struct Lst_42bc70 { int pad[2]; int cnt; };
-extern "C" void Gap__Bec__beNDMWShopJunk__vfunc_21(beNDMWShopJunk *arg0);
-typedef struct S_obj { char pad4[4]; int f4; char pad8[0x68]; igIntList *f112; } S_obj;
+extern "C" void beNDMWShopJunk_Update(beNDMWShopJunk *);
 typedef struct S_rec { char pad12[12]; unsigned char f12; } S_rec;
 extern "C" S_rec * igProperty_GetRecordByte(...);
-extern "C" int DAT_0051b848[4];
-extern "C" int DAT_0051b858[4];
-extern "C" int DAT_0051b868[4];
-extern "C" int DAT_0051b870[4];
+extern "C" int j_shback[4];
+extern "C" int SQ_OPENCARD[4];
+extern "C" int SQ_OPEN_8[4];
+extern "C" int ISUSE_9[4];
 extern "C" int g_beSystem_metaObject[4];
 extern "C" int g_beNDMWStatusTitle01_metaObject[4];
-extern "C" void Gap__Bec__beNDMWShopCtrlA0__vfunc_21(beNDMWShopCtrlA0 *arg0);
-extern "C" igObject *FUN_003b4250(void *);
-extern "C" igObject *FUN_003b7a40(void *);
-extern "C" void *DAT_004cf8a8[4];
+extern "C" void beNDMWShopCtrlA0_Update(beNDMWShopCtrlA0 *);
+extern "C" igObject *beNDMWShopSelectA0_Create(void *);
+extern "C" igObject *beNDMWShopCtrlA2_Create(void *);
 extern "C" float g_vec3Zero[4];
-extern "C" float DAT_004e105c[4];
-extern "C" float DAT_004e1060[4];
-extern "C" int DAT_0051b1c8[4];
-extern "C" int DAT_0051b1d0[4];
-extern "C" int DAT_0051b878[4];
-extern "C" int DAT_0051b888[4];
-extern "C" int DAT_0051b890[4];
-extern "C" int DAT_0051b8a0[4];
-extern "C" int DAT_0051b8a8[4];
-extern "C" int DAT_0051b8b8[4];
-extern "C" int DAT_0051b8c8[4];
-extern "C" int DAT_0051b8d8[4];
-extern "C" int DAT_0051b8e8[4];
-extern "C" int DAT_0051b8f0[4];
-extern "C" int DAT_0051b8f8[4];
-extern "C" void Gap__Bec__beNDMWShopCtrlA1__vfunc_21(beNDMWShopCtrlA1 *arg0);
-extern "C" int DAT_004cf9e8[4];
-extern "C" int DAT_0051b908[4];
-extern "C" int DAT_0051b918[4];
-extern "C" int DAT_0051b920[4];
-extern "C" int DAT_0051b930[4];
-extern "C" int DAT_0051b938[4];
-struct Str { static inline int intern(int *s) {
-    int ref;
-    int pool;
-    if (s == 0) {
-        ref = 0;
-    } else {
-        if (g_stringPool[0] == 0) {
-            pool = StringPool_Allocate(16);
-            if (pool)
-                pool = StringPool_Construct(pool);
-            g_stringPool[0] = pool;
-        }
-        ref = ((int)StringPool_Intern(g_stringPool[0], s));
-    }
-    return ref;
-}
-};
-struct Arr { char p0[16]; unsigned char *f16; };
-struct Rec_42df70 { char p0[12]; Arr *f12; };
-extern "C" void FUN_0042df70(beNDMWShopCtrlA1 *arg0);
-extern "C" int DAT_004cf9f0[4];
-extern "C" int DAT_004cf9f8[4];
-extern "C" int DAT_0051b948[4];
+extern "C" int font000_5[4];
+extern "C" int font001_5[4];
+extern "C" int j_shbase_2[4];
+extern "C" int SOUND_8[4];
+extern "C" int CURSOR_NG_4[4];
+extern "C" int PLAY_6[4];
+extern "C" int i_staccount_2[4];
+extern "C" int STWINFONT34_2[4];
+extern "C" int j_shcardwin[4];
+extern "C" int STWINFONT33[4];
+extern "C" int text_1[4];
+extern "C" int text_9[4];
+extern "C" int txt_status_lua_4[4];
+extern "C" void beNDMWShopCtrlA1_Update(beNDMWShopCtrlA1 *);
+extern "C" int CARDLIST_3[4];
+extern "C" int card[4];
+extern "C" int CARDINFO[4];
+extern "C" int SQALBUM[4];
+extern "C" int j_shcard00[4];
+extern "C" void beNDMWShopCtrlA1_ShowFirstAlbumPage(beNDMWShopCtrlA1 *);
+extern "C" int blank[4];
 /* Stores a retained card name into slot `index` of the card-info list. */
 static inline void StoreCardName(beNDMWShopCtrlA1 *self, int index, int token) {
     StringRef name(token);
@@ -462,247 +304,177 @@ static inline void StoreCardName(beNDMWShopCtrlA1 *self, int index, int token) {
         *slot = (int)name.p;
     }
 }
-extern "C" void FUN_0042e330(beNDMWShopCtrlA1 *arg0);
-extern "C" void FUN_0042e9e0(beNDMWShopCtrlA1 *arg0);
-struct Rec_42eb80 { int p[3]; igDataList *f12; };
-struct FRec { int p[3]; igDataList *f12; };
-struct VObj {
-#define V4(a) virtual int a##0(); virtual int a##1(); virtual int a##2(); virtual int a##3();
-V4(a) V4(b) V4(c) V4(d) V4(e) virtual int g0(); virtual int g1();
-    virtual unsigned f24();
-};
+extern "C" void beNDMWShopCtrlA1_ShowAlbumPage(beNDMWShopCtrlA1 *);
+extern "C" void beNDMWShopCtrlA1_CloseAlbumPage(beNDMWShopCtrlA1 *);
 struct P3 { void *p[3]; };
-extern "C" P3 DAT_004cfa00;
-extern "C" P3 DAT_004cfa10;
-extern "C" P3 DAT_004cfa20;
-extern "C" int DAT_0051b708[4];
-extern "C" int DAT_0051b718[4];
-extern "C" int DAT_0051b728[4];
-extern "C" int DAT_0051b738[4];
-extern "C" int DAT_0051b748[4];
-extern "C" int DAT_0051b758[4];
-extern "C" int DAT_0051b768[4];
-extern "C" int DAT_0051b778[4];
-extern "C" int DAT_0051b788[4];
-extern "C" int DAT_0051b9c0[4];
-extern "C" int DAT_0051b9d0[4];
-extern "C" int DAT_0051b9e0[4];
-extern "C" int DAT_0051b9e8[4];
-extern "C" int DAT_0051b9f8[];
-extern "C" unsigned char GPR_00554a4c;
-struct Rc_42eb80 : public igObject { };
+extern "C" P3 g_boosterCardNameTexts;
+extern "C" P3 g_boosterCardOpenSequences;
+extern "C" P3 g_boosterCardNameTextsReset;
+extern "C" int SQ_OPEN00_2[4];
+extern "C" int SQ_OPEN01_3[4];
+extern "C" int SQ_OPEN02_3[4];
+extern "C" int SQ_OPEN03_2[4];
+extern "C" int SQ_OPEN04_2[4];
+extern "C" int SQ_OPEN05_2[4];
+extern "C" int SQ_OPEN06_2[4];
+extern "C" int SQ_OPEN07_2[4];
+extern "C" int SQ_OPEN08_2[4];
+extern "C" int j_shbooster[4];
+extern "C" int KAKURITSU[4];
+extern "C" int RARE[4];
+extern "C" int TALKFONT01[4];
+extern "C" int COLOR_4[];
 
-extern "C" void Gap__Bec__beNDMWShopCtrlA2__vfunc_21(beNDMWShopCtrlA2 *arg0);
+extern "C" void beNDMWShopCtrlA2_Update(beNDMWShopCtrlA2 *);
 extern "C" char *g_fontName1[];
-extern "C" char *DAT_004cf8d0[];
-extern "C" int DAT_0051ba28[4];
-extern "C" int DAT_0051ba38[4];
-extern "C" int DAT_0051ba48[4];
-extern "C" int DAT_0051ba60[4];
-extern "C" int DAT_0051ba70[4];
-extern "C" int DAT_0051ba80[4];
-extern "C" int DAT_0051ba90[4];
-extern "C" int DAT_0051baa0[4];
-extern "C" int DAT_0051bab0[4];
-extern "C" int DAT_0051bac0[4];
-extern "C" int DAT_0051bad0[4];
-extern "C" int DAT_0051bae8[4];
-extern "C" int DAT_0051baf0[4];
+extern "C" char *g_evolveStatRowTexts[];
+extern "C" int SQ_STCLOSE_2[4];
+extern "C" int SQ_SINKAONOPEN[4];
+extern "C" int STWINFONT31[4];
+extern "C" int SQ_SINKAOFFOPEN[4];
+extern "C" int STWINFONT37[4];
+extern "C" int STWINFONT20[4];
+extern "C" int STWINFONT43[4];
+extern "C" int STWINFONT21[4];
+extern "C" int STWINFONT22[4];
+extern "C" int DIGIMONNO_6[4];
+extern "C" int WEAPONEQUIPCHECK[4];
+extern "C" int shinka_5[4];
+extern "C" int EXPLANATION_2[4];
 extern "C" int g_beNDMWStatusSelectE1_metaObject[4];
-struct DummyVirtual {
-    virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5();
-    virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11();
-    virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17();
-    virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21();
-    virtual void v24(void *, void *); virtual int v25(); virtual int v26();
-};
-extern "C" void Gap__Bec__beNDMWShopCtrlEvolve__vfunc_21(beNDMWShopCtrlEvolve *self);
-struct NamePair { int unused; char *name; };
-extern "C" char DAT_0051bb20[];
-extern "C" void FUN_00430d20(beNDMWShopCtrlEvolve *ctl, int sendNames, int sendStats);
-extern "C" int DAT_0051bb28[4];
-extern "C" int DAT_0051bb38[4];
-extern "C" int DAT_0051bb48[4];
-extern "C" int DAT_0051bb60[4];
-extern "C" int DAT_0051bb78[4];
-extern "C" int DAT_0051bb88[4];
-extern "C" int DAT_0051bb90[4];
-extern "C" int DAT_0051bba0[4];
-extern "C" void FUN_004313b0(beNDMWShopCtrlEvolve *arg0);
-extern "C" void FUN_00431670(beNDMWShopCtrlEvolve *arg0, igObjectList *arg1);
-extern "C" int DAT_0051bbb0[4];
-extern "C" int DAT_0051bbc0[4];
-extern "C" int DAT_0051bbd0[4];
-extern "C" int DAT_0051bbe8[4];
-struct Rec12 { char p[12]; int f12; };
-extern "C" void Gap__Bec__beNDMWShopCtrlDigilabo__vfunc_21(beNDMWShopCtrlDigilabo *self);
-struct Item_4329d0 { int p[3]; int f12; };
-struct RecB { int p[3]; unsigned char f12; };
-struct RecI { int p[3]; int f12; };
-extern "C" int DAT_0051bc40[4];
-extern "C" int DAT_0051bc48[4];
-extern "C" void FUN_004329d0(beNDMWShopCtrlDigilabo *self);
-extern "C" void FUN_00432c90(beNDMWShopCtrlDigilabo *arg0);
-extern "C" int DAT_004cfa30[4];
-typedef struct { char pad[12]; int f12; } Rec2;
-extern "C" int FUN_00432d30(beNDMWShopCtrlDigilabo *arg0);
-extern "C" void FUN_00433120(beNDMWWindow *arg0, int arg1, int arg2);
+extern "C" void beNDMWShopCtrlEvolve_Update(beNDMWShopCtrlEvolve *self);
+extern "C" char Lv_2[];
+extern "C" void beNDMWShopCtrlEvolve_RefreshText(beNDMWShopCtrlEvolve *ctl, int sendNames, int sendStats);
+extern "C" int CURRENT2BASE_2[4];
+extern "C" int MODEL_NAME_2[4];
+extern "C" int BASE2CURRENT_2[4];
+extern "C" int WEAPONEQUIPSTRONG[4];
+extern "C" int MAINSLOT_4[4];
+extern "C" int SUBSLOT_4[4];
+extern "C" int POWERPOCKET_4[4];
+extern "C" int MAINPOCKET_4[4];
+extern "C" void beNDMWShopCtrlEvolve_ApplyEvolution(beNDMWShopCtrlEvolve *);
+extern "C" void beNDMWShopCtrlEvolve_ClearItemSlots(beNDMWShopCtrlEvolve *, igObjectList *);
+extern "C" int POWERSOCKETNAME_5[4];
+extern "C" int PLAYERARMS_4[4];
+extern "C" int demo_digilab_lua[4];
+extern "C" int stagML12_lua[4];
+extern "C" void beNDMWShopCtrlDigilabo_Update(beNDMWShopCtrlDigilabo *self);
+extern "C" int NINZU_5[4];
+extern "C" int POWERSOCKET_4[4];
+extern "C" void beNDMWShopCtrlDigilabo_SnapshotParty(beNDMWShopCtrlDigilabo *self);
+extern "C" void beNDMWShopCtrlDigilabo_RecalcPlayers(beNDMWShopCtrlDigilabo *);
+extern "C" int beNDMWShopCtrlDigilabo_HasPartyChanged(beNDMWShopCtrlDigilabo *);
+extern "C" void beNDMWShopCtrlDigilabo_ShowPlayerTitle(beNDMWWindow *, int, int);
 extern "C" bePadData *bePadManager_GetPadForPlayer(...);
-extern "C" int DAT_0051b1d8[4];
-extern "C" int DAT_0051bc60[4];
-extern "C" int DAT_0051bc70[4];
-extern "C" int DAT_0051bc80[4];
-extern "C" int DAT_0051bc98[4];
-extern "C" int DAT_0051bca8[4];
-extern "C" int DAT_0051bcb8[4];
-extern "C" int DAT_0051bcc8[4];
-extern "C" int DAT_0051bcd8[4];
-extern "C" int DAT_0051bce8[4];
-extern "C" int DAT_0051bcf8[4];
-extern "C" int DAT_0051bd08[4];
-extern "C" int DAT_0051bd18[4];
-extern "C" void Gap__Bec__beNDMWShopCtrlEditBit__vfunc_21(beNDMWShopCtrlEditBit *self);
-struct Item_434790 { int p[5]; int f20; };
-extern "C" unsigned char GPR_00554a50;
-extern "C" unsigned char GPR_00554a54;
-extern "C" unsigned char GPR_00554a58;
-extern "C" unsigned char GPR_00554a5c;
-extern "C" void Gap__Bec__beNDMWShopCtrlSell__vfunc_21(beNDMWShopCtrlSell *self);
-extern "C" Tbl DAT_004cfa40;
-extern "C" char *DAT_004c22f0[4];
-extern "C" int DAT_0051bd50[4];
+extern "C" int font002_4[4];
+extern "C" int SQ_BITPUTINOPEN[4];
+extern "C" int STWINFONT36[4];
+extern "C" int SQ_BITDRAWOUTOPEN[4];
+extern "C" int SQ_JUNKOPEN[4];
+extern "C" int font_03d_2[4];
+extern "C" int font01_d[4];
+extern "C" int font02_d[4];
+extern "C" int SELECTCTRL_4[4];
+extern "C" int i_stcursor03_2[4];
+extern "C" int ISSELECTNOW_2[4];
+extern "C" int CURSOR_MOVE_3[4];
+extern "C" int STWINFONT25[4];
+extern "C" void beNDMWShopCtrlEditBit_Update(beNDMWShopCtrlEditBit *self);
+extern "C" void beNDMWShopCtrlSell_Update(beNDMWShopCtrlSell *self);
+extern "C" Tbl g_sellCursorOpenSequences;
+extern "C" char *g_stringObjEmptyText[4];
+extern "C" int SQ_AWINOPEN[4];
 extern "C" char STWINFONT30[];
-extern "C" int DAT_0051bd70[];
-extern "C" char DAT_0051bd78[];
-extern "C" char DAT_0051bd80[];
+extern "C" int KAITORI_2[];
+extern "C" char equippedMark_2[];
+extern "C" char unequippedMark_2[];
 /* matching construct: raw view of the property-record folder (list at +12). */
-struct RecordFolder { int w0; int w4; int w8; igDataList *list; };
 struct V3 { float x, y, z; };
-extern "C" void Gap__Bec__beNDMWShopCtrlDeviceSell__vfunc_21(beNDMWShopCtrlDeviceSell *self);
-extern "C" void FUN_00436060(beNDMWShopCtrlDeviceSell *self, int full, unsigned char sel);
-typedef struct Obj { int pad0[4]; unsigned char flag; } Obj;
-typedef struct Folder { int pad0[2]; int count; int pad1; Obj **items; } Folder;
-extern "C" int FUN_004367c0(beNDMWShopCtrlDeviceSell *self);
+extern "C" void beNDMWShopCtrlDeviceSell_Update(beNDMWShopCtrlDeviceSell *self);
+extern "C" void beNDMWShopCtrlDeviceSell_RefreshText(beNDMWShopCtrlDeviceSell *self, int full, unsigned char sel);
+extern "C" int beNDMWShopCtrlDeviceSell_UpdatePageCount(beNDMWShopCtrlDeviceSell *self);
 typedef struct O_4369f0 { char p[12]; int m; } O_4369f0;
-extern "C" void FUN_004369f0(O_4369f0 *arg0);
-extern "C" int DAT_0051bd88[4];
-extern "C" int DAT_0051bd98[4];
-extern "C" int DAT_0051bda0[4];
-extern "C" int DAT_0051bdb0[4];
-extern "C" unsigned char GPR_00554a60;
-extern "C" unsigned char GPR_00554a64;
+extern "C" void beNDMWShopCtrlDeviceSell_ResetRowColors(O_4369f0 *);
+extern "C" int STWINFONT15_2[4];
+extern "C" int CENTER_4[4];
+extern "C" int SQ_EWINOPEN[4];
+extern "C" int SQ_BWINOPEN[4];
 
-extern "C" void Gap__Bec__beNDMWShopCtrlDiskSell__vfunc_21(beNDMWShopCtrlDiskSell *self);
-extern "C" void FUN_00437ae0(beNDMWShopCtrlDiskSell *arg0, int arg1, int arg2);
-extern "C" void FUN_00437f50(beNDMWShopCtrlDiskSell *arg0);
-extern "C" void FUN_00438050(beNDMWShopCtrlDiskSell *arg0);
+extern "C" void beNDMWShopCtrlDiskSell_Update(beNDMWShopCtrlDiskSell *self);
+extern "C" void beNDMWShopCtrlDiskSell_RefreshText(beNDMWShopCtrlDiskSell *, int, int);
+extern "C" void beNDMWShopCtrlDiskSell_ShowQuantity(beNDMWShopCtrlDiskSell *);
+extern "C" void beNDMWShopCtrlDiskSell_HideQuantity(beNDMWShopCtrlDiskSell *);
 struct ChipPriceText { char text[5]; } __attribute__((aligned(16)));
-extern "C" ChipPriceText DAT_0051bdc0;
+extern "C" ChipPriceText dashdashdashdash_2;
 struct Vec3 { float x, y, z; } __attribute__((aligned(16)));
 struct Pool { static char *Intern(char *s) { if (g_stringPool[0] == 0) { int v = StringPool_Allocate(16); if (v != 0) v = StringPool_Construct(v); g_stringPool[0] = v; } return StringPool_Intern(g_stringPool[0], s); } };
-extern "C" void FUN_004393e0(beNDMWShopCtrlSales *arg0, int arg1, unsigned char arg2);
-extern "C" unsigned char GPR_00554a68;
-extern "C" unsigned char GPR_00554a6c;
-extern "C" unsigned char GPR_00554a70;
-extern "C" int FUN_00439aa0(beNDMWShopCtrlSales *self);
-extern "C" int DAT_0051bdc8[4];
-extern "C" int DAT_0051bdd0[4];
-extern "C" int DAT_0051bdd8[4];
-extern "C" int DAT_0051bde8[4];
+extern "C" void beNDMWShopCtrlSales_RefreshText(beNDMWShopCtrlSales *, int, unsigned char);
+extern "C" int beNDMWShopCtrlSales_UpdatePageCount(beNDMWShopCtrlSales *self);
+extern "C" int SOUBI_3[4];
+extern "C" int SKILL_3[4];
+extern "C" int SKILLPOINT_3[4];
+extern "C" int LVPOINT_2[4];
 struct Rec_439d60 { char pad[12]; int f12; };
 /* matching construct: the retail bool result (daddiu) comes from an inline member function with early returns */
 struct SalesChk {
-    static bool Chk(beNDMWShopCtrlSales *self, beNDMWItemBase *arg1, int obj) {
+    static bool Chk(beNDMWShopCtrlSales *self, beNDMWItemBase *item, int obj) {
         int rec;
-        int s3, s0;
+        int usable, level;
         igIntList *l;
         int a, b;
-        if (arg1 == 0) return false;
-        if (arg1->_kindNo == 3) return true;
+        if (item == 0) return false;
+        if (item->_kindNo == 3) return true;
         rec = ((int)igInsightCore_FindManager(self->_insight, g_beNDMWStatus_metaObject[0]));
-        if (arg1->_kindNo == 0) {
-            int sh = ((Rec_439d60 *)((void *)igProperty_GetRecord(obj, &DAT_0051bac0[0])))->f12;
-            s3 = (1 << sh) & beNDMWItemBase_GetRecordInt(arg1, rec, &DAT_0051bdc8[0]);
-            l = (igIntList *)((Rec_439d60 *)((void *)igProperty_GetRecordIntList(obj, &DAT_0051bdd0[0])))->f12;
-            a = beNDMWItemBase_GetRecordInt(arg1, rec, &DAT_0051bdd0[0]);
-            b = beNDMWItemBase_GetRecordInt(arg1, rec, &DAT_0051bdd8[0]);
-            if (s3 != 0 && ((int *)l->_data)[a] >= b) return true;
+        if (item->_kindNo == 0) {
+            int sh = ((Rec_439d60 *)((void *)igProperty_GetRecord(obj, DIGIMONNO_6)))->f12;
+            usable = (1 << sh) & beNDMWItemBase_GetRecordInt(item, rec, SOUBI_3);
+            l = (igIntList *)((Rec_439d60 *)((void *)igProperty_GetRecordIntList(obj, SKILL_3)))->f12;
+            a = beNDMWItemBase_GetRecordInt(item, rec, SKILL_3);
+            b = beNDMWItemBase_GetRecordInt(item, rec, SKILLPOINT_3);
+            if (usable != 0 && ((int *)l->_data)[a] >= b) return true;
             return false;
-        } else if (arg1->_kindNo == 1 || arg1->_kindNo == 2) {
-            s0 = ((Rec_439d60 *)((void *)igProperty_GetRecord(obj, &DAT_0051b5a0[0])))->f12;
-            if (s0 >= beNDMWItemBase_GetRecordInt(arg1, rec, &DAT_0051bde8[0])) return true;
+        } else if (item->_kindNo == 1 || item->_kindNo == 2) {
+            level = ((Rec_439d60 *)((void *)igProperty_GetRecord(obj, LEVEL_8)))->f12;
+            if (level >= beNDMWItemBase_GetRecordInt(item, rec, LVPOINT_2)) return true;
             return false;
         }
         return false;
     }
 };
-extern "C" bool FUN_00439d60(beNDMWShopCtrlSales *arg0, beNDMWItemBase *arg1);
-extern "C" int DAT_0051bdf0[4];
-extern "C" int DAT_0051be00[4];
+extern "C" bool beNDMWShopCtrlSales_CanPlayerUse(beNDMWShopCtrlSales *, beNDMWItemBase *);
+extern "C" int ONPREVIEW_2[4];
+extern "C" int OFPREVIEW_2[4];
 /* matching construct: allocator pick kept as an in-class method so it inlines as in the retail unit */
 struct ShopAlloc {
-    static int Pool(beNDMWShopCtrlSales *self) { int a = ((int)igObject_GetAllocator(self)); if (GPR_00554c14 != 0) return a; return ((int)Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0])); }
+    static int Pool(beNDMWShopCtrlSales *self) { int a = ((int)igObject_GetAllocator(self)); if (g_useOwnerAllocator != 0) return a; return ((int)Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0])); }
 };
-extern "C" void FUN_00439f30(beNDMWShopCtrlSales *arg0, int arg1);
-struct RC { int p0; unsigned refs; char p8[8]; char f16; };
+extern "C" void beNDMWShopCtrlSales_PreviewSelected(beNDMWShopCtrlSales *, int);
 typedef igObjectList OL;
-extern "C" void FUN_0043a450(void *arg0, OL *arg1, OL *arg2, OL *arg3, OL *arg4);
-extern "C" void FUN_0043a660(void *arg0, igDataList *arg1, igDataList *arg2, igDataList *arg3, igDataList *arg4);
-extern "C" Tbl DAT_004cfa70;
-extern "C" int *DAT_004cf8ac[4];
-extern "C" int DAT_004cfaa0[8];
-extern "C" int DAT_0051be10[4];
-extern "C" int DAT_0051be20[4];
+extern "C" void beNDMWShopCtrlSales_StashEquipment(void *, OL *, OL *, OL *, OL *);
+extern "C" void beNDMWShopCtrlSales_RestoreEquipment(void *, igDataList *, igDataList *, igDataList *, igDataList *);
+extern "C" Tbl g_salesRowCursorSequences;
+extern "C" int g_xdataChipStatPromptCodes[8];
+extern "C" int STWINFONT35[4];
+extern "C" int SQ_XDATAITEMOPEN[4];
 extern "C" char NEXTX[];
-extern "C" int DAT_0051be40[4];
-extern "C" int DAT_0051be50[4];
-extern "C" int DAT_0051be58[4];
-extern "C" int DAT_0051be68[4];
-extern "C" int DAT_0051be78[4];
-extern "C" int DAT_0051be88[4];
-extern "C" int DAT_0051be90[4];
-extern "C" int DAT_0051be98[4];
-struct ChipVT {
-    virtual void d0();
-    virtual void d1();
-    virtual void d2();
-    virtual void d3();
-    virtual void d4();
-    virtual void d5();
-    virtual void d6();
-    virtual void d7();
-    virtual void d8();
-    virtual void d9();
-    virtual void d10();
-    virtual void d11();
-    virtual void d12();
-    virtual void d13();
-    virtual void d14();
-    virtual void d15();
-    virtual void d16();
-    virtual void d17();
-    virtual void d18();
-    virtual void d19();
-    virtual void d20();
-    virtual void d21();
-    virtual void v22(int *, int *);
-    virtual int v23();
-    virtual int v24();
-};
-typedef struct ChipRecord {
-    char p[12];
-    int f12;
-} ChipRecord;
-struct ChipUtil { static inline bool IsChip(beNDMWItemBase *e) { if (e != 0) { return e->_kindNo == 3; } return false; } static inline int *CastSel(int *p) { if (p != 0 && igObject_IsKindOf(p, g_beNDMWStatusSelectE1_metaObject[0]) != 0) return p; return 0; } };
-extern "C" void Gap__Bec__beNDMWShopCtrlXdataChip__vfunc_21(beNDMWShopCtrlXdataChip *arg0);
+extern "C" int RES_FIRE_3[4];
+extern "C" int RES_ICE_3[4];
+extern "C" int RES_THUNDER_3[4];
+extern "C" int RES_DARK_3[4];
+extern "C" int CHIMEIRITSU_3[4];
+extern "C" int HPDRAIN_3[4];
+extern "C" int MPDRAIN_3[4];
+extern "C" int CHOHATURITSU_3[4];
+extern "C" void beNDMWShopCtrlXdataChip_Update(beNDMWShopCtrlXdataChip *);
 extern "C" int beNDMWShopCtrlXdataChip_UpdatePageCount(beNDMWShopCtrlXdataChip *self);
 extern "C" char *g_fontName1[];
 extern "C" char DISPON[];
 extern "C" int g_beNDMWStatus_metaObject[];
 extern "C" void beNDMWShopCtrlXdataChip_RefreshText(beNDMWShopCtrlXdataChip *self, long long refreshRows, long long refreshDescription);
-extern "C" igObject * FUN_003b7360(...);
+extern "C" igObject * beNDMWShopCtrlSell_Create(...);
 typedef beNDMWShopDevice S;
-extern "C" void Gap__Bec__beNDMWShopDevice__vfunc_21(S *arg0);
+extern "C" void beNDMWShopDevice_Update(S *);
 extern "C" int g_beNDMWShopDevice_metaObject[4];
 extern "C" int g_beNDMWShopCtrlXdataChip_metaObject[4];
 extern "C" int g_beNDMWShopCtrlSales_metaObject[4];
@@ -722,469 +494,719 @@ extern "C" int g_beNDMWShopCtrl30_metaObject[4];
 extern "C" int g_beNDMWShopCtrl10_metaObject[4];
 extern "C" int g_beNDMWShopCtrl00_metaObject[4];
 
-void Gap__Bec__beNDMWShopCtrl00__vfunc_21(beNDMWShopCtrl00 *arg0) {
-    S_ref *t;
-    int x;
+extern "C" unsigned char GPR_00554a60;
+extern "C" unsigned char GPR_00554a64;
+extern "C" unsigned char GPR_00554a68;
+extern "C" unsigned char GPR_00554a6c;
+extern "C" unsigned char GPR_00554a70;
+static inline void BoolList_Append(igBoolList *list, const bool &value)
+{
+    int count = list->_count;
+    if (count < list->_capacity) {
+        list->_count = count + 1;
+    } else {
+        List_Resize(list, count + 1, 1);
+    }
+    ((bool *)list->_data)[count] = value;
+}
 
-    switch (arg0->_st0) {
-    case 0:
-        x = ((int)igObject_GetAllocator(arg0));
-        { igSmartPointer<beNDMWShopTitle00> r1((beNDMWShopTitle00 *)FUN_003b3370(GPR_00554c14 != 0 ? x : ((int)Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]))));
-        beNDMWWindow_BindContext(r1.p, arg0, arg0->_insight, arg0->_playerNo, 0);
-        ObjectList_AppendRetained(arg0->_subWindow, r1.p);
+static inline void BoolList_Set(igBoolList *list, int index, const bool &value)
+{
+    if (list->_count != 0 && index >= 0 && index < list->_count) {
+        ((bool *)list->_data)[index] = value;
+    }
+}
+
+/* _st0 of every shop window: build the window, run it, close it, wait for the close to finish.
+ * _st1 is the step inside SHOP_STATE_RUN, _st2 the step's phase and _st3 a step-local word. */
+enum ShopWindowState { SHOP_STATE_OPEN, SHOP_STATE_RUN, SHOP_STATE_CLOSE, SHOP_STATE_WAIT_CLOSED };
+/* The phases (_st2) of a step that opens one child window and waits for it to close. */
+enum ChildWindowPhase { CHILD_OPEN, CHILD_WAIT };
+/* Answers of a yes/no window. */
+enum ShopAnswer { ANSWER_YES, ANSWER_NO };
+enum { MAX_PLAYERS = 4 };
+/* beNDMWWindowSelect state that resends the selection size and moves the cursor to the top. */
+enum { SELECT_STATE_RELOAD_TO_TOP = 4 };
+
+#define NEXT_STATE(window) { (window)->_st0 = (window)->_st0 + 1; (window)->_st3 = 0; (window)->_st2 = 0; (window)->_st1 = 0; }
+#define ENTER_STATE(window, state) { (window)->_st0 = (state); (window)->_st3 = 0; (window)->_st2 = 0; (window)->_st1 = 0; }
+#define NEXT_STEP(window) { (window)->_st1 = (window)->_st1 + 1; (window)->_st3 = 0; (window)->_st2 = 0; }
+#define ENTER_STEP(window, step) { (window)->_st1 = (step); (window)->_st3 = 0; (window)->_st2 = 0; }
+#define NEXT_PHASE(window) { (window)->_st2 = (window)->_st2 + 1; (window)->_st3 = 0; }
+#define ENTER_PHASE(window, phase) { (window)->_st2 = (phase); (window)->_st3 = 0; }
+
+/* The window's state read afresh: `_st0 = CurrentState(self) + 1` reloads the value the switch tested. */
+template <class Window> static inline int CurrentState(const Window *window)
+{
+    return window->_st0;
+}
+
+/* The owner's allocator, or the default selector's when owner allocation is off. */
+#define PICK_ALLOCATOR(allocator, owner) { \
+    allocator = igObject_GetAllocator(owner); \
+    allocator = g_useOwnerAllocator ? allocator : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]); }
+#define CHILD_COUNT(window) (((igObjectList *)(window)->_subWindow)->_count)
+#define ObjectList_Count(list) (((igObjectList *)(list))->_count)
+/* The first child window that is a beNDMWStatusCtrlD0 (device list), or null; `index` ends at its
+ * position. */
+#define FIND_DEVICE_LIST(found, index, window) { \
+    (found) = 0; \
+    (index) = 0; \
+    if (0 < CHILD_COUNT(window)) { \
+        do { \
+            beNDMWStatusCtrlD0 *child_ = (beNDMWStatusCtrlD0 *)((int *)((igObjectList *)*(int *)&(window)->_subWindow)->_data)[index]; \
+            if (child_ != 0 && igObject_IsKindOf(child_, g_beNDMWStatusCtrlD0_metaObject[0]) != 0) { \
+                (found) = child_; \
+            } else { \
+                (found) = 0; \
+            } \
+            if ((found) != 0) break; \
+            (index)++; \
+        } while ((index) < CHILD_COUNT(window)); \
+    } }
+
+/* Sends `selector` to the `group` receivers with the window's player number. */
+#define SEND_PLAYER_MESSAGE(window, group, selector) { \
+    beMessenger_SelectGroup((window)->_messenger, group); \
+    beMessenger_AppendInt((window)->_messenger, (window)->_playerNo); \
+    beMessenger_DispatchSelected((window)->_messenger, selector); }
+/* GAMERAM: select the player's data object (the reply's first object). */
+#define REQUEST_PLAYER(window) SEND_PLAYER_MESSAGE(window, GAMERAM_14, GETPLAYER_10)
+/* GAMERAM: recompute the player's derived stats. */
+#define RECALC_PLAYER(window) SEND_PLAYER_MESSAGE(window, GAMERAM_14, RECALCPLAYER_5)
+/* SUBWND: redraw the player's status windows. */
+#define UPDATE_SUBWINDOW(window) SEND_PLAYER_MESSAGE(window, SUBWND_8, UPDATE_3)
+
+/* The window player's data object. */
+template <class Window> static inline int GetPlayer(Window *window)
+{
+    beMessenger_SelectGroup(window->_messenger, GAMERAM_14);
+    beMessenger_AppendInt(window->_messenger, window->_playerNo);
+    beMessenger_DispatchSelected(window->_messenger, GETPLAYER_10);
+    return beMessenger_GetObject(window->_messenger, 0);
+}
+
+/* A player's integer record (BIT, LEVEL, MHP...). */
+static inline beDataObjInt *PlayerInt(int player, const void *record)
+{
+    return (beDataObjInt *)igProperty_GetRecord(player, record);
+}
+
+/* The item list of a player's folder record (DEVICEFOLDER, DISKFOLDER...). */
+static inline igObjectList *PlayerFolder(int player, const void *record)
+{
+    return (igObjectList *)((beDataObjObjectList *)igProperty_GetRecordFolder(player, record))->_data;
+}
+
+/* The pooled copy of `text` (null for null), creating the string pool on first use. */
+static inline const char *InternString(const char *text)
+{
+    if (text == 0) return 0;
+    if (g_stringPool[0] == 0) {
+        int pool = StringPool_Allocate(0x10);
+        if (pool != 0) pool = StringPool_Construct(pool);
+        g_stringPool[0] = pool;
+    }
+    return StringPool_Intern(g_stringPool[0], text);
+}
+
+/* InternString for a text that is never null. */
+static inline const char *InternLiteral(const char *text)
+{
+    if (g_stringPool[0] == 0) {
+        int pool = StringPool_Allocate(0x10);
+        if (pool != 0) pool = StringPool_Construct(pool);
+        g_stringPool[0] = pool;
+    }
+    return StringPool_Intern(g_stringPool[0], text);
+}
+
+/* Drops one reference to a pooled string (reference count at text[-4], chunk header at text[-8]). */
+static inline void ReleaseString(const char *text)
+{
+    if (text != 0) {
+        int *header = (int *)text - 2;
+        int references = header[1] - 1;
+        header[1] = references;
+        if (references == 0) StringChunk_ReleaseHeader(header[0], header);
+    }
+}
+
+/* Appends the pooled copy of `text` to a string list. */
+#define APPEND_INTERNED(list, text) { StringList_AppendRetained((int)(list), StringRef(InternString((const char *)(text)))); }
+
+/* The paging virtuals (slots 22..24) a list window shares with beNDMWListCtrl. */
+struct PagedWindow {
+    virtual void vfunc_0();
+    virtual void vfunc_1();
+    virtual void vfunc_2();
+    virtual void vfunc_3();
+    virtual void vfunc_4();
+    virtual void vfunc_5();
+    virtual void vfunc_6();
+    virtual void vfunc_7();
+    virtual void vfunc_8();
+    virtual void vfunc_9();
+    virtual void vfunc_10();
+    virtual void vfunc_11();
+    virtual void vfunc_12();
+    virtual void vfunc_13();
+    virtual void vfunc_14();
+    virtual void vfunc_15();
+    virtual void vfunc_16();
+    virtual void vfunc_17();
+    virtual void vfunc_18();
+    virtual void vfunc_19();
+    virtual void vfunc_20();
+    virtual void vfunc_21();
+    virtual void PresentPageArrows(float *leftArrowPos, float *rightArrowPos);
+    virtual int TurnPagePrev();
+    virtual int TurnPageNext();
+};
+
+/* The page selector, when the first child window is one. */
+static inline beNDMWWindowSelect *AsPageSelector(igObject *window)
+{
+    if (window != 0 && igObject_IsKindOf(window, g_beNDMWStatusSelectE1_metaObject[0]) != 0) {
+        return (beNDMWWindowSelect *)window;
+    }
+    return 0;
+}
+
+/* Dispatch-only view of the system's igMersenneTwisterRandomNumber: genrand is vtable slot 22. */
+class RandomNumberDispatch {
+  public:
+    virtual void slot0();
+    virtual void slot1();
+    virtual void slot2();
+    virtual void slot3();
+    virtual void slot4();
+    virtual void slot5();
+    virtual void slot6();
+    virtual void slot7();
+    virtual void slot8();
+    virtual void slot9();
+    virtual void slot10();
+    virtual void slot11();
+    virtual void slot12();
+    virtual void slot13();
+    virtual void slot14();
+    virtual void slot15();
+    virtual void slot16();
+    virtual void slot17();
+    virtual void slot18();
+    virtual void slot19();
+    virtual void slot20();
+    virtual void sgenrand(unsigned int seed);
+    virtual unsigned int genrand();
+};
+
+
+static inline void FillHpMp(int player)
+{
+    int value = PlayerInt(player, MHP_5)->_data;
+    PlayerInt(player, HP_6)->_data = value;
+    value = PlayerInt(player, MMP_6)->_data;
+    PlayerInt(player, MP_6)->_data = value;
+}
+
+/* The service a shop root opens, by its entry code. */
+enum ShopService {
+    SHOP_SERVICE_XDATA = 1,
+    SHOP_SERVICE_BANK = 3,
+    SHOP_SERVICE_CNOS = 4,
+    SHOP_SERVICE_DISK = 5,
+    SHOP_SERVICE_WPU = 6,
+    SHOP_SERVICE_APU = 7,
+    SHOP_SERVICE_CHIP = 8,
+    SHOP_SERVICE_JUNK = 9
+};
+
+/* Steps (_st1) of the root's run state. */
+enum ShopRootStep {
+    SHOP_ROOT_OPEN_SERVICE,
+    SHOP_ROOT_WAIT_SERVICE
+};
+
+void beNDMWShopCtrl00_Update(beNDMWShopCtrl00 *self)
+{
+    void *allocator;
+
+    switch (self->_st0) {
+    case SHOP_STATE_OPEN:
+        PICK_ALLOCATOR(allocator, self);
+        {
+            igSmartPointer<beNDMWShopTitle00> shopTitle((beNDMWShopTitle00 *)beNDMWShopTitle00_Create(allocator));
+            beNDMWWindow_BindContext(shopTitle.p, self, self->_insight, self->_playerNo, 0);
+            ObjectList_AppendRetained(self->_subWindow, shopTitle.p);
         }
-        x = ((int)igObject_GetAllocator(arg0));
-        { igSmartPointer<beNDMWStatusTitle01> r2((beNDMWStatusTitle01 *)beNDMWStatusTitle01_Create(GPR_00554c14 != 0 ? x : ((int)Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]))));
-        beNDMWWindow_BindContext(r2.p, arg0, arg0->_insight, arg0->_playerNo, 0);
-        ObjectList_AppendRetained(arg0->_subWindow, r2.p);
+        PICK_ALLOCATOR(allocator, self);
+        {
+            igSmartPointer<beNDMWStatusTitle01> statusTitle1((beNDMWStatusTitle01 *)beNDMWStatusTitle01_Create(allocator));
+            beNDMWWindow_BindContext(statusTitle1.p, self, self->_insight, self->_playerNo, 0);
+            ObjectList_AppendRetained(self->_subWindow, statusTitle1.p);
         }
-        x = ((int)igObject_GetAllocator(arg0));
-        { igSmartPointer<beNDMWStatusTitle02> r3((beNDMWStatusTitle02 *)beNDMWStatusTitle02_Create(GPR_00554c14 != 0 ? x : ((int)Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]))));
-        beNDMWWindow_BindContext(r3.p, arg0, arg0->_insight, arg0->_playerNo, 0);
-        ObjectList_AppendRetained(arg0->_subWindow, r3.p);
+        PICK_ALLOCATOR(allocator, self);
+        {
+            igSmartPointer<beNDMWStatusTitle02> statusTitle2((beNDMWStatusTitle02 *)beNDMWStatusTitle02_Create(allocator));
+            beNDMWWindow_BindContext(statusTitle2.p, self, self->_insight, self->_playerNo, 0);
+            ObjectList_AppendRetained(self->_subWindow, statusTitle2.p);
         }
-        x = ((int)igObject_GetAllocator(arg0));
-        { igSmartPointer<beNDMWStatusTitle03> r4((beNDMWStatusTitle03 *)beNDMWStatusTitle03_Create(GPR_00554c14 != 0 ? x : ((int)Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]))));
-        beNDMWWindow_BindContext(r4.p, arg0, arg0->_insight, arg0->_playerNo, 0);
-        ObjectList_AppendRetained(arg0->_subWindow, r4.p);
+        PICK_ALLOCATOR(allocator, self);
+        {
+            igSmartPointer<beNDMWStatusTitle03> statusTitle3((beNDMWStatusTitle03 *)beNDMWStatusTitle03_Create(allocator));
+            beNDMWWindow_BindContext(statusTitle3.p, self, self->_insight, self->_playerNo, 0);
+            ObjectList_AppendRetained(self->_subWindow, statusTitle3.p);
         }
-        x = ((int)igObject_GetAllocator(arg0));
-        { igSmartPointer<beNDMWShopTitle01> r5((beNDMWShopTitle01 *)FUN_003b31b0(GPR_00554c14 != 0 ? x : ((int)Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]))));
-        beNDMWWindow_BindContext(r5.p, arg0, arg0->_insight, arg0->_playerNo, arg0->_entCode);
-        ObjectList_AppendRetained(arg0->_subWindow, r5.p);
+        PICK_ALLOCATOR(allocator, self);
+        {
+            igSmartPointer<beNDMWShopTitle01> serviceTitle((beNDMWShopTitle01 *)beNDMWShopTitle01_Create(allocator));
+            beNDMWWindow_BindContext(serviceTitle.p, self, self->_insight, self->_playerNo, self->_entCode);
+            ObjectList_AppendRetained(self->_subWindow, serviceTitle.p);
         }
-        arg0->_st0 = arg0->_st0 + 1;
-        arg0->_st3 = 0;
-        arg0->_st2 = 0;
-        arg0->_st1 = 0;
+        NEXT_STATE(self);
         return;
-    case 1:
-        switch (arg0->_st1) {
-        case 0:
-            beMessenger_SelectReceivers(arg0->_messenger, &DAT_0051b308[0], &DAT_0051b318[0], 0);
-            beMessenger_AppendString(arg0->_messenger, &DAT_0051b328[0]);
-            beMessenger_DispatchSelected(arg0->_messenger, &DAT_0051b338[0]);
-            if ((beMessenger_GetBool(arg0->_messenger, 0) & 0xFF) == 1) {
+    case SHOP_STATE_RUN:
+        switch (self->_st1) {
+        case SHOP_ROOT_OPEN_SERVICE:
+            beMessenger_SelectReceivers(self->_messenger, MODELCTRL_16, i_messwn_3, 0);
+            beMessenger_AppendString(self->_messenger, SQ_STOPEN_3);
+            beMessenger_DispatchSelected(self->_messenger, ISSEQNAME_6);
+            if ((beMessenger_GetBool(self->_messenger, 0) & 0xFF) == 1) {
+                /* the message window is still playing its open sequence */
                 return;
-            } else {
-                {
-                igSmartPointer<beNDMWWindow> r6(0);
-                switch (arg0->_entCode) {
-                case 1:
-                x = ((int)igObject_GetAllocator(arg0));
-                x = GPR_00554c14 != 0 ? x : ((int)Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]));
-                t = (S_ref *)r6.p;
-                if (t != 0) {
-                    t->f4 = (int)((int)(t->f4 - 1));
-                    if (((unsigned long long)((long long)t->f4 << 0x29) >> 0x29) == 0) {
-                        igObject_Destroy(t);
-                    }
-                }
-                r6.p = (beNDMWWindow *)FUN_003b8b60(x);
+            }
+            {
+                igSmartPointer<beNDMWWindow> service;
+                switch (self->_entCode) {
+                case SHOP_SERVICE_XDATA:
+                    PICK_ALLOCATOR(allocator, self);
+                    service.release();
+                    service.p = (beNDMWWindow *)beNDMWShopCtrl10_Create(allocator);
                     break;
-                case 3:
-                x = ((int)igObject_GetAllocator(arg0));
-                x = GPR_00554c14 != 0 ? x : ((int)Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]));
-                t = (S_ref *)r6.p;
-                if (t != 0) {
-                    t->f4 = (int)((int)(t->f4 - 1));
-                    if (((unsigned long long)((long long)t->f4 << 0x29) >> 0x29) == 0) {
-                        igObject_Destroy(t);
-                    }
-                }
-                r6.p = (beNDMWWindow *)FUN_003b8630(x);
+                case SHOP_SERVICE_BANK:
+                    PICK_ALLOCATOR(allocator, self);
+                    service.release();
+                    service.p = (beNDMWWindow *)beNDMWShopCtrl30_Create(allocator);
                     break;
-                case 4:
-                x = ((int)igObject_GetAllocator(arg0));
-                x = GPR_00554c14 != 0 ? x : ((int)Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]));
-                t = (S_ref *)r6.p;
-                if (t != 0) {
-                    t->f4 = (int)((int)(t->f4 - 1));
-                    if (((unsigned long long)((long long)t->f4 << 0x29) >> 0x29) == 0) {
-                        igObject_Destroy(t);
-                    }
-                }
-                r6.p = (beNDMWWindow *)FUN_003b8400(x);
+                case SHOP_SERVICE_CNOS:
+                    PICK_ALLOCATOR(allocator, self);
+                    service.release();
+                    service.p = (beNDMWWindow *)beNDMWShopCtrl40_Create(allocator);
                     break;
-                case 5:
-                x = ((int)igObject_GetAllocator(arg0));
-                x = GPR_00554c14 != 0 ? x : ((int)Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]));
-                t = (S_ref *)r6.p;
-                if (t != 0) {
-                    t->f4 = (int)((int)(t->f4 - 1));
-                    if (((unsigned long long)((long long)t->f4 << 0x29) >> 0x29) == 0) {
-                        igObject_Destroy(t);
-                    }
-                }
-                r6.p = (beNDMWWindow *)FUN_003b81d0(x);
+                case SHOP_SERVICE_DISK:
+                    PICK_ALLOCATOR(allocator, self);
+                    service.release();
+                    service.p = (beNDMWWindow *)beNDMWShopCtrl50_Create(allocator);
                     break;
-                case 6:
-                case 7:
-                case 8:
-                x = ((int)igObject_GetAllocator(arg0));
-                x = GPR_00554c14 != 0 ? x : ((int)Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]));
-                t = (S_ref *)r6.p;
-                if (t != 0) {
-                    t->f4 = (int)((int)(t->f4 - 1));
-                    if (((unsigned long long)((long long)t->f4 << 0x29) >> 0x29) == 0) {
-                        igObject_Destroy(t);
-                    }
-                }
-                r6.p = (beNDMWWindow *)FUN_003b6650(x);
+                case SHOP_SERVICE_WPU:
+                case SHOP_SERVICE_APU:
+                case SHOP_SERVICE_CHIP:
+                    PICK_ALLOCATOR(allocator, self);
+                    service.release();
+                    service.p = (beNDMWWindow *)beNDMWShopDevice_Create(allocator);
                     break;
-                case 9:
-                x = ((int)igObject_GetAllocator(arg0));
-                x = GPR_00554c14 != 0 ? x : ((int)Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]));
-                t = (S_ref *)r6.p;
-                if (t != 0) {
-                    t->f4 = (int)((int)(t->f4 - 1));
-                    if (((unsigned long long)((long long)t->f4 << 0x29) >> 0x29) == 0) {
-                        igObject_Destroy(t);
-                    }
-                }
-                r6.p = (beNDMWWindow *)FUN_003b6310(x);
+                case SHOP_SERVICE_JUNK:
+                    PICK_ALLOCATOR(allocator, self);
+                    service.release();
+                    service.p = (beNDMWWindow *)beNDMWShopJunk_Create(allocator);
                     break;
                 default:
-                x = ((int)igObject_GetAllocator(arg0));
-                x = GPR_00554c14 != 0 ? x : ((int)Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]));
-                t = (S_ref *)r6.p;
-                if (t != 0) {
-                    t->f4 = (int)((int)(t->f4 - 1));
-                    if (((unsigned long long)((long long)t->f4 << 0x29) >> 0x29) == 0) {
-                        igObject_Destroy(t);
-                    }
-                }
-                r6.p = (beNDMWWindow *)FUN_003b8b60(x);
+                    PICK_ALLOCATOR(allocator, self);
+                    service.release();
+                    service.p = (beNDMWWindow *)beNDMWShopCtrl10_Create(allocator);
                     break;
                 }
-                beNDMWWindow_BindContext(r6.p, arg0, arg0->_insight, arg0->_playerNo, arg0->_entCode);
-                ObjectList_AppendRetained(arg0->_subWindow, r6.p);
-                }
-                arg0->_nowProcKazu = ((igObjectList *)arg0->_subWindow)->_count;
-                arg0->_st1 = arg0->_st1 + 1;
-                arg0->_st3 = 0;
-                arg0->_st2 = 0;
+                beNDMWWindow_BindContext(service.p, self, self->_insight, self->_playerNo, self->_entCode);
+                ObjectList_AppendRetained(self->_subWindow, service.p);
             }
-        case 1:
-            if (((igObjectList *)arg0->_subWindow)->_count != arg0->_nowProcKazu) {
-                arg0->_st0 = arg0->_st0 + 1;
-                arg0->_st3 = 0;
-                arg0->_st2 = 0;
-                arg0->_st1 = 0;
+            self->_nowProcKazu = CHILD_COUNT(self);
+            NEXT_STEP(self);
+        case SHOP_ROOT_WAIT_SERVICE:
+            if (CHILD_COUNT(self) != self->_nowProcKazu) {
+                NEXT_STATE(self);
                 return;
             }
             break;
         }
         break;
-    case 2:
-        beMessenger_SendNamed(arg0->_messenger, &DAT_0051b308[0], &DAT_0051b348[0], 0, &DAT_0051b358[0]);
-        beNDMWWindow_PlayQueuedModelClose(arg0);
-        beNDMWWindow_ClearQueuedText(arg0);
-        beNDMWWindow_RequestChildrenClose(arg0);
-        arg0->_st0 = arg0->_st0 + 1;
-        arg0->_st3 = 0;
-        arg0->_st2 = 0;
-        arg0->_st1 = 0;
+    case SHOP_STATE_CLOSE:
+        beMessenger_SendNamed(self->_messenger, MODELCTRL_16, i_bgclear_2, 0, OFFREEZE_3);
+        beNDMWWindow_PlayQueuedModelClose(self);
+        beNDMWWindow_ClearQueuedText(self);
+        beNDMWWindow_RequestChildrenClose(self);
+        NEXT_STATE(self);
         return;
-    case 3:
-        if (beNDMWWindow_PollCloseComplete() != 0) {
-            arg0->_isRun = 0;
+    case SHOP_STATE_WAIT_CLOSED:
+        if (beNDMWWindow_PollCloseComplete(self) != 0) {
+            self->_isRun = 0;
         }
         break;
     }
 }
 
+/* A selection window's result when nothing is chosen (cancelled, or no row highlighted). */
+enum { SELECT_NONE = -1 };
 
+/* Steps (_st1) of the XDATA service. */
+enum XdataStep {
+    XDATA_STEP_MAIN_MENU,
+    XDATA_STEP_STATS,
+    XDATA_STEP_CHIPS
+};
 
-static inline int st0(const beNDMWShopCtrl10 *self) { return self->_st0; }
+/* Results of the XDATA main menu. */
+enum XdataMenu {
+    XDATA_MENU_STATS,
+    XDATA_MENU_CHIPS,
+    XDATA_MENU_LEAVE
+};
 
-void Gap__Bec__beNDMWShopCtrl10__vfunc_21(beNDMWShopCtrl10 *self)
+/* Substeps (_st2) of the stat upgrade step. */
+enum XdataStatsSubstep {
+    XDATA_STATS_OPEN_LIST,
+    XDATA_STATS_CHOOSE,
+    XDATA_STATS_QUOTE,
+    XDATA_STATS_CONFIRM,
+    XDATA_STATS_UPGRADED,
+    XDATA_STATS_CONTINUE
+};
+
+/* Stats on the XDATA stat list, in list order. */
+enum XdataStat {
+    XDATA_STAT_STRENGTH,
+    XDATA_STAT_DEFENSE,
+    XDATA_STAT_WISDOM,
+    XDATA_STAT_SPIRIT,
+    XDATA_STAT_SPEED,
+    XDATA_STAT_MAX_HP,
+    XDATA_STAT_MAX_MP,
+    XDATA_STAT_COUNT
+};
+
+/* Slots of the player's UPCNT list: upgrades bought per stat. */
+enum UpgradeCountSlot {
+    UPCNT_MAX_HP,
+    UPCNT_MAX_MP,
+    UPCNT_STRENGTH,
+    UPCNT_DEFENSE,
+    UPCNT_WISDOM,
+    UPCNT_SPIRIT,
+    UPCNT_SPEED
+};
+
+/* txt_shop.lua message numbers of the XDATA service. */
+enum XdataMessage {
+    XDATA_MSG_MAIN_MENU = 1150,
+    XDATA_MSG_STAT_HELP = 1154,
+    XDATA_MSG_NOT_ENOUGH_XDATA = 1161,
+    XDATA_MSG_STAT_AT_LIMIT = 1162,
+    XDATA_MSG_CONFIRM = 1163,
+    XDATA_MSG_UPGRADED = 1165,
+    XDATA_MSG_CONTINUE = 1166
+};
+
+enum {
+    XDATA_STAT_CAP = 9999,
+    XDATA_HP_MP_CAP = 99999,
+    XDATA_COST_FREE_STAT = 45,
+    XDATA_COST_STEP = 5,
+    XDATA_COST_MAX = 400,
+    QUOTE_PROMPT_ROWS = 4
+};
+
+/* XDATA price of one upgrade of a stat: one per started step of 5 above 45, at most 400 (a
+ * negative price becomes 1). */
+static inline void ComputeXdataCost(int &cost, int stat)
 {
-    Tbl7 names;
-    char buf[128];
-    Tbl7 arr2;
+    int remainder = (stat - XDATA_COST_FREE_STAT) % XDATA_COST_STEP;
+    int steps = (stat - XDATA_COST_FREE_STAT - remainder) / XDATA_COST_STEP;
+    cost = steps + (remainder != 0);
+    cost = cost > XDATA_COST_MAX ? XDATA_COST_MAX : (cost < 0 ? 1 : cost);
+}
+
+/* Adds one to a list entry; the entry is read before the bounds test. */
+static inline void IntList_Increment(igIntList *list, int index)
+{
+    int count;
+    int *entries;
+    int *slot;
+    int incremented;
+    entries = (int *)list->_data;
+    slot = &entries[index];
+    count = list->_count;
+    incremented = *slot + 1;
+    if (count != 0 && index < count) *slot = incremented;
+}
+
+void beNDMWShopCtrl10_Update(beNDMWShopCtrl10 *self)
+{
+    Tbl7 statFonts;
+    char remainingText[128];
+    Tbl7 quotePrompts;
+    void *allocator;
+
     switch (self->_st0) {
     default:
         return;
-    case 0:
-        self->_st0 = st0(self) + 1;
+    case SHOP_STATE_OPEN:
+        self->_st0 = CurrentState(self) + 1;
         self->_st3 = 0;
         self->_st2 = 0;
         self->_st1 = 0;
-        self->_st1 = 0;
-        self->_st3 = 0;
-        self->_st2 = 0;
-    case 1:
+        ENTER_STEP(self, XDATA_STEP_MAIN_MENU);
+    case SHOP_STATE_RUN:
         switch (self->_st1) {
-        case 0:
+        case XDATA_STEP_MAIN_MENU:
             switch (self->_st2) {
-            case 0:
+            case CHILD_OPEN:
+                PICK_ALLOCATOR(allocator, self);
                 {
-                NEWWIN(beNDMWShopSelect01, w364, FUN_003b4d90, 1150)
-                ((beNDMWShopSelect01 *)w364.p)->_startPoint = self->_xdataMenu;
+                    igSmartPointer<beNDMWShopSelect01> menu((beNDMWShopSelect01 *)beNDMWShopSelect01_Create(allocator));
+                    beNDMWWindow_BindContext(menu.p, self, self->_insight, self->_playerNo, XDATA_MSG_MAIN_MENU);
+                    ObjectList_AppendRetained(self->_subWindow, menu.p);
+                    menu.p->_startPoint = self->_xdataMenu;
                 }
-                self->_nowProcKazu = CNT;
-                self->_st2 = self->_st2 + 1;
-                self->_st3 = 0;
-            case 1:
-                if (CNT != self->_nowProcKazu) {
-                    self->_parameter = 0;
+                self->_nowProcKazu = CHILD_COUNT(self);
+                NEXT_PHASE(self);
+            case CHILD_WAIT:
+                if (CHILD_COUNT(self) != self->_nowProcKazu) {
+                    self->_parameter = XDATA_STAT_STRENGTH;
                     switch (self->_retCode) {
-                    case 0:
-                        self->_xdataMenu = 0;
-                        self->_st1 = 1;
-                        self->_st3 = 0;
-                        self->_st2 = 0;
+                    case XDATA_MENU_STATS:
+                        self->_xdataMenu = XDATA_MENU_STATS;
+                        ENTER_STEP(self, XDATA_STEP_STATS);
                         return;
-                    case 1:
-                        self->_xdataMenu = 1;
-                        self->_st1 = 2;
-                        self->_st3 = 0;
-                        self->_st2 = 0;
+                    case XDATA_MENU_CHIPS:
+                        self->_xdataMenu = XDATA_MENU_CHIPS;
+                        ENTER_STEP(self, XDATA_STEP_CHIPS);
                         return;
-                    case 2:
+                    case XDATA_MENU_LEAVE:
                     default:
-                        self->_st0 = self->_st0 + 1;
-                        self->_st3 = 0;
-                        self->_st2 = 0;
-                        self->_st1 = 0;
+                        NEXT_STATE(self);
                         return;
                     }
                 }
                 break;
             }
             break;
-        case 1:
+        case XDATA_STEP_STATS:
             switch (self->_st2) {
-            case 0:
-                beMessenger_SelectGroup(self->_messenger, ((char *)DAT_0051b398));
+            case XDATA_STATS_OPEN_LIST:
+                beMessenger_SelectGroup(self->_messenger, GAMERAM_14);
                 beMessenger_AppendInt(self->_messenger, self->_playerNo);
                 beMessenger_AppendBool(self->_messenger, 0);
-                beMessenger_DispatchSelected(self->_messenger, ((char *)DAT_0051b3a0));
+                beMessenger_DispatchSelected(self->_messenger, RECALCPLAYER_5);
+                PICK_ALLOCATOR(allocator, self);
                 {
-                NEWWIN(beNDMWShopSelect11, w360, FUN_003b4790, self->_parameter)
+                    igSmartPointer<beNDMWShopSelect11> statList((beNDMWShopSelect11 *)beNDMWShopSelect11_Create((int)allocator));
+                    beNDMWWindow_BindContext(statList.p, self, self->_insight, self->_playerNo, self->_parameter);
+                    ObjectList_AppendRetained(self->_subWindow, statList.p);
                 }
-                self->_nowProcKazu = CNT;
-                self->_st2 = self->_st2 + 1;
-                self->_st3 = 0;
+                self->_nowProcKazu = CHILD_COUNT(self);
+                NEXT_PHASE(self);
+                /* _st3: the stat whose help text is shown */
                 self->_st3 = self->_parameter;
                 return;
-            case 1:
-                if (CNT == self->_nowProcKazu) {
-                    int rc = self->_retCode;
-                    if (rc != -1 && rc != self->_st3) {
-                        beNDMWWindow_RunMessageScript(self, ((char *)DAT_0051b3b0), rc + 1154);
+            case XDATA_STATS_CHOOSE:
+                if (CHILD_COUNT(self) == self->_nowProcKazu) {
+                    int highlighted = self->_retCode;
+                    if (highlighted != SELECT_NONE && highlighted != self->_st3) {
+                        beNDMWWindow_RunMessageScript(self, txt_shop_lua_2, highlighted + XDATA_MSG_STAT_HELP);
                         self->_st3 = self->_retCode;
                     }
                     break;
-                } else {
-                    int obj;
-                    int limit;
-                    int need;
-                    int have;
-                    int money;
-                    char *key;
+                }
+                {
+                    int player;
+                    int statCap;
+                    int cost;
+                    int xdata;
+                    int statValue;
+                    const void *statKey;
                     int i;
-                    int *np;
-                    int *q;
-                    names = DAT_004cf950;
-                    np = names.v;
-                    i = 0;
-                    q = np;
-                    for (; i < 7; i++) {
-                        beMessenger_SelectGroup(self->_messenger, ((char *)TEXTCTL_3));
-                        beMessenger_AppendString(self->_messenger, ((char *)STWINFONT14));
-                        beMessenger_AppendString(self->_messenger, (void *)*q);
-                        beMessenger_DispatchSelected(self->_messenger, ((char *)DAT_0051b3d8));
-                        q++;
+                    statFonts = g_xdataStatFontNames;
+                    for (i = 0; i < XDATA_STAT_COUNT; i++) {
+                        beMessenger_SelectGroup(self->_messenger, TEXTCTL_3);
+                        beMessenger_AppendString(self->_messenger, STWINFONT14);
+                        beMessenger_AppendString(self->_messenger, (void *)statFonts.v[i]);
+                        beMessenger_DispatchSelected(self->_messenger, DEFAULTCOLOR_5);
                     }
-                    beMessenger_SelectGroup(self->_messenger, ((char *)DAT_0051b398));
-                    beMessenger_AppendInt(self->_messenger, self->_playerNo);
-                    beMessenger_DispatchSelected(self->_messenger, ((char *)DAT_0051b3e8));
-                    obj = beMessenger_GetObject(self->_messenger, 0);
-                    limit = 9999;
+                    REQUEST_PLAYER(self);
+                    player = beMessenger_GetObject(self->_messenger, 0);
+                    statCap = XDATA_STAT_CAP;
                     switch (self->_retCode) {
                     default:
-                        self->_st1 = 0;
-                        self->_st3 = 0;
-                        self->_st2 = 0;
+                        ENTER_STEP(self, XDATA_STEP_MAIN_MENU);
                         return;
-                    case 0: key = ((char *)DAT_0051b3f8); break;
-                    case 1: key = DAT_0051b400; break;
-                    case 2: key = ((char *)DAT_0051b408); break;
-                    case 3: key = ((char *)DAT_0051b418); break;
-                    case 4: key = ((char *)DAT_0051b420); break;
-                    case 5: key = DAT_0051b430; limit = 99999; break;
-                    case 6: key = DAT_0051b438; limit = 99999; break;
+                    case XDATA_STAT_STRENGTH: statKey = TSUYOSA_4; break;
+                    case XDATA_STAT_DEFENSE: statKey = MAMORI_3; break;
+                    case XDATA_STAT_WISDOM: statKey = KASHIKOSA_4; break;
+                    case XDATA_STAT_SPIRIT: statKey = SEISHIN_4; break;
+                    case XDATA_STAT_SPEED: statKey = SUBAYASA_4; break;
+                    case XDATA_STAT_MAX_HP: statKey = MHP_5; statCap = XDATA_HP_MP_CAP; break;
+                    case XDATA_STAT_MAX_MP: statKey = MMP_6; statCap = XDATA_HP_MP_CAP; break;
                     }
-                    money = *(int *)(((int)igProperty_GetRecord(obj, key)) + 12);
-                    CEILD(need, money)
-                    need = need > 400 ? 400 : (need < 0 ? 1 : need);
+                    statValue = PlayerInt(player, statKey)->_data;
+                    ComputeXdataCost(cost, statValue);
                     self->_parameter = self->_retCode;
+                    PICK_ALLOCATOR(allocator, self);
                     {
-                    NEWWIN(beNDMWShopSelect00, w356, beNDMWShopSelect00_Create, 0)
-                    self->_st2 = self->_st2 + 1;
-                    self->_st3 = 0;
-                    have = *(int *)(((int)igProperty_GetRecord(obj, ((char *)DAT_0051b440))) + 12);
-                    if (money >= limit) {
-                        ((beNDMWWindow *)w356.p)->_entCode = 1162;
-                        self->_st3 = 0;
-                    } else if (have < need) {
-                        ((beNDMWWindow *)w356.p)->_entCode = 1161;
-                        self->_st3 = 0;
-                    } else {
-                        int j;
-                        beNDMWWindow_QueueText(w356.p, ((char *)DAT_0051b448), ((char *)DAT_0051b220), DAT_0051b458, ((char *)DAT_0051b460));
-                        sprintf(buf, ((char *)percent_d), have - need);
-                        beNDMWWindow_QueueText(w356.p, ((char *)DAT_0051b448), ((char *)DAT_0051b248), buf, ((char *)DAT_0051b460));
-                        for (j = 0; j < 4; j++) {
-                            APPENDSTR(((beNDMWWindow *)w356.p)->_textCloseTypeList, ((char *)DAT_0051b448))
-                            { int *t = (int *)*np; APPENDSTR(((beNDMWWindow *)w356.p)->_textCloseNameList, t) }
-                            np++;
+                        igSmartPointer<beNDMWShopSelect00> quote((beNDMWShopSelect00 *)beNDMWShopSelect00_Create(allocator));
+                        beNDMWWindow_BindContext(quote.p, self, self->_insight, self->_playerNo, 0);
+                        ObjectList_AppendRetained(self->_subWindow, quote.p);
+                        NEXT_PHASE(self);
+                        xdata = PlayerInt(player, XDATA_4)->_data;
+                        /* _st3: whether the quote offers the upgrade */
+                        if (statValue >= statCap) {
+                            quote.p->_entCode = XDATA_MSG_STAT_AT_LIMIT;
+                            self->_st3 = 0;
+                        } else if (xdata < cost) {
+                            quote.p->_entCode = XDATA_MSG_NOT_ENOUGH_XDATA;
+                            self->_st3 = 0;
+                        } else {
+                            int j;
+                            beNDMWWindow_QueueText(quote.p, STWINFONT41, font011_3, plus1, RIGHT_3);
+                            sprintf(remainingText, percent_d, xdata - cost);
+                            beNDMWWindow_QueueText(quote.p, STWINFONT41, font012, remainingText, RIGHT_3);
+                            for (j = 0; j < QUOTE_PROMPT_ROWS; j++) {
+                                StringList_AppendRetained(quote.p->_textCloseTypeList, StringRef(InternString((const char *)STWINFONT41)));
+                                StringList_AppendRetained(quote.p->_textCloseNameList, StringRef(InternString((const char *)statFonts.v[j])));
+                            }
+                            StringList_AppendRetained(quote.p->_textCloseTypeList, StringRef(InternString((const char *)STWINFONT41)));
+                            StringList_AppendRetained(quote.p->_textCloseNameList, StringRef(InternString((const char *)font011_3)));
+                            StringList_AppendRetained(quote.p->_textCloseTypeList, StringRef(InternString((const char *)STWINFONT41)));
+                            StringList_AppendRetained(quote.p->_textCloseNameList, StringRef(InternString((const char *)font012)));
+                            StringList_AppendRetained(quote.p->_textCloseTypeList, StringRef(InternString(STWINFONT29)));
+                            StringList_AppendRetained(quote.p->_textCloseNameList, StringRef(InternString((const char *)statFonts.v[2])));
+                            quotePrompts = g_xdataStatPromptIds;
+                            quote.p->_entCode = quotePrompts.v[self->_retCode];
+                            self->_st3 = 1;
                         }
-                        APPENDSTR(((beNDMWWindow *)w356.p)->_textCloseTypeList, ((char *)DAT_0051b448))
-                        APPENDSTR(((beNDMWWindow *)w356.p)->_textCloseNameList, ((char *)DAT_0051b220))
-                        APPENDSTR(((beNDMWWindow *)w356.p)->_textCloseTypeList, ((char *)DAT_0051b448))
-                        APPENDSTR(((beNDMWWindow *)w356.p)->_textCloseNameList, ((char *)DAT_0051b248))
-                        APPENDSTR(((beNDMWWindow *)w356.p)->_textCloseTypeList, ((char *)STWINFONT29))
-                        { int *t = (int *)names.v[2]; APPENDSTR(((beNDMWWindow *)w356.p)->_textCloseNameList, t) }
-                        arr2 = DAT_004cf970;
-                        ((beNDMWWindow *)w356.p)->_entCode = arr2.v[self->_retCode];
-                        self->_st3 = 1;
                     }
-                    }
-                    self->_nowProcKazu = CNT;
+                    self->_nowProcKazu = CHILD_COUNT(self);
                     return;
                 }
                 break;
-            case 2:
-                if (CNT != self->_nowProcKazu) {
-switch (self->_st3) { case 0: default: { self->_st1 = 1; self->_st3 = 0; self->_st2 = 0; return; } case 1: break; }
-                    {
-                    NEWWIN(beNDMWShopSelect01, w352, FUN_003b4d90, 1163)
-                    }
-                    self->_nowProcKazu = CNT;
-                    self->_st2 = self->_st2 + 1;
-                    self->_st3 = 0;
-                    return;
-                }
-                break;
-            case 3:
-                if (CNT != self->_nowProcKazu) {
-                    switch (self->_retCode) {
-                    case 0: {
-                        int obj;
-                        char *key;
-                        int need;
-                        int have;
-                        igIntList *lst;
-                        beMessenger_SelectGroup(self->_messenger, ((char *)DAT_0051b398));
-                        beMessenger_AppendInt(self->_messenger, self->_playerNo);
-                        beMessenger_DispatchSelected(self->_messenger, ((char *)DAT_0051b3e8));
-                        obj = beMessenger_GetObject(self->_messenger, 0);
-                        switch (self->_parameter) {
-                        case 0: key = ((char *)DAT_0051b3f8); break;
-                        case 1: key = DAT_0051b400; break;
-                        case 2: key = ((char *)DAT_0051b408); break;
-                        case 3: key = ((char *)DAT_0051b418); break;
-                        case 4: key = ((char *)DAT_0051b420); break;
-                        case 5: key = DAT_0051b430; break;
-                        case 6: key = DAT_0051b438; break;
-                        }
-                        CEILD(need, *(int *)(((int)igProperty_GetRecord(obj, key)) + 12))
-                        need = need > 400 ? 400 : (need < 0 ? 1 : need);
-                        have = *(int *)(((int)igProperty_GetRecord(obj, ((char *)DAT_0051b440))) + 12);
-                        { int rec = ((int)igProperty_GetRecord(obj, ((char *)DAT_0051b440))); *(int *)(rec + 12) = have - need; }
-                        lst = (igIntList *)*(int *)(((int)igProperty_GetRecordIntList(obj, DAT_0051b480)) + 12);
-                        switch (self->_parameter) {
-                        case 0: INC(lst, 2) break;
-                        case 1: INC(lst, 3) break;
-                        case 2: INC(lst, 4) break;
-                        case 3: INC(lst, 5) break;
-                        case 4: INC(lst, 6) break;
-                        case 5: INC(lst, 0) break;
-                        case 6: INC(lst, 1) break;
-                        }
-                        beMessenger_SelectGroup(self->_messenger, ((char *)DAT_0051b398));
-                        beMessenger_AppendInt(self->_messenger, self->_playerNo);
-                        beMessenger_DispatchSelected(self->_messenger, ((char *)DAT_0051b3a0));
-                        beMessenger_SelectGroup(self->_messenger, ((char *)DAT_0051b398));
-                        beMessenger_AppendInt(self->_messenger, self->_playerNo);
-                        beMessenger_DispatchSelected(self->_messenger, ((char *)DAT_0051b3e8));
-                        obj = beMessenger_GetObject(self->_messenger, 0);
-                        {
-                            int a = *(int *)(((int)igProperty_GetRecord(obj, DAT_0051b430)) + 12);
-                            *(int *)(((int)igProperty_GetRecord(obj, DAT_0051b488)) + 12) = a;
-                            a = *(int *)(((int)igProperty_GetRecord(obj, DAT_0051b438)) + 12);
-                            *(int *)(((int)igProperty_GetRecord(obj, DAT_0051b490)) + 12) = a;
-                        }
-                        beMessenger_SelectGroup(self->_messenger, ((char *)DAT_0051b498));
-                        beMessenger_AppendInt(self->_messenger, self->_playerNo);
-                        beMessenger_DispatchSelected(self->_messenger, ((char *)DAT_0051b4a0));
-                        {
-                        NEWWIN(beNDMWShopSelect00, w348, beNDMWShopSelect00_Create, 1165)
-                        }
-                        self->_nowProcKazu = CNT;
-                        self->_st2 = self->_st2 + 1;
-                        self->_st3 = 0;
-                        return;
-                    }
-                    case 1:
-                    default:
-                        self->_st1 = 1;
-                        self->_st3 = 0;
-                        self->_st2 = 0;
-                        return;
-                    }
-                }
-                break;
-            case 4:
-                if (CNT != self->_nowProcKazu) {
-                    {
-                    NEWWIN(beNDMWShopSelect01, w344, FUN_003b4d90, 1166)
-                    }
-                    self->_nowProcKazu = CNT;
-                    self->_st2 = self->_st2 + 1;
-                    self->_st3 = 0;
-                    return;
-                }
-                break;
-            case 5:
-                if (CNT != self->_nowProcKazu) {
-                    switch (self->_retCode) {
+            case XDATA_STATS_QUOTE:
+                if (CHILD_COUNT(self) != self->_nowProcKazu) {
+                    switch (self->_st3) {
                     case 0:
-                        self->_st1 = 1;
-                        self->_st3 = 0;
-                        self->_st2 = 0;
+                    default:
+                        ENTER_STEP(self, XDATA_STEP_STATS);
                         return;
                     case 1:
+                        break;
+                    }
+                    PICK_ALLOCATOR(allocator, self);
+                    {
+                        igSmartPointer<beNDMWShopSelect01> confirm((beNDMWShopSelect01 *)beNDMWShopSelect01_Create(allocator));
+                        beNDMWWindow_BindContext(confirm.p, self, self->_insight, self->_playerNo, XDATA_MSG_CONFIRM);
+                        ObjectList_AppendRetained(self->_subWindow, confirm.p);
+                    }
+                    self->_nowProcKazu = CHILD_COUNT(self);
+                    NEXT_PHASE(self);
+                    return;
+                }
+                break;
+            case XDATA_STATS_CONFIRM:
+                if (CHILD_COUNT(self) != self->_nowProcKazu) {
+                    switch (self->_retCode) {
+                    case ANSWER_YES: {
+                        int player;
+                        const void *statKey;
+                        int cost;
+                        int xdata;
+                        igIntList *upgradeCounts;
+                        REQUEST_PLAYER(self);
+                        player = beMessenger_GetObject(self->_messenger, 0);
+                        switch (self->_parameter) {
+                        case XDATA_STAT_STRENGTH: statKey = TSUYOSA_4; break;
+                        case XDATA_STAT_DEFENSE: statKey = MAMORI_3; break;
+                        case XDATA_STAT_WISDOM: statKey = KASHIKOSA_4; break;
+                        case XDATA_STAT_SPIRIT: statKey = SEISHIN_4; break;
+                        case XDATA_STAT_SPEED: statKey = SUBAYASA_4; break;
+                        case XDATA_STAT_MAX_HP: statKey = MHP_5; break;
+                        case XDATA_STAT_MAX_MP: statKey = MMP_6; break;
+                        }
+                        ComputeXdataCost(cost, PlayerInt(player, statKey)->_data);
+                        xdata = PlayerInt(player, XDATA_4)->_data;
+                        PlayerInt(player, XDATA_4)->_data = xdata - cost;
+                        upgradeCounts = (igIntList *)((beDataObjIntList *)igProperty_GetRecordIntList(player, UPCNT_3))->_data;
+                        switch (self->_parameter) {
+                        case XDATA_STAT_STRENGTH: IntList_Increment(upgradeCounts, UPCNT_STRENGTH); break;
+                        case XDATA_STAT_DEFENSE: IntList_Increment(upgradeCounts, UPCNT_DEFENSE); break;
+                        case XDATA_STAT_WISDOM: IntList_Increment(upgradeCounts, UPCNT_WISDOM); break;
+                        case XDATA_STAT_SPIRIT: IntList_Increment(upgradeCounts, UPCNT_SPIRIT); break;
+                        case XDATA_STAT_SPEED: IntList_Increment(upgradeCounts, UPCNT_SPEED); break;
+                        case XDATA_STAT_MAX_HP: IntList_Increment(upgradeCounts, UPCNT_MAX_HP); break;
+                        case XDATA_STAT_MAX_MP: IntList_Increment(upgradeCounts, UPCNT_MAX_MP); break;
+                        }
+                        RECALC_PLAYER(self);
+                        REQUEST_PLAYER(self);
+                        player = beMessenger_GetObject(self->_messenger, 0);
+                        FillHpMp(player);
+                        UPDATE_SUBWINDOW(self);
+                        PICK_ALLOCATOR(allocator, self);
+                        {
+                            igSmartPointer<beNDMWShopSelect00> notice((beNDMWShopSelect00 *)beNDMWShopSelect00_Create(allocator));
+                            beNDMWWindow_BindContext(notice.p, self, self->_insight, self->_playerNo, XDATA_MSG_UPGRADED);
+                            ObjectList_AppendRetained(self->_subWindow, notice.p);
+                        }
+                        self->_nowProcKazu = CHILD_COUNT(self);
+                        NEXT_PHASE(self);
+                        return;
+                    }
+                    case ANSWER_NO:
                     default:
-                        self->_st1 = 0;
-                        self->_st3 = 0;
-                        self->_st2 = 0;
+                        ENTER_STEP(self, XDATA_STEP_STATS);
+                        return;
+                    }
+                }
+                break;
+            case XDATA_STATS_UPGRADED:
+                if (CHILD_COUNT(self) != self->_nowProcKazu) {
+                    PICK_ALLOCATOR(allocator, self);
+                    {
+                        igSmartPointer<beNDMWShopSelect01> question((beNDMWShopSelect01 *)beNDMWShopSelect01_Create(allocator));
+                        beNDMWWindow_BindContext(question.p, self, self->_insight, self->_playerNo, XDATA_MSG_CONTINUE);
+                        ObjectList_AppendRetained(self->_subWindow, question.p);
+                    }
+                    self->_nowProcKazu = CHILD_COUNT(self);
+                    NEXT_PHASE(self);
+                    return;
+                }
+                break;
+            case XDATA_STATS_CONTINUE:
+                if (CHILD_COUNT(self) != self->_nowProcKazu) {
+                    switch (self->_retCode) {
+                    case ANSWER_YES:
+                        ENTER_STEP(self, XDATA_STEP_STATS);
+                        return;
+                    case ANSWER_NO:
+                    default:
+                        ENTER_STEP(self, XDATA_STEP_MAIN_MENU);
                         return;
                     }
                 }
                 break;
             }
             break;
-        case 2:
+        case XDATA_STEP_CHIPS:
             switch (self->_st2) {
-            case 0:
-                beMessenger_SelectGroup(self->_messenger, ((char *)DAT_0051b398));
-                beMessenger_AppendInt(self->_messenger, self->_playerNo);
-                beMessenger_DispatchSelected(self->_messenger, ((char *)DAT_0051b3a0));
+            case CHILD_OPEN:
+                RECALC_PLAYER(self);
+                PICK_ALLOCATOR(allocator, self);
                 {
-                NEWWIN(beNDMWShopCtrlXdataChip, w340, FUN_003b6940, 0)
+                    igSmartPointer<beNDMWShopCtrlXdataChip> chips((beNDMWShopCtrlXdataChip *)beNDMWShopCtrlXdataChip_Create((int)allocator));
+                    beNDMWWindow_BindContext(chips.p, self, self->_insight, self->_playerNo, 0);
+                    ObjectList_AppendRetained(self->_subWindow, chips.p);
                 }
-                self->_nowProcKazu = CNT;
-                self->_st2 = self->_st2 + 1;
-                self->_st3 = 0;
-            case 1:
-                if (CNT != self->_nowProcKazu) {
-                    self->_st1 = 0;
-                    self->_st3 = 0;
-                    self->_st2 = 0;
+                self->_nowProcKazu = CHILD_COUNT(self);
+                NEXT_PHASE(self);
+            case CHILD_WAIT:
+                if (CHILD_COUNT(self) != self->_nowProcKazu) {
+                    ENTER_STEP(self, XDATA_STEP_MAIN_MENU);
                     self->_st3 = 1;
                     return;
                 }
@@ -1193,30 +1215,19 @@ switch (self->_st3) { case 0: default: { self->_st1 = 1; self->_st3 = 0; self->_
             break;
         }
         break;
-    case 2: {
-        int obj;
-        int a;
-        beMessenger_SelectGroup(self->_messenger, ((char *)DAT_0051b398));
-        beMessenger_AppendInt(self->_messenger, self->_playerNo);
-        beMessenger_DispatchSelected(self->_messenger, ((char *)DAT_0051b3a0));
-        beMessenger_SelectGroup(self->_messenger, ((char *)DAT_0051b398));
-        beMessenger_AppendInt(self->_messenger, self->_playerNo);
-        beMessenger_DispatchSelected(self->_messenger, ((char *)DAT_0051b3e8));
-        obj = beMessenger_GetObject(self->_messenger, 0);
-        a = *(int *)(((int)igProperty_GetRecord(obj, DAT_0051b430)) + 12);
-        *(int *)(((int)igProperty_GetRecord(obj, DAT_0051b488)) + 12) = a;
-        a = *(int *)(((int)igProperty_GetRecord(obj, DAT_0051b438)) + 12);
-        *(int *)(((int)igProperty_GetRecord(obj, DAT_0051b490)) + 12) = a;
+    case SHOP_STATE_CLOSE: {
+        int player;
+        RECALC_PLAYER(self);
+        REQUEST_PLAYER(self);
+        player = beMessenger_GetObject(self->_messenger, 0);
+        FillHpMp(player);
         beNDMWWindow_PlayQueuedModelClose(self);
         beNDMWWindow_ClearQueuedText(self);
         beNDMWWindow_RequestChildrenClose(self);
-        self->_st0 = self->_st0 + 1;
-        self->_st3 = 0;
-        self->_st2 = 0;
-        self->_st1 = 0;
+        NEXT_STATE(self);
         return;
     }
-    case 3:
+    case SHOP_STATE_WAIT_CLOSED:
         if (beNDMWWindow_PollCloseComplete(self) != 0) {
             self->_isRun = 0;
         }
@@ -1224,847 +1235,836 @@ switch (self->_st3) { case 0: default: { self->_st1 = 1; self->_st3 = 0; self->_
     }
 }
 
+/* Steps (_st1) of the BANK service. */
+enum BankStep {
+    BANK_STEP_MAIN_MENU,
+    BANK_STEP_KIND_MENU,
+    BANK_STEP_DEPOSIT_DEVICES,
+    BANK_STEP_WITHDRAW_DEVICES,
+    BANK_STEP_DEPOSIT_BITS,
+    BANK_STEP_WITHDRAW_BITS,
+    BANK_STEP_NOTICE
+};
 
+/* Results of the BANK main menu (kept in _bankMenu). */
+enum BankMenu {
+    BANK_MENU_DEPOSIT,
+    BANK_MENU_WITHDRAW,
+    BANK_MENU_LEAVE
+};
 
+/* Results of the BANK "what to move" menu. */
+enum BankKind {
+    BANK_KIND_DEVICES,
+    BANK_KIND_BITS
+};
 
-static inline int st0_428790(const beNDMWShopCtrl30 *ctrl) { return ctrl->_st0; }
+/* Substeps (_st2) of the device deposit/withdraw steps. */
+enum BankDevicesSubstep {
+    BANK_DEVICES_OPEN_LIST,
+    BANK_DEVICES_CHOOSE,
+    BANK_DEVICES_OPEN_NOTICE,
+    BANK_DEVICES_WAIT_NOTICE,
+    BANK_DEVICES_WAIT_LIST_CLOSED = 5
+};
 
-void Gap__Bec__beNDMWShopCtrl30__vfunc_21(beNDMWShopCtrl30 *arg0) {
-    void *alloc;
-    beNDMWStatusCtrlD0 *wa; int ia;
-    beNDMWStatusCtrlD0 *wb; int ib;
-    beNDMWStatusCtrlD0 *wc; int ic;
-    int amt;
-    void *pl;
-    int x;
-    int y;
-    switch (arg0->_st0) {
-    case 0:
-        arg0->_st0 = st0_428790(arg0) + 1;
-        arg0->_st3 = 0;
-        arg0->_st2 = 0;
-        arg0->_st1 = 0;
-    case 1:
-        switch (arg0->_st1) {
-        case 0:
-            switch (arg0->_st2) {
-            case 0:
-                alloc = igObject_GetAllocator(arg0);
-                alloc = GPR_00554c14 ? alloc : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
-                {
-                igSmartPointer<beNDMWShopSelect01> win((beNDMWShopSelect01 *)FUN_003b4d90(alloc));
-                beNDMWWindow_BindContext(win.p, arg0, arg0->_insight, arg0->_playerNo, 0x546);
-                ObjectList_AppendRetained((void *)arg0->_subWindow, win.p);
-                ((beNDMWShopSelect01 *)win.p)->_startPoint = arg0->_bankMenu;
-                }
-                arg0->_nowProcKazu = LCNT(arg0->_subWindow);
-                arg0->_st2 = arg0->_st2 + 1;
-                arg0->_st3 = 0;
-            case 1:
-                if (LCNT(arg0->_subWindow) != arg0->_nowProcKazu) {
-                    switch (arg0->_retCode) {
-                    case 0:
-                    case 1:
-                        arg0->_bankMenu = arg0->_retCode;
-                        arg0->_st1 = 1;
-                        arg0->_st3 = 0;
-                        arg0->_st2 = 0;
-                        return;
-                    case 2:
-                    default:
-                        arg0->_st0 = arg0->_st0 + 1;
-                        arg0->_st3 = 0;
-                        arg0->_st2 = 0;
-                        arg0->_st1 = 0;
-                        return;
-                    }
-                }
-                break;
-            }
-            break;
-        case 1:
-            switch (arg0->_st2) {
-            case 0:
-                alloc = igObject_GetAllocator(arg0);
-                alloc = GPR_00554c14 ? alloc : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
-                {
-                igSmartPointer<beNDMWShopSelect01> win((beNDMWShopSelect01 *)FUN_003b4d90(alloc));
-                beNDMWWindow_BindContext(win.p, arg0, arg0->_insight, arg0->_playerNo, 0x54B);
-                ObjectList_AppendRetained((void *)arg0->_subWindow, win.p);
-                }
-                arg0->_nowProcKazu = LCNT(arg0->_subWindow);
-                arg0->_st2 = arg0->_st2 + 1;
-                arg0->_st3 = 0;
-            case 1:
-                if (LCNT(arg0->_subWindow) != arg0->_nowProcKazu) {
-                    switch (arg0->_retCode) {
-                    case 0: {
-                        void *pl;
-                        igObjectList *l;
-                        beMessenger_SelectGroup(arg0->_messenger, &DAT_0051b398[0]);
-                        beMessenger_AppendInt(arg0->_messenger, arg0->_playerNo);
-                        beMessenger_DispatchSelected(arg0->_messenger, &DAT_0051b3e8[0]);
-                        pl = ((void *)beMessenger_GetObject(arg0->_messenger, 0));
-                        igProperty_GetRecordFolder(pl, &DAT_0051b528[0]);
-                        l = ((Fld *)igProperty_GetRecordFolder(pl, &DAT_0051b538[0]))->f12;
-                        if (arg0->_bankMenu == 0) {
-                            arg0->_st1 = 2;
-                            arg0->_st3 = 0;
-                            arg0->_st2 = 0;
-                            return;
-                        }
-                        if (l->_count <= 0) {
-                            arg0->_st1 = 6;
-                            arg0->_st3 = 0;
-                            arg0->_st2 = 0;
-                            arg0->_st3 = 0x55E;
-                            return;
-                        }
-                        arg0->_st1 = 3;
-                        arg0->_st3 = 0;
-                        arg0->_st2 = 0;
-                        return;
-                    }
-                    case 1:
-                        if (arg0->_bankMenu == 0) {
-                            arg0->_st1 = 4;
-                            arg0->_st3 = 0;
-                            arg0->_st2 = 0;
-                            return;
-                        }
-                        arg0->_st1 = 5;
-                        arg0->_st3 = 0;
-                        arg0->_st2 = 0;
-                        return;
-                    default:
-                        arg0->_st1 = 0;
-                        arg0->_st3 = 0;
-                        arg0->_st2 = 0;
-                        return;
-                    }
-                }
-                break;
-            }
-            break;
-        case 2:
-        case 3:
-            switch (arg0->_st2) {
-            case 0:
-                alloc = igObject_GetAllocator(arg0);
-                alloc = GPR_00554c14 ? alloc : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
-                {
-                igSmartPointer<beNDMWStatusCtrlD0> win((beNDMWStatusCtrlD0 *)beNDMWStatusCtrlD0_Create(alloc));
-                beNDMWWindow_BindContext(win.p, arg0, arg0->_insight, arg0->_playerNo, 0);
-                ObjectList_AppendRetained((void *)arg0->_subWindow, win.p);
-                ((beNDMWStatusCtrlD0 *)win.p)->_isAutoClose = 0;
-                ((beNDMWStatusCtrlD0 *)win.p)->_isEquipDisable = 1;
-                if (arg0->_st1 == 3) ((beNDMWStatusCtrlD0 *)win.p)->_isBankFolder = 1;
-                }
-                switch (arg0->_st1) {
-                case 2:
-                    beNDMWWindow_RunMessageScript(arg0, &DAT_0051b3b0[0], 0x54D);
-                    break;
-                case 3:
-                    beNDMWWindow_RunMessageScript(arg0, &DAT_0051b3b0[0], 0x554);
-                    break;
-                }
-                arg0->_nowProcKazu = LCNT(arg0->_subWindow);
-                arg0->_st2 = arg0->_st2 + 1;
-                arg0->_st3 = 0;
-                return;
-            case 1:
-                FINDWIN(wa, ia)
-                if (wa != 0) {
-                    if (arg0->_retCode == -1) {
-                        wa->_st0 = wa->_st0 + 1;
-                        wa->_st3 = 0;
-                        wa->_st2 = 0;
-                        wa->_st1 = 0;
-                        arg0->_st2 = 5;
-                        arg0->_st3 = 0;
-                        beMessenger_SelectGroup(arg0->_messenger, TEXTCTL_3);
-                        beMessenger_AppendString(arg0->_messenger, STWINFONT29);
-                        beMessenger_AppendString(arg0->_messenger, &DAT_0051b548[0]);
-                        beMessenger_AppendString(arg0->_messenger, DISPOFF);
-                        beMessenger_DispatchSelected(arg0->_messenger, SWITCH_2);
-                        return;
-                    }
-                    if (wa->_st0 == 1 && wa->_st1 == 2) {
-                        void *pl;
-                        igObjectList *la;
-                        igObjectList *lb;
-                        beNDMWItemBase *it;
-                        int sw, rc;
-                        Fld *fb;
-                        beMessenger_SelectGroup(arg0->_messenger, &DAT_0051b398[0]);
-                        beMessenger_AppendInt(arg0->_messenger, arg0->_playerNo);
-                        beMessenger_DispatchSelected(arg0->_messenger, &DAT_0051b3e8[0]);
-                        pl = ((void *)beMessenger_GetObject(arg0->_messenger, 0));
-                        la = ((Fld *)igProperty_GetRecordFolder(pl, &DAT_0051b528[0]))->f12;
-                        fb = ((Fld *)igProperty_GetRecordFolder(pl, &DAT_0051b538[0]));
-                        sw = arg0->_st1;
-                        lb = fb->f12;
-                        rc = arg0->_retCode;
-                        switch (sw) {
-                        case 2:
-                            it = (beNDMWItemBase *)((int *)la->_data)[rc];
-                            if (lb->_count >= 0x60) {
-                                arg0->_st2 = 2;
-                                arg0->_st3 = 0;
-                                arg0->_st3 = 0x54E;
-                                return;
-                            }
-                            if (it->_isEquip == 0) {
-                                ObjectList_AppendRetained(lb, it);
-                                ObjectList_RemoveFirstRetained(la, it, 0);
-                            }
-                            wa->_st2 = 1;
-                            wa->_st3 = 0;
-                            return;
-                        case 3:
-                            it = (beNDMWItemBase *)((int *)lb->_data)[rc];
-                            if (la->_count >= 0x24) {
-                                arg0->_st2 = 2;
-                                arg0->_st3 = 0;
-                                arg0->_st3 = 0x555;
-                                return;
-                            }
-                            ObjectList_AppendRetained(la, it);
-                            ObjectList_RemoveFirstRetained(lb, it, 0);
-                            if (lb->_count <= 0) {
-                                arg0->_st2 = 2;
-                                arg0->_st3 = 0;
-                                arg0->_st3 = 0x55E;
-                                beNDMWStatusCtrlD0_RefreshText(wa, 1, 0);
-                                return;
-                            }
-                            wa->_st2 = 1;
-                            wa->_st3 = 0;
-                            return;
-                        }
-                    }
-                }
-                break;
-            case 2:
-                beMessenger_SelectGroup(arg0->_messenger, TEXTCTL_3);
-                beMessenger_AppendString(arg0->_messenger, STWINFONT29);
-                beMessenger_AppendString(arg0->_messenger, &DAT_0051b548[0]);
-                beMessenger_AppendString(arg0->_messenger, DISPOFF);
-                beMessenger_DispatchSelected(arg0->_messenger, SWITCH_2);
-                alloc = igObject_GetAllocator(arg0);
-                alloc = GPR_00554c14 ? alloc : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
-                {
-                igSmartPointer<beNDMWShopSelect00> win((beNDMWShopSelect00 *)beNDMWShopSelect00_Create(alloc));
-                beNDMWWindow_BindContext(win.p, arg0, arg0->_insight, arg0->_playerNo, arg0->_st3);
-                ObjectList_AppendRetained((void *)arg0->_subWindow, win.p);
-                }
-                arg0->_nowProcKazu = LCNT(arg0->_subWindow);
-                arg0->_st2 = arg0->_st2 + 1;
-                arg0->_st3 = 0;
-            case 3:
-                if (LCNT(arg0->_subWindow) != arg0->_nowProcKazu) {
-                    FINDWINV(wb, ib)
-                    if (wb != 0) {
-                        wb->_st0 = wb->_st0 + 1;
-                        wb->_st3 = 0;
-                        wb->_st2 = 0;
-                        wb->_st1 = 0;
-                        arg0->_st2 = 5;
-                        arg0->_st3 = 0;
-                        return;
-                    }
-                }
-                break;
-            case 5:
-                FINDWIN(wc, ic)
-                if (wc == 0) {
-                    arg0->_st1 = 0;
-                    arg0->_st3 = 0;
-                    arg0->_st2 = 0;
-                    return;
-                }
-                break;
-            }
-            break;
-        case 4:
-        case 5:
-            switch (arg0->_st2) {
-            case 0:
-                alloc = igObject_GetAllocator(arg0);
-                alloc = GPR_00554c14 ? alloc : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
-                {
-                igSmartPointer<beNDMWShopCtrlEditBit> win((beNDMWShopCtrlEditBit *)FUN_003b7520(alloc));
-                beNDMWWindow_BindContext(win.p, arg0, arg0->_insight, arg0->_playerNo, arg0->_bankMenu);
-                ObjectList_AppendRetained((void *)arg0->_subWindow, win.p);
-                }
-                arg0->_nowProcKazu = LCNT(arg0->_subWindow);
-                arg0->_st2 = arg0->_st2 + 1;
-                arg0->_st3 = 0;
-            case 1:
-                if (LCNT(arg0->_subWindow) != arg0->_nowProcKazu) {
-                    if (arg0->_retCode != -1) {
-                        beMessenger_SelectGroup(arg0->_messenger, &DAT_0051b398[0]);
-                        beMessenger_AppendInt(arg0->_messenger, arg0->_playerNo);
-                        beMessenger_DispatchSelected(arg0->_messenger, &DAT_0051b3e8[0]);
-                        pl = ((void *)beMessenger_GetObject(arg0->_messenger, 0));
-                        amt = arg0->_retCode;
-                        if (arg0->_bankMenu == 0) {
-                            x = igProperty_GetRecord(pl, &DAT_0051b560[0])->f12;
-                            y = igProperty_GetRecord(pl, &DAT_0051b568[0])->f12;
-                            x = x - amt;
-                            y = y + amt;
-                            igProperty_GetRecord(pl, &DAT_0051b560[0])->f12 = x;
-                            igProperty_GetRecord(pl, &DAT_0051b568[0])->f12 = y;
-                        } else {
-                            x = igProperty_GetRecord(pl, &DAT_0051b560[0])->f12;
-                            y = igProperty_GetRecord(pl, &DAT_0051b568[0])->f12;
-                            x = x + amt;
-                            y = y - amt;
-                            igProperty_GetRecord(pl, &DAT_0051b560[0])->f12 = x;
-                            igProperty_GetRecord(pl, &DAT_0051b568[0])->f12 = y;
-                        }
-                        beMessenger_SelectGroup(arg0->_messenger, &DAT_0051b498[0]);
-                        beMessenger_AppendInt(arg0->_messenger, arg0->_playerNo);
-                        beMessenger_DispatchSelected(arg0->_messenger, &DAT_0051b4a0[0]);
-                    }
-                    arg0->_st1 = 0;
-                    arg0->_st3 = 0;
-                    arg0->_st2 = 0;
-                    return;
-                }
-                break;
-            }
-            break;
-        case 6:
-            switch (arg0->_st2) {
-            case 0:
-                alloc = igObject_GetAllocator(arg0);
-                alloc = GPR_00554c14 ? alloc : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
-                {
-                igSmartPointer<beNDMWShopSelect00> win((beNDMWShopSelect00 *)beNDMWShopSelect00_Create(alloc));
-                beNDMWWindow_BindContext(win.p, arg0, arg0->_insight, arg0->_playerNo, arg0->_st3);
-                ObjectList_AppendRetained((void *)arg0->_subWindow, win.p);
-                }
-                arg0->_nowProcKazu = LCNT(arg0->_subWindow);
-                arg0->_st2 = arg0->_st2 + 1;
-                arg0->_st3 = 0;
-            case 1:
-                if (LCNT(arg0->_subWindow) != arg0->_nowProcKazu) {
-                    arg0->_st1 = 0;
-                    arg0->_st3 = 0;
-                    arg0->_st2 = 0;
-                    return;
-                }
-                break;
-            }
-            break;
-        }
-        break;
-    case 2:
-        beNDMWWindow_PlayQueuedModelClose(arg0);
-        beNDMWWindow_ClearQueuedText(arg0);
-        beNDMWWindow_RequestChildrenClose(arg0);
-        arg0->_st0 = arg0->_st0 + 1;
-        arg0->_st3 = 0;
-        arg0->_st2 = 0;
-        arg0->_st1 = 0;
-        return;
-    case 3:
-        if (beNDMWWindow_PollCloseComplete(arg0) != 0) {
-            arg0->_isRun = 0;
-        }
-        break;
-    }
+/* txt_shop.lua message numbers of the BANK service. */
+enum BankMessage {
+    BANK_MSG_MAIN_MENU = 1350,
+    BANK_MSG_KIND_MENU = 1355,
+    BANK_MSG_DEPOSIT_DEVICE = 1357,
+    BANK_MSG_BANK_FULL = 1358,
+    BANK_MSG_WITHDRAW_DEVICE = 1364,
+    BANK_MSG_DEVICE_FOLDER_FULL = 1365,
+    BANK_MSG_BANK_EMPTY = 1374
+};
+
+enum {
+    BANK_DEVICE_CAPACITY = 96,
+    DEVICE_FOLDER_CAPACITY = 36
+};
+
+/* The beNDMWStatusCtrlD0 run step in which a row has been picked, and the substep of it that
+ * reopens the list. */
+enum {
+    DEVICE_LIST_STEP_PICKED = 2,
+    DEVICE_LIST_REOPEN = 1
+};
+
+/* Hides the device step's prompt (the STWINFONT29 font100 text of messages 1357/1364). */
+template <class Window> static inline void HideDevicePrompt(Window *window)
+{
+    beMessenger_SelectGroup(window->_messenger, TEXTCTL_3);
+    beMessenger_AppendString(window->_messenger, STWINFONT29);
+    beMessenger_AppendString(window->_messenger, font100_3);
+    beMessenger_AppendString(window->_messenger, DISPOFF);
+    beMessenger_DispatchSelected(window->_messenger, SWITCH_2);
 }
 
-void Gap__Bec__beNDMWShopCtrl40__vfunc_21(beNDMWShopCtrl40 *arg0) {
-    void *alloc;
-    beNDMWWindow *wa;
-    int ia;
-    beNDMWWindow *wb;
-    int ib;
-    beNDMWWindow *wc;
-    int ic;
-    switch (arg0->_st0) {
-    case 0:
-        beNDMWWindow_QueueText(arg0, STWINFONT29, &DAT_0051b548[0], &DAT_0051b590[0], &DAT_0051b598[0]);
-        arg0->_st0 = arg0->_st0 + 1;
-        arg0->_st3 = 0;
-        arg0->_st2 = 0;
-        arg0->_st1 = 0;
-    case 1:
-        switch (arg0->_st1) {
-        case 0:
-            switch (arg0->_st2) {
-            case 0:
-                alloc = igObject_GetAllocator(arg0);
-                alloc = GPR_00554c14 ? alloc : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
-                {
-                    igSmartPointer<beNDMWStatusCtrlD0> spBC((beNDMWStatusCtrlD0 *)beNDMWStatusCtrlD0_Create(alloc));
-                    beNDMWWindow_BindContext(spBC.p, arg0, arg0->_insight, arg0->_playerNo, 0);
-                    ObjectList_AppendRetained((void *)arg0->_subWindow, spBC.p);
-                    ((Rc *)spBC.p)->f111 = 0;
-                    ((Rc *)spBC.p)->f109 = 1;
-                }
-                beNDMWWindow_RunMessageScript(arg0, &DAT_0051b3b0[0], 0x5AA);
-                arg0->_nowProcKazu = LCNT(arg0->_subWindow);
-                arg0->_st2 = arg0->_st2 + 1;
-                arg0->_st3 = 0;
-                return;
-            case 1:
-                FINDWIN_429630(wa, ia)
-                if (wa != 0) {
-                    if (arg0->_retCode == -1) {
-                        arg0->_st1 = 3;
-                        arg0->_st3 = 0;
-                        arg0->_st2 = 0;
-                        return;
-                    }
-                    if (wa->_st0 == 1 && wa->_st1 == 2) {
-                        arg0->_selectCursor = arg0->_retCode;
-                        beMessenger_SelectGroup(arg0->_messenger, &DAT_0051b398[0]);
-                        beMessenger_AppendInt(arg0->_messenger, arg0->_playerNo);
-                        beMessenger_DispatchSelected(arg0->_messenger, &DAT_0051b3e8[0]);
-                        if (igProperty_GetRecord(((void *)beMessenger_GetObject(arg0->_messenger, 0)), &DAT_0051b560[0])->f12 < 300) {
-                            arg0->_st1 = 2;
-                            arg0->_st3 = 0;
-                            arg0->_st2 = 0;
-                        } else {
-                            arg0->_st1 = 1;
-                            arg0->_st3 = 0;
-                            arg0->_st2 = 0;
-                        }
-                        beMessenger_SelectGroup(arg0->_messenger, TEXTCTL_3);
-                        beMessenger_AppendString(arg0->_messenger, STWINFONT29);
-                        beMessenger_AppendString(arg0->_messenger, &DAT_0051b548[0]);
-                        beMessenger_AppendString(arg0->_messenger, DISPOFF);
-                        beMessenger_DispatchSelected(arg0->_messenger, SWITCH_2);
-                        return;
-                    }
-                }
-                break;
-            }
-            break;
-        case 1:
-            switch (arg0->_st2) {
-            case 0:
-                alloc = igObject_GetAllocator(arg0);
-                alloc = GPR_00554c14 ? alloc : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
-                {
-                    igSmartPointer<beNDMWShopSelect00> spB8((beNDMWShopSelect00 *)beNDMWShopSelect00_Create(alloc));
-                    beNDMWWindow_BindContext(spB8.p, arg0, arg0->_insight, arg0->_playerNo, 0x5AC);
-                    ObjectList_AppendRetained((void *)arg0->_subWindow, spB8.p);
-                }
-                arg0->_nowProcKazu = LCNT(arg0->_subWindow);
-                arg0->_st2 = arg0->_st2 + 1;
-                arg0->_st3 = 0;
-            case 1:
-                if (LCNT(arg0->_subWindow) != arg0->_nowProcKazu) {
-                    alloc = igObject_GetAllocator(arg0);
-                    alloc = GPR_00554c14 ? alloc : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
-                    {
-                        igSmartPointer<beNDMWShopSelect01> spB4((beNDMWShopSelect01 *)FUN_003b4d90(alloc));
-                        beNDMWWindow_BindContext(spB4.p, arg0, arg0->_insight, arg0->_playerNo, 0x5AD);
-                        ObjectList_AppendRetained((void *)arg0->_subWindow, spB4.p);
-                    }
-                    arg0->_nowProcKazu = LCNT(arg0->_subWindow);
-                    arg0->_st2 = arg0->_st2 + 1;
-                    arg0->_st3 = 0;
-            case 2:
-                    if (LCNT(arg0->_subWindow) != arg0->_nowProcKazu) {
-                        if (arg0->_retCode == 0) {
-                            int base;
-                            void *db;
-                            int lvl;
-                            int lim;
-                            int tier;
-                            int sum;
-                            int cnt;
-                            int j;
-                            void *pl;
-                            Item *it;
-                            int id;
-                            beMessenger_SelectGroup(arg0->_messenger, &DAT_0051b398[0]);
-                            beMessenger_AppendInt(arg0->_messenger, arg0->_playerNo);
-                            beMessenger_DispatchSelected(arg0->_messenger, &DAT_0051b3e8[0]);
-                            pl = ((void *)beMessenger_GetObject(arg0->_messenger, 0));
-                            { int cur = igProperty_GetRecord(pl, &DAT_0051b560[0])->f12;
-                              Rec *r = igProperty_GetRecord(pl, &DAT_0051b560[0]);
-                              r->f12 = cur - 300; }
-                            beMessenger_SelectGroup(arg0->_messenger, &DAT_0051b498[0]);
-                            beMessenger_AppendInt(arg0->_messenger, arg0->_playerNo);
-                            beMessenger_DispatchSelected(arg0->_messenger, &DAT_0051b4a0[0]);
-                            it = (Item *)((Fld_429630 *)igProperty_GetRecordFolder(pl, &DAT_0051b528[0]))->f12->data[arg0->_selectCursor];
-                            lvl = igProperty_GetRecord(pl, &DAT_0051b5a0[0])->f12;
-                            if (lvl < 0x29) tier = 1;
-                            else if (lvl < 0x65) tier = 2;
-                            else if (lvl < 0xC9) tier = 3;
-                            else if (lvl < 0x12D) tier = 4;
-                            else if (lvl < 0x191) tier = 5;
-                            else tier = 6;
-                            StringRef spB0(0);
-                            if (it->f8 == 0) {
-                                if (g_stringPool[0] == 0) {
-                                    void *o = ((void *)StringPool_Allocate(0x10));
-                                    if (o != 0) o = ((void *)StringPool_Construct(o));
-                                    g_stringPool[0] = (int)o;
-                                }
-                                { char *ns = StringPool_Intern((void *)g_stringPool[0], &DAT_0051b5a8[0]);
-                                  { char *os = spB0.p; RELS(os) }
-                                  spB0.p = ns; }
-                            } else if (it->f8 == 1) {
-                                if (g_stringPool[0] == 0) {
-                                    void *o = ((void *)StringPool_Allocate(0x10));
-                                    if (o != 0) o = ((void *)StringPool_Construct(o));
-                                    g_stringPool[0] = (int)o;
-                                }
-                                { char *ns = StringPool_Intern((void *)g_stringPool[0], &DAT_0051b5b8[0]);
-                                  { char *os = spB0.p; RELS(os) }
-                                  spB0.p = ns; }
-                            } else if (it->f8 == 2) {
-                                if (g_stringPool[0] == 0) {
-                                    void *o = ((void *)StringPool_Allocate(0x10));
-                                    if (o != 0) o = ((void *)StringPool_Construct(o));
-                                    g_stringPool[0] = (int)o;
-                                }
-                                { char *ns = StringPool_Intern((void *)g_stringPool[0], &DAT_0051b5c8[0]);
-                                  { char *os = spB0.p; RELS(os) }
-                                  spB0.p = ns; }
-                            }
-                            beMessenger_SendNamed(arg0->_messenger, &DAT_0051b5d8[0], spB0.p, 0, &DAT_0051b5e8[0]);
-                            db = ((void *)beMessenger_GetObject(arg0->_messenger, 0));
-                            base = tier * 100;
-                            cnt = beDataBase_GetRecordInt(db, base, &DAT_0051b5f8[0]);
-                            lim = (int)(((P1 *)igInsightCore_FindManager(arg0->_insight, g_beNDMWStatus_metaObject[0]))->f16->f48->v22() % 10000U);
-                            sum = 0;
-                            j = 1;
-                            if (cnt > 0) {
-                                do {
-                                    id = base + j;
-                                    sum += beDataBase_GetRecordInt(db, id, &DAT_0051b600[0]);
-                                    if (sum >= lim) {
-                                        int v = beDataBase_GetRecordInt(db, id, &DAT_0051b5f8[0]);
-                                        beDataBase_GetRecordInt(db, id, &DAT_0051b608[0]);
-                                        it->f12 = v;
-                                        break;
-                                    }
-                                    j++;
-                                } while (cnt >= j);
-                            }
-                        }
-                        arg0->_retCode = arg0->_selectCursor;
-                        FINDWIN_429630(wb, ib)
-                        if (wb != 0) {
-                            arg0->_st1 = 0;
-                            arg0->_st3 = 0;
-                            arg0->_st2 = 0;
-                            arg0->_st2 = 1;
-                            arg0->_st3 = 0;
-                            wb->_st2 = 1;
-                            wb->_st3 = 0;
-                            beMessenger_SelectGroup(arg0->_messenger, TEXTCTL_3);
-                            beMessenger_AppendString(arg0->_messenger, STWINFONT29);
-                            beMessenger_AppendString(arg0->_messenger, &DAT_0051b548[0]);
-                            beMessenger_AppendString(arg0->_messenger, DISPOFF);
-                            beMessenger_DispatchSelected(arg0->_messenger, SWITCH_2);
-                            return;
-                        }
-                    }
-                }
-                break;
-            }
-            break;
-        case 2:
-            switch (arg0->_st2) {
-            case 0:
-                alloc = igObject_GetAllocator(arg0);
-                alloc = GPR_00554c14 ? alloc : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
-                {
-                    igSmartPointer<beNDMWShopSelect00> spAC((beNDMWShopSelect00 *)beNDMWShopSelect00_Create(alloc));
-                    beNDMWWindow_BindContext(spAC.p, arg0, arg0->_insight, arg0->_playerNo, 0x5AB);
-                    ObjectList_AppendRetained((void *)arg0->_subWindow, spAC.p);
-                }
-                arg0->_nowProcKazu = LCNT(arg0->_subWindow);
-                arg0->_st2 = arg0->_st2 + 1;
-                arg0->_st3 = 0;
-            case 1:
-                if (LCNT(arg0->_subWindow) != arg0->_nowProcKazu) {
-                    arg0->_st1 = 3;
-                    arg0->_st3 = 0;
-                    arg0->_st2 = 0;
-                    return;
-                }
-                break;
-            }
-            break;
-        case 3:
-            FINDWIN_429630(wc, ic)
-            switch (arg0->_st2) {
-            case 0:
-                if (wc != 0) {
-                    wc->_st0 = 2;
-                    wc->_st3 = 0;
-                    wc->_st2 = 0;
-                    wc->_st1 = 0;
-                }
-                arg0->_st2 = arg0->_st2 + 1;
-                arg0->_st3 = 0;
-                return;
-            case 1:
-                if (wc == 0) {
-                    arg0->_st0 = arg0->_st0 + 1;
-                    arg0->_st3 = 0;
-                    arg0->_st2 = 0;
-                    arg0->_st1 = 0;
-                    return;
-                }
-                break;
-            }
-            break;
-        }
-        break;
-    case 2:
-        beNDMWWindow_PlayQueuedModelClose(arg0);
-        beNDMWWindow_ClearQueuedText(arg0);
-        beNDMWWindow_RequestChildrenClose(arg0);
-        arg0->_st0 = arg0->_st0 + 1;
-        arg0->_st3 = 0;
-        arg0->_st2 = 0;
-        arg0->_st1 = 0;
-        return;
-    case 3:
-        if (beNDMWWindow_PollCloseComplete(arg0) != 0) {
-            arg0->_isRun = 0;
-        }
-        break;
-    }
-}
-
-static inline int f20Of(const Item_42a2e0 *item) { return item->f20; }
-
-void Gap__Bec__beNDMWShopCtrl50__vfunc_21(beNDMWShopCtrl50 *self) {
-    int vA[3];
-    int vB[3];
-    const igObjectList *fa;
-    void *alloc;
-    int obj;
-    int i;
-    int cost0;
-    int cost2;
-    int objm;
-    int found;
-    int j;
-    int money;
-    int rec2;
-    const igObjectList *fb;
-    int jb;
-    Item_42a2e0 *it;
-    Item_42a2e0 *ib;
-    char **fp;
-    igStringRefList *la;
-    igStringRefList *lb;
+void beNDMWShopCtrl30_Update(beNDMWShopCtrl30 *self)
+{
+    void *allocator;
 
     switch (self->_st0) {
-    case 0:
-        beNDMWWindow_PlayQueuedModelClose(self);
-        la = (igStringRefList *)self->_modelCloseInfoNameList;
-        CLEAR1(la, 0)
-        la->_count = 0;
-        ((igIntList *)self->_modelCloseRamNoList)->_count = 0;
-        lb = (igStringRefList *)self->_modelCloseSeqNameList;
-        CLEAR_LIST(lb, 0)
-        lb->_count = 0;
-        beNDMWWindow_ClearQueuedText(self);
-        self->_st0 = self->_st0 + 1;
+    case SHOP_STATE_OPEN:
+        self->_st0 = CurrentState(self) + 1;
         self->_st3 = 0;
         self->_st2 = 0;
         self->_st1 = 0;
-        self->_st1 = 0;
-        self->_st3 = 0;
-        self->_st2 = 0;
-    case 1:
+    case SHOP_STATE_RUN:
         switch (self->_st1) {
-        case 0:
+        case BANK_STEP_MAIN_MENU:
             switch (self->_st2) {
-            default:
-                return;
-            case 0:
-                ALLOC(alloc, self)
+            case CHILD_OPEN:
+                PICK_ALLOCATOR(allocator, self);
                 {
-                igSmartPointer<beNDMWShopSelect01> spCC((beNDMWShopSelect01 *)FUN_003b4d90(alloc));
-                beNDMWWindow_BindContext(spCC.p, self, self->_insight, self->_playerNo, 0x60E);
-                ObjectList_AppendRetained(self->_subWindow, spCC.p);
+                    igSmartPointer<beNDMWShopSelect01> menu((beNDMWShopSelect01 *)beNDMWShopSelect01_Create(allocator));
+                    beNDMWWindow_BindContext(menu.p, self, self->_insight, self->_playerNo, BANK_MSG_MAIN_MENU);
+                    ObjectList_AppendRetained(self->_subWindow, menu.p);
+                    menu.p->_startPoint = self->_bankMenu;
                 }
-                self->_nowProcKazu = SUBCNT(self);
-                self->_st2 = self->_st2 + 1;
-                self->_st3 = 0;
-            case 1:
-                if (SUBCNT(self) != self->_nowProcKazu) {
+                self->_nowProcKazu = CHILD_COUNT(self);
+                NEXT_PHASE(self);
+            case CHILD_WAIT:
+                if (CHILD_COUNT(self) != self->_nowProcKazu) {
                     switch (self->_retCode) {
-                    case 0:
-                        self->_st1 = 1;
-                        self->_st3 = 0;
-                        self->_st2 = 0;
-                        self->_cursor = 0;
+                    case BANK_MENU_DEPOSIT:
+                    case BANK_MENU_WITHDRAW:
+                        self->_bankMenu = self->_retCode;
+                        ENTER_STEP(self, BANK_STEP_KIND_MENU);
                         return;
-                    case 1:
-                        self->_st1 = 4;
-                        self->_st3 = 0;
-                        self->_st2 = 0;
-                        return;
-                    case 2: default:
-                        self->_st0 = self->_st0 + 1;
-                        self->_st3 = 0;
-                        self->_st2 = 0;
-                        self->_st1 = 0;
+                    case BANK_MENU_LEAVE:
+                    default:
+                        NEXT_STATE(self);
                         return;
                     }
                 }
                 break;
             }
             break;
-        case 1:
+        case BANK_STEP_KIND_MENU:
+            switch (self->_st2) {
+            case CHILD_OPEN:
+                PICK_ALLOCATOR(allocator, self);
+                {
+                    igSmartPointer<beNDMWShopSelect01> menu((beNDMWShopSelect01 *)beNDMWShopSelect01_Create(allocator));
+                    beNDMWWindow_BindContext(menu.p, self, self->_insight, self->_playerNo, BANK_MSG_KIND_MENU);
+                    ObjectList_AppendRetained(self->_subWindow, menu.p);
+                }
+                self->_nowProcKazu = CHILD_COUNT(self);
+                NEXT_PHASE(self);
+            case CHILD_WAIT:
+                if (CHILD_COUNT(self) != self->_nowProcKazu) {
+                    switch (self->_retCode) {
+                    case BANK_KIND_DEVICES: {
+                        int player;
+                        igObjectList *bank;
+                        REQUEST_PLAYER(self);
+                        player = beMessenger_GetObject(self->_messenger, 0);
+                        igProperty_GetRecordFolder(player, DEVICEFOLDER_4);
+                        bank = (igObjectList *)((beDataObjObjectList *)igProperty_GetRecordFolder(player, BANKDEVICE_3))->_data;
+                        if (self->_bankMenu == BANK_MENU_DEPOSIT) {
+                            ENTER_STEP(self, BANK_STEP_DEPOSIT_DEVICES);
+                            return;
+                        }
+                        if (bank->_count <= 0) {
+                            ENTER_STEP(self, BANK_STEP_NOTICE);
+                            /* _st3: the notice's message */
+                            self->_st3 = BANK_MSG_BANK_EMPTY;
+                            return;
+                        }
+                        ENTER_STEP(self, BANK_STEP_WITHDRAW_DEVICES);
+                        return;
+                    }
+                    case BANK_KIND_BITS:
+                        if (self->_bankMenu == BANK_MENU_DEPOSIT) {
+                            ENTER_STEP(self, BANK_STEP_DEPOSIT_BITS);
+                            return;
+                        }
+                        ENTER_STEP(self, BANK_STEP_WITHDRAW_BITS);
+                        return;
+                    default:
+                        ENTER_STEP(self, BANK_STEP_MAIN_MENU);
+                        return;
+                    }
+                }
+                break;
+            }
+            break;
+        case BANK_STEP_DEPOSIT_DEVICES:
+        case BANK_STEP_WITHDRAW_DEVICES:
+            switch (self->_st2) {
+            case BANK_DEVICES_OPEN_LIST:
+                PICK_ALLOCATOR(allocator, self);
+                {
+                    igSmartPointer<beNDMWStatusCtrlD0> list((beNDMWStatusCtrlD0 *)beNDMWStatusCtrlD0_Create(allocator));
+                    beNDMWWindow_BindContext(list.p, self, self->_insight, self->_playerNo, 0);
+                    ObjectList_AppendRetained(self->_subWindow, list.p);
+                    list.p->_isAutoClose = 0;
+                    list.p->_isEquipDisable = 1;
+                    if (self->_st1 == BANK_STEP_WITHDRAW_DEVICES) list.p->_isBankFolder = 1;
+                }
+                switch (self->_st1) {
+                case BANK_STEP_DEPOSIT_DEVICES:
+                    beNDMWWindow_RunMessageScript(self, txt_shop_lua_2, BANK_MSG_DEPOSIT_DEVICE);
+                    break;
+                case BANK_STEP_WITHDRAW_DEVICES:
+                    beNDMWWindow_RunMessageScript(self, txt_shop_lua_2, BANK_MSG_WITHDRAW_DEVICE);
+                    break;
+                }
+                self->_nowProcKazu = CHILD_COUNT(self);
+                NEXT_PHASE(self);
+                return;
+            case BANK_DEVICES_CHOOSE: {
+                beNDMWStatusCtrlD0 *list;
+                int listIndex;
+                FIND_DEVICE_LIST(list, listIndex, self)
+                if (list != 0) {
+                    if (self->_retCode == SELECT_NONE) {
+                        NEXT_STATE(list);
+                        ENTER_PHASE(self, BANK_DEVICES_WAIT_LIST_CLOSED);
+                        HideDevicePrompt(self);
+                        return;
+                    }
+                    if (list->_st0 == SHOP_STATE_RUN && list->_st1 == DEVICE_LIST_STEP_PICKED) {
+                        int player;
+                        igObjectList *folder;
+                        igObjectList *bank;
+                        beNDMWItemBase *device;
+                        int picked;
+                        REQUEST_PLAYER(self);
+                        player = beMessenger_GetObject(self->_messenger, 0);
+                        folder = (igObjectList *)((beDataObjObjectList *)igProperty_GetRecordFolder(player, DEVICEFOLDER_4))->_data;
+                        bank = (igObjectList *)((beDataObjObjectList *)igProperty_GetRecordFolder(player, BANKDEVICE_3))->_data;
+                        picked = self->_retCode;
+                        switch (self->_st1) {
+                        case BANK_STEP_DEPOSIT_DEVICES:
+                            device = (beNDMWItemBase *)((int *)folder->_data)[picked];
+                            if (bank->_count >= BANK_DEVICE_CAPACITY) {
+                                ENTER_PHASE(self, BANK_DEVICES_OPEN_NOTICE);
+                                self->_st3 = BANK_MSG_BANK_FULL;
+                                return;
+                            }
+                            if (device->_isEquip == 0) {
+                                ObjectList_AppendRetained(bank, device);
+                                ObjectList_RemoveFirstRetained(folder, device, 0);
+                            }
+                            ENTER_PHASE(list, DEVICE_LIST_REOPEN);
+                            return;
+                        case BANK_STEP_WITHDRAW_DEVICES:
+                            device = (beNDMWItemBase *)((int *)bank->_data)[picked];
+                            if (folder->_count >= DEVICE_FOLDER_CAPACITY) {
+                                ENTER_PHASE(self, BANK_DEVICES_OPEN_NOTICE);
+                                self->_st3 = BANK_MSG_DEVICE_FOLDER_FULL;
+                                return;
+                            }
+                            ObjectList_AppendRetained(folder, device);
+                            ObjectList_RemoveFirstRetained(bank, device, 0);
+                            if (bank->_count <= 0) {
+                                ENTER_PHASE(self, BANK_DEVICES_OPEN_NOTICE);
+                                self->_st3 = BANK_MSG_BANK_EMPTY;
+                                beNDMWStatusCtrlD0_RefreshText(list, 1, 0);
+                                return;
+                            }
+                            ENTER_PHASE(list, DEVICE_LIST_REOPEN);
+                            return;
+                        }
+                    }
+                }
+                break;
+            }
+            case BANK_DEVICES_OPEN_NOTICE:
+                HideDevicePrompt(self);
+                PICK_ALLOCATOR(allocator, self);
+                {
+                    igSmartPointer<beNDMWShopSelect00> notice((beNDMWShopSelect00 *)beNDMWShopSelect00_Create(allocator));
+                    beNDMWWindow_BindContext(notice.p, self, self->_insight, self->_playerNo, self->_st3);
+                    ObjectList_AppendRetained(self->_subWindow, notice.p);
+                }
+                self->_nowProcKazu = CHILD_COUNT(self);
+                NEXT_PHASE(self);
+            case BANK_DEVICES_WAIT_NOTICE:
+                if (CHILD_COUNT(self) != self->_nowProcKazu) {
+                    beNDMWStatusCtrlD0 *list;
+                    int listIndex;
+                    FIND_DEVICE_LIST(list, listIndex, self)
+                    if (list != 0) {
+                        NEXT_STATE(list);
+                        ENTER_PHASE(self, BANK_DEVICES_WAIT_LIST_CLOSED);
+                        return;
+                    }
+                }
+                break;
+            case BANK_DEVICES_WAIT_LIST_CLOSED: {
+                beNDMWStatusCtrlD0 *list;
+                int listIndex;
+                FIND_DEVICE_LIST(list, listIndex, self)
+                if (list == 0) {
+                    ENTER_STEP(self, BANK_STEP_MAIN_MENU);
+                    return;
+                }
+                break;
+            }
+            }
+            break;
+        case BANK_STEP_DEPOSIT_BITS:
+        case BANK_STEP_WITHDRAW_BITS:
+            switch (self->_st2) {
+            case CHILD_OPEN:
+                PICK_ALLOCATOR(allocator, self);
+                {
+                    igSmartPointer<beNDMWShopCtrlEditBit> editor((beNDMWShopCtrlEditBit *)beNDMWShopCtrlEditBit_Create(allocator));
+                    beNDMWWindow_BindContext(editor.p, self, self->_insight, self->_playerNo, self->_bankMenu);
+                    ObjectList_AppendRetained(self->_subWindow, editor.p);
+                }
+                self->_nowProcKazu = CHILD_COUNT(self);
+                NEXT_PHASE(self);
+            case CHILD_WAIT:
+                if (CHILD_COUNT(self) != self->_nowProcKazu) {
+                    if (self->_retCode != SELECT_NONE) {
+                        int amount;
+                        int player;
+                        int bits;
+                        int bankBits;
+                        REQUEST_PLAYER(self);
+                        player = beMessenger_GetObject(self->_messenger, 0);
+                        amount = self->_retCode;
+                        if (self->_bankMenu == BANK_MENU_DEPOSIT) {
+                            bits = PlayerInt(player, BIT_7)->_data;
+                            bankBits = PlayerInt(player, BANKBIT_2)->_data;
+                            bits = bits - amount;
+                            bankBits = bankBits + amount;
+                            PlayerInt(player, BIT_7)->_data = bits;
+                            PlayerInt(player, BANKBIT_2)->_data = bankBits;
+                        } else {
+                            bits = PlayerInt(player, BIT_7)->_data;
+                            bankBits = PlayerInt(player, BANKBIT_2)->_data;
+                            bits = bits + amount;
+                            bankBits = bankBits - amount;
+                            PlayerInt(player, BIT_7)->_data = bits;
+                            PlayerInt(player, BANKBIT_2)->_data = bankBits;
+                        }
+                        UPDATE_SUBWINDOW(self);
+                    }
+                    ENTER_STEP(self, BANK_STEP_MAIN_MENU);
+                    return;
+                }
+                break;
+            }
+            break;
+        case BANK_STEP_NOTICE:
+            switch (self->_st2) {
+            case CHILD_OPEN:
+                PICK_ALLOCATOR(allocator, self);
+                {
+                    igSmartPointer<beNDMWShopSelect00> notice((beNDMWShopSelect00 *)beNDMWShopSelect00_Create(allocator));
+                    beNDMWWindow_BindContext(notice.p, self, self->_insight, self->_playerNo, self->_st3);
+                    ObjectList_AppendRetained(self->_subWindow, notice.p);
+                }
+                self->_nowProcKazu = CHILD_COUNT(self);
+                NEXT_PHASE(self);
+            case CHILD_WAIT:
+                if (CHILD_COUNT(self) != self->_nowProcKazu) {
+                    ENTER_STEP(self, BANK_STEP_MAIN_MENU);
+                    return;
+                }
+                break;
+            }
+            break;
+        }
+        break;
+    case SHOP_STATE_CLOSE:
+        beNDMWWindow_PlayQueuedModelClose(self);
+        beNDMWWindow_ClearQueuedText(self);
+        beNDMWWindow_RequestChildrenClose(self);
+        NEXT_STATE(self);
+        return;
+    case SHOP_STATE_WAIT_CLOSED:
+        if (beNDMWWindow_PollCloseComplete(self) != 0) {
+            self->_isRun = 0;
+        }
+        break;
+    }
+}
+
+/* Switches a text label of a font window off. */
+#define HIDE_TEXT(window, font, label) { \
+    beMessenger_SelectGroup((window)->_messenger, TEXTCTL_3); \
+    beMessenger_AppendString((window)->_messenger, font); \
+    beMessenger_AppendString((window)->_messenger, label); \
+    beMessenger_AppendString((window)->_messenger, DISPOFF); \
+    beMessenger_DispatchSelected((window)->_messenger, SWITCH_2); }
+
+/* beNDMWStatusCtrlD0::_st1 while its selection is paused on a decided row, and the substep that
+ * reopens the selection. */
+enum { DEVICE_LIST_DECIDED = 2, DEVICE_LIST_RESELECT = 1 };
+
+/* beNDMWShopCtrl40::_st1 */
+enum CnosStep { CNOS_SELECT_DEVICE, CNOS_CONVERT, CNOS_SHORT_OF_BITS, CNOS_CLOSE_LIST };
+
+/* beNDMWShopCtrl40::_st2 in CNOS_SELECT_DEVICE. */
+enum CnosSelectSubstep { SELECT_OPEN_LIST, SELECT_WAIT_DECISION };
+
+/* beNDMWItemBase::_kindNo of a device. */
+enum DeviceKind { DEVICE_WEAPON, DEVICE_BLUE_ARMOR, DEVICE_YELLOW_ARMOR };
+
+#define CNOS_PRICE 300
+#define RATE_TOTAL 10000U
+
+/* Makes `name` hold `token`, already retained by the caller. */
+static inline void AssignString(StringRef &name, const char *token)
+{
+    ReleaseString(name.p);
+    name.p = (char *)token;
+}
+
+void beNDMWShopCtrl40_Update(beNDMWShopCtrl40 *self) {
+    void *allocator;
+    beNDMWStatusCtrlD0 *decidedList;
+    beNDMWStatusCtrlD0 *convertedList;
+    beNDMWStatusCtrlD0 *closingList;
+    switch (self->_st0) {
+    case SHOP_STATE_OPEN:
+        beNDMWWindow_QueueText(self, STWINFONT29, font100_3, space_2, LEFT_4);
+        NEXT_STATE(self)
+    case SHOP_STATE_RUN:
+        switch (self->_st1) {
+        case CNOS_SELECT_DEVICE:
+            switch (self->_st2) {
+            case SELECT_OPEN_LIST:
+                PICK_ALLOCATOR(allocator, self)
+                {
+                    igSmartPointer<beNDMWStatusCtrlD0> list((beNDMWStatusCtrlD0 *)beNDMWStatusCtrlD0_Create(allocator));
+                    beNDMWWindow_BindContext(list.p, self, self->_insight, self->_playerNo, 0);
+                    ObjectList_AppendRetained(self->_subWindow, list.p);
+                    list.p->_isAutoClose = 0;
+                    list.p->_isUnknownEnable = 1;
+                }
+                beNDMWWindow_RunMessageScript(self, txt_shop_lua_2, 0x5AA);
+                self->_nowProcKazu = ObjectList_Count(self->_subWindow);
+                NEXT_PHASE(self)
+                return;
+            case SELECT_WAIT_DECISION:
+                { int listIndex; FIND_DEVICE_LIST(decidedList, listIndex, self) }
+                if (decidedList != 0) {
+                    if (self->_retCode == -1) {
+                        ENTER_STEP(self, CNOS_CLOSE_LIST)
+                        return;
+                    }
+                    if (decidedList->_st0 == SHOP_STATE_RUN && decidedList->_st1 == DEVICE_LIST_DECIDED) {
+                        self->_selectCursor = self->_retCode;
+                        REQUEST_PLAYER(self)
+                        if (PlayerInt(beMessenger_GetObject(self->_messenger, 0), BIT_7)->_data < CNOS_PRICE) {
+                            ENTER_STEP(self, CNOS_SHORT_OF_BITS)
+                        } else {
+                            ENTER_STEP(self, CNOS_CONVERT)
+                        }
+                        HIDE_TEXT(self, STWINFONT29, font100_3)
+                        return;
+                    }
+                }
+                break;
+            }
+            break;
+        case CNOS_CONVERT:
             switch (self->_st2) {
             case 0:
-                beNDMWWindow_PresentModelAtOrigin(self, &DAT_0051b610[0], 0, &DAT_0051b618[0], &DAT_0051b620[0]);
-                vA[0] = 0xC3120000;
-                vA[1] = 0x41C80000;
-                vA[2] = 0;
-                beNDMWWindow_PresentModel(self, &DAT_0051b630[0], 0, &DAT_0051b640[0], &DAT_0051b620[0], &vA[0]);
-                vB[0] = 0x436C0000;
-                vB[1] = 0x41C80000;
-                vB[2] = 0;
-                beNDMWWindow_PresentModel(self, &DAT_0051b650[0], 0, &DAT_0051b640[0], &DAT_0051b620[0], &vB[0]);
-                beMessenger_SendNamed(self->_messenger, &DAT_0051b5d8[0], &DAT_0051b660[0], 0, &DAT_0051b5e8[0]);
-                obj = beMessenger_GetObject(self->_messenger, 0);
-                INTERN_APPEND(self->_textCloseTypeList, &DAT_0051b668[0])
-                INTERN_APPEND(self->_textCloseNameList, ((char * *)g_fontNames)[0])
-                beNDMWWindow_RunMessageScript(self, &DAT_0051b3b0[0], 0x5DD);
-                i = 0;
-                fp = &((char * *)g_fontNames)[0];
-                do {
-                    beNDMWWindow_QueueText(self, STWINFONT14, *fp, beDataBase_GetRecordString(obj, i, NAME_2), &DAT_0051b598[0]);
-                    beNDMWWindow_QueueNumberText(self, STWINFONT17, *fp, beDataBase_GetRecordInt(obj, i, &DAT_0051b690[0]), &DAT_0051b460[0]);
-                    i += 1;
-                    fp += 1;
-                } while (i < 10);
-                beNDMWWindow_QueueText(self, STWINFONT29, ((char * *)g_fontNames)[0], &DAT_0051b590[0], &DAT_0051b598[0]);
-                self->_st2 = self->_st2 + 1;
-                self->_st3 = 0;
-            case 1:
-                FUN_0042bae0((int *)self, -1);
-                beMessenger_SendNamed(self->_messenger, &DAT_0051b308[0], &DAT_0051b610[0], 0, &DAT_0051b698[0]);
-                ALLOC(alloc, self)
+                PICK_ALLOCATOR(allocator, self)
                 {
-                igSmartPointer<beNDMWStatusSelectE1> spC8((beNDMWStatusSelectE1 *)beNDMWStatusSelectE1_Create(alloc));
-                beNDMWWindow_BindContext(spC8.p, self, self->_insight, self->_playerNo, 0);
-                ObjectList_AppendRetained(self->_subWindow, spC8.p);
-                { beNDMWWindowSelect *w = (beNDMWWindowSelect *)spC8.p; w->_offsetPos[0] = -121.0f; w->_offsetPos[1] = 128.0f; w->_offsetPos[2] = 0.0f; }
-                ((beNDMWWindowSelect *)spC8.p)->_startPoint = self->_cursor;
-                ((beNDMWWindowSelect *)spC8.p)->_selectMax = 10;
-                INTERN_APPEND(((beNDMWWindow *)spC8.p)->_textCloseTypeList, STWINFONT29)
-                INTERN_APPEND(((beNDMWWindow *)spC8.p)->_textCloseNameList, &DAT_0051b548[0])
-                beNDMWWindow_RunMessageScript(spC8.p, &DAT_0051b3b0[0], 0x611);
+                    igSmartPointer<beNDMWShopSelect00> message((beNDMWShopSelect00 *)beNDMWShopSelect00_Create(allocator));
+                    beNDMWWindow_BindContext(message.p, self, self->_insight, self->_playerNo, 0x5AC);
+                    ObjectList_AppendRetained(self->_subWindow, message.p);
                 }
-                self->_nowProcKazu = SUBCNT(self);
-                self->_st2 = self->_st2 + 1;
-                self->_st3 = 0;
-                self->_retCode = self->_cursor;
+                self->_nowProcKazu = ObjectList_Count(self->_subWindow);
+                NEXT_PHASE(self)
+            case 1:
+                if (ObjectList_Count(self->_subWindow) == self->_nowProcKazu) break;
+                PICK_ALLOCATOR(allocator, self)
+                {
+                    igSmartPointer<beNDMWShopSelect01> yesNo((beNDMWShopSelect01 *)beNDMWShopSelect01_Create(allocator));
+                    beNDMWWindow_BindContext(yesNo.p, self, self->_insight, self->_playerNo, 0x5AD);
+                    ObjectList_AppendRetained(self->_subWindow, yesNo.p);
+                }
+                self->_nowProcKazu = ObjectList_Count(self->_subWindow);
+                NEXT_PHASE(self)
             case 2:
+                if (ObjectList_Count(self->_subWindow) == self->_nowProcKazu) break;
+                if (self->_retCode == ANSWER_YES) {
+                    int bandRow;
+                    int table;
+                    int level;
+                    unsigned int roll;
+                    int band;
+                    int rateSum;
+                    int entryCount;
+                    int entry;
+                    int player;
+                    beNDMWItemBase *device;
+                    int row;
+                    REQUEST_PLAYER(self)
+                    player = beMessenger_GetObject(self->_messenger, 0);
+                    {
+                        int bits = PlayerInt(player, BIT_7)->_data;
+                        beDataObjInt *money = PlayerInt(player, BIT_7);
+                        money->_data = bits - CNOS_PRICE;
+                    }
+                    UPDATE_SUBWINDOW(self)
+                    device = ((beNDMWItemBase **)PlayerFolder(player, DEVICEFOLDER_4)->_data)[self->_selectCursor];
+                    level = PlayerInt(player, LEVEL_8)->_data;
+                    if (level <= 40) band = 1;
+                    else if (level <= 100) band = 2;
+                    else if (level <= 200) band = 3;
+                    else if (level <= 300) band = 4;
+                    else if (level <= 400) band = 5;
+                    else band = 6;
+                    StringRef tableName(0);
+                    if (device->_kindNo == DEVICE_WEAPON) {
+                        AssignString(tableName, InternLiteral((const char *)coweapon));
+                    } else if (device->_kindNo == DEVICE_BLUE_ARMOR) {
+                        AssignString(tableName, InternLiteral((const char *)coarmor1));
+                    } else if (device->_kindNo == DEVICE_YELLOW_ARMOR) {
+                        AssignString(tableName, InternLiteral((const char *)coarmor2));
+                    }
+                    beMessenger_SendNamed(self->_messenger, DATABASE_11, tableName.p, 0, GETDATABASE_10);
+                    table = beMessenger_GetObject(self->_messenger, 0);
+                    /* Row band*100 holds the band's entry count; its entries follow it. */
+                    bandRow = band * 100;
+                    entryCount = beDataBase_GetRecordInt(table, bandRow, ID);
+                    roll = ((RandomNumberDispatch *)((beSystem *)((beNDMWStatus *)igInsightCore_FindManager(self->_insight, g_beNDMWStatus_metaObject[0]))->_system)->_random)->genrand() % RATE_TOTAL;
+                    rateSum = 0;
+                    entry = 1;
+                    if (entryCount > 0) {
+                        do {
+                            row = bandRow + entry;
+                            rateSum += beDataBase_GetRecordInt(table, row, RATE);
+                            if (rateSum >= (int)roll) {
+                                int id = beDataBase_GetRecordInt(table, row, ID);
+                                beDataBase_GetRecordInt(table, row, RANK);
+                                device->_recNo = id;
+                                break;
+                            }
+                            entry++;
+                        } while (entryCount >= entry);
+                    }
+                }
+                self->_retCode = self->_selectCursor;
+                { int listIndex; FIND_DEVICE_LIST(convertedList, listIndex, self) }
+                if (convertedList != 0) {
+                    ENTER_STEP(self, CNOS_SELECT_DEVICE)
+                    ENTER_PHASE(self, SELECT_WAIT_DECISION)
+                    ENTER_PHASE(convertedList, DEVICE_LIST_RESELECT)
+                    HIDE_TEXT(self, STWINFONT29, font100_3)
+                    return;
+                }
+                break;
+            }
+            break;
+        case CNOS_SHORT_OF_BITS:
+            switch (self->_st2) {
+            case 0:
+                PICK_ALLOCATOR(allocator, self)
+                {
+                    igSmartPointer<beNDMWShopSelect00> message((beNDMWShopSelect00 *)beNDMWShopSelect00_Create(allocator));
+                    beNDMWWindow_BindContext(message.p, self, self->_insight, self->_playerNo, 0x5AB);
+                    ObjectList_AppendRetained(self->_subWindow, message.p);
+                }
+                self->_nowProcKazu = ObjectList_Count(self->_subWindow);
+                NEXT_PHASE(self)
+            case 1:
+                if (ObjectList_Count(self->_subWindow) != self->_nowProcKazu) {
+                    ENTER_STEP(self, CNOS_CLOSE_LIST)
+                    return;
+                }
+                break;
+            }
+            break;
+        case CNOS_CLOSE_LIST:
+            { int listIndex; FIND_DEVICE_LIST(closingList, listIndex, self) }
+            switch (self->_st2) {
+            case 0:
+                if (closingList != 0) {
+                    ENTER_STATE(closingList, SHOP_STATE_CLOSE)
+                }
+                NEXT_PHASE(self)
+                return;
+            case 1:
+                if (closingList == 0) {
+                    NEXT_STATE(self)
+                    return;
+                }
+                break;
+            }
+            break;
+        }
+        break;
+    case SHOP_STATE_CLOSE:
+        beNDMWWindow_PlayQueuedModelClose(self);
+        beNDMWWindow_ClearQueuedText(self);
+        beNDMWWindow_RequestChildrenClose(self);
+        NEXT_STATE(self)
+        return;
+    case SHOP_STATE_WAIT_CLOSED:
+        if (beNDMWWindow_PollCloseComplete(self) != 0) {
+            self->_isRun = 0;
+        }
+        break;
+    }
+}
+
+/* beNDMWShopCtrl50::_st1 */
+enum DiskShopStep { DISK_MENU, DISK_LIST, DISK_QUANTITY, DISK_PURCHASE, DISK_SELL, DISK_NOTICE };
+
+/* beNDMWShopCtrl50 menu choices (the menu's _retCode). */
+enum DiskMenuChoice { DISK_MENU_BUY, DISK_MENU_SELL, DISK_MENU_EXIT };
+
+/* beNDMWShopCtrl50::_st2 in DISK_LIST. */
+enum DiskListSubstep { LIST_PRESENT, LIST_SELECT, LIST_DESCRIBE, LIST_WAIT };
+
+/* beNDMWShopCtrl50::_st2 in DISK_PURCHASE. */
+enum DiskPurchaseSubstep { PURCHASE_CHECK_BITS, PURCHASE_ANNOUNCE, PURCHASE_CONFIRM, PURCHASE_APPLY };
+
+#define DISK_ROWS 10
+#define DISK_STACK_MAX 9
+
+/* Points every slot of a string list at the pooled empty string, releasing what each held. */
+#define EMPTY_STRING_SLOTS(list) { \
+    int count; \
+    int slotIndex; \
+    char **slot; \
+    char *empty; \
+    int offset; \
+    char *old; \
+    count = (list)->_count; \
+    slotIndex = 0; \
+    if (0 < count) { \
+        offset = 0; \
+        do { \
+            slot = (char **)((int)(list)->_data + offset); \
+            if (g_stringPool[0] == 0) { \
+                int pool = StringPool_Allocate(0x10); \
+                if (pool != 0) pool = StringPool_Construct(pool); \
+                g_stringPool[0] = pool; \
+            } \
+            empty = StringPool_Intern(g_stringPool[0], 0); \
+            old = *slot; \
+            ReleaseString(old); \
+            slotIndex += 1; \
+            *slot = empty; \
+            offset += 4; \
+        } while (slotIndex < count); \
+    } }
+
+/* matching construct: try.sh — reading the count through an inline orders the addu operands of
+ * the purchase's stack update; a direct `_kazu +=` swaps them. */
+static inline int DiskCount(const beNDMWItemDisk *disk) { return disk->_kazu; }
+
+void beNDMWShopCtrl50_Update(beNDMWShopCtrl50 *self) {
+    float leftArrowPos[3];
+    float rightArrowPos[3];
+    const igObjectList *heldDisks;
+    void *allocator;
+    int conItems;
+    int row;
+    int cost;
+    int totalPrice;
+    int player;
+    int heldCount;
+    int slot;
+    int bits;
+    beDataObjInt *money;
+    const igObjectList *ownedDisks;
+    int ownedSlot;
+    beNDMWItemDisk *disk;
+    beNDMWItemDisk *ownedDisk;
+    const char **font;
+    igStringRefList *closeInfoNames;
+    igStringRefList *closeSequenceNames;
+
+    switch (self->_st0) {
+    case SHOP_STATE_OPEN:
+        beNDMWWindow_PlayQueuedModelClose(self);
+        closeInfoNames = (igStringRefList *)self->_modelCloseInfoNameList;
+        EMPTY_STRING_SLOTS(closeInfoNames)
+        closeInfoNames->_count = 0;
+        ((igIntList *)self->_modelCloseRamNoList)->_count = 0;
+        closeSequenceNames = (igStringRefList *)self->_modelCloseSeqNameList;
+        EMPTY_STRING_SLOTS(closeSequenceNames)
+        closeSequenceNames->_count = 0;
+        beNDMWWindow_ClearQueuedText(self);
+        NEXT_STATE(self)
+        ENTER_STEP(self, DISK_MENU)
+    case SHOP_STATE_RUN:
+        switch (self->_st1) {
+        case DISK_MENU:
+            switch (self->_st2) {
+            case 0:
+                PICK_ALLOCATOR(allocator, self)
+                {
+                    igSmartPointer<beNDMWShopSelect01> menu((beNDMWShopSelect01 *)beNDMWShopSelect01_Create(allocator));
+                    beNDMWWindow_BindContext(menu.p, self, self->_insight, self->_playerNo, 0x60E);
+                    ObjectList_AppendRetained(self->_subWindow, menu.p);
+                }
+                self->_nowProcKazu = ObjectList_Count(self->_subWindow);
+                NEXT_PHASE(self)
+            case 1:
+                if (ObjectList_Count(self->_subWindow) != self->_nowProcKazu) {
+                    switch (self->_retCode) {
+                    case DISK_MENU_BUY:
+                        ENTER_STEP(self, DISK_LIST)
+                        self->_cursor = 0;
+                        return;
+                    case DISK_MENU_SELL:
+                        ENTER_STEP(self, DISK_SELL)
+                        return;
+                    case DISK_MENU_EXIT:
+                    default:
+                        NEXT_STATE(self)
+                        return;
+                    }
+                }
+                break;
+            }
+            break;
+        case DISK_LIST:
+            switch (self->_st2) {
+            case LIST_PRESENT:
+                beNDMWWindow_PresentModelAtOrigin(self, j_shwin, 0, SQ_WAIT_5, SQ_CLOSE_10);
+                leftArrowPos[0] = -146.0f;
+                leftArrowPos[1] = 25.0f;
+                leftArrowPos[2] = 0.0f;
+                beNDMWWindow_PresentModel(self, i_stcursorleft_2, 0, SQ_HIDE_2, SQ_CLOSE_10, leftArrowPos);
+                rightArrowPos[0] = 236.0f;
+                rightArrowPos[1] = 25.0f;
+                rightArrowPos[2] = 0.0f;
+                beNDMWWindow_PresentModel(self, i_stcursorright_2, 0, SQ_HIDE_2, SQ_CLOSE_10, rightArrowPos);
+                beMessenger_SendNamed(self->_messenger, DATABASE_11, conItem_2, 0, GETDATABASE_10);
+                conItems = beMessenger_GetObject(self->_messenger, 0);
+                StringList_AppendRetained(self->_textCloseTypeList, StringRef(InternString((const char *)STWINFONT13_2)));
+                StringList_AppendRetained(self->_textCloseNameList, StringRef(InternString(g_fontNames[0])));
+                beNDMWWindow_RunMessageScript(self, txt_shop_lua_2, 0x5DD);
+                row = 0;
+                font = g_fontNames;
+                do {
+                    beNDMWWindow_QueueText(self, STWINFONT14, *font, beDataBase_GetRecordString(conItems, row, NAME_2), LEFT_4);
+                    beNDMWWindow_QueueNumberText(self, STWINFONT17, *font, beDataBase_GetRecordInt(conItems, row, HANBAI_2), RIGHT_3);
+                    row += 1;
+                    font += 1;
+                } while (row < DISK_ROWS);
+                beNDMWWindow_QueueText(self, STWINFONT29, g_fontNames[0], space_2, LEFT_4);
+                NEXT_PHASE(self)
+            case LIST_SELECT:
+                beNDMWShopCtrl50_MoveRowCursor((int *)self, -1);
+                beMessenger_SendNamed(self->_messenger, MODELCTRL_16, j_shwin, 0, SQ_CWINOPEN);
+                PICK_ALLOCATOR(allocator, self)
+                {
+                    igSmartPointer<beNDMWStatusSelectE1> select((beNDMWStatusSelectE1 *)beNDMWStatusSelectE1_Create(allocator));
+                    beNDMWStatusSelectE1 *selectWindow;
+                    beNDMWWindow_BindContext(select.p, self, self->_insight, self->_playerNo, 0);
+                    ObjectList_AppendRetained(self->_subWindow, select.p);
+                    selectWindow = select.p;
+                    selectWindow->_offsetPos[0] = -121.0f;
+                    selectWindow->_offsetPos[1] = 128.0f;
+                    selectWindow->_offsetPos[2] = 0.0f;
+                    select.p->_startPoint = self->_cursor;
+                    select.p->_selectMax = DISK_ROWS;
+                    StringList_AppendRetained(select.p->_textCloseTypeList, StringRef(InternString(STWINFONT29)));
+                    StringList_AppendRetained(select.p->_textCloseNameList, StringRef(InternString((const char *)font100_3)));
+                    beNDMWWindow_RunMessageScript(select.p, txt_shop_lua_2, 0x611);
+                }
+                self->_nowProcKazu = ObjectList_Count(self->_subWindow);
+                NEXT_PHASE(self)
+                self->_retCode = self->_cursor;
+            case LIST_DESCRIBE:
                 if (self->_retCode != -1) {
-                    beMessenger_SendNamed(self->_messenger, &DAT_0051b5d8[0], &DAT_0051b660[0], 0, &DAT_0051b5e8[0]);
-                    obj = beMessenger_GetObject(self->_messenger, 0);
+                    beMessenger_SendNamed(self->_messenger, DATABASE_11, conItem_2, 0, GETDATABASE_10);
+                    conItems = beMessenger_GetObject(self->_messenger, 0);
                     beMessenger_SelectGroup(self->_messenger, TEXTCTL_3);
                     beMessenger_AppendString(self->_messenger, STWINFONT29);
-                    beMessenger_AppendString(self->_messenger, ((char * *)g_fontNames)[0]);
-                    { int ms = self->_messenger; beMessenger_AppendString(ms, beDataBase_GetRecordString(obj, self->_retCode, TXT)); }
+                    beMessenger_AppendString(self->_messenger, g_fontNames[0]);
+                    {
+                        /* matching construct: try.sh — the messenger is read before the record call */
+                        int messenger = self->_messenger;
+                        beMessenger_AppendString(messenger, beDataBase_GetRecordString(conItems, self->_retCode, TXT));
+                    }
                     beMessenger_DispatchSelected(self->_messenger, TEXTSET);
                     beMessenger_SelectGroup(self->_messenger, TEXTCTL_3);
                     beMessenger_AppendString(self->_messenger, STWINFONT29);
-                    beMessenger_AppendString(self->_messenger, ((char * *)g_fontNames)[0]);
-                    beMessenger_AppendString(self->_messenger, &((int *)DISPON)[0]);
+                    beMessenger_AppendString(self->_messenger, g_fontNames[0]);
+                    beMessenger_AppendString(self->_messenger, DISPON);
                     beMessenger_DispatchSelected(self->_messenger, SWITCH_2);
                 }
-                self->_st2 = self->_st2 + 1;
-                self->_st3 = 0;
+                NEXT_PHASE(self)
                 self->_st3 = self->_retCode;
-            case 3:
-                if (SUBCNT(self) == self->_nowProcKazu) {
+            case LIST_WAIT:
+                if (ObjectList_Count(self->_subWindow) == self->_nowProcKazu) {
                     if (self->_retCode != -1) {
                         if (self->_retCode != self->_st3) {
-                            self->_st2 = 2;
-                            self->_st3 = 0;
+                            ENTER_PHASE(self, LIST_DESCRIBE)
                             return;
                         }
                     }
                 } else {
                     if (self->_retCode != -1) {
                         self->_cursor = self->_retCode;
-                        FUN_0042bae0((int *)self, self->_cursor);
+                        beNDMWShopCtrl50_MoveRowCursor((int *)self, self->_cursor);
                         self->_conItemNo = self->_retCode;
-                        beMessenger_SelectGroup(self->_messenger, &DAT_0051b398[0]);
-                        beMessenger_AppendInt(self->_messenger, self->_playerNo);
-                        beMessenger_DispatchSelected(self->_messenger, &DAT_0051b3e8[0]);
-                        fa = igProperty_GetRecordFolder(beMessenger_GetObject(self->_messenger, 0), &DAT_0051b6c0[0])->f12;
-                        found = 0;
-                        j = 0;
-                        if (0 < VCNT(fa)) {
+                        REQUEST_PLAYER(self)
+                        heldDisks = PlayerFolder(beMessenger_GetObject(self->_messenger, 0), DISKFOLDER_5);
+                        heldCount = 0;
+                        slot = 0;
+                        if (0 < heldDisks->_count) {
                             do {
-                                it = ((Item_42a2e0 **)fa->_data)[j];
-                                if (it != 0 && self->_conItemNo == it->f12) {
-                                    found = it->f20;
+                                disk = ((beNDMWItemDisk **)heldDisks->_data)[slot];
+                                if (disk != 0 && self->_conItemNo == disk->_recNo) {
+                                    heldCount = disk->_kazu;
                                     break;
                                 }
-                                j += 1;
-                            } while (j < VCNT(fa));
+                                slot += 1;
+                            } while (slot < heldDisks->_count);
                         }
-                        if (found == 9) {
-                            self->_st1 = 5;
-                            self->_st3 = 0;
-                            self->_st2 = 0;
+                        if (heldCount == DISK_STACK_MAX) {
+                            ENTER_STEP(self, DISK_NOTICE)
                             self->_st3 = 0x623;
                             return;
                         }
-                        self->_st1 = 2;
-                        self->_st3 = 0;
-                        self->_st2 = 0;
-                        self->_diskCnt = found;
+                        ENTER_STEP(self, DISK_QUANTITY)
+                        self->_diskCnt = heldCount;
                         return;
                     }
-                    self->_st0 = 0;
-                    self->_st3 = 0;
-                    self->_st2 = 0;
-                    self->_st1 = 0;
+                    ENTER_STATE(self, SHOP_STATE_OPEN)
                     return;
                 }
                 break;
             }
             break;
-        case 2:
+        case DISK_QUANTITY:
             switch (self->_st2) {
             case 0:
-                beMessenger_SendNamed(self->_messenger, &DAT_0051b308[0], &DAT_0051b610[0], 0, &DAT_0051b6d0[0]);
-                ALLOC(alloc, self)
+                beMessenger_SendNamed(self->_messenger, MODELCTRL_16, j_shwin, 0, SQ_DWINOPEN);
+                PICK_ALLOCATOR(allocator, self)
                 {
-                igSmartPointer<beNDMWShopSelect52> spC4((beNDMWShopSelect52 *)beNDMWShopSelect52_Create(alloc));
-                beNDMWWindow_BindContext(spC4.p, self, self->_insight, self->_playerNo, 9 - self->_diskCnt);
-                ObjectList_AppendRetained(self->_subWindow, spC4.p);
-                { beNDMWWindowSelect *w = (beNDMWWindowSelect *)spC4.p; w->_offsetPos[0] = 52.0f; w->_offsetPos[1] = -69.0f; w->_offsetPos[2] = 0.0f; }
-                INTERN_APPEND(((beNDMWWindow *)spC4.p)->_textCloseTypeList, STWINFONT29)
-                INTERN_APPEND(((beNDMWWindow *)spC4.p)->_textCloseNameList, &DAT_0051b548[0])
-                beNDMWWindow_RunMessageScript(self, &DAT_0051b3b0[0], 0x624);
-                beNDMWWindow_RunMessageScript(self, &DAT_0051b3b0[0], 0x5DE);
-                self->_retCode = 8 - self->_diskCnt;
-                FUN_0042b880(self);
+                    igSmartPointer<beNDMWShopSelect52> quantity((beNDMWShopSelect52 *)beNDMWShopSelect52_Create(allocator));
+                    beNDMWShopSelect52 *quantityWindow;
+                    beNDMWWindow_BindContext(quantity.p, self, self->_insight, self->_playerNo, DISK_STACK_MAX - self->_diskCnt);
+                    ObjectList_AppendRetained(self->_subWindow, quantity.p);
+                    quantityWindow = quantity.p;
+                    quantityWindow->_offsetPos[0] = 52.0f;
+                    quantityWindow->_offsetPos[1] = -69.0f;
+                    quantityWindow->_offsetPos[2] = 0.0f;
+                    StringList_AppendRetained(quantity.p->_textCloseTypeList, StringRef(InternString(STWINFONT29)));
+                    StringList_AppendRetained(quantity.p->_textCloseNameList, StringRef(InternString((const char *)font100_3)));
+                    beNDMWWindow_RunMessageScript(self, txt_shop_lua_2, 0x624);
+                    beNDMWWindow_RunMessageScript(self, txt_shop_lua_2, 0x5DE);
+                    self->_retCode = (DISK_STACK_MAX - 1) - self->_diskCnt;
+                    beNDMWShopCtrl50_ShowQuantity(self);
                 }
-                self->_nowProcKazu = SUBCNT(self);
-                self->_st2 = self->_st2 + 1;
-                self->_st3 = 0;
+                self->_nowProcKazu = ObjectList_Count(self->_subWindow);
+                NEXT_PHASE(self)
             case 1:
-                if (SUBCNT(self) == self->_nowProcKazu) {
+                if (ObjectList_Count(self->_subWindow) == self->_nowProcKazu) {
                     if (self->_retCode != -1) {
                         if (self->_st3 != self->_retCode) {
-                            FUN_0042b880(self);
+                            beNDMWShopCtrl50_ShowQuantity(self);
                         }
                         self->_st3 = self->_retCode;
                         return;
@@ -2072,150 +2072,126 @@ void Gap__Bec__beNDMWShopCtrl50__vfunc_21(beNDMWShopCtrl50 *self) {
                 } else {
                     switch (self->_retCode) {
                     default:
-                        self->_st1 = 3;
-                        self->_st3 = 0;
-                        self->_st2 = 0;
-                        self->_st3 = (9 - self->_diskCnt) - self->_retCode;
+                        ENTER_STEP(self, DISK_PURCHASE)
+                        self->_st3 = (DISK_STACK_MAX - self->_diskCnt) - self->_retCode;
                         return;
                     case -1:
-                    FUN_0042b9d0(self);
-                    self->_st1 = 1;
-                    self->_st3 = 0;
-                    self->_st2 = 0;
-                    self->_st2 = 1;
-                    self->_st3 = 0;
+                        beNDMWShopCtrl50_HideQuantity(self);
+                        ENTER_STEP(self, DISK_LIST)
+                        ENTER_PHASE(self, LIST_SELECT)
                     }
                     return;
                 }
                 break;
             }
             break;
-        case 3:
+        case DISK_PURCHASE:
             switch (self->_st2) {
-            case 0:
-                beMessenger_SendNamed(self->_messenger, &DAT_0051b5d8[0], &DAT_0051b660[0], 0, &DAT_0051b5e8[0]);
-                self->_tanka = beDataBase_GetRecordInt(beMessenger_GetObject(self->_messenger, 0), self->_conItemNo, &DAT_0051b690[0]);
+            case PURCHASE_CHECK_BITS:
+                beMessenger_SendNamed(self->_messenger, DATABASE_11, conItem_2, 0, GETDATABASE_10);
+                self->_tanka = beDataBase_GetRecordInt(beMessenger_GetObject(self->_messenger, 0), self->_conItemNo, HANBAI_2);
                 self->_kazu = self->_st3;
-                cost0 = self->_tanka * self->_kazu;
-                beMessenger_SelectGroup(self->_messenger, &DAT_0051b398[0]);
-                beMessenger_AppendInt(self->_messenger, self->_playerNo);
-                beMessenger_DispatchSelected(self->_messenger, &DAT_0051b3e8[0]);
-                if (cost0 <= W(((int)igProperty_GetRecord(beMessenger_GetObject(self->_messenger, 0), &DAT_0051b560[0])), 12)) {
-                    self->_st2 = self->_st2 + 1;
-                    self->_st3 = 0;
+                cost = self->_tanka * self->_kazu;
+                REQUEST_PLAYER(self)
+                if (cost <= PlayerInt(beMessenger_GetObject(self->_messenger, 0), BIT_7)->_data) {
+                    NEXT_PHASE(self)
                     return;
                 }
-                self->_st1 = 5;
-                self->_st3 = 0;
-                self->_st2 = 0;
+                ENTER_STEP(self, DISK_NOTICE)
                 self->_st3 = 0x622;
                 return;
-            case 1:
-                ALLOC(alloc, self)
+            case PURCHASE_ANNOUNCE:
+                PICK_ALLOCATOR(allocator, self)
                 {
-                igSmartPointer<beNDMWShopSelect00> spC0((beNDMWShopSelect00 *)beNDMWShopSelect00_Create(alloc));
-                beNDMWWindow_BindContext(spC0.p, self, self->_insight, self->_playerNo, 0x613);
-                ObjectList_AppendRetained(self->_subWindow, spC0.p);
+                    igSmartPointer<beNDMWShopSelect00> message((beNDMWShopSelect00 *)beNDMWShopSelect00_Create(allocator));
+                    beNDMWWindow_BindContext(message.p, self, self->_insight, self->_playerNo, 0x613);
+                    ObjectList_AppendRetained(self->_subWindow, message.p);
                 }
-                self->_nowProcKazu = SUBCNT(self);
-                self->_st2 = self->_st2 + 1;
-                self->_st3 = 0;
-            case 2:
-                if (SUBCNT(self) != self->_nowProcKazu) {
-                    ALLOC(alloc, self)
+                self->_nowProcKazu = ObjectList_Count(self->_subWindow);
+                NEXT_PHASE(self)
+            case PURCHASE_CONFIRM:
+                if (ObjectList_Count(self->_subWindow) != self->_nowProcKazu) {
+                    PICK_ALLOCATOR(allocator, self)
                     {
-                    igSmartPointer<beNDMWShopSelect01> spBC((beNDMWShopSelect01 *)FUN_003b4d90(alloc));
-                    beNDMWWindow_BindContext(spBC.p, self, self->_insight, self->_playerNo, 0x614);
-                    ObjectList_AppendRetained(self->_subWindow, spBC.p);
+                        igSmartPointer<beNDMWShopSelect01> yesNo((beNDMWShopSelect01 *)beNDMWShopSelect01_Create(allocator));
+                        beNDMWWindow_BindContext(yesNo.p, self, self->_insight, self->_playerNo, 0x614);
+                        ObjectList_AppendRetained(self->_subWindow, yesNo.p);
                     }
-                    self->_nowProcKazu = SUBCNT(self);
-                    self->_st2 = self->_st2 + 1;
-                    self->_st3 = 0;
+                    self->_nowProcKazu = ObjectList_Count(self->_subWindow);
+                    NEXT_PHASE(self)
                     return;
                 }
                 break;
-            case 3:
-                if (SUBCNT(self) != self->_nowProcKazu) {
-                    FUN_0042b9d0(self);
+            case PURCHASE_APPLY:
+                if (ObjectList_Count(self->_subWindow) != self->_nowProcKazu) {
+                    beNDMWShopCtrl50_HideQuantity(self);
                     switch (self->_retCode) {
-                    case 0:
-                        cost2 = self->_tanka * self->_kazu;
-                        beMessenger_SelectGroup(self->_messenger, &DAT_0051b398[0]);
-                        beMessenger_AppendInt(self->_messenger, self->_playerNo);
-                        beMessenger_DispatchSelected(self->_messenger, &DAT_0051b3e8[0]);
-                        objm = beMessenger_GetObject(self->_messenger, 0);
-                        money = W(((int)igProperty_GetRecord(objm, &DAT_0051b560[0])), 12);
-                        rec2 = ((int)igProperty_GetRecord(objm, &DAT_0051b560[0]));
-                        W(rec2, 12) = money - cost2;
-                        beMessenger_SelectGroup(self->_messenger, &DAT_0051b498[0]);
-                        beMessenger_AppendInt(self->_messenger, self->_playerNo);
-                        beMessenger_DispatchSelected(self->_messenger, &DAT_0051b4a0[0]);
-                        fb = igProperty_GetRecordFolder(objm, &DAT_0051b6c0[0])->f12;
-                        jb = 0;
-                        if (0 < VCNT(fb)) {
+                    case ANSWER_YES:
+                        totalPrice = self->_tanka * self->_kazu;
+                        REQUEST_PLAYER(self)
+                        player = beMessenger_GetObject(self->_messenger, 0);
+                        bits = PlayerInt(player, BIT_7)->_data;
+                        money = PlayerInt(player, BIT_7);
+                        money->_data = bits - totalPrice;
+                        UPDATE_SUBWINDOW(self)
+                        ownedDisks = PlayerFolder(player, DISKFOLDER_5);
+                        ownedSlot = 0;
+                        if (0 < ownedDisks->_count) {
                             do {
-                                ib = ((Item_42a2e0 **)fb->_data)[jb];
-                                if (ib != 0 && self->_conItemNo == ib->f12) {
-                                    ib->f20 = self->_kazu + f20Of(ib);
+                                ownedDisk = ((beNDMWItemDisk **)ownedDisks->_data)[ownedSlot];
+                                if (ownedDisk != 0 && self->_conItemNo == ownedDisk->_recNo) {
+                                    ownedDisk->_kazu = self->_kazu + DiskCount(ownedDisk);
                                     break;
                                 }
-                                jb += 1;
-                            } while (jb < VCNT(fb));
+                                ownedSlot += 1;
+                            } while (ownedSlot < ownedDisks->_count);
                         }
                         break;
-                    case 1: default:
+                    case ANSWER_NO:
+                    default:
                         break;
                     }
-                    self->_st1 = 1;
-                    self->_st3 = 0;
-                    self->_st2 = 0;
-                    self->_st2 = 1;
-                    self->_st3 = 0;
+                    ENTER_STEP(self, DISK_LIST)
+                    ENTER_PHASE(self, LIST_SELECT)
                     return;
                 }
                 break;
             }
             break;
-        case 5:
+        case DISK_NOTICE:
             switch (self->_st2) {
             case 0:
-                ALLOC(alloc, self)
+                PICK_ALLOCATOR(allocator, self)
                 {
-                igSmartPointer<beNDMWShopSelect00> spB8((beNDMWShopSelect00 *)beNDMWShopSelect00_Create(alloc));
-                beNDMWWindow_BindContext(spB8.p, self, self->_insight, self->_playerNo, self->_st3);
-                ObjectList_AppendRetained(self->_subWindow, spB8.p);
+                    igSmartPointer<beNDMWShopSelect00> message((beNDMWShopSelect00 *)beNDMWShopSelect00_Create(allocator));
+                    beNDMWWindow_BindContext(message.p, self, self->_insight, self->_playerNo, self->_st3);
+                    ObjectList_AppendRetained(self->_subWindow, message.p);
                 }
-                self->_nowProcKazu = SUBCNT(self);
-                self->_st2 = self->_st2 + 1;
-                self->_st3 = 0;
+                self->_nowProcKazu = ObjectList_Count(self->_subWindow);
+                NEXT_PHASE(self)
             case 1:
-                if (SUBCNT(self) != self->_nowProcKazu) {
-                    FUN_0042b9d0(self);
-                    self->_st1 = 1;
-                    self->_st3 = 0;
-                    self->_st2 = 0;
+                if (ObjectList_Count(self->_subWindow) != self->_nowProcKazu) {
+                    beNDMWShopCtrl50_HideQuantity(self);
+                    ENTER_STEP(self, DISK_LIST)
                     return;
                 }
                 break;
             }
             break;
-        case 4:
+        case DISK_SELL:
             switch (self->_st2) {
             case 0:
-                ALLOC(alloc, self)
+                PICK_ALLOCATOR(allocator, self)
                 {
-                igSmartPointer<beNDMWShopCtrlSell> spB4((beNDMWShopCtrlSell *)FUN_003b7360(alloc));
-                beNDMWWindow_BindContext(spB4.p, self, self->_insight, self->_playerNo, 0);
-                ObjectList_AppendRetained(self->_subWindow, spB4.p);
+                    igSmartPointer<beNDMWShopCtrlSell> sell((beNDMWShopCtrlSell *)beNDMWShopCtrlSell_Create(allocator));
+                    beNDMWWindow_BindContext(sell.p, self, self->_insight, self->_playerNo, 0);
+                    ObjectList_AppendRetained(self->_subWindow, sell.p);
                 }
-                self->_nowProcKazu = SUBCNT(self);
-                self->_st2 = self->_st2 + 1;
-                self->_st3 = 0;
+                self->_nowProcKazu = ObjectList_Count(self->_subWindow);
+                NEXT_PHASE(self)
             case 1:
-                if (SUBCNT(self) != self->_nowProcKazu) {
-                    self->_st1 = 0;
-                    self->_st3 = 0;
-                    self->_st2 = 0;
+                if (ObjectList_Count(self->_subWindow) != self->_nowProcKazu) {
+                    ENTER_STEP(self, DISK_MENU)
                     return;
                 }
                 break;
@@ -2223,16 +2199,13 @@ void Gap__Bec__beNDMWShopCtrl50__vfunc_21(beNDMWShopCtrl50 *self) {
             break;
         }
         break;
-    case 2:
+    case SHOP_STATE_CLOSE:
         beNDMWWindow_PlayQueuedModelClose(self);
         beNDMWWindow_ClearQueuedText(self);
         beNDMWWindow_RequestChildrenClose(self);
-        self->_st0 = self->_st0 + 1;
-        self->_st3 = 0;
-        self->_st2 = 0;
-        self->_st1 = 0;
+        NEXT_STATE(self)
         return;
-    case 3:
+    case SHOP_STATE_WAIT_CLOSED:
         if (beNDMWWindow_PollCloseComplete(self) != 0) {
             self->_isRun = 0;
         }
@@ -2240,1598 +2213,261 @@ void Gap__Bec__beNDMWShopCtrl50__vfunc_21(beNDMWShopCtrl50 *self) {
     }
 }
 
+/* Shows the chosen quantity (font010) and its total price (font021) in the quantity window. */
+void beNDMWShopCtrl50_ShowQuantity(beNDMWShopCtrl50 *self) {
+    char text[16];
+    int conItems;
+    int quantity;
+    int unitPrice;
 
-void FUN_0042b880(beNDMWShopCtrl50 *owner) {
-    char sp40[16];
-    int obj;
-    int remaining;
-    int unitCount;
-    beNDMWShopCtrl50 *me;
-
-    me = (beNDMWShopCtrl50 *)owner;
-    beMessenger_SendNamed(me->_messenger, &DAT_0051b5d8[0], &DAT_0051b660[0], 0, &DAT_0051b5e8[0]);
-    obj = beMessenger_GetObject(me->_messenger, 0);
-    remaining = (9 - me->_diskCnt) - me->_retCode;
-    unitCount = beDataBase_GetRecordInt(obj, me->_conItemNo, &DAT_0051b690[0], 9, me->_diskCnt);
-    sprintf(sp40, percent_d, remaining);
-    beMessenger_SelectGroup(me->_messenger, TEXTCTL_3);
-    beMessenger_AppendString(me->_messenger, &((const char *)DAT_0051b6f8)[0]);
-    beMessenger_AppendString(me->_messenger, &DAT_0051b218[0]);
-    beMessenger_AppendString(me->_messenger, sp40);
-    beMessenger_DispatchSelected(me->_messenger, TEXTSET);
-    sprintf(sp40, percent_d, remaining * unitCount);
-    beMessenger_SelectGroup(me->_messenger, TEXTCTL_3);
-    beMessenger_AppendString(me->_messenger, &((const char *)DAT_0051b6f8)[0]);
-    beMessenger_AppendString(me->_messenger, &DAT_0051b288[0]);
-    beMessenger_AppendString(me->_messenger, sp40);
-    beMessenger_DispatchSelected(me->_messenger, TEXTSET);
+    beMessenger_SendNamed(self->_messenger, DATABASE_11, conItem_2, 0, GETDATABASE_10);
+    conItems = beMessenger_GetObject(self->_messenger, 0);
+    quantity = (DISK_STACK_MAX - self->_diskCnt) - self->_retCode;
+    unitPrice = beDataBase_GetRecordInt(conItems, self->_conItemNo, HANBAI_2);
+    sprintf(text, percent_d, quantity);
+    beMessenger_SelectGroup(self->_messenger, TEXTCTL_3);
+    beMessenger_AppendString(self->_messenger, STWINFONT32);
+    beMessenger_AppendString(self->_messenger, font010_3);
+    beMessenger_AppendString(self->_messenger, text);
+    beMessenger_DispatchSelected(self->_messenger, TEXTSET);
+    sprintf(text, percent_d, quantity * unitPrice);
+    beMessenger_SelectGroup(self->_messenger, TEXTCTL_3);
+    beMessenger_AppendString(self->_messenger, STWINFONT32);
+    beMessenger_AppendString(self->_messenger, font021);
+    beMessenger_AppendString(self->_messenger, text);
+    beMessenger_DispatchSelected(self->_messenger, TEXTSET);
 }
 
-void FUN_0042b9d0(beNDMWShopCtrl50 *arg0) {
-    beMessenger_SelectGroup(arg0->_messenger, TEXTCTL_3);
-    beMessenger_AppendString(arg0->_messenger, &DAT_0051b6f8[0]);
-    beMessenger_AppendString(arg0->_messenger, &DAT_0051b278[0]);
-    beMessenger_AppendString(arg0->_messenger, DISPOFF);
-    beMessenger_DispatchSelected(arg0->_messenger, SWITCH_2);
-    beMessenger_SelectGroup(arg0->_messenger, TEXTCTL_3);
-    beMessenger_AppendString(arg0->_messenger, &DAT_0051b6f8[0]);
-    beMessenger_AppendString(arg0->_messenger, &((int *)DAT_0051b218)[0]);
-    beMessenger_AppendString(arg0->_messenger, DISPOFF);
-    beMessenger_DispatchSelected(arg0->_messenger, SWITCH_2);
-    beMessenger_SelectGroup(arg0->_messenger, TEXTCTL_3);
-    beMessenger_AppendString(arg0->_messenger, &DAT_0051b6f8[0]);
-    beMessenger_AppendString(arg0->_messenger, &((int *)DAT_0051b288)[0]);
-    beMessenger_AppendString(arg0->_messenger, DISPOFF);
-    beMessenger_DispatchSelected(arg0->_messenger, SWITCH_2);
+/* Hides the quantity window's labels: the caption (font020), the quantity and the total price. */
+void beNDMWShopCtrl50_HideQuantity(beNDMWShopCtrl50 *self) {
+    HIDE_TEXT(self, STWINFONT32, font020)
+    HIDE_TEXT(self, STWINFONT32, font010_3)
+    HIDE_TEXT(self, STWINFONT32, font021)
 }
 
-void FUN_0042bae0(int *arg0, int arg1) {
-    Tbl sp30;
-    float v[3];
-    if (arg1 > -1) {
-        sp30 = DAT_004cf990;
-        beMessenger_SendNamed(arg0[3], ((char *)DAT_0051b308), DAT_0051b7c8, 0, DAT_0051b7d8);
-        if (beMessenger_GetBool(arg0[3], 0) != 0) {
-            beMessenger_SendNamed(arg0[3], ((char *)DAT_0051b308), DAT_0051b7c8, 0, (char *)sp30.s[arg1]);
+/* Word index of beNDMWWindow::_messenger in the window this helper receives as `int *`. */
+enum { WINDOW_MESSENGER_WORD = 3 };
+
+/* Moves the disk list's row cursor model to `row` (generating it on first use), or closes it
+ * for a negative row. */
+void beNDMWShopCtrl50_MoveRowCursor(int *window, int row) {
+    Tbl rowSequences;
+    float position[3];
+    if (row > -1) {
+        rowSequences = g_diskListCursorSequences;
+        beMessenger_SendNamed(window[WINDOW_MESSENGER_WORD], MODELCTRL_16, i_stcursor04_2, 0, ISRUN_10);
+        if (beMessenger_GetBool(window[WINDOW_MESSENGER_WORD], 0) != 0) {
+            beMessenger_SendNamed(window[WINDOW_MESSENGER_WORD], MODELCTRL_16, i_stcursor04_2, 0, rowSequences.s[row]);
             return;
         }
-        beMessenger_SelectReceivers(arg0[3], ((char *)DAT_0051b308), DAT_0051b7c8, 0);
-        beMessenger_AppendString(arg0[3], sp30.s[arg1]);
-        v[2] = 0;
-        v[0] = -121.0f;
-        v[1] = 128.0f;
-        beMessenger_AppendVec3(arg0[3], v);
-        beMessenger_DispatchSelected(arg0[3], DAT_0051b7e0);
+        beMessenger_SelectReceivers(window[WINDOW_MESSENGER_WORD], MODELCTRL_16, i_stcursor04_2, 0);
+        beMessenger_AppendString(window[WINDOW_MESSENGER_WORD], rowSequences.s[row]);
+        position[2] = 0;
+        position[0] = -121.0f;
+        position[1] = 128.0f;
+        beMessenger_AppendVec3(window[WINDOW_MESSENGER_WORD], position);
+        beMessenger_DispatchSelected(window[WINDOW_MESSENGER_WORD], GENERATE_13);
         return;
     }
-    beMessenger_SendNamed(arg0[3], ((char *)DAT_0051b308), DAT_0051b7c8, 0, DAT_0051b7d8);
-    if (beMessenger_GetBool(arg0[3], 0) != 0) {
-        beMessenger_SendNamed(arg0[3], ((char *)DAT_0051b308), DAT_0051b7c8, 0, ((char *)DAT_0051b620));
+    beMessenger_SendNamed(window[WINDOW_MESSENGER_WORD], MODELCTRL_16, i_stcursor04_2, 0, ISRUN_10);
+    if (beMessenger_GetBool(window[WINDOW_MESSENGER_WORD], 0) != 0) {
+        beMessenger_SendNamed(window[WINDOW_MESSENGER_WORD], MODELCTRL_16, i_stcursor04_2, 0, SQ_CLOSE_10);
     }
 }
 
-void Gap__Bec__beNDMWShopJunk__vfunc_21(beNDMWShopJunk *arg0) {
-    void *alloc;
-    Tbl_42bc70 sp50;
-    switch (arg0->_st0) {
-    case 0:
-        beMessenger_SelectGroup(arg0->_messenger, DAT_0051b498);
-        beMessenger_AppendInt(arg0->_messenger, 9);
-        beMessenger_DispatchSelected(arg0->_messenger, DAT_0051b7f0);
-        if (beMessenger_GetObjectCount(arg0->_messenger) > 0) {
-            Rc_42bc70 *o = ((Rc_42bc70 *)beMessenger_GetObject(arg0->_messenger, 0));
-            if (o != 0) o->_refCount = (int)o->_refCount + 1;
-            { Rc_42bc70 *t = (Rc_42bc70 *)arg0->_junkItemList; REL_42bc70(t) }
-            arg0->_junkItemList = (int)o;
-            arg0->_totalGift = beMessenger_GetInt(arg0->_messenger, 1);
-        }
-        arg0->_st0 = arg0->_st0 + 1;
-        arg0->_st3 = 0;
-        arg0->_st2 = 0;
-        arg0->_st1 = 0;
-        arg0->_st1 = 0;
-        arg0->_st3 = 0;
-        arg0->_st2 = 0;
-    case 1:
-        switch (arg0->_st1) {
-        case 0:
-            switch (arg0->_st2) {
-            case 0:
-                alloc = igObject_GetAllocator(arg0);
-                alloc = GPR_00554c14 ? alloc : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
-                {
-                igSmartPointer<beNDMWShopSelect01> sp8C((beNDMWShopSelect01 *)FUN_003b4d90(alloc));
-                beNDMWWindow_BindContext(sp8C.p, arg0, arg0->_insight, arg0->_playerNo, 0x79e);
-                ObjectList_AppendRetained((unsigned)arg0->_subWindow, sp8C.p);
-                ((beNDMWShopSelect01 *)sp8C.p)->_startPoint = arg0->_junkMenu;
-                alloc = igObject_GetAllocator(arg0);
-                alloc = GPR_00554c14 ? alloc : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
-                igSmartPointer<igBoolList> sp88((igBoolList *)igBoolList_Create(alloc));
+/* Retains `object`, releases the reference held in `field` and stores `object` there. */
+#define SET_OBJECT_REF(field, object) { \
+    igObject *retained = (igObject *)(object); \
+    if (retained != 0) retained->_refCount = (int)retained->_refCount + 1; \
+    { igObject *previous = (igObject *)(field); RELEASE(previous) } \
+    (field) = (int)retained; }
 
-                if (arg0->_totalGift >= 3956000) {
-                    PUSHB(sp88.p, GPR_00554a38)
-                } else {
-                    PUSHB(sp88.p, GPR_00554a3c)
-                }
-                if (((igObjectList *)arg0->_junkItemList)->_count <= 0) {
-                    PUSHB(sp88.p, GPR_00554a40)
-                } else {
-                    PUSHB(sp88.p, GPR_00554a44)
-                }
-                PUSHB(sp88.p, GPR_00554a48)
-                int i;
-                Rc_42bc70 *src;
+/* _retCode of a child window closed with cancel. */
+enum { RET_CANCEL = -1 };
+
+enum SubWndMode { SUBWND_MODE_JUNK = 9, SUBWND_MODE_CARD = 10 };
+
+enum JunkStep { JUNK_STEP_MENU, JUNK_STEP_DONATE, JUNK_STEP_BUY, JUNK_STEP_FAREWELL };
+enum JunkMenuChoice { JUNK_CHOICE_DONATE, JUNK_CHOICE_BUY, JUNK_CHOICE_LEAVE, JUNK_MENU_CHOICES };
+/* Index of the lifetime junk donation total in the GAMERAM common COUNTER list. */
+enum { COUNTER_JUNK_GIFT = 1 };
+/* Donating stops once the lifetime total reaches the last reward threshold. */
+enum { JUNK_GIFT_MAX = 3956000 };
+/* beNDMWShopCtrlEditBit entry code: 0 deposit and 1 withdraw at the bank, 2 donate here. */
+enum { EDITBIT_MODE_DONATE = 2 };
+
+void beNDMWShopJunk_Update(beNDMWShopJunk *self) {
+    void *allocator;
+    switch (self->_st0) {
+    case SHOP_STATE_OPEN:
+        beMessenger_SelectGroup(self->_messenger, SUBWND_8);
+        beMessenger_AppendInt(self->_messenger, SUBWND_MODE_JUNK);
+        beMessenger_DispatchSelected(self->_messenger, GETSHOPDATA);
+        if (beMessenger_GetObjectCount(self->_messenger) > 0) {
+            SET_OBJECT_REF(self->_junkItemList, beMessenger_GetObject(self->_messenger, 0));
+            self->_totalGift = beMessenger_GetInt(self->_messenger, 1);
+        }
+        NEXT_STATE(self);
+        ENTER_STEP(self, JUNK_STEP_MENU);
+    case SHOP_STATE_RUN:
+        switch (self->_st1) {
+        case JUNK_STEP_MENU:
+            switch (self->_st2) {
+            case CHILD_OPEN:
+                PICK_ALLOCATOR(allocator, self);
                 {
-                    for (i = 0; (src = sp88.p, i < ((igBoolList *)src)->_count); i++) {
-                        beMessenger_SelectGroup(arg0->_messenger, TEXTCTL_3);
-                        beMessenger_AppendString(arg0->_messenger, (const char *)STWINFONT29);
-                        beMessenger_AppendString(arg0->_messenger, g_fontNames[i]);
-                        if (*(unsigned char *)(((igBoolList *)sp88.p)->_data + i) != 0) {
-                            beMessenger_DispatchSelected(arg0->_messenger, DAT_0051b3d8);
+                    igSmartPointer<beNDMWShopSelect01> menu((beNDMWShopSelect01 *)beNDMWShopSelect01_Create(allocator));
+                    beNDMWWindow_BindContext(menu.p, self, self->_insight, self->_playerNo, 0x79e);
+                    ObjectList_AppendRetained(self->_subWindow, menu.p);
+                    menu.p->_startPoint = self->_junkMenu;
+                    PICK_ALLOCATOR(allocator, self);
+                    igSmartPointer<igBoolList> enabled((igBoolList *)igBoolList_Create(allocator));
+                    if (self->_totalGift >= JUNK_GIFT_MAX) {
+                        BoolList_Append(enabled.p, false);
+                    } else {
+                        BoolList_Append(enabled.p, true);
+                    }
+                    if (((igObjectList *)self->_junkItemList)->_count <= 0) {
+                        BoolList_Append(enabled.p, false);
+                    } else {
+                        BoolList_Append(enabled.p, true);
+                    }
+                    BoolList_Append(enabled.p, true);
+                    int i;
+                    for (i = 0; i < enabled.p->_count; i++) {
+                        beMessenger_SelectGroup(self->_messenger, TEXTCTL_3);
+                        beMessenger_AppendString(self->_messenger, STWINFONT29);
+                        beMessenger_AppendString(self->_messenger, g_fontNames[i]);
+                        if (*(bool *)(enabled.p->_data + i)) {
+                            beMessenger_DispatchSelected(self->_messenger, DEFAULTCOLOR_5);
                         } else {
-                            beMessenger_DispatchSelected(arg0->_messenger, DAT_0051b800);
+                            beMessenger_DispatchSelected(self->_messenger, CANCELCOLOR_4);
                         }
                     }
+                    beNDMWShopSelect01 *window = menu.p;
+                    SET_OBJECT_REF(window->_decideList, enabled.p);
                 }
-                {
-                    beNDMWShopSelect01 *dst = (beNDMWShopSelect01 *)sp8C.p;
-                    if (src != 0) src->_refCount = (int)src->_refCount + 1;
-                    { Rc_42bc70 *t = (Rc_42bc70 *)dst->_decideList; REL_42bc70(t) }
-                    dst->_decideList = (int)src;
-                }
-                }
-                arg0->_nowProcKazu = ((beNDMWWindowList *)arg0->_subWindow)->_count;
-                arg0->_st2 = arg0->_st2 + 1;
-                arg0->_st3 = 0;
-            case 1:
-                if (((beNDMWWindowList *)arg0->_subWindow)->_count != arg0->_nowProcKazu) {
+                self->_nowProcKazu = CHILD_COUNT(self);
+                NEXT_PHASE(self);
+            case CHILD_WAIT:
+                if (CHILD_COUNT(self) != self->_nowProcKazu) {
                     {
-                        int i = 0;
-                        const char **q = g_fontNames;
-                        do {
-                            beMessenger_SelectGroup(arg0->_messenger, TEXTCTL_3);
-                            beMessenger_AppendString(arg0->_messenger, (const char *)STWINFONT29);
-                            beMessenger_AppendString(arg0->_messenger, g_fontNames[i]);
-                            beMessenger_DispatchSelected(arg0->_messenger, DAT_0051b3d8);
-                            i++;
-                            q++;
-                        } while (i < 3);
+                        int i;
+                        for (i = 0; i < JUNK_MENU_CHOICES; i++) {
+                            beMessenger_SelectGroup(self->_messenger, TEXTCTL_3);
+                            beMessenger_AppendString(self->_messenger, STWINFONT29);
+                            beMessenger_AppendString(self->_messenger, g_fontNames[i]);
+                            beMessenger_DispatchSelected(self->_messenger, DEFAULTCOLOR_5);
+                        }
                     }
-                    switch (arg0->_retCode) {
-                    case 0:
-                        arg0->_junkMenu = 0;
-                        arg0->_st1 = 1;
-                        arg0->_st3 = 0;
-                        arg0->_st2 = 0;
+                    switch (self->_retCode) {
+                    case JUNK_CHOICE_DONATE:
+                        self->_junkMenu = JUNK_CHOICE_DONATE;
+                        ENTER_STEP(self, JUNK_STEP_DONATE);
                         return;
-                    case 1:
-                        arg0->_junkMenu = 1;
-                        arg0->_st1 = 2;
-                        arg0->_st3 = 0;
-                        arg0->_st2 = 0;
+                    case JUNK_CHOICE_BUY:
+                        self->_junkMenu = JUNK_CHOICE_BUY;
+                        ENTER_STEP(self, JUNK_STEP_BUY);
                         return;
                     default:
-                    case 2:
-                        arg0->_st0 = arg0->_st0 + 1;
-                        arg0->_st3 = 0;
-                        arg0->_st2 = 0;
-                        arg0->_st1 = 0;
+                    case JUNK_CHOICE_LEAVE:
+                        NEXT_STATE(self);
                         return;
                     }
                 }
                 break;
             }
             break;
-        case 1:
-            switch (arg0->_st2) {
-            case 0:
-                alloc = igObject_GetAllocator(arg0);
-                alloc = GPR_00554c14 ? alloc : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
+        case JUNK_STEP_DONATE:
+            switch (self->_st2) {
+            case CHILD_OPEN:
+                PICK_ALLOCATOR(allocator, self);
                 {
-                igSmartPointer<beNDMWShopCtrlEditBit> sp84((beNDMWShopCtrlEditBit *)FUN_003b7520(alloc));
-                beNDMWWindow_BindContext(sp84.p, arg0, arg0->_insight, arg0->_playerNo, 2);
-                ObjectList_AppendRetained((unsigned)arg0->_subWindow, sp84.p);
+                    igSmartPointer<beNDMWShopCtrlEditBit> amount((beNDMWShopCtrlEditBit *)beNDMWShopCtrlEditBit_Create(allocator));
+                    beNDMWWindow_BindContext(amount.p, self, self->_insight, self->_playerNo, EDITBIT_MODE_DONATE);
+                    ObjectList_AppendRetained(self->_subWindow, amount.p);
                 }
-                arg0->_nowProcKazu = ((beNDMWWindowList *)arg0->_subWindow)->_count;
-                arg0->_st2 = arg0->_st2 + 1;
-                arg0->_st3 = 0;
-            case 1:
-                if (((beNDMWWindowList *)arg0->_subWindow)->_count != arg0->_nowProcKazu) {
-                    if (arg0->_retCode != -1) {
-                        igIntList *l;
-                        beMessenger_SendGroup(arg0->_messenger, DAT_0051b398, DAT_0051b810);
-                        l = igProperty_GetRecordIntList(((Rc_42bc70 *)beMessenger_GetObject(arg0->_messenger, 0)), DAT_0051b820)->f12;
+                self->_nowProcKazu = CHILD_COUNT(self);
+                NEXT_PHASE(self);
+            case CHILD_WAIT:
+                if (CHILD_COUNT(self) != self->_nowProcKazu) {
+                    if (self->_retCode != RET_CANCEL) {
+                        igIntList *counters;
+                        beMessenger_SendGroup(self->_messenger, GAMERAM_14, GETCOMMON_10);
+                        counters = (igIntList *)((beDataObjIntList *)igProperty_GetRecordIntList(beMessenger_GetObject(self->_messenger, 0), COUNTER_4))->_data;
                         {
-                            int c = l->_count;
-                            int *p = &((int *)l->_data)[1];
-                            int v = *p + (int)arg0->_retCode;
-                            if (c != 0 && c > 1) *p = v;
+                            int count = counters->_count;
+                            int *giftTotal = &((int *)counters->_data)[COUNTER_JUNK_GIFT];
+                            int newTotal = *giftTotal + (int)self->_retCode;
+                            if (count != 0 && count > COUNTER_JUNK_GIFT) *giftTotal = newTotal;
                         }
-                        beMessenger_SelectGroup(arg0->_messenger, DAT_0051b398);
-                        beMessenger_AppendInt(arg0->_messenger, arg0->_playerNo);
-                        beMessenger_DispatchSelected(arg0->_messenger, DAT_0051b3e8);
+                        beMessenger_SelectGroup(self->_messenger, GAMERAM_14);
+                        beMessenger_AppendInt(self->_messenger, self->_playerNo);
+                        beMessenger_DispatchSelected(self->_messenger, GETPLAYER_10);
                         {
-                            Rc_42bc70 *o = ((Rc_42bc70 *)beMessenger_GetObject(arg0->_messenger, 0));
-                            int s = igProperty_GetRecord(o, DAT_0051b560)->f12 - arg0->_retCode;
-                            igProperty_GetRecord(o, DAT_0051b560)->f12 = s;
+                            int player = beMessenger_GetObject(self->_messenger, 0);
+                            int bitsLeft = ((beDataObjInt *)igProperty_GetRecord(player, BIT_7))->_data - self->_retCode;
+                            ((beDataObjInt *)igProperty_GetRecord(player, BIT_7))->_data = bitsLeft;
                         }
-                        beMessenger_SelectGroup(arg0->_messenger, DAT_0051b498);
-                        beMessenger_AppendInt(arg0->_messenger, arg0->_playerNo);
-                        beMessenger_DispatchSelected(arg0->_messenger, DAT_0051b4a0);
-                        arg0->_st1 = 0;
-                        arg0->_st3 = 0;
-                        arg0->_st2 = 0;
+                        beMessenger_SelectGroup(self->_messenger, SUBWND_8);
+                        beMessenger_AppendInt(self->_messenger, self->_playerNo);
+                        beMessenger_DispatchSelected(self->_messenger, UPDATE_3);
+                        ENTER_STEP(self, JUNK_STEP_MENU);
                         {
-                            int *p;
-                            sp50 = DAT_004cf9c0;
-                            p = sp50.v;
-                            if (*p != -1) {
+                            int thresholds[] = { 1000, 6000, 26000, 86000, 206000, 456000, 956000, 1956000, 3956000, -1 };
+                            int *threshold = thresholds;
+                            if (*threshold != -1) {
                                 do {
-                                    if (arg0->_totalGift < *p && !(((int *)l->_data)[1] < *p)) {
-                                        beLua__RunNamedChunk(igInsightCore_FindManager(arg0->_insight, g_beLua_metaObject[0]), DAT_0051b828, DAT_0051b838);
-                                        arg0->_st1 = 3;
-                                        arg0->_st3 = 0;
-                                        arg0->_st2 = 0;
+                                    if (self->_totalGift < *threshold && ((int *)counters->_data)[COUNTER_JUNK_GIFT] >= *threshold) {
+                                        beLua__RunNamedChunk(igInsightCore_FindManager(self->_insight, g_beLua_metaObject[0]), junkexit_lua, stagML13_lua);
+                                        ENTER_STEP(self, JUNK_STEP_FAREWELL);
                                         return;
                                     }
-                                    p++;
-                                } while (*p != -1);
+                                    threshold++;
+                                } while (*threshold != -1);
                             }
                         }
                     } else {
-                        arg0->_st1 = 0;
-                        arg0->_st3 = 0;
-                        arg0->_st2 = 0;
+                        ENTER_STEP(self, JUNK_STEP_MENU);
                         return;
                     }
                 }
                 break;
             }
             break;
-        case 2:
-            switch (arg0->_st2) {
-            case 0:
-                alloc = igObject_GetAllocator(arg0);
-                alloc = GPR_00554c14 ? alloc : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
-                {
-                igSmartPointer<beNDMWShopCtrlSales> sp80((beNDMWShopCtrlSales *)FUN_003b6bc0(alloc));
-                beNDMWWindow_BindContext(sp80.p, arg0, arg0->_insight, arg0->_playerNo, 9);
-                ObjectList_AppendRetained((unsigned)arg0->_subWindow, sp80.p);
-                }
-                arg0->_nowProcKazu = ((beNDMWWindowList *)arg0->_subWindow)->_count;
-                arg0->_st2 = arg0->_st2 + 1;
-                arg0->_st3 = 0;
-            case 1:
-                if (((beNDMWWindowList *)arg0->_subWindow)->_count != arg0->_nowProcKazu) {
-                    arg0->_st1 = 0;
-                    arg0->_st3 = 0;
-                    arg0->_st2 = 0;
-                    return;
-                }
-                break;
-            }
-            break;
-        case 3:
-            switch (arg0->_st2) {
-            case 0:
-                alloc = igObject_GetAllocator(arg0);
-                alloc = GPR_00554c14 ? alloc : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
-                {
-                igSmartPointer<beNDMWShopSelect00> sp7C((beNDMWShopSelect00 *)beNDMWShopSelect00_Create(alloc));
-                beNDMWWindow_BindContext(sp7C.p, arg0, arg0->_insight, arg0->_playerNo, 0x7b2);
-                ObjectList_AppendRetained((unsigned)arg0->_subWindow, sp7C.p);
-                }
-                arg0->_nowProcKazu = ((beNDMWWindowList *)arg0->_subWindow)->_count;
-                arg0->_st2 = arg0->_st2 + 1;
-                arg0->_st3 = 0;
-            case 1:
-                if (((beNDMWWindowList *)arg0->_subWindow)->_count != arg0->_nowProcKazu) {
-                    arg0->_st0 = arg0->_st0 + 1;
-                    arg0->_st3 = 0;
-                    arg0->_st2 = 0;
-                    arg0->_st1 = 0;
-                    return;
-                }
-                break;
-            }
-            break;
-        }
-        break;
-    case 2:
-        beNDMWWindow_PlayQueuedModelClose(arg0);
-        beNDMWWindow_ClearQueuedText(arg0);
-        beNDMWWindow_RequestChildrenClose(arg0);
-        arg0->_st0 = arg0->_st0 + 1;
-        arg0->_st3 = 0;
-        arg0->_st2 = 0;
-        arg0->_st1 = 0;
-        return;
-    case 3:
-        if (beNDMWWindow_PollCloseComplete(arg0) != 0) {
-            arg0->_isRun = 0;
-        }
-        break;
-    }
-}
-
-
-static inline int countOf(const igIntList *l) { return l->_count; }
-
-void Gap__Bec__beNDMWShopCtrlA0__vfunc_21(beNDMWShopCtrlA0 *arg0) {
-    S_ref *t;
-    int x;
-    int i;
-
-    switch (arg0->_st0) {
-    case 0:
-        switch (arg0->_st1) {
-        case 0:
-            beNDMWWindow_PresentModelAtOrigin(arg0, &DAT_0051b848[0], 0, &DAT_0051b858[0], &DAT_0051b620[0]);
-            beNDMWWindow_PresentModelAtOrigin(arg0, &DAT_0051b348[0], 0, &DAT_0051b868[0], &DAT_0051b620[0]);
-            arg0->_st1 = arg0->_st1 + 1;
-            arg0->_st3 = 0;
-            arg0->_st2 = 0;
-            return;
-        case 1:
-            beMessenger_SelectReceivers(arg0->_messenger, &DAT_0051b308[0], &DAT_0051b848[0], 0);
-            beMessenger_AppendString(arg0->_messenger, &DAT_0051b858[0]);
-            beMessenger_DispatchSelected(arg0->_messenger, &DAT_0051b338[0]);
-            if ((beMessenger_GetBool(arg0->_messenger, 0) & 0xFF) != 1) {
-                x = ((int)igObject_GetAllocator(arg0));
-                { igSmartPointer<beNDMWShopTitle03> r1((beNDMWShopTitle03 *)FUN_003b2c00(GPR_00554c14 != 0 ? x : ((int)Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]))));
-                beNDMWWindow_BindContext(r1.p, arg0, arg0->_insight, arg0->_playerNo, 0);
-                ObjectList_AppendRetained(arg0->_subWindow, r1.p);
-                }  
-                x = ((int)igObject_GetAllocator(arg0));
-                { igSmartPointer<beNDMWStatusTitle03> r2((beNDMWStatusTitle03 *)beNDMWStatusTitle03_Create(GPR_00554c14 != 0 ? x : ((int)Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]))));
-                beNDMWWindow_BindContext(r2.p, arg0, arg0->_insight, arg0->_playerNo, 0);
-                ObjectList_AppendRetained(arg0->_subWindow, r2.p);
-                {
-                    S_ref *n = (S_ref *)r2.p;
-                    if (n != 0) { n->f4 = (int)((int)(n->f4 + 1)); }
-                    t = (S_ref *)(arg0->_account);
-                    if (t != 0) {
-                        t->f4 = (int)((int)(t->f4 - 1));
-                        if (((unsigned long long)((long long)t->f4 << 0x29) >> 0x29) == 0) {
-                            igObject_Destroy(t);
-                        }
-                    }
-                    arg0->_account = (int)n;
-                }
-                FUN_00426530(arg0->_account, 0);
-                }  
-                x = ((int)igObject_GetAllocator(arg0));
-                { igSmartPointer<beNDMWShopTitle01> r3((beNDMWShopTitle01 *)FUN_003b31b0(GPR_00554c14 != 0 ? x : ((int)Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]))));
-                beNDMWWindow_BindContext(r3.p, arg0, arg0->_insight, arg0->_playerNo, arg0->_entCode);
-                ObjectList_AppendRetained(arg0->_subWindow, r3.p);
-                }  
-                i = 0;
-                do {
-                    beMessenger_SelectGroup(arg0->_messenger, &DAT_0051b398[0]);
-                    beMessenger_AppendInt(arg0->_messenger, i);
-                    beMessenger_DispatchSelected(arg0->_messenger, &DAT_0051b3e8[0]);
-                    if (igProperty_GetRecordByte(beMessenger_GetObject(arg0->_messenger, 0), &DAT_0051b870[0])->f12 != 0) {
-                        int c;
-                        igIntList *l;
-                        l = (igIntList *)arg0->_playerNoList;
-                        c = l->_count;
-                        if (c < l->_capacity) {
-                            l->_count = countOf(l) + 1;
-                        } else {
-                            List_Resize(l, c + 1, 4);
-                        }
-                        ((int *)l->_data)[c] = i;
-                    }
-                    i += 1;
-                } while (i < 4);
-                x = ((int)igObject_GetAllocator(arg0));
-                { igSmartPointer<beNDMWStatusTitle01> r4((beNDMWStatusTitle01 *)beNDMWStatusTitle01_Create(GPR_00554c14 != 0 ? x : ((int)Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]))));
-                beNDMWWindow_BindContext(r4.p, arg0, arg0->_insight, arg0->_playerNo, 1);
-                ObjectList_AppendRetained(arg0->_subWindow, r4.p);
-                }  
-                arg0->_st0 = arg0->_st0 + 1;
-                arg0->_st3 = 0;
-                arg0->_st2 = 0;
-                arg0->_st1 = 0;
-                return;
-            }
-            break;
-        }
-        break;
-    case 1:
-        switch (arg0->_st1) {
-        case 0:
-            beMessenger_SelectReceivers(arg0->_messenger, &DAT_0051b308[0], &DAT_0051b318[0], 0);
-            beMessenger_AppendString(arg0->_messenger, &DAT_0051b868[0]);
-            beMessenger_DispatchSelected(arg0->_messenger, &DAT_0051b338[0]);
-            if (((beMessenger_GetBool(arg0->_messenger, 0) & 0xFF) != 1) && (arg0->_entCode == 0xA)) {
-                arg0->_st1 = 1;
-                arg0->_st3 = 0;
-                arg0->_st2 = 0;
-                return;
-            }
-            break;
-        case 1:
-            switch (arg0->_st2) {
-            case 0:
-                x = ((int)igObject_GetAllocator(arg0));
-                { igSmartPointer<beNDMWShopSelect02> r5((beNDMWShopSelect02 *)FUN_003b4b10(GPR_00554c14 != 0 ? x : ((int)Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]))));
-                beNDMWWindow_BindContext(r5.p, arg0, arg0->_insight, arg0->_playerNo, 0x7D3);
-                ObjectList_AppendRetained(arg0->_subWindow, r5.p);
-                FUN_00426530(arg0->_account, 0);
-                }  
-                arg0->_nowProcKazu = ((igObjectList *)arg0->_subWindow)->_count;
-                arg0->_st2 = arg0->_st2 + 1;
-                arg0->_st3 = 0;
-
-            case 1:
-                if (((igObjectList *)arg0->_subWindow)->_count != arg0->_nowProcKazu) {
-                    switch (arg0->_retCode) {
-                    case 0:
-                        arg0->_st1 = 2;
-                        arg0->_st3 = 0;
-                        arg0->_st2 = 0;
-                        return;
-                    default:
-                    case 1:
-                        arg0->_st0 = arg0->_st0 + 1;
-                        arg0->_st3 = 0;
-                        arg0->_st2 = 0;
-                        arg0->_st1 = 0;
-                        ((beSystem *)igInsightCore_FindManager(arg0->_insight, g_beSystem_metaObject[0]))->_isSResetEnable = 0;
-                        return;
-                    }
-                }
-                break;
-            }
-            break;
-        case 2:
-            switch (arg0->_st2) {
-            case 0:
-                x = ((int)igObject_GetAllocator(arg0));
-                { igSmartPointer<beNDMWShopSelect02> r6((beNDMWShopSelect02 *)FUN_003b4b10(GPR_00554c14 != 0 ? x : ((int)Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]))));
-                beNDMWWindow_BindContext(r6.p, arg0, arg0->_insight, arg0->_playerNo, -1);
-                ObjectList_AppendRetained(arg0->_subWindow, r6.p);
-                i = 0;
-                {
-                    int j;
-                    int c;
-                    igIntList *l;
-                    int *src;
-                    for (j = 0; j < ((igIntList *)arg0->_playerNoList)->_count; j++) {
-                        src = (int *)((igIntList *)arg0->_playerNoList)->_data + j;
-                        l = ((S_obj *)r6.p)->f112;
-                        c = l->_count;
-                        if (c < l->_capacity) {
-                            l->_count = countOf(l) + 1;
-                        } else {
-                            List_Resize(l, c + 1, 4);
-                        }
-                        ((int *)l->_data)[c] = *src;
-                    }
-                }
-                }  
-                FUN_00426530(arg0->_account, 1);
-                arg0->_nowProcKazu = ((igObjectList *)arg0->_subWindow)->_count;
-                arg0->_st2 = arg0->_st2 + 1;
-                arg0->_st3 = 0;
-
-            case 1:
-                {
-                    if (((igObjectList *)arg0->_subWindow)->_count != arg0->_nowProcKazu) {
-                        switch (arg0->_retCode) {
-                        case 0:
-                        case 1:
-                        case 2:
-                        case 3:
-                            {
-                                int *found = 0;
-                                int *obj;
-                                int idx;
-                                for (idx = 0; idx < ((igObjectList *)arg0->_subWindow)->_count; idx++) {
-                                    obj = (int *)((int *)((igObjectList *)(*(int *)&arg0->_subWindow))->_data)[idx];
-                                    if ((obj != 0) && (igObject_IsKindOf(obj, g_beNDMWStatusTitle01_metaObject[0]) != 0)) {
-                                        found = obj;
-                                    } else {
-                                        found = 0;
-                                    }
-                                    if (found != 0) break;
-                                }
-                                if (found != 0) {
-                                    found[5] = ((int *)((igIntList *)arg0->_playerNoList)->_data)[arg0->_retCode];
-                                    FUN_00425fb0(found);
-                                    arg0->_playerNo = ((int *)((igIntList *)arg0->_playerNoList)->_data)[arg0->_retCode];
-                                }
-                            }
-                            x = ((int)igObject_GetAllocator(arg0));
-                            { igSmartPointer<beNDMWShopCtrlA1> r7((beNDMWShopCtrlA1 *)FUN_003b7c00(GPR_00554c14 != 0 ? x : ((int)Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]))));
-                            beNDMWWindow_BindContext(r7.p, arg0, arg0->_insight, ((int *)((igIntList *)arg0->_playerNoList)->_data)[arg0->_retCode], 0);
-                            ObjectList_AppendRetained(arg0->_subWindow, r7.p);
-                            }  
-                            arg0->_nowProcKazu = ((igObjectList *)arg0->_subWindow)->_count;
-                            arg0->_st1 = 3;
-                            arg0->_st3 = 0;
-                            arg0->_st2 = 0;
-                            return;
-                        default:
-                            arg0->_st1 = 1;
-                            arg0->_st3 = 0;
-                            arg0->_st2 = 0;
-                            return;
-                        }
-                    }
-                }
-                break;
-            }
-            break;
-        case 3:
-            if (((igObjectList *)arg0->_subWindow)->_count != arg0->_nowProcKazu) {
-                arg0->_st1 = 2;
-                arg0->_st3 = 0;
-                arg0->_st2 = 0;
-                return;
-            }
-            break;
-        }
-        break;
-    case 2:
-        beNDMWWindow_PlayQueuedModelClose();
-        beNDMWWindow_ClearQueuedText(arg0);
-        beNDMWWindow_RequestChildrenClose(arg0);
-        arg0->_st0 = arg0->_st0 + 1;
-        arg0->_st3 = 0;
-        arg0->_st2 = 0;
-        arg0->_st1 = 0;
-        t = (S_ref *)(arg0->_account);
-        if (t != 0) {
-            t->f4 = (int)((int)(t->f4 - 1));
-            if (((unsigned long long)((long long)t->f4 << 0x29) >> 0x29) == 0) {
-                igObject_Destroy(t);
-            }
-        }
-        arg0->_account = 0;
-        return;
-    case 3:
-        if (beNDMWWindow_PollCloseComplete() != 0) {
-            arg0->_isRun = 0;
-        }
-        break;
-    }
-}
-
-
-
-
-static inline int st0_42d450(const beNDMWShopCtrlA1 *self) { return self->_st0; }
-
-void Gap__Bec__beNDMWShopCtrlA1__vfunc_21(beNDMWShopCtrlA1 *arg0) {
-    void *alloc;
-    float sp40[3];
-    float sp30[3];
-    const igObjectList *a;
-    int s0;
-    int i;
-    Item_42a2e0 *it;
-    switch (arg0->_st0) {
-    case 0:
-        arg0->_st0 = st0_42d450(arg0) + 1;
-        arg0->_st3 = 0;
-        arg0->_st2 = 0;
-        arg0->_st1 = 0;
-        arg0->_st1 = 4;
-        arg0->_st3 = 0;
-        arg0->_st2 = 0;
-        return;
-    case 1:
-        switch (arg0->_st1) {
-        case 4:
-            switch (arg0->_st2) {
-            case 0:
-                beMessenger_SelectReceivers(arg0->_messenger, DAT_0051b308, DAT_0051b878, arg0->_playerNo);
-                beMessenger_AppendString(arg0->_messenger, DAT_0051b868);
-                beMessenger_DispatchSelected(arg0->_messenger, DAT_0051b338);
-                if ((beMessenger_GetBool(arg0->_messenger, 0) & 0xFF) == 1) {
-                    return;
-                }
-                alloc = igObject_GetAllocator(arg0);
-                alloc = GPR_00554c14 ? alloc : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
-                {
-                igSmartPointer<beNDMWShopSelect02> win((beNDMWShopSelect02 *)FUN_003b4b10(alloc));
-                beNDMWWindow_BindContext(win.p, arg0, arg0->_insight, arg0->_playerNo, 0x7D5);
-                ObjectList_AppendRetained(arg0->_subWindow, win.p);
-                }
-                arg0->_nowProcKazu = ((igDataList *)arg0->_subWindow)->_count;
-                arg0->_st2 = arg0->_st2 + 1;
-                arg0->_st3 = 0;
-            case 1:
-                if (((igDataList *)arg0->_subWindow)->_count != arg0->_nowProcKazu) {
-                    switch (arg0->_retCode) {
-                    case 0:
-                        arg0->_st1 = 5;
-                        arg0->_st3 = 0;
-                        arg0->_st2 = 0;
-                        return;
-                    case 1:
-                        arg0->_st1 = 6;
-                        arg0->_st3 = 0;
-                        arg0->_st2 = 0;
-                        return;
-                    default:
-                        arg0->_st0 = arg0->_st0 + 1;
-                        arg0->_st3 = 0;
-                        arg0->_st2 = 0;
-                        arg0->_st1 = 0;
-                        return;
-                    }
-                }
-                break;
-            }
-            break;
-        case 5:
-            switch (arg0->_st2) {
-            case 0:
-                beMessenger_SelectGroup(arg0->_messenger, DAT_0051b398);
-                beMessenger_AppendInt(arg0->_messenger, arg0->_playerNo);
-                beMessenger_DispatchSelected(arg0->_messenger, DAT_0051b3e8);
-                a = igProperty_GetRecordFolder(beMessenger_GetObject(arg0->_messenger, 0), DAT_0051b6c0)->f12;
-                s0 = 0;
-                i = 0;
-                while (i < a->_count) {
-                    it = ((Item_42a2e0 **)((igObjectList *)a)->_data)[i];
-                    if (it != 0 && it->f12 == 10) {
-                        s0 = it->f20;
-                        break;
-                    }
-                    i++;
-                }
-                if (s0 > 0) {
-                    alloc = igObject_GetAllocator(arg0);
-                    alloc = GPR_00554c14 ? alloc : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
-                    igSmartPointer<beNDMWShopCtrlA2> win((beNDMWShopCtrlA2 *)FUN_003b7a40(alloc));
-                    beNDMWWindow_BindContext(win.p, arg0, arg0->_insight, arg0->_playerNo, s0);
-                    ObjectList_AppendRetained(arg0->_subWindow, win.p);
-                } else {
-                    alloc = igObject_GetAllocator(arg0);
-                    alloc = GPR_00554c14 ? alloc : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
-                    igSmartPointer<beNDMWShopSelect03> win((beNDMWShopSelect03 *)FUN_003b4950(alloc));
-                    beNDMWWindow_BindContext(win.p, arg0, arg0->_insight, arg0->_playerNo, 0x7D7);
-                    ObjectList_AppendRetained(arg0->_subWindow, win.p);
-                    beMessenger_SelectGroup(arg0->_messenger, DAT_0051b888);
-                    beMessenger_AppendString(arg0->_messenger, DAT_0051b890);
-                    beMessenger_DispatchSelected(arg0->_messenger, DAT_0051b8a0);
-                }
-                arg0->_nowProcKazu = ((igDataList *)arg0->_subWindow)->_count;
-                arg0->_st2 = arg0->_st2 + 1;
-                arg0->_st3 = 0;
-            case 1:
-                if (((igDataList *)arg0->_subWindow)->_count != arg0->_nowProcKazu) {
-                    switch (arg0->_retCode) {
-                    case 6:
-                        arg0->_st1 = 6;
-                        arg0->_st3 = 0;
-                        arg0->_st2 = 0;
-                        return;
-                    case 4:
-                        arg0->_st1 = 4;
-                        arg0->_st3 = 0;
-                        arg0->_st2 = 0;
-                        return;
-                    default:
-                    case 0:
-                        arg0->_st1 = 4;
-                        arg0->_st3 = 0;
-                        arg0->_st2 = 0;
-                        return;
-                    }
-                }
-                break;
-            }
-            break;
-        case 6:
-            switch (arg0->_st2) {
-            case 0:
-                beMessenger_SendNamed(arg0->_messenger, DAT_0051b308, DAT_0051b8a8, 0, DAT_0051b620);
-                beMessenger_SendNamed(arg0->_messenger, DAT_0051b308, DAT_0051b318, 0, DAT_0051b620);
-                beMessenger_SelectGroup(arg0->_messenger, TEXTCTL_3);
-                beMessenger_AppendString(arg0->_messenger, DAT_0051b8b8);
-                beMessenger_AppendString(arg0->_messenger, DAT_004cf8a8[0]);
-                beMessenger_AppendString(arg0->_messenger, DISPOFF);
-                beMessenger_DispatchSelected(arg0->_messenger, SWITCH_2);
-                alloc = igObject_GetAllocator(arg0);
-                alloc = GPR_00554c14 ? alloc : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
-                {
-                igSmartPointer<beNDMWShopSelectA0> win((beNDMWShopSelectA0 *)FUN_003b4250(alloc));
-                beNDMWWindow_BindContext(win.p, arg0, arg0->_insight, arg0->_playerNo, 0);
-                ObjectList_AppendRetained(arg0->_subWindow, win.p);
-                }
-                FUN_0042df70((beNDMWShopCtrlA1 *)arg0);
-                arg0->_nowProcKazu = ((igDataList *)arg0->_subWindow)->_count;
-                arg0->_st2 = arg0->_st2 + 1;
-                arg0->_st3 = 0;
-                return;
-            case 1:
-                beMessenger_SelectReceivers(arg0->_messenger, DAT_0051b308, DAT_0051b8c8, 0);
-                beMessenger_AppendString(arg0->_messenger, DAT_0051b868);
-                beMessenger_DispatchSelected(arg0->_messenger, DAT_0051b338);
-                if ((beMessenger_GetBool(arg0->_messenger, 0) & 0xFF) == 1) {
-                    return;
-                }
-                beMessenger_SelectGroup(arg0->_messenger, TEXTCTL_3);
-                beMessenger_AppendString(arg0->_messenger, DAT_0051b8d8);
-                beMessenger_AppendString(arg0->_messenger, DAT_0051b1c8);
-                beMessenger_AppendString(arg0->_messenger, DAT_0051b8e8);
-                beMessenger_DispatchSelected(arg0->_messenger, TEXTSET);
-                beMessenger_SelectGroup(arg0->_messenger, TEXTCTL_3);
-                beMessenger_AppendString(arg0->_messenger, DAT_0051b8d8);
-                beMessenger_AppendString(arg0->_messenger, DAT_0051b1d0);
-                beMessenger_AppendString(arg0->_messenger, DAT_0051b8f0);
-                beMessenger_DispatchSelected(arg0->_messenger, TEXTSET);
-                arg0->_st2 = arg0->_st2 + 1;
-                arg0->_st3 = 0;
-            case 2:
-                if (((igDataList *)arg0->_subWindow)->_count == arg0->_nowProcKazu) {
-                    if (arg0->_retCode != -1 && arg0->_st3 != arg0->_retCode) {
-                        FUN_0042e330((beNDMWShopCtrlA1 *)arg0);
-                        arg0->_st3 = arg0->_retCode;
-                        return;
-                    }
-                } else {
-                    FUN_0042e9e0((beNDMWShopCtrlA1 *)arg0);
-                    beNDMWWindow_RunMessageScript(arg0, DAT_0051b8f8, 0);
-                    beMessenger_SelectGroup(arg0->_messenger, TEXTCTL_3);
-                    beMessenger_AppendString(arg0->_messenger, DAT_0051b8b8);
-                    beMessenger_AppendString(arg0->_messenger, DAT_004cf8a8[0]);
-                    beMessenger_AppendString(arg0->_messenger, ((int *)DISPON));
-                    beMessenger_DispatchSelected(arg0->_messenger, SWITCH_2);
-                    beMessenger_SelectReceivers(arg0->_messenger, DAT_0051b308, DAT_0051b8a8, 0);
-                    beMessenger_AppendString(arg0->_messenger, DAT_0051b868);
-                    sp40[0] = g_vec3Zero[0];
-                    sp40[1] = DAT_004e105c[0];
-                    sp40[2] = DAT_004e1060[0];
-                    beMessenger_AppendVec3(arg0->_messenger, (float *)sp40);
-                    beMessenger_DispatchSelected(arg0->_messenger, ((int *)DAT_0051b7e0));
-                    beMessenger_SelectReceivers(arg0->_messenger, DAT_0051b308, DAT_0051b318, 0);
-                    beMessenger_AppendString(arg0->_messenger, DAT_0051b868);
-                    sp30[0] = g_vec3Zero[0];
-                    sp30[1] = DAT_004e105c[0];
-                    sp30[2] = DAT_004e1060[0];
-                    beMessenger_AppendVec3(arg0->_messenger, (float *)sp30);
-                    beMessenger_DispatchSelected(arg0->_messenger, ((int *)DAT_0051b7e0));
-                    arg0->_st1 = 4;
-                    arg0->_st3 = 0;
-                    arg0->_st2 = 0;
-                    return;
-                }
-                break;
-            }
-            break;
-        }
-        break;
-    case 2:
-        beNDMWWindow_PlayQueuedModelClose(arg0);
-        beNDMWWindow_ClearQueuedText(arg0);
-        beNDMWWindow_RequestChildrenClose(arg0);
-        arg0->_st0 = arg0->_st0 + 1;
-        arg0->_st3 = 0;
-        arg0->_st2 = 0;
-        arg0->_st1 = 0;
-        return;
-    case 3:
-        if (beNDMWWindow_PollCloseComplete(arg0) != 0) {
-            arg0->_isRun = 0;
-        }
-        break;
-    }
-}
-
-
-
-
-void FUN_0042df70(beNDMWShopCtrlA1 *arg0) {
-    Arr *s2;
-    int s1;
-    int s4;
-    int s0;
-    int c;
-    int tt;
-    igIntList *l;
-    int c2;
-    igIntList *l2;
-    beMessenger_SelectGroup(arg0->_messenger, &DAT_0051b398[0]);
-    beMessenger_AppendInt(arg0->_messenger, arg0->_playerNo);
-    beMessenger_DispatchSelected(arg0->_messenger, &DAT_0051b3e8[0]);
-    s2 = ((Rec_42df70 *)igProperty_GetRecordArray(beMessenger_GetObject(arg0->_messenger, 0), &DAT_0051b908[0]))->f12;
-    beMessenger_SendNamed(arg0->_messenger, &DAT_0051b5d8[0], &DAT_0051b918[0], 0, &DAT_0051b5e8[0]);
-    if (beMessenger_GetObjectCount(arg0->_messenger) > 0) {
-        s1 = beMessenger_GetObject(arg0->_messenger, 0);
-    } else {
-        return;
-    }
-    {
-        s0 = 0;
-        do {
-            beDataBase_GetRecordString(s1, s0, &DAT_0051b920[0]);
-            beDataBase_GetRecordString(s1, s0, &DAT_0051b930[0]);
-            if (s2->f16[s0] != 0) {
-                s4 = ((int)beDataBase_GetRecordString(s1, s0, &DAT_0051b920[0]));
-                tt = Str::intern((int *)s4);
-                StringRef name(tt);
-                beNDMWWindow_PresentModelAtOrigin(arg0, name.p, 0, ((int)beDataBase_GetRecordString(s1, s0, &DAT_0051b930[0])), 0);
-                {
-                    StringRef copy((int)name.p);
-                    tt = (int)copy.p;
-                    if (tt)
-                        *(int *)(tt - 4) = *(int *)(tt - 4) + 1;
-                    StringList_AppendRetained(arg0->_cardInfoList, copy);
-                }
-                l = (igIntList *)arg0->_cardRamNoList;
-                c = l->_count;
-                if (c < l->_capacity) {
-                    l->_count = countOf(l) + 1;
-                } else {
-                    List_Resize(l, c + 1, 4);
-                }
-                ((int *)l->_data)[c] = DAT_004cf9e8[0];
-            } else {
-                beNDMWWindow_PresentModelAtOrigin(arg0, &DAT_0051b938[0], s0, ((int)beDataBase_GetRecordString(s1, s0, &DAT_0051b930[0])), 0);
-                { int tok = Str::intern(&DAT_0051b938[0]); StringList_AppendRetained(arg0->_cardInfoList, StringRef(tok)); }
-                l2 = (igIntList *)arg0->_cardRamNoList;
-                c2 = l2->_count;
-                if (c2 < l2->_capacity) {
-                    l2->_count = countOf(l2) + 1;
-                } else {
-                    List_Resize(l2, c2 + 1, 4);
-                }
-                ((int *)l2->_data)[c2] = s0;
-            }
-            s0++;
-        } while (s0 < 6);
-    }
-}
-
-void FUN_0042e330(beNDMWShopCtrlA1 *self) {
-    char pageText[2];
-    igDataList *list;
-    Arr *flags;
-    int page;
-    int record;
-    int i;
-    int count;
-    int model;
-    int card;
-    beMessenger_SelectGroup(self->_messenger, &DAT_0051b398[0]);
-    beMessenger_AppendInt(self->_messenger, self->_playerNo);
-    beMessenger_DispatchSelected(self->_messenger, &DAT_0051b3e8[0]);
-    flags = ((Rec_42df70 *)igProperty_GetRecordArray(beMessenger_GetObject(self->_messenger, 0), &DAT_0051b908[0]))->f12;
-    page = self->_retCode;
-    beMessenger_SendNamed(self->_messenger, &DAT_0051b5d8[0], &DAT_0051b918[0], 0, &DAT_0051b5e8[0]);
-    if (beMessenger_GetObjectCount(self->_messenger) > 0) {
-        record = beMessenger_GetObject(self->_messenger, 0);
-    } else {
-        return;
-    }
-    pageText[1] = 0;
-    pageText[0] = page + '1';
-    beMessenger_SelectGroup(self->_messenger, TEXTCTL_3);
-    beMessenger_AppendString(self->_messenger, &DAT_0051b8d8[0]);
-    beMessenger_AppendString(self->_messenger, &DAT_0051b1c8[0]);
-    beMessenger_AppendString(self->_messenger, pageText);
-    beMessenger_DispatchSelected(self->_messenger, TEXTSET);
-    switch (page) {
-    case 0: case 1: case 2: case 3: case 4: case 5: case 6: case 7: case 8:
-        for (i = 0; i < 6; i++) {
-            StringRef name = StringList_CopyRetained(((igDataList *)self->_cardInfoList), i);
-            /* matching construct: variant search — `card` before the ram-number load (induction register order) */
-            card = page * 6 + i;
-            model = ((int *)((igIntList *)self->_cardRamNoList)->_data)[i];
-            if (card > 49) {
-                beNDMWWindow_SendModelSequence(self, name.p, model, &DAT_0051b620[0]);
-                StoreCardName(self, i, Str::intern(&DAT_0051b948[0]));
-                list = ((igDataList *)self->_cardRamNoList);
-                count = list->_count;
-                if (count != 0 && i >= 0 && i < count) ((int *)list->_data)[i] = DAT_004cf9f0[0];
-            } else if (flags->f16[card] != 0) {
-                if (model != -1) beNDMWWindow_SendModelSequence(self, name.p, model, &DAT_0051b620[0]);
-                StringRef cardName(Str::intern((int *)beDataBase_GetRecordString(record, card, &DAT_0051b920[0])));
-                beNDMWWindow_PresentModelAtOrigin(self, cardName.p, 0, ((int)beDataBase_GetRecordString(record, card, &DAT_0051b930[0])), 0);
-                list = ((igDataList *)self->_cardInfoList);
-                count = list->_count;
-                if (count != 0 && i >= 0 && i < count) {
-                    int *slot = &((int *)list->_data)[i];
-                    int text = (int)cardName.p;
-                    if (text) *(int *)(text - 4) = *(int *)(text - 4) + 1;
-                    RELS((char *)*slot);
-                    *slot = (int)cardName.p;
-                }
-                list = ((igDataList *)self->_cardRamNoList);
-                count = list->_count;
-                if (count != 0 && i >= 0 && i < count) ((int *)list->_data)[i] = DAT_004cf9f8[0];
-            } else {
-                if (model != -1) {
-                    if (strcmp(name.p, &DAT_0051b938[0]) == 0)
-                        continue;
-                    beNDMWWindow_SendModelSequence(self, name.p, model, &DAT_0051b620[0]);
-                }
-                beNDMWWindow_PresentModelAtOrigin(self, &DAT_0051b938[0], i, ((int)beDataBase_GetRecordString(record, i, &DAT_0051b930[0])), 0);
-                StoreCardName(self, i, Str::intern(&DAT_0051b938[0]));
-                list = ((igDataList *)self->_cardRamNoList);
-                count = list->_count;
-                if (count != 0 && i >= 0 && i < count) ((int *)list->_data)[i] = i;
-            }
-        }
-        break;
-    }
-}
-
-void FUN_0042e9e0(beNDMWShopCtrlA1 *arg0) {
-    int *temp_a1_2;
-    int temp_a2;
-    int var_s2;
-    int temp_v1_2;
-    int var_s1;
-    igDataList *l2;
-    int temp_s5;
-    int var_s4;
-    int var_v0;
-    int **temp_s3;
-    int *temp_a0;
-    int *temp_s2;
-    igDataList *var_a1;
-    int var_s1_2;
-
-    var_s2 = 0;
-    var_a1 = (igDataList *)arg0->_cardInfoList;
-    if (0 < var_a1->_count) {
-        var_s1 = 0;
-        do {
-            {
-                StringRef name = (StringList_CopyRetained(var_a1, var_s2));
-                temp_a2 = *(int *)(((igDataList *)arg0->_cardRamNoList)->_data + var_s1);
-                if (temp_a2 != -1) {
-                    beNDMWWindow_SendModelSequence(arg0, name.p, temp_a2, &DAT_0051b620[0]);
-                }
-            }
-            var_a1 = (igDataList *)arg0->_cardInfoList;
-            var_s2 += 1;
-            var_s1 += 4;
-        } while (var_s2 < var_a1->_count);
-    }
-    temp_s5 = *(int *)&var_a1->_count;
-    l2 = (igDataList *)var_a1;
-    var_s4 = 0;
-    if (0 < temp_s5) {
-        var_s1_2 = 0;
-        do {
-            temp_s3 = (int **)(l2->_data + var_s1_2);
-            if (g_stringPool[0] == 0) {
-                var_v0 = StringPool_Allocate(0x10);
-                if (var_v0 != 0) {
-                    var_v0 = StringPool_Construct(var_v0);
-                }
-                g_stringPool[0] = var_v0;
-            }
-            temp_s2 = (int *)StringPool_Intern(g_stringPool[0], 0);
-            temp_a0 = *temp_s3;
-            if (temp_a0 != 0) {
-                temp_a1_2 = temp_a0 - 2;
-                temp_v1_2 = temp_a0[-1] - 1;
-                temp_a0[-1] = temp_v1_2;
-                if (temp_v1_2 == 0) {
-                    StringChunk_ReleaseHeader(*temp_a1_2, temp_a1_2);
-                }
-            }
-            var_s4 += 1;
-            *temp_s3 = temp_s2;
-            var_s1_2 += 4;
-        } while (var_s4 < temp_s5);
-    }
-    l2->_count = 0;
-    ((igDataList *)arg0->_cardRamNoList)->_count = 0;
-}
-
-static inline int st0_42eb80(const beNDMWShopCtrlA2 *ctrl) { return ctrl->_st0; }
-
-void Gap__Bec__beNDMWShopCtrlA2__vfunc_21(beNDMWShopCtrlA2 *arg0) {
-    void *alloc;
-    void *a3;
-    unsigned times[3];
-    P3 names1;
-    P3 names2;
-    P3 names3;
-    float vec[3];
-    int obj;
-    beNDMWStatus *ctx;
-    int maxv;
-    int i;
-    switch (arg0->_st0) {
-    case 0:
-        arg0->_st0 = st0_42eb80(arg0) + 1;
-        arg0->_st3 = 0;
-        arg0->_st2 = 0;
-        arg0->_st1 = 0;
-        arg0->_st1 = 7;
-        arg0->_st3 = 0;
-        arg0->_st2 = 0;
-        return;
-    case 1:
-        switch (arg0->_st1) {
-        case 7:
-            switch (arg0->_st2) {
-            case 0:
-                switch ((unsigned)arg0->_entCode) {
-                case 1: a3 = DAT_0051b708; break;
-                case 2: a3 = DAT_0051b718; break;
-                case 3: a3 = DAT_0051b728; break;
-                case 4: a3 = DAT_0051b738; break;
-                case 5: a3 = DAT_0051b748; break;
-                case 6: a3 = DAT_0051b758; break;
-                case 7: a3 = DAT_0051b768; break;
-                case 8: a3 = DAT_0051b778; break;
-                case 9: a3 = DAT_0051b788; break;
-                }
-                beNDMWWindow_PresentModelAtOrigin(arg0, DAT_0051b9c0, 0, a3, DAT_0051b620);
-                alloc = igObject_GetAllocator(arg0);
-                alloc = GPR_00554c14 ? alloc : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
-                {
-                    igSmartPointer<beNDMWShopSelect03> win((beNDMWShopSelect03 *)FUN_003b4950(alloc));
-                    beNDMWWindow_BindContext(win.p, arg0, arg0->_insight, arg0->_playerNo, 0x7DD);
-                    ObjectList_AppendRetained(arg0->_subWindow, win.p);
-                }
-                arg0->_nowProcKazu = ((igDataList *)arg0->_subWindow)->_count;
-                arg0->_st2 = arg0->_st2 + 1;
-                arg0->_st3 = 0;
-            case 1:
-                if (((igDataList *)arg0->_subWindow)->_count != arg0->_nowProcKazu) {
-                    arg0->_st2 = arg0->_st2 + 1;
-                    arg0->_st3 = 0;
-                }
-                break;
-            case 2:
-                alloc = igObject_GetAllocator(arg0);
-                alloc = GPR_00554c14 ? alloc : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
-                {
-                    igSmartPointer<beNDMWShopSelect02> win((beNDMWShopSelect02 *)FUN_003b4b10(alloc));
-                    beNDMWWindow_BindContext(win.p, arg0, arg0->_insight, arg0->_playerNo, 0x7D8);
-                    ObjectList_AppendRetained(arg0->_subWindow, win.p);
-                }
-                arg0->_nowProcKazu = ((igDataList *)arg0->_subWindow)->_count;
-                arg0->_st2 = arg0->_st2 + 1;
-                arg0->_st3 = 0;
-            case 3:
-                if (((igDataList *)arg0->_subWindow)->_count != arg0->_nowProcKazu) {
-                    switch (arg0->_retCode) {
-                    case 0:
-                        beNDMWWindow_PlayQueuedModelClose(arg0);
-                        CLEAR(arg0->_modelCloseInfoNameList)
-                        ((igIntList *)arg0->_modelCloseRamNoList)->_count = 0;
-                        CLEAR(arg0->_modelCloseSeqNameList)
-                        arg0->_st1 = 8;
-                        arg0->_st3 = 0;
-                        arg0->_st2 = 0;
-                        return;
-                    case 1:
-                        ((beNDMWWindow *)arg0->_mother)->_retCode = 6;
-                        arg0->_st0 = arg0->_st0 + 1;
-                        arg0->_st3 = 0;
-                        arg0->_st2 = 0;
-                        arg0->_st1 = 0;
-                        return;
-                    default:
-                        ((beNDMWWindow *)arg0->_mother)->_retCode = 4;
-                        arg0->_st0 = arg0->_st0 + 1;
-                        arg0->_st3 = 0;
-                        arg0->_st2 = 0;
-                        arg0->_st1 = 0;
-                        return;
-                    }
-                }
-                break;
-            }
-            break;
-        case 8:
-            switch (arg0->_st2) {
-            case 0:
-                alloc = igObject_GetAllocator(arg0);
-                alloc = GPR_00554c14 ? alloc : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
-                {
-                igSmartPointer<beNDMWShopSelect03> win((beNDMWShopSelect03 *)FUN_003b4950(alloc));
-                beNDMWWindow_BindContext(win.p, arg0, arg0->_insight, arg0->_playerNo, 0);
-                ObjectList_AppendRetained(arg0->_subWindow, win.p);
-                beMessenger_SelectGroup(arg0->_messenger, DAT_0051b398);
-                beMessenger_AppendInt(arg0->_messenger, arg0->_playerNo);
-                beMessenger_DispatchSelected(arg0->_messenger, DAT_0051b3e8);
-                obj = beMessenger_GetObject(arg0->_messenger, 0);
-                {
-                    const igDataList *a = ((FRec *)igProperty_GetRecordFolder(obj, DAT_0051b6c0))->f12;
-                    int j = 0;
-                    while (j < a->_count) {
-                        Item_42a2e0 *it = ((Item_42a2e0 **)a->_data)[j];
-                        if (it != 0 && it->f12 == 10) {
-                            if (it->f20 > 0) it->f20 = it->f20 - 1;
-                            break;
-                        }
-                        j++;
-                    }
-                }
-                beMessenger_SendNamed(arg0->_messenger, DAT_0051b5d8, DAT_0051b918, 0, DAT_0051b5e8);
-                {
-                int db = beMessenger_GetObject(arg0->_messenger, 0);
-                ctx = (beNDMWStatus *)igInsightCore_FindManager(arg0->_insight, g_beNDMWStatus_metaObject[0]);
-                maxv = 0;
-                names1 = DAT_004cfa00;
-                names2 = DAT_004cfa10;
-                for (i = 0; i < 3; i++) {
-                    unsigned char found;
-                    int acc;
-                    int idx;
-                    int cnt;
-                    times[i] = (((VObj *)((beSystem *)ctx->_system)->_random)->f24() % 1000U) * 1000;
-                    found = 0;
-                    acc = 0;
-                    idx = 0;
-                    cnt = beDataBase_GetRecordCount(db);
-                    for (; idx < cnt; idx++) {
-                        acc += beDataBase_GetRecordInt(db, idx, DAT_0051b9d0) * 1000;
-                        if (times[i] < (unsigned)acc) { found = 1; break; }
-                    }
-                    if (found == 0) idx = cnt - 1;
-                    {
-                        igDataList *ar = ((Rec_42eb80 *)igProperty_GetRecordArray(obj, DAT_0051b908))->f12;
-                        if (ar->_count != 0 && idx >= 0 && idx < ar->_count) ((char *)ar->_data)[idx] = GPR_00554a4c;
-                    }
-                    if (maxv < beDataBase_GetRecordInt(db, idx, DAT_0051b9e0)) maxv = beDataBase_GetRecordInt(db, idx, DAT_0051b9e0);
-                    beNDMWWindow_QueueText((beNDMWShopSelect03 *)win, DAT_0051b9e8, names1.p[i], ((void *)beDataBase_GetRecordString(db, idx, NAME_2)), DAT_0051b598);
-                    beNDMWWindow_PresentModelAtOrigin(win.p, ((void *)beDataBase_GetRecordString(db, idx, DAT_0051b920)), i, names2.p[i], DAT_0051b620);
-                    {
-                        float x, y, z;
-                        switch (beDataBase_GetRecordInt(db, idx, DAT_0051b9e0)) {
-                        case 2: x = 0.0f; y = 1.0f; z = 0.0f; break;
-                        case 1: x = 1.0f; y = 1.0f; z = 0.0f; break;
-                        default: x = 1.0f; y = 1.0f; z = 1.0f; break;
-                        }
-                        beMessenger_SelectGroup(arg0->_messenger, TEXTCTL_3);
-                        beMessenger_AppendString(arg0->_messenger, DAT_0051b9e8);
-                        beMessenger_AppendString(arg0->_messenger, names1.p[i]);
-                        vec[0] = x; vec[1] = y; vec[2] = z;
-                        beMessenger_AppendVec3(arg0->_messenger, (float *)vec);
-                        beMessenger_DispatchSelected(arg0->_messenger, DAT_0051b9f8);
-                    }
-                }
-                }
-                switch (maxv) {
-                case 2: ((beNDMWShopSelect03 *)win)->_entCode = 0x7DA; break;
-                case 1: ((beNDMWShopSelect03 *)win)->_entCode = 0x7DB; break;
-                default: ((beNDMWShopSelect03 *)win)->_entCode = 0x7DC; break;
-                }
-                }
-                arg0->_nowProcKazu = ((igDataList *)arg0->_subWindow)->_count;
-                arg0->_st2 = arg0->_st2 + 1;
-                arg0->_st3 = 0;
-            case 1:
-                if (((igDataList *)arg0->_subWindow)->_count != arg0->_nowProcKazu) {
-                    int k;
-                    names3 = DAT_004cfa20;
-                    for (k = 0; k < 3; k++) {
-                        beMessenger_SelectGroup(arg0->_messenger, TEXTCTL_3);
-                        beMessenger_AppendString(arg0->_messenger, DAT_0051b9e8);
-                        beMessenger_AppendString(arg0->_messenger, names3.p[k]);
-                        beMessenger_DispatchSelected(arg0->_messenger, DAT_0051b3d8);
-                    }
-                    ((beNDMWWindow *)arg0->_mother)->_retCode = 4;
-                    arg0->_st0 = arg0->_st0 + 1;
-                    arg0->_st3 = 0;
-                    arg0->_st2 = 0;
-                    arg0->_st1 = 0;
-                    return;
-                }
-                break;
-            }
-            break;
-        }
-        break;
-    case 2:
-        beNDMWWindow_PlayQueuedModelClose(arg0);
-        beNDMWWindow_ClearQueuedText(arg0);
-        beNDMWWindow_RequestChildrenClose(arg0);
-        arg0->_st0 = arg0->_st0 + 1;
-        arg0->_st3 = 0;
-        arg0->_st2 = 0;
-        arg0->_st1 = 0;
-        return;
-    case 3:
-        if (beNDMWWindow_PollCloseComplete(arg0) != 0) {
-            arg0->_isRun = 0;
-        }
-        break;
-    }
-}
-
-void Gap__Bec__beNDMWShopCtrlEvolve__vfunc_21(beNDMWShopCtrlEvolve *self) {
-    int vB[3];
-    int vA[3];
-    void *alloc;
-    int v;
-    beNDMWShinkaObject *el;
-    int money;
-
-    switch (self->_st0) {
-    case 0:
-        switch (self->_st1) {
-        case 0:
-            beNDMWWindow_PresentModelAtOrigin(self, &DAT_0051b318[0], 0, &DAT_0051b328[0], &DAT_0051ba28[0]);
-            self->_st1 = self->_st1 + 1;
-            self->_st3 = 0;
-            self->_st2 = 0;
-        case 1:
-            beMessenger_SelectReceivers(self->_messenger, &DAT_0051b308[0], &DAT_0051b318[0], 0);
-            beMessenger_AppendString(self->_messenger, &DAT_0051b328[0]);
-            beMessenger_DispatchSelected(self->_messenger, &DAT_0051b338[0]);
-            if ((beMessenger_GetBool(self->_messenger, 0) & 0xFF) != 1) {
-                FUN_00443110(self->_shinkaCtrl, self->_insight, self->_playerNo);
-                if (SLIST(self)->_count > 8) {
-                    self->_maxPage = 2;
-                } else {
-                    self->_maxPage = 1;
-                }
-                self->_nowPage = 0;
-                self->_cursor = 0;
-                if (self->_maxPage > 1) {
-                    beNDMWWindow_PresentModelAtOrigin(self, &DAT_0051b610[0], 0, &DAT_0051ba38[0], &DAT_0051b620[0]);
-                    vA[0] = 0xC24C0000;
-                    vA[2] = 0;
-                    vA[1] = 0x41C80000;
-                    vB[0] = 0xC39A0000;
-                    vB[1] = 0x41C80000;
-                    vB[2] = 0;
-                    ((DummyVirtual *)self)->v24(vB, vA);
-                    beNDMWWindow_QueueText(self, &DAT_0051ba48[0], ((char * *)g_fontNames)[0], &DAT_0051b590[0], &DAT_0051b460[0]);
-                    beNDMWWindow_QueueText(self, &DAT_0051ba48[0], g_fontName1[0], &DAT_0051b590[0], &DAT_0051b460[0]);
-                } else {
-                    beNDMWWindow_PresentModelAtOrigin(self, &DAT_0051b610[0], 0, &DAT_0051ba60[0], &DAT_0051b620[0]);
-                }
-                APPENDSTR_42f710(self->_textCloseTypeList, STWINFONT29)
-                APPENDSTR_42f710(self->_textCloseNameList, &DAT_0051b548[0])
-                beNDMWWindow_RunMessageScript(self, &DAT_0051b3b0[0], 0x4E6);
-                APPENDSTR_42f710(self->_textCloseTypeList, &DAT_0051ba70[0])
-                APPENDSTRV(self->_textCloseNameList, ((char * *)g_fontNames)[0])
-                APPENDSTR_42f710(self->_textCloseTypeList, &DAT_0051ba70[0])
-                APPENDSTRV(self->_textCloseNameList, g_fontName1[0])
-                beNDMWWindow_RunMessageScript(self, &DAT_0051b3b0[0], 0x4C2);
-                {
-                int i = 0;
-                char **fp = ((char * *)g_fontNames);
-                do {
-                    beNDMWWindow_QueueText(self, &DAT_0051ba80[0], *fp, &DAT_0051b590[0], &DAT_0051b598[0]);
-                    beNDMWWindow_QueueText(self, &DAT_0051ba90[0], *fp, &DAT_0051b590[0], &DAT_0051b598[0]);
-                    beNDMWWindow_QueueText(self, &DAT_0051baa0[0], *fp, &DAT_0051b590[0], &DAT_0051b460[0]);
-                    i += 1;
-                    fp += 1;
-                } while (i < 8);
-                }
-                {
-                int j = 0;
-                char **gp = DAT_004cf8d0;
-                do {
-                    beNDMWWindow_QueueText(self, &DAT_0051bab0[0], gp[0], &DAT_0051b590[0], &DAT_0051b598[0]);
-                    beNDMWWindow_QueueText(self, &DAT_0051bab0[0], gp[1], &DAT_0051b590[0], &DAT_0051b460[0]);
-                    j += 1;
-                    gp += 2;
-                } while (j < 16);
-                }
-                beNDMWWindow_RunMessageScript(self, &DAT_0051b3b0[0], 0x4B2);
-                beNDMWWindow_QueueText(self, STWINFONT29, ((char * *)g_fontNames)[0], &DAT_0051b590[0], &DAT_0051b598[0]);
-                self->_st0 = self->_st0 + 1;
-                self->_st3 = 0;
-                self->_st2 = 0;
-                self->_st1 = 0;
-                self->_st1 = 0;
-                self->_st3 = 0;
-                self->_st2 = 0;
-                return;
-            }
-            break;
-        }
-        break;
-    case 1:
-        switch (self->_st1) {
-        case 0:
-            ALLOC_42f710(alloc, self)
-            {
-            igSmartPointer<beNDMWStatusSelectE1> win((beNDMWStatusSelectE1 *)beNDMWStatusSelectE1_Create(alloc));
-            beNDMWWindow_BindContext(win.p, self, self->_insight, self->_playerNo, 0);
-            ObjectList_AppendRetained(self->_subWindow, win.p);
-            {
-            float *pos = ((beNDMWWindowSelect *)win.p)->_offsetPos;
-            pos[0] = -283.0f;
-            pos[1] = 92.0f;
-            pos[2] = 0.0f;
-            ((beNDMWWindowSelect *)win.p)->_startPoint = self->_cursor;
-            v = SLIST(self)->_count;
-            if (v == 0) {
-                ((beNDMWWindowSelect *)win.p)->_selectMax = 2;
-            } else {
-                switch (self->_nowPage) {
-                case 0:
-                    if (v > 8) {
-                        ((beNDMWWindowSelect *)win.p)->_selectMax = 8;
-                    } else {
-                        ((beNDMWWindowSelect *)win.p)->_selectMax = v;
-                    }
-                    break;
-                case 1:
-                    ((beNDMWWindowSelect *)win.p)->_selectMax = v - 8;
-                    break;
-                }
-            }
-            }
-            }
-            self->_nowProcKazu = SUB(self)->_count;
-            self->_st1 = self->_st1 + 1;
-            self->_st3 = 0;
-            self->_st2 = 0;
-            self->_retCode = self->_cursor;
-            FUN_00430d20(self, 1, 0);
-        case 1:
-            if (self->_retCode != -1) {
-                FUN_00430d20(self, 0, 1);
-            }
-            self->_st1 = self->_st1 + 1;
-            self->_st3 = 0;
-            self->_st2 = 0;
-            self->_st3 = self->_retCode;
-        case 2:
-            if (SUB(self)->_count == self->_nowProcKazu) {
-                if (self->_retCode != -1) {
-                    if (self->_st3 != self->_retCode) {
-                        self->_st1 = 1;
-                        self->_st3 = 0;
-                        self->_st2 = 0;
-                        return;
-                    }
-                    {
-                    int *found = 0;
-                    int i = 0;
-                    int *obj;
-                    if (0 < SUB(self)->_count) {
-                        do {
-                            obj = (int *)((int *)((igObjectList *)*(int *)&self->_subWindow)->_data)[i];
-                            if ((obj != 0) && (igObject_IsKindOf(obj, g_beNDMWStatusSelectE1_metaObject[0]) != 0)) {
-                                found = obj;
-                            } else {
-                                found = 0;
-                            }
-                            if (found != 0) break;
-                            i += 1;
-                        } while (i < SUB(self)->_count);
-                    }
-                    if (beNDMWWindowSelect_CanRequestFO2TOP(found) != 0) {
-                        bool flag = false;
-                        if (((DummyVirtual *)self)->v25() != 0) {
-                            flag = true;
-                        } else if (((DummyVirtual *)self)->v26() != 0) {
-                            flag = true;
-                        }
-                        if (flag) {
-                            ((beNDMWWindowSelect *)found)->_st0 = 4;
-                            ((beNDMWWindowSelect *)found)->_st3 = 0;
-                            ((beNDMWWindowSelect *)found)->_st2 = 0;
-                            ((beNDMWWindowSelect *)found)->_st1 = 0;
-                            v = SLIST(self)->_count;
-                            if (v == 0) {
-                                ((beNDMWWindowSelect *)found)->_selectMax = 2;
-                            } else {
-                                switch (self->_nowPage) {
-                                case 0:
-                                    if (v > 8) {
-                                        ((beNDMWWindowSelect *)found)->_selectMax = 8;
-                                    } else {
-                                        ((beNDMWWindowSelect *)found)->_selectMax = v;
-                                    }
-                                    break;
-                                case 1:
-                                    ((beNDMWWindowSelect *)found)->_selectMax = v - 8;
-                                    break;
-                                }
-                            }
-                            self->_st1 = 1;
-                            self->_st3 = 0;
-                            self->_st2 = 0;
-                            self->_retCode = 0;
-                            FUN_00430d20(self, 1, 0);
-                            return;
-                        }
-                    }
-                    }
-                }
-            } else {
-                switch (self->_retCode) {
-                case -1:
-                    ((beNDMWWindow *)self->_mother)->_retCode = -1;
-                    self->_st0 = self->_st0 + 1;
-                    self->_st3 = 0;
-                    self->_st2 = 0;
-                    self->_st1 = 0;
-                    return;
-                default:
-                    self->_cursor = self->_retCode;
-                    el = (beNDMWShinkaObject *)((int *)SLIST(self)->_data)[self->_cursor + self->_nowPage * 8];
-                    beMessenger_SelectGroup(self->_messenger, &DAT_0051b398[0]);
-                    beMessenger_AppendInt(self->_messenger, self->_playerNo);
-                    beMessenger_DispatchSelected(self->_messenger, &DAT_0051b3e8[0]);
-                    money = W(((int *)igProperty_GetRecord(beMessenger_GetObject(self->_messenger, 0), &DAT_0051bac0[0])), 12);
-                    beMessenger_SelectGroup(self->_messenger, &DAT_0051b398[0]);
-                    beMessenger_AppendInt(self->_messenger, self->_playerNo);
-                    beMessenger_AppendInt(self->_messenger, el->_id);
-                    beMessenger_DispatchSelected(self->_messenger, &DAT_0051bad0[0]);
-                    if (money == el->_id) {
-                        self->_st1 = 4;
-                        self->_st3 = 0;
-                        self->_st2 = 0;
-                        self->_st2 = 0;
-                        self->_st3 = 0;
-                        beMessenger_SelectGroup(self->_messenger, &DAT_0051b888[0]);
-                        beMessenger_AppendString(self->_messenger, &DAT_0051b890[0]);
-                        beMessenger_DispatchSelected(self->_messenger, &DAT_0051b8a0[0]);
-                        return;
-                    }
-                    if (!(beMessenger_GetBool(self->_messenger, 0) & 0xFF)) {
-                        self->_st1 = 4;
-                        self->_st3 = 0;
-                        self->_st2 = 0;
-                        self->_st2 = 1;
-                        self->_st3 = 0;
-                        beMessenger_SelectGroup(self->_messenger, &DAT_0051b888[0]);
-                        beMessenger_AppendString(self->_messenger, &DAT_0051b890[0]);
-                        beMessenger_DispatchSelected(self->_messenger, &DAT_0051b8a0[0]);
-                        return;
-                    }
-                    self->_st1 = 3;
-                    self->_st3 = 0;
-                    self->_st2 = 0;
-                    return;
-                }
-            }
-            break;
-        case 3:
+        case JUNK_STEP_BUY:
             switch (self->_st2) {
-            case 0:
-                ALLOC_42f710(alloc, self)
+            case CHILD_OPEN:
+                PICK_ALLOCATOR(allocator, self);
                 {
-                igSmartPointer<beNDMWShopSelect01> win((beNDMWShopSelect01 *)FUN_003b4d90(alloc));
-                beNDMWWindow_BindContext(win.p, self, self->_insight, self->_playerNo, 0x4E7);
-                ObjectList_AppendRetained(self->_subWindow, win.p);
+                    igSmartPointer<beNDMWShopCtrlSales> sales((beNDMWShopCtrlSales *)beNDMWShopCtrlSales_Create(allocator));
+                    beNDMWWindow_BindContext(sales.p, self, self->_insight, self->_playerNo, SUBWND_MODE_JUNK);
+                    ObjectList_AppendRetained(self->_subWindow, sales.p);
                 }
-                self->_nowProcKazu = SUB(self)->_count;
-                self->_st2 = self->_st2 + 1;
-                self->_st3 = 0;
-            case 1:
-                if (SUB(self)->_count != self->_nowProcKazu) {
-                    switch (self->_retCode) {
-                    case 0:
-                        self->_st2 = self->_st2 + 1;
-                        self->_st3 = 0;
-                        return;
-                    case 1:
-                    default:
-                        self->_st1 = 0;
-                        self->_st3 = 0;
-                        self->_st2 = 0;
-                        return;
-                    }
-                }
-                break;
-            case 2:
-                ALLOC_42f710(alloc, self)
-                {
-                igSmartPointer<beNDMWShopSelect00> win((beNDMWShopSelect00 *)beNDMWShopSelect00_Create(alloc));
-                beNDMWWindow_BindContext(win.p, self, self->_insight, self->_playerNo, 0x4E9);
-                ObjectList_AppendRetained(self->_subWindow, win.p);
-                }
-                self->_nowProcKazu = SUB(self)->_count;
-                self->_st2 = self->_st2 + 1;
-                self->_st3 = 0;
-            case 3:
-                if (SUB(self)->_count == self->_nowProcKazu) break;
-                self->_st2 = self->_st2 + 1;
-                self->_st3 = 0;
-            case 4:
-                ALLOC_42f710(alloc, self)
-                {
-                igSmartPointer<beNDMWShopSelect01> win((beNDMWShopSelect01 *)FUN_003b4d90(alloc));
-                beNDMWWindow_BindContext(win.p, self, self->_insight, self->_playerNo, 0x4EA);
-                ObjectList_AppendRetained(self->_subWindow, win.p);
-                }
-                self->_nowProcKazu = SUB(self)->_count;
-                self->_st2 = self->_st2 + 1;
-                self->_st3 = 0;
-            case 5:
-                if (SUB(self)->_count != self->_nowProcKazu) {
-                    switch (self->_retCode) {
-                    case 0:
-                        self->_st2 = self->_st2 + 1;
-                        self->_st3 = 0;
-                        return;
-                    case 1:
-                    default:
-                        self->_st1 = 0;
-                        self->_st3 = 0;
-                        self->_st2 = 0;
-                        return;
-                    }
-                }
-                break;
-            case 6: {
-                beNDMWShinkaObjectList *ar;
-                int cnt;
-                int idx;
-                ALLOC_42f710(alloc, self)
-                {
-                igSmartPointer<beNDMWShopSelect00> win((beNDMWShopSelect00 *)beNDMWShopSelect00_Create(alloc));
-                beNDMWWindow_BindContext(win.p, self, self->_insight, self->_playerNo, 0);
-                ObjectList_AppendRetained(self->_subWindow, win.p);
-                APPENDSTR_42f710(((beNDMWWindowSelect *)win.p)->_textCloseTypeList, STWINFONT29)
-                APPENDSTR_42f710(((beNDMWWindowSelect *)win.p)->_textCloseNameList, &DAT_0051b548[0])
-                beNDMWWindow_RunMessageScript(self, &DAT_0051b3b0[0], 0x4EC);
-                }
-                ar = SLIST(self);
-                idx = self->_cursor + self->_nowPage * 8;
-                cnt = ar->_count;
-                if (cnt > 0 && idx < cnt) {
-                    beNDMWShinkaObject *e = (beNDMWShinkaObject *)((int *)ar->_data)[idx];
-                    char *rs;
-                    beMessenger_SendNamed(self->_messenger, &DAT_0051b5d8[0], &DAT_0051bae8[0], 0, &DAT_0051b5e8[0]);
-                    rs = beDataBase_GetRecordString(beMessenger_GetObject(self->_messenger, 0), e->_id, &DAT_0051baf0[0]);
-                    beMessenger_SelectGroup(self->_messenger, TEXTCTL_3);
-                    beMessenger_AppendString(self->_messenger, STWINFONT29);
-                    beMessenger_AppendString(self->_messenger, ((char * *)g_fontNames)[0]);
-                    beMessenger_AppendString(self->_messenger, rs);
-                    beMessenger_DispatchSelected(self->_messenger, TEXTSET);
-                    beMessenger_SelectGroup(self->_messenger, TEXTCTL_3);
-                    beMessenger_AppendString(self->_messenger, STWINFONT29);
-                    beMessenger_AppendString(self->_messenger, ((char * *)g_fontNames)[0]);
-                    beMessenger_AppendString(self->_messenger, &((int *)DISPON)[0]);
-                    beMessenger_DispatchSelected(self->_messenger, SWITCH_2);
-                    FUN_004313b0(self);
-                }
-                self->_nowProcKazu = SUB(self)->_count;
-                self->_st2 = self->_st2 + 1;
-                self->_st3 = 0;
-            }
-            case 7:
-                if (SUB(self)->_count != self->_nowProcKazu) {
-                    ((beNDMWWindow *)self->_mother)->_retCode = 1;
-                    self->_st0 = self->_st0 + 1;
-                    self->_st3 = 0;
-                    self->_st2 = 0;
-                    self->_st1 = 0;
+                self->_nowProcKazu = CHILD_COUNT(self);
+                NEXT_PHASE(self);
+            case CHILD_WAIT:
+                if (CHILD_COUNT(self) != self->_nowProcKazu) {
+                    ENTER_STEP(self, JUNK_STEP_MENU);
                     return;
                 }
                 break;
             }
             break;
-        case 4:
-            switch (self->_st3) {
-            case 0:
-                ALLOC_42f710(alloc, self)
+        case JUNK_STEP_FAREWELL:
+            switch (self->_st2) {
+            case CHILD_OPEN:
+                PICK_ALLOCATOR(allocator, self);
                 {
-                igSmartPointer<beNDMWShopSelect00> win((beNDMWShopSelect00 *)beNDMWShopSelect00_Create(alloc));
-                beNDMWWindow_BindContext(win.p, self, self->_insight, self->_playerNo, 0);
-                ObjectList_AppendRetained(self->_subWindow, win.p);
-                APPENDSTR_42f710(((beNDMWWindowSelect *)win.p)->_textCloseTypeList, STWINFONT29)
-                APPENDSTR_42f710(((beNDMWWindowSelect *)win.p)->_textCloseNameList, &DAT_0051b1c8[0])
-                if (self->_st2 == 0) {
-                    beNDMWWindow_RunMessageScript(win.p, &DAT_0051b3b0[0], 0x7E4);
-                } else {
-                    beNDMWWindow_RunMessageScript(win.p, &DAT_0051b3b0[0], 0x7E5);
+                    igSmartPointer<beNDMWShopSelect00> message((beNDMWShopSelect00 *)beNDMWShopSelect00_Create(allocator));
+                    beNDMWWindow_BindContext(message.p, self, self->_insight, self->_playerNo, 0x7b2);
+                    ObjectList_AppendRetained(self->_subWindow, message.p);
                 }
-                }
-                self->_nowProcKazu = SUB(self)->_count;
-                self->_st3 = self->_st3 + 1;
-            case 1:
-                if (SUB(self)->_count != self->_nowProcKazu) {
-                    self->_st1 = 0;
-                    self->_st3 = 0;
-                    self->_st2 = 0;
+                self->_nowProcKazu = CHILD_COUNT(self);
+                NEXT_PHASE(self);
+            case CHILD_WAIT:
+                if (CHILD_COUNT(self) != self->_nowProcKazu) {
+                    NEXT_STATE(self);
                     return;
                 }
                 break;
@@ -3839,333 +2475,1496 @@ void Gap__Bec__beNDMWShopCtrlEvolve__vfunc_21(beNDMWShopCtrlEvolve *self) {
             break;
         }
         break;
-    case 2:
-        beNDMWWindow_PlayQueuedModelClose();
+    case SHOP_STATE_CLOSE:
+        beNDMWWindow_PlayQueuedModelClose(self);
         beNDMWWindow_ClearQueuedText(self);
         beNDMWWindow_RequestChildrenClose(self);
-        self->_st0 = self->_st0 + 1;
-        self->_st3 = 0;
-        self->_st2 = 0;
-        self->_st1 = 0;
+        NEXT_STATE(self);
         return;
-    case 3:
-        if (beNDMWWindow_PollCloseComplete() != 0) {
+    case SHOP_STATE_WAIT_CLOSED:
+        if (beNDMWWindow_PollCloseComplete(self) != 0) {
             self->_isRun = 0;
         }
         break;
     }
 }
 
-void FUN_00430d20(beNDMWShopCtrlEvolve *ctl, int sendNames, int sendStats) {
-    char countBuf[28];
-    int statVals[16];
-    char valueBuf[16];
-    char pageDigits[4];
-    beNDMWShinkaObjectList *itemList;
-    int slot;
-    char *itemName;
-    char **labelPtr;
-    int statIdx;
-    int digitChar;
-    int pageBase;
-    int cursor;
-    int selIndex;
-    beNDMWShinkaObjectList *selList;
-    int listIndex;
-    beNDMWShinkaObject *item;
-    beNDMWShinkaObject *selItem;
-    char *recordName;
-    int *valuePtr;
-    struct NamePair *labelPair;
-    if (sendNames != 0) {
-        itemList = (beNDMWShinkaObjectList *)((beNDMWShinkaCtrl *)ctl->_shinkaCtrl)->_list;
-        for (slot = 0, labelPtr = ((char * *)g_fontNames); slot < 8; slot++, labelPtr++) {
-            listIndex = slot + ctl->_nowPage * 8;
-            if (itemList->_count - 1 < listIndex) {
-                beMessenger_SelectGroup(ctl->_messenger, ((char *)TEXTCTL_3));
-                beMessenger_AppendString(ctl->_messenger, ((char *)DAT_0051ba80));
-                beMessenger_AppendString(ctl->_messenger, *labelPtr);
-                beMessenger_AppendString(ctl->_messenger, ((char *)DISPOFF));
-                beMessenger_DispatchSelected(ctl->_messenger, ((char *)SWITCH_2));
-                beMessenger_SelectGroup(ctl->_messenger, ((char *)TEXTCTL_3));
-                beMessenger_AppendString(ctl->_messenger, ((char *)DAT_0051ba90));
-                beMessenger_AppendString(ctl->_messenger, *labelPtr);
-                beMessenger_AppendString(ctl->_messenger, ((char *)DISPOFF));
-                beMessenger_DispatchSelected(ctl->_messenger, ((char *)SWITCH_2));
-                beMessenger_SelectGroup(ctl->_messenger, ((char *)TEXTCTL_3));
-                beMessenger_AppendString(ctl->_messenger, ((char *)DAT_0051baa0));
-                beMessenger_AppendString(ctl->_messenger, *labelPtr);
-                beMessenger_AppendString(ctl->_messenger, ((char *)DISPOFF));
-                beMessenger_DispatchSelected(ctl->_messenger, ((char *)SWITCH_2));
-            } else {
-                item = (beNDMWShinkaObject *)((int *)itemList->_data)[listIndex];
-                itemName = (char *)item->_name;
-                beMessenger_SelectGroup(ctl->_messenger, ((char *)TEXTCTL_3));
-                beMessenger_AppendString(ctl->_messenger, ((char *)DAT_0051ba80));
-                beMessenger_AppendString(ctl->_messenger, *labelPtr);
-                beMessenger_AppendString(ctl->_messenger, itemName);
-                beMessenger_DispatchSelected(ctl->_messenger, ((char *)TEXTSET));
-                beMessenger_SelectGroup(ctl->_messenger, ((char *)TEXTCTL_3));
-                beMessenger_AppendString(ctl->_messenger, ((char *)DAT_0051ba80));
-                beMessenger_AppendString(ctl->_messenger, *labelPtr);
-                beMessenger_AppendString(ctl->_messenger, DISPON);
-                beMessenger_DispatchSelected(ctl->_messenger, ((char *)SWITCH_2));
-                beMessenger_SelectGroup(ctl->_messenger, ((char *)TEXTCTL_3));
-                beMessenger_AppendString(ctl->_messenger, ((char *)DAT_0051ba90));
-                beMessenger_AppendString(ctl->_messenger, *labelPtr);
-                beMessenger_AppendString(ctl->_messenger, DAT_0051bb20);
-                beMessenger_DispatchSelected(ctl->_messenger, ((char *)TEXTSET));
-                beMessenger_SelectGroup(ctl->_messenger, ((char *)TEXTCTL_3));
-                beMessenger_AppendString(ctl->_messenger, ((char *)DAT_0051ba90));
-                beMessenger_AppendString(ctl->_messenger, *labelPtr);
-                beMessenger_AppendString(ctl->_messenger, DISPON);
-                beMessenger_DispatchSelected(ctl->_messenger, ((char *)SWITCH_2));
-                sprintf(countBuf, ((char *)percent_d), ((beNDMWShinkaObject *)((int *)itemList->_data)[listIndex])->_level);
-                beMessenger_SelectGroup(ctl->_messenger, ((char *)TEXTCTL_3));
-                beMessenger_AppendString(ctl->_messenger, ((char *)DAT_0051baa0));
-                beMessenger_AppendString(ctl->_messenger, *labelPtr);
-                beMessenger_AppendString(ctl->_messenger, countBuf);
-                beMessenger_DispatchSelected(ctl->_messenger, ((char *)TEXTSET));
-                beMessenger_SelectGroup(ctl->_messenger, ((char *)TEXTCTL_3));
-                beMessenger_AppendString(ctl->_messenger, ((char *)DAT_0051baa0));
-                beMessenger_AppendString(ctl->_messenger, *labelPtr);
-                beMessenger_AppendString(ctl->_messenger, DISPON);
-                beMessenger_DispatchSelected(ctl->_messenger, ((char *)SWITCH_2));
-            }
-        }
-        if (ctl->_maxPage > 1) {
-            pageDigits[1] = 0;
-            digitChar = ctl->_nowPage; digitChar += 0x31;
-            pageDigits[0] = digitChar;
-            beMessenger_SelectGroup(ctl->_messenger, ((char *)TEXTCTL_3));
-            beMessenger_AppendString(ctl->_messenger, ((char *)DAT_0051ba48));
-            beMessenger_AppendString(ctl->_messenger, ((char * *)g_fontNames)[0]);
-            beMessenger_AppendString(ctl->_messenger, pageDigits);
-            beMessenger_DispatchSelected(ctl->_messenger, ((char *)TEXTSET));
-            digitChar = ctl->_maxPage; digitChar += 0x30;
-            pageDigits[0] = digitChar;
-            beMessenger_SelectGroup(ctl->_messenger, ((char *)TEXTCTL_3));
-            beMessenger_AppendString(ctl->_messenger, ((char *)DAT_0051ba48));
-            beMessenger_AppendString(ctl->_messenger, ((char * *)g_fontNames)[1]);
-            beMessenger_AppendString(ctl->_messenger, pageDigits);
-            beMessenger_DispatchSelected(ctl->_messenger, ((char *)TEXTSET));
-        }
+/* Reads the count again instead of reusing a value already loaded. */
+static inline int countOf(const igIntList *l) { return l->_count; }
+
+/* Appends to the igIntList held in a reflected object-reference field; `value` is read after the
+ * list has grown. */
+static inline void IntList_Append(int listField, const int &value)
+{
+    int count;
+    igIntList *list;
+    list = (igIntList *)listField;
+    count = list->_count;
+    if (count < list->_capacity) {
+        list->_count = countOf(list) + 1;
+    } else {
+        List_Resize(list, count + 1, 4);
     }
-    if (sendStats != 0) {
-        cursor = ctl->_retCode;
-        if (cursor != -1) {
-            selList = (beNDMWShinkaObjectList *)((beNDMWShinkaCtrl *)ctl->_shinkaCtrl)->_list;
-            pageBase = ctl->_nowPage * 8;
-            selIndex = pageBase + cursor;
-            if (selIndex < selList->_count) {
-                selItem = (beNDMWShinkaObject *)((int *)selList->_data)[selIndex];
-                statVals[0] = selItem->_hpMax;
-                statVals[1] = selItem->_mpMax;
-                statVals[2] = selItem->_tsuyosa;
-                statVals[3] = selItem->_mamori;
-                statVals[4] = selItem->_kashikosa;
-                statVals[5] = selItem->_seishin;
-                statVals[6] = selItem->_subayasa;
-                statVals[7] = selItem->_blunt;
-                statVals[8] = selItem->_slash;
-                statVals[9] = selItem->_stab;
-                statVals[10] = selItem->_bash;
-                statVals[11] = selItem->_shot;
-                statVals[12] = selItem->_crush;
-                statVals[13] = selItem->_blast;
-                statVals[14] = selItem->_heal;
-                statVals[15] = selItem->_force;
-                for (statIdx = 0, valuePtr = statVals, labelPair = ((struct NamePair *)DAT_004cf8d0); statIdx < 16; statIdx++, valuePtr++, labelPair++) {
-                    sprintf(valueBuf, ((char *)percent_d), *valuePtr);
-                    beMessenger_SelectGroup(ctl->_messenger, ((char *)TEXTCTL_3));
-                    beMessenger_AppendString(ctl->_messenger, ((char *)DAT_0051bab0));
-                    beMessenger_AppendString(ctl->_messenger, labelPair->name);
-                    beMessenger_AppendString(ctl->_messenger, valueBuf);
-                    beMessenger_DispatchSelected(ctl->_messenger, ((char *)TEXTSET));
-                }
-                beMessenger_SendNamed(ctl->_messenger, ((char *)DAT_0051b5d8), ((char *)DAT_0051bae8), 0, ((char *)DAT_0051b5e8));
-                recordName = (char *)((int)beDataBase_GetRecordString(beMessenger_GetObject(ctl->_messenger, 0), selItem->_id, ((char *)DAT_0051baf0)));
-                beMessenger_SelectGroup(ctl->_messenger, ((char *)TEXTCTL_3));
-                beMessenger_AppendString(ctl->_messenger, ((char *)STWINFONT29));
-                beMessenger_AppendString(ctl->_messenger, ((char * *)g_fontNames)[0]);
-                beMessenger_AppendString(ctl->_messenger, recordName);
-                beMessenger_DispatchSelected(ctl->_messenger, ((char *)TEXTSET));
-                beMessenger_SelectGroup(ctl->_messenger, ((char *)TEXTCTL_3));
-                beMessenger_AppendString(ctl->_messenger, ((char *)STWINFONT29));
-                beMessenger_AppendString(ctl->_messenger, ((char * *)g_fontNames)[0]);
-                beMessenger_AppendString(ctl->_messenger, DISPON);
-                beMessenger_DispatchSelected(ctl->_messenger, ((char *)SWITCH_2));
-            }
-        }
-    }
+    ((int *)list->_data)[count] = value;
 }
 
-void FUN_004313b0(beNDMWShopCtrlEvolve *arg0) {
-    int temp_s0;
-    int temp_s2_2;
-    int temp_s3;
-    beNDMWShinkaObjectList *temp_a5;
-    beNDMWShinkaObject *temp_s2;
-
-    beMessenger_SelectGroup(arg0->_messenger, &DAT_0051b398[0]);
-    beMessenger_AppendInt(arg0->_messenger, arg0->_playerNo);
-    beMessenger_DispatchSelected(arg0->_messenger, &DAT_0051b3e8[0]);
-    temp_s0 = beMessenger_GetObject(arg0->_messenger, 0);
-    temp_a5 = (beNDMWShinkaObjectList *)((beNDMWShinkaCtrl *)arg0->_shinkaCtrl)->_list;
-    temp_s2 = (beNDMWShinkaObject *)((int *)temp_a5->_data)[arg0->_cursor + arg0->_nowPage * 8];
-    beMessenger_SendNamed(arg0->_messenger, &DAT_0051b5d8[0], &DAT_0051bae8[0], 0, &DAT_0051b5e8[0]);
-    temp_s3 = beMessenger_GetObject(arg0->_messenger, 0);
-    beMessenger_SelectGroup(arg0->_messenger, &DAT_0051b398[0]);
-    beMessenger_AppendInt(arg0->_messenger, arg0->_playerNo);
-    beMessenger_DispatchSelected(arg0->_messenger, &DAT_0051bb28[0]);
-    beMessenger_SelectGroup(arg0->_messenger, &DAT_0051b398[0]);
-    beMessenger_AppendInt(arg0->_messenger, arg0->_playerNo);
-    temp_s2_2 = arg0->_messenger;
-    beMessenger_AppendString(temp_s2_2, ((int)beDataBase_GetRecordString(temp_s3, temp_s2->_id, &DAT_0051bb38[0])));
-    beMessenger_DispatchSelected(arg0->_messenger, &DAT_0051bb48[0]);
-    beMessenger_SelectReceivers(arg0->_messenger, &DAT_0051b398[0], 0, 0);
-    beMessenger_AppendInt(arg0->_messenger, arg0->_playerNo);
-    beMessenger_DispatchSelected(arg0->_messenger, &DAT_0051b3a0[0]);
-    beMessenger_SelectGroup(arg0->_messenger, &DAT_0051b398[0]);
-    beMessenger_AppendInt(arg0->_messenger, arg0->_playerNo);
-    beMessenger_DispatchSelected(arg0->_messenger, &DAT_0051b3e8[0]);
-    beMessenger_SelectGroup(arg0->_messenger, &DAT_0051b398[0]);
-    beMessenger_AppendInt(arg0->_messenger, arg0->_playerNo);
-    beMessenger_DispatchSelected(arg0->_messenger, &DAT_0051bb60[0]);
-    FUN_00431670(arg0, (igObjectList *)(*(int *)((char *)(((void *)igProperty_GetRecordFolder(temp_s0, &DAT_0051bb78[0]))) + 12)));
-    FUN_00431670(arg0, (igObjectList *)(*(int *)((char *)(((void *)igProperty_GetRecordFolder(temp_s0, &DAT_0051bb88[0]))) + 12)));
-    FUN_00431670(arg0, (igObjectList *)(*(int *)((char *)(((void *)igProperty_GetRecordFolder(temp_s0, &DAT_0051bb90[0]))) + 12)));
-    FUN_00431670(arg0, (igObjectList *)(*(int *)((char *)(((void *)igProperty_GetRecordFolder(temp_s0, &DAT_0051bba0[0]))) + 12)));
-    beMessenger_SelectReceivers(arg0->_messenger, &DAT_0051b398[0], 0, 0);
-    beMessenger_AppendInt(arg0->_messenger, arg0->_playerNo);
-    beMessenger_DispatchSelected(arg0->_messenger, &DAT_0051b3a0[0]);
-    beMessenger_SelectGroup(arg0->_messenger, &DAT_0051b498[0]);
-    beMessenger_AppendInt(arg0->_messenger, arg0->_playerNo);
-    beMessenger_DispatchSelected(arg0->_messenger, &DAT_0051b4a0[0]);
-    FUN_00433120((beNDMWWindow *)arg0->_mother, arg0->_playerNo, 1);
+static inline const int &IntList_Get(int listField, int index)
+{
+    return ((int *)((igIntList *)listField)->_data)[index];
 }
 
-void FUN_00431670(beNDMWShopCtrlEvolve *arg0, igObjectList *arg1) {
+enum CardSetupStep { CARD_SETUP_PRESENT, CARD_SETUP_TITLES };
+enum CardStep { CARD_STEP_WAIT_OPEN, CARD_STEP_MENU, CARD_STEP_PICK_PLAYER, CARD_STEP_PLAYER_MENU };
+enum CardMenuChoice { CARD_CHOICE_ENTER, CARD_CHOICE_LEAVE };
+
+void beNDMWShopCtrlA0_Update(beNDMWShopCtrlA0 *self) {
+    void *allocator;
     int i;
-    int off;
-    beNDMWItemBase *o;
-    beNDMWItemBase *p;
-    i = 0;
-    goto guard;
-body:
-    o = *(beNDMWItemBase **)(arg1->_data + off);
-    if (o != 0) o->_isEquip = 0;
-    p = *(beNDMWItemBase **)(arg1->_data + off);
-    if (p != 0) {
-        p->_refCount = (int)p->_refCount - 1;
-        if (((unsigned long long)((long long)(int)p->_refCount << 0x29) >> 0x29) == 0) igObject_Destroy(p);
+
+    switch (self->_st0) {
+    case SHOP_STATE_OPEN:
+        switch (self->_st1) {
+        case CARD_SETUP_PRESENT:
+            beNDMWWindow_PresentModelAtOrigin(self, j_shback, 0, SQ_OPENCARD, SQ_CLOSE_10);
+            beNDMWWindow_PresentModelAtOrigin(self, i_bgclear_2, 0, SQ_OPEN_8, SQ_CLOSE_10);
+            NEXT_STEP(self);
+            return;
+        case CARD_SETUP_TITLES:
+            beMessenger_SelectReceivers(self->_messenger, MODELCTRL_16, j_shback, 0);
+            beMessenger_AppendString(self->_messenger, SQ_OPENCARD);
+            beMessenger_DispatchSelected(self->_messenger, ISSEQNAME_6);
+            if ((beMessenger_GetBool(self->_messenger, 0) & 0xFF) != 1) {
+                PICK_ALLOCATOR(allocator, self);
+                {
+                    igSmartPointer<beNDMWShopTitle03> shopTitle((beNDMWShopTitle03 *)beNDMWShopTitle03_Create(allocator));
+                    beNDMWWindow_BindContext(shopTitle.p, self, self->_insight, self->_playerNo, 0);
+                    ObjectList_AppendRetained(self->_subWindow, shopTitle.p);
+                }
+                PICK_ALLOCATOR(allocator, self);
+                {
+                    igSmartPointer<beNDMWStatusTitle03> account((beNDMWStatusTitle03 *)beNDMWStatusTitle03_Create(allocator));
+                    beNDMWWindow_BindContext(account.p, self, self->_insight, self->_playerNo, 0);
+                    ObjectList_AppendRetained(self->_subWindow, account.p);
+                    SET_OBJECT_REF(self->_account, account.p);
+                    beNDMWStatusTitle03_SetFont002Enabled(self->_account, 0);
+                }
+                PICK_ALLOCATOR(allocator, self);
+                {
+                    igSmartPointer<beNDMWShopTitle01> serviceTitle((beNDMWShopTitle01 *)beNDMWShopTitle01_Create(allocator));
+                    beNDMWWindow_BindContext(serviceTitle.p, self, self->_insight, self->_playerNo, self->_entCode);
+                    ObjectList_AppendRetained(self->_subWindow, serviceTitle.p);
+                }
+                for (i = 0; i < MAX_PLAYERS; i++) {
+                    beMessenger_SelectGroup(self->_messenger, GAMERAM_14);
+                    beMessenger_AppendInt(self->_messenger, i);
+                    beMessenger_DispatchSelected(self->_messenger, GETPLAYER_10);
+                    if (((beDataObjBool *)igProperty_GetRecordByte(beMessenger_GetObject(self->_messenger, 0), ISUSE_9))->_data != 0) {
+                        IntList_Append(self->_playerNoList, i);
+                    }
+                }
+                PICK_ALLOCATOR(allocator, self);
+                {
+                    igSmartPointer<beNDMWStatusTitle01> playerTitle((beNDMWStatusTitle01 *)beNDMWStatusTitle01_Create(allocator));
+                    beNDMWWindow_BindContext(playerTitle.p, self, self->_insight, self->_playerNo, 1);
+                    ObjectList_AppendRetained(self->_subWindow, playerTitle.p);
+                }
+                NEXT_STATE(self);
+                return;
+            }
+            break;
+        }
+        break;
+    case SHOP_STATE_RUN:
+        switch (self->_st1) {
+        case CARD_STEP_WAIT_OPEN:
+            beMessenger_SelectReceivers(self->_messenger, MODELCTRL_16, i_messwn_3, 0);
+            beMessenger_AppendString(self->_messenger, SQ_OPEN_8);
+            beMessenger_DispatchSelected(self->_messenger, ISSEQNAME_6);
+            if (((beMessenger_GetBool(self->_messenger, 0) & 0xFF) != 1) && (self->_entCode == SUBWND_MODE_CARD)) {
+                ENTER_STEP(self, CARD_STEP_MENU);
+                return;
+            }
+            break;
+        case CARD_STEP_MENU:
+            switch (self->_st2) {
+            case CHILD_OPEN:
+                PICK_ALLOCATOR(allocator, self);
+                {
+                    igSmartPointer<beNDMWShopSelect02> menu((beNDMWShopSelect02 *)beNDMWShopSelect02_Create(allocator));
+                    beNDMWWindow_BindContext(menu.p, self, self->_insight, self->_playerNo, 0x7D3);
+                    ObjectList_AppendRetained(self->_subWindow, menu.p);
+                    beNDMWStatusTitle03_SetFont002Enabled(self->_account, 0);
+                }
+                self->_nowProcKazu = CHILD_COUNT(self);
+                NEXT_PHASE(self);
+            case CHILD_WAIT:
+                if (CHILD_COUNT(self) != self->_nowProcKazu) {
+                    switch (self->_retCode) {
+                    case CARD_CHOICE_ENTER:
+                        ENTER_STEP(self, CARD_STEP_PICK_PLAYER);
+                        return;
+                    default:
+                    case CARD_CHOICE_LEAVE:
+                        NEXT_STATE(self);
+                        ((beSystem *)igInsightCore_FindManager(self->_insight, g_beSystem_metaObject[0]))->_isSResetEnable = 0;
+                        return;
+                    }
+                }
+                break;
+            }
+            break;
+        case CARD_STEP_PICK_PLAYER:
+            switch (self->_st2) {
+            case CHILD_OPEN:
+                PICK_ALLOCATOR(allocator, self);
+                {
+                    igSmartPointer<beNDMWShopSelect02> picker((beNDMWShopSelect02 *)beNDMWShopSelect02_Create(allocator));
+                    beNDMWWindow_BindContext(picker.p, self, self->_insight, self->_playerNo, -1);
+                    ObjectList_AppendRetained(self->_subWindow, picker.p);
+                    {
+                        int j;
+                        for (j = 0; j < ((igIntList *)self->_playerNoList)->_count; j++) {
+                            IntList_Append(picker.p->_playerNoList, IntList_Get(self->_playerNoList, j));
+                        }
+                    }
+                }
+                beNDMWStatusTitle03_SetFont002Enabled(self->_account, 1);
+                self->_nowProcKazu = CHILD_COUNT(self);
+                NEXT_PHASE(self);
+            case CHILD_WAIT:
+                if (CHILD_COUNT(self) != self->_nowProcKazu) {
+                    switch (self->_retCode) {
+                    case 0:
+                    case 1:
+                    case 2:
+                    case 3:
+                        {
+                            beNDMWStatusTitle01 *playerTitle = 0;
+                            int index;
+                            for (index = 0; index < CHILD_COUNT(self); index++) {
+                                beNDMWStatusTitle01 *child = ((beNDMWStatusTitle01 **)((beNDMWWindowList *)*(int *)&self->_subWindow)->_data)[index];
+                                if (child != 0 && igObject_IsKindOf(child, g_beNDMWStatusTitle01_metaObject[0]) != 0) {
+                                    playerTitle = child;
+                                } else {
+                                    playerTitle = 0;
+                                }
+                                if (playerTitle != 0) break;
+                            }
+                            if (playerTitle != 0) {
+                                playerTitle->_playerNo = IntList_Get(self->_playerNoList, self->_retCode);
+                                beNDMWStatusTitle01_ShowShopLayout(playerTitle);
+                                self->_playerNo = IntList_Get(self->_playerNoList, self->_retCode);
+                            }
+                        }
+                        PICK_ALLOCATOR(allocator, self);
+                        {
+                            igSmartPointer<beNDMWShopCtrlA1> playerMenu((beNDMWShopCtrlA1 *)beNDMWShopCtrlA1_Create(allocator));
+                            beNDMWWindow_BindContext(playerMenu.p, self, self->_insight, IntList_Get(self->_playerNoList, self->_retCode), 0);
+                            ObjectList_AppendRetained(self->_subWindow, playerMenu.p);
+                        }
+                        self->_nowProcKazu = CHILD_COUNT(self);
+                        ENTER_STEP(self, CARD_STEP_PLAYER_MENU);
+                        return;
+                    default:
+                        ENTER_STEP(self, CARD_STEP_MENU);
+                        return;
+                    }
+                }
+                break;
+            }
+            break;
+        case CARD_STEP_PLAYER_MENU:
+            if (CHILD_COUNT(self) != self->_nowProcKazu) {
+                ENTER_STEP(self, CARD_STEP_PICK_PLAYER);
+                return;
+            }
+            break;
+        }
+        break;
+    case SHOP_STATE_CLOSE:
+        beNDMWWindow_PlayQueuedModelClose(self);
+        beNDMWWindow_ClearQueuedText(self);
+        beNDMWWindow_RequestChildrenClose(self);
+        NEXT_STATE(self);
+        {
+            igObject *account = (igObject *)self->_account;
+            RELEASE(account)
+        }
+        self->_account = 0;
+        return;
+    case SHOP_STATE_WAIT_CLOSED:
+        if (beNDMWWindow_PollCloseComplete(self) != 0) {
+            self->_isRun = 0;
+        }
+        break;
     }
-    if (arg1->_count != 0 && i >= 0 && i < arg1->_count) *(beNDMWItemBase **)(arg1->_data + off) = 0;
-    off += 4;
+}
+
+/* The steps of beNDMWShopCtrlA1 continue the numbering of beNDMWShopCtrlA0's; beNDMWShopCtrlA2
+ * returns the step to resume with as its _retCode. */
+enum CardPlayerStep { CARD_PLAYER_STEP_MENU = 4, CARD_PLAYER_STEP_BOOSTER = 5, CARD_PLAYER_STEP_ALBUM = 6 };
+enum CardPlayerChoice { CARD_PLAYER_CHOICE_BOOSTER, CARD_PLAYER_CHOICE_ALBUM };
+enum AlbumPhase { ALBUM_OPEN, ALBUM_SHOW_PAGE_COUNT, ALBUM_BROWSE };
+/* _recNo of the card booster disk in the player's DISKFOLDER. */
+enum { CARD_BOOSTER_REC_NO = 10 };
+
+void beNDMWShopCtrlA1_Update(beNDMWShopCtrlA1 *self) {
+    void *allocator;
+    float accountOrigin[3];
+    float messageOrigin[3];
+    const igObjectList *disks;
+    int boosters;
+    int i;
+    beNDMWItemDisk *disk;
+    switch (self->_st0) {
+    case SHOP_STATE_OPEN:
+        self->_st0 = CurrentState(self) + 1;
+        self->_st3 = 0;
+        self->_st2 = 0;
+        self->_st1 = 0;
+        ENTER_STEP(self, CARD_PLAYER_STEP_MENU);
+        return;
+    case SHOP_STATE_RUN:
+        switch (self->_st1) {
+        case CARD_PLAYER_STEP_MENU:
+            switch (self->_st2) {
+            case CHILD_OPEN:
+                beMessenger_SelectReceivers(self->_messenger, MODELCTRL_16, j_shbase_2, self->_playerNo);
+                beMessenger_AppendString(self->_messenger, SQ_OPEN_8);
+                beMessenger_DispatchSelected(self->_messenger, ISSEQNAME_6);
+                if ((beMessenger_GetBool(self->_messenger, 0) & 0xFF) == 1) {
+                    return;
+                }
+                PICK_ALLOCATOR(allocator, self);
+                {
+                    igSmartPointer<beNDMWShopSelect02> menu((beNDMWShopSelect02 *)beNDMWShopSelect02_Create(allocator));
+                    beNDMWWindow_BindContext(menu.p, self, self->_insight, self->_playerNo, 0x7D5);
+                    ObjectList_AppendRetained(self->_subWindow, menu.p);
+                }
+                self->_nowProcKazu = CHILD_COUNT(self);
+                NEXT_PHASE(self);
+            case CHILD_WAIT:
+                if (CHILD_COUNT(self) != self->_nowProcKazu) {
+                    switch (self->_retCode) {
+                    case CARD_PLAYER_CHOICE_BOOSTER:
+                        ENTER_STEP(self, CARD_PLAYER_STEP_BOOSTER);
+                        return;
+                    case CARD_PLAYER_CHOICE_ALBUM:
+                        ENTER_STEP(self, CARD_PLAYER_STEP_ALBUM);
+                        return;
+                    default:
+                        NEXT_STATE(self);
+                        return;
+                    }
+                }
+                break;
+            }
+            break;
+        case CARD_PLAYER_STEP_BOOSTER:
+            switch (self->_st2) {
+            case CHILD_OPEN:
+                beMessenger_SelectGroup(self->_messenger, GAMERAM_14);
+                beMessenger_AppendInt(self->_messenger, self->_playerNo);
+                beMessenger_DispatchSelected(self->_messenger, GETPLAYER_10);
+                disks = (igObjectList *)((beDataObjObjectList *)igProperty_GetRecordFolder(beMessenger_GetObject(self->_messenger, 0), DISKFOLDER_5))->_data;
+                boosters = 0;
+                i = 0;
+                while (i < disks->_count) {
+                    disk = ((beNDMWItemDisk **)disks->_data)[i];
+                    if (disk != 0 && disk->_recNo == CARD_BOOSTER_REC_NO) {
+                        boosters = disk->_kazu;
+                        break;
+                    }
+                    i++;
+                }
+                if (boosters > 0) {
+                    PICK_ALLOCATOR(allocator, self);
+                    igSmartPointer<beNDMWShopCtrlA2> opener((beNDMWShopCtrlA2 *)beNDMWShopCtrlA2_Create(allocator));
+                    beNDMWWindow_BindContext(opener.p, self, self->_insight, self->_playerNo, boosters);
+                    ObjectList_AppendRetained(self->_subWindow, opener.p);
+                } else {
+                    PICK_ALLOCATOR(allocator, self);
+                    igSmartPointer<beNDMWShopSelect03> message((beNDMWShopSelect03 *)beNDMWShopSelect03_Create(allocator));
+                    beNDMWWindow_BindContext(message.p, self, self->_insight, self->_playerNo, 0x7D7);
+                    ObjectList_AppendRetained(self->_subWindow, message.p);
+                    beMessenger_SelectGroup(self->_messenger, SOUND_8);
+                    beMessenger_AppendString(self->_messenger, CURSOR_NG_4);
+                    beMessenger_DispatchSelected(self->_messenger, PLAY_6);
+                }
+                self->_nowProcKazu = CHILD_COUNT(self);
+                NEXT_PHASE(self);
+            case CHILD_WAIT:
+                if (CHILD_COUNT(self) != self->_nowProcKazu) {
+                    switch (self->_retCode) {
+                    case CARD_PLAYER_STEP_ALBUM:
+                        ENTER_STEP(self, CARD_PLAYER_STEP_ALBUM);
+                        return;
+                    case CARD_PLAYER_STEP_MENU:
+                        ENTER_STEP(self, CARD_PLAYER_STEP_MENU);
+                        return;
+                    default:
+                    case 0:
+                        ENTER_STEP(self, CARD_PLAYER_STEP_MENU);
+                        return;
+                    }
+                }
+                break;
+            }
+            break;
+        case CARD_PLAYER_STEP_ALBUM:
+            switch (self->_st2) {
+            case ALBUM_OPEN:
+                beMessenger_SendNamed(self->_messenger, MODELCTRL_16, i_staccount_2, 0, SQ_CLOSE_10);
+                beMessenger_SendNamed(self->_messenger, MODELCTRL_16, i_messwn_3, 0, SQ_CLOSE_10);
+                beMessenger_SelectGroup(self->_messenger, TEXTCTL_3);
+                beMessenger_AppendString(self->_messenger, STWINFONT34_2);
+                beMessenger_AppendString(self->_messenger, g_fontNames[2]);
+                beMessenger_AppendString(self->_messenger, DISPOFF);
+                beMessenger_DispatchSelected(self->_messenger, SWITCH_2);
+                PICK_ALLOCATOR(allocator, self);
+                {
+                    igSmartPointer<beNDMWShopSelectA0> pager((beNDMWShopSelectA0 *)beNDMWShopSelectA0_Create(allocator));
+                    beNDMWWindow_BindContext(pager.p, self, self->_insight, self->_playerNo, 0);
+                    ObjectList_AppendRetained(self->_subWindow, pager.p);
+                }
+                beNDMWShopCtrlA1_ShowFirstAlbumPage(self);
+                self->_nowProcKazu = CHILD_COUNT(self);
+                NEXT_PHASE(self);
+                return;
+            case ALBUM_SHOW_PAGE_COUNT:
+                beMessenger_SelectReceivers(self->_messenger, MODELCTRL_16, j_shcardwin, 0);
+                beMessenger_AppendString(self->_messenger, SQ_OPEN_8);
+                beMessenger_DispatchSelected(self->_messenger, ISSEQNAME_6);
+                if ((beMessenger_GetBool(self->_messenger, 0) & 0xFF) == 1) {
+                    return;
+                }
+                beMessenger_SelectGroup(self->_messenger, TEXTCTL_3);
+                beMessenger_AppendString(self->_messenger, STWINFONT33);
+                beMessenger_AppendString(self->_messenger, font000_5);
+                beMessenger_AppendString(self->_messenger, text_1);
+                beMessenger_DispatchSelected(self->_messenger, TEXTSET);
+                beMessenger_SelectGroup(self->_messenger, TEXTCTL_3);
+                beMessenger_AppendString(self->_messenger, STWINFONT33);
+                beMessenger_AppendString(self->_messenger, font001_5);
+                beMessenger_AppendString(self->_messenger, text_9);
+                beMessenger_DispatchSelected(self->_messenger, TEXTSET);
+                NEXT_PHASE(self);
+            case ALBUM_BROWSE:
+                /* While the page selector is open its _retCode is the selected page; _st3 holds the page shown. */
+                if (CHILD_COUNT(self) == self->_nowProcKazu) {
+                    if (self->_retCode != RET_CANCEL && self->_st3 != self->_retCode) {
+                        beNDMWShopCtrlA1_ShowAlbumPage(self);
+                        self->_st3 = self->_retCode;
+                        return;
+                    }
+                } else {
+                    beNDMWShopCtrlA1_CloseAlbumPage(self);
+                    beNDMWWindow_RunMessageScript(self, txt_status_lua_4, 0);
+                    beMessenger_SelectGroup(self->_messenger, TEXTCTL_3);
+                    beMessenger_AppendString(self->_messenger, STWINFONT34_2);
+                    beMessenger_AppendString(self->_messenger, g_fontNames[2]);
+                    beMessenger_AppendString(self->_messenger, DISPON);
+                    beMessenger_DispatchSelected(self->_messenger, SWITCH_2);
+                    beMessenger_SelectReceivers(self->_messenger, MODELCTRL_16, i_staccount_2, 0);
+                    beMessenger_AppendString(self->_messenger, SQ_OPEN_8);
+                    accountOrigin[0] = g_vec3Zero[0];
+                    accountOrigin[1] = g_vec3Zero[1];
+                    accountOrigin[2] = g_vec3Zero[2];
+                    beMessenger_AppendVec3(self->_messenger, accountOrigin);
+                    beMessenger_DispatchSelected(self->_messenger, GENERATE_13);
+                    beMessenger_SelectReceivers(self->_messenger, MODELCTRL_16, i_messwn_3, 0);
+                    beMessenger_AppendString(self->_messenger, SQ_OPEN_8);
+                    messageOrigin[0] = g_vec3Zero[0];
+                    messageOrigin[1] = g_vec3Zero[1];
+                    messageOrigin[2] = g_vec3Zero[2];
+                    beMessenger_AppendVec3(self->_messenger, messageOrigin);
+                    beMessenger_DispatchSelected(self->_messenger, GENERATE_13);
+                    ENTER_STEP(self, CARD_PLAYER_STEP_MENU);
+                    return;
+                }
+                break;
+            }
+            break;
+        }
+        break;
+    case SHOP_STATE_CLOSE:
+        beNDMWWindow_PlayQueuedModelClose(self);
+        beNDMWWindow_ClearQueuedText(self);
+        beNDMWWindow_RequestChildrenClose(self);
+        NEXT_STATE(self);
+        return;
+    case SHOP_STATE_WAIT_CLOSED:
+        if (beNDMWWindow_PollCloseComplete(self) != 0) {
+            self->_isRun = 0;
+        }
+        break;
+    }
+}
+
+/* The pooled empty string token. */
+static inline const char *EmptyString()
+{
+    if (g_stringPool[0] == 0) {
+        int pool = StringPool_Allocate(0x10);
+        if (pool != 0) {
+            pool = StringPool_Construct(pool);
+        }
+        g_stringPool[0] = pool;
+    }
+    return StringPool_Intern(g_stringPool[0], 0);
+}
+
+/* Pooled strings keep their reference count in the word before the text and their chunk header
+ * in the word before that. */
+static inline void RetainString(const char *text)
+{
+    if (text) ((int *)text)[-1] = ((int *)text)[-1] + 1;
+}
+
+/* Stores a retained `name` into slot `index` of the igStringRefList held in `listField`. */
+static inline void StringList_SetRetained(int listField, int index, const StringRef &name)
+{
+    igStringRefList *list = (igStringRefList *)listField;
+    int count = list->_count;
+    if (count != 0 && index >= 0 && index < count) {
+        const char **slot = &((const char **)list->_data)[index];
+        RetainString(name.p);
+        ReleaseString(*slot);
+        *slot = name.p;
+    }
+}
+
+static inline void IntList_SetAt(int listField, int index, const int &value)
+{
+    igIntList *list = (igIntList *)listField;
+    int count = list->_count;
+    if (count != 0 && index >= 0 && index < count) ((int *)list->_data)[index] = value;
+}
+
+/* The album shows CARDS_PER_PAGE cards a page: models at ram number 0 for owned cards, the blank
+ * card j_shcard00 at the slot's own ram number otherwise. */
+enum { CARDS_PER_PAGE = 6, ALBUM_PAGES = 9, CARD_COUNT = 50, LAST_CARD_NO = CARD_COUNT - 1 };
+/* _cardRamNoList entry of a slot with no model. */
+enum { NO_MODEL = -1 };
+
+void beNDMWShopCtrlA1_ShowFirstAlbumPage(beNDMWShopCtrlA1 *self) {
+    igBoolList *owned;
+    int database;
+    int slot;
+    beMessenger_SelectGroup(self->_messenger, GAMERAM_14);
+    beMessenger_AppendInt(self->_messenger, self->_playerNo);
+    beMessenger_DispatchSelected(self->_messenger, GETPLAYER_10);
+    owned = (igBoolList *)((beDataObjBoolList *)igProperty_GetRecordArray(beMessenger_GetObject(self->_messenger, 0), CARDLIST_3))->_data;
+    beMessenger_SendNamed(self->_messenger, DATABASE_11, card, 0, GETDATABASE_10);
+    if (beMessenger_GetObjectCount(self->_messenger) > 0) {
+        database = beMessenger_GetObject(self->_messenger, 0);
+    } else {
+        return;
+    }
+    for (slot = 0; slot < CARDS_PER_PAGE; slot++) {
+        /* Both lookups are repeated below; these results are unused. */
+        beDataBase_GetRecordString(database, slot, CARDINFO);
+        beDataBase_GetRecordString(database, slot, SQALBUM);
+        if (*(unsigned char *)(owned->_data + slot) != 0) {
+            StringRef name(InternString(beDataBase_GetRecordString(database, slot, CARDINFO)));
+            beNDMWWindow_PresentModelAtOrigin(self, name.p, 0, beDataBase_GetRecordString(database, slot, SQALBUM), 0);
+            {
+                StringRef copy(name.p);
+                RetainString(copy.p);
+                StringList_AppendRetained(self->_cardInfoList, copy);
+            }
+            IntList_Append(self->_cardRamNoList, 0);
+        } else {
+            beNDMWWindow_PresentModelAtOrigin(self, j_shcard00, slot, beDataBase_GetRecordString(database, slot, SQALBUM), 0);
+            StringList_AppendRetained(self->_cardInfoList, StringRef(InternString((const char *)j_shcard00)));
+            IntList_Append(self->_cardRamNoList, slot);
+        }
+    }
+}
+
+void beNDMWShopCtrlA1_ShowAlbumPage(beNDMWShopCtrlA1 *self) {
+    char pageText[2];
+    igBoolList *owned;
+    int page;
+    int database;
+    int slot;
+    int ramNo;
+    int cardNo;
+    beMessenger_SelectGroup(self->_messenger, GAMERAM_14);
+    beMessenger_AppendInt(self->_messenger, self->_playerNo);
+    beMessenger_DispatchSelected(self->_messenger, GETPLAYER_10);
+    owned = (igBoolList *)((beDataObjBoolList *)igProperty_GetRecordArray(beMessenger_GetObject(self->_messenger, 0), CARDLIST_3))->_data;
+    page = self->_retCode;
+    beMessenger_SendNamed(self->_messenger, DATABASE_11, card, 0, GETDATABASE_10);
+    if (beMessenger_GetObjectCount(self->_messenger) > 0) {
+        database = beMessenger_GetObject(self->_messenger, 0);
+    } else {
+        return;
+    }
+    pageText[1] = 0;
+    pageText[0] = page + '1';
+    beMessenger_SelectGroup(self->_messenger, TEXTCTL_3);
+    beMessenger_AppendString(self->_messenger, STWINFONT33);
+    beMessenger_AppendString(self->_messenger, font000_5);
+    beMessenger_AppendString(self->_messenger, pageText);
+    beMessenger_DispatchSelected(self->_messenger, TEXTSET);
+    switch (page) {
+    case 0: case 1: case 2: case 3: case 4: case 5: case 6: case 7: case 8:
+        for (slot = 0; slot < CARDS_PER_PAGE; slot++) {
+            StringRef shown = StringList_CopyRetained(((igStringRefList *)self->_cardInfoList), slot);
+            /* matching construct: variant search — `cardNo` before the ram-number load (induction register order) */
+            cardNo = page * CARDS_PER_PAGE + slot;
+            ramNo = ((int *)((igIntList *)self->_cardRamNoList)->_data)[slot];
+            if (cardNo > LAST_CARD_NO) {
+                beNDMWWindow_SendModelSequence(self, shown.p, ramNo, SQ_CLOSE_10);
+                StringList_SetRetained(self->_cardInfoList, slot, StringRef(InternString((const char *)blank)));
+                IntList_SetAt(self->_cardRamNoList, slot, NO_MODEL);
+            } else if (*(unsigned char *)(owned->_data + cardNo) != 0) {
+                if (ramNo != NO_MODEL) beNDMWWindow_SendModelSequence(self, shown.p, ramNo, SQ_CLOSE_10);
+                StringRef name(InternString(beDataBase_GetRecordString(database, cardNo, CARDINFO)));
+                beNDMWWindow_PresentModelAtOrigin(self, name.p, 0, beDataBase_GetRecordString(database, cardNo, SQALBUM), 0);
+                StringList_SetRetained(self->_cardInfoList, slot, name);
+                IntList_SetAt(self->_cardRamNoList, slot, 0);
+            } else {
+                if (ramNo != NO_MODEL) {
+                    if (strcmp(shown.p, j_shcard00) == 0)
+                        continue;
+                    beNDMWWindow_SendModelSequence(self, shown.p, ramNo, SQ_CLOSE_10);
+                }
+                beNDMWWindow_PresentModelAtOrigin(self, j_shcard00, slot, beDataBase_GetRecordString(database, slot, SQALBUM), 0);
+                StringList_SetRetained(self->_cardInfoList, slot, StringRef(InternString((const char *)j_shcard00)));
+                IntList_SetAt(self->_cardRamNoList, slot, slot);
+            }
+        }
+        break;
+    }
+}
+
+void beNDMWShopCtrlA1_CloseAlbumPage(beNDMWShopCtrlA1 *self) {
+    igDataList *names;
+    igStringRefList *cleared;
+    int count;
+    int slot;
+    int index;
+
+    names = (igDataList *)self->_cardInfoList;
+    for (slot = 0; slot < names->_count; slot++) {
+        {
+            StringRef name = StringList_CopyRetained(names, slot);
+            int ramNo = ((int *)((igIntList *)self->_cardRamNoList)->_data)[slot];
+            if (ramNo != NO_MODEL) {
+                beNDMWWindow_SendModelSequence(self, name.p, ramNo, SQ_CLOSE_10);
+            }
+        }
+        names = (igDataList *)self->_cardInfoList;
+    }
+    cleared = (igStringRefList *)names;
+    count = cleared->_count;
+    for (index = 0; index < count; index++) {
+        const char **entry = &((const char **)cleared->_data)[index];
+        const char *empty = EmptyString();
+        ReleaseString(*entry);
+        *entry = empty;
+    }
+    cleared->_count = 0;
+    ((igIntList *)self->_cardRamNoList)->_count = 0;
+}
+
+
+/* Replaces every entry of a string list with the pool's interned null string and empties the list. */
+#define CLEAR_STRING_LIST(list) { \
+    igStringRefList *strings = (igStringRefList *)(list); \
+    int count = strings->_count; \
+    int i; \
+    for (i = 0; i < count; i++) { \
+        char **slot = (char **)strings->_data + i; \
+        char *empty = (char *)InternLiteral(0); \
+        ReleaseString(*slot); \
+        *slot = empty; \
+    } \
+    strings->_count = 0; }
+
+#define PLAY_CURSOR_NG(window) { \
+    beMessenger_SelectGroup((window)->_messenger, SOUND_8); \
+    beMessenger_AppendString((window)->_messenger, CURSOR_NG_4); \
+    beMessenger_DispatchSelected((window)->_messenger, PLAY_6); }
+/* Child `index` of the window's sub-window list, the list pointer re-read through its field. */
+#define SUBWINDOW_AT(window, index) (((igObject **)((igObjectList *)*(int *)&(window)->_subWindow)->_data)[index])
+
+enum BoosterStep { BOOSTER_STEP_OFFER = 7, BOOSTER_STEP_OPEN_PACK = 8 };
+enum BoosterOfferSubstep { OFFER_SHOW_PACKS, OFFER_WAIT_DESCRIPTION, OFFER_ASK, OFFER_WAIT_ANSWER };
+enum BoosterOpenSubstep { OPEN_DRAW_CARDS, OPEN_WAIT_RESULT };
+enum BoosterChoice { BOOSTER_CHOICE_OPEN = 0, BOOSTER_CHOICE_ALBUM = 1 };
+/* Results the card shop (beNDMWShopCtrlA1) reads back from the booster window. */
+enum BoosterResult { BOOSTER_RESULT_MENU = 4, BOOSTER_RESULT_ALBUM = 6 };
+enum CardRarity { CARD_RARITY_NORMAL, CARD_RARITY_RARE, CARD_RARITY_SUPER_RARE };
+enum {
+    BOOSTER_PACK_REC_NO = 10, /* the booster-pack disk in the player's disk folder */
+    BOOSTER_PACK_CARDS = 3,
+    CARD_CHANCE_SCALE = 1000  /* KAKURITSU is in thousandths */
+};
+
+enum EvolveOpenStep { EVOLVE_OPEN_MESSAGE_WINDOW, EVOLVE_SET_UP_LIST };
+enum EvolveStep {
+    EVOLVE_STEP_OPEN_LIST,
+    EVOLVE_STEP_SHOW_SELECTION,
+    EVOLVE_STEP_SELECT,
+    EVOLVE_STEP_CONFIRM,
+    EVOLVE_STEP_REFUSE
+};
+enum EvolveConfirmSubstep {
+    CONFIRM_ASK,
+    CONFIRM_WAIT_ANSWER,
+    CONFIRM_NOTICE,
+    CONFIRM_WAIT_NOTICE,
+    CONFIRM_ASK_AGAIN,
+    CONFIRM_WAIT_SECOND_ANSWER,
+    CONFIRM_EVOLVE,
+    CONFIRM_WAIT_EVOLVED
+};
+/* EVOLVE_STEP_REFUSE keeps the reason in _st2 and counts its substeps in _st3. */
+enum EvolveRefusal { REFUSE_CURRENT_SPECIES, REFUSE_EQUIPMENT };
+enum EvolveRefuseSubstep { REFUSE_SHOW_MESSAGE, REFUSE_WAIT_MESSAGE };
+/* Result the Digilabo window (beNDMWShopCtrlDigilabo) reads back: the player's Digimon changed. */
+enum { EVOLVE_RESULT_EVOLVED = 1 };
+enum {
+    EVOLVE_PAGE_ROWS = 8,
+    EVOLVE_MAX_PAGES = 2,
+    EVOLVE_EMPTY_SELECT_MAX = 2,
+    EVOLVE_STAT_ROWS = 16
+};
+
+static inline beNDMWShinkaObjectList *EvolutionList(const beNDMWShopCtrlEvolve *self)
+{
+    return (beNDMWShinkaObjectList *)((beNDMWShinkaCtrl *)self->_shinkaCtrl)->_list;
+}
+
+/* Sends TEXTCTL `command` with `value` to text element `name` of text type `type`. */
+#define TEXT_CONTROL(window, type, name, value, command) { \
+    beMessenger_SelectGroup((window)->_messenger, TEXTCTL_3); \
+    beMessenger_AppendString((window)->_messenger, type); \
+    beMessenger_AppendString((window)->_messenger, name); \
+    beMessenger_AppendString((window)->_messenger, value); \
+    beMessenger_DispatchSelected((window)->_messenger, command); }
+#define EVOLUTION_AT(list, index) (((beNDMWShinkaObject **)(list)->_data)[index])
+
+/* The two text-element names of one stat row: its label and its value. */
+struct StatRowNames {
+    const char *label;
+    const char *value;
+};
+
+/* The booster-pack window: shows the player's unopened packs, offers to open one and deals three
+ * cards drawn by their KAKURITSU weights into the player's CARDLIST. */
+void beNDMWShopCtrlA2_Update(beNDMWShopCtrlA2 *self) {
+    void *allocator;
+    void *packSequence;
+    unsigned cardRolls[BOOSTER_PACK_CARDS];
+    P3 cardTextNames;
+    P3 cardModelSequences;
+    P3 cardTextNamesToReset;
+    float rarityColor[3];
+    int player;
+    beNDMWStatus *status;
+    int bestRarity;
+    int i;
+    switch (self->_st0) {
+    case SHOP_STATE_OPEN:
+        self->_st0 = CurrentState(self) + 1;
+        self->_st3 = 0;
+        self->_st2 = 0;
+        self->_st1 = 0;
+        ENTER_STEP(self, BOOSTER_STEP_OFFER);
+        return;
+    case SHOP_STATE_RUN:
+        switch (self->_st1) {
+        case BOOSTER_STEP_OFFER:
+            switch (self->_st2) {
+            case OFFER_SHOW_PACKS:
+                /* The entry code is the number of packs the player holds. */
+                switch ((unsigned)self->_entCode) {
+                case 1: packSequence = SQ_OPEN00_2; break;
+                case 2: packSequence = SQ_OPEN01_3; break;
+                case 3: packSequence = SQ_OPEN02_3; break;
+                case 4: packSequence = SQ_OPEN03_2; break;
+                case 5: packSequence = SQ_OPEN04_2; break;
+                case 6: packSequence = SQ_OPEN05_2; break;
+                case 7: packSequence = SQ_OPEN06_2; break;
+                case 8: packSequence = SQ_OPEN07_2; break;
+                case 9: packSequence = SQ_OPEN08_2; break;
+                }
+                beNDMWWindow_PresentModelAtOrigin(self, j_shbooster, 0, packSequence, SQ_CLOSE_10);
+                PICK_ALLOCATOR(allocator, self);
+                {
+                    igSmartPointer<beNDMWShopSelect03> description((beNDMWShopSelect03 *)beNDMWShopSelect03_Create(allocator));
+                    beNDMWWindow_BindContext(description.p, self, self->_insight, self->_playerNo, 0x7DD);
+                    ObjectList_AppendRetained(self->_subWindow, description.p);
+                }
+                self->_nowProcKazu = CHILD_COUNT(self);
+                NEXT_PHASE(self);
+            case OFFER_WAIT_DESCRIPTION:
+                if (CHILD_COUNT(self) != self->_nowProcKazu) {
+                    NEXT_PHASE(self);
+                }
+                break;
+            case OFFER_ASK:
+                PICK_ALLOCATOR(allocator, self);
+                {
+                    igSmartPointer<beNDMWShopSelect02> question((beNDMWShopSelect02 *)beNDMWShopSelect02_Create(allocator));
+                    beNDMWWindow_BindContext(question.p, self, self->_insight, self->_playerNo, 0x7D8);
+                    ObjectList_AppendRetained(self->_subWindow, question.p);
+                }
+                self->_nowProcKazu = CHILD_COUNT(self);
+                NEXT_PHASE(self);
+            case OFFER_WAIT_ANSWER:
+                if (CHILD_COUNT(self) != self->_nowProcKazu) {
+                    switch (self->_retCode) {
+                    case BOOSTER_CHOICE_OPEN:
+                        beNDMWWindow_PlayQueuedModelClose(self);
+                        CLEAR_STRING_LIST(self->_modelCloseInfoNameList)
+                        ((igIntList *)self->_modelCloseRamNoList)->_count = 0;
+                        CLEAR_STRING_LIST(self->_modelCloseSeqNameList)
+                        ENTER_STEP(self, BOOSTER_STEP_OPEN_PACK);
+                        return;
+                    case BOOSTER_CHOICE_ALBUM:
+                        ((beNDMWWindow *)self->_mother)->_retCode = BOOSTER_RESULT_ALBUM;
+                        NEXT_STATE(self);
+                        return;
+                    default:
+                        ((beNDMWWindow *)self->_mother)->_retCode = BOOSTER_RESULT_MENU;
+                        NEXT_STATE(self);
+                        return;
+                    }
+                }
+                break;
+            }
+            break;
+        case BOOSTER_STEP_OPEN_PACK:
+            switch (self->_st2) {
+            case OPEN_DRAW_CARDS:
+                PICK_ALLOCATOR(allocator, self);
+                {
+                    igSmartPointer<beNDMWShopSelect03> result((beNDMWShopSelect03 *)beNDMWShopSelect03_Create(allocator));
+                    beNDMWWindow_BindContext(result.p, self, self->_insight, self->_playerNo, 0);
+                    ObjectList_AppendRetained(self->_subWindow, result.p);
+                    SEND_PLAYER_MESSAGE(self, GAMERAM_14, GETPLAYER_10);
+                    player = beMessenger_GetObject(self->_messenger, 0);
+                    {
+                        const igObjectList *disks = (igObjectList *)((beDataObjObjectList *)igProperty_GetRecordFolder(player, DISKFOLDER_5))->_data;
+                        int slot;
+                        for (slot = 0; slot < disks->_count; slot++) {
+                            beNDMWItemDisk *disk = ((beNDMWItemDisk **)disks->_data)[slot];
+                            if (disk != 0 && disk->_recNo == BOOSTER_PACK_REC_NO) {
+                                if (disk->_kazu > 0) disk->_kazu = disk->_kazu - 1;
+                                break;
+                            }
+                        }
+                    }
+                    beMessenger_SendNamed(self->_messenger, DATABASE_11, card, 0, GETDATABASE_10);
+                    {
+                        int cards = beMessenger_GetObject(self->_messenger, 0);
+                        status = (beNDMWStatus *)igInsightCore_FindManager(self->_insight, g_beNDMWStatus_metaObject[0]);
+                        bestRarity = 0;
+                        cardTextNames = g_boosterCardNameTexts;
+                        cardModelSequences = g_boosterCardOpenSequences;
+                        for (i = 0; i < BOOSTER_PACK_CARDS; i++) {
+                            unsigned char drawn;
+                            int chance;
+                            int card;
+                            int cardCount;
+                            cardRolls[i] = (((RandomNumberDispatch *)((beSystem *)status->_system)->_random)->genrand() % CARD_CHANCE_SCALE) * CARD_CHANCE_SCALE;
+                            drawn = 0;
+                            chance = 0;
+                            card = 0;
+                            cardCount = beDataBase_GetRecordCount(cards);
+                            for (; card < cardCount; card++) {
+                                chance += beDataBase_GetRecordInt(cards, card, KAKURITSU) * CARD_CHANCE_SCALE;
+                                if (cardRolls[i] < (unsigned)chance) { drawn = 1; break; }
+                            }
+                            if (drawn == 0) card = cardCount - 1;
+                            {
+                                igBoolList *obtainedCards = (igBoolList *)((beDataObjBoolList *)igProperty_GetRecordArray(player, CARDLIST_3))->_data;
+                                BoolList_Set(obtainedCards, card, true);
+                            }
+                            if (bestRarity < beDataBase_GetRecordInt(cards, card, RARE)) bestRarity = beDataBase_GetRecordInt(cards, card, RARE);
+                            beNDMWWindow_QueueText(result.get(), TALKFONT01, cardTextNames.p[i], beDataBase_GetRecordString(cards, card, NAME_2), LEFT_4);
+                            beNDMWWindow_PresentModelAtOrigin(result.p, beDataBase_GetRecordString(cards, card, CARDINFO), i, cardModelSequences.p[i], SQ_CLOSE_10);
+                            {
+                                float red, green, blue;
+                                switch (beDataBase_GetRecordInt(cards, card, RARE)) {
+                                case CARD_RARITY_SUPER_RARE: red = 0.0f; green = 1.0f; blue = 0.0f; break;
+                                case CARD_RARITY_RARE: red = 1.0f; green = 1.0f; blue = 0.0f; break;
+                                default: red = 1.0f; green = 1.0f; blue = 1.0f; break;
+                                }
+                                beMessenger_SelectGroup(self->_messenger, TEXTCTL_3);
+                                beMessenger_AppendString(self->_messenger, TALKFONT01);
+                                beMessenger_AppendString(self->_messenger, cardTextNames.p[i]);
+                                rarityColor[0] = red; rarityColor[1] = green; rarityColor[2] = blue;
+                                beMessenger_AppendVec3(self->_messenger, rarityColor);
+                                beMessenger_DispatchSelected(self->_messenger, COLOR_4);
+                            }
+                        }
+                    }
+                    switch (bestRarity) {
+                    case CARD_RARITY_SUPER_RARE: result->_entCode = 0x7DA; break;
+                    case CARD_RARITY_RARE: result->_entCode = 0x7DB; break;
+                    default: result->_entCode = 0x7DC; break;
+                    }
+                }
+                self->_nowProcKazu = CHILD_COUNT(self);
+                NEXT_PHASE(self);
+            case OPEN_WAIT_RESULT:
+                if (CHILD_COUNT(self) != self->_nowProcKazu) {
+                    int k;
+                    cardTextNamesToReset = g_boosterCardNameTextsReset;
+                    for (k = 0; k < BOOSTER_PACK_CARDS; k++) {
+                        beMessenger_SelectGroup(self->_messenger, TEXTCTL_3);
+                        beMessenger_AppendString(self->_messenger, TALKFONT01);
+                        beMessenger_AppendString(self->_messenger, cardTextNamesToReset.p[k]);
+                        beMessenger_DispatchSelected(self->_messenger, DEFAULTCOLOR_5);
+                    }
+                    ((beNDMWWindow *)self->_mother)->_retCode = BOOSTER_RESULT_MENU;
+                    NEXT_STATE(self);
+                    return;
+                }
+                break;
+            }
+            break;
+        }
+        break;
+    case SHOP_STATE_CLOSE:
+        beNDMWWindow_PlayQueuedModelClose(self);
+        beNDMWWindow_ClearQueuedText(self);
+        beNDMWWindow_RequestChildrenClose(self);
+        NEXT_STATE(self);
+        return;
+    case SHOP_STATE_WAIT_CLOSED:
+        if (beNDMWWindow_PollCloseComplete(self) != 0) {
+            self->_isRun = 0;
+        }
+        break;
+    }
+}
+
+/* The Digivolution menu of the Digilabo: lists the evolutions the player's Digimon can take, eight
+ * to a page with the selected one's stats and explanation, and evolves after two confirmations. */
+void beNDMWShopCtrlEvolve_Update(beNDMWShopCtrlEvolve *self) {
+    float leftArrowPos[3];
+    float rightArrowPos[3];
+    void *allocator;
+    int count;
+    beNDMWShinkaObject *evolution;
+    int currentSpecies;
+
+    switch (self->_st0) {
+    case SHOP_STATE_OPEN:
+        switch (self->_st1) {
+        case EVOLVE_OPEN_MESSAGE_WINDOW:
+            beNDMWWindow_PresentModelAtOrigin(self, i_messwn_3, 0, SQ_STOPEN_3, SQ_STCLOSE_2);
+            NEXT_STEP(self);
+        case EVOLVE_SET_UP_LIST:
+            beMessenger_SelectReceivers(self->_messenger, MODELCTRL_16, i_messwn_3, 0);
+            beMessenger_AppendString(self->_messenger, SQ_STOPEN_3);
+            beMessenger_DispatchSelected(self->_messenger, ISSEQNAME_6);
+            if ((beMessenger_GetBool(self->_messenger, 0) & 0xFF) != 1) {
+                beNDMWShinkaCtrl_Setup(self->_shinkaCtrl, self->_insight, self->_playerNo);
+                if (EvolutionList(self)->_count > EVOLVE_PAGE_ROWS) {
+                    self->_maxPage = EVOLVE_MAX_PAGES;
+                } else {
+                    self->_maxPage = 1;
+                }
+                self->_nowPage = 0;
+                self->_cursor = 0;
+                if (self->_maxPage > 1) {
+                    beNDMWWindow_PresentModelAtOrigin(self, j_shwin, 0, SQ_SINKAONOPEN, SQ_CLOSE_10);
+                    rightArrowPos[0] = -51.0f;
+                    rightArrowPos[2] = 0.0f;
+                    rightArrowPos[1] = 25.0f;
+                    leftArrowPos[0] = -308.0f;
+                    leftArrowPos[1] = 25.0f;
+                    leftArrowPos[2] = 0.0f;
+                    ((PagedWindow *)self)->PresentPageArrows(leftArrowPos, rightArrowPos);
+                    beNDMWWindow_QueueText(self, STWINFONT31, g_fontNames[0], space_2, RIGHT_3);
+                    beNDMWWindow_QueueText(self, STWINFONT31, g_fontName1[0], space_2, RIGHT_3);
+                } else {
+                    beNDMWWindow_PresentModelAtOrigin(self, j_shwin, 0, SQ_SINKAOFFOPEN, SQ_CLOSE_10);
+                }
+                APPEND_INTERNED(self->_textCloseTypeList, STWINFONT29);
+                APPEND_INTERNED(self->_textCloseNameList, font100_3);
+                beNDMWWindow_RunMessageScript(self, txt_shop_lua_2, 0x4E6);
+                APPEND_INTERNED(self->_textCloseTypeList, STWINFONT37);
+                APPEND_INTERNED(self->_textCloseNameList, g_fontNames[0]);
+                APPEND_INTERNED(self->_textCloseTypeList, STWINFONT37);
+                APPEND_INTERNED(self->_textCloseNameList, g_fontName1[0]);
+                beNDMWWindow_RunMessageScript(self, txt_shop_lua_2, 0x4C2);
+                {
+                    int row;
+                    const char **rowName;
+                    for (row = 0, rowName = g_fontNames; row < EVOLVE_PAGE_ROWS; row++, rowName++) {
+                        beNDMWWindow_QueueText(self, STWINFONT20, *rowName, space_2, LEFT_4);
+                        beNDMWWindow_QueueText(self, STWINFONT43, *rowName, space_2, LEFT_4);
+                        beNDMWWindow_QueueText(self, STWINFONT21, *rowName, space_2, RIGHT_3);
+                    }
+                }
+                {
+                    int stat;
+                    const StatRowNames *statRow;
+                    for (stat = 0, statRow = (const StatRowNames *)g_evolveStatRowTexts; stat < EVOLVE_STAT_ROWS; stat++, statRow++) {
+                        beNDMWWindow_QueueText(self, STWINFONT22, statRow->label, space_2, LEFT_4);
+                        beNDMWWindow_QueueText(self, STWINFONT22, statRow->value, space_2, RIGHT_3);
+                    }
+                }
+                beNDMWWindow_RunMessageScript(self, txt_shop_lua_2, 0x4B2);
+                beNDMWWindow_QueueText(self, STWINFONT29, g_fontNames[0], space_2, LEFT_4);
+                NEXT_STATE(self);
+                ENTER_STEP(self, EVOLVE_STEP_OPEN_LIST);
+                return;
+            }
+            break;
+        }
+        break;
+    case SHOP_STATE_RUN:
+        switch (self->_st1) {
+        case EVOLVE_STEP_OPEN_LIST:
+            PICK_ALLOCATOR(allocator, self);
+            {
+                igSmartPointer<beNDMWStatusSelectE1> selector((beNDMWStatusSelectE1 *)beNDMWStatusSelectE1_Create(allocator));
+                beNDMWWindow_BindContext(selector.p, self, self->_insight, self->_playerNo, 0);
+                ObjectList_AppendRetained(self->_subWindow, selector.p);
+                {
+                    float *offset = selector->_offsetPos;
+                    offset[0] = -283.0f;
+                    offset[1] = 92.0f;
+                    offset[2] = 0.0f;
+                    selector->_startPoint = self->_cursor;
+                    count = EvolutionList(self)->_count;
+                    if (count == 0) {
+                        selector->_selectMax = EVOLVE_EMPTY_SELECT_MAX;
+                    } else {
+                        switch (self->_nowPage) {
+                        case 0:
+                            if (count > EVOLVE_PAGE_ROWS) {
+                                selector->_selectMax = EVOLVE_PAGE_ROWS;
+                            } else {
+                                selector->_selectMax = count;
+                            }
+                            break;
+                        case 1:
+                            selector->_selectMax = count - EVOLVE_PAGE_ROWS;
+                            break;
+                        }
+                    }
+                }
+            }
+            self->_nowProcKazu = CHILD_COUNT(self);
+            NEXT_STEP(self);
+            self->_retCode = self->_cursor;
+            beNDMWShopCtrlEvolve_RefreshText(self, 1, 0);
+        case EVOLVE_STEP_SHOW_SELECTION:
+            if (self->_retCode != -1) {
+                beNDMWShopCtrlEvolve_RefreshText(self, 0, 1);
+            }
+            NEXT_STEP(self);
+            self->_st3 = self->_retCode;
+        case EVOLVE_STEP_SELECT:
+            if (CHILD_COUNT(self) == self->_nowProcKazu) {
+                if (self->_retCode != -1) {
+                    if (self->_st3 != self->_retCode) {
+                        ENTER_STEP(self, EVOLVE_STEP_SHOW_SELECTION);
+                        return;
+                    }
+                    {
+                        beNDMWWindowSelect *selector = 0;
+                        int i;
+                        for (i = 0; i < CHILD_COUNT(self); i++) {
+                            selector = AsPageSelector(SUBWINDOW_AT(self, i));
+                            if (selector != 0) break;
+                        }
+                        if (beNDMWWindowSelect_CanRequestFO2TOP(selector) != 0) {
+                            bool pageTurned = false;
+                            if (((PagedWindow *)self)->TurnPagePrev() != 0) {
+                                pageTurned = true;
+                            } else if (((PagedWindow *)self)->TurnPageNext() != 0) {
+                                pageTurned = true;
+                            }
+                            if (pageTurned) {
+                                ENTER_STATE(selector, SELECT_STATE_RELOAD_TO_TOP);
+                                count = EvolutionList(self)->_count;
+                                if (count == 0) {
+                                    selector->_selectMax = EVOLVE_EMPTY_SELECT_MAX;
+                                } else {
+                                    switch (self->_nowPage) {
+                                    case 0:
+                                        if (count > EVOLVE_PAGE_ROWS) {
+                                            selector->_selectMax = EVOLVE_PAGE_ROWS;
+                                        } else {
+                                            selector->_selectMax = count;
+                                        }
+                                        break;
+                                    case 1:
+                                        selector->_selectMax = count - EVOLVE_PAGE_ROWS;
+                                        break;
+                                    }
+                                }
+                                ENTER_STEP(self, EVOLVE_STEP_SHOW_SELECTION);
+                                self->_retCode = 0;
+                                beNDMWShopCtrlEvolve_RefreshText(self, 1, 0);
+                                return;
+                            }
+                        }
+                    }
+                }
+            } else {
+                switch (self->_retCode) {
+                case -1:
+                    ((beNDMWWindow *)self->_mother)->_retCode = -1;
+                    NEXT_STATE(self);
+                    return;
+                default:
+                    self->_cursor = self->_retCode;
+                    evolution = EVOLUTION_AT(EvolutionList(self), self->_cursor + self->_nowPage * EVOLVE_PAGE_ROWS);
+                    currentSpecies = ((beDataObjInt *)igProperty_GetRecord(GetPlayer(self), DIGIMONNO_6))->_data;
+                    beMessenger_SelectGroup(self->_messenger, GAMERAM_14);
+                    beMessenger_AppendInt(self->_messenger, self->_playerNo);
+                    beMessenger_AppendInt(self->_messenger, evolution->_id);
+                    beMessenger_DispatchSelected(self->_messenger, WEAPONEQUIPCHECK);
+                    if (currentSpecies == evolution->_id) {
+                        ENTER_STEP(self, EVOLVE_STEP_REFUSE);
+                        self->_st2 = REFUSE_CURRENT_SPECIES;
+                        self->_st3 = REFUSE_SHOW_MESSAGE;
+                        PLAY_CURSOR_NG(self);
+                        return;
+                    }
+                    if (!(beMessenger_GetBool(self->_messenger, 0) & 0xFF)) {
+                        ENTER_STEP(self, EVOLVE_STEP_REFUSE);
+                        self->_st2 = REFUSE_EQUIPMENT;
+                        self->_st3 = REFUSE_SHOW_MESSAGE;
+                        PLAY_CURSOR_NG(self);
+                        return;
+                    }
+                    ENTER_STEP(self, EVOLVE_STEP_CONFIRM);
+                    return;
+                }
+            }
+            break;
+        case EVOLVE_STEP_CONFIRM:
+            switch (self->_st2) {
+            case CONFIRM_ASK:
+                PICK_ALLOCATOR(allocator, self);
+                {
+                    igSmartPointer<beNDMWShopSelect01> question((beNDMWShopSelect01 *)beNDMWShopSelect01_Create(allocator));
+                    beNDMWWindow_BindContext(question.p, self, self->_insight, self->_playerNo, 0x4E7);
+                    ObjectList_AppendRetained(self->_subWindow, question.p);
+                }
+                self->_nowProcKazu = CHILD_COUNT(self);
+                NEXT_PHASE(self);
+            case CONFIRM_WAIT_ANSWER:
+                if (CHILD_COUNT(self) != self->_nowProcKazu) {
+                    switch (self->_retCode) {
+                    case ANSWER_YES:
+                        NEXT_PHASE(self);
+                        return;
+                    case ANSWER_NO:
+                    default:
+                        ENTER_STEP(self, EVOLVE_STEP_OPEN_LIST);
+                        return;
+                    }
+                }
+                break;
+            case CONFIRM_NOTICE:
+                PICK_ALLOCATOR(allocator, self);
+                {
+                    igSmartPointer<beNDMWShopSelect00> notice((beNDMWShopSelect00 *)beNDMWShopSelect00_Create(allocator));
+                    beNDMWWindow_BindContext(notice.p, self, self->_insight, self->_playerNo, 0x4E9);
+                    ObjectList_AppendRetained(self->_subWindow, notice.p);
+                }
+                self->_nowProcKazu = CHILD_COUNT(self);
+                NEXT_PHASE(self);
+            case CONFIRM_WAIT_NOTICE:
+                if (CHILD_COUNT(self) == self->_nowProcKazu) break;
+                NEXT_PHASE(self);
+            case CONFIRM_ASK_AGAIN:
+                PICK_ALLOCATOR(allocator, self);
+                {
+                    igSmartPointer<beNDMWShopSelect01> question((beNDMWShopSelect01 *)beNDMWShopSelect01_Create(allocator));
+                    beNDMWWindow_BindContext(question.p, self, self->_insight, self->_playerNo, 0x4EA);
+                    ObjectList_AppendRetained(self->_subWindow, question.p);
+                }
+                self->_nowProcKazu = CHILD_COUNT(self);
+                NEXT_PHASE(self);
+            case CONFIRM_WAIT_SECOND_ANSWER:
+                if (CHILD_COUNT(self) != self->_nowProcKazu) {
+                    switch (self->_retCode) {
+                    case ANSWER_YES:
+                        NEXT_PHASE(self);
+                        return;
+                    case ANSWER_NO:
+                    default:
+                        ENTER_STEP(self, EVOLVE_STEP_OPEN_LIST);
+                        return;
+                    }
+                }
+                break;
+            case CONFIRM_EVOLVE: {
+                beNDMWShinkaObjectList *evolutions;
+                int evolutionCount;
+                int index;
+                PICK_ALLOCATOR(allocator, self);
+                {
+                    igSmartPointer<beNDMWShopSelect00> message((beNDMWShopSelect00 *)beNDMWShopSelect00_Create(allocator));
+                    beNDMWWindow_BindContext(message.p, self, self->_insight, self->_playerNo, 0);
+                    ObjectList_AppendRetained(self->_subWindow, message.p);
+                    APPEND_INTERNED(message->_textCloseTypeList, STWINFONT29);
+                    APPEND_INTERNED(message->_textCloseNameList, font100_3);
+                    beNDMWWindow_RunMessageScript(self, txt_shop_lua_2, 0x4EC);
+                }
+                evolutions = EvolutionList(self);
+                index = self->_cursor + self->_nowPage * EVOLVE_PAGE_ROWS;
+                evolutionCount = evolutions->_count;
+                if (evolutionCount > 0 && index < evolutionCount) {
+                    beNDMWShinkaObject *chosen = EVOLUTION_AT(evolutions, index);
+                    char *explanation;
+                    beMessenger_SendNamed(self->_messenger, DATABASE_11, shinka_5, 0, GETDATABASE_10);
+                    explanation = beDataBase_GetRecordString(beMessenger_GetObject(self->_messenger, 0), chosen->_id, EXPLANATION_2);
+                    TEXT_CONTROL(self, STWINFONT29, g_fontNames[0], explanation, TEXTSET);
+                    TEXT_CONTROL(self, STWINFONT29, g_fontNames[0], DISPON, SWITCH_2);
+                    beNDMWShopCtrlEvolve_ApplyEvolution(self);
+                }
+                self->_nowProcKazu = CHILD_COUNT(self);
+                NEXT_PHASE(self);
+            }
+            case CONFIRM_WAIT_EVOLVED:
+                if (CHILD_COUNT(self) != self->_nowProcKazu) {
+                    ((beNDMWWindow *)self->_mother)->_retCode = EVOLVE_RESULT_EVOLVED;
+                    NEXT_STATE(self);
+                    return;
+                }
+                break;
+            }
+            break;
+        case EVOLVE_STEP_REFUSE:
+            switch (self->_st3) {
+            case REFUSE_SHOW_MESSAGE:
+                PICK_ALLOCATOR(allocator, self);
+                {
+                    igSmartPointer<beNDMWShopSelect00> message((beNDMWShopSelect00 *)beNDMWShopSelect00_Create(allocator));
+                    beNDMWWindow_BindContext(message.p, self, self->_insight, self->_playerNo, 0);
+                    ObjectList_AppendRetained(self->_subWindow, message.p);
+                    APPEND_INTERNED(message->_textCloseTypeList, STWINFONT29);
+                    APPEND_INTERNED(message->_textCloseNameList, font000_5);
+                    if (self->_st2 == REFUSE_CURRENT_SPECIES) {
+                        beNDMWWindow_RunMessageScript(message.p, txt_shop_lua_2, 0x7E4);
+                    } else {
+                        beNDMWWindow_RunMessageScript(message.p, txt_shop_lua_2, 0x7E5);
+                    }
+                }
+                self->_nowProcKazu = CHILD_COUNT(self);
+                self->_st3 = self->_st3 + 1;
+            case REFUSE_WAIT_MESSAGE:
+                if (CHILD_COUNT(self) != self->_nowProcKazu) {
+                    ENTER_STEP(self, EVOLVE_STEP_OPEN_LIST);
+                    return;
+                }
+                break;
+            }
+            break;
+        }
+        break;
+    case SHOP_STATE_CLOSE:
+        beNDMWWindow_PlayQueuedModelClose(self);
+        beNDMWWindow_ClearQueuedText(self);
+        beNDMWWindow_RequestChildrenClose(self);
+        NEXT_STATE(self);
+        return;
+    case SHOP_STATE_WAIT_CLOSED:
+        if (beNDMWWindow_PollCloseComplete(self) != 0) {
+            self->_isRun = 0;
+        }
+        break;
+    }
+}
+
+/* Rewrites the Digivolution window texts: with `refreshList`, the eight rows of the current page
+ * (name, "Lv" and level, hidden past the end of the list) and the page counter; with
+ * `refreshSelection`, the stats and explanation of the evolution under the cursor. */
+void beNDMWShopCtrlEvolve_RefreshText(beNDMWShopCtrlEvolve *self, int refreshList, int refreshSelection) {
+    char levelText[28];
+    int stats[EVOLVE_STAT_ROWS];
+    char statText[16];
+    char pageText[4];
+    beNDMWShinkaObjectList *evolutions;
+    int row;
+    char *name;
+    const char **rowName;
+    int stat;
+    int pageStart;
+    int cursor;
+    int selected;
+    beNDMWShinkaObjectList *selectionList;
+    int index;
+    beNDMWShinkaObject *evolution;
+    beNDMWShinkaObject *selection;
+    char *explanation;
+    int *statValue;
+    const StatRowNames *statRow;
+    if (refreshList != 0) {
+        evolutions = EvolutionList(self);
+        for (row = 0, rowName = g_fontNames; row < EVOLVE_PAGE_ROWS; row++, rowName++) {
+            index = row + self->_nowPage * EVOLVE_PAGE_ROWS;
+            if (evolutions->_count - 1 < index) {
+                TEXT_CONTROL(self, STWINFONT20, *rowName, DISPOFF, SWITCH_2);
+                TEXT_CONTROL(self, STWINFONT43, *rowName, DISPOFF, SWITCH_2);
+                TEXT_CONTROL(self, STWINFONT21, *rowName, DISPOFF, SWITCH_2);
+            } else {
+                evolution = EVOLUTION_AT(evolutions, index);
+                name = (char *)evolution->_name;
+                TEXT_CONTROL(self, STWINFONT20, *rowName, name, TEXTSET);
+                TEXT_CONTROL(self, STWINFONT20, *rowName, DISPON, SWITCH_2);
+                TEXT_CONTROL(self, STWINFONT43, *rowName, Lv_2, TEXTSET);
+                TEXT_CONTROL(self, STWINFONT43, *rowName, DISPON, SWITCH_2);
+                sprintf(levelText, percent_d, EVOLUTION_AT(evolutions, index)->_level);
+                TEXT_CONTROL(self, STWINFONT21, *rowName, levelText, TEXTSET);
+                TEXT_CONTROL(self, STWINFONT21, *rowName, DISPON, SWITCH_2);
+            }
+        }
+        if (self->_maxPage > 1) {
+            pageText[1] = 0;
+            pageText[0] = '1' + self->_nowPage;
+            TEXT_CONTROL(self, STWINFONT31, g_fontNames[0], pageText, TEXTSET);
+            pageText[0] = '0' + self->_maxPage;
+            TEXT_CONTROL(self, STWINFONT31, g_fontNames[1], pageText, TEXTSET);
+        }
+    }
+    if (refreshSelection != 0) {
+        cursor = self->_retCode;
+        if (cursor != -1) {
+            selectionList = EvolutionList(self);
+            pageStart = self->_nowPage * EVOLVE_PAGE_ROWS;
+            selected = pageStart + cursor;
+            if (selected < selectionList->_count) {
+                selection = EVOLUTION_AT(selectionList, selected);
+                stats[0] = selection->_hpMax;
+                stats[1] = selection->_mpMax;
+                stats[2] = selection->_tsuyosa;
+                stats[3] = selection->_mamori;
+                stats[4] = selection->_kashikosa;
+                stats[5] = selection->_seishin;
+                stats[6] = selection->_subayasa;
+                stats[7] = selection->_blunt;
+                stats[8] = selection->_slash;
+                stats[9] = selection->_stab;
+                stats[10] = selection->_bash;
+                stats[11] = selection->_shot;
+                stats[12] = selection->_crush;
+                stats[13] = selection->_blast;
+                stats[14] = selection->_heal;
+                stats[15] = selection->_force;
+                for (stat = 0, statValue = stats, statRow = (const StatRowNames *)g_evolveStatRowTexts; stat < EVOLVE_STAT_ROWS; stat++, statValue++, statRow++) {
+                    sprintf(statText, percent_d, *statValue);
+                    TEXT_CONTROL(self, STWINFONT22, statRow->value, statText, TEXTSET);
+                }
+                beMessenger_SendNamed(self->_messenger, DATABASE_11, shinka_5, 0, GETDATABASE_10);
+                explanation = beDataBase_GetRecordString(beMessenger_GetObject(self->_messenger, 0), selection->_id, EXPLANATION_2);
+                TEXT_CONTROL(self, STWINFONT29, g_fontNames[0], explanation, TEXTSET);
+                TEXT_CONTROL(self, STWINFONT29, g_fontNames[0], DISPON, SWITCH_2);
+            }
+        }
+    }
+}
+
+/* Evolves the player's Digimon into the evolution under the cursor: keeps the current stats as the
+ * base, switches the model to the evolution's MODEL_NAME, re-equips the strongest weapons, empties
+ * the four item slot lists and refreshes the status windows. */
+void beNDMWShopCtrlEvolve_ApplyEvolution(beNDMWShopCtrlEvolve *self) {
+    int player;
+    int messenger;
+    int shinkaDataBase;
+    beNDMWShinkaObject *evolution;
+
+    player = GetPlayer(self);
+    evolution = EVOLUTION_AT(EvolutionList(self), self->_cursor + self->_nowPage * EVOLVE_PAGE_ROWS);
+    beMessenger_SendNamed(self->_messenger, DATABASE_11, shinka_5, 0, GETDATABASE_10);
+    shinkaDataBase = beMessenger_GetObject(self->_messenger, 0);
+    SEND_PLAYER_MESSAGE(self, GAMERAM_14, CURRENT2BASE_2);
+    beMessenger_SelectGroup(self->_messenger, GAMERAM_14);
+    beMessenger_AppendInt(self->_messenger, self->_playerNo);
+    messenger = self->_messenger;
+    beMessenger_AppendString(messenger, beDataBase_GetRecordString(shinkaDataBase, evolution->_id, MODEL_NAME_2));
+    beMessenger_DispatchSelected(self->_messenger, BASE2CURRENT_2);
+    beMessenger_SelectReceivers(self->_messenger, GAMERAM_14, 0, 0);
+    beMessenger_AppendInt(self->_messenger, self->_playerNo);
+    beMessenger_DispatchSelected(self->_messenger, RECALCPLAYER_5);
+    SEND_PLAYER_MESSAGE(self, GAMERAM_14, GETPLAYER_10);
+    SEND_PLAYER_MESSAGE(self, GAMERAM_14, WEAPONEQUIPSTRONG);
+    beNDMWShopCtrlEvolve_ClearItemSlots(self, PlayerFolder(player, MAINSLOT_4));
+    beNDMWShopCtrlEvolve_ClearItemSlots(self, PlayerFolder(player, SUBSLOT_4));
+    beNDMWShopCtrlEvolve_ClearItemSlots(self, PlayerFolder(player, POWERPOCKET_4));
+    beNDMWShopCtrlEvolve_ClearItemSlots(self, PlayerFolder(player, MAINPOCKET_4));
+    beMessenger_SelectReceivers(self->_messenger, GAMERAM_14, 0, 0);
+    beMessenger_AppendInt(self->_messenger, self->_playerNo);
+    beMessenger_DispatchSelected(self->_messenger, RECALCPLAYER_5);
+    SEND_PLAYER_MESSAGE(self, SUBWND_8, UPDATE_3);
+    beNDMWShopCtrlDigilabo_ShowPlayerTitle((beNDMWWindow *)self->_mother, self->_playerNo, 1);
+}
+
+/* Unequips every item of an item slot list, drops the list's reference to it and empties the slot.
+ * The entry test sits after the loop, as in the retail block order. */
+void beNDMWShopCtrlEvolve_ClearItemSlots(beNDMWShopCtrlEvolve *self, igObjectList *slots) {
+    int i;
+    beNDMWItemBase *item;
+    beNDMWItemBase *held;
+    i = 0;
+    goto check_first;
+clear_slot:
+    item = ((beNDMWItemBase **)slots->_data)[i];
+    if (item != 0) item->_isEquip = 0;
+    held = ((beNDMWItemBase **)slots->_data)[i];
+    IG_OBJECT_RELEASE(held);
+    if (slots->_count != 0 && i >= 0 && i < slots->_count) ((beNDMWItemBase **)slots->_data)[i] = 0;
     i++;
-cond:
-    if (i < arg1->_count) goto body;
+check_next:
+    if (i < slots->_count) goto clear_slot;
 done:
     return;
-guard:
-    if (0 < arg1->_count) { off = 0; goto cond; }
+check_first:
+    if (0 < slots->_count) goto check_next;
     goto done;
 }
 
-void Gap__Bec__beNDMWShopCtrlDigilabo__vfunc_21(beNDMWShopCtrlDigilabo *self) {
-    void *alloc;
+
+#define PLAYER_COUNT(self) (((igIntList *)(self)->_playerNoList)->_count)
+#define PLAYER_NO(self, index) (((int *)((igIntList *)(self)->_playerNoList)->_data)[index])
+
+/* matching construct: the search guard reads the list through this accessor, so the loop reloads _subWindow */
+template <class Window> static inline igObjectList *SubWindows(const Window *window) { return (igObjectList *)window->_subWindow; }
+
+/* Sets `found` to the first child window that is a kind of `metaObject`, or 0. */
+#define FIND_CHILD_OF_KIND(found, i, window, metaObject) { \
+    found = 0; \
+    i = 0; \
+    if (0 < SubWindows(window)->_count) { \
+        do { \
+            igObject *child = ((igObject **)((igObjectList *)(window)->_subWindow)->_data)[i]; \
+            if (child != 0 && igObject_IsKindOf(child, metaObject) != 0) { \
+                found = child; \
+            } else { \
+                found = 0; \
+            } \
+            if (found != 0) break; \
+            i += 1; \
+        } while (i < CHILD_COUNT(window)); \
+    } }
+
+static inline int IntList_Count(const igIntList *list) { return list->_count; }
+
+/* matching construct: the grown count is re-read through IntList_Count */
+#define INT_LIST_APPEND(target, value) { \
+    int appendIndex; \
+    igIntList *appendList = (igIntList *)(target); \
+    appendIndex = appendList->_count; \
+    if (appendIndex < appendList->_capacity) { \
+        appendList->_count = IntList_Count(appendList) + 1; \
+    } else { \
+        List_Resize(appendList, appendIndex + 1, 4); \
+    } \
+    ((int *)appendList->_data)[appendIndex] = (value); }
+
+/* Creates a child window of `Type` for this window's player and adds it to the sub-windows. */
+#define OPEN_CHILD(Type, entCode) { \
+    void *allocator; \
+    PICK_ALLOCATOR(allocator, self) \
+    igSmartPointer<Type> child((Type *)Type##_Create(allocator)); \
+    beNDMWWindow_BindContext(child.p, self, self->_insight, self->_playerNo, entCode); \
+    ObjectList_AppendRetained(self->_subWindow, child.p); }
+/* Remembers the child count and moves on to the phase that waits for the child to close. */
+#define AWAIT_CHILD(window) { (window)->_nowProcKazu = CHILD_COUNT(window); NEXT_PHASE(window) }
+#define CHILD_CLOSED(window) (CHILD_COUNT(window) != (window)->_nowProcKazu)
+
+enum DigilaboStep { LABO_MENU, LABO_EVOLVE, LABO_EQUIP, LABO_OFFER_EQUIP, LABO_SWITCH_PLAYER = 5, LABO_LEAVE };
+enum DigilaboChoice { LABO_CHOICE_EVOLVE, LABO_CHOICE_EQUIP, LABO_CHOICE_SWITCH_PLAYER, LABO_CHOICE_LEAVE };
+enum { EVOLVE_DONE = 1, EQUIP_CHANGED = 100 };
+
+enum { NO_WEAPON = -1 };
+
+static inline void IntList_Set(igIntList *list, int index, const int &value)
+{
+    if (list->_count != 0 && index >= 0 && index < list->_count) {
+        ((int *)list->_data)[index] = value;
+    }
+}
+
+/* Queues a text that the window switches off when it closes. */
+#define QUEUE_TEXT_CLOSE(window, type, name) \
+    StringList_AppendRetained((window)->_textCloseTypeList, StringRef(InternString((const char *)(type)))); \
+    StringList_AppendRetained((window)->_textCloseNameList, StringRef(InternString((const char *)(name))));
+
+enum EditBitMode { EDITBIT_DEPOSIT, EDITBIT_WITHDRAW, EDITBIT_JUNK };
+enum EditBitPhase {
+    EDITBIT_OPEN_INPUT, EDITBIT_SHOW_AMOUNTS, EDITBIT_EDIT, EDITBIT_OPEN_CONFIRM, EDITBIT_AWAIT_CONFIRM,
+    EDITBIT_OPEN_JUNK_NOTICE, EDITBIT_AWAIT_JUNK_NOTICE
+};
+enum { BIT_DIGITS = 7, MAX_BANK_BIT = 9999999, MAX_JUNK_BIT = 999999999 };
+enum { STICK_UP = 0x1, STICK_DOWN = 0x4, PAD_UP = 0x10, PAD_DOWN = 0x40 };
+
+static inline int CurrentPhase(const beNDMWShopCtrlEditBit *self) { return self->_st2; }
+
+void beNDMWShopCtrlDigilabo_Update(beNDMWShopCtrlDigilabo *self) {
     igObject *found;
     int i;
+    int p;
     int j;
-    int idx;
-    int *src;
-    igIntList *l;
-    igIntList *pl;
+    int index;
+    int *playerNo;
+    igIntList *choices;
 
     switch (self->_st0) {
     default:
         return;
-    case 0:
+    case SHOP_STATE_OPEN:
         self->_isDigimonChange = 0;
         self->_isWeaponChange = 0;
-        FUN_004329d0(self);
-        ALLOC_42f710(alloc, self)
-        {
-            igSmartPointer<beNDMWShopTitle00> spAC((beNDMWShopTitle00 *)FUN_003b3370(alloc));
-        beNDMWWindow_BindContext(spAC.p, self, self->_insight, self->_playerNo, 0);
-        ObjectList_AppendRetained(self->_subWindow, spAC.p);
-        }
-        ALLOC_42f710(alloc, self)
-        {
-            igSmartPointer<beNDMWStatusTitle03> spA8((beNDMWStatusTitle03 *)beNDMWStatusTitle03_Create(alloc));
-        beNDMWWindow_BindContext(spA8.p, self, self->_insight, self->_playerNo, 0);
-        ObjectList_AppendRetained(self->_subWindow, spA8.p);
-        }
-        ALLOC_42f710(alloc, self)
-        {
-            igSmartPointer<beNDMWShopTitle01> spA4((beNDMWShopTitle01 *)FUN_003b31b0(alloc));
-        beNDMWWindow_BindContext(spA4.p, self, self->_insight, self->_playerNo, self->_entCode);
-        ObjectList_AppendRetained(self->_subWindow, spA4.p);
-        }
-        self->_st0 = self->_st0 + 1;
-        self->_st3 = 0;
-        self->_st2 = 0;
-        self->_st1 = 0;
-    case 1:
+        beNDMWShopCtrlDigilabo_SnapshotParty(self);
+        OPEN_CHILD(beNDMWShopTitle00, 0)
+        OPEN_CHILD(beNDMWStatusTitle03, 0)
+        OPEN_CHILD(beNDMWShopTitle01, self->_entCode)
+        NEXT_STATE(self)
+    case SHOP_STATE_RUN:
         switch (self->_st1) {
-        case 0:
+        case LABO_MENU:
             switch (self->_st2) {
             case 0:
-                FUN_00433290(self);
-                FUN_00433120((beNDMWWindow *)self, self->_playerNo, 0);
-                self->_st2 = self->_st2 + 1;
-                self->_st3 = 0;
+                beNDMWShopCtrlDigilabo_PresentMessageWindow(self);
+                beNDMWShopCtrlDigilabo_ShowPlayerTitle((beNDMWWindow *)self, self->_playerNo, 0);
+                NEXT_PHASE(self)
                 return;
             case 1:
-                beMessenger_SelectReceivers(self->_messenger, &DAT_0051b308[0], &DAT_0051b318[0], 0);
-                beMessenger_AppendString(self->_messenger, &DAT_0051b868[0]);
-                beMessenger_DispatchSelected(self->_messenger, &DAT_0051b338[0]);
+                beMessenger_SelectReceivers(self->_messenger, MODELCTRL_16, i_messwn_3, 0);
+                beMessenger_AppendString(self->_messenger, SQ_OPEN_8);
+                beMessenger_DispatchSelected(self->_messenger, ISSEQNAME_6);
                 if (((unsigned char)beMessenger_GetBool(self->_messenger, 0)) != 1) {
-                    ALLOC_42f710(alloc, self)
-                    {
-                        igSmartPointer<beNDMWShopSelect02> spA0((beNDMWShopSelect02 *)FUN_003b4b10(alloc));
-                    beNDMWWindow_BindContext(spA0.p, self, self->_insight, self->_playerNo, PLN(self));
-                    ObjectList_AppendRetained(self->_subWindow, spA0.p);
-                    }
-                    self->_nowProcKazu = SUBN(self);
-                    self->_st2 = self->_st2 + 1;
-                    self->_st3 = 0;
+                    OPEN_CHILD(beNDMWShopSelect02, PLAYER_COUNT(self))
+                    AWAIT_CHILD(self)
                 }
                 break;
             case 2:
-                if (SUBN(self) != self->_nowProcKazu) {
+                if (CHILD_CLOSED(self)) {
                     switch (self->_retCode) {
-                    case 0:
-                        self->_st1 = 1;
-                        self->_st3 = 0;
-                        self->_st2 = 0;
+                    case LABO_CHOICE_EVOLVE:
+                        ENTER_STEP(self, LABO_EVOLVE)
                         break;
-                    case 1:
-                        self->_st1 = 2;
-                        self->_st3 = 0;
-                        self->_st2 = 0;
+                    case LABO_CHOICE_EQUIP:
+                        ENTER_STEP(self, LABO_EQUIP)
                         break;
-                    case 2:
-                        if (PLN(self) == 1) {
-                            self->_st1 = 6;
-                            self->_st3 = 0;
-                            self->_st2 = 0;
+                    case LABO_CHOICE_SWITCH_PLAYER:
+                        if (PLAYER_COUNT(self) == 1) {
+                            ENTER_STEP(self, LABO_LEAVE)
                         } else {
-                            self->_st1 = 5;
-                            self->_st3 = 0;
-                            self->_st2 = 0;
+                            ENTER_STEP(self, LABO_SWITCH_PLAYER)
                         }
                         break;
                     default:
-                    case 3:
-                        self->_st1 = 6;
-                        self->_st3 = 0;
-                        self->_st2 = 0;
+                    case LABO_CHOICE_LEAVE:
+                        ENTER_STEP(self, LABO_LEAVE)
                         break;
                     }
                     self->_topMenu = self->_retCode;
@@ -4174,312 +3973,201 @@ void Gap__Bec__beNDMWShopCtrlDigilabo__vfunc_21(beNDMWShopCtrlDigilabo *self) {
                 break;
             }
             break;
-        case 1:
+        case LABO_EVOLVE:
             switch (self->_st2) {
             case 0:
-                ALLOC_42f710(alloc, self)
-                {
-                    igSmartPointer<beNDMWShopCtrlEvolve> sp9C((beNDMWShopCtrlEvolve *)FUN_003b8860(alloc));
-                beNDMWWindow_BindContext(sp9C.p, self, self->_insight, self->_playerNo, 0);
-                ObjectList_AppendRetained(self->_subWindow, sp9C.p);
-                }
-                self->_nowProcKazu = SUBN(self);
-                self->_st2 = self->_st2 + 1;
-                self->_st3 = 0;
+                OPEN_CHILD(beNDMWShopCtrlEvolve, 0)
+                AWAIT_CHILD(self)
             case 1:
-                if (SUBN(self) != self->_nowProcKazu) {
+                if (CHILD_CLOSED(self)) {
                     switch (self->_retCode) {
-                    case 1:
+                    case EVOLVE_DONE:
                         self->_isDigimonChange = 1;
-                        self->_st1 = 3;
-                        self->_st3 = 0;
-                        self->_st2 = 0;
+                        ENTER_STEP(self, LABO_OFFER_EQUIP)
                         break;
                     default:
-                        self->_st1 = 0;
-                        self->_st3 = 0;
-                        self->_st2 = 0;
+                        ENTER_STEP(self, LABO_MENU)
                         break;
                     }
-                    FUN_00433290(self);
+                    beNDMWShopCtrlDigilabo_PresentMessageWindow(self);
                     return;
                 }
                 break;
             }
             break;
-        case 2:
+        case LABO_EQUIP:
             switch (self->_st2) {
             case 0:
-                found = 0;
-                i = 0;
-                if (0 < SUBN(self)) {
-                    do {
-                        igObject *e = (igObject *)((int *)((igObjectList *)(*(int *)&self->_subWindow))->_data)[i];
-                        if (e != 0 && igObject_IsKindOf(e, g_beNDMWStatusTitle01_metaObject[0]) != 0) {
-                            found = e;
-                        } else {
-                            found = 0;
-                        }
-                        if (found != 0) break;
-                        i += 1;
-                    } while (i < SUBN(self));
-                }
+                FIND_CHILD_OF_KIND(found, i, self, g_beNDMWStatusTitle01_metaObject[0])
                 if (found != 0) {
                     ((beNDMWStatusTitle01 *)found)->_playerNo = self->_playerNo;
-                    FUN_00425e60(found);
+                    beNDMWStatusTitle01_ShowStatusLayout(found);
                 }
-                self->_st2 = self->_st2 + 1;
-                self->_st3 = 0;
+                NEXT_PHASE(self)
                 return;
             case 1:
-                ALLOC_42f710(alloc, self)
                 {
-                    igSmartPointer<beNDMWStatusCtrlEquip> sp98((beNDMWStatusCtrlEquip *)beNDMWStatusCtrlEquip_Create(alloc));
-                beNDMWWindow_BindContext(sp98.p, self, self->_insight, self->_playerNo, 1);
-                ObjectList_AppendRetained(self->_subWindow, sp98.p);
-                beNDMWWindow_PresentModelAtOrigin(sp98.p, &DAT_0051b318[0], 0, &DAT_0051b328[0], &DAT_0051ba28[0]);
+                    void *allocator;
+                    PICK_ALLOCATOR(allocator, self)
+                    igSmartPointer<beNDMWStatusCtrlEquip> equip((beNDMWStatusCtrlEquip *)beNDMWStatusCtrlEquip_Create(allocator));
+                    beNDMWWindow_BindContext(equip.p, self, self->_insight, self->_playerNo, 1);
+                    ObjectList_AppendRetained(self->_subWindow, equip.p);
+                    beNDMWWindow_PresentModelAtOrigin(equip.p, i_messwn_3, 0, SQ_STOPEN_3, SQ_STCLOSE_2);
                 }
-                self->_nowProcKazu = SUBN(self);
-                self->_st2 = self->_st2 + 1;
-                self->_st3 = 0;
+                AWAIT_CHILD(self)
             case 2:
-                if (SUBN(self) != self->_nowProcKazu) {
+                if (CHILD_CLOSED(self)) {
                     switch (self->_retCode) {
-                    case 100:
+                    case EQUIP_CHANGED:
                         self->_isWeaponChange = 1;
                         break;
                     }
-                    self->_st1 = 0;
-                    self->_st3 = 0;
-                    self->_st2 = 0;
-                    FUN_00433290(self);
+                    ENTER_STEP(self, LABO_MENU)
+                    beNDMWShopCtrlDigilabo_PresentMessageWindow(self);
                     return;
                 }
                 break;
             }
             break;
-        case 3:
+        case LABO_OFFER_EQUIP:
             switch (self->_st2) {
             case 0:
-                beMessenger_SelectReceivers(self->_messenger, &DAT_0051b308[0], &DAT_0051b318[0], 0);
-                beMessenger_AppendString(self->_messenger, &DAT_0051b868[0]);
-                beMessenger_DispatchSelected(self->_messenger, &DAT_0051b338[0]);
+                beMessenger_SelectReceivers(self->_messenger, MODELCTRL_16, i_messwn_3, 0);
+                beMessenger_AppendString(self->_messenger, SQ_OPEN_8);
+                beMessenger_DispatchSelected(self->_messenger, ISSEQNAME_6);
                 if (((unsigned char)beMessenger_GetBool(self->_messenger, 0)) == 1) break;
-                {
-                    ALLOC_42f710(alloc, self)
-                    {
-                        igSmartPointer<beNDMWShopSelect03> sp94((beNDMWShopSelect03 *)FUN_003b4950(alloc));
-                    beNDMWWindow_BindContext(sp94.p, self, self->_insight, self->_playerNo, 0x4ED);
-                    ObjectList_AppendRetained(self->_subWindow, sp94.p);
-                    }
-                    self->_nowProcKazu = SUBN(self);
-                    self->_st2 = self->_st2 + 1;
-                    self->_st3 = 0;
-                }
+                OPEN_CHILD(beNDMWShopSelect03, 0x4ED)
+                AWAIT_CHILD(self)
             case 1:
-                if (SUBN(self) == self->_nowProcKazu) break;
-                {
-                    ALLOC_42f710(alloc, self)
-                    {
-                        igSmartPointer<beNDMWShopSelect02> sp90((beNDMWShopSelect02 *)FUN_003b4b10(alloc));
-                    beNDMWWindow_BindContext(sp90.p, self, self->_insight, self->_playerNo, 0x4EE);
-                    ObjectList_AppendRetained(self->_subWindow, sp90.p);
-                    }
-                    self->_nowProcKazu = SUBN(self);
-                    self->_st2 = self->_st2 + 1;
-                    self->_st3 = 0;
-                }
+                if (!CHILD_CLOSED(self)) break;
+                OPEN_CHILD(beNDMWShopSelect02, 0x4EE)
+                AWAIT_CHILD(self)
             case 2:
-                if (SUBN(self) == self->_nowProcKazu) break;
-                {
-                    switch (self->_retCode) {
-                    case 0:
-                        self->_st1 = 2;
-                        self->_st3 = 0;
-                        self->_st2 = 0;
-                        return;
-                    default:
-                        self->_st1 = 0;
-                        self->_st3 = 0;
-                        self->_st2 = 0;
-                        return;
-                    }
+                if (!CHILD_CLOSED(self)) break;
+                switch (self->_retCode) {
+                case 0:
+                    ENTER_STEP(self, LABO_EQUIP)
+                    return;
+                default:
+                    ENTER_STEP(self, LABO_MENU)
+                    return;
                 }
                 break;
             }
             break;
-        case 5:
+        case LABO_SWITCH_PLAYER:
             switch (self->_st2) {
             case 0:
-                if (1 < PLN(self)) {
-                    ALLOC_42f710(alloc, self)
-                    {
-                        igSmartPointer<beNDMWShopSelect03> sp8C((beNDMWShopSelect03 *)FUN_003b4950(alloc));
-                    beNDMWWindow_BindContext(sp8C.p, self, self->_insight, self->_playerNo, 0x4E2);
-                    ObjectList_AppendRetained(self->_subWindow, sp8C.p);
-                    }
-                    self->_nowProcKazu = SUBN(self);
-                    self->_st2 = self->_st2 + 1;
-                    self->_st3 = 0;
+                if (1 < PLAYER_COUNT(self)) {
+                    OPEN_CHILD(beNDMWShopSelect03, 0x4E2)
+                    AWAIT_CHILD(self)
                     return;
                 }
-                self->_st1 = 0;
-                self->_st3 = 0;
-                self->_st2 = 0;
+                ENTER_STEP(self, LABO_MENU)
                 return;
             case 1:
-                if (SUBN(self) == self->_nowProcKazu) break;
+                if (!CHILD_CLOSED(self)) break;
                 {
-                    ALLOC_42f710(alloc, self)
-                    {
-                        igSmartPointer<beNDMWShopSelect02> sp88((beNDMWShopSelect02 *)FUN_003b4b10(alloc));
-                    beNDMWWindow_BindContext(sp88.p, self, self->_insight, self->_playerNo, -1);
-                    ObjectList_AppendRetained(self->_subWindow, sp88.p);
-                    pl = (igIntList *)self->_playerNoList;
-                    j = 0;
-                    if (0 < pl->_count) {
-                        do {
-                            src = &((int *)pl->_data)[j];
-                            l = (igIntList *)((beNDMWShopSelect02 *)sp88.p)->_playerNoList;
-                            idx = l->_count;
-                            if (idx < l->_capacity) {
-                                l->_count = countOf(l) + 1;
-                            } else {
-                                List_Resize(l, idx + 1, 4);
-                            }
-                            j += 1;
-                            ((int *)l->_data)[idx] = *src;
-                            pl = (igIntList *)self->_playerNoList;
-                        } while (j < pl->_count);
+                    void *allocator;
+                    PICK_ALLOCATOR(allocator, self)
+                    igSmartPointer<beNDMWShopSelect02> chooser((beNDMWShopSelect02 *)beNDMWShopSelect02_Create(allocator));
+                    beNDMWWindow_BindContext(chooser.p, self, self->_insight, self->_playerNo, -1);
+                    ObjectList_AppendRetained(self->_subWindow, chooser.p);
+                    for (j = 0; j < PLAYER_COUNT(self); j++) {
+                        playerNo = &PLAYER_NO(self, j);
+                        choices = (igIntList *)chooser.p->_playerNoList;
+                        index = choices->_count;
+                        if (index < choices->_capacity) {
+                            choices->_count = IntList_Count(choices) + 1;
+                        } else {
+                            List_Resize(choices, index + 1, 4);
+                        }
+                        ((int *)choices->_data)[index] = *playerNo;
                     }
-                    }
-                    self->_nowProcKazu = SUBN(self);
-                    self->_st2 = self->_st2 + 1;
-                    self->_st3 = 0;
-                }
+                }                AWAIT_CHILD(self)
             case 2:
-                if (SUBN(self) != self->_nowProcKazu) {
+                if (CHILD_CLOSED(self)) {
                     switch (self->_retCode) {
                     default:
-                        self->_playerNo = PL(self, self->_retCode);
-                        self->_st1 = 0;
-                        self->_st3 = 0;
-                        self->_st2 = 0;
+                        self->_playerNo = PLAYER_NO(self, self->_retCode);
+                        ENTER_STEP(self, LABO_MENU)
                         return;
                     case -1:
-                        self->_st1 = 0;
-                        self->_st3 = 0;
-                        self->_st2 = 0;
+                        ENTER_STEP(self, LABO_MENU)
                         return;
                     }
                 }
                 break;
             }
             break;
-        case 6:
+        case LABO_LEAVE:
             switch (self->_st2) {
             case 0:
-                if (FUN_00432d30(self) != 0) {
-                    self->_st2 = 2;
-                    self->_st3 = 0;
+                if (beNDMWShopCtrlDigilabo_HasPartyChanged(self) != 0) {
+                    ENTER_PHASE(self, 2)
                     return;
                 }
-                ALLOC_42f710(alloc, self)
-                {
-                    igSmartPointer<beNDMWShopSelect03> sp84((beNDMWShopSelect03 *)FUN_003b4950(alloc));
-                beNDMWWindow_BindContext(sp84.p, self, self->_insight, self->_playerNo, 0x4FB);
-                ObjectList_AppendRetained(self->_subWindow, sp84.p);
-                }
-                self->_nowProcKazu = SUBN(self);
-                self->_st2 = self->_st2 + 1;
-                self->_st3 = 0;
-                FUN_00432c90(self);
-                int k = 0;
-                if (0 < PLN(self)) {
+                OPEN_CHILD(beNDMWShopSelect03, 0x4FB)
+                AWAIT_CHILD(self)
+                beNDMWShopCtrlDigilabo_RecalcPlayers(self);
+                p = 0;
+                if (0 < PLAYER_COUNT(self)) {
                     do {
-                        beMessenger_SelectGroup(self->_messenger, &DAT_0051b398[0]);
-                        beMessenger_AppendInt(self->_messenger, PL(self, k));
-                        beMessenger_DispatchSelected(self->_messenger, &DAT_0051b3e8[0]);
+                        beMessenger_SelectGroup(self->_messenger, GAMERAM_14);
+                        beMessenger_AppendInt(self->_messenger, PLAYER_NO(self, p));
+                        beMessenger_DispatchSelected(self->_messenger, GETPLAYER_10);
                         /* matching construct: the copied token is an expression temporary; a named local would take a higher stack slot than retail's */
-                        beMessenger_SendNamed(self->_messenger, &DAT_0051bbc0[0], (StringList_CopyRetained(((Rec12 *)igProperty_GetRecordStringList(beMessenger_GetObject(self->_messenger, 0), &DAT_0051bbb0[0]))->f12, 0)).p, PL(self, k), &((int *)DAT_0051b7e0)[0]);
-                        k += 1;
-                    } while (k < PLN(self));
+                        beMessenger_SendNamed(self->_messenger, PLAYERARMS_4, (StringList_CopyRetained(((beDataObjStringList *)igProperty_GetRecordStringList(beMessenger_GetObject(self->_messenger, 0), POWERSOCKETNAME_5))->_data, 0)).p, PLAYER_NO(self, p), GENERATE_13);
+                        p += 1;
+                    } while (p < PLAYER_COUNT(self));
                 }
                 break;
             case 1:
-                if (SUBN(self) != self->_nowProcKazu) {
-                    self->_st0 = self->_st0 + 1;
-                    self->_st3 = 0;
-                    self->_st2 = 0;
-                    self->_st1 = 0;
+                if (CHILD_CLOSED(self)) {
+                    NEXT_STATE(self)
                 }
                 break;
             case 2:
-                ALLOC_42f710(alloc, self)
-                {
-                    igSmartPointer<beNDMWShopSelect03> sp80((beNDMWShopSelect03 *)FUN_003b4950(alloc));
-                beNDMWWindow_BindContext(sp80.p, self, self->_insight, self->_playerNo, 0x4F3);
-                ObjectList_AppendRetained(self->_subWindow, sp80.p);
-                }
-                self->_nowProcKazu = SUBN(self);
-                self->_st2 = self->_st2 + 1;
-                self->_st3 = 0;
+                OPEN_CHILD(beNDMWShopSelect03, 0x4F3)
+                AWAIT_CHILD(self)
             case 3:
-                if (SUBN(self) == self->_nowProcKazu) break;
-                {
-                    ALLOC_42f710(alloc, self)
-                    {
-                        igSmartPointer<beNDMWShopSelect02> sp7C((beNDMWShopSelect02 *)FUN_003b4b10(alloc));
-                    beNDMWWindow_BindContext(sp7C.p, self, self->_insight, self->_playerNo, 0x4F4);
-                    ObjectList_AppendRetained(self->_subWindow, sp7C.p);
-                    }
-                    self->_nowProcKazu = SUBN(self);
-                    self->_st2 = self->_st2 + 1;
-                    self->_st3 = 0;
-                }
+                if (!CHILD_CLOSED(self)) break;
+                OPEN_CHILD(beNDMWShopSelect02, 0x4F4)
+                AWAIT_CHILD(self)
             case 4:
-                if (SUBN(self) != self->_nowProcKazu) {
+                if (CHILD_CLOSED(self)) {
                     switch (self->_retCode) {
                     case 0:
-                        self->_st2 = self->_st2 + 1;
-                        self->_st3 = 0;
+                        NEXT_PHASE(self)
                         ((beSystem *)igInsightCore_FindManager(self->_insight, g_beSystem_metaObject[0]))->_isSResetEnable = 0;
                         break;
                     default:
-                        self->_st1 = 5;
-                        self->_st3 = 0;
-                        self->_st2 = 0;
+                        ENTER_STEP(self, LABO_SWITCH_PLAYER)
                         break;
                     }
                 }
                 break;
             case 5:
-                FUN_00432c90(self);
+                beNDMWShopCtrlDigilabo_RecalcPlayers(self);
                 self->_isDemoRun = 1;
-                self->_st0 = self->_st0 + 1;
-                self->_st3 = 0;
-                self->_st2 = 0;
-                self->_st1 = 0;
+                NEXT_STATE(self)
                 break;
             }
             break;
         }
         break;
-    case 2:
-        beMessenger_SendNamed(self->_messenger, &DAT_0051b308[0], &DAT_0051b348[0], 0, &DAT_0051b358[0]);
+    case SHOP_STATE_CLOSE:
+        beMessenger_SendNamed(self->_messenger, MODELCTRL_16, i_bgclear_2, 0, OFFREEZE_3);
         beNDMWWindow_PlayQueuedModelClose(self);
         beNDMWWindow_ClearQueuedText(self);
         beNDMWWindow_RequestChildrenClose(self);
-        self->_st0 = self->_st0 + 1;
-        self->_st3 = 0;
-        self->_st2 = 0;
-        self->_st1 = 0;
+        NEXT_STATE(self)
         if (self->_isDemoRun != 0) {
-            beLua__RunNamedChunk(igInsightCore_FindManager(self->_insight, g_beLua_metaObject[0]), &DAT_0051bbd0[0], &DAT_0051bbe8[0]);
+            beLua__RunNamedChunk(igInsightCore_FindManager(self->_insight, g_beLua_metaObject[0]), demo_digilab_lua, stagML12_lua);
             return;
         }
         break;
-    case 3:
+    case SHOP_STATE_WAIT_CLOSED:
         if (beNDMWWindow_PollCloseComplete() != 0) {
             self->_isRun = 0;
         }
@@ -4489,433 +4177,293 @@ void Gap__Bec__beNDMWShopCtrlDigilabo__vfunc_21(beNDMWShopCtrlDigilabo *self) {
 
 
 
-void FUN_004329d0(beNDMWShopCtrlDigilabo *self) {
-    void *obj;
-    RecB *rb;
+/* Remembers every active player's digimon and the weapons in its power sockets, so that leaving
+ * the lab can tell whether anything changed. */
+void beNDMWShopCtrlDigilabo_SnapshotParty(beNDMWShopCtrlDigilabo *self) {
+    int playerNo;
+    void *player;
+    void *allocator;
+    igObjectList *sockets;
     int i;
-    int val;
-    igObjectList *fold;
-    void *alloc;
-    int j;
-    Item_4329d0 *it;
-    int idx;
+    int digimonNo;
+    int weaponNo;
 
-    beMessenger_SendGroup(self->_messenger, &DAT_0051b398[0], &DAT_0051b810[0]);
-    igProperty_GetRecord(((void *)beMessenger_GetObject(self->_messenger, 0)), &DAT_0051bc40[0]);
-    i = 0;
+    beMessenger_SendGroup(self->_messenger, GAMERAM_14, GETCOMMON_10);
+    igProperty_GetRecord(beMessenger_GetObject(self->_messenger, 0), NINZU_5);
+    playerNo = 0;
     do {
-        beMessenger_SelectGroup(self->_messenger, &DAT_0051b398[0]);
-        beMessenger_AppendInt(self->_messenger, i);
-        beMessenger_DispatchSelected(self->_messenger, &DAT_0051b3e8[0]);
-        obj = ((void *)beMessenger_GetObject(self->_messenger, 0));
-        rb = ((RecB *)igProperty_GetRecordByte(obj, &DAT_0051b870[0]));
-        if (rb->f12 != 0) {
-            {
-                igIntList *l = (igIntList *)self->_playerNoList;
-                idx = l->_count;
-                if (idx < l->_capacity) {
-                    l->_count = countOf(l) + 1;
-                } else {
-                    List_Resize(l, idx + 1, 4);
+        beMessenger_SelectGroup(self->_messenger, GAMERAM_14);
+        beMessenger_AppendInt(self->_messenger, playerNo);
+        beMessenger_DispatchSelected(self->_messenger, GETPLAYER_10);
+        player = (void *)beMessenger_GetObject(self->_messenger, 0);
+        if (((beDataObjBool *)igProperty_GetRecordByte(player, ISUSE_9))->_data != 0) {
+            INT_LIST_APPEND(self->_playerNoList, playerNo)
+            digimonNo = ((beDataObjInt *)igProperty_GetRecord(player, DIGIMONNO_6))->_data;
+            INT_LIST_APPEND(self->_digimonNoList, digimonNo)
+            sockets = (igObjectList *)((beDataObjObjectList *)igProperty_GetRecordFolder(player, POWERSOCKET_4))->_data;
+            PICK_ALLOCATOR(allocator, self)
+            igSmartPointer<igIntList> weaponNos((igIntList *)igIntList_Create(allocator));
+            for (i = 0; i < sockets->_count; i++) {
+                beNDMWItemBase *weapon = ((beNDMWItemBase **)sockets->_data)[i];
+                if (weapon != 0) {
+                    weaponNo = weapon->_recNo;
+                    INT_LIST_APPEND(weaponNos.p, weaponNo)
                 }
-                ((int *)l->_data)[idx] = i;
             }
-            {
-                int idx2;
-                igIntList *l;
-                val = ((RecI *)igProperty_GetRecord(obj, &DAT_0051bac0[0]))->f12;
-                l = (igIntList *)self->_digimonNoList;
-                idx2 = l->_count;
-                if (idx2 < l->_capacity) {
-                    l->_count = countOf(l) + 1;
-                } else {
-                    List_Resize(l, idx2 + 1, 4);
-                }
-                ((int *)l->_data)[idx2] = val;
-            }
-            fold = igProperty_GetRecordFolder(obj, &DAT_0051bc48[0])->f12;
-            alloc = igObject_GetAllocator(self);
-            alloc = GPR_00554c14 ? alloc : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
-            igSmartPointer<igIntList> lst((igIntList *)((int)igIntList_Create(alloc)));
-            j = 0;
-            if (0 < fold->_count) {
-                idx = 0;
-                do {
-                    it = *(Item_4329d0 **)&((char *)fold->_data)[idx];
-                    if (it != 0) {
-                        int idx3;
-                        igIntList *l = lst.p;
-                        val = it->f12;
-                        idx3 = l->_count;
-                        if (idx3 < l->_capacity) {
-                            l->_count = countOf(l) + 1;
-                        } else {
-                            List_Resize(l, idx3 + 1, 4);
-                        }
-                        ((int *)l->_data)[idx3] = val;
-                    }
-                    j += 1;
-                    idx += 4;
-                } while (j < fold->_count);
-            }
-            ObjectList_AppendRetained(self->_wpuNoListList, lst.p);
+            ObjectList_AppendRetained(self->_wpuNoListList, weaponNos.p);
         }
-        i += 1;
-    } while (i < 4);
+        playerNo += 1;
+    } while (playerNo < MAX_PLAYERS);
 }
 
-void FUN_00432c90(beNDMWShopCtrlDigilabo *arg0) {
+void beNDMWShopCtrlDigilabo_RecalcPlayers(beNDMWShopCtrlDigilabo *self) {
     int i;
-    for (i = 0; i < ((igIntList *)arg0->_playerNoList)->_count; i++) {
-        beMessenger_SelectReceivers(arg0->_messenger, &DAT_0051b398[0], 0, 0);
-        beMessenger_AppendInt(arg0->_messenger, ((int *)((igIntList *)arg0->_playerNoList)->_data)[i]);
-        beMessenger_DispatchSelected(arg0->_messenger, &DAT_0051b3a0[0]);
+    for (i = 0; i < PLAYER_COUNT(self); i++) {
+        beMessenger_SelectReceivers(self->_messenger, GAMERAM_14, 0, 0);
+        beMessenger_AppendInt(self->_messenger, PLAYER_NO(self, i));
+        beMessenger_DispatchSelected(self->_messenger, RECALCPLAYER_5);
     }
 }
 
-/* Working list reference held across the List_Resize call. */
-static inline int count(const igIntList *list) { return list->_count; }
-
-int FUN_00432d30(beNDMWShopCtrlDigilabo *arg0) {
-    int cn;
-    int v1;
-    igObjectList *folder;
-    int j;
-    igIntList *list;
-    Rec2 *e;
-    int v0;
-    int k2;
-    int al;
-    int *rec;
-    int o4;
-    int o5;
-    int off;
-    void *obj;
-    int c;
-    int *src;
-    igIntList *t;
-    int al2;
-    int w;
-    igIntList *l;
+/* Whether the party differs from the snapshot taken on entry: another digimon, or another set of
+ * power-socket weapons. Only checked after an evolution or an equipment change was confirmed. */
+int beNDMWShopCtrlDigilabo_HasPartyChanged(beNDMWShopCtrlDigilabo *self) {
+    int p;
+    void *player;
+    igObjectList *sockets;
+    igIntList *savedWeaponNos;
+    void *allocator;
+    int weaponCount;
+    int i;
+    int s;
     int k;
-    int o2;
-    int o3;
-    int *arr;
-    int s0;
-    igIntList *l2;
-    igIntList *t2;
-    int r;
-    if (arg0->_isDigimonChange != 0 || arg0->_isWeaponChange != 0) {
-        cn = 0;
-        off = 0;
-        if (0 < ((igIntList *)arg0->_playerNoList)->_count) {
-            do {
-                s0 = *(int *)(((igIntList *)arg0->_playerNoList)->_data + off);
-                beMessenger_SelectGroup(arg0->_messenger, &DAT_0051b398[0]);
-                beMessenger_AppendInt(arg0->_messenger, s0);
-                beMessenger_DispatchSelected(arg0->_messenger, &DAT_0051b3e8[0]);
-                obj = (void *)beMessenger_GetObject(arg0->_messenger, 0);
-                rec = (int *)((void *)igProperty_GetRecord(obj, &DAT_0051bac0[0]));
-                if (rec[3] != *(int *)(((igIntList *)arg0->_digimonNoList)->_data + off)) return 1;
-                folder = (igObjectList *)(((int *)((void *)igProperty_GetRecordFolder(obj, &DAT_0051bc48[0])))[3]);
-                list = (igIntList *)*(int *)(((igIntList *)arg0->_wpuNoListList)->_data + off);
-                al = ((int)igObject_GetAllocator(arg0));
-                if (GPR_00554c14 != 0) {
-                    al2 = al;
-                } else {
-                    al2 = ((int)Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]));
-                }
-                {
-                igSmartPointer<igIntList> sp((igIntList *)igIntList_Create(al2));
-                v0 = 0;
-                if (0 < list->_count) {
-                    o2 = 0;
-                    do {
-                        src = (int *)((char *)list->_data + o2);
-                        l = sp.p;
-                        c = l->_count;
-                        if (c < l->_capacity) {
-                            l->_count = count(l) + 1;
-                        } else {
-                            List_Resize(l, c + 1, 4);
-                        }
-                        ((int *)l->_data)[c] = *src;
-                        v0++;
-                        o2 += 4;
-                    } while (v0 < list->_count);
-                }
-                v1 = 0;
-                j = 0;
-                if (0 < folder->_count) {
-                    o3 = 0;
-                    do {
-                        e = *(Rec2 **)(folder->_data + o3);
-                        if (e != 0) {
-                            w = e->f12;
-                            v1++;
-                            l = sp.p;
-                            o4 = 0;
-                            if (0 < CNT_432d30(l)) {
-                                k = 0;
-                                l2 = l;
-                                do {
-                                    int x = *(int *)(l2->_data + k);
-                                    if (x != -1 && w == x) {
-                                        if (CNT_432d30(l) != 0 && o4 >= 0 && o4 < CNT_432d30(l)) {
-                                            ((int *)l->_data)[o4] = DAT_004cfa30[0];
-                                        }
-                                        break;
-                                    }
-                                    o4++;
-                                    k += 4;
-                                    l2 = l;
-                                } while (o4 < CNT_432d30(l));
+    int m;
+    int weaponNo;
+
+    if (self->_isDigimonChange != 0 || self->_isWeaponChange != 0) {
+        for (p = 0; p < PLAYER_COUNT(self); p++) {
+            int playerNo = PLAYER_NO(self, p);
+            beMessenger_SelectGroup(self->_messenger, GAMERAM_14);
+            beMessenger_AppendInt(self->_messenger, playerNo);
+            beMessenger_DispatchSelected(self->_messenger, GETPLAYER_10);
+            player = (void *)beMessenger_GetObject(self->_messenger, 0);
+            beDataObjInt *digimon = (beDataObjInt *)igProperty_GetRecord(player, DIGIMONNO_6);
+            if (digimon->_data != ((int *)((igIntList *)self->_digimonNoList)->_data)[p]) return 1;
+            sockets = (igObjectList *)((beDataObjObjectList *)igProperty_GetRecordFolder(player, POWERSOCKET_4))->_data;
+            savedWeaponNos = ((igIntList **)((igObjectList *)self->_wpuNoListList)->_data)[p];
+            PICK_ALLOCATOR(allocator, self)
+            igSmartPointer<igIntList> unmatched((igIntList *)igIntList_Create(allocator));
+            for (i = 0; i < savedWeaponNos->_count; i++) {
+                const int &savedWeaponNo = ((int *)savedWeaponNos->_data)[i];
+                INT_LIST_APPEND(unmatched.p, savedWeaponNo)
+            }
+            /* Strike every equipped weapon off the saved list. */
+            weaponCount = 0;
+            for (s = 0; s < sockets->_count; s++) {
+                beNDMWItemBase *weapon = ((beNDMWItemBase **)sockets->_data)[s];
+                if (weapon != 0) {
+                    weaponNo = weapon->_recNo;
+                    weaponCount++;
+                    igIntList *remaining = unmatched.p;
+                    k = 0;
+                    if (0 < remaining->_count) {
+                        /* matching construct: index and byte offset walk separately and the list is re-read each pass */
+                        int offset = 0;
+                        igIntList *current = remaining;
+                        do {
+                            int saved = *(int *)(current->_data + offset);
+                            if (saved != NO_WEAPON && weaponNo == saved) {
+                                IntList_Set(remaining, k, NO_WEAPON);
+                                break;
                             }
-                        }
-                        j++;
-                        o3 += 4;
-                    } while (j < folder->_count);
+                            k++;
+                            offset += 4;
+                            current = remaining;
+                        } while (k < remaining->_count);
+                    }
                 }
-                if (v1 != list->_count) {
-                    return 1;
-                }
-                t = sp.p;
-                k2 = 0;
-                if (0 < CNT_432d30(t)) {
-                    o5 = 0;
-                    t2 = t;
-                    do {
-                        if (*(int *)(t2->_data + o5) != -1) {
-                            return 1;
-                        }
-                        k2++;
-                        o5 += 4;
-                        t2 = t;
-                    } while (k2 < CNT_432d30(t));
-                }
-                }
-                cn = cn + 1;
-                off += 4;
-                r = ((igIntList *)arg0->_playerNoList)->_count > cn;
-            } while (r);
+            }
+            if (weaponCount != savedWeaponNos->_count) return 1;
+            igIntList *remaining = unmatched.p;
+            m = 0;
+            if (0 < remaining->_count) {
+                /* matching construct: as above */
+                int offset = 0;
+                igIntList *current = remaining;
+                do {
+                    if (*(int *)(current->_data + offset) != NO_WEAPON) return 1;
+                    m++;
+                    offset += 4;
+                    current = remaining;
+                } while (m < remaining->_count);
+            }
         }
     }
     return 0;
 }
 
 
-void FUN_00433120(beNDMWWindow *arg0, int arg1, int arg2) {
-    beNDMWWindow *var_s2;
-    int var_s1;
-    int var_s0;
-    int var_v0;
-    int w;
-    beNDMWWindow *e;
-
-    var_s2 = 0;
-    var_s1 = 0;
-    if (0 < ((igObjectList *)*(int *)&arg0->_subWindow)->_count) {
-        var_s0 = 0;
-        do {
-            e = (beNDMWWindow *)((int *)((igObjectList *)arg0->_subWindow)->_data)[var_s1];
-            if ((e != 0) && (igObject_IsKindOf(e, g_beNDMWStatusTitle01_metaObject[0]) != 0)) {
-                var_s2 = e;
-            } else {
-                var_s2 = 0;
-            }
-            if (var_s2 != 0) break;
-            var_s1 += 1;
-            var_s0 += 4;
-        } while (var_s1 < ((igObjectList *)arg0->_subWindow)->_count);
-    }
-    if (var_s2 == 0) {
-        var_v0 = ((int)igObject_GetAllocator(arg0));
-        if (GPR_00554c14 != 0) {
-            w = var_v0;
-        } else {
-            w = ((int)Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]));
-        }
-        /* The new window is owned by the stack reference until the sub-window list has taken its own. */
-        igSmartPointer<beNDMWStatusTitle01> created((beNDMWStatusTitle01 *)beNDMWStatusTitle01_Create(w));
-        beNDMWWindow_BindContext(created.p, arg0, arg0->_insight, arg1, 1);
-        ObjectList_AppendRetained(arg0->_subWindow, (igObject *)created.p);
-    } else {
-        var_s2->_playerNo = arg1;
-        FUN_00425fb0(var_s2);
-    }
-}
-
-void FUN_00433290(void *window)
-{
-    beNDMWWindow_PresentModelAtOrigin(window, ((char *)DAT_0051b318), 0, ((char *)DAT_0051b868), ((char *)DAT_0051b620));
-}
-
-static inline int st2(const beNDMWShopCtrlEditBit *self) { return self->_st2; }
-
-void Gap__Bec__beNDMWShopCtrlEditBit__vfunc_21(beNDMWShopCtrlEditBit *self) {
-    char sp50[20];
-    void *alloc;
-    int obj;
-    int s2v;
-    int s1v;
-    int s0v;
+void beNDMWShopCtrlDigilabo_ShowPlayerTitle(beNDMWWindow *self, int playerNo, int unused) {
+    igObject *found;
     int i;
-    int mult;
-    int cnt;
+
+    FIND_CHILD_OF_KIND(found, i, self, g_beNDMWStatusTitle01_metaObject[0])
+    beNDMWStatusTitle01 *title = (beNDMWStatusTitle01 *)found;
+    if (title == 0) {
+        void *allocator;
+        PICK_ALLOCATOR(allocator, self)
+        igSmartPointer<beNDMWStatusTitle01> created((beNDMWStatusTitle01 *)beNDMWStatusTitle01_Create(allocator));
+        beNDMWWindow_BindContext(created.p, self, self->_insight, playerNo, 1);
+        ObjectList_AppendRetained(self->_subWindow, created.p);
+    } else {
+        title->_playerNo = playerNo;
+        beNDMWStatusTitle01_ShowShopLayout(title);
+    }
+}
+
+void beNDMWShopCtrlDigilabo_PresentMessageWindow(void *window)
+{
+    beNDMWWindow_PresentModelAtOrigin(window, i_messwn_3, 0, SQ_OPEN_8, SQ_CLOSE_10);
+}
+
+void beNDMWShopCtrlEditBit_Update(beNDMWShopCtrlEditBit *self) {
+    char slotName[20];
+    void *player;
+    int input;
+    int carried;
+    int banked;
+    int i;
+    int step;
+    int stick;
     bePadData *pad;
-    int pa;
-    int pb;
-    int oldv;
-    int v;
-    int lim;
-    int a2v;
-    int rc;
-    int h;
+    int pressed;
+    int repeated;
+    int previous;
+    int room;
+    int digits;
+    int column;
 
     switch (self->_st0) {
     default:
         return;
-    case 0:
+    case SHOP_STATE_OPEN:
         switch (self->_entCode) {
-        case 0:
-            beNDMWWindow_PresentModelAtOrigin(self, &DAT_0051b610[0], 0, &DAT_0051bc60[0], &DAT_0051b620[0]);
-            INTERN_APPEND_4332d0(self->_textCloseTypeList, &DAT_0051bc70[0])
-            INTERN_APPEND_4332d0(self->_textCloseNameList, &DAT_0051b1c8[0])
-            INTERN_APPEND_4332d0(self->_textCloseTypeList, &DAT_0051bc70[0])
-            INTERN_APPEND_4332d0(self->_textCloseNameList, &DAT_0051b1d0[0])
-            beNDMWWindow_RunMessageScript(self, &DAT_0051b3b0[0], 0x515);
-            INTERN_APPEND_4332d0(self->_textCloseTypeList, STWINFONT29)
-            INTERN_APPEND_4332d0(self->_textCloseNameList, &DAT_0051b548[0])
-            beNDMWWindow_RunMessageScript(self, &DAT_0051b3b0[0], 0x550);
+        case EDITBIT_DEPOSIT:
+            beNDMWWindow_PresentModelAtOrigin(self, j_shwin, 0, SQ_BITPUTINOPEN, SQ_CLOSE_10);
+            QUEUE_TEXT_CLOSE(self, STWINFONT36, font000_5)
+            QUEUE_TEXT_CLOSE(self, STWINFONT36, font001_5)
+            beNDMWWindow_RunMessageScript(self, txt_shop_lua_2, 0x515);
+            QUEUE_TEXT_CLOSE(self, STWINFONT29, font100_3)
+            beNDMWWindow_RunMessageScript(self, txt_shop_lua_2, 0x550);
             break;
-        case 1:
-            beNDMWWindow_PresentModelAtOrigin(self, &DAT_0051b610[0], 0, &DAT_0051bc80[0], &DAT_0051b620[0]);
-            INTERN_APPEND_4332d0(self->_textCloseTypeList, &DAT_0051bc70[0])
-            INTERN_APPEND_4332d0(self->_textCloseNameList, &DAT_0051b1c8[0])
-            INTERN_APPEND_4332d0(self->_textCloseTypeList, &DAT_0051bc70[0])
-            INTERN_APPEND_4332d0(self->_textCloseNameList, &DAT_0051b1d0[0])
-            INTERN_APPEND_4332d0(self->_textCloseTypeList, &DAT_0051bc70[0])
-            INTERN_APPEND_4332d0(self->_textCloseNameList, &DAT_0051b1d8[0])
-            beNDMWWindow_RunMessageScript(self, &DAT_0051b3b0[0], 0x55F);
-            INTERN_APPEND_4332d0(self->_textCloseTypeList, STWINFONT29)
-            INTERN_APPEND_4332d0(self->_textCloseNameList, &DAT_0051b548[0])
-            beNDMWWindow_RunMessageScript(self, &DAT_0051b3b0[0], 0x557);
+        case EDITBIT_WITHDRAW:
+            beNDMWWindow_PresentModelAtOrigin(self, j_shwin, 0, SQ_BITDRAWOUTOPEN, SQ_CLOSE_10);
+            QUEUE_TEXT_CLOSE(self, STWINFONT36, font000_5)
+            QUEUE_TEXT_CLOSE(self, STWINFONT36, font001_5)
+            QUEUE_TEXT_CLOSE(self, STWINFONT36, font002_4)
+            beNDMWWindow_RunMessageScript(self, txt_shop_lua_2, 0x55F);
+            QUEUE_TEXT_CLOSE(self, STWINFONT29, font100_3)
+            beNDMWWindow_RunMessageScript(self, txt_shop_lua_2, 0x557);
             break;
-        case 2:
-            beNDMWWindow_PresentModelAtOrigin(self, &DAT_0051b610[0], 0, &DAT_0051bc98[0], &DAT_0051b620[0]);
-            INTERN_APPEND_4332d0(self->_textCloseTypeList, &DAT_0051bc70[0])
-            INTERN_APPEND_4332d0(self->_textCloseNameList, &DAT_0051b1c8[0])
-            beNDMWWindow_RunMessageScript(self, &DAT_0051b3b0[0], 0x562);
+        case EDITBIT_JUNK:
+            beNDMWWindow_PresentModelAtOrigin(self, j_shwin, 0, SQ_JUNKOPEN, SQ_CLOSE_10);
+            QUEUE_TEXT_CLOSE(self, STWINFONT36, font000_5)
+            beNDMWWindow_RunMessageScript(self, txt_shop_lua_2, 0x562);
             break;
         }
-        self->_st0 = self->_st0 + 1;
-        self->_st3 = 0;
-        self->_st2 = 0;
-        self->_st1 = 0;
-    case 1:
+        NEXT_STATE(self)
+    case SHOP_STATE_RUN:
         switch (self->_st2) {
-        case 0:
-            ALLOC(alloc, self)
-            {
-            igSmartPointer<beNDMWShopSelect34> spAC((beNDMWShopSelect34 *)beNDMWShopSelect34_Create(alloc));
-            beNDMWWindow_BindContext(spAC.p, self, self->_insight, self->_playerNo, self->_entCode);
-            ObjectList_AppendRetained(self->_subWindow, spAC.p);
-            }
-            self->_nowProcKazu = ((igObjectList *)self->_subWindow)->_count;
-            self->_st2 = self->_st2 + 1;
-            self->_st3 = 0;
+        case EDITBIT_OPEN_INPUT:
+            OPEN_CHILD(beNDMWShopSelect34, self->_entCode)
+            AWAIT_CHILD(self)
             return;
-        case 1:
-            beMessenger_SelectGroup(self->_messenger, &DAT_0051b398[0]);
+        case EDITBIT_SHOW_AMOUNTS:
+            beMessenger_SelectGroup(self->_messenger, GAMERAM_14);
             beMessenger_AppendInt(self->_messenger, self->_playerNo);
-            beMessenger_DispatchSelected(self->_messenger, &DAT_0051b3e8[0]);
-            obj = beMessenger_GetObject(self->_messenger, 0);
+            beMessenger_DispatchSelected(self->_messenger, GETPLAYER_10);
+            player = (void *)beMessenger_GetObject(self->_messenger, 0);
             self->_editBit = 0;
-            s2v = ((int *)((igObjectList *)self->_subWindow)->_data)[0];
-            s1v = W(((int)igProperty_GetRecord(obj, &DAT_0051b560[0])), 12);
-            s0v = W(((int)igProperty_GetRecord(obj, &DAT_0051b568[0])), 12);
+            input = ((int *)((igObjectList *)self->_subWindow)->_data)[0];
+            carried = ((beDataObjInt *)igProperty_GetRecord(player, BIT_7))->_data;
+            banked = ((beDataObjInt *)igProperty_GetRecord(player, BANKBIT_2))->_data;
             switch (self->_entCode) {
-            case 0:
-                FUN_004402e0(s2v, self->_editBit, 1, &DAT_0051bca8[0]);
-                v = 9999999 - s0v;
-                s1v = s1v < v ? s1v : v;
-                self->_editMax = s1v;
-                FUN_00440110(s2v, self->_entCode, s0v);
+            case EDITBIT_DEPOSIT:
+                FUN_004402e0(input, self->_editBit, 1, font_03d_2);
+                room = MAX_BANK_BIT - banked;
+                carried = carried < room ? carried : room;
+                self->_editMax = carried;
+                FUN_00440110(input, self->_entCode, banked);
                 break;
-            case 1:
-                FUN_004402e0(s2v, self->_editBit, 1, &DAT_0051bcb8[0]);
-                v = 9999999 - s1v;
-                self->_editMax = s0v < v ? s0v : v;
-                FUN_00440110(s2v, self->_entCode, s1v);
-                FUN_004402e0(s2v, s0v, 1, &DAT_0051bcc8[0]);
+            case EDITBIT_WITHDRAW:
+                FUN_004402e0(input, self->_editBit, 1, font01_d);
+                room = MAX_BANK_BIT - carried;
+                self->_editMax = banked < room ? banked : room;
+                FUN_00440110(input, self->_entCode, carried);
+                FUN_004402e0(input, banked, 1, font02_d);
                 break;
-            case 2:
-                FUN_004402e0(s2v, self->_editBit, 1, &DAT_0051bca8[0]);
-                v = 999999999 - s1v;
-                s1v = s1v < v ? s1v : v;
-                self->_editMax = s1v;
+            case EDITBIT_JUNK:
+                FUN_004402e0(input, self->_editBit, 1, font_03d_2);
+                room = MAX_JUNK_BIT - carried;
+                carried = carried < room ? carried : room;
+                self->_editMax = carried;
                 break;
             }
-            self->_st2 = self->_st2 + 1;
-            self->_st3 = 0;
+            NEXT_PHASE(self)
             return;
-        case 2:
-            if (((igObjectList *)self->_subWindow)->_count == self->_nowProcKazu) {
-                rc = self->_retCode;
-                if (rc != -1) {
-                    if (self->_st3 == rc) {
-                        beMessenger_SendNamed(self->_messenger, &DAT_0051bcd8[0], &DAT_0051bce8[0], self->_playerNo, &DAT_0051bcf8[0]);
+        case EDITBIT_EDIT:
+            if (CHILD_COUNT(self) == self->_nowProcKazu) {
+                column = self->_retCode;
+                if (column != -1) {
+                    if (self->_st3 == column) {
+                        beMessenger_SendNamed(self->_messenger, SELECTCTRL_4, i_stcursor03_2, self->_playerNo, ISSELECTNOW_2);
                         if (beMessenger_GetBool(self->_messenger, 0) & 0xFF) {
                             pad = bePadManager_GetPadForPlayer(self->_padManager, self->_playerNo);
-                            pa = pad->_trigger;
-                            pb = pad->_repeat;
-                            cnt = pad->_lTrg | pad->_lRpt;
-                            bool up = true;
-                            if (!(cnt & 1) && !((pa | pb) & 0x10)) up = false;
-                            bool dn = true;
-                            if (!(cnt & 4) && !((pa | pb) & 0x40)) dn = false;
-                            if (up || dn) {
-                                oldv = self->_editBit;
-                                mult = 1;
-                                a2v = 7 - self->_retCode;
-                                for (i = a2v; i > 1; i--) mult *= 10;
+                            pressed = pad->_trigger;
+                            repeated = pad->_repeat;
+                            stick = pad->_lTrg | pad->_lRpt;
+                            bool up = (stick & STICK_UP) || ((pressed | repeated) & PAD_UP);
+                            bool down = (stick & STICK_DOWN) || ((pressed | repeated) & PAD_DOWN);
+                            if (up || down) {
+                                previous = self->_editBit;
+                                step = 1;
+                                digits = BIT_DIGITS - self->_retCode;
+                                for (i = digits; i > 1; i--) step *= 10;
                                 if (up) {
-                                    self->_editBit = self->_editBit + mult;
-                                    lim = self->_editMax;
-                                    if (self->_editBit >= lim) self->_editBit = lim;
-                                } else if (dn) {
-                                    self->_editBit = self->_editBit - mult;
+                                    self->_editBit = self->_editBit + step;
+                                    if (self->_editBit >= self->_editMax) self->_editBit = self->_editMax;
+                                } else if (down) {
+                                    self->_editBit = self->_editBit - step;
                                     if (self->_editBit <= 0) self->_editBit = 0;
                                 }
-                                v = self->_editBit;
-                                if (v != oldv) {
-                                    h = ((int *)((igObjectList *)self->_subWindow)->_data)[0];
+                                if (self->_editBit != previous) {
+                                    input = ((int *)((igObjectList *)self->_subWindow)->_data)[0];
                                     switch (self->_entCode) {
-                                    case 2:
-                                    case 0:
-                                        FUN_004402e0(h, v, a2v, &DAT_0051bca8[0]);
+                                    case EDITBIT_JUNK:
+                                    case EDITBIT_DEPOSIT:
+                                        FUN_004402e0(input, self->_editBit, digits, font_03d_2);
                                         break;
-                                    case 1:
-                                        FUN_004402e0(h, v, a2v, &DAT_0051bcb8[0]);
+                                    case EDITBIT_WITHDRAW:
+                                        FUN_004402e0(input, self->_editBit, digits, font01_d);
                                         break;
                                     }
-                                    beMessenger_SelectGroup(self->_messenger, &DAT_0051b888[0]);
-                                    beMessenger_AppendString(self->_messenger, &DAT_0051bd08[0]);
-                                    beMessenger_DispatchSelected(self->_messenger, &DAT_0051b8a0[0]);
+                                    beMessenger_SelectGroup(self->_messenger, SOUND_8);
+                                    beMessenger_AppendString(self->_messenger, CURSOR_MOVE_3);
+                                    beMessenger_DispatchSelected(self->_messenger, PLAY_6);
                                     return;
                                 }
                             }
                         }
                     } else {
-                        h = ((int *)((igObjectList *)self->_subWindow)->_data)[0];
-                        a2v = 7 - rc;
+                        input = ((int *)((igObjectList *)self->_subWindow)->_data)[0];
+                        digits = BIT_DIGITS - column;
                         switch (self->_entCode) {
-                        case 2:
-                        case 0:
-                            FUN_004402e0(h, self->_editBit, a2v, &DAT_0051bca8[0]);
+                        case EDITBIT_JUNK:
+                        case EDITBIT_DEPOSIT:
+                            FUN_004402e0(input, self->_editBit, digits, font_03d_2);
                             break;
-                        case 1:
-                            FUN_004402e0(h, self->_editBit, a2v, &DAT_0051bcb8[0]);
+                        case EDITBIT_WITHDRAW:
+                            FUN_004402e0(input, self->_editBit, digits, font01_d);
                             break;
                         }
                         self->_st3 = self->_retCode;
@@ -4925,117 +4473,97 @@ void Gap__Bec__beNDMWShopCtrlEditBit__vfunc_21(beNDMWShopCtrlEditBit *self) {
             } else {
                 if (self->_retCode == -1 || self->_editBit <= 0) {
                     ((beNDMWWindow *)self->_mother)->_retCode = -1;
-                    self->_st0 = self->_st0 + 1;
-                    self->_st3 = 0;
-                    self->_st2 = 0;
-                    self->_st1 = 0;
+                    NEXT_STATE(self)
                     return;
                 } else {
                     ((beNDMWWindow *)self->_mother)->_retCode = self->_editBit;
-                    self->_st2 = self->_st2 + 1;
-                    self->_st3 = 0;
+                    NEXT_PHASE(self)
                     beMessenger_SelectGroup(self->_messenger, TEXTCTL_3);
                     beMessenger_AppendString(self->_messenger, STWINFONT29);
-                    beMessenger_AppendString(self->_messenger, &DAT_0051b548[0]);
+                    beMessenger_AppendString(self->_messenger, font100_3);
                     beMessenger_AppendString(self->_messenger, DISPOFF);
                     beMessenger_DispatchSelected(self->_messenger, SWITCH_2);
                     return;
                 }
             }
             break;
-        case 3:
-            ALLOC(alloc, self)
+        case EDITBIT_OPEN_CONFIRM:
             {
-            igSmartPointer<beNDMWShopSelect00> spA8((beNDMWShopSelect00 *)beNDMWShopSelect00_Create(alloc));
-            beNDMWWindow_BindContext(spA8.p, self, self->_insight, self->_playerNo, 0);
-            ObjectList_AppendRetained(self->_subWindow, spA8.p);
-            switch (self->_entCode) {
-            case 0:
-                ((beNDMWShopSelect00 *)spA8.p)->_entCode = 0x552;
-                break;
-            case 1:
-                ((beNDMWShopSelect00 *)spA8.p)->_entCode = 0x559;
-                break;
-            case 2:
-                ((beNDMWShopSelect00 *)spA8.p)->_entCode = 0x7A9;
-                break;
+                void *allocator;
+                PICK_ALLOCATOR(allocator, self)
+                igSmartPointer<beNDMWShopSelect00> confirm((beNDMWShopSelect00 *)beNDMWShopSelect00_Create(allocator));
+                beNDMWWindow_BindContext(confirm.p, self, self->_insight, self->_playerNo, 0);
+                ObjectList_AppendRetained(self->_subWindow, confirm.p);
+                switch (self->_entCode) {
+                case EDITBIT_DEPOSIT:
+                    confirm.p->_entCode = 0x552;
+                    break;
+                case EDITBIT_WITHDRAW:
+                    confirm.p->_entCode = 0x559;
+                    break;
+                case EDITBIT_JUNK:
+                    confirm.p->_entCode = 0x7A9;
+                    break;
+                }
             }
-            }
-            self->_nowProcKazu = ((igObjectList *)self->_subWindow)->_count;
-            self->_st2 = self->_st2 + 1;
-            self->_st3 = 0;
+            AWAIT_CHILD(self)
             return;
-        case 4:
-            if (((igObjectList *)self->_subWindow)->_count != self->_nowProcKazu) {
-                if (self->_entCode == 2) {
-                    self->_st2 = st2(self) + 1;
+        case EDITBIT_AWAIT_CONFIRM:
+            if (CHILD_CLOSED(self)) {
+                if (self->_entCode == EDITBIT_JUNK) {
+                    /* matching construct: the phase is re-read through CurrentPhase */
+                    self->_st2 = CurrentPhase(self) + 1;
                     self->_st3 = 0;
                     return;
                 }
-                self->_st0 = self->_st0 + 1;
-                self->_st3 = 0;
-                self->_st2 = 0;
-                self->_st1 = 0;
+                NEXT_STATE(self)
                 return;
             }
             break;
-        case 5:
-            ALLOC(alloc, self)
-            {
-            igSmartPointer<beNDMWShopSelect01> spA4((beNDMWShopSelect01 *)FUN_003b4d90(alloc));
-            beNDMWWindow_BindContext(spA4.p, self, self->_insight, self->_playerNo, 0x7AA);
-            ObjectList_AppendRetained(self->_subWindow, spA4.p);
-            }
-            self->_nowProcKazu = ((igObjectList *)self->_subWindow)->_count;
-            self->_st2 = self->_st2 + 1;
-            self->_st3 = 0;
+        case EDITBIT_OPEN_JUNK_NOTICE:
+            OPEN_CHILD(beNDMWShopSelect01, 0x7AA)
+            AWAIT_CHILD(self)
             return;
-        case 6:
-            if (((igObjectList *)self->_subWindow)->_count != self->_nowProcKazu) {
+        case EDITBIT_AWAIT_JUNK_NOTICE:
+            if (CHILD_CLOSED(self)) {
                 if (self->_retCode != 0) {
                     ((beNDMWWindow *)self->_mother)->_retCode = -1;
                 }
-                self->_st0 = self->_st0 + 1;
-                self->_st3 = 0;
-                self->_st2 = 0;
-                self->_st1 = 0;
+                NEXT_STATE(self)
                 return;
             }
             break;
         }
         break;
-    case 2:
+    case SHOP_STATE_CLOSE:
         beNDMWWindow_PlayQueuedModelClose();
         beNDMWWindow_ClearQueuedText(self);
         beNDMWWindow_RequestChildrenClose(self);
         i = 0;
-        self->_st0 = self->_st0 + 1;
-        self->_st3 = 0;
-        self->_st2 = 0;
-        self->_st1 = 0;
+        NEXT_STATE(self)
         do {
-            sprintf(&sp50[0], &DAT_0051bca8[0], i);
+            sprintf(slotName, font_03d_2, i);
             beMessenger_SelectGroup(self->_messenger, TEXTCTL_3);
-            beMessenger_AppendString(self->_messenger, &DAT_0051bd18[0]);
-            beMessenger_AppendString(self->_messenger, &sp50[0]);
+            beMessenger_AppendString(self->_messenger, STWINFONT25);
+            beMessenger_AppendString(self->_messenger, slotName);
             beMessenger_AppendString(self->_messenger, DISPOFF);
             beMessenger_DispatchSelected(self->_messenger, SWITCH_2);
-            sprintf(&sp50[0], &DAT_0051bcb8[0], i);
+            sprintf(slotName, font01_d, i);
             beMessenger_SelectGroup(self->_messenger, TEXTCTL_3);
-            beMessenger_AppendString(self->_messenger, &DAT_0051bd18[0]);
-            beMessenger_AppendString(self->_messenger, &sp50[0]);
+            beMessenger_AppendString(self->_messenger, STWINFONT25);
+            beMessenger_AppendString(self->_messenger, slotName);
             beMessenger_AppendString(self->_messenger, DISPOFF);
             beMessenger_DispatchSelected(self->_messenger, SWITCH_2);
-            sprintf(&sp50[0], &DAT_0051bcc8[0], i);
+            sprintf(slotName, font02_d, i);
             beMessenger_SelectGroup(self->_messenger, TEXTCTL_3);
-            beMessenger_AppendString(self->_messenger, &DAT_0051bd18[0]);
-            beMessenger_AppendString(self->_messenger, &sp50[0]);
+            beMessenger_AppendString(self->_messenger, STWINFONT25);
+            beMessenger_AppendString(self->_messenger, slotName);
             beMessenger_AppendString(self->_messenger, DISPOFF);
             beMessenger_DispatchSelected(self->_messenger, SWITCH_2);
             i += 1;
-        } while (i < 7);
+        } while (i < BIT_DIGITS);
         return;
-    case 3:
+    case SHOP_STATE_WAIT_CLOSED:
         if (beNDMWWindow_PollCloseComplete() != 0) {
             self->_isRun = 0;
         }
@@ -5043,190 +4571,169 @@ void Gap__Bec__beNDMWShopCtrlEditBit__vfunc_21(beNDMWShopCtrlEditBit *self) {
     }
 }
 
-static inline int st0_434790(const beNDMWShopCtrlSell *ctrl) { return ctrl->_st0; }
+/* A window's _messenger (word 3), for callers that hold the window as a word pointer. */
+#define MESSENGER(window) ((window)[3])
+/* Retain `list` and store it in the window's `_decideList`, releasing the previous one. */
+#define SET_DECIDE_LIST(window, list) { \
+    igBoolList *retained = (igBoolList *)(list); \
+    beNDMWWindowSelect *target = (beNDMWWindowSelect *)(window); \
+    if (retained != 0) retained->_refCount = retained->_refCount + 1; \
+    { igObject *previous = (igObject *)target->_decideList; RELEASE(previous) } \
+    target->_decideList = (int)retained; }
 
-void Gap__Bec__beNDMWShopCtrlSell__vfunc_21(beNDMWShopCtrlSell *self) {
-    void *alloc;
+/* The rows a sell list shows per page. */
+enum { SELL_PAGE_ROWS = 12 };
+/* Money is capped at this amount. */
+enum { MONEY_MAX = 9999999 };
+
+/* beNDMWShopCtrlSell's steps (_st1) while running. */
+enum SellStep { SELL_STEP_CHOOSE = 0, SELL_STEP_DEVICES = 1, SELL_STEP_DISKS = 2, SELL_STEP_NOTHING = 3 };
+/* beNDMWShopCtrlSell's _st3 in SELL_STEP_CHOOSE: which choice to grey out. */
+enum SellChoiceLimit { SELL_CHOICE_ALL = 0, SELL_CHOICE_NO_DEVICES = 1, SELL_CHOICE_NO_DISKS = 2 };
+
+/* beNDMWShopCtrlDeviceSell's steps (_st1) while running. */
+enum DeviceSellStep { DEVICESELL_STEP_LIST = 4, DEVICESELL_STEP_CONFIRM = 5 };
+
+/* The object list held by the player's folder record `name` (DEVICEFOLDER, DISKFOLDER). */
+#define PlayerFolder(player, name) ((igObjectList *)((beDataObjObjectList *)igProperty_GetRecordFolder(player, name))->_data)
+
+void beNDMWShopCtrlSell_Update(beNDMWShopCtrlSell *self) {
+    void *allocator;
     igObjectList *devices;
     const igObjectList *disks;
-    Item_434790 *item;
+    beNDMWItemDisk *disk;
     bool hasDevice;
     bool hasDisk;
     int i;
-    int rec;
+    int player;
 
-    switch (st0_434790(self)) {
-    case 0:
-        self->_st0 = self->_st0 + 1;
-        self->_st3 = 0;
-        self->_st2 = 0;
-        self->_st1 = 0;
-        beMessenger_SelectGroup(self->_messenger, &DAT_0051b398[0]);
+    switch (CurrentState(self)) {
+    case SHOP_STATE_OPEN:
+        NEXT_STATE(self)
+        beMessenger_SelectGroup(self->_messenger, GAMERAM_14);
         beMessenger_AppendInt(self->_messenger, self->_playerNo);
-        beMessenger_DispatchSelected(self->_messenger, &DAT_0051b3e8[0]);
-        rec = beMessenger_GetObject(self->_messenger, 0);
-        devices = igProperty_GetRecordFolder(rec, &DAT_0051b528[0])->f12;
-        disks = igProperty_GetRecordFolder(rec, &DAT_0051b6c0[0])->f12;
-        hasDevice = 0;
+        beMessenger_DispatchSelected(self->_messenger, GETPLAYER_10);
+        player = beMessenger_GetObject(self->_messenger, 0);
+        devices = PlayerFolder(player, DEVICEFOLDER_4);
+        disks = PlayerFolder(player, DISKFOLDER_5);
+        hasDevice = false;
         if (devices->_count > 0) {
-            hasDevice = 1;
+            hasDevice = true;
         }
-        hasDisk = 0;
+        hasDisk = false;
         for (i = 0; i < disks->_count; i++) {
-            item = ((Item_434790 **)disks->_data)[i];
-            if (item != 0 && item->f20 > 0) {
-                hasDisk = 1;
+            disk = ((beNDMWItemDisk **)disks->_data)[i];
+            if (disk != 0 && disk->_kazu > 0) {
+                hasDisk = true;
                 break;
             }
         }
         if (hasDevice || hasDisk) {
-            self->_st1 = 0;
-            self->_st3 = 0;
-            self->_st2 = 0;
+            ENTER_STEP(self, SELL_STEP_CHOOSE)
             if (hasDevice == 0) {
-                self->_st3 = 1;
+                self->_st3 = SELL_CHOICE_NO_DEVICES;
             } else if (hasDisk == 0) {
-                self->_st3 = 2;
+                self->_st3 = SELL_CHOICE_NO_DISKS;
             }
         } else {
-            self->_st1 = 3;
-            self->_st3 = 0;
-            self->_st2 = 0;
+            ENTER_STEP(self, SELL_STEP_NOTHING)
         }
-    case 1:
+    case SHOP_STATE_RUN:
         switch (self->_st1) {
-        case 0:
+        case SELL_STEP_CHOOSE:
             switch (self->_st2) {
             case 0:
-                ALLOC(alloc, self)
+                PICK_ALLOCATOR(allocator, self)
                 {
-                igSmartPointer<beNDMWShopSelectB0> sp5C((beNDMWShopSelectB0 *)FUN_003b3f40(alloc));
-                beNDMWWindow_BindContext(sp5C.p, self, self->_insight, self->_playerNo, 0);
-                ObjectList_AppendRetained(self->_subWindow, sp5C.p);
+                igSmartPointer<beNDMWShopSelectB0> choice((beNDMWShopSelectB0 *)beNDMWShopSelectB0_Create(allocator));
+                beNDMWWindow_BindContext(choice.p, self, self->_insight, self->_playerNo, 0);
+                ObjectList_AppendRetained(self->_subWindow, choice.p);
                 switch (self->_st3) {
-                case 1: {
-                    ALLOC(alloc, self)
-                    igSmartPointer<igBoolList> sp58((igBoolList *)igBoolList_Create(alloc));
-                    { igBoolList *l = (igBoolList *)sp58.p; PUSH_BOOL(l, GPR_00554a50) }
-                    { igBoolList *l = (igBoolList *)sp58.p; PUSH_BOOL(l, GPR_00554a54) }
-                    {
-                        igBoolList *l = (igBoolList *)sp58.p;
-                        beNDMWShopSelect00 *w = (beNDMWShopSelect00 *)sp5C.p;
-                        if (l != 0) {
-                            l->_refCount = l->_refCount + 1;
-                        }
-                        {
-                            igObject *old = (igObject *)w->_decideList;
-                            RELEASE(old)
-                        }
-                        w->_decideList = (int)l;
-                    }
+                case SELL_CHOICE_NO_DEVICES: {
+                    PICK_ALLOCATOR(allocator, self)
+                    igSmartPointer<igBoolList> enabled((igBoolList *)igBoolList_Create(allocator));
+                    BoolList_Append(enabled.p, false);
+                    BoolList_Append(enabled.p, true);
+                    SET_DECIDE_LIST(choice.p, enabled.p)
                     break;
                 }
-                case 2: {
-                    ALLOC(alloc, self)
-                    igSmartPointer<igBoolList> sp54((igBoolList *)igBoolList_Create(alloc));
-                    { igBoolList *l = (igBoolList *)sp54.p; PUSH_BOOL(l, GPR_00554a58) }
-                    { igBoolList *l = (igBoolList *)sp54.p; PUSH_BOOL(l, GPR_00554a5c) }
-                    {
-                        igBoolList *l = (igBoolList *)sp54.p;
-                        beNDMWShopSelect00 *w = (beNDMWShopSelect00 *)sp5C.p;
-                        if (l != 0) {
-                            l->_refCount = l->_refCount + 1;
-                        }
-                        {
-                            igObject *old = (igObject *)w->_decideList;
-                            RELEASE(old)
-                        }
-                        w->_decideList = (int)l;
-                    }
+                case SELL_CHOICE_NO_DISKS: {
+                    PICK_ALLOCATOR(allocator, self)
+                    igSmartPointer<igBoolList> enabled((igBoolList *)igBoolList_Create(allocator));
+                    BoolList_Append(enabled.p, true);
+                    BoolList_Append(enabled.p, false);
+                    SET_DECIDE_LIST(choice.p, enabled.p)
                     break;
                 }
                 }
                 }
-                self->_nowProcKazu = ((beNDMWWindowList *)self->_subWindow)->_count;
-                self->_st2 = self->_st2 + 1;
-                self->_st3 = 0;
+                self->_nowProcKazu = ObjectList_Count(self->_subWindow);
+                NEXT_PHASE(self)
             case 1:
-                if (((beNDMWWindowList *)self->_subWindow)->_count != self->_nowProcKazu) {
+                if (ObjectList_Count(self->_subWindow) != self->_nowProcKazu) {
                     beMessenger_SelectGroup(self->_messenger, TEXTCTL_3);
                     beMessenger_AppendString(self->_messenger, STWINFONT29);
-                    beMessenger_AppendString(self->_messenger, ((char * *)g_fontNames)[0]);
-                    beMessenger_DispatchSelected(self->_messenger, &DAT_0051b3d8[0]);
+                    beMessenger_AppendString(self->_messenger, g_fontNames[0]);
+                    beMessenger_DispatchSelected(self->_messenger, DEFAULTCOLOR_5);
                     beMessenger_SelectGroup(self->_messenger, TEXTCTL_3);
                     beMessenger_AppendString(self->_messenger, STWINFONT29);
                     beMessenger_AppendString(self->_messenger, g_fontName1[0]);
-                    beMessenger_DispatchSelected(self->_messenger, &DAT_0051b3d8[0]);
+                    beMessenger_DispatchSelected(self->_messenger, DEFAULTCOLOR_5);
                     switch (self->_retCode) {
                     case 0:
-                        self->_st1 = 1;
-                        self->_st3 = 0;
-                        self->_st2 = 0;
+                        ENTER_STEP(self, SELL_STEP_DEVICES)
                         return;
                     case 1:
-                        self->_st1 = 2;
-                        self->_st3 = 0;
-                        self->_st2 = 0;
+                        ENTER_STEP(self, SELL_STEP_DISKS)
                         return;
                     default:
-                        self->_st0 = self->_st0 + 1;
-                        self->_st3 = 0;
-                        self->_st2 = 0;
-                        self->_st1 = 0;
+                        NEXT_STATE(self)
                         return;
                     }
                 }
                 break;
             }
             break;
-        case 1:
-        case 2:
+        case SELL_STEP_DEVICES:
+        case SELL_STEP_DISKS:
             switch (self->_st2) {
             case 0:
-                if (self->_st1 == 1) {
-                    ALLOC(alloc, self)
-                    igSmartPointer<beNDMWShopCtrlDeviceSell> sp50((beNDMWShopCtrlDeviceSell *)FUN_003b70e0(alloc));
-                    beNDMWWindow_BindContext(sp50.p, self, self->_insight, self->_playerNo, 0);
-                    ObjectList_AppendRetained(self->_subWindow, sp50.p);
+                if (self->_st1 == SELL_STEP_DEVICES) {
+                    PICK_ALLOCATOR(allocator, self)
+                    igSmartPointer<beNDMWShopCtrlDeviceSell> list((beNDMWShopCtrlDeviceSell *)beNDMWShopCtrlDeviceSell_Create(allocator));
+                    beNDMWWindow_BindContext(list.p, self, self->_insight, self->_playerNo, 0);
+                    ObjectList_AppendRetained(self->_subWindow, list.p);
                 } else {
-                    ALLOC(alloc, self)
-                    igSmartPointer<beNDMWShopCtrlDiskSell> sp4C((beNDMWShopCtrlDiskSell *)FUN_003b6e60(alloc));
-                    beNDMWWindow_BindContext(sp4C.p, self, self->_insight, self->_playerNo, 0);
-                    ObjectList_AppendRetained(self->_subWindow, sp4C.p);
+                    PICK_ALLOCATOR(allocator, self)
+                    igSmartPointer<beNDMWShopCtrlDiskSell> list((beNDMWShopCtrlDiskSell *)beNDMWShopCtrlDiskSell_Create(allocator));
+                    beNDMWWindow_BindContext(list.p, self, self->_insight, self->_playerNo, 0);
+                    ObjectList_AppendRetained(self->_subWindow, list.p);
                 }
-                self->_nowProcKazu = ((beNDMWWindowList *)self->_subWindow)->_count;
-                self->_st2 = self->_st2 + 1;
-                self->_st3 = 0;
+                self->_nowProcKazu = ObjectList_Count(self->_subWindow);
+                NEXT_PHASE(self)
             case 1:
-                if (((beNDMWWindowList *)self->_subWindow)->_count != self->_nowProcKazu) {
-                    self->_st0 = 0;
-                    self->_st3 = 0;
-                    self->_st2 = 0;
-                    self->_st1 = 0;
+                if (ObjectList_Count(self->_subWindow) != self->_nowProcKazu) {
+                    ENTER_STATE(self, SHOP_STATE_OPEN)
                     return;
                 }
                 break;
             }
             break;
-        case 3:
+        case SELL_STEP_NOTHING:
             switch (self->_st2) {
             case 0:
-                ALLOC(alloc, self)
+                PICK_ALLOCATOR(allocator, self)
                 {
-                igSmartPointer<beNDMWShopSelect00> sp48((beNDMWShopSelect00 *)beNDMWShopSelect00_Create(alloc));
-                beNDMWWindow_BindContext(sp48.p, self, self->_insight, self->_playerNo, 0x628);
-                ObjectList_AppendRetained(self->_subWindow, sp48.p);
+                igSmartPointer<beNDMWShopSelect00> notice((beNDMWShopSelect00 *)beNDMWShopSelect00_Create(allocator));
+                beNDMWWindow_BindContext(notice.p, self, self->_insight, self->_playerNo, 0x628);
+                ObjectList_AppendRetained(self->_subWindow, notice.p);
                 }
-                self->_nowProcKazu = ((beNDMWWindowList *)self->_subWindow)->_count;
-                self->_st2 = self->_st2 + 1;
-                self->_st3 = 0;
+                self->_nowProcKazu = ObjectList_Count(self->_subWindow);
+                NEXT_PHASE(self)
             case 1:
-                if (((beNDMWWindowList *)self->_subWindow)->_count != self->_nowProcKazu) {
-                    self->_st0 = self->_st0 + 1;
-                    self->_st3 = 0;
-                    self->_st2 = 0;
-                    self->_st1 = 0;
-                    ((beNDMWShopCtrlSell *)self->_mother)->_retCode = -1;
+                if (ObjectList_Count(self->_subWindow) != self->_nowProcKazu) {
+                    NEXT_STATE(self)
+                    ((beNDMWWindow *)self->_mother)->_retCode = -1;
                     return;
                 }
                 break;
@@ -5234,16 +4741,13 @@ void Gap__Bec__beNDMWShopCtrlSell__vfunc_21(beNDMWShopCtrlSell *self) {
             break;
         }
         break;
-    case 2:
+    case SHOP_STATE_CLOSE:
         beNDMWWindow_PlayQueuedModelClose(self);
         beNDMWWindow_ClearQueuedText(self);
         beNDMWWindow_RequestChildrenClose(self);
-        self->_st0 = self->_st0 + 1;
-        self->_st3 = 0;
-        self->_st2 = 0;
-        self->_st1 = 0;
+        NEXT_STATE(self)
         return;
-    case 3:
+    case SHOP_STATE_WAIT_CLOSED:
         if (beNDMWWindow_PollCloseComplete(self) != 0) {
             self->_isRun = 0;
         }
@@ -5251,145 +4755,123 @@ void Gap__Bec__beNDMWShopCtrlSell__vfunc_21(beNDMWShopCtrlSell *self) {
     }
 }
 
-void FUN_00435250(int *arg0, int arg1) {
-    Tbl sp30;
-    float v[3];
-    if (arg1 > -1) {
-        sp30 = DAT_004cfa40;
-        beMessenger_SendNamed(arg0[3], ((char *)DAT_0051b308), DAT_0051b7c8, 0, DAT_0051b7d8);
-        if (beMessenger_GetBool(arg0[3], 0) != 0) {
-            beMessenger_SendNamed(arg0[3], ((char *)DAT_0051b308), DAT_0051b7c8, 0, (char *)sp30.s[arg1]);
+void beNDMWShopCtrlSell_MoveRowCursor(int *sellWindow, int row) {
+    Tbl rowSequences;
+    float position[3];
+    if (row > -1) {
+        rowSequences = g_sellCursorOpenSequences;
+        beMessenger_SendNamed(MESSENGER(sellWindow), MODELCTRL_16, i_stcursor04_2, 0, ISRUN_10);
+        if (beMessenger_GetBool(MESSENGER(sellWindow), 0) != 0) {
+            beMessenger_SendNamed(MESSENGER(sellWindow), MODELCTRL_16, i_stcursor04_2, 0, rowSequences.s[row]);
             return;
         }
-        beMessenger_SelectReceivers(arg0[3], ((char *)DAT_0051b308), DAT_0051b7c8, 0);
-        beMessenger_AppendString(arg0[3], sp30.s[arg1]);
-        v[2] = 0;
-        v[0] = -121.0f;
-        v[1] = 128.0f;
-        beMessenger_AppendVec3(arg0[3], v);
-        beMessenger_DispatchSelected(arg0[3], DAT_0051b7e0);
+        beMessenger_SelectReceivers(MESSENGER(sellWindow), MODELCTRL_16, i_stcursor04_2, 0);
+        beMessenger_AppendString(MESSENGER(sellWindow), rowSequences.s[row]);
+        position[2] = 0;
+        position[0] = -121.0f;
+        position[1] = 128.0f;
+        beMessenger_AppendVec3(MESSENGER(sellWindow), position);
+        beMessenger_DispatchSelected(MESSENGER(sellWindow), GENERATE_13);
         return;
     }
-    beMessenger_SendNamed(arg0[3], ((char *)DAT_0051b308), DAT_0051b7c8, 0, DAT_0051b7d8);
-    if (beMessenger_GetBool(arg0[3], 0) != 0) {
-        beMessenger_SendNamed(arg0[3], ((char *)DAT_0051b308), DAT_0051b7c8, 0, ((char *)DAT_0051b620));
+    beMessenger_SendNamed(MESSENGER(sellWindow), MODELCTRL_16, i_stcursor04_2, 0, ISRUN_10);
+    if (beMessenger_GetBool(MESSENGER(sellWindow), 0) != 0) {
+        beMessenger_SendNamed(MESSENGER(sellWindow), MODELCTRL_16, i_stcursor04_2, 0, SQ_CLOSE_10);
     }
 }
 
-void Gap__Bec__beNDMWShopCtrlDeviceSell__vfunc_21(beNDMWShopCtrlDeviceSell *self)
+void beNDMWShopCtrlDeviceSell_Update(beNDMWShopCtrlDeviceSell *self)
 {
     switch (self->_st0) {
-    case 0: {
-        int vB[3];
-        int vA[3];
-        int i;
-        beNDMWWindow_PresentModelAtOrigin(self, DAT_0051b610, 0, DAT_0051bd50, DAT_0051b620);
-        FUN_004367c0(self);
-        vA[0] = 0x436C0000;
-        vA[2] = 0;
-        vA[1] = 0x41C80000;
-        vB[0] = 0xC3120000;
-        vB[1] = 0x41C80000;
-        vB[2] = 0;
-        ((DummyVirtual *)self)->v24(vB, vA);
-        APPENDSTR(self->_textCloseTypeList, STWINFONT29)
-        APPENDSTR(self->_textCloseNameList, DAT_0051b548)
-        beNDMWWindow_RunMessageScript(self, DAT_0051b3b0, 0x676);
-        APPENDSTR(self->_textCloseTypeList, DAT_0051b668)
+    case SHOP_STATE_OPEN: {
+        float leftArrowPos[3];
+        float rightArrowPos[3];
+        int row;
+        beNDMWWindow_PresentModelAtOrigin(self, j_shwin, 0, SQ_AWINOPEN, SQ_CLOSE_10);
+        beNDMWShopCtrlDeviceSell_UpdatePageCount(self);
+        rightArrowPos[0] = 236.0f;
+        rightArrowPos[2] = 0.0f;
+        rightArrowPos[1] = 25.0f;
+        leftArrowPos[0] = -146.0f;
+        leftArrowPos[1] = 25.0f;
+        leftArrowPos[2] = 0.0f;
+        ((PagedWindow *)self)->PresentPageArrows(leftArrowPos, rightArrowPos);
+        APPEND_INTERNED(self->_textCloseTypeList, STWINFONT29)
+        APPEND_INTERNED(self->_textCloseNameList, font100_3)
+        beNDMWWindow_RunMessageScript(self, txt_shop_lua_2, 0x676);
+        APPEND_INTERNED(self->_textCloseTypeList, STWINFONT13_2)
+        APPEND_INTERNED(self->_textCloseNameList, g_fontNames[0])
+        beNDMWWindow_RunMessageScript(self, txt_shop_lua_2, 0x3E8);
+        row = 0;
         {
-            const char *name = g_fontNames[0];
-            APPENDSTR(self->_textCloseNameList, name)
-        }
-        beNDMWWindow_RunMessageScript(self, DAT_0051b3b0, 0x3E8);
-        i = 0;
-        {
-            const char **p = g_fontNames;
+            const char **rowFont = g_fontNames;
             do {
-                beNDMWWindow_QueueText(self, STWINFONT14, *p, DAT_0051b590, DAT_0051b598);
-                beNDMWWindow_QueueText(self, STWINFONT17, *p, DAT_0051b590, DAT_0051b460);
-                i++;
-                p += 1;
-            } while (i < 12);
+                beNDMWWindow_QueueText(self, STWINFONT14, *rowFont, space_2, LEFT_4);
+                beNDMWWindow_QueueText(self, STWINFONT17, *rowFont, space_2, RIGHT_3);
+                row++;
+                rowFont++;
+            } while (row < SELL_PAGE_ROWS);
         }
-        beNDMWWindow_QueueText(self, STWINFONT30, g_fontNames[0], DAT_0051b590, DAT_0051b460);
-        beNDMWWindow_QueueText(self, STWINFONT30, g_fontName1[0], DAT_0051b590, DAT_0051b460);
+        beNDMWWindow_QueueText(self, STWINFONT30, g_fontNames[0], space_2, RIGHT_3);
+        beNDMWWindow_QueueText(self, STWINFONT30, g_fontName1[0], space_2, RIGHT_3);
         self->_cursor = 0;
         self->_nowPage = 0;
-        self->_st0 = self->_st0 + 1;
-        self->_st3 = 0;
-        self->_st2 = 0;
-        self->_st1 = 0;
-        self->_st1 = 4;
-        self->_st3 = 0;
-        self->_st2 = 0;
+        NEXT_STATE(self)
+        ENTER_STEP(self, DEVICESELL_STEP_LIST)
     }
-    case 1:
+    case SHOP_STATE_RUN:
         switch (self->_st1) {
-        case 4:
+        case DEVICESELL_STEP_LIST:
             switch (self->_st2) {
             case 0: {
-                void *alloc;
-                ALLOC(alloc, self)
+                void *allocator;
+                PICK_ALLOCATOR(allocator, self)
                 {
-                    igSmartPointer<beNDMWStatusSelectE1> selectWin((beNDMWStatusSelectE1 *)beNDMWStatusSelectE1_Create(alloc));
+                    igSmartPointer<beNDMWStatusSelectE1> selectWin((beNDMWStatusSelectE1 *)beNDMWStatusSelectE1_Create(allocator));
                     self->_retCode = self->_cursor;
                     beNDMWWindow_BindContext(selectWin.p, self, self->_insight, self->_playerNo, 0);
                     ObjectList_AppendRetained(self->_subWindow, selectWin.p);
-                    { beNDMWStatusSelectE1 *w = selectWin.p; w->_offsetPos[0] = -121.0f; w->_offsetPos[1] = 128.0f; w->_offsetPos[2] = 0.0f; }
-                    selectWin.p->_startPoint = self->_cursor;
-                    beNDMWWindow_QueueText(selectWin.p, STWINFONT29, g_fontNames[0], DAT_0051b590, DAT_0051b598);
-                    selectWin.p->_selectMax = FUN_004367c0(self);
                     {
-                        igObject *d = (igObject *)self->_decideList;
-                        beNDMWStatusSelectE1 *w = selectWin.p;
-                        igObject *o;
-                        if (d) d->_refCount = d->_refCount + 1;
-                        o = (igObject *)w->_decideList;
-                        REL_42a2e0(o)
-                        w->_decideList = (int)d;
+                        beNDMWStatusSelectE1 *select = selectWin.p;
+                        select->_offsetPos[0] = -121.0f;
+                        select->_offsetPos[1] = 128.0f;
+                        select->_offsetPos[2] = 0.0f;
                     }
+                    selectWin.p->_startPoint = self->_cursor;
+                    beNDMWWindow_QueueText(selectWin.p, STWINFONT29, g_fontNames[0], space_2, LEFT_4);
+                    selectWin.p->_selectMax = beNDMWShopCtrlDeviceSell_UpdatePageCount(self);
+                    SET_DECIDE_LIST(selectWin.p, (igBoolList *)self->_decideList)
                 }
-                self->_nowProcKazu = ((igObjectList *)self->_subWindow)->_count;
-                self->_st2 = self->_st2 + 1;
-                self->_st3 = 0;
+                self->_nowProcKazu = ObjectList_Count(self->_subWindow);
+                NEXT_PHASE(self)
             }
             case 1:
-                FUN_00436060(self, 1, 1);
-                self->_st2 = self->_st2 + 1;
-                self->_st3 = 0;
+                beNDMWShopCtrlDeviceSell_RefreshText(self, 1, 1);
+                NEXT_PHASE(self)
                 return;
             case 2: {
-                igObjectList *sub = (igObjectList *)self->_subWindow;
-                if (sub->_count == self->_nowProcKazu) {
-                    int rc = self->_retCode;
-                    if (rc != -1) {
-                        if (rc != self->_st3) {
-                            FUN_00436060(self, 0, 1);
+                igObjectList *subWindows = (igObjectList *)self->_subWindow;
+                if (subWindows->_count == self->_nowProcKazu) {
+                    int selected = self->_retCode;
+                    if (selected != -1) {
+                        if (selected != self->_st3) {
+                            beNDMWShopCtrlDeviceSell_RefreshText(self, 0, 1);
                             self->_st3 = self->_retCode;
                             return;
                         }
                         {
-                            beNDMWStatusSelectE1 *w = (beNDMWStatusSelectE1 *)*(int *)sub->_data;
-                            if (beNDMWWindowSelect_CanRequestFO2TOP(w, 5, sub) != 0) {
-                                bool flag = false;
-                                if (((DummyVirtual *)self)->v25() != 0) {
-                                    flag = true;
-                                } else if (((DummyVirtual *)self)->v26() != 0) {
-                                    flag = true;
+                            beNDMWStatusSelectE1 *selectWin = ((beNDMWStatusSelectE1 **)subWindows->_data)[0];
+                            if (beNDMWWindowSelect_CanRequestFO2TOP(selectWin, 5, subWindows) != 0) {
+                                bool pageTurned = false;
+                                if (((PagedWindow *)self)->TurnPagePrev() != 0) {
+                                    pageTurned = true;
+                                } else if (((PagedWindow *)self)->TurnPageNext() != 0) {
+                                    pageTurned = true;
                                 }
-                                if (flag) {
-                                    igObject *d;
-                                    igObject *o;
-                                    w->_st0 = 4;
-                                    w->_st3 = 0;
-                                    w->_st2 = 0;
-                                    w->_st1 = 0;
-                                    w->_selectMax = FUN_004367c0(self);
-                                    d = (igObject *)self->_decideList;
-                                    if (d) d->_refCount = d->_refCount + 1;
-                                    o = (igObject *)w->_decideList;
-                                    REL_42a2e0(o)
-                                    w->_decideList = (int)d;
+                                if (pageTurned) {
+                                    ENTER_STATE(selectWin, 4)
+                                    selectWin->_selectMax = beNDMWShopCtrlDeviceSell_UpdatePageCount(self);
+                                    SET_DECIDE_LIST(selectWin, (igBoolList *)self->_decideList)
                                     self->_st2 = 1;
                                     self->_st3 = 0;
                                     return;
@@ -5400,18 +4882,13 @@ void Gap__Bec__beNDMWShopCtrlDeviceSell__vfunc_21(beNDMWShopCtrlDeviceSell *self
                 } else {
                     switch (self->_retCode) {
                     default:
-                        self->_st1 = 5;
-                        self->_st3 = 0;
-                        self->_st2 = 0;
+                        ENTER_STEP(self, DEVICESELL_STEP_CONFIRM)
                         self->_cursor = self->_retCode;
-                        FUN_00435250((int *)self->_mother, self->_cursor);
+                        beNDMWShopCtrlSell_MoveRowCursor((int *)self->_mother, self->_cursor);
                         return;
                     case -1:
                         ((beNDMWWindow *)self->_mother)->_retCode = -1;
-                        self->_st0 = self->_st0 + 1;
-                        self->_st3 = 0;
-                        self->_st2 = 0;
-                        self->_st1 = 0;
+                        NEXT_STATE(self)
                         return;
                     }
                 }
@@ -5419,74 +4896,69 @@ void Gap__Bec__beNDMWShopCtrlDeviceSell__vfunc_21(beNDMWShopCtrlDeviceSell *self
             }
             }
             break;
-        case 5:
+        case DEVICESELL_STEP_CONFIRM:
             switch (self->_st2) {
             case 0: {
-                void *alloc;
-                ALLOC(alloc, self)
+                void *allocator;
+                PICK_ALLOCATOR(allocator, self)
                 {
-                    igSmartPointer<beNDMWShopSelect00> confirmWin((beNDMWShopSelect00 *)beNDMWShopSelect00_Create(alloc));
-                    beNDMWWindow_BindContext(confirmWin.p, self, self->_insight, self->_playerNo, 0x619);
-                    ObjectList_AppendRetained(self->_subWindow, confirmWin.p);
+                    igSmartPointer<beNDMWShopSelect00> priceWin((beNDMWShopSelect00 *)beNDMWShopSelect00_Create(allocator));
+                    beNDMWWindow_BindContext(priceWin.p, self, self->_insight, self->_playerNo, 0x619);
+                    ObjectList_AppendRetained(self->_subWindow, priceWin.p);
                 }
             }
-                self->_nowProcKazu = ((igObjectList *)self->_subWindow)->_count;
-                self->_st2 = self->_st2 + 1;
-                self->_st3 = 0;
+                self->_nowProcKazu = ObjectList_Count(self->_subWindow);
+                NEXT_PHASE(self)
             case 1:
-                if (((igObjectList *)self->_subWindow)->_count != self->_nowProcKazu) {
-                    void *alloc;
-                    ALLOC(alloc, self)
+                if (ObjectList_Count(self->_subWindow) != self->_nowProcKazu) {
+                    void *allocator;
+                    PICK_ALLOCATOR(allocator, self)
                     {
-                        igSmartPointer<beNDMWShopSelect01> noticeWin((beNDMWShopSelect01 *)FUN_003b4d90(alloc));
-                        beNDMWWindow_BindContext(noticeWin.p, self, self->_insight, self->_playerNo, 0x61A);
-                        ObjectList_AppendRetained(self->_subWindow, noticeWin.p);
+                        igSmartPointer<beNDMWShopSelect01> yesNoWin((beNDMWShopSelect01 *)beNDMWShopSelect01_Create(allocator));
+                        beNDMWWindow_BindContext(yesNoWin.p, self, self->_insight, self->_playerNo, 0x61A);
+                        ObjectList_AppendRetained(self->_subWindow, yesNoWin.p);
                     }
-                    self->_nowProcKazu = ((igObjectList *)self->_subWindow)->_count;
-                    self->_st2 = self->_st2 + 1;
-                    self->_st3 = 0;
+                    self->_nowProcKazu = ObjectList_Count(self->_subWindow);
+                    NEXT_PHASE(self)
                     return;
                 }
                 break;
             case 2:
-                if (((igObjectList *)self->_subWindow)->_count != self->_nowProcKazu) {
-                    int rc = self->_retCode;
-                    switch (rc) {
+                if (ObjectList_Count(self->_subWindow) != self->_nowProcKazu) {
+                    int answer = self->_retCode;
+                    switch (answer) {
                     case 0: {
-                        int obj;
-                        igIntList *fold;
-                        int total;
-                        int idx;
+                        int player;
+                        igObjectList *devices;
+                        int remaining;
+                        int index;
                         int money;
                         int price;
-                        int ins;
-                        int item;
-                        beMessenger_SelectGroup(self->_messenger, DAT_0051b398);
+                        int status;
+                        beNDMWItemBase *device;
+                        beMessenger_SelectGroup(self->_messenger, GAMERAM_14);
                         beMessenger_AppendInt(self->_messenger, self->_playerNo);
-                        beMessenger_DispatchSelected(self->_messenger, DAT_0051b3e8);
-                        obj = beMessenger_GetObject(self->_messenger, 0);
-                        fold = (igIntList *)igProperty_GetRecordFolder(obj, DAT_0051b528)->f12;
-                        idx = self->_cursor + self->_nowPage * 12;
-                        if (idx < fold->_count) {
-                            ins = (int)igInsightCore_FindManager(self->_insight, g_beNDMWStatus_metaObject[0]);
-                            item = ((int *)fold->_data)[idx];
-                            price = beNDMWItemRevisionPocketBase_GetPrice(item, ins, DAT_0051bd70);
-                            money = igProperty_GetRecord(obj, DAT_0051b560)->f12;
+                        beMessenger_DispatchSelected(self->_messenger, GETPLAYER_10);
+                        player = beMessenger_GetObject(self->_messenger, 0);
+                        devices = PlayerFolder(player, DEVICEFOLDER_4);
+                        index = self->_cursor + self->_nowPage * SELL_PAGE_ROWS;
+                        if (index < devices->_count) {
+                            status = (int)igInsightCore_FindManager(self->_insight, g_beNDMWStatus_metaObject[0]);
+                            device = ((beNDMWItemBase **)devices->_data)[index];
+                            price = beNDMWItemRevisionPocketBase_GetPrice(device, status, KAITORI_2);
+                            money = ((beDataObjInt *)igProperty_GetRecord(player, BIT_7))->_data;
                             money = money + price;
-                            if (money > 9999999) money = 9999999;
-                            igProperty_GetRecord(obj, DAT_0051b560)->f12 = money;
-                            ObjectList_RemoveFirstRetained(fold, (void *)item, 0);
-                            beMessenger_SelectGroup(self->_messenger, DAT_0051b498);
+                            if (money > MONEY_MAX) money = MONEY_MAX;
+                            ((beDataObjInt *)igProperty_GetRecord(player, BIT_7))->_data = money;
+                            ObjectList_RemoveFirstRetained(devices, (void *)device, 0);
+                            beMessenger_SelectGroup(self->_messenger, SUBWND_8);
                             beMessenger_AppendInt(self->_messenger, self->_playerNo);
-                            beMessenger_DispatchSelected(self->_messenger, DAT_0051b4a0);
-                            total = fold->_count;
-                            if (total <= 0) {
-                                self->_st0 = self->_st0 + 1;
-                                self->_st3 = 0;
-                                self->_st2 = 0;
-                                self->_st1 = 0;
+                            beMessenger_DispatchSelected(self->_messenger, UPDATE_3);
+                            remaining = devices->_count;
+                            if (remaining <= 0) {
+                                NEXT_STATE(self)
                             } else {
-                                if (idx >= total) {
+                                if (index >= remaining) {
                                     if (self->_cursor == 0) {
                                         if (self->_nowPage > 0) self->_nowPage = self->_nowPage - 1;
                                     } else {
@@ -5494,25 +4966,20 @@ void Gap__Bec__beNDMWShopCtrlDeviceSell__vfunc_21(beNDMWShopCtrlDeviceSell *self
                                     }
                                 }
                                 if (self->_nowPage == 0)
-                                    beMessenger_SendNamed(self->_messenger, DAT_0051b308, DAT_0051b630, 0, DAT_0051b640);
-                                if (fold->_count <= (self->_nowPage + 1) * 12)
-                                    beMessenger_SendNamed(self->_messenger, DAT_0051b308, DAT_0051b650, 0, DAT_0051b640);
+                                    beMessenger_SendNamed(self->_messenger, MODELCTRL_16, i_stcursorleft_2, 0, SQ_HIDE_2);
+                                if (devices->_count <= (self->_nowPage + 1) * SELL_PAGE_ROWS)
+                                    beMessenger_SendNamed(self->_messenger, MODELCTRL_16, i_stcursorright_2, 0, SQ_HIDE_2);
                             }
                         } else {
-                            self->_st0 = self->_st0 + 1;
-                            self->_st3 = 0;
-                            self->_st2 = 0;
-                            self->_st1 = 0;
+                            NEXT_STATE(self)
                         }
                         break;
                     }
                     case 1:
                         break;
                     }
-                    self->_st1 = 4;
-                    self->_st3 = 0;
-                    self->_st2 = 0;
-                    FUN_00435250((int *)self->_mother, -1);
+                    ENTER_STEP(self, DEVICESELL_STEP_LIST)
+                    beNDMWShopCtrlSell_MoveRowCursor((int *)self->_mother, -1);
                     return;
                 }
                 break;
@@ -5520,17 +4987,14 @@ void Gap__Bec__beNDMWShopCtrlDeviceSell__vfunc_21(beNDMWShopCtrlDeviceSell *self
             break;
         }
         break;
-    case 2:
+    case SHOP_STATE_CLOSE:
         beNDMWWindow_PlayQueuedModelClose(self);
         beNDMWWindow_ClearQueuedText(self);
         beNDMWWindow_RequestChildrenClose(self);
-        self->_st0 = self->_st0 + 1;
-        self->_st3 = 0;
-        self->_st2 = 0;
-        self->_st1 = 0;
-        FUN_004369f0((O_4369f0 *)self);
+        NEXT_STATE(self)
+        beNDMWShopCtrlDeviceSell_ResetRowColors((O_4369f0 *)self);
         return;
-    case 3:
+    case SHOP_STATE_WAIT_CLOSED:
         if (beNDMWWindow_PollCloseComplete(self) != 0) {
             self->_isRun = 0;
         }
@@ -5538,1018 +5002,214 @@ void Gap__Bec__beNDMWShopCtrlDeviceSell__vfunc_21(beNDMWShopCtrlDeviceSell *self
     }
 }
 
-void FUN_00436060(beNDMWShopCtrlDeviceSell *self, int full, unsigned char sel)
+/* Shows the page's device names, buy-back prices and page numbers (drawRows) and the selected device's description (drawDescription). */
+void beNDMWShopCtrlDeviceSell_RefreshText(beNDMWShopCtrlDeviceSell *self, int drawRows, unsigned char drawDescription)
 {
-    beMessenger_SelectGroup(self->_messenger, &DAT_0051b398[0]);
+    beMessenger_SelectGroup(self->_messenger, GAMERAM_14);
     beMessenger_AppendInt(self->_messenger, self->_playerNo);
-    beMessenger_DispatchSelected(self->_messenger, &DAT_0051b3e8[0]);
-    igDataList *folder = ((RecordFolder *)((char *)igProperty_GetRecordFolder(beMessenger_GetObject(self->_messenger, 0), &DAT_0051b528[0])))->list;
-    igSmartPointer<igStringObj> str((igStringObj *)((int *)igInsightCore_FindManager(self->_insight, g_beSystem_metaObject[0]))[18]);
-    if (str.p != 0) str.p->_refCount = str.p->_refCount + 1;
-    char numbuf[2];
-    char nb2[2];
-    char nb3[2];
-    char name[16];
-    V3 vA;
-    V3 vB;
-    if (full != 0) {
-        int i = 0;
+    beMessenger_DispatchSelected(self->_messenger, GETPLAYER_10);
+    igObjectList *devices = PlayerFolder(beMessenger_GetObject(self->_messenger, 0), DEVICEFOLDER_4);
+    igSmartPointer<igStringObj> text((igStringObj *)((beSystem *)igInsightCore_FindManager(self->_insight, g_beSystem_metaObject[0]))->_globalStrObj);
+    if (text.p != 0) text.p->_refCount = text.p->_refCount + 1;
+    char pageText[2];
+    char pocketText[2];
+    char chipPocketText[2];
+    char priceText[16];
+    V3 revisionColor;
+    V3 colorArgument;
+    if (drawRows != 0) {
+        int row = 0;
         do {
-            int idx = i + self->_nowPage * 12;
-            const char *s;
-            if (idx < folder->_count) {
-                void *c = igInsightCore_FindManager(self->_insight, g_beNDMWStatus_metaObject[0]);
-                beNDMWItemBase *o = *(beNDMWItemBase **)(folder->_data + idx * 4);
-                FUN_0030b3c0(str.p, beNDMWItemBase_GetRecordString(o, c, NAME_2));
-                if (o->_isEquip != 0) { igStringObj *t = str.p; FUN_0030b460(t, &DAT_0051bd78[0], 0, strlen(&DAT_0051bd78[0])); }
-                else { igStringObj *t = str.p; FUN_0030b460(t, &DAT_0051bd80[0], 0, strlen(&DAT_0051bd80[0])); }
+            int index = row + self->_nowPage * SELL_PAGE_ROWS;
+            const char *visibility;
+            if (index < devices->_count) {
+                void *status = igInsightCore_FindManager(self->_insight, g_beNDMWStatus_metaObject[0]);
+                beNDMWItemBase *device = ((beNDMWItemBase **)devices->_data)[index];
+                FUN_0030b3c0(text.p, beNDMWItemBase_GetRecordString(device, status, NAME_2));
+                if (device->_isEquip != 0) { igStringObj *name = text.p; FUN_0030b460(name, equippedMark_2, 0, strlen(equippedMark_2)); }
+                else { igStringObj *name = text.p; FUN_0030b460(name, unequippedMark_2, 0, strlen(unequippedMark_2)); }
                 beMessenger_SelectGroup(self->_messenger, TEXTCTL_3);
-                beMessenger_AppendString(self->_messenger, &((char *)STWINFONT14)[0]);
-                beMessenger_AppendString(self->_messenger, ((char * *)g_fontNames)[i]);
+                beMessenger_AppendString(self->_messenger, STWINFONT14);
+                beMessenger_AppendString(self->_messenger, g_fontNames[row]);
                 {
-                    int m = self->_messenger;
-                    char *t0 = (char *)str.p->_buffer;
-                    char *t;
-                    if (t0 == 0) t = DAT_004c22f0[0]; else t = t0;
-                    beMessenger_AppendString(m, t);
+                    int messenger = self->_messenger;
+                    char *buffer = (char *)text.p->_buffer;
+                    beMessenger_AppendString(messenger, buffer == 0 ? g_stringObjEmptyText[0] : buffer);
                 }
                 beMessenger_DispatchSelected(self->_messenger, TEXTSET);
-                sprintf(name, percent_d, beNDMWItemRevisionPocketBase_GetPrice(o, c, &DAT_0051bd70[0]));
+                sprintf(priceText, percent_d, beNDMWItemRevisionPocketBase_GetPrice(device, status, KAITORI_2));
                 beMessenger_SelectGroup(self->_messenger, TEXTCTL_3);
-                beMessenger_AppendString(self->_messenger, &((char *)STWINFONT17)[0]);
-                beMessenger_AppendString(self->_messenger, ((char * *)g_fontNames)[i]);
-                beMessenger_AppendString(self->_messenger, name);
+                beMessenger_AppendString(self->_messenger, STWINFONT17);
+                beMessenger_AppendString(self->_messenger, g_fontNames[row]);
+                beMessenger_AppendString(self->_messenger, priceText);
                 beMessenger_DispatchSelected(self->_messenger, TEXTSET);
-                beNDMWItemBase_GetRevisionColor(&vA, o);
+                beNDMWItemBase_GetRevisionColor(&revisionColor, device);
                 beMessenger_SelectGroup(self->_messenger, TEXTCTL_3);
-                beMessenger_AppendString(self->_messenger, &((char *)STWINFONT14)[0]);
-                beMessenger_AppendString(self->_messenger, ((char * *)g_fontNames)[i]);
-                vB = vA;
-                beMessenger_AppendVec3(self->_messenger, (float *)&vB);
-                beMessenger_DispatchSelected(self->_messenger, &DAT_0051b9f8[0]);
-                if (*(unsigned char *)(((igUnsignedCharList *)self->_decideList)->_data + i) != 0) {
+                beMessenger_AppendString(self->_messenger, STWINFONT14);
+                beMessenger_AppendString(self->_messenger, g_fontNames[row]);
+                colorArgument = revisionColor;
+                beMessenger_AppendVec3(self->_messenger, (float *)&colorArgument);
+                beMessenger_DispatchSelected(self->_messenger, COLOR_4);
+                if (*(unsigned char *)(((igBoolList *)self->_decideList)->_data + row) != 0) {
                     beMessenger_SelectGroup(self->_messenger, TEXTCTL_3);
-                    beMessenger_AppendString(self->_messenger, &((char *)STWINFONT17)[0]);
-                    beMessenger_AppendString(self->_messenger, ((char * *)g_fontNames)[i]);
-                    beMessenger_DispatchSelected(self->_messenger, &DAT_0051b3d8[0]);
+                    beMessenger_AppendString(self->_messenger, STWINFONT17);
+                    beMessenger_AppendString(self->_messenger, g_fontNames[row]);
+                    beMessenger_DispatchSelected(self->_messenger, DEFAULTCOLOR_5);
                 } else {
                     beMessenger_SelectGroup(self->_messenger, TEXTCTL_3);
-                    beMessenger_AppendString(self->_messenger, &((char *)STWINFONT17)[0]);
-                    beMessenger_AppendString(self->_messenger, ((char * *)g_fontNames)[i]);
-                    beMessenger_DispatchSelected(self->_messenger, &DAT_0051b800[0]);
+                    beMessenger_AppendString(self->_messenger, STWINFONT17);
+                    beMessenger_AppendString(self->_messenger, g_fontNames[row]);
+                    beMessenger_DispatchSelected(self->_messenger, CANCELCOLOR_4);
                 }
-                s = &DISPON[0];
+                visibility = DISPON;
             } else {
-                s = &((char *)DISPOFF)[0];
+                visibility = DISPOFF;
             }
             beMessenger_SelectGroup(self->_messenger, TEXTCTL_3);
-            beMessenger_AppendString(self->_messenger, &((char *)STWINFONT14)[0]);
-            beMessenger_AppendString(self->_messenger, ((char * *)g_fontNames)[i]);
-            beMessenger_AppendString(self->_messenger, s);
+            beMessenger_AppendString(self->_messenger, STWINFONT14);
+            beMessenger_AppendString(self->_messenger, g_fontNames[row]);
+            beMessenger_AppendString(self->_messenger, visibility);
             beMessenger_DispatchSelected(self->_messenger, SWITCH_2);
             beMessenger_SelectGroup(self->_messenger, TEXTCTL_3);
-            beMessenger_AppendString(self->_messenger, &((char *)STWINFONT17)[0]);
-            beMessenger_AppendString(self->_messenger, ((char * *)g_fontNames)[i]);
-            beMessenger_AppendString(self->_messenger, s);
+            beMessenger_AppendString(self->_messenger, STWINFONT17);
+            beMessenger_AppendString(self->_messenger, g_fontNames[row]);
+            beMessenger_AppendString(self->_messenger, visibility);
             beMessenger_DispatchSelected(self->_messenger, SWITCH_2);
-            i++;
-        } while (i < 12);
-        numbuf[1] = 0;
-        numbuf[0] = self->_nowPage + 0x31;
+            row++;
+        } while (row < SELL_PAGE_ROWS);
+        pageText[1] = 0;
+        pageText[0] = self->_nowPage + '1';
         beMessenger_SelectGroup(self->_messenger, TEXTCTL_3);
-        beMessenger_AppendString(self->_messenger, &((char *)STWINFONT30)[0]);
-        beMessenger_AppendString(self->_messenger, ((char * *)g_fontNames)[0]);
-        beMessenger_AppendString(self->_messenger, numbuf);
+        beMessenger_AppendString(self->_messenger, STWINFONT30);
+        beMessenger_AppendString(self->_messenger, g_fontNames[0]);
+        beMessenger_AppendString(self->_messenger, pageText);
         beMessenger_DispatchSelected(self->_messenger, TEXTSET);
-        numbuf[0] = self->_maxPage + 0x30;
+        pageText[0] = self->_maxPage + '0';
         beMessenger_SelectGroup(self->_messenger, TEXTCTL_3);
-        beMessenger_AppendString(self->_messenger, &((char *)STWINFONT30)[0]);
+        beMessenger_AppendString(self->_messenger, STWINFONT30);
         beMessenger_AppendString(self->_messenger, g_fontName1[0]);
-        beMessenger_AppendString(self->_messenger, numbuf);
+        beMessenger_AppendString(self->_messenger, pageText);
         beMessenger_DispatchSelected(self->_messenger, TEXTSET);
     }
-    if (sel) {
-        int rc = self->_retCode; int pg = self->_nowPage * 12; int idx = pg + rc;
-        const char *s;
-        if (idx < folder->_count) {
-            char *txt;
-            void *c2 = igInsightCore_FindManager(self->_insight, g_beNDMWStatus_metaObject[0]);
-            beNDMWItemBase *o = *(beNDMWItemBase **)(folder->_data + idx * 4);
+    if (drawDescription) {
+        int selected = self->_retCode;
+        int pageStart = self->_nowPage * SELL_PAGE_ROWS;
+        int index = pageStart + selected;
+        const char *visibility;
+        if (index < devices->_count) {
+            char *description;
+            void *status = igInsightCore_FindManager(self->_insight, g_beNDMWStatus_metaObject[0]);
+            beNDMWItemBase *device = ((beNDMWItemBase **)devices->_data)[index];
             int kind;
-            txt = beNDMWItemBase_GetRecordString(o, c2, TXT);
-            kind = o->_kindNo;
+            description = beNDMWItemBase_GetRecordString(device, status, TXT);
+            kind = device->_kindNo;
             if (kind == 0) {
-                if (o->_recNo != 0x114) {
-                    nb2[1] = 0;
-                    nb2[0] = ((beNDMWItemBlueArmor *)o)->_pocket + 0x30;
-                    FUN_0030b3c0(str.p, txt);
+                if (device->_recNo != 0x114) {
+                    pocketText[1] = 0;
+                    pocketText[0] = ((beNDMWItemRevisionPocketBase *)device)->_pocket + '0';
+                    FUN_0030b3c0(text.p, description);
                     {
-                        int t = (int)str.p;
-                        int n = ((igStringObj *)t)->_length;
-                        FUN_0030b460((igStringObj *)t, nb2, n, strlen(nb2));
+                        int described = (int)text.p;
+                        int length = ((igStringObj *)described)->_length;
+                        FUN_0030b460((igStringObj *)described, pocketText, length, strlen(pocketText));
                     }
-                    { char *x = (char *)str.p->_buffer; txt = (x == 0) ? DAT_004c22f0[0] : x; }
+                    { char *buffer = (char *)text.p->_buffer; description = (buffer == 0) ? g_stringObjEmptyText[0] : buffer; }
                 }
-            } else if (kind == 1 && o->_recNo != 0x1f) {
-                nb3[1] = 0;
-                nb3[0] = ((beNDMWItemBlueArmor *)o)->_pocket + 0x30;
-                FUN_0030b3c0(str.p, txt);
+            } else if (kind == 1 && device->_recNo != 0x1f) {
+                chipPocketText[1] = 0;
+                chipPocketText[0] = ((beNDMWItemRevisionPocketBase *)device)->_pocket + '0';
+                FUN_0030b3c0(text.p, description);
                 {
-                    int t = (int)str.p;
-                    int n = ((igStringObj *)t)->_length;
-                    FUN_0030b460((igStringObj *)t, nb3, n, strlen(nb3));
+                    int described = (int)text.p;
+                    int length = ((igStringObj *)described)->_length;
+                    FUN_0030b460((igStringObj *)described, chipPocketText, length, strlen(chipPocketText));
                 }
-                { char *x = (char *)str.p->_buffer; txt = (x == 0) ? DAT_004c22f0[0] : x; }
+                { char *buffer = (char *)text.p->_buffer; description = (buffer == 0) ? g_stringObjEmptyText[0] : buffer; }
             }
             beMessenger_SelectGroup(self->_messenger, TEXTCTL_3);
-            beMessenger_AppendString(self->_messenger, &((char *)STWINFONT29)[0]);
-            beMessenger_AppendString(self->_messenger, ((char * *)g_fontNames)[0]);
-            beMessenger_AppendString(self->_messenger, txt);
+            beMessenger_AppendString(self->_messenger, STWINFONT29);
+            beMessenger_AppendString(self->_messenger, g_fontNames[0]);
+            beMessenger_AppendString(self->_messenger, description);
             beMessenger_DispatchSelected(self->_messenger, TEXTSET);
-            s = &DISPON[0];
+            visibility = DISPON;
         } else {
-            s = &((char *)DISPOFF)[0];
+            visibility = DISPOFF;
         }
         beMessenger_SelectGroup(self->_messenger, TEXTCTL_3);
-        beMessenger_AppendString(self->_messenger, &((char *)STWINFONT29)[0]);
-        beMessenger_AppendString(self->_messenger, ((char * *)g_fontNames)[0]);
-        beMessenger_AppendString(self->_messenger, s);
+        beMessenger_AppendString(self->_messenger, STWINFONT29);
+        beMessenger_AppendString(self->_messenger, g_fontNames[0]);
+        beMessenger_AppendString(self->_messenger, visibility);
         beMessenger_DispatchSelected(self->_messenger, SWITCH_2);
     }
 }
 
-int FUN_004367c0(beNDMWShopCtrlDeviceSell *self) {
-    Folder *fold; int n; int v; int rem; int rows; int i; int idx; int c; Obj *o; bool mark; int k; igCharList *l;
-    beMessenger_SelectGroup(self->_messenger, &DAT_0051b398[0]);
+int beNDMWShopCtrlDeviceSell_UpdatePageCount(beNDMWShopCtrlDeviceSell *self) {
+    igObjectList *devices; int count; int pages; int remaining; int rows; int row; int index; int status;
+    beNDMWItemBase *device; bool sellable; int slot; igBoolList *decide;
+    beMessenger_SelectGroup(self->_messenger, GAMERAM_14);
     beMessenger_AppendInt(self->_messenger, self->_playerNo);
-    beMessenger_DispatchSelected(self->_messenger, &DAT_0051b3e8[0]);
-    fold = *(Folder **)(((char *)igProperty_GetRecordFolder(((void *)beMessenger_GetObject(self->_messenger, 0)), &DAT_0051b528[0])) + 12);
-    n = fold->count;
-    if (n % 12 != 0) v = n / 12 + 1; else v = n / 12;
-    self->_maxPage = v;
-    rem = n - self->_nowPage * 12;
-    rows = (rem >= 12) ? 12 : rem % 12;
-    i = 0;
-    ((igCharList *)self->_decideList)->_count = 0;
+    beMessenger_DispatchSelected(self->_messenger, GETPLAYER_10);
+    devices = PlayerFolder(beMessenger_GetObject(self->_messenger, 0), DEVICEFOLDER_4);
+    count = devices->_count;
+    if (count % SELL_PAGE_ROWS != 0) pages = count / SELL_PAGE_ROWS + 1; else pages = count / SELL_PAGE_ROWS;
+    self->_maxPage = pages;
+    remaining = count - self->_nowPage * SELL_PAGE_ROWS;
+    rows = (remaining >= SELL_PAGE_ROWS) ? SELL_PAGE_ROWS : remaining % SELL_PAGE_ROWS;
+    row = 0;
+    ((igBoolList *)self->_decideList)->_count = 0;
     do {
-        idx = i + self->_nowPage * 12;
-        if (idx < n) {
-            c = ((int)igInsightCore_FindManager(self->_insight, g_beNDMWStatus_metaObject[0]));
-            o = fold->items[idx];
-            mark = true;
-            if (o->flag != 0) mark = false;
-            else if (beNDMWItemRevisionPocketBase_GetPrice(o, c, &DAT_0051bd70[0]) <= 0) mark = false;
-            l = (igCharList *)self->_decideList;
-            k = l->_count;
-            if (k < l->_capacity) l->_count = k + 1; else List_Resize(l, k + 1, 1);
-            *(char *)(k + (int)l->_data) = mark;
+        index = row + self->_nowPage * SELL_PAGE_ROWS;
+        if (index < count) {
+            status = (int)igInsightCore_FindManager(self->_insight, g_beNDMWStatus_metaObject[0]);
+            device = ((beNDMWItemBase **)devices->_data)[index];
+            sellable = true;
+            if (device->_isEquip != 0) sellable = false;
+            else if (beNDMWItemRevisionPocketBase_GetPrice(device, status, KAITORI_2) <= 0) sellable = false;
+            decide = (igBoolList *)self->_decideList;
+            slot = decide->_count;
+            if (slot < decide->_capacity) decide->_count = slot + 1; else List_Resize(decide, slot + 1, 1);
+            ((unsigned char *)decide->_data)[slot] = sellable;
         }
-        i++;
-    } while (i < 12);
+        row++;
+    } while (row < SELL_PAGE_ROWS);
     return rows;
 }
 
-void FUN_004369f0(O_4369f0 *arg0) {
-    int i;
-    int **p = ((int * *)g_fontNames);
-    for (i = 0; i < 12; i++) {
-        beMessenger_SelectGroup(arg0->m, TEXTCTL_3);
-        beMessenger_AppendString(arg0->m, STWINFONT14);
-        beMessenger_AppendString(arg0->m, *p);
-        beMessenger_DispatchSelected(arg0->m, &DAT_0051b3d8[0]);
-        beMessenger_SelectGroup(arg0->m, TEXTCTL_3);
-        beMessenger_AppendString(arg0->m, STWINFONT17);
-        beMessenger_AppendString(arg0->m, *p);
-        beMessenger_DispatchSelected(arg0->m, &DAT_0051b3d8[0]);
-        p++;
-    }
-}
-
-void Gap__Bec__beNDMWShopCtrlDiskSell__vfunc_21(beNDMWShopCtrlDiskSell *self) {
-    int vA[3];
-    int vB[3];
-    void *alloc;
-    igObjectList *temp_s3;
-    igObjectList *fa;
-    Item_434790 *rc;
-    int folder;
-    int i;
-    int j;
-    int obj;
-    igObjectList *fb;
-    int newv;
-    int cost;
-    int tot;
-    int rec;
+void beNDMWShopCtrlDeviceSell_ResetRowColors(O_4369f0 *deviceSell) {
+    beNDMWShopCtrlDeviceSell *self = (beNDMWShopCtrlDeviceSell *)deviceSell;
     int row;
-    char **fp;
-    unsigned char *dst;
-    unsigned char val;
-
-    switch (self->_st0) {
-    default:
-        return;
-    case 0:
-        beNDMWWindow_PresentModelAtOrigin(self, &DAT_0051b610[0], 0, &DAT_0051b618[0], &DAT_0051b620[0]);
-        vA[0] = 0xC3120000;
-        vA[1] = 0x41C80000;
-        vA[2] = 0;
-        beNDMWWindow_PresentModel(self, &DAT_0051b630[0], 0, &DAT_0051b640[0], &DAT_0051b620[0], &vA[0]);
-        vB[0] = 0x436C0000;
-        vB[1] = 0x41C80000;
-        vB[2] = 0;
-        beNDMWWindow_PresentModel(self, &DAT_0051b650[0], 0, &DAT_0051b640[0], &DAT_0051b620[0], &vB[0]);
-        INTERN_APPEND(self->_textCloseTypeList, STWINFONT29)
-        INTERN_APPEND(self->_textCloseNameList, &DAT_0051b548[0])
-        INTERN_APPEND(self->_textCloseTypeList, &DAT_0051b668[0])
-        INTERN_APPEND(self->_textCloseNameList, ((char * *)g_fontNames)[0])
-        beNDMWWindow_RunMessageScript(self, &DAT_0051b3b0[0], 0x3E9);
-        beMessenger_SelectGroup(self->_messenger, &DAT_0051b398[0]);
-        beMessenger_AppendInt(self->_messenger, self->_playerNo);
-        beMessenger_DispatchSelected(self->_messenger, &DAT_0051b3e8[0]);
-        temp_s3 = igProperty_GetRecordFolder(beMessenger_GetObject(self->_messenger, 0), &DAT_0051b6c0[0])->f12;
-        i = 0;
-        if (0 < temp_s3->_count) {
-            fp = &((char * *)g_fontNames)[0];
-            do {
-                beNDMWWindow_QueueText(self, STWINFONT14, *fp, &DAT_0051b590[0], &DAT_0051b598[0]);
-                beNDMWWindow_QueueText(self, &DAT_0051bd88[0], *fp, &DAT_0051b590[0], &DAT_0051bd98[0]);
-                beNDMWWindow_QueueText(self, STWINFONT17, *fp, &DAT_0051b590[0], &DAT_0051b460[0]);
-                i += 1;
-                fp += 1;
-            } while (i < temp_s3->_count);
-        }
-        self->_cursor = 0;
-        self->_st0 = self->_st0 + 1;
-        self->_st3 = 0;
-        self->_st2 = 0;
-        self->_st1 = 0;
-        self->_st1 = 6;
-        self->_st3 = 0;
-        self->_st2 = 0;
-    case 1:
-        switch (self->_st1) {
-        case 6:
-            switch (self->_st2) {
-            case 0:
-                beMessenger_SendNamed(self->_messenger, &DAT_0051b308[0], &DAT_0051b610[0], 0, &DAT_0051bda0[0]);
-                FUN_00435250((int *)self->_mother, -1);
-                ALLOC(alloc, self)
-                {
-                igSmartPointer<beNDMWStatusSelectE1> spBC((beNDMWStatusSelectE1 *)beNDMWStatusSelectE1_Create(alloc));
-                self->_retCode = self->_cursor;
-                beNDMWWindow_BindContext(spBC.p, self, self->_insight, self->_playerNo, 0);
-                ObjectList_AppendRetained(self->_subWindow, spBC.p);
-                { beNDMWStatusSelectE1 *w = (beNDMWStatusSelectE1 *)spBC.p; w->_offsetPos[0] = -121.0f; w->_offsetPos[1] = 128.0f; w->_offsetPos[2] = 0.0f; }
-                ((beNDMWStatusSelectE1 *)spBC.p)->_startPoint = self->_cursor;
-                beNDMWWindow_QueueText(spBC.p, STWINFONT29, ((char * *)g_fontNames)[0], &DAT_0051b590[0], &DAT_0051b598[0]);
-                beMessenger_SelectGroup(self->_messenger, &DAT_0051b398[0]);
-                beMessenger_AppendInt(self->_messenger, self->_playerNo);
-                beMessenger_DispatchSelected(self->_messenger, &DAT_0051b3e8[0]);
-                fa = igProperty_GetRecordFolder(beMessenger_GetObject(self->_messenger, 0), &DAT_0051b6c0[0])->f12;
-                ((beNDMWStatusSelectE1 *)spBC.p)->_selectMax = fa->_count;
-                ALLOC(alloc, self)
-                igSmartPointer<igBoolList> spB8((igBoolList *)igBoolList_Create(alloc));
-                j = 0;
-                if (0 < fa->_count) {
-                    do {
-                        if (((Item_434790 **)fa->_data)[j]->f20 > 0) {
-                            { int idx; igBoolList *l = (igBoolList *)spB8.p; idx = l->_count;
-                            if (idx < l->_capacity) {
-                                l->_count = idx + 1;
-                            } else {
-                                List_Resize(l, idx + 1, 1);
-                            }
-                            ((unsigned char *)l->_data)[idx] = GPR_00554a60; }
-                        } else {
-                            { int idx; igBoolList *l = (igBoolList *)spB8.p; idx = l->_count;
-                            if (idx < l->_capacity) {
-                                l->_count = idx + 1;
-                            } else {
-                                List_Resize(l, idx + 1, 1);
-                            }
-                            ((unsigned char *)l->_data)[idx] = GPR_00554a64; }
-                        }
-                        j += 1;
-                    } while (j < fa->_count);
-                }
-                {
-                    igBoolList *l2 = (igBoolList *)spB8.p;
-                    beNDMWStatusSelectE1 *w = (beNDMWStatusSelectE1 *)spBC.p;
-                    if (l2 != 0) {
-                        l2->_refCount = l2->_refCount + 1;
-                    }
-                    { igObject *old = (igObject *)w->_decideList; REL_42a2e0(old) }
-                    w->_decideList = (int)l2;
-                }
-                beNDMWWindow_RunMessageScript(self, &DAT_0051b3b0[0], 0x676);
-                }
-                self->_nowProcKazu = ((beNDMWWindowList *)self->_subWindow)->_count;
-                self->_st2 = self->_st2 + 1;
-                self->_st3 = 0;
-            case 1:
-                FUN_00437ae0(self, 1, 1);
-                self->_st2 = self->_st2 + 1;
-                self->_st3 = 0;
-                return;
-            case 2:
-                if (((beNDMWWindowList *)self->_subWindow)->_count == self->_nowProcKazu) {
-                    if (self->_retCode != -1) {
-                        if (self->_st3 != self->_retCode) {
-                            FUN_00437ae0(self, 0, 1);
-                            self->_st3 = self->_retCode;
-                            return;
-                        }
-                    }
-                } else {
-                    if (self->_retCode != -1) {
-                        self->_st1 = 7;
-                        self->_st3 = 0;
-                        self->_st2 = 0;
-                        self->_cursor = self->_retCode;
-                        FUN_00435250((int *)self->_mother, self->_cursor);
-                        beMessenger_SelectGroup(self->_messenger, &DAT_0051b398[0]);
-                        beMessenger_AppendInt(self->_messenger, self->_playerNo);
-                        beMessenger_DispatchSelected(self->_messenger, &DAT_0051b3e8[0]);
-                        self->_maxSell = ((Item_434790 **)igProperty_GetRecordFolder(beMessenger_GetObject(self->_messenger, 0), &DAT_0051b6c0[0])->f12->_data)[self->_cursor]->f20;
-                        if (self->_maxSell == 0) {
-                            self->_st1 = 6;
-                            self->_st3 = 0;
-                            self->_st2 = 0;
-                            return;
-                        }
-                        break;
-                    }
-                    ((beNDMWWindow *)self->_mother)->_retCode = -1;
-                    self->_st0 = self->_st0 + 1;
-                    self->_st3 = 0;
-                    self->_st2 = 0;
-                    self->_st1 = 0;
-                    return;
-                }
-                break;
-            }
-            break;
-        case 7:
-            switch (self->_st2) {
-            case 0:
-                beMessenger_SendNamed(self->_messenger, &DAT_0051b308[0], &DAT_0051b610[0], 0, &DAT_0051bdb0[0]);
-                ALLOC(alloc, self)
-                {
-                igSmartPointer<beNDMWShopSelect52> spB4((beNDMWShopSelect52 *)beNDMWShopSelect52_Create(alloc));
-                beNDMWWindow_BindContext(spB4.p, self, self->_insight, self->_playerNo, self->_maxSell);
-                ObjectList_AppendRetained(self->_subWindow, spB4.p);
-                { beNDMWShopSelect52 *w = (beNDMWShopSelect52 *)spB4.p; w->_offsetPos[0] = 52.0f; w->_offsetPos[1] = -104.0f; w->_offsetPos[2] = 0.0f; }
-                INTERN_APPEND(((beNDMWShopSelect52 *)spB4.p)->_textCloseTypeList, STWINFONT29)
-                INTERN_APPEND(((beNDMWShopSelect52 *)spB4.p)->_textCloseNameList, &DAT_0051b548[0])
-                beNDMWWindow_RunMessageScript(self, &DAT_0051b3b0[0], 0x624);
-                beNDMWWindow_RunMessageScript(self, &DAT_0051b3b0[0], 0x5E1);
-                self->_retCode = self->_maxSell - 1;
-                FUN_00437f50(self);
-                }
-                self->_nowProcKazu = ((beNDMWWindowList *)self->_subWindow)->_count;
-                self->_st2 = self->_st2 + 1;
-                self->_st3 = 0;
-            case 1:
-                if (((beNDMWWindowList *)self->_subWindow)->_count == self->_nowProcKazu) {
-                    if (self->_retCode != -1) {
-                        if (self->_st3 != self->_retCode) {
-                            FUN_00437f50(self);
-                        }
-                        self->_st3 = self->_retCode;
-                        return;
-                    }
-                } else {
-                    if (self->_retCode != -1) {
-                        self->_st1 = 8;
-                        self->_st3 = 0;
-                        self->_st2 = 0;
-                        self->_kazu = self->_maxSell - self->_retCode;
-                        return;
-                    }
-                    FUN_00438050(self);
-                    self->_st1 = 6;
-                    self->_st3 = 0;
-                    self->_st2 = 0;
-                    return;
-                }
-                break;
-            }
-            break;
-        case 8:
-            switch (self->_st2) {
-            case 0:
-                ALLOC(alloc, self)
-                {
-                igSmartPointer<beNDMWShopSelect00> spB0((beNDMWShopSelect00 *)beNDMWShopSelect00_Create(alloc));
-                beNDMWWindow_BindContext(spB0.p, self, self->_insight, self->_playerNo, 0x619);
-                ObjectList_AppendRetained(self->_subWindow, spB0.p);
-                }
-                self->_nowProcKazu = ((beNDMWWindowList *)self->_subWindow)->_count;
-                self->_st2 = self->_st2 + 1;
-                self->_st3 = 0;
-            case 1:
-                if (((beNDMWWindowList *)self->_subWindow)->_count != self->_nowProcKazu) {
-                    ALLOC(alloc, self)
-                    {
-                    igSmartPointer<beNDMWShopSelect01> spAC((beNDMWShopSelect01 *)FUN_003b4d90(alloc));
-                    beNDMWWindow_BindContext(spAC.p, self, self->_insight, self->_playerNo, 0x61A);
-                    ObjectList_AppendRetained(self->_subWindow, spAC.p);
-                    }
-                    self->_nowProcKazu = ((beNDMWWindowList *)self->_subWindow)->_count;
-                    self->_st2 = self->_st2 + 1;
-                    self->_st3 = 0;
-                    return;
-                }
-                break;
-            case 2:
-                if (((beNDMWWindowList *)self->_subWindow)->_count != self->_nowProcKazu) {
-                    FUN_00438050(self);
-                    switch (self->_retCode) {
-                    case 0:
-                        beMessenger_SelectGroup(self->_messenger, &DAT_0051b398[0]);
-                        beMessenger_AppendInt(self->_messenger, self->_playerNo);
-                        beMessenger_DispatchSelected(self->_messenger, &DAT_0051b3e8[0]);
-                        obj = beMessenger_GetObject(self->_messenger, 0);
-                        fb = igProperty_GetRecordFolder(obj, &DAT_0051b6c0[0])->f12;
-                        cost = self->_tanka * self->_kazu;
-                        tot = W(((int)igProperty_GetRecord(obj, &DAT_0051b560[0])), 12);
-                        tot = tot + cost;
-                        if (tot > 9999999) {
-                            tot = 9999999;
-                        }
-                        W(((int)igProperty_GetRecord(obj, &DAT_0051b560[0])), 12) = tot;
-                        beMessenger_SelectGroup(self->_messenger, &DAT_0051b498[0]);
-                        beMessenger_AppendInt(self->_messenger, self->_playerNo);
-                        beMessenger_DispatchSelected(self->_messenger, &DAT_0051b4a0[0]);
-                        rc = ((Item_434790 **)fb->_data)[self->_cursor]; { unsigned int q = rc->f20; tot = q - self->_kazu; rc->f20 = tot; }
-                        break;
-                    case 1:
-                        break;
-                    }
-                    self->_st1 = 6;
-                    self->_st3 = 0;
-                    self->_st2 = 0;
-                    return;
-                }
-                break;
-            }
-            break;
-        }
-        break;
-    case 2:
-        beNDMWWindow_PlayQueuedModelClose();
-        beNDMWWindow_ClearQueuedText(self);
-        beNDMWWindow_RequestChildrenClose(self);
-        self->_st0 = self->_st0 + 1;
-        self->_st3 = 0;
-        self->_st2 = 0;
-        self->_st1 = 0;
-        FUN_00435250((int *)self->_mother, -1);
-        return;
-    case 3:
-        if (beNDMWWindow_PollCloseComplete() != 0) {
-            self->_isRun = 0;
-        }
-        break;
+    const char **rowFont = g_fontNames;
+    for (row = 0; row < SELL_PAGE_ROWS; row++) {
+        beMessenger_SelectGroup(self->_messenger, TEXTCTL_3);
+        beMessenger_AppendString(self->_messenger, STWINFONT14);
+        beMessenger_AppendString(self->_messenger, *rowFont);
+        beMessenger_DispatchSelected(self->_messenger, DEFAULTCOLOR_5);
+        beMessenger_SelectGroup(self->_messenger, TEXTCTL_3);
+        beMessenger_AppendString(self->_messenger, STWINFONT17);
+        beMessenger_AppendString(self->_messenger, *rowFont);
+        beMessenger_DispatchSelected(self->_messenger, DEFAULTCOLOR_5);
+        rowFont++;
     }
 }
 
-void FUN_00437ae0(beNDMWShopCtrlDiskSell *arg0, int arg1, int arg2) {
-    char spA0[28];
-    char spBC[2];
-    igObjectList *temp_s6;
-    int temp_s7;
-    int i;
-    beNDMWItemDisk *it;
-    char *s;
-    int off;
-    char **p;
+#define SET_TEXT(window, font, label, text) { \
+    beMessenger_SelectGroup((window)->_messenger, TEXTCTL_3); \
+    beMessenger_AppendString((window)->_messenger, font); \
+    beMessenger_AppendString((window)->_messenger, label); \
+    beMessenger_AppendString((window)->_messenger, text); \
+    beMessenger_DispatchSelected((window)->_messenger, TEXTSET); }
+#define SWITCH_TEXT(window, font, label, display) { \
+    beMessenger_SelectGroup((window)->_messenger, TEXTCTL_3); \
+    beMessenger_AppendString((window)->_messenger, font); \
+    beMessenger_AppendString((window)->_messenger, label); \
+    beMessenger_AppendString((window)->_messenger, display); \
+    beMessenger_DispatchSelected((window)->_messenger, SWITCH_2); }
+#define BOOL_LIST_PUSH(list, value) { \
+    int n; igBoolList *l = (igBoolList *)(list); n = l->_count; \
+    if (n < l->_capacity) l->_count = n + 1; else List_Resize(l, n + 1, 1); \
+    ((unsigned char *)l->_data)[n] = (value); }
 
-    beMessenger_SelectGroup(arg0->_messenger, DAT_0051b398);
-    beMessenger_AppendInt(arg0->_messenger, arg0->_playerNo);
-    beMessenger_DispatchSelected(arg0->_messenger, DAT_0051b3e8);
-    temp_s6 = *(igObjectList **)((char *)((void *)igProperty_GetRecordFolder(beMessenger_GetObject(arg0->_messenger, 0), DAT_0051b6c0)) + 12);
-    temp_s7 = ((int)igInsightCore_FindManager(arg0->_insight, g_beNDMWStatus_metaObject[0]));
-    if (arg1 != 0) {
-        i = 0;
-        if (i < temp_s6->_count) {
-            off = 0;
-            p = ((char * *)g_fontNames);
-            do {
-                it = *(beNDMWItemDisk **)((char *)temp_s6->_data + off);
-                s = beNDMWItemBase_GetRecordString(it, temp_s7, NAME_2);
-                beMessenger_SelectGroup(arg0->_messenger, TEXTCTL_3);
-                beMessenger_AppendString(arg0->_messenger, ((char *)STWINFONT14));
-                beMessenger_AppendString(arg0->_messenger, *p);
-                beMessenger_AppendString(arg0->_messenger, s);
-                beMessenger_DispatchSelected(arg0->_messenger, TEXTSET);
-                spBC[0] = it->_kazu + 0x30;
-                spBC[1] = 0;
-                beMessenger_SelectGroup(arg0->_messenger, TEXTCTL_3);
-                beMessenger_AppendString(arg0->_messenger, ((char *)DAT_0051bd88));
-                beMessenger_AppendString(arg0->_messenger, *p);
-                beMessenger_AppendString(arg0->_messenger, spBC);
-                beMessenger_DispatchSelected(arg0->_messenger, TEXTSET);
-                sprintf(spA0, percent_d, beNDMWItemRevisionPocketBase_GetPrice(it, temp_s7, DAT_0051bd70));
-                beMessenger_SelectGroup(arg0->_messenger, TEXTCTL_3);
-                beMessenger_AppendString(arg0->_messenger, ((char *)STWINFONT17));
-                beMessenger_AppendString(arg0->_messenger, *p);
-                beMessenger_AppendString(arg0->_messenger, spA0);
-                beMessenger_DispatchSelected(arg0->_messenger, TEXTSET);
-                beMessenger_SelectGroup(arg0->_messenger, TEXTCTL_3);
-                beMessenger_AppendString(arg0->_messenger, ((char *)STWINFONT14));
-                beMessenger_AppendString(arg0->_messenger, *p);
-                beMessenger_AppendString(arg0->_messenger, DISPON);
-                beMessenger_DispatchSelected(arg0->_messenger, SWITCH_2);
-                beMessenger_SelectGroup(arg0->_messenger, TEXTCTL_3);
-                beMessenger_AppendString(arg0->_messenger, ((char *)DAT_0051bd88));
-                beMessenger_AppendString(arg0->_messenger, *p);
-                beMessenger_AppendString(arg0->_messenger, DISPON);
-                beMessenger_DispatchSelected(arg0->_messenger, SWITCH_2);
-                beMessenger_SelectGroup(arg0->_messenger, TEXTCTL_3);
-                beMessenger_AppendString(arg0->_messenger, ((char *)STWINFONT17));
-                beMessenger_AppendString(arg0->_messenger, *p);
-                beMessenger_AppendString(arg0->_messenger, DISPON);
-                beMessenger_DispatchSelected(arg0->_messenger, SWITCH_2);
-                i += 1;
-                off += 4;
-                p += 1;
-            } while (i < temp_s6->_count);
-        }
-    }
-    if (arg2 != 0) {
-        int idx = arg0->_retCode;
-        it = 0;
-        if (idx != -1) {
-            it = ((beNDMWItemDisk **)temp_s6->_data)[idx];
-        }
-        if (it != 0) {
-            s = beNDMWItemBase_GetRecordString(it, temp_s7, TXT);
-            beMessenger_SelectGroup(arg0->_messenger, TEXTCTL_3);
-            beMessenger_AppendString(arg0->_messenger, ((char *)STWINFONT29));
-            beMessenger_AppendString(arg0->_messenger, ((char * *)g_fontNames)[0]);
-            beMessenger_AppendString(arg0->_messenger, s);
-            beMessenger_DispatchSelected(arg0->_messenger, TEXTSET);
-            beMessenger_SelectGroup(arg0->_messenger, TEXTCTL_3);
-            beMessenger_AppendString(arg0->_messenger, ((char *)STWINFONT29));
-            beMessenger_AppendString(arg0->_messenger, ((char * *)g_fontNames)[0]);
-            beMessenger_AppendString(arg0->_messenger, DISPON);
-            beMessenger_DispatchSelected(arg0->_messenger, SWITCH_2);
-            arg0->_tanka = beNDMWItemRevisionPocketBase_GetPrice(it, temp_s7, DAT_0051bd70);
-            return;
-        }
-        beMessenger_SelectGroup(arg0->_messenger, TEXTCTL_3);
-        beMessenger_AppendString(arg0->_messenger, ((char *)STWINFONT29));
-        beMessenger_AppendString(arg0->_messenger, ((char * *)g_fontNames)[0]);
-        beMessenger_AppendString(arg0->_messenger, ((char *)DISPOFF));
-        beMessenger_DispatchSelected(arg0->_messenger, SWITCH_2);
-    }
-}
-
-void FUN_00437f50(beNDMWShopCtrlDiskSell *arg0) {
-    char sp30[16];
-    int temp_s0;
-
-    temp_s0 = arg0->_maxSell - arg0->_retCode;
-    sprintf(sp30, percent_d, temp_s0);
-    beMessenger_SelectGroup(arg0->_messenger, TEXTCTL_3);
-    beMessenger_AppendString(arg0->_messenger, &((const char *)STWINFONT30)[0]);
-    beMessenger_AppendString(arg0->_messenger, &DAT_0051b218[0]);
-    beMessenger_AppendString(arg0->_messenger, sp30);
-    beMessenger_DispatchSelected(arg0->_messenger, TEXTSET);
-    sprintf(sp30, percent_d, temp_s0 * arg0->_tanka);
-    beMessenger_SelectGroup(arg0->_messenger, TEXTCTL_3);
-    beMessenger_AppendString(arg0->_messenger, &((const char *)STWINFONT30)[0]);
-    beMessenger_AppendString(arg0->_messenger, &DAT_0051b288[0]);
-    beMessenger_AppendString(arg0->_messenger, sp30);
-    beMessenger_DispatchSelected(arg0->_messenger, TEXTSET);
-}
-
-void FUN_00438050(beNDMWShopCtrlDiskSell *arg0) {
-    beMessenger_SelectGroup(arg0->_messenger, TEXTCTL_3);
-    beMessenger_AppendString(arg0->_messenger, STWINFONT30);
-    beMessenger_AppendString(arg0->_messenger, &DAT_0051b278[0]);
-    beMessenger_AppendString(arg0->_messenger, DISPOFF);
-    beMessenger_DispatchSelected(arg0->_messenger, SWITCH_2);
-    beMessenger_SelectGroup(arg0->_messenger, TEXTCTL_3);
-    beMessenger_AppendString(arg0->_messenger, STWINFONT30);
-    beMessenger_AppendString(arg0->_messenger, &((int *)DAT_0051b218)[0]);
-    beMessenger_AppendString(arg0->_messenger, DISPOFF);
-    beMessenger_DispatchSelected(arg0->_messenger, SWITCH_2);
-    beMessenger_SelectGroup(arg0->_messenger, TEXTCTL_3);
-    beMessenger_AppendString(arg0->_messenger, STWINFONT30);
-    beMessenger_AppendString(arg0->_messenger, &((int *)DAT_0051b288)[0]);
-    beMessenger_AppendString(arg0->_messenger, DISPOFF);
-    beMessenger_DispatchSelected(arg0->_messenger, SWITCH_2);
-}
-
-void FUN_004393e0(beNDMWShopCtrlSales *arg0, int arg1, unsigned char arg2) {
-    int rec;
-    int i;
-    beNDMWItemRevisionPocketBase *it;
-    char *name;
-    rec = ((int)igInsightCore_FindManager(arg0->_insight, g_beNDMWStatus_metaObject[0]));
-    if (arg1 != 0) {
-        i = 0;
-        do {
-            StringRef str;
-            it = 0;
-            int idx = i + arg0->_nowPage * 12;
-            if (idx < LIST(arg0->_salesItemList)->_count) it = (beNDMWItemRevisionPocketBase *)((int *)LIST(arg0->_salesItemList)->_data)[idx];
-            if (it != 0) {
-                Vec3 pos;
-                Vec3 pos2;
-                ChipPriceText buf;
-                name = beNDMWItemBase_GetRecordString(it, rec, ((char *)NAME_2));
-                beMessenger_SelectGroup(arg0->_messenger, ((char *)TEXTCTL_3));
-                beMessenger_AppendString(arg0->_messenger, ((char *)STWINFONT14));
-                beMessenger_AppendString(arg0->_messenger, ((char * *)g_fontNames)[i]);
-                beMessenger_AppendString(arg0->_messenger, name);
-                beMessenger_DispatchSelected(arg0->_messenger, ((char *)TEXTSET));
-                beNDMWItemBase_GetRevisionColor(&pos, it);
-                beMessenger_SelectGroup(arg0->_messenger, ((char *)TEXTCTL_3));
-                beMessenger_AppendString(arg0->_messenger, ((char *)STWINFONT14));
-                beMessenger_AppendString(arg0->_messenger, ((char * *)g_fontNames)[i]);
-                pos2.x = pos.x; pos2.y = pos.y; pos2.z = pos.z;
-                beMessenger_AppendVec3(arg0->_messenger, (float *)&pos2);
-                beMessenger_DispatchSelected(arg0->_messenger, ((char *)DAT_0051b9f8));
-                if (it->_kindNo == 3 && it->_recNo == 185) {
-                    buf = DAT_0051bdc0;
-                } else {
-                    sprintf(&buf, ((char *)percent_d), beNDMWItemRevisionPocketBase_GetPrice(it, rec, ((char *)DAT_0051b690)));
-                }
-                beMessenger_SelectGroup(arg0->_messenger, ((char *)TEXTCTL_3));
-                beMessenger_AppendString(arg0->_messenger, ((char *)STWINFONT17));
-                beMessenger_AppendString(arg0->_messenger, ((char * *)g_fontNames)[i]);
-                beMessenger_AppendString(arg0->_messenger, (char *)&buf);
-                beMessenger_DispatchSelected(arg0->_messenger, ((char *)TEXTSET));
-                str.Set(Pool::Intern(DISPON));
-            } else {
-                str.Set(Pool::Intern(((char *)DISPOFF)));
-            }
-            beMessenger_SelectGroup(arg0->_messenger, ((char *)TEXTCTL_3));
-            beMessenger_AppendString(arg0->_messenger, ((char *)STWINFONT14));
-            beMessenger_AppendString(arg0->_messenger, ((char * *)g_fontNames)[i]);
-            beMessenger_AppendString(arg0->_messenger, str.p);
-            beMessenger_DispatchSelected(arg0->_messenger, ((char *)SWITCH_2));
-            beMessenger_SelectGroup(arg0->_messenger, ((char *)TEXTCTL_3));
-            beMessenger_AppendString(arg0->_messenger, ((char *)STWINFONT17));
-            beMessenger_AppendString(arg0->_messenger, ((char * *)g_fontNames)[i]);
-            beMessenger_AppendString(arg0->_messenger, str.p);
-            beMessenger_DispatchSelected(arg0->_messenger, ((char *)SWITCH_2));
-        } while (++i < 12);
-        char dig[2];
-        dig[1] = 0;
-        dig[0] = arg0->_nowPage + 49;
-        beMessenger_SelectGroup(arg0->_messenger, ((char *)TEXTCTL_3));
-        beMessenger_AppendString(arg0->_messenger, ((char *)STWINFONT30));
-        beMessenger_AppendString(arg0->_messenger, ((char * *)g_fontNames)[0]);
-        beMessenger_AppendString(arg0->_messenger, dig);
-        beMessenger_DispatchSelected(arg0->_messenger, ((char *)TEXTSET));
-        dig[0] = arg0->_maxPage + 48;
-        beMessenger_SelectGroup(arg0->_messenger, ((char *)TEXTCTL_3));
-        beMessenger_AppendString(arg0->_messenger, ((char *)STWINFONT30));
-        beMessenger_AppendString(arg0->_messenger, ((char * *)g_fontNames)[1]);
-        beMessenger_AppendString(arg0->_messenger, dig);
-        beMessenger_DispatchSelected(arg0->_messenger, ((char *)TEXTSET));
-    }
-    if (arg2) {
-        int base = arg0->_nowPage * 12; it = (beNDMWItemRevisionPocketBase *)((int *)LIST(arg0->_salesItemList)->_data)[base + arg0->_retCode];
-        char *label;
-        if (it != 0) {
-            name = beNDMWItemBase_GetRecordString(it, rec, ((char *)TXT));
-            if (it->_kindNo == 0 || it->_kindNo == 1) {
-                char dig[2];
-                dig[1] = 0;
-                dig[0] = it->_pocket + 48;
-                igSmartPointer<igStringObj> rc((igStringObj *)(((beSystem *)((int)igInsightCore_FindManager(arg0->_insight, g_beSystem_metaObject[0])))->_globalStrObj));
-                if (rc.p != 0) rc.p->_refCount = rc.p->_refCount + 1;
-                FUN_0030b3c0(rc.p, name);
-                igStringObj *t = rc.p;
-                i = t->_length;
-                FUN_0030b460(t, dig, i, strlen(dig));
-                name = (rc.p->_buffer == 0) ? DAT_004c22f0[0] : (char *)rc.p->_buffer;
-            }
-            beMessenger_SelectGroup(arg0->_messenger, ((char *)TEXTCTL_3));
-            beMessenger_AppendString(arg0->_messenger, ((char *)STWINFONT29));
-            beMessenger_AppendString(arg0->_messenger, ((char * *)g_fontNames)[0]);
-            beMessenger_AppendString(arg0->_messenger, name);
-            beMessenger_DispatchSelected(arg0->_messenger, ((char *)TEXTSET));
-            label = DISPON;
-            FUN_00439f30(arg0, 1);
-        } else {
-            label = ((char *)DISPOFF);
-            FUN_00439f30(arg0, 0);
-        }
-        beMessenger_SelectGroup(arg0->_messenger, ((char *)TEXTCTL_3));
-        beMessenger_AppendString(arg0->_messenger, ((char *)STWINFONT29));
-        beMessenger_AppendString(arg0->_messenger, ((char * *)g_fontNames)[0]);
-        beMessenger_AppendString(arg0->_messenger, label);
-        beMessenger_DispatchSelected(arg0->_messenger, ((char *)SWITCH_2));
-    }
-}
-
-int FUN_00439aa0(beNDMWShopCtrlSales *self) {
-    int cnt;
-    int pg;
-    int k;
-    int n;
-    igUnsignedCharList *q;
-    int i;
-    int off;
-    igObjectList *l;
-    int idx;
-    int base;
-    int s1;
-    igObjectList *l2;
-    int lim;
-    int j;
-    int N2;
-    igUnsignedCharList *Q2;
-    int N3;
-    igUnsignedCharList *Q3;
-    char *d;
-    int *e;
-    igObjectList *lx;
-    lx = (igObjectList *)self->_salesItemList;
-    cnt = lx->_count;
-    i = 0;
-    if (i < cnt) {
-    off = 0;
-    do {
-        if (*(int *)(lx->_data + off) != 0) cnt = i + 1;
-        i++;
-        off += 4;
-        lx = (igObjectList *)self->_salesItemList;
-    } while (i < lx->_count);
-    }
-    if (cnt % 12 != 0) pg = cnt / 12 + 1;
-    else pg = cnt / 12;
-    self->_maxPage = pg;
-    s1 = 12;
-    base = self->_nowPage * 12;
-    l2 = (igObjectList *)self->_salesItemList;
-    for (k = 0; k < 12; k++) {
-        idx = base + k;
-        if (idx > l2->_count - 1 || ((int *)l2->_data)[idx] == 0) { s1 = k; break; }
-        l2 = (igObjectList *)self->_salesItemList;
-    }
-    if (s1 <= 0) s1 = 1;
-    else if (s1 > 12) s1 = 12;
-    ((igUnsignedCharList *)self->_decideList)->_count = 0;
-    for (j = 0; j < s1; j++) {
-        e = (int *)((int *)((igObjectList *)self->_salesItemList)->_data)[base + j];
-        if (e == 0) {
-            q = (igUnsignedCharList *)self->_decideList;
-            n = q->_count;
-            if (n < q->_capacity) q->_count = n + 1; else List_Resize(q, n + 1, 1);
-            ((unsigned char *)q->_data)[n] = GPR_00554a68;
-        } else if (e[2] == 3 && e[3] == 0xb9) {
-            Q2 = (igUnsignedCharList *)self->_decideList;
-            N2 = Q2->_count;
-            if (N2 < Q2->_capacity) Q2->_count = N2 + 1; else List_Resize(Q2, N2 + 1, 1);
-            ((unsigned char *)Q2->_data)[N2] = GPR_00554a6c;
-        } else {
-            Q3 = (igUnsignedCharList *)self->_decideList;
-            N3 = Q3->_count;
-            if (N3 < Q3->_capacity) Q3->_count = N3 + 1; else List_Resize(Q3, N3 + 1, 1);
-            ((unsigned char *)Q3->_data)[N3] = GPR_00554a70;
-        }
-    }
-    return s1;
-}
-
-bool FUN_00439d60(beNDMWShopCtrlSales *arg0, beNDMWItemBase *arg1) {
-    int obj;
-    beMessenger_SelectGroup(arg0->_messenger, &DAT_0051b398[0]);
-    beMessenger_AppendInt(arg0->_messenger, arg0->_playerNo);
-    beMessenger_DispatchSelected(arg0->_messenger, &DAT_0051b3e8[0]);
-    obj = beMessenger_GetObject(arg0->_messenger, 0);
-    return SalesChk::Chk(arg0, arg1, obj);
-}
-
-void FUN_00439f30(beNDMWShopCtrlSales *arg0, int arg1) {
-    int obj;
-    beNDMWItemBase *item;
-    igObjectList *l0, *l1, *l2;
-    igObjectList *m0, *m1;
-    int kind;
-    beNDMWItemBase *o;
-    int ix;
-    int col;
-    int a2;
-    beMessenger_SelectGroup(arg0->_messenger, &DAT_0051b398[0]);
-    beMessenger_AppendInt(arg0->_messenger, arg0->_playerNo);
-    beMessenger_DispatchSelected(arg0->_messenger, &DAT_0051b3e8[0]);
-    obj = beMessenger_GetObject(arg0->_messenger, 0);
-    a2 = arg1 & 0xff;
-    item = 0;
-    if (a2 == 1) {
-        ix = arg0->_nowPage * 12; item = ((beNDMWItemBase **)((igObjectList *)arg0->_salesItemList)->_data)[ix + arg0->_retCode];
-    }
-    if (a2 == 1 && item != 0) {
-        l0 = (igObjectList *)((Rec_439d60 *)igProperty_GetRecordFolder(obj, &DAT_0051bc48[0]))->f12;
-        m0 = (igObjectList *)((Rec_439d60 *)igProperty_GetRecordFolder(obj, &DAT_0051bb90[0]))->f12;
-        l1 = (igObjectList *)((Rec_439d60 *)igProperty_GetRecordFolder(obj, &DAT_0051bb78[0]))->f12;
-        m1 = (igObjectList *)((Rec_439d60 *)igProperty_GetRecordFolder(obj, &DAT_0051bba0[0]))->f12;
-        l2 = (igObjectList *)((Rec_439d60 *)igProperty_GetRecordFolder(obj, &DAT_0051bb88[0]))->f12;
-        igSmartPointer<beNDMWItemBaseList> a((beNDMWItemBaseList *)beNDMWItemBaseList_Create(ShopAlloc::Pool(arg0)));
-        igSmartPointer<beNDMWItemBaseList> b((beNDMWItemBaseList *)beNDMWItemBaseList_Create(ShopAlloc::Pool(arg0)));
-        kind = item->_kindNo;
-        if (kind == 0) {
-            FUN_0043a450(arg0, (OL *)l0, (OL *)a.p, (OL *)m0, (OL *)b.p);
-            if (item != 0) item->_refCount++;
-            o = ((beNDMWItemBase **)l0->_data)[0];
-            if (o != 0) { o->_refCount--; if (!(o->_refCount & 0x7fffff)) igObject_Destroy(o); }
-            if (l0->_count != 0 && 0 < l0->_count) ((beNDMWItemBase **)l0->_data)[0] = item;
-        } else if (kind == 1) {
-            FUN_0043a450(arg0, (OL *)l1, (OL *)a.p, (OL *)m1, (OL *)b.p);
-            if (item != 0) item->_refCount++;
-            o = ((beNDMWItemBase **)l1->_data)[0];
-            if (o != 0) { o->_refCount--; if (!(o->_refCount & 0x7fffff)) igObject_Destroy(o); }
-            if (l1->_count != 0 && 0 < l1->_count) ((beNDMWItemBase **)l1->_data)[0] = item;
-        } else if (kind == 2) {
-            FUN_0043a450(arg0, (OL *)l2, (OL *)a.p, (OL *)0, (OL *)0);
-            if (item != 0) item->_refCount++;
-            o = ((beNDMWItemBase **)l2->_data)[0];
-            if (o != 0) { o->_refCount--; if (!(o->_refCount & 0x7fffff)) igObject_Destroy(o); }
-            if (l2->_count != 0 && 0 < l2->_count) ((beNDMWItemBase **)l2->_data)[0] = item;
-        }
-        beMessenger_SelectReceivers(arg0->_messenger, &DAT_0051b398[0], 0, 0);
-        beMessenger_AppendInt(arg0->_messenger, arg0->_playerNo);
-        beMessenger_DispatchSelected(arg0->_messenger, &DAT_0051b3a0[0]);
-        beMessenger_SelectGroup(arg0->_messenger, &DAT_0051b498[0]);
-        beMessenger_AppendInt(arg0->_messenger, arg0->_playerNo);
-        beMessenger_DispatchSelected(arg0->_messenger, &DAT_0051bdf0[0]);
-        kind = item->_kindNo;
-        if (kind == 0) FUN_0043a660(arg0, (igDataList *)l0, (igDataList *)a.p, (igDataList *)m0, (igDataList *)b.p);
-        else if (kind == 1) FUN_0043a660(arg0, (igDataList *)l1, (igDataList *)a.p, (igDataList *)m1, (igDataList *)b.p);
-        else if (kind == 2) FUN_0043a660(arg0, (igDataList *)l2, (igDataList *)a.p, (igDataList *)0, (igDataList *)0);
-        beMessenger_SelectReceivers(arg0->_messenger, &DAT_0051b398[0], 0, 0);
-        beMessenger_AppendInt(arg0->_messenger, arg0->_playerNo);
-        beMessenger_DispatchSelected(arg0->_messenger, &DAT_0051b3a0[0]);
-    } else {
-        beMessenger_SelectGroup(arg0->_messenger, &DAT_0051b498[0]);
-        beMessenger_AppendInt(arg0->_messenger, arg0->_playerNo);
-        beMessenger_DispatchSelected(arg0->_messenger, &DAT_0051be00[0]);
-    }
-}
-
-void FUN_0043a450(void *arg0, OL *arg1, OL *arg2, OL *arg3, OL *arg4) {
-    int i2;
-    int off2;
-    igObject *r;
-    int i;
-    RC *o;
-    int off;
-    i = 0;
-    goto guard1;
-body1:
-    o = ((RC **)(arg1->_data + off))[0];
-    ObjectList_AppendRetained(arg2, o);
-    if (o != 0) o->f16 = 0;
-    r = ((igObject **)(arg1->_data + off))[0];
-    if (r != 0) {
-        r->_refCount--;
-        if (!(r->_refCount & 0x7fffff)) igObject_Destroy(r);
-    }
-    if (arg1->_count != 0 && i >= 0 && i < arg1->_count) {
-        ((RC **)(arg1->_data + off))[0] = 0;
-    }
-    off += 4;
-    i++;
-cond1:
-    if (i < arg1->_count) goto body1;
-after1:
-    if (arg3 != 0) {
-        if (arg4 != 0) {
-            i2 = 0;
-            goto guard2;
-body2:
-            o = ((RC **)(arg3->_data + off2))[0];
-            ObjectList_AppendRetained(arg4, o);
-            if (o != 0) o->f16 = 0;
-            r = ((igObject **)(arg3->_data + off2))[0];
-            if (r != 0) {
-                r->_refCount--;
-                if (!(r->_refCount & 0x7fffff)) igObject_Destroy(r);
-            }
-            if (arg3->_count != 0 && i2 >= 0 && i2 < arg3->_count) {
-                ((RC **)(arg3->_data + off2))[0] = 0;
-            }
-            off2 += 4;
-            i2++;
-cond2:
-            if (i2 < arg3->_count) goto body2;
-        }
-    }
-done:
-    return;
-guard2:
-    if (0 < arg3->_count) { off2 = 0; goto cond2; }
-    goto done;
-guard1:
-    if (0 < arg1->_count) { off = 0; goto cond1; }
-    goto after1;
-}
-
-void FUN_0043a660(void *arg0, igDataList *arg1, igDataList *arg2, igDataList *arg3, igDataList *arg4) {
-    int i2;
-    igObject *o2;
-    int i;
-    igObject *r2;
-    igObject *r;
-    igObject *o;
-    i = 0;
-    goto guard1;
-body1:
-    o = ((igObject **)arg2->_data)[i];
-    if (o != 0) o->_refCount++;
-    r = ((igObject **)arg1->_data)[i];
-    if (r != 0) {
-        r->_refCount--;
-        if (!(r->_refCount & 0x7fffff)) igObject_Destroy(r);
-    }
-    if (arg1->_count != 0 && i >= 0 && i < arg1->_count) {
-        ((igObject **)arg1->_data)[i] = o;
-    }
-    if (o != 0) *((char *)o + 16) = 1;
-    r = ((igObject **)arg2->_data)[i];
-    if (r != 0) {
-        r->_refCount--;
-        if (!(r->_refCount & 0x7fffff)) igObject_Destroy(r);
-    }
-    if (arg2->_count != 0 && i >= 0 && i < arg2->_count) {
-        ((igObject **)arg2->_data)[i] = 0;
-    }
-    i++;
-cond1:
-    if (i < arg2->_count) goto body1;
-after1:
-    if (arg3 != 0) {
-        if (arg4 != 0) {
-            i2 = 0;
-            goto guard2;
-body2:
-            o2 = ((igObject **)arg4->_data)[i2];
-            if (o2 != 0) o2->_refCount++;
-            r2 = ((igObject **)arg3->_data)[i2];
-            if (r2 != 0) {
-                r2->_refCount--;
-                if (!(r2->_refCount & 0x7fffff)) igObject_Destroy(r2);
-            }
-            if (arg3->_count != 0 && i2 >= 0 && i2 < arg3->_count) {
-                ((igObject **)arg3->_data)[i2] = o2;
-            }
-            if (o2 != 0) *((char *)o2 + 16) = 1;
-            r2 = ((igObject **)arg4->_data)[i2];
-            if (r2 != 0) {
-                r2->_refCount--;
-                if (!(r2->_refCount & 0x7fffff)) igObject_Destroy(r2);
-            }
-            if (arg4->_count != 0 && i2 >= 0 && i2 < arg4->_count) {
-                ((igObject **)arg4->_data)[i2] = 0;
-            }
-                    i2++;
-cond2:
-            if (i2 < arg4->_count) goto body2;
-        }
-    }
-done:
-    return;
-guard2:
-    if (0 < arg4->_count) goto cond2;
-    goto done;
-guard1:
-    if (0 < arg2->_count) goto cond1;
-    goto after1;
-}
-
-void FUN_0043a950(int *arg0, int arg1) {
-    Tbl sp30;
-    float v[3];
-    if (arg1 > -1) {
-        sp30 = DAT_004cfa70;
-        beMessenger_SendNamed(arg0[3], ((char *)DAT_0051b308), DAT_0051b7c8, 0, DAT_0051b7d8);
-        if (beMessenger_GetBool(arg0[3], 0) != 0) {
-            beMessenger_SendNamed(arg0[3], ((char *)DAT_0051b308), DAT_0051b7c8, 0, (char *)sp30.s[arg1]);
-            return;
-        }
-        beMessenger_SelectReceivers(arg0[3], ((char *)DAT_0051b308), DAT_0051b7c8, 0);
-        beMessenger_AppendString(arg0[3], sp30.s[arg1]);
-        v[2] = 0;
-        v[0] = -121.0f;
-        v[1] = 128.0f;
-        beMessenger_AppendVec3(arg0[3], v);
-        beMessenger_DispatchSelected(arg0[3], DAT_0051b7e0);
-        return;
-    }
-    beMessenger_SendNamed(arg0[3], ((char *)DAT_0051b308), DAT_0051b7c8, 0, DAT_0051b7d8);
-    if (beMessenger_GetBool(arg0[3], 0) != 0) {
-        beMessenger_SendNamed(arg0[3], ((char *)DAT_0051b308), DAT_0051b7c8, 0, ((char *)DAT_0051b620));
-    }
-}
+enum { MAX_BITS = 9999999 };
 
 static inline void ReleaseObject(igObject *o)
 {
@@ -6559,392 +5219,1013 @@ static inline void ReleaseObject(igObject *o)
     }
 }
 
-void Gap__Bec__beNDMWShopCtrlXdataChip__vfunc_21(beNDMWShopCtrlXdataChip *arg0) {
-    int vecB[3];
-    int vecA[3];
-    char sp90[16];
-    int sp70[8];
-    int al;
-    int i;
-    int n;
-    int **p;
-    int *src;
-    igObjectList *folder;
-    igObjectList *list;
-    igStringRefList *slist;
-    beNDMWItemBase *item;
-    ChipRecord *rec;
-    int pages;
-    int ret;
-    int have;
-    int s0;
-    bool s1;
-    int s1i;
-    int idx;
-    int sel;
-    int cost;
-    int cur;
-    int pocket;
-    int *sub;
-    int *first;
-    int k;
-    int li;
-    int cst;
-    int q;
+enum DiskSellStep { DISKSELL_PICK_DISK = 6, DISKSELL_PICK_QUANTITY, DISKSELL_CONFIRM };
 
-    switch (arg0->_st0) {
-    case 0:
-        INTERN_APPEND_43aae0(arg0->_textCloseTypeList, &DAT_0051b668[0])
-        INTERN_APPEND_43aae0(arg0->_textCloseNameList, &DAT_0051b1c8[0])
-        INTERN_APPEND_43aae0(arg0->_textCloseTypeList, &DAT_0051be10[0])
-        INTERN_APPEND_43aae0(arg0->_textCloseNameList, &DAT_0051b1c8[0])
-        i = 0;
-        p = &((int * *)g_fontNames)[0];
-        do {
-            beNDMWWindow_QueueText(arg0, STWINFONT14, *p, &DAT_0051b590[0], &DAT_0051b598[0]);
-            beNDMWWindow_QueueText(arg0, STWINFONT17, *p, &DAT_0051b590[0], &DAT_0051b460[0]);
-            i += 1;
-            p += 1;
-        } while (i < 12);
-        beNDMWWindow_QueueText(arg0, STWINFONT29, ((int * *)g_fontNames)[0], &DAT_0051b590[0], &DAT_0051b598[0]);
-        beNDMWWindow_QueueText(arg0, STWINFONT29, &DAT_0051b548[0], &DAT_0051b590[0], &DAT_0051b598[0]);
-        beNDMWWindow_QueueText(arg0, STWINFONT30, ((int * *)g_fontNames)[0], &DAT_0051b590[0], &DAT_0051bd98[0]);
-        beNDMWWindow_QueueText(arg0, STWINFONT30, ((int * *)g_fontName1)[0], &DAT_0051b590[0], &DAT_0051bd98[0]);
-        arg0->_st0 = arg0->_st0 + 1;
-        arg0->_st3 = 0;
-        arg0->_st2 = 0;
-        arg0->_st1 = 0;
-    case 1:
-        switch (arg0->_st1) {
-        case 0:
-            MSG3(&DAT_0051b398[0], &DAT_0051b3e8[0])
-            rec = (ChipRecord *)((int *)igProperty_GetRecordFolder(beMessenger_GetObject(arg0->_messenger, 0), &DAT_0051b528[0]));
-            list = (igObjectList *)arg0->_itemBaseList;
-            folder = (igObjectList *)rec->f12;
-            n = list->_count;
-            k = 0;
-            if (0 < n) {
-                do {
-                    igObject *o = (igObject *)((int *)list->_data)[k];
-                    RELEASE_43aae0(o)
-                    k += 1;
-                } while (k < n);
-            }
-            { int m = list->_count; int j; for (j = 0; j < m; j++) ((int *)list->_data)[j] = 0; }
-            list->_count = 0;
-            for (q = 0; q < folder->_count; q++) {
-                beNDMWItemBase *e = (beNDMWItemBase *)((int *)folder->_data)[q];
-                if (e != 0) { int ok = e->_kindNo == 3; if (ok) ObjectList_AppendRetained(arg0->_itemBaseList, e); }
-            }
-            if (((igObjectList *)arg0->_itemBaseList)->_count <= 0) {
-                arg0->_st1 = 0xA;
-                arg0->_st3 = 0;
-                arg0->_st2 = 0;
-                arg0->_st3 = 0x491;
+void beNDMWShopCtrlDiskSell_Update(beNDMWShopCtrlDiskSell *self) {
+    float leftCursorPos[3];
+    float rightCursorPos[3];
+    void *allocator;
+    igObjectList *disks;
+    igObjectList *offered;
+    beNDMWItemDisk *disk;
+    int i;
+    int j;
+    int player;
+    igObjectList *stock;
+    int sale;
+    int bits;
+
+    switch (self->_st0) {
+    default:
+        return;
+    case SHOP_STATE_OPEN:
+        beNDMWWindow_PresentModelAtOrigin(self, j_shwin, 0, SQ_WAIT_5, SQ_CLOSE_10);
+        leftCursorPos[0] = -146.0f;
+        leftCursorPos[1] = 25.0f;
+        leftCursorPos[2] = 0.0f;
+        beNDMWWindow_PresentModel(self, i_stcursorleft_2, 0, SQ_HIDE_2, SQ_CLOSE_10, leftCursorPos);
+        rightCursorPos[0] = 236.0f;
+        rightCursorPos[1] = 25.0f;
+        rightCursorPos[2] = 0.0f;
+        beNDMWWindow_PresentModel(self, i_stcursorright_2, 0, SQ_HIDE_2, SQ_CLOSE_10, rightCursorPos);
+        StringList_AppendRetained(self->_textCloseTypeList, StringRef(InternString(STWINFONT29)));
+        StringList_AppendRetained(self->_textCloseNameList, StringRef(InternString((const char *)font100_3)));
+        StringList_AppendRetained(self->_textCloseTypeList, StringRef(InternString((const char *)STWINFONT13_2)));
+        StringList_AppendRetained(self->_textCloseNameList, StringRef(InternString(g_fontNames[0])));
+        beNDMWWindow_RunMessageScript(self, txt_shop_lua_2, 1001);
+        disks = PlayerFolder(GetPlayer(self), DISKFOLDER_5);
+        for (i = 0; i < disks->_count; i++) {
+            beNDMWWindow_QueueText(self, STWINFONT14, g_fontNames[i], space_2, LEFT_4);
+            beNDMWWindow_QueueText(self, STWINFONT15_2, g_fontNames[i], space_2, CENTER_4);
+            beNDMWWindow_QueueText(self, STWINFONT17, g_fontNames[i], space_2, RIGHT_3);
+        }
+        self->_cursor = 0;
+        NEXT_STATE(self)
+        ENTER_STEP(self, DISKSELL_PICK_DISK)
+    case SHOP_STATE_RUN:
+        switch (self->_st1) {
+        case DISKSELL_PICK_DISK:
+            switch (self->_st2) {
+            case 0:
+                beMessenger_SendNamed(self->_messenger, MODELCTRL_16, j_shwin, 0, SQ_EWINOPEN);
+                beNDMWShopCtrlSell_MoveRowCursor((int *)self->_mother, -1);
+                PICK_ALLOCATOR(allocator, self)
+                {
+                igSmartPointer<beNDMWStatusSelectE1> selector((beNDMWStatusSelectE1 *)beNDMWStatusSelectE1_Create(allocator));
+                self->_retCode = self->_cursor;
+                beNDMWWindow_BindContext(selector.p, self, self->_insight, self->_playerNo, 0);
+                ObjectList_AppendRetained(self->_subWindow, selector.p);
+                {
+                    beNDMWStatusSelectE1 *window = selector.p;
+                    window->_offsetPos[0] = -121.0f;
+                    window->_offsetPos[1] = 128.0f;
+                    window->_offsetPos[2] = 0.0f;
+                }
+                selector.p->_startPoint = self->_cursor;
+                beNDMWWindow_QueueText(selector.p, STWINFONT29, g_fontNames[0], space_2, LEFT_4);
+                offered = PlayerFolder(GetPlayer(self), DISKFOLDER_5);
+                selector.p->_selectMax = offered->_count;
+                PICK_ALLOCATOR(allocator, self)
+                igSmartPointer<igBoolList> sellable((igBoolList *)igBoolList_Create(allocator));
+                for (j = 0; j < offered->_count; j++) {
+                    if (((beNDMWItemDisk **)offered->_data)[j]->_kazu > 0) {
+                        BOOL_LIST_PUSH(sellable.p, GPR_00554a60)
+                    } else {
+                        BOOL_LIST_PUSH(sellable.p, GPR_00554a64)
+                    }
+                }
+                {
+                    igBoolList *decide = (igBoolList *)sellable.p;
+                    beNDMWStatusSelectE1 *window = selector.p;
+                    if (decide != 0) {
+                        decide->_refCount = decide->_refCount + 1;
+                    }
+                    ReleaseObject((igObject *)window->_decideList);
+                    window->_decideList = (int)decide;
+                }
+                beNDMWWindow_RunMessageScript(self, txt_shop_lua_2, 1654);
+                }
+                self->_nowProcKazu = CHILD_COUNT(self);
+                NEXT_PHASE(self)
+            case 1:
+                beNDMWShopCtrlDiskSell_RefreshText(self, 1, 1);
+                NEXT_PHASE(self)
                 return;
+            case 2:
+                if (CHILD_COUNT(self) == self->_nowProcKazu) {
+                    if (self->_retCode != -1) {
+                        if (self->_st3 != self->_retCode) {
+                            beNDMWShopCtrlDiskSell_RefreshText(self, 0, 1);
+                            self->_st3 = self->_retCode;
+                            return;
+                        }
+                    }
+                } else {
+                    if (self->_retCode != -1) {
+                        ENTER_STEP(self, DISKSELL_PICK_QUANTITY)
+                        self->_cursor = self->_retCode;
+                        beNDMWShopCtrlSell_MoveRowCursor((int *)self->_mother, self->_cursor);
+                        self->_maxSell = ((beNDMWItemDisk **)PlayerFolder(GetPlayer(self), DISKFOLDER_5)->_data)[self->_cursor]->_kazu;
+                        if (self->_maxSell == 0) {
+                            ENTER_STEP(self, DISKSELL_PICK_DISK)
+                            return;
+                        }
+                        break;
+                    }
+                    ((beNDMWWindow *)self->_mother)->_retCode = -1;
+                    NEXT_STATE(self)
+                    return;
+                }
+                break;
             }
-            pages = beNDMWShopCtrlXdataChip_UpdatePageCount(arg0);
-            if (arg0->_st2 == 0) {
-                beNDMWWindow_PresentModelAtOrigin(arg0, &DAT_0051b610[0], 0, &DAT_0051be20[0], &DAT_0051b620[0]);
-                beNDMWWindow_RunMessageScript(arg0, &DAT_0051b3b0[0], 0x456);
-                vecA[0] = 0x436C0000;
-                vecA[2] = 0;
-                vecA[1] = 0x41C80000;
-                vecB[0] = 0xC3120000;
-                vecB[1] = 0x41C80000;
-                vecB[2] = 0;
-                ((ChipVT *)arg0)->v22(vecB, vecA);
-            }
-            ALLOC_43aae0(al)
-            {
-            igSmartPointer<beNDMWStatusSelectE1> pageWin((beNDMWStatusSelectE1 *)beNDMWStatusSelectE1_Create(al));
-            beNDMWWindow_BindContext(pageWin.p, arg0, arg0->_insight, arg0->_playerNo, 0);
-            ObjectList_AppendRetained((unsigned)arg0->_subWindow, pageWin.p);
-            {
-                beNDMWStatusSelectE1 *t = pageWin.p;
-                t->_offsetPos[0] = -121.0f;
-                t->_offsetPos[1] = 128.0f;
-                t->_offsetPos[2] = 0.0f;
-            }
-            pageWin.p->_selectMax = pages;
-            pageWin.p->_startPoint = arg0->_cursor;
-            }
-            arg0->_nowProcKazu = ((beNDMWWindowList *)(arg0->_subWindow))->_count;
-            arg0->_st1 = arg0->_st1 + 1;
-            arg0->_st3 = 0;
-            arg0->_st2 = 0;
-            return;
-        case 1:
-            if (arg0->_retCode != -1) {
-                beNDMWShopCtrlXdataChip_RefreshText(arg0, 1, 1);
-            }
-            arg0->_st1 = arg0->_st1 + 1;
-            arg0->_st3 = 0;
-            arg0->_st2 = 0;
-        case 2:
-            sub = (int *)arg0->_subWindow;
-            if (sub[2] == arg0->_nowProcKazu) {
-                cur = arg0->_retCode;
-                if (cur != -1) {
-                    if (arg0->_st3 != cur) {
-                        beNDMWShopCtrlXdataChip_RefreshText(arg0, 0, 1);
-                        arg0->_st3 = arg0->_retCode;
+            break;
+        case DISKSELL_PICK_QUANTITY:
+            switch (self->_st2) {
+            case 0:
+                beMessenger_SendNamed(self->_messenger, MODELCTRL_16, j_shwin, 0, SQ_BWINOPEN);
+                PICK_ALLOCATOR(allocator, self)
+                {
+                igSmartPointer<beNDMWShopSelect52> quantity((beNDMWShopSelect52 *)beNDMWShopSelect52_Create(allocator));
+                beNDMWWindow_BindContext(quantity.p, self, self->_insight, self->_playerNo, self->_maxSell);
+                ObjectList_AppendRetained(self->_subWindow, quantity.p);
+                {
+                    beNDMWShopSelect52 *window = quantity.p;
+                    window->_offsetPos[0] = 52.0f;
+                    window->_offsetPos[1] = -104.0f;
+                    window->_offsetPos[2] = 0.0f;
+                }
+                StringList_AppendRetained(quantity.p->_textCloseTypeList, StringRef(InternString(STWINFONT29)));
+                StringList_AppendRetained(quantity.p->_textCloseNameList, StringRef(InternString((const char *)font100_3)));
+                beNDMWWindow_RunMessageScript(self, txt_shop_lua_2, 1572);
+                beNDMWWindow_RunMessageScript(self, txt_shop_lua_2, 1505);
+                self->_retCode = self->_maxSell - 1;
+                beNDMWShopCtrlDiskSell_ShowQuantity(self);
+                }
+                self->_nowProcKazu = CHILD_COUNT(self);
+                NEXT_PHASE(self)
+            case 1:
+                if (CHILD_COUNT(self) == self->_nowProcKazu) {
+                    if (self->_retCode != -1) {
+                        if (self->_st3 != self->_retCode) {
+                            beNDMWShopCtrlDiskSell_ShowQuantity(self);
+                        }
+                        self->_st3 = self->_retCode;
                         return;
                     }
-                    first = ChipUtil::CastSel((int *)*(int *)sub[4]);
-                    if (first != 0 && beNDMWWindowSelect_CanRequestFO2TOP(first) != 0) {
-                        s1 = false;
-                        if (((ChipVT *)arg0)->v23() != 0) {
-                            s1 = true;
-                        } else if (((ChipVT *)arg0)->v24() != 0) {
-                            s1 = true;
+                } else {
+                    if (self->_retCode != -1) {
+                        ENTER_STEP(self, DISKSELL_CONFIRM)
+                        self->_kazu = self->_maxSell - self->_retCode;
+                        return;
+                    }
+                    beNDMWShopCtrlDiskSell_HideQuantity(self);
+                    ENTER_STEP(self, DISKSELL_PICK_DISK)
+                    return;
+                }
+                break;
+            }
+            break;
+        case DISKSELL_CONFIRM:
+            switch (self->_st2) {
+            case 0:
+                PICK_ALLOCATOR(allocator, self)
+                {
+                igSmartPointer<beNDMWShopSelect00> question((beNDMWShopSelect00 *)beNDMWShopSelect00_Create(allocator));
+                beNDMWWindow_BindContext(question.p, self, self->_insight, self->_playerNo, 1561);
+                ObjectList_AppendRetained(self->_subWindow, question.p);
+                }
+                self->_nowProcKazu = CHILD_COUNT(self);
+                NEXT_PHASE(self)
+            case 1:
+                if (CHILD_COUNT(self) != self->_nowProcKazu) {
+                    PICK_ALLOCATOR(allocator, self)
+                    {
+                    igSmartPointer<beNDMWShopSelect01> answer((beNDMWShopSelect01 *)beNDMWShopSelect01_Create(allocator));
+                    beNDMWWindow_BindContext(answer.p, self, self->_insight, self->_playerNo, 1562);
+                    ObjectList_AppendRetained(self->_subWindow, answer.p);
+                    }
+                    self->_nowProcKazu = CHILD_COUNT(self);
+                    NEXT_PHASE(self)
+                    return;
+                }
+                break;
+            case 2:
+                if (CHILD_COUNT(self) != self->_nowProcKazu) {
+                    beNDMWShopCtrlDiskSell_HideQuantity(self);
+                    switch (self->_retCode) {
+                    case ANSWER_YES:
+                        player = GetPlayer(self);
+                        stock = PlayerFolder(player, DISKFOLDER_5);
+                        sale = self->_tanka * self->_kazu;
+                        bits = PlayerInt(player, BIT_7)->_data;
+                        bits += sale;
+                        if (bits > MAX_BITS) {
+                            bits = MAX_BITS;
                         }
-                        if (s1) {
-                            ((beNDMWWindowSelect *)first)->_st0 = 4;
-                            ((beNDMWWindowSelect *)first)->_st3 = 0;
-                            ((beNDMWWindowSelect *)first)->_st2 = 0;
-                            ((beNDMWWindowSelect *)first)->_st1 = 0;
-                            arg0->_st1 = 1;
-                            arg0->_st3 = 0;
-                            arg0->_st2 = 0;
-                            first[21] = beNDMWShopCtrlXdataChip_UpdatePageCount(arg0);
+                        PlayerInt(player, BIT_7)->_data = bits;
+                        beMessenger_SelectGroup(self->_messenger, SUBWND_8);
+                        beMessenger_AppendInt(self->_messenger, self->_playerNo);
+                        beMessenger_DispatchSelected(self->_messenger, UPDATE_3);
+                        disk = ((beNDMWItemDisk **)stock->_data)[self->_cursor];
+                        {
+                            unsigned int owned = disk->_kazu;
+                            disk->_kazu = owned - self->_kazu;
+                        }
+                        break;
+                    case ANSWER_NO:
+                        break;
+                    }
+                    ENTER_STEP(self, DISKSELL_PICK_DISK)
+                    return;
+                }
+                break;
+            }
+            break;
+        }
+        break;
+    case SHOP_STATE_CLOSE:
+        beNDMWWindow_PlayQueuedModelClose();
+        beNDMWWindow_ClearQueuedText(self);
+        beNDMWWindow_RequestChildrenClose(self);
+        NEXT_STATE(self)
+        beNDMWShopCtrlSell_MoveRowCursor((int *)self->_mother, -1);
+        return;
+    case SHOP_STATE_WAIT_CLOSED:
+        if (beNDMWWindow_PollCloseComplete() != 0) {
+            self->_isRun = 0;
+        }
+        break;
+    }
+}
+
+/* Writes the disk rows (name, count, buy-back price) and/or the selected disk's description. */
+void beNDMWShopCtrlDiskSell_RefreshText(beNDMWShopCtrlDiskSell *self, int refreshRows, int refreshSelection) {
+    char price[28];
+    char count[2];
+    igObjectList *disks;
+    int status;
+    int i;
+    beNDMWItemDisk *disk;
+    char *text;
+
+    disks = PlayerFolder(GetPlayer(self), DISKFOLDER_5);
+    status = (int)igInsightCore_FindManager(self->_insight, g_beNDMWStatus_metaObject[0]);
+    if (refreshRows != 0) {
+        for (i = 0; i < disks->_count; i++) {
+            disk = ((beNDMWItemDisk **)disks->_data)[i];
+            text = beNDMWItemBase_GetRecordString(disk, status, NAME_2);
+            SET_TEXT(self, STWINFONT14, g_fontNames[i], text)
+            count[0] = '0' + disk->_kazu;
+            count[1] = 0;
+            SET_TEXT(self, STWINFONT15_2, g_fontNames[i], count)
+            sprintf(price, percent_d, beNDMWItemRevisionPocketBase_GetPrice(disk, status, KAITORI_2));
+            SET_TEXT(self, STWINFONT17, g_fontNames[i], price)
+            SWITCH_TEXT(self, STWINFONT14, g_fontNames[i], DISPON)
+            SWITCH_TEXT(self, STWINFONT15_2, g_fontNames[i], DISPON)
+            SWITCH_TEXT(self, STWINFONT17, g_fontNames[i], DISPON)
+        }
+    }
+    if (refreshSelection != 0) {
+        int row = self->_retCode;
+        disk = 0;
+        if (row != -1) {
+            disk = ((beNDMWItemDisk **)disks->_data)[row];
+        }
+        if (disk != 0) {
+            text = beNDMWItemBase_GetRecordString(disk, status, TXT);
+            SET_TEXT(self, STWINFONT29, g_fontNames[0], text)
+            SWITCH_TEXT(self, STWINFONT29, g_fontNames[0], DISPON)
+            self->_tanka = beNDMWItemRevisionPocketBase_GetPrice(disk, status, KAITORI_2);
+            return;
+        }
+        SWITCH_TEXT(self, STWINFONT29, g_fontNames[0], DISPOFF)
+    }
+}
+
+/* Shows how many disks the quantity window sells and what they fetch. */
+void beNDMWShopCtrlDiskSell_ShowQuantity(beNDMWShopCtrlDiskSell *self) {
+    char text[16];
+    int quantity;
+
+    quantity = self->_maxSell - self->_retCode;
+    sprintf(text, percent_d, quantity);
+    SET_TEXT(self, STWINFONT30, font010_3, text)
+    sprintf(text, percent_d, quantity * self->_tanka);
+    SET_TEXT(self, STWINFONT30, font021, text)
+}
+
+void beNDMWShopCtrlDiskSell_HideQuantity(beNDMWShopCtrlDiskSell *self) {
+    SWITCH_TEXT(self, STWINFONT30, font020, DISPOFF)
+    SWITCH_TEXT(self, STWINFONT30, font010_3, DISPOFF)
+    SWITCH_TEXT(self, STWINFONT30, font021, DISPOFF)
+}
+
+enum { SALES_PAGE_ROWS = 12 };
+enum ItemKind { ITEM_WEAPON, ITEM_BLUE_ARMOR, ITEM_YELLOW_ARMOR, ITEM_ABILITY_CHIP };
+/* This ability chip is listed without a price and cannot be chosen. */
+enum { UNPRICED_CHIP_RECORD = 185 };
+/* Puts `item` (retained) into slot 0, releasing what was there. */
+#define EQUIP_FIRST_SLOT(slots, item) { \
+    beNDMWItemBase *replaced; \
+    if ((item) != 0) (item)->_refCount++; \
+    replaced = ((beNDMWItemBase **)(slots)->_data)[0]; \
+    ReleaseObject(replaced); \
+    if ((slots)->_count != 0 && 0 < (slots)->_count) ((beNDMWItemBase **)(slots)->_data)[0] = (item); }
+#define SALES_ITEMS(self) ((igObjectList *)(self)->_salesItemList)
+/* The window arrives as a word array; word 3 is its _messenger. */
+#define MESSENGER_OF(window) ((window)[3])
+
+/* Writes the page's rows (name in its revision colour, price) and page numbers, and/or the
+ * selected item's description. */
+void beNDMWShopCtrlSales_RefreshText(beNDMWShopCtrlSales *self, int refreshRows, unsigned char refreshSelection) {
+    int status;
+    int row;
+    beNDMWItemRevisionPocketBase *item;
+    char *text;
+    status = (int)igInsightCore_FindManager(self->_insight, g_beNDMWStatus_metaObject[0]);
+    if (refreshRows != 0) {
+        row = 0;
+        do {
+            StringRef display;
+            item = 0;
+            int index = row + self->_nowPage * SALES_PAGE_ROWS;
+            if (index < SALES_ITEMS(self)->_count) item = ((beNDMWItemRevisionPocketBase **)SALES_ITEMS(self)->_data)[index];
+            if (item != 0) {
+                Vec3 color;
+                Vec3 colorArgument;
+                ChipPriceText price;
+                text = beNDMWItemBase_GetRecordString(item, status, NAME_2);
+                SET_TEXT(self, STWINFONT14, g_fontNames[row], text)
+                beNDMWItemBase_GetRevisionColor(&color, item);
+                beMessenger_SelectGroup(self->_messenger, TEXTCTL_3);
+                beMessenger_AppendString(self->_messenger, STWINFONT14);
+                beMessenger_AppendString(self->_messenger, g_fontNames[row]);
+                colorArgument.x = color.x;
+                colorArgument.y = color.y;
+                colorArgument.z = color.z;
+                beMessenger_AppendVec3(self->_messenger, (float *)&colorArgument);
+                beMessenger_DispatchSelected(self->_messenger, COLOR_4);
+                if (item->_kindNo == ITEM_ABILITY_CHIP && item->_recNo == UNPRICED_CHIP_RECORD) {
+                    price = dashdashdashdash_2;
+                } else {
+                    sprintf(&price, percent_d, beNDMWItemRevisionPocketBase_GetPrice(item, status, HANBAI_2));
+                }
+                SET_TEXT(self, STWINFONT17, g_fontNames[row], (char *)&price)
+                display.Set(InternLiteral(DISPON));
+            } else {
+                display.Set(InternLiteral(DISPOFF));
+            }
+            SWITCH_TEXT(self, STWINFONT14, g_fontNames[row], display.p)
+            SWITCH_TEXT(self, STWINFONT17, g_fontNames[row], display.p)
+        } while (++row < SALES_PAGE_ROWS);
+        char digit[2];
+        digit[1] = 0;
+        digit[0] = '1' + self->_nowPage;
+        SET_TEXT(self, STWINFONT30, g_fontNames[0], digit)
+        digit[0] = '0' + self->_maxPage;
+        SET_TEXT(self, STWINFONT30, g_fontNames[1], digit)
+    }
+    if (refreshSelection) {
+        int base = self->_nowPage * SALES_PAGE_ROWS;
+        item = ((beNDMWItemRevisionPocketBase **)SALES_ITEMS(self)->_data)[base + self->_retCode];
+        char *shown;
+        if (item != 0) {
+            text = beNDMWItemBase_GetRecordString(item, status, TXT);
+            if (item->_kindNo == ITEM_WEAPON || item->_kindNo == ITEM_BLUE_ARMOR) {
+                char pocket[2];
+                pocket[1] = 0;
+                pocket[0] = '0' + item->_pocket;
+                igSmartPointer<igStringObj> label((igStringObj *)((beSystem *)igInsightCore_FindManager(self->_insight, g_beSystem_metaObject[0]))->_globalStrObj, kRetainReference);
+                FUN_0030b3c0(label.p, text);
+                igStringObj *labelText = label.p;
+                row = labelText->_length;
+                FUN_0030b460(labelText, pocket, row, strlen(pocket));
+                text = (label.p->_buffer == 0) ? g_stringObjEmptyText[0] : (char *)label.p->_buffer;
+            }
+            SET_TEXT(self, STWINFONT29, g_fontNames[0], text)
+            shown = DISPON;
+            beNDMWShopCtrlSales_PreviewSelected(self, 1);
+        } else {
+            shown = DISPOFF;
+            beNDMWShopCtrlSales_PreviewSelected(self, 0);
+        }
+        SWITCH_TEXT(self, STWINFONT29, g_fontNames[0], shown)
+    }
+}
+
+/* Counts the pages, returns how many rows the current page shows and refills the decide list
+ * (an empty row or the unpriced chip cannot be chosen). */
+int beNDMWShopCtrlSales_UpdatePageCount(beNDMWShopCtrlSales *self) {
+    int listed;
+    int pages;
+    int row;
+    int i;
+    int offset;
+    int index;
+    int base;
+    int rows;
+    igObjectList *items;
+    int j;
+    beNDMWItemBase *item;
+    igObjectList *scan;
+    scan = SALES_ITEMS(self);
+    listed = scan->_count;
+    i = 0;
+    if (i < listed) {
+        offset = 0;
+        do {
+            if (*(int *)(scan->_data + offset) != 0) listed = i + 1;
+            i++;
+            offset += 4;
+            scan = SALES_ITEMS(self);
+        } while (i < scan->_count);
+    }
+    if (listed % SALES_PAGE_ROWS != 0) pages = listed / SALES_PAGE_ROWS + 1;
+    else pages = listed / SALES_PAGE_ROWS;
+    self->_maxPage = pages;
+    rows = SALES_PAGE_ROWS;
+    base = self->_nowPage * SALES_PAGE_ROWS;
+    items = SALES_ITEMS(self);
+    for (row = 0; row < SALES_PAGE_ROWS; row++) {
+        index = base + row;
+        if (index > items->_count - 1 || ((int *)items->_data)[index] == 0) { rows = row; break; }
+        items = SALES_ITEMS(self);
+    }
+    if (rows <= 0) rows = 1;
+    else if (rows > SALES_PAGE_ROWS) rows = SALES_PAGE_ROWS;
+    ((igBoolList *)self->_decideList)->_count = 0;
+    for (j = 0; j < rows; j++) {
+        item = ((beNDMWItemBase **)SALES_ITEMS(self)->_data)[base + j];
+        if (item == 0) {
+            BOOL_LIST_PUSH(self->_decideList, GPR_00554a68)
+        } else if (item->_kindNo == ITEM_ABILITY_CHIP && item->_recNo == UNPRICED_CHIP_RECORD) {
+            BOOL_LIST_PUSH(self->_decideList, GPR_00554a6c)
+        } else {
+            BOOL_LIST_PUSH(self->_decideList, GPR_00554a70)
+        }
+    }
+    return rows;
+}
+
+bool beNDMWShopCtrlSales_CanPlayerUse(beNDMWShopCtrlSales *self, beNDMWItemBase *item) {
+    return SalesChk::Chk(self, item, GetPlayer(self));
+}
+
+/* Previews the selected item: equips it with the slot's current equipment stashed, has GAMERAM
+ * recalculate the player for SUBWND's preview, then puts the equipment back. */
+void beNDMWShopCtrlSales_PreviewSelected(beNDMWShopCtrlSales *self, int preview) {
+    int player;
+    beNDMWItemBase *item;
+    igObjectList *weaponSockets, *mainSlots, *subSlots;
+    igObjectList *weaponPockets, *mainPockets;
+    int kind;
+    int base;
+    int show;
+    player = GetPlayer(self);
+    show = (unsigned char)preview;
+    item = 0;
+    if (show == 1) {
+        base = self->_nowPage * SALES_PAGE_ROWS;
+        item = ((beNDMWItemBase **)SALES_ITEMS(self)->_data)[base + self->_retCode];
+    }
+    if (show == 1 && item != 0) {
+        weaponSockets = PlayerFolder(player, POWERSOCKET_4);
+        weaponPockets = PlayerFolder(player, POWERPOCKET_4);
+        mainSlots = PlayerFolder(player, MAINSLOT_4);
+        mainPockets = PlayerFolder(player, MAINPOCKET_4);
+        subSlots = PlayerFolder(player, SUBSLOT_4);
+        igSmartPointer<beNDMWItemBaseList> stashedSlots((beNDMWItemBaseList *)beNDMWItemBaseList_Create(ShopAlloc::Pool(self)));
+        igSmartPointer<beNDMWItemBaseList> stashedPockets((beNDMWItemBaseList *)beNDMWItemBaseList_Create(ShopAlloc::Pool(self)));
+        kind = item->_kindNo;
+        if (kind == ITEM_WEAPON) {
+            beNDMWShopCtrlSales_StashEquipment(self, weaponSockets, (igObjectList *)stashedSlots.p, weaponPockets, (igObjectList *)stashedPockets.p);
+            EQUIP_FIRST_SLOT(weaponSockets, item)
+        } else if (kind == ITEM_BLUE_ARMOR) {
+            beNDMWShopCtrlSales_StashEquipment(self, mainSlots, (igObjectList *)stashedSlots.p, mainPockets, (igObjectList *)stashedPockets.p);
+            EQUIP_FIRST_SLOT(mainSlots, item)
+        } else if (kind == ITEM_YELLOW_ARMOR) {
+            beNDMWShopCtrlSales_StashEquipment(self, subSlots, (igObjectList *)stashedSlots.p, 0, 0);
+            EQUIP_FIRST_SLOT(subSlots, item)
+        }
+        beMessenger_SelectReceivers(self->_messenger, GAMERAM_14, 0, 0);
+        beMessenger_AppendInt(self->_messenger, self->_playerNo);
+        beMessenger_DispatchSelected(self->_messenger, RECALCPLAYER_5);
+        beMessenger_SelectGroup(self->_messenger, SUBWND_8);
+        beMessenger_AppendInt(self->_messenger, self->_playerNo);
+        beMessenger_DispatchSelected(self->_messenger, ONPREVIEW_2);
+        kind = item->_kindNo;
+        if (kind == ITEM_WEAPON) beNDMWShopCtrlSales_RestoreEquipment(self, (igDataList *)weaponSockets, (igDataList *)stashedSlots.p, (igDataList *)weaponPockets, (igDataList *)stashedPockets.p);
+        else if (kind == ITEM_BLUE_ARMOR) beNDMWShopCtrlSales_RestoreEquipment(self, (igDataList *)mainSlots, (igDataList *)stashedSlots.p, (igDataList *)mainPockets, (igDataList *)stashedPockets.p);
+        else if (kind == ITEM_YELLOW_ARMOR) beNDMWShopCtrlSales_RestoreEquipment(self, (igDataList *)subSlots, (igDataList *)stashedSlots.p, 0, 0);
+        beMessenger_SelectReceivers(self->_messenger, GAMERAM_14, 0, 0);
+        beMessenger_AppendInt(self->_messenger, self->_playerNo);
+        beMessenger_DispatchSelected(self->_messenger, RECALCPLAYER_5);
+    } else {
+        beMessenger_SelectGroup(self->_messenger, SUBWND_8);
+        beMessenger_AppendInt(self->_messenger, self->_playerNo);
+        beMessenger_DispatchSelected(self->_messenger, OFPREVIEW_2);
+    }
+}
+
+/* Moves every item of the slot list (and of the pocket list, when given) into the stash lists,
+ * unequipped, and empties the slots. */
+void beNDMWShopCtrlSales_StashEquipment(void *owner, igObjectList *slots, igObjectList *stashedSlots, igObjectList *pockets, igObjectList *stashedPockets) {
+    int pocket;
+    igObject *held;
+    int slot;
+    beNDMWItemBase *item;
+    slot = 0;
+    goto enterSlots;
+nextSlot:
+    item = ((beNDMWItemBase **)slots->_data)[slot];
+    ObjectList_AppendRetained(stashedSlots, item);
+    if (item != 0) item->_isEquip = 0;
+    held = ((igObject **)slots->_data)[slot];
+    ReleaseObject(held);
+    if (slots->_count != 0 && slot >= 0 && slot < slots->_count) {
+        ((igObject **)slots->_data)[slot] = 0;
+    }
+    slot++;
+testSlot:
+    if (slot < slots->_count) goto nextSlot;
+slotsDone:
+    if (pockets != 0) {
+        if (stashedPockets != 0) {
+            pocket = 0;
+            goto enterPockets;
+nextPocket:
+            item = ((beNDMWItemBase **)pockets->_data)[pocket];
+            ObjectList_AppendRetained(stashedPockets, item);
+            if (item != 0) item->_isEquip = 0;
+            held = ((igObject **)pockets->_data)[pocket];
+            ReleaseObject(held);
+            if (pockets->_count != 0 && pocket >= 0 && pocket < pockets->_count) {
+                ((igObject **)pockets->_data)[pocket] = 0;
+            }
+            pocket++;
+testPocket:
+            if (pocket < pockets->_count) goto nextPocket;
+        }
+    }
+done:
+    return;
+enterPockets:
+    if (0 < pockets->_count) goto testPocket;
+    goto done;
+enterSlots:
+    if (0 < slots->_count) goto testSlot;
+    goto slotsDone;
+}
+
+/* Puts the stashed items back into their slots (and pockets), equipped, and empties the stash. */
+void beNDMWShopCtrlSales_RestoreEquipment(void *owner, igDataList *slots, igDataList *stashedSlots, igDataList *pockets, igDataList *stashedPockets) {
+    int pocket;
+    beNDMWItemBase *pocketItem;
+    int slot;
+    igObject *pocketHeld;
+    igObject *held;
+    beNDMWItemBase *item;
+    slot = 0;
+    goto enterSlots;
+nextSlot:
+    item = ((beNDMWItemBase **)stashedSlots->_data)[slot];
+    if (item != 0) item->_refCount++;
+    held = ((igObject **)slots->_data)[slot];
+    ReleaseObject(held);
+    if (slots->_count != 0 && slot >= 0 && slot < slots->_count) {
+        ((beNDMWItemBase **)slots->_data)[slot] = item;
+    }
+    if (item != 0) item->_isEquip = 1;
+    held = ((igObject **)stashedSlots->_data)[slot];
+    ReleaseObject(held);
+    if (stashedSlots->_count != 0 && slot >= 0 && slot < stashedSlots->_count) {
+        ((igObject **)stashedSlots->_data)[slot] = 0;
+    }
+    slot++;
+testSlot:
+    if (slot < stashedSlots->_count) goto nextSlot;
+slotsDone:
+    if (pockets != 0) {
+        if (stashedPockets != 0) {
+            pocket = 0;
+            goto enterPockets;
+nextPocket:
+            pocketItem = ((beNDMWItemBase **)stashedPockets->_data)[pocket];
+            if (pocketItem != 0) pocketItem->_refCount++;
+            pocketHeld = ((igObject **)pockets->_data)[pocket];
+            ReleaseObject(pocketHeld);
+            if (pockets->_count != 0 && pocket >= 0 && pocket < pockets->_count) {
+                ((beNDMWItemBase **)pockets->_data)[pocket] = pocketItem;
+            }
+            if (pocketItem != 0) pocketItem->_isEquip = 1;
+            pocketHeld = ((igObject **)stashedPockets->_data)[pocket];
+            ReleaseObject(pocketHeld);
+            if (stashedPockets->_count != 0 && pocket >= 0 && pocket < stashedPockets->_count) {
+                ((igObject **)stashedPockets->_data)[pocket] = 0;
+            }
+            pocket++;
+testPocket:
+            if (pocket < stashedPockets->_count) goto nextPocket;
+        }
+    }
+done:
+    return;
+enterPockets:
+    if (0 < stashedPockets->_count) goto testPocket;
+    goto done;
+enterSlots:
+    if (0 < stashedSlots->_count) goto testSlot;
+    goto slotsDone;
+}
+
+/* Moves the row cursor model to `row` (opening it at the list's origin first), or closes it for -1. */
+void beNDMWShopCtrlSales_MoveRowCursor(int *window, int row) {
+    Tbl rowSequences;
+    float origin[3];
+    if (row > -1) {
+        rowSequences = g_salesRowCursorSequences;
+        beMessenger_SendNamed(MESSENGER_OF(window), MODELCTRL_16, i_stcursor04_2, 0, ISRUN_10);
+        if (beMessenger_GetBool(MESSENGER_OF(window), 0) != 0) {
+            beMessenger_SendNamed(MESSENGER_OF(window), MODELCTRL_16, i_stcursor04_2, 0, rowSequences.s[row]);
+            return;
+        }
+        beMessenger_SelectReceivers(MESSENGER_OF(window), MODELCTRL_16, i_stcursor04_2, 0);
+        beMessenger_AppendString(MESSENGER_OF(window), rowSequences.s[row]);
+        origin[2] = 0.0f;
+        origin[0] = -121.0f;
+        origin[1] = 128.0f;
+        beMessenger_AppendVec3(MESSENGER_OF(window), origin);
+        beMessenger_DispatchSelected(MESSENGER_OF(window), GENERATE_13);
+        return;
+    }
+    beMessenger_SendNamed(MESSENGER_OF(window), MODELCTRL_16, i_stcursor04_2, 0, ISRUN_10);
+    if (beMessenger_GetBool(MESSENGER_OF(window), 0) != 0) {
+        beMessenger_SendNamed(MESSENGER_OF(window), MODELCTRL_16, i_stcursor04_2, 0, SQ_CLOSE_10);
+    }
+}
+
+#define RECALC_PLAYER_SELECTED(window) { \
+    beMessenger_SelectReceivers((window)->_messenger, GAMERAM_14, 0, 0); \
+    beMessenger_AppendInt((window)->_messenger, (window)->_playerNo); \
+    beMessenger_DispatchSelected((window)->_messenger, RECALCPLAYER_5); }
+
+/* _st1 of beNDMWShopCtrlXdataChip in SHOP_STATE_RUN. */
+enum XdataChipStep {
+    CHIP_STEP_LIST = 0,
+    CHIP_STEP_REFRESH_PAGE = 1,
+    CHIP_STEP_SELECT = 2,
+    CHIP_STEP_CHECK_COST = 3,
+    CHIP_STEP_UPGRADE = 4,
+    CHIP_STEP_NO_CHIPS = 10,
+    CHIP_STEP_REFUSED = 11
+};
+
+/* _st2 substeps: the list step opens the window only on LIST_OPEN; the dialogs open then wait. */
+enum XdataChipSubstep {
+    LIST_OPEN = 0,
+    LIST_REBUILD = 1,
+    UPGRADE_SHOW_INFO = 0,
+    UPGRADE_CONFIRM = 1,
+    UPGRADE_COMMIT = 2,
+    NOTICE_OPEN = 0,
+    NOTICE_WAIT = 1
+};
+
+/* Shop message codes shown by the chip upgrade dialogs. */
+enum XdataChipMessage {
+    CHIP_MSG_GUIDE_SCRIPT = 1110,
+    CHIP_MSG_SHORT_OF_XDATA = 1161,
+    CHIP_MSG_NO_CHIPS = 1169,
+    CHIP_MSG_MAX_LEVEL = 1170,
+    CHIP_MSG_CONFIRM = 1171
+};
+
+enum { CHIP_KIND = 3, CHIP_STAT_PROMPTS = 8 };
+
+#define CHIP_AT(window, index) (((beNDMWItemBase **)((igObjectList *)(window)->_itemBaseList)->_data)[index])
+
+/* Info-window message codes for the first stat a chip raises, in statKeys order (resistances last);
+ * the table is copied by quadwords. */
+union ChipStatPrompts { int code[CHIP_STAT_PROMPTS]; unsigned __int128 quad[2]; };
+
+/* XDATA chip upgrade shop: lists the player's ability chips twelve to a page with their next-level
+ * XDATA cost, previews the highlighted chip one level up and, on confirmation, spends the XDATA and
+ * raises the chip's level. */
+void beNDMWShopCtrlXdataChip_Update(beNDMWShopCtrlXdataChip *self) {
+    float leftArrowPos[3];
+    float rightArrowPos[3];
+    char numberText[16];
+    ChipStatPrompts statPrompts;
+    void *allocator;
+    int row;
+    int count;
+    const char **font;
+    igObjectList *deviceFolder;
+    igObjectList *chips;
+    beDataObjObjectList *folderRecord;
+    int rowsOnPage;
+    int nextCost;
+    int balance;
+    int remaining;
+    bool pageTurned;
+    void *statusManager;
+    int index;
+    int result;
+    beNDMWWindowList *subWindows;
+    beNDMWWindowSelect *selector;
+    int slot;
+    int statIndex;
+    int statValue;
+    int folderIndex;
+
+    switch (self->_st0) {
+    case SHOP_STATE_OPEN:
+        APPEND_INTERNED(self->_textCloseTypeList, STWINFONT13_2);
+        APPEND_INTERNED(self->_textCloseNameList, font000_5);
+        APPEND_INTERNED(self->_textCloseTypeList, STWINFONT35);
+        APPEND_INTERNED(self->_textCloseNameList, font000_5);
+        for (row = 0, font = g_fontNames; row < CHIPS_PER_PAGE; row++, font++) {
+            beNDMWWindow_QueueText(self, STWINFONT14, *font, space_2, LEFT_4);
+            beNDMWWindow_QueueText(self, STWINFONT17, *font, space_2, RIGHT_3);
+        }
+        beNDMWWindow_QueueText(self, STWINFONT29, g_fontNames[0], space_2, LEFT_4);
+        beNDMWWindow_QueueText(self, STWINFONT29, font100_3, space_2, LEFT_4);
+        beNDMWWindow_QueueText(self, STWINFONT30, g_fontNames[0], space_2, CENTER_4);
+        beNDMWWindow_QueueText(self, STWINFONT30, g_fontName1[0], space_2, CENTER_4);
+        NEXT_STATE(self)
+    case SHOP_STATE_RUN:
+        switch (self->_st1) {
+        case CHIP_STEP_LIST:
+            SEND_PLAYER_MESSAGE(self, GAMERAM_14, GETPLAYER_10)
+            folderRecord = (beDataObjObjectList *)igProperty_GetRecordFolder(beMessenger_GetObject(self->_messenger, 0), DEVICEFOLDER_4);
+            chips = (igObjectList *)self->_itemBaseList;
+            deviceFolder = (igObjectList *)folderRecord->_data;
+            count = chips->_count;
+            for (slot = 0; slot < count; slot++) {
+                igObject *held = ((igObject **)chips->_data)[slot];
+                RELEASE(held)
+            }
+            {
+                int clearCount = chips->_count;
+                int clearSlot;
+                for (clearSlot = 0; clearSlot < clearCount; clearSlot++) {
+                    ((igObject **)chips->_data)[clearSlot] = 0;
+                }
+            }
+            chips->_count = 0;
+            for (folderIndex = 0; folderIndex < deviceFolder->_count; folderIndex++) {
+                beNDMWItemBase *device = ((beNDMWItemBase **)deviceFolder->_data)[folderIndex];
+                if (device != 0) {
+                    int isChip = device->_kindNo == CHIP_KIND;
+                    if (isChip) ObjectList_AppendRetained(self->_itemBaseList, device);
+                }
+            }
+            if (((igObjectList *)self->_itemBaseList)->_count <= 0) {
+                ENTER_STEP(self, CHIP_STEP_NO_CHIPS)
+                self->_st3 = CHIP_MSG_NO_CHIPS;
+                return;
+            }
+            rowsOnPage = beNDMWShopCtrlXdataChip_UpdatePageCount(self);
+            if (self->_st2 == LIST_OPEN) {
+                beNDMWWindow_PresentModelAtOrigin(self, j_shwin, 0, SQ_XDATAITEMOPEN, SQ_CLOSE_10);
+                beNDMWWindow_RunMessageScript(self, txt_shop_lua_2, CHIP_MSG_GUIDE_SCRIPT);
+                rightArrowPos[0] = 236.0f;
+                rightArrowPos[2] = 0.0f;
+                rightArrowPos[1] = 25.0f;
+                leftArrowPos[0] = -146.0f;
+                leftArrowPos[1] = 25.0f;
+                leftArrowPos[2] = 0.0f;
+                ((PagedWindow *)self)->PresentPageArrows(leftArrowPos, rightArrowPos);
+            }
+            PICK_ALLOCATOR(allocator, self)
+            {
+                igSmartPointer<beNDMWStatusSelectE1> pageWin((beNDMWStatusSelectE1 *)beNDMWStatusSelectE1_Create(allocator));
+                beNDMWWindow_BindContext(pageWin.p, self, self->_insight, self->_playerNo, 0);
+                ObjectList_AppendRetained(self->_subWindow, pageWin.p);
+                {
+                    beNDMWStatusSelectE1 *window = pageWin.p;
+                    window->_offsetPos[0] = -121.0f;
+                    window->_offsetPos[1] = 128.0f;
+                    window->_offsetPos[2] = 0.0f;
+                }
+                pageWin.p->_selectMax = rowsOnPage;
+                pageWin.p->_startPoint = self->_cursor;
+            }
+            self->_nowProcKazu = CHILD_COUNT(self);
+            NEXT_STEP(self)
+            return;
+        case CHIP_STEP_REFRESH_PAGE:
+            if (self->_retCode != -1) {
+                beNDMWShopCtrlXdataChip_RefreshText(self, 1, 1);
+            }
+            NEXT_STEP(self)
+        case CHIP_STEP_SELECT:
+            subWindows = (beNDMWWindowList *)self->_subWindow;
+            if (subWindows->_count == self->_nowProcKazu) {
+                result = self->_retCode;
+                if (result != -1) {
+                    /* _st3 remembers the row whose description is shown. */
+                    if (self->_st3 != result) {
+                        beNDMWShopCtrlXdataChip_RefreshText(self, 0, 1);
+                        self->_st3 = self->_retCode;
+                        return;
+                    }
+                    selector = AsPageSelector(((igObject **)subWindows->_data)[0]);
+                    if (selector != 0 && beNDMWWindowSelect_CanRequestFO2TOP(selector) != 0) {
+                        pageTurned = false;
+                        if (((PagedWindow *)self)->TurnPagePrev() != 0) {
+                            pageTurned = true;
+                        } else if (((PagedWindow *)self)->TurnPageNext() != 0) {
+                            pageTurned = true;
+                        }
+                        if (pageTurned) {
+                            ENTER_STATE(selector, SELECT_STATE_RELOAD_TO_TOP)
+                            ENTER_STEP(self, CHIP_STEP_REFRESH_PAGE)
+                            selector->_selectMax = beNDMWShopCtrlXdataChip_UpdatePageCount(self);
                             return;
                         }
                     }
                 }
             } else {
-                cur = arg0->_retCode;
-                switch (cur) {
+                result = self->_retCode;
+                switch (result) {
                 case -1:
-                    arg0->_st0 = arg0->_st0 + 1;
-                    arg0->_st3 = 0;
-                    arg0->_st2 = 0;
-                    arg0->_st1 = 0;
+                    NEXT_STATE(self)
                     return;
                 default:
-                    arg0->_cursor = cur;
-                    arg0->_st1 = arg0->_st1 + 1;
-                    arg0->_st3 = 0;
-                    arg0->_st2 = 0;
+                    self->_cursor = result;
+                    NEXT_STEP(self)
                     return;
                 }
             }
             break;
-        case 3:
-            MSG3(&DAT_0051b398[0], &DAT_0051b3e8[0])
-            have = ((ChipRecord *)((int *)igProperty_GetRecord(beMessenger_GetObject(arg0->_messenger, 0), &DAT_0051b440[0])))->f12;
-            pages = arg0->_nowPage;
-            idx = arg0->_cursor + pages * 0xC;
-            ret = beNDMWItemBase_GetRecordInt(((int *)((igObjectList *)arg0->_itemBaseList)->_data)[idx], ((int)igInsightCore_FindManager(arg0->_insight, g_beNDMWStatus_metaObject[0], pages)), NEXTX);
-            if (ret == -1) {
-                arg0->_st1 = 0xB;
-                arg0->_st3 = 0;
-                arg0->_st2 = 0;
-                arg0->_st3 = 0x492;
+        case CHIP_STEP_CHECK_COST:
+            SEND_PLAYER_MESSAGE(self, GAMERAM_14, GETPLAYER_10)
+            balance = ((beDataObjInt *)igProperty_GetRecord(beMessenger_GetObject(self->_messenger, 0), XDATA_4))->_data;
+            index = self->_cursor + self->_nowPage * CHIPS_PER_PAGE;
+            nextCost = beNDMWItemBase_GetRecordInt(CHIP_AT(self, index), igInsightCore_FindManager(self->_insight, g_beNDMWStatus_metaObject[0]), NEXTX);
+            if (nextCost == -1) {
+                ENTER_STEP(self, CHIP_STEP_REFUSED)
+                self->_st3 = CHIP_MSG_MAX_LEVEL;
                 return;
             }
-            if (have < ret) {
-                arg0->_st1 = 0xB;
-                arg0->_st3 = 0;
-                arg0->_st2 = 0;
-                arg0->_st3 = 0x489;
+            if (balance < nextCost) {
+                ENTER_STEP(self, CHIP_STEP_REFUSED)
+                self->_st3 = CHIP_MSG_SHORT_OF_XDATA;
                 return;
             }
-            arg0->_st1 = arg0->_st1 + 1;
-            arg0->_st3 = 0;
-            arg0->_st2 = 0;
+            NEXT_STEP(self)
             return;
-        case 4:
-            switch (arg0->_st2) {
-            case 0: {
+        case CHIP_STEP_UPGRADE:
+            switch (self->_st2) {
+            case UPGRADE_SHOW_INFO: {
                 beNDMWItemBase *chip;
-                int status;
-                int recNo;
+                void *chipStatusManager;
+                int level;
                 {
-                ALLOC_43aae0(al)
-                igSmartPointer<beNDMWShopSelect00> infoWin((beNDMWShopSelect00 *)beNDMWShopSelect00_Create(al));
-                beNDMWWindow_BindContext(infoWin.p, arg0, arg0->_insight, arg0->_playerNo, 0);
-                ObjectList_AppendRetained((unsigned)arg0->_subWindow, infoWin.p);
-                int pages0 = arg0->_nowPage;
-                int idx0 = arg0->_cursor + pages0 * 0xC;
-                status = ((int)igInsightCore_FindManager(arg0->_insight, g_beNDMWStatus_metaObject[0], pages0));
-                chip = (beNDMWItemBase *)((int *)((igObjectList *)arg0->_itemBaseList)->_data)[idx0];
-                recNo = chip->_recNo;
-                if (chip->_isEquip != 0) {
-                    chip->_recNo = recNo + 1;
-                    beMessenger_SelectReceivers(arg0->_messenger, &DAT_0051b398[0], 0, 0);
-                    beMessenger_AppendInt(arg0->_messenger, arg0->_playerNo);
-                    beMessenger_DispatchSelected(arg0->_messenger, &DAT_0051b3a0[0]);
-                    MSG3(&DAT_0051b498[0], &DAT_0051bdf0[0])
-                    chip->_recNo = recNo;
-                    beMessenger_SelectReceivers(arg0->_messenger, &DAT_0051b398[0], 0, 0);
-                    beMessenger_AppendInt(arg0->_messenger, arg0->_playerNo);
-                    beMessenger_DispatchSelected(arg0->_messenger, &DAT_0051b3a0[0]);
-                }
-                ALLOC_43aae0(al)
-                igSmartPointer<beNDMWItemAbilityChip> abilityChip((beNDMWItemAbilityChip *)beNDMWItemAbilityChip_Create(al));
-                beNDMWItemAbilityChip_Set(abilityChip.p, recNo + 1);
-                beNDMWWindow_QueueText(infoWin.p, STWINFONT29, ((int * *)g_fontNames)[0], ((int *)beNDMWItemBase_GetRecordString(abilityChip.p, status, NAME_2)), &DAT_0051b598[0]);
-                beNDMWWindow_QueueText(infoWin.p, &DAT_0051b448[0], ((int * *)g_fontName1)[0], &DAT_0051b590[0], &DAT_0051b598[0]);
-                beNDMWWindow_QueueText(infoWin.p, &DAT_0051b448[0], ((int * *)DAT_004cf8a8)[0], &DAT_0051b590[0], &DAT_0051b598[0]);
-                beNDMWWindow_QueueText(infoWin.p, &DAT_0051b448[0], DAT_004cf8ac[0], &DAT_0051b590[0], &DAT_0051b598[0]);
-                beNDMWWindow_QueueText(infoWin.p, STWINFONT29, ((int * *)DAT_004cf8a8)[0], &DAT_0051b590[0], &DAT_0051b598[0]);
-                {
-                ALLOC_43aae0(al)
-                igSmartPointer<igStringRefList> statNames((igStringRefList *)FUN_002b90e0(al));
-                INTERN_APPEND_43aae0((int)statNames.p, &DAT_0051b3f8[0])
-                INTERN_APPEND_43aae0((int)statNames.p, &DAT_0051b408[0])
-                INTERN_APPEND_43aae0((int)statNames.p, &DAT_0051b418[0])
-                INTERN_APPEND_43aae0((int)statNames.p, &DAT_0051b420[0])
-                INTERN_APPEND_43aae0((int)statNames.p, &DAT_0051be40[0])
-                INTERN_APPEND_43aae0((int)statNames.p, &DAT_0051be50[0])
-                INTERN_APPEND_43aae0((int)statNames.p, &DAT_0051be58[0])
-                INTERN_APPEND_43aae0((int)statNames.p, &DAT_0051be68[0])
-                INTERN_APPEND_43aae0((int)statNames.p, &DAT_0051be78[0])
-                INTERN_APPEND_43aae0((int)statNames.p, &DAT_0051be88[0])
-                INTERN_APPEND_43aae0((int)statNames.p, &DAT_0051be90[0])
-                INTERN_APPEND_43aae0((int)statNames.p, &DAT_0051be98[0])
-                s1i = ((int)igInsightCore_FindManager(arg0->_insight, g_beNDMWStatus_metaObject[0]));
-                ALLOC_43aae0(al)
-                igSmartPointer<igIntList> costs = igSmartPointer<igIntList>((igIntList *)igIntList_Create(al));
-                slist = statNames.p;
-                li = 0;
-                if (0 < slist->_count) {
-                    do {
-                        cst = beNDMWItemBase_GetRecordInt(abilityChip.p, s1i, (StringList_CopyRetained(slist, li)).p);
-                        if (cst > 0) {
-                            sprintf(sp90, percent_d, cst);
-                            beNDMWWindow_QueueText(infoWin.p, &DAT_0051b448[0], &DAT_0051b220[0], sp90, &DAT_0051b460[0]);
-                            if (li >= 8) li = 7;
-                            {
-                                struct Q2 { unsigned __int128 a[2]; }; *(Q2 *)sp70 = *(Q2 *)&DAT_004cfaa0[0];
-                            }
-                            infoWin.p->_entCode = sp70[li];
-                            break;
-                        }
-                        slist = statNames.p;
-                        li += 1;
-                    } while (li < slist->_count);
-                }
-                }
-                MSG3(&DAT_0051b398[0], &DAT_0051b3e8[0])
-                s0 = ((ChipRecord *)((int *)igProperty_GetRecord(beMessenger_GetObject(arg0->_messenger, 0), &DAT_0051b440[0])))->f12;
-                sprintf(sp90, percent_d, s0 - beNDMWItemBase_GetRecordInt(chip, status, NEXTX));
-                beNDMWWindow_QueueText(infoWin.p, &DAT_0051b448[0], &DAT_0051b248[0], sp90, &DAT_0051b460[0]);
-                }
-                arg0->_nowProcKazu = ((beNDMWWindowList *)(arg0->_subWindow))->_count;
-                arg0->_st2 = arg0->_st2 + 1;
-                arg0->_st3 = 0;
-            }
-            case 1:
-                if (((beNDMWWindowList *)(arg0->_subWindow))->_count != arg0->_nowProcKazu) {
-                    ALLOC_43aae0(al)
+                    PICK_ALLOCATOR(allocator, self)
+                    igSmartPointer<beNDMWShopSelect00> infoWin((beNDMWShopSelect00 *)beNDMWShopSelect00_Create(allocator));
+                    beNDMWWindow_BindContext(infoWin.p, self, self->_insight, self->_playerNo, 0);
+                    ObjectList_AppendRetained(self->_subWindow, infoWin.p);
+                    int chipIndex = self->_cursor + self->_nowPage * CHIPS_PER_PAGE;
+                    chipStatusManager = igInsightCore_FindManager(self->_insight, g_beNDMWStatus_metaObject[0]);
+                    chip = CHIP_AT(self, chipIndex);
+                    level = chip->_recNo;
+                    if (chip->_isEquip != 0) {
+                        /* Preview the equipped chip one level up, then restore it. */
+                        chip->_recNo = level + 1;
+                        RECALC_PLAYER_SELECTED(self)
+                        SEND_PLAYER_MESSAGE(self, SUBWND_8, ONPREVIEW_2)
+                        chip->_recNo = level;
+                        RECALC_PLAYER_SELECTED(self)
+                    }
+                    PICK_ALLOCATOR(allocator, self)
+                    igSmartPointer<beNDMWItemAbilityChip> nextLevel((beNDMWItemAbilityChip *)beNDMWItemAbilityChip_Create(allocator));
+                    beNDMWItemAbilityChip_Set(nextLevel.p, level + 1);
+                    beNDMWWindow_QueueText(infoWin.p, STWINFONT29, g_fontNames[0], beNDMWItemBase_GetRecordString(nextLevel.p, chipStatusManager, NAME_2), LEFT_4);
+                    beNDMWWindow_QueueText(infoWin.p, STWINFONT41, g_fontName1[0], space_2, LEFT_4);
+                    beNDMWWindow_QueueText(infoWin.p, STWINFONT41, g_fontNames[2], space_2, LEFT_4);
+                    beNDMWWindow_QueueText(infoWin.p, STWINFONT41, g_fontNames[3], space_2, LEFT_4);
+                    beNDMWWindow_QueueText(infoWin.p, STWINFONT29, g_fontNames[2], space_2, LEFT_4);
                     {
-                    igSmartPointer<beNDMWShopSelect01> buyWin((beNDMWShopSelect01 *)FUN_003b4d90(al));
-                    beNDMWWindow_BindContext(buyWin.p, arg0, arg0->_insight, arg0->_playerNo, 0x493);
-                    ObjectList_AppendRetained((unsigned)arg0->_subWindow, buyWin.p);
-                    }
-                    arg0->_nowProcKazu = ((beNDMWWindowList *)(arg0->_subWindow))->_count;
-                    arg0->_st2 = arg0->_st2 + 1;
-                    arg0->_st3 = 0;
-                case 2:
-                    if (((beNDMWWindowList *)(arg0->_subWindow))->_count != arg0->_nowProcKazu) {
-                        MSG3(&DAT_0051b498[0], &DAT_0051be00[0])
-                        switch (arg0->_retCode) {
-                        case 0: {
-                            beNDMWItemBase *chip2;
-                            int st2;
-                            int cost2;
-                            int sel2;
-                            int cur2;
-                            int pages2 = arg0->_nowPage;
-                            int idx2 = arg0->_cursor + pages2 * 0xC;
-                            st2 = ((int)igInsightCore_FindManager(arg0->_insight, g_beNDMWStatus_metaObject[0], pages2));
-                            chip2 = (beNDMWItemBase *)((int *)((igObjectList *)arg0->_itemBaseList)->_data)[idx2];
-                            MSG3(&DAT_0051b398[0], &DAT_0051b3e8[0])
-                            sel2 = beMessenger_GetObject(arg0->_messenger, 0);
-                            cur2 = ((ChipRecord *)((int *)igProperty_GetRecord(sel2, &DAT_0051b440[0])))->f12;
-                            cost2 = beNDMWItemBase_GetRecordInt(chip2, st2, NEXTX);
-                            ChipRecord *r2 = (ChipRecord *)((int *)igProperty_GetRecord(sel2, &DAT_0051b440[0]));
-                            r2->f12 = cur2 - cost2;
-                            chip2->_recNo = chip2->_recNo + 1;
-                            MSG3(&DAT_0051b398[0], &DAT_0051b3a0[0])
-                            MSG3(&DAT_0051b498[0], &DAT_0051b4a0[0])
-                            break;
+                        PICK_ALLOCATOR(allocator, self)
+                        igSmartPointer<igStringRefList> statKeys((igStringRefList *)FUN_002b90e0(allocator));
+                        APPEND_INTERNED(statKeys.p, TSUYOSA_4);
+                        APPEND_INTERNED(statKeys.p, KASHIKOSA_4);
+                        APPEND_INTERNED(statKeys.p, SEISHIN_4);
+                        APPEND_INTERNED(statKeys.p, SUBAYASA_4);
+                        APPEND_INTERNED(statKeys.p, RES_FIRE_3);
+                        APPEND_INTERNED(statKeys.p, RES_ICE_3);
+                        APPEND_INTERNED(statKeys.p, RES_THUNDER_3);
+                        APPEND_INTERNED(statKeys.p, RES_DARK_3);
+                        APPEND_INTERNED(statKeys.p, CHIMEIRITSU_3);
+                        APPEND_INTERNED(statKeys.p, HPDRAIN_3);
+                        APPEND_INTERNED(statKeys.p, MPDRAIN_3);
+                        APPEND_INTERNED(statKeys.p, CHOHATURITSU_3);
+                        statusManager = igInsightCore_FindManager(self->_insight, g_beNDMWStatus_metaObject[0]);
+                        PICK_ALLOCATOR(allocator, self)
+                        igSmartPointer<igIntList> unusedValues = igSmartPointer<igIntList>((igIntList *)igIntList_Create(allocator));
+                        /* Show the first stat the next level raises, with its explanation. */
+                        for (statIndex = 0; statIndex < statKeys.p->_count; statIndex++) {
+                            statValue = beNDMWItemBase_GetRecordInt(nextLevel.p, statusManager, StringList_CopyRetained(statKeys.p, statIndex).p);
+                            if (statValue > 0) {
+                                sprintf(numberText, percent_d, statValue);
+                                beNDMWWindow_QueueText(infoWin.p, STWINFONT41, font011_3, numberText, RIGHT_3);
+                                if (statIndex >= CHIP_STAT_PROMPTS) statIndex = CHIP_STAT_PROMPTS - 1;
+                                statPrompts = *(const ChipStatPrompts *)g_xdataChipStatPromptCodes;
+                                infoWin.p->_entCode = statPrompts.code[statIndex];
+                                break;
+                            }
                         }
-                        default:
-                            break;
-                        }
-                        arg0->_st1 = 0;
-                        arg0->_st3 = 0;
-                        arg0->_st2 = 0;
-                        arg0->_st2 = 1;
-                        arg0->_st3 = 0;
-                        return;
                     }
+                    SEND_PLAYER_MESSAGE(self, GAMERAM_14, GETPLAYER_10)
+                    remaining = ((beDataObjInt *)igProperty_GetRecord(beMessenger_GetObject(self->_messenger, 0), XDATA_4))->_data;
+                    sprintf(numberText, percent_d, remaining - beNDMWItemBase_GetRecordInt(chip, chipStatusManager, NEXTX));
+                    beNDMWWindow_QueueText(infoWin.p, STWINFONT41, font012, numberText, RIGHT_3);
                 }
-                break;
+                self->_nowProcKazu = CHILD_COUNT(self);
+                NEXT_PHASE(self)
+            }
+            case UPGRADE_CONFIRM:
+                if (CHILD_COUNT(self) == self->_nowProcKazu) break;
+                PICK_ALLOCATOR(allocator, self)
+                {
+                    igSmartPointer<beNDMWShopSelect01> confirmWin((beNDMWShopSelect01 *)beNDMWShopSelect01_Create(allocator));
+                    beNDMWWindow_BindContext(confirmWin.p, self, self->_insight, self->_playerNo, CHIP_MSG_CONFIRM);
+                    ObjectList_AppendRetained(self->_subWindow, confirmWin.p);
+                }
+                self->_nowProcKazu = CHILD_COUNT(self);
+                NEXT_PHASE(self)
+            case UPGRADE_COMMIT:
+                if (CHILD_COUNT(self) == self->_nowProcKazu) break;
+                SEND_PLAYER_MESSAGE(self, SUBWND_8, OFPREVIEW_2)
+                switch (self->_retCode) {
+                case ANSWER_YES: {
+                    beNDMWItemBase *upgraded;
+                    void *upgradeStatusManager;
+                    int cost;
+                    int player;
+                    int held;
+                    int chipIndex = self->_cursor + self->_nowPage * CHIPS_PER_PAGE;
+                    upgradeStatusManager = igInsightCore_FindManager(self->_insight, g_beNDMWStatus_metaObject[0]);
+                    upgraded = CHIP_AT(self, chipIndex);
+                    SEND_PLAYER_MESSAGE(self, GAMERAM_14, GETPLAYER_10)
+                    player = beMessenger_GetObject(self->_messenger, 0);
+                    held = ((beDataObjInt *)igProperty_GetRecord(player, XDATA_4))->_data;
+                    cost = beNDMWItemBase_GetRecordInt(upgraded, upgradeStatusManager, NEXTX);
+                    beDataObjInt *xdata = (beDataObjInt *)igProperty_GetRecord(player, XDATA_4);
+                    xdata->_data = held - cost;
+                    upgraded->_recNo = upgraded->_recNo + 1;
+                    SEND_PLAYER_MESSAGE(self, GAMERAM_14, RECALCPLAYER_5)
+                    SEND_PLAYER_MESSAGE(self, SUBWND_8, UPDATE_3)
+                    break;
+                }
+                default:
+                    break;
+                }
+                ENTER_STEP(self, CHIP_STEP_LIST)
+                ENTER_PHASE(self, LIST_REBUILD)
+                return;
             }
             break;
-        case 10:
-            switch (arg0->_st2) {
-            case 0:
-                ALLOC_43aae0(al)
+        case CHIP_STEP_NO_CHIPS:
+            switch (self->_st2) {
+            case NOTICE_OPEN:
+                PICK_ALLOCATOR(allocator, self)
                 {
-                igSmartPointer<beNDMWShopSelect00> refusalWin((beNDMWShopSelect00 *)beNDMWShopSelect00_Create(al));
-                beNDMWWindow_BindContext(refusalWin.p, arg0, arg0->_insight, arg0->_playerNo, arg0->_st3);
-                ObjectList_AppendRetained((unsigned)arg0->_subWindow, refusalWin.p);
-                beNDMWShopSelect00 *w = refusalWin.p;
-                if (g_stringPool[0] == 0) {
-                    int pool = StringPool_Allocate(0x10);
-                    if (pool != 0) pool = StringPool_Construct(pool);
-                    g_stringPool[0] = pool;
+                    igSmartPointer<beNDMWShopSelect00> noticeWin((beNDMWShopSelect00 *)beNDMWShopSelect00_Create(allocator));
+                    beNDMWWindow_BindContext(noticeWin.p, self, self->_insight, self->_playerNo, self->_st3);
+                    ObjectList_AppendRetained(self->_subWindow, noticeWin.p);
+                    beNDMWShopSelect00 *window = noticeWin.p;
+                    const char *panelName = InternLiteral((const char *)font100_3);
+                    ReleaseString((const char *)window->_panelName);
+                    window->_panelName = (int)panelName;
                 }
-                {
-                    int *nw = (int *)StringPool_Intern(g_stringPool[0], &DAT_0051b548[0]);
-                    int *old = (int *)w->_panelName;
-                    if (old != 0) {
-                        int *hd = old - 2;
-                        int c = old[-1] - 1;
-                        old[-1] = c;
-                        if (c == 0) StringChunk_ReleaseHeader(*hd, hd);
-                    }
-                    w->_panelName = (int)nw;
-                }
-                }
-                arg0->_nowProcKazu = ((beNDMWWindowList *)(arg0->_subWindow))->_count;
-                arg0->_st2 = arg0->_st2 + 1;
-                arg0->_st3 = 0;
-            case 1:
-                if (((beNDMWWindowList *)(arg0->_subWindow))->_count != arg0->_nowProcKazu) {
-                    arg0->_st0 = arg0->_st0 + 1;
-                    arg0->_st3 = 0;
-                    arg0->_st2 = 0;
-                    arg0->_st1 = 0;
+                self->_nowProcKazu = CHILD_COUNT(self);
+                NEXT_PHASE(self)
+            case NOTICE_WAIT:
+                if (CHILD_COUNT(self) != self->_nowProcKazu) {
+                    NEXT_STATE(self)
                     return;
                 }
                 break;
             }
             break;
-        case 11:
-            switch (arg0->_st2) {
-            case 0:
-                ALLOC_43aae0(al)
+        case CHIP_STEP_REFUSED:
+            switch (self->_st2) {
+            case NOTICE_OPEN:
+                PICK_ALLOCATOR(allocator, self)
                 {
-                igSmartPointer<beNDMWShopSelect00> shortageWin((beNDMWShopSelect00 *)beNDMWShopSelect00_Create(al));
-                beNDMWWindow_BindContext(shortageWin.p, arg0, arg0->_insight, arg0->_playerNo, arg0->_st3);
-                ObjectList_AppendRetained((unsigned)arg0->_subWindow, shortageWin.p);
+                    igSmartPointer<beNDMWShopSelect00> noticeWin((beNDMWShopSelect00 *)beNDMWShopSelect00_Create(allocator));
+                    beNDMWWindow_BindContext(noticeWin.p, self, self->_insight, self->_playerNo, self->_st3);
+                    ObjectList_AppendRetained(self->_subWindow, noticeWin.p);
                 }
-                arg0->_nowProcKazu = ((beNDMWWindowList *)(arg0->_subWindow))->_count;
-                arg0->_st2 = arg0->_st2 + 1;
-                arg0->_st3 = 0;
-            case 1:
-                if (((beNDMWWindowList *)(arg0->_subWindow))->_count != arg0->_nowProcKazu) {
-                    arg0->_st1 = 0;
-                    arg0->_st3 = 0;
-                    arg0->_st2 = 0;
-                    arg0->_st2 = 1;
-                    arg0->_st3 = 0;
+                self->_nowProcKazu = CHILD_COUNT(self);
+                NEXT_PHASE(self)
+            case NOTICE_WAIT:
+                if (CHILD_COUNT(self) != self->_nowProcKazu) {
+                    ENTER_STEP(self, CHIP_STEP_LIST)
+                    ENTER_PHASE(self, LIST_REBUILD)
                     return;
                 }
                 break;
@@ -6952,235 +6233,223 @@ void Gap__Bec__beNDMWShopCtrlXdataChip__vfunc_21(beNDMWShopCtrlXdataChip *arg0) 
             break;
         }
         break;
-    case 2:
-        beNDMWWindow_PlayQueuedModelClose(arg0);
-        beNDMWWindow_ClearQueuedText(arg0);
-        beNDMWWindow_RequestChildrenClose(arg0);
-        arg0->_st0 = arg0->_st0 + 1;
-        arg0->_st3 = 0;
-        arg0->_st2 = 0;
-        arg0->_st1 = 0;
+    case SHOP_STATE_CLOSE:
+        beNDMWWindow_PlayQueuedModelClose(self);
+        beNDMWWindow_ClearQueuedText(self);
+        beNDMWWindow_RequestChildrenClose(self);
+        NEXT_STATE(self)
         return;
-    case 3:
-        if (beNDMWWindow_PollCloseComplete(arg0) != 0) {
-            arg0->_isRun = 0;
+    case SHOP_STATE_WAIT_CLOSED:
+        if (beNDMWWindow_PollCloseComplete(self) != 0) {
+            self->_isRun = 0;
         }
         break;
     }
 }
 
-/* Chip list pagination: refresh maximum pages and return current row count. */
+/* Recomputes _maxPage and returns how many chips the current page shows (at least one). */
+int beNDMWShopCtrlXdataChip_UpdatePageCount(beNDMWShopCtrlXdataChip *self)
+{
+    int count = ((igObjectList *)self->_itemBaseList)->_count;
+    int pages;
+    int remaining;
+    int rows;
 
-int beNDMWShopCtrlXdataChip_UpdatePageCount(beNDMWShopCtrlXdataChip *self){
-    int count=((igObjectList *)self->_itemBaseList)->_count,pages,remaining,result;
-    if(count%12)pages=count/12+1;
-    else pages=count/12;
-    self->_maxPage=pages;
-    remaining=(int)((unsigned)((igObjectList *)self->_itemBaseList)->_count-(unsigned)self->_nowPage*12);
-    if(remaining>=12){
-        result=12;
+    if (count % CHIPS_PER_PAGE) {
+        pages = count / CHIPS_PER_PAGE + 1;
+    } else {
+        pages = count / CHIPS_PER_PAGE;
     }
-    else result=remaining%12;
-    if(result<1){result=1;}
-    return result;
+    self->_maxPage = pages;
+    remaining = ((igObjectList *)self->_itemBaseList)->_count - self->_nowPage * CHIPS_PER_PAGE;
+    if (remaining >= CHIPS_PER_PAGE) {
+        rows = CHIPS_PER_PAGE;
+    } else {
+        rows = remaining % CHIPS_PER_PAGE;
+    }
+    if (rows < 1) {
+        rows = 1;
+    }
+    return rows;
 }
 
-/* "----" */
+/* Sends `value` to the text cell (`textType`, `cell`) through TEXTCTL: TEXTSET sets the text,
+ * SWITCH shows (DISPON) or hides (DISPOFF) it. */
+#define SEND_TEXT(window, textType, cell, value, selector) { \
+    beMessenger_SelectGroup((window)->_messenger, TEXTCTL_3); \
+    beMessenger_AppendString((window)->_messenger, textType); \
+    beMessenger_AppendString((window)->_messenger, cell); \
+    beMessenger_AppendString((window)->_messenger, value); \
+    beMessenger_DispatchSelected((window)->_messenger, selector); }
 
+/* Rewrites the chip names and next-level XDATA costs of the current page with the page counter
+ * ("n" of "max"), and the description of the highlighted chip. */
 void beNDMWShopCtrlXdataChip_RefreshText(beNDMWShopCtrlXdataChip *self, long long refreshRows,
                                          long long refreshDescription) {
-    char page[4];
+    char pageDigit[4];
     ChipPriceText priceText;
-    int status;
+    void *statusManager;
     int row;
     int index;
     char *name;
-    int item;
-    int nextX;
+    beNDMWItemBase *item;
+    int nextCost;
     char *visibility;
-    char **font;
+    const char **font;
     int selectedIndex;
-    int selectedItem;
+    beNDMWItemBase *selectedItem;
     char *description;
 
-    /* Status is captured even when neither refresh flag is set. */
-    status = ((int)igInsightCore_FindManager(self->_insight, g_beNDMWStatus_metaObject[0]));
+    statusManager = igInsightCore_FindManager(self->_insight, g_beNDMWStatus_metaObject[0]);
     if (refreshRows != 0) {
-        font = (char **)(g_fontNames);
+        font = g_fontNames;
         for (row = 0; row < CHIPS_PER_PAGE; row++, font++) {
             index = row + self->_nowPage * CHIPS_PER_PAGE;
             if (index < ((beNDMWItemBaseList *)self->_itemBaseList)->_count) {
-                item = *(int *)(((beNDMWItemBaseList *)self->_itemBaseList)->_data + (index * 4));
+                item = CHIP_AT(self, index);
                 if (item == 0) {
                     continue;
                 }
-                name = beNDMWItemBase_GetRecordString(item, status, NAME_2);
-                nextX = beNDMWItemBase_GetRecordInt(item, status, NEXTX);
-                beMessenger_SelectGroup(self->_messenger, TEXTCTL_3);
-                beMessenger_AppendString(self->_messenger, STWINFONT14);
-                beMessenger_AppendString(self->_messenger, *font);
-                beMessenger_AppendString(self->_messenger, name);
-                beMessenger_DispatchSelected(self->_messenger, TEXTSET);
-                if (nextX > 0) {
-                    sprintf((char *)&priceText, percent_d, nextX);
+                name = beNDMWItemBase_GetRecordString(item, statusManager, NAME_2);
+                nextCost = beNDMWItemBase_GetRecordInt(item, statusManager, NEXTX);
+                SEND_TEXT(self, STWINFONT14, *font, name, TEXTSET)
+                if (nextCost > 0) {
+                    sprintf(priceText.text, percent_d, nextCost);
                 } else {
-                    priceText = DAT_0051bdc0;
+                    priceText = dashdashdashdash_2;
                 }
-                beMessenger_SelectGroup(self->_messenger, TEXTCTL_3);
-                beMessenger_AppendString(self->_messenger, STWINFONT17);
-                beMessenger_AppendString(self->_messenger, *font);
-                beMessenger_AppendString(self->_messenger, (char *)&priceText);
-                beMessenger_DispatchSelected(self->_messenger, TEXTSET);
-                visibility = &DISPON[0];
+                SEND_TEXT(self, STWINFONT17, *font, priceText.text, TEXTSET)
+                visibility = DISPON;
             } else {
                 visibility = DISPOFF;
             }
-            beMessenger_SelectGroup(self->_messenger, TEXTCTL_3);
-            beMessenger_AppendString(self->_messenger, STWINFONT14);
-            beMessenger_AppendString(self->_messenger, *font);
-            beMessenger_AppendString(self->_messenger, visibility);
-            beMessenger_DispatchSelected(self->_messenger, SWITCH_2);
-            beMessenger_SelectGroup(self->_messenger, TEXTCTL_3);
-            beMessenger_AppendString(self->_messenger, STWINFONT17);
-            beMessenger_AppendString(self->_messenger, *font);
-            beMessenger_AppendString(self->_messenger, visibility);
-            beMessenger_DispatchSelected(self->_messenger, SWITCH_2);
+            SEND_TEXT(self, STWINFONT14, *font, visibility, SWITCH_2)
+            SEND_TEXT(self, STWINFONT17, *font, visibility, SWITCH_2)
         }
-        page[1] = 0;
-        page[0] = self->_nowPage + '1';
-        beMessenger_SelectGroup(self->_messenger, TEXTCTL_3);
-        beMessenger_AppendString(self->_messenger, STWINFONT30);
-        beMessenger_AppendString(self->_messenger, g_fontNames[0]);
-        beMessenger_AppendString(self->_messenger, page);
-        beMessenger_DispatchSelected(self->_messenger, TEXTSET);
-        page[0] = self->_maxPage + '0';
-        beMessenger_SelectGroup(self->_messenger, TEXTCTL_3);
-        beMessenger_AppendString(self->_messenger, STWINFONT30);
-        beMessenger_AppendString(self->_messenger, g_fontName1[0]);
-        beMessenger_AppendString(self->_messenger, page);
-        beMessenger_DispatchSelected(self->_messenger, TEXTSET);
+        pageDigit[1] = 0;
+        pageDigit[0] = self->_nowPage + '1';
+        SEND_TEXT(self, STWINFONT30, g_fontNames[0], pageDigit, TEXTSET)
+        pageDigit[0] = self->_maxPage + '0';
+        SEND_TEXT(self, STWINFONT30, g_fontName1[0], pageDigit, TEXTSET)
     }
     if (refreshDescription != 0) {
         /* matching construct: hand sweep — the subtraction of a negation keeps the retail addu operand order */
         selectedIndex = self->_nowPage * CHIPS_PER_PAGE - -self->_retCode;
         if (selectedIndex < ((beNDMWItemBaseList *)self->_itemBaseList)->_count) {
-            selectedItem = *(int *)(((beNDMWItemBaseList *)self->_itemBaseList)->_data + (selectedIndex * 4));
+            selectedItem = CHIP_AT(self, selectedIndex);
             if (selectedItem != 0) {
-                description = beNDMWItemBase_GetRecordString(selectedItem, status, TXT);
-                beMessenger_SelectGroup(self->_messenger, TEXTCTL_3);
-                beMessenger_AppendString(self->_messenger, STWINFONT29);
-                beMessenger_AppendString(self->_messenger, g_fontNames[0]);
-                beMessenger_AppendString(self->_messenger, description);
-                beMessenger_DispatchSelected(self->_messenger, TEXTSET);
-                beMessenger_SelectGroup(self->_messenger, TEXTCTL_3);
-                beMessenger_AppendString(self->_messenger, STWINFONT29);
-                beMessenger_AppendString(self->_messenger, g_fontNames[0]);
-                beMessenger_AppendString(self->_messenger, &DISPON[0]);
-                beMessenger_DispatchSelected(self->_messenger, SWITCH_2);
+                description = beNDMWItemBase_GetRecordString(selectedItem, statusManager, TXT);
+                SEND_TEXT(self, STWINFONT29, g_fontNames[0], description, TEXTSET)
+                SEND_TEXT(self, STWINFONT29, g_fontNames[0], DISPON, SWITCH_2)
             }
         }
     }
 }
 
-static inline int st0Of(const S *s) { return s->_st0; }
+/* Shop entry codes (_entCode) served by beNDMWShopDevice. */
+enum DeviceShop {
+    DEVICE_SHOP_WPU = 6,
+    DEVICE_SHOP_APU = 7,
+    DEVICE_SHOP_CHIP = 8
+};
 
-void Gap__Bec__beNDMWShopDevice__vfunc_21(S *arg0) {
-    void *alloc;
-    switch (arg0->_st0) {
-    case 0:
-        arg0->_st0 = st0Of(arg0) + 1;
-        arg0->_st3 = 0;
-        arg0->_st2 = 0;
-        arg0->_st1 = 0;
-        arg0->_st1 = 0;
-        arg0->_st3 = 0;
-        arg0->_st2 = 0;
-    case 1:
-        switch (arg0->_st1) {
-        case 0:
-            switch (arg0->_st2) {
-            case 0:
-                alloc = igObject_GetAllocator(arg0);
-                alloc = GPR_00554c14 ? alloc : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
+/* Message codes of each device shop's buy / sell / leave menu. */
+enum DeviceShopMenuMessage {
+    WPU_MENU_MESSAGE = 1650,
+    APU_MENU_MESSAGE = 1750,
+    CHIP_MENU_MESSAGE = 1850
+};
+
+/* _st1 of beNDMWShopDevice in SHOP_STATE_RUN; the menu's result picks the next step. */
+enum DeviceShopStep {
+    DEVICE_STEP_MENU = 0,
+    DEVICE_STEP_BUY = 1,
+    DEVICE_STEP_SELL = 2
+};
+
+enum DeviceShopChoice { DEVICE_CHOICE_BUY = 0, DEVICE_CHOICE_SELL = 1, DEVICE_CHOICE_LEAVE = 2 };
+
+/* WPU / APU / chip device shop: a buy / sell / leave menu that opens the sales or sell controller
+ * and comes back to the menu when it closes. */
+void beNDMWShopDevice_Update(beNDMWShopDevice *self) {
+    void *allocator;
+    switch (self->_st0) {
+    case SHOP_STATE_OPEN:
+        /* matching construct: hand sweep — reading _st0 through the inline reloads it for the increment */
+        self->_st0 = CurrentState(self) + 1;
+        self->_st3 = 0;
+        self->_st2 = 0;
+        self->_st1 = 0;
+        ENTER_STEP(self, DEVICE_STEP_MENU)
+    case SHOP_STATE_RUN:
+        switch (self->_st1) {
+        case DEVICE_STEP_MENU:
+            switch (self->_st2) {
+            case CHILD_OPEN:
+                PICK_ALLOCATOR(allocator, self)
                 {
-                igSmartPointer<beNDMWShopSelect01> win((beNDMWShopSelect01 *)FUN_003b4d90(alloc));
-                beNDMWWindow_BindContext(win.p, arg0, arg0->_insight, arg0->_playerNo, 0);
-                ObjectList_AppendRetained(LST(arg0), win.p);
-                switch (arg0->_entCode) {
-                case 6: ((beNDMWShopSelect01 *)win.p)->_entCode = 0x672; break;
-                case 7: ((beNDMWShopSelect01 *)win.p)->_entCode = 0x6D6; break;
-                case 8: ((beNDMWShopSelect01 *)win.p)->_entCode = 0x73A; break;
+                    igSmartPointer<beNDMWShopSelect01> menuWin((beNDMWShopSelect01 *)beNDMWShopSelect01_Create(allocator));
+                    beNDMWWindow_BindContext(menuWin.p, self, self->_insight, self->_playerNo, 0);
+                    ObjectList_AppendRetained(self->_subWindow, menuWin.p);
+                    switch (self->_entCode) {
+                    case DEVICE_SHOP_WPU: menuWin.p->_entCode = WPU_MENU_MESSAGE; break;
+                    case DEVICE_SHOP_APU: menuWin.p->_entCode = APU_MENU_MESSAGE; break;
+                    case DEVICE_SHOP_CHIP: menuWin.p->_entCode = CHIP_MENU_MESSAGE; break;
+                    }
                 }
-                }
-                arg0->_nowProcKazu = LST(arg0)->_count;
-                arg0->_st2 = arg0->_st2 + 1;
-                arg0->_st3 = 0;
-            case 1:
-                if (LST(arg0)->_count != arg0->_nowProcKazu) {
-                    switch (arg0->_retCode) {
-                    case 0:
-                        arg0->_st1 = 1;
-                        arg0->_st3 = 0;
-                        arg0->_st2 = 0;
+                self->_nowProcKazu = CHILD_COUNT(self);
+                NEXT_PHASE(self)
+            case CHILD_WAIT:
+                if (CHILD_COUNT(self) != self->_nowProcKazu) {
+                    switch (self->_retCode) {
+                    case DEVICE_CHOICE_BUY:
+                        ENTER_STEP(self, DEVICE_STEP_BUY)
                         return;
-                    case 1:
-                        arg0->_st1 = 2;
-                        arg0->_st3 = 0;
-                        arg0->_st2 = 0;
+                    case DEVICE_CHOICE_SELL:
+                        ENTER_STEP(self, DEVICE_STEP_SELL)
                         return;
                     default:
-                    case 2:
-                        arg0->_st0 = arg0->_st0 + 1;
-                        arg0->_st3 = 0;
-                        arg0->_st2 = 0;
-                        arg0->_st1 = 0;
+                    case DEVICE_CHOICE_LEAVE:
+                        NEXT_STATE(self)
                         return;
                     }
                 }
                 break;
             }
             break;
-        case 1:
-            switch (arg0->_st2) {
-            case 0:
-                alloc = igObject_GetAllocator(arg0);
-                alloc = GPR_00554c14 ? alloc : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
+        case DEVICE_STEP_BUY:
+            switch (self->_st2) {
+            case CHILD_OPEN:
+                PICK_ALLOCATOR(allocator, self)
                 {
-                igSmartPointer<beNDMWShopCtrlSales> win((beNDMWShopCtrlSales *)FUN_003b6bc0(alloc));
-                beNDMWWindow_BindContext(win.p, arg0, arg0->_insight, arg0->_playerNo, arg0->_entCode);
-                ObjectList_AppendRetained(LST(arg0), win.p);
+                    igSmartPointer<beNDMWShopCtrlSales> salesWin((beNDMWShopCtrlSales *)beNDMWShopCtrlSales_Create(allocator));
+                    beNDMWWindow_BindContext(salesWin.p, self, self->_insight, self->_playerNo, self->_entCode);
+                    ObjectList_AppendRetained(self->_subWindow, salesWin.p);
                 }
-                arg0->_nowProcKazu = LST(arg0)->_count;
-                arg0->_st2 = arg0->_st2 + 1;
-                arg0->_st3 = 0;
-            case 1:
-                if (LST(arg0)->_count != arg0->_nowProcKazu) {
-                    arg0->_st1 = 0;
-                    arg0->_st3 = 0;
-                    arg0->_st2 = 0;
+                self->_nowProcKazu = CHILD_COUNT(self);
+                NEXT_PHASE(self)
+            case CHILD_WAIT:
+                if (CHILD_COUNT(self) != self->_nowProcKazu) {
+                    ENTER_STEP(self, DEVICE_STEP_MENU)
                     return;
                 }
                 break;
             }
             break;
-        case 2:
-            switch (arg0->_st2) {
-            case 0:
-                alloc = igObject_GetAllocator(arg0);
-                alloc = GPR_00554c14 ? alloc : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
+        case DEVICE_STEP_SELL:
+            switch (self->_st2) {
+            case CHILD_OPEN:
+                PICK_ALLOCATOR(allocator, self)
                 {
-                igSmartPointer<beNDMWShopCtrlSell> win((beNDMWShopCtrlSell *)FUN_003b7360(alloc));
-                beNDMWWindow_BindContext(win.p, arg0, arg0->_insight, arg0->_playerNo, 0);
-                ObjectList_AppendRetained(LST(arg0), win.p);
+                    igSmartPointer<beNDMWShopCtrlSell> sellWin((beNDMWShopCtrlSell *)beNDMWShopCtrlSell_Create(allocator));
+                    beNDMWWindow_BindContext(sellWin.p, self, self->_insight, self->_playerNo, 0);
+                    ObjectList_AppendRetained(self->_subWindow, sellWin.p);
                 }
-                arg0->_nowProcKazu = LST(arg0)->_count;
-                arg0->_st2 = arg0->_st2 + 1;
-                arg0->_st3 = 0;
-            case 1:
-                if (LST(arg0)->_count != arg0->_nowProcKazu) {
-                    arg0->_st1 = 0;
-                    arg0->_st3 = 0;
-                    arg0->_st2 = 0;
+                self->_nowProcKazu = CHILD_COUNT(self);
+                NEXT_PHASE(self)
+            case CHILD_WAIT:
+                if (CHILD_COUNT(self) != self->_nowProcKazu) {
+                    ENTER_STEP(self, DEVICE_STEP_MENU)
                     return;
                 }
                 break;
@@ -7188,110 +6457,107 @@ void Gap__Bec__beNDMWShopDevice__vfunc_21(S *arg0) {
             break;
         }
         break;
-    case 2:
-        beNDMWWindow_PlayQueuedModelClose(arg0);
-        beNDMWWindow_ClearQueuedText(arg0);
-        beNDMWWindow_RequestChildrenClose(arg0);
-        arg0->_st0 = arg0->_st0 + 1;
-        arg0->_st3 = 0;
-        arg0->_st2 = 0;
-        arg0->_st1 = 0;
+    case SHOP_STATE_CLOSE:
+        beNDMWWindow_PlayQueuedModelClose(self);
+        beNDMWWindow_ClearQueuedText(self);
+        beNDMWWindow_RequestChildrenClose(self);
+        NEXT_STATE(self)
         return;
-    case 3:
-        if (beNDMWWindow_PollCloseComplete(arg0) != 0) {
-            arg0->_isRun = 0;
+    case SHOP_STATE_WAIT_CLOSED:
+        if (beNDMWWindow_PollCloseComplete(self) != 0) {
+            self->_isRun = 0;
         }
         break;
     }
 }
 
-int Gap__Bec__beNDMWShopDevice__vfunc_20(void)
+/* Metadata accessors: each returns its class's registered meta object. */
+int beNDMWShopDevice_GetMeta(void)
 {
     return g_beNDMWShopDevice_metaObject[0];
 }
 
-int Gap__Bec__beNDMWShopCtrlXdataChip__vfunc_20(void)
+int beNDMWShopCtrlXdataChip_GetMeta(void)
 {
     return g_beNDMWShopCtrlXdataChip_metaObject[0];
 }
 
-int Gap__Bec__beNDMWShopCtrlSales__vfunc_20(void)
+int beNDMWShopCtrlSales_GetMeta(void)
 {
     return g_beNDMWShopCtrlSales_metaObject[0];
 }
 
-int Gap__Bec__beNDMWShopCtrlDiskSell__vfunc_20(void)
+int beNDMWShopCtrlDiskSell_GetMeta(void)
 {
     return g_beNDMWShopCtrlDiskSell_metaObject[0];
 }
 
-int Gap__Bec__beNDMWShopCtrlDeviceSell__vfunc_20(void)
+int beNDMWShopCtrlDeviceSell_GetMeta(void)
 {
     return g_beNDMWShopCtrlDeviceSell_metaObject[0];
 }
 
-int Gap__Bec__beNDMWShopCtrlSell__vfunc_20(void)
+int beNDMWShopCtrlSell_GetMeta(void)
 {
     return g_beNDMWShopCtrlSell_metaObject[0];
 }
 
-int Gap__Bec__beNDMWShopCtrlEditBit__vfunc_20(void)
+int beNDMWShopCtrlEditBit_GetMeta(void)
 {
     return g_beNDMWShopCtrlEditBit_metaObject[0];
 }
 
-int Gap__Bec__beNDMWShopCtrlDigilabo__vfunc_20(void)
+int beNDMWShopCtrlDigilabo_GetMeta(void)
 {
     return g_beNDMWShopCtrlDigilabo_metaObject[0];
 }
 
-int Gap__Bec__beNDMWShopCtrlEvolve__vfunc_20(void)
+int beNDMWShopCtrlEvolve_GetMeta(void)
 {
     return g_beNDMWShopCtrlEvolve_metaObject[0];
 }
 
-int Gap__Bec__beNDMWShopCtrlA2__vfunc_20(void)
+int beNDMWShopCtrlA2_GetMeta(void)
 {
     return g_beNDMWShopCtrlA2_metaObject[0];
 }
 
-int Gap__Bec__beNDMWShopCtrlA1__vfunc_20(void)
+int beNDMWShopCtrlA1_GetMeta(void)
 {
     return g_beNDMWShopCtrlA1_metaObject[0];
 }
 
-int Gap__Bec__beNDMWShopCtrlA0__vfunc_20(void)
+int beNDMWShopCtrlA0_GetMeta(void)
 {
     return g_beNDMWShopCtrlA0_metaObject[0];
 }
 
-int Gap__Bec__beNDMWShopJunk__vfunc_20(void)
+int beNDMWShopJunk_GetMeta(void)
 {
     return g_beNDMWShopJunk_metaObject[0];
 }
 
-int Gap__Bec__beNDMWShopCtrl50__vfunc_20(void)
+int beNDMWShopCtrl50_GetMeta(void)
 {
     return g_beNDMWShopCtrl50_metaObject[0];
 }
 
-int Gap__Bec__beNDMWShopCtrl40__vfunc_20(void)
+int beNDMWShopCtrl40_GetMeta(void)
 {
     return g_beNDMWShopCtrl40_metaObject[0];
 }
 
-int Gap__Bec__beNDMWShopCtrl30__vfunc_20(void)
+int beNDMWShopCtrl30_GetMeta(void)
 {
     return g_beNDMWShopCtrl30_metaObject[0];
 }
 
-int Gap__Bec__beNDMWShopCtrl10__vfunc_20(void)
+int beNDMWShopCtrl10_GetMeta(void)
 {
     return g_beNDMWShopCtrl10_metaObject[0];
 }
 
-int Gap__Bec__beNDMWShopCtrl00__vfunc_20(void)
+int beNDMWShopCtrl00_GetMeta(void)
 {
     return g_beNDMWShopCtrl00_metaObject[0];
 }
-

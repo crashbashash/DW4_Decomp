@@ -17709,7 +17709,7 @@
 003b2ab0 000074 beNDMWTitle2_Register
 003b2b30 00001c beNDMWTitle2_GetMetaObject
 003b2b50 0000a8 beNDMWTitle2_InitFields
-003b2c00 000034 FUN_003b2c00
+003b2c00 000034 beNDMWShopTitle03_Create
 003b2c40 00004c FUN_003b2c40
 003b2c90 000074 beNDMWShopTitle03_GetVTable
 003b2d10 000218 FUN_003b2d10
@@ -17720,13 +17720,13 @@
 003b3110 000064 beNDMWShopTitle03_Register
 003b3180 00001c beNDMWShopTitle03_GetMetaObject
 003b31a0 00000c FUN_003b31a0
-003b31b0 000034 FUN_003b31b0
+003b31b0 000034 beNDMWShopTitle01_Create
 003b31f0 00004c FUN_003b31f0
 003b3240 000074 beNDMWShopTitle01_GetVTable
 003b32c0 000020 FUN_003b32c0
 003b32e0 000064 beNDMWShopTitle01_Register
 003b3350 00001c beNDMWShopTitle01_GetMetaObject
-003b3370 000034 FUN_003b3370
+003b3370 000034 beNDMWShopTitle00_Create
 003b33b0 00004c FUN_003b33b0
 003b3400 000074 beNDMWShopTitle00_GetVTable
 003b3480 000020 FUN_003b3480
@@ -17768,7 +17768,7 @@
 003b3eb0 000060 beNDMWWindowTitle_Register
 003b3f10 00001c beNDMWWindowTitle_GetMetaObject
 003b3f30 00000c FUN_003b3f30
-003b3f40 000034 FUN_003b3f40
+003b3f40 000034 beNDMWShopSelectB0_Create
 003b3f80 00004c FUN_003b3f80
 003b3fd0 00007c beNDMWShopSelectB0_GetVTable
 003b4050 000138 FUN_003b4050
@@ -17776,7 +17776,7 @@
 003b41b0 000064 beNDMWShopSelectB0_Register
 003b4220 00001c beNDMWShopSelectB0_GetMetaObject
 003b4240 00000c FUN_003b4240
-003b4250 000034 FUN_003b4250
+003b4250 000034 beNDMWShopSelectA0_Create
 003b4290 00004c FUN_003b4290
 003b42e0 00007c beNDMWShopSelectA0_GetVTable
 003b4360 000020 FUN_003b4360
@@ -17794,26 +17794,26 @@
 003b46e0 000020 FUN_003b46e0
 003b4700 000064 beNDMWShopSelect34_Register
 003b4770 00001c beNDMWShopSelect34_GetMetaObject
-003b4790 000034 FUN_003b4790
+003b4790 000034 beNDMWShopSelect11_Create
 003b47d0 00004c FUN_003b47d0
 003b4820 00007c beNDMWShopSelect11_GetVTable
 003b48a0 000020 FUN_003b48a0
 003b48c0 000064 beNDMWShopSelect11_Register
 003b4930 00001c beNDMWShopSelect11_GetMetaObject
-003b4950 000034 FUN_003b4950
+003b4950 000034 beNDMWShopSelect03_Create
 003b4990 00004c FUN_003b4990
 003b49e0 00007c beNDMWShopSelect03_GetVTable
 003b4a60 000020 FUN_003b4a60
 003b4a80 000064 beNDMWShopSelect03_Register
 003b4af0 00001c beNDMWShopSelect03_GetMetaObject
-003b4b10 000034 FUN_003b4b10
+003b4b10 000034 beNDMWShopSelect02_Create
 003b4b50 00004c FUN_003b4b50
 003b4ba0 00008c beNDMWShopSelect02_GetVTable
 003b4c30 000020 FUN_003b4c30
 003b4c50 000074 beNDMWShopSelect02_Register
 003b4cd0 00001c beNDMWShopSelect02_GetMetaObject
 003b4cf0 000098 beNDMWShopSelect02_InitFields
-003b4d90 000034 FUN_003b4d90
+003b4d90 000034 beNDMWShopSelect01_Create
 003b4dd0 00004c FUN_003b4dd0
 003b4e20 00007c beNDMWShopSelect01_GetVTable
 003b4ea0 000020 FUN_003b4ea0
@@ -17876,7 +17876,7 @@
 003b6130 000074 beNDMWStatusInfoWork_Register
 003b61b0 00001c beNDMWStatusInfoWork_GetMetaObject
 003b61d0 000138 beNDMWStatusInfoWork_InitFields
-003b6310 000034 FUN_003b6310
+003b6310 000034 beNDMWShopJunk_Create
 003b6350 00004c FUN_003b6350
 003b63a0 000084 beNDMWShopJunk_GetVTable
 003b6430 0000c0 beNDMWWindowCtrl_Destroy
@@ -17885,7 +17885,7 @@
 003b6590 00001c beNDMWShopJunk_GetMetaObject
 003b65b0 00000c beNDMWWindowCtrl_GetPublishedMetaObject
 003b65c0 000090 beNDMWShopJunk_InitFields
-003b6650 000034 FUN_003b6650
+003b6650 000034 beNDMWShopDevice_Create
 003b6690 00004c FUN_003b6690
 003b66e0 000084 beNDMWShopDevice_GetVTable
 003b6770 000070 FUN_003b6770
@@ -17894,41 +17894,41 @@
 003b6880 00001c beNDMWShopDevice_GetMetaObject
 003b68a0 00000c FUN_003b68a0
 003b68b0 000090 beNDMWShopDevice_InitFields
-003b6940 000034 FUN_003b6940
+003b6940 000034 beNDMWShopCtrlXdataChip_Create
 003b6980 00004c FUN_003b6980
 003b69d0 000084 beNDMWShopCtrlXdataChip_GetVTable
 003b6a60 000020 FUN_003b6a60
 003b6a80 000074 beNDMWShopCtrlXdataChip_Register
 003b6b00 00001c beNDMWShopCtrlXdataChip_GetMetaObject
 003b6b20 000098 beNDMWShopCtrlXdataChip_InitFields
-003b6bc0 000034 FUN_003b6bc0
+003b6bc0 000034 beNDMWShopCtrlSales_Create
 003b6c00 00004c FUN_003b6c00
 003b6c50 0000a0 beNDMWShopCtrlSales_GetVTable
 003b6cf0 000020 FUN_003b6cf0
 003b6d10 000074 beNDMWShopCtrlSales_Register
 003b6d90 00001c beNDMWShopCtrlSales_GetMetaObject
 003b6db0 0000b0 beNDMWShopCtrlSales_InitFields
-003b6e60 000034 FUN_003b6e60
+003b6e60 000034 beNDMWShopCtrlDiskSell_Create
 003b6ea0 00004c FUN_003b6ea0
 003b6ef0 000084 beNDMWShopCtrlDiskSell_GetVTable
 003b6f80 000020 FUN_003b6f80
 003b6fa0 000074 beNDMWShopCtrlDiskSell_Register
 003b7020 00001c beNDMWShopCtrlDiskSell_GetMetaObject
 003b7040 000098 beNDMWShopCtrlDiskSell_InitFields
-003b70e0 000034 FUN_003b70e0
+003b70e0 000034 beNDMWShopCtrlDeviceSell_Create
 003b7120 00004c FUN_003b7120
 003b7170 000084 beNDMWShopCtrlDeviceSell_GetVTable
 003b7200 000020 FUN_003b7200
 003b7220 000074 beNDMWShopCtrlDeviceSell_Register
 003b72a0 00001c beNDMWShopCtrlDeviceSell_GetMetaObject
 003b72c0 000098 beNDMWShopCtrlDeviceSell_InitFields
-003b7360 000034 FUN_003b7360
+003b7360 000034 beNDMWShopCtrlSell_Create
 003b73a0 00004c FUN_003b73a0
 003b73f0 000074 beNDMWShopCtrlSell_GetVTable
 003b7470 000020 FUN_003b7470
 003b7490 000064 beNDMWShopCtrlSell_Register
 003b7500 00001c beNDMWShopCtrlSell_GetMetaObject
-003b7520 000034 FUN_003b7520
+003b7520 000034 beNDMWShopCtrlEditBit_Create
 003b7560 00004c FUN_003b7560
 003b75b0 000074 beNDMWShopCtrlEditBit_GetVTable
 003b7630 000020 FUN_003b7630
@@ -17942,13 +17942,13 @@
 003b78c0 000074 beNDMWShopCtrlDigilabo_Register
 003b7940 00001c beNDMWShopCtrlDigilabo_GetMetaObject
 003b7960 0000d8 beNDMWShopCtrlDigilabo_InitFields
-003b7a40 000034 FUN_003b7a40
+003b7a40 000034 beNDMWShopCtrlA2_Create
 003b7a80 00004c FUN_003b7a80
 003b7ad0 000074 beNDMWShopCtrlA2_GetVTable
 003b7b50 000020 FUN_003b7b50
 003b7b70 000064 beNDMWShopCtrlA2_Register
 003b7be0 00001c beNDMWShopCtrlA2_GetMetaObject
-003b7c00 000034 FUN_003b7c00
+003b7c00 000034 beNDMWShopCtrlA1_Create
 003b7c40 00004c FUN_003b7c40
 003b7c90 0000a0 beNDMWShopCtrlA1_GetVTable
 003b7d30 000020 FUN_003b7d30
@@ -17963,28 +17963,28 @@
 003b8080 000074 beNDMWShopCtrlA0_Register
 003b8100 00001c beNDMWShopCtrlA0_GetMetaObject
 003b8120 0000b0 beNDMWShopCtrlA0_InitFields
-003b81d0 000034 FUN_003b81d0
+003b81d0 000034 beNDMWShopCtrl50_Create
 003b8210 00004c FUN_003b8210
 003b8260 000074 beNDMWShopCtrl50_GetVTable
 003b82e0 000020 FUN_003b82e0
 003b8300 00006c beNDMWShopCtrl50_Register
 003b8370 00001c beNDMWShopCtrl50_GetMetaObject
 003b8390 000070 beNDMWShopCtrl50_InitFields
-003b8400 000034 FUN_003b8400
+003b8400 000034 beNDMWShopCtrl40_Create
 003b8440 00004c FUN_003b8440
 003b8490 000074 beNDMWShopCtrl40_GetVTable
 003b8510 000020 FUN_003b8510
 003b8530 00006c beNDMWShopCtrl40_Register
 003b85a0 00001c beNDMWShopCtrl40_GetMetaObject
 003b85c0 000070 beNDMWShopCtrl40_InitFields
-003b8630 000034 FUN_003b8630
+003b8630 000034 beNDMWShopCtrl30_Create
 003b8670 00004c FUN_003b8670
 003b86c0 000074 beNDMWShopCtrl30_GetVTable
 003b8740 000020 FUN_003b8740
 003b8760 00006c beNDMWShopCtrl30_Register
 003b87d0 00001c beNDMWShopCtrl30_GetMetaObject
 003b87f0 000070 beNDMWShopCtrl30_InitFields
-003b8860 000034 FUN_003b8860
+003b8860 000034 beNDMWShopCtrlEvolve_Create
 003b88a0 00004c FUN_003b88a0
 003b88f0 000084 beNDMWShopCtrlEvolve_GetVTable
 003b8980 000080 FUN_003b8980
@@ -17992,7 +17992,7 @@
 003b8a20 000074 beNDMWShopCtrlEvolve_Register
 003b8aa0 00001c beNDMWShopCtrlEvolve_GetMetaObject
 003b8ac0 000098 beNDMWShopCtrlEvolve_InitFields
-003b8b60 000034 FUN_003b8b60
+003b8b60 000034 beNDMWShopCtrl10_Create
 003b8ba0 00004c FUN_003b8ba0
 003b8bf0 000074 beNDMWShopCtrl10_GetVTable
 003b8c70 000020 FUN_003b8c70
@@ -19377,11 +19377,11 @@
 00424230 000064 Gap__Bec__beNDMWStatusTitle00__vfunc_22 Gap::Bec::beNDMWStatusTitle00::vfunc_22
 004242a0 001190 Gap__Bec__beNDMWStatusTitle01__vfunc_22 Gap::Bec::beNDMWStatusTitle01::vfunc_22
 00425430 000a30 FUN_00425430
-00425e60 000144 FUN_00425e60
-00425fb0 000144 FUN_00425fb0
+00425e60 000144 beNDMWStatusTitle01_ShowStatusLayout
+00425fb0 000144 beNDMWStatusTitle01_ShowShopLayout
 00426100 000034 Gap__Bec__beNDMWStatusTitle02__vfunc_22 Gap::Bec::beNDMWStatusTitle02::vfunc_22
 00426140 0003e4 Gap__Bec__beNDMWStatusTitle03__vfunc_22 Gap::Bec::beNDMWStatusTitle03::vfunc_22
-00426530 00008c FUN_00426530
+00426530 00008c beNDMWStatusTitle03_SetFont002Enabled
 004265c0 000184 Gap__Bec__beNDMWStatusTitle04__vfunc_22 Gap::Bec::beNDMWStatusTitle04::vfunc_22
 00426750 00000c Gap__Bec__beNDMWStatusTitle04__vfunc_20 Gap::Bec::beNDMWStatusTitle04::vfunc_20
 00426760 00000c Gap__Bec__beNDMWStatusTitle03__vfunc_20 Gap::Bec::beNDMWStatusTitle03::vfunc_20
@@ -19389,90 +19389,90 @@
 00426780 00000c Gap__Bec__beNDMWStatusTitle01__vfunc_20 Gap::Bec::beNDMWStatusTitle01::vfunc_20
 00426790 00000c Gap__Bec__beNDMWStatusTitle00__vfunc_20 Gap::Bec::beNDMWStatusTitle00::vfunc_20
 004267a0 00000c Gap__Bec__beNDMWWindowTitle__vfunc_20 Gap::Bec::beNDMWWindowTitle::vfunc_20
-004267b0 0007e4 Gap__Bec__beNDMWShopCtrl00__vfunc_21 Gap::Bec::beNDMWShopCtrl00::vfunc_21
+004267b0 0007e4 beNDMWShopCtrl00_Update
 00426fa0 000080 FUN_00426fa0
 00427020 000080 FUN_00427020
-004270a0 00156c Gap__Bec__beNDMWShopCtrl10__vfunc_21 Gap::Bec::beNDMWShopCtrl10::vfunc_21
+004270a0 00156c beNDMWShopCtrl10_Update
 00428610 000080 FUN_00428610
 00428690 000080 FUN_00428690
 00428710 000080 FUN_00428710
-00428790 000e18 Gap__Bec__beNDMWShopCtrl30__vfunc_21 Gap::Bec::beNDMWShopCtrl30::vfunc_21
+00428790 000e18 beNDMWShopCtrl30_Update
 004295b0 000080 FUN_004295b0
-00429630 000ca8 Gap__Bec__beNDMWShopCtrl40__vfunc_21 Gap::Bec::beNDMWShopCtrl40::vfunc_21
-0042a2e0 001518 Gap__Bec__beNDMWShopCtrl50__vfunc_21 Gap::Bec::beNDMWShopCtrl50::vfunc_21
+00429630 000ca8 beNDMWShopCtrl40_Update
+0042a2e0 001518 beNDMWShopCtrl50_Update
 0042b800 000080 FUN_0042b800
-0042b880 00014c FUN_0042b880
-0042b9d0 000110 FUN_0042b9d0
-0042bae0 00018c FUN_0042bae0
-0042bc70 000b1c Gap__Bec__beNDMWShopJunk__vfunc_21 Gap::Bec::beNDMWShopJunk::vfunc_21
+0042b880 00014c beNDMWShopCtrl50_ShowQuantity
+0042b9d0 000110 beNDMWShopCtrl50_HideQuantity
+0042bae0 00018c beNDMWShopCtrl50_MoveRowCursor
+0042bc70 000b1c beNDMWShopJunk_Update
 0042c790 000080 FUN_0042c790
-0042c810 000ab4 Gap__Bec__beNDMWShopCtrlA0__vfunc_21 Gap::Bec::beNDMWShopCtrlA0::vfunc_21
+0042c810 000ab4 beNDMWShopCtrlA0_Update
 0042d2d0 000080 FUN_0042d2d0
 0042d350 000080 FUN_0042d350
 0042d3d0 000080 FUN_0042d3d0
-0042d450 000994 Gap__Bec__beNDMWShopCtrlA1__vfunc_21 Gap::Bec::beNDMWShopCtrlA1::vfunc_21
+0042d450 000994 beNDMWShopCtrlA1_Update
 0042ddf0 000080 FUN_0042ddf0
 0042de70 000080 FUN_0042de70
 0042def0 000080 FUN_0042def0
-0042df70 0003b4 FUN_0042df70
-0042e330 0006a8 FUN_0042e330
-0042e9e0 000194 FUN_0042e9e0
-0042eb80 000b84 Gap__Bec__beNDMWShopCtrlA2__vfunc_21 Gap::Bec::beNDMWShopCtrlA2::vfunc_21
-0042f710 001604 Gap__Bec__beNDMWShopCtrlEvolve__vfunc_21 Gap::Bec::beNDMWShopCtrlEvolve::vfunc_21
-00430d20 000688 FUN_00430d20
-004313b0 0002b8 FUN_004313b0
-00431670 0000f0 FUN_00431670
-00431760 0011ec Gap__Bec__beNDMWShopCtrlDigilabo__vfunc_21 Gap::Bec::beNDMWShopCtrlDigilabo::vfunc_21
+0042df70 0003b4 beNDMWShopCtrlA1_ShowFirstAlbumPage
+0042e330 0006a8 beNDMWShopCtrlA1_ShowAlbumPage
+0042e9e0 000194 beNDMWShopCtrlA1_CloseAlbumPage
+0042eb80 000b84 beNDMWShopCtrlA2_Update
+0042f710 001604 beNDMWShopCtrlEvolve_Update
+00430d20 000688 beNDMWShopCtrlEvolve_RefreshText
+004313b0 0002b8 beNDMWShopCtrlEvolve_ApplyEvolution
+00431670 0000f0 beNDMWShopCtrlEvolve_ClearItemSlots
+00431760 0011ec beNDMWShopCtrlDigilabo_Update
 00432950 000080 FUN_00432950
-004329d0 0002bc FUN_004329d0
-00432c90 0000a0 FUN_00432c90
-00432d30 0003e8 FUN_00432d30
-00433120 000170 FUN_00433120
-00433290 000034 FUN_00433290
-004332d0 0014bc Gap__Bec__beNDMWShopCtrlEditBit__vfunc_21 Gap::Bec::beNDMWShopCtrlEditBit::vfunc_21
-00434790 000938 Gap__Bec__beNDMWShopCtrlSell__vfunc_21 Gap::Bec::beNDMWShopCtrlSell::vfunc_21
+004329d0 0002bc beNDMWShopCtrlDigilabo_SnapshotParty
+00432c90 0000a0 beNDMWShopCtrlDigilabo_RecalcPlayers
+00432d30 0003e8 beNDMWShopCtrlDigilabo_HasPartyChanged
+00433120 000170 beNDMWShopCtrlDigilabo_ShowPlayerTitle
+00433290 000034 beNDMWShopCtrlDigilabo_PresentMessageWindow
+004332d0 0014bc beNDMWShopCtrlEditBit_Update
+00434790 000938 beNDMWShopCtrlSell_Update
 004350d0 000080 FUN_004350d0
 00435150 000080 FUN_00435150
 004351d0 000080 FUN_004351d0
-00435250 00018c FUN_00435250
-004353e0 000c78 Gap__Bec__beNDMWShopCtrlDeviceSell__vfunc_21 Gap::Bec::beNDMWShopCtrlDeviceSell::vfunc_21
-00436060 000758 FUN_00436060
-004367c0 000224 FUN_004367c0
-004369f0 0000c8 FUN_004369f0
-00436ac0 001014 Gap__Bec__beNDMWShopCtrlDiskSell__vfunc_21 Gap::Bec::beNDMWShopCtrlDiskSell::vfunc_21
-00437ae0 000470 FUN_00437ae0
-00437f50 0000f8 FUN_00437f50
-00438050 000110 FUN_00438050
-00438160 001280 Gap__Bec__beNDMWShopCtrlSales__vfunc_21 Gap::Bec::beNDMWShopCtrlSales::vfunc_21
-004393e0 0006b8 FUN_004393e0
-00439aa0 0002c0 FUN_00439aa0
-00439d60 0001cc FUN_00439d60
-00439f30 000520 FUN_00439f30
-0043a450 000208 FUN_0043a450
-0043a660 0002e8 FUN_0043a660
-0043a950 00018c FUN_0043a950
-0043aae0 001c3c Gap__Bec__beNDMWShopCtrlXdataChip__vfunc_21 Gap::Bec::beNDMWShopCtrlXdataChip::vfunc_21
+00435250 00018c beNDMWShopCtrlSell_MoveRowCursor
+004353e0 000c78 beNDMWShopCtrlDeviceSell_Update
+00436060 000758 beNDMWShopCtrlDeviceSell_RefreshText
+004367c0 000224 beNDMWShopCtrlDeviceSell_UpdatePageCount
+004369f0 0000c8 beNDMWShopCtrlDeviceSell_ResetRowColors
+00436ac0 001014 beNDMWShopCtrlDiskSell_Update
+00437ae0 000470 beNDMWShopCtrlDiskSell_RefreshText
+00437f50 0000f8 beNDMWShopCtrlDiskSell_ShowQuantity
+00438050 000110 beNDMWShopCtrlDiskSell_HideQuantity
+00438160 001280 beNDMWShopCtrlSales_Update
+004393e0 0006b8 beNDMWShopCtrlSales_RefreshText
+00439aa0 0002c0 beNDMWShopCtrlSales_UpdatePageCount
+00439d60 0001cc beNDMWShopCtrlSales_CanPlayerUse
+00439f30 000520 beNDMWShopCtrlSales_PreviewSelected
+0043a450 000208 beNDMWShopCtrlSales_StashEquipment
+0043a660 0002e8 beNDMWShopCtrlSales_RestoreEquipment
+0043a950 00018c beNDMWShopCtrlSales_MoveRowCursor
+0043aae0 001c3c beNDMWShopCtrlXdataChip_Update
 0043c720 0000d0 beNDMWShopCtrlXdataChip_UpdatePageCount
 0043c7f0 000430 beNDMWShopCtrlXdataChip_RefreshText
-0043cc20 000490 Gap__Bec__beNDMWShopDevice__vfunc_21 Gap::Bec::beNDMWShopDevice::vfunc_21
-0043d0b0 00000c Gap__Bec__beNDMWShopDevice__vfunc_20 Gap::Bec::beNDMWShopDevice::vfunc_20
-0043d0c0 00000c Gap__Bec__beNDMWShopCtrlXdataChip__vfunc_20 Gap::Bec::beNDMWShopCtrlXdataChip::vfunc_20
-0043d0d0 00000c Gap__Bec__beNDMWShopCtrlSales__vfunc_20 Gap::Bec::beNDMWShopCtrlSales::vfunc_20
-0043d0e0 00000c Gap__Bec__beNDMWShopCtrlDiskSell__vfunc_20 Gap::Bec::beNDMWShopCtrlDiskSell::vfunc_20
-0043d0f0 00000c Gap__Bec__beNDMWShopCtrlDeviceSell__vfunc_20 Gap::Bec::beNDMWShopCtrlDeviceSell::vfunc_20
-0043d100 00000c Gap__Bec__beNDMWShopCtrlSell__vfunc_20 Gap::Bec::beNDMWShopCtrlSell::vfunc_20
-0043d110 00000c Gap__Bec__beNDMWShopCtrlEditBit__vfunc_20 Gap::Bec::beNDMWShopCtrlEditBit::vfunc_20
-0043d120 00000c Gap__Bec__beNDMWShopCtrlDigilabo__vfunc_20 Gap::Bec::beNDMWShopCtrlDigilabo::vfunc_20
-0043d130 00000c Gap__Bec__beNDMWShopCtrlEvolve__vfunc_20 Gap::Bec::beNDMWShopCtrlEvolve::vfunc_20
-0043d140 00000c Gap__Bec__beNDMWShopCtrlA2__vfunc_20 Gap::Bec::beNDMWShopCtrlA2::vfunc_20
-0043d150 00000c Gap__Bec__beNDMWShopCtrlA1__vfunc_20 Gap::Bec::beNDMWShopCtrlA1::vfunc_20
-0043d160 00000c Gap__Bec__beNDMWShopCtrlA0__vfunc_20 Gap::Bec::beNDMWShopCtrlA0::vfunc_20
-0043d170 00000c Gap__Bec__beNDMWShopJunk__vfunc_20 Gap::Bec::beNDMWShopJunk::vfunc_20
-0043d180 00000c Gap__Bec__beNDMWShopCtrl50__vfunc_20 Gap::Bec::beNDMWShopCtrl50::vfunc_20
-0043d190 00000c Gap__Bec__beNDMWShopCtrl40__vfunc_20 Gap::Bec::beNDMWShopCtrl40::vfunc_20
-0043d1a0 00000c Gap__Bec__beNDMWShopCtrl30__vfunc_20 Gap::Bec::beNDMWShopCtrl30::vfunc_20
-0043d1b0 00000c Gap__Bec__beNDMWShopCtrl10__vfunc_20 Gap::Bec::beNDMWShopCtrl10::vfunc_20
-0043d1c0 00000c Gap__Bec__beNDMWShopCtrl00__vfunc_20 Gap::Bec::beNDMWShopCtrl00::vfunc_20
+0043cc20 000490 beNDMWShopDevice_Update
+0043d0b0 00000c beNDMWShopDevice_GetMeta
+0043d0c0 00000c beNDMWShopCtrlXdataChip_GetMeta
+0043d0d0 00000c beNDMWShopCtrlSales_GetMeta
+0043d0e0 00000c beNDMWShopCtrlDiskSell_GetMeta
+0043d0f0 00000c beNDMWShopCtrlDeviceSell_GetMeta
+0043d100 00000c beNDMWShopCtrlSell_GetMeta
+0043d110 00000c beNDMWShopCtrlEditBit_GetMeta
+0043d120 00000c beNDMWShopCtrlDigilabo_GetMeta
+0043d130 00000c beNDMWShopCtrlEvolve_GetMeta
+0043d140 00000c beNDMWShopCtrlA2_GetMeta
+0043d150 00000c beNDMWShopCtrlA1_GetMeta
+0043d160 00000c beNDMWShopCtrlA0_GetMeta
+0043d170 00000c beNDMWShopJunk_GetMeta
+0043d180 00000c beNDMWShopCtrl50_GetMeta
+0043d190 00000c beNDMWShopCtrl40_GetMeta
+0043d1a0 00000c beNDMWShopCtrl30_GetMeta
+0043d1b0 00000c beNDMWShopCtrl10_GetMeta
+0043d1c0 00000c beNDMWShopCtrl00_GetMeta
 0043d1d0 00027c Gap__Bec__beNDMWShopSelect00__vfunc_22 Gap::Bec::beNDMWShopSelect00::vfunc_22
 0043d450 0007b8 Gap__Bec__beNDMWShopSelect01__vfunc_22 Gap::Bec::beNDMWShopSelect01::vfunc_22
 0043dc10 000e98 Gap__Bec__beNDMWShopSelect02__vfunc_22 Gap::Bec::beNDMWShopSelect02::vfunc_22
@@ -19514,7 +19514,7 @@
 00442bd0 000140 Gap__Bec__beNDMWMdlItem__vfunc_44 Gap::Bec::beNDMWMdlItem::vfunc_44
 00442d10 0003e4 Gap__Bec__beNDMWMdlItem__vfunc_45 Gap::Bec::beNDMWMdlItem::vfunc_45
 00443100 00000c Gap__Bec__beNDMWMdlItem__vfunc_20 Gap::Bec::beNDMWMdlItem::vfunc_20
-00443110 000184 FUN_00443110
+00443110 000184 beNDMWShinkaCtrl_Setup
 004432a0 000298 FUN_004432a0
 00443540 000080 FUN_00443540
 004435c0 000340 FUN_004435c0

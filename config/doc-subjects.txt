@@ -45,6 +45,7 @@ docs/engine/save-card-api.md
 docs/engine/save-interface.md
 docs/engine/selectctrl.md
 docs/engine/shop-selectors.md
+docs/engine/shop-windows.md
 docs/engine/sound-format.md
 docs/engine/stage-loading.md
 docs/engine/stage-materials.md

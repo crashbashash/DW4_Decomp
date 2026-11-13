@@ -72,7 +72,7 @@ extern "C" int DAT_0051d1d0[4];
 extern "C" int DAT_0051d1d8[4];
 extern "C" int g_beMessenger_metaObject[4];
 extern "C" int g_beNDMWGameRam_metaObject[4];
-extern "C" void FUN_00443110(beNDMWShinkaCtrl *arg0, int arg1, int arg2);
+extern "C" void beNDMWShinkaCtrl_Setup(beNDMWShinkaCtrl *arg0, int arg1, int arg2);
 extern "C" int beNDMWGameRam_CalcMaxPoints(beNDMWGameRam *, int, int, int);
 extern "C" int beNDMWGameRam_CalcAttribute(beNDMWGameRam *, int, int, int);
 extern "C" int GETDATABASE_3[4];
@@ -294,7 +294,7 @@ extern "C" void FUN_00447b40(beNDMWMdlPEBaseInfoWork *owner, void *arg);
 extern "C" int g_beNDMWMdlPEBaseInfoWork_metaObject[4];
 extern "C" int g_beNDMWMdlPEBase_metaObject[4];
 
-void FUN_00443110(beNDMWShinkaCtrl *arg0, int arg1, int arg2) {
+void beNDMWShinkaCtrl_Setup(beNDMWShinkaCtrl *arg0, int arg1, int arg2) {
     igObject *t;
     igObject *a0;
     arg0->_playerNo = arg2;

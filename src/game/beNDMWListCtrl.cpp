@@ -178,7 +178,7 @@ extern "C" void sprintf(...);
 extern "C" int beNDMWShopSelect34_Create(...);
 extern "C" int FUN_004402e0(...);
 extern "C" int beMessenger_AppendObject(...);
-extern "C" void FUN_00443110(int, int, int);
+extern "C" void beNDMWShinkaCtrl_Setup(int, int, int);
 extern "C" void beNDMWWindow_SendModelSequence(...);
 extern "C" void *ObjectList_GetAt_003e9260(...);
 extern "C" void ObjectList_RemoveAt_00406f20(...);
@@ -5390,7 +5390,7 @@ void beNDMWStatusCtrlSkill_Update(beNDMWStatusCtrlSkill *self)
             } else
             switch (self->_retCode) {
             case 0:
-                FUN_00443110(self->_shinkaCtrl, self->_insight, self->_playerNo);
+                beNDMWShinkaCtrl_Setup(self->_shinkaCtrl, self->_insight, self->_playerNo);
                 if (SW(((beNDMWShinkaCtrl *)self->_shinkaCtrl)->_list)->_count > 8)
                     self->_maxPage = 2;
                 else
