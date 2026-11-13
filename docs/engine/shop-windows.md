@@ -77,7 +77,12 @@ refills the decide list (one bool per row: false greys a row out) and returns th
 highlighted item's TXT. Page turns go through the list window's paging virtuals (slots 22–24, shared
 with `beNDMWListCtrl`) and put the `beNDMWWindowSelect` into its reload state. The row pointer model
 `i_stcursor04` plays `SQ_OPENnn` for the row (`beNDMWShopCtrl50_MoveRowCursor`,
-`beNDMWShopCtrlSell_MoveRowCursor`, `beNDMWShopCtrlSales_MoveRowCursor`).
+`beNDMWShopCtrlSell_MoveRowCursor`, `beNDMWShopCtrlSales_MoveRowCursor`). A decide-list fill with a
+literal appends through one inline whose `true`/`false` argument binds a `const bool &`, so each literal is
+an MWCC one-byte `.sdata` temporary the code loads. The inline declares the count before the list
+pointer it casts from its argument: MWCC numbers the locals in declaration order, which is what puts
+the list in the lower saved register in `beNDMWShopCtrlDiskSell_Update` and
+`beNDMWShopCtrlSales_UpdatePageCount`.
 
 - **Sell** (`beNDMWShopCtrlSell_Update`): greys out devices or disks when the player has none to sell,
   then opens `beNDMWShopCtrlDeviceSell` or `beNDMWShopCtrlDiskSell`. Selling adds the KAITORI price to
@@ -111,7 +116,4 @@ with `beNDMWListCtrl`) and put the `beNDMWWindowSelect` into its reload state. T
 ## Open questions
 
 - Message codes are `txt_shop.lua` indices; what each says is inferred from where it is used.
-- The two decide-list fills in `beNDMWShopCtrlDiskSell_Update` and `beNDMWShopCtrlSales_UpdatePageCount`
-  still read the compiler's bool constants by address: the `BoolList_Append(list, true)` spelling the
-  other windows use swaps two registers there.
 - `beNDMWShopCtrlSales_Update` has no source.
