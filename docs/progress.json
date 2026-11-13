@@ -230,7 +230,7 @@
    },
    "fun_dat_refs": {
     "reason": null,
-    "value": 24152
+    "value": 21998
    },
    "inline_asm.other": {
     "reason": null,
@@ -250,7 +250,7 @@
    },
    "m2c_idiom.units": {
     "reason": null,
-    "value": 559
+    "value": 556
    },
    "mismatch.bytes": {
     "reason": null,
@@ -286,11 +286,11 @@
    },
    "raw_casts.reflected": {
     "reason": null,
-    "value": 363
+    "value": 365
    },
    "struct.a": {
     "reason": null,
-    "value": 58
+    "value": 52
    },
    "struct.b": {
     "reason": null,
@@ -298,7 +298,7 @@
    },
    "struct.c": {
     "reason": null,
-    "value": 70
+    "value": 69
    },
    "unapproved.bytes": {
     "reason": null,
@@ -334,12 +334,12 @@
    "compile.functions": 0,
    "foreign_profile.bytes": 288,
    "foreign_profile.functions": 10,
-   "fun_dat_refs": 24152,
+   "fun_dat_refs": 21998,
    "inline_asm.other": 0,
    "inventory.unsymbolised_bytes": 1020,
    "inventory_gap.bytes": 0,
    "inventory_gap.functions": 0,
-   "m2c_idiom.units": 559,
+   "m2c_idiom.units": 556,
    "mismatch.bytes": 0,
    "mismatch.functions": 0,
    "name_defect.bytes": 0,
@@ -348,10 +348,10 @@
    "orphan.bytes": 32,
    "profile_split.bytes": 18924,
    "profile_split.units": 2,
-   "raw_casts.reflected": 363,
-   "struct.a": 58,
+   "raw_casts.reflected": 365,
+   "struct.a": 52,
    "struct.b": 0,
-   "struct.c": 70,
+   "struct.c": 69,
    "unapproved.bytes": 22032,
    "unapproved.functions": 51,
    "unmatched.bytes": 627060,
@@ -362,9 +362,9 @@
   "fully_matched": 19581,
   "fully_verified": 19497,
   "matched": 19565,
-  "named": 10688,
-  "named_semantic": 3146,
-  "named_semantic_matched": 2950,
+  "named": 10797,
+  "named_semantic": 3267,
+  "named_semantic_matched": 3069,
   "total": 20584
  },
  "largest": [
@@ -374,7 +374,7 @@
    "va": "0x003fca10"
   },
   {
-   "name": "Gap__Bec__beNDMWLoadIntf2__vfunc_31",
+   "name": "beNDMWLoadIntf2__Update",
    "size": 18616,
    "va": "0x003e4750"
   },
@@ -389,7 +389,7 @@
    "va": "0x00286d28"
   },
   {
-   "name": "Gap__Bec__beNDMWStatus__vfunc_34",
+   "name": "beNDMWStatus__OnMessage",
    "size": 9820,
    "va": "0x003d60e0"
   },
@@ -414,7 +414,7 @@
    "va": "0x00396a80"
   },
   {
-   "name": "Gap__Bec__beNDMWLoadIntf2__vfunc_34",
+   "name": "beNDMWLoadIntf2__OnMessage",
    "size": 8272,
    "va": "0x003e9430"
   }
@@ -452,42 +452,42 @@
   "vtables": 478
  },
  "readable": {
-  "bytes": 959708,
+  "bytes": 1067952,
   "failing": {
    "addresses": {
-    "bytes": 1566844,
-    "functions": 9406
+    "bytes": 1433928,
+    "functions": 9178
    },
    "fields": {
-    "bytes": 369692,
-    "functions": 1139
+    "bytes": 316204,
+    "functions": 1101
    },
    "idioms": {
-    "bytes": 388944,
-    "functions": 1120
+    "bytes": 342032,
+    "functions": 1061
    },
    "name": {
-    "bytes": 1546580,
-    "functions": 12792
+    "bytes": 1486756,
+    "functions": 12673
    },
    "placed": {
-    "bytes": 183988,
-    "functions": 1519
+    "bytes": 183668,
+    "functions": 1518
    },
    "references": {
-    "bytes": 885944,
-    "functions": 3206
+    "bytes": 730400,
+    "functions": 3015
    },
    "types": {
-    "bytes": 332116,
-    "functions": 530
+    "bytes": 275332,
+    "functions": 506
    },
    "virtuals": {
-    "bytes": 153644,
-    "functions": 285
+    "bytes": 151352,
+    "functions": 266
    }
   },
-  "functions": 6147,
+  "functions": 6324,
   "matched_functions": 19581
  },
  "regions": [
@@ -622,12 +622,12 @@
  ],
  "typed": {
   "error": null,
-  "offset_casts": 6037,
-  "pct": 40.08,
-  "recovered": 26516,
-  "synthetic": 9106,
-  "total": 66156,
-  "typeable": 363,
-  "typeable_pct": 0.55
+  "offset_casts": 6018,
+  "pct": 39.61,
+  "recovered": 25786,
+  "synthetic": 8939,
+  "total": 65106,
+  "typeable": 365,
+  "typeable_pct": 0.56
  }
 }
