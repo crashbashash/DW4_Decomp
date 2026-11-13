@@ -54,7 +54,7 @@ void FUN_004552e0(int *arg0, int *arg1) {
     }
 }
 
-int FUN_00455370(VC_455370 *arg0, char *arg1) {
+int beFontImage_CountTriangles(VC_455370 *arg0, char *arg1) {
     int s = 0;
     char *p = arg1;
     while (*p != 0) {
@@ -64,7 +64,7 @@ int FUN_00455370(VC_455370 *arg0, char *arg1) {
     return s;
 }
 
-int FUN_004553e0(void **arg0, unsigned short *arg1) {
+int beFontImage_CountTrianglesWide(void **arg0, unsigned short *arg1) {
     int sum;
     unsigned short *p;
     int c;

@@ -9420,7 +9420,7 @@ extern "C" int g_igStringMetaField_vtable[4];
 struct S_30b320 { char pad[8]; char *f8; int f12; };
 extern "C" void FUN_0030b320(struct S_30b320 *arg0, int arg1, int arg2);
 typedef struct S0_30b420 { char pad8[8]; int f8; int fC; } S0_30b420;
-extern "C" int FUN_0030b420(S0_30b420 *arg0);
+extern "C" int igStringObj_Clear(S0_30b420 *arg0);
 typedef struct IniStringView { char pad[8]; char *text; unsigned int length; } IniStringView;
 extern "C" char *FUN_00300d70(IniStringView *, unsigned int);
 extern "C" void FUN_0030b460(IniStringView *self, char *insert, unsigned int at, unsigned int n);

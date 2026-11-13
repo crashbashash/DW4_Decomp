@@ -1,4 +1,4 @@
-void FUN_003624f0(int arg0) {
+void beFontGeomAttrPair_Create(int arg0) {
     FUN_00362690();
     igMetaObject_CreateInstance(*(int *)0x5896D8, arg0);
 }

@@ -156,7 +156,7 @@ int FUN_002da710(void *arg0, int arg1, int arg2) {
 
 int FUN_002da770(int *p)
 {
-    return FUN_0030b420((S0_30b420 *)(*(int *)((char *)p + 40)));
+    return igStringObj_Clear((S0_30b420 *)(*(int *)((char *)p + 40)));
 }
 
 static inline int n_of(const struct L_2da780 *list) { return list->n; }

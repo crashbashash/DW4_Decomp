@@ -57,7 +57,7 @@ L24:
     arg0->f56 = arg1;
     arg0->f88 = arg1;
     arg0->f52 = arg2;
-    FUN_0015db90(sp70);
+    igVertexArrayLock_Init(sp70);
     sp70[1] = 0;
     sp70[0] = 0;
     arg0->f40->v108(sp70, 1);

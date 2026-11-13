@@ -4,7 +4,7 @@
 void Gap__Gfx__igPrimLengthArray1_1__vfunc_20(igPrimLengthArray1_1 *self) {
 }
 
-void *FUN_0015db90(void *arg0) {
+void *igVertexArrayLock_Init(void *arg0) {
     *(int *)((char *)arg0 + 0) = 0;
     *(int *)((char *)arg0 + 4) = 0;
     *(int *)((char *)arg0 + 8) = 0;

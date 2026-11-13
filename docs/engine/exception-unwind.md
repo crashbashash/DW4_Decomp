@@ -170,6 +170,6 @@ compiles to the same instructions without the record.
 
 ## Open questions
 
-- `FUN_00383ed0` keeps a retail record with a packed summary of `0`, but the compiler
+- `beFont_AlignLines` keeps a retail record with a packed summary of `0`, but the compiler
   emits none for its current C or C++ spellings. None of the constructs above has
   been tried on it.

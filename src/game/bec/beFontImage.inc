@@ -167,21 +167,21 @@ int FUN_00361d20(void) {
     return g_igBitmapFont_metaObject[0];
 }
 
-int FUN_00361d30(void) {
+int beFont_GetAlignEnum(void) {
     if (DAT_00589660[0] == 0) {
         DAT_00589660[0] = igMetaEnum_Create(&DAT_00505188[0], &DAT_004c6ca0[0], &DAT_004c6cb0[0], 3);
     }
     return DAT_00589660[0];
 }
 
-int FUN_00361d90(void) {
+int beFont_GetSwitchEnum(void) {
     if (DAT_00589668[0] == 0) {
         DAT_00589668[0] = igMetaEnum_Create(&DAT_00504990[0], &DAT_004c6cc0[0], &DAT_004c6cd0[0], 4);
     }
     return DAT_00589668[0];
 }
 
-int FUN_00361df0(void) {
+int beFont_GetMessageEnum(void) {
     if (DAT_00589670[0] == 0) {
         DAT_00589670[0] = igMetaEnum_Create(&DAT_00501a58[0], &DAT_004c6ce0[0], &DAT_004c6d10[0], 9);
     }

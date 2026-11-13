@@ -219,7 +219,7 @@ void FUN_001dc500(A_1dc500 *arg0, unsigned char arg1, int arg2) {
     }
 }
 
-void FUN_001dc820(void *arg0, unsigned int arg1) {
+void igSwitch_EnableChild(void *arg0, unsigned int arg1) {
     int *temp_a1;
     int temp_a2_2;
     unsigned int temp_a3;
@@ -241,7 +241,7 @@ void FUN_001dc870(int *p)
     igBitMask_SetAll((igDataList *)(*(int *)((char *)p + 32)));
 }
 
-void FUN_001dc880(void *arg0, unsigned int arg1) {
+void igSwitch_DisableChild(void *arg0, unsigned int arg1) {
     int *temp_a1;
     int temp_a2_2;
     unsigned int temp_a3;

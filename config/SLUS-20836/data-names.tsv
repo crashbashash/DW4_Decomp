@@ -3088,6 +3088,7 @@
 0x004c8804	g_attributeNames	recovered-global
 0x004c8820	g_cameraShakeOffsetX	recovered-global
 0x004c8850	g_cameraShakeOffsetY	recovered-global
+0x004c8880	g_sjisToUnicodeTable	recovered-global
 0x004c8fc0	g_fadeInCurve	recovered-global
 0x004c90b0	g_fadeOutCurve	recovered-global
 0x004c91a0	g_svConnectMax	recovered-global
@@ -4520,6 +4521,13 @@
 0x0050e490	sndfBuffer	string-literal
 0x0050e4a0	_dataBuffer	string-literal
 0x0050e728	TEXTCTL	string-literal
+0x0050e730	LAYERCTL_2	string-literal
+0x0050e740	FONT	string-literal
+0x0050e748	GETLAYERNODE	string-literal
+0x0050e758	g_emptyTextPlaceholder	recovered-global
+0x0050e798	text_igStringObj	string-literal
+0x0050e7a8	text_beUnicodeObj	string-literal
+0x0050e7b8	ALL_3	string-literal
 0x0050ed58	MATCTRL	string-literal
 0x0050ef10	HIT	string-literal
 0x0050ef18	MODELCTRL_7	string-literal

@@ -412,7 +412,7 @@ struct F { char p[20]; short f20; char p1[14]; char f36; char p2; char f38; char
 extern "C" void igVertexArray1_1_InitFields(void);
 extern "C" void thunk_igPsx2VertexArray1_1_GetMetaObject(void);
 extern "C" void thunk_FUN_0015e010(void);
-extern "C" int FUN_0014b940(int arg0);
+extern "C" int igVertexArray_Create(int arg0);
 extern "C" igMetaObject *FUN_0014b980(void);
 extern "C" igMetaObject *igVertexArray_GetMetaObject(void);
 extern "C" void FUN_0014ba20(void);
@@ -1965,7 +1965,7 @@ extern "C" void FUN_0015db00(Sdb00 *arg0, int arg1, V2f *arg2);
 extern "C" void FUN_0015db40(igPointSpriteExtView *self);
 extern "C" void FUN_0015db60(igPointSpriteExtView *self);
 extern "C" void Gap__Gfx__igPrimLengthArray1_1__vfunc_20(igPrimLengthArray1_1 *self);
-extern "C" void *FUN_0015db90(void *arg0);
+extern "C" void *igVertexArrayLock_Init(void *arg0);
 typedef struct S0_15df80 { char pad24[24]; int f18; } S0_15df80;
 typedef struct S_temp_v0 { char pad4[4]; int f4; } S_temp_v0;
 extern "C" int Gap__Core__igObject__vfunc_11(...);

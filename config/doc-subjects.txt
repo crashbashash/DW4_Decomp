@@ -69,6 +69,7 @@ docs/systems/digivolution-and-sidequests.md
 docs/systems/drop-tables.md
 docs/systems/enemy-data.md
 docs/systems/enemy-spawn-system.md
+docs/systems/font.md
 docs/systems/hub-inventory.md
 docs/systems/hub-recovery.md
 docs/systems/items.md

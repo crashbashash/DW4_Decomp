@@ -125,7 +125,7 @@ int FUN_001d68f0(void) {
 
 int FUN_001d6900(Primitive **out) {
     float v[18];
-    igSmartPointer<Primitive> quad(FUN_00137810(FUN_002f8a20()));
+    igSmartPointer<Primitive> quad(igGeometryAttr_Create(FUN_002f8a20()));
     VertexFormat format;
     int i;
     format.flags = 0;

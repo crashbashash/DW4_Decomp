@@ -22,6 +22,7 @@ Content, save format, and the data-driven systems. Index: [`../README.md`](../RE
 | `dev-stage-debug-menu.md` | Dev stage `stag0000` + the engine's stage-select warp recipe |
 | `enemy-spawn-system.md` | `GENERATER`/`GENE-xx` spawn system (field map, triggers, model swap) |
 | `drop-tables.md` | Item drop tables and the weighted roll |
+| [beFont text nodes](font.md) | The beFont message handler, layout-entry search, Shift-JIS conversion and text geometry |
 | `rng.md` + `rng-sites.tsv` + `rng-verification.md` | The one RNG: MT19937, seed **5150**, every draw site (Lua + native), the new-game draw timeline, and how to predict/shift it |
 | `critical-path.md` | Flag-by-flag path to the ending (speedrun reference) |
 | `flags/` | Flag data; see its own [`README.md`](flags/README.md) (map, meanings, `flag-xref.tsv`) |

@@ -1,7 +1,7 @@
 #include "dw4/reflected.h"
 typedef unsigned int u32;
 struct Vec3Table { char p0[16]; char *base; int stride; };
-extern "C" void FUN_00383ed0(beFont *self, int unused, beFontInfoData *par, Vec3Table *tab) {
+extern "C" void beFont_AlignLines(beFont *self, int unused, beFontInfoData *par, Vec3Table *tab) {
     float ref = par->_width;
     int mode = par->_align;
     float f = 0.0f;

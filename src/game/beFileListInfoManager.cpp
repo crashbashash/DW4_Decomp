@@ -43,7 +43,7 @@ extern "C" int g_beMessenger_metaObject[4];
 extern "C" int g_igViewerSceneInfoManager_metaObject[4];
 extern "C" void Gap__Bec__beFileListInfoManager__vfunc_23(beFileListInfoManager *arg0);
 extern "C" int g_beFileListInfoManager_metaObject[4];
-extern "C" void FUN_00382df0(void *, igObject *);
+extern "C" void beFont_AddFontImages(void *, igObject *);
 extern "C" void ObjectList_AppendRetained(igObjectList *, igObject *);
 extern "C" int g_igNamedObjectInfo_metaObject[4];
 extern "C" int g_beFont_metaObject[4];
@@ -116,7 +116,7 @@ int Gap__Bec__beFileListInfoManager__vfunc_25(beFileListInfoManager *self, igObj
     if (g_igNamedObjectInfo_metaObject[0] == ((MetaVt *)info)->getMeta()) {
         void *found = igInsightCore_FindManager(self->_insight, g_beFont_metaObject[0]);
         if (found == 0) return 0;
-        FUN_00382df0(found, info);
+        beFont_AddFontImages(found, info);
         return 1;
     }
     return 0;

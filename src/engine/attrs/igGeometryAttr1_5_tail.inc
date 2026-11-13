@@ -192,7 +192,7 @@ void Gap__Attrs__igGeometryAttr1_5__vfunc_34(GeometryAttrView *arg0, float *arg1
     float ny = nz;
     float nx = nz;
     unsigned int i;
-        FUN_0015db90(&acc);
+        igVertexArrayLock_Init(&acc);
     acc.f4 = 0;
     acc.f0 = 0;
     acc.f8 = arg0->f28;

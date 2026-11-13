@@ -219,7 +219,7 @@ void FUN_0032e130(MediaPathFields *self, int index, char **path) {
         }
         row->name = interned;
     }
-    FUN_0030b420((S0_30b420 *)self->conversion);
+    igStringObj_Clear((S0_30b420 *)self->conversion);
 }
 
 int FUN_0032e950(struct Z_32e950 *arg0, int arg1, int arg2, int arg3, int arg4, int arg5, int arg6, int arg7) {

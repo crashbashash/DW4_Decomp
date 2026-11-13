@@ -223,7 +223,7 @@ void *FUN_00165e50(Self *self, Obj_165e50 *src) {
     /* matching construct: random sweep — the order of the local declarations */
     int k; int nb; Obj_165e50 *dst; Mat *buf; V_165e50 *q; int m; int i; int n; int j; Fl flags; int scratch; V_165e50 acc, t, nacc, nt; Obj_165e50 *al;
     if (src != 0) {
-    dst = (Obj_165e50 *)FUN_0014b940(FUN_00165cd0((int *)self));
+    dst = (Obj_165e50 *)igVertexArray_Create(FUN_00165cd0((int *)self));
     flags = *src->v100();
     flags.b &= ~0xF0;
     flags.b &= ~0xF00;

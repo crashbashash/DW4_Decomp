@@ -1,0 +1,26 @@
+# beFont.cpp: the beFont text node (message handler, layout-entry search, Shift-JIS conversion, text
+# geometry and line layout), the BecLibrary creator and message enums it calls, and the scene-graph,
+# vertex-array and font-image helpers it calls. Evidence in docs/systems/font.md.
+# <va>	<name>	<module>
+0x00137810	igGeometryAttr_Create	engine
+0x0014b940	igVertexArray_Create	engine
+0x0015db90	igVertexArrayLock_Init	engine
+0x001dc820	igSwitch_EnableChild	engine
+0x001dc880	igSwitch_DisableChild	engine
+0x0030b420	igStringObj_Clear	engine
+0x00361d30	beFont_GetAlignEnum	game
+0x00361d90	beFont_GetSwitchEnum	game
+0x00361df0	beFont_GetMessageEnum	game
+0x003624f0	beFontGeomAttrPair_Create	game
+0x00382df0	beFont_AddFontImages	game
+0x00383350	beFont_FindFontIndex	game
+0x00383420	beFont_SetText	game
+0x00383910	beFont_ReplaceVertexArray	game
+0x00383ab0	beFont_PrepareGeometry	game
+0x00383bf0	beFont_LayoutLines	game
+0x00383ed0	beFont_AlignLines	game
+0x00384010	beFont_LockVertexArray	game
+0x003840a0	beFont_FindFirstLayoutEntry	game
+0x003841d0	beFont_FindNextLayoutEntry	game
+0x00455370	beFontImage_CountTriangles	engine
+0x004553e0	beFontImage_CountTrianglesWide	engine

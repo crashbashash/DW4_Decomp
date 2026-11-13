@@ -364,10 +364,10 @@ void FUN_0030b3c0(int arg0, int arg1) {
         FUN_0030b320((struct S_30b320 *)arg0, arg1, strlen(arg1));
         return;
     }
-    FUN_0030b420((S0_30b420 *)arg0);
+    igStringObj_Clear((S0_30b420 *)arg0);
 }
 
-int FUN_0030b420(S0_30b420 *arg0) {
+int igStringObj_Clear(S0_30b420 *arg0) {
     int temp_a1;
 
     temp_a1 = arg0->f8;

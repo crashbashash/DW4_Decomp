@@ -17,9 +17,9 @@ extern "C" void *FUN_001968f0(void *);
 extern "C" void *FUN_0019f1d0(void *);
 extern "C" int FUN_001c5d10(void *, void *);
 extern "C" int FUN_001c6050(void *, void *);
-extern "C" int FUN_001dc820(void *, int);
+extern "C" int igSwitch_EnableChild(void *, int);
 extern "C" int FUN_001dc870(void *);
-extern "C" int FUN_001dc880(void *, int);
+extern "C" int igSwitch_DisableChild(void *, int);
 extern "C" int FUN_001dc8d0(void *);
 extern "C" int FUN_001dc8e0(void *, void *);
 extern "C" void *igInsightCore_FindManager(int, int);
@@ -216,12 +216,12 @@ int Gap__Bec__beLayerCtl__vfunc_34(beLayerCtl *arg0, beLayerInfoRam *arg1, beMes
             for (i = 0; i < LCOUNT(KIDS(SWT(arg0))); i++) {
                 if (strcmp(NAME(ELEM(KIDS(SWT(arg0)), i)), a) == 0) {
                     switch (beMessenger_ResolveEnumValue(arg0->_messenger, FUN_0035c9e0(), b)) {
-                    case 0: FUN_001dc880((void *)arg0->_layerSwt, i); break;
-                    case 1: FUN_001dc820((void *)arg0->_layerSwt, i); break;
+                    case 0: igSwitch_DisableChild((void *)arg0->_layerSwt, i); break;
+                    case 1: igSwitch_EnableChild((void *)arg0->_layerSwt, i); break;
                     case 2: {
                         igSwitch *l = SWT(arg0);
-                        if ((1 << (i & 31)) & ((unsigned *)((igBitMask *)l->_childMask)->_data)[(unsigned)i >> 5]) FUN_001dc880(l, i);
-                        else FUN_001dc820(l, i);
+                        if ((1 << (i & 31)) & ((unsigned *)((igBitMask *)l->_childMask)->_data)[(unsigned)i >> 5]) igSwitch_DisableChild(l, i);
+                        else igSwitch_EnableChild(l, i);
                         break; }
                     }
                     break;

@@ -3497,7 +3497,7 @@ struct Primitive : public igVirtualObject {
     int f8;
     VertexArray *vertices;
 };
-extern "C" Primitive *FUN_00137810(int);
+extern "C" Primitive *igGeometryAttr_Create(int);
 extern "C" int FUN_002f8a20(void);
 /* Configure the stage render-state objects (viewport/camera/clear/light setup). A straight run of
  * configuration writes: object fields (+12 mode words, +20/+24/+36 flags), the virtual setters at
@@ -5858,9 +5858,9 @@ extern "C" void FUN_001db500(A_1db500 *arg0);
 extern "C" void Gap__Sg__igSorter__vfunc_24(Sorter *arg0);
 extern "C" void FUN_001dc400(igSorter *arg0, igGroup *arg1, igAttrStackManager *arg2);
 extern "C" void FUN_001dc500(A_1dc500 *arg0, unsigned char arg1, int arg2);
-extern "C" void FUN_001dc820(void *arg0, unsigned int arg1);
+extern "C" void igSwitch_EnableChild(void *arg0, unsigned int arg1);
 extern "C" void FUN_001dc870(int *p);
-extern "C" void FUN_001dc880(void *arg0, unsigned int arg1);
+extern "C" void igSwitch_DisableChild(void *arg0, unsigned int arg1);
 extern "C" void FUN_001dc8d0(int *p);
 extern "C" int FUN_001dc8e0(void *arg0, int arg1);
 extern "C" int Gap__Sg__igSwitch__vfunc_35(S_1dc940 *arg0, int arg1, void *arg2);

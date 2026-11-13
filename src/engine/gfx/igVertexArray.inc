@@ -1,4 +1,4 @@
-int FUN_0014b940(int arg0) {
+int igVertexArray_Create(int arg0) {
     FUN_0014ba20();
     return igMetaObject_CreateInstance(*(int *)0x55FAC8, arg0);
 }
