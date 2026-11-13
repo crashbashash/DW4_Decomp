@@ -23,16 +23,24 @@ planning something big, open an issue first so two people don't end up on the sa
 The code has to match the original byte for byte. If you can't get a function into C yet, leave it
 out. Please don't wrap its instructions in `asm`.
 
+The game is compiled the way it was originally built: one whole source file at a time, not one function
+at a time. A function goes into its file (`src/<module>/<file>.c`), in the order the functions sit in the
+game, and it only counts once the whole file still matches. A function compiles differently next to its
+neighbours, so check it inside its file.
+
 Inline `asm` and `volatile` make a function count as unmatched until the project owner approves that use
 ([why](docs/engine/source-approvals.md)), so look for plain C first.
 
 ## Checking your work
 
-To try one function:
+To check a file, pass the address of its first function and the file:
 
 ```sh
-python3 tools/check.py --function 0xVA --cand src/unmatched/FUN_XXXXXXXX.c
+python3 tools/check.py --function 0xVA --cand src/<module>/<file>.c
 ```
+
+Every function in the file should print `MATCH`. If you change which functions a file holds, re-measure its
+rows with `tools/whole_file_rows.py` (its help text gives the command).
 
 For a side-by-side view, run `make objdiff` and open the folder in
 [objdiff](https://github.com/encounter/objdiff).

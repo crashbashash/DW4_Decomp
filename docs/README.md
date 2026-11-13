@@ -186,6 +186,24 @@ Committed files, and the gitignored working directories the analysis writes to. 
 - **Knowledge lives in the topic's document.** Write what is known as plain fact. Mark anything unproven
   under an "Open questions" section, and keep approaches that failed under "What didn't work", so nobody
   repeats them. A live-memory claim counts when a running game or an off-line savestate read confirms it.
+- **A document states the current state.** No dated sections, update notes or accounts of how a result was
+  reached (Git keeps the history); when something changes, rewrite the passage that describes it. Keep each
+  document with its topic and index it from the owning folder's README.
+- **No match tallies in prose.** A document never records which functions match or lack source, nor counts
+  of matched functions or bytes: `../data/check-categories.tsv` and `../PROGRESS.md` own that. Describe
+  behaviour, layout and why a shape compiles as it does. Output generated from those tables is fine.
+- **Method documents name no function.** A document on how to match or check code, rather than what a part
+  of the game does, gives the source shape and its instructions, with `FUN_XXXXXXXX` and `0xVA` as
+  placeholders, since an example goes stale when its function is renamed. A document naming functions is a
+  subject document listed in `../config/doc-subjects.txt`, and every name it uses exists in the symbol
+  table, so a rename updates it. `../scripts/check_doc_function_names.py` enforces both in `make hygiene`
+  and the pre-commit hook.
+- **Progress is fully matched source.** The headline is `functions.fully_matched` and
+  `code_bytes.fully_matched` in `progress.json`: units `make check` classifies as `match`, plus
+  owner-approved assembly sources. `fully_verified` is the `match` count alone, which the regression rule
+  compares. The code-bytes-identical figure adds the verification debt and is reported second, never as
+  the headline. Nothing else earns credit: no partial score for a near miss (objdiff's fuzzy percentage
+  included), and no figure summed with asm bodies.
 - **A savestate carries the loaded world in RAM**, so it cannot test a disc change. To test one, boot
   the disc and then load the stage.
 - **Never write the pristine disc.** Work from a copy.
