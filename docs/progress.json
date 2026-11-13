@@ -230,7 +230,7 @@
    },
    "fun_dat_refs": {
     "reason": null,
-    "value": 30369
+    "value": 29323
    },
    "inline_asm.other": {
     "reason": null,
@@ -250,7 +250,7 @@
    },
    "m2c_idiom.units": {
     "reason": null,
-    "value": 722
+    "value": 693
    },
    "mismatch.bytes": {
     "reason": null,
@@ -289,8 +289,8 @@
     "value": 365
    },
    "struct.a": {
-    "reason": null,
-    "value": 66
+    "reason": "ThreadParam has two layouts: eekernel.h's 48 bytes, which p2StartWatchdog's frame needs, and adxps2.c's 36-byte Sony layout; which one the p2 code used is open",
+    "value": 67
    },
    "struct.b": {
     "reason": null,
@@ -298,7 +298,7 @@
    },
    "struct.c": {
     "reason": null,
-    "value": 88
+    "value": 87
    },
    "unapproved.bytes": {
     "reason": null,
@@ -334,12 +334,12 @@
    "compile.functions": 0,
    "foreign_profile.bytes": 288,
    "foreign_profile.functions": 10,
-   "fun_dat_refs": 30369,
+   "fun_dat_refs": 29323,
    "inline_asm.other": 0,
    "inventory.unsymbolised_bytes": 1020,
    "inventory_gap.bytes": 0,
    "inventory_gap.functions": 0,
-   "m2c_idiom.units": 722,
+   "m2c_idiom.units": 693,
    "mismatch.bytes": 0,
    "mismatch.functions": 0,
    "name_defect.bytes": 0,
@@ -349,9 +349,9 @@
    "profile_split.bytes": 18924,
    "profile_split.units": 2,
    "raw_casts.reflected": 365,
-   "struct.a": 66,
+   "struct.a": 67,
    "struct.b": 0,
-   "struct.c": 88,
+   "struct.c": 87,
    "unapproved.bytes": 22032,
    "unapproved.functions": 51,
    "unmatched.bytes": 628164,
@@ -362,9 +362,9 @@
   "fully_matched": 19569,
   "fully_verified": 19485,
   "matched": 19553,
-  "named": 10101,
-  "named_semantic": 2434,
-  "named_semantic_matched": 2278,
+  "named": 10208,
+  "named_semantic": 2547,
+  "named_semantic_matched": 2381,
   "total": 20584
  },
  "largest": [
@@ -379,7 +379,7 @@
    "va": "0x003e4750"
   },
   {
-   "name": "Gap__Bec__beNDMWSaveIntf__vfunc_31",
+   "name": "beNDMWSaveIntf_Update",
    "size": 16352,
    "va": "0x004081a0"
   },
@@ -452,42 +452,42 @@
   "vtables": 478
  },
  "readable": {
-  "bytes": 841300,
+  "bytes": 852912,
   "failing": {
    "addresses": {
-    "bytes": 1704944,
-    "functions": 9903
+    "bytes": 1692308,
+    "functions": 9814
    },
    "fields": {
-    "bytes": 428512,
-    "functions": 1300
+    "bytes": 419748,
+    "functions": 1291
    },
    "idioms": {
-    "bytes": 537020,
-    "functions": 1483
+    "bytes": 504636,
+    "functions": 1438
    },
    "name": {
-    "bytes": 1834908,
-    "functions": 13452
+    "bytes": 1787264,
+    "functions": 13350
    },
    "placed": {
-    "bytes": 227792,
-    "functions": 1815
+    "bytes": 219276,
+    "functions": 1767
    },
    "references": {
-    "bytes": 1037924,
-    "functions": 3552
+    "bytes": 1010072,
+    "functions": 3496
    },
    "types": {
-    "bytes": 405696,
-    "functions": 663
+    "bytes": 381464,
+    "functions": 654
    },
    "virtuals": {
-    "bytes": 171324,
-    "functions": 310
+    "bytes": 171148,
+    "functions": 308
    }
   },
-  "functions": 5636,
+  "functions": 5714,
   "matched_functions": 19569
  },
  "regions": [
@@ -622,11 +622,11 @@
  ],
  "typed": {
   "error": null,
-  "offset_casts": 6298,
-  "pct": 39.82,
-  "recovered": 26453,
-  "synthetic": 9538,
-  "total": 66435,
+  "offset_casts": 6279,
+  "pct": 39.8,
+  "recovered": 26449,
+  "synthetic": 9517,
+  "total": 66449,
   "typeable": 365,
   "typeable_pct": 0.55
  }
