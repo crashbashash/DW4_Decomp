@@ -25,7 +25,7 @@ int InitTLB32MB(void)
     FUN_0010d0d0(D_004d26d0, D_00482558.nkernel - 1, D_00482558.nkernel,
                  D_00482558.nkernel + D_00482558.ndefault - 1, D_00482558.nkernel + D_00482558.ndefault,
                  D_00482558.nkernel + D_00482558.ndefault + D_00482558.nextend - 1);
-    __asm__ volatile("mtc0 $0, $6\n\tsync.p");
+    __asm__("mtc0 $0, $6\n\tsync.p");
     i = 0;
     n = D_00482558.nkernel;
     if (n > 48) {
@@ -42,7 +42,7 @@ int InitTLB32MB(void)
     for (e = D_00482558.deflt; i < n; i++, e++)
         RFU086_WaitEvnetFlag(i, (*e)[0], (*e)[1], (*e)[2], (*e)[3]);
     D_00482558.wired = i;
-    __asm__ volatile("mtc0 %0, $6\n\tsync.p" : : "r"(i));
+    __asm__("mtc0 %0, $6\n\tsync.p" : : "r"(i));
     if (D_00482558.nextend > 0) {
         n = i + D_00482558.nextend;
         if (n > 48) {

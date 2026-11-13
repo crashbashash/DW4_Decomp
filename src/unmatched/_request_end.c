@@ -1,3 +1,4 @@
+#include "dw4/eekernel_gp.h"
 typedef struct {
     void *packet;
     int pad4;
@@ -18,11 +19,6 @@ typedef struct {
 } RpcEndPacket;
 int iSignalSema(int sema);
 void FUN_0010dbb0(void *packet);
-static inline void *swapGp(void *gp) {
-    void *old;
-    __asm__ volatile("move %0,$28; move $28,%1" : "=&r"(old) : "r"(gp) : "memory");
-    return old;
-}
 void _request_end(RpcEndPacket *request) {
     RpcClientData *client;
     void *savedGp;
@@ -30,9 +26,9 @@ void _request_end(RpcEndPacket *request) {
     case 0x8000000A:
         client = request->client;
         if (client->endFunction) {
-            savedGp = swapGp(client->gp);
+            savedGp = SetGp(client->gp);
             client->endFunction(client->endParam);
-            swapGp(savedGp);
+            SetGp(savedGp);
         }
         break;
     case 0x80000009:

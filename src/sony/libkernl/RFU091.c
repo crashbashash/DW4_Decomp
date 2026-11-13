@@ -1,4 +1,4 @@
 void RFU091(void)
 {
-    __asm__ volatile("li $3, 91\n\tsyscall");
+    __asm__("li $3, 91\n\tsyscall");
 }

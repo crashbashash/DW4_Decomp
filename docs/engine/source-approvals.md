@@ -60,6 +60,17 @@ Hardware is the exception to the first case. A register access can match without
 merge or drop it, but the source would then misstate what the code addresses, so it keeps the keyword and goes
 to the owner.
 
+On an `asm` statement the qualifier means something else: the statement is not deleted, moved or combined. A
+statement with no output operand has that property already, so its `volatile` can do nothing, and one with outputs
+is often inert too. Test it the same way: strip it and verify. An inert one is removed, even where an upstream text
+writes it (Sony's `graphdev.c`, `libtimer.c` and `eekernel.h` do), and the row loses it. One kept must change the
+bytes when stripped. Stripping a needed one usually gives the same instructions in another order, a statement
+hoisted above the register saves or moved into a delay slot; that is approved only with the upstream text or
+hardware evidence for the statement itself, as for Sony's `mfc0 %0, $12` Status reads. Try first the operand form
+the upstream text uses: a store written with its word as an output (`"=m"`) can be moved and needs the keyword, while
+Sony's `: : "m"(word)` input form is fixed already. An inline helper the upstream header supplies is used from a
+project header holding its exact text, and its `volatile` counts there.
+
 The `lui`, `addiu`, `lw 0` address form is not evidence for a `volatile` global by itself under GCC: functions that
 match without one have it too, nearly always because the address register has a second use. Under ee-gcc 2.96 a
 single-use access in that form, with no call or block boundary before it, has no plain spelling that has been found.
@@ -240,12 +251,26 @@ the value.
 Sony libkernl functions written in C with instructions C has no spelling for: reads and writes of COP0 registers
 (`mfc0`, `mtc0`), `cache` operations, `di`, `sync.p`, and system calls made from inside a C file.
 
-* Sony's own build shows they are C: each sits in an SDK 3.0.3 `libkernl.a` member that carries the compiler's
-  markers and records a `.c` source, and the cache, interrupt, thread, heap and TLB functions are byte-identical to
-  those members with relocated words masked.
-* The system calls in these files are local functions of C members, not part of the assembled stub file, so each
-  is a C function holding one `syscall`.
-* The `volatile` on each `__asm__` keeps the statement from being moved or dropped, which it must not be.
+* Sony's own build shows they are C: each sits in an SDK 3.0.3 `libkernl.a` member (`wise2/b03476.a`) that carries
+  the compiler's markers and records a `.c` source, and the cache, interrupt, `diei`, thread, glue, heap and TLB
+  functions are byte-identical to those members (`cache.o`, `intr.o`, `diei.o`, `thread.o`, `glue.o`, `tlbfunc.o`,
+  `sifcmd.o`) with relocated words masked. The SDK match table records `_sceIDC` and `_sceSDC` as 160 bytes against
+  retail's 164 only because its size stops before the final `jr`'s delay slot.
+* Sony's source text exists for part of it. `delaythread.c` (SDK 3.0.3 source text `r03287`) is `DelayThread`
+  statement for statement, including `__asm__ volatile("mfc0 %0, $12" : "=r"(status))`. `eekernel.h` (`r03616`)
+  holds the `DI()` and `EI()` macros `sbrk` uses; `include/dw4/eekernel_intr.h` carries that text exactly.
+* The system calls in these files are local functions of C members, not part of the assembled stub file. The
+  `.mdebug` procedure records of SDK `alarm.o`, `tlbfunc.o` and `initsys.o` give `setup`, `Copy`, `GetEntryAddress`,
+  `FindAddress` and `_SetTLBEntry` frame register 29 and return register 31, as for their C neighbours, while the
+  stubs of `klib.o` have 0 and 0 and carry line numbers. In retail each sits among its member's functions in that
+  member's order. So each is a C function holding one `syscall`.
+* `di` appears only in `sbrk`, through `DI()`; the cache and interrupt functions disable interrupts by calling
+  the function at `0x113f20` (`DIntr`).
+* A `volatile` in a function's own text stays only where stripping it changes the bytes: on the nine
+  `mfc0 %0, $12` Status reads, which it keeps below the register saves and out of a delay slot. `sbrk` also counts
+  the five of `DI()` and `EI()`, which `eekernel_intr.h` carries as Sony's header text (only the loop's `mfc0` one
+  changes the bytes). The others (the syscall locals, the `mtc0` and `cache` statements, `sync`, `ei` and the
+  write-back block) were inert and are left out.
 * One TLB function keeps a counter in a fixed register across calls, which only a register variable gives.
 * The SIF's data-cache write-back is one `asm` block: a loop of `cache 0x18` with `sync`, carrying its own return. It
   sets `.set noreorder` and leaves it on, so the compiler's closing `jr ra` gets no delay-slot `nop`, as in Sony's
@@ -253,23 +278,46 @@ Sony libkernl functions written in C with instructions C has no spelling for: re
 
 ### sony-gp-and-syscall-asm
 
-Sony library functions in C that read or swap `$gp`, or make a system call, through an inline `asm` statement: the
-callback and handler registration of libmpeg, libcdvd, libkernl's SIF and timer code, and two thread calls.
+Sony library functions in C that read, store or swap `$gp`, make a system call, or read the hardware timer through an
+inline `asm` statement: the callback and handler registration of libmpeg, libcdvd, libkernl's SIF and timer code, two
+thread calls and `GetTimerSystemTime`.
 
 * Sony's own build shows they are C: each sits in an SDK 3.0.3 member that carries the compiler's markers and records
-  a `.c` source, and each is byte-identical to that member with relocated words masked. One power-off handler's
-  member is a version four bytes shorter, with the same `$gp` store.
-* C reaches neither `$gp` nor a system call. A handler registered for another context records the caller's `$gp`,
-  and a callback runs on the `$gp` its owner supplied.
-* The `volatile` on each `__asm__` keeps the statement in place, and a `"memory"` clobber is what makes the values
-  around a swap reload, as retail does.
+  a `.c` source, and eleven are byte-identical to that member with relocated words masked. The exception is
+  the function at `0x10ef70`, whose member (`filestub.o` `scePowerOffHandler`) is a version four bytes shorter, with the same `$gp`
+  store.
+* Sony's source text exists. `eekernel.h` (SDK 3.0.3 source text `r03616`) writes `GetGp()` and `SetGp()` as
+  `__asm__ volatile` with a `"memory"` clobber; `include/dw4/eekernel_gp.h` carries that text exactly and the six
+  functions reading or swapping `$gp` use it. `libtimer.c` (`r03285`) writes the `$gp` store as
+  `__asm__ volatile("sw $28, %0\n" : : "m"(pCounter->gp_value) : "memory")`, and its `ReferHardCounter` block is
+  `GetTimerSystemTime`'s statement: two timer-register reads, the overflow count and the prescale shift.
+* C reaches neither `$gp`, a system call nor that timer sequence. A handler registered for another context records the
+  caller's `$gp`, and a callback runs on the `$gp` its owner supplied.
+* The `sw $28` stores are written in Sony's input form, `: : "m"(word)`, which has no output and needs no `volatile`.
+  The keyword on `GetTimerSystemTime`'s block and on the thread calls' inline syscall was inert and is left out; the
+  thread calls carry a `"memory"` clobber, as every asm helper in Sony's `eekernel.h` does, which orders their two
+  prologue saves. The `volatile` rows left are the two in `eekernel_gp.h`, counted against every function of a file
+  that includes it.
+* A `"memory"` clobber is what makes the values around a swap reload, as retail does: `_request_end` and
+  `sceSifExecNotifyHandler` mismatch without it, and `sceSifAddCmdHandler`'s read needs it. `sceSdRemote`'s swap
+  matches either way.
 
 ### sony-interrupt-shared-state
 
-Sony library state an interrupt handler writes while thread code waits on it: the vertical-blank flag and time
-`VSync2` passes to its handler, the DMA state `_ch3dmaCSC` shares with its channel's handler, and the DECI2 state
-`sceTtyInit` shares with `sceTtyHandler`. Retail reloads each where the waiter reads it, which a plain spelling merges.
-Only the fields the handler writes are qualified.
+Sony library state shared between interrupt-time code and thread code. These rows also count register and
+`__asm__ volatile` keywords, which rest on #sony-hardware-registers.
+
+* `VSync2` passes its flag and time block to the EE kernel through `SetVSyncFlag` (syscall 115). The kernel's
+  vertical-blank interrupt writes the block; no handler in the executable does. Retail reloads `flag` in a call-free
+  poll loop, and the keyword gives that reload. `time` is read once: its keyword only keeps that load out of a branch
+  delay slot, and no plain spelling found matches.
+* `_ch3dmaCSC` is itself the channel-3 DMA handler. The waiter is the function at `0x1087a8`, which keeps the state on its stack,
+  registers `_ch3dmaCSC` for channel 3 and polls `count` in a call-free loop. Retail loads `count` four times in the
+  handler, and the keyword gives those reloads.
+* `sceTtyInit` sets up the DECI2 block it shares with `sceTtyHandler`, which it registers through `sceDeci2Open`. The
+  handler writes `len`, `rlen` and `busy`, and reads `len` twice with no call between. `sceTtyInit` only stores zero
+  to those three, so there their keywords fix the store order only. `id` is qualified because `sceTtyInit` stores it
+  and loads it back, which the keyword gives; the handler only reads it.
 
 ### adxm-thread-flags
 
@@ -297,7 +345,10 @@ the requests and wait on the exit words, so the state really is shared between t
 ### sony-hardware-registers
 
 Accesses to EE and GS registers in Sony's libraries, and in the CRI code that drives the same registers. Each
-keyword is on a fixed register address, or for the DMA channels on a register reached through a channel pointer.
+keyword is on a fixed register address, or for the DMA channels on a register reached through a channel pointer,
+except the `__asm__ volatile` on `sync` and `ei` in `VSync`, `VSync2`, `_ch4dma` and `_ch3dmaCSC`. Those change no
+bytes and follow Sony's own spelling: SDK 3.0.3 `eekernel.h` defines `EI()` as `__asm__ volatile("ei")` and
+`ExitHandler()` as `__asm__ volatile("sync.l; ei")`.
 
 * Sony's `eeregs.h` in SDK 3.0.3 defines the registers as `volatile` pointers to their fixed addresses, and its
   access macros go through them, so code using the header is `volatile` without writing the word. The header's
@@ -309,10 +360,11 @@ keyword is on a fixed register address, or for the DMA channels on a register re
 * Most keywords change the bytes when removed, so the compiler would merge or drop the access. The others rest on
   the header.
 * Adding `volatile` to the plain register accesses left in these functions keeps them matching, with one exception:
-  a 64-bit read of a register the header declares as 32 bits. A cast to the wider type, which that read needs, drops
-  the qualifier and matches retail.
-* The serial port registers are the exception to the header: they are absent from it and identified from the
-  open-source ps2sdk.
+  the 64-bit read of IPU_TOP, which the header declares as 32 bits. A cast to the wider type, which that read needs,
+  drops the qualifier and matches retail. The 64-bit IPU_CMD reads in the function at `0x106660` and the function at `0x1067e8` keep the
+  qualifier, which retail needs; the header has no macro for that read.
+* The serial port registers and the interrupt status register I_STAT at `0x1000F000` are absent from the header and
+  identified from the open-source ps2sdk.
 
 DW4's libraries are SDK release 2.8.0, which is not available, so the text compared is from a later release.
 
@@ -320,35 +372,40 @@ DW4's libraries are SDK release 2.8.0, which is not available, so the text compa
 
 The timer alarm functions declare the id member of their alarm record `volatile`.
 
-* The Timer Library's `alarm.c` in SDK 3.0.3 declares that member `volatile`. Its function bodies, given only
-  retail's symbol names and the library's constants, compile to retail's bytes for all of these functions, and to
-  different bytes once the qualifier is removed.
-* The functions are also byte-identical to objects in the SDK's archives.
+* Retail's functions are libkernl's copies, `timeralarm.o` (`timeralarm.c`) in `libkernl.a`, driving Timer 2. That
+  source is not in the SDK. Its sibling, the Timer Library's `alarm.c` in SDK 3.0.3 (`libtimer.a`, Timer 1), declares
+  that member `volatile`. Its function bodies, given only retail's symbol names and the libkernl constants, compile to
+  retail's bytes for all of these functions, and to different bytes once the qualifier is removed.
+* The functions are also byte-identical to the `libkernl.a` member in the SDK's archives.
 
 ### sony-timer-state
 
 The timer functions declare `volatile` the members of the timer state and counter records that its interrupt handler
 also uses.
 
-* The Timer Library's `libtimer.c` in SDK 3.0.3 declares those members `volatile`. Its function bodies, given only
-  retail's symbol names, the library's constants and retail's helpers for the timer registers, compile to retail's
-  bytes for these functions, and to different bytes once the qualifiers are removed.
-* The functions are also byte-identical to objects in the SDK's archives.
+* Retail's functions are libkernl's copies, `timer.o` (`timer.c`) in `libkernl.a`, driving Timer 2. That source is
+  not in the SDK. Its sibling, the Timer Library's `libtimer.c` in SDK 3.0.3 (`libtimer.a`, Timer 1, source text
+  `r03285`), declares those members `volatile`, among them `volatile int cbcounterid`, the `current` member
+  `iSetTimerHandler` reads. Its function bodies, given only retail's symbol names, the libkernl constants and retail's
+  helpers for the timer registers, compile to retail's bytes for these functions, and to different bytes once the
+  qualifiers are removed.
+* The functions are also byte-identical to the `libkernl.a` member in the SDK's archives.
 
 ### sony-vu-and-gp-asm
 
 `sceGsResetPath` and `sceSdRemote` hold statements C has no spelling for.
 
-* Sony's `libgraph` and `libsdr` sources in SDK 3.0.3 write these as `__asm__` statements. `sceGsResetPath` orders the
-  VIF1 reset with `sync.l`, then sets a bit of VU control register `$vi28` with `cfc2`, `ori`, `ctc2` and `sync.p`.
-  `sceSdRemote` reads `$gp` through one inline helper to record it beside a registered handler, and swaps it through
-  another around an RPC call that has an end function.
-* Compiled from Sony's text with only retail symbols, constants and helper names mapped, both functions are
-  byte-identical to retail. `sceGsResetPath` needs the assembler of its [compiler note](sd-prologue.md).
+* Sony's `libgraph` source in SDK 3.0.3 (`graphdev.c`, source text `r03376`) writes `sceGsResetPath`'s statements
+  as `__asm__`: it orders the VIF1 reset with `sync.l`, then sets a bit of VU control register `$vi28` with `cfc2`,
+  `ori`, `ctc2` and `sync.p`. Its `libsdr` source (`sdr_main.c`, `r03289`) holds no `__asm__`: `sceSdRemote` calls
+  `GetGp()` to record `$gp` beside a registered handler and `SetGp()` to swap it around an RPC call that has an end
+  function, and those statements are `eekernel.h`'s (`r03616`), carried exactly by `include/dw4/eekernel_gp.h`.
+* Compiled from Sony's text, with the header's `GetGp`/`SetGp` and only retail symbols and constants mapped, both
+  functions are byte-identical to retail. `sceGsResetPath` needs the assembler of its [compiler note](sd-prologue.md).
 * C reaches neither a VU control register nor a move of `$gp`.
-* `sceSdRemote`'s two `volatile` keywords belong to these statements. Sony writes them, and neither can go: without the
-  one on the read the registers differ, and without both the function comes out 164 bytes short.
-  `sceGsResetPath`'s statements have no outputs, so its `__volatile__` changes nothing and is left out.
+* `sceSdRemote`'s two `volatile` keywords are the header's. Neither can go: without the one on the read the registers
+  differ, and without the one on the swap the function comes out 164 bytes short. `sceGsResetPath`'s statements have
+  no outputs, so its `__volatile__` changes nothing and is left out, by the rule in "Testing a `volatile`".
 
 ### dma-channel-cop0
 

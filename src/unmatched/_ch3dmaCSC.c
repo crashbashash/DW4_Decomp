@@ -1,7 +1,7 @@
 typedef struct {
     volatile int count;
     int done;
-    volatile int remain;
+    int remain;
     unsigned int addr;
     int total;
 } CscDmaState;

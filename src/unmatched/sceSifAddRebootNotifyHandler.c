@@ -1,3 +1,4 @@
+#include "dw4/eekernel_gp.h"
 typedef void (*NotifyHandler)(void *arg, void *data);
 typedef struct {
     NotifyHandler func;
@@ -10,11 +11,6 @@ extern NotifyEntry *DAT_00483528;
 extern unsigned int DAT_0048352c;
 int FUN_00113f20(void);
 int FUN_00113f78(void);
-static inline void *currentGp(void) {
-    void *gp;
-    __asm__ volatile("move %0,$28" : "=r"(gp));
-    return gp;
-}
 int sceSifAddRebootNotifyHandler(unsigned int index, NotifyHandler func, void *data) {
     NotifyEntry *table;
     unsigned int count;
@@ -31,7 +27,7 @@ int sceSifAddRebootNotifyHandler(unsigned int index, NotifyHandler func, void *d
     interrupts = FUN_00113f20();
     table[index].func = func;
     table[index].data = data;
-    table[index].gp = currentGp();
+    table[index].gp = GetGp();
     if (interrupts) FUN_00113f78();
     return 0;
 }

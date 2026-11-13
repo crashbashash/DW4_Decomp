@@ -1,6 +1,6 @@
 void sceSifWriteBackDCache(void *ptr, int size)
 {
-    __asm__ volatile(
+    __asm__(
         ".set noreorder\n"
         "lui     $25, 0xffff\n"
         "ori     $25, $25, 0xffc0\n"

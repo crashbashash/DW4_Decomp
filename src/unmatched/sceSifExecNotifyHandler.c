@@ -1,3 +1,4 @@
+#include "dw4/eekernel_gp.h"
 typedef void (*NotifyHandler)(void *arg, void *data);
 typedef struct {
     NotifyHandler func;
@@ -8,16 +9,6 @@ typedef struct {
 extern NotifyEntry DAT_0055cd48[32];
 extern NotifyEntry *DAT_00483528;
 extern int DAT_0048352c;
-static inline void *currentGp(void) {
-    void *gp;
-    __asm__ volatile("move %0,$28" : "=r"(gp));
-    return gp;
-}
-static inline void *swapGp(void *gp) {
-    void *old;
-    __asm__ volatile("move %0,$28; move $28,%1" : "=&r"(old) : "r"(gp) : "memory");
-    return old;
-}
 void sceSifExecNotifyHandler(int builtin, void *arg) {
     NotifyEntry *entry;
     int count;
@@ -30,12 +21,12 @@ void sceSifExecNotifyHandler(int builtin, void *arg) {
         entry = DAT_00483528;
         count = DAT_0048352c;
     }
-    savedGp = currentGp();
+    savedGp = GetGp();
     for (i = 0; i < count; i++) {
         if (entry[i].func) {
-            swapGp(entry[i].gp);
+            SetGp(entry[i].gp);
             entry[i].func(arg, entry[i].data);
         }
     }
-    swapGp(savedGp);
+    SetGp(savedGp);
 }

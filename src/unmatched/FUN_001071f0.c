@@ -12,9 +12,9 @@ void FUN_001071f0(char *d) {
     *(int *)(d + 400) = FUN_00106c88(d, 1);
     *(int *)(d + 404) = FUN_00106c88(d, 1);
     *(int *)(d + 408) = FUN_00106c88(d, 1);
-    *(volatile unsigned int *)0x10002010 = (*(unsigned int *)0x10002010 & ~0x400000) | (FUN_00106c88(d, 1) << 22);
-    *(volatile unsigned int *)0x10002010 = (*(unsigned int *)0x10002010 & ~0x200000) | (FUN_00106c88(d, 1) << 21);
-    *(volatile unsigned int *)0x10002010 = (*(unsigned int *)0x10002010 & ~0x100000) | (FUN_00106c88(d, 1) << 20);
+    *(volatile unsigned int *)0x10002010 = (*(volatile unsigned int *)0x10002010 & ~0x400000) | (FUN_00106c88(d, 1) << 22);
+    *(volatile unsigned int *)0x10002010 = (*(volatile unsigned int *)0x10002010 & ~0x200000) | (FUN_00106c88(d, 1) << 21);
+    *(volatile unsigned int *)0x10002010 = (*(volatile unsigned int *)0x10002010 & ~0x100000) | (FUN_00106c88(d, 1) << 20);
     *(int *)(d + 412) = FUN_00106c88(d, 1);
     FUN_00106c88(d, 1);
     *(int *)(d + 416) = FUN_00106c88(d, 1);

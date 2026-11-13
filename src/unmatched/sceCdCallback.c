@@ -11,7 +11,7 @@ CdCallback sceCdCallback(CdCallback func) {
     interrupts = FUN_00113f20();
     old = DAT_0055cf80;
     DAT_0055cf80 = func;
-    __asm__ volatile("sw $28,%0" : "=m"(DAT_0055cf84));
+    __asm__("sw $28,%0" : : "m"(DAT_0055cf84));
     if (interrupts) FUN_00113f78();
     return old;
 }

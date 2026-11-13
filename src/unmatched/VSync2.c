@@ -1,6 +1,6 @@
 int FUN_00113f20(void);
 int FUN_00113f78(void);
-void SetVSyncFlag(volatile int *flag, volatile unsigned long *time);
+void SetVSyncFlag(int *flag, unsigned long *time);
 unsigned long VSync2(void) {
     int interrupts;
     struct {
@@ -8,7 +8,7 @@ unsigned long VSync2(void) {
         volatile unsigned long time;
     } vsync;
     vsync.flag = 0;
-    SetVSyncFlag(&vsync.flag, &vsync.time);
+    SetVSyncFlag((int *)&vsync.flag, (unsigned long *)&vsync.time);
     interrupts = FUN_00113f20();
     *(volatile int *)0x1000F000 = 4;
     __asm__ volatile("sync");

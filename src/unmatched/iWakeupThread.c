@@ -14,7 +14,7 @@ int FUN_0010ae20(int thid);
 int iSignalSema(int sema);
 static inline int currentThreadId(void) {
     int thid;
-    __asm__ volatile("li $3,-47\n\tsyscall\n\tmove %0,$2" : "=r"(thid) : : "$2", "$3");
+    __asm__("li $3,-47\n\tsyscall\n\tmove %0,$2" : "=r"(thid) : : "$2", "$3", "memory");
     return thid;
 }
 int iWakeupThread(int thid) {

@@ -10,7 +10,7 @@ int FUN_0010ba28(int ch)
     stat &= 0x10000;
     if (stat) FUN_00113f20();
     ret = _EnableIntc(ch);
-    __asm__ volatile("sync");
+    __asm__("sync");
     if (stat) FUN_00113f78();
     return ret;
 }

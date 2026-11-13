@@ -1,6 +1,4 @@
-typedef unsigned int u_int;
-#define DI() { u_int stat; do { __asm__ volatile (".p2align 3"); __asm__ volatile ("di"); __asm__ volatile ("sync.p"); __asm__ volatile ("mfc0 %0, $12" : "=r"(stat):); } while (stat & 0x00010000); }
-#define EI() __asm__ volatile("ei")
+#include "dw4/eekernel_intr.h"
 extern char *D_00481e54;
 int *__errno(void);
 void *EndOfHeap(void);

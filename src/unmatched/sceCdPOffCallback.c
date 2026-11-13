@@ -14,7 +14,7 @@ CdPowerOffCallback sceCdPOffCallback(CdPowerOffCallback func, void *data) {
     old = DAT_0055cf88;
     DAT_0055cf90 = data;
     DAT_0055cf88 = func;
-    __asm__ volatile("sw $28,%0" : "=m"(DAT_0055cf8c));
+    __asm__("sw $28,%0" : : "m"(DAT_0055cf8c));
     if (interrupts) FUN_00113f78();
     return old;
 }

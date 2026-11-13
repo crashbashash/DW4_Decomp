@@ -3,7 +3,7 @@ int FUN_00113f20(void);
 int FUN_00113f78(void);
 static inline unsigned long readHardCounter(void) {
     unsigned long now;
-    __asm__ volatile(
+    __asm__(
         ".set push\n.set noreorder\n"
         "lwu %0,0(%1)\n"
         "lw $8,0x10(%1)\n"

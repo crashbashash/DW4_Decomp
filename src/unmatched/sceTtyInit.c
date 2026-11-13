@@ -1,4 +1,4 @@
-typedef struct { int size; volatile int count; char *rd; char *wr; } Q;
+typedef struct { int size; int count; char *rd; char *wr; } Q;
 typedef struct { unsigned short len; unsigned short rsvd; unsigned short proto; unsigned char src; char dst; int data; char buf[256]; } Hdr;
 typedef struct { volatile int id; volatile int len; volatile int rlen; volatile int busy; Hdr *tx; Hdr *rx; Q *q; } D;
 extern D DAT_00555bd0;

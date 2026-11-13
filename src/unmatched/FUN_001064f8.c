@@ -11,7 +11,7 @@ void FUN_001064f8(char *d) {
             *(volatile unsigned int *)0x1000F590 = *(volatile unsigned int *)0x1000F520 | 0x10000;
             *(volatile unsigned int *)0x1000B400 = 0;
             *(volatile unsigned int *)0x1000B000 = 0;
-            *(unsigned int *)0x1000F590 = *(volatile unsigned int *)0x1000F520 & ~0x10000;
+            *(volatile unsigned int *)0x1000F590 = *(volatile unsigned int *)0x1000F520 & ~0x10000;
             if (intr) {
                 FUN_00113f78();
             }

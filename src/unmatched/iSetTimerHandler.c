@@ -38,7 +38,7 @@ int iSetTimerHandler(int id, unsigned long schedule, TimerHandler handler, void 
     } else {
         t->schedule = schedule;
         t->flags |= 2;
-        __asm__ volatile("sw $28,%0" : "=m"(t->gp) : : "memory");
+        __asm__("sw $28,%0" : : "m"(t->gp) : "memory");
         t->arg = arg;
         if (t->flags & 1) InsertAlarm(t);
     }

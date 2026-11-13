@@ -21,7 +21,7 @@ PowerOffHandler FUN_0010ef70(PowerOffHandler func, void *data) {
     old = DAT_00559200.func;
     entry->data = data;
     DAT_00559200.func = func;
-    __asm__ volatile("sw $28,%0" : "=m"(DAT_00559240));
+    __asm__("sw $28,%0" : : "m"(DAT_00559240));
     if (interrupts) FUN_00113f78();
     FUN_0010ef60();
     return old;
