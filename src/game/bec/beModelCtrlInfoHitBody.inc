@@ -1,4 +1,4 @@
-void FUN_003523d0(int arg0) {
+void beModelCtrlInfoHitBody_Create(int arg0) {
     FUN_003525e0();
     igMetaObject_CreateInstance(*(int *)0x588B00, arg0);
 }

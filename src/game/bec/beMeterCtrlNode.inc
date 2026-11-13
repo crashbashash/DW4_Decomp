@@ -5,7 +5,7 @@ igMetaObject *FUN_00356cc0(void) {
     return g_beMeterCtrlNode_metaObject[0];
 }
 
-void *FUN_00356d10(void) {
+void *beMeterCtrlNode_ResolveMetaObject(void) {
     igMetaObject *g = g_beMeterCtrlNode_metaObject[0];
     if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_00356de0();
@@ -55,7 +55,7 @@ void *beMeterCtrlNode_Register(void) {
 
 void beMeterCtrlNode_GetMetaObject(void)
 {
-    FUN_00356d10();
+    beMeterCtrlNode_ResolveMetaObject();
 }
 
 void beMeterCtrlNode_InitFields(void) {
@@ -74,6 +74,6 @@ void beMeterCtrlNode_InitFields(void) {
 
 void FUN_00356f40(void)
 {
-    FUN_00390890();
+    beMeterCtrlNode_RegisterTraversalFunction();
 }
 

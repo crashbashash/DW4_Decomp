@@ -19,7 +19,7 @@ int igTimeAttr_CreateInstance(...);
 int igTraversal_RegisterFunction(int, int, TraversalFunction);
 int beModelCtrlNode2_ResolveMetaObject(...);
 int beModelCtrl_DrawDebugHitBox(...);
-int FUN_00394400(...);
+int beModelCtrl_CallLua(...);
 int Memory_GetAllocatorBySelector(...);
 int igObject_GetAllocator(...);
 int thunk_FUN_0018ac80(...);
@@ -353,7 +353,7 @@ send:
         int luaBHit = ((beModelCtrlInfoWork *)ramData->_work)->_luaBHit;
         if (luaBHit != 0) {
             int name = info->_name != 0 ? info->_name : (int)emptyString;
-            FUN_00394400(ctrl, ram, luaBHit, BHit, name, 0, 0, 0, 0, 0);
+            beModelCtrl_CallLua(ctrl, ram, luaBHit, BHit, name, 0, 0, 0, 0, 0);
         }
     }
     return 1;

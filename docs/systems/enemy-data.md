@@ -196,13 +196,13 @@ number cannot serve as an anchor. Any "HP ≈ N" anchor should name the **row**
 > **This section corroborates the decode.** The path is confirmed and documented in
 > [`enemy-spawn-system.md`](enemy-spawn-system.md); the table it reads from is decoded
 > [below](#the-enemy-stat-table-areaafs--iso). Read it as confirmation that the same conclusions reproduce
-> from savestates, and for the `FUN_00394400`/`"ONE"` mechanism, which only this
+> from savestates, and for the `beModelCtrl_CallLua`/`"ONE"` mechanism, which only this
 > section describes.
 
 Read out of a running game rather than decoded from the igBinary layout, which is the
 project's standard for a stat claim.
 
-### The populator: `FUN_00394400` (`0x394400`)
+### The populator: `beModelCtrl_CallLua` (`0x394400`)
 
 This is the "focus this model and refresh the cached stat block" function. Its
 provenance, read off `0x394520`–`0x3945bc`:
@@ -231,7 +231,7 @@ inference, not an established name; nothing else corroborates it. For the uncrow
 max-HP field object, but treat the name as unverified and check it (the same
 field-object mechanism reaches current HP through `+0x0c`).
 
-`FUN_00394400` is also the **sole writer** of the MDL block (one store site in the
+`beModelCtrl_CallLua` is also the **sole writer** of the MDL block (one store site in the
 whole ELF), and it re-writes HP after the UI update when HP did not change: a meter
 clamp, not a second stat source.
 

@@ -1,0 +1,50 @@
+# beModelCtrl.cpp: beModelCtrl per-model update, command list and message handler, plus the beMeterCtrlNode
+# traversal registration emitted in the same file; and the BecLibrary creators and message enum it calls.
+# Evidence in docs/engine/model-controller.md.
+# <va>	<name>	<module>
+0x0034fd00	beModelCtrlNode2_Create	game
+0x00351420	beModelCtrlInfoRideOn4_Create	game
+0x00351780	beModelCtrlInfoRideOn3_Create	game
+0x00351ad0	beModelCtrlInfoRideOn2_Create	game
+0x00351e20	beModelCtrlInfoRideOn_Create	game
+0x00352140	beModelCtrlInfoAI_Create	game
+0x003523d0	beModelCtrlInfoHitBody_Create	game
+0x00352940	beModelCtrlMoveObject_Create	game
+0x00356ab0	beModelCtrl_GetMessageEnum	game
+0x00356d10	beMeterCtrlNode_ResolveMetaObject	game
+0x003902f0	beMeterCtrlNode_TraversalFunction	game
+0x00390320	beMeterCtrlNode_Traverse	game
+0x00390890	beMeterCtrlNode_RegisterTraversalFunction	game
+0x003908e0	beModelCtrlInfoHitBody_GetAABoxList	game
+0x00390d70	beModelCtrl_ResolveManagers	game
+0x00390f80	beModelCtrl_UpdateMapAI	game
+0x003915a0	beModelCtrl_UpdateHomingAI	game
+0x00391a10	beModelCtrl_RunCtrl	game
+0x00391cf0	beModelCtrl_UpdateKeyCtrl	game
+0x00391fe0	beModelCtrl_RunAction	game
+0x00392050	beModelCtrlInfoRideOn_SetModel	game
+0x003921a0	beModelCtrlInfoRideOn_IsModel	game
+0x003926d0	beModelCtrl_CheckWallAndFloor	game
+0x00392be0	beModelCtrl_QueryMove	game
+0x00392d20	beModelCtrlMoveObject_Start	game
+0x00392d90	beModelCtrlMoveObject_Stop	game
+0x00392e10	beModelCtrlMoveObject_Step	game
+0x00392fa0	beModelCtrl_ApplyMoves	game
+0x00393260	beModelCtrl_RunMove	game
+0x00393b20	beModelCtrl_RunPdMove	game
+0x00393c80	beModelCtrlInfoWork_SetSeqLabel	game
+0x003943c0	beModelCtrl_RunLabelCtrl	game
+0x00394400	beModelCtrl_CallLua	game
+0x00394640	beModelCtrl_RunLuaCall	game
+0x00394920	beModelCtrl_RunAiMap	game
+0x00394ad0	beModelCtrl_RunMsgBox	game
+0x00394ae0	beModelCtrl_RunJump	game
+0x00394b30	beModelCtrl_StartWaitCheck	game
+0x00394bf0	beModelCtrl_UpdateWaitCheck	game
+0x00394fa0	beModelCtrl_RunHitBox	game
+0x00395070	beModelCtrl_RunMuteki	game
+0x003951e0	beModelCtrl_UpdateMuteki	game
+0x00395250	beModelCtrl_RunCommands	game
+0x003956e0	beModelCtrl_UpdateDirection	game
+0x003960f0	beModelCtrlInfoWork_FindSeqLabel	game
+0x00396940	beModelCtrl_UpdateBound	game

@@ -15136,7 +15136,7 @@
 0034fbe0 000068 beModelCtrlSubComBase_Register
 0034fc50 00001c beModelCtrlSubComBase_GetMetaObject
 0034fc70 000088 beModelCtrlSubComBase_InitFields
-0034fd00 000034 FUN_0034fd00
+0034fd00 000034 beModelCtrlNode2_Create
 0034fd40 000044 FUN_0034fd40
 0034fd90 00004c beModelCtrlNode2_ResolveMetaObject
 0034fde0 000098 beModelCtrlNode2_GetVTable
@@ -15172,7 +15172,7 @@
 00350fd0 000074 beModelCtrlInfoWork_Register
 00351050 00001c beModelCtrlInfoWork_GetMetaObject
 00351070 0003a8 beModelCtrlInfoWork_InitFields
-00351420 000034 FUN_00351420
+00351420 000034 beModelCtrlInfoRideOn4_Create
 00351460 00004c FUN_00351460
 003514b0 0000f4 beModelCtrlInfoRideOn4_GetVTable
 003515b0 000020 FUN_003515b0
@@ -15180,21 +15180,21 @@
 00351640 00001c beModelCtrlInfoRideOn4_GetMetaObject
 00351660 00000c FUN_00351660
 00351670 000110 beModelCtrlInfoRideOn4_InitFields
-00351780 000034 FUN_00351780
+00351780 000034 beModelCtrlInfoRideOn3_Create
 003517c0 00004c FUN_003517c0
 00351810 0000f4 beModelCtrlInfoRideOn3_GetVTable
 00351910 000020 FUN_00351910
 00351930 00006c beModelCtrlInfoRideOn3_Register
 003519a0 00001c beModelCtrlInfoRideOn3_GetMetaObject
 003519c0 000110 beModelCtrlInfoRideOn3_InitFields
-00351ad0 000034 FUN_00351ad0
+00351ad0 000034 beModelCtrlInfoRideOn2_Create
 00351b10 00004c FUN_00351b10
 00351b60 0000f4 beModelCtrlInfoRideOn2_GetVTable
 00351c60 000020 FUN_00351c60
 00351c80 00006c beModelCtrlInfoRideOn2_Register
 00351cf0 00001c beModelCtrlInfoRideOn2_GetMetaObject
 00351d10 000110 beModelCtrlInfoRideOn2_InitFields
-00351e20 000034 FUN_00351e20
+00351e20 000034 beModelCtrlInfoRideOn_Create
 00351e60 000044 FUN_00351e60
 00351eb0 00004c FUN_00351eb0
 00351f00 0000ec beModelCtrlInfoRideOn_GetVTable
@@ -15202,7 +15202,7 @@
 00352010 000074 beModelCtrlInfoRideOn_Register
 00352090 00001c beModelCtrlInfoRideOn_GetMetaObject
 003520b0 000090 beModelCtrlInfoRideOn_InitFields
-00352140 000034 FUN_00352140
+00352140 000034 beModelCtrlInfoAI_Create
 00352180 000044 FUN_00352180
 003521d0 00004c FUN_003521d0
 00352220 000084 beModelCtrlInfoAI_GetVTable
@@ -15210,7 +15210,7 @@
 003522d0 00006c beModelCtrlInfoAI_Register
 00352340 00001c beModelCtrlInfoAI_GetMetaObject
 00352360 000070 beModelCtrlInfoAI_InitFields
-003523d0 000034 FUN_003523d0
+003523d0 000034 beModelCtrlInfoHitBody_Create
 00352410 000044 FUN_00352410
 00352460 00004c FUN_00352460
 003524b0 00012c beModelCtrlInfoHitBody_GetVTable
@@ -15224,7 +15224,7 @@
 00352890 000020 FUN_00352890
 003528b0 00006c beModelCtrlMoveObjectList_Register
 00352920 00001c beModelCtrlMoveObjectList_GetMetaObject
-00352940 000034 FUN_00352940
+00352940 000034 beModelCtrlMoveObject_Create
 00352980 00004c FUN_00352980
 003529d0 00003c beModelCtrlMoveObject_GetVTable
 00352a10 000020 FUN_00352a10
@@ -15401,14 +15401,14 @@
 00356970 000074 beModelCtrlData_Register
 003569f0 00001c beModelCtrlData_GetMetaObject
 00356a10 000098 beModelCtrlData_InitFields
-00356ab0 000054 FUN_00356ab0
+00356ab0 000054 beModelCtrl_GetMessageEnum
 00356b10 00004c FUN_00356b10
 00356b60 000020 FUN_00356b60
 00356b80 000070 beModelCtrl_Register
 00356bf0 00001c beModelCtrl_GetMetaObject
 00356c10 0000b0 beModelCtrl_InitFields
 00356cc0 000044 FUN_00356cc0
-00356d10 00004c FUN_00356d10
+00356d10 00004c beMeterCtrlNode_ResolveMetaObject
 00356d60 000078 beMeterCtrlNode_GetVTable
 00356de0 000020 FUN_00356de0
 00356e00 00007c beMeterCtrlNode_Register
@@ -17205,57 +17205,57 @@
 0038fa50 0004e4 Gap__Bec__beMeterCtrl__vfunc_31 Gap::Bec::beMeterCtrl::vfunc_31
 0038ff40 000398 Gap__Bec__beMeterCtrl__vfunc_33 Gap::Bec::beMeterCtrl::vfunc_33
 003902e0 00000c Gap__Bec__beMeterCtrl__vfunc_20 Gap::Bec::beMeterCtrl::vfunc_20
-003902f0 000028 FUN_003902f0
-00390320 000568 FUN_00390320
-00390890 000034 FUN_00390890
+003902f0 000028 beMeterCtrlNode_TraversalFunction
+00390320 000568 beMeterCtrlNode_Traverse
+00390890 000034 beMeterCtrlNode_RegisterTraversalFunction
 003908d0 000008 beModelCtrl_DrawDebugHitBox
-003908e0 000484 FUN_003908e0
-00390d70 000060 FUN_00390d70
+003908e0 000484 beModelCtrlInfoHitBody_GetAABoxList
+00390d70 000060 beModelCtrl_ResolveManagers
 00390dd0 00000c Gap__Core__igObject__vfunc_30 Gap::Core::igObject::vfunc_30
 00390de0 000098 Gap__Bec__beModelCtrl__vfunc_25 Gap::Bec::beModelCtrl::vfunc_25
 00390e80 0000e4 Gap__Core__igObject__vfunc_29 Gap::Core::igObject::vfunc_29
 00390f70 000008 Gap__Bec__beNDMWMdlMapCursor__vfunc_37 Gap::Bec::beNDMWMdlMapCursor::vfunc_37
-00390f80 000614 FUN_00390f80
-003915a0 000468 FUN_003915a0
-00391a10 000130 FUN_00391a10
+00390f80 000614 beModelCtrl_UpdateMapAI
+003915a0 000468 beModelCtrl_UpdateHomingAI
+00391a10 000130 beModelCtrl_RunCtrl
 00391b40 0001a4 Gap__Core__igObject__vfunc_38 Gap::Core::igObject::vfunc_38
-00391cf0 0002e4 FUN_00391cf0
-00391fe0 000064 FUN_00391fe0
-00392050 000150 FUN_00392050
-003921a0 000054 FUN_003921a0
+00391cf0 0002e4 beModelCtrl_UpdateKeyCtrl
+00391fe0 000064 beModelCtrl_RunAction
+00392050 000150 beModelCtrlInfoRideOn_SetModel
+003921a0 000054 beModelCtrlInfoRideOn_IsModel
 00392200 000040 Gap__Bec__beModelCtrlInfoRideOn2__vfunc_21 Gap::Bec::beModelCtrlInfoRideOn2::vfunc_21
 00392240 000180 Gap__Bec__beModelCtrlInfoRideOn3__vfunc_21 Gap::Bec::beModelCtrlInfoRideOn3::vfunc_21
 003923c0 000308 Gap__Bec__beModelCtrlInfoRideOn4__vfunc_21 Gap::Bec::beModelCtrlInfoRideOn4::vfunc_21
-003926d0 000508 FUN_003926d0
-00392be0 000138 FUN_00392be0
-00392d20 000064 FUN_00392d20
-00392d90 00007c FUN_00392d90
-00392e10 000184 FUN_00392e10
-00392fa0 0002b4 FUN_00392fa0
-00393260 000840 FUN_00393260
+003926d0 000508 beModelCtrl_CheckWallAndFloor
+00392be0 000138 beModelCtrl_QueryMove
+00392d20 000064 beModelCtrlMoveObject_Start
+00392d90 00007c beModelCtrlMoveObject_Stop
+00392e10 000184 beModelCtrlMoveObject_Step
+00392fa0 0002b4 beModelCtrl_ApplyMoves
+00393260 000840 beModelCtrl_RunMove
 00393aa0 000080 FUN_00393aa0
-00393b20 000158 FUN_00393b20
-00393c80 000738 FUN_00393c80
-003943c0 000040 FUN_003943c0
-00394400 000240 FUN_00394400
-00394640 0002d4 FUN_00394640
-00394920 0001a8 FUN_00394920
-00394ad0 000008 FUN_00394ad0
-00394ae0 000044 FUN_00394ae0
-00394b30 0000b4 FUN_00394b30
-00394bf0 000398 FUN_00394bf0
+00393b20 000158 beModelCtrl_RunPdMove
+00393c80 000738 beModelCtrlInfoWork_SetSeqLabel
+003943c0 000040 beModelCtrl_RunLabelCtrl
+00394400 000240 beModelCtrl_CallLua
+00394640 0002d4 beModelCtrl_RunLuaCall
+00394920 0001a8 beModelCtrl_RunAiMap
+00394ad0 000008 beModelCtrl_RunMsgBox
+00394ae0 000044 beModelCtrl_RunJump
+00394b30 0000b4 beModelCtrl_StartWaitCheck
+00394bf0 000398 beModelCtrl_UpdateWaitCheck
 00394f90 000008 Gap__Core__igObject__vfunc_39 Gap::Core::igObject::vfunc_39
-00394fa0 0000c4 FUN_00394fa0
-00395070 000164 FUN_00395070
-003951e0 00006c FUN_003951e0
-00395250 000490 FUN_00395250
-003956e0 000468 FUN_003956e0
+00394fa0 0000c4 beModelCtrl_RunHitBox
+00395070 000164 beModelCtrl_RunMuteki
+003951e0 00006c beModelCtrl_UpdateMuteki
+00395250 000490 beModelCtrl_RunCommands
+003956e0 000468 beModelCtrl_UpdateDirection
 00395b50 000584 Gap__Core__igObject__vfunc_31 Gap::Core::igObject::vfunc_31
 003960e0 000008 Gap__Core__igObject__vfunc_46 Gap::Core::igObject::vfunc_46
-003960f0 000244 FUN_003960f0
+003960f0 000244 beModelCtrlInfoWork_FindSeqLabel
 00396340 0003fc FUN_00396340
 00396740 000200 FUN_00396740
-00396940 00013c FUN_00396940
+00396940 00013c beModelCtrl_UpdateBound
 00396a80 00219c Gap__Bec__beModelCtrl__vfunc_33 Gap::Bec::beModelCtrl::vfunc_33
 00398c20 000080 FUN_00398c20
 00398ca0 000080 FUN_00398ca0

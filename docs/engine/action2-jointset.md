@@ -96,7 +96,7 @@ list for the guard, the body and the latch.
 `beModelCtrl` is a `beAction2`: the two share vtable slots 21-34. `beModelCtrl::vfunc_33` (`0x396a80`)
 holds the controller's message handling and resolves string-keyed ids through
 `beMessenger_ResolveEnumValue` (`0x38d4a0`). Its 33-entry `MsgAction` table is at `0x4c58f0`, built by
-`FUN_00356ab0`:
+`beModelCtrl_GetMessageEnum`:
 
 | ids | names |
 | --- | --- |

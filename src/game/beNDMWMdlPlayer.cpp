@@ -37,7 +37,7 @@ extern "C" int FUN_00192f50(void *, void *, void *);
 extern "C" int __divdi3(long long, int);
 extern "C" void * FUN_002eb010(...);
 extern "C" void *FUN_00354a60(void *);
-extern "C" int FUN_00393c80(void *, void *, void *, void *, void *);
+extern "C" int beModelCtrlInfoWork_SetSeqLabel(void *, void *, void *, void *, void *);
 extern "C" int beModelCtrlSubCom_AddHitBox(int, void *, int, int);
 extern "C" int beBaseInfoRam_StartTimer(void *, void *, int);
 extern "C" int beBaseInfoRam_IsTimerExpired(void *, void *);
@@ -57,7 +57,7 @@ extern "C" int beMessenger_SendNamed(...);
 extern "C" int beMessenger_SetRunCheck(int, int);
 extern "C" int igNamedObject_SetName(void *, void *);
 extern "C" int * igProperty_GetRecord(...);
-extern "C" int FUN_00395250(...);
+extern "C" int beModelCtrl_RunCommands(...);
 extern "C" int Memory_GetAllocatorBySelector(...);
 extern "C" int igObject_GetAllocator(...);
 extern "C" void List_Reserve(...);
@@ -454,7 +454,7 @@ void Gap__Bec__beNDMWMdlPlayer__vfunc_38(beNDMWMdlPlayer *arg0, PlayerArg *arg1)
                 if (beMessenger_GetBool(arg0->_messenger, 1) != 0) {
                     SET_KEYNAME(w, DAT_00516160)
                 } else {
-                    FUN_00393c80(arg0, arg1, w, DAT_00516168, beMessenger_GetString(arg0->_messenger, 0));
+                    beModelCtrlInfoWork_SetSeqLabel(arg0, arg1, w, DAT_00516168, beMessenger_GetString(arg0->_messenger, 0));
                     SET_KEYNAME(w, DAT_00516168)
                 }
                 handled = 1;
@@ -614,7 +614,7 @@ void Gap__Bec__beNDMWMdlPlayer__vfunc_39(beNDMWMdlPlayer *arg0, beBaseInfoRam *a
                 s0->_wCheckName = (int)ni1;
                 s0->_wCheckSt = 0;
                 if (s0->_wCheckMode == 0) {
-                    FUN_00395250(arg0, s1, arg1, s0);
+                    beModelCtrl_RunCommands(arg0, s1, arg1, s0);
                     return;
                 }
                 ((MdlPlayerVirtualSlots *)arg0)->vX(arg1, DAT_00516290);
@@ -645,7 +645,7 @@ void Gap__Bec__beNDMWMdlPlayer__vfunc_39(beNDMWMdlPlayer *arg0, beBaseInfoRam *a
                 if (c == 0) StringChunk_ReleaseHeader(*hd, hd);
             }
             s0->_wCheckName = (int)ni2;
-            FUN_00395250(arg0, s1, arg1, s0);
+            beModelCtrl_RunCommands(arg0, s1, arg1, s0);
         }
     } else if (strcmp(s0->_wCheckName, DAT_005162a0) == 0 && !(s4 & 0x4000)) {
         if (g_stringPool[0] == 0) {
@@ -662,7 +662,7 @@ void Gap__Bec__beNDMWMdlPlayer__vfunc_39(beNDMWMdlPlayer *arg0, beBaseInfoRam *a
             if (c == 0) StringChunk_ReleaseHeader(*hd, hd);
         }
         s0->_wCheckName = (int)ni3;
-        FUN_00395250(arg0, s1, arg1, s0);
+        beModelCtrl_RunCommands(arg0, s1, arg1, s0);
     }
 }
 

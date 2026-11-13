@@ -1,4 +1,4 @@
-void FUN_00351e20(int arg0) {
+void beModelCtrlInfoRideOn_Create(int arg0) {
     FUN_00351ff0();
     igMetaObject_CreateInstance(*(int *)0x588AA8, arg0);
 }

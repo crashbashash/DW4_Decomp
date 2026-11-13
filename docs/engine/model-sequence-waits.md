@@ -1,7 +1,7 @@
 # Model-sequence JUMP and WCHECK
 
 The contiguous four-body group `0x00394ae0..0x00394f98` implements these commands.
-All four match: `FUN_00394ae0`, `FUN_00394b30` and `FUN_00394bf0` in one-function files
+All four match: `beModelCtrl_RunJump`, `beModelCtrl_StartWaitCheck` and `beModelCtrl_UpdateWaitCheck` in one-function files
 under `src/unmatched/`, and the adjacent `igObject::vfunc_39`.
 
 | Entry | Bytes | Contract |

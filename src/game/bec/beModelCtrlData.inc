@@ -73,7 +73,7 @@ void beModelCtrlData_InitFields(void) {
     igMetaObject_NameFields(temp_s0, &DAT_004c58d0[0], &DAT_004c58d8[0], &DAT_004c58e0[0], temp_s2);
 }
 
-int FUN_00356ab0(void) {
+int beModelCtrl_GetMessageEnum(void) {
     if (DAT_00588e50[0] == 0) {
         DAT_00588e50[0] = igMetaEnum_Create(&DAT_005016f0[0], &DAT_004c58f0[0], &DAT_004c5980[0], 0x21);
     }

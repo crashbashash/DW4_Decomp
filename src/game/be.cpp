@@ -378,10 +378,10 @@ extern "C" int DAT_0050dd00[4];
 extern "C" int DAT_0050dd10[4];
 extern "C" int DAT_0050dd20[4];
 extern "C" int DAT_0050dd30[4];
-extern "C" int DAT_0058a1e8[4];
-extern "C" char *DAT_0058a214[4];
+extern "C" int g_mdlMatrix[4];
+extern "C" char *g_mdlCallName[4];
 extern "C" int DAT_0050db00[4];
-extern "C" V3 * DAT_0058a218[4];
+extern "C" V3 * g_mdlWorldPosTarget[4];
 extern "C" igObject *beBaseInfoDataList_Create(...);
 extern "C" beModelCtrlInfoRamData *igProperty_FindByName(...);
 extern "C" beBaseInfoRam *g_mdlEntity[4];
@@ -1435,7 +1435,7 @@ char *MDLgetPosStr(float fparg0, float fparg1, float fparg2) {
     long long s0;
 
     igMatrix44f_SetIdentity((float *)&m);
-    Matrix44_Copy(&m, ((void * *)DAT_0058a1e8)[0]);
+    Matrix44_Copy(&m, ((void * *)g_mdlMatrix)[0]);
     b.x = fparg0;
     b.y = fparg1;
     b.z = fparg2;
@@ -1454,7 +1454,7 @@ int *MDLgetRotStr(float fparg0, float fparg1, float fparg2) {
     long long a;
     long long b;
     igMatrix44f_SetIdentity(mat);
-    FUN_001908f0(mat, DAT_0058a1e8[0]);
+    FUN_001908f0(mat, g_mdlMatrix[0]);
     FUN_00192f50(vec, DAT_004e1098, mat);
     ang = atan2f(vec[0], vec[2]);
     a = fptodp(fparg0);
@@ -1540,7 +1540,7 @@ void FloatingNumber_Spawn(int dmg, int row) {
         s = DAT_004c8778[row].w[idx];
         beMessenger_SelectReceivers(g_beMessenger[0], DAT_0050db10, a, obj->_ramNo);
         beMessenger_AppendString(g_beMessenger[0], s);
-        Matrix44_GetTranslation(DAT_0058a1e8[0], (float *)&v);
+        Matrix44_GetTranslation(g_mdlMatrix[0], (float *)&v);
         w.x = v.x; w.y = v.y; w.z = v.z;
         beMessenger_AppendVec3(g_beMessenger[0], (float *)&w);
         beMessenger_DispatchSelected(g_beMessenger[0], DAT_0050dd10);
@@ -1573,13 +1573,13 @@ void MDLsetDMGTurn(int value) {
 static inline int isZero(int value) { return value == 0; }
 
 int MDLisCallName(char *name) {
-    char *s = DAT_0058a214[0];
+    char *s = g_mdlCallName[0];
     if (s == 0) return isZero((int)name);
     return isZero(strcmp(s, name));
 }
 
 void MDLsetWorldPosTarget_78(float fparg0, float fparg1, float fparg2) {
-    float *p = ((float * *)DAT_0058a218)[0];
+    float *p = ((float * *)g_mdlWorldPosTarget)[0];
     if (p != 0) {
         p[0] = fparg0;
         p[1] = fparg1;
@@ -1592,10 +1592,10 @@ void MDLsetWorldPosTarget_79(int arg0) {
     float a, b, c;
     V3 *t;
 
-    if (DAT_0058a218[0] != 0) {
+    if (g_mdlWorldPosTarget[0] != 0) {
         FUN_001e6d30((char *)arg0, (float *)&sp10, &DAT_0050db00[0]);
         a = sp10.x; c = sp10.z; b = sp10.y;
-        t = DAT_0058a218[0];
+        t = g_mdlWorldPosTarget[0];
         t->x = a;
         t->y = b;
         t->z = c;
@@ -1605,7 +1605,7 @@ void MDLsetWorldPosTarget_79(int arg0) {
 float MDLgetKyoriSquare(float x, float y, float z) {
     float v[3];
     float dx, dy, dz;
-    Matrix44_GetTranslation(DAT_0058a1e8[0], v);
+    Matrix44_GetTranslation(g_mdlMatrix[0], v);
     dy = v[1] - y;
     dx = v[0] - x;
     dz = v[2] - z;
