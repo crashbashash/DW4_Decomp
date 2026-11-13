@@ -6686,6 +6686,7 @@
 00241390	LuaFunction_CallUnaryOperator	match	-
 00241700	LuaClass_FindForMeta	match	-
 00241750	LuaClass_DistanceToBase	match	-
+00241930	igLuaGlue__Class_Construct	match	-
 00241f70	LuaClass_SetTagMethod	match	-
 00241fe0	LuaClass_SetTableHandlers	match	-
 00242050	LuaClass_Register	match	-
@@ -6736,8 +6737,8 @@
 00243ba0	LuaDoubleArray_Set	match	-
 00243c80	LuaDoubleArray_New	match	-
 00243d00	LuaGlue_Initialize	match	-
-002442c0	LuaClass_RegisterConstants	match	-
-002442d0	LuaClass_RegisterFunctions	match	-
+002442c0	igLuaGlue__Class__registerConstants	match	-
+002442d0	igLuaGlue__Class__registerFunctions	match	-
 002442e0	LuaBoolArray_Set	match	-
 002443c0	LuaGlue_Shutdown	match	-
 002444c0	LuaFieldWalker_Destruct	match	-
@@ -15909,12 +15910,12 @@
 00370760	Gap__Bec__beBaseInfoList__vfunc_22	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
 00370770	Gap__Bec__beBaseInfoDataList__vfunc_22	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
 00370780	LuaAPI_Dispatch	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-003717e0	LuaAPIClass_Construct	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-00371840	LuaAPIClass_Create	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-003718d0	BecLuaClass_Construct	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-00371930	BecLuaClass_Create	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
+003717e0	beLuaWrapper_Construct	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
+00371840	beLuaWrapper_Create	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
+003718d0	BecLuaWrapper_Construct	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
+00371930	BecLuaWrapper_Create	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
 003719c0	LuaAPI_RegisterClasses	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-003719d0	LuaAPI_Register	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
+003719d0	beLuaWrapper__registerFunctions	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
 00371a10	be_AddToScheduler	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
 00371a20	be_RemoveFromScheduler	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
 00371a30	be_Start	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)

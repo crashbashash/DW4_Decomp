@@ -36,8 +36,8 @@
   "struct.c": 68,
   "unapproved.bytes": 18856,
   "unapproved.functions": 33,
-  "unmatched.bytes": 626928,
-  "unmatched.functions": 934
+  "unmatched.bytes": 625336,
+  "unmatched.functions": 933
  },
  "note": "Debt ratchet baseline for tools/progress.py --debt-check: every counter may only go down. Re-record with --debt-baseline; an increase needs --allow-increase \"<reason>\" and the reason is kept next to the value. See docs/engine/debt-ratchet.md."
 }
