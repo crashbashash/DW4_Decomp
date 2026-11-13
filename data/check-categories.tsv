@@ -775,7 +775,7 @@
 00130d70	thunk_igVertexBlendMatrixAttr_GetMetaObject	match	-
 00130d80	igVertexBlendMatrixAttr_InitFields	match	-
 00130e90	FUN_00130e90	match	-
-00130f20	FUN_00130f20	match	-
+00130f20	igTimeAttr_CreateInstance	match	-
 00130f60	FUN_00130f60	match	-
 00130fb0	igTimeAttr_GetMetaObject	match	-
 00131000	igTimeAttr_GetVTable	match	-
@@ -4682,7 +4682,7 @@
 001b1250	FUN_001b1250	match	-
 001b12f0	FUN_001b12f0	match	-
 001b13d0	FUN_001b13d0	match	-
-001b1490	FUN_001b1490	match	-
+001b1490	igAttrStackManager_MarkStackChanged	match	-
 001b1cf0	FUN_001b1cf0	match	-
 001b1dc0	FUN_001b1dc0	match	-
 001b1e50	FUN_001b1e50	match	-
@@ -5096,7 +5096,7 @@
 001dc8e0	FUN_001dc8e0	match	-
 001dc940	Gap__Sg__igSwitch__vfunc_35	match	-
 001dc9a0	FUN_001dc9a0	match	-
-001dca40	FUN_001dca40	match	-
+001dca40	igObjectPool_Grow	match	-
 001dcb80	FUN_001dcb80	match	-
 001dcc80	FUN_001dcc80	match	-
 001dce70	FUN_001dce70	match	-
@@ -5140,9 +5140,9 @@
 001e04c0	FUN_001e04c0	match	-
 001e0590	Gap__Sg__igTraversal__vfunc_23	match	-
 001e05a0	Gap__Sg__igTraversal__vfunc_24	match	-
-001e06c0	FUN_001e06c0	match	-
+001e06c0	igTraversal_RegisterFunction	match	-
 001e0790	FUN_001e0790	match	-
-001e07a0	FUN_001e07a0	match	-
+001e07a0	igTraversal_TraverseChildren	match	-
 001e0830	thunk_FUN_001c1c50	match	-
 001e0840	Gap__Sg__igPsx2EnvironmentMapShader__vfunc_10	match	-
 001e08a0	Gap__Sg__igPsx2EnvironmentMapShader__vfunc_22	match	-
@@ -5595,11 +5595,11 @@
 001eee40	FUN_001eee40	match	-
 001eeed0	FUN_001eeed0	match	-
 001eef20	FUN_001eef20	match	-
-001ef4c0	FUN_001ef4c0	match	-
-001ef9b0	FUN_001ef9b0	match	-
-001efb40	FUN_001efb40	match	-
-001efce0	FUN_001efce0	match	-
-001efd30	FUN_001efd30	match	-
+001ef4c0	p2Vif0DmaHandler	match	-
+001ef9b0	p2InitDmaChannel	match	-
+001efb40	p2InitDmaChannels	match	-
+001efce0	p2InitDmaPredicatePool	match	-
+001efd30	p2ReserveDmaPredicates	match	-
 001efd90	p2AddDmaPredicate	match	-
 001efe70	p2FreeDmaPredicates	match	-
 001efec0	p2DmaPredicatesSatisfied	match	-
@@ -5622,27 +5622,28 @@
 001f0710	p2DmaSequenceDone	match	-
 001f0730	p2ShutdownDmaChannels	match	-
 001f0930	p2WaitDmaCondition	assembly	-
-001f0e70	FUN_001f0e70	unapproved	unapproved: 1 volatile without an approval row
-001f0fa0	FUN_001f0fa0	match	-
-001f10c0	FUN_001f10c0	match	-
-001f10e0	FUN_001f10e0	match	-
-001f10f0	FUN_001f10f0	match	-
-001f1120	FUN_001f1120	match	-
-001f14b0	FUN_001f14b0	match	-
-001f1850	FUN_001f1850	match	-
-001f1c00	FUN_001f1c00	match	-
-001f1fe0	FUN_001f1fe0	match	-
-001f23a0	FUN_001f23a0	match	-
-001f2d90	FUN_001f2d90	match	-
-001f3160	FUN_001f3160	match	-
-001f3550	FUN_001f3550	match	-
-001f3900	FUN_001f3900	match	-
-001f3d00	FUN_001f3d00	match	-
-001f4100	FUN_001f4100	match	-
-001f4140	FUN_001f4140	match	-
-001f4300	FUN_001f4300	match	-
-001f6460	FUN_001f6460	match	-
-001f6470	FUN_001f6470	match	-
+001f0d10	p2UnpackByteTriples	match	-
+001f0e70	p2UnpackBytePairs	match	-
+001f0fa0	p2UnpackBytes	match	-
+001f10c0	p2SetTexCoordArray	match	-
+001f10e0	p2SetSpriteByteArray	match	-
+001f10f0	p2SetVertexArrays	match	-
+001f1120	p2DrawPoints	match	-
+001f14b0	p2DrawLines	match	-
+001f1850	p2DrawLineStrip	match	-
+001f1c00	p2DrawTriangles	match	-
+001f1fe0	p2DrawTriangleStrip	match	-
+001f23a0	p2DrawTriangleFan	match	-
+001f2d90	p2DrawIndexedTriangleStrip	match	-
+001f3160	p2DrawIndexedTriangles	match	-
+001f3550	p2DrawIndexedTriangleFan	match	-
+001f3900	p2DrawSprites	match	-
+001f3d00	p2DrawIndexedSprites	match	-
+001f4100	p2SubmitRecordedVertices	match	-
+001f4140	p2AlignVifPacket	match	-
+001f4300	p2WriteVifRow	match	-
+001f6460	p2CopyWord	match	-
+001f6470	p2CopyQuadword	match	-
 001f6f50	FUN_001f6f50	match	-
 001f7330	FUN_001f7330	match	-
 001f7340	FUN_001f7340	match	-
@@ -5664,18 +5665,18 @@
 001f8730	FUN_001f8730	match	-
 001f8740	FUN_001f8740	match	-
 001f8750	FUN_001f8750	match	-
-001f8790	FUN_001f8790	match	-
-001f8830	FUN_001f8830	match	-
-001f88d0	FUN_001f88d0	match	-
-001f8970	FUN_001f8970	match	-
-001f89c0	FUN_001f89c0	match	-
-001f8a30	FUN_001f8a30	match	-
-001f8aa0	FUN_001f8aa0	match	-
-001f8ae0	FUN_001f8ae0	match	-
-001fb0a0	FUN_001fb0a0	match	-
-001fb470	FUN_001fb470	match	-
-001fc030	FUN_001fc030	match	-
-001fc2b0	FUN_001fc2b0	match	-
+001f8790	p2InitLighting	match	-
+001f8830	p2EnableLight	match	-
+001f88d0	p2DisableLight	match	-
+001f8970	p2EnableLighting	match	-
+001f89c0	p2DisableLighting	match	-
+001f8a30	p2SetLight	match	-
+001f8aa0	p2SetLightingColor	match	-
+001f8ae0	p2SetMaterial	match	-
+001fb0a0	p2SetLightingMode	match	-
+001fb470	p2WriteDirectionalLights	match	-
+001fc030	p2AdjointMatrix	match	-
+001fc2b0	p2InvertMatrix	match	-
 001fc310	FUN_001fc310	match	-
 001fc350	FUN_001fc350	match	-
 001fc430	FUN_001fc430	match	-
@@ -5934,8 +5935,8 @@
 002250e0	inflate_flush	match	-
 002252a0	zcalloc	match	-
 002252b0	zcfree	match	-
-002252d8	FUN_002252d8	match	-
-00225300	FUN_00225300	match	-
+002252d8	debug_printf	match	-
+00225300	sceMtapInit	match	-
 00225540	sceMtapPortOpen	match	-
 002255b0	sceMtapPortClose	match	-
 00225620	sceMtapGetConnection	match	-
@@ -6442,8 +6443,8 @@
 00236260	FUN_00236260	match	-
 002364e0	FUN_002364e0	unapproved	unapproved: 2 volatile without an approval row
 002369e0	Gap__Insight__igWindowResizeEventReceiver__vfunc_32	match	-
-00236ab0	FUN_00236ab0	match	-
-00236b10	FUN_00236b10	match	-
+00236ab0	igInsightCore_AddManager	match	-
+00236b10	igInsightCore_RemoveManager	match	-
 00236be0	FUN_00236be0	match	-
 00236c40	FUN_00236c40	match	-
 00236ca0	FUN_00236ca0	match	-
@@ -6627,14 +6628,14 @@
 0023c440	LuaLibrary_MarkRegistered	match	-
 0023c460	igLuaState_GetMetaObject	match	-
 0023c4b0	igLuaState_GetVTable	match	-
-0023c590	FUN_0023c590	match	-
+0023c590	igLuaState_EnsureRegistered	match	-
 0023c5a0	igLuaState_Register	match	-
 0023c620	thunk_igLuaState_GetMetaObject	match	-
 0023c630	igLuaState_InitFields	match	-
-0023c6c0	FUN_0023c6c0	match	-
+0023c6c0	igLuaGlue_GetOrCreateMetaObject	match	-
 0023c710	igLuaGlue_GetMetaObject	match	-
 0023c760	igLuaGlue_GetVTable	match	-
-0023c7a0	FUN_0023c7a0	match	-
+0023c7a0	igLuaGlue_EnsureRegistered	match	-
 0023c7b0	igLuaGlue_Register	match	-
 0023c820	thunk_igLuaGlue_GetMetaObject	match	-
 0023c830	Gap__Lua__igLuaGlue__vfunc_22	match	-
@@ -6734,11 +6735,11 @@
 00243b00	FUN_00243b00	match	-
 00243ba0	FUN_00243ba0	match	-
 00243c80	FUN_00243c80	match	-
-00243d00	FUN_00243d00	match	-
+00243d00	LuaGlue_Initialize	match	-
 002442c0	FUN_002442c0	match	-
 002442d0	FUN_002442d0	match	-
 002442e0	FUN_002442e0	match	-
-002443c0	FUN_002443c0	match	-
+002443c0	LuaGlue_Shutdown	match	-
 002444c0	FUN_002444c0	match	-
 00244550	FUN_00244550	match	-
 00244560	FUN_00244560	match	-
@@ -6782,11 +6783,11 @@
 00246780	FUN_00246780	match	-
 002467a0	FUN_002467a0	match	-
 00246830	Gap__Lua__igLuaState__vfunc_22	match	-
-00246840	FUN_00246840	match	-
-002468a0	FUN_002468a0	match	-
-002468e0	FUN_002468e0	match	-
-00246a90	FUN_00246a90	match	-
-00246b30	FUN_00246b30	match	DEFERRED duplicate 0x25a230 __dt__28igSmartPointer<10ScriptFile>Fv 128B (compared under the profile of its retail unit)
+00246840	ThreadLocalTable_Insert	match	-
+002468a0	ThreadLocalTable_Link	match	-
+002468e0	ThreadLocalTable_Resize	match	-
+00246a90	ThreadLocalTable_Remove	match	-
+00246b30	lua_dofile	match	-
 00246d30	luaA_index	match	-
 00246d60	luaA_indexAcceptable	match	-
 00246db0	lua_stackspace	match	-
@@ -7340,7 +7341,7 @@
 0025f2c0	FUN_0025f2c0	match	-
 0025f2d0	FUN_0025f2d0	match	-
 0025f2e8	FUN_0025f2e8	match	-
-0025f300	FUN_0025f300	match	-
+0025f300	ADX_GetCoefficient	match	-
 0025f460	FUN_0025f460	match	-
 0025f588	FUN_0025f588	match	-
 0025f688	FUN_0025f688	match	-
@@ -7348,7 +7349,7 @@
 0025f780	FUN_0025f780	match	-
 0025fd38	FUN_0025fd38	match	-
 0025fd98	FUN_0025fd98	match	-
-002606e0	FUN_002606e0	match	-
+002606e0	ADX_DecodeSte4	match	-
 00260750	FUN_00260750	match	-
 00260788	FUN_00260788	match	-
 002607c0	FUN_002607c0	match	-
@@ -7448,70 +7449,70 @@
 00263b00	FUN_00263b00	match	-
 00263b08	FUN_00263b08	match	-
 00263b40	FUN_00263b40	match	-
-00263b80	FUN_00263b80	match	-
-00263c08	FUN_00263c08	match	-
-00263c78	FUN_00263c78	match	-
-00263d60	FUN_00263d60	unapproved	unapproved: 1 volatile without an approval row
-00263d88	FUN_00263d88	unapproved	unapproved: 1 volatile without an approval row
-00263db0	FUN_00263db0	match	-
-00263dc8	FUN_00263dc8	unapproved	unapproved: 2 volatile without an approval row
-00263e20	FUN_00263e20	unapproved	unapproved: 4 volatile without an approval row
-00263eb8	FUN_00263eb8	match	-
-00263fc0	FUN_00263fc0	match	-
-002640a0	FUN_002640a0	match	-
-002641d8	FUN_002641d8	match	-
-002642b0	FUN_002642b0	match	-
-00264300	FUN_00264300	match	-
-00264350	FUN_00264350	match	-
-00264368	FUN_00264368	match	-
-002643d0	FUN_002643d0	match	-
-00264430	FUN_00264430	match	-
-002644d8	FUN_002644d8	match	-
-00264590	FUN_00264590	match	-
-00264618	FUN_00264618	match	-
-002646a0	FUN_002646a0	match	-
-00264738	FUN_00264738	unapproved	unapproved: 2 volatile without an approval row
-00264808	FUN_00264808	match	-
-00264818	FUN_00264818	match	-
-00264830	FUN_00264830	match	-
-00264848	FUN_00264848	match	-
-00264860	FUN_00264860	match	-
-00264878	FUN_00264878	match	-
-00264890	FUN_00264890	match	-
-002648a8	FUN_002648a8	match	-
-002648e8	FUN_002648e8	match	-
-002648f8	FUN_002648f8	match	-
-00264aa0	FUN_00264aa0	unapproved	unapproved: 6 volatile without an approval row
-00264af0	FUN_00264af0	unapproved	unapproved: 1 volatile without an approval row
-00264b88	FUN_00264b88	unapproved	unapproved: 3 volatile without an approval row
-00264c58	FUN_00264c58	unapproved	unapproved: 3 volatile without an approval row
-00264d28	FUN_00264d28	unapproved	unapproved: 3 volatile without an approval row
-00264df8	FUN_00264df8	unapproved	unapproved: 3 volatile without an approval row
-00264ec8	FUN_00264ec8	unapproved	unapproved: 3 volatile without an approval row
-00264f98	FUN_00264f98	unapproved	unapproved: 3 volatile without an approval row
-00265068	FUN_00265068	match	-
-00265080	FUN_00265080	match	-
-00265098	FUN_00265098	match	-
-002651d0	FUN_002651d0	match	-
-002651e8	FUN_002651e8	match	-
-00265200	FUN_00265200	match	-
-00265288	FUN_00265288	unapproved	unapproved: 2 volatile without an approval row
-00265308	FUN_00265308	unapproved	unapproved: 1 volatile without an approval row
-00265330	FUN_00265330	match	-
-00265368	FUN_00265368	match	-
-00265380	FUN_00265380	match	-
-002653c8	FUN_002653c8	match	-
-00265428	FUN_00265428	match	-
-00265440	FUN_00265440	match	-
-002654a8	FUN_002654a8	match	-
-002654c0	FUN_002654c0	match	-
-002656c8	FUN_002656c8	unapproved	unapproved: 1 volatile without an approval row
-00265778	FUN_00265778	match	-
-002657a0	FUN_002657a0	match	-
-002657c8	FUN_002657c8	match	-
-002657e0	FUN_002657e0	match	-
-00265808	FUN_00265808	match	-
-00265838	FUN_00265838	match	-
+00263b80	adxm_lock	match	-
+00263c08	adxm_unlock	match	-
+00263c78	adxm_goto_svr_border	match	-
+00263d60	adxm_goto_mwidle_border	unapproved	unapproved: 1 volatile without an approval row
+00263d88	adxm_goto_usridle_border	unapproved	unapproved: 1 volatile without an approval row
+00263db0	adxm_safe_count_up	match	-
+00263dc8	adxm_safe_thrd	unapproved	unapproved: 2 volatile without an approval row
+00263e20	adxm_usrvsync_thrd	unapproved	unapproved: 4 volatile without an approval row
+00263eb8	adxm_vsync_thrd	match	-
+00263fc0	adxm_fs_thrd	match	-
+002640a0	adxm_mwidle_thrd	match	-
+002641d8	adxm_usridle_thrd	match	-
+002642b0	adxm_iwakeup_thrd	match	-
+00264300	adxm_wakeup_thrd	match	-
+00264350	adxm_sleep_thrd	match	-
+00264368	adxm_resume_thrd	match	-
+002643d0	adxm_suspend_thrd	match	-
+00264430	adxm_create_safe_thrd	match	-
+002644d8	adxm_create_usrvsync_thrd	match	-
+00264590	adxm_create_vsync_thrd	match	-
+00264618	adxm_create_fs_thrd	match	-
+002646a0	adxm_create_mwidle_thrd	match	-
+00264738	adxm_create_usridle_thrd	unapproved	unapproved: 2 volatile without an approval row
+00264808	adxm_is_usridle_mode	match	-
+00264818	ADXM_ExecSvrUsrVsync	match	-
+00264830	ADXM_ExecSvrVsync	match	-
+00264848	ADXM_ExecSvrFs	match	-
+00264860	ADXM_ExecSvrMain	match	-
+00264878	ADXM_ExecSvrMwIdle	match	-
+00264890	ADXM_ExecSvrUsrIdle	match	-
+002648a8	ADXM_ExecSvrAll	match	-
+002648e8	ADXM_IsSetupThrd	match	-
+002648f8	ADXM_SetCbErr	match	-
+00264aa0	adxm_request_thrd_exit	unapproved	unapproved: 6 volatile without an approval row
+00264af0	ADXM_ShutdownThrd	unapproved	unapproved: 1 volatile without an approval row
+00264b88	adxm_delete_usridle_thrd	unapproved	unapproved: 3 volatile without an approval row
+00264c58	adxm_delete_mwidle_thrd	unapproved	unapproved: 3 volatile without an approval row
+00264d28	adxm_delete_vsync_thrd	unapproved	unapproved: 3 volatile without an approval row
+00264df8	adxm_delete_fs_thrd	unapproved	unapproved: 3 volatile without an approval row
+00264ec8	adxm_delete_usrvsync_thrd	unapproved	unapproved: 3 volatile without an approval row
+00264f98	adxm_delete_safe_thrd	unapproved	unapproved: 3 volatile without an approval row
+00265068	ADXM_Lock	match	-
+00265080	ADXM_Unlock	match	-
+00265098	ADXM_GetLockLevel	match	-
+002651d0	ADXM_ExecVint	match	-
+002651e8	ADXM_ExecMain	match	-
+00265200	adxm_wakeup_idle_thrds	match	-
+00265288	adxm_wakeup_vsync_waiter	unapproved	unapproved: 2 volatile without an approval row
+00265308	ADXM_WaitVsync	unapproved	unapproved: 1 volatile without an approval row
+00265330	ADXM_ExecVsyncFrame	match	-
+00265368	ADXPS2_ExecVsyncFrame	match	-
+00265380	ADXPS2_ExecServer	match	-
+002653c8	ADXPS2_SetupThrd	match	-
+00265428	ADXPS2_ShutdownThrd	match	-
+00265440	ADXPS2_ExecServerLocked	match	-
+002654a8	ADXPS2_Lock	match	-
+002654c0	ADXPS2_Unlock	match	-
+002656c8	ADXM_ShutdownThrdEx	unapproved	unapproved: 1 volatile without an approval row
+00265778	ADXM_SetCbUsrVsync	match	-
+002657a0	ADXM_SetCbUsrIdle	match	-
+002657c8	ADXM_GotoUsrIdleBorder	match	-
+002657e0	ADXM_SetCbVsyncFrame	match	-
+00265808	adxm_call_vsync_frame_cb	match	-
+00265838	adxm_call_mwidle_sleep_cb	match	-
 00265868	FUN_00265868	match	-
 00265878	FUN_00265878	match	-
 002658a8	FUN_002658a8	match	-
@@ -7832,27 +7833,27 @@
 0026e8b8	FUN_0026e8b8	match	-
 0026ebf8	FUN_0026ebf8	match	-
 0026ec78	FUN_0026ec78	match	jump table 0x4eee40: 5 entries, 20 bytes, matches retail
-0026ee48	FUN_0026ee48	match	-
-0026ee70	FUN_0026ee70	match	-
-0026ee98	FUN_0026ee98	match	-
-0026ef68	FUN_0026ef68	match	-
-0026ef90	FUN_0026ef90	match	-
-0026efb8	FUN_0026efb8	match	-
-0026efe0	FUN_0026efe0	match	-
-0026eff0	FUN_0026eff0	match	-
-0026f010	FUN_0026f010	match	-
-0026f048	FUN_0026f048	match	-
-0026f050	FUN_0026f050	match	-
-0026f058	FUN_0026f058	match	-
-0026f088	FUN_0026f088	match	-
-0026f0b8	FUN_0026f0b8	match	-
-0026f0e8	FUN_0026f0e8	match	-
-0026f108	FUN_0026f108	match	-
-0026f130	FUN_0026f130	match	-
-0026f148	FUN_0026f148	match	-
-0026f150	FUN_0026f150	match	-
-0026f160	FUN_0026f160	match	-
-0026f258	FUN_0026f258	match	-
+0026ee48	ADXPD_Init	match	-
+0026ee70	ADXPD_Finish	match	-
+0026ee98	ADXPD_Create	match	-
+0026ef68	ADXPD_SetCoef	match	-
+0026ef90	ADXPD_SetDly	match	-
+0026efb8	ADXPD_GetDly	match	-
+0026efe0	ADXPD_SetExtPrm	match	-
+0026eff0	ADXPD_GetExtPrm	match	-
+0026f010	ADXPD_Destroy	match	-
+0026f048	ADXPD_SetMode	match	-
+0026f050	ADXPD_GetStat	match	-
+0026f058	ADXPD_EntryMono	match	-
+0026f088	ADXPD_EntrySte	match	-
+0026f0b8	ADXPD_EntryPl2	match	-
+0026f0e8	ADXPD_Start	match	-
+0026f108	ADXPD_Stop	match	-
+0026f130	ADXPD_Reset	match	-
+0026f148	ADXPD_GetNumBlk	match	-
+0026f150	adxpd_SetOddBlockError	match	-
+0026f160	ADXPD_ExecHndl	match	-
+0026f258	ADXPD_ExecServer	match	-
 0026f350	FUN_0026f350	match	-
 0026f3a0	FUN_0026f3a0	match	-
 0026f438	FUN_0026f438	match	-
@@ -14194,7 +14195,7 @@
 0034e520	FUN_0034e520	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
 0034e540	beNumberCtrl_Register	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
 0034e5b0	beNumberCtrl_GetMetaObject	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
-0034e5d0	FUN_0034e5d0	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
+0034e5d0	beLoadingNode_ResolveMetaObject	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
 0034e620	beLoadingNode_GetVTable	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
 0034e690	FUN_0034e690	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
 0034e710	FUN_0034e710	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
@@ -14203,7 +14204,7 @@
 0034e7d0	FUN_0034e7d0	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
 0034e7e0	beLoadingNode_InitFields	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
 0034e850	FUN_0034e850	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
-0034e870	FUN_0034e870	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
+0034e870	beNodeAnim_ResolveMetaObject	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
 0034e8c0	beNodeAnim_GetVTable	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
 0034e930	FUN_0034e930	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
 0034e950	beNodeAnim_Register	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
@@ -16401,21 +16402,21 @@
 0039a900	Gap__Bec__beModelCtrlSCSound__vfunc_20	match	DEFERRED duplicate 0x198190 __dt__3RefFv 128B (compared under the profile of its retail unit)
 0039a910	Gap__Bec__beModelCtrlSCEffect__vfunc_20	match	DEFERRED duplicate 0x198190 __dt__3RefFv 128B (compared under the profile of its retail unit)
 0039a920	Gap__Bec__beModelCtrlSCHitBox__vfunc_20	match	DEFERRED duplicate 0x198190 __dt__3RefFv 128B (compared under the profile of its retail unit)
-0039a930	FUN_0039a930	match	-
-0039a960	FUN_0039a960	match	-
-0039a9e0	FUN_0039a9e0	match	-
-0039ab20	FUN_0039ab20	unapproved	unapproved: 2 volatile without an approval row
-0039ad80	FUN_0039ad80	match	-
-0039adc0	FUN_0039adc0	match	-
-0039adf0	FUN_0039adf0	match	-
-0039ae00	FUN_0039ae00	match	-
-0039ae10	FUN_0039ae10	match	-
+0039a930	beNodeAnim_TraversalFunction	match	-
+0039a960	beNodeAnim_SetTime	match	-
+0039a9e0	beNodeAnim_UpdateTime	match	-
+0039ab20	beNodeAnim_Traverse	unapproved	unapproved: 2 volatile without an approval row
+0039ad80	beNodeAnim_RegisterTraversalFunction	match	-
+0039adc0	beLoadingNode_TraversalFunction	match	-
+0039adf0	beLoadingNode_Lock	match	-
+0039ae00	beLoadingNode_IsPastPlayLimit	match	-
+0039ae10	beLoadingNode_RegisterTraversalFunction	match	-
 0039ae50	Gap__Bec__bePadData__vfunc_07	match	-
 0039aef0	Gap__Bec__bePadData__vfunc_08	match	-
-0039af10	FUN_0039af10	match	-
-0039af90	FUN_0039af90	match	-
-0039b050	FUN_0039b050	match	-
-0039b110	FUN_0039b110	match	-
+0039af10	bePadData_UpdateButtons	match	-
+0039af90	bePadData_UpdateLeftStick	match	-
+0039b050	bePadData_UpdateRightStick	match	-
+0039b110	bePadData_StickDirections	match	-
 0039b2d0	Gap__Bec__bePadData__vfunc_20	match	-
 0039b2e0	Gap__Bec__bePadManager__vfunc_21	match	-
 0039b300	Gap__Bec__bePadManager__vfunc_22	match	-
@@ -18231,7 +18232,7 @@
 003f5320	Gap__Bec__beNDMWTitle2__vfunc_29	match	-
 003f5350	Gap__Bec__beNDMWTitle2__vfunc_34	match	-
 003f5400	Gap__Bec__beNDMWTitle2__vfunc_20	match	-
-003f5410	FUN_003f5410	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
+003f5410	beNDMWWindow_QueueText	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
 003f5660	FUN_003f5660	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
 003f56d0	FUN_003f56d0	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
 003f5920	beNDMWWindow_RunMessageScript	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
@@ -18443,17 +18444,17 @@
 004233c0	Gap__Bec__beNDMWStatusCtrlEquip__vfunc_20	match	DEFERRED duplicate 0x1c6460 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
 004233d0	Gap__Bec__beNDMWStatusCtrl00__vfunc_20	match	DEFERRED duplicate 0x1c6460 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
 004233e0	Gap__Bec__beNDMWListCtrl__vfunc_20	match	DEFERRED duplicate 0x1c6460 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
-004233f0	Gap__Bec__beNDMWWindowSelect__vfunc_21	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
+004233f0	beNDMWWindowSelect_Update	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
 00423700	beNDMWWindowSelect_CanRequestFO2TOP	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-00423760	Gap__Bec__beNDMWStatusSelect00__vfunc_22	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-00423bf0	Gap__Bec__beNDMWStatusSelect01__vfunc_22	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-00423f00	Gap__Bec__beNDMWStatusSelectE0__vfunc_22	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-00424070	Gap__Bec__beNDMWStatusSelectE1__vfunc_22	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-00424110	Gap__Bec__beNDMWStatusSelectE1__vfunc_20	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-00424120	Gap__Bec__beNDMWStatusSelectE0__vfunc_20	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-00424130	Gap__Bec__beNDMWStatusSelect01__vfunc_20	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-00424140	Gap__Bec__beNDMWStatusSelect00__vfunc_20	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-00424150	Gap__Bec__beNDMWWindowSelect__vfunc_20	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
+00423760	beNDMWStatusSelect00_Setup	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
+00423bf0	beNDMWStatusSelect01_Setup	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
+00423f00	beNDMWStatusSelectE0_Setup	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
+00424070	beNDMWStatusSelectE1_Setup	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
+00424110	beNDMWStatusSelectE1_GetMeta	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
+00424120	beNDMWStatusSelectE0_GetMeta	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
+00424130	beNDMWStatusSelect01_GetMeta	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
+00424140	beNDMWStatusSelect00_GetMeta	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
+00424150	beNDMWWindowSelect_GetMeta	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
 00424160	Gap__Bec__beNDMWWindowTitle__vfunc_21	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
 00424230	Gap__Bec__beNDMWStatusTitle00__vfunc_22	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
 00425430	FUN_00425430	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
