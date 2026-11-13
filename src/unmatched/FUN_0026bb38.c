@@ -1,4 +1,4 @@
-/* Reports DAT_004ee5a0 for a null handle or value; otherwise calls FUN_0026bc60, then between
+/* Reports DAT_004ee5a0 for a null handle or value; otherwise calls ADXT_Stop, then between
  * FUN_0025f2d0 and FUN_0025f2e8 calls FUN_0026b978(handle, value), sets the mode byte to 3 and
  * calls FUN_0026d158(handle, 1). */
 /* Handle layout shared by FUN_0026bb38 through FUN_0026ebf8. */
@@ -53,7 +53,7 @@ typedef struct Handle_26bbc0 {
 
 extern char DAT_004ee5a0[];
 void FUN_002607e8(const char *message);
-void FUN_0026bc60(void);
+void ADXT_Stop(void);
 void FUN_0025f2d0(void);
 void FUN_0025f2e8(void);
 void FUN_0026b978(Handle_26bbc0 *handle, int value);
@@ -64,7 +64,7 @@ void FUN_0026bb38(Handle_26bbc0 *handle, int value) {
         FUN_002607e8(DAT_004ee5a0);
         return;
     }
-    FUN_0026bc60();
+    ADXT_Stop();
     FUN_0025f2d0();
     FUN_0026b978(handle, value);
     handle->mode = 3;

@@ -3987,6 +3987,7 @@
 0x00500670	igMovieRenderer_className	class-name
 0x00500690	igMovieManager_className	class-name
 0x005006f8	igMoviePlugin_className	class-name
+0x00500d70	You_probably_didn_t_open_the_DMA	string-literal
 0x00501400	libBecRuntimePlugin_className	class-name
 0x00501640	beWeaponInfoRam_className	class-name
 0x00501650	beWeaponInfo_className	class-name
@@ -4854,6 +4855,7 @@
 0x00554df4	g_igAdxFile_ignoreWriteWarning	recovered-global
 0x00554df8	g_igAdxFile_ignoreOpenModeWarning	recovered-global
 0x00554dfc	g_AdxMovieLibrary_registered	recovered-global
+0x00554e00	g_criMovieDmaWarningMuted	recovered-global
 0x00554e50	g_BecLibrary_registered	recovered-global
 0x00554e54	g_hitBoxDebugColorsReady	recovered-global
 0x00554e68	g_NdmwLibrary_registered	recovered-global
@@ -5539,6 +5541,9 @@
 0x00587860	g_igMovieRenderer_metaObject	class-handle
 0x00587870	g_igMovieManager_metaObject	class-handle
 0x005878a8	g_igMoviePlugin_metaObject	class-handle
+0x005878b8	g_criMovieUploadPacketSize	recovered-global
+0x005878c0	g_criMovieUploadPacket	recovered-global
+0x005878d8	g_criMovieVisualContext	recovered-global
 0x005878e0	g_libBecRuntimePlugin_metaObject	class-handle
 0x00587a20	g_beWeaponInfoRam_metaObject	class-handle
 0x00587a28	g_beWeaponInfo_metaObject	class-handle

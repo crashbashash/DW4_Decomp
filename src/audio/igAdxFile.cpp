@@ -42,7 +42,7 @@ void Gap__Core__igObject__vfunc_08__002ff0f0(igObject *self);
 void Gap__Core__igObject__vfunc_11(igObject *self);
 void *igObject_GetAllocator(igObject *self);
 int igMetaObject_CountInstances(int meta, int recursive);
-char *FUN_002ed2b0(int size, int align, void *allocator); /* aligned allocation */
+char *Memory_AllocateAlignedWithAllocator(int size, int align, void *allocator); /* aligned allocation */
 int Memory_FreeBufferWithAllocator(int buffer, int allocator);
 void FUN_002e30b0(igObject *file, const char *fileName); /* sets igFile::_fileName */
 int FUN_003082b0(const char *format, ...);  /* reports a warning */
@@ -115,7 +115,7 @@ void Gap__igAdxFile__vfunc_07(igAdxFile *self)
 {
     Gap__Core__igObject__vfunc_07(self);
     igMetaObject_CountInstances(((igAdxFileVirtuals *)self)->vfunc_20(), 1);
-    self->_pBuffer = (int)FUN_002ed2b0(self->_iBufferSize, 0x40, igObject_GetAllocator(self));
+    self->_pBuffer = (int)Memory_AllocateAlignedWithAllocator(self->_iBufferSize, 0x40, igObject_GetAllocator(self));
     /* matching construct: hand search — the failed-allocation return folds into the epilogue, leaving the reload of
        _pBuffer; the GameCube build keeps the same compare with no branch after it */
     if (self->_pBuffer == 0) {
@@ -331,7 +331,7 @@ int Gap__igAdxFile__vfunc_25(igAdxFile *self, char *dest, int size, int count)
         return count;
     }
     if (self->_pTmpBuffer == 0) {
-        self->_pTmpBuffer = (int)FUN_002ed2b0(self->_iBufferSize, 0x40, igObject_GetAllocator(self));
+        self->_pTmpBuffer = (int)Memory_AllocateAlignedWithAllocator(self->_iBufferSize, 0x40, igObject_GetAllocator(self));
         if (self->_pTmpBuffer == 0) {
             return 0;
         }

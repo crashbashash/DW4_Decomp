@@ -1,4 +1,4 @@
-/* Reports DAT_004eecd8 for a null handle or name; otherwise calls FUN_0026bc60, copies name into
+/* Reports DAT_004eecd8 for a null handle or name; otherwise calls ADXT_Stop, copies name into
  * the handle buffer, stores the two extra arguments, resets the cursor and flags (state 1) and
  * calls FUN_0026d158(handle, 0). */
 /* Handle layout shared by FUN_0026bb38 through FUN_0026d6e8. */
@@ -49,7 +49,7 @@ typedef struct Handle_26bbc0 {
 
 extern char DAT_004eecd8[];
 void FUN_002607e8(const char *message);
-void FUN_0026bc60(void);
+void ADXT_Stop(void);
 char *strcpy(char *dst, const char *src);
 void FUN_0026d158(Handle_26bbc0 *handle, int value);
 
@@ -58,7 +58,7 @@ void FUN_0026d6e8(Handle_26bbc0 *handle, const char *name, int f188, int f192) {
         FUN_002607e8(DAT_004eecd8);
         return;
     }
-    FUN_0026bc60();
+    ADXT_Stop();
     strcpy(handle->name, name);
     handle->cursor = handle->name;
     handle->f188 = f188;

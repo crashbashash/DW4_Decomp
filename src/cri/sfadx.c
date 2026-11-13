@@ -111,9 +111,9 @@ void FUN_00263548();
 int FUN_00265f28();
 int FUN_00265f40();
 int FUN_0026b348();
-int FUN_0026b728();
+int ADXT_Destroy();
 void FUN_0026bb38();
-int FUN_0026bc60();
+int ADXT_Stop();
 int FUN_0026bd20();
 int FUN_0026bf90();
 int FUN_0026c2d8();
@@ -126,7 +126,7 @@ int FUN_0026c6c8();
 void FUN_0026c7b0();
 int FUN_0026cb98();
 int FUN_0026cce0();
-void FUN_0026ce40();
+void ADXT_Pause();
 void FUN_0026cfd0();
 void FUN_0026cfe8();
 int FUN_0026d048();
@@ -633,7 +633,7 @@ int FUN_0029ca38(SfdAdxHn *h) {
 }
 
 int FUN_0029cb10(int adxt) {
-    FUN_0026b728(adxt);
+    ADXT_Destroy(adxt);
     return 0;
 }
 
@@ -652,7 +652,7 @@ int FUN_0029cb48(SfdAdxHn *h) {
 }
 
 int FUN_0029cb68(SfdAdxHn *h) {
-    FUN_0026bc60(((SfdAdxCtx *)h->sub.ctx)->adxt);
+    ADXT_Stop(((SfdAdxCtx *)h->sub.ctx)->adxt);
     return 0;
 }
 
@@ -712,7 +712,7 @@ void FUN_0029ccd0(SfdAdxHn *h, int value) {
 }
 
 void FUN_0029cd18(int adxt, void *blk, int value) {
-    FUN_0026ce40(adxt, value);
+    ADXT_Pause(adxt, value);
     FUN_002b05a0(blk, value);
 }
 

@@ -25,7 +25,7 @@ void *FUN_002ed260(unsigned int size, unsigned int alignment)
     return allocator->AllocateAligned(size, alignment);
 }
 
-void *FUN_002ed2b0(unsigned int size, unsigned int alignment, igMemoryPool_2ed1c0 *pool)
+void *Memory_AllocateAlignedWithAllocator(unsigned int size, unsigned int alignment, igMemoryPool_2ed1c0 *pool)
 {
     return pool->AllocateAligned(size, alignment);
 }

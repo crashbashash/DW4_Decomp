@@ -27,7 +27,7 @@ void FUN_0026a0a0(int);
 void FUN_00277278(int);
 void FUN_0026bbc0(CriAdxt *);
 
-void FUN_0026bc60(CriAdxt *adxt)
+void ADXT_Stop(CriAdxt *adxt)
 {
     if (adxt == 0) {
         FUN_002607e8(DAT_004ee5c8);

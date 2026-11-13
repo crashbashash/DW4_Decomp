@@ -6,7 +6,7 @@ typedef struct {
 extern char DAT_004eed08[];
 extern char DAT_004eed38[];
 void FUN_002607e8(const char *message);
-void FUN_0026bc60(AdxtState *adxt);
+void ADXT_Stop(AdxtState *adxt);
 void FUN_0025f2d0(void);
 void FUN_0025f2e8(void);
 int FUN_0027b408(void *buf, int size);
@@ -21,7 +21,7 @@ void FUN_0026d7d8(AdxtState *adxt, void *buf, int size)
         FUN_002607e8(DAT_004eed08);
         return;
     }
-    FUN_0026bc60(adxt);
+    ADXT_Stop(adxt);
     FUN_0025f2d0();
     sj = FUN_0027b408(buf, size);
     if (sj == 0) {

@@ -8,7 +8,7 @@ typedef struct {
 } Work2934c0;
 extern Work2934c0 *FUN_00294a30(void);
 
-void FUN_002934c0(void *allocFn, void *releaseFn, void *ctx) {
+void MWSFD_SetMallocFunc(void *allocFn, void *releaseFn, void *ctx) {
     Work2934c0 *work = FUN_00294a30();
 
     work->allocFn = allocFn;

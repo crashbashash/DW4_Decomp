@@ -10,7 +10,7 @@ struct Handle00295468 {
     int target; /* +64 */
 };
 
-int FUN_00295468(struct Handle00295468 *handle) {
+int mwPlyIsPause(struct Handle00295468 *handle) {
     int status = FUN_002aa2f0(handle->target);
     int result;
 

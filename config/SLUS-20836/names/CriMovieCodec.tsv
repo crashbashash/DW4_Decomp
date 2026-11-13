@@ -1,0 +1,27 @@
+# igCriMovieCodec (CRI Sofdec codec wrapper) and the callees its bodies name.
+# CRI ADXT names come from each function's own parameter-error message; the GS/DMA packet helpers,
+# MWSFD hooks and pool helpers from what each function does (docs/engine/cri-movie-codec.md).
+# <va>	<name>	<module>
+0x00337410	Dma_SetTag	movie
+0x00337480	Gif_SetTag	movie
+0x003374e0	Gif_SetAd	movie
+0x00337520	Gif_SetBitbltbuf	movie
+0x00337570	Gif_SetTrxpos	movie
+0x003375c0	Gif_SetTrxreg	movie
+0x00337600	Gif_SetTrxdir	movie
+0x00337630	CriMovie_BuildTileUpload	movie
+0x003378e0	CriMovie_BuildFrameUpload	movie
+0x00337aa0	CriMovie_SubmitFrame	movie
+0x003387d0	CriMovie_DestroyObjectRef	movie
+0x00338d60	CriMovie_Allocate	movie
+0x00338da0	CriMovie_AllocateAligned	movie
+0x00338df0	CriMovie_Free	movie
+0x0026b728	ADXT_Destroy	cri
+0x0026bc60	ADXT_Stop	cri
+0x0026ce40	ADXT_Pause	cri
+0x0026cf70	ADXT_GetStatPause	cri
+0x002934c0	MWSFD_SetMallocFunc	cri
+0x00295468	mwPlyIsPause	cri
+0x002ed2b0	Memory_AllocateAlignedWithAllocator	engine
+0x0016cdd0	igPsx2VisualContext_CallDmaChain	engine
+0x0016cde0	igPsx2VisualContext_IsDisplayingFirstBuffer	engine

@@ -20,7 +20,7 @@ typedef struct {
 extern char DAT_004eed68[];
 extern char DAT_004eed98[];
 void FUN_002607e8(const char *message);
-void FUN_0026bc60(AdxtHandle *adxt);
+void ADXT_Stop(AdxtHandle *adxt);
 void FUN_0025f2d0(void);
 void FUN_0025f2e8(void);
 void *FUN_0027b408(void *data, int size);
@@ -35,7 +35,7 @@ void FUN_0026d8b8(AdxtHandle *adxt, AcxHeader *acx, int no)
         FUN_002607e8(DAT_004eed68);
         return;
     }
-    FUN_0026bc60(adxt);
+    ADXT_Stop(adxt);
     if (no >= BSWAP32(acx->count) || no < 0) {
         return;
     }

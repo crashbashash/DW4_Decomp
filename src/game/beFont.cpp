@@ -60,7 +60,7 @@ extern "C" void List_Resize(void *, int, int);
 extern "C" void FUN_00384010(int arg0, int *arg1, int *arg2, int *arg3);
 extern "C" int Memory_FreeBufferWithAllocator(int, int);
 extern "C" int memset(int, int, unsigned int);
-extern "C" int FUN_002ed2b0(unsigned int, int, int);
+extern "C" int Memory_AllocateAlignedWithAllocator(unsigned int, int, int);
 extern "C" int Gap__Bec__beUnicodeObj__vfunc_20(void);
 extern "C" int TEXTCTL[4];
 extern "C" void Gap__Bec__beFont__vfunc_29(beFont *self, int receiver);
@@ -1095,10 +1095,10 @@ void beUnicodeObj_AllocateBuffer(beUnicodeObj *arg0, int arg1) {
         need = (arg1 + 1) * 2;
         if (Memory_GetBufferSize(arg0->_buffer) < need) {
             Memory_FreeBufferWithAllocator(arg0->_buffer, ((int)igObject_GetAllocator(arg0)));
-            arg0->_buffer = FUN_002ed2b0(need, 0x10, ((int)igObject_GetAllocator(arg0)));
+            arg0->_buffer = Memory_AllocateAlignedWithAllocator(need, 0x10, ((int)igObject_GetAllocator(arg0)));
         }
     } else {
-        arg0->_buffer = FUN_002ed2b0((arg1 + 1) * 2, 0x10, ((int)igObject_GetAllocator(arg0)));
+        arg0->_buffer = Memory_AllocateAlignedWithAllocator((arg1 + 1) * 2, 0x10, ((int)igObject_GetAllocator(arg0)));
     }
     memset(arg0->_buffer, 0, Memory_GetBufferSize(arg0->_buffer));
 }

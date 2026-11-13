@@ -75,7 +75,7 @@ extern "C" void *Memory_AllocateBufferDirect(unsigned int size, igMemoryPool *po
 
 extern "C" void *FUN_002ed260(unsigned int size, unsigned int alignment);
 
-extern "C" void *FUN_002ed2b0(unsigned int size, unsigned int alignment, igMemoryPool *pool);
+extern "C" void *Memory_AllocateAlignedWithAllocator(unsigned int size, unsigned int alignment, igMemoryPool *pool);
 
 extern "C" void *FUN_002ed2e0(unsigned int size, unsigned int alignment);
 

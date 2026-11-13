@@ -1110,11 +1110,11 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_27(int dummy0, int arg1) {
     FUN_002d96f0(arg1, 5, &DAT_004df510[0]);
 }
 
-void FUN_0016cdd0(int arg0, int arg1, int arg2, int arg3) {
+void igPsx2VisualContext_CallDmaChain(int arg0, int arg1, int arg2, int arg3) {
     FUN_001f7db0(arg1, arg2, arg3);
 }
 
-void FUN_0016cde0(void) {
+void igPsx2VisualContext_IsDisplayingFirstBuffer(void) {
     FUN_00207420(1);
 }
 

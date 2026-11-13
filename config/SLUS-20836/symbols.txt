@@ -2952,8 +2952,8 @@
 0016cc60 0000ac FUN_0016cc60
 0016cd10 000028 FUN_0016cd10
 0016cd40 000084 Gap__Gfx__igPsx2VisualContext__vfunc_27 Gap::Gfx::igPsx2VisualContext::vfunc_27
-0016cdd0 000010 FUN_0016cdd0
-0016cde0 000008 FUN_0016cde0
+0016cdd0 000010 igPsx2VisualContext_CallDmaChain
+0016cde0 000008 igPsx2VisualContext_IsDisplayingFirstBuffer
 0016cdf0 000008 Gap__Gfx__igPsx2DisableExt__vfunc_29 Gap::Gfx::igPsx2DisableExt::vfunc_29
 0016ce00 00008c Gap__Gfx__igPsx2DisableExt__vfunc_30 Gap::Gfx::igPsx2DisableExt::vfunc_30
 0016ce90 000088 Gap__Gfx__igPsx2DisableExt__vfunc_31 Gap::Gfx::igPsx2DisableExt::vfunc_31
@@ -8296,14 +8296,14 @@
 0026b6b0 000028 FUN_0026b6b0
 0026b6d8 000028 FUN_0026b6d8
 0026b700 000028 FUN_0026b700
-0026b728 0001d4 FUN_0026b728
+0026b728 0001d4 ADXT_Destroy
 0026b900 000060 FUN_0026b900
 0026b960 000014 FUN_0026b960
 0026b978 0000ec FUN_0026b978
 0026ba68 0000cc FUN_0026ba68
 0026bb38 000084 FUN_0026bb38
 0026bbc0 0000a0 FUN_0026bbc0
-0026bc60 0000c0 FUN_0026bc60
+0026bc60 0000c0 ADXT_Stop
 0026bd20 000030 FUN_0026bd20
 0026bd50 000038 FUN_0026bd50
 0026bd88 0000c8 FUN_0026bd88
@@ -8347,8 +8347,8 @@
 0026cdb0 000030 FUN_0026cdb0
 0026cde0 000030 FUN_0026cde0
 0026ce10 000030 FUN_0026ce10
-0026ce40 00012c FUN_0026ce40
-0026cf70 000030 FUN_0026cf70
+0026ce40 00012c ADXT_Pause
+0026cf70 000030 ADXT_GetStatPause
 0026cfa0 000014 FUN_0026cfa0
 0026cfb8 000014 FUN_0026cfb8
 0026cfd0 000008 FUN_0026cfd0
@@ -9341,7 +9341,7 @@
 00293230 0001c4 FUN_00293230
 002933f8 00004c FUN_002933f8
 00293448 000078 FUN_00293448
-002934c0 000048 FUN_002934c0
+002934c0 000048 MWSFD_SetMallocFunc
 00293508 0000a0 FUN_00293508
 002935a8 000034 FUN_002935a8
 002935e0 000034 FUN_002935e0
@@ -9424,7 +9424,7 @@
 00295398 00003c FUN_00295398
 002953d8 00005c FUN_002953d8
 00295438 00002c FUN_00295438
-00295468 000048 FUN_00295468
+00295468 000048 mwPlyIsPause
 002954b0 000018 FUN_002954b0
 002954c8 0000f4 FUN_002954c8
 002955c0 00000c FUN_002955c0
@@ -12485,7 +12485,7 @@
 002ed200 000038 Memory_AllocateDefaultBuffer
 002ed240 00001c Memory_AllocateBufferDirect
 002ed260 000048 FUN_002ed260
-002ed2b0 000024 FUN_002ed2b0
+002ed2b0 000024 Memory_AllocateAlignedWithAllocator
 002ed2e0 000048 FUN_002ed2e0
 002ed330 000074 Memory_ReallocateBuffer
 002ed3b0 000088 FUN_002ed3b0
@@ -14228,33 +14228,33 @@
 003373e0 00000c Gap__igTextureBindAttrList__vfunc_22 Gap::igTextureBindAttrList::vfunc_22
 003373f0 00000c Gap__igAdxAfsFileList__vfunc_22 Gap::igAdxAfsFileList::vfunc_22
 00337400 00000c Gap__igFileNameList__vfunc_22 Gap::igFileNameList::vfunc_22
-00337410 000068 FUN_00337410
-00337480 00005c FUN_00337480
-003374e0 000038 FUN_003374e0
-00337520 000048 FUN_00337520
-00337570 000048 FUN_00337570
-003375c0 000034 FUN_003375c0
-00337600 000024 FUN_00337600
-00337630 0002a4 FUN_00337630
-003378e0 00003c FUN_003378e0
+00337410 000068 Dma_SetTag
+00337480 00005c Gif_SetTag
+003374e0 000038 Gif_SetAd
+00337520 000048 Gif_SetBitbltbuf
+00337570 000048 Gif_SetTrxpos
+003375c0 000034 Gif_SetTrxreg
+00337600 000024 Gif_SetTrxdir
+00337630 0002a4 CriMovie_BuildTileUpload
+003378e0 00003c CriMovie_BuildFrameUpload
 00337920 000124 Gap__igCriMovieCodec__vfunc_28 Gap::igCriMovieCodec::vfunc_28
 00337a50 00004c Gap__igCriMovieCodec__vfunc_29 Gap::igCriMovieCodec::vfunc_29
-00337aa0 0000e0 FUN_00337aa0
+00337aa0 0000e0 CriMovie_SubmitFrame
 00337b80 000030 Gap__igCriMovieData__vfunc_11 Gap::igCriMovieData::vfunc_11
 00337bb0 00003c Gap__igCriMovieCodec__vfunc_01 Gap::igCriMovieCodec::vfunc_01
 00337bf0 00001c Gap__igCriMovieCodec__vfunc_02 Gap::igCriMovieCodec::vfunc_02
 00337c10 000008 Gap__igCriMovieCodec__vfunc_21 Gap::igCriMovieCodec::vfunc_21
 00337c20 0001d0 Gap__igCriMovieCodec__vfunc_22 Gap::igCriMovieCodec::vfunc_22
 00337df0 0009e0 Gap__igCriMovieCodec__vfunc_23 Gap::igCriMovieCodec::vfunc_23
-003387d0 000080 FUN_003387d0
+003387d0 000080 CriMovie_DestroyObjectRef
 00338850 0000cc Gap__igCriMovieCodec__vfunc_24 Gap::igCriMovieCodec::vfunc_24
 00338920 0000d4 Gap__igCriMovieCodec__vfunc_25 Gap::igCriMovieCodec::vfunc_25
 00338a00 0000e0 Gap__igCriMovieCodec__vfunc_26 Gap::igCriMovieCodec::vfunc_26
 00338ae0 000118 Gap__igCriMovieCodec__vfunc_30 Gap::igCriMovieCodec::vfunc_30
 00338c00 000158 Gap__igCriMovieCodec__vfunc_27 Gap::igCriMovieCodec::vfunc_27
-00338d60 000038 FUN_00338d60
-00338da0 000048 FUN_00338da0
-00338df0 000038 FUN_00338df0
+00338d60 000038 CriMovie_Allocate
+00338da0 000048 CriMovie_AllocateAligned
+00338df0 000038 CriMovie_Free
 00338e30 00000c Gap__igCriMovieCodec__vfunc_20 Gap::igCriMovieCodec::vfunc_20
 00338e40 00000c Gap__igCriMovieData__vfunc_20 Gap::igCriMovieData::vfunc_20
 00338e50 000080 FUN_00338e50

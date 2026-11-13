@@ -20,7 +20,7 @@ void FUN_0025f2e8(void);
 void FUN_00265cd0(int adx, int sw);
 void FUN_0026bf90(AdxtPause *adxt, int *ncount, int *tscale);
 
-void FUN_0026ce40(AdxtPause *adxt, int sw)
+void ADXT_Pause(AdxtPause *adxt, int sw)
 {
     int stat;
     int saved;

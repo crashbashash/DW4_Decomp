@@ -8,7 +8,7 @@ extern "C" void igLuaState_RunString(void);
 extern "C" int igLuaState_RunBuffer(...);
 extern "C" void Gap__Bec__beLuaState__vfunc_21(void);
 extern "C" void Gap__Bec__beLuaState__vfunc_23(void);
-extern "C" int FUN_002ed2b0(int, int, int);
+extern "C" int Memory_AllocateAlignedWithAllocator(int, int, int);
 extern "C" int Gap__Bec__beLuaState__vfunc_20(void);
 extern "C" int Gap__Lua__igLuaState__vfunc_10(beLuaState *);
 extern "C" int g_defaultAllocatorSelector[4];
@@ -79,7 +79,7 @@ int Gap__Bec__beLuaState__vfunc_22(beLuaState *arg0, int arg1) {
     }
     var_v0 = igObject_GetAllocator(arg0);
     var_v0 = (GPR_00554c14 != 0) ? var_v0 : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
-    arg0->_lp = (int)FUN_002ed2b0(s0, 0x40, var_v0);
+    arg0->_lp = (int)Memory_AllocateAlignedWithAllocator(s0, 0x40, var_v0);
     if (arg0->_lp == 0) {
         ((V *)reader.p)->v24();
         return -1;

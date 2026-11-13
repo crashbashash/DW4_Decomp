@@ -6,7 +6,7 @@ extern "C" int igObject_GetAllocator(...);
 extern "C" void FUN_003a9810(void *arg0, int arg1);
 extern "C" int Memory_FreeBufferWithAllocator(int, int);
 extern "C" int memset(void *, int, int);
-extern "C" int FUN_002ed2b0(int, int, int);
+extern "C" int Memory_AllocateAlignedWithAllocator(int, int, int);
 extern "C" int igMetaObject_CountInstances(...);
 extern "C" void Gap__Bec__beSaveMemoryObj__vfunc_08(void **arg0);
 extern "C" int Gap__Bec__beSaveMemoryObj__vfunc_20(void);
@@ -253,7 +253,7 @@ void FUN_003a98d0(struct O *arg0, int arg1, int arg2) {
     } else {
         a = igObject_GetAllocator(arg0);
         b = GPR_00554c14 != 0 ? a : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
-        arg0->buf = (void *)FUN_002ed2b0(arg1, arg2 & 0xFFFF, b);
+        arg0->buf = (void *)Memory_AllocateAlignedWithAllocator(arg1, arg2 & 0xFFFF, b);
     }
     memset(arg0->buf, 0, arg1);
 }

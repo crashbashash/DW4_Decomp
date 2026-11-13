@@ -1,17 +1,17 @@
 
 extern "C" int igObject_GetAllocator(...);
-extern "C" int FUN_002ed2b0(...);
+extern "C" int Memory_AllocateAlignedWithAllocator(...);
 extern "C" int FUN_0026b348(int, int, int);
 extern "C" int FUN_0026d8b8(int, int, int);
 extern "C" int FUN_0026d5f0(int, short, short);
 extern "C" int FUN_0026d7a0(int, int);
-extern "C" int FUN_0026bc60(int);
+extern "C" int ADXT_Stop(int);
 extern "C" void FUN_00332340(void *arg0);
-extern "C" int FUN_0026ce40(int);
+extern "C" int ADXT_Pause(int);
 extern "C" void FUN_00332370(void *arg0);
-extern "C" int FUN_0026cf70(int);
+extern "C" int ADXT_GetStatPause(int);
 extern "C" int FUN_003323a0(void *arg0);
-extern "C" int FUN_0026b728(...);
+extern "C" int ADXT_Destroy(...);
 extern "C" int Memory_FreeBufferWithAllocator(...);
 extern "C" int FUN_0026c660(int);
 extern "C" void FUN_00332430(void *arg0);
@@ -210,7 +210,7 @@ int FUN_00331fb0(struct S *s, int a, int b, int c, int d) {
         q = ((s->f28 + 1) * t + 0x800) / 0x800;
         w = (q << 11) + 0x24;
         { int m = s->f20 * 0x40C0; s->f12 = m + w + 0x40; }
-        s->f8 = FUN_002ed2b0(s->f12, 16, igObject_GetAllocator(s));
+        s->f8 = Memory_AllocateAlignedWithAllocator(s->f12, 16, igObject_GetAllocator(s));
         if (s->f8 == 0) return 0;
         s->f36 = 1;
     }
@@ -283,14 +283,14 @@ void FUN_00332340(void *arg0) {
 
     temp_a0 = *(int *)((char *)(arg0) + 44);
     if (temp_a0 != 0) {
-        FUN_0026bc60(temp_a0);
+        ADXT_Stop(temp_a0);
     }
 }
 
 void FUN_00332370(void *arg0) {
     int temp_a0 = *(int *)((char *)(arg0) + 44);
     if (temp_a0 != 0) {
-        FUN_0026ce40(temp_a0);
+        ADXT_Pause(temp_a0);
     }
 }
 
@@ -301,12 +301,12 @@ int FUN_003323a0(void *arg0) {
     if (temp_a0 == 0) {
         return -1;
     }
-    return FUN_0026cf70(temp_a0);
+    return ADXT_GetStatPause(temp_a0);
 }
 
 void FUN_003323d0(S_3323d0 *arg0) {
     if (arg0->f44 != 0) {
-        FUN_0026b728(arg0->f44);
+        ADXT_Destroy(arg0->f44);
     }
     if (arg0->f8 != 0) {
         Memory_FreeBufferWithAllocator(arg0->f8, igObject_GetAllocator(arg0));
@@ -522,7 +522,7 @@ int FUN_00332860(void) {
         DAT_005873a0[0] = (int)&DAT_004fff60[0];
         DAT_005873a4[0] = 0x20;
         DAT_005873ac[0] = ((DAT_005873a4[0] + 1) * 0xD) + 0x68;
-        DAT_005873a8[0] = FUN_002ed2b0(DAT_005873ac[0], 0x10, temp_s0);
+        DAT_005873a8[0] = Memory_AllocateAlignedWithAllocator(DAT_005873ac[0], 0x10, temp_s0);
         FUN_0026b120(&DAT_005873a0[0]);
     }
     if (DAT_005873c8[0] != 0) {
@@ -532,7 +532,7 @@ int FUN_00332860(void) {
             DAT_005873b0[0] = (int)&DAT_004fff60[0];
             DAT_005873b4[0] = 0x20;
             DAT_005873bc[0] = ((DAT_005873b4[0] + 1) * 0xD) + 0x68;
-            DAT_005873b8[0] = FUN_002ed2b0(DAT_005873bc[0], 0x10, temp_s0);
+            DAT_005873b8[0] = Memory_AllocateAlignedWithAllocator(DAT_005873bc[0], 0x10, temp_s0);
             FUN_0026ad50(&DAT_005873b0[0]);
         }
     }
@@ -601,7 +601,7 @@ void FUN_00332d20(int arg0) {
     }
     DAT_005875e8[0] = arg0;
     if (arg0 > 0) {
-        ((int *)DAT_005875f0)[0] = FUN_002ed2b0(arg0 * 4, 0x10, temp_s2);
+        ((int *)DAT_005875f0)[0] = Memory_AllocateAlignedWithAllocator(arg0 * 4, 0x10, temp_s2);
         var_v1 = 0;
         if (0 < DAT_005875e8[0]) {
             var_a0 = 0;
@@ -740,7 +740,7 @@ int FUN_003332b0(int stream, const char *path, int mode, int length)
     if (!GPR_00554de8) return 0;
     size = ((length + 1) * 2 + 282) & ~3;
     if (size > 0) {
-        DAT_005875f0[0][stream] = ((void *)FUN_002ed2b0(size, 16, ((void *)Memory_GetAllocatorByName(((char *)DAT_004ffe68)))));
+        DAT_005875f0[0][stream] = ((void *)Memory_AllocateAlignedWithAllocator(size, 16, ((void *)Memory_GetAllocatorByName(((char *)DAT_004ffe68)))));
     }
     FUN_00332e90(stream, (char *)path);
     name = StringList_CopyRetained(((int *)DAT_00587608)[0], stream).p;

@@ -1,5 +1,5 @@
 /* Attaches Dolby Pro Logic II processing (per its error strings) to an ADXT handle with at least
- * two channels (+3): resets it (FUN_0026bc60, FUN_00279058), installs the FUN_00279200 hook
+ * two channels (+3): resets it (ADXT_Stop, FUN_00279058), installs the FUN_00279200 hook
  * (FUN_00278640) and clears FUN_002786c8, creates the processor with FUN_00278780(a, b) and binds
  * it to the renderer state (+4 then +4: words +232/+236/+240) via FUN_00278d58, then installs the
  * four FUN_00279128/2791b0/279198/2791e8 callbacks and calls ADXM_Unlock. Failures are reported
@@ -29,7 +29,7 @@ extern void *DAT_00498c6c;
 extern void *DAT_00498c70;
 extern void *DAT_004a52d0;
 void FUN_002607e8(const char *message);
-void FUN_0026bc60(Adxt_278f20 *adxt);
+void ADXT_Stop(Adxt_278f20 *adxt);
 void FUN_00279058(Adxt_278f20 *adxt);
 void FUN_00278640(void (*hook)(), int arg);
 void FUN_00279200();
@@ -51,7 +51,7 @@ void FUN_00278f20(Adxt_278f20 *adxt, int a, int b) {
         FUN_002607e8(E2003091101_ADXT_handle_must_be_created_for_stereo_output);
         return;
     }
-    FUN_0026bc60(adxt);
+    ADXT_Stop(adxt);
     FUN_00279058(adxt);
     FUN_00278640(FUN_00279200, 0);
     FUN_002786c8(0);
