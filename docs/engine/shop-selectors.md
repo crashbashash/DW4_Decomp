@@ -1,23 +1,29 @@
 # Shared selector and shop widget initialization
 
-**Six complete bodies /7,916 code bytes** are recovered: the shared
-WindowSelect update4233f0 /772 bytes, FO2TOP predicate423700 /84 bytes,
-ShopSelect00 initializer43d1d0 /636, ShopSelect01 initializer43d450 /1,976,
-ShopSelect11 initializer43ecc0 /3,752 and its stat/cost display43fb70 /696.
+The shared WindowSelect update (`beNDMWWindowSelect_Update`, 772 bytes) and its FO2TOP predicate
+(84 bytes) live in [beNDMWWindowSelect.cpp](../../src/game/beNDMWWindowSelect.cpp). The shop
+selectors' `Setup` overrides, their `GetMeta` overrides and two digit-display helpers are the
+matched unit [beNDMWShopSelect00.cpp](../../src/game/beNDMWShopSelect00.cpp), in retail order:
 
-The full1,979-word spans hold **1,909 reachable instruction addresses**, six
-zero padding words and64 statically impossible
-literal-null construction words. The84-byte
-[FO2TOP predicate](../../src/game/beNDMWWindowSelect.cpp) is in `src/game/`;
-the three shop initializers and the stat/cost display /7,060 bytes are one-function
-files under `src/unmatched/`, and the shared update4233f0 /772 bytes is
-[beNDMWWindowSelect.cpp](../../src/game/beNDMWWindowSelect.cpp). Receiver/input, pool/list,
-lookup/recalculation, formatting, text/model and Lua services remain boundaries.
+| Original entry | Body | Bytes |
+| --- | --- | ---: |
+| `0x0043d1d0` | `beNDMWShopSelect00_Setup` | 636 |
+| `0x0043d450` | `beNDMWShopSelect01_Setup` | 1,976 |
+| `0x0043dc10` | `beNDMWShopSelect02_Setup` (unmatched, own file) | 3,736 |
+| `0x0043eab0` | `beNDMWShopSelect03_Setup` | 524 |
+| `0x0043ecc0` | `beNDMWShopSelect11_Setup` | 3,752 |
+| `0x0043fb70` | `beNDMWShopSelect11_RefreshStatCosts` | 696 |
+| `0x0043fe30` | `beNDMWShopSelect34_Setup` | 732 |
+| `0x00440110` | `beNDMWShopCtrlEditBit_ShowValueDigits` | 460 |
+| `0x004402e0` | `beNDMWWindow_ShowPaddedDigits` | 724 |
+| `0x004405c0` | `beNDMWShopSelect52_Setup` | 176 |
+| `0x00440670` | `beNDMWShopSelectA0_Setup` | 932 |
+| `0x00440a20` | `beNDMWShopSelectB0_Setup` | 1,300 |
+| `0x00440f40`..`0x00440fc0` | `beNDMWShopSelectB0_GetMeta`, `beNDMWShopSelectA0_GetMeta`, `beNDMWShopSelect52_GetMeta`, `beNDMWShopSelect34_GetMeta`, `beNDMWShopSelect11_GetMeta`, `beNDMWShopSelect03_GetMeta`, `beNDMWShopSelect02_GetMeta`, `beNDMWShopSelect01_GetMeta`, `beNDMWShopSelect00_GetMeta` | 12 each |
 
-The76-byte lazy shop metadata
-accessor uses the repository's explicit-padding convention.
-Its null branch enters at the registration call while the non-null/not-ready path
-executes the original no-op.
+Each `Setup` is the virtual the shared update calls in state0; each `GetMeta` returns the class
+metaobject. Receiver/input, pool/list, lookup/recalculation, formatting, text/model and Lua
+services remain boundaries.
 
 ## Selector fields and generation
 
@@ -105,7 +111,7 @@ All four clear `_isNoCancel`.
 ## One-choice message widget
 
 ShopSelect00 initializes a one-choice `i_stmessky` receiver. With a signed positive
-entry code44 it appends STWINFONT29 to the text-close types. A null `_fontName`112
+entry code44 it appends STWINFONT29 to the text-close types. A null `_panelName`112
 queues font000; a provided font token is copied/retained into the corresponding
 name list through a real private reference cell. It runs txt_shop.lua with the
 current entry code. Nonpositive entry codes omit that text work.
@@ -156,6 +162,40 @@ resets corresponding STWINFONT14 value colors below cap. Capped values receive
 exact RGB bits3f666666/3ecccccd/3e4ccccd. It re-reads the copied cap before color
 selection after the text callbacks, preserving the original captured stat and
 live table distinction.
+
+The key table names the stat properties TSUYOSA, MAMORI, KASHIKOSA, SEISHIN, SUBAYASA, MHP and
+MMP; the font table names STWINFONT19/STWINFONT14 slots font000..font006 in the same order.
+
+## Talk-window and cursor widgets
+
+- **03** is the talk-window counterpart of 00: for a positive entry code it queues
+  TALKFONT01/font00 for closing and runs txt_shop.lua, then selects one-choice `i_messky` at the
+  origin, start 0.
+- **34** aligns the digit slots CENTER before its seven-choice `i_stcursor03` cursor (start 6):
+  entry code 3 aligns STWINFONT28 font000..font006; any other code aligns STWINFONT25
+  font000..font006, font010..font016 and font020..font026. The cursor offset is (-20, 138, 0) for
+  codes 0 and 2, (-20, -1, 0) for code 1 and (147, -2, 0) for code 3.
+- **52** selects `i_stcursor05` with the entry code as choice count and the last choice as start.
+- **A0** presents `j_shcardwin` (SQ_OPEN, closing SQ_CLOSE), queues STWINFONT34 font000/font001
+  for closing, runs txt_shop.lua with 2001, queues blank CENTER text in STWINFONT33
+  font000/font001 and selects the nine-choice `j_shcardcursor` at the origin.
+- **B0** queues STWINFONT29 font100/font000/font001, runs txt_shop.lua with 1573 and, when a
+  decision list is present, colours each row font (font000, font001) DEFAULTCOLOR for a nonzero
+  flag and CANCELCOLOR otherwise, reloading the list for every row. It then selects two-choice
+  `i_stmesscr` at the origin.
+
+## Digit displays
+
+Both helpers first switch seven digit slots off (TEXTCTL ... DISPOFF, SWITCH), format the value,
+then write its characters from the last one backwards so that slot 0 holds the units digit, each
+followed by DISPON.
+
+- `beNDMWShopCtrlEditBit_ShowValueDigits(editBit, mode, value)` uses STWINFONT25 slots
+  `font%03d` for mode 1 and `font01%d` otherwise, and formats with `%d`. The
+  [shop controller](shop-windows.md) calls it.
+- `beNDMWWindow_ShowPaddedDigits(window, value, digits, slotFormat)` uses STWINFONT28 when the
+  window's entry code is 3 and STWINFONT25 otherwise. `digits` 1..7 selects `%d`, `%02d` ..
+  `%07d`; 0 or any larger value leaves every slot off. The shop and list controllers call it.
 
 ## XDATA flow outcome, spans and verification
 

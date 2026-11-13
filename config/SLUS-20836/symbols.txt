@@ -19473,27 +19473,27 @@
 0043d1a0 00000c beNDMWShopCtrl30_GetMeta
 0043d1b0 00000c beNDMWShopCtrl10_GetMeta
 0043d1c0 00000c beNDMWShopCtrl00_GetMeta
-0043d1d0 00027c Gap__Bec__beNDMWShopSelect00__vfunc_22 Gap::Bec::beNDMWShopSelect00::vfunc_22
-0043d450 0007b8 Gap__Bec__beNDMWShopSelect01__vfunc_22 Gap::Bec::beNDMWShopSelect01::vfunc_22
-0043dc10 000e98 Gap__Bec__beNDMWShopSelect02__vfunc_22 Gap::Bec::beNDMWShopSelect02::vfunc_22
-0043eab0 00020c Gap__Bec__beNDMWShopSelect03__vfunc_22 Gap::Bec::beNDMWShopSelect03::vfunc_22
-0043ecc0 000ea8 Gap__Bec__beNDMWShopSelect11__vfunc_22 Gap::Bec::beNDMWShopSelect11::vfunc_22
+0043d1d0 00027c beNDMWShopSelect00_Setup
+0043d450 0007b8 beNDMWShopSelect01_Setup
+0043dc10 000e98 beNDMWShopSelect02_Setup
+0043eab0 00020c beNDMWShopSelect03_Setup
+0043ecc0 000ea8 beNDMWShopSelect11_Setup
 0043fb70 0002b8 beNDMWShopSelect11_RefreshStatCosts
-0043fe30 0002dc Gap__Bec__beNDMWShopSelect34__vfunc_22 Gap::Bec::beNDMWShopSelect34::vfunc_22
-00440110 0001cc FUN_00440110
-004402e0 0002d4 FUN_004402e0
-004405c0 0000b0 Gap__Bec__beNDMWShopSelect52__vfunc_22 Gap::Bec::beNDMWShopSelect52::vfunc_22
-00440670 0003a4 Gap__Bec__beNDMWShopSelectA0__vfunc_22 Gap::Bec::beNDMWShopSelectA0::vfunc_22
-00440a20 000514 Gap__Bec__beNDMWShopSelectB0__vfunc_22 Gap::Bec::beNDMWShopSelectB0::vfunc_22
-00440f40 00000c Gap__Bec__beNDMWShopSelectB0__vfunc_20 Gap::Bec::beNDMWShopSelectB0::vfunc_20
-00440f50 00000c Gap__Bec__beNDMWShopSelectA0__vfunc_20 Gap::Bec::beNDMWShopSelectA0::vfunc_20
-00440f60 00000c Gap__Bec__beNDMWShopSelect52__vfunc_20 Gap::Bec::beNDMWShopSelect52::vfunc_20
-00440f70 00000c Gap__Bec__beNDMWShopSelect34__vfunc_20 Gap::Bec::beNDMWShopSelect34::vfunc_20
-00440f80 00000c Gap__Bec__beNDMWShopSelect11__vfunc_20 Gap::Bec::beNDMWShopSelect11::vfunc_20
-00440f90 00000c Gap__Bec__beNDMWShopSelect03__vfunc_20 Gap::Bec::beNDMWShopSelect03::vfunc_20
-00440fa0 00000c Gap__Bec__beNDMWShopSelect02__vfunc_20 Gap::Bec::beNDMWShopSelect02::vfunc_20
-00440fb0 00000c Gap__Bec__beNDMWShopSelect01__vfunc_20 Gap::Bec::beNDMWShopSelect01::vfunc_20
-00440fc0 00000c Gap__Bec__beNDMWShopSelect00__vfunc_20 Gap::Bec::beNDMWShopSelect00::vfunc_20
+0043fe30 0002dc beNDMWShopSelect34_Setup
+00440110 0001cc beNDMWShopCtrlEditBit_ShowValueDigits
+004402e0 0002d4 beNDMWWindow_ShowPaddedDigits
+004405c0 0000b0 beNDMWShopSelect52_Setup
+00440670 0003a4 beNDMWShopSelectA0_Setup
+00440a20 000514 beNDMWShopSelectB0_Setup
+00440f40 00000c beNDMWShopSelectB0_GetMeta
+00440f50 00000c beNDMWShopSelectA0_GetMeta
+00440f60 00000c beNDMWShopSelect52_GetMeta
+00440f70 00000c beNDMWShopSelect34_GetMeta
+00440f80 00000c beNDMWShopSelect11_GetMeta
+00440f90 00000c beNDMWShopSelect03_GetMeta
+00440fa0 00000c beNDMWShopSelect02_GetMeta
+00440fb0 00000c beNDMWShopSelect01_GetMeta
+00440fc0 00000c beNDMWShopSelect00_GetMeta
 00440fd0 000064 Gap__Bec__beNDMWShopTitle00__vfunc_22 Gap::Bec::beNDMWShopTitle00::vfunc_22
 00441040 000208 Gap__Bec__beNDMWShopTitle01__vfunc_22 Gap::Bec::beNDMWShopTitle01::vfunc_22
 00441250 000034 Gap__Bec__beNDMWShopTitle03__vfunc_22 Gap::Bec::beNDMWShopTitle03::vfunc_22

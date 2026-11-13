@@ -176,7 +176,7 @@ extern "C" beDataObjBool *igProperty_GetRecordByte(...);
 extern "C" int beNDMWStatusCtrlSendBit_Create(int);
 extern "C" void sprintf(...);
 extern "C" int beNDMWShopSelect34_Create(...);
-extern "C" int FUN_004402e0(...);
+extern "C" int beNDMWWindow_ShowPaddedDigits(...);
 extern "C" int beMessenger_AppendObject(...);
 extern "C" void beNDMWShinkaCtrl_Setup(int, int, int);
 extern "C" void beNDMWWindow_SendModelSequence(...);
@@ -5215,7 +5215,7 @@ void beNDMWStatusCtrlSendBit_Update(beNDMWStatusCtrlSendBit *p) {
                 igSmartPointer<beNDMWShopSelect34> r114((beNDMWShopSelect34 *)beNDMWShopSelect34_Create(al));
                 beNDMWWindow_BindContext(r114.p, p, p->_insight, p->_playerNo, 3);
                 ObjectList_AppendRetained(p->_subWindow, r114.p);
-                FUN_004402e0(r114.p, p->_editBit, 1, font_03d);
+                beNDMWWindow_ShowPaddedDigits(r114.p, p->_editBit, 1, font_03d);
                 }
                 p->_nowProcKazu = ((igObjectList *)p->_subWindow)->_count;
                 SEL(GAMERAM_9); API(p->_playerNo); DSP(GETPLAYER_6);
@@ -5267,14 +5267,14 @@ void beNDMWStatusCtrlSendBit_Update(beNDMWStatusCtrlSendBit *p) {
                                 }
                                 c1 = p->_editBit;
                                 if (c1 != e) {
-                                    FUN_004402e0(((int *)((igObjectList *)p->_subWindow)->_data)[0], c1, t, font_03d, e, dig);
+                                    beNDMWWindow_ShowPaddedDigits(((int *)((igObjectList *)p->_subWindow)->_data)[0], c1, t, font_03d, e, dig);
                                     SEL(SOUND_4); APS(CURSOR_MOVE); DSP(PLAY_3);
                                     return;
                                 }
                             }
                         }
                     } else {
-                        FUN_004402e0(((int *)((igObjectList *)sw)->_data)[0], p->_editBit, 7 - t, font_03d);
+                        beNDMWWindow_ShowPaddedDigits(((int *)((igObjectList *)sw)->_data)[0], p->_editBit, 7 - t, font_03d);
                         p->_st3 = p->_retCode;
                         return;
                     }

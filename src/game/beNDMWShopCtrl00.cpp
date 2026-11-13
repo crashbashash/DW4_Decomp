@@ -86,8 +86,8 @@ extern "C" void *beNDMWStatusCtrlEquip_Create(...);
 extern "C" int beNDMWStatusTitle01_ShowStatusLayout(...);
 extern "C" void * igIntList_Create(...);
 extern "C" void beNDMWShopCtrlDigilabo_PresentMessageWindow(void *window);
-extern "C" int FUN_00440110(...);
-extern "C" int FUN_004402e0(...);
+extern "C" int beNDMWShopCtrlEditBit_ShowValueDigits(...);
+extern "C" int beNDMWWindow_ShowPaddedDigits(...);
 extern "C" void *beNDMWShopSelectB0_Create(...);
 extern "C" void *beNDMWShopCtrlDiskSell_Create(...);
 extern "C" void *beNDMWShopCtrlDeviceSell_Create(...);
@@ -4389,21 +4389,21 @@ void beNDMWShopCtrlEditBit_Update(beNDMWShopCtrlEditBit *self) {
             banked = ((beDataObjInt *)igProperty_GetRecord(player, BANKBIT_2))->_data;
             switch (self->_entCode) {
             case EDITBIT_DEPOSIT:
-                FUN_004402e0(input, self->_editBit, 1, font_03d_2);
+                beNDMWWindow_ShowPaddedDigits(input, self->_editBit, 1, font_03d_2);
                 room = MAX_BANK_BIT - banked;
                 carried = carried < room ? carried : room;
                 self->_editMax = carried;
-                FUN_00440110(input, self->_entCode, banked);
+                beNDMWShopCtrlEditBit_ShowValueDigits(input, self->_entCode, banked);
                 break;
             case EDITBIT_WITHDRAW:
-                FUN_004402e0(input, self->_editBit, 1, font01_d);
+                beNDMWWindow_ShowPaddedDigits(input, self->_editBit, 1, font01_d);
                 room = MAX_BANK_BIT - carried;
                 self->_editMax = banked < room ? banked : room;
-                FUN_00440110(input, self->_entCode, carried);
-                FUN_004402e0(input, banked, 1, font02_d);
+                beNDMWShopCtrlEditBit_ShowValueDigits(input, self->_entCode, carried);
+                beNDMWWindow_ShowPaddedDigits(input, banked, 1, font02_d);
                 break;
             case EDITBIT_JUNK:
-                FUN_004402e0(input, self->_editBit, 1, font_03d_2);
+                beNDMWWindow_ShowPaddedDigits(input, self->_editBit, 1, font_03d_2);
                 room = MAX_JUNK_BIT - carried;
                 carried = carried < room ? carried : room;
                 self->_editMax = carried;
@@ -4441,10 +4441,10 @@ void beNDMWShopCtrlEditBit_Update(beNDMWShopCtrlEditBit *self) {
                                     switch (self->_entCode) {
                                     case EDITBIT_JUNK:
                                     case EDITBIT_DEPOSIT:
-                                        FUN_004402e0(input, self->_editBit, digits, font_03d_2);
+                                        beNDMWWindow_ShowPaddedDigits(input, self->_editBit, digits, font_03d_2);
                                         break;
                                     case EDITBIT_WITHDRAW:
-                                        FUN_004402e0(input, self->_editBit, digits, font01_d);
+                                        beNDMWWindow_ShowPaddedDigits(input, self->_editBit, digits, font01_d);
                                         break;
                                     }
                                     beMessenger_SelectGroup(self->_messenger, SOUND_8);
@@ -4460,10 +4460,10 @@ void beNDMWShopCtrlEditBit_Update(beNDMWShopCtrlEditBit *self) {
                         switch (self->_entCode) {
                         case EDITBIT_JUNK:
                         case EDITBIT_DEPOSIT:
-                            FUN_004402e0(input, self->_editBit, digits, font_03d_2);
+                            beNDMWWindow_ShowPaddedDigits(input, self->_editBit, digits, font_03d_2);
                             break;
                         case EDITBIT_WITHDRAW:
-                            FUN_004402e0(input, self->_editBit, digits, font01_d);
+                            beNDMWWindow_ShowPaddedDigits(input, self->_editBit, digits, font01_d);
                             break;
                         }
                         self->_st3 = self->_retCode;

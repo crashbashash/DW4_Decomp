@@ -73,8 +73,8 @@ static inline void release(int ref) {
             StringChunk_ReleaseHeader(*header, header);
     }
 } };
-extern "C" void Gap__Bec__beNDMWShopSelect02__vfunc_22(beNDMWShopSelect02 *arg0);
-void Gap__Bec__beNDMWShopSelect02__vfunc_22(beNDMWShopSelect02 *arg0) {
+extern "C" void beNDMWShopSelect02_Setup(beNDMWShopSelect02 *arg0);
+void beNDMWShopSelect02_Setup(beNDMWShopSelect02 *arg0) {
     volatile int a;
     int b;
     int slot1;

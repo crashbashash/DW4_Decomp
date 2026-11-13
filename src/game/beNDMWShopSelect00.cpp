@@ -1,204 +1,99 @@
 #include "dw4/reflected.h"
-#define INTERN_APPEND(field, text) { \
-    const char *tok; \
-    if ((text) == 0) { \
-        tok = 0; \
-    } else { \
-        if (((void * *)g_stringPool)[0] == 0) { \
-            void *pool = StringPool_Allocate(0x10); \
-            if (pool != 0) pool = StringPool_Construct(pool); \
-            ((void * *)g_stringPool)[0] = pool; \
-        } \
-        tok = StringPool_Intern(((void * *)g_stringPool)[0], (const char *)(text)); \
-    } \
-    StringRef held(tok); \
-    StringList_AppendRetained(field, (const StringRef &)held); }
-#define INTERN_APPEND_440a20(field, text) { \
-    void *tok; \
-    if ((text) == 0) { tok = (void *)0; } else { \
-        if (g_stringPool[0] == 0) { int pool = ((int)StringPool_Allocate(0x10)); if (pool != 0) { pool = ((int)StringPool_Construct(pool)); } g_stringPool[0] = pool; } \
-        tok = ((void *)StringPool_Intern(g_stringPool[0], (text))); } \
-    StringList_AppendRetained(field, StringRef(tok)); }
 
-class StringRef;
-extern "C" void * StringPool_Allocate(...);
-extern "C" int StringChunk_ReleaseHeader(...);
-extern "C" void * StringPool_Construct(...);
-extern "C" const char * StringPool_Intern(...);
-extern "C" int beNDMWWindow_RunMessageScript(...);
-extern "C" int beNDMWWindow_PresentModelAtOrigin(...);
-extern "C" int beNDMWWindow_QueueText(...);
-extern "C" int beMessenger_AppendBool(...);
-extern "C" int beMessenger_AppendInt(...);
-extern "C" int beMessenger_DispatchSelected(...);
-extern "C" int beMessenger_SelectGroup(...);
-extern "C" int beMessenger_AppendString(...);
-extern "C" void beMessenger_AppendVec3(int, int *);
-extern "C" int beMessenger_GetObject(int, int);
-extern "C" void sprintf(...);
-extern "C" int strlen(char *);
-extern "C" int Gap__Bec__beNDMWShopSelectB0__vfunc_20(void);
-extern "C" int Gap__Bec__beNDMWShopSelectA0__vfunc_20(void);
-extern "C" int Gap__Bec__beNDMWShopSelect52__vfunc_20(void);
-extern "C" int Gap__Bec__beNDMWShopSelect34__vfunc_20(void);
-extern "C" int Gap__Bec__beNDMWShopSelect11__vfunc_20(void);
-extern "C" int Gap__Bec__beNDMWShopSelect03__vfunc_20(void);
-extern "C" int Gap__Bec__beNDMWShopSelect02__vfunc_20(void);
-extern "C" int Gap__Bec__beNDMWShopSelect01__vfunc_20(void);
-extern "C" int Gap__Bec__beNDMWShopSelect00__vfunc_20(void);
-extern "C" int DAT_0051c488[4];
-extern "C" int DAT_0051c498[4];
-extern "C" int DAT_0051c4a0[4];
-extern "C" int DAT_0051c4b0[4];
-extern "C" int g_stringPool[4];
-/* Owning stack reference to a pooled string token (reference count at p[-1], chunk header at
- * p[-2]); releases the token on scope exit. */
-class StringRef {
-public:
-    char *p;
-    StringRef(int s) : p((char *)s) {}
-    StringRef(const char *s) : p((char *)s) {}
-    StringRef(void *s) : p((char *)s) {}
-    StringRef(int s, int retain) : p((char *)s) { char *t = p; if (t) ((int *)t)[-1] = ((int *)t)[-1] + 1; }
-    ~StringRef() { if (p) { int *h = (int *)p - 2; int r = ((int *)p)[-1] - 1; ((int *)p)[-1] = r; if (r == 0) StringChunk_ReleaseHeader(*h, h); } }
-};
-extern "C" int StringList_AppendRetained(int, const StringRef &);
-struct Str { static inline int intern(int *s) {
-    int ref;
-    int pool;
-    if (s == 0) {
-        ref = 0;
-    } else {
-        if (g_stringPool[0] == 0) {
-            pool = ((int)StringPool_Allocate(16));
-            if (pool)
-                pool = ((int)StringPool_Construct(pool));
-            g_stringPool[0] = pool;
-        }
-        ref = ((int)StringPool_Intern(g_stringPool[0], s));
-    }
-    return ref;
-}
-static inline void release(int ref) {
-    int *header;
-    int count;
-    if (ref) {
-        header = (int *)(ref - 8);
-        count = *(int *)(ref - 4) - 1;
-        *(int *)(ref - 4) = count;
-        if (!count)
-            StringChunk_ReleaseHeader(*header, header);
-    }
-} };
-extern "C" void Gap__Bec__beNDMWShopSelect00__vfunc_22(beNDMWShopSelect00 *arg0);
-extern "C" int DAT_0051c4c0[4];
-extern "C" int DAT_0051c4c8[4];
-extern "C" int DAT_0051c4d0[4];
-extern "C" void Gap__Bec__beNDMWShopSelect01__vfunc_22(beNDMWShopSelect01 *arg0);
-extern "C" int DAT_0051c530[4];
-extern "C" int DAT_0051c5a8[4];
-extern "C" int DAT_0051c5b0[4];
-extern "C" void Gap__Bec__beNDMWShopSelect03__vfunc_22(beNDMWShopSelect03 *arg0);
-extern "C" int DAT_0051c500[4];
-extern "C" int DAT_0051c540[4];
-extern "C" int DAT_0051c5c0[4];
-extern "C" int DAT_0051c5d0[4];
-extern "C" int DAT_0051c5e8[4];
-extern "C" int DAT_0051c5f8[4];
-extern "C" int DAT_0051c600[4];
-extern "C" int DAT_0051c610[4];
-extern "C" int DAT_0051c620[4];
-extern "C" int DAT_0051c630[4];
-extern "C" int DAT_0051c638[4];
-extern "C" int DAT_0051c640[4];
-extern "C" int DAT_0051c648[4];
-extern "C" int DAT_0051c650[4];
-extern "C" int DAT_0051c660[4];
-extern "C" int DAT_0051c668[4];
-extern "C" int DAT_0051c670[4];
-extern "C" int DAT_0051c680[4];
-struct StringRefHelpers { static inline int intern(int *s) {
-    int ref;
-    int pool;
-    if (s == 0) {
-        ref = 0;
-    } else {
-        if (g_stringPool[0] == 0) {
-            pool = ((int)StringPool_Allocate(16));
-            if (pool)
-                pool = ((int)StringPool_Construct(pool));
-            g_stringPool[0] = pool;
-        }
-        ref = ((int)StringPool_Intern(g_stringPool[0], s));
-    }
-    return ref;
-}
-static inline void release(int ref) {
-    int *header;
-    int count;
-    if (ref) {
-        header = (int *)(ref - 8);
-        count = *(int *)(ref - 4) - 1;
-        *(int *)(ref - 4) = count;
-        if (!count)
-            StringChunk_ReleaseHeader(*header, header);
-    }
-} };
-extern "C" void Gap__Bec__beNDMWShopSelect11__vfunc_22(beNDMWShopSelect11 *arg0);
+extern "C" void *StringPool_Allocate(int size);
+extern "C" void *StringPool_Construct(void *pool);
+extern "C" char *StringPool_Intern(void *pool, const char *text);
+extern "C" int StringChunk_ReleaseHeader(int chunk, int *header);
+extern "C" void *g_stringPool[4];
+extern "C" int beNDMWWindow_RunMessageScript(void *self, const char *script, int entCode);
+extern "C" int beNDMWWindow_PresentModelAtOrigin(void *self, const char *model, int id, const char *sequence, const char *close);
+extern "C" int beNDMWWindow_QueueText(void *self, const char *type, const char *name, const char *text, const char *align);
+extern "C" int beMessenger_AppendBool(int messenger, int value);
+extern "C" int beMessenger_AppendInt(int messenger, int value);
+extern "C" int beMessenger_AppendString(int messenger, const char *text);
+extern "C" void beMessenger_AppendVec3(int messenger, float *vec);
+extern "C" int beMessenger_DispatchSelected(int messenger, const char *message);
+extern "C" int beMessenger_SelectGroup(int messenger, const char *group);
+extern "C" int beMessenger_GetObject(int messenger, int index);
+extern "C" void sprintf(char *out, const char *format, ...);
+extern "C" int strlen(const char *text);
+
 typedef struct PropertyRecord {
     char pad[12];
     int value;
 } PropertyRecord;
-extern "C" PropertyRecord *igProperty_GetRecord(int, const char *);
-extern "C" const char DAT_0051c508[];
-extern "C" const char DAT_0051c6d8[];
-extern "C" int DAT_0051c6e0[4];
-extern "C" int DAT_0051c6e8[4];
-extern "C" int DAT_0051c6f0[4];
-extern "C" const char DAT_0051c6f8[];
-extern "C" int DAT_0051c700[4];
-/* DEFAULTCOLOR */
+extern "C" PropertyRecord *igProperty_GetRecord(int object, const char *name);
 
-typedef struct NameTab { const char *a[7]; } NameTab;
-typedef struct LimitTab { int a[7]; } LimitTab;
-extern "C" const NameTab DAT_004cfad0;
-extern "C" const LimitTab DAT_004cfaf0;
-extern "C" const NameTab DAT_004cfb10;
-extern "C" void beNDMWShopSelect11_RefreshStatCosts(beNDMWShopSelect11 *self);
-extern "C" int DAT_0051c710[4];
-extern "C" char DAT_0051c720[];
-extern "C" int DAT_0051c730[4];
-extern "C" int DAT_0051c738[4];
-extern "C" char DAT_0051c740[];
-extern "C" int DAT_0051c750[4];
-extern "C" int DAT_0051c760[4];
-extern "C" int DAT_0051c770[4];
-extern "C" void Gap__Bec__beNDMWShopSelect34__vfunc_22(beNDMWShopSelect34 *arg0);
-extern "C" char DAT_0051c780[];
-extern "C" int DAT_0051c788[4];
-extern "C" char DAT_0051c790[];
-extern "C" void FUN_00440110(beNDMWShopCtrlEditBit *arg0, int arg1, int arg2);
-extern "C" int DAT_0051c798[4];
-extern "C" int DAT_0051c7a0[4];
-extern "C" int DAT_0051c7a8[4];
-extern "C" int DAT_0051c7b0[4];
-extern "C" int DAT_0051c7b8[4];
-extern "C" int DAT_0051c7c0[4];
-extern "C" void FUN_004402e0(beNDMWWindow *arg0, int arg1, unsigned int arg2, int *arg3);
-extern "C" int DAT_0051c7f0[4];
-extern "C" void Gap__Bec__beNDMWShopSelect52__vfunc_22(beNDMWShopSelect52 *arg0);
-extern "C" int DAT_0051c800[4];
-extern "C" int DAT_0051c810[4];
-extern "C" int DAT_0051c818[4];
-extern "C" int DAT_0051c828[4];
-extern "C" int DAT_0051c838[4];
-extern "C" void Gap__Bec__beNDMWShopSelectA0__vfunc_22(beNDMWShopSelectA0 *arg0);
-/* _decideList target: count at +8, byte flags at +16. */
-typedef struct DecideFlagList { char p0[8]; int count; char p12[4]; unsigned char *data; } DecideFlagList;
-typedef struct { int lo; int hi; } IntPair;
-extern "C" IntPair DAT_004cfb30[4];
-extern "C" int DAT_0051c848[4];
-extern "C" void Gap__Bec__beNDMWShopSelectB0__vfunc_22(beNDMWShopSelectB0 *arg0);
+extern "C" char STWINFONT13_3[];
+extern "C" char STWINFONT14_3[];
+extern "C" char STWINFONT19[];
+extern "C" char STWINFONT25_2[];
+extern "C" char STWINFONT28_2[];
+extern "C" char STWINFONT29_4[];
+extern "C" char STWINFONT33_2[];
+extern "C" char STWINFONT34[];
+extern "C" char STWINFONT35_2[];
+extern "C" char TALKFONT01_2[];
+extern "C" char font00[];
+extern "C" char font000_4[];
+extern "C" char font001_4[];
+extern "C" char font002_3[];
+extern "C" char font003_3[];
+extern "C" char font004_2[];
+extern "C" char font005_2[];
+extern "C" char font006_2[];
+extern "C" char font100_4[];
+extern "C" char font_03d_3[];
+extern "C" char font01_d_2[];
+extern "C" char font02_d_2[];
+extern "C" char txt_shop_lua_3[];
+extern "C" char i_messky[];
+extern "C" char i_stmessky[];
+extern "C" char i_stmesscr_2[];
+extern "C" char i_stcursor01_2[];
+extern "C" char i_stcursor03_3[];
+extern "C" char i_stcursor05[];
+extern "C" char j_shwin_2[];
+extern "C" char j_shcardwin_2[];
+extern "C" char j_shcardcursor[];
+extern "C" char SQ_XDATASTATUSOPEN[];
+extern "C" char SQ_OPEN_7[];
+extern "C" char SQ_CLOSE_8[];
+extern "C" char GAMERAM_10[];
+extern "C" char GETPLAYER_7[];
+extern "C" char RECALCPLAYER_6[];
+extern "C" char TEXTCTL_6[];
+extern "C" char TEXTSET_4[];
+extern "C" char COLOR_2[];
+extern "C" char DEFAULTCOLOR_4[];
+extern "C" char CANCELCOLOR_3[];
+extern "C" char ALIGN_4[];
+extern "C" char LEFT_5[];
+extern "C" char CENTER_3[];
+extern "C" char RIGHT_4[];
+extern "C" char SWITCH_5[];
+extern "C" char DISPON_4[];
+extern "C" char DISPOFF_3[];
+extern "C" char space_3[];
+extern "C" char dashdashdashdash_3[];
+extern "C" char percent_d_6[];
+extern "C" char percent_02d[];
+extern "C" char percent_03d[];
+extern "C" char percent_04d[];
+extern "C" char percent_05d[];
+extern "C" char percent_06d[];
+extern "C" char percent_07d[];
+
+/* The seven XDATA stats: property key, cost-display cap and value font, in display order. */
+typedef struct StatNameTable { const char *names[7]; } StatNameTable;
+typedef struct StatCapTable { int caps[7]; } StatCapTable;
+extern "C" const StatNameTable g_shopStatPropertyNames;
+extern "C" const StatCapTable g_shopStatCaps;
+extern "C" const StatNameTable g_shopStatValueFonts;
+/* STWINFONT29 fonts naming the decision rows of ShopSelectB0. */
+typedef struct DecideFontPair { const char *fonts[2]; } DecideFontPair;
+extern "C" const DecideFontPair g_shopDecideFlagFonts;
+
 extern "C" int g_beNDMWShopSelectB0_metaObject[4];
 extern "C" int g_beNDMWShopSelectA0_metaObject[4];
 extern "C" int g_beNDMWShopSelect52_metaObject[4];
@@ -209,590 +104,513 @@ extern "C" int g_beNDMWShopSelect02_metaObject[4];
 extern "C" int g_beNDMWShopSelect01_metaObject[4];
 extern "C" int g_beNDMWShopSelect00_metaObject[4];
 
-void Gap__Bec__beNDMWShopSelect00__vfunc_22(beNDMWShopSelect00 *arg0) {
-    int pool;
-    int ref;
-    int old;
-    int obj;
-    if (arg0->_entCode > 0) {
-        { int tok = Str::intern(&DAT_0051c488[0]); StringList_AppendRetained(arg0->_textCloseTypeList, StringRef(tok)); }
-        obj = arg0->_panelName;
-        if (obj == 0) {
-            { int tok = Str::intern(&DAT_0051c498[0]); StringList_AppendRetained(arg0->_textCloseNameList, StringRef(tok)); }
-        } else {
-            StringList_AppendRetained(arg0->_textCloseNameList, StringRef(obj, 1));
-        }
-        beNDMWWindow_RunMessageScript(arg0, &DAT_0051c4a0[0], arg0->_entCode);
-    }
+extern "C" void beNDMWShopSelect00_Setup(beNDMWShopSelect00 *self);
+extern "C" void beNDMWShopSelect01_Setup(beNDMWShopSelect01 *self);
+extern "C" void beNDMWShopSelect03_Setup(beNDMWShopSelect03 *self);
+extern "C" void beNDMWShopSelect11_Setup(beNDMWShopSelect11 *self);
+extern "C" void beNDMWShopSelect11_RefreshStatCosts(beNDMWShopSelect11 *self);
+extern "C" void beNDMWShopSelect34_Setup(beNDMWShopSelect34 *self);
+extern "C" void beNDMWShopCtrlEditBit_ShowValueDigits(beNDMWShopCtrlEditBit *self, int mode, int value);
+extern "C" void beNDMWWindow_ShowPaddedDigits(beNDMWWindow *self, int value, unsigned int digits, const char *slotFormat);
+extern "C" void beNDMWShopSelect52_Setup(beNDMWShopSelect52 *self);
+extern "C" void beNDMWShopSelectA0_Setup(beNDMWShopSelectA0 *self);
+extern "C" void beNDMWShopSelectB0_Setup(beNDMWShopSelectB0 *self);
+extern "C" int beNDMWShopSelectB0_GetMeta(void);
+extern "C" int beNDMWShopSelectA0_GetMeta(void);
+extern "C" int beNDMWShopSelect52_GetMeta(void);
+extern "C" int beNDMWShopSelect34_GetMeta(void);
+extern "C" int beNDMWShopSelect11_GetMeta(void);
+extern "C" int beNDMWShopSelect03_GetMeta(void);
+extern "C" int beNDMWShopSelect02_GetMeta(void);
+extern "C" int beNDMWShopSelect01_GetMeta(void);
+extern "C" int beNDMWShopSelect00_GetMeta(void);
+
+/* The pooled-string singleton, created on first use. */
+static inline void *StringPool_Get(void) {
     if (g_stringPool[0] == 0) {
-        pool = ((int)StringPool_Allocate(16));
-        if (pool)
-            pool = ((int)StringPool_Construct(pool));
+        void *pool = StringPool_Allocate(0x10);
+        if (pool != 0) pool = StringPool_Construct(pool);
         g_stringPool[0] = pool;
     }
-    ref = ((int)StringPool_Intern(g_stringPool[0], &DAT_0051c4b0[0]));
-    old = arg0->_infoName;
-    Str::release(old);
-    arg0->_infoName = ref;
-    arg0->_selectMax = 1;
-    arg0->_offsetPos[0] = 0;
-    arg0->_offsetPos[1] = 0;
-    arg0->_offsetPos[2] = 0;
-    arg0->_startPoint = 0;
-    arg0->_isNoCancel = 0;
+    return g_stringPool[0];
 }
 
-void Gap__Bec__beNDMWShopSelect01__vfunc_22(beNDMWShopSelect01 *arg0) {
-    const char *sp4C;
-    const char *sp48;
-    const char *u1, *u2, *u3, *u4;
-    const char *t4C, *t48;
-    const char *old;
-    const char *n;
-    switch (arg0->_entCode) {
+/* Drops one share of a pooled string token (reference count at token[-1], chunk header at token[-2]). */
+static inline void StringToken_Release(char *token) {
+    if (token != 0) {
+        int *header = (int *)token - 2;
+        int refs = ((int *)token)[-1] - 1;
+        ((int *)token)[-1] = refs;
+        if (refs == 0) StringChunk_ReleaseHeader(*header, header);
+    }
+}
+
+/* Owning stack reference to a pooled string token; releases the token on scope exit. */
+class StringRef {
+public:
+    char *p;
+    StringRef(char *s) : p(s) {}
+    /* takes an extra share of a token already owned elsewhere */
+    StringRef(char *s, int retain) : p(s) { if (p != 0) ((int *)p)[-1] = ((int *)p)[-1] + 1; }
+    ~StringRef() { StringToken_Release(p); }
+};
+extern "C" int StringList_AppendRetained(int list, StringRef *token);
+
+/* Appends a pooled copy of `text` to a window string list; a null text appends a null token. */
+#define INTERN_APPEND(list, text) { \
+    char *token; \
+    if ((text) == 0) { \
+        token = 0; \
+    } else { \
+        token = StringPool_Intern(StringPool_Get(), (text)); \
+    } \
+    StringRef held(token); \
+    StringList_AppendRetained(list, &held); }
+
+/* Interns `name` as the window's SELECTCTRL receiver name, dropping the previous one. */
+#define SET_INFO_NAME(self, name) { \
+    char *fresh = StringPool_Intern(StringPool_Get(), (name)); \
+    StringToken_Release((char *)(self)->_infoName); \
+    (self)->_infoName = (int)fresh; }
+
+void beNDMWShopSelect00_Setup(beNDMWShopSelect00 *self) {
+    if (self->_entCode > 0) {
+        INTERN_APPEND(self->_textCloseTypeList, STWINFONT29_4)
+        if (self->_panelName == 0) {
+            INTERN_APPEND(self->_textCloseNameList, font000_4)
+        } else {
+            StringRef held((char *)self->_panelName, 1);
+            StringList_AppendRetained(self->_textCloseNameList, &held);
+        }
+        beNDMWWindow_RunMessageScript(self, txt_shop_lua_3, self->_entCode);
+    }
+    SET_INFO_NAME(self, i_stmessky)
+    self->_selectMax = 1;
+    self->_offsetPos[0] = 0;
+    self->_offsetPos[1] = 0;
+    self->_offsetPos[2] = 0;
+    self->_startPoint = 0;
+    self->_isNoCancel = 0;
+}
+
+void beNDMWShopSelect01_Setup(beNDMWShopSelect01 *self) {
+    switch (self->_entCode) {
     case 0x48B: case 0x48E: case 0x493: case 0x4E7: case 0x4EA: case 0x4F8: case 0x54B:
     case 0x614: case 0x678: case 0x6DC: case 0x740: case 0x61A: case 0x5AD: case 0x7AA:
-        INTERN_APPEND(arg0->_textCloseTypeList, DAT_0051c488)
-        INTERN_APPEND(arg0->_textCloseNameList, DAT_0051c498)
-        INTERN_APPEND(arg0->_textCloseTypeList, DAT_0051c488)
-        INTERN_APPEND(arg0->_textCloseNameList, DAT_0051c4c0)
-        beNDMWWindow_RunMessageScript(arg0, DAT_0051c4a0, arg0->_entCode);
-        arg0->_selectMax = 2;
+        INTERN_APPEND(self->_textCloseTypeList, STWINFONT29_4)
+        INTERN_APPEND(self->_textCloseNameList, font000_4)
+        INTERN_APPEND(self->_textCloseTypeList, STWINFONT29_4)
+        INTERN_APPEND(self->_textCloseNameList, font001_4)
+        beNDMWWindow_RunMessageScript(self, txt_shop_lua_3, self->_entCode);
+        self->_selectMax = 2;
         break;
     case 0x47E: case 0x546: case 0x60E: case 0x672: case 0x6D6: case 0x73A: case 0x79E:
-        INTERN_APPEND(arg0->_textCloseTypeList, DAT_0051c488)
-        INTERN_APPEND(arg0->_textCloseNameList, DAT_0051c498)
-        INTERN_APPEND(arg0->_textCloseTypeList, DAT_0051c488)
-        INTERN_APPEND(arg0->_textCloseNameList, DAT_0051c4c0)
-        INTERN_APPEND(arg0->_textCloseTypeList, DAT_0051c488)
-        INTERN_APPEND(arg0->_textCloseNameList, DAT_0051c4c8)
-        beNDMWWindow_RunMessageScript(arg0, DAT_0051c4a0, arg0->_entCode);
-        arg0->_selectMax = 3;
+        INTERN_APPEND(self->_textCloseTypeList, STWINFONT29_4)
+        INTERN_APPEND(self->_textCloseNameList, font000_4)
+        INTERN_APPEND(self->_textCloseTypeList, STWINFONT29_4)
+        INTERN_APPEND(self->_textCloseNameList, font001_4)
+        INTERN_APPEND(self->_textCloseTypeList, STWINFONT29_4)
+        INTERN_APPEND(self->_textCloseNameList, font002_3)
+        beNDMWWindow_RunMessageScript(self, txt_shop_lua_3, self->_entCode);
+        self->_selectMax = 3;
         break;
     }
-    if (((void * *)g_stringPool)[0] == 0) {
-        void *pool = StringPool_Allocate(0x10);
-        if (pool != 0) pool = StringPool_Construct(pool);
-        ((void * *)g_stringPool)[0] = pool;
-    }
-    n = StringPool_Intern(((void * *)g_stringPool)[0], (const char *)DAT_0051c4d0);
-    old = (const char *)arg0->_infoName;
-    if (old != 0) {
-        int *hd = (int *)old - 2;
-        int cnt = ((int *)old)[-1] - 1;
-        ((int *)old)[-1] = cnt;
-        if (cnt == 0) StringChunk_ReleaseHeader(*hd, hd);
-    }
-    arg0->_infoName = (int)n;
-    arg0->_offsetPos[0] = 0;
-    arg0->_offsetPos[1] = 0;
-    arg0->_offsetPos[2] = 0;
-    arg0->_isNoCancel = 0;
+    SET_INFO_NAME(self, i_stmesscr_2)
+    self->_offsetPos[0] = 0;
+    self->_offsetPos[1] = 0;
+    self->_offsetPos[2] = 0;
+    self->_isNoCancel = 0;
 }
 
-void Gap__Bec__beNDMWShopSelect03__vfunc_22(beNDMWShopSelect03 *arg0) {
-    const char *old;
-    const char *n;
-    if (arg0->_entCode > 0) {
-        INTERN_APPEND(arg0->_textCloseTypeList, DAT_0051c530)
-        INTERN_APPEND(arg0->_textCloseNameList, DAT_0051c5a8)
-        beNDMWWindow_RunMessageScript(arg0, DAT_0051c4a0, arg0->_entCode);
+void beNDMWShopSelect03_Setup(beNDMWShopSelect03 *self) {
+    if (self->_entCode > 0) {
+        INTERN_APPEND(self->_textCloseTypeList, TALKFONT01_2)
+        INTERN_APPEND(self->_textCloseNameList, font00)
+        beNDMWWindow_RunMessageScript(self, txt_shop_lua_3, self->_entCode);
     }
-    if (((void * *)g_stringPool)[0] == 0) {
-        void *pool = StringPool_Allocate(0x10);
-        if (pool != 0) pool = StringPool_Construct(pool);
-        ((void * *)g_stringPool)[0] = pool;
-    }
-    n = StringPool_Intern(((void * *)g_stringPool)[0], (const char *)DAT_0051c5b0);
-    old = (const char *)arg0->_infoName;
-    if (old != 0) {
-        int *hd = (int *)old - 2;
-        int cnt = ((int *)old)[-1] - 1;
-        ((int *)old)[-1] = cnt;
-        if (cnt == 0) StringChunk_ReleaseHeader(*hd, hd);
-    }
-    arg0->_infoName = (int)n;
-    arg0->_selectMax = 1;
-    arg0->_offsetPos[0] = 0;
-    arg0->_offsetPos[1] = 0;
-    arg0->_offsetPos[2] = 0;
-    arg0->_startPoint = 0;
-    arg0->_isNoCancel = 0;
+    SET_INFO_NAME(self, i_messky)
+    self->_selectMax = 1;
+    self->_offsetPos[0] = 0;
+    self->_offsetPos[1] = 0;
+    self->_offsetPos[2] = 0;
+    self->_startPoint = 0;
+    self->_isNoCancel = 0;
 }
 
-void Gap__Bec__beNDMWShopSelect11__vfunc_22(beNDMWShopSelect11 *arg0) {
-    int pool;
-    int ref;
-    int old;
-    beNDMWWindow_PresentModelAtOrigin(arg0, &DAT_0051c5c0[0], 0, &DAT_0051c5d0[0], &DAT_0051c5e8[0]);
-    { int tok = StringRefHelpers::intern(&DAT_0051c488[0]); StringList_AppendRetained(arg0->_textCloseTypeList, StringRef(tok)); }
-    { int tok = StringRefHelpers::intern(&DAT_0051c5f8[0]); StringList_AppendRetained(arg0->_textCloseNameList, StringRef(tok)); }
-    beNDMWWindow_RunMessageScript(arg0, &DAT_0051c4a0[0], 0x481);
-    { int tok = StringRefHelpers::intern(&DAT_0051c600[0]); StringList_AppendRetained(arg0->_textCloseTypeList, StringRef(tok)); }
-    { int tok = StringRefHelpers::intern(&DAT_0051c498[0]); StringList_AppendRetained(arg0->_textCloseNameList, StringRef(tok)); }
-    { int tok = StringRefHelpers::intern(&DAT_0051c610[0]); StringList_AppendRetained(arg0->_textCloseTypeList, StringRef(tok)); }
-    { int tok = StringRefHelpers::intern(&DAT_0051c4c0[0]); StringList_AppendRetained(arg0->_textCloseNameList, StringRef(tok)); }
-    beNDMWWindow_RunMessageScript(arg0, &DAT_0051c4a0[0], 0x44D);
-    { int tok = StringRefHelpers::intern(&DAT_0051c620[0]); StringList_AppendRetained(arg0->_textCloseTypeList, StringRef(tok)); }
-    { int tok = StringRefHelpers::intern(&DAT_0051c498[0]); StringList_AppendRetained(arg0->_textCloseNameList, StringRef(tok)); }
-    { int tok = StringRefHelpers::intern(&DAT_0051c620[0]); StringList_AppendRetained(arg0->_textCloseTypeList, StringRef(tok)); }
-    { int tok = StringRefHelpers::intern(&DAT_0051c4c0[0]); StringList_AppendRetained(arg0->_textCloseNameList, StringRef(tok)); }
-    { int tok = StringRefHelpers::intern(&DAT_0051c620[0]); StringList_AppendRetained(arg0->_textCloseTypeList, StringRef(tok)); }
-    { int tok = StringRefHelpers::intern(&DAT_0051c4c8[0]); StringList_AppendRetained(arg0->_textCloseNameList, StringRef(tok)); }
-    { int tok = StringRefHelpers::intern(&DAT_0051c620[0]); StringList_AppendRetained(arg0->_textCloseTypeList, StringRef(tok)); }
-    { int tok = StringRefHelpers::intern(&DAT_0051c630[0]); StringList_AppendRetained(arg0->_textCloseNameList, StringRef(tok)); }
-    { int tok = StringRefHelpers::intern(&DAT_0051c620[0]); StringList_AppendRetained(arg0->_textCloseTypeList, StringRef(tok)); }
-    { int tok = StringRefHelpers::intern(&DAT_0051c638[0]); StringList_AppendRetained(arg0->_textCloseNameList, StringRef(tok)); }
-    { int tok = StringRefHelpers::intern(&DAT_0051c620[0]); StringList_AppendRetained(arg0->_textCloseTypeList, StringRef(tok)); }
-    { int tok = StringRefHelpers::intern(&DAT_0051c640[0]); StringList_AppendRetained(arg0->_textCloseNameList, StringRef(tok)); }
-    { int tok = StringRefHelpers::intern(&DAT_0051c620[0]); StringList_AppendRetained(arg0->_textCloseTypeList, StringRef(tok)); }
-    { int tok = StringRefHelpers::intern(&DAT_0051c648[0]); StringList_AppendRetained(arg0->_textCloseNameList, StringRef(tok)); }
-    beNDMWWindow_RunMessageScript(arg0, &DAT_0051c4a0[0], 0x44F);
-    beNDMWWindow_QueueText(arg0, &DAT_0051c650[0], &DAT_0051c498[0], &DAT_0051c660[0], &DAT_0051c668[0]);
-    beNDMWWindow_QueueText(arg0, &DAT_0051c650[0], &DAT_0051c4c0[0], &DAT_0051c660[0], &DAT_0051c668[0]);
-    beNDMWWindow_QueueText(arg0, &DAT_0051c650[0], &DAT_0051c4c8[0], &DAT_0051c660[0], &DAT_0051c668[0]);
-    beNDMWWindow_QueueText(arg0, &DAT_0051c650[0], &DAT_0051c630[0], &DAT_0051c660[0], &DAT_0051c668[0]);
-    beNDMWWindow_QueueText(arg0, &DAT_0051c650[0], &DAT_0051c638[0], &DAT_0051c660[0], &DAT_0051c668[0]);
-    beNDMWWindow_QueueText(arg0, &DAT_0051c650[0], &DAT_0051c640[0], &DAT_0051c660[0], &DAT_0051c668[0]);
-    beNDMWWindow_QueueText(arg0, &DAT_0051c650[0], &DAT_0051c648[0], &DAT_0051c660[0], &DAT_0051c668[0]);
-    beNDMWWindow_QueueText(arg0, &DAT_0051c488[0], &DAT_0051c498[0], &DAT_0051c660[0], &DAT_0051c540[0]);
-    beMessenger_SelectGroup(arg0->_messenger, &DAT_0051c500[0]);
-    beMessenger_AppendInt(arg0->_messenger, arg0->_playerNo);
-    beMessenger_AppendBool(arg0->_messenger, 0);
-    beMessenger_DispatchSelected(arg0->_messenger, &DAT_0051c670[0]);
-    beNDMWShopSelect11_RefreshStatCosts(arg0);
-    beNDMWWindow_RunMessageScript(arg0, &DAT_0051c4a0[0], arg0->_entCode + 0x482);
-    if (g_stringPool[0] == 0) {
-        pool = ((int)StringPool_Allocate(16));
-        if (pool)
-            pool = ((int)StringPool_Construct(pool));
-        g_stringPool[0] = pool;
-    }
-    ref = ((int)StringPool_Intern(g_stringPool[0], &DAT_0051c680[0]));
-    old = arg0->_infoName;
-    StringRefHelpers::release(old);
-    arg0->_infoName = ref;
-    arg0->_selectMax = 7;
-    arg0->_offsetPos[0] = -121.0f;
-    arg0->_offsetPos[1] = 128.0f;
-    arg0->_offsetPos[2] = 0.0f;
-    arg0->_startPoint = arg0->_entCode;
-    arg0->_isNoCancel = 0;
-}
-
-void beNDMWShopSelect11_RefreshStatCosts(beNDMWShopSelect11 *self)
-{
-    int col[3];
-    char buf[16];
-    NameTab props;
-    LimitTab limits;
-    NameTab fonts;
-    int *c1;
-    int *c2;
-    int obj;
-    int i;
-    int cur;
-    const char **pp;
-    int *pl;
-    const char **pf;
-
-    beMessenger_SelectGroup(self->_messenger, ((const char *)DAT_0051c500));
+void beNDMWShopSelect11_Setup(beNDMWShopSelect11 *self) {
+    beNDMWWindow_PresentModelAtOrigin(self, j_shwin_2, 0, SQ_XDATASTATUSOPEN, SQ_CLOSE_8);
+    INTERN_APPEND(self->_textCloseTypeList, STWINFONT29_4)
+    INTERN_APPEND(self->_textCloseNameList, font100_4)
+    beNDMWWindow_RunMessageScript(self, txt_shop_lua_3, 0x481);
+    INTERN_APPEND(self->_textCloseTypeList, STWINFONT13_3)
+    INTERN_APPEND(self->_textCloseNameList, font000_4)
+    INTERN_APPEND(self->_textCloseTypeList, STWINFONT35_2)
+    INTERN_APPEND(self->_textCloseNameList, font001_4)
+    beNDMWWindow_RunMessageScript(self, txt_shop_lua_3, 0x44D);
+    INTERN_APPEND(self->_textCloseTypeList, STWINFONT14_3)
+    INTERN_APPEND(self->_textCloseNameList, font000_4)
+    INTERN_APPEND(self->_textCloseTypeList, STWINFONT14_3)
+    INTERN_APPEND(self->_textCloseNameList, font001_4)
+    INTERN_APPEND(self->_textCloseTypeList, STWINFONT14_3)
+    INTERN_APPEND(self->_textCloseNameList, font002_3)
+    INTERN_APPEND(self->_textCloseTypeList, STWINFONT14_3)
+    INTERN_APPEND(self->_textCloseNameList, font003_3)
+    INTERN_APPEND(self->_textCloseTypeList, STWINFONT14_3)
+    INTERN_APPEND(self->_textCloseNameList, font004_2)
+    INTERN_APPEND(self->_textCloseTypeList, STWINFONT14_3)
+    INTERN_APPEND(self->_textCloseNameList, font005_2)
+    INTERN_APPEND(self->_textCloseTypeList, STWINFONT14_3)
+    INTERN_APPEND(self->_textCloseNameList, font006_2)
+    beNDMWWindow_RunMessageScript(self, txt_shop_lua_3, 0x44F);
+    beNDMWWindow_QueueText(self, STWINFONT19, font000_4, space_3, RIGHT_4);
+    beNDMWWindow_QueueText(self, STWINFONT19, font001_4, space_3, RIGHT_4);
+    beNDMWWindow_QueueText(self, STWINFONT19, font002_3, space_3, RIGHT_4);
+    beNDMWWindow_QueueText(self, STWINFONT19, font003_3, space_3, RIGHT_4);
+    beNDMWWindow_QueueText(self, STWINFONT19, font004_2, space_3, RIGHT_4);
+    beNDMWWindow_QueueText(self, STWINFONT19, font005_2, space_3, RIGHT_4);
+    beNDMWWindow_QueueText(self, STWINFONT19, font006_2, space_3, RIGHT_4);
+    beNDMWWindow_QueueText(self, STWINFONT29_4, font000_4, space_3, LEFT_5);
+    beMessenger_SelectGroup(self->_messenger, GAMERAM_10);
     beMessenger_AppendInt(self->_messenger, self->_playerNo);
-    beMessenger_DispatchSelected(self->_messenger, DAT_0051c508);
-    obj = beMessenger_GetObject(self->_messenger, 0);
-    props = DAT_004cfad0;
-    limits = DAT_004cfaf0;
-    fonts = DAT_004cfb10;
-    pp = props.a;
-    pl = limits.a;
-    pf = fonts.a;
+    beMessenger_AppendBool(self->_messenger, 0);
+    beMessenger_DispatchSelected(self->_messenger, RECALCPLAYER_6);
+    beNDMWShopSelect11_RefreshStatCosts(self);
+    beNDMWWindow_RunMessageScript(self, txt_shop_lua_3, self->_entCode + 0x482);
+    SET_INFO_NAME(self, i_stcursor01_2)
+    self->_selectMax = 7;
+    self->_offsetPos[0] = -121.0f;
+    self->_offsetPos[1] = 128.0f;
+    self->_offsetPos[2] = 0.0f;
+    self->_startPoint = self->_entCode;
+    self->_isNoCancel = 0;
+}
+
+/* Shows the raise cost of each of the player's seven stats, or ---- once the stat reached its cap. */
+void beNDMWShopSelect11_RefreshStatCosts(beNDMWShopSelect11 *self) {
+    float color[3];
+    char text[16];
+    StatNameTable properties;
+    StatCapTable caps;
+    StatNameTable fonts;
+    int player;
+    int i;
+    int value;
+    const char **property;
+    int *cap;
+    const char **font;
+
+    beMessenger_SelectGroup(self->_messenger, GAMERAM_10);
+    beMessenger_AppendInt(self->_messenger, self->_playerNo);
+    beMessenger_DispatchSelected(self->_messenger, GETPLAYER_7);
+    player = beMessenger_GetObject(self->_messenger, 0);
+    properties = g_shopStatPropertyNames;
+    caps = g_shopStatCaps;
+    fonts = g_shopStatValueFonts;
+    property = properties.names;
+    cap = caps.caps;
+    font = fonts.names;
     i = 0;
-    c1 = &col[1];
-    c2 = &col[2];
     do {
-        cur = igProperty_GetRecord(obj, *pp)->value;
+        value = igProperty_GetRecord(player, *property)->value;
         {
-        int r = (cur - 45) % 5;
-        int q = (cur - 45 - r) / 5 + (r ? 1 : 0);
-        if (q > 400)
-            q = 400;
-        else if (q < 0)
-            q = 1;
-        else
-            q = (int)q;
-        if (cur >= *pl)
-            sprintf(buf, DAT_0051c6d8, q);
-        else
-            sprintf(buf, ((const char *)DAT_0051c6e0), q);
+            int rest = (value - 45) % 5;
+            int cost = (value - 45 - rest) / 5 + (rest ? 1 : 0);
+            cost = cost > 400 ? 400 : (cost < 0 ? 1 : cost);
+            if (value >= *cap)
+                sprintf(text, dashdashdashdash_3, cost);
+            else
+                sprintf(text, percent_d_6, cost);
         }
-        beMessenger_SelectGroup(self->_messenger, ((const char *)DAT_0051c6e8));
-        beMessenger_AppendString(self->_messenger, ((const char *)DAT_0051c650));
-        beMessenger_AppendString(self->_messenger, *pf);
-        beMessenger_AppendString(self->_messenger, buf);
-        beMessenger_DispatchSelected(self->_messenger, ((const char *)DAT_0051c6f0));
-        beMessenger_SelectGroup(self->_messenger, ((const char *)DAT_0051c6e8));
-        beMessenger_AppendString(self->_messenger, ((const char *)DAT_0051c620));
-        beMessenger_AppendString(self->_messenger, *pf);
-        if (cur >= *pl) {
-            col[0] = 0x3F666666;
-            *c1 = 0x3ECCCCCD;
-            *c2 = 0x3E4CCCCD;
-            beMessenger_AppendVec3(self->_messenger, col);
-            beMessenger_DispatchSelected(self->_messenger, DAT_0051c6f8);
+        beMessenger_SelectGroup(self->_messenger, TEXTCTL_6);
+        beMessenger_AppendString(self->_messenger, STWINFONT19);
+        beMessenger_AppendString(self->_messenger, *font);
+        beMessenger_AppendString(self->_messenger, text);
+        beMessenger_DispatchSelected(self->_messenger, TEXTSET_4);
+        beMessenger_SelectGroup(self->_messenger, TEXTCTL_6);
+        beMessenger_AppendString(self->_messenger, STWINFONT14_3);
+        beMessenger_AppendString(self->_messenger, *font);
+        if (value >= *cap) {
+            color[0] = 0.9f;
+            color[1] = 0.4f;
+            color[2] = 0.2f;
+            beMessenger_AppendVec3(self->_messenger, color);
+            beMessenger_DispatchSelected(self->_messenger, COLOR_2);
         } else {
-            beMessenger_DispatchSelected(self->_messenger, ((const char *)DAT_0051c700));
+            beMessenger_DispatchSelected(self->_messenger, DEFAULTCOLOR_4);
         }
-        i++; pp++; pl++; pf++;
+        i++; property++; cap++; font++;
     } while (i < 7);
 }
 
-void Gap__Bec__beNDMWShopSelect34__vfunc_22(beNDMWShopSelect34 *arg0) {
-    int sp30[4];
+void beNDMWShopSelect34_Setup(beNDMWShopSelect34 *self) {
+    char slot[16];
     int i;
-    const char *n;
-    const char *old;
     i = 0;
     do {
-        switch (arg0->_entCode) {
+        switch (self->_entCode) {
         case 3:
-            sprintf(sp30, DAT_0051c710, i);
-            beMessenger_SelectGroup(arg0->_messenger, DAT_0051c6e8);
-            beMessenger_AppendString(arg0->_messenger, ((int *)DAT_0051c720));
-            beMessenger_AppendString(arg0->_messenger, sp30);
-            beMessenger_AppendString(arg0->_messenger, DAT_0051c730);
-            beMessenger_DispatchSelected(arg0->_messenger, DAT_0051c738);
+            sprintf(slot, font_03d_3, i);
+            beMessenger_SelectGroup(self->_messenger, TEXTCTL_6);
+            beMessenger_AppendString(self->_messenger, STWINFONT28_2);
+            beMessenger_AppendString(self->_messenger, slot);
+            beMessenger_AppendString(self->_messenger, CENTER_3);
+            beMessenger_DispatchSelected(self->_messenger, ALIGN_4);
             break;
         default:
-            sprintf(sp30, DAT_0051c710, i);
-            beMessenger_SelectGroup(arg0->_messenger, DAT_0051c6e8);
-            beMessenger_AppendString(arg0->_messenger, ((int *)DAT_0051c740));
-            beMessenger_AppendString(arg0->_messenger, sp30);
-            beMessenger_AppendString(arg0->_messenger, DAT_0051c730);
-            beMessenger_DispatchSelected(arg0->_messenger, DAT_0051c738);
-            sprintf(sp30, DAT_0051c750, i);
-            beMessenger_SelectGroup(arg0->_messenger, DAT_0051c6e8);
-            beMessenger_AppendString(arg0->_messenger, ((int *)DAT_0051c740));
-            beMessenger_AppendString(arg0->_messenger, sp30);
-            beMessenger_AppendString(arg0->_messenger, DAT_0051c730);
-            beMessenger_DispatchSelected(arg0->_messenger, DAT_0051c738);
-            sprintf(sp30, DAT_0051c760, i);
-            beMessenger_SelectGroup(arg0->_messenger, DAT_0051c6e8);
-            beMessenger_AppendString(arg0->_messenger, ((int *)DAT_0051c740));
-            beMessenger_AppendString(arg0->_messenger, sp30);
-            beMessenger_AppendString(arg0->_messenger, DAT_0051c730);
-            beMessenger_DispatchSelected(arg0->_messenger, DAT_0051c738);
+            sprintf(slot, font_03d_3, i);
+            beMessenger_SelectGroup(self->_messenger, TEXTCTL_6);
+            beMessenger_AppendString(self->_messenger, STWINFONT25_2);
+            beMessenger_AppendString(self->_messenger, slot);
+            beMessenger_AppendString(self->_messenger, CENTER_3);
+            beMessenger_DispatchSelected(self->_messenger, ALIGN_4);
+            sprintf(slot, font01_d_2, i);
+            beMessenger_SelectGroup(self->_messenger, TEXTCTL_6);
+            beMessenger_AppendString(self->_messenger, STWINFONT25_2);
+            beMessenger_AppendString(self->_messenger, slot);
+            beMessenger_AppendString(self->_messenger, CENTER_3);
+            beMessenger_DispatchSelected(self->_messenger, ALIGN_4);
+            sprintf(slot, font02_d_2, i);
+            beMessenger_SelectGroup(self->_messenger, TEXTCTL_6);
+            beMessenger_AppendString(self->_messenger, STWINFONT25_2);
+            beMessenger_AppendString(self->_messenger, slot);
+            beMessenger_AppendString(self->_messenger, CENTER_3);
+            beMessenger_DispatchSelected(self->_messenger, ALIGN_4);
             break;
         }
         i++;
     } while (i < 7);
-    if (((void * *)g_stringPool)[0] == 0) {
-        void *pool = StringPool_Allocate(0x10);
-        if (pool != 0) pool = StringPool_Construct(pool);
-        ((void * *)g_stringPool)[0] = pool;
-    }
-    n = StringPool_Intern(((void * *)g_stringPool)[0], (const char *)DAT_0051c770);
-    old = (const char *)arg0->_infoName;
-    if (old != 0) {
-        int *hd = (int *)old - 2;
-        int cnt = ((int *)old)[-1] - 1;
-        ((int *)old)[-1] = cnt;
-        if (cnt == 0) StringChunk_ReleaseHeader(*hd, hd);
-    }
-    arg0->_infoName = (int)n;
-    arg0->_selectMax = 7;
-    arg0->_startPoint = 6;
-    arg0->_isNoCancel = 0;
-    switch (arg0->_entCode) {
+    SET_INFO_NAME(self, i_stcursor03_3)
+    self->_selectMax = 7;
+    self->_startPoint = 6;
+    self->_isNoCancel = 0;
+    switch (self->_entCode) {
     case 2:
     case 0:
-        *(unsigned *)&arg0->_offsetPos[0] = 0xC1A00000;
-        *(unsigned *)&arg0->_offsetPos[1] = 0x430A0000;
-        arg0->_offsetPos[2] = 0;
+        self->_offsetPos[0] = -20.0f;
+        self->_offsetPos[1] = 138.0f;
+        self->_offsetPos[2] = 0;
         break;
     case 1:
-        *(unsigned *)&arg0->_offsetPos[0] = 0xC1A00000;
-        *(unsigned *)&arg0->_offsetPos[1] = 0xBF800000;
-        arg0->_offsetPos[2] = 0;
+        self->_offsetPos[0] = -20.0f;
+        self->_offsetPos[1] = -1.0f;
+        self->_offsetPos[2] = 0;
         break;
     case 3:
-        *(unsigned *)&arg0->_offsetPos[0] = 0x43130000;
-        *(unsigned *)&arg0->_offsetPos[1] = 0xC0000000;
-        arg0->_offsetPos[2] = 0;
+        self->_offsetPos[0] = 147.0f;
+        self->_offsetPos[1] = -2.0f;
+        self->_offsetPos[2] = 0;
         break;
     }
 }
 
-void FUN_00440110(beNDMWShopCtrlEditBit *arg0, int arg1, int arg2) {
-    char buf[16];
-    char tmp[12];
-    char ch[2];
-    int *tbl;
-    int n;
+/* Hides the seven STWINFONT25 digit slots, then shows `value` right-aligned in them. */
+void beNDMWShopCtrlEditBit_ShowValueDigits(beNDMWShopCtrlEditBit *self, int mode, int value) {
+    char slot[16];
+    char digits[12];
+    char digit[2];
+    const char *slotFormat;
+    int length;
     int i;
-    int j;
+    int pos;
 
-    switch (arg1) {
+    switch (mode) {
     default:
-        tbl = DAT_0051c750;
+        slotFormat = font01_d_2;
         break;
     case 1:
-        tbl = DAT_0051c710;
+        slotFormat = font_03d_3;
         break;
     }
     i = 0;
     do {
-        sprintf(buf, tbl, i);
-        beMessenger_SelectGroup(arg0->_messenger, DAT_0051c6e8);
-        beMessenger_AppendString(arg0->_messenger, ((const char *)DAT_0051c740));
-        beMessenger_AppendString(arg0->_messenger, buf);
-        beMessenger_AppendString(arg0->_messenger, ((const char *)DAT_0051c780));
-        beMessenger_DispatchSelected(arg0->_messenger, DAT_0051c788);
+        sprintf(slot, slotFormat, i);
+        beMessenger_SelectGroup(self->_messenger, TEXTCTL_6);
+        beMessenger_AppendString(self->_messenger, STWINFONT25_2);
+        beMessenger_AppendString(self->_messenger, slot);
+        beMessenger_AppendString(self->_messenger, DISPOFF_3);
+        beMessenger_DispatchSelected(self->_messenger, SWITCH_5);
         i += 1;
     } while (i < 7);
-    sprintf(tmp, DAT_0051c6e0, arg2);
-    n = strlen(tmp);
-    j = n - 1;
-    ch[1] = 0;
-    if (j > -1) {
+    sprintf(digits, percent_d_6, value);
+    length = strlen(digits);
+    pos = length - 1;
+    digit[1] = 0;
+    if (pos > -1) {
         do {
-            sprintf(buf, tbl, j);
-            ch[0] = tmp[(n - 1) - j];
-            beMessenger_SelectGroup(arg0->_messenger, DAT_0051c6e8);
-            beMessenger_AppendString(arg0->_messenger, ((const char *)DAT_0051c740));
-            beMessenger_AppendString(arg0->_messenger, buf);
-            beMessenger_AppendString(arg0->_messenger, ch);
-            beMessenger_DispatchSelected(arg0->_messenger, DAT_0051c6f0);
-            beMessenger_SelectGroup(arg0->_messenger, DAT_0051c6e8);
-            beMessenger_AppendString(arg0->_messenger, ((const char *)DAT_0051c740));
-            beMessenger_AppendString(arg0->_messenger, buf);
-            beMessenger_AppendString(arg0->_messenger, ((const char *)DAT_0051c790));
-            beMessenger_DispatchSelected(arg0->_messenger, DAT_0051c788);
-            j -= 1;
-        } while (j > -1);
+            sprintf(slot, slotFormat, pos);
+            digit[0] = digits[(length - 1) - pos];
+            beMessenger_SelectGroup(self->_messenger, TEXTCTL_6);
+            beMessenger_AppendString(self->_messenger, STWINFONT25_2);
+            beMessenger_AppendString(self->_messenger, slot);
+            beMessenger_AppendString(self->_messenger, digit);
+            beMessenger_DispatchSelected(self->_messenger, TEXTSET_4);
+            beMessenger_SelectGroup(self->_messenger, TEXTCTL_6);
+            beMessenger_AppendString(self->_messenger, STWINFONT25_2);
+            beMessenger_AppendString(self->_messenger, slot);
+            beMessenger_AppendString(self->_messenger, DISPON_4);
+            beMessenger_DispatchSelected(self->_messenger, SWITCH_5);
+            pos -= 1;
+        } while (pos > -1);
     }
 }
 
-void FUN_004402e0(beNDMWWindow *arg0, int arg1, unsigned int arg2, int *arg3) {
-    char b70[16];
-    char b80[12];
-    char c[2];
-    char *s1;
-    int i, n;
-    void *fmt;
+/* Hides the seven digit slots named by `slotFormat`, then shows `value` zero-padded to
+ * `digits` places (1..7; 0 or more leaves them hidden). */
+void beNDMWWindow_ShowPaddedDigits(beNDMWWindow *self, int value, unsigned int digits, const char *slotFormat) {
+    char slot[16];
+    char text[12];
+    char digit[2];
+    char *type;
+    int i, length;
 
-    if (arg0->_entCode == 3) {
-        s1 = &DAT_0051c720[0];
+    if (self->_entCode == 3) {
+        type = STWINFONT28_2;
     } else {
-        s1 = &DAT_0051c740[0];
+        type = STWINFONT25_2;
     }
     i = 0;
     do {
-        sprintf(b70, arg3, i);
-        beMessenger_SelectGroup(arg0->_messenger, &DAT_0051c6e8[0]);
-        beMessenger_AppendString(arg0->_messenger, s1);
-        beMessenger_AppendString(arg0->_messenger, b70);
-        beMessenger_AppendString(arg0->_messenger, &DAT_0051c780[0]);
-        beMessenger_DispatchSelected(arg0->_messenger, &DAT_0051c788[0]);
+        sprintf(slot, slotFormat, i);
+        beMessenger_SelectGroup(self->_messenger, TEXTCTL_6);
+        beMessenger_AppendString(self->_messenger, type);
+        beMessenger_AppendString(self->_messenger, slot);
+        beMessenger_AppendString(self->_messenger, DISPOFF_3);
+        beMessenger_DispatchSelected(self->_messenger, SWITCH_5);
         i++;
     } while (i < 7);
-    switch (arg2) {
+    switch (digits) {
     case 0: return;
-    case 1: sprintf(b80, &DAT_0051c6e0[0], arg1); break;
-    case 2: sprintf(b80, &DAT_0051c798[0], arg1); break;
-    case 3: sprintf(b80, &DAT_0051c7a0[0], arg1); break;
-    case 4: sprintf(b80, &DAT_0051c7a8[0], arg1); break;
-    case 5: sprintf(b80, &DAT_0051c7b0[0], arg1); break;
-    case 6: sprintf(b80, &DAT_0051c7b8[0], arg1); break;
-    case 7: sprintf(b80, &DAT_0051c7c0[0], arg1); break;
+    case 1: sprintf(text, percent_d_6, value); break;
+    case 2: sprintf(text, percent_02d, value); break;
+    case 3: sprintf(text, percent_03d, value); break;
+    case 4: sprintf(text, percent_04d, value); break;
+    case 5: sprintf(text, percent_05d, value); break;
+    case 6: sprintf(text, percent_06d, value); break;
+    case 7: sprintf(text, percent_07d, value); break;
     default: return;
     }
-    n = strlen(b80);
-    i = n - 1;
-    c[1] = 0;
+    length = strlen(text);
+    i = length - 1;
+    digit[1] = 0;
     if (i > -1) {
         do {
-            sprintf(b70, arg3, i);
-            c[0] = b80[(n - 1) - i];
-            beMessenger_SelectGroup(arg0->_messenger, &DAT_0051c6e8[0]);
-            beMessenger_AppendString(arg0->_messenger, s1);
-            beMessenger_AppendString(arg0->_messenger, b70);
-            beMessenger_AppendString(arg0->_messenger, c);
-            beMessenger_DispatchSelected(arg0->_messenger, &DAT_0051c6f0[0]);
-            beMessenger_SelectGroup(arg0->_messenger, &DAT_0051c6e8[0]);
-            beMessenger_AppendString(arg0->_messenger, s1);
-            beMessenger_AppendString(arg0->_messenger, b70);
-            beMessenger_AppendString(arg0->_messenger, &DAT_0051c790[0]);
-            beMessenger_DispatchSelected(arg0->_messenger, &DAT_0051c788[0]);
+            sprintf(slot, slotFormat, i);
+            digit[0] = text[(length - 1) - i];
+            beMessenger_SelectGroup(self->_messenger, TEXTCTL_6);
+            beMessenger_AppendString(self->_messenger, type);
+            beMessenger_AppendString(self->_messenger, slot);
+            beMessenger_AppendString(self->_messenger, digit);
+            beMessenger_DispatchSelected(self->_messenger, TEXTSET_4);
+            beMessenger_SelectGroup(self->_messenger, TEXTCTL_6);
+            beMessenger_AppendString(self->_messenger, type);
+            beMessenger_AppendString(self->_messenger, slot);
+            beMessenger_AppendString(self->_messenger, DISPON_4);
+            beMessenger_DispatchSelected(self->_messenger, SWITCH_5);
             i--;
         } while (i > -1);
     }
 }
 
-void Gap__Bec__beNDMWShopSelect52__vfunc_22(beNDMWShopSelect52 *arg0) {
-    int *temp_a1;
-    int temp_v1;
-    int var_v0;
-    char *temp_a0;
-    void *temp_s1;
-    if (g_stringPool[0] == 0) {
-        var_v0 = ((int)StringPool_Allocate(0x10));
-        if (var_v0 != 0) {
-            var_v0 = ((int)StringPool_Construct(var_v0));
-        }
-        g_stringPool[0] = var_v0;
-    }
-    temp_s1 = (void *)(((void *)StringPool_Intern(g_stringPool[0], &DAT_0051c7f0[0])));
-    temp_a0 = (char *)arg0->_infoName;
-    if (temp_a0 != 0) {
-        temp_a1 = (int *)(temp_a0 - 8);
-        temp_v1 = *(int *)(temp_a0 - 4) - 1;
-        *(int *)(temp_a0 - 4) = temp_v1;
-        if (temp_v1 == 0) {
-            StringChunk_ReleaseHeader(*temp_a1, temp_a1);
-        }
-        }
-    arg0->_infoName = (int)temp_s1;
-    arg0->_selectMax = arg0->_entCode;
-    arg0->_startPoint = arg0->_entCode - 1;
-    arg0->_isNoCancel = 0;
+void beNDMWShopSelect52_Setup(beNDMWShopSelect52 *self) {
+    SET_INFO_NAME(self, i_stcursor05)
+    self->_selectMax = self->_entCode;
+    self->_startPoint = self->_entCode - 1;
+    self->_isNoCancel = 0;
 }
 
-void Gap__Bec__beNDMWShopSelectA0__vfunc_22(beNDMWShopSelectA0 *arg0) {
-    int pool;
-    int ref;
-    int old;
-    beNDMWWindow_PresentModelAtOrigin(arg0, &DAT_0051c800[0], 0, &DAT_0051c810[0], &DAT_0051c5e8[0]);
-    { int tok = StringRefHelpers::intern(&DAT_0051c818[0]); StringList_AppendRetained(arg0->_textCloseTypeList, StringRef(tok)); }
-    { int tok = StringRefHelpers::intern(&DAT_0051c498[0]); StringList_AppendRetained(arg0->_textCloseNameList, StringRef(tok)); }
-    { int tok = StringRefHelpers::intern(&DAT_0051c818[0]); StringList_AppendRetained(arg0->_textCloseTypeList, StringRef(tok)); }
-    { int tok = StringRefHelpers::intern(&DAT_0051c4c0[0]); StringList_AppendRetained(arg0->_textCloseNameList, StringRef(tok)); }
-    beNDMWWindow_RunMessageScript(arg0, &DAT_0051c4a0[0], 0x7D1);
-    beNDMWWindow_QueueText(arg0, &DAT_0051c828[0], &DAT_0051c498[0], &DAT_0051c660[0], &DAT_0051c730[0]);
-    beNDMWWindow_QueueText(arg0, &DAT_0051c828[0], &DAT_0051c4c0[0], &DAT_0051c660[0], &DAT_0051c730[0]);
-    if (g_stringPool[0] == 0) {
-        pool = ((int)StringPool_Allocate(16));
-        if (pool)
-            pool = ((int)StringPool_Construct(pool));
-        g_stringPool[0] = pool;
-    }
-    ref = ((int)StringPool_Intern(g_stringPool[0], &DAT_0051c838[0]));
-    old = arg0->_infoName;
-    StringRefHelpers::release(old);
-    arg0->_infoName = ref;
-    arg0->_selectMax = 9;
-    arg0->_offsetPos[0] = 0;
-    arg0->_offsetPos[1] = 0;
-    arg0->_offsetPos[2] = 0;
-    arg0->_startPoint = 0;
-    arg0->_isNoCancel = 0;
+void beNDMWShopSelectA0_Setup(beNDMWShopSelectA0 *self) {
+    beNDMWWindow_PresentModelAtOrigin(self, j_shcardwin_2, 0, SQ_OPEN_7, SQ_CLOSE_8);
+    INTERN_APPEND(self->_textCloseTypeList, STWINFONT34)
+    INTERN_APPEND(self->_textCloseNameList, font000_4)
+    INTERN_APPEND(self->_textCloseTypeList, STWINFONT34)
+    INTERN_APPEND(self->_textCloseNameList, font001_4)
+    beNDMWWindow_RunMessageScript(self, txt_shop_lua_3, 0x7D1);
+    beNDMWWindow_QueueText(self, STWINFONT33_2, font000_4, space_3, CENTER_3);
+    beNDMWWindow_QueueText(self, STWINFONT33_2, font001_4, space_3, CENTER_3);
+    SET_INFO_NAME(self, j_shcardcursor)
+    self->_selectMax = 9;
+    self->_offsetPos[0] = 0;
+    self->_offsetPos[1] = 0;
+    self->_offsetPos[2] = 0;
+    self->_startPoint = 0;
+    self->_isNoCancel = 0;
 }
 
-static inline DecideFlagList *decideList(const beNDMWShopSelectB0 *self) { return (DecideFlagList *)self->_decideList; }
+/* The selector's decision flags: one byte per row, nonzero when the row can be chosen. */
+static inline igDataList *beNDMWShopSelectB0_DecideFlags(const beNDMWShopSelectB0 *self) { return (igDataList *)self->_decideList; }
 
-void Gap__Bec__beNDMWShopSelectB0__vfunc_22(beNDMWShopSelectB0 *arg0) {
-    int tv1;
-    int s1;
-    int *a1;
-    int *s0;
-    void *a0;
-    int t;
-    int *s3;
-    void *s0b;
-    INTERN_APPEND_440a20(arg0->_textCloseTypeList, &DAT_0051c488[0])
-    INTERN_APPEND_440a20(arg0->_textCloseNameList, &DAT_0051c5f8[0])
-    INTERN_APPEND_440a20(arg0->_textCloseTypeList, &DAT_0051c488[0])
-    INTERN_APPEND_440a20(arg0->_textCloseNameList, &DAT_0051c498[0])
-    INTERN_APPEND_440a20(arg0->_textCloseTypeList, &DAT_0051c488[0])
-    INTERN_APPEND_440a20(arg0->_textCloseNameList, &DAT_0051c4c0[0])
-    beNDMWWindow_RunMessageScript(arg0, &DAT_0051c4a0[0], 0x625);
-    if (arg0->_decideList != 0) {
-        IntPair labels = DAT_004cfb30[0];
-        s0 = (int *)&labels;
-        s1 = 0;
-        if (0 < decideList(arg0)->count) {
+void beNDMWShopSelectB0_Setup(beNDMWShopSelectB0 *self) {
+    INTERN_APPEND(self->_textCloseTypeList, STWINFONT29_4)
+    INTERN_APPEND(self->_textCloseNameList, font100_4)
+    INTERN_APPEND(self->_textCloseTypeList, STWINFONT29_4)
+    INTERN_APPEND(self->_textCloseNameList, font000_4)
+    INTERN_APPEND(self->_textCloseTypeList, STWINFONT29_4)
+    INTERN_APPEND(self->_textCloseNameList, font001_4)
+    beNDMWWindow_RunMessageScript(self, txt_shop_lua_3, 0x625);
+    if (self->_decideList != 0) {
+        int i;
+        const char **font;
+        DecideFontPair rowFonts = g_shopDecideFlagFonts;
+        font = rowFonts.fonts;
+        i = 0;
+        if (0 < beNDMWShopSelectB0_DecideFlags(self)->_count) {
             do {
-                if (((DecideFlagList *)arg0->_decideList)->data[s1] != 0) {
-                    s3 = &DAT_0051c700[0];
+                const char *color;
+                if (((unsigned char *)(((igDataList *)self->_decideList)->_data + i))[0] != 0 /* matching construct: int _data + i keeps retail addu operand order */) {
+                    color = DEFAULTCOLOR_4;
                 } else {
-                    s3 = &DAT_0051c848[0];
+                    color = CANCELCOLOR_3;
                 }
-                beMessenger_SelectGroup(arg0->_messenger, &DAT_0051c6e8[0]);
-                beMessenger_AppendString(arg0->_messenger, &DAT_0051c488[0]);
-                beMessenger_AppendString(arg0->_messenger, (int *)*s0);
-                beMessenger_DispatchSelected(arg0->_messenger, s3);
-                s1 = s1 + 1;
-                s0 = s0 + 1;
-            } while (s1 < ((DecideFlagList *)arg0->_decideList)->count);
+                beMessenger_SelectGroup(self->_messenger, TEXTCTL_6);
+                beMessenger_AppendString(self->_messenger, STWINFONT29_4);
+                beMessenger_AppendString(self->_messenger, *font);
+                beMessenger_DispatchSelected(self->_messenger, color);
+                i++;
+                font++;
+            } while (i < ((igDataList *)self->_decideList)->_count);
         }
     }
-    if (g_stringPool[0] == 0) {
-        t = ((int)StringPool_Allocate(0x10));
-        if (t != 0) {
-            t = ((int)StringPool_Construct(t));
-        }
-        g_stringPool[0] = t;
-    }
-    s0b = ((void *)StringPool_Intern(g_stringPool[0], &DAT_0051c4d0[0]));
-    a0 = (void *)arg0->_infoName;
-    if (a0 != 0) {
-        a1 = (int *)((char *)a0 - 8);
-        tv1 = *(int *)((char *)a0 - 4) - 1;
-        *(int *)((char *)a0 - 4) = tv1;
-        if (tv1 == 0) {
-            StringChunk_ReleaseHeader(*a1, a1);
-        }
-    }
-    arg0->_infoName = (int)s0b;
-    arg0->_selectMax = 2;
-    arg0->_offsetPos[0] = 0;
-    arg0->_offsetPos[1] = 0;
-    arg0->_offsetPos[2] = 0;
-    arg0->_startPoint = 0;
-    arg0->_isNoCancel = 0;
+    SET_INFO_NAME(self, i_stmesscr_2)
+    self->_selectMax = 2;
+    self->_offsetPos[0] = 0;
+    self->_offsetPos[1] = 0;
+    self->_offsetPos[2] = 0;
+    self->_startPoint = 0;
+    self->_isNoCancel = 0;
 }
 
-int Gap__Bec__beNDMWShopSelectB0__vfunc_20(void)
-{
+int beNDMWShopSelectB0_GetMeta(void) {
     return g_beNDMWShopSelectB0_metaObject[0];
 }
 
-int Gap__Bec__beNDMWShopSelectA0__vfunc_20(void)
-{
+int beNDMWShopSelectA0_GetMeta(void) {
     return g_beNDMWShopSelectA0_metaObject[0];
 }
 
-int Gap__Bec__beNDMWShopSelect52__vfunc_20(void)
-{
+int beNDMWShopSelect52_GetMeta(void) {
     return g_beNDMWShopSelect52_metaObject[0];
 }
 
-int Gap__Bec__beNDMWShopSelect34__vfunc_20(void)
-{
+int beNDMWShopSelect34_GetMeta(void) {
     return g_beNDMWShopSelect34_metaObject[0];
 }
 
-int Gap__Bec__beNDMWShopSelect11__vfunc_20(void)
-{
+int beNDMWShopSelect11_GetMeta(void) {
     return g_beNDMWShopSelect11_metaObject[0];
 }
 
-int Gap__Bec__beNDMWShopSelect03__vfunc_20(void)
-{
+int beNDMWShopSelect03_GetMeta(void) {
     return g_beNDMWShopSelect03_metaObject[0];
 }
 
-int Gap__Bec__beNDMWShopSelect02__vfunc_20(void)
-{
+int beNDMWShopSelect02_GetMeta(void) {
     return g_beNDMWShopSelect02_metaObject[0];
 }
 
-int Gap__Bec__beNDMWShopSelect01__vfunc_20(void)
-{
+int beNDMWShopSelect01_GetMeta(void) {
     return g_beNDMWShopSelect01_metaObject[0];
 }
 
-int Gap__Bec__beNDMWShopSelect00__vfunc_20(void)
-{
+int beNDMWShopSelect00_GetMeta(void) {
     return g_beNDMWShopSelect00_metaObject[0];
 }
-
