@@ -66,6 +66,11 @@ Word +0 ties a vtable to its class: `beGeneraterData`'s vtable `0x00535eb0` read
 RTTI record: Alchemy, `p2` and `enbaya` are built with `-RTTI off`
 ([build profiles](build-profiles.md)). The MetaField classes are such classes, which
 is why none is in the 478-entry dump ([RTTI-less vtables](#rtti-less-vtables-resolved-from-getvtable)).
+Such a vtable still compiles from source when its class is declared with its virtual functions: the
+Lua binding builds its classes' vtables and igLuaGlue's and igLuaState's that way, with igObject's
+slots declared as a `Gap::Core::igObject` class beside the reflected struct. Its slot functions are
+`externals` rows of the unit, and the vtable a `data` row
+([script engine](script-engine-lua.md#the-bound-class-type)).
 
 ### Inheritance, and the important catch
 

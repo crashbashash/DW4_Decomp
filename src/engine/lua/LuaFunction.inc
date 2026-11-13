@@ -1,5 +1,5 @@
 LuaFunction::LuaFunction(lua_CFunction function, int id, const char *name, const LuaType &result,
-                         LuaClass *owner, int isMethod, int argCount) {
+                         igLuaGlue::Class *owner, int isMethod, int argCount) {
     link.key = (unsigned int)owner ^ LuaBinding_HashName(name);
     link.next = 0;
     link.prev = 0;
@@ -61,9 +61,9 @@ int LuaFunction_Call(LuaFunction *function, lua_State *L) {
 }
 
 /* Binds an operator to a class and every class derived from it. */
-void LuaClass_SetOperator(lua_State *L, LuaClass *luaClass, LuaFunction *function, int event) {
+void LuaClass_SetOperator(lua_State *L, igLuaGlue::Class *luaClass, LuaFunction *function, int event) {
     const char **eventName;
-    LuaClass *derived;
+    igLuaGlue::Class *derived;
 
     lua_pushusertag(L, function, 0);
     lua_pushcclosure(L, LuaFunction_CallOperator, 1);
@@ -92,7 +92,7 @@ void LuaFunction_SetField(lua_State *L, LuaFunction *function) {
 /* Binds a class's functions from the tables a binding generator writes: one code word per
  * function (id, argument count, name index, method flag and whether the method entry point
  * handles it) followed by the result's and each argument's type code. */
-void LuaClass_BindFunctions(LuaClass *owner, lua_CFunction method, lua_CFunction function,
+void LuaClass_BindFunctions(igLuaGlue::Class *owner, lua_CFunction method, lua_CFunction function,
                             const char **names, int count, const unsigned int *codes, LuaFunction **byId) {
     int i;
     unsigned int code;

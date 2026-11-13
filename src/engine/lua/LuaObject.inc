@@ -16,7 +16,7 @@ static inline igMetaField *LuaFieldTable_Find(igMetaObject *meta, const char *na
  * table argument names. */
 int LuaObject_New(lua_State *L) {
     igMetaObject *meta;
-    LuaClass *luaClass;
+    igLuaGlue::Class *luaClass;
     int tag;
     LuaBoundObject *object;
     const char *key;
@@ -27,7 +27,7 @@ int LuaObject_New(lua_State *L) {
         tag = g_luaObjectTag;
         luaClass = 0;
     } else {
-        luaClass = (LuaClass *)lua_touserdata(L, -1);
+        luaClass = (igLuaGlue::Class *)lua_touserdata(L, -1);
         meta = luaClass->metaObject;
         tag = luaClass->instanceTag;
     }
@@ -128,7 +128,7 @@ int LuaFunction_CallUpvalue(lua_State *L) {
 int LuaFunction_CallOverload(lua_State *L) {
     LuaFunction *function;
     const char *name;
-    LuaClass *owner;
+    igLuaGlue::Class *owner;
     LuaFunction *chosen;
 
     function = (LuaFunction *)lua_touserdata(L, -1);
@@ -148,8 +148,8 @@ int LuaFunction_CallOverload(lua_State *L) {
 }
 
 /* Reads a member of a class: a value of its class table, a property, or an enum constant. */
-int LuaClass_GetMember(lua_State *L, LuaClass *luaClass, const char *name) {
-    LuaClass *c;
+int LuaClass_GetMember(lua_State *L, igLuaGlue::Class *luaClass, const char *name) {
+    igLuaGlue::Class *c;
     LuaProperty *property;
     LuaConstant *constant;
 
@@ -177,8 +177,8 @@ int LuaClass_GetMember(lua_State *L, LuaClass *luaClass, const char *name) {
     return 0;
 }
 
-int LuaClass_GetIndexed(lua_State *L, LuaClass *luaClass) {
-    LuaClass *c;
+int LuaClass_GetIndexed(lua_State *L, igLuaGlue::Class *luaClass) {
+    igLuaGlue::Class *c;
 
     for (c = luaClass; c != 0; c = c->base) {
         if (c->indexGetter != 0) {
@@ -193,25 +193,25 @@ int LuaClass_GetIndexed(lua_State *L, LuaClass *luaClass) {
 
 /* The `gettable` tag method of class tables and of objects without a meta-object. */
 int LuaClass_GetTable(lua_State *L) {
-    LuaClass *luaClass;
+    igLuaGlue::Class *luaClass;
 
     if (LuaBinding_GetPeer(L, 1) != 0) {
         return LuaPeer_GetTable(L);
     }
     if (lua_type(L, 2) == LUA_TSTRING) {
-        luaClass = (LuaClass *)lua_touserdata(L, -1);
+        luaClass = (igLuaGlue::Class *)lua_touserdata(L, -1);
         return LuaClass_GetMember(L, luaClass, lua_tostring(L, 2));
     }
-    return LuaClass_GetIndexed(L, (LuaClass *)lua_touserdata(L, -1));
+    return LuaClass_GetIndexed(L, (igLuaGlue::Class *)lua_touserdata(L, -1));
 }
 
 /* The `settable` tag method of class tables and of objects without a meta-object. */
 int LuaClass_SetTable(lua_State *L) {
     int keyType;
-    LuaClass *c;
+    igLuaGlue::Class *c;
     LuaProperty *property;
     const char *name;
-    LuaClass *luaClass;
+    igLuaGlue::Class *luaClass;
 
     if (LuaBinding_GetPeer(L, 1) != 0) {
         return LuaPeer_SetTable(L);
@@ -222,7 +222,7 @@ int LuaClass_SetTable(lua_State *L) {
     } else {
         name = 0;
     }
-    c = (LuaClass *)lua_touserdata(L, -1);
+    c = (igLuaGlue::Class *)lua_touserdata(L, -1);
     for (; c != 0; c = c->base) {
         if (name != 0) {
             property = LuaPropertyTable_Find(c, name);
@@ -237,7 +237,7 @@ int LuaClass_SetTable(lua_State *L) {
             return c->indexSetter->function(L);
         }
     }
-    luaClass = (LuaClass *)lua_touserdata(L, -1);
+    luaClass = (igLuaGlue::Class *)lua_touserdata(L, -1);
     if (keyType == LUA_TSTRING) {
         LuaError("Cannot find field \"%s\" on class \"%s\"", name, luaClass->name);
     } else {
@@ -253,7 +253,7 @@ int LuaObject_GetTable(lua_State *L) {
     int keyType;
     LuaBoundObject *object;
     igMetaObject *meta;
-    LuaClass *luaClass;
+    igLuaGlue::Class *luaClass;
     igMetaField *field;
     const char *key;
 
@@ -265,7 +265,7 @@ int LuaObject_GetTable(lua_State *L) {
     object = (LuaBoundObject *)lua_touserdata(L, 1);
     meta = object->getMeta();
     if (tag != g_luaObjectTag) {
-        luaClass = (LuaClass *)lua_touserdata(L, -1);
+        luaClass = (igLuaGlue::Class *)lua_touserdata(L, -1);
         if (keyType == LUA_TSTRING) {
             key = lua_tostring(L, 2);
             field = LuaFieldTable_Find(meta, key);
@@ -394,7 +394,7 @@ void LuaObject_SetField(lua_State *L, igMetaField *field, LuaBoundObject *object
 int LuaFunction_CallOperator(lua_State *L) {
     LuaFunction *function;
     int tag;
-    LuaClass *owner;
+    igLuaGlue::Class *owner;
 
     function = (LuaFunction *)lua_touserdata(L, -1);
     tag = lua_tag(L, 1);

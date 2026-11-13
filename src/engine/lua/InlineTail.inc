@@ -1,11 +1,11 @@
-igMetaObject *Gap__Lua__igLuaGlue__vfunc_22(void) {
+inline igMetaObject *igLuaGlue::getMeta() {
     return g_igLuaGlue_metaObject[0];
 }
 
-void Gap__Lua__igLuaGlue__vfunc_09(void) {
+inline void igLuaGlue::userConstruct() {
     LuaGlue_Initialize();
 }
 
-void Gap__Lua__igLuaGlue__vfunc_10(void) {
+inline void igLuaGlue::userDestruct() {
     LuaGlue_Shutdown();
 }

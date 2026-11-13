@@ -1,10 +1,10 @@
 /* An ig*Array class, one per element kind: a Lua class of its own with no meta-object and no
  * peer constructor. */
 template <int kind>
-struct LuaArrayClass : LuaClass {
+struct LuaArrayClass : igLuaGlue::Class {
     LuaArrayClass(const char *name, lua_CFunction gc, lua_CFunction get, lua_CFunction set,
                   lua_CFunction construct)
-        : LuaClass(name, 0, gc, 0, get, set, construct) {}
+        : igLuaGlue::Class(name, 0, gc, 0, get, set, construct) {}
 };
 
 /* Builds the array classes, creates every class a start-up hook registers (phase 0 first),

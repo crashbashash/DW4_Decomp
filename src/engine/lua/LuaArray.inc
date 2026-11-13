@@ -8,10 +8,10 @@ int LuaCharArray_Delete(lua_State *L) {
 }
 
 int LuaCharArray_Get(lua_State *L) {
-    LuaClass *luaClass;
+    igLuaGlue::Class *luaClass;
     char *array;
 
-    luaClass = (LuaClass *)lua_touserdata(L, -1);
+    luaClass = (igLuaGlue::Class *)lua_touserdata(L, -1);
     if (lua_type(L, 2) != LUA_TNUMBER) {
         LuaError("%s: Non-number array access", luaClass->name);
         return 0;
@@ -23,11 +23,11 @@ int LuaCharArray_Get(lua_State *L) {
 
 
 int LuaCharArray_Set(lua_State *L) {
-    LuaClass *luaClass;
+    igLuaGlue::Class *luaClass;
     char *array;
     int index;
 
-    luaClass = (LuaClass *)lua_touserdata(L, -1);
+    luaClass = (igLuaGlue::Class *)lua_touserdata(L, -1);
     if (lua_type(L, 2) != LUA_TNUMBER) {
         LuaError("%s: Non-number array access", luaClass->name);
         return 0;
@@ -53,7 +53,7 @@ int LuaCharArray_New(lua_State *L) {
         count = 1;
     }
     array = new char[count];
-    lua_pushusertag(L, array, ((LuaClass *)lua_touserdata(L, -1))->instanceTag);
+    lua_pushusertag(L, array, ((igLuaGlue::Class *)lua_touserdata(L, -1))->instanceTag);
     return 1;
 }
 
@@ -63,10 +63,10 @@ int LuaUnsignedCharArray_Delete(lua_State *L) {
 }
 
 int LuaUnsignedCharArray_Get(lua_State *L) {
-    LuaClass *luaClass;
+    igLuaGlue::Class *luaClass;
     unsigned char *array;
 
-    luaClass = (LuaClass *)lua_touserdata(L, -1);
+    luaClass = (igLuaGlue::Class *)lua_touserdata(L, -1);
     if (lua_type(L, 2) != LUA_TNUMBER) {
         LuaError("%s: Non-number array access", luaClass->name);
         return 0;
@@ -78,11 +78,11 @@ int LuaUnsignedCharArray_Get(lua_State *L) {
 
 
 int LuaUnsignedCharArray_Set(lua_State *L) {
-    LuaClass *luaClass;
+    igLuaGlue::Class *luaClass;
     unsigned char *array;
     int index;
 
-    luaClass = (LuaClass *)lua_touserdata(L, -1);
+    luaClass = (igLuaGlue::Class *)lua_touserdata(L, -1);
     if (lua_type(L, 2) != LUA_TNUMBER) {
         LuaError("%s: Non-number array access", luaClass->name);
         return 0;
@@ -108,7 +108,7 @@ int LuaUnsignedCharArray_New(lua_State *L) {
         count = 1;
     }
     array = new unsigned char[count];
-    lua_pushusertag(L, array, ((LuaClass *)lua_touserdata(L, -1))->instanceTag);
+    lua_pushusertag(L, array, ((igLuaGlue::Class *)lua_touserdata(L, -1))->instanceTag);
     return 1;
 }
 
@@ -118,10 +118,10 @@ int LuaShortArray_Delete(lua_State *L) {
 }
 
 int LuaShortArray_Get(lua_State *L) {
-    LuaClass *luaClass;
+    igLuaGlue::Class *luaClass;
     short *array;
 
-    luaClass = (LuaClass *)lua_touserdata(L, -1);
+    luaClass = (igLuaGlue::Class *)lua_touserdata(L, -1);
     if (lua_type(L, 2) != LUA_TNUMBER) {
         LuaError("%s: Non-number array access", luaClass->name);
         return 0;
@@ -133,11 +133,11 @@ int LuaShortArray_Get(lua_State *L) {
 
 
 int LuaShortArray_Set(lua_State *L) {
-    LuaClass *luaClass;
+    igLuaGlue::Class *luaClass;
     short *array;
     int index;
 
-    luaClass = (LuaClass *)lua_touserdata(L, -1);
+    luaClass = (igLuaGlue::Class *)lua_touserdata(L, -1);
     if (lua_type(L, 2) != LUA_TNUMBER) {
         LuaError("%s: Non-number array access", luaClass->name);
         return 0;
@@ -163,7 +163,7 @@ int LuaShortArray_New(lua_State *L) {
         count = 1;
     }
     array = new short[count];
-    lua_pushusertag(L, array, ((LuaClass *)lua_touserdata(L, -1))->instanceTag);
+    lua_pushusertag(L, array, ((igLuaGlue::Class *)lua_touserdata(L, -1))->instanceTag);
     return 1;
 }
 
@@ -173,10 +173,10 @@ int LuaUnsignedShortArray_Delete(lua_State *L) {
 }
 
 int LuaUnsignedShortArray_Get(lua_State *L) {
-    LuaClass *luaClass;
+    igLuaGlue::Class *luaClass;
     unsigned short *array;
 
-    luaClass = (LuaClass *)lua_touserdata(L, -1);
+    luaClass = (igLuaGlue::Class *)lua_touserdata(L, -1);
     if (lua_type(L, 2) != LUA_TNUMBER) {
         LuaError("%s: Non-number array access", luaClass->name);
         return 0;
@@ -188,11 +188,11 @@ int LuaUnsignedShortArray_Get(lua_State *L) {
 
 
 int LuaUnsignedShortArray_Set(lua_State *L) {
-    LuaClass *luaClass;
+    igLuaGlue::Class *luaClass;
     unsigned short *array;
     int index;
 
-    luaClass = (LuaClass *)lua_touserdata(L, -1);
+    luaClass = (igLuaGlue::Class *)lua_touserdata(L, -1);
     if (lua_type(L, 2) != LUA_TNUMBER) {
         LuaError("%s: Non-number array access", luaClass->name);
         return 0;
@@ -218,7 +218,7 @@ int LuaUnsignedShortArray_New(lua_State *L) {
         count = 1;
     }
     array = new unsigned short[count];
-    lua_pushusertag(L, array, ((LuaClass *)lua_touserdata(L, -1))->instanceTag);
+    lua_pushusertag(L, array, ((igLuaGlue::Class *)lua_touserdata(L, -1))->instanceTag);
     return 1;
 }
 
@@ -228,10 +228,10 @@ int LuaIntArray_Delete(lua_State *L) {
 }
 
 int LuaIntArray_Get(lua_State *L) {
-    LuaClass *luaClass;
+    igLuaGlue::Class *luaClass;
     int *array;
 
-    luaClass = (LuaClass *)lua_touserdata(L, -1);
+    luaClass = (igLuaGlue::Class *)lua_touserdata(L, -1);
     if (lua_type(L, 2) != LUA_TNUMBER) {
         LuaError("%s: Non-number array access", luaClass->name);
         return 0;
@@ -243,11 +243,11 @@ int LuaIntArray_Get(lua_State *L) {
 
 
 int LuaIntArray_Set(lua_State *L) {
-    LuaClass *luaClass;
+    igLuaGlue::Class *luaClass;
     int *array;
     int index;
 
-    luaClass = (LuaClass *)lua_touserdata(L, -1);
+    luaClass = (igLuaGlue::Class *)lua_touserdata(L, -1);
     if (lua_type(L, 2) != LUA_TNUMBER) {
         LuaError("%s: Non-number array access", luaClass->name);
         return 0;
@@ -273,7 +273,7 @@ int LuaIntArray_New(lua_State *L) {
         count = 1;
     }
     array = new int[count];
-    lua_pushusertag(L, array, ((LuaClass *)lua_touserdata(L, -1))->instanceTag);
+    lua_pushusertag(L, array, ((igLuaGlue::Class *)lua_touserdata(L, -1))->instanceTag);
     return 1;
 }
 
@@ -283,10 +283,10 @@ int LuaUnsignedIntArray_Delete(lua_State *L) {
 }
 
 int LuaUnsignedIntArray_Get(lua_State *L) {
-    LuaClass *luaClass;
+    igLuaGlue::Class *luaClass;
     unsigned int *array;
 
-    luaClass = (LuaClass *)lua_touserdata(L, -1);
+    luaClass = (igLuaGlue::Class *)lua_touserdata(L, -1);
     if (lua_type(L, 2) != LUA_TNUMBER) {
         LuaError("%s: Non-number array access", luaClass->name);
         return 0;
@@ -298,11 +298,11 @@ int LuaUnsignedIntArray_Get(lua_State *L) {
 
 
 int LuaUnsignedIntArray_Set(lua_State *L) {
-    LuaClass *luaClass;
+    igLuaGlue::Class *luaClass;
     unsigned int *array;
     int index;
 
-    luaClass = (LuaClass *)lua_touserdata(L, -1);
+    luaClass = (igLuaGlue::Class *)lua_touserdata(L, -1);
     if (lua_type(L, 2) != LUA_TNUMBER) {
         LuaError("%s: Non-number array access", luaClass->name);
         return 0;
@@ -328,7 +328,7 @@ int LuaUnsignedIntArray_New(lua_State *L) {
         count = 1;
     }
     array = new unsigned int[count];
-    lua_pushusertag(L, array, ((LuaClass *)lua_touserdata(L, -1))->instanceTag);
+    lua_pushusertag(L, array, ((igLuaGlue::Class *)lua_touserdata(L, -1))->instanceTag);
     return 1;
 }
 
@@ -338,10 +338,10 @@ int LuaLongArray_Delete(lua_State *L) {
 }
 
 int LuaLongArray_Get(lua_State *L) {
-    LuaClass *luaClass;
+    igLuaGlue::Class *luaClass;
     long long *array;
 
-    luaClass = (LuaClass *)lua_touserdata(L, -1);
+    luaClass = (igLuaGlue::Class *)lua_touserdata(L, -1);
     if (lua_type(L, 2) != LUA_TNUMBER) {
         LuaError("%s: Non-number array access", luaClass->name);
         return 0;
@@ -353,11 +353,11 @@ int LuaLongArray_Get(lua_State *L) {
 
 
 int LuaLongArray_Set(lua_State *L) {
-    LuaClass *luaClass;
+    igLuaGlue::Class *luaClass;
     long long *array;
     int index;
 
-    luaClass = (LuaClass *)lua_touserdata(L, -1);
+    luaClass = (igLuaGlue::Class *)lua_touserdata(L, -1);
     if (lua_type(L, 2) != LUA_TNUMBER) {
         LuaError("%s: Non-number array access", luaClass->name);
         return 0;
@@ -383,7 +383,7 @@ int LuaLongArray_New(lua_State *L) {
         count = 1;
     }
     array = new long long[count];
-    lua_pushusertag(L, array, ((LuaClass *)lua_touserdata(L, -1))->instanceTag);
+    lua_pushusertag(L, array, ((igLuaGlue::Class *)lua_touserdata(L, -1))->instanceTag);
     return 1;
 }
 
@@ -393,10 +393,10 @@ int LuaUnsignedLongArray_Delete(lua_State *L) {
 }
 
 int LuaUnsignedLongArray_Get(lua_State *L) {
-    LuaClass *luaClass;
+    igLuaGlue::Class *luaClass;
     unsigned long long *array;
 
-    luaClass = (LuaClass *)lua_touserdata(L, -1);
+    luaClass = (igLuaGlue::Class *)lua_touserdata(L, -1);
     if (lua_type(L, 2) != LUA_TNUMBER) {
         LuaError("%s: Non-number array access", luaClass->name);
         return 0;
@@ -408,11 +408,11 @@ int LuaUnsignedLongArray_Get(lua_State *L) {
 
 
 int LuaUnsignedLongArray_Set(lua_State *L) {
-    LuaClass *luaClass;
+    igLuaGlue::Class *luaClass;
     unsigned long long *array;
     int index;
 
-    luaClass = (LuaClass *)lua_touserdata(L, -1);
+    luaClass = (igLuaGlue::Class *)lua_touserdata(L, -1);
     if (lua_type(L, 2) != LUA_TNUMBER) {
         LuaError("%s: Non-number array access", luaClass->name);
         return 0;
@@ -438,7 +438,7 @@ int LuaUnsignedLongArray_New(lua_State *L) {
         count = 1;
     }
     array = new unsigned long long[count];
-    lua_pushusertag(L, array, ((LuaClass *)lua_touserdata(L, -1))->instanceTag);
+    lua_pushusertag(L, array, ((igLuaGlue::Class *)lua_touserdata(L, -1))->instanceTag);
     return 1;
 }
 
@@ -448,10 +448,10 @@ int LuaBoolArray_Delete(lua_State *L) {
 }
 
 int LuaBoolArray_Get(lua_State *L) {
-    LuaClass *luaClass;
+    igLuaGlue::Class *luaClass;
     bool *array;
 
-    luaClass = (LuaClass *)lua_touserdata(L, -1);
+    luaClass = (igLuaGlue::Class *)lua_touserdata(L, -1);
     if (lua_type(L, 2) != LUA_TNUMBER) {
         LuaError("%s: Non-number array access", luaClass->name);
         return 0;
@@ -472,7 +472,7 @@ int LuaBoolArray_New(lua_State *L) {
         count = 1;
     }
     array = new bool[count];
-    lua_pushusertag(L, array, ((LuaClass *)lua_touserdata(L, -1))->instanceTag);
+    lua_pushusertag(L, array, ((igLuaGlue::Class *)lua_touserdata(L, -1))->instanceTag);
     return 1;
 }
 
@@ -482,10 +482,10 @@ int LuaFloatArray_Delete(lua_State *L) {
 }
 
 int LuaFloatArray_Get(lua_State *L) {
-    LuaClass *luaClass;
+    igLuaGlue::Class *luaClass;
     float *array;
 
-    luaClass = (LuaClass *)lua_touserdata(L, -1);
+    luaClass = (igLuaGlue::Class *)lua_touserdata(L, -1);
     if (lua_type(L, 2) != LUA_TNUMBER) {
         LuaError("%s: Non-number array access", luaClass->name);
         return 0;
@@ -497,11 +497,11 @@ int LuaFloatArray_Get(lua_State *L) {
 
 
 int LuaFloatArray_Set(lua_State *L) {
-    LuaClass *luaClass;
+    igLuaGlue::Class *luaClass;
     float *array;
     int index;
 
-    luaClass = (LuaClass *)lua_touserdata(L, -1);
+    luaClass = (igLuaGlue::Class *)lua_touserdata(L, -1);
     if (lua_type(L, 2) != LUA_TNUMBER) {
         LuaError("%s: Non-number array access", luaClass->name);
         return 0;
@@ -527,7 +527,7 @@ int LuaFloatArray_New(lua_State *L) {
         count = 1;
     }
     array = new float[count];
-    lua_pushusertag(L, array, ((LuaClass *)lua_touserdata(L, -1))->instanceTag);
+    lua_pushusertag(L, array, ((igLuaGlue::Class *)lua_touserdata(L, -1))->instanceTag);
     return 1;
 }
 
@@ -537,10 +537,10 @@ int LuaDoubleArray_Delete(lua_State *L) {
 }
 
 int LuaDoubleArray_Get(lua_State *L) {
-    LuaClass *luaClass;
+    igLuaGlue::Class *luaClass;
     double *array;
 
-    luaClass = (LuaClass *)lua_touserdata(L, -1);
+    luaClass = (igLuaGlue::Class *)lua_touserdata(L, -1);
     if (lua_type(L, 2) != LUA_TNUMBER) {
         LuaError("%s: Non-number array access", luaClass->name);
         return 0;
@@ -552,11 +552,11 @@ int LuaDoubleArray_Get(lua_State *L) {
 
 
 int LuaDoubleArray_Set(lua_State *L) {
-    LuaClass *luaClass;
+    igLuaGlue::Class *luaClass;
     double *array;
     int index;
 
-    luaClass = (LuaClass *)lua_touserdata(L, -1);
+    luaClass = (igLuaGlue::Class *)lua_touserdata(L, -1);
     if (lua_type(L, 2) != LUA_TNUMBER) {
         LuaError("%s: Non-number array access", luaClass->name);
         return 0;
@@ -582,6 +582,6 @@ int LuaDoubleArray_New(lua_State *L) {
         count = 1;
     }
     array = new double[count];
-    lua_pushusertag(L, array, ((LuaClass *)lua_touserdata(L, -1))->instanceTag);
+    lua_pushusertag(L, array, ((igLuaGlue::Class *)lua_touserdata(L, -1))->instanceTag);
     return 1;
 }

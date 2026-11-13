@@ -5,7 +5,7 @@
 # point and the 116 real implementations have a symbol to name.
 # <va>	<name>	<module>
 0x00370780	LuaAPI_Dispatch	Lua
-0x003719d0	LuaAPI_Register	Lua
+0x003719d0	beLuaWrapper::registerFunctions	Lua
 0x00371c70	SYSisJoinPlayer	Lua
 0x00371ca0	SYSgetPlayerName	Lua
 0x00371cd0	SYSgetWeaponName	Lua

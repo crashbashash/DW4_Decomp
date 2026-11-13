@@ -61,7 +61,7 @@
 0x00241700	LuaClass_FindForMeta	engine
 0x00241750	LuaClass_DistanceToBase	engine
 0x00241790	LuaClassTable_Clear	engine
-0x00241930	LuaClass_Construct	engine
+0x00241930	igLuaGlue::Class_Construct	engine
 0x00241f70	LuaClass_SetTagMethod	engine
 0x00241fe0	LuaClass_SetTableHandlers	engine
 0x00242050	LuaClass_Register	engine
@@ -111,8 +111,8 @@
 0x00243b00	LuaDoubleArray_Get	engine
 0x00243ba0	LuaDoubleArray_Set	engine
 0x00243c80	LuaDoubleArray_New	engine
-0x002442c0	LuaClass_RegisterConstants	engine
-0x002442d0	LuaClass_RegisterFunctions	engine
+0x002442c0	igLuaGlue::Class::registerConstants	engine
+0x002442d0	igLuaGlue::Class::registerFunctions	engine
 0x002442e0	LuaBoolArray_Set	engine
 0x002444c0	LuaFieldWalker_Destruct	engine
 0x00244550	LuaFieldWalker_IsValid	engine

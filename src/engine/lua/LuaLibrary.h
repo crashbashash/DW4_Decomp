@@ -51,7 +51,6 @@ extern "C" void igLuaState_InitFields(void);
 
 extern "C" igMetaObject *g_igLuaGlue_metaObject[4];
 extern "C" const char igLuaGlue_className[];
-extern "C" int g_igLuaGlue_vtable[4];
 extern "C" igMetaObject *igLuaGlue_GetOrCreateMetaObject(void);
 extern "C" igMetaObject *igLuaGlue_GetMetaObject(void);
 extern "C" int igLuaGlue_GetVTable(void);
@@ -60,9 +59,6 @@ extern "C" void *igLuaGlue_Register(void);
 extern "C" void thunk_igLuaGlue_GetMetaObject(void);
 extern "C" void LuaGlue_Initialize(void);
 extern "C" void LuaGlue_Shutdown(void);
-extern "C" igMetaObject *Gap__Lua__igLuaGlue__vfunc_22(void);
-extern "C" void Gap__Lua__igLuaGlue__vfunc_09(void);
-extern "C" void Gap__Lua__igLuaGlue__vfunc_10(void);
 
 static inline bool isRegistered(igMetaObject *meta)
 {
@@ -82,7 +78,8 @@ static inline void releaseString(char *text) {
 }
 
 /* `<Class>_GetVTable` runs a class's inline constructor and destructor on a stack instance and
- * reads the vtable word in between; igObject_InitHeader is igObject's constructor. */
+ * reads the vtable word in between; igObject_InitHeader is igObject's constructor. igLuaState's
+ * is written out by hand on this image of the object, its destructors included. */
 struct ObjectImage {
     int *vtable;
     unsigned int _refCount;
@@ -94,6 +91,35 @@ struct LuaStateImage : ObjectImage {
     lua_State *_luaState;
     igObject *_memPool;
 };
+
+namespace Gap {
+namespace Core {
+/* igNamedObject's virtual functions: an igObject with a name. */
+class igNamedObject : public igObject {
+public:
+    char *_name;
+
+    igMetaObject *getMeta();
+};
+}
+namespace Lua {
+/* A Lua state as an Alchemy object. Built, it opens the state in its memory pool with the standard
+ * libraries and the glue's; going, it closes it. Its own virtual functions run a chunk from a
+ * string, a file or a buffer. */
+class igLuaState : public Core::igNamedObject {
+public:
+    lua_State *_luaState;
+    ::igObject *_memPool;
+
+    void userConstruct();
+    void userDestruct();
+    igMetaObject *getMeta();
+    virtual int runString(const char *source);
+    virtual int runFile(const char *path);
+    virtual int runBuffer(const char *buffer, unsigned int size, const char *name);
+};
+}
+}
 
 /* Thread-local values: one entry per (thread, slot), hashed by the two words xored. An entry
  * leaves the table when it is destroyed. */
@@ -255,19 +281,20 @@ struct LuaPropertyLink {
 };
 struct LuaProperty : LuaHashLink, LuaPropertyLink {
     const char *name;
-    LuaClass *owner;
+    igLuaGlue::Class *owner;
 };
 
 /* An enum constant of a class. */
 struct LuaConstant {
     LuaHashLink link;
     const char *name;
-    LuaClass *owner;
+    igLuaGlue::Class *owner;
     int value;
 };
 
-/* A reflected field the binding exposes by name: the entry leaves the table when destroyed, and
- * its memory comes from the glue's pool. */
+/* A reflected field the binding exposes by name: the entry joins the table when built and leaves
+ * it when destroyed, and its memory comes from the glue's pool. */
+extern "C" void LuaFieldTable_Insert(LuaHashLink *link);
 extern "C" void LuaFieldTable_Remove(LuaHashLink *link);
 struct LuaFieldLink : LuaHashLink {
     ~LuaFieldLink() {
@@ -279,6 +306,7 @@ struct LuaFieldEntry {
     igMetaObject *meta;
     igMetaField *field;
 
+    LuaFieldEntry(igMetaObject *meta, igMetaField *field);
     ~LuaFieldEntry();
     void operator delete(void *memory) {
         Memory_FreeBufferWithAllocator(memory, g_luaGluePool);
@@ -316,15 +344,94 @@ struct LuaFieldIterator {
     LuaFieldEntry *get();
 };
 
+extern "C" void LuaClassTable_Insert(LuaHashLink *link);
+extern "C" void LuaClassTable_Resize(void);
+
+/* A class enters the class table as it is built, keyed by its name's hash. */
+template <>
+inline Hashed<igLuaGlue::Class, 7>::Hashed(unsigned int key) {
+    link.key = key;
+    link.next = 0;
+    link.prev = 0;
+    LuaClassTable_Insert(&link);
+}
+
+/* Holds the class table still while it lives, as LuaFieldTableLock does the field table. */
+struct LuaClassTableLock {
+    unsigned int count;
+
+    LuaClassTableLock() {
+        count = g_luaClassCount;
+        g_luaClassTableBusy += 1;
+    }
+    ~LuaClassTableLock() {
+        g_luaClassTableBusy--;
+        if (count != g_luaClassCount) {
+            LuaClassTable_Resize();
+        }
+    }
+};
+
+/* Walks the class-table bucket of one key. */
+struct LuaClassIterator {
+    LuaClassTableLock lock;
+    igLuaGlue::Class *node;
+
+    LuaClassIterator(unsigned int key)
+        : node(g_luaClassBuckets != 0
+                   ? (igLuaGlue::Class *)g_luaClassBuckets[(g_luaClassBucketCount - 1) & (key ^ (key >> g_luaClassBucketShift))]
+                   : 0) {
+    }
+    bool isValid() {
+        return node != 0;
+    }
+    void operator++(int) {
+        node = (igLuaGlue::Class *)node->link.next;
+    }
+    igLuaGlue::Class *get() {
+        return node;
+    }
+};
+
+/* Walks every class in the class table. */
+struct LuaClassWalker {
+    LuaClassTableLock lock;
+    igLuaGlue::Class *node;
+    unsigned int bucket;
+
+    LuaClassWalker() {
+        node = 0;
+        bucket = 0;
+        while (node == 0 && bucket < g_luaClassBucketCount && g_luaClassBuckets != 0) {
+            node = (igLuaGlue::Class *)g_luaClassBuckets[bucket++];
+        }
+    }
+    bool isValid() {
+        return node != 0;
+    }
+    void operator++(int) {
+        node = (igLuaGlue::Class *)node->link.next;
+        if (node != 0) {
+            return;
+        }
+        while (node == 0 && bucket < g_luaClassBucketCount) {
+            node = (igLuaGlue::Class *)g_luaClassBuckets[bucket++];
+        }
+    }
+    igLuaGlue::Class *get() {
+        return node;
+    }
+};
+
 /* A class a start-up hook creates when the glue starts: static instances link themselves in. */
 struct LuaStartupHook {
     int phase;
-    LuaClass *(*create)(void);
-    LuaClass *luaClass;
+    igLuaGlue::Class *(*create)(void);
+    igLuaGlue::Class *luaClass;
     LuaStartupHook *next;
     LuaStartupHook *prev;
 
-    LuaStartupHook(LuaClass *(*create)(void), int phase);
+    LuaStartupHook(igLuaGlue::Class *(*create)(void), int phase);
 };
 
 /* The sorted tags of userdata that are Alchemy objects (an igIntList). */
@@ -401,6 +508,15 @@ static inline unsigned int LuaBinding_HashName(const char *name) {
     return hash;
 }
 
+inline LuaFieldEntry::LuaFieldEntry(igMetaObject *meta, igMetaField *field) {
+    link.key = (unsigned int)meta ^ LuaBinding_HashName((const char *)field->_fieldName);
+    link.next = 0;
+    link.prev = 0;
+    LuaFieldTable_Insert(&link);
+    this->meta = meta;
+    this->field = field;
+}
+
 enum { LUA_ANYTAG = -1 };
 enum { LUA_PUSH_INSTANCE, LUA_PUSH_REFERENCE, LUA_PUSH_KEEP_TAG };
 
@@ -408,9 +524,13 @@ enum { LUA_PUSH_INSTANCE, LUA_PUSH_REFERENCE, LUA_PUSH_KEEP_TAG };
 typedef void (*LuaErrorHandler)(const char *message, void *data);
 
 extern "C" LuaTagList *g_luaObjectTags;
-extern "C" LuaClass *g_luaArrayClasses[13];
-extern "C" LuaClass *g_luaGlobalClass;
+extern "C" igLuaGlue::Class *g_luaArrayClasses[13];
+extern "C" igLuaGlue::Class *g_luaGlobalClass;
 extern "C" LuaStartupHook *g_luaStartupHooks;
+/* The empty name of the class that holds the global functions. */
+extern "C" const char emptyString_3[];
+/* How many classes wait for a base class of the name they gave to be built. */
+extern "C" int g_luaClassesAwaitingBase;
 extern "C" int g_luaObjectTag;
 extern "C" int g_luaMetaObjectTag;
 extern "C" const char *g_luaOperatorEvents[];
@@ -427,17 +547,17 @@ int LuaType_Accepts(LuaType *type, lua_State *L, int index, int *distance);
 void LuaValue_StoreInTable(LuaValue *value, lua_State *L, int table);
 bool LuaObject_PushField(lua_State *L, igMetaField *field, LuaBoundObject *object);
 int LuaObject_StoreField(lua_State *L, igMetaField *field, LuaBoundObject *object, int index);
-LuaFunction *LuaFunctionTable_Find(LuaClass *owner, const char *name);
+LuaFunction *LuaFunctionTable_Find(igLuaGlue::Class *owner, const char *name);
 LuaFunction *LuaFunction_Resolve(LuaFunction *function, lua_State *L, int first, int upvalue);
 void LuaFunctionTable_LinkOverloads(void);
 int LuaFunction_Call(LuaFunction *function, lua_State *L);
-void LuaClass_SetOperator(lua_State *L, LuaClass *luaClass, LuaFunction *function, int event);
+void LuaClass_SetOperator(lua_State *L, igLuaGlue::Class *luaClass, LuaFunction *function, int event);
 void LuaFunction_SetField(lua_State *L, LuaFunction *function);
-void LuaClass_BindClass(lua_State *L, LuaClass *luaClass);
+void LuaClass_BindClass(lua_State *L, igLuaGlue::Class *luaClass);
 void LuaFunctionTable_Clear(void);
-LuaProperty *LuaPropertyTable_Find(LuaClass *owner, const char *name);
+LuaProperty *LuaPropertyTable_Find(igLuaGlue::Class *owner, const char *name);
 void LuaPropertyTable_Clear(void);
-LuaConstant *LuaConstantTable_Find(const char *name, LuaClass *owner);
+LuaConstant *LuaConstantTable_Find(const char *name, igLuaGlue::Class *owner);
 void LuaClassTable_Clear(void);
 void LuaConstantTable_Clear(void);
 void LuaEnumTable_Clear(void);
@@ -450,8 +570,8 @@ int LuaObject_Collect(lua_State *L);
 int LuaFunction_CallMember(lua_State *L);
 int LuaFunction_CallUpvalue(lua_State *L);
 int LuaFunction_CallOverload(lua_State *L);
-int LuaClass_GetMember(lua_State *L, LuaClass *luaClass, const char *name);
-int LuaClass_GetIndexed(lua_State *L, LuaClass *luaClass);
+int LuaClass_GetMember(lua_State *L, igLuaGlue::Class *luaClass, const char *name);
+int LuaClass_GetIndexed(lua_State *L, igLuaGlue::Class *luaClass);
 int LuaClass_GetTable(lua_State *L);
 int LuaClass_SetTable(lua_State *L);
 int LuaObject_GetTable(lua_State *L);
@@ -462,16 +582,16 @@ int LuaPeer_SetTable(lua_State *L);
 void LuaObject_SetField(lua_State *L, igMetaField *field, LuaBoundObject *object, const char *key, int index);
 int LuaFunction_CallOperator(lua_State *L);
 int LuaFunction_CallUnaryOperator(lua_State *L);
-LuaClass *LuaClass_FindByName(const char *name);
-LuaClass *LuaClass_FindByTag(int tag);
-LuaClass *LuaClass_FindForMeta(igMetaObject *meta);
-int LuaClass_DistanceToBase(LuaClass *base, LuaClass *luaClass);
+igLuaGlue::Class *LuaClass_FindByName(const char *name);
+igLuaGlue::Class *LuaClass_FindByTag(int tag);
+igLuaGlue::Class *LuaClass_FindForMeta(igMetaObject *meta);
+int LuaClass_DistanceToBase(igLuaGlue::Class *base, igLuaGlue::Class *luaClass);
 void LuaClassTable_ReleaseAll(void);
-void LuaClass_SetTagMethod(lua_State *L, LuaClass *luaClass, int tag, lua_CFunction handler, const char *event);
-void LuaClass_SetTableHandlers(lua_State *L, LuaClass *luaClass, int tag, lua_CFunction set, lua_CFunction get);
-void LuaClass_Register(LuaClass *luaClass, lua_State *L);
-void LuaClass_SetBase(LuaClass *luaClass, LuaClass *base);
-int LuaClass_HasTag(LuaClass *luaClass, int tag, int *distance);
+void LuaClass_SetTagMethod(lua_State *L, igLuaGlue::Class *luaClass, int tag, lua_CFunction handler, const char *event);
+void LuaClass_SetTableHandlers(lua_State *L, igLuaGlue::Class *luaClass, int tag, lua_CFunction set, lua_CFunction get);
+void LuaClass_Register(igLuaGlue::Class *luaClass, lua_State *L);
+void LuaClass_SetBase(igLuaGlue::Class *luaClass, igLuaGlue::Class *base);
+int LuaClass_HasTag(igLuaGlue::Class *luaClass, int tag, int *distance);
 int LuaBinding_GetClassTags(lua_State *L);
 int LuaCharArray_Delete(lua_State *L);
 int LuaCharArray_Get(lua_State *L);
@@ -582,7 +702,7 @@ extern "C" LuaThreadManagerView *g_threadManager;
 
 extern "C" LuaErrorHandler g_luaErrorHandler;
 extern "C" void *g_luaErrorHandlerData;
-extern "C" LuaStateImage *g_currentLuaState;
+extern "C" Gap::Lua::igLuaState *g_currentLuaState;
 extern "C" unsigned char g_luaStatePerThread;
 extern "C" int g_luaStateSlot;
 extern "C" int g_threadLocalNextSlot;
@@ -625,15 +745,9 @@ void ThreadLocal_Set(int slot, void *value);
 void ThreadLocal_SetForThread(void *thread, int slot, void *value);
 int ThreadLocal_NewSlot(void *value);
 void ThreadLocal_FreeSlot(int slot);
-void igLuaState_MakeCurrent(LuaStateImage *state);
-void igLuaState_Open(LuaStateImage *state);
-void igLuaState_Close(LuaStateImage *state);
-int igLuaState_RunString(LuaStateImage *state, const char *source);
-int igLuaState_RunFile(LuaStateImage *state, const char *path);
-int igLuaState_RunBuffer(LuaStateImage *state, const char *buffer, unsigned int size, const char *name);
+void igLuaState_MakeCurrent(Gap::Lua::igLuaState *state);
 void LuaBinding_SetErrorHandler(LuaErrorHandler handler, void *data);
 LuaErrorHandler LuaBinding_GetErrorHandler(void **data);
-igMetaObject *Gap__Lua__igLuaState__vfunc_22(void);
 }
 
 #endif

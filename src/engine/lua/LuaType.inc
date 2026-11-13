@@ -6,7 +6,7 @@ void LuaBinding_SetGlobalUserdata(lua_State *L, const char *name, void *object, 
     lua_settop(L, -2);
 }
 
-LuaStartupHook::LuaStartupHook(LuaClass *(*create)(void), int phase) {
+LuaStartupHook::LuaStartupHook(igLuaGlue::Class *(*create)(void), int phase) {
     this->phase = phase;
     this->create = create;
     next = g_luaStartupHooks;
@@ -115,7 +115,7 @@ int LuaType_MatchesUserdata(LuaType *type, int tag, LuaBoundObject *object, int 
 /* Pushes an object as userdata: tagged as a new instance, as a reference, or keeping the tag it
  * already has. A script's first reference to an Alchemy object adds one to its count. */
 void LuaType_PushObject(LuaType *type, lua_State *L, LuaBoundObject *object, int mode) {
-    LuaClass *luaClass;
+    igLuaGlue::Class *luaClass;
 
     if (object == 0) {
         lua_pushnil(L);

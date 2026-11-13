@@ -74,11 +74,11 @@ Lua API closes the calculation dispatcher. The callback itself is
 
 ## The rest of `be.cpp`
 
-The file is the Lua class `be`: `LuaAPIClass` (name `be`, meta name `igInfoManager`) whose
-registerFunctions slot `LuaAPI_Register` binds the 116 names in `g_luaApiFunctionNames` with the
-type codes in `g_luaApiFunctionCodes` to `LuaAPI_Dispatch`, and the namespace class `BecLuaClass`
-(`Bec`). Their start-up hooks' factories, `LuaAPIClass_Create` (after `be_EnsureRegistered`) and
-`BecLuaClass_Create`, allocate the class from `g_luaGluePool` through a class-scope placement
+The file is the Lua class `be`: `Gap::Bec::beLuaWrapper` (name `be`, base name `igInfoManager`) whose
+`beLuaWrapper::registerFunctions` binds the 116 names in `g_luaApiFunctionNames` with the
+type codes in `g_luaApiFunctionCodes` to `LuaAPI_Dispatch`, and the namespace class `Gap::BecLuaWrapper`
+(`Bec`). Their start-up hooks' factories, `beLuaWrapper_Create` (after `be_EnsureRegistered`) and
+`BecLuaWrapper_Create`, allocate the class from `g_luaGluePool` through a class-scope placement
 `operator new`; the matching placement `operator delete` frees it again if the constructor throws,
 which is the cleanup each factory's exception table records. A code's low byte is the binding kind
 plus 512: 5 int, 9 bool, 11 float, 13 string, 7 long, 15 void. The dispatcher reads each argument

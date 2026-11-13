@@ -326,10 +326,10 @@
 0x0036a510	beBaseInfoRamTimer_Create	game
 0x0036ae80	beBaseInfoDataList_Create	game
 0x0036e160	be_EnsureRegistered	game
-0x003717e0	LuaAPIClass_Construct	game
-0x00371840	LuaAPIClass_Create	game
-0x003718d0	BecLuaClass_Construct	game
-0x00371930	BecLuaClass_Create	game
+0x003717e0	beLuaWrapper_Construct	game
+0x00371840	beLuaWrapper_Create	game
+0x003718d0	BecLuaWrapper_Construct	game
+0x00371930	BecLuaWrapper_Create	game
 0x003719c0	LuaAPI_RegisterClasses	game
 0x00371a10	be_AddToScheduler	game
 0x00371a20	be_RemoveFromScheduler	game

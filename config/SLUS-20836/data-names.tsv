@@ -5344,6 +5344,7 @@
 0x004ea160	igBoundingSphereMaker_className	class-name
 0x004ea180	igLuaState_className	class-name
 0x004ea1b0	igLuaGlue_className	class-name
+0x004ea638	emptyString_3	string-literal
 0x004ec870	text_cdrom0_MODULES_IOPRP280_IMG_1	string-literal
 0x004ecf40	text_atstream_5150	string-literal
 0x004ecf60	text_ndmw_igb	string-literal
@@ -8209,8 +8210,8 @@
 0x00533180	g_igStringMetaField_vtable	recovered-global
 0x00533430	g_igUnsignedIntMetaField_vtable	recovered-global
 0x00537ee0	g_beModelCtrlInfoWork_vtable	recovered-global
-0x00539ef0	g_BecLuaClass_vtable	recovered-global
-0x00539f00	g_LuaAPIClass_vtable	recovered-global
+0x00539ef0	g_BecLuaWrapper_vtable	recovered-global
+0x00539f00	g_beLuaWrapper_vtable	recovered-global
 0x0053daa0	g_beNDMWWindowCtrl_vtable	recovered-global
 0x0053dc30	g_beNDMWWindow_vtable	recovered-global
 0x0053f150	g_beNDMWStatusCtrlBaseEquip_vtable	recovered-global
@@ -8799,6 +8800,7 @@
 0x0056de40	g_luaArrayClasses	recovered-global
 0x0056de88	g_luaGlobalClass	recovered-global
 0x0056de90	g_luaStartupHooks	recovered-global
+0x0056de98	g_luaClassesAwaitingBase	recovered-global
 0x0056dea0	g_luaFieldCount	recovered-global
 0x0056dea8	g_luaFieldBuckets	recovered-global
 0x0056deb0	g_luaFieldTableBusy	recovered-global

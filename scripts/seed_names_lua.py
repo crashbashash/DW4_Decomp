@@ -8,10 +8,10 @@ already decoded in `data/script_api.json` and written up in
 
 This emits one overlay line per **real implementation**, plus the two functions the
 write-up names directly: the dispatcher at `0x00370780` and the registration entry
-point at `0x003719d0`.  Names are the API name itself; where the table uses one name
-for several entries (the API overloads — `sd`, `DMsetSD`, `DMchkSD`, `DMswtSD`,
-`MDLsetWorldPosTarget`) each gets its table `id` as a suffix, so no two addresses
-claim the same name.
+point at `0x003719d0`, the `be` class's `registerFunctions`.  Names are the API name
+itself; where the table uses one name for several entries (the API overloads — `sd`,
+`DMsetSD`, `DMchkSD`, `DMswtSD`, `MDLsetWorldPosTarget`) each gets its table `id` as a
+suffix, so no two addresses claim the same name.
 
 The 116 **stubs are not nameable individually**: they are all branch targets
 *inside* the single 4,192-byte function at `0x00370780` (auto-analysis made the
@@ -30,8 +30,8 @@ import sys
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # Functions the write-up names directly, as opposed to the 116 in the API table.
-FIXED = [(0x00370780, "LuaAPI_Dispatch"),   # the dispatcher (its stubs live inside)
-         (0x003719d0, "LuaAPI_Register")]   # calls the generic registrar
+FIXED = [(0x00370780, "LuaAPI_Dispatch"),                    # the dispatcher (its stubs live inside)
+         (0x003719d0, "beLuaWrapper::registerFunctions")]   # calls the generic registrar
 
 
 def main():

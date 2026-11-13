@@ -51,7 +51,7 @@ file at a time, not as one translation unit: runs of inline methods close files 
 where a library-sized unit would have one run at its end. All four files share
 `src/engine/lua/LuaLibrary.h`, the library's private header. It includes the binding's public surface,
 `include/dw4/lua.h`: stock Lua's API, the bound-value types (`LuaType`, `LuaKind`, `LuaValue`), bound
-functions and classes (`LuaFunction`, `LuaClass`, `LuaHashLink`), the glue's pool and
+functions and classes (`LuaFunction`, `igLuaGlue::Class`, `LuaHashLink`), the glue's pool and
 the entry points a game class calls (`LuaType_PushString`, `LuaClass_BindFunctions`, `LuaError`). Game
 code such as `src/game/be.cpp` includes only the public header.
 
@@ -59,20 +59,23 @@ code such as `src/game/be.cpp` includes only the public header.
   `LuaLibrary` registration latch, igLuaState's and igLuaGlue's metadata (meta-object getters, vtable
   readers, registrars, igLuaState's two reflected fields `_luaState` and `_memPool`), then igLuaGlue's
   inline methods. igLuaGlue has no virtual function out of line, so its vtable and inline methods are
-  emitted here; two of them only call the glue's start-up and shutdown in the binding code.
+  emitted here; two of them only call the glue's start-up and shutdown in the binding code. MWCC emits
+  a file's inline virtuals in the reverse of their declaration order.
 - **The binding**, `src/engine/lua/LuaBinding.cpp` (`0x23c860`–`0x2442dc`): types and value
   conversion (`LuaType_*`, `LuaValue_*`), bound functions and their overload resolution
-  (`LuaFunction_*`), objects and their fields (`LuaObject_*`), classes (`LuaClass_*`), the typed
+  (`LuaFunction_*`), objects and their fields (`LuaObject_*`), classes (`LuaClass_*` and the class
+  constructor `igLuaGlue::Class_Construct`, which emits the class's own vtable), the typed
   array classes (`Lua<Type>Array_Delete`/`_Get`/`_Set`/`_New`) and `LuaGlue_Initialize`, which
   constructs one array class per element kind and so emits their vtables. It ends with the base
-  class's two empty virtual functions, `LuaClass_RegisterConstants` and `LuaClass_RegisterFunctions`:
+  class's two empty virtual functions, `igLuaGlue::Class::registerConstants` and
+  `igLuaGlue::Class::registerFunctions`:
   every array class's vtable and the game's two classes point at them, and MWCC emits inline virtuals
   after a file's last ordinary function, so they close the file.
 - **The state**, `src/engine/lua/LuaState.cpp` (`0x2442e0`–`0x24683c`): `LuaBoolArray_Set`,
   `LuaGlue_Shutdown` and the field-table walker, the script functions `new` and `cast`, the binding's
   hash tables, the thread-local slots, igLuaState's out-of-line methods (`igLuaState_Open`,
-  `igLuaState_Close`, `igLuaState_Run*`), the error handler and igLuaState's slot-22 getter, which
-  igLuaState's vtable is emitted with.
+  `igLuaState_Close`, `igLuaState_Run*`), the error handler and igLuaState's slot-22 getter. Its
+  first out-of-line virtual is here, so igLuaState's vtable is emitted with this file.
 - **The last file**, `src/engine/lua/LuaRuntime.cpp` (`0x246840`–`0x246d28`): the thread-local
   table's internals and the game's `lua_dofile`.
 
@@ -85,15 +88,37 @@ compiled earlier in the same file gives its caller
 ([emitted functions](emitted-functions.md#whole-file-units)).
 
 ### The bound-class type
-The game's RTTI names the class the source calls `LuaClass` (a typedef): `Gap::Lua::igLuaGlue::Class`,
-whose one base is `Hashed<Gap::Lua::igLuaGlue::Class, 7>`, a hash-table entry. The 7 is the class
-table's smallest bucket shift, the limit its resize never goes below. The game's two classes derived
-from it are `Gap::Bec::beLuaWrapper`, the `be` class, whose `registerFunctions` binds the native API,
-and `Gap::BecLuaWrapper`, the `Bec` class. The binding is built without RTTI, so its vtables have a
-zero first word, and the array classes' compile from the source. The base class's own (`0x52d650`)
-is retail data: its constructor, which stores it, has no source. The game's library keeps RTTI,
-so `be.cpp` compiles the two game classes' vtables together with their type records, base lists and
-class-name strings, and the base class's and `Hashed`'s records with them.
+The game's RTTI names the bound class `Gap::Lua::igLuaGlue::Class`, whose one base is
+`Hashed<Gap::Lua::igLuaGlue::Class, 7>`, a hash-table entry; the source spells it `igLuaGlue::Class`,
+without the namespaces, as it spells every Alchemy class. The 7 is the class table's smallest bucket
+shift, the limit its resize never goes below. The game's two classes derived from it are
+`Gap::Bec::beLuaWrapper`, the `be` class, whose `beLuaWrapper::registerFunctions` binds the native
+API, and `Gap::BecLuaWrapper`, the `Bec` class; `beLuaWrapper_Create` and `BecLuaWrapper_Create` are
+their start-up hooks' factories.
+
+The constructor `igLuaGlue::Class_Construct` registers the class as it is built. The `Hashed` base
+enters it in the class table; then it adds one field-table entry for each reflected field of the
+meta-object its name names. A second class of a name already in the table stops there. A class named
+`""` is the global class, which holds the global functions. A class gives the name of its base, which
+may be built before or after it: the constructor makes the new class the base of every class already
+waiting for its name, then looks its own base up, and counts itself in `g_luaClassesAwaitingBase` when
+the base is not built yet. Both lookups hold the class table still while they walk it.
+
+The `""` it compares with sits in this file's data, but b52 under `-sdatathreshold 2` puts any literal
+of one or two bytes in `.sdata`, and no retail Alchemy code reads a string through `gp`. The source
+reads it by its data name `emptyString_3`, as `be.cpp` and `beModelCtrl.cpp` read theirs.
+
+The binding is built without RTTI, so its vtables have a zero first word, and every one of them
+compiles from the source: the array classes', the bound class's own (`0x52d650`), igLuaGlue's
+(`0x52d540`) and igLuaState's (`0x52d660`). igObject's and igNamedObject's virtual functions are
+declared as classes in `Gap::Core` for them, apart from the reflected structs of the same names.
+`igLuaState_GetVTable` stays written out by hand on an image of the object: as classes its
+constructor and the `_memPool` holder compile as retail, but b52 will not inline the release of the
+`_name` string in igNamedObject's destructor at any depth or spelling tried, where retail does. It
+therefore still stores igLuaState's and igNamedObject's vtables (`0x524950`, another file's) by their
+data names. The game's library keeps RTTI, so `be.cpp` compiles the two game classes' vtables together
+with their type records, base lists and class-name strings, and the base class's and `Hashed`'s
+records with them.
 
 ### Hash tables
 The binding keeps six chained hash tables: fields, functions, classes, properties, constants and
@@ -180,7 +205,7 @@ So each script-API call routes: object → id (`obj+40`) → jump table → stub
 real C++ function.
 
 ### Registration
-`LuaAPI_Register` calls the generic registrar:
+`beLuaWrapper::registerFunctions` calls the generic registrar:
 ```
 0x23f4f0(L, 0, 0x00370780, 0x004c8560, 116, 0x0050cfc0, 0)
           ^dispatcher  ^names   ^count ^descriptors
@@ -406,8 +431,10 @@ OP_LFORLOOP, OP_CLOSURE`.
 - The sixth hash table (`LuaEnumTable_*`, `g_luaEnum*`) is named from its place after the constant
   table; nothing names what it holds, and only its link, resize and remove survive in the image.
 - `LuaProperty`'s first base is shaped as a plain hash link; what it is for is not established.
-- `igLuaState_Open` and `igLuaState_Close` (igLuaState's slots 7 and 10) are named from what they do;
-  `beLuaState` inherits slot 7.
+- `igLuaState_Open` and `igLuaState_Close` (igLuaState's slots 7 and 8) are named from what they do;
+  `beLuaState` inherits slot 7. The source names igObject's slots 7 and 8 `userConstruct` and
+  `userDestruct` from what their overrides do (open and close the state, start and stop the glue);
+  no string names them.
 - Strings `LuaState.cpp` reads (`"base"`, `"%sPeer"`, `"function"` and the tag-method event names)
   are at the same addresses as the binding's, which fits two files only if the linker merged equal
   strings across files.

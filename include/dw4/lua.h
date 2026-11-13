@@ -85,24 +85,49 @@ enum LuaKind {
 };
 
 /* An entry of the binding's hash table for T, chained through its link; N is the table's smallest
- * bucket shift. */
+ * bucket shift. An entry joins its table as it is built. */
 template <class T, int N>
 struct Hashed {
     LuaHashLink link;
+
+    Hashed(unsigned int key);
 };
 
 namespace Gap {
+namespace Core {
+/* igObject's virtual functions, for the classes whose vtables the binding builds; the reflected
+ * `igObject` is the same object seen as data. Its constructor is igObject_InitHeader. Slot 7 runs
+ * once an object is built and slot 8 before it goes. */
+class igObject {
+public:
+    igObject();
+    virtual void vfunc_00(); virtual void vfunc_01(); virtual void vfunc_02(); virtual void vfunc_03();
+    virtual void vfunc_04(); virtual void vfunc_05(); virtual void vfunc_06();
+    virtual void userConstruct();
+    virtual void userDestruct();
+    virtual void vfunc_09(); virtual void vfunc_10(); virtual void vfunc_11(); virtual void vfunc_12();
+    virtual void vfunc_13(); virtual void vfunc_14(); virtual void vfunc_15(); virtual void vfunc_16();
+    virtual void vfunc_17(); virtual void vfunc_18();
+    virtual int cloneViaMetadata(int copyMode);
+    virtual igMetaObject *getMeta();
+    unsigned int _refCount;
+};
+}
 namespace Lua {
-/* Alchemy's glue between reflected classes and Lua (an igObject), declared here only as the scope
- * of the bound-class type. */
-class igLuaGlue {
+/* Alchemy's glue between reflected classes and Lua: built, it builds the binding's classes;
+ * going, it releases them. */
+class igLuaGlue : public Core::igObject {
 public:
     struct Class;
+
+    void userDestruct();
+    void userConstruct();
+    igMetaObject *getMeta();
 };
 }
 }
-/* The bound-class type under the name the binding's functions (`LuaClass_*`) use. */
-typedef Gap::Lua::igLuaGlue::Class LuaClass;
+/* Alchemy's classes are spelled without their namespaces, as everywhere else in the source. */
+using Gap::Lua::igLuaGlue;
 
 /* A bound value's type: the C++ kind, how many pointers lead to it, and the Lua types a script
  * may pass for it (`1 << LUA_T*`). An object names its meta-object and its Lua class; an enum
@@ -118,7 +143,7 @@ struct LuaType {
     unsigned int writeBack : 1;
     int acceptedTypes : 16;
     igMetaObject *metaObject;
-    LuaClass *luaClass;
+    igLuaGlue::Class *luaClass;
 
     LuaType() {}
     LuaType(int kind, int indirection, int flags, const char *className);
@@ -154,7 +179,7 @@ struct LuaFunction {
     LuaHashLink link;               /* key: the owner xored with the name's hash */
     const char *name;
     LuaType result;
-    LuaClass *owner;
+    igLuaGlue::Class *owner;
     lua_CFunction function;
     LuaFunction *nextOverload;
     short id;
@@ -164,14 +189,15 @@ struct LuaFunction {
     unsigned short hasOutArgs : 1;
     unsigned short isMethod : 1;
 
-    LuaFunction(lua_CFunction function, int id, const char *name, const LuaType &result, LuaClass *owner,
+    LuaFunction(lua_CFunction function, int id, const char *name, const LuaType &result, igLuaGlue::Class *owner,
                 int isMethod, int argCount);
 };
 
 /* A class exposed to Lua: its tags, its class table and the handlers of its tag methods.
- * Instances a script creates carry `instanceTag`, objects it is handed `referenceTag`. Its two
- * virtual functions, which a derived class overrides, bind its functions and constants; the vtable
- * pointer follows the data. The link's key is the name's hash. */
+ * Instances a script creates carry `instanceTag`, objects it is handed `referenceTag`. It names its
+ * base class, which may be built before or after it. Its two virtual functions, which a derived
+ * class overrides, bind its functions and constants; the vtable pointer follows the data. The
+ * link's key is the name's hash. */
 namespace Gap {
 namespace Lua {
 struct igLuaGlue::Class : Hashed<igLuaGlue::Class, 7> {
@@ -181,7 +207,7 @@ struct igLuaGlue::Class : Hashed<igLuaGlue::Class, 7> {
     Class *firstDerived;
     Class *prevSibling;
     Class *nextSibling;
-    const char *metaName;
+    const char *baseName;
     int instanceTag;
     int referenceTag;
     int classTag;
@@ -195,7 +221,7 @@ struct igLuaGlue::Class : Hashed<igLuaGlue::Class, 7> {
     lua_CFunction peerConstructor;
     Class *alternate;
 
-    Class(const char *name, const char *metaName, lua_CFunction gc, lua_CFunction peerConstructor,
+    Class(const char *name, const char *baseName, lua_CFunction gc, lua_CFunction peerConstructor,
           lua_CFunction get, lua_CFunction set, lua_CFunction construct);
     virtual void registerFunctions() {}
     virtual void registerConstants() {}
@@ -212,7 +238,7 @@ void LuaType_PushString(LuaType *type, lua_State *L, const char *string);
 /* Binds a class's functions from the tables a binding generator writes: one code word per
  * function, then its result's and each argument's type code. A method is called through
  * `method`, anything else through `function`; `byId`, if given, receives each method by id. */
-void LuaClass_BindFunctions(LuaClass *owner, lua_CFunction method, lua_CFunction function,
+void LuaClass_BindFunctions(igLuaGlue::Class *owner, lua_CFunction method, lua_CFunction function,
                             const char **names, int count, const unsigned int *codes, LuaFunction **byId);
 /* Formats a binding error and hands it to the registered handler. */
 void LuaError(const char *format, ...);

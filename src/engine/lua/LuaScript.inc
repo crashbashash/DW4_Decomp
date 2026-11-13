@@ -1,9 +1,9 @@
 int LuaBoolArray_Set(lua_State *L) {
-    LuaClass *luaClass;
+    igLuaGlue::Class *luaClass;
     bool *array;
     int index;
 
-    luaClass = (LuaClass *)lua_touserdata(L, -1);
+    luaClass = (igLuaGlue::Class *)lua_touserdata(L, -1);
     if (lua_type(L, 2) != LUA_TNUMBER) {
         LuaError("%s: Non-number array access", luaClass->name);
         return 0;
@@ -107,7 +107,7 @@ void *LuaBinding_GetPeer(lua_State *L, int index) {
  * from, runs its peer constructor (else its constructor) and links the new object's table to
  * the argument as its base. */
 int LuaBinding_New(lua_State *L) {
-    LuaClass *luaClass;
+    igLuaGlue::Class *luaClass;
     char *peerName;
     lua_CFunction construct;
 
@@ -118,7 +118,7 @@ int LuaBinding_New(lua_State *L) {
         lua_pushstring(L, "base");
         lua_rawget(L, -2);
     } while (lua_type(L, -1) == LUA_TTABLE);
-    luaClass = (LuaClass *)lua_touserdata(L, -1);
+    luaClass = (igLuaGlue::Class *)lua_touserdata(L, -1);
     if (0 == luaClass) {
         LuaError("new() requires that root table in table hierarchy have variable 'base = SomeC++Class'");
         return 0;
@@ -151,11 +151,11 @@ int LuaBinding_New(lua_State *L) {
  * that class derives from the object's. Both tests compare the same way round. */
 int LuaBinding_Cast(lua_State *L) {
     const char *className;
-    LuaClass *from;
-    LuaClass *to;
+    igLuaGlue::Class *from;
+    igLuaGlue::Class *to;
     void *object;
     bool derived;
-    LuaClass *c;
+    igLuaGlue::Class *c;
 
     if (lua_type(L, 1) != LUA_TSTRING) {
         LuaError("function cast() requires classname as first arg");

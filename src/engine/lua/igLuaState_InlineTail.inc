@@ -1,3 +1,3 @@
-igMetaObject *Gap__Lua__igLuaState__vfunc_22(void) {
+inline igMetaObject *Gap::Lua::igLuaState::getMeta() {
     return g_igLuaState_metaObject[0];
 }

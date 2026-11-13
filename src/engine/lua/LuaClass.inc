@@ -1,7 +1,7 @@
 /* The Lua class of a meta-object or of its nearest ancestor that has one. */
-LuaClass *LuaClass_FindForMeta(igMetaObject *meta) {
+igLuaGlue::Class *LuaClass_FindForMeta(igMetaObject *meta) {
     igMetaObject *m;
-    LuaClass *luaClass;
+    igLuaGlue::Class *luaClass;
 
     for (m = meta; m != 0; m = (igMetaObject *)m->_parent) {
         luaClass = LuaClass_FindByName((const char *)m->_name);
@@ -11,7 +11,7 @@ LuaClass *LuaClass_FindForMeta(igMetaObject *meta) {
 }
 
 /* How many derivations lead from `luaClass` up to `base`, -1 when it does not derive from it. */
-int LuaClass_DistanceToBase(LuaClass *base, LuaClass *luaClass) {
+int LuaClass_DistanceToBase(igLuaGlue::Class *base, igLuaGlue::Class *luaClass) {
     int distance = 0;
     while (luaClass != 0) {
         if (luaClass == base) {
@@ -23,13 +23,85 @@ int LuaClass_DistanceToBase(LuaClass *base, LuaClass *luaClass) {
     return -1;
 }
 
-void LuaClass_SetTagMethod(lua_State *L, LuaClass *luaClass, int tag, lua_CFunction handler, const char *event) {
+/* A class enters the class table and exposes the reflected fields of the meta-object its name
+ * names. A second class of a name already taken goes no further. Otherwise it becomes the base of
+ * the classes waiting for it by name, and finds its own base, or waits for it. */
+igLuaGlue::Class::Class(const char *className, const char *baseClassName, lua_CFunction gc,
+                        lua_CFunction peerConstructor, lua_CFunction get, lua_CFunction set,
+                        lua_CFunction construct)
+    : Hashed<Class, 7>(LuaBinding_HashName(className)), name(className),
+      metaObject(igObjectSystem_FindMetaByNameDefault(className)), base(0), baseName(baseClassName),
+      indexGetter(0), indexSetter(0), gcHandler(gc), setHandler(set), getHandler(get), constructor(construct),
+      peerConstructor(peerConstructor), alternate(0) {
+    igMetaObject *meta;
+    int count;
+    int i;
+
+    firstDerived = 0;
+    prevSibling = 0;
+    nextSibling = 0;
+    base = 0;
+    meta = metaObject;
+    if (meta != 0) {
+        count = igMetaObject_GetFieldCount(meta);
+        for (i = 0; i < count; i++) {
+            new (g_luaGluePool) LuaFieldEntry(meta, (igMetaField *)igMetaObject_GetFieldAt(meta, i));
+        }
+    }
+    {
+        LuaClassIterator it(LuaBinding_HashName(name));
+        while (it.isValid()) {
+            Class *other = it.get();
+            if (strcmp(other->name, name) == 0 && other != this) {
+                return;
+            }
+            it++;
+        }
+    }
+    if (strcmp(name, emptyString_3) == 0) {
+        g_luaGlobalClass = this;
+    }
+    firstDerived = 0;
+    prevSibling = 0;
+    nextSibling = 0;
+    base = 0;
+    if (name != 0 && g_luaClassesAwaitingBase != 0) {
+        LuaClassWalker it;
+        while (it.isValid()) {
+            Class *derived = it.get();
+            if (derived->base == 0 && derived->baseName != 0 && strcmp(derived->baseName, name) == 0) {
+                LuaClass_SetBase(derived, this);
+                g_luaClassesAwaitingBase--;
+                if (g_luaClassesAwaitingBase == 0) {
+                    break;
+                }
+            }
+            it++;
+        }
+    }
+    if (baseClassName != 0) {
+        {
+            LuaClassIterator it(LuaBinding_HashName(baseClassName));
+            while (it.isValid()) {
+                Class *candidate = it.get();
+                if (strcmp(candidate->name, baseClassName) == 0) {
+                    LuaClass_SetBase(this, candidate);
+                    return;
+                }
+                it++;
+            }
+        }
+        g_luaClassesAwaitingBase++;
+    }
+}
+
+void LuaClass_SetTagMethod(lua_State *L, igLuaGlue::Class *luaClass, int tag, lua_CFunction handler, const char *event) {
     lua_pushusertag(L, luaClass, 0);
     lua_pushcclosure(L, handler, 1);
     lua_settagmethod(L, tag, event);
 }
 
-void LuaClass_SetTableHandlers(lua_State *L, LuaClass *luaClass, int tag, lua_CFunction set, lua_CFunction get) {
+void LuaClass_SetTableHandlers(lua_State *L, igLuaGlue::Class *luaClass, int tag, lua_CFunction set, lua_CFunction get) {
     LuaClass_SetTagMethod(L, luaClass, tag, set, "settable");
     LuaClass_SetTagMethod(L, luaClass, tag, get, "gettable");
 }
@@ -37,7 +109,7 @@ void LuaClass_SetTableHandlers(lua_State *L, LuaClass *luaClass, int tag, lua_CF
 /* Gives a class its tags, its global class table and its tag methods. A class with a
  * constructor handles its instances itself; one with a meta-object reads and writes the
  * reflected fields; the others go through their class tables. */
-void LuaClass_Register(LuaClass *luaClass, lua_State *L) {
+void LuaClass_Register(igLuaGlue::Class *luaClass, lua_State *L) {
     char *peerName;
     int tag;
 
@@ -89,7 +161,7 @@ void LuaClass_Register(LuaClass *luaClass, lua_State *L) {
     LuaClass_SetTableHandlers(L, luaClass, luaClass->classTag, LuaClass_SetTable, LuaClass_GetTable);
 }
 
-void LuaClass_SetBase(LuaClass *luaClass, LuaClass *base) {
+void LuaClass_SetBase(igLuaGlue::Class *luaClass, igLuaGlue::Class *base) {
     if (base != 0) {
         luaClass->nextSibling = base->firstDerived;
         if (luaClass->nextSibling != 0) {
@@ -103,8 +175,8 @@ void LuaClass_SetBase(LuaClass *luaClass, LuaClass *base) {
 
 /* Whether `tag` belongs to the class or a class derived from it; `distance` counts the
  * derivations down to the one it belongs to. */
-int LuaClass_HasTag(LuaClass *luaClass, int tag, int *distance) {
-    LuaClass *derived;
+int LuaClass_HasTag(igLuaGlue::Class *luaClass, int tag, int *distance) {
+    igLuaGlue::Class *derived;
 
     if (tag == luaClass->instanceTag || tag == luaClass->referenceTag) {
         return 1;
@@ -121,9 +193,9 @@ int LuaClass_HasTag(LuaClass *luaClass, int tag, int *distance) {
 
 /* The script function `getClassTags(class)`: the class table's tag, then the two instance tags. */
 int LuaBinding_GetClassTags(lua_State *L) {
-    LuaClass *luaClass;
+    igLuaGlue::Class *luaClass;
 
-    luaClass = (LuaClass *)lua_touserdata(L, 1);
+    luaClass = (igLuaGlue::Class *)lua_touserdata(L, 1);
     if (luaClass == 0) {
         LuaError("function getClassTags() requires class as argument");
         return 0;

@@ -7153,7 +7153,7 @@
 00241700 000048 LuaClass_FindForMeta
 00241750 000034 LuaClass_DistanceToBase
 00241790 000198 LuaClassTable_Clear
-00241930 000638 LuaClass_Construct
+00241930 000638 igLuaGlue__Class_Construct igLuaGlue::Class_Construct
 00241f70 00006c LuaClass_SetTagMethod
 00241fe0 00006c LuaClass_SetTableHandlers
 00242050 0003a0 LuaClass_Register
@@ -7204,8 +7204,8 @@
 00243ba0 0000d4 LuaDoubleArray_Set
 00243c80 000080 LuaDoubleArray_New
 00243d00 0005b8 LuaGlue_Initialize
-002442c0 000008 LuaClass_RegisterConstants
-002442d0 000008 LuaClass_RegisterFunctions
+002442c0 000008 igLuaGlue__Class__registerConstants igLuaGlue::Class::registerConstants
+002442d0 000008 igLuaGlue__Class__registerFunctions igLuaGlue::Class::registerFunctions
 002442e0 0000dc LuaBoolArray_Set
 002443c0 0000f8 LuaGlue_Shutdown
 002444c0 000084 LuaFieldWalker_Destruct
@@ -16768,12 +16768,12 @@
 00370760 00000c Gap__Bec__beBaseInfoList__vfunc_22 Gap::Bec::beBaseInfoList::vfunc_22
 00370770 00000c Gap__Bec__beBaseInfoDataList__vfunc_22 Gap::Bec::beBaseInfoDataList::vfunc_22
 00370780 00105c LuaAPI_Dispatch
-003717e0 000058 LuaAPIClass_Construct
-00371840 00008c LuaAPIClass_Create
-003718d0 000054 BecLuaClass_Construct
-00371930 000084 BecLuaClass_Create
+003717e0 000058 beLuaWrapper_Construct
+00371840 00008c beLuaWrapper_Create
+003718d0 000054 BecLuaWrapper_Construct
+00371930 000084 BecLuaWrapper_Create
 003719c0 000008 LuaAPI_RegisterClasses
-003719d0 00003c LuaAPI_Register
+003719d0 00003c beLuaWrapper__registerFunctions beLuaWrapper::registerFunctions
 00371a10 000008 be_AddToScheduler
 00371a20 000008 be_RemoveFromScheduler
 00371a30 000088 be_Start

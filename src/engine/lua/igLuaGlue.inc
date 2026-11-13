@@ -14,10 +14,8 @@ igMetaObject *igLuaGlue_GetMetaObject(void)
 }
 
 int igLuaGlue_GetVTable(void) {
-    ObjectImage glue;
+    igLuaGlue glue;
 
-    igObject_InitHeader(&glue);
-    glue.vtable = g_igLuaGlue_vtable;
     return *(int *)((char *)&glue + g_objectSystem[0]->vtableOffset);
 }
 
