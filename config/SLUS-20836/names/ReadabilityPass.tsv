@@ -609,3 +609,17 @@
 0x00452870	igCharMetricsList_RunStaticInit	engine
 0x00452ae0	igCharMetricsMetaField_RunStaticInit	engine
 0x004532f0	igAction_RunStaticInit	engine
+0x0039fd30	beSystem_AddToScheduler	game
+0x0039fd50	beSystem_RemoveFromScheduler	game
+0x0039fd70	beSystem_Start	game
+0x0039fff0	beSystem_Stop	game
+0x003a0000	beSystem_AcceptInfo	game
+0x003a0010	beSystem_Reset	game
+0x003a0020	beSystem_Update	game
+0x003a0540	beSystem_IsRunning	game
+0x003a0560	beSystem_GetMetaObject_Virtual	game
+0x00308c80	igResource_StartAsyncLoading	engine
+0x00308e00	igResource_StopAsyncLoading	engine
+0x003092f0	igResource_LoadDirectory	engine
+0x00309740	igResource_IsDirectoryLoaded	engine
+0x00309750	igResource_UnloadDirectory	engine

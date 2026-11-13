@@ -18,7 +18,7 @@ void Gap__Core__igDirectory__vfunc_12(Obj12 *arg0) {
 
     if (arg0->f32 != 0) {
         for (i = 0; i < arg0->list->count; i++) {
-            FUN_00309750((W_309750 *)arg0->f32, ((int *)arg0->list->data[i])[5]);
+            igResource_UnloadDirectory((W_309750 *)arg0->f32, ((int *)arg0->list->data[i])[5]);
         }
     }
     temp_s2 = FUN_002d9120(arg0);

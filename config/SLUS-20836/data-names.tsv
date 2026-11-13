@@ -2865,6 +2865,7 @@
 0x004c1c70	g_igPsx2Thread_callbackList	callback-list
 0x004c1d40	g_igPsx2Media_callbackList	callback-list
 0x004c2170	g_memoryContextNames	recovered-global
+0x004c22e8	g_resourceLoaderStackSize	recovered-global
 0x004c2608	g_igPageMemoryPool_defaultPoolOptionFlags	recovered-global
 0x004c2610	g_rangeStart	recovered-global
 0x004c2668	g_igAdxAfsFileList_callbackList	callback-list
@@ -5744,6 +5745,7 @@
 0x00586f60	g_secondaryAllocatorList	recovered-global
 0x00587018	g_allocatorSelector	recovered-global
 0x00587040	g_metadataAllocatorKey	recovered-global
+0x00587060	g_temporaryAllocatorSelector	recovered-global
 0x00587098	g_defaultAllocatorKey	recovered-global
 0x00587108	g_ndmwAllocatorSelector	recovered-global
 0x00587110	g_defaultAllocatorSelector	recovered-global

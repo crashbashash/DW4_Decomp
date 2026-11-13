@@ -1729,7 +1729,7 @@ extern "C" void FUN_003085c0(void);
 extern "C" void FUN_00308770(void);
 extern "C" int FUN_00308850(int *p, int extra1);
 extern "C" void FUN_00308c00(int *arg0, void *arg1);
-extern "C" int FUN_00309740(int arg0, void *arg1);
+extern "C" int igResource_IsDirectoryLoaded(int arg0, void *arg1);
 extern "C" int FUN_00309a50(void);
 extern "C" int FUN_00309a60(int directory, int name, int metaName, int wanted);
 extern "C" void FUN_00309fe0(int arg0);
@@ -9285,7 +9285,7 @@ class V92 { public: virtual void d0(); virtual void d1(); virtual void d2(); vir
 class V200 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void d32(); virtual void d33(); virtual void d34(); virtual void d35(); virtual void d36(); virtual void d37(); virtual void d38(); virtual void d39(); virtual void d40(); virtual void d41(); virtual void d42(); virtual void d43(); virtual void d44(); virtual void d45(); virtual void d46(); virtual void d47(); virtual R_308c80 vB(int); };
 class V136 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual R_308c80 vC(int); };
 struct AsyncListOwner { char pad[28]; unsigned char ready; char pad29[3]; igSmartPointer<RO_308c80> list; igSmartPointer<RO_308c80> field; };
-extern "C" void FUN_00308c80(AsyncListOwner *arg0);
+extern "C" void igResource_StartAsyncLoading(AsyncListOwner *arg0);
 struct PairCallStatus { int w; };
 struct PairCountedObject { int vt; int f4; };
 struct PairCountedRef { int vt; int f4; };
@@ -9293,7 +9293,7 @@ class PairSourceView { public: virtual void d0(); virtual void d1(); virtual voi
 class PairQueryTarget { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual PairCallStatus m96(PairCountedObject *); };
 class PairQueryHost { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual PairQueryTarget *m92(); };
 class PairOwnerView { public: char pad[28]; unsigned char f28; char p29[3]; PairSourceView *f32; PairCountedObject *f36; };
-extern "C" void FUN_00308e00(PairOwnerView *arg0);
+extern "C" void igResource_StopAsyncLoading(PairOwnerView *arg0);
 typedef struct T_308f00 { char pad28[28]; unsigned char f28; char pad29[15]; S_ref *f44; S_ref *f48; } T_308f00;
 extern "C" void Gap__Core__igResource__vfunc_12(T_308f00 *arg0);
 struct Obj_308fb0 : public igObject { };
@@ -9313,7 +9313,7 @@ struct Item_3092f0 { char pad0[8]; unsigned char f8; char pad9[19]; unsigned cha
 struct Out_3092f0 { char pad0[20]; int *f20; char pad24[8]; Item_3092f0 *f32; unsigned char f36; char pad37[11]; unsigned char f48; unsigned char f49; char pad50[15]; unsigned char f65; char pad66[98]; int f164; char pad168[109]; unsigned char f277; char pad278[2]; Obj_3092f0 *f280; Obj_3092f0 *f284; Obj_3092f0 *f288; };
 struct Mem_3092f0 { Obj_3092f0 *p; ~Mem_3092f0() {} };
 struct ORef { Obj_3092f0 *p; ~ORef() { Obj_3092f0 *q = p; if (q) { q->refs = q->refs - 1; if (((unsigned long long)(long long)p->refs & 0x7fffffULL) == 0) igObject_Destroy(p); } } };
-extern "C" void *FUN_003092f0(Item_3092f0 *arg0, int arg1);
+extern "C" void *igResource_LoadDirectory(Item_3092f0 *arg0, int arg1);
 struct P_309640 {
     virtual void a0();
     virtual void a1();
@@ -9348,7 +9348,7 @@ struct P_309640 {
 extern "C" P_309640 *FUN_00309640(P_309640 *arg0, P_309640 *arg1);
 struct S1_309750 { char pad4[4]; int f4; char pad8[24]; S1_309750 *f32; };
 struct W_309750 { char p[12]; S1_309750 *f12; };
-extern "C" void FUN_00309750(W_309750 *arg0, int arg1);
+extern "C" void igResource_UnloadDirectory(W_309750 *arg0, int arg1);
 typedef struct R_309870 { int w0; int refs; } R_309870;
 typedef struct Lst_309870 { char pad8[8]; int n; char pad12[4]; R_309870 **data; } Lst_309870;
 typedef struct Ob_309870 { char pad12[12]; R_309870 *f12; Lst_309870 *f16; } Ob_309870;

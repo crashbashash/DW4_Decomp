@@ -8,7 +8,7 @@ extern "C" int Gap__Bec__beTimer__vfunc_20(void);
 extern "C" int FUN_00236f80(int, int);
 extern "C" int igObject_Destroy(...);
 extern "C" int beLua__RunNamedChunk(...);
-extern "C" int FUN_003a0540(...);
+extern "C" int beSystem_IsRunning(...);
 extern "C" int List_RemoveWordAt(...);
 extern "C" int strcmp(...);
 extern "C" int g_beTimer_metaObject[4];
@@ -98,7 +98,7 @@ void Gap__Bec__beTimer__vfunc_27(beTimer *arg0) {
         now = ((igInsightCore *)arg0->_insight)->_worldTime;
         delta = now - old;
         arg0->_oldWorldTime = now;
-        if (FUN_003a0540(arg0->_system) & 0xFF) {
+        if (beSystem_IsRunning(arg0->_system) & 0xFF) {
             n = ((beTimerDataList *)arg0->_dataList)->_count;
             i = 0;
             if (n > 0) {

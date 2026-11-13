@@ -13,7 +13,7 @@ then builds the loading filename in the mutable string at GameInfo `+0x48`:
 2. Erase its first two characters (`FUN_0030bbf0`, index 0, count 2).
 3. Insert `ld` at index 0 (`FUN_0030b460`).
 4. Append `.igb` and prepend `loadingUSA/`.
-5. Request `loadingUSA/ldagML11.igb` through `FUN_003092f0`; retain the
+5. Request `loadingUSA/ldagML11.igb` through `igResource_LoadDirectory`; retain the
    request in the manager's pending list `+0x2c`, and enter state 1.
 
 The constants are at `0x0050e570` (`ld`), `0x0050e578` (`.igb`) and

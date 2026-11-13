@@ -6,11 +6,11 @@ extern "C" int FUN_00236f80(...);
 extern "C" int igInsightCore_AddInfo(...);
 extern "C" int FUN_002eb010(...);
 extern "C" int igObject_IsKindOf(...);
-extern "C" int FUN_00308c80(...);
-extern "C" int FUN_00308e00(...);
-extern "C" int FUN_003092f0(...);
-extern "C" int FUN_00309740(...);
-extern "C" int FUN_00309750(...);
+extern "C" int igResource_StartAsyncLoading(...);
+extern "C" int igResource_StopAsyncLoading(...);
+extern "C" int igResource_LoadDirectory(...);
+extern "C" int igResource_IsDirectoryLoaded(...);
+extern "C" int igResource_UnloadDirectory(...);
 extern "C" int FUN_0030b3c0(...);
 extern "C" int FUN_0030b460(...);
 extern "C" int FUN_0030bbf0(...);
@@ -192,7 +192,7 @@ extern "C" void Gap__Bec__beFileListInfoManager__vfunc_27(beFileListInfoManager 
                 REL_STR(old)
                 s0->_stageName = (int)nw;
             }
-            FUN_00308c80(DAT_00586dd0[0]);
+            igResource_StartAsyncLoading(DAT_00586dd0[0]);
             {
             igSmartPointer<igObject> stageObj((igObject *)((beSystem *)arg0->_system)->_globalStrObj, kRetainReference);
             FUN_0030b3c0(stageObj.p, ((beSystem *)arg0->_system)->_stageName);
@@ -205,7 +205,7 @@ extern "C" void Gap__Bec__beFileListInfoManager__vfunc_27(beFileListInfoManager 
                 int r;
                 int a2;
                 if (a1 == 0) { a2 = DAT_004c22f0[0]; } else { a2 = a1; }
-                r = FUN_003092f0(DAT_00586dd0[0], a2);
+                r = igResource_LoadDirectory(DAT_00586dd0[0], a2);
                 ObjectList_AppendRetained(arg0->_dirList, r);
             }
             }
@@ -222,14 +222,14 @@ extern "C" void Gap__Bec__beFileListInfoManager__vfunc_27(beFileListInfoManager 
             int j;
             igObjectList *s5;
             s1 = ((int **)((igDirectoryList *)arg0->_dirList)->_data)[0];
-            if ((FUN_00309740(DAT_00586dd0[0], s1) & 0xFF) == 0) {
+            if ((igResource_IsDirectoryLoaded(DAT_00586dd0[0], s1) & 0xFF) == 0) {
                 break;
             }
             s4 = (igObjectList *)s1[7];
             for (k = 0; k < s4->_count; k++) {
                 igInsightCore_AddInfo(arg0->_insight, ((int *)s4->_data)[k]);
             }
-            FUN_00309750(DAT_00586dd0[0], s1[5]);
+            igResource_UnloadDirectory(DAT_00586dd0[0], s1[5]);
             CLEAR(igDirectoryList, arg0->_dirList)
             s5 = (igObjectList *)((beFileListInfo **)((igInfoList *)arg0->_infoList)->_data)[0]->_fnames;
             if (arg0->_isReadOnetime == 0) {
@@ -431,7 +431,7 @@ extern "C" void Gap__Bec__beFileListInfoManager__vfunc_27(beFileListInfoManager 
                     List_RemoveWordAt(l, 0);
                     ((int *)l->_data)[l->_count] = 0;
                 }
-                FUN_00308e00(DAT_00586dd0[0]);
+                igResource_StopAsyncLoading(DAT_00586dd0[0]);
                 break;
             }
             break;

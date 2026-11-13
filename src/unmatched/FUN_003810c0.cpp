@@ -3,9 +3,9 @@ extern "C" {
 int igInsightCore_AddInfo(...);
 int FUN_002eb010(...);
 int igObject_IsKindOf(...);
-int FUN_003092f0(...);
-int FUN_00309740(...);
-int FUN_00309750(...);
+int igResource_LoadDirectory(...);
+int igResource_IsDirectoryLoaded(...);
+int igResource_UnloadDirectory(...);
 int List_InsertWords(...);
 int Memory_GetAllocatorBySelector(...);
 int ObjectList_AppendRetained(...);
@@ -68,7 +68,7 @@ int FUN_003810c0(beFileListInfoManager *arg0, igStringRefList *arg1) {
     dirs = (igDirectoryList *)arg0->_dirList;
     if (dirs->_count != 0) {
         d = ((igDirectory **)dirs->_data)[0];
-        if (FUN_00309740(DAT_00586dd0[0], d) != 0) {
+        if (igResource_IsDirectoryLoaded(DAT_00586dd0[0], d) != 0) {
             if ((char *)&DAT_0050e6c8[0] == 0) {
                 nm = 0;
             } else {
@@ -134,7 +134,7 @@ int FUN_003810c0(beFileListInfoManager *arg0, igStringRefList *arg1) {
                     off += 4;
                 } while (i < kids->_count);
             }
-            FUN_00309750(DAT_00586dd0[0], d->_name);
+            igResource_UnloadDirectory(DAT_00586dd0[0], d->_name);
             {
                 igDirectoryList *l = (igDirectoryList *)arg0->_dirList;
                 int n = l->_count;
@@ -221,7 +221,7 @@ int FUN_003810c0(beFileListInfoManager *arg0, igStringRefList *arg1) {
             arg0->_onetimeCount = arg0->_onetimeCount - 1;
         }
         StringRef sp168(StringList_CopyRetained(arg1, arg0->_loaded));
-        ObjectList_AppendRetained(arg0->_dirList, FUN_003092f0(DAT_00586dd0[0], sp168.p));
+        ObjectList_AppendRetained(arg0->_dirList, igResource_LoadDirectory(DAT_00586dd0[0], sp168.p));
     }
     return 0;
 }

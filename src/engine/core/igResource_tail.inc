@@ -1,4 +1,4 @@
-void FUN_00308e00(PairOwnerView *arg0) {
+void igResource_StopAsyncLoading(PairOwnerView *arg0) {
     PairCallStatus sp3C, sp38;
     PairCountedObject *q;
     PairSourceView *x;
@@ -30,7 +30,7 @@ void Gap__Core__igResource__vfunc_12(T_308f00 *arg0) {
     S_ref *temp_a0_2;
 
     if (arg0->f28 == 1) {
-        FUN_00308e00((PairOwnerView *)arg0);
+        igResource_StopAsyncLoading((PairOwnerView *)arg0);
     }
     temp_a0 = arg0->f44;
     if (temp_a0 != 0) {
@@ -51,7 +51,7 @@ void Gap__Core__igResource__vfunc_12(T_308f00 *arg0) {
     Gap__Core__igObject__vfunc_10((int)arg0);
 }
 
-void *FUN_003092f0(Item_3092f0 *arg0, int arg1) {
+void *igResource_LoadDirectory(Item_3092f0 *arg0, int arg1) {
     Mem_3092f0 sp5C;
     R4_3092f0 sp54;
     Obj_3092f0 *r;
@@ -135,7 +135,7 @@ P_309640 *FUN_00309640(P_309640 *arg0, P_309640 *arg1) {
     return arg1;
 }
 
-void FUN_00309750(W_309750 *arg0, int arg1) {
+void igResource_UnloadDirectory(W_309750 *arg0, int arg1) {
     igSmartPointer<igObject> found = FUN_003087a0(arg0, arg1);
     S1_309750 *entry = (S1_309750 *)found.p;
     bool current;

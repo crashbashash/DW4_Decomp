@@ -13086,14 +13086,14 @@
 00308860 00022c FUN_00308860
 00308a90 00016c FUN_00308a90
 00308c00 000078 FUN_00308c00
-00308c80 000180 FUN_00308c80
-00308e00 0000f8 FUN_00308e00
+00308c80 000180 igResource_StartAsyncLoading
+00308e00 0000f8 igResource_StopAsyncLoading
 00308f00 0000ac Gap__Core__igResource__vfunc_12 Gap::Core::igResource::vfunc_12
 00308fb0 000338 FUN_00308fb0
-003092f0 00034c FUN_003092f0
+003092f0 00034c igResource_LoadDirectory
 00309640 000100 FUN_00309640
-00309740 000010 FUN_00309740
-00309750 000120 FUN_00309750
+00309740 000010 igResource_IsDirectoryLoaded
+00309750 000120 igResource_UnloadDirectory
 00309870 000100 FUN_00309870
 00309970 0000dc FUN_00309970
 00309a50 000010 FUN_00309a50
@@ -17368,15 +17368,15 @@
 0039fc80 000008 Gap__Bec__beSwitchCtrl__vfunc_31 Gap::Bec::beSwitchCtrl::vfunc_31
 0039fc90 000090 Gap__Bec__beSwitchCtrl__vfunc_33 Gap::Bec::beSwitchCtrl::vfunc_33
 0039fd20 00000c Gap__Bec__beSwitchCtrl__vfunc_20 Gap::Bec::beSwitchCtrl::vfunc_20
-0039fd30 000020 Gap__Bec__beSystem__vfunc_21 Gap::Bec::beSystem::vfunc_21
-0039fd50 000020 Gap__Bec__beSystem__vfunc_22 Gap::Bec::beSystem::vfunc_22
-0039fd70 00027c Gap__Bec__beSystem__vfunc_23 Gap::Bec::beSystem::vfunc_23
-0039fff0 000008 Gap__Bec__beSystem__vfunc_24 Gap::Bec::beSystem::vfunc_24
-003a0000 000008 Gap__Bec__beSystem__vfunc_25 Gap::Bec::beSystem::vfunc_25
-003a0010 00000c Gap__Bec__beSystem__vfunc_26 Gap::Bec::beSystem::vfunc_26
-003a0020 000514 Gap__Bec__beSystem__vfunc_27 Gap::Bec::beSystem::vfunc_27
-003a0540 000020 FUN_003a0540
-003a0560 00000c Gap__Bec__beSystem__vfunc_20 Gap::Bec::beSystem::vfunc_20
+0039fd30 000020 beSystem_AddToScheduler
+0039fd50 000020 beSystem_RemoveFromScheduler
+0039fd70 00027c beSystem_Start
+0039fff0 000008 beSystem_Stop
+003a0000 000008 beSystem_AcceptInfo
+003a0010 00000c beSystem_Reset
+003a0020 000514 beSystem_Update
+003a0540 000020 beSystem_IsRunning
+003a0560 00000c beSystem_GetMetaObject_Virtual
 003a0570 000140 FUN_003a0570
 003a06b0 000504 FUN_003a06b0
 003a0bc0 000058 FUN_003a0bc0

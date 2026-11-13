@@ -138,7 +138,7 @@ Shapes found on one function:
 
 ### The system update, the node-clock timer and the LoadIntf2 update
 
-* `beSystem::vfunc_27` (`0x003a0020`, 1,300 bytes): see
+* The beSystem update (`0x003a0020`, 1,300 bytes): see
   [system update recovery](system-clock.md#complete-besystem-update-recovery).
 * The node-clock timer is in `src/game/bePadData.cpp`.
   A `const` timestamp snapshot, a `const` play-count load before subtraction,

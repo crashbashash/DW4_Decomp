@@ -15,7 +15,7 @@ a running game or a savestate) and **[hypothesis]**.
 
 ## Complete beSystem update recovery
 
-`beSystem::vfunc_27` (`0x003a0020`, **1,300 code bytes**) has
+`beSystem_Update` (`0x003a0020`, **1,300 code bytes**) has
 byte-identical typed C in `src/game/beSystem.cpp`.
 The function samples `igInsightCore._worldTime`, stores the signed wrapped delta
 in `_frameTimeL`, converts it to `_frameTimeF` with the original frame divisor,
@@ -23,15 +23,33 @@ and stores the new `_svWorldTimeL`. Its remaining body owns next-stage directory
 preparation/publication, retained allocator and directory references, interned
 stage strings, directory-info callbacks and the active first-frame flag reset.
 
-The matching profile is the content-pinned alternate compiler with `-O3,p`.
-Four distinct allocator/base variable pairs preserve the original reference
-lifetimes and register assignment. The list preheader uses `0 < count` to
-retain the original `slt`/branch sequence. Object reference counts are word-sized
-and the active/first-frame flags are byte-sized; the clock fields are 64-bit.
-The entire 1,300-byte body, including 75 relocations, matches retail. The full
-matching build has zero mismatches and the relink is byte-identical.
-This source recovery does not close the separate runtime cadence or pause routing
-questions below.
+Object reference counts are word-sized and the active/first-frame flags are
+byte-sized; the clock fields are 64-bit. A pending `_nextStage` first points the
+`igResource` object and data memory pools at the ndmw allocator (for `ndmw.igb`)
+or the default one, starts asynchronous loading (`igResource_StartAsyncLoading`)
+and requests the directory (`igResource_LoadDirectory`). Once
+`igResource_IsDirectoryLoaded` reports the directory no longer pending, each info
+goes to `igInsightCore_AddInfo`, the directory is dropped
+(`igResource_UnloadDirectory`) and loading stops (`igResource_StopAsyncLoading`).
+This does not close the separate runtime cadence or pause routing questions below.
+
+### The other beSystem slots
+
+| Entry | Name | Behaviour |
+|---|---|---|
+| `0x0039fd30` | `beSystem_AddToScheduler` | hands the system to the insight scheduler unless it already holds it |
+| `0x0039fd50` | `beSystem_RemoveFromScheduler` | takes it back out when held |
+| `0x0039fd70` | `beSystem_Start` | manager slot `+0x64`, called by the system start: sets `_isActive`, clears `_isFirstTime`, queues `ndmw.igb` as `_nextStage`, drops `_bootDirectory`, stores 100000 in `g_resourceLoaderStackSize`, clears the resource's `_useMemoryPoolAssignmentsState` and points its object, data and temporary pools at the ndmw (object, data) and temporary allocators |
+| `0x0039fff0` | `beSystem_Stop` | manager slot `+0x68`, called by the system stop: empty |
+| `0x003a0000` | `beSystem_AcceptInfo` | slot the insight core offers each new info to; returns 0, so the system keeps none |
+| `0x003a0010` | `beSystem_Reset` | sets `_isFirstTime` |
+| `0x003a0540` | `beSystem_IsRunning` | `_isActive` and not `_isFirstTime`; the gate the managers test |
+| `0x003a0560` | `beSystem_GetMetaObject_Virtual` | returns the class meta-object |
+
+Open questions: no caller of the `+0x70` slot (`beSystem_Reset`) is identified, so the
+name rests on its body. `g_resourceLoaderStackSize` is the third argument the async
+loader passes when it creates its worker (`0x00304f00`); that it is a stack size is
+inferred from the value, not shown.
 
 ## Ownership and the writer chain
 
@@ -193,7 +211,7 @@ These contracts cover the complete thirteen-body timer group
 `0x00330a50..0x00330e58`, the adjacent system start/stop pair
 `0x002371f0`/`0x00237280`, the adjacent sample/render pair
 `0x00237730`/`0x002377c0`, and the scheduler/manager/gate bodies
-`0x00237ec0`/`0x00378bc0`/`0x003a0540` needed to establish update order.
+`0x00237ec0`/`0x00378bc0`/`0x003a0540` (`beSystem_IsRunning`) needed to establish update order.
 
 ### Timer lifecycle
 
