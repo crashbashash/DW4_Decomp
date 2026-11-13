@@ -22,14 +22,18 @@ extern int sceMpegInit(void);
 extern void *memcpy(void *dst, const void *src, unsigned int size);
 void FUN_00108f88(SfdMpegCtx *mpeg);
 void FUN_00109118(void);
-void FUN_00113f20(void);
-void FUN_00113f78(void);
+void DIntr(void);
+void EIntr(void);
 void FUN_0028b180(void *dst, void *src, int size);
 void FUN_0028b460(void *dst, int value, int size);
-int FUN_002a0bb8();
+int sfd_ReportError();
 int FUN_002abf68(void);
+void sceMpegClearRefBuff(SfdMpegCtx *mpeg);
+
+extern char sfmpv_seqend_codes[16];
 
 void FUN_002a8e50(SfdIpuStream *stream, unsigned int *first, int *firstSize, unsigned int *second, int *secondSize);
+int sfmpvps2_SendIpu(SfdIpuStream *stream);
 void FUN_002a8f40(SfdIpuStream *stream, int bytes);
 int FUN_002a8f90(SfdIpuStream *stream, int count);
 int FUN_002a9210(SfdIpuStream *stream);
@@ -37,7 +41,7 @@ int FUN_002a9310(SfdIpuStream *stream);
 int FUN_002a9628(SfdIpuStream *stream);
 void FUN_002a9680(SfdIpuStream *stream);
 int FUN_002a96e0(SfdPlayer *player);
-int FUN_002a9a30(SfdIpuStream *stream, char *src, int pos);
+int sfmpvps2_PutData(SfdIpuStream *stream, char *src, int pos);
 void FUN_002a9c50(SfdPlayer *player);
 int FUN_002a9dc8(char *buf, int size, char *dst, int cap, char *src, int pos, char *data, int len);
 
@@ -49,19 +53,19 @@ int FUN_002a8b50(SfdIpuStream *stream, int position) {
 }
 
 void FUN_002a8ba0(unsigned int chcr) {
-    FUN_00113f20();
+    DIntr();
     *D_ENABLEW = *D_ENABLER | 0x10000;
     *D3_CHCR = chcr;
     *D_ENABLEW = *D_ENABLER & ~0x10000;
-    FUN_00113f78();
+    EIntr();
 }
 
 void FUN_002a8c08(unsigned int chcr) {
-    FUN_00113f20();
+    DIntr();
     *D_ENABLEW = *D_ENABLER | 0x10000;
     *D4_CHCR = chcr;
     *D_ENABLEW = *D_ENABLER & ~0x10000;
-    FUN_00113f78();
+    EIntr();
 }
 
 void FUN_002a8c70(long long *arg0, long long arg1, long long arg2, long long arg3) {
@@ -70,16 +74,16 @@ void FUN_002a8c70(long long *arg0, long long arg1, long long arg2, long long arg
 
 void FUN_002a8f40(SfdIpuStream *stream, int bytes) {
     WaitSema(stream->sema);
-    stream->f20 += bytes;
+    stream->restBytes += bytes;
     stream->f72 += bytes;
     SignalSema(stream->sema);
 }
 
 int FUN_002a8f90(SfdIpuStream *stream, int count) {
     WaitSema(stream->sema);
-    stream->f20 -= count;
+    stream->restBytes -= count;
     stream->f72 -= count;
-    if (stream->f20 < 0) {
+    if (stream->restBytes < 0) {
         for (;;) {
         }
     }
@@ -118,7 +122,7 @@ int FUN_002a9628(SfdIpuStream *stream) {
 
 void FUN_002a9680(SfdIpuStream *stream) {
     WaitSema(stream->sema);
-    stream->f20 = (stream->f20 + 2051) / 2048 * 2048;
+    stream->restBytes = (stream->restBytes + 2051) / 2048 * 2048;
     SignalSema(stream->sema);
 }
 
@@ -143,8 +147,8 @@ void FUN_002a9738(SfdPlayer *player, int *bytes, int *position, int *start, int 
     SfdIpuStream *stream = &mpv->stream;
     *bytes = stream->bytes;
     *start = stream->f12 << 11;
-    *position = (((stream->f12 + stream->f16) << 11) + stream->f20) % stream->bytes;
-    *end = (stream->f16 << 11) + stream->f20;
+    *position = (((stream->f12 + stream->queuedSct) << 11) + stream->restBytes) % stream->bytes;
+    *end = (stream->queuedSct << 11) + stream->restBytes;
 }
 
 int FUN_002a99b8(SfdPlayer *player) {
@@ -158,11 +162,11 @@ int FUN_002a99c8(void *unused, void *record, SfdPlayer *player) {
     __builtin_memcpy(DAT_00585680, record, 8);
     mpv = player->streams.mpv;
     __builtin_memcpy(&mpv->event, record, 8);
-    FUN_002a0bb8(player, 0xFF000F40);
+    sfd_ReportError(player, 0xFF000F40);
     return 1;
 }
 
-int FUN_002a9a30(SfdIpuStream *stream, char *src, int pos) {
+int sfmpvps2_PutData(SfdIpuStream *stream, char *src, int pos) {
     unsigned int first;
     int firstSize;
     unsigned int second;
@@ -172,6 +176,24 @@ int FUN_002a9a30(SfdIpuStream *stream, char *src, int pos) {
     result = FUN_002a9dc8((char *)UNCACHED(first), firstSize, (char *)UNCACHED(second), secondSize, src, pos, 0, 0);
     FUN_002a8f40(stream, result);
     return result;
+}
+
+int sfmpvps2_ExecIpu(int unused0, int unused1, SfdPlayer *player) {
+    SfdMpv *mpv = player->streams.mpv;
+    SfdIpuCtl *ctl = &mpv->ipu;
+    SfdIpuStream *stream = &mpv->stream;
+    if (ctl->endSent == 1) {
+        sceMpegClearRefBuff(&mpv->mpeg);
+        return 1;
+    }
+    sfmpvps2_SendIpu(stream);
+    if (ctl->endRequest != 0 && stream->queuedSct == 0) {
+        ctl->endSent = 1;
+        sfmpvps2_PutData(stream, sfmpv_seqend_codes, 16);
+        stream->restBytes = stream->bytes;
+        sfmpvps2_SendIpu(stream);
+    }
+    return 1;
 }
 
 int FUN_002a9b78(int unused0, int unused1, SfdPlayer *player) {
@@ -217,7 +239,7 @@ int FUN_002a9ca0(SfdPlayer *player, char *src, int pos) {
         return pos;
     }
     mpv = player->streams.mpv;
-    return FUN_002a9a30(&mpv->stream, src, pos);
+    return sfmpvps2_PutData(&mpv->stream, src, pos);
 }
 
 int FUN_002a9d10(SfdPlayer *player, int count) {

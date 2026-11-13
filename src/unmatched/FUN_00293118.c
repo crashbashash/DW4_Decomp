@@ -1,4 +1,4 @@
-int FUN_00276fb8();
+int LSC_Destroy();
 int FUN_00292958();
 int FUN_002936a8();
 int FUN_00293728();
@@ -6,7 +6,7 @@ int FUN_00295808();
 int FUN_002977f8();
 int FUN_002982e8();
 int FUN_00299eb8();
-int FUN_0029a320();
+int mwsfd_Error();
 int FUN_0029b240();
 int memset();
 extern int DAT_004bd0e0[4];
@@ -29,7 +29,7 @@ void FUN_00293118(void *arg0) {
         }
         temp_a0_2 = *(int *)((char *)(arg0) + 76);
         if (temp_a0_2 != 0) {
-            FUN_00276fb8(temp_a0_2);
+            LSC_Destroy(temp_a0_2);
         }
         temp_a0_3 = *(int *)((char *)(arg0) + 68);
         if (temp_a0_3 != 0) {
@@ -50,7 +50,7 @@ void FUN_00293118(void *arg0) {
         FUN_00299eb8((char *)arg0 + 0x294);
         FUN_002936a8(arg0);
         if (FUN_00293728(arg0) != 0) {
-            FUN_0029a320(&DAT_004f3000[0]);
+            mwsfd_Error(&DAT_004f3000[0]);
         }
         memset(arg0, 0, 0x2B8);
         *(int *)((char *)(arg0) + 4) = 0;

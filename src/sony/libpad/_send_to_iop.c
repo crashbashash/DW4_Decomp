@@ -15,12 +15,12 @@ typedef struct {
     int f20;
     int f24;
 } PadSlot;
-extern PadSlot DAT_0055d290[2][4];
-int FUN_00113f20(void);
-int FUN_00113f78(void);
+extern PadSlot padState[2][4];
+int DIntr(void);
+int EIntr(void);
 void FUN_0010b7d8(void *start, void *end);
 void *memcpy(void *dst, const void *src, unsigned int n);
-PadFrame *FUN_00118178(int port, int slot);
+PadFrame *padGetDmaStr(int port, int slot);
 int scePadSetButtonInfo(int port, int slot, int mode);
 int FUN_00118af8(int port, int slot);
 extern int DAT_0055d480[32];
@@ -36,7 +36,7 @@ typedef struct {
 } DmaData;
 extern int DAT_0048510c;
 extern char DAT_004d2950[];
-int FUN_0010d108(const char *fmt, ...);
+int scePrintf(const char *fmt, ...);
 int FUN_0010b280(int id);
 int FUN_0010b2a0(DmaData *d, int n);
 int _send_to_iop(int port, int slot) {
@@ -45,15 +45,15 @@ int _send_to_iop(int port, int slot) {
     unsigned int dst;
     int id;
     int n;
-    b = (int *)DAT_0055d290[port][slot].f4;
-    if (DAT_0055d290[port][slot].f12 != 0) {
-        if (FUN_0010b280(DAT_0055d290[port][slot].f12) >= 0) {
-            if (DAT_0048510c) FUN_0010d108(DAT_004d2950);
+    b = (int *)padState[port][slot].f4;
+    if (padState[port][slot].f12 != 0) {
+        if (FUN_0010b280(padState[port][slot].f12) >= 0) {
+            if (DAT_0048510c) scePrintf(DAT_004d2950);
             return 0;
         }
     }
     n = b[0] + 1;
-    dst = DAT_0055d290[port][slot].f8 + ((n & 1) << 5);
+    dst = padState[port][slot].f8 + ((n & 1) << 5);
     b[0] = n;
     FUN_0010b7d8(b, (char *)b + 31);
     dma[0].dest = dst;
@@ -62,9 +62,9 @@ int _send_to_iop(int port, int slot) {
     dma[0].attr = 0;
     id = FUN_0010b2a0(dma, 1);
     if (id == 0) {
-        if (DAT_0048510c) FUN_0010d108(DAT_004d2950);
+        if (DAT_0048510c) scePrintf(DAT_004d2950);
         return 0;
     }
-    DAT_0055d290[port][slot].f12 = id;
+    padState[port][slot].f12 = id;
     return 1;
 }

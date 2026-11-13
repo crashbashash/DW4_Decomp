@@ -5,7 +5,7 @@ void FUN_002a0e68();
 int FUN_002abd18();
 void FUN_002ae020();
 int FUN_002afca0();
-extern void *DAT_004beadc[8];
+extern void *sfply_handles[8];
 
 struct Block2a0ae0 {
     char f0[12];
@@ -14,11 +14,11 @@ struct Block2a0ae0 {
 };
 extern struct Block2a0ae0 DAT_004bea88;
 
-/* Shuts the eight handles in DAT_004beadc and the sub-systems down; returns the first error seen
+/* Shuts the eight handles in sfply_handles and the sub-systems down; returns the first error seen
  * from FUN_002afca0, else the last FUN_002abd18 status. */
 int FUN_002a0ae0(void) {
     int i;
-    void **handle = DAT_004beadc;
+    void **handle = sfply_handles;
     int status = 0;
     int error;
 

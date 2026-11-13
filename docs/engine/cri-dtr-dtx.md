@@ -18,5 +18,3 @@ function after DTR's code is the first to use DTX's data.
 
 - The RPC server's thread function at `0x273128` matches only with its ready flag (`0x4a9b18`) `volatile`;
   it has no approval and stays `unapproved`.
-- The delay loop at `0x2736b8` has no source: retail loads `-1` before `0xffff`, and no loop spelling tried
-  gives that order.

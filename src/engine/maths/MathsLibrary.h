@@ -37,7 +37,7 @@ typedef enum Intersection {
     kDisjoint,
     kIntersecting
 } Intersection;
-int FUN_0018ac80(...);
+int igAABox_Transform(...);
 
 int igMetaEnum_Create(...);
 
@@ -603,10 +603,10 @@ int FUN_0018b450(float *a, float *b);
 int FUN_0018b540(void *parg0, struct P *b);
 int igAABox_IntersectPoint(struct B4 *arg0, struct V *arg1);
 
-void FUN_0018b6b0(void);
+void igAABox_ExtendByRay(igAABox *box, igRay *ray);
 
 void FUN_0018b890(struct Box *arg0, float *arg1);
-int thunk_FUN_0018ac80();
+int thunk_igAABox_Transform();
 void FUN_0018b990(float *arg0, float *arg1);
 void FUN_0018b730(igAABox *box, igAABox *other);
 void FUN_0018b7d0(igAABox *box, igSphere *sphere);
@@ -722,9 +722,9 @@ struct igVec3f {
 };
 
 void Vec3f_TransformDirection(float *out, float *v, float *m);
-void FUN_00192fc0(float *out, float *v, float *m);
+void Vec3f_TransformProjective(float *out, float *v, float *m);
 
-int FUN_00192e50(const float *normal);
+int Vec3_GetOctant(const float *normal);
 
 void FUN_0018c820(igPlane *plane, const void *matrix);
 
@@ -771,7 +771,7 @@ int FUN_0018d700(igSphere *sphere, igAABox *box);
 int FUN_0018d7b0(igSphere *sphere, igPlane *plane);
 int FUN_0018d820(igSphere *a, igSphere *b);
 
-void FUN_0018d8b0(void);
+int igSphere_IntersectsRay(igSphere *sphere, igRay *ray);
 
 int FUN_0018db20(igSphere *a, igSphere *b);
 int FUN_0018dcb0(igSphere *sphere, float *point);
@@ -1015,7 +1015,7 @@ extern int g_statusSucceeded[4];
 
 typedef union U6 { float f; struct { unsigned char p0, p1, p2; unsigned char lo : 7; unsigned char sign : 1; } b; } U6;
 extern int g_allocatorFailureStatus[4];
-int FUN_00192030(int, int, float *);
+void Matrix44_Adjugate(float *self, const float *m, float *adjugate);
 
 float FUN_00192290(float *m);
 

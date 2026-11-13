@@ -1,6 +1,6 @@
 /* Reports DAT_004ee5a0 for a null handle or value; otherwise calls ADXT_Stop, then between
- * FUN_0025f2d0 and FUN_0025f2e8 calls FUN_0026b978(handle, value), sets the mode byte to 3 and
- * calls FUN_0026d158(handle, 1). */
+ * ADXCRS_Lock and ADXCRS_Unlock calls FUN_0026b978(handle, value), sets the mode byte to 3 and
+ * calls ADXT_SetLnkSw(handle, 1). */
 /* Handle layout shared by FUN_0026bb38 through FUN_0026ebf8. */
 typedef struct Source_26bbc0 Source_26bbc0;
 typedef struct SourceTable_26bbc0 {
@@ -52,22 +52,22 @@ typedef struct Handle_26bbc0 {
 } Handle_26bbc0;
 
 extern char DAT_004ee5a0[];
-void FUN_002607e8(const char *message);
+void ADXERR_CallErrFunc1(const char *message);
 void ADXT_Stop(void);
-void FUN_0025f2d0(void);
-void FUN_0025f2e8(void);
+void ADXCRS_Lock(void);
+void ADXCRS_Unlock(void);
 void FUN_0026b978(Handle_26bbc0 *handle, int value);
-void FUN_0026d158(Handle_26bbc0 *handle, int value);
+void ADXT_SetLnkSw(Handle_26bbc0 *handle, int value);
 
 void FUN_0026bb38(Handle_26bbc0 *handle, int value) {
     if (handle == 0 || value == 0) {
-        FUN_002607e8(DAT_004ee5a0);
+        ADXERR_CallErrFunc1(DAT_004ee5a0);
         return;
     }
     ADXT_Stop();
-    FUN_0025f2d0();
+    ADXCRS_Lock();
     FUN_0026b978(handle, value);
     handle->mode = 3;
-    FUN_0026d158(handle, 1);
-    FUN_0025f2e8();
+    ADXT_SetLnkSw(handle, 1);
+    ADXCRS_Unlock();
 }

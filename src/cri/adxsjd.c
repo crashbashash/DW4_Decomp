@@ -3,47 +3,51 @@
 #include "dw4/cri/sfdsj.h"
 
 #define ADXSJD_MAX_OBJ 16
+#define ADXSJD_MAX_HDR 0xc800
+#define SWAP16(x) ((unsigned short)(((x) << 8) | ((x) >> 8)))
 
 enum AdxSjdStat {
     ADXSJD_STAT_STOP = 0,
     ADXSJD_STAT_DECHDR = 1,
     ADXSJD_STAT_DECODE = 2,
-    ADXSJD_STAT_DECEND = 3
+    ADXSJD_STAT_DECEND = 3,
+    ADXSJD_STAT_ERROR = 4
 };
 
 typedef struct AdxSjdObj {
     signed char used;
     signed char stat;
     signed char nch;
-    signed char f3;
+    signed char end_on_empty;
     AdxbObj *adxb;
     SfdSj *sji;
     SfdSj *sjo[2];
-    char pad20[8];
+    SfdSjChunk cki;
     SfdSjChunk ck[2];
-    int f44;
-    int f48;
-    int f52;
-    int f56;
-    int f60;
-    int f64;
-    int f68;
-    int f72;
-    int f76;
-    int f80;
-    int f84;
-    char f88[64];
-    int f152;
-    int f156;
+    int dec_nsmpl;
+    int dec_dtlen;
+    int dec_pos;
+    int max_dec_nsmpl;
+    int trap_nsmpl;
+    int trap_cnt;
+    int trap_dtlen;
+    void (*trap_func)(void *context);
+    void *trap_obj;
+    void (*flt_func)(void *context, int ch, char *data, int len);
+    void *flt_obj;
+    char hdr[64];
+    int hdr_len;
+    int lnksw;
     int fill;
     int skip;
 } AdxSjdObj;
 
 void *memset(void *dst, int value, unsigned int size);
+void *memcpy(void *dst, const void *src, unsigned int size);
 
-void FUN_0025f2d0(void);
-void FUN_0025f2e8(void);
-void *FUN_0027c730(SfdSj *sj);
+void ADXCRS_Lock(void);
+void ADXCRS_Unlock(void);
+void *SJRBF_GetBufPtr(SfdSj *sj);
 int FUN_0027c738(SfdSj *sj);
 int FUN_0027c740(SfdSj *sj);
 void FUN_0025b968();
@@ -53,18 +57,21 @@ void FUN_0025bb50();
 void FUN_0025bb80();
 void FUN_0025bc10();
 void FUN_0025d300(void);
+void adxb_SetDefaultFmt(AdxbObj *adxb);
+int ADXB_DecodeHeader(AdxbObj *adxb, char *hdr, int size);
 AdxbObj *FUN_0025d3c0(int nch, void *buf, int bsize, int xsize);
 void FUN_0025d4f8(AdxbObj *adxb);
 void FUN_0025d830(AdxbObj *adxb);
 void FUN_0025da40();
-int FUN_0025da68(AdxbObj *adxb);
+int ADXB_GetPcmBuf(AdxbObj *adxb);
+int ADXB_GetFormat(AdxbObj *adxb);
 int FUN_0025da70(AdxbObj *adxb);
-int FUN_0025da78(AdxbObj *adxb);
+int ADXB_GetNumChan(AdxbObj *adxb);
 int FUN_0025daa8(AdxbObj *adxb);
 int FUN_0025dab0(AdxbObj *adxb);
 int FUN_0025db10(AdxbObj *adxb);
 int FUN_0025db18(AdxbObj *adxb);
-int FUN_0025db20(AdxbObj *adxb);
+int ADXB_GetTotalNumSmpl(AdxbObj *adxb);
 int FUN_0025db28(AdxbObj *adxb);
 int FUN_0025db30(AdxbObj *adxb);
 int FUN_0025db38(AdxbObj *adxb);
@@ -81,19 +88,30 @@ void FUN_0025dbd8(AdxbObj *adxb);
 void FUN_0025dc18();
 void FUN_0025dc80();
 int FUN_0025ddc8(AdxbObj *adxb);
+void ADXB_EntryData(AdxbObj *adxb, char *data, int len);
+void ADXB_Start(AdxbObj *adxb);
 void FUN_0025de68(AdxbObj *adxb);
-int FUN_0025def0(AdxbObj *adxb);
-int FUN_0025def8(AdxbObj *adxb);
+int ADXB_GetDecDtLen(AdxbObj *adxb);
+int ADXB_GetDecNumSmpl(AdxbObj *adxb);
+void ADXB_Reset(AdxbObj *adxb);
 void FUN_0025df00();
 void FUN_0025e4b8(AdxbObj *adxb);
+int ADX_DecodeFooter(char *hdr, int size, short *ofst);
+void ADXERR_CallErrFunc2(const char *code, const char *message);
+void SJ_SplitChunk(SfdSjChunk *ck, int len, SfdSjChunk *head, SfdSjChunk *rest);
 
 extern int adxsjd_use_cnt;
+extern void (*adxsjd_header_hook)(AdxbObj *adxb, int rate);
 extern AdxSjdObj adxsjd_objs[ADXSJD_MAX_OBJ];
+extern char E03010901_ADXB_DecodeHeader[];
+extern char Can_not_decode_this_file_format[];
 
-void FUN_002662f8(AdxSjdObj *sjd);
-void FUN_00266590(AdxSjdObj *sjd, int *a, int *b, int *c);
-void FUN_002666b0(AdxSjdObj *sjd);
-void FUN_00266a18(AdxSjdObj *sjd);
+void adxsjd_decode_prep(AdxSjdObj *sjd);
+int adxsjd_get_wr(AdxSjdObj *sjd, int *offset, int *room, int *until_trap);
+void adxsjd_decexec_start(AdxSjdObj *sjd);
+void adxsjd_decexec_end(AdxSjdObj *sjd);
+int ADXSJD_GetBlkSmpl(AdxSjdObj *sjd);
+int ADXSJD_GetTotalNumSmpl(AdxSjdObj *sjd);
 
 void FUN_00265f28(void)
 {
@@ -118,23 +136,23 @@ void FUN_00265f88(void)
 
 void FUN_00265fb0(AdxSjdObj *sjd)
 {
-    sjd->f60 = -1;
-    sjd->f56 = 0x7FFFFFFF;
+    sjd->trap_nsmpl = -1;
+    sjd->max_dec_nsmpl = 0x7FFFFFFF;
     sjd->skip = 0;
-    sjd->f152 = 0;
-    sjd->f44 = 0;
-    sjd->f48 = 0;
-    sjd->f52 = 0;
-    sjd->f64 = 0;
-    sjd->f68 = 0;
+    sjd->hdr_len = 0;
+    sjd->dec_nsmpl = 0;
+    sjd->dec_dtlen = 0;
+    sjd->dec_pos = 0;
+    sjd->trap_cnt = 0;
+    sjd->trap_dtlen = 0;
     /* matching construct: permuter — the do/while(0) keeps ee-gcc from scheduling the fill store above this byte store */
     do {
-        sjd->f3 = 0;
+        sjd->end_on_empty = 0;
     } while (0);
     sjd->fill = 0;
 }
 
-AdxSjdObj *FUN_00265ff0(SfdSj *sji, int nch, SfdSj **sjo)
+AdxSjdObj *ADXSJD_Create(SfdSj *sji, int nch, SfdSj **sjo)
 {
     AdxSjdObj *sjd;
     SfdSj *sj0;
@@ -154,14 +172,14 @@ AdxSjdObj *FUN_00265ff0(SfdSj *sji, int nch, SfdSj **sjo)
         return 0;
     }
     sjd = &adxsjd_objs[i];
-    buf = FUN_0027c730(sj0);
+    buf = SJRBF_GetBufPtr(sj0);
     bsize = FUN_0027c738(sj0) / 2;
     xsize = FUN_0027c740(sj0) / 2;
     sjd->adxb = FUN_0025d3c0(nch, buf, bsize, bsize + xsize);
     if (sjd->adxb == 0) {
         return 0;
     }
-    FUN_0025da40(sjd->adxb, FUN_00266590, sjd);
+    FUN_0025da40(sjd->adxb, adxsjd_get_wr, sjd);
     sjd->sji = sji;
     sjd->nch = nch;
     for (ch = 0; ch < nch; ch++) {
@@ -169,15 +187,15 @@ AdxSjdObj *FUN_00265ff0(SfdSj *sji, int nch, SfdSj **sjo)
     }
     sjd->stat = ADXSJD_STAT_STOP;
     FUN_00265fb0(sjd);
-    sjd->f72 = 0;
-    sjd->f76 = 0;
-    sjd->f80 = 0;
-    sjd->f84 = 0;
+    sjd->trap_func = 0;
+    sjd->trap_obj = 0;
+    sjd->flt_func = 0;
+    sjd->flt_obj = 0;
     sjd->used = 1;
     return sjd;
 }
 
-void FUN_00266170(AdxSjdObj *sjd)
+void ADXSJD_Destroy(AdxSjdObj *sjd)
 {
     AdxbObj *adxb;
 
@@ -187,13 +205,13 @@ void FUN_00266170(AdxSjdObj *sjd)
             sjd->adxb = 0;
             FUN_0025d4f8(adxb);
         }
-        FUN_0025f2d0();
+        ADXCRS_Lock();
         memset(sjd, 0, sizeof(AdxSjdObj));
-        FUN_0025f2e8();
+        ADXCRS_Unlock();
     }
 }
 
-char FUN_002661d0(AdxSjdObj *sjd)
+char ADXSJD_GetStat(AdxSjdObj *sjd)
 {
     return sjd->stat;
 }
@@ -210,9 +228,9 @@ void FUN_00266218(AdxSjdObj *sjd, int ch, SfdSj *sjo)
     sjd->sjo[ch] = sjo;
 }
 
-void FUN_00266228(AdxSjdObj *sjd, int value)
+void ADXSJD_SetMaxDecSmpl(AdxSjdObj *sjd, int value)
 {
-    sjd->f56 = value;
+    sjd->max_dec_nsmpl = value;
     FUN_0025bb80(sjd->adxb);
     FUN_0025b998(sjd->adxb, value);
 }
@@ -223,33 +241,227 @@ void FUN_00266268(AdxSjdObj *sjd)
     FUN_0025b9b8(sjd->adxb);
 }
 
-void FUN_00266298(AdxSjdObj *sjd)
+void ADXSJD_Start(AdxSjdObj *sjd)
 {
     FUN_00265fb0(sjd);
     sjd->stat = ADXSJD_STAT_DECHDR;
 }
 
-void FUN_002662c8(AdxSjdObj *sjd)
+void ADXSJD_Stop(AdxSjdObj *sjd)
 {
     FUN_0025de68(sjd->adxb);
     sjd->stat = ADXSJD_STAT_STOP;
 }
 
+void adxsjd_decode_prep(AdxSjdObj *sjd)
+{
+    SfdSj *sji;
+    AdxbObj *adxb;
+    SfdSjChunk ck;
+    SfdSjChunk part;
+    int i;
+    int hdrlen;
+    int type;
+
+    sji = sjd->sji;
+    adxb = sjd->adxb;
+    sji->vtbl->getChunk(sji, 1, ADXSJD_MAX_HDR, &ck);
+    for (i = 0; i < ck.len; i++) {
+        if (ck.data[i] != 0) {
+            break;
+        }
+    }
+    SJ_SplitChunk(&ck, i, &part, &ck);
+    sji->vtbl->putChunk(sji, 0, &part);
+    if (ck.len < 16) {
+        sji->vtbl->ungetChunk(sji, 1, &ck);
+        return;
+    }
+    hdrlen = ADXB_DecodeHeader(adxb, ck.data, ck.len);
+    if (hdrlen == 0 || ck.len < hdrlen) {
+        sji->vtbl->ungetChunk(sji, 1, &ck);
+        return;
+    }
+    if (hdrlen < 0) {
+        if ((short)adxb->def_format != 0) {
+            adxb_SetDefaultFmt(adxb);
+            hdrlen = 0;
+        } else {
+            sji->vtbl->ungetChunk(sji, 1, &ck);
+            ADXERR_CallErrFunc2(E03010901_ADXB_DecodeHeader, Can_not_decode_this_file_format);
+            sjd->stat = ADXSJD_STAT_ERROR;
+            return;
+        }
+    }
+    sjd->hdr_len = hdrlen;
+    if (ADXB_GetFormat(adxb) == 4) {
+        sjd->end_on_empty = 1;
+    }
+    if (ADXB_GetFormat(adxb) == 2) {
+        memcpy(sjd->hdr, ck.data, ck.len > 64 ? 64 : ck.len);
+    }
+    type = ADXB_GetFormat(adxb);
+    if (type == 10 || type == 11 || type == 12 || type == 20 || type == 15) {
+        sji->vtbl->ungetChunk(sji, 1, &ck);
+    } else {
+        SJ_SplitChunk(&ck, hdrlen, &ck, &part);
+        sji->vtbl->putChunk(sji, 0, &ck);
+        sji->vtbl->ungetChunk(sji, 1, &part);
+    }
+    if (adxb->mono_to_stereo != 0 && adxsjd_header_hook != 0) {
+        adxsjd_header_hook(adxb, adxb->sfreq);
+    }
+    sjd->stat = ADXSJD_STAT_DECODE;
+}
+
+int adxsjd_get_wr(AdxSjdObj *sjd, int *offset, int *room, int *until_trap)
+{
+    SfdSj *sjo = sjd->sjo[0];
+    int ch;
+    int n;
+
+    for (ch = 0; ch < ADXB_GetNumChan(sjd->adxb); ch++) {
+        sjd->sjo[ch]->vtbl->getChunk(sjd->sjo[ch], 0, 0x4000, &sjd->ck[ch]);
+    }
+    *offset = (sjd->ck[0].data - (char *)SJRBF_GetBufPtr(sjo)) / 2;
+    n = sjd->ck[0].len / 2;
+    *room = n < sjd->max_dec_nsmpl ? n : sjd->max_dec_nsmpl;
+    if (sjd->trap_nsmpl >= 0) {
+        *until_trap = sjd->trap_nsmpl - sjd->trap_cnt;
+    } else {
+        *until_trap = 0x1fffffff;
+    }
+    return ADXB_GetPcmBuf(sjd->adxb);
+}
+
+void adxsjd_decexec_start(AdxSjdObj *sjd)
+{
+    AdxbObj *adxb;
+    SfdSj *sji;
+    SfdSjChunk rest;
+    short ofst;
+    int i;
+    int len;
+    int found;
+
+    adxb = sjd->adxb;
+    sji = sjd->sji;
+    if (sjd->trap_nsmpl >= 0 && sjd->trap_cnt >= sjd->trap_nsmpl && sjd->trap_func != 0) {
+        sjd->trap_func(sjd->trap_obj);
+    }
+    if (sjd->end_on_empty == 1 && sji->vtbl->getNumData(sji, 1) == 0) {
+        sjd->stat = ADXSJD_STAT_DECEND;
+        return;
+    }
+    sji->vtbl->getChunk(sji, 1, 0x7fffffff, &sjd->cki);
+    if (ADXB_GetFormat(adxb) == 0 && sjd->cki.len >= 4
+        && (unsigned short)((*(unsigned short *)sjd->cki.data << 8) | ((unsigned char *)sjd->cki.data)[1]) == 0x8001) {
+        sjd->stat = ADXSJD_STAT_DECEND;
+        if (ADX_DecodeFooter(sjd->cki.data, sjd->cki.len, &ofst) == 0) {
+            if (sjd->cki.len < ofst) {
+                sji->vtbl->ungetChunk(sji, 1, &sjd->cki);
+                return;
+            }
+            SJ_SplitChunk(&sjd->cki, ofst, &sjd->cki, &rest);
+            sji->vtbl->putChunk(sji, 0, &sjd->cki);
+            sji->vtbl->ungetChunk(sji, 1, &rest);
+        }
+        if (sjd->lnksw != 0) {
+            for (;;) {
+                sji->vtbl->getChunk(sji, 1, 0x7fffffff, &sjd->cki);
+                len = sjd->cki.len;
+                if (len == 0) {
+                    break;
+                }
+                for (i = 0; i < sjd->cki.len; i++) {
+                    if (sjd->cki.data[i] != 0) {
+                        break;
+                    }
+                }
+                found = i < len;
+                SJ_SplitChunk(&sjd->cki, i, &sjd->cki, &rest);
+                sji->vtbl->putChunk(sji, 0, &sjd->cki);
+                sji->vtbl->ungetChunk(sji, 1, &rest);
+                if (found) {
+                    break;
+                }
+            }
+        }
+        return;
+    }
+    if (sjd->dec_pos >= ADXSJD_GetTotalNumSmpl(sjd)) {
+        sjd->stat = ADXSJD_STAT_DECEND;
+        sji->vtbl->ungetChunk(sji, 1, &sjd->cki);
+        return;
+    }
+    if (ADXSJD_GetBlkSmpl(sjd) > sjd->sjo[0]->vtbl->getNumData(sjd->sjo[0], 0) / 2) {
+        sji->vtbl->ungetChunk(sji, 1, &sjd->cki);
+        return;
+    }
+    if (ADXB_GetFormat(adxb) == 10) {
+        sji->vtbl->ungetChunk(sji, 1, &sjd->cki);
+    }
+    if (ADXB_GetFormat(adxb) == 15) {
+        sji->vtbl->ungetChunk(sji, 1, &sjd->cki);
+    }
+    ADXB_EntryData(adxb, sjd->cki.data, sjd->cki.len);
+    ADXB_Start(adxb);
+}
+
+void adxsjd_decexec_end(AdxSjdObj *sjd)
+{
+    AdxbObj *adxb;
+    SfdSj *sji;
+    SfdSjChunk ck;
+    SfdSjChunk rest;
+    int total;
+    int bytes;
+    int n;
+    int ch;
+
+    adxb = sjd->adxb;
+    sji = sjd->sji;
+    total = ADXB_GetTotalNumSmpl(adxb);
+    bytes = ADXB_GetDecDtLen(adxb);
+    n = ADXB_GetDecNumSmpl(adxb);
+    total -= sjd->dec_pos;
+    if (n >= total) {
+        n = total;
+    }
+    SJ_SplitChunk(&sjd->cki, bytes, &ck, &rest);
+    sji->vtbl->putChunk(sji, 0, &ck);
+    sji->vtbl->ungetChunk(sji, 1, &rest);
+    for (ch = 0; ch < ADXB_GetNumChan(sjd->adxb); ch++) {
+        SJ_SplitChunk(&sjd->ck[ch], n * 2, &ck, &rest);
+        if (sjd->flt_func != 0) {
+            sjd->flt_func(sjd->flt_obj, ch, ck.data, ck.len);
+        }
+        sjd->sjo[ch]->vtbl->putChunk(sjd->sjo[ch], 1, &ck);
+        sjd->sjo[ch]->vtbl->ungetChunk(sjd->sjo[ch], 0, &rest);
+    }
+    sjd->dec_nsmpl += n;
+    sjd->dec_dtlen += bytes;
+    sjd->dec_pos += n;
+    sjd->trap_cnt += n;
+    sjd->trap_dtlen += bytes;
+    ADXB_Reset(adxb);
+}
+
 void FUN_00266be0(AdxSjdObj *sjd)
 {
     AdxbObj *adxb = sjd->adxb;
-    int total = FUN_0025db20(adxb);
-    int added = FUN_0025def0(adxb);
-    int step = FUN_0025def8(adxb);
-    int remaining = total - sjd->f52;
+    int total = ADXB_GetTotalNumSmpl(adxb);
+    int added = ADXB_GetDecDtLen(adxb);
+    int step = ADXB_GetDecNumSmpl(adxb);
+    int remaining = total - sjd->dec_pos;
 
     if (step < remaining) {
         remaining = step;
     }
     /* matching construct: permuter — the three updates moved from f52, f44, f48 order to this one */
-    sjd->f44 += remaining;
-    sjd->f48 += added;
-    sjd->f52 += remaining;
+    sjd->dec_nsmpl += remaining;
+    sjd->dec_dtlen += added;
+    sjd->dec_pos += remaining;
 }
 
 void FUN_00266c70(AdxSjdObj *sjd)
@@ -259,13 +471,13 @@ void FUN_00266c70(AdxSjdObj *sjd)
 
     adxb = sjd->adxb;
     if (FUN_0025ddc8(adxb) == 0) {
-        FUN_002666b0(sjd);
+        adxsjd_decexec_start(sjd);
     }
     FUN_0025e4b8(adxb);
     if (FUN_0025ddc8(adxb) == 3) {
-        FUN_00266a18(sjd);
+        adxsjd_decexec_end(sjd);
     }
-    type = adxb->f152;
+    type = adxb->format;
     if (type == 10 || type == 20 || type == 11 || type == 12 || type == 15) {
         FUN_00266be0(sjd);
     }
@@ -274,22 +486,22 @@ void FUN_00266c70(AdxSjdObj *sjd)
 void FUN_00266dc8(AdxSjdObj *sjd);
 void FUN_00266f18(AdxSjdObj *sjd);
 
-void FUN_00266d20(AdxSjdObj *sjd)
+void ADXSJD_ExecHndl(AdxSjdObj *sjd)
 {
     if (sjd->fill > 0) {
-        FUN_0025f2d0();
+        ADXCRS_Lock();
         FUN_00266dc8(sjd);
-        FUN_0025f2e8();
+        ADXCRS_Unlock();
     }
     if (sjd->stat == ADXSJD_STAT_DECODE) {
         FUN_00266c70(sjd);
     } else if (sjd->stat == ADXSJD_STAT_DECHDR) {
-        FUN_002662f8(sjd);
+        adxsjd_decode_prep(sjd);
     }
     if (sjd->skip > 0) {
-        FUN_0025f2d0();
+        ADXCRS_Lock();
         FUN_00266f18(sjd);
-        FUN_0025f2e8();
+        ADXCRS_Unlock();
     }
 }
 
@@ -355,19 +567,19 @@ void FUN_00267058(void)
 
     for (i = ADXSJD_MAX_OBJ - 1; i >= 0; i--, sjd++) {
         if (sjd->used == 1) {
-            FUN_00266d20(sjd);
+            ADXSJD_ExecHndl(sjd);
         }
     }
 }
 
 int FUN_002670b8(AdxSjdObj *sjd)
 {
-    return sjd->f48;
+    return sjd->dec_dtlen;
 }
 
-int FUN_002670c0(AdxSjdObj *sjd)
+int ADXSJD_GetDecNumSmpl(AdxSjdObj *sjd)
 {
-    return sjd->f44;
+    return sjd->dec_nsmpl;
 }
 
 void FUN_002670c8(AdxSjdObj *sjd, void (*func)(void *context, int count, int bytes), void *context)
@@ -377,22 +589,22 @@ void FUN_002670c8(AdxSjdObj *sjd, void (*func)(void *context, int count, int byt
 
 void FUN_002670e0(AdxSjdObj *sjd, int value)
 {
-    sjd->f52 = value;
+    sjd->dec_pos = value;
 }
 
 int FUN_002670e8(AdxSjdObj *sjd)
 {
-    return sjd->f52;
+    return sjd->dec_pos;
 }
 
 void FUN_002670f0(AdxSjdObj *sjd, int value)
 {
-    sjd->f156 = value;
+    sjd->lnksw = value;
 }
 
 int FUN_002670f8(AdxSjdObj *sjd)
 {
-    return sjd->f156;
+    return sjd->lnksw;
 }
 
 void FUN_00267100(AdxSjdObj *sjd, const char *text)
@@ -412,79 +624,79 @@ void FUN_00267130(AdxSjdObj *sjd)
 
 int FUN_00267148(AdxSjdObj *sjd, int amount)
 {
-    FUN_0025f2d0();
+    ADXCRS_Lock();
     if (amount > 0) {
         sjd->fill += amount;
     } else {
         sjd->skip -= amount;
     }
-    FUN_0025f2e8();
+    ADXCRS_Unlock();
     return amount;
 }
 
-void FUN_002671a8(AdxSjdObj *sjd, int a, int b)
+void FUN_002671a8(AdxSjdObj *sjd, void (*func)(void *context, int ch, char *data, int len), void *context)
 {
-    sjd->f80 = a;
-    sjd->f84 = b;
+    sjd->flt_func = func;
+    sjd->flt_obj = context;
 }
 
-void FUN_002671b8(AdxSjdObj *sjd, int a, int b)
+void ADXSJD_EntryTrapFunc(AdxSjdObj *sjd, void (*func)(void *context), void *context)
 {
-    sjd->f72 = a;
-    sjd->f76 = b;
+    sjd->trap_func = func;
+    sjd->trap_obj = context;
 }
 
-void FUN_002671c8(AdxSjdObj *sjd, int value)
+void ADXSJD_SetTrapNumSmpl(AdxSjdObj *sjd, int value)
 {
-    sjd->f60 = value;
+    sjd->trap_nsmpl = value;
 }
 
 int FUN_002671d0(AdxSjdObj *sjd)
 {
-    return sjd->f60;
+    return sjd->trap_nsmpl;
 }
 
-void FUN_002671d8(AdxSjdObj *sjd, int value)
+void ADXSJD_SetTrapCnt(AdxSjdObj *sjd, int value)
 {
-    sjd->f64 = value;
+    sjd->trap_cnt = value;
 }
 
 int FUN_002671e0(AdxSjdObj *sjd)
 {
-    return sjd->f64;
+    return sjd->trap_cnt;
 }
 
-void FUN_002671e8(AdxSjdObj *sjd, int value)
+void ADXSJD_SetTrapDtLen(AdxSjdObj *sjd, int value)
 {
-    sjd->f68 = value;
+    sjd->trap_dtlen = value;
 }
 
 int FUN_002671f0(AdxSjdObj *sjd)
 {
-    return sjd->f68;
+    return sjd->trap_dtlen;
 }
 
-int FUN_002671f8(AdxSjdObj *sjd)
+int ADXSJD_GetFormat(AdxSjdObj *sjd)
 {
-    return FUN_0025da68(sjd->adxb);
+    return ADXB_GetFormat(sjd->adxb);
 }
 
-int FUN_00267210(AdxSjdObj *sjd)
+int ADXSJD_GetSfreq(AdxSjdObj *sjd)
 {
     return FUN_0025da70(sjd->adxb);
 }
 
-int FUN_00267228(AdxSjdObj *sjd)
+int ADXSJD_GetNumChan(AdxSjdObj *sjd)
 {
-    return FUN_0025da78(sjd->adxb);
+    return ADXB_GetNumChan(sjd->adxb);
 }
 
-int FUN_00267240(AdxSjdObj *sjd)
+int ADXSJD_GetOutBps(AdxSjdObj *sjd)
 {
     return FUN_0025dab0(sjd->adxb);
 }
 
-int FUN_00267258(AdxSjdObj *sjd)
+int ADXSJD_GetBlkSmpl(AdxSjdObj *sjd)
 {
     return FUN_0025db10(sjd->adxb);
 }
@@ -494,9 +706,9 @@ int FUN_00267270(AdxSjdObj *sjd)
     return FUN_0025db18(sjd->adxb);
 }
 
-int FUN_00267288(AdxSjdObj *sjd)
+int ADXSJD_GetTotalNumSmpl(AdxSjdObj *sjd)
 {
-    return FUN_0025db20(sjd->adxb);
+    return ADXB_GetTotalNumSmpl(sjd->adxb);
 }
 
 int FUN_002672a0(AdxSjdObj *sjd)
@@ -504,7 +716,7 @@ int FUN_002672a0(AdxSjdObj *sjd)
     return FUN_0025db28(sjd->adxb);
 }
 
-int FUN_002672b8(AdxSjdObj *sjd)
+int ADXSJD_GetNumLoop(AdxSjdObj *sjd)
 {
     return FUN_0025db38(sjd->adxb);
 }
@@ -514,7 +726,7 @@ int FUN_002672d0(AdxSjdObj *sjd)
     return FUN_0025db30(sjd->adxb);
 }
 
-int FUN_002672e8(AdxSjdObj *sjd)
+int ADXSJD_GetLpStartPos(AdxSjdObj *sjd)
 {
     return FUN_0025db40(sjd->adxb);
 }
@@ -527,12 +739,12 @@ int FUN_00267300(AdxSjdObj *sjd)
     return FUN_0025db48(sjd->adxb);
 }
 
-int FUN_00267330(AdxSjdObj *sjd)
+int ADXSJD_GetLpEndPos(AdxSjdObj *sjd)
 {
     return FUN_0025db60(sjd->adxb);
 }
 
-int FUN_00267348(AdxSjdObj *sjd)
+int ADXSJD_GetLpEndOfst(AdxSjdObj *sjd)
 {
     return FUN_0025db68(sjd->adxb);
 }
@@ -542,7 +754,7 @@ int FUN_00267360(AdxSjdObj *sjd)
     return FUN_0025db70(sjd->adxb);
 }
 
-int FUN_00267378(AdxSjdObj *sjd)
+int ADXSJD_GetDefOutVol(AdxSjdObj *sjd)
 {
     if (FUN_0025db70(sjd->adxb) > 0 && (sjd->stat == ADXSJD_STAT_DECODE || sjd->stat == ADXSJD_STAT_DECEND)) {
         return FUN_0025db78(sjd->adxb);
@@ -570,7 +782,7 @@ char *FUN_00267438(AdxSjdObj *sjd)
 
 int FUN_00267490(AdxSjdObj *sjd)
 {
-    return sjd->f152;
+    return sjd->hdr_len;
 }
 
 int FUN_00267498(AdxSjdObj *sjd)
@@ -578,9 +790,9 @@ int FUN_00267498(AdxSjdObj *sjd)
     return FUN_0025daa8(sjd->adxb);
 }
 
-char *FUN_002674b0(AdxSjdObj *sjd)
+char *ADXSJD_GetSpsdInfo(AdxSjdObj *sjd)
 {
-    return sjd->f88;
+    return sjd->hdr;
 }
 
 void FUN_002674b8(AdxSjdObj *sjd)

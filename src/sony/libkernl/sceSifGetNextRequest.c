@@ -1,10 +1,10 @@
 typedef struct N { char pad[60]; struct N *next; } N;
 typedef struct { int pad; int ok; int pad2; N *head; } L;
-void FUN_00113f20(void);
-void FUN_00113f78(void);
+void DIntr(void);
+void EIntr(void);
 N *sceSifGetNextRequest(L *l) {
     N *n;
-    FUN_00113f20();
+    DIntr();
     n = l->head;
     if (n == 0) {
         l->ok = 0;
@@ -12,6 +12,6 @@ N *sceSifGetNextRequest(L *l) {
         l->ok = 1;
         l->head = n->next;
     }
-    FUN_00113f78();
+    EIntr();
     return n;
 }

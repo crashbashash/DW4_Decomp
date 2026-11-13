@@ -1,9 +1,9 @@
 
 extern "C" int igObject_GetAllocator(...);
 extern "C" int Memory_AllocateAlignedWithAllocator(...);
-extern "C" int FUN_0026b348(int, int, int);
+extern "C" int ADXT_Create(int, int, int);
 extern "C" int FUN_0026d8b8(int, int, int);
-extern "C" int FUN_0026d5f0(int, short, short);
+extern "C" int ADXT_StartAfs(int, short, short);
 extern "C" int FUN_0026d7a0(int, int);
 extern "C" int ADXT_Stop(int);
 extern "C" void igAdxAudio_Stop(void *arg0);
@@ -47,7 +47,7 @@ extern "C" void igAdx_SetModulePath(int arg0);
 extern "C" void FUN_00332810(int arg0);
 extern "C" int AddIntcHandler(int, int (*)(), int);
 extern "C" int ADXM_ExecVint(void);
-extern "C" int FUN_0010ba28(int);
+extern "C" int EnableIntc(int);
 extern "C" int sceSifInitRpc(int);
 extern "C" int sceSifInitIopHeap(...);
 extern "C" int FUN_00116fb0(int);
@@ -227,7 +227,7 @@ int igAdxAudio_CreateHandle(T_3320d0 *arg0, int a1, int a2, int a3, int a4, int 
         }
     }
     if (arg0->f2c == 0) {
-        arg0->f2c = FUN_0026b348(arg0->f14, arg0->f8, arg0->fc);
+        arg0->f2c = ADXT_Create(arg0->f14, arg0->f8, arg0->fc);
         if (arg0->f2c == 0) {
             return 0;
         }
@@ -254,7 +254,7 @@ int FUN_003321f0(struct S_3321f0 *arg0, int arg1, int arg2, int arg3, int arg4, 
     temp_v0 = FUN_00333440((const char *)arg1);
     if (temp_v0 != -1) {
         temp_v0_2 = ((struct T_3321f0 * *)DAT_00587620)[0]->f16[temp_v0];
-        FUN_0026d5f0(arg0->f44, temp_v0_2->f16, temp_v0_2->f18);
+        ADXT_StartAfs(arg0->f44, temp_v0_2->f16, temp_v0_2->f18);
     } else {
         FUN_0026d7a0(arg0->f44, arg1);
     }
@@ -269,7 +269,7 @@ int igAdxAudio_StartFile(struct A *arg0, int arg1) {
         temp_v0 = FUN_00333440((const char *)arg1);
         if (temp_v0 != -1) {
             e = (struct E *)((struct L *)((void * *)DAT_00587620)[0])->tab[temp_v0];
-            FUN_0026d5f0(arg0->f44, e->s16, e->s18);
+            ADXT_StartAfs(arg0->f44, e->s16, e->s18);
         } else {
             FUN_0026d7a0(arg0->f44, arg1);
         }
@@ -538,7 +538,7 @@ int FUN_00332860(void) {
     }
     FUN_0010b9c0(2);
     DAT_005873c0[0] = AddIntcHandler(2, &ADXM_ExecVint, 0);
-    FUN_0010ba28(2);
+    EnableIntc(2);
     GPR_00554de8 = 1;
     return 1;
 }

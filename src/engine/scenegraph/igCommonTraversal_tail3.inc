@@ -395,7 +395,7 @@ int FUN_001b7d70(void *arg0, void *arg1) {
     if (*(int *)((char *)(arg1) + 20) & 0x20) {
         return 0;
     }
-    FUN_00192fc0(&sp40, &sp30, var_a2);
+    Vec3f_TransformProjective(&sp40, &sp30, var_a2);
     dy = sp40.y;
     dx = sp40.x;
     dz = sp40.z;

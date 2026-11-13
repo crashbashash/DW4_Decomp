@@ -5,8 +5,7 @@ host file system. It keeps one request object, queues a read on it (DVD sectors 
 a seek and read on a host file through the IOP file calls), and a server step advances the request
 until it completes or fails. The source is `src/cri/srd.c`. It builds with Sony EE GCC 2.96 at
 `-O2 -G0` as one whole file (`cri_srd` in `units.tsv`, its rows in `unit-objects.json`;
-[whole-file units](emitted-functions.md#whole-file-units)); the seek wrapper at `0x272780` has no
-source yet and links from the retail image between its members.
+[whole-file units](emitted-functions.md#whole-file-units)).
 
 ## Extent
 

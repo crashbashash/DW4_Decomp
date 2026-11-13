@@ -1,7 +1,7 @@
 extern "C" {
 extern int DAT_004c2368[4];
 int FUN_002dcc50(...);
-int FUN_003081d0(...);
+int igReportNotice(...);
 extern int DAT_004c2310[4];
 extern int DAT_004c2330[4];
 extern int DAT_004c2338[4];
@@ -51,7 +51,7 @@ extern "C" void FUN_0030f040(O30F *arg0, int arg1, int arg2, int arg3) {
                 return;
             }
             if ((DAT_004c2368[0] < 4) && (GPR_00554c34 == 0)) {
-                temp_v0_2 = FUN_003081d0(&DAT_004fb480[0], DAT_004c2310[arg1], arg2, arg3, DAT_005871e0[0], var_s0, var_s1);
+                temp_v0_2 = igReportNotice(&DAT_004fb480[0], DAT_004c2310[arg1], arg2, arg3, DAT_005871e0[0], var_s0, var_s1);
                 if ((temp_v0_2 != 1) && (temp_v0_2 == 2)) {
                     GPR_00554c34 = 1;
                 }

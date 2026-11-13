@@ -1,4 +1,4 @@
-/* Unless mode DAT_004b1dc8 is 1 with no pending count in DAT_004b1dc0, stores the busy flag (+88);
+/* Unless mode ps2rna_setup_voice is 1 with no pending count in ps2rna_nvoice, stores the busy flag (+88);
  * a flag other than 1 then runs FUN_00272fc8 on each of the object's channel handles (count at
  * +82, handles at +16), marking +89 and clearing the busy flag after each. */
 typedef struct Obj_27a818 {
@@ -11,15 +11,15 @@ typedef struct Obj_27a818 {
     signed char done;       /* 0x59 */
 } Obj_27a818;
 
-extern int DAT_004b1dc8;
-extern int DAT_004b1dc0;
+extern int ps2rna_setup_voice;
+extern int ps2rna_nvoice;
 void FUN_00272fc8(int handle);
 
 void FUN_0027a818(Obj_27a818 *obj, int flag) {
     int count = obj->count;
     int i;
 
-    if (DAT_004b1dc8 == 1 && DAT_004b1dc0 <= 0) {
+    if (ps2rna_setup_voice == 1 && ps2rna_nvoice <= 0) {
         return;
     }
     obj->busy = flag;

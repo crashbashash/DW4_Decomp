@@ -63,8 +63,8 @@ int FUN_0027b008();
 int FUN_0027b038();
 int FUN_0027b0f8();
 int FUN_0027b188();
-unsigned int FUN_0027da60(void *handle, int mode);
-void FUN_002659a0(const char *format, ...);
+unsigned int SJRMT_GetNumData(void *handle, int mode);
+void ADXMSG_PrintErr(const char *format, ...);
 
 void FUN_00265a20(void) {
     FUN_00279218();
@@ -82,11 +82,11 @@ unsigned int FUN_00265a78(AdxRna *rna, int index) {
 }
 
 unsigned int FUN_00265ab8(AdxRna *rna, int index) {
-    return FUN_0027da60(rna->tracks->tracks[index]->handle, 1) >> 1;
+    return SJRMT_GetNumData(rna->tracks->tracks[index]->handle, 1) >> 1;
 }
 
 unsigned int FUN_00265af0(AdxRna *rna, int index) {
-    return FUN_0027da60(rna->tracks->tracks[index]->handle, 0) >> 1;
+    return SJRMT_GetNumData(rna->tracks->tracks[index]->handle, 0) >> 1;
 }
 
 void FUN_00265b28(void) {
@@ -138,11 +138,11 @@ void FUN_00265c30(void)
 {
 }
 
-void FUN_00265c38(void) {
+void ADXRNA_Create(void) {
     FUN_0027a2e8();
 }
 
-void FUN_00265c50(void *handle) {
+void ADXRNA_Destroy(void *handle) {
     FUN_0027a8b0(handle, 0);
     FUN_0027a818(handle, 0);
     FUN_0027a688(handle);
@@ -156,11 +156,11 @@ void FUN_00265ca0(void) {
     FUN_0027a7b8();
 }
 
-void FUN_00265cb8(void) {
+void ADXRNA_SetTransSw(void) {
     FUN_0027a818();
 }
 
-void FUN_00265cd0(void) {
+void ADXRNA_SetPlaySw(void) {
     FUN_0027a8b0();
 }
 
@@ -168,7 +168,7 @@ void FUN_00265ce8(void) {
     FUN_0027aa08();
 }
 
-void FUN_00265d00(void) {
+void ADXRNA_GetNumData(void) {
     FUN_0027aa40();
 }
 
@@ -177,7 +177,7 @@ void FUN_00265d18(void) {
 }
 
 void FUN_00265d30(void) {
-    FUN_002659a0(DAT_004ee378);
+    ADXMSG_PrintErr(DAT_004ee378);
     for (;;) {
     }
 }
@@ -190,15 +190,15 @@ void FUN_00265d80(void) {
     FUN_0027ad70();
 }
 
-void FUN_00265d98(void) {
+void ADXRNA_SetNumChan(void) {
     FUN_0027adb8();
 }
 
-void FUN_00265db0(void) {
+void ADXRNA_SetSfreq(void) {
     FUN_0027ade8();
 }
 
-void FUN_00265dc8(void) {
+void ADXRNA_SetOutVol(void) {
     FUN_0027ae18();
 }
 
@@ -210,7 +210,7 @@ void FUN_00265df8(void) {
     FUN_0027aea8();
 }
 
-void FUN_00265e10(void) {
+void ADXRNA_SetBitPerSmpl(void) {
     FUN_0027aed8();
 }
 
@@ -254,7 +254,7 @@ void FUN_00265ee0(void) {
     FUN_0027a910();
 }
 
-void FUN_00265ef8(void)
+void ADXRNA_SetTotalNumSmpl(void)
 {
 }
 
@@ -262,7 +262,7 @@ void FUN_00265f00(void)
 {
 }
 
-int FUN_00265f08(void) {
+int ADXRNA_SetStmHdInfo(void) {
     FUN_0027b188();
     return 0;
 }

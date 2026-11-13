@@ -17,7 +17,7 @@ void Gap__Sg__igEnbayaContextPool__vfunc_13(int arg0) {
     temp_s0 = FUN_003064b0(temp_s2, 7);
     var_s1 = 0;
     while (var_s1 < temp_s0) {
-        if (FUN_00306510(temp_s2, 7, var_s1, &sp5C) != 0) {
+        if (igRegistry_GetKeyName(temp_s2, 7, var_s1, &sp5C) != 0) {
             sp58 = 0;
             var_a2 = *(int *)((char *)(sp5C) + 8);
             var_a2 = (var_a2 == 0) ? ((int *)g_stringObjEmptyText)[0] : var_a2;

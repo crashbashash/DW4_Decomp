@@ -103,7 +103,7 @@ extern "C" int igTraversal_RegisterFunction(int, int, void (*)(void));
 extern "C" int beMeterCtrlNode_ResolveMetaObject(...);
 extern "C" void beMeterCtrlNode_RegisterTraversalFunction(void);
 extern "C" void beModelCtrl_DrawDebugHitBox(void);
-extern "C" int thunk_FUN_0018ac80(...);
+extern "C" int thunk_igAABox_Transform(...);
 extern "C" int Memory_GetAllocatorBySelector(...);
 extern "C" int igObject_GetAllocator(...);
 extern "C" int ObjectList_AppendRetained(...);
@@ -173,7 +173,7 @@ extern "C" int beMessenger_DispatchSelected(...);
 extern "C" int beMessenger_GetMatrix(...);
 extern "C" int beMessenger_GetMatrixCount(...);
 extern "C" int beMessenger_SelectReceivers(...);
-extern "C" int FUN_0018ac80(...);
+extern "C" int igAABox_Transform(...);
 extern "C" bool FUN_0018b050(void *, int);
 extern "C" void FUN_00191670(void *, void *, float);
 extern "C" int beModelCtrl_GetMessageEnum(void);
@@ -198,7 +198,7 @@ extern "C" int DAT_00562640[4];
 
 /* three floats as the retail code copies them: a plain aggregate, without igVec3f's constructors */
 struct Vec3 { float x, y, z; };
-extern "C" igAABox * FUN_0018a660(...);
+extern "C" igAABox * igAABox_CreateInstance(...);
 extern "C" void FUN_0018b990(igAABox *, float *);
 extern "C" int g_propertyNameField[4];
 extern "C" char HIT[];
@@ -527,7 +527,7 @@ igAABoxList *beModelCtrlInfoHitBody_GetAABoxList(beModelCtrlInfoHitBody *body, b
                 int alloc = igObject_GetAllocator(body);
                 int a;
                 if (g_useOwnerAllocator != 0) a = alloc; else a = Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
-                igSmartPointer<igAABox> created(FUN_0018a660(a));
+                igSmartPointer<igAABox> created(igAABox_CreateInstance(a));
                 { igAABox *boxPtr = created.p; igAABoxList *boxList = (igAABoxList *)body->_AABoxList; ObjectList_AppendRetained(boxList, boxPtr); }
             }
         }
@@ -546,7 +546,7 @@ igAABoxList *beModelCtrlInfoHitBody_GetAABoxList(beModelCtrlInfoHitBody *body, b
             float above[3];
             int k;
             for (k = 0; k < 3; k++) { float *a = &dst->_min[k]; float *box = &dst->_max[k]; *a = src->_min[k]; *box = src->_max[k]; }
-            thunk_FUN_0018ac80(dst, matrix);
+            thunk_igAABox_Transform(dst, matrix);
             center[0] = (dst->_min[0]) * 0.5f + (dst->_max[0]) * 0.5f;
             center[1] = (dst->_min[1]) * 0.5f + (dst->_max[1]) * 0.5f;
             center[2] = (dst->_min[2]) * 0.5f + (dst->_max[2]) * 0.5f;
@@ -2357,7 +2357,7 @@ void beModelCtrl_UpdateBound(beModelCtrl *self, beModelCtrlNode2 *node, igAABox 
         } else {
             allocator = Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
         }
-        igSmartPointer<igAABox> created(FUN_0018a660(allocator));
+        igSmartPointer<igAABox> created(igAABox_CreateInstance(allocator));
         bound = created.p;
         if (bound != 0) {
             bound->_refCount++;
@@ -2374,7 +2374,7 @@ void beModelCtrl_UpdateBound(beModelCtrl *self, beModelCtrlNode2 *node, igAABox 
     bound->_max[0] = box->_max[0];
     bound->_max[1] = box->_max[1];
     bound->_max[2] = box->_max[2];
-    FUN_0018ac80(bound, node->_m);
+    igAABox_Transform(bound, node->_m);
 }
 
 #define ALLOCATOR(a, o) int a = igObject_GetAllocator(o); a = g_useOwnerAllocator ? a : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);

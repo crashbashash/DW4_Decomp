@@ -1,6 +1,6 @@
-/* Between FUN_0025f2d0 and FUN_0025f2e8, resets a request with FUN_0026a178 and sets field 92 to
+/* Between ADXCRS_Lock and ADXCRS_Unlock, resets a request with FUN_0026a178 and sets field 92 to
  * 0xFFFFF; returns 1. */
-/* Request layout shared by FUN_00269ff0 through FUN_0026a300. */
+/* Request layout shared by FUN_00269ff0 through ADXSTM_SetEos. */
 typedef struct Request_269ff0 {
     char used;          /* 0x00: entries of DAT_004a7f10 with used == 1 are serviced by FUN_0026a908 */
     char state;         /* 0x01: 2 or 3 after FUN_0026a178 (by sectors), polled for 1 by FUN_0026a2a0 */
@@ -29,14 +29,14 @@ typedef struct Request_269ff0 {
     char pad88[4];
     int f92;            /* 0x5c */
 } Request_269ff0;    /* 0x60 bytes: the DAT_004a7f10 entry stride */
-void FUN_0025f2d0(void);
-void FUN_0025f2e8(void);
+void ADXCRS_Lock(void);
+void ADXCRS_Unlock(void);
 void FUN_0026a178(Request_269ff0 *request);
 
 int FUN_0026a1b0(Request_269ff0 *request) {
-    FUN_0025f2d0();
+    ADXCRS_Lock();
     FUN_0026a178(request);
     request->f92 = 0xFFFFF;
-    FUN_0025f2e8();
+    ADXCRS_Unlock();
     return 1;
 }

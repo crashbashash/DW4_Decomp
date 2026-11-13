@@ -2,8 +2,8 @@ typedef struct { unsigned short len; unsigned short rsvd; unsigned short proto; 
 typedef struct { volatile int id; volatile int len; int b; volatile int busy; Hdr *tx; } D;
 extern D DAT_00555bd0;
 extern char DAT_00555c00[];
-int FUN_00113f20(void);
-int FUN_00113f78(void);
+int DIntr(void);
+int EIntr(void);
 int FUN_0010c0a0(int, char);
 void FUN_0010c0d0(int);
 int sceTtyWrite(char *buf, int n) {
@@ -13,7 +13,7 @@ int sceTtyWrite(char *buf, int n) {
     Hdr *h;
     char *p;
     if (DAT_00555bd0.busy) return -1;
-    s = FUN_00113f20();
+    s = DIntr();
     DAT_00555bd0.busy = 1;
     h = (Hdr *)((unsigned int)DAT_00555c00 | 0x20000000);
     DAT_00555bd0.tx = h;
@@ -33,10 +33,10 @@ int sceTtyWrite(char *buf, int n) {
     h->len = DAT_00555bd0.len;
     if (FUN_0010c0a0(DAT_00555bd0.id, h->dst) < 0) {
         DAT_00555bd0.busy = 0;
-        if (s) FUN_00113f78();
+        if (s) EIntr();
         return -1;
     }
     while (DAT_00555bd0.busy) FUN_0010c0d0(DAT_00555bd0.id);
-    if (s) FUN_00113f78();
+    if (s) EIntr();
     return written;
 }

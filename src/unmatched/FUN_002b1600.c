@@ -1,6 +1,6 @@
-/* Reports error 0xFF000701 for the handle through FUN_002a0bb8. */
-int FUN_002a0bb8();
+/* Reports error 0xFF000701 for the handle through sfd_ReportError. */
+int sfd_ReportError();
 
 void FUN_002b1600(int handle) {
-    FUN_002a0bb8(handle, 0xFF000701);
+    sfd_ReportError(handle, 0xFF000701);
 }

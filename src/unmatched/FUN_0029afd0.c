@@ -1,5 +1,5 @@
-void *FUN_00294a30();
+void *mwsfd_GetWork();
 
 int FUN_0029afd0(void) {
-    return *(int *)((char *)(FUN_00294a30()) + 36);
+    return *(int *)((char *)(mwsfd_GetWork()) + 36);
 }

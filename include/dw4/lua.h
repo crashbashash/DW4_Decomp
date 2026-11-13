@@ -85,12 +85,13 @@ enum LuaKind {
 };
 
 /* An entry of the binding's hash table for T, chained through its link; N is the table's smallest
- * bucket shift. An entry joins its table as it is built. */
+ * bucket shift. An entry joins its table as it is built and leaves it when destroyed. */
 template <class T, int N>
 struct Hashed {
     LuaHashLink link;
 
     Hashed(unsigned int key);
+    ~Hashed();
 };
 
 namespace Gap {
@@ -175,8 +176,8 @@ struct LuaValue {
 
 /* A bound C++ function or method, followed by its argument types. Functions of one name and
  * owner chain as overloads. */
-struct LuaFunction {
-    LuaHashLink link;               /* key: the owner xored with the name's hash */
+struct LuaFunction : Hashed<LuaFunction, 8> {
+    /* link key: the owner xored with the name's hash */
     const char *name;
     LuaType result;
     igLuaGlue::Class *owner;
@@ -191,6 +192,7 @@ struct LuaFunction {
 
     LuaFunction(lua_CFunction function, int id, const char *name, const LuaType &result, igLuaGlue::Class *owner,
                 int isMethod, int argCount);
+    void operator delete(void *memory);
 };
 
 /* A class exposed to Lua: its tags, its class table and the handlers of its tag methods.
@@ -223,6 +225,7 @@ struct igLuaGlue::Class : Hashed<igLuaGlue::Class, 7> {
 
     Class(const char *name, const char *baseName, lua_CFunction gc, lua_CFunction peerConstructor,
           lua_CFunction get, lua_CFunction set, lua_CFunction construct);
+    void operator delete(void *memory);
     virtual void registerFunctions() {}
     virtual void registerConstants() {}
 };
@@ -231,6 +234,18 @@ struct igLuaGlue::Class : Hashed<igLuaGlue::Class, 7> {
 
 /* The pool bound classes are allocated from. */
 extern "C" igObject *g_luaGluePool;
+extern "C" void Memory_FreeBufferWithAllocator(void *buffer, igObject *pool);
+extern "C" void LuaClassTable_Remove(LuaHashLink *link);
+
+/* A class leaves the class table when destroyed, and goes back to the glue's pool. */
+template <>
+inline Hashed<igLuaGlue::Class, 7>::~Hashed() {
+    LuaClassTable_Remove(&link);
+}
+
+inline void igLuaGlue::Class::operator delete(void *memory) {
+    Memory_FreeBufferWithAllocator(memory, g_luaGluePool);
+}
 
 extern "C" {
 /* Pushes a string as a bound function's result. */

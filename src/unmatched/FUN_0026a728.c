@@ -3,7 +3,7 @@
  * (cvFsOpen on the name +80 and offset +84), measures it in sectors (seek to end,
  * cvFsTell) or bytes (cvFsGetFileSize when +84 is 0), clamps the start (+12) and length (+20
  * sectors, +16 bytes) to it and rewinds (FUN_0026a140); a failed open is reported through
- * FUN_00260840 and sets state 4. Finally a running (state 2) and open (+73) stream is serviced
+ * ADXERR_CallErrFunc2 and sets state 4. Finally a running (state 2) and open (+73) stream is serviced
  * with FUN_0026a330. */
 typedef struct Stmf_26a728 {
     signed char pad0;
@@ -30,7 +30,7 @@ void cvFsClose(void *file);
 void FUN_0027e1c0(void);
 void FUN_0027e1d8(void);
 void *cvFsOpen(char *name, int offset, int mode);
-void FUN_00260840(const char *message, char *name);
+void ADXERR_CallErrFunc2(const char *message, char *name);
 int cvFsSeek(void *file, int offset, int origin);
 int cvFsTell(void *file);
 int cvFsGetFileSize(char *name);
@@ -65,7 +65,7 @@ void FUN_0026a728(Stmf_26a728 *stmf) {
             if (stmf->file == 0) {
                 stmf->file = cvFsOpen(stmf->name, stmf->offset, 0);
                 if (stmf->file == 0) {
-                    FUN_00260840(E02110501_adxstmf_stat_exec_can_t_open, stmf->name);
+                    ADXERR_CallErrFunc2(E02110501_adxstmf_stat_exec_can_t_open, stmf->name);
                     stmf->state = 4;
                     stmf->opened = 0;
                     stmf->open_request = 0;

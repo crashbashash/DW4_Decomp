@@ -1,4 +1,4 @@
-/* Stores four values in the work area from FUN_00294a30 (+64..+76). */
+/* Stores four values in the work area from mwsfd_GetWork (+64..+76). */
 typedef struct {
     char pad0[64];
     int f64;
@@ -6,10 +6,10 @@ typedef struct {
     int f72;
     int f76;
 } Work29ab58;
-extern Work29ab58 *FUN_00294a30(void);
+extern Work29ab58 *mwsfd_GetWork(void);
 
 void FUN_0029ab58(int a, int b, int c, int d) {
-    Work29ab58 *work = FUN_00294a30();
+    Work29ab58 *work = mwsfd_GetWork();
 
     work->f64 = a;
     work->f68 = b;

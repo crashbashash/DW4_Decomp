@@ -1,6 +1,6 @@
 /* Rejects a chunk handed to a handle in an unsupported mode (anything but 0 or 1): a non-empty
  * chunk is cleared and the handle's error callback (+28, object +32) gets code -3. A NULL or
- * unused (+4 clear) handle is reported through FUN_0027b2e0. */
+ * unused (+4 clear) handle is reported through SJERR_CallErr. */
 typedef struct Chunk_27b930 {
     char *data;     /* 0x00 */
     int length;     /* 0x04 */
@@ -16,15 +16,15 @@ typedef struct Handle_27b930 {
 
 extern char E2004090243_NULL_pointer_is_specified[];   /* 'E2004090243 : NULL pointer is specified.' */
 extern char E2004090244_Specified_handle_is_invalid[]; /* 'E2004090244 : Specified handle is invalid.' */
-int FUN_0027b2e0(const char *message);
+int SJERR_CallErr(const char *message);
 
 void FUN_0027b930(Handle_27b930 *handle, int mode, Chunk_27b930 *chunk) {
     if (handle == 0) {
-        FUN_0027b2e0(E2004090243_NULL_pointer_is_specified);
+        SJERR_CallErr(E2004090243_NULL_pointer_is_specified);
         return;
     }
     if (handle->used == 0) {
-        FUN_0027b2e0(E2004090244_Specified_handle_is_invalid);
+        SJERR_CallErr(E2004090244_Specified_handle_is_invalid);
         return;
     }
     if (chunk->length > 0 && chunk->data != 0 && mode != 0 && mode != 1) {

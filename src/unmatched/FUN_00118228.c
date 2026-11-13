@@ -15,21 +15,21 @@ typedef struct {
     int f20;
     int f24;
 } PadSlot;
-extern PadSlot DAT_0055d290[2][4];
-int FUN_00113f20(void);
-int FUN_00113f78(void);
+extern PadSlot padState[2][4];
+int DIntr(void);
+int EIntr(void);
 void FUN_0010b7d8(void *start, void *end);
 void *memcpy(void *dst, const void *src, unsigned int n);
-PadFrame *FUN_00118178(int port, int slot);
+PadFrame *padGetDmaStr(int port, int slot);
 int FUN_00118228(int port, int slot, void *dst) {
     PadFrame f;
     PadFrame *q;
     int s;
-    if (DAT_0055d290[port][slot].open == 0) return 0;
-    s = FUN_00113f20();
+    if (padState[port][slot].open == 0) return 0;
+    s = DIntr();
     q = &f;
-    *q = *FUN_00118178(port, slot);
+    *q = *padGetDmaStr(port, slot);
     memcpy(dst, q->data, q->len);
-    if (s == 1) FUN_00113f78();
+    if (s == 1) EIntr();
     return q->len;
 }

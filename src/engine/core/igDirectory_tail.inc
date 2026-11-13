@@ -81,11 +81,11 @@ void FUN_002d7130(Owner_2d7130 *owner) {
     }
     children->count = 0;
     for (i = 0; i < copy->count; i++) {
-        FUN_002d6f50(owner, copy->data[i], 0);
+        igRendererOrderedList_Append(owner, copy->data[i], 0);
     }
 }
 
-void FUN_002d7690(char *arg0) {
+void igRendererOrderedList_Clear(char *arg0) {
     L_2d7690 *l;
     int n;
     int i;

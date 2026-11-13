@@ -30,11 +30,11 @@ extern "C" {
 int FUN_002618c0(char *fname, int dir);   /* open by name */
 int FUN_00261b78(int ptid, int flid);     /* open an AFS partition entry */
 void FUN_00261c88(int adxf);              /* close */
-int FUN_002620d8(int adxf, int nsct, char *buf); /* start a read of nsct sectors */
+int ADXF_ReadNw(int adxf, int nsct, char *buf); /* start a read of nsct sectors */
 int FUN_002623f8(int adxf, int nsct, int type);  /* seek */
 int FUN_00262510(int adxf);               /* tell, in sectors */
 int FUN_00262540(int adxf);               /* file size in sectors */
-int FUN_00262678(int adxf);               /* status */
+int ADXF_GetStat(int adxf);               /* status */
 
 void Gap__Core__igObject__vfunc_01(igObject *self);
 void Gap__Core__igObject__vfunc_07(igObject *self);
@@ -147,7 +147,7 @@ void Gap__igAdxFile__vfunc_08(igAdxFile *self)
 
 int igAdxFile_GetReadStatus(igAdxFile *self)
 {
-    return FUN_00262678(self->_adxf);
+    return ADXF_GetStat(self->_adxf);
 }
 
 int igAdxFile_WaitForReadEnd(igAdxFile *self)
@@ -297,7 +297,7 @@ int Gap__igAdxFile__vfunc_25(igAdxFile *self, char *dest, int size, int count)
             if (FUN_00262540(self->_adxf) < position) {
                 sectors = FUN_00262540(self->_adxf) - FUN_00262510(self->_adxf);
             }
-            FUN_002620d8(self->_adxf, sectors, dest);
+            ADXF_ReadNw(self->_adxf, sectors, dest);
         }
         if (self->_bUseAsync == 0 || self->_bUseAlchemyAsync != 0) {
             igAdxFile_WaitForReadEnd(self);
@@ -312,7 +312,7 @@ int Gap__igAdxFile__vfunc_25(igAdxFile *self, char *dest, int size, int count)
             if (FUN_00262540(self->_adxf) < position) {
                 sectors = FUN_00262540(self->_adxf) - FUN_00262510(self->_adxf);
             }
-            FUN_002620d8(self->_adxf, sectors, (char *)self->_pBuffer);
+            ADXF_ReadNw(self->_adxf, sectors, (char *)self->_pBuffer);
         }
         if (self->_bUseAsync == 0 || self->_bUseAlchemyAsync != 0) {
             igAdxFile_WaitForReadEnd(self);
@@ -346,7 +346,7 @@ int Gap__igAdxFile__vfunc_25(igAdxFile *self, char *dest, int size, int count)
                 if (FUN_00262540(self->_adxf) < position) {
                     sectors = FUN_00262540(self->_adxf) - FUN_00262510(self->_adxf);
                 }
-                FUN_002620d8(self->_adxf, sectors, (char *)self->_pTmpBuffer);
+                ADXF_ReadNw(self->_adxf, sectors, (char *)self->_pTmpBuffer);
             } else {
                 FUN_00304430("igAdxFile::3 read cancel\n");
                 FUN_00304680();

@@ -113,7 +113,128 @@ int *Gap__Core__igCallStackTable__vfunc_25(struct O_2d3b80 *o, int i) {
 int *r; if (i < 0 || i >= o->l->count || o->l->data == 0) { r = 0; } else { r = o->l->data + i; if (i > 0 && r[-1] != 0) r = 0; } return r;
 }
 
+/* igCallStackTable: words = zero-terminated call stacks packed end to end, index = hash slots.
+ * Slot 30 inserts a stack's word offset into the hash index (vfunc_30). */
+struct CallStackWordList {
+    int vtable; int references; int count; int capacity; int *data;
+    void reserveFor(int n) const {
+        int grown = capacity * 2;
+        if (capacity < n) {
+            if (!(grown < count)) {
+                List_Reserve((L_2d6680 *)this, grown, 4);
+            }
+        }
+    }
+};
+class CallStackTableAddView { public:
+    virtual void s0(); virtual void s1(); virtual void s2(); virtual void s3(); virtual void s4(); virtual void s5();
+    virtual void s6(); virtual void s7(); virtual void s8(); virtual void s9(); virtual void s10(); virtual void s11();
+    virtual void s12(); virtual void s13(); virtual void s14(); virtual void s15(); virtual void s16(); virtual void s17();
+    virtual void s18(); virtual void s19(); virtual void s20(); virtual void s21(); virtual void s22(); virtual void s23();
+    virtual void s24(); virtual void s25(); virtual void s26(); virtual void s27();
+    virtual int insert(int *key, int value);
+    int references; int pad8; int pad12; CallStackWordList *words; CallStackIndexList *index;
+};
+/* Number of return addresses before the terminating zero. */
+static inline int callStackDepth(const int *stack) {
+    int depth = 0;
+    while (*stack++ != 0) {
+        depth++;
+    }
+    return depth;
+}
+/* Appends a zero-terminated call stack to the word list and returns its word offset. */
+extern "C" int Gap__Core__igCallStackTable__addCallStack(CallStackTableAddView *self, int *stack) {
+    int length;
+    int offset;
+    length = callStackDepth(stack) + 1;
+    self->words->reserveFor(length + (offset = self->words->count));
+    List_AppendWords((WordList *)self->words, length, (int)stack);
+    if (self->index != 0 && self->index->count != 0) {
+        self->insert(self->words->data + offset, offset);
+    }
+    return offset;
+}
+
 void Gap__Core__igCallStackTable__vfunc_27(O_2d3cd0 *o, int x) { switch (o->v26()) { case -1: o->v24(x); break; default: break; } }
+
+/* igCallStackTable: words = zero-terminated call stacks packed end to end, index = hash slots
+ * holding word offsets (-1 = empty). Slot 29 (vfunc_29) hashes a stack. */
+class CallStackTableFindView { public:
+    virtual void s0(); virtual void s1(); virtual void s2(); virtual void s3(); virtual void s4(); virtual void s5();
+    virtual void s6(); virtual void s7(); virtual void s8(); virtual void s9(); virtual void s10(); virtual void s11();
+    virtual void s12(); virtual void s13(); virtual void s14(); virtual void s15(); virtual void s16(); virtual void s17();
+    virtual void s18(); virtual void s19(); virtual void s20(); virtual void s21(); virtual void s22(); virtual void s23();
+    virtual void s24(); virtual void s25(); virtual void s26();
+    virtual int hash(unsigned int *stack);
+    int references; int pad8; int pad12; CallStackIndexCells *words; CallStackIndexList *index;
+};
+static inline int callStackDepth(const unsigned int *stack) {
+    int depth = 0;
+    while (*stack++ != 0) {
+        depth++;
+    }
+    return depth;
+}
+/* strcmp over zero-terminated return-address arrays. */
+static inline int compareCallStacks(const unsigned int *a, const unsigned int *b) {
+    /* matching construct: manual variant search — (bool) test gives retail's sltu/xori end-of-stack check */
+    while ((bool)*a && *b != 0 && *a == *b) {
+        a++;
+        b++;
+    }
+    if (*a < *b) {
+        return 1;
+    }
+    if (*b < *a) {
+        return -1;
+    }
+    return 0;
+}
+/* Returns the word offset of an identical stored call stack, or -1. */
+extern "C" int Gap__Core__igCallStackTable__findCallStack(CallStackTableFindView *self, unsigned int *stack) {
+    CallStackIndexList *index;
+    int slot;
+    int offset;
+    int n;
+    int tries;
+    unsigned int *s;
+    unsigned int *end;
+
+    index = self->index;
+    if (index != 0 && index->count != 0) {
+        slot = self->hash(stack);
+        tries = 0;
+        n = self->index->count;
+        for (;;) {
+            offset = self->index->data[slot];
+            if (offset == -1) {
+                return -1;
+            }
+            if (compareCallStacks(self->words->data + offset, stack) == 0) {
+                return offset;
+            }
+            slot += 1;
+            if (slot >= n) {
+                slot = 0;
+            }
+            tries += 1;
+            if (tries >= n) {
+                return -1;
+            }
+        }
+    }
+    /* matching construct: manual variant search — end computed before the cursor; colours the base register */
+    end = self->words->data + self->words->count;
+    s = self->words->data;
+    while (s < end) {
+        if (compareCallStacks(stack, s) == 0) {
+            return s - self->words->data;
+        }
+        s += callStackDepth(s) + 1;
+    }
+    return -1;
+}
 
 unsigned int Gap__Core__igCallStackTable__vfunc_29(CallStackTableView *self, unsigned int *stack) {
     CallStackHashTable *t = self->table;

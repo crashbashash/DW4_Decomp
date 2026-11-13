@@ -3,7 +3,7 @@
  * the name. */
 int FUN_002968c0(void *player); /* non-zero for a valid player handle */
 int FUN_00277010(int list, const char *name);
-void FUN_0029a320(const char *format, ...);
+void mwsfd_Error(const char *format, ...);
 
 extern char DAT_004f45f8[]; /* "E1122633: mwPlyEntryFname: handle is invalid." */
 extern char DAT_004f4628[]; /* "E10915B: mwPlyEntryFname: fname is NULL." */
@@ -20,16 +20,16 @@ struct Player00298ec0 {
 
 void FUN_00298ec0(struct Player00298ec0 *player, const char *name) {
     if (FUN_002968c0(player) == 0) {
-        FUN_0029a320(DAT_004f45f8);
+        mwsfd_Error(DAT_004f45f8);
         return;
     }
     if (name == 0) {
-        FUN_0029a320(DAT_004f4628);
+        mwsfd_Error(DAT_004f4628);
         return;
     }
     if (FUN_00277010(player->fileList, name) < 0) {
         player->state = 4;
-        FUN_0029a320(DAT_004f4658, name);
+        mwsfd_Error(DAT_004f4658, name);
         return;
     }
     player->entryCount++;

@@ -3,8 +3,8 @@ typedef struct {
     long long a;
     long long b;
 } TimeQuery;
-int FUN_00113f20(void);
-int FUN_00113f78(void);
+int DIntr(void);
+int EIntr(void);
 void FUN_001064c8(char *d, unsigned int cmd);
 void FUN_00109208(int sema, TimeQuery *q);
 void FUN_00108538(char *d, unsigned int addr, int n) {
@@ -12,12 +12,12 @@ void FUN_00108538(char *d, unsigned int addr, int n) {
     int intr;
 
     while (*(volatile int *)0x10002010 < 0);
-    intr = FUN_00113f20();
+    intr = DIntr();
     *(volatile unsigned int *)0x1000B010 = addr & 0x0FFFFFFF;
     *(volatile unsigned int *)0x1000B020 = n << 6;
     *(volatile unsigned int *)0x1000B000 = 0x100;
     if (intr) {
-        FUN_00113f78();
+        EIntr();
     }
     FUN_001064c8(d, n | 0x70000000);
     q.type = 4;

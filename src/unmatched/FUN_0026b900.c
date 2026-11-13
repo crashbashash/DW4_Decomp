@@ -1,11 +1,11 @@
-extern char DAT_0049c8f8[];
+extern char adxt_obj[];
 int ADXT_Destroy();
 
 void FUN_0026b900(void) {
     int var_s1;
     char *var_s0;
 
-    var_s0 = (char *)DAT_0049c8f8;
+    var_s0 = (char *)adxt_obj;
     var_s1 = 0xF;
     do {
         if (*var_s0 == 1) {

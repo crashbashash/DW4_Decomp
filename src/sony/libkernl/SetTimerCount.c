@@ -22,17 +22,17 @@ typedef struct {
 } KState;
 extern KState DAT_00483508;
 long iGetTimerSystemTime(void);
-int FUN_00113f20(void);
-int FUN_00113f78(void);
+int DIntr(void);
+int EIntr(void);
 long SetTimerCount(int id, long count) {
     Timer *t;
     int s;
     long old;
     long long now;
     t = (Timer *)(((unsigned int)id >> 10) << 6);
-    s = FUN_00113f20();
+    s = DIntr();
     if (id < 0 || (id & 0x3ff) != t->id || DAT_00483508.current == id) {
-        if (s) FUN_00113f78();
+        if (s) EIntr();
         return -1;
     }
     old = t->now;
@@ -44,6 +44,6 @@ long SetTimerCount(int id, long count) {
     } else {
         t->now = count;
     }
-    if (s) FUN_00113f78();
+    if (s) EIntr();
     return old;
 }

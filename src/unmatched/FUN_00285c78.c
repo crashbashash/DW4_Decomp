@@ -23,7 +23,7 @@ char *FUN_00286d28();
 char *FUN_00286958();
 char *FUN_00286010();
 char *FUN_00286838();
-void FUN_0027d470(Chunk *src, int n, Chunk *head, Chunk *tail);
+void SJ_SplitChunk(Chunk *src, int n, Chunk *head, Chunk *tail);
 
 int FUN_00285c78(Mpeg2Ctx *ctx, SjObj *sj) {
     Mpeg2Hdr *h = &ctx->hdr;
@@ -65,7 +65,7 @@ int FUN_00285c78(Mpeg2Ctx *ctx, SjObj *sj) {
             sj->vt->ungetChunk(sj, 1, &ck);
             break;
         }
-        FUN_0027d470(&ck, end - ck.data, &ck, &rest);
+        SJ_SplitChunk(&ck, end - ck.data, &ck, &rest);
         sj->vt->putChunk(sj, 0, &ck);
         sj->vt->ungetChunk(sj, 1, &rest);
         if (h->error_count != 0) {

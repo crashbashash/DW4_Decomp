@@ -1,15 +1,51 @@
+
+extern "C" void Gap__Sg__igShaderData__resize(ShaderDataView *self, int count);
+
+/* Resizes the push, pop and child lists to {count}; child slots past the old count are released and cleared. */
+void Gap__Sg__igShaderData__resize(ShaderDataView *self, int count) {
+    int i;
+    ObjectList_ResizeRetained(self->_attrPushLists, count);
+    ObjectList_ResizeRetained(self->_attrPopLists, count);
+    i = self->_childLists->count;
+    ObjectList_ResizeRetained(self->_childLists, count);
+    /* matching construct: check.py — the loop guard is emitted after the loop and re-enters at the test */
+    goto guard;
+next:
+    {
+        ShaderDataList *children = self->_childLists;
+        ShaderDataEntry *old = children->data[i];
+        if (old != 0) {
+            old->references = old->references - 1;
+            if (((unsigned long long)((long long)old->references << 0x29) >> 0x29) == 0) {
+                igObject_Destroy((void *)old);
+            }
+        }
+        if (children->count != 0 && i >= 0 && i < children->count) {
+            children->data[i] = 0;
+        }
+    }
+    i++;
+test:
+    if (i < count) goto next;
+done:
+    return;
+guard:
+    if (i < count) goto test;
+    goto done;
+}
+
 void Gap__Sg__igShaderData__vfunc_24(void *arg0, int dummy1, int arg2, int arg3) {
     ObjectList_AppendRetained(*(int *)((char *)(arg0) + 8));
     ObjectList_AppendRetained(*(int *)((char *)(arg0) + 12), arg2);
     ObjectList_AppendRetained(*(int *)((char *)(arg0) + 20), arg3);
 }
 
-void Gap__Sg__igShaderData__vfunc_25(struct T_1d84d0 *arg0) {
-    List_1d84d0 *l;
+void Gap__Sg__igShaderData__vfunc_25(struct ShaderDataView *arg0) {
+    ShaderDataList *l;
     int n;
     int i;
-    Obj_1d84d0 *o;
-    l = arg0->l8;
+    ShaderDataEntry *o;
+    l = arg0->_attrPushLists;
     n = l->count;
     for (i = 0; i < n; i++) {
         o = l->data[i];
@@ -28,7 +64,7 @@ void Gap__Sg__igShaderData__vfunc_25(struct T_1d84d0 *arg0) {
         }
     }
     l->count = 0;
-    l = arg0->l12;
+    l = arg0->_attrPopLists;
     n = l->count;
     for (i = 0; i < n; i++) {
         o = l->data[i];
@@ -47,7 +83,7 @@ void Gap__Sg__igShaderData__vfunc_25(struct T_1d84d0 *arg0) {
         }
     }
     l->count = 0;
-    l = arg0->l20;
+    l = arg0->_childLists;
     n = l->count;
     for (i = 0; i < n; i++) {
         o = l->data[i];
@@ -66,14 +102,14 @@ void Gap__Sg__igShaderData__vfunc_25(struct T_1d84d0 *arg0) {
         }
     }
     l->count = 0;
-    o = arg0->o16;
+    o = arg0->_dataPumps;
     if (o != 0) {
         o->references = o->references - 1;
         if (((unsigned long long)((long long)o->references << 0x29) >> 0x29) == 0) {
             igObject_Destroy((void *)o);
         }
     }
-    arg0->o16 = 0;
+    arg0->_dataPumps = 0;
 }
 
 void FUN_001d86f0(struct S_1d86f0 *arg0, int arg1, igObject *arg2) {

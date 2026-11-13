@@ -2,7 +2,7 @@
  * rejects an invalid handle, otherwise resets it, records the source, sets state 2, clears the
  * counters and kicks playback. */
 extern int FUN_002968c0(void *sfd);
-extern void FUN_0029a320(const char *msg);
+extern void mwsfd_Error(const char *msg);
 extern void FUN_00295808(void *sfd);
 extern void FUN_002954c8(void *sfd);
 extern void FUN_00291d30(void *sfd);
@@ -20,7 +20,7 @@ typedef struct {
 
 void FUN_00295788(Sfd295788 *sfd, int sj) {
     if (FUN_002968c0(sfd) == 0) {
-        FUN_0029a320(DAT_004f37e8);
+        mwsfd_Error(DAT_004f37e8);
         return;
     }
     FUN_00295808(sfd);

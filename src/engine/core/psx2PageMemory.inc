@@ -501,7 +501,7 @@ void FUN_0032a600(A600 *arg0, int arg1) {
         spDC->w4 = out.b0;
         FUN_0032a180((char *)spDC, &text_Section_Code[0]);
         FUN_0032a1b0((char *)spDC, &text_Program[0]);
-        List_InsertWords(arg1, FUN_002d6e60((L_2d6e60 *)arg1, &spDC, (Cmp)FUN_0032a260), 1, &spDC);
+        List_InsertWords((igDataList *)arg1, FUN_002d6e60((L_2d6e60 *)arg1, &spDC, (Cmp)FUN_0032a260), 1, &spDC);
     }
     s1 = &out.a1;
     if (*s1 != -1) {
@@ -512,7 +512,7 @@ void FUN_0032a600(A600 *arg0, int arg1) {
         spDC->w4 = out.b1;
         FUN_0032a180((char *)spDC, &text_Section_Data[0]);
         FUN_0032a1b0((char *)spDC, &text_Program[0]);
-        List_InsertWords(arg1, FUN_002d6e60((L_2d6e60 *)arg1, &spDC, (Cmp)FUN_0032a260), 1, &spDC);
+        List_InsertWords((igDataList *)arg1, FUN_002d6e60((L_2d6e60 *)arg1, &spDC, (Cmp)FUN_0032a260), 1, &spDC);
     }
     s1 = &out.a2;
     if (*s1 != -1) {
@@ -523,7 +523,7 @@ void FUN_0032a600(A600 *arg0, int arg1) {
         spDC->w4 = out.b2;
         FUN_0032a180((char *)spDC, &text_Section_Initialized_Data[0]);
         FUN_0032a1b0((char *)spDC, &text_Program[0]);
-        List_InsertWords(arg1, FUN_002d6e60((L_2d6e60 *)arg1, &spDC, (Cmp)FUN_0032a260), 1, &spDC);
+        List_InsertWords((igDataList *)arg1, FUN_002d6e60((L_2d6e60 *)arg1, &spDC, (Cmp)FUN_0032a260), 1, &spDC);
     }
     s1 = &out.a3;
     if (*s1 != -1) {
@@ -534,7 +534,7 @@ void FUN_0032a600(A600 *arg0, int arg1) {
         spDC->w4 = out.b3;
         FUN_0032a180((char *)spDC, &text_Section_Uninitialized_Data[0]);
         FUN_0032a1b0((char *)spDC, &text_Program[0]);
-        List_InsertWords(arg1, FUN_002d6e60((L_2d6e60 *)arg1, &spDC, (Cmp)FUN_0032a260), 1, &spDC);
+        List_InsertWords((igDataList *)arg1, FUN_002d6e60((L_2d6e60 *)arg1, &spDC, (Cmp)FUN_0032a260), 1, &spDC);
     }
     s1 = &out.a4;
     if (*s1 != -1) {
@@ -545,7 +545,7 @@ void FUN_0032a600(A600 *arg0, int arg1) {
         spDC->w4 = out.b4;
         FUN_0032a180((char *)spDC, &text_Section_Stack_Data[0]);
         FUN_0032a1b0((char *)spDC, &text_Program[0]);
-        List_InsertWords(arg1, FUN_002d6e60((L_2d6e60 *)arg1, &spDC, (Cmp)FUN_0032a260), 1, &spDC);
+        List_InsertWords((igDataList *)arg1, FUN_002d6e60((L_2d6e60 *)arg1, &spDC, (Cmp)FUN_0032a260), 1, &spDC);
     }
 }
 
@@ -572,7 +572,7 @@ void FUN_0032a900(A900 *arg0, int arg1) {
             case 2: FUN_0032a180((char *)spDC, &text_Heap_Blocked[0]); FUN_0032a1b0((char *)spDC, &text_SystemHeap[0]); break;
             case 3: FUN_0032a180((char *)spDC, &text_Heap_Allocated[0]); FUN_0032a1b0((char *)spDC, &text_SystemHeap[0]); break;
             }
-            List_InsertWords(arg1, FUN_002d6e60((L_2d6e60 *)arg1, &spDC, (Cmp)FUN_0032a260), 1, &spDC);
+            List_InsertWords((igDataList *)arg1, FUN_002d6e60((L_2d6e60 *)arg1, &spDC, (Cmp)FUN_0032a260), 1, &spDC);
         }
     }
     if (out.b != -1 && out.a != -1) {
@@ -583,7 +583,7 @@ void FUN_0032a900(A900 *arg0, int arg1) {
         spDC->w4 = out.a;
         FUN_0032a180((char *)spDC, &text_Heap_Free_from_top[0]);
         FUN_0032a1b0((char *)spDC, &text_SystemHeap[0]);
-        List_InsertWords(arg1, FUN_002d6e60((L_2d6e60 *)arg1, &spDC, (Cmp)FUN_0032a260), 1, &spDC);
+        List_InsertWords((igDataList *)arg1, FUN_002d6e60((L_2d6e60 *)arg1, &spDC, (Cmp)FUN_0032a260), 1, &spDC);
     }
 }
 

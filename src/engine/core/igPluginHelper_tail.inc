@@ -31,7 +31,7 @@ void FUN_00304b10(void *self) {
         n = ((unsigned int)FUN_003064b0((int)ini, section));
         for (i = 0; i < n; i++) {
             key = 0;
-            if (FUN_00306510(ini, section, i, &key) == 0) {
+            if (!igRegistry_GetKeyName((int)ini, section, i, &key)) {
                 dropKey(key);
             } else {
                 *(IniValueList **)&values = ((IniValueList *)igStringRefList_Create(((int)igObject_GetAllocator((int)self))));

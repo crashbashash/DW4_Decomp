@@ -11,8 +11,8 @@ int igMatrix44f_SetIdentity(...);
 int FUN_001904f0(...);
 int igObjectPool_Grow(...);
 int igAttrStackManager_MarkStackChanged(...);
-int FUN_001b12f0(...);
-int FUN_001b13d0(...);
+int igAttrStackManager_PushOverrideAttr(...);
+int igAttrStackManager_PopOverrideAttr(...);
 int igTraversal_TraverseChildren(...);
 int FUN_001356b0(...);
 int igTimeAttr_CreateInstance(...);
@@ -22,8 +22,8 @@ int beModelCtrl_DrawDebugHitBox(...);
 int beModelCtrl_CallLua(...);
 int Memory_GetAllocatorBySelector(...);
 int igObject_GetAllocator(...);
-int thunk_FUN_0018ac80(...);
-igAABox *FUN_0018a660(int);
+int thunk_igAABox_Transform(...);
+igAABox *igAABox_CreateInstance(int);
 igObject *beBaseInfoDataList_Create(int);
 beModelCtrlInfoRamData *igProperty_FindByName(...);
 beModelCtrlSCSound *beModelCtrlSCSound_Create(...);
@@ -220,14 +220,14 @@ int beModelCtrlNode2_Traverse(beModelCtrlNode2 *node, igCommonTraversal *trav) {
     if (j < overrides(node)->_count) {
         jo = 0;
         do {
-            FUN_001b12f0(mgr, *(int *)(((igAttrList *)node->_overrideAttrList)->_data + jo));
+            igAttrStackManager_PushOverrideAttr(mgr, *(int *)(((igAttrList *)node->_overrideAttrList)->_data + jo));
             j++;
             jo += 4;
         } while (j < ((igAttrList *)node->_overrideAttrList)->_count);
     }
     result = igTraversal_TraverseChildren(trav, node);
     for (l = ((igAttrList *)node->_overrideAttrList)->_count - 1, lo = l * 4; l >= 0; l--) {
-        FUN_001b13d0(mgr, *(int *)(((igAttrList *)node->_overrideAttrList)->_data + lo));
+        igAttrStackManager_PopOverrideAttr(mgr, *(int *)(((igAttrList *)node->_overrideAttrList)->_data + lo));
         lo -= 4;
     }
     {
@@ -287,10 +287,10 @@ int Gap__Bec__beModelCtrlSCHitBox__vfunc_21(beModelCtrlSCHitBox *self, beBaseInf
     } else {
         allocator = Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
     }
-    igSmartPointer<igAABox> hitBox(FUN_0018a660(allocator));
+    igSmartPointer<igAABox> hitBox(igAABox_CreateInstance(allocator));
     goto placeAtOffset;
 toNodeSpace:
-    thunk_FUN_0018ac80(hitBox.p, ((beModelCtrlNode2 *)ramData->_node)->_m);
+    thunk_igAABox_Transform(hitBox.p, ((beModelCtrlNode2 *)ramData->_node)->_m);
     { box = hitBox.p;
     center[0] = box->_min[0] * 0.5f + box->_max[0] * 0.5f;
     center[1] = box->_min[1] * 0.5f + box->_max[1] * 0.5f;

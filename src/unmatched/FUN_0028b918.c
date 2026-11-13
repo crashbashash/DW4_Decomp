@@ -1,7 +1,7 @@
 int FUN_0028ba20();
 int FUN_0028be88();
 int FUN_0028c6f8();
-int FUN_0028d360();
+int MPS_GetStartCodeKind();
 typedef struct {
     char pad0[16];
     int mode;               /* +16 */
@@ -16,7 +16,7 @@ int FUN_0028b918(Rd *rd, int pos, int n, int *len, int *flags) {
     int t;
 
     *len = 0;
-    t = FUN_0028d360(pos);
+    t = MPS_GetStartCodeKind(pos);
     *flags = t;
     ret = 0;
     switch (t) {

@@ -1,11 +1,11 @@
-/* Runs FUN_0028da60 on the object; on failure reports error 0xFF020103 through FUN_0028d890,
+/* Runs mps_CheckHn on the object; on failure reports error 0xFF020103 through mps_ReportError,
  * otherwise sets its first word to 1. */
-extern int FUN_0028da60(int *obj);
-extern int FUN_0028d890(int zero, int code);
+extern int mps_CheckHn(int *obj);
+extern int mps_ReportError(int zero, int code);
 
 int FUN_0028dc28(int *obj) {
-    if (FUN_0028da60(obj) != 0) {
-        return FUN_0028d890(0, 0xFF020103);
+    if (mps_CheckHn(obj) != 0) {
+        return mps_ReportError(0, 0xFF020103);
     }
     *obj = 1;
     return 0;

@@ -15,8 +15,8 @@ struct TagByte { unsigned char lo:7; unsigned char flag:1; };
 class SetFlagsPool;
 
 extern "C" {
-int FUN_002f8870(...);
-int FUN_003081d0(...);
+int Memory_PrintPoolStatistics(...);
+int igReportNotice(...);
 int FUN_00308320(...);
 int memset(...);
 void *memcpy(void *, void *, int);
@@ -68,9 +68,9 @@ extern "C" igResult igArenaMemoryPool_CheckHeap(CheckHeapPool *self) {
     }
     if (arena->blocks == 0 || arena->capacity == 0) {
         if (self->verbosity > 0) {
-            FUN_002f8870(0, self);
+            Memory_PrintPoolStatistics(0, self);
             if (GPR_00554cec == 0) {
-                r = FUN_003081d0(text_igArenaMemoryPool_checkHeap_E69);
+                r = igReportNotice(text_igArenaMemoryPool_checkHeap_E69);
                 if (r == 1) {
                 } else if (r == 2) {
                     GPR_00554cec = 1;
@@ -81,7 +81,7 @@ extern "C" igResult igArenaMemoryPool_CheckHeap(CheckHeapPool *self) {
     }
     if (arena->count < 0 || arena->capacity < 0 || arena->count > arena->capacity) {
         if (self->verbosity >= 3 && GPR_00554cf0 == 0) {
-            r = FUN_003081d0(text_igArenaMemoryPool_checkHeap_E70);
+            r = igReportNotice(text_igArenaMemoryPool_checkHeap_E70);
             if (r == 1) {
             } else if (r == 2) {
                 GPR_00554cf0 = 1;

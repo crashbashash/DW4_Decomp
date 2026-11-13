@@ -15,18 +15,18 @@ typedef struct {
     int errobj;
 } SjMem;
 
-void FUN_0027b2e0(const char *message);
+void SJERR_CallErr(const char *message);
 extern char DAT_004f1bf8[];
 extern char DAT_004f1c28[];
 
 void FUN_0027b810(SjMem *sj, int line, int nbyte, CriSjChunk *ck)
 {
     if (sj == 0) {
-        FUN_0027b2e0(DAT_004f1bf8);
+        SJERR_CallErr(DAT_004f1bf8);
         return;
     }
     if (sj->used == 0) {
-        FUN_0027b2e0(DAT_004f1c28);
+        SJERR_CallErr(DAT_004f1c28);
         return;
     }
     if (line == 0) {

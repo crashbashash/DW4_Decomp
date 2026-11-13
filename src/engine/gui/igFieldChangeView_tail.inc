@@ -17,7 +17,7 @@ void FUN_004551a0(struct S_4551a0 *arg0, int arg1, int arg2) {
     sp[0] = 2;
     sp[2] = b;
     sp[1] = (int)arg0;
-    FUN_004578c0((S_4578c0 *)arg0->a, (S_4578c0 *)sp);
+    igModel_NotifyViews((S_4578c0 *)arg0->a, (S_4578c0 *)sp);
 }
 
 void FUN_004551f0(void *arg0v, int arg1, void *arg2v) {

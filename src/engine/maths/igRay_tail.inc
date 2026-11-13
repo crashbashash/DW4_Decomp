@@ -42,8 +42,8 @@ void FUN_0018d360(igRay *ray, const void *matrix) {
     end.x = ray->_pos[0] + len * ray->_dir[0];
     end.y = ray->_pos[1] + len * ray->_dir[1];
     end.z = ray->_pos[2] + len * ray->_dir[2];
-    FUN_00192fc0(ray->_pos, ray->_pos, (float *)matrix);
-    FUN_00192fc0((float *)&end, (float *)&end, (float *)matrix);
+    Vec3f_TransformProjective(ray->_pos, ray->_pos, (float *)matrix);
+    Vec3f_TransformProjective((float *)&end, (float *)&end, (float *)matrix);
     end.subtractInto(ray->_dir, ray->_pos);
     len = lengthOf(ray->_dir);
     scale = 1.0f / len;

@@ -23,6 +23,29 @@ LuaType::LuaType(const char **names, unsigned int code) {
     *this = LuaType(code & 0x1f, (code >> 5) & 3, (code >> 7) & 7, names[(code >> 10) & 0x3fffff]);
 }
 
+/* An object names its class (an object of a class the binding does not know keeps only the
+ * meta-object), a pointer to a number or an enum names its array class and an enum its name. */
+LuaType::LuaType(int kind, int indirection, int flags, const char *className)
+    : kind(kind), indirection(indirection) {
+    byValue = (flags & 1) != 0;
+    flag3 = (flags & 2) != 0;
+    flag4 = (flags & 4) != 0;
+    writeBack = 0;
+    metaObject = 0;
+    luaClass = 0;
+    if (this->indirection < 2) {
+        if (this->kind == LUA_KIND_OBJECT) {
+            luaClass = LuaClass_FindByName(className);
+            metaObject = luaClass ? luaClass->metaObject : igObjectSystem_FindMetaByNameDefault(className);
+        } else if (this->indirection == 1 && (LuaType_IsNumber(this) || this->kind == LUA_KIND_ENUM)) {
+            luaClass = g_luaArrayClasses[this->kind];
+        } else if (this->kind == LUA_KIND_ENUM) {
+            metaObject = (igMetaObject *)className;
+        }
+    }
+    LuaType_UpdateAccepted(this);
+}
+
 void LuaType_UpdateAccepted(LuaType *type) {
     int accepts;
 
@@ -267,6 +290,135 @@ LuaType LuaType_FromMetaField(LuaMetaFieldView *field) {
     return result;
 }
 
+/* Converts the Lua value at `index` to `type`. A table stands for its peer object, or for an
+ * argument passed by reference in its slot 1 (given a default when empty), which the call then
+ * writes back. A callback is named by a global function's name. */
+LuaValue::LuaValue(LuaType *type, lua_State *L, int index) {
+    int luaType;
+    bool inTable;
+    const char *name;
+    LuaFunction *callback;
+
+    this->type = *type;
+    data.ll = 0;
+    if (index < 0) {
+        index = lua_gettop(L) + index + 1;
+    }
+    luaType = lua_type(L, index);
+    inTable = false;
+    if (!(this->type.acceptedTypes & (1 << luaType))) goto wrongType;
+    if (luaType == LUA_TTABLE) {
+        if ((data.object = LuaBinding_GetPeer(L, index)) != 0) {
+            if (!this->type.isObjectPointer) goto wrongType;
+            return;
+        }
+        if (!this->type.acceptsTable) goto wrongType;
+        if (lua_getn(L, index) == 0) {
+            if (this->type.indirection > 0 || this->type.kind == LUA_KIND_STRING) {
+                lua_pushnil(L);
+            } else {
+                lua_pushnumber(L, 0);
+            }
+            lua_rawseti(L, index, 1);
+        }
+        lua_rawgeti(L, index, 1);
+        index = -1;
+        luaType = lua_type(L, index);
+        if (luaType == LUA_TTABLE) {
+            if ((data.object = LuaBinding_GetPeer(L, index)) != 0) {
+                if (!this->type.isObjectPointer) goto wrongType;
+                return;
+            }
+        } else if (!((1 << luaType) & this->type.acceptedTypes)) {
+            goto wrongType;
+        }
+        inTable = true;
+        this->type.writeBack = 1;
+    }
+    switch (luaType) {
+    case LUA_TNUMBER: {
+        double number = lua_tonumber(L, index);
+        switch (this->type.kind) {
+        case LUA_KIND_CHAR:
+            data.c = number;
+            break;
+        case LUA_KIND_UCHAR:
+            data.uc = number;
+            break;
+        case LUA_KIND_SHORT:
+            data.s = number;
+            break;
+        case LUA_KIND_USHORT:
+            data.us = number;
+            break;
+        case LUA_KIND_INT:
+        case LUA_KIND_ENUM:
+            data.i = number;
+            break;
+        case LUA_KIND_UINT:
+            data.ui = number;
+            break;
+        case LUA_KIND_LONG:
+            data.ll = number;
+            break;
+        case LUA_KIND_ULONG:
+            data.ull = number;
+            break;
+        case LUA_KIND_BOOL:
+            data.b = number != 0;
+            break;
+        case LUA_KIND_FLOAT:
+            data.f = number;
+            break;
+        case LUA_KIND_DOUBLE:
+            data.d = number;
+            break;
+        default:
+            goto wrongType;
+        }
+        break;
+    }
+    case LUA_TSTRING:
+        switch (this->type.kind) {
+        case LUA_KIND_STRING:
+            data.string = (char *)lua_tostring(L, index);
+            break;
+        case LUA_KIND_CHARS:
+            if (lua_type(L, index) == LUA_TNIL) {
+                data.object = 0;
+            } else {
+                name = lua_tostring(L, index);
+                callback = g_luaGlobalClass ? LuaFunctionTable_Find(g_luaGlobalClass, name, true) : 0;
+                if (callback != 0) {
+                    data.object = (void *)callback->function;
+                } else {
+                    LuaError("Could not find callback with name %s\n", name);
+                }
+            }
+            break;
+        default:
+            goto wrongType;
+        }
+        break;
+    case LUA_TUSERDATA:
+        data.object = lua_touserdata(L, index);
+        break;
+    case LUA_TNIL:
+        data.object = 0;
+        break;
+    case LUA_TTABLE:
+    case LUA_TFUNCTION:
+    default:
+        goto wrongType;
+    }
+    if (inTable) {
+        lua_settop(L, -2);
+    }
+    return;
+wrongType:
+    LuaError("Type has wrong value!");
+}
+
 /* Stores a value back into slot 1 of the table at `table` (an argument passed in a table). */
 void LuaValue_StoreInTable(LuaValue *value, lua_State *L, int table) {
     if (value->type.indirection > 0) {
@@ -313,4 +465,145 @@ void LuaValue_StoreInTable(LuaValue *value, lua_State *L, int table) {
         }
     }
     lua_rawseti(L, table, 1);
+}
+
+/* A reflected field of an object, by its offset. */
+template <class T>
+static inline T &LuaObject_Field(LuaBoundObject *object, igMetaField *field) {
+    return *(T *)((char *)object + field->_offset);
+}
+
+/* Pushes the value of a reflected field of `object`; false when the binding cannot convert its
+ * type. An embedded object is pushed as a reference to it. */
+bool LuaObject_PushField(lua_State *L, igMetaField *field, LuaBoundObject *object) {
+    LuaType type = LuaType_FromMetaField((LuaMetaFieldView *)field);
+
+    if (type.kind != LUA_KIND_NONE) {
+        switch (type.kind) {
+        case LUA_KIND_CHAR:
+            lua_pushnumber(L, LuaObject_Field<signed char>(object, field));
+            break;
+        case LUA_KIND_UCHAR:
+            lua_pushnumber(L, LuaObject_Field<unsigned char>(object, field));
+            break;
+        case LUA_KIND_INT:
+            lua_pushnumber(L, LuaObject_Field<int>(object, field));
+            break;
+        case LUA_KIND_UINT:
+            lua_pushnumber(L, LuaObject_Field<unsigned int>(object, field));
+            break;
+        case LUA_KIND_SHORT:
+            lua_pushnumber(L, LuaObject_Field<short>(object, field));
+            break;
+        case LUA_KIND_USHORT:
+            lua_pushnumber(L, LuaObject_Field<unsigned short>(object, field));
+            break;
+        case LUA_KIND_LONG:
+            lua_pushnumber(L, LuaObject_Field<long long>(object, field));
+            break;
+        case LUA_KIND_ULONG:
+            lua_pushnumber(L, LuaObject_Field<unsigned long long>(object, field));
+            break;
+        case LUA_KIND_ENUM:
+            lua_pushnumber(L, LuaObject_Field<int>(object, field));
+            break;
+        case LUA_KIND_FLOAT:
+            lua_pushnumber(L, LuaObject_Field<float>(object, field));
+            break;
+        case LUA_KIND_DOUBLE:
+            lua_pushnumber(L, LuaObject_Field<double>(object, field));
+            break;
+        case LUA_KIND_STRING:
+            LuaType_PushString(&type, L, LuaObject_Field<char *>(object, field));
+            break;
+        case LUA_KIND_BOOL:
+            lua_pushnumber(L, LuaObject_Field<bool>(object, field));
+            break;
+        case LUA_KIND_OBJECT:
+            if (type.metaObject != 0) {
+                LuaType_PushPointer(&type, L, LUA_PUSH_KEEP_TAG, LuaObject_Field<LuaBoundObject *>(object, field));
+            } else if (type.indirection == 1) {
+                LuaType_PushPointer(&type, L, LUA_PUSH_KEEP_TAG, LuaObject_Field<LuaBoundObject *>(object, field));
+            } else {
+                LuaType_PushObject(&type, L, &LuaObject_Field<LuaBoundObject>(object, field), LUA_PUSH_KEEP_TAG);
+            }
+            break;
+        default:
+            goto unsupported;
+        }
+        return true;
+    }
+unsupported:
+    LuaError("Unsupported field \"%s\" on class \"%s\"", field->_fieldName, object->getMeta()->_name);
+    return false;
+}
+
+/* Sets a reflected field of `object` from the Lua value at `index`; false when the binding cannot
+ * convert its type. */
+int LuaObject_StoreField(lua_State *L, igMetaField *field, LuaBoundObject *object, int index) {
+    LuaType type = LuaType_FromMetaField((LuaMetaFieldView *)field);
+
+    if (type.kind != LUA_KIND_NONE) {
+        LuaValue value(&type, L, index);
+
+        switch (type.kind) {
+        case LUA_KIND_CHAR:
+            LuaObject_Field<signed char>(object, field) = value.data.c;
+            break;
+        case LUA_KIND_UCHAR:
+            LuaObject_Field<unsigned char>(object, field) = value.data.uc;
+            break;
+        case LUA_KIND_INT:
+            LuaObject_Field<int>(object, field) = value.data.i;
+            break;
+        case LUA_KIND_UINT:
+            LuaObject_Field<unsigned int>(object, field) = value.data.ui;
+            break;
+        case LUA_KIND_SHORT:
+            LuaObject_Field<short>(object, field) = value.data.s;
+            break;
+        case LUA_KIND_USHORT:
+            LuaObject_Field<unsigned short>(object, field) = value.data.us;
+            break;
+        case LUA_KIND_LONG:
+            LuaObject_Field<long long>(object, field) = value.data.ll;
+            break;
+        case LUA_KIND_ULONG:
+            LuaObject_Field<unsigned long long>(object, field) = value.data.ull;
+            break;
+        case LUA_KIND_FLOAT:
+            LuaObject_Field<float>(object, field) = value.data.f;
+            break;
+        case LUA_KIND_DOUBLE:
+            LuaObject_Field<double>(object, field) = value.data.d;
+            break;
+        case LUA_KIND_STRING: {
+            char *text = internString(value.data.string);
+            igStringMetaField_AssignRetainedToken(field, object, &text);
+            releaseString(text);
+            break;
+        }
+        case LUA_KIND_BOOL:
+            LuaObject_Field<bool>(object, field) = value.data.b;
+            break;
+        case LUA_KIND_ENUM:
+            LuaObject_Field<int>(object, field) = value.data.i;
+            break;
+        case LUA_KIND_OBJECT:
+            if (type.metaObject != 0) {
+                igObjectRefMetaField_Assign(field, object, value.data.object);
+            } else if (type.indirection == 1) {
+                LuaObject_Field<LuaBoundObject *>(object, field) = (LuaBoundObject *)value.data.object;
+            } else {
+                LuaObject_Field<void *>(object, field) = value.data.object;
+            }
+            break;
+        default:
+            goto unsupported;
+        }
+        return true;
+    }
+unsupported:
+    LuaError("Unsupported field \"%s\" on class \"%s\"", field->_fieldName, object->getMeta()->_name);
+    return false;
 }

@@ -484,7 +484,7 @@ igResult_2e3a10 FUN_002e5110(IgbFixReader *self) {
         if (o == o->replacement(self)) {
             IgbFixPlain *list = self->sorted;
             IgbFixRetain keep(o);
-            List_InsertWords(list, FUN_00142bb0(list, &keep), 1, &keep);
+            List_InsertWords((igDataList *)list, FUN_00142bb0(list, &keep), 1, &keep);
         }
         {
             int word;

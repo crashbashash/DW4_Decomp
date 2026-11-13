@@ -14,7 +14,7 @@ typedef struct {
     int errobj;
 } SjNode;
 
-void FUN_0027b2e0(const char *message);
+void SJERR_CallErr(const char *message);
 extern char DAT_004f1fc8[];
 extern char DAT_004f1ff8[];
 
@@ -25,11 +25,11 @@ int FUN_0027c648(SjNode *sj, int line, int nbyte, int *out)
     int n;
 
     if (sj == 0) {
-        FUN_0027b2e0(DAT_004f1fc8);
+        SJERR_CallErr(DAT_004f1fc8);
         return 0;
     }
     if (sj->used == 0) {
-        FUN_0027b2e0(DAT_004f1ff8);
+        SJERR_CallErr(DAT_004f1ff8);
         return 0;
     }
     if (line == 0) {

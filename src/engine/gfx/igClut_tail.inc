@@ -32,10 +32,29 @@ int Gap__Gfx__igClut__vfunc_24(void **arg0) {
     return temp_s0;
 }
 
+unsigned char igClut_UnscaleAlpha(igClut *clut)
+{
+    unsigned int i;
+    unsigned char *entry;
+    unsigned char unscaled = 0;
+
+    if (clut->_fmt == 7) {
+        entry = (unsigned char *)clut->_pData;
+        for (i = 0; i < clut->_numEntries; i++) {
+            entry[3] = (entry[3] & 0x80) ? ~(entry[3] & 0xFF) << 1 : entry[3] << 1;
+            entry += 4;
+        }
+        unscaled = 1;
+    } else if (clut->_fmt != 5) {
+        return 0;
+    }
+    return unscaled;
+}
+
 int FUN_00154b40(Obj_154b40 *arg0) {
     int temp_v0;
     if (arg0->f29 != 0) {
-        temp_v0 = FUN_00154ad0();
+        temp_v0 = igClut_UnscaleAlpha((igClut *)arg0);
         arg0->f29 = 0U;
         return temp_v0 & 0xFF;
     }

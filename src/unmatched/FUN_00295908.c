@@ -17,7 +17,7 @@ int FUN_00294d70(void);
 int FUN_00294ef8(int code);
 int FUN_002968c0(PausePly *ply);
 void FUN_00299bc0(void *sub, int sw);
-void FUN_0029a320(const char *format, ...);
+void mwsfd_Error(const char *format, ...);
 void FUN_0029b018(PausePly *ply);
 int FUN_002aa340(int handle, int sw);
 int FUN_002adba0(int handle, int id, int *value);
@@ -29,7 +29,7 @@ void FUN_00295908(PausePly *ply, int sw)
     int r;
 
     if (FUN_002968c0(ply) == 0) {
-        FUN_0029a320(DAT_004f3860);
+        mwsfd_Error(DAT_004f3860);
         return;
     }
     handle = ply->handle;
@@ -44,7 +44,7 @@ void FUN_00295908(PausePly *ply, int sw)
     }
     if (FUN_002aa340(handle, sw) != 0) {
         FUN_00294ef8(-310);
-        FUN_0029a320(DAT_004f3888, sw == 1 ? DAT_004f38b0 : DAT_004f38b8);
+        mwsfd_Error(DAT_004f3888, sw == 1 ? DAT_004f38b0 : DAT_004f38b8);
     }
     FUN_00299bc0(ply->sub, sw);
     ply->paused = sw;

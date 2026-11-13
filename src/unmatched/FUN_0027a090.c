@@ -5,12 +5,12 @@ struct Object27a {
     signed char flag86;   /* +86 */
 };
 
-extern int DAT_004b1dc0;
-extern int DAT_004b1dc8;
+extern int ps2rna_nvoice;
+extern int ps2rna_setup_voice;
 extern int DAT_004b1e08;
 
 void FUN_0027a090(struct Object27a *object, int value) {
-    if ((DAT_004b1dc8 != 1 || DAT_004b1dc0 > 0) && DAT_004b1e08 == 2 && object->flag86 != value) {
+    if ((ps2rna_setup_voice != 1 || ps2rna_nvoice > 0) && DAT_004b1e08 == 2 && object->flag86 != value) {
         object->flag86 = value;
     }
 }

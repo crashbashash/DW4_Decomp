@@ -1,6 +1,6 @@
 extern unsigned long DAT_00483508;
-int FUN_00113f20(void);
-int FUN_00113f78(void);
+int DIntr(void);
+int EIntr(void);
 static inline unsigned long readHardCounter(void) {
     unsigned long now;
     __asm__(
@@ -28,8 +28,8 @@ static inline unsigned long readHardCounter(void) {
 }
 unsigned long GetTimerSystemTime(void) {
     unsigned long now;
-    int interrupts = FUN_00113f20();
+    int interrupts = DIntr();
     now = readHardCounter();
-    if (interrupts) FUN_00113f78();
+    if (interrupts) EIntr();
     return now;
 }

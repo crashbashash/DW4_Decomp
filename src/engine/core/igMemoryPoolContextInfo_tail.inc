@@ -1614,7 +1614,7 @@ void igMemoryPoolContextInfo_DeleteAllocation(void *allocation) {
     free(allocation);
 }
 
-void FUN_002f8870(int arg0, int arg1) {
+void Memory_PrintPoolStatistics(int arg0, int arg1) {
     if (arg1 != 0) {
         ((DW4VC_260_2 *)(((void ** *)DAT_00586fd0)[0]))->vX((int)(arg0), (int)(arg1));
         return;

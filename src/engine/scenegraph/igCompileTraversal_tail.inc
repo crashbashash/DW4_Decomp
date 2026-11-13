@@ -91,7 +91,7 @@ void FUN_001bb550(int arg0, int arg1) {
         igTraversal_RegisterFunction((struct L_1e06c0 *)arg0, (struct X_1e06c0 *)arg1, (void *)FUN_001bc1e0);
         return;
     }
-    if (FUN_002fe290(arg1, DAT_005618f8[0]) != 0) {
+    if (FUN_002fe290(arg1, g_unlinkedTransformClass_metaObject[0]) != 0) {
         igTraversal_RegisterFunction((struct L_1e06c0 *)arg0, (struct X_1e06c0 *)arg1, (void *)FUN_001bc0e0);
         return;
     }
@@ -317,6 +317,110 @@ void FUN_001bd170(struct A_1bd170 *arg0, struct B_1bd170 *arg1) {
     }
 }
 
+class CompiledAttr {
+public:
+    virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3(); virtual void v4();
+    virtual void v5(); virtual void v6(); virtual void v7(); virtual void v8(); virtual void v9();
+    virtual void v10(); virtual void v11(); virtual void v12(); virtual void v13(); virtual void v14();
+    virtual void v15(); virtual void v16(); virtual void v17(); virtual void v18();
+    virtual CompiledAttr *createCopy(int deep);
+    virtual G *getMeta();
+    unsigned int _refCount;
+};
+typedef igTDataList<CompiledAttr *> CompiledAttrList;
+template <class T> static inline void setValueAt(igTDataList<T> *list, int i, T value) {
+    if (list->_count != 0 && i >= 0 && i < list->_count) {
+        list->_data[i] = value;
+    }
+}
+template <class T> static inline void appendValue(igTDataList<T> *list, T value) {
+    int n = list->_count;
+    if (n < list->_capacity) {
+        list->_count = list->count() + 1;
+    } else {
+        List_Resize(list, n + 1, 4);
+    }
+    list->_data[n] = value;
+}
+struct CompiledAttrSet {
+    char _pad0[32];
+    CompiledAttrList *_attributes;
+    char _pad36[16];
+    int _defaultAttrMode;
+    igTDataList<CompiledAttr **> *_attrSlots;
+    CompiledAttrList *_slotAttrs;
+    CompiledAttrList *_sharedAttrs;
+};
+static inline void appendSlotAttr(CompiledAttrSet *set, CompiledAttr *attr) {
+    int n;
+    CompiledAttrList *slotAttrs = set->_slotAttrs;
+    n = slotAttrs->_count;
+    if (n < slotAttrs->_capacity) {
+        slotAttrs->_count = slotAttrs->count() + 1;
+    } else {
+        List_Resize(slotAttrs, n + 1, 4);
+    }
+    slotAttrs->_data[n] = attr;
+}
+extern "C" int igObject_IsAlikeShallow(CompiledAttr *a, CompiledAttr *b);
+extern "C" void igAttrSet_ShareCompiledAttrs(CompiledAttrSet *set, igCompileTraversal *traversal);
+
+void igAttrSet_ShareCompiledAttrs(CompiledAttrSet *set, igCompileTraversal *traversal) {
+    CompiledAttrList *defaults = (CompiledAttrList *)((igAttrStackManager *)traversal->_attrStack)->_attrDefaults;
+    int i;
+    int count;
+    if (set->_defaultAttrMode == 0) {
+        i = 0;
+        while (i < set->_attributes->_count) {
+            if (defaults->find(set->_attributes->_data[i]) != -1) {
+                List_RemoveWordAt(set->_attributes, i);
+            } else {
+                i++;
+            }
+        }
+        return;
+    }
+    i = set->_attributes->_count;
+    if (set->_defaultAttrMode == 1) {
+        while (i != 0) {
+            i--;
+            if (defaults->find(set->_attributes->_data[i]) == -1) {
+                break;
+            }
+            List_RemoveWordAt(set->_attributes, set->_attributes->_count - 1);
+        }
+    }
+    count = set->_attributes->_count;
+    for (i = 0; i < count; i++) {
+        CompiledAttr *attr = set->_attributes->_data[i];
+        if (defaults->find(attr) != -1) {
+            bool unique;
+            appendValue(set->_attrSlots, &set->_attributes->_data[i]);
+            int shared = set->_sharedAttrs->_count;
+            unique = true;
+            if (g_igLightStateAttr_metaObject[0] != attr->getMeta()) {
+                int j;
+                for (j = 0; j < shared; j++) {
+                    CompiledAttr *other = set->_sharedAttrs->_data[j];
+                    if (igObject_IsAlikeShallow(other, attr) != 0) {
+                        setValueAt(set->_attributes, i, other);
+                        appendSlotAttr(set, other);
+                        unique = false;
+                        break;
+                    }
+                }
+            }
+            if (unique) {
+                CompiledAttr *copy = attr->createCopy(0);
+                setValueAt(set->_attributes, i, copy);
+                appendSlotAttr(set, copy);
+                ObjectList_AppendRetained(set->_sharedAttrs, copy);
+                releaseRefCounted(copy);
+            }
+        }
+    }
+}
+
 void FUN_001bd6b0(Links *links, Shape *shape) {
     int index;
     igTDataList<int> *indices;
@@ -365,10 +469,10 @@ int FUN_001bd890(RemapOwner *o, RemapContext *ctx) {
             unsigned int n;
             int j;
             ObjectList_AppendRetained(o->_entries, e);
-            release_1bd890(e);
+            releaseRefCounted(e);
             t = ((RemapTable *)FUN_00139990(((void *)igObject_GetAllocator(ctx))));
             setTarget(e, t);
-            release_1bd890(t);
+            releaseRefCounted(t);
             e->_slot = &o->_items->_data[i];
             setAt(o->_items, i, (RemapObject *)t);
             n = item->_indices->_count;
@@ -383,7 +487,7 @@ int FUN_001bd890(RemapOwner *o, RemapContext *ctx) {
         } else if (igObject_IsKindOf(item, g_igBlendMatrixPaletteAttr_metaObject[0]) != 0) {
             RemapEntry *e = ((RemapEntry *)FUN_001a2c70((int)(((void *)igObject_GetAllocator(ctx)))));
             ObjectList_AppendRetained(o->_entries, e);
-            release_1bd890(e);
+            releaseRefCounted(e);
             setTarget(e, item);
             e->_slot = &o->_items->_data[i];
             setAt(o->_items, i, item);

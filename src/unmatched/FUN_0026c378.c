@@ -1,5 +1,5 @@
 /* Returns -1 (after reporting DAT_004ee6a0) for a null handle, 0 while its state is below 2, else
- * FUN_00267228 of its stream. */
+ * ADXSJD_GetNumChan of its stream. */
 /* Handle layout shared by FUN_0026bb38 through FUN_0026ebf8. */
 typedef struct Source_26bbc0 Source_26bbc0;
 typedef struct SourceTable_26bbc0 {
@@ -51,16 +51,16 @@ typedef struct Handle_26bbc0 {
 } Handle_26bbc0;
 
 extern char DAT_004ee6a0[];
-void FUN_002607e8(const char *message);
-int FUN_00267228(void *stream);
+void ADXERR_CallErrFunc1(const char *message);
+int ADXSJD_GetNumChan(void *stream);
 
 int FUN_0026c378(Handle_26bbc0 *handle) {
     if (handle == 0) {
-        FUN_002607e8(DAT_004ee6a0);
+        ADXERR_CallErrFunc1(DAT_004ee6a0);
         return -1;
     }
     if (handle->state >= 2) {
-        return FUN_00267228(handle->stream);
+        return ADXSJD_GetNumChan(handle->stream);
     }
     return 0;
 }

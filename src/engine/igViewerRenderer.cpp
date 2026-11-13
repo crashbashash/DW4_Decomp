@@ -54,7 +54,7 @@ void Gap__Viewer__igViewerRenderer__vfunc_23(Q2 *arg0);
 int __dl__FPv(...);
 void *FUN_001007e0(...);
 void *FUN_00238110(...);
-int FUN_004578c0(...);
+int igModel_NotifyViews(...);
 int StringChunk_ReleaseHeader(...);
 
 extern int DAT_0058ca58[4];
@@ -362,6 +362,54 @@ void Gap__Viewer__igViewerRenderer__vfunc_23(Q2 *arg0) {
     FUN_00460330((LightOwner *)arg0);
 }
 
+/* One entry of the viewer's disable features: whether the feature may be switched off, its
+ * igDisableExt feature id and its name ("texture", "lighting", "blending", ...). */
+struct DisableFeature { bool supported; int feature; const char *name; };
+extern DisableFeature g_viewerDisableFeatures[];
+
+/* The matrix setter of the visual context; IG_GFX_MATRIX_PROJECTION is the type the projection
+ * matrix attribute passes. */
+enum { IG_GFX_MATRIX_PROJECTION = 0 };
+class VisualContextView { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void d32(); virtual void d33(); virtual void d34(); virtual void d35(); virtual void d36(); virtual void d37(); virtual void d38(); virtual void d39(); virtual void d40(); virtual void d41(); virtual void d42(); virtual void d43(); virtual void d44(); virtual void d45(); virtual void d46(); virtual void d47(); virtual void d48(); virtual void d49(); virtual void d50(); virtual void d51(); virtual void d52(); virtual void d53(); virtual void d54(); virtual void d55(); virtual void d56(); virtual void d57(); virtual void d58(); virtual void d59(); virtual void d60(); virtual void d61(); virtual void d62(); virtual void d63(); virtual void d64(); virtual void d65(); virtual void d66(); virtual void d67(); virtual void d68(); virtual void d69(); virtual void d70(); virtual void d71(); virtual void d72(); virtual void d73(); virtual void d74(); virtual void d75(); virtual void d76(); virtual void d77(); virtual void d78(); virtual void d79(); virtual void d80(); virtual void d81(); virtual void d82(); virtual void d83(); virtual void d84(); virtual void d85(); virtual void d86(); virtual void d87(); virtual void d88(); virtual void d89(); virtual void d90(); virtual void d91(); virtual void d92(); virtual void d93(); virtual void d94(); virtual void d95(); virtual void d96(); virtual void d97(); virtual void d98(); virtual void d99(); virtual void d100(); virtual void d101(); virtual void d102(); virtual void d103(); virtual void d104(); virtual void d105(); virtual void d106(); virtual void d107(); virtual void d108(); virtual void d109(); virtual void d110(); virtual void d111(); virtual void d112(); virtual void d113(); virtual void d114(); virtual void d115(); virtual void d116(); virtual void d117(); virtual void d118(); virtual void d119(); virtual void d120(); virtual void d121(); virtual void d122(); virtual void d123(); virtual void d124(); virtual void d125(); virtual void d126(); virtual void d127(); virtual void d128(); virtual void d129(); virtual void d130(); virtual void d131(); virtual void d132(); virtual void d133(); virtual void d134(); virtual void d135(); virtual void d136(); virtual void d137(); virtual void d138(); virtual void d139(); virtual void d140(); virtual void d141(); virtual void d142(); virtual void d143(); virtual void d144(); virtual void d145(); virtual void d146(); virtual void d147(); virtual void d148(); virtual void d149(); virtual void d150(); virtual void d151(); virtual void d152(); virtual void d153(); virtual void d154(); virtual void d155(); virtual void d156(); virtual void d157(); virtual void d158(); virtual void d159(); virtual void d160(); virtual void d161(); virtual void d162(); virtual void d163(); virtual void d164(); virtual void d165(); virtual void d166(); virtual void d167(); virtual void d168(); virtual void d169(); virtual void d170(); virtual void d171(); virtual void d172(); virtual void d173(); virtual void d174(); virtual void d175(); virtual void d176(); virtual void d177(); virtual void d178(); virtual void d179(); virtual void d180(); virtual void d181(); virtual void d182(); virtual void d183(); virtual void d184(); virtual void d185(); virtual void d186(); virtual void d187(); virtual void d188(); virtual void d189(); virtual void d190(); virtual void d191(); virtual void d192(); virtual void d193(); virtual void d194(); virtual void d195(); virtual void d196(); virtual void d197(); virtual void d198(); virtual void d199(); virtual void d200(); virtual int setMatrix(int type, int matrix); };
+class DisableExtView { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void setDisabled(int feature, bool disabled); };
+class RenderOutputView { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void render(int visualContext); };
+
+static inline bool BitMask_IsSet(igBitMask *mask, unsigned int bit) {
+    return (((unsigned int *)mask->_data)[bit >> 5] & (1 << (bit & 0x1F))) != 0;
+}
+
+/* Draws the light and scene outputs with the projection matrix of the parameters, switching off
+ * for the duration of the draw the features the parameters' disable mask selects. */
+void Gap__Viewer__igViewerRenderer__Render(igViewerRenderer *self) {
+    igViewerParameters *params = (igViewerParameters *)self->_parameters;
+    int count = ((igBitMask *)params->_disables)->_bitCount;
+    int i;
+    int j;
+    ((VisualContextView *)self->_visualContext)->setMatrix(IG_GFX_MATRIX_PROJECTION, (int)&params->_projectionMatrix[0]);
+    if (self->_disableExtension != 0) {
+        for (i = 0; i < count; i++) {
+            if (g_viewerDisableFeatures[i].supported
+                && BitMask_IsSet((igBitMask *)((igViewerParameters *)self->_parameters)->_disables, i)) {
+                ((DisableExtView *)self->_disableExtension)->setDisabled(g_viewerDisableFeatures[i].feature, true);
+            }
+        }
+    }
+    if (self->_lightOutput != 0) {
+        ((RenderOutputView *)self->_lightOutput)->render(self->_visualContext);
+    }
+    if (self->_sceneOutput != 0) {
+        ((RenderOutputView *)self->_sceneOutput)->render(self->_visualContext);
+    }
+    if (self->_disableExtension != 0) {
+        for (j = 0; j < count; j++) {
+            if (g_viewerDisableFeatures[j].supported
+                && BitMask_IsSet((igBitMask *)((igViewerParameters *)self->_parameters)->_disables, j)) {
+                ((DisableExtView *)self->_disableExtension)->setDisabled(g_viewerDisableFeatures[j].feature, false);
+            }
+        }
+    }
+}
+
 void FUN_0045f930(Arg *arg0) {
     int sp0[3];
     int sp1[3];
@@ -403,7 +451,7 @@ void FUN_0045f930(Arg *arg0) {
     sp0[1] = 0;
     sp0[0] = 2;
     sp0[2] = DAT_0058ca58[0];
-    FUN_004578c0(arg0->f12, sp0);
+    igModel_NotifyViews(arg0->f12, sp0);
     if (s0->f93 != 0) {
         /* matching construct: respell sweep under C++ — the C int-valued !s1 */
         v = (bool)s1 ^ 1;
@@ -415,72 +463,72 @@ void FUN_0045f930(Arg *arg0) {
     sp1[1] = 0;
     sp1[0] = 2;
     sp1[2] = DAT_0058ca60[0];
-    FUN_004578c0(arg0->f12, sp1);
+    igModel_NotifyViews(arg0->f12, sp1);
     arg0->f12->f194 = (s1i & s0->f96) != 0;
     sp2[1] = 0;
     sp2[0] = 2;
     sp2[2] = DAT_0058ca68[0];
-    FUN_004578c0(arg0->f12, sp2);
+    igModel_NotifyViews(arg0->f12, sp2);
     arg0->f12->f195 = s0->f168;
     sp3[1] = 0;
     sp3[0] = 2;
     sp3[2] = DAT_0058ca70[0];
-    FUN_004578c0(arg0->f12, sp3);
+    igModel_NotifyViews(arg0->f12, sp3);
     arg0->f12->f196 = s0->f169;
     sp4[1] = 0;
     sp4[0] = 2;
     sp4[2] = DAT_0058ca78[0];
-    FUN_004578c0(arg0->f12, sp4);
+    igModel_NotifyViews(arg0->f12, sp4);
     arg0->f12->f197 = s0->f166;
     sp5[1] = 0;
     sp5[0] = 2;
     sp5[2] = DAT_0058ca80[0];
-    FUN_004578c0(arg0->f12, sp5);
+    igModel_NotifyViews(arg0->f12, sp5);
     arg0->f12->f198 = s0->f167;
     sp6[1] = 0;
     sp6[0] = 2;
     sp6[2] = DAT_0058ca88[0];
-    FUN_004578c0(arg0->f12, sp6);
+    igModel_NotifyViews(arg0->f12, sp6);
     arg0->f12->f199 = s0->f164;
     sp7[1] = 0;
     sp7[0] = 2;
     sp7[2] = DAT_0058ca90[0];
-    FUN_004578c0(arg0->f12, sp7);
+    igModel_NotifyViews(arg0->f12, sp7);
     arg0->f12->f200 = s0->f165;
     sp8[1] = 0;
     sp8[0] = 2;
     sp8[2] = DAT_0058ca98[0];
-    FUN_004578c0(arg0->f12, sp8);
+    igModel_NotifyViews(arg0->f12, sp8);
     arg0->f12->f201 = 0;
     sp9[1] = 0;
     sp9[0] = 2;
     sp9[2] = DAT_0058caa0[0];
-    FUN_004578c0(arg0->f12, sp9);
+    igModel_NotifyViews(arg0->f12, sp9);
     arg0->f12->f202 = 0;
     sp10[1] = 0;
     sp10[0] = 2;
     sp10[2] = DAT_0058caa8[0];
-    FUN_004578c0(arg0->f12, sp10);
+    igModel_NotifyViews(arg0->f12, sp10);
     arg0->f12->f184 = 0;
     sp11[1] = 0;
     sp11[0] = 2;
     sp11[2] = DAT_0058ca38[0];
-    FUN_004578c0(arg0->f12, sp11);
+    igModel_NotifyViews(arg0->f12, sp11);
     arg0->f12->f185 = 1;
     sp12[1] = 0;
     sp12[0] = 2;
     sp12[2] = DAT_0058ca40[0];
-    FUN_004578c0(arg0->f12, sp12);
+    igModel_NotifyViews(arg0->f12, sp12);
     arg0->f12->f186 = 0;
     sp13[1] = 0;
     sp13[0] = 2;
     sp13[2] = DAT_0058ca48[0];
-    FUN_004578c0(arg0->f12, sp13);
+    igModel_NotifyViews(arg0->f12, sp13);
     arg0->f12->f188 = 0;
     sp14[1] = 0;
     sp14[0] = 2;
     sp14[2] = DAT_0058ca50[0];
-    FUN_004578c0(arg0->f12, sp14);
+    igModel_NotifyViews(arg0->f12, sp14);
     if (DAT_0056dc50[0] != 0) {
         if (--DAT_0056dc50[0]->f232 <= 0) {
             f = DAT_0056dc50[0];
@@ -633,7 +681,7 @@ void FUN_004601e0(igViewerRenderer *arg0) {
     sp[0] = 2;
     sp[1] = 0;
     sp[2] = DAT_0058ca20[0];
-    FUN_004578c0((void *)arg0->_parameters, sp);
+    igModel_NotifyViews((void *)arg0->_parameters, sp);
 }
 
 void FUN_00460260(CameraLink *arg0) {

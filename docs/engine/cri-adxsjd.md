@@ -26,11 +26,9 @@ skip count, each under the ADX critical section.
 
 ## Open questions
 
-- No string names the functions; they keep their address names until callers outside the file can be
-  renamed with them (the Sofdec glue and ADXT call most of them).
+- No string names the functions: their names follow CRI's `ADXSJD_` / `adxsjd_` spelling from what each does
+  and from ADXB's matching calls, and stay best guesses.
 - Five ADXB getters are declared returning `int` here: their wrappers tail-call them, which a `short` or
   `char` return would not allow; `src/cri/adxb.c` defines them with the narrower types.
-- Four functions have no source and link from the retail image: the header step at `0x2662f8`, the decode
-  callback at `0x266590`, and the two decode steps at `0x2666b0` and `0x266a18`.
 - The reset (`0x265fb0`) and the counter update (`0x266be0`) keep the permuter-found constructs their drafts
   matched with.

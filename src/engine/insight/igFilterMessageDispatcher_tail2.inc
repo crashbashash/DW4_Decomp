@@ -38,7 +38,7 @@ void Gap__Insight__igFilterMessageDispatcher__vfunc_27(S_arg0 *arg0, void *arg1,
     }
 }
 
-void FUN_00237e80(igMessageDispatcherOwnerView *self)
+void igMessenger_AddReceiver(igMessageDispatcherOwnerView *self)
 {
     self->f8->vfunc_21();
 }

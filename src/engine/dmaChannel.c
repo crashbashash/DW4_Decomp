@@ -29,8 +29,8 @@ struct SemaParam {
     unsigned int option;
 };
 
-int FUN_00113f20();
-int FUN_00113f78();
+int DIntr();
+int EIntr();
 int p2GrowPool();
 int p2ResetDmaPacketCount(int);
 int p2FlushVif1Packet(void);
@@ -190,10 +190,10 @@ void p2AddDmaPredicate(int channel, int (*predicate)(long long), long long arg) 
     }
     __asm__("mfc0 %0, $12\n\tsrl $6, %0, 16\n\tand %0, %0, $6" : "=r"(status) : : "$6");
     if (status & 1) {
-        FUN_00113f20();
+        DIntr();
         node = p2DmaPredicatePool;
         p2DmaPredicatePool = node->next;
-        FUN_00113f78();
+        EIntr();
     } else {
         node = p2DmaPredicatePool;
         p2DmaPredicatePool = node->next;
@@ -261,10 +261,10 @@ void p2AddDmaCompletion(int channel, void (*func)(void *), void *arg) {
     }
     __asm__("mfc0 %0, $12\n\tsrl $6, %0, 16\n\tand %0, %0, $6" : "=r"(status) : : "$6");
     if (status & 1) {
-        FUN_00113f20();
+        DIntr();
         node = p2DmaCompletionPool;
         p2DmaCompletionPool = node->next;
-        FUN_00113f78();
+        EIntr();
     } else {
         node = p2DmaCompletionPool;
         p2DmaCompletionPool = node->next;
@@ -427,17 +427,17 @@ void p2WaitDmaSequence(int channel, long long sequence) {
     long long start;
     long long end;
 
-    FUN_00113f20();
+    DIntr();
     wait = 0;
     if (p2DmaCompletedSequence[channel] < sequence) {
         wait = 1;
         p2DmaWaitSequence[channel] = sequence;
     }
-    FUN_00113f78();
+    EIntr();
     if (wait) {
-        FUN_00113f20();
+        DIntr();
         p2DmaWatchFlags.busy |= 2;
-        FUN_00113f78();
+        EIntr();
         p2FlushVif1Packet();
         completed = (long long *)((char *)p2DmaCompletedSequence + channel * 8);
         while (sequence > *completed) {
@@ -448,10 +448,10 @@ void p2WaitDmaSequence(int channel, long long sequence) {
             p2ReadClock(&end);
             p2DmaWaitTime += (int)(end - start);
         }
-        FUN_00113f20();
+        DIntr();
         p2DmaWatchFlags.busy &= ~2;
         p2DmaWatchFlags.seen &= ~2;
-        FUN_00113f78();
+        EIntr();
         p2DmaWaitSequence[channel] = 0;
     }
 }

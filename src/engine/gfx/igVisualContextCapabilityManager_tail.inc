@@ -246,7 +246,7 @@ void *FUN_00165e50(Self *self, Obj_165e50 *src) {
         for (j = 0; j < nb; j++) {
             float w = src->v184(j, i);
             if (!(w <= 0.0f)) {
-                FUN_00192fc0(&t, p, self->mats + (src->v196(j, i)));
+                Vec3f_TransformProjective(&t, p, self->mats + (src->v196(j, i)));
                 t -= *p;
                 t *= w;
                 acc += t;

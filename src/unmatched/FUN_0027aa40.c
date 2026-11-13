@@ -24,14 +24,14 @@ typedef struct AdxVoice {
     AdxChannel *ch;
 } AdxVoice;
 
-extern int DAT_004b1dc0;
-extern int DAT_004b1dc8;
+extern int ps2rna_nvoice;
+extern int ps2rna_setup_voice;
 
 int FUN_0027aa40(AdxVoice *v)
 {
     AdxStream *s;
 
-    if (DAT_004b1dc8 == 1 && DAT_004b1dc0 <= 0)
+    if (ps2rna_setup_voice == 1 && ps2rna_nvoice <= 0)
         return 0;
     s = v->ch->stream;
     return (0x4000 - s->ops->query(s, 0)) / 2;

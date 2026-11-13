@@ -1,12 +1,12 @@
 #include "dw4/igSmartPointer.h"
 #include "dw4/reflected.h"
-#define REL(x) { RC *q = (x); if (q != 0) { q->_refCount = q->_refCount - 1; if ((q->_refCount & 0x7FFFFF) == 0) igObject_Destroy(q); } }
+#define REL(x) { RefCountedObject *q = (x); if (q != 0) { q->_refCount = q->_refCount - 1; if ((q->_refCount & 0x7FFFFF) == 0) igObject_Destroy(q); } }
 #define ALLOC(a, self) { int base_ = igObject_GetAllocator(self); if (g_useOwnerAllocator != 0) { a = base_; } else { a = Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]); } }
 
 typedef struct O { char p[32]; int w; int h; char q[20]; int cw; int ch; } O;
 extern "C" int DAT_004c2c50[4];
 extern "C" int DAT_004c2c58[4];
-extern "C" int FUN_00338f70(O *o, int *a1, int *a2, int *a3, int *a4);
+extern "C" int igMovieInfo_GetTiling(O *o, int *a1, int *a2, int *a3, int *a4);
 extern "C" int g_igMovieManager_metaObject[4];
 extern "C" void Gap__igMovieManager__vfunc_21(void);
 extern "C" void Gap__igMovieManager__vfunc_23(void);
@@ -37,9 +37,9 @@ extern "C" void *FUN_00335da0(...);
 extern "C" void *FUN_00142f30(...);
 extern "C" void *FUN_0044c490(...);
 extern "C" int igInsightCore_AddToScheduler(...);
-extern "C" int FUN_00236ee0(...);
-extern "C" int FUN_002d6f50(...);
-extern "C" int FUN_002d7690(...);
+extern "C" int igInsightCore_AddRenderer(...);
+extern "C" int igRendererOrderedList_Append(...);
+extern "C" int igRendererOrderedList_Clear(...);
 extern "C" int emptyString[4];
 extern "C" int text_Could_not_create_a_codec_of_type[4];
 extern "C" int text_Failed_to_start_movie_s[4];
@@ -65,8 +65,8 @@ public:
     virtual int v30(...); virtual int v31(...); virtual int v32(...); virtual int v33(...); virtual int v34(...);
     virtual int v35(...); virtual int v36(...);
 };
-/* reference-counted engine object header: refcount word at +4 (low 23 bits) */
-struct RC : public igObject { };
+/* A reference-counted igObject: the count is the low 23 bits of _refCount. */
+struct RefCountedObject : public igObject { };
 /* 4-byte struct returned through a hidden pointer by vtable slot 22 of the audio object */
 struct R4 { int x; };
 /* igMovieManager._movieRenderer: only the owner back-reference at +12 is used here */
@@ -84,15 +84,15 @@ public:
 struct ListHead {
     int a; int b; int count; int cap; int *data;
     /* matching construct: reading the search key through a pointer keeps it in a stack slot, as retail does */
-    static RC *cur(RC *const *a) { return *a; }
+    static RefCountedObject *cur(RefCountedObject *const *a) { return *a; }
     /* inlined igObjectList::indexOf(item): linear search, -1 when absent */
-    int indexOf(RC *item) {
+    int indexOf(RefCountedObject *item) {
         int n = count;
         int i = 0;
         if (0 < n) {
             int *p = data;
             do {
-                if (cur(&item) == (RC *)*p) return i;
+                if (cur(&item) == (RefCountedObject *)*p) return i;
                 i++; p++;
             } while (i < n);
         }
@@ -128,7 +128,7 @@ extern "C" int Gap__igMovieRenderer__vfunc_20(void);
 extern "C" void Gap__igMovieRenderer__vfunc_24(igMovieRenderer *self);
 extern "C" void Gap__igMovieRenderer__vfunc_22(igMovieRenderer *self);
 
-int FUN_00338f70(O *o, int *a1, int *a2, int *a3, int *a4) {
+int igMovieInfo_GetTiling(O *o, int *a1, int *a2, int *a3, int *a4) {
     int v;
     v = o->cw;
     *a1 = (v != -1) ? v : DAT_004c2c50[0];
@@ -208,16 +208,16 @@ int Gap__igMovieManager__vfunc_25(igMovieManager *self, void *arg1) {
     if (codecName != 0) {
     ListHead *movies = (ListHead *)self->_movieList;
     if (movies != 0) {
-        if (movies->indexOf((RC *)movie) != -1) return 0;
+        if (movies->indexOf((RefCountedObject *)movie) != -1) return 0;
     }
-    igSmartPointer<RC> codec;
+    igSmartPointer<RefCountedObject> codec;
     codec.p = 0;
     if (codec.p != 0) codec.p->_refCount = codec.p->_refCount + 1;
     if (self->_codecList != 0) {
         i = 0;
         if (0 < ((ListHead *)self->_codecList)->count) {
             do {
-                RC *c = ((RC **)((ListHead *)self->_codecList)->data)[i];
+                RefCountedObject *c = ((RefCountedObject **)((ListHead *)self->_codecList)->data)[i];
                 const char *n = (const char *)((int *)((VC_3392a0 *)c)->v20())[7];
                 if (strcmp(n, codecName) == 0) {
                     if (c != 0) c->_refCount = c->_refCount + 1;
@@ -239,37 +239,37 @@ int Gap__igMovieManager__vfunc_25(igMovieManager *self, void *arg1) {
             return 0;
         }
         ALLOC(a, self);
-        RC *created = (RC *)igMetaObject_CreateInstance(meta, a);
-        RC *c;
+        RefCountedObject *created = (RefCountedObject *)igMetaObject_CreateInstance(meta, a);
+        RefCountedObject *c;
         if (created != 0 && igObject_IsKindOf(created, g_igMovieCodec_metaObject[0]) != 0) { c = created; } else { c = 0; }
         if (c != 0) c->_refCount = c->_refCount + 1;
         REL(codec.p)
         codec.p = c;
-        { RC *q = codec.p; q->_refCount = q->_refCount - 1; if ((q->_refCount & 0x7FFFFF) == 0) igObject_Destroy(q); }
+        { RefCountedObject *q = codec.p; q->_refCount = q->_refCount - 1; if ((q->_refCount & 0x7FFFFF) == 0) igObject_Destroy(q); }
         if (((VC_3392a0 *)codec.p)->v21() != 0) {
             if (self->_codecList == 0) {
                 ALLOC(a, self);
-                REL((RC *)self->_codecList)
+                REL((RefCountedObject *)self->_codecList)
                 self->_codecList = (int)FUN_00335400(a);
             }
             ObjectList_AppendRetained(self->_codecList, codec.p);
         }
     }
     {
-        RC *c = codec.p;
+        RefCountedObject *c = codec.p;
         if (c != 0) c->_refCount = c->_refCount + 1;
-        REL((RC *)movie->codec)
+        REL((RefCountedObject *)movie->codec)
         movie->codec = (int)c;
     }
     if (self->_audioDisabled == 0 && self->_audio == 0) {
         ALLOC(a, self);
-        REL((RC *)self->_audio)
+        REL((RefCountedObject *)self->_audio)
         self->_audio = (int)FUN_00142f30(a);
         ((VC_3392a0 *)self->_audio)->v24(((int *)self->_insight)[5]);
         ((VS *)self->_audio)->s22();
     }
     {
-        RC *held = codec.p;
+        RefCountedObject *held = codec.p;
         ((VC_3392a0 *)held)->v22(((VC_3392a0 *)((int *)self->_insight)[5])->v36(), self->_audio);
     }
     if (((VC_3392a0 *)codec.p)->v23(movie) != 0) {
@@ -286,7 +286,7 @@ int Gap__igMovieManager__vfunc_25(igMovieManager *self, void *arg1) {
             }
             if (self->_movieList == 0) {
                 ALLOC(a, self);
-                REL((RC *)self->_movieList)
+                REL((RefCountedObject *)self->_movieList)
                 self->_movieList = (int)FUN_00335da0(a);
             }
             ObjectList_AppendRetained(self->_movieList, movie);
@@ -294,12 +294,12 @@ int Gap__igMovieManager__vfunc_25(igMovieManager *self, void *arg1) {
             {
                 MovieRenderer *rend = (MovieRenderer *)self->_movieRenderer;
                 if (self != 0) self->_refCount = self->_refCount + 1;
-                REL((RC *)rend->owner)
+                REL((RefCountedObject *)rend->owner)
                 rend->owner = (int)self;
             }
             if (self->_rendererList == 0) {
                 ALLOC(a, self);
-                REL((RC *)self->_rendererList)
+                REL((RefCountedObject *)self->_rendererList)
                 self->_rendererList = (int)FUN_0044c490(a);
             }
             {
@@ -307,11 +307,11 @@ int Gap__igMovieManager__vfunc_25(igMovieManager *self, void *arg1) {
                 int n = lst->count;
                 int i;
                 for (i = 0; i < n; i++) {
-                    FUN_002d6f50(self->_rendererList, ((ListHead *)((int *)((int *)self->_insight)[7])[2])->data[(unsigned)i] /* matching construct: unsigned index keeps the scale inside the loop */, 0);
+                    igRendererOrderedList_Append(self->_rendererList, ((ListHead *)((int *)((int *)self->_insight)[7])[2])->data[(unsigned)i] /* matching construct: unsigned index keeps the scale inside the loop */, 0);
                 }
             }
-            FUN_002d7690(((int *)self->_insight)[7]);
-            FUN_00236ee0(self->_insight, self->_movieRenderer);
+            igRendererOrderedList_Clear(((int *)self->_insight)[7]);
+            igInsightCore_AddRenderer(self->_insight, self->_movieRenderer);
             return 1;
         }
         if (GPR_00554e38 == 0) {
@@ -332,6 +332,83 @@ int Gap__igMovieManager__vfunc_25(igMovieManager *self, void *arg1) {
     }
     return 0;
     }
+    }
+    return 0;
+}
+
+extern "C" int List_RemoveWordAt(...);
+extern "C" int igInsightCore_RemoveFromScheduler(...);
+/* The igMovieCodec slots the manager calls on a movie's codec (docs/engine/cri-movie-codec.md). */
+class igMovieCodecSlots {
+public:
+    virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5();
+    virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11();
+    virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17();
+    virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23();
+    virtual int close(igMovieInfo *movie);               /* slot 24 */
+    virtual int resume(igMovieInfo *movie);              /* slot 25 */
+    virtual int pause(igMovieInfo *movie, int state);    /* slot 26 */
+};
+
+/* Stops a playing movie: pauses and closes it in its codec, drops it from the movie list,
+ * unschedules the manager once no movie is left, releases the codec list and gives the insight
+ * back the renderers it held before the movie started. */
+int igMovieManager_StopMovie(igMovieManager *self, void *object) {
+    int index;
+    igMovieInfo *movie;
+    if (object != 0 && igObject_IsKindOf(object, g_igMovieInfo_metaObject[0]) != 0) { movie = (igMovieInfo *)object; } else { movie = 0; }
+    ListHead *movies = (ListHead *)self->_movieList;
+    if (movies != 0 && movie != 0) {
+        /* matching construct: fdiff — ListHead::indexOf written out with the result copied into
+         * `index`, declared before `movie`: the inline's return value colours before the movie
+         * (s0/s1 swapped); the caller's index keeps the movie in s0 as retail does */
+        {
+            RefCountedObject *key = (RefCountedObject *)movie;
+            int n = movies->count;
+            int i = 0;
+            if (0 < n) {
+                int *p = movies->data;
+                do {
+                    if (ListHead::cur(&key) == (RefCountedObject *)*p) { index = i; goto found; }
+                    i++; p++;
+                } while (i < n);
+            }
+            index = -1;
+        found:;
+        }
+        if (index != -1) {
+            ((igMovieCodecSlots *)movie->_codec)->pause(movie, 1);
+            ((igMovieCodecSlots *)movie->_codec)->close(movie);
+            {
+                ListHead *list = (ListHead *)self->_movieList;
+                REL(((RefCountedObject **)list->data)[index])
+                List_RemoveWordAt(list, index);
+                list->data[list->count] = 0;
+            }
+            if (((ListHead *)self->_movieList)->count == 0) {
+                igInsightCore_RemoveFromScheduler(self->_insight, self);
+                REL((RefCountedObject *)self->_movieList)
+                self->_movieList = 0;
+            }
+            if (self->_codecList != 0) {
+                REL((RefCountedObject *)self->_codecList)
+                self->_codecList = 0;
+            }
+            igRendererOrderedList_Clear(((igInsightCore *)self->_insight)->_rendererList);
+            {
+                igRendererOrderedList *saved = (igRendererOrderedList *)self->_rendererList;
+                int n = ((ListHead *)saved->_objectList)->count;
+                int i;
+                for (i = 0; i < n; i++) {
+                    igRendererOrderedList_Append(((igInsightCore *)self->_insight)->_rendererList,
+                                                 ((ListHead *)((igRendererOrderedList *)self->_rendererList)->_objectList)->data[(unsigned)i], 0);
+                }
+            }
+            igRendererOrderedList_Clear(self->_rendererList);
+            REL((RefCountedObject *)self->_rendererList)
+            self->_rendererList = 0;
+            return 1;
+        }
     }
     return 0;
 }

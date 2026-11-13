@@ -1,3 +1,5 @@
+#include "dw4/cri/mwply.h"
+
 typedef struct SjObj SjObj;
 
 typedef struct SjChunk {
@@ -20,75 +22,6 @@ typedef struct SjVtbl {
 
 struct SjObj {
     SjVtbl *vtbl;
-};
-
-typedef struct MwsfdPly MwsfdPly;
-
-typedef struct MwsfdPlyVtbl {
-    void *f0[8];
-    int (*getStat)(MwsfdPly *ply); /* 32 */
-} MwsfdPlyVtbl;
-
-typedef struct MwsfdCreInf {
-    int type;      /* 0 */
-    char pad4[28];
-    int f32;       /* 32 */
-} MwsfdCreInf;
-
-typedef enum MwsfdChromaFmt {
-    MWSFD_CHROMA_FMT_0,
-    MWSFD_CHROMA_FMT_1,
-    MWSFD_CHROMA_FMT_2,
-    MWSFD_CHROMA_FMT_3
-} MwsfdChromaFmt;
-
-typedef enum MwsfdChromaPos {
-    MWSFD_CHROMA_POS_0,
-    MWSFD_CHROMA_POS_1
-} MwsfdChromaPos;
-
-typedef struct MwsfdPicInf {
-    unsigned int pictureStructure; /* 0 */
-    unsigned int chromaFormat;     /* 4 */
-    int f8;
-    int f12;
-    int f16;
-    MwsfdChromaPos chromaPosH;     /* 20 */
-    MwsfdChromaPos chromaPosV;     /* 24 */
-} MwsfdPicInf;
-
-typedef struct MwsfdUsrBuf {
-    char *buf; /* 0 */
-    int size;  /* 4 */
-    int f8;    /* 8 */
-} MwsfdUsrBuf;
-
-typedef struct MwsfdAddInf {
-    int valid;  /* 0 */
-    char *addr; /* 4 */
-    int size;   /* 8 */
-} MwsfdAddInf;
-
-struct MwsfdPly {
-    MwsfdPlyVtbl *vtbl;     /* 0 */
-    int used;               /* 4 */
-    int f8;
-    MwsfdCreInf cre;        /* 12 */
-    char pad48[16];
-    int stream;             /* 64 */
-    char pad68[12];
-    int compoSet;           /* 80 */
-    int compoMode;          /* 84 */
-    char pad88[52];
-    MwsfdPicInf pic;        /* 140 */
-    int f160;
-    void *sfx;              /* 172 */
-    char pad176[224];
-    SjObj *addInfSj;        /* 400 */
-    char *addInfBase;       /* 404 */
-    int addInfSize;         /* 408 */
-    MwsfdUsrBuf usrBuf;     /* 412 */
-    MwsfdAddInf addInf;     /* 424 */
 };
 
 typedef struct MwsfdFrm {
@@ -151,6 +84,8 @@ extern char DAT_004f4338[];
 extern char DAT_004f4370[];
 extern char DAT_004f43a8[];
 extern char DAT_004f43e0[];
+extern char CRITAGS[];
+extern char CRITAGE[];
 extern char DAT_004f4420[];
 extern char DAT_004f4458[];
 extern char DAT_004f4460[];
@@ -163,14 +98,15 @@ extern char DAT_004f4558[];
 extern char DAT_004f4588[];
 extern char DAT_004f45c0[];
 
-SjObj *FUN_0027bd48(char *buf, int size, int flags);
-int FUN_0027d6b0(SjChunk *in, const char *start, const char *end, SjChunk *out);
+SjObj *SJRBF_Create(char *buf, int size, int flags);
+void *memcpy(void *dst, const void *src, unsigned int size);
+int SJ_SearchTag(SjChunk *in, const char *start, const char *end, SjChunk *out);
 void FUN_00293118(MwsfdPly *ply);
 void FUN_00293f60(int addr, int width, int height, int *out);
 int FUN_002944b0(MwsfdPly *ply);
 int FUN_002968c0(MwsfdPly *ply);
-void FUN_0029a320(const char *msg);
-int FUN_002b0ff8(int stream, int index, SjObj *sj, int b);
+void mwsfd_Error(const char *msg);
+int FUN_002b0ff8(void *sfd, int index, SjObj *sj, int b);
 void FUN_002b3690(void *sfx, MwsfdCnvPrm *prm);
 void FUN_002b3708(void *sfx, MwsfdCnvPrm *prm);
 void FUN_002b3788(void);
@@ -190,7 +126,7 @@ void FUN_002b3c20(void *sfx, int value);
 void FUN_002b3c28(void *sfx);
 void FUN_002b3c78(void *sfx);
 void FUN_002b3c98(void *sfx, char *addr, int size);
-void FUN_002b3d30(void *sfx, int *first, int *second);
+void SFX_GetZinf(void *sfx, char **data, int *size);
 void FUN_002b3d60(void *sfx, int value);
 int FUN_002b3d68(void *sfx);
 void FUN_002b3d70(void *sfx, int value);
@@ -239,9 +175,9 @@ MwsfdChromaFmt FUN_00297b18(MwsfdPly *ply);
 int FUN_00297b88(MwsfdChromaPos position);
 void FUN_00297e58(MwsfdPly *ply, int mode);
 void FUN_00298028(MwsfdPly *ply, int a, int b, int c);
-void FUN_00298468(MwsfdPly *ply);
+void mwsfd_GetCriTags(MwsfdPly *ply);
 void FUN_00298618(MwsfdPly *ply);
-int FUN_002986c0(MwsfdPly *ply);
+int mwsfd_RequestAddInf(MwsfdPly *ply);
 
 void FUN_00297780(void)
 {
@@ -251,7 +187,7 @@ void FUN_00297780(void)
 
 void FUN_002977a8(void *ctx, const char *msg)
 {
-    FUN_0029a320(msg);
+    mwsfd_Error(msg);
 }
 
 void FUN_002977c0(void)
@@ -315,7 +251,7 @@ int FUN_002978b0(unsigned int format)
         result = 3;
         break;
     default:
-        FUN_0029a320(DAT_004f4028);
+        mwsfd_Error(DAT_004f4028);
         result = 3;
         break;
     }
@@ -356,11 +292,12 @@ void FUN_002979d8(MwsfdPlane *plane, int addr, int width, int height)
 
 void FUN_002979e8(MwsfdPly *ply, MwsfdFrm *frm, MwsfdCnvPrm *prm)
 {
-    int values[2];
+    char *data;
+    int size;
 
-    FUN_002b3d30(ply->sfx, &values[0], &values[1]);
-    prm->f80 = values[0];
-    prm->f84 = values[1];
+    SFX_GetZinf(ply->sfx, &data, &size);
+    prm->f80 = (int)data;
+    prm->f84 = size;
     prm->f88 = 0;
     prm->f92 = 0;
 }
@@ -395,7 +332,7 @@ int FUN_00297aa8(MwsfdPly *ply)
         result = 3;
         break;
     default:
-        FUN_0029a320(DAT_004f4050);
+        mwsfd_Error(DAT_004f4050);
         break;
     }
     return result;
@@ -416,7 +353,7 @@ MwsfdChromaFmt FUN_00297b18(MwsfdPly *ply)
         result = 3;
         break;
     default:
-        FUN_0029a320(DAT_004f4078);
+        mwsfd_Error(DAT_004f4078);
         break;
     }
     return result;
@@ -434,7 +371,7 @@ int FUN_00297b88(MwsfdChromaPos position)
         result = 1;
         break;
     default:
-        FUN_0029a320(DAT_004f40a0);
+        mwsfd_Error(DAT_004f40a0);
         break;
     }
     return result;
@@ -456,9 +393,9 @@ void FUN_00297c08(MwsfdPly *ply, MwsfdFrm *frm, int arg)
     void *sfx;
 
     if (FUN_002968c0(ply) == 0) {
-        FUN_0029a320(DAT_004f40c0);
+        mwsfd_Error(DAT_004f40c0);
     } else if (frm->addr == 0) {
-        FUN_0029a320(DAT_004f40f0);
+        mwsfd_Error(DAT_004f40f0);
     } else {
         sfx = FUN_00297810(ply);
         FUN_00297838(ply, frm, &prm);
@@ -472,9 +409,9 @@ void FUN_00297cb0(MwsfdPly *ply, MwsfdFrm *frm, int arg)
     void *sfx;
 
     if (FUN_002968c0(ply) == 0) {
-        FUN_0029a320(DAT_004f4120);
+        mwsfd_Error(DAT_004f4120);
     } else if (frm->addr == 0) {
-        FUN_0029a320(DAT_004f4150);
+        mwsfd_Error(DAT_004f4150);
     } else {
         sfx = FUN_00297810(ply);
         FUN_00297838(ply, frm, &prm);
@@ -487,16 +424,16 @@ void FUN_00297d58(MwsfdPly *ply, int mode)
     int compo = mode;
 
     if (FUN_002968c0(ply) == 0) {
-        FUN_0029a320(DAT_004f4180);
+        mwsfd_Error(DAT_004f4180);
         return;
     }
     if (ply->addInfSj == 0) {
         if (mode == 0x101) {
-            FUN_0029a320(DAT_004f41b8);
+            mwsfd_Error(DAT_004f41b8);
             return;
         }
         if (mode == 0) {
-            FUN_0029a320(DAT_004f4200);
+            mwsfd_Error(DAT_004f4200);
             return;
         }
     }
@@ -518,7 +455,7 @@ void FUN_00297e58(MwsfdPly *ply, int mode)
 int FUN_00297e88(MwsfdPly *ply)
 {
     if (FUN_002968c0(ply) == 0) {
-        FUN_0029a320(DAT_004f4250);
+        mwsfd_Error(DAT_004f4250);
         return 0;
     }
     return FUN_002b3be0(FUN_00297810(ply));
@@ -552,7 +489,7 @@ void FUN_00297f60(MwsfdPly *ply, int a, int b)
 void FUN_00297f78(MwsfdPly *ply, int a, int b)
 {
     if (FUN_002968c0(ply) == 0) {
-        FUN_0029a320(DAT_004f4288);
+        mwsfd_Error(DAT_004f4288);
         return;
     }
     FUN_002b3c08(FUN_00297810(ply), a, b);
@@ -573,7 +510,7 @@ void FUN_00298028(MwsfdPly *ply, int a, int b, int c)
     void *sfx;
 
     if (!FUN_002968c0(ply)) {
-        FUN_0029a320(DAT_004f42c8);
+        mwsfd_Error(DAT_004f42c8);
         return;
     }
     sfx = FUN_00297810(ply);
@@ -584,7 +521,7 @@ void FUN_00298028(MwsfdPly *ply, int a, int b, int c)
 void FUN_002980c0(MwsfdPly *ply, int value)
 {
     if (FUN_002968c0(ply) == 0) {
-        FUN_0029a320(DAT_004f4300);
+        mwsfd_Error(DAT_004f4300);
         return;
     }
     FUN_002b3d60(FUN_00297810(ply), value);
@@ -593,7 +530,7 @@ void FUN_002980c0(MwsfdPly *ply, int value)
 int FUN_00298128(MwsfdPly *ply)
 {
     if (FUN_002968c0(ply) == 0) {
-        FUN_0029a320(DAT_004f4338);
+        mwsfd_Error(DAT_004f4338);
         return 0;
     }
     return FUN_002b3d68(FUN_00297810(ply));
@@ -602,7 +539,7 @@ int FUN_00298128(MwsfdPly *ply)
 void FUN_00298188(MwsfdPly *ply, int value)
 {
     if (FUN_002968c0(ply) == 0) {
-        FUN_0029a320(DAT_004f4370);
+        mwsfd_Error(DAT_004f4370);
         return;
     }
     FUN_002b3d70(FUN_00297810(ply), value);
@@ -611,7 +548,7 @@ void FUN_00298188(MwsfdPly *ply, int value)
 int FUN_002981f0(MwsfdPly *ply)
 {
     if (FUN_002968c0(ply) == 0) {
-        FUN_0029a320(DAT_004f43a8);
+        mwsfd_Error(DAT_004f43a8);
         return 0;
     }
     return FUN_002b3d78(FUN_00297810(ply));
@@ -645,9 +582,9 @@ SjObj *FUN_00298288(MwsfdPly *ply)
     if (FUN_00298260(&ply->cre) == 0) {
         return 0;
     }
-    sj = FUN_0027bd48(ply->addInfBase, ply->addInfSize, 0);
+    sj = SJRBF_Create(ply->addInfBase, ply->addInfSize, 0);
     if (sj == 0) {
-        FUN_0029a320(DAT_004f43e0);
+        mwsfd_Error(DAT_004f43e0);
         FUN_00293118(ply);
         return 0;
     }
@@ -674,7 +611,7 @@ int FUN_00298318(MwsfdPly *ply)
     if (sj == 0) {
         return 0;
     }
-    if (FUN_002b0ff8(ply->stream, 2, sj, 0) != 0) {
+    if (FUN_002b0ff8(ply->sfd, 2, sj, 0) != 0) {
         return -1;
     }
     return 0;
@@ -704,7 +641,7 @@ void FUN_002983c8(MwsfdPly *ply)
     MwsfdAddInf *inf = &ply->addInf;
 
     if (ply->addInfSj != 0 && inf->valid != 1) {
-        FUN_00298468(ply);
+        mwsfd_GetCriTags(ply);
         FUN_00298618(ply);
     }
 }
@@ -714,8 +651,50 @@ void FUN_00298420(MwsfdPly *ply)
     if (ply->addInfSj == 0) {
         return;
     }
-    FUN_00298468(ply);
+    mwsfd_GetCriTags(ply);
     FUN_00298618(ply);
+}
+
+void mwsfd_GetCriTags(MwsfdPly *ply)
+{
+    SjChunk in;
+    SjChunk out;
+    SjChunk chunk;
+    MwsfdAddInf *inf = &ply->addInf;
+    SjObj *sj = ply->addInfSj;
+    MwsfdUsrBuf *ub;
+    int size;
+
+    size = sj->vtbl->getNumData(sj, 1);
+    if (size == 0) {
+        inf->addr = 0;
+        inf->size = 0;
+        inf->valid = 1;
+        return;
+    }
+    in.addr = ply->addInfBase;
+    in.size = size;
+    if (SJ_SearchTag(&in, CRITAGS, CRITAGE, &out) == 0) {
+        inf->addr = 0;
+        inf->size = 0;
+        inf->valid = 1;
+        return;
+    }
+    ub = &ply->usrBuf;
+    if (ub->buf != 0) {
+        memcpy(ub->buf, out.addr, out.size);
+        inf->addr = ub->buf;
+        inf->size = out.size;
+        inf->valid = 1;
+        sj->vtbl->getChunk(sj, 1, 0x7FFFFFFF, &chunk);
+        sj->vtbl->putChunk(sj, 0, &chunk);
+        sj->vtbl->reset(sj);
+        return;
+    }
+    inf->addr = out.addr;
+    inf->size = out.size;
+    inf->valid = 1;
+    mwsfd_RequestAddInf(ply);
 }
 
 void FUN_002985b8(MwsfdPly *ply, char *buf, int size)
@@ -723,7 +702,7 @@ void FUN_002985b8(MwsfdPly *ply, char *buf, int size)
     MwsfdUsrBuf *ub = &ply->usrBuf;
 
     if (size < 0x20000) {
-        FUN_0029a320(DAT_004f4420);
+        mwsfd_Error(DAT_004f4420);
     }
     ub->buf = buf;
     ub->size = size;
@@ -742,14 +721,14 @@ void FUN_00298618(MwsfdPly *ply)
     }
     in.addr = inf->addr;
     in.size = inf->size;
-    if (FUN_0027d6b0(&in, DAT_004f4458, DAT_004f4460, &out) == 0) {
+    if (SJ_SearchTag(&in, DAT_004f4458, DAT_004f4460, &out) == 0) {
         FUN_002b3c98(sfx, 0, 0);
         return;
     }
     FUN_002b3c98(sfx, out.addr, out.size);
 }
 
-int FUN_002986c0(MwsfdPly *ply)
+int mwsfd_RequestAddInf(MwsfdPly *ply)
 {
     if (FUN_00298250(ply) == 1) {
         return 0;
@@ -757,7 +736,7 @@ int FUN_002986c0(MwsfdPly *ply)
     if (ply->addInfSj == 0) {
         return 0;
     }
-    if (FUN_002b0ff8(ply->stream, 2, 0, 0) != 0) {
+    if (FUN_002b0ff8(ply->sfd, 2, 0, 0) != 0) {
         return -1;
     }
     return 0;
@@ -779,6 +758,15 @@ void FUN_00298750(MwsfdPly *ply, char **addr, int *size)
 
     *addr = inf->addr;
     *size = inf->size;
+}
+
+void mwPlyGetSfxZinf(MwsfdPly *ply, char **data, int *size)
+{
+    SjChunk zinf;
+
+    SFX_GetZinf(ply->sfx, &zinf.addr, &zinf.size);
+    *data = zinf.addr;
+    *size = zinf.size;
 }
 
 void FUN_002987b8(MwsfdPly *ply, MwsfdFrm *frm, int a, int b)
@@ -811,11 +799,11 @@ void FUN_00298990(MwsfdPly *ply, MwsfdFrm *frm)
     void *sfx;
 
     if (FUN_002968c0(ply) == 0) {
-        FUN_0029a320(DAT_004f4468);
+        mwsfd_Error(DAT_004f4468);
         return;
     }
     if (frm->addr == 0) {
-        FUN_0029a320(DAT_004f4498);
+        mwsfd_Error(DAT_004f4498);
         return;
     }
     sfx = FUN_00297810(ply);
@@ -829,11 +817,11 @@ void FUN_00298a30(MwsfdPly *ply, MwsfdFrm *frm)
     void *sfx;
 
     if (FUN_002968c0(ply) == 0) {
-        FUN_0029a320(DAT_004f44c8);
+        mwsfd_Error(DAT_004f44c8);
         return;
     }
     if (frm->addr == 0) {
-        FUN_0029a320(DAT_004f44f8);
+        mwsfd_Error(DAT_004f44f8);
         return;
     }
     sfx = FUN_00297810(ply);
@@ -934,7 +922,7 @@ void FUN_00298c68(void)
 void FUN_00298c80(MwsfdPly *ply, int value)
 {
     if (FUN_002968c0(ply) == 0) {
-        FUN_0029a320(DAT_004f4528);
+        mwsfd_Error(DAT_004f4528);
         return;
     }
     FUN_002b3ff8(FUN_00297810(ply), value);
@@ -943,7 +931,7 @@ void FUN_00298c80(MwsfdPly *ply, int value)
 int FUN_00298ce8(MwsfdPly *ply)
 {
     if (FUN_002968c0(ply) == 0) {
-        FUN_0029a320(DAT_004f4558);
+        mwsfd_Error(DAT_004f4558);
         return 0;
     }
     return FUN_002b4050(FUN_00297810(ply));
@@ -972,7 +960,7 @@ void FUN_00298d78(MwsfdPly *ply)
 void FUN_00298de0(MwsfdPly *ply, int value)
 {
     if (FUN_002968c0(ply) == 0) {
-        FUN_0029a320(DAT_004f4588);
+        mwsfd_Error(DAT_004f4588);
         return;
     }
     FUN_002b3e88(FUN_00297810(ply), value);
@@ -981,7 +969,7 @@ void FUN_00298de0(MwsfdPly *ply, int value)
 int FUN_00298e48(MwsfdPly *ply)
 {
     if (FUN_002968c0(ply) == 0) {
-        FUN_0029a320(DAT_004f45c0);
+        mwsfd_Error(DAT_004f45c0);
         return 0;
     }
     return FUN_002b3e90(FUN_00297810(ply));

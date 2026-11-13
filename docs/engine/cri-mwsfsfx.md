@@ -21,8 +21,9 @@ SFX-handle getter compiled earlier in the same file, as the call is then known n
 
 ## Types
 
-The player (`MwsfdPly`), the frame, the conversion parameters (`MwsfdCnvPrm`, 144 bytes) and the planes
-are one declaration each. The chroma format the conversion is given, and the chroma positions in the decoded
+The player (`MwsfdPly`, 696 bytes, one of the 8 entries of the MWSFD work area) is declared once in
+`include/dw4/cri/mwply.h`, which the MWSFD one-function files share; the frame, the conversion parameters
+(`MwsfdCnvPrm`, 144 bytes) and the planes are one declaration each in this file. The chroma format the conversion is given, and the chroma positions in the decoded
 picture's information, are enums (`MwsfdChromaFmt`, `MwsfdChromaPos`): the parameter-filling function matches
 only when those values are typed apart from the plain `int` fields around them, because GCC's alias analysis
 then keeps their loads and stores in source order. Their constants are placeholders until the values' meanings
@@ -34,7 +35,7 @@ are known.
 - Whether the added-information block at `0x298250` up to `0x2986c0` is part of this file or a file of its
   own: a function after it reads the same fields and one inside it sets SFX's user information, but nothing
   rules out a boundary.
-- Three functions have no source and link from the retail image: the CRITAGS parse at `0x298468` (two words
-  off: retail stores the address, the valid flag, then the size in a delay slot), and the SFX getters at
-  `0x298768` (retail restores `ra` after the two output stores) and `0x298880` (retail computes a flag with
-  `xori` and `movn`).
+- The SFX getter at `0x298880` has no source and links from the retail image: retail computes a flag with
+  `xori` and `movn`, and no ordering of 48 tried reproduces where it loads the two outputs.
+- `mwsfd_GetCriTags` matches with the tag pointer and size read into `char *` and `int` locals, and
+  `mwPlyGetSfxZinf` with its chunk as a local `SjChunk`, which places the `ld ra` as retail does.

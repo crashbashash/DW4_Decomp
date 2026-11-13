@@ -32,6 +32,32 @@ int List_Resize(void *list, int count, int extra2)
     ((igDataList *)list)->_count = count;
 }
 
+static inline int countOf(const L_2d6900 *list) { return list->n; }
+
+extern "C" void List_InsertBytes(L_2d6900 *list, int index, int count, int src, int stride) {
+    int oldCount;
+    int newCount;
+    int at;
+    int dst;
+    int tail;
+    if (index < 0 || index > countOf(list)) {
+        return;
+    }
+    if (count >= 0 && count != 0) {
+        oldCount = list->n;
+        newCount = oldCount + count;
+        if (newCount <= list->cap) { list->n = newCount; } else { List_Resize((void *)list, newCount, stride); }
+        at = list->data + index * stride;
+        count *= stride;
+        dst = at + count;
+        tail = oldCount - index;
+        if (tail != 0) {
+            memmove(dst, at, tail * stride);
+        }
+        memcpy(at, src, count);
+    }
+}
+
 void List_AppendBytes(L_2d6900 *l, int cnt, int src, int sz) {
     int old;
     int nn;

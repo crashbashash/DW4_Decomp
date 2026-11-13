@@ -1,6 +1,6 @@
 extern char DAT_004d2178[];
 int sprintf(char *buf, const char *fmt, ...);
-void FUN_00109b10(char *d, const char *msg, ...);
+void _sceMpegMessage(char *d, const char *msg, ...);
 int FUN_00107ba8(char *d, int *lim) {
     char buf[256];
     int ok;
@@ -12,7 +12,7 @@ int FUN_00107ba8(char *d, int *lim) {
     }
     if (!ok) {
         sprintf(buf, DAT_004d2178, lim[1], lim[2]);
-        FUN_00109b10(d, buf);
+        _sceMpegMessage(d, buf);
     }
     return ok;
 }

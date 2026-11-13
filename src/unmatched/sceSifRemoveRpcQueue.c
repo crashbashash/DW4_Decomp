@@ -13,15 +13,15 @@ typedef struct SifRpcData {
     sceSifQueueData *active_queue;
 } SifRpcData;
 
-extern SifRpcData DAT_00557a00;
-int FUN_00113f20(void);
-int FUN_00113f78(void);
+extern SifRpcData _sif_rpc_data;
+int DIntr(void);
+int EIntr(void);
 
 sceSifQueueData *sceSifRemoveRpcQueue(sceSifQueueData *qd) {
     sceSifQueueData *pq;
-    FUN_00113f20();
-    if ((pq = DAT_00557a00.active_queue) == qd) {
-        DAT_00557a00.active_queue = pq->next;
+    DIntr();
+    if ((pq = _sif_rpc_data.active_queue) == qd) {
+        _sif_rpc_data.active_queue = pq->next;
     } else {
         while (pq != 0) {
             if (pq->next == qd) {
@@ -31,6 +31,6 @@ sceSifQueueData *sceSifRemoveRpcQueue(sceSifQueueData *qd) {
             pq = pq->next;
         }
     }
-    FUN_00113f78();
+    EIntr();
     return pq;
 }

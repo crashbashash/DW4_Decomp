@@ -3,7 +3,7 @@ typedef struct HdrSkipObj {
     int hdrlen;
 } HdrSkipObj;
 
-int FUN_0028d360(unsigned char * p);
+int MPS_GetStartCodeKind(unsigned char * p);
 int FUN_002a1730(unsigned char *p, int n);
 int FUN_002a1770(HdrSkipObj *obj, unsigned char *p);
 
@@ -20,7 +20,7 @@ void FUN_002a1650(HdrSkipObj *obj, unsigned char *buf, int size, int *skip)
     }
     count = 0;
     while (size >= 4) {
-        if (FUN_0028d360(buf++) & 0xD0000) {
+        if (MPS_GetStartCodeKind(buf++) & 0xD0000) {
             *skip = count;
             return;
         }

@@ -15,7 +15,7 @@ void Gap__Core__igArenaMemoryPool__vfunc_111(Obj_311990 *o, unsigned int lo, int
         if (lo >= a && (h = e + 1, lo <= e[1])) {
             if (found) {
                 if (o->lvlB >= 2 && GPR_00554ce4 == 0) {
-                    int rc = FUN_003081d0(text_igArenaMemoryPool_E67_Block_list, r->data, h, a);
+                    int rc = igReportNotice(text_igArenaMemoryPool_E67_Block_list, r->data, h, a);
                     if (rc != 1 && rc == 2) GPR_00554ce4 = 1;
                 }
                 return;
@@ -49,9 +49,9 @@ if (r->count >= cap) {
                 r->cap = ncap;
             } else {
                 if (o->lvlB > 0) {
-                    FUN_002f8870(0, (int)o);
+                    Memory_PrintPoolStatistics(0, (int)o);
                     if (GPR_00554ce8 == 0) {
-                        int rc = FUN_003081d0(text_igArenaMemoryPool_E68_Unable_to);
+                        int rc = igReportNotice(text_igArenaMemoryPool_E68_Unable_to);
                         if (rc != 1 && rc == 2) GPR_00554ce8 = 1;
                     }
                 }

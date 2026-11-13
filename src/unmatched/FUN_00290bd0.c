@@ -9,7 +9,7 @@ void FUN_00290e40(void);
 void FUN_00290ec0(int base);
 void FUN_00291438(void);
 
-extern char DAT_004f2a00[];
+extern char cri_mpv_version[];
 extern char *volatile DAT_00573f10;
 extern int DAT_00573f68;
 
@@ -17,7 +17,7 @@ int FUN_00290bd0(int count, int arg) {
     int status;
     int base;
 
-    DAT_00573f10 = DAT_004f2a00;
+    DAT_00573f10 = cri_mpv_version;
     status = FUN_00290ca8();
     if (status != 0) {
         if (status == (int)0xff03ff05) {

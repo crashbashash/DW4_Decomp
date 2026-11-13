@@ -15,13 +15,13 @@ typedef struct {
     unsigned int x30;
 } Obj;
 extern char DAT_004d1e70[];
-int FUN_0010d108(const char *fmt, ...);
+int scePrintf(const char *fmt, ...);
 void sceDmaPause(Obj *o);
 void WatchDma(Obj *o, unsigned int addr, int limit) {
     int n = limit ? limit : 0x1000000;
     while (*(volatile unsigned int *)&o->x10 < addr) {
         if (--n < 0) {
-            FUN_0010d108(DAT_004d1e70);
+            scePrintf(DAT_004d1e70);
             sceDmaPause(o);
         }
     }

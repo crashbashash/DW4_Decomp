@@ -14,7 +14,7 @@ void FUN_001d4180(void) {
     DAT_00562850[0] = FUN_001384a0(Memory_GetAllocatorBySelector(DAT_00587038[0]));
     DAT_00562858[0] = FUN_001325a0(Memory_GetAllocatorBySelector(DAT_00587038[0]));
     DAT_00562860[0] = FUN_001325a0(Memory_GetAllocatorBySelector(DAT_00587038[0]));
-    DAT_00562868[0] = FUN_00131c60(Memory_GetAllocatorBySelector(DAT_00587038[0]));
+    g_shadowTextureFunctionAttr0[0] = FUN_00131c60(Memory_GetAllocatorBySelector(DAT_00587038[0]));
     DAT_00562870[0] = FUN_00131c60(Memory_GetAllocatorBySelector(DAT_00587038[0]));
     DAT_00562878[0] = FUN_001315d0(Memory_GetAllocatorBySelector(DAT_00587038[0]));
     DAT_00562880[0] = FUN_001315d0(Memory_GetAllocatorBySelector(DAT_00587038[0]));
@@ -35,7 +35,7 @@ igMetaObject *Gap__Sg__igProjectiveShadowShader__vfunc_22(void) {
     return g_igProjectiveShadowShader_metaObject[0];
 }
 
-void FUN_001d4480(void) {
+void igProjectiveShadowShader_ConfigureSharedAttrs(void) {
     ShadowColor black;
     ShadowColor white;
     ((ShadowSetupObj *)DAT_005628d8[0])->s23(0);
@@ -84,8 +84,8 @@ void FUN_001d4480(void) {
     ((ShadowSetupObj *)DAT_00562858[0])->s23(0);
     ((ShadowSetupObj *)DAT_00562860[0])->s30(1);
     ((ShadowSetupObj *)DAT_00562860[0])->s23(1);
-    ((ShadowModeObj *)((ShadowSetupObj *)DAT_00562868[0]))->mode = 1;
-    ((ShadowSetupObj *)DAT_00562868[0])->s23(0);
+    ((ShadowModeObj *)((ShadowSetupObj *)g_shadowTextureFunctionAttr0[0]))->mode = 1;
+    ((ShadowSetupObj *)g_shadowTextureFunctionAttr0[0])->s23(0);
     ((ShadowModeObj *)((ShadowSetupObj *)DAT_00562870[0]))->mode = 1;
     ((ShadowSetupObj *)DAT_00562870[0])->s23(1);
     ((ShadowSetupObj *)DAT_00562878[0])->s30(1);
@@ -184,11 +184,11 @@ void FUN_001d5430(void) {
         if (((unsigned long long)((long long)t->f4 << 0x29) >> 0x29) == 0) igObject_Destroy((void *)t);
         ((R_1d5430 * *)DAT_00562860)[0] = 0;
     }
-    t = ((R_1d5430 * *)DAT_00562868)[0];
+    t = ((R_1d5430 * *)g_shadowTextureFunctionAttr0)[0];
     if (t != 0) {
         t->f4 = t->f4 - 1;
         if (((unsigned long long)((long long)t->f4 << 0x29) >> 0x29) == 0) igObject_Destroy((void *)t);
-        ((R_1d5430 * *)DAT_00562868)[0] = 0;
+        ((R_1d5430 * *)g_shadowTextureFunctionAttr0)[0] = 0;
     }
     t = ((R_1d5430 * *)DAT_00562870)[0];
     if (t != 0) {
@@ -255,32 +255,32 @@ int FUN_001d5a70(P *arg0, Q_1d5a70 *arg1) {
     v.x = 0; v.y = 0; v.z = 0;
     v.w = w;
     arg0->o116->v30(&v);
-    FUN_001b12f0((igAttrStackManager *)s0, (igAttr *)DAT_00562820[0]);
-    FUN_001b12f0((igAttrStackManager *)s0, (igAttr *)DAT_00562850[0]);
-    FUN_001b12f0((igAttrStackManager *)s0, (igAttr *)arg0->w152);
-    FUN_001b12f0((igAttrStackManager *)s0, (igAttr *)arg0->w156);
-    FUN_001b12f0((igAttrStackManager *)s0, (igAttr *)arg0->w192);
+    igAttrStackManager_PushOverrideAttr((igAttrStackManager *)s0, (igAttr *)DAT_00562820[0]);
+    igAttrStackManager_PushOverrideAttr((igAttrStackManager *)s0, (igAttr *)DAT_00562850[0]);
+    igAttrStackManager_PushOverrideAttr((igAttrStackManager *)s0, (igAttr *)arg0->w152);
+    igAttrStackManager_PushOverrideAttr((igAttrStackManager *)s0, (igAttr *)arg0->w156);
+    igAttrStackManager_PushOverrideAttr((igAttrStackManager *)s0, (igAttr *)arg0->w192);
     FUN_001d9ac0((struct A_1d9ac0 *)arg1->w68, DAT_00562840[0], s0);
-    FUN_001b13d0((struct A_1b13d0 *)s0, (struct B_1b13d0 *)arg0->w192);
-    FUN_001b12f0((igAttrStackManager *)s0, (igAttr *)DAT_005627f8[0]);
+    igAttrStackManager_PopOverrideAttr((struct A_1b13d0 *)s0, (struct B_1b13d0 *)arg0->w192);
+    igAttrStackManager_PushOverrideAttr((igAttrStackManager *)s0, (igAttr *)DAT_005627f8[0]);
     FUN_001b1030((igAttrStackManager *)s0, (igAttr *)arg0->w88);
     FUN_001b1030((igAttrStackManager *)s0, (igAttr *)arg0->w92);
     if (arg0->b237 != 0) {
-        FUN_001b12f0((igAttrStackManager *)s0, (igAttr *)((int)arg0->o116));
+        igAttrStackManager_PushOverrideAttr((igAttrStackManager *)s0, (igAttr *)((int)arg0->o116));
     }
-    FUN_001b12f0((igAttrStackManager *)s0, (igAttr *)arg0->w196);
+    igAttrStackManager_PushOverrideAttr((igAttrStackManager *)s0, (igAttr *)arg0->w196);
     FUN_001d5ef0((struct S60 *)arg0, (int)arg1);
-    FUN_001b13d0((struct A_1b13d0 *)s0, (struct B_1b13d0 *)arg0->w196);
+    igAttrStackManager_PopOverrideAttr((struct A_1b13d0 *)s0, (struct B_1b13d0 *)arg0->w196);
     if (arg0->b237 != 0) {
-        FUN_001b13d0((struct A_1b13d0 *)s0, (struct B_1b13d0 *)((int)arg0->o116));
+        igAttrStackManager_PopOverrideAttr((struct A_1b13d0 *)s0, (struct B_1b13d0 *)((int)arg0->o116));
     }
     FUN_001b1100((struct A_1b1100 *)s0, (struct B_1b1100 *)arg0->w92);
     FUN_001b1100((struct A_1b1100 *)s0, (struct B_1b1100 *)arg0->w88);
-    FUN_001b13d0((struct A_1b13d0 *)s0, (struct B_1b13d0 *)DAT_005627f8[0]);
-    FUN_001b13d0((struct A_1b13d0 *)s0, (struct B_1b13d0 *)arg0->w156);
-    FUN_001b13d0((struct A_1b13d0 *)s0, (struct B_1b13d0 *)arg0->w152);
-    FUN_001b13d0((struct A_1b13d0 *)s0, (struct B_1b13d0 *)DAT_00562850[0]);
-    FUN_001b13d0((struct A_1b13d0 *)s0, (struct B_1b13d0 *)DAT_00562820[0]);
+    igAttrStackManager_PopOverrideAttr((struct A_1b13d0 *)s0, (struct B_1b13d0 *)DAT_005627f8[0]);
+    igAttrStackManager_PopOverrideAttr((struct A_1b13d0 *)s0, (struct B_1b13d0 *)arg0->w156);
+    igAttrStackManager_PopOverrideAttr((struct A_1b13d0 *)s0, (struct B_1b13d0 *)arg0->w152);
+    igAttrStackManager_PopOverrideAttr((struct A_1b13d0 *)s0, (struct B_1b13d0 *)DAT_00562850[0]);
+    igAttrStackManager_PopOverrideAttr((struct A_1b13d0 *)s0, (struct B_1b13d0 *)DAT_00562820[0]);
     FUN_001dc610(arg1->w68);
     return arg0->w164;
 }
@@ -292,30 +292,30 @@ void FUN_001d5c40(A0_1d5c40 *arg0, A1_1d5c40 *arg1) {
     temp_s0 = arg1->f34;
     FUN_001dc500((A_1dc500 *)arg1->f44, 0, 0);
     temp_s1 = FUN_001d5a70((P *)arg0, (Q_1d5a70 *)arg1);
-    FUN_001b12f0((igAttrStackManager *)temp_s0, (igAttr *)arg1->fe8);
+    igAttrStackManager_PushOverrideAttr((igAttrStackManager *)temp_s0, (igAttr *)arg1->fe8);
     if (arg0->f94 != 0) {
         FUN_001d5e60((struct A_1d5e60 *)arg0, (int)arg1);
     }
-    FUN_001b12f0((igAttrStackManager *)temp_s0, (igAttr *)DAT_005627e8[0]);
-    FUN_001b12f0((igAttrStackManager *)temp_s0, (igAttr *)temp_s1);
-    FUN_001b12f0((igAttrStackManager *)temp_s0, (igAttr *)DAT_00562858[0]);
-    FUN_001b12f0((igAttrStackManager *)temp_s0, (igAttr *)DAT_00562868[0]);
-    FUN_001b12f0((igAttrStackManager *)temp_s0, (igAttr *)arg0->f90);
-    FUN_001b12f0((igAttrStackManager *)temp_s0, (igAttr *)DAT_00562878[0]);
-    FUN_001b12f0((igAttrStackManager *)temp_s0, (igAttr *)DAT_00562810[0]);
-    FUN_001b12f0((igAttrStackManager *)temp_s0, (igAttr *)DAT_00562800[0]);
-    FUN_001b12f0((igAttrStackManager *)temp_s0, (igAttr *)DAT_005628d0[0]);
+    igAttrStackManager_PushOverrideAttr((igAttrStackManager *)temp_s0, (igAttr *)DAT_005627e8[0]);
+    igAttrStackManager_PushOverrideAttr((igAttrStackManager *)temp_s0, (igAttr *)temp_s1);
+    igAttrStackManager_PushOverrideAttr((igAttrStackManager *)temp_s0, (igAttr *)DAT_00562858[0]);
+    igAttrStackManager_PushOverrideAttr((igAttrStackManager *)temp_s0, (igAttr *)g_shadowTextureFunctionAttr0[0]);
+    igAttrStackManager_PushOverrideAttr((igAttrStackManager *)temp_s0, (igAttr *)arg0->f90);
+    igAttrStackManager_PushOverrideAttr((igAttrStackManager *)temp_s0, (igAttr *)DAT_00562878[0]);
+    igAttrStackManager_PushOverrideAttr((igAttrStackManager *)temp_s0, (igAttr *)DAT_00562810[0]);
+    igAttrStackManager_PushOverrideAttr((igAttrStackManager *)temp_s0, (igAttr *)DAT_00562800[0]);
+    igAttrStackManager_PushOverrideAttr((igAttrStackManager *)temp_s0, (igAttr *)DAT_005628d0[0]);
     FUN_001d5e60((struct A_1d5e60 *)arg0, (int)arg1);
-    FUN_001b13d0((struct A_1b13d0 *)temp_s0, (struct B_1b13d0 *)DAT_005628d0[0]);
-    FUN_001b13d0((struct A_1b13d0 *)temp_s0, (struct B_1b13d0 *)DAT_00562800[0]);
-    FUN_001b13d0((struct A_1b13d0 *)temp_s0, (struct B_1b13d0 *)DAT_00562810[0]);
-    FUN_001b13d0((struct A_1b13d0 *)temp_s0, (struct B_1b13d0 *)DAT_00562878[0]);
-    FUN_001b13d0((struct A_1b13d0 *)temp_s0, (struct B_1b13d0 *)arg0->f90);
-    FUN_001b13d0((struct A_1b13d0 *)temp_s0, (struct B_1b13d0 *)DAT_00562868[0]);
-    FUN_001b13d0((struct A_1b13d0 *)temp_s0, (struct B_1b13d0 *)DAT_00562858[0]);
-    FUN_001b13d0((struct A_1b13d0 *)temp_s0, (struct B_1b13d0 *)temp_s1);
-    FUN_001b13d0((struct A_1b13d0 *)temp_s0, (struct B_1b13d0 *)DAT_005627e8[0]);
-    FUN_001b13d0((struct A_1b13d0 *)temp_s0, (struct B_1b13d0 *)arg1->fe8);
+    igAttrStackManager_PopOverrideAttr((struct A_1b13d0 *)temp_s0, (struct B_1b13d0 *)DAT_005628d0[0]);
+    igAttrStackManager_PopOverrideAttr((struct A_1b13d0 *)temp_s0, (struct B_1b13d0 *)DAT_00562800[0]);
+    igAttrStackManager_PopOverrideAttr((struct A_1b13d0 *)temp_s0, (struct B_1b13d0 *)DAT_00562810[0]);
+    igAttrStackManager_PopOverrideAttr((struct A_1b13d0 *)temp_s0, (struct B_1b13d0 *)DAT_00562878[0]);
+    igAttrStackManager_PopOverrideAttr((struct A_1b13d0 *)temp_s0, (struct B_1b13d0 *)arg0->f90);
+    igAttrStackManager_PopOverrideAttr((struct A_1b13d0 *)temp_s0, (struct B_1b13d0 *)g_shadowTextureFunctionAttr0[0]);
+    igAttrStackManager_PopOverrideAttr((struct A_1b13d0 *)temp_s0, (struct B_1b13d0 *)DAT_00562858[0]);
+    igAttrStackManager_PopOverrideAttr((struct A_1b13d0 *)temp_s0, (struct B_1b13d0 *)temp_s1);
+    igAttrStackManager_PopOverrideAttr((struct A_1b13d0 *)temp_s0, (struct B_1b13d0 *)DAT_005627e8[0]);
+    igAttrStackManager_PopOverrideAttr((struct A_1b13d0 *)temp_s0, (struct B_1b13d0 *)arg1->fe8);
     FUN_001d5e00((void *)arg0, (S1_1d5e00 *)arg1);
     FUN_001dc610(arg1->f44);
 }
@@ -388,7 +388,7 @@ void FUN_001d6060(O_1d6060 *arg0, char *arg1) {
         FUN_00191860(&sp70, arg0->f224, arg0->f220, arg0->f216, arg0->f212, arg0->f124, arg0->f128);
     } else {
         t = 0.0174532924f * (2.0f * arg0->f56);
-        FUN_001919d0(&sp70, t, t, 1.0f, arg0->f124, arg0->f128);
+        igMatrix44f_MakePerspective(&sp70, t, t, 1.0f, arg0->f124, arg0->f128);
     }
     arg0->f88->vX(&spB0);
     arg0->f92->vX(&sp70);
@@ -399,8 +399,8 @@ void FUN_001d6060(O_1d6060 *arg0, char *arg1) {
 void FUN_001d6190(struct S_1d6190 *arg0, char *arg1) {
     struct Src_1d6190 *t;
     if (arg0->f104 == 0) {
-        FUN_001d4480();
-        FUN_001d4e60(arg0);
+        igProjectiveShadowShader_ConfigureSharedAttrs();
+        igProjectiveShadowShader_Initialize(arg0);
         arg0->f104 = 1;
     }
     t = arg0->src;

@@ -7,9 +7,9 @@ typedef struct {
     int next;
     ThreadRequest entries[512];
 } ThreadRequestQueue;
-extern int DAT_00481e58;
-extern int DAT_00555680;
-extern ThreadRequestQueue DAT_00555688;
+extern int topThreadId;
+extern int topThreadSema;
+extern ThreadRequestQueue topThreadRequests;
 int FUN_0010ae60(int thid);
 int iSignalSema(int sema);
 static inline int currentThreadId(void) {
@@ -21,11 +21,11 @@ int iSuspendThread(int thid) {
     int self = currentThreadId();
     int i;
     if (self != thid) return FUN_0010ae60(thid);
-    if ((unsigned int)self >= 256 || DAT_00481e58 == 0) return -1;
-    i = DAT_00555688.next & 0x1FF;
-    DAT_00555688.next = i + 1;
-    DAT_00555688.entries[i].command = 2;
-    DAT_00555688.entries[i].thread = self;
-    iSignalSema(DAT_00555680);
+    if ((unsigned int)self >= 256 || topThreadId == 0) return -1;
+    i = topThreadRequests.next & 0x1FF;
+    topThreadRequests.next = i + 1;
+    topThreadRequests.entries[i].command = 2;
+    topThreadRequests.entries[i].thread = self;
+    iSignalSema(topThreadSema);
     return self;
 }

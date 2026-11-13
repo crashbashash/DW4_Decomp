@@ -6,9 +6,9 @@ typedef struct {
 } Sjr;
 
 extern int DAT_004a7ef0;
-extern int DAT_004a7ef4;
+extern int adxstmf_nrml_num;
 extern Sjr DAT_004a7f10[];
-void FUN_00269ca0(Sjr *sjr, int a0, int a1, int a2, int a3);
+void ADXSTMF_SetupHandleMember(Sjr *sjr, int a0, int a1, int a2, int a3);
 
 Sjr *FUN_00269da8(int a0, int a1, int a2, int a3)
 {
@@ -16,16 +16,16 @@ Sjr *FUN_00269da8(int a0, int a1, int a2, int a3)
     int i;
 
     sjr = 0;
-    for (i = 0; i < DAT_004a7ef4; i++) {
+    for (i = 0; i < adxstmf_nrml_num; i++) {
         sjr = &DAT_004a7f10[DAT_004a7ef0 + i];
         if (sjr->used == 0) {
             break;
         }
     }
-    if (i == DAT_004a7ef4) {
+    if (i == adxstmf_nrml_num) {
         return 0;
     }
-    FUN_00269ca0(sjr, a0, a1, a2, a3);
+    ADXSTMF_SetupHandleMember(sjr, a0, a1, a2, a3);
     sjr->f74 = 1;
     return sjr;
 }

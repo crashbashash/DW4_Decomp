@@ -7,7 +7,7 @@ extern int DAT_004a52c0;
 int FUN_002743c0();
 int FUN_00276e30();
 int vsprintf(char *buffer, const char *format, va_list args);
-void FUN_0010d108(const char *format, ...);
+void scePrintf(const char *format, ...);
 
 int FUN_00265868(void) {
     return DAT_004a52c0;
@@ -25,7 +25,7 @@ void FUN_002658a8(const char *format, ...) {
     va_start(args, format);
     if (DAT_004a52c0 != 2) {
         vsprintf(buffer, format, args);
-        FUN_0010d108(buffer);
+        scePrintf(buffer);
     }
     va_end(args);
 }
@@ -36,18 +36,18 @@ void FUN_00265928(const char *format, ...) {
     va_start(args, format);
     if (DAT_004a52c0 == 0) {
         vsprintf(buffer, format, args);
-        FUN_0010d108(buffer);
+        scePrintf(buffer);
     }
     va_end(args);
 }
 
-void FUN_002659a0(const char *format, ...) {
+void ADXMSG_PrintErr(const char *format, ...) {
     char buffer[128];
     va_list args;
     va_start(args, format);
     if (DAT_004a52c0 != 2) {
         vsprintf(buffer, format, args);
-        FUN_0010d108(buffer);
+        scePrintf(buffer);
     }
     va_end(args);
 }

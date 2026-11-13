@@ -137,7 +137,7 @@ void Gap__Core__igPageMemoryPool__vfunc_32(T_325850 *t) {
     if (t->f112 != 0) {
         if (t->f24 != 0) {
             if (t->f136 >= 3 && GPR_00554dc0 == 0) {
-                r = FUN_003081d0(DAT_004ff240, t->f132, t->f24);
+                r = igReportNotice(DAT_004ff240, t->f132, t->f24);
                 if (r != 1 && r == 2) {
                     GPR_00554dc0 = 1;
                 }
@@ -146,7 +146,7 @@ void Gap__Core__igPageMemoryPool__vfunc_32(T_325850 *t) {
         } else {
             if (t->f88 != 0) {
                 if (t->f136 >= 3 && GPR_00554dc4 == 0) {
-                    r = FUN_003081d0(DAT_004ff2a0, t->f132, (int)t->f88);
+                    r = igReportNotice(DAT_004ff2a0, t->f132, (int)t->f88);
                     if (r != 1 && r == 2) {
                         GPR_00554dc4 = 1;
                     }

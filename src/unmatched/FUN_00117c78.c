@@ -9,7 +9,7 @@ extern int DAT_0048510c;
 extern char DAT_004d2998[];
 extern char DAT_004d29c0[];
 int sceSifBindRpc(void *cd, unsigned int id, int mode);
-int FUN_0010d108(const char *fmt, ...);
+int scePrintf(const char *fmt, ...);
 int FUN_00117db8(int mode);
 int FUN_00117c78(int mode) {
     int i;
@@ -30,8 +30,8 @@ int FUN_00117c78(int mode) {
     r = scePadGetModVersion();
     if (r >> 8 != 4) {
         if (DAT_0048510c) {
-            FUN_0010d108(DAT_004d2998);
-            FUN_0010d108(DAT_004d29c0, 4, 0, r >> 8, r & 0xff);
+            scePrintf(DAT_004d2998);
+            scePrintf(DAT_004d29c0, 4, 0, r >> 8, r & 0xff);
         }
         return 0;
     }

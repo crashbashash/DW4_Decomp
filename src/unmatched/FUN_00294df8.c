@@ -1,6 +1,6 @@
 /* Drops the init reference count at 0x4bd250; when it reaches zero, finishes every active one of
  * the 8 player slots and shuts the subsystems down in order. */
-extern char *FUN_00294a30(void);
+extern char *mwsfd_GetWork(void);
 extern void FUN_00293118(void *slot);
 extern void FUN_0029a1d0(void);
 extern void FUN_0029a0e0(void);
@@ -25,7 +25,7 @@ typedef struct {
 } PlySlot;
 
 void FUN_00294df8(void) {
-    char *work = FUN_00294a30();
+    char *work = mwsfd_GetWork();
     PlySlot *slot;
     int i;
 

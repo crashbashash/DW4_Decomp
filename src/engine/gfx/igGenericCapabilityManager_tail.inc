@@ -432,15 +432,15 @@ void FUN_00158400(S0_158400 *arg0, int arg1, int arg2) {
     }
     arg0->f34 = arg1;
     arg0->f3C = 0U;
-    FUN_00158480((igImage *)arg0);
+    igImage_UpdateFormatInfo((igImage *)arg0);
     arg0->f30 = arg2;
 }
 
-void FUN_00158470(void *arg0) {
+void igImage_SetDefaultOrder(void *arg0) {
     *(int *)((char *)arg0 + 24) = 0x66;
 }
 
-void FUN_00158480(igImage *arg0) {
+void igImage_UpdateFormatInfo(igImage *arg0) {
     unsigned int sp5C;
     int sp58;
     int sp54;
@@ -497,7 +497,7 @@ void FUN_001585d0(S_1585d0 *arg0) {
         Memory_FreeBuffer(temp_a0);
         arg0->f34 = 0;
     }
-    FUN_00158480((igImage *)arg0);
+    igImage_UpdateFormatInfo((igImage *)arg0);
     var_v0 = (void **)(igObject_GetAllocator(arg0));
     var_v0 = (g_useOwnerAllocator != 0) ? var_v0 : (void **)(Memory_GetAllocatorBySelector(DAT_005870e8[0]));
     arg0->f34 = ((DW4VC_220_2 *)(var_v0))->vX((int)(arg0->f30), (int)(0x80));
@@ -733,7 +733,7 @@ void FUN_0015a100(S_15a100 *arg0) {
     } else {
         n = (unsigned)arg0->f48 / arg0->f12;
     }
-    FUN_00158480((igImage *)arg0);
+    igImage_UpdateFormatInfo((igImage *)arg0);
     if (arg0->f52 != 0 && n != arg0->f76) {
         al = (A_15a100 *)igObject_GetAllocator(arg0);
         al = (g_useOwnerAllocator != 0) ? al : (A_15a100 *)Memory_GetAllocatorBySelector(DAT_005870e8[0]);
@@ -795,7 +795,7 @@ int FUN_0015a380(S_15a380 *arg0) {
 
 void FUN_0015a420(C_15a420 *o, int a1, int a2, int a3, int a4, int a5) {
     o->v28(a2); o->v26(a4); o->v27(a5); o->v30(a3);
-    if (a1 != o->f52) { o->v29(); int y = o->f48; int x = o->f52; memcpy(x, a1, y); } else { o->f60 = 1; FUN_00158480((igImage *)o); }
+    if (a1 != o->f52) { o->v29(); int y = o->f48; int x = o->f52; memcpy(x, a1, y); } else { o->f60 = 1; igImage_UpdateFormatInfo((igImage *)o); }
 }
 
 void FUN_0015a500(void *arg0, int arg1) {
@@ -808,6 +808,21 @@ void FUN_0015a510(void *arg0, int arg1) {
 
 void FUN_0015a520(void *arg0, int arg1) {
     *(int *)((char *)(arg0) + 8) = (int) (arg1 & 0xFFFF);
+}
+
+void igImage_SetPixels(TextureImage *image, void *pixels, int format, int width, int height)
+{
+    image->setWidth(width);
+    image->setHeight(height);
+    igImage_SetDefaultOrder(image);
+    image->setFormat(format);
+    if (pixels != image->pixels) {
+        image->allocateImage();
+        memcpy(image->pixels, pixels, (unsigned int)image->imageSize);
+    } else {
+        image->localImage = 1;
+        igImage_UpdateFormatInfo((igImage *)image);
+    }
 }
 
 int FUN_0015a600(T_15a600 *arg0) {

@@ -8,7 +8,7 @@ int FUN_00296438(void *player);
 int FUN_002964a0(void *player);
 int FUN_00294308(void *player);
 int FUN_002970e8(void *player);
-void FUN_0029a320(const char *format, ...);
+void mwsfd_Error(const char *format, ...);
 
 extern char DAT_004f3f38[]; /* "E202191: mwPlyGetPlyInf: handle is invalid." */
 
@@ -20,7 +20,7 @@ void FUN_002971f0(void *player, struct Stats002971f0 *stats) {
     int status[40];
 
     if (FUN_002968c0(player) == 0) {
-        FUN_0029a320(DAT_004f3f38);
+        mwsfd_Error(DAT_004f3f38);
         return;
     }
     FUN_002add28(FUN_002963a8(player), status);

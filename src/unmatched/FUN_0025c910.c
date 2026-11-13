@@ -1,4 +1,4 @@
-unsigned char *FUN_0025c5a0(unsigned char *buf, int len, int *sfreq, int *nch, int *bits,
+unsigned char *adxb_GetAuInfo(unsigned char *buf, int len, int *sfreq, int *nch, int *bits,
                             int *nsmpl, int *loop);
 
 int FUN_0025c910(unsigned char *buf, int len, short *hdrlen, signed char *type, signed char *bits,
@@ -14,7 +14,7 @@ int FUN_0025c910(unsigned char *buf, int len, short *hdrlen, signed char *type, 
         *hdrlen = 0;
         return -1;
     }
-    data = FUN_0025c5a0(buf, len, &freq, &ch, &bps, &smpl, loop);
+    data = adxb_GetAuInfo(buf, len, &freq, &ch, &bps, &smpl, loop);
     if (data == 0) {
         return -1;
     }

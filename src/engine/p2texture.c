@@ -1,7 +1,7 @@
 #define MIN(a, b) ((a) < (b) ? (a) : (b))
 #define MAX(a, b) ((a) < (b) ? (b) : (a))
-int FUN_00113f20();
-int FUN_00113f78();
+int DIntr();
+int EIntr();
 int p2GrowPool();
 int p2SubmitDmaPacket();
 void p2SetClut(void *clut);
@@ -507,7 +507,7 @@ void FUN_002097f0(struct Tex_2097f0 **list, int count) {
     int addr;
     unsigned int qwc;
 
-    FUN_00113f20();
+    DIntr();
     if (p2DmaPacketQueued(2, DAT_00568f38[0]) != 0) {
         seq = DAT_00568f08[0]->seq;
         if (seq >= 0 && DAT_00568f38[0]->seq >= seq && DAT_00568f38[0]->cur < DAT_00568f38[0]->end) {
@@ -528,7 +528,7 @@ void FUN_002097f0(struct Tex_2097f0 **list, int count) {
             DAT_00569168[0]--;
         }
     }
-    FUN_00113f78();
+    EIntr();
     do {
         p2CurrentGsRegisters[0]->x391 = DAT_004917b0[(*list)->format];
         p2CurrentGsRegisters[0]->x390 = ((*list)->width + 63) / 64;
@@ -1141,7 +1141,7 @@ void FUN_0020b9d0(void *arg0) {
     int t = n->f71 + a1;
     if (n->f72 == 0) {
         p2ReserveDmaCompletions(t, a1);
-        FUN_00113f20();
+        DIntr();
         n->Set();
         c = n->f36;
         if (c != 0) {
@@ -1155,7 +1155,7 @@ void FUN_0020b9d0(void *arg0) {
             }
             var_s0 = var_s0->f32;
         }
-        FUN_00113f78();
+        EIntr();
     }
 }
 #pragma cplusplus reset
@@ -1379,9 +1379,9 @@ void FUN_0020c9f0(N_20c9f0 *arg0) {
     if (arg0->f48 == 0 && arg0->f52 == 0) {
         p2WaitDmaSequence(1, arg0->f8);
     }
-    FUN_00113f20();
+    DIntr();
     arg0->m = 0;
-    FUN_00113f78();
+    EIntr();
     a1 = arg0->f28;
     if (a1 != 0 && a1->m == 0) {
         a1->f64 += arg0->f64;

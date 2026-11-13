@@ -1,7 +1,7 @@
 extern char DAT_004f3178[];
 int FUN_00294d28(void);
 int FUN_00298b18(int obj);
-int FUN_0029a320(char *msg);
+int mwsfd_Error(char *msg);
 
 typedef struct FrmTypeInfo {
     char pad[88];
@@ -25,7 +25,7 @@ int FUN_00293d48(int obj, FrmTypeInfo *info)
         break;
     case 0:
     default:
-        FUN_0029a320(DAT_004f3178);
+        mwsfd_Error(DAT_004f3178);
         break;
     }
     if (FUN_00294d28() == 1 && FUN_00298b18(obj) == 1)

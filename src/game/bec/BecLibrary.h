@@ -633,7 +633,7 @@ extern "C" void FUN_0034ab30(void);
 extern "C" void *beSvSlotData_Register(void);
 extern "C" void beSvSlotData_GetMetaObject(void);
 extern "C" void beSvSlotData_InitFields(void);
-extern "C" void FUN_0034ac50(int arg0);
+extern "C" void beSaveMemoryObj_CreateInstance(int arg0);
 extern "C" igMetaObject *FUN_0034ac90(void);
 extern "C" int beSaveMemoryObj_GetVTable(void);
 extern "C" void FUN_0034ad70(void);

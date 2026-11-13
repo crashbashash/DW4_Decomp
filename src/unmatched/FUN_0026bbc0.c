@@ -1,5 +1,5 @@
-/* Between FUN_0025f2d0 and FUN_0025f2e8, stops a handle: resets its field-12 object (FUN_00265cb8,
- * FUN_00265cd0, FUN_0027a948), detaches its stream with FUN_002662c8, releases its source in mode
+/* Between ADXCRS_Lock and ADXCRS_Unlock, stops a handle: resets its field-12 object (ADXRNA_SetTransSw,
+ * ADXRNA_SetPlaySw, PS2RNA_SetStopFlag), detaches its stream with ADXSJD_Stop, releases its source in mode
  * 2, frees field 116 with FUN_0025b610 and clears the state. */
 /* Handle layout shared by FUN_0026bb38 through FUN_0026ebf8. */
 typedef struct Source_26bbc0 Source_26bbc0;
@@ -51,22 +51,22 @@ typedef struct Handle_26bbc0 {
     int f192;                   /* 0xc0 */
 } Handle_26bbc0;
 
-void FUN_0025f2d0(void);
-void FUN_0025f2e8(void);
-void FUN_00265cb8(void *object, int value);
-void FUN_00265cd0(void *object, int value);
-void FUN_0027a948(void *object, int value);
-void FUN_002662c8(void *stream);
+void ADXCRS_Lock(void);
+void ADXCRS_Unlock(void);
+void ADXRNA_SetTransSw(void *object, int value);
+void ADXRNA_SetPlaySw(void *object, int value);
+void PS2RNA_SetStopFlag(void *object, int value);
+void ADXSJD_Stop(void *stream);
 void FUN_0025b610(void *object);
 
 void FUN_0026bbc0(Handle_26bbc0 *handle) {
     Source_26bbc0 *source;
 
-    FUN_0025f2d0();
-    FUN_00265cb8(handle->f12, 0);
-    FUN_00265cd0(handle->f12, 0);
-    FUN_0027a948(handle->f12, 1);
-    FUN_002662c8(handle->stream);
+    ADXCRS_Lock();
+    ADXRNA_SetTransSw(handle->f12, 0);
+    ADXRNA_SetPlaySw(handle->f12, 0);
+    PS2RNA_SetStopFlag(handle->f12, 1);
+    ADXSJD_Stop(handle->stream);
     if (handle->mode == 2) {
         source = handle->source;
         if (source != 0) {
@@ -80,5 +80,5 @@ void FUN_0026bbc0(Handle_26bbc0 *handle) {
     handle->source = 0;
     handle->state = 0;
     handle->f172 = 0;
-    FUN_0025f2e8();
+    ADXCRS_Unlock();
 }

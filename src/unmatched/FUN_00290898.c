@@ -14,7 +14,7 @@ typedef struct SjSeekSj {
     SjSeekSjVtbl *vtbl;
 } SjSeekSj;
 
-void FUN_0027d470(SjSeekChunk *src, int size, SjSeekChunk *head, SjSeekChunk *rest);
+void SJ_SplitChunk(SjSeekChunk *src, int size, SjSeekChunk *head, SjSeekChunk *rest);
 int FUN_0028dc78(char *p);
 char *FUN_0028de10(char *buf, int len, int mask);
 
@@ -34,12 +34,12 @@ int FUN_00290898(SjSeekSj *sj)
         }
         p = FUN_0028de10(chunk.addr, chunk.size, -1);
         if (p == 0) {
-            FUN_0027d470(&chunk, chunk.size - 3, &chunk, &rest);
+            SJ_SplitChunk(&chunk, chunk.size - 3, &chunk, &rest);
             sj->vtbl->putChunk(sj, 0, &chunk);
             sj->vtbl->ungetChunk(sj, 1, &rest);
         } else {
             code = FUN_0028dc78(p);
-            FUN_0027d470(&chunk, p - chunk.addr, &chunk, &rest);
+            SJ_SplitChunk(&chunk, p - chunk.addr, &chunk, &rest);
             sj->vtbl->putChunk(sj, 0, &chunk);
             sj->vtbl->ungetChunk(sj, 1, &rest);
             break;

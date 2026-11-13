@@ -5,7 +5,6 @@ extern "C" int Gap__Bec__beMeterCtrl__vfunc_30(void);
 extern "C" int Gap__Bec__beMeterCtrl__vfunc_20(void);
 extern "C" void beMessenger_RegisterReceiverFromInfo(int, int, char *);
 extern "C" int FUN_00357600(...);
-extern "C" int FUN_0038f9b0(...);
 extern "C" int beMessenger_AppendFloat(int, float);
 extern "C" float beMessenger_GetFloat(int, int);
 extern "C" int beMessenger_GetInt(int, int);
@@ -36,6 +35,37 @@ int Gap__Bec__beMeterCtrl__vfunc_30(void)
 void Gap__Bec__beMeterCtrl__vfunc_29(beMeterCtrl * p0, int p1, char * p2)
 {
     beMessenger_RegisterReceiverFromInfo(p0->_messenger, p1, METERCTRL_3);
+}
+
+static inline float RatioTime(const float maxValue)
+{
+    return 2.0e9f / maxValue;
+}
+
+static inline float PerFrame(const float value)
+{
+    return value / 60.0f;
+}
+
+static void beMeterCtrl_SetupMaxValue(beMeterCtrl *self, beMeterCtrlOneData *data)
+{
+    int digits = 1;
+    int value = (int)data->_maxValueF;
+
+    while (1) {
+        value /= 10;
+        if (value == 0) {
+            break;
+        }
+        digits++;
+    }
+    data->_ketaKazu = digits;
+    data->_ratioTimeValueF = RatioTime(data->_maxValueF);
+    data->_addMaxValueF = PerFrame(data->_maxValueF);
+    if (data->_addMaxValueF < 1.0f) {
+        data->_addMaxValueF = 1.0f;
+    }
+    data->_isChange = 1;
 }
 
 int Gap__Bec__beMeterCtrl__vfunc_33(beMeterCtrl *arg0, beBaseInfoRam *arg1, int arg2) {
@@ -84,7 +114,7 @@ int Gap__Bec__beMeterCtrl__vfunc_33(beMeterCtrl *arg0, beBaseInfoRam *arg1, int 
         return 1;
     case 6:
         s1->_maxValueF = beMessenger_GetFloat(arg0->_messenger, 0);
-        FUN_0038f9b0(arg0, s1);
+        beMeterCtrl_SetupMaxValue(arg0, s1);
         return 1;
     case 7:
         s3 = beMessenger_GetString(arg0->_messenger, 0);

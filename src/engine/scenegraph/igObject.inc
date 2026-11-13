@@ -46,23 +46,23 @@ void FUN_001b23b0(int *arg0, int *arg1) {
 int FUN_001b23e0(int arg0, Y *arg1) {
     V3_1b23e0 sp40;
     V3_1b23e0 sp30;
-    igSmartPointer<X_1b23e0> created(((X_1b23e0 *)FUN_0018a660(igObject_GetAllocator())));
+    igSmartPointer<X_1b23e0> created(((X_1b23e0 *)igAABox_CreateInstance(igObject_GetAllocator())));
     FUN_001b1fa0(arg1, &sp40, &sp30);
     created.get()->a = sp40;
     created.get()->b = sp30;
-    FUN_00190060(arg0, created.get());
+    igVolume_ExtendBy(arg0, created.get());
     return (((int)((unsigned int) (*arg1->f12->vX() & 0xF0) >> 4)) & 0xFF) <= 0;
 }
 
 int FUN_001b24d0(int arg0, int arg1) {
-    igSmartPointer<BoundsObject> bounds(((BoundsObject *)FUN_0018a660(igObject_GetAllocator())));
+    igSmartPointer<BoundsObject> bounds(((BoundsObject *)igAABox_CreateInstance(igObject_GetAllocator())));
     BoundsObject *array;
     V3_1b24d0 min;
     V3_1b24d0 max;
     FUN_001b21d0((A_1b21d0 *)arg1, (V3_1b21d0 *)&min, (V3_1b21d0 *)&max);
     bounds.get()->min = min;
     bounds.get()->max = max;
-    FUN_00190060(arg0, bounds.get());
+    igVolume_ExtendBy(arg0, bounds.get());
     FUN_001b23b0((int *)&array, (int *)arg1);
     int missing = igVertexArray2__FindVertexData(array, 5, 0);
     if (array != 0) {
@@ -74,7 +74,7 @@ int FUN_001b24d0(int arg0, int arg1) {
     return !missing;
 }
 
-bool FUN_001b2600(int arg0, void *arg1) {
+bool igGeometry_ExtendBound(int arg0, void *arg1) {
     List_1b2600 *l;
     int n;
     bool ok;
@@ -100,10 +100,13 @@ bool FUN_001b2600(int arg0, void *arg1) {
     return ok;
 }
 
-int FUN_001b26f0(int arg0, void *arg1, int arg2) {
+/* The transform slot that recomputes the matrix at a 64-bit time. */
+class TransformAtTime { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void d32(); virtual void d33(); virtual void d34(); virtual void d35(); virtual void d36(); virtual int updateAt(long long); };
+
+int igTransform_ExtendBound(int arg0, void *arg1, long long time) {
     if (*(int *)((char *)(arg1) + 96) == 0) {
-        ((DW4VC_156_1 *)(((char *)(arg1) + 0)))->vX((int)(arg2));
-        FUN_0018ac80(arg0, (char *)arg1 + 0x20);
+        ((TransformAtTime *)arg1)->updateAt(time);
+        igAABox_Transform(arg0, (char *)arg1 + 0x20);
     }
     return 1;
 }

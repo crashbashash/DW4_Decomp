@@ -15,7 +15,7 @@ void FUN_00116498(void);
 int FUN_0010af00(int sema);
 int FUN_0010af30(int sema);
 int FUN_0010ade0(int id, void *info);
-int FUN_0010d108(const char *fmt, ...);
+int scePrintf(const char *fmt, ...);
 void sceSifInitRpc(int mode);
 int sceSifBindRpc(void *cd, unsigned int id, int mode);
 int sceCdSyncS(int mode);
@@ -23,7 +23,7 @@ int FUN_00116d90(int cmd) {
     int i;
     FUN_00116498();
     if (DAT_0048356c != FUN_0010af30(DAT_0048356c)) {
-        if (DAT_00483550 > 0) FUN_0010d108(DAT_004d2850, cmd, DAT_00483558);
+        if (DAT_00483550 > 0) scePrintf(DAT_004d2850, cmd, DAT_00483558);
         return 0;
     }
     DAT_00483558 = cmd;
@@ -36,7 +36,7 @@ int FUN_00116d90(int cmd) {
     if (DAT_0048358c >= 0) return 1;
     while (1) {
         if (sceSifBindRpc(&DAT_004850c0, 0x80000593, 0) < 0) {
-            if (DAT_00483550 > 0) FUN_0010d108(DAT_004d2878);
+            if (DAT_00483550 > 0) scePrintf(DAT_004d2878);
             i = 0x100000;
             while (i--);
             continue;

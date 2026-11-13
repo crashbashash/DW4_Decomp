@@ -4,6 +4,7 @@
 #include "dw4/reflected.h"
 #include "dw4/igSmartPointer.h"
 #include "dw4/igTDataList.h"
+#include "dw4/igVec3f.h"
 #define CHAR_METRICS_ITEM_SIZE 0x28
 
 extern "C" void igMetaObject_RunStaticInit(...);
@@ -11,7 +12,7 @@ extern "C" int FUN_002d7090(...);
 extern "C" int List_InsertWords(...);
 extern "C" int DAT_0058c618[4];
 extern "C" int FUN_00191f30(...);
-extern "C" int FUN_00192fc0(...);
+extern "C" int Vec3f_TransformProjective(...);
 extern "C" int DAT_0058c418[4];
 extern "C" unsigned char g_GuiLibrary_registered;
 extern "C" void GuiLibrary_MarkRegistered(void);
@@ -904,9 +905,9 @@ extern "C" int Gap__Gui__igOnOffColorChanger__vfunc_23(int arg0, OnOffColorState
 extern "C" void thunk_FUN_00453a40(igBasicColorChanger *arg0, int arg1, int arg2, int arg3, void *arg4);
 typedef struct B { char p[12]; float x, y, z; } B;
 typedef struct A { char p[8]; B *b; char q[12]; float dx, dy; } A;
-extern "C" void FUN_00453b90(float *out, A *a);
+extern "C" igVec3f FUN_00453b90(A *a);
 extern "C" int igGroup_AppendChild(...);
-extern "C" int FUN_00453e70(...);
+extern "C" void igDefaultAspect_UpdateMinimumSize(igDefaultAspect *self);
 extern "C" void Gap__Gui__igDefaultAspect__vfunc_25(igDefaultAspect *arg0);
 extern "C" int FUN_001c5eb0(...);
 extern "C" float g_vec3Zero[4];
@@ -930,18 +931,19 @@ struct E { char pad[8]; V96 *f8; V92 *f12; };
 struct L_4540d0 { char pad[8]; int count; char pad1[4]; E **data; };
 struct S_4540d0 { char pad[8]; int f8; char pad1[28]; L_4540d0 *f40; };
 extern "C" void FUN_004540d0(S_4540d0 *arg0);
-extern "C" int FUN_00453be0(...);
+extern "C" void igDefaultAspectElement_PlaceGeometry(igDefaultAspectElement *self, const igVec3f *size);
+class igGeometryElementSizeView { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void setSize(const igVec3f *size); };
 extern "C" void FUN_00454180(void *arg0);
 class C22 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void vX(int *); };
 class C30 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void vX(int *, int *); };
 class C28 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void vX(int *, int, int); };
 extern "C" void FUN_004541f0(int *arg0, int *arg1);
-extern "C" int FUN_002d6f50(...);
-extern "C" void FUN_00454290(void *arg0, int arg1);
+extern "C" int igRendererOrderedList_Append(...);
+extern "C" void igEventDispatcher_AddReceiver(void *arg0, int arg1);
 extern "C" int FUN_002d7750(...);
 typedef struct Obj_4542a0 { char pad[12]; int f12; } Obj_4542a0;
 extern "C" void FUN_004542a0(Obj_4542a0 *arg0, int arg1);
-extern "C" int FUN_004542d0(int *p);
+extern "C" int igEventDispatcher_AddReceiverOrder(int *p);
 typedef struct S0 { char pad12[12]; int fC; } S0;
 extern "C" int FUN_002d7760(...);
 extern "C" void FUN_004542e0(S0 *arg0, int arg1, int arg2);
@@ -1207,7 +1209,7 @@ struct S_4559a0 { char pad[28]; unsigned char b; };
 extern "C" void FUN_004559a0(struct S_4559a0 *arg0, unsigned char arg1);
 struct Vec3 { int x; int y; int z; };
 struct Node : igObject { int fc_pad; igObject *child; };
-extern "C" igObject *FUN_0018a660(int);
+extern "C" igObject *igAABox_CreateInstance(int);
 extern "C" int FUN_001900d0(igObject *, Vec3 *);
 extern "C" int FUN_001d3550(Node *);
 extern "C" void Gap__Gui__igGuiComponentNode__vfunc_13(Node *self);
@@ -1274,7 +1276,7 @@ typedef struct P_456a60 { char pad28[28]; Q *f28; } P_456a60;
 typedef struct A_456a60 { char pad12[12]; int f12; char pad16[8]; Rc_456a60 *f24; P_456a60 *f28; unsigned char f32; } A_456a60;
 typedef struct R_456a60 { char pad8[8]; Q *f8; } R_456a60;
 typedef struct V3 { int a; int b; int c; int pad[4]; } V3;
-extern "C" int DAT_0058c3d8[4];
+extern "C" int g_igGuiSystemModelMousePositionField[4];
 extern "C" void FUN_00456a60(A_456a60 *arg0, R_456a60 *arg1);
 class Obj_456b80 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void d32(); virtual void d33(); virtual void d34(); virtual void vX(void *); };
 struct P_456b80 { char pad[12]; float x; float y; };
@@ -1288,7 +1290,7 @@ struct Obj_456cc0 : VC_456cc0 { char pad4[24]; LL *f28; };
 struct P_456cc0 { char pad164[164]; T_456cc0 *f164; };
 struct W { char pad12[12]; P_456cc0 *f12; char pad16[4]; Obj_456cc0 *f20; };
 extern "C" int DAT_0058c400[4];
-extern "C" void FUN_00456cc0(W *arg0, T_456cc0 *arg1);
+extern "C" void igGuiSystem_SetRootComponent(W *arg0, T_456cc0 *arg1);
 struct N_456e10 { char pad[24]; struct N_456e10 *f24; };
 struct O_456e10 { char pad[12]; struct M_456e10 *f12; };
 struct M_456e10 { char pad[164]; void *f164; };
@@ -1396,7 +1398,7 @@ struct S_4578c0;
 class VC_4578c0 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void vX(S_4578c0 *); };
 struct L_4578c0 { char p[8]; int n; char q[4]; VC_4578c0 **arr; };
 struct S_4578c0 { char p[4]; VC_4578c0 *f4; L_4578c0 *f8; };
-extern "C" void FUN_004578c0(S_4578c0 *arg0, S_4578c0 *arg1);
+extern "C" void igModel_NotifyViews(S_4578c0 *arg0, S_4578c0 *arg1);
 struct L_457950 { char pad[8]; int n; int pad2; int *arr; };
 struct O_457950 { char pad[8]; struct L_457950 *l; };
 extern "C" void Gap__Gui__igModel__vfunc_10(struct O_457950 *arg0);

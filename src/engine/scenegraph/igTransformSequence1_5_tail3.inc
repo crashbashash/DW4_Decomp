@@ -320,7 +320,7 @@ int Gap__Sg__igTransformSequence1_5__vfunc_48(igTransformSequence1_5 *self, int 
     return 0;
 }
 
-void FUN_001deb50(igTransformSequence1_5 *self, float *out, int from, int to, float t) {
+void igTransformSequence1_5_InterpolateTranslation(igTransformSequence1_5 *self, float *out, int from, int to, float t) {
     unsigned char method = self->_interpolationMethod[0];
     if (method == 0) {
         float *key = (float *)(((igVec3fList *)self->_xlateList)->_data + from * 12);
@@ -340,7 +340,7 @@ void FUN_001deb50(igTransformSequence1_5 *self, float *out, int from, int to, fl
                  (float *)(((igVec3fList *)self->_xlateList)->_data + to * 12), t);
 }
 
-void FUN_001def90(igTransformSequence1_5 *self, float *out, int from, int to, float t) {
+void igTransformSequence1_5_InterpolateRotation(igTransformSequence1_5 *self, float *out, int from, int to, float t) {
     unsigned char method = self->_interpolationMethod[1];
     if (method == 0) {
         float *key = (float *)(((igQuaternionfList *)self->_quatList)->_data + from * 16);
@@ -361,9 +361,9 @@ void FUN_001def90(igTransformSequence1_5 *self, float *out, int from, int to, fl
     }
 }
 
-void FUN_001df1d0(A_1df1d0 *arg0, long long arg1, int *arg2, int *arg3, float *arg4) {
+void igTransformSequence1_5_FindUniformKeys(SequenceKeyTimes *arg0, long long arg1, int *arg2, int *arg3, float *arg4) {
     float a = (float)(unsigned int)(arg1 >> 18);
-    float b = (float)(unsigned int)(*arg0->b->p >> 18);
+    float b = (float)(unsigned int)(*arg0->_timeListLong->_data >> 18);
     *arg2 = (int)(a / b);
     *arg3 = *arg2 + 1;
     *arg4 = fmodf(a, b) / b;
@@ -384,7 +384,226 @@ long long Gap__Sg__igTransformSequence1_5__vfunc_32(V_1df740 *arg0) {
 
 void Gap__Sg__igTransformSequence1_5__vfunc_27(IgForwardTarget *o, int a, int b, int c) { o->slot26(a, b, c, (char *)o + 40, 0); }
 
+/* The igTransformSequence1_5 virtuals the key evaluators call (vfunc_N sits at vtable offset 4N). */
+class TransformSequence1_5Slots {
+public:
+    virtual void slot2(); virtual void slot3(); virtual void slot4(); virtual void slot5(); virtual void slot6();
+    virtual void slot7(); virtual void slot8(); virtual void slot9(); virtual void slot10(); virtual void slot11();
+    virtual void slot12(); virtual void slot13(); virtual void slot14(); virtual void slot15(); virtual void slot16();
+    virtual void slot17(); virtual void slot18(); virtual void slot19(); virtual void slot20(); virtual void slot21();
+    virtual void slot22(); virtual void slot23(); virtual void slot24(); virtual void slot25(); virtual void slot26();
+    virtual void slot27(); virtual void slot28(); virtual void slot29(); virtual void slot30(); virtual void slot31();
+    virtual void slot32(); virtual void slot33(); virtual void slot34(); virtual void slot35(); virtual void slot36();
+    virtual void slot37(); virtual void slot38();
+    virtual int getKeyCount();                      /* vfunc_39 */
+    virtual void slot40(); virtual void slot41();
+    virtual float *getTranslationKey(int index);    /* vfunc_42 */
+    virtual void slot43(); virtual void slot44();
+    virtual float *getQuaternionKey(int index);     /* vfunc_45 */
+};
+static inline long long keyTime(igLongList *times, unsigned int index) { return ((long long *)times->_data)[index]; }
+static inline void copyTranslation(float *dst, const float *src) { dst[0] = src[0]; dst[1] = src[1]; dst[2] = src[2]; }
+static inline void copyQuaternion(float *dst, const float *src) { dst[0] = src[0]; dst[1] = src[1]; dst[2] = src[2]; dst[3] = src[3]; }
+extern "C" void igTransformSequence1_5_FindKeys(igTransformSequence1_5 *self, long long time, int *key0, int *key1, float *t, int *lastKey);
+extern "C" void igTransformSequence1_5_InterpolateTranslation(igTransformSequence1_5 *self, float *out, int from, int to, float t);
+extern "C" void igTransformSequence1_5_InterpolateRotation(igTransformSequence1_5 *self, float *out, int from, int to, float t);
+extern "C" void igTransformSequence1_5_FindUniformKeys(SequenceKeyTimes *arg0, long long arg1, int *arg2, int *arg3, float *arg4);
+extern "C" int Gap__Sg__igTransformSequence1_5__evaluateRotationAndTranslation(igTransformSequence1_5 *self, float *quat, float *translation, long long time, int *lastKey, int flags);
+
+/* Evaluates the translation and rotation tracks at {time}: wraps the time by the play mode, finds the
+ * bracketing keys and interpolates between them into {translation} and {quat}. {lastKey} caches the
+ * key search position. */
+int Gap__Sg__igTransformSequence1_5__evaluateRotationAndTranslation(igTransformSequence1_5 *self, float *quat, float *translation, long long time, int *lastKey, int flags) {
+    long long first;
+    long long end;
+    long long last;
+    igLongList *times;
+    long long duration;
+    long long rem;
+    float t;
+    int key1;
+    int key0;
+    float span;
+
+    long long now = time - self->_keyframeTimeOffset;
+    if (!self->_uniformTimeEnabled) {
+        times = (igLongList *)self->_timeListLong;
+        first = ((long long *)times->_data)[0];
+        last = keyTime(times, times->_count - 1);
+        duration = self->_animationDuration;
+        end = first + duration;
+    } else {
+        times = (igLongList *)self->_timeListLong;
+        first = 0;
+        last = ((long long *)times->_data)[0] * (long long)(((igQuaternionfList *)self->_quatList)->_count - 1);
+        end = self->_animationDuration;
+        duration = end;
+    }
+    if (duration == 0) {
+        copyTranslation(translation, ((TransformSequence1_5Slots *)self)->getTranslationKey(0));
+        return 1;
+    }
+    if (end < now) {
+        switch (self->_playMode) {
+        case 1: {
+            int lastIndex = times->_count - 1;
+            copyTranslation(translation, ((TransformSequence1_5Slots *)self)->getTranslationKey(lastIndex));
+            copyQuaternion(quat, ((TransformSequence1_5Slots *)self)->getQuaternionKey(lastIndex));
+        }
+            return 1;
+        case 3:
+        case 0:
+            UnsignedDivMod64_Cached(now - first, duration, &rem);
+            now = first + rem;
+            if (*lastKey != 1 && now < keyTime((igLongList *)self->_timeListLong, *lastKey - 1)) {
+                *lastKey = 1;
+            }
+            break;
+        case 2: {
+            unsigned long long cycle = (unsigned long long)(unsigned int)UnsignedDivMod64_Cached(now - first, duration, &rem);
+            if ((int)cycle & 1) {
+                now = end - rem;
+            } else {
+                now = first + rem;
+            }
+        } break;
+        default:
+            copyTranslation(translation, ((TransformSequence1_5Slots *)self)->getTranslationKey(0));
+            copyQuaternion(quat, ((TransformSequence1_5Slots *)self)->getQuaternionKey(0));
+            return 1;
+        }
+    } else if (now < first) {
+        copyTranslation(translation, ((TransformSequence1_5Slots *)self)->getTranslationKey(0));
+        copyQuaternion(quat, ((TransformSequence1_5Slots *)self)->getQuaternionKey(0));
+        return 1;
+    }
+    if (last < now) {
+        if (self->_playMode == 3) {
+            float elapsed;
+            key0 = ((igLongList *)self->_timeListLong)->_count - 1;
+            key1 = 0;
+            if (!self->_uniformTimeEnabled) {
+                elapsed = (float)(unsigned int)(int)((now - last) >> 18);
+                span = (float)(unsigned int)(int)((end - last) >> 18);
+            } else {
+                span = (float)(unsigned int)(int)(((long long *)((igLongList *)self->_timeListLong)->_data)[0] >> 18);
+                elapsed = fmodf((float)(unsigned int)(int)(now >> 18), span);
+            }
+            if (span < 9.99999997e-07f) {
+                t = 0.0f;
+            } else {
+                t = elapsed / span;
+            }
+        } else {
+            int lastIndex = ((TransformSequence1_5Slots *)self)->getKeyCount() - 1;
+            copyTranslation(translation, ((TransformSequence1_5Slots *)self)->getTranslationKey(lastIndex));
+            copyQuaternion(quat, ((TransformSequence1_5Slots *)self)->getQuaternionKey(lastIndex));
+            return 1;
+        }
+    } else if (!self->_uniformTimeEnabled) {
+        igTransformSequence1_5_FindKeys(self, now, &key0, &key1, &t, lastKey);
+    } else {
+        igTransformSequence1_5_FindUniformKeys((SequenceKeyTimes *)self, now, &key0, &key1, &t);
+    }
+    igTransformSequence1_5_InterpolateTranslation(self, translation, key0, key1, t);
+    igTransformSequence1_5_InterpolateRotation(self, quat, key0, key1, t);
+    return 1;
+}
+
 void Gap__Sg__igTransformSequence1_5__vfunc_25(IgForwardTarget_1dfd60 *o, int a, int b) { o->slot24(a, b, (char *)o + 40, 0); }
+
+extern "C" int Gap__Sg__igTransformSequence1_5__evaluateRotation(igTransformSequence1_5 *self, float *quat, long long time, int *lastKey, int flags);
+
+/* Evaluates the rotation track at {time}: wraps the time by the play mode, finds the bracketing keys
+ * and interpolates between them into {quat}. {lastKey} caches the key search position. */
+int Gap__Sg__igTransformSequence1_5__evaluateRotation(igTransformSequence1_5 *self, float *quat, long long time, int *lastKey, int flags) {
+    long long first;
+    long long end;
+    long long last;
+    igLongList *times;
+    long long duration;
+    long long rem;
+    float t;
+    int key1;
+    int key0;
+    float span;
+
+    long long now = time - self->_keyframeTimeOffset;
+    if (!self->_uniformTimeEnabled) {
+        times = (igLongList *)self->_timeListLong;
+        first = ((long long *)times->_data)[0];
+        last = keyTime(times, times->_count - 1);
+        duration = self->_animationDuration;
+        end = first + duration;
+    } else {
+        times = (igLongList *)self->_timeListLong;
+        first = 0;
+        last = ((long long *)times->_data)[0] * (long long)(((igQuaternionfList *)self->_quatList)->_count - 1);
+        end = self->_animationDuration;
+        duration = end;
+    }
+    if (duration == 0) {
+        copyQuaternion(quat, ((TransformSequence1_5Slots *)self)->getQuaternionKey(0));
+        return 1;
+    }
+    if (end < now) {
+        switch (self->_playMode) {
+        case 1:
+            copyQuaternion(quat, ((TransformSequence1_5Slots *)self)->getQuaternionKey(times->_count - 1));
+            return 1;
+        case 3:
+        case 0:
+            UnsignedDivMod64_Cached(now - first, duration, &rem);
+            now = first + rem;
+            if (*lastKey != 1 && now < keyTime((igLongList *)self->_timeListLong, *lastKey - 1)) {
+                *lastKey = 1;
+            }
+            break;
+        case 2: {
+            unsigned long long cycle = (unsigned long long)(unsigned int)UnsignedDivMod64_Cached(now - first, duration, &rem);
+            if ((int)cycle & 1) {
+                now = end - rem;
+            } else {
+                now = first + rem;
+            }
+        } break;
+        default:
+            copyQuaternion(quat, ((TransformSequence1_5Slots *)self)->getQuaternionKey(0));
+            return 1;
+        }
+    } else if (now < first) {
+        copyQuaternion(quat, ((TransformSequence1_5Slots *)self)->getQuaternionKey(0));
+        return 1;
+    }
+    if (last < now) {
+        if (self->_playMode == 3) {
+            float elapsed;
+            key0 = ((igLongList *)self->_timeListLong)->_count - 1;
+            key1 = 0;
+            if (!self->_uniformTimeEnabled) {
+                elapsed = (float)(unsigned int)(int)((now - last) >> 18);
+                span = (float)(unsigned int)(int)((end - last) >> 18);
+            } else {
+                span = (float)(unsigned int)(int)(((long long *)((igLongList *)self->_timeListLong)->_data)[0] >> 18);
+                elapsed = fmodf((float)(unsigned int)(int)(now >> 18), span);
+            }
+            if (span < 9.99999997e-07f) {
+                t = 0.0f;
+            } else {
+                t = elapsed / span;
+            }
+        } else {
+            copyQuaternion(quat, ((TransformSequence1_5Slots *)self)->getQuaternionKey(((TransformSequence1_5Slots *)self)->getKeyCount() - 1));
+            return 1;
+        }
+    } else if (!self->_uniformTimeEnabled) {
+        igTransformSequence1_5_FindKeys(self, now, &key0, &key1, &t, lastKey);
+    } else {
+        igTransformSequence1_5_FindUniformKeys((SequenceKeyTimes *)self, now, &key0, &key1, &t);
+    }
+    igTransformSequence1_5_InterpolateRotation(self, quat, key0, key1, t);
+    return 1;
+}
 
 
 static inline bool centerOfRotationIsSet(const igTransformSequence1_5 *o) {

@@ -1,5 +1,5 @@
 /* Returns the number of nodes queued on one lane of a handle (linked list at +24 + 4 * lane); null
- * and unused handles are reported through FUN_0027b2e0 and return 0. */
+ * and unused handles are reported through SJERR_CallErr and return 0. */
 struct Node27d {
     struct Node27d *next;   /* +0 */
 };
@@ -11,7 +11,7 @@ struct Handle27d {
     struct Node27d *lanes[4];   /* +24 */
 };
 
-extern void FUN_0027b2e0(const char *message);
+extern void SJERR_CallErr(const char *message);
 extern const char E2004090279_NULL_pointer_is_specified[];
 extern const char E2004090280_Specified_handle_is_invalid[];
 
@@ -20,11 +20,11 @@ int FUN_0027d348(struct Handle27d *handle, int lane) {
     int count;
 
     if (handle == 0) {
-        FUN_0027b2e0(E2004090279_NULL_pointer_is_specified);
+        SJERR_CallErr(E2004090279_NULL_pointer_is_specified);
         return 0;
     }
     if (handle->used == 0) {
-        FUN_0027b2e0(E2004090280_Specified_handle_is_invalid);
+        SJERR_CallErr(E2004090280_Specified_handle_is_invalid);
         return 0;
     }
     count = 0;

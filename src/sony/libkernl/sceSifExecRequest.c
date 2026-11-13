@@ -1,12 +1,12 @@
 typedef struct { unsigned int src; unsigned int dest; int size; int attr; } Dma;
 typedef struct { char p0[16]; int rec; int p1; int rpc_id; void *client; int cid; char p2[28]; } Pkt;
 typedef struct { int p0; void *(*func)(int, void *, int); void *buf; int size; char p1[12]; void *client; void *paddr; int rpc; void *recv; int rsize; int rmode; unsigned int rid; } Sd;
-extern char DAT_00557a00[];
+extern char _sif_rpc_data[];
 void sceSifWriteBackDCache(void *, int);
-int FUN_00113f20(void);
-int FUN_00113f78(void);
+int DIntr(void);
+int EIntr(void);
 Pkt *_sceRpcGetFPacket2(void *, unsigned int);
-Pkt *FUN_0010dbd0(void *);
+Pkt *_sceRpcGetFPacket(void *);
 int FUN_0010d6c8(int, void *, int, void *, void *, int);
 int FUN_0010b2a0(Dma *, int);
 void sceSifExecRequest(Sd *sd) {
@@ -21,13 +21,13 @@ void sceSifExecRequest(Sd *sd) {
     if (rec) size = sd->rsize;
     if (sd->size > 0) sceSifWriteBackDCache(sd->buf, sd->size);
     if (size > 0) sceSifWriteBackDCache(rec, size);
-    FUN_00113f20();
+    DIntr();
     if (sd->rid & 4) {
-        rend = _sceRpcGetFPacket2(DAT_00557a00, sd->rid >> 16);
+        rend = _sceRpcGetFPacket2(_sif_rpc_data, sd->rid >> 16);
     } else {
-        rend = FUN_0010dbd0(DAT_00557a00);
+        rend = _sceRpcGetFPacket(_sif_rpc_data);
     }
-    FUN_00113f78();
+    EIntr();
     rend->cid = 0x8000000a;
     rend->client = sd->client;
     if (sd->rmode) {

@@ -33,7 +33,7 @@ void *memset(void *s, int c, unsigned int n);
 int FUN_002933f8(GetHdrInfInfo *info);
 int FUN_00293448(GetHdrInfHdr *hdr);
 void FUN_00294390(char *buf, int size, GetHdrInfHdr *hdr);
-void FUN_0029a320(const char *format, ...);
+void mwsfd_Error(const char *format, ...);
 void FUN_0029f160(char *buf, int size, GetHdrInfInfo *info);
 
 /* matching construct: 120-order sweep of the field copies */
@@ -43,11 +43,11 @@ void FUN_00293230(char *buf, int size, GetHdrInfHdr *out)
     GetHdrInfInfo info;
 
     if (buf == 0 || out == 0) {
-        FUN_0029a320(DAT_004f3018);
+        mwsfd_Error(DAT_004f3018);
         return;
     }
     if (size <= 0) {
-        FUN_0029a320(DAT_004f3040);
+        mwsfd_Error(DAT_004f3040);
         return;
     }
     memset(&hdr, 0, sizeof(hdr));

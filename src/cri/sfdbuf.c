@@ -5,7 +5,7 @@ typedef struct SfdBufInf {
     SfdSj *sj;   /* 4 */
     char *buf;   /* 8 */
     int size;    /* 12 */
-    int f16;
+    int xsize;   /* 16 */
     char *p0;    /* 20 */
 } SfdBufInf;
 
@@ -59,11 +59,11 @@ extern int DAT_0057fab0;
 extern int DAT_0057fab4;
 
 extern void *memcpy(void *dst, const void *src, unsigned int n);
-int FUN_002a0bb8();
-void FUN_002a0e70(int *lock);
-void FUN_002a0e88(int *lock);
+int sfd_ReportError();
+void sfd_Lock(int *lock);
+void sfd_Unlock(int *lock);
 void FUN_002ac6d0(void *ring);
-SfdSj *FUN_0027bd48(void *work, int size, int extra);
+SfdSj *SJRBF_Create(void *work, int size, int extra);
 SfdSj *FUN_0027b408(void *work, int size);
 int FUN_0027c760(SfdSj *sj, int a, int b);
 int FUN_0027bc30(SfdSj *sj);
@@ -80,14 +80,14 @@ void FUN_0029d8f0(SfdBufEnt *ents, char **areas, int *sizes, int index);
 void FUN_0029da18(SfdBufEnt *ents, char **areas, int *sizes, int index);
 void FUN_0029da68(SfdBufEnt *ent, int state, int flag);
 void FUN_0029da88(void *body);
-int FUN_0029db60(SfdBufInf *inf);
+int sfbuf_ChkInf(SfdBufInf *inf);
 int FUN_0029dba8(SfdBufHn *h, SfdBufInf *inf, int index);
 void FUN_0029dc18(SfdBufBody *body, void *src, SfdBufEnt *ent, int flag);
 void FUN_0029dcb8(SfdBufCur *cur);
-int FUN_0029ddb0(SfdBufHn *h, int index, SfdBufStat *stat, int id);
+int sfbuf_GetStat(SfdBufHn *h, int index, SfdBufStat *stat, int id);
 int FUN_0029de88(SfdBufHn *h, int index, int len, int id);
 void FUN_0029dfd8(SfdBufBody *body);
-int FUN_0029e068(SfdSj *sj, int id, SfdSjChunk *first, SfdSjChunk *second);
+int sfbuf_PeekChunks(SfdSj *sj, int id, SfdSjChunk *first, SfdSjChunk *second);
 int FUN_0029e160(SfdSj *sj, int id, int len);
 int FUN_0029ec40(SfdSj *sj);
 int FUN_0029ec78(SfdSj *sj);
@@ -165,14 +165,14 @@ int FUN_0029d6f8(SfdBufInf *inf, char *data, int size, int extra) {
     inf->buf = data;
     inf->size = len;
     if (len <= 0) {
-        return FUN_002a0bb8(0, 0xFF00040C, extra);
+        return sfd_ReportError(0, 0xFF00040C, extra);
     }
-    inf->f16 = extra;
+    inf->xsize = extra;
     inf->p0 = 0;
-    sj = FUN_0027bd48(data, len, extra);
+    sj = SJRBF_Create(data, len, extra);
     inf->sj = sj;
     if (sj == 0) {
-        return FUN_002a0bb8(0, 0xFF00040A);
+        return sfd_ReportError(0, 0xFF00040A);
     }
     return 0;
 }
@@ -207,7 +207,7 @@ void FUN_0029d838(SfdBufHn *h, SfdBufEnt *ents, char **areas, int *sizes, int in
     inf->sj = (SfdSj *)*size;
     inf->buf = 0;
     inf->size = 0;
-    inf->f16 = (int)h->rec;
+    inf->xsize = (int)h->rec;
     for (i = 15; i >= 0; i--) {
         h->rec[i].f0 = 0;
     }
@@ -223,7 +223,7 @@ void FUN_0029d8f0(SfdBufEnt *ents, char **areas, int *sizes, int index) {
     body->inf.sj = (SfdSj *)*size;
     body->inf.buf = 0;
     body->inf.size = 0;
-    body->inf.f16 = 0;
+    body->inf.xsize = 0;
     body->inf.p0 = 0;
     body->cur.pos = 0;
     body->cur.len = 0;
@@ -231,6 +231,28 @@ void FUN_0029d8f0(SfdBufEnt *ents, char **areas, int *sizes, int index) {
     body->f36 = 0;
     body->f40 = 0;
     body->f44 = 0;
+}
+
+void sfbuf_SetRingInf(SfdBufHn *h, int index, int bits, int count, int value) {
+    SfdBufEnt *ents = h->ent;
+    SfdBufEnt *ent = &ents[index];
+    SfdBufBody *body = &ent->body;
+    SfdBufInf *inf = &body->inf;
+    int size;
+    char *data;
+    int bytes;
+    size = (int)inf->sj;
+    data = inf->data;
+    if (count >= 2) {
+        size /= count;
+    }
+    bytes = (bits + 7) / 8;
+    inf->size = bits;
+    inf->xsize = count;
+    inf->buf = (char *)value;
+    inf->p0 = data;
+    body->cur.pos = data + size;
+    body->cur.len = size / bytes;
 }
 
 void FUN_0029da18(SfdBufEnt *ents, char **areas, int *sizes, int index) {
@@ -264,8 +286,8 @@ void FUN_0029da88(void *body) {
 
 void FUN_0029dab8(SfdBufHn *h, SfdBufInf *inf) {
     int index;
-    if (FUN_0029db60(inf) != 0) {
-        FUN_002a0bb8(h, 0xFF000408);
+    if (sfbuf_ChkInf(inf) != 0) {
+        sfd_ReportError(h, 0xFF000408);
         return;
     }
     if (FUN_002b03e8(h, 1) != 0) {
@@ -280,12 +302,30 @@ void FUN_0029dab8(SfdBufHn *h, SfdBufInf *inf) {
     FUN_0029dba8(h, inf, index);
 }
 
+int sfbuf_ChkInf(SfdBufInf *inf) {
+    if (inf->sj == 0) {
+        return -1;
+    }
+    if (inf->data == 0) {
+        if (inf->buf == 0) {
+            return -1;
+        }
+        if (inf->size <= 0) {
+            return -1;
+        }
+        if ((int)inf->p0 > 0) {
+            return -1;
+        }
+    }
+    return 0;
+}
+
 int FUN_0029dba8(SfdBufHn *h, SfdBufInf *inf, int index) {
     SfdBufEnt *ents = h->ent;
     SfdBufEnt *ent = &ents[index];
     SfdBufBody *body = &ent->body;
     if (ent->state != 4) {
-        return FUN_002a0bb8(h, 0xFF000409);
+        return sfd_ReportError(h, 0xFF000409);
     }
     FUN_0029dc18(body, inf, ent, inf->sj != 0);
     return 0;
@@ -293,14 +333,14 @@ int FUN_0029dba8(SfdBufHn *h, SfdBufInf *inf, int index) {
 
 void FUN_0029dc18(SfdBufBody *body, void *src, SfdBufEnt *ent, int flag) {
     int lock;
-    FUN_002a0e70(&lock);
+    sfd_Lock(&lock);
     ent->valid = flag;
     memcpy(&body->inf, src, sizeof(SfdBufInf));
     FUN_0029dcb8(&body->cur);
     body->f32 = 0;
     body->f36 = 0;
     FUN_002ac6d0(&body->f40);
-    FUN_002a0e88(&lock);
+    sfd_Unlock(&lock);
 }
 
 void FUN_0029dcb8(SfdBufCur *cur) {
@@ -331,12 +371,38 @@ void FUN_0029dd58(SfdBufHn *h, int index, SfdSj **out) {
     *out = ent->body.inf.sj;
 }
 
+int sfbuf_GetStat(SfdBufHn *h, int index, SfdBufStat *stat, int id) {
+    SfdBufEnt *ents = h->ent;
+    SfdBufEnt *ent;
+    SfdSj *sj;
+    SfdSjChunk first;
+    SfdSjChunk second;
+    stat->ck0.len = 0;
+    stat->ck1.len = 0;
+    stat->tailLen = 0;
+    stat->tailFlag = 0;
+    stat->ck0.data = 0;
+    stat->ck1.data = 0;
+    stat->tailData = 0;
+    ent = &ents[index];
+    sj = ent->body.inf.sj;
+    if (ent->valid == 0 || sj == 0) {
+        return 0;
+    }
+    sfbuf_PeekChunks(sj, id, &first, &second);
+    stat->ck0.data = first.data;
+    stat->ck0.len = first.len;
+    stat->ck1.data = second.data;
+    stat->ck1.len = second.len;
+    return 0;
+}
+
 void FUN_0029dd80(SfdBufHn *h, int index, SfdBufStat *stat) {
-    FUN_0029ddb0(h, index, stat, 0);
+    sfbuf_GetStat(h, index, stat, 0);
 }
 
 void FUN_0029dd98(SfdBufHn *h, int index, SfdBufStat *stat) {
-    FUN_0029ddb0(h, index, stat, 1);
+    sfbuf_GetStat(h, index, stat, 1);
 }
 
 void FUN_0029de58(SfdBufHn *h, int index, int len) {
@@ -352,7 +418,7 @@ void FUN_0029dfd8(SfdBufBody *body) {
     SfdSjChunk first;
     SfdSjChunk second;
     char *pos;
-    FUN_0029e068(body->inf.sj, 1, &first, &second);
+    sfbuf_PeekChunks(body->inf.sj, 1, &first, &second);
     pos = cur->pos;
     if (pos < first.data || pos >= first.data + first.len) {
         if (pos < second.data || pos >= second.data + second.len) {
@@ -362,7 +428,7 @@ void FUN_0029dfd8(SfdBufBody *body) {
     }
 }
 
-int FUN_0029e068(SfdSj *sj, int id, SfdSjChunk *first, SfdSjChunk *second) {
+int sfbuf_PeekChunks(SfdSj *sj, int id, SfdSjChunk *first, SfdSjChunk *second) {
     int available = sj->vtbl->getNumData(sj, id);
     sj->vtbl->getChunk(sj, id, 0x7FFFFFFF, first);
     if (first->len < available) {
@@ -387,19 +453,19 @@ int FUN_0029e160(SfdSj *sj, int id, int len) {
 void FUN_0029e1b8(SfdBufHn *h, int index, int *pos, int *len) {
     int lock;
     SfdBufCur *cur = &h->ent[index].body.cur;
-    FUN_002a0e70(&lock);
+    sfd_Lock(&lock);
     *pos = (int)cur->pos;
     *len = cur->len;
-    FUN_002a0e88(&lock);
+    sfd_Unlock(&lock);
 }
 
 void FUN_0029e228(SfdBufHn *h, int index, int pos, int len) {
     int lock;
     SfdBufCur *cur = &h->ent[index].body.cur;
-    FUN_002a0e70(&lock);
+    sfd_Lock(&lock);
     cur->pos = (char *)pos;
     cur->len = len;
-    FUN_002a0e88(&lock);
+    sfd_Unlock(&lock);
 }
 
 int FUN_0029e290(SfdBufHn *h, int index) {
@@ -419,7 +485,7 @@ int FUN_0029e2d0(SfdBufHn *h, int index) {
     SfdBufBody *body = &h->ent[index].body;
     int count;
     int pending;
-    FUN_002a0e70(&lock);
+    sfd_Lock(&lock);
     count = body->f32;
     pending = body->f36;
     if (count == 0 && pending != 0) {
@@ -428,7 +494,7 @@ int FUN_0029e2d0(SfdBufHn *h, int index) {
     if (count < 0) {
         count = 0x7FFFFFFF;
     }
-    FUN_002a0e88(&lock);
+    sfd_Unlock(&lock);
     return count;
 }
 
@@ -438,7 +504,7 @@ int FUN_0029e370(SfdBufHn *h, int index, SfdSj **out) {
     *out = 0;
     ent = &ents[index];
     if (ent->valid == 0) {
-        return FUN_002a0bb8(h, 0xFF000401);
+        return sfd_ReportError(h, 0xFF000401);
     }
     *out = ent->body.inf.sj;
     return 0;
@@ -461,19 +527,19 @@ int FUN_0029e5b0(SfdBufHn *h, int index, int n) {
     if (n == 0)
         return 0;
     if (ent->valid == 0) {
-        return FUN_002a0bb8(h, 0xFF000401);
+        return sfd_ReportError(h, 0xFF000401);
     }
     body = &ent->body;
-    FUN_002a0e70(&lock);
+    sfd_Lock(&lock);
     pos = body->f32 + n;
     body->f32 = pos;
     if (pos >= body->cur.len)
         body->f32 = pos - body->cur.len;
     body->f40 += n;
     if (body->f44 + body->cur.len < body->f40)
-        ret = FUN_002a0bb8(h, 0xFF000406);
+        ret = sfd_ReportError(h, 0xFF000406);
     h->dirty = 1;
-    FUN_002a0e88(&lock);
+    sfd_Unlock(&lock);
     return ret;
 }
 
@@ -487,19 +553,19 @@ int FUN_0029e858(SfdBufHn *h, int index, int n) {
     if (n == 0)
         return 0;
     if (ent->valid == 0) {
-        return FUN_002a0bb8(h, 0xFF000401);
+        return sfd_ReportError(h, 0xFF000401);
     }
     body = &ent->body;
-    FUN_002a0e70(&lock);
+    sfd_Lock(&lock);
     pos = body->f36 + n;
     body->f36 = pos;
     if (pos >= body->cur.len)
         body->f36 = pos - body->cur.len;
     body->f44 += n;
     if (body->f40 < body->f44)
-        ret = FUN_002a0bb8(h, 0xFF000407);
+        ret = sfd_ReportError(h, 0xFF000407);
     h->dirty = 1;
-    FUN_002a0e88(&lock);
+    sfd_Unlock(&lock);
     return ret;
 }
 
@@ -579,7 +645,7 @@ void FUN_0029eaf8(SfdSj *sj, int *first, int *second) {
 void FUN_0029ebb0(void) {
     char work[16];
     SfdSj *sj;
-    sj = FUN_0027bd48(work, 8, 0);
+    sj = SJRBF_Create(work, 8, 0);
     DAT_0057fab0 = sj->vtbl->getUuid(sj);
     sj->vtbl->destroy(sj);
     sj = FUN_0027b408(work, 8);

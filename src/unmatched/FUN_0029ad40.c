@@ -1,6 +1,6 @@
 extern int DAT_004bd254;
 extern char DAT_004f4ab8[];
-void FUN_0029a320(const char *, ...);
+void mwsfd_Error(const char *, ...);
 int FUN_0029af28(void *);
 int FUN_0029afd0(void);
 int FUN_0029ade0(void *);
@@ -17,7 +17,7 @@ int FUN_0029ad40(Obj29ad40 *obj) {
         return 0;
     }
     if (obj == 0) {
-        FUN_0029a320(DAT_004f4ab8);
+        mwsfd_Error(DAT_004f4ab8);
         return 0;
     }
     state = obj->state;

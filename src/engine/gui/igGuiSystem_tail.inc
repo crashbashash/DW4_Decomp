@@ -99,8 +99,8 @@ void FUN_00456a60(A_456a60 *arg0, R_456a60 *arg1) {
     FUN_004569c0((O_4569c0 *)arg0, arg0->f32);
     sp30.a = 2;
     sp30.b = 0;
-    sp30.c = DAT_0058c3d8[0];
-    FUN_004578c0((S_4578c0 *)arg0->f12, (S_4578c0 *)&sp30);
+    sp30.c = g_igGuiSystemModelMousePositionField[0];
+    igModel_NotifyViews((S_4578c0 *)arg0->f12, (S_4578c0 *)&sp30);
 }
 
 void FUN_00456b80(int *arg0, float *arg1) {
@@ -141,10 +141,10 @@ void FUN_00456c20(igGuiSystemModel *arg0, igGuiComponent *arg1) {
     sp30[0] = 2;
     sp30[1] = 0;
     sp30[2] = DAT_0058c408[0];
-    FUN_004578c0((S_4578c0 *)arg0, (S_4578c0 *)sp30);
+    igModel_NotifyViews((S_4578c0 *)arg0, (S_4578c0 *)sp30);
 }
 
-void FUN_00456cc0(W *arg0, T_456cc0 *arg1) {
+void igGuiSystem_SetRootComponent(W *arg0, T_456cc0 *arg1) {
     T_456cc0 *sp5C; int sp40[4]; T_456cc0 **p; T_456cc0 *old; int v; LL *l;
     if (arg0->f12->f164 != 0) { arg0->f12->f164->f8 = 0; }
     p = &arg0->f12->f164;
@@ -158,7 +158,7 @@ void FUN_00456cc0(W *arg0, T_456cc0 *arg1) {
     sp40[0] = 2;
     sp40[1] = 0;
     sp40[2] = DAT_0058c400[0];
-    FUN_004578c0((S_4578c0 *)arg0->f12, (S_4578c0 *)sp40);
+    igModel_NotifyViews((S_4578c0 *)arg0->f12, (S_4578c0 *)sp40);
     l = arg0->f20->f28;
     if (l != 0) { v = l->f8; } else { v = 0; }
     if (v > 1) {

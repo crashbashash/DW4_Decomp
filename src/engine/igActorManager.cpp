@@ -76,6 +76,28 @@ void Gap__Viewer__igActorManager__vfunc_24(int arg0) {
     igInsightCore_RemoveFromScheduler(*(int *)((char *)(arg0) + 12), arg0);
 }
 
+/* Releases every actor the manager holds and leaves the actor list empty. */
+void Gap__Viewer__igActorManager__ClearActors(igActorManager *self) {
+    igObjectList *actors = (igObjectList *)self->_actors;
+    int count = actors->_count;
+    int i;
+    for (i = 0; i < count; i++) {
+        igObject *actor = ((igObject **)actors->_data)[i];
+        if (actor != 0) {
+            actor->_refCount = actor->_refCount - 1;
+            if ((actor->_refCount & 0x7FFFFF) == 0) {
+                igObject_Destroy(actor);
+            }
+        }
+    }
+    int remaining = actors->_count;
+    int j;
+    for (j = 0; j < remaining; j++) {
+        ((igObject **)actors->_data)[j] = 0;
+    }
+    actors->_count = 0;
+}
+
 /* The list pointer is re-read in the body and in the loop test, with a `0 < n` guard. */
 int Gap__Viewer__igActorManager__vfunc_27(int arg0, A *arg1) {
     int i;

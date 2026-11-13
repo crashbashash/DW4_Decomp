@@ -59,9 +59,9 @@ adding an overlay never reduces coverage: it is merged, not substituted.
    at once is one verified commit.
 
 A one-function file's **filename is its symbol**; a named function is resolved at
-any depth, so moving it between modules never touches a build tool. Newly
-decompiled functions are banked into `src/unmatched/` and leave it the first time
-they are named.
+any depth, so moving it between modules never touches a build tool. One-function files are
+legacy drafts: a function now lands inside its whole file, and the one-function files of a
+range go when the range is folded.
 
 ### Folding a module into a translation unit
 

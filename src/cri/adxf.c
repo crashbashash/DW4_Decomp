@@ -59,17 +59,17 @@ typedef struct AdxfLogEntry {
 
 extern int DAT_00499de4;
 extern AdxfHandle DAT_00499de8[ADXF_HANDLE_COUNT];
-extern AdxfPtInfo *DAT_0049a228[256];
+extern AdxfPtInfo *adxf_ptinfo[256];
 extern int DAT_0049a628;
 extern AdxfLogEntry DAT_0049a630[16];
 extern unsigned short DAT_0049a730[16];
 extern int DAT_0049a750;
-extern int DAT_0049a754;
-extern AdxfHandle *DAT_0049a758;
-extern int DAT_0049a75c;
-extern int DAT_0049a760;
-extern void *DAT_0049a768;
-extern int DAT_0049a76c;
+extern int adxf_ldptnw_nfile;
+extern AdxfHandle *adxf_ldptnw_hn;
+extern int adxf_ldptnw_ptid;
+extern int adxf_ldptnw_stat;
+extern unsigned char *adxf_ldptnw_buf;
+extern int adxf_ldptnw_nsct;
 extern char DAT_0049a800[];
 
 extern char DAT_004ed900[];
@@ -79,6 +79,11 @@ extern char DAT_004ed9a8[];
 extern char DAT_004ed9d8[];
 extern char DAT_004eda00[];
 extern char DAT_004eda30[];
+extern char E0041303_illigal_parameter_ptid_ADXF_GetPtStat[];
+extern char AFS[];
+extern char E0040701_Illigal_format_not_AFS_ADXF_GetPtStat[];
+extern char E0040702_Illigal_number_of_file_ADXF_GetPtStat[];
+extern char E2122501_AFS_file_has_128MB_or_more_ADXF_GetPtStat[];
 extern char DAT_004edb58[];
 extern char DAT_004edb90[];
 extern char DAT_004edbc8[];
@@ -106,39 +111,40 @@ extern char DAT_004edf70[];
 extern char DAT_004edf98[];
 
 void *memset(void *dst, int value, unsigned int size);
+int memcmp(const void *a, const void *b, unsigned int size);
 char *strncpy(char *dst, const char *src, unsigned int n);
 void FUN_0010b918(void *start, void *last);
-void FUN_0025f2d0(void);
-void FUN_0025f2e8(void);
-void FUN_002607e8(const char *message);
+void ADXCRS_Lock(void);
+void ADXCRS_Unlock(void);
+void ADXERR_CallErrFunc1(const char *message);
 void ADXM_ExecMain(void);
-void *FUN_00269f50(int a, int size);
-void FUN_00269f98(void *stm);
+void *ADXSTM_Create(int a, int size);
+void ADXSTM_Destroy(void *stm);
 void FUN_0026a068(void *stm, const char *fname, void *dir, int ofst, int nsct);
 void FUN_0026a0e0(void *stm);
-char FUN_0026a138(void *stm);
+char ADXSTM_GetStat(void *stm);
 void FUN_0026a140(void *stm, int ofst);
 int FUN_0026a160(void *stm);
 void FUN_0026a1f0(void *stm, int nsct);
 void FUN_0026a238(void *stm);
 void FUN_0026a2a0(void *stm);
-void FUN_0026a300(void *stm, int a);
+void ADXSTM_SetEos(void *stm, int a);
 int FUN_0026a9e8(void *stm, int nsct);
 int FUN_0026aa00(void *stm);
 int FUN_0026aa08(void *stm);
 void FUN_0026aa10(void *stm, int a);
 void FUN_0026aae8(void *stm, AdxfSj *sj);
-int FUN_0026aba8(void *stm);
+int ADXSTM_GetStatRead(void *stm);
 void FUN_0026abb0(void *stm);
-AdxfSj *FUN_0027bd48(void *buf, int size, int a);
+AdxfSj *SJRBF_Create(void *buf, int size, int a);
 int cvFsGetFileSize();
 
-int FUN_002612d8(int ptid);
+int ADXF_GetPtStat(int ptid);
 void FUN_00261c88(AdxfHandle *adxf);
 int FUN_00261f48(AdxfHandle *adxf, int nsct, void *buf);
 int FUN_00262118(AdxfHandle *adxf);
-int FUN_00262678(AdxfHandle *adxf);
-int FUN_00262748(int ptid, int flid, char *fname, void **dir, int *ofst, int *nsct);
+int ADXF_GetStat(AdxfHandle *adxf);
+int ADXF_GetFnameRangeEx(int ptid, int flid, char *fname, void **dir, int *ofst, int *nsct);
 
 void FUN_00260a40(void *base, int length) {
     FUN_0010b918(base, (char *)base + length - 1);
@@ -151,19 +157,19 @@ void FUN_00260b30(void)
         return;
     }
     FUN_00261d40();
-    DAT_0049a760 = 1;
-    DAT_0049a75c = -1;
-    DAT_0049a758 = 0;
-    DAT_0049a754 = 0;
+    adxf_ldptnw_stat = 1;
+    adxf_ldptnw_ptid = -1;
+    adxf_ldptnw_hn = 0;
+    adxf_ldptnw_nfile = 0;
     DAT_0049a628 = 0;
     DAT_0049a750 = 0;
     memset(DAT_0049a730, 0, sizeof(DAT_0049a730));
     memset(DAT_0049a630, 0xFF, sizeof(DAT_0049a630));
-    memset(DAT_0049a228, 0, sizeof(DAT_0049a228));
+    memset(adxf_ptinfo, 0, sizeof(adxf_ptinfo));
     memset(DAT_00499de8, 0, sizeof(DAT_00499de8));
 }
 
-int FUN_00260bf8(int bytes) {
+int adxf_CalcNumSct(int bytes) {
     return bytes / 2048 + (bytes % 2048 > 0);
 }
 
@@ -193,11 +199,11 @@ void FUN_00260cd0(void) {
 
 int FUN_00260d00(unsigned int ptid, AdxfPtInfo *ptinfo) {
     if (ptid >= 256) {
-        FUN_002607e8(DAT_004ed900);
+        ADXERR_CallErrFunc1(DAT_004ed900);
         return -3;
     }
     if (ptinfo == 0) {
-        FUN_002607e8(DAT_004ed938);
+        ADXERR_CallErrFunc1(DAT_004ed938);
         return -3;
     }
     return 0;
@@ -276,7 +282,7 @@ int FUN_00260f50(int ptid, int afsid, int flid, AdxfPtInfo *ptinfo, void *tmpbuf
 
 AdxfHandle *FUN_002618c0(const char *fname, void *dir);
 AdxfHandle *FUN_00261b78(int afsid, int flid);
-int FUN_002620d8(AdxfHandle *adxf, int nsct, void *buf);
+int ADXF_ReadNw(AdxfHandle *adxf, int nsct, void *buf);
 
 int FUN_00260f88(int ptid, int afsid, int flid, const char *fname, void *dir, AdxfPtInfo *ptinfo,
                  void *tmpbuf, int tbsize, int type)
@@ -286,60 +292,60 @@ int FUN_00260f88(int ptid, int afsid, int flid, const char *fname, void *dir, Ad
     int nsct;
     int size;
 
-    if (DAT_0049a760 == 2) {
-        FUN_002607e8(DAT_004ed968);
+    if (adxf_ldptnw_stat == 2) {
+        ADXERR_CallErrFunc1(DAT_004ed968);
         return -1;
     }
-    if (DAT_0049a758 != 0) {
-        FUN_00261c88(DAT_0049a758);
-        DAT_0049a758 = 0;
+    if (adxf_ldptnw_hn != 0) {
+        FUN_00261c88(adxf_ldptnw_hn);
+        adxf_ldptnw_hn = 0;
     }
-    DAT_0049a75c = -1;
-    DAT_0049a760 = 1;
+    adxf_ldptnw_ptid = -1;
+    adxf_ldptnw_stat = 1;
     if (tmpbuf == 0) {
-        FUN_002607e8(DAT_004ed9a8);
-        DAT_0049a760 = 4;
+        ADXERR_CallErrFunc1(DAT_004ed9a8);
+        adxf_ldptnw_stat = 4;
         return -3;
     }
     if (tbsize <= 0) {
-        FUN_002607e8(DAT_004ed9d8);
-        DAT_0049a760 = 4;
+        ADXERR_CallErrFunc1(DAT_004ed9d8);
+        adxf_ldptnw_stat = 4;
         return -3;
     }
     ret = FUN_00260d00(ptid, ptinfo);
     if (ret < 0) {
-        DAT_0049a760 = 4;
+        adxf_ldptnw_stat = 4;
         return ret;
     }
-    if (DAT_0049a75c >= 0) {
-        FUN_002607e8(DAT_004eda00);
-        DAT_0049a760 = 4;
+    if (adxf_ldptnw_ptid >= 0) {
+        ADXERR_CallErrFunc1(DAT_004eda00);
+        adxf_ldptnw_stat = 4;
         return -1;
     }
-    DAT_0049a760 = 2;
-    DAT_0049a75c = ptid;
-    DAT_0049a754 = 0;
+    adxf_ldptnw_stat = 2;
+    adxf_ldptnw_ptid = ptid;
+    adxf_ldptnw_nfile = 0;
     memset(ptinfo, 0, sizeof(AdxfPtInfo));
-    DAT_0049a228[ptid] = ptinfo;
+    adxf_ptinfo[ptid] = ptinfo;
     ptinfo->next = 0;
     if (fname == 0) {
-        DAT_0049a758 = FUN_00261b78(afsid, flid);
-        if (DAT_0049a758 == 0) {
-            FUN_002607e8(DAT_004eda30);
-            DAT_0049a760 = 4;
+        adxf_ldptnw_hn = FUN_00261b78(afsid, flid);
+        if (adxf_ldptnw_hn == 0) {
+            ADXERR_CallErrFunc1(DAT_004eda30);
+            adxf_ldptnw_stat = 4;
             return -1;
         }
-        ret = FUN_00262748(afsid, flid, ptinfo->fname, &dir, &ofst, &size);
+        ret = ADXF_GetFnameRangeEx(afsid, flid, ptinfo->fname, &dir, &ofst, &size);
         if (ret < 0) {
-            DAT_0049a760 = 4;
+            adxf_ldptnw_stat = 4;
             return ret;
         }
         ptinfo->base = ofst;
     } else {
-        DAT_0049a758 = FUN_002618c0(fname, dir);
-        if (DAT_0049a758 == 0) {
-            FUN_002607e8(DAT_004eda30);
-            DAT_0049a760 = 4;
+        adxf_ldptnw_hn = FUN_002618c0(fname, dir);
+        if (adxf_ldptnw_hn == 0) {
+            ADXERR_CallErrFunc1(DAT_004eda30);
+            adxf_ldptnw_stat = 4;
             return -1;
         }
         strncpy(ptinfo->fname, fname, 256);
@@ -348,40 +354,142 @@ int FUN_00260f88(int ptid, int afsid, int flid, const char *fname, void *dir, Ad
     ptinfo->f14 = 0;
     nsct = tbsize / 2048;
     ptinfo->dir = dir;
-    DAT_0049a768 = tmpbuf;
-    DAT_0049a76c = nsct;
-    ret = FUN_002620d8(DAT_0049a758, nsct, tmpbuf);
+    adxf_ldptnw_buf = tmpbuf;
+    adxf_ldptnw_nsct = nsct;
+    ret = ADXF_ReadNw(adxf_ldptnw_hn, nsct, tmpbuf);
     if (ret < 0) {
-        FUN_00261c88(DAT_0049a758);
-        DAT_0049a760 = 4;
+        FUN_00261c88(adxf_ldptnw_hn);
+        adxf_ldptnw_stat = 4;
         return ret;
     }
     ptinfo->nfile = 0;
     return 0;
 }
 
-void FUN_00261218(void) {
-    FUN_00261c88(DAT_0049a758);
-    DAT_0049a758 = 0;
-    DAT_0049a754 = 0;
-    DAT_0049a76c = 0;
+void adxf_CloseLdptnwHn(void) {
+    FUN_00261c88(adxf_ldptnw_hn);
+    adxf_ldptnw_hn = 0;
+    adxf_ldptnw_nfile = 0;
+    adxf_ldptnw_nsct = 0;
 }
 
 void FUN_00261258(void) {
-    if (DAT_0049a758 != 0 && DAT_0049a75c >= 0) {
-        if (FUN_00262678(DAT_0049a758) != 1) {
-            FUN_00262118(DAT_0049a758);
+    if (adxf_ldptnw_hn != 0 && adxf_ldptnw_ptid >= 0) {
+        if (ADXF_GetStat(adxf_ldptnw_hn) != 1) {
+            FUN_00262118(adxf_ldptnw_hn);
         }
-        FUN_00261218();
+        adxf_CloseLdptnwHn();
     }
 }
 
 int FUN_002612c0(int ptid) {
-    return FUN_002612d8(ptid);
+    return ADXF_GetPtStat(ptid);
+}
+
+/* A little-endian word of an AFS table of contents. */
+#define ADXF_LE32(p) ((p)[0] | (p)[1] << 8 | (p)[2] << 16 | (p)[3] << 24)
+
+/* Poll the partition load: read the AFS header and then each sector of the table into ptinfo. */
+/* matching construct: manual — the header's count read indexes word i with i = 1 set in each branch */
+int ADXF_GetPtStat(int ptid)
+{
+    AdxfPtInfo *ptinfo;
+    unsigned short *nsct16 = 0;
+    unsigned int *nsct32 = 0;
+    unsigned short *top16 = 0;
+    unsigned int *top32 = 0;
+    int stat;
+    int nfile;
+    int nsct;
+    int nword;
+    int i;
+
+    if (ptid != adxf_ldptnw_ptid) {
+        ADXERR_CallErrFunc1(E0041303_illigal_parameter_ptid_ADXF_GetPtStat);
+        return -3;
+    }
+    if (adxf_ldptnw_hn == 0 && ptid != -1) {
+        return adxf_ldptnw_stat;
+    }
+    stat = ADXF_GetStat(adxf_ldptnw_hn);
+    adxf_ldptnw_stat = stat;
+    if (stat != 3) {
+        return stat;
+    }
+    ptinfo = adxf_ptinfo[ptid];
+    if (ptinfo->type == 1) {
+        top32 = &ptinfo->top;
+        nsct32 = top32 + 1;
+    } else {
+        top16 = (unsigned short *)&ptinfo->top;
+        nsct16 = top16 + 1;
+    }
+    if (ptinfo->nfile == 0) {
+        if (memcmp(adxf_ldptnw_buf, AFS, 3) != 0) {
+            ADXERR_CallErrFunc1(E0040701_Illigal_format_not_AFS_ADXF_GetPtStat);
+            adxf_ldptnw_stat = 4;
+            adxf_CloseLdptnwHn();
+            return adxf_ldptnw_stat;
+        }
+        /* word 1 of the header is the file count, word 2 the first file's offset */
+        i = 1;
+        if (ADXF_LE32(adxf_ldptnw_buf + i * 4) > 0x10000) {
+            ADXERR_CallErrFunc1(E0040702_Illigal_number_of_file_ADXF_GetPtStat);
+            adxf_ldptnw_stat = 4;
+            adxf_CloseLdptnwHn();
+            return adxf_ldptnw_stat;
+        }
+        nfile = ptinfo->nfile16 = adxf_ldptnw_buf[i * 4] | adxf_ldptnw_buf[i * 4 + 1] << 8;
+        ptinfo->nfile = nfile;
+        if (ptinfo->type == 1) {
+            ptinfo->size = sizeof(AdxfPtInfo) + (nfile + 1) * 4;
+        } else {
+            ptinfo->size = (nfile * 2 + sizeof(AdxfPtInfo)) >> 2 << 2;
+        }
+        if (ptinfo->type == 1) {
+            *top32 = ADXF_LE32(adxf_ldptnw_buf + 8) / 2048;
+        } else {
+            *top16 = ADXF_LE32(adxf_ldptnw_buf + 8) / 2048;
+        }
+        i = 3;
+    } else {
+        i = 1;
+    }
+    /* the table holds an offset and a size word per file: walk the size words */
+    nword = adxf_ldptnw_nsct * 512;
+    for (; i < nword; i += 2) {
+        if (ptinfo->type == 1) {
+            nsct32[adxf_ldptnw_nfile++] = adxf_CalcNumSct(ADXF_LE32(adxf_ldptnw_buf + i * 4));
+        } else {
+            nsct = adxf_CalcNumSct(ADXF_LE32(adxf_ldptnw_buf + i * 4));
+            if (nsct & 0xFFFF0000) {
+                ADXERR_CallErrFunc1(E2122501_AFS_file_has_128MB_or_more_ADXF_GetPtStat);
+                adxf_ldptnw_stat = 4;
+                adxf_CloseLdptnwHn();
+                return adxf_ldptnw_stat;
+            }
+            nsct16[adxf_ldptnw_nfile++] = nsct;
+        }
+        if (adxf_ldptnw_nfile >= ptinfo->nfile) {
+            adxf_ldptnw_stat = 3;
+            adxf_CloseLdptnwHn();
+            break;
+        }
+    }
+    if (i < nword) {
+        return adxf_ldptnw_stat;
+    }
+    if (ADXF_ReadNw(adxf_ldptnw_hn, adxf_ldptnw_nsct, adxf_ldptnw_buf) < 0) {
+        adxf_ldptnw_stat = 4;
+        adxf_CloseLdptnwHn();
+    } else {
+        adxf_ldptnw_stat = adxf_ldptnw_hn->stat;
+    }
+    return adxf_ldptnw_stat;
 }
 
 int FUN_00261708(int ptid) {
-    return DAT_0049a228[ptid]->size;
+    return adxf_ptinfo[ptid]->size;
 }
 
 AdxfHandle *FUN_00261720(void) {
@@ -401,13 +509,13 @@ AdxfHandle *FUN_00261778(void) {
     void *stm;
     adxf = FUN_00261720();
     if (adxf == 0) {
-        FUN_002607e8(DAT_004edb58);
+        ADXERR_CallErrFunc1(DAT_004edb58);
         return 0;
     }
-    stm = FUN_00269f50(0, 256);
+    stm = ADXSTM_Create(0, 256);
     adxf->stm = stm;
     if (stm == 0) {
-        FUN_002607e8(DAT_004edb90);
+        ADXERR_CallErrFunc1(DAT_004edb90);
         return 0;
     }
     adxf->stat = 1;
@@ -425,14 +533,14 @@ AdxfHandle *FUN_00261778(void) {
 int FUN_00261810(AdxfHandle *adxf, const char *fname, void *dir) {
     int size;
     if (fname == 0) {
-        FUN_002607e8(DAT_004edbc8);
+        ADXERR_CallErrFunc1(DAT_004edbc8);
         return -1;
     }
     adxf->dir = dir;
     adxf->fname = fname;
     adxf->ofst = 0;
     FUN_0026a068(adxf->stm, fname, dir, 0, 0xfffff);
-    if (FUN_0026a138(adxf->stm) == 4) {
+    if (ADXSTM_GetStat(adxf->stm) == 4) {
         FUN_0026a0e0(adxf->stm);
         return -1;
     }
@@ -468,7 +576,7 @@ int FUN_00261960(AdxfHandle *adxf, const char *fname, void *dir, int ofst, int n
     adxf->stm_nsct = nsct;
     adxf->ofst = 0;
     FUN_0026a068(adxf->stm, fname, dir, ofst, nsct);
-    if (FUN_0026a138(adxf->stm) == 4) {
+    if (ADXSTM_GetStat(adxf->stm) == 4) {
         FUN_0026a0e0(adxf->stm);
         return -1;
     }
@@ -493,7 +601,7 @@ AdxfHandle *FUN_002619e0(const char *fname, void *dir, int ofst, int nsct) {
     return var_s2;
 }
 
-char *FUN_002628a0(int ptid);
+char *ADXF_GetFnameFromPt(int ptid);
 
 int FUN_00261aa0(AdxfHandle *adxf, int afsid, int flid)
 {
@@ -503,18 +611,18 @@ int FUN_00261aa0(AdxfHandle *adxf, int afsid, int flid)
     int nsct;
     char *ptname;
 
-    if (FUN_00262748(afsid, flid, fname, &dir, &ofst, &nsct) < 0) {
+    if (ADXF_GetFnameRangeEx(afsid, flid, fname, &dir, &ofst, &nsct) < 0) {
         return -3;
     }
     adxf->skpsct = ofst;
     adxf->dir = dir;
-    ptname = FUN_002628a0(afsid);
+    ptname = ADXF_GetFnameFromPt(afsid);
     adxf->ofst = 0;
     adxf->fname = ptname;
     adxf->stm_nsct = nsct;
     adxf->stm_ofst = ofst;
     FUN_0026a068(adxf->stm, ptname, adxf->dir, ofst, nsct);
-    if (FUN_0026a138(adxf->stm) == 4) {
+    if (ADXSTM_GetStat(adxf->stm) == 4) {
         FUN_0026a0e0(adxf->stm);
         return -1;
     }
@@ -563,7 +671,7 @@ void FUN_00261c88(AdxfHandle *adxf) {
             adxf->used = 0;
             adxf->stm = 0;
             FUN_0026a0e0(stm);
-            FUN_00269f98(stm);
+            ADXSTM_Destroy(stm);
         }
         memset(adxf, 0, sizeof(AdxfHandle));
         FUN_00260c20(3, 1, (int)adxf, -1, -1);
@@ -587,10 +695,10 @@ void FUN_00261d40(void) {
 int FUN_00261da0(AdxfHandle *adxf, int nsct, AdxfSj *sj) {
     int remaining;
     int count;
-    if (FUN_0026a138(adxf->stm) != 1) {
+    if (ADXSTM_GetStat(adxf->stm) != 1) {
         FUN_0026a2a0(adxf->stm);
     }
-    FUN_0025f2d0();
+    ADXCRS_Lock();
     remaining = adxf->fsize_sct - adxf->ofst;
     adxf->rdsct = 0;
     if (nsct < remaining) {
@@ -602,7 +710,7 @@ int FUN_00261da0(AdxfHandle *adxf, int nsct, AdxfSj *sj) {
         adxf->stat = 3;
         count = 0;
     } else {
-        FUN_0026a300(adxf->stm, -1);
+        ADXSTM_SetEos(adxf->stm, -1);
         FUN_0026aae8(adxf->stm, sj);
         FUN_0026a9e8(adxf->stm, adxf->rqrdsct);
         adxf->stat = 2;
@@ -612,22 +720,22 @@ int FUN_00261da0(AdxfHandle *adxf, int nsct, AdxfSj *sj) {
         FUN_0026a1f0(adxf->stm, adxf->rqsct);
         count = adxf->rqsct;
     }
-    FUN_0025f2e8();
+    ADXCRS_Unlock();
     return count;
 }
 
 int FUN_00261ea0(AdxfHandle *adxf, int nsct, AdxfSj *sj) {
     int count;
     if (adxf == 0) {
-        FUN_002607e8(DAT_004edc00);
+        ADXERR_CallErrFunc1(DAT_004edc00);
         return -3;
     }
     if (nsct < 0) {
-        FUN_002607e8(DAT_004edc28);
+        ADXERR_CallErrFunc1(DAT_004edc28);
         return -3;
     }
     if (sj == 0) {
-        FUN_002607e8(DAT_004edc58);
+        ADXERR_CallErrFunc1(DAT_004edc58);
         return -3;
     }
     if (adxf->stat == 2) {
@@ -649,51 +757,51 @@ int FUN_00261f48(AdxfHandle *adxf, int nsct, void *buf)
     int ret;
     FUN_00260c20(4, 0, (int)adxf, nsct, (int)buf);
     if (adxf == 0) {
-        FUN_002607e8(DAT_004edc80);
+        ADXERR_CallErrFunc1(DAT_004edc80);
         return -3;
     }
     if (nsct < 0) {
-        FUN_002607e8(DAT_004edca8);
+        ADXERR_CallErrFunc1(DAT_004edca8);
         return -3;
     }
     if (buf == 0) {
-        FUN_002607e8(DAT_004edcd8);
+        ADXERR_CallErrFunc1(DAT_004edcd8);
         return -3;
     }
     if (adxf->stat == 2)
         return 0;
     if (adxf->sj != 0) {
-        FUN_002607e8(DAT_004edd00);
+        ADXERR_CallErrFunc1(DAT_004edd00);
         return -1;
     }
     size = nsct << 11;
-    sj = FUN_0027bd48(buf, size, 0);
+    sj = SJRBF_Create(buf, size, 0);
     if (sj == 0)
         return -2;
-    FUN_0025f2d0();
+    ADXCRS_Lock();
     adxf->buf = buf;
     adxf->sj = sj;
     adxf->bsize = size;
     if (DAT_0049a628 == 1)
         FUN_00260a40(buf, size);
-    FUN_0025f2e8();
+    ADXCRS_Unlock();
     ret = FUN_00261da0(adxf, nsct, adxf->sj);
     if (ret <= 0) {
-        FUN_0025f2d0();
+        ADXCRS_Lock();
         if (adxf->sj != 0) {
             adxf->sj->vtbl->destroy(adxf->sj);
             adxf->sj = 0;
         }
-        FUN_0025f2e8();
+        ADXCRS_Unlock();
     }
     adxf->sjflag = 0;
     FUN_00260c20(4, 1, (int)adxf, nsct, (int)buf);
     return ret;
 }
 
-int FUN_002620d8(AdxfHandle *adxf, int nsct, void *buf) {
+int ADXF_ReadNw(AdxfHandle *adxf, int nsct, void *buf) {
     if ((unsigned int)buf & 0x3F) {
-        FUN_002607e8(DAT_004edd30);
+        ADXERR_CallErrFunc1(DAT_004edd30);
         return -3;
     }
     return FUN_00261f48(adxf, nsct, buf);
@@ -704,7 +812,7 @@ void FUN_00261c18(AdxfHandle *adxf);
 int FUN_00262118(AdxfHandle *adxf) {
     FUN_00260c20(5, 0, (int)adxf, -1, -1);
     if (adxf == 0) {
-        FUN_002607e8(DAT_004edd68);
+        ADXERR_CallErrFunc1(DAT_004edd68);
         return -3;
     }
     if (adxf->stat != 1) {
@@ -712,15 +820,15 @@ int FUN_00262118(AdxfHandle *adxf) {
             adxf->stat = 1;
         } else {
             if (adxf->stm == 0) {
-                FUN_002607e8(DAT_004edd90);
+                ADXERR_CallErrFunc1(DAT_004edd90);
                 return -1;
             }
             FUN_0026a2a0(adxf->stm);
-            FUN_0025f2d0();
+            ADXCRS_Lock();
             adxf->rdsct = FUN_0026a160(adxf->stm) - adxf->ofst;
             FUN_00261c18(adxf);
             adxf->stat = 1;
-            FUN_0025f2e8();
+            ADXCRS_Unlock();
             FUN_00260c20(5, 1, (int)adxf, -1, -1);
         }
     }
@@ -730,7 +838,7 @@ int FUN_00262118(AdxfHandle *adxf) {
 int FUN_00262208(AdxfHandle *adxf) {
     FUN_00260c20(7, 0, (int)adxf, -1, -1);
     if (adxf == 0) {
-        FUN_002607e8(DAT_004eddc0);
+        ADXERR_CallErrFunc1(DAT_004eddc0);
         return -3;
     }
     if (adxf->stat != 1) {
@@ -738,7 +846,7 @@ int FUN_00262208(AdxfHandle *adxf) {
             adxf->stat = 1;
         } else {
             if (adxf->stm == 0) {
-                FUN_002607e8(DAT_004edde8);
+                ADXERR_CallErrFunc1(DAT_004edde8);
                 return -1;
             }
             FUN_0026a238(adxf->stm);
@@ -756,7 +864,7 @@ void FUN_002622d0(AdxfHandle *adxf)
     int n;
 
     if (adxf->stat == 2) {
-        adxf->stat = FUN_0026a138(adxf->stm);
+        adxf->stat = ADXSTM_GetStat(adxf->stm);
         n = FUN_0026a160(adxf->stm) - adxf->ofst;
         adxf->rdsct = n;
         if ((unsigned char)adxf->stat == 3 || (unsigned char)adxf->stat == 4) {
@@ -766,7 +874,7 @@ void FUN_002622d0(AdxfHandle *adxf)
     }
     req = adxf->stopnw;
     if (req == 1) {
-        st = FUN_0026a138(adxf->stm);
+        st = ADXSTM_GetStat(adxf->stm);
         if (st == req) {
             adxf->rdsct = FUN_0026a160(adxf->stm) - adxf->ofst;
             FUN_00261c18(adxf);
@@ -780,7 +888,7 @@ void FUN_00262398(void) {
     AdxfHandle *adxf;
     int remaining;
     remaining = 15;
-    FUN_0025f2d0();
+    ADXCRS_Lock();
     adxf = DAT_00499de8;
     do {
         if (adxf->used == 1) {
@@ -789,14 +897,14 @@ void FUN_00262398(void) {
         remaining--;
         adxf++;
     } while (remaining >= 0);
-    FUN_0025f2e8();
+    ADXCRS_Unlock();
 }
 
 int FUN_002623f8(AdxfHandle *adxf, int ofst, int whence)
 {
     FUN_00260c20(6, 0, (int)adxf, ofst, whence);
     if (adxf == 0) {
-        FUN_002607e8(DAT_004ede18);
+        ADXERR_CallErrFunc1(DAT_004ede18);
         return -3;
     }
     if (adxf->stat == 2) {
@@ -809,7 +917,7 @@ int FUN_002623f8(AdxfHandle *adxf, int ofst, int whence)
     } else if (whence == 2) {
         adxf->ofst = adxf->fsize_sct + ofst;
     } else {
-        FUN_002607e8(DAT_004ede40);
+        ADXERR_CallErrFunc1(DAT_004ede40);
         return -3;
     }
     if (adxf->ofst < 0) {
@@ -823,7 +931,7 @@ int FUN_002623f8(AdxfHandle *adxf, int ofst, int whence)
 
 int FUN_00262510(AdxfHandle *adxf) {
     if (adxf == 0) {
-        FUN_002607e8(DAT_004ede68);
+        ADXERR_CallErrFunc1(DAT_004ede68);
         return -3;
     }
     return adxf->ofst;
@@ -837,12 +945,12 @@ int FUN_00262540(AdxfHandle *adxf) {
 
 int FUN_00262580(AdxfHandle *adxf) {
     if (adxf == 0) {
-        FUN_002607e8(DAT_004ede90);
+        ADXERR_CallErrFunc1(DAT_004ede90);
         return -3;
     }
     if (adxf->fsize_byte > 0x7ffff7ff) {
         FUN_0026abb0(adxf->stm);
-        if (FUN_0026a138(adxf->stm) == 4) {
+        if (ADXSTM_GetStat(adxf->stm) == 4) {
             return -5;
         }
     }
@@ -852,7 +960,7 @@ int FUN_00262580(AdxfHandle *adxf) {
 
 int FUN_002625f8(AdxfHandle *adxf, int *ofst) {
     if (adxf == 0) {
-        FUN_002607e8(DAT_004edec0);
+        ADXERR_CallErrFunc1(DAT_004edec0);
         *ofst = 0;
         return -3;
     }
@@ -862,15 +970,15 @@ int FUN_002625f8(AdxfHandle *adxf, int *ofst) {
 
 int FUN_00262648(AdxfHandle *adxf) {
     if (adxf == 0) {
-        FUN_002607e8(DAT_004edef0);
+        ADXERR_CallErrFunc1(DAT_004edef0);
         return -3;
     }
     return adxf->rdsct;
 }
 
-int FUN_00262678(AdxfHandle *adxf) {
+int ADXF_GetStat(AdxfHandle *adxf) {
     if (adxf == 0) {
-        FUN_002607e8(DAT_004edf20);
+        ADXERR_CallErrFunc1(DAT_004edf20);
         return -3;
     }
     return adxf->stat;
@@ -880,16 +988,16 @@ int FUN_002626a8(unsigned int ptid, int flid) {
     AdxfPtInfo *ptinfo;
 
     if (ptid >= 256) {
-        FUN_002607e8(DAT_004edf48);
+        ADXERR_CallErrFunc1(DAT_004edf48);
         return -3;
     }
-    ptinfo = DAT_0049a228[ptid];
+    ptinfo = adxf_ptinfo[ptid];
     if (ptinfo == 0) {
-        FUN_002607e8(DAT_004edf48);
+        ADXERR_CallErrFunc1(DAT_004edf48);
         return -3;
     }
     if (flid < 0 || flid >= ptinfo->nfile) {
-        FUN_002607e8(DAT_004edf70);
+        ADXERR_CallErrFunc1(DAT_004edf70);
         return -3;
     }
     return 0;
@@ -898,10 +1006,10 @@ int FUN_002626a8(unsigned int ptid, int flid) {
 int FUN_00262720(int ptid, int flid, char *fname, int *ofst, int *nsct) {
     void *dir[4];
 
-    return FUN_00262748(ptid, flid, fname, dir, ofst, nsct);
+    return ADXF_GetFnameRangeEx(ptid, flid, fname, dir, ofst, nsct);
 }
 
-int FUN_00262748(int ptid, int flid, char *fname, void **dir, int *ofst, int *nsct)
+int ADXF_GetFnameRangeEx(int ptid, int flid, char *fname, void **dir, int *ofst, int *nsct)
 {
     AdxfPtInfo *ptinfo;
     int ret;
@@ -915,7 +1023,7 @@ int FUN_00262748(int ptid, int flid, char *fname, void **dir, int *ofst, int *ns
         *nsct = -1;
         return ret;
     }
-    ptinfo = DAT_0049a228[ptid];
+    ptinfo = adxf_ptinfo[ptid];
     if (ptinfo->type == 1) {
         unsigned int *tbl = &ptinfo->top;
 
@@ -939,8 +1047,8 @@ int FUN_00262748(int ptid, int flid, char *fname, void **dir, int *ofst, int *ns
     return ret;
 }
 
-char *FUN_002628a0(int ptid) {
-    return DAT_0049a228[ptid]->fname;
+char *ADXF_GetFnameFromPt(int ptid) {
+    return adxf_ptinfo[ptid]->fname;
 }
 
 void FUN_002628b8(int sw) {
@@ -949,7 +1057,7 @@ void FUN_002628b8(int sw) {
 
 void FUN_002628c8(AdxfHandle *adxf, int rqrdsct) {
     if (adxf->stat == 2) {
-        FUN_002607e8(DAT_004edf98);
+        ADXERR_CallErrFunc1(DAT_004edf98);
         return;
     }
     adxf->rqrdsct = rqrdsct;
@@ -961,7 +1069,7 @@ int FUN_00262900(AdxfHandle *adxf)
         return 0;
     if (adxf->stm == 0)
         return 0;
-    return FUN_0026aba8(adxf->stm);
+    return ADXSTM_GetStatRead(adxf->stm);
 }
 
 int FUN_00262938(void *a0) {

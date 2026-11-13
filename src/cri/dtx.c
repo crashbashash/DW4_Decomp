@@ -36,14 +36,14 @@ typedef struct DtxObj {
 } DtxObj;
 
 extern volatile int DAT_004a9b18;
-extern int DAT_004a9b14;
+extern int dtx_rpc_id;
 extern int DAT_004a9b1c;
 extern int DAT_004a9b20;
 extern int DAT_004a9b24;
 extern int DAT_004a9b28;
-extern int DAT_004a9b2c;
+extern int dtx_init_cnt;
 extern DtxObj DAT_004a9b30[16];
-extern SifClientData DAT_004aa3b0;
+extern SifClientData dtx_rpc_client;
 extern char DAT_004aa3d8[];
 extern char DAT_004aa420[];
 extern char DAT_004aa440[];
@@ -58,15 +58,17 @@ extern char DAT_004f00e8[];
 extern char DAT_004f0108[];
 extern char DAT_004f0120[];
 extern char DAT_004f0138[];
+extern char E0092101_DTX_Init_bind_errr[];
 
 void *memset(void *dst, int value, unsigned int n);
 int sprintf(char *buffer, const char *format, ...);
-void FUN_002659a0(const char *format, ...);
+void ADXMSG_PrintErr(const char *format, ...);
 void FUN_0010b7d8(char *start, char *end);
 void FUN_0010b918(char *start, char *end);
 unsigned int sceSifSetDma(SifDmaData *sdd, int len);
 int sceSifCallRpc(SifClientData *cd, int fno, int mode, void *send, int ssize, void *recv, int rsize,
                  void *end, void *endarg);
+int sceSifBindRpc(SifClientData *cd, unsigned int request, unsigned int mode);
 int GetThreadId(void);
 void sceSifSetRpcQueue(void *queue, int thread_id);
 void sceSifRegisterRpc(void *server, int command, void *handler, void *buffer, void *cancel_handler,
@@ -105,7 +107,7 @@ int *FUN_00273078(unsigned int command, int *data, unsigned int size)
 int FUN_00273128(void)
 {
     sceSifSetRpcQueue(DAT_004aa420, GetThreadId());
-    sceSifRegisterRpc(DAT_004aa3d8, DAT_004a9b14, FUN_00273078, DAT_004aa440, 0, 0, DAT_004aa420);
+    sceSifRegisterRpc(DAT_004aa3d8, dtx_rpc_id, FUN_00273078, DAT_004aa440, 0, 0, DAT_004aa420);
     DAT_004a9b18 = 1;
     FUN_0010e990(DAT_004aa420);
     return 0;
@@ -117,14 +119,14 @@ int FUN_002731a8(unsigned int id, char *eewk, int iopwk, int wklen)
     DAT_0056e580[1] = (int)eewk;
     DAT_0056e580[2] = iopwk;
     DAT_0056e580[3] = wklen;
-    sceSifCallRpc(&DAT_004aa3b0, 2, 0, DAT_0056e580, 0x10, DAT_0056e680, 4, 0, 0);
+    sceSifCallRpc(&dtx_rpc_client, 2, 0, DAT_0056e580, 0x10, DAT_0056e680, 4, 0, 0);
     return DAT_0056e680[0];
 }
 
 void FUN_00273218(int server)
 {
     DAT_0056e580[0] = server;
-    sceSifCallRpc(&DAT_004aa3b0, 3, 0, DAT_0056e580, 4, DAT_0056e680, 0, 0, 0);
+    sceSifCallRpc(&dtx_rpc_client, 3, 0, DAT_0056e580, 4, DAT_0056e680, 0, 0, 0);
 }
 
 void FUN_00273268(int obj, char *buf, int size)
@@ -163,19 +165,19 @@ DtxObj *FUN_00273338(unsigned int id, char *eewk, int iopwk, int wklen)
     DtxObj *dtx;
     int size;
     if ((int)eewk & 63) {
-        FUN_002659a0(DAT_004f00c8);
+        ADXMSG_PrintErr(DAT_004f00c8);
         return 0;
     }
     if (iopwk & 31) {
-        FUN_002659a0(DAT_004f00e8);
+        ADXMSG_PrintErr(DAT_004f00e8);
         return 0;
     }
     if (wklen & 63) {
-        FUN_002659a0(DAT_004f0108, wklen);
+        ADXMSG_PrintErr(DAT_004f0108, wklen);
         return 0;
     }
     if (id >= 16) {
-        FUN_002659a0(DAT_004f0120, id);
+        ADXMSG_PrintErr(DAT_004f0120, id);
         return 0;
     }
     dtx = &DAT_004a9b30[id];
@@ -184,7 +186,7 @@ DtxObj *FUN_00273338(unsigned int id, char *eewk, int iopwk, int wklen)
     }
     dtx->server = FUN_002731a8(id, eewk, iopwk, wklen);
     if (dtx->server == 0) {
-        FUN_002659a0(DAT_004f0138);
+        ADXMSG_PrintErr(DAT_004f0138);
         return 0;
     }
     size = wklen - 64;
@@ -261,11 +263,35 @@ void FUN_00273558(DtxObj *dtx)
     }
 }
 
+/* DTX_Init: the first call binds the RPC client, retrying after a delay until the IOP server answers;
+   every call counts one more user. */
+void DTX_Init(void)
+{
+    int i;
+
+    if (dtx_init_cnt == 0) {
+        while (1) {
+            if (sceSifBindRpc(&dtx_rpc_client, dtx_rpc_id, 0) < 0) {
+                ADXMSG_PrintErr(E0092101_DTX_Init_bind_errr);
+                while (1) {
+                }
+            }
+            if (dtx_rpc_client.serve != 0) {
+                break;
+            }
+            i = 0x10000;
+            while (i--) {
+            }
+        }
+    }
+    dtx_init_cnt++;
+}
+
 void FUN_002737a8(void)
 {
     DtxObj *dtx;
     int i;
-    if (--DAT_004a9b2c == 0) {
+    if (--dtx_init_cnt == 0) {
         dtx = DAT_004a9b30;
         for (i = 0; i < 16; i++, dtx++) {
             if (dtx->used == 1) {
@@ -275,14 +301,14 @@ void FUN_002737a8(void)
     }
 }
 
-int FUN_00273820(int fno, int *send, int nsend, int *recv, int nrecv)
+int DTX_CallUrpc(int fno, int *send, int nsend, int *recv, int nrecv)
 {
     int i;
     FUN_0027e1c0();
     for (i = 0; i < nsend; i++) {
         DAT_0056e580[i] = send[i];
     }
-    sceSifCallRpc(&DAT_004aa3b0, fno + 1024, 0, DAT_0056e580, nsend * 4, DAT_0056e680, nrecv * 4, 0, 0);
+    sceSifCallRpc(&dtx_rpc_client, fno + 1024, 0, DAT_0056e580, nsend * 4, DAT_0056e680, nrecv * 4, 0, 0);
     for (i = 0; i < nrecv; i++) {
         recv[i] = DAT_0056e680[i];
     }

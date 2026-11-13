@@ -29,13 +29,13 @@ void FUN_0018c820(igPlane *plane, const void *matrix) {
     point.y = d * plane->_norm[1];
     point.z = d * plane->_norm[2];
     Vec3f_TransformDirection(plane->_norm, plane->_norm, (float *)matrix);
-    FUN_00192fc0((float *)&point, (float *)&point, (float *)matrix);
+    Vec3f_TransformProjective((float *)&point, (float *)&point, (float *)matrix);
     scale = 1.0f / lengthOf(plane->_norm);
     plane->_norm[0] = plane->_norm[0] * scale;
     plane->_norm[1] = plane->_norm[1] * scale;
     plane->_norm[2] = plane->_norm[2] * scale;
     plane->_offset = point.dot(plane->_norm);
-    plane->_octant = FUN_00192e50(plane->_norm);
+    plane->_octant = Vec3_GetOctant(plane->_norm);
 }
 
 int FUN_0018c920(void *arg0, void *arg1) {

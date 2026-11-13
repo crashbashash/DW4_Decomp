@@ -6,7 +6,40 @@ void Gap__Gui__igDefaultAspect__vfunc_25(igDefaultAspect *arg0) {
         igGroup_AppendChild(arg0->_node, *(int *)((char *)((*(int *)(*(int *)((char *)l + 16) + (i * 4)))) + 16));
     }
     FUN_004540d0((S_4540d0 *)arg0);
-    FUN_00453e70(arg0);
+    igDefaultAspect_UpdateMinimumSize(arg0);
+}
+
+/* matching construct: hand variant — comparing through pointers makes the compiler reload the
+ * first component for the store, as retail does. */
+static inline void raiseTo(float *max, const float *v) {
+    if (*max < *v) *max = *v;
+}
+
+/* Grows the aspect's minimum size to the largest element and notifies the model. */
+void igDefaultAspect_UpdateMinimumSize(igDefaultAspect *self) {
+    float maxX, maxY, maxZ;
+    int i;
+    T_453f70 *model;
+
+    maxZ = maxY = maxX = 0.0f;
+    for (i = 0; i < ((igDefaultAspectElementList *)self->_elementList)->_count; i++) {
+        igVec3f size = FUN_00453b90(((A **)((igDefaultAspectElementList *)self->_elementList)->_data)[i]);
+        raiseTo(&maxX, &size.x);
+        raiseTo(&maxY, &size.y);
+        raiseTo(&maxZ, &size.z);
+    }
+    self->_minSize[0] = maxX;
+    self->_minSize[1] = maxY;
+    self->_minSize[2] = maxZ;
+    model = (T_453f70 *)self->_model;
+    model->f16 = maxX;
+    model->f20 = maxY;
+    model->f24 = maxZ;
+    int msg[3];
+    msg[0] = 2;
+    msg[1] = 0;
+    msg[2] = DAT_0058c468[0];
+    igModel_NotifyViews((S_4578c0 *)self->_model, (S_4578c0 *)msg);
 }
 
 void Gap__Gui__igDefaultAspect__vfunc_26(A_453f70 *arg0) {
@@ -33,7 +66,7 @@ void Gap__Gui__igDefaultAspect__vfunc_26(A_453f70 *arg0) {
     sp30[0] = 2;
     sp30[1] = 0;
     sp30[2] = DAT_0058c468[0];
-    FUN_004578c0((S_4578c0 *)arg0->f8, (S_4578c0 *)&sp30[0]);
+    igModel_NotifyViews((S_4578c0 *)arg0->f8, (S_4578c0 *)&sp30[0]);
 }
 
 void Gap__Gui__igDefaultAspect__vfunc_27(void *arg0, struct S_454050 *arg1) {
@@ -72,7 +105,7 @@ void FUN_00454180(void *arg0) {
     int *t;
     i = 0;
     while (t = *(int **)((char *)arg0 + 40), i < t[2]) {
-        FUN_00453be0(*(int *)(t[4] + (i * 4)), *(int *)((char *)(arg0) + 8) + 0x10);
+        igDefaultAspectElement_PlaceGeometry(((igDefaultAspectElement **)t[4])[i], (const igVec3f *)(*(int *)((char *)(arg0) + 8) + 0x10));
         i += 1;
     }
 }
@@ -87,8 +120,8 @@ void FUN_004541f0(int *arg0, int *arg1) {
     ((C28 *)arg0)->vX(arg1, sp3C, sp38);
 }
 
-void FUN_00454290(void *arg0, int arg1) {
-    FUN_002d6f50(*(int *)((char *)(arg0) + 12), arg1, 0);
+void igEventDispatcher_AddReceiver(void *arg0, int arg1) {
+    igRendererOrderedList_Append(*(int *)((char *)(arg0) + 12), arg1, 0);
 }
 
 void FUN_004542a0(Obj_4542a0 *arg0, int arg1) {
@@ -96,7 +129,7 @@ void FUN_004542a0(Obj_4542a0 *arg0, int arg1) {
     FUN_002d7750(&sp1C, arg0->f12, arg1);
 }
 
-int FUN_004542d0(int *p)
+int igEventDispatcher_AddReceiverOrder(int *p)
 {
     return FUN_002d7090(*(int *)((char *)p + 12));
 }

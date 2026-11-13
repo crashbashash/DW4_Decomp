@@ -1,6 +1,6 @@
 /* Decodes one element of text with a FUN_0028da88 decoder and, when its flags carry 0x10000,
  * returns word +12 of the FUN_0028d4a8 info through *out. */
-void FUN_0028b750();
+void MPS_DecodeChunk();
 void FUN_0028d4a8();
 void *FUN_0028da88();
 int FUN_0028dc28();
@@ -18,7 +18,7 @@ void FUN_0029f4b8(char *text, int length, int *out) {
 
     decoder = FUN_0028da88();
     if (decoder != 0) {
-        FUN_0028b750(decoder, text, length, &consumed, &flags);
+        MPS_DecodeChunk(decoder, text, length, &consumed, &flags);
         if (flags & 0x10000) {
             FUN_0028d4a8(decoder, &info);
             FUN_0028dc28(decoder);

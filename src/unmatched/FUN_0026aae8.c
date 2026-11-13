@@ -1,4 +1,4 @@
-/* Attaches a stream interface at offset 4 and, between FUN_0025f2d0 and FUN_0025f2e8, stores the
+/* Attaches a stream interface at offset 4 and, between ADXCRS_Lock and ADXCRS_Unlock, stores the
  * sum of its slot-9 values for 0 and 1 at offset 64, then copies that total to offsets 24 and 28. */
 typedef struct Stream_26aae8 Stream_26aae8;
 typedef struct StreamTable_26aae8 {
@@ -19,16 +19,16 @@ typedef struct Object_26aae8 {
     int total;              /* 0x40 */
 } Object_26aae8;
 
-void FUN_0025f2d0(void);
-void FUN_0025f2e8(void);
+void ADXCRS_Lock(void);
+void ADXCRS_Unlock(void);
 
 void FUN_0026aae8(Object_26aae8 *object, Stream_26aae8 *stream) {
     int first;
 
     object->stream = stream;
-    FUN_0025f2d0();
+    ADXCRS_Lock();
     first = stream->table->slot9(stream, 0);
     object->total = first + stream->table->slot9(stream, 1);
-    FUN_0025f2e8();
+    ADXCRS_Unlock();
     object->f28 = object->f24 = object->total;
 }

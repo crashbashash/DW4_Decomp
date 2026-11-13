@@ -3,13 +3,6 @@
  * capabilities are read per pass. p2SetPassCount sets how many passes there are. */
 #include "dw4/p2core.h"
 
-/* The capability bits of a stage's p2ProgramFlags entry used here. */
-enum {
-    P2_CAP_TEXTURE = 1,
-    P2_CAP_TEXTURE_COMBINE = 10,
-    P2_CAP_MULTIPASS = 23
-};
-
 /* GS TEX0.TFX, p2TextureFunction */
 enum {
     P2_TFX_MODULATE,
@@ -144,6 +137,33 @@ int p2StagesUseVertexColour(int all) {
     return all;
 }
 
+/* Whether a drawn stage from `first` on textures with the combiner on in combine mode 1 or 3. */
+int p2StagesUseOddCombineMode(int first) {
+    int stage;
+    int last;
+    int found;
+
+    found = 0;
+    if (P2_STAGE_FLAG(p2CurrentProgram, P2_CAP_MULTIPASS)) {
+        last = p2ExtraPassCount;
+    } else {
+        last = 0;
+    }
+    for (stage = first; last >= stage; stage++) {
+        unsigned int flags = p2ProgramFlags[stage];
+        unsigned int textured = (flags >> P2_CAP_TEXTURE) & 1;
+        unsigned int combined = (flags >> P2_CAP_TEXTURE_COMBINE) & 1;
+
+        if (textured && combined) {
+            if (p2TextureCombineMode[stage] == 1 || p2TextureCombineMode[stage] == 3) {
+                found = 1;
+                break;
+            }
+        }
+    }
+    return found;
+}
+
 /* The highest combine mode among the drawn stages that texture with the combiner on, or -1. */
 int p2GetPassCombineMode(void) {
     int stage;
@@ -260,3 +280,191 @@ void p2GetPassMasks(int pass, unsigned int *frameMask, unsigned int *zbufMask) {
         *zbufMask = p2PassZbufMask;
     }
 }
+
+extern unsigned int DAT_00491360[4];
+extern unsigned int DAT_00491370, DAT_00491378, DAT_00491380;
+extern unsigned int DAT_00569378, DAT_0056937c;
+typedef struct { char pad0[40]; unsigned int *end; unsigned int pad44; unsigned int *cursor; } GsPacketBuffer;
+extern GsPacketBuffer *DAT_00568f04;
+extern int p2DisplayListMode;
+void p2GrowDisplayList(void);
+void p2SubmitDmaPacket(int arg);
+
+
+/* The layout of a particle block: per-row arrays of the components the particle format has. */
+typedef struct p2ParticleFormat {
+    int count;
+    int primitive;
+    unsigned char positionCount;
+    unsigned char colourCount;
+    unsigned char sizeCount0;
+    unsigned char sizeCount1;
+    unsigned char texCoordCount;
+    unsigned char byteCount;
+    unsigned char wordCount;
+    char pad15;
+    char *data;
+    int size;
+    char pad24[12];
+    unsigned char attributeKind;
+    unsigned char verticesPerPrimitive;
+    unsigned char headerBytes;
+    unsigned char tagBytes;
+    unsigned char trailerBytes;
+    char pad41[3];
+    short rowStride;
+    short rowCount;
+    short keysPerRow;
+    short positionOffset;
+    short colourOffset;
+    short attributeOffset;
+    short texCoordOffset;
+    short endOffset;
+    short vuAddress0;
+    short vuAddress2;
+    short vuAddress1;
+    short vuAddress3;
+    int vertexFormat;
+} p2ParticleFormat;
+
+extern int p2VertexFormat;
+extern int p2CurrentPrimitive;
+extern p2VuBufferLayout p2VuBuffers;
+int p2LayoutVuBuffers(void);
+
+/* Lays out a particle block for `format`: the vertex format and attribute kind its components
+ * need, how many particles a row holds (what one VU batch takes, whole primitives), where each
+ * component's array sits in a row, and the block's size, which it returns. */
+int p2LayoutParticleFormat(p2ParticleFormat *format) {
+    int primitive;
+    int vertexFormat;
+    int width;
+
+    primitive = p2CurrentPrimitive;
+    vertexFormat = p2VertexFormat;
+    p2VertexFormat = P2_FORMAT_RECORDING;
+    p2VertexFormat |= format->colourCount ? (int)P2_FORMAT_COLOURS : 0;
+    p2VertexFormat |= format->texCoordCount ? (int)P2_FORMAT_TEXCOORDS : 0;
+    p2CurrentPrimitive = format->primitive;
+    format->attributeKind = 0;
+    if (format->sizeCount1 || format->sizeCount0) {
+        if (format->sizeCount1) {
+            p2VertexFormat |= P2_FORMAT_SPRITE_SIZE_MODE1;
+            format->attributeKind = 2;
+        } else {
+            p2VertexFormat |= P2_FORMAT_SPRITE_SIZE_MODE0;
+            format->attributeKind = 1;
+        }
+    }
+    if (format->byteCount) {
+        p2VertexFormat |= P2_FORMAT_SPRITE_BYTES;
+        format->attributeKind = 3;
+    }
+    if (format->wordCount) {
+        p2VertexFormat |= P2_FORMAT_SPRITE_WORDS;
+        format->attributeKind = 4;
+    }
+    p2DisplayListMode = 1;
+    p2LayoutVuBuffers();
+    p2DisplayListMode = 0;
+    format->verticesPerPrimitive = 2;
+    if (format->positionCount == 3 || format->colourCount == 3 || format->byteCount == 3 ||
+        format->sizeCount0 == 3 || format->sizeCount1 == 3) {
+        format->verticesPerPrimitive = 3;
+    }
+    format->vertexFormat = P2_FORMAT_RECORDING;
+    format->keysPerRow = p2VuBuffers.batchVertexLimit / format->verticesPerPrimitive;
+    if (format->byteCount) {
+        format->keysPerRow = p2VuBuffers.batchVertexLimit;
+    }
+    switch (format->primitive) {
+    case 1:
+        if (format->keysPerRow % 2) {
+            format->keysPerRow -= (short)(format->keysPerRow % 2);
+        }
+        break;
+    case 3:
+        if (format->keysPerRow % 3) {
+            format->keysPerRow -= (short)(format->keysPerRow % 3);
+        }
+        break;
+    case 0:
+    case 2:
+    case 4:
+    case 5:
+    case 6:
+        break;
+    }
+    format->headerBytes = 12;
+    format->tagBytes = 4;
+    format->trailerBytes = 20;
+    format->rowStride = 0;
+    if (format->positionCount) {
+        format->rowStride += format->tagBytes;
+        format->positionOffset = format->rowStride;
+        format->rowStride += (short)(format->keysPerRow * (format->positionCount * 12));
+    }
+    if (format->colourCount) {
+        format->rowStride += format->tagBytes;
+        format->colourOffset = format->rowStride;
+        format->rowStride += (short)(format->keysPerRow * (format->colourCount * 16));
+        format->vertexFormat |= P2_FORMAT_COLOURS;
+    }
+    if (format->attributeKind) {
+        width = format->sizeCount0 > format->sizeCount1 ? format->sizeCount0 : format->sizeCount1;
+        width = (unsigned char)width > format->byteCount ? width : format->byteCount;
+        width = width > format->wordCount ? width : format->wordCount;
+        format->rowStride += format->tagBytes;
+        format->attributeOffset = format->rowStride;
+        if (p2VertexFormat & P2_FORMAT_SPRITE_SIZE_MODE0) {
+            format->vertexFormat |= P2_FORMAT_SPRITE_SIZE_MODE0;
+        } else if (p2VertexFormat & P2_FORMAT_SPRITE_SIZE_MODE1) {
+            format->vertexFormat |= P2_FORMAT_SPRITE_SIZE_MODE1;
+        }
+        if (format->byteCount) {
+            format->vertexFormat |= P2_FORMAT_SPRITE_BYTES;
+        }
+        if (format->wordCount) {
+            format->vertexFormat |= P2_FORMAT_SPRITE_WORDS;
+        }
+        format->rowStride += (short)(format->keysPerRow * (format->attributeKind * (width * 4)));
+    }
+    if (format->texCoordCount) {
+        format->rowStride += format->tagBytes;
+        format->texCoordOffset = format->rowStride;
+        format->rowStride += (short)(format->keysPerRow * 8);
+        format->vertexFormat |= P2_FORMAT_TEXCOORDS;
+    }
+    format->endOffset = format->rowStride;
+    format->rowStride += format->trailerBytes;
+    format->rowCount = (format->count + (format->keysPerRow - 1)) / format->keysPerRow;
+    format->vuAddress0 = p2VuBuffers.address0;
+    format->vuAddress2 = p2VuBuffers.address2;
+    format->vuAddress1 = p2VuBuffers.address1;
+    format->vuAddress3 = p2VuBuffers.address3;
+    format->size = format->headerBytes + format->rowCount * format->rowStride;
+    format->size = (format->size + 15) & ~15;
+    p2VertexFormat = vertexFormat;
+    p2CurrentPrimitive = primitive;
+    p2DirtyFlags |= P2_DIRTY_VU_BUFFERS;
+    return format->size;
+}
+
+/* A VIF code, written to the packet as one word. */
+typedef union p2VifCode {
+    struct {
+        unsigned short immediate;
+        unsigned char num;
+        unsigned char command;
+    } field;
+    unsigned int word;
+} p2VifCode;
+
+extern unsigned int DAT_004913a8, DAT_004913ac;
+extern p2VifCode DAT_00491388, DAT_00491390, DAT_00491398, DAT_004913a0;
+extern unsigned int DAT_004913c0, DAT_004913c4;
+extern p2VifCode DAT_004913c8;
+extern int DAT_0056b458;
+extern unsigned int DAT_0056b068;
+unsigned short p2GetVuProgramAddress(int);
+

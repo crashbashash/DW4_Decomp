@@ -50,7 +50,7 @@ char *strcat(char *dst, const char *src);
 unsigned int strlen(const char *s);
 int strcmp(const char *a, const char *b);
 void FUN_00265928(const char *format, ...);
-void FUN_002659a0(const char *format, ...);
+void ADXMSG_PrintErr(const char *format, ...);
 
 SrdObj *FUN_00271670(void);
 void FUN_002716f8(SrdObj *stm);
@@ -60,7 +60,7 @@ void FUN_00271b98(SrdObj *stm);
 void FUN_00272118(void);
 void FUN_00272228(void);
 void FUN_002725a0(int marker);
-long FUN_00272780(int fd, long offset, int whence);
+long SRD_Lseek(int fd, long offset, int whence);
 int FUN_00272838(int fd, int cmd, int *result);
 int FUN_002728b0(const char *name, int flags);
 int FUN_00272918(int fd);
@@ -233,25 +233,25 @@ long FUN_00275740(const char *fname)
         fd = FUN_002728b0(DAT_004ab8c0, 1);
         FUN_002725a0(0x4401);
         if (fd < 0) {
-            FUN_002659a0("HTCI: sceOpen failed. \"%s\"\n", DAT_004ab8c0);
+            ADXMSG_PrintErr("HTCI: sceOpen failed. \"%s\"\n", DAT_004ab8c0);
             FUN_002753d8(0, "E0092705:sceOpen fail.(htCiGetFileSize)");
             return 0;
         }
         if (fd == 0x10004) {
-            FUN_002659a0("HTCI: sceOpen failed. IOP Module version is invalid.\n");
+            ADXMSG_PrintErr("HTCI: sceOpen failed. IOP Module version is invalid.\n");
             FUN_002753d8(0, "E0082101:sceOpen fail.(htCiGetFileSize)");
             return 0;
         }
         if (fd == 19) {
-            FUN_002659a0("HTCI: sceOpen failed. file desc is insufficient.\n");
+            ADXMSG_PrintErr("HTCI: sceOpen failed. file desc is insufficient.\n");
             FUN_002753d8(0, "E0082101:sceOpen fail.(htCiGetFileSize)");
             return 0;
         }
         FUN_002725a0(0x4600);
-        FUN_00272780(fd, 0, 0);
+        SRD_Lseek(fd, 0, 0);
         FUN_002725a0(0x4601);
         FUN_002725a0(0x4600);
-        size = FUN_00272780(fd, 0, 2);
+        size = SRD_Lseek(fd, 0, 2);
         FUN_002725a0(0x4601);
         if (size < 0) {
             FUN_002753d8(0, "E0092706:sceLseek fail.(htCiGetFileSize)");
@@ -277,13 +277,13 @@ long FUN_002758f8(int fd)
 {
     long result;
     FUN_002725a0(0x4700);
-    result = FUN_00272780(fd, 0, 0);
+    result = SRD_Lseek(fd, 0, 0);
     FUN_002725a0(0x4701);
     if (result < 0) {
         return 0;
     }
     FUN_002725a0(0x4800);
-    result = FUN_00272780(fd, 0, 2);
+    result = SRD_Lseek(fd, 0, 2);
     FUN_002725a0(0x4801);
     if (result < 0) {
         return 0;
@@ -490,7 +490,7 @@ void FUN_00275e50(HtCiFile *h)
             break;
         }
         if (++i > 0x63fff6) {
-            FUN_002659a0("HTCI: htCiStopTr timeout.\r\n");
+            ADXMSG_PrintErr("HTCI: htCiStopTr timeout.\r\n");
             break;
         }
         FUN_002753a8();
@@ -723,13 +723,13 @@ int FUN_002765e0(const char *name, void *buf)
         return 0;
     }
     FUN_002725a0(0x6100);
-    size = FUN_00272780(fd, 0, 2);
+    size = SRD_Lseek(fd, 0, 2);
     FUN_002725a0(0x6101);
     if (size < 0) {
         return 0;
     }
     FUN_002725a0(0x6200);
-    ret = FUN_00272780(fd, 0, 0);
+    ret = SRD_Lseek(fd, 0, 0);
     FUN_002725a0(0x6201);
     if (ret < 0) {
         return 0;
@@ -793,7 +793,7 @@ int FUN_00276740(HtCiFileLoc *files, int n)
     }
     FUN_00265928("HTCI: Total %d files.\n", opened);
     if (failed > 0) {
-        FUN_002659a0("HTCI: Error, Can't load all cache file.%c", 10);
+        ADXMSG_PrintErr("HTCI: Error, Can't load all cache file.%c", 10);
     }
     return opened;
 }
@@ -823,13 +823,13 @@ int FUN_002768f8(void)
         ret = FUN_00272918(files[i].fd);
         FUN_002725a0(0x6901);
         if (ret < 0) {
-            FUN_002659a0("HTCI: \"%s\" can't Close.(sceClose)\n", path);
+            ADXMSG_PrintErr("HTCI: \"%s\" can't Close.(sceClose)\n", path);
         } else {
-            FUN_002659a0("HTCI: \"%s\" Closed.(sceClose)\n", path);
+            ADXMSG_PrintErr("HTCI: \"%s\" Closed.(sceClose)\n", path);
             closed++;
         }
     }
-    FUN_002659a0("HTCI: Total %d files\n", closed);
+    ADXMSG_PrintErr("HTCI: Total %d files\n", closed);
     FUN_00276af0();
     return 1;
 }

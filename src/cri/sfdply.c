@@ -5,15 +5,15 @@ typedef void (*SfdTmrFn)(SfdPly *h, int arg, SfdTimer *tmr);
 
 extern int DAT_004f5020[];
 extern void (*DAT_004beb24)(SfdPly *h, int value);
-extern SfdPly *DAT_004beadc[8];
-extern int DAT_004bea70;
+extern SfdPly *sfply_handles[8];
+extern int sfply_sys_stat;
 extern unsigned int DAT_004beb20;
 extern SfdCond DAT_004be8d8;
 extern int DAT_004bead4;
 extern void (*DAT_004beb18)(SfdTriple *tc);
 
-int FUN_002a0bb8();
-int FUN_002a0dd8(SfdPly *h);
+int sfd_ReportError();
+int sfd_CheckHn(SfdPly *h);
 int FUN_002b0338();
 void FUN_002af428(void);
 int FUN_002afb98(SfdPly *h, int value);
@@ -24,25 +24,25 @@ long FUN_002b5a10(void);
 void FUN_002afbc8(void *acc, long time);
 void FUN_002ace90(SfdPly *h);
 int FUN_002b02a0(SfdPly *h, int state);
-int FUN_002b03a0(SfdPly *h, int id);
-int FUN_002b03d0(SfdPly *h, int id);
+int sftrn_GetFlagA(SfdPly *h, int id);
+int sftrn_GetFlagB(SfdPly *h, int id);
 int FUN_002b03e8(SfdPly *h, int id);
 int FUN_0029e2b0(SfdPly *h, int ch);
 int FUN_0029e2d0(SfdPly *h, int ch);
 void FUN_002ace60(SfdPly *h, int req1, int req2);
 void FUN_002ada78(SfdPly *h, int id, int value);
-int FUN_002adc40(SfdPly *h, int id);
+int SFD_GetCond(SfdPly *h, int id);
 int FUN_002b5b38(void);
-void FUN_002a0e70(void *lock);
-void FUN_002a0e88(void *lock);
-int FUN_002916f8(int a, int b, int c);
+void sfd_Lock(void *lock);
+void sfd_Unlock(void *lock);
+int UTY_MulDiv(int a, int b, int c);
 int FUN_0029eaa8(SfdPly *h, int id);
 int FUN_0029ea88(SfdPly *h, int id);
 void FUN_0029ea68(SfdPly *h, int id, int value);
 int FUN_002ae968(SfdPly *h, int *pos, int *len);
-int FUN_002ae828(SfdPly *h, int *pos, int *len);
-int FUN_002ae608(SfdPly *h);
-int FUN_002aed60(int a, int b, int c, int d);
+int sftim_GetTime(SfdPly *h, int *pos, int *len);
+int sftim_ChkTimeOver(SfdPly *h);
+int sftim_IsTimeReached(int a, int b, int c, int d);
 int FUN_00285118(int a, int b, int c, int d);
 void FUN_0028b530(void *dst, int value, int n);
 void FUN_0028b0c0(void *dst, void *src, int n);
@@ -80,7 +80,7 @@ void FUN_002aa980(SfdPly *h);
 int FUN_002aa9a8(SfdPly *h);
 int FUN_002aa9c0(SfdPly *h);
 int FUN_002aa9f0(SfdPly *h);
-int FUN_002aaab0(SfdPly *h);
+int sfply_IsAvReady(SfdPly *h);
 void FUN_002aab60(SfdPly *h);
 void FUN_002aab90(SfdPly *h);
 void FUN_002aac38(SfdPly *h);
@@ -98,10 +98,10 @@ int FUN_002ab370(SfdPly *h);
 int FUN_002ab3f0(SfdPly *h);
 int FUN_002ab460(SfdPly *h);
 int FUN_002ab4d0(SfdPly *h);
-int FUN_002ab598(SfdPly *h);
-int FUN_002ab5f0(SfdPly *h);
+int sfply_IsTimeOver(SfdPly *h);
+int sfply_IsStopTimeReached(SfdPly *h);
 int FUN_002ab680(SfdPly *h);
-int FUN_002ab6b8(void);
+int sfply_UpdateSysStat(void);
 int FUN_002ab810(SfdCrePrm *prm);
 int FUN_002ab878(void);
 SfdPly *FUN_002ab8b8(SfdCrePrm *prm, int arg);
@@ -117,13 +117,13 @@ int FUN_002abef0(SfdPly *h);
 void FUN_002abf58(int on);
 int FUN_002abf78(SfdPly *h);
 int FUN_002abfd8(SfdPly *h);
-int FUN_002ac3a8(SfdPly *h, int value);
+int SFD_GetInputBufStat(SfdPly *h, int value);
 int FUN_002ac418(SfdPly *h, int a, int b);
 int FUN_002ac498(SfdPly *h);
 
 int FUN_002aa2f0(SfdPly *h) {
-    if (FUN_002a0dd8(h) != 0) {
-        FUN_002a0bb8(0, 0xFF000141);
+    if (sfd_CheckHn(h) != 0) {
+        sfd_ReportError(0, 0xFF000141);
         return 0;
     }
     return h->pause;
@@ -160,8 +160,8 @@ long FUN_002aa4c8(SfdPly *h, int value) {
 }
 
 void FUN_002aa4f0(SfdPly *h) {
-    if (FUN_002a0dd8(h) != 0) {
-        FUN_002a0bb8(0, 0xFF000143);
+    if (sfd_CheckHn(h) != 0) {
+        sfd_ReportError(0, 0xFF000143);
         return;
     }
     FUN_002aa538(h);
@@ -173,8 +173,8 @@ int FUN_002aa538(SfdPly *h) {
 }
 
 int FUN_002aa548(SfdPly *h, int value) {
-    if (FUN_002a0dd8(h) != 0) {
-        return FUN_002a0bb8(0, 0xFF000144);
+    if (sfd_CheckHn(h) != 0) {
+        return sfd_ReportError(0, 0xFF000144);
     }
     FUN_002afb98(h, value);
     FUN_0029d0e0(h, value);
@@ -182,16 +182,16 @@ int FUN_002aa548(SfdPly *h, int value) {
 }
 
 int FUN_002aa5b8(SfdPly *h, int value) {
-    if (FUN_002a0dd8(h) != 0) {
-        return FUN_002a0bb8(0, 0xFF000145, value);
+    if (sfd_CheckHn(h) != 0) {
+        return sfd_ReportError(0, 0xFF000145, value);
     }
     FUN_002ad950(h, 30, value);
     return 0;
 }
 
 int FUN_002aa628(SfdPly *h, int value) {
-    if (FUN_002a0dd8(h) != 0) {
-        return FUN_002a0bb8(0, 0xFF000146, value);
+    if (sfd_CheckHn(h) != 0) {
+        return sfd_ReportError(0, 0xFF000146, value);
     }
     FUN_002ad950(h, 29, value);
     return 0;
@@ -204,7 +204,7 @@ void FUN_002aa698(void) {
 
 void FUN_002aa6c0(void) {
     if (DAT_004f5020[0] != 0x5A5A5A5A) {
-        FUN_002a0bb8(0, 0xFF000201);
+        sfd_ReportError(0, 0xFF000201);
     }
 }
 
@@ -221,7 +221,7 @@ int FUN_002aa728(SfdPly *h) {
 }
 
 int FUN_002aa750(void) {
-    SfdPly **slot = DAT_004beadc;
+    SfdPly **slot = sfply_handles;
     int i;
     for (i = 0; i < 8; i++) {
         SfdPly *h = *slot++;
@@ -233,15 +233,15 @@ int FUN_002aa750(void) {
 }
 
 int FUN_002aa7b8(SfdPly *h) {
-    if (FUN_002a0dd8(h) != 0) {
-        return FUN_002a0bb8(0, 0xFF000138);
+    if (sfd_CheckHn(h) != 0) {
+        return sfd_ReportError(0, 0xFF000138);
     }
     FUN_002aa868(h);
     return 0;
 }
 
 void FUN_002aa810(void) {
-    SfdPly **slot = DAT_004beadc;
+    SfdPly **slot = sfply_handles;
     int i;
     for (i = 0; i < 8; i++) {
         SfdPly *h = *slot++;
@@ -249,7 +249,7 @@ void FUN_002aa810(void) {
             FUN_002aa868(h);
         }
     }
-    FUN_002ab6b8();
+    sfply_UpdateSysStat();
 }
 
 void FUN_002aa980(SfdPly *h) {
@@ -273,7 +273,7 @@ int FUN_002aa9c0(SfdPly *h) {
 int FUN_002aa9f0(SfdPly *h) {
     int st = h->stat;
     int req = h->reqStat;
-    if (FUN_002aaab0(h) == 0) {
+    if (sfply_IsAvReady(h) == 0) {
         return st;
     }
     FUN_002aab60(h);
@@ -295,6 +295,24 @@ int FUN_002aa9f0(SfdPly *h) {
         break;
     }
     return st;
+}
+
+int sfply_IsAvReady(SfdPly *h) {
+    int audio, video;
+    if (SFD_GetCond(h, 5) == 0) {
+        audio = 1;
+    } else {
+        audio = sftrn_GetFlagA(h, 6);
+        audio |= sftrn_GetFlagB(h, 6);
+    }
+    if (SFD_GetCond(h, 6) == 0) {
+        video = 1;
+    } else {
+        video = sftrn_GetFlagA(h, 7);
+        video |= sftrn_GetFlagB(h, 7);
+    }
+    if (audio != 0 && video != 0) return 1;
+    return 0;
 }
 
 void FUN_002aab60(SfdPly *h) {
@@ -341,8 +359,8 @@ void FUN_002aacc0(SfdPly *h) {
         value = 2;
         break;
     case 3:
-        value = FUN_002adc40(h, 25);
-        if (value == 0 && (FUN_002b5b38() != 0 || FUN_002adc40(h, 72) == 0))
+        value = SFD_GetCond(h, 25);
+        if (value == 0 && (FUN_002b5b38() != 0 || SFD_GetCond(h, 72) == 0))
             value = 3;
         break;
     default:
@@ -409,7 +427,7 @@ long FUN_002aaf08(SfdPly *h) {
     char lock[16];
     SfdTimer *t = &h->tmr;
     long result;
-    FUN_002a0e70(lock);
+    sfd_Lock(lock);
     result = 0;
     if (t->active == 0) {
         if (FUN_002aafb8(h) != 0) {
@@ -421,7 +439,7 @@ long FUN_002aaf08(SfdPly *h) {
         t->active = 0;
         result = FUN_002aa3d0(h, 0);
     }
-    FUN_002a0e88(lock);
+    sfd_Unlock(lock);
     return result;
 }
 
@@ -430,22 +448,22 @@ int FUN_002aafb8(SfdPly *h) {
     int v[2];
     SfdD28 *d;
     int a, b;
-    if (FUN_002adc40(h, 67) == 0) return 0;
-    if (FUN_002adc40(h, 15) == 0) return 0;
+    if (SFD_GetCond(h, 67) == 0) return 0;
+    if (SFD_GetCond(h, 15) == 0) return 0;
     if (h->pause != 0) return 0;
     if (h->stat != 4) return 0;
     if (FUN_002ab218(h) != 0) return 0;
-    if (FUN_002adc40(h, 5) == 1 && t->f36 == 0) return 0;
-    if (FUN_002adc40(h, 6) == 1 && FUN_0029eaa8(h, 2) > 0) return 0;
+    if (SFD_GetCond(h, 5) == 1 && t->f36 == 0) return 0;
+    if (SFD_GetCond(h, 6) == 1 && FUN_0029eaa8(h, 2) > 0) return 0;
     if (FUN_002b03e8(h, 1) != 0 && FUN_0029eaa8(h, 0) > 0) return 0;
-    if (FUN_002adc40(h, 5) == 1 && FUN_002ab2b8(h) != 0) return 0;
+    if (SFD_GetCond(h, 5) == 1 && FUN_002ab2b8(h) != 0) return 0;
     FUN_002ae968(h, &v[0], &v[1]);
     d = &h->d28;
     a = d->f648;
     b = d->f644;
-    b -= FUN_002916f8(FUN_002adc40(h, 68), a, 1000000);
+    b -= UTY_MulDiv(SFD_GetCond(h, 68), a, 1000000);
     if (v[0] <= 0 || b <= 0) return 0;
-    return FUN_002aed60(v[0], v[1], b, a) == 0;
+    return sftim_IsTimeReached(v[0], v[1], b, a) == 0;
 }
 
 int FUN_002ab138(SfdPly *h) {
@@ -453,22 +471,22 @@ int FUN_002ab138(SfdPly *h) {
     SfdD28 *d;
     int a, b;
     if (FUN_002ab218(h) != 0) return 1;
-    if (FUN_002adc40(h, 5) == 1 && FUN_002ab2b8(h) != 0) return 1;
-    if (FUN_002adc40(h, 6) == 1 && FUN_002ab370(h) != 0) return 1;
+    if (SFD_GetCond(h, 5) == 1 && FUN_002ab2b8(h) != 0) return 1;
+    if (SFD_GetCond(h, 6) == 1 && FUN_002ab370(h) != 0) return 1;
     FUN_002ae968(h, &v[0], &v[1]);
     d = &h->d28;
     a = d->f648;
     b = d->f644;
-    return FUN_002aed60(v[0], v[1], b - FUN_002916f8(FUN_002adc40(h, 69), a, 1000000), a) != 0;
+    return sftim_IsTimeReached(v[0], v[1], b - UTY_MulDiv(SFD_GetCond(h, 69), a, 1000000), a) != 0;
 }
 
 int FUN_002ab218(SfdPly *h) {
     int result;
     unsigned int ch;
-    if (FUN_002adc40(h, 5) != 0 && FUN_002b03d0(h, 6) != 0) {
+    if (SFD_GetCond(h, 5) != 0 && sftrn_GetFlagB(h, 6) != 0) {
         return 1;
     }
-    if (FUN_002adc40(h, 6) != 0 && FUN_002b03d0(h, 7) != 0) {
+    if (SFD_GetCond(h, 6) != 0 && sftrn_GetFlagB(h, 7) != 0) {
         return 1;
     }
     for (ch = 0; ch < 8; ch++) {
@@ -484,7 +502,7 @@ int FUN_002ab2b8(SfdPly *h) {
     SfdStmInf *e = &h->ent[h->f28.f152].info;
     SjObj *sj = e->sj;
     int v = sj->vtbl->getNumData(sj, 1);
-    if (v < e->size * 80 / 100 && v < FUN_002adc40(h, 70)) {
+    if (v < e->size * 80 / 100 && v < SFD_GetCond(h, 70)) {
         return 0;
     }
     return 1;
@@ -500,7 +518,7 @@ int FUN_002ab370(SfdPly *h) {
 }
 
 int FUN_002ab3f0(SfdPly *h) {
-    if (FUN_002ab460(h) != 0 || FUN_002ab4d0(h) != 0 || FUN_002ab598(h) != 0 || FUN_002ab5f0(h) != 0) {
+    if (FUN_002ab460(h) != 0 || FUN_002ab4d0(h) != 0 || sfply_IsTimeOver(h) != 0 || sfply_IsStopTimeReached(h) != 0) {
         return FUN_002ab680(h);
     }
     return 0;
@@ -533,9 +551,9 @@ int FUN_002ab4d0(SfdPly *h) {
     if (c->req2 == 0 && c->req1 == 0) {
         return 1;
     }
-    check6 = FUN_002b03d0(h, 6);
-    check7 = FUN_002b03d0(h, 7);
-    mode = FUN_002adc40(h, 25);
+    check6 = sftrn_GetFlagB(h, 6);
+    check7 = sftrn_GetFlagB(h, 7);
+    mode = SFD_GetCond(h, 25);
     result = 0;
     switch (mode) {
     case 0:
@@ -554,6 +572,21 @@ int FUN_002ab4d0(SfdPly *h) {
     return result;
 }
 
+int sfply_IsTimeOver(SfdPly *h) {
+    SfdTimer *t = &h->tmr;
+    if (h->stat != 4 || h->pause == 1 || t->active == 1) return 0;
+    return sftim_ChkTimeOver(h) != 0;
+}
+
+int sfply_IsStopTimeReached(SfdPly *h) {
+    SfdTimer *t = &h->tmr;
+    int v[2];
+    if (h->stat != 4 || h->pause == 1 || t->active == 1) return 0;
+    if (sftim_GetTime(h, &v[0], &v[1]) != 0) return 0;
+    if (v[0] < 0) return 0;
+    return sftim_IsTimeReached(SFD_GetCond(h, 54), 1000, v[0], v[1]) != 0;
+}
+
 int FUN_002ab680(SfdPly *h) {
     int ok = FUN_002abf78(h);
     if (ok == 0) {
@@ -562,8 +595,45 @@ int FUN_002ab680(SfdPly *h) {
     return ok;
 }
 
+int sfply_UpdateSysStat(void) {
+    int count[3];
+    int lock;
+    SfdPly **slot;
+    int i;
+    int kind;
+    sfd_Lock(&lock);
+    count[0] = 0;
+    count[1] = 0;
+    count[2] = 0;
+    slot = sfply_handles;
+    for (i = 0; i < 8; i++) {
+        SfdPly *h = *slot++;
+        if (h != 0) {
+            int st = h->stat;
+            if (st == 0) {
+                kind = 0;
+            } else if (st == 6 || st < 0) {
+                kind = 2;
+            } else {
+                kind = 1;
+            }
+            count[kind]++;
+        }
+    }
+    if (count[1] != 0) {
+        kind = 1;
+    } else if (count[2] != 0) {
+        kind = 2;
+    } else {
+        kind = 0;
+    }
+    sfply_sys_stat = kind;
+    sfd_Unlock(&lock);
+    return kind;
+}
+
 SfdPly *FUN_002ab778(SfdCrePrm *prm, int arg) {
-    SfdPly **handles = DAT_004beadc;
+    SfdPly **handles = sfply_handles;
     int slot;
     SfdPly *h;
     if (FUN_002ab810(prm) != 0) {
@@ -571,7 +641,7 @@ SfdPly *FUN_002ab778(SfdCrePrm *prm, int arg) {
     }
     slot = FUN_002ab878();
     if (slot == -1) {
-        FUN_002a0bb8(0, 0xFF000206);
+        sfd_ReportError(0, 0xFF000206);
         return 0;
     }
     h = FUN_002ab8b8(prm, arg);
@@ -581,16 +651,16 @@ SfdPly *FUN_002ab778(SfdCrePrm *prm, int arg) {
 
 int FUN_002ab810(SfdCrePrm *prm) {
     if (prm->f4 == 0) {
-        return FUN_002a0bb8(0, 0xFF000204);
+        return sfd_ReportError(0, 0xFF000204);
     }
     if (prm->workSize < 0x3718U) {
-        return FUN_002a0bb8(0, 0xFF000205);
+        return sfd_ReportError(0, 0xFF000205);
     }
     return 0;
 }
 
 int FUN_002ab878(void) {
-    SfdPly **slot = DAT_004beadc;
+    SfdPly **slot = sfply_handles;
     int i;
     for (i = 0; i < 8; i++) {
         if (*slot++ == 0) {
@@ -657,7 +727,7 @@ void FUN_002abc30(SfdPly *h, int delta, int arg) {
     int *counter = &h->tmr.count;
     SfdCntFn fn;
     *counter += delta;
-    fn = (SfdCntFn)FUN_002adc40(h, 36);
+    fn = (SfdCntFn)SFD_GetCond(h, 36);
     if (fn != 0) {
         fn(h, arg, counter);
     }
@@ -667,7 +737,7 @@ void FUN_002abc98(SfdPly *h, int delta, int arg) {
     SfdTimer *t = &h->tmr;
     SfdTmrFn fn;
     t->count2 += delta;
-    fn = (SfdTmrFn)FUN_002adc40(h, 37);
+    fn = (SfdTmrFn)SFD_GetCond(h, 37);
     if (fn != 0) {
         fn(h, arg, t);
     }
@@ -680,16 +750,16 @@ int FUN_002abd00(SfdPly *h) {
 int FUN_002abd18(SfdPly *h) {
     int result;
     int i;
-    if (FUN_002a0dd8(h) != 0) {
-        return FUN_002a0bb8(0, 0xFF000131);
+    if (sfd_CheckHn(h) != 0) {
+        return sfd_ReportError(0, 0xFF000131);
     }
     FUN_002abef0(h);
     FUN_0029fed0(h->blk120);
     FUN_0029d790(h);
     result = FUN_002abdb8(h);
     for (i = 0; i < 8; i++) {
-        if (DAT_004beadc[i] == h) {
-            DAT_004beadc[i] = 0;
+        if (sfply_handles[i] == h) {
+            sfply_handles[i] = 0;
         }
     }
     return result;
@@ -702,10 +772,10 @@ int FUN_002abdb8(SfdPly *h) {
 }
 
 int FUN_002abde0(SfdPly *h) {
-    if (FUN_002a0dd8(h) != 0) {
-        return FUN_002a0bb8(0, 0xFF000132);
+    if (sfd_CheckHn(h) != 0) {
+        return sfd_ReportError(0, 0xFF000132);
     }
-    if (FUN_002adc40(h, 47) == 1) {
+    if (SFD_GetCond(h, 47) == 1) {
         FUN_002aa538(h);
     } else {
         FUN_002abe60(h);
@@ -726,8 +796,8 @@ long FUN_002abe70(SfdPly *h) {
 
 /* matching construct: implicit-int return (declared int, no value returned) — epilogue order */
 int FUN_002abe98(SfdPly *h) {
-    if (FUN_002a0dd8(h) != 0) {
-        FUN_002a0bb8(0, 0xFF000133);
+    if (sfd_CheckHn(h) != 0) {
+        sfd_ReportError(0, 0xFF000133);
         return;
     }
     FUN_002abef0(h);
@@ -772,24 +842,24 @@ int FUN_002abf78(SfdPly *h) {
     return 0;
 }
 
-int FUN_002ac3a8(SfdPly *h, int value) {
-    if (FUN_002a0dd8(h) != 0) {
-        return FUN_002a0bb8(0, 0xFF000134);
+int SFD_GetInputBufStat(SfdPly *h, int value) {
+    if (sfd_CheckHn(h) != 0) {
+        return sfd_ReportError(0, 0xFF000134);
     }
     return FUN_002b0338(h, 0, 9, value, 0);
 }
 
 int FUN_002ac418(SfdPly *h, int a, int b) {
-    if (FUN_002a0dd8(h) != 0) {
-        return FUN_002a0bb8(0, 0xFF000135);
+    if (sfd_CheckHn(h) != 0) {
+        return sfd_ReportError(0, 0xFF000135);
     }
     return FUN_002b0338(h, 0, 10, a, b);
 }
 
 int FUN_002ac498(SfdPly *h) {
     int id;
-    if (FUN_002a0dd8(h) != 0) {
-        return FUN_002a0bb8(0, 0xFF000135);
+    if (sfd_CheckHn(h) != 0) {
+        return sfd_ReportError(0, 0xFF000135);
     }
     id = h->f28.f20;
     if (FUN_0029ea88(h, id) == 1) {
@@ -808,8 +878,8 @@ int FUN_002ac548(SfdPly *h, int *out) {
     int result;
     int value;
     *out = 0;
-    if (FUN_002a0dd8(h) != 0) {
-        return FUN_002a0bb8(0, 0xFF000136, 11, out, 0);
+    if (sfd_CheckHn(h) != 0) {
+        return sfd_ReportError(0, 0xFF000136, 11, out, 0);
     }
     result = FUN_002b0338(h, 6, 11, out, 0);
     value = *out;
@@ -823,8 +893,8 @@ int FUN_002ac548(SfdPly *h, int *out) {
 }
 
 void FUN_002ac600(SfdPly *h, int value) {
-    if (FUN_002a0dd8(h) != 0) {
-        FUN_002a0bb8(0, 0xFF000137);
+    if (sfd_CheckHn(h) != 0) {
+        sfd_ReportError(0, 0xFF000137);
         return;
     }
     h->tmr.f24 = 0;
@@ -832,8 +902,8 @@ void FUN_002ac600(SfdPly *h, int value) {
 }
 
 void FUN_002ac670(SfdPly *h, int value) {
-    if (FUN_002a0dd8(h) != 0) {
-        FUN_002a0bb8(0, 0xFF000139);
+    if (sfd_CheckHn(h) != 0) {
+        sfd_ReportError(0, 0xFF000139);
         return;
     }
     FUN_0029dab8(h, value);

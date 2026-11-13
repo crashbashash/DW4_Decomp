@@ -4,8 +4,8 @@
 extern int FUN_002773d0(int obj);
 extern int FUN_002ac498(int stream);
 extern void FUN_00295b10(void *ply);
-extern int FUN_002ad910(int stream);
-extern void FUN_0029a320(const char *msg);
+extern int SFD_GetHnStat(int stream);
+extern void mwsfd_Error(const char *msg);
 extern char DAT_004f4a70[]; /* "E99072102 mwlSfdExecDecSvrPlaying: can't term" */
 
 typedef struct {
@@ -25,14 +25,14 @@ void FUN_0029a7d8(Ply29a7d8 *ply) {
     if (ply->f117 == 1) {
         if (FUN_002773d0(ply->f76) == 0) {
             if (FUN_002ac498(stream) != 0) {
-                FUN_0029a320(DAT_004f4a70);
+                mwsfd_Error(DAT_004f4a70);
             }
             ply->f117 = 0;
         }
     } else {
         FUN_00295b10(ply);
     }
-    if (FUN_002ad910(stream) == 6) {
+    if (SFD_GetHnStat(stream) == 6) {
         ply->state = 3;
     }
 }

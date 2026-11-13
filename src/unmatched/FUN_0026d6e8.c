@@ -1,6 +1,6 @@
 /* Reports DAT_004eecd8 for a null handle or name; otherwise calls ADXT_Stop, copies name into
  * the handle buffer, stores the two extra arguments, resets the cursor and flags (state 1) and
- * calls FUN_0026d158(handle, 0). */
+ * calls ADXT_SetLnkSw(handle, 0). */
 /* Handle layout shared by FUN_0026bb38 through FUN_0026d6e8. */
 typedef struct Source_26bbc0 Source_26bbc0;
 typedef struct SourceTable_26bbc0 {
@@ -48,14 +48,14 @@ typedef struct Handle_26bbc0 {
 } Handle_26bbc0;
 
 extern char DAT_004eecd8[];
-void FUN_002607e8(const char *message);
+void ADXERR_CallErrFunc1(const char *message);
 void ADXT_Stop(void);
 char *strcpy(char *dst, const char *src);
-void FUN_0026d158(Handle_26bbc0 *handle, int value);
+void ADXT_SetLnkSw(Handle_26bbc0 *handle, int value);
 
 void FUN_0026d6e8(Handle_26bbc0 *handle, const char *name, int f188, int f192) {
     if (handle == 0 || name == 0) {
-        FUN_002607e8(DAT_004eecd8);
+        ADXERR_CallErrFunc1(DAT_004eecd8);
         return;
     }
     ADXT_Stop();
@@ -67,5 +67,5 @@ void FUN_0026d6e8(Handle_26bbc0 *handle, const char *name, int f188, int f192) {
     handle->state = 1;
     handle->f172 = 1;
     handle->mode = 0;
-    FUN_0026d158(handle, 0);
+    ADXT_SetLnkSw(handle, 0);
 }

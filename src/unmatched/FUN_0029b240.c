@@ -1,5 +1,5 @@
-int FUN_00269f98();
+int ADXSTM_Destroy();
 
 void FUN_0029b240(void) {
-    FUN_00269f98();
+    ADXSTM_Destroy();
 }

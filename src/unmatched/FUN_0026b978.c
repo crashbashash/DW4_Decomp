@@ -1,7 +1,7 @@
 /* Starts ADXT playback: resets each channel stream (vtable +20, count at +3, streams at +24),
- * starts the source (+4) with the argument (FUN_002661d8, also kept at +20) and FUN_00266298, sets
+ * starts the source (+4) with the argument (FUN_002661d8, also kept at +20) and ADXSJD_Start, sets
  * the state byte (+1) to 1 and resets the playback counters (+76, +113, +140, +144, +156, +160
- * from DAT_0049c8f0, +164); kicks the attached object (+116) with FUN_0025b470 when present. */
+ * from adxt_vsync_cnt, +164); kicks the attached object (+116) with FUN_0025b470 when present. */
 typedef struct Stream_26b978 Stream_26b978;
 typedef struct StreamVtbl_26b978 {
     void *pad0[5];
@@ -35,9 +35,9 @@ typedef struct Adxt_26b978 {
     int f164;               /* 0xa4 */
 } Adxt_26b978;
 
-extern int DAT_0049c8f0;
+extern int adxt_vsync_cnt;
 void FUN_002661d8(int source, int arg);
-int FUN_00266298(int source);
+int ADXSJD_Start(int source);
 void FUN_0025b470(int attached);
 
 void FUN_0026b978(Adxt_26b978 *adxt, int arg) {
@@ -48,7 +48,7 @@ void FUN_0026b978(Adxt_26b978 *adxt, int arg) {
     }
     FUN_002661d8(adxt->source, arg);
     adxt->start_arg = arg;
-    FUN_00266298(adxt->source);
+    ADXSJD_Start(adxt->source);
     /* matching construct: statement-order sweep — limit is written before last */
     adxt->state = 1;
     adxt->limit = 0x7fffffff;
@@ -57,7 +57,7 @@ void FUN_0026b978(Adxt_26b978 *adxt, int arg) {
     adxt->f113 = 0;
     adxt->f156 = 0;
     adxt->f164 = 0;
-    adxt->setting = DAT_0049c8f0;
+    adxt->setting = adxt_vsync_cnt;
     if (adxt->attached != 0) {
         FUN_0025b470(adxt->attached);
     }

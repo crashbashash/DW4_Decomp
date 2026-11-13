@@ -20,14 +20,14 @@ typedef struct {
 extern AlarmState D_00483508;
 
 void *memset(void *dst, int value, unsigned int size);
-int FUN_00113f20(void);
-int FUN_00113f78(void);
+int DIntr(void);
+int EIntr(void);
 void FUN_001147f0(int arg);
 void FUN_00114800(int mode);
 void FUN_00114810(int arg);
 void _sceTimerAlarmInit(void);
 int AddIntcHandler__0010abd0(int cause, void *handler, int next, void *arg);
-int FUN_0010ba28(int cause);
+int EnableIntc(int cause);
 int FUN_00114dc0();
 extern Alarm D_0055a940[128];
 
@@ -54,7 +54,7 @@ int InitTimer(int clock)
         return 0x80009021;
     }
     D_00483508.handler = handler;
-    state = FUN_00113f20();
+    state = DIntr();
     mode = *(volatile int *)0x10001010;
     mode = (mode & 0xFFFFFFFC) | clock;
     mode |= 0x300;
@@ -64,9 +64,9 @@ int InitTimer(int clock)
         FUN_00114810(0xFFFF);
     }
     FUN_00114800(mode);
-    FUN_0010ba28(11);
+    EnableIntc(11);
     if (state) {
-        FUN_00113f78();
+        EIntr();
     }
     return 0;
 }

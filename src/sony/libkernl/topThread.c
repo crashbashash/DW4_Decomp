@@ -1,6 +1,6 @@
 typedef struct { unsigned char cmd; unsigned char arg; } Ent;
 typedef struct { int idx; int x; Ent ent[512]; } R;
-extern int DAT_00555680;
+extern int topThreadSema;
 extern char DAT_004d2410[];
 int FUN_0010af20(int);
 int FUN_0010ae10(int);
@@ -10,7 +10,7 @@ int FUN_0010d0d0(const char *, ...);
 void topThread(R *r) {
     int i;
     for (;;) {
-        FUN_0010af20(DAT_00555680);
+        FUN_0010af20(topThreadSema);
         i = r->idx & 0x1ff;
         r->idx = i + 1;
         switch (r->ent[i].cmd) {

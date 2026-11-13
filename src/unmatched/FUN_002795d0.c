@@ -24,17 +24,17 @@ extern void FUN_0027d880(int stream);
 extern void FUN_0027e078(int resource);
 extern void *memset(void *dest, int value, unsigned int size);
 extern void FUN_001122d8(int resource);
-extern int DAT_004b1dc0;
-extern int DAT_004b1dcc;
-extern signed char DAT_004b1dd4;
-extern struct Entry279 DAT_004b1e20[];
+extern int ps2rna_nvoice;
+extern int ps2rna_iop_heap;
+extern signed char ps2rna_iop_alloced;
+extern struct Entry279 ps2rna_psj[];
 
 void FUN_002795d0(void) {
     struct Entry279 *entry;
     int i;
 
-    for (i = 0; i < DAT_004b1dc0; i++) {
-        entry = &DAT_004b1e20[i];
+    for (i = 0; i < ps2rna_nvoice; i++) {
+        entry = &ps2rna_psj[i];
         if (entry->stream != 0) {
             FUN_0027d880(entry->stream);
         }
@@ -46,9 +46,9 @@ void FUN_002795d0(void) {
         }
         memset(entry, 0, sizeof(*entry));
     }
-    if (DAT_004b1dd4 == 1) {
-        FUN_001122d8(DAT_004b1dcc);
-        DAT_004b1dcc = 0;
-        DAT_004b1dd4 = 0;
+    if (ps2rna_iop_alloced == 1) {
+        FUN_001122d8(ps2rna_iop_heap);
+        ps2rna_iop_heap = 0;
+        ps2rna_iop_alloced = 0;
     }
 }

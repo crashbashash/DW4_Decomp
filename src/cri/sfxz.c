@@ -26,7 +26,7 @@ extern char DAT_004f5990[];
 void *memset(void *dst, int value, unsigned int size);
 int sscanf(const char *s, const char *fmt, ...);
 long long __muldi3(long long n, int k);
-int FUN_0027d6b0(SfxMem *in, char *tag, char *endtag, SfxMem *out);
+int SJ_SearchTag(SfxMem *in, char *tag, char *endtag, SfxMem *out);
 int FUN_002b3780(SfxFrame *frm, char *tag);
 
 void FUN_002b4228(void);
@@ -115,11 +115,11 @@ void FUN_002b4380(SfxZHn *zhn) {
     }
     in.data = info->data;
     in.size = info->size;
-    FUN_0027d6b0(&in, DAT_004f5870, DAT_004f5878, &out);
+    SJ_SearchTag(&in, DAT_004f5870, DAT_004f5878, &out);
     hdr->data = out.data;
     hdr->size = out.size;
     hdr->valid = 1;
-    FUN_0027d6b0(&in, DAT_004f5880, DAT_004f5878, &out);
+    SJ_SearchTag(&in, DAT_004f5880, DAT_004f5878, &out);
     vfrm->valid = 1;
     vfrm->data = out.data;
     vfrm->size = out.size;

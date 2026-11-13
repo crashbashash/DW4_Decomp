@@ -25,8 +25,8 @@ struct SfdSj {
 typedef struct SfdBufStat {
     SfdSjChunk ck0;  /* 0 */
     SfdSjChunk ck1;  /* 8 */
-    char *p16;
-    int f20;
-    int f24;
+    char *tailData;
+    int tailLen;
+    int tailFlag;
     int pad28;
 } SfdBufStat;

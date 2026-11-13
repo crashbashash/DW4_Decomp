@@ -1,7 +1,7 @@
 #include "dw4/reflected.h"
 
-extern "C" int FUN_00389bc0(void *, void *);
-extern "C" int FUN_00389b90(void *node, void *traversal);
+extern "C" int beLOA_Traverse(beLOA *node, igCommonTraversal *traversal);
+extern "C" int beLOA_TraversalFunction(igCommonTraversal *traversal, beLOA *node);
 extern "C" int igTraversal_RegisterFunction(int, int, void (*)(void));
 extern "C" int FUN_0035cd40(...);
 extern "C" void FUN_00389fb0(void);
@@ -89,12 +89,147 @@ extern "C" int Gap__Bec__beLua__vfunc_25(beLua *arg0, int arg1);
 typedef struct RefCountedObject { char pad[4]; int f4; } RefCountedObject;
 extern "C" void Gap__Bec__beLua__vfunc_26(beLua *arg0);
 
-int FUN_00389b90(void *node, void *traversal) {
-    return FUN_00389bc0(traversal, node);
+int beLOA_TraversalFunction(igCommonTraversal *traversal, beLOA *node) {
+    return beLOA_Traverse(node, traversal);
+}
+
+extern "C" void Matrix44_GetTranslation(const float *matrix, float *vector);
+extern "C" void List_RemoveWordAt(igObjectList *list, int index);
+extern "C" void igAttrStackManager_PushOverrideAttr(igAttrStackManager *attrs, igAttr *attr);
+extern "C" void igAttrStackManager_PopOverrideAttr(igAttrStackManager *attrs, igAttr *attr);
+extern "C" int igTraversal_TraverseChildren(igCommonTraversal *traversal, beLOA *node);
+extern "C" igMetaObject *g_igModelViewMatrixAttr_metaObject[4];
+/* the colour attribute's value setter is virtual slot 30 (vtable offset 128) */
+class OverrideAttr {
+public:
+    virtual void vfunc_00(); virtual void vfunc_01(); virtual void vfunc_02(); virtual void vfunc_03();
+    virtual void vfunc_04(); virtual void vfunc_05(); virtual void vfunc_06(); virtual void vfunc_07();
+    virtual void vfunc_08(); virtual void vfunc_09(); virtual void vfunc_10(); virtual void vfunc_11();
+    virtual void vfunc_12(); virtual void vfunc_13(); virtual void vfunc_14(); virtual void vfunc_15();
+    virtual void vfunc_16(); virtual void vfunc_17(); virtual void vfunc_18(); virtual void vfunc_19();
+    virtual void vfunc_20(); virtual void vfunc_21(); virtual void vfunc_22(); virtual void vfunc_23();
+    virtual void vfunc_24(); virtual void vfunc_25(); virtual void vfunc_26(); virtual void vfunc_27();
+    virtual void vfunc_28(); virtual void vfunc_29();
+    virtual void SetValue(void *value);
+};
+
+/* matching construct: these read the reference field through a typed pointer; the compiler does
+ * not merge such a load with the field's plain int reads, which keeps retail's separate reloads */
+static inline igAttrStackManager *AttrManagerOf(igCommonTraversal *traversal) { return *(igAttrStackManager **)&traversal->_attrStack; }
+static inline igObjectList *OverrideAttrsOf(beLOA *node) { return *(igObjectList **)&node->_overrideAttrList; }
+
+/* the attribute currently in effect for a type: the cached override, else the top of its stack, else the default */
+static inline igAttr *CurrentAttr(igCommonTraversal *traversal, igMetaObject *meta)
+{
+    igAttrStackManager *manager = AttrManagerOf(traversal);
+    igAttrStack *stack = ((igAttrStack **)((igObjectList *)manager->_attrStacks)->_data)
+        [((int *)manager->_attrStackIndexTable)[meta->_id]];
+    int top = stack->_cachedOverride;
+    if (top >= 0) {
+        return ((igAttr **)stack->_data)[top];
+    }
+    top = stack->_count;
+    if (top != 0) {
+        int last = top - 1;
+        return ((igAttr **)stack->_data)[last];
+    }
+    return (igAttr *)stack->_default;
+}
+
+/* beLOA fades its subtree by camera distance. Status 0 (opaque) / 2 (faded): the model-view
+ * translation's squared length against _range starts a fade out (1) / in (3). Fading moves the
+ * alpha _color[3] by _addAlpha per 1/60 s of traversal time towards _maxAlpha (out) or 1 (in).
+ * At alpha 1 the override attributes are dropped; otherwise the blend state, blend function and
+ * colour attributes are pushed around the children with the colour set to _color. */
+int beLOA_Traverse(beLOA *node, igCommonTraversal *traversal)
+{
+    igAttrStackManager *attrs;
+    long long now;
+    igModelViewMatrixAttr *modelView;
+    float position[3];
+    float *alpha;
+    float frames;
+    igObjectList *list;
+    igObject *attr;
+    int i;
+    int result;
+    int j;
+
+    attrs = (igAttrStackManager *)traversal->_attrStack;
+    now = *(long long *)((igLongList *)traversal->_timeStack)->_data;
+    switch (node->_status) {
+    case 0:
+    case 2:
+        modelView = (igModelViewMatrixAttr *)CurrentAttr(traversal, g_igModelViewMatrixAttr_metaObject[0]);
+        Matrix44_GetTranslation(modelView->_m, position);
+        if (position[0] * position[0] + position[1] * position[1] + position[2] * position[2] < node->_range) {
+            if (node->_status == 0) {
+                node->_status = 1;
+            }
+        } else if (node->_status == 2) {
+            node->_status = 3;
+        }
+        break;
+    case 1:
+        if (node->_color[3] > node->_maxAlpha) {
+            alpha = &node->_color[3];
+            frames = (float)(now - node->_oldTime) / 16666667.0f;
+            *alpha -= frames * node->_addAlpha;
+            if (*alpha < node->_maxAlpha) {
+                *alpha = node->_maxAlpha;
+                node->_status = 2;
+            }
+        }
+        break;
+    case 3:
+        alpha = &node->_color[3];
+        if (*alpha < 1.0f) {
+            frames = (float)(now - node->_oldTime) / 16666667.0f;
+            if ((*alpha += frames * node->_addAlpha) > 1.0f) {
+                *alpha = 1.0f;
+                node->_status = 0;
+            }
+        }
+        break;
+    }
+    if (node->_color[3] == 1.0f) {
+        while (((igObjectList *)node->_overrideAttrList)->_count != 0) {
+            list = OverrideAttrsOf(node);
+            attr = ((igObject **)list->_data)[0];
+            if (attr != 0) {
+                attr->_refCount = attr->_refCount - 1;
+                if ((attr->_refCount & 0x7FFFFF) == 0) {
+                    igObject_Destroy(attr);
+                }
+            }
+            List_RemoveWordAt(list, 0);
+            ((igObject **)list->_data)[list->_count] = 0;
+        }
+    } else {
+        list = (igObjectList *)node->_overrideAttrList;
+        if (list->_count == 0) {
+            ObjectList_AppendRetained((int)list, node->_blendStateAttr);
+            ObjectList_AppendRetained(node->_overrideAttrList, node->_blendFunctionAttr);
+            ObjectList_AppendRetained(node->_overrideAttrList, node->_colorAttr);
+        }
+        ((OverrideAttr *)node->_colorAttr)->SetValue(node->_color);
+    }
+    node->_oldTime = now;
+    for (i = 0; i < ((igObjectList *)node->_overrideAttrList)->_count; i++) {
+        igAttrStackManager_PushOverrideAttr(attrs, ((igAttr **)OverrideAttrsOf(node)->_data)[i]);
+    }
+    result = igTraversal_TraverseChildren(traversal, node);
+    for (j = ((igObjectList *)node->_overrideAttrList)->_count - 1; j >= 0; j--) {
+        igAttrStackManager_PopOverrideAttr(attrs, ((igAttr **)OverrideAttrsOf(node)->_data)[j]);
+    }
+    if (result == 2) {
+        return 2;
+    }
+    return 0;
 }
 
 void FUN_00389fb0(void) {
-    igTraversal_RegisterFunction(DAT_00562640[0], FUN_0035cd40(), (void (*)())FUN_00389b90);
+    igTraversal_RegisterFunction(DAT_00562640[0], FUN_0035cd40(), (void (*)())beLOA_TraversalFunction);
 }
 
 int beLua__RunNamedChunk(beLua *self, const char *name, const char *given)

@@ -59,7 +59,7 @@ extern "C" {
 extern int g_statusSucceeded[4];
 extern int g_allocatorFailureStatus[4];
 int FUN_0010f330(...);
-int FUN_0010f738(...);
+int sceLseek(...);
 int FUN_0010f970(...);
 int strcat(...);
 unsigned char FUN_002e31c0(int);
@@ -153,11 +153,11 @@ L23:
         if (arg1->f24 < 0) {
             *arg0 = g_allocatorFailureStatus[0];
         } else {
-            if (arg2 == 6) FUN_0010f738(arg1->f24, 0, 2);
+            if (arg2 == 6) sceLseek(arg1->f24, 0, 2);
             if (arg1->f60 == 0) {
-                m = FUN_0010f738(arg1->f24, 0, 2);
+                m = sceLseek(arg1->f24, 0, 2);
                 FUN_0032b5b0(arg1, m);
-                FUN_0010f738(arg1->f24, 0, 0);
+                sceLseek(arg1->f24, 0, 0);
                 if (m > 0) {
                     v0 = FUN_0010f970(arg1->f24, arg1->f44, m);
                     if (v0 != m) FUN_0032b5b0(arg1, v0);

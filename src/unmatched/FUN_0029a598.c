@@ -4,9 +4,9 @@ int FUN_00295398();
 int FUN_00295908();
 int FUN_00299ae8();
 int FUN_00299bc0();
-int FUN_0029a320();
+int mwsfd_Error();
 int FUN_0029ece8();
-int FUN_002ad910();
+int SFD_GetHnStat();
 extern int DAT_004f4a10[4];
 
 struct Obj29a598;
@@ -26,7 +26,7 @@ struct Obj29a598 {
 
 void FUN_0029a598(struct Obj29a598 *obj) {
     struct Sub294 *sub = &obj->f660;
-    int state = FUN_002ad910(obj->f64);
+    int state = SFD_GetHnStat(obj->f64);
     int subState = FUN_00299ae8(sub);
 
     /* matching construct: manual — nested ifs instead of early returns keep the final call a sibling (tail) call */
@@ -37,7 +37,7 @@ void FUN_0029a598(struct Obj29a598 *obj) {
                 FUN_00295908(obj, 0);
             }
             if (obj->f116 == 1 && FUN_0029ece8(obj->f64) != 0) {
-                FUN_0029a320(&DAT_004f4a10[0]);
+                mwsfd_Error(&DAT_004f4a10[0]);
             }
             if (obj->f118 == 0) {
                 FUN_00299bc0(sub, 0);

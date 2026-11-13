@@ -1,7 +1,7 @@
 int FUN_00299a90();
 int FUN_00299f68();
 int FUN_00299f88();
-int FUN_002a0f98();
+int SFD_SetStmObject();
 
 void FUN_00299e08(void *arg0) {
     int temp_s0_2;
@@ -23,5 +23,5 @@ void FUN_00299e08(void *arg0) {
         FUN_00299a90(temp_s2);
     }
     ((int (*)())*(int *)((char *)((*temp_s1)) + 20))(temp_s1);
-    FUN_002a0f98(temp_s3, temp_s0_2 + 0xC0, temp_s1, 0, 0);
+    SFD_SetStmObject(temp_s3, temp_s0_2 + 0xC0, temp_s1, 0, 0);
 }

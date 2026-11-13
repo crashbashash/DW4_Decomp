@@ -11,7 +11,6 @@
 0x0013c1c0	Gap::Attrs::igAttrPool::vfunc_13	engine
 0x0013c260	Gap::Attrs::igBlendFunctionAttr::vfunc_12	engine
 0x0013c2b0	Gap::Attrs::igBlendFunctionAttr::vfunc_22	engine
-0x0013c2c0	Gap::Attrs::igBlendFunctionAttr::vfunc_24	engine
 0x0013c350	Gap::Attrs::igBlendFunctionAttr::vfunc_26	engine
 0x0013c400	Gap::Attrs::igBlendFunctionAttr::vfunc_33	engine
 0x0013c410	Gap::Attrs::igBlendFunctionAttr::vfunc_32	engine
@@ -129,7 +128,6 @@
 0x0013fb80	Gap::Attrs::igProjectionMatrixAttr::vfunc_24	engine
 0x0013fb90	Gap::Attrs::igProjectionMatrixAttr::vfunc_26	engine
 0x0013fbf0	Gap::Attrs::igProjectionMatrixAttr::vfunc_32	engine
-0x0013fc00	Gap::Attrs::igRenderDestinationAttr::vfunc_24	engine
 0x0013fd70	Gap::Attrs::igRenderDestinationAttr::vfunc_26	engine
 0x0013fe60	Gap::Attrs::igRenderDestinationAttr::vfunc_12	engine
 0x0013fea0	Gap::Attrs::igRenderDestinationAttr::vfunc_28	engine
@@ -220,7 +218,6 @@
 0x00141ff0	Gap::Attrs::igVertexBlendStateAttr::vfunc_32	engine
 0x00142000	Gap::Attrs::igViewportAttr::vfunc_24	engine
 0x00142030	Gap::Attrs::igViewportAttr::vfunc_26	engine
-0x001420b0	Gap::Attrs::igVisualContextAttrDefaultManager::vfunc_24	engine
 0x00142250	Gap::Attrs::igDisplayListAttr::vfunc_26	engine
 0x00142260	Gap::Attrs::igVisualContextAttrDefaultManager::vfunc_22	engine
 0x00142270	Gap::Attrs::igViewportAttr::vfunc_22	engine
@@ -772,7 +769,6 @@
 0x001bf030	Gap::Sg::igCompressedAnimationSequenceQS::vfunc_44	engine
 0x001bf3e0	Gap::Sg::igTransformSequence1_5::vfunc_43	engine
 0x001bf3f0	Gap::Sg::igTransformSequence1_5::vfunc_39	engine
-0x001bf440	Gap::Sg::igCompressedAnimationSequenceQS::vfunc_36	engine
 0x001bf690	Gap::Sg::igCompressedAnimationSequenceQS::vfunc_46	engine
 0x001bf790	Gap::Sg::igCompressedAnimationSequenceQS::vfunc_42	engine
 0x001bfa60	Gap::Sg::igCompressedAnimationSequenceQS::vfunc_23	engine
@@ -866,9 +862,7 @@
 0x001df6e0	Gap::Sg::igTransformSequence1_5::vfunc_31	engine
 0x001df740	Gap::Sg::igTransformSequence1_5::vfunc_32	engine
 0x001df7a0	Gap::Sg::igTransformSequence1_5::vfunc_27	engine
-0x001df7c0	Gap::Sg::igTransformSequence1_5::vfunc_28	engine
 0x001dfd60	Gap::Sg::igTransformSequence1_5::vfunc_25	engine
-0x001dfd80	Gap::Sg::igTransformSequence1_5::vfunc_26	engine
 0x001e0240	Gap::Sg::igTransformSequence1_5::vfunc_29	engine
 0x001e0380	Gap::Sg::igTraversal::vfunc_09	engine
 0x001e0590	Gap::Sg::igTraversal::vfunc_23	engine
@@ -1242,9 +1236,7 @@
 0x002d3a50	Gap::Core::igCallStackTable::vfunc_23	engine
 0x002d3aa0	Gap::Core::igCallStackTable::vfunc_24	engine
 0x002d3b80	Gap::Core::igCallStackTable::vfunc_25	engine
-0x002d3be0	Gap::Core::igCallStackTable::vfunc_26	engine
 0x002d3cd0	Gap::Core::igCallStackTable::vfunc_27	engine
-0x002d3d30	Gap::Core::igCallStackTable::vfunc_28	engine
 0x002d3f60	Gap::Core::igCallStackTable::vfunc_29	engine
 0x002d3fe0	Gap::Core::igCallStackTable::vfunc_30	engine
 0x002d40f0	Gap::Core::igCallStackTable::vfunc_31	engine
@@ -2073,13 +2065,11 @@
 0x0045f1d0	Gap::Viewer::igViewerGuiFactory::vfunc_22	engine
 0x0045f430	Gap::Viewer::igViewerRenderer::vfunc_25	engine
 0x0045f690	Gap::Viewer::igViewerRenderer::vfunc_23	engine
-0x0045f780	Gap::Viewer::igViewerRenderer::vfunc_26	engine
 0x0045fd70	Gap::Viewer::igViewerRenderer::vfunc_13	engine
 0x00460f70	Gap::Viewer::igViewerRenderer::vfunc_22	engine
 0x00460f80	Gap::Viewer::igViewerRenderer::vfunc_24	engine
 0x00460f90	Gap::Viewer::igViewerSceneInfoManagerController::vfunc_24	engine
 0x004614b0	Gap::Viewer::igViewerSceneInfoManager::vfunc_13	engine
-0x00461c70	Gap::Viewer::igViewerSceneInfoManager::vfunc_23	engine
 0x00462090	Gap::Viewer::igViewerSceneInfoManager::vfunc_24	engine
 0x00462240	Gap::Viewer::igViewerSceneInfoManager::vfunc_29	engine
 0x004622a0	Gap::Viewer::igViewerSceneInfoManager::vfunc_28	engine
@@ -2114,7 +2104,6 @@
 0x00466df0	Gap::Viewer::igActorManager::vfunc_26	engine
 0x00466e00	Gap::Viewer::igActorManager::vfunc_23	engine
 0x00466e10	Gap::Viewer::igActorManager::vfunc_24	engine
-0x00466e20	Gap::Viewer::igActorManager::vfunc_28	engine
 0x00466f80	Gap::Viewer::igActorManager::vfunc_27	engine
 0x004670b0	Gap::Viewer::igActorManager::vfunc_29	engine
 0x004670c0	Gap::Viewer::igActorManager::vfunc_22	engine

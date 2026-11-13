@@ -73,20 +73,20 @@ void ADXB_ExecOneSpsd(AdxbObj *obj)
     int i;
 
     buf = &obj->buf;
-    src = (short *)buf->f0;
+    src = (short *)buf->ibuf;
     if (obj->stat == 1) {
-        if (ADXPD_GetStat(obj->rna) == 0) {
+        if (ADXPD_GetStat(obj->adxpd) == 0) {
             obj->cb120(obj->obj124, &buf->pos, &buf->lim, &buf->end);
-            n = buf->top - buf->pos;
+            n = buf->pcmbsize - buf->pos;
             if (buf->lim < n) {
                 n = buf->lim;
             }
             if (buf->len < n) {
                 n = buf->len;
             }
-            dst = (short *)buf->f20 + buf->pos;
-            if (obj->f14 == 2) {
-                dst2 = (short *)buf->f20 + (buf->f28 + buf->pos);
+            dst = buf->pcmbuf + buf->pos;
+            if (obj->nch == 2) {
+                dst2 = buf->pcmbuf + (buf->pcmbdist + buf->pos);
                 for (i = 0; i < n; i++) {
                     dst[i] = src[i * 2];
                     dst2[i] = src[i * 2 + 1];
@@ -98,7 +98,7 @@ void ADXB_ExecOneSpsd(AdxbObj *obj)
             }
             obj->stat = 2;
             obj->f144 = n;
-            obj->f148 = n * obj->f14 * 2;
+            obj->f148 = n * obj->nch * 2;
         }
     }
     if (obj->stat == 2) {

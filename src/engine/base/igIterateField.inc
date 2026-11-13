@@ -1,6 +1,6 @@
-void FUN_00227780(int arg0) {
+void *FUN_00227780(int arg0) {
     FUN_002278a0();
-    igMetaObject_CreateInstance(*(int *)0x56D968, arg0);
+    return igMetaObject_CreateInstance(*(int *)0x56D968, arg0);
 }
 
 igMetaObject *igIterateField_GetMetaObject(void)

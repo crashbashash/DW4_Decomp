@@ -1,9 +1,16 @@
 float sqrtf(float);
 float cosf(float);
+int memcmp(const void *a, const void *b, unsigned int size);
+void *memcpy(void *dst, const void *src, unsigned int size);
 
 extern int DAT_00499cd0;
 
 #define SWAP16(x) (((x) >> 8) | (((x) << 8) & 0xFF00))
+/* big-endian 16- and 32-bit header fields at byte offset o of b; the 32-bit tag is read byte by byte */
+#define RD16(b, o) (((*(short *)((b) + (o)) >> 8) & 0xFF) | ((*(short *)((b) + (o)) << 8) & 0xFF00))
+#define SWAP32(x) (((unsigned int)(x) >> 24) | ((x) << 24) | ((((x) << 8) & 0xFF0000) | (((x) >> 8) & 0xFF00)))
+#define RD32(b, o) SWAP32(*(int *)((b) + (o)))
+#define RDB32(b, o) (((b)[o] << 24) | ((b)[(o) + 1] << 16) | ((b)[(o) + 2] << 8) | (b)[(o) + 3])
 
 void ADX_GetCoefficient(int arg0, int arg1, short *arg2, short *arg3) {
     float a, b, r, s, c;
@@ -16,7 +23,7 @@ b = sqrtf(2.0f) - 1.0f;
     *arg3 = (short) (int) (-r * r * 4096.0f);
 }
 
-int FUN_0025f460(unsigned char *buf, int size, short *pos)
+int ADX_ScanInfoCode(unsigned char *buf, int size, short *pos)
 {
     int i;
     int found;
@@ -39,6 +46,33 @@ int FUN_0025f460(unsigned char *buf, int size, short *pos)
     }
     *pos = 0;
     return -1;
+}
+
+/* Is the buffer an ADX header that ends with the (c)CRI copyright? Returns 1 and the data offset if so. */
+int ADX_IsCopyrightHeader(unsigned char *hdr, int size, short *ofst)
+{
+    int hdrlen;
+    int copyright;
+
+    if (size < 16) {
+        return 0;
+    }
+    if ((hdr[1] | (hdr[0] << 8)) != 0x8000) {
+        return 0;
+    }
+    hdrlen = ((hdr[2] << 8) | hdr[3]) + 4;
+    /* the six copyright bytes end the header, just before the data */
+    copyright = hdrlen - 6;
+    if (size < 0x8000) {
+        return 0;
+    }
+    if (memcmp(hdr + copyright, "(c)CRI", 6) != 0) {
+        return 0;
+    }
+    if (ofst != 0) {
+        *ofst = hdrlen;
+    }
+    return 1;
 }
 
 int FUN_0025f588(unsigned char *hdr, int len, short *ofst, signed char *type, signed char *bsize,
@@ -80,7 +114,7 @@ int FUN_0025f688(unsigned char *hdr, int size, short *out) {
     return 0;
 }
 
-int FUN_0025f708(unsigned char *hdr, int size, unsigned char *ver, unsigned char *flag)
+int ADX_DecodeInfoExVer(unsigned char *hdr, int size, unsigned char *ver, unsigned char *flag)
 {
     const unsigned short *words = (const unsigned short *)hdr;
     if (size < 20) {
@@ -103,7 +137,7 @@ int FUN_0025f780(unsigned char *hdr, int size, short *start, short *end)
     unsigned char ver;
     unsigned char flag;
 
-    if (FUN_0025f708(hdr, size, &ver, &flag) != 0) {
+    if (ADX_DecodeInfoExVer(hdr, size, &ver, &flag) != 0) {
         return -1;
     }
     if (ver >= 4) {
@@ -129,7 +163,120 @@ int FUN_0025f780(unsigned char *hdr, int size, short *start, short *end)
     return 0;
 }
 
-int FUN_0025fd38(unsigned char *hdr, int size, short *ofst)
+/* ADX_DecodeInfoExLoop: the loop block of a version 3 (at 0x14) or version 4 (at 0x20) header: the
+ * loop type, the loop count (only a single loop is accepted, else -2), the loop flag and the loop's
+ * start and end in samples and in bytes. The fields are big-endian. */
+int ADX_DecodeInfoExLoop(unsigned char *hdr, int size, int *lptype, short *nloop, short *lpflg, int *lpstart,
+                 int *lpstartofst, int *lpend, int *lpendofst)
+{
+    const unsigned short *words = (const unsigned short *)hdr;
+    unsigned char ver;
+    unsigned char flag;
+    int ret;
+    int need;
+    int pos;
+
+    *nloop = 0;
+    ret = ADX_DecodeInfoExVer(hdr, size, &ver, &flag);
+    if (ret != 0) {
+        return ret;
+    }
+    need = 48;
+    if (ver == 4) {
+        need = 60;
+    }
+    if (size < need) {
+        return -1;
+    }
+    if ((unsigned short)SWAP16(words[0]) != 0x8000) {
+        return -2;
+    }
+    if ((short)((words[1] << 8) & 0xFF00 | hdr[3]) < need - 4) {
+        return -1;
+    }
+    pos = 20;
+    if (ver == 4) {
+        pos = 32;
+    }
+    *lptype = (short)RD16(hdr, pos);
+    pos += 2;
+    *nloop = RD16(hdr, pos);
+    pos += 2;
+    if (*nloop != 1) {
+        return -2;
+    }
+    pos += 2;
+    *lpflg = RD16(hdr, pos);
+    pos += 2;
+    *lpstart = RD32(hdr, pos);
+    pos += 4;
+    *lpstartofst = RD32(hdr, pos);
+    pos += 4;
+    *lpend = RD32(hdr, pos);
+    pos += 4;
+    *lpendofst = RD32(hdr, pos);
+    return 0;
+}
+
+/* ADX_DecodeInfoAinf: the AINF chunk after the loop block (skipped when the header has no loop): its
+ * size, the 16-byte data id, the default output volume and the two pans. */
+int ADX_DecodeInfoAinf(unsigned char *hdr, int size, int *ainfsiz, char *ainf, short *volume, short *pan)
+{
+    const unsigned short *words = (const unsigned short *)hdr;
+    unsigned char ver;
+    unsigned char flag;
+    int ret;
+    int need;
+    int pos;
+    short nloop;
+    int magic;
+
+    *ainfsiz = 0;
+    ret = ADX_DecodeInfoExVer(hdr, size, &ver, &flag);
+    if (ret != 0) {
+        return ret;
+    }
+    need = 60;
+    if (ver == 4) {
+        need = 72;
+    }
+    if (size < need) {
+        return -1;
+    }
+    if ((unsigned short)SWAP16(words[0]) != 0x8000) {
+        return -2;
+    }
+    if ((short)((words[1] << 8) & 0xFF00 | hdr[3]) < need - 4) {
+        return -1;
+    }
+    pos = 20;
+    if (ver == 4) {
+        pos = 32;
+    }
+    pos += 2;
+    nloop = RD16(hdr, pos);
+    pos += 2;
+    if (nloop != 0) {
+        pos += 20;
+    }
+    magic = RDB32(hdr, pos);
+    pos += 4;
+    if (magic != 0x41494E46) { /* "AINF" */
+        return -2;
+    }
+    *ainfsiz = RD32(hdr, pos);
+    pos += 4;
+    memcpy(ainf, hdr + pos, 16);
+    pos += 16;
+    *volume = RD16(hdr, pos);
+    pos += 4;
+    pan[0] = RD16(hdr, pos);
+    pos += 2;
+    pan[1] = RD16(hdr, pos);
+    return 0;
+}
+
+int ADX_DecodeFooter(unsigned char *hdr, int size, short *ofst)
 {
     const unsigned short *words = (const unsigned short *)hdr;
     if (size < 16) {

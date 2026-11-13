@@ -1,14 +1,14 @@
-int FUN_00113f20(void);
-int FUN_00113f78(void);
+int DIntr(void);
+int EIntr(void);
 void VSync(void) {
-    int interrupts = FUN_00113f20();
+    int interrupts = DIntr();
     *(volatile int *)0x1000F000 = 4;
     __asm__ volatile("sync");
-    if (interrupts) FUN_00113f78();
+    if (interrupts) EIntr();
     while ((*(volatile int *)0x1000F000 & 4) == 0) {
     }
-    interrupts = FUN_00113f20();
+    interrupts = DIntr();
     *(volatile int *)0x1000F000 = 4;
     __asm__ volatile("sync");
-    if (interrupts) FUN_00113f78();
+    if (interrupts) EIntr();
 }

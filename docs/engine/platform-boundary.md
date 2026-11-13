@@ -95,7 +95,7 @@ surface; the rest is the C runtime below it.
 `0x100008..0x114698`, spread across the whole front of the image, the first one being the entry
 point itself. So the front region *is* kernel/runtime code, and the platform timer cluster that
 starts at `0x1146a8` continues it. The stretch after the named kernel
-(`0x10b360..0x1137a8`, 168 functions) is the C runtime too: `FUN_0010d108`, its busiest entry with
+(`0x10b360..0x1137a8`, 168 functions) is the C runtime too: `scePrintf`, its busiest entry with
 60 external call sites, saves `a1,a2,a3,t0,t1,t2` into a stack buffer and installs the buffer in a
 global: the `va_list` prologue of the **printf family**.
 

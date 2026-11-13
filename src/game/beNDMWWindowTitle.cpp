@@ -11,6 +11,8 @@ extern "C" void beNDMWWindow_PresentModel(beNDMWWindow *self, const char *model,
 extern "C" void beNDMWWindow_PresentModelAtOrigin(void *self, const char *model, int id, const char *sequence,
                                                   const char *close);
 extern "C" void beNDMWWindow_RunMessageScript(void *self, const char *chunk, int callNo);
+extern "C" void beNDMWWindow_QueueText(void *self, const char *textType, const char *textName, const char *text,
+                                      const char *align);
 extern "C" void *StringPool_Allocate(int size);
 extern "C" void *StringPool_Construct(void *pool);
 extern "C" const char *StringPool_Intern(void *pool, const char *text);
@@ -72,6 +74,37 @@ extern "C" char DEFAULTCOLOR_6[];
 extern "C" char CANCELCOLOR_5[];
 extern "C" char i_sttitle_2[];
 extern "C" char STWINFONT12_2[];
+extern "C" char text_font030[];
+extern "C" char text_font031[];
+extern "C" char text_font032[];
+extern "C" char text_font033[];
+extern "C" char text_font034[];
+extern "C" char text_font035[];
+extern "C" char text_font036[];
+extern "C" char text_font037[];
+extern "C" char text_font038[];
+extern "C" char text_font039[];
+extern "C" char text_font060[];
+extern "C" char text_font061[];
+extern "C" char STWINFONT02_2[];
+extern "C" char space_4[];
+extern "C" char LEFT_6[];
+extern "C" char CENTER_6[];
+extern "C" char RIGHT_5[];
+extern "C" char text_font010[];
+extern "C" char text_font011[];
+extern "C" char text_font040[];
+extern "C" char text_font041[];
+extern "C" char text_font042[];
+extern "C" char text_font043[];
+extern "C" char text_font044[];
+extern "C" char text_font045[];
+extern "C" char text_font046[];
+extern "C" char text_font047[];
+extern "C" char text_font048[];
+extern "C" char text_font049[];
+extern "C" char text_font070[];
+extern "C" char text_font071[];
 
 /* A null-terminated list of the STWINFONT06 text elements a layout switches (font030..font071). */
 typedef struct FontNameList { const char *name[29]; } FontNameList;
@@ -176,6 +209,64 @@ extern "C" void Gap__Bec__beNDMWWindowTitle__vfunc_21(beNDMWWindowTitle *self) {
 extern "C" void Gap__Bec__beNDMWStatusTitle00__vfunc_22(beNDMWStatusTitle00 *self) {
     beNDMWWindow_PresentModelAtOrigin(self, i_stback_2, 0, SQ_OPEN_9, SQ_CLOSE_9);
     beNDMWWindow_PresentModelAtOrigin(self, i_bgclear, 0, SQ_OPEN_9, SQ_CLOSE_9);
+}
+
+extern "C" void beNDMWStatusTitle01_ShowStatusLayout(beNDMWStatusTitle01 *self);
+extern "C" void beNDMWStatusTitle01_ShowShopLayout(beNDMWStatusTitle01 *self);
+
+/* Player title setup: queues the twelve STWINFONT06 layout texts (font030..font039, font060,
+ * font061) for closing, fills the STWINFONT02/04/06 header and value texts with a blank, runs
+ * txt_status.lua call 3, then shows the status layout (entry code 0) or the shop layout. */
+extern "C" void beNDMWStatusTitle01_Setup(beNDMWStatusTitle01 *self) {
+    AppendInterned(self->_textCloseTypeList, STWINFONT06_2);
+    AppendInterned(self->_textCloseNameList, text_font030);
+    AppendInterned(self->_textCloseTypeList, STWINFONT06_2);
+    AppendInterned(self->_textCloseNameList, text_font031);
+    AppendInterned(self->_textCloseTypeList, STWINFONT06_2);
+    AppendInterned(self->_textCloseNameList, text_font032);
+    AppendInterned(self->_textCloseTypeList, STWINFONT06_2);
+    AppendInterned(self->_textCloseNameList, text_font033);
+    AppendInterned(self->_textCloseTypeList, STWINFONT06_2);
+    AppendInterned(self->_textCloseNameList, text_font034);
+    AppendInterned(self->_textCloseTypeList, STWINFONT06_2);
+    AppendInterned(self->_textCloseNameList, text_font035);
+    AppendInterned(self->_textCloseTypeList, STWINFONT06_2);
+    AppendInterned(self->_textCloseNameList, text_font036);
+    AppendInterned(self->_textCloseTypeList, STWINFONT06_2);
+    AppendInterned(self->_textCloseNameList, text_font037);
+    AppendInterned(self->_textCloseTypeList, STWINFONT06_2);
+    AppendInterned(self->_textCloseNameList, text_font038);
+    AppendInterned(self->_textCloseTypeList, STWINFONT06_2);
+    AppendInterned(self->_textCloseNameList, text_font039);
+    AppendInterned(self->_textCloseTypeList, STWINFONT06_2);
+    AppendInterned(self->_textCloseNameList, text_font060);
+    AppendInterned(self->_textCloseTypeList, STWINFONT06_2);
+    AppendInterned(self->_textCloseNameList, text_font061);
+    beNDMWWindow_QueueText(self, STWINFONT02_2, font000_6, space_4, LEFT_6);
+    beNDMWWindow_QueueText(self, STWINFONT04_2, font000_6, space_4, CENTER_6);
+    beNDMWWindow_QueueText(self, STWINFONT04_2, font001_6, space_4, LEFT_6);
+    beNDMWWindow_QueueText(self, STWINFONT06_2, font000_6, space_4, RIGHT_5);
+    beNDMWWindow_QueueText(self, STWINFONT06_2, font001_6, space_4, RIGHT_5);
+    beNDMWWindow_QueueText(self, STWINFONT06_2, text_font010, space_4, RIGHT_5);
+    beNDMWWindow_QueueText(self, STWINFONT06_2, text_font011, space_4, RIGHT_5);
+    beNDMWWindow_QueueText(self, STWINFONT06_2, text_font040, space_4, RIGHT_5);
+    beNDMWWindow_QueueText(self, STWINFONT06_2, text_font041, space_4, RIGHT_5);
+    beNDMWWindow_QueueText(self, STWINFONT06_2, text_font042, space_4, RIGHT_5);
+    beNDMWWindow_QueueText(self, STWINFONT06_2, text_font043, space_4, RIGHT_5);
+    beNDMWWindow_QueueText(self, STWINFONT06_2, text_font044, space_4, RIGHT_5);
+    beNDMWWindow_QueueText(self, STWINFONT06_2, text_font045, space_4, RIGHT_5);
+    beNDMWWindow_QueueText(self, STWINFONT06_2, text_font046, space_4, RIGHT_5);
+    beNDMWWindow_QueueText(self, STWINFONT06_2, text_font047, space_4, RIGHT_5);
+    beNDMWWindow_QueueText(self, STWINFONT06_2, text_font048, space_4, RIGHT_5);
+    beNDMWWindow_QueueText(self, STWINFONT06_2, text_font049, space_4, RIGHT_5);
+    beNDMWWindow_QueueText(self, STWINFONT06_2, text_font070, space_4, RIGHT_5);
+    beNDMWWindow_QueueText(self, STWINFONT06_2, text_font071, space_4, RIGHT_5);
+    beNDMWWindow_RunMessageScript(self, txt_status_lua_3, 3);
+    if (self->_entCode == 0) {
+        beNDMWStatusTitle01_ShowStatusLayout(self);
+    } else {
+        beNDMWStatusTitle01_ShowShopLayout(self);
+    }
 }
 
 /* Replaces the window's queued model closes with the face of the current player's Digimon: plays

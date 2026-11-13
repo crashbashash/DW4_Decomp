@@ -1,8 +1,8 @@
-int FUN_002adc40(int, int);
+int SFD_GetCond(int, int);
 void FUN_002a27d8(int, int *, int *);
 
 int FUN_002a1d28(int h, int dflt) {
-    int v = FUN_002adc40(h, 59);
+    int v = SFD_GetCond(h, 59);
     int a;
     int b;
 

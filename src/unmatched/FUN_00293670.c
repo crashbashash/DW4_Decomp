@@ -3,9 +3,9 @@ typedef struct {
     void (*callback)(void *ctx, int arg);
     void *ctx;
 } Handler;
-extern Handler *FUN_00294a30(void);
+extern Handler *mwsfd_GetWork(void);
 
 void FUN_00293670(int arg) {
-    Handler *h = FUN_00294a30();
+    Handler *h = mwsfd_GetWork();
     h->callback(h->ctx, arg);
 }

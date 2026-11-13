@@ -51,13 +51,13 @@ typedef struct Handle_26bbc0 {
 } Handle_26bbc0;
 
 extern char DAT_004ee940[];
-void FUN_002607e8(const char *message);
+void ADXERR_CallErrFunc1(const char *message);
 
 int FUN_0026c978(Handle_26bbc0 *handle) {
     Source_26bbc0 *source;
 
     if (handle == 0) {
-        FUN_002607e8(DAT_004ee940);
+        ADXERR_CallErrFunc1(DAT_004ee940);
         return -1;
     }
     source = handle->source;

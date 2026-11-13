@@ -4,8 +4,8 @@ extern "C" void igInsightCore_AddToScheduler(int, char *);
 extern "C" void igInsightCore_RemoveFromScheduler(int, char *);
 extern "C" void *igInsightCore_FindManager(...);
 extern "C" void *FUN_0034ce50(...);
-extern "C" int FUN_00454290(...);
-extern "C" int FUN_004542d0(...);
+extern "C" int igEventDispatcher_AddReceiver(...);
+extern "C" int igEventDispatcher_AddReceiverOrder(...);
 extern "C" int FUN_004574f0(...);
 extern "C" int FUN_00462e90(...);
 extern "C" int Memory_GetAllocatorBySelector(...);
@@ -85,8 +85,8 @@ void Gap__Bec__bePadManager__vfunc_23(O *o) {
     }
     M *m = o->f12;
     int s0 = m->f32;
-    FUN_004542d0(s0, o->f24, m->f36);
-    FUN_00454290(s0, o->f24);
+    igEventDispatcher_AddReceiverOrder(s0, o->f24, m->f36);
+    igEventDispatcher_AddReceiver(s0, o->f24);
     char *v = (char *)igInsightCore_FindManager(o->f12, g_igViewerSceneInfoManager_metaObject[0]);
     int s = *(int *)(v + 132);
     FUN_004574f0(s, 15);

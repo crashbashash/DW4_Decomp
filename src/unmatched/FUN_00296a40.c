@@ -7,7 +7,7 @@ typedef struct SetSyncPly {
 
 extern char DAT_004f3c60[];
 int FUN_002968c0(SetSyncPly *ply);
-void FUN_0029a320(const char *format, ...);
+void mwsfd_Error(const char *format, ...);
 void FUN_002ad950(int handle, int id, int value);
 
 void FUN_00296a40(SetSyncPly *ply, int mode)
@@ -15,7 +15,7 @@ void FUN_00296a40(SetSyncPly *ply, int mode)
     int handle;
 
     if (FUN_002968c0(ply) == 0) {
-        FUN_0029a320(DAT_004f3c60);
+        mwsfd_Error(DAT_004f3c60);
         return;
     }
     handle = ply->handle;

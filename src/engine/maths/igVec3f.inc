@@ -20,7 +20,7 @@ void Vec3f_TransformDirection(float *out, float *v, float *m) {
     out[2] = x * m[2] + y * m[6] + z * m[10];
 }
 
-void FUN_00192fc0(float *out, float *v, float *m) {
+void Vec3f_TransformProjective(float *out, float *v, float *m) {
     float x = v[0], y = v[1], z = v[2];
     float w;
     out[0] = m[12] + (x * m[0] + y * m[4] + z * m[8]);

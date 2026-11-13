@@ -6,13 +6,13 @@ typedef struct Adxt {
 } Adxt;
 
 extern char D_004ee6d0[];
-extern void FUN_002607e8(char *msg);
+extern void ADXERR_CallErrFunc1(char *msg);
 extern int FUN_00267490(int stm);
 
 int FUN_0026c3c8(Adxt *adxt)
 {
     if (adxt == 0) {
-        FUN_002607e8(D_004ee6d0);
+        ADXERR_CallErrFunc1(D_004ee6d0);
         return -1;
     }
     if (adxt->state >= 2)

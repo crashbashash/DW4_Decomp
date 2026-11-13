@@ -3,7 +3,7 @@ extern char DAT_004d22f8[];
 extern char DAT_00481d40[];
 extern char DAT_00481d80[];
 unsigned int FUN_00106c88(M *, int);
-int FUN_00109b10(M *, char *);
+int _sceMpegMessage(M *, char *);
 void FUN_001064f8(M *);
 void FUN_001064c8(M *, unsigned int);
 void FUN_0010a138(M *, unsigned int, char *);
@@ -15,7 +15,7 @@ void FUN_00109c88(M *m) {
     v = FUN_00106c88(m, 32);
     m->w = v >> 20;
     m->h = (v >> 8) & 0xfff;
-    if (m->h > 2800) FUN_00109b10(m, DAT_004d22f8);
+    if (m->h > 2800) _sceMpegMessage(m, DAT_004d22f8);
     v = FUN_00106c88(m, 30);
     m->br = v >> 12;
     m->vbv = (v >> 1) & 0x3ff;

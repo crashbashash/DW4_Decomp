@@ -7,7 +7,7 @@ void FUN_0018d480(void) {
     FUN_0018fca0((PairKeyedItem *)g_igSphere_metaObject[0], (PairKeyedItem *)g_igSphere_metaObject[0], (int)FUN_0018db20);
     FUN_0018fc30((IndexedWordPairKey *)g_igSphere_metaObject[0], (IndexedWordPairKey *)g_igAABox_metaObject[0], (int)FUN_0018dd20);
     FUN_0018fc30((IndexedWordPairKey *)g_igSphere_metaObject[0], (IndexedWordPairKey *)g_igSphere_metaObject[0], (int)&FUN_0018de10);
-    FUN_0018fd10((int *)g_igSphere_metaObject[0], (int)FUN_0018d8b0);
+    FUN_0018fd10((int *)g_igSphere_metaObject[0], (int)igSphere_IntersectsRay);
     FUN_0018fd90((IndexedWordKey *)g_igSphere_metaObject[0], (int)&FUN_0018dbc0);
     FUN_0018fd50((IndexedSlotKey *)g_igSphere_metaObject[0], (int)&FUN_0018dfc0);
     FUN_0018fe10((int *)g_igSphere_metaObject[0], (int)FUN_0018dcb0);
@@ -71,6 +71,33 @@ int FUN_0018d820(igSphere *a, igSphere *b) {
         }
         return hit;
     }
+}
+
+/* matching construct: declaration-order sweep — t declared before root */
+int igSphere_IntersectsRay(igSphere *sphere, igRay *ray) {
+    float radiusSq, dx, dy, dz, proj, disc, t, root;
+    if (sphere->_radius < 0.0f) {
+        return 0;
+    }
+    radiusSq = sphere->_radius * sphere->_radius;
+    dx = sphere->_center[0] - ray->_pos[0];
+    dy = sphere->_center[1] - ray->_pos[1];
+    dz = sphere->_center[2] - ray->_pos[2];
+    proj = dx * ray->_dir[0] + dy * ray->_dir[1] + dz * ray->_dir[2];
+    disc = radiusSq + proj * proj - dx * dx - dy * dy - dz * dz;
+    if (disc < 0.0f) {
+        return 0;
+    }
+    root = sqrtf(disc);
+    t = proj - root;
+    if (0.0f <= t && t <= ray->_len) {
+        return 1;
+    }
+    t = proj + root;
+    if (0.0f <= t && t <= ray->_len) {
+        return 1;
+    }
+    return 0;
 }
 
 Intersection FUN_0018d9b0(igSphere *sphere, void *other)

@@ -16,15 +16,15 @@ typedef struct {
     int f20;
     int f24;
 } PadSlot;
-extern PadSlot DAT_0055d290[2][4];
-int FUN_00113f20(void);
-int FUN_00113f78(void);
+extern PadSlot padState[2][4];
+int DIntr(void);
+int EIntr(void);
 void FUN_0010b7d8(void *start, void *end);
 void *memcpy(void *dst, const void *src, unsigned int n);
-PadFrame *FUN_00118178(int port, int slot);
+PadFrame *padGetDmaStr(int port, int slot);
 int scePadSetButtonInfo(int port, int slot, int mode);
 int FUN_00118af8(int port, int slot);
 int scePadExitPressMode(int port, int slot) {
-    if (DAT_0055d290[port][slot].open == 0) return 0;
+    if (padState[port][slot].open == 0) return 0;
     return scePadSetButtonInfo(port, slot, 0);
 }

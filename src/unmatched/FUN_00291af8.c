@@ -1,6 +1,6 @@
 /* Maps a creation-parameter buffer format to the internal one (1 -> 1, 0/2 -> 2, 3 -> 3); anything
- * else reports "MwsfdCrePrm: illigal buffmt." through FUN_0029a320 and yields 3. */
-void FUN_0029a320(const char *message);
+ * else reports "MwsfdCrePrm: illigal buffmt." through mwsfd_Error and yields 3. */
+void mwsfd_Error(const char *message);
 
 extern char DAT_004f2b28[]; /* "E206011: MwsfdCrePrm: illigal buffmt." */
 
@@ -16,7 +16,7 @@ int FUN_00291af8(int format) {
     } else if (format == 3) {
         result = 3;
     } else {
-        FUN_0029a320(DAT_004f2b28);
+        mwsfd_Error(DAT_004f2b28);
         result = 3;
     }
     return result;

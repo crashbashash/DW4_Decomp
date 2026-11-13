@@ -89,6 +89,49 @@ LuaFieldWalker::LuaFieldWalker() {
     }
 }
 
+/* Opens the binding in a state: makes the binding's tags (the first state keeps them), sets the
+ * tag methods of undefined globals and of the object tags, adds the script functions `new`, `cast`
+ * and `getClassTags`, registers every class and the bound functions, then collects garbage. */
+void LuaGlue_OpenLibrary(lua_State *L) {
+    int nilTag;
+
+    if (g_luaObjectTag == LUA_UNMADETAG) {
+        g_luaObjectTag = lua_newtag(L);
+        g_luaMetaObjectTag = lua_newtag(L);
+        g_luaReservedTag = lua_newtag(L);
+    } else {
+        lua_newtag(L);
+        lua_newtag(L);
+        lua_newtag(L);
+    }
+    lua_pushnil(L);
+    nilTag = lua_tag(L, -1);
+    lua_settop(L, -2);
+    lua_pushcclosure(L, LuaBinding_GetGlobal, 0);
+    lua_settagmethod(L, nilTag, "getglobal");
+    lua_pushcclosure(L, LuaBinding_SetGlobal, 0);
+    lua_settagmethod(L, nilTag, "setglobal");
+    lua_pushcclosure(L, LuaObject_GetTable, 0);
+    lua_settagmethod(L, g_luaObjectTag, "gettable");
+    lua_pushcclosure(L, LuaObject_SetTable, 0);
+    lua_settagmethod(L, g_luaObjectTag, "settable");
+    lua_pushcclosure(L, LuaObject_Collect, 0);
+    lua_settagmethod(L, g_luaObjectTag, "gc");
+    lua_pushcclosure(L, LuaObject_New, 0);
+    lua_settagmethod(L, g_luaMetaObjectTag, "function");
+    lua_pushcclosure(L, LuaBinding_New, 0);
+    lua_setglobal(L, "new");
+    lua_pushcclosure(L, LuaBinding_Cast, 0);
+    lua_setglobal(L, "cast");
+    lua_pushcclosure(L, LuaBinding_GetClassTags, 0);
+    lua_setglobal(L, "getClassTags");
+    for (LuaClassWalker it; it.isValid(); it++) {
+        LuaClass_Register(it.get(), L);
+    }
+    LuaFunctionTable_BindAll(L);
+    lua_dostring(L, "collectgarbage()");
+}
+
 /* The C++ object a script table stands for, in its `peer` field. */
 void *LuaBinding_GetPeer(lua_State *L, int index) {
     void *peer;

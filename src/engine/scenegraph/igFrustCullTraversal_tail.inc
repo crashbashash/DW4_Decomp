@@ -96,7 +96,7 @@ void FUN_001c5030(igFrustCullTraversal *arg0, igNode *arg1) {
                 float *mx = (float *)&x->_max;
                 mn[0] = mn[1] = mn[2] = 3.4028235e38f;
                 mx[0] = mx[1] = mx[2] = -3.4028235e38f;
-                FUN_00190060(x, o);
+                igVolume_ExtendBy(x, o);
             }
             FUN_001c4c20(arg0, arg1, FUN_001c4ac0((CullFrustumView *)arg0, (CullBoundsView *)var));
             return;

@@ -1,5 +1,5 @@
-int FUN_002a0bb8();
+int sfd_ReportError();
 
 void FUN_002a2c60(void) {
-    FUN_002a0bb8();
+    sfd_ReportError();
 }

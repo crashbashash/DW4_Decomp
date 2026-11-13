@@ -1,5 +1,5 @@
 /* Returns the length of a handle's linked list (head at +20, next pointer at 0 of each node); a
- * NULL or unused (+4 clear) handle is reported through FUN_0027b2e0 and returns 0. */
+ * NULL or unused (+4 clear) handle is reported through SJERR_CallErr and returns 0. */
 typedef struct Node_27d400 {
     struct Node_27d400 *next;   /* 0x00 */
 } Node_27d400;
@@ -13,18 +13,18 @@ typedef struct Handle_27d400 {
 
 extern char E2004090281_NULL_pointer_is_specified[];   /* 'E2004090281 : NULL pointer is specified.' */
 extern char E2004090282_Specified_handle_is_invalid[]; /* 'E2004090282 : Specified handle is invalid.' */
-int FUN_0027b2e0(const char *message);
+int SJERR_CallErr(const char *message);
 
 int FUN_0027d400(Handle_27d400 *handle) {
     Node_27d400 *node;
     int count;
 
     if (handle == 0) {
-        FUN_0027b2e0(E2004090281_NULL_pointer_is_specified);
+        SJERR_CallErr(E2004090281_NULL_pointer_is_specified);
         return 0;
     }
     if (handle->used == 0) {
-        FUN_0027b2e0(E2004090282_Specified_handle_is_invalid);
+        SJERR_CallErr(E2004090282_Specified_handle_is_invalid);
         return 0;
     }
     count = 0;

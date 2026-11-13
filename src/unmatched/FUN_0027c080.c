@@ -22,7 +22,7 @@ typedef struct {
     int errobj;
 } SjRbf;
 
-void FUN_0027b2e0(const char *message);
+void SJERR_CallErr(const char *message);
 extern char DAT_004f1e58[];
 extern char DAT_004f1e88[];
 extern char DAT_004f1eb8[];
@@ -32,15 +32,15 @@ extern char DAT_004f1eb8[];
 void FUN_0027c080(SjRbf *sj, int line, int nbyte, CriSjChunk *ck)
 {
     if (sj == 0) {
-        FUN_0027b2e0(DAT_004f1e58);
+        SJERR_CallErr(DAT_004f1e58);
         return;
     }
     if (sj->used == 0) {
-        FUN_0027b2e0(DAT_004f1e88);
+        SJERR_CallErr(DAT_004f1e88);
         return;
     }
     if (sj->bsize == 0) {
-        FUN_0027b2e0(DAT_004f1eb8);
+        SJERR_CallErr(DAT_004f1eb8);
         return;
     }
     if (line == 0) {

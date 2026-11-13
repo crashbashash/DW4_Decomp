@@ -31,13 +31,45 @@ extern "C" beHitLandResultData *FUN_0035e400(void *);
 extern "C" void *g_stringPool[4];
 extern "C" int g_defaultAllocatorSelector[4];
 extern "C" unsigned char g_useOwnerAllocator;
-struct HitRecord { char pad[12]; void *matrix; char pad16[32]; float position[3]; };
-struct ResultRecord { char header[16]; char hit[72]; };
+struct HitRecord { char pad[12]; void *matrix; char pad16[8]; float point[3]; char pad36[12]; float position[3]; char pad60[12]; };
+struct ResultRecord { char header[16]; HitRecord hit; };
 extern "C" void Gap__Bec__beHitLandModelOrder__vfunc_22(beHitLandModelOrder *self, HitRecord *hit);
 extern "C" igObject *FUN_00188220(int);
 extern "C" void Gap__Bec__beHitLandModelOrder__vfunc_21(beHitLandModelOrder *self, int a1, int a2);
-extern "C" void FUN_00388ff0(beHitLandModelOrder *arg0);
+extern "C" void beHitLandModelOrder_Reset(beHitLandModelOrder *order);
 extern "C" int g_beHitLandModelOrder_metaObject[4];
+#include "dw4/igVec3f.h"
+extern "C" int beMessenger_GetBoolCount(int messenger);
+extern "C" int beMessenger_GetVec3Count(int messenger);
+extern "C" int beMessenger_GetFloatCount(int messenger);
+extern "C" void beMessenger_GetVec3(igVec3f *out, int messenger, int index);
+extern "C" float beMessenger_GetFloat(int messenger, int index);
+extern "C" void beMessenger_ClearInt(int messenger);
+extern "C" void beMessenger_ClearBool(int messenger);
+extern "C" void beMessenger_ClearVec3(int messenger);
+extern "C" void beMessenger_AppendInt(int messenger, int value);
+extern "C" void beMessenger_AppendString(int messenger, int text);
+extern "C" void beMessenger_AppendBool(int messenger, unsigned char value);
+extern "C" void beMessenger_AppendVec3(int messenger, igVec3f value);
+extern "C" void beHitLandModel_TraceOrder(beHitLandModel *self, beHitLandModelOrder *order);
+
+/* beHitLandModelOrder's virtual methods by vtable slot (slot 21 is Gap__Bec__beHitLandModelOrder__vfunc_21). */
+class beHitLandModelOrderMethods {
+public:
+    virtual void slot0(); virtual void slot1(); virtual void slot2(); virtual void slot3(); virtual void slot4();
+    virtual void slot5(); virtual void slot6(); virtual void slot7(); virtual void slot8(); virtual void slot9();
+    virtual void slot10(); virtual void slot11(); virtual void slot12(); virtual void slot13(); virtual void slot14();
+    virtual void slot15(); virtual void slot16(); virtual void slot17(); virtual void slot18(); virtual void slot19();
+    virtual void slot20();
+    virtual void AddRay(igVec3f *start, igVec3f *end);
+};
+
+/* beHitLandModelOrder::_hitdataList as the object list it is, with the list's inline accessors. */
+struct HitResultList : igObjectList {
+    int getCount() const { return _count; }
+    beHitLandResultData *get(int index) const { return ((beHitLandResultData **)_data)[index]; }
+};
+typedef igSmartPointer<HitResultList> HitResultListRef;
 
 int FUN_00386030(void *arg0, int arg1, int arg2) {
     void **temp_a0;
@@ -100,6 +132,154 @@ void Gap__Bec__beHitLandModel__vfunc_31(void)
 {
 }
 
+/* Height of the landing point of the order's index-th hit. */
+static inline float HitHeight(beHitLandModelOrder *order, int index)
+{
+    return ((ResultRecord *)((HitResultListRef &)order->_hitdataList)->get(index))->hit.point[1];
+}
+
+/* Casts four vertical probe rays at the corners of the square of half-width radius around the
+ * messenger's position, picks the landing hit (the highest one inside the up/down window, else the
+ * highest below, else the lowest) and posts the result back to the messenger. */
+static void beHitLandModel_FindLand(beHitLandModel *self)
+{
+    bool inWindow;
+    bool grounded;
+    bool found;
+    igVec3f position;
+    igVec3f start;
+    igVec3f end;
+    float radius;
+    float up;
+    float down;
+    float maxX;
+    float minX;
+    float maxZ;
+    float minZ;
+    beHitLandModelOrder *order;
+    int count;
+
+    if (beMessenger_GetBoolCount(self->_messenger) != 0) return;
+    if (beMessenger_GetVec3Count(self->_messenger) == 0) return;
+    if (beMessenger_GetFloatCount(self->_messenger) == 0) return;
+    beMessenger_GetVec3(&position, self->_messenger, 0);
+    radius = beMessenger_GetFloat(self->_messenger, 0);
+    up = beMessenger_GetFloat(self->_messenger, 1);
+    down = beMessenger_GetFloat(self->_messenger, 2);
+    inWindow = false;
+    grounded = false;
+    beHitLandModelOrder_Reset((beHitLandModelOrder *)self->_order);
+    order = (beHitLandModelOrder *)self->_order;
+    maxX = radius + position.x;
+    maxZ = radius + position.z;
+    minX = position.x - radius;
+    minZ = position.z - radius;
+
+    start.x = maxX; start.y = 1000.0f; start.z = maxZ;
+    end.x = maxX; end.y = -100.0f; end.z = maxZ;
+    ((beHitLandModelOrderMethods *)order)->AddRay(&start, &end);
+    start.x = minX; start.y = 1000.0f; start.z = maxZ;
+    end.x = minX; end.y = -100.0f; end.z = maxZ;
+    ((beHitLandModelOrderMethods *)order)->AddRay(&start, &end);
+    start.x = maxX; start.y = 1000.0f; start.z = minZ;
+    end.x = maxX; end.y = -100.0f; end.z = minZ;
+    ((beHitLandModelOrderMethods *)order)->AddRay(&start, &end);
+    start.x = minX; start.y = 1000.0f; start.z = minZ;
+    end.x = minX; end.y = -100.0f; end.z = minZ;
+    ((beHitLandModelOrderMethods *)order)->AddRay(&start, &end);
+
+    start.x = maxX; start.y = 1000.0f; start.z = maxZ;
+    *(igVec3f *)order->_raymax = start;
+    end.x = minX; end.y = -100.0f; end.z = minZ;
+    *(igVec3f *)order->_raymin = end;
+    order->_kind = 1;
+    beHitLandModel_TraceOrder(self, order);
+
+    count = order->_hitdataCount;
+    if (count > 0) {
+        bool first = true;
+        int best = 0;
+        float bestHeight = 0.0f;
+        float bestDistance = bestHeight;
+        beHitLandResultData *result;
+        const char *name;
+
+        for (int i = 0; i < count; i++) {
+            if (up + HitHeight(order, i) > position.y && HitHeight(order, i) - down < position.y) {
+                if (first) {
+                    bestDistance = HitHeight(order, i) - position.y;
+                    first = false;
+                    best = i;
+                    bestHeight = HitHeight(order, i);
+                } else {
+                    float distance = HitHeight(order, i) - position.y;
+                    if (distance > bestDistance) {
+                        bestHeight = HitHeight(order, i);
+                        best = i;
+                        bestDistance = distance;
+                    }
+                }
+            }
+        }
+        if (first) {
+            for (int i = 0; i < count; i++) {
+                if (HitHeight(order, i) < position.y) {
+                    if (first) {
+                        bestDistance = position.y - HitHeight(order, i);
+                        first = false;
+                        best = i;
+                        bestHeight = HitHeight(order, i);
+                    } else if (position.y - HitHeight(order, i) < bestDistance) {
+                        bestHeight = HitHeight(order, i);
+                        best = i;
+                        bestDistance = position.y - HitHeight(order, i);
+                    }
+                }
+            }
+            if (first) {
+                for (int i = 0; i < count; i++) {
+                    HitRecord *hit = &((ResultRecord *)((HitResultListRef &)order->_hitdataList)->get(i))->hit;
+                    if (i == 0) {
+                        bestHeight = hit->point[1];
+                        best = i;
+                        bestDistance = bestHeight;
+                    } else if (hit->point[1] <= bestDistance) {
+                        bestHeight = hit->point[1];
+                        best = i;
+                        bestDistance = hit->point[1];
+                    }
+                }
+            }
+        }
+        if (bestHeight + up > position.y && bestHeight - down < position.y) {
+            inWindow = true;
+        } else {
+            inWindow = false;
+        }
+        if (position.y - bestHeight <= 0.0f) {
+            grounded = true;
+        } else {
+            grounded = false;
+        }
+        position.y = bestHeight;
+        beMessenger_ClearInt(self->_messenger);
+        result = ((HitResultListRef &)order->_hitdataList)->get(best);
+        name = (const char *)result->_infoName;
+        beMessenger_AppendInt(self->_messenger, result->_ramNo);
+        beMessenger_AppendString(self->_messenger, (int)name);
+        found = true;
+    } else {
+        position.y = -1.0f;
+        found = false;
+    }
+    beMessenger_ClearBool(self->_messenger);
+    beMessenger_ClearVec3(self->_messenger);
+    beMessenger_AppendBool(self->_messenger, inWindow);
+    beMessenger_AppendBool(self->_messenger, grounded);
+    beMessenger_AppendBool(self->_messenger, found);
+    beMessenger_AppendVec3(self->_messenger, position);
+}
+
 void FUN_00388590(int arg0, float *arg1, float *arg2, int arg3) {
     float b;
     float a;
@@ -135,7 +315,7 @@ void Gap__Bec__beHitLandModelOrder__vfunc_22(beHitLandModelOrder *self, HitRecor
         ObjectList_AppendRetained(self->_hitdataList, (beHitLandResultData *)created);
     }
     Vec3f_TransformDirection(hit->position, hit->position, hit->matrix);
-    FUN_00388e60(((ResultRecord *)((beHitLandResultData **)((igObjectList *)self->_hitdataList)->_data)[self->_hitdataCount])->hit, hit);
+    FUN_00388e60(&((ResultRecord *)((beHitLandResultData **)((igObjectList *)self->_hitdataList)->_data)[self->_hitdataCount])->hit, hit);
     result = ((beHitLandResultData **)((igObjectList *)self->_hitdataList)->_data)[self->_hitdataCount];
     name = (const char *)self->_infoName;
     if (g_stringPool[0] == 0) {
@@ -192,10 +372,10 @@ void Gap__Bec__beHitLandModelOrder__vfunc_21(beHitLandModelOrder *self, int a1, 
     self->_rayCount = self->_rayCount + 1;
 }
 
-void FUN_00388ff0(beHitLandModelOrder *arg0) {
-    arg0->_kind = 0;
-    arg0->_rayCount = 0;
-    arg0->_hitdataCount = 0;
+void beHitLandModelOrder_Reset(beHitLandModelOrder *order) {
+    order->_kind = 0;
+    order->_rayCount = 0;
+    order->_hitdataCount = 0;
 }
 
 int Gap__Bec__beHitLandModelOrder__vfunc_20(void)

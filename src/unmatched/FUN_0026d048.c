@@ -8,12 +8,12 @@ typedef struct {
     int f160;
 } AdxtTimer;
 
-extern int DAT_004a8e4c;
-extern int DAT_004a8e98;
-extern int DAT_0049c8f0;
+extern int adxt_time_mode;
+extern int adxt_time_unit;
+extern int adxt_vsync_cnt;
 int FUN_00265ea0(int a0);
 void FUN_0026cbd8(void);
-void FUN_0026bf90(AdxtTimer *adxt, int *ncount, int *tscale);
+void ADXT_GetTime(AdxtTimer *adxt, int *ncount, int *tscale);
 
 int FUN_0026d048(AdxtTimer *adxt)
 {
@@ -27,11 +27,11 @@ int FUN_0026d048(AdxtTimer *adxt)
     }
     ret = FUN_00265ea0(adxt->f12);
     FUN_0026cbd8();
-    saved = DAT_004a8e4c;
-    DAT_004a8e4c = 0;
-    FUN_0026bf90(adxt, &ncount, &tscale);
-    DAT_004a8e4c = saved;
-    adxt->f156 = (float)ncount / (float)tscale * (float)DAT_004a8e98;
-    adxt->f160 = DAT_0049c8f0;
+    saved = adxt_time_mode;
+    adxt_time_mode = 0;
+    ADXT_GetTime(adxt, &ncount, &tscale);
+    adxt_time_mode = saved;
+    adxt->f156 = (float)ncount / (float)tscale * (float)adxt_time_unit;
+    adxt->f160 = adxt_vsync_cnt;
     return ret;
 }

@@ -2,7 +2,7 @@ typedef struct { char p0[316]; unsigned int w; unsigned int h; char p2[8]; int b
 extern char DAT_004d2310[];
 extern char DAT_004d2338[];
 unsigned int FUN_00106c88(M *, int);
-int FUN_00109b10(M *, char *);
+int _sceMpegMessage(M *, char *);
 void FUN_00105228(int);
 void FUN_0010a218(M *m) {
     unsigned int v;
@@ -14,11 +14,11 @@ void FUN_0010a218(M *m) {
     m->chroma = (v >> 17) & 3;
     vsx = (v >> 13) & 3;
     hsx = (v >> 15) & 3;
-    if (m->chroma != 1) FUN_00109b10(m, DAT_004d2310);
+    if (m->chroma != 1) _sceMpegMessage(m, DAT_004d2310);
     m->prog = (v >> 19) & 1;
     id = v >> 20;
     vbvx = FUN_00106c88(m, 16) >> 8;
-    if (id != 0x48 && id != 0x58 && id != 0x44) FUN_00109b10(m, DAT_004d2338);
+    if (id != 0x48 && id != 0x58 && id != 0x44) _sceMpegMessage(m, DAT_004d2338);
     m->w = (hsx << 12) | (m->w & 0xfff);
     m->h = (vsx << 12) | (m->h & 0xfff);
     m->br += brx << 18;

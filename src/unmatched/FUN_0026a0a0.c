@@ -1,6 +1,6 @@
 /* Calls FUN_0026a238, then between FUN_0027e1c0 and FUN_0027e1d8 copies a set byte 73 into byte 70
  * and clears the busy flag. */
-/* Request layout shared by FUN_00269ff0 through FUN_0026a300. */
+/* Request layout shared by FUN_00269ff0 through ADXSTM_SetEos. */
 typedef struct Request_269ff0 {
     char used;          /* 0x00: entries of DAT_004a7f10 with used == 1 are serviced by FUN_0026a908 */
     char state;         /* 0x01: 2 or 3 after FUN_0026a178 (by sectors), polled for 1 by FUN_0026a2a0 */

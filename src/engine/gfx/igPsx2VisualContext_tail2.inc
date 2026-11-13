@@ -327,7 +327,7 @@ int FUN_00169e40(VisualContextTextures *self, int index, TextureImage *image, vo
     pixels = image->pixels;
     bool allocated = false;
     int format;
-    if (pixels == 0 || image->f48 < 0 || ((int)pixels & 15) != 0) {
+    if (pixels == 0 || image->imageSize < 0 || ((int)pixels & 15) != 0) {
         pixels = ((BufferAllocator *)FUN_00165cf0((int *)self))->allocate(width * height * 4, 16);
         allocated = true;
     }
@@ -354,7 +354,7 @@ int FUN_00169e40(VisualContextTextures *self, int index, TextureImage *image, vo
         image->setPixels(pixels, format, 100, width, height);
         Memory_FreeBuffer(pixels);
     } else {
-        FUN_0015a530(image, pixels, format, width, height);
+        igImage_SetPixels(image, pixels, format, width, height);
     }
     return 1;
 }

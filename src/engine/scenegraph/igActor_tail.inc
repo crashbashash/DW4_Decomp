@@ -21,7 +21,7 @@ int Gap__Sg__igActor__vfunc_37(ActorView *o0, ActorTraversal *t0) {
         }
         {
             world = o->_world;
-            rootBone = (char *)o + DAT_005624c0[0]->_offset;
+            rootBone = (char *)o + g_igActor_transformMetaField[0]->_offset;
             FUN_001904f0(bonesOf(o), rootBone, world);
         }
         status = o->_animationState->update(t, o);
@@ -301,12 +301,12 @@ int FUN_001b9d90(LightTraversalView *o, LightSceneView *scene) {
     FUN_001904f0(matrix, currentEntry(stackOf_1b9d90(o->_state, ((CullMeta * *)g_igModelViewMatrixAttr_metaObject)[0]))->_matrix, o->_view);
     for (i = 0; i < scene->_lights->_count; i++) {
         LightView *light = scene->_lights->_data[i];
-        FUN_00192fc0(&position, (char *)light + DAT_0055f0a0[0]->_offset, matrix);
+        Vec3f_TransformProjective(&position, (char *)light + DAT_0055f0a0[0]->_offset, matrix);
         light->_worldPosition.x = position.x;
         light->_worldPosition.y = position.y;
         light->_worldPosition.z = position.z;
         if (light->_type == 0 || light->_type == 2) {
-            Vec3f_TransformDirection(&direction, (char *)light + DAT_0055f0c0[0]->_offset, matrix);
+            Vec3f_TransformDirection(&direction, (char *)light + g_igLightAttr_directionMetaField[0]->_offset, matrix);
             light->_worldDirection.x = direction.x;
             light->_worldDirection.y = direction.y;
             light->_worldDirection.z = direction.z;
@@ -362,7 +362,7 @@ int FUN_001ba080(CullTraversalView *o, CullNodeView *node) {
     center.z = node->_center.z;
     st = o->_state;
     stack = st->_stacks->_data[st->_slotOfIndex[((CullMeta * *)g_igModelViewMatrixAttr_metaObject)[0]->_index]];
-    FUN_00192fc0(&out, &center, currentEntry_1ba080(stack)->_matrix);
+    Vec3f_TransformProjective(&out, &center, currentEntry_1ba080(stack)->_matrix);
     child = ((int)FUN_001d0520((RangeLookup *)node, out.x * out.x + out.y * out.y + out.z * out.z));
     if (child != 0) {
         if (FUN_001e04c0((S_1e04c0 *)o, (V_1e04c0 *)child) == 2) return 2;
@@ -373,9 +373,9 @@ int FUN_001ba080(CullTraversalView *o, CullNodeView *node) {
 
 int FUN_001ba1a0(int a0, int arg1) {
     S_1ba1a0 *arg0 = (S_1ba1a0 *)a0;
-    FUN_001b12f0((igAttrStackManager *)arg0->f52, (igAttr *)arg0->f232);
+    igAttrStackManager_PushOverrideAttr((igAttrStackManager *)arg0->f52, (igAttr *)arg0->f232);
     FUN_001b3ff0((void *)arg1, (int)arg0);
-    FUN_001b13d0((struct A_1b13d0 *)arg0->f52, (struct B_1b13d0 *)arg0->f232);
+    igAttrStackManager_PopOverrideAttr((struct A_1b13d0 *)arg0->f52, (struct B_1b13d0 *)arg0->f232);
     return 0;
 }
 
@@ -400,7 +400,7 @@ int FUN_001ba6b0(char *arg0, struct S_1d6190 *arg1) {
     return 0;
 }
 
-int FUN_001ba850(A1_1c03a0 *arg0, A0_1c03a0 *arg1) {
+int FUN_001ba850(A1_1c03a0 *arg0, DepthOfFieldNode *arg1) {
     FUN_001c03a0(arg1, arg0);
     return 0;
 }

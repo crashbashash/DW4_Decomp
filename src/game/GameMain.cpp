@@ -210,7 +210,7 @@ extern "C" int FUN_00463bc0(...);
 extern "C" float __floatdisf(int);
 extern "C" int fptodp(float);
 extern "C" int FUN_003082b0(...);
-extern "C" int FUN_004578c0(...);
+extern "C" int igModel_NotifyViews(...);
 extern "C" int thunk_FUN_00238ed0(...);
 extern "C" int strcpy(...);
 extern "C" int strlen(...);
@@ -1129,13 +1129,13 @@ void FUN_0025a8c0(App_25a8c0 *arg0) {
         obj = (igViewerParameters *)arg0->f4->_parameters;
         obj->_showGui = 0;
         e0.a = 2; e0.b = 0; e0.c = DAT_0058cab8[0];
-        FUN_004578c0(obj, &e0);
+        igModel_NotifyViews(obj, &e0);
         obj->_showBoundingBox = 0;
         e1.a = 2; e1.b = 0; e1.c = DAT_0058cac0[0];
-        FUN_004578c0(obj, &e1);
+        igModel_NotifyViews(obj, &e1);
         obj->_showNormals = 0;
         e2.a = 2; e2.b = 0; e2.c = DAT_0058cac8[0];
-        FUN_004578c0(obj, &e2);
+        igModel_NotifyViews(obj, &e2);
         if (((Frame * *)DAT_0056dc50)[0] == 0) {
             Frame *v = ((Frame *)FUN_001007e0(240));
             if (v != 0) v = ((Frame *)FUN_00238110(v));
@@ -1193,7 +1193,7 @@ void FUN_0025a8c0(App_25a8c0 *arg0) {
         }
         obj->_flushFrames = 1;
         e3.a = 2; e3.b = 0; e3.c = DAT_0058cad0[0];
-        FUN_004578c0(obj, &e3);
+        igModel_NotifyViews(obj, &e3);
         FUN_00463bb0(arg0);
         sp.p->vB();
         temp_f12 = (1e9f * (float)s1) / __floatdisf(sp.p->vA());

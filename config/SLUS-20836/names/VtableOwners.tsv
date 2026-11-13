@@ -235,7 +235,6 @@
 0x001c63d0	Gap::Sg::igNode::vfunc_27	engine
 0x001d33a0	Gap::Sg::igNode::vfunc_09	engine
 0x001d3590	Gap::Sg::igNode::vfunc_17	engine
-0x001d8360	Gap::Sg::igShaderData::vfunc_23	engine
 0x001d8470	Gap::Sg::igShaderData::vfunc_24	engine
 0x001d84d0	Gap::Sg::igShaderData::vfunc_25	engine
 0x001d8930	Gap::Sg::igShaderData::vfunc_17	engine
@@ -386,7 +385,6 @@
 0x0031d3a0	Gap::Core::igArenaMemoryPool::vfunc_101	engine
 0x0031d640	Gap::Core::igArenaMemoryPool::vfunc_62	engine
 0x0031e020	Gap::Core::igArenaMemoryPool::vfunc_63	engine
-0x0031e030	Gap::Core::igArenaMemoryPool::vfunc_64	engine
 0x0031e0b0	Gap::Core::igArenaMemoryPool::vfunc_65	engine
 0x0031e670	Gap::Core::igArenaMemoryPool::vfunc_97	engine
 0x0031e8b0	Gap::Core::igArenaMemoryPool::vfunc_98	engine

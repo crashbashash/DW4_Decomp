@@ -19,8 +19,8 @@ typedef struct {
 
 extern AlarmState D_00483508;
 
-int FUN_00113f20(void);
-int FUN_00113f78(void);
+int DIntr(void);
+int EIntr(void);
 int RemoveIntcHandler(int cause, int handler_id);
 int FUN_0010b9c0(int cause);
 void FUN_00114800(int mode);
@@ -35,7 +35,7 @@ int EndTimer(void)
     if (D_00483508.active != 0) {
         return 0x80000010;
     }
-    state = FUN_00113f20();
+    state = DIntr();
     if (RemoveIntcHandler(11, D_00483508.handler) == 0) {
         FUN_0010b9c0(11);
         FUN_00114800(0xC00);
@@ -44,7 +44,7 @@ int EndTimer(void)
     D_00483508.count = 0;
     D_00483508.handler = -1;
     if (state) {
-        FUN_00113f78();
+        EIntr();
     }
     return 0;
 }

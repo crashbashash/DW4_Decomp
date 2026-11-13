@@ -4,11 +4,11 @@ struct Object27a {
     signed char flag82;   /* +82 */
 };
 
-extern int DAT_004b1dc0;
-extern int DAT_004b1dc8;
+extern int ps2rna_nvoice;
+extern int ps2rna_setup_voice;
 
 void FUN_0027adb8(struct Object27a *object, int value) {
-    if (DAT_004b1dc8 != 1 || DAT_004b1dc0 > 0) {
+    if (ps2rna_setup_voice != 1 || ps2rna_nvoice > 0) {
         object->flag82 = value;
     }
 }

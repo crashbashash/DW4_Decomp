@@ -225,6 +225,28 @@ extern "C" int g_beSvFormatApi_metaObject[4];
 extern "C" int g_beSvFileFindApi_metaObject[4];
 extern "C" int g_beSvFileMakeApi_metaObject[4];
 extern "C" void Gap__Bec__beSvFileMakeApi__vfunc_08(beSvFileMakeApi *self);
+extern "C" beSaveMemoryObj *beSaveMemoryObj_CreateInstance(int allocator);
+extern "C" void *memcpy(void *, const void *, unsigned int);
+extern "C" void ObjectList_AppendRetained(int list, igObject *item);
+
+/* The request slots every beSaveApi subclass overrides after getMetaObject (slot 20). */
+class beSaveApiVirtuals : public igObjectVirtuals {
+public:
+    virtual void start(beSvDeliver *deliver);
+    virtual int poll();
+    virtual void report(beSvDeliver *deliver);
+    virtual int checksum(int *data, unsigned int size);
+};
+
+/* beSvFileMakeApi with its save buffer typed and the unlisted word at +72. */
+struct beSvFileMakeApiWork : beSvApiWork {
+    int _earlyGamedata;
+    beSaveMemoryObj *_saveWork;
+    int _makeStep;
+};
+
+extern "C" void beSvFileMakeApi_Start(beSvFileMakeApiWork *self, beSvDeliver *deliver);
+extern "C" void beSvWriteMediaApi_Start(beSvWriteMediaApiWork *self, beSvDeliver *deliver);
 
 void beSaveDataDeliver_AllocateData(beSaveDataDeliver *deliver, int size) {
     int own;
@@ -286,6 +308,39 @@ void Gap__Bec__beSaveMemoryObj__vfunc_08(beSaveMemoryObj *self) {
 int Gap__Bec__beSaveMemoryObj__vfunc_20(void)
 {
     return g_beSaveMemoryObj_metaObject[0];
+}
+
+/* Starts a save: builds the save image in a new beSaveMemoryObj of the platform's data size: the checksum word,
+ * the save version, then the game data. */
+void beSvFileMakeApi_Start(beSvFileMakeApiWork *self, beSvDeliver *deliver) {
+    beSvPlatDataPS2 *platform;
+    int own;
+    int allocator;
+    igObject *old;
+    int *image;
+    int *field;
+    beSaveDataDeliver *gameData;
+
+    platform = (beSvPlatDataPS2 *)deliver->_platformData;
+    g_svPlatformData[0] = platform;
+    self->_connect = deliver->_targetConnect;
+    self->_isEnd = 0;
+    self->_result = 1;
+    own = igObject_GetAllocator(self);
+    allocator = g_useOwnerAllocator != 0 ? own : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
+    old = self->_saveWork;
+    IG_OBJECT_RELEASE(old);
+    self->_saveWork = beSaveMemoryObj_CreateInstance(allocator);
+    beSaveMemoryObj_Allocate(self->_saveWork, platform->_dataSize, 0);
+    image = (int *)self->_saveWork->_mem;
+    field = image;
+    field++;
+    *field++ = g_svSaveVersion[0];
+    gameData = (beSaveDataDeliver *)deliver->_gameData;
+    memcpy(field, (void *)gameData->_data, gameData->_size);
+    image[0] = ((beSaveApiVirtuals *)self)->checksum(image, platform->_dataSize);
+    self->_makeStep = 0;
+    g_svCardBusy = 1;
 }
 
 void Gap__Bec__beSvFileMakeApi__vfunc_23(beSvFileMakeApi *self, beSvDeliver *deliver) {
@@ -489,6 +544,44 @@ void Gap__Bec__beSvUseCheckApi__vfunc_23(beSvUseCheckApi *self, beSvDeliver *del
 void Gap__Bec__beSvReadMediaApi__vfunc_23(beSvReadMediaApi *self, beSvDeliver *deliver) {
     deliver->_result = self->_result;
     deliver->_isEndOperat = 1;
+}
+
+/* Starts a write: builds the save image like beSvFileMakeApi_Start, in a 32-byte aligned buffer, and
+ * resets the passes. */
+void beSvWriteMediaApi_Start(beSvWriteMediaApiWork *self, beSvDeliver *deliver) {
+    beSvPlatDataPS2 *platform;
+    int own;
+    int allocator;
+    igObject *old;
+    int *image;
+    int *field;
+    beSaveDataDeliver *gameData;
+
+    platform = (beSvPlatDataPS2 *)deliver->_platformData;
+    self->_connect = deliver->_targetConnect;
+    self->_isEnd = 0;
+    self->_result = 1;
+    g_svPlatformData[0] = (beSvPlatDataPS2 *)deliver->_platformData;
+    self->_imagePass = 0;
+    own = igObject_GetAllocator(self);
+    allocator = g_useOwnerAllocator != 0 ? own : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
+    old = self->_saveWork;
+    IG_OBJECT_RELEASE(old);
+    self->_saveWork = beSaveMemoryObj_CreateInstance(allocator);
+    beSaveMemoryObj_Allocate(self->_saveWork, platform->_dataSize, 32);
+    image = (int *)self->_saveWork->_mem;
+    field = image;
+    field++;
+    *field++ = g_svSaveVersion[0];
+    gameData = (beSaveDataDeliver *)deliver->_gameData;
+    memcpy(field, (void *)gameData->_data, gameData->_size);
+    image[0] = ((beSaveApiVirtuals *)self)->checksum(image, platform->_dataSize);
+    self->_phase = 0;
+    self->_st3 = 0;
+    self->_st2 = 0;
+    self->_step = 0;
+    g_svCardBusy = 1;
+    self->_retryCount = 0;
 }
 
 #define SV_NEXT_STEP(self)  ((self)->_step = (self)->getStep() + 1, (self)->_st3 = 0, (self)->_st2 = 0)

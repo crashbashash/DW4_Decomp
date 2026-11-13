@@ -321,7 +321,7 @@ register set) and a TEXFLUSH, and `p2GetPassMasks` gives the FRAME/ZBUF masks a 
 
 Open questions:
 
-* `FUN_001fcc10` and `FUN_001fd160` are called by `FUN_001762d0` together with
+* `p2LayoutParticleFormat` and `FUN_001fd160` are called by `FUN_001762d0` together with
   psx2ParticleFormat's first six functions, in address order, so they might be the head of that
   file. The `.bss` at `0x56b068`, used only by `0x1fd160`, lies below particleFormat's `0x56b070`,
   which argues for keeping them in `p2multipass.c`.

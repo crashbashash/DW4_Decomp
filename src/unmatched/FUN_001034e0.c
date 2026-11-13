@@ -42,7 +42,7 @@ extern char DAT_004d1ee0[];
 void FUN_00103730(Dec *d, int bx, int by, int macroblock_type, int motion_type, int PMV[2][2][2],
                   int mv_field_sel[2][2], int dmvector[2]);
 void FUN_00108340(Dec *d);
-void FUN_00109ad8(Dec *d, const char *msg, ...);
+void _sceMpegErrorf(Dec *d, const char *msg, ...);
 int FUN_001034e0(Dec *d, int MBA, int MBAinc, int macroblock_type, int motion_type, int PMV[2][2][2],
                  int mv_field_sel[2][2], int dmvector[2]) {
     int intra = macroblock_type & 1;
@@ -57,7 +57,7 @@ int FUN_001034e0(Dec *d, int MBA, int MBAinc, int macroblock_type, int motion_ty
         d->buf[d->cur].pending = 0;
     } else {
         if ((unsigned int)(motion_type - 1) >= 3) {
-            FUN_00109ad8(d, DAT_004d1ee0, motion_type);
+            _sceMpegErrorf(d, DAT_004d1ee0, motion_type);
             d->fault = 1;
             return 0;
         }

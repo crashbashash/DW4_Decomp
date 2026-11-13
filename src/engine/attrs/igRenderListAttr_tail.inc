@@ -36,3 +36,15 @@ int FUN_00140050(void *arg0) {
     return *(int *)((char *)(arg0) + 104);
 }
 
+struct SetRenderDestinationAttrView {
+    int _vtable;
+    unsigned int _refCount;
+    short _cachedAttrIndex;
+    short _cachedUnitID;
+    RenderDestinationAttrView *_pRDAttr;
+};
+
+extern "C" void Gap__Gfx__igPsx2VisualContext__vfunc_48(igObject *context, int renderDestination, int *textureIndex);
+extern "C" void Gap__Gfx__igPsx2VisualContext__vfunc_49(igObject *context, int renderDestination, int *textureIndex, int flags);
+
+

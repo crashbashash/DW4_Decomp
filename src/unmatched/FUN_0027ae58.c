@@ -5,13 +5,13 @@ struct Voice27a {
     int channel_level[8];   /* +64 */
 };
 
-extern int DAT_004b1dc0;
-extern int DAT_004b1dc8;
+extern int ps2rna_nvoice;
+extern int ps2rna_setup_voice;
 
 void FUN_0027ae58(struct Voice27a *voice, int channel, int level) {
     int clamped;
 
-    if (DAT_004b1dc8 != 1 || DAT_004b1dc0 > 0) {
+    if (ps2rna_setup_voice != 1 || ps2rna_nvoice > 0) {
         clamped = -15;
         if (level >= -15) {
             clamped = level;

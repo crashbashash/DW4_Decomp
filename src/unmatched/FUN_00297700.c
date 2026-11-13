@@ -1,5 +1,5 @@
-int FUN_002a0f98();
+int SFD_SetStmObject();
 
 void FUN_00297700(void *arg0) {
-    FUN_002a0f98(*(int *)((char *)(arg0) + 64));
+    SFD_SetStmObject(*(int *)((char *)(arg0) + 64));
 }

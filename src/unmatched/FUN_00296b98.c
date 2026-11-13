@@ -1,7 +1,7 @@
 extern char DAT_004f3c90[];
 extern char DAT_004f3cc0[];
 int FUN_002968c0(void *obj);
-void FUN_0029a320(char *msg);
+void mwsfd_Error(char *msg);
 int FUN_002adba0(int handle, int id, int *value);
 
 typedef struct SyncModeObj {
@@ -15,7 +15,7 @@ int FUN_00296b98(SyncModeObj *obj)
     int ret;
 
     if (FUN_002968c0(obj) == 0) {
-        FUN_0029a320(DAT_004f3c90);
+        mwsfd_Error(DAT_004f3c90);
         return -1;
     }
     FUN_002adba0(obj->handle, 15, &value);
@@ -30,7 +30,7 @@ int FUN_00296b98(SyncModeObj *obj)
         ret = 2;
         break;
     default:
-        FUN_0029a320(DAT_004f3cc0);
+        mwsfd_Error(DAT_004f3cc0);
         ret = -1;
         break;
     }

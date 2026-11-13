@@ -1,3 +1,16 @@
+#include "dw4/igVec3f.h"
+extern "C" igVec3f *Gap__Sg__igCompressedAnimationSequenceQS__getTranslationKey(QSView *o, int index);
+
+igVec3f *Gap__Sg__igCompressedAnimationSequenceQS__getTranslationKey(QSView *o, int index) {
+    static igVec3f translation;
+    unsigned short *p = o->_compressedTranslationList->_data + index * 3;
+    float *out = &translation.x;
+    *out++ = o->_translationBase + (float)(unsigned int)*p++ * o->_translationRangeOverMaxUShort;
+    *out++ = o->_translationBase + (float)(unsigned int)*p++ * o->_translationRangeOverMaxUShort;
+    *out++ = o->_translationBase + (float)(unsigned int)*p++ * o->_translationRangeOverMaxUShort;
+    return &translation;
+}
+
 void FUN_001bf560(QSView *o, int index, float *out) {
     unsigned short *p = o->_compressedQuaternionList->_data + index * 4;
     *out++ = o->_quaternionBase + (float)(unsigned int)*p++ * o->_quaternionRangeOverMaxUShort;
@@ -184,20 +197,51 @@ int FUN_001c0240(igTransformSequence1_5 *self) {
     return self->_scaleList;
 }
 
+class ProjectionMatrixAttrView {
+public:
+    virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3(); virtual void v4(); virtual void v5(); virtual void v6(); virtual void v7(); virtual void v8(); virtual void v9();
+    virtual void v10(); virtual void v11(); virtual void v12(); virtual void v13(); virtual void v14(); virtual void v15(); virtual void v16(); virtual void v17(); virtual void v18(); virtual void v19();
+    virtual void v20(); virtual void v21(); virtual void v22(); virtual void v23(); virtual void v24(); virtual void v25(); virtual void v26(); virtual void v27(); virtual void v28(); virtual void v29();
+    virtual void setMatrix(igMatrix44fView *);
+};
+static inline float aspectOf(const DepthOfFieldNode &dof) { return dof._fovX / dof._fovY; }
+static inline float degToRad(const float degrees) { return 0.0174532924f * degrees; }
+/* The far edge of the in-focus region: the focus distance pushed out by _blurPercent of its distance from the near
+ * plane. */
+static inline float nearRegionFar(const DepthOfFieldNode &dof) { return dof._focusDistance + dof._blurPercent * (0.01f * (dof._focusDistance - dof._nearPlane)); }
+extern "C" void DepthOfField_UpdateProjections(DepthOfFieldNode *dof);
+
+/* Completes the field of view from the aspect ratio and rebuilds the near-pass and far-pass projections. */
+void DepthOfField_UpdateProjections(DepthOfFieldNode *dof) {
+    if (dof->_fovX == -1.0f) {
+        dof->_fovX = dof->_fovY * dof->_aspect;
+    } else if (dof->_fovY == -1.0f) {
+        dof->_fovY = dof->_fovX / dof->_aspect;
+    }
+    igMatrix44fView nearProjection;
+    igMatrix44f_MakePerspective(&nearProjection, degToRad(dof->_fovX), degToRad(dof->_fovY), aspectOf(*dof),
+                 dof->_nearPlane, nearRegionFar(*dof));
+    ((ProjectionMatrixAttrView *)g_depthOfFieldNearProjectionAttr[0])->setMatrix(&nearProjection);
+    igMatrix44fView farProjection;
+    igMatrix44f_MakePerspective(&farProjection, degToRad(dof->_fovX), degToRad(dof->_fovY), aspectOf(*dof),
+                 dof->_focusDistance, dof->_farPlane);
+    ((ProjectionMatrixAttrView *)g_depthOfFieldFarProjectionAttr[0])->setMatrix(&farProjection);
+}
+
 int FUN_001c0390(void *, int) {
     return 0;
 }
 
-void FUN_001c03a0(A0_1c03a0 *arg0, A1_1c03a0 *arg1) {
+void FUN_001c03a0(DepthOfFieldNode *arg0, A1_1c03a0 *arg1) {
     float sp70[4];
     float f20;
     Cls *s1;
     int s0;
     Obj_1c03a0 *s4;
     int v1;
-    if (arg0->f28 != 0) v1 = arg0->f28->_count; else v1 = 0;
+    if (arg0->_childList != 0) v1 = arg0->_childList->_count; else v1 = 0;
     if (v1 != 0) {
-        if (arg0->f32 != 0 && !(arg0->f36 <= 1.0f)) {
+        if (arg0->_enabled != 0 && !(arg0->_blurPercent <= 1.0f)) {
             s1 = arg1->f60;
             if (GPR_00554984 != 0) {
                 if ((FUN_001c0390((void *)arg0, arg1->f32) & 0xFF) == 1) GPR_00554b8c = 1; else GPR_00554b8c = 0;
@@ -205,9 +249,9 @@ void FUN_001c03a0(A0_1c03a0 *arg0, A1_1c03a0 *arg1) {
             }
             if (GPR_00554b8c != 0) {
                 s0 = arg1->f52;
-                if (arg0->f64 != 0) {
-                    FUN_001c0250(arg0);
-                    arg0->f64 = 0;
+                if (arg0->_projectionDirty != 0) {
+                    DepthOfField_UpdateProjections(arg0);
+                    arg0->_projectionDirty = 0;
                 }
                 s1->v716(sp70);
                 f20 = s1->v728();
@@ -221,49 +265,49 @@ void FUN_001c03a0(A0_1c03a0 *arg0, A1_1c03a0 *arg1) {
                 s4->f48 = fptodp(f20);
                 s4->f64 = f20;
                 FUN_001dc500((A_1dc500 *)arg1->f68, 0, 0);
-                FUN_001b12f0((igAttrStackManager *)s0, (igAttr *)DAT_00562668[0]);
-                FUN_001b12f0((igAttrStackManager *)s0, (igAttr *)DAT_00562670[0]);
+                igAttrStackManager_PushOverrideAttr((igAttrStackManager *)s0, (igAttr *)DAT_00562668[0]);
+                igAttrStackManager_PushOverrideAttr((igAttrStackManager *)s0, (igAttr *)DAT_00562670[0]);
                 FUN_001d9bb0((void *)arg1->f68, s0);
-                FUN_001b12f0((igAttrStackManager *)s0, (igAttr *)DAT_00562660[0]);
-                FUN_001b12f0((igAttrStackManager *)s0, (igAttr *)DAT_005626b8[0]);
+                igAttrStackManager_PushOverrideAttr((igAttrStackManager *)s0, (igAttr *)DAT_00562660[0]);
+                igAttrStackManager_PushOverrideAttr((igAttrStackManager *)s0, (igAttr *)g_depthOfFieldFarProjectionAttr[0]);
                 igTraversal_TraverseChildren((int)(arg1), (S_1e07a0 *)arg0);
-                FUN_001b13d0((struct A_1b13d0 *)s0, (struct B_1b13d0 *)DAT_005626b8[0]);
-                FUN_001b13d0((struct A_1b13d0 *)s0, (struct B_1b13d0 *)DAT_00562660[0]);
-                FUN_001b13d0((struct A_1b13d0 *)s0, (struct B_1b13d0 *)DAT_00562670[0]);
-                FUN_001b13d0((struct A_1b13d0 *)s0, (struct B_1b13d0 *)DAT_00562668[0]);
+                igAttrStackManager_PopOverrideAttr((struct A_1b13d0 *)s0, (struct B_1b13d0 *)g_depthOfFieldFarProjectionAttr[0]);
+                igAttrStackManager_PopOverrideAttr((struct A_1b13d0 *)s0, (struct B_1b13d0 *)DAT_00562660[0]);
+                igAttrStackManager_PopOverrideAttr((struct A_1b13d0 *)s0, (struct B_1b13d0 *)DAT_00562670[0]);
+                igAttrStackManager_PopOverrideAttr((struct A_1b13d0 *)s0, (struct B_1b13d0 *)DAT_00562668[0]);
                 FUN_001d9bb0((void *)arg1->f68, s0);
-                FUN_001b12f0((igAttrStackManager *)s0, (igAttr *)DAT_005626c8[0]);
-                FUN_001b12f0((igAttrStackManager *)s0, (igAttr *)DAT_005626a8[0]);
-                FUN_001b12f0((igAttrStackManager *)s0, (igAttr *)DAT_005626d0[0]);
+                igAttrStackManager_PushOverrideAttr((igAttrStackManager *)s0, (igAttr *)DAT_005626c8[0]);
+                igAttrStackManager_PushOverrideAttr((igAttrStackManager *)s0, (igAttr *)DAT_005626a8[0]);
+                igAttrStackManager_PushOverrideAttr((igAttrStackManager *)s0, (igAttr *)DAT_005626d0[0]);
                 FUN_001d9bb0((void *)arg1->f68, s0);
-                FUN_001b12f0((igAttrStackManager *)s0, (igAttr *)DAT_00562680[0]);
-                FUN_001b12f0((igAttrStackManager *)s0, (igAttr *)DAT_00562688[0]);
+                igAttrStackManager_PushOverrideAttr((igAttrStackManager *)s0, (igAttr *)DAT_00562680[0]);
+                igAttrStackManager_PushOverrideAttr((igAttrStackManager *)s0, (igAttr *)DAT_00562688[0]);
                 if (s1->v148(16) != 0) {
-                    FUN_001b12f0((igAttrStackManager *)s0, (igAttr *)DAT_005626a0[0]);
+                    igAttrStackManager_PushOverrideAttr((igAttrStackManager *)s0, (igAttr *)DAT_005626a0[0]);
                 } else {
-                    FUN_001b12f0((igAttrStackManager *)s0, (igAttr *)DAT_00562698[0]);
+                    igAttrStackManager_PushOverrideAttr((igAttrStackManager *)s0, (igAttr *)DAT_00562698[0]);
                 }
-                FUN_001b12f0((igAttrStackManager *)s0, (igAttr *)DAT_00562690[0]);
-                FUN_001b12f0((igAttrStackManager *)s0, (igAttr *)DAT_005626c0[0]);
-                FUN_001b12f0((igAttrStackManager *)s0, (igAttr *)DAT_005626d8[0]);
+                igAttrStackManager_PushOverrideAttr((igAttrStackManager *)s0, (igAttr *)DAT_00562690[0]);
+                igAttrStackManager_PushOverrideAttr((igAttrStackManager *)s0, (igAttr *)DAT_005626c0[0]);
+                igAttrStackManager_PushOverrideAttr((igAttrStackManager *)s0, (igAttr *)DAT_005626d8[0]);
                 FUN_001db720(arg1->f68, DAT_00562678[0], s0);
-                FUN_001b13d0((struct A_1b13d0 *)s0, (struct B_1b13d0 *)DAT_005626d8[0]);
-                FUN_001b13d0((struct A_1b13d0 *)s0, (struct B_1b13d0 *)DAT_005626c0[0]);
-                FUN_001b13d0((struct A_1b13d0 *)s0, (struct B_1b13d0 *)DAT_00562690[0]);
+                igAttrStackManager_PopOverrideAttr((struct A_1b13d0 *)s0, (struct B_1b13d0 *)DAT_005626d8[0]);
+                igAttrStackManager_PopOverrideAttr((struct A_1b13d0 *)s0, (struct B_1b13d0 *)DAT_005626c0[0]);
+                igAttrStackManager_PopOverrideAttr((struct A_1b13d0 *)s0, (struct B_1b13d0 *)DAT_00562690[0]);
                 if (s1->v148(16) != 0) {
-                    FUN_001b13d0((struct A_1b13d0 *)s0, (struct B_1b13d0 *)DAT_005626a0[0]);
+                    igAttrStackManager_PopOverrideAttr((struct A_1b13d0 *)s0, (struct B_1b13d0 *)DAT_005626a0[0]);
                 } else {
-                    FUN_001b13d0((struct A_1b13d0 *)s0, (struct B_1b13d0 *)DAT_00562698[0]);
+                    igAttrStackManager_PopOverrideAttr((struct A_1b13d0 *)s0, (struct B_1b13d0 *)DAT_00562698[0]);
                 }
-                FUN_001b13d0((struct A_1b13d0 *)s0, (struct B_1b13d0 *)DAT_00562688[0]);
-                FUN_001b13d0((struct A_1b13d0 *)s0, (struct B_1b13d0 *)DAT_00562680[0]);
-                FUN_001b13d0((struct A_1b13d0 *)s0, (struct B_1b13d0 *)DAT_005626d0[0]);
-                FUN_001b13d0((struct A_1b13d0 *)s0, (struct B_1b13d0 *)DAT_005626a8[0]);
-                FUN_001b13d0((struct A_1b13d0 *)s0, (struct B_1b13d0 *)DAT_005626c8[0]);
+                igAttrStackManager_PopOverrideAttr((struct A_1b13d0 *)s0, (struct B_1b13d0 *)DAT_00562688[0]);
+                igAttrStackManager_PopOverrideAttr((struct A_1b13d0 *)s0, (struct B_1b13d0 *)DAT_00562680[0]);
+                igAttrStackManager_PopOverrideAttr((struct A_1b13d0 *)s0, (struct B_1b13d0 *)DAT_005626d0[0]);
+                igAttrStackManager_PopOverrideAttr((struct A_1b13d0 *)s0, (struct B_1b13d0 *)DAT_005626a8[0]);
+                igAttrStackManager_PopOverrideAttr((struct A_1b13d0 *)s0, (struct B_1b13d0 *)DAT_005626c8[0]);
                 FUN_001d9bb0((void *)arg1->f68, s0);
-                FUN_001b12f0((igAttrStackManager *)s0, (igAttr *)DAT_005626b0[0]);
+                igAttrStackManager_PushOverrideAttr((igAttrStackManager *)s0, (igAttr *)g_depthOfFieldNearProjectionAttr[0]);
                 igTraversal_TraverseChildren((int)(arg1), (S_1e07a0 *)arg0);
-                FUN_001b13d0((struct A_1b13d0 *)s0, (struct B_1b13d0 *)DAT_005626b0[0]);
+                igAttrStackManager_PopOverrideAttr((struct A_1b13d0 *)s0, (struct B_1b13d0 *)g_depthOfFieldNearProjectionAttr[0]);
                 FUN_001d9bb0((void *)arg1->f68, s0);
                 FUN_001dc610(arg1->f68);
                 return;

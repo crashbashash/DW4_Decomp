@@ -110,7 +110,7 @@ int FUN_001ceab0(HitTraversal *self, HitNode *node) {
                             pointReport.matrix = matrix;
                             pointReport.object = segment;
                             pointReport.query = self->query;
-                            FUN_00192fc0(&pointReport.local, &pointReport.point, matrix);
+                            Vec3f_TransformProjective(&pointReport.local, &pointReport.point, matrix);
                             {
                                 float dx = segment->x - pointReport.local.x;
                                 float dy = segment->y - pointReport.local.y;
@@ -251,7 +251,7 @@ void FUN_001d0130(SceneTransformNode *self, SceneRenderer *renderer, SceneMatrix
     }
     for (i = 0; i < count; i++) {
         child = self->children->data[i];
-        meta = DAT_005618f8[0];
+        meta = g_unlinkedTransformClass_metaObject[0];
         got = child->getMeta();
         if (meta == got) {
             FUN_001d0130(child, renderer, &world, context);

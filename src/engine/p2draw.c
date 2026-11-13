@@ -13,20 +13,12 @@ enum p2Primitive {
     P2_PRIM_TRIANGLE,
     P2_PRIM_TRIANGLE_STRIP,
     P2_PRIM_TRIANGLE_FAN,
-    P2_PRIM_SPRITE
+    P2_PRIM_SPRITE,
+    P2_PRIM_TRIANGLE_STRIPS /* a list of triangle strips */
 };
 
-/* Bits of p2VertexFormat: which arrays the vertex program unpacks. */
-enum p2VertexFormatBit {
-    P2_FORMAT_NORMALS = 0x1,
-    P2_FORMAT_COLOURS = 0x2,
-    P2_FORMAT_TEXCOORDS = 0x4,
-    P2_FORMAT_ARRAY_BITS = 0x7,
-    P2_FORMAT_RECORDING = 0x20,
-    P2_FORMAT_SPRITE_SIZE_MODE0 = 0x40,
-    P2_FORMAT_SPRITE_SIZE_MODE1 = 0x80,
-    P2_FORMAT_SPRITE_BYTES = 0x100
-};
+#include "dw4/p2dma.h"
+#include "dw4/p2core.h"
 
 /* Bits of a program's p2ProgramFlags entry, as shifts. */
 enum p2ProgramFlagBit {
@@ -35,18 +27,17 @@ enum p2ProgramFlagBit {
 };
 
 enum {
+    P2_VIF_UNPACK_UNSIGNED = 0x4000,
+    P2_VIF_UNPACK_RELATIVE = 0x8000,
     P2_VIF_UNPACK_RELATIVE_UNSIGNED = 0xC000,
+    P2_VIF_MODE_NORMAL = 0,
+    P2_VIF_MODE_OFFSET = 1, /* the row registers are added to what is unpacked */
+    P2_VIF_UNPACK_V1_32 = 0x60, /* add 4 per further component */
+    P2_VIF_UNPACK_16BIT = 1,
+    P2_VIF_UNPACK_8BIT = 2,
     P2_PIPELINE_VERTEX_ARRAYS = 0,
     P2_RENDER_STATE_ALL = 0x1FF
 };
-
-/* Where the double-buffered vertex batches sit in VU1 memory, and how many vertices one holds. */
-typedef struct p2VuBufferLayout {
-    char pad0[10];
-    short byteUnpackAddress;
-    char pad12[10];
-    short batchVertexLimit;
-} p2VuBufferLayout;
 
 /* A write position in a VIF packet, also read as an address to test its alignment. */
 typedef union p2VifCursor {
@@ -63,6 +54,12 @@ typedef union p2VifCode {
         unsigned char num;
         unsigned char command;
     } field;
+    struct {
+        unsigned int immediate : 16;
+        unsigned int num : 8;
+        unsigned int command : 7;
+        unsigned int interrupt : 1;
+    } bits;
     unsigned int word;
 } p2VifCode;
 
@@ -72,16 +69,34 @@ typedef union p2DmaTag {
     unsigned int word[4];
 } p2DmaTag;
 
+/* What announces one strip of a batch of triangle strips to the vertex program: an UNPACK of
+ * one vector to the strip's slot, and the first three words of its GIF tag, vertex count first. */
+typedef struct p2StripHeader {
+    p2VifCode unpack;
+    unsigned int gifTag[3];
+} p2StripHeader;
+
+enum {
+    P2_STRIPS_PER_BATCH = 16,
+    P2_STRIP_PACKET_MARGIN = 0x110 /* room a batch of strip headers needs in the packet */
+};
+
 typedef void (*p2VertexSubmit)(unsigned int count, int first);
 
 int p2UploadComponentScales(void);
 int FUN_001fffb0(void);
 int FUN_00200980(void);
-int FUN_00201a90(void);
+int p2LayoutVuBuffers(void);
 int FUN_001ff3b0(int);
-int FUN_001ff720(int);
+int p2SendRenderState(int);
 void p2SetVifRowScale(float);
 float p2GetVifRowScale(void);
+int p2GetComponentFixedScale(int component, int *scale);
+int p2GetComponentSize(int component);
+int p2GetVifMask(void);
+void p2SetVifMask(int mask);
+void p2SubmitDmaPacket(int channel);
+void p2GrowDisplayList(void);
 
 void p2SubmitVertices(unsigned int count, int first, unsigned short *indices);
 /* Declared without a prototype: the recording submit passes it no index list. */
@@ -107,6 +122,16 @@ extern const unsigned int p2UnpackBytePairsNop;
 extern p2VifCode p2UnpackBytesCode;
 extern p2DmaTag p2UnpackBytesTag;
 extern const unsigned int p2UnpackBytesNop;
+extern p2DmaTag p2UnpackElementsTag;
+extern char p2StripHeaderReset;
+extern int p2BatchStripCount;
+extern p2DmaTag p2StripTag;
+extern p2VifCode p2StripUnpackCode;
+extern unsigned int p2StripGifTag[4];
+extern p2StripHeader p2NextStripHeader;
+extern p2DmaPacket *p2DmaCurrentPacket[P2_DMA_CHANNEL_COUNT];
+extern p2VifCode p2VifModeCode;
+extern p2DmaTag p2ComponentUnpackTag;
 
 extern int p2VertexFormat;
 extern int p2DrawPipeline;
@@ -294,7 +319,7 @@ static inline void p2BeginDraw(int primitive, int sprites) {
         }
         FUN_001fffb0();
         FUN_00200980();
-        FUN_00201a90();
+        p2LayoutVuBuffers();
         p2VertexSubmitter = p2SubmitRecordedVertices;
     } else {
         if ((programFlags >> P2_PROGRAM_ARRAY_FORMAT) & 1) {
@@ -322,11 +347,23 @@ static inline void p2BeginDraw(int primitive, int sprites) {
         p2VertexSubmitter = (p2VertexSubmit)p2SubmitVertices;
         if (p2RenderStateDirty != 0) {
             FUN_001ff3b0(P2_RENDER_STATE_ALL);
-            FUN_001ff720(P2_RENDER_STATE_ALL);
+            p2SendRenderState(P2_RENDER_STATE_ALL);
         }
     }
     if (fixedPoint) {
         p2UploadComponentScales();
+    }
+}
+
+/* Hands the current VIF1 packet over when less than room is left in it; while a display list is
+ * recorded the list grows a block instead. */
+static inline void p2EndVif1Write(unsigned int room) {
+    if (p2DmaCurrentPacket[P2_DMA_VIF1]->cursor + room >= p2DmaCurrentPacket[P2_DMA_VIF1]->limit) {
+        if (p2DisplayListMode != 0) {
+            p2GrowDisplayList();
+        } else {
+            p2SubmitDmaPacket(P2_DMA_VIF1);
+        }
     }
 }
 
@@ -470,6 +507,95 @@ void p2DrawTriangleFan(unsigned int count) {
     p2CountStatVertices(batch);
 }
 
+/* Draws a list of triangle strips, as many as fit one batch at a time. The strips of a batch are
+ * announced to the vertex program by a header each: an UNPACK to the next header slot and the start of
+ * the strip's GIF tag. A strip that does not fit is split at an even length with its last two vertices
+ * drawn again in the next batch; a split shorter than a triangle waits for the next batch. */
+void p2DrawTriangleStrips(int count, const int *lengths) {
+    int first = 0;
+    int done = 0;
+    int total; /* matching construct: declaration-order sweep — this order gives retail's registers */
+    int limit;
+    int length;
+    int i;
+    int strips;
+    p2DmaTag *tag;
+    p2StripHeader *header;
+    p2StripHeader *strip;
+    int batch[P2_STRIPS_PER_BATCH];
+
+    if (p2StripHeaderReset) {
+        p2StripHeaderReset = 0;
+        p2NextStripHeader.unpack.word = p2StripUnpackCode.word;
+        p2NextStripHeader.gifTag[0] = p2StripGifTag[0];
+        p2NextStripHeader.gifTag[1] = p2StripGifTag[1];
+        p2NextStripHeader.gifTag[2] = p2StripGifTag[2];
+    }
+    p2BeginDraw(P2_PRIM_TRIANGLE_STRIPS, 0);
+    limit = p2VuBuffers.batchVertexLimit;
+    p2EndVif1Write(P2_STRIP_PACKET_MARGIN);
+    total = 0;
+    strips = 0;
+    while (count != 0) {
+        length = *lengths - done;
+        if (total + length <= limit) {
+            total += length;
+            batch[strips++] = length;
+            lengths++;
+            count--;
+            done = 0;
+        } else {
+            batch[strips] = limit - total;
+            total = limit;
+            if (batch[strips] & 1) {
+                batch[strips] -= 1;
+                total = limit - 1;
+                if (batch[strips] > 2) {
+                    done += batch[strips++] - 2;
+                } else {
+                    done = 0;
+                    total = limit - 3;
+                }
+            } else {
+                done += batch[strips++] - 2;
+            }
+        }
+        if (total >= limit - 3 || strips >= P2_STRIPS_PER_BATCH || count == 0) {
+            header = (p2StripHeader *)p2DmaCurrentPacket[P2_DMA_VIF1]->cursor;
+            p2StripTag.qwc = strips;
+            p2BatchStripCount = strips;
+            tag = (p2DmaTag *)header++;
+            tag->word[0] = p2StripTag.word[0];
+            tag->word[1] = p2StripTag.word[1];
+            tag->word[2] = p2StripTag.word[2];
+            tag->word[3] = p2StripTag.word[3];
+            p2NextStripHeader.unpack.word = p2StripUnpackCode.word;
+            for (i = 0; i < strips; i++) {
+                p2NextStripHeader.gifTag[0] = batch[i];
+                strip = header++;
+                strip->unpack.word = p2NextStripHeader.unpack.word;
+                strip->gifTag[0] = p2NextStripHeader.gifTag[0];
+                strip->gifTag[1] = p2NextStripHeader.gifTag[1];
+                strip->gifTag[2] = p2NextStripHeader.gifTag[2];
+                p2NextStripHeader.unpack.field.immediate++;
+                p2PrimitiveCount += batch[i] - 2;
+            }
+            p2DmaCurrentPacket[P2_DMA_VIF1]->cursor = (unsigned int)header;
+            p2VertexSubmitter(total, first);
+            p2VertexCount += total;
+            p2CountStatVertices(total);
+            first += total;
+            p2EndVif1Write(P2_STRIP_PACKET_MARGIN);
+            total = 0;
+            strips = 0;
+            if (done != 0) {
+                first -= 2;
+            }
+        }
+    }
+    p2BatchStripCount = 1;
+}
+
 void p2DrawIndexedTriangleStrip(unsigned int count, unsigned short *indices) {
     int limit;
     unsigned int batch;
@@ -578,6 +704,49 @@ void p2AlignVifPacket(p2VifCursor *cursor) {
     }
 }
 
+/* Appends a VIF UNPACK of count elements of size bytes each, read in order from data or, with an
+ * index list, from the indexed elements, padded to a word. With withTag it opens a DMA tag first
+ * and closes it once the packet is aligned, dropping the tag again when it holds nothing. */
+void p2UnpackElements(unsigned int count, const short *indices, const char *data, int address,
+                      p2VifCursor *cursor, unsigned int size, p2VifCode code, char offsetMode, int withTag) {
+    p2DmaTag *tag = (p2DmaTag *)cursor->word;
+    unsigned int i; /* matching construct: declaration-order sweep — i before src gives retail's registers */
+    const char *src = data;
+    unsigned int j;
+    unsigned int *p;
+
+    if (withTag) {
+        cursor->word = tag->word + 4;
+        tag->word[0] = p2UnpackElementsTag.word[0];
+        tag->word[1] = p2UnpackElementsTag.word[1];
+        tag->word[2] = p2UnpackElementsTag.word[2];
+        tag->word[3] = p2UnpackElementsTag.word[3];
+    }
+    code.field.num = count;
+    code.field.immediate = address | P2_VIF_UNPACK_RELATIVE | (offsetMode ? P2_VIF_UNPACK_UNSIGNED : 0);
+    p = cursor->word;
+    cursor->word = p + 1;
+    *p = code.word;
+    for (i = 0; i < count; i++) {
+        if (indices != 0) {
+            src = data + size * indices[i];
+        }
+        for (j = 0; j < size; j++) {
+            *cursor->byte++ = *src++;
+        }
+    }
+    while (cursor->address & 3) {
+        *cursor->byte++ = 0;
+    }
+    if (withTag) {
+        p2AlignVifPacket(cursor);
+        tag->qwc = (int)(cursor->address - (unsigned int)tag) / 16 - 1;
+        if (tag->qwc == 0) {
+            cursor->word -= 4;
+        }
+    }
+}
+
 /* Loads the VIF row registers when the value or the scale differs from what they hold. */
 void p2WriteVifRow(p2VifCursor *cursor, unsigned int value, float scale) {
     unsigned int *p;
@@ -605,6 +774,81 @@ void p2WriteVifRow(p2VifCursor *cursor, unsigned int value, float scale) {
             *p = value;
         }
         p2SetVifRowScale(scale);
+    }
+}
+
+/* Writes a VIF STMOD when the mode differs from the one VIF1 is in. */
+static inline void p2SetVifMode(p2VifCursor *cursor, int mode) {
+    unsigned int *p;
+
+    if (p2GetVifMask() ^ mode) {
+        p2SetVifMask(mode);
+        p2VifModeCode.field.immediate = mode;
+        p = cursor->word;
+        cursor->word = p + 1;
+        *p = p2VifModeCode.word;
+    }
+}
+
+/* Picks the unpack command of a vertex component and the VIF mode for it. Fixed-point data of a
+ * component with a fixed scale is unpacked from bytes, or from halfwords when the component has
+ * fewer of them than the count, with the scale loaded into the row registers and added in offset
+ * mode; other data is unpacked as it is. */
+static inline void p2SelectComponentUnpack(int fixedPoint, int component, const char **elements,
+                                           const char *data, p2VifCode *code, int command,
+                                           char *offsetMode, p2VifCursor *cursor, int first, int count) {
+    int scale;
+
+    if (fixedPoint && p2GetComponentFixedScale(component, &scale)) {
+        if (count == p2GetComponentSize(component)) {
+            code->bits.command = command + P2_VIF_UNPACK_8BIT;
+            *elements = data + first * count;
+        } else {
+            code->bits.command = command + P2_VIF_UNPACK_16BIT;
+            *elements = data + first * count * 2;
+        }
+        /* matching construct: manual variant — the row value is read through its address */
+        p2WriteVifRow(cursor, *(unsigned int *)&scale, count == 4 ? 0.0f : 1.0f);
+        p2SetVifMode(cursor, P2_VIF_MODE_OFFSET);
+        *offsetMode = 1;
+    } else {
+        *offsetMode = 0;
+        code->bits.command = command;
+        p2SetVifMode(cursor, P2_VIF_MODE_NORMAL);
+    }
+}
+
+/* Sets up the unpack of a vertex component, by default as count words; with withTag inside a DMA
+ * tag of its own, dropped again when it holds nothing. */
+void p2BeginComponentUnpack(int fixedPoint, int component, const char **elements, const char *data,
+                            p2VifCode *code, int command, char *offsetMode, p2VifCursor *cursor,
+                            int first, int count, int withTag) {
+    p2DmaTag *tag;
+
+    if (command == 0) {
+        command = P2_VIF_UNPACK_V1_32 + (count - 1) * 4;
+    }
+    if (withTag) {
+        tag = (p2DmaTag *)cursor->word;
+        cursor->word = tag->word + 4;
+        tag->word[0] = p2ComponentUnpackTag.word[0];
+        tag->word[1] = p2ComponentUnpackTag.word[1];
+        tag->word[2] = p2ComponentUnpackTag.word[2];
+        tag->word[3] = p2ComponentUnpackTag.word[3];
+        p2SelectComponentUnpack(fixedPoint, component, elements, data, code, command, offsetMode, cursor,
+                                first, count);
+        if (cursor->word == tag->word + 4) {
+            cursor->word -= 4;
+        } else {
+            p2AlignVifPacket(cursor);
+            tag->qwc = (int)(cursor->address - (unsigned int)tag) / 16 - 1;
+            if (tag->qwc == 0) {
+                cursor->word -= 4;
+            }
+        }
+    } else {
+        p2SelectComponentUnpack(fixedPoint, component, elements, data, code, command, offsetMode, cursor,
+                                first, count);
     }
 }
 

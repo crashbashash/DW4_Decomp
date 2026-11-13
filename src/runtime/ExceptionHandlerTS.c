@@ -1,30 +1,6 @@
-typedef struct CatchInfo CatchInfo;
-typedef struct ExceptionInfo ExceptionInfo;
+#include "dw4/runtime/exception.h"
 
-typedef struct TargetContext {
-    __int128 GPR[32];
-    unsigned int frame_size;
-    unsigned int argument_size;
-    int n_saved_GPRs;
-    int has_flushback;
-    int has_frame_ptr;
-    unsigned int n_saved_FPRs;
-    float FPR[32];
-} TargetContext;
-
-typedef struct ThrowContext {
-    char *throwtype;
-    void *location;
-    void *dtor;
-    CatchInfo *catchinfo;
-    char *returnaddr;
-    char *SP;
-    char *FP;
-    char *throwSP;
-    TargetContext target;
-} ThrowContext;
-
-asm void __TransferControl(register ThrowContext *context, register ExceptionInfo *info, register char *address)
+asm void __TransferControl(register ThrowContext *context, register MWExceptionInfo *info, register char *address)
 {
     .set    reorder
     lq      s0, ThrowContext.target.GPR[16](a0)

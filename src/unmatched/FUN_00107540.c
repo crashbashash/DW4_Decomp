@@ -1,7 +1,7 @@
 int FUN_001064c8();
 int FUN_001064f8();
 int FUN_00106c88();
-int FUN_00109b10();
+int _sceMpegMessage();
 extern int DAT_004d20e0[4];
 extern int DAT_004d2108[4];
 void FUN_00107540(void *arg0) {
@@ -23,9 +23,9 @@ void FUN_00107540(void *arg0) {
         FUN_001064f8(arg0);
     }
     if (FUN_00106c88(arg0, 1) != 0) {
-        FUN_00109b10(arg0, &DAT_004d20e0[0]);
+        _sceMpegMessage(arg0, &DAT_004d20e0[0]);
     }
     if (FUN_00106c88(arg0, 1) != 0) {
-        FUN_00109b10(arg0, &DAT_004d2108[0]);
+        _sceMpegMessage(arg0, &DAT_004d2108[0]);
     }
 }

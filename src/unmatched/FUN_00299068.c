@@ -2,7 +2,7 @@
  * invalid handle or a NULL name, otherwise opens the name (FUN_00295b68), resets the +76 stream,
  * applies the +440 setting, enables looping and starts. */
 extern int FUN_002968c0(void *ply);
-extern void FUN_0029a320(const char *msg);
+extern void mwsfd_Error(const char *msg);
 extern void FUN_00295b68(void *ply, const char *fname);
 extern void FUN_00277278(int stream);
 extern void FUN_00298ec0(void *ply, int value);
@@ -20,11 +20,11 @@ typedef struct {
 
 void FUN_00299068(Ply299068 *ply, const char *fname) {
     if (FUN_002968c0(ply) == 0) {
-        FUN_0029a320(DAT_004f46f0);
+        mwsfd_Error(DAT_004f46f0);
         return;
     }
     if (fname == 0) {
-        FUN_0029a320(DAT_004f4720);
+        mwsfd_Error(DAT_004f4720);
         return;
     }
     FUN_00295b68(ply, fname);

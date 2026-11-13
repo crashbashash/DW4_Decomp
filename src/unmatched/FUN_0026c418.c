@@ -51,12 +51,12 @@ typedef struct Handle_26bbc0 {
 } Handle_26bbc0;
 
 extern char DAT_004ee700[];
-void FUN_002607e8(const char *message);
+void ADXERR_CallErrFunc1(const char *message);
 int FUN_00267498(void *stream);
 
 int FUN_0026c418(Handle_26bbc0 *handle) {
     if (handle == 0) {
-        FUN_002607e8(DAT_004ee700);
+        ADXERR_CallErrFunc1(DAT_004ee700);
         return -1;
     }
     if (handle->state >= 2) {

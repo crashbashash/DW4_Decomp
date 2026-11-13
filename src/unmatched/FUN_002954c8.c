@@ -16,7 +16,7 @@ extern char DAT_004f36f8[];
 extern char DAT_004f3728[];
 int FUN_00292af0(SfdStart2Ply *ply);
 void FUN_002945c8(SfdStart2Ply *ply);
-void FUN_00294a30(SfdStart2Ply *ply);
+void mwsfd_GetWork(SfdStart2Ply *ply);
 void FUN_00295358(SfdStart2Ply *ply);
 void FUN_002955c0(SfdStart2Ply *ply);
 void FUN_00295908(SfdStart2Ply *ply, int mode);
@@ -26,23 +26,23 @@ void FUN_00298398(SfdStart2Ply *ply);
 void FUN_00299a38(void *sub);
 void FUN_00299bc0(void *sub, int on);
 void FUN_00299e08(SfdStart2Ply *ply);
-void FUN_0029a320(const char *format, ...);
+void mwsfd_Error(const char *format, ...);
 
 /* matching construct: permuter, reduced by hand: the sub-handle read just before its use */
 void FUN_002954c8(SfdStart2Ply *ply)
 {
     void *sub;
 
-    FUN_00294a30(ply);
+    mwsfd_GetWork(ply);
     if (ply->handle != 0) {
         if (FUN_00292af0(ply) != 0) {
-            FUN_0029a320(DAT_004f36f8);
+            mwsfd_Error(DAT_004f36f8);
             return;
         }
         FUN_00299e08(ply);
         FUN_00298398(ply);
         if (FUN_00298318(ply) != 0) {
-            FUN_0029a320(DAT_004f3728);
+            mwsfd_Error(DAT_004f3728);
             return;
         }
         FUN_00298378(ply);

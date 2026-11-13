@@ -1,5 +1,5 @@
-int FUN_0026a138();
+int ADXSTM_GetStat();
 
 int FUN_0029b178(void) {
-    return FUN_0026a138() == 4;
+    return ADXSTM_GetStat() == 4;
 }

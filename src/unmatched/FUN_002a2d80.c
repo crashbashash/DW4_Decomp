@@ -18,7 +18,7 @@ typedef struct {
 Src2a2d80 *FUN_002a2ed0(void);
 void FUN_002a0220(void *);
 void FUN_002a2e28(void *);
-int FUN_002a2e30(void *, Dst2a2d80 *, Src2a2d80 *);
+int sfd_DecodePicTexts(void *, Dst2a2d80 *, Src2a2d80 *);
 
 int FUN_002a2d80(char *obj) {
     Src2a2d80 *src = FUN_002a2ed0();
@@ -36,7 +36,7 @@ int FUN_002a2d80(char *obj) {
     FUN_002a0220(obj);
     FUN_002a2e28(obj);
     sub = obj + 3368;
-    r = FUN_002a2e30(obj, dst, src);
+    r = sfd_DecodePicTexts(obj, dst, src);
     if (r == 0) {
         dst->f44 = src->f40;
         *(long long *)(sub + 336) = src->f24;

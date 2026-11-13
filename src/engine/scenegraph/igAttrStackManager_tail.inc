@@ -407,7 +407,7 @@ n1 = temp_s0->n - 1; a = temp_s0->a; x = a[n1];
     igAttrStackManager_MarkStackChanged((struct A_1b1490 *)arg0, (struct B_1b1490 *)temp_s0, temp_s1);
 }
 
-void FUN_001b12f0(igAttrStackManager *self, igAttr *attr) {
+void igAttrStackManager_PushOverrideAttr(igAttrStackManager *self, igAttr *attr) {
     AttrObjectStack *stack = (AttrObjectStack *)self->_attrStacks;
     int slot = attr->_cachedAttrIndex;
     slot = attr->_cachedUnitID + ((int *)self->_attrStackIndexTable)[slot];
@@ -419,7 +419,7 @@ void FUN_001b12f0(igAttrStackManager *self, igAttr *attr) {
     igAttrStackManager_MarkStackChanged((struct A_1b1490 *)self, (struct B_1b1490 *)stack, slot);
 }
 
-void FUN_001b13d0(struct A_1b13d0 *arg0, struct B_1b13d0 *arg1) {
+void igAttrStackManager_PopOverrideAttr(struct A_1b13d0 *arg0, struct B_1b13d0 *arg1) {
     int (*temp_a2)(int, int);
     int temp_s1;
     struct Q_1b13d0 *temp_s0;

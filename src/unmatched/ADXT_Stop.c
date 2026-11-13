@@ -21,8 +21,8 @@ typedef struct {
 
 extern char DAT_004ee5c8[];
 extern void (*DAT_004a8e64)(CriAdxt *);
-void FUN_002607e8(const char *message);
-void FUN_002662c8(int);
+void ADXERR_CallErrFunc1(const char *message);
+void ADXSJD_Stop(int);
 void FUN_0026a0a0(int);
 void FUN_00277278(int);
 void FUN_0026bbc0(CriAdxt *);
@@ -30,11 +30,11 @@ void FUN_0026bbc0(CriAdxt *);
 void ADXT_Stop(CriAdxt *adxt)
 {
     if (adxt == 0) {
-        FUN_002607e8(DAT_004ee5c8);
+        ADXERR_CallErrFunc1(DAT_004ee5c8);
         return;
     }
     if (DAT_004a8e64 != 0) {
-        FUN_002662c8(adxt->f4);
+        ADXSJD_Stop(adxt->f4);
         DAT_004a8e64(adxt);
     }
     if (adxt->f8 != 0) {

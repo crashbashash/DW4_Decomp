@@ -19,7 +19,7 @@ typedef struct SjSkipObj {
     SjSkipChunk chunk;
 } SjSkipObj;
 
-void FUN_0027d470(SjSkipChunk *src, int size, SjSkipChunk *head, SjSkipChunk *rest);
+void SJ_SplitChunk(SjSkipChunk *src, int size, SjSkipChunk *head, SjSkipChunk *rest);
 int FUN_00290520(SjSkipObj *obj, char *addr, int size);
 void FUN_00290898(SjSkipSj *sj);
 
@@ -38,7 +38,7 @@ int FUN_00290430(SjSkipObj *obj, SjSkipSj *sj)
     base += 8;
     base += bits >> 3;
     base -= 4;
-    FUN_0027d470(chunk, base - chunk->addr, chunk, &rest);
+    SJ_SplitChunk(chunk, base - chunk->addr, chunk, &rest);
 
     sj->vtbl->putChunk(sj, 0, chunk);
     sj->vtbl->ungetChunk(sj, 1, &rest);

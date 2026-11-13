@@ -11,17 +11,17 @@ struct Handle27b {
     int start;     /* +24 */
 };
 
-extern void FUN_0027b2e0(const char *message);
+extern void SJERR_CallErr(const char *message);
 extern const char E2004090237_NULL_pointer_is_specified[];
 extern const char E2004090238_Specified_handle_is_invalid[];
 
 void FUN_0027b710(struct Handle27b *handle) {
     if (handle == 0) {
-        FUN_0027b2e0(E2004090237_NULL_pointer_is_specified);
+        SJERR_CallErr(E2004090237_NULL_pointer_is_specified);
         return;
     }
     if (handle->used == 0) {
-        FUN_0027b2e0(E2004090238_Specified_handle_is_invalid);
+        SJERR_CallErr(E2004090238_Specified_handle_is_invalid);
         return;
     }
     handle->position = handle->start;

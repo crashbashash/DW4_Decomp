@@ -1,10 +1,10 @@
 typedef struct N { int a; int b; int c; int pad; int d; int e; char pad2[32]; void *next; void *f; struct L *owner; } N;
 typedef struct L { int pad; int ok; void *head; } L;
-void FUN_00113f20(void);
-void FUN_00113f78(void);
+void DIntr(void);
+void EIntr(void);
 void sceSifRegisterRpc(N *n, int a, int b, int c, int d, int e, L *l) {
     N *p;
-    FUN_00113f20();
+    DIntr();
     n->f = 0;
     n->next = 0;
     n->a = a;
@@ -19,5 +19,5 @@ void sceSifRegisterRpc(N *n, int a, int b, int c, int d, int e, L *l) {
         for (p = l->head; p->next != 0; p = p->next);
         p->next = n;
     }
-    FUN_00113f78();
+    EIntr();
 }

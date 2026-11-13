@@ -24,7 +24,7 @@ typedef struct {
     int errobj;
 } SjList;
 
-void FUN_0027b2e0(const char *message);
+void SJERR_CallErr(const char *message);
 extern char DAT_004f22e8[];
 extern char DAT_004f2318[];
 
@@ -33,11 +33,11 @@ void FUN_0027d0d0(SjList *sj, unsigned int line, CriSjChunk *ck)
     CriNode *n;
 
     if (sj == 0) {
-        FUN_0027b2e0(DAT_004f22e8);
+        SJERR_CallErr(DAT_004f22e8);
         return;
     }
     if (sj->used == 0) {
-        FUN_0027b2e0(DAT_004f2318);
+        SJERR_CallErr(DAT_004f2318);
         return;
     }
     if (line >= 4) {

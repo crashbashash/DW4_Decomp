@@ -307,7 +307,7 @@ void FUN_00190010(void **arg0, int arg1) {
     FUN_0018fb20(((DW4VC_88_0 *)(arg0))->vX())(arg0, arg1);
 }
 
-void FUN_00190060(void **arg0, void **arg1) {
+void igVolume_ExtendBy(void **arg0, void **arg1) {
     void *temp_s0;
 
     temp_s0 = ((DW4VC_88_0 *)(arg0))->vX();

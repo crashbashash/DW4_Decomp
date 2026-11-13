@@ -1,5 +1,5 @@
 extern char DAT_004d2060[];
-void FUN_00109b10(char *d, const char *msg, ...);
+void _sceMpegMessage(char *d, const char *msg, ...);
 int FUN_00105be8(char *d, int *a, int *b, int *c, int *flags) {
     int ok = 1;
 
@@ -18,7 +18,7 @@ int FUN_00105be8(char *d, int *a, int *b, int *c, int *flags) {
         c[0] = c[1] = *(int *)(d + 396) == 2;
     }
     if (*(int *)(d + 360) == 1) {
-        FUN_00109b10(d, DAT_004d2060);
+        _sceMpegMessage(d, DAT_004d2060);
         ok = 0;
     }
     *flags &= ~1;

@@ -24,9 +24,9 @@ igResult_3125d0 FUN_00312790(HeapBoundsPool *self, int index, char *cur, char *e
     ok = false;
     if (cur < lo || hi < cur) {
         if (self->messageLevel > 0) {
-            FUN_002f8870(0, (int)self);
+            Memory_PrintPoolStatistics(0, (int)self);
             if (GPR_00554cf4 == 0) {
-                r = FUN_003081d0(DAT_004fc490, index, cur, lo, hi);
+                r = igReportNotice(DAT_004fc490, index, cur, lo, hi);
                 if (r != 1 && r == 2) {
                     GPR_00554cf4 = 1;
                 }
@@ -36,9 +36,9 @@ igResult_3125d0 FUN_00312790(HeapBoundsPool *self, int index, char *cur, char *e
     }
     if (end < lo || hi < end) {
         if (self->messageLevel > 0) {
-            FUN_002f8870(0, (int)self);
+            Memory_PrintPoolStatistics(0, (int)self);
             if (GPR_00554cf8 == 0) {
-                r = FUN_003081d0(DAT_004fc500, index, end, lo, hi);
+                r = igReportNotice(DAT_004fc500, index, end, lo, hi);
                 if (r != 1 && r == 2) {
                     GPR_00554cf8 = 1;
                 }
@@ -48,9 +48,9 @@ igResult_3125d0 FUN_00312790(HeapBoundsPool *self, int index, char *cur, char *e
     }
     if (end < cur) {
         if (self->messageLevel > 0) {
-            FUN_002f8870(0, (int)self);
+            Memory_PrintPoolStatistics(0, (int)self);
             if (GPR_00554cfc == 0) {
-                r = FUN_003081d0(DAT_004fc570, index, end, cur);
+                r = igReportNotice(DAT_004fc570, index, end, cur);
                 if (r != 1 && r == 2) {
                     GPR_00554cfc = 1;
                 }
@@ -60,9 +60,9 @@ igResult_3125d0 FUN_00312790(HeapBoundsPool *self, int index, char *cur, char *e
     }
     if (!((ArenaBlockHeader *)cur)->used) {
         if (self->messageLevel > 0) {
-            FUN_002f8870(0, (int)self);
+            Memory_PrintPoolStatistics(0, (int)self);
             if (GPR_00554d00 == 0) {
-                r = FUN_003081d0(DAT_004fc5e0);
+                r = igReportNotice(DAT_004fc5e0);
                 if (r != 1 && r == 2) {
                     GPR_00554d00 = 1;
                 }
@@ -107,9 +107,9 @@ igResult_3125d0 FUN_00312790(HeapBoundsPool *self, int index, char *cur, char *e
     if (cur != end && !ok) {
 bad:
         if (self->messageLevel > 0) {
-            FUN_002f8870(0, (int)self);
+            Memory_PrintPoolStatistics(0, (int)self);
             if (GPR_00554d04 == 0) {
-                r = FUN_003081d0(DAT_004fc660, cur, index, count, size);
+                r = igReportNotice(DAT_004fc660, cur, index, count, size);
                 if (r != 1 && r == 2) {
                     GPR_00554d04 = 1;
                 }
@@ -136,7 +136,7 @@ bool igArenaMemoryPool_Trim(TrimPool *self, int pad) {
     if (count < 0 || (cap = a->capacity) < 0 || count > cap) {
         if (self->debug >= 3) {
             if (GPR_00554d1c == 0) {
-                int r = FUN_003081d0(text_igArenaMemoryPool_trim_E76_Arena);
+                int r = igReportNotice(text_igArenaMemoryPool_trim_E76_Arena);
                 if (r != 1 && r == 2) {
                     GPR_00554d1c = 1;
                 }
@@ -576,6 +576,24 @@ void Gap__Core__igArenaMemoryPool__vfunc_63(int *arg0) {
     *arg0 = g_allocatorFailureStatus.v;
 }
 
+static inline char *blockHeader(char *p) {
+    char *h = p - 4;
+    if (((MallocBlockEnd *)(p - 1))->flag == 1) h = p - 12;
+    return h;
+}
+
+static inline char *padRecord(char *h) {
+    if (((MallocBlockTag *)(h + 3))->padded) return h - 10;
+    return h - 8;
+}
+
+void Gap__Core__igArenaMemoryPool__freeSized(MallocPoolFreeView *self, unsigned int size, char **block) {
+    char *q = padRecord(blockHeader(*block));
+    self->_localFreeCount += *(unsigned short *)(q + 2);
+    self->_localNetAllocationCount -= size;
+    self->Release((char *)((int)q - 4) - 4);
+}
+
 void Gap__Core__igArenaMemoryPool__vfunc_97(Pool97 *self) {
     int v;
     FUN_002f2260(self);
@@ -643,7 +661,7 @@ void Gap__Core__igArenaMemoryPool__vfunc_98(Pool98 *arg0) {
         if ((arg0->f188 >= 3) && (GPR_00554d6c == 0)) {
             long long k24 = arg0->f24;
             name = name ? name : &DAT_004f7910[0];
-            r = FUN_003081d0(DAT_004fd670, name, arg0->f180, (int)k24);
+            r = igReportNotice(DAT_004fd670, name, arg0->f180, (int)k24);
             if ((r != 1) && (r == 2)) {
                 GPR_00554d6c = 1;
             }
@@ -654,7 +672,7 @@ void Gap__Core__igArenaMemoryPool__vfunc_98(Pool98 *arg0) {
         if ((arg0->f188 >= 3) && (GPR_00554d70 == 0)) {
             long long k88 = arg0->f88;
             name = name ? name : &DAT_004f7910[0];
-            r = FUN_003081d0(DAT_004fd6d0, name, arg0->f180, (int)k88);
+            r = igReportNotice(DAT_004fd6d0, name, arg0->f180, (int)k88);
             if ((r != 1) && (r == 2)) {
                 GPR_00554d70 = 1;
             }
@@ -666,7 +684,7 @@ void Gap__Core__igArenaMemoryPool__vfunc_98(Pool98 *arg0) {
         name = ((int *)FUN_002f89a0((int)arg0));
         if ((arg0->f188 >= 3) && (GPR_00554d74 == 0)) {
             name = name ? name : &DAT_004f7910[0];
-            r = FUN_003081d0(DAT_004fd730, name, arg0->f180, FUN_0031d390(arg0));
+            r = igReportNotice(DAT_004fd730, name, arg0->f180, FUN_0031d390(arg0));
             if ((r != 1) && (r == 2)) {
                 GPR_00554d74 = 1;
             }
@@ -803,9 +821,9 @@ void igArenaMemoryPool_SetPoolOptionFlags(SetFlagsPool *p, int f) {
     if ((f & 1) != (p->flags & 1)) {
         if (p->vX(f & 1) != 0) {
             if (p->cnt > 0) {
-                FUN_002f8870(0, (int)p);
+                Memory_PrintPoolStatistics(0, (int)p);
                 if (GPR_00554d78 == 0) {
-                    r = FUN_003081d0(DAT_004fd7a0);
+                    r = igReportNotice(DAT_004fd7a0);
                     if (r != 1) { if (r == 2) { GPR_00554d78 = 1; } }
                 }
             }

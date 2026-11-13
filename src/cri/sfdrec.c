@@ -171,10 +171,20 @@ typedef struct SfdRecSlot {
     SfdRecSub sub; /* 4 */
 } SfdRecSlot;
 
-typedef struct SfdRecB2208 {
-    int f0;
+typedef struct SfdRecHdrInf {
+    int valid;
     int f4;
     int f8;
+    int count;
+    char pad16[36];
+    int countBase;
+    char pad56[2140];
+} SfdRecHdrInf;
+
+typedef struct SfdRecSysTime {
+    int set;
+    int time;
+    int unit;
     int f12;
     int f16;
     int f20;
@@ -182,33 +192,33 @@ typedef struct SfdRecB2208 {
     long f32;
     int f40;
     int f44;
-} SfdRecB2208;
+} SfdRecSysTime;
 
-typedef struct SfdRecB2768 {
-    int f0;
-    int f4;
-    int f8;
-} SfdRecB2768;
+typedef struct SfdRecAudioTime {
+    int set;
+    int time;
+    int unit;
+} SfdRecAudioTime;
 
-typedef struct SfdRecB3340 {
-    int f0;
-    int f4;
-    int f8;
+typedef struct SfdRecVideoTime {
+    int set;
+    int time;
+    int unit;
     int f12;
     int f16;
     int f20;
-} SfdRecB3340;
+} SfdRecVideoTime;
 
 struct SfdRec {
     int state;            /* 0 */
     int time;
     int unit;
-    char blk12[2196];     /* 12 */
-    SfdRecB2208 b2208;    /* 2208 */
+    SfdRecHdrInf hdrInf;    /* 12 */
+    SfdRecSysTime sysTime;    /* 2208 */
     char pad2256[512];
-    SfdRecB2768 b2768;    /* 2768 */
+    SfdRecAudioTime audioTime;    /* 2768 */
     char blk2780[560];    /* 2780 */
-    SfdRecB3340 b3340;    /* 3340 */
+    SfdRecVideoTime videoTime;    /* 3340 */
     char pad3364[132];
     int derived;
     int default_value;
@@ -277,16 +287,16 @@ typedef struct SfdEntry44 {
 } SfdEntry44;
 
 int FUN_0028b530();
-int FUN_002916f8(int value, int scale, int divisor);
+int UTY_MulDiv(int value, int scale, int divisor);
 void FUN_0029feb8(void *blk);
 int FUN_0029ed48(SfdPly *hn);
-int FUN_002a0928(SfdPly *hn);
-int FUN_002a0bb8();
-int FUN_002a0dd8(SfdPly *hn);
+int sfd_GetStmVersion(SfdPly *hn);
+int sfd_ReportError();
+int sfd_CheckHn(SfdPly *hn);
 int FUN_002aa538(SfdPly *hn);
 int FUN_002abef0(SfdPly *hn);
 void FUN_002ada78(SfdPly *hn, int index, int value);
-int FUN_002adc40();
+int SFD_GetCond();
 void FUN_002ae248(void *blk, int value);
 int FUN_002b02a0(SfdPly *hn, int command);
 int FUN_002b03e8();
@@ -295,10 +305,10 @@ void FUN_002acb98(SfdRec *rec);
 void FUN_002acc08(SfdRec *rec);
 /* matching construct: declared void here — an int prototype moves the flag load from v0 to v1 */
 void FUN_002ace48(SfdRec *record, int *running);
-void FUN_002aced8(SfdPly *hn);
-int FUN_002ad040(SfdPly *hn, SfdRecB3340 *rate, int *status);
-int FUN_002ad0c0(SfdPly *hn, SfdRecB2768 *rate, int *status);
-int FUN_002ad140(SfdPly *hn);
+void sfrec_DecideTime(SfdPly *hn);
+int sfrec_ChkVideoRate(SfdPly *hn, SfdRecVideoTime *rate, int *status);
+int sfrec_ChkAudioRate(SfdPly *hn, SfdRecAudioTime *rate, int *status);
+int sfrec_HasSysTrn(SfdPly *hn);
 void FUN_002ad1d0(SfdRec *record, int *ready);
 void FUN_002ad2e0(SfdRec *record, int scale, int divisor, int *out);
 void FUN_002ad330(int delegate, int scale, int divisor, int *out);
@@ -306,7 +316,7 @@ void FUN_002ad3e0(SfdRec *record, int value, int *out, int *out_scale);
 void FUN_002ad468(int delegate, int value, int *out, int *out_scale);
 void FUN_002ad738(SfdPly *hn);
 int FUN_002ad828(char *ctx);
-int FUN_002ad870(SfdPly *hn);
+int sfrec_CalcDerivedTime(SfdPly *hn);
 
 
 void FUN_002acb30(SfdRecSlot *slot)
@@ -343,53 +353,53 @@ void FUN_002acb98(SfdRec *rec) {
 }
 
 void FUN_002acc08(SfdRec *rec) {
-    SfdRecB2208 *a = &rec->b2208;
-    SfdRecB3340 *c = &rec->b3340;
-    SfdRecB2768 *b = &rec->b2768;
+    SfdRecSysTime *a = &rec->sysTime;
+    SfdRecVideoTime *c = &rec->videoTime;
+    SfdRecAudioTime *b = &rec->audioTime;
     rec->state = 0;
     rec->time = 0;
     rec->unit = 0;
-    FUN_0029feb8(rec->blk12);
-    a->f0 = 0;
-    a->f4 = 0;
-    a->f8 = 0;
+    FUN_0029feb8(&rec->hdrInf);
+    a->set = 0;
+    a->time = 0;
+    a->unit = 0;
     a->f12 = 0;
     a->f16 = 0;
     a->f24 = 0;
     a->f32 = 0;
     a->f40 = 0;
     a->f44 = 0;
-    b->f0 = 0;
-    b->f4 = 0;
-    b->f8 = 0;
+    b->set = 0;
+    b->time = 0;
+    b->unit = 0;
     FUN_002ae248(rec->blk2780, 0x7FFFFFFF);
-    c->f0 = 0;
-    c->f4 = 0;
+    c->set = 0;
+    c->time = 0;
     c->f12 = 0;
     c->f16 = 0;
     c->f20 = 0;
-    c->f8 = 1; /* matching construct: manual — this store written last keeps retail's store order */
+    c->unit = 1; /* matching construct: manual — this store written last keeps retail's store order */
 }
 
 int FUN_002accc0(SfdPly *h, SfdRec *rec) {
-    if (FUN_002a0dd8(h) != 0) {
-        return FUN_002a0bb8(0, 0xFF000151);
+    if (sfd_CheckHn(h) != 0) {
+        return sfd_ReportError(0, 0xFF000151);
     }
     h->recSlot.rec = rec;
     return 0;
 }
 
 int FUN_002acd18(SfdPly *h, int value) {
-    if (FUN_002a0dd8(h) != 0) {
-        return FUN_002a0bb8(0, 0xFF000152);
+    if (sfd_CheckHn(h) != 0) {
+        return sfd_ReportError(0, 0xFF000152);
     }
     h->recSlot.rec->delegate = value;
     return 0;
 }
 
 void FUN_002acd78(SfdPly *h) {
-    if (FUN_002a0dd8(h) != 0) {
-        FUN_002a0bb8(0, 0xFF000153, 1);
+    if (sfd_CheckHn(h) != 0) {
+        sfd_ReportError(0, 0xFF000153, 1);
         return;
     }
     FUN_002ada78(h, 47, 1);
@@ -399,8 +409,8 @@ void FUN_002acd78(SfdPly *h) {
 int FUN_002acdd8(SfdPly *hn, int *running)
 {
     *running = 0;
-    if (FUN_002a0dd8(hn) != 0) {
-        return FUN_002a0bb8(0, 0xFF000154);
+    if (sfd_CheckHn(hn) != 0) {
+        return sfd_ReportError(0, 0xFF000154);
     }
     FUN_002ace48(hn->recSlot.rec, running);
     return 0;
@@ -430,39 +440,94 @@ void FUN_002ace90(SfdPly *hn)
     if (hn->recSlot.rec == 0) {
         return;
     }
-    FUN_002aced8(hn);
+    sfrec_DecideTime(hn);
     FUN_002ad738(hn);
 }
 
-int FUN_002ad040(SfdPly *hn, SfdRecB3340 *rate, int *status)
+void sfrec_DecideTime(SfdPly *hn)
+{
+    SfdRec *record = hn->recSlot.rec;
+    SfdRecHdrInf *hdr = &record->hdrInf;
+    SfdRecSysTime *sys = &record->sysTime;
+    SfdRecAudioTime *audio = &record->audioTime;
+    SfdRecVideoTime *video = &record->videoTime;
+    int videoStatus;
+    int audioStatus;
+    int time;
+    int unit;
+
+    if (record->state != 0) {
+        return;
+    }
+    if (sfrec_ChkVideoRate(hn, video, &videoStatus) != 0) {
+        return;
+    }
+    if (sfrec_ChkAudioRate(hn, audio, &audioStatus) != 0) {
+        return;
+    }
+    if (sfrec_HasSysTrn(hn) != 0) {
+        sys->set = 1;
+        if (hdr->valid == 0) {
+            time = sys->time;
+        } else if (hdr->count > 0) {
+            int count = hdr->count;
+            int rate = record->value;
+            int base = hdr->countBase;
+            if (rate > 0 && base > 0) {
+                time = UTY_MulDiv(rate, 1000, base);
+            } else {
+                time = count;
+            }
+        } else if (sfd_GetStmVersion(hn) < 108) {
+            time = (sys->time << 11) / 2018;
+        } else {
+            time = sys->time;
+        }
+        unit = sys->unit;
+    } else if (audioStatus != 0) {
+        time = audio->time;
+        unit = audio->unit;
+    } else if (videoStatus != 0) {
+        time = video->time;
+        unit = video->unit;
+    } else {
+        return;
+    }
+    record->time = time;
+    record->unit = unit;
+    record->state = 1;
+    sfrec_CalcDerivedTime(hn);
+}
+
+int sfrec_ChkVideoRate(SfdPly *hn, SfdRecVideoTime *rate, int *status)
 {
     int result;
     if (FUN_002b03e8(hn, 3) != 0) {
-        result = FUN_002adc40(hn, 6);
+        result = SFD_GetCond(hn, 6);
         if (result == 1) {
             *status = result;
-            return rate->f0 == 0;
+            return rate->set == 0;
         }
     }
     *status = 0;
     return 0;
 }
 
-int FUN_002ad0c0(SfdPly *hn, SfdRecB2768 *rate, int *status)
+int sfrec_ChkAudioRate(SfdPly *hn, SfdRecAudioTime *rate, int *status)
 {
     int result;
     if (FUN_002b03e8(hn, 2) != 0) {
-        result = FUN_002adc40(hn, 5);
+        result = SFD_GetCond(hn, 5);
         if (result == 1) {
             *status = result;
-            return rate->f0 == 0;
+            return rate->set == 0;
         }
     }
     *status = 0;
     return 0;
 }
 
-int FUN_002ad140(SfdPly *hn)
+int sfrec_HasSysTrn(SfdPly *hn)
 {
     return FUN_002b03e8(hn, 1) != 0;
 }
@@ -470,8 +535,8 @@ int FUN_002ad140(SfdPly *hn)
 int FUN_002ad160(SfdPly *hn, int *ready)
 {
     *ready = 0;
-    if (FUN_002a0dd8(hn) != 0) {
-        return FUN_002a0bb8(0, 0xFF000155);
+    if (sfd_CheckHn(hn) != 0) {
+        return sfd_ReportError(0, 0xFF000155);
     }
     FUN_002ad1d0(hn->recSlot.rec, ready);
     return 0;
@@ -497,8 +562,8 @@ int FUN_002ad240(SfdPly *hn, int scale, int divisor, int *out)
     SfdRec **timing;
     int ready;
     *out = 0;
-    if (FUN_002a0dd8(hn) != 0) {
-        return FUN_002a0bb8(0, 0xFF000156);
+    if (sfd_CheckHn(hn) != 0) {
+        return sfd_ReportError(0, 0xFF000156);
     }
     /* matching construct: the record address is taken after the guard */
     timing = &hn->recSlot.rec;
@@ -517,7 +582,7 @@ void FUN_002ad2e0(SfdRec *record, int scale, int divisor, int *out)
         FUN_002ad330(delegate, scale, divisor, out);
         return;
     }
-    *out = FUN_002916f8(record->derived, scale, divisor);
+    *out = UTY_MulDiv(record->derived, scale, divisor);
 }
 
 void FUN_002ad330(int delegate, int scale, int divisor, int *out)
@@ -531,8 +596,8 @@ int FUN_002ad338(SfdPly *hn, int value, int *out, int *pending)
     int ready;
     *out = 0;
     *pending = 1;
-    if (FUN_002a0dd8(hn) != 0) {
-        return FUN_002a0bb8(0, 0xFF000157);
+    if (sfd_CheckHn(hn) != 0) {
+        return sfd_ReportError(0, 0xFF000157);
     }
     /* matching construct: the record address is taken after the guard */
     timing = &hn->recSlot.rec;
@@ -557,7 +622,7 @@ void FUN_002ad3e0(SfdRec *record, int value, int *out, int *out_scale)
     if (divisor <= 0) {
         *out = 0;
     } else {
-        *out = FUN_002916f8(value, 1000, divisor);
+        *out = UTY_MulDiv(value, 1000, divisor);
     }
     *out_scale = 1000;
 }
@@ -571,8 +636,8 @@ void FUN_002ad468(int delegate, int value, int *out, int *out_scale)
 void FUN_002ad478(SfdPly *hn, SfdRecSub *settings)
 {
     SfdRec *timing;
-    if (FUN_002a0dd8(hn) != 0) {
-        FUN_002a0bb8(0, 0xFF000158);
+    if (sfd_CheckHn(hn) != 0) {
+        sfd_ReportError(0, 0xFF000158);
         return;
     }
     timing = hn->recSlot.rec;
@@ -596,23 +661,23 @@ void FUN_002ad478(SfdPly *hn, SfdRecSub *settings)
 int FUN_002ad570(SfdPly *hn, int value)
 {
     SfdRec *record;
-    if (FUN_002a0dd8(hn) != 0) {
-        return FUN_002a0bb8(0, 0xFF000159);
+    if (sfd_CheckHn(hn) != 0) {
+        return sfd_ReportError(0, 0xFF000159);
     }
     record = hn->recSlot.rec;
     if (record == 0) {
         return 0;
     }
     record->value = value;
-    FUN_002ad870(hn);
+    sfrec_CalcDerivedTime(hn);
     return 0;
 }
 
 int FUN_002ad5e0(SfdPly *hn, int divisor, int scale)
 {
     SfdRec *timing;
-    if (FUN_002a0dd8(hn) != 0) {
-        return FUN_002a0bb8(0, 0xFF00015A);
+    if (sfd_CheckHn(hn) != 0) {
+        return sfd_ReportError(0, 0xFF00015A);
     }
     timing = hn->recSlot.rec;
     if (timing == 0) {
@@ -620,30 +685,30 @@ int FUN_002ad5e0(SfdPly *hn, int divisor, int scale)
     }
     timing->divisor = divisor;
     timing->scale = scale;
-    FUN_002ad870(hn);
+    sfrec_CalcDerivedTime(hn);
     return 0;
 }
 
 int FUN_002ad668(SfdPly *hn, int value)
 {
     SfdRec *record;
-    if (FUN_002a0dd8(hn) != 0) {
-        return FUN_002a0bb8(0, 0xFF00015B);
+    if (sfd_CheckHn(hn) != 0) {
+        return sfd_ReportError(0, 0xFF00015B);
     }
     record = hn->recSlot.rec;
     if (record == 0) {
         return 0;
     }
     record->explicit_value = value;
-    FUN_002ad870(hn);
+    sfrec_CalcDerivedTime(hn);
     return 0;
 }
 
 void FUN_002ad6d8(SfdPly *hn, int offset)
 {
     SfdRec *record;
-    if (FUN_002a0dd8(hn) != 0) {
-        FUN_002a0bb8(0, 0xFF00015C);
+    if (sfd_CheckHn(hn) != 0) {
+        sfd_ReportError(0, 0xFF00015C);
         return;
     }
     record = hn->recSlot.rec;
@@ -676,7 +741,7 @@ void FUN_002ad738(SfdPly *hn)
         changed = 1;
         s->default_scale = rec->unit;
     }
-    if (changed) FUN_002ad870(hn);
+    if (changed) sfrec_CalcDerivedTime(hn);
     }
 }
 
@@ -694,7 +759,7 @@ int FUN_002ad828(char *ctx)
     return value;
 }
 
-int FUN_002ad870(SfdPly *hn)
+int sfrec_CalcDerivedTime(SfdPly *hn)
 {
     SfdRec *record = hn->recSlot.rec;
     int value = record->explicit_value;
@@ -719,7 +784,7 @@ int FUN_002ad870(SfdPly *hn)
                 goto store;
             }
         }
-        value = FUN_002916f8(numerator, scale, divisor);
+        value = UTY_MulDiv(numerator, scale, divisor);
     }
 store:
     record->derived = value;

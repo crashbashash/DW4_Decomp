@@ -27,12 +27,12 @@ extern int DAT_0049c8d8;
 extern int DAT_0049c8e0;
 extern int DAT_0049c8e4;
 extern int DAT_0049c8ec;
-extern volatile int DAT_0049c8f0;
+extern volatile int adxt_vsync_cnt;
 extern char DAT_0049d538[];
 extern char DAT_0049d938[];
 extern int DAT_004a9b1c;
 
-void FUN_002607e8(const char *message);
+void ADXERR_CallErrFunc1(const char *message);
 int FUN_0026cbd8();
 int ADXT_ExecFsSvr();
 int LSC_ExecServer();
@@ -43,7 +43,7 @@ void FUN_00265c18(void);
 void FUN_00260b30(void);
 void FUN_00269c98(void);
 void FUN_00277918(void);
-void FUN_0025f2d0(void);
+void ADXCRS_Lock(void);
 void FUN_0027e6d0(int key, int value);
 void FUN_0027ec50(void);
 void FUN_00265f88(void);
@@ -51,22 +51,22 @@ void FUN_00260788(void);
 void FUN_0027b390(void);
 void FUN_0027bcd0(void);
 void FUN_0027c810(void);
-void FUN_0025f2e8(void);
+void ADXCRS_Unlock(void);
 void FUN_00269268(void);
 void FUN_00269298(void);
 AdxEnc *FUN_002692c8(int nch, Sj **out, Sj *in);
 void FUN_00269878(AdxEnc *enc, int nch, int f92, int end);
 void FUN_00269508(AdxEnc *enc);
 void FUN_00269bd0(void);
-void FUN_00269630(AdxEnc *enc);
+void ADXENC_SetEnd(AdxEnc *enc);
 void FUN_00269498(AdxEnc *enc);
-Sj *FUN_0027bd48(void *buf, int size, int f8);
+Sj *SJRBF_Create(void *buf, int size, int f8);
 Sj *FUN_0027b408(void *buf, int size);
 
 extern char *volatile DAT_0056dfa8;
 extern char DAT_004ee080[];
 extern int DAT_0049c8e8;
-extern char DAT_0049c8f8[];
+extern char adxt_obj[];
 void *memset(void *dst, int value, unsigned int size);
 int ADXCRS_Init();
 int FUN_0027c798();
@@ -83,22 +83,22 @@ int FUN_00265c30();
 int LSC_EntryErrFunc();
 int ADXM_IsSetupThrd();
 int FUN_0027e748();
-int FUN_0027e600();
+int SVM_SetCbSvr();
 int FUN_0026c798();
 void FUN_002631c8(int value) {
     DAT_0049c8e4 = value;
 }
 
 void FUN_002631d8(void *unused, const char *message) {
-    FUN_002607e8(message);
+    ADXERR_CallErrFunc1(message);
 }
 
 void FUN_002631f0(void *unused, const char *message) {
-    FUN_002607e8(message);
+    ADXERR_CallErrFunc1(message);
 }
 
 void FUN_00263208(void) {
-    DAT_0049c8f0 += 1;
+    adxt_vsync_cnt += 1;
     FUN_0026cbd8();
 }
 
@@ -132,7 +132,7 @@ void FUN_002632c0(void)
     DAT_0056dfa8 = DAT_004ee080;
     if (DAT_0049c8d8 == 0) {
         ADXCRS_Init();
-        FUN_0025f2d0();
+        ADXCRS_Lock();
         FUN_0027c798();
         FUN_0027bc58();
         FUN_0027b318();
@@ -145,18 +145,18 @@ void FUN_002632c0(void)
         FUN_0027ec10();
         FUN_00265c30(FUN_002631d8, 0);
         LSC_EntryErrFunc(FUN_002631f0, 0);
-        memset(DAT_0049c8f8, 0, 3136);
+        memset(adxt_obj, 0, 3136);
         if (ADXM_IsSetupThrd() == 1 && DAT_0049c8e4 == 1) {
             FUN_0027e748(2, 1, FUN_00263280, 0);
-            DAT_0049c8ec = FUN_0027e600(4, FUN_002632a0, 0);
-            DAT_0049c8e0 = FUN_0027e600(5, FUN_00263230, 0);
+            DAT_0049c8ec = SVM_SetCbSvr(4, FUN_002632a0, 0);
+            DAT_0049c8e0 = SVM_SetCbSvr(5, FUN_00263230, 0);
         } else {
-            DAT_0049c8e0 = FUN_0027e600(5, FUN_00263250, 0);
+            DAT_0049c8e0 = SVM_SetCbSvr(5, FUN_00263250, 0);
         }
-        DAT_0049c8f0 = 0;
+        adxt_vsync_cnt = 0;
         DAT_0049c8e8 = 0;
         FUN_0026c798(60);
-        FUN_0025f2e8();
+        ADXCRS_Unlock();
     }
     DAT_0049c8d8++;
 }
@@ -174,7 +174,7 @@ void FUN_00263470(void) {
         FUN_00260b30();
         FUN_00269c98();
         FUN_00277918();
-        FUN_0025f2d0();
+        ADXCRS_Lock();
         FUN_0027e6d0(2, 1);
         FUN_0027e6d0(4, DAT_0049c8ec);
         FUN_0027e6d0(5, DAT_0049c8e0);
@@ -184,7 +184,7 @@ void FUN_00263470(void) {
         FUN_0027b390();
         FUN_0027bcd0();
         FUN_0027c810();
-        FUN_0025f2e8();
+        ADXCRS_Unlock();
         DAT_004a9b1c = 1;
     }
 }
@@ -198,7 +198,7 @@ void FUN_00263548(AdxtObject *adxt, int nch, int f92, int end)
     Sj *dst;
     AdxEnc *enc;
     FUN_00269268();
-    in = FUN_0027bd48(DAT_0049d538, 1024, 0);
+    in = SJRBF_Create(DAT_0049d538, 1024, 0);
     out[0] = FUN_0027b408(DAT_0049d938, 32);
     out[1] = FUN_0027b408(DAT_0049d938 + 32, 32);
     dst = adxt->sji;
@@ -219,7 +219,7 @@ void FUN_00263548(AdxtObject *adxt, int nch, int f92, int end)
     memcpy(ckOut.ptr, ckIn.ptr, ckIn.len);
     in->vt->put_chunk(in, 0, &ckIn);
     dst->vt->put_chunk(dst, 1, &ckOut);
-    FUN_00269630(enc);
+    ADXENC_SetEnd(enc);
     FUN_00269498(enc);
     in->vt->destroy(in);
     out[1]->vt->destroy(out[1]);

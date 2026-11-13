@@ -37,7 +37,7 @@ void FUN_00457ab0(igRadioGroup *arg0, igRadioGroupSelectedObserver *arg1, int ar
             m.a = 2;
             m.b = 0;
             m.c = DAT_0058c280[0];
-            FUN_004578c0((S_4578c0 *)((void *)arg0->_model), (S_4578c0 *)&m);
+            igModel_NotifyViews((S_4578c0 *)((void *)arg0->_model), (S_4578c0 *)&m);
         }
     } else {
         s = (igRadioGroupModel *)arg0->_model;
@@ -52,7 +52,7 @@ void FUN_00457ab0(igRadioGroup *arg0, igRadioGroupSelectedObserver *arg1, int ar
             m2.a = 2;
             m2.b = 0;
             m2.c = DAT_0058c280[0];
-            FUN_004578c0((S_4578c0 *)((void *)arg0->_model), (S_4578c0 *)&m2);
+            igModel_NotifyViews((S_4578c0 *)((void *)arg0->_model), (S_4578c0 *)&m2);
         }
     }
 }

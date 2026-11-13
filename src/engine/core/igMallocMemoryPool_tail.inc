@@ -213,17 +213,6 @@ void Gap__Core__igMallocMemoryPool__vfunc_63(int *arg0) {
     *arg0 = g_allocatorFailureStatus.v;
 }
 
-static inline char *blockHeader(char *p) {
-    char *h = p - 4;
-    if (((MallocBlockEnd *)(p - 1))->flag == 1) h = p - 12;
-    return h;
-}
-
-static inline char *padRecord(char *h) {
-    if (((MallocBlockTag *)(h + 3))->padded) return h - 10;
-    return h - 8;
-}
-
 void Gap__Core__igMallocMemoryPool__vfunc_64(MallocPoolFreeView *self, unsigned int size, char **block) {
     char *q = padRecord(blockHeader(*block));
     self->_localFreeCount += *(unsigned short *)(q + 2);

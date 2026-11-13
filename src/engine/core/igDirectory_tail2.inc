@@ -336,7 +336,7 @@ int FUN_002d87b0(FieldLinkSet *self, FieldLinkObject *obj, char *name, int user)
     igSmartPointer<FieldLinkRecord> record(((FieldLinkRecord *)FUN_002bd8f0((int)(((void *)igObject_GetAllocator((int)self))))));
     record.get()->index = index;
     RetainedWord<FieldLinkRecord> inserted(record.get());
-    List_InsertWords(self, index, 1, &inserted);
+    List_InsertWords((igDataList *)self, index, 1, &inserted);
     if (name != 0) {
         igNamedObject_SetName((N_2fecb0 *)(record.get()), (int)name);
     }
@@ -380,7 +380,7 @@ int FUN_002d8a80(L8a80 *arg0, int arg1, int arg2, int arg3, int arg4, int arg5, 
     igSmartPointer<E8a80> record(((E8a80 *)FUN_002c0d80(FUN_00301000(arg0))));
     record.get()->idx = s0;
     RetainedWord<E8a80> inserted(record.get());
-    List_InsertWords(arg0, s0, 1, &inserted);
+    List_InsertWords((igDataList *)arg0, s0, 1, &inserted);
     if (arg5) igNamedObject_SetName((N_2fecb0 *)(record.get()), arg5);
     record.get()->f16 = arg6;
     record.get()->f20 = 1;
@@ -423,7 +423,7 @@ int FUN_002d8d00(Lst8d00 *list, int key, int name, int val) {
     entry.get()->vX(key);
     entry.get()->f12 = idx;
     Retained retained(entry.get());
-    List_InsertWords(list, idx, 1, &retained);
+    List_InsertWords((igDataList *)list, idx, 1, &retained);
     return entry.get()->f12;
 }
 

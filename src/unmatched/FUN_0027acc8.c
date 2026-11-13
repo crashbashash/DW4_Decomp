@@ -1,4 +1,4 @@
-/* Unless mode DAT_004b1dc8 is 1 with no pending count in DAT_004b1dc0: between FUN_0027b270 and
+/* Unless mode ps2rna_setup_voice is 1 with no pending count in ps2rna_nvoice: between FUN_0027b270 and
  * FUN_0027b288, runs FUN_0027ab08 on every active (byte 0 == 1) entry of the 16-entry table
  * DAT_004b4220 (100-byte entries), then calls FUN_00272d60 and FUN_0027dd58. */
 typedef struct Entry_27acc8 {
@@ -6,8 +6,8 @@ typedef struct Entry_27acc8 {
     char pad1[99];
 } Entry_27acc8;
 
-extern int DAT_004b1dc8;
-extern int DAT_004b1dc0;
+extern int ps2rna_setup_voice;
+extern int ps2rna_nvoice;
 extern Entry_27acc8 DAT_004b4220[16];
 void FUN_0027b270(void);
 void FUN_0027b288(void);
@@ -18,7 +18,7 @@ void FUN_0027dd58(void);
 void FUN_0027acc8(void) {
     int i;
 
-    if (DAT_004b1dc8 == 1 && DAT_004b1dc0 <= 0) {
+    if (ps2rna_setup_voice == 1 && ps2rna_nvoice <= 0) {
         return;
     }
     FUN_0027b270();

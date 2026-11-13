@@ -85,7 +85,7 @@ void FUN_004558b0(struct S_4558b0 *arg0, unsigned char arg1) {
         sp10[0] = 2;
         sp10[1] = 0;
         sp10[2] = DAT_0058c450[0];
-        FUN_004578c0((S_4578c0 *)arg0, (S_4578c0 *)&sp10[0]);
+        igModel_NotifyViews((S_4578c0 *)arg0, (S_4578c0 *)&sp10[0]);
     }
 }
 
@@ -99,7 +99,7 @@ void FUN_00455900(struct S_455900 *arg0, unsigned char arg1) {
         sp10[0] = 2;
         sp10[1] = 0;
         sp10[2] = DAT_0058c458[0];
-        FUN_004578c0((S_4578c0 *)arg0, (S_4578c0 *)sp10);
+        igModel_NotifyViews((S_4578c0 *)arg0, (S_4578c0 *)sp10);
     }
 }
 
@@ -113,7 +113,7 @@ void FUN_00455950(S_455950 *arg0, unsigned char arg1) {
         sp10[0] = 2;
         sp10[1] = 0;
         sp10[2] = DAT_0058c460[0];
-        FUN_004578c0((S_4578c0 *)arg0, (S_4578c0 *)sp10);
+        igModel_NotifyViews((S_4578c0 *)arg0, (S_4578c0 *)sp10);
     }
 }
 
@@ -127,7 +127,7 @@ void FUN_004559a0(struct S_4559a0 *arg0, unsigned char arg1) {
         sp[0] = 2;
         sp[1] = 0;
         sp[2] = DAT_0058c470[0];
-        FUN_004578c0((S_4578c0 *)arg0, (S_4578c0 *)sp);
+        igModel_NotifyViews((S_4578c0 *)arg0, (S_4578c0 *)sp);
     }
 }
 

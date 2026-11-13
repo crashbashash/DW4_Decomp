@@ -1,3 +1,4 @@
+#include "dw4/p2dma.h"
 int p2GetTextureBase();
 extern long long p2FrameTimeMin[4];
 extern long long DAT_00562cc0[4];
@@ -103,8 +104,8 @@ typedef union VifCode {
         unsigned int immediate : 16;
         unsigned int num : 8;
         unsigned int cmd : 8;
-    } f;
-    unsigned int w;
+    } field;
+    unsigned int word;
 } VifCode;
 
 typedef union VifQuad {
@@ -237,6 +238,49 @@ void FUN_001f6f50(void *arg0) {
     p2FrameTimeMax[0] = 0;
 }
 
+/* The VIF1 chain p2SetColour sends: a DMA cnt tag over one quadword whose two VIF slots idle,
+ * then a FLUSHE and an UNPACK V4-8 of the colour into VU1 data memory. */
+typedef struct p2ColourPacket {
+    unsigned int tag[2];
+    VifCode tagCodes[2];
+    VifCode flush;
+    VifCode idle;
+    VifCode unpack;
+    unsigned int colour;
+} p2ColourPacket;
+
+/* UNPACK's immediate: the VU address in the low bits, bit 14 for unsigned elements. */
+#define P2_VIF_UNPACK_UNSIGNED 0x4000
+/* The VU1 data address of the current colour. */
+#define P2_VU1_COLOUR 0x1B
+
+extern p2ColourPacket p2ColourPacketTemplate;
+extern unsigned int p2ColourNop;
+extern p2DmaPacket *p2DmaCurrentPacket[P2_DMA_CHANNEL_COUNT];
+
+/* Sends the current colour, packed RGBA, to VU1 data memory. */
+void p2SetColour(unsigned int colour) {
+    unsigned int *p = (unsigned int *)p2DmaCurrentPacket[P2_DMA_VIF1]->cursor;
+    p2ColourPacketTemplate.unpack.field.immediate = P2_VIF_UNPACK_UNSIGNED | P2_VU1_COLOUR;
+    p[0] = p2ColourPacketTemplate.tag[0];
+    p[1] = p2ColourPacketTemplate.tag[1];
+    p[2] = p2ColourPacketTemplate.tagCodes[0].word;
+    p[3] = p2ColourPacketTemplate.tagCodes[1].word;
+    p[4] = p2ColourPacketTemplate.flush.word;
+    p[5] = p2ColourNop;
+    p[6] = p2ColourPacketTemplate.unpack.word;
+    p += 7;
+    *p++ = colour;
+    p2DmaCurrentPacket[P2_DMA_VIF1]->cursor = (unsigned int)p;
+    if (p2DmaCurrentPacket[P2_DMA_VIF1]->cursor >= p2DmaCurrentPacket[P2_DMA_VIF1]->limit) {
+        if (p2DisplayListMode != 0) {
+            p2GrowDisplayList();
+        } else {
+            p2SubmitDmaPacket(P2_DMA_VIF1);
+        }
+    }
+}
+
 void FUN_001f7330(void)
 {
 }
@@ -365,7 +409,7 @@ int FUN_001f7530(int cause) {
     return 0;
 }
 
-void FUN_001f76c0(int arg0) {
+void p2SendGsRegister(int arg0) {
     int sp1C;
 
     sp1C = arg0;
@@ -376,7 +420,7 @@ void FUN_001f76f0(int count, int *regs) {
     int n;
 
     if (p2CurrentProgram == 0) {
-        DAT_0056aeb8.f.immediate = p2GetVuProgramAddress(DAT_0056ae40);
+        DAT_0056aeb8.field.immediate = p2GetVuProgramAddress(DAT_0056ae40);
         for (; count > 0; count -= n, regs += n) {
             int i;
             unsigned __int128 *p;
@@ -392,7 +436,7 @@ void FUN_001f76f0(int count, int *regs) {
             ((unsigned int *)p)[1] = DAT_00490f90.w[1];
             ((unsigned int *)p)[2] = DAT_00490f90.w[2];
             ((unsigned int *)p)[3] = DAT_00490f90.w[3];
-            DAT_0056aea0.code[3].f.num = n + 1;
+            DAT_0056aea0.code[3].field.num = n + 1;
             p[1] = DAT_0056aea0.q;
             *(p += 2) = DAT_00490f80.q;
             p++;
@@ -418,11 +462,17 @@ void FUN_001f76f0(int count, int *regs) {
     }
 }
 
-void FUN_001f7ad0(void) {
+void p2FlushGsRegisters(void) {
     if (*(long long *)0x56AE48 != 0) {
         FUN_001f78d0();
     }
 }
+
+
+extern unsigned int DAT_00491000, DAT_00491004, DAT_00491008, DAT_0049100c, DAT_00491010, DAT_00491018;
+extern VifCode DAT_00491020;
+extern unsigned long long DAT_00491030, DAT_00491038;
+extern unsigned int DAT_0056aec8;
 
 
 void FUN_001f7db0(unsigned int addr, int unused, int flush) {

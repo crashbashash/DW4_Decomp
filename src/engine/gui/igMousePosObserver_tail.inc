@@ -46,10 +46,10 @@ void Gap__Gui__igMousePosObserver__vfunc_24(igMousePosObserver *self, struct Gui
     int type;
     model = (igGuiSystemModel *)self->_model;
     type = msg->type;
-    if (type == DAT_0058c3d8[0]) {
+    if (type == g_igGuiSystemModelMousePositionField[0]) {
         Vec3f_455d80 v(model->_mousePosition[0], model->_mousePosition[1], 0.0f);
         Vec3f_455d80 p;
-        FUN_00192fc0(&v, &v, self->_inverseProjectionMatrix);
+        Vec3f_TransformProjective(&v, &v, self->_inverseProjectionMatrix);
         p = v;
         FUN_00456b80((int *)self->_guiSystem, &p.x);
         FUN_00456050(self, model);
@@ -76,7 +76,7 @@ void Gap__Gui__igMousePosObserver__vfunc_24(igMousePosObserver *self, struct Gui
         m[0] = 2;
         m[1] = 0;
         m[2] = DAT_0058c418[0];
-        FUN_004578c0((S_4578c0 *)model, (S_4578c0 *)m);
+        igModel_NotifyViews((S_4578c0 *)model, (S_4578c0 *)m);
     } else if (msg->handled == 0) {
         int result;
         FUN_00191f30(&result, self->_inverseProjectionMatrix, model->_projectionMatrix);
@@ -154,6 +154,6 @@ void FUN_00456050(igMousePosObserver *a, igGuiSystemModel *b) {
     sp[0] = 2;
     sp[1] = (int)a;
     sp[2] = DAT_0058c410[0];
-    FUN_004578c0((S_4578c0 *)b, (S_4578c0 *)sp);
+    igModel_NotifyViews((S_4578c0 *)b, (S_4578c0 *)sp);
 }
 

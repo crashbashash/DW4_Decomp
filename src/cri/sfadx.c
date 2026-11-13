@@ -96,7 +96,7 @@ struct SfdAdxHn {
 };
 
 extern char DAT_004f4b68[];
-extern char DAT_004f4b50[];
+extern char sfadx_silent_block[];
 extern SfdAdxCfg DAT_0057fa90;
 extern int DAT_0057faac;
 extern int DAT_004be8b8;
@@ -110,12 +110,12 @@ int FUN_00263470();
 void FUN_00263548();
 int FUN_00265f28();
 int FUN_00265f40();
-int FUN_0026b348();
+int ADXT_Create();
 int ADXT_Destroy();
 void FUN_0026bb38();
 int ADXT_Stop();
 int FUN_0026bd20();
-int FUN_0026bf90();
+int ADXT_GetTime();
 int FUN_0026c2d8();
 int FUN_0026c328();
 int FUN_0026c378();
@@ -127,18 +127,18 @@ void FUN_0026c7b0();
 int FUN_0026cb98();
 int FUN_0026cce0();
 void ADXT_Pause();
-void FUN_0026cfd0();
+void ADXT_SetFx();
 void FUN_0026cfe8();
 int FUN_0026d048();
 void FUN_0026d138();
 int FUN_0026d250();
-int FUN_0026d2e8();
+int adxt_IsFooter();
 int FUN_0026d328();
-SfdSj *FUN_0027bd48();
-int FUN_0027d470();
+SfdSj *SJRBF_Create();
+int SJ_SplitChunk();
 void FUN_0028b0c0();
 int FUN_0028b530();
-int FUN_002916f8();
+int UTY_MulDiv();
 int FUN_0029dd98();
 int FUN_0029de70();
 int FUN_0029e370();
@@ -149,12 +149,12 @@ int FUN_0029ea88();
 int FUN_0029eaf8();
 long FUN_0029ecb0();
 void FUN_0029ee80();
-int FUN_002a0928();
-int FUN_002a0bb8();
+int sfd_GetStmVersion();
+int sfd_ReportError();
 int FUN_002abf68();
 int FUN_002ada78();
-int FUN_002adc40();
-int FUN_002aec58();
+int SFD_GetCond();
+int sftim_IsPlaying();
 int FUN_002af060();
 int FUN_002af540();
 void FUN_002b0408();
@@ -188,10 +188,10 @@ void FUN_0029b8d8(SfdAdxHn *h, char *dst, int max, int *out);
 void FUN_0029b990(SfdAdxHn *h, char *buf, int size, int *used);
 int FUN_0029bbf8(char *records, int length, int *found);
 int FUN_0029bc80(SfdAdxHn *h, int nch, int size);
-void FUN_0029bca0(SfdAdxHn *h, char *buf, int size, int *used);
-char *FUN_0029bd60(SfdAdxHn *h, char *buf, int size);
-void FUN_0029be80(SfdAdxHn *h, char *buf, int size, int *used);
-int FUN_0029bf98(SfdAdxHn *h, int *out12, int *out16);
+void sfadx_ExecSearchHeader(SfdAdxHn *h, char *buf, int size, int *used);
+char *sfadx_FindBlockAlign(SfdAdxHn *h, char *buf, int size);
+void sfadx_SkipSilence(SfdAdxHn *h, char *buf, int size, int *used);
+int sfadx_GetChanRate(SfdAdxHn *h, int *out12, int *out16);
 void FUN_0029bfe8(SfdAdxHn *h);
 int FUN_0029c090(SfdAdxHn *h);
 void FUN_0029c0b8(SfdAdxHn *h, int flag);
@@ -208,8 +208,8 @@ int FUN_0029c658(SfdAdxHn *h, SfdAdxCtx *ctx);
 int FUN_0029c810(SfdAdxCfg *cfg);
 int FUN_0029c880(void);
 void FUN_0029c890(SfdAdxHn *h);
-int FUN_0029c8d0(SfdAdxHn *h, int *time, int *unit);
-void FUN_0029c990(void *blk, int adxt, int *out0, int *out1);
+int sfadx_GetTime(SfdAdxHn *h, int *time, int *unit);
+void sfadx_GetAdxtTime(void *blk, int adxt, int *out0, int *out1);
 int FUN_0029cb10(int adxt);
 int FUN_0029cb30(int adxt);
 int FUN_0029cb68(SfdAdxHn *h);
@@ -276,7 +276,7 @@ void FUN_0029b4c8(SfdAdxHn *h, int volume) {
         hi = t * 0.01f;
         lo = (int)t - hi * 100;
     }
-    FUN_0026cfd0(adxt, hi, lo);
+    ADXT_SetFx(adxt, hi, lo);
     return;
 }
 
@@ -325,7 +325,7 @@ void FUN_0029b6d0(SfdAdxHn *h) {
 int FUN_0029b6e8(SfdAdxHn *h) {
     int out;
     int r;
-    if (FUN_002adc40(h, 6) == 0) {
+    if (SFD_GetCond(h, 6) == 0) {
         return 0;
     }
     if (FUN_0029c380(h) == 1) {
@@ -373,7 +373,7 @@ void FUN_0029b850(SfdSj *sj, int len, SfdSjChunk *ck) {
         sj->vtbl->ungetChunk(sj, 0, ck);
         return;
     }
-    FUN_0027d470(ck, len, ck, &rest);
+    SJ_SplitChunk(ck, len, ck, &rest);
     sj->vtbl->putChunk(sj, 1, ck);
     sj->vtbl->ungetChunk(sj, 0, &rest);
 }
@@ -400,7 +400,7 @@ int FUN_0029bbf8(char *records, int length, int *found) {
     int pos;
     *found = 0;
     for (pos = 0; pos < length; pos += 18) {
-        if (FUN_0026d2e8(records, 18, scratch) != 0) {
+        if (adxt_IsFooter(records, 18, scratch) != 0) {
             *found = 1;
             break;
         }
@@ -413,7 +413,7 @@ int FUN_0029bc80(SfdAdxHn *h, int nch, int size) {
     return FUN_0026d328(((SfdAdxCtx *)h->sub.ctx)->adxt);
 }
 
-void FUN_0029bca0(SfdAdxHn *h, char *buf, int size, int *used) {
+void sfadx_ExecSearchHeader(SfdAdxHn *h, char *buf, int size, int *used) {
     SfdAdxCtx *ctx;
     int len;
     int n;
@@ -423,8 +423,8 @@ void FUN_0029bca0(SfdAdxHn *h, char *buf, int size, int *used) {
         return;
     if (FUN_0026d250(buf, size, &len) != 0)
         n = len;
-    else if (FUN_002a0928(h) < 108)
-        n = FUN_0029bd60(h, buf, size) - buf;
+    else if (sfd_GetStmVersion(h) < 108)
+        n = sfadx_FindBlockAlign(h, buf, size) - buf;
     else
         n = 0;
     *used = n;
@@ -432,7 +432,65 @@ void FUN_0029bca0(SfdAdxHn *h, char *buf, int size, int *used) {
     h->total += n;
 }
 
-int FUN_0029bf98(SfdAdxHn *h, int *out12, int *out16) {
+char *sfadx_FindBlockAlign(SfdAdxHn *h, char *buf, int size) {
+    char scratch[16];
+    char *end = buf + size;
+    char *base;
+    char *p;
+    char *bestBase = 0;
+    int found = 0;
+    /* matching construct: declaration permutation — best declared after found */
+    char *best = 0;
+    for (base = buf; base < buf + 36; base += 2) {
+        found = 0;
+        for (p = base; p < end; p += 18) {
+            if (*p < 0) {
+                found = 1;
+                if (adxt_IsFooter(p, 18, scratch) != 0 && best < p) {
+                    best = p;
+                    bestBase = base;
+                }
+                break;
+            }
+        }
+        if (!found)
+            break;
+    }
+    if (found) {
+        if (bestBase == 0) {
+            sfd_ReportError(h, 0xFF000C0A);
+            return buf;
+        }
+        base = bestBase;
+    }
+    return base;
+}
+
+void sfadx_SkipSilence(SfdAdxHn *h, char *buf, int size, int *used) {
+    SfdAdxCtx *ctx;
+    int pos;
+    int nch;
+    int rate;
+    *used = 0;
+    ctx = (SfdAdxCtx *)h->sub.ctx;
+    if (sfd_GetStmVersion(h) >= 108) {
+        ctx->step = sfadx_ExecSearchHeader;
+        return;
+    }
+    for (pos = 0; pos < size - 18; pos += 18) {
+        if (memcmp(buf, sfadx_silent_block, 18) != 0) {
+            ctx->step = sfadx_ExecSearchHeader;
+            break;
+        }
+        buf += 18;
+    }
+    *used = pos;
+    h->total += pos;
+    if (sfadx_GetChanRate(h, &nch, &rate) == 0)
+        ctx->pos += pos / (nch * 18) * 32;
+}
+
+int sfadx_GetChanRate(SfdAdxHn *h, int *out12, int *out16) {
     SfdAdxInfo *info = FUN_0029ceb8(h);
     if (info == 0) {
         return -1;
@@ -465,19 +523,19 @@ void FUN_0029c0b8(SfdAdxHn *h, int flag) {
     err = FUN_0026cce0(adxt);
     if (err != 0)
         DAT_0057faac = err;
-    if (FUN_002adc40(h, 26) == 0)
+    if (SFD_GetCond(h, 26) == 0)
         err = 0;
     switch (err) {
     case 0:
         break;
     case -1:
-        FUN_002a0bb8(h, 0xFF000C08);
+        sfd_ReportError(h, 0xFF000C08);
         break;
     case -2:
-        FUN_002a0bb8(h, 0xFF000C09);
+        sfd_ReportError(h, 0xFF000C09);
         break;
     default:
-        FUN_002a0bb8(h, 0xFF000C07);
+        sfd_ReportError(h, 0xFF000C07);
         break;
     }
     if (st == 4 || st == 5)
@@ -564,7 +622,7 @@ int FUN_0029c470(int adxt) {
 void FUN_0029c498(SfdAdxHn *h) {
     SfdAdxCtx *ctx = (SfdAdxCtx *)h->sub.ctx;
     int adxt = ctx->adxt;
-    int value = FUN_002adc40(h, 27);
+    int value = SFD_GetCond(h, 27);
     if (ctx->opt27 != value) {
         ctx->opt27 = value;
         FUN_0026c7b0(adxt, value);
@@ -575,7 +633,7 @@ int FUN_0029c810(SfdAdxCfg *cfg) {
     int adxt;
     int ret;
     if (FUN_002abf68() != 1) {
-        adxt = FUN_0026b348(cfg->f12, cfg->f24, cfg->f20);
+        adxt = ADXT_Create(cfg->f12, cfg->f24, cfg->f20);
     } else {
         adxt = FUN_0029c880();
     }
@@ -592,18 +650,40 @@ int FUN_0029c880(void) {
 }
 
 void FUN_0029c890(SfdAdxHn *h) {
-    FUN_002af060(h, FUN_0029c8d0, 2);
+    FUN_002af060(h, sfadx_GetTime, 2);
     FUN_002ada78(h, 15, 2);
 }
 
-void FUN_0029c990(void *blk, int adxt, int *out0, int *out1) {
+int sfadx_GetTime(SfdAdxHn *h, int *time, int *unit) {
+    SfdAdxCtx *ctx = (SfdAdxCtx *)h->sub.ctx;
+    int adxt = ctx->adxt;
+    void *blk = h->blk4120;
+    int nowTime;
+    int nowUnit;
+    if (sftim_IsPlaying(h) == 0)
+        return 0;
+    if (h->state == 4) {
+        sfadx_GetAdxtTime(blk, adxt, &nowTime, &nowUnit);
+        if (ctx->time < nowTime) {
+            /* matching construct: variant search — the unit read before the time store */
+            int newUnit = nowUnit;
+            ctx->time = nowTime;
+            ctx->unit = newUnit;
+        }
+    }
+    *time = ctx->time;
+    *unit = ctx->unit;
+    return 0;
+}
+
+void sfadx_GetAdxtTime(void *blk, int adxt, int *out0, int *out1) {
     SfdAdxPair size;
     SfdAdxPair extra;
     SfdAdxPair result;
     int width;
     int height;
     DAT_004be8b8 = FUN_0026bd20(adxt);
-    FUN_0026bf90(adxt, &width, &height);
+    ADXT_GetTime(adxt, &width, &height);
     size.b = height;
     size.a = width;
     extra.a = FUN_002b5a10();
@@ -720,23 +800,23 @@ void FUN_0029cd58(void *blk, int *result, int target) {
     int x;
     int y;
     FUN_002af540(blk, &x, &y);
-    *result = FUN_002916f8(target, x, y);
+    *result = UTY_MulDiv(target, x, y);
 }
 
 void FUN_0029cda8(SfdAdxHn *h) {
-    FUN_002a0bb8(h, 0xFF000C03);
+    sfd_ReportError(h, 0xFF000C03);
 }
 
 void FUN_0029cdc8(SfdAdxHn *h) {
-    FUN_002a0bb8(h, 0xFF000C03);
+    sfd_ReportError(h, 0xFF000C03);
 }
 
 void FUN_0029cde8(SfdAdxHn *h) {
-    FUN_002a0bb8(h, 0xFF000C03);
+    sfd_ReportError(h, 0xFF000C03);
 }
 
 void FUN_0029ce08(SfdAdxHn *h) {
-    FUN_002a0bb8(h, 0xFF000C03);
+    sfd_ReportError(h, 0xFF000C03);
 }
 
 int FUN_0029ce28(SfdAdxHn *h) {
@@ -755,7 +835,7 @@ int FUN_0029ce28(SfdAdxHn *h) {
     FUN_00263548(adxt, info->f12, info->f16, info->f20);
     FUN_0026d138(adxt, 0);
     ctx->started = 1;
-    ctx->step = FUN_0029be80;
+    ctx->step = sfadx_SkipSilence;
     return 0;
 }
 

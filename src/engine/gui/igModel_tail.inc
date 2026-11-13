@@ -40,7 +40,7 @@ void FUN_004577f0(igModel *arg0, OV *arg1) {
     }
 }
 
-void FUN_004578c0(S_4578c0 *arg0, S_4578c0 *arg1) {
+void igModel_NotifyViews(S_4578c0 *arg0, S_4578c0 *arg1) {
     int var_s0;
     VC_4578c0 *o;
     for (var_s0 = 0; var_s0 < arg0->f8->n; var_s0++) {

@@ -39,7 +39,7 @@ int FUN_0010aee0(Sema *s);
 int FUN_0010af20(int sema);
 void sceSifInitRpc(int mode);
 int sceSifBindRpc(void *cd, unsigned int id, int mode);
-int FUN_0010d108(const char *fmt, ...);
+int scePrintf(const char *fmt, ...);
 int sceMcSync(int mode, int *cmd, int *result);
 int sceMcInit(void) {
     Sema s;
@@ -60,7 +60,7 @@ int sceMcInit(void) {
     sceSifInitRpc(0);
     while (1) {
         if (sceSifBindRpc(&DAT_0055d5c0, 0x80000400, 0) < 0) {
-            FUN_0010d108(DAT_004d2ad0);
+            scePrintf(DAT_004d2ad0);
             while (1);
         }
         if (DAT_0055d5c0.server != 0) break;
@@ -74,12 +74,12 @@ int sceMcInit(void) {
         return r - 100;
     }
     if (DAT_0055eb80[1] < 522) {
-        FUN_0010d108(DAT_004d2ae8);
+        scePrintf(DAT_004d2ae8);
         DAT_0055d5c0.server = 0;
         return -120;
     }
     if (DAT_0055eb80[2] < 526) {
-        FUN_0010d108(DAT_004d2b10);
+        scePrintf(DAT_004d2b10);
         DAT_0055d5c0.server = 0;
         return -121;
     }

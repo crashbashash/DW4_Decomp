@@ -26,15 +26,15 @@ typedef struct Adxt {
 } Adxt;
 
 extern const char D_004eedd0[];
-extern int FUN_002672e8(void *);
+extern int ADXSJD_GetLpStartPos(void *);
 extern int FUN_00267300(void *);
-extern int FUN_00267330(void *);
-extern void FUN_002671c8(void *, int);
-extern void FUN_002671d8(void *, int);
-extern void FUN_002671e8(void *, int);
+extern int ADXSJD_GetLpEndPos(void *);
+extern void ADXSJD_SetTrapNumSmpl(void *, int);
+extern void ADXSJD_SetTrapCnt(void *, int);
+extern void ADXSJD_SetTrapDtLen(void *, int);
 extern void FUN_002670e0(void *, int);
 extern void FUN_002674d0(void *);
-extern void FUN_002607e8(const char *);
+extern void ADXERR_CallErrFunc1(const char *);
 
 void FUN_0026dae0(Adxt *t)
 {
@@ -43,21 +43,21 @@ void FUN_0026dae0(Adxt *t)
     int a, b, c;
     SjChunk ck;
 
-    a = FUN_002672e8(rt);
+    a = ADXSJD_GetLpStartPos(rt);
     b = FUN_00267300(rt);
-    c = FUN_00267330(rt);
+    c = ADXSJD_GetLpEndPos(rt);
     if ((unsigned char)(t->state - 2) < 2 && t->b108 == 0) {
-        FUN_002671c8(t->rt, -1);
+        ADXSJD_SetTrapNumSmpl(t->rt, -1);
         return;
     }
     sj->vt->f24(sj, 1, t->reqLen, &ck);
     if (ck.len < t->reqLen)
-        FUN_002607e8(D_004eedd0);
+        ADXERR_CallErrFunc1(D_004eedd0);
     sj->vt->f32(sj, 0, &ck);
-    FUN_002671d8(rt, 0);
+    ADXSJD_SetTrapCnt(rt, 0);
     t->w144 = c - a;
-    FUN_002671c8(rt, t->w144);
-    FUN_002671e8(rt, b);
+    ADXSJD_SetTrapNumSmpl(rt, t->w144);
+    ADXSJD_SetTrapDtLen(rt, b);
     FUN_002670e0(rt, a);
     if (t->state == 2) {
         sj->vt->f20(sj);

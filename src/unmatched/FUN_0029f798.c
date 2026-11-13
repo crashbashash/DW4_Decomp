@@ -1,10 +1,10 @@
-/* Scans forward while at least 4 bytes remain and returns the first position where FUN_0028d360
+/* Scans forward while at least 4 bytes remain and returns the first position where MPS_GetStartCodeKind
  * yields wanted, or 0. */
-int FUN_0028d360();
+int MPS_GetStartCodeKind();
 
 char *FUN_0029f798(char *p, int remaining, int wanted) {
     while (remaining >= 4) {
-        if (FUN_0028d360(p) == wanted) {
+        if (MPS_GetStartCodeKind(p) == wanted) {
             return p;
         }
         remaining--;

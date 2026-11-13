@@ -109,7 +109,7 @@ int Gap__Core__igPsx2File__vfunc_27(A_32b640 *arg0, int arg1, int arg2, int arg3
         arg3 = r / arg2;
         q = arg3 * arg2;
         if (r != q) {
-            FUN_0010f738(arg0->f18, base + q, 0);
+            sceLseek(arg0->f18, base + q, 0);
         }
         return arg3;
     }
@@ -131,7 +131,7 @@ int Gap__Core__igPsx2File__vfunc_29(F_32b760 *arg0, int arg1, int arg2, int arg3
     if (arg2 == 0) return 0;
     if (arg0->f60 == 1) {
         if (arg0->f20 == 6) {
-            FUN_0010f738(arg0->f24, 0, 2);
+            sceLseek(arg0->f24, 0, 2);
         }
         return FUN_0010fbd0(arg0->f24, arg1, arg3 * arg2) / arg2;
     }
@@ -146,7 +146,7 @@ int Gap__Core__igPsx2File__vfunc_29(F_32b760 *arg0, int arg1, int arg2, int arg3
 }
 
 int Gap__Core__igPsx2File__vfunc_32(S_32b870 *arg0) {
-    if (arg0->d != 0) return 0; FUN_0010f738(arg0->a, 0, 0); FUN_0010fbd0(arg0->a, arg0->b, arg0->c); return 0;
+    if (arg0->d != 0) return 0; sceLseek(arg0->a, 0, 0); FUN_0010fbd0(arg0->a, arg0->b, arg0->c); return 0;
 }
 
 int Gap__Core__igPsx2File__vfunc_31(struct S_32bba0 *arg0, int arg1, ...) {
@@ -280,13 +280,13 @@ int Gap__Core__igPsx2File__vfunc_38(int *arg0, int arg1, int arg2) {
     if (arg0[15] != 0) {
         switch (arg2) {
         case 0:
-            s = FUN_0010f738(arg0[6], arg1, 0);
+            s = sceLseek(arg0[6], arg1, 0);
             return -(s != arg1);
         case 1:
             s = ((Obj_32bf30 *)arg0)->vX();
-            return -(arg1 != FUN_0010f738(arg0[6], arg1, 1) - s);
+            return -(arg1 != sceLseek(arg0[6], arg1, 1) - s);
         case 2:
-            FUN_0010f738(arg0[6], arg1, 2);
+            sceLseek(arg0[6], arg1, 2);
             return 0;
         default:
             return -1;
@@ -314,7 +314,7 @@ int Gap__Core__igPsx2File__vfunc_38(int *arg0, int arg1, int arg2) {
 
 int Gap__Core__igPsx2File__vfunc_39(igPsx2File *arg0) {
     if (arg0->_isBinary != 0) {
-        return FUN_0010f738(arg0->_fileHandle, 0, 1);
+        return sceLseek(arg0->_fileHandle, 0, 1);
     }
     return arg0->_bufPos;
 }

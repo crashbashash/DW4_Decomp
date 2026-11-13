@@ -33,7 +33,7 @@ typedef struct SfdTrnModules {
     SfdTrnFn *fns[15];
 } SfdTrnModules;
 
-int FUN_002a0bb8();
+int sfd_ReportError();
 void FUN_002ada78(SfdHn *hn, int index, int value);
 
 int FUN_002afcb8(SfdTrnModules *modules, int k);
@@ -84,7 +84,7 @@ void FUN_002afd38(SfdHn *hn, SfdTrnSlot *s, SfdTrnConfig **pconfig)
         FUN_002afdf0(&s[i], config->fns[i]);
     }
     if (FUN_002afe38(hn, config) != 0) {
-        FUN_002a0bb8(hn, 0xFF000302);
+        sfd_ReportError(hn, 0xFF000302);
     }
 }
 
@@ -252,7 +252,7 @@ void FUN_002b0388(SfdHn *hn, int index, int value)
     hn->trn[0].f0 = value;
 }
 
-int FUN_002b03a0(SfdHn *hn, int index)
+int sftrn_GetFlagA(SfdHn *hn, int index)
 {
     hn = (SfdHn *)((char *)hn + index * 0x44);
     return hn->trn[0].f0;
@@ -264,7 +264,7 @@ void FUN_002b03b8(SfdHn *hn, int index, int value)
     hn->trn[0].f4 = value;
 }
 
-int FUN_002b03d0(SfdHn *hn, int index)
+int sftrn_GetFlagB(SfdHn *hn, int index)
 {
     hn = (SfdHn *)((char *)hn + index * 0x44);
     return hn->trn[0].f4;

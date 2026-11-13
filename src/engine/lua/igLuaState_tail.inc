@@ -16,6 +16,19 @@ void ThreadLocal_Set(int slot, void *value) {
     ThreadLocal_SetForThread(g_threadManager->getCurrentThread(), slot, value);
 }
 
+/* Sets a thread's value of a slot, when the thread has taken it. */
+void ThreadLocal_SetForThread(void *thread, int slot, void *value) {
+    LuaSemaphoreLock lock(g_threadLocalSemaphore);
+
+    for (ThreadLocalIterator it(ThreadLocalTable_Key(thread, slot)); it.isValid(); it++) {
+        ThreadLocalEntry *entry = it.get();
+        if (entry->slot == slot && entry->thread == thread) {
+            entry->value = value;
+            return;
+        }
+    }
+}
+
 /* Takes the next slot, giving it `value` on the calling thread. */
 int ThreadLocal_NewSlot(void *value) {
     if (g_threadLocalSemaphore == 0) {
@@ -28,6 +41,31 @@ int ThreadLocal_NewSlot(void *value) {
     LuaSemaphoreLock lock(g_threadLocalSemaphore);
     new ThreadLocalEntry(g_threadManager->getCurrentThread(), g_threadLocalNextSlot++, value);
     return g_threadLocalNextSlot - 1;
+}
+
+/* Frees a slot: deletes every thread's entry for it, dropping one semaphore reference with each,
+ * and destroys the semaphore when only this call's own reference is left. */
+void ThreadLocal_FreeSlot(int slot) {
+    g_threadLocalSemaphore->_refCount = g_threadLocalSemaphore->_refCount + 1;
+    {
+        LuaSemaphoreLock lock(g_threadLocalSemaphore);
+        ThreadLocalWalker it;
+        while (it.isValid()) {
+            ThreadLocalEntry *entry = it.get();
+            it++;
+            if (entry->slot == slot) {
+                delete entry;
+                LuaSemaphore_ReleaseReference(g_threadLocalSemaphore);
+            }
+        }
+    }
+    if ((g_threadLocalSemaphore->_refCount & 0x7FFFFF) == 1) {
+        g_threadLocalSemaphore->destroy();
+        LuaSemaphore_ReleaseReference(g_threadLocalSemaphore);
+        g_threadLocalSemaphore = 0;
+    } else {
+        LuaSemaphore_ReleaseReference(g_threadLocalSemaphore);
+    }
 }
 
 /* Makes a state the one the bindings run in: per thread, or for every thread. */

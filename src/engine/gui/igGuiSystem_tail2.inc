@@ -70,8 +70,8 @@ int Gap__Gui__igGuiSystem__vfunc_24(A_457100 *arg0, float fparg0, float fparg1) 
     temp_v1->f18 = fparg1;
     s.a = 2;
     s.b = 0;
-    s.c = DAT_0058c3d8[0];
-    FUN_004578c0((S_4578c0 *)arg0->fc, (S_4578c0 *)&s);
+    s.c = g_igGuiSystemModelMousePositionField[0];
+    igModel_NotifyViews((S_4578c0 *)arg0->fc, (S_4578c0 *)&s);
     return arg0->fc->fb0 != 0;
 }
 
@@ -83,7 +83,7 @@ int Gap__Gui__igGuiSystem__vfunc_32(int *self, int x, int y) {
     p.a = 2;
     p.b = 0;
     p.c = DAT_0058c3d0[0];
-    FUN_004578c0((S_4578c0 *)((void *)self[3]), (S_4578c0 *)&p);
+    igModel_NotifyViews((S_4578c0 *)((void *)self[3]), (S_4578c0 *)&p);
     return 0;
 }
 
@@ -94,7 +94,7 @@ int Gap__Gui__igGuiSystem__vfunc_34(igGuiSystem *arg0) {
     buf[0] = 2;
     buf[1] = 0;
     buf[2] = DAT_0058c420[0];
-    FUN_004578c0((S_4578c0 *)arg0->_model, (S_4578c0 *)buf);
+    igModel_NotifyViews((S_4578c0 *)arg0->_model, (S_4578c0 *)buf);
     return 1;
 }
 
@@ -113,7 +113,7 @@ int Gap__Gui__igGuiSystem__vfunc_25(struct P_457220 *arg0, int arg1, char arg2) 
     sp[0] = 2;
     sp[1] = 0;
     sp[2] = DAT_0058c3e0[0];
-    FUN_004578c0((S_4578c0 *)arg0->o, (S_4578c0 *)&sp[0]);
+    igModel_NotifyViews((S_4578c0 *)arg0->o, (S_4578c0 *)&sp[0]);
     return arg0->o->fac != 0;
 }
 

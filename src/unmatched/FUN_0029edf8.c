@@ -1,7 +1,7 @@
 /* Under the guard, adds amount to the running total at +3368+356 and records the new total in the
  * 32-entry history slot for the incremented count. */
-void FUN_002a0e70();
-void FUN_002a0e88();
+void sfd_Lock();
+void sfd_Unlock();
 
 /* Running total with a 32-entry history of past totals. */
 struct Tally {
@@ -22,12 +22,12 @@ int FUN_0029edf8(struct Owner29edf8 *owner, int amount) {
     int total;
     int count;
 
-    FUN_002a0e70(guard);
+    sfd_Lock(guard);
     total = tally->total + amount;
     count = tally->count;
     count++; /* matching construct: manual — separate increment stops count + 1 + 31 folding into + 32 */
     tally->total = total;
     tally->history[count % 32] = total;
     tally->count = count;
-    FUN_002a0e88(guard);
+    sfd_Unlock(guard);
 }

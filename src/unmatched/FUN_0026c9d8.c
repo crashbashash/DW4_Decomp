@@ -1,11 +1,11 @@
-int FUN_002607e8();
+int ADXERR_CallErrFunc1();
 extern int DAT_004ee970[4];
 int FUN_0026c9d8(int arg0, int arg1) {
     unsigned int temp_v0;
     void **temp_v0_2;
 
     if ((arg0 == 0) || (arg1 < 0)) {
-        FUN_002607e8(&DAT_004ee970[0]);
+        ADXERR_CallErrFunc1(&DAT_004ee970[0]);
         return -1;
     }
     temp_v0_2 = (void **)(*(int *)((char *)(((arg1 * 4) + arg0)) + 24));

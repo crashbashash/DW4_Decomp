@@ -29,7 +29,7 @@ void sceSifInitRpc(unsigned int mode);
 int sceSifBindRpc(sceSifClientData *client, unsigned int rpc_number, int mode);
 int sceSifCallRpc(sceSifClientData *client, int rpc_number, int mode, void *send, int ssize, void *receive,
                  int rsize, void (*end_function)(void *), void *end_param);
-int FUN_0010d108(const char *format, ...);
+int scePrintf(const char *format, ...);
 
 int sceMtapGetModVersion(void);
 
@@ -97,8 +97,8 @@ int sceMtapInit(void)
     }
     version = sceMtapGetModVersion();
     if (version >> 8 != LIBMTAP_VERSION_MAJOR) {
-        FUN_0010d108("libmtap: Module version mismatch ");
-        FUN_0010d108("[libmtap.a = %d.%d, mtapman.irx = %d.%d]\n", LIBMTAP_VERSION_MAJOR,
+        scePrintf("libmtap: Module version mismatch ");
+        scePrintf("[libmtap.a = %d.%d, mtapman.irx = %d.%d]\n", LIBMTAP_VERSION_MAJOR,
                      LIBMTAP_VERSION_MINOR, version >> 8, version & 0xff);
         return 0;
     }

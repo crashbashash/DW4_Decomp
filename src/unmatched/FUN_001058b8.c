@@ -1,10 +1,10 @@
-int FUN_00105690();
-int FUN_00106a58();
-int FUN_00106b78();
+int _getMacroblockAddressIncrement();
+int _ipuShowBits();
+int _ipuFlushBits();
 int FUN_00106df8();
 int FUN_00106e78();
-int FUN_00109ad8();
-int FUN_00109b10();
+int _sceMpegErrorf();
+int _sceMpegMessage();
 extern int DAT_004d1ff8[4];
 extern int DAT_004d2020[4];
 int FUN_001058b8(void *arg0, int arg1, int *arg2, int *arg3, void *arg4) {
@@ -14,17 +14,17 @@ int FUN_001058b8(void *arg0, int arg1, int *arg2, int *arg3, void *arg4) {
 
     *(int *)((char *)(arg0) + 308) = 0;
     FUN_00106df8(arg0);
-    temp_v0 = FUN_00106a58(arg0, 0x20);
+    temp_v0 = _ipuShowBits(arg0, 0x20);
     if ((unsigned int) (temp_v0 - 0x101) >= 0xAFU) {
-        FUN_00109ad8(arg0, &DAT_004d1ff8[0], temp_v0);
+        _sceMpegErrorf(arg0, &DAT_004d1ff8[0], temp_v0);
         return 2;
     }
-    FUN_00106b78(arg0, 0x20);
+    _ipuFlushBits(arg0, 0x20);
     temp_s3 = FUN_00106e78(arg0);
-    temp_v0_2 = FUN_00105690(arg0);
+    temp_v0_2 = _getMacroblockAddressIncrement(arg0);
     *arg3 = temp_v0_2;
     if (*(int *)((char *)(arg0) + 308) != 0) {
-        FUN_00109b10(arg0, &DAT_004d2020[0], temp_v0_2);
+        _sceMpegMessage(arg0, &DAT_004d2020[0], temp_v0_2);
         return 1;
     }
     *arg2 = (((((temp_s3 << 7) + (temp_v0 & 0xFF)) - 1) * *(int *)((char *)(arg0) + 324)) + temp_v0_2) - 1;

@@ -51,6 +51,38 @@ void FUN_002295a0(void *arg0) {
     *(char *)((char *)(*(int *)((char *)(arg0) + 28)) + 32) = 0;
 }
 
+static inline Iterator *createFieldIterator() {
+    Tag tag = Tag();
+    return (Iterator *)FUN_00227780(0);
+}
+
+class igMetaTyped {
+public:
+    virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7();
+    virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15();
+    virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19();
+    virtual igMetaObject *getMetaObject();
+};
+
+/* Walk self's object-ref fields; each one typed as an igInterface that `other` can fill is bound via FUN_0022bc10. */
+extern "C" void igInterface_BindInterfaceFields(igMetaTyped *self, igMetaTyped *other) {
+    igSmartPointer<Iterator> it(createFieldIterator());
+    FUN_0022a9e0((S0 *)it.get(), (S1 *)self->getMetaObject());
+    for (;;) {
+        void *field = (void *)FUN_0022aa60((B *)it.p);
+        if (((field != 0) ^ 1) != 0) break;
+        FUN_0022aab0((S_4 *)it.p);
+        field = cast0_6(field);
+        if (field == 0) continue;
+        void *type = *(void **)((char *)field + 56);
+        if (type != 0 && FUN_002fe290(type, g_igInterface_metaObject[0]) != 0
+            && FUN_002fdef0(other->getMetaObject(), field) != 0) {
+            int result;
+            FUN_0022bc10(&result, (int)field, (int)self, (int)field, (int)other);
+        }
+    }
+}
+
 int FUN_00229700(int a0, int a1)
 {
     return a1;
@@ -195,14 +227,17 @@ int FUN_0022a030(int *p)
     return *(int *)((char *)p + 16);
 }
 
+extern "C" int FUN_0022a040(ItemRegistry *self, StringRef name, int kind);
+
+
 extern "C" igSmartPointer<InterfaceItem> Gap__igItemInterface__vfunc_27(int self, const StringRef &name, int kind) {
-    int key = FUN_0022a040(self, name, kind);
+    int key = FUN_0022a040((ItemRegistry *)self, name, kind);
     if (key == 0) {
         return igSmartPointer<InterfaceItem>((InterfaceItem *)0, kRetainReference);
     }
     igSmartPointer<InterfaceItem> item(FUN_002fd610(key));
     if (item.get() != 0) {
-        FUN_002295b0(self, item.get());
+        igInterface_BindInterfaceFields((igMetaTyped *)self, (igMetaTyped *)item.get());
     }
     return item;
 }
@@ -345,8 +380,8 @@ int FUN_0022ac00(void *arg0) {
     return *(int *)(*(int *)((char *)(temp_v0) + 16) + ((temp_v1 - 1) * 4));
 }
 
-int FUN_0022ac40(void) {
-    return FUN_0022ad00() != 0;
+int FUN_0022ac40(void *it) {
+    return FUN_0022ad00((GraphIterator *)it) != 0;
 }
 
 int FUN_0022ac60(void *arg0) {
@@ -356,15 +391,16 @@ int FUN_0022ac60(void *arg0) {
 int FUN_0022ac70(int arg0, int arg1) {
     int v;
 
-    v = FUN_0022ad00(arg0);
+    v = FUN_0022ad00((GraphIterator *)arg0);
     while (FUN_0022ac60((void *)arg0) != 0) {
         if (v != 0 && igObject_IsKindOf(v, arg1) != 0) {
             return v;
         }
-        v = FUN_0022ad00(arg0);
+        v = FUN_0022ad00((GraphIterator *)arg0);
     }
     return 0;
 }
+
 
 void FUN_0022b0a0(int arg0, int *arg1) {
     int sp60[16];
@@ -410,7 +446,7 @@ int Gap__igLockInterface__vfunc_27(int self, int mode) {
         if (lock.get() == 0) {
             continue;
         }
-        FUN_002295b0(self, lock.get());
+        igInterface_BindInterfaceFields((igMetaTyped *)self, (igMetaTyped *)lock.get());
         if (lock.get()->tryLock(mode) != 0) {
             return 1;
         }
@@ -449,8 +485,82 @@ void FUN_0022b470(int arg0, int arg1) {
     FUN_0022c7f0((A_2 *)arg0, *(int *)((char *)(arg0) + 32), (B_2 *)*(int *)((char *)(arg0) + 8), arg1);
 }
 
-void FUN_0022b610(void) {
-    FUN_0022b480();
+static inline Iterator *createGraphIterator() {
+    Tag tag = Tag();
+    return (Iterator *)FUN_00227460(0);
+}
+
+/* Reject a graph the optimizer cannot handle: an igSegment or an IS_DYNAMIC (flag 0x40) object.
+ * The walk never re-reads the current node after advancing, so only the root is tested. */
+extern "C" int igOptimizer_CheckGraph(B_2 *log, int root) {
+    igSmartPointer<Iterator> it(createGraphIterator());
+    FUN_0022aac0((T_4 *)it.get(), root);
+    int node = FUN_0022ac00(it.get());
+    for (; FUN_0022ac60(it.get()) != 0; FUN_0022ac40(it.get())) {
+        if (igObject_IsKindOf(node, igSegment_GetMetaObject()) != 0) {
+            log->put(DAT_004e7ec0);
+            return 0;
+        }
+        if (*(int *)((char *)node + 20) & 0x40) {
+            log->put(DAT_004e7ef0);
+            return 0;
+        }
+    }
+    return 1;
+}
+
+void FUN_0022b610(B_2 *log, int root) {
+    igOptimizer_CheckGraph(log, root);
+}
+
+class NamedObject : public igMetaTyped {
+public:
+    unsigned int _refCount;
+    char *_name;
+};
+typedef igTDataList<NamedObject *> NamedObjectList;
+struct OptObjectSource { char pad[16]; NamedObjectList *objects; };
+struct OptContext { char pad[40]; OptObjectSource *source; NamedObjectList *skipped; };
+class OptPass {
+public:
+    virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7();
+    virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15();
+    virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20();
+    virtual void log(const char *format, ...);
+    virtual void d22(); virtual void d23(); virtual void d24();
+    virtual bool applyTo(NamedObject *object);
+    virtual void d26();
+    virtual bool accepts(NamedObject *object);
+    unsigned int _refCount;
+    OptContext *_context;
+};
+
+static inline Rc *createObjectList(Tag) {
+    return (Rc *)FUN_002c3400(0);
+}
+
+/* Run the pass over a snapshot of the context's objects, skipping the excluded ones;
+ * logs `<type> named "<name>":` before each and returns whether every application succeeded. */
+extern "C" bool igOptPass_ApplyToObjects(OptPass *self) {
+    OptContext *context = self->_context;
+    OptObjectSource *source = context->source;
+    igSmartPointer<Rc> objects(createObjectList(Tag()));
+    for (int i = 0, n = source->objects->count(); i < n; i++) {
+        ObjectList_AppendRetained(objects.p, source->objects->_data[i]);
+    }
+    bool ok = true;
+    int count = ((NamedObjectList *)objects.p)->count();
+    for (int j = 0; j < count; j++) {
+        NamedObjectList *skipped = context->skipped;
+        NamedObject *object = ((NamedObjectList *)objects.p)->_data[j];
+        if (skipped->find(object) < 0 && self->accepts(object)) {
+            char *name = object->_name ? object->_name : emptyString;
+            self->log(DAT_004e7f30, ((igMetaObject *)object->getMetaObject())->_name, name);
+            bool applied = self->applyTo(object);
+            ok = ok && applied;
+        }
+    }
+    return ok;
 }
 
 bool FUN_0022b820(int arg0, int arg1) {

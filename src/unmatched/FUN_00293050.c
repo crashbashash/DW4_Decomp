@@ -2,7 +2,7 @@ int FUN_002977d8(int a, int b);
 int FUN_00293508(void *obj, int size);
 int FUN_00298260(void *sub);
 void FUN_002936a8(void *obj);
-void FUN_0029a320(const char *message);
+void mwsfd_Error(const char *message);
 
 extern char DAT_004f2fb0[];
 extern char DAT_004f2fd8[];
@@ -14,7 +14,7 @@ int FUN_00293050(char *obj) {
     int stream;
 
     if (buf == 0) {
-        FUN_0029a320(DAT_004f2fb0);
+        mwsfd_Error(DAT_004f2fb0);
         FUN_002936a8(obj);
         return -1;
     }
@@ -23,7 +23,7 @@ int FUN_00293050(char *obj) {
     if (FUN_00298260(sub) == 1) {
         stream = FUN_00293508(obj, 0x20000);
         if (stream == 0) {
-            FUN_0029a320(DAT_004f2fd8);
+            mwsfd_Error(DAT_004f2fd8);
             FUN_002936a8(obj);
             return -1;
         }

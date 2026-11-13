@@ -10,15 +10,15 @@ typedef struct {
     int f160;
 } AdxtPause;
 
-extern int DAT_004a8e4c;
-extern int DAT_004a8e98;
-extern int DAT_0049c8f0;
+extern int adxt_time_mode;
+extern int adxt_time_unit;
+extern int adxt_vsync_cnt;
 extern char DAT_004eeb98[];
-void FUN_002607e8(const char *message);
-void FUN_0025f2d0(void);
-void FUN_0025f2e8(void);
-void FUN_00265cd0(int adx, int sw);
-void FUN_0026bf90(AdxtPause *adxt, int *ncount, int *tscale);
+void ADXERR_CallErrFunc1(const char *message);
+void ADXCRS_Lock(void);
+void ADXCRS_Unlock(void);
+void ADXRNA_SetPlaySw(int adx, int sw);
+void ADXT_GetTime(AdxtPause *adxt, int *ncount, int *tscale);
 
 void ADXT_Pause(AdxtPause *adxt, int sw)
 {
@@ -28,27 +28,27 @@ void ADXT_Pause(AdxtPause *adxt, int sw)
     int tscale;
 
     if (adxt == 0) {
-        FUN_002607e8(DAT_004eeb98);
+        ADXERR_CallErrFunc1(DAT_004eeb98);
         return;
     }
     stat = adxt->stat;
     if (sw == adxt->pause) {
         return;
     }
-    FUN_0025f2d0();
+    ADXCRS_Lock();
     adxt->pause = sw;
     if (stat == 3 || stat == 4) {
         if (sw == 1) {
-            FUN_00265cd0(adxt->adx, 0);
+            ADXRNA_SetPlaySw(adxt->adx, 0);
         } else {
-            FUN_00265cd0(adxt->adx, 1);
-            adxt->f160 = DAT_0049c8f0;
+            ADXRNA_SetPlaySw(adxt->adx, 1);
+            adxt->f160 = adxt_vsync_cnt;
         }
-        saved = DAT_004a8e4c;
-        DAT_004a8e4c = 0;
-        FUN_0026bf90(adxt, &ncount, &tscale);
-        DAT_004a8e4c = saved;
-        adxt->f156 = (float)ncount / (float)tscale * (float)DAT_004a8e98;
+        saved = adxt_time_mode;
+        adxt_time_mode = 0;
+        ADXT_GetTime(adxt, &ncount, &tscale);
+        adxt_time_mode = saved;
+        adxt->f156 = (float)ncount / (float)tscale * (float)adxt_time_unit;
     }
-    FUN_0025f2e8();
+    ADXCRS_Unlock();
 }

@@ -1,9 +1,9 @@
-int FUN_00113f20(void);
-int FUN_00113f78(void);
+int DIntr(void);
+int EIntr(void);
 void setD3_CHCR(unsigned int v) {
-    int s = FUN_00113f20();
+    int s = DIntr();
     *(volatile unsigned int *)0x1000f590 = *(volatile unsigned int *)0x1000f520 | 0x10000;
     *(volatile unsigned int *)0x1000b000 = v;
     *(volatile unsigned int *)0x1000f590 = *(volatile unsigned int *)0x1000f520 & ~0x10000;
-    if (s) FUN_00113f78();
+    if (s) EIntr();
 }

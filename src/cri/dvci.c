@@ -68,7 +68,7 @@ int strcmp(const char *a, const char *b);
 int strcasecmp(const char *a, const char *b);
 unsigned long strtoul(const char *s, char **end, int base);
 void FUN_00265928(const char *format, ...);
-void FUN_002659a0(const char *format, ...);
+void ADXMSG_PrintErr(const char *format, ...);
 void FUN_0010b918(void *start, void *end);
 int sceCdSync(int mode);
 int sceCdRead(unsigned int lsn, unsigned int sectors, void *buf, CdReadMode *mode);
@@ -226,7 +226,7 @@ int FUN_00273ce8(const char *fname)
         sceCdSync(0);
         FUN_002725a0(0x8201);
         if (FUN_002739e8(&fp, DAT_004ab300) == 0) {
-            FUN_002659a0("DVCI: sceCdSearchFile failed. \"%s\"\n", DAT_004ab300);
+            ADXMSG_PrintErr("DVCI: sceCdSearchFile failed. \"%s\"\n", DAT_004ab300);
             FUN_002739b8(0, "E0092902:can't find file.(dvCiGetFileSize)");
             return 0;
         }
@@ -270,7 +270,7 @@ DvCiFile *FUN_00273e00(const char *fname, void *atr, int rw)
     ret = FUN_00274e30(fname, &h->fp);
     if (h->fp.size == 0) {
         FUN_002745c0(fname, DAT_004ab300);
-        FUN_002659a0("DVCI: File cache was not hit. \"%s\"\n", DAT_004ab300);
+        ADXMSG_PrintErr("DVCI: File cache was not hit. \"%s\"\n", DAT_004ab300);
         FUN_002725a0(0x8300);
         sceCdSync(0);
         FUN_002725a0(0x8301);
@@ -420,7 +420,7 @@ void FUN_00274248(DvCiFile *h)
             break;
         }
         if (++i > 0x9ffff) {
-            FUN_002659a0("DVCI: dvCiStopTr timeout. (10sec)\r\n");
+            ADXMSG_PrintErr("DVCI: dvCiStopTr timeout. (10sec)\r\n");
             break;
         }
     }
@@ -487,7 +487,7 @@ int FUN_00274410(const char *fname)
         sceCdSync(0);
         FUN_002725a0(0x8401);
         if (FUN_002739e8(&fp, DAT_004ab300) == 0) {
-            FUN_002659a0("DVCI: sceCdSearchFile failed. \"%s\"\n", DAT_004ab300);
+            ADXMSG_PrintErr("DVCI: sceCdSearchFile failed. \"%s\"\n", DAT_004ab300);
             return 0;
         }
     }
@@ -715,7 +715,7 @@ int FUN_00274ab0(DvCiFileLoc *files, int n)
     }
     FUN_00265928("DVCI: Total %d files.\n", found);
     if (missing > 0)
-        FUN_002659a0("DVCI: Warning, Can't load all cache file.%c", 10);
+        ADXMSG_PrintErr("DVCI: Warning, Can't load all cache file.%c", 10);
     return found;
 }
 
@@ -770,7 +770,7 @@ int FUN_00274e30(const char *name, sceCdlFILE *fp)
     if (strcmp("DVD-ROM", name) == 0) {
         fp->size = -1;
         fp->lsn = 0;
-        FUN_002659a0("DVCI: CD/DVD-ROM Image opened%c\n", '.');
+        ADXMSG_PrintErr("DVCI: CD/DVD-ROM Image opened%c\n", '.');
         return 1;
     }
     if (FUN_00274d30(name) == 1) {

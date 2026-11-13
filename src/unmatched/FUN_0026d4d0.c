@@ -11,7 +11,7 @@ typedef struct {
 } CriPlayer;
 
 extern int DAT_0049c8e8;
-extern CriPlayer DAT_0049c8f8[16];
+extern CriPlayer adxt_obj[16];
 
 void FUN_0026d4d0(int time)
 {
@@ -20,7 +20,7 @@ void FUN_0026d4d0(int time)
     int ch;
 
     DAT_0049c8e8 = time;
-    p = DAT_0049c8f8;
+    p = adxt_obj;
     for (i = 15; i >= 0; i--, p++) {
         if (p->state == 1) {
             for (ch = 0; ch < p->numChannels; ch++) {

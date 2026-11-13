@@ -8,7 +8,7 @@ typedef struct Adxt {
 } Adxt;
 
 extern int FUN_0026bd20(Adxt *adxt);
-extern int FUN_0026a138(int obj);
+extern int ADXSTM_GetStat(int obj);
 extern void FUN_00266268(int stm);
 
 void FUN_0026ec78(Adxt *adxt)
@@ -20,7 +20,7 @@ void FUN_0026ec78(Adxt *adxt)
     switch (adxt->kind) {
     case 0:
     case 1:
-        if (FUN_0026a138(adxt->obj) == 3)
+        if (ADXSTM_GetStat(adxt->obj) == 3)
             FUN_00266268(adxt->stm);
         break;
     case 2:

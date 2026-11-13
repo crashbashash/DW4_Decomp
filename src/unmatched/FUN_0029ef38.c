@@ -12,8 +12,8 @@ typedef struct PtsPopObj {
     PtsPopSub sub;
 } PtsPopObj;
 
-void FUN_002a0e70(void *lock);
-void FUN_002a0e88(void *lock);
+void sfd_Lock(void *lock);
+void sfd_Unlock(void *lock);
 
 int FUN_0029ef38(PtsPopObj *obj, int *item, int *last)
 {
@@ -21,7 +21,7 @@ int FUN_0029ef38(PtsPopObj *obj, int *item, int *last)
     char lock[16];
     int ok;
 
-    FUN_002a0e70(lock);
+    sfd_Lock(lock);
     if (sub->wr - sub->rd <= 0) {
         *item = -1;
         ok = 0;
@@ -31,6 +31,6 @@ int FUN_0029ef38(PtsPopObj *obj, int *item, int *last)
         *item = sub->items[sub->rd % 32];
         sub->rd++;
     }
-    FUN_002a0e88(lock);
+    sfd_Unlock(lock);
     return ok;
 }

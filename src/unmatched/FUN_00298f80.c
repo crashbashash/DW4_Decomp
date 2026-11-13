@@ -11,7 +11,7 @@ struct SjObj {
 };
 
 extern int FUN_002968c0(void *ply);
-extern void FUN_0029a320(const char *msg);
+extern void mwsfd_Error(const char *msg);
 extern void FUN_002995e0(void *ply, int arg);
 extern void FUN_00295788(void *ply, int sj);
 extern void FUN_00295ab8(void *ply);
@@ -31,7 +31,7 @@ void FUN_00298f80(Ply298f80 *ply) {
     SjObj *sj;
 
     if (FUN_002968c0(ply) == 0) {
-        FUN_0029a320(DAT_004f4688);
+        mwsfd_Error(DAT_004f4688);
         return;
     }
     FUN_002995e0(ply, 1);

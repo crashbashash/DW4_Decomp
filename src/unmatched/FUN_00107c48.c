@@ -1,5 +1,5 @@
-int FUN_00113f20(void);
-int FUN_00113f78(void);
+int DIntr(void);
+int EIntr(void);
 void FUN_00107c48(char *d, int *pic) {
     int fields;
     unsigned int src = pic[0] & 0x0FFFFFFF;
@@ -26,22 +26,22 @@ void FUN_00107c48(char *d, int *pic) {
     for (f = 0; f < fields; f++) {
         out = dst;
         for (i = 0; i < pic[3]; i++) {
-            intr = FUN_00113f20();
+            intr = DIntr();
             *(volatile unsigned int *)0x1000D480 = 0;
             *(volatile unsigned int *)0x1000D410 = src;
             *(volatile unsigned int *)0x1000D420 = qwc;
             *(volatile unsigned int *)0x1000D400 = 0x101;
             if (intr) {
-                FUN_00113f78();
+                EIntr();
             }
             while (*(volatile unsigned int *)0x1000D400 & 0x100);
-            intr = FUN_00113f20();
+            intr = DIntr();
             *(volatile unsigned int *)0x1000D080 = 0;
             *(volatile unsigned int *)0x1000D010 = out;
             *(volatile unsigned int *)0x1000D020 = qwc;
             *(volatile unsigned int *)0x1000D000 = 0x100;
             if (intr) {
-                FUN_00113f78();
+                EIntr();
             }
             while (*(volatile unsigned int *)0x1000D000 & 0x100);
             while (*(volatile unsigned int *)0x1000D020);

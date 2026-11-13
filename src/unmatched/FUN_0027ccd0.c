@@ -1,7 +1,7 @@
 /* Returns the total size queued on one of the four lanes of a handle (sum of +12 over the lane's
  * linked list at +24 + 4 * lane); an out-of-range lane is reported through the handle's error
  * callback (+40, context +44, code -3) and returns 0. Null and unused handles are reported through
- * FUN_0027b2e0. */
+ * SJERR_CallErr. */
 struct Node27c {
     struct Node27c *next;   /* +0 */
     int f4;
@@ -18,7 +18,7 @@ struct Handle27c {
     int error_context;                        /* +44 */
 };
 
-extern void FUN_0027b2e0(const char *message);
+extern void SJERR_CallErr(const char *message);
 extern const char E2004090269_NULL_pointer_is_specified[];
 extern const char E2004090270_Specified_handle_is_invalid[];
 
@@ -27,11 +27,11 @@ int FUN_0027ccd0(struct Handle27c *handle, unsigned int lane) {
     int total;
 
     if (handle == 0) {
-        FUN_0027b2e0(E2004090269_NULL_pointer_is_specified);
+        SJERR_CallErr(E2004090269_NULL_pointer_is_specified);
         return 0;
     }
     if (handle->used == 0) {
-        FUN_0027b2e0(E2004090270_Specified_handle_is_invalid);
+        SJERR_CallErr(E2004090270_Specified_handle_is_invalid);
         return 0;
     }
     if (lane >= 4) {

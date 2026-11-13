@@ -51,8 +51,7 @@ extern "C" float DAT_004e105c[4];
 extern "C" float DAT_004e1060[4];
 extern "C" int PLAYER_9[4];
 extern "C" int SETEFFECT_4[4];
-struct A0 { char pad[20]; int f20; };
-extern "C" void FUN_004412c0(struct A0 *arg0, int arg1, int arg2);
+extern "C" void beNDMWMdlItem_PlayPickupEffect(beNDMWMdlItem *self, int recNo, int playerNo);
 extern "C" int KIND_ITEM[4];
 extern "C" char DROPITEM_2[];
 extern "C" void Gap__Bec__beNDMWMdlItem__vfunc_37(beNDMWMdlItem *p0, int a1);
@@ -140,23 +139,58 @@ struct ReleaseRefInline { static inline void go(igObject *object) {
 /* matching construct: dummy-virtual class supplies the retail vtable slot offsets for the virtual calls */
 class MdlItemVirtual { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void d32(); virtual void d33(); virtual void d34(); virtual void d35(); virtual void d36(); virtual void d37(); virtual void d38(); virtual void d39(); virtual void d40(); virtual void d41(); virtual void d42();  virtual void vX(beNDMWGameRamInfoRam *); char p[16]; };
 extern "C" void Gap__Bec__beNDMWMdlItem__vfunc_45(MdlItemVirtual *arg0, beNDMWGameRamInfoRam *arg1);
+extern "C" void beNDMWMdlItem_Update(beNDMWMdlItem *self, beBaseInfoRam *ram);
+extern "C" int beTargetObj_SelectTarget(void *, void *, void *);
+extern "C" float beTargetObj_GetTargetDistanceSq(void);
+extern "C" int beTargetObj_GetTargetRamNo(void);
+extern "C" void *StringPool_Allocate(int);
+extern "C" void *StringPool_Construct(void *);
+extern "C" char *StringPool_Intern(void *, const void *);
+extern "C" void StringChunk_ReleaseHeader(int, int *);
+extern "C" void FloatingNumber_Spawn(int value, int style);
+extern "C" char *beNDMWItemBase_GetRecordString(int item, beNDMWMdlItem *ctrl, void *field);
+extern "C" void beNDMWItemBase_GetRevisionColor(float *color, int item);
+extern "C" int beBaseInfoRam_IsTimerExpired(beBaseInfoRam *, void *);
+extern "C" void beBaseInfoRam_RemoveTimer(beBaseInfoRam *, void *);
+extern "C" void beBaseInfoRam_StartTimer(beBaseInfoRam *, void *, int);
+extern "C" void Matrix44_GetTranslation(void *matrix, float *out);
+extern "C" void Matrix44_Copy(float *matrix, void *source);
+extern "C" void igMatrix44f_SetIdentity(float *matrix);
+extern "C" void Vec3f_TransformProjective(float *out, float *v, float *m);
+extern "C" int beMessenger_GetMatrixCount(int);
+extern "C" void beMessenger_GetMatrix(float *out, int messenger, int index);
+extern "C" void *g_stringPool[4];
+extern "C" beBaseInfoRam *g_mdlEntity[4];
+extern "C" void *g_mdlMatrix[4];
+/* "font00".."font03": the item-name font of each player */
+extern "C" char *g_itemNameFontNames[4];
+extern "C" char NEAR_4[];
+extern "C" char CENTER_6[];
+extern "C" char ALIGN_6[];
+extern "C" char NAME_8[];
+extern "C" char TEXTSET_8[];
+extern "C" char COLOR_6[];
+extern "C" char SET_6[];
+extern "C" char GETMATRIX_10[];
+extern "C" char SETPOSITION[];
 
-void FUN_004412c0(struct A0 *arg0, int arg1, int arg2) {
+/* Plays the pickup effect of instant item recNo (1..25) on player playerNo. */
+void beNDMWMdlItem_PlayPickupEffect(beNDMWMdlItem *self, int recNo, int playerNo) {
     float sp30[4];
     int temp_s1;
 
-    beMessenger_PrepareDelayedSelection(arg0->f20, &PLAYER_9[0], 0, arg2);
-    temp_s1 = (arg1 - 1) * 8;
-    beMessenger_AppendString(arg0->f20, *(int *)((char *)DAT_004cfb40 + temp_s1));
-    beMessenger_AppendString(arg0->f20, *(int *)((char *)DAT_004cfb44 + temp_s1));
-    beMessenger_AppendFloat(arg0->f20, 1.0f);
+    beMessenger_PrepareDelayedSelection(self->_messenger, &PLAYER_9[0], 0, playerNo);
+    temp_s1 = (recNo - 1) * 8;
+    beMessenger_AppendString(self->_messenger, *(int *)((char *)DAT_004cfb40 + temp_s1));
+    beMessenger_AppendString(self->_messenger, *(int *)((char *)DAT_004cfb44 + temp_s1));
+    beMessenger_AppendFloat(self->_messenger, 1.0f);
     sp30[0] = g_vec3Zero[0];
     sp30[1] = DAT_004e105c[0];
     sp30[2] = DAT_004e1060[0];
-    beMessenger_AppendVec3(arg0->f20, sp30);
-    beMessenger_AppendBool(arg0->f20, 0);
-    beMessenger_AppendBool(arg0->f20, 1);
-    beMessenger_EnqueueSelected(arg0->f20, &SETEFFECT_4[0], 1);
+    beMessenger_AppendVec3(self->_messenger, sp30);
+    beMessenger_AppendBool(self->_messenger, 0);
+    beMessenger_AppendBool(self->_messenger, 1);
+    beMessenger_EnqueueSelected(self->_messenger, &SETEFFECT_4[0], 1);
 }
 
 int Gap__Bec__beNDMWMdlItem__vfunc_35(int dummy0, int arg1) {
@@ -315,6 +349,232 @@ void Gap__Bec__beNDMWMdlItem__vfunc_36(beNDMWMdlItem *self, beBaseInfoRam *info)
     }
     }
     beModelCtrl__OnGenerate(self, info);
+}
+
+/* matching construct: dummy-virtual views supply the retail vtable slot offsets: the item's use
+ * (+96) and the visual context's viewport query (+744). */
+class ItemSlots { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual int use(beNDMWMdlItem *ctrl, int ramNo); };
+#define VC_SLOTS10(p) virtual void p##0(); virtual void p##1(); virtual void p##2(); virtual void p##3(); virtual void p##4(); virtual void p##5(); virtual void p##6(); virtual void p##7(); virtual void p##8(); virtual void p##9();
+class VisualContextSlots { public: VC_SLOTS10(a) VC_SLOTS10(b) VC_SLOTS10(c) VC_SLOTS10(d) VC_SLOTS10(e) VC_SLOTS10(f) VC_SLOTS10(g) VC_SLOTS10(h) VC_SLOTS10(i) VC_SLOTS10(j) VC_SLOTS10(k) VC_SLOTS10(l) VC_SLOTS10(m) VC_SLOTS10(n) VC_SLOTS10(o) VC_SLOTS10(p) VC_SLOTS10(q) VC_SLOTS10(r) virtual void s0(); virtual void s1(); virtual void s2(); virtual void s3();
+    virtual void getViewport(int *x, int *y, int *w, int *h); };
+
+/* Squared distance between two points. */
+static inline float DistanceSq(const float *a, const float *b) {
+    return (a[0] - b[0]) * (a[0] - b[0]) + (a[1] - b[1]) * (a[1] - b[1]) + (a[2] - b[2]) * (a[2] - b[2]);
+}
+
+/* Per frame: find the nearest player. A plain item (money, recovery) is used up by the first
+ * player who comes near; a named item shows its name over itself in that player's font, locks
+ * itself to the player, blinks the name colour and keeps the label on the item's screen position
+ * until the player walks away (then the item is released through slot 45). */
+void beNDMWMdlItem_Update(beNDMWMdlItem *self, beBaseInfoRam *ram) {
+    beModelCtrlInfoRamData *ramData;
+    beNDMWMdlItemInfoWork *work;
+    igObjectList *locks;
+    int i;
+    bool isNear;
+    int ramNo;
+    int x, y, w, h;
+    float color[3];
+    float itemPos[3];
+    float playerPos[3];
+    float pos[3];
+    float eye[3];
+    float rgb[3];
+    float label[3];
+    float view[16];
+    float projection[16];
+    float playerMatrix[16];
+    float distSq;
+    if (ram->_dataList == 0) {
+        int alloc = ((int)igObject_GetAllocator(ram));
+        int a;
+        if (g_useOwnerAllocator != 0) {
+            a = alloc;
+        } else {
+            a = ((int)Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]));
+        }
+        ObjectRef created(beBaseInfoDataList_Create(a));
+        igObject *s0 = created.p;
+        if (s0 != 0) {
+            s0->_refCount++;
+        }
+        RefRelease::go((igObject *)ram->_dataList);
+        ram->_dataList = (int)s0;
+    }
+    ramData = (beModelCtrlInfoRamData *)igProperty_FindByName(ram->_dataList, g_propertyNameField[0], ONE_14);
+    work = (beNDMWMdlItemInfoWork *)ramData->_work;
+    if (((igObjectList *)self->_lockRamList)->_count == 0) {
+        for (i = 0; i < 4; i++) {
+            ObjectList_AppendRetained(self->_lockRamList, 0);
+        }
+    }
+    isNear = 0;
+    ramNo = 0;
+    if (beTargetObj_SelectTarget((char *)ramData->_node + 32, PLAYER_9, NEAR_4) != 0) {
+        float distSq = beTargetObj_GetTargetDistanceSq();
+        ramNo = beTargetObj_GetTargetRamNo();
+        isNear = distSq < 64.0f;
+    }
+    if (work->_isNamed == 0) {
+        if (isNear) {
+            ((ItemSlots *)work->_itemObject)->use(self, ramNo);
+            {
+                char *token;
+                int *old;
+                if (g_stringPool[0] == 0) {
+                    void *pool = StringPool_Allocate(0x10);
+                    if (pool != 0) pool = StringPool_Construct(pool);
+                    g_stringPool[0] = pool;
+                }
+                token = StringPool_Intern(g_stringPool[0], SQ_DDMG);
+                old = (int *)work->_keyEventName;
+                if (old != 0) {
+                    int *header = old - 2;
+                    int refs = old[-1] - 1;
+                    old[-1] = refs;
+                    if (refs == 0) StringChunk_ReleaseHeader(*header, header);
+                }
+                work->_keyEventName = (int)token;
+            }
+            switch (((beNDMWItemInstant *)work->_itemObject)->_recNo) {
+            case 0:
+                g_mdlEntity[0] = ram;
+                g_mdlMatrix[0] = (char *)ramData->_node + 32;
+                FloatingNumber_Spawn(((beNDMWItemInstant *)work->_itemObject)->_value, 4);
+                break;
+            case 1: case 2: case 3: case 4: case 5: case 6: case 7: case 8: case 9: case 10:
+            case 11: case 12: case 13: case 14: case 15: case 16: case 17: case 18: case 19: case 20:
+            case 21: case 22: case 23: case 24: case 25:
+                beNDMWMdlItem_PlayPickupEffect(self, ((beNDMWItemInstant *)work->_itemObject)->_recNo, ramNo);
+                break;
+            }
+        }
+    } else switch (ram->_st0) {
+    case 0:
+        if (isNear == 0) break;
+        if (((igObject **)((igObjectList *)self->_lockRamList)->_data)[ramNo] == 0) {
+            char *font = g_itemNameFontNames[ramNo];
+            char *name;
+            beMessenger_SelectGroup(self->_messenger, TEXTCTL_10);
+            beMessenger_AppendString(self->_messenger, ITNAMEFONT);
+            beMessenger_AppendString(self->_messenger, font);
+            beMessenger_AppendString(self->_messenger, CENTER_6);
+            beMessenger_DispatchSelected(self->_messenger, ALIGN_6);
+            name = beNDMWItemBase_GetRecordString(work->_itemObject, self, NAME_8);
+            beMessenger_SelectGroup(self->_messenger, TEXTCTL_10);
+            beMessenger_AppendString(self->_messenger, ITNAMEFONT);
+            beMessenger_AppendString(self->_messenger, font);
+            beMessenger_AppendString(self->_messenger, name);
+            beMessenger_DispatchSelected(self->_messenger, TEXTSET_8);
+            work->_isColorLight = 0;
+            beBaseInfoRam_RemoveTimer(ram, COLOR_6);
+            beMessenger_SelectGroup(self->_messenger, TEXTCTL_10);
+            beMessenger_AppendString(self->_messenger, ITNAMEFONT);
+            beMessenger_AppendString(self->_messenger, font);
+            beMessenger_AppendString(self->_messenger, SET_6);
+            beMessenger_DispatchSelected(self->_messenger, SWITCH_10);
+            work->_isDispName = 1;
+            {
+                char *token;
+                int *old;
+                if (g_stringPool[0] == 0) {
+                    void *pool = StringPool_Allocate(0x10);
+                    if (pool != 0) pool = StringPool_Construct(pool);
+                    g_stringPool[0] = pool;
+                }
+                token = StringPool_Intern(g_stringPool[0], font);
+                old = (int *)work->_fontType;
+                if (old != 0) {
+                    int *header = old - 2;
+                    int refs = old[-1] - 1;
+                    old[-1] = refs;
+                    if (refs == 0) StringChunk_ReleaseHeader(*header, header);
+                }
+                work->_fontType = (int)token;
+            }
+            work->_dispPlayerRamNo = ramNo;
+            locks = (igObjectList *)self->_lockRamList;
+            if (ram != 0) ram->_refCount++;
+            RefRelease::go(((igObject **)locks->_data)[ramNo]);
+            {
+                int count = locks->_count;
+                if (count != 0 && ramNo >= 0 && ramNo < count) ((igObject **)locks->_data)[ramNo] = ram;
+            }
+            ram->_st0++;
+            ram->_st3 = 0;
+            ram->_st2 = 0;
+            ram->_st1 = 0;
+        }
+        if (ram->_st0 == 0) break;
+    case 1:
+        if (beBaseInfoRam_IsTimerExpired(ram, COLOR_6) != 0) {
+            beNDMWItemBase_GetRevisionColor(color, work->_itemObject);
+            if (work->_isColorLight != 0) {
+                work->_isColorLight = 0;
+                color[0] /= 3.0f;
+                color[1] /= 3.0f;
+                color[2] /= 3.0f;
+            } else {
+                work->_isColorLight = 1;
+            }
+            beMessenger_SelectGroup(self->_messenger, TEXTCTL_10);
+            beMessenger_AppendString(self->_messenger, ITNAMEFONT);
+            beMessenger_AppendString(self->_messenger, work->_fontType);
+            rgb[0] = color[0];
+            rgb[1] = color[1];
+            rgb[2] = color[2];
+            beMessenger_AppendVec3(self->_messenger, rgb);
+            beMessenger_DispatchSelected(self->_messenger, COLOR_6);
+            beBaseInfoRam_StartTimer(ram, COLOR_6, 500000000);
+        }
+        Matrix44_GetTranslation((char *)ramData->_node + 32, itemPos);
+        beMessenger_SendNamed(self->_messenger, PLAYER_9, 0, work->_dispPlayerRamNo, GETMATRIX_10);
+        if (beMessenger_GetMatrixCount(self->_messenger) != 0) {
+            beMessenger_GetMatrix(playerMatrix, self->_messenger, 0);
+            Matrix44_GetTranslation(playerMatrix, playerPos);
+            distSq = DistanceSq(itemPos, playerPos);
+        } else {
+            distSq = 100.0f;
+        }
+        if (distSq < 64.0f) {
+            float screenX, screenY;
+            igViewerParameters *params;
+            igMatrix44f_SetIdentity(view);
+            igMatrix44f_SetIdentity(projection);
+            params = (igViewerParameters *)((igViewerSceneInfoManager *)self->_viewerSIManager)->_parameters;
+            Matrix44_Copy(view, params->_viewMatrix);
+            params = (igViewerParameters *)((igViewerSceneInfoManager *)self->_viewerSIManager)->_parameters;
+            Matrix44_Copy(projection, params->_projectionMatrix);
+            Matrix44_GetTranslation((char *)ramData->_node + 32, pos);
+            pos[1] += 10.0f;
+            Vec3f_TransformProjective(eye, pos, view);
+            Vec3f_TransformProjective(pos, eye, projection);
+            ((VisualContextSlots *)((igInsightCore *)self->_insight)->_visualContext)->getViewport(&x, &y, &w, &h);
+            screenX = x + ((1.0f + pos[0]) * w) / 2.0f;
+            screenY = h - (y + ((1.0f + pos[1]) * h) / 2.0f);
+            screenX -= w / 2;
+            screenY = (h - screenY) - h / 2;
+            screenX /= 100.0f;
+            screenY /= 100.0f;
+            screenX -= 0.7f;
+            beMessenger_SelectGroup(self->_messenger, TEXTCTL_10);
+            beMessenger_AppendString(self->_messenger, ITNAMEFONT);
+            beMessenger_AppendString(self->_messenger, work->_fontType);
+            label[0] = screenX;
+            label[1] = screenY;
+            label[2] = -5.0f;
+            beMessenger_AppendVec3(self->_messenger, label);
+            beMessenger_DispatchSelected(self->_messenger, SETPOSITION);
+        } else {
+            ((MdlItemVt *)self)->exit(ram);
+            ram->_st0 = 0;
+            ram->_st3 = 0;
+            ram->_st2 = 0;
+            ram->_st1 = 0;
+        }
+        break;
+    }
 }
 
 void Gap__Bec__beNDMWMdlItem__vfunc_43(beNDMWMdlItem *arg0, beBaseInfoRam *arg1) {

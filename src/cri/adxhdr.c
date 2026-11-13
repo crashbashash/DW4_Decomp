@@ -52,7 +52,7 @@ extern char DAT_004edfd0[];
 extern char DAT_004ee008[];
 extern char DAT_004ee048[];
 
-void FUN_002607e8(const char *message);
+void ADXERR_CallErrFunc1(const char *message);
 void *memset(void *dst, int value, unsigned int size);
 
 void FUN_00262a30(unsigned char *bytes, short value) {
@@ -253,18 +253,18 @@ void FUN_00263060(void *buf, int size, AdxtHdrInfo *out)
     int work[4];
     int ret;
     if (buf == 0 || out == 0) {
-        FUN_002607e8(DAT_004edfd0);
+        ADXERR_CallErrFunc1(DAT_004edfd0);
         return;
     }
     memset(&info, 0, sizeof(info));
     memset(&hdr, 0, sizeof(hdr));
     ret = FUN_00262d30(buf, size, work, &hdr);
     if (ret == -4) {
-        FUN_002607e8(DAT_004ee008);
+        ADXERR_CallErrFunc1(DAT_004ee008);
         return;
     }
     if (ret < 0) {
-        FUN_002607e8(DAT_004ee048);
+        ADXERR_CallErrFunc1(DAT_004ee048);
         return;
     }
     if (hdr.version == 6) {

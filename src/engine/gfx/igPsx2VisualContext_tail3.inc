@@ -10,7 +10,7 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_65(VisualContextView *arg0, void *colo
         DAT_005608a0[0] += 1;
     }
     arg0->f3bc = lo | hi;
-    FUN_001f7250(arg0->f3bc);
+    p2SetColour(arg0->f3bc);
 }
 
 void Gap__Gfx__igPsx2VisualContext__vfunc_66(VisualContextView *arg0, unsigned int arg1) {
@@ -24,7 +24,7 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_66(VisualContextView *arg0, unsigned i
         DAT_005608a0[0] += 1;
     }
     arg0->f3bc = lo | hi;
-    FUN_001f7250(arg0->f3bc);
+    p2SetColour(arg0->f3bc);
 }
 
 void Gap__Gfx__igPsx2VisualContext__vfunc_67(S_16d010 *arg0, float *arg1) {

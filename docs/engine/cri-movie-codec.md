@@ -21,7 +21,7 @@ The `igMovieCodec` base returns 0 from every slot from 21 to 29; the codec overr
 | 24 | `Gap__igCriMovieCodec__vfunc_24` | closes a movie: stops and destroys the ADXT handle if there is one, destroys the MWPLY handle, frees both work areas through `CriMovie_Free` and clears the fields |
 | 25 | `Gap__igCriMovieCodec__vfunc_25` | resumes: sets `_state` to 0, then releases the ADXT pause (`ADXT_GetStatPause` / `ADXT_Pause`) or the MWPLY pause (`mwPlyIsPause`, then the handle's pause entry) |
 | 26 | `Gap__igCriMovieCodec__vfunc_26` | pauses: stores the requested `_state`, then pauses whichever player is running |
-| 27 | `Gap__igCriMovieCodec__vfunc_27` | not matched; per-frame update (`mwPlyGetCurFrm` / `mwPlyRelCurFrm`) |
+| 27 | `igCriMovieCodec_Update` | per-frame update (`mwPlyGetCurFrm` / `mwPlyRelCurFrm`) |
 | 28 | `Gap__igCriMovieCodec__vfunc_28` | allocates the upload packet for the movie's size and takes a reference to the `igPsx2VisualContext` it is sent through |
 | 29 | `Gap__igCriMovieCodec__vfunc_29` | frees the upload packet |
 | 30 | `Gap__igCriMovieCodec__vfunc_30` | reconciles the player with `_state`: a movie marked paused whose player runs goes through slot 26, a movie marked playing whose player is paused through slot 25 |
@@ -39,7 +39,7 @@ context with `igPsx2VisualContext_CallDmaChain`. The frame goes to y 448 while
 `igPsx2VisualContext_IsDisplayingFirstBuffer` holds and to y 0 otherwise. With no packet allocated it warns
 once (`g_criMovieDmaWarningMuted`) that the DMA transfer was never opened.
 
-`CriMovie_BuildTileUpload` (not matched) writes the chain: a `cnt` tag and a GIF A+D block setting
+`CriMovie_BuildTileUpload` writes the chain: a `cnt` tag and a GIF A+D block setting
 `BITBLTBUF` and `TRXREG` to a 16x16 PSMCT32 transfer, then for every tile, column by column, a `cnt` tag, a GIF tag, `TRXPOS` for the
 tile and `TRXDIR`, an image GIF tag of 64 quadwords and a `ref` tag to the tile's 1024 bytes of decoded image,
 and finally a `ret` tag when the chain is called (as `CriMovie_SubmitFrame` calls it) or an `end` tag when it is not. Wider than 640 pixels it sends 40

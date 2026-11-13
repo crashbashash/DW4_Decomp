@@ -15,6 +15,7 @@ enum p2GsRegister {
     P2_GS_RGBAQ = 1,
     P2_GS_TEX0_1 = 6,
     P2_GS_TEX0_2 = 7,
+    P2_GS_PRMODECONT = 19,
     P2_GS_PRMODE = 20,
     P2_GS_TEXCLUT = 21,
     P2_GS_SCANMSK = 22,
@@ -22,7 +23,10 @@ enum p2GsRegister {
     P2_GS_TEXTURE_30 = 30,
     P2_GS_SCISSOR_1 = 32,
     P2_GS_SCISSOR_2 = 33,
+    P2_GS_ALPHA_1 = 34,
+    P2_GS_ALPHA_2 = 35,
     P2_GS_DIMX = 36,
+    P2_GS_DTHE = 37,
     P2_GS_COLCLAMP = 38,
     P2_GS_TEST_1 = 39,
     P2_GS_TEST_2 = 40,
@@ -40,8 +44,42 @@ enum p2GsRegister {
 
 /* p2DirtyFlags: the renderer state the next draw must send again. */
 enum {
+    P2_DIRTY_FUNCTION_TABLES = 0x1,     /* the vertex programs' function tables 0 and 1 */
+    P2_DIRTY_LIGHTING_FUNCTIONS = 0x2,  /* function table 2, the lighting programs */
+    P2_DIRTY_LIGHTS = 0x4,
+    P2_DIRTY_GIF_TAGS = 0x8,
+    P2_DIRTY_VERTEX_FORMAT = 0x10,
+    P2_DIRTY_BLEND_MATRICES = 0x20,
     P2_DIRTY_GS_REGISTERS = 0x40,
+    P2_DIRTY_VU_BUFFERS = 0x80,
+    P2_DIRTY_PASSES = 0x100,            /* the multipass setup */
     P2_DIRTY_ALL = 0x1FF
+};
+
+/* Bits of p2VertexFormat: which arrays the vertex program unpacks. */
+enum p2VertexFormatBit {
+    P2_FORMAT_NORMALS = 0x1,
+    P2_FORMAT_COLOURS = 0x2,
+    P2_FORMAT_TEXCOORDS = 0x4,
+    P2_FORMAT_ARRAY_BITS = 0x7,
+    P2_FORMAT_BLEND_WEIGHTS = 0x8,
+    P2_FORMAT_BLEND = 0x10,
+    P2_FORMAT_RECORDING = 0x20,
+    P2_FORMAT_SPRITE_SIZE_MODE0 = 0x40,
+    P2_FORMAT_SPRITE_SIZE_MODE1 = 0x80,
+    P2_FORMAT_SPRITE_SIZE = 0xC0,
+    P2_FORMAT_SPRITE_BYTES = 0x100,
+    P2_FORMAT_SPRITE_WORDS = 0x200
+};
+
+/* The capability bits of a program's p2ProgramFlags entry. */
+enum p2Capability {
+    P2_CAP_TEXTURE = 1,
+    P2_CAP_LIGHTING = 8,
+    P2_CAP_VERTEX_BLEND = 9,
+    P2_CAP_TEXTURE_COMBINE = 10,
+    P2_CAP_MULTIPASS = 23,
+    P2_CAP_FIXED_POINT = 27
 };
 /* p2DisplayFlags */
 enum {
@@ -183,6 +221,45 @@ typedef union p2GsBit {
     unsigned int half[2];
 } p2GsBit;
 
+typedef union p2GsXyz {
+    unsigned long long word;
+    struct {
+        unsigned short x;
+        unsigned short y;
+        unsigned int z;
+    } field;
+} p2GsXyz;
+
+typedef union p2GsPrmode {
+    unsigned long long word;
+    struct {
+        unsigned long long : 3;
+        unsigned long long iip : 1;     /* Gouraud shading */
+        unsigned long long tme : 1;     /* texture mapping */
+        unsigned long long fge : 1;     /* fogging */
+        unsigned long long abe : 1;     /* alpha blending */
+        unsigned long long aa1 : 1;     /* antialiasing */
+        unsigned long long fst : 1;
+        unsigned long long ctxt : 1;
+        unsigned long long fix : 1;
+    } field;
+    unsigned int half[2];
+} p2GsPrmode;
+
+/* ALPHA: Cv = (A - B) * C >> 7 + D, each selecting Cs, Cd or 0 (C: As, Ad or FIX). */
+typedef union p2GsAlpha {
+    unsigned long long word;
+    struct {
+        unsigned long long a : 2;
+        unsigned long long b : 2;
+        unsigned long long c : 2;
+        unsigned long long d : 2;
+        unsigned long long : 24;
+        unsigned long long fix : 8;
+    } field;
+    unsigned int half[2];
+} p2GsAlpha;
+
 /* The images of the GS drawing registers a render program uses, in GS register order. */
 typedef struct p2GsRegisterSet {
     p2GsPrim prim;
@@ -190,17 +267,17 @@ typedef struct p2GsRegisterSet {
     unsigned long long st;
     unsigned long long uv;
     unsigned long long xyzf2;
-    unsigned long long xyz2;
+    p2GsXyz xyz2;
     p2GsTex0 tex0[2];
     unsigned long long clamp[2];
     unsigned long long fog;
     unsigned long long xyzf3;
-    unsigned long long xyz3;
+    p2GsXyz xyz3;
     unsigned long long tex1[2];
     unsigned long long tex2[2];
     p2GsXyoffset xyoffset[2];
-    unsigned long long prmodecont;
-    unsigned long long prmode;
+    p2GsBit prmodecont;
+    p2GsPrmode prmode;
     p2GsTexClut texclut;
     p2GsScanmsk scanmsk;
     unsigned long long miptbp1[2];
@@ -209,9 +286,9 @@ typedef struct p2GsRegisterSet {
     p2GsFogCol fogcol;
     unsigned long long f232[3];
     p2GsScissor scissor[2];
-    unsigned long long alpha[2];
+    p2GsAlpha alpha[2];
     unsigned long long dimx;
-    unsigned long long dthe;
+    p2GsBit dthe;
     p2GsBit colclamp;
     p2GsTest test[2];
     p2GsBit pabe;
@@ -222,6 +299,24 @@ typedef struct p2GsRegisterSet {
     unsigned long long signal;          /* the SIGNAL id in the low word, its mask in the high */
     unsigned long long f432[2];
 } p2GsRegisterSet;
+
+/* Where the VU1 programs keep their buffers in VU1 data memory. The vertex batches are double
+ * buffered through the VIF BASE and OFFSET registers; batchVertexLimit is how many vertices one
+ * batch holds. */
+typedef struct p2VuBufferLayout {
+    short address0;
+    short address1;
+    short address2;
+    short address3;
+    short address4;
+    short byteUnpackAddress;
+    short address6;
+    short address7;
+    short address8;
+    short base;                         /* VIF BASE: the first batch buffer */
+    short offset;                       /* VIF OFFSET: where the second starts, from the first */
+    short batchVertexLimit;
+} p2VuBufferLayout;
 
 /* One heap block of a recorded display list; the first block describes the whole list. */
 typedef struct p2DisplayList {

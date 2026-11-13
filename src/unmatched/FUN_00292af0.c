@@ -5,8 +5,8 @@ extern int FUN_002abe98(int sfd);
 extern int FUN_002a0c68(int sfd, void (*errFn)(void), void *ctx);
 extern void FUN_00295010(void);
 extern void FUN_00294ef8(int code);
-extern void FUN_002927f8(void *hn);
-extern void FUN_0029a320(const char *msg);
+extern void mwsfcre_AttachPicUsrBuf(void *hn);
+extern void mwsfd_Error(const char *msg);
 extern char DAT_004f2d68[]; /* "E0203261: MWSFCRE_ResetSfdHn: SFD_Stop() failed." */
 extern char DAT_004f2da0[]; /* "E0203262: MWSFCRE_ResetSfdHn: SFD_SetErrFn() failed." */
 
@@ -19,14 +19,14 @@ int FUN_00292af0(Hn292af0 *hn) {
     int sfd = hn->sfd;
 
     if (FUN_002abe98(sfd) != 0) {
-        FUN_0029a320(DAT_004f2d68);
+        mwsfd_Error(DAT_004f2d68);
         return -1;
     }
     if (FUN_002a0c68(sfd, FUN_00295010, hn) != 0) {
         FUN_00294ef8(-303);
-        FUN_0029a320(DAT_004f2da0);
+        mwsfd_Error(DAT_004f2da0);
         return -1;
     }
-    FUN_002927f8(hn);
+    mwsfcre_AttachPicUsrBuf(hn);
     return 0;
 }

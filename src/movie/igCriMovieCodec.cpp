@@ -14,12 +14,26 @@ typedef struct MwPly MwPly;
 typedef struct MwPlyFunctions {
     void *reserved0[5];
     void (*destroy)(MwPly *ply);             /* +20 */
-    void *reserved24[4];
+    void *reserved24[2];
+    int (*getStat)(MwPly *ply);              /* +32 */
+    void *reserved36[1];
     void (*pause)(MwPly *ply, int sw);       /* +40 */
 } MwPlyFunctions;
 struct MwPly {
     MwPlyFunctions *functions;
 };
+
+/* mwPlyGetStat: the player ran to the end of the stream, or failed. */
+enum { kMwPlyStatPlayEnd = 3, kMwPlyStatError = 4 };
+
+/* MWSFD's frame object, filled by mwPlyGetCurFrm; bufadr is 0 while no frame is decoded. */
+typedef struct MwsfdFrmObj {
+    void *bufadr;
+    int reserved4[35];
+} MwsfdFrmObj;
+
+/* igCriMovieData::_macroFunction: hands a decoded frame to the display. */
+typedef unsigned char (*CriMovieFrameFunction)(igMovieInfo *movie, void *image);
 
 /* A held reference to an igObject. */
 typedef struct igObjectRef {
@@ -35,17 +49,19 @@ public:
     virtual void d24();
     virtual int resume(igMovieInfo *movie);              /* slot 25 */
     virtual int pause(igMovieInfo *movie, int state);    /* slot 26 */
+    virtual void d27(); virtual void d28(); virtual void d29();
+    virtual int syncPauseState(igMovieInfo *movie);      /* slot 30 */
 };
 
 extern "C" {
-int CriMovie_BuildTileUpload(void *packet, void *image, int tileBytes, int x, int y, int width, int height, int called);
-void Dma_SetTag(unsigned long long *tag, unsigned spr, unsigned addr, unsigned irq, unsigned id, unsigned pce, unsigned qwc);
-void Gif_SetTag(void *tag, unsigned long long regs, int nreg, int flg, int prim, int pre, int eop, int nloop);
+int CriMovie_BuildTileUpload(void *packet, char *image, int tileBytes, int x, int y, int width, int height, int called);
+static void Dma_SetTag(unsigned long long *tag, unsigned spr, unsigned addr, unsigned irq, unsigned id, unsigned pce, unsigned qwc);
+static void Gif_SetTag(void *tag, unsigned long long regs, int nreg, int flg, int prim, int pre, int eop, int nloop);
 static void Gif_SetAd(int *qword, int address, unsigned long long data);
-void Gif_SetBitbltbuf(int *qword, unsigned int dbp, unsigned int dbw, unsigned int dpsm);
-void Gif_SetTrxpos(int *qword, unsigned int dir, unsigned int dsax, unsigned int dsay);
-void Gif_SetTrxreg(int *qword, unsigned int rrw, unsigned int rrh);
-void Gif_SetTrxdir(int *qword, unsigned int xdir);
+static void Gif_SetBitbltbuf(void *qword, unsigned int dbp, unsigned int dbw, unsigned int dpsm);
+static void Gif_SetTrxpos(void *qword, unsigned int dir, unsigned int dsax, unsigned int dsay);
+static void Gif_SetTrxreg(void *qword, unsigned int rrw, unsigned int rrh);
+static void Gif_SetTrxdir(void *qword, unsigned int xdir);
 int CriMovie_BuildFrameUpload(void *packet, void *image, int x, int y, int width, int height, int called);
 int CriMovie_SubmitFrame(igMovieInfo *movie, void *image);
 igObjectRef *CriMovie_DestroyObjectRef(igObjectRef *ref, int deleteStorage);
@@ -63,6 +79,7 @@ int Gap__igCriMovieCodec__vfunc_24(igCriMovieCodec *self, igMovieInfo *movie);
 int Gap__igCriMovieCodec__vfunc_25(igCriMovieCodec *self, igMovieInfo *movie);
 int Gap__igCriMovieCodec__vfunc_26(igCriMovieCodec *self, igMovieInfo *movie, int state);
 int Gap__igCriMovieCodec__vfunc_30(igCriMovieCodecView *self, igMovieInfo *movie);
+int igCriMovieCodec_Update(igCriMovieCodecView *self, igMovieInfo *movie);
 int Gap__igCriMovieCodec__vfunc_20(void);
 int Gap__igCriMovieData__vfunc_20(void);
 
@@ -86,6 +103,11 @@ int ADXT_GetStatPause(int adxt);
 void ADXT_Pause(int adxt, int sw);
 void ADXT_Stop(int adxt);
 void ADXT_Destroy(int adxt);
+void ADXM_ExecMain(void);
+void MWSFD_ExecVsyncFrame(void);
+void mwPlyGetCurFrm(MwPly *ply, MwsfdFrmObj *frame);
+void mwPlyRelCurFrm(MwPly *ply);
+int igMovieInfo_GetTiling(igMovieInfo *movie, int *tileWidth, int *tileHeight, int *tilesAcross, int *tilesDown);
 
 extern unsigned char g_useOwnerAllocator;
 extern unsigned char g_criMovieDmaWarningMuted;
@@ -109,6 +131,11 @@ static inline void mwPlyPause(MwPly *ply, int sw)
     ply->functions->pause(ply, sw);
 }
 
+static inline int mwPlyGetStat(MwPly *ply)
+{
+    return ply->functions->getStat(ply);
+}
+
 static inline igCriMovieData *AsCriMovieData(void *object)
 {
     if (object != 0 && igObject_IsKindOf(object, g_igCriMovieData_metaObject[0]) != 0) {
@@ -117,11 +144,11 @@ static inline igCriMovieData *AsCriMovieData(void *object)
     return 0;
 }
 
-void Dma_SetTag(unsigned long long *tag, unsigned spr, unsigned addr, unsigned irq, unsigned id, unsigned pce, unsigned qwc) {
+static void Dma_SetTag(unsigned long long *tag, unsigned spr, unsigned addr, unsigned irq, unsigned id, unsigned pce, unsigned qwc) {
     *tag = (unsigned long long)qwc | (((unsigned long long)pce << 26) | (((unsigned long long)id << 28) | (((unsigned long long)irq << 31) | (((unsigned long long)spr << 63) | ((unsigned long long)(addr & ~0xFU) << 32)))));
 }
 
-void Gif_SetTag(void *tag, unsigned long long regs, int nreg, int flg, int prim, int pre, int eop, int nloop) {
+static void Gif_SetTag(void *tag, unsigned long long regs, int nreg, int flg, int prim, int pre, int eop, int nloop) {
     unsigned long long mask;
     int *words = (int *)tag;
     words[0] = (eop << 0xF) | nloop;
@@ -138,24 +165,85 @@ static void Gif_SetAd(int *qword, int address, unsigned long long data) {
     qword[3] = 0;
 }
 
-void Gif_SetBitbltbuf(int *qword, unsigned int dbp, unsigned int dbw, unsigned int dpsm) {
-    Gif_SetAd(qword, 0x50, (unsigned long long)dbp << 32 | ((unsigned long long)dpsm << 56 | (unsigned long long)dbw << 48));
+static void Gif_SetBitbltbuf(void *qword, unsigned int dbp, unsigned int dbw, unsigned int dpsm) {
+    Gif_SetAd((int *)qword, 0x50, (unsigned long long)dbp << 32 | ((unsigned long long)dpsm << 56 | (unsigned long long)dbw << 48));
 }
 
-void Gif_SetTrxpos(int *qword, unsigned int dir, unsigned int dsax, unsigned int dsay) {
-    Gif_SetAd(qword, 0x51, (unsigned long long)dsax << 32 | ((unsigned long long)dir << 59 | (unsigned long long)dsay << 48));
+static void Gif_SetTrxpos(void *qword, unsigned int dir, unsigned int dsax, unsigned int dsay) {
+    Gif_SetAd((int *)qword, 0x51, (unsigned long long)dsax << 32 | ((unsigned long long)dir << 59 | (unsigned long long)dsay << 48));
 }
 
-void Gif_SetTrxreg(int *qword, unsigned int rrw, unsigned int rrh) {
-    Gif_SetAd(qword, 0x52, (unsigned long long)rrh << 32 | rrw);
+static void Gif_SetTrxreg(void *qword, unsigned int rrw, unsigned int rrh) {
+    Gif_SetAd((int *)qword, 0x52, (unsigned long long)rrh << 32 | rrw);
 }
 
-void Gif_SetTrxdir(int *qword, unsigned int xdir) {
-    Gif_SetAd(qword, 0x53, xdir);
+static void Gif_SetTrxdir(void *qword, unsigned int xdir) {
+    Gif_SetAd((int *)qword, 0x53, xdir);
+}
+
+/* Writes the DMA chain that uploads a decoded frame to the GS one 16x16 PSMCT32 tile at a time,
+ * column by column; the image holds each column of tiles contiguously, tileBytes per tile. Wider
+ * than 640 pixels only 40 columns go; taller than 448 lines only 28 rows go, skipping as many lines
+ * at the top of each column as at the bottom. Returns the chain's size in bytes. */
+int CriMovie_BuildTileUpload(void *packet, char *image, int tileBytes, int x, int y, int width, int height, int called) {
+    /* matching construct: register order — cursor declared first colours after the frame's shape */
+    char *cursor;
+    /* matching construct: unsigned copies of x and y keep the tile position as left + column * 16
+     * instead of one running induction variable */
+    unsigned int left;
+    unsigned int top;
+    int columns;
+    int rows;
+    int skippedLines;
+    int start;
+    int column;
+    int row;
+    int last;
+
+    if (width > 640) {
+        columns = 40;
+    } else {
+        columns = width >> 4;
+    }
+    if (height > 448) {
+        rows = 28;
+        skippedLines = (height - 448) / 2;
+    } else {
+        rows = height >> 4;
+        skippedLines = 0;
+    }
+    left = x;
+    top = y;
+    start = ((unsigned int)packet & 0x0FFFFFFF) | 0x20000000;
+    cursor = (char *)start;
+    Dma_SetTag((unsigned long long *)cursor, 0, 0, 0, 1, 0, 3);
+    Gif_SetTag(cursor + 16, 14, 1, 0, 0, 0, 0, 2);
+    Gif_SetBitbltbuf(cursor + 32, 0, 10, 0);
+    Gif_SetTrxreg(cursor + 48, 16, 16);
+    cursor += 64;
+    image += skippedLines * 64;
+    for (column = 0; column < columns; column++) {
+        for (row = 0; row < rows; row++) {
+            /* matching construct: `? 1 : 0` makes last an int, so it is passed without another 0xff mask */
+            last = (row == rows - 1 && column == columns - 1) ? 1 : 0;
+            Dma_SetTag((unsigned long long *)cursor, 0, 0, 0, 1, 0, 4);
+            Gif_SetTag(cursor + 16, 14, 1, 0, 0, 0, 0, 2);
+            Gif_SetTrxpos(cursor + 32, 0, left + column * 16, top + row * 16);
+            Gif_SetTrxdir(cursor + 48, 0);
+            Gif_SetTag(cursor + 64, 0, 0, 2, 0, 0, last, 64);
+            Dma_SetTag((unsigned long long *)(cursor + 80), 0, (unsigned int)image & 0x0FFFFFFF, 0, 3, 0, 64);
+            cursor += 96;
+            image += tileBytes;
+        }
+        image += skippedLines * 128;
+    }
+    Dma_SetTag((unsigned long long *)cursor, 0, 0, 0, called ? 6 : 7, 0, 0);
+    cursor += 16;
+    return (int)cursor - start;
 }
 
 int CriMovie_BuildFrameUpload(void *packet, void *image, int x, int y, int width, int height, int called) {
-    return CriMovie_BuildTileUpload(packet, image, 0x400, x, y, width, height, called);
+    return CriMovie_BuildTileUpload(packet, (char *)image, 0x400, x, y, width, height, called);
 }
 
 /* Allocates the upload packet for the movie's frame size (six quadwords per 16x16 tile plus the
@@ -333,6 +421,44 @@ int Gap__igCriMovieCodec__vfunc_30(igCriMovieCodecView *self, igMovieInfo *movie
         }
     }
     return 0;
+}
+
+/* Per-frame update: keeps the pause state in step, runs the CRI servers, hands a decoded frame to
+ * the display and pauses the movie once the stream ends or fails. Returns whether a frame went out. */
+int igCriMovieCodec_Update(igCriMovieCodecView *self, igMovieInfo *movie) {
+    igCriMovieData *data;
+    int shown;
+    MwsfdFrmObj frame;
+    int tileWidth;
+    int tileHeight;
+    int tilesAcross;
+    int tilesDown;
+    int stat;
+
+    data = AsCriMovieData((void *)movie->_userdata);
+    shown = 0;
+    if (data != 0) {
+        self->syncPauseState(movie);
+        if (movie->_state != kMovieStatePaused) {
+            MWSFD_ExecVsyncFrame();
+            MWSFD_ExecVsyncFrame();
+            ADXM_ExecMain();
+            mwPlyGetCurFrm((MwPly *)data->_mwply, &frame);
+            if (frame.bufadr != 0) {
+                if (data->_macroFunction == 0) {
+                    igMovieInfo_GetTiling(movie, &tileWidth, &tileHeight, &tilesAcross, &tilesDown);
+                    data->_macroFunction = (int)&CriMovie_SubmitFrame;
+                }
+                shown = ((CriMovieFrameFunction)data->_macroFunction)(movie, frame.bufadr);
+                mwPlyRelCurFrm((MwPly *)data->_mwply);
+            }
+            stat = mwPlyGetStat((MwPly *)data->_mwply);
+            if (stat == kMwPlyStatPlayEnd || stat == kMwPlyStatError) {
+                self->pause(movie, 2);
+            }
+        }
+    }
+    return shown;
 }
 
 void *CriMovie_Allocate(igCriMovieCodec *codec, unsigned int size) {

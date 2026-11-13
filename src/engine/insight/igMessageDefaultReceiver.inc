@@ -1,4 +1,4 @@
-void FUN_00232200(int arg0) {
+void igMessageDefaultReceiver_CreateInstance(int arg0) {
     FUN_00232320();
     igMetaObject_CreateInstance(*(int *)0x56DB30, arg0);
 }

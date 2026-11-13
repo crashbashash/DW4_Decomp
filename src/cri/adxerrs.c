@@ -34,7 +34,7 @@ void FUN_002607c0(AdxErrFunc func, int obj)
     FUN_0027e8a0();
 }
 
-void FUN_002607e8(const char *msg)
+void ADXERR_CallErrFunc1(const char *msg)
 {
     strncpy(DAT_00499ce0, msg, 0xFF);
     if (DAT_00499cd8 != 0) {
@@ -43,7 +43,7 @@ void FUN_002607e8(const char *msg)
     FUN_0027e2f0(DAT_00499ce0);
 }
 
-void FUN_00260840(const char *code, const char *msg)
+void ADXERR_CallErrFunc2(const char *code, const char *msg)
 {
     strncpy(DAT_00499ce0, code, 0xFF);
     strncat(DAT_00499ce0, msg, 0xFF);
@@ -76,7 +76,7 @@ void FUN_002608b0(int value, char *dst, int size)
     dst[i] = 0;
 }
 
-void FUN_002609b8(int value, int extra, char *text, int size)
+void ADXERR_ItoA2(int value, int extra, char *text, int size)
 {
     FUN_002608b0(value, text, size);
     strncat(text, DAT_004ed8c0, (size - strlen(text)) - 1);

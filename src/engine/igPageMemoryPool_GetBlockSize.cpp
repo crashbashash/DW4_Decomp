@@ -15,8 +15,8 @@ int memset(...);
 int strstr(...);
 int FUN_002f0880(...);
 void *FUN_002ba650(...);
-int FUN_003081d0(...);
-void FUN_002f8870(...);
+int igReportNotice(...);
+void Memory_PrintPoolStatistics(...);
 void FUN_00326330(void *a0, int a1);
 extern int g_igPageMemoryPool_defaultPoolOptionFlags[4];
 extern int g_allocatorFailureStatus[4];
@@ -420,9 +420,9 @@ unsigned igPageMemoryPool_GetBlockSize(PoolGBS *self, unsigned addr) {
                 size += 4096;
             }
             if (self->debug > 0) {
-                FUN_002f8870(0, self);
+                Memory_PrintPoolStatistics(0, self);
                 if (GPR_00554dd8 == 0) {
-                    int r = FUN_003081d0(text_igPageMemoryPool_getBlockSize_Sh);
+                    int r = igReportNotice(text_igPageMemoryPool_getBlockSize_Sh);
                     if (r != 1 && r == 2) {
                         GPR_00554dd8 = 1;
                     }

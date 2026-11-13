@@ -46,10 +46,10 @@ typedef union p2GsDispfb {
     } field;
 } p2GsDispfb;
 
-int FUN_00113f20(void);
-int FUN_00113f78(void);
+int DIntr(void);
+int EIntr(void);
 int p2GetDisplayFlags(void);
-void FUN_001f76c0(int reg);
+void p2SendGsRegister(int reg);
 void FUN_001f8190(int reg);
 long long p2readGSPrivRegister(int reg);
 void p2SubmitDmaPacket(int channel, p2DmaPacket *packet);
@@ -229,9 +229,9 @@ void p2SwapBuffers(void) {
         p2QueueDisplayPacket();
     }
     if (p2SwapOnVsync != 0) {
-        FUN_00113f20();
+        DIntr();
         p2DmaWatchFlags.busy |= P2_WATCH_SWAPBUFFERS;
-        FUN_00113f78();
+        EIntr();
         while (p2FramesSwapped > p2FramesShown + p2SwapLatency) {
             p2ReadClock(&start);
             p2BlockedSema = p2SwapSema;
@@ -241,10 +241,10 @@ void p2SwapBuffers(void) {
             p2SwapWaitTime += (long long)((end - start) << 32) >> 32;
         }
         p2SwapLatency = 2;
-        FUN_00113f20();
+        DIntr();
         p2DmaWatchFlags.busy &= ~P2_WATCH_SWAPBUFFERS;
         p2DmaWatchFlags.seen &= ~P2_WATCH_SWAPBUFFERS;
-        FUN_00113f78();
+        EIntr();
         p2AddDmaPredicate(P2_DMA_VIF1, swapbuffersPredicate, p2FramesSwapped);
     } else {
         p2FrameDrawn = 0;
@@ -273,7 +273,7 @@ void p2SwapBuffers(void) {
             } else {
                 p2CurrentGsRegisters->scanmsk.field.msk = 2;
             }
-            FUN_001f76c0(P2_GS_SCANMSK);
+            p2SendGsRegister(P2_GS_SCANMSK);
         }
         if (displayFlags == 0) {
             if (p2Display.frameMode != 0 && p2Display.frameCount == 1) {
@@ -285,8 +285,8 @@ void p2SwapBuffers(void) {
         gs = p2CurrentGsRegisters;
         gs->frame[1].half[0] = gs->frame[0].half[0];
         gs->frame[1].half[1] = gs->frame[0].half[1];
-        FUN_001f76c0(P2_GS_FRAME_1);
-        FUN_001f76c0(P2_GS_FRAME_2);
+        p2SendGsRegister(P2_GS_FRAME_1);
+        p2SendGsRegister(P2_GS_FRAME_2);
         if (p2Display.frameMode == 0 && p2Display.frameCount == 2) {
             p2UploadViewport();
         }
@@ -329,22 +329,22 @@ void p2AddFinishFunc(void (*func)(p2FinishFunc *finish, int arg), int arg) {
     if (p2FreeFinishFuncs == 0) {
         p2GrowPool(P2_POOL_FINISH, &p2FreeFinishFuncs);
     }
-    FUN_00113f20();
+    DIntr();
     finish = p2FreeFinishFuncs;
     p2FreeFinishFuncs = finish->next;
-    FUN_00113f78();
+    EIntr();
     finish->sequence = p2AddPreviousFinishFuncPredicate();
     finish->func = func;
     finish->arg = arg;
     finish->next = 0;
-    FUN_00113f20();
+    DIntr();
     if (p2FinishTail != 0) {
         p2FinishTail->next = finish;
     } else {
         p2FinishHead = finish;
     }
     p2FinishTail = finish;
-    FUN_00113f78();
+    EIntr();
 }
 
 /* Starts a new finish sequence: the id goes into the GS SIGNAL register image, sent with the next
@@ -358,7 +358,7 @@ int p2NewFinishSequence(int signal) {
     ((int *)&p2CurrentGsRegisters->signal)[1] = -1;
     p2FinishesPending += 1;
     if (signal != 0) {
-        FUN_001f76c0(P2_GS_SIGNAL);
+        p2SendGsRegister(P2_GS_SIGNAL);
     }
     return p2FinishSequence;
 }
@@ -369,9 +369,9 @@ void p2WaitFinishSequence(unsigned int sequence) {
     long long end;
 
     p2FlushVif1Packet();
-    FUN_00113f20();
+    DIntr();
     p2DmaWatchFlags.busy |= P2_WATCH_FINISH_SEQUENCE;
-    FUN_00113f78();
+    EIntr();
     while (p2FinishSequenceDone < sequence) {
         p2ReadClock(&start);
         p2BlockedSema = p2FinishSema;
@@ -380,10 +380,10 @@ void p2WaitFinishSequence(unsigned int sequence) {
         p2ReadClock(&end);
         p2FinishWaitTime += (long long)((end - start) << 32) >> 32;
     }
-    FUN_00113f20();
+    DIntr();
     p2DmaWatchFlags.busy &= ~P2_WATCH_FINISH_SEQUENCE;
     p2DmaWatchFlags.seen &= ~P2_WATCH_FINISH_SEQUENCE;
-    FUN_00113f78();
+    EIntr();
     p2FinishesPending -= 1;
 }
 

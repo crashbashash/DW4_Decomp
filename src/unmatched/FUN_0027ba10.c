@@ -15,7 +15,7 @@ typedef struct {
     int errobj;
 } SjMem;
 
-void FUN_0027b2e0(const char *message);
+void SJERR_CallErr(const char *message);
 extern char DAT_004f1cb8[];
 extern char DAT_004f1ce8[];
 
@@ -26,11 +26,11 @@ void FUN_0027ba10(SjMem *sj, int line, CriSjChunk *ck)
     int pos;
 
     if (sj == 0) {
-        FUN_0027b2e0(DAT_004f1cb8);
+        SJERR_CallErr(DAT_004f1cb8);
         return;
     }
     if (sj->used == 0) {
-        FUN_0027b2e0(DAT_004f1ce8);
+        SJERR_CallErr(DAT_004f1ce8);
         return;
     }
     if (ck->len <= 0 || ck->ptr == 0) {

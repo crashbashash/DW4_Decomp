@@ -2,7 +2,7 @@
  * invalid handle, otherwise resets it, releases the previous stream joint through its vtable slot
  * +12, wraps the buffer in a new one (FUN_0027b408) and kicks playback. */
 extern int FUN_002968c0(void *sfd);
-extern void FUN_0029a320(const char *msg);
+extern void mwsfd_Error(const char *msg);
 extern void FUN_00295808(void *sfd);
 extern void FUN_002954c8(void *sfd);
 extern void FUN_00291d30(void *sfd);
@@ -31,7 +31,7 @@ void FUN_002956d8(Sfd2956d8 *sfd, void *buf, int size) {
     SjObj *sj;
 
     if (FUN_002968c0(sfd) == 0) {
-        FUN_0029a320(DAT_004f37b8);
+        mwsfd_Error(DAT_004f37b8);
         return;
     }
     FUN_00295808(sfd);

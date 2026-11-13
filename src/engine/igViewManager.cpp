@@ -53,7 +53,7 @@ public:
 struct ViewerViewManager { int _vtable; unsigned int _refCount; ViewerClock *clock; };
 void FUN_00464080(ViewerViewManager *manager, long long frameTime);
 
-int FUN_004578c0(...);
+int igModel_NotifyViews(...);
 
 extern int DAT_0058cd80[4];
 
@@ -115,8 +115,8 @@ igObject *FUN_00459340(int);
 igObject *FUN_0045e230(int);
 igObject *FUN_0045be30(int);
 igObject *FUN_0045dbe0(int);
-int FUN_00237020(...);
-int FUN_00236ee0(...);
+int igInsightCore_AddRendererOrder(...);
+int igInsightCore_AddRenderer(...);
 int igInsightCore_AddManager(...);
 int StringPool_Allocate(...);
 int StringPool_Construct(...);
@@ -184,9 +184,9 @@ ViewerSetup::ViewerSetup(igObject *w)
             StringRef overlays;
             scenes.p = intern("Scenes done");
             overlays.p = intern("Overlays done");
-            FUN_00237020(core.p, scenes.p, logo.p);
-            FUN_00237020(core.p, logo.p, overlays.p);
-            FUN_00236ee0(core.p, logo.p);
+            igInsightCore_AddRendererOrder(core.p, scenes.p, logo.p);
+            igInsightCore_AddRendererOrder(core.p, logo.p, overlays.p);
+            igInsightCore_AddRenderer(core.p, logo.p);
         }
         igInsightCore_AddManager(core.p, sceneInfo.p);
         igInsightCore_AddManager(core.p, dataPump.p);
@@ -295,7 +295,7 @@ void FUN_00464110(void *arg0, void *arg1) {
     buf[0] = 2;
     buf[1] = 0;
     buf[2] = DAT_0058cd80[0];
-    FUN_004578c0(*(int *)((char *)(arg0) + 12), buf);
+    igModel_NotifyViews(*(int *)((char *)(arg0) + 12), buf);
 }
 
 int Gap__Viewer__igViewManager__vfunc_23(void *arg0) {
@@ -335,16 +335,16 @@ void FUN_00464540(Arg *arg0, int arg1) {
     r1.z = 0;
     r1.t = 2;
     r1.v = DAT_0058cd50[0];
-    FUN_004578c0(arg0->o, &r1);
+    igModel_NotifyViews(arg0->o, &r1);
     r2.t = 2;
     r2.z = 0;
     r2.v = DAT_0058cd58[0];
-    FUN_004578c0(arg0->o, &r2);
+    igModel_NotifyViews(arg0->o, &r2);
     arg0->o->f80 = s0->f64;
     r3.t = 2;
     r3.z = 0;
     r3.v = DAT_0058cd48[0];
-    FUN_004578c0(arg0->o, &r3);
+    igModel_NotifyViews(arg0->o, &r3);
     if (DAT_0056dc50[0] != 0) {
         if (--DAT_0056dc50[0]->f232 <= 0) {
             f = DAT_0056dc50[0];
@@ -444,7 +444,7 @@ int Gap__Viewer__igViewManager__vfunc_32(igViewManager *self, int width, int hei
     event.type = 2;
     event.arg = 0;
     event.data = DAT_0058cd40;
-    FUN_004578c0((igViewModel *)self->_viewModel, &event);
+    igModel_NotifyViews((igViewModel *)self->_viewModel, &event);
     return 0;
 }
 

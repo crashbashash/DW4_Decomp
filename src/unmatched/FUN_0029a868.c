@@ -1,5 +1,5 @@
 typedef struct Obj { char pad[8]; unsigned int mode; } Obj;
-extern void FUN_0029a4b8(Obj *);
+extern void mwply_UpdateStat(Obj *);
 extern void FUN_0029a7d8(Obj *);
 extern void FUN_0029a8e0(Obj *);
 extern void FUN_00296320(Obj *);
@@ -7,7 +7,7 @@ int FUN_0029a868(Obj *o)
 {
     switch (o->mode) {
     case 1:
-        FUN_0029a4b8(o);
+        mwply_UpdateStat(o);
         break;
     case 2:
         FUN_0029a7d8(o);

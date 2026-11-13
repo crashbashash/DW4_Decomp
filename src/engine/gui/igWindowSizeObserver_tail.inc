@@ -7,7 +7,7 @@ void Gap__Gui__igWindowSizeObserver__vfunc_24(void *arg0, int *arg1) {
         sp30[0] = 2;
         sp30[1] = (int)arg0;
         sp30[2] = DAT_0058c3f0[0];
-        FUN_004578c0((S_4578c0 *)temp_s0, (S_4578c0 *)sp30);
+        igModel_NotifyViews((S_4578c0 *)temp_s0, (S_4578c0 *)sp30);
     }
 }
 

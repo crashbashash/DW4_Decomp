@@ -79,10 +79,10 @@ void Gap__Insight__igInsightCore__vfunc_13(struct A_237300 *arg0) {
     FUN_002d7090(arg0->f28, first.p, second.p);
     FUN_002d7090(arg0->f28, second.p, third.p);
     FUN_002d7090(arg0->f28, arg0->f44, first.p);
-    FUN_002d6f50(arg0->f28, arg0->f44, 0);
+    igRendererOrderedList_Append(arg0->f28, arg0->f44, 0);
     arg0->f72 = 0x40000;
     *(struct A_237300 **)(arg0->f36 + 8) = arg0;
-    FUN_00454290(arg0->f32, arg0->f36);
+    igEventDispatcher_AddReceiver(arg0->f32, arg0->f36);
 }
 
 void FUN_00237530(OO *arg0) {

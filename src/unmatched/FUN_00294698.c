@@ -20,7 +20,7 @@ typedef struct PicLogLog {
 
 int FUN_00294360(PicLogItem *h);
 int FUN_002944f0(PicLogItem *h);
-int FUN_002947d0(PicLogItem *h);
+int mwply_IsPicItemType3(PicLogItem *h);
 PicLogItem *FUN_002b17d8(char *buf, int size);
 void FUN_002b18a0(PicLogItem *h);
 int FUN_002b19f0(PicLogItem *h, int *out);
@@ -42,7 +42,7 @@ void FUN_00294698(PicLogLog *log, char *buf, unsigned int size)
         FUN_002b18a0(h);
         return;
     }
-    a = FUN_002947d0(h);
+    a = mwply_IsPicItemType3(h);
     b = FUN_00294360(h);
     c = FUN_002944f0(h);
     i = log->idx;

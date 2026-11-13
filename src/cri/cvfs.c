@@ -32,6 +32,12 @@ extern char cvFsStopTr_1_handle_error[];
 extern char cvFsStopTr_2_vtbl_error[];
 extern char cvFsGetStat_1_handle_error[];
 extern char cvFsGetStat_2_vtbl_error[];
+extern char cvFsGetFileSize_1_illegal_file_name[];
+extern char cvFsGetFileSize_3_device_not_found[];
+extern char cvFsGetFileSize_4_vtbl_error[];
+extern char cvFsGetFileSizeEx_1_illegal_file_name[];
+extern char cvFsGetFileSizeEx_3_device_not_found[];
+extern char cvFsGetFileSizeEx_4_vtbl_error[];
 extern char cvFsGetFileSizeByHndl_1_illegal_file_handle[];
 extern char cvFsGetFreeSize_5_device_not_found[];
 extern char cvFsGetFreeSize_6_vtbl_error[];
@@ -41,12 +47,24 @@ extern char cvFsSetSctLen_3_handle_error[];
 extern char cvFsSetSctLen_4_vtbl_error[];
 extern char cvFsGetNumTr_1_handle_error[];
 extern char cvFsGetNumTr_2_vtbl_error[];
+extern char cvFsChangeDir_1_illegal_directory_name[];
+extern char cvFsChangeDir_3_device_not_found[];
+extern char cvFsChangeDir_4_vtbl_error[];
 extern char cvFsIsExistFile_1_illegal_file_name[];
 extern char cvFsIsExistFile_2_illegal_device_name[];
 extern char cvFsIsExistFile_3_device_not_found[];
 extern char cvFsIsExistFile_4_vtbl_error[];
 extern char cvFsGetMaxByteRate_1_handle_error[];
 extern char cvFsGetMaxByteRate_2_vtbl_error[];
+extern char cvFsMakeDir_1_illegal_directory_name[];
+extern char cvFsMakeDir_3_device_not_found[];
+extern char cvFsMakeDir_4_vtbl_error[];
+extern char cvFsRemoveDir_1_illegal_directory_name[];
+extern char cvFsRemoveDir_3_device_not_found[];
+extern char cvFsRemoveDir_4_vtbl_error[];
+extern char cvFsDeleteFile_1_illegal_file_name[];
+extern char cvFsDeleteFile_3_device_not_found[];
+extern char cvFsDeleteFile_4_vtbl_error[];
 extern char cvFsGetDevName_1_vtbl_error[];
 extern char cvFsOptFn1_1_handle_error[];
 extern char cvFsOptFn1_2_vtbl_error[];
@@ -489,6 +507,66 @@ int cvFsGetStat(CvFsHandle *hdl)
     return stat;
 }
 
+int cvFsGetFileSize(const char *path)
+{
+    char devname[CVFS_PATH_SIZE];
+    char fname[CVFS_PATH_SIZE];
+    CvFsVtbl *vtbl;
+    int size;
+
+    if (path == 0) {
+        cvFsError(cvFsGetFileSize_1_illegal_file_name);
+        return 0;
+    }
+    splitPath(devname, fname, path);
+    if (fname[0] == 0) {
+        cvFsError(cvFsGetFileSize_1_illegal_file_name);
+        return 0;
+    }
+    vtbl = getPathDevice(devname, fname, path);
+    if (vtbl == 0) {
+        /* Retail reports the miss and still reads the table. */
+        cvFsError(cvFsGetFileSize_3_device_not_found);
+    }
+    if (vtbl->get_file_size != 0) {
+        size = ((int (*)(const char *))vtbl->get_file_size)(fname);
+    } else {
+        cvFsError(cvFsGetFileSize_4_vtbl_error);
+        return 0;
+    }
+    return size;
+}
+
+int cvFsGetFileSizeEx(const char *path, int arg)
+{
+    char devname[CVFS_PATH_SIZE];
+    char fname[CVFS_PATH_SIZE];
+    CvFsVtbl *vtbl;
+    int size;
+
+    if (path == 0) {
+        cvFsError(cvFsGetFileSizeEx_1_illegal_file_name);
+        return 0;
+    }
+    splitPath(devname, fname, path);
+    if (fname[0] == 0) {
+        cvFsError(cvFsGetFileSizeEx_1_illegal_file_name);
+        return 0;
+    }
+    vtbl = getPathDevice(devname, fname, path);
+    if (vtbl == 0) {
+        /* Retail reports the miss and still reads the table. */
+        cvFsError(cvFsGetFileSizeEx_3_device_not_found);
+    }
+    if (vtbl->get_file_size_ex != 0) {
+        size = ((int (*)(const char *, int))vtbl->get_file_size_ex)(fname, arg);
+    } else {
+        cvFsError(cvFsGetFileSizeEx_4_vtbl_error);
+        return 0;
+    }
+    return size;
+}
+
 int cvFsGetFileSizeByHndl(CvFsHandle *hdl)
 {
     int size;
@@ -588,6 +666,36 @@ int cvFsGetNumTr(CvFsHandle *hdl)
     return ntr;
 }
 
+int cvFsChangeDir(const char *path)
+{
+    char devname[CVFS_PATH_SIZE];
+    char fname[CVFS_PATH_SIZE];
+    CvFsVtbl *vtbl;
+    int result;
+
+    if (path == 0) {
+        cvFsError(cvFsChangeDir_1_illegal_directory_name);
+        return -1;
+    }
+    splitPath(devname, fname, path);
+    if (fname[0] == 0) {
+        cvFsError(cvFsChangeDir_1_illegal_directory_name);
+        return -1;
+    }
+    vtbl = getPathDevice(devname, fname, path);
+    if (vtbl == 0) {
+        /* Retail reports the miss and still reads the table. */
+        cvFsError(cvFsChangeDir_3_device_not_found);
+    }
+    if (vtbl->change_dir != 0) {
+        result = ((int (*)(const char *))vtbl->change_dir)(fname);
+    } else {
+        cvFsError(cvFsChangeDir_4_vtbl_error);
+        return -1;
+    }
+    return result;
+}
+
 int cvFsIsExistFile(const char *path)
 {
     char devname[CVFS_PATH_SIZE];
@@ -676,6 +784,97 @@ int cvFsGetMaxByteRate(CvFsHandle *hdl)
         cvFsError(cvFsGetMaxByteRate_2_vtbl_error);
     }
     return 0;
+}
+
+int cvFsMakeDir(const char *path)
+{
+    /* Retail's frame holds 48-byte name buffers here, not the 304 bytes of its siblings. */
+    char devname[48];
+    char fname[48];
+    CvFsVtbl *vtbl;
+    int result;
+
+    if (path == 0) {
+        cvFsError(cvFsMakeDir_1_illegal_directory_name);
+        return -1;
+    }
+    splitPath(devname, fname, path);
+    if (fname[0] == 0) {
+        cvFsError(cvFsMakeDir_1_illegal_directory_name);
+        return -1;
+    }
+    vtbl = getPathDevice(devname, fname, path);
+    if (vtbl == 0) {
+        /* Retail reports the miss and still reads the table. */
+        cvFsError(cvFsMakeDir_3_device_not_found);
+    }
+    if (vtbl->make_dir != 0) {
+        result = ((int (*)(const char *))vtbl->make_dir)(fname);
+    } else {
+        cvFsError(cvFsMakeDir_4_vtbl_error);
+        return -1;
+    }
+    return result;
+}
+
+int cvFsRemoveDir(const char *path)
+{
+    char devname[CVFS_PATH_SIZE];
+    char fname[CVFS_PATH_SIZE];
+    CvFsVtbl *vtbl;
+    int result;
+
+    if (path == 0) {
+        cvFsError(cvFsRemoveDir_1_illegal_directory_name);
+        return -1;
+    }
+    splitPath(devname, fname, path);
+    if (fname[0] == 0) {
+        cvFsError(cvFsRemoveDir_1_illegal_directory_name);
+        return -1;
+    }
+    vtbl = getPathDevice(devname, fname, path);
+    if (vtbl == 0) {
+        /* Retail reports the miss and still reads the table. */
+        cvFsError(cvFsRemoveDir_3_device_not_found);
+    }
+    if (vtbl->remove_dir != 0) {
+        result = ((int (*)(const char *))vtbl->remove_dir)(fname);
+    } else {
+        cvFsError(cvFsRemoveDir_4_vtbl_error);
+        return -1;
+    }
+    return result;
+}
+
+int cvFsDeleteFile(const char *path)
+{
+    char devname[CVFS_PATH_SIZE];
+    char fname[CVFS_PATH_SIZE];
+    CvFsVtbl *vtbl;
+    int result;
+
+    if (path == 0) {
+        cvFsError(cvFsDeleteFile_1_illegal_file_name);
+        return -1;
+    }
+    splitPath(devname, fname, path);
+    if (fname[0] == 0) {
+        cvFsError(cvFsDeleteFile_1_illegal_file_name);
+        return -1;
+    }
+    vtbl = getPathDevice(devname, fname, path);
+    if (vtbl == 0) {
+        /* Retail reports the miss and still reads the table. */
+        cvFsError(cvFsDeleteFile_3_device_not_found);
+    }
+    if (vtbl->delete_file != 0) {
+        result = ((int (*)(const char *))vtbl->delete_file)(fname);
+    } else {
+        cvFsError(cvFsDeleteFile_4_vtbl_error);
+        return -1;
+    }
+    return result;
 }
 
 char *cvFsGetDevName(CvFsHandle *hdl)

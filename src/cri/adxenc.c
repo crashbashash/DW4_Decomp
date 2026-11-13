@@ -77,7 +77,9 @@ typedef struct AdxEnc {
     short prev1[2];             /* 0x88 */
     short prev2[2];             /* 0x8c */
     short buf[2][32];           /* 0x90 */
-    char pad272[384];
+    short resid[2][32];         /* 0x110 */
+    short norm[2][32];          /* 0x190 */
+    short recon[2][32];         /* 0x210 */
     short scale[2];             /* 0x290 */
     char pad660[4];
     double rscale[2];           /* 0x298 */
@@ -112,11 +114,12 @@ extern const char DAT_004ee428[];
 void *memset(void *dst, int value, unsigned int size);
 void *memcpy(void *dst, const void *src, unsigned int size);
 unsigned int strlen(const char *s);
+int abs(int value);
 char *strncpy(char *dst, const char *src, unsigned int size);
 int ADX_GetCoefficient(short id, int arg, short *first, short *second);
 int FUN_0025f588(unsigned short *data, int size, short *out_a, char *out_b, char *out_c, char *out_d, char *out_e, int *out_f, int *out_g, int *out_h);
 
-int FUN_00268188(AdxEnc *e, int ch);
+int adxenc_EncodeBlock(AdxEnc *e, int ch);
 void FUN_002683e8(AdxEnc *e, int ch);
 int FUN_00268b10(AdxEnc *e, Sj *out);
 
@@ -310,21 +313,21 @@ void FUN_00267c50(AdxEncPredictor *p, short k0, short k1)
     p->k1 = k1;
 }
 
-void FUN_00267c60(AdxEncPredictor *p, short h0, short h1)
+void adxenc_SetPredHistory(AdxEncPredictor *p, short h0, short h1)
 {
     /* matching construct: variant search — stmt order [1, 0]; the unit compiler (Sony EE GCC 2.96 -O2 -G0) keeps independent stores in source order, so the statements follow the retail store order */
     p->h0 = h0;
     p->h1 = h1;
 }
 
-void FUN_00267c70(AdxEncPredictor *p, unsigned short *h0, unsigned short *h1)
+void adxenc_GetPredHistory(AdxEncPredictor *p, unsigned short *h0, unsigned short *h1)
 {
     unsigned short t = p->h0;
     *h0 = t;
     *h1 = p->h1;
 }
 
-short FUN_00267c88(AdxEncPredictor *state, short input)
+short adxenc_PredictSample(AdxEncPredictor *state, short input)
 {
     int value;
     short output;
@@ -393,14 +396,41 @@ void FUN_00267de8(AdxEncFilter *f, int id, int arg)
     FUN_00267c50(f->pred, first, second);
 }
 
-void FUN_00267e40(AdxEncFilter *f, short h0, short h1)
+void adxenc_SetFilterHistory(AdxEncFilter *f, short h0, short h1)
 {
     /* matching construct: variant search — stmt order [1, 0]; the unit compiler (Sony EE GCC 2.96 -O2 -G0) keeps independent stores in source order, so the statements follow the retail store order */
     f->h0 = h0;
     f->h1 = h1;
 }
 
-void FUN_00267f38(AdxEncFilter *f)
+void adxenc_FilterSample(AdxEncFilter *f, int i, short input)
+{
+    int j;
+    int value;
+    short output;
+    int level;
+    unsigned short prev;
+
+    if (i == 0) {
+        for (j = 0; j < f->nsmpl; j++) {
+            f->res[j] = 0;
+        }
+        f->peak = 0;
+    }
+    if (f != 0) {
+        value = input - ((f->k0 * f->h0) >> 12) - ((f->k1 * f->h1) >> 12);
+        f->res[i] = output = value > 32767 ? 32767 : (value < -32768 ? -32768 : value);
+        level = abs(output);
+        if (f->peak < level) {
+            f->peak = level;
+        }
+        prev = f->h0;
+        f->h0 = input;
+        f->h1 = prev;
+    }
+}
+
+void adxenc_CalcScale(AdxEncFilter *f)
 {
     int scale;
     int n;
@@ -416,7 +446,7 @@ void FUN_00267f38(AdxEncFilter *f)
     }
 }
 
-short FUN_00267fd0(AdxEncFilter *f, int i)
+short adxenc_GetResidual(AdxEncFilter *f, int i)
 {
     short v;
 
@@ -438,7 +468,7 @@ int FUN_00267ff0(AdxEncFilter *f, int i)
     return v;
 }
 
-void FUN_00268008(AdxEncFilter *f, int i, signed char v)
+void adxenc_SetNibble(AdxEncFilter *f, int i, signed char v)
 {
     f->nibble[i] = v;
 }
@@ -467,6 +497,43 @@ int FUN_00268018(AdxEnc *x, int pos, int n, short **bufs)
         }
     }
     return cnt;
+}
+
+int adxenc_EncodeBlock(AdxEnc *e, int ch)
+{
+    AdxEncFilter *f;
+    AdxEncPredictor *pred;
+    unsigned short h0;
+    unsigned short h1;
+    short sample;
+    short decoded;
+    int level;
+    int i;
+
+    f = e->flt[ch];
+    pred = f->pred;
+    adxenc_SetFilterHistory(f, e->prev1[ch], e->prev2[ch]);
+    /* matching construct: variant search — the samples are read as *(e->buf[ch] + i), not e->buf[ch][i]; the row offset then stays a loop invariant of its own in both loops */
+    for (i = 0; i < e->blklen; i++) {
+        adxenc_FilterSample(f, i, *(e->buf[ch] + i));
+    }
+    adxenc_CalcScale(f);
+    adxenc_SetPredHistory(f->pred, e->prev1[ch], e->prev2[ch]);
+    for (i = 0; i < e->blklen; i++) {
+        sample = *(e->buf[ch] + i);
+        adxenc_GetPredHistory(pred, &h0, &h1);
+        adxenc_SetFilterHistory(f, h0, h1);
+        adxenc_FilterSample(f, i, sample);
+        level = adxenc_GetResidual(f, i) * f->rscale;
+        level = (short)(level > 32767 ? 32767 : (level < -32768 ? -32768 : level));
+        level = (level < 0 ? level - 2340 : level + 2340) / 4681;
+        level = level >= 7 ? 7 : (level < -8 ? -8 : level);
+        adxenc_SetNibble(f, i, level);
+        level *= f->scale;
+        decoded = level > 32767 ? 32767 : (level < -32768 ? -32768 : level);
+        adxenc_PredictSample(f->pred, decoded);
+    }
+    return 0;
 }
 
 int FUN_00268670(AdxEnc *e)
@@ -498,12 +565,12 @@ int FUN_00268670(AdxEnc *e)
     }
     e->pos += e->blklen;
     for (ch = 0; ch < e->nch; ch++) {
-        FUN_00268188(e, ch);
+        adxenc_EncodeBlock(e, ch);
         f = e->flt[ch];
         pred = f->pred;
         e->scale[ch] = f->scale;
         e->rscale[ch] = f->rscale;
-        FUN_00267c70(pred, &h0, &h1);
+        adxenc_GetPredHistory(pred, &h0, &h1);
         e->prev1[ch] = h0;
         e->prev2[ch] = h1;
         FUN_002683e8(e, ch);
@@ -603,15 +670,15 @@ void FUN_00269298(void)
 }
 
 /* matching construct: statement-order sweep of the five trailing stores */
-void FUN_0025f2d0(void);
-void FUN_0025f2e8(void);
+void ADXCRS_Lock(void);
+void ADXCRS_Unlock(void);
 
 void FUN_00269498(AdxEnc *e)
 {
     if (e == 0) {
         return;
     }
-    FUN_0025f2d0();
+    ADXCRS_Lock();
     if (e->flt[0] != 0) {
         FUN_00267da0(e->flt[0]);
     }
@@ -620,7 +687,7 @@ void FUN_00269498(AdxEnc *e)
     }
     /* matching construct: hand search — the four status bytes are cleared together, one word store */
     memset(e, 0, 4);
-    FUN_0025f2e8();
+    ADXCRS_Unlock();
 }
 
 void FUN_00269508(AdxEnc *x)
@@ -652,6 +719,11 @@ void FUN_00269508(AdxEnc *x)
 int FUN_00269500(AdxEnc *e)
 {
     return e->stat;
+}
+
+void ADXENC_SetEnd(AdxEnc *e)
+{
+    e->ended = 1;
 }
 
 void FUN_00269640(AdxEnc *e, int v)

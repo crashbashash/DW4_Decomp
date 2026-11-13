@@ -18,7 +18,7 @@ recovered. The packs carry serialised `igLightAttr` records, but those are proto
 | `p2lighting` `0x001fb710` | 980 | the **lit** path: emits the light constant block and returns the advanced cursor |
 | `p2WriteDirectionalLights` | 660 | the **unlit** path: writes the first four directional lights' directions as x, y and z rows, plus three rows of half vectors toward a viewer on +z when specular lighting is on (also used from `FUN_001fbaf0`) |
 | `FUN_001fbaf0` | 484 | the tail `p2lighting` calls when the `0x56AFAE` mode is on; appends a 48-byte block and an optional 16-byte record |
-| `FUN_001f9430` | 6684 | the per-frame light updater (calls `FUN_001fb0e0`); also the ambient accumulation in `0x1f9f20` |
+| `p2UpdateLights` | 6684 | the per-frame light updater (calls `FUN_001fb0e0`); also the ambient accumulation in `0x1f9f20` |
 | `FUN_001f8b50` | 2260 | the light-state refresh: fills the index tables `0x56AF30`/`0x56AF38`, the count `0x56AF94` and the enable flags from the pointer table `0x56AF40` |
 | `FUN_001f8490` | 660 | initialises the light-type → program-index table at `0x56AE50` (`0,1,…,10,12,13,20,…,127`) |
 | `p2SetLight` / `p2SetMaterial` | 108 / 108 | store a light into `p2Lights` (`0x56AF40`) or the material into `p2Materials` (`0x56AF60`) at a caller-supplied slot |
@@ -146,7 +146,7 @@ so the records are prototypes, not the running values.
 | `0x56AED0` | `p2LightingMode` | int | lighting mode 1/5 (`p2SetLightingMode`) |
 | `0x56AE50` | | u8[?] | light-type → program-index table (`FUN_001f8490`) |
 | `0x554BC0` | `p2LightingEnabled` | bool | lighting on (`p2EnableLighting`) |
-| `0x554BC4` | `p2LightsNeedTransform` | bool | set by `FUN_001f9430`; the unlit path then rotates the lights (object-space programs) or raises `p2LightCalcPending` |
+| `0x554BC4` | `p2LightsNeedTransform` | bool | set by `p2UpdateLights`; the unlit path then rotates the lights (object-space programs) or raises `p2LightCalcPending` |
 | `0x491270` | `p2LightsChanged` | int | any light, material or mode changed; the refresh rebuilds the tables |
 
 Measured from an offline RAM dump (stag0102 loaded): `0x56AF00 = 2`,
@@ -200,7 +200,7 @@ practice stage with stag0001's BG02 overlay pattern has been found.
 
 **Not established (unconfirmed):** a second retail dump with k > 0 (the three practice-stage dumps are the only constant dim additive draws in
 about 1,300 parsed dumps; the Main Lobby frames contain no lit k > 0 mesh, so they neither confirm nor contradict the hub half);
-which events re-emit a fresh block in the draw-begin path `FUN_001f9430` (`p2DirtyFlags` bit 2 and the lighting-dirty state); whether
+which events re-emit a fresh block in the draw-begin path `p2UpdateLights` (`p2DirtyFlags` bit 2 and the lighting-dirty state); whether
 leaving a texture-matrix transform uploads on its own (the stream shows only the entry uploads plus one restore on leaving the scope);
 the `sel`/object-space program variants (`p2WriteDirectionalLights` transforms the lights on the EE there), the `p2lighting` path and positional
 or spot lights; a rotating or scaled ancestor, where `(V3 . R)^k` is an extrapolation; and a hidden switch branch (a draw skipped

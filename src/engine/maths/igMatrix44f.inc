@@ -57,6 +57,13 @@ void Matrix44_GetTranslation(const float *matrix, float *vector) {
     vector[2] = matrix[14];
 }
 
+void Matrix44_TranslateLocal(float *m, const ScaleVec &v) {
+    m[12] += m[0] * v[0] + m[4] * v[1] + m[8] * v[2];
+    m[13] += m[1] * v[0] + m[5] * v[1] + m[9] * v[2];
+    m[14] += m[2] * v[0] + m[6] * v[1] + m[10] * v[2];
+    m[15] += m[3] * v[0] + m[7] * v[1] + m[11] * v[2];
+}
+
 void FUN_00190b30(float *m, const ScaleVec &v) {
     m[0] += m[3] * v[0];
     m[1] += m[3] * v[1];
@@ -324,7 +331,7 @@ void FUN_00191910(float *m, float l, float r, float b, float t, float n, float f
     m[15] = 0;
 }
 
-void FUN_001919d0(int arg0, float a, float b, float c, float d, float e) {
+void igMatrix44f_MakePerspective(int arg0, float a, float b, float c, float d, float e) {
     float t23;
     float t14;
 
@@ -356,7 +363,7 @@ void FUN_00191f30(int *arg0, float *arg1, int arg2) {
     U6 u;
     float len;
     int i, j;
-    FUN_00192030((int)arg1, arg2, tmp);
+    Matrix44_Adjugate(arg1, (const float *)arg2, tmp);
     len = FUN_00192290((float *)arg2);
     u.f = len;
     u.b.sign = 0;
@@ -378,6 +385,47 @@ void FUN_00191f30(int *arg0, float *arg1, int arg2) {
         } while (i < 4);
         *arg0 = g_statusSucceeded[0];
     }
+}
+
+/* Adjugate (transposed cofactor matrix) of m, written to adjugate. */
+void Matrix44_Adjugate(float *self, const float *m, float *adjugate) {
+    float m00, m10, m20, m30;
+    float m01, m11, m21, m31;
+    float m02, m12, m22, m32;
+    float m03, m13, m23, m33;
+
+    m00 = m[0];
+    m01 = m[1];
+    m02 = m[2];
+    m03 = m[3];
+    m10 = m[4];
+    m11 = m[5];
+    m12 = m[6];
+    m13 = m[7];
+    m20 = m[8];
+    m21 = m[9];
+    m22 = m[10];
+    m23 = m[11];
+    m30 = m[12];
+    m31 = m[13];
+    m32 = m[14];
+    m33 = m[15];
+    adjugate[0] = m11 * (m22 * m33 - m32 * m23) - m12 * (m21 * m33 - m31 * m23) + m13 * (m21 * m32 - m31 * m22);
+    adjugate[4] = -(m10 * (m22 * m33 - m32 * m23) - m12 * (m20 * m33 - m30 * m23) + m13 * (m20 * m32 - m30 * m22));
+    adjugate[8] = m10 * (m21 * m33 - m31 * m23) - m11 * (m20 * m33 - m30 * m23) + m13 * (m20 * m31 - m30 * m21);
+    adjugate[12] = -(m10 * (m21 * m32 - m31 * m22) - m11 * (m20 * m32 - m30 * m22) + m12 * (m20 * m31 - m30 * m21));
+    adjugate[1] = -(m01 * (m22 * m33 - m32 * m23) - m02 * (m21 * m33 - m31 * m23) + m03 * (m21 * m32 - m31 * m22));
+    adjugate[5] = m00 * (m22 * m33 - m32 * m23) - m02 * (m20 * m33 - m30 * m23) + m03 * (m20 * m32 - m30 * m22);
+    adjugate[9] = -(m00 * (m21 * m33 - m31 * m23) - m01 * (m20 * m33 - m30 * m23) + m03 * (m20 * m31 - m30 * m21));
+    adjugate[13] = m00 * (m21 * m32 - m31 * m22) - m01 * (m20 * m32 - m30 * m22) + m02 * (m20 * m31 - m30 * m21);
+    adjugate[2] = m01 * (m12 * m33 - m32 * m13) - m02 * (m11 * m33 - m31 * m13) + m03 * (m11 * m32 - m31 * m12);
+    adjugate[6] = -(m00 * (m12 * m33 - m32 * m13) - m02 * (m10 * m33 - m30 * m13) + m03 * (m10 * m32 - m30 * m12));
+    adjugate[10] = m00 * (m11 * m33 - m31 * m13) - m01 * (m10 * m33 - m30 * m13) + m03 * (m10 * m31 - m30 * m11);
+    adjugate[14] = -(m00 * (m11 * m32 - m31 * m12) - m01 * (m10 * m32 - m30 * m12) + m02 * (m10 * m31 - m30 * m11));
+    adjugate[3] = -(m01 * (m12 * m23 - m22 * m13) - m02 * (m11 * m23 - m21 * m13) + m03 * (m11 * m22 - m21 * m12));
+    adjugate[7] = m00 * (m12 * m23 - m22 * m13) - m02 * (m10 * m23 - m20 * m13) + m03 * (m10 * m22 - m20 * m12);
+    adjugate[11] = -(m00 * (m11 * m23 - m21 * m13) - m01 * (m10 * m23 - m20 * m13) + m03 * (m10 * m21 - m20 * m11));
+    adjugate[15] = m00 * (m11 * m22 - m21 * m12) - m01 * (m10 * m22 - m20 * m12) + m02 * (m10 * m21 - m20 * m11);
 }
 
 float FUN_00192290(float *m) {
@@ -541,6 +589,53 @@ void FUN_00192810(void *arg0, void *arg1) {
     *(int *)((char *)(arg1) + 60) = 0x3F800000;
 }
 
+/* Writes the rotation part of the matrix of unit quaternion q.
+ * matching construct: declaration-order sweep — the locals' declaration order sets their registers */
+void Quaternion_GetRotation(const float *q, float *m) {
+    float y2;
+    float x2;
+    float w;
+    float wx;
+    float wy;
+    float wz;
+    float x;
+    float xx;
+    float xy;
+    float zz;
+    float z2;
+    float xz;
+    float yy;
+    float y;
+    float z;
+    float yz;
+
+    x = q[0];
+    y = q[1];
+    z = q[2];
+    w = q[3];
+    x2 = 2.0f * x;
+    y2 = 2.0f * y;
+    z2 = 2.0f * z;
+    wx = x2 * w;
+    xx = x2 * x;
+    wy = y2 * w;
+    wz = z2 * w;
+    xy = y2 * x;
+    xz = z2 * x;
+    zz = z2 * z;
+    yy = y2 * y;
+    yz = z2 * y;
+    m[0] = 1.0f - (yy + zz);
+    m[1] = xy - wz;
+    m[2] = xz + wy;
+    m[4] = xy + wz;
+    m[5] = 1.0f - (xx + zz);
+    m[6] = yz - wx;
+    m[8] = xz - wy;
+    m[9] = yz + wx;
+    m[10] = 1.0f - (xx + yy);
+}
+
 void FUN_00192990(int arg0, float *arg1, float *arg2, float *arg3) {
     float m[16];
     float t;
@@ -588,3 +683,25 @@ void FUN_00192e10(float *arg0, float *arg1) {
     arg0[2] = a0 * b1 - a1 * b0;
 }
 
+enum Octant {
+    OCTANT_XPOS_YPOS_ZPOS,
+    OCTANT_XPOS_YPOS_ZNEG,
+    OCTANT_XPOS_YNEG_ZPOS,
+    OCTANT_XPOS_YNEG_ZNEG,
+    OCTANT_XNEG_YPOS_ZPOS,
+    OCTANT_XNEG_YPOS_ZNEG,
+    OCTANT_XNEG_YNEG_ZPOS,
+    OCTANT_XNEG_YNEG_ZNEG
+};
+
+int Vec3_GetOctant(const float *normal) {
+    Octant octant;
+    if (normal[0] < 0.0f) {
+        if (normal[1] < 0.0f) octant = normal[2] < 0.0f ? OCTANT_XNEG_YNEG_ZNEG : OCTANT_XNEG_YNEG_ZPOS;
+        else octant = normal[2] < 0.0f ? OCTANT_XNEG_YPOS_ZNEG : OCTANT_XNEG_YPOS_ZPOS;
+    } else {
+        if (normal[1] < 0.0f) octant = normal[2] < 0.0f ? OCTANT_XPOS_YNEG_ZNEG : OCTANT_XPOS_YNEG_ZPOS;
+        else octant = normal[2] < 0.0f ? OCTANT_XPOS_YPOS_ZNEG : OCTANT_XPOS_YPOS_ZPOS;
+    }
+    return octant;
+}

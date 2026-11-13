@@ -151,7 +151,7 @@ void FUN_00453990(struct FontLayers_453990 *self, int index, struct FontLayerIte
     msg[1] = 0;
     msg[2] = DAT_0058c618[0];
     msg[3] = index;
-    FUN_004578c0((S_4578c0 *)self, (S_4578c0 *)msg);
+    igModel_NotifyViews((S_4578c0 *)self, (S_4578c0 *)msg);
 }
 
 void FUN_00453a20(void *arg0, int arg1) {

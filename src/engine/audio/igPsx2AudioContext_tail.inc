@@ -128,9 +128,9 @@ void Gap__igPsx2AudioContext__vfunc_24(int *arg0, struct InitContext *arg1) {
     CallRpc(arg1->conn, 0x40000, 0x3FFF3FFFu, 0, 0);
     CallRpc(arg1->conn, 0x40001, 0x3FFF3FFF, 0, 0);
     arg1->f40 = (int)FUN_00300db0(arg1, 0x2000, 0x10);
-    FUN_00113f20();
+    DIntr();
     sceSifAddCmdHandler(3, FUN_00143800, 0);
-    FUN_00113f78();
+    EIntr();
     *arg0 = g_statusSucceeded[0];
 }
 }
@@ -546,8 +546,8 @@ void Gap__igPsx2AudioContext__vfunc_54(igPsx2AudioContext *arg0, int arg1) {
         ((AudioThread *)arg0->_streamingThread)->a132((void *)&FUN_00143880);
         ((AudioThread *)arg0->_streamingThread)->a140(arg1);
         ((AudioThread *)arg0->_streamingThread)->a120();
-        FUN_00113f20();
+        DIntr();
         sceSifAddCmdHandler(0, &FUN_00143840, &DAT_0055f5b0[0]);
-        FUN_00113f78();
+        EIntr();
     }
 }

@@ -1,12 +1,12 @@
-/* Unless mode DAT_004b1dc8 is 1 with no pending count in DAT_004b1dc0, runs FUN_0027a818 and then
+/* Unless mode ps2rna_setup_voice is 1 with no pending count in ps2rna_nvoice, runs FUN_0027a818 and then
  * FUN_0027a8b0 on the argument. */
-extern int DAT_004b1dc8;
-extern int DAT_004b1dc0;
+extern int ps2rna_setup_voice;
+extern int ps2rna_nvoice;
 int FUN_0027a818(int arg, int flag);
 int FUN_0027a8b0(int arg, int flag);
 
 void FUN_0027a7b8(int arg) {
-    if (DAT_004b1dc8 == 1 && DAT_004b1dc0 <= 0) {
+    if (ps2rna_setup_voice == 1 && ps2rna_nvoice <= 0) {
         return;
     }
     FUN_0027a818(arg, 0);

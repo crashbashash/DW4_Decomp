@@ -20,6 +20,6 @@ void Gap__Sg__igLod__vfunc_17(void **arg0) {
 
 void Gap__Sg__igLod__vfunc_27(igLod *self, float *matrix) {
     FUN_001c6340((int *)self, (int)(matrix));
-    FUN_00192fc0(self->_center, self->_center, matrix);
+    Vec3f_TransformProjective(self->_center, self->_center, matrix);
 }
 

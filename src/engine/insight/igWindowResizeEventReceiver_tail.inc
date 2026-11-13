@@ -16,7 +16,7 @@ int Gap__Insight__igWindowResizeEventReceiver__vfunc_32(Receiver *self, int widt
 
 void igInsightCore_AddManager(void *arg0, void *arg1) {
     if (FUN_00236b70() == 0) {
-        FUN_002d6f50(*(int *)((char *)(arg0) + 8), arg1, 0);
+        igRendererOrderedList_Append(*(int *)((char *)(arg0) + 8), arg1, 0);
         *(int *)((char *)(arg1) + 12) = (int)(arg0);
         ((DW4VC_92_0 *)(((char *)(arg1) + 0)))->vX();
     }
@@ -78,9 +78,9 @@ void FUN_00236e80(A *arg0) {
     }
 }
 
-void FUN_00236ee0(void *arg0, int arg1) {
+void igInsightCore_AddRenderer(void *arg0, int arg1) {
     FUN_00457ca0(arg1, *(int *)((char *)arg0 + 24));
-    FUN_002d6f50(*(int *)((char *)arg0 + 28), arg1, 0);
+    igRendererOrderedList_Append(*(int *)((char *)arg0 + 28), arg1, 0);
 }
 
 void FUN_00236f30(Obj_236f30 *arg0, int arg1) {
@@ -104,7 +104,7 @@ int FUN_00237010(void) {
     return (int)g_igInfoManager_metaObject[0];
 }
 
-int FUN_00237020(int *p)
+int igInsightCore_AddRendererOrder(int *p)
 {
     return FUN_002d7090(*(int *)((char *)p + 28));
 }

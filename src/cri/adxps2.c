@@ -115,7 +115,7 @@ int FUN_0027ed80();
 int FUN_0027edb0();
 int FUN_0026cbd8();
 int ADXT_ExecFsSvr();
-void FUN_002659a0(const char *format, ...);
+void ADXMSG_PrintErr(const char *format, ...);
 
 void adxm_wakeup_thrd(int threadId);
 int adxm_resume_thrd(int threadId);
@@ -372,7 +372,7 @@ void adxm_create_usrvsync_thrd(void *stack, int stackSize) {
     } else {
         param.stack = stack;
         param.stackSize = stackSize;
-        FUN_002659a0(ADXM_UsrVsyncThread_Stack_pointe, stack, stackSize);
+        ADXMSG_PrintErr(ADXM_UsrVsyncThread_Stack_pointe, stack, stackSize);
     }
     param.initPriority = adxm_main_init_prio;
     param.gpReg = _gp;
@@ -432,7 +432,7 @@ void adxm_create_usridle_thrd(void *stack, int stackSize) {
     } else {
         param.stack = stack;
         param.stackSize = stackSize;
-        FUN_002659a0(ADXM_UsrIdleThread_Stack_pointer, stack, stackSize);
+        ADXMSG_PrintErr(ADXM_UsrIdleThread_Stack_pointer, stack, stackSize);
     }
     param.initPriority = adxm_main_init_prio;
     param.gpReg = _gp;

@@ -16,8 +16,8 @@ typedef struct {
 } AdxRna;
 
 extern AdxRna DAT_00498738[16];
-void FUN_0025f2d0(void);
-void FUN_0025f2e8(void);
+void ADXCRS_Lock(void);
+void ADXCRS_Unlock(void);
 
 /* matching construct: store-order search over the seven stores, 62 of 150 steps */
 AdxRna *FUN_0025b2e8(int nch, Sj **sj, Sj **out)
@@ -34,7 +34,7 @@ AdxRna *FUN_0025b2e8(int nch, Sj **sj, Sj **out)
     if (i == 16) {
         return 0;
     }
-    FUN_0025f2d0();
+    ADXCRS_Lock();
     rna = &DAT_00498738[i];
     rna->nch = nch;
     for (ch = 0; ch < nch; ch++) {
@@ -49,6 +49,6 @@ AdxRna *FUN_0025b2e8(int nch, Sj **sj, Sj **out)
     rna->nch_ = nch;
     rna->f40 = 0.1f;
     rna->used = 1;
-    FUN_0025f2e8();
+    ADXCRS_Unlock();
     return rna;
 }

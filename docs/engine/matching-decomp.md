@@ -84,20 +84,20 @@ stores definite results in `build/cache/` (untracked), keyed by content:
 ## Translation units
 
 `src/` holds **translation units**, the way the original source was built: `src/game/be.cpp`
-is the `be` class with the Lua API, `src/engine/core/CoreLibrary.cpp` the Core library in retail order, one fragment per class run, `src/game/*.c` a
-`be*` class each. Unnamed functions stay in `src/unmatched/`; named ones are grouped and folded
-there by `tools/place_named.py` (see [`naming.md`](naming.md)). A unit's functions are
-written in retail address order, because MWCC emits a unit's functions in source order, so
-contiguity in the binary is what identifies the original file, and `tools/merge_units.py` folds
-per-function files into a unit once a module is worked. (The Lua functions are one contiguous
-run: the 116 real implementations occupy `0x371c70..0x375d90` with every gap between them ≤16
-bytes of alignment padding.)
+is the `be` class with the Lua API, `src/engine/core/CoreLibrary.cpp` the Core library in retail order, one
+fragment per class run, `src/cri/*.c` one CRI file each. A unit's functions are written in retail address
+order, because both compilers emit a file's functions in source order, so contiguity in the binary is what
+identifies the original file.
 
-The matching build is still **per function**: `verify_one` compiles one function and compares
-its words to retail. `tools/units.py` bridges the two by blanking every definition but the one
-being checked, leaving the unit's `#include`s, prototypes and `extern`s in place. A symbol whose
-declaration two functions disagree on (m2c guesses `int[4]` in one, `char[]` in another) is kept
-as a block-scope `extern` inside each user, so no two functions have to agree.
+The matching build compiles **whole files**: a whole-file unit's row in `config/SLUS-20836/units.tsv` covers
+the file's range, its `unit-objects.json` row (`whole_file`, measured by `tools/whole_file_rows.py`) lists
+the members, and `make check` compiles the file once and compares every placed member with retail
+([whole-file units](emitted-functions.md#whole-file-units)). A new function joins its file in retail order
+and counts only when the whole file verifies, since compiling whole changes code under both compilers. A
+range not yet folded is folded first (`tools/merge_units.py` gathers its one-function files); the
+one-function files left in `src/unmatched/` and their per-function rows are legacy. For those,
+`tools/units.py` still splits a unit per function, blanking every definition but the one being checked and
+keeping a symbol two functions declare differently as a block-scope `extern` inside each user.
 
 The split is written as a short `dw4u_`-prefixed file in the unit's own directory. MWCC
 reads a file's extension from the first dot, so it refuses a filename with a leading dot
@@ -112,10 +112,11 @@ make asm               # (re)generate asm/; generated from your executable, neve
 make check             # split integrity + coverage  (all cores; cached reruns are quick, a cold run is long; see Cached gates)
 make report            # coverage only
 
-# decompile one function
-sed -n '1,40p' asm/FUN_XXXXXXXX.s      # read the retail code
-$EDITOR src/unmatched/FUN_XXXXXXXX.c   # write candidate C
-make check                             # or: scripts/match_func.py 0xVA src/unmatched/FUN_XXXXXXXX.c FUN_XXXXXXXX
+# decompile one function: draft it, then join it to its whole file
+sed -n '1,40p' asm/FUN_XXXXXXXX.s                          # read the retail code
+$EDITOR src/<module>/<file>.c                              # write its C in retail order in the file
+python3 tools/whole_file_rows.py --partial ... --write     # re-measure the file's rows (see its docstring)
+python3 tools/check.py --function 0xVA --cand src/<module>/<file>.c   # 0xVA: the file's first function
 ```
 
 A function is done when its compiled bytes are **identical** to retail. Mismatches print

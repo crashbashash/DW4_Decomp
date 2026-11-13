@@ -1,4 +1,4 @@
-/* Moves a handle to state 6 (field 96 = -1) when its request reports 4 through FUN_0026a138 or its
+/* Moves a handle to state 6 (field 96 = -1) when its request reports 4 through ADXSTM_GetStat or its
  * field-148 object reports 3 through FUN_002773a0. */
 /* Handle layout shared by FUN_0026bb38 through FUN_0026ebf8. */
 typedef struct Source_26bbc0 Source_26bbc0;
@@ -50,11 +50,11 @@ typedef struct Handle_26bbc0 {
     int f192;                   /* 0xc0 */
 } Handle_26bbc0;
 
-int FUN_0026a138(void *request);
+int ADXSTM_GetStat(void *request);
 int FUN_002773a0(void *object);
 
 void FUN_0026ebf8(Handle_26bbc0 *handle) {
-    if (handle->request != 0 && FUN_0026a138(handle->request) == 4) {
+    if (handle->request != 0 && ADXSTM_GetStat(handle->request) == 4) {
         handle->f96 = -1;
         handle->state = 6;
     }

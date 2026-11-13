@@ -19,22 +19,6 @@
 #define P2_DISPLAY_LIST_BLOCK_SIZE 0x8000
 #define P2_DISPLAY_LIST_RESERVE 0x1400
 
-/* The capability bits of a program's p2ProgramFlags entry. */
-enum p2Capability {
-    P2_CAP_VERTEX_BLEND = 9,
-    P2_CAP_FIXED_POINT = 27
-};
-
-/* p2VertexFormat bits this file sets or tests. */
-enum {
-    P2_FORMAT_NORMALS = 0x01,
-    P2_FORMAT_TEXCOORDS = 0x04,
-    P2_FORMAT_BLEND_WEIGHTS = 0x08,
-    P2_FORMAT_BLEND = 0x10,
-    P2_FORMAT_RECORDING = 0x20,
-    P2_FORMAT_SPRITE_SIZE = 0xC0
-};
-
 /* p2VuProgram.flags */
 enum {
     P2_VU_PROGRAM_VU1 = 0x1,
@@ -89,7 +73,8 @@ typedef struct p2DmaTagWords {
 typedef union p2DmaChainTag {
     unsigned int word[4];
     struct {
-        unsigned int qwcId;
+        unsigned short qwc;
+        unsigned short id;
         unsigned int addr : 31;
         unsigned int spr : 1;
     } field;
@@ -133,15 +118,15 @@ typedef struct p2VuProgram {
     long long key;                /* which variant of a program this is */
     int size;
     int state;
-    int f16;
-    int f20;
+    int index;
+    unsigned int code;            /* the microcode in the VU1 symbol image */
     struct p2VuProgram *alias;
-    int f28;
+    int reserved;
     int address;
-    int f36;
+    int listValue;                /* the program list's value beside key and flags; nothing reads it */
     unsigned int flags;           /* P2_VU_PROGRAM_*; the slot in the high half */
     char *name;
-    int f48[4];
+    int reservedWords[4];
 } p2VuProgram;
 
 /* An image the renderer created for the visual context: a texture node of the image pool. */
@@ -174,6 +159,22 @@ typedef struct p2Clut {
     int format : 4;
 } p2Clut;
 
+/* Each program's texturing: its texture function, two bits a program, and whether it maps
+ * textures, a bit a program. */
+typedef struct p2ProgramTextureState {
+    unsigned int functions;
+    unsigned short enabled;
+} p2ProgramTextureState;
+
+/* A program's blend equation, kept as its ALPHA register packs it. */
+typedef struct p2BlendEquation {
+    unsigned short a : 2;
+    unsigned short b : 2;
+    unsigned short c : 2;
+    unsigned short d : 2;
+    unsigned short fix : 8;
+} p2BlendEquation;
+
 int memcpy();
 int memset();
 int printf();
@@ -204,11 +205,16 @@ int FUN_00330770();
 char *FUN_003307b0(unsigned int data, int size, int heap);
 p2Texture *p2LoadTexture(void *pixels, int width, int height, int psm, int flags);
 void FUN_001fcb00(void);
+void p2SendGsRegister(int reg);
+void p2EnableLighting(void);
+void p2DisableLighting(void);
+void p2CopyContext1ToContext2(void);
 void p2SubmitDmaPacket(int channel);
 void p2WaitDmaSequence(int channel, long long sequence);
 void p2ShutdownDmaChannels(void);
 
 void p2SetCapability(int capability, int on);
+void p2UploadFog(void);
 void p2SoftwareBlendOneWeight(int count, float *out);
 void p2SoftwareBlendTwoWeights(int count, float *out);
 void p2SoftwareBlendThreeWeights(int count, float *out);
@@ -227,6 +233,9 @@ extern int p2CurrentPrimitive;
 extern char p2DepthTestEnabled[P2_PROGRAM_COUNT];
 extern char p2DepthFunction[P2_PROGRAM_COUNT];
 extern char p2DepthWriteDisabled[P2_PROGRAM_COUNT];
+extern p2BlendEquation p2BlendEquations[P2_PROGRAM_COUNT];
+extern long long p2StatCapabilityChanges;
+extern p2ProgramTextureState p2ProgramTexture;
 extern int p2ColorScalerState;
 extern int p2FogMode;
 extern float p2FogScale;
@@ -333,7 +342,7 @@ int p2IsCapabilityEnabled(int capability) {
 
 /* Sends the depth test and depth write of the current program's context; with the test off the
  * GS still needs ZTE set, so it passes every pixel and writes nothing. */
-void p2UpdateDepthTest(void) {
+static void p2UpdateDepthTest(void) {
     if (p2CurrentProgram == 0) {
         if (p2DepthTestEnabled[0] != 0) {
             p2CurrentGsRegisters->test[0].field.zte = 1;
@@ -389,6 +398,213 @@ void p2InitCapabilities(void) {
     }
     p2CurrentProgram = 0;
     p2CurrentGsRegisters = &p2GsRegisterSets[0];
+}
+
+/* Switches a capability of the current program; the next draw sends what the switch marks. */
+void p2SetCapability(int capability, int on) {
+    int bit;
+
+    p2StatCapabilityChanges++;
+    switch (capability) {
+    case 0:
+        p2DepthTestEnabled[p2CurrentProgram] = on;
+        p2UpdateDepthTest();
+        break;
+    case 1:
+        if (p2CurrentProgram == 0) {
+            p2CurrentGsRegisters->prmode.field.tme = on;
+            p2DirtyFlags |= 0x51;
+            p2GsDirtyRegisters |= P2_GS_BIT(P2_GS_PRMODE);
+        }
+        bit = 1 << p2CurrentProgram;
+        if (on) {
+            p2ProgramTexture.enabled |= bit;
+        } else {
+            p2ProgramTexture.enabled &= ~bit;
+        }
+        break;
+    case 2:
+        p2CurrentGsRegisters->prmode.field.abe = on;
+        p2DirtyFlags |= P2_DIRTY_GS_REGISTERS;
+        p2GsDirtyRegisters |= P2_GS_BIT(P2_GS_PRMODE);
+        if (p2CurrentProgram != 0) {
+            p2DirtyFlags |= 0x111;
+        }
+        break;
+    case 3:
+        if (p2CurrentProgram == 0) {
+            p2CurrentGsRegisters->test[0].field.ate = on;
+            p2DirtyFlags |= P2_DIRTY_GS_REGISTERS;
+            p2GsDirtyRegisters |= P2_GS_BIT(P2_GS_TEST_1);
+            if (p2ExtraPassCount != 0) {
+                p2CurrentGsRegisters->test[1].field.ate = on;
+                p2DirtyFlags |= P2_DIRTY_GS_REGISTERS;
+                p2GsDirtyRegisters |= P2_GS_BIT(P2_GS_TEST_2);
+            }
+        } else {
+            p2CurrentGsRegisters->test[1].field.ate = on;
+            p2DirtyFlags |= P2_DIRTY_GS_REGISTERS;
+            p2GsDirtyRegisters |= P2_GS_BIT(P2_GS_TEST_2);
+        }
+        break;
+    case 4:
+        if (p2CurrentProgram == 0) {
+            p2CurrentGsRegisters->test[0].field.date = on;
+            p2DirtyFlags |= P2_DIRTY_GS_REGISTERS;
+            p2GsDirtyRegisters |= P2_GS_BIT(P2_GS_TEST_1);
+            if (p2ExtraPassCount != 0) {
+                p2CurrentGsRegisters->test[1].field.date = on;
+                p2DirtyFlags |= P2_DIRTY_GS_REGISTERS;
+                p2GsDirtyRegisters |= P2_GS_BIT(P2_GS_TEST_2);
+            }
+        } else {
+            p2CurrentGsRegisters->test[1].field.date = on;
+            p2DirtyFlags |= P2_DIRTY_GS_REGISTERS;
+            p2GsDirtyRegisters |= P2_GS_BIT(P2_GS_TEST_2);
+        }
+        break;
+    case 5:
+        p2CurrentGsRegisters->prmode.field.aa1 = on;
+        p2DirtyFlags |= P2_DIRTY_GS_REGISTERS;
+        p2GsDirtyRegisters |= P2_GS_BIT(P2_GS_PRMODE);
+        break;
+    case 7:
+        p2CurrentGsRegisters->prmode.field.fge = on;
+        p2DirtyFlags |= 0x51;
+        p2GsDirtyRegisters |= P2_GS_BIT(P2_GS_PRMODE);
+        if (on) {
+            p2FogEnable = 1.0f;
+        } else {
+            p2FogEnable = 0.0f;
+        }
+        p2UploadFog();
+        break;
+    case 11:
+        p2CurrentGsRegisters->dthe.field.on = on;
+        p2DirtyFlags |= P2_DIRTY_GS_REGISTERS;
+        p2GsDirtyRegisters |= P2_GS_BIT(P2_GS_DTHE);
+        break;
+    case 13:
+        p2DirtyFlags |= 0x11;
+        break;
+    case 14:
+        p2DirtyFlags |= 0x11;
+        break;
+    case 12:
+        p2DirtyFlags |= 0x4;
+        break;
+    case 16:
+        p2DirtyFlags |= 0x11;
+        break;
+    case 15:
+        p2DirtyFlags |= 0x11;
+        break;
+    case 17:
+        p2CurrentGsRegisters->prmode.field.iip = on;
+        p2DirtyFlags |= P2_DIRTY_GS_REGISTERS;
+        p2GsDirtyRegisters |= P2_GS_BIT(P2_GS_PRMODE);
+        break;
+    case 8:
+        if (on) {
+            p2EnableLighting();
+        } else {
+            p2DisableLighting();
+        }
+        if ((p2ProgramFlags[p2CurrentProgram] >> P2_CAP_VERTEX_BLEND) & 1) {
+            p2DirtyFlags |= 0x20;
+        }
+        break;
+    case 10:
+        p2DirtyFlags |= 0x11;
+        if (p2CurrentProgram != 0) {
+            p2DirtyFlags |= 0x100;
+        }
+        break;
+    case 6:
+        p2DirtyFlags |= 0x11;
+        break;
+    case 18:
+        p2DirtyFlags |= 0x11;
+        break;
+    case 19:
+        p2DirtyFlags |= 0x11;
+        break;
+    case 20:
+        p2DirtyFlags |= 0x4;
+        break;
+    case P2_CAP_VERTEX_BLEND:
+        p2DirtyFlags |= 0x31;
+        if (((p2ProgramFlags[p2CurrentProgram] >> P2_CAP_LIGHTING) & 1) && !on) {
+            p2DirtyFlags |= 0x4;
+        }
+        break;
+    case 25:
+        p2DirtyFlags |= 0x11;
+        break;
+    case 22:
+        p2DirtyFlags |= 0x91;
+        if (!on) {
+            unsigned int flags = p2ProgramFlags[p2CurrentProgram];
+            if ((flags >> P2_CAP_LIGHTING) & 1) {
+                p2DirtyFlags |= 0x4;
+            }
+            if ((flags >> P2_CAP_VERTEX_BLEND) & 1) {
+                p2DirtyFlags |= 0x20;
+            }
+        }
+        break;
+    case 23:
+        if (on) {
+            p2CopyContext1ToContext2();
+            p2DirtyFlags |= 0x100;
+            p2CurrentGsRegisters->prmodecont.field.on = 1;
+            p2DirtyFlags |= P2_DIRTY_GS_REGISTERS;
+            p2GsDirtyRegisters |= P2_GS_BIT(P2_GS_PRMODECONT);
+        } else {
+            p2CurrentGsRegisters->prmodecont.field.on = 0;
+            p2SendGsRegister(P2_GS_PRMODECONT);
+            p2DirtyFlags |= P2_DIRTY_GS_REGISTERS;
+            p2GsDirtyRegisters |= P2_GS_BIT(P2_GS_PRMODE);
+        }
+        p2DirtyFlags |= 0x91;
+        break;
+    case 26:
+        p2DirtyFlags |= 0x1;
+        break;
+    case 27:
+        p2DirtyFlags |= 0x11;
+        break;
+    }
+}
+
+void p2SetDepthFunction(int function, int writeDisabled) {
+    int program = p2CurrentProgram;
+    p2DepthFunction[program] = function;
+    p2DepthWriteDisabled[program] = writeDisabled;
+    p2UpdateDepthTest();
+}
+
+/* Sets the GS blend equation of the current program, (A - B) * C >> 7 + D, and keeps it packed
+ * as the program's ALPHA image. */
+void p2SetBlendEquation(int a, int b, int c, int d, int fix) {
+    *(unsigned short *)&p2BlendEquations[p2CurrentProgram] = a | (b << 2) | (c << 4) | (d << 6) | (fix << 8);
+    if (p2CurrentProgram == 0) {
+        p2CurrentGsRegisters->alpha[0].field.a = a;
+        p2CurrentGsRegisters->alpha[0].field.b = b;
+        p2CurrentGsRegisters->alpha[0].field.c = c;
+        p2CurrentGsRegisters->alpha[0].field.d = d;
+        p2CurrentGsRegisters->alpha[0].field.fix = fix;
+        p2DirtyFlags |= P2_DIRTY_GS_REGISTERS;
+        p2GsDirtyRegisters |= P2_GS_BIT(P2_GS_ALPHA_1);
+    } else {
+        p2CurrentGsRegisters->alpha[1].field.a = a;
+        p2CurrentGsRegisters->alpha[1].field.b = b;
+        p2CurrentGsRegisters->alpha[1].field.c = c;
+        p2CurrentGsRegisters->alpha[1].field.d = d;
+        p2CurrentGsRegisters->alpha[1].field.fix = fix;
+        p2DirtyFlags |= P2_DIRTY_GS_REGISTERS;
+        p2GsDirtyRegisters |= P2_GS_BIT(P2_GS_ALPHA_2);
+    }
 }
 
 void p2SetFrameBufferAlpha(int on) {
@@ -695,7 +911,7 @@ void p2Clear(int mask, unsigned int colour, int depth) {
         } else {
             height = FUN_00208200(p2Display.renderTarget);
         }
-        prmode = p2CurrentGsRegisters->prmode;
+        prmode = p2CurrentGsRegisters->prmode.word;
         test = p2CurrentGsRegisters->test[0].word;
         zbuf = p2CurrentGsRegisters->zbuf[0].word;
         frame = p2CurrentGsRegisters->frame[0].word;
@@ -707,7 +923,7 @@ void p2Clear(int mask, unsigned int colour, int depth) {
         p2CurrentGsRegisters->scissor[0].field.scay1 = (antialias != 0 ? p2Display.antialiasHeight : p2Display.height) - 1;
         {
             p2GsRegisterSet *gs = p2CurrentGsRegisters;
-            gs->prmode = 0;
+            gs->prmode.word = 0;
             gs->prim.field.type = P2_PRIM_SPRITE;
         }
         {
@@ -737,7 +953,7 @@ void p2Clear(int mask, unsigned int colour, int depth) {
         }
         {
             p2GsRegisterSet *gs = p2CurrentGsRegisters;
-            gs->prmode = prmode;
+            gs->prmode.word = prmode;
             gs->test[0].word = test;
             gs->zbuf[0].word = zbuf;
             gs->frame[0].word = frame;
@@ -923,8 +1139,31 @@ int p2GetVuProgramAddress(int program) {
 
 void p2AliasVuProgram(int program, int target) {
     p2VuPrograms[program].alias = &p2VuPrograms[target];
-    p2VuPrograms[program].f28 = 0;
+    p2VuPrograms[program].reserved = 0;
     p2VuPrograms[program].flags = p2VuPrograms[program].flags | P2_VU_PROGRAM_ALIAS;
+}
+
+/* Adds a program whose microcode runs from start to end, as the next entry of the table. */
+int p2AddVuProgram(unsigned int flags, unsigned int start, unsigned int end) {
+    int result = -1;
+    if (p2VuProgramLast + 1 < P2_VU_PROGRAM_COUNT) {
+        result = ++p2VuProgramLast;
+        p2VuPrograms[p2VuProgramLast].code = start;
+        p2VuPrograms[p2VuProgramLast].size = (end - start) >> 3;
+        p2VuPrograms[p2VuProgramLast].state = 0;
+        p2VuPrograms[p2VuProgramLast].index = p2VuProgramLast;
+        p2VuPrograms[p2VuProgramLast].address = 0;
+        p2VuPrograms[p2VuProgramLast].alias = 0;
+        p2VuPrograms[p2VuProgramLast].reserved = 0;
+        p2VuPrograms[p2VuProgramLast].key = 0;
+        p2VuPrograms[p2VuProgramLast].listValue = 0;
+        p2VuPrograms[p2VuProgramLast].flags = flags;
+        p2VuPrograms[p2VuProgramLast].reservedWords[0] = 0;
+        p2VuPrograms[p2VuProgramLast].reservedWords[2] = 0;
+        p2VuPrograms[p2VuProgramLast].reservedWords[1] = 0;
+        p2VuPrograms[p2VuProgramLast].name = 0;
+    }
+    return result;
 }
 
 void p2SetVuProgramName(int program, const char *name) {
@@ -942,9 +1181,9 @@ char *p2GetVuProgramName(int program) {
     return 0;
 }
 
-void p2SetVuProgram(int program, long long key, int f36, unsigned int flags) {
+void p2SetVuProgram(int program, long long key, int listValue, unsigned int flags) {
     p2VuPrograms[program].key = key;
-    p2VuPrograms[program].f36 = f36;
+    p2VuPrograms[program].listValue = listValue;
     p2VuPrograms[program].flags = flags;
 }
 

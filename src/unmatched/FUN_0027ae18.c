@@ -5,11 +5,11 @@ struct Voice27a {
     int volume;   /* +56 */
 };
 
-extern int DAT_004b1dc0;
-extern int DAT_004b1dc8;
+extern int ps2rna_nvoice;
+extern int ps2rna_setup_voice;
 
 void FUN_0027ae18(struct Voice27a *voice, int volume) {
-    if (DAT_004b1dc8 != 1 || DAT_004b1dc0 > 0) {
+    if (ps2rna_setup_voice != 1 || ps2rna_nvoice > 0) {
         if (volume > 0) {
             volume = 0;
         }

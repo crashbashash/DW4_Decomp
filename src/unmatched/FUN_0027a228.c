@@ -9,8 +9,8 @@ extern int FUN_00279f08(void);
 extern void FUN_002737a8(void);
 extern void FUN_0027df08(void);
 extern void FUN_0027db68(void);
-extern int DAT_004b1dc0;
-extern int DAT_004b1dc8;
+extern int ps2rna_nvoice;
+extern int ps2rna_setup_voice;
 extern int DAT_004b1ddc;
 extern int DAT_004b1e0c;
 extern int DAT_004b1e14;
@@ -19,7 +19,7 @@ extern int DAT_004b4860;
 /* matching construct: hand search — int return type with no return value (implicit-int style); a void
    return type lets GCC turn the last call into a sibling call */
 int FUN_0027a228(void) {
-    if (DAT_004b1dc8 != 1 || DAT_004b1dc0 > 0) {
+    if (ps2rna_setup_voice != 1 || ps2rna_nvoice > 0) {
         if (--DAT_004b1e0c == 0) {
             FUN_001122d8(DAT_004b1ddc);
             DAT_004b1ddc = 0;

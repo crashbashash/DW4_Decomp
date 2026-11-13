@@ -26,8 +26,8 @@ typedef struct {
 extern char DAT_004d2208[];
 extern char DAT_004d2248[];
 extern char DAT_004d2288[];
-int FUN_00109ad8(MpegDecoder *d, const char *message, int value);
-int FUN_0010d108(const char *format, ...);
+int _sceMpegErrorf(MpegDecoder *d, const char *message, int value);
+int scePrintf(const char *format, ...);
 int FUN_00106ee0(MpegDecoder *d);
 int FUN_001098a8(MpegStream *mp);
 int FUN_001096e8(MpegStream *mp, int index, int image);
@@ -37,11 +37,11 @@ int FUN_00109410(MpegStream *mp) {
     int code = 1;
     d->done = 0;
     if (d->image & 0x3F) {
-        FUN_00109ad8(d, DAT_004d2208, d->image);
+        _sceMpegErrorf(d, DAT_004d2208, d->image);
         return -1;
     }
     if (d->aborted) {
-        FUN_0010d108(DAT_004d2248);
+        scePrintf(DAT_004d2248);
         return -1;
     }
     d->stopped = 0;
@@ -77,7 +77,7 @@ int FUN_00109410(MpegStream *mp) {
             break;
         }
         if (d->aborted) {
-            FUN_0010d108(DAT_004d2288);
+            scePrintf(DAT_004d2288);
             return -1;
         }
         if (d->stopped) return 1;

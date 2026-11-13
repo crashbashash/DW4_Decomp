@@ -3,7 +3,7 @@ void FUN_00104258(char *d, int first);
 int FUN_00105250(char *d);
 int FUN_001059e8(char *d, int count);
 void FUN_001064f8(char *d);
-void FUN_00109b10(char *d, const char *msg, ...);
+void _sceMpegMessage(char *d, const char *msg, ...);
 int FUN_001057a0(char *d) {
     int count;
     int r;
@@ -29,7 +29,7 @@ int FUN_001057a0(char *d) {
         FUN_00104258(d, *(int *)(d + 2088) == 0);
     }
     if (r == 1 || r == 2) {
-        FUN_00109b10(d, DAT_004d1fd8);
+        _sceMpegMessage(d, DAT_004d1fd8);
     }
     return r == 0;
 }

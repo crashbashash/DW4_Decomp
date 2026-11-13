@@ -1,13 +1,13 @@
 extern char DAT_004d2138[];
 extern char DAT_004d2158[];
 int FUN_001057a0(char *d);
-void FUN_00109b10(char *d, const char *msg, ...);
+void _sceMpegMessage(char *d, const char *msg, ...);
 int FUN_00107790(char *d) {
     char *p;
     int r;
 
     if (*(int *)(d + 396) == 3 && *(int *)(d + 312) != 0) {
-        FUN_00109b10(d, DAT_004d2138);
+        _sceMpegMessage(d, DAT_004d2138);
         *(int *)(d + 312) = 0;
     }
     switch (*(int *)(d + 396)) {
@@ -22,7 +22,7 @@ int FUN_00107790(char *d) {
         break;
     default:
         p = *(char **)(d + 472);
-        FUN_00109b10(d, DAT_004d2158);
+        _sceMpegMessage(d, DAT_004d2158);
         break;
     }
     r = FUN_001057a0(d);

@@ -33,7 +33,9 @@ Destroying an encoder clears the four status bytes with one word store, which th
 - The functions have no names from strings beyond the module's; the fields are named from use.
 - The first function, at `0x2674e8`, is an unreferenced `return 0` that could instead end the ADXB wrappers
   before it.
-- Seven functions have no source and link from the retail image, among them the create function at
-  `0x2692c8` (retail has three padding `nop`s in its free-slot search loop that this compiler does not emit
-  for the drafted loop) and the end-flag setter at `0x269630`, where retail loads the constant 1 once for both
-  the store and the return value.
+- The create function at `0x2692c8` and three encoder steps have no source and link from the retail image.
+  The create function's free-slot search loop matches (the three zero words after its short loops are GCC's
+  own alignment padding, which a disassembler shows as `...`); what remains is a dead `li t3,32` in retail
+  and where the divide-by-zero check of `128 / f84` falls among the stores.
+- The block encoder at `0x268188` matches only with the sample filter at `0x267e50` defined above it in the
+  file: with the filter only declared, one branch becomes `blezl`.

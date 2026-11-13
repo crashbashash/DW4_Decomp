@@ -1,13 +1,13 @@
 #include "dw4/cri/sfdply.h"
 
 extern void *memset(void *dst, int value, unsigned int size);
-int FUN_002a0bb8();
-int FUN_002a0dd8(SfdPly *h);
+int sfd_ReportError();
+int sfd_CheckHn(SfdPly *h);
 
 void FUN_002ac770(SfdRing *ring, char *buffer, int size);
-int FUN_002ac880(SfdRing *ring, SfdItem *item, int *full);
+int sfring_Push(SfdRing *ring, SfdItem *item, int *full);
 void FUN_002ac990(SfdRing *ring, unsigned int pos, SfdItem *out, unsigned int base, unsigned int span);
-int FUN_002aca28(SfdRing *ring, unsigned int pos, unsigned int base, unsigned int span);
+int sfring_FindPos(SfdRing *ring, unsigned int pos, unsigned int base, unsigned int span);
 
 /* matching construct: variant search — statement order; the unit compiler (Sony EE GCC 2.96 -O2 -G0) schedules the last independent store of the body into the return delay slot and keeps the rest in source order, so the stores are written in retail's emitted order */
 void FUN_002ac6d0(SfdRing *ring) {
@@ -22,8 +22,8 @@ int FUN_002ac6e8(SfdPly *h, void *data, int size) {
     if (data == 0 || size <= 0) {
         return 0;
     }
-    if (FUN_002a0dd8(h) != 0) {
-        return FUN_002a0bb8(0, 0xFF000165);
+    if (sfd_CheckHn(h) != 0) {
+        return sfd_ReportError(0, 0xFF000165);
     }
     FUN_002ac770(&h->ent[1].ring, data, size);
     return 0;
@@ -50,8 +50,26 @@ int FUN_002ac7f0(SfdPly *h, int index, SfdItem *item, int *full) {
     if (ring->items == 0) {
         return 0;
     }
-    if (FUN_002ac880(ring, item, full) == -1) {
-        return FUN_002a0bb8(h, 0xFF000421);
+    if (sfring_Push(ring, item, full) == -1) {
+        return sfd_ReportError(h, 0xFF000421);
+    }
+    return 0;
+}
+
+int sfring_Push(SfdRing *ring, SfdItem *item, int *full) {
+    int wr;
+    if (ring->count == ring->size) {
+        *full = 1;
+        return -1;
+    }
+    wr = ring->wr;
+    ring->items[wr] = *item;
+    ring->wr = (wr + 1 < ring->size) ? wr + 1 : wr + 1 - ring->size;
+    ring->count++;
+    if (ring->count >= ring->size) {
+        *full = 1;
+    } else {
+        *full = 0;
     }
     return 0;
 }
@@ -83,7 +101,7 @@ void FUN_002ac990(SfdRing *ring, unsigned int pos, SfdItem *out, unsigned int ba
     if (ring->count == 0) {
         return;
     }
-    skip = FUN_002aca28(ring, pos, base, span);
+    skip = sfring_FindPos(ring, pos, base, span);
     if (skip == -1) {
         return;
     }
@@ -94,6 +112,30 @@ void FUN_002ac990(SfdRing *ring, unsigned int pos, SfdItem *out, unsigned int ba
     ring->rd = rd;
     ring->count -= skip;
     *out = ring->items[rd];
+}
+
+int sfring_FindPos(SfdRing *ring, unsigned int pos, unsigned int base, unsigned int span) {
+    int size = ring->size;
+    unsigned int end = base + span;
+    int rd = ring->rd;
+    int n;
+    SfdItem *item;
+    unsigned int start;
+    unsigned int stop;
+    for (n = 0; n < ring->count; n++) {
+        item = &ring->items[rd];
+        start = item->addr;
+        stop = start + item->size;
+        if (stop <= end) {
+            if (pos >= start && pos < stop) {
+                return n;
+            }
+        } else if ((pos >= start && pos < end) || (pos >= base && pos < stop - span)) {
+            return n;
+        }
+        rd = (rd + 1 < size) ? rd + 1 : rd + 1 - size;
+    }
+    return -1;
 }
 
 int FUN_002acaf0(SfdPly *h, int index) {

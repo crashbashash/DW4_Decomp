@@ -12,7 +12,7 @@ void Gap__Gui__igGuiSystemModel__vfunc_13(int arg0, int arg1) {
         args[0] = 2;
         args[1] = 0;
         args[2] = DAT_0058c3e8[0];
-        FUN_004578c0((S_4578c0 *)arg0, (S_4578c0 *)args);
+        igModel_NotifyViews((S_4578c0 *)arg0, (S_4578c0 *)args);
     }
 }
 

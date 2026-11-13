@@ -77,6 +77,36 @@ static inline void releaseString(char *text) {
     }
 }
 
+/* The shared pool of reference-counted strings, created on first use. */
+struct StringPool;
+extern "C" StringPool *g_stringPool;
+extern "C" void *StringPool_Allocate(unsigned int size);
+extern "C" StringPool *StringPool_Construct(void *memory);
+extern "C" char *StringPool_Intern(StringPool *pool, const char *text);
+static inline StringPool *stringPool() {
+    if (g_stringPool == 0) {
+        void *memory = StringPool_Allocate(16);
+        if (memory != 0) {
+            memory = StringPool_Construct(memory);
+        }
+        g_stringPool = (StringPool *)memory;
+    }
+    return g_stringPool;
+}
+
+/* A pooled copy of `text`, holding a reference; none for none. */
+static inline char *internString(const char *text) {
+    if (text == 0) {
+        return 0;
+    }
+    return StringPool_Intern(stringPool(), text);
+}
+
+/* A reflected field's setters: a string field takes a reference to a pooled string, an object
+ * reference field a reference to the object. */
+extern "C" void igStringMetaField_AssignRetainedToken(igMetaField *field, void *object, char **text);
+extern "C" void igObjectRefMetaField_Assign(igMetaField *field, void *object, void *value);
+
 /* `<Class>_GetVTable` runs a class's inline constructor and destructor on a stack instance and
  * reads the vtable word in between; igObject_InitHeader is igObject's constructor. igLuaState's
  * is written out by hand on this image of the object, its destructors included. */
@@ -154,6 +184,78 @@ extern "C" unsigned int g_threadLocalBucketCount;
 extern "C" unsigned int g_threadLocalCount;
 extern "C" ThreadLocalEntry **g_threadLocalBuckets;
 extern "C" int g_threadLocalTableBusy;
+
+/* Holds the thread-local table still while it lives, as LuaFieldTableLock does the field table. */
+struct ThreadLocalTableLock {
+    unsigned int count;
+
+    ThreadLocalTableLock() {
+        count = g_threadLocalCount;
+        g_threadLocalTableBusy += 1;
+    }
+    ~ThreadLocalTableLock() {
+        g_threadLocalTableBusy--;
+        if (count != g_threadLocalCount) {
+            ThreadLocalTable_Resize();
+        }
+    }
+};
+
+/* A thread's key for a slot. */
+inline unsigned int ThreadLocalTable_Key(void *thread, int slot) {
+    return (unsigned int)thread ^ slot;
+}
+
+/* Walks the thread-local bucket of one key. */
+struct ThreadLocalIterator {
+    ThreadLocalTableLock lock;
+    ThreadLocalEntry *node;
+
+    ThreadLocalIterator(unsigned int key)
+        : node(g_threadLocalBuckets != 0
+                   ? g_threadLocalBuckets[(g_threadLocalBucketCount - 1) & (key ^ (key >> g_threadLocalBucketShift))]
+                   : 0) {
+    }
+    bool isValid() {
+        return node != 0;
+    }
+    void operator++(int) {
+        node = node->next;
+    }
+    ThreadLocalEntry *get() {
+        return node;
+    }
+};
+
+/* Walks every entry of the thread-local table. */
+struct ThreadLocalWalker {
+    ThreadLocalTableLock lock;
+    ThreadLocalEntry *node;
+    unsigned int bucket;
+
+    ThreadLocalWalker() {
+        node = 0;
+        bucket = 0;
+        while (node == 0 && bucket < g_threadLocalBucketCount && g_threadLocalBuckets != 0) {
+            node = g_threadLocalBuckets[bucket++];
+        }
+    }
+    bool isValid() {
+        return node != 0;
+    }
+    void operator++(int) {
+        node = node->next;
+        if (node != 0) {
+            return;
+        }
+        while (node == 0 && bucket < g_threadLocalBucketCount) {
+            node = g_threadLocalBuckets[bucket++];
+        }
+    }
+    ThreadLocalEntry *get() {
+        return node;
+    }
+};
 
 extern "C" void *Memory_AllocateDefaultBuffer(unsigned int size);
 extern "C" void Memory_FreeBufferAliasA(void *buffer);
@@ -241,6 +343,7 @@ public:
 /* The binding's hash tables, one per kind of entry: bucket count 1 << shift, entry count,
  * buckets, and a busy count that defers resizing while a walk is under way. */
 struct LuaProperty;
+struct LuaPropertyLink;
 extern "C" unsigned int g_luaFieldBucketShift;
 extern "C" unsigned int g_luaFieldBucketCount;
 extern "C" unsigned int g_luaFieldCount;
@@ -273,24 +376,51 @@ extern "C" LuaHashLink **g_luaEnumBuckets;
 extern "C" int g_luaEnumTableBusy;
 
 /* A property (a bound variable) of a class; its owner's handlers read and write it. Its second
- * base is its link in the property table. */
+ * base is its link in the property table, which it leaves when destroyed. */
+extern "C" void LuaPropertyTable_Remove(LuaPropertyLink *link);
 struct LuaPropertyLink {
     unsigned int key;               /* the owner xored with the name's hash */
     LuaProperty *next;
     LuaProperty *prev;
+
+    ~LuaPropertyLink() {
+        LuaPropertyTable_Remove(this);
+    }
 };
 struct LuaProperty : LuaHashLink, LuaPropertyLink {
     const char *name;
     igLuaGlue::Class *owner;
 };
 
-/* An enum constant of a class. */
-struct LuaConstant {
-    LuaHashLink link;
-    const char *name;
+/* An enum of a class. Its link's key and the two words after it are not established. */
+struct LuaEnum : Hashed<LuaEnum, 4> {
+    int unknown[2];
     igLuaGlue::Class *owner;
+
+    void operator delete(void *memory) {
+        Memory_FreeBufferWithAllocator(memory, g_luaGluePool);
+    }
+};
+
+/* A constant of an enum, keyed by its name's hash. */
+struct LuaConstant : Hashed<LuaConstant, 8> {
+    LuaEnum *enumeration;
+    const char *name;
     int value;
 };
+
+extern "C" void LuaConstantTable_Remove(LuaHashLink *link);
+extern "C" void LuaEnumTable_Remove(LuaHashLink *link);
+
+template <>
+inline Hashed<LuaConstant, 8>::~Hashed() {
+    LuaConstantTable_Remove(&link);
+}
+
+template <>
+inline Hashed<LuaEnum, 4>::~Hashed() {
+    LuaEnumTable_Remove(&link);
+}
 
 /* A reflected field the binding exposes by name: the entry joins the table when built and leaves
  * it when destroyed, and its memory comes from the glue's pool. */
@@ -346,6 +476,8 @@ struct LuaFieldIterator {
 
 extern "C" void LuaClassTable_Insert(LuaHashLink *link);
 extern "C" void LuaClassTable_Resize(void);
+extern "C" void LuaFunctionTable_Insert(LuaHashLink *link);
+extern "C" void LuaFunctionTable_Remove(LuaHashLink *link);
 
 /* A class enters the class table as it is built, keyed by its name's hash. */
 template <>
@@ -354,6 +486,25 @@ inline Hashed<igLuaGlue::Class, 7>::Hashed(unsigned int key) {
     link.next = 0;
     link.prev = 0;
     LuaClassTable_Insert(&link);
+}
+
+/* A function enters the function table as it is built, keyed by its owner and name, and leaves
+ * it when destroyed; it comes from the glue's pool. */
+template <>
+inline Hashed<LuaFunction, 8>::Hashed(unsigned int key) {
+    link.key = key;
+    link.next = 0;
+    link.prev = 0;
+    LuaFunctionTable_Insert(&link);
+}
+
+template <>
+inline Hashed<LuaFunction, 8>::~Hashed() {
+    LuaFunctionTable_Remove(&link);
+}
+
+inline void LuaFunction::operator delete(void *memory) {
+    Memory_FreeBufferWithAllocator(memory, g_luaGluePool);
 }
 
 /* Holds the class table still while it lives, as LuaFieldTableLock does the field table. */
@@ -419,6 +570,129 @@ struct LuaClassWalker {
         }
     }
     igLuaGlue::Class *get() {
+        return node;
+    }
+};
+
+/* The globals of the table whose entries are T, as the walks below read them. */
+template <class T>
+struct LuaTable;
+
+extern "C" void LuaFunctionTable_Resize(void);
+extern "C" void LuaPropertyTable_Resize(void);
+extern "C" void LuaConstantTable_Resize(void);
+extern "C" void LuaEnumTable_Resize(void);
+
+template <>
+struct LuaTable<LuaFunction> {
+    static unsigned int &count() { return g_luaFunctionCount; }
+    static int &busy() { return g_luaFunctionTableBusy; }
+    static unsigned int bucketCount() { return g_luaFunctionBucketCount; }
+    static unsigned int bucketShift() { return g_luaFunctionBucketShift; }
+    static LuaHashLink **buckets() { return g_luaFunctionBuckets; }
+    static LuaFunction *next(LuaFunction *entry) { return (LuaFunction *)entry->link.next; }
+    static void resize() { LuaFunctionTable_Resize(); }
+};
+
+template <>
+struct LuaTable<LuaProperty> {
+    static unsigned int &count() { return g_luaPropertyCount; }
+    static int &busy() { return g_luaPropertyTableBusy; }
+    static unsigned int bucketCount() { return g_luaPropertyBucketCount; }
+    static unsigned int bucketShift() { return g_luaPropertyBucketShift; }
+    static LuaProperty **buckets() { return g_luaPropertyBuckets; }
+    static LuaProperty *next(LuaProperty *entry) { return entry->LuaPropertyLink::next; }
+    static void resize() { LuaPropertyTable_Resize(); }
+};
+
+template <>
+struct LuaTable<LuaConstant> {
+    static unsigned int &count() { return g_luaConstantCount; }
+    static int &busy() { return g_luaConstantTableBusy; }
+    static unsigned int bucketCount() { return g_luaConstantBucketCount; }
+    static unsigned int bucketShift() { return g_luaConstantBucketShift; }
+    static LuaHashLink **buckets() { return g_luaConstantBuckets; }
+    static LuaConstant *next(LuaConstant *entry) { return (LuaConstant *)entry->link.next; }
+    static void resize() { LuaConstantTable_Resize(); }
+};
+
+template <>
+struct LuaTable<LuaEnum> {
+    static unsigned int &count() { return g_luaEnumCount; }
+    static int &busy() { return g_luaEnumTableBusy; }
+    static unsigned int bucketCount() { return g_luaEnumBucketCount; }
+    static unsigned int bucketShift() { return g_luaEnumBucketShift; }
+    static LuaHashLink **buckets() { return g_luaEnumBuckets; }
+    static LuaEnum *next(LuaEnum *entry) { return (LuaEnum *)entry->link.next; }
+    static void resize() { LuaEnumTable_Resize(); }
+};
+
+/* Holds the table of T still while it lives, as LuaClassTableLock does the class table. */
+template <class T>
+struct LuaTableLock {
+    unsigned int count;
+
+    LuaTableLock() {
+        count = LuaTable<T>::count();
+        LuaTable<T>::busy() += 1;
+    }
+    ~LuaTableLock() {
+        LuaTable<T>::busy()--;
+        if (count != LuaTable<T>::count()) {
+            LuaTable<T>::resize();
+        }
+    }
+};
+
+/* Walks the bucket of one key in the table of T. */
+template <class T>
+struct LuaTableIterator {
+    LuaTableLock<T> lock;
+    T *node;
+
+    LuaTableIterator(unsigned int key)
+        : node(LuaTable<T>::buckets() != 0
+                   ? (T *)LuaTable<T>::buckets()[(LuaTable<T>::bucketCount() - 1) & (key ^ (key >> LuaTable<T>::bucketShift()))]
+                   : 0) {
+    }
+    bool isValid() {
+        return node != 0;
+    }
+    void operator++(int) {
+        node = LuaTable<T>::next(node);
+    }
+    T *get() {
+        return node;
+    }
+};
+
+/* Walks every entry of the table of T. */
+template <class T>
+struct LuaTableWalker {
+    LuaTableLock<T> lock;
+    T *node;
+    unsigned int bucket;
+
+    LuaTableWalker() {
+        node = 0;
+        bucket = 0;
+        while (node == 0 && bucket < LuaTable<T>::bucketCount() && LuaTable<T>::buckets() != 0) {
+            node = (T *)LuaTable<T>::buckets()[bucket++];
+        }
+    }
+    bool isValid() {
+        return node != 0;
+    }
+    void operator++(int) {
+        node = LuaTable<T>::next(node);
+        if (node != 0) {
+            return;
+        }
+        while (node == 0 && bucket < LuaTable<T>::bucketCount()) {
+            node = (T *)LuaTable<T>::buckets()[bucket++];
+        }
+    }
+    T *get() {
         return node;
     }
 };
@@ -518,6 +792,8 @@ inline LuaFieldEntry::LuaFieldEntry(igMetaObject *meta, igMetaField *field) {
 }
 
 enum { LUA_ANYTAG = -1 };
+/* The binding's tags until the first state opens the library and makes them. */
+enum { LUA_UNMADETAG = -9999 };
 enum { LUA_PUSH_INSTANCE, LUA_PUSH_REFERENCE, LUA_PUSH_KEEP_TAG };
 
 /* Receives each message LuaError formats, with the data registered alongside. */
@@ -533,6 +809,9 @@ extern "C" const char emptyString_3[];
 extern "C" int g_luaClassesAwaitingBase;
 extern "C" int g_luaObjectTag;
 extern "C" int g_luaMetaObjectTag;
+/* Made with the other two; nothing reads it. */
+extern "C" int g_luaReservedTag;
+void lua_setglobal(lua_State *L, const char *name);
 extern "C" const char *g_luaOperatorEvents[];
 
 /* LuaBinding.cpp */
@@ -547,8 +826,9 @@ int LuaType_Accepts(LuaType *type, lua_State *L, int index, int *distance);
 void LuaValue_StoreInTable(LuaValue *value, lua_State *L, int table);
 bool LuaObject_PushField(lua_State *L, igMetaField *field, LuaBoundObject *object);
 int LuaObject_StoreField(lua_State *L, igMetaField *field, LuaBoundObject *object, int index);
-LuaFunction *LuaFunctionTable_Find(igLuaGlue::Class *owner, const char *name);
-LuaFunction *LuaFunction_Resolve(LuaFunction *function, lua_State *L, int first, int upvalue);
+LuaFunction *LuaFunctionTable_Find(igLuaGlue::Class *owner, const char *name, bool callback);
+void LuaFunctionTable_BindAll(lua_State *L);
+LuaFunction *LuaFunction_Resolve(LuaFunction *function, lua_State *L, int first, int last);
 void LuaFunctionTable_LinkOverloads(void);
 int LuaFunction_Call(LuaFunction *function, lua_State *L);
 void LuaClass_SetOperator(lua_State *L, igLuaGlue::Class *luaClass, LuaFunction *function, int event);
@@ -666,7 +946,8 @@ public:
     virtual void s15(); virtual void s16(); virtual void s17(); virtual void s18(); virtual void s19();
     virtual void s20();
     virtual igResult initialize();                              /* slot 21 */
-    virtual void s22(); virtual void s23(); virtual void s24(); virtual void s25(); virtual void s26();
+    virtual igResult destroy();                                 /* slot 22 */
+    virtual void s23(); virtual void s24(); virtual void s25(); virtual void s26();
     virtual void s27(); virtual void s28();
     virtual igResult release();                                 /* slot 29 */
     virtual void s30();
@@ -687,6 +968,14 @@ struct LuaSemaphoreLock {
         semaphore->release();
     }
 };
+
+/* Drops one reference to the semaphore, destroying it with the last. */
+static inline void LuaSemaphore_ReleaseReference(LuaSemaphoreView *semaphore) {
+    semaphore->_refCount = semaphore->_refCount - 1;
+    if ((semaphore->_refCount & 0x7FFFFF) == 0) {
+        igObject_Destroy(semaphore);
+    }
+}
 
 /* The thread manager; slot 21 is the calling thread. */
 class LuaThreadManagerView {

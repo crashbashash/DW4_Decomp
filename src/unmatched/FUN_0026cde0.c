@@ -50,11 +50,11 @@ typedef struct Handle_26bbc0 {
 } Handle_26bbc0;
 
 extern char DAT_004eeb28[];
-void FUN_002607e8(const char *message);
+void ADXERR_CallErrFunc1(const char *message);
 
 void FUN_0026cde0(Handle_26bbc0 *handle, int value) {
     if (handle == 0) {
-        FUN_002607e8(DAT_004eeb28);
+        ADXERR_CallErrFunc1(DAT_004eeb28);
         return;
     }
     handle->f112 = value;

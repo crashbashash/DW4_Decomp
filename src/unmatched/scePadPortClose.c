@@ -15,17 +15,17 @@ typedef struct {
     int f20;
     int f24;
 } PadSlot;
-extern PadSlot DAT_0055d290[2][4];
+extern PadSlot padState[2][4];
 extern int DAT_0055d480[32];
 extern int DAT_0055d240;
 int sceSifCallRpc(void *cd, int fno, int mode, void *send, int ssize, void *recv, int rsize, void (*end)(void *), void *arg);
 int scePadPortClose(int port, int slot) {
-    if (DAT_0055d290[port][slot].open == 0) return 0;
+    if (padState[port][slot].open == 0) return 0;
     DAT_0055d480[0] = 14;
     DAT_0055d480[1] = port;
     DAT_0055d480[2] = slot;
     DAT_0055d480[4] = 1;
     if (sceSifCallRpc(&DAT_0055d240, 1, 0, DAT_0055d480, 128, DAT_0055d480, 128, 0, 0) < 0) return 0;
-    DAT_0055d290[port][slot].open = 0;
+    padState[port][slot].open = 0;
     return DAT_0055d480[3];
 }

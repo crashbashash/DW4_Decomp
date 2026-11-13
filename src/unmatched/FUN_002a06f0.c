@@ -26,7 +26,7 @@ int FUN_002b27d0();
 int FUN_002b2840();
 int FUN_002b28b8(PicExtItem *h, int id, int *a, int *b);
 int FUN_002b2968();
-int FUN_002b29d8();
+int sfd_GetHdrStmInfo();
 int FUN_002b2a48();
 int FUN_002b2ab8();
 int FUN_002b2b28();
@@ -50,7 +50,7 @@ void FUN_002a06f0(PicExtItem *h, int id, PicExtInfo *info)
     info->f20 = ok != 0;
     if (ok == 0)
         return;
-    info->f24 = FUN_002a08c0(h, id, FUN_002b29d8);
+    info->f24 = FUN_002a08c0(h, id, sfd_GetHdrStmInfo);
     info->f28 = FUN_002a08c0(h, id, FUN_002b2a48);
     info->f32 = FUN_002a08c0(h, id, FUN_002b2ab8);
     info->f36 = FUN_002a08c0(h, id, FUN_002b2b28);

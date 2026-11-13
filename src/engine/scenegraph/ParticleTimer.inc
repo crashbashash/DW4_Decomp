@@ -99,6 +99,43 @@ void Gap__Bec__ParticleTimer__vfunc_25(ParticleTimer *arg0, int arg1) {
     }
 }
 
+
+extern "C" unsigned int Gap__Bec__ParticleTimer__getTriangleCount(ParticleTimer *self);
+
+/* Triangle count of the timer's geometry attributes: triangle lists (_primType 3) add one per primitive, triangle
+ * strips (4) add the vertex count less two per strip. */
+unsigned int Gap__Bec__ParticleTimer__getTriangleCount(ParticleTimer *self)
+{
+    /* matching construct: declaration order sets the register colours (attrs last) */
+    unsigned int triangles;
+    unsigned int count;
+    unsigned int i;
+    igGeometryAttr *geom;
+    igObjectList *attrs;
+
+    attrs = (igObjectList *)self->_attributes;
+    triangles = 0;
+    count = attrs->_count;
+    i = 0;
+    /* matching construct: retail enters the loop through a zero-trip guard placed after the return (as FUN_001c5b80) */
+    goto guard;
+next:
+    geom = ((igGeometryAttr **)attrs->_data)[i];
+    if (geom->_primType == 3) {
+        triangles += geom->_numPrims;
+    } else if (geom->_primType == 4) {
+        triangles += ((igVertexArray *)geom->_vertexArray)->_numVerts - geom->_numPrims * 2;
+    }
+    i++;
+test:
+    if (i < count) goto next;
+done:
+    return triangles;
+guard:
+    if (i < count) goto test;
+    goto done;
+}
+
 void Gap__Bec__ParticleTimer__vfunc_29(ParticleAttributeObj *arg0) {
     /* matching construct: a typed view of the receiver declared first; a cast at each use changes how the compiler hoists the field address */
     ParticleTimer *self = (ParticleTimer *)arg0;

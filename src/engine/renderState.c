@@ -1,10 +1,11 @@
+#include "dw4/p2dma.h"
+#include "dw4/p2core.h"
 extern int FUN_001f8b50();
 extern int FUN_001fffb0();
 extern int FUN_00200980();
-extern int FUN_00201a90();
+extern int p2LayoutVuBuffers();
 extern int FUN_00204ea0();
-extern int p2DirtyFlags[4];
-extern int p2DisplayListMode[4];
+extern int p2DisplayListMode;
 extern int DAT_0056b3b0[4];
 extern int DAT_0056b3b4[4];
 extern int DAT_0056b3b8[4];
@@ -22,9 +23,9 @@ extern long long DAT_0056b5e0[4];
 extern long long DAT_0056b5e8[4];
 extern long long DAT_0056b5f0[4];
 extern int p2LightCalcPending[4];
-extern int DAT_0056b608[4];
-extern int DAT_0056ba00[16];
 extern int DAT_0056ba20[4];
+extern int p2LightingFunctions[4];
+extern int p2StateCacheStatus;
 struct P { long long m0; long long m8; int p16; struct P *next; int sh; int count; int tab[1]; };
 struct E { int w0; int w4; };
 extern long long p2VertexArrayMask[4];
@@ -132,8 +133,6 @@ extern int DAT_0056b590[4];
 extern int * DAT_0056b594[4];
 extern int DAT_0056b600[4];
 extern int DAT_0056b604[4];
-extern unsigned int p2ProgramFlags[4];
-extern int p2ExtraPassCount[4];
 extern int DAT_0056b4f8[4];
 extern int DAT_0056b530[4];
 extern int DAT_0056b568[4];
@@ -145,53 +144,53 @@ void FUN_001ff3b0(int arg0) {
     int s;
     int f;
     int n, a;
-    s = p2DirtyFlags[0] & arg0;
+    s = p2DirtyFlags & arg0;
     if (s != 0) {
         DAT_0056b5a8[0] += 1;
     }
-    if (p2DisplayListMode[0] == 0) {
+    if (p2DisplayListMode == 0) {
         if (s & 4) {
             DAT_0056b5c0[0] += 1;
             FUN_001f8b50();
-            s = p2DirtyFlags[0] & arg0;
+            s = p2DirtyFlags & arg0;
         }
         if (s & 0x193) {
-            DAT_0056b608[0] = FUN_00204ea0();
-            s = p2DirtyFlags[0] & arg0;
-            if (DAT_0056b608[0] == 0 || (DAT_0056b608[0] == 1 && (s & 0x100))) {
+            p2StateCacheStatus = FUN_00204ea0();
+            s = p2DirtyFlags & arg0;
+            if (p2StateCacheStatus == 0 || (p2StateCacheStatus == 1 && (s & 0x100))) {
                 if (s & 0x10) {
-                    FUN_001fffb0(DAT_0056b608[0]);
+                    FUN_001fffb0(p2StateCacheStatus);
                     s |= 0x80;
-                    p2DirtyFlags[0] |= 0x80;
+                    p2DirtyFlags |= 0x80;
                 }
                 if (s & 1) {
                     FUN_00200980();
-                    s = p2DirtyFlags[0] & arg0;
+                    s = p2DirtyFlags & arg0;
                 }
                 if (s & 2) {
-                    if (p2DisplayListMode[0] == 0) {
+                    if (p2DisplayListMode == 0) {
                         f = DAT_0056b480[0];
                         a = f & 0x10;
                         n = 0;
                         if (a && (f & 0x20)) {
                             n++;
-                            DAT_0056ba00[0] = DAT_0056b3b8[0];
+                            p2LightingFunctions[0] = DAT_0056b3b8[0];
                         } else if (f & 0x20) {
                             n++;
-                            DAT_0056ba00[0] = DAT_0056b3b4[0];
+                            p2LightingFunctions[0] = DAT_0056b3b4[0];
                         } else if (a) {
                             n++;
-                            DAT_0056ba00[0] = DAT_0056b3b0[0];
+                            p2LightingFunctions[0] = DAT_0056b3b0[0];
                         }
                         if (f & 0x40) {
-                            DAT_0056ba00[n] = DAT_0056b3c0[0];
+                            p2LightingFunctions[n] = DAT_0056b3c0[0];
                             n++;
                         }
                         if (f & 0x1C00) {
-                            DAT_0056ba00[n] = DAT_0056b3c0[(f & 0x1C00) >> 10];
+                            p2LightingFunctions[n] = DAT_0056b3c0[(f & 0x1C00) >> 10];
                             n++;
                         }
-                        DAT_0056ba00[n] = DAT_0056b448[0];
+                        p2LightingFunctions[n] = DAT_0056b448[0];
                         DAT_0056ba20[0] = n + 1;
                         if (DAT_0056ba20[0] > 1) {
                             p2LightCalcPending[0] = 1;
@@ -201,7 +200,7 @@ void FUN_001ff3b0(int arg0) {
                     }
                 }
                 if (s & 0x80) {
-                    FUN_00201a90();
+                    p2LayoutVuBuffers();
                 }
             }
         }
@@ -235,8 +234,6 @@ void p2SubmitDmaPacket();
 extern int p2CurrentPrimitive;
 extern int DAT_00490d38;
 extern int DAT_00569308;
-extern int p2CurrentProgram;
-extern char *p2CurrentGsRegisters;
 extern unsigned int DAT_004914f0, DAT_004914f4, DAT_004914f8, DAT_004914fc;
 extern VifCode DAT_00491500;
 extern GifTag DAT_00491510, DAT_00491520, DAT_00491530;
@@ -253,7 +250,190 @@ static inline int remap(int prim) {
     return prim;
 }
 
-void FUN_001ffcf0(void) {
+/* A DMA tag with its quadword count in the low half, written to the packet as four words. */
+typedef union p2DmaTag { unsigned int word[4]; unsigned short qwc; } p2DmaTag;
+/* An UNPACK VIF code; byte 2 is its element count. */
+typedef union p2VifUnpack { unsigned int word; unsigned char num[4]; } p2VifUnpack;
+
+/* p2StateCacheStatus: what the state cache lookup found for the current state, and whether its
+ * packets have been sent since. */
+enum {
+    P2_STATE_CACHE_MISS,
+    P2_STATE_CACHE_HIT,
+    P2_STATE_SENT
+};
+
+/* The STMASK pattern that leaves the first word of each lighting-table vector written and the
+ * other three unchanged. */
+#define P2_LIGHTING_FUNCTIONS_MASK 0xFCFCFCFC
+
+extern p2DmaPacket *p2DmaCurrentPacket[P2_DMA_CHANNEL_COUNT];
+extern int p2LoadVuPrograms();
+extern int p2FunctionTables[];
+extern int p2FunctionTableSizes[3];
+extern unsigned int p2FunctionTablePad;
+extern p2DmaTag p2FunctionTablesTag;
+extern p2VifUnpack p2LightingFunctionsUnpack, p2FunctionTable0Unpack, p2FunctionTable1Unpack;
+extern unsigned int p2FunctionTablesFlush, p2LightingFunctionsStmask;
+extern __int128 p2SentFunctionTables[];
+extern __int128 p2SentLightingFunctionsCode, p2SentLightingFunctions;
+extern int p2SentFunctionTablesQwc;
+void p2UpdateLights();
+void p2UploadBlendMatrices();
+void p2FlushGsRegisters();
+void p2StoreStateCacheEntry();
+void p2SendGifTags(void);
+void p2SendPassSetup(void);
+void p2SendVuBufferLayout(void);
+
+/* Sends the render state `mask` selects and p2DirtyFlags marks: the VU program addresses of the
+ * function tables, the GIF tags, the multipass setup and the VU buffer layout (all skipped when the
+ * state cache already holds them), the lights, the blend matrices and the GS registers. Recording a
+ * display list sends only the GS registers and keeps everything but them and the vertex format
+ * marked. */
+int p2SendRenderState(int mask) {
+    int k;
+    int qwc;
+    int j;
+    unsigned int *p;
+    int dirty;
+    int lightingCount;
+    int i;
+    int load;
+    unsigned short *q;
+    int vertexCount;
+    unsigned int *word;
+    __int128 *addresses;
+
+    dirty = p2DirtyFlags & mask;
+    load = dirty;
+    vertexCount = p2FunctionTableSizes[0] + p2FunctionTableSizes[1];
+    lightingCount = p2FunctionTableSizes[2];
+    if (p2DisplayListMode == 0) {
+        if (p2StateCacheStatus != P2_STATE_SENT) {
+            if (dirty & (P2_DIRTY_FUNCTION_TABLES | P2_DIRTY_LIGHTING_FUNCTIONS | P2_DIRTY_VERTEX_FORMAT |
+                         P2_DIRTY_VU_BUFFERS | P2_DIRTY_PASSES)) {
+                if (dirty & P2_DIRTY_FUNCTION_TABLES) {
+                    if (p2LoadVuPrograms(p2FunctionTables, p2LightingFunctions, vertexCount + 1, lightingCount + 1) == 0) {
+                        load |= P2_DIRTY_FUNCTION_TABLES | P2_DIRTY_LIGHTING_FUNCTIONS;
+                    }
+                }
+                if (dirty & P2_DIRTY_LIGHTING_FUNCTIONS) {
+                    if (p2LoadVuPrograms(p2LightingFunctions, p2FunctionTables, lightingCount + 1, vertexCount + 1) == 0) {
+                        load |= P2_DIRTY_FUNCTION_TABLES | P2_DIRTY_LIGHTING_FUNCTIONS;
+                    }
+                }
+                p = (unsigned int *)p2DmaCurrentPacket[P2_DMA_VIF1]->cursor;
+                if (load & P2_DIRTY_FUNCTION_TABLES) {
+                    /* tables 0 and 1 as halfwords, each padded to whole words, the packet to a quadword */
+                    p2FunctionTable0Unpack.num[2] = p2FunctionTableSizes[0];
+                    if (p2FunctionTableSizes[0] % 2 != 0) {
+                        p2FunctionTable0Unpack.num[2]++;
+                    }
+                    q = (unsigned short *)(p + 4);
+                    *(unsigned int *)q = p2FunctionTablesFlush;
+                    word = &((unsigned int *)q)[1];
+                    q += 4;
+                    *word = p2FunctionTable0Unpack.word;
+                    for (i = 0; i < p2FunctionTableSizes[0]; i++) {
+                        *q++ = p2GetVuProgramAddress(p2FunctionTables[i]);
+                    }
+                    if (p2FunctionTableSizes[0] % 2 != 0) {
+                        *q++ = 0;
+                    }
+                    if (p2FunctionTableSizes[1] != 0) {
+                        p2FunctionTable1Unpack.num[2] = p2FunctionTableSizes[1];
+                        if (p2FunctionTableSizes[1] % 2 != 0) {
+                            p2FunctionTable1Unpack.num[2]++;
+                        }
+                        word = (unsigned int *)q;
+                        q = (unsigned short *)(word + 1);
+                        *word = p2FunctionTable1Unpack.word;
+                        for (j = 0; j < p2FunctionTableSizes[1]; j++) {
+                            *q++ = p2GetVuProgramAddress(p2FunctionTables[i++]);
+                        }
+                        if (p2FunctionTableSizes[1] % 2 != 0) {
+                            *q++ = 0;
+                        }
+                    }
+                    while ((int)q & 0xF) {
+                        word = (unsigned int *)q;
+                        q = (unsigned short *)(word + 1);
+                        *word = p2FunctionTablePad;
+                    }
+                    qwc = ((unsigned int *)q - (p + 4)) >> 2;
+                    p2FunctionTablesTag.qwc = qwc;
+                    p[0] = p2FunctionTablesTag.word[0];
+                    p[1] = p2FunctionTablesTag.word[1];
+                    p[2] = p2FunctionTablesTag.word[2];
+                    p[3] = p2FunctionTablesTag.word[3];
+                    for (k = 0; k < qwc; k++) {
+                        p2SentFunctionTables[k] = ((__int128 *)(p + 4))[k];
+                    }
+                    p = (unsigned int *)q;
+                    p2SentFunctionTablesQwc = k;
+                }
+                if (load & P2_DIRTY_LIGHTING_FUNCTIONS) {
+                    /* table 2 as the first word of four vectors, a missing entry padded */
+                    p2FunctionTablesTag.qwc = 2;
+                    p[0] = p2FunctionTablesTag.word[0];
+                    p[1] = p2FunctionTablesTag.word[1];
+                    p[2] = p2FunctionTablesTag.word[2];
+                    p[3] = p2FunctionTablesTag.word[3];
+                    p2LightingFunctionsUnpack.num[2] = p2FunctionTableSizes[2];
+                    p[4] = p2FunctionTablesFlush;
+                    p[5] = p2LightingFunctionsStmask;
+                    p[6] = P2_LIGHTING_FUNCTIONS_MASK;
+                    p[7] = p2LightingFunctionsUnpack.word;
+                    p[8] = lightingCount-- > 0 ? p2GetVuProgramAddress(p2LightingFunctions[0]) : p2FunctionTablePad;
+                    addresses = (__int128 *)(p + 8);
+                    p[9] = lightingCount-- > 0 ? p2GetVuProgramAddress(p2LightingFunctions[1]) : p2FunctionTablePad;
+                    p[10] = lightingCount-- > 0 ? p2GetVuProgramAddress(p2LightingFunctions[2]) : p2FunctionTablePad;
+                    p[11] = lightingCount > 0 ? p2GetVuProgramAddress(p2LightingFunctions[3]) : p2FunctionTablePad;
+                    p2SentLightingFunctionsCode = ((__int128 *)p)[1];
+                    p += 12;
+                    p2SentLightingFunctions = *addresses;
+                }
+                p2DmaCurrentPacket[P2_DMA_VIF1]->cursor = (unsigned int)p;
+                if (p2DmaCurrentPacket[P2_DMA_VIF1]->cursor >= p2DmaCurrentPacket[P2_DMA_VIF1]->limit) {
+                    if (p2DisplayListMode != 0) {
+                        p2GrowDisplayList();
+                    } else {
+                        p2SubmitDmaPacket(P2_DMA_VIF1);
+                    }
+                }
+                if (dirty & P2_DIRTY_GIF_TAGS) {
+                    p2SendGifTags();
+                    dirty |= P2_DIRTY_PASSES;
+                    p2DirtyFlags |= P2_DIRTY_PASSES;
+                }
+                if (dirty & P2_DIRTY_PASSES) {
+                    p2SendPassSetup();
+                }
+                if (dirty & P2_DIRTY_VU_BUFFERS) {
+                    p2SendVuBufferLayout();
+                }
+                p2StoreStateCacheEntry();
+                p2StateCacheStatus = P2_STATE_SENT;
+            }
+        }
+        if (dirty & P2_DIRTY_LIGHTS) {
+            p2UpdateLights();
+        }
+        if (dirty & P2_DIRTY_BLEND_MATRICES) {
+            p2UploadBlendMatrices();
+        }
+    } else {
+        mask &= ~(P2_DIRTY_ALL & ~(P2_DIRTY_GS_REGISTERS | P2_DIRTY_VERTEX_FORMAT));
+    }
+    if (dirty & P2_DIRTY_GS_REGISTERS) {
+        p2FlushGsRegisters();
+    }
+    p2DirtyFlags &= ~(mask & P2_DIRTY_ALL);
+    return 0;
+}
+
+void p2SendGifTags(void) {
     int texPrim;
     int prim;
     unsigned int *p;
@@ -294,7 +474,7 @@ void FUN_001ffcf0(void) {
         tag = &DAT_00491530;
     }
     if (flag) {
-        bits = *(int *)(p2CurrentGsRegisters + 160) & 0x7F8;
+        bits = p2CurrentGsRegisters->prmode.half[0] & 0x7F8;
         texPrim |= bits;
         prim |= bits;
     }
@@ -317,7 +497,7 @@ void FUN_001ffcf0(void) {
     DAT_0056b770 = ((__int128 *)p)[2];
     DAT_00568f04->cursor = p + 12;
     if (DAT_00568f04->cursor >= DAT_00568f04->end) {
-        if (p2DisplayListMode[0] != 0) {
+        if (p2DisplayListMode != 0) {
             p2GrowDisplayList();
         } else {
             p2SubmitDmaPacket(1);
@@ -370,6 +550,145 @@ int FUN_00200830(struct P *p, long long *out) {
         }
     }
     return res;
+}
+
+int p2GetPassCombineMode(void);
+void p2GetPassMasks(int pass, unsigned int *frameMask, unsigned int *zbufMask);
+/* Declared without a prototype: p2SendPassSetup passes the combine mode too, which it ignores. */
+int p2GetPassProgramAddress();
+
+/* STMASK patterns: write only the last three words of each vector, or only the second. */
+#define P2_PASS_MASK 0x03030303
+#define P2_PALETTE_FLAG_MASK 0xF3F3F3F3
+/* The palette flag, the second byte of a V4-8 vector: set when both stages draw paletted textures. */
+#define P2_PALETTE_FLAG_BOTH 0xFF00
+#define P2_PALETTE_FLAG_OTHER 0x100
+#define P2_STAGES_BOTH_PALETTED 3
+
+extern p2DmaTag p2PassSetupTag;
+extern p2VifUnpack p2PassSetupUnpack;
+extern unsigned int p2PassSetupFlush, p2PassSetupStmask, p2PaletteFlagUnpack;
+extern int p2PalettedStages;
+extern __int128 p2SentPassSetup[];
+
+/* Sends the multipass setup when the current program draws in passes: for each pass a vector of
+ * its FRAME and ZBUF masks and the address of its VU program, then the palette flag. */
+void p2SendPassSetup(void) {
+    int n;
+    int pass;
+    int mode;
+    unsigned int *start;
+    unsigned int *p;
+    int i;
+    unsigned int *word;
+    unsigned int frameMask;
+    unsigned int zbufMask;
+
+    if ((p2ProgramFlags[p2CurrentProgram] >> P2_CAP_MULTIPASS) & 1) {
+        mode = p2GetPassCombineMode();
+        p = (unsigned int *)p2DmaCurrentPacket[P2_DMA_VIF1]->cursor;
+        start = p;
+        p2PassSetupTag.qwc = p2ExtraPassCount + 3;
+        p[0] = p2PassSetupTag.word[0];
+        p[1] = p2PassSetupTag.word[1];
+        p[2] = p2PassSetupTag.word[2];
+        p[3] = p2PassSetupTag.word[3];
+        p += 4;
+        word = p; p = word + 1; *word = p2PassSetupFlush;
+        *p++ = p2PassSetupStmask;
+        *p++ = P2_PASS_MASK;
+        word = p; p = word + 1;
+        p2PassSetupUnpack.num[2] = p2ExtraPassCount + 1;
+        *word = p2PassSetupUnpack.word;
+        for (pass = 0; pass <= p2ExtraPassCount; pass++) {
+            p2GetPassMasks(pass, &frameMask, &zbufMask);
+            *p++ = 0;
+            *p++ = frameMask;
+            *p++ = zbufMask;
+            *p++ = p2GetPassProgramAddress(pass + 1, mode);
+        }
+        if (p2PalettedStages == P2_STAGES_BOTH_PALETTED) {
+            *p++ = p2PassSetupStmask;
+            *p++ = P2_PALETTE_FLAG_MASK;
+            *p++ = p2PaletteFlagUnpack;
+            *p++ = P2_PALETTE_FLAG_BOTH;
+        } else {
+            *p++ = p2PassSetupStmask;
+            *p++ = P2_PALETTE_FLAG_MASK;
+            *p++ = p2PaletteFlagUnpack;
+            *p++ = P2_PALETTE_FLAG_OTHER;
+        }
+        n = p2ExtraPassCount + 3;
+        for (i = 0; i < n; i++) {
+            p2SentPassSetup[i] = ((__int128 *)start)[i + 1];
+        }
+        p2DmaCurrentPacket[P2_DMA_VIF1]->cursor = (unsigned int)p;
+        if (p2DmaCurrentPacket[P2_DMA_VIF1]->cursor >= p2DmaCurrentPacket[P2_DMA_VIF1]->limit) {
+            if (p2DisplayListMode != 0) {
+                p2GrowDisplayList();
+            } else {
+                p2SubmitDmaPacket(P2_DMA_VIF1);
+            }
+        }
+    }
+}
+
+
+extern unsigned int p2VuBufferLayoutTag[4];
+extern unsigned int p2VuBufferBytesUnpack, p2VuBufferHalvesUnpack, p2VuBufferLayoutFlush;
+extern p2VuBufferLayout p2VuBuffers;
+extern VifCode p2VuBufferBase, p2VuBufferOffset;
+extern unsigned int p2VuBufferLayoutNop;
+extern int p2VifOffset, p2VifBase;
+extern __int128 p2SentVuBufferLayout0, p2SentVuBufferLayout1, p2SentVuBufferLayout2;
+
+/* Sends p2VuBuffers: its addresses as bytes and halfwords to the VU1 program's constants, and its
+ * double buffer as the VIF BASE and OFFSET, which p2VifBase and p2VifOffset keep for the state cache. */
+void p2SendVuBufferLayout(void) {
+    unsigned int *p;
+    __int128 *data;
+
+    p = (unsigned int *)p2DmaCurrentPacket[P2_DMA_VIF1]->cursor;
+    p[0] = p2VuBufferLayoutTag[0];
+    p[1] = p2VuBufferLayoutTag[1];
+    p[2] = p2VuBufferLayoutTag[2];
+    p[3] = p2VuBufferLayoutTag[3];
+    data = (__int128 *)(p + 4);
+    p[4] = p2VuBufferLayoutFlush;
+    p[5] = p2VuBufferBytesUnpack;
+    ((unsigned char *)p)[24] = p2VuBuffers.address0;
+    ((unsigned char *)p)[25] = p2VuBuffers.address1;
+    ((unsigned char *)p)[26] = p2VuBuffers.address2;
+    ((unsigned char *)p)[27] = p2VuBuffers.address3;
+    ((unsigned char *)p)[28] = p2VuBuffers.address4;
+    ((unsigned char *)p)[29] = p2VuBuffers.byteUnpackAddress;
+    ((unsigned char *)p)[30] = p2VuBuffers.address7;
+    ((unsigned char *)p)[31] = p2VuBuffers.address8;
+    *(p += 8) = p2VuBufferHalvesUnpack;
+    ((short *)p)[2] = p2VuBuffers.address6;
+    ((short *)p)[3] = p2VuBuffers.base;
+    ((short *)p)[4] = p2VuBuffers.offset + p2VuBuffers.base;
+    ((short *)p)[5] = -1;
+    p2VuBufferBase.imm = p2VuBuffers.base;
+    p2VifBase = p2VuBuffers.base;
+    p2VuBufferOffset.imm = p2VuBuffers.offset;
+    p2VifOffset = p2VuBuffers.offset;
+    p[3] = p2VuBufferLayoutNop;
+    p[4] = p2VuBufferLayoutNop;
+    p[5] = p2VuBufferLayoutNop;
+    p[6] = p2VuBufferBase.word;
+    p[7] = p2VuBufferOffset.word;
+    p2SentVuBufferLayout0 = data[0];
+    p2SentVuBufferLayout1 = data[1];
+    p2SentVuBufferLayout2 = data[2];
+    p2DmaCurrentPacket[P2_DMA_VIF1]->cursor = (unsigned int)(p + 8);
+    if (p2DmaCurrentPacket[P2_DMA_VIF1]->cursor >= p2DmaCurrentPacket[P2_DMA_VIF1]->limit) {
+        if (p2DisplayListMode != 0) {
+            p2GrowDisplayList();
+        } else {
+            p2SubmitDmaPacket(P2_DMA_VIF1);
+        }
+    }
 }
 
 void FUN_00202300(void) {
@@ -714,13 +1033,13 @@ void FUN_00202300(void) {
     } while (var_s0 < 6);
 }
 
-int FUN_00202e20(int arg0) {
+int p2GetPassProgramAddress(int arg0) {
     int temp_a1;
     int temp_a2;
     int var_v0;
 
     var_v0 = 0;
-    if (p2ExtraPassCount[0] < arg0) {
+    if (p2ExtraPassCount < arg0) {
         return 0;
     }
     temp_a2 = ((unsigned int) p2ProgramFlags[0] >> 6) & 1;

@@ -36,7 +36,7 @@ Exact script call-site references, message arguments, API roots and native edges
 | --- | --- | ---: | ---: |
 | `0x0010c8d8` | `FUN_0010c8d8` | 148 | 0 |
 | `0x0010cad8` | `FUN_0010cad8` | 1524 | 16 |
-| `0x00113f20` | `FUN_00113f20` | 84 | 0 |
+| `0x00113f20` | `DIntr` | 84 | 0 |
 | `0x0018be80` | `FUN_0018be80` | 1340 | 0 |
 | `0x001908f0` | `Matrix44_Copy` | 188 | 0 |
 | `0x00190a50` | `Matrix44_TranslateLocal` | 212 | 0 |

@@ -59,7 +59,7 @@ void *memset();
 char *strcpy();
 int strlen();
 int sprintf();
-int FUN_002916f8(int value, int scale, int divisor);
+int UTY_MulDiv(int value, int scale, int divisor);
 
 void FUN_002b04e8(SfdTst *tst);
 int FUN_002b0a70(SfdTst *tst, int value);

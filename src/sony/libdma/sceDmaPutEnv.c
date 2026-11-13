@@ -13,7 +13,7 @@ typedef struct {
 extern unsigned char DAT_004d1eb0[];
 extern unsigned char DAT_004d1ec0[];
 extern unsigned char DAT_004d1ed0[];
-extern DmaEnv DAT_00555050;
+extern DmaEnv sceDmaCurrentEnv;
 int sceDmaPutEnv(DmaEnv *env) {
     unsigned int ctrl, pcr, sqwc, rbor, rbsr;
 
@@ -44,6 +44,6 @@ int sceDmaPutEnv(DmaEnv *env) {
     *(volatile unsigned int *)0x1000E030 = sqwc;
     *(volatile unsigned int *)0x1000E050 = rbor;
     *(volatile unsigned int *)0x1000E040 = rbsr;
-    DAT_00555050 = *env;
+    sceDmaCurrentEnv = *env;
     return 0;
 }

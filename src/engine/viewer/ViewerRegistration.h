@@ -93,7 +93,7 @@ extern "C" int DAT_004d0a80[4];
 extern "C" int DAT_004d0ab0[4];
 extern "C" void igStatisticsItem_InitFields(void);
 extern "C" int igMetaObject_CreateInstance(int, int);
-extern "C" void FUN_004590c0(int arg0);
+extern "C" void igViewerAction_Create(int arg0);
 extern "C" igMetaObject *g_igViewerAction_metaObject[4];
 extern "C" void *igViewerAction_GetMetaObject(void);
 extern "C" int DAT_00542460[4];

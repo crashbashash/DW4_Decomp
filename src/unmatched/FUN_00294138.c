@@ -1,7 +1,7 @@
 /* Releases the current frame of a Sofdec playback handle: rejects an invalid handle, otherwise frees the frame through FUN_002ac600 when
  * one is held and advances the frame counters. */
 extern int FUN_002968c0(void *ply);
-extern void FUN_0029a320(const char *msg);
+extern void mwsfd_Error(const char *msg);
 extern void *FUN_002963a8(void *ply);
 extern int FUN_002ac600(void *stream, int frame);
 extern char DAT_004f31d8[]; /* "E1122615: mwPlyRelCurFrm: handle is invalid." */
@@ -20,7 +20,7 @@ void FUN_00294138(Ply294138 *ply) {
     void *stream;
 
     if (FUN_002968c0(ply) == 0) {
-        FUN_0029a320(DAT_004f31d8);
+        mwsfd_Error(DAT_004f31d8);
         return;
     }
     limit = ply->f128;

@@ -1,23 +1,23 @@
-int FUN_00113f20(void);
-int FUN_00113f78(void);
+int DIntr(void);
+int EIntr(void);
 void FUN_00114800(int mode);
 unsigned long long iGetTimerSystemTime(void);
 void SetNextComp(unsigned long long now);
 
 int StartTimerSystemTime(void)
 {
-    int state = FUN_00113f20();
+    int state = DIntr();
     int mode = *(volatile int *)0x10001010;
     if (mode & 0x80) {
         if (state) {
-            FUN_00113f78();
+            EIntr();
         }
         return 1;
     }
     FUN_00114800((mode & 0xFFFFF3FF) | 0x80);
     SetNextComp(iGetTimerSystemTime());
     if (state) {
-        FUN_00113f78();
+        EIntr();
     }
     return 0;
 }

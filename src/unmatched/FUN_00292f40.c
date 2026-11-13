@@ -1,4 +1,4 @@
-/* Returns -1 when the handle (no flag at +24) has a status block from FUN_00294a30 with either +40
+/* Returns -1 when the handle (no flag at +24) has a status block from mwsfd_GetWork with either +40
  * or +44 still zero, else 0. */
 
 struct Status00292f40 {
@@ -12,10 +12,10 @@ struct Handle00292f40 {
     int f24; /* +24: non-zero skips the check */
 };
 
-struct Status00292f40 *FUN_00294a30(struct Handle00292f40 *handle);
+struct Status00292f40 *mwsfd_GetWork(struct Handle00292f40 *handle);
 
 int FUN_00292f40(struct Handle00292f40 *handle) {
-    struct Status00292f40 *status = FUN_00294a30(handle);
+    struct Status00292f40 *status = mwsfd_GetWork(handle);
     int result = 0;
 
     if (handle->f24 == 0) {

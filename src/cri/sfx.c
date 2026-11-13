@@ -33,7 +33,7 @@ extern char DAT_004f5860[];
 extern char DAT_004f5868[];
 
 void *memset(void *dst, int value, unsigned int size);
-int FUN_0027d6b0(SfxMem *in, char *tag, char *endtag, SfxMem *out);
+int SJ_SearchTag(SfxMem *in, char *tag, char *endtag, SfxMem *out);
 void FUN_00283038();
 void FUN_00283058(void);
 /* matching construct: manual — FUN_00283090 declared void (its result is unused) leaves v0 free for the decrement, as in retail */
@@ -280,14 +280,14 @@ void FUN_002b3c98(SfxHn *hn, char *data, int size) {
     zhn = hn->zhn;
     in.data = data;
     in.size = size;
-    if (FUN_0027d6b0(&in, DAT_004f5860, DAT_004f5868, &out) == 0)
+    if (SJ_SearchTag(&in, DAT_004f5860, DAT_004f5868, &out) == 0)
         FUN_002b4358(zhn, 0, 0);
     else
         FUN_002b4358(zhn, out.data, out.size);
     zinf->valid = 1;
 }
 
-void FUN_002b3d30(SfxHn *hn, char **data, int *size) {
+void SFX_GetZinf(SfxHn *hn, char **data, int *size) {
     SfxChunk *zinf = &hn->zinf;
     char *value4;
     int value8;

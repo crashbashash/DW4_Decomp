@@ -2,7 +2,7 @@
  * with callback FUN_002a2c60, reporting errors 0xFF000D08/0xFF000D09. */
 int FUN_0028d918();
 void *FUN_0028da88();
-void FUN_002a0bb8();
+void sfd_ReportError();
 void FUN_002a2bd8();
 void FUN_002a2c60();
 void FUN_002a2cc8();
@@ -25,10 +25,10 @@ void FUN_002a2b10(struct Player2a2b10 *player) {
     FUN_002a2bd8(params);
     decoder = FUN_0028da88();
     if (decoder == 0) {
-        FUN_002a0bb8(0, 0xFF000D08);
+        sfd_ReportError(0, 0xFF000D08);
     } else if (FUN_0028d918(decoder, FUN_002a2c60, player) != 0) {
         FUN_002a2cc8(decoder);
-        FUN_002a0bb8(0, 0xFF000D09);
+        sfd_ReportError(0, 0xFF000D09);
     } else {
         params->handle = decoder;
     }

@@ -1,3 +1,32 @@
+/* The class of a name, 0 when none is bound. */
+igLuaGlue::Class *LuaClass_FindByName(const char *name) {
+    LuaClassIterator it(LuaBinding_HashName(name));
+    while (it.isValid()) {
+        igLuaGlue::Class *luaClass = it.get();
+        if (strcmp(luaClass->name, name) == 0) {
+            return luaClass;
+        }
+        it++;
+    }
+    return 0;
+}
+
+/* The class whose instances or references carry a tag, 0 for a plain Alchemy object's. */
+igLuaGlue::Class *LuaClass_FindByTag(int tag) {
+    if (tag == g_luaObjectTag) {
+        return 0;
+    }
+    LuaClassWalker it;
+    while (it.isValid()) {
+        igLuaGlue::Class *luaClass = it.get();
+        if (tag == luaClass->instanceTag || tag == luaClass->referenceTag) {
+            return luaClass;
+        }
+        it++;
+    }
+    return 0;
+}
+
 /* The Lua class of a meta-object or of its nearest ancestor that has one. */
 igLuaGlue::Class *LuaClass_FindForMeta(igMetaObject *meta) {
     igMetaObject *m;
@@ -21,6 +50,16 @@ int LuaClass_DistanceToBase(igLuaGlue::Class *base, igLuaGlue::Class *luaClass) 
         distance++;
     }
     return -1;
+}
+
+/* Empties the class table, freeing every class. */
+void LuaClassTable_Clear(void) {
+    LuaClassWalker it;
+    while (it.isValid()) {
+        igLuaGlue::Class *luaClass = it.get();
+        it++;
+        delete luaClass;
+    }
 }
 
 /* A class enters the class table and exposes the reflected fields of the meta-object its name

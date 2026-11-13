@@ -54,8 +54,8 @@ extern char DAT_004f0058[];
 extern char DAT_004f0068[];
 
 void *memset(void *dst, int value, unsigned int n);
-void FUN_002659a0(const char *format, ...);
-void FUN_0027d470(SjChunk *ck, int nbyte, SjChunk *ck1, SjChunk *ck2);
+void ADXMSG_PrintErr(const char *format, ...);
+void SJ_SplitChunk(SjChunk *ck, int nbyte, SjChunk *ck1, SjChunk *ck2);
 void FUN_0010b7d8(char *start, char *end);
 int sceSifDmaStat(unsigned int id);
 unsigned int sceSifSetDma(SifDmaData *sdd, int len);
@@ -83,7 +83,7 @@ void FUN_002729e8(DtrObj *dtr)
         dtr->total += dtr->cks.len;
         dtr->transfer = 0;
         if (dtr->cks.len != 0) {
-            FUN_002659a0(DAT_004eff50);
+            ADXMSG_PrintErr(DAT_004eff50);
             for (;;) {
             }
         }
@@ -95,28 +95,28 @@ void FUN_002729e8(DtrObj *dtr)
     dtr->sjd->vtbl->GetChunk(dtr->sjd, 0, 0x7fffffff, &ckd);
     n = cks.len < ckd.len ? cks.len : ckd.len;
     n = n / dtr->unit * dtr->unit;
-    FUN_0027d470(&cks, n, &cks, &cks2);
+    SJ_SplitChunk(&cks, n, &cks, &cks2);
     dtr->sjs->vtbl->UngetChunk(dtr->sjs, 1, &cks2);
-    FUN_0027d470(&ckd, n, &ckd, &ckd2);
+    SJ_SplitChunk(&ckd, n, &ckd, &ckd2);
     dtr->sjd->vtbl->UngetChunk(dtr->sjd, 0, &ckd2);
     if (n <= 0) {
         return;
     }
     if (cks.len & 63) {
-        FUN_002659a0(DAT_004eff70);
-        FUN_002659a0(DAT_004eff98, cks.data, ckd.data, cks.len);
+        ADXMSG_PrintErr(DAT_004eff70);
+        ADXMSG_PrintErr(DAT_004eff98, cks.data, ckd.data, cks.len);
         for (;;) {
         }
     }
     if ((int)cks.data & 63) {
-        FUN_002659a0(DAT_004effc8);
-        FUN_002659a0(DAT_004eff98, cks.data, ckd.data, cks.len);
+        ADXMSG_PrintErr(DAT_004effc8);
+        ADXMSG_PrintErr(DAT_004eff98, cks.data, ckd.data, cks.len);
         for (;;) {
         }
     }
     if ((int)ckd.data & 63) {
-        FUN_002659a0(DAT_004efff0);
-        FUN_002659a0(DAT_004eff98, cks.data, ckd.data, cks.len);
+        ADXMSG_PrintErr(DAT_004efff0);
+        ADXMSG_PrintErr(DAT_004eff98, cks.data, ckd.data, cks.len);
         for (;;) {
         }
     }
@@ -127,7 +127,7 @@ void FUN_002729e8(DtrObj *dtr)
     dtr->dma.mode = 0;
     dtr->dmaid = sceSifSetDma(&dtr->dma, 1);
     if (dtr->dmaid == 0) {
-        FUN_002659a0(DAT_004f0018);
+        ADXMSG_PrintErr(DAT_004f0018);
         dtr->sjs->vtbl->UngetChunk(dtr->sjs, 1, &cks);
         dtr->sjd->vtbl->UngetChunk(dtr->sjd, 0, &ckd);
         return;
@@ -162,12 +162,12 @@ void FUN_00272d60(void)
 
 void FUN_00272e20(void)
 {
-    FUN_002659a0(DAT_004f0040, DAT_004a930c);
+    ADXMSG_PrintErr(DAT_004f0040, DAT_004a930c);
     if (DAT_004a930c == 0) {
         memset(DAT_004a9310, 0, sizeof(DAT_004a9310));
     }
     DAT_004a930c++;
-    FUN_002659a0(DAT_004f0058);
+    ADXMSG_PrintErr(DAT_004f0058);
 }
 
 void FUN_00272e88(void)
@@ -187,7 +187,7 @@ DtrObj *FUN_00272ea0(SjObj *sjs, SjObj *sjd)
         }
     }
     if (i == 32) {
-        FUN_002659a0(DAT_004f0068, 32, 32);
+        ADXMSG_PrintErr(DAT_004f0068, 32, 32);
         dtr = 0;
     } else {
         memset(dtr, 0, sizeof(DtrObj));

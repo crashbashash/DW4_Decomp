@@ -328,6 +328,54 @@ void LuaEnumTable_Link(LuaHashLink *link, LuaHashLink **buckets, unsigned int bu
     *bucket = link;
 }
 
+void LuaEnumTable_Resize(void) {
+    unsigned int oldShift;
+    unsigned int shift;
+    unsigned int bucketCount;
+    unsigned int size;
+    LuaHashLink **buckets;
+    unsigned int index;
+    LuaHashLink *entry;
+    LuaHashLink *next;
+
+    if (g_luaEnumBuckets == 0) {
+        g_luaEnumBuckets = (LuaHashLink **)Memory_AllocateDefaultBuffer(g_luaEnumBucketCount * 4);
+        memset(g_luaEnumBuckets, 0, g_luaEnumBucketCount * 4);
+        return;
+    }
+    if (g_luaEnumTableBusy == 0) {
+        if (g_luaEnumCount == 0) {
+            Memory_FreeBufferAliasA(g_luaEnumBuckets);
+            g_luaEnumBuckets = 0;
+            g_luaEnumBucketCount = 16;
+            return;
+        }
+        oldShift = g_luaEnumBucketShift;
+        shift = oldShift;
+        if (g_luaEnumBucketCount < g_luaEnumCount) {
+            shift = oldShift + 1;
+        } else if (g_luaEnumCount < (g_luaEnumBucketCount >> 1) && oldShift > 4) {
+            shift = oldShift - 1;
+        }
+        if (shift != oldShift) {
+            bucketCount = 1 << shift;
+            size = bucketCount * 4;
+            buckets = (LuaHashLink **)Memory_AllocateDefaultBuffer(size);
+            memset(buckets, 0, size);
+            for (index = 0; index < g_luaEnumBucketCount; index++) {
+                for (entry = g_luaEnumBuckets[index]; entry != 0; entry = next) {
+                    next = entry->next;
+                    LuaEnumTable_Link(entry, buckets, bucketCount, shift);
+                }
+            }
+            g_luaEnumBucketCount = bucketCount;
+            g_luaEnumBucketShift = shift;
+            Memory_FreeBufferAliasA(g_luaEnumBuckets);
+            g_luaEnumBuckets = buckets;
+        }
+    }
+}
+
 void LuaEnumTable_Remove(LuaHashLink *link) {
     LuaHashLink **bucket;
 

@@ -186,7 +186,7 @@ extern "C" int igMessageDispatcher_SetAbstractProxy_002321e0[4];
 extern "C" void igMessageDispatcher_Register(void);
 extern "C" void thunk_igMessageDispatcher_GetMetaObject(void);
 extern "C" void FUN_002321e0(void);
-extern "C" void FUN_00232200(int arg0);
+extern "C" void igMessageDefaultReceiver_CreateInstance(int arg0);
 extern "C" igMetaObject *g_igMessageDefaultReceiver_metaObject[4];
 extern "C" igMetaObject *igMessageDefaultReceiver_GetMetaObject(void);
 extern "C" int DAT_0052c930[4];
@@ -800,7 +800,7 @@ struct WindowInfo { char p[40]; int f40; };
 struct Receiver { char p[8]; WindowInfo *f8; };
 extern "C" int Gap__Insight__igWindowResizeEventReceiver__vfunc_32(Receiver *self, int width, int height);
 extern "C" int FUN_00236b70(...);
-extern "C" int FUN_002d6f50(...);
+extern "C" int igRendererOrderedList_Append(...);
 class DW4VC_92_0 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual int vX(); };
 extern "C" void igInsightCore_AddManager(void *arg0, void *arg1);
 extern "C" int FUN_002d7750(...);
@@ -828,7 +828,7 @@ typedef struct L { char pad8[8]; int cnt; char pad12[4]; int *arr; } L;
 typedef struct A { char pad104[104]; L *f68; } A;
 extern "C" void FUN_00236e80(A *arg0);
 extern "C" int FUN_00457ca0(...);
-extern "C" void FUN_00236ee0(void *arg0, int arg1);
+extern "C" void igInsightCore_AddRenderer(void *arg0, int arg1);
 extern "C" int g_statusSucceeded[4];
 typedef struct Obj_236f30 { char pad[28]; int f28; } Obj_236f30;
 extern "C" void FUN_00236f30(Obj_236f30 *arg0, int arg1);
@@ -838,7 +838,7 @@ struct Mid { int pad[2]; List *list; };
 struct Self { int pad[2]; Mid *mid; };
 extern "C" Obj_236f80 *igInsightCore_FindManager(Self *arg0, int arg1);
 extern "C" int FUN_00237010(void);
-extern "C" int FUN_00237020(int *p);
+extern "C" int igInsightCore_AddRendererOrder(int *p);
 /* Dummy class with 25 virtual slots before vX, so that vX is the manager's
  * vtable slot 27 (matching construct: gives the retail `lw t9,108(t9)` call). */
 class DW4VC { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual int vX(int); };
@@ -859,7 +859,7 @@ struct Q { int p0; int p1; int count; int p3; B **data; };
 extern "C" void FUN_00237280(int *arg0);
 extern "C" int FUN_002d7090(...);
 extern "C" int FUN_002d78e0(...);
-extern "C" int FUN_00454290(...);
+extern "C" int igEventDispatcher_AddReceiver(...);
 extern "C" int Gap__Core__igObject__vfunc_11(...);
 extern "C" int text_Clear_done[4];
 extern "C" int text_Scenes_done[4];
@@ -976,7 +976,7 @@ struct igMessageDispatcherOwnerView {
     char _pad0[8];
     igFilterMessageDispatcherView *f8;
 };
-extern "C" void FUN_00237e80(igMessageDispatcherOwnerView *self);
+extern "C" void igMessenger_AddReceiver(igMessageDispatcherOwnerView *self);
 extern "C" void FUN_00237ea0(igMessageDispatcherOwnerView *self, void *message);
 class SchedulerManager {
 public:

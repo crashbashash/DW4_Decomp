@@ -7,15 +7,15 @@ typedef struct SfdHandle {
 
 extern char DAT_004bea74[];
 extern void FUN_002a0d00(void *errorBlock, int a, int b);
-extern int FUN_002a0dd8(SfdHandle *handle);
-extern int FUN_002a0bb8(SfdHandle *handle, int code);
+extern int sfd_CheckHn(SfdHandle *handle);
+extern int sfd_ReportError(SfdHandle *handle, int code);
 
 int FUN_002a0c68(SfdHandle *handle, int a, int b) {
     if (handle == 0) {
         FUN_002a0d00(DAT_004bea74, a, b);
     } else {
-        if (FUN_002a0dd8(handle) != 0) {
-            return FUN_002a0bb8(0, 0xFF000101);
+        if (sfd_CheckHn(handle) != 0) {
+            return sfd_ReportError(0, 0xFF000101);
         }
         FUN_002a0d00(handle->errorBlock, a, b);
     }

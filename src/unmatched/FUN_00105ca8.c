@@ -4,11 +4,11 @@ void _motionVectors(char *d, int PMV[2][2][2], int *dmvector, int mv_field_sel[2
 void FUN_00106378(char *d, int *pmv, int *dmvector, int h_r_size, int v_r_size, int dmv, int mvscale, int full_pel);
 void FUN_001064c8(char *d, unsigned int cmd);
 void FUN_001064f8(char *d);
-int FUN_001067e8(char *d, int type);
-void FUN_00106b78(char *d, int n);
+int _ipuVdec(char *d, int type);
+void _ipuFlushBits(char *d, int n);
 unsigned int FUN_00106c88(char *d, int n);
 void FUN_001084b0(unsigned int addr, int size);
-void FUN_00109b10(char *d, const char *msg, ...);
+void _sceMpegMessage(char *d, const char *msg, ...);
 
 #define LD(o) (*(int *)(ld + (o)))
 #define picture_coding_type LD(360)
@@ -23,9 +23,9 @@ int FUN_00105ca8(char *ld, int *pmacroblock_type, int *pmotion_type, int *pdct_t
     int motion_vector_count, mv_format, dmv, mvscale, dct_type;
 
     *(volatile unsigned int *)0x10002010 = (*(volatile unsigned int *)0x10002010 & ~0x07000000) | (picture_coding_type << 24);
-    macroblock_type = *pmacroblock_type = FUN_001067e8(ld, 1);
+    macroblock_type = *pmacroblock_type = _ipuVdec(ld, 1);
     if (macroblock_type == 0) {
-        FUN_00109b10(ld, DAT_004d2090);
+        _sceMpegMessage(ld, DAT_004d2090);
         Fault_Flag = 1;
         return 0;
     }
@@ -75,7 +75,7 @@ int FUN_00105ca8(char *ld, int *pmacroblock_type, int *pmotion_type, int *pdct_t
         return 0;
 
     if ((*pmacroblock_type & 1) && concealment_motion_vectors)
-        FUN_00106b78(ld, 1);
+        _ipuFlushBits(ld, 1);
 
     if (*pmacroblock_type & 3) {
         FUN_001084b0(*(unsigned int *)(ld + LD(2088) * 320 + 1452), 0x300);

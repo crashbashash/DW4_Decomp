@@ -319,7 +319,7 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_88(C_171100 *arg0, int arg1, float *ar
         e->z = arg2[2];
         if (e->f152 != 0) {
             arg0->vX(1, sp40);
-            FUN_00192fc0((char *)e + 0x70, arg2, sp40);
+            Vec3f_TransformProjective((char *)e + 0x70, arg2, sp40);
         }
         FUN_00171690(arg0, e);
     }
@@ -1241,7 +1241,7 @@ void FUN_00174640(int arg0, int arg1) {
         var_a2 = 2;
         var_a4 = 0x80;
     }
-    FUN_001e81f0(var_a0, var_a1, var_a2, var_a3, var_a4, temp_a5, tab);
+    p2SetBlendEquation(var_a0, var_a1, var_a2, var_a3, var_a4, temp_a5, tab);
 }
 
 void Gap__Gfx__igPsx2VisualContext__vfunc_217(igPsx2VisualContext *self, unsigned char enable)

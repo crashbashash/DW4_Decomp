@@ -1,5 +1,5 @@
-int FUN_002916f8();
+int UTY_MulDiv();
 
 void FUN_002916e0(void) {
-    FUN_002916f8();
+    UTY_MulDiv();
 }

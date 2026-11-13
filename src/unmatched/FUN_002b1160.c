@@ -1,8 +1,8 @@
-/* Sets the state word (+4) of 0x44-byte entry 8 to 1 through FUN_002b03b8 when FUN_002b03d0 reads
+/* Sets the state word (+4) of 0x44-byte entry 8 to 1 through FUN_002b03b8 when sftrn_GetFlagB reads
  * it as not 1, FUN_0029ea88(obj, obj+8536) reports 1 and FUN_002b11e0 agrees. */
 int FUN_0029ea88();
 int FUN_002b03b8();
-int FUN_002b03d0();
+int sftrn_GetFlagB();
 int FUN_002b11e0();
 
 struct EntryOwner {
@@ -13,7 +13,7 @@ struct EntryOwner {
 };
 
 void FUN_002b1160(struct EntryOwner *obj) {
-    if (FUN_002b03d0(obj, 8) != 1 && FUN_0029ea88(obj, obj->f8536) == 1 && FUN_002b11e0(obj) != 0) {
+    if (sftrn_GetFlagB(obj, 8) != 1 && FUN_0029ea88(obj, obj->f8536) == 1 && FUN_002b11e0(obj) != 0) {
         FUN_002b03b8(obj, 8, 1);
     }
 }

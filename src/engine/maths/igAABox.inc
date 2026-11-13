@@ -1,4 +1,4 @@
-void FUN_0018a660(int arg0) {
+void igAABox_CreateInstance(int arg0) {
     FUN_0018a780();
     igMetaObject_CreateInstance(*(int *)0x5610E0, arg0);
 }
@@ -92,10 +92,10 @@ void FUN_0018a8f0(void) {
     FUN_0018fc30((IndexedWordPairKey *)g_igAABox_metaObject[0], (IndexedWordPairKey *)g_igSphere_metaObject[0], (int)FUN_0018b7d0);
     FUN_0018fd10((int *)g_igAABox_metaObject[0], (int)FUN_0018b170);
     FUN_0018fd90((IndexedWordKey *)g_igAABox_metaObject[0], (int)FUN_0018b540);
-    FUN_0018fd50((IndexedSlotKey *)g_igAABox_metaObject[0], (int)FUN_0018b6b0);
+    FUN_0018fd50((IndexedSlotKey *)g_igAABox_metaObject[0], (int)igAABox_ExtendByRay);
     FUN_0018fe10((int *)g_igAABox_metaObject[0], (int)igAABox_IntersectPoint);
     FUN_0018fdd0(g_igAABox_metaObject[0], (int)FUN_0018b890);
-    FUN_0018fe50((IndexedSlotKey *)g_igAABox_metaObject[0], (int)thunk_FUN_0018ac80);
+    FUN_0018fe50((IndexedSlotKey *)g_igAABox_metaObject[0], (int)thunk_igAABox_Transform);
     FUN_0018fe90((IndexedWordKey *)g_igAABox_metaObject[0], (int)FUN_0018b940);
     FUN_0018fed0(g_igAABox_metaObject[0], (int)FUN_0018b970);
     FUN_0018ff10((int *)g_igAABox_metaObject[0], (int)FUN_0018b990);
@@ -339,6 +339,19 @@ int igAABox_IntersectPoint(struct B4 *arg0, struct V *arg1) {
     return 0;
 }
 
+
+void igAABox_ExtendByRay(igAABox *box, igRay *ray) {
+    Box *bounds = (Box *)box;
+    float end[3];
+    float len;
+    FUN_0018b890(bounds, ray->_pos);
+    len = ray->_len;
+    end[0] = ray->_pos[0] + len * ray->_dir[0];
+    end[1] = ray->_pos[1] + len * ray->_dir[1];
+    end[2] = ray->_pos[2] + len * ray->_dir[2];
+    FUN_0018b890(bounds, end);
+}
+
 void FUN_0018b730(igAABox *box, igAABox *other) {
     if (!(box->_min[0] <= other->_min[0])) box->_min[0] = other->_min[0];
     if (!(box->_min[1] <= other->_min[1])) box->_min[1] = other->_min[1];
@@ -400,9 +413,9 @@ void FUN_0018b890(struct Box *arg0, float *arg1) {
     }
 }
 
-int thunk_FUN_0018ac80()
+int thunk_igAABox_Transform()
 {
-    return FUN_0018ac80();
+    return igAABox_Transform();
 }
 
 void FUN_0018b940(igAABox *box) {

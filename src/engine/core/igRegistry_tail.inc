@@ -134,6 +134,44 @@ int FUN_003064b0(int arg0, int arg1) {
     return cnt;
 }
 
+/* Copies the index-th key of a section to *key, retained; false when the section has fewer keys. */
+bool igRegistry_GetKeyName(int registry, int section, int index, IniKeyText **key) {
+    IniPairEntry *entry;
+    IniKeyText *value;
+    IniKeyText *old;
+    int i;
+    bool found;
+    int seen;
+    IniPairList *pairs = ((IniIncludeView *)registry)->pairs;
+    /* matching construct: manual variant search — the pair count reuses the registry parameter, as the section key counter above does */
+    registry = pairs->count;
+    seen = 0;
+    found = false;
+    for (i = 0; i < registry; i++) {
+        entry = pairs->data[i];
+        if (entry != 0 && entry->section == section) {
+            if (seen == index) {
+                value = (IniKeyText *)entry->key;
+                if (value != 0) {
+                    value->_refCount++;
+                }
+                old = *key;
+                if (old != 0) {
+                    old->_refCount = old->_refCount - 1;
+                    if (((unsigned long long)((long long)old->_refCount << 0x29) >> 0x29) == 0) {
+                        igObject_Destroy(old);
+                    }
+                }
+                *key = value;
+                found = true;
+                break;
+            }
+            seen++;
+        }
+    }
+    return found;
+}
+
 bool FUN_003065f0(int arg0, int arg1, const char *arg2, int *arg3, int arg4, int arg5) {
     bool var_s0;
     void *temp_v0;
@@ -597,7 +635,7 @@ static inline char *text_307fd0(IniIncludeText *s) {
     return t;
 }
 
-int FUN_003081d0(const char *arg0, ...) {
+int igReportNotice(const char *arg0, ...) {
     int n = __builtin_args_info(2);
     int off;
     if (n >= 8) off = 0; else off = (8 - n) * 8;

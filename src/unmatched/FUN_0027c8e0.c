@@ -16,7 +16,7 @@ extern void *DAT_004b9668[];
 extern SjNodePool DAT_004b96a0[64];
 extern char DAT_004f2028[];
 void FUN_0027c778(Sj *);
-void FUN_0027cbc0(SjNodePool *);
+void SJUNI_Reset(SjNodePool *);
 
 SjNodePool *FUN_0027c8e0(int mode, int data, int size)
 {
@@ -40,6 +40,6 @@ SjNodePool *FUN_0027c8e0(int mode, int data, int size)
     sj->nnode = size / 16;
     sj->func = FUN_0027c778;
     sj->self = (Sj *)sj;
-    FUN_0027cbc0(sj);
+    SJUNI_Reset(sj);
     return sj;
 }

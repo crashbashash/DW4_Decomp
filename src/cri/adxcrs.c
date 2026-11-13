@@ -10,12 +10,12 @@ void ADXCRS_Init(void)
     adxcrs_lock_cnt = 0;
 }
 
-void FUN_0025f2d0(void)
+void ADXCRS_Lock(void)
 {
     FUN_0027e1c0();
 }
 
-void FUN_0025f2e8(void)
+void ADXCRS_Unlock(void)
 {
     FUN_0027e1d8();
 }

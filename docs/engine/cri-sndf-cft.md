@@ -11,8 +11,7 @@ The first two files of the Sofdec block, each compiled as one whole file with So
 ## Open questions
 
 - SNDF's init (`0x280b98`) passes the build-string pointer as a third argument to `sceSifInitRpc`, with no
-  value in the second; no C spelling found reproduces that, so it has no source. Its message switch at
-  `0x281bb8` is a balanced compare tree no case spelling tried gives.
+  value in the second; no C spelling found reproduces that, so it has no source.
 - CFT's init stores its version string in a `volatile` word and is `unapproved`
   ([build-string stores](source-approvals.md#build-string-stores)). Two table builders and two alpha-plane loops have no source (store order; a multiply retail
   recomputes on each pass).

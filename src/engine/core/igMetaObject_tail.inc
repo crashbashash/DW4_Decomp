@@ -460,7 +460,7 @@ int FUN_002fe600(igTDataList<ChainMeta *> *list, ChainMeta *object) {
     int n = list->count();
     while (i == -1 && object != 0) {
         ChainRef retained(object);
-        List_InsertWords(list, n, 1, &retained);
+        List_InsertWords((igDataList *)list, n, 1, &retained);
         object = object->parent;
         i = list->find(object);
     }

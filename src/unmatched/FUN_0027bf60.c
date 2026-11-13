@@ -1,6 +1,6 @@
 /* Resets a handle's transfer state: copies the start value (+32) to +16 and clears the counters at
  * +12, +20, +24, +40, +44, +48 and +52; a NULL or unused (+4 clear) handle is reported through
- * FUN_0027b2e0. */
+ * SJERR_CallErr. */
 typedef struct Handle_27bf60 {
     int pad0;
     int used;       /* 0x04 */
@@ -20,15 +20,15 @@ typedef struct Handle_27bf60 {
 
 extern char E2004090207_NULL_pointer_is_specified[];   /* 'E2004090207 : NULL pointer is specified.' */
 extern char E2004090208_Specified_handle_is_invalid[]; /* 'E2004090208 : Specified handle is invalid.' */
-int FUN_0027b2e0(const char *message);
+int SJERR_CallErr(const char *message);
 
 void FUN_0027bf60(Handle_27bf60 *handle) {
     if (handle == 0) {
-        FUN_0027b2e0(E2004090207_NULL_pointer_is_specified);
+        SJERR_CallErr(E2004090207_NULL_pointer_is_specified);
         return;
     }
     if (handle->used == 0) {
-        FUN_0027b2e0(E2004090208_Specified_handle_is_invalid);
+        SJERR_CallErr(E2004090208_Specified_handle_is_invalid);
         return;
     }
     handle->current = handle->start;

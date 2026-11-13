@@ -4,7 +4,7 @@
 extern void *FUN_002935a8(void *work, int size);
 extern void *FUN_002935e0(int size);
 extern void FUN_00293708(void *work);
-extern void FUN_0029a320(const char *msg);
+extern void mwsfd_Error(const char *msg);
 extern char DAT_004f3070[]; /* "E2053001 MWSFD_Malloc: cnt over." */
 
 typedef struct {
@@ -19,7 +19,7 @@ void *FUN_00293508(Work293508 *work, int size) {
     void *block;
 
     if (work->count >= 32) {
-        FUN_0029a320(DAT_004f3070);
+        mwsfd_Error(DAT_004f3070);
         return 0;
     }
     if (size < 0) {

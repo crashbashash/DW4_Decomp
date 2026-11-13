@@ -27,6 +27,7 @@ handle with the current entry's size, and the 16 entries. An entry (`LscStm`, 32
 more than the previous entry's, wrapping at `0x7FFFFFFF`), the file name and the byte sum of the name (the
 server refuses an entry whose name changed after it was queued), the directory, offset and sector count, its
 state (`LscStmStat`: waiting, reading, done) and the sectors read so far.
+The object and entry types are in `include/dw4/cri/lsc.h`, which the MWSFD player files share.
 
 ## Open questions
 

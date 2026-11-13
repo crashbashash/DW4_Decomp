@@ -22,7 +22,7 @@ class C { public: virtual void d0(); virtual void d1(); virtual void d2(); virtu
 
 int FUN_00191f30(...);
 int Vec3f_TransformDirection(...);
-int FUN_004578c0(...);
+int igModel_NotifyViews(...);
 int Matrix44_GetTranslation(...);
 
 extern int g_vec3XAxis[4];
@@ -156,6 +156,11 @@ static inline void scaleVec3(float *v, float s) {
 struct S { char pad[92]; float f92; float f96; float f100; float f104; };
 
 extern const float g_vec3Zero[4];
+extern const float g_vec2Zero[2];
+extern int g_igGuiSystemModelMousePositionField[4];
+/* What igModel_NotifyViews tells a model's views: type 2 is a changed field, sent by `sender`. */
+typedef struct ViewModelEvent { int type; int sender; int field; } ViewModelEvent;
+enum { VIEW_MODEL_FIELD_CHANGED = 2 };
 
 struct PickRecord;
 struct Hit;
@@ -220,7 +225,7 @@ static inline Marker *createMarker() { AdoptReference tag = AdoptReference(); re
 
 int FUN_0018d2b0(...);
 int FUN_0018d360(...);
-int FUN_00192fc0(...);
+int Vec3f_TransformProjective(...);
 int FUN_001ce970(...);
 /* matching construct: dummy virtual slots so v23()/v25() dispatch through the retail vtable offsets (igIntersectTraversal) */
 class VM { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void v23(int); virtual void d24(); virtual void v25(long long); };
@@ -278,7 +283,7 @@ void FUN_004650d0(Ob *arg0) {
     e1.id = 2;
     e1.obj = arg0;
     e1.data = DAT_0058cd60[0];
-    FUN_004578c0(temp_s0, &e1);
+    igModel_NotifyViews(temp_s0, &e1);
     Vec3f_TransformDirection((char *)temp_s0 + 0x68, &g_vec3ZAxis[0], &arg0->mat);
     temp_s0->f104 = -temp_s0->f104;
     temp_s0->f108 = -temp_s0->f108;
@@ -286,12 +291,12 @@ void FUN_004650d0(Ob *arg0) {
     e2.id = 2;
     e2.obj = arg0;
     e2.data = DAT_0058cd68[0];
-    FUN_004578c0(temp_s0, &e2);
+    igModel_NotifyViews(temp_s0, &e2);
     Vec3f_TransformDirection((char *)temp_s0 + 0x80, &g_vec3XAxis[0], &arg0->mat);
     e3.id = 2;
     e3.obj = arg0;
     e3.data = DAT_0058cd78[0];
-    FUN_004578c0(temp_s0, &e3);
+    igModel_NotifyViews(temp_s0, &e3);
 }
 
 void FUN_004651e0(struct CameraTargetLink *arg0) {
@@ -367,18 +372,18 @@ void FUN_004653c0(igCameraMode *arg0) {
         spA[0] = 2;
         spA[1] = 0;
         spA[2] = DAT_0058cd48[0];
-        FUN_004578c0(temp_s0, spA);
+        igModel_NotifyViews(temp_s0, spA);
         temp_s0->_farPlane = temp_f21;
         spB[0] = 2;
         spB[1] = 0;
         spB[2] = DAT_0058cd58[0];
-        FUN_004578c0(temp_s0, spB);
+        igModel_NotifyViews(temp_s0, spB);
         var_f20 = (var_f20 == 0.0f) ? temp_f21 / 1000.0f : var_f20;
         temp_s0->_nearPlane = var_f20;
         spC[0] = 2;
         spC[1] = 0;
         spC[2] = DAT_0058cd50[0];
-        FUN_004578c0(temp_s0, spC);
+        igModel_NotifyViews(temp_s0, spC);
     }
 }
 
@@ -402,7 +407,7 @@ void FUN_004654d0(ViewerPickView *arg0) {
         sp30[0] = 2;
         sp30[1] = 0;
         sp30[2] = DAT_0058cd38[0];
-        FUN_004578c0(d, sp30);
+        igModel_NotifyViews(d, sp30);
     }
 }
 
@@ -496,7 +501,7 @@ void FUN_00465cc0(char *arg0, float fparg0) {
     sp[0] = 2;
     sp[1] = 0;
     sp[2] = DAT_0058cd38[0];
-    FUN_004578c0(temp_s0, sp);
+    igModel_NotifyViews(temp_s0, sp);
 }
 
 void FUN_00465d40(struct Orbit *arg0) {
@@ -558,6 +563,29 @@ void FUN_00465e40(void *arg0, int arg1, char arg2) {
         break;
     }
     *(int *)((char *)(arg0) + 112) = 0;
+}
+
+/* Applies a mouse drag of `delta` with the default button layout: the left button rotates, the
+ * middle one pans and the right one rolls and zooms. */
+void Gap__Viewer__igRotateMode__ApplyDrag(ViewerCameraState *state, const float *delta) {
+    ViewerCameraTarget *target = state->target;
+
+    if (state->primaryButton) {
+        const float pi = 3.1415927f;
+        state->yaw += pi * delta[0];
+        state->pitch += pi * delta[1];
+    }
+    if (state->secondaryButton) {
+        setVec3(state->pan, delta[0], delta[1] / target->aspect, 0.0f);
+        scaleVec3(state->pan, state->distance / 2.0f);
+    }
+    if (state->tertiaryButton) {
+        float dx = delta[0];
+        float dy;
+        state->roll += dx * 3.1415927f;
+        dy = delta[1];
+        state->zoom *= 1.0f + dy / 2.0f;
+    }
 }
 
 void FUN_004660f0(ViewerCameraState *state, const float *delta) {
@@ -622,6 +650,27 @@ int FUN_004665e0(int arg0, int arg1, int arg2) {
     return 0;
 }
 
+/* Moves the GUI mouse cursor by the joystick's deflection over `seconds` and tells the GUI model's
+ * views that the mouse position changed. */
+void Gap__Viewer__igPickMode__MoveCursor(igPickMode *pickMode, float seconds) {
+    igGuiSystemModel *model = (igGuiSystemModel *)((igGuiSystem *)pickMode->_guiSystem)->_model;
+    float dx = pickMode->_joystickT[0];
+    float dy = pickMode->_joystickT[1];
+    ViewModelEvent event;
+    bool moving = dx != g_vec2Zero[0] || dy != g_vec2Zero[1];
+
+    if (moving) {
+        dx *= seconds;
+        dy *= seconds;
+        model->_mousePosition[0] += dx;
+        model->_mousePosition[1] += dy;
+        event.type = VIEW_MODEL_FIELD_CHANGED;
+        event.sender = 0;
+        event.field = g_igGuiSystemModelMousePositionField[0];
+        igModel_NotifyViews(model, &event);
+    }
+}
+
 void FUN_004666c0(void *arg0, int arg1, int arg2, float fparg0, float fparg1) {
     if (!(arg2 & 0xFFFF)) {
         *(float *)((char *)(arg0) + 180) = fparg0;
@@ -649,7 +698,7 @@ void FUN_004666e0(struct X *arg0, int arg1, int arg2) {
             m.a = 2;
             m.b = 0;
             m.c = DAT_0058cb00[0];
-            FUN_004578c0(arg0->y, &m);
+            igModel_NotifyViews(arg0->y, &m);
         }
     }
 }
@@ -734,7 +783,7 @@ void FUN_00466b20(igPickMode *arg0) {
     v[0] = *(float *)&p->_mousePosition[0];
     v[1] = y;
     *(int *)&v[2] = 0x3F800000;
-    FUN_00192fc0(v, v, arg0->_inverseProjectionMatrix);
+    Vec3f_TransformProjective(v, v, arg0->_inverseProjectionMatrix);
     FUN_0018d2b0(arg0->_ray, &g_vec3Zero[0], v);
     FUN_0018d360(arg0->_ray, arg0->_inverseMatrix);
     arg0->_impactLength = ((igRay *)arg0->_ray)->_len;
@@ -766,7 +815,7 @@ void FUN_00466b20(igPickMode *arg0) {
     sp40[0] = 2;
     sp40[1] = 0;
     sp40[2] = DAT_0058cb00[0];
-    FUN_004578c0((igViewerParameters *)arg0->_parameters, sp40);
+    igModel_NotifyViews((igViewerParameters *)arg0->_parameters, sp40);
 }
 
 /* Returns the metaobject handle of igPickMode, not of igViewManager. */

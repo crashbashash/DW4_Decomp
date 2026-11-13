@@ -29,6 +29,7 @@ callback at +120, and the three decryption key values at +160, +162 and +164 as 
 
 - Function and field names beyond `ADXB_DecodeHeaderAdx`.
 - The 32-byte helper at `0x25d2e0`, between the SKG and ADXB pools, is unreferenced; it most likely ends SKG.
-- Two functions have no source and link from the retail image: the callback at `0x25d370` that the handle
-  setup installs (six words off: retail orders two loads the other way) and the buffer-position function
-  at `0x25e018` (24 words off: register choice and where an offset is added).
+- The buffer-position function at `0x25e018` has no source and links from the retail image (24 words off:
+  register choice and where an offset is added).
+- `adxb_get_wr` matches only with the handle's PCM buffer typed `short *` and the callback at +120 returning
+  `short *`; an `int` buffer address adds the casts that move its loads.

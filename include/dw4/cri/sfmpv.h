@@ -183,7 +183,9 @@ typedef struct SfdIpuCtl {
     int f4;
     int f8;
     int f12;
-    char pad16[12];
+    char pad16[4];
+    int endRequest; /* 20 */
+    int endSent;    /* 24 */
     int stopped;
     int value;
 } SfdIpuCtl;
@@ -200,8 +202,8 @@ typedef struct SfdIpuStream {
     unsigned int uncached;
     int sectors;
     int f12;
-    int f16;
-    int f20;
+    int queuedSct;
+    int restBytes;
     int bytes;
     int r28;
     int r32;

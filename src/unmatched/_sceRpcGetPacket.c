@@ -10,13 +10,13 @@ typedef struct {
     RpcPacket *packets;
     int packetCount;
 } RpcPacketPool;
-int FUN_00113f20(void);
-int FUN_00113f78(void);
+int DIntr(void);
+int EIntr(void);
 RpcPacket *_sceRpcGetPacket(RpcPacketPool *pool) {
     RpcPacket *packet;
     int i;
     int id;
-    FUN_00113f20();
+    DIntr();
     packet = pool->packets;
     for (i = 0; i < pool->packetCount; i++, packet++) {
         if (!(packet->state & 1)) {
@@ -30,10 +30,10 @@ RpcPacket *_sceRpcGetPacket(RpcPacketPool *pool) {
             }
             packet->self = packet;
             packet->id = id;
-            FUN_00113f78();
+            EIntr();
             return packet;
         }
     }
-    FUN_00113f78();
+    EIntr();
     return 0;
 }

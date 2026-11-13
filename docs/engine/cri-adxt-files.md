@@ -19,8 +19,7 @@ with Sony EE GCC 2.96 at `-O2 -G0` (their rows in `units.tsv` and `unit-objects.
   in the init file on that layout alone.
 - The message helpers could belong to ADXPS2 or ADXRNA: they have no strings or pool of their own to place
   them.
-- `ADXT_EntryAfs` (`0x2637d8`) has no source: the best draft differs only in which of two saved registers
-  holds the AFS handle and which the file id. `ADXT_Init` (`0x2632c0`) declares its build-string word
+- `ADXT_Init` (`0x2632c0`) declares its build-string word
   and its tick count `volatile`, which it needs to match; it has no approval row, so it is `unapproved`
   ([build-string stores](source-approvals.md#build-string-stores),
   [ADXT tick count](source-approvals.md#adxt-ready-count)); the stream file reads the count plain.

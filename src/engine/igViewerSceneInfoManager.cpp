@@ -46,7 +46,7 @@ int FUN_00460ac0(...);
 
 void FUN_004612a0(int arg0);
 struct SceneSelection;
-void FUN_004629c0(SceneSelection *arg0);
+void igViewerSceneInfoManager_HideGui(SceneSelection *arg0);
 void FUN_00462a10(int *arg0);
 void FUN_00462a20(int *arg0);
 void FUN_00462a30(int *arg0);
@@ -60,7 +60,7 @@ struct ControllerLink { char p0[12]; int f12; int f16; };
 
 typedef struct ViewerMessage { int kind; int arg; int id; } ViewerMessage;
 
-int FUN_004578c0(...);
+int igModel_NotifyViews(...);
 
 int Gap__Core__igObject__vfunc_11(...);
 
@@ -75,7 +75,7 @@ int FUN_004573c0(...);
 int FUN_004573d0(...);
 int FUN_004573f0(...);
 int FUN_00457e90(...);
-int FUN_0045ec90(...);
+int igViewerGuiFactory_CreateAction(...);
 int FUN_00463c90(...);
 
 int StringChunk_ReleaseHeader(...);
@@ -123,7 +123,7 @@ struct RendererLink {
 #define BIND(setter, receiver, name, ...)                                                 \
     {                                                                                     \
         igObject *sp;                                                                     \
-        FUN_0045ec90(&sp, arg0->_guiFactory, arg0, name);                                 \
+        igViewerGuiFactory_CreateAction(&sp, arg0->_guiFactory, arg0, name);                                 \
         setter(receiver, __VA_ARGS__, sp);                                                \
         IG_OBJECT_RELEASE(sp);                                                                \
     }
@@ -356,7 +356,7 @@ void Gap__Viewer__igViewerSceneInfoManagerController__vfunc_24(struct Controller
   if (v1 == DAT_0058ca58[0] || v1 == DAT_0058ca60[0] || v1 == DAT_0058ca68[0]) { FUN_004608a0(arg0->f16); return; }
   if (v1 == DAT_0058ca70[0] || v1 == DAT_0058ca78[0] || v1 == DAT_0058ca80[0] || v1 == DAT_0058ca88[0] || v1 == DAT_0058ca90[0] || v1 == DAT_0058ca98[0] || v1 == DAT_0058caa0[0] || v1 == DAT_0058caa8[0]) { FUN_00460ac0(arg0->f16); return; }
   if (v1 == DAT_0058cab0[0]) { FUN_00462fa0(a0, arg1->f12); return; }
-  if (v1 == DAT_0058cab8[0]) { FUN_004629c0((SceneSelection *)a0); return; }
+  if (v1 == DAT_0058cab8[0]) { igViewerSceneInfoManager_HideGui((SceneSelection *)a0); return; }
   if (v1 == DAT_0058cac0[0]) { FUN_00462a20((int *)a0); return; }
   if (v1 == DAT_0058cac8[0]) { FUN_00462a10((int *)a0); return; }
   if (v1 == DAT_0058cad0[0]) { FUN_00462a30((int *)a0); return; }
@@ -411,7 +411,7 @@ void FUN_004612b0(igViewerSceneInfoManager *self) {
                 rising.kind = 2;
                 rising.arg = 0;
                 rising.id = DAT_0058cb08[0];
-                FUN_004578c0((igViewerParameters *)self->_parameters, &rising);
+                igModel_NotifyViews((igViewerParameters *)self->_parameters, &rising);
             }
             operation = &((igViewerParameters *)self->_parameters)->_timeOperation;
             if (*operation == 2 && time < begin) {
@@ -420,7 +420,7 @@ void FUN_004612b0(igViewerSceneInfoManager *self) {
                 falling.kind = 2;
                 falling.arg = 0;
                 falling.id = DAT_0058cb08[0];
-                FUN_004578c0((igViewerParameters *)self->_parameters, &falling);
+                igModel_NotifyViews((igViewerParameters *)self->_parameters, &falling);
             }
             break;
         }
@@ -429,7 +429,7 @@ void FUN_004612b0(igViewerSceneInfoManager *self) {
     changed.kind = 2;
     changed.arg = 0;
     changed.id = DAT_0058ca30[0];
-    FUN_004578c0((igViewerParameters *)self->_parameters, &changed);
+    igModel_NotifyViews((igViewerParameters *)self->_parameters, &changed);
     ((igInsightCore *)self->_insight)->_worldTime = time;
 }
 
@@ -539,6 +539,114 @@ void Gap__Viewer__igViewerSceneInfoManager__vfunc_13(igViewerSceneInfoManager *a
     BIND(FUN_004573d0, arg0->_hotKeyReceiver, DAT_004d1b88, 2)
 }
 
+void igViewerSceneInfoManager_OnActivate(void);
+int igGuiSystem_SetRootComponent(...);
+int igEventDispatcher_AddReceiverOrder(...);
+int igEventDispatcher_AddReceiver(...);
+int igInsightCore_AddRendererOrder(...);
+int igInsightCore_AddRenderer(...);
+int igInsightCore_AddToScheduler(...);
+int igViewportResizedMessage_GetMetaObject(void);
+int igMessenger_AddReceiver(...);
+int StringPool_Allocate(...);
+int StringPool_Construct(...);
+void *StringPool_Intern(...);
+extern int g_stringPool[4];
+
+/* What precedes an interned string's characters: its chunk and its reference count. */
+struct StringHeader {
+    int chunk;
+    int refCount;
+};
+
+static inline void releaseString(void *p) {
+    if (p != 0) {
+        StringHeader *h = (StringHeader *)p - 1;
+        int rc = h->refCount - 1;
+        h->refCount = rc;
+        if (rc == 0) StringChunk_ReleaseHeader(h->chunk, h);
+    }
+}
+
+static inline void *intern(const char *s) {
+    if (s == 0) return 0;
+    if (g_stringPool[0] == 0) {
+        int pool = StringPool_Allocate(16);
+        if (pool != 0) pool = StringPool_Construct(pool);
+        g_stringPool[0] = pool;
+    }
+    return StringPool_Intern(g_stringPool[0], s);
+}
+
+/* An interned (pooled) string reference, released when it goes out of scope. */
+struct StringRef {
+    void *p;
+    ~StringRef() { releaseString(p); }
+};
+
+/* igViewerRenderer's viewport-resize handler, called through a member pointer. */
+struct ResizeHandler { void onViewportResized(); };
+typedef void (ResizeHandler::*ResizeFunction)();
+extern ResizeFunction g_viewerRendererResizeHandler;
+
+/* igMessageDefaultReceiver: forwards a message to a member function of its handler object. */
+struct MessageReceiver : igObject {
+    igObject *handler;
+    ResizeFunction function;
+    void setHandler(igObject *object, ResizeFunction f) {
+        if (object != 0) {
+            object->_refCount = object->_refCount + 1;
+        }
+        igRelease(handler);
+        handler = object;
+        function = f;
+    }
+};
+MessageReceiver *igMessageDefaultReceiver_CreateInstance(int);
+
+/* Registers the manager with the insight core: GUI receivers, the render order of the viewer's
+ * renderers between the "Clear done" / "Scenes done" / "Overlays done" markers, the renderer's
+ * viewport-resize receiver, and the renderers themselves; the GUI starts hidden. */
+void Gap__Viewer__igViewerSceneInfoManager__Activate(igViewerSceneInfoManager *self) {
+    igViewerSceneInfoManager_OnActivate();
+    igGuiSystem_SetRootComponent(self->_gui, self->_rootComponent);
+    int dispatcher = ((igInsightCore *)self->_insight)->_dispatcher;
+    igEventDispatcher_AddReceiverOrder(dispatcher, ((igInsightCore *)self->_insight)->_windowResizeReceiver, self->_gui);
+    igEventDispatcher_AddReceiverOrder(dispatcher, self->_gui, self->_hotKeyReceiver);
+    igEventDispatcher_AddReceiverOrder(dispatcher, self->_hotKeyReceiver, self->_viewManager);
+    igEventDispatcher_AddReceiver(dispatcher, self->_viewManager);
+    igEventDispatcher_AddReceiver(dispatcher, self->_hotKeyReceiver);
+    StringRef clearDone;
+    StringRef scenesDone;
+    StringRef overlaysDone;
+    clearDone.p = intern("Clear done");
+    scenesDone.p = intern("Scenes done");
+    overlaysDone.p = intern("Overlays done");
+    igInsightCore_AddRendererOrder(self->_insight, clearDone.p, self->_normalsRenderer);
+    igInsightCore_AddRendererOrder(self->_insight, self->_normalsRenderer, self->_viewerRenderer);
+    igInsightCore_AddRendererOrder(self->_insight, self->_viewerRenderer, self->_bboxRenderer);
+    igInsightCore_AddRendererOrder(self->_insight, self->_bboxRenderer, scenesDone.p);
+    igInsightCore_AddRendererOrder(self->_insight, scenesDone.p, ((igGuiSystem *)self->_gui)->_renderer);
+    igInsightCore_AddRendererOrder(self->_insight, ((igGuiSystem *)self->_gui)->_renderer, overlaysDone.p);
+    igInsightCore_AddRendererOrder(self->_insight, overlaysDone.p, self->_flushRenderer);
+    igSmartPointer<MessageReceiver> receiver(igMessageDefaultReceiver_CreateInstance(0), AdoptReference());
+    ResizeFunction resized = g_viewerRendererResizeHandler;
+    receiver->setHandler((igObject *)self->_viewerRenderer, resized);
+    igMessenger_AddReceiver(((igInsightCore *)self->_insight)->_messenger, receiver.p, igViewportResizedMessage_GetMetaObject());
+    igInsightCore_AddRenderer(self->_insight, self->_viewerRenderer);
+    if (((igViewerParameters *)self->_parameters)->_showNormals != 0) {
+        igInsightCore_AddRenderer(self->_insight, self->_normalsRenderer);
+    }
+    if (((igViewerParameters *)self->_parameters)->_showBoundingBox != 0) {
+        igInsightCore_AddRenderer(self->_insight, self->_bboxRenderer);
+    }
+    if (((igViewerParameters *)self->_parameters)->_flushFrames != 0) {
+        igInsightCore_AddRenderer(self->_insight, self->_flushRenderer);
+    }
+    igViewerSceneInfoManager_HideGui((SceneSelection *)self);
+    igInsightCore_AddToScheduler(self->_insight, self);
+}
+
 void Gap__Viewer__igViewerSceneInfoManager__vfunc_24(S0 *arg0) {
     FUN_00236f30(arg0->fC, *(int *)((char *)(*(int *)((char *)(arg0) + 44)) + 8));
     FUN_00236f30(arg0->fC, arg0->f1C);
@@ -619,23 +727,23 @@ void Gap__Viewer__igViewerSceneInfoManager__vfunc_28(A *arg0) {
     q1.b = 0;
     q1.a = 2;
     q1.c = DAT_0058c9f0[0];
-    FUN_004578c0(arg0->f20, &q1);
+    igModel_NotifyViews(arg0->f20, &q1);
     FUN_00460330(arg0->f24);
     CLEAR(arg0->f20->f220)
     q2.a = 2;
     q2.b = 0;
     q2.c = DAT_0058cae8[0];
-    FUN_004578c0(arg0->f20, &q2);
+    igModel_NotifyViews(arg0->f20, &q2);
     arg0->f20->f224 = 0;
     q3.a = 2;
     q3.b = 0;
     q3.c = DAT_0058caf0[0];
-    FUN_004578c0(arg0->f20, &q3);
+    igModel_NotifyViews(arg0->f20, &q3);
     arg0->f20->f232 = 0;
     q4.a = 2;
     q4.b = 0;
     q4.c = DAT_0058caf8[0];
-    FUN_004578c0(arg0->f20, &q4);
+    igModel_NotifyViews(arg0->f20, &q4);
     CLEAR(arg0->f180)
 }
 
@@ -667,7 +775,7 @@ int Gap__Viewer__igViewerSceneInfoManager__vfunc_27(igViewerSceneInfoManager *ar
         t0.a = 2;
         t0.b = 0;
         t0.c = DAT_0058c9f0[0];
-        FUN_004578c0(arg0->_parameters, &t0);
+        igModel_NotifyViews(arg0->_parameters, &t0);
         FUN_00460330(arg0->_viewerRenderer);
         b = false;
         float f2 = s0->f80;
@@ -690,12 +798,12 @@ int Gap__Viewer__igViewerSceneInfoManager__vfunc_27(igViewerSceneInfoManager *ar
         t1.a = 2;
         t1.b = 0;
         t1.c = DAT_0058c9f8[0];
-        FUN_004578c0(arg0->_parameters, &t1);
+        igModel_NotifyViews(arg0->_parameters, &t1);
         ObjectList_AppendRetainedList(((igViewerParameters *)arg0->_parameters)->_cameras, arg1->_cameras);
         t2.a = 2;
         t2.b = 0;
         t2.c = DAT_0058cae8[0];
-        FUN_004578c0(arg0->_parameters, &t2);
+        igModel_NotifyViews(arg0->_parameters, &t2);
         {
             igViewerParameters *o = (igViewerParameters *)arg0->_parameters;
             long long *q = &o->_beginTime;
@@ -706,7 +814,7 @@ int Gap__Viewer__igViewerSceneInfoManager__vfunc_27(igViewerSceneInfoManager *ar
         t3.a = 2;
         t3.b = 0;
         t3.c = DAT_0058caf0[0];
-        FUN_004578c0(arg0->_parameters, &t3);
+        igModel_NotifyViews(arg0->_parameters, &t3);
         {
             igViewerParameters *o = (igViewerParameters *)arg0->_parameters;
             long long *q = &o->_endTime;
@@ -717,7 +825,7 @@ int Gap__Viewer__igViewerSceneInfoManager__vfunc_27(igViewerSceneInfoManager *ar
         t4.a = 2;
         t4.b = 0;
         t4.c = DAT_0058caf8[0];
-        FUN_004578c0(arg0->_parameters, &t4);
+        igModel_NotifyViews(arg0->_parameters, &t4);
         if (DAT_0056dc50[0] != 0) {
             int rc = DAT_0056dc50[0]->f232 - 1;
             DAT_0056dc50[0]->f232 = rc;
@@ -756,7 +864,7 @@ int Gap__Viewer__igViewerSceneInfoManager__vfunc_27(igViewerSceneInfoManager *ar
     return 0;
 }
 
-void FUN_004629c0(SceneSelection *arg0) {
+void igViewerSceneInfoManager_HideGui(SceneSelection *arg0) {
     void *temp_a0;
 
     temp_a0 = (void *)(arg0->fC);
@@ -789,7 +897,7 @@ void FUN_00462a50(ViewSync *arg0) {
     buf[0] = 2;
     buf[1] = 0;
     buf[2] = DAT_0058cad8[0];
-    FUN_004578c0(arg0->f20, buf, 1);
+    igModel_NotifyViews(arg0->f20, buf, 1);
     FUN_00464110(arg0->f136, (int)arg0->f20 + 0x10);
     FUN_004643a0(arg0->f136, arg0->f20->f12);
 }
@@ -824,12 +932,12 @@ void FUN_00462ac0(igViewerSceneInfoManager *arg0) {
     sp50[0] = 2;
     sp50[1] = 0;
     sp50[2] = DAT_0058cb00[0];
-    FUN_004578c0(arg0->_parameters, sp50);
+    igModel_NotifyViews(arg0->_parameters, sp50);
     ((igViewerParameters *)arg0->_parameters)->_timeOperation = 1;
     sp40[0] = 2;
     sp40[1] = 0;
     sp40[2] = DAT_0058cb08[0];
-    FUN_004578c0(arg0->_parameters, sp40);
+    igModel_NotifyViews(arg0->_parameters, sp40);
     if (DAT_0056dc50[0] == 0) {
         f = (Frame *)FUN_001007e0(240);
         if (f != 0) f = (Frame *)FUN_00238110(f);
@@ -846,7 +954,7 @@ void FUN_00462ac0(igViewerSceneInfoManager *arg0) {
     sp30[1] = 0;
     sp30[0] = 2;
     sp30[2] = DAT_0058cad8[0];
-    FUN_004578c0(arg0->_parameters, sp30);
+    igModel_NotifyViews(arg0->_parameters, sp30);
     if (DAT_0056dc50[0] != 0) {
         if (--DAT_0056dc50[0]->f232 <= 0) {
             f = DAT_0056dc50[0];
@@ -902,7 +1010,7 @@ void FUN_00462d30(void *arg0) {
     s.a = 2;
     s.b = 0;
     s.c = DAT_0058cb08[0];
-    FUN_004578c0(*(void **)((char *)(arg0) + 20), &s);
+    igModel_NotifyViews(*(void **)((char *)(arg0) + 20), &s);
 }
 
 void FUN_00462d80(struct Y2 *arg0) {
@@ -912,7 +1020,7 @@ void FUN_00462d80(struct Y2 *arg0) {
     buf[0] = 2;
     buf[1] = 0;
     buf[2] = DAT_0058cb08[0];
-    FUN_004578c0(arg0->t, buf);
+    igModel_NotifyViews(arg0->t, buf);
 }
 
 void igViewerSceneInfoManager_ResetOperationMode(void *arg0) {
@@ -922,7 +1030,7 @@ void igViewerSceneInfoManager_ResetOperationMode(void *arg0) {
     buf[0] = 2;
     buf[1] = 0;
     buf[2] = DAT_0058cad8[0];
-    FUN_004578c0(*(int *)((char *)(arg0) + 20), buf, 1);
+    igModel_NotifyViews(*(int *)((char *)(arg0) + 20), buf, 1);
 }
 
 void FUN_00462e10(void *arg0)
@@ -965,7 +1073,7 @@ void FUN_00462e90(S2 *arg0) {
         m.a = 2;
         m.b = 0;
         m.c = DAT_0058cab8[0];
-        FUN_004578c0(arg0->f20, &m);
+        igModel_NotifyViews(arg0->f20, &m);
         break;
     }
     case 1: {
@@ -977,7 +1085,7 @@ void FUN_00462e90(S2 *arg0) {
         m.a = 2;
         m.b = 0;
         m.c = DAT_0058cab8[0];
-        FUN_004578c0(arg0->f20, &m);
+        igModel_NotifyViews(arg0->f20, &m);
         break;
     }
     case 2: {
@@ -986,7 +1094,7 @@ void FUN_00462e90(S2 *arg0) {
         m.a = 2;
         m.b = 0;
         m.c = DAT_0058cab8[0];
-        FUN_004578c0(arg0->f20, &m);
+        igModel_NotifyViews(arg0->f20, &m);
         FUN_00462e50(arg0);
         break;
     }
@@ -1048,7 +1156,7 @@ void Gap__Viewer__igViewerSceneInfoManager__vfunc_26(void) {
 
 }
 
-void FUN_004633f0(void)
+void igViewerSceneInfoManager_OnActivate(void)
 {
 }
 

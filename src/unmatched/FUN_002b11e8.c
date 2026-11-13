@@ -1,8 +1,8 @@
-/* Sets the first word (+0) of 0x44-byte entry 8 to 1 through FUN_002b0388 when FUN_002b03a0 reads
+/* Sets the first word (+0) of 0x44-byte entry 8 to 1 through FUN_002b0388 when sftrn_GetFlagA reads
  * it as not 1, FUN_0029ea48(obj, obj+8536) reports 1 and FUN_002b1268 agrees. */
 int FUN_0029ea48();
 int FUN_002b0388();
-int FUN_002b03a0();
+int sftrn_GetFlagA();
 int FUN_002b1268();
 
 struct EntryOwner {
@@ -13,7 +13,7 @@ struct EntryOwner {
 };
 
 void FUN_002b11e8(struct EntryOwner *obj) {
-    if (FUN_002b03a0(obj, 8) != 1 && FUN_0029ea48(obj, obj->f8536) == 1 && FUN_002b1268(obj) != 0) {
+    if (sftrn_GetFlagA(obj, 8) != 1 && FUN_0029ea48(obj, obj->f8536) == 1 && FUN_002b1268(obj) != 0) {
         FUN_002b0388(obj, 8, 1);
     }
 }

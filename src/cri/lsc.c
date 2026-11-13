@@ -1,8 +1,7 @@
 /* CRI LSC (link stream controller): plays a queue of file ranges into one SJ stream, one after another. */
-#include "dw4/cri/sfdsj.h"
+#include "dw4/cri/lsc.h"
 
 #define LSC_MAX_OBJ 32
-#define LSC_MAX_STM 16
 
 enum LscStat {
     LSC_STAT_STOP = 0,
@@ -16,39 +15,6 @@ enum LscStmStat {
     LSC_STM_STAT_READ = 1,
     LSC_STM_STAT_END = 2
 };
-
-/* One queued file range. */
-typedef struct LscStm {
-    int id;
-    char *fname;
-    int fname_sum;
-    void *dir;
-    int ofst;
-    int nsct;
-    int stat;
-    int rdsct;
-} LscStm;
-
-typedef struct LscObj {
-    signed char used;
-    signed char stat;
-    signed char reading;
-    signed char loop;
-    signed char pause;
-    char pad5[3];
-    SfdSj *sj;
-    char pad12[8];
-    int flow_min;
-    int flow_max;
-    int wpos;
-    int rpos;
-    int nstm;
-    void *stm;
-    int stm_size;
-    int pad48;
-    int pad52;
-    LscStm stms[LSC_MAX_STM];
-} LscObj;
 
 typedef struct LscCrs {
     int word[4];
@@ -69,13 +35,13 @@ void FUN_0027b2b0(void);
 void FUN_0027b2c8(void);
 void FUN_00269ff0(void *stm, char *fname, void *dir, int ofst, int nsct);
 void FUN_0026a0a0(void *stm);
-int FUN_0026a138(void *stm);
+int ADXSTM_GetStat(void *stm);
 void FUN_0026a140(void *stm, int pos);
 int FUN_0026a160(void *stm);
 int FUN_0026a1b0(void *stm);
 void FUN_0026a238(void *stm);
 void FUN_0026a2a0(void *stm);
-void FUN_0026a300(void *stm, int size);
+void ADXSTM_SetEos(void *stm, int size);
 void FUN_0026a9d8(void *stm, int min, int max);
 
 extern char E0001_Illigal_parameter_sj_LSC_Create[];
@@ -103,7 +69,7 @@ void lsc_Unlock(LscCrs *crs);
 void lsc_CallErrFunc(const char *format, ...);
 void FUN_00277278(LscObj *lsc);
 void lsc_ExecHndl(LscObj *lsc);
-int FUN_00277038(LscObj *lsc, char *fname, void *dir, int ofst, int nsct);
+int LSC_EntryFileRange(LscObj *lsc, char *fname, void *dir, int ofst, int nsct);
 
 LscObj *lsc_SearchFreeObj(void)
 {
@@ -149,7 +115,7 @@ LscObj *LSC_Create(SfdSj *sj)
     return lsc;
 }
 
-void FUN_00276fb8(LscObj *lsc)
+void LSC_Destroy(LscObj *lsc)
 {
     if (lsc != 0) {
         FUN_00277278(lsc);
@@ -165,10 +131,10 @@ void LSC_SetStmHndl(LscObj *lsc, void *stm)
 
 int FUN_00277010(LscObj *lsc, char *fname)
 {
-    return FUN_00277038(lsc, fname, 0, 0, 0xFFFFF);
+    return LSC_EntryFileRange(lsc, fname, 0, 0, 0xFFFFF);
 }
 
-int FUN_00277038(LscObj *lsc, char *fname, void *dir, int ofst, int nsct)
+int LSC_EntryFileRange(LscObj *lsc, char *fname, void *dir, int ofst, int nsct)
 {
     LscStm *stm;
     int last;
@@ -502,7 +468,7 @@ void FUN_00277918(void)
         lsc = lsc_objs;
         for (i = 0; i < LSC_MAX_OBJ; i++, lsc++) {
             if (lsc->used == 1) {
-                FUN_00276fb8(lsc);
+                LSC_Destroy(lsc);
             }
         }
         memset(lsc_objs, 0, sizeof(lsc_objs));
@@ -535,7 +501,7 @@ void lsc_StartStm(LscObj *lsc)
         return;
     }
     FUN_00269ff0(lsc->stm, stm->fname, stm->dir, stm->ofst, stm->nsct);
-    FUN_0026a300(lsc->stm, stm->nsct);
+    ADXSTM_SetEos(lsc->stm, stm->nsct);
     lsc->stm_size = stm->nsct;
     stm->rdsct = 0;
     lsc->reading = 0;
@@ -555,7 +521,7 @@ void lsc_StatRead(LscObj *lsc)
         return;
     }
     stm = &lsc->stms[lsc->rpos];
-    switch (FUN_0026a138(lsc->stm)) {
+    switch (ADXSTM_GetStat(lsc->stm)) {
     case 2:
         stm->rdsct = FUN_0026a160(lsc->stm);
         break;
@@ -593,7 +559,7 @@ void lsc_EndStm(LscObj *lsc)
         lsc->stat = LSC_STAT_WAIT;
     }
     if (lsc->loop == 1) {
-        FUN_00277038(lsc, fname, dir, ofst, nsct);
+        LSC_EntryFileRange(lsc, fname, dir, ofst, nsct);
     }
 }
 
