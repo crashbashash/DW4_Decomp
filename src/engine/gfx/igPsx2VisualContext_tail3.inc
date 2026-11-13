@@ -237,8 +237,8 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_174(A_16dca0 *arg0) {
         f20 = dptofp(arg0->f56->v100());
         arg0->f56->v116();
     }
-    FUN_002073c0();
-    FUN_00207560();
+    p2EndFrame();
+    p2SwapBuffers();
     if (arg0->b60 != 0) {
         arg0->v112(f20, f20 - arg0->f68);
         arg0->v116(f20);
@@ -259,8 +259,8 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_174(A_16dca0 *arg0) {
 }
 
 void Gap__Gfx__igPsx2VisualContext__vfunc_175(void) {
-    FUN_00207fa0(FUN_00207f30(1));
-    FUN_00207440();
+    p2WaitFinishSequence(p2NewFinishSequence(1));
+    p2SetSingleFrameLatency();
 }
 
 void FUN_0016e140(void *arg0, int arg1) {

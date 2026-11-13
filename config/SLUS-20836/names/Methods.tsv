@@ -41,9 +41,9 @@
 #   0x20c270  the error "Unsupported texture format in p2LoadTexture: %d\n" raised by the texture
 #             upload path, so the containing function IS p2LoadTexture.
 #
-# Left unnamed on purpose: 0x1fb710's only identifying string, `p2lighting`, is a *log tag* -- it is
-# passed as a0 to 0x20dfd0 together with a 3-float payload built from s4+112..120, i.e. an event
-# name, not the function's own name.
+# Left unnamed on purpose: 0x1fb710's only identifying string, `p2lighting`, is a *tag* -- it is
+# passed as a0 to p2LockVu0 (0x20dfd0), which stores it as the VU0 lock's owner, so it names the
+# lock holder, not necessarily the function's own name.
 #
 # The DMA predicates name themselves through their registry: 0x1f0410 stores (function, name) pairs
 # in a ten-entry table, and every call passes a predicate's address with its name string.

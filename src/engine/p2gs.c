@@ -304,9 +304,9 @@ void FUN_001f7500(void *arg0) {
 }
 
 void FUN_001f8190(int registerIndex);
-void FUN_00207d70(void);
-void FUN_00207920(void);
-void FUN_002080b0(void);
+void p2FinishHandler(void);
+void p2VsyncHandler(void);
+void p2GsSignalHandler(void);
 
 typedef struct {
     unsigned long long SIGNAL:1;
@@ -348,14 +348,14 @@ int FUN_001f7530(int cause) {
     FUN_001f8190(0x40);
     if (DAT_00568e38 == 0) {
         if (status & 2) {
-            FUN_00207d70();
+            p2FinishHandler();
         }
         if (status & 8) {
-            FUN_00207920();
+            p2VsyncHandler();
             DAT_0056ae30++;
         }
         if (status & 1) {
-            FUN_002080b0();
+            p2GsSignalHandler();
             DAT_0056ae28++;
         }
     }

@@ -31,11 +31,11 @@ struct SemaParam {
 
 int FUN_00113f20();
 int FUN_00113f78();
-int FUN_00204240();
-int FUN_00204100(int);
-int FUN_00208120(void);
+int p2GrowPool();
+int p2ResetDmaPacketCount(int);
+int p2FlushVif1Packet(void);
 int FUN_00330770();
-void FUN_0020d270(long long *);
+void p2ReadClock(long long *);
 int FlushCache(int);
 int iReferSemaStatus();
 int iSignalSema();
@@ -108,7 +108,7 @@ void p2InitDmaChannel(int channel) {
     p2DmaFreePackets[channel] = -1;
     p2DmaCurrentPacket[channel] = 0;
     p2DmaLastPacket[channel] = 0;
-    FUN_00204240(channel, &p2DmaCurrentPacket[channel]);
+    p2GrowPool(channel, &p2DmaCurrentPacket[channel]);
     p2DmaCompletedSequence[channel] = -1;
     p2DmaStartedSequence[channel] = -1;
     p2DmaWaitSequence[channel] = 0;
@@ -160,7 +160,7 @@ void p2InitDmaChannels(void) {
 
 void p2InitDmaPredicatePool(void) {
     p2DmaPredicatePool = 0;
-    FUN_00204240(P2_POOL_DMA_PREDICATE, &p2DmaPredicatePool);
+    p2GrowPool(P2_POOL_DMA_PREDICATE, &p2DmaPredicatePool);
     if (DAT_00490b60 != 0) {
         p2RegisterPredicateName(p2PreviousFinishFuncDonePredicate, DAT_004e4fe0);
     }
@@ -177,7 +177,7 @@ void p2ReserveDmaPredicates(int count) {
         i++;
     }
     if (i != count) {
-        FUN_00204240(P2_POOL_DMA_PREDICATE, &p2DmaPredicatePool, i);
+        p2GrowPool(P2_POOL_DMA_PREDICATE, &p2DmaPredicatePool, i);
     }
 }
 
@@ -186,7 +186,7 @@ void p2AddDmaPredicate(int channel, int (*predicate)(long long), long long arg) 
     p2DmaPredicate *node;
     unsigned int status;
     if (p2DmaPredicatePool == 0) {
-        FUN_00204240(P2_POOL_DMA_PREDICATE, &p2DmaPredicatePool);
+        p2GrowPool(P2_POOL_DMA_PREDICATE, &p2DmaPredicatePool);
     }
     __asm__ volatile("mfc0 %0, $12\n\tsrl $6, %0, 16\n\tand %0, %0, $6" : "=r"(status) : : "$6");
     if (status & 1) {
@@ -234,7 +234,7 @@ int p2DmaPredicatesSatisfied(int channel) {
 
 void p2InitDmaCompletionPool(void) {
     p2DmaCompletionPool = 0;
-    FUN_00204240(P2_POOL_DMA_COMPLETION, &p2DmaCompletionPool);
+    p2GrowPool(P2_POOL_DMA_COMPLETION, &p2DmaCompletionPool);
 }
 
 void p2ReserveDmaCompletions(int count) {
@@ -248,7 +248,7 @@ void p2ReserveDmaCompletions(int count) {
         i++;
     }
     if (i != count) {
-        FUN_00204240(P2_POOL_DMA_COMPLETION, &p2DmaCompletionPool, i);
+        p2GrowPool(P2_POOL_DMA_COMPLETION, &p2DmaCompletionPool, i);
     }
 }
 
@@ -257,7 +257,7 @@ void p2AddDmaCompletion(int channel, void (*func)(void *), void *arg) {
     p2DmaCompletion *node;
     unsigned int status;
     if (p2DmaCompletionPool == 0) {
-        FUN_00204240(P2_POOL_DMA_COMPLETION, &p2DmaCompletionPool);
+        p2GrowPool(P2_POOL_DMA_COMPLETION, &p2DmaCompletionPool);
     }
     __asm__ volatile("mfc0 %0, $12\n\tsrl $6, %0, 16\n\tand %0, %0, $6" : "=r"(status) : : "$6");
     if (status & 1) {
@@ -321,7 +321,7 @@ void p2StartDmaPacket(int channel) {
         break;
     case P2_DMA_VIF1:
         p2DmaWatchFlags.busy |= 0x40;
-        FUN_0020d270(&DAT_00568ed8);
+        p2ReadClock(&DAT_00568ed8);
         if (p2DmaChannelIdle[P2_DMA_VIF1] == 0 && p2DmaChannelIdle[P2_DMA_GIF] == 0) {
             DAT_00568ef8 = DAT_00568ed8;
         }
@@ -334,7 +334,7 @@ void p2StartDmaPacket(int channel) {
         break;
     case P2_DMA_GIF:
         p2DmaWatchFlags.busy |= 0x80;
-        FUN_0020d270(&DAT_00568ee0);
+        p2ReadClock(&DAT_00568ee0);
         if (p2DmaChannelIdle[P2_DMA_VIF1] == 0 && p2DmaChannelIdle[P2_DMA_GIF] == 0) {
             DAT_00568ef8 = DAT_00568ee0;
         }
@@ -438,14 +438,14 @@ void p2WaitDmaSequence(int channel, long long sequence) {
         FUN_00113f20();
         p2DmaWatchFlags.busy |= 2;
         FUN_00113f78();
-        FUN_00208120();
+        p2FlushVif1Packet();
         completed = (long long *)((char *)p2DmaCompletedSequence + channel * 8);
         while (sequence > *completed) {
-            FUN_0020d270(&start);
+            p2ReadClock(&start);
             p2BlockedSema = *(volatile int *)&p2DmaWaitSema;
             WaitSema(*(volatile int *)&p2DmaWaitSema);
             p2BlockedSema = -1;
-            FUN_0020d270(&end);
+            p2ReadClock(&end);
             p2DmaWaitTime += (int)(end - start);
         }
         FUN_00113f20();
@@ -469,7 +469,7 @@ void p2ShutdownDmaChannels(void) {
     FlushCache(0);
     channel = 0;
     do {
-        FUN_00204100(channel);
+        p2ResetDmaPacketCount(channel);
         p2DmaPacketCount[channel] = -1;
         p2DmaFreePackets[channel] = -1;
         current = &p2DmaCurrentPacket[channel];

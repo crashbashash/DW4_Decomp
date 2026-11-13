@@ -3035,7 +3035,7 @@ extern "C" int FUN_0020b270(...);
 extern "C" int FUN_0020bb20(...);
 extern "C" int FUN_0020c800(int handle);
 extern "C" int FUN_0020c9f0(...);
-extern "C" int FUN_0020dba0(int, int, int, int, float, float);
+extern "C" int p2SetViewport(int, int, int, int, float, float);
 extern "C" int p2LoadTexture(int, int, int, int, int);
 extern "C" int DAT_0048a4e0[4];
 extern "C" int DAT_0048a4ec[4];
@@ -3319,7 +3319,7 @@ extern "C" void FUN_0016cd10(void *arg0);
 extern "C" void Gap__Gfx__igPsx2VisualContext__vfunc_27(int dummy0, int arg1);
 extern "C" int FUN_001f7db0(...);
 extern "C" void igPsx2VisualContext_CallDmaChain(int arg0, int arg1, int arg2, int arg3);
-extern "C" int FUN_00207420(...);
+extern "C" int swapbuffersDrawPredicate(...);
 extern "C" void igPsx2VisualContext_IsDisplayingFirstBuffer(void);
 extern "C" void Gap__Gfx__igPsx2DisableExt__vfunc_29(void *arg0, int arg1);
 extern "C" unsigned char GPR_00554b44;
@@ -3381,17 +3381,17 @@ extern "C" int FUN_001f6f50(...);
 extern "C" float __floatdisf(long long);
 extern "C" int Gap__Gfx__igPsx2VisualContext__vfunc_173(A_16dbe0 *arg0);
 extern "C" int FUN_00178970(...);
-extern "C" int FUN_002073c0(...);
-extern "C" int FUN_00207560(...);
+extern "C" int p2EndFrame(...);
+extern "C" int p2SwapBuffers(...);
 extern "C" float dptofp(...);
 struct N_16dca0;
 class B_16dca0 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual int v100(); virtual long long v104(); virtual void d25(); virtual void d26(); virtual void v116(); };
 class A_16dca0 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void v112(float,float); virtual void v116(float); char pad[52]; B_16dca0 *f56; unsigned char b60; char p61[3]; int f64; float f68; char pad2[1480]; N_16dca0 *f1552; };
 struct N_16dca0 { char pad0[4]; int f4; int f8; char pad1[4]; unsigned char b16; char pad2[463]; char f480[456]; long long f936; char pad3[8]; N_16dca0 *f952; };
 extern "C" void Gap__Gfx__igPsx2VisualContext__vfunc_174(A_16dca0 *arg0);
-extern "C" int FUN_00207440(...);
-extern "C" int FUN_00207f30(int);
-extern "C" int FUN_00207fa0(int);
+extern "C" int p2SetSingleFrameLatency(...);
+extern "C" int p2NewFinishSequence(int);
+extern "C" int p2WaitFinishSequence(int);
 extern "C" void Gap__Gfx__igPsx2VisualContext__vfunc_175(void);
 extern "C" void FUN_0016e140(void *arg0, int arg1);
 typedef struct Obj_16e180 { char pad[24]; int f24; } Obj_16e180;
@@ -3423,7 +3423,7 @@ public:
 extern "C" void Gap__Gfx__igPsx2BlendEquationExt__vfunc_30(igPsx2BlendEquationExt *ext);
 extern "C" void FUN_0016e290(igPsx2BlendEquationExt *arg0, int arg1, int arg2, int arg3, int arg4, char arg5);
 extern "C" void Gap__Gfx__igPsx2DecalExt__vfunc_29(igPsx2DecalExt *self, int context);
-extern "C" void FUN_0020d910(int);
+extern "C" void p2SetDepthBias(int);
 extern "C" void Gap__Gfx__igPsx2DecalExt__vfunc_30(int arg0, int arg1);
 class DW4VC_136_0 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual int vX(); };
 extern "C" void Gap__Gfx__igPsx2Image__vfunc_19(void *arg0);
@@ -4528,7 +4528,7 @@ struct S_175790 { char pad[1544]; long long v; };
 extern "C" int p2SetDitherMatrix(long long);
 extern "C" int DAT_00560a00[4];
 extern "C" void FUN_00175790(struct S_175790 *arg0, long long arg1);
-extern "C" int FUN_001fc310(...);
+extern "C" int p2SetPassCount(...);
 extern "C" int DAT_00560a04[4];
 extern "C" void FUN_001757c0(igPsx2VisualContext *arg0, int arg1);
 class ParticleArrayCalls {
@@ -4704,7 +4704,7 @@ class AttrValue1774 { public: virtual void d0(); virtual void d1(); virtual void
 struct AttrNode1774 { char p0[12]; AttrValue1774 *obj; char p16[8]; int f24; char p28[4]; int f32; };
 struct Geometry1774 { char p0[20]; int attrs; char p24[24]; int f48[16]; int f112; int f116; int f120; char p124[4]; int f128; };
 extern "C" int FUN_001774c0(igPsx2VisualContext *vc, Geometry1774 *geom, unsigned char *useTexture);
-extern "C" int FUN_00204840(int index);
+extern "C" int p2GetPoolAllocated(int index);
 class StatAllocator {
 public:
     virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void d32(); virtual void d33(); virtual void d34(); virtual void d35(); virtual void d36(); virtual void d37(); virtual void d38(); virtual void d39(); virtual void d40(); virtual void d41(); virtual void d42(); virtual void d43(); virtual void d44(); virtual void d45(); virtual void d46(); virtual void d47(); virtual void d48(); virtual void d49(); virtual void d50(); virtual void d51();
@@ -4921,7 +4921,7 @@ extern "C" void Gap__Gfx__igPsx2VisualContext__vfunc_258(void);
  * elapsed = current[5] - previous[5] (frame-length counter), nothing is computed when it is not
  * positive; most ids return (current[k] - previous[k]) / elapsed, some scaled to milliseconds (x
  * 1000 / 9216000 ticks per second) or by 16; ids 44..56 return a small-integer query
- * FUN_00204840(n); ids 58, 59, 16, 17, 20, 24 consume a free-running accumulator and clear it; ids
+ * p2GetPoolAllocated(n); ids 58, 59, 16, 17, 20, 24 consume a free-running accumulator and clear it; ids
  * 60..186 consume the per-id event counters (unsigned) and clear them; ids 42 and 43 take a fresh
  * snapshot and return one raw field of it. The result is -1.0f for an unknown id. */
 typedef struct GsStatBlock { long long c[58]; } GsStatBlock;

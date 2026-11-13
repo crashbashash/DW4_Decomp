@@ -80,8 +80,8 @@ int FUN_00200980(void);
 int FUN_00201a90(void);
 int FUN_001ff3b0(int);
 int FUN_001ff720(int);
-void FUN_0020e3c0(float);
-float FUN_0020e3d0(void);
+void p2SetVifRowScale(float);
+float p2GetVifRowScale(void);
 
 void p2SubmitVertices(unsigned int count, int first, unsigned short *indices);
 /* Declared without a prototype: the recording submit passes it no index list. */
@@ -582,7 +582,7 @@ void p2AlignVifPacket(p2VifCursor *cursor) {
 void p2WriteVifRow(p2VifCursor *cursor, unsigned int value, float scale) {
     unsigned int *p;
 
-    if (value != 0 || scale != FUN_0020e3d0()) {
+    if (value != 0 || scale != p2GetVifRowScale()) {
         p = cursor->word;
         cursor->word = p + 1;
         *p = p2VifRowCommand;
@@ -604,7 +604,7 @@ void p2WriteVifRow(p2VifCursor *cursor, unsigned int value, float scale) {
             cursor->word = p + 1;
             *p = value;
         }
-        FUN_0020e3c0(scale);
+        p2SetVifRowScale(scale);
     }
 }
 

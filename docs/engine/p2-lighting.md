@@ -1,8 +1,8 @@
 # `p2lighting`: what the EE packs for the VU1 light programs
 
 `p2lighting` (`0x001fb710`, 980 bytes) is the one lighting function in the `p2` backend that
-**builds the constant block the LIGHT microcode reads**. It is named in its own trace string (the
-pointer `0x004e5150` is passed to the logger at `0x0020dfd0`); this
+**builds the constant block the LIGHT microcode reads**. It is named in its own tag string (the
+pointer `0x004e5150` is passed as the VU0 lock owner to `p2LockVu0` at `0x0020dfd0`); this
 page is the static decode of its body and of the runtime state it reads.
 
 Every source the function reads is a runtime global in the EE's bss, and the per-light descriptors

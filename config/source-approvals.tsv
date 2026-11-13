@@ -203,10 +203,10 @@ volatile	p2AddDmaCompletion	1	#dma-channel-cop0
 asm-function	p2WaitDmaCondition	1	#dma-channel-cop0
 volatile	p2WaitDmaSequence	3	#dma-channel-shared-words
 volatile	p2Vif0DmaHandler	1	#dma-channel-shared-words
-volatile	FUN_00207560	4	#dma-channel-shared-words
+volatile	p2SwapBuffers	3	#dma-channel-shared-words
 asm	p2StartDmaPacket	2	#dma-packet-kick
 volatile	p2StartDmaPacket	2	#dma-packet-kick
-volatile	FUN_0020e6a0	2	#dma-channel-shared-words
+volatile	p2RunWatchdog	2	#dma-channel-shared-words
 volatile	FUN_001f7530	2	#gs-interrupt-sync-ei
 asm	FUN_0027f410	1	#enbaya-vu0-macro
 asm	FUN_0027f510	1	#enbaya-vu0-macro

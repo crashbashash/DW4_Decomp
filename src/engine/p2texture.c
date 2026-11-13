@@ -2,14 +2,7 @@
 #define MAX(a, b) ((a) < (b) ? (b) : (a))
 int FUN_00113f20();
 int FUN_00113f78();
-long long p2AddPreviousFinishFuncPredicate();
-int FUN_00204240();
-int FUN_001f76c0();
-int FUN_0020d270(long long *);
-int WaitSema(int);
-int iReferSemaStatus();
-int iSignalSema();
-long long p2readGSPrivRegister();
+int p2GrowPool();
 int p2SubmitDmaPacket();
 void p2SetClut(void *clut);
 int FUN_001fcb00();
@@ -24,10 +17,7 @@ int p2AddDmaPredicate();
 void FUN_001f74e0(void);
 void FUN_001f7500(void);
 
-extern int DAT_0056bfd8[4];
 extern int p2BlockedSema;
-extern int DAT_0056c164[4];
-extern int DAT_0056c010[4];
 extern long long DAT_0056b020[4];
 extern int DAT_0056c020[4];
 extern int p2ProgramFlags[4];
@@ -53,104 +43,6 @@ extern int DAT_0056c138[4];
 extern int DAT_0056c140[4];
 extern long long DAT_0056c148[4];
 extern int DAT_0056c130[4];
-
-struct N_207e70 { int f0; struct N_207e70 *f4; long long f8; int f16; int f20; };
-extern struct N_207e70 *DAT_0056bf40[4];
-extern struct N_207e70 *DAT_0056bf48[4];
-extern struct N_207e70 *DAT_0056bf50[4];
-void FUN_00207e70(int arg0, int arg1) {
-    struct N_207e70 *temp_s0;
-
-    if (DAT_0056bf50[0] == 0) {
-        FUN_00204240(9, &DAT_0056bf50[0]);
-    }
-    FUN_00113f20();
-    temp_s0 = DAT_0056bf50[0];
-    DAT_0056bf50[0] = temp_s0->f4;
-    FUN_00113f78();
-    temp_s0->f8 = p2AddPreviousFinishFuncPredicate();
-    temp_s0->f16 = arg0;
-    temp_s0->f20 = arg1;
-    temp_s0->f4 = 0;
-    FUN_00113f20();
-    if (DAT_0056bf40[0] != 0) {
-        DAT_0056bf40[0]->f4 = temp_s0;
-    } else {
-        DAT_0056bf48[0] = temp_s0;
-    }
-    DAT_0056bf40[0] = temp_s0;
-    FUN_00113f78();
-}
-
-extern int DAT_0056bfb8[4];
-int FUN_00207f30(int arg0) {
-    extern void * DAT_0056ad80[4];
-    int temp_a1;
-
-    temp_a1 = DAT_0056bfb8[0] + 1;
-    DAT_0056bfb8[0] = temp_a1;
-    *(int *)((char *)DAT_0056ad80[0] + 424) = temp_a1;
-    *(int *)((char *)DAT_0056ad80[0] + 428) = -1;
-    DAT_0056bfd8[0] += 1;
-    if (arg0 != 0) {
-        FUN_001f76c0(0x35, temp_a1);
-    }
-    return DAT_0056bfb8[0];
-}
-
-extern volatile int p2DmaWatchFlags[4];
-extern volatile int DAT_0056d678[4];
-void FUN_00207fa0(unsigned int arg0) {
-    int FUN_00208120();
-    extern volatile int DAT_0056bf80[4];
-    extern unsigned int DAT_0056bfc0[4];
-    long long sp28;
-    long long sp20;
-    FUN_00208120();
-    FUN_00113f20();
-    p2DmaWatchFlags[0] |= 8;
-    FUN_00113f78();
-    goto test;
-body:
-    FUN_0020d270(&sp28);
-    p2BlockedSema = DAT_0056bf80[0];
-    WaitSema(DAT_0056bf80[0]);
-    p2BlockedSema = -1;
-    FUN_0020d270(&sp20);
-    DAT_0056c164[0] += (long long)((sp20 - sp28) << 0x20) >> 0x20;
-test:
-    if (DAT_0056bfc0[0] < arg0) goto body;
-    FUN_00113f20();
-    p2DmaWatchFlags[0] = p2DmaWatchFlags[0] & ~8;
-    DAT_0056d678[0] &= ~8;
-    FUN_00113f78();
-    DAT_0056bfd8[0] = DAT_0056bfd8[0] - 1;
-}
-
-void FUN_002080b0(void) {
-    extern int DAT_0056bf80[4];
-    extern int DAT_0056bfc0[4];
-    int st[8];
-
-    DAT_0056c010[0] += 1;
-    DAT_0056bfc0[0] = (int) ((long long) (p2readGSPrivRegister(0x48) << 0x20) >> 0x20);
-    iReferSemaStatus(DAT_0056bf80[0], st);
-    if (st[0] != st[1]) {
-        iSignalSema(DAT_0056bf80[0]);
-    }
-}
-
-struct F_208120 { unsigned char c0:1; unsigned char c1:1; unsigned char c2:6; };
-struct S_208120 { char p0[32]; int a; char p1[12]; int b; char p2[12]; struct F_208120 f; };
-void FUN_00208120(void) {
-    extern struct S_208120 *DAT_00568f04[4];
-    struct S_208120 *s = DAT_00568f04[0];
-    if (s->a != s->b) goto call;
-    if (s->f.c1 != 0) {
-call:
-        p2SubmitDmaPacket(1, s);
-    }
-}
 
 void FUN_00208170(int arg0) {
     extern int p2DirtyFlags[4];
@@ -183,7 +75,7 @@ struct N_208210 *FUN_00208210(void) {
     extern struct N_208210 *DAT_0056c0c8[4];
     struct N_208210 *o;
     if (DAT_0056c0c8[0] == 0) {
-        FUN_00204240(0xA, &DAT_0056c0c8[0]);
+        p2GrowPool(0xA, &DAT_0056c0c8[0]);
     }
     o = DAT_0056c0c8[0];
     DAT_0056c0c8[0] = o->next;
@@ -241,7 +133,7 @@ void FUN_002082f0(void) {
         i += 1;
     } while (i < 0x11U);
     DAT_0056c128[0] = 0;
-    FUN_00204240(0xA, &DAT_0056c0c8[0]);
+    p2GrowPool(0xA, &DAT_0056c0c8[0]);
     temp_v0_2 = FUN_00208210();
     DAT_0056c0d0[0] = temp_v0_2;
     temp_v0_2->f24 = 0;
@@ -1161,7 +1053,7 @@ struct W_20b7f0 { long long f0; char p8[24]; int f32; char p36[12]; int f48; cha
 struct V_20b7f0 { long long f0; long long f8; };
 struct N_20b7f0 { long long f0; long long f8; char p16[8]; int f24; char p28[42]; char m:7; char hi:1; };
 unsigned char FUN_0020b7f0(struct N_20b7f0 *arg0) {
-    int FUN_00207e70();
+    int p2AddFinishFunc();
     int FUN_0020b280();
     int FUN_0020b650();
     extern struct W_20b7f0 *DAT_00568f04[4];
@@ -1181,7 +1073,7 @@ unsigned char FUN_0020b7f0(struct N_20b7f0 *arg0) {
         s0 = FUN_0020b650(arg0, &r, 0, &t);
         if (r >= 0) {
             if (DAT_0056c130[0] == 1) {
-                FUN_00207e70(FUN_001f7500, 0);
+                p2AddFinishFunc(FUN_001f7500, 0);
                 t = DAT_00568f04[0]->f0;
                 p2SubmitDmaPacket(1);
                 FUN_0020b280(arg0, s0, r);

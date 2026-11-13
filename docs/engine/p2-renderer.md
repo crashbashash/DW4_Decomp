@@ -15,7 +15,7 @@ memory-mapped register:
 | `p2StartDmaPacket` | 560 | `dmac` |
 | `FUN_001f8190` | 400 | `gs` |
 | `p2readGSPrivRegister` | 320 | `gs` |
-| `FUN_0020cd10` | 656 | `timer` |
+| `p2StartTimers` | 656 | `timer` |
 | `FUN_001f8350` | 308 | `dma_spr` |
 
 So the whole backend is register-free except for the DMA kicks, one GS-to-memory transfer and two GS
@@ -111,7 +111,7 @@ error messages, so the identification is recovered rather than guessed:
 | `0x0020c270` | 1324 | `Unsupported texture format in p2LoadTexture: %d` |
 | `0x001fb710` | 980 | `p2lighting` |
 | `0x001f7490` | 72 | `GS csr.id = %d, csr.rev = %d` |
-| `0x00207210` | 428 | `swapbuffersPredicate`, `swapbuffersDrawPredicate` |
+| `0x00207210` | 428 | `swapbuffersPredicate`, `swapbuffersDrawPredicate` (it is `p2InitSwap`) |
 | `0x002082f0` | 312 | `textureLoadedPredicate`, `textureDeferredPredicate` |
 
 `p2LoadTexture` is the GS-side texture upload, `p2readGSPrivRegister` the privileged GS readback, and
@@ -244,6 +244,87 @@ Open questions:
 * `p2Clear` with `p2ClearPasses` set draws three passes whose red channel is the pass number times 32;
   what those passes are for is not known.
 * `p2ImagePoolSize` (`0x562d80`) is written once and never read.
+
+## Swapping, pools, timers and the small files
+
+From `0x1fc310` to `0x20e750` the layer is a run of whole files. Each file's `.bss` block is used
+by its own functions and by nothing else, which is where the cuts come from:
+
+| range | file | what it holds |
+| --- | --- | --- |
+| `0x1fc310`-`0x1fd5a0` | `p2multipass.c` | multipass stage queries and the pass packet |
+| `0x204100`-`0x204e30` | `p2pool.c` | the typed record pools (`include/dw4/p2pool.h`) |
+| `0x204e30`-`0x206570` | `p2stateCache.c` | the render-state cache (`include/dw4/p2stateCache.h`) |
+| `0x206570`-`0x208170` | `p2swap.c` | frame swap, the FINISH queue and finish sequences (`include/dw4/p2swap.h`) |
+| `0x208170`-`0x20cc10` | `p2texture.c` | texture binding and upload |
+| `0x20cc10`-`0x20d790` | `p2timer.c` | the clock, sleeping and alarms (`include/dw4/p2timer.h`) |
+| `0x20d790`-`0x20d900` | `p2vu1Symbols.c` | lookups in the VU1 symbol table |
+| `0x20d900`-`0x20df00` | `p2viewport.c` | the viewport, its scale and the depth bias |
+| `0x20df00`-`0x20e080` | `p2vu0.c` | the VU0 lock and request records |
+| `0x20e080`-`0x20e400` | `p2vif.c` | VIF row and mask registers |
+| `0x20e400`-`0x20e750` | `p2watchdog.c` | the watchdog thread |
+
+* **Swap file before texture.** Every function from `0x206570` to `0x208120` uses only `.bss`
+  `0x56bf38`-`0x56c010`, and every function from `0x208170` on uses only `0x56c020`-`0x56c138`.
+  `p2InitSwap` creates the finish queue, the finish semaphore and the sequence words that the FINISH
+  handler, `p2AddFinishFunc`, `p2NewFinishSequence`, `p2WaitFinishSequence` and `p2GsSignalHandler`
+  use, so those five belong to the swap file and not to `p2texture.c`.
+* **Timer.** Its `.bss` (`0x56c150`-`0x56c2a0`) runs downward in the order the code first uses it,
+  which is how MWCC places one file's file-scope `.bss`. Its `.data` alarm free-list pointer
+  (`0x4918c0`) comes before `p2StartTimers`'s template. Both point to one file. The blocks after it
+  run upward, so each is a file of its own.
+* **Viewport, VU0 and VIF.** These cuts have the least evidence. The viewport's `.bss`
+  (`0x56c2c0`-`0x56c318`) and `.data` (`0x4964e0`-`0x4964f8`) are used only by `0x20d900`-`0x20dba0`.
+  The VU0 file's (`0x56c320`-`0x56c648`, `0x496500`-`0x496538`) are used only by
+  `0x20df00`-`0x20e060`, and the VIF file's (`0x56c650`-`0x56c660`, `0x496540`-`0x4965b0`) only by
+  `0x20e080`-`0x20e3f0`. A clean partition is consistent with one file per block, but it does not
+  prove that the blocks are separate files.
+
+**Swap and finish.** `p2SwapBuffers` waits while the frames drawn run more than `p2SwapLatency`
+ahead of those shown, then either leaves the flip to the vertical-blank handler or shows the new
+frame at once. A new frame's VIF1 packet waits on `swapbuffersDrawPredicate` until the buffer it
+draws into is off the screen. `p2AddFinishFunc` queues a function behind the packets submitted so far,
+and the GS FINISH handler (`p2FinishHandler`) calls it once the GS has drawn them. A finish sequence
+is a GS `SIGNAL` id written behind the work: `p2GsSignalHandler` records each id the GS reaches, and
+`p2WaitFinishSequence` blocks until a given id has been reached.
+
+**Pools.** Every kind of renderer record (the visual context's `IG_GFX_INTERNAL_STRUCT_*_PSX2`
+settings) comes from its own free list. `p2GrowPool` allocates a block when a list runs dry, and the
+first record of the block keeps the allocation so that `p2FreePool` can release every block of a
+kind. The kinds are numbered: DMA buffers VIF0/VIF1/GIF 0-2, image 3, DMA buffer sizes 4-6, DMA
+predicate 7, DMA completion 8, finish 9, texture 10, state cache 11, multipass 12 and display list 13.
+
+**Timer.** Timer 1 counts at BUSCLK/16, and its overflow interrupt extends the count to the 64-bit
+clock (`p2ReadClock`). Timer 0 drives the alarms: `p2Sleep`/`p2SleepMilliseconds` queue an alarm
+whose delay counts from the alarm before it, and the timer 0 compare interrupt signals the alarms as
+their delays run out. Waiting code adds the clock time it spends blocked to `p2DmaWaitTime`,
+`p2SwapWaitTime`, `p2FinishWaitTime`, `p2SleepTime` and `p2Vu0LockWaitTime`.
+
+**VU0.** `p2LockVu0` (`0x20dfd0`) waits for the VU0 lock and records an owner tag. The
+`"p2lighting"` string that `p2lighting` passes it is that tag. `p2LockVu0` reproduces only as C++, so
+it stays a function of its own (`src/engine/p2LockVu0.cpp`) outside `p2vu0.c`.
+
+**Watchdog.** Code that waits on the hardware or another thread sets its bit in
+`p2DmaWatchFlags.busy`. The bits are PacketBuffer 0, DMAFinishSequence 1, Swapbuffers 2,
+FinishSequence 3, TextureUnbind 4, DMAVIF0 5, DMAVIF1 6, DMAGIF 7, VSync 8, VU0UcodeLoad 9 and VU0Lock
+10. Every four seconds the watchdog thread copies `busy` into `seen`. If a bit it copied the previous
+time is still set, it prints the VU program tables and the timed-out waits, then aborts. It also gives
+up when `p2WatchdogTicks`, which is reset every frame, reaches 60. `p2WatchdogDisabled`
+(`0x4965c0`) starts at 1 and nothing clears it.
+
+**Multipass.** With capability 23 on, each texture stage beyond the first draws as a pass of its
+own in GS context 2. `p2WritePassPacket` writes a pass's ALPHA/TEX0/TEX1 (from stage pass-1's
+register set) and a TEXFLUSH, and `p2GetPassMasks` gives the FRAME/ZBUF masks a pass draws with.
+
+Open questions:
+
+* `FUN_001fcc10` and `FUN_001fd160` are called by `FUN_001762d0` together with
+  psx2ParticleFormat's first six functions, in address order, so they might be the head of that
+  file. The `.bss` at `0x56b068`, used only by `0x1fd160`, lies below particleFormat's `0x56b070`,
+  which argues for keeping them in `p2multipass.c`.
+* Nothing writes `p2Vu0Program` (`0x56c320`); it is a 4-bit field of the state-cache key.
+* The names `p2SetDepthBias`, `p2SetVifMask`, `p2VsyncSwapPending` and `p2VsyncsWaited` are read from
+  behaviour, not from strings.
 
 ## What the engine asks for
 

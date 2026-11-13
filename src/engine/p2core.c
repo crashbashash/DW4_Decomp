@@ -189,16 +189,16 @@ int FUN_0010ba90();
 int FUN_001f76f0();
 int FUN_00202300();
 int FUN_00203500();
-int FUN_00204240();
-int FUN_00204950();
-int FUN_00206540();
-int FUN_00206610();
-int FUN_00207f30();
-int FUN_00207fa0();
+int p2GrowPool();
+int p2FreePool();
+int p2InvalidateStateCache();
+int p2BuildDisplayPacket();
+int p2NewFinishSequence();
+int p2WaitFinishSequence();
 int FUN_00208200();
-int FUN_0020ccd0();
-int FUN_0020d790();
-int FUN_0020d820();
+int p2ShutdownTimer();
+int p2OpenVu1Symbols();
+int p2CloseVu1Symbols();
 int FUN_00330730();
 int FUN_00330770();
 char *FUN_003307b0(unsigned int data, int size, int heap);
@@ -670,7 +670,7 @@ void p2SetBlendMatrices(int base, int count) {
 
 void p2SetClearWidth(int width) {
     p2ClearWidth = width;
-    FUN_00206610();
+    p2BuildDisplayPacket();
 }
 
 void p2SetClearPasses(int on) {
@@ -752,7 +752,7 @@ void p2Clear(int mask, unsigned int colour, int depth) {
 void p2InitImagePool(void) {
     p2ImagePool = 0;
     p2ImagePoolSize = 0x400000;
-    FUN_00204240(P2_POOL_IMAGE, &p2ImagePool);
+    p2GrowPool(P2_POOL_IMAGE, &p2ImagePool);
 }
 
 p2Texture *p2GetImageTexture(p2Image *image) {
@@ -789,7 +789,7 @@ p2Image *p2CreateImage(int format, int order, int layout, void *pixels) {
     default:
         return 0;
     }
-    if (p2ImagePool == 0) FUN_00204240(P2_POOL_IMAGE, &p2ImagePool);
+    if (p2ImagePool == 0) p2GrowPool(P2_POOL_IMAGE, &p2ImagePool);
     image = p2ImagePool;
     p2ImagePool = image->next;
     image->pixels = 0;
@@ -856,9 +856,9 @@ void p2InitVuPrograms(const char *programList, const char *symbolTable) {
             p2VuProgramList[i] = '\n';
         }
     }
-    if (programList != 0 && FUN_0020d790(symbolTable, &p2VuMicrocode) != 0) {
+    if (programList != 0 && p2OpenVu1Symbols(symbolTable, &p2VuMicrocode) != 0) {
         p2ParseVuProgramList(programList);
-        FUN_0020d820();
+        p2CloseVu1Symbols();
         FUN_00202300();
     }
 }
@@ -901,7 +901,7 @@ int p2LoadVuPrograms(int *programs, int *extraPrograms, int count, int extraCoun
     }
     if (i != count) {
         p2UnloadVuPrograms(1);
-        FUN_00206540();
+        p2InvalidateStateCache();
         result = 0;
         for (i = 0; i < count; i++) {
             if (p2LoadVuProgram(programs[i]) == 0) {
@@ -1240,10 +1240,10 @@ void p2EnableWatchdog(int on) {
 /* Takes down what opening the display set up: the handlers, the watchdog thread, the VU
  * program names, the DMA channels and the pools. */
 void p2CloseDisplay(void) {
-    FUN_00207fa0(FUN_00207f30(1));
+    p2WaitFinishSequence(p2NewFinishSequence(1));
     p2DirtyFlags = P2_DIRTY_ALL;
     p2UnloadVuPrograms(1);
-    FUN_00206540();
+    p2InvalidateStateCache();
     if (p2FirstOpen == 0) {
         printf("Alchemy display closed\n");
         p2DisplayClosing = 1;
@@ -1265,7 +1265,7 @@ void p2CloseDisplay(void) {
         if (RemoveDmacHandler(P2_DMA_GIF, p2DmaHandlerIds[P2_DMA_GIF]) == -1) {
             printf("Error removing GIF dmac handler\n");
         }
-        FUN_0020ccd0();
+        p2ShutdownTimer();
         FUN_0010b9c0(P2_INTC_GS);
         RemoveIntcHandler(P2_INTC_GS, p2GsIntcHandlerId);
         if (p2VblankStartIntcHandlerId != -1) {
@@ -1281,19 +1281,19 @@ void p2CloseDisplay(void) {
         p2FreeVuProgramNames();
         FUN_00203500();
         p2ShutdownDmaChannels();
-        FUN_00204950(3, 0);
-        FUN_00204950(9, 0);
-        FUN_00204950(0xA, 0);
-        FUN_00204950(7, 0);
-        FUN_00204950(8, 0);
-        FUN_00204950(0xB, 0);
-        FUN_00204950(0xD, 0);
-        FUN_00204950(0, 0);
-        FUN_00204950(1, 0);
-        FUN_00204950(2, 0);
-        FUN_00204950(4, 0);
-        FUN_00204950(5, 0);
-        FUN_00204950(6, 0);
+        p2FreePool(3, 0);
+        p2FreePool(9, 0);
+        p2FreePool(0xA, 0);
+        p2FreePool(7, 0);
+        p2FreePool(8, 0);
+        p2FreePool(0xB, 0);
+        p2FreePool(0xD, 0);
+        p2FreePool(0, 0);
+        p2FreePool(1, 0);
+        p2FreePool(2, 0);
+        p2FreePool(4, 0);
+        p2FreePool(5, 0);
+        p2FreePool(6, 0);
     }
 }
 
@@ -1306,7 +1306,7 @@ void p2FreeDisplayListBlock(p2DisplayList *list) {
 p2DisplayList *p2AllocDisplayList(void) {
     p2DisplayList *list;
     if (p2DisplayListPool == 0) {
-        FUN_00204240(P2_POOL_DISPLAY_LIST, &p2DisplayListPool);
+        p2GrowPool(P2_POOL_DISPLAY_LIST, &p2DisplayListPool);
     }
     list = p2DisplayListPool;
     p2DisplayListPool = list->next;
@@ -1319,7 +1319,7 @@ p2DisplayList *p2AllocDisplayList(void) {
 
 void p2InitDisplayListPool(void) {
     p2DisplayListPool = 0;
-    FUN_00204240(P2_POOL_DISPLAY_LIST, &p2DisplayListPool);
+    p2GrowPool(P2_POOL_DISPLAY_LIST, &p2DisplayListPool);
 }
 
 /* Starts recording: the VIF1 data of the draws that follow goes into the list's blocks instead

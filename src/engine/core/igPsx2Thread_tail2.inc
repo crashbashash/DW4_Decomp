@@ -26,7 +26,7 @@ void Gap__Core__igPsx2Thread__vfunc_24(int *arg0, void *arg1, T24_32f840 *arg2) 
     sp38 = ((VC2_24 *)arg2->f48)->vX();
     if (arg2->f60 != -1) {
         while (ReferThreadStatus(arg2->f60, 0) != 0x10) {
-            FUN_0020d360(1);
+            p2SleepMilliseconds(1);
         }
     }
     *arg0 = g_statusSucceeded.v;
@@ -34,7 +34,7 @@ void Gap__Core__igPsx2Thread__vfunc_24(int *arg0, void *arg1, T24_32f840 *arg2) 
 
 void Gap__Core__igPsx2Thread__vfunc_25(int *arg0, int arg1, int arg2) {
     if (GPR_00554ddc != 0) {
-        FUN_0020d360((int)__udivdi3(arg2, 0xF4240));
+        p2SleepMilliseconds((int)__udivdi3(arg2, 0xF4240));
         *arg0 = g_statusSucceeded.v;
     } else {
         *arg0 = g_allocatorFailureStatus.v;

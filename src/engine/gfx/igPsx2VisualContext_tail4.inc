@@ -1801,7 +1801,7 @@ void FUN_001757c0(igPsx2VisualContext *arg0, int arg1) {
         DAT_00560a04[0] += 1;
     }
     arg0->_bMultiPassNum = arg1;
-    FUN_001fc310(arg0->_bMultiPassNum);
+    p2SetPassCount(arg0->_bMultiPassNum);
     if (arg0->_bMultiPassNum > 1 && arg0->_pixelPipelineMode == 3) {
         if (p2IsCapabilityEnabled(0x17) == 0) {
             p2EnableCapability(0x17);

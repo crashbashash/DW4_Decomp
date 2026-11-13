@@ -20,14 +20,14 @@ enum p2DmaChannel {
 /* A condition a packet waits for before it may start: test(arg) must return nonzero. */
 typedef struct p2DmaPredicate {
     long long arg;
-    int f8;
+    void *memory;                     /* the first record of a pool block keeps the block */
     struct p2DmaPredicate *next;
     int (*test)(long long arg);
 } p2DmaPredicate;
 
 /* A function a packet's DMAC handler calls once the transfer has ended. */
 typedef struct p2DmaCompletion {
-    int f0;
+    void *memory;                     /* the first record of a pool block keeps the block */
     struct p2DmaCompletion *next;
     void (*func)(void *arg);
     void *arg;

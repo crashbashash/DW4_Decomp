@@ -26,7 +26,7 @@ struct T56 { char p[44]; unsigned char f44; char p2[11]; char f56; };
 extern "C" {
 int FUN_00300db0(...);
 int FUN_00300f50(...);
-int FUN_0020d360(int);
+int p2SleepMilliseconds(int);
 int FUN_0032f7f0(...);
 void FUN_003304e0(ThreadMgr *, igPsx2Thread *);
 Result FUN_0030e430(void *);

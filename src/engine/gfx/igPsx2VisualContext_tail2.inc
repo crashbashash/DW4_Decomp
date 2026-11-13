@@ -124,10 +124,10 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_48(V_1690d0 *arg0, int arg1) {
     t = s0->f28;
     if (t != 2 && cur->f28 == 2) {
         FUN_0020b110(t, arg1 * 0x30, (int)base);
-        FUN_0020dba0(arg0->f916, arg0->f920, arg0->f924, arg0->f928, 1.0f - arg0->f932, 1.0f - arg0->f936);
+        p2SetViewport(arg0->f916, arg0->f920, arg0->f924, arg0->f928, 1.0f - arg0->f932, 1.0f - arg0->f936);
     } else if (t == 2) {
         FUN_0020ad60(s0->f40, s0->f44, (int)base);
-        FUN_0020dba0(0, 0, s0->w, s0->h, 1.0f - arg0->f932, 1.0f - arg0->f936);
+        p2SetViewport(0, 0, s0->w, s0->h, 1.0f - arg0->f932, 1.0f - arg0->f936);
     }
     arg0->f872 = arg1;
     FUN_0016a520((O520 *)arg0);
@@ -217,7 +217,7 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_49(VC49 *self, int bufferIndex, int *t
     }
     FUN_0020ad60(buf->colorTex, buf->depthTex);
     self->currentBuf = bufferIndex;
-    FUN_0020dba0(0, 0, buf->width, buf->height, 1.0f - self->near, 1.0f - self->far);
+    p2SetViewport(0, 0, buf->width, buf->height, 1.0f - self->near, 1.0f - self->far);
     FUN_0016a520((O520 *)self);
     if (buf->depthFormat <= 0) {
         self->setDepth(0);
@@ -369,7 +369,7 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_185(struct S185 *arg0, int arg1, int a
     if (arg0->f104 == 0) {
         FUN_0016a520((O520 *)arg0);
     }
-    FUN_0020dba0(arg1, arg2, arg3, arg4, 1.0f - arg0->f932, 1.0f - arg0->f936);
+    p2SetViewport(arg1, arg2, arg3, arg4, 1.0f - arg0->f932, 1.0f - arg0->f936);
 }
 
 void Gap__Gfx__igPsx2VisualContext__vfunc_186(void *arg0, int *arg1, int *arg2, int *arg3, int *arg4) {
@@ -1115,6 +1115,6 @@ void igPsx2VisualContext_CallDmaChain(int arg0, int arg1, int arg2, int arg3) {
 }
 
 void igPsx2VisualContext_IsDisplayingFirstBuffer(void) {
-    FUN_00207420(1);
+    swapbuffersDrawPredicate(1);
 }
 

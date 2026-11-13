@@ -114,7 +114,18 @@ typedef union p2GsScissor {
         unsigned long long : 5;
         unsigned long long scay1 : 11;
     } field;
+    unsigned int half[2];
 } p2GsScissor;
+
+typedef union p2GsXyoffset {
+    unsigned long long word;
+    struct {
+        short ofx;
+        short f2;
+        short ofy;
+        short f6;
+    } field;
+} p2GsXyoffset;
 
 typedef union p2GsTest {
     unsigned long long word;
@@ -128,6 +139,7 @@ typedef union p2GsTest {
         unsigned long long zte : 1;
         unsigned long long ztst : 2;
     } field;
+    unsigned int half[2];
 } p2GsTest;
 
 typedef union p2GsFrame {
@@ -141,7 +153,15 @@ typedef union p2GsFrame {
         unsigned int : 2;
         unsigned int fbmsk;
     } field;
+    unsigned int half[2];
 } p2GsFrame;
+
+typedef union p2GsScanmsk {
+    unsigned long long word;
+    struct {
+        unsigned char msk : 2;
+    } field;
+} p2GsScanmsk;
 
 typedef union p2GsZbuf {
     unsigned long long word;
@@ -152,6 +172,7 @@ typedef union p2GsZbuf {
         unsigned long long : 4;
         unsigned long long zmsk : 1;
     } field;
+    unsigned int half[2];
 } p2GsZbuf;
 
 typedef union p2GsBit {
@@ -159,6 +180,7 @@ typedef union p2GsBit {
     struct {
         unsigned long long on : 1;
     } field;
+    unsigned int half[2];
 } p2GsBit;
 
 /* The images of the GS drawing registers a render program uses, in GS register order. */
@@ -176,11 +198,11 @@ typedef struct p2GsRegisterSet {
     unsigned long long xyz3;
     unsigned long long tex1[2];
     unsigned long long tex2[2];
-    unsigned long long xyoffset[2];
+    p2GsXyoffset xyoffset[2];
     unsigned long long prmodecont;
     unsigned long long prmode;
     p2GsTexClut texclut;
-    unsigned long long scanmsk;
+    p2GsScanmsk scanmsk;
     unsigned long long miptbp1[2];
     unsigned long long miptbp2[2];
     unsigned long long texa;
