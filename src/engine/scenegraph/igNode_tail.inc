@@ -57,7 +57,7 @@ guardHave:
     goto doneHave;
 }
 
-int FUN_001c5d10(void *arg0, int arg1) {
+int igGroup_AppendChild(void *arg0, int arg1) {
     int var_s0;
     void *temp_v0;
 

@@ -180,7 +180,7 @@ extern int DAT_0058caf8[4];
     } \
     l->count = 0; }
 
-int FUN_001c5d10(...);
+int igGroup_AppendChild(...);
 int FUN_001d65e0(...);
 int FUN_001d6700(...);
 int ObjectList_AppendRetainedList(...);
@@ -663,7 +663,7 @@ int Gap__Viewer__igViewerSceneInfoManager__vfunc_27(igViewerSceneInfoManager *ar
         if (arg1->_cameras == 0) {
             FUN_001d65e0(arg1);
         }
-        FUN_001c5d10(((igViewerParameters *)arg0->_parameters)->_scene, arg1->_sceneGraph);
+        igGroup_AppendChild(((igViewerParameters *)arg0->_parameters)->_scene, arg1->_sceneGraph);
         t0.a = 2;
         t0.b = 0;
         t0.c = DAT_0058c9f0[0];

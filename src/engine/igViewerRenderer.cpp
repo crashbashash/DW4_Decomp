@@ -105,7 +105,7 @@ void *FUN_0013b490(...);
 void *FUN_0019fde0(...);
 int FUN_001c5160(void *, float);
 
-int FUN_001c5d10(...);
+int igGroup_AppendChild(...);
 
 void FUN_00460e00(int *a, void *arg1);
 
@@ -595,10 +595,10 @@ void Gap__Viewer__igViewerRenderer__vfunc_13(P *arg0) {
     FUN_00460e00((int *)arg0, (void *)arg0->f24);
     FUN_00460e00((int *)arg0, (void *)arg0->f28);
     FUN_00460e00((int *)arg0, (void *)arg0->f32);
-    FUN_001c5d10(arg0->f44, arg0->f52);
-    FUN_001c5d10(arg0->f52, arg0->f56);
+    igGroup_AppendChild(arg0->f44, arg0->f52);
+    igGroup_AppendChild(arg0->f52, arg0->f56);
     ObjectList_AppendRetained(arg0->f56->f28, arg0->f36);
-    FUN_001c5d10(arg0->f44, arg0->f48);
+    igGroup_AppendChild(arg0->f44, arg0->f48);
     arg0->f72->b8 = 1;
     arg0->f72->f12 = (int)&FUN_0045f200;
     arg0->f72->b24 = 1;
@@ -687,7 +687,7 @@ extern "C" void FUN_00460330(LightOwner *arg0) {
     CLEAR(arg0->f64)
     CLEAR(arg0->f60)
     if (arg0->f12->f12 != 0) {
-        FUN_001c5d10(arg0->f48, arg0->f12->f12);
+        igGroup_AppendChild(arg0->f48, arg0->f12->f12);
         FUN_00460790((igViewerRenderer *)arg0, (igGroup *)arg0->f12->f12);
     }
     n3 = arg0->f60->count;

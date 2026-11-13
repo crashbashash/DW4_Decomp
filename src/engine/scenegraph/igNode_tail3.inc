@@ -22,7 +22,7 @@ void FUN_001d3410(NodeSlots *o, void *with) {
         igGroup_RemoveChild((S_1c5eb0 *)c, (Obj_1c5eb0 *)o);
         i--;
     }
-    FUN_001c5d10(with, (int)(o));
+    igGroup_AppendChild(with, (int)(o));
     release_1d3410((int *)&held);
 }
 

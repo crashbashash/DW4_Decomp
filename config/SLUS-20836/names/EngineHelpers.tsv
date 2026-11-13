@@ -78,3 +78,4 @@
 0x0030b3c0	igStringObj_Set	engine
 0x0030b460	igStringObj_Insert	engine
 0x0030b630	igStringObj_ToFloat	engine
+0x001c5d10	igGroup_AppendChild	engine

@@ -40,8 +40,3 @@ GETNAMELIST, GETLAYERNODE, INFO (0..5). A layer is addressed by the name of a ch
 - **INFO**: no action.
 
 Every message but a failed ORDER or a short SWITCH, REMOVE or GETLAYERNODE returns 1.
-
-## Open questions
-
-- `FUN_001c5d10` appends a child to an `igGroup` (it calls the child list's append virtual); its name waits on
-  a rename that touches the scene-graph library's callers.

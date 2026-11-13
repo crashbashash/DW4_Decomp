@@ -29,7 +29,7 @@ void Gap__Gui__igGuiSystem__vfunc_13(A_456780 *self) {
     first.p = (R_456780 *)FUN_0044e990(allocator);
     FUN_00457e90((S0_457e90 *)(first.get()), self->f12);
     ObjectList_AppendRetained(self->f16, first.get());
-    FUN_001c5d10(self->f20, self->f28);
+    igGroup_AppendChild(self->f20, self->f28);
     R_456780 *value = self->f20;
     X_456780 *x = self->f8;
     set(x->f12, value);
@@ -94,7 +94,7 @@ void FUN_00456a60(A_456a60 *arg0, R_456a60 *arg1) {
         }
     }
     if (arg1 != 0) {
-        FUN_001c5d10(arg0->f28, arg1->f8->f8);
+        igGroup_AppendChild(arg0->f28, arg1->f8->f8);
     }
     FUN_004569c0((O_4569c0 *)arg0, arg0->f32);
     sp30.a = 2;

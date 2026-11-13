@@ -22,7 +22,7 @@ typedef struct OL2 { char p[8]; int count; int cap; RC **data; } OL2;
 typedef struct T { char p[60]; int f60; } T;
 typedef struct A { char p[32]; OL *l; } A;
 typedef struct B { char p[36]; T *t; } B;
-extern "C" int FUN_001c5d10(T *, int);
+extern "C" int igGroup_AppendChild(T *, int);
 extern "C" void FUN_0039e090(A *arg0, B *arg1);
 extern "C" int igObject_IsKindOf(beShadow01Info *, int);
 extern "C" int Gap__Core__igObject__vfunc_25(beShadow01 *, beShadow01Info *);
@@ -109,7 +109,7 @@ void FUN_0039e090(A *arg0, B *arg1) {
         do {
             it = *(Item **)((char *)arg0->l->data + off);
             if (it->f32 != 0) ObjectList_AppendRetained(t->f60, it->f32);
-            if (it->f28 != 0) FUN_001c5d10(t, it->f28);
+            if (it->f28 != 0) igGroup_AppendChild(t, it->f28);
             i += 1;
             off += 4;
         } while (i < n);

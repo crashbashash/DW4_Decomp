@@ -269,7 +269,7 @@ int igSwitch_AppendChild(void *arg0, int arg1) {
     int a0v;
     void *temp_v0;
 
-    temp_s0 = FUN_001c5d10((void *)arg0, arg1);
+    temp_s0 = igGroup_AppendChild((void *)arg0, arg1);
     temp_v0 = (void *)(*(int *)((char *)(arg0) + 28));
     a0v = *(int *)((char *)(arg0) + 32);
     if (temp_v0 != 0) {

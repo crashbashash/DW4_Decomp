@@ -30,7 +30,7 @@ extern "C" void igNamedObject_SetName(void *, char *);
 extern "C" void *igInsightCore_FindManager(int, int);
 extern "C" igSwitch *igSwitch_CreateInstance(void *);
 extern "C" igGroup *igGroup_CreateInstance(void *);
-extern "C" int FUN_001c5d10(void *, void *);
+extern "C" int igGroup_AppendChild(void *, void *);
 extern "C" int igGroup_RemoveChild(void *, void *);
 extern "C" int igSwitch_AppendChild(igSwitch *, void *);
 extern "C" void *igSwitch_RemoveChildAt(igSwitch *, int);
@@ -156,8 +156,8 @@ int beLayerCtl__OnMessage(beLayerCtl *self, beLayerInfoRam *ram, beMessengerWork
                 igGroup *node = NODE_AT(CHILDREN(lights), j);
                 if (NAME_OF(node) != 0 && strcmp(LAYERPARENT, NAME_OF(node)) == 0) { parent = node; break; }
             }
-            if (parent != 0) FUN_001c5d10(parent, (void *)self->_layerSwt);
-            else FUN_001c5d10(lights, (void *)self->_layerSwt);
+            if (parent != 0) igGroup_AppendChild(parent, (void *)self->_layerSwt);
+            else igGroup_AppendChild(lights, (void *)self->_layerSwt);
             self->_isOrdered = 1;
         }
         beLayerGroupList *groups = (beLayerGroupList *)info->_groups;
@@ -194,8 +194,8 @@ int beLayerCtl__OnMessage(beLayerCtl *self, beLayerInfoRam *ram, beMessengerWork
                     layer = NODE_AT(LAYERS(self), k);
                     if (strcmp(name, NAME_OF(layer)) == 0) { target = layer; break; }
                 }
-                if (target != 0) FUN_001c5d10(target, node);
-                else FUN_001c5d10(none.p, node);
+                if (target != 0) igGroup_AppendChild(target, node);
+                else igGroup_AppendChild(none.p, node);
                 igGroup_RemoveChild(root, node);
             }
         }

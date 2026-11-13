@@ -429,7 +429,7 @@ void Gap__Sg__igProjectiveShadowShader__vfunc_17(struct S_1d6240 *arg0) {
     if (temp_v1 != 0) {
         temp_s1 = temp_v1->cnt;
         for (var_s0 = 0; var_s0 < temp_s1; var_s0++) {
-            FUN_001c5d10((void *)arg0, arg0->f64->data[var_s0]);
+            igGroup_AppendChild((void *)arg0, arg0->f64->data[var_s0]);
         }
         temp_a0 = (struct R_1d6240 *)arg0->f64;
         if (temp_a0 != 0) {

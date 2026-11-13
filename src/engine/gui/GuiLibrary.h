@@ -905,7 +905,7 @@ extern "C" void thunk_FUN_00453a40(igBasicColorChanger *arg0, int arg1, int arg2
 typedef struct B { char p[12]; float x, y, z; } B;
 typedef struct A { char p[8]; B *b; char q[12]; float dx, dy; } A;
 extern "C" void FUN_00453b90(float *out, A *a);
-extern "C" int FUN_001c5d10(...);
+extern "C" int igGroup_AppendChild(...);
 extern "C" int FUN_00453e70(...);
 extern "C" void Gap__Gui__igDefaultAspect__vfunc_25(igDefaultAspect *arg0);
 extern "C" int FUN_001c5eb0(...);

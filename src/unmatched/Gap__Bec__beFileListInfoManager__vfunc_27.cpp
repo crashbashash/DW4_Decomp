@@ -1,7 +1,7 @@
 #include "dw4/igSmartPointer.h"
 extern "C" int sprintf(...);
 extern "C" int strlen(...);
-extern "C" int FUN_001c5d10(...);
+extern "C" int igGroup_AppendChild(...);
 extern "C" int igInsightCore_FindManager(...);
 extern "C" int igInsightCore_AddInfo(...);
 extern "C" int StringPool_Allocate(...);
@@ -474,7 +474,7 @@ extern "C" void Gap__Bec__beFileListInfoManager__vfunc_27(beFileListInfoManager 
                             beMessenger_AppendString(arg0->_messenger, nm);
                             beMessenger_DispatchSelected(arg0->_messenger, &DAT_0050e640[0]);
                             if (beMessenger_GetObjectCount(arg0->_messenger) > 0) {
-                                FUN_001c5d10(beMessenger_GetObject(arg0->_messenger, 0), obj);
+                                igGroup_AppendChild(beMessenger_GetObject(arg0->_messenger, 0), obj);
                             }
                         }
                     }

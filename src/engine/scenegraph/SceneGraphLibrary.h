@@ -5606,7 +5606,7 @@ extern "C" void FUN_001c59f0(OO *arg0, int arg1, int arg2, int arg3);
 extern "C" int Gap__Sg__igNode__vfunc_22(void);
 extern "C" void FUN_001c5b30(int arg0, int arg1, int arg2);
 extern "C" void FUN_001c5b80(SgLinkNode *o);
-extern "C" int FUN_001c5d10(void *arg0, int arg1);
+extern "C" int igGroup_AppendChild(void *arg0, int arg1);
 extern "C" int FUN_001c5d70(T_1c5d70 *self, int a1, O_1c5d70 *a2);
 extern "C" void FUN_001c5e20(T_1c5e20 *arg0);
 extern "C" Ref_1c5eb0 FUN_001c5eb0(S_1c5eb0 *host, int idx);
