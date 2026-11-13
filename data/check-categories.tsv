@@ -5724,7 +5724,7 @@
 00207d70	p2FinishHandler	match	-
 00207e70	p2AddFinishFunc	match	-
 00207f30	p2NewFinishSequence	match	-
-00207fa0	p2WaitFinishSequence	unapproved	unapproved: 2 volatile without an approval row
+00207fa0	p2WaitFinishSequence	match	-
 002080b0	p2GsSignalHandler	match	-
 00208120	p2FlushVif1Packet	match	-
 00208170	FUN_00208170	match	-
@@ -7453,11 +7453,11 @@
 00263b80	adxm_lock	match	-
 00263c08	adxm_unlock	match	-
 00263c78	adxm_goto_svr_border	match	-
-00263d60	adxm_goto_mwidle_border	unapproved	unapproved: 1 volatile without an approval row
-00263d88	adxm_goto_usridle_border	unapproved	unapproved: 1 volatile without an approval row
+00263d60	adxm_goto_mwidle_border	match	-
+00263d88	adxm_goto_usridle_border	match	-
 00263db0	adxm_safe_count_up	match	-
-00263dc8	adxm_safe_thrd	unapproved	unapproved: 2 volatile without an approval row
-00263e20	adxm_usrvsync_thrd	unapproved	unapproved: 4 volatile without an approval row
+00263dc8	adxm_safe_thrd	match	-
+00263e20	adxm_usrvsync_thrd	match	-
 00263eb8	adxm_vsync_thrd	match	-
 00263fc0	adxm_fs_thrd	match	-
 002640a0	adxm_mwidle_thrd	match	-
@@ -7472,7 +7472,7 @@
 00264590	adxm_create_vsync_thrd	match	-
 00264618	adxm_create_fs_thrd	match	-
 002646a0	adxm_create_mwidle_thrd	match	-
-00264738	adxm_create_usridle_thrd	unapproved	unapproved: 2 volatile without an approval row
+00264738	adxm_create_usridle_thrd	match	-
 00264808	adxm_is_usridle_mode	match	-
 00264818	ADXM_ExecSvrUsrVsync	match	-
 00264830	ADXM_ExecSvrVsync	match	-
@@ -7483,22 +7483,22 @@
 002648a8	ADXM_ExecSvrAll	match	-
 002648e8	ADXM_IsSetupThrd	match	-
 002648f8	ADXM_SetCbErr	match	-
-00264aa0	adxm_request_thrd_exit	unapproved	unapproved: 6 volatile without an approval row
-00264af0	ADXM_ShutdownThrd	unapproved	unapproved: 1 volatile without an approval row
-00264b88	adxm_delete_usridle_thrd	unapproved	unapproved: 3 volatile without an approval row
-00264c58	adxm_delete_mwidle_thrd	unapproved	unapproved: 3 volatile without an approval row
-00264d28	adxm_delete_vsync_thrd	unapproved	unapproved: 3 volatile without an approval row
-00264df8	adxm_delete_fs_thrd	unapproved	unapproved: 3 volatile without an approval row
-00264ec8	adxm_delete_usrvsync_thrd	unapproved	unapproved: 3 volatile without an approval row
-00264f98	adxm_delete_safe_thrd	unapproved	unapproved: 3 volatile without an approval row
+00264aa0	adxm_request_thrd_exit	match	-
+00264af0	ADXM_ShutdownThrd	match	-
+00264b88	adxm_delete_usridle_thrd	match	-
+00264c58	adxm_delete_mwidle_thrd	match	-
+00264d28	adxm_delete_vsync_thrd	match	-
+00264df8	adxm_delete_fs_thrd	match	-
+00264ec8	adxm_delete_usrvsync_thrd	match	-
+00264f98	adxm_delete_safe_thrd	match	-
 00265068	ADXM_Lock	match	-
 00265080	ADXM_Unlock	match	-
 00265098	ADXM_GetLockLevel	match	-
 002651d0	ADXM_ExecVint	match	-
 002651e8	ADXM_ExecMain	match	-
 00265200	adxm_wakeup_idle_thrds	match	-
-00265288	adxm_wakeup_vsync_waiter	unapproved	unapproved: 2 volatile without an approval row
-00265308	ADXM_WaitVsync	unapproved	unapproved: 1 volatile without an approval row
+00265288	adxm_wakeup_vsync_waiter	match	-
+00265308	ADXM_WaitVsync	match	-
 00265330	ADXM_ExecVsyncFrame	match	-
 00265368	ADXPS2_ExecVsyncFrame	match	-
 00265380	ADXPS2_ExecServer	match	-
@@ -7507,7 +7507,7 @@
 00265440	ADXPS2_ExecServerLocked	match	-
 002654a8	ADXPS2_Lock	match	-
 002654c0	ADXPS2_Unlock	match	-
-002656c8	ADXM_ShutdownThrdEx	unapproved	unapproved: 1 volatile without an approval row
+002656c8	ADXM_ShutdownThrdEx	match	-
 00265778	ADXM_SetCbUsrVsync	match	-
 002657a0	ADXM_SetCbUsrIdle	match	-
 002657c8	ADXM_GotoUsrIdleBorder	match	-
@@ -15912,6 +15912,7 @@
 003717e0	LuaAPIClass_Construct	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
 00371840	LuaAPIClass_Create	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
 003718d0	BecLuaClass_Construct	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
+00371930	BecLuaClass_Create	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
 003719c0	LuaAPI_RegisterClasses	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
 003719d0	LuaAPI_Register	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
 00371a10	be_AddToScheduler	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
@@ -16186,7 +16187,7 @@
 00383910	beFont_ReplaceVertexArray	match	DEFERRED duplicate 0x1338d0 __dt__31igSmartPointer<13igVertexArray>Fv 128B (compared under the profile of its retail unit)
 00383ab0	beFont_PrepareGeometry	match	DEFERRED duplicate 0x1338d0 __dt__31igSmartPointer<13igVertexArray>Fv 128B (compared under the profile of its retail unit)
 00383bf0	beFont_LayoutLines	match	DEFERRED duplicate 0x1338d0 __dt__31igSmartPointer<13igVertexArray>Fv 128B (compared under the profile of its retail unit)
-00383ed0	beFont_AlignLines	code-only	exception metadata: retail keeps an index record at 0x54e954 (packed) that the object does not produce (its unit was C++ with exceptions on)
+00383ed0	beFont_AlignLines	match	DEFERRED duplicate 0x1338d0 __dt__31igSmartPointer<13igVertexArray>Fv 128B (compared under the profile of its retail unit)
 00384010	beFont_LockVertexArray	match	DEFERRED duplicate 0x1338d0 __dt__31igSmartPointer<13igVertexArray>Fv 128B (compared under the profile of its retail unit)
 003840a0	beFont_FindFirstLayoutEntry	match	DEFERRED duplicate 0x1338d0 __dt__31igSmartPointer<13igVertexArray>Fv 128B (compared under the profile of its retail unit)
 003841d0	beFont_FindNextLayoutEntry	match	DEFERRED duplicate 0x1338d0 __dt__31igSmartPointer<13igVertexArray>Fv 128B (compared under the profile of its retail unit)
@@ -18474,7 +18475,7 @@
 00425fb0	beNDMWStatusTitle01_ShowShopLayout	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
 00426100	Gap__Bec__beNDMWStatusTitle02__vfunc_22	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
 00426140	Gap__Bec__beNDMWStatusTitle03__vfunc_22	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-00426530	beNDMWStatusTitle03_SetFont002Enabled	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
+00426530	beNDMWStatusTitle03_SetCancelPromptEnabled	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
 004265c0	Gap__Bec__beNDMWStatusTitle04__vfunc_22	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
 00426750	Gap__Bec__beNDMWStatusTitle04__vfunc_20	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
 00426760	Gap__Bec__beNDMWStatusTitle03__vfunc_20	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
@@ -18610,13 +18611,13 @@
 00443540	FUN_00443540	match	DEFERRED duplicate 0x150eb0 __dt__10IntListRefFv 128B (compared under the profile of its retail unit)
 004435c0	beNDMWShinkaObject_Load	match	DEFERRED duplicate 0x150eb0 __dt__10IntListRefFv 128B (compared under the profile of its retail unit)
 00443900	beNDMWMdlPEBase_ShowStatusIcon	match	DEFERRED duplicate 0x150eb0 __dt__10IntListRefFv 128B (compared under the profile of its retail unit)
-00443bd0	Gap__Bec__beNDMWMdlPEBase__vfunc_46	match	DEFERRED duplicate 0x150eb0 __dt__10IntListRefFv 128B (compared under the profile of its retail unit)
+00443bd0	beNDMWMdlPEBase__UpdateStatus	match	DEFERRED duplicate 0x150eb0 __dt__10IntListRefFv 128B (compared under the profile of its retail unit)
 00445200	beNDMWMdlPEBase_OnSequenceChange	match	DEFERRED duplicate 0x150eb0 __dt__10IntListRefFv 128B (compared under the profile of its retail unit)
 004456c0	beNDMWMdlPEBase_LoadDownData	match	DEFERRED duplicate 0x150eb0 __dt__10IntListRefFv 128B (compared under the profile of its retail unit)
 00445990	beNDMWMdlPEBase_LoadUpData	match	DEFERRED duplicate 0x150eb0 __dt__10IntListRefFv 128B (compared under the profile of its retail unit)
 00445c60	beNDMWMdlPEBase_RecalcPlayer	match	DEFERRED duplicate 0x150eb0 __dt__10IntListRefFv 128B (compared under the profile of its retail unit)
-00445d10	Gap__Bec__beNDMWMdlPEBase__vfunc_47	match	DEFERRED duplicate 0x150eb0 __dt__10IntListRefFv 128B (compared under the profile of its retail unit)
-004477b0	Gap__Bec__beNDMWMdlPEBaseInfoWork__vfunc_8	match	DEFERRED duplicate 0x150eb0 __dt__10IntListRefFv 128B (compared under the profile of its retail unit)
+00445d10	beNDMWMdlPEBase__OnStatusMessage	match	DEFERRED duplicate 0x150eb0 __dt__10IntListRefFv 128B (compared under the profile of its retail unit)
+004477b0	beNDMWMdlPEBaseInfoWork__Destroy	match	DEFERRED duplicate 0x150eb0 __dt__10IntListRefFv 128B (compared under the profile of its retail unit)
 00447b00	beNDMWMdlPEBaseInfoWork_IsPoisoned	match	DEFERRED duplicate 0x150eb0 __dt__10IntListRefFv 128B (compared under the profile of its retail unit)
 00447b40	beNDMWMdlPEBaseInfoWork_CurePoison	match	DEFERRED duplicate 0x150eb0 __dt__10IntListRefFv 128B (compared under the profile of its retail unit)
 00447ba0	beNDMWMdlPEBaseInfoWork__GetMeta	match	DEFERRED duplicate 0x150eb0 __dt__10IntListRefFv 128B (compared under the profile of its retail unit)
