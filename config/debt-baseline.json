@@ -16,12 +16,12 @@
   "compile.functions": 0,
   "foreign_profile.bytes": 288,
   "foreign_profile.functions": 10,
-  "fun_dat_refs": 29323,
+  "fun_dat_refs": 26387,
   "inline_asm.other": 0,
   "inventory.unsymbolised_bytes": 1020,
   "inventory_gap.bytes": 0,
   "inventory_gap.functions": 0,
-  "m2c_idiom.units": 693,
+  "m2c_idiom.units": 561,
   "mismatch.bytes": 0,
   "mismatch.functions": 0,
   "name_defect.bytes": 0,
@@ -30,17 +30,14 @@
   "orphan.bytes": 32,
   "profile_split.bytes": 18924,
   "profile_split.units": 2,
-  "raw_casts.reflected": 365,
-  "struct.a": {
-   "reason": "ThreadParam has two layouts: eekernel.h's 48 bytes, which p2StartWatchdog's frame needs, and adxps2.c's 36-byte Sony layout; which one the p2 code used is open",
-   "value": 67
-  },
+  "raw_casts.reflected": 363,
+  "struct.a": 61,
   "struct.b": 0,
-  "struct.c": 87,
+  "struct.c": 78,
   "unapproved.bytes": 22032,
   "unapproved.functions": 51,
-  "unmatched.bytes": 628164,
-  "unmatched.functions": 947
+  "unmatched.bytes": 627060,
+  "unmatched.functions": 935
  },
  "note": "Debt ratchet baseline for tools/progress.py --debt-check: every counter may only go down. Re-record with --debt-baseline; an increase needs --allow-increase \"<reason>\" and the reason is kept next to the value. See docs/engine/debt-ratchet.md."
 }
