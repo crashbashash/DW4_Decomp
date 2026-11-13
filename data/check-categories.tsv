@@ -13724,7 +13724,7 @@
 00343300	beSwitchCtrlInfo_Register	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
 00343380	beSwitchCtrlInfo_GetMetaObject	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
 003433a0	beSwitchCtrlInfo_InitFields	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
-00343430	FUN_00343430	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
+00343430	beSwitchCtrl_GetMessageEnum	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
 00343490	beSwitchCtrl_CreateInstance	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
 003434d0	FUN_003434d0	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
 00343520	FUN_00343520	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
@@ -16480,12 +16480,12 @@
 0039fae0	igSmartPointer_bePlaySE_Destruct	match	DEFERRED duplicate 0x1c6460 __dt__11NameListRefFv 128B (compared under the profile of its retail unit)
 0039fb60	beSound_FindData	match	DEFERRED duplicate 0x1c6460 __dt__11NameListRefFv 128B (compared under the profile of its retail unit)
 0039fc20	beSound_GetMeta	match	DEFERRED duplicate 0x1c6460 __dt__11NameListRefFv 128B (compared under the profile of its retail unit)
-0039fc30	Gap__Bec__beSwitchCtrl__vfunc_32	match	-
-0039fc40	Gap__Bec__beSwitchCtrl__vfunc_30	match	-
-0039fc50	Gap__Bec__beSwitchCtrl__vfunc_29	match	-
-0039fc80	Gap__Bec__beSwitchCtrl__vfunc_31	match	-
-0039fc90	Gap__Bec__beSwitchCtrl__vfunc_33	match	-
-0039fd20	Gap__Bec__beSwitchCtrl__vfunc_20	match	-
+0039fc30	beSwitchCtrl__Prepare	match	-
+0039fc40	beSwitchCtrl__GetInfoMeta	match	-
+0039fc50	beSwitchCtrl__RegisterReceiver	match	-
+0039fc80	beSwitchCtrl__Update	match	-
+0039fc90	beSwitchCtrl__OnMessage	match	-
+0039fd20	beSwitchCtrl__GetMeta	match	-
 0039fd30	beSystem_AddToScheduler	match	-
 0039fd50	beSystem_RemoveFromScheduler	match	-
 0039fd70	beSystem_Start	match	-
@@ -18469,7 +18469,7 @@
 00424150	beNDMWWindowSelect_GetMeta	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
 00424160	Gap__Bec__beNDMWWindowTitle__vfunc_21	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
 00424230	Gap__Bec__beNDMWStatusTitle00__vfunc_22	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-00425430	FUN_00425430	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
+00425430	beNDMWStatusTitle01_ShowDigimonFace	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
 00425e60	beNDMWStatusTitle01_ShowStatusLayout	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
 00425fb0	beNDMWStatusTitle01_ShowShopLayout	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
 00426100	Gap__Bec__beNDMWStatusTitle02__vfunc_22	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
