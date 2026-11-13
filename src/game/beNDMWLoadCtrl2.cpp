@@ -803,20 +803,23 @@ void beNDMWLoadIntf2MesWin__EndSystemMessage(beNDMWLoadIntf2MesWin *win) {
     }
 }
 
+/* The interface's const accessor for its memory-card utility; it takes the interface by reference, as
+ * a member function takes `this`. The compiler does not reuse a loop guard's read of a const object
+ * in the loop's body, so the loop below loads the utility again for each use. */
+static inline beNDMWMcUtilCtrl *mcUtilCtrl(const beNDMWLoadCtrl2CommonIntf &intf) { return (beNDMWMcUtilCtrl *)intf._mcUtilCtrl; }
+
 void beNDMWLoadCtrl2CommonIntf__UpdateCutConnect(beNDMWLoadCtrl2CommonIntf *intf) {
     int slot;
     int slotPlayer;
     igIntList *accessList;
     int k;
-    beNDMWMcUtilCtrl__Update((beNDMWMcUtilCtrl *)intf->_mcUtilCtrl);
+    beNDMWMcUtilCtrl__Update(mcUtilCtrl(*intf));
     PLW(intf, 0)->_isCutConnect = 0;
     PLW(intf, 1)->_isCutConnect = 0;
     PLW(intf, 2)->_isCutConnect = 0;
     PLW(intf, 3)->_isCutConnect = 0;
-    /* The guard reads _mcUtilCtrl through its smart pointer and the body reads the field directly, so the
-     * body reloads the slot list instead of reusing the guard's load. */
-    for (slot = 0; slot < ((beNDMWMcSlotList *)((igSmartPointer<beNDMWMcUtilCtrl> &)intf->_mcUtilCtrl)->_slot)->_count; slot++) {
-        if (((beNDMWMcSlotPS2 **)((beNDMWMcSlotList *)((beNDMWMcUtilCtrl *)intf->_mcUtilCtrl)->_slot)->_data)[slot]->_isConnect == 0) {
+    for (slot = 0; slot < ((beNDMWMcSlotList *)mcUtilCtrl(*intf)->_slot)->_count; slot++) {
+        if (((beNDMWMcSlot **)((beNDMWMcSlotList *)mcUtilCtrl(*intf)->_slot)->_data)[slot]->_isConnect == 0) {
             for (slotPlayer = 0; slotPlayer < ((beNDMWLoadSlotPlayerList *)intf->_slotSaveData)->_count; slotPlayer++) {
                 if (slot == ((beNDMWLoadSlotPlayer **)((beNDMWLoadSlotPlayerList *)intf->_slotSaveData)->_data)[slotPlayer]->_connectNO) {
                     accessList = (igIntList *)((beNDMWLoadSlotPlayer **)((beNDMWLoadSlotPlayerList *)intf->_slotSaveData)->_data)[slotPlayer]->_accessPlList;

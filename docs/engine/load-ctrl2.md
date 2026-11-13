@@ -81,6 +81,20 @@ clears the deeper ones on store) and returns 0 while running, 1 on success and 2
 Card requests go through `beNDMWMcUtilCtrl__Request`; the request kinds are 0 file make,
 1 file find, 2 format, 3 use check, 4 read, 5 write, 6 free size, 7 game-data report.
 
+## The interface's accessor
+
+`beNDMWLoadCtrl2CommonIntf__UpdateCutConnect` reaches the memory-card utility through the
+interface's const accessor (`mcUtilCtrl`), and reads `_slotSaveData` and `_flagWork` as plain
+fields. Retail shows the difference: the card loop loads `_mcUtilCtrl` and its slot list for the
+guard and again for the body, while the player loop inside it loads `_slotSaveData` once for both.
+
+The compiler marks an address computed from a const object (`this` of a const member function, a
+reference to const). It copies a loop's guard in front of the loop, then rebuilds the address
+arithmetic inside the loop, and the rebuilt nodes lose the mark while the copy in front keeps it.
+Common-subexpression elimination compares the marks, so the read before the loop and the reads in
+the loop are different expressions: the guard's value is not available on entry and the body
+computes it again. A read of a non-const object carries no mark and is shared.
+
 ## Data
 
 - `g_loadMessageTable` is a table of `LoadMessage` (id in bits 0-19 with the group in bits 12-15,
