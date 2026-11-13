@@ -1195,7 +1195,6 @@
 0x0023c830	Gap::Lua::igLuaGlue::vfunc_22	engine
 0x0023c840	Gap::Lua::igLuaGlue::vfunc_09	engine
 0x0023c850	Gap::Lua::igLuaGlue::vfunc_10	engine
-0x002465f0	Gap::Lua::igLuaState::vfunc_10	engine
 0x00246830	Gap::Lua::igLuaState::vfunc_22	engine
 0x0025afb0	Gap::Core::igFolder::vfunc_26	engine
 0x002be590	Gap::Core::igMetaObject::vfunc_21	engine

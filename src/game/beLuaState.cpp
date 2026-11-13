@@ -10,7 +10,7 @@ extern "C" void Gap__Bec__beLuaState__vfunc_21(void);
 extern "C" void Gap__Bec__beLuaState__vfunc_23(void);
 extern "C" int Memory_AllocateAlignedWithAllocator(int, int, int);
 extern "C" int Gap__Bec__beLuaState__vfunc_20(void);
-extern "C" int Gap__Lua__igLuaState__vfunc_10(beLuaState *);
+extern "C" int igLuaState_Close(beLuaState *);
 extern "C" int g_defaultAllocatorSelector[4];
 extern "C" unsigned char GPR_00554c14;
 extern "C" void Gap__Bec__beLuaState__vfunc_08(beLuaState *arg0);
@@ -45,7 +45,7 @@ void Gap__Bec__beLuaState__vfunc_08(beLuaState *arg0) {
         var_v0 = (GPR_00554c14 != 0) ? var_v0 : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
         Memory_FreeBufferWithAllocator(arg0->_lp, var_v0);
     }
-    Gap__Lua__igLuaState__vfunc_10(arg0);
+    igLuaState_Close(arg0);
 }
 
 void Gap__Bec__beLuaState__vfunc_21(void)

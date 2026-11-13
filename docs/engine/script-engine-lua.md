@@ -47,21 +47,57 @@ with reason codes `LUA_ERRRUN`, `LUA_ERRFILE`, `LUA_ERRSYNTAX`, `LUA_ERRMEM`,
 
 ## Source files of the binding library
 The Alchemy Lua binding library (`0x23c440`–`0x246d28`, before stock Lua's `lapi.c`) was compiled one
-file at a time, not as one translation unit: two runs of inline methods close files in the middle of
-it, where a library-sized unit would have one run at its end.
+file at a time, not as one translation unit: runs of inline methods close files in the middle of it,
+where a library-sized unit would have one run at its end. All four files share
+`src/engine/lua/LuaLibrary.h`.
 
 - **The library front**, `src/engine/lua/LuaRegistration.cpp` (`0x23c440`–`0x23c858`): the
   `LuaLibrary` registration latch, igLuaState's and igLuaGlue's metadata (meta-object getters, vtable
   readers, registrars, igLuaState's two reflected fields `_luaState` and `_memPool`), then igLuaGlue's
   inline methods. igLuaGlue has no virtual function out of line, so its vtable and inline methods are
   emitted here; two of them only call the glue's start-up and shutdown in the binding code.
-- **The binding code** (`0x23c860`–`0x24683c`) ends with igLuaState's out-of-line methods and its
-  slot-22 getter, which igLuaState's vtable is emitted with. Some of its functions have no source yet.
+- **The binding**, `src/engine/lua/LuaBinding.cpp` (`0x23c860`–`0x2442dc`): types and value
+  conversion (`LuaType_*`, `LuaValue_*`), bound functions and their overload resolution
+  (`LuaFunction_*`), objects and their fields (`LuaObject_*`), classes (`LuaClass_*`), the typed
+  array classes (`Lua<Type>Array_Delete`/`_Get`/`_Set`/`_New`) and `LuaGlue_Initialize`. It ends with
+  the base class's two empty virtual slots, `LuaClass_RegisterConstants` and
+  `LuaClass_RegisterFunctions`: every array class's vtable and the game's `be` class point at them,
+  and MWCC emits inline virtuals after a file's last ordinary function, so they close the file.
+- **The state**, `src/engine/lua/LuaState.cpp` (`0x2442e0`–`0x24683c`): `LuaBoolArray_Set`,
+  `LuaGlue_Shutdown` and the field-table walker, the script functions `new` and `cast`, the binding's
+  hash tables, the thread-local slots, igLuaState's out-of-line methods (`igLuaState_Open`,
+  `igLuaState_Close`, `igLuaState_Run*`), the error handler and igLuaState's slot-22 getter, which
+  igLuaState's vtable is emitted with.
 - **The last file**, `src/engine/lua/LuaRuntime.cpp` (`0x246840`–`0x246d28`): the thread-local
   table's internals and the game's `lua_dofile`.
 
-No retail call crosses either cut with the register knowledge a `static` callee compiled earlier in
-the same file gives its caller ([emitted functions](emitted-functions.md#whole-file-units)).
+The cut at `0x2442e0` has three kinds of evidence. `LuaBoolArray_Set` reads its own copies of
+`"%s: Non-number array access"` and `"Value to set must be number"`, where the other array setters
+share one pair, and MWCC pools equal literals within a file. The field-table walker's destructor, valid
+test and getter exist twice with identical bytes, one copy on each side. And the inline-virtual run
+above ends the binding. No retail call crosses any cut with the register knowledge a `static` callee
+compiled earlier in the same file gives its caller
+([emitted functions](emitted-functions.md#whole-file-units)).
+
+The base Lua class's vtables (`g_Lua*ArrayClass_vtable`) stay retail data: under the engine profile
+MWCC writes an RTTI pointer into a class's first vtable word, where retail Alchemy vtables hold 0.
+The array classes store their vtable in an inline constructor, and calls through it go through a view
+class that declares the slots without defining them.
+
+### Hash tables
+The binding keeps six chained hash tables: fields, functions, classes, properties, constants and
+enums, each with a shift, a bucket count, an entry count, a bucket array and a busy count. Their
+insert, link, resize and remove functions are identical but for the table; a property is linked
+through its second base, so the property table's link and resize adjust the pointer between the
+entry and its link. The growth rules are the thread-local table's below, with each table's own
+minimum size.
+
+### Script functions
+`new(table)` follows the table's `base` fields to the class at the root, runs its `<Class>Peer`
+constructor when the globals hold one (else the class's own), and makes the argument the new object's
+base. `cast(className, object)` returns the object as userdata of the named class when that class
+derives from the object's; it tests the derivation twice the same way round, so the reverse direction
+is never accepted.
 
 ### Thread-local values
 The binding keeps values per thread, such as the Lua state its start-up stores, in a hash table of
@@ -354,5 +390,18 @@ OP_LFORLOOP, OP_CLOSURE`.
 - `LuaGlue_Initialize` and `LuaGlue_Shutdown` are named from what they do (build the array-type
   conversions and run the registered start-up hooks; undo them). igLuaGlue's virtual slots that call
   them have no recovered names.
-- Whether the binding code is one file or several is untested. No class's slot-22 getter sits inside
-  it before igLuaState's at its end; its other two- and three-word bodies are field accessors.
+- Kind 16 (`LUA_KIND_STATIC`) is named from where it is accepted; what a value of that kind holds is
+  not established.
+- The sixth hash table (`LuaEnumTable_*`, `g_luaEnum*`) is named from its place after the constant
+  table; nothing names what it holds, and only its link, resize and remove survive in the image.
+- `LuaProperty`'s first base is shaped as a plain hash link; what it is for is not established.
+- `igLuaState_Open` and `igLuaState_Close` (igLuaState's slots 7 and 10) are named from what they do;
+  `beLuaState` inherits slot 7.
+- Strings `LuaState.cpp` reads (`"base"`, `"%sPeer"`, `"function"` and the tag-method event names)
+  are at the same addresses as the binding's, which fits two files only if the linker merged equal
+  strings across files.
+- The hash-table run (`0x244dd0`–`0x245e7c`) and the thread-local table in `LuaRuntime.cpp` follow
+  igLuaState's slot-22 getter's file in the way template instances end a file, which would put more
+  cuts in both; the binding calls those functions, so this is unresolved.
+- Whether `-RTTI off` belongs in the Alchemy profile, which would let the array classes' vtables be
+  compiled instead of kept as retail data, is the owner's decision.

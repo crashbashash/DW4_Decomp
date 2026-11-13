@@ -13600,9 +13600,9 @@
     },
     {
       "address": 2345248,
-      "name": "FUN_0023c920",
+      "name": "LuaType_ConstructFromCode",
       "size": 120,
-      "source": "src/unmatched/FUN_0023c920.c",
+      "source": "src/engine/lua/LuaBinding.cpp",
       "direct": [
         {
           "site": 2345316,
@@ -13615,7 +13615,7 @@
     },
     {
       "address": 2345376,
-      "name": "FUN_0023c9a0",
+      "name": "LuaType_Construct",
       "size": 416,
       "source": null,
       "direct": [
@@ -13648,17 +13648,17 @@
     },
     {
       "address": 2345792,
-      "name": "FUN_0023cb40",
+      "name": "LuaType_UpdateAccepted",
       "size": 448,
-      "source": "src/unmatched/FUN_0023cb40.c",
+      "source": "src/engine/lua/LuaBinding.cpp",
       "direct": [],
       "indirect": []
     },
     {
       "address": 2346240,
-      "name": "FUN_0023cd00",
+      "name": "LuaType_IsNumber",
       "size": 60,
-      "source": "src/unmatched/FUN_0023cd00.c",
+      "source": "src/engine/lua/LuaBinding.cpp",
       "direct": [],
       "indirect": [
         {
@@ -13670,9 +13670,9 @@
     },
     {
       "address": 2347120,
-      "name": "FUN_0023d070",
+      "name": "LuaType_PushString",
       "size": 52,
-      "source": "src/unmatched/FUN_0023d070.c",
+      "source": "src/engine/lua/LuaBinding.cpp",
       "direct": [
         {
           "site": 2347136,
@@ -13691,9 +13691,9 @@
     },
     {
       "address": 2351456,
-      "name": "FUN_0023e160",
+      "name": "LuaFunction_Construct",
       "size": 420,
-      "source": "src/unmatched/FUN_0023e160.c",
+      "source": "src/engine/lua/LuaBinding.cpp",
       "direct": [
         {
           "site": 2351536,
@@ -13712,9 +13712,9 @@
     },
     {
       "address": 2356464,
-      "name": "FUN_0023f4f0",
+      "name": "LuaClass_BindFunctions",
       "size": 428,
-      "source": "src/unmatched/FUN_0023f4f0.c",
+      "source": "src/engine/lua/LuaBinding.cpp",
       "direct": [
         {
           "site": 2356580,
@@ -13745,7 +13745,7 @@
     },
     {
       "address": 2364400,
-      "name": "FUN_002413f0",
+      "name": "LuaClass_FindByName",
       "size": 352,
       "source": null,
       "direct": [
@@ -13778,9 +13778,9 @@
     },
     {
       "address": 2379808,
-      "name": "FUN_00245020",
+      "name": "LuaFunctionTable_Insert",
       "size": 88,
-      "source": "src/unmatched/FUN_00245020.c",
+      "source": "src/engine/lua/LuaState.cpp",
       "direct": [
         {
           "site": 2379820,
@@ -13799,17 +13799,17 @@
     },
     {
       "address": 2379904,
-      "name": "FUN_00245080",
+      "name": "LuaFunctionTable_Link",
       "size": 64,
-      "source": "src/unmatched/FUN_00245080.c",
+      "source": "src/engine/lua/LuaState.cpp",
       "direct": [],
       "indirect": []
     },
     {
       "address": 2379968,
-      "name": "FUN_002450c0",
+      "name": "LuaFunctionTable_Resize",
       "size": 424,
-      "source": "src/unmatched/FUN_002450c0.c",
+      "source": "src/engine/lua/LuaState.cpp",
       "direct": [
         {
           "site": 2380020,
@@ -13858,17 +13858,17 @@
     },
     {
       "address": 2380496,
-      "name": "FUN_002452d0",
+      "name": "LuaClassTable_Link",
       "size": 64,
-      "source": "src/unmatched/FUN_002452d0.c",
+      "source": "src/engine/lua/LuaState.cpp",
       "direct": [],
       "indirect": []
     },
     {
       "address": 2380560,
-      "name": "FUN_00245310",
+      "name": "LuaClassTable_Resize",
       "size": 424,
-      "source": "src/unmatched/FUN_00245310.c",
+      "source": "src/engine/lua/LuaState.cpp",
       "direct": [
         {
           "site": 2380612,
@@ -13917,9 +13917,9 @@
     },
     {
       "address": 2385824,
-      "name": "FUN_002467a0",
+      "name": "LuaError",
       "size": 132,
-      "source": "src/unmatched/FUN_002467a0.c",
+      "source": "src/engine/lua/LuaState.cpp",
       "direct": [
         {
           "site": 2385908,

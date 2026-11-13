@@ -41,7 +41,7 @@ Exact script call-site references, message arguments, API roots and native edges
 | `0x001908f0` | `Matrix44_Copy` | 188 | 0 |
 | `0x00190a50` | `Matrix44_TranslateLocal` | 212 | 0 |
 | `0x0022e440` | `__muldi3` | 116 | 0 |
-| `0x0023c9a0` | `FUN_0023c9a0` | 416 | 0 |
-| `0x002413f0` | `FUN_002413f0` | 352 | 0 |
+| `0x0023c9a0` | `LuaType_Construct` | 416 | 0 |
+| `0x002413f0` | `LuaClass_FindByName` | 352 | 0 |
 | `0x002d6b80` | `List_InsertWords` | 220 | 0 |
 | `0x0030cb80` | `StringChunk_ReturnBlock` | 340 | 0 |

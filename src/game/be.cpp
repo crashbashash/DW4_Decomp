@@ -20,18 +20,18 @@
 extern "C" void lua_pushnumber(void *, long long);
 extern "C" long long litodp(int);
 extern "C" long long FUN_00100290(int);
-extern "C" void FUN_0023d070(char *, void *, char *);
-extern "C" void FUN_002467a0(char *, ...);
+extern "C" void LuaType_PushString(char *, void *, char *);
+extern "C" void LuaError(char *, ...);
 extern "C" long long fptodp(float);
 extern "C" int LuaAPI_Dispatch(void *L);
-extern "C" int FUN_00241930(...);
+extern "C" int LuaClass_Construct(...);
 extern "C" void *FUN_003717e0(void *arg0);
 extern "C" void FUN_0036e160(void);
 extern "C" void *Memory_AllocateBufferDirect(unsigned int size, void *pool);
 extern "C" void FUN_002ed4c0(void *ptr, void *pool);
 extern "C" void *FUN_003718d0(void *arg0);
 extern "C" void FUN_003719c0(void);
-extern "C" int FUN_0023f4f0(int, int, void *, void *, int, void *, int);
+extern "C" int LuaClass_BindFunctions(int, int, void *, void *, int, void *, int);
 extern "C" void LuaAPI_Register(int arg0);
 extern "C" void Gap__Bec__be__vfunc_21(void);
 extern "C" void Gap__Bec__be__vfunc_22(void);
@@ -226,10 +226,10 @@ extern "C" char DAT_0050d600[];
 extern "C" int DAT_0050ceb8[4];
 extern "C" int DAT_0050d7f0[4];
 extern "C" int DAT_00539f00[4];
-extern "C" void *DAT_0056de30;
+extern "C" void *g_luaGluePool;
 struct PoolAllocated {
     static void *operator new(unsigned int size, void *pool) { return Memory_AllocateBufferDirect(size, pool); }
-    static void operator delete(void *ptr, void *) { FUN_002ed4c0(ptr, DAT_0056de30); }
+    static void operator delete(void *ptr, void *) { FUN_002ed4c0(ptr, g_luaGluePool); }
 };
 struct PooledNode : PoolAllocated {
     char body[92];
@@ -424,11 +424,11 @@ int LuaAPI_Dispatch(void *L) {
     case 0x0:
         lua_pushnumber(L, FUN_00100290(SYSisJoinPlayer(a->v[0].u.i))); return 1;
     case 0x1:
-        FUN_0023d070(fn->name, L, ((char *)SYSgetPlayerName(a->v[0].u.i))); return 1;
+        LuaType_PushString(fn->name, L, ((char *)SYSgetPlayerName(a->v[0].u.i))); return 1;
     case 0x2:
         lua_pushnumber(L, litodp(SYSgetPlayerNinzu())); return 1;
     case 0x3:
-        FUN_0023d070(fn->name, L, SYSgetWeaponName(a->v[0].u.i, a->v[1].u.i)); return 1;
+        LuaType_PushString(fn->name, L, SYSgetWeaponName(a->v[0].u.i, a->v[1].u.i)); return 1;
     case 0x4:
         lua_pushnumber(L, litodp(((int)SYSgetRandom((unsigned int)(a->v[0].u.i))))); return 1;
     case 0x5:
@@ -450,7 +450,7 @@ int LuaAPI_Dispatch(void *L) {
     case 0xd:
         SYSsetGateStage((int *)(a->v[0].u.i), a->v[1].u.i); return 0;
     case 0xe:
-        FUN_0023d070(fn->name, L, ((char *)SYSgetGateStageName())); return 1;
+        LuaType_PushString(fn->name, L, ((char *)SYSgetGateStageName())); return 1;
     case 0xf:
         lua_pushnumber(L, litodp(SYSgetGateStageNo())); return 1;
     case 0x10:
@@ -478,7 +478,7 @@ int LuaAPI_Dispatch(void *L) {
     case 0x1b:
         CFLsetName(a->v[0].u.i); return 0;
     case 0x1c:
-        FUN_0023d070(fn->name, L, ((char *)CFLgetFolderName())); return 1;
+        LuaType_PushString(fn->name, L, ((char *)CFLgetFolderName())); return 1;
     case 0x1d:
         sd_29(a->v[0].u.i, a->v[1].u.i, a->v[2].u.i, a->v[3].u.i, a->v[4].u.i); return 0;
     case 0x1e:
@@ -540,7 +540,7 @@ int LuaAPI_Dispatch(void *L) {
     case 0x3a:
         lua_pushnumber(L, litodp(COUNTERget(a->v[0].u.i))); return 1;
     case 0x3b:
-        FUN_0023d070(fn->name, L, ((char *)MDLgetInfoName())); return 1;
+        LuaType_PushString(fn->name, L, ((char *)MDLgetInfoName())); return 1;
     case 0x3c:
         lua_pushnumber(L, litodp(MDLgetRamNo())); return 1;
     case 0x3d:
@@ -550,9 +550,9 @@ int LuaAPI_Dispatch(void *L) {
     case 0x3f:
         lua_pushnumber(L, litodp(MDLgetHp())); return 1;
     case 0x40:
-        FUN_0023d070(fn->name, L, MDLgetPosStr(a->v[0].u.f, a->v[1].u.f, a->v[2].u.f)); return 1;
+        LuaType_PushString(fn->name, L, MDLgetPosStr(a->v[0].u.f, a->v[1].u.f, a->v[2].u.f)); return 1;
     case 0x41:
-        FUN_0023d070(fn->name, L, ((char *)MDLgetRotStr(a->v[0].u.f, a->v[1].u.f, a->v[2].u.f))); return 1;
+        LuaType_PushString(fn->name, L, ((char *)MDLgetRotStr(a->v[0].u.f, a->v[1].u.f, a->v[2].u.f))); return 1;
     case 0x42:
         MDLaddHp(a->v[0].u.i); return 0;
     case 0x43:
@@ -564,7 +564,7 @@ int LuaAPI_Dispatch(void *L) {
     case 0x46:
         lua_pushnumber(L, litodp(MDLgetBulletKind())); return 1;
     case 0x47:
-        FUN_0023d070(fn->name, L, ((char *)MDLgetBulletName())); return 1;
+        LuaType_PushString(fn->name, L, ((char *)MDLgetBulletName())); return 1;
     case 0x48:
         lua_pushnumber(L, litodp(MDLgetBulletBoxNo())); return 1;
     case 0x49:
@@ -616,13 +616,13 @@ int LuaAPI_Dispatch(void *L) {
     case 0x60:
         lua_pushnumber(L, litodp(BLTcalcEXPUp())); return 1;
     case 0x61:
-        FUN_0023d070(fn->name, L, BLTgetAttributeStr()); return 1;
+        LuaType_PushString(fn->name, L, BLTgetAttributeStr()); return 1;
     case 0x62:
         lua_pushnumber(L, FUN_00100290(((unsigned char)BLPisHitCheck()))); return 1;
     case 0x63:
         lua_pushnumber(L, litodp(BLPgetDamageValue())); return 1;
     case 0x64:
-        FUN_0023d070(fn->name, L, ((char *)BLPgetAttackZokusei())); return 1;
+        LuaType_PushString(fn->name, L, ((char *)BLPgetAttackZokusei())); return 1;
     case 0x65:
         lua_pushnumber(L, litodp(BLPgetDamageRank(a->v[0].u.i, a->v[1].u.i))); return 1;
     case 0x66:
@@ -644,9 +644,9 @@ int LuaAPI_Dispatch(void *L) {
     case 0x6e:
         lua_pushnumber(L, litodp(PLAYERgetPos())); return 1;
     case 0x6f:
-        FUN_0023d070(fn->name, L, ((char *)PLAYERgetDataStr(a->v[0].u.i, a->v[1].u.i, a->v[2].u.f))); return 1;
+        LuaType_PushString(fn->name, L, ((char *)PLAYERgetDataStr(a->v[0].u.i, a->v[1].u.i, a->v[2].u.f))); return 1;
     case 0x70:
-        FUN_0023d070(fn->name, L, ((char *)PLAYERgetPosStr(a->v[0].u.i, a->v[1].u.f, a->v[2].u.f, a->v[3].u.f))); return 1;
+        LuaType_PushString(fn->name, L, ((char *)PLAYERgetPosStr(a->v[0].u.i, a->v[1].u.f, a->v[2].u.f, a->v[3].u.f))); return 1;
     case 0x71:
         LISsetDifficultMax(a->v[0].u.i); return 0;
     case 0x72:
@@ -654,24 +654,24 @@ int LuaAPI_Dispatch(void *L) {
     case 0x73:
         ShutDown(); return 0;
     default:
-        FUN_002467a0(DAT_0050d600, fn->p->f12, fn->f12);
+        LuaError(DAT_0050d600, fn->p->f12, fn->f12);
         return 0;
     }
 }
 
 void *FUN_003717e0(void *arg0) {
-    FUN_00241930(arg0, &DAT_0050ceb8[0], &DAT_0050d7f0[0], 0, 0, 0, 0, 0);
+    LuaClass_Construct(arg0, &DAT_0050ceb8[0], &DAT_0050d7f0[0], 0, 0, 0, 0, 0);
     *(int *)((char *)(arg0) + 88) = (int)(&DAT_00539f00[0]);
     return arg0;
 }
 
 PooledNode *FUN_00371840(void) {
     FUN_0036e160();
-    return new (DAT_0056de30) PooledNode;
+    return new (g_luaGluePool) PooledNode;
 }
 
 void *FUN_003718d0(void *arg0) {
-    FUN_00241930(arg0, &DAT_0050c908[0], 0, 0, 0, 0, 0, 0);
+    LuaClass_Construct(arg0, &DAT_0050c908[0], 0, 0, 0, 0, 0, 0);
     *(int *)((char *)(arg0) + 88) = (int)(&DAT_00539ef0[0]);
     return arg0;
 }
@@ -681,7 +681,7 @@ void FUN_003719c0(void)
 }
 
 void LuaAPI_Register(int arg0) {
-    FUN_0023f4f0(arg0, 0, (void *)&LuaAPI_Dispatch, &DAT_004c8560[0], 0x74, &DAT_0050cfc0[0], 0);
+    LuaClass_BindFunctions(arg0, 0, (void *)&LuaAPI_Dispatch, &DAT_004c8560[0], 0x74, &DAT_0050cfc0[0], 0);
 }
 
 /* Default body of slot 21, does nothing. */
