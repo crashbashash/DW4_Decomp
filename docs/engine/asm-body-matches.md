@@ -83,7 +83,7 @@ assembler treats a sequence; the notes below were measured that way and stay as 
 
 ## Large functions
 
-The largest functions have jump tables: `beNDMWLoadIntf2::vfunc_31`, 18,616 bytes, two tables; `beNDMWSaveIntf::vfunc_31`, 16,352 bytes,
+The largest functions have jump tables: `beNDMWLoadIntf2::Update`, 18,616 bytes, two tables; `beNDMWSaveIntf::vfunc_31`, 16,352 bytes,
 two tables.
 
 ### The rows they need
@@ -150,7 +150,7 @@ Shapes found on one function:
   interference node describes that draft, not every possible source form, so it does not make the
   function impossible in source.
   See [the clock recovery](stage-loading.md#clock-update).
-* `beNDMWLoadIntf2::vfunc_31`: the complete 18,616-byte update
+* `beNDMWLoadIntf2::Update`: the complete 18,616-byte update
   is in `src/game/beNDMWLoadIntf2.cpp`, including the out-of-line
   helper copies it emits, nine jump tables, exception index and sixteen cleanup
   ranges/actions. See [the full recovery](load-intf2.md#matched-source).

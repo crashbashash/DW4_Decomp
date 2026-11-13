@@ -335,7 +335,7 @@ int igAnimationCombiner_RemoveAllStates(CombinerResetView *c) {
             FUN_001ae250((void * *)&b->_animationState, 0);
             FUN_001ae1d0((void * *)&b->_transformSource, 0);
             FUN_001ae1b0(b->_q, 0.0f, 0.0f, 0.0f, 0.0f);
-            FUN_001ae1a0(b->_t, 0.0f, 0.0f, 0.0f);
+            Vec3f_Set(b->_t, 0.0f, 0.0f, 0.0f);
             b->_priority = 0;
             b->_useTranslation = 0;
             b->_lastKeyframe = 1;
@@ -355,7 +355,7 @@ int igAnimationCombiner_RemoveAllStates(CombinerResetView *c) {
     return 1;
 }
 
-void FUN_001ae1a0(void *arg0, float fparg0, float fparg1, float fparg2) {
+void Vec3f_Set(void *arg0, float fparg0, float fparg1, float fparg2) {
     *(float *)((char *)(arg0) + 0) = fparg0;
     *(float *)((char *)(arg0) + 4) = fparg1;
     *(float *)((char *)(arg0) + 8) = fparg2;

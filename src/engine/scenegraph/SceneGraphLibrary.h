@@ -5309,7 +5309,7 @@ extern "C" void FUN_001ad770(igAnimationCombiner *a);
 extern "C" int FUN_001ad860(igAnimationCombiner *arg0, igAnimationState *arg1);
 extern "C" int FUN_001ad990(CombinerBlendView *c, CombinerAnimation *anim, int combineMode, int transitionMode, int status, int *priorities, bool perBone, CombinerBinding *binding);
 extern "C" int igAnimationCombiner_RemoveAllStates(CombinerResetView *c);
-extern "C" void FUN_001ae1a0(void *arg0, float fparg0, float fparg1, float fparg2);
+extern "C" void Vec3f_Set(void *arg0, float fparg0, float fparg1, float fparg2);
 extern "C" void FUN_001ae1b0(void *arg0, float fparg0, float fparg1, float fparg2, float fparg3);
 extern "C" void **FUN_001ae1d0(void **arg0, void *arg1);
 extern "C" void **FUN_001ae250(void **arg0, igObject *arg1);
@@ -6158,7 +6158,7 @@ static inline void clearBoneInfo(CombinerBoneInfo *b) {
     FUN_001ae250((void * *)&b->_animationState, 0);
     FUN_001ae1d0((void * *)&b->_transformSource, 0);
     FUN_001ae1b0(b->_q, 0.0f, 0.0f, 0.0f, 0.0f);
-    FUN_001ae1a0(b->_t, 0.0f, 0.0f, 0.0f);
+    Vec3f_Set(b->_t, 0.0f, 0.0f, 0.0f);
     b->_priority = 0;
     b->_useTranslation = 0;
     b->_lastKeyframe = 1;

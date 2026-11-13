@@ -115,7 +115,7 @@ their own recovery. Source presence does not substitute for `make check`.
 | `0x003c9be0` | `FightCom_GetMetaEnum` | 84 | [src/game/ndmw/NdmwLibrary.cpp](../../src/game/ndmw/NdmwLibrary.cpp) |
 | `0x003e9090` | `DataList_GetData_003e9090` | 8 | [src/game/beNDMWLoadIntf2.cpp](../../src/game/beNDMWLoadIntf2.cpp) |
 | `0x003e9110` | `ObjectRef_Release_003e9110` | 68 | [src/game/beNDMWLoadIntf2.cpp](../../src/game/beNDMWLoadIntf2.cpp) |
-| `0x003e9220` | `FUN_003e9220` | 28 | [src/game/beNDMWLoadIntf2.cpp](../../src/game/beNDMWLoadIntf2.cpp) |
+| `0x003e9220` | `Vec3f_Copy` | 28 | [src/game/beNDMWLoadIntf2.cpp](../../src/game/beNDMWLoadIntf2.cpp) |
 | `0x003e9260` | `ObjectList_GetAt_003e9260` | 20 | [src/game/beNDMWLoadIntf2.cpp](../../src/game/beNDMWLoadIntf2.cpp) |
 | `0x003e9280` | `DataList_FindProperty_003e9280` | 28 | [src/game/beNDMWLoadIntf2.cpp](../../src/game/beNDMWLoadIntf2.cpp) |
 | `0x003e92a0` | `ObjectRef_Get_003e92a0` | 8 | [src/game/beNDMWLoadIntf2.cpp](../../src/game/beNDMWLoadIntf2.cpp) |

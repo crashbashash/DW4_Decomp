@@ -4952,7 +4952,7 @@
 001ad990 000528 FUN_001ad990
 001adec0 0000a4 FUN_001adec0
 001adf70 00022c igAnimationCombiner_RemoveAllStates
-001ae1a0 000010 FUN_001ae1a0
+001ae1a0 000010 Vec3f_Set
 001ae1b0 000014 FUN_001ae1b0
 001ae1d0 000078 FUN_001ae1d0
 001ae250 000078 FUN_001ae250
@@ -18418,7 +18418,7 @@
 003c2710 000020 FUN_003c2710
 003c2730 000064 beNDMWLoadIntf2Info_Register
 003c27a0 00001c beNDMWLoadIntf2Info_GetMetaObject
-003c27c0 000034 FUN_003c27c0
+003c27c0 000034 beNDMWLoadIntf2NameSel_Create
 003c2800 00004c beNDMWLoadIntf2NameSel_GetReadyMetaObject
 003c2850 00008c beNDMWLoadIntf2NameSel_GetVTable
 003c28e0 000020 FUN_003c28e0
@@ -18438,7 +18438,7 @@
 003c2fa0 000074 beNDMWLoadIntf2SelSlot_Register
 003c3020 00001c beNDMWLoadIntf2SelSlot_GetMetaObject
 003c3040 00019c beNDMWLoadIntf2SelSlot_InitFields
-003c31e0 000034 FUN_003c31e0
+003c31e0 000034 beNDMWLoadIntf2Diffselect_Create
 003c3220 00004c beNDMWLoadIntf2Diffselect_ResolveMetaObject
 003c3270 00008c beNDMWLoadIntf2Diffselect_GetVTable
 003c3300 000020 FUN_003c3300
@@ -18473,21 +18473,21 @@
 003c3f30 000074 beNDMWLoadIntf2DegiState_Register
 003c3fb0 00001c beNDMWLoadIntf2DegiState_GetMetaObject
 003c3fd0 0000e8 beNDMWLoadIntf2DegiState_InitFields
-003c40c0 000034 FUN_003c40c0
+003c40c0 000034 beNDMWLoadIntf2MakeChr_Create
 003c4100 00004c beNDMWLoadIntf2MakeChr_ResolveMetaObject
 003c4150 00008c beNDMWLoadIntf2MakeChr_GetVTable
 003c41e0 000020 FUN_003c41e0
 003c4200 00006c beNDMWLoadIntf2MakeChr_Register
 003c4270 00001c beNDMWLoadIntf2MakeChr_GetMetaObject
 003c4290 000124 beNDMWLoadIntf2MakeChr_InitFields
-003c43c0 000034 FUN_003c43c0
+003c43c0 000034 beNDMWLoadIntf2CtrlData_Create
 003c4400 00004c beNDMWLoadIntf2CtrlData_ResolveMetaObject
 003c4450 00008c beNDMWLoadIntf2CtrlData_GetVTable
 003c44e0 000020 FUN_003c44e0
 003c4500 00006c beNDMWLoadIntf2CtrlData_Register
 003c4570 00001c beNDMWLoadIntf2CtrlData_GetMetaObject
 003c4590 000110 beNDMWLoadIntf2CtrlData_InitFields
-003c46a0 000054 FUN_003c46a0
+003c46a0 000054 LoadIntf2Message_GetMetaEnum
 003c4700 000034 FUN_003c4700
 003c4740 000044 FUN_003c4740
 003c4790 00004c beNDMWLoadIntf2_ResolveMetaObject
@@ -19001,11 +19001,11 @@
 003d9dd0 00000c Gap__Bec__beNDMWStatus__vfunc_20 Gap::Bec::beNDMWStatus::vfunc_20
 003d9de0 000030 beNDMWLoadIntf2DegiState__Init beNDMWLoadIntf2DegiState::Init
 003d9e10 000024 beNDMWLoadIntf2DegiState__RequestOpen beNDMWLoadIntf2DegiState::RequestOpen
-003d9e40 000024 FUN_003d9e40
+003d9e40 000024 beNDMWLoadIntf2DegiState__RequestChange beNDMWLoadIntf2DegiState::RequestChange
 003d9e70 000020 beNDMWLoadIntf2DegiState__RequestClose beNDMWLoadIntf2DegiState::RequestClose
 003d9e90 000024 beNDMWLoadIntf2DegiState__RequestConfirmClose beNDMWLoadIntf2DegiState::RequestConfirmClose
-003d9ec0 000724 FUN_003d9ec0
-003da5f0 0001c8 FUN_003da5f0
+003d9ec0 000724 beNDMWLoadIntf2DegiState__DrawStatusText beNDMWLoadIntf2DegiState::DrawStatusText
+003da5f0 0001c8 beNDMWLoadIntf2DegiState__ClearStatusText beNDMWLoadIntf2DegiState::ClearStatusText
 003da7c0 0007e8 beNDMWLoadIntf2DegiState__Update beNDMWLoadIntf2DegiState::Update
 003dafb0 000034 beNDMWLoadIntf2DataSelIntf__Init beNDMWLoadIntf2DataSelIntf::Init
 003daff0 000070 beNDMWLoadIntf2DataSelIntf__ClearStatesFrom beNDMWLoadIntf2DataSelIntf::ClearStatesFrom
@@ -19022,9 +19022,9 @@
 003ddb10 000070 beNDMWLoadIntf2Diffselect__Init beNDMWLoadIntf2Diffselect::Init
 003ddb80 0006d4 beNDMWLoadIntf2Diffselect__Update beNDMWLoadIntf2Diffselect::Update
 003de260 00021c beNDMWLoadIntf2NameSel__Init beNDMWLoadIntf2NameSel::Init
-003de480 00031c FUN_003de480
-003de7a0 0001ec FUN_003de7a0
-003de990 0005d4 FUN_003de990
+003de480 00031c beNDMWLoadIntf2NameSel__DrawRowLetters beNDMWLoadIntf2NameSel::DrawRowLetters
+003de7a0 0001ec beNDMWLoadIntf2NameSel__DrawColumnLetters beNDMWLoadIntf2NameSel::DrawColumnLetters
+003de990 0005d4 beNDMWLoadIntf2NameSel__DrawEnteredName beNDMWLoadIntf2NameSel::DrawEnteredName
 003def70 000010 beNDMWLoadIntf2NameSel__SetAnswer beNDMWLoadIntf2NameSel::SetAnswer
 003def80 001c00 beNDMWLoadIntf2NameSel__Update beNDMWLoadIntf2NameSel::Update
 003e0b80 000028 beNDMWLoadIntf2SelSlot__Reset beNDMWLoadIntf2SelSlot::Reset
@@ -19044,8 +19044,8 @@
 003e4480 000048 beNDMWLoadIntf2ComMdlCtrl__IsRunning beNDMWLoadIntf2ComMdlCtrl::IsRunning
 003e44d0 000014 beNDMWLoadIntf2ComMdlCtrl__IsCloseQueueEmpty beNDMWLoadIntf2ComMdlCtrl::IsCloseQueueEmpty
 003e44f0 0001b4 beNDMWLoadIntf2ComMdlCtrl__Poll beNDMWLoadIntf2ComMdlCtrl::Poll
-003e46b0 00009c Gap__Bec__beNDMWLoadIntf2__vfunc_32 Gap::Bec::beNDMWLoadIntf2::vfunc_32
-003e4750 0048b8 Gap__Bec__beNDMWLoadIntf2__vfunc_31 Gap::Bec::beNDMWLoadIntf2::vfunc_31
+003e46b0 00009c beNDMWLoadIntf2__ResolvePadManager beNDMWLoadIntf2::ResolvePadManager
+003e4750 0048b8 beNDMWLoadIntf2__Update beNDMWLoadIntf2::Update
 003e9010 000080 ObjectRef_Destruct_003e9010
 003e9090 000008 DataList_GetData_003e9090
 003e90a0 000008 beNDMWLoadSavePlWork__SetIsCtrl beNDMWLoadSavePlWork::SetIsCtrl
@@ -19055,7 +19055,7 @@
 003e90f0 000014 DataList_GetWordAt_003e90f0
 003e9110 000044 ObjectRef_Release_003e9110
 003e9160 0000bc ObjectList_SetAtRetained_003e9160
-003e9220 00001c FUN_003e9220
+003e9220 00001c Vec3f_Copy
 003e9240 000014 DataList_GetWordAt_003e9240
 003e9260 000014 ObjectList_GetAt_003e9260
 003e9280 00001c DataList_FindProperty_003e9280
@@ -19065,9 +19065,9 @@
 003e9360 000008 AllocatorValue_Make_003e9360
 003e9370 000038 Memory_SelectAllocator_003e9370
 003e93b0 000008 ObjectRef_Get_003e93b0
-003e93c0 00000c Gap__Bec__beNDMWLoadIntf2__vfunc_30 Gap::Bec::beNDMWLoadIntf2::vfunc_30
-003e93d0 000058 Gap__Bec__beNDMWLoadIntf2__vfunc_29 Gap::Bec::beNDMWLoadIntf2::vfunc_29
-003e9430 002050 Gap__Bec__beNDMWLoadIntf2__vfunc_34 Gap::Bec::beNDMWLoadIntf2::vfunc_34
+003e93c0 00000c beNDMWLoadIntf2__GetInfoMeta beNDMWLoadIntf2::GetInfoMeta
+003e93d0 000058 beNDMWLoadIntf2__RegisterReceivers beNDMWLoadIntf2::RegisterReceivers
+003e9430 002050 beNDMWLoadIntf2__OnMessage beNDMWLoadIntf2::OnMessage
 003eb480 000080 FUN_003eb480
 003eb500 000080 FUN_003eb500
 003eb580 000080 FUN_003eb580
@@ -19079,7 +19079,7 @@
 003eb880 000080 FUN_003eb880
 003eb900 000080 FUN_003eb900
 003eb980 000080 FUN_003eb980
-003eba00 00000c Gap__Bec__beNDMWLoadIntf2__vfunc_20 Gap::Bec::beNDMWLoadIntf2::vfunc_20
+003eba00 00000c beNDMWLoadIntf2__GetMeta beNDMWLoadIntf2::GetMeta
 003eba10 0002c4 TextOrder_Configure
 003ebce0 000088 TextOrder_PublishLine
 003ebd70 000048 TextOrder_ConfigureFont
