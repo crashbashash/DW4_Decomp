@@ -35,9 +35,9 @@ extern "C" int beMessenger_AppendVec3(...);
 extern "C" int beMessenger_GetObjectCount(...);
 extern "C" int igObject_GetAllocator(...);
 extern "C" int Matrix44_GetTranslation(...);
-extern "C" int FUN_003a7a20(...);
-extern "C" int FUN_003a7e90(...);
-extern "C" int FUN_003a8580(...);
+extern "C" int beBaseInfoRam_StartTimer(...);
+extern "C" int beBaseInfoRam_IsTimerExpired(...);
+extern "C" int beBaseInfoRam_RemoveTimer(...);
 extern "C" long long __divdi3(...);
 extern "C" int FUN_003c03e0(...);
 extern "C" int strcmp(...);
@@ -560,11 +560,11 @@ void Gap__Bec__beNDMWMdlPEBase__vfunc_46(beNDMWMdlPEBase *self, Model *obj) {
         if (w->_messenger == 0) w->_messenger = self->_messenger;
         if (w->_isOnCtrl != 0 && W(_timerList)->data[0] != 0) {
             if (((BList *)w->_isFirstList)->data[0] != 0) {
-                FUN_003a7a20(obj, &DAT_0051d3f0[0], 2000000000);
+                beBaseInfoRam_StartTimer(obj, &DAT_0051d3f0[0], 2000000000);
                 { int v_ = W(_timerList)->data[0] - 1; SETI(w->_timerList, 0, v_) }
                 SETB(w->_isFirstList, 0, GPR_00554a78)
             }
-            if (FUN_003a7e90(obj, &DAT_0051d3f0[0]) != 0) {
+            if (beBaseInfoRam_IsTimerExpired(obj, &DAT_0051d3f0[0]) != 0) {
                 Param *hp = (Param *)w->_hp;
                 int v = hp->value - w->_poisonDamage;
                 if (v >= 0) { v = (int)v; } else { v = 0; } hp->value = v;
@@ -580,54 +580,54 @@ void Gap__Bec__beNDMWMdlPEBase__vfunc_46(beNDMWMdlPEBase *self, Model *obj) {
                 if (hp->value <= 0) {
                     if (w->_isPlayer != 0) {
                         CALLV(&DAT_0051d448[0]);
-                        FUN_003a8580(obj, &DAT_0051d3f0[0]);
+                        beBaseInfoRam_RemoveTimer(obj, &DAT_0051d3f0[0]);
                         SETI(w->_timerList, 0, DAT_004cfcc8[0])
                     } else {
                         hp->value = 1;
-                        FUN_003a8580(obj, &DAT_0051d3f0[0]);
+                        beBaseInfoRam_RemoveTimer(obj, &DAT_0051d3f0[0]);
                         SETI(w->_timerList, 0, DAT_004cfcd0[0])
                     }
                 } else {
                     { int v_ = W(_timerList)->data[0] - 1; SETI(w->_timerList, 0, v_) }
                     if (W(_timerList)->data[0] <= 0) {
-                        FUN_003a8580(obj, &DAT_0051d3f0[0]);
+                        beBaseInfoRam_RemoveTimer(obj, &DAT_0051d3f0[0]);
                         SETI(w->_timerList, 0, DAT_004cfcd8[0])
                     } else {
-                        FUN_003a7a20(obj, &DAT_0051d3f0[0], 2000000000);
+                        beBaseInfoRam_StartTimer(obj, &DAT_0051d3f0[0], 2000000000);
                     }
                 }
             }
         }
         if (w->_isOnCtrl != 0 && W(_timerList)->data[8] != 0) {
             if (((BList *)w->_isFirstList)->data[8] != 0) {
-                FUN_003a7a20(obj, &DAT_0051d450[0], MS(W(_timerList)->data[8]));
+                beBaseInfoRam_StartTimer(obj, &DAT_0051d450[0], MS(W(_timerList)->data[8]));
                 if (strcmp(w->_seqCodeName, &DAT_0051d458[0]) != 0) CALLV(&DAT_0051d458[0]);
                 SETB(w->_isFirstList, 8, GPR_00554a7c)
             }
-            if (FUN_003a7e90(obj, &DAT_0051d450[0]) != 0) {
+            if (beBaseInfoRam_IsTimerExpired(obj, &DAT_0051d450[0]) != 0) {
                 CALLV(&DAT_0051d460[0]);
-                FUN_003a8580(obj, &DAT_0051d450[0]);
+                beBaseInfoRam_RemoveTimer(obj, &DAT_0051d450[0]);
                 SETI(w->_timerList, 8, DAT_004cfce0[0])
             }
         }
         if (w->_isOnCtrl != 0 && W(_timerList)->data[9] != 0 && strcmp(w->_seqCodeName, &DAT_0051d468[0]) == 0) {
             if (((BList *)w->_isFirstList)->data[9] != 0) {
-                FUN_003a7a20(obj, &DAT_0051d470[0], MS(W(_timerList)->data[9]));
+                beBaseInfoRam_StartTimer(obj, &DAT_0051d470[0], MS(W(_timerList)->data[9]));
                 SETB(w->_isFirstList, 9, GPR_00554a80)
             }
-            if (FUN_003a7e90(obj, &DAT_0051d470[0]) != 0) {
+            if (beBaseInfoRam_IsTimerExpired(obj, &DAT_0051d470[0]) != 0) {
                 SETI(w->_timerList, 9, DAT_004cfce8[0])
-                FUN_003a8580(obj, &DAT_0051d470[0]);
+                beBaseInfoRam_RemoveTimer(obj, &DAT_0051d470[0]);
                 CALLV(&DAT_0051d460[0]);
             }
         }
         if (w->_isOnCtrl != 0 && W(_timerList)->data[3] != 0) {
             if (((BList *)w->_isFirstList)->data[3] != 0) {
-                FUN_003a7a20(obj, &DAT_0051d478[0], MS(W(_timerList)->data[3]));
+                beBaseInfoRam_StartTimer(obj, &DAT_0051d478[0], MS(W(_timerList)->data[3]));
                 SETB(w->_isFirstList, 3, GPR_00554a84)
             }
-            if (FUN_003a7e90(obj, &DAT_0051d478[0]) != 0) {
-                FUN_003a8580(obj, &DAT_0051d478[0]);
+            if (beBaseInfoRam_IsTimerExpired(obj, &DAT_0051d478[0]) != 0) {
+                beBaseInfoRam_RemoveTimer(obj, &DAT_0051d478[0]);
                 SETI(w->_timerList, 3, DAT_004cfcf0[0])
                 CALLV(&DAT_0051d460[0]);
             } else {
@@ -647,11 +647,11 @@ void Gap__Bec__beNDMWMdlPEBase__vfunc_46(beNDMWMdlPEBase *self, Model *obj) {
         }
         if (w->_isOnCtrl != 0 && W(_timerList)->data[1] != 0) {
             if (((BList *)w->_isFirstList)->data[1] != 0) {
-                FUN_003a7a20(obj, &DAT_0051d480[0], MS(W(_timerList)->data[1]));
+                beBaseInfoRam_StartTimer(obj, &DAT_0051d480[0], MS(W(_timerList)->data[1]));
                 SETB(w->_isFirstList, 1, GPR_00554a88)
             }
-            if (FUN_003a7e90(obj, &DAT_0051d480[0]) != 0) {
-                FUN_003a8580(obj, &DAT_0051d480[0]);
+            if (beBaseInfoRam_IsTimerExpired(obj, &DAT_0051d480[0]) != 0) {
+                beBaseInfoRam_RemoveTimer(obj, &DAT_0051d480[0]);
                 SETI(w->_timerList, 1, DAT_004cfcf8[0])
                 SETI(w->_downDataList, 0, DAT_004cfd00[0])
                 SETI(w->_downDataList, 1, DAT_004cfd08[0])
@@ -662,11 +662,11 @@ void Gap__Bec__beNDMWMdlPEBase__vfunc_46(beNDMWMdlPEBase *self, Model *obj) {
         }
         if (w->_isOnCtrl != 0 && W(_timerList)->data[2] != 0) {
             if (((BList *)w->_isFirstList)->data[2] != 0) {
-                FUN_003a7a20(obj, &DAT_0051d488[0], MS(W(_timerList)->data[2]));
+                beBaseInfoRam_StartTimer(obj, &DAT_0051d488[0], MS(W(_timerList)->data[2]));
                 SETB(w->_isFirstList, 2, GPR_00554a8c)
             }
-            if (FUN_003a7e90(obj, &DAT_0051d488[0]) != 0) {
-                FUN_003a8580(obj, &DAT_0051d488[0]);
+            if (beBaseInfoRam_IsTimerExpired(obj, &DAT_0051d488[0]) != 0) {
+                beBaseInfoRam_RemoveTimer(obj, &DAT_0051d488[0]);
                 SETI(w->_timerList, 2, DAT_004cfd20[0])
                 SETI(w->_downDataList, 4, DAT_004cfd28[0])
                 SETI(w->_downDataList, 5, DAT_004cfd30[0])
@@ -675,11 +675,11 @@ void Gap__Bec__beNDMWMdlPEBase__vfunc_46(beNDMWMdlPEBase *self, Model *obj) {
         }
         if (w->_isOnCtrl != 0 && W(_timerList)->data[5] != 0) {
             if (((BList *)w->_isFirstList)->data[5] != 0) {
-                FUN_003a7a20(obj, &DAT_0051d490[0], MS(W(_timerList)->data[5]));
+                beBaseInfoRam_StartTimer(obj, &DAT_0051d490[0], MS(W(_timerList)->data[5]));
                 SETB(w->_isFirstList, 5, GPR_00554a90)
             }
-            if (FUN_003a7e90(obj, &DAT_0051d490[0]) != 0) {
-                FUN_003a8580(obj, &DAT_0051d490[0]);
+            if (beBaseInfoRam_IsTimerExpired(obj, &DAT_0051d490[0]) != 0) {
+                beBaseInfoRam_RemoveTimer(obj, &DAT_0051d490[0]);
                 SETI(w->_timerList, 5, DAT_004cfd38[0])
                 SETI(w->_upDataList, 0, DAT_004cfd40[0])
                 SETI(w->_upDataList, 1, DAT_004cfd48[0])
@@ -690,11 +690,11 @@ void Gap__Bec__beNDMWMdlPEBase__vfunc_46(beNDMWMdlPEBase *self, Model *obj) {
         }
         if (w->_isOnCtrl != 0 && W(_timerList)->data[6] != 0) {
             if (((BList *)w->_isFirstList)->data[6] != 0) {
-                FUN_003a7a20(obj, &DAT_0051d498[0], MS(W(_timerList)->data[6]));
+                beBaseInfoRam_StartTimer(obj, &DAT_0051d498[0], MS(W(_timerList)->data[6]));
                 SETB(w->_isFirstList, 6, GPR_00554a94)
             }
-            if (FUN_003a7e90(obj, &DAT_0051d498[0]) != 0) {
-                FUN_003a8580(obj, &DAT_0051d498[0]);
+            if (beBaseInfoRam_IsTimerExpired(obj, &DAT_0051d498[0]) != 0) {
+                beBaseInfoRam_RemoveTimer(obj, &DAT_0051d498[0]);
                 SETI(w->_timerList, 6, DAT_004cfd60[0])
                 SETI(w->_upDataList, 4, DAT_004cfd68[0])
                 SETI(w->_upDataList, 5, DAT_004cfd70[0])
@@ -704,11 +704,11 @@ void Gap__Bec__beNDMWMdlPEBase__vfunc_46(beNDMWMdlPEBase *self, Model *obj) {
         }
         if (w->_isOnCtrl != 0 && W(_timerList)->data[4] != 0) {
             if (((BList *)w->_isFirstList)->data[4] != 0) {
-                FUN_003a7a20(obj, &DAT_0051d4a0[0], MS(W(_timerList)->data[4]));
+                beBaseInfoRam_StartTimer(obj, &DAT_0051d4a0[0], MS(W(_timerList)->data[4]));
                 SETB(w->_isFirstList, 4, GPR_00554a98)
             }
-            if (FUN_003a7e90(obj, &DAT_0051d4a0[0]) != 0) {
-                FUN_003a8580(obj, &DAT_0051d4a0[0]);
+            if (beBaseInfoRam_IsTimerExpired(obj, &DAT_0051d4a0[0]) != 0) {
+                beBaseInfoRam_RemoveTimer(obj, &DAT_0051d4a0[0]);
                 SETI(w->_timerList, 4, DAT_004cfd80[0])
                 SETI(w->_upDataList, 7, DAT_004cfd88[0])
                 SETI(w->_upDataList, 8, DAT_004cfd90[0])
@@ -720,17 +720,17 @@ void Gap__Bec__beNDMWMdlPEBase__vfunc_46(beNDMWMdlPEBase *self, Model *obj) {
         if (w->_isOnCtrl != 0 && W(_timerList)->data[7] != 0) {
             if (((BList *)w->_isFirstList)->data[7] != 0) {
                 SETI(w->_downDataList, 6, DAT_004cfda8[0])
-                FUN_003a7a20(obj, &DAT_0051d4a8[0], 0);
+                beBaseInfoRam_StartTimer(obj, &DAT_0051d4a8[0], 0);
                 SETB(w->_isFirstList, 7, GPR_00554a9c)
             }
-            if (FUN_003a7e90(obj, &DAT_0051d4a8[0]) != 0) {
+            if (beBaseInfoRam_IsTimerExpired(obj, &DAT_0051d4a8[0]) != 0) {
                 int t120;
                 { List *L_ = W(_downDataList); int v_ = L_->data[6] + 4; SETI(L_, 6, v_) }
                 beMessenger_SelectGroup(self->_messenger, &DAT_0051d4b0[0]);
                 beMessenger_AppendInt(self->_messenger, obj->id);
                 beMessenger_DispatchSelected(self->_messenger, &DAT_0051d4b8[0]);
                 t120 = igProperty_GetRecord(((int)beMessenger_GetObject(self->_messenger, 0)), &DAT_0051d4c8[0])->value * 120;
-                FUN_003a7a20(obj, &DAT_0051d4a8[0], MS(t120));
+                beBaseInfoRam_StartTimer(obj, &DAT_0051d4a8[0], MS(t120));
                 FUN_00445c60(self, (A1 *)obj, w);
             }
         }
@@ -823,7 +823,7 @@ void FUN_00445200(beNDMWMdlPEBase *arg0, beBaseInfoRam *arg1) {
         }
         if (((igIntList *)st->_timerList)->_count != 0) {
             if (((int *)((igIntList *)st->_timerList)->_data)[8] != 0 && strcmp((char *)st->_seqCodeName, &DAT_0051d458[0]) != 0) {
-                FUN_003a8580(arg1, &DAT_0051d450[0]);
+                beBaseInfoRam_RemoveTimer(arg1, &DAT_0051d450[0]);
                 SETB_445200((igUnsignedCharList *)st->_isFirstList, 8, GPR_00554aa0)
                 SETI_445200((igIntList *)st->_timerList, 8, DAT_004cfdc8[0])
             }
@@ -833,7 +833,7 @@ void FUN_00445200(beNDMWMdlPEBase *arg0, beBaseInfoRam *arg1) {
                     return;
                 }
                 if (strcmp((char *)st->_seqCodeName, &DAT_0051d468[0]) != 0) {
-                    FUN_003a8580(arg1, &DAT_0051d470[0]);
+                    beBaseInfoRam_RemoveTimer(arg1, &DAT_0051d470[0]);
                     SETB_445200((igUnsignedCharList *)st->_isFirstList, 9, GPR_00554aa4)
                     SETI_445200((igIntList *)st->_timerList, 9, DAT_004cfdd0[0])
                     beMessenger_SendNamed(arg0->_messenger, &DAT_0051d3a8[0], DAT_004cfc74[0], ((int *)((igIntList *)st->_dispRamNoList)->_data)[9], &DAT_0051d3e8[0]);
@@ -1119,22 +1119,22 @@ int Gap__Bec__beNDMWMdlPEBase__vfunc_47(beNDMWMdlPEBase *self, Model *obj, int n
     }
     case 14:
         if (w != 0 && w->_dispRamNoList != 0) {
-            FUN_003a8580(obj, &DAT_0051d3f0[0]);
+            beBaseInfoRam_RemoveTimer(obj, &DAT_0051d3f0[0]);
             SETB(w->_isFirstList, 0, GPR_00554adc)
             SETI(w->_timerList, 0, DAT_004cfe18[0])
-            FUN_003a8580(obj, &DAT_0051d480[0]);
+            beBaseInfoRam_RemoveTimer(obj, &DAT_0051d480[0]);
             SETB(w->_isFirstList, 1, GPR_00554ae0)
             SETI(w->_timerList, 1, DAT_004cfe20[0])
-            FUN_003a8580(obj, &DAT_0051d488[0]);
+            beBaseInfoRam_RemoveTimer(obj, &DAT_0051d488[0]);
             SETB(w->_isFirstList, 2, GPR_00554ae4)
             SETI(w->_timerList, 2, DAT_004cfe28[0])
-            FUN_003a8580(obj, &DAT_0051d490[0]);
+            beBaseInfoRam_RemoveTimer(obj, &DAT_0051d490[0]);
             SETB(w->_isFirstList, 5, GPR_00554ae8)
             SETI(w->_timerList, 5, DAT_004cfe30[0])
-            FUN_003a8580(obj, &DAT_0051d498[0]);
+            beBaseInfoRam_RemoveTimer(obj, &DAT_0051d498[0]);
             SETB(w->_isFirstList, 6, GPR_00554aec)
             SETI(w->_timerList, 6, DAT_004cfe38[0])
-            FUN_003a8580(obj, &DAT_0051d4a0[0]);
+            beBaseInfoRam_RemoveTimer(obj, &DAT_0051d4a0[0]);
             SETB(w->_isFirstList, 4, GPR_00554af0)
             SETI(w->_timerList, 4, DAT_004cfe40[0])
             if (w->_upDataList != 0) { FILLI(_upDataList, DAT_004cfe48) }
@@ -1143,13 +1143,13 @@ int Gap__Bec__beNDMWMdlPEBase__vfunc_47(beNDMWMdlPEBase *self, Model *obj, int n
         }
     case 13:
         if (w != 0 && w->_dispRamNoList != 0) {
-            FUN_003a8580(obj, &DAT_0051d450[0]);
+            beBaseInfoRam_RemoveTimer(obj, &DAT_0051d450[0]);
             SETB(w->_isFirstList, 8, GPR_00554af4)
             SETI(w->_timerList, 8, DAT_004cfe58[0])
-            FUN_003a8580(obj, &DAT_0051d470[0]);
+            beBaseInfoRam_RemoveTimer(obj, &DAT_0051d470[0]);
             SETB(w->_isFirstList, 9, GPR_00554af8)
             SETI(w->_timerList, 9, DAT_004cfe60[0])
-            FUN_003a8580(obj, &DAT_0051d478[0]);
+            beBaseInfoRam_RemoveTimer(obj, &DAT_0051d478[0]);
             SETB(w->_isFirstList, 3, GPR_00554afc)
             SETI(w->_timerList, 3, DAT_004cfe68[0])
             VC(&DAT_0051d460[0]);
@@ -1243,7 +1243,7 @@ void FUN_00447b40(beNDMWMdlPEBaseInfoWork *owner, void *arg)
     igDataList *list;
     int n;
 
-    FUN_003a8580(arg, ((const char *)DAT_0051d3f0));
+    beBaseInfoRam_RemoveTimer(arg, ((const char *)DAT_0051d3f0));
     list = (igDataList *)owner->_timerList;
     n = list->_count;
     if (n != 0 && 0 < n) {

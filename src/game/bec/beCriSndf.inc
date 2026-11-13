@@ -1,4 +1,4 @@
-void FUN_00367490(int arg0) {
+void beCriSndf_Create(int arg0) {
     FUN_003675b0();
     igMetaObject_CreateInstance(*(int *)0x589AB0, arg0);
 }

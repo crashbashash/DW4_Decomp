@@ -39,8 +39,8 @@ extern "C" void * FUN_002eb010(...);
 extern "C" void *FUN_00354a60(void *);
 extern "C" int FUN_00393c80(void *, void *, void *, void *, void *);
 extern "C" int beModelCtrlSubCom_AddHitBox(int, void *, int, int);
-extern "C" int FUN_003a7a20(void *, void *, int);
-extern "C" int FUN_003a7e90(void *, void *);
+extern "C" int beBaseInfoRam_StartTimer(void *, void *, int);
+extern "C" int beBaseInfoRam_IsTimerExpired(void *, void *);
 extern "C" void StringChunk_ReleaseHeader(...);
 extern "C" void * StringPool_Construct(...);
 extern "C" const char * StringPool_Intern(...);
@@ -511,7 +511,7 @@ void Gap__Bec__beNDMWMdlPlayer__vfunc_38(beNDMWMdlPlayer *arg0, PlayerArg *arg1)
                     beMessenger_AppendInt(arg0->_messenger, arg1->id);
                     beMessenger_SetRunCheck(arg0->_messenger, 1);
                     beMessenger_DispatchSelected(arg0->_messenger, DAT_005161e8);
-                    if (beMessenger_GetBoolCount(arg0->_messenger) == 0 && FUN_003a7e90(arg1, DAT_005161f0) != 0) {
+                    if (beMessenger_GetBoolCount(arg0->_messenger) == 0 && beBaseInfoRam_IsTimerExpired(arg1, DAT_005161f0) != 0) {
                         int lv;
                         int q;
                         if (full) {
@@ -523,7 +523,7 @@ void Gap__Bec__beNDMWMdlPlayer__vfunc_38(beNDMWMdlPlayer *arg0, PlayerArg *arg1)
                             SET_KEYNAME(w, DAT_00516208)
                         }
                         lv = igProperty_GetRecord(((int *)((IntList *)((beNDMWGameRam *)arg0->_gameRam)->_playerDataListList)->data)[arg1->id], DAT_00516218)[3];
-                        FUN_003a7a20(arg1, DAT_005161f0, __divdi3((long long)lv * 1000000000, 0x3C));
+                        beBaseInfoRam_StartTimer(arg1, DAT_005161f0, __divdi3((long long)lv * 1000000000, 0x3C));
                         q = (lv - 22) / 4;
                         beMessenger_SendNamed(arg0->_messenger, DAT_00516228, DAT_00516238, arg1->id, (void *)DAT_004cc780[q]);
                     }

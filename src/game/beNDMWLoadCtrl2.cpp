@@ -33,8 +33,8 @@ extern "C" int beMessenger_AppendObject(...);
 extern "C" int beMessenger_SelectGroup(...);
 extern "C" int beMessenger_SendNamed(...);
 extern "C" int beMessenger_GetBool(int, int);
-extern "C" int FUN_003a7a20(int, void *, unsigned long long);
-extern "C" int FUN_003a7e90(int, int *);
+extern "C" int beBaseInfoRam_StartTimer(int, void *, unsigned long long);
+extern "C" int beBaseInfoRam_IsTimerExpired(int, int *);
 extern "C" int FUN_00236f80(...);
 extern "C" int FUN_00382eb0(...);
 extern "C" void *FUN_003c6360(...);
@@ -1045,12 +1045,12 @@ int FUN_003ed2e0(beNDMWLoadCtrl2CommonIntf *arg0, int arg1, int arg2, int arg3, 
         break;
     case 2:
         FUN_003f1460((beNDMWMcUtilCtrl *)arg0->_mcUtilCtrl, 0, arg3);
-        FUN_003a7a20(arg0->_inforam, &DAT_00517e38[0], 0xB2D05E00ULL);
+        beBaseInfoRam_StartTimer(arg0->_inforam, &DAT_00517e38[0], 0xB2D05E00ULL);
         s0 += 1;
         break;
     case 3:
         if (MCSLOT(arg0, arg3)->_isConnect == 1) {
-            if ((FUN_003a7e90(arg0->_inforam, &DAT_00517e38[0]) & 0xFF) == 1) {
+            if ((beBaseInfoRam_IsTimerExpired(arg0->_inforam, &DAT_00517e38[0]) & 0xFF) == 1) {
                 s0 += 1;
                 goto L4;
             }
@@ -1223,12 +1223,12 @@ int FUN_003edc20(beNDMWLoadCtrl2CommonIntf *arg0, int arg1, int arg2, int arg3, 
     case 0:
         FUN_003f0d60((O *)(PLW(arg0, arg1)->_haveSaveData), ((C *)MCU(arg0)->_svData)->f8, arg4, (E_3f0d60 *)(((int *)((beNDMWDegiDataList *)arg0->_gameUseData)->_data)[arg1]));
         FUN_003f1460((beNDMWMcUtilCtrl *)arg0->_mcUtilCtrl, 5, arg3);
-        FUN_003a7a20(arg0->_inforam, &DAT_00517e48[0], 0xB2D05E00ULL);
+        beBaseInfoRam_StartTimer(arg0->_inforam, &DAT_00517e48[0], 0xB2D05E00ULL);
         s0 += 1;
         break;
     case 1:
         if (MCSLOT(arg0, arg3)->_isConnect == 1) {
-            if ((FUN_003a7e90(arg0->_inforam, &DAT_00517e48[0]) & 0xFF) == 1) {
+            if ((beBaseInfoRam_IsTimerExpired(arg0->_inforam, &DAT_00517e48[0]) & 0xFF) == 1) {
                 s0 += 1;
                 goto L2;
             }

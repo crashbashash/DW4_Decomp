@@ -28,6 +28,7 @@ docs/engine/messenger-dispatch.md
 docs/engine/model-ctrl-sub-commands.md
 docs/engine/model-format.md
 docs/engine/model-sequence-waits.md
+docs/engine/movie-controller.md
 docs/engine/near-miss-shapes-player-vfunc44.md
 docs/engine/p2-lighting.md
 docs/engine/p2-renderer.md

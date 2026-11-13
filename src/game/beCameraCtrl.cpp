@@ -29,15 +29,15 @@ extern "C" int FUN_0018ab70(void *, int, float *);
 extern "C" int Matrix44_Copy(void *, void *);
 extern "C" void * FUN_00236f80(...);
 extern "C" int FUN_00463fd0(...);
-extern "C" int FUN_003a8580(...);
+extern "C" int beBaseInfoRam_RemoveTimer(...);
 extern "C" void *FUN_00192f00(float *, float, float *, float *);
 extern "C" int FUN_001925f0(float *, void *);
 extern "C" void *FUN_00192cc0(float *, float, float *, float *);
 extern "C" int FUN_00191770(void *, float *);
-extern "C" unsigned char FUN_003a7d80(...);
-extern "C" int FUN_003a7a20(...);
-extern "C" float FUN_003a8140(void *, void *);
-extern "C" int FUN_003a7e90(...);
+extern "C" unsigned char beBaseInfoRam_HasTimer(...);
+extern "C" int beBaseInfoRam_StartTimer(...);
+extern "C" float beBaseInfoRam_GetTimerFrameDelta(void *, void *);
+extern "C" int beBaseInfoRam_IsTimerExpired(...);
 extern "C" int __fixsfdi(float);
 extern "C" int ObjectList_RemoveFirstRetained(...);
 extern "C" int FUN_001b1cf0(...);
@@ -339,7 +339,7 @@ void FUN_00378ed0(beCameraCtrl *self, beBaseInfoRam *act) {
                 self->_cameraOld = self->_cameraNow;
                 Matrix44_Copy(XFORM(sys->_eyePosList, 0)->_m, XFORM(sys->_eyePosList, self->_cameraNow)->_m);
                 Matrix44_Copy(XFORM(sys->_intPosList, 0)->_m, XFORM(sys->_intPosList, self->_cameraNow)->_m);
-                FUN_003a8580(act, &DAT_0050e218[0]);
+                beBaseInfoRam_RemoveTimer(act, &DAT_0050e218[0]);
             } else {
                 float t = F(self->_cameraNowFrame) / 120.0f;
                 float *s1;
@@ -369,15 +369,15 @@ void FUN_00378ed0(beCameraCtrl *self, beBaseInfoRam *act) {
                     FUN_00191770(s6, q1);
                     j += 1;
                 } while (j < 2);
-                if (!(FUN_003a7d80(act, &DAT_0050e218[0]) & 0xFF)) {
-                    FUN_003a7a20(act, &DAT_0050e218[0], 0);
+                if (!(beBaseInfoRam_HasTimer(act, &DAT_0050e218[0]) & 0xFF)) {
+                    beBaseInfoRam_StartTimer(act, &DAT_0050e218[0], 0);
                 }
                 if (self->_isPosChange == 0) {
                     float cur = F(self->_cameraNowFrame);
-                    F(self->_cameraNowFrame) = cur + 1.5f * FUN_003a8140(act, &DAT_0050e218[0]);
+                    F(self->_cameraNowFrame) = cur + 1.5f * beBaseInfoRam_GetTimerFrameDelta(act, &DAT_0050e218[0]);
                 } else {
                     float cur2 = F(self->_cameraNowFrame);
-                    F(self->_cameraNowFrame) = cur2 + FUN_003a8140(act, &DAT_0050e218[0]);
+                    F(self->_cameraNowFrame) = cur2 + beBaseInfoRam_GetTimerFrameDelta(act, &DAT_0050e218[0]);
                 }
             }
         }
@@ -413,19 +413,19 @@ void FUN_00378ed0(beCameraCtrl *self, beBaseInfoRam *act) {
                         Matrix44_SetTranslation(mp, tmp);
                         k += 1;
                     } while (k < 2);
-                    if (FUN_003a7e90(act, &DAT_0050e228[0]) != 0) {
+                    if (beBaseInfoRam_IsTimerExpired(act, &DAT_0050e228[0]) != 0) {
                         int np = pr->_movePoint + 1;
                         if (((char *)(np + pr->_moveCode))[0] == 0) np = 0;
                         pr->_movePoint = np;
-                        float w = pr->_oneTime; w = w; FUN_003a7a20(act, &DAT_0050e228[0], __fixsfdi((1e9f * w) / 60.0f));
+                        float w = pr->_oneTime; w = w; beBaseInfoRam_StartTimer(act, &DAT_0050e228[0], __fixsfdi((1e9f * w) / 60.0f));
                     }
-                    if (FUN_003a7e90(act, &DAT_0050e238[0]) != 0) {
+                    if (beBaseInfoRam_IsTimerExpired(act, &DAT_0050e238[0]) != 0) {
                         int h408;
                         Matrix44_SetTranslation(XFORM(sys->_eyePosList, 0)->_m, pr->_svEyePos);
                         Matrix44_SetTranslation(XFORM(sys->_intPosList, 0)->_m, pr->_svIntPos);
                         ObjectList_RemoveFirstRetained(&h408, act->_dataList, pr, 0);
-                        FUN_003a8580(act, &DAT_0050e238[0]);
-                        FUN_003a8580(act, &DAT_0050e228[0]);
+                        beBaseInfoRam_RemoveTimer(act, &DAT_0050e238[0]);
+                        beBaseInfoRam_RemoveTimer(act, &DAT_0050e228[0]);
                     }
                 }
             }
@@ -638,8 +638,8 @@ int Gap__Bec__beCameraCtrl__vfunc_33(beCameraCtrl *self, beBaseInfoRam *ram, int
             shake->_endTime = beMessenger_GetFloat(self->_messenger, 2);
             shake->_movePoint = 0;
             /* matching construct: endTime goes through a local (as in FUN_00378ed0) to order the float loads; seconds -> ticks at 60 fps */
-            { float w = shake->_endTime; w = w; FUN_003a7a20(ram, &DAT_0050e238[0], __fixsfdi((1e9f * w) / 60.0f)); w = 0.0f; }
-            FUN_003a8580(ram, &DAT_0050e228[0]);
+            { float w = shake->_endTime; w = w; beBaseInfoRam_StartTimer(ram, &DAT_0050e238[0], __fixsfdi((1e9f * w) / 60.0f)); w = 0.0f; }
+            beBaseInfoRam_RemoveTimer(ram, &DAT_0050e228[0]);
             shake->_isFirst = 1;
         }
         return 1;

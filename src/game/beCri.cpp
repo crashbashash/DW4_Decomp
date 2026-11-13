@@ -31,22 +31,22 @@ extern "C" int strcmp(...);
 extern "C" int FUN_0037b950(void);
 extern "C" int FUN_00236c40(...);
 extern "C" int FUN_00236f80(int, int);
-extern "C" int FUN_003a6950(int, int);
+extern "C" int beCriAudio_Setup(int, int);
 extern "C" int igNamedObject_SetName(...);
-extern "C" int FUN_003a6b50(int);
+extern "C" int beCriAudio_Release(int);
 extern "C" int ObjectList_AppendRetained(...);
 extern "C" int List_Reserve(...);
 extern "C" int FUN_00332cf0(...);
-extern "C" int FUN_003a6f70(...);
-extern "C" int FUN_003a70c0(...);
-extern "C" int FUN_003a7300(...);
-extern "C" int FUN_003a73b0(...);
-extern "C" int FUN_003a74b0(...);
-extern "C" int FUN_003a7890(...);
-extern "C" int FUN_003a79a0(...);
+extern "C" int beCriAudio_SetVolume(...);
+extern "C" int beCriAudio_GetStatus(...);
+extern "C" int beCriAudio_IsPaused(...);
+extern "C" int beCriAudio_Suspend(...);
+extern "C" int beCriAudio_Resume(...);
+extern "C" int beCriVolume_StepAdxLevel(...);
+extern "C" int beCriVolume_StepSndfLevel(...);
 extern "C" int ObjectList_RemoveFirstRetained(...);
-extern "C" int FUN_003a6c00(...);
-extern "C" int FUN_003a7260(...);
+extern "C" int beCriAudio_PlayFile(...);
+extern "C" int beCriAudio_Pause(...);
 extern "C" int strlen(...);
 extern "C" int FUN_00332d20(int);
 extern "C" int FUN_00333230(int);
@@ -65,7 +65,7 @@ extern "C" int FUN_00281cf8(...);
 extern "C" int Memory_FreeBuffer(...);
 extern "C" void FUN_002829f0(int, int);
 extern "C" void FUN_0037dc60(int *arg0, char *arg1);
-extern "C" int FUN_00332490(int);
+extern "C" int igAdxAudio_GetStatus(int);
 extern "C" int FUN_002825e0(int, unsigned int, int);
 extern "C" int igObject_IsKindOf(int, int);
 extern "C" int FUN_00308860(int, int *, int);
@@ -138,15 +138,15 @@ extern "C" void Gap__Bec__beCri__vfunc_26(beCri *arg0);
 struct CriSystemState { char p0[88]; int f88; };
 extern "C" void Gap__Bec__beCri__vfunc_27(beCri *arg0);
 extern "C" int emptyString[4];
-extern "C" void FUN_003a7590(beCriVolume *, int, float, float, float);
+extern "C" void beCriVolume_StartFade(beCriVolume *, int, float, float, float);
 extern "C" long long FUN_0037c2c0(beCri *self, igObjectList *table, beSoundData *ev);
 extern "C" int FUN_0037c130(beCri *self, unsigned char kind, short priority);
-extern "C" int FUN_003a6c80(beCriAudio *, void *, int);
-extern "C" int FUN_003a6ce0(beCriAudio *, int, int);
+extern "C" int beCriAudio_PlayMemory(beCriAudio *, void *, int);
+extern "C" int beCriAudio_PlaySfp(beCriAudio *, int, int);
 extern "C" int FUN_0030ba20(igNamedObject *);
 extern "C" int FUN_0030b5c0(igNamedObject *);
 extern "C" long long FUN_0037c4c0(beCri *self, igObjectList *lst, beSoundData *req);
-extern "C" int FUN_003a6e00(beCriAudio *);
+extern "C" int beCriAudio_Stop(beCriAudio *);
 extern "C" void FUN_0037caf0(void *arg0, beCriHandle *arg1);
 extern "C" void FUN_0037cb80(beCri *arg0, long long arg1);
 typedef struct L { char p8[8]; int n; char p12[4]; int *data; } L;
@@ -434,7 +434,7 @@ void Gap__Bec__beCri__vfunc_23(beCri *arg0) {
         }
     }
     arg0->_hdBGM = (int)FUN_00366910(var_v0);
-    FUN_003a6950(((struct RefCountedNamedObject *)arg0->_hdBGM)->f12, 2);
+    beCriAudio_Setup(((struct RefCountedNamedObject *)arg0->_hdBGM)->f12, 2);
     igNamedObject_SetName(arg0->_hdBGM, 0);
     var_v0_2 = ((int)igObject_GetAllocator(arg0));
     if (GPR_00554c14 != 0) {
@@ -450,7 +450,7 @@ void Gap__Bec__beCri__vfunc_23(beCri *arg0) {
         }
     }
     arg0->_hdENV = (int)FUN_00366910(var_v0_2);
-    FUN_003a6950(((struct RefCountedNamedObject *)arg0->_hdENV)->f12, 2);
+    beCriAudio_Setup(((struct RefCountedNamedObject *)arg0->_hdENV)->f12, 2);
     igNamedObject_SetName(arg0->_hdENV, 0);
     FUN_0037d310((int)arg0);
     arg0->_pauseOnetime = 0;
@@ -463,8 +463,8 @@ void Gap__Bec__beCri__vfunc_23(beCri *arg0) {
 
 void Gap__Bec__beCri__vfunc_24(beCri *arg0) {
     FUN_0037cc50((O *)arg0, 5);
-    FUN_003a6b50(*(int *)((char *)(arg0->_hdBGM) + 12));
-    FUN_003a6b50(*(int *)((char *)(arg0->_hdENV) + 12));
+    beCriAudio_Release(*(int *)((char *)(arg0->_hdBGM) + 12));
+    beCriAudio_Release(*(int *)((char *)(arg0->_hdENV) + 12));
     FUN_0037d4a0((int *)arg0);
 }
 
@@ -534,7 +534,7 @@ void Gap__Bec__beCri__vfunc_27(beCri *arg0) {
                 i = 0;
                 do {
                     t = ((beCriHandle **)((igObjectList *)arg0->_hdSEs)->_data)[i];
-                    if (t->_playID != 0) FUN_003a74b0((beCriAudio *)t->_audio, ((igObjectList *)arg0->_hdSEs));
+                    if (t->_playID != 0) beCriAudio_Resume((beCriAudio *)t->_audio, ((igObjectList *)arg0->_hdSEs));
                     i++;
                 } while (i < ((igObjectList *)arg0->_hdSEs)->_count);
             }
@@ -551,7 +551,7 @@ void Gap__Bec__beCri__vfunc_27(beCri *arg0) {
                 j = 0;
                 do {
                     t = ((beCriHandle **)((igObjectList *)arg0->_hdSEs)->_data)[j];
-                    if (t->_playID != 0) FUN_003a73b0((beCriAudio *)t->_audio, ((igObjectList *)arg0->_hdSEs));
+                    if (t->_playID != 0) beCriAudio_Suspend((beCriAudio *)t->_audio, ((igObjectList *)arg0->_hdSEs));
                     j++;
                 } while (j < ((igObjectList *)arg0->_hdSEs)->_count);
             }
@@ -570,18 +570,18 @@ void Gap__Bec__beCri__vfunc_27(beCri *arg0) {
                 if (s2->_playID != 0) {
                     s1 = (beCriAudio *)s2->_audio;
                     s0 = (beCriVolume *)s2->_volume;
-                    r = FUN_003a70c0(s1, ((igObjectList *)arg0->_hdSEs));
+                    r = beCriAudio_GetStatus(s1, ((igObjectList *)arg0->_hdSEs));
                     switch (r) {
                     case 1:
-                        if (FUN_003a7300(s1) == 0) {
+                        if (beCriAudio_IsPaused(s1) == 0) {
                             switch (s0->_isExec) {
                             case 3: {
                                 if (s1->_audioType == 3) {
-                                    v = FUN_003a79a0(s0, arg0->_baseVolume);
+                                    v = beCriVolume_StepSndfLevel(s0, arg0->_baseVolume);
                                 } else {
-                                    v = FUN_003a7890(s0, arg0->_baseVolume);
+                                    v = beCriVolume_StepAdxLevel(s0, arg0->_baseVolume);
                                 }
-                                FUN_003a6f70(s1, v);
+                                beCriAudio_SetVolume(s1, v);
                                 if (s0->_end == 0.0f) {
                                     if (s1->_audioType == 3) {
                                         if (v < 13) FUN_0037caf0(arg0, s2);
@@ -670,17 +670,17 @@ long long FUN_0037c2c0(beCri *self, igObjectList *table, beSoundData *ev) {
         handle = (beCriVolume *)slot->_volume;
         break;
     }
-    if (FUN_003a70c0(voice) == 1) {
-        if (handle->_isExec == 0) FUN_003a7590(handle, self->_baseVolume, 1.0f, 0.0f, 10.0f);
+    if (beCriAudio_GetStatus(voice) == 1) {
+        if (handle->_isExec == 0) beCriVolume_StartFade(handle, self->_baseVolume, 1.0f, 0.0f, 10.0f);
         return 0;
     }
     handle->_max = ev->_volume;
     name = (int *)((igNamedObject **)table->_data)[ev->_fnameIdx]->_name;
     name = name != 0 ? name : &emptyString[0];
-    FUN_003a7260(voice, 1);
-    FUN_003a6f70(voice, handle->_max + self->_baseVolume);
-    if (FUN_003a6c00(voice, name) & 0xff) {
-        if (self->_pauseOnetime != 0) self->_pauseOnetime = 0; else FUN_003a7260(voice, 0);
+    beCriAudio_Pause(voice, 1);
+    beCriAudio_SetVolume(voice, handle->_max + self->_baseVolume);
+    if (beCriAudio_PlayFile(voice, name) & 0xff) {
+        if (self->_pauseOnetime != 0) self->_pauseOnetime = 0; else beCriAudio_Pause(voice, 0);
         seq = self->_request + 1;
         self->_request = seq;
         slot->_playID = seq;
@@ -729,11 +729,11 @@ long long FUN_0037c4c0(beCri *self, igObjectList *lst, beSoundData *req) {
         src = (char *)((igNamedObject **)lst->_data)[req->_fnameIdx]->_name;
         nm = src != 0 ? src : ((char *)emptyString);
         vf->_audioType = 1;
-        FUN_003a7260(vf, 1);
-        FUN_003a6f70(vf, df->_max + self->_baseVolume);
-        ok = FUN_003a6c00(vf, nm);
+        beCriAudio_Pause(vf, 1);
+        beCriAudio_SetVolume(vf, df->_max + self->_baseVolume);
+        ok = beCriAudio_PlayFile(vf, nm);
         if (ok) {
-            if (self->_pauseOnetime) self->_pauseOnetime = 0; else FUN_003a7260(vf, 0);
+            if (self->_pauseOnetime) self->_pauseOnetime = 0; else beCriAudio_Pause(vf, 0);
         }
     } else {
         if (ENTS->_count <= 0) return 0;
@@ -774,11 +774,11 @@ long long FUN_0037c4c0(beCri *self, igObjectList *lst, beSoundData *req) {
                 dc0 = (beCriVolume *)slot->_volume;
                 dc0->_max = req->_volume;
                 vc0->_audioType = 2;
-                FUN_003a7260(vc0, 1);
-                FUN_003a6f70(vc0, dc0->_max + self->_baseVolume);
-                ok = FUN_003a6c80(vc0, (void *)e0->_dataBuffer, req->_memoryIdx);
+                beCriAudio_Pause(vc0, 1);
+                beCriAudio_SetVolume(vc0, dc0->_max + self->_baseVolume);
+                ok = beCriAudio_PlayMemory(vc0, (void *)e0->_dataBuffer, req->_memoryIdx);
                 if (self->_pauseOnetime) self->_pauseOnetime = 0;
-                FUN_003a7260(vc0, 0);
+                beCriAudio_Pause(vc0, 0);
             } else {
                 return 0;
             }
@@ -792,8 +792,8 @@ long long FUN_0037c4c0(beCri *self, igObjectList *lst, beSoundData *req) {
                 slot = ((beCriHandle **)SLOTS->_data)[idx];
                 vc1 = (beCriAudio *)slot->_audio;
                 ((beCriVolume *)slot->_volume)->_max = req->_volume;
-                ok = FUN_003a6ce0(vc1, idx, req->_memoryIdx);
-                if (ok) FUN_003a6f70(vc1, 127);
+                ok = beCriAudio_PlaySfp(vc1, idx, req->_memoryIdx);
+                if (ok) beCriAudio_SetVolume(vc1, 127);
                 if (self->_pauseOnetime) self->_pauseOnetime = 0;
             } else {
                 return 0;
@@ -831,11 +831,11 @@ void FUN_0037caf0(void *arg0, beCriHandle *arg1) {
     temp_v1->_sta = 0;
     temp_v1->_end = 0;
     if (temp_s0->_audioType == 3) {
-        FUN_003a6f70(temp_s0, 0);
+        beCriAudio_SetVolume(temp_s0, 0);
     } else {
-        FUN_003a6f70(temp_s0, -0x3E7);
+        beCriAudio_SetVolume(temp_s0, -0x3E7);
     }
-    FUN_003a6e00(temp_s0);
+    beCriAudio_Stop(temp_s0);
     igNamedObject_SetName(arg1, 0);
 }
 
@@ -902,12 +902,12 @@ void FUN_0037cd90(beCri *arg0, int arg1) {
     p = (int *)((beCriHandle *)arg0->_hdBGM)->_name;
     p = p != 0 ? p : &emptyString[0];
     if (strcmp(p, arg1) == 0) {
-        FUN_003a7260(((beCriHandle *)arg0->_hdBGM)->_audio, 0);
+        beCriAudio_Pause(((beCriHandle *)arg0->_hdBGM)->_audio, 0);
     } else {
         p = (int *)((beCriHandle *)arg0->_hdENV)->_name;
         p = p != 0 ? p : &emptyString[0];
         if (strcmp(p, arg1) == 0) {
-            FUN_003a7260(((beCriHandle *)arg0->_hdENV)->_audio, 0);
+            beCriAudio_Pause(((beCriHandle *)arg0->_hdENV)->_audio, 0);
         } else {
             i = 0;
             if (0 < ((beCriHandleList *)arg0->_hdSEs)->_count) {
@@ -920,7 +920,7 @@ void FUN_0037cd90(beCri *arg0, int arg1) {
                         if (strlen(p) != 0) {
                             p = it->_name != 0 ? (int *)it->_name : &emptyString[0];
                             if (strcmp(p, arg1) == 0) {
-                                FUN_003a7260(it->_audio, 0);
+                                beCriAudio_Pause(it->_audio, 0);
                             }
                         }
                     }
@@ -939,11 +939,11 @@ void FUN_0037cf30(beCri *arg0, char *arg1, float f0, float f1, float f2) {
     igObjectList *l;
     s = (char *)((beCriHandle *)arg0->_hdBGM)->_name;
     if ((s ? s : DEFN) && strcmp(s ? s : DEFN, arg1) == 0) {
-        FUN_003a7590((beCriVolume *)(((beCriHandle *)arg0->_hdBGM)->_volume), arg0->_baseVolume, f0, f1, f2);
+        beCriVolume_StartFade((beCriVolume *)(((beCriHandle *)arg0->_hdBGM)->_volume), arg0->_baseVolume, f0, f1, f2);
     } else {
         s = (char *)((beCriHandle *)arg0->_hdENV)->_name;
         if ((s ? s : DEFN) && strcmp(s ? s : DEFN, arg1) == 0) {
-            FUN_003a7590((beCriVolume *)(((beCriHandle *)arg0->_hdENV)->_volume), arg0->_baseVolume, f0, f1, f2);
+            beCriVolume_StartFade((beCriVolume *)(((beCriHandle *)arg0->_hdENV)->_volume), arg0->_baseVolume, f0, f1, f2);
         } else {
             l = (igObjectList *)arg0->_hdSEs;
             for (i = 0; i < l->_count; i++) {
@@ -952,7 +952,7 @@ void FUN_0037cf30(beCri *arg0, char *arg1, float f0, float f1, float f2) {
                 if (s ? s : DEFN) {
                     if (strlen(s ? s : DEFN)) {
                         if (strcmp(arg1, (char *)n->_name ? (char *)n->_name : DEFN) == 0)
-                            FUN_003a7590((beCriVolume *)n->_volume, arg0->_baseVolume, f0, f1, f2);
+                            beCriVolume_StartFade((beCriVolume *)n->_volume, arg0->_baseVolume, f0, f1, f2);
                     }
                 }
                 l = (igObjectList *)arg0->_hdSEs;
@@ -966,18 +966,18 @@ void FUN_0037d160(beCri *arg0, long long arg1, float fparg0, float fparg1, float
     int i;
     c = (beCriHandle *)arg0->_hdBGM;
     if (arg1 == c->_playID) {
-        FUN_003a7590((beCriVolume *)c->_volume, arg0->_baseVolume, fparg0, fparg1, fparg2);
+        beCriVolume_StartFade((beCriVolume *)c->_volume, arg0->_baseVolume, fparg0, fparg1, fparg2);
         return;
     }
     c = (beCriHandle *)arg0->_hdENV;
     if (arg1 == c->_playID) {
-        FUN_003a7590((beCriVolume *)c->_volume, arg0->_baseVolume, fparg0, fparg1, fparg2);
+        beCriVolume_StartFade((beCriVolume *)c->_volume, arg0->_baseVolume, fparg0, fparg1, fparg2);
         return;
     }
     for (i = 0; i < ((igObjectList *)arg0->_hdSEs)->_count; i++) {
         c = ((beCriHandle **)((igObjectList *)arg0->_hdSEs)->_data)[i];
         if (arg1 == c->_playID) {
-            FUN_003a7590((beCriVolume *)c->_volume, arg0->_baseVolume, fparg0, fparg1, fparg2);
+            beCriVolume_StartFade((beCriVolume *)c->_volume, arg0->_baseVolume, fparg0, fparg1, fparg2);
         }
     }
 }
@@ -1008,7 +1008,7 @@ void FUN_0037d310(int arg0) {
         int a = ((int)igObject_GetAllocator(arg0));
         a = GPR_00554c14 ? a : ((int)Memory_GetAllocatorBySelector(g_ndmwAllocatorSelector[0]));
         igSmartPointer<Obj> r((Obj *)((void *)FUN_00366910(a)));
-        FUN_003a6950(r.p->w12, 1);
+        beCriAudio_Setup(r.p->w12, 1);
         igNamedObject_SetName((Obj *)r, 0);
         ObjectList_AppendRetained(LIST(arg0), (Obj *)r);
         }
@@ -1020,7 +1020,7 @@ void FUN_0037d310(int arg0) {
         int a = ((int)igObject_GetAllocator(arg0));
         a = GPR_00554c14 ? a : ((int)Memory_GetAllocatorBySelector(g_ndmwAllocatorSelector[0]));
         igSmartPointer<Obj> r((Obj *)((void *)FUN_00366910(a)));
-        FUN_003a6950(r.p->w12, -1);
+        beCriAudio_Setup(r.p->w12, -1);
         igNamedObject_SetName((Obj *)r, 0);
         ObjectList_AppendRetained(LIST(arg0), (Obj *)r);
         }
@@ -1034,7 +1034,7 @@ void FUN_0037d4a0(int *arg0) {
     FUN_0037cc50((O *)arg0, 3);
     if (*(int *)(arg0[10] + 8) > 0) {
         do {
-            FUN_003a6b50(*(int *)(**(int **)(arg0[10] + 16) + 12));
+            beCriAudio_Release(*(int *)(**(int **)(arg0[10] + 16) + 12));
             l = (int *)arg0[10];
             o = (Obj_37d4a0 *)**(int **)(l + 4);
             if (o != 0) {
@@ -1055,11 +1055,11 @@ void FUN_0037d570(Owner *self, int on) {
         Entry *e = self->list->items[i];
         if (e->armed != 0 && e->type == 4) {
             Target *t = e->target;
-            if (FUN_003a70c0(t) == 1) {
+            if (beCriAudio_GetStatus(t) == 1) {
                 if (on != 0) {
-                    FUN_003a6f70(t, t->kind == 3 ? 127 : 0);
+                    beCriAudio_SetVolume(t, t->kind == 3 ? 127 : 0);
                 } else {
-                    FUN_003a6f70(t, t->kind == 3 ? 0 : -999);
+                    beCriAudio_SetVolume(t, t->kind == 3 ? 0 : -999);
                 }
             }
         }
@@ -1271,7 +1271,7 @@ unsigned char FUN_0037dd10(beCri *arg0, int *arg1) {
         if (0 < ((beCriHandleList *)arg0->_hdSEs)->_count) {
             do {
                 it1 = ((beCriHandle **)((beCriHandleList *)arg0->_hdSEs)->_data)[i1];
-                if (it1->_playID != 0 && ((beCriAudio *)it1->_audio)->_audioType == 1 && FUN_00332490(((beCriAudio *)it1->_audio)->_adxt) != 3) {
+                if (it1->_playID != 0 && ((beCriAudio *)it1->_audio)->_audioType == 1 && igAdxAudio_GetStatus(((beCriAudio *)it1->_audio)->_adxt) != 3) {
                     res1 = 0;
                     break;
                 }
@@ -1285,11 +1285,11 @@ unsigned char FUN_0037dd10(beCri *arg0, int *arg1) {
     res2 = 1;
     p = (int *)((beCriHandle *)arg0->_hdBGM)->_name;
     if ((p != 0 ? p : &emptyString[0]) != 0 && strcmp(p != 0 ? p : &emptyString[0], arg1) == 0) {
-        if (FUN_00332490(((beCriAudio *)((beCriHandle *)arg0->_hdBGM)->_audio)->_adxt) != 3) res2 = 0;
+        if (igAdxAudio_GetStatus(((beCriAudio *)((beCriHandle *)arg0->_hdBGM)->_audio)->_adxt) != 3) res2 = 0;
     } else {
         p = (int *)((beCriHandle *)arg0->_hdENV)->_name;
         if ((p != 0 ? p : &emptyString[0]) != 0 && strcmp(p != 0 ? p : &emptyString[0], arg1) == 0) {
-            if (FUN_00332490(((beCriAudio *)((beCriHandle *)arg0->_hdENV)->_audio)->_adxt) != 3) res2 = 0;
+            if (igAdxAudio_GetStatus(((beCriAudio *)((beCriHandle *)arg0->_hdENV)->_audio)->_adxt) != 3) res2 = 0;
         } else {
             i2 = 0;
             if (0 < ((beCriHandleList *)arg0->_hdSEs)->_count) {
@@ -1298,7 +1298,7 @@ unsigned char FUN_0037dd10(beCri *arg0, int *arg1) {
                     p = (int *)it->_name;
                     if ((p != 0 ? p : &emptyString[0]) != 0) {
                         if (strlen(p != 0 ? p : &emptyString[0]) != 0) {
-                            if (strcmp(arg1, (int *)it->_name != 0 ? (int *)it->_name : &emptyString[0]) == 0 && it->_playID != 0 && FUN_00332490(((beCriAudio *)it->_audio)->_adxt) != 3) {
+                            if (strcmp(arg1, (int *)it->_name != 0 ? (int *)it->_name : &emptyString[0]) == 0 && it->_playID != 0 && igAdxAudio_GetStatus(((beCriAudio *)it->_audio)->_adxt) != 3) {
                                 res2 = 0;
                                 break;
                             }

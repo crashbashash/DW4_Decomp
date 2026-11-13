@@ -9,15 +9,15 @@ extern "C" void Gap__Bec__beAction2__vfunc_32(void);
 extern "C" int Gap__Bec__beAction2__vfunc_30(void);
 extern "C" int Gap__Bec__beAction2__vfunc_20(void);
 extern "C" int beMessenger_RegisterReceiverFromInfo(int, char *, int *);
-extern "C" int FUN_003a7e90(...);
-extern "C" int FUN_003a8580(...);
+extern "C" int beBaseInfoRam_IsTimerExpired(...);
+extern "C" int beBaseInfoRam_RemoveTimer(...);
 extern "C" int ObjectList_RemoveFirstRetained(...);
 extern "C" int igObject_Destroy(...);
 extern "C" int FUN_00193540(...);
 extern "C" void *FUN_00131390(...);
 extern "C" void *FUN_00135e20(...);
 extern "C" void *FUN_00138ee0(...);
-extern "C" int FUN_003a7a20(...);
+extern "C" int beBaseInfoRam_StartTimer(...);
 extern "C" int Memory_GetAllocatorBySelector(...);
 extern "C" int ObjectList_AppendRetained(...);
 extern "C" int igObject_GetAllocator(...);
@@ -25,7 +25,7 @@ extern "C" long long beModelCtrlNode2_LocalTime(int, long long);
 extern "C" int FUN_001dd4b0(long long, long long, long long *);
 extern "C" void FUN_001af510(void *, long long);
 extern "C" long long __fixsfdi(float);
-extern "C" float FUN_003a8140(...);
+extern "C" float beBaseInfoRam_GetTimerFrameDelta(...);
 extern "C" void *FUN_00139600(...);
 extern "C" int FUN_001ac140(...);
 extern "C" void * igProperty_FindByName(...);
@@ -40,10 +40,10 @@ extern "C" int beMessenger_AppendObject(int, int);
 extern "C" int beMessenger_AppendMatrix(int, int);
 extern "C" int beMessenger_AppendString(int, void *);
 extern "C" int beMessenger_GetString(int, int);
-extern "C" int FUN_003a84a0(void *, float);
+extern "C" int beBaseInfoRam_SetAllTimerScales(void *, float);
 extern "C" int strcmp(void *, void *);
 extern "C" int List_Reserve(void *, int, int);
-extern "C" int FUN_003a8760(void *);
+extern "C" int beBaseInfoRam_RemoveAllTimers(void *);
 extern "C" int FUN_001adf70(int);
 extern "C" void *igMetaObject_FindFieldByName(int, void *);
 extern "C" void Memory_FreeBuffer(int);
@@ -216,7 +216,7 @@ void beAction2FLASHSET_Update(void *arg0, beAction2InfoRam *arg1) {
     case 0:
         break;
     case 1:
-        if (FUN_003a7e90(arg1, &DAT_0050dfd0[0]) != 0) {
+        if (beBaseInfoRam_IsTimerExpired(arg1, &DAT_0050dfd0[0]) != 0) {
             s0 = ((Action2NodeList136 *)arg1->_node)->list;
             if (s1->_blendStateAttr == 0) {
                 ObjectList_RemoveFirstRetained(&sp4C, s0, s1->_colorAttr, 0);
@@ -247,7 +247,7 @@ void beAction2FLASHSET_Update(void *arg0, beAction2InfoRam *arg1) {
                 }
             }
             s1->_textureStateAttr = 0;
-            FUN_003a8580(arg1, &DAT_0050dfd0[0]);
+            beBaseInfoRam_RemoveTimer(arg1, &DAT_0050dfd0[0]);
             s1->_flashSt0 = 0;
         }
     }
@@ -306,7 +306,7 @@ int beAction2FLASHSET_Start(int arg0, beAction2InfoRam *arg1, beAction2FLASHSET 
     ((AttrObjView *)c->_textureStateAttr)->vX(0);
     ((AttrObjView *)c->_lightingStateAttr)->vX(0);
     c->_flashSt0 = 1;
-    FUN_003a7a20(arg1, &DAT_0050dfd0[0], 0x03F940AC);
+    beBaseInfoRam_StartTimer(arg1, &DAT_0050dfd0[0], 0x03F940AC);
     return 1;
 }
 
@@ -324,7 +324,7 @@ void beAction2WAITCHECK_Update(beAction2 *arg0, beAction2InfoRam *arg1) {
     ctx = (beAction2Info *)arg1->_parentInfo;
     switch (work->_waitSt0) {
     case 1:
-        if (FUN_003a7e90(arg1, &DAT_0050dfd8[0]) != 0) {
+        if (beBaseInfoRam_IsTimerExpired(arg1, &DAT_0050dfd8[0]) != 0) {
             work->_waitSt0 = 0;
             beAction2_StartComponents((int)arg0, arg1);
         }
@@ -376,7 +376,7 @@ int beAction2WAITCHECK_Start(beAction2 *mgr, beAction2InfoRam *act, beAction2WAI
         secs = DAT_0058a348[0] + (float)r / 100.0f;
     }
     case 'F':
-        FUN_003a7a20(act, DAT_0050dfd8, __fixsfdi(1e9f * secs / 60.0f));
+        beBaseInfoRam_StartTimer(act, DAT_0050dfd8, __fixsfdi(1e9f * secs / 60.0f));
         w->_waitSt0 = 1;
         break;
     case 'M':
@@ -402,7 +402,7 @@ void beAction2FADESET_Update(void *arg0, beAction2InfoRam *arg1) {
         int list;
         int s1, s2, s3;
         RefCountedObject *a0;
-        dt = FUN_003a8140(arg1, &DAT_0050dfe0[0]);
+        dt = beBaseInfoRam_GetTimerFrameDelta(arg1, &DAT_0050dfe0[0]);
         if (dt != 0.0f) {
             FUN_00193540(&v, 1, ((DummyVirtualComponent *)c->_colorAttr)->f28);
             pw = &v.w;
@@ -435,7 +435,7 @@ void beAction2FADESET_Update(void *arg0, beAction2InfoRam *arg1) {
                     if (((unsigned long long)((long long)a0->rc << 0x29) >> 0x29) == 0) igObject_Destroy(a0);
                 }
                 c->_blendStateAttr = 0;
-                FUN_003a8580(arg1, &DAT_0050dfe0[0]);
+                beBaseInfoRam_RemoveTimer(arg1, &DAT_0050dfe0[0]);
                 c->_fadeSt0 = 3;
             }
         }
@@ -446,7 +446,7 @@ void beAction2FADESET_Update(void *arg0, beAction2InfoRam *arg1) {
         FadeColor v;
         float *pw;
         float nv;
-        dt = FUN_003a8140(arg1, &DAT_0050dfe0[0]);
+        dt = beBaseInfoRam_GetTimerFrameDelta(arg1, &DAT_0050dfe0[0]);
         if (dt != 0.0f) {
             FUN_00193540(&v, 1, ((DummyVirtualComponent *)c->_colorAttr)->f28);
             nv = c->_fadeValue - dt * c->_fadeAddValue;
@@ -456,7 +456,7 @@ void beAction2FADESET_Update(void *arg0, beAction2InfoRam *arg1) {
             ((DummyVirtualComponent *)c->_colorAttr)->vX(&v);
             c->_fadeValue = *pw;
             if (*pw <= 0.0f) {
-                FUN_003a8580(arg1, &DAT_0050dfe0[0]);
+                beBaseInfoRam_RemoveTimer(arg1, &DAT_0050dfe0[0]);
                 c->_fadeSt0 = 3;
             }
         }
@@ -559,7 +559,7 @@ int beAction2FADESET_Start(int arg0, beAction2InfoRam *arg1, beAction2FADESET *a
             c->_fadeAddValue = arg2->_fadeValue / arg2->_fadeTime;
             c->_fadeSt0 = 2;
         }
-        FUN_003a7a20(arg1, &DAT_0050dfe0[0], 0);
+        beBaseInfoRam_StartTimer(arg1, &DAT_0050dfe0[0], 0);
     }
     return 1;
 }
@@ -906,7 +906,7 @@ int Gap__Bec__beAction2__vfunc_33(beAction2 *arg0, beAction2InfoRam *arg1, void 
             float f20;
             int tt;
             float k = 0.0f;
-            FUN_003a84a0(arg1, k);
+            beBaseInfoRam_SetAllTimerScales(arg1, k);
             tt = (int)(((igInsightCore *)arg0->_insight)->_worldTime >> 0x12);
             nd = (beModelCtrlNode2 *)arg1->_node;
             f20 = (float)(unsigned int)tt;
@@ -927,7 +927,7 @@ int Gap__Bec__beAction2__vfunc_33(beAction2 *arg0, beAction2InfoRam *arg1, void 
             float f20;
             int tt;
             float k = 1.0f;
-            FUN_003a84a0(arg1, k);
+            beBaseInfoRam_SetAllTimerScales(arg1, k);
             tt = (int)(((igInsightCore *)arg0->_insight)->_worldTime >> 0x12);
             nd = (beModelCtrlNode2 *)arg1->_node;
             f20 = (float)(unsigned int)tt;
@@ -967,7 +967,7 @@ int Gap__Bec__beAction2__vfunc_33(beAction2 *arg0, beAction2InfoRam *arg1, void 
             BITCLR(ramNo)
             { Rc *o = (Rc *)arg1->_work; REL(o) }
             arg1->_work = 0;
-            FUN_003a8760(arg1);
+            beBaseInfoRam_RemoveAllTimers(arg1);
             arg1->_isRun = 0;
             if (info->_animationDatabase != 0) {
                 igObjectList *dl = (igObjectList *)((igAnimationDatabase *)info->_animationDatabase)->_combinerList;

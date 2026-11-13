@@ -225,7 +225,7 @@ one another. Expired row cleanup is separate from admission.
 
 Stream types 1/2 follow the `beCriAudio` stream path at `0x0037c2c0`, adding
 `beSoundInfo._baseVolume` to signed `beSoundData._volume`. Volume routes through
-`0x003a6f70`, `0x00332430` and `0x0026c660`; the latter also adds an optional
+`beCriAudio_SetVolume`, `igAdxAudio_SetOutVolume` and `0x0026c660`; the latter also adds an optional
 CRI channel adjustment. `0x0027ae18` clamps enabled-driver levels to `[-999,0]`.
 The command packet builder at `0x00279790` loads the table word from
 `0x004b0e20 - level*4` and writes it as the volume command's Q8 amplitude.
@@ -277,10 +277,13 @@ by handle number or by name over 10.0 (the ten-frame fade); a DOWN of the curren
 ramps the carrier of that name from `a` to `b` over `c`.
 
 **Fades.** `VOLUMECTL2 name a b frames`, `VOLUMECTL` UP/DOWN and the 10-frame fade-out of a busy music slot arm a ramp
-(`FUN_003a7590`) over two adjacent 60-entry ease tables (`0x004c8fc0` rising from 0.04, `0x004c90b0` falling from 0.96; both end at
-index 53). Each frame (`FUN_003a7890`/`FUN_003a7810`) advances the position by `(last - first) / frames` entries and yields the level
-`base + volume + (int)(210 * factor) - 210` in 0.1 dB, finishing as soon as the target level is reached and returning -999 (silence) for a
-target of 0: a 10-frame fade to 0 is silent on frame 9.
+(`beCriVolume_StartFade`, on the handle's `beCriVolume`: `_isExec` 3 while it runs, `_current` the curve position, `_sta`/`_end`
+the factors, `_unit` the step, `_max` the voice's base level) over two adjacent 60-entry ease tables (`g_fadeInCurve` at `0x004c8fc0`
+rising from 0.04, `g_fadeOutCurve` at `0x004c90b0` falling from 0.96; both end at index 53). Each frame
+(`beCriVolume_StepAdxLevel`, or `beCriVolume_StepSndfLevel` for a sound-bank voice, both through `beCriVolume_StepFade`) advances the
+position by `(last - first) / frames` entries and yields the level `base + volume + (int)(210 * factor) - 210` in 0.1 dB (sound bank:
+`(int)(127 * factor)`), finishing as soon as the target level is reached and returning -999 (silence) for a target of 0: a 10-frame
+fade to 0 is silent on frame 9.
 
 **Music change.** `FUN_0037c2c0` takes the BGM slot for type 1 and the ambience slot for type 2 (memory index -1 only). If the slot's
 voice is still playing it arms the 1.0 -> 0.0 over 10.0 ramp (only when none runs) and returns 0; `beSound::vfunc_34` then enqueues the PLAY
@@ -294,9 +297,16 @@ ambience streams are separate 48 kHz ADX handles. `FUN_0037c130(kind, priority)`
 not above the request's, oldest first; a play stores the cue's type, priority and an increasing request id in the handle. Only
 30 of the 8,855 cue records have a priority other than 0 (all 1).
 
-**Voice state.** The helpers `FUN_003a7260`, `FUN_003a7300`, `FUN_003a73b0` and `FUN_003a74b0` take a `beCriAudio`: `_adxt` (+8), `_sndf` (+12),
-`_audioType` (+16; 1 and 2 are ADX voices, 3 a sound-bank voice) and `_errVolume` (+20, -999 or a level). They forward to ADX-driver calls
-that are not analysed, so what each helper does (pause, resume or other) is not established.
+**Voice state.** A `beCriAudio` holds either an ADX voice (`_adxt`, an `igAdxAudio`; `_audioType` 1 plays files, 2 memory) or a
+sound-bank voice (`_sndf`, a `beCriSndf`; type 3), set up by `beCriAudio_Setup` (a negative channel count picks the sound bank; 2
+channels run the ADX handle at 48 kHz, 1 at 24 kHz). The sound-bank calls go through `SNDF_SeqCommand(command, request, argument)`
+with the commands its error strings name: 1 `SNDF_SEQ_SET`, 2 `SNDF_SEQ_PLAY`, 3 `SNDF_SEQ_STOP`, 4 `SNDF_SEQ_VOLUME`,
+7 `SNDF_SEQ_GETSTATUS`; the strings carry the method names `playSfp`, `stop`, `setVolume` and `getStatus`
+(`beCriAudio_PlaySfp`, `beCriAudio_Stop`, `beCriAudio_SetVolume`, `beCriAudio_GetStatus`), and the error reporter they are passed
+to (`beCriAudio_ReportError`) is empty in retail. `beCriAudio_Pause` and `beCriAudio_IsPaused` reach only ADX voices.
+`beCri::vfunc_27` calls `beCriAudio_Suspend` on every playing handle while the DVD reports an error and `beCriAudio_Resume` once it
+clears: suspend saves the ADX output level in `_errVolume`, mutes and pauses the voice; resume restores the level, unpauses and
+sets `_errVolume` back to -999. A sound-bank voice only records 127 (suspend) or -999 (resume).
 
 **ISREADY.** `ISREADY <name>` (case 12, `FUN_0037dd10`) answers 1 unless the named BGM, ambience or live effect handle has an ADX state other
 than 3 (playing), which answers 0. A name no handle holds answers 1, and the special name `ALL` (`0x50e488`) tests the live ADX handles
@@ -304,8 +314,8 @@ together. Boss intros send `PLAYatPAUSE BT_SBOSS` and then wait on `DMchkSD ISRE
 stream takes to reach state 3 is not measured.
 
 **Level.** The ADX route (memory index -1) sets the voice level to `_volume + _baseVolume`, like the streams; the sound-bank
-route sets level 127 and stores `_volume` as the handle maximum. The sound-bank backend is an RPC into the sound IOP module (`0x00281bb8`: play = command 1 with the id and the packed
-sequence number, volume = command 4), so the event byte, the `00 82 02` wait of `WINDOW_OPEN2` and the handle maximum are
+route sets level 127 and stores `_volume` as the handle maximum. The sound-bank backend is an RPC into the sound IOP module (`SNDF_SeqCommand`: play = command 1 with the id and the packed
+sequence number, then command 2; volume = command 4), so the event byte, the `00 82 02` wait of `WINDOW_OPEN2` and the handle maximum are
 interpreted on the IOP side and are not recoverable from the EE program. `beSoundData._channel` (+24) is 1 for resident effects and 2 for
 streamed tracks in all 8,855 cue records, except three type 3 ADX effects that carry 2. The EE program reads cue records only at offsets 8,
 16, 18, 20, 26 and 28, so `_channel` is a data-side tag there; whether the sound IOP module uses it is not known.

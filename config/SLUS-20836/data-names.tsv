@@ -3027,6 +3027,8 @@
 0x004c8720	g_getRecordCommands	recovered-global
 0x004c8800	g_attributeNameDefault	recovered-global
 0x004c8804	g_attributeNames	recovered-global
+0x004c8fc0	g_fadeInCurve	recovered-global
+0x004c90b0	g_fadeOutCurve	recovered-global
 0x004c9230	g_libNdmwRuntimePlugin_callbackList	callback-list
 0x004c9408	g_beNDMWWindowList_callbackList	callback-list
 0x004c9470	g_beNDMWWindow_callbackList	callback-list
@@ -4361,6 +4363,18 @@
 0x0050ffe8	ENEMY_2	string-literal
 0x0050fff0	GETMATRIX_ACTIVE	string-literal
 0x00510008	NEAR_2	string-literal
+0x00510060	playSfp_REQUESTID	string-literal
+0x00510080	playSfp_SNDF_SEQ_SET	string-literal
+0x005100a0	playSfp_SNDF_SEQ_PLAY	string-literal
+0x005100c0	stop_REQUESTID	string-literal
+0x005100e0	stop_SNDF_SEQ_GETSTATUS	string-literal
+0x00510100	stop_SNDF_SEQ_STOP	string-literal
+0x00510120	setVolume_REQUESTID	string-literal
+0x00510140	setVolume_SNDF_SEQ_GETSTATUS	string-literal
+0x00510170	setVolume_SNDF_SEQ_VOLUME	string-literal
+0x00510190	getStatus_REQUESTID	string-literal
+0x005101b0	getStatus_SNDF_SEQ_GETSTATUS	string-literal
+0x00510200	MOVIE	string-literal
 0x005108f0	libNdmwRuntimePlugin_className	class-name
 0x00510a40	beNDMWWindowList_className	class-name
 0x00510ab8	beNDMWWindow_className	class-name

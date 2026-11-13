@@ -33,8 +33,8 @@ extern "C" int FUN_00236f80(int, int);
 extern "C" int Gap__Bec__beNDMWPanelWaza__vfunc_30(void);
 extern "C" int Gap__Bec__beNDMWPanelWaza__vfunc_20(void);
 extern "C" int beMessenger_RegisterReceiver(int, void *, int *, int, int);
-extern "C" int FUN_003a7a20(...);
-extern "C" int FUN_003a7e90(void *, int *);
+extern "C" int beBaseInfoRam_StartTimer(...);
+extern "C" int beBaseInfoRam_IsTimerExpired(void *, int *);
 extern "C" int FUN_003cc3d0(int, int *);
 extern "C" int FUN_003cc480(void *);
 extern "C" int FUN_003cc540(void *);
@@ -668,7 +668,7 @@ void Gap__Bec__beNDMWPanelWaza__vfunc_31(beNDMWPanelWaza *self, beNDMWPanelWazaI
             emg = 1;
             switch (ramState->_st1) {
             case 0:
-                if ((unsigned char)FUN_003a7e90(ramState, &DAT_00515b90[0])) {
+                if ((unsigned char)beBaseInfoRam_IsTimerExpired(ramState, &DAT_00515b90[0])) {
                     emg = 0;
                     if (panel->_isEmg != 0 ||
                         (blocked == 0 && (trig & 0x4000) && panel->_listKazu != 0 && work->_page != 2)) {
@@ -677,7 +677,7 @@ void Gap__Bec__beNDMWPanelWaza__vfunc_31(beNDMWPanelWaza *self, beNDMWPanelWazaI
                             if (0 < ret) {
                                 H::SetLabel(work, refStr);
                                 work->_retIsFire = 1;
-                                FUN_003a7a20(ramState, &DAT_00515b90[0], ret);
+                                beBaseInfoRam_StartTimer(ramState, &DAT_00515b90[0], ret);
                                 ramState->_st1 = ramState->_st1 + 1;
                                 ramState->_st3 = 0;
                                 ramState->_st2 = 0;
@@ -688,7 +688,7 @@ void Gap__Bec__beNDMWPanelWaza__vfunc_31(beNDMWPanelWaza *self, beNDMWPanelWazaI
                                 ramState->_st2 = 0;
                                 ramState->_st1 = 0;
                             } else {
-                                FUN_003a7a20(ramState, &DAT_00515b90[0], 0x0FE502AA);
+                                beBaseInfoRam_StartTimer(ramState, &DAT_00515b90[0], 0x0FE502AA);
                                 ramState->_st1 = ramState->_st1 + 1;
                                 ramState->_st3 = 0;
                                 ramState->_st2 = 0;
@@ -756,7 +756,7 @@ void Gap__Bec__beNDMWPanelWaza__vfunc_31(beNDMWPanelWaza *self, beNDMWPanelWazaI
                 }
                 break;
             case 1:
-                if (FUN_003a7e90(ramState, &DAT_00515b90[0]) != 0) {
+                if (beBaseInfoRam_IsTimerExpired(ramState, &DAT_00515b90[0]) != 0) {
                     ramState->_st1 = 0;
                     ramState->_st3 = 0;
                     ramState->_st2 = 0;
@@ -1028,13 +1028,13 @@ int Gap__Bec__beNDMWPanelWaza__vfunc_34(beNDMWPanelWaza *self, beNDMWPanelWazaIn
             FUN_003d0a90((int)self, (beNDMWPanelWazaInfoRam *)ram, 1, (igObject *)obj);
         } else if (FUN_003d08f0((beNDMWPanelWaza *)self, (beNDMWPanelWazaInfoRam *)ram) != 0) {
             FUN_003d0a90((int)self, (beNDMWPanelWazaInfoRam *)ram, 0, (igObject *)obj);
-        } else if (FUN_003a7e90(ram, DAT_00515be8) != 0) {
+        } else if (beBaseInfoRam_IsTimerExpired(ram, DAT_00515be8) != 0) {
             beMessenger_PushArgContext(self->_messenger);
             beMessenger_SelectGroup(self->_messenger, DAT_005159c0);
             beMessenger_AppendString(self->_messenger, (int)DAT_00515a98);
             beMessenger_DispatchSelected(self->_messenger, DAT_005159d8);
             beMessenger_PopArgContext(self->_messenger);
-            FUN_003a7a20(ram, DAT_00515be8, 0x0FE502AA);
+            beBaseInfoRam_StartTimer(ram, DAT_00515be8, 0x0FE502AA);
         }
         beMessenger_AppendBool(self->_messenger, 1);
         return 1;

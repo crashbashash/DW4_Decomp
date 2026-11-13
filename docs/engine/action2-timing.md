@@ -12,11 +12,11 @@ sequence layer polls.
 |---|---:|---|---|
 | `0x00230110` | 60 | `a2_f32_to_s64` | float → int64; sign-magnitude wrapper around the soft-double conversion `0x0022ffe8` |
 | `0x00398e80` | 112 | `a2_node_time(node, clock)` | node clock: `(int64)(scale · ticks) << 18` plus bias |
-| `0x003a7a20` | 736 | `a2_timer_start(act, name, duration)` | arm or re-arm the named timer on the action's property list |
-| `0x003a7d00` | 128 | `a2_ref_release(ref, flags)` | release `*ref`; delete `ref` when `(int16)flags > 0`; returns `ref` |
-| `0x003a7d80` | 272 | `a2_timer_exists(act, name)` | property-list lookup as a boolean |
-| `0x003a7e90` | 312 | `a2_timer_complete(act, name)` | **`duration < elapsed`**, strict, signed 64-bit; a missing timer reads complete |
-| `0x003a7fd0` | 364 | `a2_timer_elapsed(act, name)` | `(int64)(timer.scale · ticks) << 18` plus the timer's stored base |
+| `0x003a7a20` | 736 | `beBaseInfoRam_StartTimer(act, name, duration)` | arm or re-arm the named timer on the action's property list |
+| `0x003a7d00` | 128 | `TimerHolder` destructor `(ref, flags)` | release `*ref`; delete `ref` when `(int16)flags > 0`; returns `ref` |
+| `0x003a7d80` | 272 | `beBaseInfoRam_HasTimer(act, name)` | property-list lookup as a boolean |
+| `0x003a7e90` | 312 | `beBaseInfoRam_IsTimerExpired(act, name)` | **`duration < elapsed`**, strict, signed 64-bit; a missing timer reads complete |
+| `0x003a7fd0` | 364 | `beBaseInfoRam_GetTimerElapsed(act, name)` | `(int64)(timer.scale · ticks) << 18` plus the timer's stored base |
 | `0x00376340` | 372 | `a2_waitcheck_update(mgr, act)` | `beAction2WAITCHECK_Update` |
 | `0x003764c0` | 440 | `a2_waitcheck_start(mgr, act, comp)` | `beAction2WAITCHECK_Start`; returns 0 (wait) or 1 (continue) |
 | `0x00376de0` | 332 | `a2_jointset_update(mgr, act)` | `beAction2JOINTSET_Update` |
@@ -31,8 +31,8 @@ is the `Gap::Bec::beAction2` manager (`mgr`) and its second the playing-action o
 `+0x14` active byte, `+0x28` property list, `+0x2c` time node, `+0x38`
 `beAction2InfoWork`). `*_Start` handlers take the component as a third argument. The
 driver calls `*_Update` with exactly `(mgr, act)`. `mgr+0xc` is the engine system whose
-int64 clock is at `+0x50`; `mgr+0x14` is the messenger. The `a2_*` names are descriptive
-labels, not committed symbols: no retail name for the timer group or the
+int64 clock is at `+0x50`; `mgr+0x14` is the messenger. The timer functions take any `beBaseInfoRam` (the playing action is
+one); the other `a2_*` names are descriptive labels, not committed symbols: no retail name for them or the
 conversion has evidence beyond the property names `WAIT` (`0x50dfd8`) and `FADE`
 (`0x50dfe0`), so they remain hypotheses.
 
@@ -81,9 +81,9 @@ tick count exactly, so elapsed times coarsen.
 The action's property list (`act+0x28`) is created lazily, with a reference-counted
 assign whose count lives in the low 23 bits (release triggers when
 `(count & 0x7fffff) == 0`; a count with high bits set therefore releases early).
-`a2_timer_start` looks the name up, creates and registers the property when
+`beBaseInfoRam_StartTimer` looks the name up, creates and registers the property when
 absent, and writes, in order: base `-(f(start) << 18)` at `+0x18`, the start clock at
-`+0x28`, `1.0f` at `+0x38`, the duration at `+0x20`. `a2_timer_complete` looks the timer
+`+0x28`, `1.0f` at `+0x38`, the duration at `+0x20`. `beBaseInfoRam_IsTimerExpired` looks the timer
 up, reads its duration, then calls the elapsed query (a second lookup) and compares
 `duration < elapsed` as signed 64-bit integers. Elapsed time is
 `f(now)` minus `f(start)`, each quantized to 2^18 ns when `scale` is 1.0, so a timer's
@@ -91,6 +91,15 @@ elapsed value moves in 262,144 ns steps.
 
 Retail also arms a `FADE` timer with duration 0 from `FADESET_Start`; that call uses the
 same function.
+
+The rest of the timer group works on the same `beBaseInfoRamTimer` records (`_timeScale` +16, `_timeBias` +24,
+`_endTime` +32, `_svWorldTime` +40, `_svBeforTime` +48, `_keikaFrame` +56):
+`beBaseInfoRam_SetTimerScale` changes `_timeScale` and rebiases so the timer's current time does not jump;
+`beBaseInfoRam_SetAllTimerScales` does that for every timer in the list (entries whose meta object is
+`beBaseInfoRamTimer`); `beBaseInfoRam_GetTimerFrameDelta` returns the timer's advance since the previous world frame
+in 1/60 s frames (`elapsed / 16,666,667 ns`, at most 3.0), computed once per world clock value and cached in
+`_keikaFrame`; `beBaseInfoRam_RemoveTimer` and `beBaseInfoRam_RemoveAllTimers` drop one named timer or every timer,
+the latter leaving any other entries of the list in place.
 
 ## WAITCHECK
 
@@ -110,7 +119,7 @@ component's type string (a null string reads as empty):
 resumes `a2_start_components`** (the store happens before the call):
 
 - **Joint** completes when the low **byte** of `work+0x30` (`_jointIsEnd`) is nonzero.
-- **Frame** completes when `a2_timer_complete(act, "WAIT")`.
+- **Frame** completes when `beBaseInfoRam_IsTimerExpired(act, "WAIT")`.
 - **Motion** consults the motion object's clock (`0x001dd4b0`, `0x001af510` are leaves)
   and completes when its updated position is not unsigned-below the end time; a zero
   end time completes at once; the guard `work+8 != 1` of the controlling element

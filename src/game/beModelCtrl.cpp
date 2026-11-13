@@ -32,12 +32,12 @@ extern "C" void Gap__Bec__beNDMWMdlMapCursor__vfunc_37(void);
 extern "C" int FUN_002eb010(...);
 extern "C" int StringPool_Construct(...);
 extern "C" int StringChunk_ReleaseHeader(...);
-extern "C" int FUN_003a7e90(void *, void *);
+extern "C" int beBaseInfoRam_IsTimerExpired(void *, void *);
 extern "C" int beTargetObj_SetTarget(void *, void *);
 extern "C" int beTargetObj_SelectTarget(void *, void *, void *);
 extern "C" float beTargetObj_GetTargetDistanceSq(...);
 extern "C" float beTargetObj_GetTargetBearing(int, int, int, float);
-extern "C" int FUN_003a7a20(...);
+extern "C" int beBaseInfoRam_StartTimer(...);
 extern "C" int __fixsfdi(float);
 extern "C" int strcmp(...);
 extern "C" int beMessenger_SendNamed(...);
@@ -52,9 +52,9 @@ extern "C" int beMessenger_GetBool(...);
 extern "C" int beMessenger_GetBoolCount(...);
 extern "C" int beMessenger_GetInt(...);
 extern "C" int beMessenger_GetStringCount(...);
-extern "C" float FUN_003a8140(...);
+extern "C" float beBaseInfoRam_GetTimerFrameDelta(...);
 extern "C" int Matrix44_TranslateLocal(...);
-extern "C" int FUN_003a7d80(...);
+extern "C" int beBaseInfoRam_HasTimer(...);
 extern "C" void *FUN_00352940(...);
 extern "C" float atan2f(float, float);
 extern "C" int FUN_00192f50(...);
@@ -64,7 +64,7 @@ struct beModelCtrlInfoWork;
 extern "C" void FUN_00393c80(int a0, int a1, beModelCtrlInfoWork *a2, int name, int val);
 extern "C" int sprintf(...);
 extern "C" int beLua__RunNamedChunk(...);
-extern "C" int FUN_003a8580(...);
+extern "C" int beBaseInfoRam_RemoveTimer(...);
 extern "C" unsigned char FUN_00394ad0(int, int, void *, void *);
 extern "C" int beModelCtrlSubCom_StopType(int, int, int);
 extern "C" void FUN_003951e0(int a0, int a1, float *a2);
@@ -540,8 +540,8 @@ extern "C" beModelCtrlInfoAI *FUN_00352140(int);
 extern "C" beModelCtrlInfoHitBody *FUN_003523d0(int);
 extern "C" void beModelCtrlSubCom_StopAll(int, beBaseInfoRam *);
 extern "C" void beModelCtrlSubCom_AddEffect(int, const char *, const char *, V4 *, V4 *, int, float, int);
-extern "C" void FUN_003a84a0(beBaseInfoRam *, float);
-extern "C" void FUN_003a8760(beBaseInfoRam *);
+extern "C" void beBaseInfoRam_SetAllTimerScales(beBaseInfoRam *, float);
+extern "C" void beBaseInfoRam_RemoveAllTimers(beBaseInfoRam *);
 extern "C" void Matrix44_FromTranslation(void *, V4 *);
 extern "C" void beMessenger_GetVec3(V4 *, int, int);
 extern "C" float DAT_004c8fb8[4];
@@ -810,7 +810,7 @@ void FUN_00390f80(beModelCtrl *arg0, void *arg1, beBaseInfoRam *arg2, beModelCtr
     prop = ((beModelCtrlInfoRamData *)igProperty_FindByName((igObject *)arg2->_dataList, g_propertyNameField[0], &DAT_0050ef60[0]));
     cur = (beModelCtrlInfoAI *)arg3->_aI;
     StringRef str(0);
-    if (FUN_003a7e90(arg2, &DAT_0050ef68[0]) != 0) {
+    if (beBaseInfoRam_IsTimerExpired(arg2, &DAT_0050ef68[0]) != 0) {
         e = ((beModelCtrlAIMap **)((beModelCtrlAIMapList *)arg4->_aIMapList)->_data)[cur->_mapNo];
         if ((char *)e->_targetType == 0) {
             if (g_stringPool[0] == 0) {
@@ -892,7 +892,7 @@ void FUN_00390f80(beModelCtrl *arg0, void *arg1, beBaseInfoRam *arg2, beModelCtr
             }
         }
         str.p = newv;
-        fv = seg->_time; fv = fv; FUN_003a7a20(arg2, &DAT_0050ef68[0], __fixsfdi((1e9f * fv) / 60.0f));
+        fv = seg->_time; fv = fv; beBaseInfoRam_StartTimer(arg2, &DAT_0050ef68[0], __fixsfdi((1e9f * fv) / 60.0f));
     } else {
         nm = (char *)cur->_seqName;
         if (g_stringPool[0] == 0) {
@@ -1438,7 +1438,7 @@ void FUN_00392fa0(beModelCtrl *arg0, int arg1, beBaseInfoRam *arg2, beModelCtrlI
     info = (beModelCtrlMoveObjectList *)arg3->_moveObjectList;
     arg3->_isHitCheck = 0;
     if (info->_count != 0) {
-        f20 = FUN_003a8140(arg2, &DAT_0050f0b8[0]);
+        f20 = beBaseInfoRam_GetTimerFrameDelta(arg2, &DAT_0050f0b8[0]);
         if (((MoveObjRef *)info->_data)[3]->_isRun != 0) {
             f3 = 0.017453292f * FUN_00392e10((beModelCtrlMoveObject *)(MOVES(arg3)[3]), f20);
             *(float *)&arg3->_targetDirection[1] = *(float *)&arg3->_targetDirection[1] + f3;
@@ -1496,8 +1496,8 @@ unsigned char FUN_00393260(beModelCtrl *arg0, beBaseInfoRam *arg1, beModelCtrlIn
 {
     float sp88[3];
     int k;
-    if (!(FUN_003a7d80(arg1, &DAT_0050f0b8[0]) & 0xFF)) {
-        FUN_003a7a20(arg1, &DAT_0050f0b8[0], 0);
+    if (!(beBaseInfoRam_HasTimer(arg1, &DAT_0050f0b8[0]) & 0xFF)) {
+        beBaseInfoRam_StartTimer(arg1, &DAT_0050f0b8[0], 0);
     }
     if (arg2->_isPosLock != 0) {
         arg2->_isPosLock = 0;
@@ -2043,7 +2043,7 @@ found:
             DAT_0058a218[0] = 0;
         }
     }
-    FUN_003a8580(arg2, &DAT_0050ef68[0]);
+    beBaseInfoRam_RemoveTimer(arg2, &DAT_0050ef68[0]);
     return 1;
 }
 
@@ -2161,7 +2161,7 @@ int FUN_00394fa0(int arg0, int arg1, A *arg2, B *arg3) {
 }
 
 int FUN_00395070(int arg0, int arg1, beModelCtrlInfoWork *arg2, beModelCtrlMUTEKI *arg3) {
-    if (!(FUN_003a7d80(arg1, &DAT_0050f0b8[0]) & 0xFF)) { FUN_003a7a20(arg1, &DAT_0050f0b8[0], 0); }
+    if (!(beBaseInfoRam_HasTimer(arg1, &DAT_0050f0b8[0]) & 0xFF)) { beBaseInfoRam_StartTimer(arg1, &DAT_0050f0b8[0], 0); }
     if (strcmp(MutekiNameOf::Get(arg3), &DAT_0050f190[0]) == 0) { arg2->_isWallCheck = 0; }
     else if (strcmp(MutekiNameOf::Get(arg3), &DAT_0050f198[0]) == 0) { arg2->_isWallCheck = 1; }
     else if (strcmp(MutekiNameOf::Get(arg3), &DAT_0050f1a0[0]) == 0) { arg2->_isFloorCheck = 0; }
@@ -2173,7 +2173,7 @@ int FUN_00395070(int arg0, int arg1, beModelCtrlInfoWork *arg2, beModelCtrlMUTEK
 void FUN_003951e0(int a0, int a1, float *a2) {
     float f = a2[31];
     if (!(f <= 0.0f)) {
-        float v = f - FUN_003a8140(a1, &DAT_0050f0b8[0]);
+        float v = f - beBaseInfoRam_GetTimerFrameDelta(a1, &DAT_0050f0b8[0]);
         if (v < 0.0f) v = 0.0f;
         a2[31] = v;
     }
@@ -2281,7 +2281,7 @@ void FUN_003956e0(int a0, int a1, beBaseInfoRam *obj, beModelCtrlInfoWork *st, i
             if (*spp == 0.0f) {
                 *pv = *(float *)((char *)&st->_direction[0] + off);
             } else {
-                step = *spp * FUN_003a8140(obj, &DAT_0050f0b8[0]);
+                step = *spp * beBaseInfoRam_GetTimerFrameDelta(obj, &DAT_0050f0b8[0]);
                 c = *(float *)((char *)&st->_direction[0] + off);
                 t = *(float *)((char *)&st->_targetDirection[0] + off);
                 while (c < 0.0f) c += 6.2831855f;
@@ -2404,7 +2404,7 @@ void Gap__Core__igObject__vfunc_31(beModelCtrl *arg0, beBaseInfoRam *arg1) {
         if (q->_ctrlSt0 != 0) {
             FUN_00391cf0((KeyCtrlOwner *)arg0, s2, (int)arg1, q);
         } else if (q->_aI != 0) {
-            FUN_003a8580(arg1, &DAT_0050ef68[0]);
+            beBaseInfoRam_RemoveTimer(arg1, &DAT_0050ef68[0]);
         }
         ((UpdView *)arg0)->v46(arg1);
         if (q->_isPosLock == 0) {
@@ -2651,7 +2651,7 @@ int Gap__Bec__beModelCtrl__vfunc_33(beModelCtrl *self, beBaseInfoRam *ent, const
             beModelCtrlNode2 *o3 = O3;
             REL(o3->_bound)
             o3->_bound = 0;
-            FUN_003a8760(ent);
+            beBaseInfoRam_RemoveAllTimers(ent);
             ent->_isRun = 0;
             beMessenger_PopArgContext(M);
         }
@@ -2773,7 +2773,7 @@ int Gap__Bec__beModelCtrl__vfunc_33(beModelCtrl *self, beBaseInfoRam *ent, const
         return 1;
     case 20:
         if (ent->_isRun != 0 && d != 0) {
-            FUN_003a84a0(ent, 0.0f);
+            beBaseInfoRam_SetAllTimerScales(ent, 0.0f);
             int id = ent->_ramNo;
             NAMEOF(n)
             beMessenger_SendNamed(M, ((char *)DAT_0050eff8), n, id, DAT_0050f1f0);
@@ -2783,7 +2783,7 @@ int Gap__Bec__beModelCtrl__vfunc_33(beModelCtrl *self, beBaseInfoRam *ent, const
         return 1;
     case 21:
         if (ent->_isRun != 0 && d != 0) {
-            FUN_003a84a0(ent, 1.0f);
+            beBaseInfoRam_SetAllTimerScales(ent, 1.0f);
             int id = ent->_ramNo;
             NAMEOF(n)
             beMessenger_SendNamed(M, ((char *)DAT_0050eff8), n, id, DAT_0050f200);
@@ -2945,7 +2945,7 @@ int Gap__Bec__beModelCtrl__vfunc_33(beModelCtrl *self, beBaseInfoRam *ent, const
                 beModelCtrlNode2 *o3 = O3;
                 REL(o3->_bound)
                 o3->_bound = 0;
-                FUN_003a8760(ent);
+                beBaseInfoRam_RemoveAllTimers(ent);
                 beMessenger_PopArgContext(M);
             } else {
                 const char *tk;

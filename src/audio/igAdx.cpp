@@ -6,19 +6,19 @@ extern "C" int FUN_0026d8b8(int, int, int);
 extern "C" int FUN_0026d5f0(int, short, short);
 extern "C" int FUN_0026d7a0(int, int);
 extern "C" int ADXT_Stop(int);
-extern "C" void FUN_00332340(void *arg0);
+extern "C" void igAdxAudio_Stop(void *arg0);
 extern "C" int ADXT_Pause(int);
-extern "C" void FUN_00332370(void *arg0);
+extern "C" void igAdxAudio_Pause(void *arg0);
 extern "C" int ADXT_GetStatPause(int);
-extern "C" int FUN_003323a0(void *arg0);
+extern "C" int igAdxAudio_GetPauseState(void *arg0);
 extern "C" int ADXT_Destroy(...);
 extern "C" int Memory_FreeBufferWithAllocator(...);
 extern "C" int FUN_0026c660(int);
-extern "C" void FUN_00332430(void *arg0);
+extern "C" void igAdxAudio_SetOutVolume(void *arg0);
 extern "C" int FUN_0026c6c8(int);
-extern "C" int FUN_00332460(void *arg0);
+extern "C" int igAdxAudio_GetOutVolume(void *arg0);
 extern "C" int FUN_0026bd20(int);
-extern "C" int FUN_00332490(void *arg0);
+extern "C" int igAdxAudio_GetStatus(void *arg0);
 extern "C" void *FUN_002b9500(int);
 extern "C" int Memory_GetAllocatorByName(...);
 extern "C" int igObject_Destroy(...);
@@ -93,11 +93,11 @@ extern "C" void FUN_00100610(void *);
 extern "C" void FUN_003337e0(void);
 extern "C" void FUN_003337f0(void);
 struct S { char pad[8]; int f8; int f12; int pad2; int f20; int f24; int f28; int f32; unsigned char f36; };
-extern "C" int FUN_00331fb0(struct S *s, int a, int b, int c, int d);
+extern "C" int igAdxAudio_Initialize(struct S *s, int a, int b, int c, int d);
 typedef struct T_3320d0 { char pad0[8]; int f8; int fc; char pad1[4]; int f14; char pad2[12]; unsigned char f24; char pad3[7]; int f2c; } T_3320d0;
-extern "C" int FUN_003320d0(T_3320d0 *arg0, int a1, int a2, int a3, int a4, int a5);
+extern "C" int igAdxAudio_CreateHandle(T_3320d0 *arg0, int a1, int a2, int a3, int a4, int a5);
 typedef struct S_332160 { char pad0[20]; int f20; int f24; int f28; int f32; char pad36[8]; int f44; } S_332160;
-extern "C" int FUN_00332160(S_332160 *arg0, int arg1, int arg2);
+extern "C" int igAdxAudio_StartMemory(S_332160 *arg0, int arg1, int arg2);
 struct Q { char pad[16]; short f16; short f18; };
 struct T_3321f0 { char pad[16]; struct Q **f16; };
 struct S_3321f0 { char pad[44]; int f44; };
@@ -105,9 +105,9 @@ extern "C" int FUN_003321f0(struct S_3321f0 *arg0, int arg1, int arg2, int arg3,
 struct A { char pad[20]; int f20; int f24; int f28; int f32; char pad2[8]; int f44; };
 struct L { char pad[16]; int *tab; };
 struct E { char pad[16]; short s16; short s18; };
-extern "C" int FUN_00332290(struct A *arg0, int arg1);
+extern "C" int igAdxAudio_StartFile(struct A *arg0, int arg1);
 struct S_3323d0 { char pad[8]; int f8; char pad2[32]; int f44; };
-extern "C" void FUN_003323d0(S_3323d0 *arg0);
+extern "C" void igAdxAudio_Shutdown(S_3323d0 *arg0);
 typedef struct R { char pad4[4]; int f4; } R;
 extern "C" int DAT_004ffe68[4];
 typedef struct Obj { int w0; unsigned refs; } Obj;
@@ -199,7 +199,7 @@ typedef struct ObjectRefTarget { int word0; int references; } ObjectRefTarget;
 typedef struct ObjectRefWord { ObjectRefTarget *value; } ObjectRefWord;
 extern "C" ObjectRefWord *FUN_00333760(ObjectRefWord *self,int delete_storage);
 
-int FUN_00331fb0(struct S *s, int a, int b, int c, int d) {
+int igAdxAudio_Initialize(struct S *s, int a, int b, int c, int d) {
     if (s->f36 == 0) {
         int t, q, w;
         s->f20 = a;
@@ -217,10 +217,10 @@ int FUN_00331fb0(struct S *s, int a, int b, int c, int d) {
     return 1;
 }
 
-int FUN_003320d0(T_3320d0 *arg0, int a1, int a2, int a3, int a4, int a5) {
+int igAdxAudio_CreateHandle(T_3320d0 *arg0, int a1, int a2, int a3, int a4, int a5) {
     if (arg0->f24 == 0) {
         if (a5 != 0) {
-            FUN_00331fb0((S *)arg0, a1, a2, a3, a4);
+            igAdxAudio_Initialize((S *)arg0, a1, a2, a3, a4);
             arg0->f24 = 1;
         } else {
             return 0;
@@ -235,9 +235,9 @@ int FUN_003320d0(T_3320d0 *arg0, int a1, int a2, int a3, int a4, int a5) {
     return arg0->f2c;
 }
 
-int FUN_00332160(S_332160 *arg0, int arg1, int arg2) {
+int igAdxAudio_StartMemory(S_332160 *arg0, int arg1, int arg2) {
     if (arg0->f44 == 0) {
-        arg0->f44 = FUN_003320d0((T_3320d0 *)arg0, arg0->f20, arg0->f24, arg0->f28, arg0->f32, 0);
+        arg0->f44 = igAdxAudio_CreateHandle((T_3320d0 *)arg0, arg0->f20, arg0->f24, arg0->f28, arg0->f32, 0);
         if (arg0->f44 == 0) {
             return 0;
         }
@@ -250,7 +250,7 @@ int FUN_003321f0(struct S_3321f0 *arg0, int arg1, int arg2, int arg3, int arg4, 
     int temp_v0;
     struct Q *temp_v0_2;
 
-    arg0->f44 = FUN_003320d0((T_3320d0 *)arg0, arg2, arg3, arg4, arg5, 1);
+    arg0->f44 = igAdxAudio_CreateHandle((T_3320d0 *)arg0, arg2, arg3, arg4, arg5, 1);
     temp_v0 = FUN_00333440((const char *)arg1);
     if (temp_v0 != -1) {
         temp_v0_2 = ((struct T_3321f0 * *)DAT_00587620)[0]->f16[temp_v0];
@@ -261,7 +261,7 @@ int FUN_003321f0(struct S_3321f0 *arg0, int arg1, int arg2, int arg3, int arg4, 
     return 1;
 }
 
-int FUN_00332290(struct A *arg0, int arg1) {
+int igAdxAudio_StartFile(struct A *arg0, int arg1) {
     int temp_v0;
     struct E *e;
 
@@ -278,7 +278,7 @@ int FUN_00332290(struct A *arg0, int arg1) {
     return FUN_003321f0((struct S_3321f0 *)arg0, arg1, arg0->f20, arg0->f24, arg0->f28, arg0->f32);
 }
 
-void FUN_00332340(void *arg0) {
+void igAdxAudio_Stop(void *arg0) {
     int temp_a0;
 
     temp_a0 = *(int *)((char *)(arg0) + 44);
@@ -287,14 +287,14 @@ void FUN_00332340(void *arg0) {
     }
 }
 
-void FUN_00332370(void *arg0) {
+void igAdxAudio_Pause(void *arg0) {
     int temp_a0 = *(int *)((char *)(arg0) + 44);
     if (temp_a0 != 0) {
         ADXT_Pause(temp_a0);
     }
 }
 
-int FUN_003323a0(void *arg0) {
+int igAdxAudio_GetPauseState(void *arg0) {
     int temp_a0;
 
     temp_a0 = *(int *)((char *)arg0 + 44);
@@ -304,7 +304,7 @@ int FUN_003323a0(void *arg0) {
     return ADXT_GetStatPause(temp_a0);
 }
 
-void FUN_003323d0(S_3323d0 *arg0) {
+void igAdxAudio_Shutdown(S_3323d0 *arg0) {
     if (arg0->f44 != 0) {
         ADXT_Destroy(arg0->f44);
     }
@@ -313,7 +313,7 @@ void FUN_003323d0(S_3323d0 *arg0) {
     }
 }
 
-void FUN_00332430(void *arg0) {
+void igAdxAudio_SetOutVolume(void *arg0) {
     int temp_a0;
 
     temp_a0 = *(int *)((char *)(arg0) + 44);
@@ -322,7 +322,7 @@ void FUN_00332430(void *arg0) {
     }
 }
 
-int FUN_00332460(void *arg0) {
+int igAdxAudio_GetOutVolume(void *arg0) {
     int temp_a0;
 
     temp_a0 = *(int *)((char *)arg0 + 44);
@@ -332,7 +332,7 @@ int FUN_00332460(void *arg0) {
     return FUN_0026c6c8(temp_a0);
 }
 
-int FUN_00332490(void *arg0) {
+int igAdxAudio_GetStatus(void *arg0) {
     int temp_a0;
 
     temp_a0 = *(int *)((char *)arg0 + 44);

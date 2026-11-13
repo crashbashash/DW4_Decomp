@@ -70,7 +70,7 @@ extern "C" void FUN_003337e0(void);
 extern "C" void FUN_003350b0(void);
 extern "C" void FUN_003337f0(void);
 extern "C" void FUN_003350d0(void);
-extern "C" void FUN_003350f0(int arg0);
+extern "C" void igAdxAudio_Create(int arg0);
 extern "C" igMetaObject *FUN_00335130(void);
 extern "C" void *FUN_00335180(void);
 extern "C" int igAdxAudio_GetVTable(void);
@@ -837,7 +837,7 @@ void FUN_003350d0(void)
     FUN_003337f0();
 }
 
-void FUN_003350f0(int arg0) {
+void igAdxAudio_Create(int arg0) {
     FUN_00335260();
     igMetaObject_CreateInstance(*(int *)0x5876E0, arg0);
 }
