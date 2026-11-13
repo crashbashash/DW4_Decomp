@@ -340,9 +340,16 @@ appended to `beCri::_lsBinObjs`, and `beCri_StartSfpTransfers` starts the transf
 `beCri_PlayEffect` takes three arguments (the controller, the file-name list and the cue): the Xbox and GameCube
 builds pass two besides the receiver, and the PS2 body never reads `a3`. In the PS2 play-row search the row index
 lands in `a3` through the colouring order of the search's locals, not as an argument. That loop reloads the row
-count every row and keeps a byte offset beside the index; MWCC gives that shape for a list re-read after each row
-(the walk `beSound_Update` does) with an explicit offset, while a plain indexed `for` loop over a local list hoists
-the count and turns the offset into a pointer. `VOLUMECTL2` also computes `|a - b|` and discards it.
+count every row, hoists the data pointer and keeps a byte offset beside the index. Its registers (index `a3`, row
+`a2`, offset `a1`, list `a0`) are the colouring of a `for`-scoped index, a body-scoped row, a strength-reduced
+offset and a list pointer hoisted after strength reduction. Nested inline accessors (the row read through an
+inline that takes the list from another inline of the controller) give exactly that, except that the count is
+hoisted too. The count load stays in the loop only when a list
+variable is assigned inside the loop (the re-read `beSound_Update` does). A declared variable always takes a lower
+id than the compiler's offset, so the source spells the offset out and orders the declarations by hand. A plain
+indexed `for` loop over a local list hoists the count and turns the offset into a pointer. The GameCube and Xbox
+builds read the list once before the loop and reload both the count and the data every row. `VOLUMECTL2` also
+computes `|a - b|` and discards it.
 
 ## The beCri controller
 
@@ -381,6 +388,7 @@ fades go through `beCri_FadeByName` and `beCri_FadeByID`, `STOP` through `beCri_
 `OFFREEZE` (`beCri_SetFreezeAudible` with 0 and 1) silence or restore the playing type 4 effects.
 `SNDFVOLUME` (`beCri_SetSndfVolume`) sets the sound-bank master level once.
 
-Open questions: what type 4 cues are (only they follow the freeze); the insight calls of slots 21 and 22
+Open questions: the source form of the PS2 play-row search (which form keeps the count load in the loop with the
+list hoisted only after strength reduction); what type 4 cues are (only they follow the freeze); the insight calls of slots 21 and 22
 (`igInsightCore_AddToScheduler`, `igInsightCore_RemoveFromScheduler`) are read as joining and leaving the insight from their pairing, not from
 their bodies.
