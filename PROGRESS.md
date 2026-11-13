@@ -4,8 +4,8 @@ A snapshot of how much of `game.elf` has been rebuilt as matching source. Regene
 
 ```
 fully matched (C/C++ and approved assembly)
-  functions  ███████████████████████░  95.1 %   19,568 / 20,584
-  code bytes ███████████████████░░░░░  81.0 %   2,815,648 / 3,475,412   (make check `match` and `assembly`: code bytes, exception metadata and symbol rules)
+  functions  ███████████████████████░  95.1 %   19,569 / 20,584
+  code bytes ███████████████████░░░░░  81.0 %   2,816,104 / 3,475,412   (make check `match` and `assembly`: code bytes, exception metadata and symbol rules)
 code bytes identical (verification debt included; see below)
   functions  ███████████████████████░  95.4 %   19,637 / 20,584
   code bytes ████████████████████░░░░  81.9 %   2,847,248 / 3,475,412
@@ -23,8 +23,8 @@ The function count is flattered by small functions: the ones done have a median 
 
 | category | functions | code bytes | % of code bytes | meaning |
 | --- | ---: | ---: | ---: | --- |
-| **`match`** | 19,484 | 2,810,292 | 80.9 | code bytes, exception metadata and symbol rules all pass; fully verified |
-| `code-only` | 8 | 9,280 | 0.3 | code bytes identical; exception metadata not reproduced (compile mode or cleanup scope) |
+| **`match`** | 19,485 | 2,810,748 | 80.9 | code bytes, exception metadata and symbol rules all pass; fully verified |
+| `code-only` | 7 | 8,824 | 0.3 | code bytes identical; exception metadata not reproduced (compile mode or cleanup scope) |
 | `foreign-profile` | 10 | 288 | 0.0 | code bytes identical only under a provisional per-function override whose compiler, flags or exception mode differ from the unit's profile (config/SLUS-20836/units.tsv; docs/engine/build-profiles.md) |
 | `unapproved` | 51 | 22,032 | 0.6 | code bytes identical, but the source uses inline `asm` or `volatile` the owner has not approved (config/source-approvals.tsv; docs/engine/source-approvals.md) |
 | `assembly` | 84 | 5,356 | 0.2 | an owner-approved hand-written assembly source (config/assembly-sources.tsv), byte-identical: the original was written in assembly, so it is matched, though not C (docs/engine/assembly-sources.md) |
@@ -33,7 +33,7 @@ The `code-only` debt by exception-metadata reason (from each unit's diagnostic):
 
 | reason | functions | code bytes | meaning |
 | --- | ---: | ---: | --- |
-| `missing` | 6 | 3,472 | retail keeps an exception record the unit does not produce |
+| `missing` | 5 | 3,016 | retail keeps an exception record the unit does not produce |
 | `other` | 2 | 5,808 | the unit's first diagnostic line does not name the exception reason (a deferred duplicate, or a table/index line comes first); see its row in data/check-categories.tsv |
 
 **Fully linked** is the sibling number a WIP decomp is read on, and the bar above measures bytes built from recovered C/C++ over the **4,541,184-byte section** that `make link` emits and `tools/linkcheck.py` compares (`0x100000..0x554b00`, code + data). The loader also maps a zero-initialised `.bss` tail to `0x58d280`, but the link never emits it, so it is not in the denominator. The **asm bodies** are not counted: they link from `src/`, but an `asm` body is the retail instructions wrapped in a function (docs/engine/asm-body-matches.md), not recovered C, so counting it would overstate the decompilation. Elsewhere the two headlines differ (Twilight Princess: 12.07 % decompiled, 8.12 % fully linked) since a translation-unit build can only drop a unit's asm stub once the *whole* unit is decompiled. Counting **code alone**, this repo's two numbers are identical, **81.8 %** C/C++, because of how the pipeline works: `tools/layout.py` tiles the section per function, so `tools/linkgen.py` replaces retail one function at a time and a match is linked from source immediately. `make link` prints the accounting from the link itself (**19,553 units / 2,856,524 bytes from C/C++ (14,632 of them compiler-generated jump tables), 0 units / 0 bytes of asm bodies, 628,164 bytes from `asm/`**), and the section then compares byte-identical, so nothing decompiled is waiting to be linked.
@@ -42,18 +42,18 @@ The `code-only` debt by exception-metadata reason (from each unit's diagnostic):
 
 Matching proves the bytes; it does not make the source readable. A matched function counts as **readable** when it also passes every test below. The tests are mechanical, so this is a floor: a function can pass them all and still be hard to follow. An owner-approved assembly source counts as readable when it has a recovered name, because its approval records that no C reproduces it.
 
-**5,502** of the 19,568 matched functions are readable: **819,672** code bytes, **23.6 %** of the code.
+**5,636** of the 19,569 matched functions are readable: **841,300** code bytes, **24.2 %** of the code.
 
 | A matched function is readable when | matched functions failing it | code bytes |
 | --- | ---: | ---: |
-| the function has a recovered name, not `FUN_<address>` or a numbered virtual slot | 13,631 | 1,867,988 |
-| no name holds an address: not the function's own, nor any function, variable or type it uses | 10,063 | 1,729,300 |
-| the types it uses have real names, not a placeholder such as `S`, `Obj`, `Info176` or `DW4VC_232_2` | 719 | 423,648 |
-| it sits in its class or module file, not `src/unmatched/` | 1,888 | 240,988 |
-| what it calls and reads is named: no `FUN_`/`DAT_` references | 3,673 | 1,062,588 |
-| no decompiler leftovers: `temp_*`, `var_*`, `argN`, stack-offset locals such as `sp5C` | 1,615 | 562,884 |
-| fields are reached through named struct members: no `fNN`/`unkNN` members, no cast of a pointer plus an offset | 1,343 | 440,920 |
-| virtual calls go through a named method, not a slot number such as `v216` or a cast function pointer | 324 | 176,992 |
+| the function has a recovered name, not `FUN_<address>` or a numbered virtual slot | 13,452 | 1,834,908 |
+| no name holds an address: not the function's own, nor any function, variable or type it uses | 9,903 | 1,704,944 |
+| the types it uses have real names, not a placeholder such as `S`, `Obj`, `Info176` or `DW4VC_232_2` | 663 | 405,696 |
+| it sits in its class or module file, not `src/unmatched/` | 1,815 | 227,792 |
+| what it calls and reads is named: no `FUN_`/`DAT_` references | 3,552 | 1,037,924 |
+| no decompiler leftovers: `temp_*`, `var_*`, `argN`, stack-offset locals such as `sp5C` | 1,483 | 537,020 |
+| fields are reached through named struct members: no `fNN`/`unkNN` members, no cast of a pointer plus an offset | 1,300 | 428,512 |
+| virtual calls go through a named method, not a slot number such as `v216` or a cast function pointer | 310 | 171,324 |
 
 ## Debt
 
@@ -61,10 +61,10 @@ The debt ratchet ([`docs/engine/debt-ratchet.md`](docs/engine/debt-ratchet.md)):
 
 | counter | baseline | current | Δ | measures |
 | --- | ---: | ---: | ---: | --- |
-| `code_only.functions` | 8 | 8 | 0 | units whose code bytes match but exception metadata is unproven (data/check-categories.tsv) |
-| `code_only.bytes` | 9,280 | 9,280 | 0 | code bytes of those units |
-| `code_only.missing.functions` | 6 | 6 | 0 | code-only: retail keeps an exception record the unit does not produce |
-| `code_only.missing.bytes` | 3,472 | 3,472 | 0 | bytes of those |
+| `code_only.functions` | 7 | 7 | 0 | units whose code bytes match but exception metadata is unproven (data/check-categories.tsv) |
+| `code_only.bytes` | 8,824 | 8,824 | 0 | code bytes of those units |
+| `code_only.missing.functions` | 5 | 5 | 0 | code-only: retail keeps an exception record the unit does not produce |
+| `code_only.missing.bytes` | 3,016 | 3,016 | 0 | bytes of those |
 | `code_only.extra.functions` | 0 | 0 | 0 | code-only: the unit emits exception metadata retail lacks |
 | `code_only.extra.bytes` | 0 | 0 | 0 | bytes of those |
 | `code_only.differ.functions` | 0 | 0 | 0 | code-only: both have exception metadata and it differs |
@@ -84,12 +84,12 @@ The debt ratchet ([`docs/engine/debt-ratchet.md`](docs/engine/debt-ratchet.md)):
 | `inline_asm.other` | 0 | 0 | 0 | `asm` statements other than `sync` and `ei` without an owner's approval row for each function they reach (tools/inline_asm.py) |
 | `unmatched.functions` | 947 | 947 | 0 | functions in the layout with no definition in src/ |
 | `unmatched.bytes` | 628,164 | 628,164 | 0 | bytes of those |
-| `struct.a` | 69 | 69 | 0 | struct-report groups: same view name, clashing layouts across units (scripts/check_struct_conflicts.py) |
+| `struct.a` | 66 | 66 | 0 | struct-report groups: same view name, clashing layouts across units (scripts/check_struct_conflicts.py) |
 | `struct.b` | 0 | 0 | 0 | struct-report groups: receiver view disagrees with the reflected class |
-| `struct.c` | 92 | 92 | 0 | struct-report groups: offset-named member whose number is not its offset |
-| `m2c_idiom.units` | 781 | 781 | 0 | source files (asm bodies excluded) still carrying m2c idioms: `temp_*`, `var_*` or `argN` |
+| `struct.c` | 88 | 88 | 0 | struct-report groups: offset-named member whose number is not its offset |
+| `m2c_idiom.units` | 722 | 722 | 0 | source files (asm bodies excluded) still carrying m2c idioms: `temp_*`, `var_*` or `argN` |
 | `raw_casts.reflected` | 365 | 365 | 0 | raw offset casts on a named receiver where reflection names the field (tools/typed_coverage.py `typeable`) |
-| `fun_dat_refs` | 31,870 | 31,870 | 0 | FUN_/DAT_-named references in matched units' code (comments and strings excluded, definitions subtracted) |
+| `fun_dat_refs` | 30,369 | 30,369 | 0 | FUN_/DAT_-named references in matched units' code (comments and strings excluded, definitions subtracted) |
 | `foreign_profile.functions` | 10 | 10 | 0 | code bytes match only under a provisional per-function override that differs from the unit's profile in config/SLUS-20836/units.tsv (data/check-categories.tsv) |
 | `foreign_profile.bytes` | 288 | 288 | 0 | bytes of those |
 | `unapproved.functions` | 51 | 51 | 0 | code bytes match, but the source uses inline `asm` or `volatile` with no owner approval (config/source-approvals.tsv) |
@@ -172,14 +172,14 @@ The section in 16 equal parts. `0x00100000` is the start of everything.
 
 | | |
 | --- | --- |
-| functions with a recovered name (any: role names included) | 9,905 of 20,584 |
-| functions with a **semantic** name (not `FUN_`/`thunk_`, not `::vfunc_NN`, not `*_GetMetaObject`/`_GetVTable`/`_Register`/`_InitFields`) | 2,238 of 20,584 (2,098 of them matched) |
+| functions with a recovered name (any: role names included) | 10,101 of 20,584 |
+| functions with a **semantic** name (not `FUN_`/`thunk_`, not `::vfunc_NN`, not `*_GetMetaObject`/`_GetVTable`/`_Register`/`_InitFields`) | 2,434 of 20,584 (2,278 of them matched) |
 | RTTI records / vtables / vfunc names | 579 / 478 / 1,286 |
 | reflection MetaObjects (with fields) | 1,075 (659) |
 | reflection fields with offset and type | 3,680 |
 | switch jump tables recovered | 209 tables, 4,147 entries, in 172 functions |
 | Lua chunks decompiled | 5,291 |
-| field accesses using a **recovered** type (not an offset cast) | 26,288 of 66,519 (39.52 %) |
+| field accesses using a **recovered** type (not an offset cast) | 26,453 of 66,435 (39.82 %) |
 | functions in the retail split (`asm/`, generated) | 20,584 |
 
 ## How these numbers are produced
