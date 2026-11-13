@@ -24,7 +24,7 @@
   "beBaseInfoDataList": 14,
   "beBaseInfoList": 10,
   "beBaseInfoManager": 36,
-  "beBaseInfoRam": 741,
+  "beBaseInfoRam": 736,
   "beBaseInfoRamList": 4,
   "beBaseInfoRamTimer": 20,
   "beBinDataObject": 3,
@@ -159,10 +159,10 @@
   "beNDMWItemYellowArmor": 13,
   "beNDMWListCtrl": 19,
   "beNDMWLoadCtrl2": 71,
-  "beNDMWLoadCtrl2CommonIntf": 245,
+  "beNDMWLoadCtrl2CommonIntf": 244,
   "beNDMWLoadCtrl2CtrlData": 74,
   "beNDMWLoadIntf2": 147,
-  "beNDMWLoadIntf2ComMdlCtrl": 64,
+  "beNDMWLoadIntf2ComMdlCtrl": 66,
   "beNDMWLoadIntf2CtrlData": 110,
   "beNDMWLoadIntf2DataSelIntf": 347,
   "beNDMWLoadIntf2DegiState": 171,
@@ -175,7 +175,7 @@
   "beNDMWLoadIntf2SelSlot": 569,
   "beNDMWLoadIntf2TextOrder": 80,
   "beNDMWLoadSavePlWork": 205,
-  "beNDMWLoadSavePlWorkList": 33,
+  "beNDMWLoadSavePlWorkList": 34,
   "beNDMWLoadSlotPlayer": 24,
   "beNDMWLoadSlotPlayerList": 12,
   "beNDMWLogo": 7,
@@ -205,7 +205,7 @@
   "beNDMWSaveCtrl": 11,
   "beNDMWSaveCtrlCtrlData": 4,
   "beNDMWSaveIntf": 49,
-  "beNDMWSaveIntfComMdlCtrl": 6,
+  "beNDMWSaveIntfComMdlCtrl": 4,
   "beNDMWSaveIntfCtrlData": 62,
   "beNDMWShinkaCtrl": 28,
   "beNDMWShinkaObject": 44,
@@ -265,7 +265,7 @@
   "beNDMWTitle2": 40,
   "beNDMWTitle2CtrlData": 195,
   "beNDMWTitle2Option": 72,
-  "beNDMWWindow": 199,
+  "beNDMWWindow": 200,
   "beNDMWWindowCtrl": 24,
   "beNDMWWindowList": 41,
   "beNDMWWindowSelect": 128,
@@ -643,22 +643,22 @@
    "total": 3039
   },
   "engine": {
-   "files": 83,
-   "offset_casts": 4086,
-   "other_members": 11110,
+   "files": 94,
+   "offset_casts": 4087,
+   "other_members": 11205,
    "recovered": 6077,
-   "recovered_pct": 21.43,
-   "synthetic": 7084,
-   "total": 28357
+   "recovered_pct": 21.36,
+   "synthetic": 7076,
+   "total": 28445
   },
   "game": {
    "files": 85,
-   "offset_casts": 1257,
-   "other_members": 2857,
-   "recovered": 19602,
-   "recovered_pct": 79.82,
-   "synthetic": 843,
-   "total": 24559
+   "offset_casts": 1254,
+   "other_members": 2852,
+   "recovered": 19598,
+   "recovered_pct": 79.83,
+   "synthetic": 847,
+   "total": 24551
   },
   "libgcc": {
    "files": 7,
@@ -724,19 +724,19 @@
    "total": 3776
   },
   "unmatched": {
-   "files": 1858,
-   "offset_casts": 889,
-   "other_members": 2670,
+   "files": 1810,
+   "offset_casts": 872,
+   "other_members": 2638,
    "recovered": 528,
-   "recovered_pct": 10.22,
-   "synthetic": 1077,
-   "total": 5164
+   "recovered_pct": 10.36,
+   "synthetic": 1060,
+   "total": 5098
   }
  },
  "note": "Baseline for tools/typed_coverage.py --check. The gate is on the *count* of recovered accesses, never on the percentage: the m2c loop keeps adding matched (and so untyped) C, so the ratio can fall while the count only grows. Update it deliberately with --update-baseline and commit, so every change in coverage is a reviewed diff.",
- "offset_casts": 6298,
- "recovered": 26453,
- "synthetic": 9538,
- "total": 66435,
+ "offset_casts": 6279,
+ "recovered": 26449,
+ "synthetic": 9517,
+ "total": 66449,
  "typeable": 365
 }

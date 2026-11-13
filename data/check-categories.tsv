@@ -5677,13 +5677,13 @@
 001fb470	p2WriteDirectionalLights	match	-
 001fc030	p2AdjointMatrix	match	-
 001fc2b0	p2InvertMatrix	match	-
-001fc310	FUN_001fc310	match	-
-001fc350	FUN_001fc350	match	-
-001fc430	FUN_001fc430	match	-
-001fc510	FUN_001fc510	match	-
-001fc680	FUN_001fc680	match	-
-001fc770	FUN_001fc770	match	-
-001fca50	FUN_001fca50	match	-
+001fc310	p2SetPassCount	match	-
+001fc350	p2CopyContext1ToContext2	match	-
+001fc430	p2StagesTextured	match	-
+001fc510	p2StagesUseVertexColour	match	-
+001fc680	p2GetPassCombineMode	match	-
+001fc770	p2WritePassPacket	match	-
+001fca50	p2GetPassMasks	match	-
 001fd5a0	FUN_001fd5a0	match	-
 001fd660	FUN_001fd660	match	-
 001fd7a0	FUN_001fd7a0	match	-
@@ -5705,28 +5705,28 @@
 00202fa0	FUN_00202fa0	match	-
 00203000	FUN_00203000	match	-
 00203500	FUN_00203500	match	-
-00204100	FUN_00204100	match	-
-00204150	FUN_00204150	match	jump table 0x4e5230: 14 entries, 56 bytes, matches retail
-00204840	FUN_00204840	match	jump table 0x4e52b0: 14 entries, 56 bytes, matches retail
-00204910	FUN_00204910	match	-
-00204950	FUN_00204950	match	jump table 0x4e52f0: 14 entries, 56 bytes, matches retail
-00204e30	FUN_00204e30	match	-
-00206540	FUN_00206540	match	-
-00206570	FUN_00206570	match	-
-00207210	FUN_00207210	match	-
-002073c0	FUN_002073c0	match	-
-00207400	FUN_00207400	match	-
-00207420	FUN_00207420	match	-
-00207440	FUN_00207440	match	-
-00207450	FUN_00207450	match	-
-00207470	FUN_00207470	match	-
-00207560	FUN_00207560	match	-
-00207d70	FUN_00207d70	match	-
-00207e70	FUN_00207e70	match	-
-00207f30	FUN_00207f30	match	-
-00207fa0	FUN_00207fa0	unapproved	unapproved: 3 volatile without an approval row
-002080b0	FUN_002080b0	match	-
-00208120	FUN_00208120	match	-
+00204100	p2ResetDmaPacketCount	match	-
+00204150	p2SetPoolSize	match	-
+00204840	p2GetPoolAllocated	match	-
+00204910	p2FixDmaPacketPool	match	-
+00204950	p2FreePool	match	-
+00204e30	p2InitStateCache	match	-
+00206540	p2InvalidateStateCache	match	-
+00206570	p2RecordFrameTime	match	-
+00207210	p2InitSwap	match	-
+002073c0	p2EndFrame	match	-
+00207400	swapbuffersPredicate	match	-
+00207420	swapbuffersDrawPredicate	match	-
+00207440	p2SetSingleFrameLatency	match	-
+00207450	p2SetSwapInterval	match	-
+00207470	p2QueueDisplayPacket	match	-
+00207560	p2SwapBuffers	match	-
+00207d70	p2FinishHandler	match	-
+00207e70	p2AddFinishFunc	match	-
+00207f30	p2NewFinishSequence	match	-
+00207fa0	p2WaitFinishSequence	unapproved	unapproved: 2 volatile without an approval row
+002080b0	p2GsSignalHandler	match	-
+00208120	p2FlushVif1Packet	match	-
 00208170	FUN_00208170	match	-
 00208200	FUN_00208200	match	-
 00208210	FUN_00208210	match	-
@@ -5762,30 +5762,30 @@
 0020c8b0	FUN_0020c8b0	match	-
 0020c9e0	FUN_0020c9e0	match	-
 0020c9f0	FUN_0020c9f0	match	-
-0020cc10	FUN_0020cc10	match	-
-0020cc50	FUN_0020cc50	match	-
-0020ccd0	FUN_0020ccd0	match	-
-0020d270	FUN_0020d270	match	-
-0020d290	FUN_0020d290	match	-
-0020d340	FUN_0020d340	match	-
-0020d360	FUN_0020d360	match	-
-0020d400	FUN_0020d400	match	-
-0020d790	FUN_0020d790	match	-
-0020d820	FUN_0020d820	match	-
-0020d830	FUN_0020d830	match	-
-0020d900	FUN_0020d900	match	-
-0020d910	FUN_0020d910	match	-
-0020df00	FUN_0020df00	match	-
-0020df10	FUN_0020df10	match	-
-0020dfd0	FUN_0020dfd0	match	-
-0020e060	FUN_0020e060	match	-
-0020e3c0	FUN_0020e3c0	match	-
-0020e3d0	FUN_0020e3d0	match	-
-0020e3e0	FUN_0020e3e0	match	-
-0020e3f0	FUN_0020e3f0	match	-
-0020e400	FUN_0020e400	match	-
-0020e4a0	FUN_0020e4a0	match	-
-0020e6a0	FUN_0020e6a0	match	-
+0020cc10	p2InitTimer	match	-
+0020cc50	p2StopTimers	match	-
+0020ccd0	p2ShutdownTimer	match	-
+0020d270	p2ReadClock	match	-
+0020d290	p2ReadNanoseconds	match	-
+0020d340	p2Sleep	match	-
+0020d360	p2SleepMilliseconds	match	-
+0020d400	p2InsertAlarm	match	-
+0020d790	p2OpenVu1Symbols	match	-
+0020d820	p2CloseVu1Symbols	match	-
+0020d830	p2FindVu1Symbol	match	-
+0020d900	p2SetViewportScale	match	-
+0020d910	p2SetDepthBias	match	-
+0020df00	p2GetVu0Program	match	-
+0020df10	p2InitVu0	match	-
+0020dfd0	p2LockVu0	match	-
+0020e060	p2UnlockVu0	match	-
+0020e3c0	p2SetVifRowScale	match	-
+0020e3d0	p2GetVifRowScale	match	-
+0020e3e0	p2SetVifMask	match	-
+0020e3f0	p2GetVifMask	match	-
+0020e400	p2StartWatchdog	match	-
+0020e4a0	p2PrintWatchdogReport	match	-
+0020e6a0	p2RunWatchdog	match	-
 0020e750	png_set_sig_bytes	match	-
 0020e7b0	png_sig_cmp	match	-
 0020e840	png_zalloc	match	-
@@ -6130,7 +6130,7 @@
 00229450	Gap__igOptInterface__vfunc_29	match	-
 00229460	FUN_00229460	match	-
 002294e0	Gap__igOptConfiguration__vfunc_23	match	-
-002294f0	FUN_002294f0	match	-
+002294f0	igDataList_GetCount	match	-
 00229500	FUN_00229500	match	-
 00229570	FUN_00229570	match	-
 00229580	FUN_00229580	match	-
@@ -17255,14 +17255,14 @@
 003bc840	beSaveIntfComMdlData_Register	match	DEFERRED duplicate 0x130720 __dt__16StringRef_3cbb60Fv 120B (compared under the profile of its retail unit)
 003bc8b0	beSaveIntfComMdlData_GetMetaObject	match	DEFERRED duplicate 0x130720 __dt__16StringRef_3cbb60Fv 120B (compared under the profile of its retail unit)
 003bc8d0	beSaveIntfComMdlData_InitFields	match	DEFERRED duplicate 0x130720 __dt__16StringRef_3cbb60Fv 120B (compared under the profile of its retail unit)
-003bc940	FUN_003bc940	match	DEFERRED duplicate 0x130720 __dt__16StringRef_3cbb60Fv 120B (compared under the profile of its retail unit)
+003bc940	beNDMWSaveIntfCtrlData_Create	match	DEFERRED duplicate 0x130720 __dt__16StringRef_3cbb60Fv 120B (compared under the profile of its retail unit)
 003bc980	FUN_003bc980	match	DEFERRED duplicate 0x130720 __dt__16StringRef_3cbb60Fv 120B (compared under the profile of its retail unit)
 003bc9d0	beNDMWSaveIntfCtrlData_GetVTable	match	DEFERRED duplicate 0x130720 __dt__16StringRef_3cbb60Fv 120B (compared under the profile of its retail unit)
 003bca60	FUN_003bca60	match	DEFERRED duplicate 0x130720 __dt__16StringRef_3cbb60Fv 120B (compared under the profile of its retail unit)
 003bca80	beNDMWSaveIntfCtrlData_Register	match	DEFERRED duplicate 0x130720 __dt__16StringRef_3cbb60Fv 120B (compared under the profile of its retail unit)
 003bcaf0	beNDMWSaveIntfCtrlData_GetMetaObject	match	DEFERRED duplicate 0x130720 __dt__16StringRef_3cbb60Fv 120B (compared under the profile of its retail unit)
 003bcb10	beNDMWSaveIntfCtrlData_InitFields	match	DEFERRED duplicate 0x130720 __dt__16StringRef_3cbb60Fv 120B (compared under the profile of its retail unit)
-003bcc20	FUN_003bcc20	match	DEFERRED duplicate 0x130720 __dt__16StringRef_3cbb60Fv 120B (compared under the profile of its retail unit)
+003bcc20	beNDMWSaveIntf_GetMessageEnum	match	DEFERRED duplicate 0x130720 __dt__16StringRef_3cbb60Fv 120B (compared under the profile of its retail unit)
 003bcc80	FUN_003bcc80	match	DEFERRED duplicate 0x130720 __dt__16StringRef_3cbb60Fv 120B (compared under the profile of its retail unit)
 003bccc0	FUN_003bccc0	match	DEFERRED duplicate 0x130720 __dt__16StringRef_3cbb60Fv 120B (compared under the profile of its retail unit)
 003bcd10	FUN_003bcd10	match	DEFERRED duplicate 0x130720 __dt__16StringRef_3cbb60Fv 120B (compared under the profile of its retail unit)
@@ -17519,7 +17519,7 @@
 003c2c40	beNDMWLoadIntf2ChrDataSel_Register	match	DEFERRED duplicate 0x130720 __dt__16StringRef_3cbb60Fv 120B (compared under the profile of its retail unit)
 003c2cc0	beNDMWLoadIntf2ChrDataSel_GetMetaObject	match	DEFERRED duplicate 0x130720 __dt__16StringRef_3cbb60Fv 120B (compared under the profile of its retail unit)
 003c2ce0	beNDMWLoadIntf2ChrDataSel_InitFields	match	DEFERRED duplicate 0x130720 __dt__16StringRef_3cbb60Fv 120B (compared under the profile of its retail unit)
-003c2e60	FUN_003c2e60	match	DEFERRED duplicate 0x130720 __dt__16StringRef_3cbb60Fv 120B (compared under the profile of its retail unit)
+003c2e60	beNDMWLoadIntf2SelSlot_Create	match	DEFERRED duplicate 0x130720 __dt__16StringRef_3cbb60Fv 120B (compared under the profile of its retail unit)
 003c2ea0	beNDMWLoadIntf2SelSlot_ResolveMetaObject	match	DEFERRED duplicate 0x130720 __dt__16StringRef_3cbb60Fv 120B (compared under the profile of its retail unit)
 003c2ef0	beNDMWLoadIntf2SelSlot_GetVTable	match	DEFERRED duplicate 0x130720 __dt__16StringRef_3cbb60Fv 120B (compared under the profile of its retail unit)
 003c2f80	FUN_003c2f80	match	DEFERRED duplicate 0x130720 __dt__16StringRef_3cbb60Fv 120B (compared under the profile of its retail unit)
@@ -17533,14 +17533,14 @@
 003c3320	beNDMWLoadIntf2Diffselect_Register	match	DEFERRED duplicate 0x130720 __dt__16StringRef_3cbb60Fv 120B (compared under the profile of its retail unit)
 003c33a0	beNDMWLoadIntf2Diffselect_GetMetaObject	match	DEFERRED duplicate 0x130720 __dt__16StringRef_3cbb60Fv 120B (compared under the profile of its retail unit)
 003c33c0	beNDMWLoadIntf2Diffselect_InitFields	match	DEFERRED duplicate 0x130720 __dt__16StringRef_3cbb60Fv 120B (compared under the profile of its retail unit)
-003c3560	FUN_003c3560	match	DEFERRED duplicate 0x130720 __dt__16StringRef_3cbb60Fv 120B (compared under the profile of its retail unit)
+003c3560	beNDMWLoadIntf2DataSelIntf_Create	match	DEFERRED duplicate 0x130720 __dt__16StringRef_3cbb60Fv 120B (compared under the profile of its retail unit)
 003c35a0	beNDMWLoadIntf2DataSelIntf_ResolveMetaObject	match	DEFERRED duplicate 0x130720 __dt__16StringRef_3cbb60Fv 120B (compared under the profile of its retail unit)
 003c35f0	beNDMWLoadIntf2DataSelIntf_GetVTable	match	DEFERRED duplicate 0x130720 __dt__16StringRef_3cbb60Fv 120B (compared under the profile of its retail unit)
 003c3680	FUN_003c3680	match	DEFERRED duplicate 0x130720 __dt__16StringRef_3cbb60Fv 120B (compared under the profile of its retail unit)
 003c36a0	beNDMWLoadIntf2DataSelIntf_Register	match	DEFERRED duplicate 0x130720 __dt__16StringRef_3cbb60Fv 120B (compared under the profile of its retail unit)
 003c3720	beNDMWLoadIntf2DataSelIntf_GetMetaObject	match	DEFERRED duplicate 0x130720 __dt__16StringRef_3cbb60Fv 120B (compared under the profile of its retail unit)
 003c3740	beNDMWLoadIntf2DataSelIntf_InitFields	match	DEFERRED duplicate 0x130720 __dt__16StringRef_3cbb60Fv 120B (compared under the profile of its retail unit)
-003c3900	FUN_003c3900	match	DEFERRED duplicate 0x130720 __dt__16StringRef_3cbb60Fv 120B (compared under the profile of its retail unit)
+003c3900	beNDMWLoadIntf2DegiStateCtrl_Create	match	DEFERRED duplicate 0x130720 __dt__16StringRef_3cbb60Fv 120B (compared under the profile of its retail unit)
 003c3940	FUN_003c3940	match	DEFERRED duplicate 0x130720 __dt__16StringRef_3cbb60Fv 120B (compared under the profile of its retail unit)
 003c3990	beNDMWLoadIntf2DegiStateCtrl_ResolveMetaObject	match	DEFERRED duplicate 0x130720 __dt__16StringRef_3cbb60Fv 120B (compared under the profile of its retail unit)
 003c39e0	beNDMWLoadIntf2DegiStateCtrl_GetVTable	match	DEFERRED duplicate 0x130720 __dt__16StringRef_3cbb60Fv 120B (compared under the profile of its retail unit)
@@ -17554,7 +17554,7 @@
 003c3d90	FUN_003c3d90	match	DEFERRED duplicate 0x130720 __dt__16StringRef_3cbb60Fv 120B (compared under the profile of its retail unit)
 003c3db0	beNDMWLoadIntf2DegiStateList_Register	match	DEFERRED duplicate 0x130720 __dt__16StringRef_3cbb60Fv 120B (compared under the profile of its retail unit)
 003c3e20	beNDMWLoadIntf2DegiStateList_GetMetaObject	match	DEFERRED duplicate 0x130720 __dt__16StringRef_3cbb60Fv 120B (compared under the profile of its retail unit)
-003c3e40	FUN_003c3e40	match	DEFERRED duplicate 0x130720 __dt__16StringRef_3cbb60Fv 120B (compared under the profile of its retail unit)
+003c3e40	beNDMWLoadIntf2DegiState_Create	match	DEFERRED duplicate 0x130720 __dt__16StringRef_3cbb60Fv 120B (compared under the profile of its retail unit)
 003c3e80	beNDMWLoadIntf2DegiState_ResolveMetaObject	match	DEFERRED duplicate 0x130720 __dt__16StringRef_3cbb60Fv 120B (compared under the profile of its retail unit)
 003c3ed0	beNDMWLoadIntf2DegiState_GetVTable	match	DEFERRED duplicate 0x130720 __dt__16StringRef_3cbb60Fv 120B (compared under the profile of its retail unit)
 003c3f10	FUN_003c3f10	match	DEFERRED duplicate 0x130720 __dt__16StringRef_3cbb60Fv 120B (compared under the profile of its retail unit)
@@ -17660,7 +17660,7 @@
 003c62b0	FUN_003c62b0	match	DEFERRED duplicate 0x130720 __dt__16StringRef_3cbb60Fv 120B (compared under the profile of its retail unit)
 003c62d0	beNDMWLoadSlotPlayerList_Register	match	DEFERRED duplicate 0x130720 __dt__16StringRef_3cbb60Fv 120B (compared under the profile of its retail unit)
 003c6340	beNDMWLoadSlotPlayerList_GetMetaObject	match	DEFERRED duplicate 0x130720 __dt__16StringRef_3cbb60Fv 120B (compared under the profile of its retail unit)
-003c6360	FUN_003c6360	match	DEFERRED duplicate 0x130720 __dt__16StringRef_3cbb60Fv 120B (compared under the profile of its retail unit)
+003c6360	beNDMWLoadSlotPlayer_Create	match	DEFERRED duplicate 0x130720 __dt__16StringRef_3cbb60Fv 120B (compared under the profile of its retail unit)
 003c63a0	FUN_003c63a0	match	DEFERRED duplicate 0x130720 __dt__16StringRef_3cbb60Fv 120B (compared under the profile of its retail unit)
 003c63f0	beNDMWLoadSlotPlayer_GetReadyMetaObject	match	DEFERRED duplicate 0x130720 __dt__16StringRef_3cbb60Fv 120B (compared under the profile of its retail unit)
 003c6440	beNDMWLoadSlotPlayer_GetVTable	match	DEFERRED duplicate 0x130720 __dt__16StringRef_3cbb60Fv 120B (compared under the profile of its retail unit)
@@ -17681,7 +17681,7 @@
 003c69a0	beNDMWDegiData_Register	match	DEFERRED duplicate 0x130720 __dt__16StringRef_3cbb60Fv 120B (compared under the profile of its retail unit)
 003c6a20	beNDMWDegiData_GetMetaObject	match	DEFERRED duplicate 0x130720 __dt__16StringRef_3cbb60Fv 120B (compared under the profile of its retail unit)
 003c6a40	beNDMWDegiData_InitFields	match	DEFERRED duplicate 0x130720 __dt__16StringRef_3cbb60Fv 120B (compared under the profile of its retail unit)
-003c6b00	FUN_003c6b00	match	DEFERRED duplicate 0x130720 __dt__16StringRef_3cbb60Fv 120B (compared under the profile of its retail unit)
+003c6b00	beNDMWLoadIntf2MesWin_Create	match	DEFERRED duplicate 0x130720 __dt__16StringRef_3cbb60Fv 120B (compared under the profile of its retail unit)
 003c6b40	FUN_003c6b40	match	DEFERRED duplicate 0x130720 __dt__16StringRef_3cbb60Fv 120B (compared under the profile of its retail unit)
 003c6b90	beNDMWLoadIntf2MesWin_GetReadyMetaObject	match	DEFERRED duplicate 0x130720 __dt__16StringRef_3cbb60Fv 120B (compared under the profile of its retail unit)
 003c6be0	beNDMWLoadIntf2MesWin_GetVTable	match	DEFERRED duplicate 0x130720 __dt__16StringRef_3cbb60Fv 120B (compared under the profile of its retail unit)
@@ -18084,26 +18084,26 @@
 003d9cd0	ObjectRef_Destruct_003d9cd0	match	DEFERRED duplicate 0x1363f0 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
 003d9d50	ObjectRef_Destruct_003d9d50	match	DEFERRED duplicate 0x1363f0 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
 003d9dd0	Gap__Bec__beNDMWStatus__vfunc_20	match	DEFERRED duplicate 0x1363f0 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
-003d9de0	FUN_003d9de0	match	-
-003d9e10	FUN_003d9e10	match	-
+003d9de0	beNDMWLoadIntf2DegiState__Init	match	-
+003d9e10	beNDMWLoadIntf2DegiState__RequestOpen	match	-
 003d9e40	FUN_003d9e40	match	-
-003d9e70	FUN_003d9e70	match	-
-003d9e90	FUN_003d9e90	match	-
+003d9e70	beNDMWLoadIntf2DegiState__RequestClose	match	-
+003d9e90	beNDMWLoadIntf2DegiState__RequestConfirmClose	match	-
 003d9ec0	FUN_003d9ec0	match	-
 003da5f0	FUN_003da5f0	match	-
-003da7c0	FUN_003da7c0	match	-
-003dafb0	FUN_003dafb0	match	-
+003da7c0	beNDMWLoadIntf2DegiState__Update	match	-
+003dafb0	beNDMWLoadIntf2DataSelIntf__Init	match	-
 003daff0	beNDMWLoadIntf2DataSelIntf__ClearStatesFrom	match	-
-003db060	FUN_003db060	match	-
+003db060	beNDMWLoadIntf2DataSelIntf__OpenSaveArea	match	-
 003db780	beNDMWLoadIntf2DataSelIntf__UpdateSelection	match	-
-003dbf90	FUN_003dbf90	match	-
-003dc2e0	FUN_003dc2e0	match	-
-003dc590	FUN_003dc590	match	-
-003dcab0	FUN_003dcab0	match	-
-003dcc60	FUN_003dcc60	match	-
-003dd160	FUN_003dd160	match	-
-003dd440	FUN_003dd440	match	-
-003dd6d0	FUN_003dd6d0	match	-
+003dbf90	beNDMWLoadIntf2DataSelIntf__CloseAll	match	-
+003dc2e0	beNDMWLoadIntf2DataSelIntf__ShowSelectedStatus	match	-
+003dc590	beNDMWLoadIntf2DataSelIntf__RestoreSaveArea	match	-
+003dcab0	beNDMWLoadIntf2DataSelIntf__CloseStatusWindows	match	-
+003dcc60	beNDMWLoadIntf2DataSelIntf__OpenSlotSaveArea	match	-
+003dd160	beNDMWLoadIntf2DataSelIntf__OpenAreaCursor	match	-
+003dd440	beNDMWLoadIntf2DataSelIntf__CloseSaveArea	match	-
+003dd6d0	beNDMWLoadIntf2DataSelIntf__ShowAccessPlayers	match	-
 003ddb10	beNDMWLoadIntf2Diffselect__Init	match	-
 003ddb80	beNDMWLoadIntf2Diffselect__Update	match	-
 003de260	beNDMWLoadIntf2NameSel__Init	match	-
@@ -18112,7 +18112,7 @@
 003de990	FUN_003de990	match	-
 003def70	beNDMWLoadIntf2NameSel__SetAnswer	match	-
 003def80	beNDMWLoadIntf2NameSel__Update	match	-
-003e0b80	FUN_003e0b80	match	-
+003e0b80	beNDMWLoadIntf2SelSlot__Reset	match	-
 003e0bb0	beNDMWLoadIntf2SelSlot__Init	match	-
 003e0c40	beNDMWLoadIntf2SelSlot__Open	match	-
 003e1760	beNDMWLoadIntf2SelSlot__UpdateSelection	match	-
@@ -18143,13 +18143,13 @@
 003e9220	FUN_003e9220	match	-
 003e9240	DataList_GetWordAt_003e9240	match	-
 003e9260	ObjectList_GetAt_003e9260	match	-
-003e9280	FUN_003e9280	match	-
-003e92a0	FUN_003e92a0	match	-
+003e9280	DataList_FindProperty_003e9280	match	-
+003e92a0	ObjectRef_Get_003e92a0	match	-
 003e92b0	ObjectRef_Assign_003e92b0	match	-
 003e9330	FUN_003e9330	match	-
-003e9360	FUN_003e9360	match	-
+003e9360	AllocatorValue_Make_003e9360	match	-
 003e9370	Memory_SelectAllocator_003e9370	match	-
-003e93b0	FUN_003e93b0	match	-
+003e93b0	ObjectRef_Get_003e93b0	match	-
 003e93c0	Gap__Bec__beNDMWLoadIntf2__vfunc_30	match	-
 003e93d0	Gap__Bec__beNDMWLoadIntf2__vfunc_29	match	-
 003e9430	Gap__Bec__beNDMWLoadIntf2__vfunc_34	match	-
@@ -18176,25 +18176,25 @@
 003eca00	FUN_003eca00	match	DEFERRED duplicate 0x1363f0 __dt__7ItemRefFv 128B (compared under the profile of its retail unit)
 003eca70	beNDMWLoadIntf2MesWin__RequestOpen	match	DEFERRED duplicate 0x1363f0 __dt__7ItemRefFv 128B (compared under the profile of its retail unit)
 003ecaa0	beNDMWLoadIntf2MesWin__RequestClose	match	DEFERRED duplicate 0x1363f0 __dt__7ItemRefFv 128B (compared under the profile of its retail unit)
-003ecad0	FUN_003ecad0	match	DEFERRED duplicate 0x1363f0 __dt__7ItemRefFv 128B (compared under the profile of its retail unit)
-003ecae0	FUN_003ecae0	match	DEFERRED duplicate 0x1363f0 __dt__7ItemRefFv 128B (compared under the profile of its retail unit)
-003ecb00	FUN_003ecb00	match	DEFERRED duplicate 0x1363f0 __dt__7ItemRefFv 128B (compared under the profile of its retail unit)
-003ecb20	FUN_003ecb20	match	DEFERRED duplicate 0x1363f0 __dt__7ItemRefFv 128B (compared under the profile of its retail unit)
+003ecad0	beNDMWLoadIntf2MesWin__RequestMessage	match	DEFERRED duplicate 0x1363f0 __dt__7ItemRefFv 128B (compared under the profile of its retail unit)
+003ecae0	beNDMWLoadIntf2MesWin__RequestQuestion	match	DEFERRED duplicate 0x1363f0 __dt__7ItemRefFv 128B (compared under the profile of its retail unit)
+003ecb00	beNDMWLoadIntf2MesWin__RequestPrompt	match	DEFERRED duplicate 0x1363f0 __dt__7ItemRefFv 128B (compared under the profile of its retail unit)
+003ecb20	beNDMWLoadIntf2MesWin__Cancel	match	DEFERRED duplicate 0x1363f0 __dt__7ItemRefFv 128B (compared under the profile of its retail unit)
 003ecb70	beNDMWLoadIntf2MesWin__GetIsCtrl	match	DEFERRED duplicate 0x1363f0 __dt__7ItemRefFv 128B (compared under the profile of its retail unit)
-003ecb80	FUN_003ecb80	match	DEFERRED duplicate 0x1363f0 __dt__7ItemRefFv 128B (compared under the profile of its retail unit)
+003ecb80	beNDMWLoadIntf2MesWin__GetCurPoint	match	DEFERRED duplicate 0x1363f0 __dt__7ItemRefFv 128B (compared under the profile of its retail unit)
 003ecb90	beNDMWLoadIntf2MesWin__RequestMesErase	match	DEFERRED duplicate 0x1363f0 __dt__7ItemRefFv 128B (compared under the profile of its retail unit)
-003ecba0	FUN_003ecba0	match	DEFERRED duplicate 0x1363f0 __dt__7ItemRefFv 128B (compared under the profile of its retail unit)
+003ecba0	beNDMWLoadIntf2MesWin__RequestSystemMessage	match	DEFERRED duplicate 0x1363f0 __dt__7ItemRefFv 128B (compared under the profile of its retail unit)
 003ecbc0	beNDMWLoadIntf2MesWin__EndSystemMessage	match	DEFERRED duplicate 0x1363f0 __dt__7ItemRefFv 128B (compared under the profile of its retail unit)
 003ecc60	FUN_003ecc60	match	DEFERRED duplicate 0x1363f0 __dt__7ItemRefFv 128B (compared under the profile of its retail unit)
-003ecdc0	FUN_003ecdc0	match	DEFERRED duplicate 0x1363f0 __dt__7ItemRefFv 128B (compared under the profile of its retail unit)
-003ed050	FUN_003ed050	match	DEFERRED duplicate 0x1363f0 __dt__7ItemRefFv 128B (compared under the profile of its retail unit)
-003ed2e0	FUN_003ed2e0	match	DEFERRED duplicate 0x1363f0 __dt__7ItemRefFv 128B (compared under the profile of its retail unit)
+003ecdc0	beNDMWLoadCtrl2CommonIntf__StepNoticeQuestion	match	DEFERRED duplicate 0x1363f0 __dt__7ItemRefFv 128B (compared under the profile of its retail unit)
+003ed050	beNDMWLoadCtrl2CommonIntf__StepCheckMemoryCard	match	DEFERRED duplicate 0x1363f0 __dt__7ItemRefFv 128B (compared under the profile of its retail unit)
+003ed2e0	beNDMWLoadCtrl2CommonIntf__StepCreateSaveFile	match	DEFERRED duplicate 0x1363f0 __dt__7ItemRefFv 128B (compared under the profile of its retail unit)
 003ed650	beNDMWLoadCtrl2CommonIntf__StepReadMedia	match	DEFERRED duplicate 0x1363f0 __dt__7ItemRefFv 128B (compared under the profile of its retail unit)
 003edba0	FUN_003edba0	match	DEFERRED duplicate 0x1363f0 __dt__7ItemRefFv 128B (compared under the profile of its retail unit)
-003edc20	FUN_003edc20	match	DEFERRED duplicate 0x1363f0 __dt__7ItemRefFv 128B (compared under the profile of its retail unit)
+003edc20	beNDMWLoadCtrl2CommonIntf__StepWriteSaveData	match	DEFERRED duplicate 0x1363f0 __dt__7ItemRefFv 128B (compared under the profile of its retail unit)
 003edf60	beNDMWLoadCtrl2CommonIntf__StepFormatMemoryCard	match	DEFERRED duplicate 0x1363f0 __dt__7ItemRefFv 128B (compared under the profile of its retail unit)
 003ee190	FUN_003ee190	match	DEFERRED duplicate 0x1363f0 __dt__7ItemRefFv 128B (compared under the profile of its retail unit)
-003ee250	FUN_003ee250	match	DEFERRED duplicate 0x1363f0 __dt__7ItemRefFv 128B (compared under the profile of its retail unit)
+003ee250	beNDMWLoadCtrl2CommonIntf__StartUtilFor	match	DEFERRED duplicate 0x1363f0 __dt__7ItemRefFv 128B (compared under the profile of its retail unit)
 003ee320	beNDMWLoadCtrl2CommonIntf__RemoveAccessPlayer	match	DEFERRED duplicate 0x1363f0 __dt__7ItemRefFv 128B (compared under the profile of its retail unit)
 003ee490	FUN_003ee490	match	DEFERRED duplicate 0x1363f0 __dt__7ItemRefFv 128B (compared under the profile of its retail unit)
 003ee4d0	beNDMWDegiData__UpdateFieldsFromData	match	DEFERRED duplicate 0x1363f0 __dt__7ItemRefFv 128B (compared under the profile of its retail unit)
@@ -18233,8 +18233,8 @@
 003f5350	Gap__Bec__beNDMWTitle2__vfunc_34	match	-
 003f5400	Gap__Bec__beNDMWTitle2__vfunc_20	match	-
 003f5410	beNDMWWindow_QueueText	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-003f5660	FUN_003f5660	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-003f56d0	FUN_003f56d0	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
+003f5660	beNDMWWindow_QueueNumberText	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
+003f56d0	beNDMWWindow_QueueObjectText	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
 003f5920	beNDMWWindow_RunMessageScript	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
 003f59b0	beNDMWWindow_ClearTextElement	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
 003f5a40	beNDMWWindow_ClearQueuedText	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
@@ -18320,14 +18320,14 @@
 00407aa0	Gap__Bec__beNDMWSaveCtrl__vfunc_34	match	-
 00408070	FUN_00408070	match	-
 004080f0	Gap__Bec__beNDMWSaveCtrl__vfunc_20	match	-
-00408100	Gap__Bec__beNDMWSaveIntf__vfunc_32	match	-
-004081a0	Gap__Bec__beNDMWSaveIntf__vfunc_31	match	-
-0040c180	FUN_0040c180	match	-
-0040c1b0	Gap__Bec__beNDMWSaveIntf__vfunc_30	match	-
-0040c1c0	Gap__Bec__beNDMWSaveIntf__vfunc_29	match	-
-0040c220	Gap__Bec__beNDMWSaveIntf__vfunc_34	match	-
-0040da50	FUN_0040da50	match	-
-0040dad0	Gap__Bec__beNDMWSaveIntf__vfunc_20	match	-
+00408100	beNDMWSaveIntf_AcquirePadManager	match	-
+004081a0	beNDMWSaveIntf_Update	match	-
+0040c180	NewDataListRef_Construct_0040c180	match	-
+0040c1b0	beNDMWSaveIntf_GetInfoMeta	match	-
+0040c1c0	beNDMWSaveIntf_RegisterReceivers	match	-
+0040c220	beNDMWSaveIntf_OnMessage	match	-
+0040da50	CtrlDataRef_Destruct_0040da50	match	-
+0040dad0	beNDMWSaveIntf_GetMeta	match	-
 0040dae0	Gap__Bec__beNDMWListCtrl__vfunc_22	match	DEFERRED duplicate 0x1c6460 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
 0040dbf0	Gap__Bec__beNDMWListCtrl__vfunc_23	match	DEFERRED duplicate 0x1c6460 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
 0040dd30	Gap__Bec__beNDMWListCtrl__vfunc_24	match	DEFERRED duplicate 0x1c6460 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
