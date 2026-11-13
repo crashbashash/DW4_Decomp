@@ -29,7 +29,7 @@ extern "C" char DAT_005165c0[];
 extern "C" void Gap__Bec__beNDMWMdlPlayer2__vfunc_37(beNDMWMdlPlayer2 * p0, int p1, char * p2);
 extern "C" igObject *beBaseInfoDataList_Create(int);
 extern "C" igObject *FUN_003bf560(int);
-extern "C" beDataObjIntList *FUN_003a9310(...);
+extern "C" beDataObjIntList *igProperty_GetRecordStringList(...);
 extern "C" beDataObjFloatList *FUN_003a9370(...);
 struct PropertyRecordView { char p[16]; int f16; igObject *f20; };
 extern "C" PropertyRecordView * igProperty_FindByName(...);
@@ -172,7 +172,7 @@ void Gap__Bec__beNDMWMdlPlayer2__vfunc_36(beNDMWMdlPlayer2 *arg0, beBaseInfoRam 
     beMessenger_SendGroup(arg0->_messenger, DAT_005165d0, DAT_005165d8);
     {
         int o = beMessenger_GetObject(arg0->_messenger, 0);
-        s4 = FUN_003a9310(o, DAT_005165e8);
+        s4 = igProperty_GetRecordStringList(o, DAT_005165e8);
         s3 = FUN_003a9370(o, DAT_005165f8);
     }
     /* matching construct: cast from the 4-byte _system reference */

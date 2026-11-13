@@ -36,7 +36,7 @@ extern "C" int beMessenger_GetBool(int, int);
 extern "C" int beBaseInfoRam_StartTimer(int, void *, unsigned long long);
 extern "C" int beBaseInfoRam_IsTimerExpired(int, int *);
 extern "C" int FUN_00236f80(...);
-extern "C" int FUN_00382eb0(...);
+extern "C" int beFont_ConvertToUnicode(...);
 extern "C" void *beNDMWLoadSlotPlayer_Create(...);
 extern "C" void * beNDMWDegiData_Create(...);
 extern "C" int List_Resize(void *, int, int);
@@ -202,8 +202,8 @@ extern "C" PropByteRecord * igProperty_GetRecordByte(...);
 extern "C" PropIntRecord * igProperty_GetRecord(...);
 extern "C" PropObjListRecord * igProperty_GetRecordFolder(...);
 extern "C" PropByteListRecord * igProperty_GetRecordArray(...);
-extern "C" PropStrListRecord * FUN_003a92e0(...);
-extern "C" PropIntListRecord * FUN_003a9250(...);
+extern "C" PropStrListRecord * igProperty_GetRecordString(...);
+extern "C" PropIntListRecord * igProperty_GetRecordIntList(...);
 extern "C" int DAT_00517e58[4];
 extern "C" int DAT_00517e60[4];
 extern "C" int DAT_00517e68[4];
@@ -306,7 +306,7 @@ struct Saved {
     int a8[176];
 };
 struct Host { int w0[7]; Saved *saved; int w1[5]; int dword52; };
-extern "C" Chunk *FUN_003614f0(int);
+extern "C" Chunk *beUnicodeObj_Create(int);
 extern "C" void beUnicodeObj_AllocateBuffer(Chunk *, int);
 extern "C" ItemRef FUN_003ef1e0(void *owner, int id);
 extern "C" int g_ndmwAllocatorSelector[4];
@@ -1146,11 +1146,11 @@ int beNDMWLoadCtrl2CommonIntf__StepReadMedia(beNDMWLoadCtrl2CommonIntf *self, in
                     DegiDataRef el((Rc *)((beNDMWDegiData **)((igObjectList *)GRP(grp.p)->_saveDataList)->_data)[j]);
                     if (el.p != 0) REFS(el.p) = REFS(el.p) + 1;
                     if (DD(el.p)->_isUse == 1 && DNAME(DD(el.p))[0] != 0xFFFF) {
-                        Rc *str; /* the unicode text FUN_00382eb0 hands back (declared here: its slot sits below the record reference) */
+                        Rc *str; /* the unicode text beFont_ConvertToUnicode hands back (declared here: its slot sits below the record reference) */
                         digimonName = (unsigned short *)DD(el.p)->_dmName;
                         {
                             int insightEntry = FUN_00236f80(self->_insight, g_beFont_metaObject[0]);
-                            FUN_00382eb0(&str, insightEntry, digimonName);
+                            beFont_ConvertToUnicode(&str, insightEntry, digimonName);
                         }
                         unicodeText = (unsigned short *)((beUnicodeObj *)str)->_buffer;
                         for (charIndex = 0; ; ) {
@@ -1515,7 +1515,7 @@ void beNDMWDegiData__LoadFromProperties(beNDMWDegiData *arg0, int arg1) {
         }
     }
     {
-        PropStrListRecord *rs = FUN_003a92e0(arg1, &DAT_00517ea0[0]);
+        PropStrListRecord *rs = igProperty_GetRecordString(arg1, &DAT_00517ea0[0]);
         void *str = (void *)rs->v;
         if (str != 0) strcpy(&d->f8[0], str);
     }
@@ -1533,20 +1533,20 @@ void beNDMWDegiData__LoadFromProperties(beNDMWDegiData *arg0, int arg1) {
     FIND1(d->f788, &DAT_00517f48[0])
     BYTES(d->b792, igProperty_GetRecordArray, &DAT_00517f50[0])
     BYTES(d->b1816, igProperty_GetRecordArray, &DAT_00517f60[0])
-    INTS(d->w1828, FUN_003a9250, &DAT_00517f70[0])
+    INTS(d->w1828, igProperty_GetRecordIntList, &DAT_00517f70[0])
     BYTES(d->b1892, igProperty_GetRecordArray, &DAT_00517f80[0])
-    INTS(d->w1908, FUN_003a9250, &DAT_00517f90[0])
-    INTS(d->w1972, FUN_003a9250, &DAT_00517fa0[0])
-    INTS(d->w2036, FUN_003a9250, &DAT_00517fb0[0])
-    INTS(d->w2612, FUN_003a9250, &DAT_00517fc0[0])
+    INTS(d->w1908, igProperty_GetRecordIntList, &DAT_00517f90[0])
+    INTS(d->w1972, igProperty_GetRecordIntList, &DAT_00517fa0[0])
+    INTS(d->w2036, igProperty_GetRecordIntList, &DAT_00517fb0[0])
+    INTS(d->w2612, igProperty_GetRecordIntList, &DAT_00517fc0[0])
     beNDMWDegiData__UpdateFieldsFromData((beNDMWDegiData *)arg0);
 }
 
-extern "C" igObject *FUN_003c85b0(int);
-extern "C" igObject *FUN_003c87f0(int);
-extern "C" igObject *FUN_003c8970(int);
-extern "C" igObject *FUN_003c8b00(int);
-extern "C" igObject *FUN_003c8c90(int);
+extern "C" igObject *beNDMWItemDisk_Create(int);
+extern "C" igObject *beNDMWItemAbilityChip_Create(int);
+extern "C" igObject *beNDMWItemYellowArmor_Create(int);
+extern "C" igObject *beNDMWItemBlueArmor_Create(int);
+extern "C" igObject *beNDMWItemWeapon_Create(int);
 /* matching construct: dummy virtual slots so the vX() call dispatches through the retail vtable offset */
 struct ItemVirtual { virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual int vX(int); };
 /* matching construct: one releasing holder class per retail destructor copy (the table at 0x544c20 names 0x3d9d50, 0x3d9cd0, 0x3d9c50, 0x3d9bd0 and 0x3b9ba0; the last is not the copy other members of this file name for their holders) */
@@ -1567,31 +1567,31 @@ ItemRef FUN_003ef1e0(void *owner, int id) {
     int k = (id >> 12) & 0xF;
     if (k == 0) {
         {
-            CreatedItemRef<1> sp((igObject *)FUN_003c8c90(itemAllocator(owner)));
+            CreatedItemRef<1> sp((igObject *)beNDMWItemWeapon_Create(itemAllocator(owner)));
             ((ItemVirtual *)sp.p)->vX(id);
             return ItemRef((Obj *)sp.p, kRetainReference);
         }
     } else if (k == 1) {
         {
-            CreatedItemRef<2> sp((igObject *)FUN_003c8b00(itemAllocator(owner)));
+            CreatedItemRef<2> sp((igObject *)beNDMWItemBlueArmor_Create(itemAllocator(owner)));
             ((ItemVirtual *)sp.p)->vX(id);
             return ItemRef((Obj *)sp.p, kRetainReference);
         }
     } else if (k == 2) {
         {
-            CreatedItemRef<3> sp((igObject *)FUN_003c8970(itemAllocator(owner)));
+            CreatedItemRef<3> sp((igObject *)beNDMWItemYellowArmor_Create(itemAllocator(owner)));
             ((ItemVirtual *)sp.p)->vX(id);
             return ItemRef((Obj *)sp.p, kRetainReference);
         }
     } else if (k == 3) {
         {
-            CreatedItemRef<4> sp((igObject *)FUN_003c87f0(itemAllocator(owner)));
+            CreatedItemRef<4> sp((igObject *)beNDMWItemAbilityChip_Create(itemAllocator(owner)));
             ((ItemVirtual *)sp.p)->vX(id);
             return ItemRef((Obj *)sp.p, kRetainReference);
         }
     } else if (k == 4) {
         {
-            CreatedItemRef<5> sp((igObject *)FUN_003c85b0(itemAllocator(owner)));
+            CreatedItemRef<5> sp((igObject *)beNDMWItemDisk_Create(itemAllocator(owner)));
             ((ItemVirtual *)sp.p)->vX(id);
             return ItemRef((Obj *)sp.p, kRetainReference);
         }
@@ -1610,7 +1610,7 @@ void beNDMWDegiData__StoreToProperties(Host *arg0, void *arg1, int arg2) {
     ((RecInt *)igProperty_GetRecord(arg1, DAT_00517e80))->value = s->i84;
     ((RecInt *)igProperty_GetRecord(arg1, DAT_00517e88))->value = s->i88;
     char *nm = s->name;
-    RecStr *rs = ((RecStr *)FUN_003a92e0(arg1, DAT_00517ea0));
+    RecStr *rs = ((RecStr *)igProperty_GetRecordString(arg1, DAT_00517ea0));
     if (((void * *)g_stringPool)[0] == 0) {
         void *p = FUN_002eb010(16);
         if (p != 0)
@@ -1636,13 +1636,13 @@ void beNDMWDegiData__StoreToProperties(Host *arg0, void *arg1, int arg2) {
     else
         a = Memory_GetAllocatorBySelector(g_ndmwAllocatorSelector[0]);
     {
-    ChunkRef sp188((Obj *)FUN_003614f0(a));
+    ChunkRef sp188((Obj *)beUnicodeObj_Create(a));
     Obj * sp184;
     beUnicodeObj_AllocateBuffer((Chunk *)sp188.p, 8);
     unsigned short *dst = ((Chunk *)sp188.p)->chars;
     Saved::Str16 *q = &s->nm;
     if (q->sel != 0xffff) {
-        FUN_00382eb0((void *)&sp184, arg2, arg0->dword52);
+        beFont_ConvertToUnicode((void *)&sp184, arg2, arg0->dword52);
         unsigned short *src = ((Chunk *)sp184)->chars;
         int ia = 0;
         for (; ia < 8; ia++) {
@@ -1776,7 +1776,7 @@ void beNDMWDegiData__StoreToProperties(Host *arg0, void *arg1, int arg2) {
         if (a2->_count != 0 && i9 >= 0 && i9 < a2->_count)
             ((unsigned char *)a2->_data)[i9] = v;
     }
-    igIntList *a3 = ((RecArr32 *)FUN_003a9250(arg1, DAT_00517f70))->value;
+    igIntList *a3 = ((RecArr32 *)igProperty_GetRecordIntList(arg1, DAT_00517f70))->value;
     for (int i10 = 0; i10 < 16; i10++) {
         int v = s->a3[i10];
         if (a3->_count != 0 && i10 >= 0 && i10 < a3->_count)
@@ -1788,25 +1788,25 @@ void beNDMWDegiData__StoreToProperties(Host *arg0, void *arg1, int arg2) {
         if (a4->_count != 0 && i11 >= 0 && i11 < a4->_count)
             ((unsigned char *)a4->_data)[i11] = v;
     }
-    igIntList *a5 = ((RecArr32 *)FUN_003a9250(arg1, DAT_00517f90))->value;
+    igIntList *a5 = ((RecArr32 *)igProperty_GetRecordIntList(arg1, DAT_00517f90))->value;
     for (int i12 = 0; i12 < 16; i12++) {
         int v = s->a5[i12];
         if (a5->_count != 0 && i12 >= 0 && i12 < a5->_count)
             ((int *)a5->_data)[i12] = v;
     }
-    igIntList *a6 = ((RecArr32 *)FUN_003a9250(arg1, DAT_00517fa0))->value;
+    igIntList *a6 = ((RecArr32 *)igProperty_GetRecordIntList(arg1, DAT_00517fa0))->value;
     for (int i13 = 0; i13 < 16; i13++) {
         int v = s->a6[i13];
         if (a6->_count != 0 && i13 >= 0 && i13 < a6->_count)
             ((int *)a6->_data)[i13] = v;
     }
-    igIntList *a7 = ((RecArr32 *)FUN_003a9250(arg1, DAT_00517fb0))->value;
+    igIntList *a7 = ((RecArr32 *)igProperty_GetRecordIntList(arg1, DAT_00517fb0))->value;
     for (int i14 = 0; i14 < 144; i14++) {
         int v = s->a7[i14];
         if (a7->_count != 0 && i14 >= 0 && i14 < a7->_count)
             ((int *)a7->_data)[i14] = v;
     }
-    igIntList *a8 = ((RecArr32 *)FUN_003a9250(arg1, DAT_00517fc0))->value;
+    igIntList *a8 = ((RecArr32 *)igProperty_GetRecordIntList(arg1, DAT_00517fc0))->value;
     for (int i15 = 0; i15 < 176; i15++) {
         if (a8->_count != 0 && i15 >= 0 && i15 < a8->_count)
             ((int *)a8->_data)[i15] = s->a8[i15];

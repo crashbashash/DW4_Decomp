@@ -8,7 +8,7 @@ property system in [`../engine/property-system.md`](../engine/property-system.md
 
 ## Matching recovery boundary
 
-FIGHTCALC is a nested command family of `beNDMWGameRam::vfunc_34`, not a
+FIGHTCALC is a nested command family of `beNDMWGameRam_OnMessage`, not a
 standalone function. Its setup and cases occupy the contiguous physical region
 `0x003fde30..0x00406ad0` (36,000 bytes), sharing the enclosing 41,864-byte
 dispatcher's frame and return. The original name table is `FightCom`, with 22

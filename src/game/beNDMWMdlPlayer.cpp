@@ -198,9 +198,9 @@ struct ArrRec { char p[12]; igIntList *f12; };
 struct BArrRec { char p[12]; igUnsignedCharList *f12; };
 struct SListRec { char p[12]; igStringObjList *f12; };
 extern "C" ByteRec *igProperty_GetRecordByte(...);
-extern "C" ArrRec *FUN_003a9250(...);
+extern "C" ArrRec *igProperty_GetRecordIntList(...);
 extern "C" BArrRec *igProperty_GetRecordArray(...);
-extern "C" SListRec *FUN_003a9310(...);
+extern "C" SListRec *igProperty_GetRecordStringList(...);
 extern "C" int DAT_004cc7b8[4];
 extern "C" int DAT_004cc7c0[4];
 extern "C" int DAT_004cc7d0[4];
@@ -784,7 +784,7 @@ void Gap__Bec__beNDMWMdlPlayer__vfunc_36(beNDMWMdlPlayer *arg0, beBaseInfoRam *a
     {
         int i = 0, off = 0;
         do {
-            igIntList *v = FUN_003a9250(obj, DAT_005163c0)->f12;
+            igIntList *v = igProperty_GetRecordIntList(obj, DAT_005163c0)->f12;
             if (v->_count != 0 && i >= 0 && i < v->_count) {
                 *(int *)(v->_data + off) /* matching construct: byte-offset element write; indexing by i or off/4 changes the induction variable */ = DAT_004cc7b8[0];
             }
@@ -795,7 +795,7 @@ void Gap__Bec__beNDMWMdlPlayer__vfunc_36(beNDMWMdlPlayer *arg0, beBaseInfoRam *a
     {
         int i = 0, off = 0;
         do {
-            igIntList *v = FUN_003a9250(obj, DAT_005163c8)->f12;
+            igIntList *v = igProperty_GetRecordIntList(obj, DAT_005163c8)->f12;
             if (v->_count != 0 && i >= 0 && i < v->_count) {
                 *(int *)(v->_data + off) /* matching construct: byte-offset element write; indexing by i or off/4 changes the induction variable */ = DAT_004cc7c0[0];
             }
@@ -819,8 +819,8 @@ void Gap__Bec__beNDMWMdlPlayer__vfunc_36(beNDMWMdlPlayer *arg0, beBaseInfoRam *a
             d[i] = GPR_005549e0;
         }
     }
-    if (FUN_003a9310(obj, DAT_00516400)->f12->_count != 0) {
-        StringRef name = StringList_CopyRetained(FUN_003a9310(obj, DAT_00516400)->f12, 0);
+    if (igProperty_GetRecordStringList(obj, DAT_00516400)->f12->_count != 0) {
+        StringRef name = StringList_CopyRetained(igProperty_GetRecordStringList(obj, DAT_00516400)->f12, 0);
         beMessenger_SendDelayedNamed(arg0->_messenger, DAT_00516410, name.p, arg1->_ramNo, DAT_00516260, 1);
     }
     beMessenger_SelectGroup(arg0->_messenger, DAT_00516388);

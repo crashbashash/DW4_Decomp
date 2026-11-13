@@ -71,6 +71,7 @@ Index: [`../README.md`](../README.md).
 | [List services](list-services.md) | Shared reserve/growth/mutation/search and retained string/object bridges, composed messenger verification and remaining service boundaries |
 | [String pool](string-pool.md) | Public pool/ordered-table lifecycle, token references, cold registry interning and remaining cleanup/synchronization boundaries |
 | [String chunks](string-chunks.md) | Packed free-list allocation/coalescing, cross-chunk growth, allocator/delete boundaries and pool integration |
+| [`game-ram.md`](game-ram.md) | **The game RAM (`beNDMWGameRam`)**: common and per-player data lists built from layouts, joining players, species switching, HP/MP changes, growth and stat recompute |
 | `game-state.md` | Live game-state globals, `MDL` block, world position, pointer chains |
 | `property-system.md` | `GAMERAM` property/method system (player stats, keys) |
 | `afs-archives.md` | `NDMW.AFS` / `AREA.AFS` layout and Lua chunk storage |

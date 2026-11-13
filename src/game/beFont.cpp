@@ -131,10 +131,10 @@ extern "C" int g_beFontImage_metaObject[4];
 extern "C" void FUN_00382df0(KindMatchTarget *arg0, KindMatchSource *arg1);
 struct Pair { unsigned short out; unsigned short key; };
 struct Table { Pair e[425]; };
-extern "C" beUnicodeObj *FUN_003614f0(int);
+extern "C" beUnicodeObj *beUnicodeObj_Create(int);
 extern "C" int FUN_0030b460(igStringObj *, char *, int, int);
 extern "C" const Table DAT_004c8880;
-extern "C" igSmartPointer<beUnicodeObj> FUN_00382eb0(beFont *self, const char *str);
+extern "C" igSmartPointer<beUnicodeObj> beFont_ConvertToUnicode(beFont *self, const char *str);
 extern "C" int FUN_00383350(beFont *arg0, int arg1);
 /* matching construct: dummy virtual slots so the vX() call dispatches through the retail vtable offset of the
    vertex-array configure method (an igVertexArray subclass instance; the reflected igVertexArray has no vtable type) */
@@ -588,7 +588,7 @@ void FUN_00382df0(KindMatchTarget *arg0, KindMatchSource *arg1) {
     }
 }
 
-igSmartPointer<beUnicodeObj> FUN_00382eb0(beFont *self, const char *str) {
+igSmartPointer<beUnicodeObj> beFont_ConvertToUnicode(beFont *self, const char *str) {
     Table t = DAT_004c8880;
     char c0;
     char c1;
@@ -639,7 +639,7 @@ igSmartPointer<beUnicodeObj> FUN_00382eb0(beFont *self, const char *str) {
     }
     a = ((int)igObject_GetAllocator(self));
     a = GPR_00554c14 ? a : ((int)Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]));
-    igSmartPointer<beUnicodeObj> r(FUN_003614f0(a));
+    igSmartPointer<beUnicodeObj> r(beUnicodeObj_Create(a));
     beUnicodeObj_AllocateBuffer(r.p, n);
     unsigned short *buf = (unsigned short *)r.p->_buffer;
     int m = 0;
@@ -729,7 +729,7 @@ void FUN_00383420(beFont *self, FontLayout *layout, N *src, int idx) {
         const char *s0 = (const char *)((igStringObj *)src)->_buffer;
         const char *s;
         if (s0 == 0) s = DAT_004c22f0[0]; else s = s0;
-        igSmartPointer<beUnicodeObj> tmp(FUN_00382eb0(self, s));
+        igSmartPointer<beUnicodeObj> tmp(beFont_ConvertToUnicode(self, s));
         beUnicodeObj *n = tmp.get();
         if (n != 0) ++n->_refCount;
         beUnicodeObj *o = cur.p;

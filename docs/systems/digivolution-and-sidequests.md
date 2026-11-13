@@ -101,7 +101,7 @@ Live reward delivery and the setter's small-data constant need validation.
 
 ## 3. Form index map
 
-Index = the 16-species/model order (`FUN_003f80e0` `MODEL_NAME`
+Index = the 16-species/model order (`beNDMWGameRam_FindSpecies` `MODEL_NAME`
 table). This is also the order of the save's `BASE_*` arrays.
 
 | idx | model name | Digimon | starter? |

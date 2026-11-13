@@ -1,6 +1,6 @@
 # GAMERAM combat dispatcher
 
-`beNDMWGameRam::vfunc_34` at `0x3fca10` (41,864 bytes, 3,259 relocations) is a member of the whole-file unit
+`beNDMWGameRam_OnMessage` at `0x3fca10` (41,864 bytes, 3,259 relocations) is a member of the whole-file unit
 [`src/game/beNDMWGameRam.cpp`](../../src/game/beNDMWGameRam.cpp) (`0x3f6620`-`0x407080`), at its retail position after
 `beNDMWGameRam_CollectNearbyNonzeroHp`. It is the
 parent command callback (GETCOMMON, GETPLAYER, CTRLITEM, FIGHTCALC, CTRLPLAYER and the rest of the 22-name `Message` enum) and
@@ -53,7 +53,7 @@ nops, and declarations placed where the register colouring needs them ([register
   `tools/layout.py` records a function's tables as one span (with the compiler's padding inside it), so `tools/linkgen.py` takes a
   compiled owner's individual tables from `config/SLUS-20836/jumptables.txt` and pins each at its own address.
 * **Verification:** `python3 tools/check.py --no-cache --function 0x3f6620 --cand src/game/beNDMWGameRam.cpp` (the whole unit,
-  including `MATCH emitted 0x3fca10 Gap__Bec__beNDMWGameRam__vfunc_34 41864B`).
+  including `MATCH emitted 0x3fca10 beNDMWGameRam_OnMessage 41864B`).
 
 ## How the registers were matched
 
@@ -62,7 +62,7 @@ where its variable is declared, nodes are pushed in ascending id when their degr
 push order. The receiver `this` is `s4` in retail; it stays `s0` when any of four hot FIGHTCALC regions leaves a wide clique of
 simultaneously live webs. The tools for this are `tools/dispatcher/regalloc_trace.py` (the real compiler's colouring,
 instrumented, including the second pass that produces the emitted registers) and `regalloc_sim.py` (replays simplify/select from a dump in
-milliseconds so id permutations can be searched without recompiling). The same method also matches `FUN_003fab90` and the messenger
+milliseconds so id permutations can be searched without recompiling). The same method also matches `beNDMWGameRam_RecomputeStats` and the messenger
 callees ([callees](combat-callees.md)).
 
 ## Scope

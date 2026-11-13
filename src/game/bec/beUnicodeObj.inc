@@ -1,4 +1,4 @@
-void FUN_003614f0(int arg0) {
+void beUnicodeObj_Create(int arg0) {
     FUN_00361610();
     igMetaObject_CreateInstance(*(int *)0x589640, arg0);
 }

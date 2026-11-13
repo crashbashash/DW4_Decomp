@@ -47,12 +47,12 @@ extern "C" int beMessenger_SendGroup(...);
 extern "C" int strcmp(const char *a, const char *b);
 extern "C" int FUN_00236f80(...);
 extern "C" int beLua__RunNamedChunk(...);
-extern "C" int FUN_003f9c80(...);
-extern "C" int FUN_003f9e20(...);
+extern "C" int beNDMWGameRam_ChangeHp(...);
+extern "C" int beNDMWGameRam_ChangeMp(...);
 extern "C" int FUN_00447b00(...);
 extern "C" int FUN_00447b40(...);
 extern "C" int SYSsetGateStage(...);
-extern "C" void *FUN_003a9250(...);
+extern "C" void *igProperty_GetRecordIntList(...);
 extern "C" void *igProperty_GetRecord(...);
 extern "C" int beDataBase_GetRecordInt(beDataBase *, int, const char *);
 extern "C" unsigned long long beDataBase_GetRecordBool(beDataBase *, int, const char *);
@@ -529,22 +529,22 @@ int Gap__Bec__beNDMWItemDisk__vfunc_22(beNDMWItemDisk *self, beNDMWGameRam *game
     switch (recNo) {
     case 9: {
         int ram = FUN_00236f80(gameRam->_insight, g_beNDMWGameRam_metaObject[0]);
-        FUN_003f9c80(ram, playerNo, beNDMWItemBase_GetRecordInt((beNDMWItemBase *)self, (beNDMWStatus *)gameRam, HP_2), -1);
-        FUN_003f9e20(ram, playerNo, beNDMWItemBase_GetRecordInt((beNDMWItemBase *)self, (beNDMWStatus *)gameRam, MP_2));
+        beNDMWGameRam_ChangeHp(ram, playerNo, beNDMWItemBase_GetRecordInt((beNDMWItemBase *)self, (beNDMWStatus *)gameRam, HP_2), -1);
+        beNDMWGameRam_ChangeMp(ram, playerNo, beNDMWItemBase_GetRecordInt((beNDMWItemBase *)self, (beNDMWStatus *)gameRam, MP_2));
         return 0;
     }
     }
     switch (recNo) {
     case 0: case 1: case 2: {
         int hp = beNDMWItemBase_GetRecordInt((beNDMWItemBase *)self, (beNDMWStatus *)gameRam, HP_2);
-        FUN_003f9c80(FUN_00236f80(gameRam->_insight, g_beNDMWGameRam_metaObject[0]), playerNo, hp, -1);
+        beNDMWGameRam_ChangeHp(FUN_00236f80(gameRam->_insight, g_beNDMWGameRam_metaObject[0]), playerNo, hp, -1);
         return 0;
     }
     }
     switch (recNo) {
     case 3: case 4: case 5: {
         int mp = beNDMWItemBase_GetRecordInt((beNDMWItemBase *)self, (beNDMWStatus *)gameRam, MP_2);
-        FUN_003f9e20(FUN_00236f80(gameRam->_insight, g_beNDMWGameRam_metaObject[0]), playerNo, mp);
+        beNDMWGameRam_ChangeMp(FUN_00236f80(gameRam->_insight, g_beNDMWGameRam_metaObject[0]), playerNo, mp);
         return 0;
     }
     }
@@ -673,12 +673,12 @@ int Gap__Bec__beNDMWItemInstant__vfunc_22(beNDMWItemInstant *self, beNDMWGameRam
         case 18: case 19: counter = 9; break;
         case 20: case 21: counter = 10; break;
         }
-        upcnt = (IntListProperty *)FUN_003a9250(player, UPCNT_2);
+        upcnt = (IntListProperty *)igProperty_GetRecordIntList(player, UPCNT_2);
         {
             int current = ((int *)upcnt->_value->_data)[counter];
             count = current + up;
         }
-        counters = ((IntListProperty *)FUN_003a9250(player, UPCNT_2))->_value;
+        counters = ((IntListProperty *)igProperty_GetRecordIntList(player, UPCNT_2))->_value;
         if (counters->_count != 0 && counter >= 0 && counter < counters->_count) {
             ((int *)counters->_data)[counter] = count;
         }

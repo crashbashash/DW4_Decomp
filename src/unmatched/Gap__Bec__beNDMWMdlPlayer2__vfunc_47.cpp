@@ -26,9 +26,9 @@ Ref *beBaseInfoDataList_Create(void *);
 void igObject_Destroy(Ref *);
 char *igProperty_FindByName(Ref *, int, const char *);
 RecInt *igProperty_GetRecord(int, const char *);
-RecIv *FUN_003a9250(int, const char *);
-RecStr *FUN_003a92e0(int, const char *);
-RecSl *FUN_003a9310(int, const char *);
+RecIv *igProperty_GetRecordIntList(int, const char *);
+RecStr *igProperty_GetRecordString(int, const char *);
+RecSl *igProperty_GetRecordStringList(int, const char *);
 RecFl *FUN_003a9370(int, const char *);
 void StringList_CopyRetained(int *, StrVec *, int);
 void StringChunk_ReleaseHeader(int, void *);
@@ -113,7 +113,7 @@ extern "C" int Gap__Bec__beNDMWMdlPlayer2__vfunc_47(beNDMWMdlPlayer2 *self, Msg 
     } else if (strcmp(name, DAT_00516660) == 0) {
         beMessenger_SendGroup(self->_messenger, DAT_005165d0, DAT_005165d8);
         int obj = beMessenger_GetObject(self->_messenger, 0);
-        StrVec *names = FUN_003a9310(obj, DAT_005165e8)->v;
+        StrVec *names = igProperty_GetRecordStringList(obj, DAT_005165e8)->v;
         F3Vec *pos = FUN_003a9370(obj, DAT_005165f8)->v;
         int idx = msg->number;
         bool match;
@@ -181,7 +181,7 @@ extern "C" int Gap__Bec__beNDMWMdlPlayer2__vfunc_47(beNDMWMdlPlayer2 *self, Msg 
         int o = beMessenger_GetObject(self->_messenger, 0);
         if (!found) {
             igProperty_GetRecord(o, DAT_005166c0)->v = val;
-            char *who = FUN_003a92e0(o, DAT_005166c8)->v;
+            char *who = igProperty_GetRecordString(o, DAT_005166c8)->v;
             if (*who == 0) who = DAT_005166d8;
             beMessenger_SelectReceivers(self->_messenger, DAT_00516670, who, msg->number);
             beMessenger_AppendMatrix(self->_messenger, mat);
@@ -191,26 +191,26 @@ extern "C" int Gap__Bec__beNDMWMdlPlayer2__vfunc_47(beNDMWMdlPlayer2 *self, Msg 
         beMessenger_SendGroup(self->_messenger, DAT_005165d0, DAT_005165d8);
         int obj = beMessenger_GetObject(self->_messenger, 0);
         int i2 = msg->number * 2;
-        int *dp = FUN_003a9250(obj, DAT_005166f0)->v->data;
+        int *dp = igProperty_GetRecordIntList(obj, DAT_005166f0)->v->data;
         int d = dp[i2];
         d += igProperty_GetRecord(o, DAT_00516700)->v; igProperty_GetRecord(o, DAT_00516700)->v = d;
         {
-            IntVec *vec = FUN_003a9250(obj, DAT_005166f0)->v;
+            IntVec *vec = igProperty_GetRecordIntList(obj, DAT_005166f0)->v;
             if (vec->count != 0 && i2 >= 0 && i2 < vec->count)
                 vec->data[i2] = DAT_004cc820[0];
         }
-        char *cur = FUN_003a92e0(o, DAT_005166c8)->v;
+        char *cur = igProperty_GetRecordString(o, DAT_005166c8)->v;
         val = msg->number;
         {
-            StringList_CopyRetained(&s, FUN_003a9310(obj, DAT_00516708)->v, val);
+            StringList_CopyRetained(&s, igProperty_GetRecordStringList(obj, DAT_00516708)->v, val);
             char *sp = (char *)s;
             STR_RELEASE(sp)
             if (strcmp(cur, sp) == 0) {
                 int i3 = msg->number * 2 + 1;
-                int *dp3 = FUN_003a9250(obj, DAT_005166f0)->v->data;
+                int *dp3 = igProperty_GetRecordIntList(obj, DAT_005166f0)->v->data;
                 int e3 = dp3[i3]; int d3 = (e3 * pct) / 100;
                 d3 += igProperty_GetRecord(o, DAT_00516718)->v; igProperty_GetRecord(o, DAT_00516718)->v = d3;
-                IntVec *vec = FUN_003a9250(obj, DAT_005166f0)->v;
+                IntVec *vec = igProperty_GetRecordIntList(obj, DAT_005166f0)->v;
                 if (vec->count != 0 && i3 >= 0 && i3 < vec->count)
                     vec->data[i3] = DAT_004cc828[0];
             }
@@ -220,7 +220,7 @@ extern "C" int Gap__Bec__beNDMWMdlPlayer2__vfunc_47(beNDMWMdlPlayer2 *self, Msg 
         int obj2 = beMessenger_GetObject(self->_messenger, 0);
         empty = 0;
         int k = msg->number;
-        StrVec *lst = FUN_003a9310(obj2, DAT_005165e8)->v;
+        StrVec *lst = igProperty_GetRecordStringList(obj2, DAT_005165e8)->v;
         if (lst->count != 0 && k >= 0 && k < lst->count) {
             int *slot = lst->data + k;
             int e1 = empty;

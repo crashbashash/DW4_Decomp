@@ -265,7 +265,7 @@ XDATA, BIT, DEVICEFOLDER, …` (key strings `0x00517e58`–`0x00517ee0`).
   see [`techniques.md`](techniques.md).
 
 **Species index order** (confirmed): the game derives the
-species index from `DIGIMONNAME` via `FUN_003f80e0`, which linear-searches the
+species index from `DIGIMONNAME` via `beNDMWGameRam_FindSpecies`, which linear-searches the
 MODEL_NAME table (ELF `0x417b88`):
 `0 agumon, 1 vmon, 2 girumon, 3 dorumon, 4 weregaru, 5 hekabut, 6 wargrey,
 7 angelr, 8 beelzeb, 9 alpha, 10 bwargrey, 11 impdrafm, 12 impdrapm,

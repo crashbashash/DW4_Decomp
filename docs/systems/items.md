@@ -401,9 +401,9 @@ igBinary deserializer (same prerequisite as the NDMW.AFS item DB).
 - Unproven: mod slot counts are rolled per item and normal rolls cap at 4, one below the functional maximum
   of 5. Counts of 6 and 15 crash or show a question mark.
 - Unproven: the Rack Board's luck may be a dead stat. Rack Board (armor2 model 9, ids `0x201b`-`0x201d`)
-  raises `LUCKRITSU`, which `FUN_003fab90` sums from the equipped board through `FUN_003fa2c0` and stores in
+  raises `LUCKRITSU`, which `beNDMWGameRam_RecomputeStats` sums from the equipped board through `beNDMWGameRam_AddSubSlotBonus` and stores in
   the GAMERAM property. No string-keyed read of it exists: the single `LUCKRITSU` string (`0x5189e0`) is
   used only at that compute and store and in the property template (`0x4cefa8`). `EXPRITSU` and `BITRITSU`
-  do have readers, in `beNDMWGameRam::vfunc_34` (`0x3ff87c`) and `beNDMWItemInstant::vfunc_22` (`0x448bd8`).
+  do have readers, in `beNDMWGameRam_OnMessage` (`0x3ff87c`) and `beNDMWItemInstant::vfunc_22` (`0x448bd8`).
   These rates are not shown in-game. A positional read of the property or of board field +0x40 is not
   excluded. Test: equip a Rack Board and compare a forced single-entry drop table with `LUCKRITSU` 0 and N.

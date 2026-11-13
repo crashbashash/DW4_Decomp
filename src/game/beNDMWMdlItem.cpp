@@ -65,13 +65,13 @@ struct ParentInfo : public igObject { char *_name; };
 struct Rec { int p[3]; int f12; };
 extern "C" igObject * beBaseInfoDataList_Create(...);
 extern "C" igObject *FUN_003c13f0(...);
-extern "C" igObject *FUN_003c85b0(...);
+extern "C" igObject *beNDMWItemDisk_Create(...);
 extern "C" igObject *FUN_003c83c0(...);
 extern "C" igObject *FUN_003c8240(...);
-extern "C" igObject *FUN_003c87f0(...);
-extern "C" igObject *FUN_003c8c90(...);
-extern "C" igObject *FUN_003c8b00(...);
-extern "C" igObject *FUN_003c8970(...);
+extern "C" igObject *beNDMWItemAbilityChip_Create(...);
+extern "C" igObject *beNDMWItemWeapon_Create(...);
+extern "C" igObject *beNDMWItemBlueArmor_Create(...);
+extern "C" igObject *beNDMWItemYellowArmor_Create(...);
 extern "C" Prop * igProperty_FindByName(...);
 extern "C" Rec *igProperty_GetRecord(...);
 extern "C" char *DAT_004cfc10[10];
@@ -255,7 +255,7 @@ void Gap__Bec__beNDMWMdlItem__vfunc_36(beNDMWMdlItem *self, beBaseInfoRam *info)
     switch ((unsigned int)work.p->_dbId) {
     case 0: {
         ALLOC(alloc, g_ndmwAllocatorSelector)
-        ItemRef h(FUN_003c85b0(alloc));
+        ItemRef h(beNDMWItemDisk_Create(alloc));
         { beNDMWMdlItemInfoWork *w = work.p; beNDMWItemDisk_Set(h.p, w->_recNo); }
         storeItem(work, h);
         break;
@@ -276,7 +276,7 @@ void Gap__Bec__beNDMWMdlItem__vfunc_36(beNDMWMdlItem *self, beBaseInfoRam *info)
     }
     case 6: {
         ALLOC(alloc, g_ndmwAllocatorSelector)
-        ItemRefK<4> h(FUN_003c87f0(alloc));
+        ItemRefK<4> h(beNDMWItemAbilityChip_Create(alloc));
         { beNDMWMdlItemInfoWork *w = work.p; beNDMWItemAbilityChip_Set(h.p, w->_recNo); }
         storeItem(work, h);
         break;
@@ -290,21 +290,21 @@ void Gap__Bec__beNDMWMdlItem__vfunc_36(beNDMWMdlItem *self, beBaseInfoRam *info)
         switch ((unsigned int)work.p->_dbId) {
         case 3: {
             ALLOC(alloc, g_ndmwAllocatorSelector)
-            ItemRefK<1> h(FUN_003c8c90(alloc));
+            ItemRefK<1> h(beNDMWItemWeapon_Create(alloc));
             { beNDMWMdlItemInfoWork *w = work.p; beNDMWItemWeapon_SetRandom(h.p, w->_recNo, self, roll); }
             storeItem(work, h);
             break;
         }
         case 4: {
             ALLOC(alloc, g_ndmwAllocatorSelector)
-            ItemRefK<2> h(FUN_003c8b00(alloc));
+            ItemRefK<2> h(beNDMWItemBlueArmor_Create(alloc));
             { beNDMWMdlItemInfoWork *w = work.p; beNDMWItemBlueArmor_SetRandom(h.p, w->_recNo, self, roll); }
             storeItem(work, h);
             break;
         }
         case 5: {
             ALLOC(alloc, g_ndmwAllocatorSelector)
-            ItemRefK<3> h(FUN_003c8970(alloc));
+            ItemRefK<3> h(beNDMWItemYellowArmor_Create(alloc));
             { beNDMWMdlItemInfoWork *w = work.p; beNDMWItemYellowArmor_SetRandom(h.p, w->_recNo, self, roll); }
             storeItem(work, h);
             break;

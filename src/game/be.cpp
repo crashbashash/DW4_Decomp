@@ -49,7 +49,7 @@ extern "C" int beMessenger_SendNamed(...);
 extern "C" int beMessenger_GetObject(...);
 extern "C" int bePlayer_GetStruct(int playerNo);
 extern "C" void *igProperty_GetRecordByte(int, char *);
-extern "C" void * FUN_003a92e0(...);
+extern "C" void * igProperty_GetRecordString(...);
 extern "C" void * igProperty_GetRecord(...);
 extern "C" int beMessenger_SendGroup(...);
 extern "C" int beMessenger_DispatchSelected(...);
@@ -165,7 +165,7 @@ extern "C" int DMgetCount(void);
 extern "C" unsigned char FLGisOn(int arg0);
 extern "C" void FLGset(int arg0, unsigned char arg1);
 extern "C" void FLGflip(int arg0);
-extern "C" void * FUN_003a9250(...);
+extern "C" void * igProperty_GetRecordIntList(...);
 extern "C" void COUNTERset(int arg0, int arg1);
 extern "C" int COUNTERget(int arg0);
 extern "C" int sprintf(...);
@@ -307,7 +307,7 @@ extern "C" int g_blpStatus[4];
 extern "C" int g_txtCallNo[4];
 extern "C" int g_attackZokusei[4];
 struct T { char pad[12]; igStringRefList *list; };
-extern "C" struct T *FUN_003a9310(int, int *);
+extern "C" struct T *igProperty_GetRecordStringList(int, int *);
 extern "C" int DAT_0050d960[4];
 extern "C" beSystem *g_beSystem[4];
 class DW4VC_96_0 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual int vX(); };
@@ -780,14 +780,14 @@ unsigned char SYSisJoinPlayer(int playerIndex) {
 }
 
 int SYSgetPlayerName(int playerIndex) {
-    return ((PropertyRecord *)FUN_003a92e0(bePlayer_GetStruct(playerIndex + 1), DIGIMONNAME))->value;
+    return ((PropertyRecord *)igProperty_GetRecordString(bePlayer_GetStruct(playerIndex + 1), DIGIMONNAME))->value;
 }
 
 char *SYSgetWeaponName(int arg0, int arg1) {
     char *s;
     igStringRefList *list;
 
-    list = FUN_003a9310(bePlayer_GetStruct(arg0 + 1), &DAT_0050d960[0])->list;
+    list = igProperty_GetRecordStringList(bePlayer_GetStruct(arg0 + 1), &DAT_0050d960[0])->list;
     if (list->_count <= arg1) {
         return 0;
     }
@@ -861,7 +861,7 @@ void SYSsetGateStage(int *arg0, int arg1) {
     obj = beMessenger_GetObject(g_beMessenger[0], 0);
     *(int *)((char *)igProperty_GetRecord(obj, GATESTAGENO) + 12) = arg1;
     if (arg0 == 0) {
-        rec = (R *)FUN_003a92e0(obj, GATESTAGENAME);
+        rec = (R *)igProperty_GetRecordString(obj, GATESTAGENAME);
         if (g_stringPool[0] == 0) {
             v = FUN_002eb010(0x10);
             if (v != 0) {
@@ -882,7 +882,7 @@ void SYSsetGateStage(int *arg0, int arg1) {
         rec->f12 = s0;
         return;
     }
-    rec = (R *)FUN_003a92e0(obj, GATESTAGENAME);
+    rec = (R *)igProperty_GetRecordString(obj, GATESTAGENAME);
     if (g_stringPool[0] == 0) {
         v = FUN_002eb010(0x10);
         if (v != 0) {
@@ -905,7 +905,7 @@ void SYSsetGateStage(int *arg0, int arg1) {
 
 int SYSgetGateStageName(void) {
     beMessenger_SendGroup(g_beMessenger[0], GAMERAM, GETCOMMON);
-    return ((PropertyRecord *)FUN_003a92e0(beMessenger_GetObject(g_beMessenger[0], 0), GATESTAGENAME))->value;
+    return ((PropertyRecord *)igProperty_GetRecordString(beMessenger_GetObject(g_beMessenger[0], 0), GATESTAGENAME))->value;
 }
 
 int SYSgetGateStageNo(void) {
@@ -1014,10 +1014,10 @@ int SYSctlShinka(int arg0, int arg1, int arg2) {
     d = (unsigned char *)((igBoolList *)((beDataObjBoolList *)igProperty_GetRecordArray(bePlayer_GetStruct(arg1 + 1), &DAT_0050da18[0]))->_data)->_data; /* matching construct: byte base held in a pointer local keeps the retail operand order of the index add */
     has = d[arg2];
     if (strcmp(arg0, &DAT_0050da50[0]) == 0) {
-        if (has != 0) ret = ((int *)((igIntList *)((beDataObjIntList *)FUN_003a9250(bePlayer_GetStruct(arg1 + 1), &DAT_0050da58[0]))->_data)->_data)[arg2];
+        if (has != 0) ret = ((int *)((igIntList *)((beDataObjIntList *)igProperty_GetRecordIntList(bePlayer_GetStruct(arg1 + 1), &DAT_0050da58[0]))->_data)->_data)[arg2];
         else ret = -1;
     } else if (strcmp(arg0, &DAT_0050da68[0]) == 0) {
-        if (has != 0) ret = ((int *)((igIntList *)((beDataObjIntList *)FUN_003a9250(bePlayer_GetStruct(arg1 + 1), &DAT_0050da78[0]))->_data)->_data)[arg2];
+        if (has != 0) ret = ((int *)((igIntList *)((beDataObjIntList *)igProperty_GetRecordIntList(bePlayer_GetStruct(arg1 + 1), &DAT_0050da78[0]))->_data)->_data)[arg2];
         else ret = -1;
     } else if (strcmp(arg0, &DAT_0050da88[0]) == 0) {
         if (has != 0) ret = 0;
@@ -1402,7 +1402,7 @@ void COUNTERset(int arg0, int arg1) {
     igIntList *temp_a1;
     int temp_v1;
     beMessenger_SendNamed(g_beMessenger[0], GAMERAM, 0, 0, GETCOMMON);
-    temp_a1 = (igIntList *)(*(int *)((char *)(FUN_003a9250(beMessenger_GetObject(g_beMessenger[0], 0), &DAT_0050daf8[0])) + 12));
+    temp_a1 = (igIntList *)(*(int *)((char *)(igProperty_GetRecordIntList(beMessenger_GetObject(g_beMessenger[0], 0), &DAT_0050daf8[0])) + 12));
     temp_v1 = temp_a1->_count;
     if ((temp_v1 != 0) && (arg0 >= 0) && (arg0 < temp_v1)) {
         *(int *)(temp_a1->_data + (arg0 * 4)) = arg1;
@@ -1413,7 +1413,7 @@ int COUNTERget(int arg0)
 {
   int *new_var;
   beMessenger_SendNamed(g_beMessenger[0, 0], GAMERAM, 0, 0, GETCOMMON);
-  new_var = (int *) (((char *) FUN_003a9250(beMessenger_GetObject(g_beMessenger[0], 0), &DAT_0050daf8[0])) + 12);
+  new_var = (int *) (((char *) igProperty_GetRecordIntList(beMessenger_GetObject(g_beMessenger[0], 0), &DAT_0050daf8[0])) + 12);
   return *((int *) ((*((int *) (((char *) (*new_var)) + 16))) + (arg0 * 4)));
 }
 

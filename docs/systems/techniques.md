@@ -31,15 +31,15 @@ header precedes the struct).
 
 The mapping between the `BASE_*` arrays and the live `GAMERAM` properties is:
 
-- `FUN_003f8760` (current → base, pre-save): `BASE_LEVEL[species]=LEVEL`,
+- `beNDMWGameRam_StoreSpecies` (current → base, pre-save): `BASE_LEVEL[species]=LEVEL`,
   `BASE_EXP[species]=EXP`, `BASE_SKILL[species*9 + i]=SKILL[i]` for `i` in 0..8,
   `BASE_UPCNT[species*11 + i]=UPCNT[i]` for `i` in 0..10.
-- `FUN_003f82a0` (base → current, post-load): the exact inverse.
+- `beNDMWGameRam_SelectSpecies` (base → current, post-load): the exact inverse.
 
 `SKILL[]` is a **9-element array** on the player record. The **6 attack styles
 occupy 6 of these 9 slots**; the value is the technique's level (higher =
 more skilled; it is also compared against `TECHn_SKILL1..5` thresholds to unlock
-special moves into `WAZALIST`; see `FUN_003fab90`).
+special moves into `WAZALIST`; see `beNDMWGameRam_RecomputeStats`).
 
 ## BASE_UPCNT: X-Data power-ups (slot order CONFIRMED)
 
@@ -47,7 +47,7 @@ The `UPCNT` array holds the **X-Data Keeper power-up values** (the shop that
 spends X-Data to permanently boost the 7 core stats + 4 elemental resistances).
 It is stored per-species at `BASE_UPCNT[species*11 + slot]` (`+0xa3c`, 16×11 u32).
 
-Slot order (CONFIRMED by tracing `FUN_003fa850`/`FUN_003fa3b0`/`FUN_003fab90`):
+Slot order (CONFIRMED by tracing `beNDMWGameRam_CalcAttribute`/`beNDMWGameRam_CalcMaxPoints`/`beNDMWGameRam_RecomputeStats`):
 
 | Slot | Stat | Derivation |
 | --- | --- | --- |
@@ -64,9 +64,9 @@ Slot order (CONFIRMED by tracing `FUN_003fa850`/`FUN_003fa3b0`/`FUN_003fab90`):
 | 10 | Dark resistance | base + `UPCNT[10]` |
 
 Evidence: the growth-key table at `0x004cf250` is `STR_INI AC_INI INT_INI
-MND_INI DEX_INI` (stat index 0..4), and `FUN_003fa850` reads
-`UPCNT[species*11 + 2 + stat_index]`; `FUN_003fa3b0` reads `UPCNT[species*11+0]`
-for MHP and `UPCNT[species*11+1]` for MMP; `FUN_003fab90` reads
+MND_INI DEX_INI` (stat index 0..4), and `beNDMWGameRam_CalcAttribute` reads
+`UPCNT[species*11 + 2 + stat_index]`; `beNDMWGameRam_CalcMaxPoints` reads `UPCNT[species*11+0]`
+for MHP and `UPCNT[species*11+1]` for MMP; `beNDMWGameRam_RecomputeStats` reads
 `UPCNT[species*11+7..10]` for the four resistances. Each stat is clamped to
 **1..9999** after the final equipment/temporary additions (HP/MP instead
 cap above at 99999). The displayed formulas above describe the base helpers

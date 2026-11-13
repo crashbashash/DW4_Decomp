@@ -1,4 +1,4 @@
-void FUN_003c85b0(int arg0) {
+void beNDMWItemDisk_Create(int arg0) {
     FUN_003c86d0();
     igMetaObject_CreateInstance(*(int *)0x58BF38, arg0);
 }

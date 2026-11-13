@@ -150,7 +150,7 @@
     if (n_ < l_->_capacity) l_->_count = count_4207a0(l_) + 1; else List_Resize(l_, n_ + 1, 4); \
     ((int *)l_->_data)[n_] = (val); }
 #define LIST_REMOVE(lst, idx) { igObjectList *l_ = (igObjectList *)(lst); int ix_ = (idx); \
-    ObjectRef_Release_003e9110(ObjectList_GetAt_003e9260(l_, ix_)); FUN_00406f20(l_, ix_); \
+    ObjectRef_Release_003e9110(ObjectList_GetAt_003e9260(l_, ix_)); ObjectList_RemoveAt_00406f20(l_, ix_); \
     ((int *)l_->_data)[l_->_count] = 0; }
 
 extern "C" void beMessenger_SendNamed(...);
@@ -179,7 +179,7 @@ extern "C" int beNDMWWindow_RequestChildrenClose(...);
 extern "C" void * igObject_GetAllocator(...);
 extern "C" int beNDMWWindow_RunMessageScript(...);
 extern "C" int igObject_IsKindOf(...);
-extern "C" int FUN_003a9310(...);
+extern "C" int igProperty_GetRecordStringList(...);
 extern "C" void * FUN_003b4f50(...);
 extern "C" void * FUN_003b51b0(...);
 extern "C" void FUN_00411180(beNDMWStatusCtrlBaseEquip *p);
@@ -239,7 +239,7 @@ extern "C" int beMessenger_AppendObject(...);
 extern "C" void FUN_00443110(int, int, int);
 extern "C" void beNDMWWindow_SendModelSequence(...);
 extern "C" void *ObjectList_GetAt_003e9260(...);
-extern "C" void FUN_00406f20(...);
+extern "C" void ObjectList_RemoveAt_00406f20(...);
 extern "C" void *FUN_003c90f0(void *);
 extern "C" int Gap__Bec__beNDMWStatusSubMenu__vfunc_20(void);
 extern "C" int Gap__Bec__beNDMWStatusCtrlSkill__vfunc_20(void);
@@ -364,7 +364,7 @@ static inline int PickAlloc(beNDMWStatusCtrlBaseEquip *q) {
     return al;
 }
 static inline void SendName(beNDMWStatusCtrlBaseEquip *q) {
-    StringRef sv(StringList_CopyRetained(*(int *)(FUN_003a9310(q->_playerList, DAT_00519c60) + 12), 0));
+    StringRef sv(StringList_CopyRetained(*(int *)(igProperty_GetRecordStringList(q->_playerList, DAT_00519c60) + 12), 0));
     beMessenger_SendNamed(q->_messenger, DAT_00519c70, sv.p, q->_playerNo, DAT_00519c80);
 }
 static inline void AssignRef(int *slot, Obj *v) {
@@ -494,7 +494,7 @@ extern "C" void Gap__Bec__beNDMWStatusPowerSocket__vfunc_29(beNDMWStatusPowerSoc
 typedef struct PropertyRecord { char p12[12]; int f12; } PropertyRecord;
 typedef struct PropertyRecordTable { char p16[16]; int *data; } PropertyRecordTable;
 typedef struct PropertyRecordHolder { char p12[12]; PropertyRecordTable *f12; } PropertyRecordHolder;
-extern "C" PropertyRecordHolder * FUN_003a9250(...);
+extern "C" PropertyRecordHolder * igProperty_GetRecordIntList(...);
 extern "C" int DAT_00519f78[4];
 extern "C" int DAT_00519f88[4];
 extern "C" int DAT_00519f90[4];
@@ -2218,7 +2218,7 @@ int Gap__Bec__beNDMWStatusPowerSocket__vfunc_30(beNDMWStatusPowerSocket *arg0, i
     s0 = FUN_00236f80(arg0->_insight, g_beNDMWStatus_metaObject[0]);
     s2 = ((PropertyRecord *)igProperty_GetRecord(arg0->_playerList, &DAT_00519f78[0]))->f12;
     fl = (1 << s2) & beNDMWItemBase_GetRecordInt(s3, s0, &DAT_00519f88[0]);
-    s1 = FUN_003a9250(arg0->_playerList, &DAT_00519f90[0])->f12;
+    s1 = igProperty_GetRecordIntList(arg0->_playerList, &DAT_00519f90[0])->f12;
     s0b = beNDMWItemBase_GetRecordInt(s3, s0, &DAT_00519f90[0]);
     v0 = beNDMWItemBase_GetRecordInt(s3, s0, &DAT_00519f98[0]);
     if ((fl != 0) && (s1->data[s0b] >= v0)) {
@@ -5343,7 +5343,7 @@ void Gap__Bec__beNDMWStatusCtrlSkill__vfunc_21(beNDMWStatusCtrlSkill *self)
                     beMessenger_AppendInt(self->_messenger, self->_playerNo);
                     beMessenger_DispatchSelected(self->_messenger, DAT_00519ba8);
                     obj = beMessenger_GetObject(self->_messenger, 0);
-                    recs = (igObjectList *)*(int *)(((int)FUN_003a9250(obj, DAT_00519f90)) + 12);
+                    recs = (igObjectList *)*(int *)(((int)igProperty_GetRecordIntList(obj, DAT_00519f90)) + 12);
                     level = *(int *)(((int)igProperty_GetRecord(obj, LEVEL_3)) + 12);
                     limit = H_41f190::Scale(level);
                     for (i = 0; i < recs->_count; i++) {

@@ -1,4 +1,4 @@
-void FUN_00364050(int arg0) {
+void beDataObjList_Create(int arg0) {
     FUN_00364170();
     igMetaObject_CreateInstance(*(int *)0x589840, arg0);
 }

@@ -190,7 +190,7 @@ extern "C" int strcmp(...);
 extern "C" int beDataBase_GetRecordCount(int);
 extern "C" int FUN_00443110(...);
 extern "C" int beNDMWWindowSelect_CanRequestFO2TOP(...);
-extern "C" void *FUN_003a9310(...);
+extern "C" void *igProperty_GetRecordStringList(...);
 extern "C" void *FUN_003b8860(...);
 extern "C" void *FUN_003bace0(...);
 extern "C" int FUN_00425e60(...);
@@ -213,7 +213,7 @@ extern "C" int beNDMWItemBase_GetRecordInt(...);
 extern "C" int FUN_003c90f0(...);
 extern "C" void FUN_0043a950(int *arg0, int arg1);
 extern "C" int *FUN_002b90e0(...);
-extern "C" int *FUN_003c87f0(...);
+extern "C" int *beNDMWItemAbilityChip_Create(...);
 extern "C" int beNDMWItemAbilityChip_Set(...);
 extern "C" int Gap__Bec__beNDMWShopDevice__vfunc_20(void);
 extern "C" int Gap__Bec__beNDMWShopCtrlXdataChip__vfunc_20(void);
@@ -373,7 +373,7 @@ extern "C" char DAT_0051b7d8[];
 extern "C" char DAT_0051b7e0[];
 typedef igObject Rc_42bc70;
 struct P { int pad[3]; igIntList *f12; };
-extern "C" P * FUN_003a9250(...);
+extern "C" P * igProperty_GetRecordIntList(...);
 extern "C" int DAT_0051b7f0[4];
 extern "C" int DAT_0051b800[];
 extern "C" int DAT_0051b810[4];
@@ -623,7 +623,7 @@ struct SalesChk {
         if (arg1->_kindNo == 0) {
             int sh = ((Rec_439d60 *)((void *)igProperty_GetRecord(obj, &DAT_0051bac0[0])))->f12;
             s3 = (1 << sh) & beNDMWItemBase_GetRecordInt(arg1, rec, &DAT_0051bdc8[0]);
-            l = (igIntList *)((Rec_439d60 *)((void *)FUN_003a9250(obj, &DAT_0051bdd0[0])))->f12;
+            l = (igIntList *)((Rec_439d60 *)((void *)igProperty_GetRecordIntList(obj, &DAT_0051bdd0[0])))->f12;
             a = beNDMWItemBase_GetRecordInt(arg1, rec, &DAT_0051bdd0[0]);
             b = beNDMWItemBase_GetRecordInt(arg1, rec, &DAT_0051bdd8[0]);
             if (s3 != 0 && ((int *)l->_data)[a] >= b) return true;
@@ -1095,7 +1095,7 @@ switch (self->_st3) { case 0: default: { self->_st1 = 1; self->_st3 = 0; self->_
                         need = need > 400 ? 400 : (need < 0 ? 1 : need);
                         have = *(int *)(((int)igProperty_GetRecord(obj, ((char *)DAT_0051b440))) + 12);
                         { int rec = ((int)igProperty_GetRecord(obj, ((char *)DAT_0051b440))); *(int *)(rec + 12) = have - need; }
-                        lst = (igIntList *)*(int *)(((int)FUN_003a9250(obj, DAT_0051b480)) + 12);
+                        lst = (igIntList *)*(int *)(((int)igProperty_GetRecordIntList(obj, DAT_0051b480)) + 12);
                         switch (self->_parameter) {
                         case 0: INC(lst, 2) break;
                         case 1: INC(lst, 3) break;
@@ -2440,7 +2440,7 @@ void Gap__Bec__beNDMWShopJunk__vfunc_21(beNDMWShopJunk *arg0) {
                     if (arg0->_retCode != -1) {
                         igIntList *l;
                         beMessenger_SendGroup(arg0->_messenger, DAT_0051b398, DAT_0051b810);
-                        l = FUN_003a9250(((Rc_42bc70 *)beMessenger_GetObject(arg0->_messenger, 0)), DAT_0051b820)->f12;
+                        l = igProperty_GetRecordIntList(((Rc_42bc70 *)beMessenger_GetObject(arg0->_messenger, 0)), DAT_0051b820)->f12;
                         {
                             int c = l->_count;
                             int *p = &((int *)l->_data)[1];
@@ -4401,7 +4401,7 @@ void Gap__Bec__beNDMWShopCtrlDigilabo__vfunc_21(beNDMWShopCtrlDigilabo *self) {
                         beMessenger_AppendInt(self->_messenger, PL(self, k));
                         beMessenger_DispatchSelected(self->_messenger, &DAT_0051b3e8[0]);
                         /* matching construct: the copied token is an expression temporary; a named local would take a higher stack slot than retail's */
-                        beMessenger_SendNamed(self->_messenger, &DAT_0051bbc0[0], (StringList_CopyRetained(((Rec12 *)FUN_003a9310(beMessenger_GetObject(self->_messenger, 0), &DAT_0051bbb0[0]))->f12, 0)).p, PL(self, k), &((int *)DAT_0051b7e0)[0]);
+                        beMessenger_SendNamed(self->_messenger, &DAT_0051bbc0[0], (StringList_CopyRetained(((Rec12 *)igProperty_GetRecordStringList(beMessenger_GetObject(self->_messenger, 0), &DAT_0051bbb0[0]))->f12, 0)).p, PL(self, k), &((int *)DAT_0051b7e0)[0]);
                         k += 1;
                     } while (k < PLN(self));
                 }
@@ -6782,7 +6782,7 @@ void Gap__Bec__beNDMWShopCtrlXdataChip__vfunc_21(beNDMWShopCtrlXdataChip *arg0) 
                     beMessenger_DispatchSelected(arg0->_messenger, &DAT_0051b3a0[0]);
                 }
                 ALLOC_43aae0(al)
-                igSmartPointer<beNDMWItemAbilityChip> abilityChip((beNDMWItemAbilityChip *)FUN_003c87f0(al));
+                igSmartPointer<beNDMWItemAbilityChip> abilityChip((beNDMWItemAbilityChip *)beNDMWItemAbilityChip_Create(al));
                 beNDMWItemAbilityChip_Set(abilityChip.p, recNo + 1);
                 beNDMWWindow_QueueText(infoWin.p, STWINFONT29, ((int * *)g_fontNames)[0], ((int *)beNDMWItemBase_GetRecordString(abilityChip.p, status, NAME_2)), &DAT_0051b598[0]);
                 beNDMWWindow_QueueText(infoWin.p, &DAT_0051b448[0], ((int * *)g_fontName1)[0], &DAT_0051b590[0], &DAT_0051b598[0]);

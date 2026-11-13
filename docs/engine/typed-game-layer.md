@@ -108,13 +108,13 @@ Evidence is the class's `_InitFields` metaobject getter (handle resolved through
 | `beMovie._insight` | `object` | whose class handles are looked up by FUN_00236f80 (insight getter): DAT_00588518 bePadManager, DAT_00589208 beLua |
 | `beMovie._messenger` | `beMessenger` | beMessenger_RegisterReceiver callee |
 | `beNDMWGameRam._commonDataList` | `beDataObjList` | (FUN_00364090); _playerDataListList -> beDataObjListList (FUN_00363ec0); _dBShinka.._dBEneatk -> beDataBase (FUN_003658e0) |
-| `beNDMWGameRam._dBShinka` | `beDataBase` | first argument of beDataBase_GetRecordString in FUN_003f82a0, object obtained via beMessenger_GetObject |
+| `beNDMWGameRam._dBShinka` | `beDataBase` | first argument of beDataBase_GetRecordString in beNDMWGameRam_SelectSpecies, object obtained via beMessenger_GetObject |
 | `beNDMWGameRam._infoList` | `beBaseInfoList` | beBaseInfoManager._infoList, list class by name; used with ObjectList_AppendRetained |
 | `beNDMWGameRam._messenger` | `beMessenger` | passed as the first argument of beMessenger_RegisterReceiverFromInfo (config/SLUS-20836/names) |
-| `beNDMWGameRam._playerDataListList` | `igIntList` | of player data handles: indexed by player in FUN_003f82a0 and FUN_003f8760 (SaveBase.c) |
+| `beNDMWGameRam._playerDataListList` | `igIntList` | of player data handles: indexed by player in beNDMWGameRam_SelectSpecies and beNDMWGameRam_StoreSpecies (SaveBase.c) |
 | `beNDMWGameRam._system` | `beSystem` | beBaseInfoManager_InitFields sets the _system field metaobject via FUN_00342ce0 which loads handle 0x587d08 (beSystem) |
 | `beNDMWGameRamInfo._ramList` | `beBaseInfoRamList` | name pairing; receives the new ram |
-| `beNDMWGameRamInfoRam._parentInfo` | `beNDMWGameRamInfo` | ; _parentManager -> beNDMWGameRam: stored from the created info and arg0 in Gap__Bec__beNDMWGameRam__vfunc_25 |
+| `beNDMWGameRamInfoRam._parentInfo` | `beNDMWGameRamInfo` | ; _parentManager -> beNDMWGameRam: stored from the created info and arg0 in beNDMWGameRam_CreateInfo |
 | `beNDMWLoadCtrl2CommonIntf._flagWork` | `beNDMWLoadSavePlWorkList` | InitFields field 6 getter FUN_003c5520 reads handle 0x58bc10 (beNDMWLoadSavePlWorkList) |
 | `beNDMWLoadCtrl2CommonIntf._gameUseData` | `beNDMWDegiDataList` | beNDMWLoadCtrl2CommonIntf_InitFields field 5 metaobject getter FUN_003c66a0 reads class handle 0x58bd20 (beNDMWDegiDataList) |
 | `beNDMWLoadCtrl2CommonIntf._inforam` | `beBaseInfoRam` | InitFields field 2 getter FUN_0036a230 reads handle 0x589d28 |
@@ -215,8 +215,8 @@ Evidence is the class's `_InitFields` metaobject getter (handle resolved through
 
 ## Notes not resolved to a single field
 
-* DEVICEFOLDER igObjectList elements -> beNDMWItemBase (subclasses beNDMWItemWeapon/BlueArmor/YellowArmor/AbilityChip): creators FUN_003c8c90/8b00/8970/87f0 and initialisers beNDMWItemWeapon_Set, beNDMWItemBlueArmor_Set, beNDMWItemYellowArmor_Set and beNDMWItemAbilityChip_Set
-* DISKFOLDER igObjectList elements -> beNDMWItemDisk: FUN_003f7310 creates and initialises them with beNDMWItemDisk_Set(beNDMWItemDisk *)
+* DEVICEFOLDER igObjectList elements -> beNDMWItemBase (subclasses beNDMWItemWeapon/BlueArmor/YellowArmor/AbilityChip): creators beNDMWItemWeapon_Create, beNDMWItemBlueArmor_Create, beNDMWItemYellowArmor_Create and beNDMWItemAbilityChip_Create and initialisers beNDMWItemWeapon_Set, beNDMWItemBlueArmor_Set, beNDMWItemYellowArmor_Set and beNDMWItemAbilityChip_Set
+* DISKFOLDER igObjectList elements -> beNDMWItemDisk: beNDMWGameRam_ResetPlayer creates and initialises them with beNDMWItemDisk_Set(beNDMWItemDisk *)
 * beActionStarter._messenger, beLightCtrl._messenger, beNDMWMdlMapBase._messenger, beSeCtl._messenger -> beMessenger: first argument of beMessenger_RegisterReceiver/FromInfo in their vfunc_29/37
 * beBaseInfoRam._dataList (context +40) -> container of RamData records searched by name (e.g. beSelectCtrlInfoRamData): hypothesis, from selectctrl.md and the shared igProperty_FindByName(DAT_00585be0) key
 * window object built by FUN_003baf10 in beNDMWStatusSubSlot vfunc_29 is a beNDMWWindow subclass: callees beNDMWWindow_BindContext/RunMessageScript; fields _textCloseTypeList/_textCloseNameList at +60/+64
@@ -259,7 +259,7 @@ The generator emits a struct for each class in `config/typed-scope.tsv` even whe
 All of these are unproven.
 
 * **Property record classes.** The class of each property record is taken from the template type of its property key. All 146
-  sites in `beNDMWGameRam::vfunc_34` resolve to a single key and all int-typed keys share one class, but a variable aliasing two
+  sites in `beNDMWGameRam_OnMessage` resolve to a single key and all int-typed keys share one class, but a variable aliasing two
   keys would be mistyped.
 * **Handler `arg1`.** The `arg1` of handler vfuncs is `beBaseInfoRam` or a subclass. The best evidence is `beSelectCtrl::vfunc_33`
   (eight offsets and widths: 8, 12, 20, 24, 28, 32, 36, 40) and `beNDMWTitle2::vfunc_34` (+24..+36 and +40), plus the shared

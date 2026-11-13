@@ -7,7 +7,7 @@
 #define AREAS(common, pl) (((beNDMWDegiData **)((beNDMWDegiDataList *)((beNDMWLoadSlotPlayer *)PLW(common, pl)->_haveSaveData)->_saveDataList)->_data))
 #define SLOT_DEGI(bk, pl, i) \
     ((beNDMWDegiData *)((int *)((beNDMWDegiDataList *)((beNDMWLoadSlotPlayer *)((beNDMWLoadSavePlWork *)((int *)((beNDMWLoadSavePlWorkList *)(bk)->_flagWork)->_data)[pl])->_haveSaveData)->_saveDataList)->_data)[i])
-#define BIND(P, I, F) do { int a = igObject_GetAllocator(arg0); a = GPR_00554c14 ? a : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]); igSmartPointer<Obj> r(((Obj *)FUN_003614f0(a))); beUnicodeObj_AllocateBuffer(r.p, 1); *(unsigned short *)r.p->_buffer = arg0->t.name[I]; FUN_003ec120(arg0->n._textOrder, P, arg0->n._ramNo, I, r.p, 1, F); } while (0)
+#define BIND(P, I, F) do { int a = igObject_GetAllocator(arg0); a = GPR_00554c14 ? a : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]); igSmartPointer<Obj> r(((Obj *)beUnicodeObj_Create(a))); beUnicodeObj_AllocateBuffer(r.p, 1); *(unsigned short *)r.p->_buffer = arg0->t.name[I]; FUN_003ec120(arg0->n._textOrder, P, arg0->n._ramNo, I, r.p, 1, F); } while (0)
 #define MC_UTIL(owner) ((beNDMWMcUtilCtrl *)(owner)->_mcUtilCtrl)
 #define MC_SLOTS(owner) ((beNDMWMcSlotList *)MC_UTIL(owner)->_slot)
 #define MC_SLOT(list, i) (((beNDMWMcSlot **)(list)->_data)[i])
@@ -62,7 +62,7 @@ extern "C" void beNDMWLoadIntf2DegiState__RequestOpen(beNDMWLoadIntf2DegiState *
 extern "C" void FUN_003d9e40(beNDMWLoadIntf2DegiState *arg0, int arg1, int arg2);
 extern "C" void beNDMWLoadIntf2DegiState__RequestClose(beNDMWLoadIntf2DegiState *arg0, int arg1);
 extern "C" void beNDMWLoadIntf2DegiState__RequestConfirmClose(beNDMWLoadIntf2DegiState *arg0);
-extern "C" beUnicodeObj * FUN_003614f0(...);
+extern "C" beUnicodeObj * beUnicodeObj_Create(...);
 typedef struct SlotEnt { int name; int val; int val2; } SlotEnt;
 extern "C" int DAT_00516c40[4];
 extern "C" int DATABASE[4];
@@ -1788,7 +1788,7 @@ extern "C" void Gap__Bec__beNDMWLoadIntf2__vfunc_31(beNDMWLoadIntf2 *self,
                       allocator_2 = LoadHelpers::Selector(
                           &g_ndmwAllocatorSelector[0],
                           igObject_GetAllocator(self));
-                      nameObject = (void *)FUN_003614f0(allocator_2);
+                      nameObject = (void *)beUnicodeObj_Create(allocator_2);
                       {
                         igSmartPointer<beUnicodeObj> nameRef((beUnicodeObj *)nameObject);
                         beUnicodeObj_AllocateBuffer(nameRef.p, 8);
@@ -2900,7 +2900,7 @@ void FUN_003d9ec0(SlotPanel *arg0) {
             SlotEnt *s2;
             a = igObject_GetAllocator(arg0);
             {
-                igSmartPointer<beUnicodeObj> text(FUN_003614f0(GPR_00554c14 != 0 ? a : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0])));
+                igSmartPointer<beUnicodeObj> text(beUnicodeObj_Create(GPR_00554c14 != 0 ? a : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0])));
                 beUnicodeObj_AllocateBuffer(text.p, 8);
                 srcA = (unsigned short *)((char *)s0 + 8);
                 iA = 0;
@@ -2955,7 +2955,7 @@ void FUN_003d9ec0(SlotPanel *arg0) {
             SlotEnt *s2;
             a = igObject_GetAllocator(arg0);
             {
-                igSmartPointer<beUnicodeObj> text(FUN_003614f0(GPR_00554c14 != 0 ? a : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0])));
+                igSmartPointer<beUnicodeObj> text(beUnicodeObj_Create(GPR_00554c14 != 0 ? a : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0])));
                 beUnicodeObj_AllocateBuffer(text.p, 8);
                 srcB = (unsigned short *)((char *)s0 + 8);
                 iB = 0;
@@ -3390,7 +3390,7 @@ unsigned char beNDMWLoadIntf2DataSelIntf__OpenSaveArea(beNDMWLoadIntf2DataSelInt
                 if (it->_isUse == 1) {
                     al = igObject_GetAllocator(arg0);
                     al = GPR_00554c14 ? al : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
-                    igSmartPointer<beUnicodeObj> text((beUnicodeObj *)((int)FUN_003614f0(al)));
+                    igSmartPointer<beUnicodeObj> text((beUnicodeObj *)((int)beUnicodeObj_Create(al)));
                     beUnicodeObj_AllocateBuffer(text.p, 8);
                     src = (unsigned short *)it->_dmNameUni;
                     n = 0;
@@ -3795,7 +3795,7 @@ unsigned char beNDMWLoadIntf2DataSelIntf__RestoreSaveArea(beNDMWLoadIntf2DataSel
                 if (it->_isUse == 1) {
                     int a = igObject_GetAllocator(arg0);
                     a = GPR_00554c14 ? a : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
-                    igSmartPointer<beUnicodeObj> rp(FUN_003614f0(a));
+                    igSmartPointer<beUnicodeObj> rp(beUnicodeObj_Create(a));
                     beUnicodeObj_AllocateBuffer(rp.p, 8);
                     unsigned short *dst = (unsigned short *)rp.p->_buffer;
                     unsigned short *src = (unsigned short *)it->_dmNameUni;
@@ -3946,7 +3946,7 @@ unsigned char beNDMWLoadIntf2DataSelIntf__OpenSlotSaveArea(beNDMWLoadIntf2DataSe
                 if (it->_isUse == 1) {
                     al = igObject_GetAllocator(arg0, arg0->_plNo);
                     if (GPR_00554c14 != 0) a0 = al; else a0 = Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
-                    igSmartPointer<beUnicodeObj> rcs((beUnicodeObj *)((int)FUN_003614f0(a0)));
+                    igSmartPointer<beUnicodeObj> rcs((beUnicodeObj *)((int)beUnicodeObj_Create(a0)));
                     beUnicodeObj_AllocateBuffer(rcs.p, 8);
                     src = (unsigned short *)it->_dmNameUni;
                     n = 0;
@@ -4147,7 +4147,7 @@ int beNDMWLoadIntf2DataSelIntf__ShowAccessPlayers(beNDMWLoadIntf2DataSelIntf *ar
                     beNDMWLoadIntf2ComMdlCtrl__Play((beNDMWLoadIntf2ComMdlCtrl *)s4, s3, (int *)DAT_004cc830[j], ((Tab *)g_playerModelRow)[k].f8, 0);
                     int a = igObject_GetAllocator(arg0);
                     a = GPR_00554c14 ? a : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
-                    igSmartPointer<beUnicodeObj> r(FUN_003614f0(a));
+                    igSmartPointer<beUnicodeObj> r(beUnicodeObj_Create(a));
                     beUnicodeObj_AllocateBuffer(r.p, 8);
                     unsigned short *base;
                     unsigned short *src;
@@ -4421,7 +4421,7 @@ void FUN_003de480(beNDMWLoadIntf2NameSel *arg0, int arg1) {
         if (s0 < arg0->_tateMin) s0 = arg0->_tateMax - 1;
         a = igObject_GetAllocator(arg0);
         a = GPR_00554c14 ? a : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
-        igSmartPointer<Obj> r0(((Obj *)FUN_003614f0(a)));
+        igSmartPointer<Obj> r0(((Obj *)beUnicodeObj_Create(a)));
         beUnicodeObj_AllocateBuffer(r0.p, 1);
         *(unsigned short *)r0.p->_buffer = DAT_004cc860[s0].v[0];
         FUN_003ec120(arg0->_textOrder, DAT_00516f10, arg0->_ramNo, 0, r0.p, 1, 0);
@@ -4430,7 +4430,7 @@ void FUN_003de480(beNDMWLoadIntf2NameSel *arg0, int arg1) {
         s0 = arg0->_tatePoint;
         a = igObject_GetAllocator(arg0);
         a = GPR_00554c14 ? a : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
-        igSmartPointer<Obj> r1(((Obj *)FUN_003614f0(a)));
+        igSmartPointer<Obj> r1(((Obj *)beUnicodeObj_Create(a)));
         beUnicodeObj_AllocateBuffer(r1.p, 1);
         *(unsigned short *)r1.p->_buffer = DAT_004cc860[s0].v[0];
         FUN_003ec120(arg0->_textOrder, DAT_00516f10, arg0->_ramNo, 1, r1.p, 1, 0);
@@ -4440,7 +4440,7 @@ void FUN_003de480(beNDMWLoadIntf2NameSel *arg0, int arg1) {
         if (n >= arg0->_tateMax) s0 = arg0->_tateMin; else s0 = n;
         a = igObject_GetAllocator(arg0);
         a = GPR_00554c14 ? a : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
-        igSmartPointer<Obj> r2(((Obj *)FUN_003614f0(a)));
+        igSmartPointer<Obj> r2(((Obj *)beUnicodeObj_Create(a)));
         beUnicodeObj_AllocateBuffer(r2.p, 1);
         *(unsigned short *)r2.p->_buffer = DAT_004cc860[s0].v[0];
         FUN_003ec120(arg0->_textOrder, DAT_00516f10, arg0->_ramNo, 2, r2.p, 1, 0);
@@ -4471,7 +4471,7 @@ void FUN_003de7a0(beNDMWLoadIntf2NameSel *arg0, int arg1) {
             s3 = (s1 + i) % DAT_004cc860[arg0->_tatePoint].mod;
             a = igObject_GetAllocator(arg0);
             a = GPR_00554c14 ? a : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
-            igSmartPointer<beUnicodeObj> r(FUN_003614f0(a));
+            igSmartPointer<beUnicodeObj> r(beUnicodeObj_Create(a));
             beUnicodeObj_AllocateBuffer(r.p, 1);
             *(unsigned short *)r.p->_buffer = DAT_004cc860[arg0->_tatePoint].v[s3];
             FUN_003ec120(arg0->_textOrder, DAT_00516f20, arg0->_ramNo, i, r.p, 1, 0);

@@ -57,10 +57,10 @@ extern "C" void beMessenger_SendDelayedGroup(int, const void *, const void *, in
 extern "C" void beMessenger_SendNamed(...);
 extern "C" int * igProperty_GetRecord(...);
 extern "C" void *FUN_003b5ec0(...);
-extern "C" void *FUN_003c87f0(...);
-extern "C" void *FUN_003c8970(...);
-extern "C" void *FUN_003c8b00(...);
-extern "C" void *FUN_003c8c90(...);
+extern "C" void *beNDMWItemAbilityChip_Create(...);
+extern "C" void *beNDMWItemYellowArmor_Create(...);
+extern "C" void *beNDMWItemBlueArmor_Create(...);
+extern "C" void *beNDMWItemWeapon_Create(...);
 extern "C" int beNDMWItemWeapon_SetRandom(...);
 extern "C" int beNDMWItemBlueArmor_SetRandom(...);
 extern "C" int beNDMWItemYellowArmor_SetRandom(...);
@@ -185,7 +185,7 @@ extern "C" int Gap__Bec__beNDMWStatus__vfunc_34(beNDMWStatus *arg0, beNDMWStatus
 struct Rec { int p[3]; int f12; };
 struct RecB { char p[12]; unsigned char f12; };
 struct IRec { int p[3]; igDataList *f12; };
-extern "C" IRec *FUN_003a9250(...);
+extern "C" IRec *igProperty_GetRecordIntList(...);
 extern "C" int DAT_00516b50[4];
 extern "C" int DAT_00516b60[4];
 extern "C" int DAT_00516b70[4];
@@ -1063,7 +1063,7 @@ void FUN_003d8740(beNDMWStatus *owner, beNDMWStatusInfoRam *ram) {
                 buf6[0] = i6 / 10 + 48; buf6[1] = i6 % 10 + 48; buf6[2] = 0;
                 id = beDataBase_GetRecordInt(data, rowIdx, buf6);
                 if (id != -1) {
-                    ITEM4(1, spWpn, FUN_003c8c90, beNDMWItemWeapon_SetRandom, WL(_weaponSalesList), id)
+                    ITEM4(1, spWpn, beNDMWItemWeapon_Create, beNDMWItemWeapon_SetRandom, WL(_weaponSalesList), id)
                 } else {
                     ObjectList_AppendRetained(WL(_weaponSalesList), 0);
                 }
@@ -1111,7 +1111,7 @@ void FUN_003d8740(beNDMWStatus *owner, beNDMWStatusInfoRam *ram) {
             do {
                 buf7[0] = i7a / 10 + 48; buf7[1] = i7a % 10 + 48; buf7[2] = 0;
                 id = beDataBase_GetRecordInt(data, row, buf7);
-                ITEM4(2, spBlue, FUN_003c8b00, beNDMWItemBlueArmor_SetRandom, WL(_armorSalesList), id)
+                ITEM4(2, spBlue, beNDMWItemBlueArmor_Create, beNDMWItemBlueArmor_SetRandom, WL(_armorSalesList), id)
                 i7a += 1;
             } while (i7a < 12);
             i7b = 12;
@@ -1119,7 +1119,7 @@ void FUN_003d8740(beNDMWStatus *owner, beNDMWStatusInfoRam *ram) {
                 buf7[0] = i7b / 10 + 48; buf7[1] = i7b % 10 + 48; buf7[2] = 0;
                 kind = beDataBase_GetRecordInt(data, row, buf7);
                 if (kind != -1) {
-                    ITEM4(3, spYel, FUN_003c8970, beNDMWItemYellowArmor_SetRandom, WL(_armorSalesList), kind)
+                    ITEM4(3, spYel, beNDMWItemYellowArmor_Create, beNDMWItemYellowArmor_SetRandom, WL(_armorSalesList), kind)
                 } else {
                     ObjectList_AppendRetained(WL(_armorSalesList), 0);
                 }
@@ -1168,7 +1168,7 @@ void FUN_003d8740(beNDMWStatus *owner, beNDMWStatusInfoRam *ram) {
                 buf8[0] = i8 / 10 + 48; buf8[1] = i8 % 10 + 48; buf8[2] = 0;
                 id = beDataBase_GetRecordInt(data, row8, buf8);
                 if (id != -1) {
-                    ITEM2(4, spChip, FUN_003c87f0, beNDMWItemAbilityChip_Set, WL(_chipSalesList), id)
+                    ITEM2(4, spChip, beNDMWItemAbilityChip_Create, beNDMWItemAbilityChip_Set, WL(_chipSalesList), id)
                 } else {
                     ObjectList_AppendRetained(WL(_chipSalesList), 0);
                 }
@@ -1179,7 +1179,7 @@ void FUN_003d8740(beNDMWStatus *owner, beNDMWStatusInfoRam *ram) {
     case 9:
         beMessenger_SendGroup(owner->_messenger, &DAT_00516848[0], &DAT_00516b80[0]);
         common = beMessenger_GetObject(owner->_messenger, 0);
-        prop = FUN_003a9250(common, &DAT_00516b90[0]);
+        prop = igProperty_GetRecordIntList(common, &DAT_00516b90[0]);
         invested = ((int *)prop->f12->_data)[1];
         if (invested >= 3956000) jrow = 8;
         else if (invested >= 1956000) jrow = 7;
@@ -1207,13 +1207,13 @@ void FUN_003d8740(beNDMWStatus *owner, beNDMWStatusInfoRam *ram) {
                         kind = beDataBase_GetRecordInt(data, jrow, buf9);
                         switch (kind) {
                         case 0:
-                            ITEM4(1, spJWpn, FUN_003c8c90, beNDMWItemWeapon_SetRandom, WL(_junkSalesList), id)
+                            ITEM4(1, spJWpn, beNDMWItemWeapon_Create, beNDMWItemWeapon_SetRandom, WL(_junkSalesList), id)
                             break;
                         case 1:
-                            ITEM4(2, spJBlue, FUN_003c8b00, beNDMWItemBlueArmor_SetRandom, WL(_junkSalesList), id)
+                            ITEM4(2, spJBlue, beNDMWItemBlueArmor_Create, beNDMWItemBlueArmor_SetRandom, WL(_junkSalesList), id)
                             break;
                         case 2:
-                            ITEM4(3, spJYel, FUN_003c8970, beNDMWItemYellowArmor_SetRandom, WL(_junkSalesList), id)
+                            ITEM4(3, spJYel, beNDMWItemYellowArmor_Create, beNDMWItemYellowArmor_SetRandom, WL(_junkSalesList), id)
                             break;
                         }
                     }

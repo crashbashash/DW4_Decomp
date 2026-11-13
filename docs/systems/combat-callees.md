@@ -22,7 +22,7 @@ original source.
 | `0x0038e060` | 1228 | `beMessenger_DispatchSelected` (+ emitted holder destructor `0x0038e530`, 128) | `src/game/beMessenger.cpp` |
 | `0x0038e8f0` | 932 | `beMessenger_EnqueueSelected` (its cleanups are the destructors `0x0038c390`, emitted after `beMessenger_InitializeMemory`, and `0x00357a90`, 128 each) | `src/game/beMessenger.cpp` |
 | `0x003fab90` | 6872 | player stat recompute (derived stats, WAZALIST rebuild, rates); owns the `0x003fc670` destructor and the `0x003fc780` query | `src/game/beNDMWGameRam.cpp` |
-| `0x003f8760` | 548 | current-to-BASE save preparation (mirror of `FUN_003f82a0`) | `src/game/beNDMWGameRam.cpp` |
+| `0x003f8760` | 548 | current-to-BASE save preparation (mirror of `beNDMWGameRam_SelectSpecies`) | `src/game/beNDMWGameRam.cpp` |
 | `0x003f9c80` | 408 | HP gauge update (delta or absolute, clamp to [0, MHP], `hpmt`/`hpnm`) | `src/game/beNDMWGameRam.cpp` |
 | `0x003f9e20` | 344 | MP gauge update (`mpmt`/`mpnm`) | `src/game/beNDMWGameRam.cpp` |
 | `0x00447b00` | 56 | list slot nonzero test | `src/game/beNDMWMdlPEBase.cpp` |
@@ -36,11 +36,11 @@ original source.
 - **`EnqueueSelected`**: the insertion loop gets retail's separate index and byte-offset inductions when the list base goes through an
   inline static helper that takes it as a parameter; the row pointer is typed `unsigned`; the two stack-resident references are two
   classes (`RowRef`, `SavedRef`), emitted as two copies of the same destructor body.
-- **`FUN_003fab90`**: the register rotation was graph-colouring order, not declaration order. An offline replica of the compiler's
+- **`beNDMWGameRam_RecomputeStats`**: the register rotation was graph-colouring order, not declaration order. An offline replica of the compiler's
   optimistic colouring showed that `player` needs the late virtual-register index that small inline accessors
   (`GetPlayer`, `GetProp`) give it. The body is 6,872 bytes: the return sequence lies past the raw symbol extent and needs a reviewed
-  row in `data/function-extents.json`. A retail destructor address can belong to one ownership group only, so the nearby-query
-  source (`beNDMWGameRam_CollectNearbyNonzeroHp.inc`) is included by this unit and both bodies are verified together.
+  row in `data/function-extents.json`. A retail destructor address can belong to one ownership group only, so the nearby query
+  is written in this unit and both bodies are verified together.
   Helpers are struct static members because `tools/units.py` blanks free top-level helpers.
 
 ## Not reproducible from plain source

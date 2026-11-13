@@ -17,6 +17,7 @@ docs/engine/engine-boot.md
 docs/engine/exception-unwind.md
 docs/engine/front-end-boot.md
 docs/engine/function-inventory.md	FUN_0016c598 FUN_0016ce28 FUN_0016ceb4 FUN_00172184 FUN_00177918 FUN_002fe2ac thunk_FUN_002fe2ac
+docs/engine/game-ram.md
 docs/engine/game-state.md
 docs/engine/igbinary-format.md
 docs/engine/igvertexarray2helper.md

@@ -6,9 +6,9 @@ extern "C" int igProperty_GetRecord(int container, char *key, int unused);
 extern "C" int igProperty_GetRecordByte(int container, char *key, int unused);
 extern "C" int igProperty_GetRecordArray(int container, char *key, int unused);
 extern "C" int igProperty_GetRecordFolder(int container, char *key, int unused);
-extern "C" void FUN_003a9250(int p0, char * p1, int p2);
-extern "C" void FUN_003a92e0(int p0, char * p1, int p2);
-extern "C" void FUN_003a9310(int p0, char * p1, int p2);
+extern "C" void igProperty_GetRecordIntList(int p0, char * p1, int p2);
+extern "C" void igProperty_GetRecordString(int p0, char * p1, int p2);
+extern "C" void igProperty_GetRecordStringList(int p0, char * p1, int p2);
 extern "C" void FUN_003a9370(int p0, char * p1, int p2);
 extern "C" void Gap__Bec__beDBManager__vfunc_32(void);
 extern "C" int Gap__Bec__beDBManager__vfunc_30(void);
@@ -52,7 +52,7 @@ int igProperty_GetRecord(int container, char *key, int unused)
     return igProperty_FindByName(container, g_propertyNameField[0], key);
 }
 
-void FUN_003a9250(int p0, char * p1, int p2)
+void igProperty_GetRecordIntList(int p0, char * p1, int p2)
 {
     igProperty_FindByName(p0, *(int *)0x00585be0, p1);
 }
@@ -67,12 +67,12 @@ int igProperty_GetRecordArray(int container, char *key, int unused)
     return igProperty_FindByName(container, g_propertyNameField[0], key);
 }
 
-void FUN_003a92e0(int p0, char * p1, int p2)
+void igProperty_GetRecordString(int p0, char * p1, int p2)
 {
     igProperty_FindByName(p0, *(int *)0x00585be0, p1);
 }
 
-void FUN_003a9310(int p0, char * p1, int p2)
+void igProperty_GetRecordStringList(int p0, char * p1, int p2)
 {
     igProperty_FindByName(p0, *(int *)0x00585be0, p1);
 }

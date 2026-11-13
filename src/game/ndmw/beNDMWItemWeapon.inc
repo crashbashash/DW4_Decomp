@@ -1,4 +1,4 @@
-void FUN_003c8c90(int arg0) {
+void beNDMWItemWeapon_Create(int arg0) {
     FUN_003c8d60();
     igMetaObject_CreateInstance(*(int *)0x58BF60, arg0);
 }

@@ -1,4 +1,4 @@
-void FUN_003ca380(int arg0) {
+void beNDMWGameRamInfo_Create(int arg0) {
     FUN_003ca480();
     igMetaObject_CreateInstance(*(int *)0x58C108, arg0);
 }

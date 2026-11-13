@@ -23,7 +23,7 @@ extern "C" int beMessenger_SelectGroup(...);
 extern "C" int beMessenger_SendNamed(...);
 extern "C" int FUN_00100610(void **);
 extern "C" int FUN_002eb010(int);
-extern "C" void * FUN_003a9250(...);
+extern "C" void * igProperty_GetRecordIntList(...);
 extern "C" int StringChunk_ReleaseHeader(int, int *);
 extern "C" int StringPool_Construct(int);
 extern "C" int StringPool_Intern(int, int);
@@ -73,16 +73,16 @@ extern "C" int DAT_0051d1d8[4];
 extern "C" int g_beMessenger_metaObject[4];
 extern "C" int g_beNDMWGameRam_metaObject[4];
 extern "C" void FUN_00443110(beNDMWShinkaCtrl *arg0, int arg1, int arg2);
-extern "C" int FUN_003fa3b0(beNDMWGameRam *, int, int, int);
-extern "C" int FUN_003fa850(beNDMWGameRam *, int, int, int);
-extern "C" int DAT_00519420[4];
-extern "C" int DAT_00519430[4];
-extern "C" int DAT_00519438[4];
+extern "C" int beNDMWGameRam_CalcMaxPoints(beNDMWGameRam *, int, int, int);
+extern "C" int beNDMWGameRam_CalcAttribute(beNDMWGameRam *, int, int, int);
+extern "C" int GETDATABASE_3[4];
+extern "C" int shinka_2[4];
+extern "C" int DATABASE_3[4];
 extern "C" int DAT_0051d1f8[4];
 extern "C" int DAT_0051d208[4];
 extern "C" int DAT_0051d210[4];
 extern "C" int g_stringPool[4];
-/* Property record returned by FUN_003a9250: its int list sits at +12. */
+/* Property record returned by igProperty_GetRecordIntList: its int list sits at +12. */
 struct PropertyIntArray { char pad[12]; igIntList *list; };
 extern "C" void FUN_004435c0(beNDMWShinkaObject *out, beNDMWGameRam *ctx, int arg2, int arg3);
 struct R { char p[16]; int f16; };
@@ -366,7 +366,7 @@ void FUN_004432a0(beNDMWShinkaCtrl *self) {
     }
     lst->_count = 0;
     s2 = (igBoolList *)igProperty_GetRecordArray(self->_playerParameter, &DAT_0051d1e8[0])->_data;
-    FUN_003a9250(self->_playerParameter, &DAT_0051d1f8[0]);
+    igProperty_GetRecordIntList(self->_playerParameter, &DAT_0051d1f8[0]);
     for (idx = 0; idx < 16; idx++) {
         if ((*(unsigned char **)&s2->_data)[idx] != 0) {
             base = igObject_GetAllocator(self);
@@ -408,7 +408,7 @@ void FUN_004435c0(beNDMWShinkaObject *out, beNDMWGameRam *ctx, int arg2, int arg
     igIntList *sd;
     out->_id = arg3;
     if (ctx->_dBShinka == 0) {
-        beMessenger_SendNamed(ctx->_messenger, &DAT_00519438[0], &DAT_00519430[0], 0, &DAT_00519420[0]);
+        beMessenger_SendNamed(ctx->_messenger, &DATABASE_3[0], &shinka_2[0], 0, &GETDATABASE_3[0]);
         o = ((igObject *)beMessenger_GetObject(ctx->_messenger, 0));
         if (o != 0) {
             o->_refCount = o->_refCount + 1;
@@ -439,16 +439,16 @@ void FUN_004435c0(beNDMWShinkaObject *out, beNDMWGameRam *ctx, int arg2, int arg
             StringChunk_ReleaseHeader(*hdr, hdr);
     }
     out->_name = ref;
-    t1 = ((struct PropertyIntArray *)FUN_003a9250(((int *)((igIntList *)ctx->_playerDataListList)->_data)[arg2], &DAT_0051d1f8[0]));
+    t1 = ((struct PropertyIntArray *)igProperty_GetRecordIntList(((int *)((igIntList *)ctx->_playerDataListList)->_data)[arg2], &DAT_0051d1f8[0]));
     out->_level = ((int *)t1->list->_data)[arg3];
-    out->_hpMax = FUN_003fa3b0(ctx, arg2, arg3, 1);
-    out->_mpMax = FUN_003fa3b0(ctx, arg2, arg3, 0);
-    out->_tsuyosa = FUN_003fa850(ctx, arg2, arg3, 0);
-    out->_mamori = FUN_003fa850(ctx, arg2, arg3, 1);
-    out->_kashikosa = FUN_003fa850(ctx, arg2, arg3, 2);
-    out->_seishin = FUN_003fa850(ctx, arg2, arg3, 3);
-    out->_subayasa = FUN_003fa850(ctx, arg2, arg3, 4);
-    t2 = ((struct PropertyIntArray *)FUN_003a9250(((int *)((igIntList *)ctx->_playerDataListList)->_data)[arg2], &DAT_0051d210[0]));
+    out->_hpMax = beNDMWGameRam_CalcMaxPoints(ctx, arg2, arg3, 1);
+    out->_mpMax = beNDMWGameRam_CalcMaxPoints(ctx, arg2, arg3, 0);
+    out->_tsuyosa = beNDMWGameRam_CalcAttribute(ctx, arg2, arg3, 0);
+    out->_mamori = beNDMWGameRam_CalcAttribute(ctx, arg2, arg3, 1);
+    out->_kashikosa = beNDMWGameRam_CalcAttribute(ctx, arg2, arg3, 2);
+    out->_seishin = beNDMWGameRam_CalcAttribute(ctx, arg2, arg3, 3);
+    out->_subayasa = beNDMWGameRam_CalcAttribute(ctx, arg2, arg3, 4);
+    t2 = ((struct PropertyIntArray *)igProperty_GetRecordIntList(((int *)((igIntList *)ctx->_playerDataListList)->_data)[arg2], &DAT_0051d210[0]));
     sd = t2->list;
     out->_blunt = *(int *)(sd->_data + arg3 * 36);
     out->_slash = *(int *)(sd->_data + (arg3 * 9 + 1) * 4);
@@ -854,7 +854,7 @@ void FUN_004456c0(beNDMWMdlPEBase *arg0, beBaseInfoRam *arg1, beNDMWMdlPEBaseInf
         beMessenger_SelectGroup(arg0->_messenger, &DAT_0051d4b0[0]);
         beMessenger_AppendInt(arg0->_messenger, arg1->_ramNo);
         beMessenger_DispatchSelected(arg0->_messenger, &DAT_0051d4b8[0]);
-        s0 = ((Obj *)FUN_003a9250(beMessenger_GetObject(arg0->_messenger, 0), &DAT_0051d4d8[0]))->f12;
+        s0 = ((Obj *)igProperty_GetRecordIntList(beMessenger_GetObject(arg0->_messenger, 0), &DAT_0051d4d8[0]))->f12;
         if (s0 != 0) s0->_refCount = s0->_refCount + 1;
         old = (igObject *)arg2->_downDataList;
         if (old != 0) {
@@ -900,7 +900,7 @@ void FUN_00445990(beNDMWMdlPEBase *arg0, beBaseInfoRam *arg1, beNDMWMdlPEBaseInf
         beMessenger_SelectGroup(arg0->_messenger, &DAT_0051d4b0[0]);
         beMessenger_AppendInt(arg0->_messenger, arg1->_ramNo);
         beMessenger_DispatchSelected(arg0->_messenger, &DAT_0051d4b8[0]);
-        s0 = ((Obj *)FUN_003a9250(beMessenger_GetObject(arg0->_messenger, 0), &DAT_0051d4e8[0]))->f12;
+        s0 = ((Obj *)igProperty_GetRecordIntList(beMessenger_GetObject(arg0->_messenger, 0), &DAT_0051d4e8[0]))->f12;
         if (s0 != 0) s0->_refCount = s0->_refCount + 1;
         old = (igObject *)arg2->_upDataList;
         if (old != 0) {
