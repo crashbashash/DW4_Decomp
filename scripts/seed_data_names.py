@@ -128,10 +128,12 @@ def unique(name, va, rows, copies=False):
 def referenced():
     found = set()
     for mod in SCOPE:
-        d = os.path.join(ROOT, "src", mod)
-        for f in sorted(os.listdir(d)):
-            for m in DAT.finditer(open(os.path.join(d, f), errors="replace").read()):
-                found.add(int(m.group(1), 16))
+        # library units live in subfolders (src/engine/attrs/), with headers and .inc fragments
+        for root, _, names in os.walk(os.path.join(ROOT, "src", mod)):
+            for f in sorted(names):
+                if f.endswith((".c", ".cpp", ".h", ".inc")):
+                    for m in DAT.finditer(open(os.path.join(root, f), errors="replace").read()):
+                        found.add(int(m.group(1), 16))
     return sorted(found)
 
 
