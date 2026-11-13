@@ -34,8 +34,14 @@
   "struct.a": 48,
   "struct.b": 0,
   "struct.c": 68,
-  "unapproved.bytes": 18856,
-  "unapproved.functions": 33,
+  "unapproved.bytes": {
+   "reason": "owner revoked 13 CRI/ADX approvals with thin evidence after the Fable review; FUN_0027e0d0 gained a row",
+   "value": 21356
+  },
+  "unapproved.functions": {
+   "reason": "owner revoked 13 CRI/ADX approvals with thin evidence after the Fable review; FUN_0027e0d0 gained a row",
+   "value": 45
+  },
   "unmatched.bytes": 625336,
   "unmatched.functions": 933
  },

@@ -7432,12 +7432,12 @@
 002631c8	FUN_002631c8	match	-
 002631d8	FUN_002631d8	match	-
 002631f0	FUN_002631f0	match	-
-00263208	FUN_00263208	match	-
+00263208	FUN_00263208	unapproved	unapproved: 1 volatile without an approval row
 00263230	FUN_00263230	match	-
 00263250	FUN_00263250	match	-
 00263280	FUN_00263280	match	-
 002632a0	FUN_002632a0	match	-
-002632c0	FUN_002632c0	match	-
+002632c0	FUN_002632c0	unapproved	unapproved: 2 volatile without an approval row
 00263450	FUN_00263450	match	-
 00263470	FUN_00263470	match	-
 00263548	FUN_00263548	match	-
@@ -7458,11 +7458,11 @@
 00263d88	adxm_goto_usridle_border	match	-
 00263db0	adxm_safe_count_up	match	-
 00263dc8	adxm_safe_thrd	match	-
-00263e20	adxm_usrvsync_thrd	match	-
-00263eb8	adxm_vsync_thrd	match	-
-00263fc0	adxm_fs_thrd	match	-
-002640a0	adxm_mwidle_thrd	match	-
-002641d8	adxm_usridle_thrd	match	-
+00263e20	adxm_usrvsync_thrd	unapproved	unapproved: 4 volatile without an approval row
+00263eb8	adxm_vsync_thrd	unapproved	unapproved: 7 volatile without an approval row
+00263fc0	adxm_fs_thrd	unapproved	unapproved: 6 volatile without an approval row
+002640a0	adxm_mwidle_thrd	unapproved	unapproved: 7 volatile without an approval row
+002641d8	adxm_usridle_thrd	unapproved	unapproved: 5 volatile without an approval row
 002642b0	adxm_iwakeup_thrd	match	-
 00264300	adxm_wakeup_thrd	match	-
 00264350	adxm_sleep_thrd	match	-
@@ -7919,7 +7919,7 @@
 00271520	cvFsGetFileSizeEx64	match	-
 002715e0	cvFsGetFsys64Info	match	-
 00271640	FUN_00271640	match	-
-00271670	FUN_00271670	match	-
+00271670	FUN_00271670	unapproved	unapproved: 1 volatile without an approval row
 002716f8	FUN_002716f8	match	-
 00271798	FUN_00271798	match	-
 00271888	FUN_00271888	match	-
@@ -8337,7 +8337,7 @@
 0027df08	FUN_0027df08	match	-
 0027df80	FUN_0027df80	match	-
 0027e078	FUN_0027e078	match	-
-0027e0d0	FUN_0027e0d0	unapproved	unapproved: 2 volatile without an approval row
+0027e0d0	FUN_0027e0d0	match	-
 0027e130	FUN_0027e130	match	-
 0027e1c0	FUN_0027e1c0	match	-
 0027e1d8	FUN_0027e1d8	match	-
@@ -8469,7 +8469,7 @@
 00283028	FUN_00283028	match	-
 00283038	FUN_00283038	match	-
 00283048	FUN_00283048	match	-
-00283058	FUN_00283058	match	-
+00283058	FUN_00283058	unapproved	unapproved: 1 volatile without an approval row
 00283090	FUN_00283090	match	-
 00283098	FUN_00283098	match	-
 002830a8	FUN_002830a8	match	-
@@ -9823,7 +9823,7 @@
 002b3690	FUN_002b3690	match	-
 002b3708	FUN_002b3708	match	-
 002b3780	FUN_002b3780	match	-
-002b3788	FUN_002b3788	match	-
+002b3788	FUN_002b3788	unapproved	unapproved: 1 volatile without an approval row
 002b37f8	FUN_002b37f8	match	-
 002b3808	FUN_002b3808	match	-
 002b3858	FUN_002b3858	match	-
@@ -9922,7 +9922,7 @@
 002b5068	FUN_002b5068	match	-
 002b50c8	FUN_002b50c8	match	-
 002b50d8	FUN_002b50d8	match	-
-002b50e8	FUN_002b50e8	match	-
+002b50e8	FUN_002b50e8	unapproved	unapproved: 1 volatile without an approval row
 002b5138	FUN_002b5138	match	-
 002b5148	FUN_002b5148	match	-
 002b5168	FUN_002b5168	match	-
@@ -9941,9 +9941,9 @@
 002b5758	FUN_002b5758	match	-
 002b5770	FUN_002b5770	match	-
 002b5838	FUN_002b5838	match	-
-002b5848	FUN_002b5848	match	-
+002b5848	FUN_002b5848	unapproved	unapproved: 8 volatile without an approval row
 002b59a0	FUN_002b59a0	match	-
-002b5a10	FUN_002b5a10	match	-
+002b5a10	FUN_002b5a10	unapproved	unapproved: 7 volatile without an approval row
 002b5b38	FUN_002b5b38	match	-
 002b5b68	FUN_002b5b68	match	-
 002b5b80	FUN_002b5b80	match	-
