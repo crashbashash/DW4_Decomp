@@ -16418,7 +16418,7 @@
 0039a930	beNodeAnim_TraversalFunction	match	-
 0039a960	beNodeAnim_SetTime	match	-
 0039a9e0	beNodeAnim_UpdateTime	match	-
-0039ab20	beNodeAnim_Traverse	unapproved	unapproved: 2 volatile without an approval row
+0039ab20	beNodeAnim_Traverse	match	exception index 0x54f128: matches retail (table 0x543c9c 8 bytes)
 0039ad80	beNodeAnim_RegisterTraversalFunction	match	-
 0039adc0	beLoadingNode_TraversalFunction	match	-
 0039adf0	beLoadingNode_Lock	match	-
