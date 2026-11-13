@@ -13146,7 +13146,7 @@
 0030b3c0 000058 FUN_0030b3c0
 0030b420 000038 igStringObj_Clear
 0030b460 000160 FUN_0030b460
-0030b5c0 000028 FUN_0030b5c0
+0030b5c0 000028 igStringObj_ToLower
 0030b5f0 00003c FUN_0030b5f0
 0030b630 00003c FUN_0030b630
 0030b670 0000a8 FUN_0030b670
@@ -13155,12 +13155,12 @@
 0030b770 000068 FUN_0030b770
 0030b7e0 000060 FUN_0030b7e0
 0030b840 000058 FUN_0030b840
-0030b8a0 0000d8 FUN_0030b8a0
+0030b8a0 0000d8 igStringObj_KeepExtension
 0030b980 000098 FUN_0030b980
-0030ba20 000068 FUN_0030ba20
+0030ba20 000068 igStringObj_StripDirectory
 0030ba90 0000ac FUN_0030ba90
 0030bb40 0000a4 FUN_0030bb40
-0030bbf0 0000e8 FUN_0030bbf0
+0030bbf0 0000e8 igStringObj_Erase
 0030bce0 0001f0 FUN_0030bce0
 0030bed0 000008 thunk_strcasecmp
 0030bee0 0000c0 FUN_0030bee0
@@ -14624,7 +14624,7 @@
 003440f0 00006c beSoundData_Register
 00344160 00001c beSoundData_GetMetaObject
 00344180 0000d0 beSoundData_InitFields
-00344250 000054 FUN_00344250
+00344250 000054 beSound_GetMessageEnum
 003442b0 000034 beSound_CreateInstance
 003442f0 000044 FUN_003442f0
 00344340 00004c FUN_00344340
@@ -14640,7 +14640,7 @@
 00344710 000020 FUN_00344710
 00344730 00006c bePlaySEList_Register
 003447a0 00001c bePlaySEList_GetMetaObject
-003447c0 000034 FUN_003447c0
+003447c0 000034 bePlaySE_CreateInstance
 00344800 00004c FUN_00344800
 00344850 00003c bePlaySE_GetVTable
 00344890 000020 FUN_00344890
@@ -17354,14 +17354,14 @@
 0039e290 0000d4 Gap__Bec__beShadow01__vfunc_25 Gap::Bec::beShadow01::vfunc_25
 0039e370 0001b4 Gap__Bec__beShadow01__vfunc_31 Gap::Bec::beShadow01::vfunc_31
 0039e530 00000c Gap__Bec__beShadow01__vfunc_20 Gap::Bec::beShadow01::vfunc_20
-0039e540 0001f8 Gap__Bec__beSound__vfunc_32 Gap::Bec::beSound::vfunc_32
-0039e740 000120 Gap__Bec__beSound__vfunc_29 Gap::Bec::beSound::vfunc_29
-0039e860 00000c Gap__Bec__beSound__vfunc_30 Gap::Bec::beSound::vfunc_30
-0039e870 0003a0 Gap__Bec__beSound__vfunc_31 Gap::Bec::beSound::vfunc_31
-0039ec10 000ed0 Gap__Bec__beSound__vfunc_34 Gap::Bec::beSound::vfunc_34
-0039fae0 000080 FUN_0039fae0
-0039fb60 0000c0 FUN_0039fb60
-0039fc20 00000c Gap__Bec__beSound__vfunc_20 Gap::Bec::beSound::vfunc_20
+0039e540 0001f8 beSound_Prepare
+0039e740 000120 beSound_RegisterReceiver
+0039e860 00000c beSound_GetInfoMeta
+0039e870 0003a0 beSound_Update
+0039ec10 000ed0 beSound_OnMessage
+0039fae0 000080 igSmartPointer_bePlaySE_Destruct
+0039fb60 0000c0 beSound_FindData
+0039fc20 00000c beSound_GetMeta
 0039fc30 000008 Gap__Bec__beSwitchCtrl__vfunc_32 Gap::Bec::beSwitchCtrl::vfunc_32
 0039fc40 00000c Gap__Bec__beSwitchCtrl__vfunc_30 Gap::Bec::beSwitchCtrl::vfunc_30
 0039fc50 000024 Gap__Bec__beSwitchCtrl__vfunc_29 Gap::Bec::beSwitchCtrl::vfunc_29

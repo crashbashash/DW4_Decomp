@@ -287,7 +287,7 @@ void FUN_00192f50(float *out, const float *vector, const float *matrix);
 int Vec3f_FromString(const char *text, float *vector, const char *format);
 void FUN_0030b3c0(igStringObj *string, const char *text);
 void FUN_0030b630(igStringObj *string, float *value);
-void FUN_0030bbf0(igStringObj *string, unsigned int position, unsigned int length);
+void igStringObj_Erase(igStringObj *string, unsigned int position, unsigned int length);
 float atan2f(float y, float x);
 
 /* The managers be_Start finds, and the be itself. */
@@ -1184,7 +1184,7 @@ void Lua_sd_OptionalArg(const char *args) {
                     case 'F':
                         text = (igStringObj *)g_beSystem[0]->_globalStrObj;
                         FUN_0030b3c0(text, part + 2);
-                        FUN_0030bbf0(text, text->_length - 1, 1);
+                        igStringObj_Erase(text, text->_length - 1, 1);
                         FUN_0030b630(text, &floatValue);
                         beMessenger_AppendFloat(g_beMessenger[0], floatValue);
                         break;

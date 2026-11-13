@@ -1,0 +1,18 @@
+# beSound.cpp: the beSound slots and name lookup, the BecLibrary message enum builder and play-row
+# creator they call, and the igStringObj path edits its MAKEBINLIST uses. Evidence in
+# docs/engine/sound-format.md.
+# <va>	<name>	<module>
+0x0030b5c0	igStringObj_ToLower	engine
+0x0030b8a0	igStringObj_KeepExtension	engine
+0x0030ba20	igStringObj_StripDirectory	engine
+0x0030bbf0	igStringObj_Erase	engine
+0x00344250	beSound_GetMessageEnum	game
+0x003447c0	bePlaySE_CreateInstance	game
+0x0039e540	beSound_Prepare	game
+0x0039e740	beSound_RegisterReceiver	game
+0x0039e860	beSound_GetInfoMeta	game
+0x0039e870	beSound_Update	game
+0x0039ec10	beSound_OnMessage	game
+0x0039fae0	igSmartPointer_bePlaySE_Destruct	game
+0x0039fb60	beSound_FindData	game
+0x0039fc20	beSound_GetMeta	game

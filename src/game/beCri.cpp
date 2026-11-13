@@ -43,8 +43,8 @@ int FUN_00306360(int registry, const char *section, int create);
 int FUN_00306770(int registry, int section, const char *key, igSmartPointer<igStringObj> *value, const char *fallback, int flags);
 igStringObj *FUN_002b9500(void *allocator);
 void FUN_0030b3c0(...);
-int FUN_0030ba20(igNamedObject *);
-int FUN_0030b5c0(igNamedObject *);
+int igStringObj_StripDirectory(igNamedObject *);
+int igStringObj_ToLower(igNamedObject *);
 int strcmp(...);
 int strlen(...);
 extern int g_defaultAllocatorSelector[4];
@@ -716,8 +716,8 @@ long long beCri_PlayEffect(beCri *self, igObjectList *names, beSoundData *cue) {
         name = NameOf(((igNamedObject **)names->_data)[cue->_fnameIdx]->_name);
         igSmartPointer<igStringObj> bankName((igStringObj *)((beSystem *)self->_system)->_globalStrObj, kRetainReference);
         FUN_0030b3c0(bankName.p, name);
-        FUN_0030ba20((igNamedObject *)bankName.p);
-        FUN_0030b5c0((igNamedObject *)bankName.p);
+        igStringObj_StripDirectory((igNamedObject *)bankName.p);
+        igStringObj_ToLower((igNamedObject *)bankName.p);
         found = -1;
         for (i = 0; i < Banks(self)->_count; i++) {
             bank = BankAt(Banks(self), i);

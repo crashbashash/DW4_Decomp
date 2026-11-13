@@ -120,7 +120,7 @@
       "@6241": "0x0051bc20",
       "@6270": "0x0051bc00",
       "@7554": "0x0051bd30",
-      "DAT_004c22f0": "0x004c22f0",
+      "g_stringObjEmptyText": "0x004c22f0",
       "DAT_004cf8a0": "0x004cf8a0",
       "DAT_004cf8a4": "0x004cf8a4",
       "DAT_004cf8a8": "0x004cf8a8",
@@ -6029,7 +6029,7 @@
       "DAT_00487750": "0x00487750",
       "DAT_00487758": "0x00487758",
       "DAT_00487760": "0x00487760",
-      "DAT_004c22f0": "0x004c22f0",
+      "g_stringObjEmptyText": "0x004c22f0",
       "DAT_004d64d8": "0x004d64d8",
       "DAT_004d6bc8": "0x004d6bc8",
       "DAT_004d6cc8": "0x004d6cc8",
@@ -6403,7 +6403,7 @@
       "DAT_00498258": "0x00498258",
       "DAT_00498260": "0x00498260",
       "DAT_00498268": "0x00498268",
-      "DAT_004c22f0": "0x004c22f0",
+      "g_stringObjEmptyText": "0x004c22f0",
       "DAT_004e0fa0": "0x004e0fa0",
       "DAT_004e0fa4": "0x004e0fa4",
       "DAT_004e1058": "0x004e1058",
@@ -7508,7 +7508,7 @@
       "DAT_0048dc70": "0x0048dc70",
       "DAT_0048dc78": "0x0048dc78",
       "DAT_0048dc80": "0x0048dc80",
-      "DAT_004c22f0": "0x004c22f0",
+      "g_stringObjEmptyText": "0x004c22f0",
       "DAT_004e48c8": "0x004e48c8",
       "DAT_004e4aa0": "0x004e4aa0",
       "DAT_004e4ac0": "0x004e4ac0",
@@ -10357,7 +10357,6 @@
       "DAT_0048acb0": "0x0048acb0",
       "DAT_0048acd0": "0x0048acd0",
       "DAT_0048acf0": "0x0048acf0",
-      "DAT_004c22f0": "0x004c22f0",
       "DAT_004d70e0": "0x004d70e0",
       "DAT_004d7150": "0x004d7150",
       "DAT_004d72a0": "0x004d72a0",
@@ -11119,7 +11118,8 @@
       "igVisualContext_className": "0x004db700",
       "thunk_igExternalImageEntry_GetMetaObject_0014f750": "0x0014f750",
       "thunk_igLineWidthExt_GetMetaObject_0014d750": "0x0014d750",
-      "thunk_igPsx2VertexArray2_GetMetaObject_0014acf0": "0x0014acf0"
+      "thunk_igPsx2VertexArray2_GetMetaObject_0014acf0": "0x0014acf0",
+      "g_stringObjEmptyText": "0x004c22f0"
     },
     "stripped": [
       "__dt__10Ref_1778e0Fv",
@@ -13438,7 +13438,6 @@
       "FUN_0030b3c0": "0x0030b3c0",
       "igStringObj_Clear": "0x0030b420",
       "FUN_0030b460": "0x0030b460",
-      "FUN_0030b5c0": "0x0030b5c0",
       "FUN_0030b5f0": "0x0030b5f0",
       "FUN_0030b630": "0x0030b630",
       "FUN_0030b670": "0x0030b670",
@@ -13446,12 +13445,9 @@
       "FUN_0030b770": "0x0030b770",
       "FUN_0030b7e0": "0x0030b7e0",
       "FUN_0030b840": "0x0030b840",
-      "FUN_0030b8a0": "0x0030b8a0",
       "FUN_0030b980": "0x0030b980",
-      "FUN_0030ba20": "0x0030ba20",
       "FUN_0030ba90": "0x0030ba90",
       "FUN_0030bb40": "0x0030bb40",
-      "FUN_0030bbf0": "0x0030bbf0",
       "FUN_0030bce0": "0x0030bce0",
       "thunk_strcasecmp": "0x0030bed0",
       "FUN_0030bfa0": "0x0030bfa0",
@@ -14245,7 +14241,11 @@
       "Gap__Core__igFloatList__vfunc_18": "0x00331e20",
       "Gap__Core__igPointerList__vfunc_18": "0x00331e50",
       "Gap__Core__igDependencyList__vfunc_18": "0x00331e80",
-      "FUN_00331eb0": "0x00331eb0"
+      "FUN_00331eb0": "0x00331eb0",
+      "igStringObj_ToLower": "0x0030b5c0",
+      "igStringObj_KeepExtension": "0x0030b8a0",
+      "igStringObj_StripDirectory": "0x0030ba20",
+      "igStringObj_Erase": "0x0030bbf0"
     },
     "data": {
       "@23527": "0x004f9d20",
@@ -14641,7 +14641,6 @@
       "DAT_004c22c0": "0x004c22c0",
       "DAT_004c22d8": "0x004c22d8",
       "DAT_004c22e0": "0x004c22e0",
-      "DAT_004c22f0": "0x004c22f0",
       "DAT_004c22f8": "0x004c22f8",
       "DAT_004c2300": "0x004c2300",
       "DAT_004c2370": "0x004c2370",
@@ -16007,7 +16006,8 @@
       "igUnsignedShortMetaField_GetPublishedMetaObject": "0x002b6530",
       "igUnsignedShortMetaField_className": "0x004f5ac0",
       "igVirtualCFuncMetaField_className": "0x004f5aa0",
-      "thunk_igLongTimer_GetMetaObject_002b7b60": "0x002b7b60"
+      "thunk_igLongTimer_GetMetaObject_002b7b60": "0x002b7b60",
+      "g_stringObjEmptyText": "0x004c22f0"
     },
     "stripped": [
       "__dt__10CreatedRefFv",
@@ -19735,7 +19735,6 @@
       "DAT_0048dac0": "0x0048dac0",
       "DAT_0048dae0": "0x0048dae0",
       "DAT_0048dae8": "0x0048dae8",
-      "DAT_004c22f0": "0x004c22f0",
       "DAT_004e0858": "0x004e0858",
       "DAT_004e0ef0": "0x004e0ef0",
       "DAT_004e0f30": "0x004e0f30",
@@ -20624,7 +20623,8 @@
       "igUnsignedIntList_GetPublishedMetaObject": "0x001a4f00",
       "igVertexBlendMatrixAttrPool_className": "0x004e1d60",
       "igVertexBlendMatrixListAttrPool_className": "0x004e1d40",
-      "thunk_igSkeletonBoneInfo_GetMetaObject_00198ac0": "0x00198ac0"
+      "thunk_igSkeletonBoneInfo_GetMetaObject_00198ac0": "0x00198ac0",
+      "g_stringObjEmptyText": "0x004c22f0"
     },
     "stripped": [
       "__dt__10Ref_1b2750Fv",
@@ -22056,7 +22056,6 @@
       "beSoundData_Register": "0x003440f0",
       "beSoundData_GetMetaObject": "0x00344160",
       "beSoundData_InitFields": "0x00344180",
-      "FUN_00344250": "0x00344250",
       "beSound_CreateInstance": "0x003442b0",
       "FUN_003442f0": "0x003442f0",
       "FUN_00344340": "0x00344340",
@@ -22072,7 +22071,6 @@
       "FUN_00344710": "0x00344710",
       "bePlaySEList_Register": "0x00344730",
       "bePlaySEList_GetMetaObject": "0x003447a0",
-      "FUN_003447c0": "0x003447c0",
       "FUN_00344800": "0x00344800",
       "bePlaySE_GetVTable": "0x00344850",
       "FUN_00344890": "0x00344890",
@@ -24197,7 +24195,9 @@
       "beFont_GetMessageEnum": "0x00361df0",
       "beFontGeomAttrPair_Create": "0x003624f0",
       "beDemoManagerWork_CreateInstance": "0x003637c0",
-      "beDemoKeepMes_CreateInstance": "0x00363c20"
+      "beDemoKeepMes_CreateInstance": "0x00363c20",
+      "beSound_GetMessageEnum": "0x00344250",
+      "bePlaySE_CreateInstance": "0x003447c0"
     },
     "data": {
       "DAT_004c2d00": "0x004c2d00",
@@ -30769,7 +30769,7 @@
     },
     "data": {
       "@60": "0x00515680",
-      "DAT_004c22f0": "0x004c22f0",
+      "g_stringObjEmptyText": "0x004c22f0",
       "DAT_005155c0": "0x005155c0",
       "DAT_005155d0": "0x005155d0",
       "DAT_005155d8": "0x005155d8",
@@ -31319,32 +31319,32 @@
   "0x0039e540": {
     "whole_file": true,
     "emitted": {
-      "Gap__Bec__beSound__vfunc_29": "0x0039e740",
-      "Gap__Bec__beSound__vfunc_30": "0x0039e860",
-      "Gap__Bec__beSound__vfunc_31": "0x0039e870",
-      "Gap__Bec__beSound__vfunc_34": "0x0039ec10",
-      "__dt__25igSmartPointer<8igObject>Fv": "0x0039fae0",
-      "FUN_0039fb60": "0x0039fb60",
-      "Gap__Bec__beSound__vfunc_20": "0x0039fc20"
+      "beSound_RegisterReceiver": "0x0039e740",
+      "beSound_GetInfoMeta": "0x0039e860",
+      "beSound_Update": "0x0039e870",
+      "beSound_OnMessage": "0x0039ec10",
+      "__dt__25igSmartPointer<8bePlaySE>Fv": "0x0039fae0",
+      "beSound_FindData": "0x0039fb60",
+      "beSound_GetMeta": "0x0039fc20"
     },
     "data": {
-      "@985": "0x0050fa00",
-      "DAT_004c22f0": "0x004c22f0",
-      "DAT_004e0858": "0x004e0858",
-      "DAT_0050f9a0": "0x0050f9a0",
-      "DAT_0050f9a8": "0x0050f9a8",
-      "DAT_0050f9b0": "0x0050f9b0",
-      "DAT_0050f9c0": "0x0050f9c0",
-      "DAT_0050f9d0": "0x0050f9d0",
-      "DAT_0050f9d8": "0x0050f9d8",
-      "DAT_0050f9e0": "0x0050f9e0",
-      "DAT_0050f9e8": "0x0050f9e8",
-      "DAT_0050f9f0": "0x0050f9f0",
-      "DAT_0050f9f8": "0x0050f9f8",
-      "DAT_00586f20": "0x00586f20",
-      "DAT_00587110": "0x00587110",
-      "DAT_00589ad8": "0x00589ad8",
-      "GPR_00554c14": "0x00554c14",
+      "@1087": "0x0050fa00",
+      "g_stringObjEmptyText": "0x004c22f0",
+      "emptyString": "0x004e0858",
+      "SOUND_5": "0x0050f9a0",
+      "acx": "0x0050f9a8",
+      "STATICINFO": "0x0050f9b0",
+      "GETINFOLIST": "0x0050f9c0",
+      "common": "0x0050f9d0",
+      "REVERB": "0x0050f9d8",
+      "PLAY_4": "0x0050f9e0",
+      "UP_2": "0x0050f9e8",
+      "DOWN_2": "0x0050f9f0",
+      "ALL_2": "0x0050f9f8",
+      "g_stringPool": "0x00586f20",
+      "g_defaultAllocatorSelector": "0x00587110",
+      "g_beCri_metaObject": "0x00589ad8",
+      "g_useOwnerAllocator": "0x00554c14",
       "g_beSoundInfo_metaObject": "0x00587e40",
       "g_beSound_metaObject": "0x00587ea8"
     },
@@ -31356,7 +31356,7 @@
     "externals": {
       "__dl__FPv": "0x00100610"
     },
-    "symbol": "Gap__Bec__beSound__vfunc_32"
+    "symbol": "beSound_Prepare"
   },
   "0x0039dee0": {
     "whole_file": true,
@@ -31998,7 +31998,6 @@
     },
     "data": {
       "@1055": "0x0050e770",
-      "DAT_004c22f0": "0x004c22f0",
       "g_sjisToUnicodeTable": "0x004c8880",
       "DAT_004e0858": "0x004e0858",
       "LAYERCTL_2": "0x0050e730",
@@ -32019,7 +32018,8 @@
       "TEXTCTL": "0x0050e728",
       "g_beFontInfo_metaObject": "0x005895e8",
       "g_beFont_metaObject": "0x00589678",
-      "g_beUnicodeObj_metaObject": "0x00589640"
+      "g_beUnicodeObj_metaObject": "0x00589640",
+      "g_stringObjEmptyText": "0x004c22f0"
     },
     "duplicates": {
       "__dt__31igSmartPointer<13igVertexArray>Fv": "0x001338d0",
@@ -32133,7 +32133,7 @@
       "Gap__Bec__beCri__vfunc_20": "0x0037e100"
     },
     "data": {
-      "DAT_004c22f0": "0x004c22f0",
+      "g_stringObjEmptyText": "0x004c22f0",
       "DAT_004e0858": "0x004e0858",
       "BECRUNTIME": "0x0050e400",
       "AdxModulePath": "0x0050e410",
@@ -33709,7 +33709,7 @@
       "@4989": "0x00519fe0",
       "@8464": "0x0051a250",
       "@8489": "0x0051a220",
-      "DAT_004c22f0": "0x004c22f0",
+      "g_stringObjEmptyText": "0x004c22f0",
       "g_statusFontNames": "0x004cf670",
       "DAT_004cf6d0": "0x004cf6d0",
       "DAT_004cf6d8": "0x004cf6d8",
@@ -34454,7 +34454,7 @@
       "FUN_003337f0": "0x003337f0"
     },
     "data": {
-      "DAT_004c22f0": "0x004c22f0",
+      "g_stringObjEmptyText": "0x004c22f0",
       "DAT_004e0858": "0x004e0858",
       "DAT_004ffe68": "0x004ffe68",
       "DAT_004ffe70": "0x004ffe70",

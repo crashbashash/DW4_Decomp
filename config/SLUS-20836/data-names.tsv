@@ -2879,6 +2879,7 @@
 0x004c1d40	g_igPsx2Media_callbackList	callback-list
 0x004c2170	g_memoryContextNames	recovered-global
 0x004c22e8	g_resourceLoaderStackSize	recovered-global
+0x004c22f0	g_stringObjEmptyText	recovered-global
 0x004c2608	g_igPageMemoryPool_defaultPoolOptionFlags	recovered-global
 0x004c2610	g_rangeStart	recovered-global
 0x004c2668	g_igAdxAfsFileList_callbackList	callback-list
@@ -4630,6 +4631,16 @@
 0x0050f8b0	SQ_CANCEL_3	string-literal
 0x0050f8c0	SQ_FO2TOP	string-literal
 0x0050f8d0	NOCANCEL_2	string-literal
+0x0050f9a0	SOUND_5	string-literal
+0x0050f9a8	acx	string-literal
+0x0050f9b0	STATICINFO	string-literal
+0x0050f9c0	GETINFOLIST	string-literal
+0x0050f9d0	common	string-literal
+0x0050f9d8	REVERB	string-literal
+0x0050f9e0	PLAY_4	string-literal
+0x0050f9e8	UP_2	string-literal
+0x0050f9f0	DOWN_2	string-literal
+0x0050f9f8	ALL_2	string-literal
 0x0050fb10	ndmw_igb	string-literal
 0x0050ffd0	PLAYER_5	string-literal
 0x0050ffd8	GETMATRIX_6	string-literal

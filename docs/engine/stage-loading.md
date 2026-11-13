@@ -10,7 +10,7 @@ stage load in state 0. It copies the destination name into GameInfo `+0x38`,
 then builds the loading filename in the mutable string at GameInfo `+0x48`:
 
 1. Copy the bare destination (`stagML11`).
-2. Erase its first two characters (`FUN_0030bbf0`, index 0, count 2).
+2. Erase its first two characters (`igStringObj_Erase`, index 0, count 2).
 3. Insert `ld` at index 0 (`FUN_0030b460`).
 4. Append `.igb` and prepend `loadingUSA/`.
 5. Request `loadingUSA/ldagML11.igb` through `igResource_LoadDirectory`; retain the

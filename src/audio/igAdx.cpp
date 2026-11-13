@@ -183,7 +183,7 @@ struct TextBuffer { int vtable; unsigned int refCount; char *text; };
 struct PathEntry { int vtable; unsigned int refCount; char *name; int f12; short left; short right; };
 struct PathEntryList { int vtable; unsigned int refCount; int count; int capacity; PathEntry **data; };
 extern "C" void FUN_0030b3c0(TextBuffer *buffer, const char *text);
-extern "C" void FUN_0030b5c0(TextBuffer *buffer);
+extern "C" void igStringObj_ToLower(TextBuffer *buffer);
 extern "C" void FUN_0030b5f0(TextBuffer *buffer, int *value);
 extern "C" void igNamedObject_SetName(PathEntry *object, const char *name);
 extern "C" char *DAT_004c22f0[4];
@@ -798,7 +798,7 @@ int FUN_00333440(const char *name) {
         }
         n = ((PathEntryList * *)DAT_00587620)[0]->count;
         FUN_0030b3c0(DAT_005875e0[0], name);
-        FUN_0030b5c0(DAT_005875e0[0]);
+        igStringObj_ToLower(DAT_005875e0[0]);
         for (k = 1; k < n; k++) {
             FUN_00333630((S_333630 *)(((PathEntryList * *)DAT_00587620)[0]->data[k]), path);
             const char *text = DAT_005875e0[0]->text;

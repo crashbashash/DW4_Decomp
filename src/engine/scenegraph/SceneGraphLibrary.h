@@ -1879,7 +1879,7 @@ struct Mgr { int pad[4]; Tab *tab; int pad2[7]; int arg; int pad3[4]; int *idx; 
 struct TravView { virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void f31(); };
 extern "C" void *FUN_002b9500(...);
 extern "C" int FUN_0030b3c0(...);
-extern "C" int FUN_0030b5c0(igObject *);
+extern "C" int igStringObj_ToLower(igObject *);
 extern "C" int List_BinarySearchWords(int, void *, void *);
 extern "C" int FUN_002d6e60(int, void *, void *);
 extern "C" int g_temporaryAllocatorSelector[4];

@@ -253,7 +253,7 @@ void FUN_001b7770(igCommonTraversal *self, int name, int value) {
     al = GPR_00554c14 ? al : Memory_GetAllocatorBySelector(g_temporaryAllocatorSelector[0]);
     str = ((igObject *)FUN_002b9500(al));
     FUN_0030b3c0(str, name);
-    FUN_0030b5c0(str);
+    igStringObj_ToLower(str);
     { int first = self->_segmentOverrideNames; searchKey = str;
     index = List_BinarySearchWords(first, &searchKey, FUN_001b7740); }
     if (index < 0) {

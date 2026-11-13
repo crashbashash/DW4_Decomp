@@ -215,13 +215,10 @@ The lobby terminal sequence 7 resolves to waveform 7.
 
 ## Repeat admission and stream levels
 
-Static inspection covers the complete eight-body `beSound` runtime group
-`0x0039e540..0x0039fc2c`. The selection playback arm of its message dispatcher
-at `0x0039ec10` samples the signed world clock at `context+0x50`. It suppresses
-an SE when its resolved sound index matches a `_playSEs` row and `now < deadline`.
-A positive playback handle adds a row with `deadline = now + 0x02faf07e`
-(**49,999,998 ns**). Equal time permits playback; unrelated sounds do not block
-one another. Expired row cleanup is separate from admission.
+The resident-effect arm of `beSound_OnMessage` samples the signed world clock (`igInsightCore::_worldTime`). It
+suppresses an SE when its resolved sound index matches a `_playSEs` row and `now < deadline`. A positive playback
+handle adds a row with `deadline = now + 0x02faf07e` (**49,999,998 ns**). Equal time permits playback; unrelated
+sounds do not block one another. Expired rows are dropped separately, by `beSound_Update`.
 
 Stream types 1/2 follow the stream player `beCri_PlayStream`, adding
 `beSoundInfo._baseVolume` to signed `beSoundData._volume`. Volume routes through
@@ -259,10 +256,12 @@ entries, the fifth at 48 kHz).
 
 ## beSound runtime: PLAY, stop commands and the voice pool
 
-Read from the byte-matched `beSound::vfunc_34` (`0x0039ec10`) and the matched `beCri` players it calls. The message enum
-(from the class's enum strings) is `1 STOP, 2 PLAY, 3 PLAYatPAUSE, 4 PAUSEOFF, 5 VOLUMECTL, 6 BGMSTOP, 7 ENVSTOP, 8 SESTOP,
+Read from `beSound_OnMessage` and the `beCri` players it calls. The message enum (`beSound_GetMessageEnum`, from the
+class's enum strings) is `0 MODENONE, 1 STOP, 2 PLAY, 3 PLAYatPAUSE, 4 PAUSEOFF, 5 VOLUMECTL, 6 BGMSTOP, 7 ENVSTOP, 8 SESTOP,
 9 GETWORDLIST, 10 VOLUMECTL2, 11 FXCTL, 12 ISREADY, 13 ISBGMREADY, 14 ISENVREADY, 15 ISALLREADY, 16 GETCURRENTBGM,
 17 SNDFVOLUME, 18 OFFREEZE, 19 ONFREEZE, 20 MAKEBINLIST, 21 ISDONETRANS, 22 FREESFPDATA`, which is the handler's case order.
+`MODENONE` and `GETCURRENTBGM` have no case: the handler answers 0 (not handled) for them, so the current BGM name is
+never reported.
 
 **PLAY (2) and PLAYatPAUSE (3, which first sets `_pauseOnetime`).** The cue is found by name in the info's data list, then by
 `_type`: type 1 (music) returns without restarting when the name equals `_currentBGM`, otherwise starts in the stream player
@@ -286,7 +285,7 @@ position by `(last - first) / frames` entries and yields the level `base + volum
 fade to 0 is silent on frame 9.
 
 **Music change.** `beCri_PlayStream` takes the BGM slot for type 1 and the ambience slot for type 2 (memory index -1 only). If the slot's
-voice is still playing it arms the 1.0 -> 0.0 over 10.0 ramp (only when none runs) and returns 0; `beSound::vfunc_34` then enqueues the PLAY
+voice is still playing it arms the 1.0 -> 0.0 over 10.0 ramp (only when none runs) and returns 0; `beSound_OnMessage` then enqueues the PLAY
 again with delay 0xB. The per-frame update (`beCri::vfunc_27`) steps the ramp and stops the voice when a fade to 0 passes -209 (ADX) or
 127 * factor < 13 (sound bank), after which the retry starts the new track at `_volume + _baseVolume`. A music PLAY of the current BGM is
 ignored before any of this.
@@ -319,6 +318,28 @@ sequence number, then command 2; volume = command 4), so the event byte, the `00
 interpreted on the IOP side and are not recoverable from the EE program. `beSoundData._channel` (+24) is 1 for resident effects and 2 for
 streamed tracks in all 8,855 cue records, except three type 3 ADX effects that carry 2. The EE program reads cue records only at offsets 8,
 16, 18, 20, 26 and 28, so `_channel` is a data-side tag there; whether the sound IOP module uses it is not known.
+
+## The beSound controller
+
+`src/game/beSound.cpp` holds the controller that answers the `SOUND` messages. Its slots: slot 32
+(`beSound_Prepare`) takes the insight's `beCri` manager into `_cri` when it is not set and empties `_playSEs`;
+slot 29 (`beSound_RegisterReceiver`) registers the ram as receiver `SOUND`, copies the info's `_baseVolume` into
+the controller and its `_sndfVolume` through `beCri_SetSndfVolume`, defaults the info's `_dataType` to `acx` and
+sets `beCri::_dataType` 0 for `acx` (every cue streams from the AFS archives) or 1 (sound banks); slot 31
+(`beSound_Update`) asks `STATICINFO` for `GETINFOLIST` on its first run, drops every static info except `_common`
+(emptying its data list), sends `FXCTL REVERB`, and from then on drops the play rows whose deadline has passed;
+slot 34 is `beSound_OnMessage`; `beSound_FindData` returns the index of a cue in the info's data list by name, or -1;
+slots 30 and 20 return the info and controller meta objects.
+
+**MAKEBINLIST.** For every file name of `_fnameList` whose extension (`igStringObj_KeepExtension`, then
+`igStringObj_Erase` of the dot) equals the info's `_dataType`, the handler pools the lower-case file name without
+its directory (`igStringObj_StripDirectory`, `igStringObj_ToLower`) once into a string list, using the system's
+scratch string object. For each collected name the first object of that name in any static info's data list is
+appended to `beCri::_lsBinObjs`, and `beCri_StartSfpTransfers` starts the transfers.
+
+Open questions: `beSound_OnMessage` passes the number of play rows it searched as a fourth argument to
+`beCri_PlayEffect`, which reads three (only the four-argument call reproduces the register choice); the play-row
+search keeps the row and count loads inside the loop only in its decompiler-shaped spelling.
 
 ## The beCri controller
 

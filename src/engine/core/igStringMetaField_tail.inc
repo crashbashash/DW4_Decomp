@@ -407,7 +407,7 @@ void FUN_0030b460(IniStringView *self, char *insert, unsigned int at, unsigned i
     }
 }
 
-void FUN_0030b5c0(void *arg0) {
+void igStringObj_ToLower(void *arg0) {
     int temp_a0;
 
     temp_a0 = *(int *)((char *)arg0 + 8);
@@ -495,7 +495,7 @@ int FUN_0030b840(int arg0, int extra1, int extra2) {
 
 static inline char *pick(char *a, char *d) { if (a == 0) { return d; } return a; }
 
-void FUN_0030b8a0(O_30b8a0 *o) {
+void igStringObj_KeepExtension(O_30b8a0 *o) {
     int i;
     char *e;
     char *t;
@@ -533,7 +533,7 @@ void FUN_0030b980(struct P_30b980 *p) {
     }
 }
 
-void FUN_0030ba20(int *arg0) {
+void igStringObj_StripDirectory(int *arg0) {
     char *p;
     unsigned int a3;
     a3 = arg0[2];
@@ -600,7 +600,7 @@ int FUN_0030bb40(char *arg0, char *arg1) {
 
 static inline char *text_30bbf0(Str_30bbf0 *s) { char *t = s->text_30bbf0; if (t == 0) { return DAT_004c22f0[0]; } return t; }
 
-int FUN_0030bbf0(Str_30bbf0 *self, unsigned int pos, unsigned int len) {
+int igStringObj_Erase(Str_30bbf0 *self, unsigned int pos, unsigned int len) {
     unsigned int end;
     Str_30bbf0 *tmp;
     Str_30bbf0 *held;

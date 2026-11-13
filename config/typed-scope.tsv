@@ -894,11 +894,11 @@ Gap__Bec__beShadow01__vfunc_30	beShadow01	game
 Gap__Bec__beShadow01__vfunc_32	beShadow01	game
 Gap__Bec__beSoundData__vfunc_20	beSoundData	game
 Gap__Bec__beSoundInfo__vfunc_20	beSoundInfo	game
-Gap__Bec__beSound__vfunc_20	beSound	game
-Gap__Bec__beSound__vfunc_29	beSound	game
-Gap__Bec__beSound__vfunc_30	beSound	game
-Gap__Bec__beSound__vfunc_32	beSound	game
-Gap__Bec__beSound__vfunc_34	beSound	game
+beSound_GetMeta	beSound	game
+beSound_RegisterReceiver	beSound	game
+beSound_GetInfoMeta	beSound	game
+beSound_Prepare	beSound	game
+beSound_OnMessage	beSound	game
 Gap__Bec__beStaticInfoCtl__vfunc_20	beStaticInfoCtl	game
 Gap__Bec__beStaticInfoCtl__vfunc_24	beStaticInfoCtl	game
 Gap__Bec__beStaticInfoCtl__vfunc_29	beStaticInfoCtl	game

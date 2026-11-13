@@ -103,7 +103,7 @@ void beSoundData_InitFields(void) {
     igMetaObject_NameFields(temp_s0, &DAT_004c3850[0], &DAT_004c3870[0], &DAT_004c3890[0], temp_s1);
 }
 
-int FUN_00344250(void) {
+int beSound_GetMessageEnum(void) {
     if (DAT_00587ea0[0] == 0) {
         DAT_00587ea0[0] = igMetaEnum_Create(&DAT_00501a58[0], &DAT_004c38b0[0], &DAT_004c3910[0], 0x17);
     }

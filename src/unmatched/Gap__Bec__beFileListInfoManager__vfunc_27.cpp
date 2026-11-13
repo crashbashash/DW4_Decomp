@@ -13,7 +13,7 @@ extern "C" int igResource_IsDirectoryLoaded(...);
 extern "C" int igResource_UnloadDirectory(...);
 extern "C" int FUN_0030b3c0(...);
 extern "C" int FUN_0030b460(...);
-extern "C" int FUN_0030bbf0(...);
+extern "C" int igStringObj_Erase(...);
 extern "C" int FUN_003810c0(...);
 extern "C" int FUN_003817d0(...);
 extern "C" int beLua__RunNamedChunk(...);
@@ -196,7 +196,7 @@ extern "C" void Gap__Bec__beFileListInfoManager__vfunc_27(beFileListInfoManager 
             {
             igSmartPointer<igObject> stageObj((igObject *)((beSystem *)arg0->_system)->_globalStrObj, kRetainReference);
             FUN_0030b3c0(stageObj.p, ((beSystem *)arg0->_system)->_stageName);
-            FUN_0030bbf0(stageObj.p, 0, 2);
+            igStringObj_Erase(stageObj.p, 0, 2);
             t0 = (int *)stageObj.p; FUN_0030b460(t0, &DAT_0050e570[0], 0, strlen(&DAT_0050e570[0]));
             { int *ta = (int *)stageObj.p; int xa = ta[3]; FUN_0030b460(ta, &DAT_0050e578[0], xa, strlen(&DAT_0050e578[0])); }
             t0 = (int *)stageObj.p; FUN_0030b460(t0, &DAT_0050e580[0], 0, strlen(&DAT_0050e580[0]));

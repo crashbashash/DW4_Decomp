@@ -85,10 +85,10 @@ StringRef FUN_001554a0(int arg1) {
     int r;
     igSmartPointer<Ref_1554a0> text(FUN_002b9500(Memory_GetAllocatorBySelector(DAT_00587048[0])));
     FUN_0030b3c0(text.get(), arg1);
-    FUN_0030b5c0(text.get());
+    igStringObj_ToLower(text.get());
     for (i = text.get()->len - 1; i >= 0; i--) {
         if (text.get()->str[i] == 0x5F) {
-            FUN_0030bbf0(text.get(), i, 1);
+            igStringObj_Erase(text.get(), i, 1);
         }
     }
     s = text.get()->str;
