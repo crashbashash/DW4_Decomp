@@ -20,8 +20,8 @@ extern "C" void * igProperty_FindByName(...);
 extern "C" int beMessenger_SendGroup(...);
 extern "C" int beMessenger_GetMatrixCount(...);
 extern "C" int beMessenger_GetMatrix(...);
-extern "C" int Matrix44_GetTranslation(...);
-extern "C" int Matrix44_SetTranslation(...);
+extern "C" int igMatrix44f_GetTranslation(...);
+extern "C" int igMatrix44f_SetTranslation(...);
 extern "C" int Gap__Bec__beNDMWMdlMapBase__vfunc_20(void);
 extern "C" int KIND_MAPBASE[4];
 extern "C" char MAPBASE[];
@@ -29,7 +29,7 @@ extern "C" void Gap__Bec__beNDMWMdlMapBase__vfunc_37(beNDMWMdlMapBase * p0, int 
 extern "C" int ONE_16[4];
 extern "C" int g_propertyNameField[4];
 extern "C" int g_stringPool[4];
-extern "C" int g_defaultAllocatorSelector[4];
+extern "C" int kIGMemoryPoolHandleUser1[4];
 extern "C" unsigned char g_useOwnerAllocator;
 /* Property record: reference at +20. */
 struct Prop { char pad[20]; igObject *f20; };
@@ -80,7 +80,7 @@ void Gap__Bec__beNDMWMdlMapBase__vfunc_37(beNDMWMdlMapBase * p0, int p1, char * 
 void Gap__Bec__beNDMWMdlMapBase__vfunc_36(beNDMWMdlMapBase *arg0, beBaseInfoRam *arg1) {
     if (arg1->_dataList == 0) {
         int a = igObject_GetAllocator(arg1);
-        int al = g_useOwnerAllocator != 0 ? a : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
+        int al = g_useOwnerAllocator != 0 ? a : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
         igObject *created = (igObject *)beBaseInfoDataList_Create(al);
         /* matching construct: the new list is a temporary bound to the setter's reference parameter (it
          * takes the stack slot below the named info-work reference, as retail's +0x58 does) */
@@ -89,7 +89,7 @@ void Gap__Bec__beNDMWMdlMapBase__vfunc_36(beNDMWMdlMapBase *arg0, beBaseInfoRam 
     Prop *s3 = (Prop *)igProperty_FindByName(arg1->_dataList, g_propertyNameField[0], ONE_16);
     {
         int a2 = igObject_GetAllocator(arg0);
-        int al2 = g_useOwnerAllocator != 0 ? a2 : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
+        int al2 = g_useOwnerAllocator != 0 ? a2 : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
         InfoWorkRef w((igObject *)FUN_00350020(al2));
         igObject *t2 = w.p;
         if (t2 != 0) t2->_refCount = t2->_refCount + 1;
@@ -136,7 +136,7 @@ void Gap__Bec__beNDMWMdlMapBase__vfunc_46(beNDMWMdlMapBase *arg0, RamInfoArg *ar
         for (i = 0; i < n; i++) {
             {
                 beMessenger_GetMatrix(m, arg0->_messenger, i);
-                Matrix44_GetTranslation(m, &t);
+                igMatrix44f_GetTranslation(m, &t);
                 sum.x += t.x;
                 *py += t.y;
                 *pz += t.z;
@@ -159,7 +159,7 @@ void Gap__Bec__beNDMWMdlMapBase__vfunc_46(beNDMWMdlMapBase *arg0, RamInfoArg *ar
         if (g_useOwnerAllocator != 0) {
             a = alloc;
         } else {
-            a = Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
+            a = Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
         }
         igSmartPointer<igObject> created(((igObject *)beBaseInfoDataList_Create(a)));
         igObject *s0 = created.p;
@@ -174,7 +174,7 @@ void Gap__Bec__beNDMWMdlMapBase__vfunc_46(beNDMWMdlMapBase *arg0, RamInfoArg *ar
         arg1->m40 = s0;
     }
     r = ((PropertyRecord *)igProperty_FindByName(arg1->m40, g_propertyNameField[0], ONE_16));
-    Matrix44_SetTranslation(r->f16 + 32, &sum);
+    igMatrix44f_SetTranslation(r->f16 + 32, &sum);
 }
 
 int Gap__Bec__beNDMWMdlMapBase__vfunc_20(void)

@@ -15,7 +15,7 @@ void Gap__Sg__igSkeleton__vfunc_23(SkeletonView *o, SkeletonSlots *clock, int un
             int parent = info->_parentIdx;
             if (parent == 0) {
                 g = &global[i];
-                Matrix44_Copy(g, &local[i]);
+                igMatrix44f_Copy(g, &local[i]);
             } else {
                 g = &global[i];
                 FUN_00190470(g, &local[i], &global[parent]);
@@ -33,7 +33,7 @@ void Gap__Sg__igSkeleton__vfunc_23(SkeletonView *o, SkeletonSlots *clock, int un
         SkeletonMatrix *g;
         info = o->_boneInfoList->_data[i];
         off = i << 6;
-        Matrix44_Copy(&m, (SkeletonMatrix *)((char *)local + off));
+        igMatrix44f_Copy(&m, (SkeletonMatrix *)((char *)local + off));
         for (j = 0; j < n; j++) {
             SkeletonOverrideView *ov = overrides->_data[j];
             if (i == ov->_bone) {
@@ -41,11 +41,11 @@ void Gap__Sg__igSkeleton__vfunc_23(SkeletonView *o, SkeletonSlots *clock, int un
                 SkeletonSourceView *source = ov->_source;
                 source->update(clock->getTime());
                 src = &ov->_source->_matrix;
-                if (ov->_mode == 2) { Matrix44_Copy(&m, src); }
+                if (ov->_mode == 2) { igMatrix44f_Copy(&m, src); }
                 if (ov->_mode == 3) {
-                    Matrix44_GetTranslation(&m, translation);
-                    Matrix44_Copy(&m, src);
-                    Matrix44_SetTranslation(&m, translation);
+                    igMatrix44f_GetTranslation(&m, translation);
+                    igMatrix44f_Copy(&m, src);
+                    igMatrix44f_SetTranslation(&m, translation);
                 } else if (ov->_mode == 0) {
                     FUN_001906d0(&m, src);
                 } else if (ov->_mode == 1) {
@@ -58,7 +58,7 @@ void Gap__Sg__igSkeleton__vfunc_23(SkeletonView *o, SkeletonSlots *clock, int un
             FUN_001904f0(g, &m, &global[info->_parentIdx]);
         } else {
             g = (SkeletonMatrix *)((char *)global + off);
-            Matrix44_Copy(g, &m);
+            igMatrix44f_Copy(g, &m);
         }
         if (info->_bmIdx != -1) {
             FUN_001904f0(&out[info->_bmIdx], inv, g);

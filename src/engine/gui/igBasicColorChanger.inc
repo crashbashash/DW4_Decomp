@@ -4,7 +4,7 @@ igMetaObject *FUN_00451fb0(void) {
 
 igMetaObject *FUN_00451fc0(void) {
     if (g_igBasicColorChanger_metaObject[0] == 0) {
-        g_igBasicColorChanger_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
+        g_igBasicColorChanger_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
     return g_igBasicColorChanger_metaObject[0];
 }

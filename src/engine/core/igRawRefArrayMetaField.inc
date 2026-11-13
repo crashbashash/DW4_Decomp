@@ -75,7 +75,7 @@ void FUN_002bc000(void) {
     Q *p;
 
     if (g_igRawRefArrayMetaField_descriptor[0] == 0) {
-        g_igRawRefArrayMetaField_descriptor[0] = ((Q *)igMetaObject_CreateInstance((CreateMeta *)g_igRawRefArrayMetaField_metaObject[0], (MemoryPool *)(((int)Memory_GetAllocatorBySelector(g_memoryContextMetaData)))));
+        g_igRawRefArrayMetaField_descriptor[0] = ((Q *)igMetaObject_CreateInstance((CreateMeta *)g_igRawRefArrayMetaField_metaObject[0], (MemoryPool *)(((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData)))));
         temp_s0 = g_igRawRefArrayMetaField_descriptor[0];
         if (temp_s0 != 0) {
             MetaRefList_AppendRetained((PointerList *)(((R_2bc000 *)FUN_002fc250())), (RefHeader *)temp_s0);

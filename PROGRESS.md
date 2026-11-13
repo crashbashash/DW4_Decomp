@@ -88,7 +88,7 @@ The debt ratchet ([`docs/engine/debt-ratchet.md`](docs/engine/debt-ratchet.md)):
 | `struct.c` | 66 | 63 | -3 | struct-report groups: offset-named member whose number is not its offset |
 | `m2c_idiom.units` | 193 | 188 | -5 | source files (asm bodies excluded) still carrying m2c idioms: `temp_*`, `var_*` or `argN` |
 | `raw_casts.reflected` | 379 | 378 | -1 | raw offset casts on a named receiver where reflection names the field (tools/typed_coverage.py `typeable`) |
-| `fun_dat_refs` | 9,743 | 8,452 | -1291 | FUN_/DAT_-named references in matched units' code (comments and strings excluded, definitions subtracted) |
+| `fun_dat_refs` | 9,743 | 8,444 | -1299 | FUN_/DAT_-named references in matched units' code (comments and strings excluded, definitions subtracted) |
 | `foreign_profile.functions` | 0 | 0 | 0 | code bytes match only under a provisional per-function override that differs from the unit's profile in config/SLUS-20836/units.tsv (data/check-categories.tsv) |
 | `foreign_profile.bytes` | 0 | 0 | 0 | bytes of those |
 | `unapproved.functions` | 22 | 22 | 0 | code bytes match, but the source uses inline `asm` or `volatile` with no owner approval (config/source-approvals.tsv) |

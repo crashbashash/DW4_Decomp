@@ -80,8 +80,8 @@ extern "C" int GAMERAM_16[4];
 extern "C" int GETPLAYER1_2[4];
 extern "C" int LEVEL_9[4];
 extern "C" int g_propertyNameField[4];
-extern "C" int g_ndmwAllocatorSelector[4];
-extern "C" int g_defaultAllocatorSelector[4];
+extern "C" int kIGMemoryPoolHandleUser0[4];
+extern "C" int kIGMemoryPoolHandleUser1[4];
 extern "C" unsigned char g_useOwnerAllocator;
 struct ObjectRef { igObject *p; ObjectRef(igObject *o) : p(o) {} ~ObjectRef() HOLDER_BODY };
 struct ItemRef { igObject *p; ItemRef(igObject *o) : p(o) {} ~ItemRef() HOLDER_BODY };
@@ -153,8 +153,8 @@ extern "C" void beNDMWItemBase_GetRevisionColor(float *color, int item);
 extern "C" int beBaseInfoRam_IsTimerExpired(beBaseInfoRam *, void *);
 extern "C" void beBaseInfoRam_RemoveTimer(beBaseInfoRam *, void *);
 extern "C" void beBaseInfoRam_StartTimer(beBaseInfoRam *, void *, int);
-extern "C" void Matrix44_GetTranslation(void *matrix, float *out);
-extern "C" void Matrix44_Copy(float *matrix, void *source);
+extern "C" void igMatrix44f_GetTranslation(void *matrix, float *out);
+extern "C" void igMatrix44f_Copy(float *matrix, void *source);
 extern "C" void igMatrix44f_SetIdentity(float *matrix);
 extern "C" void Vec3f_TransformProjective(float *out, float *v, float *m);
 extern "C" int beMessenger_GetMatrixCount(int);
@@ -253,11 +253,11 @@ void Gap__Bec__beNDMWMdlItem__vfunc_36(beNDMWMdlItem *self, beBaseInfoRam *info)
     int roll;
 
     if (info->_dataList == 0) {
-        ALLOC_OF(info, alloc, g_defaultAllocatorSelector)
+        ALLOC_OF(info, alloc, kIGMemoryPoolHandleUser1)
         Store::assign(info->_dataList, ObjectRef(beBaseInfoDataList_Create(alloc)).p);
     }
     prop = igProperty_FindByName((void *)info->_dataList, g_propertyNameField[0], &ONE_14[0]);
-    ALLOC(alloc, g_defaultAllocatorSelector)
+    ALLOC(alloc, kIGMemoryPoolHandleUser1)
     {
     igSmartPointer<beNDMWMdlItemInfoWork> work((beNDMWMdlItemInfoWork *)FUN_003c13f0(alloc));
     held = (igObject *)work.p;
@@ -288,28 +288,28 @@ void Gap__Bec__beNDMWMdlItem__vfunc_36(beNDMWMdlItem *self, beBaseInfoRam *info)
     }
     switch ((unsigned int)work.p->_dbId) {
     case 0: {
-        ALLOC(alloc, g_ndmwAllocatorSelector)
+        ALLOC(alloc, kIGMemoryPoolHandleUser0)
         ItemRef h(beNDMWItemDisk_Create(alloc));
         { beNDMWMdlItemInfoWork *w = work.p; beNDMWItemDisk_Set(h.p, w->_recNo); }
         storeItem(work, h);
         break;
     }
     case 1: {
-        ALLOC(alloc, g_ndmwAllocatorSelector)
+        ALLOC(alloc, kIGMemoryPoolHandleUser0)
         ItemRefB h(FUN_003c83c0(alloc));
         { beNDMWMdlItemInfoWork *w = work.p; beNDMWItemInstant_Set(h.p, w->_recNo); }
         storeItem(work, h);
         break;
     }
     case 2: {
-        ALLOC(alloc, g_ndmwAllocatorSelector)
+        ALLOC(alloc, kIGMemoryPoolHandleUser0)
         ItemRefC h(FUN_003c8240(alloc));
         { beNDMWMdlItemInfoWork *w = work.p; beNDMWItemImportant_Set(h.p, w->_recNo); }
         storeItem(work, h);
         break;
     }
     case 6: {
-        ALLOC(alloc, g_ndmwAllocatorSelector)
+        ALLOC(alloc, kIGMemoryPoolHandleUser0)
         ItemRefK<4> h(beNDMWItemAbilityChip_Create(alloc));
         { beNDMWMdlItemInfoWork *w = work.p; beNDMWItemAbilityChip_Set(h.p, w->_recNo); }
         storeItem(work, h);
@@ -323,21 +323,21 @@ void Gap__Bec__beNDMWMdlItem__vfunc_36(beNDMWMdlItem *self, beBaseInfoRam *info)
         roll = igProperty_GetRecord(beMessenger_GetObject(self->_messenger, 0), &LEVEL_9[0])->f12;
         switch ((unsigned int)work.p->_dbId) {
         case 3: {
-            ALLOC(alloc, g_ndmwAllocatorSelector)
+            ALLOC(alloc, kIGMemoryPoolHandleUser0)
             ItemRefK<1> h(beNDMWItemWeapon_Create(alloc));
             { beNDMWMdlItemInfoWork *w = work.p; beNDMWItemWeapon_SetRandom(h.p, w->_recNo, self, roll); }
             storeItem(work, h);
             break;
         }
         case 4: {
-            ALLOC(alloc, g_ndmwAllocatorSelector)
+            ALLOC(alloc, kIGMemoryPoolHandleUser0)
             ItemRefK<2> h(beNDMWItemBlueArmor_Create(alloc));
             { beNDMWMdlItemInfoWork *w = work.p; beNDMWItemBlueArmor_SetRandom(h.p, w->_recNo, self, roll); }
             storeItem(work, h);
             break;
         }
         case 5: {
-            ALLOC(alloc, g_ndmwAllocatorSelector)
+            ALLOC(alloc, kIGMemoryPoolHandleUser0)
             ItemRefK<3> h(beNDMWItemYellowArmor_Create(alloc));
             { beNDMWMdlItemInfoWork *w = work.p; beNDMWItemYellowArmor_SetRandom(h.p, w->_recNo, self, roll); }
             storeItem(work, h);
@@ -392,7 +392,7 @@ void beNDMWMdlItem_Update(beNDMWMdlItem *self, beBaseInfoRam *ram) {
         if (g_useOwnerAllocator != 0) {
             a = alloc;
         } else {
-            a = ((int)Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]));
+            a = ((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]));
         }
         ObjectRef created(beBaseInfoDataList_Create(a));
         igObject *s0 = created.p;
@@ -528,11 +528,11 @@ void beNDMWMdlItem_Update(beNDMWMdlItem *self, beBaseInfoRam *ram) {
             beMessenger_DispatchSelected(self->_messenger, COLOR_6);
             beBaseInfoRam_StartTimer(ram, COLOR_6, 500000000);
         }
-        Matrix44_GetTranslation((char *)ramData->_node + 32, itemPos);
+        igMatrix44f_GetTranslation((char *)ramData->_node + 32, itemPos);
         beMessenger_SendNamed(self->_messenger, PLAYER_9, 0, work->_dispPlayerRamNo, GETMATRIX_10);
         if (beMessenger_GetMatrixCount(self->_messenger) != 0) {
             beMessenger_GetMatrix(playerMatrix, self->_messenger, 0);
-            Matrix44_GetTranslation(playerMatrix, playerPos);
+            igMatrix44f_GetTranslation(playerMatrix, playerPos);
             distSq = DistanceSq(itemPos, playerPos);
         } else {
             distSq = 100.0f;
@@ -543,10 +543,10 @@ void beNDMWMdlItem_Update(beNDMWMdlItem *self, beBaseInfoRam *ram) {
             igMatrix44f_SetIdentity(view);
             igMatrix44f_SetIdentity(projection);
             params = (igViewerParameters *)((igViewerSceneInfoManager *)self->_viewerSIManager)->_parameters;
-            Matrix44_Copy(view, params->_viewMatrix);
+            igMatrix44f_Copy(view, params->_viewMatrix);
             params = (igViewerParameters *)((igViewerSceneInfoManager *)self->_viewerSIManager)->_parameters;
-            Matrix44_Copy(projection, params->_projectionMatrix);
-            Matrix44_GetTranslation((char *)ramData->_node + 32, pos);
+            igMatrix44f_Copy(projection, params->_projectionMatrix);
+            igMatrix44f_GetTranslation((char *)ramData->_node + 32, pos);
             pos[1] += 10.0f;
             Vec3f_TransformProjective(eye, pos, view);
             Vec3f_TransformProjective(pos, eye, projection);
@@ -589,7 +589,7 @@ void Gap__Bec__beNDMWMdlItem__vfunc_43(beNDMWMdlItem *arg0, beBaseInfoRam *arg1)
         if (g_useOwnerAllocator != 0) {
             a = alloc;
         } else {
-            a = ((int)Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]));
+            a = ((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]));
         }
         ObjectRef created(beBaseInfoDataList_Create(a));
         igObject *s0 = created.p;
@@ -635,7 +635,7 @@ static inline void adoptDataList(beBaseInfoRam *ram, igObject *created) {
 void Gap__Bec__beNDMWMdlItem__vfunc_44(beNDMWMdlItem *self, beBaseInfoRam *ram) {
     if (ram->_dataList == 0) {
         void *a = igObject_GetAllocator(ram);
-        void *al = g_useOwnerAllocator != 0 ? a : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
+        void *al = g_useOwnerAllocator != 0 ? a : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
         igObject *created = (igObject *)((void *)beBaseInfoDataList_Create(al));
         adoptDataList(ram, created);
     }
@@ -657,7 +657,7 @@ void Gap__Bec__beNDMWMdlItem__vfunc_45(MdlItemVirtual *arg0, beNDMWGameRamInfoRa
         if (g_useOwnerAllocator != 0) {
             a = alloc;
         } else {
-            a = ((int)Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]));
+            a = ((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]));
         }
         ObjectRef ref(beBaseInfoDataList_Create(a));
         s0 = ref.p;

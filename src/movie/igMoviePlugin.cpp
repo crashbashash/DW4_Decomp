@@ -6,7 +6,7 @@ extern "C" struct R *igMovieManager_CreateInstance(int);
 extern "C" int Memory_GetAllocatorBySelector(int);
 extern "C" int igObject_Destroy(struct R *);
 extern "C" int igObject_GetAllocator(struct S *);
-extern "C" int g_ndmwAllocatorSelector[4];
+extern "C" int kIGMemoryPoolHandleUser0[4];
 extern "C" unsigned char g_useOwnerAllocator;
 extern "C" void Gap__igMoviePlugin__vfunc_21(struct S *arg0, int arg1);
 extern "C" int igInsightCore_RemoveManager(int, int);
@@ -18,7 +18,7 @@ void Gap__igMoviePlugin__vfunc_21(struct S *arg0, int arg1) {
     int var_v0;
     struct R *temp_a0;
     var_v0 = igObject_GetAllocator(arg0);
-    var_v0 = g_useOwnerAllocator != 0 ? var_v0 : Memory_GetAllocatorBySelector(g_ndmwAllocatorSelector[0]);
+    var_v0 = g_useOwnerAllocator != 0 ? var_v0 : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser0[0]);
     temp_a0 = arg0->f8;
     if (temp_a0 != 0) {
         temp_a0->f4 = temp_a0->f4 - 1;

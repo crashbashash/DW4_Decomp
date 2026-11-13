@@ -22,6 +22,6 @@ void Gap__Attrs__igTexGenMatrixAttr__vfunc_26(igTexGenMatrixAttr *self, void *co
 
     igMatrix44f_SetIdentity(m);
     FUN_00173fd0(context, 14, m);
-    Matrix44_Copy(self->m, m);
+    igMatrix44f_Copy(self->m, m);
 }
 

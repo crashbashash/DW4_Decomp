@@ -5,7 +5,7 @@ void beCri_CreateInstance(int arg0) {
 
 igMetaObject *FUN_003678a0(void) {
     if (g_beCri_metaObject[0] == 0) {
-        g_beCri_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
+        g_beCri_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
     return g_beCri_metaObject[0];
 }

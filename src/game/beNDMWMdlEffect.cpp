@@ -16,7 +16,7 @@ struct PropertyRecordRef { char p[20]; igObject *f20; };
 extern "C" PropertyRecordRef *igProperty_FindByName(...);
 extern "C" int ONE_10[4];
 extern "C" int g_propertyNameField[4];
-extern "C" int g_defaultAllocatorSelector[4];
+extern "C" int kIGMemoryPoolHandleUser1[4];
 extern "C" unsigned char g_useOwnerAllocator;
 /* matching construct: inline static helper reproduces the retail release sequence */
 struct ReleaseRef { static inline void go(igObject *object) {
@@ -74,7 +74,7 @@ void Gap__Bec__beNDMWMdlEffect__vfunc_36(EffectReceiverShim *arg0, beBaseInfoRam
         if (g_useOwnerAllocator != 0) {
             a = alloc;
         } else {
-            a = Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
+            a = Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
         }
         DataList::create(arg1, a);
     }
@@ -83,7 +83,7 @@ void Gap__Bec__beNDMWMdlEffect__vfunc_36(EffectReceiverShim *arg0, beBaseInfoRam
     if (g_useOwnerAllocator != 0) {
         a = alloc;
     } else {
-        a = Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
+        a = Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
     }
     /* matching construct: the effect holder is a named local and the list holder above an unnamed
      * temporary; named locals take their frame slots before temporaries (effect +0x5c, list +0x58) */

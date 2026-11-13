@@ -176,7 +176,7 @@ int FUN_00154f30(Arr *self, int arg1) {
     int i;
     int *p;
     a = igObject_GetAllocator();
-    if (g_useOwnerAllocator != 0) { b = a; } else { b = (int)Memory_GetAllocatorBySelector(g_temporaryAllocatorSelector[0]); } a = b;
+    if (g_useOwnerAllocator != 0) { b = a; } else { b = (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleTemporary[0]); } a = b;
     igSmartPointer<DW4VC_100_2> h((DW4VC_100_2 *)igFile_Create(a), kRetainReference);
     { DW4VC_100_2 *x = h.p; --x->_refCount; if ((x->_refCount & 0x7fffff) == 0) igObject_Destroy(x); }
     if (self->a20 != 0) FUN_00300f50(self, self->a20);

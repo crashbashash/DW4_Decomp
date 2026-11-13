@@ -5,7 +5,7 @@ void FUN_00132810(int arg0) {
 
 igMetaObject *FUN_00132850(void) {
     if (g_igTextureBindAttr_metaObject[0] == 0) {
-        g_igTextureBindAttr_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
+        g_igTextureBindAttr_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
     return g_igTextureBindAttr_metaObject[0];
 }

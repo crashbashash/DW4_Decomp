@@ -119,17 +119,17 @@ void Gap__Core__igPsx2Semaphore__vfunc_34(int *arg0, struct T_32f1f0 *arg1) {
     if (arg1->t == -1) { *arg0 = g_resultFailure.v; return; } p = (iPollSema(arg1->t) >= 0) ? &g_resultSuccess.v : &g_resultFailure.v; *arg0 = *p;
 }
 
-ThreadStackOwner::ThreadStackOwner() {}
+SystemAllocator::SystemAllocator() {}
 
 void FUN_0032f300(void) {
-    if (((int * *)DAT_00587218)[0] == 0) {
-        ((void * *)DAT_00587218)[0] = &g_threadStackOwner;
+    if (g_activeSystemAllocator[0] == 0) {
+        g_activeSystemAllocator[0] = &g_systemAllocator;
     }
 }
 
 void FUN_0032f330(void) {
-    if (((void ** *)DAT_00587218)[0] != 0) {
-        ((DW4VC_12_0 *)(((void ** *)DAT_00587218)[0]))->vX();
+    if (((void ** *)g_activeSystemAllocator)[0] != 0) {
+        ((DW4VC_12_0 *)(((void ** *)g_activeSystemAllocator)[0]))->vX();
     }
 }
 
@@ -137,7 +137,7 @@ int FUN_0032f370(void) {
     return 6;
 }
 
-void FUN_0032f380(ThreadStackOwner *self, ThreadMemoryMap *map) {
+void FUN_0032f380(SystemAllocator *self, ThreadMemoryMap *map) {
     unsigned top;
     unsigned marker;
     unsigned bottom;

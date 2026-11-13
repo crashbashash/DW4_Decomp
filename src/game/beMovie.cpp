@@ -40,8 +40,8 @@ extern "C" int StringPool_Allocate(int);
 extern "C" int StringPool_Construct(int);
 extern "C" int StringPool_Intern(int, int);
 extern "C" void StringChunk_ReleaseHeader(int owner, void *header);
-extern "C" int g_ndmwAllocatorSelector[4];
-extern "C" int g_defaultAllocatorSelector[4];
+extern "C" int kIGMemoryPoolHandleUser0[4];
+extern "C" int kIGMemoryPoolHandleUser1[4];
 extern "C" int g_propertyNameField[4];
 extern "C" int emptyString[4];
 extern "C" int g_stringPool[4];
@@ -111,7 +111,7 @@ static inline beCriSndf *sndfOf(beCriAudio *s) { return (beCriSndf *)s->_sndf; }
 int beCriAudio_Setup(beCriAudio *self, int channels) {
     if (channels < 0) {
         int allocator = igObject_GetAllocator(self);
-        allocator = g_useOwnerAllocator ? allocator : Memory_GetAllocatorBySelector(g_ndmwAllocatorSelector[0]);
+        allocator = g_useOwnerAllocator ? allocator : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser0[0]);
         igRelease((igObject *)self->_sndf);
         self->_sndf = (int)beCriSndf_Create(allocator);
         igRelease((igObject *)self->_adxt);
@@ -119,7 +119,7 @@ int beCriAudio_Setup(beCriAudio *self, int channels) {
         self->_audioType = kAudioSndf;
     } else {
         int allocator = igObject_GetAllocator(self);
-        allocator = g_useOwnerAllocator ? allocator : Memory_GetAllocatorBySelector(g_ndmwAllocatorSelector[0]);
+        allocator = g_useOwnerAllocator ? allocator : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser0[0]);
         igRelease((igObject *)self->_adxt);
         self->_adxt = (int)igAdxAudio_Create(allocator);
         igRelease((igObject *)self->_sndf);
@@ -462,7 +462,7 @@ struct TimerHolder {
 static inline void ensureTimerList(beBaseInfoRam *ram) {
     if (ram->_dataList == 0) {
         int allocator = igObject_GetAllocator(ram);
-        allocator = g_useOwnerAllocator ? allocator : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
+        allocator = g_useOwnerAllocator ? allocator : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
         igSmartPointer<igObject> created(beBaseInfoDataList_Create(allocator));
         igObject *list = created.p;
         if (list != 0) list->_refCount = list->_refCount + 1;
@@ -485,12 +485,12 @@ void beBaseInfoRam_StartTimer(beBaseInfoRam *self, int name, long long endTime) 
     timer = igProperty_FindByName(self->_dataList, g_propertyNameField[0], name);
     if (timer == 0) {
         int allocator = igObject_GetAllocator(self);
-        allocator = g_useOwnerAllocator ? allocator : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
+        allocator = g_useOwnerAllocator ? allocator : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
         TimerHolder created(beBaseInfoRamTimer_Create(allocator));
         igNamedObject_SetName(created.p, name);
         if (self->_dataList == 0) {
             int listAllocator = igObject_GetAllocator(self);
-            listAllocator = g_useOwnerAllocator ? listAllocator : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
+            listAllocator = g_useOwnerAllocator ? listAllocator : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
             igSmartPointer<igObject> list(beBaseInfoDataList_Create(listAllocator));
             igObject *retained = list.p;
             if (retained != 0) retained->_refCount = retained->_refCount + 1;

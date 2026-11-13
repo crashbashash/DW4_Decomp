@@ -25,7 +25,7 @@ void Gap__Attrs__igTextureMatrixAttr__vfunc_26(igTextureMatrixAttr *self, igObje
 }
 
 void Gap__Attrs__igTextureMatrixAttr__vfunc_32(int a0) {
-    Matrix44_Copy((char *)a0 + 12);
+    igMatrix44f_Copy((char *)a0 + 12);
 }
 
 void Gap__Attrs__igTextureMatrixAttr__vfunc_31(igTextureMatrixAttrView *self, igVisualContextView *context)

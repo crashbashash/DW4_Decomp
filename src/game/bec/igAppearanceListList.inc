@@ -1,6 +1,6 @@
 igMetaObject *FUN_0033fd70(void) {
     if (g_igAppearanceListList_metaObject[0] == 0) {
-        g_igAppearanceListList_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
+        g_igAppearanceListList_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
     return g_igAppearanceListList_metaObject[0];
 }
@@ -53,7 +53,7 @@ void igAppearanceListList_GetMetaObject(void)
 
 igMetaObject *FUN_0033ff00(void) {
     if (g_igModelViewMatrixBoneSelectList_metaObject_00587aa0[0] == 0) {
-        g_igModelViewMatrixBoneSelectList_metaObject_00587aa0[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
+        g_igModelViewMatrixBoneSelectList_metaObject_00587aa0[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
     return g_igModelViewMatrixBoneSelectList_metaObject_00587aa0[0];
 }

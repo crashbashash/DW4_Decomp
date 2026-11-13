@@ -17,8 +17,8 @@ extern "C" int beMessenger_SendNamed(...);
 extern "C" int beMessenger_SendRam(...);
 extern "C" int beMessenger_GetMatrixCount(...);
 extern "C" int beMessenger_GetMatrix(...);
-extern "C" int Matrix44_GetTranslation(...);
-extern "C" int Matrix44_SetTranslation(...);
+extern "C" int igMatrix44f_GetTranslation(...);
+extern "C" int igMatrix44f_SetTranslation(...);
 extern "C" int Gap__Bec__beNDMWMdlMapCursor__vfunc_20(void);
 extern "C" int KIND_MAPCURSOR[4];
 extern "C" igObject *beBaseInfoDataList_Create(int);
@@ -29,7 +29,7 @@ extern "C" PropertyEntry * igProperty_FindByName(...);
 extern "C" int ONE_17[4];
 extern "C" int g_propertyNameField[4];
 extern "C" int g_stringPool[4];
-extern "C" int g_defaultAllocatorSelector[4];
+extern "C" int kIGMemoryPoolHandleUser1[4];
 extern "C" unsigned char g_useOwnerAllocator;
 /* The value object FUN_00350020 creates: an igObject whose string token sits at +220 and whose
  * integer at +224. */
@@ -55,7 +55,7 @@ public:
 struct RamDataList { static inline void Ensure(beBaseInfoRam *ram) {
     if (ram->_dataList == 0) {
         int al = igObject_GetAllocator(ram);
-        al = g_useOwnerAllocator ? al : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
+        al = g_useOwnerAllocator ? al : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
         igSmartPointer<igObject> list(beBaseInfoDataList_Create(al));
         igObject *t = list.p;
         RefCount::addref(t);
@@ -101,7 +101,7 @@ void Gap__Bec__beNDMWMdlMapCursor__vfunc_36(beNDMWMdlMapCursor *arg0, beBaseInfo
     RamDataList::Ensure(arg1);
     pr = igProperty_FindByName(arg1->_dataList, g_propertyNameField[0], &ONE_17[0]);
     al = igObject_GetAllocator(arg0);
-    al = g_useOwnerAllocator ? al : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
+    al = g_useOwnerAllocator ? al : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
     {
     /* The new value object is owned by the stack reference while it replaces the record's value and
      * takes the messenger's reply; released at the block end, before the model refresh. */
@@ -152,7 +152,7 @@ void Gap__Bec__beNDMWMdlMapCursor__vfunc_46(beNDMWMdlMapCursor *arg0, beBaseInfo
     beMessenger_SendRam(arg0->_messenger, PLAYER_11, arg1->_ramNo, GETMATRIX_9);
     if (beMessenger_GetMatrixCount(arg0->_messenger) != 0) {
         beMessenger_GetMatrix(m1, arg0->_messenger, 0);
-        Matrix44_GetTranslation(m1, &sum);
+        igMatrix44f_GetTranslation(m1, &sum);
         s2 = true;
     }
     switch (arg1->_st0) {
@@ -187,7 +187,7 @@ void Gap__Bec__beNDMWMdlMapCursor__vfunc_46(beNDMWMdlMapCursor *arg0, beBaseInfo
         beMessenger_SendGroup(arg0->_messenger, MAPBASE_2, GETMATRIX_9);
         if (beMessenger_GetMatrixCount(arg0->_messenger) != 0) {
             beMessenger_GetMatrix(m2, arg0->_messenger, 0);
-            Matrix44_GetTranslation(m2, &t);
+            igMatrix44f_GetTranslation(m2, &t);
             sum.x += t.x;
             *py += t.y;
             *pz += t.z;
@@ -197,7 +197,7 @@ void Gap__Bec__beNDMWMdlMapCursor__vfunc_46(beNDMWMdlMapCursor *arg0, beBaseInfo
                 if (g_useOwnerAllocator != 0) {
                     a = alloc;
                 } else {
-                    a = Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
+                    a = Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
                 }
                 igSmartPointer<igObject> ref(beBaseInfoDataList_Create(a));
                 s0 = ref.p;
@@ -209,7 +209,7 @@ void Gap__Bec__beNDMWMdlMapCursor__vfunc_46(beNDMWMdlMapCursor *arg0, beBaseInfo
             }
             r = ((PropertyEntry_44b520 *)igProperty_FindByName(arg1->_dataList, g_propertyNameField[0], ONE_17));
             *py = 0.0f;
-            Matrix44_SetTranslation(r->f16 + 32, &sum);
+            igMatrix44f_SetTranslation(r->f16 + 32, &sum);
         }
     }
 }

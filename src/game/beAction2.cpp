@@ -188,7 +188,7 @@ extern int g_beAction2JOINTSET_metaObject[4];
 extern int g_beAction2MOTIONSET_metaObject[4];
 extern int g_igEnbayaTransformSource_metaObject[4];
 extern int g_propertyNameField[4];
-extern int g_defaultAllocatorSelector[4];
+extern int kIGMemoryPoolHandleUser1[4];
 extern unsigned char g_useOwnerAllocator;
 extern float g_enbayaPlayOnceEndOffset[4];
 extern float g_randomWaitMinimum[4];
@@ -263,7 +263,7 @@ int beAction2FLASHSET_Start(beAction2 *manager, beAction2InfoRam *ram, beAction2
     int list = ((beModelCtrlNode2 *)ram->_node)->_overrideAttrList;
     if (work->_colorAttr == 0) {
         int ownerAllocator = igObject_GetAllocator(manager);
-        int allocator = g_useOwnerAllocator ? ownerAllocator : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
+        int allocator = g_useOwnerAllocator ? ownerAllocator : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
         AttrRef<0> created((igObject *)igColorAttr_CreateInstance(allocator));
         igObject *attr;
         igObject *old;
@@ -276,7 +276,7 @@ int beAction2FLASHSET_Start(beAction2 *manager, beAction2InfoRam *ram, beAction2
     }
     if (work->_textureStateAttr == 0) {
         int ownerAllocator = igObject_GetAllocator(manager);
-        int allocator = g_useOwnerAllocator ? ownerAllocator : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
+        int allocator = g_useOwnerAllocator ? ownerAllocator : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
         AttrRef<3> created((igObject *)igTextureStateAttr_CreateInstance(allocator));
         igObject *attr;
         igObject *old;
@@ -289,7 +289,7 @@ int beAction2FLASHSET_Start(beAction2 *manager, beAction2InfoRam *ram, beAction2
     }
     if (work->_lightingStateAttr == 0) {
         int ownerAllocator = igObject_GetAllocator(manager);
-        int allocator = g_useOwnerAllocator ? ownerAllocator : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
+        int allocator = g_useOwnerAllocator ? ownerAllocator : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
         AttrRef<2> created((igObject *)igLightingStateAttr_CreateInstance(allocator));
         igObject *attr;
         igObject *old;
@@ -482,7 +482,7 @@ int beAction2FADESET_Start(beAction2 *manager, beAction2InfoRam *ram, beAction2F
     } else {
         if (work->_colorAttr == 0) {
             int ownerAllocator = igObject_GetAllocator(manager);
-            int allocator = g_useOwnerAllocator ? ownerAllocator : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
+            int allocator = g_useOwnerAllocator ? ownerAllocator : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
             igObject *attr;
             igObject *old;
             AttrRef<0> created((igObject *)igColorAttr_CreateInstance(allocator));
@@ -495,7 +495,7 @@ int beAction2FADESET_Start(beAction2 *manager, beAction2InfoRam *ram, beAction2F
         }
         if (work->_blendStateAttr == 0) {
             int ownerAllocator = igObject_GetAllocator(manager);
-            int allocator = g_useOwnerAllocator ? ownerAllocator : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
+            int allocator = g_useOwnerAllocator ? ownerAllocator : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
             igObject *attr;
             igObject *old;
             AttrRef<1> created((igObject *)igBlendStateAttr_CreateInstance(allocator));
@@ -508,7 +508,7 @@ int beAction2FADESET_Start(beAction2 *manager, beAction2InfoRam *ram, beAction2F
         }
         if (work->_lightingStateAttr == 0) {
             int ownerAllocator = igObject_GetAllocator(manager);
-            int allocator = g_useOwnerAllocator ? ownerAllocator : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
+            int allocator = g_useOwnerAllocator ? ownerAllocator : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
             igObject *attr;
             igObject *old;
             AttrRef<2> created((igObject *)igLightingStateAttr_CreateInstance(allocator));
@@ -989,7 +989,7 @@ int beAction2_OnMessage(beAction2 *self, beAction2InfoRam *ram, void *name)
         if (workRef.p == 0) {
             void *allocator = ((void *)igObject_GetAllocator(self));
             beAction2InfoWork *created;
-            allocator = g_useOwnerAllocator ? allocator : ((void *)Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]));
+            allocator = g_useOwnerAllocator ? allocator : ((void *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]));
             { beAction2InfoWork *held = workRef.p; IG_OBJECT_RELEASE(held); }
             workRef.p = (beAction2InfoWork *)beAction2InfoWork_CreateInstance(allocator);
             created = workRef.p;

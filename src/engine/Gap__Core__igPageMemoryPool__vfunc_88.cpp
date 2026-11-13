@@ -39,7 +39,7 @@ extern int text_igPageMemoryPool_getBlockSize_Sh[4];
 extern unsigned char GPR_00554dc0;
 extern unsigned char GPR_00554dc4;
 extern unsigned char GPR_00554dd8;
-extern void *DAT_00587218[4];
+extern void *g_activeSystemAllocator[4];
 
 /* igPageMemoryPool slot 2: tail-call forwarder to the igObject slot-0 body, which is empty; the
  * pool adds no teardown of its own in this slot. */

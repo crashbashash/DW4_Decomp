@@ -5,7 +5,7 @@ void FUN_002cfe10(int arg0) {
 
 igMetaObject *FUN_002cfe50(void) {
     if (g_igPsx2IopRpcConnection_metaObject[0] == 0) {
-        g_igPsx2IopRpcConnection_metaObject[0] = (igMetaObject *)igMetaObject_Create(((int)Memory_GetAllocatorBySelector(g_memoryContextMetaData)));
+        g_igPsx2IopRpcConnection_metaObject[0] = (igMetaObject *)igMetaObject_Create(((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData)));
     }
     return g_igPsx2IopRpcConnection_metaObject[0];
 }

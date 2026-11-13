@@ -29,9 +29,9 @@ int igResource_UnloadDirectory(igResource *resource, int name);
 extern igResource *g_globalContext[4];
 extern int g_stringPool[4];
 extern int g_resourceLoaderStackSize[4];
-extern int g_ndmwAllocatorSelector[4];
-extern int g_defaultAllocatorSelector[4];
-extern int g_temporaryAllocatorSelector[4];
+extern int kIGMemoryPoolHandleUser0[4];
+extern int kIGMemoryPoolHandleUser1[4];
+extern int kIGMemoryPoolHandleTemporary[4];
 extern unsigned char g_useOwnerAllocator;
 extern int g_beSystem_metaObject[4];
 extern int ndmw_igb[4];
@@ -100,7 +100,7 @@ void beSystem_Start(beSystem *self)
     g_globalContext[0]->_useMemoryPoolAssignmentsState = 0;
 
     objectPool = igObject_GetAllocator(self);
-    objectPool = g_useOwnerAllocator != 0 ? objectPool : Memory_GetAllocatorBySelector(g_ndmwAllocatorSelector[0]);
+    objectPool = g_useOwnerAllocator != 0 ? objectPool : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser0[0]);
     objectResource = g_globalContext[0];
     if (objectPool != 0) {
         ((igObject *)objectPool)->_refCount = ((igObject *)objectPool)->_refCount + 1;
@@ -109,7 +109,7 @@ void beSystem_Start(beSystem *self)
     objectResource->_objectMemoryPool = (int)objectPool;
 
     pool = igObject_GetAllocator(self);
-    pool = g_useOwnerAllocator != 0 ? pool : Memory_GetAllocatorBySelector(g_ndmwAllocatorSelector[0]);
+    pool = g_useOwnerAllocator != 0 ? pool : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser0[0]);
     dataResource = g_globalContext[0];
     if (pool != 0) {
         ((igObject *)pool)->_refCount = ((igObject *)pool)->_refCount + 1;
@@ -118,7 +118,7 @@ void beSystem_Start(beSystem *self)
     dataResource->_dataMemoryPool = (int)pool;
 
     pool = igObject_GetAllocator(self); /* matching construct: manual — the temporary pool reuses the data pool's variable */
-    pool = g_useOwnerAllocator != 0 ? pool : Memory_GetAllocatorBySelector(g_temporaryAllocatorSelector[0]);
+    pool = g_useOwnerAllocator != 0 ? pool : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleTemporary[0]);
     temporaryResource = g_globalContext[0];
     if (pool != 0) {
         ((igObject *)pool)->_refCount = ((igObject *)pool)->_refCount + 1;
@@ -179,7 +179,7 @@ void beSystem_Update(beSystem *self)
         if (self->_nextStage != 0) {
             if (strcmp((const char *)self->_nextStage, (const char *)ndmw_igb) == 0) {
                 ndmwObjectPool = igObject_GetAllocator(self);
-                ndmwObjectPool = g_useOwnerAllocator != 0 ? ndmwObjectPool : Memory_GetAllocatorBySelector(g_ndmwAllocatorSelector[0]);
+                ndmwObjectPool = g_useOwnerAllocator != 0 ? ndmwObjectPool : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser0[0]);
                 ndmwObjectResource = g_globalContext[0];
                 if (ndmwObjectPool != 0) {
                     ((igObject *)ndmwObjectPool)->_refCount = ((igObject *)ndmwObjectPool)->_refCount + 1;
@@ -187,7 +187,7 @@ void beSystem_Update(beSystem *self)
                 igRelease((igObject *)ndmwObjectResource->_objectMemoryPool);
                 ndmwObjectResource->_objectMemoryPool = (int)ndmwObjectPool;
                 ndmwDataPool = igObject_GetAllocator(self);
-                ndmwDataPool = g_useOwnerAllocator != 0 ? ndmwDataPool : Memory_GetAllocatorBySelector(g_ndmwAllocatorSelector[0]);
+                ndmwDataPool = g_useOwnerAllocator != 0 ? ndmwDataPool : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser0[0]);
                 ndmwDataResource = g_globalContext[0];
                 if (ndmwDataPool != 0) {
                     ((igObject *)ndmwDataPool)->_refCount = ((igObject *)ndmwDataPool)->_refCount + 1;
@@ -196,7 +196,7 @@ void beSystem_Update(beSystem *self)
                 ndmwDataResource->_dataMemoryPool = (int)ndmwDataPool;
             } else {
                 defaultObjectPool = igObject_GetAllocator(self);
-                defaultObjectPool = g_useOwnerAllocator != 0 ? defaultObjectPool : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
+                defaultObjectPool = g_useOwnerAllocator != 0 ? defaultObjectPool : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
                 defaultObjectResource = g_globalContext[0];
                 if (defaultObjectPool != 0) {
                     ((igObject *)defaultObjectPool)->_refCount = ((igObject *)defaultObjectPool)->_refCount + 1;
@@ -204,7 +204,7 @@ void beSystem_Update(beSystem *self)
                 igRelease((igObject *)defaultObjectResource->_objectMemoryPool);
                 defaultObjectResource->_objectMemoryPool = (int)defaultObjectPool;
                 defaultDataPool = igObject_GetAllocator(self);
-                defaultDataPool = g_useOwnerAllocator != 0 ? defaultDataPool : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
+                defaultDataPool = g_useOwnerAllocator != 0 ? defaultDataPool : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
                 defaultDataResource = g_globalContext[0];
                 if (defaultDataPool != 0) {
                     ((igObject *)defaultDataPool)->_refCount = ((igObject *)defaultDataPool)->_refCount + 1;

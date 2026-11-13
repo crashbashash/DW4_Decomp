@@ -1,6 +1,6 @@
 igMetaObject *FUN_0035c6c0(void) {
     if (g_beLayerGroupList_metaObject[0] == 0) {
-        g_beLayerGroupList_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
+        g_beLayerGroupList_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
     return g_beLayerGroupList_metaObject[0];
 }

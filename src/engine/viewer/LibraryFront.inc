@@ -6,7 +6,7 @@ void ViewerLibrary_MarkRegistered(void) {
 
 igMetaObject *FUN_004586a0(void) {
     if (g_igViewerStatisticsManager_metaObject[0] == 0) {
-        g_igViewerStatisticsManager_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
+        g_igViewerStatisticsManager_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
     return g_igViewerStatisticsManager_metaObject[0];
 }

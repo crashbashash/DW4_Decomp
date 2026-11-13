@@ -1,6 +1,6 @@
 igMetaObject *FUN_002bc760(void) {
     if (g_igPluginRepositoryList_metaObject[0] == 0) {
-        g_igPluginRepositoryList_metaObject[0] = (igMetaObject *)igMetaObject_Create(((int)Memory_GetAllocatorBySelector(g_memoryContextMetaData)));
+        g_igPluginRepositoryList_metaObject[0] = (igMetaObject *)igMetaObject_Create(((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData)));
     }
     return g_igPluginRepositoryList_metaObject[0];
 }

@@ -5,7 +5,7 @@
 
 extern "C" int Memory_GetAllocatorBySelector(...);
 extern "C" igMetaObject *igMetaObject_Create(...);
-extern "C" int g_metadataAllocatorKey[4];
+extern "C" int kIGMemoryPoolHandleMetaData[4];
 extern "C" igMetaObject *g_igViewerStatisticsManager_metaObject[4];
 extern "C" igMetaObject *FUN_004586a0(void);
 extern "C" void *igViewerStatisticsManager_GetMetaObject(void);

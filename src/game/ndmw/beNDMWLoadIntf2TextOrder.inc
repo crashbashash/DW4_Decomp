@@ -5,7 +5,7 @@ void beNDMWLoadIntf2TextOrder_Create(int arg0) {
 
 igMetaObject *FUN_003c7700(void) {
     if (g_beNDMWLoadIntf2TextOrder_metaObject[0] == 0) {
-        g_beNDMWLoadIntf2TextOrder_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
+        g_beNDMWLoadIntf2TextOrder_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
     return g_beNDMWLoadIntf2TextOrder_metaObject[0];
 }

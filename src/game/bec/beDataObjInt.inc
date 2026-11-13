@@ -5,7 +5,7 @@ void beDataObjInt_Create(int arg0) {
 
 igMetaObject *FUN_00365550(void) {
     if (g_beDataObjInt_metaObject[0] == 0) {
-        g_beDataObjInt_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
+        g_beDataObjInt_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
     return g_beDataObjInt_metaObject[0];
 }

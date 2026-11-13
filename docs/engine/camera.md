@@ -73,7 +73,7 @@ for the first box (`_geometryList` entries 1..n, the bound's corners from `igAAB
 starts a `beCameraMode` on the viewer (`beCameraMode_Create`, `beCameraMode_SetCameraPath`,
 `igViewManager_SetViewMode`) and the eye and interest transforms (entry 0 of `_eyePosList`/`_intPosList`) blend from
 the saved matrices to the new box's entry over 120 frames under the CAMHOKAN timer: translations by `Vec3_Lerp`,
-rotations through `Matrix44_GetQuaternion`, `Quaternion_Lerp` and `Matrix44_SetQuaternion`. The demo camera starts its
+rotations through `igMatrix44f_GetQuaternion`, `Quaternion_Lerp` and `igMatrix44f_SetQuaternion`. The demo camera starts its
 `_cameraPath` once and plays it for `_endTime`.
 
 A shake is a `beCameraCtrlInfoRamShake` (`SHK`) in the ram's data list. Each frame offsets the eye and interest

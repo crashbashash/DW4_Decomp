@@ -95,7 +95,7 @@ void FUN_0014e540(void) {
     Q *p;
 
     if (DAT_0055fe40[0] == 0) {
-        DAT_0055fe40[0] = (Q *)igMetaObject_CreateInstance(g_igTrackedElementMetaField_metaObject[0], Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
+        DAT_0055fe40[0] = (Q *)igMetaObject_CreateInstance(g_igTrackedElementMetaField_metaObject[0], Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
         temp_s0 = DAT_0055fe40[0];
         if (temp_s0 != 0) {
             MetaRefList_AppendRetained(FUN_002fc250(), temp_s0);
@@ -138,7 +138,7 @@ void FUN_0014e630(int arg0) {
     void *var_v0_3;
     void *var_v0_5;
 
-    temp_s0 = (void *)(FUN_002c5fb0(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0])));
+    temp_s0 = (void *)(FUN_002c5fb0(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0])));
     if (&text_which[0] == 0) {
         var_v0 = (void *)(0);
     } else {
@@ -169,7 +169,7 @@ void FUN_0014e630(int arg0) {
     if (((unsigned long long) ((long long) *(int *)((char *)(temp_s0) + 4) << 0x29) >> 0x29) == 0) {
         igObject_Destroy(temp_s0);
     }
-    temp_s0_2 = (void *)(igIntMetaField_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0])));
+    temp_s0_2 = (void *)(igIntMetaField_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0])));
     if (&text_place[0] == 0) {
         var_v0_3 = (void *)(0);
     } else {
@@ -199,7 +199,7 @@ void FUN_0014e630(int arg0) {
     if (((unsigned long long) ((long long) *(int *)((char *)(temp_s0_2) + 4) << 0x29) >> 0x29) == 0) {
         igObject_Destroy(temp_s0_2);
     }
-    temp_s0_3 = (void *)(igIntMetaField_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0])));
+    temp_s0_3 = (void *)(igIntMetaField_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0])));
     if (&text_arg0[0] == 0) {
         var_v0_5 = (void *)(0);
     } else {

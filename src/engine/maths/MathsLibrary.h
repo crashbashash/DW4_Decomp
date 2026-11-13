@@ -58,7 +58,7 @@ igMetaObject *igMetaObject_Create(int);
 int Memory_GetAllocatorBySelector(...);
 
 extern igMetaObject *g_igVolume_metaObject[4];
-extern int g_metadataAllocatorKey[4];
+extern int kIGMemoryPoolHandleMetaData[4];
 
 void FUN_00186b20(void);
 igMetaObject *igVolume_GetMetaObject(void);
@@ -885,7 +885,7 @@ unsigned FUN_002fe2c0(int);
 int FUN_002fe2e0(int, unsigned);
 int FUN_00301ee0(InstanceNode *, unsigned);
 int __dl__FPv(void *);
-extern int DAT_00587038[4];
+extern int kIGMemoryPoolHandleSystem[4];
 extern OpTable *DAT_00561118;
 extern OpTable *DAT_00561120;
 extern OpTable *DAT_00561128;
@@ -978,7 +978,7 @@ int FUN_0018f470(void);
 void FUN_0018f480(void);
 int FUN_0018f490(void);
 
-int Matrix44_Copy(float *, float *);
+int igMatrix44f_Copy(float *, float *);
 
 class ScaleVec { public: float _v[3]; float operator[](int i) const { return _v[i]; } };
 
@@ -1032,16 +1032,16 @@ float sinf(float);
 
 int FUN_001906d0(...);
 int FUN_001904f0(...);
-void Matrix44_SetQuaternion(float *m, float *q);
+void igMatrix44f_SetQuaternion(float *m, float *q);
 
 float atanf(float);
 float tanf(float);
 
-extern int g_statusSucceeded[4];
+extern int g_resultSuccess[4];
 
 typedef union U6 { float f; struct { unsigned char p0, p1, p2; unsigned char lo : 7; unsigned char sign : 1; } b; } U6;
-extern int g_allocatorFailureStatus[4];
-void Matrix44_Adjugate(float *self, const float *m, float *adjugate);
+extern int g_resultFailure[4];
+void igMatrix44f_Adjugate(float *self, const float *m, float *adjugate);
 
 float FUN_00192290(float *m);
 

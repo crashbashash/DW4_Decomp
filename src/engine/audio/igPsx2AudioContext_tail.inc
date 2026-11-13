@@ -77,8 +77,8 @@ void Gap__igPsx2AudioContext__vfunc_24(int *arg0, struct InitContext *arg1) {
     struct InitRef *o;
     int s0; int *buf; int n; struct VoiceList *l;
     if (sceSifSearchModuleByName(text_Intrinsic_Sound_Module) < 0) {
-        if (igPsx2_LoadIopModule(text_igAudio_irx, 2, 0, 0) != *(RpcStatus *)g_statusSucceeded) {
-            *arg0 = g_allocatorFailureStatus[0];
+        if (igPsx2_LoadIopModule(text_igAudio_irx, 2, 0, 0) != *(RpcStatus *)g_resultSuccess) {
+            *arg0 = g_resultFailure[0];
             return;
         }
     }
@@ -114,7 +114,7 @@ void Gap__igPsx2AudioContext__vfunc_24(int *arg0, struct InitContext *arg1) {
     DIntr();
     sceSifAddCmdHandler(3, FUN_00143800, 0);
     EIntr();
-    *arg0 = g_statusSucceeded[0];
+    *arg0 = g_resultSuccess[0];
 }
 }
 
@@ -167,7 +167,7 @@ void Gap__igPsx2AudioContext__vfunc_29(int *arg0, void *arg1, int arg2) {
     }
     FUN_0032d9b0(&sp3C, *(int *)((char *)(arg1) + 12), arg2 | 0x90000, 0);
     ((VoiceUsedFlag *)temp_s0)->b0 = 0;
-    *arg0 = g_statusSucceeded[0];
+    *arg0 = g_resultSuccess[0];
 }
 
 /* matching construct: a small sweep of spellings */
@@ -223,12 +223,12 @@ void FUN_00144030(int *arg0, UploadContext *arg1, int arg2, int arg3, int arg4, 
 
     s3 = arg6;
     if (arg3 & 0xF) {
-        *arg0 = g_allocatorFailureStatus[0];
+        *arg0 = g_resultFailure[0];
         return;
     }
     e = (UploadEntry *)((char *)((UploadTable *)g_audioTableOwner.p)->tab + arg2 * 36);
     if (e->c0) {
-        *arg0 = g_allocatorFailureStatus[0];
+        *arg0 = g_resultFailure[0];
         return;
     }
     p = FUN_00300db0(arg1, 16, 16);
@@ -271,10 +271,10 @@ void FUN_00144030(int *arg0, UploadContext *arg1, int arg2, int arg3, int arg4, 
             e->b3 = 1;
         }
         FUN_00300f50(arg1, q);
-        *arg0 = g_statusSucceeded[0];
+        *arg0 = g_resultSuccess[0];
     } else {
         FUN_00300f50(arg1, q);
-        *arg0 = g_allocatorFailureStatus[0];
+        *arg0 = g_resultFailure[0];
     }
 }
 
@@ -285,9 +285,9 @@ void Gap__igPsx2AudioContext__vfunc_48(int *arg0, void *arg1, int arg2, int arg3
 
     FUN_0032d850(&sp28, *(int *)((char *)(arg1) + 12), arg2 | 0x80000, arg3, &sp2C, 1);
     if (sp2C == 2) {
-        *arg0 = g_statusSucceeded[0];
+        *arg0 = g_resultSuccess[0];
     } else {
-        *arg0 = g_allocatorFailureStatus[0];
+        *arg0 = g_resultFailure[0];
     }
 }
 
@@ -335,7 +335,7 @@ void Gap__igPsx2AudioContext__vfunc_34(int *arg0, void *arg1, int arg2, float fp
     } else {
         ((B11 *)temp_a2)->f = 1;
     }
-    *arg0 = g_statusSucceeded[0];
+    *arg0 = g_resultSuccess[0];
 }
 }
 
@@ -362,7 +362,7 @@ PanResult Gap__igPsx2AudioContext__vfunc_35(char *arg1, int arg2, float fparg0) 
     } else {
         e->b0 = 1;
     }
-    return PanResult(g_statusSucceeded[0]);
+    return PanResult(g_resultSuccess[0]);
 }
 }
 
@@ -375,7 +375,7 @@ void Gap__igPsx2AudioContext__vfunc_36(int *arg0, ContextView *arg1, int arg2, f
 
     e = &((VoiceTable40 *)g_audioTableOwner.p)->arr[arg2];
     if (e->a3) {
-        *arg0 = g_allocatorFailureStatus[0];
+        *arg0 = g_resultFailure[0];
         return;
     }
     whole = (int)floor(arg3);
@@ -387,7 +387,7 @@ void Gap__igPsx2AudioContext__vfunc_36(int *arg0, ContextView *arg1, int arg2, f
     } else {
         e->c1 = 1;
     }
-    *arg0 = g_statusSucceeded[0];
+    *arg0 = g_resultSuccess[0];
 }
 
 void Gap__igPsx2AudioContext__vfunc_42(int arg0, int arg1, unsigned char arg2) {

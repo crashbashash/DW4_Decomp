@@ -1,6 +1,6 @@
 igMetaObject *FUN_001a72d0(void) {
     if (g_igAnimationModifierList_metaObject[0] == 0) {
-        g_igAnimationModifierList_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
+        g_igAnimationModifierList_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
     return g_igAnimationModifierList_metaObject[0];
 }

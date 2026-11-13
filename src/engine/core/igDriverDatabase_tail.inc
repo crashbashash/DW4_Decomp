@@ -470,8 +470,8 @@ int FUN_002dc120(int p, unsigned char a, int m, unsigned char b) { switch (m) { 
 
 void *FUN_002dc180(void *arg0) {
     *(int *)((char *)(arg0) + 8) = (int)(&DAT_00530608[0]);
-    *(int *)((char *)(arg0) + 0) = ((int)igStringObj_Create(((int)Memory_GetAllocatorBySelector(g_memoryContextString))));
-    *(int *)((char *)(arg0) + 4) = ((int)igStringObj_Create(((int)Memory_GetAllocatorBySelector(g_memoryContextString))));
+    *(int *)((char *)(arg0) + 0) = ((int)igStringObj_Create(((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleString))));
+    *(int *)((char *)(arg0) + 4) = ((int)igStringObj_Create(((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleString))));
     return arg0;
 }
 
@@ -502,12 +502,12 @@ void *FUN_002dc2a0(void *arg0) {
     *(int *)((char *)(arg0) + 0) = 1;
     *(int *)((char *)(arg0) + 4) = (int)(&DAT_005305f8[0]);
     if (g_useOwnerAllocator != 0) {
-        var_v0 = ((int)Memory_GetAllocatorBySelector(g_memoryContextCurrent));
+        var_v0 = ((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleCurrent));
     } else {
-        var_v0 = ((int)Memory_GetAllocatorBySelector(g_memoryContextList));
+        var_v0 = ((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleList));
     }
     *(int *)((char *)(arg0) + 8) = ((int)FUN_002c8450(var_v0));
-    *(int *)((char *)(arg0) + 12) = ((int)igStringObj_Create(((int)Memory_GetAllocatorBySelector(g_memoryContextString))));
+    *(int *)((char *)(arg0) + 12) = ((int)igStringObj_Create(((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleString))));
     return arg0;
 }
 
@@ -559,11 +559,11 @@ void *FUN_002dc490(void *arg0, int arg1) {
     *(int *)((char *)(arg0) + 8) = arg1;
     *(int *)((char *)(arg0) + 20) = 0;
     *(int *)((char *)(arg0) + 24) = 0;
-    *(int *)((char *)(arg0) + 12) = ((int)igStringObj_Create(((int)Memory_GetAllocatorBySelector(g_memoryContextString))));
+    *(int *)((char *)(arg0) + 12) = ((int)igStringObj_Create(((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleString))));
     if (g_useOwnerAllocator != 0) {
-        var_v0 = ((int)Memory_GetAllocatorBySelector(g_memoryContextCurrent));
+        var_v0 = ((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleCurrent));
     } else {
-        var_v0 = ((int)Memory_GetAllocatorBySelector(g_memoryContextList));
+        var_v0 = ((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleList));
     }
     *(int *)((char *)(arg0) + 16) = ((int)FUN_002c8450(var_v0));
     return arg0;

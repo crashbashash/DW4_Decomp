@@ -36,7 +36,7 @@ enum PadBits {
 };
 
 #define RELEASE(type, object) { type *released = (type *)(object); if (released != 0) { released->_refCount = (int)released->_refCount - 1; if ((released->_refCount & 0x7FFFFF) == 0) igObject_Destroy(released); } }
-#define PICK_ALLOCATOR(allocator, owner) { allocator = igObject_GetAllocator(owner); allocator = (g_useOwnerAllocator != 0) ? allocator : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]); }
+#define PICK_ALLOCATOR(allocator, owner) { allocator = igObject_GetAllocator(owner); allocator = (g_useOwnerAllocator != 0) ? allocator : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]); }
 #define INFO_NAME (info->_name ? info->_name : (int)emptyString)
 #define SELECT_MODEL() { int ramNo = ram->_ramNo; beMessenger_SelectReceivers(self->_messenger, MODELCTRL_19, INFO_NAME, ramNo); }
 #define SEND_MODEL(sequence) { int ramNo = ram->_ramNo; beMessenger_SendNamed(self->_messenger, MODELCTRL_19, INFO_NAME, ramNo, sequence); }
@@ -144,7 +144,7 @@ extern "C" int g_beSelectCtrl_metaObject[4];
 extern "C" int g_bePadManager_metaObject[4];
 extern "C" int g_propertyNameField[4];
 extern "C" int g_stringPool[4];
-extern "C" int g_defaultAllocatorSelector[4];
+extern "C" int kIGMemoryPoolHandleUser1[4];
 extern "C" unsigned char g_useOwnerAllocator;
 extern "C" float g_vec3Zero[3];
 extern "C" char emptyString[];
@@ -242,7 +242,7 @@ void beSelectCtrl_Update(beSelectCtrl *self, beBaseInfoRam *ram) {
     if (ram->_dataList == 0) {
         igObject *created;
         allocator = igObject_GetAllocator(ram);
-        allocator = g_useOwnerAllocator != 0 ? allocator : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
+        allocator = g_useOwnerAllocator != 0 ? allocator : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
         igSmartPointer<igObject> list(beBaseInfoDataList_Create(allocator));
         created = list.p;
         if (created != 0) created->_refCount = created->_refCount + 1;

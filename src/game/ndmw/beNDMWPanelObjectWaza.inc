@@ -1,6 +1,6 @@
 igMetaObject *FUN_003be8e0(void) {
     if (g_beNDMWPanelObjectWaza_metaObject[0] == 0) {
-        g_beNDMWPanelObjectWaza_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
+        g_beNDMWPanelObjectWaza_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
     return g_beNDMWPanelObjectWaza_metaObject[0];
 }

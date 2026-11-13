@@ -17,7 +17,7 @@ the Insight core. Both are built from the same three slots, and their source fil
 For every field, in a fixed order, slot 21:
 
 1. picks an allocator: the plugin's own (`igObject_GetAllocator`) when `g_useOwnerAllocator` is set,
-   otherwise `Memory_GetAllocatorBySelector(g_ndmwAllocatorSelector[0])`;
+   otherwise `Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser0[0])`;
 2. releases the old reference: decrements `_refCount` and calls `igObject_Destroy` when its low
    23 bits reach zero;
 3. stores a new instance from the class's create function, which fetches the class meta object and

@@ -1,5 +1,5 @@
 #include "dw4/reflected.h"
-#define SELECT_ALLOCATOR(var, owner) { var = igObject_GetAllocator(owner); var = g_useOwnerAllocator ? var : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]); }
+#define SELECT_ALLOCATOR(var, owner) { var = igObject_GetAllocator(owner); var = g_useOwnerAllocator ? var : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]); }
 #define RELEASE(q) { igObject *o_ = (q); if (o_ != 0) { o_->_refCount = o_->_refCount - 1; if (((unsigned long long)((long long)(int)o_->_refCount << 0x29) >> 0x29) == 0) { igObject_Destroy(o_); } } }
 #define OBJECT_LIST(handle) ((igObjectList *)(handle))
 #define TRANSFORM_AT(list, i) ((igTransform *)((int *)OBJECT_LIST(list)->_data)[i])
@@ -85,11 +85,11 @@ igObject *igGraphPath_GetTail(igObject *);
 int igBitMask_SetAll(...);
 int igBitMask_ClearAll(...);
 int igAABox_GetCorner(void *, int, float *);
-int Matrix44_GetTranslation(void *, float *);
-int Matrix44_SetTranslation(void *, void *);
-int Matrix44_Copy(void *, void *);
-int Matrix44_GetQuaternion(float *, void *);
-int Matrix44_SetQuaternion(void *, float *);
+int igMatrix44f_GetTranslation(void *, float *);
+int igMatrix44f_SetTranslation(void *, void *);
+int igMatrix44f_Copy(void *, void *);
+int igMatrix44f_GetQuaternion(float *, void *);
+int igMatrix44f_SetQuaternion(void *, float *);
 void *Vec3_Lerp(float *, float, float *, float *);
 void *Quaternion_Lerp(float *, float, float *, float *);
 int StringPool_Allocate(...);
@@ -105,7 +105,7 @@ extern int g_beCameraDemoData_metaObject[4];
 extern int g_igCamera_metaObject[16];
 extern int g_igViewerSceneInfoManager_metaObject[4];
 extern int g_propertyNameField[4];
-extern int g_defaultAllocatorSelector[4];
+extern int kIGMemoryPoolHandleUser1[4];
 extern int g_stringPool[4];
 extern unsigned char g_useOwnerAllocator;
 extern char emptyString[];
@@ -246,7 +246,7 @@ void beCameraCtrl_UpdateBoxCamera(beCameraCtrl *self, beBaseInfoRam *ram) {
         n = beMessenger_GetMatrixCount(self->_messenger);
         for (i = 0; i < n; i++) {
             beMessenger_GetMatrix(matrix, self->_messenger, i);
-            Matrix44_GetTranslation(matrix, pos);
+            igMatrix44f_GetTranslation(matrix, pos);
             x += pos[0];
             y += pos[1];
             z += pos[2];
@@ -285,15 +285,15 @@ void beCameraCtrl_UpdateBoxCamera(beCameraCtrl *self, beBaseInfoRam *ram) {
                     if (shake->_isFirst != 0) {
                         shake->_isFirst = 0;
                     } else {
-                        Matrix44_SetTranslation(TRANSFORM_AT(box->_eyePosList, 0)->_m, shake->_svEyePos);
-                        Matrix44_SetTranslation(TRANSFORM_AT(box->_intPosList, 0)->_m, shake->_svIntPos);
+                        igMatrix44f_SetTranslation(TRANSFORM_AT(box->_eyePosList, 0)->_m, shake->_svEyePos);
+                        igMatrix44f_SetTranslation(TRANSFORM_AT(box->_intPosList, 0)->_m, shake->_svIntPos);
                     }
                 }
             }
         }
         if (self->_isPosChange != 0) {
             camera = 0;
-            Matrix44_SetTranslation(TRANSFORM_AT(box->_transformList, 0)->_m, self->_avgPos);
+            igMatrix44f_SetTranslation(TRANSFORM_AT(box->_transformList, 0)->_m, self->_avgPos);
             self->_savePos[0] = self->_avgPos[0];
             self->_savePos[1] = self->_avgPos[1];
             self->_savePos[2] = self->_avgPos[2];
@@ -325,8 +325,8 @@ void beCameraCtrl_UpdateBoxCamera(beCameraCtrl *self, beBaseInfoRam *ram) {
                     beCameraMode *mode;
                     self->_cameraOld = self->_cameraNow;
                     self->_cameraNow = camera;
-                    Matrix44_Copy(self->_eyeMatrix, TRANSFORM_AT(box->_eyePosList, 0)->_m);
-                    Matrix44_Copy(self->_intMatrix, TRANSFORM_AT(box->_intPosList, 0)->_m);
+                    igMatrix44f_Copy(self->_eyeMatrix, TRANSFORM_AT(box->_eyePosList, 0)->_m);
+                    igMatrix44f_Copy(self->_intMatrix, TRANSFORM_AT(box->_intPosList, 0)->_m);
                     self->_cameraNowFrame = 0.0f;
                     if (self->_viewerMang == 0) {
                         igViewerSceneInfoManager *viewer = (igViewerSceneInfoManager *)igInsightCore_FindManager(self->_insight, g_igViewerSceneInfoManager_metaObject[0]);
@@ -356,8 +356,8 @@ void beCameraCtrl_UpdateBoxCamera(beCameraCtrl *self, beBaseInfoRam *ram) {
         if (self->_cameraNow != self->_cameraOld) {
             if (self->_cameraOld == 0 || !(self->_cameraNowFrame < 120.0f)) {
                 self->_cameraOld = self->_cameraNow;
-                Matrix44_Copy(TRANSFORM_AT(box->_eyePosList, 0)->_m, TRANSFORM_AT(box->_eyePosList, self->_cameraNow)->_m);
-                Matrix44_Copy(TRANSFORM_AT(box->_intPosList, 0)->_m, TRANSFORM_AT(box->_intPosList, self->_cameraNow)->_m);
+                igMatrix44f_Copy(TRANSFORM_AT(box->_eyePosList, 0)->_m, TRANSFORM_AT(box->_eyePosList, self->_cameraNow)->_m);
+                igMatrix44f_Copy(TRANSFORM_AT(box->_intPosList, 0)->_m, TRANSFORM_AT(box->_intPosList, self->_cameraNow)->_m);
                 beBaseInfoRam_RemoveTimer(ram, CAMHOKAN);
             } else {
                 float t = self->_cameraNowFrame / 120.0f;
@@ -378,14 +378,14 @@ void beCameraCtrl_UpdateBoxCamera(beCameraCtrl *self, beBaseInfoRam *ram) {
                         out = TRANSFORM_AT(box->_intPosList, 0)->_m;
                         break;
                     }
-                    Matrix44_GetTranslation(from, fromPos);
-                    Matrix44_GetTranslation(to, toPos);
+                    igMatrix44f_GetTranslation(from, fromPos);
+                    igMatrix44f_GetTranslation(to, toPos);
                     Vec3_Lerp(fromPos, t, fromPos, toPos);
-                    Matrix44_SetTranslation(out, fromPos);
-                    Matrix44_GetQuaternion(fromRot, from);
-                    Matrix44_GetQuaternion(toRot, to);
+                    igMatrix44f_SetTranslation(out, fromPos);
+                    igMatrix44f_GetQuaternion(fromRot, from);
+                    igMatrix44f_GetQuaternion(toRot, to);
                     Quaternion_Lerp(fromRot, t, fromRot, toRot);
-                    Matrix44_SetQuaternion(out, fromRot);
+                    igMatrix44f_SetQuaternion(out, fromRot);
                     j += 1;
                 } while (j < 2);
                 if (!(beBaseInfoRam_HasTimer(ram, CAMHOKAN) & 0xFF)) {
@@ -412,20 +412,20 @@ void beCameraCtrl_UpdateBoxCamera(beCameraCtrl *self, beBaseInfoRam *ram) {
                     do {
                         if (k == 0) {
                             matrix44 = TRANSFORM_AT(box->_eyePosList, 0)->_m;
-                            Matrix44_GetTranslation(matrix44, shakePos);
+                            igMatrix44f_GetTranslation(matrix44, shakePos);
                             shake->_svEyePos[0] = shakePos[0];
                             shake->_svEyePos[1] = shakePos[1];
                             shake->_svEyePos[2] = shakePos[2];
                         } else {
                             matrix44 = TRANSFORM_AT(box->_intPosList, 0)->_m;
-                            Matrix44_GetTranslation(matrix44, shakePos);
+                            igMatrix44f_GetTranslation(matrix44, shakePos);
                             shake->_svIntPos[0] = shakePos[0];
                             shake->_svIntPos[1] = shakePos[1];
                             shake->_svIntPos[2] = shakePos[2];
                         }
                         AddShakeOffset(&shakePos[0], offsetX, shake->_value);
                         AddShakeOffset(&shakePos[1], offsetY, shake->_value);
-                        Matrix44_SetTranslation(matrix44, shakePos);
+                        igMatrix44f_SetTranslation(matrix44, shakePos);
                         k += 1;
                     } while (k < 2);
                     if (beBaseInfoRam_IsTimerExpired(ram, SHAKEONE) != 0) {
@@ -436,8 +436,8 @@ void beCameraCtrl_UpdateBoxCamera(beCameraCtrl *self, beBaseInfoRam *ram) {
                     }
                     if (beBaseInfoRam_IsTimerExpired(ram, SHAKEALL) != 0) {
                         int removed;
-                        Matrix44_SetTranslation(TRANSFORM_AT(box->_eyePosList, 0)->_m, shake->_svEyePos);
-                        Matrix44_SetTranslation(TRANSFORM_AT(box->_intPosList, 0)->_m, shake->_svIntPos);
+                        igMatrix44f_SetTranslation(TRANSFORM_AT(box->_eyePosList, 0)->_m, shake->_svEyePos);
+                        igMatrix44f_SetTranslation(TRANSFORM_AT(box->_intPosList, 0)->_m, shake->_svIntPos);
                         ObjectList_RemoveFirstRetained(&removed, ram->_dataList, shake, 0);
                         beBaseInfoRam_RemoveTimer(ram, SHAKEALL);
                         beBaseInfoRam_RemoveTimer(ram, SHAKEONE);

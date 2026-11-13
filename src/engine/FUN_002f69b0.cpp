@@ -53,7 +53,7 @@ extern char *g_memoryContextNames[46];
 extern unsigned char *g_objectSystem[4];
 extern void *DAT_00586fd0;
 extern void *g_stringPool;
-extern void *DAT_00587218[4];
+extern void *g_activeSystemAllocator[4];
 extern char text_InhibitEventTracker[];
 extern char text_UseEventTracker[];
 }

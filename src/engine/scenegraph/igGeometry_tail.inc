@@ -79,7 +79,7 @@ int FUN_001ceab0(HitTraversal *self, HitNode *node) {
             int n = stack->count;
             matrix = &stack->data[n - 1];
             if (n > 1) {
-                Matrix44_Invert(&determinant, &inverse, matrix);
+                igMatrix44f_Invert(&determinant, &inverse, matrix);
             }
             attrs = node->attrs;
             attrCount = attrs->count;
@@ -202,7 +202,7 @@ int FUN_001cfaa0(ModelTraversal *self, TraversalNode *node) {
             MatrixStack *s = self->matrices;
             TraversalMatrix m;
             s->count = s->count - 1;
-            Matrix44_Copy(&m, &s->data[s->count]);
+            igMatrix44f_Copy(&m, &s->data[s->count]);
         }
     }
     {

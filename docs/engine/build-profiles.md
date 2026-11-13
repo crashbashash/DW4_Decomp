@@ -388,6 +388,9 @@ success first, so the original defined them in that order at that point of the l
 most likely in a source named for the result class. The tree defines them in that order with the library's other
 globals at the end of the unit; the initialiser is the same for either order of the two.
 
+The Core unit also defines the 46 memory-pool objects, `kIGMemoryPoolHandle<Name>` (`0x587018`..`0x587180`) of
+type `igMemoryPoolHandle`; their names are in `g_memoryContextNames`.
+
 Code that tests a call's result against the failure constant and then returns or stores the constant reads it
 twice, the first read ahead of the comparison. That is how MWCC compiles the plain statement
 `if (call() == g_resultFailure) return g_resultFailure;`, for a `const` object and a writable one alike
@@ -413,3 +416,9 @@ the result class itself: a view of it through a cast to another class shares the
   inlined vector methods, which that search cannot write. b50 and b52 are not separated.
 * **Why Viewer takes `,p`.** Its build settings are the game's, not Alchemy's, though nothing in the image
   says why.
+* **Alias names in one-function files.** 38 one-function files under `src/engine/` still spell the status
+  objects and pool handles by their alias names (`g_statusSucceeded`, `g_allocatorFailureStatus`,
+  `g_defaultAllocatorSelector`, `g_ndmwAllocatorSelector`, `DAT_005870xx`, ...), resolved through rows in
+  `config/SLUS-20836/data-names.tsv`. Moving them to `g_resultSuccess`/`g_resultFailure`/`kIGMemoryPoolHandle*`
+  needs `tools/verify.py`'s `defined_outside` check to exempt the defining unit's own data rows; until then the
+  alias rows stay.

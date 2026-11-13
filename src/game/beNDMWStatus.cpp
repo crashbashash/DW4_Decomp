@@ -20,7 +20,7 @@ enum StatusMessage {
 #define REPLACE_WINDOW(window, create) { \
     void *allocator; \
     void *ownerAllocator = igObject_GetAllocator(self); \
-    if (g_useOwnerAllocator != 0) { allocator = ownerAllocator; } else { allocator = Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]); } \
+    if (g_useOwnerAllocator != 0) { allocator = ownerAllocator; } else { allocator = Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]); } \
     RELEASE(beNDMWWindow, (window).p) \
     (window).p = create(allocator); }
 /* The 5 and 2 byte copies are the compiler's __memcpy intrinsic, which only the alternate compiler has. */
@@ -72,12 +72,12 @@ enum StatusMessage {
 #define SALES_LIST(field) ((igObjectList *)work->field)
 #define PICK_ALLOCATOR(allocator, selector) { allocator = igObject_GetAllocator(owner); allocator = g_useOwnerAllocator ? allocator : Memory_GetAllocatorBySelector(selector); }
 #define STOCK_ITEM(K, holder, create, setRandom, list, id) { \
-    PICK_ALLOCATOR(allocator, g_ndmwAllocatorSelector[0]) \
+    PICK_ALLOCATOR(allocator, kIGMemoryPoolHandleUser0[0]) \
     ItemRef<K> holder((igObject *)create(allocator)); \
     setRandom(holder.p, id, owner, level); \
     ObjectList_AppendRetained(list, holder.p); }
 #define STOCK_CHIP(holder, list, id) { \
-    PICK_ALLOCATOR(allocator, g_ndmwAllocatorSelector[0]) \
+    PICK_ALLOCATOR(allocator, kIGMemoryPoolHandleUser0[0]) \
     ItemRef<4> holder((igObject *)beNDMWItemAbilityChip_Create(allocator)); \
     beNDMWItemAbilityChip_Set(holder.p, id); \
     ObjectList_AppendRetained(list, holder.p); }
@@ -135,8 +135,8 @@ extern "C" int beNDMWItemBlueArmor_SetRandom(...);
 extern "C" int beNDMWItemYellowArmor_SetRandom(...);
 extern "C" int beNDMWItemAbilityChip_Set(...);
 extern "C" unsigned char g_useOwnerAllocator;
-extern "C" int g_defaultAllocatorSelector[4];
-extern "C" int g_ndmwAllocatorSelector[4];
+extern "C" int kIGMemoryPoolHandleUser1[4];
+extern "C" int kIGMemoryPoolHandleUser0[4];
 extern "C" int g_beLua_metaObject[4];
 extern "C" int g_beNDMWStatusInfo_metaObject[4];
 extern "C" int g_beNDMWStatus_metaObject[4];
@@ -605,7 +605,7 @@ void beNDMWStatus__PrepareWork(beNDMWStatus *owner, beNDMWStatusInfoRam *ram) {
 
     work = (beNDMWStatusInfoWork *)ram->_work;
     if (work == 0) {
-        PICK_ALLOCATOR(allocator, g_defaultAllocatorSelector[0])
+        PICK_ALLOCATOR(allocator, kIGMemoryPoolHandleUser1[0])
         igSmartPointer<beNDMWStatusInfoWork> created((beNDMWStatusInfoWork *)beNDMWStatusInfoWork_Create(allocator));
         igObject *retained = created.p;
         if (retained != 0) retained->_refCount = retained->_refCount + 1;

@@ -129,7 +129,7 @@ extern "C" char SQ_STOPEN_3[];
 extern "C" char ISSEQNAME_6[];
 extern "C" char i_bgclear_2[];
 extern "C" char OFFREEZE_3[];
-extern "C" int g_defaultAllocatorSelector[4];
+extern "C" int kIGMemoryPoolHandleUser1[4];
 extern "C" unsigned char g_useOwnerAllocator;
 /* Owning stack reference to a pooled string token (reference count at p[-1], chunk header at
  * p[-2]); releases the token on scope exit. */
@@ -407,7 +407,7 @@ static inline void *OwnerAllocator(void *owner)
 {
     void *allocator = igObject_GetAllocator(owner);
     if (g_useOwnerAllocator != 0) return allocator;
-    return Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
+    return Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
 }
 extern "C" void beNDMWShopCtrlSales_PreviewSelected(beNDMWShopCtrlSales *, int);
 extern "C" void beNDMWShopCtrlSales_StashEquipment(void *, igObjectList *, igObjectList *, igObjectList *, igObjectList *);
@@ -498,7 +498,7 @@ template <class Window> static inline int CurrentState(const Window *window)
 /* The owner's allocator, or the default selector's when owner allocation is off. */
 #define PICK_ALLOCATOR(allocator, owner) { \
     allocator = igObject_GetAllocator(owner); \
-    allocator = g_useOwnerAllocator ? allocator : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]); }
+    allocator = g_useOwnerAllocator ? allocator : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]); }
 #define CHILD_COUNT(window) (((igObjectList *)(window)->_subWindow)->_count)
 #define ObjectList_Count(list) (((igObjectList *)(list))->_count)
 /* Child `index` of the window's sub-window list, the list pointer re-read through its field. */

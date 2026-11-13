@@ -1,6 +1,6 @@
 igMetaObject *FUN_0019cd50(void) {
     if (g_igNode_metaObject[0] == 0) {
-        g_igNode_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
+        g_igNode_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
     return g_igNode_metaObject[0];
 }
@@ -188,7 +188,7 @@ void **FUN_0019d200(void **arg0, int arg1) {
 
 igMetaObject *FUN_0019d280(void) {
     if (g_igModelViewMatrixBoneSelectList_metaObject_00561880[0] == 0) {
-        g_igModelViewMatrixBoneSelectList_metaObject_00561880[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
+        g_igModelViewMatrixBoneSelectList_metaObject_00561880[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
     return g_igModelViewMatrixBoneSelectList_metaObject_00561880[0];
 }

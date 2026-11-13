@@ -41,7 +41,7 @@ void Gap__igPsx2AudioContext__vfunc_37(int *arg0, void *arg1, int arg2, int arg3
     VoiceFlags37 *p;
     p = (VoiceFlags37 *)(*(int *)((char *)(g_audioTableOwner.p) + 16) + (arg2 * 0x24));
     if (p->b1 != 0) {
-        *arg0 = g_statusSucceeded[0];
+        *arg0 = g_resultSuccess[0];
         return;
     }
     if (*(unsigned char *)((char *)arg1 + 8) != 0) {
@@ -50,7 +50,7 @@ void Gap__igPsx2AudioContext__vfunc_37(int *arg0, void *arg1, int arg2, int arg3
         *(int *)((char *)p + 28) = arg3;
         p->c2 = 1;
     }
-    *arg0 = g_statusSucceeded[0];
+    *arg0 = g_resultSuccess[0];
 }
 
 void Gap__igPsx2AudioContext__vfunc_44(igPsx2AudioContext *self) {

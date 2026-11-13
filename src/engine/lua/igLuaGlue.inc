@@ -1,6 +1,6 @@
 igMetaObject *igLuaGlue_GetOrCreateMetaObject(void) {
     if (g_igLuaGlue_metaObject[0] == 0) {
-        g_igLuaGlue_metaObject[0] = (igMetaObject *)igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
+        g_igLuaGlue_metaObject[0] = (igMetaObject *)igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
     return g_igLuaGlue_metaObject[0];
 }

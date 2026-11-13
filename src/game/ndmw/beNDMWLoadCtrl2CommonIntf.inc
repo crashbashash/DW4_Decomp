@@ -5,7 +5,7 @@ void beNDMWLoadCtrl2CommonIntf_Create(int arg0) {
 
 igMetaObject *FUN_003c4c20(void) {
     if (g_beNDMWLoadCtrl2CommonIntf_metaObject[0] == 0) {
-        g_beNDMWLoadCtrl2CommonIntf_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
+        g_beNDMWLoadCtrl2CommonIntf_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
     return g_beNDMWLoadCtrl2CommonIntf_metaObject[0];
 }

@@ -49,8 +49,8 @@ void Gap__Sg__igCommonTraversal__vfunc_31(A_1b6e20 *arg0) {
 void FUN_001b6ee0(int arg0, int *arg1) {
     int sp3C;
 
-    Matrix44_Copy(arg0 + 0x64);
-    Matrix44_Invert(&sp3C, arg0 + 0xA4, arg1);
+    igMatrix44f_Copy(arg0 + 0x64);
+    igMatrix44f_Invert(&sp3C, arg0 + 0xA4, arg1);
 }
 
 void FUN_001b6f30(A_1b6f30 *arg0, R_1b6f30 *arg1, R_1b6f30 *arg2) {
@@ -250,7 +250,7 @@ void FUN_001b7770(igCommonTraversal *self, int name, int value) {
     igObject *stack;
     int pos;
     int al = igObject_GetAllocator(self);
-    al = g_useOwnerAllocator ? al : Memory_GetAllocatorBySelector(g_temporaryAllocatorSelector[0]);
+    al = g_useOwnerAllocator ? al : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleTemporary[0]);
     str = ((igObject *)igStringObj_Create(al));
     igStringObj_Set(str, name);
     igStringObj_ToLower(str);
@@ -261,7 +261,7 @@ void FUN_001b7770(igCommonTraversal *self, int name, int value) {
         insertKey.set(str);
         pos = FUN_002d6e60(names, &insertKey, FUN_001b7740);
         List_InsertWords(names, pos, 1, &insertKey);
-        stack = ((igObject *)FUN_0019cba0(Memory_GetAllocatorBySelector(DAT_00587038[0])));
+        stack = ((igObject *)FUN_0019cba0(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem[0])));
         newStackRef.p = stack;
         stacks = self->_segmentOverrideStacks;
         newStackRef.retain();

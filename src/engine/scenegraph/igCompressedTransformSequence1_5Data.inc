@@ -1,6 +1,6 @@
 igMetaObject *FUN_001a24f0(void) {
     if (g_igCompressedTransformSequence1_5Data_metaObject[0] == 0) {
-        g_igCompressedTransformSequence1_5Data_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
+        g_igCompressedTransformSequence1_5Data_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
     return g_igCompressedTransformSequence1_5Data_metaObject[0];
 }

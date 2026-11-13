@@ -3,8 +3,8 @@
 # maths, bit-mask and viewer helpers it calls. Evidence in docs/engine/camera.md.
 # <va>	<name>	<module>
 0x0018ab70	igAABox_GetCorner	engine
-0x00191770	Matrix44_SetQuaternion	engine
-0x001925f0	Matrix44_GetQuaternion	engine
+0x00191770	igMatrix44f_SetQuaternion	engine
+0x001925f0	igMatrix44f_GetQuaternion	engine
 0x00192cc0	Quaternion_Lerp	engine
 0x00192f00	Vec3_Lerp	engine
 0x001b1cf0	igBitMask_SetAll	engine

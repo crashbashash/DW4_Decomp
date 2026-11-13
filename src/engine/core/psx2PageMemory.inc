@@ -468,14 +468,14 @@ int FUN_0032a1b0(char *arg0, int *arg1) {
 Ent_328e00 *FUN_0032a1e0(int arg0) {
     void **temp_v0;
 
-    temp_v0 = (void **)(((void **)Memory_GetAllocatorBySelector(g_memoryContextNonTracked)));
+    temp_v0 = (void **)(((void **)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleNonTracked)));
     return (Ent_328e00 *)((DW4VC_216_1 *)(temp_v0))->vX((int)(arg0));
 }
 
 void FUN_0032a220(int arg0) {
     void **temp_v0;
 
-    temp_v0 = (void **)(((void **)Memory_GetAllocatorBySelector(g_memoryContextNonTracked)));
+    temp_v0 = (void **)(((void **)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleNonTracked)));
     ((DW4VC_264_1 *)(temp_v0))->vX((int)(arg0));
 }
 
@@ -656,13 +656,13 @@ void FUN_0032ae00(int arg0, void *arg1) {
 }
 
 void FUN_0032ae70(void) {
-    if (*(int *)0x587218 == 0) {
+    if (g_activeSystemAllocator[0] == 0) {
         FUN_0032f300();
     }
 }
 
 void FUN_0032aea0(void) {
-    if (*(int *)0x587218 != 0) {
+    if (g_activeSystemAllocator[0] != 0) {
         FUN_0032f330();
     }
 }

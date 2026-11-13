@@ -5,7 +5,7 @@ void beAction2InfoWork_CreateInstance(int arg0) {
 
 igMetaObject *FUN_0036c2e0(void) {
     if (g_beAction2InfoWork_metaObject[0] == 0) {
-        g_beAction2InfoWork_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
+        g_beAction2InfoWork_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
     return g_beAction2InfoWork_metaObject[0];
 }

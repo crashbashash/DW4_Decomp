@@ -549,7 +549,7 @@ int igAnimationCombiner_ResetToPose(CombinerStateView_1ae780 *c, CombinerStateVi
         tz = m[14];
         ty = m[13];
         tx = m[12];
-        Matrix44_GetQuaternion(&q, m);
+        igMatrix44f_GetQuaternion(&q, m);
         if (state != 0) {
             state->_base._refCount = state->_base._refCount + 1;
         }

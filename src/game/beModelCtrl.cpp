@@ -1,7 +1,7 @@
 #include "dw4/reflected.h"
 #include "dw4/igSmartPointer.h"
 #include "dw4/igTDataList.h"
-#define SELECT_ALLOCATOR(var, arg) { int base_ = igObject_GetAllocator(arg); if (g_useOwnerAllocator != 0) var = base_; else var = Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]); }
+#define SELECT_ALLOCATOR(var, arg) { int base_ = igObject_GetAllocator(arg); if (g_useOwnerAllocator != 0) var = base_; else var = Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]); }
 #define RELEASE(q) { igObject *o_ = (igObject *)(q); if (o_) { o_->_refCount = o_->_refCount - 1; if ((o_->_refCount & 0x7fffff) == 0) igObject_Destroy(o_); } }
 #define RETAIN(q) { igObject *o_ = (igObject *)(q); if (o_) o_->_refCount = o_->_refCount + 1; }
 
@@ -135,19 +135,19 @@ extern "C" int beBaseInfoRam_StartTimer(...);
 extern "C" int __fixsfdi(float);
 extern "C" int strcmp(...);
 extern "C" int beMessenger_SendNamed(...);
-extern "C" int Matrix44_Copy(...);
+extern "C" int igMatrix44f_Copy(...);
 extern "C" void igObject_Destroy(void *);
-extern "C" void Matrix44_SetTranslation(float *matrix, void *vec3);
+extern "C" void igMatrix44f_SetTranslation(float *matrix, void *vec3);
 extern "C" int Gap__Bec__beModelCtrlInfoRideOn2__vfunc_20(void);
 extern "C" float sqrtf(float);
-extern "C" int Matrix44_GetTranslation(int, float *);
+extern "C" int igMatrix44f_GetTranslation(int, float *);
 extern "C" void *beModelCtrlInfoRideOn_Create(...);
 extern "C" int beMessenger_GetBool(...);
 extern "C" int beMessenger_GetBoolCount(...);
 extern "C" int beMessenger_GetInt(...);
 extern "C" int beMessenger_GetStringCount(...);
 extern "C" float beBaseInfoRam_GetTimerFrameDelta(...);
-extern "C" int Matrix44_TranslateLocal(...);
+extern "C" int igMatrix44f_TranslateLocal(...);
 extern "C" int beBaseInfoRam_HasTimer(...);
 extern "C" void *beModelCtrlMoveObject_Create(...);
 extern "C" float atan2f(float, float);
@@ -161,11 +161,11 @@ extern "C" int beBaseInfoRam_RemoveTimer(...);
 
 extern "C" int beModelCtrlSubCom_StopType(int, int, int);
 extern "C" void beModelCtrl_UpdateMuteki(beModelCtrl *self, beBaseInfoRam *ram, beModelCtrlInfoWork *work);
-extern "C" int Matrix44_MakeEulerRotation(int, float, float, float);
+extern "C" int igMatrix44f_MakeEulerRotation(int, float, float, float);
 extern "C" int igMatrix44f_SetIdentity(...);
 extern "C" int FUN_001904f0(...);
 extern "C" int FUN_001906d0(...);
-extern "C" int Matrix44_Invert(...);
+extern "C" int igMatrix44f_Invert(...);
 extern "C" void beModelCtrl_UpdateKeyCtrl(beModelCtrl *self, beBaseInfo *info, beBaseInfoRam *ram, beModelCtrlInfoWork *work);
 extern "C" int beModelCtrlSubCom_Update(...);
 extern "C" int beMessenger_AppendString(...);
@@ -202,7 +202,7 @@ extern "C" igAABox * igAABox_CreateInstance(...);
 extern "C" void FUN_0018b990(igAABox *, float *);
 extern "C" int g_propertyNameField[4];
 extern "C" char HIT[];
-extern "C" int g_defaultAllocatorSelector[4];
+extern "C" int kIGMemoryPoolHandleUser1[4];
 extern "C" unsigned char g_useOwnerAllocator;
 extern "C" igAABoxList *beModelCtrlInfoHitBody_GetAABoxList(beModelCtrlInfoHitBody *body, beBaseInfoRam *ram, int matrix, long long time);
 extern "C" int g_beTargetObj_metaObject[4];
@@ -422,7 +422,7 @@ extern "C" void beModelCtrlSubCom_StopAll(int, beBaseInfoRam *);
 extern "C" void beModelCtrlSubCom_AddEffect(int, const char *, const char *, Vec3 *, Vec3 *, int, float, int);
 extern "C" void beBaseInfoRam_SetAllTimerScales(beBaseInfoRam *, float);
 extern "C" void beBaseInfoRam_RemoveAllTimers(beBaseInfoRam *);
-extern "C" void Matrix44_FromTranslation(void *, Vec3 *);
+extern "C" void igMatrix44f_FromTranslation(void *, Vec3 *);
 extern "C" void beMessenger_GetVec3(Vec3 *, int, int);
 extern "C" float DAT_004c8fb8[4];
 extern "C" float DAT_004e0ef0[4];
@@ -454,7 +454,7 @@ struct DataList {
     static inline void Ensure(beBaseInfoRam *ram, beModelCtrlInfoRideOn *&held) {
         if (ram->_dataList == 0) {
             int a = igObject_GetAllocator(ram);
-            a = g_useOwnerAllocator ? a : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
+            a = g_useOwnerAllocator ? a : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
             igSmartPointer<igObject> r((igObject *)((beBaseInfoDataList *)beBaseInfoDataList_Create(a)));
             held = (beModelCtrlInfoRideOn *)r.p;
             RETAIN(held)
@@ -526,7 +526,7 @@ igAABoxList *beModelCtrlInfoHitBody_GetAABoxList(beModelCtrlInfoHitBody *body, b
             {
                 int alloc = igObject_GetAllocator(body);
                 int a;
-                if (g_useOwnerAllocator != 0) a = alloc; else a = Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
+                if (g_useOwnerAllocator != 0) a = alloc; else a = Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
                 igSmartPointer<igAABox> created(igAABox_CreateInstance(a));
                 { igAABox *boxPtr = created.p; igAABoxList *boxList = (igAABoxList *)body->_AABoxList; ObjectList_AppendRetained(boxList, boxPtr); }
             }
@@ -628,7 +628,7 @@ void beModelCtrl_UpdateMapAI(beModelCtrl *self, void *info, beBaseInfoRam *ram, 
     float value;
     if (ram->_dataList == 0) {
         pool = igObject_GetAllocator(ram);
-        pool = (g_useOwnerAllocator != 0) ? pool : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
+        pool = (g_useOwnerAllocator != 0) ? pool : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
         DataListInstall::make(ram, pool);
     }
     ramData = ((beModelCtrlInfoRamData *)igProperty_FindByName((igObject *)ram->_dataList, g_propertyNameField[0], ONE_3));
@@ -816,7 +816,7 @@ void Gap__Core__igObject__vfunc_38(beModelCtrl *self, beBaseInfoRam *ram) {
     info = (beBaseInfo *)ram->_parentInfo;
     if (ram->_dataList == 0) {
         allocator = igObject_GetAllocator(ram);
-        allocator = (g_useOwnerAllocator != 0) ? allocator : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
+        allocator = (g_useOwnerAllocator != 0) ? allocator : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
         igSmartPointer<igObject> ref(beBaseInfoDataList_Create(allocator));
         list = ref.p;
         if (list != 0) {
@@ -940,7 +940,7 @@ void beModelCtrlInfoRideOn_SetModel(beModelCtrlInfoRideOn *self, int modelName, 
     igObject *oldNode;
     beMessenger_SendNamed(messenger, MODELCTRL_7, modelName, ramNo, GETMATRIX_2);
     node = beMessenger_GetObject(messenger, 0);
-    Matrix44_Copy(matrix, (char *)node + 32);
+    igMatrix44f_Copy(matrix, (char *)node + 32);
     if (g_stringPool[0] == 0) {
         value = StringPool_Allocate(16);
         if (value != 0) {
@@ -970,7 +970,7 @@ void beModelCtrlInfoRideOn_SetModel(beModelCtrlInfoRideOn *self, int modelName, 
             igObject_Destroy((void *)oldNode);
     }
     self->_modelNode = (int)node;
-    Matrix44_Copy(&self->_oldMatrix, matrix);
+    igMatrix44f_Copy(&self->_oldMatrix, matrix);
 }
 
 int beModelCtrlInfoRideOn_IsModel(beModelCtrlInfoRideOn *self, int modelName, int ramNo) {
@@ -981,18 +981,18 @@ int beModelCtrlInfoRideOn_IsModel(beModelCtrlInfoRideOn *self, int modelName, in
 
 /* Resets the ride-on pose: clears the translation of `_oldMatrix` to (0,0,0) and writes `_vector`
  * into the translation of the model node's matrix (+0x20 of a node, the igTransform `_m` offset).
- * Matrix44_SetTranslation copies vec3 into matrix words 12..14. */
+ * igMatrix44f_SetTranslation copies vec3 into matrix words 12..14. */
 void Gap__Bec__beModelCtrlInfoRideOn2__vfunc_21(beModelCtrlInfoRideOn2 *self) {
-    Matrix44_SetTranslation(self->_oldMatrix, &g_vec3Zero[0]);
-    Matrix44_SetTranslation((float *)(self->_modelNode + 0x20), self->_vector);
+    igMatrix44f_SetTranslation(self->_oldMatrix, &g_vec3Zero[0]);
+    igMatrix44f_SetTranslation((float *)(self->_modelNode + 0x20), self->_vector);
 }
 
 void Gap__Bec__beModelCtrlInfoRideOn3__vfunc_21(beModelCtrlInfoRideOn3 *self, void *m) {
     Vec3 t;
     Vec3 d;
     float e, x, g, k, b, z, len, inv, y, c, a;
-    Matrix44_SetTranslation((float *)((char *)self->_oldMatrix), g_vec3Zero);
-    Matrix44_GetTranslation((int)m, (float *)&t);
+    igMatrix44f_SetTranslation((float *)((char *)self->_oldMatrix), g_vec3Zero);
+    igMatrix44f_GetTranslation((int)m, (float *)&t);
     d.x = ((Vec3 *)self->_worldPosition)->x;
     d.y = ((Vec3 *)self->_worldPosition)->y;
     d.z = ((Vec3 *)self->_worldPosition)->z;
@@ -1027,7 +1027,7 @@ void Gap__Bec__beModelCtrlInfoRideOn3__vfunc_21(beModelCtrlInfoRideOn3 *self, vo
     d.x = d.x * k;
     d.y = d.y * k;
     d.z = d.z * k;
-    Matrix44_SetTranslation((float *)((char *)self->_modelNode + 32), &d);
+    igMatrix44f_SetTranslation((float *)((char *)self->_modelNode + 32), &d);
 }
 
 void beModelCtrl_CheckWallAndFloor(beModelCtrl *self, beBaseInfo *info, beBaseInfoRam *ram, beModelCtrlInfoWork *work) {
@@ -1113,7 +1113,7 @@ void beModelCtrl_CheckWallAndFloor(beModelCtrl *self, beBaseInfo *info, beBaseIn
                     int base = igObject_GetAllocator(self);
                     int allocator;
                     beModelCtrlInfoRideOn4 *created;
-                    if (g_useOwnerAllocator != 0) allocator = base; else allocator = Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
+                    if (g_useOwnerAllocator != 0) allocator = base; else allocator = Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
                     RideOnRef holder((beModelCtrlInfoRideOn4 *)beModelCtrlInfoRideOn_Create(allocator));
                     beModelCtrlInfoRideOn_SetModel((beModelCtrlInfoRideOn *)holder.p, floorModel, floorRamNo, self->_messenger);
                     created = holder.p;
@@ -1282,7 +1282,7 @@ void beModelCtrl_ApplyMoves(beModelCtrl *self, beBaseInfo *info, beBaseInfoRam *
                     /* matching construct: self-assignment keeps the retail select of the allocator */
                     allocator = (int)allocator;
                 } else {
-                    allocator = Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
+                    allocator = Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
                 }
                 {
                     igSmartPointer<igObject> ref(beBaseInfoDataList_Create(allocator));
@@ -1301,11 +1301,11 @@ void beModelCtrl_ApplyMoves(beModelCtrl *self, beBaseInfo *info, beBaseInfoRam *
                 }
             }
             ramData = ((beModelCtrlInfoRamData *)igProperty_FindByName((igObject *)ram->_dataList, g_propertyNameField[0], ONE_3));
-            Matrix44_Copy(matrix, (char *)ramData->_node + 0x20);
+            igMatrix44f_Copy(matrix, (char *)ramData->_node + 0x20);
             step[0] = beModelCtrlMoveObject_Step(MoveObjects(work)[0], frames);
             step[1] = beModelCtrlMoveObject_Step(MoveObjects(work)[1], frames);
             step[2] = beModelCtrlMoveObject_Step(MoveObjects(work)[2], frames);
-            Matrix44_TranslateLocal(matrix, step);
+            igMatrix44f_TranslateLocal(matrix, step);
             ((beModelCtrlNode2Slots *)ramData->_node)->vfunc_35(matrix);
             work->_isHitCheck = 1;
             box = (void *)work->_baseAABox;
@@ -1543,7 +1543,7 @@ void beModelCtrlInfoWork_SetSeqLabel(beModelCtrl *self, beBaseInfoRam *ram, beMo
         if (g_useOwnerAllocator != 0) {
             allocator = base;
         } else {
-            allocator = Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
+            allocator = Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
         }
         released = listRef.p;
         if (released != 0) {
@@ -1565,7 +1565,7 @@ void beModelCtrlInfoWork_SetSeqLabel(beModelCtrl *self, beBaseInfoRam *ram, beMo
         if (g_useOwnerAllocator != 0) {
             allocator = base;
         } else {
-            allocator = Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
+            allocator = Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
         }
         released = listRef.p;
         if (released != 0) {
@@ -1587,7 +1587,7 @@ void beModelCtrlInfoWork_SetSeqLabel(beModelCtrl *self, beBaseInfoRam *ram, beMo
         if (g_useOwnerAllocator != 0) {
             allocator = base;
         } else {
-            allocator = Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
+            allocator = Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
         }
         released = intListRef.p;
         if (released != 0) {
@@ -1743,7 +1743,7 @@ void beModelCtrl_CallLua(beModelCtrl *self, beBaseInfoRam *ram, const char *func
         if (g_useOwnerAllocator != 0) {
             allocator = base;
         } else {
-            allocator = Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
+            allocator = Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
         }
         igSmartPointer<igObject> created(beBaseInfoDataList_Create(allocator));
         p = created.p;
@@ -2139,7 +2139,7 @@ void beModelCtrl_UpdateDirection(beModelCtrl *self, beBaseInfo *info, beBaseInfo
     if (((igObject *)ram->_dataList) == 0) {
         int base = igObject_GetAllocator(ram);
         int allocator;
-        if (g_useOwnerAllocator != 0) allocator = base; else allocator = Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
+        if (g_useOwnerAllocator != 0) allocator = base; else allocator = Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
         igSmartPointer<igObject> created(((igObject *)beBaseInfoDataList_Create(allocator)));
         igObject *list = (igObject *)created.p;
         if (list != 0) list->_refCount = list->_refCount + 1;
@@ -2151,9 +2151,9 @@ void beModelCtrl_UpdateDirection(beModelCtrl *self, beBaseInfo *info, beBaseInfo
         ram->_dataList = (int)list;
     }
     matrix = ((beModelCtrlInfoRamData *)igProperty_FindByName(((igObject *)ram->_dataList), g_propertyNameField[0], ONE_3))->_node + 32;
-    Matrix44_GetTranslation(matrix, translation);
-    Matrix44_MakeEulerRotation(matrix, rotation.x, ((float*)&rotation)[1], ((float*)&rotation)[2]);
-    Matrix44_SetTranslation((float *)matrix, (void *)translation);
+    igMatrix44f_GetTranslation(matrix, translation);
+    igMatrix44f_MakeEulerRotation(matrix, rotation.x, ((float*)&rotation)[1], ((float*)&rotation)[2]);
+    igMatrix44f_SetTranslation((float *)matrix, (void *)translation);
     work->_direction[0] = rotation.x;
     work->_direction[1] = rotation.y;
     work->_direction[2] = rotation.z;
@@ -2188,7 +2188,7 @@ void Gap__Core__igObject__vfunc_31(beModelCtrl *self, beBaseInfoRam *ram) {
         int chosen;
         igObject *created;
         igObject *old;
-        if (g_useOwnerAllocator != 0) { chosen = allocator; } else { chosen = Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]); }
+        if (g_useOwnerAllocator != 0) { chosen = allocator; } else { chosen = Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]); }
         igSmartPointer<igObject> ref(beBaseInfoDataList_Create(chosen));
         created = ref.p;
         if (created != 0) created->_refCount = created->_refCount + 1;
@@ -2233,8 +2233,8 @@ void Gap__Core__igObject__vfunc_31(beModelCtrl *self, beBaseInfoRam *ram) {
             beModelCtrl_ApplyMoves(self, info, ram, work);
         } else {
             if (work->_posLockNode != 0) {
-                Matrix44_Copy(lockMatrix, work->_posLockNode + 32);
-                Matrix44_TranslateLocal(lockMatrix, &work->_posLockOffset[0]);
+                igMatrix44f_Copy(lockMatrix, work->_posLockNode + 32);
+                igMatrix44f_TranslateLocal(lockMatrix, &work->_posLockOffset[0]);
                 ((beModelCtrlNode2Slots *)ramData->_node)->vfunc_35(lockMatrix);
             } else if (work->_posLockTrc != 0) {
                 ((beModelCtrlNode2Slots *)ramData->_node)->vfunc_35((int *)(*(int *)(work->_posLockTrc + 16) + *(int *)((char *)DAT_00561288[0] + 8)));
@@ -2257,22 +2257,22 @@ void Gap__Core__igObject__vfunc_31(beModelCtrl *self, beBaseInfoRam *ram) {
         rideOn = (beModelCtrlInfoRideOn4 *)work->_rideOnData;
         if (rideOn != 0) {
             ((beModelCtrlInfoRideOnSlots *)rideOn)->vfunc_21((void *)(ramData->_node + 32));
-            Matrix44_GetTranslation((int)rideOn->_oldMatrix, (float *)oldPos);
-            Matrix44_GetTranslation(ramData->_node + 32, newPos);
+            igMatrix44f_GetTranslation((int)rideOn->_oldMatrix, (float *)oldPos);
+            igMatrix44f_GetTranslation(ramData->_node + 32, newPos);
             delta[0] = newPos[0] - oldPos[0];
             delta[1] = newPos[1] - oldPos[1];
             delta[2] = newPos[2] - oldPos[2];
-            Matrix44_Copy(oldRotation, rideOn->_oldMatrix);
-            Matrix44_Copy(offset, ramData->_node + 32);
-            Matrix44_SetTranslation((float *)oldRotation, (void *)&g_vec3Zero[0]);
-            Matrix44_Invert(&inverted, oldRotation, oldRotation);
-            Matrix44_SetTranslation((float *)offset, (void *)delta);
+            igMatrix44f_Copy(oldRotation, rideOn->_oldMatrix);
+            igMatrix44f_Copy(offset, ramData->_node + 32);
+            igMatrix44f_SetTranslation((float *)oldRotation, (void *)&g_vec3Zero[0]);
+            igMatrix44f_Invert(&inverted, oldRotation, oldRotation);
+            igMatrix44f_SetTranslation((float *)offset, (void *)delta);
             igMatrix44f_SetIdentity(local);
             FUN_001904f0(local, offset, oldRotation);
             igMatrix44f_SetIdentity(world);
             FUN_001904f0(world, local, rideOn->_modelNode + 32);
             ((beModelCtrlNode2Slots *)ramData->_node)->vfunc_35(world);
-            Matrix44_Copy(rideOn->_oldMatrix, rideOn->_modelNode + 32);
+            igMatrix44f_Copy(rideOn->_oldMatrix, rideOn->_modelNode + 32);
             work->_isHitCheck = 1;
         }
         if (work->_wCheckName != 0) beModelCtrl_UpdateWaitCheck(self, (beModelCtrlInfo *)info, ram, work);
@@ -2281,7 +2281,7 @@ void Gap__Core__igObject__vfunc_31(beModelCtrl *self, beBaseInfoRam *ram) {
         if (work->_isHitCheck != 0) beModelCtrl_CheckWallAndFloor(self, info, ram, work);
         rideOn = (beModelCtrlInfoRideOn4 *)work->_rideOnData;
         if (rideOn != 0 && rideOn->_modelRamNo == 0x68) {
-            Matrix44_GetTranslation(ramData->_node + 32, pos);
+            igMatrix44f_GetTranslation(ramData->_node + 32, pos);
             ((float *)&rideOn->_oldPlayerPos[0])[0] = pos[0];
             ((float *)&rideOn->_oldPlayerPos[0])[1] = pos[1];
             ((float *)&rideOn->_oldPlayerPos[0])[2] = pos[2];
@@ -2355,7 +2355,7 @@ void beModelCtrl_UpdateBound(beModelCtrl *self, beModelCtrlNode2 *node, igAABox 
         if (g_useOwnerAllocator != 0) {
             allocator = base;
         } else {
-            allocator = Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
+            allocator = Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
         }
         igSmartPointer<igAABox> created(igAABox_CreateInstance(allocator));
         bound = created.p;
@@ -2377,7 +2377,7 @@ void beModelCtrl_UpdateBound(beModelCtrl *self, beModelCtrlNode2 *node, igAABox 
     igAABox_Transform(bound, node->_m);
 }
 
-#define ALLOCATOR(a, o) int a = igObject_GetAllocator(o); a = g_useOwnerAllocator ? a : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
+#define ALLOCATOR(a, o) int a = igObject_GetAllocator(o); a = g_useOwnerAllocator ? a : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
 #define POOL() if (((void * *)g_stringPool)[0] == 0) { void *pl_ = ((void *)StringPool_Allocate(0x10)); if (pl_ != 0) pl_ = ((void *)StringPool_Construct(pl_)); ((void * *)g_stringPool)[0] = pl_; }
 #define RELEASE_STRING(old) if (old) { int *h_ = (int *)old - 2; int c_ = ((int *)old)[-1] - 1; ((int *)old)[-1] = c_; if (c_ == 0) StringChunk_ReleaseHeader(*h_, h_); }
 #define SET_WORK_STRING(fld, txt) { POOL() const char *tk_ = ((const char *)StringPool_Intern(((void * *)g_stringPool)[0], txt)); const char *old_ = (const char *)work->fld; RELEASE_STRING(old_) work->fld = (int)tk_; }
@@ -2644,7 +2644,7 @@ int Gap__Bec__beModelCtrl__vfunc_33(beModelCtrl *self, beBaseInfoRam *ram, const
             beMessenger_GetVec3(&movePosition, MESSENGER, 0);
             beMessenger_GetVec3(&moveRotation, MESSENGER, 1);
             igMatrix44f_SetIdentity(moveMatrix);
-            Matrix44_FromTranslation(moveMatrix, &movePosition);
+            igMatrix44f_FromTranslation(moveMatrix, &movePosition);
             if (moveRotation.x != 0.0f) FUN_00191670(moveMatrix, g_vec3XAxis, 0.017453292f * moveRotation.x);
             if (moveRotation.y != 0.0f) FUN_00191670(moveMatrix, g_vec3YAxis, 0.017453292f * moveRotation.y);
             { float rz = moveRotation.z; if (rz != 0.0f) FUN_00191670(moveMatrix, ((float *)g_vec3ZAxis), 0.017453292f * rz); }
@@ -2721,8 +2721,8 @@ int Gap__Bec__beModelCtrl__vfunc_33(beModelCtrl *self, beBaseInfoRam *ram, const
                 const char *hitterName = beMessenger_GetString(MESSENGER, 0);
                 int hitterRamNo = beMessenger_GetInt(MESSENGER, 1);
                 int hitterRecNo = -1;
-                Matrix44_GetTranslation((int)bulletMatrix, (float *)&bulletPos);
-                Matrix44_GetTranslation((int)MODEL_NODE->_m, (float *)&modelPos);
+                igMatrix44f_GetTranslation((int)bulletMatrix, (float *)&bulletPos);
+                igMatrix44f_GetTranslation((int)MODEL_NODE->_m, (float *)&modelPos);
                 beMessenger_PushArgContext(MESSENGER);
                 if (*hitterName != 0x70) {
                     beMessenger_SendNamed(MESSENGER, ((char *)MODELCTRL_7), hitterName, hitterRamNo, GETRECNO);
@@ -2826,7 +2826,7 @@ int Gap__Bec__beModelCtrl__vfunc_33(beModelCtrl *self, beBaseInfoRam *ram, const
                         RELEASE(held->_modelNode)
                         held->_modelNode = (int)node2;
                     }
-                    Matrix44_Copy(((beModelCtrlInfoRideOn2 *)r.p)->_oldMatrix, mt);
+                    igMatrix44f_Copy(((beModelCtrlInfoRideOn2 *)r.p)->_oldMatrix, mt);
                     beMessenger_GetVec3(&conveyorVector, MESSENGER, 0);
                     { beModelCtrlInfoRideOn2 *f2 = (beModelCtrlInfoRideOn2 *)r.p; f2->_vector[0] = conveyorVector.x; f2->_vector[1] = conveyorVector.y; f2->_vector[2] = conveyorVector.z; }
                     {
@@ -2848,9 +2848,9 @@ int Gap__Bec__beModelCtrl__vfunc_33(beModelCtrl *self, beBaseInfoRam *ram, const
                 if (work->_rideOnData == 0) {
                     ALLOCATOR(a, self)
                     ObjRef<3> r((igObject *)beModelCtrlInfoRideOn3_Create(a));
-                                        Matrix44_GetTranslation((int)MODEL_NODE->_m, (float *)&quicksandPos);
-                    Matrix44_Copy(quicksandMatrix, DAT_004e0ef0);
-                    Matrix44_SetTranslation((float *)quicksandMatrix, (void *)&quicksandPos);
+                                        igMatrix44f_GetTranslation((int)MODEL_NODE->_m, (float *)&quicksandPos);
+                    igMatrix44f_Copy(quicksandMatrix, DAT_004e0ef0);
+                    igMatrix44f_SetTranslation((float *)quicksandMatrix, (void *)&quicksandPos);
                     {
                         ALLOCATOR(b, self)
                         ObjRef<5> r2((igObject *)beModelCtrlNode2_Create(b));
@@ -2861,7 +2861,7 @@ int Gap__Bec__beModelCtrl__vfunc_33(beModelCtrl *self, beBaseInfoRam *ram, const
                         RELEASE(held->_modelNode)
                         held->_modelNode = (int)node2;
                     }
-                    Matrix44_Copy(((beModelCtrlInfoRideOn3 *)r.p)->_oldMatrix, quicksandMatrix);
+                    igMatrix44f_Copy(((beModelCtrlInfoRideOn3 *)r.p)->_oldMatrix, quicksandMatrix);
                     beMessenger_GetVec3(&quicksandCenter, MESSENGER, 0);
                     { beModelCtrlInfoRideOn3 *f3 = (beModelCtrlInfoRideOn3 *)r.p; f3->_worldPosition[0] = quicksandCenter.x; f3->_worldPosition[1] = quicksandCenter.y; f3->_worldPosition[2] = quicksandCenter.z; }
                     ((beModelCtrlInfoRideOn3 *)r.p)->_minKyori = beMessenger_GetFloat(MESSENGER, 0);
@@ -2887,9 +2887,9 @@ int Gap__Bec__beModelCtrl__vfunc_33(beModelCtrl *self, beBaseInfoRam *ram, const
                 if (work->_rideOnData == 0) {
                     ALLOCATOR(a, self)
                     ObjRef<4> r((igObject *)beModelCtrlInfoRideOn4_Create(a));
-                                        Matrix44_GetTranslation((int)MODEL_NODE->_m, (float *)&floorPos);
-                    Matrix44_Copy(floorMatrix, DAT_004e0ef0);
-                    Matrix44_SetTranslation((float *)floorMatrix, (void *)&floorPos);
+                                        igMatrix44f_GetTranslation((int)MODEL_NODE->_m, (float *)&floorPos);
+                    igMatrix44f_Copy(floorMatrix, DAT_004e0ef0);
+                    igMatrix44f_SetTranslation((float *)floorMatrix, (void *)&floorPos);
                     {
                         ALLOCATOR(b, self)
                         ObjRef<5> r2((igObject *)beModelCtrlNode2_Create(b));
@@ -2900,7 +2900,7 @@ int Gap__Bec__beModelCtrl__vfunc_33(beModelCtrl *self, beBaseInfoRam *ram, const
                         RELEASE(held->_modelNode)
                         held->_modelNode = (int)node2;
                     }
-                    Matrix44_Copy(((beModelCtrlInfoRideOn4 *)r.p)->_oldMatrix, floorMatrix);
+                    igMatrix44f_Copy(((beModelCtrlInfoRideOn4 *)r.p)->_oldMatrix, floorMatrix);
                     ((int *)&floorPos)[1] = 0;
                     { beModelCtrlInfoRideOn4 *f4 = (beModelCtrlInfoRideOn4 *)r.p; f4->_oldPlayerPos[0] = floorPos.x; f4->_oldPlayerPos[1] = floorPos.y; f4->_oldPlayerPos[2] = floorPos.z; }
                     { beModelCtrlInfoRideOn4 *f4 = (beModelCtrlInfoRideOn4 *)r.p; f4->_vector[0] = g_vec3Zero[0]; f4->_vector[1] = g_vec3Zero[1]; f4->_vector[2] = g_vec3Zero[2]; }

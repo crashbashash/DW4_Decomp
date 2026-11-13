@@ -392,7 +392,7 @@ igResult FUN_002f3910(PoolDescManager *self, int index, PoolDescRecord *desc, in
         slot->record = ((PoolDescRecord *)FUN_002f8be0((struct O_2f8be0 *)self->table, (int)(descName(desc))));
         if (slot->record == 0) { slot->record = ((PoolDescRecord *)FUN_002f8ca0((struct Own_2f8ca0 *)self->table, desc->alias)); }
         if (slot->record == 0) {
-            slot->record = (PoolDescRecord *)FUN_002bfed0((int)((igMemoryPool *)Memory_GetAllocatorBySelector(g_memoryContextBootstrap)));
+            slot->record = (PoolDescRecord *)FUN_002bfed0((int)((igMemoryPool *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleBootstrap)));
             FUN_002f8a80((void *)self->table, (void *)slot->record);
         }
         if (slot->record != desc) {
@@ -711,13 +711,13 @@ void FUN_002f5230(int *out, PoolDescSetup *self, int config, char *name) {
         self->table = 0;
     }
     {
-        int alloc = (int)Memory_GetAllocatorBySelector(g_memoryContextBootstrap);
+        int alloc = (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleBootstrap);
         releaseTable(self->table);
         self->table = (PoolDescTable *)FUN_002c01f0(alloc);
     }
     i = 0;
     do {
-        rec = (PoolDescRecord *)FUN_002bfed0((int)((igMemoryPool *)Memory_GetAllocatorBySelector(g_memoryContextBootstrap)));
+        rec = (PoolDescRecord *)FUN_002bfed0((int)((igMemoryPool *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleBootstrap)));
         igNamedObject_SetName((N_2fecb0 *)rec, (int)(self->recordName(i)));
         setDescString(&rec->alias, g_memoryContextNames[i]);
         switch (i) {
@@ -862,12 +862,12 @@ void MemoryContext_BuildAllocator(int *out, igMemoryPoolContextInfo *arg1, int i
     cfg = slot->cfg;
     owned = true;
     obj = slot->obj;
-    if (allocA == 0) allocA = ((igMemoryPool *)Memory_GetAllocatorBySelector(g_memoryContextBootstrap));
+    if (allocA == 0) allocA = ((igMemoryPool *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleBootstrap));
     if (allocB == 0) {
-        allocB = ((igMemoryPool *)Memory_GetAllocatorBySelector(g_memoryContextDefault));
+        allocB = ((igMemoryPool *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleDefault));
         if (allocB == 0) allocB = allocA;
     }
-    if (mbc == 0) Memory_GetAllocatorBySelector(g_memoryContextNonTracked);
+    if (mbc == 0) Memory_GetAllocatorBySelector(kIGMemoryPoolHandleNonTracked);
     if (idx == 2) {
         slot->obj = allocB;
         allocB->_refCount = allocB->_refCount + 1;
@@ -924,7 +924,7 @@ void MemoryContext_BuildAllocator(int *out, igMemoryPoolContextInfo *arg1, int i
                         }
                     }
                     if (idx == 5) {
-                        if (((igMemoryPool *)Memory_GetAllocatorBySelector(g_memoryContextMetaData)) == 0) ctx->slots[5].obj = allocA;
+                        if (((igMemoryPool *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData)) == 0) ctx->slots[5].obj = allocA;
                     }
                     {
                         igMemoryPool *old = obj;
@@ -957,8 +957,8 @@ void MemoryContext_BuildAllocator(int *out, igMemoryPoolContextInfo *arg1, int i
         obj = ((igMemoryPool *)igMetaObject_CreateInstance((CreateMeta *)meta, (MemoryPool *)allocA));
         igMemoryPool *o2 = obj;
         int size = cfg->_size;
-        al = size + (((Gl *)((void * *)DAT_00587218)[0])->v84() - 1);
-        aligned = al & ~(((Gl *)((void * *)DAT_00587218)[0])->v84() - 1);
+        al = size + (((Gl *)((void * *)g_activeSystemAllocator)[0])->v84() - 1);
+        aligned = al & ~(((Gl *)((void * *)g_activeSystemAllocator)[0])->v84() - 1);
         if (size != 0) {
             char *kind = (char *)cfg->_arenaType;
             if (kind == 0 || strcmp(kind, text_Dynamic) == 0) {
@@ -968,7 +968,7 @@ void MemoryContext_BuildAllocator(int *out, igMemoryPoolContextInfo *arg1, int i
                 if (sub == 0 || *sub == 0) { a = allocB; goto common; }
                 if (strcmp(sub, text_SystemMemory) == 0) {
 b78:
-                    int v = ((Gl *)((void * *)DAT_00587218)[0])->v68(0, aligned);
+                    int v = ((Gl *)((void * *)g_activeSystemAllocator)[0])->v68(0, aligned);
                     r3 = ((OV *)o2)->v96(v, aligned, 0);
                     slot->f136 = slot->f136 | 2;
                 } else if (strcmp(sub, text_Low) == 0 || strcmp(sub, text_High) == 0 || strcmp(sub, text_Virtual) == 0) {
@@ -1089,7 +1089,7 @@ void MemoryContext_RemoveAllocator(void *arg0, int arg1) {
                         if (a != 0) {
                             long long b = (long long)((C144 *)o)->vX();
                             sp68 = ((C96 *)o)->vX(0, 0, 0);
-                            sp64 = ((C72 *)((void * *)DAT_00587218)[0])->vX(a, b);
+                            sp64 = ((C72 *)((void * *)g_activeSystemAllocator)[0])->vX(a, b);
                         }
                     }
                 }
@@ -1547,7 +1547,7 @@ void FUN_002f8580(E3 *arg0, int *arg1) {
     FUN_00304430(DAT_004f95c8);
     FUN_00304680();
     FUN_002f0a60((char *)&text_Combined_pool_statistics[0]);
-    ((DW4VC_144_0 *)((void **)((void * *)DAT_00587218)[0]))->vX();
+    ((DW4VC_144_0 *)((void **)((void * *)g_activeSystemAllocator)[0]))->vX();
 }
 
 int Memory_GetCurrentContext(void) {

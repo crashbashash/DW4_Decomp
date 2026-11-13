@@ -17,7 +17,7 @@ are not automatically attributed to the hub.
 
 **49 bound APIs**, plus registration/dispatch, reach
 **508 functions / 117,380 bytes** through known direct edges.
-**11 functions / 4,940 bytes** lack source definitions.
+**6 functions / 3,656 bytes** lack source definitions.
 The reached bodies contain **110 unresolved register-transfer sites**.
 
 SD receiver methods, callbacks, model/AI programs, named-chunk ownership,
@@ -36,12 +36,7 @@ Exact script call-site references, message arguments, API roots and native edges
 | --- | --- | ---: | ---: |
 | `0x0010c8d8` | `FUN_0010c8d8` | 148 | 0 |
 | `0x0010cad8` | `FUN_0010cad8` | 1524 | 16 |
-| `0x00113f20` | `DIntr` | 84 | 0 |
 | `0x0018be80` | `FUN_0018be80` | 1340 | 0 |
-| `0x001908f0` | `Matrix44_Copy` | 188 | 0 |
-| `0x00190a50` | `Matrix44_TranslateLocal` | 212 | 0 |
+| `0x001908f0` | `igMatrix44f_Copy` | 188 | 0 |
 | `0x0022e440` | `__muldi3` | 116 | 0 |
-| `0x0023c9a0` | `LuaType_Construct` | 416 | 0 |
-| `0x002413f0` | `LuaClass_FindByName` | 352 | 0 |
-| `0x002d6b80` | `List_InsertWords` | 220 | 0 |
 | `0x0030cb80` | `StringChunk_ReturnBlock` | 340 | 0 |

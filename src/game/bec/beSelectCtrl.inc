@@ -5,7 +5,7 @@ void beSelectCtrl_CreateInstance(int arg0) {
 
 igMetaObject *FUN_00345a40(void) {
     if (g_beSelectCtrl_metaObject[0] == 0) {
-        g_beSelectCtrl_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
+        g_beSelectCtrl_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
     return g_beSelectCtrl_metaObject[0];
 }

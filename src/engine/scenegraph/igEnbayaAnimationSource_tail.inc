@@ -19,7 +19,7 @@ int Gap__Sg__igEnbayaAnimationSource__vfunc_23(void **arg0, int arg1, int arg2, 
 
     temp_s0 = ((DW4VC_108_4 *)(arg0))->vX((int)sp30, (int)sp40, (int)(arg2), (int)(arg3)) & 0xFF;
     FUN_00192810(sp30, arg1);
-    Matrix44_SetTranslation(arg1, sp40);
+    igMatrix44f_SetTranslation(arg1, sp40);
     return temp_s0;
 }
 

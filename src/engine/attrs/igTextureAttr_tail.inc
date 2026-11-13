@@ -28,7 +28,7 @@ static inline unsigned wrapT(const TextureAttr *a) { return a->wrapT; }
 int Gap__Attrs__igTextureAttr__vfunc_37(TextureAttr *attr, int unused, Allocator *allocator) {
     char text[8204];
     if (allocator == 0) {
-        allocator = (Allocator *)Memory_GetAllocatorBySelector(DAT_00587020[0]);
+        allocator = (Allocator *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleDefault[0]);
     }
     igSmartPointer<Image> image((Image *)FUN_00140c00(attr, 0), kRetainReference);
     int *name = &NO_IMAGE[0];

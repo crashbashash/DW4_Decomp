@@ -441,9 +441,9 @@ int FUN_00326920(void *arg0, int arg1) {
     int var_v0;
 
     if (*(int *)((char *)(arg0) + 140) & 8) {
-        var_v0 = ((DW4VC_52_0 *)(((void * *)DAT_00587218)[0]))->vX();
+        var_v0 = ((DW4VC_52_0 *)(((void * *)g_activeSystemAllocator)[0]))->vX();
     } else {
-        var_v0 = ((DW4VC_40_0 *)(((void * *)DAT_00587218)[0]))->vX();
+        var_v0 = ((DW4VC_40_0 *)(((void * *)g_activeSystemAllocator)[0]))->vX();
     }
     if (var_v0 != 0) {
         ((DW4VC_416_3 *)(((char *)(arg0) + 0)))->vX((int)(var_v0), (int)(arg1), (int)(1));
@@ -454,9 +454,9 @@ int FUN_00326920(void *arg0, int arg1) {
 void FUN_003269d0(O9d0 *arg0, int arg1, int arg2) {
     int t = (arg0->flags & 8) != 0; /* The flag test is normalised to 0/1 first; a `bool t = flags & 8` idiom would drop the sltu. */
     if (t) {
-        ((G_325850 *)((void * *)DAT_00587218)[0])->v56();
+        ((G_325850 *)((void * *)g_activeSystemAllocator)[0])->v56();
     } else {
-        ((G_325850 *)((void * *)DAT_00587218)[0])->v44();
+        ((G_325850 *)((void * *)g_activeSystemAllocator)[0])->v44();
     }
     if (arg1 != 0) {
         arg0->vX(arg1, arg2, 0);
@@ -486,9 +486,9 @@ int FUN_00326b80(int *arg0, int arg1, int arg2) {
     int v;
 
     if (arg0[35] & 8) {
-        v = ((A_325850 *)((void * *)DAT_00587218)[0])->vX(arg2);
+        v = ((A_325850 *)((void * *)g_activeSystemAllocator)[0])->vX(arg2);
     } else {
-        v = ((B_325850 *)((void * *)DAT_00587218)[0])->vX(arg2);
+        v = ((B_325850 *)((void * *)g_activeSystemAllocator)[0])->vX(arg2);
     }
     if (v != 0) {
         ((Cb80 *)arg0)->vX(v, arg2, 1);

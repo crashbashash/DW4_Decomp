@@ -233,7 +233,7 @@ void Gap__igPsx2Window__vfunc_33(void *d0, int *arg1, int *arg2) {
 }
 
 void Gap__igPsx2Window__vfunc_40(int *status_out) {
-    *status_out = g_allocatorFailureStatus[0];
+    *status_out = g_resultFailure[0];
 }
 
 /* igPsx2Window vtable slot 41 (+0xa4): leaf that returns 0 and ignores the window, the PS2

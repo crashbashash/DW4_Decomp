@@ -9,7 +9,7 @@ void FUN_002cae60(int arg0) {
 
 igMetaObject *FUN_002caea0(void) {
     if (g_igCharList_metaObject[0] == 0) {
-        g_igCharList_metaObject[0] = (igMetaObject *)igMetaObject_Create(((int)Memory_GetAllocatorBySelector(g_memoryContextMetaData)));
+        g_igCharList_metaObject[0] = (igMetaObject *)igMetaObject_Create(((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData)));
     }
     return g_igCharList_metaObject[0];
 }

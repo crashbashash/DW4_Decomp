@@ -45,7 +45,7 @@ extern "C" void *igBoolList_Create(...);
 extern "C" int List_Reserve(...);
 extern "C" int List_InsertWords(...);
 extern "C" int ObjectList_AppendRetained(...);
-extern "C" int Matrix44_GetTranslation(...);
+extern "C" int igMatrix44f_GetTranslation(...);
 extern "C" int strcmp(...);
 extern "C" int beNDMWGameRam_CalcMaxPoints(beNDMWGameRam *, int, int, int);
 extern "C" int beNDMWGameRam_CalcAttribute(beNDMWGameRam *, int, int, int);
@@ -75,7 +75,7 @@ extern "C" int g_beNDMWGameRam_metaObject[4];
 extern "C" int g_beNDMWMdlPEBaseInfoWork_metaObject[4];
 extern "C" int g_beNDMWMdlPEBase_metaObject[4];
 extern "C" int g_propertyNameField[4];
-extern "C" int g_defaultAllocatorSelector[4];
+extern "C" int kIGMemoryPoolHandleUser1[4];
 extern "C" int g_stringPool[4];
 extern "C" unsigned char g_useOwnerAllocator;
 extern "C" igVec3f g_vec3Zero;
@@ -157,10 +157,10 @@ enum { METAL_STEP = 4, METAL_DELAY_SCALE = 120 };
 /* Timers run in nanoseconds; durations arrive in frames at 60 per second. */
 static inline long long FramesToTime(int frames) { return (long long)frames * 1000000000 / 60; }
 
-/* The result igMetaEnum_GetValueByName returns, compared with g_statusSucceeded. */
+/* The result igMetaEnum_GetValueByName returns, compared with g_resultSuccess. */
 struct igResult { int value; bool operator==(const igResult &other) const { return value == other.value; } };
 extern "C" igResult igMetaEnum_GetValueByName(...);
-extern "C" igResult g_statusSucceeded;
+extern "C" igResult g_resultSuccess;
 
 /* beModelCtrl's vtable up to its message handler (slot 33). */
 class beModelCtrlSlots {
@@ -180,14 +180,14 @@ static inline void AssignReference(int &field, igObject *object) {
 
 static inline int OwnAllocator(void *object) {
     int allocator = igObject_GetAllocator(object);
-    return g_useOwnerAllocator != 0 ? allocator : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
+    return g_useOwnerAllocator != 0 ? allocator : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
 }
 
 /* Creates the ram's data list when it has none. */
 static inline void EnsureDataList(beBaseInfoRam *ram) {
     if (ram->_dataList == 0) {
         int allocator = igObject_GetAllocator(ram);
-        igSmartPointer<beBaseInfoDataList> created(beBaseInfoDataList_Create(g_useOwnerAllocator != 0 ? allocator : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0])));
+        igSmartPointer<beBaseInfoDataList> created(beBaseInfoDataList_Create(g_useOwnerAllocator != 0 ? allocator : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0])));
         AssignReference(ram->_dataList, created.p);
     }
 }
@@ -366,7 +366,7 @@ int beNDMWMdlPEBase_ShowStatusIcon(beNDMWMdlPEBase *self, beBaseInfoRam *ram, co
     igVec3f position, openPosition, movePosition, moveOffset;
     EnsureDataList(ram);
     data = igProperty_FindByName(ram->_dataList, g_propertyNameField[0], ONE_15);
-    Matrix44_GetTranslation(((igTransform *)data->_node)->_m, &position);
+    igMatrix44f_GetTranslation(((igTransform *)data->_node)->_m, &position);
     if (iconRamNo == -1) {
         beMessenger_SendNamed(self->_messenger, MODELCTRL_20, iconName, -1, FIND_SPACE_4);
         if (beMessenger_GetObjectCount(self->_messenger) == 0) goto fail;
@@ -488,7 +488,7 @@ void beNDMWMdlPEBase__UpdateStatus(beNDMWMdlPEBase *self, beBaseInfoRam *ram) {
                 IntList_Set((igIntList *)work->_timerList, STATUS_BIND, 0);
                 ((beModelCtrlSlots *)self)->handleMessage(ram, SQ_WAIT_6);
             } else {
-                if (!(igMetaEnum_GetValueByName(DamageSeq_GetMetaEnum(), (const char *)work->_seqCodeName, &damageSeq) == g_statusSucceeded)) {
+                if (!(igMetaEnum_GetValueByName(DamageSeq_GetMetaEnum(), (const char *)work->_seqCodeName, &damageSeq) == g_resultSuccess)) {
                     igObjectList *moves = (igObjectList *)work->_moveObjectList;
                     int count = moves->_count;
                     int i;
@@ -681,7 +681,7 @@ void beNDMWMdlPEBase_LoadDownData(beNDMWMdlPEBase *self, beBaseInfoRam *ram, beN
         int ownAllocator;
         ownAllocator = igObject_GetAllocator(self);
         /* An enemy starts from zeroes, owned by the stack reference until the work holds its own. */
-        IntListRef created((igIntList *)igIntList_Create(g_useOwnerAllocator != 0 ? ownAllocator : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0])));
+        IntListRef created((igIntList *)igIntList_Create(g_useOwnerAllocator != 0 ? ownAllocator : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0])));
         if (created.p->_count < DOWN_DATA_COUNT + 1) List_Reserve(created.p, DOWN_DATA_COUNT, sizeof(int));
         if (created.p->_capacity >= DOWN_DATA_COUNT) created.p->_count = DOWN_DATA_COUNT;
         else List_Resize(created.p, DOWN_DATA_COUNT, sizeof(int));
@@ -704,7 +704,7 @@ void beNDMWMdlPEBase_LoadUpData(beNDMWMdlPEBase *self, beBaseInfoRam *ram, beNDM
         int ownAllocator;
         ownAllocator = igObject_GetAllocator(self);
         /* An enemy starts from zeroes, owned by the stack reference until the work holds its own. */
-        IntListRef created((igIntList *)igIntList_Create(g_useOwnerAllocator != 0 ? ownAllocator : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0])));
+        IntListRef created((igIntList *)igIntList_Create(g_useOwnerAllocator != 0 ? ownAllocator : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0])));
         if (created.p->_count < UP_DATA_COUNT + 1) List_Reserve(created.p, UP_DATA_COUNT, sizeof(int));
         if (created.p->_capacity >= UP_DATA_COUNT) created.p->_count = UP_DATA_COUNT;
         else List_Resize(created.p, UP_DATA_COUNT, sizeof(int));
@@ -928,7 +928,7 @@ int beNDMWMdlPEBase__OnStatusMessage(beNDMWMdlPEBase *self, beBaseInfoRam *ram, 
         bool running = false;
         if (work != 0 && work->_dispRamNoList != 0 && work->_timerList != 0) {
             const char *name = (const char *)beMessenger_GetString(self->_messenger, 0);
-            if (igMetaEnum_GetValueByName(StatusName_GetMetaEnum(), name, &status) == g_statusSucceeded && IntAt(work->_timerList, status) != 0) running = true;
+            if (igMetaEnum_GetValueByName(StatusName_GetMetaEnum(), name, &status) == g_resultSuccess && IntAt(work->_timerList, status) != 0) running = true;
         }
         beMessenger_AppendBool(self->_messenger, running);
         return 1;

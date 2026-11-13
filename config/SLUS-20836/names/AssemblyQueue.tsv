@@ -89,7 +89,7 @@
 0x0018d8b0	igSphere_IntersectsRay	engine
 0x00190060	igVolume_ExtendBy	engine
 0x001919d0	igMatrix44f_MakePerspective	engine
-0x00192030	Matrix44_Adjugate	engine
+0x00192030	igMatrix44f_Adjugate	engine
 0x001928e0	Quaternion_GetRotation	engine
 0x00192e50	Vec3_GetOctant	engine
 0x00192fc0	Vec3f_TransformProjective	engine/maths

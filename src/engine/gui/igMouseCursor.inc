@@ -1,6 +1,6 @@
 igMetaObject *FUN_0044e430(void) {
     if (g_igMouseCursor_metaObject[0] == 0) {
-        g_igMouseCursor_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
+        g_igMouseCursor_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
     return g_igMouseCursor_metaObject[0];
 }

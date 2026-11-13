@@ -64,7 +64,7 @@ extern "C" int GETCOMMON_4[4];
 extern "C" int TEXTORDER_3[4];
 extern "C" int GAMEREMOVE[4];
 extern "C" int g_propertyNameField[4];
-extern "C" int g_defaultAllocatorSelector[4];
+extern "C" int kIGMemoryPoolHandleUser1[4];
 extern "C" int g_beSystem_metaObject[4];
 extern "C" int g_beLua_metaObject[4];
 extern "C" unsigned char g_useOwnerAllocator;
@@ -80,7 +80,7 @@ template <int kind> struct ChildRef {
 struct DataListGuard {
     static inline void Ensure(beBaseInfoRam *ram) {
     if (ram->_dataList == 0) {
-        int own = igObject_GetAllocator(ram); int allocator; if (g_useOwnerAllocator != 0) { allocator = own; } else { allocator = Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]); }
+        int own = igObject_GetAllocator(ram); int allocator; if (g_useOwnerAllocator != 0) { allocator = own; } else { allocator = Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]); }
         ChildRef<0> list((RefObject *)beBaseInfoDataList_Create(allocator)); RefObject *created; RefObject *old;
         created = list.object; if (created != 0) created->refCount = created->refCount + 1;
         old = (RefObject *)ram->_dataList;
@@ -209,7 +209,7 @@ public:
 extern "C" int *ObjectRef_Assign_003e92b0(void *, const NewDataListRef &);
 struct FreshDataList {
     static int *Assign(void *slot, int allocator) {
-        NewDataListRef created(AllocatorValue_Make_003e9360(Memory_SelectAllocator_003e9370(&g_defaultAllocatorSelector[0], allocator)));
+        NewDataListRef created(AllocatorValue_Make_003e9360(Memory_SelectAllocator_003e9370(&kIGMemoryPoolHandleUser1[0], allocator)));
         return ObjectRef_Assign_003e92b0(slot, created);
     }
 };
@@ -1713,11 +1713,11 @@ void beNDMWSaveIntf_Update(beNDMWSaveIntf *self, beBaseInfoRam *ram) {
                     break;
                 case 6:
                     {
-                    allocator = AllocatorChoice::Select(&g_defaultAllocatorSelector[0], igObject_GetAllocator(self));
+                    allocator = AllocatorChoice::Select(&kIGMemoryPoolHandleUser1[0], igObject_GetAllocator(self));
                     CreatedRef<1> newSlotPlayer((void *)(beNDMWLoadSlotPlayer_Create(allocator)));
                     degiIndex = 0;
                     do {
-                        allocator = AllocatorChoice::Select(&g_defaultAllocatorSelector[0], igObject_GetAllocator(self));
+                        allocator = AllocatorChoice::Select(&kIGMemoryPoolHandleUser1[0], igObject_GetAllocator(self));
                         {
                         CreatedRef<0> degiData((void *)(beNDMWDegiData_Create(allocator)));
                         ObjectList_AppendRetained(((beNDMWLoadSlotPlayer *)(newSlotPlayer.value))->_saveDataList, degiData.value);
@@ -1988,7 +1988,7 @@ int beNDMWSaveIntf_OnMessage(beNDMWSaveIntf *self, beBaseInfoRam *ram, MessageAr
     unsigned int command = beMessenger_ResolveEnumValue(self->_messenger, beNDMWSaveIntf_GetMessageEnum(), message->enumName);
     if (command == MSG_GENERATE) {
         if (ram->_dataList == 0) {
-            int allocator = AllocatorChoice::Select(&g_defaultAllocatorSelector[0], igObject_GetAllocator(self));
+            int allocator = AllocatorChoice::Select(&kIGMemoryPoolHandleUser1[0], igObject_GetAllocator(self));
             ChildRef<0> list((RefObject *)beBaseInfoDataList_Create(allocator)); RefObject *created; RefObject *old;
             created = list.object; if (created != 0) created->refCount = created->refCount + 1;
             old = (RefObject *)ram->_dataList;
@@ -1996,7 +1996,7 @@ int beNDMWSaveIntf_OnMessage(beNDMWSaveIntf *self, beBaseInfoRam *ram, MessageAr
             ram->_dataList = (int)created;
             self->_system_ = ((int)igInsightCore_FindManager(self->_insight, g_beSystem_metaObject[0]));
             {
-                int allocator = AllocatorChoice::Select(&g_defaultAllocatorSelector[0], igObject_GetAllocator(self));
+                int allocator = AllocatorChoice::Select(&kIGMemoryPoolHandleUser1[0], igObject_GetAllocator(self));
                 ChildRef<1> ctrlData((RefObject *)beNDMWSaveIntfCtrlData_Create(allocator));
                 ObjectList_AppendRetained(ram->_dataList, ctrlData.object);
                 ((beNDMWSaveIntfCtrlData *)ctrlData.object)->_isRun = 1;
@@ -2013,7 +2013,7 @@ int beNDMWSaveIntf_OnMessage(beNDMWSaveIntf *self, beBaseInfoRam *ram, MessageAr
             beMessenger_SendNamed(self->_messenger, SAVECTRL, 0, 0, GETCOMMON_4);
             ObjectList_AppendRetained(ram->_dataList, beMessenger_GetObject(self->_messenger, 0));
             {
-                int allocator = AllocatorChoice::Select(&g_defaultAllocatorSelector[0], igObject_GetAllocator(self));
+                int allocator = AllocatorChoice::Select(&kIGMemoryPoolHandleUser1[0], igObject_GetAllocator(self));
                 ChildRef<2> textOrder((RefObject *)beNDMWLoadIntf2TextOrder_Create(allocator));
                 ((beNDMWLoadIntf2TextOrder *)textOrder.object)->_messenger = self->_messenger;
                 beNDMWLoadIntf2TextOrder *order = (beNDMWLoadIntf2TextOrder *)textOrder.object;
@@ -2021,7 +2021,7 @@ int beNDMWSaveIntf_OnMessage(beNDMWSaveIntf *self, beBaseInfoRam *ram, MessageAr
                 ObjectList_AppendRetained(ram->_dataList, textOrder.object);
             }
             {
-                int allocator = AllocatorChoice::Select(&g_defaultAllocatorSelector[0], igObject_GetAllocator(self));
+                int allocator = AllocatorChoice::Select(&kIGMemoryPoolHandleUser1[0], igObject_GetAllocator(self));
                 ChildRef<3> model((RefObject *)beNDMWLoadIntf2ComMdlCtrl_Create(allocator));
                 ObjectList_AppendRetained(ram->_dataList, model.object);
                 ((beNDMWLoadIntf2ComMdlCtrl *)model.object)->_messenger = self->_messenger;
@@ -2036,7 +2036,7 @@ int beNDMWSaveIntf_OnMessage(beNDMWSaveIntf *self, beBaseInfoRam *ram, MessageAr
                 modelCtrl->_pos[2] = z;
             }
             {
-                int allocator = AllocatorChoice::Select(&g_defaultAllocatorSelector[0], igObject_GetAllocator(self));
+                int allocator = AllocatorChoice::Select(&kIGMemoryPoolHandleUser1[0], igObject_GetAllocator(self));
                 ChildRef<4> window((RefObject *)beNDMWLoadIntf2MesWin_Create(allocator));
                 ((beNDMWLoadIntf2MesWin *)window.object)->_ramNo = ram->_ramNo;
                 ((beNDMWLoadIntf2MesWin *)window.object)->_messenger = self->_messenger;
@@ -2046,7 +2046,7 @@ int beNDMWSaveIntf_OnMessage(beNDMWSaveIntf *self, beBaseInfoRam *ram, MessageAr
                 ((beNDMWLoadIntf2MesWin *)window.object)->_textOrder = (int)igProperty_FindByName(ram->_dataList, g_propertyNameField[0], TEXTORDER_3);
             }
             {
-                int allocator = AllocatorChoice::Select(&g_defaultAllocatorSelector[0], igObject_GetAllocator(self));
+                int allocator = AllocatorChoice::Select(&kIGMemoryPoolHandleUser1[0], igObject_GetAllocator(self));
                 ChildRef<5> slots((RefObject *)beNDMWLoadIntf2SelSlot_Create(allocator));
                 ((beNDMWLoadIntf2SelSlot *)slots.object)->_ramNo = ram->_ramNo;
                 ((beNDMWLoadIntf2SelSlot *)slots.object)->_messenger = self->_messenger;
@@ -2060,10 +2060,10 @@ int beNDMWSaveIntf_OnMessage(beNDMWSaveIntf *self, beBaseInfoRam *ram, MessageAr
                 ObjectList_AppendRetained(ram->_dataList, slots.object);
             }
             {
-                int allocator = AllocatorChoice::Select(&g_defaultAllocatorSelector[0], igObject_GetAllocator(self));
+                int allocator = AllocatorChoice::Select(&kIGMemoryPoolHandleUser1[0], igObject_GetAllocator(self));
                 ChildRef<6> stateCtrl((RefObject *)beNDMWLoadIntf2DegiStateCtrl_Create(allocator));
                 {
-                    int allocator2 = AllocatorChoice::Select(&g_defaultAllocatorSelector[0], igObject_GetAllocator(self));
+                    int allocator2 = AllocatorChoice::Select(&kIGMemoryPoolHandleUser1[0], igObject_GetAllocator(self));
                     ChildRef<7> upperState((RefObject *)beNDMWLoadIntf2DegiState_Create(allocator2));
                     DataListGuard::Ensure(ram);
                     void *commonIntf = igProperty_FindByName(ram->_dataList, g_propertyNameField[0], COMMONINTF_2);
@@ -2074,7 +2074,7 @@ int beNDMWSaveIntf_OnMessage(beNDMWSaveIntf *self, beBaseInfoRam *ram, MessageAr
                     ObjectList_AppendRetained(((beNDMWLoadIntf2DegiStateCtrl *)stateCtrl.object)->_statDataList, upperState.object);
                 }
                 {
-                    int allocator2 = AllocatorChoice::Select(&g_defaultAllocatorSelector[0], igObject_GetAllocator(self));
+                    int allocator2 = AllocatorChoice::Select(&kIGMemoryPoolHandleUser1[0], igObject_GetAllocator(self));
                     ChildRef<7> lowerState((RefObject *)beNDMWLoadIntf2DegiState_Create(allocator2));
                     DataListGuard::Ensure(ram);
                     void *commonIntf = igProperty_FindByName(ram->_dataList, g_propertyNameField[0], COMMONINTF_2);
@@ -2087,7 +2087,7 @@ int beNDMWSaveIntf_OnMessage(beNDMWSaveIntf *self, beBaseInfoRam *ram, MessageAr
                 ObjectList_AppendRetained(ram->_dataList, stateCtrl.object);
             }
             {
-                int allocator = AllocatorChoice::Select(&g_defaultAllocatorSelector[0], igObject_GetAllocator(self));
+                int allocator = AllocatorChoice::Select(&kIGMemoryPoolHandleUser1[0], igObject_GetAllocator(self));
                 ChildRef<8> dataSel((RefObject *)beNDMWLoadIntf2DataSelIntf_Create(allocator));
                 ((beNDMWLoadIntf2DataSelIntf *)dataSel.object)->_padManager = ((int)igInsightCore_FindManager(self->_insight, g_bePadManager_metaObject[0]));
                 DataListGuard::Ensure(ram);

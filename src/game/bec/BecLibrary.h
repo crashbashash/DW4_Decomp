@@ -2480,7 +2480,7 @@ extern "C" igMetaObject *Gap__Bec__beTimerData__vfunc_20(void);
 extern "C" igMetaObject *Gap__Bec__beTimerDataList__vfunc_20(void);
 extern "C" igMetaObject *Gap__Bec__beTimerDataList__vfunc_22(void);
 extern "C" igMetaObject *Gap__Bec__beTransformSync__vfunc_20(void);
-extern "C" int Matrix44_Copy(...);
+extern "C" int igMatrix44f_Copy(...);
 extern "C" igMetaObject *Gap__Bec__beUnicode__vfunc_20(void);
 extern "C" igMetaObject *Gap__Bec__beWaterPlainInfo__vfunc_20(void);
 extern "C" igMetaObject *Gap__Bec__beWaterMoveData__vfunc_20(void);
@@ -2584,7 +2584,7 @@ extern "C" int g_beWeaponInfo_ctorTable[4];
 extern "C" int g_beWeaponInfo_fieldTable[4];
 extern "C" int DAT_004c2fb0[4];
 extern "C" int DAT_004c2fc0[4];
-extern "C" int g_metadataAllocatorKey[4];
+extern "C" int kIGMemoryPoolHandleMetaData[4];
 extern "C" igMetaObject *g_beWeaponSeqDataList_metaObject[4];
 union U_33f080 { int vt; char b[32]; };
 extern "C" int DAT_00539ce0[4];
@@ -5886,7 +5886,7 @@ extern "C" int g_igLightSet_metaObject[4];
 extern "C" void Gap__Bec__beLuaDataObject__vfunc_08(beLuaDataObject *arg0);
 struct T_36f970 { int word0; int references; };
 extern "C" unsigned char g_useOwnerAllocator;
-extern "C" int g_defaultAllocatorSelector[4];
+extern "C" int kIGMemoryPoolHandleUser1[4];
 struct Rel { static inline void go(T_36f970 *object) {
     if (object) {
         --object->references;

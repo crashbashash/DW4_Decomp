@@ -73,7 +73,7 @@ public:
 extern "C" int beLua__RunNamedChunk(beLua *self, const char *name, const char *given);
 extern "C" igObject *FUN_0035aa20(int);
 extern "C" int igObject_GetAllocator(beLua *);
-extern "C" int g_defaultAllocatorSelector[4];
+extern "C" int kIGMemoryPoolHandleUser1[4];
 extern "C" unsigned char g_useOwnerAllocator;
 extern "C" void FUN_0038a2d0(beLua *arg0);
 extern "C" void Gap__Bec__beLua__vfunc_21(beLua *self, int unusedArg);
@@ -93,7 +93,7 @@ int beLOA_TraversalFunction(igCommonTraversal *traversal, beLOA *node) {
     return beLOA_Traverse(node, traversal);
 }
 
-extern "C" void Matrix44_GetTranslation(const float *matrix, float *vector);
+extern "C" void igMatrix44f_GetTranslation(const float *matrix, float *vector);
 extern "C" void List_RemoveWordAt(igObjectList *list, int index);
 extern "C" void igAttrStackManager_PushOverrideAttr(igAttrStackManager *attrs, igAttr *attr);
 extern "C" void igAttrStackManager_PopOverrideAttr(igAttrStackManager *attrs, igAttr *attr);
@@ -161,7 +161,7 @@ int beLOA_Traverse(beLOA *node, igCommonTraversal *traversal)
     case 0:
     case 2:
         modelView = (igModelViewMatrixAttr *)CurrentAttr(traversal, g_igModelViewMatrixAttr_metaObject[0]);
-        Matrix44_GetTranslation(modelView->_m, position);
+        igMatrix44f_GetTranslation(modelView->_m, position);
         if (position[0] * position[0] + position[1] * position[1] + position[2] * position[2] < node->_range) {
             if (node->_status == 0) {
                 node->_status = 1;
@@ -308,7 +308,7 @@ void FUN_0038a2d0(beLua *arg0) {
     if (g_useOwnerAllocator != 0) {
         var_v0 = alloc;
     } else {
-        var_v0 = Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
+        var_v0 = Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
     }
     temp_a0 = (igObject *)arg0->_luaState;
     if (temp_a0 != 0) {

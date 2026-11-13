@@ -88,20 +88,20 @@ void FUN_001c1e10(void) {
     int temp_s0;
 
     if (((void * * *)DAT_00562730)[0] == 0) {
-        ((void * * *)DAT_00562730)[0] = (void **)(((void * *)igTextureStateAttr_CreateInstance(Memory_GetAllocatorBySelector(DAT_00587038[0]))));
+        ((void * * *)DAT_00562730)[0] = (void **)(((void * *)igTextureStateAttr_CreateInstance(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem[0]))));
         ((DW4VC_128_1 *)(((void * * *)DAT_00562730)[0]))->vX((int)(1));
         ((DW4VC_100_1 *)(((void * * *)DAT_00562730)[0]))->vX((int)(0));
     }
     if (((void * * *)DAT_00562738)[0] == 0) {
-        ((void * * *)DAT_00562738)[0] = (void **)(((void * *)igBlendStateAttr_CreateInstance(Memory_GetAllocatorBySelector(DAT_00587038[0]))));
+        ((void * * *)DAT_00562738)[0] = (void **)(((void * *)igBlendStateAttr_CreateInstance(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem[0]))));
         ((DW4VC_128_1 *)(((void * * *)DAT_00562738)[0]))->vX((int)(1));
     }
     if (DAT_00562740[0] == 0) {
-        DAT_00562740[0] = (void **)(((void * *)igBlendStateAttr_CreateInstance(Memory_GetAllocatorBySelector(DAT_00587038[0]))));
+        DAT_00562740[0] = (void **)(((void * *)igBlendStateAttr_CreateInstance(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem[0]))));
         ((DW4VC_128_1 *)(DAT_00562740[0]))->vX((int)(0));
     }
     if (g_igAlphaStateAttr_instance.p == 0) {
-        temp_s0 = Memory_GetAllocatorBySelector(DAT_00587038[0]);
+        temp_s0 = Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem[0]);
         g_igAlphaStateAttr_instance.release();
         g_igAlphaStateAttr_instance.p = (igAlphaStateAttr *)FUN_0013b270(temp_s0);
         ((DW4VC_128_1 *)g_igAlphaStateAttr_instance.p)->vX(0);
@@ -436,9 +436,9 @@ void FUN_001c3ab0(int width, int height, int bpp, void *face1, void *face0, void
     float acc[4];
     total = bpp * (width * height);
     if (g_useOwnerAllocator != 0) {
-        a = ((SphereMapAllocator *)Memory_GetAllocatorBySelector(DAT_00587028[0]));
+        a = ((SphereMapAllocator *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleCurrent[0]));
     } else {
-        a = ((SphereMapAllocator *)Memory_GetAllocatorBySelector(g_temporaryAllocatorSelector[0]));
+        a = ((SphereMapAllocator *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleTemporary[0]));
     }
     mask = a->alloc(width * height);
     memset(mask, 0, width * height);
@@ -521,9 +521,9 @@ void FUN_001c3ab0(int width, int height, int bpp, void *face1, void *face0, void
         }
     }
     if (g_useOwnerAllocator != 0) {
-        a = ((SphereMapAllocator *)Memory_GetAllocatorBySelector(DAT_00587028[0]));
+        a = ((SphereMapAllocator *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleCurrent[0]));
     } else {
-        a = ((SphereMapAllocator *)Memory_GetAllocatorBySelector(g_temporaryAllocatorSelector[0]));
+        a = ((SphereMapAllocator *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleTemporary[0]));
     }
     a->release(mask);
 }

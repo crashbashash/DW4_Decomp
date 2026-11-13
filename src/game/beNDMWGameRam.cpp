@@ -1,7 +1,7 @@
 #include "dw4/igSmartPointer.h"
 #include "dw4/reflected.h"
 #define RELEASE_REF(T, q) { T *rr = (q); if (rr) { --rr->_refCount; if (!(rr->_refCount & 0x7fffff)) igObject_Destroy(rr); } }
-#define ALLOC(owner, var) { void *got = ((void *)igObject_GetAllocator(owner)); if (g_useOwnerAllocator) var = got; else var = ((void *)Memory_GetAllocatorBySelector(g_ndmwAllocatorSelector[0])); }
+#define ALLOC(owner, var) { void *got = ((void *)igObject_GetAllocator(owner)); if (g_useOwnerAllocator) var = got; else var = ((void *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser0[0])); }
 #define RESERVE(LT, h, SZ) { LT *l = (LT *)(h)->_data; if (!(entry->count < l->_count)) List_Reserve(l, entry->count, SZ); }
 #define RESIZE(LT, h, SZ) { int n = entry->count; LT *l = (LT *)(h)->_data; if (n >= 0) { if (n <= l->_capacity) l->_count = n; else List_Resize(l, n, SZ); } }
 /* matching construct: inline release macro with block-local q */
@@ -109,7 +109,7 @@ extern "C" int StringPool_GetInstance(void);
 extern "C" int ObjectRef_Get_00407030(int *p);
 extern "C" int ObjectRef_Get_00407040(int *p);
 extern "C" int ObjectRef_Get_00407050(int *p);
-extern "C" int g_ndmwAllocatorSelector[4];
+extern "C" int kIGMemoryPoolHandleUser0[4];
 extern "C" int g_dataObjDefaults[4];
 extern "C" unsigned char g_useOwnerAllocator;
 extern "C" unsigned char g_dataObjDefaultBool;
@@ -221,7 +221,7 @@ extern "C" beNDMWGameRamInfoRam *beNDMWGameRamInfoRam_Create(int);
 extern "C" int beMessenger_RegisterReceiverFromInfo(int, beNDMWGameRamInfoRam *, int *);
 extern "C" int gameram[4];
 extern "C" int GAMERAM_6[4];
-extern "C" int g_defaultAllocatorSelector[4];
+extern "C" int kIGMemoryPoolHandleUser1[4];
 /* Owning stack reference to the info's ram object created here, released on scope exit. */
 class RamRef {
 public:
@@ -396,10 +396,10 @@ struct IntList { int vtable_word, reference_word; int count; int capacity; int *
     int getCount() const { return count; } };
 extern "C" IntList *igIntList_Create(int);
 extern "C" void beMessenger_GetMatrix(Matrix44 *,int,int);
-extern "C" void Matrix44_GetTranslation(const Matrix44 *,Vector3 *);
+extern "C" void igMatrix44f_GetTranslation(const Matrix44 *,Vector3 *);
 extern "C" char GETMATRIX[];
 extern "C" char GETHP[];
-extern "C" int g_defaultAllocatorSelector[4];
+extern "C" int kIGMemoryPoolHandleUser1[4];
 /* Stack-resident counted reference to an IntList (the low 23 bits of the reference
  * word are the count; the object is destroyed when the last reference goes). */
 class NearbyListRef;
@@ -513,7 +513,7 @@ struct RecomputeHelpers {
     static inline int select_allocator(int fallback)
     {
         if (g_useOwnerAllocator) return fallback;
-        else return Memory_GetAllocatorBySelector(g_ndmwAllocatorSelector[0]);
+        else return Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser0[0]);
     }
 
     static inline void *GetPlayer(beNDMWGameRam *g, int idx)
@@ -699,7 +699,7 @@ void beNDMWGameRam_ResetPlayer(beNDMWGameRam *self, int player) {
     if (g_useOwnerAllocator != 0) {
         allocator = (int)allocator;
     } else {
-        allocator = Memory_GetAllocatorBySelector(g_ndmwAllocatorSelector[0]);
+        allocator = Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser0[0]);
     }
     igSmartPointer<igObject> data(beDataObjList_Create(allocator));
     beNDMWGameRam_BuildDataList(self, (igObjectList *)data.p, g_playerDataLayout);
@@ -721,7 +721,7 @@ void beNDMWGameRam_ResetPlayer(beNDMWGameRam *self, int player) {
         if (g_useOwnerAllocator != 0) {
             diskAllocator = (int)diskAllocator;
         } else {
-            diskAllocator = Memory_GetAllocatorBySelector(g_ndmwAllocatorSelector[0]);
+            diskAllocator = Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser0[0]);
         }
         ItemRef item(beNDMWItemDisk_Create(diskAllocator));
         beNDMWItemDisk_Set(item.p, disk);
@@ -749,7 +749,7 @@ void beNDMWGameRam_Initialize(beNDMWGameRam *self) {
     if (g_useOwnerAllocator != 0) {
         allocator = (int)allocator;
     } else {
-        allocator = Memory_GetAllocatorBySelector(g_ndmwAllocatorSelector[0]);
+        allocator = Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser0[0]);
     }
     {
         /* The new list is owned by the stack reference while it is retained into the field and the old
@@ -766,7 +766,7 @@ void beNDMWGameRam_Initialize(beNDMWGameRam *self) {
     if (g_useOwnerAllocator != 0) {
         playersAllocator = (int)playersAllocator;
     } else {
-        playersAllocator = Memory_GetAllocatorBySelector(g_ndmwAllocatorSelector[0]);
+        playersAllocator = Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser0[0]);
     }
     {
         PlayerDataListListRef players(beDataObjListList_Create(playersAllocator));
@@ -862,10 +862,10 @@ int beNDMWGameRam_CreateInfo(beNDMWGameRam *self) {
     infos = (beBaseInfoList *)self->_infoList;
     if (infos->_count == 0) {
         allocator = igObject_GetAllocator(self);
-        allocator = g_useOwnerAllocator ? allocator : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
+        allocator = g_useOwnerAllocator ? allocator : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
         igSmartPointer<beNDMWGameRamInfo> info(beNDMWGameRamInfo_Create(allocator));
         allocator = igObject_GetAllocator(self);
-        allocator = g_useOwnerAllocator ? allocator : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
+        allocator = g_useOwnerAllocator ? allocator : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
         RamRef ram(beNDMWGameRamInfoRam_Create(allocator));
         igNamedObject_SetName(info.p, gameram);
         ram.p->_parentInfo = (int)info.p;
@@ -1098,7 +1098,7 @@ void beNDMWGameRam_GiveInitialWeapons(beNDMWGameRam *self, int index) {
     field = g_initialWeaponFields;
     do {
         allocator = igObject_GetAllocator(self);
-        allocator = (g_useOwnerAllocator != 0) ? allocator : Memory_GetAllocatorBySelector(g_ndmwAllocatorSelector[0]);
+        allocator = (g_useOwnerAllocator != 0) ? allocator : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser0[0]);
         {
         RecoveryRef<1> weaponRef(beNDMWItemWeapon_Create(allocator), false);
         weapon = weaponRef.value;
@@ -1328,7 +1328,7 @@ void beNDMWGameRam_JoinPlayerWithName(beNDMWGameRam *self, int index, void *mode
     beNDMWGameRam_JoinPlayer(self, index, (const char *)modelName);
     player = ((int *)(((igObjectList *)self->_playerDataListList)->_data))[index];
     allocator = igObject_GetAllocator(self);
-    allocator = g_useOwnerAllocator ? allocator : Memory_GetAllocatorBySelector(g_ndmwAllocatorSelector[0]);
+    allocator = g_useOwnerAllocator ? allocator : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser0[0]);
     igSmartPointer<beUnicodeObj> unicodeName(beUnicodeObj_Create(allocator));
     beUnicodeObj_AllocateBuffer(unicodeName.p, 8);
     {
@@ -1935,14 +1935,14 @@ void beNDMWGameRam_FindTechniqueRow(beNDMWGameRam *receiver, void *player,
 /* Collects the ids of the members of messenger group `group` that are within 30 units of `center`
  * (compared on GETMATRIX translations), skips `excluded`, and keeps those whose GETHP reply is
  * nonzero. The result list comes from the object's own allocator when the global byte flag is set,
- * otherwise from the allocator selected by g_defaultAllocatorSelector[0]. */
+ * otherwise from the allocator selected by kIGMemoryPoolHandleUser1[0]. */
 NearbyListRef beNDMWGameRam_CollectNearbyNonzeroHp(beNDMWGameRam *self,const char *group,int excluded,const Vector3 *center) {
     int entry_index;
     int member_id;
     int append_index;
     IntList *list;
     int selfAllocator=igObject_GetAllocator(self);
-    NearbyListRef result(igIntList_Create(g_useOwnerAllocator ? selfAllocator : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0])));
+    NearbyListRef result(igIntList_Create(g_useOwnerAllocator ? selfAllocator : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0])));
     beMessenger_SendGroup(self->_messenger,group,GETMATRIX);
     int count=beMessenger_GetIntCount(self->_messenger);
     Vector3 delta;
@@ -1951,7 +1951,7 @@ NearbyListRef beNDMWGameRam_CollectNearbyNonzeroHp(beNDMWGameRam *self,const cha
         member_id=beMessenger_GetInt(self->_messenger,entry_index);
         if(member_id!=excluded) {
             beMessenger_GetMatrix(&matrix,self->_messenger,entry_index);
-            Matrix44_GetTranslation(&matrix,&delta);
+            igMatrix44f_GetTranslation(&matrix,&delta);
             delta.x-=center->x;
             delta.y-=center->y;
             delta.z-=center->z;
@@ -2000,7 +2000,7 @@ void Vec3f_Copy(...);
 int ObjectList_GetAt_003e9260(...);
 int DataList_GetData_003e9090(...);
 int Memory_SelectAllocator_003e9370(...);
-void Matrix44_Copy(...);
+void igMatrix44f_Copy(...);
 void igMatrix44f_SetIdentity(...);
 void *FightCom_GetMetaEnum(...);
 void *GameRamMessage_GetMetaEnum(...);
@@ -2117,7 +2117,7 @@ extern "C" int FUN_00229fb0(void *, const StringRef &);
 /* matching construct: inline helper reproduces the retail arithmetic shape */ struct DW4Curve { static int g(int d, int x) { return d * 0xC8 + (x + 0x8B) * (d * d); } static int f(int x) { int d = x - 1; return d * 0xC8 + (x + 0x8B) * (d * d); } };
 /* matching construct: RAII copied-reference local reproduces the retail unwind table */ class RecoveryCopiedRef { public: void *value; RecoveryCopiedRef(const AllocatorValue &source); ~RecoveryCopiedRef(); };
 extern "C" int *ObjectRef_Assign_003e92b0(void *, const RecoveryCopiedRef &);
-/* matching construct: out-of-line helper reproduces the retail call shape */ struct DW4Fresh { static int *Assign(void *obj, int alloc) { RecoveryCopiedRef c(AllocatorValue_Make_003e9360(Memory_SelectAllocator_003e9370(g_defaultAllocatorSelector, alloc))); return ObjectRef_Assign_003e92b0(obj, c); } };
+/* matching construct: out-of-line helper reproduces the retail call shape */ struct DW4Fresh { static int *Assign(void *obj, int alloc) { RecoveryCopiedRef c(AllocatorValue_Make_003e9360(Memory_SelectAllocator_003e9370(kIGMemoryPoolHandleUser1, alloc))); return ObjectRef_Assign_003e92b0(obj, c); } };
 /* matching construct: out-of-line helper that reproduces the retail call shape of the BKCHIPNAME string-list store */
 struct DW4StrListOps { static void SetAt(igStringRefList *list, int idx, const StringRef &v) { if (list->_count != 0 && idx >= 0 && idx < list->_count) FUN_00229fb0((void *)((char *)DataList_GetData_00406da0((igDataList *)list) + idx * 4), v); } };
 /* matching construct: RAII list local reproduces the retail unwind table */ class RecoveryList { public:
@@ -4204,7 +4204,7 @@ int beNDMWGameRam_OnMessage(beNDMWGameRam *self, int ram, void *message) {
                         switch (var_s5) {
                         case 0:
                             temp_ret_131 = igObject_GetAllocator(self);
-                            temp_ret_132 = Memory_SelectAllocator_003e9370(g_ndmwAllocatorSelector, temp_ret_131);
+                            temp_ret_132 = Memory_SelectAllocator_003e9370(kIGMemoryPoolHandleUser0, temp_ret_131);
                             temp_ret_134 = (void *)(beNDMWItemWeapon_Create(AllocatorValue_Make_00406f70(temp_ret_132).v));
                             { RecoveryRef<1> sp4A8((void *)(temp_ret_134), false);
                             temp_ret_135 = beNDMWItemWeapon_Set(sp4A8.value, temp_v0_21, temp_v0_23, temp_v0_22);
@@ -4213,7 +4213,7 @@ int beNDMWGameRam_OnMessage(beNDMWGameRam *self, int ram, void *message) {
                             break;
                         case 1:
                             temp_ret_137 = igObject_GetAllocator(self);
-                            temp_ret_138 = Memory_SelectAllocator_003e9370(g_ndmwAllocatorSelector, temp_ret_137);
+                            temp_ret_138 = Memory_SelectAllocator_003e9370(kIGMemoryPoolHandleUser0, temp_ret_137);
                             temp_ret_140 = (void *)(beNDMWItemBlueArmor_Create(AllocatorValue_Make_00406f60(temp_ret_138).v));
                             { RecoveryRef<2> sp4A4((void *)(temp_ret_140), false);
                             temp_ret_141 = beNDMWItemBlueArmor_Set(sp4A4.value, temp_v0_21, temp_v0_23, temp_v0_22);
@@ -4222,7 +4222,7 @@ int beNDMWGameRam_OnMessage(beNDMWGameRam *self, int ram, void *message) {
                             break;
                         case 2:
                             temp_ret_143 = igObject_GetAllocator(self);
-                            temp_ret_144 = Memory_SelectAllocator_003e9370(g_ndmwAllocatorSelector, temp_ret_143);
+                            temp_ret_144 = Memory_SelectAllocator_003e9370(kIGMemoryPoolHandleUser0, temp_ret_143);
                             temp_ret_146 = (void *)(beNDMWItemYellowArmor_Create(AllocatorValue_Make_00406f50(temp_ret_144).v));
                             { RecoveryRef<3> sp4A0((void *)(temp_ret_146), false);
                             temp_ret_147 = beNDMWItemYellowArmor_Set(sp4A0.value, temp_v0_21, temp_v0_22);
@@ -4231,7 +4231,7 @@ int beNDMWGameRam_OnMessage(beNDMWGameRam *self, int ram, void *message) {
                             break;
                         case 3:
                             temp_ret_149 = igObject_GetAllocator(self);
-                            temp_ret_150 = Memory_SelectAllocator_003e9370(g_ndmwAllocatorSelector, temp_ret_149);
+                            temp_ret_150 = Memory_SelectAllocator_003e9370(kIGMemoryPoolHandleUser0, temp_ret_149);
                             temp_ret_152 = (void *)(beNDMWItemAbilityChip_Create(AllocatorValue_Make_00406f40(temp_ret_150).v));
                             { RecoveryRef<4> sp49C((void *)(temp_ret_152), false);
                             temp_ret_153 = beNDMWItemAbilityChip_Set(sp49C.value, temp_v0_21);
@@ -6961,7 +6961,7 @@ loop_449:
                         temp_ret_1095 = (const char *)ObjectRef_Get_00407050(&((beDataObjString *)temp_ret_1094)->_data);
                         beMessenger_SendNamed(self->_messenger, &PLAYER_2[0], temp_ret_1095, temp_v0_164, GETMATRIX);
                         beMessenger_GetMatrix(&sp270, self->_messenger, 0);
-                        Matrix44_GetTranslation(&sp270, &sp3D8);
+                        igMatrix44f_GetTranslation(&sp270, &sp3D8);
                         { NearbyListRef sp434 = beNDMWGameRam_CollectNearbyNonzeroHp(self, &PLAYER_2[0], temp_v0_164, &sp3D8);
                         temp_s3_14 = ((igIntList *)sp434.value)->_count;
                         for (var_s1_24 = 0; var_s1_24 < temp_s3_14; ++var_s1_24) {
@@ -7024,7 +7024,7 @@ temp_ret_1118 = (int)igProperty_GetRecordString(temp_v0_165, DIGIMONNAME_2);
                         temp_ret_1126 = (const char *)ObjectRef_Get_00407050(&((beDataObjString *)temp_ret_1125)->_data);
                         beMessenger_SendNamed(self->_messenger, &PLAYER_2[0], temp_ret_1126, temp_v0_164, GETMATRIX);
                         beMessenger_GetMatrix(&sp230, self->_messenger, 0);
-                        Matrix44_GetTranslation(&sp230, &sp3C8);
+                        igMatrix44f_GetTranslation(&sp230, &sp3C8);
                         { NearbyListRef sp42C = beNDMWGameRam_CollectNearbyNonzeroHp(self, &PLAYER_2[0], temp_v0_164, &sp3C8);
                         temp_v0_171 = ((igIntList *)sp42C.value)->_count;
                         int sp100 = temp_v0_171;
@@ -7080,8 +7080,8 @@ temp_ret_1118 = (int)igProperty_GetRecordString(temp_v0_165, DIGIMONNAME_2);
                     temp_ret_1142 = (const char *)ObjectRef_Get_00407050(&((beDataObjString *)temp_ret_1141)->_data);
                     beMessenger_SendNamed(self->_messenger, &PLAYER_2[0], temp_ret_1142, temp_v0_164, GETMATRIX);
                     beMessenger_GetMatrix(&sp1F0, self->_messenger, 0);
-                    Matrix44_Copy(&sp2B0, &sp1F0);
-                    Matrix44_GetTranslation(&sp2B0, &sp3B8);
+                    igMatrix44f_Copy(&sp2B0, &sp1F0);
+                    igMatrix44f_GetTranslation(&sp2B0, &sp3B8);
                     { NearbyListRef sp424 = beNDMWGameRam_CollectNearbyNonzeroHp(self, &PLAYER2[0], -1, &sp3B8);
                     temp_s5_6 = ((igIntList *)sp424.value)->_count;
                     for (var_s1_25 = 0; var_s1_25 < temp_s5_6; ++var_s1_25) {
@@ -7132,7 +7132,7 @@ temp_ret_1118 = (int)igProperty_GetRecordString(temp_v0_165, DIGIMONNAME_2);
                     temp_ret_1165 = (const char *)ObjectRef_Get_00407050(&((beDataObjString *)temp_ret_1164)->_data);
                     beMessenger_SendNamed(self->_messenger, &PLAYER_2[0], temp_ret_1165, temp_v0_164, GETMATRIX);
                     beMessenger_GetMatrix(&sp1B0, self->_messenger, 0);
-                    Matrix44_GetTranslation(&sp1B0, &sp3A8);
+                    igMatrix44f_GetTranslation(&sp1B0, &sp3A8);
                     { NearbyListRef sp41C = beNDMWGameRam_CollectNearbyNonzeroHp(self, &PLAYER_2[0], temp_v0_164, &sp3A8);
                     temp_ret_1166 = (void *)(ObjectRef_Get_00406dc0((int *)&sp41C.value));
                     temp_v0_176 = (void *)(temp_ret_1166);
@@ -7253,7 +7253,7 @@ temp_ret_1118 = (int)igProperty_GetRecordString(temp_v0_165, DIGIMONNAME_2);
                     temp_ret_1223 = (const char *)ObjectRef_Get_00407050(&((beDataObjString *)temp_ret_1222)->_data);
                     beMessenger_SendNamed(self->_messenger, &PLAYER_2[0], temp_ret_1223, temp_v0_164, GETMATRIX);
                     beMessenger_GetMatrix(&sp170, self->_messenger, 0);
-                    Matrix44_GetTranslation(&sp170, &sp398);
+                    igMatrix44f_GetTranslation(&sp170, &sp398);
                     { NearbyListRef sp414 = beNDMWGameRam_CollectNearbyNonzeroHp(self, &PLAYER_2[0], temp_v0_164, &sp398);
                     temp_ret_1224 = (void *)(ObjectRef_Get_00406dc0((int *)&sp414.value));
                     temp_v0_179 = (void *)(temp_ret_1224);
@@ -7340,7 +7340,7 @@ temp_ret_1118 = (int)igProperty_GetRecordString(temp_v0_165, DIGIMONNAME_2);
                     temp_ret_1262 = (const char *)ObjectRef_Get_00407050(&((beDataObjString *)temp_ret_1261)->_data);
                     beMessenger_SendNamed(self->_messenger, &PLAYER_2[0], temp_ret_1262, temp_v0_164, GETMATRIX);
                     beMessenger_GetMatrix(&sp130, self->_messenger, 0);
-                    Matrix44_GetTranslation(&sp130, &sp388);
+                    igMatrix44f_GetTranslation(&sp130, &sp388);
                     { NearbyListRef sp40C = beNDMWGameRam_CollectNearbyNonzeroHp(self, &PLAYER_2[0], temp_v0_164, &sp388);
                     temp_ret_1263 = (void *)(ObjectRef_Get_00406dc0((int *)&sp40C.value));
                     temp_v0_181 = (void *)(temp_ret_1263);

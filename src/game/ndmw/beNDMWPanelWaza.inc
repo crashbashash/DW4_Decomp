@@ -5,7 +5,7 @@ void beNDMWPanelWaza_CreateInstance(int arg0) {
 
 igMetaObject *FUN_003beed0(void) {
     if (g_beNDMWPanelWaza_metaObject[0] == 0) {
-        g_beNDMWPanelWaza_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
+        g_beNDMWPanelWaza_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
     return g_beNDMWPanelWaza_metaObject[0];
 }

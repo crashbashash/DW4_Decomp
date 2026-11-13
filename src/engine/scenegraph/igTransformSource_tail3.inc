@@ -17,7 +17,7 @@ void FUN_001dd0e0(TransformSampleView *o, int index, float (*m)[4]) {
         float *r = m[i];
         s[i] = sqrtf(r[0] * r[0] + r[1] * r[1] + r[2] * r[2]);
     }
-    Matrix44_Copy(rot, m);
+    igMatrix44f_Copy(rot, m);
     if (FUN_00192290(m) < 0.0f) {
         s[0] = -s[0];
         s[1] = -s[1];
@@ -35,7 +35,7 @@ void FUN_001dd0e0(TransformSampleView *o, int index, float (*m)[4]) {
         inv[1] = y;
     }
     FUN_00190cb0(rot, inv);
-    Matrix44_GetQuaternion(o->_quatList->_data[index], rot);
+    igMatrix44f_GetQuaternion(o->_quatList->_data[index], rot);
 }
 
 void FUN_001dd250(A_1dd250 *arg0, int arg1, char *arg2) {

@@ -22,14 +22,14 @@ int FUN_001abc20(int *arg0, int arg1) {
 }
 
 void FUN_001abca0(void) {
-    int allocator = Memory_GetAllocatorBySelector(DAT_00587038[0]);
+    int allocator = Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem[0]);
     g_igAnimationCombinerBoneInfoPool_instance.release();
     g_igAnimationCombinerBoneInfoPool_instance.p = (igAnimationCombinerBoneInfoPool *)igAnimationCombinerBoneInfoPool_Create(allocator);
     g_igAnimationCombinerBoneInfoPool_instance->_resetMode = 0;
-    allocator = Memory_GetAllocatorBySelector(DAT_00587038[0]);
+    allocator = Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem[0]);
     g_igAnimationStatePool_instance.release();
     g_igAnimationStatePool_instance.p = (igAnimationStatePool *)igAnimationStatePool_Create(allocator);
-    allocator = Memory_GetAllocatorBySelector(DAT_00587038[0]);
+    allocator = Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem[0]);
     g_igAnimation_instance.release();
     g_igAnimation_instance.p = (igAnimation *)FUN_001a90f0(allocator);
     FUN_00306e50(*(int *)((char *)(((int * *)g_objectSystem)[0]) + 56), 7, &text_cleanCombinerStates[0], &GPR_00554b84, 0, 0);
@@ -178,8 +178,8 @@ int FUN_001ad310(void **arg0, int arg1, int arg2, int arg3, int arg4, int arg5) 
     int temp_s0;
 
     temp_s0 = ((DW4VC_96_4 *)(arg0))->vX((int)(sp40), (int)(arg3), (int)(arg4), (int)(arg5)) & 0xFF;
-    Matrix44_GetQuaternion(arg1, sp40);
-    Matrix44_GetTranslation(sp40, arg2);
+    igMatrix44f_GetQuaternion(arg1, sp40);
+    igMatrix44f_GetTranslation(sp40, arg2);
     return temp_s0;
 }
 

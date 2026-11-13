@@ -35,7 +35,7 @@ int beDemoManager_AcceptInfo(void);
 void beDemoManager_Reset(beDemoManager *self);
 void beDemoManager_Update(beDemoManager *self);
 igMetaObject *beDemoManager_GetMetaObject_Virtual(void);
-extern int g_defaultAllocatorSelector[4];
+extern int kIGMemoryPoolHandleUser1[4];
 extern unsigned char g_useOwnerAllocator;
 extern void *g_stringPool[4];
 extern igMetaObject *g_beMessenger_metaObject[4];
@@ -60,7 +60,7 @@ public:
 /* The allocator an object's new members come from: its own, or the default one. */
 static inline int allocatorFor(void *object) {
     int allocator = igObject_GetAllocator(object);
-    return g_useOwnerAllocator ? allocator : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
+    return g_useOwnerAllocator ? allocator : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
 }
 
 /* The game's string pool, created on first use. */

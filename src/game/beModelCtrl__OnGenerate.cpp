@@ -5,8 +5,8 @@ struct Prop { char pad[16]; PropV *f16; };
 extern "C" {
 igObject *beBaseInfoDataList_Create(...);
 int FUN_001910c0(void *, float, float, float);
-int Matrix44_Copy(...);
-int Matrix44_SetTranslation(...);
+int igMatrix44f_Copy(...);
+int igMatrix44f_SetTranslation(...);
 int Memory_GetAllocatorBySelector(...);
 int beMessenger_GetMatrix(...);
 int beMessenger_GetMatrixCount(...);
@@ -57,9 +57,9 @@ void beModelCtrl__OnGenerate(beModelCtrl *arg0, beBaseInfoRam *arg1) {
     }
     prop = igProperty_FindByName((void *)arg1->_dataList, g_propertyNameField[0], &ONE_3[0]);
     if (beMessenger_GetVec3Count(arg0->_messenger) != 0) {
-        Matrix44_Copy(sp80, (char *)prop->f16 + 0x20);
+        igMatrix44f_Copy(sp80, (char *)prop->f16 + 0x20);
         beMessenger_GetVec3(spC0, arg0->_messenger, 0);
-        Matrix44_SetTranslation(sp80, spC0);
+        igMatrix44f_SetTranslation(sp80, spC0);
         if (beMessenger_GetVec3Count(arg0->_messenger) == 2) {
             beMessenger_GetVec3(spD0, arg0->_messenger, 1);
             float x = spD0[0];

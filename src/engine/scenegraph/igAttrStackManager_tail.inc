@@ -28,7 +28,7 @@ void Gap__Sg__igAttrStackManager__vfunc_09(unsigned char *arg0, int arg1) {
     if (arg1 == 0) {
         if (DAT_00562580[0] == 0) {
             al = igObject_GetAllocator(arg0);
-            al = g_useOwnerAllocator != 0 ? al : Memory_GetAllocatorBySelector(DAT_005870f8[0]);
+            al = g_useOwnerAllocator != 0 ? al : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleAttribute[0]);
             DAT_00562580[0] = ((struct L_1af920 *)FUN_001a51d0(al));
         }
         l = DAT_00562580[0];
@@ -81,7 +81,7 @@ void FUN_001afb60(char *arg0) {
     int idx;
     if (FUN_002fe290(arg0, igAttr_GetMetaObject()) != 0 && *(unsigned char *)(arg0 + 26) == 0) {
         if (((RefObj * *)DAT_00562578)[0] == 0) {
-            ((RefObj * *)DAT_00562578)[0] = FUN_002c8e10(((void *)Memory_GetAllocatorBySelector(DAT_00587038[0])));
+            ((RefObj * *)DAT_00562578)[0] = FUN_002c8e10(((void *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem[0])));
         }
         K key(arg0);
         idx = Finder_1afb60::Find(((RefObj * *)DAT_00562578)[0], key);

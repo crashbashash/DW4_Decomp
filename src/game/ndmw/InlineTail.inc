@@ -98,7 +98,7 @@ void Gap__Bec__beNDMWDegiData__vfunc_07(beNDMWDegiData *arg0, int arg1) {
     if (!(arg1 & 0xFF)) {
         arg0->_dataSize = 0x2000;
         a = igObject_GetAllocator(arg0);
-        a = g_useOwnerAllocator ? a : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
+        a = g_useOwnerAllocator ? a : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
         arg0->_data = Memory_AllocateBufferDirect(0x2000, a);
     }
 }
@@ -108,7 +108,7 @@ void Gap__Bec__beNDMWDegiData__vfunc_08(V88 *arg0) {
 
     if (arg0->f28 != 0) {
         a = igObject_GetAllocator(arg0);
-        a = g_useOwnerAllocator != 0 ? a : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
+        a = g_useOwnerAllocator != 0 ? a : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
         Memory_FreeBufferWithAllocator(arg0->f28, a);
     }
     arg0->f28 = 0;

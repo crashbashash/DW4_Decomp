@@ -5,7 +5,7 @@ void igGeometryAttr_Create(int arg0) {
 
 igMetaObject *FUN_00137850(void) {
     if (g_igGeometryAttr_metaObject[0] == 0) {
-        g_igGeometryAttr_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
+        g_igGeometryAttr_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
     return g_igGeometryAttr_metaObject[0];
 }

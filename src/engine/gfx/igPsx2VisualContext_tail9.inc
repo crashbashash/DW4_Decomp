@@ -26,11 +26,11 @@ void FUN_00180060(O_180060 *arg0) {
         for (i = 0; i < arg0->f72; i++) {
             off = i << 6;
             s2 = arg0->f80 + off;
-            Matrix44_Invert(&sp5C, s2, arg0->f84 + off);
+            igMatrix44f_Invert(&sp5C, s2, arg0->f84 + off);
             v[0] = 0;
             v[1] = 0;
             v[2] = 0;
-            Matrix44_SetTranslation(s2, v);
+            igMatrix44f_SetTranslation(s2, v);
             FUN_001903d0(s2);
         }
     }

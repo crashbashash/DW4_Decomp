@@ -12,8 +12,8 @@ int Gap__Sg__igActor__vfunc_37(ActorView *o0, ActorTraversal *t0) {
     t = (ActorTraversal *)(int)t0;
     if (o->_animate) {
         ActorAttrState *st = t->_state;
-        Matrix44_Copy(o->_world, lastEntry(st->_stacks->_data[st->_slotOfIndex[((ActorMeta * *)g_igModelViewMatrixAttr_metaObject)[0]->_offset]])->_matrix);
-        Matrix44_Copy(o->_view, t->_view);
+        igMatrix44f_Copy(o->_world, lastEntry(st->_stacks->_data[st->_slotOfIndex[((ActorMeta * *)g_igModelViewMatrixAttr_metaObject)[0]->_offset]])->_matrix);
+        igMatrix44f_Copy(o->_view, t->_view);
         if (o->_nodes->_count == 0 && o->_forced == 0) {
             o->_useCached = 0;
         } else {
@@ -122,7 +122,7 @@ void FUN_001b8c80(void *self, int arg1) {
     int arg0 = (int)self;
     int temp_v0;
     temp_v0 = (int)igTransform_PushMatrix((TransformView *)arg1, (CommonTraversalView *)arg0);
-    Matrix44_Copy(arg1 + *(int *)((char *)(DAT_00561928[0]) + 8), temp_v0);
+    igMatrix44f_Copy(arg1 + *(int *)((char *)(DAT_00561928[0]) + 8), temp_v0);
     igTransform_TraverseChildrenAndPopMatrix((float *)temp_v0, (igTransform *)arg1, (igCommonTraversal *)arg0);
 }
 
@@ -143,7 +143,7 @@ void FUN_001b8cf0(igCommonTraversal *arg0, char *arg1) {
     if (v != 0) { a1 = v + 12; }
     dst = arg1 + ((igMetaObject *)DAT_00561918[0])->_id;
     if (a1 != 0) {
-        Matrix44_Copy(dst, a1, a2);
+        igMatrix44f_Copy(dst, a1, a2);
     } else {
         igMatrix44f_SetIdentity(dst, a1, a2);
     }

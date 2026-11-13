@@ -136,7 +136,7 @@ extern "C" int Gap__Bec__beSvFileMakeApi__vfunc_20(void);
 extern "C" void Gap__Bec__beSvFileMakeApi__vfunc_07(igObjectVirtuals *self);
 extern "C" void Gap__Bec__beSaveApi__vfunc_08(void);
 extern "C" void Gap__Bec__beSaveMemoryObj__vfunc_07(igObjectVirtuals *self);
-extern "C" int g_defaultAllocatorSelector[4];
+extern "C" int kIGMemoryPoolHandleUser1[4];
 extern "C" unsigned char g_useOwnerAllocator;
 extern "C" void beSaveDataDeliver_FreeData(beSaveDataDeliver *deliver);
 extern "C" void beSaveMemoryObj_Allocate(beSaveMemoryObj *self, int size, int alignment);
@@ -256,7 +256,7 @@ void beSaveDataDeliver_AllocateData(beSaveDataDeliver *deliver, int size) {
     if (g_useOwnerAllocator != 0) {
         allocator = own;
     } else {
-        allocator = Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
+        allocator = Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
     }
     deliver->_data = Memory_AllocateBufferDirect(size, allocator);
 }
@@ -266,7 +266,7 @@ void beSaveDataDeliver_FreeData(beSaveDataDeliver *deliver) {
 
     if (deliver->_data != 0) {
         allocator = igObject_GetAllocator(deliver);
-        allocator = (g_useOwnerAllocator != 0) ? allocator : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
+        allocator = (g_useOwnerAllocator != 0) ? allocator : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
         Memory_FreeBufferWithAllocator(deliver->_data, allocator);
     }
     deliver->_data = 0;
@@ -278,11 +278,11 @@ void beSaveMemoryObj_Allocate(beSaveMemoryObj *self, int size, int alignment) {
 
     if (alignment == 0) {
         own = igObject_GetAllocator(self);
-        allocator = g_useOwnerAllocator != 0 ? own : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
+        allocator = g_useOwnerAllocator != 0 ? own : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
         self->_mem = Memory_AllocateBufferDirect(size, allocator);
     } else {
         own = igObject_GetAllocator(self);
-        allocator = g_useOwnerAllocator != 0 ? own : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
+        allocator = g_useOwnerAllocator != 0 ? own : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
         self->_mem = Memory_AllocateAlignedWithAllocator(size, alignment & 0xFFFF, allocator);
     }
     memset((void *)self->_mem, 0, size);
@@ -293,7 +293,7 @@ void beSaveMemoryObj_Free(beSaveMemoryObj *self) {
 
     if (self->_mem != 0) {
         allocator = igObject_GetAllocator();
-        allocator = (g_useOwnerAllocator != 0) ? allocator : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
+        allocator = (g_useOwnerAllocator != 0) ? allocator : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
         Memory_FreeBufferWithAllocator(self->_mem, allocator);
     }
     self->_mem = 0;
@@ -327,7 +327,7 @@ void beSvFileMakeApi_Start(beSvFileMakeApiWork *self, beSvDeliver *deliver) {
     self->_isEnd = 0;
     self->_result = 1;
     own = igObject_GetAllocator(self);
-    allocator = g_useOwnerAllocator != 0 ? own : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
+    allocator = g_useOwnerAllocator != 0 ? own : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
     old = self->_saveWork;
     IG_OBJECT_RELEASE(old);
     self->_saveWork = beSaveMemoryObj_CreateInstance(allocator);
@@ -564,7 +564,7 @@ void beSvWriteMediaApi_Start(beSvWriteMediaApiWork *self, beSvDeliver *deliver) 
     g_svPlatformData[0] = (beSvPlatDataPS2 *)deliver->_platformData;
     self->_imagePass = 0;
     own = igObject_GetAllocator(self);
-    allocator = g_useOwnerAllocator != 0 ? own : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
+    allocator = g_useOwnerAllocator != 0 ? own : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
     old = self->_saveWork;
     IG_OBJECT_RELEASE(old);
     self->_saveWork = beSaveMemoryObj_CreateInstance(allocator);

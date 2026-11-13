@@ -67,7 +67,7 @@ void FUN_002ebcf0(void) {
     int temp_s0;
     char *o;
 
-    temp_s0 = ((int)Memory_GetAllocatorBySelector(g_memoryContextSystem));
+    temp_s0 = ((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem));
     o = (char *)g_fileDeviceList.p;
     if (o != 0) {
         *(int *)(o + 4) = *(int *)(o + 4) - 1;

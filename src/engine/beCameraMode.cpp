@@ -8,13 +8,13 @@ int igObject_IsKindOf(...);
 igObject *igGraphPath_GetTail(...);
 int igModel_NotifyViews(...);
 
-int Matrix44_Invert(...);
-int Matrix44_InvertOrthonormal(int *status, float *out, float *matrix);
-int Matrix44_MakeLookAt(...);
-int Matrix44_MakeEulerRotation(float *matrix, float x, float y, float z);
-int Matrix44_GetEulerAngles(float *matrix, float *x, float *y, float *z);
-int Matrix44_GetTranslation(...);
-int Matrix44_SetTranslation(float *matrix, float *translation);
+int igMatrix44f_Invert(...);
+int igMatrix44f_InvertOrthonormal(int *status, float *out, float *matrix);
+int igMatrix44f_MakeLookAt(...);
+int igMatrix44f_MakeEulerRotation(float *matrix, float x, float y, float z);
+int igMatrix44f_GetEulerAngles(float *matrix, float *x, float *y, float *z);
+int igMatrix44f_GetTranslation(...);
+int igMatrix44f_SetTranslation(float *matrix, float *translation);
 int igMatrix44f_SetIdentity(float *matrix);
 int Vec3f_TransformDirection(...);
 int Vec3f_TransformProjective(...);
@@ -175,7 +175,7 @@ void FUN_00465090(void) {
 void igViewMode_UpdateInverseMatrix(igViewMode *self) {
     int status;
 
-    Matrix44_Invert(&status, self->_inverseMatrix, ((igViewModel *)self->_model)->_viewMatrix);
+    igMatrix44f_Invert(&status, self->_inverseMatrix, ((igViewModel *)self->_model)->_viewMatrix);
 }
 
 void igViewMode_UpdateModelVectors(igViewMode *self) {
@@ -186,7 +186,7 @@ void igViewMode_UpdateModelVectors(igViewMode *self) {
     igViewModel *model;
 
     model = (igViewModel *)self->_model;
-    Matrix44_GetTranslation(self->_inverseMatrix, v);
+    igMatrix44f_GetTranslation(self->_inverseMatrix, v);
     model->_position[0] = v[0];
     model->_position[1] = v[1];
     model->_position[2] = v[2];
@@ -220,7 +220,7 @@ void igViewMode_UpdateViewMatrix(igViewMode *self) {
     center[0] = center[0] + model->_direction[0];
     center[1] += model->_direction[1];
     center[2] += model->_direction[2];
-    Matrix44_MakeLookAt(model->_viewMatrix, model->_position, center, model->_viewUpVector, model);
+    igMatrix44f_MakeLookAt(model->_viewMatrix, model->_position, center, model->_viewUpVector, model);
 }
 
 void igCameraMode_SetCameraPath(igCameraMode *self, igObject *path) {
@@ -309,11 +309,11 @@ void FUN_004654d0(igCameraMode *self) {
         model = (igViewModel *)self->_model;
         igGraphPath_GetTransform(self->_cameraPath, world, model->_drawTime);
         x = 0; y = 0; z = 0;
-        Matrix44_GetEulerAngles(world, &x, &y, &z);
-        Matrix44_GetTranslation(world, translation);
-        Matrix44_MakeEulerRotation(world, x, y, z);
-        Matrix44_SetTranslation(world, translation);
-        Matrix44_InvertOrthonormal(&status, model->_viewMatrix, world);
+        igMatrix44f_GetEulerAngles(world, &x, &y, &z);
+        igMatrix44f_GetTranslation(world, translation);
+        igMatrix44f_MakeEulerRotation(world, x, y, z);
+        igMatrix44f_SetTranslation(world, translation);
+        igMatrix44f_InvertOrthonormal(&status, model->_viewMatrix, world);
         changed[0] = VIEW_MODEL_FIELD_CHANGED;
         changed[1] = 0;
         changed[2] = g_igViewModel_viewMatrixMetaField[0];
@@ -626,7 +626,7 @@ void FUN_004667d0(igPickMode *pickMode) {
     igIntersectTraversal *traversal;
     igObject *previous;
     igObject *cursor;
-    Matrix44_Invert(&unprojected.w, pickMode->_inverseProjectionMatrix, ((igViewerParameters *)pickMode->_parameters)->_projectionMatrix);
+    igMatrix44f_Invert(&unprojected.w, pickMode->_inverseProjectionMatrix, ((igViewerParameters *)pickMode->_parameters)->_projectionMatrix);
     unprojected.b = 0;
     igSmartPointer<igProbe> probe(igProbe_Create(0));
     created = probe.get();

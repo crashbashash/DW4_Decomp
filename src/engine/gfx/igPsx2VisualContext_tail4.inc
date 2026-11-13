@@ -834,13 +834,13 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_202(Obj_172910 *o, int k) {
     case 2: {
         Stk *s = o->s[2];
         s->count--;
-        Matrix44_Copy((float *)&m0, (float *)(s->data + (s->count << 6)));
+        igMatrix44f_Copy((float *)&m0, (float *)(s->data + (s->count << 6)));
         FUN_001fbce0(4, o->s[2]->data + ((o->s[2]->count - 1) << 6));
         break; }
-    case 10: { Stk *s = o->s[4]; s->count--; Matrix44_Copy((float *)&m1, (float *)(s->data + (s->count << 6))); break; }
-    case 11: { Stk *s = o->s[5]; s->count--; Matrix44_Copy((float *)&m2, (float *)(s->data + (s->count << 6))); break; }
-    case 12: { Stk *s = o->s[6]; s->count--; Matrix44_Copy((float *)&m3, (float *)(s->data + (s->count << 6))); break; }
-    case 13: { Stk *s = o->s[7]; s->count--; Matrix44_Copy((float *)&m4, (float *)(s->data + (s->count << 6))); break; }
+    case 10: { Stk *s = o->s[4]; s->count--; igMatrix44f_Copy((float *)&m1, (float *)(s->data + (s->count << 6))); break; }
+    case 11: { Stk *s = o->s[5]; s->count--; igMatrix44f_Copy((float *)&m2, (float *)(s->data + (s->count << 6))); break; }
+    case 12: { Stk *s = o->s[6]; s->count--; igMatrix44f_Copy((float *)&m3, (float *)(s->data + (s->count << 6))); break; }
+    case 13: { Stk *s = o->s[7]; s->count--; igMatrix44f_Copy((float *)&m4, (float *)(s->data + (s->count << 6))); break; }
     }
 }
 
@@ -872,28 +872,28 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_203(O_172b00 *arg0, int arg1, char *ar
     case 10:
         igMatrix44f_SetIdentity((float *)sp110);
         SETB(arg0->s988, arg2)
-        Matrix44_Invert(&sp15C, sp110, arg2);
+        igMatrix44f_Invert(&sp15C, sp110, arg2);
         FUN_001903d0(sp110);
         SET(arg0->s1004, sp110)
         break;
     case 11:
         igMatrix44f_SetIdentity((float *)spD0);
         SETB(arg0->s992, arg2)
-        Matrix44_Invert(&sp158, spD0, arg2);
+        igMatrix44f_Invert(&sp158, spD0, arg2);
         FUN_001903d0(spD0);
         SET(arg0->s1008, spD0)
         break;
     case 12:
         igMatrix44f_SetIdentity((float *)sp90);
         SETB(arg0->s996, arg2)
-        Matrix44_Invert(&sp154, sp90, arg2);
+        igMatrix44f_Invert(&sp154, sp90, arg2);
         FUN_001903d0(sp90);
         SET(arg0->s1012, sp90)
         break;
     case 13:
         igMatrix44f_SetIdentity((float *)sp50);
         SETB(arg0->s1000, arg2)
-        Matrix44_Invert(&sp150, sp50, arg2);
+        igMatrix44f_Invert(&sp150, sp50, arg2);
         FUN_001903d0(sp50);
         SET(arg0->s1016, sp50)
         break;
@@ -976,13 +976,13 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_207(S_173b30 *self, int arg1, int arg2
 void Gap__Gfx__igPsx2VisualContext__vfunc_208(O_173d60 *o, int k, int dst) {
     St_173d60 *s;
     switch (k) {
-    case 0:  s = o->s972; Matrix44_Copy((float *)dst, (float *)(s->data + ((s->n - 1) << 6))); break;
-    case 1:  s = o->s976; Matrix44_Copy((float *)dst, (float *)(s->data + ((s->n - 1) << 6))); break;
-    case 2:  s = o->s980; Matrix44_Copy((float *)dst, (float *)(s->data + ((s->n - 1) << 6))); break;
-    case 10: s = o->s988; Matrix44_Copy((float *)dst, (float *)(s->data + ((s->n - 1) << 6))); break;
-    case 11: s = o->s992; Matrix44_Copy((float *)dst, (float *)(s->data + ((s->n - 1) << 6))); break;
-    case 12: s = o->s996; Matrix44_Copy((float *)dst, (float *)(s->data + ((s->n - 1) << 6))); break;
-    case 13: s = o->s1000; Matrix44_Copy((float *)dst, (float *)(s->data + ((s->n - 1) << 6))); break;
+    case 0:  s = o->s972; igMatrix44f_Copy((float *)dst, (float *)(s->data + ((s->n - 1) << 6))); break;
+    case 1:  s = o->s976; igMatrix44f_Copy((float *)dst, (float *)(s->data + ((s->n - 1) << 6))); break;
+    case 2:  s = o->s980; igMatrix44f_Copy((float *)dst, (float *)(s->data + ((s->n - 1) << 6))); break;
+    case 10: s = o->s988; igMatrix44f_Copy((float *)dst, (float *)(s->data + ((s->n - 1) << 6))); break;
+    case 11: s = o->s992; igMatrix44f_Copy((float *)dst, (float *)(s->data + ((s->n - 1) << 6))); break;
+    case 12: s = o->s996; igMatrix44f_Copy((float *)dst, (float *)(s->data + ((s->n - 1) << 6))); break;
+    case 13: s = o->s1000; igMatrix44f_Copy((float *)dst, (float *)(s->data + ((s->n - 1) << 6))); break;
     }
 }
 
@@ -996,9 +996,9 @@ void FUN_00173ed0(Obj_173ed0 *self, int op, void *m) {
         if (n == 0) {
             if (n < l->cap) l->count = l->count + 1;
             else List_Resize(l, n + 1, 64);
-            Matrix44_Copy((float *)(l->data + n * 64), (float *)m);
+            igMatrix44f_Copy((float *)(l->data + n * 64), (float *)m);
         } else {
-            Matrix44_Copy((float *)(l->data + (l->count - 1) * 64), (float *)m);
+            igMatrix44f_Copy((float *)(l->data + (l->count - 1) * 64), (float *)m);
         }
         l = self->list;
         FUN_001fbce0(5, l->data + (l->count - 1) * 64);
@@ -1014,7 +1014,7 @@ void FUN_00173fd0(int *arg0, int arg1, int arg2) {
     switch (arg1) {
     case 0xE:
         temp_v0 = (int *)arg0[246];
-        Matrix44_Copy((float *)arg2, (float *)(temp_v0[4] + ((temp_v0[2] - 1) << 6)));
+        igMatrix44f_Copy((float *)arg2, (float *)(temp_v0[4] + ((temp_v0[2] - 1) << 6)));
         break;
     default:
         ((A_173fd0 *)arg0)->vX(arg1, arg2);
@@ -1683,9 +1683,9 @@ float Gap__Gfx__igPsx2VisualContext__vfunc_252(void *arg0) {
 
 void Gap__Gfx__igPsx2VisualContext__vfunc_253(int *arg0, struct S_1753f0 *arg1, struct E_1753f0 *arg2) {
     if (arg1->b322 == 1) {
-        *arg0 = g_allocatorFailureStatus[0];
+        *arg0 = g_resultFailure[0];
     } else if (arg2 == 0) {
-        *arg0 = g_allocatorFailureStatus[0];
+        *arg0 = g_resultFailure[0];
     } else {
         arg1->b1348 = arg2->b0;
         arg1->b1349 = arg2->b1;
@@ -1694,7 +1694,7 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_253(int *arg0, struct S_1753f0 *arg1, 
         arg1->f1360 = arg2->f12;
         arg1->f1364 = arg2->f16;
         arg1->f1368 = arg2->f20;
-        *arg0 = g_statusSucceeded[0];
+        *arg0 = g_resultSuccess[0];
     }
 }
 

@@ -7,58 +7,58 @@
 
 /* The allocator selector of each memory context, in the order of g_memoryContextNames: the program
  * constructs every one at start-up. */
-struct igMemoryContext {
+struct igMemoryPoolHandle {
     int value;
-    igMemoryContext(int v) : value(v) {}
+    igMemoryPoolHandle(int v) : value(v) {}
     operator int() const { return value; }
 };
 extern "C" {
-extern igMemoryContext g_memoryContextBootstrap;
-extern igMemoryContext g_memoryContextDefault;
-extern igMemoryContext g_memoryContextCurrent;
-extern igMemoryContext g_memoryContextNonTracked;
-extern igMemoryContext g_memoryContextSystem;
-extern igMemoryContext g_memoryContextMetaData;
-extern igMemoryContext g_memoryContextString;
-extern igMemoryContext g_memoryContextFast;
-extern igMemoryContext g_memoryContextList;
-extern igMemoryContext g_memoryContextTemporary;
-extern igMemoryContext g_memoryContextVertex;
-extern igMemoryContext g_memoryContextRenderList;
-extern igMemoryContext g_memoryContextTexture;
-extern igMemoryContext g_memoryContextApplication;
-extern igMemoryContext g_memoryContextWorld;
-extern igMemoryContext g_memoryContextActor;
-extern igMemoryContext g_memoryContextLevel;
-extern igMemoryContext g_memoryContextFrame;
-extern igMemoryContext g_memoryContextPhysics;
-extern igMemoryContext g_memoryContextAI;
-extern igMemoryContext g_memoryContextDriverData;
-extern igMemoryContext g_memoryContextClut;
-extern igMemoryContext g_memoryContextDMA;
-extern igMemoryContext g_memoryContextAudio;
-extern igMemoryContext g_memoryContextVideo;
-extern igMemoryContext g_memoryContextHandles;
-extern igMemoryContext g_memoryContextImage;
-extern igMemoryContext g_memoryContextImageObject;
-extern igMemoryContext g_memoryContextAttribute;
-extern igMemoryContext g_memoryContextNode;
-extern igMemoryContext g_memoryContextUser0;
-extern igMemoryContext g_memoryContextUser1;
-extern igMemoryContext g_memoryContextUser2;
-extern igMemoryContext g_memoryContextUser3;
-extern igMemoryContext g_memoryContextUser4;
-extern igMemoryContext g_memoryContextUser5;
-extern igMemoryContext g_memoryContextUser6;
-extern igMemoryContext g_memoryContextUser7;
-extern igMemoryContext g_memoryContextUser8;
-extern igMemoryContext g_memoryContextUser9;
-extern igMemoryContext g_memoryContextUser10;
-extern igMemoryContext g_memoryContextUser11;
-extern igMemoryContext g_memoryContextUser12;
-extern igMemoryContext g_memoryContextUser13;
-extern igMemoryContext g_memoryContextUser14;
-extern igMemoryContext g_memoryContextUser15;
+extern igMemoryPoolHandle kIGMemoryPoolHandleBootstrap;
+extern igMemoryPoolHandle kIGMemoryPoolHandleDefault;
+extern igMemoryPoolHandle kIGMemoryPoolHandleCurrent;
+extern igMemoryPoolHandle kIGMemoryPoolHandleNonTracked;
+extern igMemoryPoolHandle kIGMemoryPoolHandleSystem;
+extern igMemoryPoolHandle kIGMemoryPoolHandleMetaData;
+extern igMemoryPoolHandle kIGMemoryPoolHandleString;
+extern igMemoryPoolHandle kIGMemoryPoolHandleFast;
+extern igMemoryPoolHandle kIGMemoryPoolHandleList;
+extern igMemoryPoolHandle kIGMemoryPoolHandleTemporary;
+extern igMemoryPoolHandle kIGMemoryPoolHandleVertex;
+extern igMemoryPoolHandle kIGMemoryPoolHandleRenderList;
+extern igMemoryPoolHandle kIGMemoryPoolHandleTexture;
+extern igMemoryPoolHandle kIGMemoryPoolHandleApplication;
+extern igMemoryPoolHandle kIGMemoryPoolHandleWorld;
+extern igMemoryPoolHandle kIGMemoryPoolHandleActor;
+extern igMemoryPoolHandle kIGMemoryPoolHandleLevel;
+extern igMemoryPoolHandle kIGMemoryPoolHandleFrame;
+extern igMemoryPoolHandle kIGMemoryPoolHandlePhysics;
+extern igMemoryPoolHandle kIGMemoryPoolHandleAI;
+extern igMemoryPoolHandle kIGMemoryPoolHandleDriverData;
+extern igMemoryPoolHandle kIGMemoryPoolHandleClut;
+extern igMemoryPoolHandle kIGMemoryPoolHandleDMA;
+extern igMemoryPoolHandle kIGMemoryPoolHandleAudio;
+extern igMemoryPoolHandle kIGMemoryPoolHandleVideo;
+extern igMemoryPoolHandle kIGMemoryPoolHandleHandles;
+extern igMemoryPoolHandle kIGMemoryPoolHandleImage;
+extern igMemoryPoolHandle kIGMemoryPoolHandleImageObject;
+extern igMemoryPoolHandle kIGMemoryPoolHandleAttribute;
+extern igMemoryPoolHandle kIGMemoryPoolHandleNode;
+extern igMemoryPoolHandle kIGMemoryPoolHandleUser0;
+extern igMemoryPoolHandle kIGMemoryPoolHandleUser1;
+extern igMemoryPoolHandle kIGMemoryPoolHandleUser2;
+extern igMemoryPoolHandle kIGMemoryPoolHandleUser3;
+extern igMemoryPoolHandle kIGMemoryPoolHandleUser4;
+extern igMemoryPoolHandle kIGMemoryPoolHandleUser5;
+extern igMemoryPoolHandle kIGMemoryPoolHandleUser6;
+extern igMemoryPoolHandle kIGMemoryPoolHandleUser7;
+extern igMemoryPoolHandle kIGMemoryPoolHandleUser8;
+extern igMemoryPoolHandle kIGMemoryPoolHandleUser9;
+extern igMemoryPoolHandle kIGMemoryPoolHandleUser10;
+extern igMemoryPoolHandle kIGMemoryPoolHandleUser11;
+extern igMemoryPoolHandle kIGMemoryPoolHandleUser12;
+extern igMemoryPoolHandle kIGMemoryPoolHandleUser13;
+extern igMemoryPoolHandle kIGMemoryPoolHandleUser14;
+extern igMemoryPoolHandle kIGMemoryPoolHandleUser15;
 }
 #define POOL() { if (((void * *)g_stringPool)[0] == 0) { void *pool = StringPool_Allocate(0x10); if (pool != 0) pool = ((void *)StringPool_Construct((struct S_2eadf0 *)pool)); ((void * *)g_stringPool)[0] = pool; } }
 #define BLOCK(ctor, strsrc) { \
@@ -6636,13 +6636,21 @@ public:
     virtual void Print(const char *fmt, ...);             /* +124 */
     int refs; /* +4 */
 };
-class SystemAllocator {
+/* The process's memory map and system allocator, built at start-up. Its base class's constructor and
+ * destructor are compiled elsewhere in the library. */
+class SystemAllocatorBase { public: SystemAllocatorBase(); virtual ~SystemAllocatorBase(); };
+class SystemAllocator : public SystemAllocatorBase {
 public:
-    PAD(0) PAD(1)
+    SystemAllocator();
+    virtual ~SystemAllocator() {}
+    virtual void d1();
     virtual void *Allocate(unsigned int size); /* +16 */
-    PAD(3) PAD(4) PAD(5) PAD(6)
+    virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6();
     virtual void Free(void *block);            /* +36 */
+    virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16();
+    virtual int GetStackSize();
 };
+extern "C" SystemAllocator g_systemAllocator;
 extern "C" char text_0x_0_x[];
 extern "C" char text_0x_08x_2[];
 extern "C" char text_02x[];
@@ -6653,7 +6661,8 @@ extern "C" char text_010lx[];
 extern "C" char text_012lx[];
 extern "C" char text_014lx[];
 extern "C" char text_016lx[];
-extern "C" SystemAllocator *DAT_00587218[4];
+/* The allocator the memory services use; FUN_0032f300 installs g_systemAllocator here when it is empty. */
+extern "C" SystemAllocator *g_activeSystemAllocator[4];
 extern "C" void *Memory_AllocateBufferViaSharedTail(unsigned int size, igMemoryPool_2ed1c0 *pool);
 extern "C" void *FUN_002ed1e0(int, unsigned int size, igMemoryPool_2ed1c0 *pool);
 extern "C" void *Memory_AllocateBufferDirect(unsigned int size, igMemoryPool_2ed1c0 *pool);
@@ -11470,17 +11479,6 @@ struct T_32f1f0 { char pad[12]; int t; };
 extern "C" void Gap__Core__igPsx2Semaphore__vfunc_34(int *arg0, struct T_32f1f0 *arg1);
 extern "C" int DAT_0052d8b0[4];
 class DW4VC_12_0 { public: virtual void d0(); virtual int vX(); };
-/* The process's memory map and system allocator, built at start-up. Its base class's constructor and
- * destructor are compiled elsewhere in the library. */
-class ThreadStackOwnerBase { public: ThreadStackOwnerBase(); virtual ~ThreadStackOwnerBase(); };
-class ThreadStackOwner : public ThreadStackOwnerBase {
-public:
-    ThreadStackOwner();
-    virtual ~ThreadStackOwner() {}
-    virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16();
-    virtual int GetStackSize();
-};
-extern "C" ThreadStackOwner g_threadStackOwner;
 struct ThreadMemoryMap {
     unsigned stackTop; int p4; int p8; int p12; int p16;
     unsigned stackBottom;
@@ -11510,7 +11508,7 @@ extern "C" char DAT_00554e81[];
 extern "C" char DAT_000383ff[];
 extern "C" char DAT_70000000[];
 extern "C" char DAT_00004000[];
-extern "C" void FUN_0032f380(ThreadStackOwner *self, ThreadMemoryMap *map);
+extern "C" void FUN_0032f380(SystemAllocator *self, ThreadMemoryMap *map);
 struct O_32f4b0 { int w0; int w4; };
 extern "C" int text_Memory_Main[4];
 extern "C" int text_Platform[4];

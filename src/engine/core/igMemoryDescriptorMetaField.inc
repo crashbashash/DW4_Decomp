@@ -77,7 +77,7 @@ void FUN_002ce760(void) {
     void *temp_s0;
 
     if (g_igMemoryDescriptorMetaField_descriptor[0] == 0) {
-        g_igMemoryDescriptorMetaField_descriptor[0] = (void *)(((void *)igMetaObject_CreateInstance((CreateMeta *)g_igMemoryDescriptorMetaField_metaObject[0], (MemoryPool *)(((int)Memory_GetAllocatorBySelector(g_memoryContextMetaData))))));
+        g_igMemoryDescriptorMetaField_descriptor[0] = (void *)(((void *)igMetaObject_CreateInstance((CreateMeta *)g_igMemoryDescriptorMetaField_metaObject[0], (MemoryPool *)(((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData))))));
         temp_s0 = (void *)(g_igMemoryDescriptorMetaField_descriptor[0]);
         if (temp_s0 != 0) {
             MetaRefList_AppendRetained((PointerList *)(((void *)FUN_002fc250())), (RefHeader *)temp_s0);
@@ -114,7 +114,7 @@ void FUN_002ce850(int arg0) {
     void *temp_s0;
     void *var_v0;
 
-    temp_s0 = (void *)(((void *)igUnsignedIntMetaField_Create(((int)Memory_GetAllocatorBySelector(g_memoryContextMetaData)))));
+    temp_s0 = (void *)(((void *)igUnsignedIntMetaField_Create(((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData)))));
     if (&text_sizeAndStatus[0] == 0) {
         var_v0 = (void *)(0);
     } else {

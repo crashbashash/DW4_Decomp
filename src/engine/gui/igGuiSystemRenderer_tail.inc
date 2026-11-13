@@ -1,7 +1,7 @@
 void Gap__Gui__igGuiSystemRenderer__vfunc_23(int *arg0) {
     int m[16];
     ((Obj_456610 *)arg0[5])->vX(arg0[2]);
-    Matrix44_Copy(m, (char *)arg0[4] + 0x20);
+    igMatrix44f_Copy(m, (char *)arg0[4] + 0x20);
     FUN_001b6ee0((void *)arg0[5], m);
 }
 

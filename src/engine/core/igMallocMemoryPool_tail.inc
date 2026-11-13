@@ -490,11 +490,11 @@ void *FUN_00324be0(TaggedPool *self, unsigned size) {
     }
     total = overhead + size;
     if (usesAligned(self)) {
-        block = (*(TaggedHeap * *)DAT_00587218)->AllocateAligned(total + 4);
+        block = (*(TaggedHeap * *)g_activeSystemAllocator)->AllocateAligned(total + 4);
     } else if (usesSized(self)) {
-        block = (*(TaggedHeap * *)DAT_00587218)->AllocateSized(total + 4);
+        block = (*(TaggedHeap * *)g_activeSystemAllocator)->AllocateSized(total + 4);
     } else {
-        block = (*(TaggedHeap * *)DAT_00587218)->Allocate(total + 4);
+        block = (*(TaggedHeap * *)g_activeSystemAllocator)->Allocate(total + 4);
     }
     if (block != 0) {
     h = (TaggedBlockHeader *)((char *)block + 4);
@@ -546,20 +546,20 @@ void FUN_00324ec0(Pool_324ec0 *self, unsigned char *p) {
         char *base = (char *)h - off;
         size = size + ((char *)h - base);
         if (f20(self)) {
-            ((Heap * *)DAT_00587218)[0]->FreeAligned(base, size);
+            ((Heap * *)g_activeSystemAllocator)[0]->FreeAligned(base, size);
         } else if (f10(self)) {
-            ((Heap * *)DAT_00587218)[0]->FreeSized(base, size);
+            ((Heap * *)g_activeSystemAllocator)[0]->FreeSized(base, size);
         } else {
-            ((Heap * *)DAT_00587218)[0]->Free(base);
+            ((Heap * *)g_activeSystemAllocator)[0]->Free(base);
         }
     } else {
         char *base = (char *)h - 4;
         if (f20(self)) {
-            ((Heap * *)DAT_00587218)[0]->FreeAligned(base, size + 4);
+            ((Heap * *)g_activeSystemAllocator)[0]->FreeAligned(base, size + 4);
         } else if (f10(self)) {
-            ((Heap * *)DAT_00587218)[0]->FreeSized(base, size + 4);
+            ((Heap * *)g_activeSystemAllocator)[0]->FreeSized(base, size + 4);
         } else {
-            ((Heap * *)DAT_00587218)[0]->Free(base);
+            ((Heap * *)g_activeSystemAllocator)[0]->Free(base);
         }
     }
 }
@@ -618,11 +618,11 @@ void *FUN_00325060(TaggedPool *self, char *p, unsigned size) {
         return moved;
     }
     if (usesAligned(self)) {
-        block = (char *)(*(TaggedReallocHeap * *)DAT_00587218)->ReallocateAligned(base, newSize, total + 4);
+        block = (char *)(*(TaggedReallocHeap * *)g_activeSystemAllocator)->ReallocateAligned(base, newSize, total + 4);
     } else if (usesSized(self)) {
-        block = (char *)(*(TaggedReallocHeap * *)DAT_00587218)->ReallocateSized(base, newSize, total + 4);
+        block = (char *)(*(TaggedReallocHeap * *)g_activeSystemAllocator)->ReallocateSized(base, newSize, total + 4);
     } else {
-        block = (char *)(*(TaggedReallocHeap * *)DAT_00587218)->Reallocate(base, newSize, total);
+        block = (char *)(*(TaggedReallocHeap * *)g_activeSystemAllocator)->Reallocate(base, newSize, total);
     }
     if (block == 0) {
         return 0;
@@ -684,11 +684,11 @@ void *FUN_003254a0(TaggedAlignedPool *self, unsigned alignment, unsigned size) {
     }
     total += overhead;
     if (usesAligned_3254a0(self)) {
-        block = (char *)(*(TaggedHeap * *)DAT_00587218)->AllocateAligned(total);
+        block = (char *)(*(TaggedHeap * *)g_activeSystemAllocator)->AllocateAligned(total);
     } else if (usesSized_3254a0(self)) {
-        block = (char *)(*(TaggedHeap * *)DAT_00587218)->AllocateSized(total);
+        block = (char *)(*(TaggedHeap * *)g_activeSystemAllocator)->AllocateSized(total);
     } else {
-        block = (char *)(*(TaggedHeap * *)DAT_00587218)->Allocate(total);
+        block = (char *)(*(TaggedHeap * *)g_activeSystemAllocator)->Allocate(total);
     }
     if (block == 0) {
         return 0;

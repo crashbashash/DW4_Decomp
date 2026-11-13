@@ -9021,6 +9021,7 @@
 0x00587110	g_defaultAllocatorSelector	recovered-global
 0x00587198	g_igObject_metaObject	class-handle
 0x005871d0	g_threadManager	recovered-global
+0x00587218	g_activeSystemAllocator	recovered-global
 0x00587320	g_rangeEnd	recovered-global
 0x005873c8	g_adxMediaMode	recovered-global
 0x005875e8	g_adxPartitionCount	recovered-global

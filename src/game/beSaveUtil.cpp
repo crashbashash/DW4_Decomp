@@ -46,7 +46,7 @@ extern "C" int g_beSaveUtilInfo_metaObject[4];
 extern "C" int g_beSaveUtil_metaObject[4];
 extern "C" char SAVEUTILITY_2[];
 extern "C" void Gap__Bec__beSaveUtil__vfunc_29(beSaveUtil * p0, int p1, char * p2);
-extern "C" int g_defaultAllocatorSelector[4];
+extern "C" int kIGMemoryPoolHandleUser1[4];
 extern "C" unsigned char g_useOwnerAllocator;
 /* reference-counted engine object header: refcount word at +4 */
 struct RC { int vt; int rc; };
@@ -185,7 +185,7 @@ void Gap__Bec__beSaveUtil__vfunc_29(beSaveUtil * p0, int p1, char * p2)
 }
 
 #define DELIVER(r) ((Deliver *)(r)->_deliver)
-#define ALLOC(a, self) { int base_ = igObject_GetAllocator(self); if (g_useOwnerAllocator != 0) { a = base_; } else { a = Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]); } }
+#define ALLOC(a, self) { int base_ = igObject_GetAllocator(self); if (g_useOwnerAllocator != 0) { a = base_; } else { a = Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]); } }
 #define NEW_REQUEST(r, kind, create) ALLOC(a, self); RP<kind> r((RC *)create(a));
 #define TAKE_SLOT_ARGUMENT(self, info) \
     DELIVER(info)->slot = -1; \

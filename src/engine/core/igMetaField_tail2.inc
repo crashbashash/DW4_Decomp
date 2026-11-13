@@ -116,7 +116,7 @@ void igMetaField_Destruct(igMetaField *arg0) {
 
 int FUN_002fc250(void) {
     if (((int *)DAT_00587188)[0] == 0) {
-        ((int *)DAT_00587188)[0] = ((int)InternalObjectList_Create(((int)Memory_GetAllocatorBySelector(g_memoryContextMetaData))));
+        ((int *)DAT_00587188)[0] = ((int)InternalObjectList_Create(((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData))));
     }
     return ((int *)DAT_00587188)[0];
 }

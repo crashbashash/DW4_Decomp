@@ -10,7 +10,7 @@ void * igIntList_Create(int arg0) {
 /* Created with allocation only when missing. */
 int igIntList_GetOrCreateMetaObject(void) {
     if (((int *)g_igIntList_metaObject)[0] == 0) {
-        ((int *)g_igIntList_metaObject)[0] = (int)igMetaObject_Create(((int)Memory_GetAllocatorBySelector(g_memoryContextMetaData)));
+        ((int *)g_igIntList_metaObject)[0] = (int)igMetaObject_Create(((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData)));
     }
     return ((int *)g_igIntList_metaObject)[0];
 }

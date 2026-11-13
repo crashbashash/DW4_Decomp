@@ -5,7 +5,7 @@ void beNDMWStageCtl_CreateInstance(int arg0) {
 
 igMetaObject *FUN_003bbde0(void) {
     if (g_beNDMWStageCtl_metaObject[0] == 0) {
-        g_beNDMWStageCtl_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
+        g_beNDMWStageCtl_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
     return g_beNDMWStageCtl_metaObject[0];
 }

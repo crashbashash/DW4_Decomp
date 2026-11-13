@@ -5,7 +5,7 @@ void beNDMWMdlEBullet_CreateInstance(int arg0) {
 
 igMetaObject *FUN_003c1ce0(void) {
     if (g_beNDMWMdlEBullet_metaObject[0] == 0) {
-        g_beNDMWMdlEBullet_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
+        g_beNDMWMdlEBullet_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
     return g_beNDMWMdlEBullet_metaObject[0];
 }

@@ -9345,7 +9345,7 @@
       "address": 1049128,
       "name": "_exit",
       "size": 8,
-      "source": "src/sony/libkernl/_exit.c",
+      "source": "src/runtime/crt0.S",
       "direct": [
         {
           "site": 1049128,
@@ -9358,9 +9358,9 @@
     },
     {
       "address": 1049152,
-      "name": "FUN_00100240",
+      "name": "_d_ulltod",
       "size": 76,
-      "source": "src/unmatched/FUN_00100240.cpp",
+      "source": "src/runtime/runtime.c",
       "direct": [
         {
           "site": 1049164,
@@ -9385,9 +9385,9 @@
     },
     {
       "address": 1049232,
-      "name": "FUN_00100290",
+      "name": "_d_utod",
       "size": 12,
-      "source": "src/unmatched/FUN_00100290.c",
+      "source": "src/runtime/runtime.c",
       "direct": [
         {
           "site": 1049236,
@@ -9400,9 +9400,9 @@
     },
     {
       "address": 1049248,
-      "name": "FUN_001002a0",
+      "name": "_dpfeq",
       "size": 36,
-      "source": "src/unmatched/FUN_001002a0.c",
+      "source": "src/runtime/runtime.c",
       "direct": [
         {
           "site": 1049256,
@@ -9415,9 +9415,9 @@
     },
     {
       "address": 1049328,
-      "name": "FUN_001002f0",
+      "name": "_dpflt",
       "size": 32,
-      "source": "src/unmatched/FUN_001002f0.c",
+      "source": "src/runtime/runtime.c",
       "direct": [
         {
           "site": 1049336,
@@ -9430,9 +9430,9 @@
     },
     {
       "address": 1049408,
-      "name": "FUN_00100340",
+      "name": "_dpfgt",
       "size": 32,
-      "source": "src/unmatched/FUN_00100340.c",
+      "source": "src/runtime/runtime.c",
       "direct": [
         {
           "site": 1049416,
@@ -9503,7 +9503,7 @@
       "address": 1095136,
       "name": "sbrk",
       "size": 172,
-      "source": "src/sony/libkernl/sbrk.c",
+      "source": "src/sony/libkernl/glue.c",
       "direct": [
         {
           "site": 1095216,
@@ -9524,7 +9524,7 @@
       "address": 1095312,
       "name": "isatty",
       "size": 8,
-      "source": "src/sony/libkernl/isatty.c",
+      "source": "src/sony/libkernl/glue.c",
       "direct": [],
       "indirect": []
     },
@@ -9532,7 +9532,7 @@
       "address": 1095320,
       "name": "fstat",
       "size": 20,
-      "source": "src/sony/libkernl/fstat.c",
+      "source": "src/sony/libkernl/glue.c",
       "direct": [],
       "indirect": []
     },
@@ -9789,9 +9789,9 @@
     },
     {
       "address": 1102032,
-      "name": "FUN_0010d0d0",
+      "name": "kprintf",
       "size": 56,
-      "source": "src/unmatched/FUN_0010d0d0.c",
+      "source": "src/unmatched/kprintf.c",
       "direct": [
         {
           "site": 1102068,
@@ -9804,9 +9804,9 @@
     },
     {
       "address": 1128624,
-      "name": "RFU086_WaitEvnetFlag",
+      "name": "_SetTLBEntry",
       "size": 16,
-      "source": "src/sony/libkernl/RFU086_WaitEvnetFlag.c",
+      "source": "src/sony/libkernl/tlbfunc.c",
       "direct": [],
       "indirect": []
     },
@@ -9814,7 +9814,7 @@
       "address": 1128784,
       "name": "InitTLB",
       "size": 64,
-      "source": "src/sony/libkernl/InitTLB.c",
+      "source": "src/sony/libkernl/tlbfunc.c",
       "direct": [
         {
           "site": 1128792,
@@ -9841,7 +9841,7 @@
       "address": 1128848,
       "name": "InitTLB32MB",
       "size": 500,
-      "source": "src/sony/libkernl/InitTLB32MB.c",
+      "source": "src/sony/libkernl/tlbfunc.c",
       "direct": [
         {
           "site": 1128920,
@@ -9914,25 +9914,25 @@
     },
     {
       "address": 1130272,
-      "name": "FUN_00113f20",
+      "name": "DIntr",
       "size": 84,
-      "source": null,
+      "source": "src/sony/libkernl/diei.c",
       "direct": [],
       "indirect": []
     },
     {
       "address": 1130360,
-      "name": "FUN_00113f78",
+      "name": "EIntr",
       "size": 24,
-      "source": "src/sony/libkernl/FUN_00113f78.c",
+      "source": "src/sony/libkernl/diei.c",
       "direct": [],
       "indirect": []
     },
     {
       "address": 1131784,
-      "name": "thunk_InitTLB",
+      "name": "TerminateLibrary",
       "size": 8,
-      "source": "src/sony/libkernl/thunk_InitTLB.c",
+      "source": "src/sony/libkernl/exit.c",
       "direct": [
         {
           "site": 1131784,
@@ -9945,9 +9945,9 @@
     },
     {
       "address": 1131976,
-      "name": "FUN_001145c8",
+      "name": "Exit",
       "size": 40,
-      "source": "src/unmatched/FUN_001145c8.c",
+      "source": "src/sony/libkernl/exit.c",
       "direct": [
         {
           "site": 1131988,
@@ -12989,7 +12989,7 @@
     },
     {
       "address": 1640688,
-      "name": "Matrix44_Copy",
+      "name": "igMatrix44f_Copy",
       "size": 188,
       "source": null,
       "direct": [],
@@ -12997,7 +12997,7 @@
     },
     {
       "address": 1641008,
-      "name": "Matrix44_GetTranslation",
+      "name": "igMatrix44f_GetTranslation",
       "size": 28,
       "source": "src/engine/maths/MathsLibrary.cpp",
       "direct": [],
@@ -13005,15 +13005,15 @@
     },
     {
       "address": 1641040,
-      "name": "Matrix44_TranslateLocal",
+      "name": "igMatrix44f_TranslateLocal",
       "size": 212,
-      "source": null,
+      "source": "src/engine/maths/MathsLibrary.cpp",
       "direct": [],
       "indirect": []
     },
     {
       "address": 1650512,
-      "name": "FUN_00192f50",
+      "name": "Vec3f_TransformDirection",
       "size": 112,
       "source": "src/engine/maths/MathsLibrary.cpp",
       "direct": [],
@@ -13050,7 +13050,7 @@
     },
     {
       "address": 1994032,
-      "name": "FUN_001e6d30",
+      "name": "Vec3f_FromString",
       "size": 80,
       "source": "src/engine/datapump/DataPumpLibrary.cpp",
       "direct": [
@@ -13617,7 +13617,7 @@
       "address": 2345376,
       "name": "LuaType_Construct",
       "size": 416,
-      "source": null,
+      "source": "src/engine/lua/LuaBinding.cpp",
       "direct": [
         {
           "site": 2345620,
@@ -13747,7 +13747,7 @@
       "address": 2364400,
       "name": "LuaClass_FindByName",
       "size": 352,
-      "source": null,
+      "source": "src/engine/lua/LuaBinding.cpp",
       "direct": [
         {
           "site": 2364424,
@@ -16552,7 +16552,7 @@
     },
     {
       "address": 2856192,
-      "name": "FUN_002b9500",
+      "name": "igStringObj_Create",
       "size": 52,
       "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [
@@ -16712,7 +16712,7 @@
       "address": 2976640,
       "name": "List_InsertWords",
       "size": 220,
-      "source": null,
+      "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [
         {
           "site": 2976764,
@@ -16921,7 +16921,7 @@
     },
     {
       "address": 3059728,
-      "name": "FUN_002eb010",
+      "name": "StringPool_Allocate",
       "size": 64,
       "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [
@@ -17822,7 +17822,7 @@
     },
     {
       "address": 3191744,
-      "name": "FUN_0030b3c0",
+      "name": "igStringObj_Set",
       "size": 88,
       "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [
@@ -17849,7 +17849,7 @@
     },
     {
       "address": 3191840,
-      "name": "FUN_0030b420",
+      "name": "igStringObj_Clear",
       "size": 56,
       "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [
@@ -17864,7 +17864,7 @@
     },
     {
       "address": 3191904,
-      "name": "FUN_0030b460",
+      "name": "igStringObj_Insert",
       "size": 352,
       "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [
@@ -17933,7 +17933,7 @@
     },
     {
       "address": 3192368,
-      "name": "FUN_0030b630",
+      "name": "igStringObj_ToFloat",
       "size": 60,
       "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [
@@ -17948,7 +17948,7 @@
     },
     {
       "address": 3193840,
-      "name": "FUN_0030bbf0",
+      "name": "igStringObj_Erase",
       "size": 232,
       "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [
@@ -18532,7 +18532,7 @@
     },
     {
       "address": 3553216,
-      "name": "FUN_003637c0",
+      "name": "beDemoManagerWork_CreateInstance",
       "size": 52,
       "source": "src/game/bec/BecLibrary.cpp",
       "direct": [
@@ -18568,7 +18568,7 @@
     },
     {
       "address": 3554336,
-      "name": "FUN_00363c20",
+      "name": "beDemoKeepMes_CreateInstance",
       "size": 52,
       "source": "src/game/bec/BecLibrary.cpp",
       "direct": [
@@ -20233,7 +20233,7 @@
     },
     {
       "address": 3611088,
-      "name": "LuaAPI_Register",
+      "name": "beLuaWrapper__registerFunctions",
       "size": 60,
       "source": "src/game/be.cpp",
       "direct": [
@@ -24056,7 +24056,7 @@
     },
     {
       "address": 3662096,
-      "name": "FUN_0037e110",
+      "name": "beDemoManager_SwitchSD",
       "size": 100,
       "source": "src/game/beDemoManager.cpp",
       "direct": [
@@ -24071,7 +24071,7 @@
     },
     {
       "address": 3662208,
-      "name": "FUN_0037e180",
+      "name": "beDemoManager_SwitchEnd",
       "size": 200,
       "source": "src/game/beDemoManager.cpp",
       "direct": [
@@ -24110,7 +24110,7 @@
     },
     {
       "address": 3662544,
-      "name": "FUN_0037e2d0",
+      "name": "beDemoManager_Case",
       "size": 196,
       "source": "src/game/beDemoManager.cpp",
       "direct": [
@@ -24149,7 +24149,7 @@
     },
     {
       "address": 3662752,
-      "name": "FUN_0037e3a0",
+      "name": "beDemoManager_AddKeepMes",
       "size": 832,
       "source": "src/game/beDemoManager.cpp",
       "direct": [
@@ -24308,7 +24308,7 @@
     },
     {
       "address": 3663584,
-      "name": "FUN_0037e6e0",
+      "name": "beDemoManager_SetLua",
       "size": 420,
       "source": "src/game/beDemoManager.cpp",
       "direct": [
@@ -24395,7 +24395,7 @@
     },
     {
       "address": 3664016,
-      "name": "FUN_0037e890",
+      "name": "beDemoManager_MsgBox",
       "size": 440,
       "source": "src/game/beDemoManager.cpp",
       "direct": [
@@ -24482,7 +24482,7 @@
     },
     {
       "address": 3664464,
-      "name": "FUN_0037ea50",
+      "name": "beDemoManager_Run",
       "size": 128,
       "source": "src/game/beDemoManager.cpp",
       "direct": [
@@ -25596,7 +25596,7 @@
     },
     {
       "address": 3838544,
-      "name": "FUN_003a9250",
+      "name": "igProperty_GetRecordIntList",
       "size": 36,
       "source": "src/game/beDBManager.cpp",
       "direct": [
@@ -25641,7 +25641,7 @@
     },
     {
       "address": 3838688,
-      "name": "FUN_003a92e0",
+      "name": "igProperty_GetRecordString",
       "size": 36,
       "source": "src/game/beDBManager.cpp",
       "direct": [
@@ -25656,7 +25656,7 @@
     },
     {
       "address": 3838736,
-      "name": "FUN_003a9310",
+      "name": "igProperty_GetRecordStringList",
       "size": 36,
       "source": "src/game/beDBManager.cpp",
       "direct": [

@@ -180,7 +180,7 @@ int FUN_001e68e0(Lst *arg0, int arg1) {
         } else {
             List_Resize(arg0, var_s0 + 1, 0x40);
         }
-        Matrix44_Copy(arg0->data + var_s0, arg1);
+        igMatrix44f_Copy(arg0->data + var_s0, arg1);
     } else {
         temp_v1 = count_of(arg0);
         if (temp_v1 == 0) {
@@ -192,7 +192,7 @@ int FUN_001e68e0(Lst *arg0, int arg1) {
                 List_Resize(arg0, var_s0 + 1, 0x40);
             }
             d = arg0->data;
-            Matrix44_Copy(d + var_s0, d + (var_s0 - 1));
+            igMatrix44f_Copy(d + var_s0, d + (var_s0 - 1));
         }
         FUN_001906d0(arg0->data + (arg0->count - 1), arg1);
     }
@@ -214,7 +214,7 @@ int FUN_001e69e0(struct S_1e69e0 *arg0, int arg1) {
         } else {
             List_Resize(arg0, var_s0 + 1, 0x40);
         }
-        Matrix44_Copy(arg0->f16 + (var_s0 << 6), arg1);
+        igMatrix44f_Copy(arg0->f16 + (var_s0 << 6), arg1);
     } else {
         temp_v1 = arg0->f8;
         if (temp_v1 == 0) {
@@ -226,7 +226,7 @@ int FUN_001e69e0(struct S_1e69e0 *arg0, int arg1) {
                 List_Resize(arg0, var_s0 + 1, 0x40);
             }
             temp_a1 = arg0->f16;
-            Matrix44_Copy(temp_a1 + (var_s0 << 6), temp_a1 + ((var_s0 - 1) << 6));
+            igMatrix44f_Copy(temp_a1 + (var_s0 << 6), temp_a1 + ((var_s0 - 1) << 6));
         }
         temp_a0 = arg0->f16 + ((arg0->f8 - 1) << 6);
         FUN_001904f0(temp_a0, temp_a0, arg1);

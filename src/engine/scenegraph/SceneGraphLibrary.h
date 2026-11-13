@@ -84,7 +84,7 @@ class DW4VC_84_1 { public: virtual void d0(); virtual void d1(); virtual void d2
 extern "C" igMetaObject *igMetaObject_Create(int);
 extern "C" int Memory_GetAllocatorBySelector(...);
 extern "C" igMetaObject *g_igTransformSource_metaObject[4];
-extern "C" int g_metadataAllocatorKey[4];
+extern "C" int kIGMemoryPoolHandleMetaData[4];
 extern "C" char igTransformSource_className[];
 extern igMetaObject *g_igTransformSequence1_5_metaObject[4];
 struct Obj_194f40 { int *vt; int w[27]; };
@@ -217,7 +217,7 @@ extern "C" int DAT_0048b228[4];
 extern "C" int DAT_0048b230[4];
 union U_196c10 { int vt; char b[144]; };
 extern igMetaObject *g_igSorter_metaObject[4];
-extern int g_metadataAllocatorKey[4];
+extern int kIGMemoryPoolHandleMetaData[4];
 extern int DAT_00528630[4];
 extern int DAT_00528620[8];
 extern void *g_objectSystem[4];
@@ -1269,7 +1269,7 @@ extern "C" void *igObject_AllocateStorage(...);
 typedef struct AnimationPoolObject { int w0; int references; char pad[20]; char f28; } AnimationPoolObject;
 extern "C" int FUN_00306e50(...);
 extern "C" int text_cleanCombinerStates[4];
-extern "C" int DAT_00587038[4];
+extern "C" int kIGMemoryPoolHandleSystem[4];
 extern "C" char GPR_00554b84;
 struct R_1abdf0 { char pad[4]; int f4; };
 struct Ent { int p[2]; int key; };
@@ -1290,8 +1290,8 @@ public:
 };
 struct igTimeView { char pad[16]; long long t; };
 struct CombinerStateList { char pad[8]; int _count; int _capacity; igAnimationState **_data; };
-extern "C" int Matrix44_GetQuaternion(...);
-extern "C" int Matrix44_GetTranslation(...);
+extern "C" int igMatrix44f_GetQuaternion(...);
+extern "C" int igMatrix44f_GetTranslation(...);
 class DW4VC_96_4 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual int vX(int, int, int, int); };
 class igCompressedSeqView {
 public:
@@ -1512,7 +1512,7 @@ struct Z { char pad56[56]; int f56; };
 extern "C" int Gap__Core__igObject__userConstruct(...);
 extern "C" int text_simpleLightManagementState[4];
 extern "C" struct L_1af920 *DAT_00562580[4];
-extern "C" int DAT_005870f8[4];
+extern "C" int kIGMemoryPoolHandleAttribute[4];
 extern "C" unsigned char g_useOwnerAllocator;
 extern "C" void FUN_002ed5c0(void *);
 struct K { void *p; K(void *x) { p = x; } ~K() { } static void operator delete(void *q) { FUN_002ed5c0(q); } };
@@ -1816,8 +1816,8 @@ class C_1b6e20 { public: virtual void d0(); virtual void d1(); virtual void d2()
 struct S20 { char p[20]; int f20; };
 struct S8 { char p[8]; int f8; };
 struct A_1b6e20 { char p[48]; char f48; char p1[3]; C_1b6e20 *f52; char p2[12]; C_1b6e20 *f68; S20 *f72; S20 *f76; S20 *f80; S20 *f84; S20 *f88; S20 *f92; S20 *f96; char p3[148]; S8 *f248; S8 *f252; char p4[12]; S20 *f268; };
-extern "C" int Matrix44_Copy(...);
-extern "C" int Matrix44_Invert(...);
+extern "C" int igMatrix44f_Copy(...);
+extern "C" int igMatrix44f_Invert(...);
 extern "C" int g_igAttr_metaObject[4];
 typedef struct R_1b6f30 { int w0; int refs; } R_1b6f30;
 typedef struct A_1b6f30 { char pad[32]; R_1b6f30 *f32; R_1b6f30 *f36; char pad40[12]; int f52; } A_1b6f30;
@@ -1880,7 +1880,7 @@ extern "C" int igStringObj_Set(...);
 extern "C" int igStringObj_ToLower(igObject *);
 extern "C" int List_BinarySearchWords(int, void *, void *);
 extern "C" int FUN_002d6e60(int, void *, void *);
-extern "C" int g_temporaryAllocatorSelector[4];
+extern "C" int kIGMemoryPoolHandleTemporary[4];
 struct SegmentOverrideRef { igObject *p; inline void retain() { if (p != 0) p->_refCount = p->_refCount + 1; } inline void set(igObject *o) { p = o; retain(); } };
 struct SegmentStackList { char pad8[8]; int _count; int _capacity; igObject **_data; int count() const { return _count; } };
 extern "C" int FUN_0030bfa0(...);
@@ -2241,7 +2241,7 @@ struct O_1bfa60 { virtual void v0(); virtual void v1(); virtual void v2(); virtu
  int p0[3]; M_1bfa60 *m; int p1[8]; int idx; unsigned char flags; };
 extern "C" void FUN_001bf7d0(QSSequenceView *o, unsigned char *before, unsigned char *after, int *key0, int *key1, float *t0, float *t1, long long time);
 extern "C" int FUN_00192810(...);
-extern "C" int Matrix44_SetTranslation(...);
+extern "C" int igMatrix44f_SetTranslation(...);
 struct M_1bfc70 { int pad[2]; int count; };
 struct O_1bfc70 { virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3(); virtual void v4(); virtual void v5(); virtual void v6(); virtual void v7(); virtual void v8(); virtual void v9(); virtual void v10(); virtual void v11(); virtual void v12(); virtual void v13(); virtual void v14(); virtual void v15(); virtual void v16(); virtual void v17(); virtual void v18(); virtual void v19(); virtual void v20(); virtual void v21(); virtual void v22(); virtual void v23(); virtual void v24(); virtual void v25(); virtual void v26(); virtual void v27(); virtual void v28(); virtual void v29(); virtual void v30(); virtual void v31(); virtual void v32(); virtual void v33(); virtual void v34(); virtual void v35(); virtual void v36(); virtual void v37(); virtual void v38(); virtual void v39(); virtual long long v40(int);
  int p0[3]; M_1bfc70 *m; int p1[8]; int cur; };
@@ -2719,7 +2719,7 @@ public:
     virtual void release(void *);
 };
 extern "C" void FUN_001c4140(float *, void *, int *, unsigned char *);
-extern "C" int DAT_00587028[4];
+extern "C" int kIGMemoryPoolHandleCurrent[4];
 struct R_1c4650 { int word0; int references; };
 extern "C" R_1c4650 *DAT_00562760[4];
 class V128_1c4650 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void vX(int); };
@@ -3033,7 +3033,7 @@ public:
     int handle;
 };
 extern "C" int DAT_004e47b0[4];
-extern "C" int DAT_00587048[4];
+extern "C" int kIGMemoryPoolHandleString[4];
 static inline void retain_1ce400(IniStringObject *object) {
     if (object != 0) {
         object->_refCount = object->_refCount + 1;
@@ -3304,8 +3304,8 @@ struct S_1d2230 { int p[3]; int t; };
 class O_1d2230 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void v128(int); virtual void v132(int);
   int p[4]; int f20; };
 struct L1d { int a; int b; int count; int cap; int *data; };
-extern "C" int g_statusSucceeded[4];
-extern "C" int g_allocatorFailureStatus[4];
+extern "C" int g_resultSuccess[4];
+extern "C" int g_resultFailure[4];
 struct ObjectListOwner { char pad[16]; igTDataList<igObject *> *_list; };
 struct S_1d32f0;
 class V_1d32f0 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual int c(); virtual S_1d32f0 *g(int); };
@@ -3450,7 +3450,7 @@ extern "C" int FUN_00190c60(...);
 typedef struct A_1d5f70 { char pad[208]; unsigned char f208; } A_1d5f70;
 extern "C" int FUN_00191860(void *, float, float, float, float, float, float);
 extern "C" int igMatrix44f_MakePerspective(void *, float, float, float, float, float);
-extern "C" int Matrix44_MakeLookAt(...);
+extern "C" int igMatrix44f_MakeLookAt(...);
 struct Mx { float m[16]; };
 class V_1d6060 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void vX(Mx *); };
 struct O_1d6060 { char p0[32]; float f32, f36, f40, f44, f48, f52, f56; char p60[28]; V_1d6060 *f88; V_1d6060 *f92; char p96[28]; float f124, f128; char p132[12]; V_1d6060 *f144; char p148[60]; unsigned char f208; char p209[3]; float f212, f216, f220, f224; };
@@ -3508,7 +3508,7 @@ extern "C" int FUN_002f8a20(void);
  * vtable offsets +100 (select) and +128 (value) on the objects held in the globals
  * 0x5628f0..0x5629f0, a unit-colour vector copied into one object (0x562940), then the scene list
  * (0x5629a0, +32) is cleared and refilled with the object FUN_001d6900 returns, and the
- * projection/view helpers FUN_00191860 / Matrix44_MakeLookAt get their literal arguments. Names are role
+ * projection/view helpers FUN_00191860 / igMatrix44f_MakeLookAt get their literal arguments. Names are role
  * hypotheses; evidence: asm/FUN_001d6a70.s. Matching constructs: dummy virtual slots give the
  * retail vtable offsets (offset = 8 + 4 * index); the stack vectors are declared in the order eye,
  * origin, up, white, forward so the frame offsets match, and the Vec4 is copied with float

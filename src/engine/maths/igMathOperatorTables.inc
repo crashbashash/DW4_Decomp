@@ -1,16 +1,16 @@
 void FUN_0018ec40(void) {
-    DAT_00561130 = FUN_00189420(Memory_GetAllocatorBySelector(DAT_00587038[0]));
-    DAT_00561138 = FUN_001892c0(Memory_GetAllocatorBySelector(DAT_00587038[0]));
-    DAT_00561140 = FUN_00189160(Memory_GetAllocatorBySelector(DAT_00587038[0]));
-    DAT_00561148 = FUN_00189000(Memory_GetAllocatorBySelector(DAT_00587038[0]));
-    DAT_00561150 = FUN_00188ea0(Memory_GetAllocatorBySelector(DAT_00587038[0]));
-    DAT_00561160 = FUN_00188be0(Memory_GetAllocatorBySelector(DAT_00587038[0]));
-    DAT_00561168 = FUN_00188a80(Memory_GetAllocatorBySelector(DAT_00587038[0]));
-    DAT_00561158 = FUN_00188d40(Memory_GetAllocatorBySelector(DAT_00587038[0]));
-    DAT_00561170 = FUN_00188920(Memory_GetAllocatorBySelector(DAT_00587038[0]));
-    DAT_00561118 = FUN_00189840(Memory_GetAllocatorBySelector(DAT_00587038[0]));
-    DAT_00561120 = FUN_001896e0(Memory_GetAllocatorBySelector(DAT_00587038[0]));
-    DAT_00561128 = FUN_00189580(Memory_GetAllocatorBySelector(DAT_00587038[0]));
+    DAT_00561130 = FUN_00189420(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem[0]));
+    DAT_00561138 = FUN_001892c0(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem[0]));
+    DAT_00561140 = FUN_00189160(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem[0]));
+    DAT_00561148 = FUN_00189000(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem[0]));
+    DAT_00561150 = FUN_00188ea0(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem[0]));
+    DAT_00561160 = FUN_00188be0(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem[0]));
+    DAT_00561168 = FUN_00188a80(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem[0]));
+    DAT_00561158 = FUN_00188d40(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem[0]));
+    DAT_00561170 = FUN_00188920(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem[0]));
+    DAT_00561118 = FUN_00189840(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem[0]));
+    DAT_00561120 = FUN_001896e0(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem[0]));
+    DAT_00561128 = FUN_00189580(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem[0]));
 }
 
 void FUN_0018edb0(int meta) {

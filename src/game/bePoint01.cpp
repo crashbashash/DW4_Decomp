@@ -5,7 +5,7 @@ extern "C" int Gap__Bec__bePoint01__vfunc_30(void);
 extern "C" void Gap__Bec__bePoint01__vfunc_31(void);
 extern "C" int Gap__Bec__bePoint01__vfunc_20(void);
 extern "C" void beMessenger_RegisterReceiverFromInfo(int, int, char *);
-extern "C" int Matrix44_Copy(int *, int *);
+extern "C" int igMatrix44f_Copy(int *, int *);
 extern "C" int beMessenger_AppendMatrix(int, void *);
 extern "C" int igBitMask_SetAll(int);
 extern "C" int igBitMask_ClearAll(int);
@@ -54,7 +54,7 @@ void FUN_0039c1c0(bePoint01 *arg0, bePoint01Info *arg1, int arg2, int arg3) {
         beMessenger_AppendMatrix(arg0->_messenger, ((igTransform **)((igObjectList *)it->_childList)->_data)[arg3]->_m);
         return;
     }
-    Matrix44_Copy(sp20, &DAT_004e0ef0[0]);
+    igMatrix44f_Copy(sp20, &DAT_004e0ef0[0]);
     beMessenger_AppendMatrix(arg0->_messenger, sp20);
 }
 

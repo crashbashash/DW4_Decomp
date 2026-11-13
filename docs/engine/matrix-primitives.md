@@ -10,11 +10,11 @@ not assertions about original class or method spelling.
 
 | Address | Operation | Contract |
 | --- | --- | --- |
-| `0x1908f0` | Matrix44_Copy | Copy 64 bytes; guest-pointer alignment selects snapshot versus forward word copy |
-| `0x1909b0` | Matrix44_FromTranslation | Write identity's first twelve words, copy three vector words to indices 12–14, write index 15 as 1 |
-| `0x190a10` | Matrix44_SetTranslation | Sequentially copy vector words to matrix indices 12–14 |
-| `0x190a30` | Matrix44_GetTranslation | Sequentially copy matrix indices 12–14 to vector output |
-| `0x190a50` | Matrix44_TranslateLocal | Add basis-weighted vector components to all four words at indices 12–15 |
+| `0x1908f0` | igMatrix44f_Copy | Copy 64 bytes; guest-pointer alignment selects snapshot versus forward word copy |
+| `0x1909b0` | igMatrix44f_FromTranslation | Write identity's first twelve words, copy three vector words to indices 12–14, write index 15 as 1 |
+| `0x190a10` | igMatrix44f_SetTranslation | Sequentially copy vector words to matrix indices 12–14 |
+| `0x190a30` | igMatrix44f_GetTranslation | Sequentially copy matrix indices 12–14 to vector output |
+| `0x190a50` | igMatrix44f_TranslateLocal | Add basis-weighted vector components to all four words at indices 12–15 |
 
 ## Alignment, aliases and float behavior
 

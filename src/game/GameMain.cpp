@@ -237,7 +237,7 @@ extern "C" int DAT_00586fd8[4];
 extern "C" int DAT_00586fe0[4];
 extern "C" int DAT_00586fe8[4];
 extern "C" int DAT_00586ff0[4];
-extern "C" int g_ndmwAllocatorSelector[4];
+extern "C" int kIGMemoryPoolHandleUser0[4];
 extern "C" int DAT_00587338[4];
 extern "C" int *DAT_00587340[4];
 extern "C" char GPR_0055499c;
@@ -248,7 +248,7 @@ struct Guard { ~Guard() { FUN_002d1770(); } };
 struct U {
     static inline int alloc(int fallback) {
         if (g_useOwnerAllocator) return fallback;
-        else return ((int)Memory_GetAllocatorBySelector(g_ndmwAllocatorSelector[0]));
+        else return ((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser0[0]));
     }
     static inline void relg(Obj **g) {
         Obj *o = g[0];
@@ -281,8 +281,8 @@ class DW4VCSR_156_1 { public: virtual void d0(); virtual void d1(); virtual void
 class DW4VCSR_200_1 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void d32(); virtual void d33(); virtual void d34(); virtual void d35(); virtual void d36(); virtual void d37(); virtual void d38(); virtual void d39(); virtual void d40(); virtual void d41(); virtual void d42(); virtual void d43(); virtual void d44(); virtual void d45(); virtual void d46(); virtual void d47(); virtual DW4SR4 vX(int); };
 struct R { int v; R() {} R(int x) { v = x; } R(const R &o) : v(o.v) {} };
 class C { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual int v30(); virtual void d31(); virtual void d32(); virtual void d33(); virtual void d34(); virtual void d35(); virtual void d36(); virtual void d37(); virtual void d38(); virtual void d39(); virtual int v40(); char p4[28]; int f32; int f36; char p40[5]; unsigned char f45; };
-extern "C" int g_statusSucceeded[4];
-extern "C" int g_allocatorFailureStatus[4];
+extern "C" int g_resultSuccess[4];
+extern "C" int g_resultFailure[4];
 extern "C" R Gap__Core__igPsx2Thread__vfunc_39(C *arg1, int arg2);
 class igResult {
 public:
@@ -531,7 +531,7 @@ struct Holder { igInsightCore *p; };
 extern "C" Pool * FUN_002f8a20(...);
 extern igSmartPointer<igAnimationStatePool> g_igAnimationStatePool_instance;
 extern igSmartPointer<igEnbayaContextPool> g_igEnbayaContextPool_instance;
-extern "C" int g_defaultAllocatorSelector[4];
+extern "C" int kIGMemoryPoolHandleUser1[4];
 extern "C" int g_igViewerSceneInfoManager_metaObject[4];
 struct H { static void *castit(void *s) {
     if (s != 0 && igObject_IsKindOf(s, g_igViewerSceneInfoManager_metaObject[0]) != 0) return s; else return 0; } };
@@ -822,7 +822,7 @@ void FUN_00259b60(void) {
 R Gap__Core__igPsx2Thread__vfunc_39(C *arg1, int arg2) {
     if (arg1->v30() == 0) {
         if (arg2 & 0xF) {
-            return R(g_allocatorFailureStatus[0]);
+            return R(g_resultFailure[0]);
         }
         arg1->f36 = arg2;
         if (arg1->f45 == 0) {
@@ -833,13 +833,13 @@ R Gap__Core__igPsx2Thread__vfunc_39(C *arg1, int arg2) {
         }
         arg1->f45 = 0;
         arg1->f32 = FUN_00300db0(arg1, arg1->f36, arg1->v40() & 0xFFFF);
-        return R(g_statusSucceeded[0]);
+        return R(g_resultSuccess[0]);
     }
-    return R(g_allocatorFailureStatus[0]);
+    return R(g_resultFailure[0]);
 }
 
 bool FUN_00259cd0(const char *path) {
-    return GPR_00554bec = FUN_0032d4b0(path) == (*(igResult *)g_statusSucceeded);
+    return GPR_00554bec = FUN_0032d4b0(path) == (*(igResult *)g_resultSuccess);
 }
 
 void FUN_00259d10(void) {
@@ -1292,17 +1292,17 @@ void FUN_0025afe0(Holder *arg0) {
     ((Sub *)arg0->p->_visualContext)->v140();
     REL_25afe0(g_igEnbayaContextPool_instance.p);
     g_igEnbayaContextPool_instance.p = 0;
-    { Pool *a_ = FUN_002f8a20(); var_v0 = g_useOwnerAllocator != 0 ? a_ : Memory_GetAllocatorBySelector(g_ndmwAllocatorSelector[0]); }
+    { Pool *a_ = FUN_002f8a20(); var_v0 = g_useOwnerAllocator != 0 ? a_ : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser0[0]); }
     REL_25afe0(g_igEnbayaContextPool_instance.p);
     g_igEnbayaContextPool_instance.p = igEnbayaContextPool_Create(var_v0);
-    { Pool *a_ = FUN_002f8a20(); var_v0 = g_useOwnerAllocator != 0 ? a_ : Memory_GetAllocatorBySelector(g_ndmwAllocatorSelector[0]); }
+    { Pool *a_ = FUN_002f8a20(); var_v0 = g_useOwnerAllocator != 0 ? a_ : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser0[0]); }
     REL_25afe0(g_igAnimationCombinerBoneInfoPool_instance.p);
     g_igAnimationCombinerBoneInfoPool_instance.p = igAnimationCombinerBoneInfoPool_Create(var_v0);
     g_igAnimationCombinerBoneInfoPool_instance->_resetMode = 0;
-    { Pool *a_ = FUN_002f8a20(); var_v0 = g_useOwnerAllocator != 0 ? a_ : Memory_GetAllocatorBySelector(g_ndmwAllocatorSelector[0]); }
+    { Pool *a_ = FUN_002f8a20(); var_v0 = g_useOwnerAllocator != 0 ? a_ : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser0[0]); }
     REL_25afe0(g_igAnimationStatePool_instance.p);
     g_igAnimationStatePool_instance.p = igAnimationStatePool_Create(var_v0);
-    { Pool *a_ = FUN_002f8a20(); var_a0 = g_useOwnerAllocator != 0 ? a_ : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]); }
+    { Pool *a_ = FUN_002f8a20(); var_a0 = g_useOwnerAllocator != 0 ? a_ : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]); }
     if (var_a0 != 0) {
         var_a0->v108(0);
     }

@@ -55,7 +55,7 @@ void Gap__Sg__igTransformSequence1_5__vfunc_34(KeySequenceView *o, int index, Ke
             float *r = m->r[i];
             s[i] = sqrtf(r[0] * r[0] + r[1] * r[1] + r[2] * r[2]);
         }
-        Matrix44_Copy(rot, m);
+        igMatrix44f_Copy(rot, m);
         if (FUN_00192290(m) < 0.0f) {
             s[0] = -s[0];
             s[1] = -s[1];
@@ -71,13 +71,13 @@ void Gap__Sg__igTransformSequence1_5__vfunc_34(KeySequenceView *o, int index, Ke
         }
         FUN_00190cb0(rot, inv);
     } else {
-        Matrix44_Copy(rot, m);
+        igMatrix44f_Copy(rot, m);
     }
     if (o->_drivenChannels & 2) {
-        Matrix44_GetQuaternion(&o->_quatList->_data[index], rot);
+        igMatrix44f_GetQuaternion(&o->_quatList->_data[index], rot);
     } else if (o->_drivenChannels & 4) {
         off = index * 16;
-        Matrix44_GetQuaternion((char *)o->_quatList->_data + off, rot);
+        igMatrix44f_GetQuaternion((char *)o->_quatList->_data + off, rot);
         pz = &euler[2];
         py = &euler[1];
         FUN_00192990((char *)o->_quatList->_data + off, euler, py, pz);

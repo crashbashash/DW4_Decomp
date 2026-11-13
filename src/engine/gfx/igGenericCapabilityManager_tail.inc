@@ -83,7 +83,7 @@ StringRef FUN_001554a0(int arg1) {
     int i;
     char *s;
     int r;
-    igSmartPointer<Ref_1554a0> text(igStringObj_Create(Memory_GetAllocatorBySelector(DAT_00587048[0])));
+    igSmartPointer<Ref_1554a0> text(igStringObj_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleString[0])));
     igStringObj_Set(text.get(), arg1);
     igStringObj_ToLower(text.get());
     for (i = text.get()->len - 1; i >= 0; i--) {
@@ -116,7 +116,7 @@ void FUN_00155c00(int *out, Owner *owner, int id) {
     int i;
     List *l = owner->a;
     if (id >= l->count || l->data[id] == 0) {
-        *out = g_allocatorFailureStatus[0];
+        *out = g_resultFailure[0];
         return;
     }
     for (i = 0; i < owner->b->count; i++) {
@@ -133,7 +133,7 @@ void FUN_00155c00(int *out, Owner *owner, int id) {
         REL(o);
         if (la->count && id >= 0 && id < la->count) la->data[id] = 0;
     }
-    *out = g_statusSucceeded[0];
+    *out = g_resultSuccess[0];
 }
 
 void FUN_00155db0(O_155db0 *arg0) {
@@ -307,7 +307,7 @@ void FUN_001566c0(S_1566c0 *arg0, S_1566c0 *arg1, int arg2, int arg3, int arg4, 
         if (g_useOwnerAllocator != 0) {
             v = alloc;
         } else {
-            v = (void **)Memory_GetAllocatorBySelector(DAT_005870e8[0]);
+            v = (void **)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleImage[0]);
         }
         arg0->f52 = (int)((VA *)v)->vX(arg0->f48, 0x80);
     }
@@ -499,7 +499,7 @@ void FUN_001585d0(S_1585d0 *arg0) {
     }
     igImage_UpdateFormatInfo((igImage *)arg0);
     var_v0 = (void **)(igObject_GetAllocator(arg0));
-    var_v0 = (g_useOwnerAllocator != 0) ? var_v0 : (void **)(Memory_GetAllocatorBySelector(DAT_005870e8[0]));
+    var_v0 = (g_useOwnerAllocator != 0) ? var_v0 : (void **)(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleImage[0]));
     arg0->f34 = ((DW4VC_220_2 *)(var_v0))->vX((int)(arg0->f30), (int)(0x80));
     arg0->f3c = 1;
 }
@@ -534,7 +534,7 @@ int FUN_00158cc0(S_158cc0 *arg0, void **arg1) {
         st->v25(&sp5C, 4, 1);
         st->v25(&sp5C, 4, 1);
         var_v0 = (void **)igObject_GetAllocator(arg0);
-        var_v0 = (g_useOwnerAllocator != 0) ? var_v0 : Memory_GetAllocatorBySelector(DAT_005870e8[0]);
+        var_v0 = (g_useOwnerAllocator != 0) ? var_v0 : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleImage[0]);
         arg0->f52 = ((VAlloc *)var_v0)->v53(arg0->f48, 0x80);
         arg0->f60 = 1;
         st->v25(arg0->f52, 1, arg0->f48);
@@ -736,7 +736,7 @@ void FUN_0015a100(S_15a100 *arg0) {
     igImage_UpdateFormatInfo((igImage *)arg0);
     if (arg0->f52 != 0 && n != arg0->f76) {
         al = (A_15a100 *)igObject_GetAllocator(arg0);
-        al = (g_useOwnerAllocator != 0) ? al : (A_15a100 *)Memory_GetAllocatorBySelector(DAT_005870e8[0]);
+        al = (g_useOwnerAllocator != 0) ? al : (A_15a100 *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleImage[0]);
         buf = al->vX(arg0->f48, 0x80);
         src = arg0->f52;
         dst = buf;

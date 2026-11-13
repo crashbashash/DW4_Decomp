@@ -17,7 +17,7 @@ int FUN_001356b0(...);
 int igTimeAttr_CreateInstance(...);
 int igMatrix44f_SetIdentity(void *matrix);
 int FUN_001904f0(void *result, void *left, void *right);
-int Matrix44_Copy(void *to, void *from);
+int igMatrix44f_Copy(void *to, void *from);
 igMetaObject *FUN_003680b0(void);
 igMetaObject *FUN_00367e50(void);
 extern int DAT_00562640[4];
@@ -47,8 +47,8 @@ int igStringObj_StripDirectory(igNamedObject *);
 int igStringObj_ToLower(igNamedObject *);
 int strcmp(...);
 int strlen(...);
-extern int g_defaultAllocatorSelector[4];
-extern int g_ndmwAllocatorSelector[4];
+extern int kIGMemoryPoolHandleUser1[4];
+extern int kIGMemoryPoolHandleUser0[4];
 extern unsigned char g_useOwnerAllocator;
 extern int g_globalContext[4];
 extern int g_igMemoryRefMetaField_metaObject[4];
@@ -219,7 +219,7 @@ static inline beCriSfpData *BankAt(igObjectList *list, int i) { return ((beCriSf
 /* The allocator the controller's handles come from: its own, or the NDMW allocator. */
 static inline void *HandleAllocator(beCri *self) {
     void *allocator = igObject_GetAllocator(self);
-    return g_useOwnerAllocator ? allocator : Memory_GetAllocatorBySelector(g_ndmwAllocatorSelector[0]);
+    return g_useOwnerAllocator ? allocator : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser0[0]);
 }
 
 /* The next free object of a traversal's pool, which `create` grows when it is used up. */
@@ -299,7 +299,7 @@ int beCopyModelCtrl2_Traverse(beCopyModelCtrl2 *node, igCommonTraversal *travers
     attrs = (igAttrStackManager *)traversal->_attrStack;
     attrId = g_igModelViewMatrixAttr_metaObject[0]->_id;
     stack = ((igAttrStack **)((igObjectList *)attrs->_attrStacks)->_data)[((int *)attrs->_attrStackIndexTable)[attrId]];
-    Matrix44_Copy(node->_m, ((beModelCtrlNode2 *)node->_srcNode)->_m);
+    igMatrix44f_Copy(node->_m, ((beModelCtrlNode2 *)node->_srcNode)->_m);
     time = ((beModelCtrlNode2 *)node->_srcNode)->_time;
     igMatrix44f_SetIdentity(&modelView);
     if (stack->_count != 0) {
@@ -367,7 +367,7 @@ int beCopyTransform_Traverse(beCopyTransform *node, igCommonTraversal *traversal
     attrs = (igAttrStackManager *)traversal->_attrStack;
     attrId = g_igModelViewMatrixAttr_metaObject[0]->_id;
     matrices = ((igAttrStack **)((igObjectList *)attrs->_attrStacks)->_data)[((int *)attrs->_attrStackIndexTable)[attrId]];
-    Matrix44_Copy(node->_m, ((igTransform *)node->_srcTransform)->_m);
+    igMatrix44f_Copy(node->_m, ((igTransform *)node->_srcTransform)->_m);
     igMatrix44f_SetIdentity(&modelView);
     if (matrices->_count != 0) {
         depth = matrices->_count - 1;
@@ -411,7 +411,7 @@ void Gap__Bec__beCri__vfunc_21(beCri *self) {
     section = FUN_00306360(registry, BECRUNTIME, 0);
     if (section == -1) return;
     void *allocator = igObject_GetAllocator(self);
-    allocator = g_useOwnerAllocator ? allocator : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
+    allocator = g_useOwnerAllocator ? allocator : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
     igSmartPointer<igStringObj> path(igStringObj_Create(allocator));
     if (FUN_00306770(registry, section, AdxModulePath, &path, g_adxModulePathDefault, 0) == 0) {
         if (strcmp(text_9_31s281, text_9_18) == 0)

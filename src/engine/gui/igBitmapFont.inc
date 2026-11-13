@@ -1,6 +1,6 @@
 igMetaObject *FUN_004524f0(void) {
     if (g_igBitmapFont_metaObject[0] == 0) {
-        g_igBitmapFont_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
+        g_igBitmapFont_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
     return g_igBitmapFont_metaObject[0];
 }

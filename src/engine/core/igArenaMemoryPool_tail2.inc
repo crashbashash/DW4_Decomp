@@ -43,7 +43,7 @@ if (r->count >= cap) {
             void *np;
             ncap = cap + 2;
             if (ncap == 0) ncap = 512;
-            np = ((Alloc_311990 * *)DAT_00587218)[0]->Realloc(r->data, ncap * 4);
+            np = ((Alloc_311990 * *)g_activeSystemAllocator)[0]->Realloc(r->data, ncap * 4);
             if (np != 0) {
                 r->data = (unsigned int *)np;
                 r->cap = ncap;

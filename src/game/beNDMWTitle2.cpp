@@ -5,7 +5,7 @@
         if (g_useOwnerAllocator != 0) {                                                                   \
             dst = alloc;                                                                           \
         } else {                                                                                   \
-            dst = Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);                                  \
+            dst = Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);                                  \
         }                                                                                          \
     }
 #define SET_DATA(ref)                                                                              \
@@ -115,7 +115,7 @@ extern "C" int j_startback[4];
 extern "C" int LOADCTRL2_2[4];
 extern "C" int GENERATE_TITLE[4];
 extern "C" int g_propertyNameField[4];
-extern "C" int g_defaultAllocatorSelector[4];
+extern "C" int kIGMemoryPoolHandleUser1[4];
 extern "C" int g_beLua_metaObject[4];
 extern "C" unsigned char g_useOwnerAllocator;
 extern "C" char g_commonSettingsValid;

@@ -22,7 +22,7 @@ extern "C" int g_beNDMWMdlObject_metaObject[4];
 extern "C" int ONE_11[4];
 extern "C" int g_propertyNameField[4];
 extern "C" int g_stringPool[4];
-extern "C" int g_defaultAllocatorSelector[4];
+extern "C" int kIGMemoryPoolHandleUser1[4];
 extern "C" unsigned char g_useOwnerAllocator;
 /* Property record: reference at +20. */
 struct OneProperty { char pad[20]; igObject *f20; };
@@ -55,7 +55,7 @@ void Gap__Bec__beNDMWMdlObject__vfunc_37(void)
 void Gap__Bec__beNDMWMdlObject__vfunc_36(beNDMWMdlObject *arg0, beBaseInfoRam *arg1) {
     if (arg1->_dataList == 0) {
         int a = igObject_GetAllocator(arg1);
-        int al = g_useOwnerAllocator != 0 ? a : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
+        int al = g_useOwnerAllocator != 0 ? a : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
         igObject *created = (igObject *)beBaseInfoDataList_Create(al);
         /* matching construct: the new list is a temporary bound to the setter's reference parameter (it
          * takes the stack slot below the named info-work reference, as retail's +0x58 does) */
@@ -64,7 +64,7 @@ void Gap__Bec__beNDMWMdlObject__vfunc_36(beNDMWMdlObject *arg0, beBaseInfoRam *a
     OneProperty *s3 = (OneProperty *)igProperty_FindByName(arg1->_dataList, g_propertyNameField[0], ONE_11);
     {
         int a2 = igObject_GetAllocator(arg0);
-        int al2 = g_useOwnerAllocator != 0 ? a2 : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
+        int al2 = g_useOwnerAllocator != 0 ? a2 : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
         InfoWorkRef w((igObject *)FUN_00350020(al2));
         igObject *t2 = w.p;
         if (t2 != 0) t2->_refCount = t2->_refCount + 1;

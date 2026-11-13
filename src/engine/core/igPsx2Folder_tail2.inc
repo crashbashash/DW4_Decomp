@@ -51,9 +51,9 @@ void FUN_0032cac0(struct S_32cac0 *arg0) {
 
 static inline FolderAllocator *currentAllocator(void) {
     if (g_useOwnerAllocator != 0) {
-        return ((FolderAllocator *)Memory_GetAllocatorBySelector(g_memoryContextCurrent));
+        return ((FolderAllocator *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleCurrent));
     }
-    return ((FolderAllocator *)Memory_GetAllocatorBySelector(g_memoryContextTemporary));
+    return ((FolderAllocator *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleTemporary));
 }
 
 int igPsx2_LoadIopModule(int a, int b, int c, int d, int e) {
@@ -165,7 +165,7 @@ static inline void setName(O_32d220 *object, int name) {
 
 static inline int fileAllocator(void) {
     int a = ((int)FUN_002f8a20());
-    return g_useOwnerAllocator != 0 ? a : ((int)Memory_GetAllocatorBySelector(g_memoryContextSystem));
+    return g_useOwnerAllocator != 0 ? a : ((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem));
 }
 
 void FUN_0032d4b0(int *arg0, char *arg1) {

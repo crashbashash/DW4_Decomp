@@ -14,7 +14,7 @@ int FUN_00150710(void) {
 
 igMetaObject *FUN_00150770(void) {
     if (g_igPsx2VisualContext_metaObject[0] == 0) {
-        g_igPsx2VisualContext_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
+        g_igPsx2VisualContext_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
     return g_igPsx2VisualContext_metaObject[0];
 }

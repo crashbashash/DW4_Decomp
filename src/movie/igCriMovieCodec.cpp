@@ -115,7 +115,7 @@ int igMovieInfo_GetTiling(igMovieInfo *movie, int *tileWidth, int *tileHeight, i
 
 extern unsigned char g_useOwnerAllocator;
 extern unsigned char g_criMovieDmaWarningMuted;
-extern int g_ndmwAllocatorSelector[4];
+extern int kIGMemoryPoolHandleUser0[4];
 extern int g_igPsx2VisualContext_metaObject[4];
 extern int g_igCriMovieCodec_metaObject[4];
 extern int g_igCriMovieData_metaObject[4];
@@ -266,7 +266,7 @@ int igCriMovieCodec_InitializeDrawing(igCriMovieCodec *self, igMovieInfo *movie,
     columns = (unsigned int)movie->_width >> 4;
     rows = (unsigned int)movie->_height >> 4;
     pool = igObject_GetAllocator(self);
-    pool = g_useOwnerAllocator ? pool : Memory_GetAllocatorBySelector(g_ndmwAllocatorSelector[0]);
+    pool = g_useOwnerAllocator ? pool : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser0[0]);
     g_criMovieUploadPacket = Memory_AllocateAlignedWithAllocator(((unsigned int)((((columns * rows * 6) + 0xA) * 4) + 0x3F) >> 6) << 8, 0x40, pool);
     object = *visualContext;
     if ((object != 0) && (igObject_IsKindOf(object, g_igPsx2VisualContext_metaObject[0]) != 0)) {
@@ -282,7 +282,7 @@ int igCriMovieCodec_ReleaseDrawing(igCriMovieCodec *self) {
     igMemoryPoolView *pool;
 
     pool = igObject_GetAllocator(self);
-    pool = g_useOwnerAllocator ? pool : Memory_GetAllocatorBySelector(g_ndmwAllocatorSelector[0]);
+    pool = g_useOwnerAllocator ? pool : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser0[0]);
     Memory_FreeBufferWithAllocator(g_criMovieUploadPacket, pool);
     return 1;
 }

@@ -65,8 +65,8 @@ extern "C" unsigned char g_useOwnerAllocator;
 extern "C" int g_globalContext[4];
 extern "C" int g_igSceneInfo_metaObject[4];
 extern "C" int g_beLuaInfo_metaObject[4];
-extern "C" int g_ndmwAllocatorSelector[4];
-extern "C" int g_defaultAllocatorSelector[4];
+extern "C" int kIGMemoryPoolHandleUser0[4];
+extern "C" int kIGMemoryPoolHandleUser1[4];
 extern "C" char emptyString[];
 extern "C" char DAT_0050e6c8[];
 extern "C" int beFileListInfoManager_LoadNextFile(beFileListInfoManager *self, igStringRefList *fileNames);
@@ -352,11 +352,11 @@ int beFileListInfoManager_LoadNextFile(beFileListInfoManager *self, igStringRefL
         int remaining = self->_onetimeCount;
         if (remaining > -1) {
             if (remaining == 2) {
-                SET_POOL(_objectMemoryPool, g_ndmwAllocatorSelector[0])
-                SET_POOL(_dataMemoryPool, g_ndmwAllocatorSelector[0])
+                SET_POOL(_objectMemoryPool, kIGMemoryPoolHandleUser0[0])
+                SET_POOL(_dataMemoryPool, kIGMemoryPoolHandleUser0[0])
             } else if (remaining == 0) {
-                SET_POOL(_objectMemoryPool, g_defaultAllocatorSelector[0])
-                SET_POOL(_dataMemoryPool, g_defaultAllocatorSelector[0])
+                SET_POOL(_objectMemoryPool, kIGMemoryPoolHandleUser1[0])
+                SET_POOL(_dataMemoryPool, kIGMemoryPoolHandleUser1[0])
             }
             self->_onetimeCount = self->_onetimeCount - 1;
         }

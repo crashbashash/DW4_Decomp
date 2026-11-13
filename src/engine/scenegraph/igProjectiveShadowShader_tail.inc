@@ -1,27 +1,27 @@
 void FUN_001d4180(void) {
-    DAT_005628d8[0] = FUN_00132810(Memory_GetAllocatorBySelector(DAT_00587038[0]));
-    DAT_005627e8[0] = igTextureStateAttr_CreateInstance(Memory_GetAllocatorBySelector(DAT_00587038[0]));
-    DAT_005627f0[0] = igTextureStateAttr_CreateInstance(Memory_GetAllocatorBySelector(DAT_00587038[0]));
-    DAT_005627f8[0] = igTextureStateAttr_CreateInstance(Memory_GetAllocatorBySelector(DAT_00587038[0]));
-    DAT_00562800[0] = FUN_00139ed0(Memory_GetAllocatorBySelector(DAT_00587038[0]));
-    DAT_00562808[0] = FUN_00139ed0(Memory_GetAllocatorBySelector(DAT_00587038[0]));
-    DAT_00562810[0] = igBlendStateAttr_CreateInstance(Memory_GetAllocatorBySelector(DAT_00587038[0]));
-    DAT_00562818[0] = igBlendStateAttr_CreateInstance(Memory_GetAllocatorBySelector(DAT_00587038[0]));
-    DAT_00562820[0] = igLightingStateAttr_CreateInstance(Memory_GetAllocatorBySelector(DAT_00587038[0]));
-    DAT_00562838[0] = FUN_00139370(Memory_GetAllocatorBySelector(DAT_00587038[0]));
-    DAT_00562840[0] = FUN_00139370(Memory_GetAllocatorBySelector(DAT_00587038[0]));
-    DAT_00562848[0] = FUN_00139370(Memory_GetAllocatorBySelector(DAT_00587038[0]));
-    DAT_00562850[0] = FUN_001384a0(Memory_GetAllocatorBySelector(DAT_00587038[0]));
-    DAT_00562858[0] = FUN_001325a0(Memory_GetAllocatorBySelector(DAT_00587038[0]));
-    DAT_00562860[0] = FUN_001325a0(Memory_GetAllocatorBySelector(DAT_00587038[0]));
-    g_shadowTextureFunctionAttr0[0] = FUN_00131c60(Memory_GetAllocatorBySelector(DAT_00587038[0]));
-    DAT_00562870[0] = FUN_00131c60(Memory_GetAllocatorBySelector(DAT_00587038[0]));
-    DAT_00562878[0] = FUN_001315d0(Memory_GetAllocatorBySelector(DAT_00587038[0]));
-    DAT_00562880[0] = FUN_001315d0(Memory_GetAllocatorBySelector(DAT_00587038[0]));
-    DAT_00562828[0] = FUN_0013b490(Memory_GetAllocatorBySelector(DAT_00587038[0]));
-    DAT_00562830[0] = FUN_0013b270(Memory_GetAllocatorBySelector(DAT_00587038[0]));
-    DAT_005628d0[0] = FUN_0013b270(Memory_GetAllocatorBySelector(DAT_00587038[0]));
-    DAT_005627e0[0] = FUN_001341b0(Memory_GetAllocatorBySelector(DAT_00587038[0]));
+    DAT_005628d8[0] = FUN_00132810(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem[0]));
+    DAT_005627e8[0] = igTextureStateAttr_CreateInstance(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem[0]));
+    DAT_005627f0[0] = igTextureStateAttr_CreateInstance(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem[0]));
+    DAT_005627f8[0] = igTextureStateAttr_CreateInstance(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem[0]));
+    DAT_00562800[0] = FUN_00139ed0(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem[0]));
+    DAT_00562808[0] = FUN_00139ed0(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem[0]));
+    DAT_00562810[0] = igBlendStateAttr_CreateInstance(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem[0]));
+    DAT_00562818[0] = igBlendStateAttr_CreateInstance(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem[0]));
+    DAT_00562820[0] = igLightingStateAttr_CreateInstance(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem[0]));
+    DAT_00562838[0] = FUN_00139370(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem[0]));
+    DAT_00562840[0] = FUN_00139370(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem[0]));
+    DAT_00562848[0] = FUN_00139370(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem[0]));
+    DAT_00562850[0] = FUN_001384a0(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem[0]));
+    DAT_00562858[0] = FUN_001325a0(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem[0]));
+    DAT_00562860[0] = FUN_001325a0(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem[0]));
+    g_shadowTextureFunctionAttr0[0] = FUN_00131c60(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem[0]));
+    DAT_00562870[0] = FUN_00131c60(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem[0]));
+    DAT_00562878[0] = FUN_001315d0(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem[0]));
+    DAT_00562880[0] = FUN_001315d0(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem[0]));
+    DAT_00562828[0] = FUN_0013b490(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem[0]));
+    DAT_00562830[0] = FUN_0013b270(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem[0]));
+    DAT_005628d0[0] = FUN_0013b270(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem[0]));
+    DAT_005627e0[0] = FUN_001341b0(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem[0]));
 }
 
 void Gap__Sg__igProjectiveShadowShader__vfunc_09(void **arg0, int arg1) {
@@ -41,10 +41,10 @@ void igProjectiveShadowShader_ConfigureSharedAttrs(void) {
     ((ShadowSetupObj *)DAT_005628d8[0])->s23(0);
     {
         ShadowRef image;
-        image.p = FUN_00132b60(FUN_002f88e0(DAT_00587038[0]));
+        image.p = FUN_00132b60(FUN_002f88e0(kIGMemoryPoolHandleSystem[0]));
         ((ShadowSetupObj *)DAT_005628d8[0])->s31((int)image.p);
         ShadowRef texture;
-        texture.p = FUN_0014df70(FUN_002f88e0(DAT_00587038[0]));
+        texture.p = FUN_0014df70(FUN_002f88e0(kIGMemoryPoolHandleSystem[0]));
         FUN_00140ad0(image.p, texture.p, 0);
         texture.p->s26(1);
         texture.p->s27(1);
@@ -355,7 +355,7 @@ void FUN_001d5f70(A_1d5f70 *arg0, int arg1, int *arg2, int *arg3, int *arg4) {
     int sp90[4];
     int sp50[16];
 
-    Matrix44_Copy(arg4);
+    igMatrix44f_Copy(arg4);
     FUN_001904f0(arg4, arg4, arg2);
     FUN_001904f0(arg4, arg4, arg3);
     igMatrix44f_SetIdentity(&sp50[0]);
@@ -366,7 +366,7 @@ void FUN_001d5f70(A_1d5f70 *arg0, int arg1, int *arg2, int *arg3, int *arg4) {
     sp90[0] = 0x3F000000;
     sp90[2] = 0x3F800000;
     sp90[1] = 0x3F000000;
-    Matrix44_SetTranslation(&sp50[0], &sp90[0]);
+    igMatrix44f_SetTranslation(&sp50[0], &sp90[0]);
     if (arg0->f208 != 0) {
         FUN_001904f0(&sp50[0], &sp50[0], g_projectiveShadowViewportMatrix.m);
     }
@@ -383,7 +383,7 @@ void FUN_001d6060(O_1d6060 *arg0, char *arg1) {
     spF0[0] = arg0->f32 + arg0->f44;
     spF0[1] = arg0->f36 + arg0->f48;
     spF0[2] = arg0->f40 + arg0->f52;
-    Matrix44_MakeLookAt(&spB0, &arg0->f32, spF0, (char *)arg0 + 132);
+    igMatrix44f_MakeLookAt(&spB0, &arg0->f32, spF0, (char *)arg0 + 132);
     if (arg0->f208 != 0) {
         FUN_00191860(&sp70, arg0->f224, arg0->f220, arg0->f216, arg0->f212, arg0->f124, arg0->f128);
     } else {

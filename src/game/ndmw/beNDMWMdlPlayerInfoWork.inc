@@ -5,7 +5,7 @@ void beNDMWMdlPlayerInfoWork_Create(int arg0) {
 
 igMetaObject *FUN_003bfcc0(void) {
     if (g_beNDMWMdlPlayerInfoWork_metaObject[0] == 0) {
-        g_beNDMWMdlPlayerInfoWork_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
+        g_beNDMWMdlPlayerInfoWork_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
     return g_beNDMWMdlPlayerInfoWork_metaObject[0];
 }

@@ -1,6 +1,6 @@
 igMetaObject *FUN_0045a8c0(void) {
     if (g_igViewerSceneInfoManagerController_metaObject[0] == 0) {
-        g_igViewerSceneInfoManagerController_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
+        g_igViewerSceneInfoManagerController_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
     return g_igViewerSceneInfoManagerController_metaObject[0];
 }

@@ -7,7 +7,7 @@ int FUN_0014c920(void) {
 
 igMetaObject *FUN_0014c980(void) {
     if (g_igParticleArray_metaObject[0] == 0) {
-        g_igParticleArray_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
+        g_igParticleArray_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
     return g_igParticleArray_metaObject[0];
 }

@@ -180,7 +180,7 @@ int beFontImage_CountTrianglesWide(int, int);
 void igSwitch_EnableChild(void *, int);
 void igSwitch_DisableChild(void *, int);
 void Color4f_Unpack(void *, int, int);
-void Matrix44_SetTranslation(void *, void *);
+void igMatrix44f_SetTranslation(void *, void *);
 unsigned int Memory_GetBufferSize(...);
 int Memory_FreeBufferWithAllocator(int, int);
 int Memory_AllocateAlignedWithAllocator(unsigned int, int, int);
@@ -200,7 +200,7 @@ extern const char *g_stringObjEmptyText[4];
 extern const SjisUnicodeTable g_sjisToUnicodeTable;
 extern int emptyString[4];
 extern int g_stringPool[4];
-extern int g_defaultAllocatorSelector[4];
+extern int kIGMemoryPoolHandleUser1[4];
 extern unsigned char g_useOwnerAllocator;
 extern int g_beFont_metaObject[4];
 extern int g_beFontInfo_metaObject[4];
@@ -404,12 +404,12 @@ int Gap__Bec__beFont__vfunc_34(beFont *self, beBaseInfoRam *ram, beMessengerWork
                 {
                     void *allocator = igObject_GetAllocator(self);
                     void *creator;
-                    if (g_useOwnerAllocator != 0) creator = allocator; else creator = Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
+                    if (g_useOwnerAllocator != 0) creator = allocator; else creator = Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
                     igSmartPointer<beFontGeomAttrPair> newPair(beFontGeomAttrPair_Create(creator));
                     SET_POOLED_STRING(newPair.p, _category, category->_name)
                     SET_POOLED_STRING(newPair.p, _panel, panel->_name)
                     allocator = igObject_GetAllocator(self);
-                    if (g_useOwnerAllocator != 0) creator = allocator; else creator = Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
+                    if (g_useOwnerAllocator != 0) creator = allocator; else creator = Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
                     igSmartPointer<igGeometryAttr> geometry(igGeometryAttr_Create(creator));
                     ObjectList_AppendRetained((void *)newPair.p->_geomAttrs, geometry.p);
                     ObjectList_AppendRetained((void *)self->_gaPairList, newPair.p);
@@ -556,7 +556,7 @@ int Gap__Bec__beFont__vfunc_34(beFont *self, beBaseInfoRam *ram, beMessengerWork
             if (index != -1) {
                 do {
                     igNodeView *attrSet = (igNodeView *)((beFontInfoData **)((igObjectList *)info->_dataList)->_data)[index]->_attrSet;
-                    Matrix44_SetTranslation(((igTransform *)nodeAt(attrSet->_childList, 0))->_m, &position);
+                    igMatrix44f_SetTranslation(((igTransform *)nodeAt(attrSet->_childList, 0))->_m, &position);
                     index = beFont_FindNextLayoutEntry(self, ram);
                 } while (index != -1);
             }
@@ -709,7 +709,7 @@ igSmartPointer<beUnicodeObj> beFont_ConvertToUnicode(beFont *self, const char *t
         }
     }
     allocator = ((int)igObject_GetAllocator(self));
-    allocator = g_useOwnerAllocator ? allocator : ((int)Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]));
+    allocator = g_useOwnerAllocator ? allocator : ((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]));
     igSmartPointer<beUnicodeObj> result(beUnicodeObj_Create(allocator));
     beUnicodeObj_AllocateBuffer(result.p, length);
     unsigned short *out = (unsigned short *)result.p->_buffer;
@@ -864,7 +864,7 @@ void beFont_ReplaceVertexArray(beFont *self, igGeometryAttr *geometry, int fontI
         held->_refCount = held->_refCount + 1;
     }
     allocator = igObject_GetAllocator(self);
-    allocator = (g_useOwnerAllocator != 0) ? allocator : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
+    allocator = (g_useOwnerAllocator != 0) ? allocator : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
     held = vertices.p;
     if (held != 0) {
         held->_refCount = held->_refCount - 1;

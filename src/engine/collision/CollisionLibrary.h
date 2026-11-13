@@ -69,7 +69,7 @@ extern "C" void igCollisionInfo_InitFields(void);
 extern "C" igMetaObject *igMetaObject_Create(...);
 extern "C" int Memory_GetAllocatorBySelector(...);
 extern "C" igMetaObject *g_igCollisionGroupList_metaObject[4];
-extern "C" int g_metadataAllocatorKey[4];
+extern "C" int kIGMemoryPoolHandleMetaData[4];
 extern "C" igMetaObject *FUN_00239a40(void);
 extern "C" igMetaObject *igCollisionGroupList_GetMetaObject(void);
 struct Obj { int *vt; char pad[28]; };

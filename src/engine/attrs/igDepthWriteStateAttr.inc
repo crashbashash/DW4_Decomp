@@ -1,6 +1,6 @@
 igMetaObject *FUN_001382a0(void) {
     if (g_igDepthWriteStateAttr_metaObject[0] == 0) {
-        g_igDepthWriteStateAttr_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
+        g_igDepthWriteStateAttr_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
     return g_igDepthWriteStateAttr_metaObject[0];
 }

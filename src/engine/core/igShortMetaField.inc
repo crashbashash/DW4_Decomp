@@ -89,7 +89,7 @@ void FUN_002ba210(void) {
     void *temp_s0;
 
     if (g_igShortMetaField_descriptor[0] == 0) {
-        g_igShortMetaField_descriptor[0] = (void *)(((void *)igMetaObject_CreateInstance((CreateMeta *)g_igShortMetaField_metaObject[0], (MemoryPool *)(((int)Memory_GetAllocatorBySelector(g_memoryContextMetaData))))));
+        g_igShortMetaField_descriptor[0] = (void *)(((void *)igMetaObject_CreateInstance((CreateMeta *)g_igShortMetaField_metaObject[0], (MemoryPool *)(((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData))))));
         temp_s0 = (void *)(g_igShortMetaField_descriptor[0]);
         if (temp_s0 != 0) {
             MetaRefList_AppendRetained((PointerList *)(((void *)FUN_002fc250())), (RefHeader *)temp_s0);

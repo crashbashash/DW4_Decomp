@@ -19,7 +19,7 @@ void * igFile_Create(int arg0) {
 
 igMetaObject *FUN_002c4ce0(void) {
     if (g_igFile_metaObject[0] == 0) {
-        g_igFile_metaObject[0] = (igMetaObject *)igMetaObject_Create(((int)Memory_GetAllocatorBySelector(g_memoryContextMetaData)));
+        g_igFile_metaObject[0] = (igMetaObject *)igMetaObject_Create(((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData)));
     }
     return g_igFile_metaObject[0];
 }

@@ -77,7 +77,7 @@ void FUN_002c8120(void) {
     void *temp_s0;
 
     if (DAT_00586780[0] == 0) {
-        DAT_00586780[0] = (void *)(((void *)igMetaObject_CreateInstance((CreateMeta *)g_igDependencyMetaField_metaObject[0], (MemoryPool *)(((int)Memory_GetAllocatorBySelector(g_memoryContextMetaData))))));
+        DAT_00586780[0] = (void *)(((void *)igMetaObject_CreateInstance((CreateMeta *)g_igDependencyMetaField_metaObject[0], (MemoryPool *)(((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData))))));
         temp_s0 = (void *)(DAT_00586780[0]);
         if (temp_s0 != 0) {
             MetaRefList_AppendRetained((PointerList *)(((void *)FUN_002fc250())), (RefHeader *)temp_s0);
@@ -123,7 +123,7 @@ void FUN_002c8250(int arg0) {
     void *var_v0;
     void *var_v0_3;
 
-    temp_s0 = (void *)(((void *)FUN_002bba00(((int)Memory_GetAllocatorBySelector(g_memoryContextMetaData)))));
+    temp_s0 = (void *)(((void *)FUN_002bba00(((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData)))));
     if (&text_before[0] == 0) {
         var_v0 = (void *)(0);
     } else {
@@ -153,7 +153,7 @@ void FUN_002c8250(int arg0) {
     if (((unsigned long long) ((long long) *(int *)((char *)(temp_s0) + 4) << 0x29) >> 0x29) == 0) {
         igObject_Destroy(temp_s0);
     }
-    temp_s0_2 = (void *)(((void *)FUN_002bba00(((int)Memory_GetAllocatorBySelector(g_memoryContextMetaData)))));
+    temp_s0_2 = (void *)(((void *)FUN_002bba00(((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData)))));
     if (&text_after[0] == 0) {
         var_v0_3 = (void *)(0);
     } else {

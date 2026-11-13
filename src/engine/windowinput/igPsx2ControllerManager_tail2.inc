@@ -22,7 +22,7 @@ void Gap__igPsx2ControllerManager__vfunc_24(igPsx2ControllerManager *arg0, int a
         if (g_useOwnerAllocator != 0) {
             al = base;
         } else {
-            al = Memory_GetAllocatorBySelector(g_temporaryAllocatorSelector[0]);
+            al = Memory_GetAllocatorBySelector(kIGMemoryPoolHandleTemporary[0]);
         }
         sp8C = (PropertyText *)igStringObj_Create(al);
         if (FUN_00306770(g_objectSystem[0]->f56, 3, &text_supportMultitap[0], &sp8C, &DAT_004d7050[0], 0) != 0) {
@@ -64,7 +64,7 @@ void Gap__igPsx2ControllerManager__vfunc_24(igPsx2ControllerManager *arg0, int a
                 if (g_useOwnerAllocator != 0) {
                     al2 = (Al *)base;
                 } else {
-                    al2 = (Al *)Memory_GetAllocatorBySelector(g_temporaryAllocatorSelector[0]);
+                    al2 = (Al *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleTemporary[0]);
                 }
                 mem = al2->vX(0x100, 0x40);
                 if (scePadPortOpen(s3, s1, mem) != 1) {

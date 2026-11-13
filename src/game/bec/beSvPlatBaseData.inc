@@ -1,6 +1,6 @@
 igMetaObject *FUN_0034a210(void) {
     if (g_beSvPlatBaseData_metaObject[0] == 0) {
-        g_beSvPlatBaseData_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
+        g_beSvPlatBaseData_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
     return g_beSvPlatBaseData_metaObject[0];
 }

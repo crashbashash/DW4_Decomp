@@ -10,7 +10,7 @@ int beMessenger_RegisterReceiverFromInfo(int, int, int *);
 int igObject_GetAllocator(...);
 
 extern int PLAYERARMS_3[4];
-extern int g_defaultAllocatorSelector[4];
+extern int kIGMemoryPoolHandleUser1[4];
 extern unsigned char g_useOwnerAllocator;
 extern int g_beWeaponInfo_metaObject[4];
 extern int g_beWeapon_metaObject[4];
@@ -54,7 +54,7 @@ void Gap__Bec__beWeapon__vfunc_29(beWeapon *arg0, int arg1) {
     igObject *old;
     if (arg0->_attachDataList == 0) {
         var_v0 = igObject_GetAllocator();
-        var_v0 = g_useOwnerAllocator ? var_v0 : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
+        var_v0 = g_useOwnerAllocator ? var_v0 : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
         igSmartPointer<igObject> list(FUN_0033f8b0(var_v0));
         t = list.p;
         if (t != 0) {
@@ -70,7 +70,7 @@ void Gap__Bec__beWeapon__vfunc_29(beWeapon *arg0, int arg1) {
         arg0->_attachDataList = (int)t;
         for (var_s0 = 0; var_s0 < 4; var_s0++) {
             var_v0 = igObject_GetAllocator(arg0);
-            var_v0 = g_useOwnerAllocator ? var_v0 : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
+            var_v0 = g_useOwnerAllocator ? var_v0 : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
             ObjectRef data(FUN_0033fa80(var_v0));
             ObjectList_AppendRetained(arg0->_attachDataList, data.p);
         }

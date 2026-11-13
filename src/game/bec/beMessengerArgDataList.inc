@@ -1,6 +1,6 @@
 igMetaObject *FUN_00358bf0(void) {
     if (g_beMessengerArgDataList_metaObject[0] == 0) {
-        g_beMessengerArgDataList_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
+        g_beMessengerArgDataList_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
     return g_beMessengerArgDataList_metaObject[0];
 }

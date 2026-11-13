@@ -7,7 +7,7 @@ int FUN_00131f80(void) {
 
 igMetaObject *FUN_00131fe0(void) {
     if (g_igTextureCubeAttr_metaObject[0] == 0) {
-        g_igTextureCubeAttr_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
+        g_igTextureCubeAttr_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
     return g_igTextureCubeAttr_metaObject[0];
 }

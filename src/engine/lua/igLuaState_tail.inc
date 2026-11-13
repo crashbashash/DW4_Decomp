@@ -84,7 +84,7 @@ void Gap::Lua::igLuaState::userConstruct() {
     lua_State *L;
 
     pool = igObject_GetAllocator(this);
-    pool = g_useOwnerAllocator != 0 ? pool : (::igObject *)Memory_GetAllocatorBySelector(g_defaultAllocatorKey);
+    pool = g_useOwnerAllocator != 0 ? pool : (::igObject *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleLevel);
     if (pool != 0) {
         pool->_refCount = pool->_refCount + 1;
     }

@@ -102,7 +102,7 @@ extern int g_beCri_metaObject[4];
 extern int g_beSoundInfo_metaObject[4];
 extern int g_beSound_metaObject[4];
 extern int g_stringPool[4];
-extern int g_defaultAllocatorSelector[4];
+extern int kIGMemoryPoolHandleUser1[4];
 extern unsigned char g_useOwnerAllocator;
 extern char *g_stringObjEmptyText[];
 extern char emptyString[];
@@ -151,7 +151,7 @@ static inline void ReleaseString(char *text) {
 /* The allocator for an object the owner creates: its own, or the default one. */
 static inline void *AllocatorFor(void *owner) {
     void *allocator = igObject_GetAllocator(owner);
-    return g_useOwnerAllocator ? allocator : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
+    return g_useOwnerAllocator ? allocator : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
 }
 
 /* The pooled copy of `text`, creating the string pool on first use. */

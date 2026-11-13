@@ -720,7 +720,7 @@ static inline int allocator(void) {
     if (g_useOwnerAllocator != 0) {
         return a;
     }
-    return ((int)Memory_GetAllocatorBySelector(g_memoryContextString));
+    return ((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleString));
 }
 
 static inline char *text_3085c0(ShortStr_3085c0 *s) {

@@ -1311,7 +1311,7 @@ extern "C" int g_libNdmwRuntimePlugin_ctorTable[4];
 extern "C" int g_libNdmwRuntimePlugin_fieldTable[4];
 extern "C" int DAT_004c9350[4];
 extern "C" int DAT_004c93b0[4];
-extern "C" int g_metadataAllocatorKey[4];
+extern "C" int kIGMemoryPoolHandleMetaData[4];
 extern "C" igMetaObject *g_beNDMWWindowList_metaObject[4];
 extern "C" igMetaObject *FUN_003b1c30(void);
 struct Obj { int *vt; char pad[28]; };
@@ -2826,7 +2826,7 @@ extern "C" int g_beNDMWAfsSetup_ctorTable[4];
 extern "C" int g_beNDMWAfsSetup_fieldTable[4];
 extern "C" int DAT_004cc660[4];
 extern "C" int DAT_004cc670[4];
-extern "C" int g_defaultAllocatorSelector[4];
+extern "C" int kIGMemoryPoolHandleUser1[4];
 extern "C" unsigned char g_useOwnerAllocator;
 /* matching construct: dummy-virtual class supplies the vtable call at +88 */
 class Obj_3cb2f0 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual int vX(); };

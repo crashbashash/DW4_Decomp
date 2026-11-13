@@ -55,7 +55,7 @@ void Gap__Gui__igMousePosObserver__vfunc_24(igMousePosObserver *self, struct Gui
         FUN_00456050(self, model);
     } else if (type == DAT_0058c3f0[0]) {
         int result;
-        Matrix44_Invert(&result, self->_inverseProjectionMatrix, model->_projectionMatrix);
+        igMatrix44f_Invert(&result, self->_inverseProjectionMatrix, model->_projectionMatrix);
     } else if (type == DAT_0058c3e0[0]) {
         igObject *under;
         int m[4];
@@ -79,7 +79,7 @@ void Gap__Gui__igMousePosObserver__vfunc_24(igMousePosObserver *self, struct Gui
         igModel_NotifyViews((S_4578c0 *)model, (S_4578c0 *)m);
     } else if (msg->handled == 0) {
         int result;
-        Matrix44_Invert(&result, self->_inverseProjectionMatrix, model->_projectionMatrix);
+        igMatrix44f_Invert(&result, self->_inverseProjectionMatrix, model->_projectionMatrix);
     }
 }
 

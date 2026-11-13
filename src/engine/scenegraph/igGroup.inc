@@ -5,7 +5,7 @@ void igGroup_CreateInstance(int arg0) {
 
 igMetaObject *FUN_0019f210(void) {
     if (g_igGroup_metaObject[0] == 0) {
-        g_igGroup_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
+        g_igGroup_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
     return g_igGroup_metaObject[0];
 }

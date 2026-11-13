@@ -9,7 +9,7 @@ extern "C" int igMatrix44f_SetIdentity(...);
 extern "C" void FUN_00191670(void *, void *, float);
 extern "C" void *FUN_0034c040(...);
 extern "C" int FUN_0034c5d0(...);
-extern "C" void Matrix44_TranslateLocal(void *, void *);
+extern "C" void igMatrix44f_TranslateLocal(void *, void *);
 extern "C" int Memory_GetAllocatorBySelector(...);
 extern "C" int beMessenger_AppendBool(int, unsigned char);
 extern "C" int beMessenger_AppendString(...);
@@ -42,7 +42,7 @@ extern "C" int g_vec3ZAxis[4];
 extern "C" int GETMATRIX_5[4];
 extern "C" int GENERATE_9[4];
 extern "C" int SQ_ERAS_3[4];
-extern "C" int g_defaultAllocatorSelector[4];
+extern "C" int kIGMemoryPoolHandleUser1[4];
 extern "C" unsigned char g_useOwnerAllocator;
 struct Rel { static inline void go(igObject *object) {
     if (object) {
@@ -224,7 +224,7 @@ int Gap__Bec__beParticleCtrl2__vfunc_34(beParticleCtrl2 *arg0, beParticleCtrl2In
                 if (g_useOwnerAllocator != 0) {
                     a = alloc;
                 } else {
-                    a = Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
+                    a = Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
                 }
                 igSmartPointer<beParticleCtrl2InfoWork> work((beParticleCtrl2InfoWork *)FUN_0034c040(a));
                 igObject *o = (igObject *)beMessenger_GetObject(arg0->_messenger, 0);
@@ -246,7 +246,7 @@ int Gap__Bec__beParticleCtrl2__vfunc_34(beParticleCtrl2 *arg0, beParticleCtrl2In
                 Rel::go((igObject *)arg1->_work);
                 arg1->_work = (int)r;
             }
-            Matrix44_TranslateLocal(spB0, &sp100);
+            igMatrix44f_TranslateLocal(spB0, &sp100);
             if (f22 != 0.0f) {
                 FUN_00191670(spB0, g_vec3XAxis, f22);
             }

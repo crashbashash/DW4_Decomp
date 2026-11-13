@@ -60,8 +60,8 @@ extern "C" int g_beLayerInfo_metaObject[4];
 extern "C" int g_beLayerCtl_metaObject[4];
 extern "C" int g_igLightStateSet_metaObject[4];
 extern "C" int g_igViewerSceneInfoManager_metaObject[4];
-extern "C" int g_ndmwAllocatorSelector[4];
-extern "C" int g_defaultAllocatorSelector[4];
+extern "C" int kIGMemoryPoolHandleUser0[4];
+extern "C" int kIGMemoryPoolHandleUser1[4];
 extern "C" unsigned char g_useOwnerAllocator;
 
 /* A scene-graph node seen through its vtable: slot 20 is igObject::getMeta. */
@@ -137,7 +137,7 @@ int beLayerCtl__OnMessage(beLayerCtl *self, beLayerInfoRam *ram, beMessengerWork
         igGroup *root = (igGroup *)((igViewerParameters *)viewer->_parameters)->_scene;
         if (self->_isOrdered == 0) {
             void *allocator;
-            PICK_ALLOCATOR(allocator, self, g_ndmwAllocatorSelector[0])
+            PICK_ALLOCATOR(allocator, self, kIGMemoryPoolHandleUser0[0])
             igSwitch *old = LAYER_SWITCH(self);
             IG_OBJECT_RELEASE(old);
             self->_layerSwt = (int)igSwitch_CreateInstance(allocator);
@@ -165,13 +165,13 @@ int beLayerCtl__OnMessage(beLayerCtl *self, beLayerInfoRam *ram, beMessengerWork
         int g;
         for (g = 0; g < groups->_count; g++) {
             void *allocator;
-            PICK_ALLOCATOR(allocator, self, g_defaultAllocatorSelector[0])
+            PICK_ALLOCATOR(allocator, self, kIGMemoryPoolHandleUser1[0])
             Ref layer((igNamedObject *)igGroup_CreateInstance(allocator));
             igNamedObject_SetName(layer.p, NAME_OF(NODE_AT(groups, g)));
             igSwitch_AppendChild(LAYER_SWITCH(self), layer.p);
         }
         void *noneAllocator;
-        PICK_ALLOCATOR(noneAllocator, self, g_defaultAllocatorSelector[0])
+        PICK_ALLOCATOR(noneAllocator, self, kIGMemoryPoolHandleUser1[0])
         Ref none((igNamedObject *)igGroup_CreateInstance(noneAllocator));
         igNamedObject_SetName(none.p, NONE_2);
         igSwitch_AppendChild(LAYER_SWITCH(self), none.p);

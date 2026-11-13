@@ -1,6 +1,6 @@
 igMetaObject *FUN_002cc630(void) {
     if (g_igCallStackTracer_metaObject[0] == 0) {
-        g_igCallStackTracer_metaObject[0] = (igMetaObject *)igMetaObject_Create(((int)Memory_GetAllocatorBySelector(g_memoryContextMetaData)));
+        g_igCallStackTracer_metaObject[0] = (igMetaObject *)igMetaObject_Create(((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData)));
     }
     return g_igCallStackTracer_metaObject[0];
 }

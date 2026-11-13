@@ -1,6 +1,6 @@
 void FUN_001d8ab0(void) {
     FUN_00199080();
-    igSmartPointer<igObject> info((igObject *)FUN_00198cc0(Memory_GetAllocatorBySelector(DAT_00587038[0])));
+    igSmartPointer<igObject> info((igObject *)FUN_00198cc0(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem[0])));
     igNamedObject_SetName(info.p, &text_shaderInfo[0]);
     igSmartPointer<igObject> list = FUN_003087a0(g_globalContext[0], (const char *)text_system);
     FUN_002d8310(list.p, info.p);

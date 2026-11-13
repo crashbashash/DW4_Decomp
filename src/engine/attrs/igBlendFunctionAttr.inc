@@ -19,7 +19,7 @@ void FUN_00139ed0(int arg0) {
 
 igMetaObject *FUN_00139f10(void) {
     if (g_igBlendFunctionAttr_metaObject[0] == 0) {
-        g_igBlendFunctionAttr_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
+        g_igBlendFunctionAttr_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
     return g_igBlendFunctionAttr_metaObject[0];
 }

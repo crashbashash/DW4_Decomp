@@ -10,7 +10,7 @@ extern "C" int Gap__Core__igObject__vfunc_23(...);
 extern "C" int igInsightCore_FindManager(int, int);
 extern "C" void *StringPool_Allocate(...);
 extern "C" igIntList *igIntList_Create(int);
-extern "C" int Matrix44_Invert(void *, void *, int);
+extern "C" int igMatrix44f_Invert(void *, void *, int);
 extern "C" int Vec3f_TransformDirection(void *, void *, void *);
 extern "C" void beModelCtrl__OnGenerate(...);
 extern "C" int strcmp(...);
@@ -19,7 +19,7 @@ extern "C" void sprintf(char *, const char *, int);
 extern "C" float atan2f(float, float);
 extern "C" int __divdi3(long long, int);
 extern "C" int igMatrix44f_SetIdentity(...);
-extern "C" void Matrix44_Copy(...);
+extern "C" void igMatrix44f_Copy(...);
 extern "C" int Memory_GetAllocatorBySelector(...);
 extern "C" int igObject_GetAllocator(...);
 extern "C" int igNamedObject_SetName(void *, void *);
@@ -67,7 +67,7 @@ extern "C" int g_beNDMWGameRam_metaObject[4];
 extern "C" int g_igViewerSceneInfoManager_metaObject[4];
 extern "C" int g_beNDMWMdlPlayer_metaObject[4];
 extern "C" int g_propertyNameField[4];
-extern "C" int g_defaultAllocatorSelector[4];
+extern "C" int kIGMemoryPoolHandleUser1[4];
 extern "C" int g_stringPool[4];
 extern "C" unsigned char g_useOwnerAllocator;
 extern "C" int emptyString[4];
@@ -175,7 +175,7 @@ extern "C" PropStringListRecord *igProperty_GetRecordStringList(...);
 
 struct igResult { int w0; igResult() {} igResult(const igResult &o) { w0 = o.w0; } bool operator==(const igResult &o) const { return w0 == o.w0; } };
 extern "C" igResult igMetaEnum_GetValueByName(void *, int, int *);
-extern "C" igResult g_statusSucceeded;
+extern "C" igResult g_resultSuccess;
 extern "C" void beNDMWMdlPEBase_OnSequenceChange(void *, beBaseInfoRam *);
 
 extern "C" void beNDMWMdlPlayer__ResolveManagers(beNDMWMdlPlayer *self);
@@ -265,7 +265,7 @@ struct Locals {
         igObject *created;
         igObject *old;
         alloc = ((void *)igObject_GetAllocator(ram));
-        alloc = g_useOwnerAllocator ? alloc : ((void *)Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]));
+        alloc = g_useOwnerAllocator ? alloc : ((void *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]));
         {
             igSmartPointer<igObject> list(beBaseInfoDataList_Create(alloc));
             created = list.p;
@@ -279,7 +279,7 @@ struct Locals {
         }
     }
     static inline void Project(void *matrix, int view, const Scratch &result) {
-        Matrix44_Invert((void *)&result, matrix, view);
+        igMatrix44f_Invert((void *)&result, matrix, view);
     }
 };
 /* matching construct: the new list is a temporary bound to the setter's reference parameter (it
@@ -456,7 +456,7 @@ void beNDMWMdlPlayer__UpdateControl(beNDMWMdlPlayer *self, beBaseInfoRam *ram) {
                 if (work->_isMainLobby != 0) {
                     beModelCtrlHITBOX *box;
                     void *alloc = ((void *)igObject_GetAllocator(self));
-                    alloc = g_useOwnerAllocator ? alloc : ((void *)Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]));
+                    alloc = g_useOwnerAllocator ? alloc : ((void *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]));
                     {
                         HitBoxRef hitBox((beModelCtrlHITBOX *)beModelCtrlHITBOX_Create(alloc));
                         igNamedObject_SetName((void *)hitBox.p, Set_2);
@@ -550,7 +550,7 @@ void beNDMWMdlPlayer__UpdateWaitCheck(beNDMWMdlPlayer *self, beBaseInfoRam *ram)
         if (g_useOwnerAllocator != 0) {
             alloc = owner;
         } else {
-            alloc = Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
+            alloc = Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
         }
         igSmartPointer<igObject> list(beBaseInfoDataList_Create(alloc));
         created = list.p;
@@ -623,7 +623,7 @@ void beNDMWMdlPlayer__OnGenerate(beNDMWMdlPlayer *self, beBaseInfoRam *ram) {
         if (g_useOwnerAllocator != 0) {
             alloc = owner;
         } else {
-            alloc = Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
+            alloc = Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
         }
         Slot::adopt(ram, beBaseInfoDataList_Create(alloc));
     }
@@ -634,7 +634,7 @@ void beNDMWMdlPlayer__OnGenerate(beNDMWMdlPlayer *self, beBaseInfoRam *ram) {
         if (g_useOwnerAllocator != 0) {
             alloc = owner;
         } else {
-            alloc = Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
+            alloc = Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
         }
         InfoWorkRef newWork(beNDMWMdlPlayerInfoWork_Create(alloc));
         created = newWork.p;
@@ -654,7 +654,7 @@ void beNDMWMdlPlayer__OnGenerate(beNDMWMdlPlayer *self, beBaseInfoRam *ram) {
             if (g_useOwnerAllocator != 0) {
                 alloc = owner;
             } else {
-                alloc = Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
+                alloc = Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
             }
             IntListRef newTimers(igIntList_Create(alloc));
             {
@@ -692,7 +692,7 @@ void beNDMWMdlPlayer__OnGenerate(beNDMWMdlPlayer *self, beBaseInfoRam *ram) {
         beMessenger_DispatchSelected(self->_messenger, GETMATRIX_3);
         if (beMessenger_GetMatrixCount(self->_messenger) != 0) {
             beMessenger_GetMatrix(pointMatrix, self->_messenger, 0);
-            Matrix44_Copy(startMatrix, pointMatrix);
+            igMatrix44f_Copy(startMatrix, pointMatrix);
         }
         beMessenger_PopArgContext(self->_messenger);
         beMessenger_AppendMatrix(self->_messenger, startMatrix);
@@ -807,7 +807,7 @@ void beNDMWMdlPlayer__OnControlOff(beNDMWMdlPlayer *self, beBaseInfoRam *ram) {
 
     if (ram->_dataList == 0) {
         int owner = igObject_GetAllocator(ram);
-        igSmartPointer<igObject> list(beBaseInfoDataList_Create(g_useOwnerAllocator != 0 ? owner : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0])));
+        igSmartPointer<igObject> list(beBaseInfoDataList_Create(g_useOwnerAllocator != 0 ? owner : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0])));
         igObject *created = list.p;
         if (created != 0) {
             created->_refCount = created->_refCount + 1;
@@ -837,7 +837,7 @@ void beNDMWMdlPlayer__OnFreeze(beNDMWMdlPlayer *self, beBaseInfoRam *ram) {
         if (g_useOwnerAllocator != 0) {
             alloc = owner;
         } else {
-            alloc = Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
+            alloc = Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
         }
         igSmartPointer<igObject> list(beBaseInfoDataList_Create(alloc));
         created = list.p;
@@ -866,7 +866,7 @@ static inline void EnsureDataList(beBaseInfoRam *ram)
         if (g_useOwnerAllocator != 0) {
             alloc = owner;
         } else {
-            alloc = ((void *)Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]));
+            alloc = ((void *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]));
         }
         igSmartPointer<igObject> list(beBaseInfoDataList_Create(alloc));
         igObject *created = list.p;
@@ -906,7 +906,7 @@ void beNDMWMdlPlayer__OnSequenceChange(beNDMWMdlPlayer *self, beBaseInfoRam *ram
         beMessenger_DispatchSelected(self->_messenger, SETEFFECT_2);
     }
     if (work->_isPanel != 0) {
-        if (igMetaEnum_GetValueByName(PanelCloseSeqList_GetMetaEnum(), work->_seqCodeName, &enumValue) == g_statusSucceeded) {
+        if (igMetaEnum_GetValueByName(PanelCloseSeqList_GetMetaEnum(), work->_seqCodeName, &enumValue) == g_resultSuccess) {
             work->_isPanel = 0;
             beMessenger_SendNamed(self->_messenger, ((char *)NDMWPANEL), 0, ram->_ramNo, ((char *)REMOVE_3));
         }
@@ -924,7 +924,7 @@ void beNDMWMdlPlayer__OnErase(beNDMWMdlPlayer *self, beBaseInfoRam *ram) {
         if (g_useOwnerAllocator != 0) {
             alloc = owner;
         } else {
-            alloc = Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
+            alloc = Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
         }
         {
             igSmartPointer<igObject> list(beBaseInfoDataList_Create(alloc));
@@ -962,7 +962,7 @@ void beNDMWMdlPlayer__OnRemove(beNDMWMdlPlayer *self, beBaseInfoRam *ram) {
         if (g_useOwnerAllocator != 0) {
             alloc = owner;
         } else {
-            alloc = Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
+            alloc = Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
         }
         igSmartPointer<igObject> list(beBaseInfoDataList_Create(alloc));
         created = list.p;

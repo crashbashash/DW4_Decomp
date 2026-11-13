@@ -21,7 +21,7 @@ void beNDMWGameRam_CreateInstance(int arg0) {
 
 igMetaObject *FUN_003c9ce0(void) {
     if (g_beNDMWGameRam_metaObject[0] == 0) {
-        g_beNDMWGameRam_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
+        g_beNDMWGameRam_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
     return g_beNDMWGameRam_metaObject[0];
 }

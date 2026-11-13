@@ -38,7 +38,7 @@ slot 28, and the renderer's slots 24 and 22 run slot 27 and slot 29 on every mov
 | 30 | `igCriMovieCodec_SyncPauseState` | reconciles the player with `_state`: a movie marked paused whose player runs goes through slot 26, a movie marked playing whose player is paused through slot 25 |
 
 `igMovieInfo::_type` 2 selects the ADXT path; `_state` 1 is paused and 0 playing. Both pools (the packet's and
-the work areas') are the codec's own when `g_useOwnerAllocator` is set and the `g_ndmwAllocatorSelector` pool
+the work areas') are the codec's own when `g_useOwnerAllocator` is set and the `kIGMemoryPoolHandleUser0` pool
 otherwise.
 
 ## Frame upload

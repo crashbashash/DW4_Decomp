@@ -31,7 +31,7 @@ int FUN_002c2a60(int arg0, int arg1) {
 
 igMetaObject *FUN_002c2ae0(void) {
     if (g___internalNonRefCountedObjectList_metaObject[0] == 0) {
-        g___internalNonRefCountedObjectList_metaObject[0] = (igMetaObject *)igMetaObject_Create(((int)Memory_GetAllocatorBySelector(g_memoryContextMetaData)));
+        g___internalNonRefCountedObjectList_metaObject[0] = (igMetaObject *)igMetaObject_Create(((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData)));
     }
     return g___internalNonRefCountedObjectList_metaObject[0];
 }

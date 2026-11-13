@@ -5,7 +5,7 @@ void beModelCtrlInfoHitBody_Create(int arg0) {
 
 igMetaObject *FUN_00352410(void) {
     if (g_beModelCtrlInfoHitBody_metaObject[0] == 0) {
-        g_beModelCtrlInfoHitBody_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
+        g_beModelCtrlInfoHitBody_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
     return g_beModelCtrlInfoHitBody_metaObject[0];
 }

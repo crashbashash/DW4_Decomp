@@ -119,7 +119,7 @@ void FUN_00456b80(int *arg0, float *arg1) {
         arg1[0] = arg1[0] - fx;
         arg1[1] = arg1[1] - fy;
         arg1[2] = arg1[2] - z;
-        Matrix44_SetTranslation(m, arg1);
+        igMatrix44f_SetTranslation(m, arg1);
         ((Obj_456b80 *)arg0[7])->vX(m);
     }
 }

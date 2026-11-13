@@ -1,6 +1,6 @@
 igMetaObject *FUN_00152370(void) {
     if (g_igPsx2VertexArray1_1_metaObject[0] == 0) {
-        g_igPsx2VertexArray1_1_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
+        g_igPsx2VertexArray1_1_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
     return g_igPsx2VertexArray1_1_metaObject[0];
 }
@@ -139,7 +139,7 @@ int FUN_001527c0(int arg0) {
 
 int FUN_00152800(void) {
     if (g_igPsx2LongList_metaObject[0] == 0) {
-        g_igPsx2LongList_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
+        g_igPsx2LongList_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
     return (int)g_igPsx2LongList_metaObject[0];
 }

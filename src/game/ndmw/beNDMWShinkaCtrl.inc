@@ -1,6 +1,6 @@
 igMetaObject *FUN_003c9480(void) {
     if (g_beNDMWShinkaCtrl_metaObject[0] == 0) {
-        g_beNDMWShinkaCtrl_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
+        g_beNDMWShinkaCtrl_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
     return g_beNDMWShinkaCtrl_metaObject[0];
 }

@@ -35,29 +35,29 @@ void FUN_001903d0(float *a) {
     m[13] = a[7];
     m[14] = a[11];
     m[15] = a[15];
-    Matrix44_Copy(a, m);
+    igMatrix44f_Copy(a, m);
 }
 
-void Matrix44_FromTranslation(float *matrix, const float *vector) {
+void igMatrix44f_FromTranslation(float *matrix, const float *vector) {
     matrix[0]=1.0f; matrix[1]=0; matrix[2]=0; matrix[3]=0;
     matrix[4]=0; matrix[5]=1.0f; matrix[6]=0; matrix[7]=0;
     matrix[8]=0; matrix[9]=0; matrix[10]=1.0f; matrix[11]=0;
     matrix[12]=vector[0]; matrix[13]=vector[1]; matrix[14]=vector[2]; matrix[15]=1.0f;
 }
 
-void Matrix44_SetTranslation(float *matrix, const float *vector) {
+void igMatrix44f_SetTranslation(float *matrix, const float *vector) {
     matrix[12] = vector[0];
     matrix[13] = vector[1];
     matrix[14] = vector[2];
 }
 
-void Matrix44_GetTranslation(const float *matrix, float *vector) {
+void igMatrix44f_GetTranslation(const float *matrix, float *vector) {
     vector[0] = matrix[12];
     vector[1] = matrix[13];
     vector[2] = matrix[14];
 }
 
-void Matrix44_TranslateLocal(float *m, const ScaleVec &v) {
+void igMatrix44f_TranslateLocal(float *m, const ScaleVec &v) {
     m[12] += m[0] * v[0] + m[4] * v[1] + m[8] * v[2];
     m[13] += m[1] * v[0] + m[5] * v[1] + m[9] * v[2];
     m[14] += m[2] * v[0] + m[6] * v[1] + m[10] * v[2];
@@ -127,7 +127,7 @@ void FUN_00190e50(void *arg0, float *arg1, float fparg0) {
     *(float *)((char *)(arg0) + 44) = (float) g_vec3Zero.z;
 }
 
-void Matrix44_MakeEulerRotation(void *arg0, float x, float y, float z) {
+void igMatrix44f_MakeEulerRotation(void *arg0, float x, float y, float z) {
     FUN_001910c0((float *)arg0, x, y, z);
     *(float *)((char *)(arg0) + 48) = (float) g_vec4WAxis.x;
     *(float *)((char *)(arg0) + 52) = (float) g_vec4WAxis.y;
@@ -256,7 +256,7 @@ void FUN_001916b0(int arg0, float *arg1, float fparg0) {
 }
 
 void FUN_001916f0(void *arg0, float *arg1) {
-    Matrix44_SetQuaternion((float *)arg0, arg1);
+    igMatrix44f_SetQuaternion((float *)arg0, arg1);
     *(float *)((char *)(arg0) + 48) = (float) g_vec4WAxis.x;
     *(float *)((char *)(arg0) + 52) = (float) g_vec4WAxis.y;
     *(float *)((char *)(arg0) + 56) = (float) g_vec4WAxis.z;
@@ -266,7 +266,7 @@ void FUN_001916f0(void *arg0, float *arg1) {
     *(float *)((char *)(arg0) + 44) = (float) g_vec3Zero.z;
 }
 
-void Matrix44_SetQuaternion(float *m, float *q) {
+void igMatrix44f_SetQuaternion(float *m, float *q) {
     float x = q[0], y = q[1], z = q[2], w = q[3];
     float n = 1.0f / sqrtf(z * z + (x * x + y * y) + w * w);
     y = y * n;
@@ -345,7 +345,7 @@ void igMatrix44f_MakePerspective(int arg0, float a, float b, float c, float d, f
     FUN_00191910((float *)arg0, t23, -t23, t14, -t14, d, e);
 }
 
-void Matrix44_InvertOrthonormal(int *r, float *o, float *m) {
+void igMatrix44f_InvertOrthonormal(int *r, float *o, float *m) {
     o[0] = m[0]; o[1] = m[4]; o[2] = m[8];
     o[4] = m[1]; o[5] = m[5]; o[6] = m[9];
     o[8] = m[2]; o[9] = m[6]; o[10] = m[10];
@@ -354,21 +354,21 @@ void Matrix44_InvertOrthonormal(int *r, float *o, float *m) {
     o[12] = -(m[12] * o[0] + m[13] * o[4] + m[14] * o[8]);
     o[13] = -(m[12] * o[1] + m[13] * o[5] + m[14] * o[9]);
     o[14] = -(m[12] * o[2] + m[13] * o[6] + m[14] * o[10]);
-    *r = g_statusSucceeded[0];
+    *r = g_resultSuccess[0];
 }
 
 /* The sign bit is cleared through a byte bit-field union. */
-void Matrix44_Invert(int *arg0, float *arg1, int arg2) {
+void igMatrix44f_Invert(int *arg0, float *arg1, int arg2) {
     float tmp[16];
     U6 u;
     float len;
     int i, j;
-    Matrix44_Adjugate(arg1, (const float *)arg2, tmp);
+    igMatrix44f_Adjugate(arg1, (const float *)arg2, tmp);
     len = FUN_00192290((float *)arg2);
     u.f = len;
     u.b.sign = 0;
     if (u.f < 1.1754944e-38f) {
-        *arg0 = g_allocatorFailureStatus[0];
+        *arg0 = g_resultFailure[0];
     } else {
         float inv = 1.0f / len;
         i = 0;
@@ -383,12 +383,12 @@ void Matrix44_Invert(int *arg0, float *arg1, int arg2) {
             } while (j < 4);
             i++;
         } while (i < 4);
-        *arg0 = g_statusSucceeded[0];
+        *arg0 = g_resultSuccess[0];
     }
 }
 
 /* Adjugate (transposed cofactor matrix) of m, written to adjugate. */
-void Matrix44_Adjugate(float *self, const float *m, float *adjugate) {
+void igMatrix44f_Adjugate(float *self, const float *m, float *adjugate) {
     float m00, m10, m20, m30;
     float m01, m11, m21, m31;
     float m02, m12, m22, m32;
@@ -492,7 +492,7 @@ void FUN_00192510(S6 *a, float *arg1, float *arg2, float *arg3, float *arg4, flo
     *arg4 = t1 + t0;
 }
 
-void Matrix44_GetQuaternion(float *q, float *m) {
+void igMatrix44f_GetQuaternion(float *q, float *m) {
     float tr = m[10] + (m[0] + m[5]);
     if (!(tr < 0.0f)) {
         float s, r; s = sqrtf(1.0f + tr);

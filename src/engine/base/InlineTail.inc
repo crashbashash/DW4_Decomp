@@ -415,7 +415,7 @@ void FUN_0022b0a0(int arg0, int *arg1) {
             FUN_001904f0(sp60, (int)o + 0x20, sp60);
         }
     }
-    Matrix44_Copy(arg0, sp60);
+    igMatrix44f_Copy(arg0, sp60);
 }
 
 void Gap__igListenerInterface__vfunc_13(igInterface *arg0) {
@@ -634,59 +634,59 @@ int Gap__Core__igMetaObject__vfunc_22(void) {
 void FUN_0022bc10(int *arg0, int arg1, int arg2, int arg3, int arg4) {
 
     if (FUN_0022e160((M *)arg1, arg2, (M *)arg3, arg4, 0) & 0xFF) {
-        *arg0 = g_statusSucceeded[0];
+        *arg0 = g_resultSuccess[0];
     } else if (FUN_0022e0a0((void *)arg1, arg2, (void *)arg3, arg4, 0) & 0xFF) {
-        *arg0 = g_statusSucceeded[0];
+        *arg0 = g_resultSuccess[0];
     } else if (FUN_0022dfe0((void *)arg1, arg2, (void *)arg3, arg4, 0) & 0xFF) {
-        *arg0 = g_statusSucceeded[0];
+        *arg0 = g_resultSuccess[0];
     } else if (FUN_0022df20((void *)arg1, arg2, (void *)arg3, arg4, 0) & 0xFF) {
-        *arg0 = g_statusSucceeded[0];
+        *arg0 = g_resultSuccess[0];
     } else if (FUN_0022de60((void *)arg1, (char *)arg2, (void *)arg3, (char *)arg4, 0) & 0xFF) {
-        *arg0 = g_statusSucceeded[0];
+        *arg0 = g_resultSuccess[0];
     } else if (FUN_0022dda0((Q *)arg1, arg2, (Q *)arg3, arg4, 0) & 0xFF) {
-        *arg0 = g_statusSucceeded[0];
+        *arg0 = g_resultSuccess[0];
     } else if (FUN_0022dce0((char *)arg1, arg2, (char *)arg3, arg4, 0) & 0xFF) {
-        *arg0 = g_statusSucceeded[0];
+        *arg0 = g_resultSuccess[0];
     } else if (FUN_0022dc20((void *)arg1, arg2, (void *)arg3, arg4, 0) & 0xFF) {
-        *arg0 = g_statusSucceeded[0];
+        *arg0 = g_resultSuccess[0];
     } else if (FUN_0022db60((M *)arg1, arg2, arg3, arg4, 0) & 0xFF) {
-        *arg0 = g_statusSucceeded[0];
+        *arg0 = g_resultSuccess[0];
     } else if (FUN_0022daa0((void *)arg1, arg2, (void *)arg3, arg4, 0) & 0xFF) {
-        *arg0 = g_statusSucceeded[0];
+        *arg0 = g_resultSuccess[0];
     } else if (FUN_0022d9e0((int *)arg1, arg2, (int *)arg3, arg4, 0) & 0xFF) {
-        *arg0 = g_statusSucceeded[0];
+        *arg0 = g_resultSuccess[0];
     } else if (FUN_0022d8e0((M *)arg1, arg2, arg3, arg4, 0) & 0xFF) {
-        *arg0 = g_statusSucceeded[0];
+        *arg0 = g_resultSuccess[0];
     } else if (FUN_0022d820((void *)arg1, arg2, (void *)arg3, arg4, 0) & 0xFF) {
-        *arg0 = g_statusSucceeded[0];
+        *arg0 = g_resultSuccess[0];
     } else if (FUN_0022d760((void *)arg1, arg2, (void *)arg3, arg4, 0) & 0xFF) {
-        *arg0 = g_statusSucceeded[0];
+        *arg0 = g_resultSuccess[0];
     } else if (FUN_0022d6a0((Q *)arg1, arg2, (Q *)arg3, arg4, 0) & 0xFF) {
-        *arg0 = g_statusSucceeded[0];
+        *arg0 = g_resultSuccess[0];
     } else if (FUN_0022d5e0((void *)arg1, arg2, (void *)arg3, arg4, 0) & 0xFF) {
-        *arg0 = g_statusSucceeded[0];
+        *arg0 = g_resultSuccess[0];
     } else if (FUN_0022d520((void *)arg1, arg2, (void *)arg3, arg4, 0) & 0xFF) {
-        *arg0 = g_statusSucceeded[0];
+        *arg0 = g_resultSuccess[0];
     } else if (FUN_0022d460((O_2 *)arg1, arg2, (O_2 *)arg3, arg4, 0) & 0xFF) {
-        *arg0 = g_statusSucceeded[0];
+        *arg0 = g_resultSuccess[0];
     } else if (FUN_0022d390((Q *)arg1, arg2, (Q *)arg3, arg4, 0) & 0xFF) {
-        *arg0 = g_statusSucceeded[0];
+        *arg0 = g_resultSuccess[0];
     } else if (FUN_0022d2c0((char *)arg1, arg2, (char *)arg3, arg4, 0) & 0xFF) {
-        *arg0 = g_statusSucceeded[0];
+        *arg0 = g_resultSuccess[0];
     } else if (FUN_0022d1f0((igMetaField *)arg1, arg2, (igMetaField *)arg3, arg4, 0) & 0xFF) {
-        *arg0 = g_statusSucceeded[0];
+        *arg0 = g_resultSuccess[0];
     } else if (FUN_0022d120((Q *)arg1, arg2, (Q *)arg3, arg4, 0) & 0xFF) {
-        *arg0 = g_statusSucceeded[0];
+        *arg0 = g_resultSuccess[0];
     } else if (FUN_0022d050((Q *)arg1, arg2, (Q *)arg3, arg4, 0) & 0xFF) {
-        *arg0 = g_statusSucceeded[0];
+        *arg0 = g_resultSuccess[0];
     } else if (FUN_0022cf70((Q *)arg1, arg2, (Q *)arg3, arg4, 0) & 0xFF) {
-        *arg0 = g_statusSucceeded[0];
+        *arg0 = g_resultSuccess[0];
     } else if (FUN_0022ce90((char *)arg1, arg2, (char *)arg3, arg4, 0) & 0xFF) {
-        *arg0 = g_statusSucceeded[0];
+        *arg0 = g_resultSuccess[0];
     } else if (FUN_0022cdb0((void *)arg1, arg2, (void *)arg3, arg4, 0) & 0xFF) {
-        *arg0 = g_statusSucceeded[0];
+        *arg0 = g_resultSuccess[0];
     } else {
-        *arg0 = g_statusSucceeded[2];
+        *arg0 = g_resultSuccess[2];
     }
 }
 
@@ -1076,7 +1076,7 @@ extern "C" int FUN_0022d460(O_2 *arg0, int arg1, O_2 *arg2, int arg3, int arg4) 
     O_2 *s3 = O_2::Cast(arg0);
     O_2 *s1 = O_2::Cast(arg2);
     if (s3 != 0 && s1 != 0) {
-        Matrix44_Copy(arg3 + s1->f8, arg1 + s3->f8);
+        igMatrix44f_Copy(arg3 + s1->f8, arg1 + s3->f8);
         return 1;
     }
     return 0;

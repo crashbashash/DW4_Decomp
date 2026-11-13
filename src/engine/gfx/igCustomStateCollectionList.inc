@@ -5,7 +5,7 @@ int FUN_0014ee00(int arg0) {
 
 igMetaObject *FUN_0014ee40(void) {
     if (g_igCustomStateCollectionList_metaObject[0] == 0) {
-        g_igCustomStateCollectionList_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
+        g_igCustomStateCollectionList_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
     return g_igCustomStateCollectionList_metaObject[0];
 }

@@ -1,6 +1,6 @@
 igMetaObject *FUN_0033efe0(void) {
     if (g_beWeaponSeqDataList_metaObject[0] == 0) {
-        g_beWeaponSeqDataList_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
+        g_beWeaponSeqDataList_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
     return g_beWeaponSeqDataList_metaObject[0];
 }

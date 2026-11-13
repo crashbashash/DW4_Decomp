@@ -5,7 +5,7 @@ void FUN_0035aa20(int arg0) {
 
 igMetaObject *FUN_0035aa60(void) {
     if (g_beLuaState_metaObject[0] == 0) {
-        g_beLuaState_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
+        g_beLuaState_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
     return g_beLuaState_metaObject[0];
 }

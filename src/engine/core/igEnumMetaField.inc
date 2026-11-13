@@ -103,7 +103,7 @@ void FUN_002c62b0(void) {
     int count;
 
     if (g_igEnumMetaField_descriptor[0] == 0) {
-        g_igEnumMetaField_descriptor[0] = ((int *)igMetaObject_CreateInstance((CreateMeta *)g_igEnumMetaField_metaObject[0], (MemoryPool *)(((int)Memory_GetAllocatorBySelector(g_memoryContextMetaData)))));
+        g_igEnumMetaField_descriptor[0] = ((int *)igMetaObject_CreateInstance((CreateMeta *)g_igEnumMetaField_metaObject[0], (MemoryPool *)(((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData)))));
         s0 = g_igEnumMetaField_descriptor[0];
         if (s0 != 0) {
             MetaRefList_AppendRetained((PointerList *)(((void *)FUN_002fc250())), (RefHeader *)s0);

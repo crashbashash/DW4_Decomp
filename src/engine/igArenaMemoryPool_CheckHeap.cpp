@@ -43,7 +43,7 @@ class SystemAllocator { public:
     virtual void d6();
     virtual int Free(int);
 };
-extern SystemAllocator *DAT_00587218[4];
+extern SystemAllocator *g_activeSystemAllocator[4];
 
 extern "C" {
 extern char text_igArenaMemoryPool_checkHeap_E69[];

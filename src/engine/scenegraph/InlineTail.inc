@@ -189,7 +189,7 @@ int FUN_001e2d10(void **arg0, int arg1) {
     int temp_s0;
 
     temp_s0 = ((DW4VC_96_1 *)(arg0))->vX((int)(&sp30[0])) & 0xFF;
-    Matrix44_GetQuaternion(arg1, &sp30[0]);
+    igMatrix44f_GetQuaternion(arg1, &sp30[0]);
     return temp_s0;
 }
 
@@ -198,7 +198,7 @@ void FUN_001e2d60(IgForwardTarget_1e2d60 *o) { o->slot23(); }
 void FUN_001e2d70(IgForwardTarget_1e2d70 *o) { o->slot25(); }
 
 void Gap__Core__igObject__vfunc_35(int a0) {
-    Matrix44_Copy((char *)a0 + 32);
+    igMatrix44f_Copy((char *)a0 + 32);
 }
 
 /* Slot 36, shared by igTransform descendants: store the igTransform::_target field (+96). */
@@ -428,7 +428,7 @@ int Gap__Sg__igCompressedAnimationSequenceQS__vfunc_26(void **arg0, int arg1) {
     int temp_s0;
 
     temp_s0 = ((DW4VC_96_1 *)(arg0))->vX((int)(sp30)) & 0xFF;
-    Matrix44_GetQuaternion(arg1, sp30);
+    igMatrix44f_GetQuaternion(arg1, sp30);
     return temp_s0;
 }
 

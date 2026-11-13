@@ -5,7 +5,7 @@ void FUN_0023a040(int arg0) {
 
 igMetaObject *FUN_0023a080(void) {
     if (g_igCollisionGrid_metaObject[0] == 0) {
-        g_igCollisionGrid_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
+        g_igCollisionGrid_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
     return g_igCollisionGrid_metaObject[0];
 }

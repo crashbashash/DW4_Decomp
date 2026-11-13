@@ -1,6 +1,6 @@
 igMetaObject *FUN_0013a4d0(void) {
     if (g_igGeometryAttrList_metaObject[0] == 0) {
-        g_igGeometryAttrList_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
+        g_igGeometryAttrList_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
     return g_igGeometryAttrList_metaObject[0];
 }

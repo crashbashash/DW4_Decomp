@@ -1,6 +1,6 @@
 igMetaObject *FUN_0019a120(void) {
     if (g_igProjectionMatrixAttrPool_metaObject[0] == 0) {
-        g_igProjectionMatrixAttrPool_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
+        g_igProjectionMatrixAttrPool_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
     return g_igProjectionMatrixAttrPool_metaObject[0];
 }

@@ -122,7 +122,7 @@ void FUN_002bd210(void) {
     int len;
 
     if (g_igObjectRefMetaField_descriptor[0] == 0) {
-        g_igObjectRefMetaField_descriptor[0] = ((M_2bd210 *)igMetaObject_CreateInstance((CreateMeta *)g_igObjectRefMetaField_metaObject[0], (MemoryPool *)(((int)Memory_GetAllocatorBySelector(g_memoryContextMetaData)))));
+        g_igObjectRefMetaField_descriptor[0] = ((M_2bd210 *)igMetaObject_CreateInstance((CreateMeta *)g_igObjectRefMetaField_metaObject[0], (MemoryPool *)(((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData)))));
         temp_s0 = g_igObjectRefMetaField_descriptor[0];
         if (temp_s0 != 0) {
             MetaRefList_AppendRetained((PointerList *)(((R_2bd210 *)FUN_002fc250())), (RefHeader *)temp_s0);

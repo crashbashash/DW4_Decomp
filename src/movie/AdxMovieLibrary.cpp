@@ -196,7 +196,7 @@ extern "C" void * g_objectSystem[4];
 struct igMetaObject_334510;
 extern "C" igMetaObject_334510 * igObject_GetMetaObject_ParentAccessor(...);
 extern "C" const char igAdx_className[];
-extern "C" int g_metadataAllocatorKey[4];
+extern "C" int kIGMemoryPoolHandleMetaData[4];
 extern "C" igMetaObject *g_igAdxAfsFileList_metaObject[4];
 struct Obj_3346b0 { int *vt; char pad[28]; };
 extern "C" int DAT_00533c00[4];
@@ -478,7 +478,7 @@ void FUN_003345f0(void)
 
 igMetaObject *FUN_00334610(void) {
     if (g_igAdxAfsFileList_metaObject[0] == 0) {
-        g_igAdxAfsFileList_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
+        g_igAdxAfsFileList_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
     return g_igAdxAfsFileList_metaObject[0];
 }
@@ -844,7 +844,7 @@ void igAdxAudio_Create(int arg0) {
 
 igMetaObject *FUN_00335130(void) {
     if (g_igAdxAudio_metaObject[0] == 0) {
-        g_igAdxAudio_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
+        g_igAdxAudio_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
     return g_igAdxAudio_metaObject[0];
 }
@@ -920,7 +920,7 @@ void FUN_00335400(int arg0) {
 
 igMetaObject *FUN_00335440(void) {
     if (g_igMovieCodecList_metaObject[0] == 0) {
-        g_igMovieCodecList_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
+        g_igMovieCodecList_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
     return g_igMovieCodecList_metaObject[0];
 }
@@ -972,7 +972,7 @@ void igMovieCodecList_GetMetaObject(void)
 
 igMetaObject *FUN_003355d0(void) {
     if (g_igMovieCodec_metaObject[0] == 0) {
-        g_igMovieCodec_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
+        g_igMovieCodec_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
     return g_igMovieCodec_metaObject[0];
 }
@@ -1244,7 +1244,7 @@ void FUN_00335da0(int arg0) {
 
 igMetaObject *FUN_00335de0(void) {
     if (g_igMovieInfoList_metaObject[0] == 0) {
-        g_igMovieInfoList_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
+        g_igMovieInfoList_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
     return g_igMovieInfoList_metaObject[0];
 }
@@ -1302,7 +1302,7 @@ void FUN_00335f70(int arg0) {
 
 igMetaObject *FUN_00335fb0(void) {
     if (g_igTextureBindAttrList_metaObject[0] == 0) {
-        g_igTextureBindAttrList_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
+        g_igTextureBindAttrList_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
     return g_igTextureBindAttrList_metaObject[0];
 }
@@ -1531,7 +1531,7 @@ void igMovieInfo_InitFields(void) {
 
 igMetaObject *FUN_00336860(void) {
     if (g_igMovieRenderer_metaObject[0] == 0) {
-        g_igMovieRenderer_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
+        g_igMovieRenderer_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
     return g_igMovieRenderer_metaObject[0];
 }
@@ -1626,7 +1626,7 @@ void igMovieManager_CreateInstance(int arg0) {
 
 igMetaObject *FUN_00336c10(void) {
     if (g_igMovieManager_metaObject[0] == 0) {
-        g_igMovieManager_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
+        g_igMovieManager_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
     return g_igMovieManager_metaObject[0];
 }

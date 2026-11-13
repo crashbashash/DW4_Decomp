@@ -308,9 +308,9 @@ unsigned char beMatCtrl_IsRideOffPlayer(beMatCtrl *self, int player);
 int beMatCtrl_GetPlayerMatStat(beMatCtrl *self, int player);
 void beMatCtrl_SetRun(beMatCtrl *self, int run);
 void igMatrix44f_SetIdentity(float *matrix);
-void Matrix44_Copy(float *matrix, const float *source);
-void Matrix44_GetTranslation(const float *matrix, float *vector);
-void Matrix44_TranslateLocal(float *matrix, const float *offset);
+void igMatrix44f_Copy(float *matrix, const float *source);
+void igMatrix44f_GetTranslation(const float *matrix, float *vector);
+void igMatrix44f_TranslateLocal(float *matrix, const float *offset);
 void Vec3f_TransformDirection(float *out, const float *vector, const float *matrix);
 int Vec3f_FromString(const char *text, float *vector, const char *format);
 void igStringObj_Set(igStringObj *string, const char *text);
@@ -330,7 +330,7 @@ extern igMetaObject *g_beMessenger_metaObject[4];
 extern igMetaObject *g_beMatCtrl_metaObject[4];
 extern igMetaObject *g_beDemoManager_metaObject[4];
 extern void *g_stringPool[4];
-extern int g_defaultAllocatorSelector[4];
+extern int kIGMemoryPoolHandleUser1[4];
 extern unsigned char g_useOwnerAllocator;
 extern int g_propertyNameField[4];
 
@@ -517,7 +517,7 @@ static inline void clearStringList(igStringRefList *list) {
 /* The allocator an object's new members come from: its own, or the default one. */
 static inline int allocatorFor(void *object) {
     int allocator = (int)igObject_GetAllocator(object);
-    return g_useOwnerAllocator != 0 ? allocator : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
+    return g_useOwnerAllocator != 0 ? allocator : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
 }
 
 int LuaAPI_Dispatch(lua_State *L) {
@@ -1432,12 +1432,12 @@ char *MDLgetPosStr(float x, float y, float z) {
     float position[3];
 
     igMatrix44f_SetIdentity(matrix);
-    Matrix44_Copy(matrix, g_mdlMatrix[0]);
+    igMatrix44f_Copy(matrix, g_mdlMatrix[0]);
     offset[0] = x;
     offset[1] = y;
     offset[2] = z;
-    Matrix44_TranslateLocal(matrix, offset);
-    Matrix44_GetTranslation(matrix, position);
+    igMatrix44f_TranslateLocal(matrix, offset);
+    igMatrix44f_GetTranslation(matrix, position);
     sprintf(g_mdlPosStrBuffer, V_f_f_f, position[0], position[1], position[2]);
     return g_mdlPosStrBuffer;
 }
@@ -1448,7 +1448,7 @@ char *MDLgetRotStr(float x, float y, float z) {
     float matrix[16];
     float heading;
     igMatrix44f_SetIdentity(matrix);
-    Matrix44_Copy(matrix, g_mdlMatrix[0]);
+    igMatrix44f_Copy(matrix, g_mdlMatrix[0]);
     Vec3f_TransformDirection(forward, g_vec3ZAxis, matrix);
     heading = atan2f(forward[0], forward[2]);
     sprintf(g_mdlRotStrBuffer, V_f_f_f, x, RADIANS_TO_DEGREES * heading + y, z);
@@ -1535,7 +1535,7 @@ void FloatingNumber_Spawn(int value, int style) {
         sequence = g_floatingNumberStyles[style].digitSequences[digits];
         beMessenger_SelectReceivers(g_beMessenger[0], MODELCTRL_9, modelInfoName, number->_ramNo);
         beMessenger_AppendString(g_beMessenger[0], sequence);
-        Matrix44_GetTranslation(g_mdlMatrix[0], position);
+        igMatrix44f_GetTranslation(g_mdlMatrix[0], position);
         at[0] = position[0]; at[1] = position[1]; at[2] = position[2];
         beMessenger_AppendVec3(g_beMessenger[0], at);
         beMessenger_DispatchSelected(g_beMessenger[0], GENERATE_8);
@@ -1602,7 +1602,7 @@ void MDLsetWorldPosTarget_79(const char *text) {
 float MDLgetKyoriSquare(float x, float y, float z) {
     float position[3];
     float dx, dy, dz;
-    Matrix44_GetTranslation(g_mdlMatrix[0], position);
+    igMatrix44f_GetTranslation(g_mdlMatrix[0], position);
     dy = position[1] - y;
     dx = position[0] - x;
     dz = position[2] - z;
@@ -1664,7 +1664,7 @@ char *PLAYERgetDataStr(int point, int index, float yaw) {
     beMessenger_AppendInt(g_beMessenger[0], index);
     beMessenger_DispatchSelected(g_beMessenger[0], GETMATRIXDIRECT);
     beMessenger_GetMatrix(matrix, g_beMessenger[0], 0);
-    Matrix44_GetTranslation(matrix, position);
+    igMatrix44f_GetTranslation(matrix, position);
     Vec3f_TransformDirection(forward, g_vec3ZAxis, matrix);
     heading = atan2f(forward[0], forward[2]);
     sprintf(g_playerDataStrBuffer, V_f_f_f_V_0_f_0, position[0], position[1], position[2], (RADIANS_TO_DEGREES * heading) + yaw);
@@ -1683,8 +1683,8 @@ char *PLAYERgetPosStr(int ramNo, float x, float y, float z) {
         offset[0] = x;
         offset[1] = y;
         offset[2] = z;
-        Matrix44_TranslateLocal(matrix, offset);
-        Matrix44_GetTranslation(matrix, position);
+        igMatrix44f_TranslateLocal(matrix, offset);
+        igMatrix44f_GetTranslation(matrix, position);
         sprintf(g_playerPosStrBuffer, V_f_f_f, position[0], position[1], position[2]);
         return g_playerPosStrBuffer;
     }

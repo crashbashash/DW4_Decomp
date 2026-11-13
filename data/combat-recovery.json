@@ -2,7 +2,7 @@
   "scope": "FIGHTCALC physical switch region and direct-call lower bound",
   "dispatcher": {
     "address": "0x003fca10",
-    "name": "Gap__Bec__beNDMWGameRam__vfunc_34",
+    "name": "beNDMWGameRam_OnMessage",
     "size": 41864,
     "source": "src/game/beNDMWGameRam.cpp"
   },
@@ -193,7 +193,7 @@
     },
     {
       "address": "0x001908f0",
-      "name": "Matrix44_Copy",
+      "name": "igMatrix44f_Copy",
       "size": 188,
       "source": null,
       "sites": [
@@ -202,7 +202,7 @@
     },
     {
       "address": "0x00190a30",
-      "name": "Matrix44_GetTranslation",
+      "name": "igMatrix44f_GetTranslation",
       "size": 28,
       "source": "src/engine/maths/MathsLibrary.cpp",
       "sites": [
@@ -1005,7 +1005,7 @@
     },
     {
       "address": "0x003a9250",
-      "name": "FUN_003a9250",
+      "name": "igProperty_GetRecordIntList",
       "size": 36,
       "source": "src/game/beDBManager.cpp",
       "sites": [
@@ -1048,7 +1048,7 @@
     },
     {
       "address": "0x003a92e0",
-      "name": "FUN_003a92e0",
+      "name": "igProperty_GetRecordString",
       "size": 36,
       "source": "src/game/beDBManager.cpp",
       "sites": [
@@ -1276,7 +1276,7 @@
     },
     {
       "address": "0x003e9220",
-      "name": "FUN_003e9220",
+      "name": "Vec3f_Copy",
       "size": 28,
       "source": "src/game/beNDMWLoadIntf2.cpp",
       "sites": [
@@ -1326,7 +1326,7 @@
     },
     {
       "address": "0x003e9280",
-      "name": "FUN_003e9280",
+      "name": "DataList_FindProperty_003e9280",
       "size": 28,
       "source": "src/game/beNDMWLoadIntf2.cpp",
       "sites": [
@@ -1335,7 +1335,7 @@
     },
     {
       "address": "0x003e92a0",
-      "name": "FUN_003e92a0",
+      "name": "ObjectRef_Get_003e92a0",
       "size": 8,
       "source": "src/game/beNDMWLoadIntf2.cpp",
       "sites": [
@@ -1353,7 +1353,7 @@
     },
     {
       "address": "0x003e9360",
-      "name": "FUN_003e9360",
+      "name": "AllocatorValue_Make_003e9360",
       "size": 8,
       "source": "src/game/beNDMWLoadIntf2.cpp",
       "sites": [
@@ -1371,7 +1371,7 @@
     },
     {
       "address": "0x003e93b0",
-      "name": "FUN_003e93b0",
+      "name": "ObjectRef_Get_003e93b0",
       "size": 8,
       "source": "src/game/beNDMWLoadIntf2.cpp",
       "sites": [
@@ -1380,7 +1380,7 @@
     },
     {
       "address": "0x003f8760",
-      "name": "FUN_003f8760",
+      "name": "beNDMWGameRam_StoreSpecies",
       "size": 548,
       "source": "src/game/beNDMWGameRam.cpp",
       "sites": [
@@ -1390,7 +1390,7 @@
     },
     {
       "address": "0x003f9c80",
-      "name": "FUN_003f9c80",
+      "name": "beNDMWGameRam_ChangeHp",
       "size": 408,
       "source": "src/game/beNDMWGameRam.cpp",
       "sites": [
@@ -1401,7 +1401,7 @@
     },
     {
       "address": "0x003f9e20",
-      "name": "FUN_003f9e20",
+      "name": "beNDMWGameRam_ChangeMp",
       "size": 344,
       "source": "src/game/beNDMWGameRam.cpp",
       "sites": [
@@ -1410,7 +1410,7 @@
     },
     {
       "address": "0x003fab90",
-      "name": "FUN_003fab90",
+      "name": "beNDMWGameRam_RecomputeStats",
       "size": 6872,
       "source": "src/game/beNDMWGameRam.cpp",
       "sites": [
@@ -1468,7 +1468,7 @@
     },
     {
       "address": "0x00406dc0",
-      "name": "FUN_00406dc0",
+      "name": "ObjectRef_Get_00406dc0",
       "size": 8,
       "source": "src/game/beNDMWGameRam.cpp",
       "sites": [
@@ -1479,7 +1479,7 @@
     },
     {
       "address": "0x00406dd0",
-      "name": "FUN_00406dd0",
+      "name": "DataList_GetWordAt_00406dd0",
       "size": 20,
       "source": "src/game/beNDMWGameRam.cpp",
       "sites": [
@@ -1488,7 +1488,7 @@
     },
     {
       "address": "0x00406df0",
-      "name": "FUN_00406df0",
+      "name": "ObjectRef_Get_00406df0",
       "size": 8,
       "source": "src/game/beNDMWGameRam.cpp",
       "sites": [
@@ -1497,7 +1497,7 @@
     },
     {
       "address": "0x00406e00",
-      "name": "FUN_00406e00",
+      "name": "ObjectRef_Get_00406e00",
       "size": 8,
       "source": "src/game/beNDMWGameRam.cpp",
       "sites": [
@@ -1506,7 +1506,7 @@
     },
     {
       "address": "0x00406e10",
-      "name": "FUN_00406e10",
+      "name": "DataListRef_Construct_00406e10",
       "size": 48,
       "source": "src/game/beNDMWGameRam.cpp",
       "sites": [
@@ -1515,7 +1515,7 @@
     },
     {
       "address": "0x00406e40",
-      "name": "FUN_00406e40",
+      "name": "PropertyRecord_GetValue_00406e40",
       "size": 8,
       "source": "src/game/beNDMWGameRam.cpp",
       "sites": [
@@ -1528,7 +1528,7 @@
     },
     {
       "address": "0x00406e50",
-      "name": "FUN_00406e50",
+      "name": "ObjectRef_Get_00406e50",
       "size": 8,
       "source": "src/game/beNDMWGameRam.cpp",
       "sites": [
@@ -1688,7 +1688,7 @@
     },
     {
       "address": "0x00406ee0",
-      "name": "FUN_00406ee0",
+      "name": "ObjectRef_Get_00406ee0",
       "size": 8,
       "source": "src/game/beNDMWGameRam.cpp",
       "sites": [
@@ -1926,7 +1926,7 @@
     },
     {
       "address": "0x00406ef0",
-      "name": "FUN_00406ef0",
+      "name": "ObjectRef_Get_00406ef0",
       "size": 8,
       "source": "src/game/beNDMWGameRam.cpp",
       "sites": [
@@ -1965,7 +1965,7 @@
     },
     {
       "address": "0x00406fa0",
-      "name": "FUN_00406fa0",
+      "name": "StringRef_Release_00406fa0",
       "size": 60,
       "source": "src/game/beNDMWGameRam.cpp",
       "sites": [
@@ -1995,7 +1995,7 @@
     },
     {
       "address": "0x00407030",
-      "name": "FUN_00407030",
+      "name": "ObjectRef_Get_00407030",
       "size": 8,
       "source": "src/game/beNDMWGameRam.cpp",
       "sites": [
@@ -2030,7 +2030,7 @@
     },
     {
       "address": "0x00407040",
-      "name": "FUN_00407040",
+      "name": "ObjectRef_Get_00407040",
       "size": 8,
       "source": "src/game/beNDMWGameRam.cpp",
       "sites": [
@@ -2039,7 +2039,7 @@
     },
     {
       "address": "0x00407050",
-      "name": "FUN_00407050",
+      "name": "ObjectRef_Get_00407050",
       "size": 8,
       "source": "src/game/beNDMWGameRam.cpp",
       "sites": [
@@ -2066,7 +2066,7 @@
     },
     {
       "address": "0x00447b00",
-      "name": "FUN_00447b00",
+      "name": "beNDMWMdlPEBaseInfoWork_IsPoisoned",
       "size": 56,
       "source": "src/game/beNDMWMdlPEBase.cpp",
       "sites": [
@@ -2076,7 +2076,7 @@
     },
     {
       "address": "0x00447b40",
-      "name": "FUN_00447b40",
+      "name": "beNDMWMdlPEBaseInfoWork_CurePoison",
       "size": 88,
       "source": "src/game/beNDMWMdlPEBase.cpp",
       "sites": [

@@ -1,25 +1,25 @@
 void Gap__Sg__igPlanarShadowShader__vfunc_09(void **arg0, int arg1) {
     Gap__Sg__igNode__vfunc_09((void * *)arg0, arg1);
     if (igMetaObject_CountInstances(((DW4VC_88_0 *)(arg0))->vX(), 1) == 0) {
-        DAT_00562798[0] = (void **)(((void * *)FUN_00139ed0(Memory_GetAllocatorBySelector(DAT_00587038[0]))));
-        DAT_005627a0[0] = (void **)(((void * *)FUN_00139ed0(Memory_GetAllocatorBySelector(DAT_00587038[0]))));
+        DAT_00562798[0] = (void **)(((void * *)FUN_00139ed0(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem[0]))));
+        DAT_005627a0[0] = (void **)(((void * *)FUN_00139ed0(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem[0]))));
         ((DW4VC_128_1 *)(DAT_005627a0[0]))->vX((int)(0));
         ((DW4VC_132_1 *)(DAT_005627a0[0]))->vX((int)(0));
-        DAT_005627a8[0] = (void **)(((void * *)igBlendStateAttr_CreateInstance(Memory_GetAllocatorBySelector(DAT_00587038[0]))));
+        DAT_005627a8[0] = (void **)(((void * *)igBlendStateAttr_CreateInstance(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem[0]))));
         ((DW4VC_128_1 *)(DAT_005627a8[0]))->vX((int)(1));
-        DAT_005627b0[0] = (void **)(((void * *)igLightingStateAttr_CreateInstance(Memory_GetAllocatorBySelector(DAT_00587038[0]))));
+        DAT_005627b0[0] = (void **)(((void * *)igLightingStateAttr_CreateInstance(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem[0]))));
         ((DW4VC_128_1 *)(DAT_005627b0[0]))->vX((int)(0));
-        DAT_005627b8[0] = (void **)(((void * *)igTextureStateAttr_CreateInstance(Memory_GetAllocatorBySelector(DAT_00587038[0]))));
+        DAT_005627b8[0] = (void **)(((void * *)igTextureStateAttr_CreateInstance(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem[0]))));
         ((DW4VC_128_1 *)(DAT_005627b8[0]))->vX((int)(0));
-        DAT_005627c8[0] = (void **)(((void * *)FUN_0013b270(Memory_GetAllocatorBySelector(DAT_00587038[0]))));
+        DAT_005627c8[0] = (void **)(((void * *)FUN_0013b270(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem[0]))));
         ((DW4VC_128_1 *)(DAT_005627c8[0]))->vX((int)(0));
-        DAT_005627c0[0] = (void *)(FUN_00137070(Memory_GetAllocatorBySelector(DAT_00587038[0])));
+        DAT_005627c0[0] = (void *)(FUN_00137070(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem[0])));
         *(int *)((char *)(DAT_005627c0[0]) + 12) = 1;
-        DAT_005627d0[0] = (void **)(FUN_00133610(Memory_GetAllocatorBySelector(DAT_00587038[0])));
+        DAT_005627d0[0] = (void **)(FUN_00133610(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem[0])));
         ((DW4VC_128_1 *)(DAT_005627d0[0]))->vX((int)(1));
         ((DW4VC_136_1 *)(DAT_005627d0[0]))->vX((int)(2));
         ((DW4VC_140_3 *)(DAT_005627d0[0]))->vX((int)(0), (int)(3), (int)(3));
-        DAT_005627d8[0] = (void **)(FUN_00138690(Memory_GetAllocatorBySelector(DAT_00587038[0])));
+        DAT_005627d8[0] = (void **)(FUN_00138690(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem[0])));
         ((DW4VC_132_1 *)(DAT_005627d8[0]))->vX((int)(0));
     }
 }

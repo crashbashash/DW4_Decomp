@@ -5,7 +5,7 @@ void FUN_00142f30(int arg0) {
 
 igMetaObject *FUN_00142f70(void) {
     if (g_igAudioContext_metaObject[0] == 0) {
-        g_igAudioContext_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
+        g_igAudioContext_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
     return g_igAudioContext_metaObject[0];
 }

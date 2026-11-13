@@ -5,7 +5,7 @@ void FUN_002ca410(int arg0) {
 
 igMetaObject *FUN_002ca450(void) {
     if (g_igUnsignedIntList_metaObject[0] == 0) {
-        g_igUnsignedIntList_metaObject[0] = (igMetaObject *)igMetaObject_Create(((int)Memory_GetAllocatorBySelector(g_memoryContextMetaData)));
+        g_igUnsignedIntList_metaObject[0] = (igMetaObject *)igMetaObject_Create(((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData)));
     }
     return g_igUnsignedIntList_metaObject[0];
 }

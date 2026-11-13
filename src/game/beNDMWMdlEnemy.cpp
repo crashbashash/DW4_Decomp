@@ -35,7 +35,7 @@ extern "C" int GETDATABASE_8[4];
 extern "C" int RARITY[4];
 extern "C" int SETRAREICON[4];
 extern "C" int g_propertyNameField[4];
-extern "C" int g_defaultAllocatorSelector[4];
+extern "C" int kIGMemoryPoolHandleUser1[4];
 extern "C" unsigned char g_useOwnerAllocator;
 extern "C" int g_beNDMWMdlEnemy_metaObject[4];
 
@@ -90,7 +90,7 @@ void beNDMWMdlEnemy__OnGenerate(beNDMWMdlEnemy *self, beBaseInfoRam *ram) {
     info = (beBaseInfo *)ram->_parentInfo;
     if (ram->_dataList == 0) {
         int allocator = igObject_GetAllocator(ram);
-        allocator = g_useOwnerAllocator ? allocator : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
+        allocator = g_useOwnerAllocator ? allocator : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
         igObject *created = (igObject *)beBaseInfoDataList_Create(allocator);
         /* matching construct: the new list is a temporary bound to the setter's reference parameter (it
          * takes the stack slot below the named info-work reference, as retail's +0x68 does) */
@@ -99,7 +99,7 @@ void beNDMWMdlEnemy__OnGenerate(beNDMWMdlEnemy *self, beBaseInfoRam *ram) {
     record = igProperty_FindByName((void *)ram->_dataList, g_propertyNameField[0], &ONE_5[0]);
     {
         int allocator = igObject_GetAllocator(self);
-        allocator = g_useOwnerAllocator ? allocator : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
+        allocator = g_useOwnerAllocator ? allocator : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
         InfoWorkRef work((igObject *)beNDMWMdlEnemyInfoWork_Create(allocator));
         igObject *held = work.p;
         if (held != 0) held->_refCount = held->_refCount + 1;

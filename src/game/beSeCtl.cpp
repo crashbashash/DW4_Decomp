@@ -3,9 +3,9 @@
 
 extern "C" int FUN_0039c430(void *node, void *traversal);
 extern "C" void igMatrix44f_SetIdentity(float *);
-extern "C" void Matrix44_Copy(float *, float *);
-extern "C" void Matrix44_GetTranslation(float *, float *);
-extern "C" void Matrix44_SetTranslation(float *, float *);
+extern "C" void igMatrix44f_Copy(float *, float *);
+extern "C" void igMatrix44f_GetTranslation(float *, float *);
+extern "C" void igMatrix44f_SetTranslation(float *, float *);
 extern "C" void FUN_001356b0(void);
 extern "C" void igTimeAttr_CreateInstance(void);
 extern "C" int igTraversal_RegisterFunction(int, int, void (*)(void));
@@ -77,10 +77,10 @@ int FUN_0039c460(beResetNode *node, igCommonTraversal *trav) {
     igMatrix44f_SetIdentity(m);
     matAttr = 0;
     if (node->_isResetRotAndScale) {
-        Matrix44_Copy(m, trav->_viewMat);
+        igMatrix44f_Copy(m, trav->_viewMat);
         int lastIdx = mvStack->_count - 1;
-        Matrix44_GetTranslation((float *)((int *)mvStack->_data)[lastIdx] + 3, t);
-        Matrix44_SetTranslation(m, t);
+        igMatrix44f_GetTranslation((float *)((int *)mvStack->_data)[lastIdx] + 3, t);
+        igMatrix44f_SetTranslation(m, t);
         igObjectPool *pool = (igObjectPool *)trav->_matrixPool;
         if (pool->_freeIndex >= pool->_count)
             igObjectPool_Grow(pool, FUN_001356b0);

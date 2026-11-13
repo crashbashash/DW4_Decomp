@@ -84,7 +84,7 @@ void FUN_002c6620(void) {
     int *g;
 
     if (g_igEnumArrayMetaField_descriptor[0] == 0) {
-        g_igEnumArrayMetaField_descriptor[0] = ((int *)igMetaObject_CreateInstance((CreateMeta *)g_igEnumArrayMetaField_metaObject[0], (MemoryPool *)(((int)Memory_GetAllocatorBySelector(g_memoryContextMetaData)))));
+        g_igEnumArrayMetaField_descriptor[0] = ((int *)igMetaObject_CreateInstance((CreateMeta *)g_igEnumArrayMetaField_metaObject[0], (MemoryPool *)(((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData)))));
         s0 = g_igEnumArrayMetaField_descriptor[0];
         if (s0 != 0) {
             MetaRefList_AppendRetained((PointerList *)(((int *)FUN_002fc250())), (RefHeader *)s0);

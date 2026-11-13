@@ -600,7 +600,7 @@ void Gap__Core__igArenaMemoryPool__vfunc_97(Pool97 *self) {
     self->w4 = 0;
     ((Bits *)&self->w4)->refs = 1;
     ((char *)self)[7] = 0;
-    self->arena = (Arena97 *)((SystemAllocator_3125d0 * *)DAT_00587218)[0]->Alloc(0x814);
+    self->arena = (Arena97 *)((SystemAllocator_3125d0 * *)g_activeSystemAllocator)[0]->Alloc(0x814);
     if (self->arena == 0 && GPR_00554d64 == 0) {
         v = igReportError(text_Unable_to_allocate_memory_for_ar);
         if (v != 1) {
@@ -630,7 +630,7 @@ void Gap__Core__igArenaMemoryPool__vfunc_97(Pool97 *self) {
     self->preSized = 0;
     self->smallest = 16;
     if (self->arena->f2020 == 0) {
-        self->arena->f2020 = (int)((SystemAllocator_3125d0 * *)DAT_00587218)[0]->AllocAligned(0x200, 4);
+        self->arena->f2020 = (int)((SystemAllocator_3125d0 * *)g_activeSystemAllocator)[0]->AllocAligned(0x200, 4);
         if (self->arena->f2020 == 0 && GPR_00554d68 == 0) {
             v = igReportError(text_Unable_to_allocate_memory_for_ar);
             if (v != 1) {
@@ -699,12 +699,12 @@ void Gap__Core__igArenaMemoryPool__vfunc_98(Pool98 *arg0) {
     if (temp_v1 != 0) {
         temp_a1 = temp_v1->f2020;
         if (temp_a1 != 0) {
-            ((SystemAllocator_3125d0 * *)DAT_00587218)[0]->Free(temp_a1);
+            ((SystemAllocator_3125d0 * *)g_activeSystemAllocator)[0]->Free(temp_a1);
             arg0->f112->f2024 = 0;
             arg0->f112->f2028 = 0;
             arg0->f112->f2032 = 0;
         }
-        ((SystemAllocator_3125d0 * *)DAT_00587218)[0]->Free((int)arg0->f112);
+        ((SystemAllocator_3125d0 * *)g_activeSystemAllocator)[0]->Free((int)arg0->f112);
         arg0->f112 = 0;
     }
     arg0->f112 = 0;
@@ -934,10 +934,10 @@ int Gap__Core__igArenaMemoryPool__vfunc_95(int arg0, unsigned char *p) {
 
 void Gap__Core__igArenaMemoryPool__vfunc_03(Pool03 *arg0, int arg1) {
     int t;
-    arg0->f70 = (Arena03 *)((SystemAllocator_3125d0 * *)DAT_00587218)[0]->Alloc(0x814);
+    arg0->f70 = (Arena03 *)((SystemAllocator_3125d0 * *)g_activeSystemAllocator)[0]->Alloc(0x814);
     memset(arg0->f70, 0, 0x814);
     if (arg0->f70->f7e4 == 0) {
-        arg0->f70->f7e4 = ((SystemAllocator_3125d0 * *)DAT_00587218)[0]->AllocAligned(0x200, 4);
+        arg0->f70->f7e4 = ((SystemAllocator_3125d0 * *)g_activeSystemAllocator)[0]->AllocAligned(0x200, 4);
         if (arg0->f70->f7e4 == 0 && GPR_00554d7c == 0) {
             t = igReportError(text_Unable_to_allocate_memory_for_ar);
             if (t != 1 && t == 2) {
@@ -973,7 +973,7 @@ unsigned int Gap__Core__igArenaMemoryPool__vfunc_105(igArenaMemoryPool *arg0, in
     if (arg0->_size != 0) {
         return -1U;
     }
-    temp_v0 = ((DW4VC_68_0 *)(((void ** *)DAT_00587218)[0]))->vX();
+    temp_v0 = ((DW4VC_68_0 *)(((void ** *)g_activeSystemAllocator)[0]))->vX();
     if (temp_v0 != -1U) {
         arg0->_systemAllocated = arg0->_systemAllocated + arg2;
         temp_v1 = (void *)(arg0->_arenaState);
@@ -1002,12 +1002,12 @@ S_320830 Gap__Core__igArenaMemoryPool__vfunc_106(void *arg1, int arg2, long long
     } else {
         f->t = 0;
     }
-    return (*((VC_320830 * *)DAT_00587218)[0]).vX();
+    return (*((VC_320830 * *)g_activeSystemAllocator)[0]).vX();
 }
 
 void Gap__Core__igArenaMemoryPool__vfunc_107(igArenaMemoryPoolView *self)
 {
-    (*(igObjectSlots_3208a0 * *)DAT_00587218)->vfunc_17();
+    (*(igObjectSlots_3208a0 * *)g_activeSystemAllocator)->vfunc_17();
 }
 
 void Gap__Core__igArenaMemoryPool__vfunc_108(void) {

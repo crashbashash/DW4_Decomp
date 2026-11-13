@@ -1,6 +1,6 @@
 igMetaObject *FUN_00233a40(void) {
     if (g_igFlushRenderer_metaObject[0] == 0) {
-        g_igFlushRenderer_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
+        g_igFlushRenderer_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
     return g_igFlushRenderer_metaObject[0];
 }
@@ -401,9 +401,9 @@ int FUN_002348b0(igStringRefList *arg0, int *arg1, const char *arg2, float *arg3
 
 static inline int renderAllocator(void) {
     if (g_useOwnerAllocator) {
-        return Memory_GetAllocatorBySelector(DAT_00587028[0]);
+        return Memory_GetAllocatorBySelector(kIGMemoryPoolHandleCurrent[0]);
     }
-    return Memory_GetAllocatorBySelector(g_temporaryAllocatorSelector[0]);
+    return Memory_GetAllocatorBySelector(kIGMemoryPoolHandleTemporary[0]);
 }
 
 struct FlushSettings *FUN_00234900(struct FlushSettings *s) {
@@ -588,9 +588,9 @@ void FUN_00234d70(int self, int count, int *names) {
     int allocator;
     int i;
     if (g_useOwnerAllocator != 0) {
-        allocator = Memory_GetAllocatorBySelector(DAT_00587028[0]);
+        allocator = Memory_GetAllocatorBySelector(kIGMemoryPoolHandleCurrent[0]);
     } else {
-        allocator = Memory_GetAllocatorBySelector(g_temporaryAllocatorSelector[0]);
+        allocator = Memory_GetAllocatorBySelector(kIGMemoryPoolHandleTemporary[0]);
     }
     igSmartPointer<InternedStringList> list(igStringRefList_Create(allocator));
     for (i = 0; i < count; i++) {
@@ -841,7 +841,7 @@ static inline int internedPool(void) {
 }
 
 void FUN_00236140(void) {
-    igSmartPointer<NamedObject> r(FUN_002c43b0(Memory_GetAllocatorBySelector(DAT_00587038[0])));
+    igSmartPointer<NamedObject> r(FUN_002c43b0(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem[0])));
     NamedObject *s0 = r.get();
     int *s1 = (int *)StringPool_Intern(internedPool(), &text_plugins[0]);
     int *old = (int *)s0->name;
@@ -873,7 +873,7 @@ static inline const char *textOf(const TextValue *value) {
 }
 
 FrameBufferFormat ViewerOptions_GetRequestedFormat(ViewerOptions_2382e0 *options) {
-    igSmartPointer<TextValue> text(igStringObj_Create(Memory_GetAllocatorBySelector(DAT_00587048[0])));
+    igSmartPointer<TextValue> text(igStringObj_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleString[0])));
     FrameBufferFormat format;
     format.enabled = 1;
     format.width = options->width;
@@ -918,7 +918,7 @@ igSmartPointer<igWindowView> Viewer_CreateDisplay(int allocator) {
     int colorBits;
     int alphaBits;
     int depthBits;
-    if (allocator == 0) allocator = Memory_GetAllocatorBySelector(DAT_00587028[0]);
+    if (allocator == 0) allocator = Memory_GetAllocatorBySelector(kIGMemoryPoolHandleCurrent[0]);
     windowAllocator = allocator;
     if (DAT_0056dc50[0] == 0) {
         struct FlushShared *shared = __nw__FUi(240);
@@ -937,8 +937,8 @@ igSmartPointer<igWindowView> Viewer_CreateDisplay(int allocator) {
     }
     if (options->allocateVisualContextInScratchPad != 0) {
         int scratchpad;
-        if (g_useOwnerAllocator != 0) scratchpad = Memory_GetAllocatorBySelector(DAT_00587028[0]);
-        else scratchpad = Memory_GetAllocatorBySelector(DAT_00587050[0]);
+        if (g_useOwnerAllocator != 0) scratchpad = Memory_GetAllocatorBySelector(kIGMemoryPoolHandleCurrent[0]);
+        else scratchpad = Memory_GetAllocatorBySelector(kIGMemoryPoolHandleFast[0]);
         contextAllocator = scratchpad;
         if (scratchpad == 0) contextAllocator = windowAllocator;
     } else {

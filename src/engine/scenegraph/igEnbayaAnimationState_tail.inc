@@ -10,7 +10,7 @@ void FUN_001c0f00(int mode) {
             DAT_00562728[0] = ((Meta *)((void *)igAnimationState_GetMetaObject()))->f60;
             Meta *m2 = (Meta *)igAnimationState_GetMetaObject();
             m2->f60 = (void *)FUN_001c10e0;
-            int a = Memory_GetAllocatorBySelector(DAT_00587038[0]);
+            int a = Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem[0]);
             g_igEnbayaContextPool_instance.release();
             g_igEnbayaContextPool_instance.p = (igEnbayaContextPool *)igEnbayaContextPool_Create(a);
         } else {

@@ -886,7 +886,7 @@ void Gap__Bec__beNumVerData__vfunc_07(Obj_36f970 *arg0, int arg1) {
         i = 0;
         do {
             alloc = igObject_GetAllocator(arg0);
-            alloc = (g_useOwnerAllocator != 0) ? alloc : ((void *)Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]));
+            alloc = (g_useOwnerAllocator != 0) ? alloc : ((void *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]));
             { Ref_36f970 sp3C(((T_36f970 *)FUN_0034de60((int)alloc)));
             ObjectList_AppendRetained(arg0->list, sp3C.p); }
             i += 1;
@@ -1272,7 +1272,7 @@ igMetaObject *Gap__Bec__beTransformSync__vfunc_20(void)
 void Gap__Bec__beTransformSync__vfunc_35(beTransformSync *arg0, int arg1) {
     int temp_s2; int var_s1; int var_s0;
 
-    Matrix44_Copy((char *)arg0 + 0x20, arg1);
+    igMatrix44f_Copy((char *)arg0 + 0x20, arg1);
     temp_s2 = ((igObjectList *)arg0->_syncTransformList)->_count;
     var_s1 = 0;
     if (0 < temp_s2) {

@@ -22,7 +22,7 @@ The message is resolved against the `Message` enum (`beLayerCtl_GetMessageEnum`)
 GETNAMELIST, GETLAYERNODE, INFO (0..5). A layer is addressed by the name of a child of the layer switch.
 
 - **ORDER.** The scene root is the `_scene` of the viewer parameters of the `igViewerSceneInfoManager`. On the
-  first ORDER the controller creates `LayerSwt` (allocator from `g_ndmwAllocatorSelector` unless
+  first ORDER the controller creates `LayerSwt` (allocator from `kIGMemoryPoolHandleUser0` unless
   `g_useOwnerAllocator`) and attaches it under the root's `igLightStateSet` child, or under that child's
   `LAYERPARENT` child when one exists; with no light state set ORDER returns 0. Every ORDER then appends one
   `igGroup` per `beLayerGroup` of the info, named after it, and a final `NONE` group

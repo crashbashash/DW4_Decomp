@@ -16,7 +16,7 @@ extern "C" int StringChunk_ReleaseHeader(...);
 extern "C" int StringPool_Construct(...);
 extern "C" int StringPool_Intern(...);
 extern "C" int StringPool_Allocate(...);
-extern "C" int Matrix44_GetTranslation(...);
+extern "C" int igMatrix44f_GetTranslation(...);
 extern "C" int bePadManager_GetPadForPlayer(int, int);
 extern "C" int beTargetObj_SelectTarget(int, int *, int *);
 extern "C" float beTargetObj_GetTargetDistanceSq(...);
@@ -40,7 +40,7 @@ extern "C" int BKCHIPSTAGE[4];
 extern "C" int BKCHIPPOS[4];
 extern "C" int g_propertyNameField[4];
 extern "C" int g_stringPool[4];
-extern "C" int g_defaultAllocatorSelector[4];
+extern "C" int kIGMemoryPoolHandleUser1[4];
 extern "C" unsigned char g_useOwnerAllocator;
 /* matching construct: Rel::go and Str::release inline the retail refcount releases */
 struct Rel { static inline void go(igObject *object) {
@@ -97,7 +97,7 @@ struct RamDataList { static inline void Ensure(beBaseInfoRam *ram) {
         if (g_useOwnerAllocator != 0) {
             a = alloc;
         } else {
-            a = Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
+            a = Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
         }
         igSmartPointer<igObject> list(beBaseInfoDataList_Create(a));
         igObject *s0 = list.p;
@@ -158,7 +158,7 @@ void Gap__Bec__beNDMWMdlPlayer2__vfunc_36(beNDMWMdlPlayer2 *arg0, beBaseInfoRam 
         if (g_useOwnerAllocator != 0) {
             a = alloc;
         } else {
-            a = Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
+            a = Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
         }
         ValueRef value(FUN_003bf560(a));
         igObject *n = value.p;
@@ -192,7 +192,7 @@ void Gap__Bec__beNDMWMdlPlayer2__vfunc_36(beNDMWMdlPlayer2 *arg0, beBaseInfoRam 
             *e = (int)name.p;
         }
     }
-    Matrix44_GetTranslation(r->f16 + 32, &t);
+    igMatrix44f_GetTranslation(r->f16 + 32, &t);
     {
         float *v = &t.x;
         igFloatList *l = (igFloatList *)s3->_data;
@@ -232,7 +232,7 @@ void Gap__Bec__beNDMWMdlPlayer2__vfunc_38(MdlPlayer2VirtualShim *arg0, beBaseInf
         if (g_useOwnerAllocator != 0) {
             a = alloc;
         } else {
-            a = Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
+            a = Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
         }
         igSmartPointer<igObject> created(beBaseInfoDataList_Create(a));
         igObject *s0 = created.p;

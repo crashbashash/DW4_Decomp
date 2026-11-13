@@ -45,12 +45,12 @@ original source.
 
 ## Not reproducible from plain source
 
-`strcmp` was written in assembly and is built from its `.S` source. `Matrix44_Copy` does not yield to the
+`strcmp` was written in assembly and is built from its `.S` source. `igMatrix44f_Copy` does not yield to the
 register-colouring lessons above and needs inline assembly to reproduce, which is not recovered source.
 
 - **`strcmp` (324 bytes).** newlib's R5900 `strcmp.S`, built from `src/newlib/strcmp.S` as owner-approved
   hand-written assembly ([assembly sources](../engine/assembly-sources.md)).
-- **`Matrix44_Copy` (188 bytes).** The scalar path and the alignment test match. The aligned path differs only in the four-quad block:
+- **`igMatrix44f_Copy` (188 bytes).** The scalar path and the alignment test match. The aligned path differs only in the four-quad block:
   retail loads `lq a2,0 / a3,16 / t0,32 / t1,48` and stores `sq a2 / a3 / t0`, branches, then `sq t1`; the best C (`__int128` temporaries,
   all 576 load/store orders, struct copies, pointer increments, volatile, pragmas, 2.3.3 to 3.0 builds) loads the first-stored quad last
   into `v1`. The compiler colours in virtual-register order and tries `v1` and `a1` first; retail's `a2, a3, t0, t1` only appears if the

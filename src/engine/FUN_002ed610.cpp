@@ -60,7 +60,7 @@ extern char DAT_004f92f0[], DAT_004f95c8[], text_0x_0_x[], text_0x_08x_2[], text
     text_014lx[], text_016lx[];
 extern unsigned char g_useOwnerAllocator;
 extern int DAT_00587028[], g_temporaryAllocatorSelector[];
-extern SystemAllocator *DAT_00587218[4];
+extern SystemAllocator *g_activeSystemAllocator[4];
 
 void *FUN_002ed1e0(int, unsigned int size, igMemoryPool *pool);
 }

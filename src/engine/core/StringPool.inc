@@ -8,7 +8,7 @@ struct S_2eadf0 *StringPool_Construct(struct S_2eadf0 *arg0) {
     arg0->f8 = 0x4000;
     arg0->f12 = 0;
     var_v0 = arg0->f12;
-    var_v0 = g_useOwnerAllocator != 0 ? var_v0 : (int)((void **)Memory_GetAllocatorBySelector(g_memoryContextString));
+    var_v0 = g_useOwnerAllocator != 0 ? var_v0 : (int)((void **)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleString));
     arg0->f12 = var_v0;
     if (arg0->f12 == 0) {
         arg0->f12 = ((int)Memory_GetDefaultAllocator());
@@ -69,14 +69,14 @@ int StringPool_Intern(StringPool *pool, const char *name)
 void * StringPool_Allocate(int arg0) {
     void **temp_v0;
 
-    temp_v0 = (void **)(((void **)Memory_GetAllocatorBySelector(g_memoryContextString)));
+    temp_v0 = (void **)(((void **)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleString)));
     return (void *)(((DW4VC_216_1 *)(temp_v0))->vX((int)(arg0)));
 }
 
 void FUN_002eb050(int arg0) {
     void **temp_v0;
 
-    temp_v0 = (void **)(((void **)Memory_GetAllocatorBySelector(g_memoryContextString)));
+    temp_v0 = (void **)(((void **)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleString)));
     ((DW4VC_264_1 *)(temp_v0))->vX((int)(arg0));
 }
 

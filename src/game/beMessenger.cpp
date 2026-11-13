@@ -33,14 +33,14 @@ const char *StringPool_Intern(void *, const char *);
 void StringChunk_ReleaseHeader(int, void *);
 void StringList_CopyRetained(void *, void *, int);
 void StringList_AppendRetained(void *, const StringRef &);
-void Matrix44_Copy(void *, void *);
+void igMatrix44f_Copy(void *, void *);
 int __dl__FPv(void *);
 
 extern void *g_stringPool[4];
-extern int g_defaultAllocatorSelector[4];
+extern int kIGMemoryPoolHandleUser1[4];
 extern int g_propertyNameField[4];
 extern unsigned char g_useOwnerAllocator;
-extern int g_statusSucceeded[4];
+extern int g_resultSuccess[4];
 extern int DAT_0058a4e0[4];
 extern int DAT_0058a4f0[4];
 extern int DAT_0058a530[4];
@@ -182,7 +182,7 @@ public:
 };
 
 #define ALLOC(var) \
-    { var = igObject_GetAllocator(arg0); var = g_useOwnerAllocator ? var : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]); }
+    { var = igObject_GetAllocator(arg0); var = g_useOwnerAllocator ? var : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]); }
 
 template <class Ref> static inline void storeAt(const int &list, int i, const Ref &slot) {
     igObject *cur = slot.p;
@@ -480,7 +480,7 @@ int beMessenger_ResolveEnumValue(beMessenger *self, int arg1, int arg2) {
         return DAT_0058a530[0];
     }
     igMetaEnum_GetValueByName(&found, arg1, arg2, &value);
-    if (*(int *)(unsigned)&found == g_statusSucceeded[0]) {
+    if (*(int *)(unsigned)&found == g_resultSuccess[0]) {
         DAT_0058a4e0[0] = arg1;
         strcpy(&DAT_0058a4f0[0], arg2);
         DAT_0058a530[0] = value;
@@ -514,7 +514,7 @@ void beMessenger_RegisterReceiver(beMessenger *self, void *recv, const char *nam
     RETAIN_REF(grp.p)
     if (grp.p == 0) {
         allocator = igObject_GetAllocator(self);
-        allocator = g_useOwnerAllocator ? allocator : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
+        allocator = g_useOwnerAllocator ? allocator : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
         RELEASE_REF(grp.p)
         grp.p = (beMessengerGroup *)beMessengerGroup_Create(allocator);
         igNamedObject_SetName(grp.p, name);
@@ -875,7 +875,7 @@ void beMessenger_PrepareDelayedSelection(beMessenger *self, const char *group, c
     RETAIN_REF(row.p)
     if (((beMessengerDelay *)row.p)->_isUse) {
         allocator = igObject_GetAllocator(self);
-        allocator = g_useOwnerAllocator ? allocator : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
+        allocator = g_useOwnerAllocator ? allocator : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
         RELEASE_REF(row.p)
         row.p = (igObject *)beMessengerDelay_Create(allocator);
         ObjectList_AppendRetained((void *)self->_delayStack, row.p);
@@ -1272,12 +1272,12 @@ void beMessenger_AppendMatrix(beMessenger *self, void *value)
         list->_count = index + 1;
     else
         List_Resize(list, index + 1, 64);
-    Matrix44_Copy((char *)list->_data + index * 64, value);
+    igMatrix44f_Copy((char *)list->_data + index * 64, value);
 }
 
 void beMessenger_GetMatrix(void *out, beMessenger *self, int index)
 {
-    Matrix44_Copy(out, (void *)(((igMatrix44fList *)((beMessengerArgData *)self->_argData)->_matrix44fList)->_data + index * 64));
+    igMatrix44f_Copy(out, (void *)(((igMatrix44fList *)((beMessengerArgData *)self->_argData)->_matrix44fList)->_data + index * 64));
 }
 
 int beMessenger_GetObjectCount(beMessenger *self) {

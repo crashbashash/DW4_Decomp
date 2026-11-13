@@ -76,7 +76,7 @@ void FUN_002dc9c0(void) {
 
 int FUN_002dca20(void) {
     if ((((int *)DAT_00586df8)[0] == 0) && (g_igErrorHandler_metaObject[0] != 0) && (DAT_00554bfc == 0)) {
-        ((int *)DAT_00586df8)[0] = FUN_002c5e10(((int)Memory_GetAllocatorBySelector(g_memoryContextSystem)));
+        ((int *)DAT_00586df8)[0] = FUN_002c5e10(((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem)));
     }
     return ((int *)DAT_00586df8)[0];
 }

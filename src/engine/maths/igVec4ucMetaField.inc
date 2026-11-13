@@ -76,7 +76,7 @@ void FUN_00187190(void) {
     int len;
 
     if (DAT_00560f30[0] == 0) {
-        DAT_00560f30[0] = igMetaObject_CreateInstance(g_igVec4ucMetaField_metaObject[0], Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
+        DAT_00560f30[0] = igMetaObject_CreateInstance(g_igVec4ucMetaField_metaObject[0], Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
         temp_s0 = DAT_00560f30[0];
         if (temp_s0 != 0) {
             MetaRefList_AppendRetained(FUN_002fc250(), temp_s0);

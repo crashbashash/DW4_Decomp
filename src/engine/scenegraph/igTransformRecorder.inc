@@ -1,6 +1,6 @@
 igMetaObject *FUN_001957c0(void) {
     if (g_igTransformRecorder_metaObject[0] == 0) {
-        g_igTransformRecorder_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
+        g_igTransformRecorder_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
     return g_igTransformRecorder_metaObject[0];
 }

@@ -56,7 +56,7 @@ extern "C" int NAME[4];
 extern "C" int CHRSELFONT04[4];
 extern "C" int percent_d_4[4];
 extern "C" int CHRSELFONT05[4];
-extern "C" int g_defaultAllocatorSelector[4];
+extern "C" int kIGMemoryPoolHandleUser1[4];
 extern "C" unsigned char g_useOwnerAllocator;
 extern "C" void beNDMWLoadIntf2DegiState__DrawStatusText(beNDMWLoadIntf2DegiState *self);
 extern "C" void beNDMWLoadIntf2DegiState__ClearStatusText(beNDMWLoadIntf2DegiState *self);
@@ -188,7 +188,7 @@ extern "C" void beNDMWLoadIntf2SelSlot__RefreshSlotMarks(beNDMWLoadIntf2SelSlot 
 extern "C" beLoadIntf2ComMdlData *beLoadIntf2ComMdlData__Create(int allocator);
 extern "C" int MODELCTRL[4];
 extern "C" int GENERATE[4];
-extern "C" int g_defaultAllocatorSelector[4];
+extern "C" int kIGMemoryPoolHandleUser1[4];
 /* Header in front of the text of an interned string: the owning chunk and the reference count. */
 struct StringTokenHeader {
     int owner;
@@ -288,7 +288,7 @@ static inline void NoteUseData(beNDMWLoadIntf2DegiState *self, beNDMWDegiData *d
  * characters) into status text slot nameSlot. */
 static inline void DrawName(beNDMWLoadIntf2DegiState *self, beNDMWDegiData *data, int nameSlot) {
     int allocator = igObject_GetAllocator(self);
-    igSmartPointer<beUnicodeObj> text(beUnicodeObj_Create(g_useOwnerAllocator != 0 ? allocator : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0])));
+    igSmartPointer<beUnicodeObj> text(beUnicodeObj_Create(g_useOwnerAllocator != 0 ? allocator : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0])));
     beUnicodeObj_AllocateBuffer(text.p, 8);
     unsigned short *dst = (unsigned short *)text.p->_buffer;
     const unsigned short *name = data->_dmNameUni;
@@ -444,7 +444,7 @@ extern "C" int BASE2CURRENT[4];
 extern "C" int RECALCPLAYER[4];
 extern "C" char hostLoad_lua[];
 extern "C" int g_propertyNameField[4];
-extern "C" int g_ndmwAllocatorSelector[4];
+extern "C" int kIGMemoryPoolHandleUser0[4];
 extern "C" int g_bePadManager_metaObject[4];
 extern "C" int g_beLua_metaObject[4];
 extern "C" int g_beFont_metaObject[4];
@@ -461,7 +461,7 @@ public:
 struct FreshDataList {
   static ObjectRefTarget **Assign(void *slot, int allocator) {
     NewDataListRef created(
-        AllocatorValue_Make_003e9360(Memory_SelectAllocator_003e9370(g_defaultAllocatorSelector, allocator)));
+        AllocatorValue_Make_003e9360(Memory_SelectAllocator_003e9370(kIGMemoryPoolHandleUser1, allocator)));
     return ObjectRef_Assign_003e92b0((ObjectRefTarget **)slot, (ObjectRefTarget **)&created);
   }
 };
@@ -1477,7 +1477,7 @@ extern "C" void beNDMWLoadIntf2__Update(beNDMWLoadIntf2 *self, beBaseInfoRam *ho
           break;
         case 1:
           if ((beNDMWLoadIntf2DataSelIntf__CloseAll(dataSelection, 0) & 0xFF) == 1) {
-            int allocator = SelectAllocator(g_defaultAllocatorSelector, igObject_GetAllocator(self));
+            int allocator = SelectAllocator(kIGMemoryPoolHandleUser1, igObject_GetAllocator(self));
             {
               DegiDataRef freshData(beNDMWDegiData_Create(allocator));
               ObjectList_SetAtRetained_003e9160((igDataList *)common->_gameUseData, host->_ramNo, (ObjectRefTarget *)freshData.value);
@@ -1504,7 +1504,7 @@ extern "C" void beNDMWLoadIntf2__Update(beNDMWLoadIntf2 *self, beBaseInfoRam *ho
             if (control->_isRdyCancel == 1) {
               if (control->_isNewMake == 1) {
                 RequestGameRam(self, host, GAMEDATAINIT);
-                int allocator = SelectAllocator(g_ndmwAllocatorSelector, igObject_GetAllocator(self));
+                int allocator = SelectAllocator(kIGMemoryPoolHandleUser0, igObject_GetAllocator(self));
                 beUnicodeObj *nameObject = beUnicodeObj_Create(allocator);
                 {
                   igSmartPointer<beUnicodeObj> nameRef(nameObject);
@@ -1583,7 +1583,7 @@ extern "C" void beNDMWLoadIntf2__Update(beNDMWLoadIntf2 *self, beBaseInfoRam *ho
           case 1:
             if ((beNDMWLoadIntf2Diffselect__Update(difficulty, HostWork(common, host)->_isCtrl) & 0xFF) == 1) {
               if (difficulty->_isCancel == 1) {
-                int allocator = SelectAllocator(g_defaultAllocatorSelector, igObject_GetAllocator(self));
+                int allocator = SelectAllocator(kIGMemoryPoolHandleUser1, igObject_GetAllocator(self));
                 {
                   DegiDataRef freshData(beNDMWDegiData_Create(allocator));
                   ObjectList_SetAtRetained_003e9160((igDataList *)common->_gameUseData, host->_ramNo, (ObjectRefTarget *)freshData.value);
@@ -1687,7 +1687,7 @@ extern "C" void beNDMWLoadIntf2__Update(beNDMWLoadIntf2 *self, beBaseInfoRam *ho
               EnterState(control, LOAD_SCREEN_NAME);
               beNDMWLoadIntf2NameSel__Init(nameEntry, 0);
             } else {
-              int allocator = SelectAllocator(g_defaultAllocatorSelector, igObject_GetAllocator(self));
+              int allocator = SelectAllocator(kIGMemoryPoolHandleUser1, igObject_GetAllocator(self));
               {
                 DegiDataRef freshData(beNDMWDegiData_Create(allocator));
                 ObjectList_SetAtRetained_003e9160((igDataList *)common->_gameUseData, host->_ramNo, (ObjectRefTarget *)freshData.value);
@@ -2464,7 +2464,7 @@ static inline void RequestPrompt(beNDMWLoadIntf2DataSelIntf *self, int mesWin, i
 /* A text object for the selector's windows, from the selector's allocator. */
 static inline beUnicodeObj *CreateUnicodeText(beNDMWLoadIntf2DataSelIntf *self) {
     int allocator = igObject_GetAllocator(self);
-    allocator = g_useOwnerAllocator ? allocator : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
+    allocator = g_useOwnerAllocator ? allocator : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
     return beUnicodeObj_Create(allocator);
 }
 
@@ -3347,7 +3347,7 @@ void beNDMWLoadIntf2NameSel__Init(beNDMWLoadIntf2NameSel *nameSel, unsigned char
  * g_useOwnerAllocator is set. */
 static inline beUnicodeObj *NameSelNewLetterText(beNDMWLoadIntf2NameSel *nameSel) {
     int allocator = igObject_GetAllocator(nameSel);
-    allocator = g_useOwnerAllocator ? allocator : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
+    allocator = g_useOwnerAllocator ? allocator : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
     return beUnicodeObj_Create(allocator);
 }
 
@@ -4632,7 +4632,7 @@ static inline int OwnerAllocator(void *owner) {
     if (g_useOwnerAllocator != 0) {
         return ownAllocator;
     }
-    return Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
+    return Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
 }
 
 /* The model request at `index` of one of the controller's queues. */

@@ -6,7 +6,7 @@ extern "C" int Memory_GetAllocatorBySelector(int selector);
 extern "C" void igInsightCore_AddManager(igInsightCore *core, int manager);
 extern "C" void igInsightCore_RemoveManager(igInsightCore *core, int manager);
 extern "C" unsigned char g_useOwnerAllocator;
-extern "C" int g_ndmwAllocatorSelector[4];
+extern "C" int kIGMemoryPoolHandleUser0[4];
 extern "C" int g_libNdmwRuntimePlugin_metaObject[4];
 extern "C" int beNDMWAfsSetup_CreateInstance(int allocator);
 extern "C" int beNDMWStageCtl_CreateInstance(int allocator);
@@ -35,7 +35,7 @@ extern "C" int beNDMWMdlMapCursor_CreateInstance(int allocator);
  * then adds each manager that exists to the core. vfunc_22 removes them again. */
 static inline int PluginAllocator(libNdmwRuntimePlugin *plugin) {
     int allocator = igObject_GetAllocator(plugin);
-    return g_useOwnerAllocator != 0 ? allocator : Memory_GetAllocatorBySelector(g_ndmwAllocatorSelector[0]);
+    return g_useOwnerAllocator != 0 ? allocator : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser0[0]);
 }
 
 static inline void ReleaseRef(int field) {

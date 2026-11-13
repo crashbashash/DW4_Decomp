@@ -16,7 +16,7 @@ struct TextureCtrlWork { char header[8]; int f8; int f12; };
 /* The _work object: two list handles at +8 and +12. */
 struct TextureCtrlSource { char pad[12]; struct TextureCtrlSource *f12; char pad1[12]; unsigned char f28; char pad2[3]; igObjectList *f32; };
 extern "C" struct TextureCtrlWork *FUN_00342630(int);
-extern "C" int g_defaultAllocatorSelector[4];
+extern "C" int kIGMemoryPoolHandleUser1[4];
 extern "C" unsigned char g_useOwnerAllocator;
 extern "C" void Gap__Bec__beTextureCtrl__vfunc_29(beTextureCtrl *arg0, struct TextureCtrlSource *arg1);
 /* matching construct: dummy-virtual class supplies the retail vtable slot offsets for the virtual calls */
@@ -63,7 +63,7 @@ void Gap__Bec__beTextureCtrl__vfunc_29(beTextureCtrl *arg0, struct TextureCtrlSo
         if (g_useOwnerAllocator != 0) {
             var_v0 = (int)var_v0;
         } else {
-            var_v0 = Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
+            var_v0 = Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
         }
         old = (igObject *)arg0->_work;
         if (old != 0) {
@@ -138,7 +138,7 @@ void Gap__Bec__beTextureCtrl__vfunc_31(beTextureCtrl *arg0, beBaseInfoRam *arg1)
                     p = igProperty_FindByName(x->_textureList, g_propertyNameField[0], a2);
                     if (p != 0) {
                         var_v0 = igObject_GetAllocator(arg0);
-                        var_v0 = g_useOwnerAllocator ? var_v0 : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
+                        var_v0 = g_useOwnerAllocator ? var_v0 : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
                         igSmartPointer<NewObjectVirtual> attr(FUN_00132810(var_v0));
                         attr.p->v132(p->f12);
                         s3 = (igAttrSet *)s1->_attrSet;

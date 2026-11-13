@@ -1,6 +1,6 @@
 igMetaObject *beBaseInfoRamList_GetOrCreateMetaObject(void) {
     if (g_beBaseInfoRamList_metaObject[0] == 0) {
-        g_beBaseInfoRamList_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
+        g_beBaseInfoRamList_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
     return g_beBaseInfoRamList_metaObject[0];
 }

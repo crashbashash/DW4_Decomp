@@ -1,6 +1,6 @@
 igMetaObject *FUN_0019b440(void) {
     if (g_igProjectiveShadowShader_metaObject[0] == 0) {
-        g_igProjectiveShadowShader_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
+        g_igProjectiveShadowShader_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
     return g_igProjectiveShadowShader_metaObject[0];
 }

@@ -86,7 +86,7 @@ int FUN_0015cb60(O_15cb50 *arg0, A1 *arg1, int *arg2, unsigned int arg3, int arg
     s6 = arg3 * 6;
     arg4 = arg0->f24->v96((int *)&sp9C, s6, arg4, 0);
     s5 = arg3 * 12;
-    arg0->f24->f8->f64 = ((Al *)Memory_GetAllocatorBySelector(DAT_00587020[0]))->v216(s5);
+    arg0->f24->f8->f64 = ((Al *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleDefault[0]))->v216(s5);
     t = 0xFF & ((unsigned int)(*arg2 & 0x300000) >> 0x14);
     arg4 = s5 + arg4;
     if (t != 0) {
@@ -158,7 +158,7 @@ void FUN_0015ce90(OO *arg0) {
         ((DW4VC_812_2 *)(arg0->f20))->vX(0, (char *)arg0 + 0xA8);
         return;
     }
-    Matrix44_Copy((float *)((int)arg0 + 0xE8), (float *)((int)arg0 + 0x28));
+    igMatrix44f_Copy((float *)((int)arg0 + 0xE8), (float *)((int)arg0 + 0x28));
 }
 
 void FUN_0015cfb0(Y *arg0) {

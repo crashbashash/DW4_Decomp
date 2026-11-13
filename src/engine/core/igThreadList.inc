@@ -1,6 +1,6 @@
 igMetaObject *FUN_002b8390(void) {
     if (g_igThreadList_metaObject[0] == 0) {
-        g_igThreadList_metaObject[0] = (igMetaObject *)igMetaObject_Create(((int)Memory_GetAllocatorBySelector(g_memoryContextMetaData)));
+        g_igThreadList_metaObject[0] = (igMetaObject *)igMetaObject_Create(((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData)));
     }
     return g_igThreadList_metaObject[0];
 }

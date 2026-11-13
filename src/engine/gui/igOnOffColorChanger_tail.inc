@@ -26,28 +26,28 @@ void igDefaultAspectElement_PlaceGeometry(igDefaultAspectElement *self, const ig
     case 0: {
         igMatrix44f_SetIdentity(m);
         igVec3f t(self->_hMargin, y, 0.0f);
-        Matrix44_SetTranslation(m, &t);
+        igMatrix44f_SetTranslation(m, &t);
         ((Obj_456b80 *)self->_transform)->vX(m);
         break;
     }
     case 2: {
         igMatrix44f_SetIdentity(m);
         igVec3f t(size->x - width, y, 0.0f);
-        Matrix44_SetTranslation(m, &t);
+        igMatrix44f_SetTranslation(m, &t);
         ((Obj_456b80 *)self->_transform)->vX(m);
         break;
     }
     case 1: {
         igMatrix44f_SetIdentity(m);
         igVec3f t((size->x - width) / 2.0f, y, 0.0f);
-        Matrix44_SetTranslation(m, &t);
+        igMatrix44f_SetTranslation(m, &t);
         ((Obj_456b80 *)self->_transform)->vX(m);
         break;
     }
     case 3: {
         igMatrix44f_SetIdentity(m);
         igVec3f t(self->_hMargin, self->_vMargin, 0.0f);
-        Matrix44_SetTranslation(m, &t);
+        igMatrix44f_SetTranslation(m, &t);
         ((Obj_456b80 *)self->_transform)->vX(m);
         /* matching construct: hand variant — reading the width into a local first gives retail's register choice. */
         float areaWidth = size->x;

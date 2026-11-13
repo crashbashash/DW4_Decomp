@@ -191,7 +191,7 @@ extern "C" void igVisualContext_CreateInstance(int arg0);
 extern "C" igMetaObject* igMetaObject_Create(...);
 extern "C" void** Memory_GetAllocatorBySelector(...);
 extern "C" igMetaObject *g_igVisualContext_metaObject[4];
-extern "C" int g_metadataAllocatorKey[4];
+extern "C" int kIGMemoryPoolHandleMetaData[4];
 extern "C" igMetaObject *FUN_0014a040(void);
 extern "C" igMetaObject *igVisualContext_GetMetaObject(void);
 extern "C" void FUN_0014a0e0(void);
@@ -1401,7 +1401,7 @@ struct Arr { char pad[8]; int a8; int a12; int a16; void *a20; int a24; };
 extern "C" void *igFile_Create(...);
 extern "C" int igObject_GetAllocator(...);
 extern "C" int DAT_004de6c0[4];
-extern "C" int g_temporaryAllocatorSelector[4];
+extern "C" int kIGMemoryPoolHandleTemporary[4];
 extern "C" unsigned char g_useOwnerAllocator;
 class DW4VC_100_2 : public igVirtualObject { public: virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual int vX(int, int); virtual int v24(); virtual int v25(int,int,int);
   };
@@ -1453,15 +1453,15 @@ extern "C" int igStringObj_Set(...);
 extern "C" int igStringObj_ToLower(...);
 extern "C" int igStringObj_Erase(...);
 extern "C" int g_stringObjEmptyText[4];
-extern "C" int DAT_00587048[4];
+extern "C" int kIGMemoryPoolHandleString[4];
 extern "C" StringRef FUN_001554a0(int arg1);
 extern "C" int g_igObject_metaObject[4];
 extern "C" void *igObject_GetMetaObject_Virtual(void);
 typedef struct Obj_155c00 { int vt; int refs; int pad; int id; } Obj_155c00;
 typedef struct List { int vt; int r; int count; int cap; Obj_155c00 **data; } List;
 typedef struct Owner { char pad[304]; List *a; List *b; } Owner;
-extern "C" int g_statusSucceeded[4];
-extern "C" int g_allocatorFailureStatus[4];
+extern "C" int g_resultSuccess[4];
+extern "C" int g_resultFailure[4];
 #define REL(o) if(o){ --(o)->refs; if((((unsigned long long)(long long)(o)->refs)&0x7fffffULL)==0) igObject_Destroy(o);}
 extern "C" void FUN_00155c00(int *out, Owner *owner, int id);
 typedef struct Rc { int w0; int refs; } Rc;
@@ -1497,7 +1497,7 @@ extern "C" void FUN_00156340(S0_156340 *arg0, void **arg1);
 struct T_1566c0 : public igObject { };
 extern "C" int FUN_00157200(...);
 extern "C" int FUN_00159320(...);
-extern "C" int DAT_005870e8[4];
+extern "C" int kIGMemoryPoolHandleImage[4];
 class V92a { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void vX(void *, int); };
 class VA { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void d32(); virtual void d33(); virtual void d34(); virtual void d35(); virtual void d36(); virtual void d37(); virtual void d38(); virtual void d39(); virtual void d40(); virtual void d41(); virtual void d42(); virtual void d43(); virtual void d44(); virtual void d45(); virtual void d46(); virtual void d47(); virtual void d48(); virtual void d49(); virtual void d50(); virtual void d51(); virtual void d52(); virtual void *vX(int, int); };
 struct S_1566c0 { char p0[8]; int f8, f12, f16, f20, f24, f28, f32, f36, f40, f44, f48; int f52; char p56[4]; char f60; char p61[3]; int f64; T_1566c0 *f68; int f72, f76; char p80[4]; int f84; };
@@ -1867,12 +1867,12 @@ struct PointSpriteView { char pad[24]; igObject *f24; igObject *getF24() const {
 extern "C" void Gap__Bec__ParticleArray__vfunc_36(ParticleArray *arg0);
 struct OO;
 struct S4d0;
-extern "C" int Matrix44_Copy(...);
+extern "C" int igMatrix44f_Copy(...);
 extern "C" int FUN_001904f0(void*,void*,void*);
 extern "C" int FUN_00190d80(void*,float*,int);
 extern "C" int FUN_00191860(void*,float,float,float,float,float,float);
 extern "C" int FUN_00192510(void*,float*,float*,float*,float*,float*,float*);
-extern "C" int DAT_00587020[4];
+extern "C" int kIGMemoryPoolHandleDefault[4];
 extern "C" int DAT_004e0ef0[4];
 union Ref_15cb50 { int w; struct { unsigned cnt:23; unsigned f:9; } b; };
 struct Rc_15cb50 { int vt; Ref_15cb50 u; };
@@ -2634,10 +2634,10 @@ extern "C" igObjectSlotView *g_pool_00560780[4];
 extern "C" igObjectSlotView *g_pool_00560788[4];
 extern "C" igObjectSlotView *g_pool_00560790[4];
 extern "C" igObjectSlotView *g_pool_00560798[4];
-extern "C" int DAT_005870b8[4];
-extern "C" int DAT_00587068[4];
-extern "C" int DAT_00587078[4];
-extern "C" int DAT_00587058[4];
+extern "C" int kIGMemoryPoolHandleDriverData[4];
+extern "C" int kIGMemoryPoolHandleVertex[4];
+extern "C" int kIGMemoryPoolHandleTexture[4];
+extern "C" int kIGMemoryPoolHandleList[4];
 extern "C" void FUN_00164f50(igVisualContextCapabilityManager_164f50 *self);
 struct VisualContextCapabilityManager;
 struct PropertyRoot {
@@ -2656,7 +2656,7 @@ struct VisualContextCapabilityManager {
 typedef igTDataList<VisualContextCapabilityManager *> ManagerList;
 extern "C" void Gap__Core__igObject__userConstruct(VisualContextCapabilityManager *self);
 extern "C" int thunk_FUN_00306e50(...);
-extern "C" int DAT_00587038;
+extern "C" int kIGMemoryPoolHandleSystem;
 extern "C" char text_showFrameRate[];
 extern "C" char text_commandLineFrameRate[];
 extern "C" void FUN_00165a80(VisualContextCapabilityManager *self);
@@ -2692,8 +2692,8 @@ class V1 { public: virtual void a0(); virtual void a1(); virtual void a2(); virt
 class V2_165d30 { public: virtual void b0(); virtual void b1(); virtual void b2(); virtual void b3(); virtual void b4(); virtual void b5(); virtual void b6(); virtual void b7(); virtual void b8(); virtual void b9(); virtual void b10(); virtual void b11(); virtual void b12(); virtual void b13(); virtual void b14(); virtual void b15(); virtual void b16(); virtual void b17(); virtual void b18(); virtual void b19(); virtual void b20(); virtual void b21(); virtual void b22(); virtual void b23(); virtual void b24(); virtual void b25(); virtual void b26(); virtual void b27(); virtual void b28(); virtual void b29(); virtual void b30(); virtual void b31(); virtual void b32(); virtual void b33(); virtual void b34(); virtual void b35(); virtual void b36(); virtual void b37(); virtual void b38(); virtual void b39(); virtual void b40(); virtual void b41(); virtual void b42(); virtual void b43(); virtual void b44(); virtual void b45(); virtual void b46(); virtual void b47(); virtual void b48(); virtual void b49(); virtual void b50(); virtual void b51(); virtual void b52(); virtual void *v220(unsigned int, int); };
 struct O_165d30 { char p72_[72]; unsigned int f72; int f76; void *f80; int f84; unsigned int f88; };
 extern "C" int FUN_001903d0(...);
-extern "C" int Matrix44_Invert(...);
-extern "C" int Matrix44_SetTranslation(...);
+extern "C" int igMatrix44f_Invert(...);
+extern "C" int igMatrix44f_SetTranslation(...);
 extern "C" void FUN_00165d30(O_165d30 *arg0, unsigned int arg1, int arg2);
 extern "C" int FUN_00165e40(void *arg0);
 extern "C" float sqrtf(float);
@@ -3886,7 +3886,7 @@ struct S_172550 { char pad0[972]; struct N_172550 *f972; struct N_172550 *f976; 
 extern "C" int Gap__Gfx__igPsx2VisualContext__vfunc_200(struct S_172550 *arg0, int arg1);
 typedef struct L_172600 { int p0; int p4; int count; int cap; char *data; } L_172600;
 typedef struct S_172600 { char p[972]; L_172600 *l972; L_172600 *l976; L_172600 *l980; int p984; L_172600 *l988; L_172600 *l992; L_172600 *l996; L_172600 *l1000; } S_172600;
-#define PUSH(f) do { int n; L_172600 *l; int v; l = arg0->f; v = count_of_172600(l); if (v != 0) { n = l->count; if (n < l->cap) { l->count = v + 1; } else { List_Resize(l, n + 1, 64); } Matrix44_Copy(l->data + (n << 6), l->data + ((n - 1) << 6)); } } while (0)
+#define PUSH(f) do { int n; L_172600 *l; int v; l = arg0->f; v = count_of_172600(l); if (v != 0) { n = l->count; if (n < l->cap) { l->count = v + 1; } else { List_Resize(l, n + 1, 64); } igMatrix44f_Copy(l->data + (n << 6), l->data + ((n - 1) << 6)); } } while (0)
 extern "C" void Gap__Gfx__igPsx2VisualContext__vfunc_201(S_172600 *arg0, int arg1);
 typedef struct Mat_172910 { float m[16]; } Mat_172910;
 typedef struct Obj_172910 { char pad[972]; Stk *s[8]; } Obj_172910;
@@ -3902,9 +3902,9 @@ typedef struct O_172b00 { char pad[972]; St_172b00 *s972; St_172b00 *s976; St_17
         n1 = n + 1; \
         if (n < s->cap) s->n = n_of(s) + 1; \
         else List_Resize(s, n1, 0x40); \
-        Matrix44_Copy(s->data + (n << 6), m); \
+        igMatrix44f_Copy(s->data + (n << 6), m); \
     } else { \
-        Matrix44_Copy(s->data + ((n_of(s) - 1) << 6), m); \
+        igMatrix44f_Copy(s->data + ((n_of(s) - 1) << 6), m); \
     } }
 #define SETB(l, m) { \
     int n; \
@@ -3915,9 +3915,9 @@ typedef struct O_172b00 { char pad[972]; St_172b00 *s972; St_172b00 *s976; St_17
         n1 = n + 1; \
         if (n < s->cap) s->n = n_of(s) + 1; \
         else List_Resize(s, n1, 0x40); \
-        Matrix44_Copy(s->data + (n << 6), m); \
+        igMatrix44f_Copy(s->data + (n << 6), m); \
     } else { \
-        Matrix44_Copy(s->data + ((n_of(s) - 1) << 6), m); \
+        igMatrix44f_Copy(s->data + ((n_of(s) - 1) << 6), m); \
     } }
 extern "C" void Gap__Gfx__igPsx2VisualContext__vfunc_203(O_172b00 *arg0, int arg1, char *arg2);
 struct Slot { int p0; int p1; int cnt; int p3; char *data; };

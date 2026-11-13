@@ -5,7 +5,7 @@ void * FUN_002c37e0(int arg0) {
 
 int FUN_002c3820(void) {
     if (((int *)g_igIGBFile_metaObject)[0] == 0) {
-        ((int *)g_igIGBFile_metaObject)[0] = (int)igMetaObject_Create(((int)Memory_GetAllocatorBySelector(g_memoryContextMetaData)));
+        ((int *)g_igIGBFile_metaObject)[0] = (int)igMetaObject_Create(((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData)));
     }
     return ((int *)g_igIGBFile_metaObject)[0];
 }

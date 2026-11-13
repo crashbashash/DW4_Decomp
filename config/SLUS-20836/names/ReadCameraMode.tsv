@@ -16,11 +16,11 @@
 0x00466cd0	igFlyMode_GetMeta	engine
 0x00466ce0	igCameraMode_GetMeta	engine
 0x00466cf0	igViewMode_GetMeta	engine
-0x00191f30	Matrix44_Invert	engine
-0x00191e30	Matrix44_InvertOrthonormal	engine
-0x00190ed0	Matrix44_MakeEulerRotation	engine
-0x00191230	Matrix44_GetEulerAngles	engine
-0x00191b10	Matrix44_MakeLookAt	engine
+0x00191f30	igMatrix44f_Invert	engine
+0x00191e30	igMatrix44f_InvertOrthonormal	engine
+0x00190ed0	igMatrix44f_MakeEulerRotation	engine
+0x00191230	igMatrix44f_GetEulerAngles	engine
+0x00191b10	igMatrix44f_MakeLookAt	engine
 0x001c5b30	igGraphPath_GetTransform	engine
 0x001c5790	igGraphPath_SetNodes	engine
 0x0019f630	igGraphPath_Create	engine

@@ -327,11 +327,11 @@ int Gap__Core__igObject__vfunc_32(ObjectListOwner *self, igObject *object) {
         int result;
         if (index >= 0) {
             List_RemoveWordAt(list, index);
-            result = g_statusSucceeded[0];
+            result = g_resultSuccess[0];
         } else {
-            result = g_allocatorFailureStatus[0];
+            result = g_resultFailure[0];
         }
-        return result == g_statusSucceeded[0];
+        return result == g_resultSuccess[0];
     }
     return 0;
 }

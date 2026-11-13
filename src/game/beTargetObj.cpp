@@ -8,8 +8,8 @@ extern "C" int igInsightCore_FindManager(int insight, int metaObject);
 extern "C" void Vec3f_TransformDirection(float *out, int *vector, float *matrix);
 extern "C" int List_Reserve(void *list, int count, int elementSize);
 extern "C" int List_Resize(void *list, int count, int elementSize);
-extern "C" void Matrix44_GetTranslation(float *matrix, float *out);
-extern "C" void Matrix44_Copy(float *dst, float *src);
+extern "C" void igMatrix44f_GetTranslation(float *matrix, float *out);
+extern "C" void igMatrix44f_Copy(float *dst, float *src);
 extern "C" int beMessenger_GetInt(beMessenger *messenger, int index);
 extern "C" void beMessenger_GetMatrix(float *out, beMessenger *messenger, int index);
 extern "C" int beMessenger_GetMatrixCount(beMessenger *messenger);
@@ -115,7 +115,7 @@ extern "C" void beTargetObj_GatherPositions(beTargetObj *self, igVec3fList *posi
     count = beMessenger_GetMatrixCount(g_targetMessenger);
     for (i = 0; i < count; i++) {
         beMessenger_GetMatrix(matrix, g_targetMessenger, i);
-        Matrix44_GetTranslation(matrix, position);
+        igMatrix44f_GetTranslation(matrix, position);
         n = positions->_count;
         if (n < positions->_capacity) {
             positions->_count = n + 1;
@@ -321,8 +321,8 @@ extern "C" int beTargetObj_SelectTarget(float *matrix, const char *group, const 
     igVec3f enemyFrom;
     int nearest;
 
-    Matrix44_Copy(g_targetOriginMatrix.m, matrix);
-    Matrix44_GetTranslation(matrix, (float *)&origin);
+    igMatrix44f_Copy(g_targetOriginMatrix.m, matrix);
+    igMatrix44f_GetTranslation(matrix, (float *)&origin);
     g_targetOrigin.x = origin.x;
     g_targetOrigin.y = origin.y;
     g_targetOrigin.z = origin.z;
@@ -349,11 +349,11 @@ extern "C" int beTargetObj_SetTarget(float *matrix, float *position)
     float origin[3];
     float dx, dy, dz;
 
-    Matrix44_GetTranslation(matrix, origin);
+    igMatrix44f_GetTranslation(matrix, origin);
     g_targetOrigin.x = origin[0];
     g_targetOrigin.y = origin[1];
     g_targetOrigin.z = origin[2];
-    Matrix44_Copy(g_targetOriginMatrix.m, matrix);
+    igMatrix44f_Copy(g_targetOriginMatrix.m, matrix);
     g_targetOriginHeading = TARGET_HEADING_UNSET;
     g_targetPosition.x = position[0];
     g_targetPosition.y = position[1];

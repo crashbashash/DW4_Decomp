@@ -55,8 +55,8 @@ int strcmp(const char *, const char *);
 int strcpy(char *, int);
 int memcpy(char *, char *, int);
 
-extern int g_statusSucceeded[4];
-extern int g_allocatorFailureStatus[4];
+extern int g_resultSuccess[4];
+extern int g_resultFailure[4];
 extern int g_igAdxFile_metaObject[4];
 extern const char DAT_00500060[8]; /* "rb" */
 extern const char DAT_00500068[8]; /* "r" */
@@ -66,7 +66,7 @@ extern unsigned char g_igAdxFile_ignoreWriteWarning;
 extern unsigned char g_igAdxFile_ignoreOpenModeWarning;
 }
 
-inline bool igResult::succeeded() { return value == g_statusSucceeded[0]; }
+inline bool igResult::succeeded() { return value == g_resultSuccess[0]; }
 
 /* The two igAdxFile virtuals the class calls on itself: the meta-object getter (slot 20,
  * Gap::igAdxFile::vfunc_20) and open (slot 21, Gap::igAdxFile::vfunc_21). */
@@ -181,11 +181,11 @@ void Gap__igAdxFile__vfunc_21(igResult *result, igAdxFile *self, OpenMode mode)
     igAdxAfsFile *entry;
 
     if (GPR_00554de8 == 0) {
-        result->value = g_allocatorFailureStatus[0];
+        result->value = g_resultFailure[0];
         return;
     }
     if (self->_bIsOpen) {
-        result->value = g_statusSucceeded[0];
+        result->value = g_resultSuccess[0];
         return;
     }
     if (mode == kDefaultOpenMode) {
@@ -215,7 +215,7 @@ void Gap__igAdxFile__vfunc_21(igResult *result, igAdxFile *self, OpenMode mode)
                 g_igAdxFile_ignoreWriteWarning = 1;
             }
         }
-        result->value = g_allocatorFailureStatus[0];
+        result->value = g_resultFailure[0];
         return;
     default:
         if (!g_igAdxFile_ignoreOpenModeWarning) {
@@ -225,7 +225,7 @@ void Gap__igAdxFile__vfunc_21(igResult *result, igAdxFile *self, OpenMode mode)
                 g_igAdxFile_ignoreOpenModeWarning = 1;
             }
         }
-        result->value = g_allocatorFailureStatus[0];
+        result->value = g_resultFailure[0];
         return;
     case kReadBinary:
     open:
@@ -238,11 +238,11 @@ void Gap__igAdxFile__vfunc_21(igResult *result, igAdxFile *self, OpenMode mode)
             self->_adxf = ADXF_Open(fileName, 0);
         }
         if (self->_adxf == 0) {
-            result->value = g_allocatorFailureStatus[0];
+            result->value = g_resultFailure[0];
             return;
         }
         self->_bIsOpen = 1;
-        result->value = g_statusSucceeded[0];
+        result->value = g_resultSuccess[0];
         return;
     }
 }

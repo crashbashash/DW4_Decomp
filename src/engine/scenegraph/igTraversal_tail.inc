@@ -34,7 +34,7 @@ void Gap__Sg__igTraversal__vfunc_09(A_1e0380 *arg0, int arg1) {
 }
 
 void FUN_001e0410(void) {
-    ((int *)DAT_00562a38)[0] = FUN_0019a6e0(Memory_GetAllocatorBySelector(DAT_00587038[0]));
+    ((int *)DAT_00562a38)[0] = FUN_0019a6e0(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem[0]));
     FUN_00306e50(*(int *)((char *)g_objectSystem[0] + 56), 7, text_useScratchPadForTraversal, &GPR_00554bac, GPR_00554bac, 1);
 }
 

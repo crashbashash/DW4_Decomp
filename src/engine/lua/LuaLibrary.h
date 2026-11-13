@@ -24,7 +24,7 @@ extern "C" int Memory_GetAllocatorBySelector(int key);
 /* The object system's byte offset of the vtable word inside an object. */
 struct ObjectSystem { char pad[916]; int vtableOffset; };
 extern "C" ObjectSystem *g_objectSystem[4];
-extern "C" int g_metadataAllocatorKey[4];
+extern "C" int kIGMemoryPoolHandleMetaData[4];
 
 extern "C" void *igObject_Register(void);
 extern "C" void *igObject_GetMetaObject_ParentAccessor(void);
@@ -987,7 +987,7 @@ extern "C" int g_threadLocalNextSlot;
 extern "C" LuaSemaphoreView *g_threadLocalSemaphore;
 extern "C" const char *g_luaErrorNames[];
 extern "C" unsigned char g_useOwnerAllocator;
-extern "C" int g_defaultAllocatorKey;
+extern "C" int kIGMemoryPoolHandleLevel;
 extern "C" igObject *igObject_GetAllocator(void *object);
 
 /* LuaState.cpp */

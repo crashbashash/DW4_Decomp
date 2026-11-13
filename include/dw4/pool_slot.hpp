@@ -14,7 +14,7 @@ public:
 
 extern "C" {
 extern unsigned char g_useOwnerAllocator;
-extern int DAT_00587020[4];
+extern int kIGMemoryPoolHandleDefault[4];
 extern void igObject_Destroy(igObjectSlotView *o);
 extern igObjectSlotView *igObject_GetAllocator(void *self);
 extern igObjectSlotView *Memory_GetAllocatorBySelector(int selector);
@@ -43,7 +43,7 @@ static inline void fill_pool_slot(void *self, igObjectSlotView **slot, igObjectS
     } else {
         igObjectSlotView *a = igObject_GetAllocator(self);
         a = g_useOwnerAllocator != 0 ? a : Memory_GetAllocatorBySelector(selector[0]);
-        if (a != Memory_GetAllocatorBySelector(DAT_00587020[0])) {
+        if (a != Memory_GetAllocatorBySelector(kIGMemoryPoolHandleDefault[0])) {
             p = igObject_GetAllocator(self);
             p = g_useOwnerAllocator != 0 ? p : Memory_GetAllocatorBySelector(selector[0]);
             retain(p);

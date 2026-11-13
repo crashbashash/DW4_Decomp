@@ -15,7 +15,7 @@ struct PropertyRecord { char header[20]; igObject *value; };
 extern "C" PropertyRecord *igProperty_FindByName(...);
 extern "C" int ONE_12[4];
 extern "C" int g_propertyNameField[4];
-extern "C" int g_defaultAllocatorSelector[4];
+extern "C" int kIGMemoryPoolHandleUser1[4];
 extern "C" unsigned char g_useOwnerAllocator;
 /* matching construct: inline release helper reproduces the retail release sequence */
 struct ReleaseRef { static inline void go(igObject *object) {
@@ -46,7 +46,7 @@ struct RamDataList { static inline void Ensure(beBaseInfoRam *ram) {
         if (g_useOwnerAllocator != 0) {
             a = alloc;
         } else {
-            a = Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
+            a = Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
         }
         igSmartPointer<igObject> list(beBaseInfoDataList_Create(a));
         s0 = list.p;
@@ -78,7 +78,7 @@ void Gap__Bec__beNDMWMdlPBullet__vfunc_36(beNDMWMdlPBullet *arg0, beBaseInfoRam 
     if (g_useOwnerAllocator != 0) {
         a = alloc;
     } else {
-        a = Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
+        a = Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
     }
     ValueRef value(FUN_00350020(a));
     s0 = value.p;

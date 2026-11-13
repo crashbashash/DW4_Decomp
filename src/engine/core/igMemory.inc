@@ -136,22 +136,22 @@ void Memory_FreeOwnedBufferUnchecked(void *buffer)
 
 void *FUN_002ee430(unsigned int size)
 {
-    if (DAT_00587218[0] == 0) {
+    if (g_activeSystemAllocator[0] == 0) {
         FUN_0032f300();
     }
-    if (DAT_00587218[0] != 0) {
-        return DAT_00587218[0]->Allocate(size);
+    if (g_activeSystemAllocator[0] != 0) {
+        return g_activeSystemAllocator[0]->Allocate(size);
     }
     return ((void *)malloc(size));
 }
 
 void FUN_002ee4a0(void *block)
 {
-    if (DAT_00587218[0] == 0) {
+    if (g_activeSystemAllocator[0] == 0) {
         FUN_0032f300();
     }
-    if (DAT_00587218[0] != 0) {
-        DAT_00587218[0]->Free(block);
+    if (g_activeSystemAllocator[0] != 0) {
+        g_activeSystemAllocator[0]->Free(block);
         return;
     }
     free(block);

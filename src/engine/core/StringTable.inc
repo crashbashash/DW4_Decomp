@@ -27,7 +27,7 @@ void StringTable_SetSynchronization(int arg0) {
     if (arg0 != 0) {
         if (DAT_005871c8[0] == 0) {
             var_v0 = ((int)FUN_002f8a20());
-var_v0 = g_useOwnerAllocator != 0 ? var_v0 : ((int)Memory_GetAllocatorBySelector(g_memoryContextSystem));
+var_v0 = g_useOwnerAllocator != 0 ? var_v0 : ((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem));
             o = (SyncLockView *)FUN_002ba650(var_v0);
             o->vX();
             DAT_005871c8[0] = o;

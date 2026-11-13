@@ -8,7 +8,7 @@
 #define DEGI(p) ((beNDMWDegiData *)(p))
 #define DNAME(d) ((unsigned short *)(d)->_dmNameUni)
 #define REL(o) { igObject *rr = (o); if (rr != 0) { REFS(rr) = REFS(rr) - 1; if (((unsigned long long)((long long)REFS(rr) << 0x29) >> 0x29) == 0) { igObject_Destroy((void *)rr); } } }
-#define ALLOC(a, self) { a = ((void *)igObject_GetAllocator(self)); a = g_useOwnerAllocator ? a : ((void *)Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0])); }
+#define ALLOC(a, self) { a = ((void *)igObject_GetAllocator(self)); a = g_useOwnerAllocator ? a : ((void *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0])); }
 #define PLW_AT(list, off) (*(beNDMWLoadSavePlWork **)((char *)((beNDMWLoadSavePlWorkList *)(list))->_data + (off)))
 #include "dw4/igSmartPointer.h"
 #include "dw4/igTDataList.h"
@@ -18,7 +18,7 @@
 #define FIND1(DSTV, REC) { igObjectList *l = igProperty_GetRecordFolder(props, REC)->value; igTDataList<IdObject *> *t = (igTDataList<IdObject *> *)igProperty_GetRecordFolder(props, DEVICEFOLDER_2)->value; IdObject *v = ((IdObject **)l->_data)[0]; if (v == 0) { DSTV = -1; } else { DSTV = t->find(v); } }
 #define FINDV(DST, REC) { igObjectList *l = igProperty_GetRecordFolder(props, REC)->value; igTDataList<IdObject *> *t = (igTDataList<IdObject *> *)igProperty_GetRecordFolder(props, DEVICEFOLDER_2)->value; int a; for (a = 0; a < l->_count; a++) { IdObject *v = ((IdObject **)l->_data)[a]; if (v == 0) { DST[a] = -1; } else { DST[a] = t->find(v); } } }
 #define INTS(DST, FN, REC) { igIntList *l = FN(props, REC)->value; int i = 0; if (0 < l->_count) { do { DST[i] = ((int *)l->_data)[i]; i++; } while (i < l->_count); } }
-#define OWNER_ALLOCATOR(dst, obj) { int alloc = igObject_GetAllocator(obj); if (g_useOwnerAllocator != 0) { dst = alloc; } else { dst = Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]); } }
+#define OWNER_ALLOCATOR(dst, obj) { int alloc = igObject_GetAllocator(obj); if (g_useOwnerAllocator != 0) { dst = alloc; } else { dst = Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]); } }
 
 extern "C" int beMessenger_AppendString(...);
 extern "C" int beMessenger_DispatchSelected(...);
@@ -127,7 +127,7 @@ extern "C" int beNDMWLoadCtrl2CommonIntf__StepNoticeQuestion(beNDMWLoadCtrl2Comm
 extern "C" int beNDMWLoadCtrl2CommonIntf__StepCheckMemoryCard(beNDMWLoadCtrl2CommonIntf *intf, int player, beNDMWLoadIntf2MesWin *mesWin, int slot, int depth);
 extern "C" char MakeDataTime[];
 extern "C" int beNDMWLoadCtrl2CommonIntf__StepCreateSaveFile(beNDMWLoadCtrl2CommonIntf *intf, int player, beNDMWLoadIntf2MesWin *mesWin, int slot, int depth);
-extern "C" int g_defaultAllocatorSelector[4];
+extern "C" int kIGMemoryPoolHandleUser1[4];
 extern "C" int g_beFont_metaObject[4];
 extern "C" unsigned char g_useOwnerAllocator;
 
@@ -277,7 +277,7 @@ struct ObjectListOps {
 extern "C" beUnicodeObj *beUnicodeObj_Create(int);
 extern "C" void beUnicodeObj_AllocateBuffer(beUnicodeObj *, int);
 extern "C" ItemRef beNDMWDegiData__CreateItem(void *owner, int id);
-extern "C" int g_ndmwAllocatorSelector[4];
+extern "C" int kIGMemoryPoolHandleUser0[4];
 extern "C" void beNDMWDegiData__StoreToProperties(beNDMWDegiData *degi, void *props, int font);
 extern "C" void beNDMWLoadSlotPlayer__WriteToBuffer(beNDMWLoadSlotPlayer *slotPlayer, int buffer, int replaceIndex, beNDMWDegiData *replacement);
 extern "C" void beNDMWLoadSlotPlayer__ReadFromBuffer(beNDMWLoadSlotPlayer *slotPlayer, int buffer);
@@ -1510,7 +1510,7 @@ static inline int itemAllocator(void *owner) {
     if (g_useOwnerAllocator != 0) {
         a = alloc;
     } else {
-        a = Memory_GetAllocatorBySelector(g_ndmwAllocatorSelector[0]);
+        a = Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser0[0]);
     }
     return a;
 }
@@ -1586,7 +1586,7 @@ void beNDMWDegiData__StoreToProperties(beNDMWDegiData *degi, void *props, int fo
     if (g_useOwnerAllocator != 0)
         a = alloc;
     else
-        a = Memory_GetAllocatorBySelector(g_ndmwAllocatorSelector[0]);
+        a = Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser0[0]);
     {
     ChunkRef nameText((RefCounted *)beUnicodeObj_Create(a));
     RefCounted * converted;
@@ -1819,7 +1819,7 @@ void beNDMWMcUtilCtrl__Init(beNDMWMcUtilCtrl *util, int messenger, int kindHard)
     case 0:
         for (i = 0; i < 5; i++) {
             int owner = igObject_GetAllocator(util);
-            int alloc = g_useOwnerAllocator ? owner : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
+            int alloc = g_useOwnerAllocator ? owner : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
             SlotRef<0> slot(beNDMWMcSlotPS2_Create(alloc));
             ObjectList_AppendRetained(util->_slot, slot.p);
         }
@@ -1827,7 +1827,7 @@ void beNDMWMcUtilCtrl__Init(beNDMWMcUtilCtrl *util, int messenger, int kindHard)
     case 1:
         for (i = 0; i < 2; i++) {
             int owner = igObject_GetAllocator(util);
-            int alloc = g_useOwnerAllocator ? owner : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
+            int alloc = g_useOwnerAllocator ? owner : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
             SlotRef<1> slot(beNDMWMcSlotGC_Create(alloc));
             ObjectList_AppendRetained(util->_slot, slot.p);
         }
@@ -1835,7 +1835,7 @@ void beNDMWMcUtilCtrl__Init(beNDMWMcUtilCtrl *util, int messenger, int kindHard)
     case 2:
         for (i = 0; i < 9; i++) {
             int owner = igObject_GetAllocator(util);
-            int alloc = g_useOwnerAllocator ? owner : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
+            int alloc = g_useOwnerAllocator ? owner : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
             SlotRef<2> slot(beNDMWMcSlotXbox_Create(alloc));
             ObjectList_AppendRetained(util->_slot, slot.p);
         }
@@ -2083,7 +2083,7 @@ void beNDMWLoadCtrl2__Update(beNDMWLoadCtrl2 *self, beBaseInfoRam *ram) {
             igObject *old;
             int base = igObject_GetAllocator(ram);
             int a;
-            if (g_useOwnerAllocator != 0) { a = base; } else { a = Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]); }
+            if (g_useOwnerAllocator != 0) { a = base; } else { a = Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]); }
             igSmartPointer<igObject> list((igObject *)beBaseInfoDataList_Create(a));
             o = list.p;
             if (o != 0) o->_refCount = o->_refCount + 1;
@@ -2102,7 +2102,7 @@ void beNDMWLoadCtrl2__Update(beNDMWLoadCtrl2 *self, beBaseInfoRam *ram) {
             igObject *old;
             int base = igObject_GetAllocator(ram);
             int a;
-            if (g_useOwnerAllocator != 0) { a = base; } else { a = Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]); }
+            if (g_useOwnerAllocator != 0) { a = base; } else { a = Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]); }
             igSmartPointer<igObject> list((igObject *)beBaseInfoDataList_Create(a));
             o = list.p;
             if (o != 0) o->_refCount = o->_refCount + 1;

@@ -1228,7 +1228,7 @@
       "address": 1049128,
       "name": "_exit",
       "size": 8,
-      "source": "src/sony/libkernl/_exit.c",
+      "source": "src/runtime/crt0.S",
       "direct": [
         {
           "site": 1049128,
@@ -1241,9 +1241,9 @@
     },
     {
       "address": 1049152,
-      "name": "FUN_00100240",
+      "name": "_d_ulltod",
       "size": 76,
-      "source": "src/unmatched/FUN_00100240.cpp",
+      "source": "src/runtime/runtime.c",
       "direct": [
         {
           "site": 1049164,
@@ -1268,9 +1268,9 @@
     },
     {
       "address": 1049232,
-      "name": "FUN_00100290",
+      "name": "_d_utod",
       "size": 12,
-      "source": "src/unmatched/FUN_00100290.c",
+      "source": "src/runtime/runtime.c",
       "direct": [
         {
           "site": 1049236,
@@ -1283,9 +1283,9 @@
     },
     {
       "address": 1049248,
-      "name": "FUN_001002a0",
+      "name": "_dpfeq",
       "size": 36,
-      "source": "src/unmatched/FUN_001002a0.c",
+      "source": "src/runtime/runtime.c",
       "direct": [
         {
           "site": 1049256,
@@ -1298,9 +1298,9 @@
     },
     {
       "address": 1049328,
-      "name": "FUN_001002f0",
+      "name": "_dpflt",
       "size": 32,
-      "source": "src/unmatched/FUN_001002f0.c",
+      "source": "src/runtime/runtime.c",
       "direct": [
         {
           "site": 1049336,
@@ -1313,9 +1313,9 @@
     },
     {
       "address": 1049408,
-      "name": "FUN_00100340",
+      "name": "_dpfgt",
       "size": 32,
-      "source": "src/unmatched/FUN_00100340.c",
+      "source": "src/runtime/runtime.c",
       "direct": [
         {
           "site": 1049416,
@@ -1328,9 +1328,9 @@
     },
     {
       "address": 1050128,
-      "name": "FUN_00100610",
+      "name": "__dl__FPv",
       "size": 92,
-      "source": null,
+      "source": "src/runtime/New.cpp",
       "direct": [
         {
           "site": 1050140,
@@ -1349,17 +1349,17 @@
     },
     {
       "address": 1050768,
-      "name": "FUN_00100890",
+      "name": "__throw_catch_compare",
       "size": 632,
-      "source": null,
+      "source": "src/runtime/NMWException.cpp",
       "direct": [],
       "indirect": []
     },
     {
       "address": 1051408,
-      "name": "FUN_00100b10",
+      "name": "__call_unexpected_handler",
       "size": 36,
-      "source": "src/unmatched/FUN_00100b10.cpp",
+      "source": "src/runtime/NMWException.cpp",
       "direct": [],
       "indirect": [
         {
@@ -1371,9 +1371,9 @@
     },
     {
       "address": 1051456,
-      "name": "FUN_00100b40",
+      "name": "__terminate",
       "size": 36,
-      "source": "src/unmatched/FUN_00100b40.cpp",
+      "source": "src/runtime/NMWException.cpp",
       "direct": [],
       "indirect": [
         {
@@ -1385,25 +1385,25 @@
     },
     {
       "address": 1051888,
-      "name": "FUN_00100cf0",
+      "name": "__DecodeUnsignedNumber",
       "size": 168,
-      "source": "src/unmatched/FUN_00100cf0.c",
+      "source": "src/runtime/ExceptionHandler.cpp",
       "direct": [],
       "indirect": []
     },
     {
       "address": 1052064,
-      "name": "FUN_00100da0",
+      "name": "__DecodeSignedNumber",
       "size": 168,
-      "source": "src/unmatched/FUN_00100da0.c",
+      "source": "src/runtime/ExceptionHandler.cpp",
       "direct": [],
       "indirect": []
     },
     {
       "address": 1052240,
-      "name": "FUN_00100e50",
+      "name": "__end__catch",
       "size": 60,
-      "source": "src/unmatched/FUN_00100e50.cpp",
+      "source": "src/runtime/ExceptionHandler.cpp",
       "direct": [],
       "indirect": [
         {
@@ -1415,9 +1415,9 @@
     },
     {
       "address": 1052304,
-      "name": "FUN_00100e90",
+      "name": "__ThrowHandler",
       "size": 420,
-      "source": null,
+      "source": "src/runtime/ExceptionHandler.cpp",
       "direct": [
         {
           "site": 1052336,
@@ -1478,9 +1478,9 @@
     },
     {
       "address": 1052736,
-      "name": "FUN_00101040",
+      "name": "FindExceptionHandler",
       "size": 828,
-      "source": null,
+      "source": "src/runtime/ExceptionHandler.cpp",
       "direct": [
         {
           "site": 1053120,
@@ -1559,9 +1559,9 @@
     },
     {
       "address": 1053568,
-      "name": "FUN_00101380",
+      "name": "__unexpected",
       "size": 516,
-      "source": null,
+      "source": "src/runtime/ExceptionHandler.cpp",
       "direct": [
         {
           "site": 1053608,
@@ -1628,9 +1628,9 @@
     },
     {
       "address": 1054192,
-      "name": "FUN_001015f0",
+      "name": "FindMostRecentException",
       "size": 372,
-      "source": null,
+      "source": "src/runtime/ExceptionHandler.cpp",
       "direct": [
         {
           "site": 1054456,
@@ -1661,9 +1661,9 @@
     },
     {
       "address": 1054576,
-      "name": "FUN_00101770",
+      "name": "UnwindStack",
       "size": 2116,
-      "source": null,
+      "source": "src/runtime/ExceptionHandler.cpp",
       "direct": [
         {
           "site": 1054644,
@@ -1929,9 +1929,9 @@
     },
     {
       "address": 1056704,
-      "name": "FUN_00101fc0",
+      "name": "NextAction",
       "size": 836,
-      "source": null,
+      "source": "src/runtime/ExceptionHandler.cpp",
       "direct": [
         {
           "site": 1056772,
@@ -2142,9 +2142,9 @@
     },
     {
       "address": 1057552,
-      "name": "FUN_00102310",
+      "name": "__FindExceptionTable",
       "size": 448,
-      "source": "src/unmatched/FUN_00102310.cpp",
+      "source": "src/runtime/ExceptionHandler.cpp",
       "direct": [
         {
           "site": 1057592,
@@ -2183,7 +2183,7 @@
       "address": 1058016,
       "name": "__TransferControl",
       "size": 100,
-      "source": "src/runtime/ExceptionHandlerTS.c",
+      "source": "src/runtime/ExceptionHandlerTS.cpp",
       "direct": [],
       "indirect": [
         {
@@ -2195,9 +2195,9 @@
     },
     {
       "address": 1058128,
-      "name": "FUN_00102550",
-      "size": 128,
-      "source": null,
+      "name": "__throw",
+      "size": 124,
+      "source": "src/runtime/ExceptionHandlerTS.cpp",
       "direct": [
         {
           "site": 1058244,
@@ -2210,9 +2210,9 @@
     },
     {
       "address": 1058256,
-      "name": "FUN_001025d0",
+      "name": "__SkipFrameInfo",
       "size": 80,
-      "source": "src/unmatched/FUN_001025d0.cpp",
+      "source": "src/runtime/ExceptionHandlerTS.cpp",
       "direct": [
         {
           "site": 1058280,
@@ -2237,17 +2237,17 @@
     },
     {
       "address": 1058336,
-      "name": "FUN_00102620",
+      "name": "__GetExceptionIndexBounds",
       "size": 32,
-      "source": "src/unmatched/FUN_00102620.c",
+      "source": "src/runtime/ExceptionHandlerTS.cpp",
       "direct": [],
       "indirect": []
     },
     {
       "address": 1058368,
-      "name": "FUN_00102640",
+      "name": "__SetupFrameInfo",
       "size": 180,
-      "source": "src/unmatched/FUN_00102640.cpp",
+      "source": "src/runtime/ExceptionHandlerTS.cpp",
       "direct": [
         {
           "site": 1058436,
@@ -2272,9 +2272,9 @@
     },
     {
       "address": 1058560,
-      "name": "FUN_00102700",
+      "name": "__PopStackFrame",
       "size": 696,
-      "source": "src/unmatched/FUN_00102700.c",
+      "source": "src/runtime/ExceptionHandlerTS.cpp",
       "direct": [],
       "indirect": []
     },
@@ -2338,7 +2338,7 @@
       "address": 1095136,
       "name": "sbrk",
       "size": 172,
-      "source": "src/sony/libkernl/sbrk.c",
+      "source": "src/sony/libkernl/glue.c",
       "direct": [
         {
           "site": 1095216,
@@ -2359,7 +2359,7 @@
       "address": 1095312,
       "name": "isatty",
       "size": 8,
-      "source": "src/sony/libkernl/isatty.c",
+      "source": "src/sony/libkernl/glue.c",
       "direct": [],
       "indirect": []
     },
@@ -2367,7 +2367,7 @@
       "address": 1095320,
       "name": "fstat",
       "size": 20,
-      "source": "src/sony/libkernl/fstat.c",
+      "source": "src/sony/libkernl/glue.c",
       "direct": [],
       "indirect": []
     },
@@ -2624,9 +2624,9 @@
     },
     {
       "address": 1102032,
-      "name": "FUN_0010d0d0",
+      "name": "kprintf",
       "size": 56,
-      "source": "src/unmatched/FUN_0010d0d0.c",
+      "source": "src/unmatched/kprintf.c",
       "direct": [
         {
           "site": 1102068,
@@ -2639,9 +2639,9 @@
     },
     {
       "address": 1128624,
-      "name": "RFU086_WaitEvnetFlag",
+      "name": "_SetTLBEntry",
       "size": 16,
-      "source": "src/sony/libkernl/RFU086_WaitEvnetFlag.c",
+      "source": "src/sony/libkernl/tlbfunc.c",
       "direct": [],
       "indirect": []
     },
@@ -2649,7 +2649,7 @@
       "address": 1128784,
       "name": "InitTLB",
       "size": 64,
-      "source": "src/sony/libkernl/InitTLB.c",
+      "source": "src/sony/libkernl/tlbfunc.c",
       "direct": [
         {
           "site": 1128792,
@@ -2676,7 +2676,7 @@
       "address": 1128848,
       "name": "InitTLB32MB",
       "size": 500,
-      "source": "src/sony/libkernl/InitTLB32MB.c",
+      "source": "src/sony/libkernl/tlbfunc.c",
       "direct": [
         {
           "site": 1128920,
@@ -2749,25 +2749,25 @@
     },
     {
       "address": 1130272,
-      "name": "FUN_00113f20",
+      "name": "DIntr",
       "size": 84,
-      "source": null,
+      "source": "src/sony/libkernl/diei.c",
       "direct": [],
       "indirect": []
     },
     {
       "address": 1130360,
-      "name": "FUN_00113f78",
+      "name": "EIntr",
       "size": 24,
-      "source": "src/sony/libkernl/FUN_00113f78.c",
+      "source": "src/sony/libkernl/diei.c",
       "direct": [],
       "indirect": []
     },
     {
       "address": 1131784,
-      "name": "thunk_InitTLB",
+      "name": "TerminateLibrary",
       "size": 8,
-      "source": "src/sony/libkernl/thunk_InitTLB.c",
+      "source": "src/sony/libkernl/exit.c",
       "direct": [
         {
           "site": 1131784,
@@ -2780,9 +2780,9 @@
     },
     {
       "address": 1131976,
-      "name": "FUN_001145c8",
+      "name": "Exit",
       "size": 40,
-      "source": "src/unmatched/FUN_001145c8.c",
+      "source": "src/sony/libkernl/exit.c",
       "direct": [
         {
           "site": 1131988,
@@ -6083,7 +6083,7 @@
     },
     {
       "address": 1640688,
-      "name": "Matrix44_Copy",
+      "name": "igMatrix44f_Copy",
       "size": 188,
       "source": null,
       "direct": [],
@@ -6091,7 +6091,7 @@
     },
     {
       "address": 1641008,
-      "name": "Matrix44_GetTranslation",
+      "name": "igMatrix44f_GetTranslation",
       "size": 28,
       "source": "src/engine/maths/MathsLibrary.cpp",
       "direct": [],
@@ -6099,9 +6099,9 @@
     },
     {
       "address": 1641040,
-      "name": "Matrix44_TranslateLocal",
+      "name": "igMatrix44f_TranslateLocal",
       "size": 212,
-      "source": null,
+      "source": "src/engine/maths/MathsLibrary.cpp",
       "direct": [],
       "indirect": []
     },
@@ -6833,7 +6833,7 @@
       "address": 2345376,
       "name": "LuaType_Construct",
       "size": 416,
-      "source": null,
+      "source": "src/engine/lua/LuaBinding.cpp",
       "direct": [
         {
           "site": 2345620,
@@ -6963,7 +6963,7 @@
       "address": 2364400,
       "name": "LuaClass_FindByName",
       "size": 352,
-      "source": null,
+      "source": "src/engine/lua/LuaBinding.cpp",
       "direct": [
         {
           "site": 2364424,
@@ -9893,7 +9893,7 @@
     },
     {
       "address": 2856192,
-      "name": "FUN_002b9500",
+      "name": "igStringObj_Create",
       "size": 52,
       "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [
@@ -12161,7 +12161,7 @@
       "address": 2976640,
       "name": "List_InsertWords",
       "size": 220,
-      "source": null,
+      "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [
         {
           "site": 2976764,
@@ -17346,7 +17346,7 @@
     },
     {
       "address": 3192304,
-      "name": "FUN_0030b5f0",
+      "name": "igStringObj_ToInt",
       "size": 60,
       "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [
@@ -20200,7 +20200,7 @@
     },
     {
       "address": 3611088,
-      "name": "LuaAPI_Register",
+      "name": "beLuaWrapper__registerFunctions",
       "size": 60,
       "source": "src/game/be.cpp",
       "direct": [
