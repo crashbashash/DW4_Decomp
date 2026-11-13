@@ -21,6 +21,16 @@ Text is addressed by font group and cell (`STWINFONTnn` / `fontnnn`) through TEX
 the cells a window fills are queued on its text-close lists so the close state blanks them.
 Messages shown in a message window are `txt_shop.lua` codes.
 
+A window finds a child of one kind with `FIND_CHILD`: a `for` loop over `_subWindow` that casts each
+child with an `As…` helper (`AsDeviceList`, `AsPlayerTitle`, `AsPageSelector`) and stops at the first
+one accepted. The condition reads `_subWindow` as the member; `SUBWINDOW_AT` reads it through the
+field's address. The compiler keeps one load for the condition and the first statement of the body
+when both read the field the same way, and retail loads it for each, so the two reads differ. A
+`const` window accessor cannot be the second read: inside the loop the compiler moves the field's
+address into a saved register, which retail does not have. The search is a macro because its index
+has to be the function's own local: with the device-list search as an inline function, BANK's saved
+registers come out in another order.
+
 ## Classes
 
 | Class | Created by | Service |
@@ -118,9 +128,12 @@ before the record lookup is called.
   re-equips the strongest weapons and empties the four item slot lists. Int lists grow through one
   `IntList_Append`, which takes the list as a pointer or as a reflected field, reads the value
   through a `const int &` after the list has grown and re-reads the grown count through `countOf`, the
-  same shape as the int-list appends in other units. `_HasPartyChanged`'s final check walks the list
-  with `countOf(unmatched)` and `IntList_Get(unmatched, m)`; passing the smart pointer to the two
-  getters on each pass is what keeps retail's count reload and separate byte offset.
+  same shape as the int-list appends in other units. `_HasPartyChanged` copies the saved weapon
+  numbers, strikes each equipped weapon off the copy and reports a change when one is left. Its two
+  walks pass the smart pointer to `countOf`, `IntList_Get` and `IntList_Set` on each pass, which
+  keeps retail's count reload and separate byte offset. `IntList_Get` and `IntList_Set` take the list
+  as the same `igIntList *`, so the strike stores through the `_data` the read already loaded; a
+  getter on a `const igIntList *` reads `_data` as a different type and the setter loads it again.
 - **EditBit** (`beNDMWShopCtrlEditBit_Update`): a seven-digit entry; the limit is the carried or banked
   amount, bounded so neither side exceeds 9,999,999 (999,999,999 for junk donations).
 
@@ -128,7 +141,6 @@ before the record lookup is called.
 
 - Message codes are `txt_shop.lua` indices; what each says is inferred from where it is used.
 - `beNDMWShopCtrlSales_Update` has no source.
-- Two Digilab loops keep shapes with no explanation yet: the child search's guard reads
-  `_subWindow` through an accessor that the loop body does not use, and `_HasPartyChanged` strikes a
-  weapon off the list by walking an index and a byte offset with a re-read list pointer. Natural `for`
-  loops and the getters that fit the final check do not reproduce either one.
+- `SUBWINDOW_AT` reads `_subWindow` through the field's address with a cast. That is the separate
+  load retail has, but what the original source wrote there is not known: probably an inline of the
+  field's own reference type.

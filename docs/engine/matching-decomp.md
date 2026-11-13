@@ -380,6 +380,20 @@ Retail shapes that only one spelling reproduces:
   plainly, or an accessor returning `unsigned`, loads in source order, where a `const` read does not. Rewriting the
   increment itself as `l->n++`, `+= 1` or `1 + l->n`, or changing `p[0]` to `*p`, does not separate the loads.
 
+  The rule cuts both ways. A getter that takes `const List *` and a setter that takes `List *` read `_data` as two
+  types, so a walk that reads through one and stores through the other loads `_data` twice. Where retail stores
+  through the address the read already loaded, both take the same pointer type. Pointer-typed loads are the
+  exception: `T *` and `T *const` merge, and so do two different pointer types.
+
+  In a loop, three things decide whether the condition and the body share a field load:
+
+  * A `for` condition and the first statement of its body share one load when they read the field alike, on the
+    first pass too. A hand-written guard before a `do`/`while` is not needed to keep them apart.
+  * A `const` pointer accessor inside the loop has the field's address moved out of it (`addiu s0,s4,52` before the
+    loop, `lw v0,0(s0)` inside). When retail reloads with no such register, that accessor is not the separate read.
+  * A read through a reference to the field (a `const int &` parameter, or a member of the field's own class) stays
+    separate from a plain member read and moves nothing out of the loop.
+
   A cast that only retypes the read, such as `*(const int *)&x` or `((const T *)p)->f`, forces the same bytes but is
   unlikely to be source. It does not make a match: the function keeps its `volatile` and stays `unapproved` until
   a spelling with a reason turns up.

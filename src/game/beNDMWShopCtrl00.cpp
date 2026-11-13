@@ -501,22 +501,15 @@ template <class Window> static inline int CurrentState(const Window *window)
     allocator = g_useOwnerAllocator ? allocator : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]); }
 #define CHILD_COUNT(window) (((igObjectList *)(window)->_subWindow)->_count)
 #define ObjectList_Count(list) (((igObjectList *)(list))->_count)
-/* The first child window that is a beNDMWStatusCtrlD0 (device list), or null; `index` ends at its
- * position. */
-#define FIND_DEVICE_LIST(found, index, window) { \
+/* Child `index` of the window's sub-window list, the list pointer re-read through its field. */
+#define SUBWINDOW_AT(window, index) (((igObject **)((igObjectList *)*(int *)&(window)->_subWindow)->_data)[index])
+/* Sets `found` to the first child window that the `AsKind` cast accepts, or null. */
+#define FIND_CHILD(found, window, AsKind) { \
+    int childIndex; \
     (found) = 0; \
-    (index) = 0; \
-    if (0 < CHILD_COUNT(window)) { \
-        do { \
-            beNDMWStatusCtrlD0 *child_ = (beNDMWStatusCtrlD0 *)((int *)((igObjectList *)*(int *)&(window)->_subWindow)->_data)[index]; \
-            if (child_ != 0 && igObject_IsKindOf(child_, g_beNDMWStatusCtrlD0_metaObject[0]) != 0) { \
-                (found) = child_; \
-            } else { \
-                (found) = 0; \
-            } \
-            if ((found) != 0) break; \
-            (index)++; \
-        } while ((index) < CHILD_COUNT(window)); \
+    for (childIndex = 0; childIndex < CHILD_COUNT(window); childIndex++) { \
+        (found) = AsKind(SUBWINDOW_AT(window, childIndex)); \
+        if ((found) != 0) break; \
     } }
 
 /* Sends `selector` to the `group` receivers with the window's player number. */
@@ -617,6 +610,24 @@ struct PagedWindow {
     virtual int TurnPagePrev();
     virtual int TurnPageNext();
 };
+
+/* The window as a device list, or null when it is another kind of window. */
+static inline beNDMWStatusCtrlD0 *AsDeviceList(igObject *window)
+{
+    if (window != 0 && igObject_IsKindOf(window, g_beNDMWStatusCtrlD0_metaObject[0]) != 0) {
+        return (beNDMWStatusCtrlD0 *)window;
+    }
+    return 0;
+}
+
+/* The window as a player title, or null when it is another kind of window. */
+static inline beNDMWStatusTitle01 *AsPlayerTitle(igObject *window)
+{
+    if (window != 0 && igObject_IsKindOf(window, g_beNDMWStatusTitle01_metaObject[0]) != 0) {
+        return (beNDMWStatusTitle01 *)window;
+    }
+    return 0;
+}
 
 /* The page selector, when the first child window is one. */
 static inline beNDMWWindowSelect *AsPageSelector(igObject *window)
@@ -1371,8 +1382,7 @@ void beNDMWShopCtrl30_Update(beNDMWShopCtrl30 *self)
                 return;
             case BANK_DEVICES_CHOOSE: {
                 beNDMWStatusCtrlD0 *list;
-                int listIndex;
-                FIND_DEVICE_LIST(list, listIndex, self)
+                FIND_CHILD(list, self, AsDeviceList)
                 if (list != 0) {
                     if (self->_retCode == SELECT_NONE) {
                         NEXT_STATE(list);
@@ -1440,8 +1450,7 @@ void beNDMWShopCtrl30_Update(beNDMWShopCtrl30 *self)
             case BANK_DEVICES_WAIT_NOTICE:
                 if (CHILD_COUNT(self) != self->_nowProcKazu) {
                     beNDMWStatusCtrlD0 *list;
-                    int listIndex;
-                    FIND_DEVICE_LIST(list, listIndex, self)
+                    FIND_CHILD(list, self, AsDeviceList)
                     if (list != 0) {
                         NEXT_STATE(list);
                         ENTER_PHASE(self, BANK_DEVICES_WAIT_LIST_CLOSED);
@@ -1451,8 +1460,7 @@ void beNDMWShopCtrl30_Update(beNDMWShopCtrl30 *self)
                 break;
             case BANK_DEVICES_WAIT_LIST_CLOSED: {
                 beNDMWStatusCtrlD0 *list;
-                int listIndex;
-                FIND_DEVICE_LIST(list, listIndex, self)
+                FIND_CHILD(list, self, AsDeviceList)
                 if (list == 0) {
                     ENTER_STEP(self, BANK_STEP_MAIN_MENU);
                     return;
@@ -1599,7 +1607,7 @@ void beNDMWShopCtrl40_Update(beNDMWShopCtrl40 *self) {
                 NEXT_PHASE(self)
                 return;
             case SELECT_WAIT_DECISION:
-                { int listIndex; FIND_DEVICE_LIST(decidedList, listIndex, self) }
+                FIND_CHILD(decidedList, self, AsDeviceList)
                 if (decidedList != 0) {
                     if (self->_retCode == -1) {
                         ENTER_STEP(self, CNOS_CLOSE_LIST)
@@ -1702,7 +1710,7 @@ void beNDMWShopCtrl40_Update(beNDMWShopCtrl40 *self) {
                     }
                 }
                 self->_retCode = self->_selectCursor;
-                { int listIndex; FIND_DEVICE_LIST(convertedList, listIndex, self) }
+                FIND_CHILD(convertedList, self, AsDeviceList)
                 if (convertedList != 0) {
                     ENTER_STEP(self, CNOS_SELECT_DEVICE)
                     ENTER_PHASE(self, SELECT_WAIT_DECISION)
@@ -1733,7 +1741,7 @@ void beNDMWShopCtrl40_Update(beNDMWShopCtrl40 *self) {
             }
             break;
         case CNOS_CLOSE_LIST:
-            { int listIndex; FIND_DEVICE_LIST(closingList, listIndex, self) }
+            FIND_CHILD(closingList, self, AsDeviceList)
             switch (self->_st2) {
             case 0:
                 if (closingList != 0) {
@@ -2460,7 +2468,7 @@ template <class ListRef> static inline void IntList_Append(ListRef listRef, cons
     ((int *)list->_data)[count] = value;
 }
 
-static inline const int &IntList_Get(const igIntList *list, int index)
+static inline const int &IntList_Get(igIntList *list, int index)
 {
     return ((int *)list->_data)[index];
 }
@@ -2597,17 +2605,8 @@ void beNDMWShopCtrlA0_Update(beNDMWShopCtrlA0 *self) {
                     case 2:
                     case 3:
                         {
-                            beNDMWStatusTitle01 *playerTitle = 0;
-                            int index;
-                            for (index = 0; index < CHILD_COUNT(self); index++) {
-                                beNDMWStatusTitle01 *child = ((beNDMWStatusTitle01 **)((beNDMWWindowList *)*(int *)&self->_subWindow)->_data)[index];
-                                if (child != 0 && igObject_IsKindOf(child, g_beNDMWStatusTitle01_metaObject[0]) != 0) {
-                                    playerTitle = child;
-                                } else {
-                                    playerTitle = 0;
-                                }
-                                if (playerTitle != 0) break;
-                            }
+                            beNDMWStatusTitle01 *playerTitle;
+                            FIND_CHILD(playerTitle, self, AsPlayerTitle)
                             if (playerTitle != 0) {
                                 playerTitle->_playerNo = IntList_Get(self->_playerNoList, self->_retCode);
                                 beNDMWStatusTitle01_ShowShopLayout(playerTitle);
@@ -3043,8 +3042,6 @@ void beNDMWShopCtrlA1_CloseAlbumPage(beNDMWShopCtrlA1 *self) {
     beMessenger_SelectGroup((window)->_messenger, SOUND_8); \
     beMessenger_AppendString((window)->_messenger, CURSOR_NG_4); \
     beMessenger_DispatchSelected((window)->_messenger, PLAY_6); }
-/* Child `index` of the window's sub-window list, the list pointer re-read through its field. */
-#define SUBWINDOW_AT(window, index) (((igObject **)((igObjectList *)*(int *)&(window)->_subWindow)->_data)[index])
 
 enum BoosterStep { BOOSTER_STEP_OFFER = 7, BOOSTER_STEP_OPEN_PACK = 8 };
 enum BoosterOfferSubstep { OFFER_SHOW_PACKS, OFFER_WAIT_DESCRIPTION, OFFER_ASK, OFFER_WAIT_ANSWER };
@@ -3429,12 +3426,8 @@ void beNDMWShopCtrlEvolve_Update(beNDMWShopCtrlEvolve *self) {
                         return;
                     }
                     {
-                        beNDMWWindowSelect *selector = 0;
-                        int i;
-                        for (i = 0; i < CHILD_COUNT(self); i++) {
-                            selector = AsPageSelector(SUBWINDOW_AT(self, i));
-                            if (selector != 0) break;
-                        }
+                        beNDMWWindowSelect *selector;
+                        FIND_CHILD(selector, self, AsPageSelector)
                         if (beNDMWWindowSelect_CanRequestFO2TOP(selector) != 0) {
                             bool pageTurned = false;
                             if (((PagedWindow *)self)->TurnPagePrev() != 0) {
@@ -3788,26 +3781,6 @@ check_first:
 #define PLAYER_COUNT(self) (((igIntList *)(self)->_playerNoList)->_count)
 #define PLAYER_NO(self, index) (((int *)((igIntList *)(self)->_playerNoList)->_data)[index])
 
-/* matching construct: the search guard reads the list through this accessor, so the loop reloads _subWindow */
-template <class Window> static inline igObjectList *SubWindows(const Window *window) { return (igObjectList *)window->_subWindow; }
-
-/* Sets `found` to the first child window that is a kind of `metaObject`, or 0. */
-#define FIND_CHILD_OF_KIND(found, i, window, metaObject) { \
-    found = 0; \
-    i = 0; \
-    if (0 < SubWindows(window)->_count) { \
-        do { \
-            igObject *child = ((igObject **)((igObjectList *)(window)->_subWindow)->_data)[i]; \
-            if (child != 0 && igObject_IsKindOf(child, metaObject) != 0) { \
-                found = child; \
-            } else { \
-                found = 0; \
-            } \
-            if (found != 0) break; \
-            i += 1; \
-        } while (i < CHILD_COUNT(window)); \
-    } }
-
 /* Creates a child window of `Type` for this window's player and adds it to the sub-windows. */
 #define OPEN_CHILD(Type, entCode) { \
     void *allocator; \
@@ -3849,8 +3822,7 @@ enum { STICK_UP = 0x1, STICK_DOWN = 0x4, PAD_UP = 0x10, PAD_DOWN = 0x40 };
 static inline int CurrentPhase(const beNDMWShopCtrlEditBit *self) { return self->_st2; }
 
 void beNDMWShopCtrlDigilabo_Update(beNDMWShopCtrlDigilabo *self) {
-    igObject *found;
-    int i;
+    beNDMWStatusTitle01 *title;
     int p;
     int j;
     int index;
@@ -3938,10 +3910,10 @@ void beNDMWShopCtrlDigilabo_Update(beNDMWShopCtrlDigilabo *self) {
         case LABO_EQUIP:
             switch (self->_st2) {
             case 0:
-                FIND_CHILD_OF_KIND(found, i, self, g_beNDMWStatusTitle01_metaObject[0])
-                if (found != 0) {
-                    ((beNDMWStatusTitle01 *)found)->_playerNo = self->_playerNo;
-                    beNDMWStatusTitle01_ShowStatusLayout((beNDMWStatusTitle01 *)found);
+                FIND_CHILD(title, self, AsPlayerTitle)
+                if (title != 0) {
+                    title->_playerNo = self->_playerNo;
+                    beNDMWStatusTitle01_ShowStatusLayout(title);
                 }
                 NEXT_PHASE(self)
                 return;
@@ -4194,8 +4166,7 @@ int beNDMWShopCtrlDigilabo_HasPartyChanged(beNDMWShopCtrlDigilabo *self) {
             PICK_ALLOCATOR(allocator, self)
             igSmartPointer<igIntList> unmatched((igIntList *)igIntList_Create(allocator));
             for (i = 0; i < savedWeaponNos->_count; i++) {
-                const int &savedWeaponNo = ((int *)savedWeaponNos->_data)[i];
-                IntList_Append(unmatched.p, savedWeaponNo);
+                IntList_Append(unmatched.p, IntList_Get(savedWeaponNos, i));
             }
             /* Strike every equipped weapon off the saved list. */
             weaponCount = 0;
@@ -4204,22 +4175,12 @@ int beNDMWShopCtrlDigilabo_HasPartyChanged(beNDMWShopCtrlDigilabo *self) {
                 if (weapon != 0) {
                     weaponNo = weapon->_recNo;
                     weaponCount++;
-                    igIntList *remaining = unmatched.p;
-                    k = 0;
-                    if (0 < remaining->_count) {
-                        /* matching construct: index and byte offset walk separately and the list is re-read each pass */
-                        int offset = 0;
-                        igIntList *current = remaining;
-                        do {
-                            int saved = *(int *)(current->_data + offset);
-                            if (saved != NO_WEAPON && weaponNo == saved) {
-                                IntList_Set(remaining, k, NO_WEAPON);
-                                break;
-                            }
-                            k++;
-                            offset += 4;
-                            current = remaining;
-                        } while (k < remaining->_count);
+                    for (k = 0; k < countOf(unmatched); k++) {
+                        int saved = IntList_Get(unmatched, k);
+                        if (saved != NO_WEAPON && weaponNo == saved) {
+                            IntList_Set(unmatched, k, NO_WEAPON);
+                            break;
+                        }
                     }
                 }
             }
@@ -4234,11 +4195,9 @@ int beNDMWShopCtrlDigilabo_HasPartyChanged(beNDMWShopCtrlDigilabo *self) {
 
 
 void beNDMWShopCtrlDigilabo_ShowPlayerTitle(beNDMWWindow *self, int playerNo, int unused) {
-    igObject *found;
-    int i;
+    beNDMWStatusTitle01 *title;
 
-    FIND_CHILD_OF_KIND(found, i, self, g_beNDMWStatusTitle01_metaObject[0])
-    beNDMWStatusTitle01 *title = (beNDMWStatusTitle01 *)found;
+    FIND_CHILD(title, self, AsPlayerTitle)
     if (title == 0) {
         void *allocator;
         PICK_ALLOCATOR(allocator, self)
