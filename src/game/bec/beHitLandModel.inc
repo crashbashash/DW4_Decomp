@@ -95,7 +95,7 @@ void beHitLandModel_InitFields(void) {
 
     temp_s0 = (void *)g_beHitLandModel_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_004c65f0[0], 5);
+    igMetaObject_CreateFields(temp_s0, &g_beHitLandModel_ctorTable[0], 5);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
     ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_0035ded0();
     temp_s1_2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
@@ -103,6 +103,6 @@ void beHitLandModel_InitFields(void) {
     temp_s1_3 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 2));
     ((igObjectRefMetaField *)temp_s1_3)->_metaObject = FUN_0019e6c0();
     FUN_002d3890(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 3), 1);
-    igMetaObject_NameFields(temp_s0, &DAT_004c6610[0], &DAT_004c6630[0], &DAT_004c6650[0], temp_s2);
+    igMetaObject_NameFields(temp_s0, &g_beHitLandModel_fieldTable[0], &DAT_004c6630[0], &DAT_004c6650[0], temp_s2);
 }
 

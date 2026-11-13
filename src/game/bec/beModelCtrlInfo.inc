@@ -53,8 +53,8 @@ void beModelCtrlInfo_InitFields(void) {
 
     temp_s0 = (void *)g_beModelCtrlInfo_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_004c5450[0], 1);
+    igMetaObject_CreateFields(temp_s0, &g_beModelCtrlInfo_ctorTable[0], 1);
     igStringMetaField_SetDefaultText(((int)igMetaObject_GetFieldAt(temp_s0, temp_s1)), 0);
-    igMetaObject_NameFields(temp_s0, &DAT_004c5458[0], &DAT_004c5460[0], &DAT_004c5468[0], temp_s1);
+    igMetaObject_NameFields(temp_s0, &g_beModelCtrlInfo_fieldTable[0], &DAT_004c5460[0], &DAT_004c5468[0], temp_s1);
 }
 

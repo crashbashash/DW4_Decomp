@@ -19,15 +19,15 @@ extern "C" int g_bePadManager_metaObject[4];
 extern "C" void Gap__Bec__beNDMWSaveCtrl__vfunc_32(beNDMWSaveCtrl *arg0);
 extern "C" int g_beNDMWSaveCtrlInfo_metaObject[4];
 extern "C" int g_beNDMWSaveCtrl_metaObject[4];
-extern "C" char DAT_005194c0[];
+extern "C" char SAVECTRL_2[];
 extern "C" void Gap__Bec__beNDMWSaveCtrl__vfunc_29(beNDMWSaveCtrl *p0, int p1, char *p2);
 extern "C" igObject *beBaseInfoDataList_Create(int);
 extern "C" igObject *FUN_003bd0b0(int);
 extern "C" igObject *beNDMWLoadCtrl2CommonIntf_Create(int);
 extern "C" igObject *beNDMWLoadSavePlWork_Create(int);
 extern "C" igObject *beNDMWDegiData_Create(int);
-extern "C" int DAT_005194e0[4];
-extern "C" int DAT_005194e8[4];
+extern "C" int CTRL_6[4];
+extern "C" int COMMONINTF_5[4];
 extern "C" int g_propertyNameField[4];
 extern "C" int g_defaultAllocatorSelector[4];
 extern "C" int g_beSystem_metaObject[4];
@@ -101,7 +101,7 @@ int Gap__Bec__beNDMWSaveCtrl__vfunc_30(void)
 
 void Gap__Bec__beNDMWSaveCtrl__vfunc_29(beNDMWSaveCtrl *p0, int p1, char *p2)
 {
-    beMessenger_RegisterReceiverFromInfo(p0->_messenger, p1, DAT_005194c0);
+    beMessenger_RegisterReceiverFromInfo(p0->_messenger, p1, SAVECTRL_2);
 }
 
 int Gap__Bec__beNDMWSaveCtrl__vfunc_34(beNDMWSaveCtrl *arg0, beBaseInfoRam *arg1, A2 *arg2) {
@@ -169,7 +169,7 @@ int Gap__Bec__beNDMWSaveCtrl__vfunc_34(beNDMWSaveCtrl *arg0, beBaseInfoRam *arg1
         arg1->_dataList = (int)t;
         }
     }
-    igProperty_FindByName(arg1->_dataList, g_propertyNameField[0], &DAT_005194e0[0]);
+    igProperty_FindByName(arg1->_dataList, g_propertyNameField[0], &CTRL_6[0]);
     switch (e) {
     case 1:
         return 1;
@@ -188,7 +188,7 @@ int Gap__Bec__beNDMWSaveCtrl__vfunc_34(beNDMWSaveCtrl *arg0, beBaseInfoRam *arg1
                 arg1->_dataList = (int)t;
                 }
             }
-            beMessenger_AppendObject(arg0->_messenger, igProperty_FindByName(arg1->_dataList, g_propertyNameField[0], &DAT_005194e8[0]));
+            beMessenger_AppendObject(arg0->_messenger, igProperty_FindByName(arg1->_dataList, g_propertyNameField[0], &COMMONINTF_5[0]));
         }
         return 1;
     default:

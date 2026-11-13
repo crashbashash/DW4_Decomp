@@ -52,7 +52,7 @@ void igNormalizeNormalsStateAttr_InitFields(void) {
 
     temp_s0 = (void *)g_igNormalizeNormalsStateAttr_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_004861e0[0], 1);
-    igMetaObject_NameFields(temp_s0, &DAT_004861e8[0], &DAT_004861f0[0], &DAT_004861f8[0], temp_s1);
+    igMetaObject_CreateFields(temp_s0, &g_igNormalizeNormalsStateAttr_ctorTable[0], 1);
+    igMetaObject_NameFields(temp_s0, &g_igNormalizeNormalsStateAttr_fieldTable[0], &DAT_004861f0[0], &DAT_004861f8[0], temp_s1);
 }
 

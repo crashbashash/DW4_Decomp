@@ -84,7 +84,7 @@ void igFlyMode_InitFields(void) {
 
     temp_s0 = (void *)g_igFlyMode_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_004d1590[0], 0xB);
+    igMetaObject_CreateFields(temp_s0, &g_igFlyMode_ctorTable[0], 0xB);
     temp_a0 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
     a.x = 0;
     a.y = 0;
@@ -118,6 +118,6 @@ void igFlyMode_InitFields(void) {
     g.x = 0;
     g.y = 0;
     FUN_0018e2f0(temp_a0_7, &g);
-    igMetaObject_NameFields(temp_s0, &DAT_004d15c0[0], &DAT_004d15f0[0], &DAT_004d1620[0], temp_s2);
+    igMetaObject_NameFields(temp_s0, &g_igFlyMode_fieldTable[0], &DAT_004d15f0[0], &DAT_004d1620[0], temp_s2);
 }
 

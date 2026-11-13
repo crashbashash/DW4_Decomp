@@ -62,7 +62,7 @@ void thunk_igMetaFieldInfo_GetMetaObject(void) {
 
 int FUN_002bec40(void) {
     if (DAT_00585cc0[0] == 0) {
-        DAT_00585cc0[0] = ((int)igMetaEnum_Create((char *)&DAT_004f6790[0], (char **)&DAT_004bfdd0[0], &DAT_004bfde0[0], 4));
+        DAT_00585cc0[0] = ((int)igMetaEnum_Create((char *)&ResetType[0], (char **)&DAT_004bfdd0[0], &DAT_004bfde0[0], 4));
     }
     return DAT_00585cc0[0];
 }

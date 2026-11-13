@@ -124,7 +124,7 @@ void FUN_002c8250(int arg0) {
     void *var_v0_3;
 
     temp_s0 = (void *)(((void *)FUN_002bba00(((int)Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0])))));
-    if (&DAT_004f8438[0] == 0) {
+    if (&text_before[0] == 0) {
         var_v0 = (void *)(0);
     } else {
         if (g_stringPool[0] == 0) {
@@ -134,7 +134,7 @@ void FUN_002c8250(int arg0) {
             }
             g_stringPool[0] = var_v0_2;
         }
-        var_v0 = (void *)(((void *)StringPool_Intern((StringPool *)g_stringPool[0], (const char *)&DAT_004f8438[0])));
+        var_v0 = (void *)(((void *)StringPool_Intern((StringPool *)g_stringPool[0], (const char *)&text_before[0])));
     }
     sp3C = (void *)(var_v0);
     igMetaField_SetFieldName((igMetaField *)temp_s0, &sp3C);
@@ -154,7 +154,7 @@ void FUN_002c8250(int arg0) {
         igObject_Destroy(temp_s0);
     }
     temp_s0_2 = (void *)(((void *)FUN_002bba00(((int)Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0])))));
-    if (&DAT_004f8440[0] == 0) {
+    if (&text_after[0] == 0) {
         var_v0_3 = (void *)(0);
     } else {
         if (g_stringPool[0] == 0) {
@@ -164,7 +164,7 @@ void FUN_002c8250(int arg0) {
             }
             g_stringPool[0] = var_v0_4;
         }
-        var_v0_3 = (void *)(((void *)StringPool_Intern((StringPool *)g_stringPool[0], (const char *)&DAT_004f8440[0])));
+        var_v0_3 = (void *)(((void *)StringPool_Intern((StringPool *)g_stringPool[0], (const char *)&text_after[0])));
     }
     sp38 = (void *)(var_v0_3);
     igMetaField_SetFieldName((igMetaField *)temp_s0_2, &sp38);

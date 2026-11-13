@@ -41,9 +41,9 @@ void igLongTimer_InitFields(void) {
     void *temp_s0;
     temp_s0 = (void *)(((void * *)g_igLongTimer_metaObject)[0]);
     temp_s1 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
-    igMetaObject_CreateFields((igMetaObject *)temp_s0, (igMetaField * (**)(void *))&DAT_004c04a0[0], 4);
+    igMetaObject_CreateFields((igMetaObject *)temp_s0, (igMetaField * (**)(void *))&g_igLongTimer_ctorTable[0], 4);
     FUN_002d3890((void **)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 3)), 1);
-    igMetaObject_NameFields((igMetaObject *)temp_s0, (const char **)&DAT_004c04b0[0], (igMetaField ***)&DAT_004c04c0[0], &DAT_004c04d0[0], temp_s1);
+    igMetaObject_NameFields((igMetaObject *)temp_s0, (const char **)&g_igLongTimer_fieldTable[0], (igMetaField ***)&DAT_004c04c0[0], &DAT_004c04d0[0], temp_s1);
     *(int *)((char *)(((void * *)g_igLongTimer_metaObject)[0]) + 60) = (int)thunk_igPsx2LongTimer_GetMetaObject;
 }
 

@@ -82,7 +82,7 @@ void beModelCtrlLABELCTRL_InitFields(void) {
 
     temp_s0 = (void *)g_beModelCtrlLABELCTRL_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_004c5878[0], 1);
-    igMetaObject_NameFields(temp_s0, &DAT_004c5880[0], &DAT_004c5888[0], &DAT_004c5890[0], temp_s1);
+    igMetaObject_CreateFields(temp_s0, &g_beModelCtrlLABELCTRL_ctorTable[0], 1);
+    igMetaObject_NameFields(temp_s0, &g_beModelCtrlLABELCTRL_fieldTable[0], &DAT_004c5888[0], &DAT_004c5890[0], temp_s1);
 }
 

@@ -54,10 +54,10 @@ void beTransformSync_InitFields(void) {
 
     temp_s0 = (void *)g_beTransformSync_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_004c3358[0], 1);
+    igMetaObject_CreateFields(temp_s0, &g_beTransformSync_ctorTable[0], 1);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
     ((igObjectRefMetaField *)temp_s1)->_metaObject = FUN_00195e70();
     ((igRefMetaField *)temp_s1)->_construct = 1;
-    igMetaObject_NameFields(temp_s0, &DAT_004c3360[0], &DAT_004c3368[0], &DAT_004c3370[0], temp_s2);
+    igMetaObject_NameFields(temp_s0, &g_beTransformSync_fieldTable[0], &DAT_004c3368[0], &DAT_004c3370[0], temp_s2);
 }
 

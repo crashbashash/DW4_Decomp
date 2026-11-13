@@ -50,9 +50,9 @@ void igAudioContext_InitFields(void) {
 
     temp_s0 = (void *)(g_igAudioContext_metaObject[0]);
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_00486cd8[0], 1);
+    igMetaObject_CreateFields(temp_s0, &g_igAudioContext_ctorTable[0], 1);
     FUN_002d3890(igMetaObject_GetFieldAt(temp_s0, temp_s1), 1);
-    igMetaObject_NameFields(temp_s0, &DAT_00486ce0[0], &DAT_00486ce8[0], &DAT_00486cf0[0], temp_s1);
+    igMetaObject_NameFields(temp_s0, &g_igAudioContext_fieldTable[0], &DAT_00486ce8[0], &DAT_00486cf0[0], temp_s1);
     *(int *)((char *)(g_igAudioContext_metaObject[0]) + 60) = (int)(thunk_FUN_00143150);
 }
 

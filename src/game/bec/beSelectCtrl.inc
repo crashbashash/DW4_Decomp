@@ -94,11 +94,11 @@ void beSelectCtrl_InitFields(void) {
 
     temp_s0 = (void *)g_beSelectCtrl_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_004c3b88[0], 2);
+    igMetaObject_CreateFields(temp_s0, &g_beSelectCtrl_ctorTable[0], 2);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
     ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_0034c8e0();
     ((igObjectRefMetaField *)temp_s1)->_refCounted = 0;
     FUN_002d3890(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1), 1);
-    igMetaObject_NameFields(temp_s0, &DAT_004c3b90[0], &DAT_004c3b98[0], &DAT_004c3ba0[0], temp_s2);
+    igMetaObject_NameFields(temp_s0, &g_beSelectCtrl_fieldTable[0], &DAT_004c3b98[0], &DAT_004c3ba0[0], temp_s2);
 }
 

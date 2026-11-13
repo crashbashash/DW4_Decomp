@@ -12,7 +12,7 @@ extern "C" int beMessenger_ResolveEnumValue(int, int, int);
 extern "C" void *igProperty_FindByName(int, int, int);
 extern "C" int g_beLightCtrlInfo_metaObject[4];
 extern "C" int g_beLightCtrl_metaObject[4];
-extern "C" char DAT_00510838[];
+extern "C" char LIGHTCTRL[];
 extern "C" void Gap__Bec__beLightCtrl__vfunc_29(beLightCtrl * p0, int p1, char * p2);
 extern "C" int g_propertyNameField[4];
 struct Light {
@@ -65,7 +65,7 @@ int Gap__Bec__beLightCtrl__vfunc_30(void)
 
 void Gap__Bec__beLightCtrl__vfunc_29(beLightCtrl * p0, int p1, char * p2)
 {
-    beMessenger_RegisterReceiverFromInfo(p0->_messenger, p1, DAT_00510838);
+    beMessenger_RegisterReceiverFromInfo(p0->_messenger, p1, LIGHTCTRL);
 }
 
 void Gap__Bec__beLightCtrl__vfunc_31(void)

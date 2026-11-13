@@ -5,7 +5,7 @@ void FUN_001c51d0(void) {
     if (((ObjectRefFieldView * *)DAT_00562768)[0] == 0) {
         field.p = igObjectRefMetaField_Create(Memory_GetAllocatorBySelector(DAT_00587038[0]));
         ((ObjectRefFieldView * *)DAT_00562768)[0] = field.p;
-        name = internText(DAT_004e4630);
+        name = internText(text_geoSet);
         igMetaField_SetFieldName(field.p, &name);
         if (name != 0) {
             int *header = (int *)name - 2;

@@ -49,13 +49,13 @@ extern "C" int FUN_0039c460(beResetNode *node, igCommonTraversal *trav);
 extern "C" int DAT_00562640[4];
 extern "C" int g_beSound_metaObject[4];
 extern "C" void Gap__Bec__beSeCtl__vfunc_32(beSeCtl *arg0);
-extern "C" char DAT_0050f760[];
+extern "C" char ACTION_BROADCAST_3[];
 extern "C" void Gap__Bec__beSeCtl__vfunc_29(beSeCtl * p0, int p1, char * p2, int p3, int p4);
 extern "C" int g_beSeInfo_metaObject[4];
 extern "C" int g_beSeCtl_metaObject[4];
 extern "C" int emptyString[4];
-extern "C" int DAT_0050f778[4];
-extern "C" int DAT_0050f788[4];
+extern "C" int MODELCTRL_13[4];
+extern "C" int SETSOUND[4];
 /* arg1 context: +12 holds the owning info. */
 struct ContextView { char p[12]; int f12; };
 /* arg2 message record: +12 model name, +16 slot, +20 action name */
@@ -155,7 +155,7 @@ void Gap__Bec__beSeCtl__vfunc_32(beSeCtl *arg0) {
 
 void Gap__Bec__beSeCtl__vfunc_29(beSeCtl * p0, int p1, char * p2, int p3, int p4)
 {
-    beMessenger_RegisterReceiver(p0->_messenger, p1, DAT_0050f760, 0, -1);
+    beMessenger_RegisterReceiver(p0->_messenger, p1, ACTION_BROADCAST_3, 0, -1);
 }
 
 int Gap__Bec__beSeCtl__vfunc_30(void)
@@ -215,10 +215,10 @@ int Gap__Bec__beSeCtl__vfunc_34(beSeCtl *arg0, struct ContextView *arg1, struct 
             p = (int *)it->_name;
             if (strcmp(p != 0 ? p : &emptyString[0], s7) == 0) {
                 sh = it->_delay;
-                beMessenger_SelectReceivers(arg0->_messenger, &DAT_0050f778[0], s5, s8);
+                beMessenger_SelectReceivers(arg0->_messenger, &MODELCTRL_13[0], s5, s8);
                 beMessenger_AppendString(arg0->_messenger, it->_sound);
                 beMessenger_AppendFloat(arg0->_messenger, __floatdisf(sh));
-                beMessenger_DispatchSelected(arg0->_messenger, &DAT_0050f788[0]);
+                beMessenger_DispatchSelected(arg0->_messenger, &SETSOUND[0]);
             }
             j += 1;
             off += 4;

@@ -147,7 +147,7 @@ void FUN_00452ca0(int arg0) {
     void *var_v0_9;
 
     temp_s1 = (void *)(FUN_002b5fe0(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0])));
-    if (&DAT_0051e7b8[0] == 0) {
+    if (&text_charNumber[0] == 0) {
         var_v0 = (void *)(0);
     } else {
         if (g_stringPool[0] == 0) {
@@ -157,7 +157,7 @@ void FUN_00452ca0(int arg0) {
             }
             g_stringPool[0] = var_v0_2;
         }
-        var_v0 = (void *)(StringPool_Intern(g_stringPool[0], &DAT_0051e7b8[0]));
+        var_v0 = (void *)(StringPool_Intern(g_stringPool[0], &text_charNumber[0]));
     }
     sp4C = (void *)(var_v0);
     igMetaField_SetFieldName(temp_s1, &sp4C);
@@ -177,7 +177,7 @@ void FUN_00452ca0(int arg0) {
         igObject_Destroy(temp_s1);
     }
     temp_s1_2 = (void *)(FUN_002c45f0(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0])));
-    if (&DAT_0051e7c8[0] == 0) {
+    if (&text_step[0] == 0) {
         var_v0_3 = (void *)(0);
     } else {
         if (g_stringPool[0] == 0) {
@@ -187,7 +187,7 @@ void FUN_00452ca0(int arg0) {
             }
             g_stringPool[0] = var_v0_4;
         }
-        var_v0_3 = (void *)(StringPool_Intern(g_stringPool[0], &DAT_0051e7c8[0]));
+        var_v0_3 = (void *)(StringPool_Intern(g_stringPool[0], &text_step[0]));
     }
     sp48 = (void *)(var_v0_3);
     igMetaField_SetFieldName(temp_s1_2, &sp48);
@@ -207,7 +207,7 @@ void FUN_00452ca0(int arg0) {
         igObject_Destroy(temp_s1_2);
     }
     temp_s1_3 = (void *)(FUN_00187b50(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0])));
-    if (&DAT_0051e7d0[0] == 0) {
+    if (&text_offset[0] == 0) {
         var_v0_5 = (void *)(0);
     } else {
         if (g_stringPool[0] == 0) {
@@ -217,7 +217,7 @@ void FUN_00452ca0(int arg0) {
             }
             g_stringPool[0] = var_v0_6;
         }
-        var_v0_5 = (void *)(StringPool_Intern(g_stringPool[0], &DAT_0051e7d0[0]));
+        var_v0_5 = (void *)(StringPool_Intern(g_stringPool[0], &text_offset[0]));
     }
     sp44 = (void *)(var_v0_5);
     igMetaField_SetFieldName(temp_s1_3, &sp44);
@@ -237,7 +237,7 @@ void FUN_00452ca0(int arg0) {
         igObject_Destroy(temp_s1_3);
     }
     temp_s1_4 = (void *)(FUN_00187b50(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0])));
-    if (&DAT_0051e7d8[0] == 0) {
+    if (&text_size_2[0] == 0) {
         var_v0_7 = (void *)(0);
     } else {
         if (g_stringPool[0] == 0) {
@@ -247,7 +247,7 @@ void FUN_00452ca0(int arg0) {
             }
             g_stringPool[0] = var_v0_8;
         }
-        var_v0_7 = (void *)(StringPool_Intern(g_stringPool[0], &DAT_0051e7d8[0]));
+        var_v0_7 = (void *)(StringPool_Intern(g_stringPool[0], &text_size_2[0]));
     }
     sp40 = (void *)(var_v0_7);
     igMetaField_SetFieldName(temp_s1_4, &sp40);
@@ -267,7 +267,7 @@ void FUN_00452ca0(int arg0) {
         igObject_Destroy(temp_s1_4);
     }
     temp_s1_5 = (void *)(FUN_00187b50(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0])));
-    if (&DAT_0051e7e0[0] == 0) {
+    if (&text_texCoordMin[0] == 0) {
         var_v0_9 = (void *)(0);
     } else {
         if (g_stringPool[0] == 0) {
@@ -277,7 +277,7 @@ void FUN_00452ca0(int arg0) {
             }
             g_stringPool[0] = var_v0_10;
         }
-        var_v0_9 = (void *)(StringPool_Intern(g_stringPool[0], &DAT_0051e7e0[0]));
+        var_v0_9 = (void *)(StringPool_Intern(g_stringPool[0], &text_texCoordMin[0]));
     }
     sp3C = (void *)(var_v0_9);
     igMetaField_SetFieldName(temp_s1_5, &sp3C);
@@ -297,7 +297,7 @@ void FUN_00452ca0(int arg0) {
         igObject_Destroy(temp_s1_5);
     }
     temp_s1_6 = (void *)(FUN_00187b50(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0])));
-    if (&DAT_0051e7f0[0] == 0) {
+    if (&text_texCoordMax[0] == 0) {
         var_v0_11 = (void *)(0);
     } else {
         if (g_stringPool[0] == 0) {
@@ -307,7 +307,7 @@ void FUN_00452ca0(int arg0) {
             }
             g_stringPool[0] = var_v0_12;
         }
-        var_v0_11 = (void *)(StringPool_Intern(g_stringPool[0], &DAT_0051e7f0[0]));
+        var_v0_11 = (void *)(StringPool_Intern(g_stringPool[0], &text_texCoordMax[0]));
     }
     sp38 = (void *)(var_v0_11);
     igMetaField_SetFieldName(temp_s1_6, &sp38);

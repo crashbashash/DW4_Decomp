@@ -63,7 +63,7 @@ void beNDMWShopCtrl30_InitFields(void) {
 
     temp_s0 = (void *)g_beNDMWShopCtrl30_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_004c9c08[0], 1);
-    igMetaObject_NameFields(temp_s0, &DAT_004c9c10[0], &DAT_004c9c18[0], &DAT_004c9c20[0], temp_s1);
+    igMetaObject_CreateFields(temp_s0, &g_beNDMWShopCtrl30_ctorTable[0], 1);
+    igMetaObject_NameFields(temp_s0, &g_beNDMWShopCtrl30_fieldTable[0], &DAT_004c9c18[0], &DAT_004c9c20[0], temp_s1);
 }
 

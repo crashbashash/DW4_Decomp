@@ -139,8 +139,8 @@ int Gap__Gfx__igClut__vfunc_23(int arg0, int arg1) {
 
     temp_v0 = FUN_0015ad50((char *)arg1);
     if (temp_v0 != 0) {
-        if (strcmp(temp_v0, &DAT_004de6b0[0]) != 0) {
-            if (strcmp(temp_v0, &DAT_004de6b8[0]) == 0) {
+        if (strcmp(temp_v0, &text_act[0]) != 0) {
+            if (strcmp(temp_v0, &ACT[0]) == 0) {
                 goto block_4;
             }
             goto block_5;

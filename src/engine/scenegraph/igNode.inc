@@ -101,7 +101,7 @@ void igNode_InitFields(void) {
 
     temp_s1 = (void *)g_igNode_metaObject[0];
     temp_s0 = igMetaObject_GetFieldCount(temp_s1);
-    igMetaObject_CreateFields(temp_s1, &DAT_0048bc90[0], 4);
+    igMetaObject_CreateFields(temp_s1, &g_igNode_ctorTable[0], 4);
     temp_s2 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s1, temp_s0)));
     ((igObjectRefMetaField *)temp_s2)->_metaObject = FUN_00186a80();
     temp_s2_2 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s1, temp_s0 + 1)));
@@ -115,7 +115,7 @@ void igNode_InitFields(void) {
     temp_v0 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s1, temp_s0 + 3)));
     FUN_002ea4b0(temp_v0, -1);
     ((igIntMetaField *)temp_v0)->_persistent = 0;
-    igMetaObject_NameFields(temp_s1, &DAT_0048bca0[0], &DAT_0048bcb0[0], &DAT_0048bcc0[0], temp_s0);
+    igMetaObject_NameFields(temp_s1, &g_igNode_fieldTable[0], &DAT_0048bcb0[0], &DAT_0048bcc0[0], temp_s0);
 }
 
 void **FUN_0019d0a0(void **arg0, long long arg1) {

@@ -63,14 +63,14 @@ void igSphere_InitFields(void) {
 
     temp_s0 = (void *)g_igSphere_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_0048ada0[0], 2);
+    igMetaObject_CreateFields(temp_s0, &g_igSphere_ctorTable[0], 2);
     temp_a0 = igMetaObject_GetFieldAt(temp_s0, temp_s1);
     v[0] = 0;
     v[1] = 0;
     v[2] = 0;
     FUN_0018e470((igVec3fMetaFieldView *)temp_a0, (const float *)v);
     FUN_002e3810(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 1), -1.0f);
-    igMetaObject_NameFields(temp_s0, &DAT_0048ada8[0], &DAT_0048adb0[0], &DAT_0048adb8[0], temp_s1);
+    igMetaObject_NameFields(temp_s0, &g_igSphere_fieldTable[0], &DAT_0048adb0[0], &DAT_0048adb8[0], temp_s1);
 }
 
 void thunk_FUN_0018d480(void) {

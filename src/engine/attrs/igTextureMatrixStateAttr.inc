@@ -56,9 +56,9 @@ void igTextureMatrixStateAttr_InitFields(void) {
 
     temp_s0 = g_igTextureMatrixStateAttr_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_00485af8[0], 2);
+    igMetaObject_CreateFields(temp_s0, &g_igTextureMatrixStateAttr_ctorTable[0], 2);
     f = (struct F *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 1);
     f->f48 = (int *)FUN_00141620;
-    igMetaObject_NameFields(temp_s0, &DAT_00485b00[0], &DAT_00485b08[0], &DAT_00485b10[0], temp_s1);
+    igMetaObject_NameFields(temp_s0, &g_igTextureMatrixStateAttr_fieldTable[0], &DAT_00485b08[0], &DAT_00485b10[0], temp_s1);
 }
 

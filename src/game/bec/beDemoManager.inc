@@ -102,7 +102,7 @@ void beDemoManager_InitFields(void) {
 
     temp_s0 = (void *)g_beDemoManager_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_004c6fc0[0], 7);
+    igMetaObject_CreateFields(temp_s0, &g_beDemoManager_ctorTable[0], 7);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
     ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_00357910();
     ((igObjectRefMetaField *)temp_s1)->_refCounted = 0;
@@ -114,6 +114,6 @@ void beDemoManager_InitFields(void) {
     temp_s1_4 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 3));
     ((igObjectRefMetaField *)temp_s1_4)->_metaObject = (int)FUN_00363630();
     ((igRefMetaField *)temp_s1_4)->_construct = 1;
-    igMetaObject_NameFields(temp_s0, &DAT_004c6fe0[0], &DAT_004c7000[0], &DAT_004c7020[0], temp_s2);
+    igMetaObject_NameFields(temp_s0, &g_beDemoManager_fieldTable[0], &DAT_004c7000[0], &DAT_004c7020[0], temp_s2);
 }
 

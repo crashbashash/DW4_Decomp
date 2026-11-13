@@ -54,7 +54,7 @@ void beSaveIntfComMdlData_InitFields(void) {
 
     temp_s0 = (void *)g_beSaveIntfComMdlData_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_004ca1b8[0], 3);
-    igMetaObject_NameFields(temp_s0, &DAT_004ca1c8[0], &DAT_004ca1d8[0], &DAT_004ca1e8[0], temp_s1);
+    igMetaObject_CreateFields(temp_s0, &g_beSaveIntfComMdlData_ctorTable[0], 3);
+    igMetaObject_NameFields(temp_s0, &g_beSaveIntfComMdlData_fieldTable[0], &DAT_004ca1d8[0], &DAT_004ca1e8[0], temp_s1);
 }
 

@@ -115,7 +115,7 @@ void FUN_002ce850(int arg0) {
     void *var_v0;
 
     temp_s0 = (void *)(((void *)igUnsignedIntMetaField_Create(((int)Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0])))));
-    if (&DAT_004f8cc0[0] == 0) {
+    if (&text_sizeAndStatus[0] == 0) {
         var_v0 = (void *)(0);
     } else {
         if (g_stringPool[0] == 0) {
@@ -125,7 +125,7 @@ void FUN_002ce850(int arg0) {
             }
             g_stringPool[0] = var_v0_2;
         }
-        var_v0 = (void *)(((void *)StringPool_Intern((StringPool *)g_stringPool[0], (const char *)&DAT_004f8cc0[0])));
+        var_v0 = (void *)(((void *)StringPool_Intern((StringPool *)g_stringPool[0], (const char *)&text_sizeAndStatus[0])));
     }
     sp3C = (void *)(var_v0);
     igMetaField_SetFieldName((igMetaField *)temp_s0, &sp3C);

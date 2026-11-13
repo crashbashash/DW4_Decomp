@@ -56,7 +56,7 @@ void beNDMWWindow_InitFields(void) {
 
     temp_s1 = (void *)g_beNDMWWindow_metaObject[0];
     temp_s0 = igMetaObject_GetFieldCount(temp_s1);
-    igMetaObject_CreateFields(temp_s1, &DAT_004c9490[0], 0x12);
+    igMetaObject_CreateFields(temp_s1, &g_beNDMWWindow_ctorTable[0], 0x12);
     temp_s2 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0));
     ((igObjectRefMetaField *)temp_s2)->_metaObject = FUN_00232840();
     ((igObjectRefMetaField *)temp_s2)->_refCounted = 0;
@@ -87,6 +87,6 @@ void beNDMWWindow_InitFields(void) {
     temp_s2_10 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 0x11));
     ((igObjectRefMetaField *)temp_s2_10)->_metaObject = FUN_002b9120();
     ((igRefMetaField *)temp_s2_10)->_construct = 1;
-    igMetaObject_NameFields(temp_s1, &DAT_004c94e0[0], &DAT_004c9530[0], &DAT_004c9580[0], temp_s0);
+    igMetaObject_NameFields(temp_s1, &g_beNDMWWindow_fieldTable[0], &DAT_004c9530[0], &DAT_004c9580[0], temp_s0);
 }
 

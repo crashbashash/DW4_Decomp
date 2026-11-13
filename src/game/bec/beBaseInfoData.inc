@@ -39,7 +39,7 @@ void beBaseInfoData_InitFields(void) {
 
     temp_s0 = (void *)g_beBaseInfoData_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_004c7d80[0], 1);
-    igMetaObject_NameFields(temp_s0, &DAT_004c7d88[0], &DAT_004c7d90[0], &DAT_004c7d98[0], temp_s1);
+    igMetaObject_CreateFields(temp_s0, &g_beBaseInfoData_ctorTable[0], 1);
+    igMetaObject_NameFields(temp_s0, &g_beBaseInfoData_fieldTable[0], &DAT_004c7d90[0], &DAT_004c7d98[0], temp_s1);
 }
 

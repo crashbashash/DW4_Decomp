@@ -86,7 +86,7 @@ void beAction2InfoRam_InitFields(void) {
 
     temp_s1 = (void *)g_beAction2InfoRam_metaObject[0];
     temp_s0 = igMetaObject_GetFieldCount(temp_s1);
-    igMetaObject_CreateFields(temp_s1, &DAT_004c8060[0], 4);
+    igMetaObject_CreateFields(temp_s1, &g_beAction2InfoRam_ctorTable[0], 4);
     temp_s2 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0));
     ((igObjectRefMetaField *)temp_s2)->_metaObject = (int)FUN_0034fd40();
     temp_s2_2 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 1));
@@ -97,6 +97,6 @@ void beAction2InfoRam_InitFields(void) {
     ((igRefMetaField *)temp_s2_3)->_construct = 1;
     temp_s2_4 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 3));
     ((igObjectRefMetaField *)temp_s2_4)->_metaObject = (int)FUN_0036c2e0();
-    igMetaObject_NameFields(temp_s1, &DAT_004c8070[0], &DAT_004c8080[0], &DAT_004c8090[0], temp_s0);
+    igMetaObject_NameFields(temp_s1, &g_beAction2InfoRam_fieldTable[0], &DAT_004c8080[0], &DAT_004c8090[0], temp_s0);
 }
 

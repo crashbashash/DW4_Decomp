@@ -76,7 +76,7 @@ void beLOA_InitFields(void) {
 
     temp_s1 = (void *)g_beLOA_metaObject[0];
     temp_s0 = igMetaObject_GetFieldCount(temp_s1);
-    igMetaObject_CreateFields(temp_s1, &DAT_004c6470[0], 0xA);
+    igMetaObject_CreateFields(temp_s1, &g_beLOA_ctorTable[0], 0xA);
     temp_a0 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 5));
     sp40[0] = 0x3F800000;
     sp40[1] = 0x3F800000;
@@ -95,7 +95,7 @@ void beLOA_InitFields(void) {
     temp_s2_4 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 9));
     ((igObjectRefMetaField *)temp_s2_4)->_metaObject = FUN_00138f20();
     ((igRefMetaField *)temp_s2_4)->_construct = 1;
-    igMetaObject_NameFields(temp_s1, &DAT_004c64a0[0], &DAT_004c64d0[0], &DAT_004c6500[0], temp_s0);
+    igMetaObject_NameFields(temp_s1, &g_beLOA_fieldTable[0], &DAT_004c64d0[0], &DAT_004c6500[0], temp_s0);
 }
 
 void FUN_0035d050(void)

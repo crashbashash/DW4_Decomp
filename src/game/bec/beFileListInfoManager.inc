@@ -82,7 +82,7 @@ void beFileListInfoManager_InitFields(void) {
 
     temp_s1 = (void *)g_beFileListInfoManager_metaObject[0];
     temp_s0 = igMetaObject_GetFieldCount(temp_s1);
-    igMetaObject_CreateFields(temp_s1, &DAT_004c6e90[0], 0xC);
+    igMetaObject_CreateFields(temp_s1, &g_beFileListInfoManager_ctorTable[0], 0xC);
     temp_s2 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0));
     ((igObjectRefMetaField *)temp_s2)->_metaObject = (int)FUN_00342ce0();
     ((igObjectRefMetaField *)temp_s2)->_refCounted = 0;
@@ -108,6 +108,6 @@ void beFileListInfoManager_InitFields(void) {
     temp_s2_8 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 9));
     ((igObjectRefMetaField *)temp_s2_8)->_metaObject = FUN_002c3440();
     ((igRefMetaField *)temp_s2_8)->_construct = 1;
-    igMetaObject_NameFields(temp_s1, &DAT_004c6ec0[0], &DAT_004c6ef0[0], &DAT_004c6f20[0], temp_s0);
+    igMetaObject_NameFields(temp_s1, &g_beFileListInfoManager_fieldTable[0], &DAT_004c6ef0[0], &DAT_004c6f20[0], temp_s0);
 }
 

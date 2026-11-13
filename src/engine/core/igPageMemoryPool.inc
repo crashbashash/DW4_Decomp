@@ -83,21 +83,21 @@ void thunk_igPageMemoryPool_GetMetaObject(void) {
 
 int FUN_002cd990(void) {
     if (DAT_00586a70[0] == 0) {
-        DAT_00586a70[0] = ((int)igMetaEnum_Create((char *)&DAT_004f8ac0[0], (char **)&DAT_004c1760[0], &DAT_004c1790[0], 0xA));
+        DAT_00586a70[0] = ((int)igMetaEnum_Create((char *)&ArenaMemoryPoolFlags[0], (char **)&DAT_004c1760[0], &DAT_004c1790[0], 0xA));
     }
     return DAT_00586a70[0];
 }
 
 int FUN_002cd9f0(void) {
     if (DAT_00586a78[0] == 0) {
-        DAT_00586a78[0] = ((int)igMetaEnum_Create((char *)&DAT_004f89f8[0], (char **)&DAT_004c17c0[0], &DAT_004c17d0[0], 4));
+        DAT_00586a78[0] = ((int)igMetaEnum_Create((char *)&MessageLevel[0], (char **)&DAT_004c17c0[0], &DAT_004c17d0[0], 4));
     }
     return DAT_00586a78[0];
 }
 
 int FUN_002cda50(void) {
     if (DAT_00586a80[0] == 0) {
-        DAT_00586a80[0] = ((int)igMetaEnum_Create((char *)&DAT_004f8b30[0], (char **)&DAT_004c17e0[0], &DAT_004c17f0[0], 4));
+        DAT_00586a80[0] = ((int)igMetaEnum_Create((char *)&HeapIntegrityCheckLevel[0], (char **)&DAT_004c17e0[0], &DAT_004c17f0[0], 4));
     }
     return DAT_00586a80[0];
 }

@@ -107,7 +107,7 @@ void igActor_InitFields(void) {
 
     temp_s0 = (void *)g_igActor_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_0048d770[0], 0xD);
+    igMetaObject_CreateFields(temp_s0, &g_igActor_ctorTable[0], 0xD);
     temp_s2 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s1)));
     ((igObjectRefMetaField *)temp_s2)->_metaObject = (int)FUN_001a6600();
     temp_s2_2 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 1)));
@@ -158,6 +158,6 @@ void igActor_InitFields(void) {
     temp_v0_2 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0xC)));
     FUN_002d3890(temp_v0_2, 1);
     ((igMetaField *)temp_v0_2)->_persistent = 0;
-    igMetaObject_NameFields(temp_s0, &DAT_0048d7b0[0], &DAT_0048d7f0[0], &DAT_0048d830[0], temp_s1);
+    igMetaObject_NameFields(temp_s0, &g_igActor_fieldTable[0], &DAT_0048d7f0[0], &DAT_0048d830[0], temp_s1);
 }
 

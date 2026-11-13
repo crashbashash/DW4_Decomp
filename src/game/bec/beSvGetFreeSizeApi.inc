@@ -95,7 +95,7 @@ void beSvGetFreeSizeApi_InitFields(void) {
 
     temp_s0 = (void *)g_beSvGetFreeSizeApi_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_004c4028[0], 3);
-    igMetaObject_NameFields(temp_s0, &DAT_004c4038[0], &DAT_004c4048[0], &DAT_004c4058[0], temp_s1);
+    igMetaObject_CreateFields(temp_s0, &g_beSvGetFreeSizeApi_ctorTable[0], 3);
+    igMetaObject_NameFields(temp_s0, &g_beSvGetFreeSizeApi_fieldTable[0], &DAT_004c4048[0], &DAT_004c4058[0], temp_s1);
 }
 

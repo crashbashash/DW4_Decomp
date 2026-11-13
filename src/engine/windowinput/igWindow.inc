@@ -58,7 +58,7 @@ void thunk_FUN_00146a60(void) {
 
 int FUN_00145eb0(void) {
     if (DAT_0055f5e0[0] == 0) {
-        DAT_0055f5e0[0] = igMetaEnum_Create(&DAT_004d64d8[0], &DAT_00486dd0[0], &DAT_00486f80[0], 0x69);
+        DAT_0055f5e0[0] = igMetaEnum_Create(&KEY_VALUES[0], &DAT_00486dd0[0], &DAT_00486f80[0], 0x69);
     }
     return DAT_0055f5e0[0];
 }

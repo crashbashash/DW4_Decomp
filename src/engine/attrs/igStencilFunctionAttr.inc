@@ -51,7 +51,7 @@ void igStencilFunctionAttr_InitFields(void) {
 
     temp_s1 = (void *)g_igStencilFunctionAttr_metaObject[0];
     temp_s0 = igMetaObject_GetFieldCount(temp_s1);
-    igMetaObject_CreateFields(temp_s1, &DAT_00485e70[0], 7);
+    igMetaObject_CreateFields(temp_s1, &g_igStencilFunctionAttr_ctorTable[0], 7);
     temp_v0 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 1));
     FUN_002dc7a0(temp_v0, &DAT_00485ef0[0]);
     *(void **)&((igEnumMetaField *)temp_v0)->_getMetaEnumFunction = (void *)FUN_00149500;
@@ -66,7 +66,7 @@ void igStencilFunctionAttr_InitFields(void) {
     temp_v0 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 6));
     FUN_002dc7a0(temp_v0, &DAT_00485f08[0]);
     *(void **)&((igEnumMetaField *)temp_v0)->_getMetaEnumFunction = (void *)FUN_001494a0;
-    igMetaObject_NameFields(temp_s1, &DAT_00485e90[0], &DAT_00485eb0[0], &DAT_00485ed0[0], temp_s0);
+    igMetaObject_NameFields(temp_s1, &g_igStencilFunctionAttr_fieldTable[0], &DAT_00485eb0[0], &DAT_00485ed0[0], temp_s0);
 }
 
 void **FUN_001338d0(void **arg0, short arg1) {

@@ -64,10 +64,10 @@ void igExternalInfoEntry_InitFields(void) {
 
     temp_s0 = (void *)g_igExternalInfoEntry_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
-    igMetaObject_CreateFields((igMetaObject *)temp_s0, (igMetaField * (**)(void *))&DAT_004c0c00[0], 3);
+    igMetaObject_CreateFields((igMetaObject *)temp_s0, (igMetaField * (**)(void *))&g_igExternalInfoEntry_ctorTable[0], 3);
     igStringMetaField_SetDefaultText((int *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1)), 0);
     FUN_002ea4b0((void **)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 1)), -1);
     igStringMetaField_SetDefaultText((int *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 2)), 0);
-    igMetaObject_NameFields((igMetaObject *)temp_s0, (const char **)&DAT_004c0c10[0], (igMetaField ***)&DAT_004c0c20[0], &DAT_004c0c30[0], temp_s1);
+    igMetaObject_NameFields((igMetaObject *)temp_s0, (const char **)&g_igExternalInfoEntry_fieldTable[0], (igMetaField ***)&DAT_004c0c20[0], &DAT_004c0c30[0], temp_s1);
 }
 

@@ -92,9 +92,9 @@ void beNDMWStatusInfoRam_InitFields(void) {
 
     temp_s0 = (void *)g_beNDMWStatusInfoRam_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_004c9840[0], 1);
+    igMetaObject_CreateFields(temp_s0, &g_beNDMWStatusInfoRam_ctorTable[0], 1);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
     ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_003b5f00();
-    igMetaObject_NameFields(temp_s0, &DAT_004c9848[0], &DAT_004c9850[0], &DAT_004c9858[0], temp_s2);
+    igMetaObject_NameFields(temp_s0, &g_beNDMWStatusInfoRam_fieldTable[0], &DAT_004c9850[0], &DAT_004c9858[0], temp_s2);
 }
 

@@ -121,7 +121,7 @@ void igAppearance_InitFields(void) {
 
     temp_s1 = (void *)g_igAppearance_metaObject[0];
     temp_s0 = igMetaObject_GetFieldCount(temp_s1);
-    igMetaObject_CreateFields(temp_s1, &DAT_0048ce60[0], 5);
+    igMetaObject_CreateFields(temp_s1, &g_igAppearance_ctorTable[0], 5);
     temp_s2 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s1, temp_s0)));
     ((igObjectRefMetaField *)temp_s2)->_metaObject = (int)FUN_00197fd0();
     temp_s2_2 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s1, temp_s0 + 1)));
@@ -136,6 +136,6 @@ void igAppearance_InitFields(void) {
     temp_s2_5 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s1, temp_s0 + 4)));
     ((igObjectRefMetaField *)temp_s2_5)->_metaObject = (int)FUN_0019cbe0();
     ((igRefMetaField *)temp_s2_5)->_construct = 1;
-    igMetaObject_NameFields(temp_s1, &DAT_0048ce80[0], &DAT_0048cea0[0], &DAT_0048cec0[0], temp_s0);
+    igMetaObject_NameFields(temp_s1, &g_igAppearance_fieldTable[0], &DAT_0048cea0[0], &DAT_0048cec0[0], temp_s0);
 }
 

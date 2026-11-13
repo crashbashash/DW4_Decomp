@@ -66,7 +66,7 @@ void igDataPump_InitFields(void) {
 
     temp_s0 = (void *)g_igDataPump_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_0048dbf0[0], 5);
+    igMetaObject_CreateFields(temp_s0, &g_igDataPump_ctorTable[0], 5);
     temp_v0 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
     *(int *)((char *)(temp_v0) + 56) = (int)((int) g_igObject_metaObject[0]);
     *(char *)((char *)(temp_v0) + 52) = 1;
@@ -77,6 +77,6 @@ void igDataPump_InitFields(void) {
     igStringMetaField_SetDefaultText(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 3), 0);
     temp_s1_2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 4));
     *(int *)((char *)(temp_s1_2) + 56) = (int)FUN_001e5530();
-    igMetaObject_NameFields(temp_s0, &DAT_0048dc10[0], &DAT_0048dc30[0], &DAT_0048dc50[0], temp_s2);
+    igMetaObject_NameFields(temp_s0, &g_igDataPump_fieldTable[0], &DAT_0048dc30[0], &DAT_0048dc50[0], temp_s2);
 }
 

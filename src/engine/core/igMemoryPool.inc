@@ -44,10 +44,10 @@ void igMemoryPool_InitFields(void) {
 
     temp_s0 = (void *)(((void * *)g_igMemoryPool_metaObject)[0]);
     temp_s1 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
-    igMetaObject_CreateFields((igMetaObject *)temp_s0, (igMetaField * (**)(void *))&DAT_004c0190[0], 0xE);
+    igMetaObject_CreateFields((igMetaObject *)temp_s0, (igMetaField * (**)(void *))&g_igMemoryPool_ctorTable[0], 0xE);
     FUN_002d3890((void **)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0xC)), 1);
     FUN_002d3890((void **)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0xD)), 1);
-    igMetaObject_NameFields((igMetaObject *)temp_s0, (const char **)&DAT_004c01d0[0], (igMetaField ***)&DAT_004c0210[0], &DAT_004c0250[0], temp_s1);
+    igMetaObject_NameFields((igMetaObject *)temp_s0, (const char **)&g_igMemoryPool_fieldTable[0], (igMetaField ***)&DAT_004c0210[0], &DAT_004c0250[0], temp_s1);
     *(int *)((char *)(((void * *)g_igMemoryPool_metaObject)[0]) + 60) = (int)thunk_igArenaMemoryPool_GetMetaObject;
 }
 

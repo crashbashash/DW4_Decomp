@@ -75,8 +75,8 @@ void beHitLandResultData_InitFields(void) {
 
     temp_s0 = (void *)g_beHitLandResultData_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_004c6760[0], 2);
+    igMetaObject_CreateFields(temp_s0, &g_beHitLandResultData_ctorTable[0], 2);
     igStringMetaField_SetDefaultText(((int)igMetaObject_GetFieldAt(temp_s0, temp_s1)), &DAT_00502a98[0]);
-    igMetaObject_NameFields(temp_s0, &DAT_004c6768[0], &DAT_004c6770[0], &DAT_004c6778[0], temp_s1);
+    igMetaObject_NameFields(temp_s0, &g_beHitLandResultData_fieldTable[0], &DAT_004c6770[0], &DAT_004c6778[0], temp_s1);
 }
 

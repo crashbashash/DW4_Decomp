@@ -61,7 +61,7 @@ void igBillboard_InitFields(void) {
 
     temp_s0 = (void *)g_igBillboard_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_0048cbc0[0], 4);
+    igMetaObject_CreateFields(temp_s0, &g_igBillboard_ctorTable[0], 4);
     temp_a0 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1)));
     spA[0] = 0;
     spA[2] = 1.0f;
@@ -75,6 +75,6 @@ void igBillboard_InitFields(void) {
     temp_s1 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s2 + 3)));
     *(int *)((char *)(temp_s1) + 56) = FUN_001356f0();
     *(char *)((char *)(temp_s1) + 38) = 0;
-    igMetaObject_NameFields(temp_s0, &DAT_0048cbd0[0], &DAT_0048cbe0[0], &DAT_0048cbf0[0], temp_s2);
+    igMetaObject_NameFields(temp_s0, &g_igBillboard_fieldTable[0], &DAT_0048cbe0[0], &DAT_0048cbf0[0], temp_s2);
 }
 

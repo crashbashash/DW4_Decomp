@@ -85,7 +85,7 @@ extern int DAT_00569090;
 extern int DAT_00569094;
 extern int DAT_00569098;
 extern char DAT_005690a0[P2_DMA_CHANNEL_COUNT];
-extern const char DAT_004e4fe0[];
+extern const char text_p2PreviousFinishFuncDonePredicat[];
 
 /* The DMAC handler of channel 0 (VIF0): the transfer of the active packet has ended. */
 int p2Vif0DmaHandler(int channel) {
@@ -162,7 +162,7 @@ void p2InitDmaPredicatePool(void) {
     p2DmaPredicatePool = 0;
     p2GrowPool(P2_POOL_DMA_PREDICATE, &p2DmaPredicatePool);
     if (p2FirstOpen != 0) {
-        p2RegisterPredicateName(p2PreviousFinishFuncDonePredicate, DAT_004e4fe0);
+        p2RegisterPredicateName(p2PreviousFinishFuncDonePredicate, text_p2PreviousFinishFuncDonePredicat);
     }
 }
 

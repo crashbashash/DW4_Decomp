@@ -76,11 +76,11 @@ void beNDMWLoadCtrl2CtrlData_InitFields(void) {
 
     temp_s1 = (void *)(((void * *)g_beNDMWLoadCtrl2CtrlData_metaObject)[0]);
     temp_s2 = igMetaObject_GetFieldCount(temp_s1);
-    igMetaObject_CreateFields(temp_s1, &DAT_004cbfa0[0], 5);
-    temp_v0 = (void **)(igMetaObject_FindFieldByName(temp_s1, &DAT_00510cd8[0]));
+    igMetaObject_CreateFields(temp_s1, &g_beNDMWLoadCtrl2CtrlData_ctorTable[0], 5);
+    temp_v0 = (void **)(igMetaObject_FindFieldByName(temp_s1, &text_name_2[0]));
     temp_s3 = ObjectPointerList_FindIndex(*(int *)((char *)(temp_s1) + 40), temp_v0);
     temp_v0_2 = (void *)(((DW4VC_84_1 *)(temp_v0))->vX((int)(1)));
-    igStringMetaField_SetDefaultText(temp_v0_2, &DAT_00510d38[0]);
+    igStringMetaField_SetDefaultText(temp_v0_2, &CTRL_5[0]);
     *(int *)((char *)(temp_v0_2) + 28) = (int)(&DAT_0058beb8[0]);
     igMetaObject_FinalizeAndReplaceField(temp_s1, temp_s3, temp_v0_2);
     ((RT *)temp_v0_2)->references = ((RT *)temp_v0_2)->references - 1;
@@ -88,7 +88,7 @@ void beNDMWLoadCtrl2CtrlData_InitFields(void) {
         igObject_Destroy(temp_v0_2);
     }
     FUN_002d3890(((int)igMetaObject_GetFieldAt(temp_s1, temp_s2)), 1);
-    igMetaObject_NameFields(temp_s1, &DAT_004cbfc0[0], &DAT_004cbfe0[0], &DAT_004cc000[0], temp_s2);
+    igMetaObject_NameFields(temp_s1, &g_beNDMWLoadCtrl2CtrlData_fieldTable[0], &DAT_004cbfe0[0], &DAT_004cc000[0], temp_s2);
 }
 
 int LoadCtrl2Message_GetMetaEnum(void) {

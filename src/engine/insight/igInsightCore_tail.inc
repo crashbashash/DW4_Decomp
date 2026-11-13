@@ -70,9 +70,9 @@ void FUN_00237280(int *arg0) {
 
 void Gap__Insight__igInsightCore__vfunc_13(struct A_237300 *arg0) {
     Gap__Core__igObject__vfunc_11();
-    StringRef_237300 first(&DAT_004e9840[0]);
-    StringRef_237300 second(&DAT_004e9850[0]);
-    StringRef_237300 third(&DAT_004e9860[0]);
+    StringRef_237300 first(&Clear_done[0]);
+    StringRef_237300 second(&Scenes_done[0]);
+    StringRef_237300 third(&Overlays_done[0]);
     FUN_002d78e0(arg0->f28, first.p);
     FUN_002d78e0(arg0->f28, second.p);
     FUN_002d78e0(arg0->f28, third.p);

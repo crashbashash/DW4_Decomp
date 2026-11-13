@@ -74,8 +74,8 @@ void beLoadingNode_InitFields(void) {
 
     temp_s0 = (void *)g_beLoadingNode_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_004c4a50[0], 2);
-    igMetaObject_NameFields(temp_s0, &DAT_004c4a58[0], &DAT_004c4a60[0], &DAT_004c4a68[0], temp_s1);
+    igMetaObject_CreateFields(temp_s0, &g_beLoadingNode_ctorTable[0], 2);
+    igMetaObject_NameFields(temp_s0, &g_beLoadingNode_fieldTable[0], &DAT_004c4a60[0], &DAT_004c4a68[0], temp_s1);
 }
 
 void FUN_0034e850(void)

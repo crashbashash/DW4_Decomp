@@ -57,7 +57,7 @@ void beCriVolume_InitFields(void) {
 
     temp_s0 = (void *)g_beCriVolume_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_004c7350[0], 6);
-    igMetaObject_NameFields(temp_s0, &DAT_004c7370[0], &DAT_004c7390[0], &DAT_004c73b0[0], temp_s1);
+    igMetaObject_CreateFields(temp_s0, &g_beCriVolume_ctorTable[0], 6);
+    igMetaObject_NameFields(temp_s0, &g_beCriVolume_fieldTable[0], &DAT_004c7390[0], &DAT_004c73b0[0], temp_s1);
 }
 

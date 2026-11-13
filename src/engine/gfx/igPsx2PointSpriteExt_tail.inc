@@ -61,10 +61,10 @@ void igPsx2PointSpriteExt_InitFields(void) {
 
     temp_s0 = (void *)g_igPsx2PointSpriteExt_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_00489e90[0], 1);
+    igMetaObject_CreateFields(temp_s0, &g_igPsx2PointSpriteExt_ctorTable[0], 1);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
     ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_00150770();
     ((igObjectRefMetaField *)temp_s1)->_refCounted = 0;
-    igMetaObject_NameFields(temp_s0, &DAT_00489e98[0], &DAT_00489ea0[0], &DAT_00489ea8[0], temp_s2);
+    igMetaObject_NameFields(temp_s0, &g_igPsx2PointSpriteExt_fieldTable[0], &DAT_00489ea0[0], &DAT_00489ea8[0], temp_s2);
 }
 

@@ -60,12 +60,12 @@ void beModelCtrlNode2_InitFields(void) {
 
     temp_s0 = (void *)g_beModelCtrlNode2_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_004c4d50[0], 4);
+    igMetaObject_CreateFields(temp_s0, &g_beModelCtrlNode2_ctorTable[0], 4);
     FUN_002e3810(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1), 1.0f);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 3));
     *(int *)((char *)(temp_s1) + 56) = FUN_0013af00();
     *(char *)((char *)(temp_s1) + 52) = 1;
-    igMetaObject_NameFields(temp_s0, &DAT_004c4d60[0], &DAT_004c4d70[0], &DAT_004c4d80[0], temp_s2);
+    igMetaObject_NameFields(temp_s0, &g_beModelCtrlNode2_fieldTable[0], &DAT_004c4d70[0], &DAT_004c4d80[0], temp_s2);
 }
 
 void FUN_00350000(void)

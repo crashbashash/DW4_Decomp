@@ -49,7 +49,7 @@ void beModelCtrlSCHitBox_InitFields(void) {
 
     temp_s0 = (void *)g_beModelCtrlSCHitBox_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_004c4c00[0], 6);
-    igMetaObject_NameFields(temp_s0, &DAT_004c4c20[0], &DAT_004c4c40[0], &DAT_004c4c60[0], temp_s1);
+    igMetaObject_CreateFields(temp_s0, &g_beModelCtrlSCHitBox_ctorTable[0], 6);
+    igMetaObject_NameFields(temp_s0, &g_beModelCtrlSCHitBox_fieldTable[0], &DAT_004c4c40[0], &DAT_004c4c60[0], temp_s1);
 }
 

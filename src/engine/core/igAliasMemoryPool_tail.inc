@@ -335,7 +335,7 @@ void igAliasMemoryPool_PrintStatistics(StatsPool *arg0, char *arg1) {
     if (arg0->f97() != 0) {
         s0 = ((int *)FUN_002f89a0(arg0->f97()));
     } else {
-        s0 = DAT_004f90b8;
+        s0 = text_null;
     }
     s6 = arg0->f45();
     s7 = arg0->f46();

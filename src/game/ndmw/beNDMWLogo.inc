@@ -70,7 +70,7 @@ void beNDMWLogo_InitFields(void) {
 
     temp_s0 = (void *)g_beNDMWLogo_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_004cac60[0], 0xB);
+    igMetaObject_CreateFields(temp_s0, &g_beNDMWLogo_ctorTable[0], 0xB);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
     ((igObjectRefMetaField *)temp_s1)->_metaObject = FUN_0034c8e0();
     ((igObjectRefMetaField *)temp_s1)->_refCounted = 0;
@@ -81,6 +81,6 @@ void beNDMWLogo_InitFields(void) {
     ((igObjectRefMetaField *)temp_s1_3)->_metaObject = (int)FUN_003c5200();
     FUN_002d3890(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 6), 1);
     FUN_002ea4b0(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 9), -1);
-    igMetaObject_NameFields(temp_s0, &DAT_004cac90[0], &DAT_004cacc0[0], &DAT_004cacf0[0], temp_s2);
+    igMetaObject_NameFields(temp_s0, &g_beNDMWLogo_fieldTable[0], &DAT_004cacc0[0], &DAT_004cacf0[0], temp_s2);
 }
 

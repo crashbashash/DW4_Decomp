@@ -145,7 +145,7 @@ int FUN_001e70a0(int arg0, int arg1, int arg2, int arg3, int arg4, int arg5) {
     int temp_v0_4;
 
     sp6C = (void *)(0);
-    FUN_001e6de0((int *)&sp68, (Vector3f *)arg4, &DAT_004e4ac0[0]);
+    FUN_001e6de0((int *)&sp68, (Vector3f *)arg4, &text_f_f_f_2[0]);
     if (FUN_00306910(arg0, arg1, arg2, &sp6C, sp68, arg5) != 0) {
         temp_s0 = Vec3f_FromString((int)sp6C, (int *)arg3, (int)&DAT_004e4ad0[0]) & 0xFF;
         if (sp68 != 0) {
@@ -199,7 +199,7 @@ int FUN_001e71f0(int arg0, int arg1, int arg2, int arg3, int arg4, int arg5) {
     int temp_v0_4;
 
     sp6C = (void *)(0);
-    FUN_001e6f10((int *)&sp68, (Quad *)arg4, &DAT_004e4ae8[0]);
+    FUN_001e6f10((int *)&sp68, (Quad *)arg4, &text_f_f_f_f_2[0]);
     if (FUN_00306910(arg0, arg1, arg2, &sp6C, sp68, arg5) != 0) {
         temp_s0 = FUN_001e6d80((int)sp6C, (int *)arg3, (int)&DAT_004e4b00[0]) & 0xFF;
         if (sp68 != 0) {

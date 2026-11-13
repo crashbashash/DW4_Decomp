@@ -52,7 +52,7 @@ void igStencilStateAttr_InitFields(void) {
 
     temp_s0 = (void *)g_igStencilStateAttr_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_00485e48[0], 1);
-    igMetaObject_NameFields(temp_s0, &DAT_00485e50[0], &DAT_00485e58[0], &DAT_00485e60[0], temp_s1);
+    igMetaObject_CreateFields(temp_s0, &g_igStencilStateAttr_ctorTable[0], 1);
+    igMetaObject_NameFields(temp_s0, &g_igStencilStateAttr_fieldTable[0], &DAT_00485e58[0], &DAT_00485e60[0], temp_s1);
 }
 

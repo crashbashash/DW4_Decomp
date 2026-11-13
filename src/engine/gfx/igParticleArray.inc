@@ -1,6 +1,6 @@
 int FUN_0014c920(void) {
     if (DAT_0055fbd8[0] == 0) {
-        DAT_0055fbd8[0] = igMetaEnum_Create(&DAT_004dc210[0], &DAT_004889c0[0], &DAT_004889d0[0], 3);
+        DAT_0055fbd8[0] = igMetaEnum_Create(&IG_GFX_PARTICLE_ARRAY_LIFE_CONTR[0], &DAT_004889c0[0], &DAT_004889d0[0], 3);
     }
     return DAT_0055fbd8[0];
 }
@@ -172,7 +172,7 @@ void igParticleArray_InitFields(void) {
 
     temp_s1 = (void *)(g_igParticleArray_metaObject[0]);
     temp_s0 = igMetaObject_GetFieldCount(temp_s1);
-    igMetaObject_CreateFields(temp_s1, &DAT_00488a00[0], 0x16);
+    igMetaObject_CreateFields(temp_s1, &g_igParticleArray_ctorTable[0], 0x16);
     temp_s2 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0));
     ((igObjectRefMetaField *)temp_s2)->_metaObject = (int)FUN_0014d0b0();
     FUN_002e3810(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 4), 1.0f);
@@ -197,7 +197,7 @@ void igParticleArray_InitFields(void) {
     FUN_002dc7a0(temp_v0, &DAT_00488b78[0]);
     ((igEnumMetaField *)temp_v0)->_getMetaEnumFunction = (int)(FUN_0014c920);
     ((igMetaField *)igMetaObject_GetFieldAt(temp_s1, temp_s0 + 0x15))->_persistent = 0;
-    igMetaObject_NameFields(temp_s1, &DAT_00488a60[0], &DAT_00488ac0[0], &DAT_00488b20[0], temp_s0);
+    igMetaObject_NameFields(temp_s1, &g_igParticleArray_fieldTable[0], &DAT_00488ac0[0], &DAT_00488b20[0], temp_s0);
     ((igMetaObject *)g_igParticleArray_metaObject[0])->_abstractProxy = (int)thunk_igPsx2ParticleArray_GetMetaObject;
 }
 

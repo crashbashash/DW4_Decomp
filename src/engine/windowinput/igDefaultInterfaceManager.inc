@@ -66,7 +66,7 @@ void igDefaultInterfaceManager_InitFields(void) {
 
     temp_s0 = (void *)g_igDefaultInterfaceManager_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_00487160[0], 0x10);
-    igMetaObject_NameFields(temp_s0, &DAT_004871a0[0], &DAT_004871e0[0], &DAT_00487220[0], temp_s1);
+    igMetaObject_CreateFields(temp_s0, &g_igDefaultInterfaceManager_ctorTable[0], 0x10);
+    igMetaObject_NameFields(temp_s0, &g_igDefaultInterfaceManager_fieldTable[0], &DAT_004871e0[0], &DAT_00487220[0], temp_s1);
 }
 

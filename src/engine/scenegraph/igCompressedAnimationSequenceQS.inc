@@ -95,7 +95,7 @@ void igCompressedAnimationSequenceQS_InitFields(void) {
 
     temp_s1 = g_igCompressedAnimationSequenceQS_metaObject[0];
     temp_s0 = igMetaObject_GetFieldCount(temp_s1);
-    igMetaObject_CreateFields(temp_s1, &DAT_0048c4e0[0], 0xC);
+    igMetaObject_CreateFields(temp_s1, &g_igCompressedAnimationSequenceQS_ctorTable[0], 0xC);
     temp_s2 = ((struct Fld_1a29e0 *)igMetaObject_GetFieldAt(temp_s1, temp_s0));
     temp_s2->f56 = FUN_002ca030();
     temp_s2_2 = ((struct Fld_1a29e0 *)igMetaObject_GetFieldAt(temp_s1, temp_s0 + 1));
@@ -112,7 +112,7 @@ void igCompressedAnimationSequenceQS_InitFields(void) {
     FUN_0030e750(((struct Fld_1a29e0 *)igMetaObject_GetFieldAt(temp_s1, temp_s0 + 0xA)), 0);
     temp_s2_4 = ((struct Fld_1a29e0 *)igMetaObject_GetFieldAt(temp_s1, temp_s0 + 0xB));
     temp_s2_4->f52 = 3;
-    igMetaObject_NameFields(temp_s1, &DAT_0048c510[0], &DAT_0048c540[0], &DAT_0048c570[0], temp_s0);
+    igMetaObject_NameFields(temp_s1, &g_igCompressedAnimationSequenceQS_fieldTable[0], &DAT_0048c540[0], &DAT_0048c570[0], temp_s0);
 }
 
 void **FUN_001a2b40(void **arg0, short arg1) {

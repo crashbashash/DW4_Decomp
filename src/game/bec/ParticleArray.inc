@@ -62,7 +62,7 @@ void ParticleArray_InitFields(void) {
 
     temp_s0 = (void *)g_ParticleArray_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_004c8260[0], 0xB);
+    igMetaObject_CreateFields(temp_s0, &g_ParticleArray_ctorTable[0], 0xB);
     FUN_002e3810(igMetaObject_GetFieldAt(temp_s0, temp_s2), 1.0f);
     FUN_002e3810(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1), 1.0f);
     FUN_002d3890(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 2), 1);
@@ -76,6 +76,6 @@ void ParticleArray_InitFields(void) {
     ((igMetaField *)igMetaObject_GetFieldAt(temp_s0, temp_s2 + 8))->_persistent = 0;
     ((igMetaField *)igMetaObject_GetFieldAt(temp_s0, temp_s2 + 9))->_persistent = 0;
     ((igMetaField *)igMetaObject_GetFieldAt(temp_s0, temp_s2 + 0xA))->_persistent = 0;
-    igMetaObject_NameFields(temp_s0, &DAT_004c8290[0], &DAT_004c82c0[0], &DAT_004c82f0[0], temp_s2);
+    igMetaObject_NameFields(temp_s0, &g_ParticleArray_fieldTable[0], &DAT_004c82c0[0], &DAT_004c82f0[0], temp_s2);
 }
 

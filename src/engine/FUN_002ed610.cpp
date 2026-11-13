@@ -55,9 +55,9 @@ int FUN_00304430(...);   /* console printf */
 int FUN_00304680();      /* console flush after each print */
 void *igFile_Create(int);
 void igObject_Destroy(void *);
-extern char DAT_004f92f0[], DAT_004f95c8[], DAT_004f9ca0[], DAT_004f9cb0[], DAT_004f9cc0[],
-    DAT_004f9cc8[], DAT_004f9cd0[], DAT_004f9cd8[], DAT_004f9ce0[], DAT_004f9ce8[],
-    DAT_004f9cf0[], DAT_004f9cf8[];
+extern char DAT_004f92f0[], DAT_004f95c8[], text_0x_0_x[], text_0x_08x_2[], text_02x[],
+    text_04x[], text_06x[], text_08x[], text_010lx[], text_012lx[],
+    text_014lx[], text_016lx[];
 extern unsigned char g_useOwnerAllocator;
 extern int DAT_00587028[], g_temporaryAllocatorSelector[];
 extern SystemAllocator *DAT_00587218[4];
@@ -135,8 +135,8 @@ extern "C" void FUN_002ed610(unsigned int size, unsigned int perLine, unsigned i
         mask = (1 << (digits * 4)) - 1; \
         while (more) { \
             if (showAddr) { \
-                if (digits < 8) { EMIT(DAT_004f9ca0, digits, addr & mask); } \
-                else { EMIT(DAT_004f9cb0, addr); } \
+                if (digits < 8) { EMIT(text_0x_0_x, digits, addr & mask); } \
+                else { EMIT(text_0x_08x_2, addr); } \
             } \
             for (i = 0; i < perLine; i++) { \
                 EMIT(FMT, VALUE); \
@@ -147,14 +147,14 @@ extern "C" void FUN_002ed610(unsigned int size, unsigned int perLine, unsigned i
         } \
         break;
         switch (size) {
-        case 1: DUMP_CASE(1, DAT_004f9cc0, *(unsigned char *)addr)
-        case 2: DUMP_CASE(2, DAT_004f9cc8, *(unsigned short *)addr)
-        case 3: DUMP_CASE(3, DAT_004f9cd0, *(unsigned int *)addr & 0xFFFFFF)
-        case 4: DUMP_CASE(4, DAT_004f9cd8, *(unsigned int *)addr)
-        case 5: DUMP_CASE(5, DAT_004f9ce0, *(unsigned long long *)addr & 0xFFFFFFFFFFULL)
-        case 6: DUMP_CASE(6, DAT_004f9ce8, *(unsigned long long *)addr & 0xFFFFFFFFFFFFULL)
-        case 7: DUMP_CASE(7, DAT_004f9cf0, *(unsigned long long *)addr & 0xFFFFFFFFFFFFFFULL)
-        default: DUMP_CASE(8, DAT_004f9cf8, *(unsigned long long *)addr)
+        case 1: DUMP_CASE(1, text_02x, *(unsigned char *)addr)
+        case 2: DUMP_CASE(2, text_04x, *(unsigned short *)addr)
+        case 3: DUMP_CASE(3, text_06x, *(unsigned int *)addr & 0xFFFFFF)
+        case 4: DUMP_CASE(4, text_08x, *(unsigned int *)addr)
+        case 5: DUMP_CASE(5, text_010lx, *(unsigned long long *)addr & 0xFFFFFFFFFFULL)
+        case 6: DUMP_CASE(6, text_012lx, *(unsigned long long *)addr & 0xFFFFFFFFFFFFULL)
+        case 7: DUMP_CASE(7, text_014lx, *(unsigned long long *)addr & 0xFFFFFFFFFFFFFFULL)
+        default: DUMP_CASE(8, text_016lx, *(unsigned long long *)addr)
         }
     }
     if (file) {

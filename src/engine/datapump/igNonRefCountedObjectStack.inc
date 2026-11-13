@@ -47,7 +47,7 @@ void FUN_001e44c0(void) {
     void *temp_s1;
 
     temp_s1 = (void *)(g_igNonRefCountedObjectStack_metaObject[0]);
-    temp_v0 = (void **)(igMetaObject_FindFieldByName(temp_s1, &DAT_004e48c8[0]));
+    temp_v0 = (void **)(igMetaObject_FindFieldByName(temp_s1, &text_data_3[0]));
     temp_s2 = ObjectPointerList_FindIndex(*(int *)((char *)(temp_s1) + 40), temp_v0);
     temp_s0 = (void *)(((DW4VC_84_1 *)(temp_v0))->vX((int)(1)));
     *(int *)((char *)(temp_s0) + 60) = igObjectRefMetaField_GetDefaultDescriptor();

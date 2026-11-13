@@ -80,7 +80,7 @@ void igAnimation_InitFields(void) {
 
     temp_s1 = (void *)g_igAnimation_metaObject[0];
     temp_s0 = igMetaObject_GetFieldCount(temp_s1);
-    igMetaObject_CreateFields(temp_s1, &DAT_0048d510[0], 8);
+    igMetaObject_CreateFields(temp_s1, &g_igAnimation_ctorTable[0], 8);
     temp_s2 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s1, temp_s0 + 1)));
     ((igObjectRefMetaField *)temp_s2)->_metaObject = (int)FUN_001a8ac0();
     ((igRefMetaField *)temp_s2)->_construct = 1;
@@ -92,6 +92,6 @@ void igAnimation_InitFields(void) {
     ((igRefMetaField *)temp_s2_3)->_construct = 1;
     temp_s2_4 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s1, temp_s0 + 7)));
     ((igObjectRefMetaField *)temp_s2_4)->_metaObject = (int)FUN_001a4d90();
-    igMetaObject_NameFields(temp_s1, &DAT_0048d530[0], &DAT_0048d550[0], &DAT_0048d570[0], temp_s0);
+    igMetaObject_NameFields(temp_s1, &g_igAnimation_fieldTable[0], &DAT_0048d550[0], &DAT_0048d570[0], temp_s0);
 }
 

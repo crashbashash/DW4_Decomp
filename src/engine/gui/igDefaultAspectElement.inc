@@ -1,6 +1,6 @@
 int FUN_00451ac0(void) {
     if (DAT_0058c5a8[0] == 0) {
-        DAT_0058c5a8[0] = igMetaEnum_Create(&DAT_0051e648[0], &DAT_004d0790[0], &DAT_004d07a0[0], 4);
+        DAT_0058c5a8[0] = igMetaEnum_Create(&FIT_MODE[0], &DAT_004d0790[0], &DAT_004d07a0[0], 4);
     }
     return DAT_0058c5a8[0];
 }
@@ -99,7 +99,7 @@ void igDefaultAspectElement_InitFields(void) {
 
     temp_s0 = (void *)g_igDefaultAspectElement_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_004d07c0[0], 6);
+    igMetaObject_CreateFields(temp_s0, &g_igDefaultAspectElement_ctorTable[0], 6);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
     *(int *)((char *)(temp_s1) + 56) = (int)FUN_004505b0();
     temp_s1_2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
@@ -110,6 +110,6 @@ void igDefaultAspectElement_InitFields(void) {
     temp_v0 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 3));
     FUN_002dc7a0(temp_v0, &DAT_004d0838[0]);
     *(int *)((char *)(temp_v0) + 52) = (int)(FUN_00451ac0);
-    igMetaObject_NameFields(temp_s0, &DAT_004d07e0[0], &DAT_004d0800[0], &DAT_004d0820[0], temp_s2);
+    igMetaObject_NameFields(temp_s0, &g_igDefaultAspectElement_fieldTable[0], &DAT_004d0800[0], &DAT_004d0820[0], temp_s2);
 }
 

@@ -66,13 +66,13 @@ void igLightSet_InitFields(void) {
 
     temp_s0 = (void *)g_igLightSet_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_0048bdc0[0], 1);
+    igMetaObject_CreateFields(temp_s0, &g_igLightSet_ctorTable[0], 1);
     temp_s1 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s2)));
     ((igObjectRefMetaField *)temp_s1)->_metaObject = FUN_001365e0();
     ((igRefMetaField *)temp_s1)->_construct = 1;
     ((igMetaField *)temp_s1)->_deepCopyMethod = 0;
     ((igMetaField *)temp_s1)->_shallowCopyMethod = 2;
-    igMetaObject_NameFields(temp_s0, &DAT_0048bdc8[0], &DAT_0048bdd0[0], &DAT_0048bdd8[0], temp_s2);
+    igMetaObject_NameFields(temp_s0, &g_igLightSet_fieldTable[0], &DAT_0048bdd0[0], &DAT_0048bdd8[0], temp_s2);
 }
 
 igMetaObject *FUN_0019de30(void) {

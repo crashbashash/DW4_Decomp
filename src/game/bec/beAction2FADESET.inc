@@ -71,7 +71,7 @@ void beAction2FADESET_InitFields(void) {
 
     temp_s0 = (void *)g_beAction2FADESET_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_004c8120[0], 2);
-    igMetaObject_NameFields(temp_s0, &DAT_004c8128[0], &DAT_004c8130[0], &DAT_004c8138[0], temp_s1);
+    igMetaObject_CreateFields(temp_s0, &g_beAction2FADESET_ctorTable[0], 2);
+    igMetaObject_NameFields(temp_s0, &g_beAction2FADESET_fieldTable[0], &DAT_004c8130[0], &DAT_004c8138[0], temp_s1);
 }
 

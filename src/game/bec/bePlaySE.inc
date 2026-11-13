@@ -54,7 +54,7 @@ void bePlaySE_InitFields(void) {
 
     temp_s0 = (void *)g_bePlaySE_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_004c39c8[0], 2);
-    igMetaObject_NameFields(temp_s0, &DAT_004c39d0[0], &DAT_004c39d8[0], &DAT_004c39e0[0], temp_s1);
+    igMetaObject_CreateFields(temp_s0, &g_bePlaySE_ctorTable[0], 2);
+    igMetaObject_NameFields(temp_s0, &g_bePlaySE_fieldTable[0], &DAT_004c39d8[0], &DAT_004c39e0[0], temp_s1);
 }
 

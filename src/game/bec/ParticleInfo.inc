@@ -1,27 +1,27 @@
 int FUN_0036e880(void) {
     if (DAT_0058a0c0[0] == 0) {
-        DAT_0058a0c0[0] = igMetaEnum_Create(&DAT_005064d0[0], &DAT_004c8360[0], &DAT_004c8370[0], 3);
+        DAT_0058a0c0[0] = igMetaEnum_Create(&IG_PARTICLE_TIME_TYPE[0], &DAT_004c8360[0], &DAT_004c8370[0], 3);
     }
     return DAT_0058a0c0[0];
 }
 
 int FUN_0036e8e0(void) {
     if (DAT_0058a0c8[0] == 0) {
-        DAT_0058a0c8[0] = igMetaEnum_Create(&DAT_00506530[0], &DAT_004c8380[0], &DAT_004c8388[0], 2);
+        DAT_0058a0c8[0] = igMetaEnum_Create(&IG_PARTICLE_ALPHA_FUNCTION[0], &DAT_004c8380[0], &DAT_004c8388[0], 2);
     }
     return DAT_0058a0c8[0];
 }
 
 int FUN_0036e940(void) {
     if (DAT_0058a0d0[0] == 0) {
-        DAT_0058a0d0[0] = igMetaEnum_Create(&DAT_005065b0[0], &DAT_004c8390[0], &DAT_004c83a0[0], 3);
+        DAT_0058a0d0[0] = igMetaEnum_Create(&IG_PARTICLE_ALPHA_TYPE[0], &DAT_004c8390[0], &DAT_004c83a0[0], 3);
     }
     return DAT_0058a0d0[0];
 }
 
 int FUN_0036e9a0(void) {
     if (DAT_0058a0d8[0] == 0) {
-        DAT_0058a0d8[0] = igMetaEnum_Create(&DAT_00506670[0], &DAT_004c83b0[0], &DAT_004c83d0[0], 5);
+        DAT_0058a0d8[0] = igMetaEnum_Create(&IG_PARTICLE_EMITTER_TYPE[0], &DAT_004c83b0[0], &DAT_004c83d0[0], 5);
     }
     return DAT_0058a0d8[0];
 }
@@ -93,7 +93,7 @@ void ParticleInfo_InitFields(void) {
 
     temp_s0 = (void *)g_ParticleInfo_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_004c8400[0], 0x12);
+    igMetaObject_CreateFields(temp_s0, &g_ParticleInfo_ctorTable[0], 0x12);
     f = igMetaObject_GetFieldAt(temp_s0, temp_s1);
     ((igFloatArrayMetaField *)f)->_num = 0xC0;
     ((igFloatArrayMetaField *)f)->_resetMethod = 3;
@@ -121,6 +121,6 @@ void ParticleInfo_InitFields(void) {
     FUN_002e3810((void *)((int)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0x10)), 0.0f);
     f = igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0x11);
     ((igObjectRefMetaField *)f)->_metaObject = FUN_0019fae0();
-    igMetaObject_NameFields(temp_s0, &DAT_004c8450[0], &DAT_004c84a0[0], &DAT_004c84f0[0], temp_s1);
+    igMetaObject_NameFields(temp_s0, &g_ParticleInfo_fieldTable[0], &DAT_004c84a0[0], &DAT_004c84f0[0], temp_s1);
 }
 

@@ -48,7 +48,7 @@ void igIndexArray_InitFields(void) {
 
     temp_s0 = (void *)(g_igIndexArray_metaObject[0]);
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_00488d40[0], 5);
+    igMetaObject_CreateFields(temp_s0, &g_igIndexArray_ctorTable[0], 5);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
     ((igMemoryRefMetaField *)temp_s1)->_memType = igUnsignedCharMetaField_GetDefaultDescriptor();
     ((igMemoryRefMetaField *)temp_s1)->_destruct = 1;
@@ -63,7 +63,7 @@ void igIndexArray_InitFields(void) {
     ((igMetaField *)temp_s1_2)->_persistent = 0;
     ((igMetaField *)temp_s1_2)->_deepCopyMethod = 1;
     ((igMetaField *)temp_s1_2)->_shallowCopyMethod = 1;
-    igMetaObject_NameFields(temp_s0, &DAT_00488d60[0], &DAT_00488d80[0], &DAT_00488da0[0], temp_s2);
+    igMetaObject_NameFields(temp_s0, &g_igIndexArray_fieldTable[0], &DAT_00488d80[0], &DAT_00488da0[0], temp_s2);
     ((igMetaObject *)g_igIndexArray_metaObject[0])->_abstractProxy = (int)(&thunk_igPsx2IndexArray_GetMetaObject);
 }
 

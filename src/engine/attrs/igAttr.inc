@@ -46,11 +46,11 @@ void igAttr_InitFields(void) {
 
     temp_s0 = (void *)g_igAttr_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_00486c50[0], 2);
+    igMetaObject_CreateFields(temp_s0, &g_igAttr_ctorTable[0], 2);
     temp_v0 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
     FUN_0030a520(temp_v0, -1);
     ((igShortMetaField *)temp_v0)->_persistent = 0;
-    igMetaObject_NameFields(temp_s0, &DAT_00486c58[0], &DAT_00486c60[0], &DAT_00486c68[0], temp_s2);
+    igMetaObject_NameFields(temp_s0, &g_igAttr_fieldTable[0], &DAT_00486c60[0], &DAT_00486c68[0], temp_s2);
 }
 
 void FUN_0013b240(void) {

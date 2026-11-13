@@ -45,7 +45,7 @@ void beNDMWPanelObject_InitFields(void) {
 
     temp_s0 = (void *)g_beNDMWPanelObject_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_004ca630[0], 0x10);
+    igMetaObject_CreateFields(temp_s0, &g_beNDMWPanelObject_ctorTable[0], 0x10);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
     ((igObjectRefMetaField *)temp_s1)->_metaObject = FUN_0036a8d0();
     ((igObjectRefMetaField *)temp_s1)->_refCounted = 0;
@@ -59,7 +59,7 @@ void beNDMWPanelObject_InitFields(void) {
     ((igObjectRefMetaField *)temp_s1_4)->_metaObject = FUN_002b9120();
     temp_s1_5 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 0xD));
     ((igObjectRefMetaField *)temp_s1_5)->_metaObject = igIntList_GetOrCreateMetaObject();
-    igMetaObject_NameFields(temp_s0, &DAT_004ca670[0], &DAT_004ca6b0[0], &DAT_004ca6f0[0], temp_s2);
+    igMetaObject_NameFields(temp_s0, &g_beNDMWPanelObject_fieldTable[0], &DAT_004ca6b0[0], &DAT_004ca6f0[0], temp_s2);
 }
 
 int FUN_003bee30(void) {

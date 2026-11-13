@@ -69,9 +69,9 @@ void beNDMWLoadCtrl2_InitFields(void) {
 
     temp_s0 = (void *)g_beNDMWLoadCtrl2_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_004cc048[0], 3);
+    igMetaObject_CreateFields(temp_s0, &g_beNDMWLoadCtrl2_ctorTable[0], 3);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
     ((igObjectRefMetaField *)temp_s1)->_metaObject = FUN_0034c8e0();
-    igMetaObject_NameFields(temp_s0, &DAT_004cc058[0], &DAT_004cc068[0], &DAT_004cc078[0], temp_s2);
+    igMetaObject_NameFields(temp_s0, &g_beNDMWLoadCtrl2_fieldTable[0], &DAT_004cc068[0], &DAT_004cc078[0], temp_s2);
 }
 

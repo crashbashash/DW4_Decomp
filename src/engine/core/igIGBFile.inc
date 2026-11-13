@@ -167,7 +167,7 @@ void igIGBFile_InitFields(void) {
     igMetaField *field;
     igMetaField *clone;
     int index;
-    igMetaObject_CreateFields(meta, (igMetaField * (**)(void *))DAT_004c0660, 0x41);
+    igMetaObject_CreateFields(meta, (igMetaField * (**)(void *))g_igIGBFile_ctorTable, 0x41);
     field = ((igMetaField *)igMetaObject_FindFieldByName(meta, (const char *)data));
     index = ObjectPointerList_FindIndex((char *)meta->_metaFields, (int)field);
     clone = ((DescriptorCloneView_2c3e90 *)field)->Clone(1);
@@ -175,14 +175,14 @@ void igIGBFile_InitFields(void) {
     clone->_externalEnumStorage = (int)DAT_00586148;
     igMetaObject_FinalizeAndReplaceField(meta, index, clone);
     releaseField(clone);
-    field = ((igMetaField *)igMetaObject_FindFieldByName(meta, (const char *)DAT_004f6de8));
+    field = ((igMetaField *)igMetaObject_FindFieldByName(meta, (const char *)text_count));
     index = ObjectPointerList_FindIndex((char *)meta->_metaFields, (int)field);
     clone = ((DescriptorCloneView_2c3e90 *)field)->Clone(1);
     clone->_persistent = 0;
     clone->_externalEnumStorage = (int)DAT_00586150;
     igMetaObject_FinalizeAndReplaceField(meta, index, clone);
     releaseField(clone);
-    field = ((igMetaField *)igMetaObject_FindFieldByName(meta, (const char *)DAT_004f5d80));
+    field = ((igMetaField *)igMetaObject_FindFieldByName(meta, (const char *)text_capacity));
     index = ObjectPointerList_FindIndex((char *)meta->_metaFields, (int)field);
     clone = ((DescriptorCloneView_2c3e90 *)field)->Clone(1);
     clone->_persistent = 0;
@@ -244,7 +244,7 @@ void igIGBFile_InitFields(void) {
     ((igMemoryRefMetaField *)field)->_memType = FUN_002cc2c0();
     field = ((igMetaField *)igMetaObject_GetFieldAt(meta, base + 0x40));
     ((igObjectRefMetaField *)field)->_metaObject = igIntList_GetOrCreateMetaObject();
-    igMetaObject_NameFields(meta, (const char **)&DAT_004c0770[0], (igMetaField ***)&DAT_004c0880[0], &DAT_004c0990[0], base);
+    igMetaObject_NameFields(meta, (const char **)&g_igIGBFile_fieldTable[0], (igMetaField ***)&DAT_004c0880[0], &DAT_004c0990[0], base);
 }
 
 void FUN_002c43a0(void) {

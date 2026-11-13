@@ -9,13 +9,13 @@ void Gap__Core__igMallocMemoryPool__vfunc_45(int *arg0, struct A1 *arg1, struct 
     temp_s1 = arg2->f76;
     if (temp_s1 != 0) {
         var_s2 = arg1->f152;
-        if (((int)strstr(temp_s1, &DAT_004fd3c8[0])) != 0) {
+        if (((int)strstr(temp_s1, &NoMessages[0])) != 0) {
             var_s2 = 0;
-        } else if (((int)strstr(temp_s1, &DAT_004fd3d8[0])) != 0) {
+        } else if (((int)strstr(temp_s1, &ErrorMessages[0])) != 0) {
             var_s2 = 1;
-        } else if (((int)strstr(temp_s1, &DAT_004fd3f0[0])) != 0) {
+        } else if (((int)strstr(temp_s1, &WarningMessages[0])) != 0) {
             var_s2 = 2;
-        } else if (((int)strstr(temp_s1, &DAT_004fd400[0])) != 0) {
+        } else if (((int)strstr(temp_s1, &Notifications[0])) != 0) {
             var_s2 = 3;
         }
         arg1->f152 = var_s2;

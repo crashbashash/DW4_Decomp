@@ -77,7 +77,7 @@ void beModelCtrlInfoAI_InitFields(void) {
 
     temp_s0 = (void *)g_beModelCtrlInfoAI_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_004c5270[0], 5);
-    igMetaObject_NameFields(temp_s0, &DAT_004c5290[0], &DAT_004c52b0[0], &DAT_004c52d0[0], temp_s1);
+    igMetaObject_CreateFields(temp_s0, &g_beModelCtrlInfoAI_ctorTable[0], 5);
+    igMetaObject_NameFields(temp_s0, &g_beModelCtrlInfoAI_fieldTable[0], &DAT_004c52b0[0], &DAT_004c52d0[0], temp_s1);
 }
 

@@ -63,7 +63,7 @@ void igAABox_InitFields(void) {
 
     temp_s0 = (void *)g_igAABox_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_0048ae58[0], 2);
+    igMetaObject_CreateFields(temp_s0, &g_igAABox_ctorTable[0], 2);
     temp_a0 = igMetaObject_GetFieldAt(temp_s0, temp_s1);
     va[0] = 3.402823466e+38f;
     va[1] = 3.402823466e+38f;
@@ -74,7 +74,7 @@ void igAABox_InitFields(void) {
     vb[1] = -3.402823466e+38f;
     vb[2] = -3.402823466e+38f;
     FUN_0018e470((igVec3fMetaFieldView *)temp_a0_2, vb);
-    igMetaObject_NameFields(temp_s0, &DAT_0048ae60[0], &DAT_0048ae68[0], &DAT_0048ae70[0], temp_s1);
+    igMetaObject_NameFields(temp_s0, &g_igAABox_fieldTable[0], &DAT_0048ae68[0], &DAT_0048ae70[0], temp_s1);
 }
 
 void thunk_FUN_0018a8f0(void) {

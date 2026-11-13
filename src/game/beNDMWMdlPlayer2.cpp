@@ -24,8 +24,8 @@ extern "C" int beLua__RunNamedChunk(int, int *, int);
 extern "C" int g_bePadManager_metaObject[4];
 extern "C" int g_beNDMWMdlPlayer2_metaObject[4];
 extern "C" void Gap__Bec__beNDMWMdlPlayer2__vfunc_23(beNDMWMdlPlayer2 *self);
-extern "C" int DAT_005165b0[4];
-extern "C" char DAT_005165c0[];
+extern "C" int KIND_PLAYER2[4];
+extern "C" char PLAYER2_2[];
 extern "C" void Gap__Bec__beNDMWMdlPlayer2__vfunc_37(beNDMWMdlPlayer2 * p0, int p1, char * p2);
 extern "C" igObject *beBaseInfoDataList_Create(int);
 extern "C" igObject *FUN_003bf560(int);
@@ -33,11 +33,11 @@ extern "C" beDataObjIntList *igProperty_GetRecordStringList(...);
 extern "C" beDataObjFloatList *FUN_003a9370(...);
 struct PropertyRecordView { char p[16]; int f16; igObject *f20; };
 extern "C" PropertyRecordView * igProperty_FindByName(...);
-extern "C" int DAT_005165c8[4];
-extern "C" int DAT_005165d0[4];
-extern "C" int DAT_005165d8[4];
-extern "C" int DAT_005165e8[4];
-extern "C" int DAT_005165f8[4];
+extern "C" int ONE_13[4];
+extern "C" int GAMERAM_15[4];
+extern "C" int GETCOMMON_7[4];
+extern "C" int BKCHIPSTAGE[4];
+extern "C" int BKCHIPPOS[4];
 extern "C" int g_propertyNameField[4];
 extern "C" int g_stringPool[4];
 extern "C" int g_defaultAllocatorSelector[4];
@@ -113,11 +113,11 @@ extern "C" void Gap__Bec__beNDMWMdlPlayer2__vfunc_36(beNDMWMdlPlayer2 *arg0, beB
 struct PlayerWorkTail { char p[236]; unsigned char f236; char p2[3]; int f240; };
 /* property record: pointer to the work record at +20 */
 struct PropertyRecord { char p[16]; int f16; PlayerWorkTail *q; };
-extern "C" int DAT_00516608[4];
-extern "C" int DAT_00516610[4];
-extern "C" int DAT_00516618[4];
-extern "C" int DAT_00516620[4];
-extern "C" int DAT_00516630[4];
+extern "C" int PLAYER_8[4];
+extern "C" int NEAR_3[4];
+extern "C" int SQ_SWON[4];
+extern "C" int SQ_SWOF[4];
+extern "C" int text_end_g_000bcaps_lua[4];
 /* Owning stack reference to the freshly created data list; released on scope exit (reference count
  * in the low 23 bits of _refCount). */
 
@@ -134,12 +134,12 @@ void Gap__Bec__beNDMWMdlPlayer2__vfunc_23(beNDMWMdlPlayer2 *self) {
 }
 
 int Gap__Bec__beNDMWMdlPlayer2__vfunc_35(int dummy0, int arg1) {
-    return strcmp(arg1, &DAT_005165b0[0]) == 0;
+    return strcmp(arg1, &KIND_PLAYER2[0]) == 0;
 }
 
 void Gap__Bec__beNDMWMdlPlayer2__vfunc_37(beNDMWMdlPlayer2 * p0, int p1, char * p2)
 {
-    beMessenger_RegisterReceiverFromInfo(p0->_messenger, p1, DAT_005165c0);
+    beMessenger_RegisterReceiverFromInfo(p0->_messenger, p1, PLAYER2_2);
 }
 
 void Gap__Bec__beNDMWMdlPlayer2__vfunc_36(beNDMWMdlPlayer2 *arg0, beBaseInfoRam *arg1) {
@@ -151,7 +151,7 @@ void Gap__Bec__beNDMWMdlPlayer2__vfunc_36(beNDMWMdlPlayer2 *arg0, beBaseInfoRam 
     int *e;
     int s1;
     RamDataList::Ensure(arg1);
-    r = igProperty_FindByName((igObject *)arg1->_dataList, g_propertyNameField[0], DAT_005165c8);
+    r = igProperty_FindByName((igObject *)arg1->_dataList, g_propertyNameField[0], ONE_13);
     {
         int alloc = igObject_GetAllocator(arg0);
         int a;
@@ -169,11 +169,11 @@ void Gap__Bec__beNDMWMdlPlayer2__vfunc_36(beNDMWMdlPlayer2 *arg0, beBaseInfoRam 
         r->f20 = n;
     }
     beModelCtrl__OnGenerate(arg0, arg1);
-    beMessenger_SendGroup(arg0->_messenger, DAT_005165d0, DAT_005165d8);
+    beMessenger_SendGroup(arg0->_messenger, GAMERAM_15, GETCOMMON_7);
     {
         int o = beMessenger_GetObject(arg0->_messenger, 0);
-        s4 = igProperty_GetRecordStringList(o, DAT_005165e8);
-        s3 = FUN_003a9370(o, DAT_005165f8);
+        s4 = igProperty_GetRecordStringList(o, BKCHIPSTAGE);
+        s3 = FUN_003a9370(o, BKCHIPPOS);
     }
     /* matching construct: cast from the 4-byte _system reference */
     beSystem *cfg = (beSystem *)arg0->_system;
@@ -246,25 +246,25 @@ void Gap__Bec__beNDMWMdlPlayer2__vfunc_38(MdlPlayer2VirtualShim *arg0, beBaseInf
         }
         arg1->_dataList = (int)s0;
     }
-    prop = ((PropertyRecord *)igProperty_FindByName(arg1->_dataList, g_propertyNameField[0], DAT_005165c8));
+    prop = ((PropertyRecord *)igProperty_FindByName(arg1->_dataList, g_propertyNameField[0], ONE_13));
     q = prop->q;
     if (q->f240 < 10) {
         q->f240 = q->f240 + 1;
     }
     bePadManager_GetPadForPlayer(((beNDMWMdlPlayer2 *)arg0)->_padManager, arg1->_ramNo);
-    if (beTargetObj_SelectTarget(prop->f16 + 32, DAT_00516608, DAT_00516610) != 0) {
+    if (beTargetObj_SelectTarget(prop->f16 + 32, PLAYER_8, NEAR_3) != 0) {
         f = beTargetObj_GetTargetDistanceSq();
         if (q->f236 == 0) {
             if (f < 900.0f) {
                 q->f236 = 1;
-                arg0->v35(arg1, DAT_00516618);
+                arg0->v35(arg1, SQ_SWON);
             }
         } else if (!(f <= 900.0f)) {
             q->f236 = 0;
-            arg0->v35(arg1, DAT_00516620);
+            arg0->v35(arg1, SQ_SWOF);
         }
     } else {
-        beLua__RunNamedChunk(((beNDMWMdlPlayer2 *)arg0)->_luaManager, DAT_00516630, 0);
+        beLua__RunNamedChunk(((beNDMWMdlPlayer2 *)arg0)->_luaManager, text_end_g_000bcaps_lua, 0);
     }
 }
 

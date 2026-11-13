@@ -175,9 +175,9 @@ int FUN_002f2bc0(int arg0, char *arg1) {
     int i;
     char *s = arg1;
     if (s != 0 && *s != 0) {
-        if (strncmp(s, &DAT_004fa3b0[0], 0x13) == 0) {
+        if (strncmp(s, &text_kIGMemoryPoolHandle[0], 0x13) == 0) {
             s += 0x13;
-        } else if (strncmp(s, &DAT_004fa3c8[0], 0xD) == 0) {
+        } else if (strncmp(s, &text_kIGMemoryPool[0], 0xD) == 0) {
             s += 0xD;
         }
         for (i = 0; i < 0x2E; i++) {
@@ -346,7 +346,7 @@ void FUN_002f31b0(int *result, PoolTable *table, int index, PoolHandle *handle)
             ASSIGN_TOKEN(handle->token10, entry->defaults->text10);
             handle->field50 = entry->defaults->field50;
         }
-        sprintf(nameBuf, DAT_004fa3e0, g_memoryContextNames[index]);
+        sprintf(nameBuf, text_kIGMemoryPoolHandle_s, g_memoryContextNames[index]);
         ASSIGN_TOKEN_DIRECT(handle->handleName, nameBuf);
     } else {
         status = (*(igResult_2f25d0 *)&g_allocatorFailureStatus).v;
@@ -733,11 +733,11 @@ void FUN_002f5230(int *out, PoolDescSetup *self, int config, char *name) {
             } else {
                 buf[0] = 0;
             }
-            if (strstr(buf, DAT_004fa530) == 0 && strstr(buf, DAT_004fa550) == 0) {
+            if (strstr(buf, InhibitEventTracker) == 0 && strstr(buf, UseEventTracker) == 0) {
                 if (buf[0] != 0) {
                     __memcpy(buf, (void *)" | InhibitEventTracker", 23);
                 } else {
-                    strncpy(buf, DAT_004fa530, 255);
+                    strncpy(buf, InhibitEventTracker, 255);
                 }
                 setDescString(&rec->s60, buf);
             }
@@ -745,7 +745,7 @@ void FUN_002f5230(int *out, PoolDescSetup *self, int config, char *name) {
         case 1:
             if (self == (*(void * *)DAT_00586fd0)) {
                 defaultSize = 0;
-                FUN_003065f0(config, 2, DAT_004fa580, &defaultSize, 0, 0);
+                FUN_003065f0(config, 2, text_defaultPoolPreSize, &defaultSize, 0, 0);
                 if (defaultSize > 0) {
                     rec->a28 = defaultSize;
                     char *n = DAT_00586de8;
@@ -758,7 +758,7 @@ void FUN_002f5230(int *out, PoolDescSetup *self, int config, char *name) {
         case 4:
             if (self == (*(void * *)DAT_00586fd0)) {
                 systemSize = 0;
-                FUN_003065f0(config, 2, DAT_004fa5a0, &systemSize, 0, 0);
+                FUN_003065f0(config, 2, text_systemPoolPreSize, &systemSize, 0, 0);
                 if (systemSize > 0) {
                     rec->a28 = systemSize;
                     char *n = DAT_00586de8;
@@ -770,24 +770,24 @@ void FUN_002f5230(int *out, PoolDescSetup *self, int config, char *name) {
         case 6:
             break;
         case 7:
-            FUN_003065f0(ctxConfig, 2, DAT_004fa5c0, &scratchSize, 0, 0);
-            FUN_003065f0(ctxConfig, 2, DAT_004fa5d0, &scratchSize, scratchSize, 0);
+            FUN_003065f0(ctxConfig, 2, text_scratchPoolSize, &scratchSize, 0, 0);
+            FUN_003065f0(ctxConfig, 2, text_scratchPadPoolSize, &scratchSize, scratchSize, 0);
             if (scratchSize != 0) {
                 if (scratchSize > 16384) { scratchSize = 16384; }
                 rec->a36 = 0x70000000;
                 rec->a28 = 16384;
-                setDescString(&rec->s44, DAT_004fa5e8);
-                setDescString(&rec->s48, DAT_004fa5f0);
+                setDescString(&rec->s44, Fixed);
+                setDescString(&rec->s48, HighSpeed);
                 rec->a28 = scratchSize;
             } else {
                 setDescString(&rec->s24, g_memoryContextNames[1]);
             }
-            if (rec->s52 == 0 || *rec->s52 == 0) { setDescString(&rec->s52, DAT_004fa600); }
+            if (rec->s52 == 0 || *rec->s52 == 0) { setDescString(&rec->s52, OnDemand); }
             break;
         case 20:
             if (self == (*(void * *)DAT_00586fd0)) {
                 driverSize = 0;
-                FUN_003065f0(config, 2, DAT_004fa610, &driverSize, 0, 0);
+                FUN_003065f0(config, 2, text_driverPoolSize, &driverSize, 0, 0);
                 if (driverSize != 0) {
                     rec = self->slots[20].record;
                     rec->a28 = driverSize;
@@ -797,10 +797,10 @@ void FUN_002f5230(int *out, PoolDescSetup *self, int config, char *name) {
             } else {
                 setDescString(&rec->s24, g_memoryContextNames[1]);
             }
-            if (rec->s52 == 0 || *rec->s52 == 0) { setDescString(&rec->s52, DAT_004fa600); }
+            if (rec->s52 == 0 || *rec->s52 == 0) { setDescString(&rec->s52, OnDemand); }
             break;
         default:
-            if (rec->s52 == 0 || *rec->s52 == 0) { setDescString(&rec->s52, DAT_004fa600); }
+            if (rec->s52 == 0 || *rec->s52 == 0) { setDescString(&rec->s52, OnDemand); }
             setDescString(&rec->s24, g_memoryContextNames[1]);
             break;
         }
@@ -884,13 +884,13 @@ void MemoryContext_BuildAllocator(int *out, igMemoryPoolContextInfo *arg1, int i
     }
     if (cfg->_scope != 0) {
         slot->f140 = 0;
-        if (strstr((char *)cfg->_scope, DAT_004fa620) == 0) {
-            if (strstr((char *)cfg->_scope, DAT_004fa2a8) != 0) slot->f140 = slot->f140 | 1;
-            else if (strstr((char *)cfg->_scope, DAT_004fa2b0) != 0) slot->f140 = slot->f140 | 2;
+        if (strstr((char *)cfg->_scope, LongTerm) == 0) {
+            if (strstr((char *)cfg->_scope, Level) != 0) slot->f140 = slot->f140 | 1;
+            else if (strstr((char *)cfg->_scope, Frame) != 0) slot->f140 = slot->f140 | 2;
         }
-        if (strstr((char *)cfg->_scope, DAT_004fa630) != 0) slot->f140 = slot->f140 | 0x01000000;
-        if (strstr((char *)cfg->_scope, DAT_004fa638) != 0) slot->f140 = slot->f140 | 0x02000000;
-        if (strstr((char *)cfg->_scope, DAT_004fa600) != 0) slot->f140 = slot->f140 | 0x04000000;
+        if (strstr((char *)cfg->_scope, Create) != 0) slot->f140 = slot->f140 | 0x01000000;
+        if (strstr((char *)cfg->_scope, Reset) != 0) slot->f140 = slot->f140 | 0x02000000;
+        if (strstr((char *)cfg->_scope, OnDemand) != 0) slot->f140 = slot->f140 | 0x04000000;
         if (flag == 0) {
             int f = slot->f140;
             if ((((unsigned long long)((long long)f << 0x28)) >> 0x28) != 0 && (f & 0x05000000) != 0) {
@@ -901,7 +901,7 @@ void MemoryContext_BuildAllocator(int *out, igMemoryPoolContextInfo *arg1, int i
     }
     if (obj != 0) {
         int size = cfg->_size;
-        if (size != 0 && (cfg->_arenaType == 0 || strcmp((char *)cfg->_arenaType, DAT_004fa640) == 0)) {
+        if (size != 0 && (cfg->_arenaType == 0 || strcmp((char *)cfg->_arenaType, Dynamic) == 0)) {
             r0 = ((OV *)obj)->v172(size);
         }
     } else {
@@ -923,7 +923,7 @@ void MemoryContext_BuildAllocator(int *out, igMemoryPoolContextInfo *arg1, int i
                 int refMode = !!(ctx->flags & 4);
                 if (refMode) {
                     if (cfg->_scope != 0) {
-                        if ((strstr((char *)cfg->_scope, DAT_004fa600) != 0 || strstr((char *)cfg->_scope, DAT_004fa648) != 0 || strstr((char *)cfg->_scope, DAT_004fa658) != 0) && flag == 0) {
+                        if ((strstr((char *)cfg->_scope, OnDemand) != 0 || strstr((char *)cfg->_scope, ONDEMAND) != 0 || strstr((char *)cfg->_scope, text_ondemand) != 0) && flag == 0) {
                             *out = (*(igResult_2f25d0 *)&g_statusSucceeded).v;
                             return;
                         }
@@ -966,25 +966,25 @@ void MemoryContext_BuildAllocator(int *out, igMemoryPoolContextInfo *arg1, int i
         aligned = al & ~(((Gl *)((void * *)DAT_00587218)[0])->v84() - 1);
         if (size != 0) {
             char *kind = (char *)cfg->_arenaType;
-            if (kind == 0 || strcmp(kind, DAT_004fa640) == 0) {
+            if (kind == 0 || strcmp(kind, Dynamic) == 0) {
                 r2 = ((OV *)o2)->v172(size);
-            } else if (strcmp((char *)cfg->_arenaType, DAT_004fa5e8) == 0) {
+            } else if (strcmp((char *)cfg->_arenaType, Fixed) == 0) {
                 sub = (char *)cfg->_source;
                 if (sub == 0 || *sub == 0) { a = allocB; goto common; }
-                if (strcmp(sub, DAT_004fa668) == 0) {
+                if (strcmp(sub, SystemMemory) == 0) {
 b78:
                     int v = ((Gl *)((void * *)DAT_00587218)[0])->v68(0, aligned);
                     r3 = ((OV *)o2)->v96(v, aligned, 0);
                     slot->f136 = slot->f136 | 2;
-                } else if (strcmp(sub, DAT_004fa678) == 0 || strcmp(sub, DAT_004fa680) == 0 || strcmp(sub, DAT_004fa688) == 0) {
+                } else if (strcmp(sub, Low) == 0 || strcmp(sub, High) == 0 || strcmp(sub, Virtual) == 0) {
                     goto b78;
-                } else if (strcmp(sub, DAT_004fa5f0) == 0) {
+                } else if (strcmp(sub, HighSpeed) == 0) {
                     int dfl = cfg->_address;
                     int a2;
                     if (dfl != 0) a2 = dfl;
                     else a2 = 0x70000000;
                     r4 = ((OV *)o2)->v96(a2, (long long)size, 0);
-                } else if (strcmp(sub, DAT_004fa690) != 0 && strcmp(sub, DAT_004fa698) != 0) {
+                } else if (strcmp(sub, Raw) != 0 && strcmp(sub, Custom) != 0) {
                     a = ctx->v96(sub);
                     if (a == 0) a = allocB;
 common:
@@ -1022,9 +1022,9 @@ void MemoryContext_BuildAndAttachEventTracker(R4 *out, Ctx3 *self, int idx) {
         ty = 0;
         ps = &slot->sub; igMemoryPoolInfo *sub = *ps;
         if (sub != 0) ty = (void *)sub->_releaseOptions;
-        if (ty == 0 || strstr(ty, &DAT_004fa530[0]) == 0) {
+        if (ty == 0 || strstr(ty, &InhibitEventTracker[0]) == 0) {
             int h2 = (self->flags & 2) != 0;
-            if ((h2 && idx != 1) || (ty != 0 && strstr(ty, &DAT_004fa550[0]) != 0)) {
+            if ((h2 && idx != 1) || (ty != 0 && strstr(ty, &UseEventTracker[0]) != 0)) {
                 o = (Obj5 *)FUN_002c5780((int)(self->v92(3)));
                 void *b = ((Gl2 *)(*(void * *)g_objectSystem))->f124;
                 void *f = (void *)(*ps)->_eventTrackerCapacity;
@@ -1043,7 +1043,7 @@ void MemoryContext_BuildAndAttachEventTracker(R4 *out, Ctx3 *self, int idx) {
         void *ty2 = 0;
         ps2 = &slot->sub; igMemoryPoolInfo *sub2 = *ps2;
         if (sub2 != 0) ty2 = (void *)sub2->_releaseOptions;
-        if (ty2 != 0 && strstr(ty2, &DAT_004fa550[0]) != 0) {
+        if (ty2 != 0 && strstr(ty2, &UseEventTracker[0]) != 0) {
             o2 = (Obj5 *)FUN_002c5780((int)(self->v92(3)));
             void *b2 = ((Gl2 *)(*(void * *)g_objectSystem))->f124;
             void *f2 = (void *)(*ps2)->_eventTrackerCapacity;
@@ -1274,7 +1274,7 @@ b16:
                         }
                     }
                     if (sp70[0] == 0) {
-                        sprintf(sp70, DAT_004fab08, arg0->v104(s4));
+                        sprintf(sp70, text_s_igm, arg0->v104(s4));
                     }
                     if (FUN_002dcc50((int *)s1) != 0) {
                         r = s1->v176(sp70);
@@ -1551,7 +1551,7 @@ void FUN_002f8580(E3 *arg0, int *arg1) {
     } while (i < 0x2E);
     FUN_00304430(DAT_004f95c8);
     FUN_00304680();
-    FUN_002f0a60((char *)&DAT_004fab90[0]);
+    FUN_002f0a60((char *)&Combined_pool_statistics[0]);
     ((DW4VC_144_0 *)((void **)((void * *)DAT_00587218)[0]))->vX();
 }
 
@@ -1742,10 +1742,10 @@ struct Item_2f8ca0 *FUN_002f8ca0(struct Own_2f8ca0 *arg0, char *arg1) {
     if ((arg1 == 0) || (*arg1 == 0)) {
         return 0;
     }
-    if (strncmp(arg1, ((char *)DAT_004fa3c8), 0xD) == 0) {
+    if (strncmp(arg1, ((char *)text_kIGMemoryPool), 0xD) == 0) {
         arg1 += 0xD;
     }
-    if (strncmp(arg1, DAT_004fabb0, 6) == 0) {
+    if (strncmp(arg1, Handle, 6) == 0) {
         if (strlen(arg1) != 6) {
             arg1 += 6;
         }
@@ -1755,10 +1755,10 @@ struct Item_2f8ca0 *FUN_002f8ca0(struct Own_2f8ca0 *arg0, char *arg1) {
         if (it != 0) {
             s = it->name;
             if ((s != 0) && (*s != 0)) {
-                if (strncmp(s, ((char *)DAT_004fa3c8), 0xD) == 0) {
+                if (strncmp(s, ((char *)text_kIGMemoryPool), 0xD) == 0) {
                     s += 0xD;
                 }
-                if (strncmp(s, DAT_004fabb0, 6) == 0) {
+                if (strncmp(s, Handle, 6) == 0) {
                     if (strlen(arg1) != 6) {
                         s += 6;
                     }

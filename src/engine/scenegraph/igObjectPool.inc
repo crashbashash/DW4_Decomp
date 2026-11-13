@@ -46,9 +46,9 @@ void igObjectPool_InitFields(void) {
 
     temp_s0 = (void *)g_igObjectPool_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_0048b1d0[0], 3);
+    igMetaObject_CreateFields(temp_s0, &g_igObjectPool_ctorTable[0], 3);
     FUN_002ea4b0(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 1), 0x32);
     FUN_002d3890(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 2), 1);
-    igMetaObject_NameFields(temp_s0, &DAT_0048b1e0[0], &DAT_0048b1f0[0], &DAT_0048b200[0], temp_s1);
+    igMetaObject_NameFields(temp_s0, &g_igObjectPool_fieldTable[0], &DAT_0048b1f0[0], &DAT_0048b200[0], temp_s1);
 }
 

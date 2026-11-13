@@ -24,7 +24,7 @@ extern int g_igAliasMemoryPool_vtable[4];
 extern int g_statusSucceeded[4];
 extern int g_allocatorFailureStatus[4];
 extern int DAT_004f90b0[4];
-extern int DAT_004f90b8[4];
+extern int text_null[4];
 extern int DAT_004f90c0[4];
 extern int DAT_004f92b0[4];
 extern int DAT_004f92f0[4];

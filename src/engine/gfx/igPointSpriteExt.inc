@@ -1,6 +1,6 @@
 int FUN_0014c290(void) {
     if (DAT_0055fb38[0] == 0) {
-        DAT_0055fb38[0] = igMetaEnum_Create(&DAT_004dbfe0[0], &DAT_00488860[0], &DAT_00488868[0], 2);
+        DAT_0055fb38[0] = igMetaEnum_Create(&IG_GFX_SPRITE_SIZE_SPACE[0], &DAT_00488860[0], &DAT_00488868[0], 2);
     }
     return DAT_0055fb38[0];
 }
@@ -122,7 +122,7 @@ void igPointSpriteExt_InitFields(void) {
 
     temp_s1 = (void *)(g_igPointSpriteExt_metaObject[0]);
     temp_s0 = igMetaObject_GetFieldCount(temp_s1);
-    igMetaObject_CreateFields(temp_s1, &DAT_00488880[0], 0x12);
+    igMetaObject_CreateFields(temp_s1, &g_igPointSpriteExt_ctorTable[0], 0x12);
     temp_s2 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0));
     ((igObjectRefMetaField *)temp_s2)->_metaObject = (int)FUN_0014a040();
     ((igObjectRefMetaField *)temp_s2)->_refCounted = 0;
@@ -151,7 +151,7 @@ void igPointSpriteExt_InitFields(void) {
     ((igMetaField *)igMetaObject_GetFieldAt(temp_s1, temp_s0 + 0xF))->_persistent = 0;
     ((igMetaField *)igMetaObject_GetFieldAt(temp_s1, temp_s0 + 0x10))->_persistent = 0;
     ((igMetaField *)igMetaObject_GetFieldAt(temp_s1, temp_s0 + 0x11))->_persistent = 0;
-    igMetaObject_NameFields(temp_s1, &DAT_004888d0[0], &DAT_00488920[0], &DAT_00488970[0], temp_s0);
+    igMetaObject_NameFields(temp_s1, &g_igPointSpriteExt_fieldTable[0], &DAT_00488920[0], &DAT_00488970[0], temp_s0);
     *(int *)((char *)(g_igPointSpriteExt_metaObject[0]) + 60) = (int)(&thunk_igPsx2PointSpriteExt_GetMetaObject);
 }
 

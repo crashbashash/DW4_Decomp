@@ -70,7 +70,7 @@ void beNDMWShinkaObject_InitFields(void) {
 
     temp_s0 = (void *)g_beNDMWShinkaObject_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_004cc210[0], 0x13);
-    igMetaObject_NameFields(temp_s0, &DAT_004cc260[0], &DAT_004cc2b0[0], &DAT_004cc300[0], temp_s1);
+    igMetaObject_CreateFields(temp_s0, &g_beNDMWShinkaObject_ctorTable[0], 0x13);
+    igMetaObject_NameFields(temp_s0, &g_beNDMWShinkaObject_fieldTable[0], &DAT_004cc2b0[0], &DAT_004cc300[0], temp_s1);
 }
 

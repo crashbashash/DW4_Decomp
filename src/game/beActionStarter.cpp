@@ -15,11 +15,11 @@ extern "C" void beMessenger_SetRunCheck(int, unsigned char);
 extern "C" int Gap__Core__igObject__vfunc_33(void);
 extern "C" int g_beActionStarterInfo_metaObject[4];
 extern "C" int g_beActionStarter_metaObject[4];
-extern "C" char DAT_0050e110[];
+extern "C" char ACTION_BROADCAST_2[];
 extern "C" void Gap__Bec__beActionStarter__vfunc_29(beActionStarter * p0, int p1, char * p2, int p3, int p4);
 extern "C" int emptyString[4];
-extern "C" int DAT_0050e128[4];
-extern "C" int DAT_0050e138[4];
+extern "C" int MODELCTRL_10[4];
+extern "C" int SETEFFECT_3[4];
 extern "C" int g_beActionStarterData2_metaObject[4];
 /* matching construct: dummy-virtual class (20 slots) so getKind() compiles to the retail jalr; the element data is read through beActionStarterData2 below. */
 struct ActionStarterDataVTable {
@@ -53,7 +53,7 @@ void Gap__Bec__beActionStarter__vfunc_32(void)
 
 void Gap__Bec__beActionStarter__vfunc_29(beActionStarter * p0, int p1, char * p2, int p3, int p4)
 {
-    beMessenger_RegisterReceiver(p0->_messenger, p1, DAT_0050e110, 0, -1);
+    beMessenger_RegisterReceiver(p0->_messenger, p1, ACTION_BROADCAST_2, 0, -1);
 }
 
 int Gap__Bec__beActionStarter__vfunc_30(void)
@@ -104,7 +104,7 @@ int Gap__Bec__beActionStarter__vfunc_34(beActionStarter *arg0, beActionStarterIn
                 v0 = v0 != 0 ? v0 : &emptyString[0];
                 if ((int)v0 == s8) {
                     int *n;
-                    beMessenger_SelectReceivers(arg0->_messenger, &DAT_0050e128[0], s4, spA0);
+                    beMessenger_SelectReceivers(arg0->_messenger, &MODELCTRL_10[0], s4, spA0);
                     n = (int *)s7->_name;
                     n = n != 0 ? n : &emptyString[0];
                     beMessenger_AppendString(arg0->_messenger, n);
@@ -126,7 +126,7 @@ int Gap__Bec__beActionStarter__vfunc_34(beActionStarter *arg0, beActionStarterIn
                         }
                     }
                     beMessenger_SetRunCheck(arg0->_messenger, 1);
-                    beMessenger_DispatchSelected(arg0->_messenger, &DAT_0050e138[0]);
+                    beMessenger_DispatchSelected(arg0->_messenger, &SETEFFECT_3[0]);
                 }
                 s3 += 1;
                 s0 += 1;

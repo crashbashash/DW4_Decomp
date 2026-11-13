@@ -112,29 +112,29 @@ void beNDMWMdlPlayerInfoWork_InitFields(void) {
 
     temp_s0 = (void *)g_beNDMWMdlPlayerInfoWork_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_004ca8c0[0], 8);
+    igMetaObject_CreateFields(temp_s0, &g_beNDMWMdlPlayerInfoWork_ctorTable[0], 8);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
     ((igObjectRefMetaField *)temp_s1)->_metaObject = igIntList_GetOrCreateMetaObject();
-    igMetaObject_NameFields(temp_s0, &DAT_004ca8e0[0], &DAT_004ca900[0], &DAT_004ca920[0], temp_s2);
+    igMetaObject_NameFields(temp_s0, &g_beNDMWMdlPlayerInfoWork_fieldTable[0], &DAT_004ca900[0], &DAT_004ca920[0], temp_s2);
 }
 
 int DamageSeq_GetMetaEnum(void) {
     if (DAT_0058b410[0] == 0) {
-        DAT_0058b410[0] = igMetaEnum_Create(&DAT_00512258[0], &DAT_004ca940[0], &DAT_004ca970[0], 0xA);
+        DAT_0058b410[0] = igMetaEnum_Create(&DamageSeq[0], &DAT_004ca940[0], &DAT_004ca970[0], 0xA);
     }
     return DAT_0058b410[0];
 }
 
 int StatusName_GetMetaEnum(void) {
     if (DAT_0058b418[0] == 0) {
-        DAT_0058b418[0] = igMetaEnum_Create(&DAT_005122d0[0], &DAT_004ca9a0[0], &DAT_004ca9d0[0], 0xB);
+        DAT_0058b418[0] = igMetaEnum_Create(&StatusName[0], &DAT_004ca9a0[0], &DAT_004ca9d0[0], 0xB);
     }
     return DAT_0058b418[0];
 }
 
 int MsgAction_GetMetaEnum(void) {
     if (DAT_0058b420[0] == 0) {
-        DAT_0058b420[0] = igMetaEnum_Create(&DAT_005123d0[0], &DAT_004caa00[0], &DAT_004caa40[0], 0x10);
+        DAT_0058b420[0] = igMetaEnum_Create(&MsgAction_2[0], &DAT_004caa00[0], &DAT_004caa40[0], 0x10);
     }
     return DAT_0058b420[0];
 }

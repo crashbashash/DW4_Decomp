@@ -98,14 +98,14 @@ int FUN_001c66c0(Node *self, int force)
     REL_STR(self->f36)
     self->f36 = s;
     self->f40 = -1;
-    idx = FUN_00306360(self->f28, (char *)&DAT_004e4668[0], 0);
+    idx = FUN_00306360(self->f28, (char *)&Interface[0], 0);
     if (idx < 0) {
         return 0;
     }
     sp4C = 0;
     sp48 = 0;
     {
-        unsigned char found = FUN_00306910(self->f28, idx, &DAT_004e4678[0], &sp4C, &DAT_004e4660[0], 0);
+        unsigned char found = FUN_00306910(self->f28, idx, &text_fileName[0], &sp4C, &DAT_004e4660[0], 0);
         sp44.p = 0;
         RET_OBJ(sp44.p)
         sp40.p = 0;
@@ -117,7 +117,7 @@ int FUN_001c66c0(Node *self, int force)
             sp4C = self->f24;
         }
     }
-    if (!(FUN_00306910(self->f28, idx, &DAT_004e4688[0], &sp48, &DAT_004e4660[0], 0) & 0xFF)) {
+    if (!(FUN_00306910(self->f28, idx, &text_section[0], &sp48, &DAT_004e4660[0], 0) & 0xFF)) {
         REL_ALL()
         return 0;
     }
@@ -192,12 +192,12 @@ IniStrRef FUN_001c6fa0(IniSectionNode *node) {
     if (FUN_001c6520((O_1c6520 *)node, 0) == 0) {
         return IniStrRef(0);
     }
-    index = FUN_00306360(node->_parent, DAT_004e4690, 0);
+    index = FUN_00306360(node->_parent, text_configuration, 0);
     if (index == -1) {
         return IniStrRef(0);
     }
     IniStrRef text(0);
-    if (FUN_00306910(node->_parent, index, DAT_004e4678, &text.p, DAT_004e4660, 0) == 0) {
+    if (FUN_00306910(node->_parent, index, text_fileName, &text.p, DAT_004e4660, 0) == 0) {
         return IniStrRef(0);
     }
     return text;
@@ -296,7 +296,7 @@ igSmartPointer<ShaderObject_1ca6c0> FUN_001ca6c0(ShaderProcessorView *self, char
         return igSmartPointer<ShaderObject_1ca6c0>(0, kRetainReference);
     }
     IniStrRef text(0);
-    if (FUN_00306910(self->ini, section, DAT_004e46f8, &text.p, DAT_004e4660, 0) == 0) {
+    if (FUN_00306910(self->ini, section, text_type, &text.p, DAT_004e4660, 0) == 0) {
         return igSmartPointer<ShaderObject_1ca6c0>(0, kRetainReference);
     }
     meta = FUN_002fe460(text.p);
@@ -308,7 +308,7 @@ igSmartPointer<ShaderObject_1ca6c0> FUN_001ca6c0(ShaderProcessorView *self, char
         return igSmartPointer<ShaderObject_1ca6c0>(0, kRetainReference);
     }
     igSmartPointer<ShaderNameList> names(igStringRefList_Create(((void *)igObject_GetAllocator(self))));
-    FUN_00306aa0(self->ini, section, DAT_004e4700, names.p, 0);
+    FUN_00306aa0(self->ini, section, text_fields, names.p, 0);
     count = names.p->count;
     for (i = 0; i < count; i++) {
         field = StringList_CopyRetained((igStringRefList *)names.p, i).p;
@@ -324,7 +324,7 @@ igSmartPointer<ShaderObject_1ca6c0> FUN_001ca6c0(ShaderProcessorView *self, char
     {
         bool initial = !(bool)flag;
         cached = initial;
-        FUN_00306e50(self->ini, section, DAT_004e4708, &cached, initial, 0);
+        FUN_00306e50(self->ini, section, text_const, &cached, initial, 0);
     }
     if (cached != 0) {
         ShaderCacheView *cache = ((ShaderCacheView *)FUN_001ca6b0((int *)self, self->kind));

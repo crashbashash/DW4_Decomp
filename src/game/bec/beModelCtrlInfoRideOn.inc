@@ -57,9 +57,9 @@ void beModelCtrlInfoRideOn_InitFields(void) {
 
     temp_s0 = (void *)g_beModelCtrlInfoRideOn_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_004c5230[0], 4);
+    igMetaObject_CreateFields(temp_s0, &g_beModelCtrlInfoRideOn_ctorTable[0], 4);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 2));
     ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_0034fd40();
-    igMetaObject_NameFields(temp_s0, &DAT_004c5240[0], &DAT_004c5250[0], &DAT_004c5260[0], temp_s2);
+    igMetaObject_NameFields(temp_s0, &g_beModelCtrlInfoRideOn_fieldTable[0], &DAT_004c5250[0], &DAT_004c5260[0], temp_s2);
 }
 

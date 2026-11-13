@@ -93,7 +93,7 @@ void bePoint01_InitFields(void) {
 
     temp_s0 = (void *)g_bePoint01_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_004c4590[0], 1);
-    igMetaObject_NameFields(temp_s0, &DAT_004c4598[0], &DAT_004c45a0[0], &DAT_004c45a8[0], temp_s1);
+    igMetaObject_CreateFields(temp_s0, &g_bePoint01_ctorTable[0], 1);
+    igMetaObject_NameFields(temp_s0, &g_bePoint01_fieldTable[0], &DAT_004c45a0[0], &DAT_004c45a8[0], temp_s1);
 }
 

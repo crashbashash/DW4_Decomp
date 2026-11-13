@@ -25,7 +25,7 @@ typedef struct { char vtable[4]; int refs; } RefCountedObject;
 extern "C" void Gap__Bec__beHitLandModel__vfunc_32(beHitLandModel *arg0);
 extern "C" int g_beHitLandModelInfo_metaObject[4];
 extern "C" int g_beHitLandModel_metaObject[4];
-extern "C" char DAT_0050eae0[];
+extern "C" char HITLANDMODEL[];
 extern "C" void Gap__Bec__beHitLandModel__vfunc_29(beHitLandModel * p0, int p1, char * p2, int p3, int p4);
 extern "C" beHitLandResultData *FUN_0035e400(void *);
 extern "C" void *g_stringPool[4];
@@ -93,7 +93,7 @@ int Gap__Bec__beHitLandModel__vfunc_30(void)
 
 void Gap__Bec__beHitLandModel__vfunc_29(beHitLandModel * p0, int p1, char * p2, int p3, int p4)
 {
-    beMessenger_RegisterReceiver(p0->_messenger, p1, DAT_0050eae0, 0, -1);
+    beMessenger_RegisterReceiver(p0->_messenger, p1, HITLANDMODEL, 0, -1);
 }
 
 void Gap__Bec__beHitLandModel__vfunc_31(void)

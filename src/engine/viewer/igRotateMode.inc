@@ -1,6 +1,6 @@
 int FUN_0045c540(void) {
     if (DAT_0058cbf0[0] == 0) {
-        DAT_0058cbf0[0] = igMetaEnum_Create(&DAT_0051f630[0], &DAT_004d1460[0], &DAT_004d1470[0], 3);
+        DAT_0058cbf0[0] = igMetaEnum_Create(&CONSTRAINT_AXIS[0], &DAT_004d1460[0], &DAT_004d1470[0], 3);
     }
     return DAT_0058cbf0[0];
 }
@@ -71,7 +71,7 @@ void igRotateMode_InitFields(void) {
 
     temp_s0 = (void *)g_igRotateMode_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_004d1480[0], 0x10);
+    igMetaObject_CreateFields(temp_s0, &g_igRotateMode_ctorTable[0], 0x10);
     FUN_002e3810(igMetaObject_GetFieldAt(temp_s0, temp_s2), 1.0f);
     temp_a0 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
     spA[0] = 0;
@@ -98,6 +98,6 @@ void igRotateMode_InitFields(void) {
     spD[1] = 0;
     spD[2] = 0;
     FUN_0018e470(temp_a0_4, spD);
-    igMetaObject_NameFields(temp_s0, &DAT_004d14c0[0], &DAT_004d1500[0], &DAT_004d1540[0], temp_s2);
+    igMetaObject_NameFields(temp_s0, &g_igRotateMode_fieldTable[0], &DAT_004d1500[0], &DAT_004d1540[0], temp_s2);
 }
 

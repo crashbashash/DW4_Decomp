@@ -90,7 +90,7 @@ void beActionStarterData2_InitFields(void) {
 
     temp_s0 = (void *)g_beActionStarterData2_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_004c7df8[0], 1);
-    igMetaObject_NameFields(temp_s0, &DAT_004c7e00[0], &DAT_004c7e08[0], &DAT_004c7e10[0], temp_s1);
+    igMetaObject_CreateFields(temp_s0, &g_beActionStarterData2_ctorTable[0], 1);
+    igMetaObject_NameFields(temp_s0, &g_beActionStarterData2_fieldTable[0], &DAT_004c7e08[0], &DAT_004c7e10[0], temp_s1);
 }
 

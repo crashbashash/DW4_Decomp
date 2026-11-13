@@ -93,7 +93,7 @@ int Gap__Core__igExternalDirEntry__vfunc_44(Ent *arg0, int arg1) {
     }
     arg0->vY(((void *)FUN_002d8e70((int)(stream.get()), (int)arg0->f32)));
     if (arg0->f24 == 0) {
-        arg0->vY(((void *)FUN_002d8e70((int)(stream.get()), (int)&DAT_004f9a50[0])));
+        arg0->vY(((void *)FUN_002d8e70((int)(stream.get()), (int)&text_root[0])));
     }
     return arg0->f24 != 0;
 }

@@ -44,7 +44,7 @@ extern "C" ObjectRefWord *FUN_003af010(ObjectRefWord *self,int delete_storage);
 typedef struct S_temp_a0 { char pad4[4]; int f4; } S_temp_a0;
 extern "C" int g_beSaveUtilInfo_metaObject[4];
 extern "C" int g_beSaveUtil_metaObject[4];
-extern "C" char DAT_00510738[];
+extern "C" char SAVEUTILITY_2[];
 extern "C" void Gap__Bec__beSaveUtil__vfunc_29(beSaveUtil * p0, int p1, char * p2);
 extern "C" int g_defaultAllocatorSelector[4];
 extern "C" unsigned char g_useOwnerAllocator;
@@ -181,7 +181,7 @@ int Gap__Bec__beSaveUtil__vfunc_30(void)
 
 void Gap__Bec__beSaveUtil__vfunc_29(beSaveUtil * p0, int p1, char * p2)
 {
-    beMessenger_RegisterReceiverFromInfo(p0->_messenger, p1, DAT_00510738);
+    beMessenger_RegisterReceiverFromInfo(p0->_messenger, p1, SAVEUTILITY_2);
 }
 
 #define DELIVER(r) ((Deliver *)(r)->_deliver)

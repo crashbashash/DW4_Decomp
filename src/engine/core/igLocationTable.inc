@@ -73,7 +73,7 @@ void igLocationTable_InitFields(void) {
 
     temp_s1 = (void *)g_igLocationTable_metaObject[0];
     temp_s0 = igMetaObject_GetFieldCount((igMetaObject *)temp_s1);
-    igMetaObject_CreateFields((igMetaObject *)temp_s1, (igMetaField * (**)(void *))&DAT_004c0520[0], 6);
+    igMetaObject_CreateFields((igMetaObject *)temp_s1, (igMetaField * (**)(void *))&g_igLocationTable_ctorTable[0], 6);
     temp_s2 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 2)));
     ((igObjectRefMetaField *)temp_s2)->_metaObject = (int)FUN_002ca2a0();
     ((igRefMetaField *)temp_s2)->_construct = 1;
@@ -86,6 +86,6 @@ void igLocationTable_InitFields(void) {
     temp_s2_4 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 5)));
     ((igObjectRefMetaField *)temp_s2_4)->_metaObject = (int)FUN_002b8d90();
     ((igRefMetaField *)temp_s2_4)->_construct = 1;
-    igMetaObject_NameFields((igMetaObject *)temp_s1, (const char **)&DAT_004c0540[0], (igMetaField ***)&DAT_004c0560[0], &DAT_004c0580[0], temp_s0);
+    igMetaObject_NameFields((igMetaObject *)temp_s1, (const char **)&g_igLocationTable_fieldTable[0], (igMetaField ***)&DAT_004c0560[0], &DAT_004c0580[0], temp_s0);
 }
 

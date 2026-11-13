@@ -102,7 +102,7 @@ void beNDMWShinkaCtrl_InitFields(void) {
 
     temp_s0 = (void *)g_beNDMWShinkaCtrl_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_004cc190[0], 6);
+    igMetaObject_CreateFields(temp_s0, &g_beNDMWShinkaCtrl_ctorTable[0], 6);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
     ((igObjectRefMetaField *)temp_s1)->_metaObject = FUN_00357910();
     ((igObjectRefMetaField *)temp_s1)->_refCounted = 0;
@@ -116,6 +116,6 @@ void beNDMWShinkaCtrl_InitFields(void) {
     temp_s1_5 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 5));
     ((igObjectRefMetaField *)temp_s1_5)->_metaObject = (int)FUN_003c9810();
     ((igRefMetaField *)temp_s1_5)->_construct = 1;
-    igMetaObject_NameFields(temp_s0, &DAT_004cc1b0[0], &DAT_004cc1d0[0], &DAT_004cc1f0[0], temp_s2);
+    igMetaObject_NameFields(temp_s0, &g_beNDMWShinkaCtrl_fieldTable[0], &DAT_004cc1d0[0], &DAT_004cc1f0[0], temp_s2);
 }
 

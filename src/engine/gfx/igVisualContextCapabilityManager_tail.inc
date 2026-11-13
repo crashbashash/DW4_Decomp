@@ -106,8 +106,8 @@ void FUN_00165a80(VisualContextCapabilityManager *self) {
     properties = ((PropertyRoot *)g_objectSystem[0])->properties;
     showFrameRate = self->showFrameRate;
     commandLineFrame = self->commandLineFrame;
-    thunk_FUN_00306e50(properties, 4, DAT_004df0a0, &showFrameRate, showFrameRate, 1);
-    thunk_FUN_00306e50(properties, 4, DAT_004df0b0, &commandLineFrame, commandLineFrame, 1);
+    thunk_FUN_00306e50(properties, 4, text_showFrameRate, &showFrameRate, showFrameRate, 1);
+    thunk_FUN_00306e50(properties, 4, text_commandLineFrameRate, &commandLineFrame, commandLineFrame, 1);
     self->showFrameRate = showFrameRate;
     self->commandLineFrame = commandLineFrame;
 }
@@ -351,7 +351,7 @@ void FUN_00166400(igVisualContext_166400 *ctx, int flags)
         ctx->vfunc_249(1000.0f);
     }
     if (flags & 0x20) {
-        thunk_FUN_003065f0(settings, 4, DAT_004df0c8, &shadingMode, 1, 1);
+        thunk_FUN_003065f0(settings, 4, text_shadingMode, &shadingMode, 1, 1);
         hot = -1;
         ctx->vfunc_67(&hot);
         colour.x = 0.0f; colour.y = 0.0f; colour.z = 0.0f; colour.w = 1.0f;
@@ -364,9 +364,9 @@ void FUN_00166400(igVisualContext_166400 *ctx, int flags)
         ctx->vfunc_225(shadingMode);
     }
     if (flags & 0x40) {
-        thunk_FUN_00306e50(settings, 4, DAT_004df0d8, &cullEnable, 0, 1);
-        thunk_FUN_003065f0(settings, 4, DAT_004df0e8, &cullMode, 0, 1);
-        thunk_FUN_003065f0(settings, 4, DAT_004df0f8, &fillMode, 0, 1);
+        thunk_FUN_00306e50(settings, 4, text_cullEnable, &cullEnable, 0, 1);
+        thunk_FUN_003065f0(settings, 4, text_cullMode, &cullMode, 0, 1);
+        thunk_FUN_003065f0(settings, 4, text_fillMode, &fillMode, 0, 1);
         ctx->vfunc_215(0);
         ctx->vfunc_217(6);
         ctx->vfunc_219(0.0f);
@@ -409,7 +409,7 @@ void FUN_00166a70(void *arg0_, float fparg0, float fparg1) {
         DAT_005607c0[0] = (1000.0f * DAT_005607a8[0]) / temp_f4;
         temp_s2 = fptodp(1.0f / DAT_00560838[0]);
         temp_s1 = fptodp(1.0f / DAT_0048a470[0]);
-        sprintf((char *)g_gsEventCount, &DAT_004df110[0], temp_s2, temp_s1, fptodp(DAT_005607b8[0]));
+        sprintf((char *)g_gsEventCount, &text_2_0f_2_0f_3_0f_fps_f[0], temp_s2, temp_s1, fptodp(DAT_005607b8[0]));
         DAT_005607a0[0] = 0.0f;
         DAT_005607a8[0] = 0.0f;
         DAT_005607b0[0] = 0;
@@ -473,7 +473,7 @@ void FUN_00166de0(int value)
     igSmartPointer<igIntList> list(FUN_002cba00((void *)(FUN_00165ce0((int *)value))));
     bool found = false;
 
-    FUN_00306e50(registry, 4, DAT_004df150, &found, 0, 1);
+    FUN_00306e50(registry, 4, text_ignoreDriverDatabase, &found, 0, 1);
     if (found) return;
     igIntList *l = list;
     count = l->_count;

@@ -57,11 +57,11 @@ void igStackMemoryPool_InitFields(void) {
 
     temp_s0 = (void *)g_igStackMemoryPool_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
-    igMetaObject_CreateFields((igMetaObject *)temp_s0, (igMetaField * (**)(void *))&DAT_004c1950[0], 0xA);
+    igMetaObject_CreateFields((igMetaObject *)temp_s0, (igMetaField * (**)(void *))&g_igStackMemoryPool_ctorTable[0], 0xA);
     FUN_002ea4b0((void **)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2))), -1);
     FUN_0030eda0((void **)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 1))), 4);
     temp_s1 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 9)));
     ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_002c57c0();
-    igMetaObject_NameFields((igMetaObject *)temp_s0, (const char **)&DAT_004c1980[0], (igMetaField ***)&DAT_004c19b0[0], &DAT_004c19e0[0], temp_s2);
+    igMetaObject_NameFields((igMetaObject *)temp_s0, (const char **)&g_igStackMemoryPool_fieldTable[0], (igMetaField ***)&DAT_004c19b0[0], &DAT_004c19e0[0], temp_s2);
 }
 

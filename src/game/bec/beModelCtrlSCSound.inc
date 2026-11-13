@@ -79,7 +79,7 @@ void beModelCtrlSCSound_InitFields(void) {
 
     temp_s0 = (void *)g_beModelCtrlSCSound_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_004c4be0[0], 2);
-    igMetaObject_NameFields(temp_s0, &DAT_004c4be8[0], &DAT_004c4bf0[0], &DAT_004c4bf8[0], temp_s1);
+    igMetaObject_CreateFields(temp_s0, &g_beModelCtrlSCSound_ctorTable[0], 2);
+    igMetaObject_NameFields(temp_s0, &g_beModelCtrlSCSound_fieldTable[0], &DAT_004c4bf0[0], &DAT_004c4bf8[0], temp_s1);
 }
 

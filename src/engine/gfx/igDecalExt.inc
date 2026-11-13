@@ -45,8 +45,8 @@ void igDecalExt_InitFields(void) {
 
     temp_s0 = (void *)(g_igDecalExt_metaObject[0]);
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_00489070[0], 1);
-    igMetaObject_NameFields(temp_s0, &DAT_00489078[0], &DAT_00489080[0], &DAT_00489088[0], temp_s1);
+    igMetaObject_CreateFields(temp_s0, &g_igDecalExt_ctorTable[0], 1);
+    igMetaObject_NameFields(temp_s0, &g_igDecalExt_fieldTable[0], &DAT_00489080[0], &DAT_00489088[0], temp_s1);
     *(int *)((char *)(g_igDecalExt_metaObject[0]) + 60) = (int)(&thunk_igPsx2DecalExt_GetMetaObject);
 }
 

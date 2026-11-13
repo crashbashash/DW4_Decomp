@@ -78,9 +78,9 @@ void beHitLandModelTraversal_InitFields(void) {
 
     temp_s0 = (void *)g_beHitLandModelTraversal_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_004c6670[0], 1);
+    igMetaObject_CreateFields(temp_s0, &g_beHitLandModelTraversal_ctorTable[0], 1);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
     ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_0035ded0();
-    igMetaObject_NameFields(temp_s0, &DAT_004c6678[0], &DAT_004c6680[0], &DAT_004c6688[0], temp_s2);
+    igMetaObject_NameFields(temp_s0, &g_beHitLandModelTraversal_fieldTable[0], &DAT_004c6680[0], &DAT_004c6688[0], temp_s2);
 }
 

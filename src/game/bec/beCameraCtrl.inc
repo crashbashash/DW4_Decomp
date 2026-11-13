@@ -77,7 +77,7 @@ void beCameraCtrl_InitFields(void) {
 
     temp_s0 = (void *)g_beCameraCtrl_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_004c7a60[0], 0xD);
+    igMetaObject_CreateFields(temp_s0, &g_beCameraCtrl_ctorTable[0], 0xD);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
     *(int *)((char *)(temp_s1) + 56) = FUN_00459380();
     *(char *)((char *)(temp_s1) + 60) = 0;
@@ -88,6 +88,6 @@ void beCameraCtrl_InitFields(void) {
     *(int *)((char *)(temp_s1_3) + 56) = (int)FUN_00368a30();
     FUN_002e3810(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 0xB), 1.0f);
     FUN_002d3890(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 0xC), 1);
-    igMetaObject_NameFields(temp_s0, &DAT_004c7aa0[0], &DAT_004c7ae0[0], &DAT_004c7b20[0], temp_s2);
+    igMetaObject_NameFields(temp_s0, &g_beCameraCtrl_fieldTable[0], &DAT_004c7ae0[0], &DAT_004c7b20[0], temp_s2);
 }
 

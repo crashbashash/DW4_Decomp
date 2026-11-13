@@ -75,13 +75,13 @@ void igProgramFile_InitFields(void) {
     ((igMetaObject *)(g_igProgramFile_metaObject[0]))->_persistent = 0;
     temp_s0 = (void *)(g_igProgramFile_metaObject[0]);
     temp_s2 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
-    igMetaObject_CreateFields((igMetaObject *)temp_s0, (igMetaField * (**)(void *))&DAT_004c1b08[0], 2);
+    igMetaObject_CreateFields((igMetaObject *)temp_s0, (igMetaField * (**)(void *))&g_igProgramFile_ctorTable[0], 2);
     ((igMetaField *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2))))->_persistent = 0;
     temp_s1 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 1)));
     ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_002c4ce0();
     ((igObjectRefMetaField *)temp_s1)->_construct = 0;
     ((igObjectRefMetaField *)temp_s1)->_persistent = 0;
-    igMetaObject_NameFields((igMetaObject *)temp_s0, (const char **)&DAT_004c1b10[0], (igMetaField ***)&DAT_004c1b18[0], &DAT_004c1b20[0], temp_s2);
+    igMetaObject_NameFields((igMetaObject *)temp_s0, (const char **)&g_igProgramFile_fieldTable[0], (igMetaField ***)&DAT_004c1b18[0], &DAT_004c1b20[0], temp_s2);
     ((igMetaObject *)(g_igProgramFile_metaObject[0]))->_abstractProxy = (int)thunk_igElfFile_GetMetaObject;
 }
 

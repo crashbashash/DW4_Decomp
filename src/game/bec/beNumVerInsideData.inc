@@ -55,7 +55,7 @@ void beNumVerInsideData_InitFields(void) {
 
     temp_s0 = (void *)g_beNumVerInsideData_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_004c4a00[0], 2);
-    igMetaObject_NameFields(temp_s0, &DAT_004c4a08[0], &DAT_004c4a10[0], &DAT_004c4a18[0], temp_s1);
+    igMetaObject_CreateFields(temp_s0, &g_beNumVerInsideData_ctorTable[0], 2);
+    igMetaObject_NameFields(temp_s0, &g_beNumVerInsideData_fieldTable[0], &DAT_004c4a10[0], &DAT_004c4a18[0], temp_s1);
 }
 

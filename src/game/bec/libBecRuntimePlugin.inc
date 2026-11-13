@@ -921,7 +921,7 @@ void libBecRuntimePlugin_InitFields(void) {
 
     temp_s1 = (void *)g_libBecRuntimePlugin_metaObject[0];
     temp_s0 = igMetaObject_GetFieldCount(temp_s1);
-    igMetaObject_CreateFields(temp_s1, &DAT_004c2d00[0], 0x27);
+    igMetaObject_CreateFields(temp_s1, &g_libBecRuntimePlugin_ctorTable[0], 0x27);
     temp_s2 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0));
     ((igObjectRefMetaField *)temp_s2)->_metaObject = (int)FUN_0034c670();
     temp_s2_2 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 1));
@@ -1000,6 +1000,6 @@ void libBecRuntimePlugin_InitFields(void) {
     ((igObjectRefMetaField *)temp_s2_38)->_metaObject = (int)FUN_00341380();
     temp_s2_39 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 0x26));
     ((igObjectRefMetaField *)temp_s2_39)->_metaObject = (int)FUN_003591e0();
-    igMetaObject_NameFields(temp_s1, &DAT_004c2da0[0], &DAT_004c2e40[0], &DAT_004c2ee0[0], temp_s0);
+    igMetaObject_NameFields(temp_s1, &g_libBecRuntimePlugin_fieldTable[0], &DAT_004c2e40[0], &DAT_004c2ee0[0], temp_s0);
 }
 

@@ -79,7 +79,7 @@ void beMeterCtrlOneData_InitFields(void) {
 
     temp_s0 = (void *)g_beMeterCtrlOneData_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_004c5ae0[0], 0xE);
+    igMetaObject_CreateFields(temp_s0, &g_beMeterCtrlOneData_ctorTable[0], 0xE);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
     *(int *)((char *)(temp_s1) + 56) = (int)FUN_00356cc0();
     FUN_002e3810(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 4), 0.0f);
@@ -88,12 +88,12 @@ void beMeterCtrlOneData_InitFields(void) {
     *(int *)((char *)(temp_s1_2) + 56) = (int)FUN_00365550();
     temp_s1_3 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 0xD));
     *(int *)((char *)(temp_s1_3) + 56) = (int)FUN_00365550();
-    igMetaObject_NameFields(temp_s0, &DAT_004c5b20[0], &DAT_004c5b60[0], &DAT_004c5ba0[0], temp_s2);
+    igMetaObject_NameFields(temp_s0, &g_beMeterCtrlOneData_fieldTable[0], &DAT_004c5b60[0], &DAT_004c5ba0[0], temp_s2);
 }
 
 int FUN_00357600(void) {
     if (DAT_00588f28[0] == 0) {
-        DAT_00588f28[0] = igMetaEnum_Create(&DAT_005016f0[0], &DAT_004c5be0[0], &DAT_004c5c00[0], 8);
+        DAT_00588f28[0] = igMetaEnum_Create(&MsgAction[0], &DAT_004c5be0[0], &DAT_004c5c00[0], 8);
     }
     return DAT_00588f28[0];
 }

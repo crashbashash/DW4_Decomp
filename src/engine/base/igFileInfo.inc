@@ -102,7 +102,7 @@ void igFileInfo_InitFields(void) {
 
     temp_s1 = (void *)g_igFileInfo_metaObject[0];
     temp_s0 = igMetaObject_GetFieldCount(temp_s1);
-    igMetaObject_CreateFields(temp_s1, &DAT_00497f30[0], 4);
+    igMetaObject_CreateFields(temp_s1, &g_igFileInfo_ctorTable[0], 4);
     temp_s2 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0));
     ((igObjectRefMetaField *)temp_s2)->_metaObject = FUN_002c7300();
     ((igRefMetaField *)temp_s2)->_construct = 1;
@@ -115,7 +115,7 @@ void igFileInfo_InitFields(void) {
     temp_s2_4 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 3));
     ((igObjectRefMetaField *)temp_s2_4)->_metaObject = FUN_002c3820();
     ((igRefMetaField *)temp_s2_4)->_construct = 1;
-    igMetaObject_NameFields(temp_s1, &DAT_00497f40[0], &DAT_00497f50[0], &DAT_00497f60[0], temp_s0);
+    igMetaObject_NameFields(temp_s1, &g_igFileInfo_fieldTable[0], &DAT_00497f50[0], &DAT_00497f60[0], temp_s0);
 }
 
 int *FUN_00229260(int *p)

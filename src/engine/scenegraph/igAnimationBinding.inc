@@ -94,7 +94,7 @@ void igAnimationBinding_InitFields(void) {
 
     temp_s0 = (void *)g_igAnimationBinding_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_0048d470[0], 5);
+    igMetaObject_CreateFields(temp_s0, &g_igAnimationBinding_ctorTable[0], 5);
     temp_s1 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s2)));
     ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_001a7100();
     temp_s1_2 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1)));
@@ -106,6 +106,6 @@ void igAnimationBinding_InitFields(void) {
     ((igObjectRefMetaField *)temp_s1_3)->_metaObject = igIntList_GetOrCreateMetaObject();
     temp_s1_4 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s2 + 4)));
     ((igObjectRefMetaField *)temp_s1_4)->_metaObject = (int)FUN_001a4d90();
-    igMetaObject_NameFields(temp_s0, &DAT_0048d490[0], &DAT_0048d4b0[0], &DAT_0048d4d0[0], temp_s2);
+    igMetaObject_NameFields(temp_s0, &g_igAnimationBinding_fieldTable[0], &DAT_0048d4b0[0], &DAT_0048d4d0[0], temp_s2);
 }
 

@@ -114,8 +114,8 @@ extern int g_metadataAllocatorKey[4];
 /* Selector word the provider is queried with when no allocator is passed. */
 extern int g_allocatorSelector[4];
 extern char igObject_className[];
-extern int DAT_004faf40[4];
-extern int DAT_004faf50[4];
+extern int text_refCount[4];
+extern int text_memPoolIndex[4];
 extern int DAT_004faf60[4];
 extern int DAT_004faf78[4];
 extern int DAT_004faf80[4];

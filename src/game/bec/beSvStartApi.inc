@@ -93,7 +93,7 @@ void beSvStartApi_InitFields(void) {
     T_348bb0 *temp_v0_2;
 
     temp_s1 = (void *)(((void * *)g_beSvStartApi_metaObject)[0]);
-    temp_v0 = (void **)(igMetaObject_FindFieldByName(temp_s1, &DAT_005027d8[0]));
+    temp_v0 = (void **)(igMetaObject_FindFieldByName(temp_s1, &text_orderType[0]));
     temp_s2 = ObjectPointerList_FindIndex(*(int *)((char *)(temp_s1) + 40), temp_v0);
     temp_v0_2 = (T_348bb0 *)(((DW4VC_84_1 *)(temp_v0))->vX((int)(1)));
     FUN_002ea4b0(temp_v0_2, 0xA);

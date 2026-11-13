@@ -78,7 +78,7 @@ void igLightAttr_InitFields(void) {
 
     temp_s0 = (void *)g_igLightAttr_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_00486370[0], 0x10);
+    igMetaObject_CreateFields(temp_s0, &g_igLightAttr_ctorTable[0], 0x10);
     temp_s2 = (LightMetaFieldView *)igMetaObject_GetFieldAt(temp_s0, temp_s1);
     FUN_002dc7a0(temp_s2, &DAT_00486470[0]);
     temp_s2->f48 = (void (*)())FUN_0013ef20;
@@ -138,6 +138,6 @@ void igLightAttr_InitFields(void) {
     temp_s2 = (LightMetaFieldView *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0xF);
     FUN_002d3890(temp_s2, 1);
     temp_s2->f38 = 0;
-    igMetaObject_NameFields(temp_s0, &DAT_004863b0[0], &DAT_004863f0[0], &DAT_00486430[0], temp_s1);
+    igMetaObject_NameFields(temp_s0, &g_igLightAttr_fieldTable[0], &DAT_004863f0[0], &DAT_00486430[0], temp_s1);
 }
 

@@ -61,7 +61,7 @@ void igLogoRenderer_InitFields(void) {
 
     temp_s0 = (void *)g_igLogoRenderer_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_004d18e0[0], 4);
+    igMetaObject_CreateFields(temp_s0, &g_igLogoRenderer_ctorTable[0], 4);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
     ((igObjectRefMetaField *)temp_s1)->_metaObject = FUN_00137850();
     temp_s1_2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 2));
@@ -70,6 +70,6 @@ void igLogoRenderer_InitFields(void) {
     temp_s1_3 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 3));
     ((igObjectRefMetaField *)temp_s1_3)->_metaObject = FUN_0013af00();
     ((igRefMetaField *)temp_s1_3)->_construct = 1;
-    igMetaObject_NameFields(temp_s0, &DAT_004d18f0[0], &DAT_004d1900[0], &DAT_004d1910[0], temp_s2);
+    igMetaObject_NameFields(temp_s0, &g_igLogoRenderer_fieldTable[0], &DAT_004d1900[0], &DAT_004d1910[0], temp_s2);
 }
 

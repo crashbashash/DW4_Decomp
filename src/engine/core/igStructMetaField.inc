@@ -71,8 +71,8 @@ void FUN_002b8b50(void) {
     int base = igMetaObject_GetFieldCount(meta);
     igMetaField *field;
     int index;
-    igMetaObject_CreateFields(meta, (FieldFactory *)DAT_004bf5e0, 3);
-    field = ((igMetaField *)igMetaObject_FindFieldByName(meta, (const char *)DAT_004f5e70));
+    igMetaObject_CreateFields(meta, (FieldFactory *)g_igStructMetaField_ctorTable, 3);
+    field = ((igMetaField *)igMetaObject_FindFieldByName(meta, (const char *)text_size));
     index = ObjectPointerList_FindIndex((char *)meta->_metaFields, (int)field);
     field = ((DescriptorCloneView *)field)->Clone(1);
     FUN_0030eda0((void **)field, (short)1);
@@ -83,7 +83,7 @@ void FUN_002b8b50(void) {
     field = ((igMetaField *)igMetaObject_GetFieldAt(meta, base));
     FUN_002ea4b0((void **)field, 1);
     field->_persistent = 0;
-    igMetaObject_NameFields(meta, (const char **)DAT_004bf5f0, (igMetaField ***)DAT_004bf600, (int *)DAT_004bf610, base);
+    igMetaObject_NameFields(meta, (const char **)g_igStructMetaField_fieldTable, (igMetaField ***)DAT_004bf600, (int *)DAT_004bf610, base);
 }
 
 void FUN_002b8c80(void) {

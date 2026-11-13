@@ -289,7 +289,7 @@ void beModelCtrlInfoWork_InitFields(void) {
 
     temp_s0 = (void *)g_beModelCtrlInfoWork_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_004c4dd0[0], 0x32);
+    igMetaObject_CreateFields(temp_s0, &g_beModelCtrlInfoWork_ctorTable[0], 0x32);
     temp_s2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s1));
     ((igObjectRefMetaField *)temp_s2)->_metaObject = (int)FUN_00365550();
     ((igRefMetaField *)temp_s2)->_construct = 1;
@@ -343,6 +343,6 @@ void beModelCtrlInfoWork_InitFields(void) {
     ((igRefMetaField *)temp_s2_15)->_construct = 1;
     temp_s2_16 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0x31));
     ((igObjectRefMetaField *)temp_s2_16)->_metaObject = FUN_0018a6a0();
-    igMetaObject_NameFields(temp_s0, &DAT_004c4ea0[0], &DAT_004c4f70[0], &DAT_004c5040[0], temp_s1);
+    igMetaObject_NameFields(temp_s0, &g_beModelCtrlInfoWork_fieldTable[0], &DAT_004c4f70[0], &DAT_004c5040[0], temp_s1);
 }
 

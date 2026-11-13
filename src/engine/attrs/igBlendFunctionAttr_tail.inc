@@ -13,7 +13,7 @@ void Gap__Attrs__igBlendFunctionAttr__vfunc_26(void **arg0, void **arg1) {
     ((DW4VC_128_1 *)(arg0))->vX((int)(((DW4VC_620_0 *)(arg1))->vX()));
     ((DW4VC_132_1_13c350 *)(arg0))->vX((int)(((DW4VC_628_0 *)(arg1))->vX()));
     if (DAT_0055f4c0[0] == 0) {
-        DAT_0055f4c0[0] = ((DW4VC_104_1 *)(arg1))->vX(&DAT_004d5de0[0]);
+        DAT_0055f4c0[0] = ((DW4VC_104_1 *)(arg1))->vX(&text_igBlendEquationExt[0]);
     }
 }
 

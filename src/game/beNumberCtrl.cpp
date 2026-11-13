@@ -20,7 +20,7 @@ struct UnidentifiedNameHolder { char pad8[8]; int f8; };
 struct UnidentifiedReceiverObject { char pad8[8]; int f8; UnidentifiedNameHolder *f12; };
 extern "C" int beMessenger_RegisterReceiver(int, UnidentifiedReceiverObject *, void *, int *, int);
 extern "C" int emptyString[4];
-extern "C" int DAT_0050feb0[4];
+extern "C" int NUMBERCTRL_4[4];
 extern "C" void Gap__Bec__beNumberCtrl__vfunc_29(beNumberCtrl *arg0, UnidentifiedReceiverObject *arg1);
 /* igObject header (vtable, reference count); the count at +4 is not a reflected field */
 /* unreflected message argument: only the command word at +20 is read */
@@ -77,7 +77,7 @@ void Gap__Bec__beNumberCtrl__vfunc_29(beNumberCtrl *arg0, UnidentifiedReceiverOb
     int t = arg1->f8;
     var_a3 = (int *)(((UnidentifiedNameHolder *)arg1->f12)->f8);
     var_a3 = var_a3 != 0 ? var_a3 : &emptyString[0];
-    beMessenger_RegisterReceiver(arg0->_messenger, arg1, &DAT_0050feb0[0], var_a3, t);
+    beMessenger_RegisterReceiver(arg0->_messenger, arg1, &NUMBERCTRL_4[0], var_a3, t);
 }
 
 int Gap__Bec__beNumberCtrl__vfunc_34(beNumberCtrl *arg0, beNumberCtrlInfoRam *arg1, MessageCommandArg *arg2) {

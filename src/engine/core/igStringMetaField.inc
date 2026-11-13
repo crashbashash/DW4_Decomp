@@ -107,8 +107,8 @@ void igStringMetaField_InitFields(void) {
 
     temp_s1 = (M_2b99e0 *)(((void * *)g_igStringMetaField_metaObject)[0]);
     temp_s2 = igMetaObject_GetFieldCount((igMetaObject *)temp_s1);
-    igMetaObject_CreateFields((igMetaObject *)temp_s1, (igMetaField * (**)(void *))&DAT_004bf6a0[0], 1);
-    temp_v0 = (void **)(((void **)igMetaObject_FindFieldByName((igMetaObject *)temp_s1, (const char *)&DAT_004f5f20[0])));
+    igMetaObject_CreateFields((igMetaObject *)temp_s1, (igMetaField * (**)(void *))&g_igStringMetaField_ctorTable[0], 1);
+    temp_v0 = (void **)(((void **)igMetaObject_FindFieldByName((igMetaObject *)temp_s1, (const char *)&text_shallowCopyMethod[0])));
     temp_s3 = ObjectPointerList_FindIndex((char *)temp_s1->f40, (int)temp_v0);
     temp_v0_2 = (T_2b99e0 *)(((DW4VC_84_1 *)(temp_v0))->vX((int)(1)));
     FUN_002d4e40((void **)temp_v0_2, 2);
@@ -118,7 +118,7 @@ void igStringMetaField_InitFields(void) {
     if (((unsigned long long)(long long)temp_v0_2->references & 0x7fffffULL) == 0) {
         igObject_Destroy(temp_v0_2);
     }
-    temp_v0 = (void **)(((void **)igMetaObject_FindFieldByName((igMetaObject *)temp_s1, (const char *)&DAT_004f5f38[0])));
+    temp_v0 = (void **)(((void **)igMetaObject_FindFieldByName((igMetaObject *)temp_s1, (const char *)&text_destruct[0])));
     temp_s3 = ObjectPointerList_FindIndex((char *)temp_s1->f40, (int)temp_v0);
     temp_v0_4 = (T_2b99e0 *)(((DW4VC_84_1 *)(temp_v0))->vX((int)(1)));
     FUN_002d3890((void **)temp_v0_4, 1);
@@ -129,7 +129,7 @@ void igStringMetaField_InitFields(void) {
         igObject_Destroy(temp_v0_4);
     }
     FUN_002d3890((void **)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s2))), 1);
-    igMetaObject_NameFields((igMetaObject *)temp_s1, (const char **)&DAT_004bf6a8[0], (igMetaField ***)&DAT_004bf6b0[0], &DAT_004bf6b8[0], temp_s2);
+    igMetaObject_NameFields((igMetaObject *)temp_s1, (const char **)&g_igStringMetaField_fieldTable[0], (igMetaField ***)&DAT_004bf6b0[0], &DAT_004bf6b8[0], temp_s2);
 }
 
 void FUN_002b9b90(void) {

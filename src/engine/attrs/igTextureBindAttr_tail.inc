@@ -86,7 +86,7 @@ void FUN_00140f40(void) {
     unsigned char sp1F;
 
     sp1F = 0;
-    FUN_00306e50(*(int *)((char *)g_objectSystem[0] + 56), 7, DAT_004d5e30, &sp1F, 0, 0);
+    FUN_00306e50(*(int *)((char *)g_objectSystem[0] + 56), 7, text_enableIgTextureAttrFastApply, &sp1F, 0, 0);
     FUN_00140e90(sp1F);
 }
 

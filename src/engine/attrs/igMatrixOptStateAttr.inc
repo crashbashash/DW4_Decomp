@@ -57,8 +57,8 @@ void igMatrixOptStateAttr_InitFields(void) {
 
     temp_s0 = (void *)g_igMatrixOptStateAttr_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_00486248[0], 1);
+    igMetaObject_CreateFields(temp_s0, &g_igMatrixOptStateAttr_ctorTable[0], 1);
     FUN_002d3890(igMetaObject_GetFieldAt(temp_s0, temp_s1), 1);
-    igMetaObject_NameFields(temp_s0, &DAT_00486250[0], &DAT_00486258[0], &DAT_00486260[0], temp_s1);
+    igMetaObject_NameFields(temp_s0, &g_igMatrixOptStateAttr_fieldTable[0], &DAT_00486258[0], &DAT_00486260[0], temp_s1);
 }
 

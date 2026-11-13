@@ -66,7 +66,7 @@ int FUN_002d1c30(int *p)
 
 void FUN_002d1c40(Obj_2d1c40 *arg0) {
     igString env;
-    char *text = (char *)getenv(DAT_004f9460);
+    char *text = (char *)getenv(IG_ROOT);
     text = ((char *)StringPool_Intern((StringPool *)(Pool::get()), (const char *)text));
     env.adopt(text);
     arg0->m920.assign(env);
@@ -87,14 +87,14 @@ void FUN_002d27a0(S_2d27a0 *arg0) {
     temp_a0 = arg0->p;
     if (temp_a0 != 0) {
         ((DW4VC_184_0 *)(temp_a0))->vX();
-        FUN_002dcc60((FileRequest *)arg0->p, (int)&DAT_004f9578[0]);
+        FUN_002dcc60((FileRequest *)arg0->p, (int)&text_exitPre[0]);
     }
 }
 
 void FUN_002d2de0(S_2d2de0 *arg0) {
     if (arg0->f84 != 0) {
         arg0->f84->vX();
-        FUN_002dcc60((FileRequest *)arg0->f84, (int)(&DAT_004f9580[0]));
+        FUN_002dcc60((FileRequest *)arg0->f84, (int)(&text_exitIn[0]));
     }
     if (arg0->f117 != 0 && ((V224 * *)DAT_00586fd0)[0] != 0) {
         ((V224 * *)DAT_00586fd0)[0]->vX();

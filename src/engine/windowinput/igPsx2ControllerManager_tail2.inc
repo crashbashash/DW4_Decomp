@@ -14,8 +14,8 @@ void Gap__igPsx2ControllerManager__vfunc_24(igPsx2ControllerManager *arg0, int a
         GPR_00554b18 = 1;
         arg0->_validControllerManager = 1;
         if (arg0->_loadIRXs != 0) {
-            FUN_0032cf50(&DAT_004d7020[0], 1, 0, 0);
-            FUN_0032cf50(&DAT_004d7030[0], 1, 0, 0);
+            FUN_0032cf50(&text_sio2man_irx[0], 1, 0, 0);
+            FUN_0032cf50(&text_padman_irx[0], 1, 0, 0);
         }
         FUN_00117c78(0);
         base = igObject_GetAllocator(arg0);
@@ -25,15 +25,15 @@ void Gap__igPsx2ControllerManager__vfunc_24(igPsx2ControllerManager *arg0, int a
             al = Memory_GetAllocatorBySelector(g_temporaryAllocatorSelector[0]);
         }
         sp8C = (PropertyText *)FUN_002b9500(al);
-        if (FUN_00306770(g_objectSystem[0]->f56, 3, &DAT_004d7040[0], &sp8C, &DAT_004d7050[0], 0) != 0) {
+        if (FUN_00306770(g_objectSystem[0]->f56, 3, &text_supportMultitap[0], &sp8C, &DAT_004d7050[0], 0) != 0) {
             s0 = sp8C->chars;
             s0 = (s0 == 0) ? g_stringObjEmptyText[0] : s0;
-            if (strcmp(s0, &DAT_004d6ce0[0]) == 0) {
+            if (strcmp(s0, &ALL_5[0]) == 0) {
                 v1 = 0xFFFF;
                 arg0->_multitap = v1;
-            } else if (strcmp(s0, &DAT_004d6cc8[0]) == 0) {
+            } else if (strcmp(s0, &NONE_3[0]) == 0) {
                 arg0->_multitap = 0;
-            } else if (strncmp(s0, &DAT_004d7058[0], 4) == 0) {
+            } else if (strncmp(s0, &PORT[0], 4) == 0) {
                 v1 = 2;
                 if (s0[4] == 0x30) { v1 = 1; arg0->_multitap = v1; } else { arg0->_multitap = v1; }
             }
@@ -47,7 +47,7 @@ void Gap__igPsx2ControllerManager__vfunc_24(igPsx2ControllerManager *arg0, int a
         s3 = 0;
         if (arg0->_multitap != 0) {
             if (arg0->_loadIRXs != 0) {
-                if (FUN_0032cf50(&DAT_004d7060[0], 1, 0, 0).ok()) {
+                if (FUN_0032cf50(&text_mtapman_irx[0], 1, 0, 0).ok()) {
                     sceMtapInit();
                     if (arg0->_multitap & 1) sceMtapPortOpen(0);
                     if (arg0->_multitap & 2) sceMtapPortOpen(1);

@@ -511,7 +511,7 @@ void libNdmwRuntimePlugin_InitFields(void) {
 
     temp_s1 = (void *)g_libNdmwRuntimePlugin_metaObject[0];
     temp_s0 = igMetaObject_GetFieldCount(temp_s1);
-    igMetaObject_CreateFields(temp_s1, &DAT_004c9290[0], 0x15);
+    igMetaObject_CreateFields(temp_s1, &g_libNdmwRuntimePlugin_ctorTable[0], 0x15);
     temp_s2 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0));
     ((igObjectRefMetaField *)temp_s2)->_metaObject = (int)FUN_003cae40();
     temp_s2_2 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 1));
@@ -554,6 +554,6 @@ void libNdmwRuntimePlugin_InitFields(void) {
     ((igObjectRefMetaField *)temp_s2_20)->_metaObject = (int)FUN_003c0f70();
     temp_s2_21 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 0x14));
     ((igObjectRefMetaField *)temp_s2_21)->_metaObject = (int)FUN_003c0d80();
-    igMetaObject_NameFields(temp_s1, &DAT_004c92f0[0], &DAT_004c9350[0], &DAT_004c93b0[0], temp_s0);
+    igMetaObject_NameFields(temp_s1, &g_libNdmwRuntimePlugin_fieldTable[0], &DAT_004c9350[0], &DAT_004c93b0[0], temp_s0);
 }
 

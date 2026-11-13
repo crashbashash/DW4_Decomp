@@ -89,7 +89,7 @@ void igOptInterface_InitFields(void) {
 
     temp_s1 = (void *)g_igOptInterface_metaObject[0];
     temp_s0 = igMetaObject_GetFieldCount(temp_s1);
-    igMetaObject_CreateFields(temp_s1, &DAT_00497bc0[0], 4);
+    igMetaObject_CreateFields(temp_s1, &g_igOptInterface_ctorTable[0], 4);
     temp_s2 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0));
     ((igObjectRefMetaField *)temp_s2)->_metaObject = FUN_002c8e50();
     ((igRefMetaField *)temp_s2)->_construct = 1;
@@ -102,6 +102,6 @@ void igOptInterface_InitFields(void) {
     temp_s2_3 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 3));
     ((igObjectRefMetaField *)temp_s2_3)->_metaObject = FUN_002c3440();
     ((igRefMetaField *)temp_s2_3)->_construct = 1;
-    igMetaObject_NameFields(temp_s1, &DAT_00497bd0[0], &DAT_00497be0[0], &DAT_00497bf0[0], temp_s0);
+    igMetaObject_NameFields(temp_s1, &g_igOptInterface_fieldTable[0], &DAT_00497be0[0], &DAT_00497bf0[0], temp_s0);
 }
 

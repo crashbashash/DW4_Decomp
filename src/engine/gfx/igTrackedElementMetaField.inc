@@ -139,7 +139,7 @@ void FUN_0014e630(int arg0) {
     void *var_v0_5;
 
     temp_s0 = (void *)(FUN_002c5fb0(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0])));
-    if (&DAT_004dcc30[0] == 0) {
+    if (&text_which[0] == 0) {
         var_v0 = (void *)(0);
     } else {
         if (g_stringPool[0] == 0) {
@@ -149,7 +149,7 @@ void FUN_0014e630(int arg0) {
             }
             g_stringPool[0] = var_v0_2;
         }
-        var_v0 = (void *)(StringPool_Intern(g_stringPool[0], &DAT_004dcc30[0]));
+        var_v0 = (void *)(StringPool_Intern(g_stringPool[0], &text_which[0]));
     }
     sp3C = (void *)(var_v0);
     igMetaField_SetFieldName(temp_s0, &sp3C);
@@ -170,7 +170,7 @@ void FUN_0014e630(int arg0) {
         igObject_Destroy(temp_s0);
     }
     temp_s0_2 = (void *)(igIntMetaField_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0])));
-    if (&DAT_004dcc38[0] == 0) {
+    if (&text_place[0] == 0) {
         var_v0_3 = (void *)(0);
     } else {
         if (g_stringPool[0] == 0) {
@@ -180,7 +180,7 @@ void FUN_0014e630(int arg0) {
             }
             g_stringPool[0] = var_v0_4;
         }
-        var_v0_3 = (void *)(StringPool_Intern(g_stringPool[0], &DAT_004dcc38[0]));
+        var_v0_3 = (void *)(StringPool_Intern(g_stringPool[0], &text_place[0]));
     }
     sp38 = (void *)(var_v0_3);
     igMetaField_SetFieldName(temp_s0_2, &sp38);
@@ -200,7 +200,7 @@ void FUN_0014e630(int arg0) {
         igObject_Destroy(temp_s0_2);
     }
     temp_s0_3 = (void *)(igIntMetaField_Create(Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0])));
-    if (&DAT_004dcc40[0] == 0) {
+    if (&text_arg0[0] == 0) {
         var_v0_5 = (void *)(0);
     } else {
         if (g_stringPool[0] == 0) {
@@ -210,7 +210,7 @@ void FUN_0014e630(int arg0) {
             }
             g_stringPool[0] = var_v0_6;
         }
-        var_v0_5 = (void *)(StringPool_Intern(g_stringPool[0], &DAT_004dcc40[0]));
+        var_v0_5 = (void *)(StringPool_Intern(g_stringPool[0], &text_arg0[0]));
     }
     sp34 = (void *)(var_v0_5);
     igMetaField_SetFieldName(temp_s0_3, &sp34);

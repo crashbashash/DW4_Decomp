@@ -18,7 +18,7 @@ extern int g_allocatorFailureStatus[4];
 extern int g_statusSucceeded[4];
 extern int g_statusSucceeded[4];
 extern int g_allocatorFailureStatus[4];
-extern int DAT_004ff570[4];
+extern int Pool_igStackMemoryPool[4];
 
 /* Output-first status wrapper. The status word is returned through the hidden output pointer (a0).
  * The shared helper also reads a1 (the pool) and a2 (a request descriptor) from its asm, and this
@@ -163,7 +163,7 @@ void Gap__Core__igStackMemoryPool__vfunc_96(void *arg0, int arg1) {
         sp3C = (void *)(var_v0);
         *(int *)((char *)(var_v0) + 0) = (int)((int) *(int *)((char *)(arg0) + 116));
         *(int *)((char *)(sp3C) + 4) = (int)((int) *(int *)((char *)(arg0) + 120));
-        FUN_0032a180(sp3C, &DAT_004ff570[0]);
+        FUN_0032a180(sp3C, &Pool_igStackMemoryPool[0]);
         FUN_0032a1b0(sp3C, FUN_002f89a0(arg0));
         List_InsertWords(arg1, FUN_002d6e60(arg1, &sp3C, FUN_0032a260), 1, &sp3C);
     }

@@ -59,13 +59,13 @@ void beGeneraterPlayerData_InitFields(void) {
 
     temp_s0 = (void *)g_beGeneraterPlayerData_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_004c6a90[0], 4);
+    igMetaObject_CreateFields(temp_s0, &g_beGeneraterPlayerData_ctorTable[0], 4);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 2));
     ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_00360360();
     ((igRefMetaField *)temp_s1)->_construct = 1;
     temp_s1_2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 3));
     ((igObjectRefMetaField *)temp_s1_2)->_metaObject = (int)FUN_00360360();
     ((igRefMetaField *)temp_s1_2)->_construct = 1;
-    igMetaObject_NameFields(temp_s0, &DAT_004c6aa0[0], &DAT_004c6ab0[0], &DAT_004c6ac0[0], temp_s2);
+    igMetaObject_NameFields(temp_s0, &g_beGeneraterPlayerData_fieldTable[0], &DAT_004c6ab0[0], &DAT_004c6ac0[0], temp_s2);
 }
 

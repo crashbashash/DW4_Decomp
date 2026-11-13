@@ -1,20 +1,20 @@
 int FUN_001a6a90(void) {
     if (DAT_005620e8[0] == 0) {
-        DAT_005620e8[0] = igMetaEnum_Create(&DAT_004e38a0[0], &DAT_0048cf10[0], &DAT_0048cf20[0], 4);
+        DAT_005620e8[0] = igMetaEnum_Create(&Status[0], &DAT_0048cf10[0], &DAT_0048cf20[0], 4);
     }
     return DAT_005620e8[0];
 }
 
 int FUN_001a6af0(void) {
     if (DAT_005620f0[0] == 0) {
-        DAT_005620f0[0] = igMetaEnum_Create(&DAT_004e38f8[0], &DAT_0048cf30[0], &DAT_0048cf50[0], 6);
+        DAT_005620f0[0] = igMetaEnum_Create(&TransitionMode[0], &DAT_0048cf30[0], &DAT_0048cf50[0], 6);
     }
     return DAT_005620f0[0];
 }
 
 int FUN_001a6b50(void) {
     if (DAT_005620f8[0] == 0) {
-        DAT_005620f8[0] = igMetaEnum_Create(&DAT_004e3928[0], &DAT_0048cf68[0], &DAT_0048cf78[0], 3);
+        DAT_005620f8[0] = igMetaEnum_Create(&CombineMode[0], &DAT_0048cf68[0], &DAT_0048cf78[0], 3);
     }
     return DAT_005620f8[0];
 }
@@ -125,7 +125,7 @@ void igAnimationState_InitFields(void) {
 
     temp_s0 = (void *)g_igAnimationState_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_0048cf90[0], 0x1A);
+    igMetaObject_CreateFields(temp_s0, &g_igAnimationState_ctorTable[0], 0x1A);
     temp_s2 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s1)));
     ((igObjectRefMetaField *)temp_s2)->_metaObject = (int)FUN_001a9130();
     ((igMetaField *)temp_s2)->_resetMethod = 2;
@@ -149,6 +149,6 @@ void igAnimationState_InitFields(void) {
     ((igObjectRefMetaField *)temp_s2_3)->_metaObject = (int)FUN_001a6bf0();
     ((igMetaField *)temp_s2_3)->_resetMethod = 2;
     ((igMetaField *)((void *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0x19)))->_persistent = 0;
-    igMetaObject_NameFields(temp_s0, &DAT_0048d000[0], &DAT_0048d070[0], &DAT_0048d0e0[0], temp_s1);
+    igMetaObject_NameFields(temp_s0, &g_igAnimationState_fieldTable[0], &DAT_0048d070[0], &DAT_0048d0e0[0], temp_s1);
 }
 

@@ -125,7 +125,7 @@ void igAttrStackManager_InitFields(void) {
 
     temp_s0 = (void *)g_igAttrStackManager_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_0048cc40[0], 0x11);
+    igMetaObject_CreateFields(temp_s0, &g_igAttrStackManager_ctorTable[0], 0x11);
     temp_s2 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 1)));
     ((igObjectRefMetaField *)temp_s2)->_metaObject = (int)FUN_001a5900();
     ((igObjectRefMetaField *)temp_s2)->_construct = 1;
@@ -162,7 +162,7 @@ void igAttrStackManager_InitFields(void) {
     ((igMemoryRefMetaField *)temp_s2_12)->_destruct = 1;
     ((igMemoryRefMetaField *)temp_s2_12)->_releaseOnCopy = 1;
     ((igMemoryRefMetaField *)temp_s2_12)->_releaseOnReset = 1;
-    igMetaObject_NameFields(temp_s0, &DAT_0048cc90[0], &DAT_0048cce0[0], &DAT_0048cd30[0], temp_s1);
+    igMetaObject_NameFields(temp_s0, &g_igAttrStackManager_fieldTable[0], &DAT_0048cce0[0], &DAT_0048cd30[0], temp_s1);
     FUN_002fe480(&thunk_FUN_001afb00);
 }
 

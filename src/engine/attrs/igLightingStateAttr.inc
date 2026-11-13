@@ -57,7 +57,7 @@ void igLightingStateAttr_InitFields(void) {
 
     temp_s0 = (void *)g_igLightingStateAttr_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_004862e8[0], 1);
-    igMetaObject_NameFields(temp_s0, &DAT_004862f0[0], &DAT_004862f8[0], &DAT_00486300[0], temp_s1);
+    igMetaObject_CreateFields(temp_s0, &g_igLightingStateAttr_ctorTable[0], 1);
+    igMetaObject_NameFields(temp_s0, &g_igLightingStateAttr_fieldTable[0], &DAT_004862f8[0], &DAT_00486300[0], temp_s1);
 }
 

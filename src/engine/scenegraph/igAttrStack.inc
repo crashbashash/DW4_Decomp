@@ -71,7 +71,7 @@ void igAttrStack_InitFields(void) {
 
     temp_s0 = (void *)g_igAttrStack_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_0048cd90[0], 8);
+    igMetaObject_CreateFields(temp_s0, &g_igAttrStack_ctorTable[0], 8);
     temp_s1 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s2)));
     ((igObjectRefMetaField *)temp_s1)->_metaObject = FUN_0013b070();
     FUN_002ea4b0(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1)), -1);
@@ -84,6 +84,6 @@ void igAttrStack_InitFields(void) {
     temp_s1_4 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s2 + 7)));
     ((igObjectRefMetaField *)temp_s1_4)->_metaObject = (int)FUN_00197af0();
     ((igObjectRefMetaField *)temp_s1_4)->_refCounted = 0;
-    igMetaObject_NameFields(temp_s0, &DAT_0048cdb0[0], &DAT_0048cdd0[0], &DAT_0048cdf0[0], temp_s2);
+    igMetaObject_NameFields(temp_s0, &g_igAttrStack_fieldTable[0], &DAT_0048cdd0[0], &DAT_0048cdf0[0], temp_s2);
 }
 

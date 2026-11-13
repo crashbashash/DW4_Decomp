@@ -72,9 +72,9 @@ void igBoolArrayMetaField_InitFields(void) {
 
     temp_s0 = (void *)g_igBoolArrayMetaField_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
-    igMetaObject_CreateFields((igMetaObject *)temp_s0, (igMetaField * (**)(void *))&DAT_004c1580[0], 1);
+    igMetaObject_CreateFields((igMetaObject *)temp_s0, (igMetaField * (**)(void *))&g_igBoolArrayMetaField_ctorTable[0], 1);
     FUN_002ea4b0((void **)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1)), 1);
-    igMetaObject_NameFields((igMetaObject *)temp_s0, (const char **)&DAT_004c1588[0], (igMetaField ***)&DAT_004c1590[0], &DAT_004c1598[0], temp_s1);
+    igMetaObject_NameFields((igMetaObject *)temp_s0, (const char **)&g_igBoolArrayMetaField_fieldTable[0], (igMetaField ***)&DAT_004c1590[0], &DAT_004c1598[0], temp_s1);
 }
 
 void FUN_002cd0a0(void) {

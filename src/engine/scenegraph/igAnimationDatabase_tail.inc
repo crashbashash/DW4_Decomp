@@ -29,7 +29,7 @@ void *Gap__Sg__igAnimationDatabase__vfunc_24(O_1aea60 *arg0, char *arg1) {
     }
     if (strncmp(arg1, DAT_004e44f8, strlen(DAT_004e44f8)) == 0) {
         if (DAT_00562560[0] == 0) {
-            var_s1 = ((R_1aea60 *)igMetaObject_FindFieldByName(g_igAnimation_metaObject[0], DAT_004e4130));
+            var_s1 = ((R_1aea60 *)igMetaObject_FindFieldByName(g_igAnimation_metaObject[0], text_trackList));
             if ((var_s1 != 0) && (igObject_IsKindOf(var_s1, g_igObjectRefMetaField_metaObject[0]) != 0)) {
                 var_s1 = (R_1aea60 *)var_s1;
             } else {
@@ -99,7 +99,7 @@ int Gap__Sg__igAnimationDatabase__vfunc_23(AnimDbRec *db, int file, AnimDbObject
         int i;
         int n;
         if (DAT_00562568 == 0) {
-            DAT_00562568 = (AnimDbField *)castField((AnimDbObject *)((void *)igMetaObject_FindFieldByName(((igMetaObject *)g_igAnimation_metaObject[0]), DAT_004e4130)));
+            DAT_00562568 = (AnimDbField *)castField((AnimDbObject *)((void *)igMetaObject_FindFieldByName(((igMetaObject *)g_igAnimation_metaObject[0]), text_trackList)));
         }
         n = db->_animationList->_count;
         for (i = 0; i < n; i++) {
@@ -114,7 +114,7 @@ int Gap__Sg__igAnimationDatabase__vfunc_23(AnimDbRec *db, int file, AnimDbObject
             total = list->_count;
             for (a = 0; a < total; a++) {
                 if ((AnimDbObject *)list->_data[a]->_source == target) {
-                    sprintf(name, DAT_004e4508, DAT_004e44f8, nameOf(skin.p->_name), a);
+                    sprintf(name, text_s_s_d, DAT_004e44f8, nameOf(skin.p->_name), a);
                     r = (unsigned char)FUN_002e2d30(file, db, name, obj);
                     return r;
                 }

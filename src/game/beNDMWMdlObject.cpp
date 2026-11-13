@@ -17,9 +17,9 @@ extern "C" int beMessenger_GetIntCount(...);
 extern "C" int beMessenger_GetString(...);
 extern "C" int igObject_GetAllocator(...);
 extern "C" void *igProperty_FindByName(...);
-extern "C" int DAT_00515f40[4];
+extern "C" int KIND_OBJECT[4];
 extern "C" int g_beNDMWMdlObject_metaObject[4];
-extern "C" int DAT_00515f50[4];
+extern "C" int ONE_11[4];
 extern "C" int g_propertyNameField[4];
 extern "C" int g_stringPool[4];
 extern "C" int g_defaultAllocatorSelector[4];
@@ -45,7 +45,7 @@ static inline void adopt(beBaseInfoRam *ram, igObject *created) { igSmartPointer
 extern "C" void Gap__Bec__beNDMWMdlObject__vfunc_36(beNDMWMdlObject *arg0, beBaseInfoRam *arg1);
 
 int Gap__Bec__beNDMWMdlObject__vfunc_35(int dummy0, int arg1) {
-    return strcmp(arg1, &DAT_00515f40[0]) == 0;
+    return strcmp(arg1, &KIND_OBJECT[0]) == 0;
 }
 
 void Gap__Bec__beNDMWMdlObject__vfunc_37(void)
@@ -61,7 +61,7 @@ void Gap__Bec__beNDMWMdlObject__vfunc_36(beNDMWMdlObject *arg0, beBaseInfoRam *a
          * takes the stack slot below the named info-work reference, as retail's +0x58 does) */
         DataListSlot::adopt(arg1, created);
     }
-    OneProperty *s3 = (OneProperty *)igProperty_FindByName(arg1->_dataList, g_propertyNameField[0], DAT_00515f50);
+    OneProperty *s3 = (OneProperty *)igProperty_FindByName(arg1->_dataList, g_propertyNameField[0], ONE_11);
     {
         int a2 = igObject_GetAllocator(arg0);
         int al2 = g_useOwnerAllocator != 0 ? a2 : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);

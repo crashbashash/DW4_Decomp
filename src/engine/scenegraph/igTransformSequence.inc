@@ -17,11 +17,11 @@ void igTransformSequence1_5_InitFields(void) {
 
     temp_s1 = (igMetaObject *)(g_igTransformSequence1_5_metaObject[0]);
     temp_s2 = igMetaObject_GetFieldCount(temp_s1);
-    igMetaObject_CreateFields(temp_s1, &DAT_0048afb0[0], 9);
+    igMetaObject_CreateFields(temp_s1, &g_igTransformSequence1_5_ctorTable[0], 9);
     temp_s0 = (igObjectRefMetaField *)(igMetaObject_GetFieldAt(temp_s1, temp_s2));
     temp_s0->_metaObject = FUN_002ca680();
     temp_s0->_construct = 1;
-    temp_v0 = (void **)(igMetaObject_FindFieldByName(temp_s1, &DAT_004e1418[0]));
+    temp_v0 = (void **)(igMetaObject_FindFieldByName(temp_s1, &text_timeList[0]));
     temp_s3 = ObjectPointerList_FindIndex(temp_s1->_metaFields, temp_v0);
     temp_v0_2 = (igMetaField *)(((DW4VC_84_1 *)(temp_v0))->vX((int)(1)));
     FUN_00303460(temp_v0_2, 0);
@@ -44,7 +44,7 @@ void igTransformSequence1_5_InitFields(void) {
     FUN_002ebc00(igMetaObject_GetFieldAt(temp_s1, temp_s2 + 7), -1);
     temp_s0_5 = (igObjectRefMetaField *)(igMetaObject_GetFieldAt(temp_s1, temp_s2 + 8));
     temp_s0_5->_metaObject = (int)FUN_001a24f0();
-    igMetaObject_NameFields(temp_s1, &DAT_0048afe0[0], &DAT_0048b010[0], &DAT_0048b040[0], temp_s2);
+    igMetaObject_NameFields(temp_s1, &g_igTransformSequence1_5_fieldTable[0], &DAT_0048b010[0], &DAT_0048b040[0], temp_s2);
 }
 
 void thunk_FUN_001ddfd0(void) {
@@ -103,7 +103,7 @@ void igTransformSequence_InitFields(void) {
 
     temp_s0 = (void *)(((void * *)g_igTransformSequence_metaObject)[0]);
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_0048b080[0], 9);
+    igMetaObject_CreateFields(temp_s0, &g_igTransformSequence_ctorTable[0], 9);
     temp_s2 = ((struct Fld *)igMetaObject_GetFieldAt(temp_s0, temp_s1));
     temp_s2->f56 = FUN_0018a0a0();
     temp_s2->f52 = 1;
@@ -128,7 +128,7 @@ void igTransformSequence_InitFields(void) {
     sp40[1] = 0;
     sp40[2] = 0;
     FUN_0018e470(temp_a0, sp40);
-    igMetaObject_NameFields(temp_s0, &DAT_0048b0b0[0], &DAT_0048b0e0[0], &DAT_0048b110[0], temp_s1);
+    igMetaObject_NameFields(temp_s0, &g_igTransformSequence_fieldTable[0], &DAT_0048b0e0[0], &DAT_0048b110[0], temp_s1);
     *(int *)((char *)(((void * *)g_igTransformSequence_metaObject)[0]) + 60) = (int)(thunk_FUN_00194ef0);
 }
 

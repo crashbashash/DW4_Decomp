@@ -1,6 +1,6 @@
 int FUN_004592e0(void) {
     if (DAT_0058c788[0] == 0) {
-        DAT_0058c788[0] = igMetaEnum_Create(&DAT_0051eaf0[0], &DAT_004d0ae0[0], &DAT_004d0af0[0], 3);
+        DAT_0058c788[0] = igMetaEnum_Create(&GUI_VISIBILITY[0], &DAT_004d0ae0[0], &DAT_004d0af0[0], 3);
     }
     return DAT_0058c788[0];
 }
@@ -459,11 +459,11 @@ void FUN_00459ee0(void) {
 
     temp_s1 = (void *)(g_igViewerSceneInfoManager_metaObject[0]);
     temp_s2 = igMetaObject_GetFieldCount(temp_s1);
-    igMetaObject_CreateFields(temp_s1, &DAT_004d0b50[0], 0x2B);
-    temp_v0 = (void **)(igMetaObject_FindFieldByName(temp_s1, &DAT_0051ee50[0]));
+    igMetaObject_CreateFields(temp_s1, &g_igViewerSceneInfoManager_ctorTable[0], 0x2B);
+    temp_v0 = (void **)(igMetaObject_FindFieldByName(temp_s1, &text_name_3[0]));
     temp_s3 = ObjectPointerList_FindIndex(*(int *)((char *)(temp_s1) + 40), temp_v0);
     temp_v0_2 = (void *)(((DW4VC_84_1 *)(temp_v0))->vX((int)(1)));
-    igStringMetaField_SetDefaultText(temp_v0_2, &DAT_0051ee60[0]);
+    igStringMetaField_SetDefaultText(temp_v0_2, &Viewer_scene_manager[0]);
     *(int *)((char *)(temp_v0_2) + 28) = (int)(&DAT_0058c798[0]);
     igMetaObject_FinalizeAndReplaceField(temp_s1, temp_s3, temp_v0_2);
     *(int *)((char *)(temp_v0_2) + 4) = (int)((int) (*(int *)((char *)(temp_v0_2) + 4) - 1));
@@ -567,6 +567,6 @@ void FUN_00459ee0(void) {
     *(char *)((char *)(temp_s0_37) + 52) = 1;
     temp_s0_38 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s2 + 0x2A));
     *(int *)((char *)(temp_s0_38) + 56) = FUN_0044ff40();
-    igMetaObject_NameFields(temp_s1, &DAT_004d0c00[0], &DAT_004d0cb0[0], &DAT_004d0d60[0], temp_s2);
+    igMetaObject_NameFields(temp_s1, &g_igViewerSceneInfoManager_fieldTable[0], &DAT_004d0cb0[0], &DAT_004d0d60[0], temp_s2);
 }
 

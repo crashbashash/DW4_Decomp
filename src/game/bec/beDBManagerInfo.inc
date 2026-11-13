@@ -69,16 +69,16 @@ void beDBManagerInfo_InitFields(void) {
 
     temp_s0 = (void *)g_beDBManagerInfo_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_004c7328[0], 1);
+    igMetaObject_CreateFields(temp_s0, &g_beDBManagerInfo_ctorTable[0], 1);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
     ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_003658e0();
     ((igRefMetaField *)temp_s1)->_construct = 1;
-    igMetaObject_NameFields(temp_s0, &DAT_004c7330[0], &DAT_004c7338[0], &DAT_004c7340[0], temp_s2);
+    igMetaObject_NameFields(temp_s0, &g_beDBManagerInfo_fieldTable[0], &DAT_004c7338[0], &DAT_004c7340[0], temp_s2);
 }
 
 int FUN_00366070(void) {
     if (DAT_00589948[0] == 0) {
-        DAT_00589948[0] = igMetaEnum_Create(&DAT_005016f0[0], &DAT_004c7348[0], &DAT_00589950[0], 1);
+        DAT_00589948[0] = igMetaEnum_Create(&MsgAction[0], &DAT_004c7348[0], &DAT_00589950[0], 1);
     }
     return DAT_00589948[0];
 }

@@ -46,8 +46,8 @@ void beNDMWWindowCtrl_InitFields(void) {
 
     temp_s0 = (void *)g_beNDMWWindowCtrl_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_004ca070[0], 1);
-    igMetaObject_NameFields(temp_s0, &DAT_004ca078[0], &DAT_004ca080[0], &DAT_004ca088[0], temp_s1);
+    igMetaObject_CreateFields(temp_s0, &g_beNDMWWindowCtrl_ctorTable[0], 1);
+    igMetaObject_NameFields(temp_s0, &g_beNDMWWindowCtrl_fieldTable[0], &DAT_004ca080[0], &DAT_004ca088[0], temp_s1);
 }
 
 int StatusMessage_GetMetaEnum(void) {

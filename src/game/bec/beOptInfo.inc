@@ -57,9 +57,9 @@ void beOptInfo_InitFields(void) {
 
     temp_s0 = (void *)g_beOptInfo_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_004c48c0[0], 4);
+    igMetaObject_CreateFields(temp_s0, &g_beOptInfo_ctorTable[0], 4);
     igStringMetaField_SetDefaultText(((int)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 2)), 0);
     igStringMetaField_SetDefaultText(((int)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 3)), 0);
-    igMetaObject_NameFields(temp_s0, &DAT_004c48d0[0], &DAT_004c48e0[0], &DAT_004c48f0[0], temp_s1);
+    igMetaObject_NameFields(temp_s0, &g_beOptInfo_fieldTable[0], &DAT_004c48e0[0], &DAT_004c48f0[0], temp_s1);
 }
 

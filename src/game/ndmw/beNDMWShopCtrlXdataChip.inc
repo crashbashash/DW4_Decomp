@@ -66,10 +66,10 @@ void beNDMWShopCtrlXdataChip_InitFields(void) {
 
     temp_s0 = (void *)g_beNDMWShopCtrlXdataChip_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_004c9968[0], 1);
+    igMetaObject_CreateFields(temp_s0, &g_beNDMWShopCtrlXdataChip_ctorTable[0], 1);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
     ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_003c9130();
     ((igRefMetaField *)temp_s1)->_construct = 1;
-    igMetaObject_NameFields(temp_s0, &DAT_004c9970[0], &DAT_004c9978[0], &DAT_004c9980[0], temp_s2);
+    igMetaObject_NameFields(temp_s0, &g_beNDMWShopCtrlXdataChip_fieldTable[0], &DAT_004c9978[0], &DAT_004c9980[0], temp_s2);
 }
 

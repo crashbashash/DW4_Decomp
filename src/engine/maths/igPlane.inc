@@ -51,10 +51,10 @@ void igPlane_InitFields(void) {
 
     temp_s0 = g_igPlane_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_0048ae08[0], 3);
+    igMetaObject_CreateFields(temp_s0, &g_igPlane_ctorTable[0], 3);
     f = (void *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 2);
     *(int *)((char *)f + 52) = (int)(&FUN_001869e0);
-    igMetaObject_NameFields(temp_s0, &DAT_0048ae18[0], &DAT_0048ae28[0], &DAT_0048ae38[0], temp_s1);
+    igMetaObject_NameFields(temp_s0, &g_igPlane_fieldTable[0], &DAT_0048ae28[0], &DAT_0048ae38[0], temp_s1);
 }
 
 void thunk_FUN_0018c660(void) {

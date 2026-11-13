@@ -78,11 +78,11 @@ void beNDMWLoadIntf2Diffselect_InitFields(void) {
 
     temp_s1 = (void *)(((void * *)g_beNDMWLoadIntf2Diffselect_metaObject)[0]);
     temp_s2 = igMetaObject_GetFieldCount(temp_s1);
-    igMetaObject_CreateFields(temp_s1, &DAT_004cb1e0[0], 0x10);
-    temp_v0 = (void **)(igMetaObject_FindFieldByName(temp_s1, &DAT_00510cd8[0]));
+    igMetaObject_CreateFields(temp_s1, &g_beNDMWLoadIntf2Diffselect_ctorTable[0], 0x10);
+    temp_v0 = (void **)(igMetaObject_FindFieldByName(temp_s1, &text_name_2[0]));
     temp_s3 = ObjectPointerList_FindIndex(((igMetaObject *)temp_s1)->_metaFields, temp_v0);
     temp_v0_2 = (void *)(((DW4VC_84_1 *)(temp_v0))->vX((int)(1)));
-    igStringMetaField_SetDefaultText(temp_v0_2, &DAT_00512940[0]);
+    igStringMetaField_SetDefaultText(temp_v0_2, &DIFFSELECT_2[0]);
     ((igStringMetaField *)temp_v0_2)->_externalEnumStorage = (int)(&DAT_0058b808[0]);
     igMetaObject_FinalizeAndReplaceField(temp_s1, temp_s3, temp_v0_2);
     ((igStringMetaField *)temp_v0_2)->_refCount = (int)((int) (((igStringMetaField *)temp_v0_2)->_refCount - 1));
@@ -104,6 +104,6 @@ void beNDMWLoadIntf2Diffselect_InitFields(void) {
     temp_s0_5 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s2 + 0xB));
     ((igObjectRefMetaField *)temp_s0_5)->_metaObject = (int)FUN_003c6b40();
     ((igObjectRefMetaField *)temp_s0_5)->_refCounted = 0;
-    igMetaObject_NameFields(temp_s1, &DAT_004cb220[0], &DAT_004cb260[0], &DAT_004cb2a0[0], temp_s2);
+    igMetaObject_NameFields(temp_s1, &g_beNDMWLoadIntf2Diffselect_fieldTable[0], &DAT_004cb260[0], &DAT_004cb2a0[0], temp_s2);
 }
 

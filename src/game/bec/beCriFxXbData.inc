@@ -54,7 +54,7 @@ void beCriFxXbData_InitFields(void) {
 
     temp_s0 = (void *)g_beCriFxXbData_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_004c74f0[0], 0xC);
-    igMetaObject_NameFields(temp_s0, &DAT_004c7520[0], &DAT_004c7550[0], &DAT_004c7580[0], temp_s1);
+    igMetaObject_CreateFields(temp_s0, &g_beCriFxXbData_ctorTable[0], 0xC);
+    igMetaObject_NameFields(temp_s0, &g_beCriFxXbData_fieldTable[0], &DAT_004c7550[0], &DAT_004c7580[0], temp_s1);
 }
 

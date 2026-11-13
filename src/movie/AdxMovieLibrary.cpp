@@ -213,8 +213,8 @@ extern "C" int DAT_00533ba0[4];
 struct igMetaObject_3348f0;
 extern "C" igMetaObject_3348f0 *igFileName_GetPublishedMetaObject(void);
 extern "C" const char igAdxAfsFile_className[];
-extern "C" int DAT_004c2670[4];
-extern "C" int DAT_004c2678[4];
+extern "C" int g_igAdxAfsFile_ctorTable[4];
+extern "C" int g_igAdxAfsFile_fieldTable[4];
 extern "C" int DAT_004c2680[4];
 extern "C" int DAT_004c2688[4];
 extern "C" igMetaObject *g_igFileNameList_metaObject[4];
@@ -227,8 +227,8 @@ struct igMetaObject_334c90;
 extern "C" igMetaObject_334c90 * igNamedObject_GetPublishedMetaObject(...);
 extern "C" const char igFileName_className[];
 extern "C" char g_igFileName_callbackList[];
-extern "C" int DAT_004c26a0[4];
-extern "C" int DAT_004c26a8[4];
+extern "C" int g_igFileName_ctorTable[4];
+extern "C" int g_igFileName_fieldTable[4];
 extern "C" int DAT_004c26b0[4];
 extern "C" int DAT_004c26b8[4];
 extern "C" igMetaObject *g_igAdxFile_metaObject[4];
@@ -238,16 +238,16 @@ extern "C" int DAT_005337f0[4];
 struct igMetaObject_334ee0;
 extern "C" igMetaObject_334ee0 *igFile_GetPublishedMetaObject(void);
 extern "C" const char igAdxFile_className[];
-extern "C" int DAT_004c26c0[4];
-extern "C" int DAT_004c2700[4];
+extern "C" int g_igAdxFile_ctorTable[4];
+extern "C" int g_igAdxFile_fieldTable[4];
 extern "C" int DAT_004c2740[4];
 extern "C" int DAT_004c2780[4];
 extern "C" igMetaObject *g_igAdxAudio_metaObject[4];
 struct W { int *vt; int f[11]; };
 extern "C" int DAT_00533730[4];
 extern "C" const char igAdxAudio_className[];
-extern "C" int DAT_004c27c0[4];
-extern "C" int DAT_004c27f0[4];
+extern "C" int g_igAdxAudio_ctorTable[4];
+extern "C" int g_igAdxAudio_fieldTable[4];
 extern "C" int DAT_004c2820[4];
 extern "C" int DAT_004c2850[4];
 extern "C" igMetaObject *g_igMovieCodecList_metaObject[4];
@@ -272,16 +272,16 @@ extern "C" igMetaObject_3359d0 *igMovieCodec_GetPublishedMetaObject(void);
 extern "C" const char igCriMovieCodec_className[];
 extern "C" char g_igCriMovieCodec_callbackList[];
 struct F { char pad[38]; unsigned char b38; char pad2[17]; int f56; };
-extern "C" int DAT_004c2890[4];
-extern "C" int DAT_004c28a0[4];
+extern "C" int g_igCriMovieCodec_ctorTable[4];
+extern "C" int g_igCriMovieCodec_fieldTable[4];
 extern "C" int DAT_004c28b0[4];
 extern "C" int DAT_004c28c0[4];
 extern "C" igMetaObject *g_igCriMovieData_metaObject[4];
 extern "C" igMetaObject *FUN_00335b80(void);
 extern "C" int DAT_00533d00[4];
 extern "C" const char igCriMovieData_className[];
-extern "C" int DAT_004c28d0[4];
-extern "C" int DAT_004c28f0[4];
+extern "C" int g_igCriMovieData_ctorTable[4];
+extern "C" int g_igCriMovieData_fieldTable[4];
 extern "C" int DAT_004c2910[4];
 extern "C" int DAT_004c2930[4];
 extern "C" igMetaObject *g_igMovieInfoList_metaObject[4];
@@ -298,11 +298,11 @@ extern "C" const char igTextureBindAttrList_className[];
 extern "C" char g_igTextureBindAttrList_callbackList[];
 extern "C" int DAT_004c2958[4];
 extern "C" int DAT_004c2968[4];
-extern "C" int DAT_00500478[4];
+extern "C" int IG_MOVIE_STATE[4];
 extern "C" int DAT_005877a0[4];
 extern "C" int DAT_004c2980[4];
 extern "C" int DAT_004c2990[4];
-extern "C" int DAT_00500508[4];
+extern "C" int IG_MOVIE_TYPE[4];
 extern "C" int DAT_005877a8[4];
 extern "C" igMetaObject *g_igMovieInfo_metaObject[4];
 extern "C" int FUN_00131b20(struct Obj_334e50 *, int);
@@ -312,8 +312,8 @@ extern "C" igMetaObject_3364e0 *igInfo_GetPublishedMetaObject(void);
 extern "C" const char igMovieInfo_className[];
 extern "C" char g_igMovieInfo_callbackList[];
 struct MovieInfoFieldView { char pad0[38]; char f38; char pad1[13]; int f52; int f56; };
-extern "C" int DAT_004c29c0[4];
-extern "C" int DAT_004c2a20[4];
+extern "C" int g_igMovieInfo_ctorTable[4];
+extern "C" int g_igMovieInfo_fieldTable[4];
 extern "C" int DAT_004c2a80[4];
 extern "C" int DAT_004c2ae0[4];
 extern "C" int DAT_004c2b38[4];
@@ -355,8 +355,8 @@ struct igMetaObject_336a90;
 extern "C" igMetaObject_336a90 *igRenderer_GetPublishedMetaObject(void);
 extern "C" const char igMovieRenderer_className[];
 extern "C" char g_igMovieRenderer_callbackList[];
-extern "C" int DAT_004c2b68[4];
-extern "C" int DAT_004c2b70[4];
+extern "C" int g_igMovieRenderer_ctorTable[4];
+extern "C" int g_igMovieRenderer_fieldTable[4];
 extern "C" int DAT_004c2b78[4];
 extern "C" int DAT_004c2b80[4];
 extern "C" igMetaObject *g_igMovieManager_metaObject[4];
@@ -372,8 +372,8 @@ extern "C" igMetaObject_336f30 *igInfoManager_GetPublishedMetaObject(void);
 extern "C" const char igMovieManager_className[];
 extern "C" char g_igMovieManager_callbackList[];
 struct Fld { char p0[38]; char f38; char p1[13]; char f52; int f56; };
-extern "C" int DAT_004c2bb0[4];
-extern "C" int DAT_004c2bd0[4];
+extern "C" int g_igMovieManager_ctorTable[4];
+extern "C" int g_igMovieManager_fieldTable[4];
 extern "C" int DAT_004c2bf0[4];
 extern "C" int DAT_004c2c10[4];
 extern "C" igMetaObject *g_igMoviePlugin_metaObject[4];
@@ -385,8 +385,8 @@ extern "C" igMetaObject_3371f0 *igInsightPlugin_GetPublishedMetaObject(void);
 extern "C" const char igMoviePlugin_className[];
 extern "C" char g_igMoviePlugin_callbackList[];
 extern "C" int g_igInsightPlugin_metaObject[4];
-extern "C" int DAT_004c2c30[4];
-extern "C" int DAT_004c2c38[4];
+extern "C" int g_igMoviePlugin_ctorTable[4];
+extern "C" int g_igMoviePlugin_fieldTable[4];
 extern "C" int DAT_004c2c40[4];
 extern "C" int DAT_004c2c48[4];
 extern "C" int g_igInsightPlugin_metaObject[4];
@@ -616,8 +616,8 @@ void igAdxAfsFile_InitFields(void) {
 
     temp_s0 = (void *)g_igAdxAfsFile_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_004c2670[0], 2);
-    igMetaObject_NameFields(temp_s0, &DAT_004c2678[0], &DAT_004c2680[0], &DAT_004c2688[0], temp_s1);
+    igMetaObject_CreateFields(temp_s0, &g_igAdxAfsFile_ctorTable[0], 2);
+    igMetaObject_NameFields(temp_s0, &g_igAdxAfsFile_fieldTable[0], &DAT_004c2680[0], &DAT_004c2688[0], temp_s1);
 }
 
 void *FUN_00334a00(void) {
@@ -748,10 +748,10 @@ void igFileName_InitFields(void) {
 
     temp_s0 = (void *)g_igFileName_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_004c26a0[0], 1);
+    igMetaObject_CreateFields(temp_s0, &g_igFileName_ctorTable[0], 1);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
     ((igObjectRefMetaField *)temp_s1)->_metaObject = FUN_002be100();
-    igMetaObject_NameFields(temp_s0, &DAT_004c26a8[0], &DAT_004c26b0[0], &DAT_004c26b8[0], temp_s2);
+    igMetaObject_NameFields(temp_s0, &g_igFileName_fieldTable[0], &DAT_004c26b0[0], &DAT_004c26b8[0], temp_s2);
 }
 
 void FUN_00334dc0(int arg0) {
@@ -815,14 +815,14 @@ void igAdxFile_InitFields(void) {
 
     temp_s0 = (void *)(((void * *)g_igAdxFile_metaObject)[0]);
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_004c26c0[0], 0xE);
+    igMetaObject_CreateFields(temp_s0, &g_igAdxFile_ctorTable[0], 0xE);
     FUN_002d3890(((int)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 4)), 1);
     FUN_002d3890(((int)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 5)), 1);
     FUN_002d3890(((int)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 6)), 1);
     FUN_002ea4b0(((int)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 8)), 0x20000);
     FUN_002ea4b0(((int)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0xC)), 0x800);
     FUN_0030ec10(((int)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0xD)), 0xFE502A);
-    igMetaObject_NameFields(temp_s0, &DAT_004c2700[0], &DAT_004c2740[0], &DAT_004c2780[0], temp_s1);
+    igMetaObject_NameFields(temp_s0, &g_igAdxFile_fieldTable[0], &DAT_004c2740[0], &DAT_004c2780[0], temp_s1);
     *(int *)((char *)(((void * *)g_igAdxFile_metaObject)[0]) + 64) = (int)(&thunk_igFile_GetMetaObject);
     FUN_002fe480(&FUN_003350d0);
 }
@@ -904,13 +904,13 @@ void igAdxAudio_InitFields(void) {
 
     temp_s0 = (void *)g_igAdxAudio_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_004c27c0[0], 9);
+    igMetaObject_CreateFields(temp_s0, &g_igAdxAudio_ctorTable[0], 9);
     FUN_002ea4b0(((int)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 2)), 4);
     FUN_002ea4b0(((int)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 3)), 2);
     FUN_002ea4b0(((int)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 5)), 4);
     FUN_002ea4b0(((int)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 6)), 0xBB80);
     igStringMetaField_SetDefaultText(((int)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 8)), 0);
-    igMetaObject_NameFields(temp_s0, &DAT_004c27f0[0], &DAT_004c2820[0], &DAT_004c2850[0], temp_s1);
+    igMetaObject_NameFields(temp_s0, &g_igAdxAudio_fieldTable[0], &DAT_004c2820[0], &DAT_004c2850[0], temp_s1);
 }
 
 void FUN_00335400(int arg0) {
@@ -1153,7 +1153,7 @@ void igCriMovieCodec_InitFields(void) {
 
     temp_s0 = (void *)g_igCriMovieCodec_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_004c2890[0], 3);
+    igMetaObject_CreateFields(temp_s0, &g_igCriMovieCodec_ctorTable[0], 3);
     t0 = (struct F *)((struct F *)igMetaObject_GetFieldAt(temp_s0, temp_s2));
     t0->b38 = 0;
     temp_s1 = (struct F *)(((struct F *)igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1)));
@@ -1162,7 +1162,7 @@ void igCriMovieCodec_InitFields(void) {
     temp_s1_2 = (struct F *)(((struct F *)igMetaObject_GetFieldAt(temp_s0, temp_s2 + 2)));
     temp_s1_2->f56 = FUN_00142f70();
     temp_s1_2->b38 = 0;
-    igMetaObject_NameFields(temp_s0, &DAT_004c28a0[0], &DAT_004c28b0[0], &DAT_004c28c0[0], temp_s2);
+    igMetaObject_NameFields(temp_s0, &g_igCriMovieCodec_fieldTable[0], &DAT_004c28b0[0], &DAT_004c28c0[0], temp_s2);
 }
 
 void FUN_00335b40(int arg0) {
@@ -1222,7 +1222,7 @@ void igCriMovieData_InitFields(void) {
 
     temp_s0 = (void *)g_igCriMovieData_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_004c28d0[0], 5);
+    igMetaObject_CreateFields(temp_s0, &g_igCriMovieData_ctorTable[0], 5);
     temp_v0 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s1));
     ((igMetaField *)temp_v0)->_size = 4;
     ((igMetaField *)temp_v0)->_persistent = 0;
@@ -1234,7 +1234,7 @@ void igCriMovieData_InitFields(void) {
     temp_v0_3 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 4));
     ((igMetaField *)temp_v0_3)->_size = 4;
     ((igMetaField *)temp_v0_3)->_persistent = 0;
-    igMetaObject_NameFields(temp_s0, &DAT_004c28f0[0], &DAT_004c2910[0], &DAT_004c2930[0], temp_s1);
+    igMetaObject_NameFields(temp_s0, &g_igCriMovieData_fieldTable[0], &DAT_004c2910[0], &DAT_004c2930[0], temp_s1);
 }
 
 void FUN_00335da0(int arg0) {
@@ -1349,14 +1349,14 @@ void igTextureBindAttrList_GetMetaObject(void)
 
 int FUN_00336140(void) {
     if (DAT_005877a0[0] == 0) {
-        DAT_005877a0[0] = igMetaEnum_Create(&DAT_00500478[0], &DAT_004c2958[0], &DAT_004c2968[0], 3);
+        DAT_005877a0[0] = igMetaEnum_Create(&IG_MOVIE_STATE[0], &DAT_004c2958[0], &DAT_004c2968[0], 3);
     }
     return DAT_005877a0[0];
 }
 
 int FUN_003361a0(void) {
     if (DAT_005877a8[0] == 0) {
-        DAT_005877a8[0] = igMetaEnum_Create(&DAT_00500508[0], &DAT_004c2980[0], &DAT_004c2990[0], 4);
+        DAT_005877a8[0] = igMetaEnum_Create(&IG_MOVIE_TYPE[0], &DAT_004c2980[0], &DAT_004c2990[0], 4);
     }
     return DAT_005877a8[0];
 }
@@ -1483,7 +1483,7 @@ void igMovieInfo_InitFields(void) {
 
     temp_s0 = (void *)g_igMovieInfo_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_004c29c0[0], 0x15);
+    igMetaObject_CreateFields(temp_s0, &g_igMovieInfo_ctorTable[0], 0x15);
     igStringMetaField_SetDefaultText(((struct MovieInfoFieldView *)igMetaObject_GetFieldAt(temp_s0, temp_s1)), 0);
     temp_v0 = (((struct MovieInfoFieldView *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 1)));
     FUN_002dc7a0(temp_v0, &DAT_004c2b38[0]);
@@ -1526,7 +1526,7 @@ void igMovieInfo_InitFields(void) {
     temp_v0_6->f56 = (int)((int) g_igObject_metaObject[0]);
     temp_v0_6->f38 = 0;
     FUN_002ea4b0(((struct MovieInfoFieldView *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0x14)), -1);
-    igMetaObject_NameFields(temp_s0, &DAT_004c2a20[0], &DAT_004c2a80[0], &DAT_004c2ae0[0], temp_s1);
+    igMetaObject_NameFields(temp_s0, &g_igMovieInfo_fieldTable[0], &DAT_004c2a80[0], &DAT_004c2ae0[0], temp_s1);
 }
 
 igMetaObject *FUN_00336860(void) {
@@ -1612,11 +1612,11 @@ void igMovieRenderer_InitFields(void) {
 
     temp_s0 = (void *)g_igMovieRenderer_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_004c2b68[0], 1);
+    igMetaObject_CreateFields(temp_s0, &g_igMovieRenderer_ctorTable[0], 1);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
     ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_00336c10();
     ((igMetaField *)temp_s1)->_persistent = 0;
-    igMetaObject_NameFields(temp_s0, &DAT_004c2b70[0], &DAT_004c2b78[0], &DAT_004c2b80[0], temp_s2);
+    igMetaObject_NameFields(temp_s0, &g_igMovieRenderer_fieldTable[0], &DAT_004c2b78[0], &DAT_004c2b80[0], temp_s2);
 }
 
 void igMovieManager_CreateInstance(int arg0) {
@@ -1743,7 +1743,7 @@ void igMovieManager_InitFields(void) {
 
     temp_s1 = (void *)g_igMovieManager_metaObject[0];
     temp_s0 = igMetaObject_GetFieldCount(temp_s1);
-    igMetaObject_CreateFields(temp_s1, &DAT_004c2bb0[0], 6);
+    igMetaObject_CreateFields(temp_s1, &g_igMovieManager_ctorTable[0], 6);
     temp_s2 = ((struct Fld *)igMetaObject_GetFieldAt(temp_s1, temp_s0));
     temp_s2->f56 = (int)FUN_00335de0();
     ((struct Fld *)igMetaObject_GetFieldAt(temp_s1, temp_s0 + 1))->f38 = 0;
@@ -1759,7 +1759,7 @@ void igMovieManager_InitFields(void) {
     temp_s2_4->f38 = 0;
     temp_s2_5 = ((struct Fld *)igMetaObject_GetFieldAt(temp_s1, temp_s0 + 5));
     temp_s2_5->f56 = FUN_0044c4d0();
-    igMetaObject_NameFields(temp_s1, &DAT_004c2bd0[0], &DAT_004c2bf0[0], &DAT_004c2c10[0], temp_s0);
+    igMetaObject_NameFields(temp_s1, &g_igMovieManager_fieldTable[0], &DAT_004c2bf0[0], &DAT_004c2c10[0], temp_s0);
 }
 
 void *FUN_003370f0(void) {
@@ -1830,10 +1830,10 @@ void igMoviePlugin_InitFields(void) {
 
     temp_s0 = (void *)g_igMoviePlugin_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_004c2c30[0], 1);
+    igMetaObject_CreateFields(temp_s0, &g_igMoviePlugin_ctorTable[0], 1);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
     ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_00336c10();
-    igMetaObject_NameFields(temp_s0, &DAT_004c2c38[0], &DAT_004c2c40[0], &DAT_004c2c48[0], temp_s2);
+    igMetaObject_NameFields(temp_s0, &g_igMoviePlugin_fieldTable[0], &DAT_004c2c40[0], &DAT_004c2c48[0], temp_s2);
 }
 
 int Gap__Insight__igInsightPlugin__vfunc_20(void)

@@ -98,7 +98,7 @@ void beWaterPlainInfoRam_InitFields(void) {
 
     temp_s1 = (void *)g_beWaterPlainInfoRam_metaObject[0];
     temp_s0 = igMetaObject_GetFieldCount(temp_s1);
-    igMetaObject_CreateFields(temp_s1, &DAT_004c30b0[0], 0x1B);
+    igMetaObject_CreateFields(temp_s1, &g_beWaterPlainInfoRam_ctorTable[0], 0x1B);
     temp_s2 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 0xA));
     ((igObjectRefMetaField *)temp_s2)->_metaObject = FUN_0014b980();
     temp_s2_2 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 0xB));
@@ -112,6 +112,6 @@ void beWaterPlainInfoRam_InitFields(void) {
     ((igRefMetaField *)temp_s2_4)->_construct = 1;
     temp_s2_5 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 0x1A));
     ((igObjectRefMetaField *)temp_s2_5)->_metaObject = (int)FUN_00340490();
-    igMetaObject_NameFields(temp_s1, &DAT_004c3120[0], &DAT_004c3190[0], &DAT_004c3200[0], temp_s0);
+    igMetaObject_NameFields(temp_s1, &g_beWaterPlainInfoRam_fieldTable[0], &DAT_004c3190[0], &DAT_004c3200[0], temp_s0);
 }
 

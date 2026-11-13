@@ -21,7 +21,7 @@ struct Pad { char pad[36]; int f36; char p2[28]; int f68; };
 struct O { char pad[20]; int f20; };
 extern "C" struct Pad *bePadManager_GetPadForPlayer(int, int);
 extern "C" int FUN_003a54a0(struct O *arg0);
-extern "C" int DAT_0050ff10[4];
+extern "C" int NOPADDATA[4];
 extern "C" void Gap__Bec__beTimer__vfunc_27(beTimer *arg0);
 
 void Gap__Bec__beTimer__vfunc_21(void)
@@ -106,7 +106,7 @@ void Gap__Bec__beTimer__vfunc_27(beTimer *arg0) {
                     off = i * 4;
                     it = ((beTimerData **)((beTimerDataList *)arg0->_dataList)->_data)[i];
                     if (it->_resetCondition != 0) {
-                        b = strcmp(it->_resetCondition, &DAT_0050ff10[0]) == 0 && FUN_003a54a0((O *)arg0) != 0;
+                        b = strcmp(it->_resetCondition, &NOPADDATA[0]) == 0 && FUN_003a54a0((O *)arg0) != 0;
                         if (b) {
                             it->_downTimer = it->_startTime;
                         }

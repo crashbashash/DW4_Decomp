@@ -64,7 +64,7 @@ void igModelViewMatrixAttr_InitFields(void) {
 
     temp_s0 = (void *)g_igModelViewMatrixAttr_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_00486228[0], 1);
+    igMetaObject_CreateFields(temp_s0, &g_igModelViewMatrixAttr_ctorTable[0], 1);
     temp_s1 = (int)igMetaObject_GetFieldAt(temp_s0, temp_s2);
     o5.x = 0;
     o5.y = 0;
@@ -84,7 +84,7 @@ void igModelViewMatrixAttr_InitFields(void) {
     o2.w = 0;
     FUN_00130e90(&o1, &o2, &o3, &o4, &o5);
     FUN_0018c640(temp_s1, &o1);
-    igMetaObject_NameFields(temp_s0, &DAT_00486230[0], &DAT_00486238[0], &DAT_00486240[0], temp_s2);
+    igMetaObject_NameFields(temp_s0, &g_igModelViewMatrixAttr_fieldTable[0], &DAT_00486238[0], &DAT_00486240[0], temp_s2);
     FUN_002fe480(&thunk_FUN_0013f730);
 }
 

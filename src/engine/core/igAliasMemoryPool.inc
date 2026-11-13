@@ -111,7 +111,7 @@ igMetaObject *FUN_002cd480(void) {
 
 int FUN_002cd5c0(void) {
     if (DAT_00586a28[0] == 0) {
-        DAT_00586a28[0] = ((int)igMetaEnum_Create((char *)&DAT_004f89f8[0], (char **)&DAT_004c16b0[0], &DAT_004c16c0[0], 4));
+        DAT_00586a28[0] = ((int)igMetaEnum_Create((char *)&MessageLevel[0], (char **)&DAT_004c16b0[0], &DAT_004c16c0[0], 4));
     }
     return DAT_00586a28[0];
 }

@@ -1,6 +1,6 @@
 int FUN_00136c80(void) {
     if (DAT_0055f110[0] == 0) {
-        DAT_0055f110[0] = igMetaEnum_Create(&DAT_004d55c0[0], &DAT_00486478[0], &DAT_00486488[0], 3);
+        DAT_0055f110[0] = igMetaEnum_Create(&ATTR_FLAGS[0], &DAT_00486478[0], &DAT_00486488[0], 3);
     }
     return DAT_0055f110[0];
 }
@@ -102,7 +102,7 @@ void igGeometrySetAttr_InitFields(void) {
 
     temp_s1 = (void *)g_igGeometrySetAttr_metaObject[0];
     temp_s0 = igMetaObject_GetFieldCount(temp_s1);
-    igMetaObject_CreateFields(temp_s1, &DAT_004864b0[0], 5);
+    igMetaObject_CreateFields(temp_s1, &g_igGeometrySetAttr_ctorTable[0], 5);
     temp_s2 = (struct F_136f30 *)(igMetaObject_GetFieldAt(temp_s1, temp_s0));
     temp_s2->f56 = FUN_0014a040();
     temp_s2->f38 = 0;
@@ -122,6 +122,6 @@ void igGeometrySetAttr_InitFields(void) {
     temp_v0_2->f38 = 0;
     temp_v0_2->f52 = (int)(&FUN_00136c80);
     FUN_002d3890(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 4), 1);
-    igMetaObject_NameFields(temp_s1, &DAT_004864d0[0], &DAT_004864f0[0], &DAT_00486510[0], temp_s0);
+    igMetaObject_NameFields(temp_s1, &g_igGeometrySetAttr_fieldTable[0], &DAT_004864f0[0], &DAT_00486510[0], temp_s0);
 }
 

@@ -92,7 +92,7 @@ void igElfFile_InitFields(void) {
     ((igMetaObject *)g_igElfFile_metaObject[0])->_persistent = 0;
     temp_s0 = (void *)(g_igElfFile_metaObject[0]);
     temp_s1 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
-    igMetaObject_CreateFields((igMetaObject *)temp_s0, (igMetaField * (**)(void *))&DAT_004c1b30[0], 9);
+    igMetaObject_CreateFields((igMetaObject *)temp_s0, (igMetaField * (**)(void *))&g_igElfFile_ctorTable[0], 9);
     temp_v0 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1)));
     ((igMetaField *)temp_v0)->_size = 0x34;
     ((igMetaField *)temp_v0)->_persistent = 0;
@@ -112,6 +112,6 @@ void igElfFile_InitFields(void) {
     temp_v0_5 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 8)));
     ((igMetaField *)temp_v0_5)->_size = 4;
     ((igMetaField *)temp_v0_5)->_persistent = 0;
-    igMetaObject_NameFields((igMetaObject *)temp_s0, (const char **)&DAT_004c1b60[0], (igMetaField ***)&DAT_004c1b90[0], &DAT_004c1bc0[0], temp_s1);
+    igMetaObject_NameFields((igMetaObject *)temp_s0, (const char **)&g_igElfFile_fieldTable[0], (igMetaField ***)&DAT_004c1b90[0], &DAT_004c1bc0[0], temp_s1);
 }
 

@@ -75,12 +75,12 @@ void igLightStateSet_InitFields(void) {
 
     temp_s0 = (void *)g_igLightStateSet_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_0048bd98[0], 1);
+    igMetaObject_CreateFields(temp_s0, &g_igLightStateSet_ctorTable[0], 1);
     temp_s1 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s2)));
     ((igObjectRefMetaField *)temp_s1)->_metaObject = FUN_00136040();
     ((igRefMetaField *)temp_s1)->_construct = 1;
     ((igMetaField *)temp_s1)->_deepCopyMethod = 0;
     ((igMetaField *)temp_s1)->_shallowCopyMethod = 2;
-    igMetaObject_NameFields(temp_s0, &DAT_0048bda0[0], &DAT_0048bda8[0], &DAT_0048bdb0[0], temp_s2);
+    igMetaObject_NameFields(temp_s0, &g_igLightStateSet_fieldTable[0], &DAT_0048bda8[0], &DAT_0048bdb0[0], temp_s2);
 }
 

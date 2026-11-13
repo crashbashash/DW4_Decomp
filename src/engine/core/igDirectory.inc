@@ -94,7 +94,7 @@ void igDirectory_InitFields(void) {
 
     temp_s1 = (void *)g_igDirectory_metaObject[0];
     temp_s0 = igMetaObject_GetFieldCount((igMetaObject *)temp_s1);
-    igMetaObject_CreateFields((igMetaObject *)temp_s1, (igMetaField * (**)(void *))&DAT_004c1110[0], 0x12);
+    igMetaObject_CreateFields((igMetaObject *)temp_s1, (igMetaField * (**)(void *))&g_igDirectory_ctorTable[0], 0x12);
     temp_v0 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0)));
     igStringMetaField_SetDefaultText((int *)temp_v0, 0);
     ((igStringMetaField *)temp_v0)->_destruct = 1;
@@ -120,7 +120,7 @@ void igDirectory_InitFields(void) {
     temp_s2_7 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 0x11)));
     ((igObjectRefMetaField *)temp_s2_7)->_metaObject = (int)FUN_002ba690();
     ((igObjectRefMetaField *)temp_s2_7)->_persistent = 0;
-    igMetaObject_NameFields((igMetaObject *)temp_s1, (const char **)&DAT_004c1160[0], (igMetaField ***)&DAT_004c11b0[0], &DAT_004c1200[0], temp_s0);
+    igMetaObject_NameFields((igMetaObject *)temp_s1, (const char **)&g_igDirectory_fieldTable[0], (igMetaField ***)&DAT_004c11b0[0], &DAT_004c1200[0], temp_s0);
 }
 
 void thunk_FUN_002d7b00(void) {

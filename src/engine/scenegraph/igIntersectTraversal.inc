@@ -147,7 +147,7 @@ void igIntersectTraversal_InitFields(void) {
 
     temp_s1 = (void *)g_igIntersectTraversal_metaObject[0];
     temp_s0 = igMetaObject_GetFieldCount(temp_s1);
-    igMetaObject_CreateFields(temp_s1, &DAT_0048be00[0], 7);
+    igMetaObject_CreateFields(temp_s1, &g_igIntersectTraversal_ctorTable[0], 7);
     temp_s2 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s1, temp_s0)));
     ((igObjectRefMetaField *)temp_s2)->_metaObject = FUN_001e4740();
     ((igRefMetaField *)temp_s2)->_construct = 1;
@@ -166,7 +166,7 @@ void igIntersectTraversal_InitFields(void) {
     ((igObjectRefMetaField *)temp_s2_5)->_metaObject = FUN_00188260();
     ((igRefMetaField *)temp_s2_5)->_construct = 1;
     ((igMetaField *)temp_s2_5)->_persistent = 0;
-    igMetaObject_NameFields(temp_s1, &DAT_0048be20[0], &DAT_0048be40[0], &DAT_0048be60[0], temp_s0);
+    igMetaObject_NameFields(temp_s1, &g_igIntersectTraversal_fieldTable[0], &DAT_0048be40[0], &DAT_0048be60[0], temp_s0);
     FUN_002fe480(&thunk_FUN_001ce740);
 }
 

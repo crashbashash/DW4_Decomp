@@ -62,7 +62,7 @@ bool FUN_00305d30(IniReaderView *self, char *name, char *dir) {
     }
     *(char **)&held = interned;
     if (held == 0 || strlen(held) == 0) {
-        assign_305d30(&held, DAT_004f9478);
+        assign_305d30(&held, text_alchemy_ini);
     }
     found = self->file->Open(held, ((char *)DAT_004f96a8));
     if (found == 0) {
@@ -637,15 +637,15 @@ int FUN_00308400(int arg0, int arg1) {
     if (((int *)&DAT_004c22d8)[0] < arg0) {
         return 0;
     }
-    p = &DAT_004fb2a0[0];
+    p = &UNKNOWN[0];
     switch (arg0) {
-    case 0: p = &DAT_004fb2a8[0]; break;
-    case 1: p = &DAT_004fb2b8[0]; break;
-    case 2: p = &DAT_004fb2c0[0]; break;
-    case 3: p = &DAT_004fb2c8[0]; break;
-    case 4: p = &DAT_004fb2d8[0]; break;
-    case 5: p = &DAT_004fb2e0[0]; break;
-    case 6: p = &DAT_004fb2e8[0]; break;
+    case 0: p = &INTERNAL_ERROR[0]; break;
+    case 1: p = &ERROR[0]; break;
+    case 2: p = &WARNING[0]; break;
+    case 3: p = &DEPRECATION[0]; break;
+    case 4: p = &NOTICE[0]; break;
+    case 5: p = &INFO[0]; break;
+    case 6: p = &DETAIL[0]; break;
     }
     if (arg0 < 4) {
         FUN_00304550((int)&DAT_004fb2f0[0], p, arg1);
@@ -700,7 +700,7 @@ void FUN_00308770(void) {
 }
 
 igSmartPointer<igObject> FUN_003087a0(void *directory, int name) {
-    if (strcmp(name, &DAT_004fb390[0]) == 0) {
+    if (strcmp(name, &text_igImageDirectory[0]) == 0) {
         return igSmartPointer<igObject>((igObject *)FUN_00308a90((O_308a90 *)directory), kRetainReference);
     }
     return igSmartPointer<igObject>((igObject *)igProperty_FindByName((struct L_3022c0 *)(*(int *)((char *)directory + 16)), (struct P_3022c0 *)DAT_00586670[0], name), kRetainReference);
@@ -783,7 +783,7 @@ Hd *FUN_00308a90(O_308a90 *arg0) {
             }
             g_stringPool[0] = v;
         }
-        s2 = StringPool_Intern((StringPool *)g_stringPool[0], (const char *)(((char *)DAT_004fb390)));
+        s2 = StringPool_Intern((StringPool *)g_stringPool[0], (const char *)(((char *)text_igImageDirectory)));
         old = s0->f20;
         if (old != 0) {
             hd = (int *)(old - 8);

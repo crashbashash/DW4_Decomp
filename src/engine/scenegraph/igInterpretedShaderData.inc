@@ -83,12 +83,12 @@ void igInterpretedShaderData_InitFields(void) {
 
     temp_s0 = (void *)g_igInterpretedShaderData_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_0048bee0[0], 2);
+    igMetaObject_CreateFields(temp_s0, &g_igInterpretedShaderData_ctorTable[0], 2);
     temp_s1 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s2)));
     ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_00199170();
     temp_s1_2 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1)));
     ((igObjectRefMetaField *)temp_s1_2)->_metaObject = FUN_002bcbb0();
     ((igRefMetaField *)temp_s1_2)->_construct = 1;
-    igMetaObject_NameFields(temp_s0, &DAT_0048bee8[0], &DAT_0048bef0[0], &DAT_0048bef8[0], temp_s2);
+    igMetaObject_NameFields(temp_s0, &g_igInterpretedShaderData_fieldTable[0], &DAT_0048bef0[0], &DAT_0048bef8[0], temp_s2);
 }
 

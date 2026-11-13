@@ -62,7 +62,7 @@ void igColorAttr_InitFields(void) {
 
     temp_s0 = (void *)g_igColorAttr_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_00486918[0], 2);
+    igMetaObject_CreateFields(temp_s0, &g_igColorAttr_ctorTable[0], 2);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
     temp_a0 = (void *)(temp_s1);
     sp40[0] = 0x3F800000;
@@ -74,6 +74,6 @@ void igColorAttr_InitFields(void) {
     temp_v0 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
     FUN_0030e9b0(temp_v0, -1);
     *(char *)((char *)(temp_v0) + 38) = 0;
-    igMetaObject_NameFields(temp_s0, &DAT_00486920[0], &DAT_00486928[0], &DAT_00486930[0], temp_s2);
+    igMetaObject_NameFields(temp_s0, &g_igColorAttr_fieldTable[0], &DAT_00486928[0], &DAT_00486930[0], temp_s2);
 }
 

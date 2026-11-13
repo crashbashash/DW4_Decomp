@@ -61,7 +61,7 @@ void beCriSndf_InitFields(void) {
 
     temp_s0 = (void *)g_beCriSndf_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_004c7600[0], 3);
-    igMetaObject_NameFields(temp_s0, &DAT_004c7610[0], &DAT_004c7620[0], &DAT_004c7630[0], temp_s1);
+    igMetaObject_CreateFields(temp_s0, &g_beCriSndf_ctorTable[0], 3);
+    igMetaObject_NameFields(temp_s0, &g_beCriSndf_fieldTable[0], &DAT_004c7620[0], &DAT_004c7630[0], temp_s1);
 }
 

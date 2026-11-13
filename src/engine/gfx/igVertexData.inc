@@ -1,6 +1,6 @@
 int FUN_0014b330(void) {
     if (DAT_0055fa50[0] == 0) {
-        DAT_0055fa50[0] = igMetaEnum_Create(&DAT_004dbd40[0], &DAT_00488650[0], &DAT_00488680[0], 0xB);
+        DAT_0055fa50[0] = igMetaEnum_Create(&IG_VERTEX_COMPONENT_TYPE[0], &DAT_00488650[0], &DAT_00488680[0], 0xB);
     }
     return DAT_0055fa50[0];
 }
@@ -93,13 +93,13 @@ void igVertexData_InitFields(void) {
 
     temp_s0 = (void *)g_igVertexData_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_004886c0[0], 6);
+    igMetaObject_CreateFields(temp_s0, &g_igVertexData_ctorTable[0], 6);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
     ((igObjectRefMetaField *)temp_s1)->_metaObject = igDataList_GetOrCreateMetaObject();
     temp_v0 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
     FUN_002dc7a0(temp_v0, &DAT_00488738[0]);
     ((igEnumMetaField *)temp_v0)->_getMetaEnumFunction = (int)(FUN_0014b330);
     FUN_0030e9b0(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 3), 1);
-    igMetaObject_NameFields(temp_s0, &DAT_004886e0[0], &DAT_00488700[0], &DAT_00488720[0], temp_s2);
+    igMetaObject_NameFields(temp_s0, &g_igVertexData_fieldTable[0], &DAT_00488700[0], &DAT_00488720[0], temp_s2);
 }
 

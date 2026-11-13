@@ -61,7 +61,7 @@ void igRay_InitFields(void) {
 
     temp_s0 = (void *)g_igRay_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_0048adc8[0], 3);
+    igMetaObject_CreateFields(temp_s0, &g_igRay_ctorTable[0], 3);
     temp_a0 = igMetaObject_GetFieldAt(temp_s0, temp_s1);
     sp40[0] = 0;
     sp40[1] = 0;
@@ -72,6 +72,6 @@ void igRay_InitFields(void) {
     sp30[1] = 0x3F800000;
     sp30[2] = 0;
     FUN_0018e470((igVec3fMetaFieldView *)temp_a0_2, (const float *)&sp30[0]);
-    igMetaObject_NameFields(temp_s0, &DAT_0048add8[0], &DAT_0048ade8[0], &DAT_0048adf8[0], temp_s1);
+    igMetaObject_NameFields(temp_s0, &g_igRay_fieldTable[0], &DAT_0048ade8[0], &DAT_0048adf8[0], temp_s1);
 }
 

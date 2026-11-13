@@ -57,7 +57,7 @@ void igBlendStateAttr_InitFields(void) {
 
     temp_s0 = (void *)g_igBlendStateAttr_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_004869e0[0], 1);
-    igMetaObject_NameFields(temp_s0, &DAT_004869e8[0], &DAT_004869f0[0], &DAT_004869f8[0], temp_s1);
+    igMetaObject_CreateFields(temp_s0, &g_igBlendStateAttr_ctorTable[0], 1);
+    igMetaObject_NameFields(temp_s0, &g_igBlendStateAttr_fieldTable[0], &DAT_004869f0[0], &DAT_004869f8[0], temp_s1);
 }
 

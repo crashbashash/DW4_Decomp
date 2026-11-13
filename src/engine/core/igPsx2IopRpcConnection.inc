@@ -57,7 +57,7 @@ void igPsx2IopRpcConnection_InitFields(void) {
 
     temp_s0 = (void *)g_igPsx2IopRpcConnection_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
-    igMetaObject_CreateFields((igMetaObject *)temp_s0, (igMetaField * (**)(void *))&DAT_004c1dd0[0], 3);
-    igMetaObject_NameFields((igMetaObject *)temp_s0, (const char **)&DAT_004c1de0[0], (igMetaField ***)&DAT_004c1df0[0], &DAT_004c1e00[0], temp_s1);
+    igMetaObject_CreateFields((igMetaObject *)temp_s0, (igMetaField * (**)(void *))&g_igPsx2IopRpcConnection_ctorTable[0], 3);
+    igMetaObject_NameFields((igMetaObject *)temp_s0, (const char **)&g_igPsx2IopRpcConnection_fieldTable[0], (igMetaField ***)&DAT_004c1df0[0], &DAT_004c1e00[0], temp_s1);
 }
 

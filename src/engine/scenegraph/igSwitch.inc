@@ -88,10 +88,10 @@ void igSwitch_InitFields(void) {
 
     temp_s0 = (void *)g_igSwitch_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_0048b218[0], 1);
+    igMetaObject_CreateFields(temp_s0, &g_igSwitch_ctorTable[0], 1);
     temp_s1 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s2)));
     ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_001a4d90();
     ((igRefMetaField *)temp_s1)->_construct = 1;
-    igMetaObject_NameFields(temp_s0, &DAT_0048b220[0], &DAT_0048b228[0], &DAT_0048b230[0], temp_s2);
+    igMetaObject_NameFields(temp_s0, &g_igSwitch_fieldTable[0], &DAT_0048b228[0], &DAT_0048b230[0], temp_s2);
 }
 

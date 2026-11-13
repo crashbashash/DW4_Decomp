@@ -54,7 +54,7 @@ void igMaterialAttr_InitFields(void) {
 
     temp_s0 = (void *)g_igMaterialAttr_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_00486270[0], 6);
+    igMetaObject_CreateFields(temp_s0, &g_igMaterialAttr_ctorTable[0], 6);
     temp_a0 = (int)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 1);
     v1.x = 0;
     v1.w = 0x3F800000;
@@ -79,6 +79,6 @@ void igMaterialAttr_InitFields(void) {
     v4.y = 0;
     v4.z = 0;
     FUN_0018e670(temp_a0_4, &v4);
-    igMetaObject_NameFields(temp_s0, &DAT_00486290[0], &DAT_004862b0[0], &DAT_004862d0[0], temp_s1);
+    igMetaObject_NameFields(temp_s0, &g_igMaterialAttr_fieldTable[0], &DAT_004862b0[0], &DAT_004862d0[0], temp_s1);
 }
 

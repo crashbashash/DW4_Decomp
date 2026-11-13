@@ -1,13 +1,13 @@
 int FUN_002c7720(void) {
     if (DAT_00586700[0] == 0) {
-        DAT_00586700[0] = ((int)igMetaEnum_Create((char *)&DAT_004f8330[0], (char **)&DAT_004c1248[0], &DAT_004c1258[0], 3));
+        DAT_00586700[0] = ((int)igMetaEnum_Create((char *)&RefType[0], (char **)&DAT_004c1248[0], &DAT_004c1258[0], 3));
     }
     return DAT_00586700[0];
 }
 
 int FUN_002c7780(void) {
     if (DAT_00586708[0] == 0) {
-        DAT_00586708[0] = ((int)igMetaEnum_Create((char *)&DAT_004f8348[0], (char **)&DAT_004c1268[0], &DAT_004c1278[0], 3));
+        DAT_00586708[0] = ((int)igMetaEnum_Create((char *)&ResolveMethod[0], (char **)&DAT_004c1268[0], &DAT_004c1278[0], 3));
     }
     return DAT_00586708[0];
 }
@@ -88,7 +88,7 @@ void igDirEntry_InitFields(void) {
 
     temp_s0 = (void *)g_igDirEntry_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
-    igMetaObject_CreateFields((igMetaObject *)temp_s0, (igMetaField * (**)(void *))&DAT_004c1290[0], 4);
+    igMetaObject_CreateFields((igMetaObject *)temp_s0, (igMetaField * (**)(void *))&g_igDirEntry_ctorTable[0], 4);
     temp_v0 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2)));
     FUN_002ea4b0((void **)temp_v0, -1);
     ((igIntMetaField *)temp_v0)->_persistent = 0;
@@ -101,6 +101,6 @@ void igDirEntry_InitFields(void) {
     ((igEnumMetaField *)temp_v0_3)->_persistent = 0;
     ((igEnumMetaField *)temp_v0_3)->_getMetaEnumFunction = (int)(FUN_002c7720);
     *(char *)((char *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 3))) + 38) = 0;
-    igMetaObject_NameFields((igMetaObject *)temp_s0, (const char **)&DAT_004c12a0[0], (igMetaField ***)&DAT_004c12b0[0], &DAT_004c12c0[0], temp_s2);
+    igMetaObject_NameFields((igMetaObject *)temp_s0, (const char **)&g_igDirEntry_fieldTable[0], (igMetaField ***)&DAT_004c12b0[0], &DAT_004c12c0[0], temp_s2);
 }
 

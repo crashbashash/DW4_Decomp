@@ -71,10 +71,10 @@ void beSvPlatBaseData_InitFields(void) {
 
     temp_s0 = (void *)g_beSvPlatBaseData_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_004c4260[0], 4);
+    igMetaObject_CreateFields(temp_s0, &g_beSvPlatBaseData_ctorTable[0], 4);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
     ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_0034a4a0();
     ((igRefMetaField *)temp_s1)->_construct = 1;
-    igMetaObject_NameFields(temp_s0, &DAT_004c4270[0], &DAT_004c4280[0], &DAT_004c4290[0], temp_s2);
+    igMetaObject_NameFields(temp_s0, &g_beSvPlatBaseData_fieldTable[0], &DAT_004c4280[0], &DAT_004c4290[0], temp_s2);
 }
 

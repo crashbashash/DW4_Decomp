@@ -95,17 +95,17 @@ void beSoundData_InitFields(void) {
 
     temp_s0 = (void *)g_beSoundData_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_004c3830[0], 6);
+    igMetaObject_CreateFields(temp_s0, &g_beSoundData_ctorTable[0], 6);
     FUN_0030a520(((int)igMetaObject_GetFieldAt(temp_s0, temp_s1)), -1);
     FUN_0030a520(((int)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 1)), -1);
     FUN_002ea4b0(((int)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 2)), -1);
     FUN_0030a520(((int)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 3)), 1);
-    igMetaObject_NameFields(temp_s0, &DAT_004c3850[0], &DAT_004c3870[0], &DAT_004c3890[0], temp_s1);
+    igMetaObject_NameFields(temp_s0, &g_beSoundData_fieldTable[0], &DAT_004c3870[0], &DAT_004c3890[0], temp_s1);
 }
 
 int beSound_GetMessageEnum(void) {
     if (DAT_00587ea0[0] == 0) {
-        DAT_00587ea0[0] = igMetaEnum_Create(&DAT_00501a58[0], &DAT_004c38b0[0], &DAT_004c3910[0], 0x17);
+        DAT_00587ea0[0] = igMetaEnum_Create(&Message_2[0], &DAT_004c38b0[0], &DAT_004c3910[0], 0x17);
     }
     return DAT_00587ea0[0];
 }

@@ -97,13 +97,13 @@ void beNDMWMdlPlayer2InfoWork_InitFields(void) {
 
     temp_s0 = (void *)g_beNDMWMdlPlayer2InfoWork_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_004ca7e0[0], 4);
-    igMetaObject_NameFields(temp_s0, &DAT_004ca7f0[0], &DAT_004ca800[0], &DAT_004ca810[0], temp_s1);
+    igMetaObject_CreateFields(temp_s0, &g_beNDMWMdlPlayer2InfoWork_ctorTable[0], 4);
+    igMetaObject_NameFields(temp_s0, &g_beNDMWMdlPlayer2InfoWork_fieldTable[0], &DAT_004ca800[0], &DAT_004ca810[0], temp_s1);
 }
 
 int PanelCloseSeqList_GetMetaEnum(void) {
     if (DAT_0058b3a0[0] == 0) {
-        DAT_0058b3a0[0] = igMetaEnum_Create(&DAT_00512120[0], &DAT_004ca820[0], &DAT_004ca840[0], 7);
+        DAT_0058b3a0[0] = igMetaEnum_Create(&PanelCloseSeqList[0], &DAT_004ca820[0], &DAT_004ca840[0], 7);
     }
     return DAT_0058b3a0[0];
 }

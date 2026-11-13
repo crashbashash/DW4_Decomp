@@ -48,7 +48,7 @@ void igFogAttr_InitFields(void) {
 
     temp_s0 = (void *)g_igFogAttr_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_00486680[0], 5);
+    igMetaObject_CreateFields(temp_s0, &g_igFogAttr_ctorTable[0], 5);
     temp_v0 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
     FUN_002dc7a0(temp_v0, &DAT_004866f8[0]);
     *(int *)((char *)(temp_v0) + 52) = (int)(&FUN_00149560);
@@ -59,6 +59,6 @@ void igFogAttr_InitFields(void) {
     sp[1] = 0.0f;
     sp[2] = 0.0f;
     FUN_0018e670(temp_a0, sp);
-    igMetaObject_NameFields(temp_s0, &DAT_004866a0[0], &DAT_004866c0[0], &DAT_004866e0[0], temp_s2);
+    igMetaObject_NameFields(temp_s0, &g_igFogAttr_fieldTable[0], &DAT_004866c0[0], &DAT_004866e0[0], temp_s2);
 }
 

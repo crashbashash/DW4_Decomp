@@ -60,19 +60,19 @@ void beHitLandModelInfo_InitFields(void) {
 
     temp_s0 = (void *)g_beHitLandModelInfo_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_004c6560[0], 4);
+    igMetaObject_CreateFields(temp_s0, &g_beHitLandModelInfo_ctorTable[0], 4);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
     ((igObjectRefMetaField *)temp_s1)->_metaObject = FUN_00196930();
     temp_s1_2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
     ((igObjectRefMetaField *)temp_s1_2)->_metaObject = FUN_00196930();
     temp_s1_3 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 2));
     ((igObjectRefMetaField *)temp_s1_3)->_metaObject = igObjectList_GetOrCreateMetaObject();
-    igMetaObject_NameFields(temp_s0, &DAT_004c6570[0], &DAT_004c6580[0], &DAT_004c6590[0], temp_s2);
+    igMetaObject_NameFields(temp_s0, &g_beHitLandModelInfo_fieldTable[0], &DAT_004c6580[0], &DAT_004c6590[0], temp_s2);
 }
 
 int FUN_0035d720(void) {
     if (DAT_00589348[0] == 0) {
-        DAT_00589348[0] = igMetaEnum_Create(&DAT_00501a58[0], &DAT_004c65a0[0], &DAT_004c65c0[0], 5);
+        DAT_00589348[0] = igMetaEnum_Create(&Message_2[0], &DAT_004c65a0[0], &DAT_004c65c0[0], 5);
     }
     return DAT_00589348[0];
 }

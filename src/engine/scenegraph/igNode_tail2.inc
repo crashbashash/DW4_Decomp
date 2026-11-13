@@ -24,7 +24,7 @@ void FUN_001c63e0(int arg0, int arg1) {
     int (*temp_v1)(int);
 
     if (GPR_00554b98 == 0) {
-        DAT_00562770[0] = (void *)(((void *)igMetaObject_FindFieldByName(g_igMetaField_metaObject[0], &DAT_004e4640[0])));
+        DAT_00562770[0] = (void *)(((void *)igMetaObject_FindFieldByName(g_igMetaField_metaObject[0], &text_invarianceFunction[0])));
         GPR_00554b98 = 1;
     }
     temp_v1 = (int (*)(int))(*(int *)(arg0 + *(int *)((char *)(DAT_00562770[0]) + 8)));

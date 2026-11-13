@@ -38,7 +38,7 @@ igMetaObject *Gap__Attrs__igTextureFunctionAttr__vfunc_22(void) {
 void Gap__Attrs__igTextureFunctionAttr__vfunc_26(igTextureFunctionAttr *arg0, void **arg1) {
     arg0->_mode = ((DW4VC_596_1 *)(arg1))->vX((int)(arg0->_unitID));
     if (DAT_0055f520[0] == 0) {
-        DAT_0055f520[0] = ((DW4VC_104_1 *)(arg1))->vX(&DAT_004d5e50[0]);
+        DAT_0055f520[0] = ((DW4VC_104_1 *)(arg1))->vX(&text_igMultiTextureExt[0]);
     }
 }
 

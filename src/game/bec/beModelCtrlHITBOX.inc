@@ -74,7 +74,7 @@ void beModelCtrlHITBOX_InitFields(void) {
 
     temp_s0 = (void *)g_beModelCtrlHITBOX_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_004c5700[0], 5);
-    igMetaObject_NameFields(temp_s0, &DAT_004c5720[0], &DAT_004c5740[0], &DAT_004c5760[0], temp_s1);
+    igMetaObject_CreateFields(temp_s0, &g_beModelCtrlHITBOX_ctorTable[0], 5);
+    igMetaObject_NameFields(temp_s0, &g_beModelCtrlHITBOX_fieldTable[0], &DAT_004c5740[0], &DAT_004c5760[0], temp_s1);
 }
 

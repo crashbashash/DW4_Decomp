@@ -75,16 +75,16 @@ void beLightCtrlInfo_InitFields(void) {
 
     temp_s0 = (void *)g_beLightCtrlInfo_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_004c6350[0], 1);
+    igMetaObject_CreateFields(temp_s0, &g_beLightCtrlInfo_ctorTable[0], 1);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
     ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_0035bb70();
     ((igRefMetaField *)temp_s1)->_construct = 1;
-    igMetaObject_NameFields(temp_s0, &DAT_004c6358[0], &DAT_004c6360[0], &DAT_004c6368[0], temp_s2);
+    igMetaObject_NameFields(temp_s0, &g_beLightCtrlInfo_fieldTable[0], &DAT_004c6360[0], &DAT_004c6368[0], temp_s2);
 }
 
 int FUN_0035bfb0(void) {
     if (DAT_00589248[0] == 0) {
-        DAT_00589248[0] = igMetaEnum_Create(&DAT_005016f0[0], &DAT_004c6370[0], &DAT_00589250[0], 1);
+        DAT_00589248[0] = igMetaEnum_Create(&MsgAction[0], &DAT_004c6370[0], &DAT_00589250[0], 1);
     }
     return DAT_00589248[0];
 }

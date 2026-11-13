@@ -86,7 +86,7 @@ void beNDMWStageCtl_InitFields(void) {
 
     temp_s0 = (void *)g_beNDMWStageCtl_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_004ca138[0], 1);
-    igMetaObject_NameFields(temp_s0, &DAT_004ca140[0], &DAT_004ca148[0], &DAT_004ca150[0], temp_s1);
+    igMetaObject_CreateFields(temp_s0, &g_beNDMWStageCtl_ctorTable[0], 1);
+    igMetaObject_NameFields(temp_s0, &g_beNDMWStageCtl_fieldTable[0], &DAT_004ca148[0], &DAT_004ca150[0], temp_s1);
 }
 

@@ -18,10 +18,10 @@ extern "C" int beMessenger_SendNamed(int, void *, int, int, void *);
 extern "C" int igObject_Destroy(...);
 extern "C" int g_beMeterCtrlInfo_metaObject[4];
 extern "C" int g_beMeterCtrl_metaObject[4];
-extern "C" char DAT_0050ee78[];
+extern "C" char METERCTRL_3[];
 extern "C" void Gap__Bec__beMeterCtrl__vfunc_29(beMeterCtrl * p0, int p1, char * p2);
-extern "C" int DAT_0050ee88[4];
-extern "C" int DAT_0050ee98[4];
+extern "C" int MODELCTRL_11[4];
+extern "C" int GETHP_2[4];
 extern "C" int Gap__Bec__beMeterCtrl__vfunc_33(beMeterCtrl *arg0, beBaseInfoRam *arg1, int arg2);
 
 void Gap__Bec__beMeterCtrl__vfunc_32(void)
@@ -35,7 +35,7 @@ int Gap__Bec__beMeterCtrl__vfunc_30(void)
 
 void Gap__Bec__beMeterCtrl__vfunc_29(beMeterCtrl * p0, int p1, char * p2)
 {
-    beMessenger_RegisterReceiverFromInfo(p0->_messenger, p1, DAT_0050ee78);
+    beMessenger_RegisterReceiverFromInfo(p0->_messenger, p1, METERCTRL_3);
 }
 
 int Gap__Bec__beMeterCtrl__vfunc_33(beMeterCtrl *arg0, beBaseInfoRam *arg1, int arg2) {
@@ -90,7 +90,7 @@ int Gap__Bec__beMeterCtrl__vfunc_33(beMeterCtrl *arg0, beBaseInfoRam *arg1, int 
         s3 = beMessenger_GetString(arg0->_messenger, 0);
         s0 = beMessenger_GetInt(arg0->_messenger, 0);
         beMessenger_PushArgContext(arg0->_messenger);
-        beMessenger_SendNamed(arg0->_messenger, &DAT_0050ee88[0], s3, s0, &DAT_0050ee98[0]);
+        beMessenger_SendNamed(arg0->_messenger, &MODELCTRL_11[0], s3, s0, &GETHP_2[0]);
         o = (igObject *)beMessenger_GetObject(arg0->_messenger, 0);
         if (o != 0) o->_refCount = o->_refCount + 1;
         {

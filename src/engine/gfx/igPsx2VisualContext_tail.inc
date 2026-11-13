@@ -1,13 +1,13 @@
 int FUN_001506b0(void) {
     if (DAT_0055ff78[0] == 0) {
-        DAT_0055ff78[0] = igMetaEnum_Create(&DAT_004dcf30[0], &DAT_00489230[0], &DAT_00489238[0], 2);
+        DAT_0055ff78[0] = igMetaEnum_Create(&IG_GFX_CLEARRENDERDESTINATION_TY[0], &DAT_00489230[0], &DAT_00489238[0], 2);
     }
     return DAT_0055ff78[0];
 }
 
 int FUN_00150710(void) {
     if (DAT_0055ff80[0] == 0) {
-        DAT_0055ff80[0] = igMetaEnum_Create(&DAT_004dcfb0[0], &DAT_00489240[0], &DAT_00489248[0], 2);
+        DAT_0055ff80[0] = igMetaEnum_Create(&IG_GFX_CLIPPING_TYPE_PSX2[0], &DAT_00489240[0], &DAT_00489248[0], 2);
     }
     return DAT_0055ff80[0];
 }
@@ -341,7 +341,7 @@ void igPsx2VisualContext_InitFields(void) {
 
     meta = (void *)(g_igPsx2VisualContext_metaObject[0]);
     base = igMetaObject_GetFieldCount(meta);
-    igMetaObject_CreateFields(meta, &DAT_00489270[0], 0x92);
+    igMetaObject_CreateFields(meta, &g_igPsx2VisualContext_ctorTable[0], 0x92);
     temp_s2 = igMetaObject_GetFieldAt(meta, base + 4);
     ((igObjectRefMetaField *)temp_s2)->_metaObject = igIntList_GetOrCreateMetaObject();
     FUN_002ea4b0(igMetaObject_GetFieldAt(meta, base + 5), -1);
@@ -575,7 +575,7 @@ void igPsx2VisualContext_InitFields(void) {
     ((igMetaField *)igMetaObject_GetFieldAt(meta, base + 0x8F))->_persistent = 0;
     ((igMetaField *)igMetaObject_GetFieldAt(meta, base + 0x90))->_persistent = 0;
     ((igMetaField *)igMetaObject_GetFieldAt(meta, base + 0x91))->_persistent = 0;
-    igMetaObject_NameFields(meta, &DAT_004894c0[0], &DAT_00489710[0], &DAT_00489960[0], base);
+    igMetaObject_NameFields(meta, &g_igPsx2VisualContext_fieldTable[0], &DAT_00489710[0], &DAT_00489960[0], base);
     *(int *)((char *)(g_igPsx2VisualContext_metaObject[0]) + 64) = (int)(&thunk_igVisualContext_GetMetaObject);
 }
 

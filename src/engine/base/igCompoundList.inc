@@ -47,13 +47,13 @@ void igCompoundList_InitFields(void) {
 
     temp_s0 = (void *)g_igCompoundList_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_00497b68[0], 3);
+    igMetaObject_CreateFields(temp_s0, &g_igCompoundList_ctorTable[0], 3);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 2));
     ((igMemoryRefMetaField *)temp_s1)->_memType = igUnsignedCharMetaField_GetDefaultDescriptor();
     ((igRefMetaField *)temp_s1)->_destruct = 1;
     ((igMemoryRefMetaField *)temp_s1)->_releaseOnCopy = 1;
     ((igMemoryRefMetaField *)temp_s1)->_releaseOnReset = 1;
-    igMetaObject_NameFields(temp_s0, &DAT_00497b78[0], &DAT_00497b88[0], &DAT_00497b98[0], temp_s2);
+    igMetaObject_NameFields(temp_s0, &g_igCompoundList_fieldTable[0], &DAT_00497b88[0], &DAT_00497b98[0], temp_s2);
 }
 
 igMetaObject *FUN_00225a30(void) {

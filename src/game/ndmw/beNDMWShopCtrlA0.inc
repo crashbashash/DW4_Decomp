@@ -78,12 +78,12 @@ void beNDMWShopCtrlA0_InitFields(void) {
 
     temp_s0 = (void *)g_beNDMWShopCtrlA0_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_004c9b50[0], 2);
+    igMetaObject_CreateFields(temp_s0, &g_beNDMWShopCtrlA0_ctorTable[0], 2);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
     ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_003b3730();
     temp_s1_2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
     ((igObjectRefMetaField *)temp_s1_2)->_metaObject = igIntList_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s1_2)->_construct = 1;
-    igMetaObject_NameFields(temp_s0, &DAT_004c9b58[0], &DAT_004c9b60[0], &DAT_004c9b68[0], temp_s2);
+    igMetaObject_NameFields(temp_s0, &g_beNDMWShopCtrlA0_fieldTable[0], &DAT_004c9b60[0], &DAT_004c9b68[0], temp_s2);
 }
 

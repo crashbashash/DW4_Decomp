@@ -49,7 +49,7 @@ void beNDMWItemInstant_InitFields(void) {
 
     temp_s0 = (void *)g_beNDMWItemInstant_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_004cc0a8[0], 1);
-    igMetaObject_NameFields(temp_s0, &DAT_004cc0b0[0], &DAT_004cc0b8[0], &DAT_004cc0c0[0], temp_s1);
+    igMetaObject_CreateFields(temp_s0, &g_beNDMWItemInstant_ctorTable[0], 1);
+    igMetaObject_NameFields(temp_s0, &g_beNDMWItemInstant_fieldTable[0], &DAT_004cc0b8[0], &DAT_004cc0c0[0], temp_s1);
 }
 

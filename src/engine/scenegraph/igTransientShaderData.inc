@@ -125,7 +125,7 @@ void igTransientShaderData_InitFields(void) {
     M *temp_s1;
 
     temp_s1 = (M *)(g_igTransientShaderData_metaObject[0]);
-    temp_v0 = (void **)(((void * *)igMetaObject_FindFieldByName(temp_s1, &DAT_004e1298[0])));
+    temp_v0 = (void **)(((void * *)igMetaObject_FindFieldByName(temp_s1, &text_attrPushLists[0])));
     temp_s2 = ObjectPointerList_FindIndex(temp_s1->f40, temp_v0);
     temp_s0 = (T_194b40 *)(((DW4VC_84_1 *)(temp_v0))->vX((int)(1)));
     temp_s0->f56 = FUN_0013abd0();
@@ -137,7 +137,7 @@ void igTransientShaderData_InitFields(void) {
     if (((unsigned long long)(long long)temp_s0->references & 0x7fffffULL) == 0) {
         igObject_Destroy((void *)temp_s0);
     }
-    temp_v0 = (void **)(((void * *)igMetaObject_FindFieldByName(temp_s1, &DAT_004e12a8[0])));
+    temp_v0 = (void **)(((void * *)igMetaObject_FindFieldByName(temp_s1, &text_attrPopLists[0])));
     temp_s2 = ObjectPointerList_FindIndex(temp_s1->f40, temp_v0);
     temp_s0 = (T_194b40 *)(((DW4VC_84_1 *)(temp_v0))->vX((int)(1)));
     temp_s0->f56 = FUN_0013abd0();
@@ -149,7 +149,7 @@ void igTransientShaderData_InitFields(void) {
     if (((unsigned long long)(long long)temp_s0->references & 0x7fffffULL) == 0) {
         igObject_Destroy((void *)temp_s0);
     }
-    temp_v0 = (void **)(((void * *)igMetaObject_FindFieldByName(temp_s1, &DAT_004e12b8[0])));
+    temp_v0 = (void **)(((void * *)igMetaObject_FindFieldByName(temp_s1, &text_dataPumps[0])));
     temp_s2 = ObjectPointerList_FindIndex(temp_s1->f40, temp_v0);
     temp_s0 = (T_194b40 *)(((DW4VC_84_1 *)(temp_v0))->vX((int)(1)));
     temp_s0->f56 = FUN_001e5690();
@@ -161,7 +161,7 @@ void igTransientShaderData_InitFields(void) {
     if (((unsigned long long)(long long)temp_s0->references & 0x7fffffULL) == 0) {
         igObject_Destroy((void *)temp_s0);
     }
-    temp_v0 = (void **)(((void * *)igMetaObject_FindFieldByName(temp_s1, &DAT_004e12c8[0])));
+    temp_v0 = (void **)(((void * *)igMetaObject_FindFieldByName(temp_s1, &text_childLists[0])));
     temp_s2 = ObjectPointerList_FindIndex(temp_s1->f40, temp_v0);
     temp_s0 = (T_194b40 *)(((DW4VC_84_1 *)(temp_v0))->vX((int)(1)));
     temp_s0->f56 = (int)FUN_0019ca30();

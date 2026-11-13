@@ -64,14 +64,14 @@ void beLayerGroup_GetMetaObject(void)
 
 int beLayerCtl_GetSwtCtlEnum(void) {
     if (DAT_00589288[0] == 0) {
-        DAT_00589288[0] = igMetaEnum_Create(&DAT_00504990[0], &DAT_004c63b0[0], &DAT_004c63d0[0], 5);
+        DAT_00589288[0] = igMetaEnum_Create(&SwtCtl[0], &DAT_004c63b0[0], &DAT_004c63d0[0], 5);
     }
     return DAT_00589288[0];
 }
 
 int beLayerCtl_GetMessageEnum(void) {
     if (DAT_00589290[0] == 0) {
-        DAT_00589290[0] = igMetaEnum_Create(&DAT_00501a58[0], &DAT_004c63f0[0], &DAT_004c6410[0], 6);
+        DAT_00589290[0] = igMetaEnum_Create(&Message_2[0], &DAT_004c63f0[0], &DAT_004c6410[0], 6);
     }
     return DAT_00589290[0];
 }

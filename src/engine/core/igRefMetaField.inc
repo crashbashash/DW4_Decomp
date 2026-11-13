@@ -37,8 +37,8 @@ void igRefMetaField_InitFields(void) {
 
     temp_s0 = (void *)g_igRefMetaField_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
-    igMetaObject_CreateFields((igMetaObject *)temp_s0, (igMetaField * (**)(void *))&DAT_004bf960[0], 2);
-    igMetaObject_NameFields((igMetaObject *)temp_s0, (const char **)&DAT_004bf968[0], (igMetaField ***)&DAT_004bf970[0], &DAT_004bf978[0], temp_s1);
+    igMetaObject_CreateFields((igMetaObject *)temp_s0, (igMetaField * (**)(void *))&g_igRefMetaField_ctorTable[0], 2);
+    igMetaObject_NameFields((igMetaObject *)temp_s0, (const char **)&g_igRefMetaField_fieldTable[0], (igMetaField ***)&DAT_004bf970[0], &DAT_004bf978[0], temp_s1);
 }
 
 void FUN_002bb930(void) {

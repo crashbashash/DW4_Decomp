@@ -149,9 +149,9 @@ void beWeapon_InitFields(void) {
 
     temp_s0 = (void *)g_beWeapon_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_004c3020[0], 1);
+    igMetaObject_CreateFields(temp_s0, &g_beWeapon_ctorTable[0], 1);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
     ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_0033f8f0();
-    igMetaObject_NameFields(temp_s0, &DAT_004c3028[0], &DAT_004c3030[0], &DAT_004c3038[0], temp_s2);
+    igMetaObject_NameFields(temp_s0, &g_beWeapon_fieldTable[0], &DAT_004c3030[0], &DAT_004c3038[0], temp_s2);
 }
 

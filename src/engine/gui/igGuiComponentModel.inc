@@ -72,7 +72,7 @@ void igGuiComponentModel_InitFields(void) {
 
     temp_s0 = (void *)g_igGuiComponentModel_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_004d04b0[0], 7);
+    igMetaObject_CreateFields(temp_s0, &g_igGuiComponentModel_ctorTable[0], 7);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
     *(int *)((char *)(temp_s1) + 56) = (int)FUN_0044ff40();
     *(char *)(60 + (char *)(temp_s1)) = 0;
@@ -82,6 +82,6 @@ void igGuiComponentModel_InitFields(void) {
     z.b = 0;
     z.c = 0;
     FUN_0018e470(temp_a0, &z);
-    igMetaObject_NameFields(temp_s0, &DAT_004d04d0[0], &DAT_004d04f0[0], &DAT_004d0510[0], temp_s2);
+    igMetaObject_NameFields(temp_s0, &g_igGuiComponentModel_fieldTable[0], &DAT_004d04f0[0], &DAT_004d0510[0], temp_s2);
 }
 

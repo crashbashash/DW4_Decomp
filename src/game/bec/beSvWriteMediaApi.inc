@@ -86,11 +86,11 @@ void beSvWriteMediaApi_InitFields(void) {
 
     temp_s0 = (void *)g_beSvWriteMediaApi_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_004c4078[0], 2);
+    igMetaObject_CreateFields(temp_s0, &g_beSvWriteMediaApi_ctorTable[0], 2);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
     ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_0034a210();
     temp_s1_2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
     ((igObjectRefMetaField *)temp_s1_2)->_metaObject = (int)FUN_0034ac90();
-    igMetaObject_NameFields(temp_s0, &DAT_004c4080[0], &DAT_004c4088[0], &DAT_004c4090[0], temp_s2);
+    igMetaObject_NameFields(temp_s0, &g_beSvWriteMediaApi_fieldTable[0], &DAT_004c4088[0], &DAT_004c4090[0], temp_s2);
 }
 

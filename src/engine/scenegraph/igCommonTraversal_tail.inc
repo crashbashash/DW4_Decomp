@@ -81,7 +81,7 @@ void igCommonTraversal_InitFields(void) {
 
     temp_s0 = (void *)g_igCommonTraversal_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_0048c7d0[0], 0x23);
+    igMetaObject_CreateFields(temp_s0, &g_igCommonTraversal_ctorTable[0], 0x23);
     temp_s2 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s1)));
     ((igObjectRefMetaField *)temp_s2)->_metaObject = (int)FUN_001a5330();
     ((igRefMetaField *)temp_s2)->_construct = 1;
@@ -204,7 +204,7 @@ void igCommonTraversal_InitFields(void) {
     FUN_0018c640(temp_s2_30, &b5o);
     ((igMetaField *)temp_s2_30)->_persistent = 0;
     ((igMetaField *)((void *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0x22)))->_persistent = 0;
-    igMetaObject_NameFields(temp_s0, &DAT_0048c860[0], &DAT_0048c8f0[0], &DAT_0048c980[0], temp_s1);
+    igMetaObject_NameFields(temp_s0, &g_igCommonTraversal_fieldTable[0], &DAT_0048c8f0[0], &DAT_0048c980[0], temp_s1);
     FUN_002fe480(&thunk_FUN_001b6c50);
 }
 

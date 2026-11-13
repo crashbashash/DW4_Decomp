@@ -86,7 +86,7 @@ void FUN_00301590(igObjectDirEntry *arg0, igMetaObject *arg1) {
         arg0->_typeMetaName = (int)s0;
     } else {
         void *pool = Pool::get();
-        s0 = ((char *)StringPool_Intern((StringPool *)pool, (const char *)DAT_004f6518));
+        s0 = ((char *)StringPool_Intern((StringPool *)pool, (const char *)NoMeta));
         SRel::go((char *)arg0->_typeMetaName);
         arg0->_typeMetaName = (int)s0;
     }

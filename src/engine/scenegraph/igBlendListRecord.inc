@@ -69,7 +69,7 @@ void igBlendListRecord_InitFields(void) {
 
     temp_s0 = (void *)g_igBlendListRecord_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_0048c5b8[0], 2);
+    igMetaObject_CreateFields(temp_s0, &g_igBlendListRecord_ctorTable[0], 2);
     temp_s1 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s2)));
     ((igObjectRefMetaField *)temp_s1)->_metaObject = FUN_001399d0();
     ((igMetaField *)temp_s1)->_persistent = 0;
@@ -77,6 +77,6 @@ void igBlendListRecord_InitFields(void) {
     ((igObjectRefMetaField *)temp_s1_2)->_metaObject = FUN_0013b070();
     ((igObjectRefMetaField *)temp_s1_2)->_refCounted = 0;
     ((igMetaField *)temp_s1_2)->_persistent = 0;
-    igMetaObject_NameFields(temp_s0, &DAT_0048c5c0[0], &DAT_0048c5c8[0], &DAT_0048c5d0[0], temp_s2);
+    igMetaObject_NameFields(temp_s0, &g_igBlendListRecord_fieldTable[0], &DAT_0048c5c8[0], &DAT_0048c5d0[0], temp_s2);
 }
 

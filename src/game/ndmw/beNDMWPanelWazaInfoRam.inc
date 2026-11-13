@@ -102,9 +102,9 @@ void beNDMWPanelWazaInfoRam_InitFields(void) {
 
     temp_s0 = (void *)g_beNDMWPanelWazaInfoRam_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_004ca460[0], 1);
+    igMetaObject_CreateFields(temp_s0, &g_beNDMWPanelWazaInfoRam_ctorTable[0], 1);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
     ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_003bdb50();
-    igMetaObject_NameFields(temp_s0, &DAT_004ca468[0], &DAT_004ca470[0], &DAT_004ca478[0], temp_s2);
+    igMetaObject_NameFields(temp_s0, &g_beNDMWPanelWazaInfoRam_fieldTable[0], &DAT_004ca470[0], &DAT_004ca478[0], temp_s2);
 }
 

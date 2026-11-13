@@ -59,15 +59,15 @@ void beMovieInfoData_InitFields(void) {
 
     temp_s0 = (void *)g_beMovieInfoData_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_004c4b30[0], 3);
+    igMetaObject_CreateFields(temp_s0, &g_beMovieInfoData_ctorTable[0], 3);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 2));
     ((igObjectRefMetaField *)temp_s1)->_metaObject = FUN_0019aee0();
-    igMetaObject_NameFields(temp_s0, &DAT_004c4b40[0], &DAT_004c4b50[0], &DAT_004c4b60[0], temp_s2);
+    igMetaObject_NameFields(temp_s0, &g_beMovieInfoData_fieldTable[0], &DAT_004c4b50[0], &DAT_004c4b60[0], temp_s2);
 }
 
 int FUN_0034eed0(void) {
     if (DAT_00588780[0] == 0) {
-        DAT_00588780[0] = igMetaEnum_Create(&DAT_00501a58[0], &DAT_004c4b70[0], &DAT_004c4b80[0], 4);
+        DAT_00588780[0] = igMetaEnum_Create(&Message_2[0], &DAT_004c4b70[0], &DAT_004c4b80[0], 4);
     }
     return DAT_00588780[0];
 }

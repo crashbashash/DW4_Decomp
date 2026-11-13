@@ -69,7 +69,7 @@ void beDataObjBool_InitFields(void) {
 
     temp_s0 = (void *)g_beDataObjBool_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_004c71d0[0], 1);
-    igMetaObject_NameFields(temp_s0, &DAT_004c71d8[0], &DAT_004c71e0[0], &DAT_004c71e8[0], temp_s1);
+    igMetaObject_CreateFields(temp_s0, &g_beDataObjBool_ctorTable[0], 1);
+    igMetaObject_NameFields(temp_s0, &g_beDataObjBool_fieldTable[0], &DAT_004c71e0[0], &DAT_004c71e8[0], temp_s1);
 }
 

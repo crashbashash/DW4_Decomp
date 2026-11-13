@@ -109,7 +109,7 @@ extern "C" int igAdxAudio_StartFile(struct A *arg0, int arg1);
 struct S_3323d0 { char pad[8]; int f8; char pad2[32]; int f44; };
 extern "C" void igAdxAudio_Shutdown(S_3323d0 *arg0);
 typedef struct R { char pad4[4]; int f4; } R;
-extern "C" int DAT_004ffe68[4];
+extern "C" int User0[4];
 typedef struct Obj { int w0; unsigned refs; } Obj;
 extern "C" int DAT_005873a8[4];
 extern "C" int DAT_005873b8[4];
@@ -125,16 +125,16 @@ class DW4VC_88_0 { public: virtual void d0(); virtual void d1(); virtual void d2
 extern "C" int g_igAdx_metaObject[4];
 extern "C" char DAT_005873d0[16];
 extern "C" int FUN_00280b98(struct Q_332860 *);
-extern "C" int DAT_004ffe70[4];
-extern "C" int DAT_004ffe80[4];
-extern "C" int DAT_004ffe90[4];
-extern "C" int DAT_004ffea0[4];
-extern "C" int DAT_004ffeb0[4];
-extern "C" int DAT_004ffee0[4];
-extern "C" int DAT_004fff10[4];
-extern "C" int DAT_004fff28[4];
-extern "C" int DAT_004fff40[4];
-extern "C" char DAT_004fff60[16];
+extern "C" int text_sdrdrv_irx[4];
+extern "C" int text_s_cri_adxi_irx[4];
+extern "C" int text_9_31s281_2[4];
+extern "C" int text_9_18_2[4];
+extern "C" int text_cri_ps2_iop_modules_cri_adxi_irx[4];
+extern "C" int text_usr_local_cri_ps2_mwlib_iop_drv[4];
+extern "C" int text_sdinit_0[4];
+extern "C" int text_s_sndfi_irx[4];
+extern "C" int text_cri_ps2_iop_modules_sndfi_irx[4];
+extern "C" char text_cdvd_fic[16];
 extern "C" int DAT_00587390[4];
 extern "C" int DAT_005873a0[4];
 extern "C" int DAT_005873a4[4];
@@ -346,7 +346,7 @@ void FUN_003324c0(void) {
     int temp_s0;
     R *old;
 
-    temp_s0 = Memory_GetAllocatorByName(&DAT_004ffe68[0]);
+    temp_s0 = Memory_GetAllocatorByName(&User0[0]);
     old = ((R * *)DAT_005875e0)[0];
     if (old != 0) {
         old->f4 = old->f4 - 1;
@@ -382,7 +382,7 @@ void FUN_00332530(void) {
     FUN_00280d20();
     FUN_0010b9c0(2);
     RemoveIntcHandler(2, DAT_005873c0[0]);
-    temp_s0 = Memory_GetAllocatorByName(&DAT_004ffe68[0]);
+    temp_s0 = Memory_GetAllocatorByName(&User0[0]);
     if (DAT_005873a8[0] != 0) {
         Memory_FreeBufferWithAllocator(DAT_005873a8[0], temp_s0);
         DAT_005873a8[0] = 0;
@@ -481,7 +481,7 @@ int FUN_00332860(void) {
         break;
     }
     GPR_005549b8 = 0;
-    FUN_0032cf50(&sp23C, &DAT_004ffe70[0], 1, 0, 0);
+    FUN_0032cf50(&sp23C, &text_sdrdrv_irx[0], 1, 0, 0);
     sceSdRemoteInit();
     sceSdRemote(1, 0x8000, 0);
     sceSdRemote(1, 0x8010, 0x980, 0x3FFF);
@@ -489,17 +489,17 @@ int FUN_00332860(void) {
     sceSdRemote(1, 0x8010, 0x981, 0x3FFF);
     sceSdRemote(1, 0x8010, 0xA81, 0x3FFF);
     if (DAT_005873d0[0] != 0) {
-        sprintf(sp30, &DAT_004ffe80[0], &DAT_005873d0[0]);
-    } else if (strcmp(&DAT_004ffe90[0], &DAT_004ffea0[0]) == 0) {
-        sprintf(sp30, &DAT_004ffeb0[0]);
+        sprintf(sp30, &text_s_cri_adxi_irx[0], &DAT_005873d0[0]);
+    } else if (strcmp(&text_9_31s281_2[0], &text_9_18_2[0]) == 0) {
+        sprintf(sp30, &text_cri_ps2_iop_modules_cri_adxi_irx[0]);
     } else {
-        sprintf(sp30, &DAT_004ffee0[0]);
+        sprintf(sp30, &text_usr_local_cri_ps2_mwlib_iop_drv[0]);
     }
-    FUN_0032cf50(&sp238, sp30, 0, 0x13, &DAT_004fff10[0]);
+    FUN_0032cf50(&sp238, sp30, 0, 0x13, &text_sdinit_0[0]);
     if (DAT_005873d0[0] != 0) {
-        sprintf(sp30, &DAT_004fff28[0], &DAT_005873d0[0]);
+        sprintf(sp30, &text_s_sndfi_irx[0], &DAT_005873d0[0]);
     } else {
-        sprintf(sp30, &DAT_004fff40[0]);
+        sprintf(sp30, &text_cri_ps2_iop_modules_sndfi_irx[0]);
     }
     FUN_0032cf50(&sp234, sp30, 0, 0, 0);
     memset(&sp20, 0, 0x10);
@@ -516,10 +516,10 @@ int FUN_00332860(void) {
     } else {
         FUN_0026b008(0);
     }
-    temp_s0 = Memory_GetAllocatorByName(&DAT_004ffe68[0]);
+    temp_s0 = Memory_GetAllocatorByName(&User0[0]);
     if ((*(unsigned char *)&g_adxUseFileInfoCache) != 0) {
         memset(&DAT_005873a0[0], 0, 0x10);
-        DAT_005873a0[0] = (int)&DAT_004fff60[0];
+        DAT_005873a0[0] = (int)&text_cdvd_fic[0];
         DAT_005873a4[0] = 0x20;
         DAT_005873ac[0] = ((DAT_005873a4[0] + 1) * 0xD) + 0x68;
         DAT_005873a8[0] = Memory_AllocateAlignedWithAllocator(DAT_005873ac[0], 0x10, temp_s0);
@@ -529,7 +529,7 @@ int FUN_00332860(void) {
         FUN_0026ac50(0);
         if ((*(unsigned char *)&g_adxUseFileInfoCache) != 0) {
             memset(&DAT_005873b0[0], 0, 0x10);
-            DAT_005873b0[0] = (int)&DAT_004fff60[0];
+            DAT_005873b0[0] = (int)&text_cdvd_fic[0];
             DAT_005873b4[0] = 0x20;
             DAT_005873bc[0] = ((DAT_005873b4[0] + 1) * 0xD) + 0x68;
             DAT_005873b8[0] = Memory_AllocateAlignedWithAllocator(DAT_005873bc[0], 0x10, temp_s0);
@@ -581,7 +581,7 @@ void igAdx_SetPartitionCount(int arg0) {
     int var_v1;
     T_332d20 *object;
 
-    temp_s2 = Memory_GetAllocatorByName(&DAT_004ffe68[0]);
+    temp_s2 = Memory_GetAllocatorByName(&User0[0]);
     if (((int *)DAT_005875f0)[0] != 0) {
         if (g_adxPartitionCount[0] > 0) {
             var_s1 = 0;
@@ -740,7 +740,7 @@ int igAdx_LoadPartition(int stream, const char *path, int mode, int length)
     if (!GPR_00554de8) return 0;
     size = ((length + 1) * 2 + 282) & ~3;
     if (size > 0) {
-        DAT_005875f0[0][stream] = ((void *)Memory_AllocateAlignedWithAllocator(size, 16, ((void *)Memory_GetAllocatorByName(((char *)DAT_004ffe68)))));
+        DAT_005875f0[0][stream] = ((void *)Memory_AllocateAlignedWithAllocator(size, 16, ((void *)Memory_GetAllocatorByName(((char *)User0)))));
     }
     igAdx_AddPartitionName(stream, (char *)path);
     name = StringList_CopyRetained(((int *)DAT_00587608)[0], stream).p;

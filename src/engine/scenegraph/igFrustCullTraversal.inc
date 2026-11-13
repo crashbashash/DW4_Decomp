@@ -488,7 +488,7 @@ void igFrustCullTraversal_InitFields(void) {
 
     temp_s1 = (void *)g_igFrustCullTraversal_metaObject[0];
     temp_s0 = igMetaObject_GetFieldCount(temp_s1);
-    igMetaObject_CreateFields(temp_s1, &DAT_0048c090[0], 7);
+    igMetaObject_CreateFields(temp_s1, &g_igFrustCullTraversal_ctorTable[0], 7);
     temp_s2 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s1, temp_s0)));
     o5.x = 0;
     o5.y = 0;
@@ -516,7 +516,7 @@ void igFrustCullTraversal_InitFields(void) {
     temp_s2_3 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s1, temp_s0 + 6)));
     ((igObjectRefMetaField *)temp_s2_3)->_metaObject = FUN_0018a6a0();
     ((igRefMetaField *)temp_s2_3)->_construct = 1;
-    igMetaObject_NameFields(temp_s1, &DAT_0048c0b0[0], &DAT_0048c0d0[0], &DAT_0048c0f0[0], temp_s0);
+    igMetaObject_NameFields(temp_s1, &g_igFrustCullTraversal_fieldTable[0], &DAT_0048c0d0[0], &DAT_0048c0f0[0], temp_s0);
     FUN_002fe480(&thunk_FUN_001c45d0);
 }
 

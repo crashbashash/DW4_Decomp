@@ -75,7 +75,7 @@ void igViewerParameters_InitFields(void) {
 
     temp_s0 = (void *)g_igViewerParameters_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_004d1040[0], 0x27);
+    igMetaObject_CreateFields(temp_s0, &g_igViewerParameters_ctorTable[0], 0x27);
     temp_s2 = (struct Fld *)igMetaObject_GetFieldAt(temp_s0, temp_s1);
     temp_s2->f56 = FUN_0019f210();
     temp_s2->f52 = 1;
@@ -109,6 +109,6 @@ void igViewerParameters_InitFields(void) {
     sp48[0] = 0;
     sp48[1] = 0;
     FUN_0018e2f0(temp_a0_2, sp48);
-    igMetaObject_NameFields(temp_s0, &DAT_004d10e0[0], &DAT_004d1180[0], &DAT_004d1220[0], temp_s1);
+    igMetaObject_NameFields(temp_s0, &g_igViewerParameters_fieldTable[0], &DAT_004d1180[0], &DAT_004d1220[0], temp_s1);
 }
 

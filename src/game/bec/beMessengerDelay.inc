@@ -58,10 +58,10 @@ void beMessengerDelay_InitFields(void) {
 
     temp_s0 = (void *)g_beMessengerDelay_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_004c5dc0[0], 7);
+    igMetaObject_CreateFields(temp_s0, &g_beMessengerDelay_ctorTable[0], 7);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 6));
     ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_00358dc0();
     ((igRefMetaField *)temp_s1)->_construct = 1;
-    igMetaObject_NameFields(temp_s0, &DAT_004c5de0[0], &DAT_004c5e00[0], &DAT_004c5e20[0], temp_s2);
+    igMetaObject_NameFields(temp_s0, &g_beMessengerDelay_fieldTable[0], &DAT_004c5e00[0], &DAT_004c5e20[0], temp_s2);
 }
 

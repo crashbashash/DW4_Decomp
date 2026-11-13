@@ -79,7 +79,7 @@ void igBoundingBoxRenderer_InitFields(void) {
 
     temp_s1 = (void *)g_igBoundingBoxRenderer_metaObject[0];
     temp_s0 = igMetaObject_GetFieldCount(temp_s1);
-    igMetaObject_CreateFields(temp_s1, &DAT_004d1940[0], 8);
+    igMetaObject_CreateFields(temp_s1, &g_igBoundingBoxRenderer_ctorTable[0], 8);
     temp_s2 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0));
     ((igObjectRefMetaField *)temp_s2)->_metaObject = (int)FUN_0045b420();
     temp_s2_2 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 1));
@@ -97,6 +97,6 @@ void igBoundingBoxRenderer_InitFields(void) {
     ((igObjectRefMetaField *)temp_s2_6)->_metaObject = FUN_00137850();
     temp_s2_7 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 6));
     ((igObjectRefMetaField *)temp_s2_7)->_metaObject = FUN_0019f670();
-    igMetaObject_NameFields(temp_s1, &DAT_004d1960[0], &DAT_004d1980[0], &DAT_004d19a0[0], temp_s0);
+    igMetaObject_NameFields(temp_s1, &g_igBoundingBoxRenderer_fieldTable[0], &DAT_004d1980[0], &DAT_004d19a0[0], temp_s0);
 }
 

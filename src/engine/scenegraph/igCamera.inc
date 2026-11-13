@@ -66,17 +66,17 @@ void igCamera_InitFields(void) {
 
     temp_s0 = (void *)g_igCamera_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_0048ca10[0], 7);
+    igMetaObject_CreateFields(temp_s0, &g_igCamera_ctorTable[0], 7);
     temp_v0 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s2)));
     FUN_002dc7a0(temp_v0, &DAT_0048ca90[0]);
     *(int *)((char *)(temp_v0) + 52) = (int)(&FUN_001a47d0);
     FUN_002e3810(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1)), 45.0f);
-    igMetaObject_NameFields(temp_s0, &DAT_0048ca30[0], &DAT_0048ca50[0], &DAT_0048ca70[0], temp_s2);
+    igMetaObject_NameFields(temp_s0, &g_igCamera_fieldTable[0], &DAT_0048ca50[0], &DAT_0048ca70[0], temp_s2);
 }
 
 int FUN_001a47d0(void) {
     if (DAT_00561ee0[0] == 0) {
-        DAT_00561ee0[0] = igMetaEnum_Create(&DAT_004e32e8[0], &DAT_0048ca98[0], &DAT_0048caa0[0], 2);
+        DAT_00561ee0[0] = igMetaEnum_Create(&CameraType[0], &DAT_0048ca98[0], &DAT_0048caa0[0], 2);
     }
     return DAT_00561ee0[0];
 }

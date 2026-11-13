@@ -499,8 +499,8 @@ void FUN_0032a600(A600 *arg0, int arg1) {
         spDC = e;
         e->w0 = *s1;
         spDC->w4 = out.b0;
-        FUN_0032a180((char *)spDC, &DAT_004ffa88[0]);
-        FUN_0032a1b0((char *)spDC, &DAT_004ffa98[0]);
+        FUN_0032a180((char *)spDC, &Section_Code[0]);
+        FUN_0032a1b0((char *)spDC, &Program[0]);
         List_InsertWords(arg1, FUN_002d6e60((L_2d6e60 *)arg1, &spDC, (Cmp)FUN_0032a260), 1, &spDC);
     }
     s1 = &out.a1;
@@ -510,8 +510,8 @@ void FUN_0032a600(A600 *arg0, int arg1) {
         spDC = e;
         e->w0 = *s1;
         spDC->w4 = out.b1;
-        FUN_0032a180((char *)spDC, &DAT_004ffaa0[0]);
-        FUN_0032a1b0((char *)spDC, &DAT_004ffa98[0]);
+        FUN_0032a180((char *)spDC, &Section_Data[0]);
+        FUN_0032a1b0((char *)spDC, &Program[0]);
         List_InsertWords(arg1, FUN_002d6e60((L_2d6e60 *)arg1, &spDC, (Cmp)FUN_0032a260), 1, &spDC);
     }
     s1 = &out.a2;
@@ -521,8 +521,8 @@ void FUN_0032a600(A600 *arg0, int arg1) {
         spDC = e;
         e->w0 = *s1;
         spDC->w4 = out.b2;
-        FUN_0032a180((char *)spDC, &DAT_004ffab0[0]);
-        FUN_0032a1b0((char *)spDC, &DAT_004ffa98[0]);
+        FUN_0032a180((char *)spDC, &Section_Initialized_Data[0]);
+        FUN_0032a1b0((char *)spDC, &Program[0]);
         List_InsertWords(arg1, FUN_002d6e60((L_2d6e60 *)arg1, &spDC, (Cmp)FUN_0032a260), 1, &spDC);
     }
     s1 = &out.a3;
@@ -532,8 +532,8 @@ void FUN_0032a600(A600 *arg0, int arg1) {
         spDC = e;
         e->w0 = *s1;
         spDC->w4 = out.b3;
-        FUN_0032a180((char *)spDC, &DAT_004ffad0[0]);
-        FUN_0032a1b0((char *)spDC, &DAT_004ffa98[0]);
+        FUN_0032a180((char *)spDC, &Section_Uninitialized_Data[0]);
+        FUN_0032a1b0((char *)spDC, &Program[0]);
         List_InsertWords(arg1, FUN_002d6e60((L_2d6e60 *)arg1, &spDC, (Cmp)FUN_0032a260), 1, &spDC);
     }
     s1 = &out.a4;
@@ -543,8 +543,8 @@ void FUN_0032a600(A600 *arg0, int arg1) {
         spDC = e;
         e->w0 = *s1;
         spDC->w4 = out.b4;
-        FUN_0032a180((char *)spDC, &DAT_004ffaf0[0]);
-        FUN_0032a1b0((char *)spDC, &DAT_004ffa98[0]);
+        FUN_0032a180((char *)spDC, &Section_Stack_Data[0]);
+        FUN_0032a1b0((char *)spDC, &Program[0]);
         List_InsertWords(arg1, FUN_002d6e60((L_2d6e60 *)arg1, &spDC, (Cmp)FUN_0032a260), 1, &spDC);
     }
 }
@@ -567,10 +567,10 @@ void FUN_0032a900(A900 *arg0, int arg1) {
             e->w0 = (i << 26) + (j << 12);
             spDC->w4 = s1 << 12;
             switch (s2) {
-            case 0: FUN_0032a180((char *)spDC, &DAT_004ffb08[0]); FUN_0032a1b0((char *)spDC, &DAT_004ffb18[0]); break;
-            case 1: FUN_0032a180((char *)spDC, &DAT_004ffb28[0]); FUN_0032a1b0((char *)spDC, &DAT_004ffb18[0]); break;
-            case 2: FUN_0032a180((char *)spDC, &DAT_004ffb38[0]); FUN_0032a1b0((char *)spDC, &DAT_004ffb18[0]); break;
-            case 3: FUN_0032a180((char *)spDC, &DAT_004ffb48[0]); FUN_0032a1b0((char *)spDC, &DAT_004ffb18[0]); break;
+            case 0: FUN_0032a180((char *)spDC, &Heap_Unknown[0]); FUN_0032a1b0((char *)spDC, &SystemHeap[0]); break;
+            case 1: FUN_0032a180((char *)spDC, &Heap_Free[0]); FUN_0032a1b0((char *)spDC, &SystemHeap[0]); break;
+            case 2: FUN_0032a180((char *)spDC, &Heap_Blocked[0]); FUN_0032a1b0((char *)spDC, &SystemHeap[0]); break;
+            case 3: FUN_0032a180((char *)spDC, &Heap_Allocated[0]); FUN_0032a1b0((char *)spDC, &SystemHeap[0]); break;
             }
             List_InsertWords(arg1, FUN_002d6e60((L_2d6e60 *)arg1, &spDC, (Cmp)FUN_0032a260), 1, &spDC);
         }
@@ -581,8 +581,8 @@ void FUN_0032a900(A900 *arg0, int arg1) {
         spDC = e;
         e->w0 = out.b;
         spDC->w4 = out.a;
-        FUN_0032a180((char *)spDC, &DAT_004ffb60[0]);
-        FUN_0032a1b0((char *)spDC, &DAT_004ffb18[0]);
+        FUN_0032a180((char *)spDC, &Heap_Free_from_top[0]);
+        FUN_0032a1b0((char *)spDC, &SystemHeap[0]);
         List_InsertWords(arg1, FUN_002d6e60((L_2d6e60 *)arg1, &spDC, (Cmp)FUN_0032a260), 1, &spDC);
     }
 }

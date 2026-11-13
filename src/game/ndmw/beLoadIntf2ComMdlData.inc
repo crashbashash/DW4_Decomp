@@ -86,7 +86,7 @@ void beLoadIntf2ComMdlData_InitFields(void) {
 
     temp_s0 = (void *)g_beLoadIntf2ComMdlData_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_004cbf28[0], 3);
-    igMetaObject_NameFields(temp_s0, &DAT_004cbf38[0], &DAT_004cbf48[0], &DAT_004cbf58[0], temp_s1);
+    igMetaObject_CreateFields(temp_s0, &g_beLoadIntf2ComMdlData_ctorTable[0], 3);
+    igMetaObject_NameFields(temp_s0, &g_beLoadIntf2ComMdlData_fieldTable[0], &DAT_004cbf48[0], &DAT_004cbf58[0], temp_s1);
 }
 

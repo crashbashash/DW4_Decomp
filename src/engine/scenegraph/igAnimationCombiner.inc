@@ -138,7 +138,7 @@ void igAnimationCombiner_InitFields(void) {
 
     temp_s0 = (void *)g_igAnimationCombiner_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_0048d360[0], 0xE);
+    igMetaObject_CreateFields(temp_s0, &g_igAnimationCombiner_ctorTable[0], 0xE);
     temp_s2 = ((struct Fld_1a88b0 *)igMetaObject_GetFieldAt(temp_s0, temp_s1));
     temp_s2->f56 = (int)FUN_001a7e20();
     temp_s2->f52 = 1;
@@ -172,7 +172,7 @@ void igAnimationCombiner_InitFields(void) {
     FUN_002ebc00(((struct Fld_1a88b0 *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0xA)), -1);
     FUN_002ebc00(((struct Fld_1a88b0 *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0xC)), 0x05F5E100);
     FUN_002ebc00(((struct Fld_1a88b0 *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0xD)), 0xFED260);
-    igMetaObject_NameFields(temp_s0, &DAT_0048d3a0[0], &DAT_0048d3e0[0], &DAT_0048d420[0], temp_s1);
+    igMetaObject_NameFields(temp_s0, &g_igAnimationCombiner_fieldTable[0], &DAT_0048d3e0[0], &DAT_0048d420[0], temp_s1);
     FUN_002fe480(&thunk_FUN_001abdf0);
 }
 

@@ -50,7 +50,7 @@ void beSaveUtilInfo_GetMetaObject(void)
 
 int FUN_00346c20(void) {
     if (DAT_00588018[0] == 0) {
-        DAT_00588018[0] = igMetaEnum_Create(&DAT_00501a58[0], &DAT_004c3c50[0], &DAT_004c3ca0[0], 0x12);
+        DAT_00588018[0] = igMetaEnum_Create(&Message_2[0], &DAT_004c3c50[0], &DAT_004c3ca0[0], 0x12);
     }
     return DAT_00588018[0];
 }

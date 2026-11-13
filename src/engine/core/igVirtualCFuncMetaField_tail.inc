@@ -2,7 +2,7 @@ int Gap__Core__igVirtualCFuncMetaField__vfunc_56(int arg0, int arg1, int arg2) {
     int sp1C;
 
     sp1C = 0;
-    sscanf(arg2, &DAT_004fb450[0], arg1, &sp1C);
+    sscanf(arg2, &text_0x_08x_n[0], arg1, &sp1C);
     return sp1C;
 }
 
@@ -11,7 +11,7 @@ void Gap__Core__igVirtualCFuncMetaField__vfunc_57(int *arg0, int arg1, int *arg2
     int var_v0;
     int var_v1;
 
-    sprintf(sp20, &DAT_004f95a8[0], *arg2);
+    sprintf(sp20, &text_0x_08x[0], *arg2);
     if (sp20 == 0) {
         var_v1 = 0;
     } else {
@@ -77,7 +77,7 @@ void FUN_0030f710(ArenaCheckPool *self, ArenaChunkBytes *h) {
                 if (self->errorLevel > 0 && self->checkLevel > 0 && (char *)h < low && self->checkLevel > 0) {
                     FUN_002f8870(0, (int)self);
                     if (GPR_00554c40 == 0) {
-                        r = FUN_003081d0(DAT_004fb570, h, DAT_004fb5c0, low);
+                        r = FUN_003081d0(text_igArenaMemoryPool_Invalid_or_cor, h, E3_Below_used_address_range, low);
                         if (r != 1 && r == 2) {
                             GPR_00554c40 = 1;
                         }
@@ -86,7 +86,7 @@ void FUN_0030f710(ArenaCheckPool *self, ArenaChunkBytes *h) {
                 if (self->errorLevel > 0 && self->checkLevel > 0 && high < (char *)h + total && self->checkLevel > 0) {
                     FUN_002f8870(0, (int)self);
                     if (GPR_00554c44 == 0) {
-                        r = FUN_003081d0(DAT_004fb570, h, DAT_004fb5e0, state->top);
+                        r = FUN_003081d0(text_igArenaMemoryPool_Invalid_or_cor, h, E4_Above_used_address_range, state->top);
                         if (r != 1 && r == 2) {
                             GPR_00554c44 = 1;
                         }
@@ -97,7 +97,7 @@ void FUN_0030f710(ArenaCheckPool *self, ArenaChunkBytes *h) {
             if (self->errorLevel > 0 && self->checkLevel > 0 && total < ((self->minimum + 7) & ~7) && self->checkLevel > 0) {
                 FUN_002f8870(0, (int)self);
                 if (GPR_00554c48 == 0) {
-                    r = FUN_003081d0(DAT_004fb570, h, DAT_004fb600, (self->minimum + 7) & ~7);
+                    r = FUN_003081d0(text_igArenaMemoryPool_Invalid_or_cor, h, E5_Block_size_less_than, (self->minimum + 7) & ~7);
                     if (r != 1 && r == 2) {
                         GPR_00554c48 = 1;
                     }
@@ -106,7 +106,7 @@ void FUN_0030f710(ArenaCheckPool *self, ArenaChunkBytes *h) {
             if (self->errorLevel > 0 && self->checkLevel > 0 && !h->inUse && self->checkLevel > 0) {
                 FUN_002f8870(0, (int)self);
                 if (GPR_00554c4c == 0) {
-                    r = FUN_003081d0(DAT_004fb620, h, DAT_004fb660);
+                    r = FUN_003081d0(text_igArenaMemoryPool_Invalid_or_cor_2, h, E6_Corrupted_header);
                     if (r != 1 && r == 2) {
                         GPR_00554c4c = 1;
                     }
@@ -116,7 +116,7 @@ void FUN_0030f710(ArenaCheckPool *self, ArenaChunkBytes *h) {
     } else if (self->errorLevel > 0 && self->checkLevel > 0 && isFreeChunk(h) != 0 && self->checkLevel > 0) {
         FUN_002f8870(0, (int)self);
         if (GPR_00554c50 == 0) {
-            r = FUN_003081d0(DAT_004fb620, h, DAT_004fb680);
+            r = FUN_003081d0(text_igArenaMemoryPool_Invalid_or_cor_2, h, E10_Corrupted_header);
             if (r != 1 && r == 2) {
                 GPR_00554c50 = 1;
             }
@@ -148,7 +148,7 @@ void FUN_003105c0(ArenaCheckPool *self, ArenaChunkBytes *h, int requested) {
                 if (self->errorLevel > 0 && self->checkLevel > 0 && (char *)h < low && self->checkLevel > 0) {
                     FUN_002f8870(0, (int)self);
                     if (GPR_00554c8c == 0) {
-                        r = FUN_003081d0(DAT_004fb570, h, DAT_004fb970, low);
+                        r = FUN_003081d0(text_igArenaMemoryPool_Invalid_or_cor, h, E25_Below_used_address_range, low);
                         if (r != 1 && r == 2) {
                             GPR_00554c8c = 1;
                         }
@@ -157,7 +157,7 @@ void FUN_003105c0(ArenaCheckPool *self, ArenaChunkBytes *h, int requested) {
                 if (self->errorLevel > 0 && self->checkLevel > 0 && high < (char *)h + total && self->checkLevel > 0) {
                     FUN_002f8870(0, (int)self);
                     if (GPR_00554c90 == 0) {
-                        r = FUN_003081d0(DAT_004fb570, h, DAT_004fb990, high);
+                        r = FUN_003081d0(text_igArenaMemoryPool_Invalid_or_cor, h, E26_Above_used_address_range, high);
                         if (r != 1 && r == 2) {
                             GPR_00554c90 = 1;
                         }
@@ -168,7 +168,7 @@ void FUN_003105c0(ArenaCheckPool *self, ArenaChunkBytes *h, int requested) {
             if (self->errorLevel > 0 && self->checkLevel > 0 && total < ((self->minimum + 7) & ~7) && self->checkLevel > 0) {
                 FUN_002f8870(0, (int)self);
                 if (GPR_00554c94 == 0) {
-                    r = FUN_003081d0(DAT_004fb570, h, DAT_004fb9b0, (self->minimum + 7) & ~7);
+                    r = FUN_003081d0(text_igArenaMemoryPool_Invalid_or_cor, h, E27_Block_size_less_than, (self->minimum + 7) & ~7);
                     if (r != 1 && r == 2) {
                         GPR_00554c94 = 1;
                     }
@@ -177,7 +177,7 @@ void FUN_003105c0(ArenaCheckPool *self, ArenaChunkBytes *h, int requested) {
             if (self->errorLevel > 0 && self->checkLevel > 0 && !h->inUse && self->checkLevel > 0) {
                 FUN_002f8870(0, (int)self);
                 if (GPR_00554c98 == 0) {
-                    r = FUN_003081d0(DAT_004fb620, h, DAT_004fb9d0);
+                    r = FUN_003081d0(text_igArenaMemoryPool_Invalid_or_cor_2, h, E28_Corrupted_header);
                     if (r != 1 && r == 2) {
                         GPR_00554c98 = 1;
                     }
@@ -187,7 +187,7 @@ void FUN_003105c0(ArenaCheckPool *self, ArenaChunkBytes *h, int requested) {
     } else if (self->errorLevel > 0 && self->checkLevel > 0 && isFreeChunk2(h) != 0 && self->checkLevel > 0) {
         FUN_002f8870(0, (int)self);
         if (GPR_00554c9c == 0) {
-            r = FUN_003081d0(DAT_004fb620, h, DAT_004fb9f0);
+            r = FUN_003081d0(text_igArenaMemoryPool_Invalid_or_cor_2, h, E32_Corrupted_header);
             if (r != 1 && r == 2) {
                 GPR_00554c9c = 1;
             }
@@ -196,7 +196,7 @@ void FUN_003105c0(ArenaCheckPool *self, ArenaChunkBytes *h, int requested) {
     if (self->errorLevel > 0 && self->checkLevel > 0 && total < ((self->minimum + 7) & ~7) && self->checkLevel > 0) {
         FUN_002f8870(0, (int)self);
         if (GPR_00554ca0 == 0) {
-            r = FUN_003081d0(DAT_004fb570, h, DAT_004fba10, total);
+            r = FUN_003081d0(text_igArenaMemoryPool_Invalid_or_cor, h, E33_Block_size_too_small_possibl, total);
             if (r != 1 && r == 2) {
                 GPR_00554ca0 = 1;
             }
@@ -205,7 +205,7 @@ void FUN_003105c0(ArenaCheckPool *self, ArenaChunkBytes *h, int requested) {
     if (self->errorLevel > 0 && self->checkLevel > 0 && ((int)((char *)h + (h->big == 0 ? 4 : 12)) & 7) && self->checkLevel > 0) {
         FUN_002f8870(0, (int)self);
         if (GPR_00554ca4 == 0) {
-            r = FUN_003081d0(DAT_004fb620, h, DAT_004fba50);
+            r = FUN_003081d0(text_igArenaMemoryPool_Invalid_or_cor_2, h, E34_Block_not_aligned_properly);
             if (r != 1 && r == 2) {
                 GPR_00554ca4 = 1;
             }
@@ -214,7 +214,7 @@ void FUN_003105c0(ArenaCheckPool *self, ArenaChunkBytes *h, int requested) {
     if (self->errorLevel > 0 && self->checkLevel > 0 && (int)(total - requested) < 0 && self->checkLevel > 0) {
         FUN_002f8870(0, (int)self);
         if (GPR_00554ca8 == 0) {
-            r = FUN_003081d0(DAT_004fb570, h, DAT_004fba80, total);
+            r = FUN_003081d0(text_igArenaMemoryPool_Invalid_or_cor, h, E35_Block_size_bad_possible_corr, total);
             if (r != 1 && r == 2) {
                 GPR_00554ca8 = 1;
             }
@@ -223,7 +223,7 @@ void FUN_003105c0(ArenaCheckPool *self, ArenaChunkBytes *h, int requested) {
     if (self->errorLevel > 0 && self->checkLevel > 0 && (int)(total - (requested + ((self->minimum + 7) & ~7))) >= 0 && self->checkLevel > 0) {
         FUN_002f8870(0, (int)self);
         if (GPR_00554cac == 0) {
-            r = FUN_003081d0(DAT_004fb570, h, DAT_004fbab0, total);
+            r = FUN_003081d0(text_igArenaMemoryPool_Invalid_or_cor, h, E36_Block_size_bad_possible_corr, total);
             if (r != 1 && r == 2) {
                 GPR_00554cac = 1;
             }
@@ -241,7 +241,7 @@ void FUN_00310b60(void *arg0, unsigned char *arg1, int extra2) {
         if ((temp_a0 > 0) && !(*arg1 & 1) && (temp_a0 > 0)) {
             FUN_002f8870(0, (int)arg0);
             if (DAT_00554cb0 == 0) {
-                temp_v0 = FUN_003081d0(DAT_004fb620, arg1, &DAT_004fbae0[0]);
+                temp_v0 = FUN_003081d0(text_igArenaMemoryPool_Invalid_or_cor_2, arg1, &E37_Corrupted_header[0]);
                 if ((temp_v0 != 1) && (temp_v0 == 2)) {
                     DAT_00554cb0 = 1;
                 }

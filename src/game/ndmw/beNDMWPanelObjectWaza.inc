@@ -73,8 +73,8 @@ void beNDMWPanelObjectWaza_InitFields(void) {
 
     temp_s1 = (void *)(((void * *)g_beNDMWPanelObjectWaza_metaObject)[0]);
     temp_s2 = igMetaObject_GetFieldCount(temp_s1);
-    igMetaObject_CreateFields(temp_s1, &DAT_004ca5f0[0], 2);
-    temp_v0 = (void **)(igMetaObject_FindFieldByName(temp_s1, &DAT_00511df8[0]));
+    igMetaObject_CreateFields(temp_s1, &g_beNDMWPanelObjectWaza_ctorTable[0], 2);
+    temp_v0 = (void **)(igMetaObject_FindFieldByName(temp_s1, &text_page[0]));
     temp_s3 = ObjectPointerList_FindIndex(((igMetaObject *)temp_s1)->_metaFields, temp_v0);
     temp_v0_2 = (igMetaField *)(((DW4VC_84_1 *)(temp_v0))->vX((int)(1)));
     FUN_002ea4b0(temp_v0_2, 0);
@@ -90,6 +90,6 @@ void beNDMWPanelObjectWaza_InitFields(void) {
     temp_s0_2 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s2 + 1));
     ((igObjectRefMetaField *)temp_s0_2)->_metaObject = igIntList_GetOrCreateMetaObject();
     ((igObjectRefMetaField *)temp_s0_2)->_construct = 1;
-    igMetaObject_NameFields(temp_s1, &DAT_004ca5f8[0], &DAT_004ca600[0], &DAT_004ca608[0], temp_s2);
+    igMetaObject_NameFields(temp_s1, &g_beNDMWPanelObjectWaza_fieldTable[0], &DAT_004ca600[0], &DAT_004ca608[0], temp_s2);
 }
 

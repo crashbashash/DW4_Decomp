@@ -57,9 +57,9 @@ void beCameraCtrlInfo_InitFields(void) {
 
     temp_s0 = (void *)g_beCameraCtrlInfo_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_004c7858[0], 1);
+    igMetaObject_CreateFields(temp_s0, &g_beCameraCtrlInfo_ctorTable[0], 1);
     f = igMetaObject_GetFieldAt(temp_s0, temp_s1);
     *(int *)((char *)f + 56) = g_igObject_metaObject[0];
-    igMetaObject_NameFields(temp_s0, &DAT_004c7860[0], &DAT_004c7868[0], &DAT_004c7870[0], temp_s1);
+    igMetaObject_NameFields(temp_s0, &g_beCameraCtrlInfo_fieldTable[0], &DAT_004c7868[0], &DAT_004c7870[0], temp_s1);
 }
 

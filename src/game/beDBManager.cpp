@@ -42,7 +42,7 @@ extern "C" char *beDataBase_GetRecordString(beDataBase *self, int record, const 
 extern "C" int beDataBase_GetRecordCount(beDataBase *self);
 extern "C" int g_beDBManagerInfo_metaObject[4];
 extern "C" int g_beDBManager_metaObject[4];
-extern "C" char DAT_005102a0[];
+extern "C" char DATABASE_9[];
 extern "C" void Gap__Bec__beDBManager__vfunc_29(beDBManager *p0, int p1, char *p2);
 extern "C" void Gap__Bec__beDBManager__vfunc_31(beDBManager *p0, int p1);
 extern "C" int Gap__Bec__beDBManager__vfunc_33(beDBManager *arg0, beBaseInfoRam *arg1, int arg2);
@@ -185,7 +185,7 @@ int Gap__Bec__beDBManager__vfunc_30(void)
 
 void Gap__Bec__beDBManager__vfunc_29(beDBManager *p0, int p1, char *p2)
 {
-    beMessenger_RegisterReceiverFromInfo(p0->_messenger, p1, DAT_005102a0);
+    beMessenger_RegisterReceiverFromInfo(p0->_messenger, p1, DATABASE_9);
 }
 
 void Gap__Bec__beDBManager__vfunc_31(beDBManager *p0, int p1)

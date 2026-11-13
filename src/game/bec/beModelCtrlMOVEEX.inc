@@ -71,7 +71,7 @@ void beModelCtrlMOVEEX_InitFields(void) {
 
     temp_s0 = (void *)g_beModelCtrlMOVEEX_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_004c57e0[0], 6);
-    igMetaObject_NameFields(temp_s0, &DAT_004c5800[0], &DAT_004c5820[0], &DAT_004c5840[0], temp_s1);
+    igMetaObject_CreateFields(temp_s0, &g_beModelCtrlMOVEEX_ctorTable[0], 6);
+    igMetaObject_NameFields(temp_s0, &g_beModelCtrlMOVEEX_fieldTable[0], &DAT_004c5820[0], &DAT_004c5840[0], temp_s1);
 }
 

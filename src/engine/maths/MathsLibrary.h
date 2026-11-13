@@ -43,7 +43,7 @@ int igMetaEnum_Create(...);
 
 extern int DAT_0048ad10[4];
 extern int DAT_0048ad30[4];
-extern int DAT_004e0960[4];
+extern int IG_MATH_SPATIAL_REGION[4];
 extern int DAT_00560f00[4];
 
 void FUN_00186e40(void);
@@ -199,8 +199,8 @@ int igMetaObject_GetFieldAt(...);
 int igMetaObject_GetFieldCount(...);
 int igMetaObject_NameFields(...);
 
-extern int DAT_0048ad70[4];
-extern int DAT_0048ad78[4];
+extern int g_igVec4fArrayMetaField_ctorTable[4];
+extern int g_igVec4fArrayMetaField_fieldTable[4];
 extern int DAT_0048ad80[4];
 extern int DAT_0048ad88[4];
 
@@ -258,8 +258,8 @@ void igSphere_InitFields(void);
 void FUN_0018e470(igVec3fMetaFieldView *self, const float *value);
 
 int FUN_002e3810(int, float);
-extern int DAT_0048ada0[4];
-extern int DAT_0048ada8[4];
+extern int g_igSphere_ctorTable[4];
+extern int g_igSphere_fieldTable[4];
 extern int DAT_0048adb0[4];
 extern int DAT_0048adb8[4];
 
@@ -294,8 +294,8 @@ extern char igRay_className[];
 
 void igRay_InitFields(void);
 
-extern int DAT_0048adc8[4];
-extern int DAT_0048add8[4];
+extern int g_igRay_ctorTable[4];
+extern int g_igRay_fieldTable[4];
 extern int DAT_0048ade8[4];
 extern int DAT_0048adf8[4];
 
@@ -313,8 +313,8 @@ extern char igPlane_className[];
 
 void igPlane_InitFields(void);
 
-extern int DAT_0048ae08[4];
-extern int DAT_0048ae18[4];
+extern int g_igPlane_ctorTable[4];
+extern int g_igPlane_fieldTable[4];
 extern int DAT_0048ae28[4];
 extern int DAT_0048ae38[4];
 
@@ -488,7 +488,7 @@ extern int igMatrix44fList_InitFields_00189b10[4];
 int ObjectPointerList_FindIndex(...);
 int igMetaObject_FinalizeAndReplaceField(...);
 void **igMetaObject_FindFieldByName(...);
-extern int DAT_004e0ca0[4];
+extern int text_data_2[4];
 extern int DAT_00561080[4];
 
 void FUN_00189b10(void);
@@ -587,8 +587,8 @@ extern char igAABox_className[];
 
 void igAABox_InitFields(void);
 
-extern int DAT_0048ae58[4];
-extern int DAT_0048ae60[4];
+extern int g_igAABox_ctorTable[4];
+extern int g_igAABox_fieldTable[4];
 extern int DAT_0048ae68[4];
 extern int DAT_0048ae70[4];
 
@@ -827,7 +827,7 @@ public:
 
 void igVec3fMetaField_SwapBytes(igVec3fMetaField *arg0, int arg1, int arg2);
 
-extern char DAT_004e0db8[];
+extern char text_f_f_f[];
 
 class igVec3fMetaFieldView {
 public:
@@ -842,7 +842,7 @@ public:
 void igVec4fArrayMetaField_SwapBytes(igVec4fArrayMetaField *arg0, int arg1, int arg2);
 void igVec4fMetaField_SwapBytes(igVec4fMetaField *arg0, int arg1, int arg2);
 
-extern char DAT_004e0dc8[];
+extern char text_f_f_f_f[];
 
 class igVec4fMetaFieldView {
 public:
@@ -858,7 +858,7 @@ void **igUnsignedCharMetaField_GetDefaultDescriptor(...);
 
 void igVec4ucMetaField_SwapBytes(igVec4ucMetaField *arg0, int arg1, int arg2);
 
-extern char DAT_004e0de0[];
+extern char text_uc_uc_uc_uc[];
 
 extern int * DAT_005610f8[4];
 extern int * DAT_00561100[4];

@@ -87,11 +87,11 @@ void igShaderInfo_InitFields(void) {
 
     temp_s0 = (void *)g_igShaderInfo_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_0048b620[0], 1);
+    igMetaObject_CreateFields(temp_s0, &g_igShaderInfo_ctorTable[0], 1);
     temp_s1 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s2)));
     *(int *)((char *)(temp_s1) + 56) = (int)FUN_00198fa0();
     *(char *)((char *)(temp_s1) + 52) = 1;
-    igMetaObject_NameFields(temp_s0, &DAT_0048b628[0], &DAT_0048b630[0], &DAT_0048b638[0], temp_s2);
+    igMetaObject_NameFields(temp_s0, &g_igShaderInfo_fieldTable[0], &DAT_0048b630[0], &DAT_0048b638[0], temp_s2);
     FUN_002fe480((int)thunk_FUN_001d8b90);
 }
 

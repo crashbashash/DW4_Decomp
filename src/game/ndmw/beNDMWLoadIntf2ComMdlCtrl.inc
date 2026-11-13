@@ -93,11 +93,11 @@ void beNDMWLoadIntf2ComMdlCtrl_InitFields(void) {
 
     temp_s1 = (void *)(((void * *)g_beNDMWLoadIntf2ComMdlCtrl_metaObject)[0]);
     temp_s2 = igMetaObject_GetFieldCount(temp_s1);
-    igMetaObject_CreateFields(temp_s1, &DAT_004cbee0[0], 4);
-    temp_v0 = (void **)(igMetaObject_FindFieldByName(temp_s1, &DAT_00510cd8[0]));
+    igMetaObject_CreateFields(temp_s1, &g_beNDMWLoadIntf2ComMdlCtrl_ctorTable[0], 4);
+    temp_v0 = (void **)(igMetaObject_FindFieldByName(temp_s1, &text_name_2[0]));
     temp_s3 = ObjectPointerList_FindIndex(((igMetaObject *)temp_s1)->_metaFields, temp_v0);
     temp_v0_2 = (void *)(((DW4VC_84_1 *)(temp_v0))->vX((int)(1)));
-    igStringMetaField_SetDefaultText(temp_v0_2, &DAT_00511b88[0]);
+    igStringMetaField_SetDefaultText(temp_v0_2, &COMMDLCTRL_4[0]);
     ((igStringMetaField *)temp_v0_2)->_externalEnumStorage = (int)(&DAT_0058be40[0]);
     igMetaObject_FinalizeAndReplaceField(temp_s1, temp_s3, temp_v0_2);
     ((igStringMetaField *)temp_v0_2)->_refCount = (int)((int) (((igStringMetaField *)temp_v0_2)->_refCount - 1));
@@ -113,6 +113,6 @@ void beNDMWLoadIntf2ComMdlCtrl_InitFields(void) {
     temp_s0_3 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s2 + 2));
     ((igObjectRefMetaField *)temp_s0_3)->_metaObject = (int)FUN_003c72c0();
     ((igObjectRefMetaField *)temp_s0_3)->_construct = 1;
-    igMetaObject_NameFields(temp_s1, &DAT_004cbef0[0], &DAT_004cbf00[0], &DAT_004cbf10[0], temp_s2);
+    igMetaObject_NameFields(temp_s1, &g_beNDMWLoadIntf2ComMdlCtrl_fieldTable[0], &DAT_004cbf00[0], &DAT_004cbf10[0], temp_s2);
 }
 

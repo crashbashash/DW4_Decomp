@@ -59,12 +59,12 @@ void igTextureUnloadAttr_InitFields(void) {
 
     temp_s0 = (void *)g_igTextureUnloadAttr_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_00485ab8[0], 2);
+    igMetaObject_CreateFields(temp_s0, &g_igTextureUnloadAttr_ctorTable[0], 2);
     temp_s1 = igMetaObject_GetFieldAt(temp_s0, temp_s2);
     *(int *)((char *)temp_s1 + 56) = (int)FUN_00132ba0();
     *(char *)((char *)temp_s1 + 60) = 0;
     temp_s3 = igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1);
     *(int *)((char *)temp_s3 + 48) = (int)FUN_00141840;
-    igMetaObject_NameFields(temp_s0, &DAT_00485ac0[0], &DAT_00485ac8[0], &DAT_00485ad0[0], temp_s2);
+    igMetaObject_NameFields(temp_s0, &g_igTextureUnloadAttr_fieldTable[0], &DAT_00485ac8[0], &DAT_00485ad0[0], temp_s2);
 }
 

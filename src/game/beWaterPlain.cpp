@@ -11,7 +11,7 @@ int igMatrix44f_SetIdentity(Mx *);
 int FUN_001906d0(Mx *, void *);
 int FUN_001c51b0(int, int, Mx *);
 extern int g_igViewerSceneInfoManager_metaObject[4];
-extern char DAT_0050fb88[];
+extern char WATERPLAIN[];
 extern int g_beWaterPlainInfo_metaObject[4];
 extern int g_beWaterPlain_metaObject[4];
 int FUN_00340c60(void);
@@ -105,7 +105,7 @@ int Gap__Bec__beWaterPlain__vfunc_30(void)
 
 void Gap__Bec__beWaterPlain__vfunc_29(beWaterPlain *p0, int p1, char *p2, int p3, int p4)
 {
-    beMessenger_RegisterReceiver(p0->_messenger, p1, DAT_0050fb88, 0, -1);
+    beMessenger_RegisterReceiver(p0->_messenger, p1, WATERPLAIN, 0, -1);
 }
 
 int Gap__Bec__beWaterPlain__vfunc_34(beWaterPlain *self, beWaterPlainInfoRam *ram, beMessengerWork *work) {

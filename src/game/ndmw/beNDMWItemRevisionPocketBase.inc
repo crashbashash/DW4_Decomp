@@ -39,7 +39,7 @@ void beNDMWItemRevisionPocketBase_InitFields(void) {
 
     temp_s0 = (void *)g_beNDMWItemRevisionPocketBase_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_004cc0e8[0], 1);
-    igMetaObject_NameFields(temp_s0, &DAT_004cc0f0[0], &DAT_004cc0f8[0], &DAT_004cc100[0], temp_s1);
+    igMetaObject_CreateFields(temp_s0, &g_beNDMWItemRevisionPocketBase_ctorTable[0], 1);
+    igMetaObject_NameFields(temp_s0, &g_beNDMWItemRevisionPocketBase_fieldTable[0], &DAT_004cc0f8[0], &DAT_004cc100[0], temp_s1);
 }
 

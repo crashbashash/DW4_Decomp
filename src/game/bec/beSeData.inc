@@ -55,7 +55,7 @@ void beSeData_InitFields(void) {
 
     temp_s0 = (void *)g_beSeData_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_004c3bd8[0], 2);
-    igMetaObject_NameFields(temp_s0, &DAT_004c3be0[0], &DAT_004c3be8[0], &DAT_004c3bf0[0], temp_s1);
+    igMetaObject_CreateFields(temp_s0, &g_beSeData_ctorTable[0], 2);
+    igMetaObject_NameFields(temp_s0, &g_beSeData_fieldTable[0], &DAT_004c3be8[0], &DAT_004c3bf0[0], temp_s1);
 }
 

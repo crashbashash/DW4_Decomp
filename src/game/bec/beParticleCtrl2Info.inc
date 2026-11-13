@@ -60,17 +60,17 @@ void beParticleCtrl2Info_InitFields(void) {
 
     temp_s0 = (void *)g_beParticleCtrl2Info_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_004c4630[0], 4);
+    igMetaObject_CreateFields(temp_s0, &g_beParticleCtrl2Info_ctorTable[0], 4);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
     ((igObjectRefMetaField *)temp_s1)->_metaObject = FUN_00196930();
     temp_s1_2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
     ((igObjectRefMetaField *)temp_s1_2)->_metaObject = FUN_00196930();
-    igMetaObject_NameFields(temp_s0, &DAT_004c4640[0], &DAT_004c4650[0], &DAT_004c4660[0], temp_s2);
+    igMetaObject_NameFields(temp_s0, &g_beParticleCtrl2Info_fieldTable[0], &DAT_004c4650[0], &DAT_004c4660[0], temp_s2);
 }
 
 int FUN_0034c5d0(void) {
     if (DAT_00588508[0] == 0) {
-        DAT_00588508[0] = igMetaEnum_Create(&DAT_00501a58[0], &DAT_004c4670[0], &DAT_004c4690[0], 8);
+        DAT_00588508[0] = igMetaEnum_Create(&Message_2[0], &DAT_004c4670[0], &DAT_004c4690[0], 8);
     }
     return DAT_00588508[0];
 }

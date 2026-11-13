@@ -124,10 +124,21 @@ def ident(cls):
     return re.sub(r"\W", "_", cls)
 
 
+# names a string's text cannot take as they are: C and C++ keywords and the literals they spell
+KEYWORDS = frozenset(
+    "asm auto bool break case catch char class const const_cast continue default delete do double "
+    "dynamic_cast else enum explicit export extern false float for friend goto if inline int long "
+    "mutable namespace new operator private protected public register reinterpret_cast return short "
+    "signed sizeof static static_cast struct switch template this throw true try typedef typeid "
+    "typename union unsigned using virtual void volatile wchar_t while NULL".split())
+
+
 def string_name(text, syms, types):
-    """A string's name is its text, unless that cannot name it: a leading digit, a function's name, or a
-    reflected type's name (a string "igInfoManager" next to the class igInfoManager)."""
-    taken = text[0].isdigit() or text in syms.values() or text in types
+    """A string's name is its text, unless that cannot name it: a leading digit, a keyword, a function's
+    name, a reflected type's name (a string "igInfoManager" next to the class igInfoManager), or a word
+    that starts lower-case (`size`, `showFrameRate`), the spelling of the parameters and locals that
+    would hide it."""
+    taken = (not text[0].isupper() or text in KEYWORDS or text in syms.values() or text in types)
     return "text_" + text if taken else text
 
 
@@ -146,15 +157,19 @@ def unique(name, va, rows, copies=False):
 
 
 def referenced():
-    found = set()
+    """The `DAT_` addresses the C reaches, and those it indexes (`DAT_x[2]`, an array declaration)."""
+    found, indexed = set(), set()
     for mod in SCOPE:
         # library units live in subfolders (src/engine/attrs/), with headers and .inc fragments
         for root, _, names in os.walk(os.path.join(ROOT, "src", mod)):
             for f in sorted(names):
                 if f.endswith((".c", ".cpp", ".h", ".inc")):
-                    for m in DAT.finditer(open(os.path.join(root, f), errors="replace").read()):
+                    text = open(os.path.join(root, f), errors="replace").read()
+                    for m in DAT.finditer(text):
                         found.add(int(m.group(1), 16))
-    return sorted(found)
+                        if text[m.end():m.end() + 1] == "[":
+                            indexed.add(int(m.group(1), 16))
+    return sorted(found), indexed
 
 
 def main():
@@ -180,10 +195,13 @@ def main():
     for va, cls in sorted(handle.items()):      # also read by absolute address: `*(int *)0x58a0e0`
         rows.setdefault(va, (unique("g_%s_metaObject" % ident(cls), va, rows), "class-handle"))
     types = {c["class"] for c in classes}
-    for va in referenced():
+    found, indexed = referenced()
+    for va in found:
         if va in rows and rows[va][1] != "function-symbol":
             continue    # a recorded name (seeded earlier or recovered by hand) stays; a function's follows its symbol
         sym = syms.get(va)
+        if sym and va in indexed:
+            continue    # code read as an array keeps its address name: the function's name declares a function
         if sym:
             name, rule = sym, "function-symbol"
         elif va in handle:

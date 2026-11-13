@@ -26,7 +26,7 @@ extern "C" int g_beNDMWAfsSetupInfo_metaObject[4];
 extern "C" int g_beCri_metaObject[4];
 extern "C" int g_beSystem_metaObject[4];
 extern "C" char emptyString[];
-extern "C" char DAT_00515710[];
+extern "C" char text_stagis08_igb[];
 extern "C" int Gap__Bec__beNDMWAfsSetup__vfunc_25(beNDMWAfsSetup *self, igObject *info);
 extern "C" int igInsightCore_RemoveFromScheduler(int, beNDMWAfsSetup *);
 extern "C" int List_Reserve(igDataList *, int, int);
@@ -76,7 +76,7 @@ int Gap__Bec__beNDMWAfsSetup__vfunc_25(beNDMWAfsSetup *self, igObject *info) {
             if (pool != 0) pool = StringPool_Construct(pool);
             g_stringPool[0] = pool;
         }
-        const char *token = StringPool_Intern(g_stringPool[0], DAT_00515710);
+        const char *token = StringPool_Intern(g_stringPool[0], text_stagis08_igb);
         const char *old = (const char *)system->_nextStage;
         if (old != 0) {
             int *header = (int *)old - 2;

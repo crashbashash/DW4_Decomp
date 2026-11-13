@@ -605,7 +605,7 @@ igResult_2e3a10 FUN_002e5ac0(void *arg1) {
 
 int Gap__Core__igIGBFile__vfunc_28(C23 *arg0, int arg1) {
     int *pp; Rel23 *t; Rel23 *t2; Rel23 *a; Rel23 *b;
-    FUN_00306e50(((LogContext * *)g_objectSystem)[0]->f56, 2, (const char *)DAT_004f9a80, (char *)((char *)arg0 + 0x42), 0, 0);
+    FUN_00306e50(((LogContext * *)g_objectSystem)[0]->f56, 2, (const char *)text_forceWriteMemoryPoolInfoFromMeta, (char *)((char *)arg0 + 0x42), 0, 0);
     igResult_2e3a10 sp7C = FUN_002e3e30((RecordFile *)arg0, arg1);
     pp = (int *)((int)&sp7C + 0);
     if (*pp == g_allocatorFailureStatus.v) return 0;
@@ -837,7 +837,7 @@ igResult_2e3a10 FUN_002e6f50(int *arg1) {
 }
 
 void FUN_002e7000(void) {
-    FUN_00306e50(*(int *)((char *)(((LogContext * *)g_objectSystem)[0]) + 56), 2, (const char *)DAT_004f9ac8, (char *)&GPR_00554c04, 0, 0);
+    FUN_00306e50(*(int *)((char *)(((LogContext * *)g_objectSystem)[0]) + 56), 2, (const char *)text_blindObjects, (char *)&GPR_00554c04, 0, 0);
 }
 
 igResult_2e3a10 FUN_002e7030(Z29 *arg1) {
@@ -1509,7 +1509,7 @@ igResult_2e3a10 FUN_002e9560(void *arg1) {
 
 int igIGBFile_ReadFile(File *self, int path) {
   int startTime;
-  sprintf(DAT_00586e20, DAT_004f9ad8, path);
+  sprintf(DAT_00586e20, text_readFile_s, path);
   startTime = DAT_005871d8[0]->now();
   self->loaded = 0;
   self->loading = 1;
@@ -1568,7 +1568,7 @@ int igIGBFile_ReadFile(File *self, int path) {
   self->loaded = 1;
   self->loading = 0;
   if (!GPR_00554c0c) {
-    int answer = FUN_00308240(DAT_004f9b90, path, dpsub(DAT_005871d8[0]->now(), startTime));
+    int answer = FUN_00308240(Total_Time_to_load_s_f_seconds, path, dpsub(DAT_005871d8[0]->now(), startTime));
     if (answer != 1 && answer == 2) GPR_00554c0c = 1;
   }
   return self->result;

@@ -83,7 +83,7 @@ void igPsx2VertexStream_InitFields(void) {
 
     temp_s0 = (void *)g_igPsx2VertexStream_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_00489c60[0], 0xA);
+    igMetaObject_CreateFields(temp_s0, &g_igPsx2VertexStream_ctorTable[0], 0xA);
     FUN_002d3890(igMetaObject_GetFieldAt(temp_s0, temp_s2), 1);
     *(char *)((char *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1)) + 38) = 0;
     f = igMetaObject_GetFieldAt(temp_s0, temp_s2 + 2);
@@ -93,7 +93,7 @@ void igPsx2VertexStream_InitFields(void) {
     *(int *)((char *)(temp_s1) + 60) = igUnsignedCharMetaField_GetDefaultDescriptor();
     temp_s1_2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 9));
     *(int *)((char *)(temp_s1_2) + 60) = igUnsignedCharMetaField_GetDefaultDescriptor();
-    igMetaObject_NameFields(temp_s0, &DAT_00489c90[0], &DAT_00489cc0[0], &DAT_00489cf0[0], temp_s2);
+    igMetaObject_NameFields(temp_s0, &g_igPsx2VertexStream_fieldTable[0], &DAT_00489cc0[0], &DAT_00489cf0[0], temp_s2);
 }
 
 void thunk_FUN_0017f5a0(void) {

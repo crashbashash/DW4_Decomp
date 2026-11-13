@@ -75,11 +75,11 @@ void igMediaFile_InitFields(void) {
 
     temp_s0 = (void *)g_igMediaFile_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
-    igMetaObject_CreateFields((igMetaObject *)temp_s0, (igMetaField * (**)(void *))&DAT_004c03e0[0], 9);
+    igMetaObject_CreateFields((igMetaObject *)temp_s0, (igMetaField * (**)(void *))&g_igMediaFile_ctorTable[0], 9);
     temp_s1 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 7)));
     ((igMemoryRefMetaField *)temp_s1)->_memType = igUnsignedCharMetaField_GetDefaultDescriptor();
     temp_s1_2 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 8)));
     ((igObjectRefMetaField *)temp_s1_2)->_metaObject = (int)FUN_002c16e0();
-    igMetaObject_NameFields((igMetaObject *)temp_s0, (const char **)&DAT_004c0410[0], (igMetaField ***)&DAT_004c0440[0], &DAT_004c0470[0], temp_s2);
+    igMetaObject_NameFields((igMetaObject *)temp_s0, (const char **)&g_igMediaFile_fieldTable[0], (igMetaField ***)&DAT_004c0440[0], &DAT_004c0470[0], temp_s2);
 }
 

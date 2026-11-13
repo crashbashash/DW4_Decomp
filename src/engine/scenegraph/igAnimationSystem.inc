@@ -46,9 +46,9 @@ void igAnimationSystem_InitFields(void) {
 
     temp_s0 = (void *)g_igAnimationSystem_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_0048cee0[0], 1);
+    igMetaObject_CreateFields(temp_s0, &g_igAnimationSystem_ctorTable[0], 1);
     temp_s1 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s2)));
     ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_001a7100();
-    igMetaObject_NameFields(temp_s0, &DAT_0048cee8[0], &DAT_0048cef0[0], &DAT_0048cef8[0], temp_s2);
+    igMetaObject_NameFields(temp_s0, &g_igAnimationSystem_fieldTable[0], &DAT_0048cef0[0], &DAT_0048cef8[0], temp_s2);
 }
 

@@ -92,9 +92,9 @@ void igEnumMetaField_InitFields(void) {
 
     temp_s0 = (void *)g_igEnumMetaField_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
-    igMetaObject_CreateFields((igMetaObject *)temp_s0, (igMetaField * (**)(void *))&DAT_004c0f70[0], 1);
+    igMetaObject_CreateFields((igMetaObject *)temp_s0, (igMetaField * (**)(void *))&g_igEnumMetaField_ctorTable[0], 1);
     *(char *)((char *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1))) + 38) = 0;
-    igMetaObject_NameFields((igMetaObject *)temp_s0, (const char **)&DAT_004c0f78[0], (igMetaField ***)&DAT_004c0f80[0], &DAT_004c0f88[0], temp_s1);
+    igMetaObject_NameFields((igMetaObject *)temp_s0, (const char **)&g_igEnumMetaField_fieldTable[0], (igMetaField ***)&DAT_004c0f80[0], &DAT_004c0f88[0], temp_s1);
 }
 
 void FUN_002c62b0(void) {

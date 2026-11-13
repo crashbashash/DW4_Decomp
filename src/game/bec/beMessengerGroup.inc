@@ -60,7 +60,7 @@ void beMessengerGroup_InitFields(void) {
 
     temp_s0 = (void *)g_beMessengerGroup_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_004c5d70[0], 3);
+    igMetaObject_CreateFields(temp_s0, &g_beMessengerGroup_ctorTable[0], 3);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
     ((igObjectRefMetaField *)temp_s1)->_metaObject = FUN_002b9120();
     ((igRefMetaField *)temp_s1)->_construct = 1;
@@ -70,6 +70,6 @@ void beMessengerGroup_InitFields(void) {
     temp_s1_3 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 2));
     ((igObjectRefMetaField *)temp_s1_3)->_metaObject = (int)beBaseInfoRamList_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s1_3)->_construct = 1;
-    igMetaObject_NameFields(temp_s0, &DAT_004c5d80[0], &DAT_004c5d90[0], &DAT_004c5da0[0], temp_s2);
+    igMetaObject_NameFields(temp_s0, &g_beMessengerGroup_fieldTable[0], &DAT_004c5d90[0], &DAT_004c5da0[0], temp_s2);
 }
 

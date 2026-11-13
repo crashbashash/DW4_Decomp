@@ -96,7 +96,7 @@ int FUN_001e6490(ValueBinding *binding, int selection) {
     binding->source->select(selection);
     binding->sink->write(binding->key, (int)binding->source + value->offset);
     if (DAT_00562c60[0] == 0) {
-        DAT_00562c60[0] = igMetaObject_FindFieldByName(g_igMetaField_metaObject[0], &DAT_004e4aa0[0]);
+        DAT_00562c60[0] = igMetaObject_FindFieldByName(g_igMetaField_metaObject[0], &text_invarianceFunction_2[0]);
     }
     Notify notify = *(Notify *)((char *)binding->sink + ((FieldDesc *)DAT_00562c60[0])->offset);
     if (notify != 0) {

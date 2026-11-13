@@ -57,7 +57,7 @@ void igMultiPassStateAttr_InitFields(void) {
 
     temp_s0 = (void *)g_igMultiPassStateAttr_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_00486200[0], 1);
-    igMetaObject_NameFields(temp_s0, &DAT_00486208[0], &DAT_00486210[0], &DAT_00486218[0], temp_s1);
+    igMetaObject_CreateFields(temp_s0, &g_igMultiPassStateAttr_ctorTable[0], 1);
+    igMetaObject_NameFields(temp_s0, &g_igMultiPassStateAttr_fieldTable[0], &DAT_00486210[0], &DAT_00486218[0], temp_s1);
 }
 

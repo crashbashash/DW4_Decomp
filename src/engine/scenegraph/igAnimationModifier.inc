@@ -1,6 +1,6 @@
 int FUN_001a7440(void) {
     if (DAT_005621f8[0] == 0) {
-        DAT_005621f8[0] = igMetaEnum_Create(&DAT_004e3c78[0], &DAT_0048d190[0], &DAT_0048d1a0[0], 4);
+        DAT_005621f8[0] = igMetaEnum_Create(&ModifierType[0], &DAT_0048d190[0], &DAT_0048d1a0[0], 4);
     }
     return DAT_005621f8[0];
 }
@@ -77,13 +77,13 @@ void igAnimationModifier_InitFields(void) {
 
     temp_s0 = (void *)g_igAnimationModifier_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_0048d1b8[0], 3);
+    igMetaObject_CreateFields(temp_s0, &g_igAnimationModifier_ctorTable[0], 3);
     FUN_002ea4b0(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s2)), -1);
     temp_s1 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1)));
     ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_00196190();
     temp_v0 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s2 + 2)));
     FUN_002dc7a0(temp_v0, &DAT_0048d1f8[0]);
     ((igEnumMetaField *)temp_v0)->_getMetaEnumFunction = (int)(FUN_001a7440);
-    igMetaObject_NameFields(temp_s0, &DAT_0048d1c8[0], &DAT_0048d1d8[0], &DAT_0048d1e8[0], temp_s2);
+    igMetaObject_NameFields(temp_s0, &g_igAnimationModifier_fieldTable[0], &DAT_0048d1d8[0], &DAT_0048d1e8[0], temp_s2);
 }
 

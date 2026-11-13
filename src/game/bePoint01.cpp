@@ -16,7 +16,7 @@ extern "C" int beMessenger_GetInt(int, int);
 extern "C" unsigned int beMessenger_ResolveEnumValue(int, int, int);
 extern "C" int g_bePoint01Info_metaObject[4];
 extern "C" int g_bePoint01_metaObject[4];
-extern "C" char DAT_0050f6e0[];
+extern "C" char PLAYERPOINT_4[];
 extern "C" void Gap__Bec__bePoint01__vfunc_29(bePoint01 * p0, int p1, char * p2);
 extern "C" int DAT_004e0ef0[4];
 extern "C" void FUN_0039c1c0(bePoint01 *arg0, bePoint01Info *arg1, int arg2, int arg3);
@@ -34,7 +34,7 @@ int Gap__Bec__bePoint01__vfunc_30(void)
 
 void Gap__Bec__bePoint01__vfunc_29(bePoint01 * p0, int p1, char * p2)
 {
-    beMessenger_RegisterReceiverFromInfo(p0->_messenger, p1, DAT_0050f6e0);
+    beMessenger_RegisterReceiverFromInfo(p0->_messenger, p1, PLAYERPOINT_4);
 }
 
 void Gap__Bec__bePoint01__vfunc_31(void)

@@ -1,6 +1,6 @@
 int FUN_00147030(void) {
     if (DAT_0055f758[0] == 0) {
-        DAT_0055f758[0] = igMetaEnum_Create(&DAT_004d6e30[0], &DAT_00487580[0], &DAT_004875a0[0], 8);
+        DAT_0055f758[0] = igMetaEnum_Create(&ControllerPhase[0], &DAT_00487580[0], &DAT_004875a0[0], 8);
     }
     return DAT_0055f758[0];
 }
@@ -77,7 +77,7 @@ void igPsx2Controller_InitFields(void) {
 
     temp_s0 = (void *)g_igPsx2Controller_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_004875d0[0], 0x18);
+    igMetaObject_CreateFields(temp_s0, &g_igPsx2Controller_ctorTable[0], 0x18);
     FUN_002ea4b0(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 3), 0x10);
     FUN_0030eda0(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 4), 2);
     temp_s2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 5));
@@ -97,7 +97,7 @@ void igPsx2Controller_InitFields(void) {
     FUN_002dc7a0(temp_v0_2, &DAT_00487758[0]);
     *(int *)((char *)(temp_v0_2) + 52) = (int)(&FUN_00147030);
     FUN_002d3890(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0x15), 1);
-    igMetaObject_NameFields(temp_s0, &DAT_00487630[0], &DAT_00487690[0], &DAT_004876f0[0], temp_s1);
+    igMetaObject_NameFields(temp_s0, &g_igPsx2Controller_fieldTable[0], &DAT_00487690[0], &DAT_004876f0[0], temp_s1);
 }
 
 int FUN_00147430(void *arg0, int arg1) {

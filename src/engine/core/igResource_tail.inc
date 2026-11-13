@@ -224,11 +224,11 @@ void FUN_00309fe0(int arg0) {
     void *s1;
     Rc_309fe0 *sp5C;
     if (arg0 != 0) {
-        s0m = igObjectSystem_FindMetaByNameDefault((const char *)&DAT_004fb3b0[0]);
+        s0m = igObjectSystem_FindMetaByNameDefault((const char *)&text_igNode[0]);
         if (s0m != 0) {
-            s1 = ((void *)FUN_002d8eb0(arg0, (int)&DAT_004f9a50[0]));
+            s1 = ((void *)FUN_002d8eb0(arg0, (int)&text_root[0]));
             if (s1 != 0 && igObject_IsKindOf(s1, (igMetaObject *)s0m) != 0) {
-                s1m = igObjectSystem_FindMetaByNameDefault((const char *)&DAT_004fb3b8[0]);
+                s1m = igObjectSystem_FindMetaByNameDefault((const char *)&text_igSceneInfo[0]);
                 if (s1m != 0) {
                     Rc_309fe0 *t;
                     Fld_309fe0 *f1, *f2, *f3;
@@ -241,10 +241,10 @@ void FUN_00309fe0(int arg0) {
                         u->refs = u->refs - 1;
                         if (((unsigned long long)(long long)u->refs & 0x7fffffULL) == 0) igObject_Destroy(u);
                     }
-                    f1 = c.Cast(igMetaObject_FindFieldByName((igMetaObject *)(((V88_309fe0 *)sp5C)->vX()), (const char *)&DAT_004fb3c8[0]));
+                    f1 = c.Cast(igMetaObject_FindFieldByName((igMetaObject *)(((V88_309fe0 *)sp5C)->vX()), (const char *)&text_sceneGraph[0]));
                     igObjectRefMetaField_Assign((igObjectRefMetaField *)f1, (void *)sp5C, (igObject *)s1);
-                    f2 = c.Cast(igMetaObject_FindFieldByName((igMetaObject *)(((V88_309fe0 *)sp5C)->vX()), (const char *)&DAT_004fb3d8[0]));
-                    f3 = c.Cast(igMetaObject_FindFieldByName((igMetaObject *)(((V88_309fe0 *)sp5C)->vX()), (const char *)&DAT_004fb3f0[0]));
+                    f2 = c.Cast(igMetaObject_FindFieldByName((igMetaObject *)(((V88_309fe0 *)sp5C)->vX()), (const char *)&text_cameras[0]));
+                    f3 = c.Cast(igMetaObject_FindFieldByName((igMetaObject *)(((V88_309fe0 *)sp5C)->vX()), (const char *)&text_sceneGraphList[0]));
                     l = c.CastL(*(void **)((char *)sp5C + f3->off));
                     if (l != 0) ObjectList_AppendUniqueRetained((igTDataList<igObject *> *)l, (igObject *)s1);
                     igObjectRefMetaField_Assign((igObjectRefMetaField *)f2, (void *)sp5C, (igObject *)0);

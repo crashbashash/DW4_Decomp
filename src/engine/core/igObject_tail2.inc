@@ -257,7 +257,7 @@ void igObject_InitFields(void) {
     temp_v0 = ((igUnsignedIntMetaField *)igUnsignedIntMetaField_Create((int)(((void **)Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0])))));
     temp_v0->_offset = 4;
     temp_v0->_externalEnumStorage = (int)(&DAT_005871a0[0]);
-    if (&DAT_004faf40[0] == 0) {
+    if (&text_refCount[0] == 0) {
         var_v0 = (void *)(0);
     } else {
         if (g_stringPool[0] == 0) {
@@ -267,7 +267,7 @@ void igObject_InitFields(void) {
             }
             g_stringPool[0] = var_v0_2;
         }
-        var_v0 = (void *)(((void *)StringPool_Intern((StringPool *)g_stringPool[0], (const char *)&DAT_004faf40[0])));
+        var_v0 = (void *)(((void *)StringPool_Intern((StringPool *)g_stringPool[0], (const char *)&text_refCount[0])));
     }
     sp2C = (void *)(var_v0);
     igMetaField_SetFieldName((igMetaField *)temp_v0, &sp2C);
@@ -289,7 +289,7 @@ void igObject_InitFields(void) {
     temp_v0_3 = ((igUnsignedIntMetaField *)igUnsignedIntMetaField_Create((int)(((void **)Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0])))));
     temp_v0_3->_offset = 4;
     temp_v0_3->_externalEnumStorage = (int)(&DAT_005871a8[0]);
-    if (&DAT_004faf50[0] == 0) {
+    if (&text_memPoolIndex[0] == 0) {
         var_v0_3 = (void *)(0);
     } else {
         if (g_stringPool[0] == 0) {
@@ -299,7 +299,7 @@ void igObject_InitFields(void) {
             }
             g_stringPool[0] = var_v0_4;
         }
-        var_v0_3 = (void *)(((void *)StringPool_Intern((StringPool *)g_stringPool[0], (const char *)&DAT_004faf50[0])));
+        var_v0_3 = (void *)(((void *)StringPool_Intern((StringPool *)g_stringPool[0], (const char *)&text_memPoolIndex[0])));
     }
     sp28 = (void *)(var_v0_3);
     igMetaField_SetFieldName((igMetaField *)temp_v0_3, &sp28);

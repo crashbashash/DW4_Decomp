@@ -75,7 +75,7 @@ void beSvReadMediaApi_InitFields(void) {
 
     temp_s0 = (void *)g_beSvReadMediaApi_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_004c40b0[0], 5);
+    igMetaObject_CreateFields(temp_s0, &g_beSvReadMediaApi_ctorTable[0], 5);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
     ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_0034a210();
     temp_s1_2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
@@ -87,6 +87,6 @@ void beSvReadMediaApi_InitFields(void) {
     temp_s1_4 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 4));
     ((igObjectRefMetaField *)temp_s1_4)->_metaObject = igObjectList_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s1_4)->_construct = 1;
-    igMetaObject_NameFields(temp_s0, &DAT_004c40d0[0], &DAT_004c40f0[0], &DAT_004c4110[0], temp_s2);
+    igMetaObject_NameFields(temp_s0, &g_beSvReadMediaApi_fieldTable[0], &DAT_004c40f0[0], &DAT_004c4110[0], temp_s2);
 }
 

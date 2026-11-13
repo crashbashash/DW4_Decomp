@@ -124,27 +124,27 @@ extern char DAT_004ff930[];
 extern char DAT_004ff960[];
 extern char DAT_004ff990[];
 extern char DAT_004ff9c0[];
-extern char DAT_004ff9f0[];
+extern char Memory_Map[];
 extern char DAT_004ffa00[];
 extern char DAT_004ffa10[];
-extern char DAT_004ffa30[];
-extern char DAT_004ffa38[];
-extern char DAT_004fac08[];
-extern char DAT_004ffa40[];
-extern char DAT_004ffa50[];
+extern char Start[];
+extern char End[];
+extern char Size[];
+extern char Pool_Name[];
+extern char Annotation[];
 extern char DAT_004ffa60[];
-extern int DAT_004ffa88[4];
-extern int DAT_004ffa98[4];
-extern int DAT_004ffaa0[4];
-extern int DAT_004ffab0[4];
-extern int DAT_004ffad0[4];
-extern int DAT_004ffaf0[4];
-extern int DAT_004ffb08[4];
-extern int DAT_004ffb18[4];
-extern int DAT_004ffb28[4];
-extern int DAT_004ffb38[4];
-extern int DAT_004ffb48[4];
-extern int DAT_004ffb60[4];
+extern int Section_Code[4];
+extern int Program[4];
+extern int Section_Data[4];
+extern int Section_Initialized_Data[4];
+extern int Section_Uninitialized_Data[4];
+extern int Section_Stack_Data[4];
+extern int Heap_Unknown[4];
+extern int SystemHeap[4];
+extern int Heap_Free[4];
+extern int Heap_Blocked[4];
+extern int Heap_Allocated[4];
+extern int Heap_Free_from_top[4];
 }
 
 struct DumpObjectRef {
@@ -263,7 +263,7 @@ void FUN_0032a280(DumpOwner *self, char *title, char *path, int a, int b, int c,
     int i;
     int count;
     DumpObjectRef list;
-    FUN_00304430(DAT_004ffa00, title == 0 ? DAT_004ff9f0 : title);
+    FUN_00304430(DAT_004ffa00, title == 0 ? Memory_Map : title);
     FUN_00304680();
     self->Describe(text);
     list.obj = FUN_002c9130(Memory_GetAllocatorBySelector(DAT_00587030[0]));
@@ -299,7 +299,7 @@ void FUN_0032a280(DumpOwner *self, char *title, char *path, int a, int b, int c,
         ((DumpSnapshotFile *)file.obj)->Write(path);
         ((DumpSnapshotFile *)file.obj)->End();
     }
-    FUN_00304430(DAT_004ffa10, DAT_004ffa30, DAT_004ffa38, DAT_004fac08, DAT_004ffa40, DAT_004ffa50);
+    FUN_00304430(DAT_004ffa10, Start, End, Size, Pool_Name, Annotation);
     FUN_00304680();
     for (i = 0; i < count; i++) {
         DumpRegion *e = (DumpRegion *)list.obj->data[i];

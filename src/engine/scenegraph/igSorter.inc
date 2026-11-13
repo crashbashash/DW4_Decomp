@@ -300,7 +300,7 @@ void igSorter_InitFields(void) {
 
     temp_s0 = (void *)g_igSorter_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_0048b270[0], 0x24);
+    igMetaObject_CreateFields(temp_s0, &g_igSorter_ctorTable[0], 0x24);
     temp_s2 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s1)));
     ((igObjectRefMetaField *)temp_s2)->_metaObject = FUN_00137fb0();
     ((igObjectRefMetaField *)temp_s2)->_construct = 1;
@@ -379,6 +379,6 @@ void igSorter_InitFields(void) {
     ((igObjectRefMetaField *)temp_s2_26)->_metaObject = (int)FUN_00197af0();
     ((igObjectRefMetaField *)temp_s2_26)->_refCounted = 0;
     *(char *)((char *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0x23))) + 38) = 0;
-    igMetaObject_NameFields(temp_s0, &DAT_0048b300[0], &DAT_0048b390[0], &DAT_0048b420[0], temp_s1);
+    igMetaObject_NameFields(temp_s0, &g_igSorter_fieldTable[0], &DAT_0048b390[0], &DAT_0048b420[0], temp_s1);
 }
 

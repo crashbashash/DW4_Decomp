@@ -83,7 +83,7 @@ void __internalNonRefCountedObjectList_InitFields(void) {
 
     temp_s0 = (void *)g___internalNonRefCountedObjectList_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
-    igMetaObject_CreateFields((igMetaObject *)temp_s0, (igMetaField * (**)(void *))&DAT_004c05c0[0], 2);
+    igMetaObject_CreateFields((igMetaObject *)temp_s0, (igMetaField * (**)(void *))&g___internalNonRefCountedObjectList_ctorTable[0], 2);
     temp_s1 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2)));
     ((igMemoryRefMetaField *)temp_s1)->_memType = igObjectRefMetaField_GetDefaultDescriptor();
     ((igMemoryRefMetaField *)temp_s1)->_memSize = 0x40;
@@ -92,6 +92,6 @@ void __internalNonRefCountedObjectList_InitFields(void) {
     ((igMemoryRefMetaField *)temp_s1)->_releaseOnCopy = 1;
     ((igMemoryRefMetaField *)temp_s1)->_releaseOnReset = 1;
     ((igMemoryRefMetaField *)temp_s1)->_refCounted = 0;
-    igMetaObject_NameFields((igMetaObject *)temp_s0, (const char **)&DAT_004c05c8[0], (igMetaField ***)&DAT_004c05d0[0], &DAT_004c05d8[0], temp_s2);
+    igMetaObject_NameFields((igMetaObject *)temp_s0, (const char **)&g___internalNonRefCountedObjectList_fieldTable[0], (igMetaField ***)&DAT_004c05d0[0], &DAT_004c05d8[0], temp_s2);
 }
 

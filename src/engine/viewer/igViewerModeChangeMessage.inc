@@ -74,7 +74,7 @@ void igViewerModeChangeMessage_InitFields(void) {
 
     temp_s0 = (void *)g_igViewerModeChangeMessage_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_004d0e18[0], 2);
-    igMetaObject_NameFields(temp_s0, &DAT_004d0e20[0], &DAT_004d0e28[0], &DAT_004d0e30[0], temp_s1);
+    igMetaObject_CreateFields(temp_s0, &g_igViewerModeChangeMessage_ctorTable[0], 2);
+    igMetaObject_NameFields(temp_s0, &g_igViewerModeChangeMessage_fieldTable[0], &DAT_004d0e28[0], &DAT_004d0e30[0], temp_s1);
 }
 

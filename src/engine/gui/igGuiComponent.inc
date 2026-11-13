@@ -154,7 +154,7 @@ void igGuiComponent_InitFields(void) {
 
     temp_s1 = (void *)g_igGuiComponent_metaObject[0];
     temp_s0 = igMetaObject_GetFieldCount(temp_s1);
-    igMetaObject_CreateFields(temp_s1, &DAT_004d05a0[0], 7);
+    igMetaObject_CreateFields(temp_s1, &g_igGuiComponent_ctorTable[0], 7);
     temp_s2 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0));
     ((igObjectRefMetaField *)temp_s2)->_metaObject = (int)FUN_0044fa40();
     temp_s2_2 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 1));
@@ -170,6 +170,6 @@ void igGuiComponent_InitFields(void) {
     temp_s2_6 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 5));
     ((igObjectRefMetaField *)temp_s2_6)->_metaObject = (int)FUN_0044f540();
     ((igRefMetaField *)temp_s2_6)->_construct = 1;
-    igMetaObject_NameFields(temp_s1, &DAT_004d05c0[0], &DAT_004d05e0[0], &DAT_004d0600[0], temp_s0);
+    igMetaObject_NameFields(temp_s1, &g_igGuiComponent_fieldTable[0], &DAT_004d05e0[0], &DAT_004d0600[0], temp_s0);
 }
 

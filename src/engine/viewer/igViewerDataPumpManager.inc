@@ -90,11 +90,11 @@ void FUN_0045c040(void) {
 
     temp_s1 = (void *)(((void *)g_igViewerDataPumpManager_metaObject[0]));
     temp_s2 = igMetaObject_GetFieldCount(temp_s1);
-    igMetaObject_CreateFields(temp_s1, &DAT_004d1358[0], 1);
-    temp_v0 = (void **)(igMetaObject_FindFieldByName(temp_s1, &DAT_0051ee50[0]));
+    igMetaObject_CreateFields(temp_s1, &g_igViewerDataPumpManager_ctorTable[0], 1);
+    temp_v0 = (void **)(igMetaObject_FindFieldByName(temp_s1, &text_name_3[0]));
     temp_s3 = ObjectPointerList_FindIndex(*(int *)((char *)(temp_s1) + 40), temp_v0);
     temp_v0_2 = (void *)(((DW4VC_84_1 *)(temp_v0))->vX((int)(1)));
-    igStringMetaField_SetDefaultText(temp_v0_2, &DAT_0051f500[0]);
+    igStringMetaField_SetDefaultText(temp_v0_2, &Viewer_data_pump_manager[0]);
     *(int *)((char *)(temp_v0_2) + 28) = (int)(&DAT_0058cb78[0]);
     igMetaObject_FinalizeAndReplaceField(temp_s1, temp_s3, temp_v0_2);
     *(int *)((char *)(temp_v0_2) + 4) = (int)((int) (*(int *)((char *)(temp_v0_2) + 4) - 1));
@@ -104,6 +104,6 @@ void FUN_0045c040(void) {
     temp_s0 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s2));
     *(int *)((char *)(temp_s0) + 56) = FUN_001e5150();
     *(char *)((char *)(temp_s0) + 52) = 1;
-    igMetaObject_NameFields(temp_s1, &DAT_004d1360[0], &DAT_004d1368[0], &DAT_004d1370[0], temp_s2);
+    igMetaObject_NameFields(temp_s1, &g_igViewerDataPumpManager_fieldTable[0], &DAT_004d1368[0], &DAT_004d1370[0], temp_s2);
 }
 

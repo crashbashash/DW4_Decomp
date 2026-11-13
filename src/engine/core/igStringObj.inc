@@ -59,12 +59,12 @@ void igStringObj_InitFields(void) {
 
     temp_s0 = (void *)g_igStringObj_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
-    igMetaObject_CreateFields((igMetaObject *)temp_s0, (igMetaField * (**)(void *))&DAT_004bf678[0], 2);
+    igMetaObject_CreateFields((igMetaObject *)temp_s0, (igMetaField * (**)(void *))&g_igStringObj_ctorTable[0], 2);
     temp_s1 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2)));
     ((igMemoryRefMetaField *)temp_s1)->_memType = FUN_002cc2c0();
     ((igRefMetaField *)temp_s1)->_destruct = 1;
     ((igMemoryRefMetaField *)temp_s1)->_releaseOnCopy = 1;
     ((igMemoryRefMetaField *)temp_s1)->_releaseOnReset = 1;
-    igMetaObject_NameFields((igMetaObject *)temp_s0, (const char **)&DAT_004bf680[0], (igMetaField ***)&DAT_004bf688[0], &DAT_004bf690[0], temp_s2);
+    igMetaObject_NameFields((igMetaObject *)temp_s0, (const char **)&g_igStringObj_fieldTable[0], (igMetaField ***)&DAT_004bf688[0], &DAT_004bf690[0], temp_s2);
 }
 

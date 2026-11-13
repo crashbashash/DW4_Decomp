@@ -77,7 +77,7 @@ void igGraphPath_InitFields(void) {
 
     temp_s0 = (void *)g_igGraphPath_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_0048c010[0], 3);
+    igMetaObject_CreateFields(temp_s0, &g_igGraphPath_ctorTable[0], 3);
     temp_s1 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s2)));
     *(int *)((char *)(temp_s1) + 56) = (int)FUN_0019cbe0();
     *(char *)((char *)(temp_s1) + 36) = 3;
@@ -88,6 +88,6 @@ void igGraphPath_InitFields(void) {
     z.c = 0;
     FUN_0018e470(temp_a0, &z);
     FUN_002e3810(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s2 + 2)), 1.0f);
-    igMetaObject_NameFields(temp_s0, &DAT_0048c020[0], &DAT_0048c030[0], &DAT_0048c040[0], temp_s2);
+    igMetaObject_NameFields(temp_s0, &g_igGraphPath_fieldTable[0], &DAT_0048c030[0], &DAT_0048c040[0], temp_s2);
 }
 

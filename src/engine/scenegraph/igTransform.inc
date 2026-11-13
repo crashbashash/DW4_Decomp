@@ -147,7 +147,7 @@ void igTransform_InitFields(void) {
 
     temp_s0 = (void *)g_igTransform_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_0048b190[0], 4);
+    igMetaObject_CreateFields(temp_s0, &g_igTransform_ctorTable[0], 4);
     temp_s1 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s2)));
     o5.x = 0;
     o5.y = 0;
@@ -173,7 +173,7 @@ void igTransform_InitFields(void) {
     *(char *)((char *)(temp_s1_2) + 38) = 0;
     temp_s1_3 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s2 + 3)));
     *(int *)((char *)(temp_s1_3) + 56) = (int)FUN_00194dd0();
-    igMetaObject_NameFields(temp_s0, &DAT_0048b1a0[0], &DAT_0048b1b0[0], &DAT_0048b1c0[0], temp_s2);
+    igMetaObject_NameFields(temp_s0, &g_igTransform_fieldTable[0], &DAT_0048b1b0[0], &DAT_0048b1c0[0], temp_s2);
 }
 
 ObjectRefWord *FUN_001966b0(ObjectRefWord *self,int delete_storage) {

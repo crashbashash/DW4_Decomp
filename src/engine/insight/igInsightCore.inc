@@ -197,7 +197,7 @@ void igInsightCore_InitFields(void) {
 
     temp_s0 = (void *)g_igInsightCore_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_004980b0[0], 0x13);
+    igMetaObject_CreateFields(temp_s0, &g_igInsightCore_ctorTable[0], 0x13);
     temp_s2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s1));
     ((igObjectRefMetaField *)temp_s2)->_metaObject = (int)FUN_00233480();
     ((igRefMetaField *)temp_s2)->_construct = 1;
@@ -232,7 +232,7 @@ void igInsightCore_InitFields(void) {
     temp_s2_12 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0x12));
     ((igObjectRefMetaField *)temp_s2_12)->_metaObject = (int)FUN_002325c0();
     ((igRefMetaField *)temp_s2_12)->_construct = 1;
-    igMetaObject_NameFields(temp_s0, &DAT_00498100[0], &DAT_00498150[0], &DAT_004981a0[0], temp_s1);
+    igMetaObject_NameFields(temp_s0, &g_igInsightCore_fieldTable[0], &DAT_00498150[0], &DAT_004981a0[0], temp_s1);
 }
 
 void thunk_FUN_00236140(void) {

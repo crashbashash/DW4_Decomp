@@ -9,7 +9,7 @@ int ObjectList_AppendRetained(int, igObject *);
 int beMessenger_RegisterReceiverFromInfo(int, int, int *);
 int igObject_GetAllocator(...);
 
-extern int DAT_0050fbf0[4];
+extern int PLAYERARMS_3[4];
 extern int g_defaultAllocatorSelector[4];
 extern unsigned char g_useOwnerAllocator;
 extern int g_beWeaponInfo_metaObject[4];
@@ -75,7 +75,7 @@ void Gap__Bec__beWeapon__vfunc_29(beWeapon *arg0, int arg1) {
             ObjectList_AppendRetained(arg0->_attachDataList, data.p);
         }
     }
-    beMessenger_RegisterReceiverFromInfo(arg0->_messenger, arg1, &DAT_0050fbf0[0]);
+    beMessenger_RegisterReceiverFromInfo(arg0->_messenger, arg1, &PLAYERARMS_3[0]);
 }
 
 void Gap__Bec__beWeapon__vfunc_31(void)

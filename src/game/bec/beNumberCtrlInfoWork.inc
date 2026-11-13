@@ -59,10 +59,10 @@ void beNumberCtrlInfoWork_InitFields(void) {
 
     temp_s0 = (void *)g_beNumberCtrlInfoWork_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_004c4900[0], 3);
+    igMetaObject_CreateFields(temp_s0, &g_beNumberCtrlInfoWork_ctorTable[0], 3);
     FUN_002ea4b0(((int)igMetaObject_GetFieldAt(temp_s0, temp_s1)), -1);
     FUN_002ea4b0(((int)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 1)), -1);
     FUN_002ea4b0(((int)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 2)), -1);
-    igMetaObject_NameFields(temp_s0, &DAT_004c4910[0], &DAT_004c4920[0], &DAT_004c4930[0], temp_s1);
+    igMetaObject_NameFields(temp_s0, &g_beNumberCtrlInfoWork_fieldTable[0], &DAT_004c4920[0], &DAT_004c4930[0], temp_s1);
 }
 

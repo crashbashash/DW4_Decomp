@@ -44,6 +44,6 @@ int FUN_001551f0(S_1551f0 *arg0, V_1551f0 *arg1) {
 
 void Gap__Gfx__igExternalImageEntry__vfunc_11(int arg0) {
     Gap__Core__igExternalDirEntry__vfunc_11();
-    FUN_002e26b0(arg0, &DAT_004fb390[0]);
+    FUN_002e26b0(arg0, &text_igImageDirectory[0]);
 }
 

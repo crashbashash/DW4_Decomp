@@ -68,13 +68,13 @@ void igGroup_InitFields(void) {
 
     temp_s0 = (void *)g_igGroup_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_0048bfe0[0], 1);
+    igMetaObject_CreateFields(temp_s0, &g_igGroup_ctorTable[0], 1);
     temp_s1 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s2)));
     ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_0019cbe0();
     ((igMetaField *)temp_s1)->_resetMethod = 3;
     ((igRefMetaField *)temp_s1)->_construct = 1;
     ((igMetaField *)temp_s1)->_deepCopyMethod = 0;
     ((igMetaField *)temp_s1)->_shallowCopyMethod = 2;
-    igMetaObject_NameFields(temp_s0, &DAT_0048bfe8[0], &DAT_0048bff0[0], &DAT_0048bff8[0], temp_s2);
+    igMetaObject_NameFields(temp_s0, &g_igGroup_fieldTable[0], &DAT_0048bff0[0], &DAT_0048bff8[0], temp_s2);
 }
 

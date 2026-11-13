@@ -51,20 +51,20 @@ void igPrimLengthArray_InitFields(void) {
 
     temp_s0 = (void *)(g_igPrimLengthArray_metaObject[0]);
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_00488810[0], 3);
+    igMetaObject_CreateFields(temp_s0, &g_igPrimLengthArray_ctorTable[0], 3);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
     ((igMemoryRefMetaField *)temp_s1)->_memType = igUnsignedCharMetaField_GetDefaultDescriptor();
     ((igRefMetaField *)temp_s1)->_destruct = 1;
     ((igMemoryRefMetaField *)temp_s1)->_releaseOnCopy = 1;
     ((igMemoryRefMetaField *)temp_s1)->_releaseOnReset = 1;
     FUN_0030e9b0(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 2), 0x20);
-    igMetaObject_NameFields(temp_s0, &DAT_00488820[0], &DAT_00488830[0], &DAT_00488840[0], temp_s2);
+    igMetaObject_NameFields(temp_s0, &g_igPrimLengthArray_fieldTable[0], &DAT_00488830[0], &DAT_00488840[0], temp_s2);
     *(int *)((char *)(g_igPrimLengthArray_metaObject[0]) + 60) = (int)(thunk_FUN_0014bde0);
 }
 
 int FUN_0014c230(void) {
     if (DAT_0055fb30[0] == 0) {
-        DAT_0055fb30[0] = igMetaEnum_Create(&DAT_004dbf60[0], &DAT_00488850[0], &DAT_00488858[0], 2);
+        DAT_0055fb30[0] = igMetaEnum_Create(&IG_GFX_SPRITE_TYPE[0], &DAT_00488850[0], &DAT_00488858[0], 2);
     }
     return DAT_0055fb30[0];
 }

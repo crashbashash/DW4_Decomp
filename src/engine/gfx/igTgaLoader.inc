@@ -93,7 +93,7 @@ void igTgaLoader_InitFields(void) {
 
     temp_s0 = (void *)g_igTgaLoader_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_00489150[0], 0xA);
+    igMetaObject_CreateFields(temp_s0, &g_igTgaLoader_ctorTable[0], 0xA);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
     ((igObjectRefMetaField *)temp_s1)->_metaObject = FUN_002c4ce0();
     temp_s1_2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
@@ -102,6 +102,6 @@ void igTgaLoader_InitFields(void) {
     ((igMemoryRefMetaField *)temp_s1_3)->_memType = igUnsignedCharMetaField_GetDefaultDescriptor();
     temp_s1_4 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 3));
     ((igMemoryRefMetaField *)temp_s1_4)->_memType = igUnsignedCharMetaField_GetDefaultDescriptor();
-    igMetaObject_NameFields(temp_s0, &DAT_00489180[0], &DAT_004891b0[0], &DAT_004891e0[0], temp_s2);
+    igMetaObject_NameFields(temp_s0, &g_igTgaLoader_fieldTable[0], &DAT_004891b0[0], &DAT_004891e0[0], temp_s2);
 }
 

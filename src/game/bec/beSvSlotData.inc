@@ -40,7 +40,7 @@ void beSvSlotData_InitFields(void) {
 
     temp_s0 = (void *)g_beSvSlotData_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_004c42f0[0], 5);
-    igMetaObject_NameFields(temp_s0, &DAT_004c4310[0], &DAT_004c4330[0], &DAT_004c4350[0], temp_s1);
+    igMetaObject_CreateFields(temp_s0, &g_beSvSlotData_ctorTable[0], 5);
+    igMetaObject_NameFields(temp_s0, &g_beSvSlotData_fieldTable[0], &DAT_004c4330[0], &DAT_004c4350[0], temp_s1);
 }
 

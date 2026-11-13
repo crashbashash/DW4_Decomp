@@ -102,7 +102,7 @@ int FUN_001cb340(ShaderProcessorView *self, ShaderTarget *target, int arg) {
     passes = target->passes;
     passes->prepare();
     target->clear();
-    section = FUN_00306360(self->ini, (char *)DAT_004e4690, 0);
+    section = FUN_00306360(self->ini, (char *)text_configuration, 0);
     if (section == -1) {
         return 0;
     }
@@ -110,9 +110,9 @@ int FUN_001cb340(ShaderProcessorView *self, ShaderTarget *target, int arg) {
     if (baseName.p != 0) {
         FUN_001cb1f0(self, baseName.p, self->ini, section, (DW4VC_96_1 *)arg, (IniValueList *)self->info->types);
     }
-    FUN_001cb2d0(self, self->info->types, DAT_004e4720, target);
+    FUN_001cb2d0(self, self->info->types, text_shader_childList, target);
     IniStrRef defaultName((char *)0);
-    if (FUN_00306910(self->ini, section, DAT_004e4738, &defaultName.p, DAT_004e4660, 0) == 0) {
+    if (FUN_00306910(self->ini, section, text_implementation, &defaultName.p, DAT_004e4660, 0) == 0) {
         return 0;
     }
     section = FUN_00306360(self->ini, defaultName.p, 0);
@@ -120,7 +120,7 @@ int FUN_001cb340(ShaderProcessorView *self, ShaderTarget *target, int arg) {
         return 0;
     }
     igSmartPointer<ShaderNameList> names(igStringRefList_Create((void *)igObject_GetAllocator(self)));
-    if (FUN_00306aa0(self->ini, section, DAT_004e4748, names.p, 0) == 0) {
+    if (FUN_00306aa0(self->ini, section, text_passes, names.p, 0) == 0) {
         return 0;
     }
     IniStrRef infoName((char *)0);
@@ -128,11 +128,11 @@ int FUN_001cb340(ShaderProcessorView *self, ShaderTarget *target, int arg) {
     igSmartPointer<ShaderNameList> keys(igStringRefList_Create((void *)igObject_GetAllocator(self)));
     igSmartPointer<ShaderNameList> values(igStringRefList_Create((void *)igObject_GetAllocator(self)));
     count = names.p->count;
-    if (FUN_00306910(self->ini, section, DAT_004e4750, &infoName.p, DAT_004e4660, 0) != 0) {
+    if (FUN_00306910(self->ini, section, text_processor, &infoName.p, DAT_004e4660, 0) != 0) {
         infoSection = FUN_00306360(self->ini, infoName.p, 0);
         info = igSmartPointer<ShaderObject_1ca6c0>(FUN_001ca6c0(self, infoName.p, 1));
         igSmartPointer<ShaderNameList> pending(igStringRefList_Create((void *)igObject_GetAllocator(self)));
-        FUN_00306aa0(self->ini, infoSection, DAT_004e4700, pending.p, 0);
+        FUN_00306aa0(self->ini, infoSection, text_fields, pending.p, 0);
         igSmartPointer<ShaderStringObject> value((ShaderStringObject *)FUN_002b9500((void *)igObject_GetAllocator(self)));
         igSmartPointer<ShaderStringObject> key((ShaderStringObject *)FUN_002b9500((void *)igObject_GetAllocator(self)));
         while (pending.p->count != 0) {
@@ -141,7 +141,7 @@ int FUN_001cb340(ShaderProcessorView *self, ShaderTarget *target, int arg) {
             {
                 ShaderStringObject *k = key.p;
                 int length = k->length;
-                igStringObj_Insert(k, DAT_004e46c0, length, strlen(DAT_004e46c0));
+                igStringObj_Insert(k, text_value, length, strlen(text_value));
             }
             igStringObj_Set(value.p, DAT_004e4660);
             {
@@ -155,7 +155,7 @@ int FUN_001cb340(ShaderProcessorView *self, ShaderTarget *target, int arg) {
                 {
                     ShaderStringObject *k = key.p;
                     int length = k->length;
-                    igStringObj_Insert(k, DAT_004e46e8, length, strlen(DAT_004e46e8));
+                    igStringObj_Insert(k, text_function, length, strlen(text_function));
                 }
                 igStringObj_Set(value.p, DAT_004e4660);
                 {
@@ -192,7 +192,7 @@ int FUN_001cb340(ShaderProcessorView *self, ShaderTarget *target, int arg) {
         info.p = (ShaderObject_1ca6c0 *)FUN_00198b60(owner);
     }
     flag = 0;
-    if (FUN_00306e50(self->ini, section, DAT_004e4760, &flag, 0, 0) != 0) {
+    if (FUN_00306e50(self->ini, section, text_useRenderPackage, &flag, 0, 0) != 0) {
         target->setFlag(flag);
     }
     target->setInfo(info.p);
@@ -210,12 +210,12 @@ int FUN_001cb340(ShaderProcessorView *self, ShaderTarget *target, int arg) {
         igSmartPointer<ShaderObject_1ca6c0> second((ShaderObject_1ca6c0 *)0, kRetainReference);
         igSmartPointer<ShaderObject_1ca6c0> third((ShaderObject_1ca6c0 *)0, kRetainReference);
         igSmartPointer<igObject> found((igObject *)0, kRetainReference);
-        found = FUN_001c8c80(self, pass, DAT_004e4778, g_igAttrList_metaObject[0], shared.p);
+        found = FUN_001c8c80(self, pass, text_pushAttrs, g_igAttrList_metaObject[0], shared.p);
         held = (ShaderObject_1ca6c0 *)found.p;
         if (held != 0) {
             primary = asMaterial(held);
             FUN_001cade0(self, (IniFieldTarget *)info.p, (IniItemList *)primary.p, shared.p, keys.p, values.p);
-            found = FUN_001c8c80(self, pass, DAT_004e4788, g_igAttrList_metaObject[0], shared.p);
+            found = FUN_001c8c80(self, pass, text_popAttrs, g_igAttrList_metaObject[0], shared.p);
             held = (ShaderObject_1ca6c0 *)found.get();
             if (held == 0) {
                 return 0;
@@ -223,7 +223,7 @@ int FUN_001cb340(ShaderProcessorView *self, ShaderTarget *target, int arg) {
             second = asMaterial(held);
             FUN_001cade0(self, (IniFieldTarget *)info.p, (IniItemList *)second.p, shared.p, keys.p, values.p);
         } else {
-            found = FUN_001c8c80(self, pass, DAT_004e4658, g_igAttrList_metaObject[0], shared.p);
+            found = FUN_001c8c80(self, pass, text_attrs, g_igAttrList_metaObject[0], shared.p);
             held = (ShaderObject_1ca6c0 *)found.get();
             if (held == 0) {
                 return 0;
@@ -232,7 +232,7 @@ int FUN_001cb340(ShaderProcessorView *self, ShaderTarget *target, int arg) {
             second = primary.p;
             FUN_001cade0(self, (IniFieldTarget *)info.p, (IniItemList *)primary.p, shared.p, keys.p, values.p);
         }
-        found = FUN_001c8c80(self, pass, DAT_004e4798, (void *)g_igNodeList_metaObject[0], shared.p);
+        found = FUN_001c8c80(self, pass, text_childNodes, (void *)g_igNodeList_metaObject[0], shared.p);
         held = (ShaderObject_1ca6c0 *)found.p;
         if (held != 0) {
             third = asTexture(held);

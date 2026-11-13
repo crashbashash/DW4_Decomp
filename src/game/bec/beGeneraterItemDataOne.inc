@@ -68,13 +68,13 @@ void beGeneraterItemDataOne_InitFields(void) {
 
     temp_s0 = (void *)g_beGeneraterItemDataOne_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_004c6b08[0], 3);
-    igMetaObject_NameFields(temp_s0, &DAT_004c6b18[0], &DAT_004c6b28[0], &DAT_004c6b38[0], temp_s1);
+    igMetaObject_CreateFields(temp_s0, &g_beGeneraterItemDataOne_ctorTable[0], 3);
+    igMetaObject_NameFields(temp_s0, &g_beGeneraterItemDataOne_fieldTable[0], &DAT_004c6b28[0], &DAT_004c6b38[0], temp_s1);
 }
 
 int FUN_00360b10(void) {
     if (DAT_005895c8[0] == 0) {
-        DAT_005895c8[0] = igMetaEnum_Create(&DAT_005016f0[0], &DAT_004c6b50[0], &DAT_004c6b70[0], 8);
+        DAT_005895c8[0] = igMetaEnum_Create(&MsgAction[0], &DAT_004c6b50[0], &DAT_004c6b70[0], 8);
     }
     return DAT_005895c8[0];
 }

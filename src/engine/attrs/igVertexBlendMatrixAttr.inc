@@ -58,7 +58,7 @@ void igVertexBlendMatrixAttr_InitFields(void) {
 
     temp_s0 = (void *)g_igVertexBlendMatrixAttr_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_00485a70[0], 2);
+    igMetaObject_CreateFields(temp_s0, &g_igVertexBlendMatrixAttr_ctorTable[0], 2);
     temp_s1 = (int)igMetaObject_GetFieldAt(temp_s0, temp_s2);
     o5.x = 0;
     o5.y = 0;
@@ -80,7 +80,7 @@ void igVertexBlendMatrixAttr_InitFields(void) {
     FUN_0018c640(temp_s1, &o1);
     tf = (int)igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1);
     *(int *)((char *)tf + 48) = (int)&FUN_00141900;
-    igMetaObject_NameFields(temp_s0, &DAT_00485a78[0], &DAT_00485a80[0], &DAT_00485a88[0], temp_s2);
+    igMetaObject_NameFields(temp_s0, &g_igVertexBlendMatrixAttr_fieldTable[0], &DAT_00485a80[0], &DAT_00485a88[0], temp_s2);
 }
 
 void FUN_00130e90(void *arg0, void *arg1, void *arg2, void *arg3, void *arg4) {

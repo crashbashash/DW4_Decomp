@@ -1,13 +1,13 @@
 int FUN_00139e10(void) {
     if (DAT_0055f3a8[0] == 0) {
-        DAT_0055f3a8[0] = igMetaEnum_Create(&DAT_004d5b40[0], &DAT_00486a90[0], &DAT_00486aa0[0], 3);
+        DAT_0055f3a8[0] = igMetaEnum_Create(&BLENDING_FUNCTION_ALPHA_PSX2[0], &DAT_00486a90[0], &DAT_00486aa0[0], 3);
     }
     return DAT_0055f3a8[0];
 }
 
 int FUN_00139e70(void) {
     if (DAT_0055f3b0[0] == 0) {
-        DAT_0055f3b0[0] = igMetaEnum_Create(&DAT_004d5bc0[0], &DAT_00486ab0[0], &DAT_00486ac0[0], 3);
+        DAT_0055f3b0[0] = igMetaEnum_Create(&BLENDING_FUNCTION_COLOR_PSX2[0], &DAT_00486ab0[0], &DAT_00486ac0[0], 3);
     }
     return DAT_0055f3b0[0];
 }
@@ -97,7 +97,7 @@ void igBlendFunctionAttr_InitFields(void) {
 
     temp_s0 = (void *)g_igBlendFunctionAttr_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_00486ae0[0], 0xB);
+    igMetaObject_CreateFields(temp_s0, &g_igBlendFunctionAttr_ctorTable[0], 0xB);
     temp_v0 = (BlendAttrMetaField *)igMetaObject_GetFieldAt(temp_s0, temp_s1);
     FUN_002dc7a0(temp_v0, &DAT_00486ba0[0]);
     temp_v0->f52 = FUN_00149740;
@@ -131,6 +131,6 @@ void igBlendFunctionAttr_InitFields(void) {
     temp_v0_8 = (BlendAttrMetaField *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0xA);
     FUN_002dc7a0(temp_v0_8, &DAT_00486bd0[0]);
     temp_v0_8->f52 = (void (*)())FUN_00139e70;
-    igMetaObject_NameFields(temp_s0, &DAT_00486b10[0], &DAT_00486b40[0], &DAT_00486b70[0], temp_s1);
+    igMetaObject_NameFields(temp_s0, &g_igBlendFunctionAttr_fieldTable[0], &DAT_00486b40[0], &DAT_00486b70[0], temp_s1);
 }
 

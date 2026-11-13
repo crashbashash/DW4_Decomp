@@ -77,11 +77,11 @@ void igMessageDefaultReceiver_InitFields(void) {
 
     temp_s0 = g_igMessageDefaultReceiver_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_00498048[0], 2);
+    igMetaObject_CreateFields(temp_s0, &g_igMessageDefaultReceiver_ctorTable[0], 2);
     p = (char *)igMetaObject_GetFieldAt(temp_s0, temp_s1);
     *(int *)(p + 56) = (int)g_igObject_metaObject[0];
     p = (char *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 1);
     *(short *)(p + 20) = 0xC;
-    igMetaObject_NameFields(temp_s0, &DAT_00498050[0], &DAT_00498058[0], &DAT_00498060[0], temp_s1);
+    igMetaObject_NameFields(temp_s0, &g_igMessageDefaultReceiver_fieldTable[0], &DAT_00498058[0], &DAT_00498060[0], temp_s1);
 }
 

@@ -110,7 +110,7 @@ void igPsx2VertexArray1_1_InitFields(void) {
 
     temp_s0 = (void *)(g_igPsx2VertexArray1_1_metaObject[0]);
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_00489d30[0], 7);
+    igMetaObject_CreateFields(temp_s0, &g_igPsx2VertexArray1_1_ctorTable[0], 7);
     f1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
     ((igObjectRefMetaField *)f1)->_metaObject = FUN_002c9170();
     ((igObjectRefMetaField *)f1)->_persistent = 0;
@@ -128,7 +128,7 @@ void igPsx2VertexArray1_1_InitFields(void) {
     ((igIntArrayMetaField *)f5)->_num = 0x10;
     ((igIntArrayMetaField *)f5)->_persistent = 0;
     ((igIntMetaField *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 6)))->_persistent = 0;
-    igMetaObject_NameFields(temp_s0, &DAT_00489d50[0], &DAT_00489d70[0], &DAT_00489d90[0], temp_s2);
+    igMetaObject_NameFields(temp_s0, &g_igPsx2VertexArray1_1_fieldTable[0], &DAT_00489d70[0], &DAT_00489d90[0], temp_s2);
     ((igMetaObject *)(g_igPsx2VertexArray1_1_metaObject[0]))->_writeProxy = (int)(&thunk_igVertexArray1_1_GetMetaObject);
 }
 

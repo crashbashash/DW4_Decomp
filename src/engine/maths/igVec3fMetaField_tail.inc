@@ -15,7 +15,7 @@ void Gap__igVec3fMetaField__vfunc_57(char **out, int unused, float *v)
     char *s;
     void *pool;
 
-    sprintf(buf, DAT_004e0db8, v[0], v[1], v[2]);
+    sprintf(buf, text_f_f_f, v[0], v[1], v[2]);
     if (buf == 0) {
         s = 0;
     } else {

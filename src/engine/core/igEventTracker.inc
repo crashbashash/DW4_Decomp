@@ -106,7 +106,7 @@ void igEventTracker_InitFields(void) {
 
     temp_s0 = g_igEventTracker_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
-    igMetaObject_CreateFields((igMetaObject *)temp_s0, (igMetaField * (**)(void *))&DAT_004c0d30[0], 0x21);
+    igMetaObject_CreateFields((igMetaObject *)temp_s0, (igMetaField * (**)(void *))&g_igEventTracker_ctorTable[0], 0x21);
     FUN_0030e9b0((void **)(((igMetaField *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 1))), -1);
     FUN_0030e9b0((void **)(((igMetaField *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 2))), -1);
     FUN_0030e9b0((void **)(((igMetaField *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 3))), -1);
@@ -174,6 +174,6 @@ void igEventTracker_InitFields(void) {
     temp_s2_12 = ((igMetaField *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0x20));
     ((igObjectRefMetaField *)temp_s2_12)->_metaObject = (int)FUN_002ba690();
     temp_s2_12->_persistent = 0;
-    igMetaObject_NameFields((igMetaObject *)temp_s0, (const char **)&DAT_004c0dc0[0], (igMetaField ***)&DAT_004c0e50[0], &DAT_004c0ee0[0], temp_s1);
+    igMetaObject_NameFields((igMetaObject *)temp_s0, (const char **)&g_igEventTracker_fieldTable[0], (igMetaField ***)&DAT_004c0e50[0], &DAT_004c0ee0[0], temp_s1);
 }
 

@@ -68,7 +68,7 @@ void beModelCtrlMUTEKI_InitFields(void) {
 
     temp_s0 = (void *)g_beModelCtrlMUTEKI_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_004c5778[0], 1);
-    igMetaObject_NameFields(temp_s0, &DAT_004c5780[0], &DAT_004c5788[0], &DAT_004c5790[0], temp_s1);
+    igMetaObject_CreateFields(temp_s0, &g_beModelCtrlMUTEKI_ctorTable[0], 1);
+    igMetaObject_NameFields(temp_s0, &g_beModelCtrlMUTEKI_fieldTable[0], &DAT_004c5788[0], &DAT_004c5790[0], temp_s1);
 }
 

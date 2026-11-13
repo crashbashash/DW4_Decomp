@@ -31,7 +31,7 @@ typedef struct NameHolder { char pad[8]; int *f8; } NameHolder;
 typedef struct RamInfoArg { char pad[8]; int f8; NameHolder *fc; char pad2[4]; unsigned char f14; char pad3[31]; igObject *f34; } RamInfoArg;
 extern "C" int beMessenger_RegisterReceiver(int, RamInfoArg *, int *, int *, int);
 extern "C" int emptyString[4];
-extern "C" int DAT_0050f638[4];
+extern "C" int MODELCTRL_12[4];
 extern "C" void Gap__Bec__beParticleCtrl2__vfunc_29(beParticleCtrl2 *arg0, RamInfoArg *arg1);
 extern "C" float g_vec3Zero[4];
 extern "C" float DAT_004e105c[4];
@@ -39,9 +39,9 @@ extern "C" float DAT_004e1060[4];
 extern "C" int g_vec3XAxis[4];
 extern "C" int g_vec3YAxis[4];
 extern "C" int g_vec3ZAxis[4];
-extern "C" int DAT_0050f648[4];
-extern "C" int DAT_0050f658[4];
-extern "C" int DAT_0050f668[4];
+extern "C" int GETMATRIX_5[4];
+extern "C" int GENERATE_9[4];
+extern "C" int SQ_ERAS_3[4];
 extern "C" int g_defaultAllocatorSelector[4];
 extern "C" unsigned char g_useOwnerAllocator;
 struct Rel { static inline void go(igObject *object) {
@@ -179,7 +179,7 @@ void Gap__Bec__beParticleCtrl2__vfunc_29(beParticleCtrl2 *arg0, RamInfoArg *arg1
     t0 = arg1->f8;
     var_a3 = arg1->fc->f8;
     var_a3 = (var_a3 != 0) ? var_a3 : (int *)(&emptyString[0]);
-    beMessenger_RegisterReceiver(arg0->_messenger, arg1, &DAT_0050f638[0], var_a3, t0);
+    beMessenger_RegisterReceiver(arg0->_messenger, arg1, &MODELCTRL_12[0], var_a3, t0);
     arg1->f14 = 0;
     temp_a0 = arg1->f34;
     if (temp_a0 != 0) {
@@ -216,7 +216,7 @@ int Gap__Bec__beParticleCtrl2__vfunc_34(beParticleCtrl2 *arg0, beParticleCtrl2In
                 f21 = DAT_004e105c[0];
                 f20 = DAT_004e1060[0];
             }
-            beMessenger_SendNamed(arg0->_messenger, DAT_0050f638, s3, s2, DAT_0050f648);
+            beMessenger_SendNamed(arg0->_messenger, MODELCTRL_12, s3, s2, GETMATRIX_5);
             beMessenger_GetMatrix(spB0, arg0->_messenger, 0);
             if (s1) {
                 int alloc = igObject_GetAllocator(arg0);
@@ -288,9 +288,9 @@ int Gap__Bec__beParticleCtrl2__vfunc_34(beParticleCtrl2 *arg0, beParticleCtrl2In
         }
         break;
     case 3:
-        beMessenger_AppendString(arg0->_messenger, DAT_0050f658);
-        beMessenger_AppendString(arg0->_messenger, DAT_0050f658);
-        beMessenger_AppendString(arg0->_messenger, DAT_0050f668);
+        beMessenger_AppendString(arg0->_messenger, GENERATE_9);
+        beMessenger_AppendString(arg0->_messenger, GENERATE_9);
+        beMessenger_AppendString(arg0->_messenger, SQ_ERAS_3);
         break;
     }
     return 1;

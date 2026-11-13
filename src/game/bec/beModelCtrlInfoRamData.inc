@@ -74,11 +74,11 @@ void beModelCtrlInfoRamData_InitFields(void) {
 
     temp_s1 = (void *)(((void * *)g_beModelCtrlInfoRamData_metaObject)[0]);
     temp_s2 = igMetaObject_GetFieldCount(temp_s1);
-    igMetaObject_CreateFields(temp_s1, &DAT_004c5480[0], 2);
-    temp_v0 = (void **)(igMetaObject_FindFieldByName(temp_s1, &DAT_00502218[0]));
+    igMetaObject_CreateFields(temp_s1, &g_beModelCtrlInfoRamData_ctorTable[0], 2);
+    temp_v0 = (void **)(igMetaObject_FindFieldByName(temp_s1, &text_name[0]));
     temp_s3 = ObjectPointerList_FindIndex(*(int *)((char *)(temp_s1) + 40), temp_v0);
     temp_v0_2 = (S_ref *)(((DW4VC_84_1 *)(temp_v0))->vX((int)(1)));
-    igStringMetaField_SetDefaultText(temp_v0_2, &DAT_00502220[0]);
+    igStringMetaField_SetDefaultText(temp_v0_2, &ONE_8[0]);
     *(int *)((char *)(temp_v0_2) + 28) = (int)(&DAT_00588bb8[0]);
     igMetaObject_FinalizeAndReplaceField(temp_s1, temp_s3, temp_v0_2);
     temp_v0_2->f4 = temp_v0_2->f4 - 1;
@@ -89,6 +89,6 @@ void beModelCtrlInfoRamData_InitFields(void) {
     *(int *)((char *)(temp_s0) + 56) = (int)FUN_0034fd40();
     temp_s0_2 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s2 + 1));
     *(int *)((char *)(temp_s0_2) + 56) = (int)FUN_00350060();
-    igMetaObject_NameFields(temp_s1, &DAT_004c5488[0], &DAT_004c5490[0], &DAT_004c5498[0], temp_s2);
+    igMetaObject_NameFields(temp_s1, &g_beModelCtrlInfoRamData_fieldTable[0], &DAT_004c5490[0], &DAT_004c5498[0], temp_s2);
 }
 

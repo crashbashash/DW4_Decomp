@@ -79,7 +79,7 @@ void igAnimationCombinerBoneInfo_InitFields(void) {
 
     temp_s0 = (void *)g_igAnimationCombinerBoneInfo_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_0048d2c0[0], 8);
+    igMetaObject_CreateFields(temp_s0, &g_igAnimationCombinerBoneInfo_ctorTable[0], 8);
     temp_s1 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s2)));
     *(int *)((char *)(temp_s1) + 56) = (int)FUN_001a6bf0();
     *(char *)((char *)(temp_s1) + 36) = 2;
@@ -90,6 +90,6 @@ void igAnimationCombinerBoneInfo_InitFields(void) {
     FUN_002ea4b0(temp_v0, 1);
     *(char *)((char *)(temp_v0) + 38) = 0;
     FUN_002ea4b0(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s2 + 7)), -1);
-    igMetaObject_NameFields(temp_s0, &DAT_0048d2e0[0], &DAT_0048d300[0], &DAT_0048d320[0], temp_s2);
+    igMetaObject_NameFields(temp_s0, &g_igAnimationCombinerBoneInfo_fieldTable[0], &DAT_0048d300[0], &DAT_0048d320[0], temp_s2);
 }
 

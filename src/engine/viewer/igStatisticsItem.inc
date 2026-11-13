@@ -103,7 +103,7 @@ void igStatisticsItem_InitFields(void) {
 
     temp_s1 = (void *)g_igStatisticsItem_metaObject[0];
     temp_s0 = igMetaObject_GetFieldCount(temp_s1);
-    igMetaObject_CreateFields(temp_s1, &DAT_004d09f0[0], 0xC);
+    igMetaObject_CreateFields(temp_s1, &g_igStatisticsItem_ctorTable[0], 0xC);
     FUN_002e3810(igMetaObject_GetFieldAt(temp_s1, temp_s0), 0.0f);
     FUN_002e3810(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 1), -1.0f);
     temp_s2 = (igObjectRefMetaField *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 6));
@@ -120,6 +120,6 @@ void igStatisticsItem_InitFields(void) {
     FUN_002dc7a0(temp_v0, &DAT_004d0ab0[0]);
     temp_v0->_getMetaEnumFunction = (int)(&FUN_00149b60);
     FUN_002ea4b0(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 0xB), -1);
-    igMetaObject_NameFields(temp_s1, &DAT_004d0a20[0], &DAT_004d0a50[0], &DAT_004d0a80[0], temp_s0);
+    igMetaObject_NameFields(temp_s1, &g_igStatisticsItem_fieldTable[0], &DAT_004d0a50[0], &DAT_004d0a80[0], temp_s0);
 }
 

@@ -92,13 +92,13 @@ void beParticleCtrl2InfoRam_InitFields(void) {
 
     temp_s0 = (void *)g_beParticleCtrl2InfoRam_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_004c45c0[0], 3);
+    igMetaObject_CreateFields(temp_s0, &g_beParticleCtrl2InfoRam_ctorTable[0], 3);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
     ((igObjectRefMetaField *)temp_s1)->_metaObject = FUN_00196190();
     temp_s1_2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
     ((igObjectRefMetaField *)temp_s1_2)->_metaObject = (int)FUN_0036e5c0();
     temp_s1_3 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 2));
     ((igObjectRefMetaField *)temp_s1_3)->_metaObject = (int)FUN_0034c080();
-    igMetaObject_NameFields(temp_s0, &DAT_004c45d0[0], &DAT_004c45e0[0], &DAT_004c45f0[0], temp_s2);
+    igMetaObject_NameFields(temp_s0, &g_beParticleCtrl2InfoRam_fieldTable[0], &DAT_004c45e0[0], &DAT_004c45f0[0], temp_s2);
 }
 

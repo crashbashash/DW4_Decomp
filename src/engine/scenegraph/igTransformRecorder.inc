@@ -171,7 +171,7 @@ void igTransformRecorder_InitFields(void) {
 
     temp_s0 = (void *)g_igTransformRecorder_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_0048b140[0], 2);
-    igMetaObject_NameFields(temp_s0, &DAT_0048b148[0], &DAT_0048b150[0], &DAT_0048b158[0], temp_s1);
+    igMetaObject_CreateFields(temp_s0, &g_igTransformRecorder_ctorTable[0], 2);
+    igMetaObject_NameFields(temp_s0, &g_igTransformRecorder_fieldTable[0], &DAT_0048b150[0], &DAT_0048b158[0], temp_s1);
 }
 

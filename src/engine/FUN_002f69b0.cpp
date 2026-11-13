@@ -54,8 +54,8 @@ extern unsigned char *g_objectSystem[4];
 extern void *DAT_00586fd0;
 extern void *g_stringPool;
 extern void *DAT_00587218[4];
-extern char DAT_004fa530[];
-extern char DAT_004fa550[];
+extern char InhibitEventTracker[];
+extern char UseEventTracker[];
 }
 
 extern "C" int igObject_InitHeader(...);
@@ -188,8 +188,8 @@ extern "C" int FUN_002f2b30(int arg0, char *arg1);
 
 
 extern "C" int strncmp(...);
-extern int DAT_004fa3b0[4];
-extern int DAT_004fa3c8[4];
+extern int text_kIGMemoryPoolHandle[4];
+extern int text_kIGMemoryPool[4];
 extern "C" int FUN_002f2bc0(int arg0, char *arg1);
 
 
@@ -300,7 +300,7 @@ struct PoolHandle {
     int field50;             /* +0x50 */
 };
 extern int g_igArenaMemoryPool_metaObject[4];
-extern char DAT_004fa3e0[];
+extern char text_kIGMemoryPoolHandle_s[];
 #define ASSIGN_TOKEN(field, source)                                           \
     text = (source);                                                          \
     if (g_stringPool == 0) {                                               \
@@ -496,14 +496,14 @@ extern "C" void FUN_00307550(int, int, const char *, int, int *, int, int);
 extern int DAT_004c2228[4];
 extern int DAT_004c2368[4];
 extern int DAT_004c2370[4];
-extern int DAT_004fa400[4];
-extern int DAT_004fa420[4];
-extern int DAT_004fa440[4];
-extern char DAT_004fa460[];
-extern char DAT_004fa490[];
-extern char DAT_004fa4c0[];
-extern int DAT_004fa4f0[4];
-extern int DAT_004fa510[4];
+extern int text_bootstrapPoolPreSize[4];
+extern int text_updatePoolStatistics[4];
+extern int text_useAliasMemoryPoolRelease[4];
+extern char text_arenaMemoryPoolOptionFlagsReleas[];
+extern char text_arenaMemoryPoolMessageLevelRelea[];
+extern char text_arenaMemoryPoolHeapIntegrityChec[];
+extern int text_inhibitArenaCountMessage[4];
+extern int text_nonTrackedPoolPreSize[4];
 extern int DAT_005871f8[4];
 extern unsigned char GPR_00554994;
 class PoolConfigObject { public: virtual void p0(); virtual void p1(); virtual void p2(); virtual void p3(); virtual void p4(); virtual void p5(); virtual void p6(); virtual void p7(); virtual void p8(); virtual void p9(); virtual void p10(); virtual void p11(); virtual void p12(); virtual void p13(); virtual void p14(); virtual void p15(); virtual void p16(); virtual void p17(); virtual void p18(); virtual void p19(); virtual void p20(); virtual void p21(); virtual void p22(); virtual void p23(); virtual void p24(); virtual void p25(); virtual void p26(); virtual void p27(); virtual void finish(); virtual void p29(); virtual void p30(); virtual int inUse(); virtual igResult lock(int); virtual void p33(); virtual void p34(); virtual void p35(); virtual void p36(); virtual void p37(); virtual void p38(); virtual void p39(); virtual void p40(); virtual igResult setName(int); int rc; char q8[184]; int options; };
@@ -616,14 +616,14 @@ extern int g_igMemoryPool_metaObject[4];
 extern "C" int FUN_002f5220(void);
 
 
-extern char DAT_004fa580[];
-extern char DAT_004fa5a0[];
-extern char DAT_004fa5c0[];
-extern char DAT_004fa5d0[];
-extern char DAT_004fa5e8[];
-extern char DAT_004fa5f0[];
-extern char DAT_004fa600[];
-extern char DAT_004fa610[];
+extern char text_defaultPoolPreSize[];
+extern char text_systemPoolPreSize[];
+extern char text_scratchPoolSize[];
+extern char text_scratchPadPoolSize[];
+extern char Fixed[];
+extern char HighSpeed[];
+extern char OnDemand[];
+extern char text_driverPoolSize[];
 class PoolDescTable { public: virtual void p0(); virtual void p1(); virtual void p2(); virtual void p3(); virtual void p4(); virtual void p5(); virtual void p6(); virtual void p7(); virtual void p8(); virtual void p9(); virtual void p10(); virtual void p11(); virtual void p12(); virtual void p13(); virtual void p14(); virtual void p15(); virtual void p16(); virtual void p17(); virtual void p18(); virtual void p19(); virtual void p20(); virtual void p21(); virtual void p22(); virtual igResult load(int, char *); int rc; };
 class PoolDescSetupBase { public: virtual void p0(); virtual void p1(); virtual void p2(); virtual void p3(); virtual void p4(); virtual void p5(); virtual void p6(); virtual void p7(); virtual void p8(); virtual void p9(); virtual void p10(); virtual void p11(); virtual void p12(); virtual void p13(); virtual void p14(); virtual void p15(); virtual void p16(); virtual void p17(); virtual void p18(); virtual void p19(); virtual void p20(); virtual void p21(); virtual void p22(); virtual void p23(); virtual char *recordName(int); };
 class PoolDescSetup : public PoolDescSetupBase { public: char q4[12]; PoolDescTable *table; PoolDescSlot slots[46]; };
@@ -834,7 +834,7 @@ extern "C" void MemoryContext_BuildAllocator(int *out, igMemoryPoolContextInfo *
 extern int DAT_00587020[4];
 extern int DAT_00587030[4];
 extern int g_metadataAllocatorKey[4];
-extern char DAT_004fa2a8[], DAT_004fa2b0[], DAT_004fa5e8[], DAT_004fa5f0[], DAT_004fa600[], DAT_004fa620[], DAT_004fa630[], DAT_004fa638[], DAT_004fa640[], DAT_004fa648[], DAT_004fa658[], DAT_004fa668[], DAT_004fa678[], DAT_004fa680[], DAT_004fa688[], DAT_004fa690[], DAT_004fa698[];
+extern char Level[], Frame[], Fixed[], HighSpeed[], OnDemand[], LongTerm[], Create[], Reset[], Dynamic[], ONDEMAND[], text_ondemand[], SystemMemory[], Low[], High[], Virtual[], Raw[], Custom[];
 #define RC(o) ((unsigned long long)(long long)(int)(o)->_refCount & 0x7fffffULL)
 void MemoryContext_BuildAllocator(int *out, igMemoryPoolContextInfo *arg1, int idx, int flag);
 
@@ -893,27 +893,27 @@ struct MemoryContextState {
     int value124; int value128; int value132; int value136; int value140;
 };
 extern int DAT_004c1eb0;
-extern char DAT_004fa6a0[];
-extern char DAT_004fa6c0[];
-extern char DAT_004fa6e0[];
-extern char DAT_004fa6f0[];
-extern char DAT_004fa710[];
-extern char DAT_004fa730[];
-extern char DAT_004fa750[];
-extern char DAT_004fa770[];
-extern char DAT_004fa790[];
-extern char DAT_004fa7b0[];
-extern char DAT_004fa7e0[];
-extern char DAT_004fa810[];
-extern char DAT_004fa830[];
-extern char DAT_004fa850[];
-extern char DAT_004fa870[];
-extern char DAT_004fa890[];
-extern char DAT_004fa8b0[];
-extern char DAT_004fa8d0[];
-extern char DAT_004fa8f0[];
-extern char DAT_004fa900[];
-extern char DAT_004fa918[];
+extern char text_useGlobalEventTracker[];
+extern char text_useSeparateEventTrackers[];
+extern char text_showLeaksOnExit[];
+extern char text_showMemoryStatisticsOnExit[];
+extern char text_showObjectStatisticsOnExit[];
+extern char text_eventTrackerInitialCapacity[];
+extern char text_eventTrackerEventTypeFilter[];
+extern char text_eventTrackerMarkerTypeFilter[];
+extern char text_eventTrackerMaxCallStackDepth[];
+extern char text_eventTrackerNotificationTypeFilt[];
+extern char text_eventTrackerNotificationCodeFilt[];
+extern char text_memoryEventFormat[];
+extern char text_markerEventFormat[];
+extern char text_notificationEventFormat[];
+extern char text_eventTrackerScopeFlags[];
+extern char text_saveEventTrackerOnExit[];
+extern char text_eventTrackerFileName[];
+extern char text_systemPoolEventTrackerFileName[];
+extern char text_symbolsFileName[];
+extern char text_showSectionHeaders[];
+extern char text_showSymbols[];
 extern "C" int FUN_002f00e0(void);
 extern "C" void FUN_00306910(int, int, char *, char **, char *, int);
 extern "C" void FUN_002d31d0(MemoryContextState *, char *);
@@ -981,43 +981,43 @@ extern "C" void FUN_002f69b0(PoolSetup *self) {
     stringD = 0;
     stringF = 0;
     stringE = 0;
-    FUN_00306e50(config, 2, DAT_004fa6a0, &trackEvents, defaultTrackEvents, 0);
+    FUN_00306e50(config, 2, text_useGlobalEventTracker, &trackEvents, defaultTrackEvents, 0);
     self->setFlags(trackEvents ? self->flags | 1 : self->flags & ~1);
     ((MemoryContextState *)g_objectSystem[0])->trackEvents = trackEvents;
-    FUN_00306e50(config, 2, DAT_004fa6c0, &trackAll, trackAll, 0);
+    FUN_00306e50(config, 2, text_useSeparateEventTrackers, &trackAll, trackAll, 0);
     self->setFlags(trackAll ? self->flags | 2 : self->flags & ~2);
-    FUN_00306e50(config, 2, DAT_004fa6e0, &flag118, 0, 0);
+    FUN_00306e50(config, 2, text_showLeaksOnExit, &flag118, 0, 0);
     ((MemoryContextState *)g_objectSystem[0])->flag118 = flag118;
-    FUN_00306e50(config, 2, DAT_004fa6f0, &flag119, 0, 0);
+    FUN_00306e50(config, 2, text_showMemoryStatisticsOnExit, &flag119, 0, 0);
     ((MemoryContextState *)g_objectSystem[0])->flag119 = flag119;
-    FUN_00306e50(config, 2, DAT_004fa710, &flag120, 0, 0);
+    FUN_00306e50(config, 2, text_showObjectStatisticsOnExit, &flag120, 0, 0);
     ((MemoryContextState *)g_objectSystem[0])->flag120 = flag120;
-    FUN_003065f0(config, 2, DAT_004fa730, &trackerSize, 0x80000, 0);
+    FUN_003065f0(config, 2, text_eventTrackerInitialCapacity, &trackerSize, 0x80000, 0);
     ((MemoryContextState *)g_objectSystem[0])->value124 = trackerSize;
-    FUN_003065f0(config, 2, DAT_004fa750, &value128, -1, 0);
+    FUN_003065f0(config, 2, text_eventTrackerEventTypeFilter, &value128, -1, 0);
     ((MemoryContextState *)g_objectSystem[0])->value128 = value128;
-    FUN_003065f0(config, 2, DAT_004fa770, &value132, -1, 0);
+    FUN_003065f0(config, 2, text_eventTrackerMarkerTypeFilter, &value132, -1, 0);
     ((MemoryContextState *)g_objectSystem[0])->value132 = value132;
-    FUN_003065f0(config, 2, DAT_004fa790, &DAT_004c1eb0, DAT_004c1eb0, 0);
-    FUN_003065f0(config, 2, DAT_004fa7b0, &value136, -1, 0);
+    FUN_003065f0(config, 2, text_eventTrackerMaxCallStackDepth, &DAT_004c1eb0, DAT_004c1eb0, 0);
+    FUN_003065f0(config, 2, text_eventTrackerNotificationTypeFilt, &value136, -1, 0);
     ((MemoryContextState *)g_objectSystem[0])->value136 = value136;
-    FUN_003065f0(config, 2, DAT_004fa7e0, &value140, -1, 0);
+    FUN_003065f0(config, 2, text_eventTrackerNotificationCodeFilt, &value140, -1, 0);
     ((MemoryContextState *)g_objectSystem[0])->value140 = value140;
-    FUN_00306910(config, 2, DAT_004fa810, &stringA, DAT_004f7910, 0);
+    FUN_00306910(config, 2, text_memoryEventFormat, &stringA, DAT_004f7910, 0);
     FUN_002d31d0((MemoryContextState *)g_objectSystem[0], stringA);
-    FUN_00306910(config, 2, DAT_004fa830, &stringB, DAT_004f7910, 0);
+    FUN_00306910(config, 2, text_markerEventFormat, &stringB, DAT_004f7910, 0);
     FUN_002d3240((MemoryContextState *)g_objectSystem[0], stringB);
-    FUN_00306910(config, 2, DAT_004fa850, &stringC, DAT_004f7910, 0);
+    FUN_00306910(config, 2, text_notificationEventFormat, &stringC, DAT_004f7910, 0);
     FUN_002d32b0((MemoryContextState *)g_objectSystem[0], stringC);
-    FUN_003065f0(config, 2, DAT_004fa870, &value172, -1, 0);
+    FUN_003065f0(config, 2, text_eventTrackerScopeFlags, &value172, -1, 0);
     FUN_002f0db0(value172);
-    FUN_00306e50(config, 2, DAT_004fa890, &flag117, 0, 0);
+    FUN_00306e50(config, 2, text_saveEventTrackerOnExit, &flag117, 0, 0);
     ((MemoryContextState *)g_objectSystem[0])->flag117 = flag117;
-    FUN_00306910(config, 2, DAT_004fa8b0, &stringD, DAT_004f7910, 0);
+    FUN_00306910(config, 2, text_eventTrackerFileName, &stringD, DAT_004f7910, 0);
     FUN_002d3320((MemoryContextState *)g_objectSystem[0], stringD);
-    FUN_00306910(config, 2, DAT_004fa8d0, &stringE, DAT_004f7910, 0);
+    FUN_00306910(config, 2, text_systemPoolEventTrackerFileName, &stringE, DAT_004f7910, 0);
     FUN_002d3370((MemoryContextState *)g_objectSystem[0], stringE);
-    FUN_00306910(config, 2, DAT_004fa8f0, &stringF, DAT_004f7910, 0);
+    FUN_00306910(config, 2, text_symbolsFileName, &stringF, DAT_004f7910, 0);
     FUN_002d33c0((MemoryContextState *)g_objectSystem[0], stringF);
     if (stringF != 0 && *stringF != 0) {
         loader = FUN_002cec00(alloc);
@@ -1030,10 +1030,10 @@ extern "C" void FUN_002f69b0(PoolSetup *self) {
                     loaded = 0;
                 }
                 optionA = 0;
-                FUN_00306e50(config, 2, DAT_004fa900, &optionA, 0, 0);
+                FUN_00306e50(config, 2, text_showSectionHeaders, &optionA, 0, 0);
                 if (optionA != 0) { loader->optionA(); }
                 optionB = 0;
-                FUN_00306e50(config, 2, DAT_004fa918, &optionB, 0, 0);
+                FUN_00306e50(config, 2, text_showSymbols, &optionB, 0, 0);
                 if (optionB != 0) { loader->optionB(); }
                 loader->finish();
             }
@@ -1062,8 +1062,8 @@ extern "C" void FUN_002f69b0(PoolSetup *self) {
                 pool = (TrackedPool *)self->slots[i].pool;
                 options = 0;
                 if (self->slots[i].record != 0) { options = self->slots[i].record->s60; }
-                if (pool != 0 && pool->hasTracker() == 0 && (options == 0 || strstr(options, DAT_004fa530) == 0)) {
-                    if ((trackAll != 0 && i != 1) || (options != 0 && strstr(options, DAT_004fa550) != 0)) {
+                if (pool != 0 && pool->hasTracker() == 0 && (options == 0 || strstr(options, InhibitEventTracker) == 0)) {
+                    if ((trackAll != 0 && i != 1) || (options != 0 && strstr(options, UseEventTracker) != 0)) {
                         t = (EventTracker *)FUN_002c5780(alloc);
                         FUN_002dcc40(t, trackerSizeFor(self->slots[i].record, trackerSize));
                         t->start();
@@ -1089,7 +1089,7 @@ extern "C" void FUN_002f69b0(PoolSetup *self) {
                 unitPool = (TrackedPool *)self->slots[j].pool;
                 unitOptions = 0;
                 if (self->slots[j].record != 0) { unitOptions = self->slots[j].record->s60; }
-                if (unitPool != 0 && unitPool->hasTracker() == 0 && unitOptions != 0 && strstr(unitOptions, DAT_004fa550) != 0) {
+                if (unitPool != 0 && unitPool->hasTracker() == 0 && unitOptions != 0 && strstr(unitOptions, UseEventTracker) != 0) {
                     unitTracker = (EventTracker *)FUN_002c5780(alloc);
                     FUN_002dcc40(unitTracker, trackerSizeFor(self->slots[j].record, trackerSize));
                     unitTracker->start();
@@ -1135,7 +1135,7 @@ extern "C" void FUN_002f7420(LeakReportSlot *self);
 
 
 extern "C" int FUN_002dcc50(void *);
-extern char DAT_004fab08[];
+extern char text_s_igm[];
 class VA { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual int v104(int); };
 class VB { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void d32(); virtual void d33(); virtual void d34(); virtual void d35(); virtual void d36(); virtual void d37(); virtual void d38(); virtual void d39(); virtual void d40(); virtual void d41(); virtual R v176(char *); virtual void d43(); virtual void d44(); virtual void d45(); virtual void d46(); virtual void d47(); virtual void d48(); virtual void d49(); virtual void d50(); virtual void d51(); virtual void d52(); virtual void d53(); virtual void d54(); virtual void d55(); virtual void d56(); virtual void d57(); virtual void d58(); virtual void d59(); virtual void d60(); virtual void d61(); virtual void d62(); virtual void d63(); virtual void d64(); virtual void d65(); virtual void d66(); virtual void d67(); virtual void d68(); virtual void d69(); virtual void d70(); virtual void d71(); virtual void d72(); virtual void d73(); virtual void d74(); virtual void d75(); virtual void d76(); virtual void d77(); virtual void d78(); virtual void d79(); virtual void d80(); virtual void d81(); virtual void d82(); virtual void d83(); virtual void d84(); virtual void d85(); virtual void d86(); virtual VB * v356(); };
 extern "C" void FUN_002f78b0(VA *arg0);
@@ -1405,7 +1405,7 @@ extern "C" void FUN_002f8280(Slot6 *arg0, int arg1, int arg2, int arg3);
 void FUN_002f8280(Slot6 *arg0, int arg1, int arg2, int arg3);
 
 
-extern char DAT_004fab10[], DAT_004fab20[], DAT_004f90b0[], DAT_004fab30[];
+extern char Pool_statistics[], DAT_004fab20[], DAT_004f90b0[], DAT_004fab30[];
 class VB2 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void * v88(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void d32(); virtual void d33(); virtual void d34(); virtual void d35(); virtual void d36(); virtual void d37(); virtual void d38(); virtual void d39(); virtual void d40(); virtual void d41(); virtual void d42(); virtual void d43(); virtual void d44(); virtual void d45(); virtual void d46(); virtual void d47(); virtual void d48(); virtual void d49(); virtual void d50(); virtual void d51(); virtual void d52(); virtual void d53(); virtual void d54(); virtual void d55(); virtual void d56(); virtual void d57(); virtual void d58(); virtual void d59(); virtual void d60(); virtual void d61(); virtual void d62(); virtual void d63(); virtual void d64(); virtual void d65(); virtual void d66(); virtual void d67(); virtual void d68(); virtual void d69(); virtual void d70(); virtual void d71(); virtual void d72(); virtual void d73(); virtual void d74(); virtual void d75(); virtual void d76(); virtual void d77(); virtual void d78(); virtual void d79(); virtual void d80(); virtual void d81(); virtual void d82(); virtual void d83(); virtual void d84(); virtual void v348(int); };
 struct Z { int w[7]; int f28; };
 extern "C" void FUN_002f8420(VA *arg0, char *arg1, VB2 *arg2);
@@ -1415,7 +1415,7 @@ void FUN_002f8420(VA *arg0, char *arg1, VB2 *arg2);
 extern "C" int FUN_002f0a60(...);
 extern int DAT_004f95c8[4];
 extern int DAT_004fab70[4];
-extern int DAT_004fab90[4];
+extern int Combined_pool_statistics[4];
 struct E3 { char p[20]; int f20; char q[120]; };
 extern "C" void FUN_002f8580(E3 *arg0, int *arg1);
 class DW4VC_144_0 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void d32(); virtual void d33(); virtual int vX(); };

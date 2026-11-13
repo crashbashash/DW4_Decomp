@@ -1,13 +1,13 @@
 int FUN_001340f0(void) {
     if (DAT_0055eec8[0] == 0) {
-        DAT_0055eec8[0] = igMetaEnum_Create(&DAT_004d5080[0], &DAT_00485f88[0], &DAT_00485f90[0], 2);
+        DAT_0055eec8[0] = igMetaEnum_Create(&RENDERDESTINATION_TEXTURE_CREATE[0], &DAT_00485f88[0], &DAT_00485f90[0], 2);
     }
     return DAT_0055eec8[0];
 }
 
 int FUN_00134150(void) {
     if (DAT_0055eed0[0] == 0) {
-        DAT_0055eed0[0] = igMetaEnum_Create(&DAT_004d5140[0], &DAT_00485f98[0], &DAT_00485fa8[0], 3);
+        DAT_0055eed0[0] = igMetaEnum_Create(&RENDERDESTINATION_CREATE_MODE[0], &DAT_00485f98[0], &DAT_00485fa8[0], 3);
     }
     return DAT_0055eed0[0];
 }
@@ -114,7 +114,7 @@ void igRenderDestinationAttr_InitFields(void) {
 
     temp_s1 = (void *)g_igRenderDestinationAttr_metaObject[0];
     temp_s0 = igMetaObject_GetFieldCount(temp_s1);
-    igMetaObject_CreateFields(temp_s1, &DAT_00485fd0[0], 0xE);
+    igMetaObject_CreateFields(temp_s1, &g_igRenderDestinationAttr_ctorTable[0], 0xE);
     temp_v0 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0));
     FUN_002dc7a0(temp_v0, &DAT_004860c8[0]);
     ((igMetaField *)temp_v0)->_persistent = 0;
@@ -163,6 +163,6 @@ void igRenderDestinationAttr_InitFields(void) {
     ((igMetaField *)temp_s2_2)->_deepCopyMethod = 1;
     ((igMetaField *)temp_s2_2)->_shallowCopyMethod = 1;
     ((igMetaField *)temp_s2_2)->_isAlikeShallowMethod = 3;
-    igMetaObject_NameFields(temp_s1, &DAT_00486010[0], &DAT_00486050[0], &DAT_00486090[0], temp_s0);
+    igMetaObject_NameFields(temp_s1, &g_igRenderDestinationAttr_fieldTable[0], &DAT_00486050[0], &DAT_00486090[0], temp_s0);
 }
 

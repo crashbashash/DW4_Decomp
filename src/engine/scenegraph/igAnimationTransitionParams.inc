@@ -53,7 +53,7 @@ void igAnimationTransitionParams_InitFields(void) {
 
     temp_s0 = (void *)g_igAnimationTransitionParams_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_0048d620[0], 4);
-    igMetaObject_NameFields(temp_s0, &DAT_0048d630[0], &DAT_0048d640[0], &DAT_0048d650[0], temp_s1);
+    igMetaObject_CreateFields(temp_s0, &g_igAnimationTransitionParams_ctorTable[0], 4);
+    igMetaObject_NameFields(temp_s0, &g_igAnimationTransitionParams_fieldTable[0], &DAT_0048d640[0], &DAT_0048d650[0], temp_s1);
 }
 

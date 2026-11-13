@@ -173,7 +173,7 @@ void FUN_0032d4b0(int *arg0, char *arg1) {
     int var_v1;
     char *var_a0;
 
-    if ((arg1 != 0) && (strncasecmp(arg1, &DAT_004ffd28[0], 7) == 0)) {
+    if ((arg1 != 0) && (strncasecmp(arg1, &text_atfile[0], 7) == 0)) {
         var_a0 = arg1 + 7;
         do {
             var_a0 += 1;

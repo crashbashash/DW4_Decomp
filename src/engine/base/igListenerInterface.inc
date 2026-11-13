@@ -84,7 +84,7 @@ void igListenerInterface_InitFields(void) {
 
     temp_s1 = (void *)g_igListenerInterface_metaObject[0];
     temp_s0 = igMetaObject_GetFieldCount(temp_s1);
-    igMetaObject_CreateFields(temp_s1, &DAT_00497ce0[0], 4);
+    igMetaObject_CreateFields(temp_s1, &g_igListenerInterface_ctorTable[0], 4);
     temp_s2 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0));
     ((igObjectRefMetaField *)temp_s2)->_metaObject = igObjectList_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2)->_construct = 1;
@@ -97,6 +97,6 @@ void igListenerInterface_InitFields(void) {
     temp_s2_4 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 3));
     ((igObjectRefMetaField *)temp_s2_4)->_metaObject = (int)FUN_00226fd0();
     ((igRefMetaField *)temp_s2_4)->_construct = 1;
-    igMetaObject_NameFields(temp_s1, &DAT_00497cf0[0], &DAT_00497d00[0], &DAT_00497d10[0], temp_s0);
+    igMetaObject_NameFields(temp_s1, &g_igListenerInterface_fieldTable[0], &DAT_00497d00[0], &DAT_00497d10[0], temp_s0);
 }
 

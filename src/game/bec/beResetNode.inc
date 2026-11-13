@@ -55,8 +55,8 @@ void beResetNode_InitFields(void) {
 
     temp_s0 = (void *)g_beResetNode_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_004c44f8[0], 2);
-    igMetaObject_NameFields(temp_s0, &DAT_004c4500[0], &DAT_004c4508[0], &DAT_004c4510[0], temp_s1);
+    igMetaObject_CreateFields(temp_s0, &g_beResetNode_ctorTable[0], 2);
+    igMetaObject_NameFields(temp_s0, &g_beResetNode_fieldTable[0], &DAT_004c4508[0], &DAT_004c4510[0], temp_s1);
 }
 
 void FUN_0034b690(void)

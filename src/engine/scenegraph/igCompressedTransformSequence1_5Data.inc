@@ -67,7 +67,7 @@ void igCompressedTransformSequence1_5Data_InitFields(void) {
 
     temp_s0 = (void *)g_igCompressedTransformSequence1_5Data_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_0048c420[0], 0xA);
+    igMetaObject_CreateFields(temp_s0, &g_igCompressedTransformSequence1_5Data_ctorTable[0], 0xA);
     temp_s1 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s2)));
     ((igObjectRefMetaField *)temp_s1)->_metaObject = FUN_002ca030();
     temp_s1_2 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1)));
@@ -76,6 +76,6 @@ void igCompressedTransformSequence1_5Data_InitFields(void) {
     ((igObjectRefMetaField *)temp_s1_3)->_metaObject = FUN_002ca030();
     temp_s1_4 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s2 + 3)));
     ((igObjectRefMetaField *)temp_s1_4)->_metaObject = FUN_002ca030();
-    igMetaObject_NameFields(temp_s0, &DAT_0048c450[0], &DAT_0048c480[0], &DAT_0048c4b0[0], temp_s2);
+    igMetaObject_NameFields(temp_s0, &g_igCompressedTransformSequence1_5Data_fieldTable[0], &DAT_0048c480[0], &DAT_0048c4b0[0], temp_s2);
 }
 

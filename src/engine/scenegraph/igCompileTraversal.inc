@@ -112,7 +112,7 @@ void igCompileTraversal_InitFields(void) {
 
     temp_s0 = (void *)g_igCompileTraversal_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_0048c600[0], 0xC);
+    igMetaObject_CreateFields(temp_s0, &g_igCompileTraversal_ctorTable[0], 0xC);
     temp_s2 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s1)));
     ((igObjectRefMetaField *)temp_s2)->_metaObject = FUN_00135540();
     ((igRefMetaField *)temp_s2)->_construct = 1;
@@ -145,7 +145,7 @@ void igCompileTraversal_InitFields(void) {
     ((igMetaField *)((void *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 9)))->_persistent = 0;
     ((igMetaField *)((void *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0xA)))->_persistent = 0;
     ((igMetaField *)((void *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0xB)))->_persistent = 0;
-    igMetaObject_NameFields(temp_s0, &DAT_0048c630[0], &DAT_0048c660[0], &DAT_0048c690[0], temp_s1);
+    igMetaObject_NameFields(temp_s0, &g_igCompileTraversal_fieldTable[0], &DAT_0048c660[0], &DAT_0048c690[0], temp_s1);
     FUN_002fe480(&thunk_FUN_001bb230);
 }
 

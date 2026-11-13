@@ -68,8 +68,8 @@ void igViewerLoadingFileMessage_InitFields(void) {
 
     temp_s0 = (void *)g_igViewerLoadingFileMessage_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_004d0e38[0], 2);
+    igMetaObject_CreateFields(temp_s0, &g_igViewerLoadingFileMessage_ctorTable[0], 2);
     igStringMetaField_SetDefaultText(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 1), &DAT_0051eef0[0]);
-    igMetaObject_NameFields(temp_s0, &DAT_004d0e40[0], &DAT_004d0e48[0], &DAT_004d0e50[0], temp_s1);
+    igMetaObject_NameFields(temp_s0, &g_igViewerLoadingFileMessage_fieldTable[0], &DAT_004d0e48[0], &DAT_004d0e50[0], temp_s1);
 }
 

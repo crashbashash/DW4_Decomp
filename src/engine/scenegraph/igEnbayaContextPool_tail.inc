@@ -25,7 +25,7 @@ void Gap__Sg__igEnbayaContextPool__vfunc_13(int arg0) {
                 sp54 = 0;
                 var_a0 = *(int *)((char *)(sp5C) + 8);
                 var_a0 = (var_a0 == 0) ? ((int *)g_stringObjEmptyText)[0] : var_a0;
-                if ((sscanf(var_a0, &DAT_004e45e0[0], &sp54) == 1) && (sp54 >= 0) && (sp58 >= 0)) {
+                if ((sscanf(var_a0, &text_enbayaContextPool_d[0], &sp54) == 1) && (sp54 >= 0) && (sp58 >= 0)) {
                     FUN_001c1a80((T_1c1a80 *)arg0, sp54, sp58);
                 }
             }

@@ -39,9 +39,9 @@ void igRenderer_InitFields(void) {
 
     temp_s0 = (void *)g_igRenderer_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_004cff98[0], 1);
+    igMetaObject_CreateFields(temp_s0, &g_igRenderer_ctorTable[0], 1);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
     ((igObjectRefMetaField *)temp_s1)->_metaObject = FUN_0014a040();
-    igMetaObject_NameFields(temp_s0, &DAT_004cffa0[0], &DAT_004cffa8[0], &DAT_004cffb0[0], temp_s2);
+    igMetaObject_NameFields(temp_s0, &g_igRenderer_fieldTable[0], &DAT_004cffa8[0], &DAT_004cffb0[0], temp_s2);
 }
 

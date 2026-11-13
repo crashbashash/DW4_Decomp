@@ -113,7 +113,7 @@ void igPluginHelper_InitFields(void) {
 
     temp_s0 = (void *)g_igPluginHelper_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
-    igMetaObject_CreateFields((igMetaObject *)temp_s0, (igMetaField * (**)(void *))&DAT_004bf9f0[0], 4);
+    igMetaObject_CreateFields((igMetaObject *)temp_s0, (igMetaField * (**)(void *))&g_igPluginHelper_ctorTable[0], 4);
     igStringMetaField_SetDefaultText((int *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2))), (int)&DAT_004f6340[0]);
     temp_s1 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 1)));
     ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_002bc760();
@@ -124,6 +124,6 @@ void igPluginHelper_InitFields(void) {
     temp_s1_3 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 3)));
     ((igObjectRefMetaField *)temp_s1_3)->_metaObject = (int)FUN_002c23b0();
     ((igRefMetaField *)temp_s1_3)->_construct = 1;
-    igMetaObject_NameFields((igMetaObject *)temp_s0, (const char **)&DAT_004bfa00[0], (igMetaField ***)&DAT_004bfa10[0], &DAT_004bfa20[0], temp_s2);
+    igMetaObject_NameFields((igMetaObject *)temp_s0, (const char **)&g_igPluginHelper_fieldTable[0], (igMetaField ***)&DAT_004bfa10[0], &DAT_004bfa20[0], temp_s2);
 }
 

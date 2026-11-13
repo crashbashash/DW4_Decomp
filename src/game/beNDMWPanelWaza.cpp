@@ -58,14 +58,14 @@ extern "C" int Gap__Bec__beNDMWPanelObjectWaza__vfunc_20(void);
 extern "C" int DAT_004cc6d0[4];
 extern "C" int DAT_004cc6e0[4];
 extern "C" int DAT_004cc720[4];
-extern "C" int DAT_00515950[4];
-extern "C" int DAT_00515958[4];
-extern "C" int DAT_00515960[4];
-extern "C" int DAT_00515968[4];
-extern "C" int DAT_00515970[4];
-extern "C" int DAT_00515978[4];
-extern "C" int DAT_00515980[4];
-extern "C" int DAT_00515988[4];
+extern "C" int TEXTCTL_9[4];
+extern "C" int TEXTSET_7[4];
+extern "C" int CENTER_5[4];
+extern "C" int ALIGN_5[4];
+extern "C" int SET_5[4];
+extern "C" int SWITCH_9[4];
+extern "C" int COLOR_5[4];
+extern "C" int CLR_5[4];
 extern "C" int g_stringPool[4];
 extern "C" float DAT_0058c180[12];
 extern "C" char GPR_00554e6c;
@@ -75,28 +75,28 @@ struct SetOp { static inline void go(igStringRefList *L, int idx, const Recovery
 extern "C" void FUN_003cdef0(beNDMWPanelObject *self, int g, int s, int *name, int val);
 struct P4B { float x; float y; float z; };
 extern "C" void FUN_003ce4c0(beNDMWPanelObject *arg0, struct P4B *arg1);
-extern "C" int DAT_00515990[4];
+extern "C" int MODELCTRL_15[4];
 typedef struct A { char pad[12]; int f12; char pad16[4]; int f20; } A;
 extern "C" void FUN_003ce500(A *arg0, int *arg1, int *arg2, float *arg3, int arg4);
 extern "C" int DAT_004cc690[][4];
-extern "C" int DAT_005159a0[4];
-extern "C" int DAT_005159b0[4];
-extern "C" int DAT_005159c0[4];
-extern "C" int DAT_005159c8[4];
-extern "C" int DAT_005159d8[4];
+extern "C" int text_i_wzslbase00[4];
+extern "C" int GENERATE_10[4];
+extern "C" int SOUND_7[4];
+extern "C" int WINDOW_OPEN[4];
+extern "C" int PLAY_5[4];
 extern "C" void FUN_003ce5b0(beNDMWPanelObject *arg0, int arg1, int arg2);
 extern "C" int DAT_004cc69c[4];
-extern "C" int DAT_005159e0[4];
+extern "C" int CURSOR_MOVE_2[4];
 extern "C" void FUN_003ce7e0(beNDMWPanelObject *arg0);
 typedef struct O { char p0[12]; int f12; char p1[8]; int f24; int f28; char p2[20]; int f52; } O;
 extern "C" void FUN_003ce890(O *arg0);
 struct Rec { char p[12]; int f12; };
 extern "C" Rec * igProperty_GetRecord(...);
 extern "C" Rec * igProperty_GetRecordFolder(...);
-extern "C" int DAT_005159f0[4];
-extern "C" int DAT_005159f8[4];
-extern "C" int DAT_00515a08[4];
-extern "C" int DAT_00515a18[4];
+extern "C" int GAMERAM_13[4];
+extern "C" int GETPLAYER_11[4];
+extern "C" int WAZALIST_3[4];
+extern "C" int NAME_4[4];
 extern "C" int DAT_00515a20[4];
 extern "C" int DAT_00515a28[4];
 struct Rel { static inline void go(igObject *object) {
@@ -107,16 +107,16 @@ struct Rel { static inline void go(igObject *object) {
     }
 } };
 extern "C" void Gap__Bec__beNDMWPanelObjectWaza__vfunc_21(beNDMWPanelObjectWaza *arg0);
-extern "C" int DAT_00515a30[4];
-extern "C" int DAT_00515a38[4];
-extern "C" int DAT_00515a40[4];
-extern "C" int DAT_00515a48[4];
-extern "C" int DAT_00515a58[4];
-extern "C" int DAT_00515a60[4];
-extern "C" int DAT_00515a70[4];
-extern "C" int DAT_00515a80[4];
-extern "C" int DAT_00515a88[4];
-extern "C" int DAT_00515a98[4];
+extern "C" int DELAY_2[4];
+extern "C" int LABEL[4];
+extern "C" int MMP_4[4];
+extern "C" int METERCTRL_4[4];
+extern "C" int text_mpmt[4];
+extern "C" int SETPERCENT_3[4];
+extern "C" int NUMBERCTRL_5[4];
+extern "C" int text_mpnm[4];
+extern "C" int SETVALUE_4[4];
+extern "C" int CURSOR_NG_3[4];
 /* Property record: integer value at +12. */
 struct PropertyRecordInt { char p[12]; int value; };
 extern "C" void Gap__Bec__beNDMWPanelObjectWaza__vfunc_22(beNDMWPanelObjectWaza *arg0, int *arg1, long long *arg2);
@@ -124,16 +124,16 @@ extern "C" int g_bePadManager_metaObject[4];
 extern "C" void Gap__Bec__beNDMWPanelWaza__vfunc_32(beNDMWPanelWaza *arg0);
 extern "C" int g_beNDMWPanelWazaInfo_metaObject[4];
 extern "C" int g_beNDMWPanelWaza_metaObject[4];
-extern "C" int DAT_00515b80[4];
+extern "C" int NDMWPANEL_2[4];
 extern "C" void Gap__Bec__beNDMWPanelWaza__vfunc_29(beNDMWPanelWaza *arg0, void *arg1);
 extern "C" bePadData *bePadManager_GetPadForPlayer(int, int);
 extern "C" int DAT_004cc680[4];
 extern "C" int DAT_004cc6c0[4];
-extern "C" int DAT_00515b90[4];
-extern "C" int DAT_00515b98[4];
-extern "C" int DAT_00515ba8[4];
-extern "C" int DAT_00515bb8[4];
-extern "C" int DAT_00515bc8[4];
+extern "C" int FIRE_2[4];
+extern "C" int CURSOR_CANCEL[4];
+extern "C" int text_i_wzslcursel[4];
+extern "C" int SQ_CLOSE_11[4];
+extern "C" int WINDOW_CLOSE[4];
 class StringRef {
 public:
     char *p;
@@ -195,7 +195,7 @@ public:
 };
 /* property record returned by the igProperty lookup (no reflected class) */
 struct Rec_3d0760 { int p[3]; igObjectList *f12; };
-extern "C" int DAT_00515aa8[4];
+extern "C" int DISKFOLDER_4[4];
 extern "C" int FUN_003d0760(beNDMWPanelWaza *arg0, beNDMWPanelWazaInfoRam *arg1);
 /* matching construct: dummy-virtual view of beNDMWPanelObjectWaza so the call
  * through slot 21 (Gap__Bec__beNDMWPanelObjectWaza__vfunc_21) compiles to the
@@ -220,9 +220,9 @@ struct Rel_3d0a90 { static inline void go(igObject *object) {
     }
 } };
 extern "C" void FUN_003d0a90(int arg0, beNDMWPanelWazaInfoRam *arg1, int arg2, igObject *arg3);
-extern "C" int DAT_00515bd8[4];
-extern "C" int DAT_00515be0[4];
-extern "C" int DAT_00515be8[4];
+extern "C" int SUBWND_7[4];
+extern "C" int ISRUN_9[4];
+extern "C" int EMGHEAL[4];
 extern "C" int g_defaultAllocatorSelector[4];
 extern "C" unsigned char g_useOwnerAllocator;
 extern "C" int Gap__Bec__beNDMWPanelWaza__vfunc_34(beNDMWPanelWaza *self, beNDMWPanelWazaInfoRam *ram, beMessengerWork *arg2);
@@ -271,23 +271,23 @@ void FUN_003cdef0(beNDMWPanelObject *self, int g, int s, int *name, int val) {
                 ref = StringPool_Intern(g_stringPool[0], name);
             }
             SetOp::go(((igStringRefList *)self->_textSetList), idx, RecoveryString((void *)ref));
-            beMessenger_SelectGroup(self->_messenger, &DAT_00515950[0]);
+            beMessenger_SelectGroup(self->_messenger, &TEXTCTL_9[0]);
             beMessenger_AppendString(self->_messenger, DAT_004cc6d0[g]);
             beMessenger_AppendString(self->_messenger, DAT_004cc6e0[s]);
             beMessenger_AppendString(self->_messenger, name);
-            beMessenger_DispatchSelected(self->_messenger, &DAT_00515958[0]);
+            beMessenger_DispatchSelected(self->_messenger, &TEXTSET_7[0]);
             if (g == 1) {
-                beMessenger_SelectGroup(self->_messenger, &DAT_00515950[0]);
+                beMessenger_SelectGroup(self->_messenger, &TEXTCTL_9[0]);
                 beMessenger_AppendString(self->_messenger, DAT_004cc6d0[g]);
                 beMessenger_AppendString(self->_messenger, DAT_004cc6e0[s]);
-                beMessenger_AppendString(self->_messenger, &DAT_00515960[0]);
-                beMessenger_DispatchSelected(self->_messenger, &DAT_00515968[0]);
+                beMessenger_AppendString(self->_messenger, &CENTER_5[0]);
+                beMessenger_DispatchSelected(self->_messenger, &ALIGN_5[0]);
             }
-            beMessenger_SelectGroup(self->_messenger, &DAT_00515950[0]);
+            beMessenger_SelectGroup(self->_messenger, &TEXTCTL_9[0]);
             beMessenger_AppendString(self->_messenger, DAT_004cc6d0[g]);
             beMessenger_AppendString(self->_messenger, DAT_004cc6e0[s]);
-            beMessenger_AppendString(self->_messenger, &DAT_00515970[0]);
-            beMessenger_DispatchSelected(self->_messenger, &DAT_00515978[0]);
+            beMessenger_AppendString(self->_messenger, &SET_5[0]);
+            beMessenger_DispatchSelected(self->_messenger, &SWITCH_9[0]);
         }
         slot = (int *)((igIntList *)self->_textColorList)->_data + idx;
         if (val != *slot) {
@@ -295,13 +295,13 @@ void FUN_003cdef0(beNDMWPanelObject *self, int g, int s, int *name, int val) {
             if (cnt != 0 && idx >= 0 && idx < cnt) {
                 *slot = val;
             }
-            beMessenger_SelectGroup(self->_messenger, &DAT_00515950[0]);
+            beMessenger_SelectGroup(self->_messenger, &TEXTCTL_9[0]);
             beMessenger_AppendString(self->_messenger, DAT_004cc6d0[g]);
             beMessenger_AppendString(self->_messenger, DAT_004cc6e0[s]);
             p = &DAT_0058c180[val * 3];
             v[0] = p[0]; v[1] = p[1]; v[2] = p[2];
             beMessenger_AppendVec3((int)self->_messenger, (float *)(&v[0]));
-            beMessenger_DispatchSelected(self->_messenger, &DAT_00515980[0]);
+            beMessenger_DispatchSelected(self->_messenger, &COLOR_5[0]);
         }
     } else {
         SetOp::go(((igStringRefList *)self->_textSetList), idx, RecoveryString((void *)0));
@@ -309,11 +309,11 @@ void FUN_003cdef0(beNDMWPanelObject *self, int g, int s, int *name, int val) {
         if (cnt != 0 && idx >= 0 && idx < cnt) {
             *((int *)((igIntList *)self->_textColorList)->_data + idx) = DAT_004cc720[0];
         }
-        beMessenger_SelectGroup(self->_messenger, &DAT_00515950[0]);
+        beMessenger_SelectGroup(self->_messenger, &TEXTCTL_9[0]);
         beMessenger_AppendString(self->_messenger, DAT_004cc6d0[g]);
         beMessenger_AppendString(self->_messenger, DAT_004cc6e0[s]);
-        beMessenger_AppendString(self->_messenger, &DAT_00515988[0]);
-        beMessenger_DispatchSelected(self->_messenger, &DAT_00515978[0]);
+        beMessenger_AppendString(self->_messenger, &CLR_5[0]);
+        beMessenger_DispatchSelected(self->_messenger, &SWITCH_9[0]);
     }
 }
 
@@ -326,7 +326,7 @@ void FUN_003ce4c0(beNDMWPanelObject *arg0, struct P4B *arg1) {
 void FUN_003ce500(A *arg0, int *arg1, int *arg2, float *arg3, int arg4) {
     float sp50[4];
 
-    beMessenger_SelectReceivers(arg0->f12, &DAT_00515990[0], (int)arg1, arg0->f20);
+    beMessenger_SelectReceivers(arg0->f12, &MODELCTRL_15[0], (int)arg1, arg0->f20);
     if (arg3 != 0) {
         sp50[0] = arg3[0];
         sp50[1] = arg3[1];
@@ -360,14 +360,14 @@ void FUN_003ce5b0(beNDMWPanelObject *arg0, int arg1, int arg2) {
     arg0->_lineMode = v;
     if (arg1 != 0) {
         FUN_003ce4c0(arg0, (struct P4B *)sp40);
-        FUN_003ce500((A *)arg0, &DAT_005159a0[0], &DAT_005159b0[0], (float *)sp40, DAT_004cc690[arg0->_page][v]);
+        FUN_003ce500((A *)arg0, &text_i_wzslbase00[0], &GENERATE_10[0], (float *)sp40, DAT_004cc690[arg0->_page][v]);
     } else {
-        FUN_003ce500((A *)arg0, &DAT_005159a0[0], (int *)DAT_004cc690[arg0->_page][v], (float *)0, 0);
+        FUN_003ce500((A *)arg0, &text_i_wzslbase00[0], (int *)DAT_004cc690[arg0->_page][v], (float *)0, 0);
     }
     if (!(arg2 & 0xFF)) {
-        beMessenger_SelectGroup(arg0->_messenger, &DAT_005159c0[0]);
-        beMessenger_AppendString(arg0->_messenger, &DAT_005159c8[0]);
-        beMessenger_DispatchSelected(arg0->_messenger, &DAT_005159d8[0]);
+        beMessenger_SelectGroup(arg0->_messenger, &SOUND_7[0]);
+        beMessenger_AppendString(arg0->_messenger, &WINDOW_OPEN[0]);
+        beMessenger_DispatchSelected(arg0->_messenger, &PLAY_5[0]);
     }
 }
 
@@ -375,7 +375,7 @@ void FUN_003ce700(int *arg0) {
     int i;
     int t;
 
-    FUN_003ce500((A *)arg0, &DAT_005159a0[0], (int *)(DAT_004cc69c[arg0[4] * 4]), (float *)0, 0);
+    FUN_003ce500((A *)arg0, &text_i_wzslbase00[0], (int *)(DAT_004cc69c[arg0[4] * 4]), (float *)0, 0);
     i = 0;
     do {
         t = i + arg0[5] * 4;
@@ -394,17 +394,17 @@ void FUN_003ce7e0(beNDMWPanelObject *arg0) {
     temp_v1 = arg0->_cursor;
     if (temp_v1 != 0) {
         arg0->_cursor = temp_v1 - 1;
-        beMessenger_SelectGroup(arg0->_messenger, &DAT_005159c0[0]);
-        beMessenger_AppendString(arg0->_messenger, &DAT_005159e0[0]);
-        beMessenger_DispatchSelected(arg0->_messenger, &DAT_005159d8[0]);
+        beMessenger_SelectGroup(arg0->_messenger, &SOUND_7[0]);
+        beMessenger_AppendString(arg0->_messenger, &CURSOR_MOVE_2[0]);
+        beMessenger_DispatchSelected(arg0->_messenger, &PLAY_5[0]);
         return;
     }
     temp_v1_2 = arg0->_offset;
     if (temp_v1_2 != 0) {
         arg0->_offset = temp_v1_2 - 1;
-        beMessenger_SelectGroup(arg0->_messenger, &DAT_005159c0[0]);
-        beMessenger_AppendString(arg0->_messenger, &DAT_005159e0[0]);
-        beMessenger_DispatchSelected(arg0->_messenger, &DAT_005159d8[0]);
+        beMessenger_SelectGroup(arg0->_messenger, &SOUND_7[0]);
+        beMessenger_AppendString(arg0->_messenger, &CURSOR_MOVE_2[0]);
+        beMessenger_DispatchSelected(arg0->_messenger, &PLAY_5[0]);
     }
 }
 
@@ -416,17 +416,17 @@ void FUN_003ce890(O *arg0) {
     if (n != 0 && (cur = arg0->f24, cur != (n - 1))) {
         if (cur != 3) {
             arg0->f24 = cur + 1;
-            beMessenger_SelectGroup(arg0->f12, &DAT_005159c0[0]);
-            beMessenger_AppendString(arg0->f12, &DAT_005159e0[0]);
-            beMessenger_DispatchSelected(arg0->f12, &DAT_005159d8[0]);
+            beMessenger_SelectGroup(arg0->f12, &SOUND_7[0]);
+            beMessenger_AppendString(arg0->f12, &CURSOR_MOVE_2[0]);
+            beMessenger_DispatchSelected(arg0->f12, &PLAY_5[0]);
             return;
         }
         t = arg0->f28;
         if ((t + 4) < n) {
             arg0->f28 = t + 1;
-            beMessenger_SelectGroup(arg0->f12, &DAT_005159c0[0]);
-            beMessenger_AppendString(arg0->f12, &DAT_005159e0[0]);
-            beMessenger_DispatchSelected(arg0->f12, &DAT_005159d8[0]);
+            beMessenger_SelectGroup(arg0->f12, &SOUND_7[0]);
+            beMessenger_AppendString(arg0->f12, &CURSOR_MOVE_2[0]);
+            beMessenger_DispatchSelected(arg0->f12, &PLAY_5[0]);
         }
     }
 }
@@ -437,9 +437,9 @@ void Gap__Bec__beNDMWPanelObjectWaza__vfunc_21(beNDMWPanelObjectWaza *arg0) {
     int spB0[3];
     int spA8[2];
     if (arg0->_playerDataList == 0) {
-        beMessenger_SelectGroup(arg0->_messenger, DAT_005159f0);
+        beMessenger_SelectGroup(arg0->_messenger, GAMERAM_13);
         beMessenger_AppendInt(arg0->_messenger, arg0->_playerNo);
-        beMessenger_DispatchSelected(arg0->_messenger, DAT_005159f8);
+        beMessenger_DispatchSelected(arg0->_messenger, GETPLAYER_11);
         igObject *o = (igObject *)beMessenger_GetObject(arg0->_messenger, 0);
         if (o != 0) {
             o->_refCount = o->_refCount + 1;
@@ -447,7 +447,7 @@ void Gap__Bec__beNDMWPanelObjectWaza__vfunc_21(beNDMWPanelObjectWaza *arg0) {
         Rel::go((igObject *)arg0->_playerDataList);
         arg0->_playerDataList = (int)o;
     }
-    igObjectList *fl = (igObjectList *)igProperty_GetRecordFolder(arg0->_playerDataList, DAT_00515a08)->f12;
+    igObjectList *fl = (igObjectList *)igProperty_GetRecordFolder(arg0->_playerDataList, WAZALIST_3)->f12;
     igObjectList *l = (igObjectList *)arg0->_listFolder;
     int n1 = l->_count;
     int i1 = 0;
@@ -497,7 +497,7 @@ void Gap__Bec__beNDMWPanelObjectWaza__vfunc_21(beNDMWPanelObjectWaza *arg0) {
                 int s6 = s2 * 4;
                 int s1 = 0;
                 beNDMWItemBase *s0 = ((beNDMWItemBase **)v1->_data)[s2];
-                int *s7 = beNDMWItemBase_GetRecordString(s0, arg0->_manager, DAT_00515a18);
+                int *s7 = beNDMWItemBase_GetRecordString(s0, arg0->_manager, NAME_4);
                 int s8 = igProperty_GetRecord(arg0->_playerDataList, DAT_00515a20)->f12;
                 if (s8 < beNDMWItemBase_GetRecordInt(s0, arg0->_manager, DAT_00515a20)) {
                     s1 = 1;
@@ -551,27 +551,27 @@ void Gap__Bec__beNDMWPanelObjectWaza__vfunc_22(beNDMWPanelObjectWaza *arg0, int 
         temp_s1 = (struct PropertyRecordInt *)igProperty_GetRecord(arg0->_playerDataList, &DAT_00515a20[0]);
         temp_v0 = beNDMWItemBase_GetRecordInt(temp_s2, arg0->_manager, &DAT_00515a20[0]);
         if (temp_s1->value >= temp_v0) {
-            *arg2 = (long long)beNDMWItemBase_GetRecordInt(temp_s2, arg0->_manager, &DAT_00515a30[0]);
+            *arg2 = (long long)beNDMWItemBase_GetRecordInt(temp_s2, arg0->_manager, &DELAY_2[0]);
             *arg2 = __divdi3(*arg2 * 0x3B9ACA00LL, 0x3C);
-            *arg1 = ((int)beNDMWItemBase_GetRecordString(temp_s2, arg0->_manager, &DAT_00515a38[0]));
+            *arg1 = ((int)beNDMWItemBase_GetRecordString(temp_s2, arg0->_manager, &LABEL[0]));
             temp_s1->value = temp_s1->value - temp_v0;
-            temp_s0 = ((struct PropertyRecordInt *)((void *)igProperty_GetRecord(arg0->_playerDataList, &DAT_00515a40[0])))->value;
-            beMessenger_PrepareDelayedSelection(arg0->_messenger, &DAT_00515a48[0], &DAT_00515a58[0], arg0->_playerNo);
+            temp_s0 = ((struct PropertyRecordInt *)((void *)igProperty_GetRecord(arg0->_playerDataList, &MMP_4[0])))->value;
+            beMessenger_PrepareDelayedSelection(arg0->_messenger, &METERCTRL_4[0], &text_mpmt[0], arg0->_playerNo);
             beMessenger_AppendFloat(arg0->_messenger, (float)(temp_s1->value * 100 / temp_s0));
-            beMessenger_EnqueueSelected(arg0->_messenger, &DAT_00515a60[0], 1);
-            beMessenger_PrepareDelayedSelection(arg0->_messenger, &DAT_00515a70[0], &DAT_00515a80[0], arg0->_playerNo);
+            beMessenger_EnqueueSelected(arg0->_messenger, &SETPERCENT_3[0], 1);
+            beMessenger_PrepareDelayedSelection(arg0->_messenger, &NUMBERCTRL_5[0], &text_mpnm[0], arg0->_playerNo);
             beMessenger_AppendInt(arg0->_messenger, temp_s1->value);
-            beMessenger_EnqueueSelected(arg0->_messenger, &DAT_00515a88[0], 1);
+            beMessenger_EnqueueSelected(arg0->_messenger, &SETVALUE_4[0], 1);
             return;
         }
-        beMessenger_SelectGroup(arg0->_messenger, &DAT_005159c0[0]);
-        beMessenger_AppendString(arg0->_messenger, &DAT_00515a98[0]);
-        beMessenger_DispatchSelected(arg0->_messenger, &DAT_005159d8[0]);
+        beMessenger_SelectGroup(arg0->_messenger, &SOUND_7[0]);
+        beMessenger_AppendString(arg0->_messenger, &CURSOR_NG_3[0]);
+        beMessenger_DispatchSelected(arg0->_messenger, &PLAY_5[0]);
         return;
     }
-    beMessenger_SelectGroup(arg0->_messenger, &DAT_005159c0[0]);
-    beMessenger_AppendString(arg0->_messenger, &DAT_00515a98[0]);
-    beMessenger_DispatchSelected(arg0->_messenger, &DAT_005159d8[0]);
+    beMessenger_SelectGroup(arg0->_messenger, &SOUND_7[0]);
+    beMessenger_AppendString(arg0->_messenger, &CURSOR_NG_3[0]);
+    beMessenger_DispatchSelected(arg0->_messenger, &PLAY_5[0]);
 }
 
 void Gap__Bec__beNDMWPanelWaza__vfunc_32(beNDMWPanelWaza *arg0) {
@@ -586,7 +586,7 @@ int Gap__Bec__beNDMWPanelWaza__vfunc_30(void)
 }
 
 void Gap__Bec__beNDMWPanelWaza__vfunc_29(beNDMWPanelWaza *arg0, void *arg1) {
-    beMessenger_RegisterReceiver(arg0->_messenger, arg1, &DAT_00515b80[0], 0, *(int *)((char *)(arg1) + 8));
+    beMessenger_RegisterReceiver(arg0->_messenger, arg1, &NDMWPANEL_2[0], 0, *(int *)((char *)(arg1) + 8));
     *(char *)((char *)(arg1) + 20) = 0;
 }
 
@@ -668,7 +668,7 @@ void Gap__Bec__beNDMWPanelWaza__vfunc_31(beNDMWPanelWaza *self, beNDMWPanelWazaI
             emg = 1;
             switch (ramState->_st1) {
             case 0:
-                if ((unsigned char)beBaseInfoRam_IsTimerExpired(ramState, &DAT_00515b90[0])) {
+                if ((unsigned char)beBaseInfoRam_IsTimerExpired(ramState, &FIRE_2[0])) {
                     emg = 0;
                     if (panel->_isEmg != 0 ||
                         (blocked == 0 && (trig & 0x4000) && panel->_listKazu != 0 && work->_page != 2)) {
@@ -677,7 +677,7 @@ void Gap__Bec__beNDMWPanelWaza__vfunc_31(beNDMWPanelWaza *self, beNDMWPanelWazaI
                             if (0 < ret) {
                                 H::SetLabel(work, refStr);
                                 work->_retIsFire = 1;
-                                beBaseInfoRam_StartTimer(ramState, &DAT_00515b90[0], ret);
+                                beBaseInfoRam_StartTimer(ramState, &FIRE_2[0], ret);
                                 ramState->_st1 = ramState->_st1 + 1;
                                 ramState->_st3 = 0;
                                 ramState->_st2 = 0;
@@ -688,7 +688,7 @@ void Gap__Bec__beNDMWPanelWaza__vfunc_31(beNDMWPanelWaza *self, beNDMWPanelWazaI
                                 ramState->_st2 = 0;
                                 ramState->_st1 = 0;
                             } else {
-                                beBaseInfoRam_StartTimer(ramState, &DAT_00515b90[0], 0x0FE502AA);
+                                beBaseInfoRam_StartTimer(ramState, &FIRE_2[0], 0x0FE502AA);
                                 ramState->_st1 = ramState->_st1 + 1;
                                 ramState->_st3 = 0;
                                 ramState->_st2 = 0;
@@ -711,9 +711,9 @@ void Gap__Bec__beNDMWPanelWaza__vfunc_31(beNDMWPanelWaza *self, beNDMWPanelWazaI
                             ramState->_st3 = 0;
                             ramState->_st2 = 0;
                             ramState->_st1 = 0;
-                            beMessenger_SelectGroup(self->_messenger, &DAT_005159c0[0]);
-                            beMessenger_AppendString(self->_messenger, &DAT_00515b98[0]);
-                            beMessenger_DispatchSelected(self->_messenger, &DAT_005159d8[0]);
+                            beMessenger_SelectGroup(self->_messenger, &SOUND_7[0]);
+                            beMessenger_AppendString(self->_messenger, &CURSOR_CANCEL[0]);
+                            beMessenger_DispatchSelected(self->_messenger, &PLAY_5[0]);
                         }
                     } else if (trig & 0x400) {
                         if (work->_page != 1) {
@@ -728,9 +728,9 @@ void Gap__Bec__beNDMWPanelWaza__vfunc_31(beNDMWPanelWaza *self, beNDMWPanelWazaI
                             ramState->_st3 = 0;
                             ramState->_st2 = 0;
                             ramState->_st1 = 0;
-                            beMessenger_SelectGroup(self->_messenger, &DAT_005159c0[0]);
-                            beMessenger_AppendString(self->_messenger, &DAT_00515b98[0]);
-                            beMessenger_DispatchSelected(self->_messenger, &DAT_005159d8[0]);
+                            beMessenger_SelectGroup(self->_messenger, &SOUND_7[0]);
+                            beMessenger_AppendString(self->_messenger, &CURSOR_CANCEL[0]);
+                            beMessenger_DispatchSelected(self->_messenger, &PLAY_5[0]);
                         }
                     } else if (trig & 0x200) {
                         if (work->_page != 2) {
@@ -745,9 +745,9 @@ void Gap__Bec__beNDMWPanelWaza__vfunc_31(beNDMWPanelWaza *self, beNDMWPanelWazaI
                             ramState->_st3 = 0;
                             ramState->_st2 = 0;
                             ramState->_st1 = 0;
-                            beMessenger_SelectGroup(self->_messenger, &DAT_005159c0[0]);
-                            beMessenger_AppendString(self->_messenger, &DAT_00515b98[0]);
-                            beMessenger_DispatchSelected(self->_messenger, &DAT_005159d8[0]);
+                            beMessenger_SelectGroup(self->_messenger, &SOUND_7[0]);
+                            beMessenger_AppendString(self->_messenger, &CURSOR_CANCEL[0]);
+                            beMessenger_DispatchSelected(self->_messenger, &PLAY_5[0]);
                         }
                     }
                     if (st3(ramState) < 2) {
@@ -756,7 +756,7 @@ void Gap__Bec__beNDMWPanelWaza__vfunc_31(beNDMWPanelWaza *self, beNDMWPanelWazaI
                 }
                 break;
             case 1:
-                if (beBaseInfoRam_IsTimerExpired(ramState, &DAT_00515b90[0]) != 0) {
+                if (beBaseInfoRam_IsTimerExpired(ramState, &FIRE_2[0]) != 0) {
                     ramState->_st1 = 0;
                     ramState->_st3 = 0;
                     ramState->_st2 = 0;
@@ -784,27 +784,27 @@ void Gap__Bec__beNDMWPanelWaza__vfunc_31(beNDMWPanelWaza *self, beNDMWPanelWazaI
                 sel = panel->_cursor + panel->_lineMode;
                 if (work->_isCursorGenerate == 0) {
                     FUN_003ce4c0((beNDMWPanelObject *)panel, (struct P4B *)vec);
-                    FUN_003ce500((A *)panel, (int *)(&DAT_00515ba8[0]), (int *)(&DAT_005159b0[0]), (float *)vec, DAT_004cc6c0[sel]);
+                    FUN_003ce500((A *)panel, (int *)(&text_i_wzslcursel[0]), (int *)(&GENERATE_10[0]), (float *)vec, DAT_004cc6c0[sel]);
                     work->_isCursorGenerate = 1;
                     return;
                 }
                 if (idx != sel) {
-                    FUN_003ce500((A *)panel, (int *)(&DAT_00515ba8[0]), (int *)((void *)DAT_004cc6c0[sel]), (float *)0, 0);
+                    FUN_003ce500((A *)panel, (int *)(&text_i_wzslcursel[0]), (int *)((void *)DAT_004cc6c0[sel]), (float *)0, 0);
                     return;
                 }
             } else if (work->_isCursorGenerate != 0) {
-                FUN_003ce500((A *)panel, (int *)(&DAT_00515ba8[0]), (int *)(&DAT_00515bb8[0]), (float *)0, 0);
+                FUN_003ce500((A *)panel, (int *)(&text_i_wzslcursel[0]), (int *)(&SQ_CLOSE_11[0]), (float *)0, 0);
                 work->_isCursorGenerate = 0;
                 return;
             }
             break;
         case 2:
-            beMessenger_SelectGroup(self->_messenger, &DAT_005159c0[0]);
-            beMessenger_AppendString(self->_messenger, &DAT_00515bc8[0]);
-            beMessenger_DispatchSelected(self->_messenger, &DAT_005159d8[0]);
+            beMessenger_SelectGroup(self->_messenger, &SOUND_7[0]);
+            beMessenger_AppendString(self->_messenger, &WINDOW_CLOSE[0]);
+            beMessenger_DispatchSelected(self->_messenger, &PLAY_5[0]);
             FUN_003ce700((int *)panel);
             if (work->_isCursorGenerate != 0) {
-                FUN_003ce500((A *)panel, (int *)(&DAT_00515ba8[0]), (int *)(&DAT_00515bb8[0]), (float *)0, 0);
+                FUN_003ce500((A *)panel, (int *)(&text_i_wzslcursel[0]), (int *)(&SQ_CLOSE_11[0]), (float *)0, 0);
             }
             ramState->_st0 = 3;
             ramState->_st3 = 0;
@@ -827,11 +827,11 @@ int FUN_003d0760(beNDMWPanelWaza *arg0, beNDMWPanelWazaInfoRam *arg1) {
     if (((beNDMWPanelObjectItem *)s2->_panelItem)->_isNoHealing != 0) {
         return 0;
     }
-    beMessenger_SelectGroup(arg0->_messenger, &DAT_005159f0[0]);
+    beMessenger_SelectGroup(arg0->_messenger, &GAMERAM_13[0]);
     beMessenger_AppendInt(arg0->_messenger, arg1->_ramNo);
-    beMessenger_DispatchSelected(arg0->_messenger, &DAT_005159f8[0]);
+    beMessenger_DispatchSelected(arg0->_messenger, &GETPLAYER_11[0]);
     int o = ((int)beMessenger_GetObject(arg0->_messenger, 0));
-    igObjectList *arr = ((Rec_3d0760 *)igProperty_GetRecordFolder(o, &DAT_00515aa8[0]))->f12;
+    igObjectList *arr = ((Rec_3d0760 *)igProperty_GetRecordFolder(o, &DISKFOLDER_4[0]))->f12;
     int best = -1;
     int idx = 0;
     int n = arr->_count - 2;
@@ -882,12 +882,12 @@ int FUN_003d08f0(beNDMWPanelWaza *arg0, beNDMWPanelWazaInfoRam *arg1) {
     if (((beNDMWPanelObjectWaza *)s2->_panelWaza)->_isNoHealing != 0) {
         return 0;
     }
-    beMessenger_SelectGroup(arg0->_messenger, &DAT_005159f0[0]);
+    beMessenger_SelectGroup(arg0->_messenger, &GAMERAM_13[0]);
     beMessenger_AppendInt(arg0->_messenger, arg1->_ramNo);
-    beMessenger_DispatchSelected(arg0->_messenger, &DAT_005159f8[0]);
+    beMessenger_DispatchSelected(arg0->_messenger, &GETPLAYER_11[0]);
     int o = ((int)beMessenger_GetObject(arg0->_messenger, 0));
     s1 = ((Fld *)igProperty_GetRecord(o, &DAT_00515a20[0]))->f12;
-    s5 = ((Rec_3d08f0 *)igProperty_GetRecordFolder(o, &DAT_00515a08[0]))->f12;
+    s5 = ((Rec_3d08f0 *)igProperty_GetRecordFolder(o, &WAZALIST_3[0]))->f12;
     s4 = s5->_count;
     s3 = s4 - 1;
     s0 = s3 * 4;
@@ -987,7 +987,7 @@ int Gap__Bec__beNDMWPanelWaza__vfunc_34(beNDMWPanelWaza *self, beNDMWPanelWazaIn
     case 3:
         ok = true;
         beMessenger_PushArgContext(self->_messenger);
-        beMessenger_SendNamed(self->_messenger, DAT_00515bd8, 0, 0, DAT_00515be0);
+        beMessenger_SendNamed(self->_messenger, SUBWND_7, 0, 0, ISRUN_9);
         if (beMessenger_GetBoolCount(self->_messenger) == 0) {
             ok = false;
         } else if (!(beMessenger_GetBool(self->_messenger, 0) & 0xFF)) {
@@ -1028,13 +1028,13 @@ int Gap__Bec__beNDMWPanelWaza__vfunc_34(beNDMWPanelWaza *self, beNDMWPanelWazaIn
             FUN_003d0a90((int)self, (beNDMWPanelWazaInfoRam *)ram, 1, (igObject *)obj);
         } else if (FUN_003d08f0((beNDMWPanelWaza *)self, (beNDMWPanelWazaInfoRam *)ram) != 0) {
             FUN_003d0a90((int)self, (beNDMWPanelWazaInfoRam *)ram, 0, (igObject *)obj);
-        } else if (beBaseInfoRam_IsTimerExpired(ram, DAT_00515be8) != 0) {
+        } else if (beBaseInfoRam_IsTimerExpired(ram, EMGHEAL) != 0) {
             beMessenger_PushArgContext(self->_messenger);
-            beMessenger_SelectGroup(self->_messenger, DAT_005159c0);
-            beMessenger_AppendString(self->_messenger, (int)DAT_00515a98);
-            beMessenger_DispatchSelected(self->_messenger, DAT_005159d8);
+            beMessenger_SelectGroup(self->_messenger, SOUND_7);
+            beMessenger_AppendString(self->_messenger, (int)CURSOR_NG_3);
+            beMessenger_DispatchSelected(self->_messenger, PLAY_5);
             beMessenger_PopArgContext(self->_messenger);
-            beBaseInfoRam_StartTimer(ram, DAT_00515be8, 0x0FE502AA);
+            beBaseInfoRam_StartTimer(ram, EMGHEAL, 0x0FE502AA);
         }
         beMessenger_AppendBool(self->_messenger, 1);
         return 1;

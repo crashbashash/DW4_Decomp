@@ -122,14 +122,14 @@ void igTextElement_InitFields(void) {
 
     temp_s0 = (void *)g_igTextElement_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_004cff28[0], 3);
+    igMetaObject_CreateFields(temp_s0, &g_igTextElement_ctorTable[0], 3);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
     ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_004507f0();
     temp_s1_2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
     ((igObjectRefMetaField *)temp_s1_2)->_metaObject = FUN_00137850();
     ((igRefMetaField *)temp_s1_2)->_construct = 1;
     igStringMetaField_SetDefaultText(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 2), &DAT_0051dd88[0]);
-    igMetaObject_NameFields(temp_s0, &DAT_004cff38[0], &DAT_004cff48[0], &DAT_004cff58[0], temp_s2);
+    igMetaObject_NameFields(temp_s0, &g_igTextElement_fieldTable[0], &DAT_004cff48[0], &DAT_004cff58[0], temp_s2);
 }
 
 void *FUN_0044c110(struct S *arg0, short arg1) {

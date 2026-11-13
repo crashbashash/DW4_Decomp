@@ -29,8 +29,8 @@ extern short DAT_00568e1c[4];
 extern short DAT_00568e22[8];
 extern short DAT_00568e24[8];
 extern int p2FirstOpen[4];
-extern int DAT_004e5370[4];
-extern int DAT_004e5390[4];
+extern int text_textureLoadedPredicate[4];
+extern int text_textureDeferredPredicate[4];
 extern int DAT_0056c060[4];
 extern int DAT_0056c078[4];
 extern int DAT_004917b0[4];
@@ -143,8 +143,8 @@ void FUN_002082f0(void) {
     DAT_0056c0d8[0] = DAT_0056c0d0[0];
     DAT_0056c078[0] = temp_v0_2->f56;
     if (p2FirstOpen[0] != 0) {
-        p2RegisterPredicateName(textureLoadedPredicate, &DAT_004e5370[0]);
-        p2RegisterPredicateName(textureDeferredPredicate, &DAT_004e5390[0]);
+        p2RegisterPredicateName(textureLoadedPredicate, &text_textureLoadedPredicate[0]);
+        p2RegisterPredicateName(textureDeferredPredicate, &text_textureDeferredPredicate[0]);
     }
     j = 0;
     do {

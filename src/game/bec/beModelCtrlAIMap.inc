@@ -86,7 +86,7 @@ void beModelCtrlAIMap_InitFields(void) {
 
     temp_s1 = (void *)g_beModelCtrlAIMap_metaObject[0];
     temp_s0 = igMetaObject_GetFieldCount(temp_s1);
-    igMetaObject_CreateFields(temp_s1, &DAT_004c5600[0], 0xA);
+    igMetaObject_CreateFields(temp_s1, &g_beModelCtrlAIMap_ctorTable[0], 0xA);
     temp_s2 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 4));
     ((igObjectRefMetaField *)temp_s2)->_metaObject = (int)FUN_003546d0();
     ((igRefMetaField *)temp_s2)->_construct = 1;
@@ -99,6 +99,6 @@ void beModelCtrlAIMap_InitFields(void) {
     temp_s2_4 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 7));
     ((igObjectRefMetaField *)temp_s2_4)->_metaObject = (int)FUN_003546d0();
     ((igRefMetaField *)temp_s2_4)->_construct = 1;
-    igMetaObject_NameFields(temp_s1, &DAT_004c5630[0], &DAT_004c5660[0], &DAT_004c5690[0], temp_s0);
+    igMetaObject_NameFields(temp_s1, &g_beModelCtrlAIMap_fieldTable[0], &DAT_004c5660[0], &DAT_004c5690[0], temp_s0);
 }
 

@@ -80,7 +80,7 @@ void Gap__Core__igPsx2Media__vfunc_09(int arg0) {
 }
 
 void FUN_0032ded0(int arg0) {
-    if (strncasecmp(arg0, &DAT_004ffd40[0], 5) == 0) {
+    if (strncasecmp(arg0, &text_cdrom[0], 5) == 0) {
         GPR_00554de0 = 1;
     } else {
         GPR_00554de0 = 0;

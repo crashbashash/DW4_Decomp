@@ -60,7 +60,7 @@ public:
     virtual int RunBuffer(void *data, unsigned size, const char *name);
 };
 extern "C" int g_stringPool[4];
-extern "C" char DAT_0050ec80[];
+extern "C" char text_s_lua[];
 extern "C" char DAT_0050ec88[];
 extern "C" char emptyString[];
 /* stack holder for the interned name: the destructor drops one reference to the pooled string and frees its chunk at zero */
@@ -110,7 +110,7 @@ int beLua__RunNamedChunk(beLua *self, const char *name, const char *given)
     char *old;
 
     if (given == 0) {
-        sprintf(buf1, DAT_0050ec80, (char *)((beSystem *)self->_system)->_stageName);
+        sprintf(buf1, text_s_lua, (char *)((beSystem *)self->_system)->_stageName);
         if (g_stringPool[0] == 0) {
             a = StringPool_Allocate(16);
             if (a) a = StringPool_Construct(a);

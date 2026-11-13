@@ -45,7 +45,7 @@ void beNDMWMcSlot_InitFields(void) {
 
     temp_s0 = (void *)g_beNDMWMcSlot_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_004cbba0[0], 5);
-    igMetaObject_NameFields(temp_s0, &DAT_004cbbc0[0], &DAT_004cbbe0[0], &DAT_004cbc00[0], temp_s1);
+    igMetaObject_CreateFields(temp_s0, &g_beNDMWMcSlot_ctorTable[0], 5);
+    igMetaObject_NameFields(temp_s0, &g_beNDMWMcSlot_fieldTable[0], &DAT_004cbbe0[0], &DAT_004cbc00[0], temp_s1);
 }
 

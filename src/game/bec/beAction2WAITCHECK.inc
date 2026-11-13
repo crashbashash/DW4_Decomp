@@ -68,7 +68,7 @@ void beAction2WAITCHECK_InitFields(void) {
 
     temp_s0 = (void *)g_beAction2WAITCHECK_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_004c8100[0], 1);
-    igMetaObject_NameFields(temp_s0, &DAT_004c8108[0], &DAT_004c8110[0], &DAT_004c8118[0], temp_s1);
+    igMetaObject_CreateFields(temp_s0, &g_beAction2WAITCHECK_ctorTable[0], 1);
+    igMetaObject_NameFields(temp_s0, &g_beAction2WAITCHECK_fieldTable[0], &DAT_004c8110[0], &DAT_004c8118[0], temp_s1);
 }
 

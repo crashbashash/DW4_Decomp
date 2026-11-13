@@ -69,7 +69,7 @@ void igTexGenMatrixAttr_InitFields(void) {
 
     temp_s0 = (void *)g_igTexGenMatrixAttr_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_00485e28[0], 2);
+    igMetaObject_CreateFields(temp_s0, &g_igTexGenMatrixAttr_ctorTable[0], 2);
     temp_s1 = igMetaObject_GetFieldAt(temp_s0, temp_s2);
     o5.x = 0;
     o5.y = 0;
@@ -91,6 +91,6 @@ void igTexGenMatrixAttr_InitFields(void) {
     FUN_0018c640(temp_s1, &o1);
     fld = (Fld *)igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1);
     fld->f48 = (int)FUN_001404f0;
-    igMetaObject_NameFields(temp_s0, &DAT_00485e30[0], &DAT_00485e38[0], &DAT_00485e40[0], temp_s2);
+    igMetaObject_NameFields(temp_s0, &g_igTexGenMatrixAttr_fieldTable[0], &DAT_00485e38[0], &DAT_00485e40[0], temp_s2);
 }
 

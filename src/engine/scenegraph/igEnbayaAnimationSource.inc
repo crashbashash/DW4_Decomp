@@ -1,6 +1,6 @@
 int FUN_001a21b0(void) {
     if (DAT_00561b98[0] == 0) {
-        DAT_00561b98[0] = igMetaEnum_Create(&DAT_004e1448[0], &DAT_0048c360[0], &DAT_0048c380[0], 5);
+        DAT_00561b98[0] = igMetaEnum_Create(&PLAY_MODE[0], &DAT_0048c360[0], &DAT_0048c380[0], 5);
     }
     return DAT_00561b98[0];
 }
@@ -64,7 +64,7 @@ void igEnbayaAnimationSource_InitFields(void) {
     int temp_s0;
     temp_s1 = (void *)g_igEnbayaAnimationSource_metaObject[0];
     temp_s0 = igMetaObject_GetFieldCount(temp_s1);
-    igMetaObject_CreateFields(temp_s1, &DAT_0048c3a0[0], 6);
+    igMetaObject_CreateFields(temp_s1, &g_igEnbayaAnimationSource_ctorTable[0], 6);
     temp_s2 = (igMemoryRefMetaField *)igMetaObject_GetFieldAt(temp_s1, temp_s0);
     temp_s2->_memType = FUN_002cc2c0();
     temp_s2->_destruct = 1;
@@ -81,7 +81,7 @@ void igEnbayaAnimationSource_InitFields(void) {
     temp_v0_2 = (igLongMetaField *)igMetaObject_GetFieldAt(temp_s1, temp_s0 + 5);
     FUN_002ebc00(temp_v0_2, -1);
     temp_v0_2->_persistent = 0;
-    igMetaObject_NameFields(temp_s1, &DAT_0048c3c0[0], &DAT_0048c3e0[0], &DAT_0048c400[0], temp_s0);
+    igMetaObject_NameFields(temp_s1, &g_igEnbayaAnimationSource_fieldTable[0], &DAT_0048c3e0[0], &DAT_0048c400[0], temp_s0);
     FUN_002fe480(FUN_001a24e0);
 }
 

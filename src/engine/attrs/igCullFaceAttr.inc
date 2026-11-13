@@ -59,10 +59,10 @@ void igCullFaceAttr_InitFields(void) {
 
     temp_s0 = (void *)g_igCullFaceAttr_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_00486768[0], 2);
+    igMetaObject_CreateFields(temp_s0, &g_igCullFaceAttr_ctorTable[0], 2);
     temp_v0 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
     FUN_002dc7a0(temp_v0, &DAT_00486788[0]);
     ((igEnumMetaField *)temp_v0)->_getMetaEnumFunction = (int)(&FUN_00149620);
-    igMetaObject_NameFields(temp_s0, &DAT_00486770[0], &DAT_00486778[0], &DAT_00486780[0], temp_s2);
+    igMetaObject_NameFields(temp_s0, &g_igCullFaceAttr_fieldTable[0], &DAT_00486778[0], &DAT_00486780[0], temp_s2);
 }
 

@@ -59,7 +59,7 @@ void igBlendMatrixPaletteAttr_InitFields(void) {
 
     temp_s0 = (void *)g_igBlendMatrixPaletteAttr_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_00486a10[0], 4);
+    igMetaObject_CreateFields(temp_s0, &g_igBlendMatrixPaletteAttr_ctorTable[0], 4);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
     ((igMemoryRefMetaField *)temp_s1)->_memType = FUN_001888e0();
     ((igRefMetaField *)temp_s1)->_destruct = 1;
@@ -70,6 +70,6 @@ void igBlendMatrixPaletteAttr_InitFields(void) {
     ((igRefMetaField *)temp_s1_2)->_destruct = 1;
     ((igMemoryRefMetaField *)temp_s1_2)->_releaseOnCopy = 1;
     ((igMemoryRefMetaField *)temp_s1_2)->_releaseOnReset = 1;
-    igMetaObject_NameFields(temp_s0, &DAT_00486a20[0], &DAT_00486a30[0], &DAT_00486a40[0], temp_s2);
+    igMetaObject_NameFields(temp_s0, &g_igBlendMatrixPaletteAttr_fieldTable[0], &DAT_00486a30[0], &DAT_00486a40[0], temp_s2);
 }
 

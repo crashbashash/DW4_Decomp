@@ -67,10 +67,10 @@ void igDataPumpInfo_InitFields(void) {
 
     temp_s0 = (void *)g_igDataPumpInfo_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_0048dbb8[0], 1);
+    igMetaObject_CreateFields(temp_s0, &g_igDataPumpInfo_ctorTable[0], 1);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
     ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_001e53c0();
     ((igRefMetaField *)temp_s1)->_construct = 1;
-    igMetaObject_NameFields(temp_s0, &DAT_0048dbc0[0], &DAT_0048dbc8[0], &DAT_0048dbd0[0], temp_s2);
+    igMetaObject_NameFields(temp_s0, &g_igDataPumpInfo_fieldTable[0], &DAT_0048dbc8[0], &DAT_0048dbd0[0], temp_s2);
 }
 

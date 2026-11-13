@@ -2,7 +2,7 @@ int Gap__Core__igLongMetaField__vfunc_56(int arg0, int arg1, int arg2) {
     int sp1C;
 
     sp1C = 0;
-    sscanf(arg2, &DAT_004f9bb8[0], arg1, &sp1C);
+    sscanf(arg2, &text_ld_n[0], arg1, &sp1C);
     return sp1C;
 }
 

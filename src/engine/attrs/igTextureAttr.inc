@@ -89,7 +89,7 @@ void igTextureAttr_InitFields(void) {
 
     temp_s0 = g_igTextureAttr_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_00485cf0[0], 0xF);
+    igMetaObject_CreateFields(temp_s0, &g_igTextureAttr_ctorTable[0], 0xF);
     temp_v0 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 1));
     FUN_002dc7a0(temp_v0, &DAT_00485df0[0]);
     *(void **)&((igEnumMetaField *)temp_v0)->_getMetaEnumFunction = (void *)FUN_00149980;
@@ -129,6 +129,6 @@ void igTextureAttr_InitFields(void) {
     ((igObjectRefMetaField *)temp_s2_4)->_shallowCopyMethod = 1;
     ((igObjectRefMetaField *)temp_s2_4)->_isAlikeShallowMethod = 3;
     ((igRawRefMetaField *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0xE))->_persistent = 0;
-    igMetaObject_NameFields(temp_s0, &DAT_00485d30[0], &DAT_00485d70[0], &DAT_00485db0[0], temp_s1);
+    igMetaObject_NameFields(temp_s0, &g_igTextureAttr_fieldTable[0], &DAT_00485d70[0], &DAT_00485db0[0], temp_s1);
 }
 

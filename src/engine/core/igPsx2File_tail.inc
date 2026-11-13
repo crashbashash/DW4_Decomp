@@ -58,12 +58,12 @@ void igPsx2File_InitFields(void) {
 
     temp_s0 = (void *)(g_igPsx2File_metaObject[0]);
     temp_s2 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
-    igMetaObject_CreateFields((igMetaObject *)temp_s0, (igMetaField * (**)(void *))&DAT_004c1e10[0], 8);
+    igMetaObject_CreateFields((igMetaObject *)temp_s0, (igMetaField * (**)(void *))&g_igPsx2File_ctorTable[0], 8);
     temp_s1 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2)));
     *(int *)((char *)(temp_s1) + 60) = igUnsignedCharMetaField_GetDefaultDescriptor();
     temp_a0 = ((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 7));
     *(char *)((char *)temp_a0 + 36) = 3;
-    igMetaObject_NameFields((igMetaObject *)temp_s0, (const char **)&DAT_004c1e30[0], (igMetaField ***)&DAT_004c1e50[0], &DAT_004c1e70[0], temp_s2);
+    igMetaObject_NameFields((igMetaObject *)temp_s0, (const char **)&g_igPsx2File_fieldTable[0], (igMetaField ***)&DAT_004c1e50[0], &DAT_004c1e70[0], temp_s2);
     *(int *)((char *)(g_igPsx2File_metaObject[0]) + 64) = (int)(&thunk_igFile_GetMetaObject);
 }
 

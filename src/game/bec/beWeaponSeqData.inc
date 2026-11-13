@@ -55,13 +55,13 @@ void beWeaponSeqData_InitFields(void) {
 
     temp_s0 = (void *)g_beWeaponSeqData_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_004c2fd8[0], 1);
-    igMetaObject_NameFields(temp_s0, &DAT_004c2fe0[0], &DAT_004c2fe8[0], &DAT_004c2ff0[0], temp_s1);
+    igMetaObject_CreateFields(temp_s0, &g_beWeaponSeqData_ctorTable[0], 1);
+    igMetaObject_NameFields(temp_s0, &g_beWeaponSeqData_fieldTable[0], &DAT_004c2fe8[0], &DAT_004c2ff0[0], temp_s1);
 }
 
 int FUN_0033f3b0(void) {
     if (DAT_00587a60[0] == 0) {
-        DAT_00587a60[0] = igMetaEnum_Create(&DAT_005016f0[0], &DAT_004c2ff8[0], &DAT_004c3008[0], 3);
+        DAT_00587a60[0] = igMetaEnum_Create(&MsgAction[0], &DAT_004c2ff8[0], &DAT_004c3008[0], 3);
     }
     return DAT_00587a60[0];
 }

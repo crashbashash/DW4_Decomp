@@ -48,7 +48,7 @@ void FUN_00460330(LightOwner *arg0);
 void FUN_004608a0(igViewerRenderer *arg0);
 struct OptionPanelView;
 void FUN_00460ac0(OptionPanelView *arg0);
-extern int DAT_0051faa8[4];
+extern int text_igDisableExt[4];
 void Gap__Viewer__igViewerRenderer__vfunc_23(Q2 *arg0);
 
 int __dl__FPv(...);
@@ -211,7 +211,7 @@ class PropertyHolder { public: virtual void d0(); virtual void d1(); virtual voi
 struct PropertyList { char pad[32]; int f32; };
 int igMetaObject_FindFieldByName(...);
 int igProperty_FindByPointer(...);
-extern int DAT_0051fab8[4];
+extern int text_meta[4];
 extern int g_igAttr_metaObject[4];
 extern int g_igObjectRefMetaField_metaObject[4];
 int FUN_00460be0(PropertyHolder *arg0, PropertyList *arg1);
@@ -340,7 +340,7 @@ void Gap__Viewer__igViewerRenderer__vfunc_25(Q *arg0) {
 }
 
 void Gap__Viewer__igViewerRenderer__vfunc_23(Q2 *arg0) {
-    Rc *temp_v0 = (Rc *)arg0->f8->v104(&DAT_0051faa8[0]);
+    Rc *temp_v0 = (Rc *)arg0->f8->v104(&text_igDisableExt[0]);
     if (temp_v0 != 0) {
         temp_v0->rc = temp_v0->rc + 1;
     }
@@ -819,7 +819,7 @@ void FUN_00460ac0(OptionPanelView *arg0) {
 }
 
 int FUN_00460be0(PropertyHolder *arg0, PropertyList *arg1) {
-    int field = castToProperty(igMetaObject_FindFieldByName(g_igAttr_metaObject[0], &DAT_0051fab8[0]));
+    int field = castToProperty(igMetaObject_FindFieldByName(g_igAttr_metaObject[0], &text_meta[0]));
     return igProperty_FindByPointer(arg1->f32, field, arg0->vX());
 }
 

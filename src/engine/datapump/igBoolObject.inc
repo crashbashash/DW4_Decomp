@@ -45,8 +45,8 @@ void igBoolObject_InitFields(void) {
 
     temp_s0 = (void *)g_igBoolObject_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_0048dc68[0], 1);
-    igMetaObject_NameFields(temp_s0, &DAT_0048dc70[0], &DAT_0048dc78[0], &DAT_0048dc80[0], temp_s1);
+    igMetaObject_CreateFields(temp_s0, &g_igBoolObject_ctorTable[0], 1);
+    igMetaObject_NameFields(temp_s0, &g_igBoolObject_fieldTable[0], &DAT_0048dc78[0], &DAT_0048dc80[0], temp_s1);
 }
 
 /* matching construct: declaration-order sweep — v, scale, count, i order */

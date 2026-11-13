@@ -13,7 +13,7 @@ void SceneSearchLibrary_MarkRegistered(void) {
 
 int FUN_00238d70(void) {
     if (DAT_0056dc58[0] == 0) {
-        DAT_0056dc58[0] = igMetaEnum_Create(&DAT_004e9d20[0], &DAT_00498270[0], &DAT_00498280[0], 3);
+        DAT_0056dc58[0] = igMetaEnum_Create(&IG_APPLICATION_FIND_TYPE[0], &DAT_00498270[0], &DAT_00498280[0], 3);
     }
     return DAT_0056dc58[0];
 }
@@ -80,7 +80,7 @@ void igSearchSceneGraph_InitFields(void) {
 
     meta = (void *)g_igSearchSceneGraph_metaObject[0];
     first = igMetaObject_GetFieldCount(meta);
-    igMetaObject_CreateFields(meta, &DAT_004982a0[0], 4);
+    igMetaObject_CreateFields(meta, &g_igSearchSceneGraph_ctorTable[0], 4);
     firstRef = igMetaObject_GetFieldAt(meta, first);
     *(int *)((char *)firstRef + 56) = FUN_002274a0();
     *(unsigned char *)((char *)firstRef + 52) = 1;
@@ -90,7 +90,7 @@ void igSearchSceneGraph_InitFields(void) {
     enumField = igMetaObject_GetFieldAt(meta, first + 3);
     FUN_002dc7a0(enumField, &DAT_004982e0[0]);
     *(int *)((char *)enumField + 52) = (int)&FUN_00238d70;
-    igMetaObject_NameFields(meta, &DAT_004982b0[0], &DAT_004982c0[0], &DAT_004982d0[0], first);
+    igMetaObject_NameFields(meta, &g_igSearchSceneGraph_fieldTable[0], &DAT_004982c0[0], &DAT_004982d0[0], first);
 }
 
 /* Sets the searched scene (self[8], ref-counted) and reallocates both identity-filled matrix arrays

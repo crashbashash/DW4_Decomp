@@ -57,10 +57,10 @@ void igWindowResizeEventReceiver_InitFields(void) {
 
     temp_s0 = (void *)g_igWindowResizeEventReceiver_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_004981f8[0], 1);
+    igMetaObject_CreateFields(temp_s0, &g_igWindowResizeEventReceiver_ctorTable[0], 1);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
     ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_00232840();
     ((igObjectRefMetaField *)temp_s1)->_refCounted = 0;
-    igMetaObject_NameFields(temp_s0, &DAT_00498200[0], &DAT_00498208[0], &DAT_00498210[0], temp_s2);
+    igMetaObject_NameFields(temp_s0, &g_igWindowResizeEventReceiver_fieldTable[0], &DAT_00498208[0], &DAT_00498210[0], temp_s2);
 }
 

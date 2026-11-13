@@ -198,9 +198,9 @@ void FUN_002342b0(const char *arg0, const char *arg1, int arg2) {
     int *var_a3;
 
     if (arg2 != 0) {
-        var_a3 = &DAT_004e95f8[0];
+        var_a3 = &text_true[0];
     } else {
-        var_a3 = &DAT_004e9600[0];
+        var_a3 = &text_false[0];
     }
     printf(&DAT_004e95d0[0], arg0, arg1, var_a3);
 }
@@ -361,7 +361,7 @@ int FUN_00234770(igStringRefList *arg0, int *arg1, const char *arg2, unsigned ch
     *arg3 = 0;
     if (strcmp(sp2C, &DAT_004e96b0[0]) == 0) {
         *arg3 = 1;
-    } else if (strcmp(sp2C, &DAT_004e95f8[0]) == 0) {
+    } else if (strcmp(sp2C, &text_true[0]) == 0) {
         *arg3 = 1;
     }
     return 1;
@@ -838,7 +838,7 @@ static inline int internedPool(void) {
 void FUN_00236140(void) {
     igSmartPointer<NamedObject> r(FUN_002c43b0(Memory_GetAllocatorBySelector(DAT_00587038[0])));
     NamedObject *s0 = r.get();
-    int *s1 = (int *)StringPool_Intern(internedPool(), &DAT_004e9740[0]);
+    int *s1 = (int *)StringPool_Intern(internedPool(), &text_plugins[0]);
     int *old = (int *)s0->name;
     if (old != 0) {
         int *hdr = old - 2;
@@ -849,13 +849,13 @@ void FUN_00236140(void) {
         }
     }
     s0->name = (int)s1;
-    FUN_002e3850(r.get(), &DAT_004e9748[0]);
-    FUN_00304720(((G *)g_objectSystem[0])->f76, &DAT_004e9750[0], r->name, 1);
+    FUN_002e3850(r.get(), &text_insight[0]);
+    FUN_00304720(((G *)g_objectSystem[0])->f76, &Insight[0], r->name, 1);
 }
 
 static inline void describe(const igSmartPointer<TextValue> &text, int value) {
     if (value < 0) {
-        igStringObj_Set(text.p, DAT_004e9778);
+        igStringObj_Set(text.p, text_default);
     } else {
         FUN_0030b720(text.p, value, DAT_004e9780);
     }
@@ -874,19 +874,19 @@ ShadowSettings FUN_00236260(ShadowConfig *config) {
     settings.width = config->width;
     settings.height = config->height;
     if (config->verbose) {
-        printf(DAT_004e9760);
+        printf(Requested_format);
     }
     describe(text, config->left);
     if (config->verbose) {
-        printf(DAT_004e9788, textOf(text.p));
+        printf(text_color_s, textOf(text.p));
     }
     describe(text, config->top);
     if (config->verbose) {
-        printf(DAT_004e9798, textOf(text.p));
+        printf(text_alpha_s, textOf(text.p));
     }
     describe(text, config->right);
     if (config->verbose) {
-        printf(DAT_004e97a8, textOf(text.p));
+        printf(text_depth_s, textOf(text.p));
     }
     describe(text, config->bottom);
     if (config->verbose) {

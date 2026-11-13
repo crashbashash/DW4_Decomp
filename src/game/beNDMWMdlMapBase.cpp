@@ -23,10 +23,10 @@ extern "C" int beMessenger_GetMatrix(...);
 extern "C" int Matrix44_GetTranslation(...);
 extern "C" int Matrix44_SetTranslation(...);
 extern "C" int Gap__Bec__beNDMWMdlMapBase__vfunc_20(void);
-extern "C" int DAT_0051db90[4];
-extern "C" char DAT_0051dba0[];
+extern "C" int KIND_MAPBASE[4];
+extern "C" char MAPBASE[];
 extern "C" void Gap__Bec__beNDMWMdlMapBase__vfunc_37(beNDMWMdlMapBase * p0, int p1, char * p2);
-extern "C" int DAT_0051dba8[4];
+extern "C" int ONE_16[4];
 extern "C" int g_propertyNameField[4];
 extern "C" int g_stringPool[4];
 extern "C" int g_defaultAllocatorSelector[4];
@@ -55,8 +55,8 @@ static inline void adopt(beBaseInfoRam *ram, igObject *created) { igSmartPointer
 };
 extern "C" void Gap__Bec__beNDMWMdlMapBase__vfunc_36(beNDMWMdlMapBase *arg0, beBaseInfoRam *arg1);
 struct PropertyRecord { char p[16]; int f16; };
-extern "C" int DAT_0051dbb0[4];
-extern "C" int DAT_0051dbb8[4];
+extern "C" int PLAYER_10[4];
+extern "C" int GETMATRIX_8[4];
 extern "C" float g_vec3Zero[4];
 extern "C" float DAT_004e105c[4];
 extern "C" float DAT_004e1060[4];
@@ -69,12 +69,12 @@ extern "C" void Gap__Bec__beNDMWMdlMapBase__vfunc_46(beNDMWMdlMapBase *arg0, Ram
 extern "C" int g_beNDMWMdlMapBase_metaObject[4];
 
 int Gap__Bec__beNDMWMdlMapBase__vfunc_35(int dummy0, int arg1) {
-    return strcmp(arg1, &DAT_0051db90[0]) == 0;
+    return strcmp(arg1, &KIND_MAPBASE[0]) == 0;
 }
 
 void Gap__Bec__beNDMWMdlMapBase__vfunc_37(beNDMWMdlMapBase * p0, int p1, char * p2)
 {
-    beMessenger_RegisterReceiverFromInfo(p0->_messenger, p1, DAT_0051dba0);
+    beMessenger_RegisterReceiverFromInfo(p0->_messenger, p1, MAPBASE);
 }
 
 void Gap__Bec__beNDMWMdlMapBase__vfunc_36(beNDMWMdlMapBase *arg0, beBaseInfoRam *arg1) {
@@ -86,7 +86,7 @@ void Gap__Bec__beNDMWMdlMapBase__vfunc_36(beNDMWMdlMapBase *arg0, beBaseInfoRam 
          * takes the stack slot below the named info-work reference, as retail's +0x58 does) */
         Slot::adopt(arg1, created);
     }
-    Prop *s3 = (Prop *)igProperty_FindByName(arg1->_dataList, g_propertyNameField[0], DAT_0051dba8);
+    Prop *s3 = (Prop *)igProperty_FindByName(arg1->_dataList, g_propertyNameField[0], ONE_16);
     {
         int a2 = igObject_GetAllocator(arg0);
         int al2 = g_useOwnerAllocator != 0 ? a2 : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
@@ -130,7 +130,7 @@ void Gap__Bec__beNDMWMdlMapBase__vfunc_46(beNDMWMdlMapBase *arg0, RamInfoArg *ar
     sum.x = g_vec3Zero[0];
     *py = DAT_004e105c[0];
     *pz = DAT_004e1060[0];
-    beMessenger_SendGroup(arg0->_messenger, DAT_0051dbb0, DAT_0051dbb8);
+    beMessenger_SendGroup(arg0->_messenger, PLAYER_10, GETMATRIX_8);
     if (beMessenger_GetMatrixCount(arg0->_messenger) != 0) {
         n = beMessenger_GetMatrixCount(arg0->_messenger);
         for (i = 0; i < n; i++) {
@@ -173,7 +173,7 @@ void Gap__Bec__beNDMWMdlMapBase__vfunc_46(beNDMWMdlMapBase *arg0, RamInfoArg *ar
         }
         arg1->m40 = s0;
     }
-    r = ((PropertyRecord *)igProperty_FindByName(arg1->m40, g_propertyNameField[0], DAT_0051dba8));
+    r = ((PropertyRecord *)igProperty_FindByName(arg1->m40, g_propertyNameField[0], ONE_16));
     Matrix44_SetTranslation(r->f16 + 32, &sum);
 }
 

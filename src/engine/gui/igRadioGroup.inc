@@ -97,7 +97,7 @@ void igRadioGroup_InitFields(void) {
 
     temp_s1 = (void *)g_igRadioGroup_metaObject[0];
     temp_s0 = igMetaObject_GetFieldCount(temp_s1);
-    igMetaObject_CreateFields(temp_s1, &DAT_004d0020[0], 6);
+    igMetaObject_CreateFields(temp_s1, &g_igRadioGroup_ctorTable[0], 6);
     temp_s2 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0));
     ((igObjectRefMetaField *)temp_s2)->_metaObject = (int)FUN_0044d170();
     ((igRefMetaField *)temp_s2)->_construct = 1;
@@ -109,6 +109,6 @@ void igRadioGroup_InitFields(void) {
     ((igRefMetaField *)temp_s2_3)->_construct = 1;
     FUN_002d3890(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 3), 1);
     FUN_002ea4b0(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 4), -1);
-    igMetaObject_NameFields(temp_s1, &DAT_004d0040[0], &DAT_004d0060[0], &DAT_004d0080[0], temp_s0);
+    igMetaObject_NameFields(temp_s1, &g_igRadioGroup_fieldTable[0], &DAT_004d0060[0], &DAT_004d0080[0], temp_s0);
 }
 

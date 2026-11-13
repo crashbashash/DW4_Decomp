@@ -71,8 +71,8 @@ void igActorManagerParams_InitFields(void) {
 
     temp_s0 = (void *)g_igActorManagerParams_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_004d1aa8[0], 2);
-    igMetaObject_NameFields(temp_s0, &DAT_004d1ab0[0], &DAT_004d1ab8[0], &DAT_004d1ac0[0], temp_s1);
+    igMetaObject_CreateFields(temp_s0, &g_igActorManagerParams_ctorTable[0], 2);
+    igMetaObject_NameFields(temp_s0, &g_igActorManagerParams_fieldTable[0], &DAT_004d1ab8[0], &DAT_004d1ac0[0], temp_s1);
 }
 
 igMetaObject *Gap__Viewer__igActorManagerParams__vfunc_22(void) {

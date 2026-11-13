@@ -101,7 +101,7 @@ void beNDMWStatusInfoWork_InitFields(void) {
 
     temp_s1 = (void *)g_beNDMWStatusInfoWork_metaObject[0];
     temp_s0 = igMetaObject_GetFieldCount(temp_s1);
-    igMetaObject_CreateFields(temp_s1, &DAT_004c9870[0], 7);
+    igMetaObject_CreateFields(temp_s1, &g_beNDMWStatusInfoWork_ctorTable[0], 7);
     temp_s2 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0));
     ((igObjectRefMetaField *)temp_s2)->_metaObject = igIntList_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2)->_construct = 1;
@@ -120,6 +120,6 @@ void beNDMWStatusInfoWork_InitFields(void) {
     temp_s2_6 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 5));
     ((igObjectRefMetaField *)temp_s2_6)->_metaObject = (int)FUN_003c9130();
     ((igRefMetaField *)temp_s2_6)->_construct = 1;
-    igMetaObject_NameFields(temp_s1, &DAT_004c9890[0], &DAT_004c98b0[0], &DAT_004c98d0[0], temp_s0);
+    igMetaObject_NameFields(temp_s1, &g_beNDMWStatusInfoWork_fieldTable[0], &DAT_004c98b0[0], &DAT_004c98d0[0], temp_s0);
 }
 

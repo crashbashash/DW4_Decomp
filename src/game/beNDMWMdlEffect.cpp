@@ -7,14 +7,14 @@ extern "C" int Gap__Bec__beNDMWMdlEffect__vfunc_20(void);
 extern "C" int FUN_00396340(...);
 extern "C" int Memory_GetAllocatorBySelector(...);
 extern "C" int igObject_GetAllocator(...);
-extern "C" int DAT_00515da8[4];
+extern "C" int KIND_EFFECT[4];
 extern "C" int g_beNDMWMdlEffect_metaObject[4];
 extern "C" igObject *FUN_00350020(...);
 extern "C" igObject *beBaseInfoDataList_Create(...);
 /* Property record: reference at +20. */
 struct PropertyRecordRef { char p[20]; igObject *f20; };
 extern "C" PropertyRecordRef *igProperty_FindByName(...);
-extern "C" int DAT_00515db8[4];
+extern "C" int ONE_10[4];
 extern "C" int g_propertyNameField[4];
 extern "C" int g_defaultAllocatorSelector[4];
 extern "C" unsigned char g_useOwnerAllocator;
@@ -57,7 +57,7 @@ struct EffectReceiverShim { int dummy; };
 extern "C" void Gap__Bec__beNDMWMdlEffect__vfunc_36(EffectReceiverShim *arg0, beBaseInfoRam *arg1);
 
 int Gap__Bec__beNDMWMdlEffect__vfunc_35(int dummy0, int arg1) {
-    return strcmp(arg1, &DAT_00515da8[0]) == 0;
+    return strcmp(arg1, &KIND_EFFECT[0]) == 0;
 }
 
 void Gap__Bec__beNDMWMdlEffect__vfunc_37(void)
@@ -78,7 +78,7 @@ void Gap__Bec__beNDMWMdlEffect__vfunc_36(EffectReceiverShim *arg0, beBaseInfoRam
         }
         DataList::create(arg1, a);
     }
-    s1 = igProperty_FindByName(arg1->_dataList, g_propertyNameField[0], DAT_00515db8);
+    s1 = igProperty_FindByName(arg1->_dataList, g_propertyNameField[0], ONE_10);
     alloc = igObject_GetAllocator(arg0);
     if (g_useOwnerAllocator != 0) {
         a = alloc;

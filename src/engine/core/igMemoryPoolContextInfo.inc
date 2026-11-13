@@ -81,10 +81,10 @@ void igMemoryPoolContextInfo_InitFields(void) {
 
     temp_s0 = (void *)g_igMemoryPoolContextInfo_metaObject_00585e88[0];
     temp_s2 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
-    igMetaObject_CreateFields((igMetaObject *)temp_s0, (igMetaField * (**)(void *))&DAT_004c0168[0], 1);
+    igMetaObject_CreateFields((igMetaObject *)temp_s0, (igMetaField * (**)(void *))&g_igMemoryPoolContextInfo_ctorTable[0], 1);
     temp_s1 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2)));
     ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_002bfd60();
     ((igRefMetaField *)temp_s1)->_construct = 1;
-    igMetaObject_NameFields((igMetaObject *)temp_s0, (const char **)&DAT_004c0170[0], (igMetaField ***)&DAT_004c0178[0], &DAT_004c0180[0], temp_s2);
+    igMetaObject_NameFields((igMetaObject *)temp_s0, (const char **)&g_igMemoryPoolContextInfo_fieldTable[0], (igMetaField ***)&DAT_004c0178[0], &DAT_004c0180[0], temp_s2);
 }
 

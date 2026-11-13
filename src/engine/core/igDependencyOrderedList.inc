@@ -60,7 +60,7 @@ void igDependencyOrderedList_InitFields(void) {
 
     temp_s1 = (void *)g_igDependencyOrderedList_metaObject[0];
     temp_s0 = igMetaObject_GetFieldCount((igMetaObject *)temp_s1);
-    igMetaObject_CreateFields((igMetaObject *)temp_s1, (igMetaField * (**)(void *))&DAT_004c1300[0], 5);
+    igMetaObject_CreateFields((igMetaObject *)temp_s1, (igMetaField * (**)(void *))&g_igDependencyOrderedList_ctorTable[0], 5);
     temp_s2 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0)));
     ((igObjectRefMetaField *)temp_s2)->_metaObject = igObjectList_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2)->_construct = 1;
@@ -73,6 +73,6 @@ void igDependencyOrderedList_InitFields(void) {
     temp_s2_4 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 3)));
     ((igObjectRefMetaField *)temp_s2_4)->_metaObject = (int)FUN_002b9120();
     ((igRefMetaField *)temp_s2_4)->_construct = 1;
-    igMetaObject_NameFields((igMetaObject *)temp_s1, (const char **)&DAT_004c1320[0], (igMetaField ***)&DAT_004c1340[0], &DAT_004c1360[0], temp_s0);
+    igMetaObject_NameFields((igMetaObject *)temp_s1, (const char **)&g_igDependencyOrderedList_fieldTable[0], (igMetaField ***)&DAT_004c1340[0], &DAT_004c1360[0], temp_s0);
 }
 

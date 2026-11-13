@@ -147,9 +147,9 @@ void igGeometryAttr1_5_InitFields(void) {
 
     temp_s0 = (void *)g_igGeometryAttr1_5_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_00486558[0], 1);
+    igMetaObject_CreateFields(temp_s0, &g_igGeometryAttr1_5_ctorTable[0], 1);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
     ((igObjectRefMetaField *)temp_s1)->_metaObject = FUN_0014c030();
-    igMetaObject_NameFields(temp_s0, &DAT_00486560[0], &DAT_00486568[0], &DAT_00486570[0], temp_s2);
+    igMetaObject_NameFields(temp_s0, &g_igGeometryAttr1_5_fieldTable[0], &DAT_00486568[0], &DAT_00486570[0], temp_s2);
 }
 

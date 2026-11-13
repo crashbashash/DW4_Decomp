@@ -56,7 +56,7 @@ void beNDMWItemWaza_InitFields(void) {
 
     temp_s0 = (void *)g_beNDMWItemWaza_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_004cc088[0], 1);
-    igMetaObject_NameFields(temp_s0, &DAT_004cc090[0], &DAT_004cc098[0], &DAT_004cc0a0[0], temp_s1);
+    igMetaObject_CreateFields(temp_s0, &g_beNDMWItemWaza_ctorTable[0], 1);
+    igMetaObject_NameFields(temp_s0, &g_beNDMWItemWaza_fieldTable[0], &DAT_004cc098[0], &DAT_004cc0a0[0], temp_s1);
 }
 

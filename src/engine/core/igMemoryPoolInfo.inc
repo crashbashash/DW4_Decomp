@@ -79,7 +79,7 @@ void igMemoryPoolInfo_InitFields(void) {
 
     temp_s0 = (void *)g_igMemoryPoolInfo_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
-    igMetaObject_CreateFields((igMetaObject *)temp_s0, (igMetaField * (**)(void *))&DAT_004c0060[0], 0x10);
-    igMetaObject_NameFields((igMetaObject *)temp_s0, (const char **)&DAT_004c00a0[0], (igMetaField ***)&DAT_004c00e0[0], &DAT_004c0120[0], temp_s1);
+    igMetaObject_CreateFields((igMetaObject *)temp_s0, (igMetaField * (**)(void *))&g_igMemoryPoolInfo_ctorTable[0], 0x10);
+    igMetaObject_NameFields((igMetaObject *)temp_s0, (const char **)&g_igMemoryPoolInfo_fieldTable[0], (igMetaField ***)&DAT_004c00e0[0], &DAT_004c0120[0], temp_s1);
 }
 

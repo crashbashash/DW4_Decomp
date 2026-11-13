@@ -49,12 +49,12 @@ extern "C" int DAT_004cfb44[4];
 extern "C" float g_vec3Zero[4];
 extern "C" float DAT_004e105c[4];
 extern "C" float DAT_004e1060[4];
-extern "C" int DAT_0051ce80[4];
-extern "C" int DAT_0051ce88[4];
+extern "C" int PLAYER_9[4];
+extern "C" int SETEFFECT_4[4];
 struct A0 { char pad[20]; int f20; };
 extern "C" void FUN_004412c0(struct A0 *arg0, int arg1, int arg2);
-extern "C" int DAT_0051ce98[4];
-extern "C" char DAT_0051cea8[];
+extern "C" int KIND_ITEM[4];
+extern "C" char DROPITEM_2[];
 extern "C" void Gap__Bec__beNDMWMdlItem__vfunc_37(beNDMWMdlItem *p0, int a1);
 extern "C" int g_beNDMWMdlItem_metaObject[4];
 extern "C" int g_igViewerSceneInfoManager_metaObject[4];
@@ -76,10 +76,10 @@ extern "C" Prop * igProperty_FindByName(...);
 extern "C" Rec *igProperty_GetRecord(...);
 extern "C" char *DAT_004cfc10[10];
 extern "C" char emptyString[];
-extern "C" int DAT_0051cf58[4];
-extern "C" int DAT_0051cf60[4];
-extern "C" int DAT_0051cf68[4];
-extern "C" int DAT_0051cf78[4];
+extern "C" int ONE_14[4];
+extern "C" int GAMERAM_16[4];
+extern "C" int GETPLAYER1_2[4];
+extern "C" int LEVEL_9[4];
 extern "C" int g_propertyNameField[4];
 extern "C" int g_ndmwAllocatorSelector[4];
 extern "C" int g_defaultAllocatorSelector[4];
@@ -100,10 +100,10 @@ struct Store {
 extern "C" void Gap__Bec__beNDMWMdlItem__vfunc_36(beNDMWMdlItem *self, beBaseInfoRam *info);
 struct PropertyValueObj { char p[252]; int f252; unsigned char f256; char p257[3]; int f260; };
 struct PropertyEntry { char p[16]; int f16; PropertyValueObj *q; };
-extern "C" int DAT_0051cfd0[4];
-extern "C" int DAT_0051cfd8[4];
-extern "C" int DAT_0051d018[4];
-extern "C" int DAT_0051d0a8[4];
+extern "C" int TEXTCTL_10[4];
+extern "C" int ITNAMEFONT[4];
+extern "C" int SWITCH_10[4];
+extern "C" int CLR_6[4];
 /* matching construct: inline release helper reproduces the retail inlined refcount release */
 struct RefRelease { static inline void go(igObject *object) {
     if (object) {
@@ -113,7 +113,7 @@ struct RefRelease { static inline void go(igObject *object) {
     }
 } };
 extern "C" void Gap__Bec__beNDMWMdlItem__vfunc_43(beNDMWMdlItem *arg0, beBaseInfoRam *arg1);
-extern "C" char DAT_0051d0b0[];
+extern "C" char SQ_EXIT_2[];
 class MdlItemVt { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void d32(); virtual void d33(); virtual void d34(); virtual void d35(); virtual void d36(); virtual void d37(); virtual void d38(); virtual void d39(); virtual void d40(); virtual void d41(); virtual void d42(); virtual void exit(beBaseInfoRam *ram); };
 extern "C" void Gap__Bec__beNDMWMdlItem__vfunc_44(beNDMWMdlItem *self, beBaseInfoRam *ram);
 struct ItemRecord { char p[20]; int f20; };
@@ -122,12 +122,12 @@ struct PropertyByteArrayHolder { char p[12]; igUnsignedCharList *f12; };
 struct PropertyRecord { char p[20]; beNDMWMdlItemInfoWork *q; };
 extern "C" PropertyFolder *igProperty_GetRecordFolder(...);
 extern "C" PropertyByteArrayHolder *igProperty_GetRecordArray(...);
-extern "C" int DAT_0051cfc8[16];
-extern "C" int DAT_0051d0b8[16];
-extern "C" int DAT_0051d0c8[16];
-extern "C" int DAT_0051d0d8[16];
-extern "C" int DAT_0051d0e8[16];
-extern "C" int DAT_0051d0f8[16];
+extern "C" int SQ_DDMG[16];
+extern "C" int GETPLAYER_12[16];
+extern "C" int DEVICEFOLDER_5[16];
+extern "C" int DISKFOLDER_6[16];
+extern "C" int GETCOMMON_11[16];
+extern "C" int FLAGFOLDER_3[16];
 extern "C" unsigned char GPR_00554a74;
 /* matching construct: the inlined release of the previous data list is a static member so the compiler expands it as retail does */
 struct ReleaseRefInline { static inline void go(igObject *object) {
@@ -145,7 +145,7 @@ void FUN_004412c0(struct A0 *arg0, int arg1, int arg2) {
     float sp30[4];
     int temp_s1;
 
-    beMessenger_PrepareDelayedSelection(arg0->f20, &DAT_0051ce80[0], 0, arg2);
+    beMessenger_PrepareDelayedSelection(arg0->f20, &PLAYER_9[0], 0, arg2);
     temp_s1 = (arg1 - 1) * 8;
     beMessenger_AppendString(arg0->f20, *(int *)((char *)DAT_004cfb40 + temp_s1));
     beMessenger_AppendString(arg0->f20, *(int *)((char *)DAT_004cfb44 + temp_s1));
@@ -156,16 +156,16 @@ void FUN_004412c0(struct A0 *arg0, int arg1, int arg2) {
     beMessenger_AppendVec3(arg0->f20, sp30);
     beMessenger_AppendBool(arg0->f20, 0);
     beMessenger_AppendBool(arg0->f20, 1);
-    beMessenger_EnqueueSelected(arg0->f20, &DAT_0051ce88[0], 1);
+    beMessenger_EnqueueSelected(arg0->f20, &SETEFFECT_4[0], 1);
 }
 
 int Gap__Bec__beNDMWMdlItem__vfunc_35(int dummy0, int arg1) {
-    return strcmp(arg1, &DAT_0051ce98[0]) == 0;
+    return strcmp(arg1, &KIND_ITEM[0]) == 0;
 }
 
 void Gap__Bec__beNDMWMdlItem__vfunc_37(beNDMWMdlItem *p0, int a1)
 {
-    beMessenger_RegisterReceiverFromInfo(p0->_messenger, a1, DAT_0051cea8);
+    beMessenger_RegisterReceiverFromInfo(p0->_messenger, a1, DROPITEM_2);
 }
 
 /* After the shared igObject slot 23 body, caches the viewer scene-info manager registered with the
@@ -222,7 +222,7 @@ void Gap__Bec__beNDMWMdlItem__vfunc_36(beNDMWMdlItem *self, beBaseInfoRam *info)
         ALLOC_OF(info, alloc, g_defaultAllocatorSelector)
         Store::assign(info->_dataList, ObjectRef(beBaseInfoDataList_Create(alloc)).p);
     }
-    prop = igProperty_FindByName((void *)info->_dataList, g_propertyNameField[0], &DAT_0051cf58[0]);
+    prop = igProperty_FindByName((void *)info->_dataList, g_propertyNameField[0], &ONE_14[0]);
     ALLOC(alloc, g_defaultAllocatorSelector)
     {
     igSmartPointer<beNDMWMdlItemInfoWork> work((beNDMWMdlItemInfoWork *)FUN_003c13f0(alloc));
@@ -285,8 +285,8 @@ void Gap__Bec__beNDMWMdlItem__vfunc_36(beNDMWMdlItem *self, beBaseInfoRam *info)
     case 4:
     case 5:
         beMessenger_PushArgContext(self->_messenger);
-        beMessenger_SendGroup(self->_messenger, &DAT_0051cf60[0], &DAT_0051cf68[0]);
-        roll = igProperty_GetRecord(beMessenger_GetObject(self->_messenger, 0), &DAT_0051cf78[0])->f12;
+        beMessenger_SendGroup(self->_messenger, &GAMERAM_16[0], &GETPLAYER1_2[0]);
+        roll = igProperty_GetRecord(beMessenger_GetObject(self->_messenger, 0), &LEVEL_9[0])->f12;
         switch ((unsigned int)work.p->_dbId) {
         case 3: {
             ALLOC(alloc, g_ndmwAllocatorSelector)
@@ -339,7 +339,7 @@ void Gap__Bec__beNDMWMdlItem__vfunc_43(beNDMWMdlItem *arg0, beBaseInfoRam *arg1)
         RefRelease::go((igObject *)arg1->_dataList);
         arg1->_dataList = (int)s0;
     }
-    s3 = ((PropertyEntry *)igProperty_FindByName(arg1->_dataList, g_propertyNameField[0], DAT_0051cf58));
+    s3 = ((PropertyEntry *)igProperty_FindByName(arg1->_dataList, g_propertyNameField[0], ONE_14));
     q = s3->q;
     if (q->f256 != 0) {
         q->f256 = 0;
@@ -352,11 +352,11 @@ void Gap__Bec__beNDMWMdlItem__vfunc_43(beNDMWMdlItem *arg0, beBaseInfoRam *arg1)
             *(igObject **)((char *)s2->_data + off) = 0;
         }
         q->f252 = -1;
-        beMessenger_SelectGroup(arg0->_messenger, DAT_0051cfd0);
-        beMessenger_AppendString(arg0->_messenger, DAT_0051cfd8);
+        beMessenger_SelectGroup(arg0->_messenger, TEXTCTL_10);
+        beMessenger_AppendString(arg0->_messenger, ITNAMEFONT);
         beMessenger_AppendString(arg0->_messenger, q->f260);
-        beMessenger_AppendString(arg0->_messenger, DAT_0051d0a8);
-        beMessenger_DispatchSelected(arg0->_messenger, DAT_0051d018);
+        beMessenger_AppendString(arg0->_messenger, CLR_6);
+        beMessenger_DispatchSelected(arg0->_messenger, SWITCH_10);
     }
 }
 
@@ -379,8 +379,8 @@ void Gap__Bec__beNDMWMdlItem__vfunc_44(beNDMWMdlItem *self, beBaseInfoRam *ram) 
         igObject *created = (igObject *)((void *)beBaseInfoDataList_Create(al));
         adoptDataList(ram, created);
     }
-    beModelCtrlInfoRamData *one = ((beModelCtrlInfoRamData *)igProperty_FindByName(ram->_dataList, g_propertyNameField[0], ((char *)DAT_0051cf58)));
-    if (strcmp((const char *)((beModelCtrlInfoWork *)one->_work)->_seqCodeName, DAT_0051d0b0) == 0)
+    beModelCtrlInfoRamData *one = ((beModelCtrlInfoRamData *)igProperty_FindByName(ram->_dataList, g_propertyNameField[0], ((char *)ONE_14)));
+    if (strcmp((const char *)((beModelCtrlInfoWork *)one->_work)->_seqCodeName, SQ_EXIT_2) == 0)
         ((MdlItemVt *)self)->exit(ram);
 }
 
@@ -407,29 +407,29 @@ void Gap__Bec__beNDMWMdlItem__vfunc_45(MdlItemVirtual *arg0, beNDMWGameRamInfoRa
         ReleaseRefInline::go((igObject *)arg1->_dataList);
         arg1->_dataList = (int)s0;
     }
-    s5 = ((PropertyRecord *)igProperty_FindByName(arg1->_dataList, g_propertyNameField[0], DAT_0051cf58))->q;
+    s5 = ((PropertyRecord *)igProperty_FindByName(arg1->_dataList, g_propertyNameField[0], ONE_14))->q;
     if (beMessenger_GetBoolCount(self->_messenger) == 0 && s5->_isNamed != 0 && s5->_isDispName != 0) {
         s2 = beMessenger_GetInt(self->_messenger, 0);
         if (s2 == s5->_dispPlayerRamNo) {
             s4 = true;
             beMessenger_PushArgContext(self->_messenger);
-            beMessenger_SelectGroup(self->_messenger, DAT_0051cf60);
+            beMessenger_SelectGroup(self->_messenger, GAMERAM_16);
             beMessenger_AppendInt(self->_messenger, s2);
-            beMessenger_DispatchSelected(self->_messenger, DAT_0051d0b8);
+            beMessenger_DispatchSelected(self->_messenger, GETPLAYER_12);
             s3 = beMessenger_GetObject(self->_messenger, 0);
             unsigned t1 = s5->_kind - 3;
             switch (t1) {
             case 0:
             case 1:
             case 6:
-                if (igProperty_GetRecordFolder(s3, DAT_0051d0c8)->f12->_count >= 36) {
+                if (igProperty_GetRecordFolder(s3, DEVICEFOLDER_5)->f12->_count >= 36) {
                     s4 = false;
                 }
                 break;
             case 2:
             case 3:
             case 5: {
-                igObjectList *l = igProperty_GetRecordFolder(s3, DAT_0051d0d8)->f12;
+                igObjectList *l = igProperty_GetRecordFolder(s3, DISKFOLDER_6)->f12;
                 if (((ItemRecord **)l->_data)[beNDMWItemBase_IndexOfRecNo(l, s5->_recNo)]->f20 >= 9) {
                     s4 = false;
                 }
@@ -437,7 +437,7 @@ void Gap__Bec__beNDMWMdlItem__vfunc_45(MdlItemVirtual *arg0, beNDMWGameRamInfoRa
             }
             }
             if (s4) {
-                igObjectList *a2 = igProperty_GetRecordFolder(s3, DAT_0051d0c8)->f12;
+                igObjectList *a2 = igProperty_GetRecordFolder(s3, DEVICEFOLDER_5)->f12;
                 unsigned t2 = s5->_kind - 3;
             switch (t2) {
                 case 0:
@@ -448,7 +448,7 @@ void Gap__Bec__beNDMWMdlItem__vfunc_45(MdlItemVirtual *arg0, beNDMWGameRamInfoRa
                 case 2:
                 case 3:
                 case 5: {
-                    igObjectList *l = igProperty_GetRecordFolder(s3, DAT_0051d0d8)->f12;
+                    igObjectList *l = igProperty_GetRecordFolder(s3, DISKFOLDER_6)->f12;
                     ItemRecord *it = ((ItemRecord **)l->_data)[beNDMWItemBase_IndexOfRecNo(l, s5->_recNo)];
                     int v = it->f20;
                     if (v != 9) {
@@ -457,10 +457,10 @@ void Gap__Bec__beNDMWMdlItem__vfunc_45(MdlItemVirtual *arg0, beNDMWGameRamInfoRa
                     break;
                 }
                 case 4: {
-                    beMessenger_SendGroup(self->_messenger, DAT_0051cf60, DAT_0051d0e8);
+                    beMessenger_SendGroup(self->_messenger, GAMERAM_16, GETCOMMON_11);
                     int o = beMessenger_GetObject(self->_messenger, 0);
                     int idx = s5->_recNo;
-                    igUnsignedCharList *ar = igProperty_GetRecordArray(o, DAT_0051d0f8)->f12;
+                    igUnsignedCharList *ar = igProperty_GetRecordArray(o, FLAGFOLDER_3)->f12;
                     int n = ar->_count;
                     if (n != 0 && idx >= 0 && idx < n) {
                         *(unsigned char *)(idx + (int)ar->_data) = GPR_00554a74;
@@ -471,7 +471,7 @@ void Gap__Bec__beNDMWMdlItem__vfunc_45(MdlItemVirtual *arg0, beNDMWGameRamInfoRa
                 int f8 = arg1->_ramNo;
                 beNDMWGameRamInfo *info = (beNDMWGameRamInfo *)arg1->_parentInfo;
                 int *name = info->_name ? (int *)info->_name : ((int *)emptyString);
-                beMessenger_SendNamed(self->_messenger, ((int *)DAT_0051cea8), name, f8, DAT_0051cfc8);
+                beMessenger_SendNamed(self->_messenger, ((int *)DROPITEM_2), name, f8, SQ_DDMG);
                 arg0->vX(arg1);
             }
             beMessenger_PopArgContext(self->_messenger);

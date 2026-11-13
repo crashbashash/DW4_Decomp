@@ -148,7 +148,7 @@ void FUN_001c20b0(Controller *self) {
   Obj_1c20b0 *s1;
   int props = ((PropertySet * *)g_objectSystem)[0]->props;
   flag = 1;
-  thunk_FUN_00306e50(props, 7, DAT_004e4600, &flag, 1, 1);
+  thunk_FUN_00306e50(props, 7, text_envMapDiscardUnusedImages, &flag, 1, 1);
   self->enabled = flag;
   assign(self->f76, igSmartPointer<Obj_1c20b0>(((Obj_1c20b0 *)FUN_00132810(igObject_GetAllocator(self)))));
   self->f76->setValue(self->a32);

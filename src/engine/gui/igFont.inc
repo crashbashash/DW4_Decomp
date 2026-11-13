@@ -46,10 +46,10 @@ void igFont_InitFields(void) {
 
     temp_s0 = (void *)g_igFont_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_004d0680[0], 4);
+    igMetaObject_CreateFields(temp_s0, &g_igFont_ctorTable[0], 4);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 2));
     ((igObjectRefMetaField *)temp_s1)->_metaObject = FUN_0013af00();
     ((igRefMetaField *)temp_s1)->_construct = 1;
-    igMetaObject_NameFields(temp_s0, &DAT_004d0690[0], &DAT_004d06a0[0], &DAT_004d06b0[0], temp_s2);
+    igMetaObject_NameFields(temp_s0, &g_igFont_fieldTable[0], &DAT_004d06a0[0], &DAT_004d06b0[0], temp_s2);
 }
 

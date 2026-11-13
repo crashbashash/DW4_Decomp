@@ -73,7 +73,7 @@ void beSvDeliver_InitFields(void) {
 
     temp_s1 = (void *)g_beSvDeliver_metaObject[0];
     temp_s0 = igMetaObject_GetFieldCount(temp_s1);
-    igMetaObject_CreateFields(temp_s1, &DAT_004c43c0[0], 0x12);
+    igMetaObject_CreateFields(temp_s1, &g_beSvDeliver_ctorTable[0], 0x12);
     temp_s2 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0));
     ((igObjectRefMetaField *)temp_s2)->_metaObject = igIntList_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2)->_construct = 1;
@@ -96,6 +96,6 @@ void beSvDeliver_InitFields(void) {
     ((igObjectRefMetaField *)temp_s2_6)->_refCounted = 0;
     temp_s2_7 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 0x11));
     ((igObjectRefMetaField *)temp_s2_7)->_metaObject = (int)FUN_0034a210();
-    igMetaObject_NameFields(temp_s1, &DAT_004c4410[0], &DAT_004c4460[0], &DAT_004c44b0[0], temp_s0);
+    igMetaObject_NameFields(temp_s1, &g_beSvDeliver_fieldTable[0], &DAT_004c4460[0], &DAT_004c44b0[0], temp_s0);
 }
 

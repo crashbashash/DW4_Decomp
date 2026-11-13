@@ -111,7 +111,7 @@ void beCri_InitFields(void) {
 
     temp_s1 = (void *)g_beCri_metaObject[0];
     temp_s0 = igMetaObject_GetFieldCount(temp_s1);
-    igMetaObject_CreateFields(temp_s1, &DAT_004c7660[0], 0xC);
+    igMetaObject_CreateFields(temp_s1, &g_beCri_ctorTable[0], 0xC);
     temp_s2 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0));
     ((igObjectRefMetaField *)temp_s2)->_metaObject = (int)FUN_00342ce0();
     ((igObjectRefMetaField *)temp_s2)->_refCounted = 0;
@@ -128,6 +128,6 @@ void beCri_InitFields(void) {
     temp_s2_6 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 7));
     ((igObjectRefMetaField *)temp_s2_6)->_metaObject = igObjectList_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2_6)->_construct = 1;
-    igMetaObject_NameFields(temp_s1, &DAT_004c7690[0], &DAT_004c76c0[0], &DAT_004c76f0[0], temp_s0);
+    igMetaObject_NameFields(temp_s1, &g_beCri_fieldTable[0], &DAT_004c76c0[0], &DAT_004c76f0[0], temp_s0);
 }
 

@@ -27,7 +27,7 @@ void FUN_00314510(void *, int, int);
 void igArenaMemoryPool_SetPoolOptionFlags(SetFlagsPool *, int);
 extern igResult g_statusSucceeded;
 extern igResult g_allocatorFailureStatus;
-extern int DAT_004fd640[4];
+extern int Unable_to_allocate_memory_for_ar[4];
 extern int DAT_00587200[4];
 extern int DAT_00531030[4];
 }
@@ -46,8 +46,8 @@ class SystemAllocator { public:
 extern SystemAllocator *DAT_00587218[4];
 
 extern "C" {
-extern char DAT_004fc400[];
-extern char DAT_004fc440[];
+extern char text_igArenaMemoryPool_checkHeap_E69[];
+extern char text_igArenaMemoryPool_checkHeap_E70[];
 extern unsigned char GPR_00554cec;
 extern unsigned char GPR_00554cf0;
 }
@@ -70,7 +70,7 @@ extern "C" igResult igArenaMemoryPool_CheckHeap(CheckHeapPool *self) {
         if (self->verbosity > 0) {
             FUN_002f8870(0, self);
             if (GPR_00554cec == 0) {
-                r = FUN_003081d0(DAT_004fc400);
+                r = FUN_003081d0(text_igArenaMemoryPool_checkHeap_E69);
                 if (r == 1) {
                 } else if (r == 2) {
                     GPR_00554cec = 1;
@@ -81,7 +81,7 @@ extern "C" igResult igArenaMemoryPool_CheckHeap(CheckHeapPool *self) {
     }
     if (arena->count < 0 || arena->capacity < 0 || arena->count > arena->capacity) {
         if (self->verbosity >= 3 && GPR_00554cf0 == 0) {
-            r = FUN_003081d0(DAT_004fc440);
+            r = FUN_003081d0(text_igArenaMemoryPool_checkHeap_E70);
             if (r == 1) {
             } else if (r == 2) {
                 GPR_00554cf0 = 1;
@@ -144,7 +144,7 @@ extern "C" igResult FUN_00312790(HeapBoundsPool *self, int index, char *cur, cha
 extern "C" {
 
 extern unsigned char GPR_00554d1c;
-extern int DAT_004fcbc0[4];
+extern int text_igArenaMemoryPool_trim_E76_Arena[4];
 }
 struct TrimArena { char p0[1992]; int top; char p1[24]; int *blocks; int capacity; int count; };
 struct TrimPool { char p0[112]; TrimArena *arena; char p1[44]; long long locked; char p2[20]; int debug; };
@@ -167,22 +167,22 @@ struct CoreGlobals { char pad0[48]; igArenaMemoryPool *defaultPool; };
 char *strstr(const char *, const char *);
 void FUN_002f0880(int *status);
 extern struct CoreGlobals *g_objectSystem[4];
-extern char DAT_004fd2f8[];
-extern char DAT_004fd300[];
-extern char DAT_004fd308[];
-extern char DAT_004fd318[];
-extern char DAT_004fd328[];
-extern char DAT_004fd340[];
-extern char DAT_004fd358[];
-extern char DAT_004fd368[];
-extern char DAT_004fd378[];
-extern char DAT_004fd388[];
-extern char DAT_004fd3a0[];
-extern char DAT_004fd3b8[];
-extern char DAT_004fd3c8[];
-extern char DAT_004fd3d8[];
-extern char DAT_004fd3f0[];
-extern char DAT_004fd400[];
+extern char Fill[];
+extern char Zero[];
+extern char Sentinels[];
+extern char Contiguous[];
+extern char AutoLock[];
+extern char SystemMemoryExhausted[];
+extern char PreSizeReached[];
+extern char MaxSizeReached[];
+extern char NoChecking[];
+extern char LightChecking[];
+extern char ModerateChecking[];
+extern char HeavyChecking[];
+extern char NoMessages[];
+extern char ErrorMessages[];
+extern char WarningMessages[];
+extern char Notifications[];
 void Gap__Core__igArenaMemoryPool__vfunc_45(int *out, igArenaMemoryPool *pool, struct PoolRequest *request);
 
 }

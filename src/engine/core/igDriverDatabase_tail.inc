@@ -111,7 +111,7 @@ int FUN_002da1c0(igDriverDatabase *arg0, const char *arg1, const char *arg2) {
     const char *p5 = name.p;
     if (p5 == 0 || strlen(p5) == 0) {
         POOL()
-        tok = ((const char *)StringPool_Intern((StringPool *)(((void * *)g_stringPool)[0]), (const char *)&DAT_004f9698[0]));
+        tok = ((const char *)StringPool_Intern((StringPool *)(((void * *)g_stringPool)[0]), (const char *)&text_drivers_ini[0]));
         releaseString(name.p);
         name.p = tok;
     }
@@ -276,17 +276,17 @@ void FUN_002dab80(void *arg0, int arg1) {
 }
 
 int FUN_002dac30(void *arg0) {
-    igStringObj_Set((int)arg0, (int)&DAT_004f96b0[0]);
+    igStringObj_Set((int)arg0, (int)&text_psx2_2[0]);
     return 1;
 }
 
 int FUN_002dac60(void *arg0) {
-    igStringObj_Set((int)arg0, (int)&DAT_004f96b8[0]);
+    igStringObj_Set((int)arg0, (int)&text_mips[0]);
     return 1;
 }
 
 int FUN_002dac90(void *arg0) {
-    igStringObj_Set((int)arg0, (int)&DAT_004f96b0[0]);
+    igStringObj_Set((int)arg0, (int)&text_psx2_2[0]);
     return 1;
 }
 
@@ -353,7 +353,7 @@ bool FUN_002db540(S_2db540 *arg0, int *arg1) {
 
     var_s0 = 0;
     FUN_002db480((int *)arg0);
-    if (sscanf(arg0->f52, &DAT_004f96d0[0], sp40) == 1) {
+    if (sscanf(arg0->f52, &text_abcdefghijklmnopqrstuvwxyzABCDEF[0], sp40) == 1) {
         arg0->f52 = arg0->f52 + strlen(sp40);
         *arg1 = ((int)FUN_002b9500(((int)igObject_GetAllocator((int)arg0))));
         igStringObj_Set(*arg1, (int)sp40);

@@ -45,7 +45,7 @@ R_2d4470 Gap__Core__igCallStackTracer__vfunc_27(void *self, int addr, char *buf,
     }
     if (buf != 0) {
         char tmp[20];
-        sprintf(tmp, ((char *)DAT_004f95a8), addr);
+        sprintf(tmp, ((char *)text_0x_08x), addr);
         strncpy(buf, tmp, size);
     }
     *offset = 0;

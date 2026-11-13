@@ -78,7 +78,7 @@ void igAnimationTransitionDefinition_InitFields(void) {
 
     temp_s0 = (void *)g_igAnimationTransitionDefinition_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_0048d5b0[0], 3);
+    igMetaObject_CreateFields(temp_s0, &g_igAnimationTransitionDefinition_ctorTable[0], 3);
     temp_s1 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s2)));
     ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_001a9130();
     ((igObjectRefMetaField *)temp_s1)->_refCounted = 0;
@@ -87,6 +87,6 @@ void igAnimationTransitionDefinition_InitFields(void) {
     ((igRefMetaField *)temp_s1_2)->_construct = 1;
     temp_s1_3 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s2 + 2)));
     ((igObjectRefMetaField *)temp_s1_3)->_metaObject = (int)FUN_001a9bb0();
-    igMetaObject_NameFields(temp_s0, &DAT_0048d5c0[0], &DAT_0048d5d0[0], &DAT_0048d5e0[0], temp_s2);
+    igMetaObject_NameFields(temp_s0, &g_igAnimationTransitionDefinition_fieldTable[0], &DAT_0048d5d0[0], &DAT_0048d5e0[0], temp_s2);
 }
 

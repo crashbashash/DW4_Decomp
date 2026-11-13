@@ -67,7 +67,7 @@ void igParticleFormat_InitFields(void) {
 
     temp_s0 = (void *)g_igParticleFormat_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_00488ba0[0], 0xA);
+    igMetaObject_CreateFields(temp_s0, &g_igParticleFormat_ctorTable[0], 0xA);
     temp_v0 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s1));
     FUN_002dc7a0(temp_v0, &DAT_00488c58[0]);
     ((igEnumMetaField *)temp_v0)->_getMetaEnumFunction = (int)(&X0_0014d010[0]);
@@ -98,26 +98,26 @@ void igParticleFormat_InitFields(void) {
     temp_v0_10 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 9));
     FUN_002dc7a0(temp_v0_10, &DAT_00488ca0[0]);
     ((igEnumMetaField *)temp_v0_10)->_getMetaEnumFunction = (int)(&X6_0014d010[0]);
-    igMetaObject_NameFields(temp_s0, &DAT_00488bd0[0], &DAT_00488c00[0], &DAT_00488c30[0], temp_s1);
+    igMetaObject_NameFields(temp_s0, &g_igParticleFormat_fieldTable[0], &DAT_00488c00[0], &DAT_00488c30[0], temp_s1);
 }
 
 int FUN_0014d450(void) {
     if (DAT_0055fcf8[0] == 0) {
-        DAT_0055fcf8[0] = igMetaEnum_Create(&DAT_004dc640[0], &DAT_00488cb0[0], &DAT_00488cc0[0], 4);
+        DAT_0055fcf8[0] = igMetaEnum_Create(&TEXTURE_ARGUMENT[0], &DAT_00488cb0[0], &DAT_00488cc0[0], 4);
     }
     return DAT_0055fcf8[0];
 }
 
 int FUN_0014d4b0(void) {
     if (DAT_0055fd00[0] == 0) {
-        DAT_0055fd00[0] = igMetaEnum_Create(&DAT_004dc710[0], &DAT_00488cd0[0], &DAT_00488ce0[0], 3);
+        DAT_0055fd00[0] = igMetaEnum_Create(&TEXTURE_STAGE_TYPE[0], &DAT_00488cd0[0], &DAT_00488ce0[0], 3);
     }
     return DAT_0055fd00[0];
 }
 
 int FUN_0014d510(void) {
     if (DAT_0055fd08[0] == 0) {
-        DAT_0055fd08[0] = igMetaEnum_Create(&DAT_004dc7c0[0], &DAT_00488cf0[0], &DAT_00488d00[0], 3);
+        DAT_0055fd08[0] = igMetaEnum_Create(&TEXTURE_FUNCTION_TYPE[0], &DAT_00488cf0[0], &DAT_00488d00[0], 3);
     }
     return DAT_0055fd08[0];
 }

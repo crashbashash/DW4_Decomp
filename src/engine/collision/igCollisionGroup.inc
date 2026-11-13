@@ -59,9 +59,9 @@ void igCollisionGroup_InitFields(void) {
 
     temp_s0 = (void *)g_igCollisionGroup_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_004983c0[0], 8);
+    igMetaObject_CreateFields(temp_s0, &g_igCollisionGroup_ctorTable[0], 8);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
     ((igObjectRefMetaField *)temp_s1)->_metaObject = FUN_00196190();
-    igMetaObject_NameFields(temp_s0, &DAT_004983e0[0], &DAT_00498400[0], &DAT_00498420[0], temp_s2);
+    igMetaObject_NameFields(temp_s0, &g_igCollisionGroup_fieldTable[0], &DAT_00498400[0], &DAT_00498420[0], temp_s2);
 }
 

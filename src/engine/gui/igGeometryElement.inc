@@ -52,7 +52,7 @@ void igGeometryElement_InitFields(void) {
 
     temp_s0 = (void *)g_igGeometryElement_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_004d0630[0], 4);
+    igMetaObject_CreateFields(temp_s0, &g_igGeometryElement_ctorTable[0], 4);
     temp_s1 = (struct GeometryMetaFieldView *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
     temp_s1->f56 = FUN_0019fae0();
     temp_s1->f52 = 1;
@@ -70,6 +70,6 @@ void igGeometryElement_InitFields(void) {
     temp_s1_2 = (struct GeometryMetaFieldView *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 3));
     temp_s1_2->f56 = FUN_0013af00();
     temp_s1_2->f52 = 1;
-    igMetaObject_NameFields(temp_s0, &DAT_004d0640[0], &DAT_004d0650[0], &DAT_004d0660[0], temp_s2);
+    igMetaObject_NameFields(temp_s0, &g_igGeometryElement_fieldTable[0], &DAT_004d0650[0], &DAT_004d0660[0], temp_s2);
 }
 

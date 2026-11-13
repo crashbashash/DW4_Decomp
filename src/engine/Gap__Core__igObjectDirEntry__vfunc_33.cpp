@@ -18,7 +18,7 @@ int FUN_002fff90(int, int, void *, int, unsigned char);
 int FUN_00300250(int, int, void *, int, unsigned char);
 extern int g_igObjectList_metaObject[4];
 extern char emptyString[];
-extern int DAT_004f6518[4];
+extern int NoMeta[4];
 extern void *g_stringPool[4];
 /* The array extern keeps the load absolute. */
 extern int g_igObjectDirEntry_metaObject[4];

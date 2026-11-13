@@ -71,10 +71,10 @@ void beLuaInfo_InitFields(void) {
 
     temp_s0 = (void *)g_beLuaInfo_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_004c6260[0], 1);
+    igMetaObject_CreateFields(temp_s0, &g_beLuaInfo_ctorTable[0], 1);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
     ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_0035afc0();
     ((igRefMetaField *)temp_s1)->_construct = 1;
-    igMetaObject_NameFields(temp_s0, &DAT_004c6268[0], &DAT_004c6270[0], &DAT_004c6278[0], temp_s2);
+    igMetaObject_NameFields(temp_s0, &g_beLuaInfo_fieldTable[0], &DAT_004c6270[0], &DAT_004c6278[0], temp_s2);
 }
 

@@ -75,10 +75,10 @@ void igVisualContextCapabilityManager_InitFields(void) {
 
     temp_s0 = (void *)g_igVisualContextCapabilityManager_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_004882d8[0], 1);
+    igMetaObject_CreateFields(temp_s0, &g_igVisualContextCapabilityManager_ctorTable[0], 1);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
     ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_0014a040();
     ((igMetaField *)temp_s1)->_persistent = 0;
-    igMetaObject_NameFields(temp_s0, &DAT_004882e0[0], &DAT_004882e8[0], &DAT_004882f0[0], temp_s2);
+    igMetaObject_NameFields(temp_s0, &g_igVisualContextCapabilityManager_fieldTable[0], &DAT_004882e8[0], &DAT_004882f0[0], temp_s2);
 }
 

@@ -69,13 +69,13 @@ void igMouseCursor_InitFields(void) {
 
     temp_s0 = (void *)g_igMouseCursor_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_004d0238[0], 2);
+    igMetaObject_CreateFields(temp_s0, &g_igMouseCursor_ctorTable[0], 2);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
     *(int *)((char *)(temp_s1) + 56) = (int)FUN_004505b0();
     temp_a0 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
     buf[0] = 0;
     buf[1] = 0;
     FUN_0018e2f0(temp_a0, buf);
-    igMetaObject_NameFields(temp_s0, &DAT_004d0240[0], &DAT_004d0248[0], &DAT_004d0250[0], temp_s2);
+    igMetaObject_NameFields(temp_s0, &g_igMouseCursor_fieldTable[0], &DAT_004d0248[0], &DAT_004d0250[0], temp_s2);
 }
 

@@ -105,10 +105,10 @@ void igEnbayaAnimationState_InitFields(void) {
 
     temp_s0 = (void *)g_igEnbayaAnimationState_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_0048c340[0], 2);
+    igMetaObject_CreateFields(temp_s0, &g_igEnbayaAnimationState_ctorTable[0], 2);
     *(char *)((char *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s1))) + 38) = 0;
     FUN_002d3890(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 1)), 1);
-    igMetaObject_NameFields(temp_s0, &DAT_0048c348[0], &DAT_0048c350[0], &DAT_0048c358[0], temp_s1);
+    igMetaObject_NameFields(temp_s0, &g_igEnbayaAnimationState_fieldTable[0], &DAT_0048c350[0], &DAT_0048c358[0], temp_s1);
     FUN_002fe480(FUN_001a21a0);
 }
 

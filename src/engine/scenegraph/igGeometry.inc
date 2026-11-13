@@ -72,8 +72,8 @@ void FUN_0019fca0(void) {
 
     temp_s1 = (void *)(((void * *)g_igGeometry_metaObject)[0]);
     temp_s2 = igMetaObject_GetFieldCount(temp_s1);
-    igMetaObject_CreateFields(temp_s1, &DAT_0048c060[0], 1);
-    temp_v0 = (void **)(((void * *)igMetaObject_FindFieldByName(temp_s1, &DAT_004e2710[0])));
+    igMetaObject_CreateFields(temp_s1, &g_igGeometry_ctorTable[0], 1);
+    temp_v0 = (void **)(((void * *)igMetaObject_FindFieldByName(temp_s1, &text_trigger[0])));
     temp_s3 = ObjectPointerList_FindIndex(*(int *)((char *)(temp_s1) + 40), temp_v0);
     temp_v0_2 = (void *)(((DW4VC_84_1 *)(temp_v0))->vX((int)(1)));
     FUN_002d3890(temp_v0_2, 1);
@@ -86,7 +86,7 @@ void FUN_0019fca0(void) {
     temp_s0 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s1, temp_s2)));
     *(int *)((char *)(temp_s0) + 56) = FUN_00133e50();
     *(char *)((char *)(temp_s0) + 38) = 0;
-    igMetaObject_NameFields(temp_s1, &DAT_0048c068[0], &DAT_0048c070[0], &DAT_0048c078[0], temp_s2);
+    igMetaObject_NameFields(temp_s1, &g_igGeometry_fieldTable[0], &DAT_0048c070[0], &DAT_0048c078[0], temp_s2);
 }
 
 void thunk_FUN_001c51d0(void) {

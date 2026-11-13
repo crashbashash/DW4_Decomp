@@ -59,8 +59,8 @@ void igModelViewMatrixBoneSelect_InitFields(void) {
 
     temp_s0 = (void *)g_igModelViewMatrixBoneSelect_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_0048bcd8[0], 1);
+    igMetaObject_CreateFields(temp_s0, &g_igModelViewMatrixBoneSelect_ctorTable[0], 1);
     FUN_002ea4b0(igMetaObject_GetFieldAt(temp_s0, temp_s1), -1);
-    igMetaObject_NameFields(temp_s0, &DAT_0048bce0[0], &DAT_0048bce8[0], &DAT_0048bcf0[0], temp_s1);
+    igMetaObject_NameFields(temp_s0, &g_igModelViewMatrixBoneSelect_fieldTable[0], &DAT_0048bce8[0], &DAT_0048bcf0[0], temp_s1);
 }
 

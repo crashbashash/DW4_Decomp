@@ -92,8 +92,8 @@ void beModelCtrlInfoDataTrc_InitFields(void) {
 
     temp_s1 = (igMetaObject *)(((void * *)g_beModelCtrlInfoDataTrc_metaObject)[0]);
     temp_s2 = igMetaObject_GetFieldCount(temp_s1);
-    igMetaObject_CreateFields(temp_s1, &DAT_004c54a8[0], 1);
-    temp_v0 = (void **)(igMetaObject_FindFieldByName(temp_s1, &DAT_00502218[0]));
+    igMetaObject_CreateFields(temp_s1, &g_beModelCtrlInfoDataTrc_ctorTable[0], 1);
+    temp_v0 = (void **)(igMetaObject_FindFieldByName(temp_s1, &text_name[0]));
     temp_s3 = ObjectPointerList_FindIndex(temp_s1->_metaFields, temp_v0);
     temp_v0_2 = (igStringMetaField *)(((DW4VC_84_1 *)(temp_v0))->vX((int)(1)));
     igStringMetaField_SetDefaultText(temp_v0_2, &DAT_00503b38[0]);
@@ -105,6 +105,6 @@ void beModelCtrlInfoDataTrc_InitFields(void) {
     }
     temp_s0 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s2));
     *(int *)((char *)(temp_s0) + 56) = FUN_001957c0();
-    igMetaObject_NameFields(temp_s1, &DAT_004c54b0[0], &DAT_004c54b8[0], &DAT_004c54c0[0], temp_s2);
+    igMetaObject_NameFields(temp_s1, &g_beModelCtrlInfoDataTrc_fieldTable[0], &DAT_004c54b8[0], &DAT_004c54c0[0], temp_s2);
 }
 

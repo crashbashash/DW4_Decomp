@@ -101,7 +101,7 @@ void igRenderPackage_InitFields(void) {
 
     temp_s1 = (void *)g_igRenderPackage_metaObject[0];
     temp_s0 = igMetaObject_GetFieldCount(temp_s1);
-    igMetaObject_CreateFields(temp_s1, &DAT_0048b4d0[0], 6);
+    igMetaObject_CreateFields(temp_s1, &g_igRenderPackage_ctorTable[0], 6);
     temp_s2 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s1, temp_s0)));
     ((igObjectRefMetaField *)temp_s2)->_metaObject = FUN_0013ad40();
     ((igRefMetaField *)temp_s2)->_construct = 1;
@@ -114,6 +114,6 @@ void igRenderPackage_InitFields(void) {
     temp_s2_4 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s1, temp_s0 + 5)));
     ((igObjectRefMetaField *)temp_s2_4)->_metaObject = (int)FUN_001977c0();
     ((igRefMetaField *)temp_s2_4)->_construct = 1;
-    igMetaObject_NameFields(temp_s1, &DAT_0048b4f0[0], &DAT_0048b510[0], &DAT_0048b530[0], temp_s0);
+    igMetaObject_NameFields(temp_s1, &g_igRenderPackage_fieldTable[0], &DAT_0048b510[0], &DAT_0048b530[0], temp_s0);
 }
 

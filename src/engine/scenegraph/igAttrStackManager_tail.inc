@@ -37,7 +37,7 @@ void Gap__Sg__igAttrStackManager__vfunc_09(unsigned char *arg0, int arg1) {
         l->data[idx] = (int)arg0;
         z = ((struct Z * *)g_objectSystem)[0]->f56;
         sp4F = arg0[60];
-        FUN_00306e50(z, 7, &DAT_004e4520[0], &sp4F, 0, 0);
+        FUN_00306e50(z, 7, &text_simpleLightManagementState[0], &sp4F, 0, 0);
         arg0[60] = sp4F;
     }
 }

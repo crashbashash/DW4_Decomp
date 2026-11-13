@@ -86,9 +86,9 @@ void beTextureCtrl_InitFields(void) {
 
     temp_s0 = (void *)g_beTextureCtrl_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_004c34e8[0], 2);
+    igMetaObject_CreateFields(temp_s0, &g_beTextureCtrl_ctorTable[0], 2);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
     ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_00342670();
-    igMetaObject_NameFields(temp_s0, &DAT_004c34f0[0], &DAT_004c34f8[0], &DAT_004c3500[0], temp_s2);
+    igMetaObject_NameFields(temp_s0, &g_beTextureCtrl_fieldTable[0], &DAT_004c34f8[0], &DAT_004c3500[0], temp_s2);
 }
 

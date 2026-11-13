@@ -84,7 +84,7 @@ void igCompiledTransform_InitFields(void) {
 
     temp_s0 = (void *)g_igCompiledTransform_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_0048c6e0[0], 8);
+    igMetaObject_CreateFields(temp_s0, &g_igCompiledTransform_ctorTable[0], 8);
     ((struct Fld_1a37a0 *)igMetaObject_GetFieldAt(temp_s0, temp_s2))->f38 = 0;
     temp_s1 = ((struct Fld_1a37a0 *)igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
     temp_s1->f56 = (int)FUN_00194dd0();
@@ -102,6 +102,6 @@ void igCompiledTransform_InitFields(void) {
     temp_v0_2->f38 = 0;
     ((struct Fld_1a37a0 *)igMetaObject_GetFieldAt(temp_s0, temp_s2 + 6))->f38 = 0;
     ((struct Fld_1a37a0 *)igMetaObject_GetFieldAt(temp_s0, temp_s2 + 7))->f38 = 0;
-    igMetaObject_NameFields(temp_s0, &DAT_0048c700[0], &DAT_0048c720[0], &DAT_0048c740[0], temp_s2);
+    igMetaObject_NameFields(temp_s0, &g_igCompiledTransform_fieldTable[0], &DAT_0048c720[0], &DAT_0048c740[0], temp_s2);
 }
 

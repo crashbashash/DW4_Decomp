@@ -1,6 +1,6 @@
 int FUN_002bc8d0(void) {
     if (DAT_00585ae8[0] == 0) {
-        DAT_00585ae8[0] = ((int)igMetaEnum_Create((char *)&DAT_004f63a8[0], (char **)&DAT_004bfa38[0], &DAT_004bfa48[0], 3));
+        DAT_00585ae8[0] = ((int)igMetaEnum_Create((char *)&LOCATION_TYPE[0], (char **)&DAT_004bfa38[0], &DAT_004bfa48[0], 3));
     }
     return DAT_00585ae8[0];
 }
@@ -91,9 +91,9 @@ void igPluginRepository_InitFields(void) {
     igMetaObject *meta = g_igPluginRepository_metaObject[0];
     int base = igMetaObject_GetFieldCount(meta);
     igMetaField *field;
-    igMetaObject_CreateFields(meta, (FieldFactory *)DAT_004bfa58, 2);
+    igMetaObject_CreateFields(meta, (FieldFactory *)g_igPluginRepository_ctorTable, 2);
     field = ((igMetaField *)igMetaObject_GetFieldAt(meta, base + 1));
     *(int *)((char *)field + 52) = (int)FUN_002bc8d0;
-    igMetaObject_NameFields(meta, (const char **)DAT_004bfa60, (igMetaField ***)DAT_004bfa68, (int *)DAT_004bfa70, base);
+    igMetaObject_NameFields(meta, (const char **)g_igPluginRepository_fieldTable, (igMetaField ***)DAT_004bfa68, (int *)DAT_004bfa70, base);
 }
 

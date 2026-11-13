@@ -114,13 +114,13 @@ void igLightStateAttr_InitFields(void) {
 
     temp_s0 = (void *)g_igLightStateAttr_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_00486320[0], 3);
+    igMetaObject_CreateFields(temp_s0, &g_igLightStateAttr_ctorTable[0], 3);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
     ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_00136750();
     FUN_002d3890(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1), 1);
     temp_v0 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 2));
     ((igObjectRefMetaField *)temp_v0)->_metaObject = (int)((int) g_igObject_metaObject[0]);
     ((igMetaField *)temp_v0)->_persistent = 0;
-    igMetaObject_NameFields(temp_s0, &DAT_00486330[0], &DAT_00486340[0], &DAT_00486350[0], temp_s2);
+    igMetaObject_NameFields(temp_s0, &g_igLightStateAttr_fieldTable[0], &DAT_00486340[0], &DAT_00486350[0], temp_s2);
 }
 

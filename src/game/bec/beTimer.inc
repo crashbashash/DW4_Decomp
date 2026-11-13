@@ -96,7 +96,7 @@ void beTimer_InitFields(void) {
 
     temp_s0 = (void *)g_beTimer_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_004c33a0[0], 5);
+    igMetaObject_CreateFields(temp_s0, &g_beTimer_ctorTable[0], 5);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
     ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_00342ce0();
     ((igObjectRefMetaField *)temp_s1)->_refCounted = 0;
@@ -109,6 +109,6 @@ void beTimer_InitFields(void) {
     temp_s1_4 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 3));
     ((igObjectRefMetaField *)temp_s1_4)->_metaObject = (int)FUN_003416b0();
     ((igRefMetaField *)temp_s1_4)->_construct = 1;
-    igMetaObject_NameFields(temp_s0, &DAT_004c33c0[0], &DAT_004c33e0[0], &DAT_004c3400[0], temp_s2);
+    igMetaObject_NameFields(temp_s0, &g_beTimer_fieldTable[0], &DAT_004c33e0[0], &DAT_004c3400[0], temp_s2);
 }
 

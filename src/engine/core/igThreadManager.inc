@@ -46,14 +46,14 @@ void igThreadManager_InitFields(void) {
     ((igMetaObject *)(g_igThreadManager_metaObject[0]))->_volatile = 1;
     temp_s0 = (void *)(g_igThreadManager_metaObject[0]);
     temp_s2 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
-    igMetaObject_CreateFields((igMetaObject *)temp_s0, (igMetaField * (**)(void *))&DAT_004bf378[0], 2);
+    igMetaObject_CreateFields((igMetaObject *)temp_s0, (igMetaField * (**)(void *))&g_igThreadManager_ctorTable[0], 2);
     temp_s1 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2)));
     ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_002b8220();
     ((igRefMetaField *)temp_s1)->_construct = 1;
     temp_s1_2 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 1)));
     ((igObjectRefMetaField *)temp_s1_2)->_metaObject = (int)FUN_002ba690();
     ((igRefMetaField *)temp_s1_2)->_construct = 1;
-    igMetaObject_NameFields((igMetaObject *)temp_s0, (const char **)&DAT_004bf380[0], (igMetaField ***)&DAT_004bf388[0], &DAT_004bf390[0], temp_s2);
+    igMetaObject_NameFields((igMetaObject *)temp_s0, (const char **)&g_igThreadManager_fieldTable[0], (igMetaField ***)&DAT_004bf388[0], &DAT_004bf390[0], temp_s2);
     ((igMetaObject *)(g_igThreadManager_metaObject[0]))->_abstractProxy = (int)thunk_igPsx2ThreadManager_GetMetaObject;
     FUN_002fe480((int)thunk_FUN_0030e540);
 }

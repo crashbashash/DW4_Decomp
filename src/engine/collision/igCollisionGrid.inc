@@ -123,7 +123,7 @@ void igCollisionGrid_InitFields(void) {
 
     temp_s0 = (void *)g_igCollisionGrid_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_00498480[0], 0xF);
+    igMetaObject_CreateFields(temp_s0, &g_igCollisionGrid_ctorTable[0], 0xF);
     temp_s2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s1));
     ((igObjectRefMetaField *)temp_s2)->_metaObject = (int)FUN_0023a570();
     ((igRefMetaField *)temp_s2)->_construct = 1;
@@ -149,6 +149,6 @@ void igCollisionGrid_InitFields(void) {
     ((igObjectRefMetaField *)temp_s2_8)->_metaObject = FUN_0018a6a0();
     ((igRefMetaField *)temp_s2_8)->_construct = 1;
     FUN_002ea4b0(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0xD), 1);
-    igMetaObject_NameFields(temp_s0, &DAT_004984c0[0], &DAT_00498500[0], &DAT_00498540[0], temp_s1);
+    igMetaObject_NameFields(temp_s0, &g_igCollisionGrid_fieldTable[0], &DAT_00498500[0], &DAT_00498540[0], temp_s1);
 }
 

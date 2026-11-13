@@ -82,9 +82,9 @@ void beTimerData_InitFields(void) {
 
     temp_s0 = (void *)g_beTimerData_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_004c3420[0], 4);
+    igMetaObject_CreateFields(temp_s0, &g_beTimerData_ctorTable[0], 4);
     igStringMetaField_SetDefaultText(((int)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 1)), 0);
     igStringMetaField_SetDefaultText(((int)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 2)), 0);
-    igMetaObject_NameFields(temp_s0, &DAT_004c3430[0], &DAT_004c3440[0], &DAT_004c3450[0], temp_s1);
+    igMetaObject_NameFields(temp_s0, &g_beTimerData_fieldTable[0], &DAT_004c3440[0], &DAT_004c3450[0], temp_s1);
 }
 

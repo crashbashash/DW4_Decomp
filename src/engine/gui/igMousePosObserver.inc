@@ -99,7 +99,7 @@ void igMousePosObserver_InitFields(void) {
 
     temp_s1 = (void *)g_igMousePosObserver_metaObject[0];
     temp_s0 = igMetaObject_GetFieldCount(temp_s1);
-    igMetaObject_CreateFields(temp_s1, &DAT_004d0330[0], 7);
+    igMetaObject_CreateFields(temp_s1, &g_igMousePosObserver_ctorTable[0], 7);
     temp_s2 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0));
     ((igObjectRefMetaField *)temp_s2)->_metaObject = (int)FUN_0044ded0();
     ((igObjectRefMetaField *)temp_s2)->_refCounted = 0;
@@ -112,6 +112,6 @@ void igMousePosObserver_InitFields(void) {
     FUN_002e3810((int)igMetaObject_GetFieldAt(temp_s1, temp_s0 + 3), 0.0f);
     temp_s2_4 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 5));
     ((igObjectRefMetaField *)temp_s2_4)->_metaObject = FUN_0019f670();
-    igMetaObject_NameFields(temp_s1, &DAT_004d0350[0], &DAT_004d0370[0], &DAT_004d0390[0], temp_s0);
+    igMetaObject_NameFields(temp_s1, &g_igMousePosObserver_fieldTable[0], &DAT_004d0370[0], &DAT_004d0390[0], temp_s0);
 }
 

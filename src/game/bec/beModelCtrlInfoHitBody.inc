@@ -102,7 +102,7 @@ void beModelCtrlInfoHitBody_InitFields(void) {
 
     temp_s1 = (void *)g_beModelCtrlInfoHitBody_metaObject[0];
     temp_s0 = igMetaObject_GetFieldCount(temp_s1);
-    igMetaObject_CreateFields(temp_s1, &DAT_004c5300[0], 7);
+    igMetaObject_CreateFields(temp_s1, &g_beModelCtrlInfoHitBody_ctorTable[0], 7);
     FUN_002d3890(igMetaObject_GetFieldAt(temp_s1, temp_s0), 1);
     temp_s2 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 3));
     ((igObjectRefMetaField *)temp_s2)->_metaObject = FUN_0018a4f0();
@@ -116,6 +116,6 @@ void beModelCtrlInfoHitBody_InitFields(void) {
     temp_s2_4 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 6));
     ((igObjectRefMetaField *)temp_s2_4)->_metaObject = FUN_0018a4f0();
     ((igRefMetaField *)temp_s2_4)->_construct = 1;
-    igMetaObject_NameFields(temp_s1, &DAT_004c5320[0], &DAT_004c5340[0], &DAT_004c5360[0], temp_s0);
+    igMetaObject_NameFields(temp_s1, &g_beModelCtrlInfoHitBody_fieldTable[0], &DAT_004c5340[0], &DAT_004c5360[0], temp_s0);
 }
 

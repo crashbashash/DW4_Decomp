@@ -51,11 +51,11 @@ void igQueue_InitFields(void) {
 
     temp_s0 = (void *)(((void * *)g_igQueue_metaObject)[0]);
     temp_s2 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
-    igMetaObject_CreateFields((igMetaObject *)temp_s0, (igMetaField * (**)(void *))&DAT_004bf9b8[0], 1);
+    igMetaObject_CreateFields((igMetaObject *)temp_s0, (igMetaField * (**)(void *))&g_igQueue_ctorTable[0], 1);
     temp_s1 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2)));
     *(int *)((char *)(temp_s1) + 56) = (int)FUN_002b8390();
     *(char *)((char *)(temp_s1) + 52) = 1;
-    igMetaObject_NameFields((igMetaObject *)temp_s0, (const char **)&DAT_004bf9c0[0], (igMetaField ***)&DAT_004bf9c8[0], &DAT_004bf9d0[0], temp_s2);
+    igMetaObject_NameFields((igMetaObject *)temp_s0, (const char **)&g_igQueue_fieldTable[0], (igMetaField ***)&DAT_004bf9c8[0], &DAT_004bf9d0[0], temp_s2);
     *(int *)((char *)(((void * *)g_igQueue_metaObject)[0]) + 60) = (int)thunk_igStandardQueue_GetMetaObject;
 }
 

@@ -41,7 +41,7 @@ void FUN_001ccd10(IniShaderFactoryView *self, IniNodeList *list) {
                 IniEntryList *entries = node->entries;
                 for (j = 0; j < entries->count; j++) {
                     IniEntry *e = entries->data[j];
-                    if (FUN_0030ba90(e->name, DAT_004e46e0) != 0) {
+                    if (FUN_0030ba90(e->name, text_file) != 0) {
                         char *s = e->value->text;
                         s = (s == 0) ? g_stringObjEmptyText[0] : s;
                         FUN_001cdbb0((IniFactoryView *)self, s);
@@ -70,7 +70,7 @@ void Gap__Sg__igIniShaderFactory__vfunc_27(IniShaderFactoryFields *self) {
         }
         for (int i = 0; i < FUN_00307650(self->f28); i++) {
             IniFactoryEntry *e = FUN_00307630(self->f28, i);
-            if (e != 0 && e->f16 != 0 && e->f12 != 0 && FUN_0030ba90(e->f16, &DAT_004e46e0[0]) != 0) {
+            if (e != 0 && e->f16 != 0 && e->f12 != 0 && FUN_0030ba90(e->f16, &text_file[0]) != 0) {
                 char *path;
                 if (e->f12->name == 0) path = g_stringObjEmptyText[0]; else path = e->f12->name;
                 FUN_001cdbb0((IniFactoryView *)self, path);
@@ -145,7 +145,7 @@ int FUN_001cd150(IniDocument **out, IniFactoryState *self, char *name) {
     }
     if (self->mode != 0) {
         if (self->mode == 3) {
-            IniSourceList *source = (IniSourceList *)FUN_00309a60(((void *)g_globalContext[0]), DAT_004fb3a8, igShaderInfo_className, 0);
+            IniSourceList *source = (IniSourceList *)FUN_00309a60(((void *)g_globalContext[0]), text_system, igShaderInfo_className, 0);
             IniFieldEntry *entry;
             if (source == 0 || igObject_IsKindOf(source, ((void * *)g_igShaderInfo_metaObject)[0]) == 0) {
                 SET_OUT(result);
@@ -248,7 +248,7 @@ igSmartPointer<IniSectionText> FUN_001cdbb0(IniFactoryView *self, char *name) {
     if (self->mode != 0) {
         IniSectionText *found;
         if (self->mode == 3) {
-            IniSourceList *source = (IniSourceList *)FUN_00309a60(((void *)g_globalContext[0]), DAT_004fb3a8, igShaderInfo_className, 0);
+            IniSourceList *source = (IniSourceList *)FUN_00309a60(((void *)g_globalContext[0]), text_system, igShaderInfo_className, 0);
             IniFieldEntry_1cdbb0 *entry;
             if (source == 0 || igObject_IsKindOf(source, ((void * *)g_igShaderInfo_metaObject)[0]) == 0) {
                 return igSmartPointer<IniSectionText>((IniSectionText *)0, kRetainReference);

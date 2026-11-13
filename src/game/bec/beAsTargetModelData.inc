@@ -82,9 +82,9 @@ void beAsTargetModelData_InitFields(void) {
 
     temp_s0 = (void *)g_beAsTargetModelData_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_004c7dd8[0], 1);
+    igMetaObject_CreateFields(temp_s0, &g_beAsTargetModelData_ctorTable[0], 1);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
     ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_0036bc60();
-    igMetaObject_NameFields(temp_s0, &DAT_004c7de0[0], &DAT_004c7de8[0], &DAT_004c7df0[0], temp_s2);
+    igMetaObject_NameFields(temp_s0, &g_beAsTargetModelData_fieldTable[0], &DAT_004c7de8[0], &DAT_004c7df0[0], temp_s2);
 }
 

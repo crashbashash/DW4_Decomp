@@ -88,12 +88,12 @@ void igTextureBindAttr_InitFields(void) {
     void *temp_s0;
     temp_s0 = (void *)g_igTextureBindAttr_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_00485cb0[0], 2);
+    igMetaObject_CreateFields(temp_s0, &g_igTextureBindAttr_ctorTable[0], 2);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
     *(int *)((char *)(temp_s1) + 56) = (int)FUN_00132ba0();
     temp_s1 = igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1);
     *(int *)((char *)temp_s1 + 48) = (int)FUN_00140e40;
-    igMetaObject_NameFields(temp_s0, &DAT_00485cb8[0], &DAT_00485cc0[0], &DAT_00485cc8[0], temp_s2);
+    igMetaObject_NameFields(temp_s0, &g_igTextureBindAttr_fieldTable[0], &DAT_00485cc0[0], &DAT_00485cc8[0], temp_s2);
 }
 
 void thunk_FUN_00140f40(void) {

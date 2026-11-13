@@ -1,6 +1,6 @@
 int FUN_002c66f0(void) {
     if (DAT_005865c8[0] == 0) {
-        DAT_005865c8[0] = ((int)igMetaEnum_Create((char *)(&DAT_004f7f00[0]), (char **)(&DAT_004c0fb8[0]), &DAT_004c0fc0[0], 2));
+        DAT_005865c8[0] = ((int)igMetaEnum_Create((char *)(&SECTION_OVERRIDE_MODE[0]), (char **)(&DAT_004c0fb8[0]), &DAT_004c0fc0[0], 2));
     }
     return DAT_005865c8[0];
 }
@@ -85,7 +85,7 @@ void igDriverDatabase_InitFields(void) {
 
     temp_s0 = (void *)g_igDriverDatabase_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
-    igMetaObject_CreateFields((igMetaObject *)temp_s0, (igMetaField * (**)(void *))&DAT_004c0ff0[0], 0xC);
+    igMetaObject_CreateFields((igMetaObject *)temp_s0, (igMetaField * (**)(void *))&g_igDriverDatabase_ctorTable[0], 0xC);
     temp_s2 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1)));
     ((igObjectRefMetaField *)temp_s2)->_metaObject = (int)FUN_002b9390();
     ((igObjectRefMetaField *)temp_s2)->_construct = 1;
@@ -127,6 +127,6 @@ void igDriverDatabase_InitFields(void) {
     ((igRawRefMetaField *)temp_v0_3)->_persistent = 0;
     ((igRawRefMetaField *)temp_v0_3)->_deepCopyMethod = 3;
     ((igRawRefMetaField *)temp_v0_3)->_shallowCopyMethod = 3;
-    igMetaObject_NameFields((igMetaObject *)temp_s0, (const char **)&DAT_004c1020[0], (igMetaField ***)&DAT_004c1050[0], &DAT_004c1080[0], temp_s1);
+    igMetaObject_NameFields((igMetaObject *)temp_s0, (const char **)&g_igDriverDatabase_fieldTable[0], (igMetaField ***)&DAT_004c1050[0], &DAT_004c1080[0], temp_s1);
 }
 

@@ -23,19 +23,19 @@ extern int g_allocatorFailureStatus[4];
 extern int g_statusSucceeded[4];
 extern int g_statusSucceeded[4];
 extern int g_allocatorFailureStatus[4];
-extern int DAT_004fd2f8[4];
-extern int DAT_004fd300[4];
-extern int DAT_004fd328[4];
-extern int DAT_004fd340[4];
-extern int DAT_004fd368[4];
-extern int DAT_004fd3c8[4];
-extern int DAT_004fd3d8[4];
-extern int DAT_004fd3f0[4];
-extern int DAT_004fd400[4];
-extern int DAT_004ff230[4];
+extern int Fill[4];
+extern int Zero[4];
+extern int AutoLock[4];
+extern int SystemMemoryExhausted[4];
+extern int MaxSizeReached[4];
+extern int NoMessages[4];
+extern int ErrorMessages[4];
+extern int WarningMessages[4];
+extern int Notifications[4];
+extern int Physical[4];
 extern int DAT_004ff240[4];
 extern int DAT_004ff2a0[4];
-extern int DAT_004ff4b0[4];
+extern int text_igPageMemoryPool_getBlockSize_Sh[4];
 extern unsigned char GPR_00554dc0;
 extern unsigned char GPR_00554dc4;
 extern unsigned char GPR_00554dd8;
@@ -422,7 +422,7 @@ unsigned igPageMemoryPool_GetBlockSize(PoolGBS *self, unsigned addr) {
             if (self->debug > 0) {
                 FUN_002f8870(0, self);
                 if (GPR_00554dd8 == 0) {
-                    int r = FUN_003081d0(DAT_004ff4b0);
+                    int r = FUN_003081d0(text_igPageMemoryPool_getBlockSize_Sh);
                     if (r != 1 && r == 2) {
                         GPR_00554dd8 = 1;
                     }

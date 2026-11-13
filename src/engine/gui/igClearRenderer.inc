@@ -69,7 +69,7 @@ void igClearRenderer_InitFields(void) {
 
     temp_s0 = (void *)g_igClearRenderer_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_004cff68[0], 1);
-    igMetaObject_NameFields(temp_s0, &DAT_004cff70[0], &DAT_004cff78[0], &DAT_004cff80[0], temp_s1);
+    igMetaObject_CreateFields(temp_s0, &g_igClearRenderer_ctorTable[0], 1);
+    igMetaObject_NameFields(temp_s0, &g_igClearRenderer_fieldTable[0], &DAT_004cff78[0], &DAT_004cff80[0], temp_s1);
 }
 

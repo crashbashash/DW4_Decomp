@@ -55,7 +55,7 @@ void beNDMWLoadIntf2DegiState_InitFields(void) {
 
     temp_s0 = (void *)g_beNDMWLoadIntf2DegiState_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_004cb4d0[0], 0x10);
+    igMetaObject_CreateFields(temp_s0, &g_beNDMWLoadIntf2DegiState_ctorTable[0], 0x10);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
     ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_003c6ee0();
     ((igObjectRefMetaField *)temp_s1)->_refCounted = 0;
@@ -68,6 +68,6 @@ void beNDMWLoadIntf2DegiState_InitFields(void) {
     temp_s1_4 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 3));
     ((igObjectRefMetaField *)temp_s1_4)->_metaObject = FUN_00357910();
     ((igObjectRefMetaField *)temp_s1_4)->_refCounted = 0;
-    igMetaObject_NameFields(temp_s0, &DAT_004cb510[0], &DAT_004cb550[0], &DAT_004cb590[0], temp_s2);
+    igMetaObject_NameFields(temp_s0, &g_beNDMWLoadIntf2DegiState_fieldTable[0], &DAT_004cb550[0], &DAT_004cb590[0], temp_s2);
 }
 

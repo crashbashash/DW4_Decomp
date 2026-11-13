@@ -51,7 +51,7 @@ void igVertexArray1_1_InitFields(void) {
 
     temp_s1 = (void *)(g_igVertexArray1_1_metaObject[0]);
     temp_s0 = igMetaObject_GetFieldCount(temp_s1);
-    igMetaObject_CreateFields(temp_s1, &DAT_00488750[0], 6);
+    igMetaObject_CreateFields(temp_s1, &g_igVertexArray1_1_ctorTable[0], 6);
     temp_s2 = (struct F *)(igMetaObject_GetFieldAt(temp_s1, temp_s0));
     temp_s2->f20 = 4;
     temp_s2 = (struct F *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 1));
@@ -76,7 +76,7 @@ void igVertexArray1_1_InitFields(void) {
     temp_s2_4->f38 = 0;
     temp_s2_4->f40 = 1;
     temp_s2_4->f39 = 1;
-    igMetaObject_NameFields(temp_s1, &DAT_00488770[0], &DAT_00488790[0], &DAT_004887b0[0], temp_s0);
+    igMetaObject_NameFields(temp_s1, &g_igVertexArray1_1_fieldTable[0], &DAT_00488790[0], &DAT_004887b0[0], temp_s0);
     *(int *)((char *)(g_igVertexArray1_1_metaObject[0]) + 60) = (int)(&thunk_igPsx2VertexArray1_1_GetMetaObject);
 }
 

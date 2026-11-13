@@ -71,7 +71,7 @@ void igLod_InitFields(void) {
 
     temp_s1 = (void *)g_igLod_metaObject[0];
     temp_s0 = igMetaObject_GetFieldCount(temp_s1);
-    igMetaObject_CreateFields(temp_s1, &DAT_0048bd10[0], 7);
+    igMetaObject_CreateFields(temp_s1, &g_igLod_ctorTable[0], 7);
     temp_s2 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s1, temp_s0)));
     ((igObjectRefMetaField *)temp_s2)->_metaObject = FUN_002c9780();
     ((igRefMetaField *)temp_s2)->_construct = 1;
@@ -96,6 +96,6 @@ void igLod_InitFields(void) {
     FUN_0018e470(temp_a0, sp40);
     temp_s2_3 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s1, temp_s0 + 6)));
     ((igObjectRefMetaField *)temp_s2_3)->_metaObject = FUN_002c9780();
-    igMetaObject_NameFields(temp_s1, &DAT_0048bd30[0], &DAT_0048bd50[0], &DAT_0048bd70[0], temp_s0);
+    igMetaObject_NameFields(temp_s1, &g_igLod_fieldTable[0], &DAT_0048bd50[0], &DAT_0048bd70[0], temp_s0);
 }
 

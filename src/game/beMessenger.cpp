@@ -45,7 +45,7 @@ extern int DAT_0058a4e0[4];
 extern int DAT_0058a4f0[4];
 extern int DAT_0058a530[4];
 extern int emptyString[4];
-extern char DAT_0050ee10[], DAT_0050ee18[];
+extern char SEARCH[], FIND_SPACE_3[];
 extern int DAT_004c8f88[4];
 extern unsigned char GPR_005549d4, GPR_005549d8;
 extern int g_beMessenger_metaObject[4];
@@ -781,7 +781,7 @@ void beMessenger_DispatchSelected(beMessenger *self, int name)
     work->_message = str;
     igObjectList *fl = (igObjectList *)work->_findRamList;
     count = fl->_count;
-    if (strcmp(name, DAT_0050ee10) == 0) {
+    if (strcmp(name, SEARCH) == 0) {
         matches = 0;
         for (i = 0; i < count; i++) {
             igIntList *list = (igIntList *)work->_findRamNoList; int have = ((int *)list->_data)[i]; if (work->_ramNo == -1 || *(int *)(list->_data + i * 4) /* matching construct: byte-offset element read keeps the data load inside the loop */ == -1 || have == work->_ramNo) matches++;
@@ -807,7 +807,7 @@ void beMessenger_DispatchSelected(beMessenger *self, int name)
                 ((int *)il->_data)[nd] = DAT_004c8f88[0];
             }
         }
-    } else if (strcmp(name, DAT_0050ee18) == 0) {
+    } else if (strcmp(name, FIND_SPACE_3) == 0) {
         ObjRef held(0);
         for (i2 = 0; i2 < count; i2++) {
             igObjectList *list = (igObjectList *)work->_findRamList;

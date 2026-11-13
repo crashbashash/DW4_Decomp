@@ -54,7 +54,7 @@ void beBkColorInfo_InitFields(void) {
 
     temp_s0 = (void *)g_beBkColorInfo_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_004c7b58[0], 1);
-    igMetaObject_NameFields(temp_s0, &DAT_004c7b60[0], &DAT_004c7b68[0], &DAT_004c7b70[0], temp_s1);
+    igMetaObject_CreateFields(temp_s0, &g_beBkColorInfo_ctorTable[0], 1);
+    igMetaObject_NameFields(temp_s0, &g_beBkColorInfo_fieldTable[0], &DAT_004c7b68[0], &DAT_004c7b70[0], temp_s1);
 }
 

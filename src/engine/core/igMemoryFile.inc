@@ -112,8 +112,8 @@ void igMemoryFile_InitFields(void) {
 
     temp_s0 = (void *)(g_igMemoryFile_metaObject[0]);
     temp_s1 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
-    igMetaObject_CreateFields((igMetaObject *)temp_s0, (igMetaField * (**)(void *))&DAT_004c0290[0], 4);
-    igMetaObject_NameFields((igMetaObject *)temp_s0, (const char **)&DAT_004c02a0[0], (igMetaField ***)&DAT_004c02b0[0], &DAT_004c02c0[0], temp_s1);
+    igMetaObject_CreateFields((igMetaObject *)temp_s0, (igMetaField * (**)(void *))&g_igMemoryFile_ctorTable[0], 4);
+    igMetaObject_NameFields((igMetaObject *)temp_s0, (const char **)&g_igMemoryFile_fieldTable[0], (igMetaField ***)&DAT_004c02b0[0], &DAT_004c02c0[0], temp_s1);
     *(int *)((char *)(g_igMemoryFile_metaObject[0]) + 64) = (int)(&thunk_igFile_GetMetaObject);
     FUN_002fe480((int)&thunk_FUN_002ef9d0);
 }

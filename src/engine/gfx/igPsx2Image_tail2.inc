@@ -131,8 +131,8 @@ int Gap__Gfx__igPsx2Image__vfunc_39(G *arg0, int arg1)
   int s;
   s = FUN_0015ad50((char *)arg1);
   if (s != 0) {
-    if (strcmp(s, &DAT_004df5b8[0]) != 0) {
-      if (strcmp(s, &DAT_004df5c0[0]) == 0) goto block_4;
+    if (strcmp(s, &text_tga[0]) != 0) {
+      if (strcmp(s, &TGA[0]) == 0) goto block_4;
       goto block_22;
     }
 block_4:
@@ -147,8 +147,8 @@ block_4:
   }
 block_22:
   if (s != 0) {
-    if (strcmp(s, &DAT_004df5c8[0]) != 0) {
-      if (strcmp(s, &DAT_004df5d0[0]) == 0) goto block_26;
+    if (strcmp(s, &text_png[0]) != 0) {
+      if (strcmp(s, &PNG[0]) == 0) goto block_26;
     } else {
 block_26:
       ReaderRef reader((O2 *)FUN_00150390(igObject_GetAllocator(arg0)));

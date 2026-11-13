@@ -83,11 +83,11 @@ void igCameraMode_InitFields(void) {
 
     temp_s0 = (void *)g_igCameraMode_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_004d1660[0], 2);
+    igMetaObject_CreateFields(temp_s0, &g_igCameraMode_ctorTable[0], 2);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
     ((igObjectRefMetaField *)temp_s1)->_metaObject = FUN_0019f670();
     temp_s1_2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
     ((igObjectRefMetaField *)temp_s1_2)->_metaObject = FUN_001a4560();
-    igMetaObject_NameFields(temp_s0, &DAT_004d1668[0], &DAT_004d1670[0], &DAT_004d1678[0], temp_s2);
+    igMetaObject_NameFields(temp_s0, &g_igCameraMode_fieldTable[0], &DAT_004d1670[0], &DAT_004d1678[0], temp_s2);
 }
 

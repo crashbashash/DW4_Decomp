@@ -63,7 +63,7 @@ void igTextureFunctionAttr_InitFields(void) {
 
     temp_s1 = (void *)g_igTextureFunctionAttr_metaObject[0];
     temp_s0 = igMetaObject_GetFieldCount(temp_s1);
-    igMetaObject_CreateFields(temp_s1, &DAT_00485b60[0], 7);
+    igMetaObject_CreateFields(temp_s1, &g_igTextureFunctionAttr_ctorTable[0], 7);
     temp_v0 = (TextureMetaFieldView *)igMetaObject_GetFieldAt(temp_s1, temp_s0);
     FUN_002dc7a0(temp_v0, &DAT_00485be0[0]);
     temp_v0->f52 = FUN_002d1870;
@@ -79,7 +79,7 @@ void igTextureFunctionAttr_InitFields(void) {
     temp_v0_2 = (TextureMetaFieldView *)igMetaObject_GetFieldAt(temp_s1, temp_s0 + 6);
     FUN_002dc7a0(temp_v0_2, &DAT_00485be8[0]);
     temp_v0_2->f52 = FUN_0014d510;
-    igMetaObject_NameFields(temp_s1, &DAT_00485b80[0], &DAT_00485ba0[0], &DAT_00485bc0[0], temp_s0);
+    igMetaObject_NameFields(temp_s1, &g_igTextureFunctionAttr_fieldTable[0], &DAT_00485ba0[0], &DAT_00485bc0[0], temp_s0);
 }
 
 void FUN_00131f70(void) {

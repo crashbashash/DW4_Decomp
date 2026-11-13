@@ -66,7 +66,7 @@ void igTextureMatrixAttr_InitFields(void) {
 
     temp_s0 = (void *)g_igTextureMatrixAttr_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_00485b20[0], 4);
+    igMetaObject_CreateFields(temp_s0, &g_igTextureMatrixAttr_ctorTable[0], 4);
     temp_s1 = igMetaObject_GetFieldAt(temp_s0, temp_s2);
     o5.x = 0;
     o5.y = 0;
@@ -89,7 +89,7 @@ void igTextureMatrixAttr_InitFields(void) {
     fld = (Fld *)igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1);
     fld->f48 = (int)FUN_00141520;
     FUN_0030a520(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 2), -1);
-    igMetaObject_NameFields(temp_s0, &DAT_00485b30[0], &DAT_00485b40[0], &DAT_00485b50[0], temp_s2);
+    igMetaObject_NameFields(temp_s0, &g_igTextureMatrixAttr_fieldTable[0], &DAT_00485b40[0], &DAT_00485b50[0], temp_s2);
 }
 
 void **FUN_00131aa0(void **arg0, short arg1) {

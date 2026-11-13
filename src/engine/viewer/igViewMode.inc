@@ -53,7 +53,7 @@ void igViewMode_InitFields(void) {
 
     temp_s0 = (void *)g_igViewMode_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_004d1680[0], 1);
-    igMetaObject_NameFields(temp_s0, &DAT_004d1688[0], &DAT_004d1690[0], &DAT_004d1698[0], temp_s1);
+    igMetaObject_CreateFields(temp_s0, &g_igViewMode_ctorTable[0], 1);
+    igMetaObject_NameFields(temp_s0, &g_igViewMode_fieldTable[0], &DAT_004d1690[0], &DAT_004d1698[0], temp_s1);
 }
 

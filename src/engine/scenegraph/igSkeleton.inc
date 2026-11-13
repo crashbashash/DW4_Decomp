@@ -86,7 +86,7 @@ void igSkeleton_InitFields(void) {
 
     temp_s0 = (void *)g_igSkeleton_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_0048b590[0], 3);
+    igMetaObject_CreateFields(temp_s0, &g_igSkeleton_ctorTable[0], 3);
     temp_s1 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s2)));
     ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_001987f0();
     ((igRefMetaField *)temp_s1)->_construct = 1;
@@ -95,6 +95,6 @@ void igSkeleton_InitFields(void) {
     ((igRefMetaField *)temp_s1_2)->_destruct = 1;
     ((igMemoryRefMetaField *)temp_s1_2)->_releaseOnCopy = 1;
     ((igMemoryRefMetaField *)temp_s1_2)->_releaseOnReset = 1;
-    igMetaObject_NameFields(temp_s0, &DAT_0048b5a0[0], &DAT_0048b5b0[0], &DAT_0048b5c0[0], temp_s2);
+    igMetaObject_NameFields(temp_s0, &g_igSkeleton_fieldTable[0], &DAT_0048b5b0[0], &DAT_0048b5c0[0], temp_s2);
 }
 

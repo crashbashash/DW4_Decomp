@@ -1,13 +1,13 @@
 int FUN_0014ad00(void) {
     if (DAT_0055fa00[0] == 0) {
-        DAT_0055fa00[0] = igMetaEnum_Create(&DAT_004dbaa0[0], &DAT_00488560[0], &DAT_00488570[0], 3);
+        DAT_0055fa00[0] = igMetaEnum_Create(&IG_VERTEX_STREAM_COMPILE_MODE[0], &DAT_00488560[0], &DAT_00488570[0], 3);
     }
     return DAT_0055fa00[0];
 }
 
 int FUN_0014ad60(void) {
     if (DAT_0055fa08[0] == 0) {
-        DAT_0055fa08[0] = igMetaEnum_Create(&DAT_004dbb40[0], &DAT_00488580[0], &DAT_00488590[0], 4);
+        DAT_0055fa08[0] = igMetaEnum_Create(&IG_VERTEX_ACCESS_MODE[0], &DAT_00488580[0], &DAT_00488590[0], 4);
     }
     return DAT_0055fa08[0];
 }
@@ -111,7 +111,7 @@ void igVertexStream_InitFields(void) {
 
     temp_s1 = (void *)(g_igVertexStream_metaObject[0]);
     temp_s0 = igMetaObject_GetFieldCount(temp_s1);
-    igMetaObject_CreateFields(temp_s1, &DAT_004885b0[0], 6);
+    igMetaObject_CreateFields(temp_s1, &g_igVertexStream_ctorTable[0], 6);
     ((igRawRefMetaField *)igMetaObject_GetFieldAt(temp_s1, temp_s0))->_persistent = 0;
     ((igBoolMetaField *)igMetaObject_GetFieldAt(temp_s1, temp_s0 + 1))->_persistent = 0;
     temp_s2 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 2));
@@ -125,7 +125,7 @@ void igVertexStream_InitFields(void) {
     temp_v0_3 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 5));
     FUN_002dc7a0(temp_v0_3, &DAT_00488638[0]);
     ((igEnumMetaField *)temp_v0_3)->_getMetaEnumFunction = (int)(FUN_0014ad00);
-    igMetaObject_NameFields(temp_s1, &DAT_004885d0[0], &DAT_004885f0[0], &DAT_00488610[0], temp_s0);
+    igMetaObject_NameFields(temp_s1, &g_igVertexStream_fieldTable[0], &DAT_004885f0[0], &DAT_00488610[0], temp_s0);
     ((igMetaObject *)g_igVertexStream_metaObject[0])->_abstractProxy = (int)thunk_igPsx2VertexStream_GetMetaObject;
 }
 

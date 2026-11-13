@@ -322,10 +322,10 @@ int Gap__Core__igPsx2File__vfunc_39(igPsx2File *arg0) {
 void FUN_0032c0c0(void) {
     if (DAT_00587338[0] == 0) {
         if (((int * *)DAT_00587330)[0] == 0) {
-            ((int * *)DAT_00587330)[0] = (int *)(&DAT_004ffbd8[0]);
+            ((int * *)DAT_00587330)[0] = (int *)(&text_host0[0]);
         }
     } else {
-        ((int * *)DAT_00587330)[0] = (int *)DAT_004ffbe0;
+        ((int * *)DAT_00587330)[0] = (int *)text_cdrom0;
     }
 }
 

@@ -70,15 +70,15 @@ void beSwitchCtrlInfo_InitFields(void) {
 
     temp_s0 = (void *)g_beSwitchCtrlInfo_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_004c3760[0], 1);
+    igMetaObject_CreateFields(temp_s0, &g_beSwitchCtrlInfo_ctorTable[0], 1);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
     ((igObjectRefMetaField *)temp_s1)->_metaObject = FUN_00196930();
-    igMetaObject_NameFields(temp_s0, &DAT_004c3768[0], &DAT_004c3770[0], &DAT_004c3778[0], temp_s2);
+    igMetaObject_NameFields(temp_s0, &g_beSwitchCtrlInfo_fieldTable[0], &DAT_004c3770[0], &DAT_004c3778[0], temp_s2);
 }
 
 int beSwitchCtrl_GetMessageEnum(void) {
     if (DAT_00587df0[0] == 0) {
-        DAT_00587df0[0] = igMetaEnum_Create(&DAT_005016f0[0], &DAT_004c3780[0], &DAT_004c3788[0], 2);
+        DAT_00587df0[0] = igMetaEnum_Create(&MsgAction[0], &DAT_004c3780[0], &DAT_004c3788[0], 2);
     }
     return DAT_00587df0[0];
 }

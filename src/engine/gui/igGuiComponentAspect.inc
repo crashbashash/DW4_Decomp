@@ -50,7 +50,7 @@ void igGuiComponentAspect_InitFields(void) {
 
     temp_s0 = (void *)g_igGuiComponentAspect_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_004d0538[0], 3);
+    igMetaObject_CreateFields(temp_s0, &g_igGuiComponentAspect_ctorTable[0], 3);
     temp_s1 = (struct GuiAspectMetaField *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
     temp_s1->f56 = (int)FUN_0044f540();
     temp_s1->b60 = 0;
@@ -64,6 +64,6 @@ void igGuiComponentAspect_InitFields(void) {
     v2[0] = 3.4028235e+38f;
     v2[1] = 3.4028235e+38f;
     FUN_0018e470(temp_a0_2, v2);
-    igMetaObject_NameFields(temp_s0, &DAT_004d0548[0], &DAT_004d0558[0], &DAT_004d0568[0], temp_s2);
+    igMetaObject_NameFields(temp_s0, &g_igGuiComponentAspect_fieldTable[0], &DAT_004d0558[0], &DAT_004d0568[0], temp_s2);
 }
 

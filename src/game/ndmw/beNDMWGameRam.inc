@@ -131,7 +131,7 @@ void beNDMWGameRam_InitFields(void) {
 
     temp_s1 = (void *)g_beNDMWGameRam_metaObject[0];
     temp_s0 = igMetaObject_GetFieldCount(temp_s1);
-    igMetaObject_CreateFields(temp_s1, &DAT_004cc4e0[0], 0xB);
+    igMetaObject_CreateFields(temp_s1, &g_beNDMWGameRam_ctorTable[0], 0xB);
     temp_s2 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0));
     ((igObjectRefMetaField *)temp_s2)->_metaObject = FUN_003658e0();
     temp_s2_2 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 1));
@@ -152,6 +152,6 @@ void beNDMWGameRam_InitFields(void) {
     ((igObjectRefMetaField *)temp_s2_9)->_metaObject = FUN_00364090();
     temp_s2_10 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 9));
     ((igObjectRefMetaField *)temp_s2_10)->_metaObject = FUN_00363ec0();
-    igMetaObject_NameFields(temp_s1, &DAT_004cc510[0], &DAT_004cc540[0], &DAT_004cc570[0], temp_s0);
+    igMetaObject_NameFields(temp_s1, &g_beNDMWGameRam_fieldTable[0], &DAT_004cc540[0], &DAT_004cc570[0], temp_s0);
 }
 

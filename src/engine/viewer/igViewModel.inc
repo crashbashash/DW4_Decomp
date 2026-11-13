@@ -78,7 +78,7 @@ void igViewModel_InitFields(void) {
 
     temp_s0 = (void *)g_igViewModel_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_004d16f0[0], 0xD);
+    igMetaObject_CreateFields(temp_s0, &g_igViewModel_ctorTable[0], 0xD);
     FUN_002e3810(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 1), 1.0f);
     FUN_002e3810(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 2), 45.0f);
     FUN_002e3810(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 3), 1.0f);
@@ -101,6 +101,6 @@ void igViewModel_InitFields(void) {
     temp_a6 = igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0xB);
     v6[0] = 0.0f; v6[1] = 0.0f; v6[2] = 0.0f;
     FUN_0018e470(temp_a6, v6);
-    igMetaObject_NameFields(temp_s0, &DAT_004d1730[0], &DAT_004d1770[0], &DAT_004d17b0[0], temp_s1);
+    igMetaObject_NameFields(temp_s0, &g_igViewModel_fieldTable[0], &DAT_004d1770[0], &DAT_004d17b0[0], temp_s1);
 }
 

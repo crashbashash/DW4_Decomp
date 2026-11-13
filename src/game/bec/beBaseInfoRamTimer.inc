@@ -73,9 +73,9 @@ void beBaseInfoRamTimer_InitFields(void) {
 
     temp_s0 = (void *)g_beBaseInfoRamTimer_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &DAT_004c7c70[0], 6);
+    igMetaObject_CreateFields(temp_s0, &g_beBaseInfoRamTimer_ctorTable[0], 6);
     FUN_002e3810((void *)(((int)igMetaObject_GetFieldAt(temp_s0, temp_s1))), 1.0f);
     FUN_002e3810((void *)(((int)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 5))), 0.0f);
-    igMetaObject_NameFields(temp_s0, &DAT_004c7c90[0], &DAT_004c7cb0[0], &DAT_004c7cd0[0], temp_s1);
+    igMetaObject_NameFields(temp_s0, &g_beBaseInfoRamTimer_fieldTable[0], &DAT_004c7cb0[0], &DAT_004c7cd0[0], temp_s1);
 }
 
