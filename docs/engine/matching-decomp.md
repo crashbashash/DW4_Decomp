@@ -316,7 +316,8 @@ taxonomy and the near-miss worklist are in [`m2c-bulk.md`](m2c-bulk.md).
 
 ## Source idioms
 
-Retail shapes that only one spelling reproduces:
+Retail shapes that only one spelling reproduces. Why each compiles as it does, the unit where it was found and the
+instruments that showed it are in [understanding a resisting shape](understanding-shapes.md).
 
 * **`jal X; nop; nop` at a join**, a `nop` just before the label a preceding branch targets.
   This is not reachable from source under the default compiler: about 40 C and C++ spellings

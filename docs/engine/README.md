@@ -135,6 +135,7 @@ Related: game systems and data are in [`../systems/`](../systems); the analysis 
 
 - [Hard/Soft lighting](light-modes.md): LIGHTMODE handoff, authored versus overridden rigs, paired texture packs and unchanged Main Lobby shadows, verified against both retail modes.
 - [Register allocation](register-allocation.md): how the pinned MWCC colours registers (simplify/select, vreg ids from declaration order), the trace/replay tools, and the source forms that move a colour.
+- [Understanding a resisting shape](understanding-shapes.md): the procedure for a function no obvious spelling matches, the instruments (the b52 optimizer IR dump in `tools/mwcc_irdump/`, gdb tracing of the compiler, the register-allocator tracer, the strip test, the GameCube and Xbox builds and compilers, SDK archives, RTTI names) and the causes found, each with its unit.
 - [CRI cvFs](cri-cvfs.md): CRI's file-system layer: its extent, the device vtbl, handle and volume-request layouts, the owner-approved `int`-typed slots and the condition they meet, and the open questions about names.
 - [CRI ADXT-side files](cri-adxt-files.md): the ADX header, ADXT init, seamless-entry, message and ADXRNA files; their extents and open questions.
 - [CRI DTR and DTX](cri-dtr-dtx.md): the EE–IOP data-transfer modules; their extents, objects and open questions.

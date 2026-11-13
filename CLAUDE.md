@@ -91,6 +91,9 @@ pass can make it read well. Two kinds of work take both together:
   Only then run a permuter or a variant search. A spelling whose only reason is the bytes (a temporary
   that holds a stack slot, a one-element array that holds a register, a directive that ends a scheduling
   block, a class shaped to dodge the inliner) needs a reason in the code's own terms before it is proposed.
+  [Understanding a resisting shape](docs/engine/understanding-shapes.md) gives the procedure, the instruments
+  (the compiler's IR dump, gdb tracing, the register-allocator tracer, other builds, SDK archives) and the causes
+  found so far.
 - **A landing includes the readability pass on what it touches.** Folding functions into a whole-file unit,
   or joining held-out functions to one, makes the touched code readable in the same change: the unit is
   the scope, with one header and one set of types.
@@ -223,7 +226,8 @@ symbol, candidate path (in its scratch directory), the exact `tools/check.py --f
 command with flags, compiler path and SHA-256, the verifier's last line, and any `config/<GAMEID>/unit-*` rows
 the match needs. The integrator re-runs that command before promoting anything and treats an unreproduced
 claim as unmatched. Brief sub-agents with what matched and readable mean; they never run full builds and never write into the
-repository.
+repository. An agent briefed on a resisting shape is pointed at
+[understanding a resisting shape](docs/engine/understanding-shapes.md), with the earlier agent's report.
 
 Pick the sub-agent's model by the kind of work:
 

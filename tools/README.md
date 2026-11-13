@@ -96,3 +96,7 @@ Run everything from the repository root. The Makefile calls the build tools; the
 ## Subfolders
 
 - `permuter/`: per-function decomp-permuter projects written by `permuter_one.py`.
+- `mwcc_irdump/`: the b52 compiler's optimizer IR dump (`make_dump_compiler.py` writes a copy with the dump switched
+  on, outside the repository; `dump.py` compiles a file with it; `ph.py` reads the log) and gdb scripts that read IR
+  node flags and the comparisons common-subexpression elimination rejects
+  ([method](../docs/engine/understanding-shapes.md#mwccs-optimizer-ir-dump)).
