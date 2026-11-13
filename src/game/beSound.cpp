@@ -220,6 +220,15 @@ static inline void ReserveIfEmpty(igObjectList *list) {
     }
 }
 
+/* The play rows as the object list they are, with the list's inline accessors. */
+struct PlaySEList : igObjectList {
+    int getCount() const { return _count; }
+    bePlaySE *get(int index) const { return ((bePlaySE **)_data)[index]; }
+};
+
+/* beSound::_playSEs as the class holds it: a smart pointer to that list. */
+typedef igSmartPointer<PlaySEList> PlaySEListRef;
+
 void beSound_Prepare(beSound *self) {
     if (self->_cri == 0) {
         igObject *cri = (igObject *)igInsightCore_FindManager(self->_insight, g_beCri_metaObject[0]);
@@ -258,9 +267,7 @@ void beSound_Update(beSound *self, beBaseInfoRam *ram) {
     igObjectList *infos;
     long long now;
     beBaseInfo *info;
-    igObjectList *playSEs;
     int infoIndex;
-    int row;
     switch (ram->_st0) {
     case STATE_START:
         beMessenger_SendGroup(self->_messenger, STATICINFO, GETINFOLIST);
@@ -290,14 +297,12 @@ void beSound_Update(beSound *self, beBaseInfoRam *ram) {
         ram->_st1 = 0;
     case STATE_RUN:
         now = ((igInsightCore *)self->_insight)->_worldTime;
-        playSEs = (igObjectList *)self->_playSEs;
-        for (row = 0; row < playSEs->_count; row++) {
-            bePlaySE *playSE = ((bePlaySE **)playSEs->_data)[row];
+        for (int i = 0; i < ((PlaySEListRef &)self->_playSEs)->getCount(); i++) {
+            bePlaySE *playSE = ((PlaySEListRef &)self->_playSEs)->get(i);
             if (playSE->_time < now) {
-                ObjectList_RemoveFirstRetained(playSEs, (igObject *)playSE, row);
-                row--;
+                ObjectList_RemoveFirstRetained((PlaySEListRef &)self->_playSEs, (igObject *)playSE, i);
+                i--;
             }
-            playSEs = (igObjectList *)self->_playSEs;
         }
     }
 }
@@ -328,11 +333,6 @@ int beSound_OnMessage(beSound *self, beBaseInfoRam *ram, beMessengerWork *messag
     igObjectList *dataList;
     int dataCount;
     int dataIndex;
-    /* matching construct: declaration-order search — rowIndex before playSE and rowOffset gives the play-row search retail's argument registers */
-    int rowIndex;
-    bePlaySE *playSE;
-    int rowOffset;
-    bePlaySEList *playSEs;
     long long now;
 
     info = (beSoundInfo *)ram->_parentInfo;
@@ -366,23 +366,13 @@ int beSound_OnMessage(beSound *self, beBaseInfoRam *ram, beMessengerWork *messag
             break;
         default:
             now = ((igInsightCore *)self->_insight)->_worldTime;
-            /* matching construct: hand search — the list re-read after each row (as beSound_Update walks it) and the
-             * byte offset keep the count load in the loop and the row offset beside the index, as retail has them */
-            playSEs = (bePlaySEList *)self->_playSEs;
-            rowIndex = 0;
-            if (rowIndex < playSEs->_count) {
-                rowOffset = 0;
-                do {
-                    playSE = *(bePlaySE **)(playSEs->_data + rowOffset);
-                    if (playSE->_id == index && now < playSE->_time) {
-                        beMessenger_AppendInt(self->_messenger, 0);
-                        beMessenger_AppendLong(self->_messenger, 0);
-                        return 1;
-                    }
-                    rowIndex++;
-                    rowOffset += 4;
-                    playSEs = (bePlaySEList *)self->_playSEs;
-                } while (rowIndex < playSEs->_count);
+            for (int i = 0; i < ((PlaySEListRef &)self->_playSEs)->getCount(); i++) {
+                bePlaySE *playSE = ((PlaySEListRef &)self->_playSEs)->get(i);
+                if (playSE->_id == index && playSE->_time > now) {
+                    beMessenger_AppendInt(self->_messenger, 0);
+                    beMessenger_AppendLong(self->_messenger, 0);
+                    return 1;
+                }
             }
             handle = beCri_PlayEffect((beCri *)self->_cri, (igObjectList *)info->_fnameList, data);
             beMessenger_AppendInt(self->_messenger, data->_type);

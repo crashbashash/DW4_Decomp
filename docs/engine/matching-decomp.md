@@ -397,6 +397,33 @@ Retail shapes that only one spelling reproduces:
   A cast that only retypes the read, such as `*(const int *)&x` or `((const T *)p)->f`, forces the same bytes but is
   unlikely to be source. It does not make a match: the function keeps its `volatile` and stays `unapproved` until
   a spelling with a reason turns up.
+* **A list loop that loads its count on every pass and steps a byte offset beside the index (`b52`).** A loop with
+  no call or store in it that reads the list once, `lw v0,8(list)` again at the bottom of every pass, `lw data,16(list)`
+  once before the loop and `addu v0,data,offset` at the top is an indexed `for` loop written with the list's inline
+  `const` accessors, on a list that an inline returned: the `operator->` of a smart-pointer field, or a `list()`
+  accessor.
+
+  ```cpp
+  struct RowList : igObjectList {
+      int getCount() const { return _count; }
+      Row *get(int index) const { return ((Row **)_data)[index]; }
+  };
+  typedef igSmartPointer<RowList> RowListRef;
+
+  for (int i = 0; i < ((RowListRef &)owner->_rows)->getCount(); i++) {
+      Row *row = ((RowListRef &)owner->_rows)->get(i);
+  ```
+
+  Each accessor call keeps the pointer it was called on in a temporary assigned at the call, so inside the loop. That
+  stops strength reduction from turning `_data + i * 4` into a walking pointer, which leaves the offset, and the
+  `const int` count in the loop test is not merged with the copy of the test in front of the loop, which leaves the
+  load. The code generator hoists a load only out of the first block of a loop, so it takes the `_data` read at the
+  top, and takes the count too when the whole loop is one block. The index, the row, the offset and the list take
+  registers in that order whatever the declarations say. An accessor that is not `const` reuses the count; a field
+  read directly, or a list held in a local pointer, also walks a pointer. A list re-read at the bottom of the loop
+  (`list = owner->_rows;`), a byte offset written out and a declaration order found by search force the same bytes
+  and are not the source. An object reference field is read as its smart pointer by a cast of the field itself; a
+  helper that returns that reference compiles alike, but is one inline more than the class had.
 * **A list search stores its key (`b52`).** `sw a1,60(sp)` with the key loaded back before a search loop is
   `igTDataList<T>::find` in `include/dw4/igTDataList.h`, which takes the key by value. The address of that parameter is
   what keeps the key in memory: a reference, or a read of the value itself, folds it into a register. Why the source

@@ -115,7 +115,9 @@ General shapes:
 * a dummy `l2 = l;` re-read at the bottom of a loop, so strength reduction cannot make a pointer induction
   variable and the base load hoists late;
 * explicit byte-offset variables (`jo += 4`) with `j = 0; if (j < n) { jo = 0; do { } while
-  (j < n); }` replacing compiler offset webs whose vreg ids sit above anything a declaration can reach;
+  (j < n); }` replacing compiler offset webs whose vreg ids sit above anything a declaration can reach. Under
+  `b52` both of these stand in for a list walked with its inline `const` accessors
+  ([matching decompilation](matching-decomp.md)), which is the form to try first;
 * the converse: an indexed loop (`list[i]`, `flags[page * 6 + i]`) in place of a draft's explicit byte offset and
   running row counter, so the optimiser creates both as induction variables numbered after an inlined helper's
   locals; the two inductions take s-registers in the order of their first uses in the loop body (`0x42e330`);
