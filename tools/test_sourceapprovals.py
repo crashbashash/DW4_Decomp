@@ -37,6 +37,16 @@ class SourceApprovals(unittest.TestCase):
         path = self.write("b.c", 'void f(void) { asm("sync"); }\n')
         self.assertIsNone(sa.problem(path, "f", {}))
 
+    def test_an_instruction_builtin_is_asm(self):
+        path = self.write("a.c", "void f(void) { __I_nop(); }\n")
+        self.assertEqual(sa.uses(path, "f")["asm"], 1)
+        self.assertIn("1 asm", sa.problem(path, "f", {}))
+        self.assertIsNone(sa.problem(path, "f", {("asm", "f"): (1, "#x")}))
+
+    def test_a_sync_and_ei_statement_needs_no_asm_row(self):
+        path = self.write("a.c", 'void f(void) { __asm__ __volatile__("sync\\nei\\n"); }\n')
+        self.assertEqual(sa.uses(path, "f")["asm"], 0)
+
     def test_a_statement_with_a_row_is_approved(self):
         path = self.write("a.c", 'void f(void) { asm("nop"); }\n')
         self.assertEqual(len(sa.approved_statements([path], {("asm", "f"): (1, "#x")})), 1)

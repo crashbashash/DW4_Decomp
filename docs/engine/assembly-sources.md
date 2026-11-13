@@ -85,6 +85,15 @@ name them (`config/SLUS-20836/names/newlib.tsv`).
   were most likely compiler output that was edited and kept as assembly. That is why plain C with
   MMI `asm` statements comes close under the 2.9-ee releases and 2.96 but never matches: a C
   search found near misses for all thirteen and a match for none.
+* No 2.96 C can produce ten of them. Every function ee-gcc 2.96 compiles at `-O2` starts with
+  `.p2align 3` and pads each loop top to 8 bytes, so its object's `.text` is 8-aligned: all 217 C
+  members of the same `libc.a` are. `memchr`, `memcmp`, `memcpy`, `memmove`, `memset`, `strcat`,
+  `strchr`, `strcmp`, `strcpy` and `strlen` are 4-aligned members with loop tops at 4 mod 8 (`memcpy`
+  at `+0x24`, `+0x5c`, `+0x8c` from an 8-aligned start). `strncmp` is 8-aligned but its loop at `+0x8c`
+  is not. `strncat` compares against `lui`/`ori` -1, which 2.96 writes `li` (`addiu`), and with
+  `strncpy` needs `psubb`, which has no C spelling. A 2026-11 search under the unit profile (newlib's
+  `memcpy.c` shapes with a TImode block, goto loops, 20 `-f` variants) was 164 to 180 bytes against
+  176 for `memcpy`, with no match, so all thirteen stay assembly.
 * `strcat` saves `ra` with `sq`, which no tried compiler emits; it is a non-leaf routine (it
   calls `strcpy`).
 * The files keep the archive objects' own local labels (`$Ln`) and their `noreorder` delay slots,

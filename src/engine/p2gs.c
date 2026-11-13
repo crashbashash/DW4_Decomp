@@ -361,8 +361,7 @@ int FUN_001f7530(int cause) {
     }
     DAT_0056ade0 = -0xB01;
     FUN_001f8190(0x41);
-    __asm__ volatile("sync");
-    __asm__ volatile("ei");
+    __asm__ __volatile__("sync\nei\n");
     return 0;
 }
 

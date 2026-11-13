@@ -138,8 +138,9 @@ CATEGORY_EXPLAIN = {
                   "(config/source-approvals.tsv; docs/engine/source-approvals.md)",
     "asm-body": "the retail instructions in an `asm` function: links identically, recovers nothing, counted in no "
                 "figure above (docs/engine/asm-body-matches.md)",
-    "assembly": "an owner-approved hand-written assembly source (config/assembly-sources.tsv), byte-identical: "
-                "the original was written in assembly, so it is matched, though not C (docs/engine/assembly-sources.md)",
+    "assembly": "owner-approved assembly, byte-identical: a hand-written `.S` source (config/assembly-sources.tsv) or an "
+                "MWCC `asm` function with an `asm-function` row (config/source-approvals.tsv); the original was "
+                "written in assembly, so it is matched, though not C (docs/engine/assembly-sources.md)",
     "mismatch": "code bytes, size, tables or object shape differ",
     "compile": "does not compile",
 }
@@ -963,7 +964,8 @@ def render_md(d):
                               pct(b["asm_body"], b["total"])))
     if b.get("functions_assembly"):
         A("assembly   : %s assembly sources, %s code bytes (%.1f %%), in the matched figures above: "
-          "owner-approved `.S` routines (config/assembly-sources.tsv) whose original was assembly"
+          "owner-approved `.S` routines (config/assembly-sources.tsv) and MWCC `asm` functions "
+          "(`asm-function` rows, config/source-approvals.tsv) whose original was assembly"
           % (format(b["functions_assembly"], ","), format(b["assembly"], ","), pct(b["assembly"], b["total"])))
     A("```")
     A("")

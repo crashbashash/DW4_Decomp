@@ -99,6 +99,13 @@ extern int p2SwapInterval;
 extern int p2VsyncsSinceSwap;
 extern int p2GsSignalCount;
 
+/* The frame count and the flag words are written by interrupt handlers while thread code waits on them; the
+ * semaphore ids are written only by p2InitSwap and read twice in each wait. */
+extern volatile int p2FinishSema;
+extern volatile int p2SwapSema;
+extern volatile long long p2FramesShown;
+extern volatile p2DmaWatch p2DmaWatchFlags;
+
 /* Queued at the end of a frame: the GS has drawn it. */
 void p2RecordFrameTime(p2FinishFunc *finish, int arg) {
     long long now;
@@ -118,9 +125,6 @@ void p2RecordFrameTime(p2FinishFunc *finish, int arg) {
 }
 
 void p2InitSwap(void) {
-    extern int p2FinishSema;
-    extern int p2SwapSema;
-    extern long long p2FramesShown;
     struct SemaParam param;
 
     param = p2SwapSemaParam;
@@ -173,8 +177,6 @@ void p2EndFrame(void) {
 
 /* The swap of frame `frame` may go ahead once the frame before it is on the screen. */
 int swapbuffersPredicate(long long frame) {
-    extern long long p2FramesShown;
-
     return p2FramesShown + 1 >= frame;
 }
 
@@ -214,9 +216,6 @@ void p2QueueDisplayPacket(void) {
 /* Ends the frame: waits while too many frames are queued ahead of the display, then either leaves
  * the flip to the vertical-blank handler or shows the new frame at once. */
 void p2SwapBuffers(void) {
-    extern volatile long long p2FramesShown;
-    extern volatile int p2SwapSema;
-    extern volatile p2DmaWatch p2DmaWatchFlags;
     long long start;
     long long end;
     int displayFlags;
@@ -366,8 +365,6 @@ int p2NewFinishSequence(int signal) {
 
 /* Waits until the GS has reached finish sequence `sequence`. */
 void p2WaitFinishSequence(unsigned int sequence) {
-    extern volatile int p2FinishSema;
-    extern volatile p2DmaWatch p2DmaWatchFlags;
     long long start;
     long long end;
 
@@ -392,7 +389,6 @@ void p2WaitFinishSequence(unsigned int sequence) {
 
 /* The GS SIGNAL handler: the GS has reached the finish sequence in SIGLBLID. */
 void p2GsSignalHandler(void) {
-    extern int p2FinishSema;
     struct SemaParam status;
 
     p2GsSignalCount += 1;

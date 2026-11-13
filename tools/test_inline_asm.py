@@ -43,6 +43,10 @@ class Statements(unittest.TestCase):
         self.assertFalse(inline_asm.is_hardware("nop"))
         self.assertFalse(inline_asm.is_hardware("dmove a0,a1"))
 
+    def test_a_statement_of_only_sync_and_ei_has_no_c_spelling(self):
+        self.assertTrue(inline_asm.is_hardware(self.bodies('__asm__ __volatile__("sync\\nei\\n");')[0]))
+        self.assertFalse(inline_asm.is_hardware(self.bodies('__asm__ __volatile__("sync\\nnop\\n");')[0]))
+
 
 if __name__ == "__main__":
     unittest.main()

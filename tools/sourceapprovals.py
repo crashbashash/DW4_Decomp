@@ -11,8 +11,9 @@ A row is `kind <TAB> symbol <TAB> count <TAB> evidence`: `asm`, `volatile` or `a
 how many uses reach it, and the anchor of the evidence in docs/engine/source-approvals.md. `asm-function`
 approves a whole MWCC `asm` function, written in assembly in the original source (its count is 1); without
 the row such a function is an asm body, which counts in no matched figure. The count voids the
-approval when another use appears. `sync` and `ei` need no row, since C cannot spell them, and stock
-source under src/third_party/ is out of scope, as it is for tools/inline_asm.py.
+approval when another use appears. A call of an MWCC `__I_<mnemonic>` instruction builtin emits the
+instruction it names, so it counts as an `asm` use. `sync` and `ei` need no row, since C cannot spell
+them, and stock source under src/third_party/ is out of scope, as it is for tools/inline_asm.py.
 
   python3 tools/sourceapprovals.py --list     # the unapproved queue, for the owner to review
   python3 tools/sourceapprovals.py --stale    # rows whose function no longer uses what they approve
@@ -39,7 +40,9 @@ _STRING = re.compile(r'"(?:\\.|[^"\\\n])*"')
 _VOLATILE = re.compile(r"\b(?:__volatile__|volatile)\b")
 _INCLUDE = re.compile(r'^\s*#\s*include\s*"([^"]+)"', re.M)
 _WORD = re.compile(r"[A-Za-z_]\w*")
-_USE_WORD = re.compile(r"asm|volatile")
+_USE_WORD = re.compile(r"asm|volatile|__I_")
+# an MWCC instruction builtin (`__I_mfc0(3, 12)`, `__I_nop()`): inline assembly by another name
+_BUILTIN = re.compile(r"(?<!\w)__I_\w+\s*\(")
 _header_cache = {}
 _defined_cache = {}
 _source_cache = {}
@@ -76,9 +79,10 @@ def _blank(text):
 
 
 def _count(text):
-    """(asm statements C could spell, volatile keywords) in a source text."""
+    """(asm statements and instruction builtin calls C could spell, volatile keywords) in a source text."""
     asm = sum(1 for _s, _e, body in inline_asm.statements(text) if not inline_asm.is_hardware(body))
-    return asm, len(_VOLATILE.findall(_blank(text)))
+    blank = _blank(text)
+    return asm + len(_BUILTIN.findall(blank)), len(_VOLATILE.findall(blank))
 
 
 @functools.lru_cache(maxsize=64)

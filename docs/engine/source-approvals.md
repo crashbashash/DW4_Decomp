@@ -33,11 +33,12 @@ through another declaration it reaches; C keywords are not names, but a type nam
 reaches the functions that use it, and a struct member declared `volatile` reaches the functions that name
 the struct or a type built on it. A whole-file source declares its module's words once, and each function
 answers only for the ones it touches. The count voids an approval when another use appears, which files the
-function as `unapproved` again.
+function as `unapproved` again. A call of one of MWCC's `__I_<mnemonic>` instruction builtins (`__I_mfc0(3, 12)`,
+`__I_nop()`) emits the instruction it names from C, so it counts as an `asm` use.
 
 Three things need no row:
 
-* `sync` and `ei`, which C cannot spell. The debt ratchet still counts them.
+* `sync` and `ei`, which C cannot spell, alone or as a statement holding nothing else. The debt ratchet still counts them.
 * Stock source under `src/third_party/`, which is never edited.
 * `.S` sources, which have their own table.
 
@@ -412,23 +413,38 @@ also uses.
 The engine's DMA channel queues in `src/engine/dmaChannel.c`, an MWCC file. Two functions read the COP0 Status
 register before taking a node from a shared pool, and one waits on the COP0 condition.
 
-* C has no spelling for a COP0 register read or for a branch on the COP0 condition (`bc0f`).
+* A COP0 register read has no C spelling except MWCC's `__I_` instruction builtins: `__I_mfc0(3, 12);
+  __I_srl(6, 3, 16); status = __I_and(3, 3, 6);` matches too, and counts as `asm` here, as each builtin emits the
+  instruction it names. No builtin spells a branch on the COP0 condition (`bc0f`).
 * Both pool functions test the interrupt-enable bits (IE and EIE, bits 0 and 16) together, and disable interrupts
   around the pool update only when both are set. In every MWCC copy of this test in the executable, five
   functions in all, the shift goes into `a2` and the `and` writes back into whichever register the read used.
   The compiler picks that register and never picks `a2` by itself, so the shift and the `and` were text of the
   statement, with `a2` named and clobbered: `mfc0 %0,$12; srl $6,%0,16; and %0,%0,$6`. Reading the register alone
-  and testing it in C gives the same instructions with other registers.
-* The `volatile` on each `__asm__` keeps the read from being moved or merged.
-* The wait is five `nop`s and a `bc0f` back to its start, then a return, with no frame: an MWCC `asm` function.
-  The function after it keeps argument registers live across calls to it, which needs the callee to be a
-  `static` defined earlier in the same file.
+  and testing it in C gives the same instructions with other registers. The builtin form names the read's
+  register by number, which explains the varying register of the five copies less well than `%0` does.
+* The statement is written without `volatile`: both functions match with or without it, so the keyword went.
+* The wait is five `nop`s, a `bc0f` back to its start and a `nop`, then a return with no frame: 36 bytes, the only
+  `bc0f` in the executable. It is a `static` C function holding one `asm { }` block. Its only caller,
+  `p2StoreImage`, keeps `a0` and `a1` live across its three calls to it; measured on a test caller, any `static`
+  callee defined earlier whose body holds inline assembly gives that (an `asm` function, a C function with an
+  `asm { }` block or an `__asm__` statement), while an `extern` callee makes the caller save `s0`-`s2`. Nothing
+  shows the original wrote a whole `asm` function, so it is C with an `asm` row.
 
 ### dma-channel-shared-words
 
 Words of the engine's DMA channel and frame code that thread code and an interrupt handler or another thread
-both reach: the two flag words at `0x56d670` and `0x56d678`, the semaphore ids at `0x569030` and `0x56bf90`, the
-frame count at `0x56bf70` and the watchdog's tick counter at `0x56d680`.
+both write: the two flag words at `0x56d670` and `0x56d678` (the three DMAC handlers, `p2StartDmaPacket`, the
+three waits and the watchdog), the frame count at `0x56bf70` (`p2VsyncHandler`, reached from the GS interrupt
+handler) and the watchdog's tick counter at `0x56d680` (`p2RunWatchdog` and `p2SubmitDmaPacket`). With them, the
+semaphore ids at `0x569030`, `0x56bf90` and `0x56bf80`, which are written only at init (`p2InitDmaChannels`,
+`p2InitSwap`): nothing writes them concurrently, so their keywords rest on the reload alone, retail loading each
+twice back to back where a plain read loads it once.
+
+Each file declares each of these words once, `volatile`, at file scope, so every function naming one counts it:
+`p2InitSwap` (the two ids it creates and the frame count it zeroes), `swapbuffersPredicate` (the frame count),
+`p2GsSignalHandler` (the finish semaphore id) and `p2PrintWatchdogReport` (the flag words). Their keywords do no
+work there; the files match with every declaration `volatile`.
 
 * The handler is registered with `AddDmacHandler` and ends with `sync` and `ei`. It clears a bit in both flag
   words, while thread code sets and clears another bit in them between disabling and enabling interrupts.
@@ -436,8 +452,11 @@ frame count at `0x56bf70` and the watchdog's tick counter at `0x56d680`.
   loads the second. Through a plain array, a struct or two separate words the compiler knows the two cannot
   overlap and loads the second word first; only a `volatile` declaration keeps the order, which the interrupt
   sharing makes the source's own.
-* The wait loop reads the semaphore id twice, once to record it and once to wait on it, with no write between;
-  retail loads it twice. Without the keyword the two reads merge.
+* `p2WaitDmaSequence` reads the semaphore id twice, once to record it and once to wait on it, with no write
+  between; retail loads it twice, and with both reads plain they merge (356 bytes against 364). It spells the
+  qualifier as a `*(volatile int *)` cast on the read it passes to `WaitSema`, where the other two waits use the
+  declaration; one cast is enough, and either one alone keeps the load. `p2DmaWaitSema` is declared plain in
+  its file; a `volatile` declaration there matches as well.
 * The handler's two uses are the same flag words, declared `volatile` in its file.
 * The frame-wait function that sets and clears another bit in the flag words also waits on a semaphore at
   `0x56bf90`, read twice as above (without the keyword it loses a load), and polls a 64-bit count at
@@ -447,12 +466,12 @@ frame count at `0x56bf70` and the watchdog's tick counter at `0x56d680`.
 * The finish-sequence wait sets and clears its own bit in the flag words the same way and waits on the finish
   semaphore at `0x56bf80`, whose id it reads twice (to record it and to wait on it); the GS SIGNAL handler
   signals that semaphore. Without the keyword the two reads merge.
-* A watchdog thread, whose entry, 4 KB stack and `gp` sit in a thread parameter block at `0x4965d4`, copies the
-  first flag word into the second on each tick and aborts if the bits it copied last time are still set: the
-  DMA handler clears them when the work completes. It reads the second word twice, and retail loads it twice.
-  It also counts ticks at `0x56d680`, which ordinary code resets from about forty places, and aborts after 60;
-  that counter is shared with other threads and polled in the loop, where the keyword keeps the order of its
-  accesses.
+* A watchdog thread, created from a thread parameter block at `0x4965d0` (entry `0x20e6a0` at `0x4965d4`, a 4 KB
+  stack at `0x56c670`, `gp` `0x55c870`, priority 1), copies the first flag word into the second on each tick and
+  aborts if the bits it copied last time are still set: the DMA handler clears them when the work completes. It
+  reads the second word twice, and retail loads it twice. It also counts ticks at `0x56d680` and aborts after 60;
+  one store in `p2SubmitDmaPacket` (`0x1ef050`, called from 40 sites in 32 functions, on other threads) resets
+  the counter, and the watchdog polls it in its loop, where the keyword keeps the order of its accesses.
 
 ### dma-packet-kick
 
@@ -463,27 +482,38 @@ branches to the function's end. Retail has `sw CHCR; b; nop` in the VIF0 and VIF
   nothing later in the block depends on; in these cases that is the CHCR store, so plain C gives `b; sw CHCR`.
   The store stays put only when a later instruction in the block pins it, and the only one that leaves retail's
   bytes is a `nop`, which the filler then takes into the slot itself. An `__asm__("nop")` after each CHCR store
-  is that instruction: retail's delay-slot `nop` is the one the source wrote. The owner approved it as the
-  original's own padding after a DMA register write.
-* The GIF case calls a timer before its stores and has a different block shape, so it needs no `nop`.
-* The `sync` before the switch is written `__asm__ volatile`, which turns the global optimiser off for the
-  function as in [gs-interrupt-sync-ei](#gs-interrupt-sync-ei); without the keyword the function differs.
-* The busy bits it sets are in the watchdog's flag word at `0x56d670`, the shared word of
-  [dma-channel-shared-words](#dma-channel-shared-words), declared `volatile` in the file.
+  is that instruction. Without one of them the function is 4 bytes short, without both 8.
+* No C form has been found for the `nop`: `return` for `break`, a label, `goto` to the end, an empty `__asm__("")`
+  or `asm { }`, `do { } while (0)`, a redundant `if`, `continue` in a wrapping loop, a direct `*D0_CHCR = 389` and
+  `volatile` register pointers all give the 8-byte-short function. Only `__I_nop()` matches, and as an instruction
+  builtin it counts as `asm`.
+* The GIF case writes CHCR the same way and calls the same timer as the VIF1 case; it differs only in being the
+  last case, which falls through to the end with no branch, so there is no delay slot after its store and no
+  `nop` (a third one makes the function 4 bytes longer). What retail shows is a `nop` exactly where a branch
+  follows the store, which an unfilled delay slot of unknown cause would also look like.
+* The `sync` before the switch is written `__asm__ volatile`. Without the keyword, or as `asm { sync }`, the
+  function is the same size with `li v1,389` loaded once before the switch. The match needs the keyword and the
+  stores written `v = 389; *Dn_CHCR = v;` together: with the keyword and `*Dn_CHCR = 389;` the load is still
+  hoisted. No pragma replaces the keyword (`opt_propagation`, `opt_common_subs`, `opt_loop_invariants`,
+  `opt_dead_assignments`, `opt_lifetimes`, `opt_dead_code`, `global_optimizer`, `peephole` and `scheduling` off,
+  `optimization_level` 0 to 3 all differ).
+* The second counted keyword is the file's `volatile` declaration of the watchdog's flag word at `0x56d670`,
+  where the busy bits it sets live ([dma-channel-shared-words](#dma-channel-shared-words)). It is inert in this
+  function, which matches without it, and counts only because the function names the declaration.
 
 ### gs-interrupt-sync-ei
 
 The GS interrupt handler in `src/engine/p2gs.c`, an MWCC file registered with `AddIntcHandler`, ends with `sync`
-and `ei`, each written `__asm__ volatile`. `sync` and `ei` need no row; the row is for the keyword on the statement.
+and `ei` in one `__asm__ __volatile__("sync\nei\n")`, the statement of ps2sdk's `ExitHandler()` macro
+(`local/ps2sdk-ref/ee/kernel/include/kernel.h:29`, mirroring Sony's `eekernel.h`). A statement of only `sync` and `ei`
+needs no `asm` row; the row is for its keyword.
 
-* Under MWCC an `__asm__ volatile` statement turns the global optimiser off for the whole function. Retail has
-  the unoptimised shape: a branch for each status bit with the test recomputed from the saved status each time.
-  With the optimiser on, the three tests become `sltu` results kept in saved registers, the frame doubles and
-  the body is 12 instructions shorter.
-* The other spellings of the two instructions leave the optimiser on: an MWCC `asm { }` block and a plain
-  `__asm__ ("sync")` both give the optimised shape.
-* The keyword marks no datum, so there is no strip test of a load; what it changes is the compile of the
-  function, and only it reproduces the retail code.
+* The upstream macro writes the statement and its one keyword.
+* Retail has a branch for each status bit with the test recomputed from the saved status each time. With no
+  keyword on either instruction, the three tests become `sltu` results kept in saved registers, the frame
+  doubles and the body is 12 instructions shorter (352 bytes against 400). One keyword is enough: on either of
+  two separate statements, or on the one statement, the function matches.
+* No pragma gives the retail shape without the keyword: nine variants, all a different size.
 
 ### enbaya-vu0-macro
 

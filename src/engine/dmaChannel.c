@@ -188,7 +188,7 @@ void p2AddDmaPredicate(int channel, int (*predicate)(long long), long long arg) 
     if (p2DmaPredicatePool == 0) {
         p2GrowPool(P2_POOL_DMA_PREDICATE, &p2DmaPredicatePool);
     }
-    __asm__ volatile("mfc0 %0, $12\n\tsrl $6, %0, 16\n\tand %0, %0, $6" : "=r"(status) : : "$6");
+    __asm__("mfc0 %0, $12\n\tsrl $6, %0, 16\n\tand %0, %0, $6" : "=r"(status) : : "$6");
     if (status & 1) {
         FUN_00113f20();
         node = p2DmaPredicatePool;
@@ -259,7 +259,7 @@ void p2AddDmaCompletion(int channel, void (*func)(void *), void *arg) {
     if (p2DmaCompletionPool == 0) {
         p2GrowPool(P2_POOL_DMA_COMPLETION, &p2DmaCompletionPool);
     }
-    __asm__ volatile("mfc0 %0, $12\n\tsrl $6, %0, 16\n\tand %0, %0, $6" : "=r"(status) : : "$6");
+    __asm__("mfc0 %0, $12\n\tsrl $6, %0, 16\n\tand %0, %0, $6" : "=r"(status) : : "$6");
     if (status & 1) {
         FUN_00113f20();
         node = p2DmaCompletionPool;
@@ -442,7 +442,7 @@ void p2WaitDmaSequence(int channel, long long sequence) {
         completed = (long long *)((char *)p2DmaCompletedSequence + channel * 8);
         while (sequence > *completed) {
             p2ReadClock(&start);
-            p2BlockedSema = *(volatile int *)&p2DmaWaitSema;
+            p2BlockedSema = p2DmaWaitSema;
             WaitSema(*(volatile int *)&p2DmaWaitSema);
             p2BlockedSema = -1;
             p2ReadClock(&end);
@@ -504,16 +504,16 @@ void p2ShutdownDmaChannels(void) {
     } while (channel <= P2_DMA_GIF);
 }
 
-static asm void p2WaitDmaCondition(void)
+static void p2WaitDmaCondition(void)
 {
-wait:
-    nop
-    nop
-    nop
-    nop
-    nop
-    bc0f    wait
-    nop
-    jr      ra
-    nop
+    asm {
+    wait:
+        nop
+        nop
+        nop
+        nop
+        nop
+        bc0f    wait
+        nop
+    }
 }

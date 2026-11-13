@@ -23,7 +23,8 @@ sys.path.insert(0, HERE)
 
 _START = re.compile(r"(?:__asm__|__asm|\basm)\s*(?:volatile|__volatile__)?\s*([{(])")
 _COMMENT = re.compile(r"/\*.*?\*/|//[^\n]*", re.S)
-_HARDWARE = re.compile(r"^(sync|ei)$")
+# `sync`, `ei`, or a statement of nothing else, as the SDK's `ExitHandler()` writes `"sync\nei\n"`
+_HARDWARE = re.compile(r"^(?:sync|ei)(?:(?:\\n|;|\s)+(?:sync|ei))*(?:\\n|;|\s)*$")
 
 
 def blank_comments(text):

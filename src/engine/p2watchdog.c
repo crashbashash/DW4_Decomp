@@ -1,7 +1,7 @@
 /* The watchdog thread. Code that waits for the hardware or another thread sets its bit in
  * p2DmaWatchFlags.busy and clears it when the wait ends; every four seconds the watchdog copies
  * busy into seen, and gives up if a bit it copied last time is still set. It also gives up when
- * p2WatchdogTicks, which the renderer resets each frame, reaches 60. */
+ * p2WatchdogTicks, which p2SubmitDmaPacket resets, reaches 60. */
 #include "dw4/eekernel.h"
 #include "dw4/p2dma.h"
 #include "dw4/p2timer.h"
@@ -18,6 +18,8 @@ extern int p2WatchdogThread;
 extern int p2WatchdogDisabled;
 extern char p2WatchdogStack[0x1000];
 extern volatile int p2WatchdogTicks;
+/* other threads and the DMA handlers write these words while the thread runs */
+extern volatile p2DmaWatch p2DmaWatchFlags;
 extern int p2FunctionTables[];
 extern int p2FunctionTableSizes[3];
 extern char newline[];
@@ -39,7 +41,6 @@ void p2StartWatchdog(void) {
 /* Lists the VU programs of the three function tables with their names and whether each is loaded,
  * then the waits that timed out. */
 void p2PrintWatchdogReport(void) {
-    extern p2DmaWatch p2DmaWatchFlags;
     static char *watchNames[] = {
         "PacketBuffer", "DMAFinishSequence", "Swapbuffers", "FinishSequence", "TextureUnbind", "DMAVIF0",
         "DMAVIF1", "DMAGIF", "VSync", "VU0UcodeLoad", "VU0Lock", 0
@@ -87,9 +88,6 @@ void p2PrintWatchdogReport(void) {
 }
 
 void p2RunWatchdog(void *arg) {
-    /* other threads and the DMA handlers write these words while the thread runs */
-    extern volatile p2DmaWatch p2DmaWatchFlags;
-
     printf("watchdog started\n");
     for (;;) {
         do {
