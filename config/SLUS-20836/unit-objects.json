@@ -7,17 +7,11 @@
       "index": "0x0054efcc",
       "table": "0x00543b74",
       "table_size": "0x000010"
-    },
-    "externals": {
-      "__dl__FPv": "0x00100610"
     }
   },
   "0x00100400": {
     "emitted": {
       "__dt__3PADFv": "0x00100530"
-    },
-    "externals": {
-      "__dl__FPv": "0x00100610"
     }
   },
   "0x004267b0": {
@@ -391,9 +385,6 @@
       "__dt__39igSmartPointer<21beNDMWStatusCtrlEquip>Fv": "0x0040ebe0",
       "__dt__9StringRefFv": "0x00130720"
     },
-    "externals": {
-      "__dl__FPv": "0x00100610"
-    },
     "symbol": "beNDMWShopCtrl00_Update"
   },
   "0x003cdef0": {
@@ -489,7 +480,6 @@
     },
     "externals": {
       "__ct__9StringRefFPCc": "0x003cc550",
-      "__dl__FPv": "0x00100610",
       "__dt__9StringRefFv": "0x00130720"
     },
     "symbol": "FUN_003cdef0"
@@ -498,9 +488,6 @@
     "emitted": {},
     "duplicates": {
       "__dt__9StringRefFv": "0x00130720"
-    },
-    "externals": {
-      "__dl__FPv": "0x00100610"
     }
   },
   "0x003f5410": {
@@ -545,9 +532,6 @@
     },
     "duplicates": {
       "__dt__9StringRefFv": "0x00130720"
-    },
-    "externals": {
-      "__dl__FPv": "0x00100610"
     },
     "symbol": "beNDMWWindow_QueueText"
   },
@@ -653,9 +637,6 @@
     "duplicates": {
       "__dt__9StringRefFv": "0x00130720"
     },
-    "externals": {
-      "__dl__FPv": "0x00100610"
-    },
     "symbol": "beNDMWShopSelect00_Setup"
   },
   "0x0038bee0": {
@@ -747,9 +728,6 @@
     "duplicates": {
       "__dt__9ObjectRefFv": "0x00357a90",
       "__dt__9StringRefFv": "0x00130720"
-    },
-    "externals": {
-      "__dl__FPv": "0x00100610"
     },
     "symbol": "beMessenger_InitializeMemory"
   },
@@ -1083,7 +1061,6 @@
     },
     "externals": {
       "__ct__17RecoveryCopiedRefFRC14AllocatorValue": "0x00406e10",
-      "__dl__FPv": "0x00100610",
       "__dt__17RecoveryCopiedRefFv": "0x0033e9c0"
     },
     "symbol": "beNDMWGameRam_BuildDataList"
@@ -1093,9 +1070,6 @@
     "duplicates": {
       "__dt__9StringRefFv": "0x00130720",
       "__dt__25igSmartPointer<8igObject>Fv": "0x001489a0"
-    },
-    "externals": {
-      "__dl__FPv": "0x00100610"
     }
   },
   "0x00221870": {
@@ -3116,9 +3090,6 @@
     "duplicates": {
       "__dt__15FolderObjectRefFv": "0x00130140",
       "__dt__15FolderStringRefFv": "0x00130720"
-    },
-    "externals": {
-      "__dl__FPv": "0x00100610"
     }
   },
   "0x0032c700": {
@@ -3126,18 +3097,12 @@
     "duplicates": {
       "__dt__15FolderObjectRefFv": "0x00130140",
       "__dt__15FolderStringRefFv": "0x00130720"
-    },
-    "externals": {
-      "__dl__FPv": "0x00100610"
     }
   },
   "0x0032cb50": {
     "emitted": {},
     "duplicates": {
       "__dt__15FolderObjectRefFv": "0x00130140"
-    },
-    "externals": {
-      "__dl__FPv": "0x00100610"
     }
   },
   "0x001273e0": {
@@ -3187,75 +3152,48 @@
   "0x002d9540": {
     "duplicates": {
       "__dt__11PropertyRefFv": "0x0025a230"
-    },
-    "externals": {
-      "__dl__FPv": "0x00100610"
     }
   },
   "0x00304840": {
     "duplicates": {
       "__dt__36igSmartPointer<18igPluginRepository>Fv": "0x0025a230"
-    },
-    "externals": {
-      "__dl__FPv": "0x00100610"
     }
   },
   "0x0032d220": {
     "duplicates": {
       "__dt__18igSmartPointer<1O>Fv": "0x0025a230"
-    },
-    "externals": {
-      "__dl__FPv": "0x00100610"
     }
   },
   "0x002e2950": {
     "duplicates": {
       "__dt__20igSmartPointer<3Obj>Fv": "0x00130140"
-    },
-    "externals": {
-      "__dl__FPv": "0x00100610"
     }
   },
   "0x00309a60": {
     "duplicates": {
       "__dt__25igSmartPointer<8igObject>Fv": "0x00130140"
-    },
-    "externals": {
-      "__dl__FPv": "0x00100610"
     }
   },
   "0x002dbd10": {
     "duplicates": {
       "__dt__18igSmartPointer<1R>Fv": "0x00130140"
-    },
-    "externals": {
-      "__dl__FPv": "0x00100610"
     }
   },
   "0x00308c80": {
     "duplicates": {
       "__dt__19igSmartPointer<2RO>Fv": "0x130140"
     },
-    "emitted": {},
-    "externals": {
-      "__dl__FPv": "0x00100610"
-    }
+    "emitted": {}
   },
   "0x002f8e10": {
     "duplicates": {
       "__dt__18igSmartPointer<1R>Fv": "0x0025a230"
-    },
-    "externals": {
-      "__dl__FPv": "0x00100610"
     }
   },
   "0x00308fb0": {
     "duplicates": {
       "__dt__20igSmartPointer<3Obj>Fv": "0x00130140",
       "__dt__20igSmartPointer<3Res>Fv": "0x0025a230"
-    },
-    "externals": {
-      "__dl__FPv": "0x00100610"
     }
   },
   "0x00100610": {
@@ -3276,9 +3214,6 @@
       "index": "0x0054f830",
       "table": "0x00543f1c",
       "table_size": "0x000010"
-    },
-    "externals": {
-      "__dl__FPv": "0x00100610"
     }
   },
   "0x003a4950": {
@@ -3289,15 +3224,9 @@
       "index": "0x0054f464",
       "table": "0x00543e00",
       "table_size": "0x000010"
-    },
-    "externals": {
-      "__dl__FPv": "0x00100610"
     }
   },
   "0x0023f830": {
-    "externals": {
-      "__dl__FPv": "0x00100610"
-    },
     "duplicates": {
       "__dt__13BindingCursorFv": "0x00240390"
     },
@@ -3306,9 +3235,6 @@
     ]
   },
   "0x0023fb30": {
-    "externals": {
-      "__dl__FPv": "0x00100610"
-    },
     "duplicates": {
       "__dt__10TypeCursorFv": "0x00240390"
     },
@@ -5426,9 +5352,6 @@
     "duplicates": {
       "__dt__25igSmartPointer<8igObject>Fv": "0x0033f6d0"
     },
-    "externals": {
-      "__dl__FPv": "0x00100610"
-    },
     "symbol": "Gap__Bec__beWeapon__vfunc_32"
   },
   "0x001fd5a0": {
@@ -7125,9 +7048,6 @@
       "__dt__29igSmartPointer<11InsightCore>Fv",
       "__dt__9StringRefFv"
     ],
-    "externals": {
-      "__dl__FPv": "0x00100610"
-    },
     "symbol": "__ct__11ViewerSetupFP8igObject"
   },
   "0x00464f90": {
@@ -16072,17 +15992,11 @@
   "0x002e7100": {
     "duplicates": {
       "__dt__20igSmartPointer<3T30>Fv": "0x00130140"
-    },
-    "externals": {
-      "__dl__FPv": "0x00100610"
     }
   },
   "0x0032a280": {
     "duplicates": {
       "__dt__13DumpObjectRefFv": "0x00130140"
-    },
-    "externals": {
-      "__dl__FPv": "0x00100610"
     }
   },
   "0x00130000": {
@@ -26586,7 +26500,6 @@
       "FUN_00130720": "0x00130720",
       "__ct__12igObjectViewFv": "0x002fef20",
       "__ct__15igMatrix44fViewFv": "0x00190380",
-      "__dl__FPv": "0x00100610",
       "__dt__10igNodeViewFv": "0x00195a90",
       "__dt__12SrcNodeFieldFv": "0x0034c1b0",
       "__dt__15CameraModeFieldFv": "0x003699a0",
@@ -29167,7 +29080,6 @@
       "__ct__18PEBaseInfoWorkViewFv": "0x003c0120",
       "__ct__8InfoBaseFv": "0x003bf650",
       "__ct__9StringRefFv": "0x00229270",
-      "__dl__FPv": "0x00100610",
       "__dt__14ObjectRefFieldFv": "0x00150eb0",
       "__dt__15ItemObjectFieldFv": "0x003c1520",
       "__dt__15PEBaseListFieldFv": "0x00226990",
@@ -29208,9 +29120,6 @@
       "__dt__25igSmartPointer<8igObject>Fv": "0x0033e9c0",
       "__dt__8ValueRefFv": "0x00352fc0"
     },
-    "externals": {
-      "__dl__FPv": "0x00100610"
-    },
     "symbol": "Gap__Bec__beNDMWMdlMapCursor__vfunc_35"
   },
   "0x0044ac60": {
@@ -29239,9 +29148,6 @@
     "duplicates": {
       "__dt__11InfoWorkRefFv": "0x00352fc0",
       "__dt__25igSmartPointer<8igObject>Fv": "0x0033e9c0"
-    },
-    "externals": {
-      "__dl__FPv": "0x00100610"
     },
     "symbol": "Gap__Bec__beNDMWMdlMapBase__vfunc_35"
   },
@@ -29443,9 +29349,6 @@
       "__dt__7ItemRefFv": "0x003b9ba0",
       "__dt__9ObjectRefFv": "0x0033e9c0"
     },
-    "externals": {
-      "__dl__FPv": "0x00100610"
-    },
     "symbol": "FUN_004412c0"
   },
   "0x00440fd0": {
@@ -29475,9 +29378,6 @@
     },
     "duplicates": {
       "__dt__9StringRefFv": "0x00130720"
-    },
-    "externals": {
-      "__dl__FPv": "0x00100610"
     },
     "symbol": "Gap__Bec__beNDMWShopTitle00__vfunc_22"
   },
@@ -29562,9 +29462,6 @@
     "duplicates": {
       "__dt__9StringRefFv": "0x00130720"
     },
-    "externals": {
-      "__dl__FPv": "0x00100610"
-    },
     "symbol": "Gap__Bec__beNDMWWindowTitle__vfunc_21"
   },
   "0x004233f0": {
@@ -29618,9 +29515,6 @@
     },
     "duplicates": {
       "__dt__9StringRefFv": "0x00130720"
-    },
-    "externals": {
-      "__dl__FPv": "0x00100610"
     },
     "symbol": "beNDMWWindowSelect_Update"
   },
@@ -29697,7 +29591,6 @@
     },
     "externals": {
       "__ct__8ModelPosFRC8ModelPos": "0x003e9220",
-      "__dl__FPv": "0x00100610",
       "__dt__14NewDataListRefFv": "0x0033e9c0"
     },
     "symbol": "beNDMWSaveIntf_AcquirePadManager"
@@ -29728,9 +29621,6 @@
       "__dt__11FlagWorkRefFv": "0x003f2bc0",
       "__dt__13CommonIntfRefFv": "0x003f2c40",
       "__dt__25igSmartPointer<8igObject>Fv": "0x0033e9c0"
-    },
-    "externals": {
-      "__dl__FPv": "0x00100610"
     },
     "symbol": "Gap__Bec__beNDMWSaveCtrl__vfunc_32"
   },
@@ -29821,8 +29711,7 @@
       "__dt__11TitleRef<4>Fv": "0x003eb800"
     },
     "externals": {
-      "FUN_002ff820": "0x002ff820",
-      "__dl__FPv": "0x00100610"
+      "FUN_002ff820": "0x002ff820"
     },
     "symbol": "beNDMWTitle2Option_InitSettings"
   },
@@ -30021,9 +29910,6 @@
     "stripped": [
       "__dt__30igSmartPointer<12beUnicodeObj>Fv"
     ],
-    "externals": {
-      "__dl__FPv": "0x00100610"
-    },
     "symbol": "TextOrder_Configure"
   },
   "0x003d9de0": {
@@ -30299,7 +30185,6 @@
       "__dt__30igSmartPointer<12beUnicodeObj>Fv": "0x003832d0"
     },
     "externals": {
-      "__dl__FPv": "0x00100610",
       "__dt__14NewDataListRefFv": "0x0033e9c0"
     },
     "symbol": "beNDMWLoadIntf2DegiState__Init"
@@ -30422,9 +30307,6 @@
       "__dt__30igSmartPointer<12beNDMWWindow>Fv": "0x003b2f30",
       "__dt__38igSmartPointer<20beNDMWStatusInfoWork>Fv": "0x003b5cf0"
     },
-    "externals": {
-      "__dl__FPv": "0x00100610"
-    },
     "symbol": "beNDMWStatus__ReleaseWindow"
   },
   "0x003d4980": {
@@ -30460,9 +30342,6 @@
     "duplicates": {
       "__dt__25igSmartPointer<8igObject>Fv": "0x0033e9c0",
       "__dt__9StringRefFv": "0x00130720"
-    },
-    "externals": {
-      "__dl__FPv": "0x00100610"
     },
     "symbol": "Gap__Bec__beNDMWMdlPlayer2__vfunc_23"
   },
@@ -30581,9 +30460,6 @@
       "__dt__25igSmartPointer<8igObject>Fv": "0x0033e9c0",
       "__dt__9StringRefFv": "0x00130720"
     },
-    "externals": {
-      "__dl__FPv": "0x00100610"
-    },
     "symbol": "beNDMWMdlPlayer__ResolveManagers"
   },
   "0x003d1ff0": {
@@ -30604,9 +30480,6 @@
     "duplicates": {
       "__dt__25igSmartPointer<8igObject>Fv": "0x0033e9c0",
       "__dt__8ValueRefFv": "0x00352fc0"
-    },
-    "externals": {
-      "__dl__FPv": "0x00100610"
     },
     "symbol": "Gap__Bec__beNDMWMdlPBullet__vfunc_35"
   },
@@ -30629,9 +30502,6 @@
     "duplicates": {
       "__dt__11InfoWorkRefFv": "0x00352fc0",
       "__dt__25igSmartPointer<8igObject>Fv": "0x0033e9c0"
-    },
-    "externals": {
-      "__dl__FPv": "0x00100610"
     },
     "symbol": "Gap__Bec__beNDMWMdlObject__vfunc_35"
   },
@@ -30662,9 +30532,6 @@
     "duplicates": {
       "__dt__25igSmartPointer<8igObject>Fv": "0x0033e9c0"
     },
-    "externals": {
-      "__dl__FPv": "0x00100610"
-    },
     "symbol": "beNDMWMdlEnemy__IsKind"
   },
   "0x003d16c0": {
@@ -30686,9 +30553,6 @@
       "__dt__25igSmartPointer<8igObject>Fv": "0x0033e9c0",
       "__dt__9EffectRefFv": "0x00352fc0"
     },
-    "externals": {
-      "__dl__FPv": "0x00100610"
-    },
     "symbol": "Gap__Bec__beNDMWMdlEffect__vfunc_35"
   },
   "0x003d1480": {
@@ -30709,9 +30573,6 @@
     "duplicates": {
       "__dt__25igSmartPointer<8igObject>Fv": "0x0033e9c0",
       "__dt__8ValueRefFv": "0x00352fc0"
-    },
-    "externals": {
-      "__dl__FPv": "0x00100610"
     },
     "symbol": "Gap__Bec__beNDMWMdlEBullet__vfunc_35"
   },
@@ -30782,9 +30643,6 @@
     "duplicates": {
       "__dt__3RefFv": "0x001489a0"
     },
-    "externals": {
-      "__dl__FPv": "0x00100610"
-    },
     "symbol": "Gap__Bec__beNDMWStageCtl__vfunc_32"
   },
   "0x003cc7d0": {
@@ -30819,9 +30677,6 @@
     },
     "duplicates": {
       "__dt__34igSmartPointer<16NewObjectVirtual>Fv": "0x0019aa10"
-    },
-    "externals": {
-      "__dl__FPv": "0x00100610"
     },
     "symbol": "Gap__Bec__beTextureCtrl__vfunc_32"
   },
@@ -30884,9 +30739,6 @@
       "g_useOwnerAllocator": "0x00554c14",
       "g_beSaveUtilInfo_metaObject": "0x00588010",
       "g_beSaveUtil_metaObject": "0x00588020"
-    },
-    "externals": {
-      "__dl__FPv": "0x00100610"
     },
     "symbol": "FUN_003ae680"
   },
@@ -31098,9 +30950,6 @@
     "duplicates": {
       "__dt__25igSmartPointer<8igObject>Fv": "0x0033e9c0"
     },
-    "externals": {
-      "__dl__FPv": "0x00100610"
-    },
     "symbol": "beCriAudio_Setup"
   },
   "0x003a59d0": {
@@ -31215,9 +31064,6 @@
     },
     "duplicates": {
       "__dt__3RefFv": "0x0034d6c0"
-    },
-    "externals": {
-      "__dl__FPv": "0x00100610"
     },
     "symbol": "Gap__Bec__beNumberCtrl__vfunc_32"
   },
@@ -31336,9 +31182,6 @@
       "__dt__12GlobalStrRefFv": "0x001489a0",
       "__dt__9StringRefFv": "0x00130720"
     },
-    "externals": {
-      "__dl__FPv": "0x00100610"
-    },
     "symbol": "beSound_Prepare"
   },
   "0x0039dee0": {
@@ -31398,9 +31241,6 @@
       "__dt__11BoolListRefFv": "0x00226990",
       "__dt__25igSmartPointer<8igObject>Fv": "0x0033e9c0",
       "__dt__7WorkRefFv": "0x00345410"
-    },
-    "externals": {
-      "__dl__FPv": "0x00100610"
     },
     "symbol": "beSelectCtrl_EnsurePadManager"
   },
@@ -31478,9 +31318,6 @@
     "duplicates": {
       "__dt__41igSmartPointer<23beParticleCtrl2InfoWork>Fv": "0x0034be40"
     },
-    "externals": {
-      "__dl__FPv": "0x00100610"
-    },
     "symbol": "Gap__Bec__beParticleCtrl2__vfunc_32"
   },
   "0x0039b2e0": {
@@ -31502,9 +31339,6 @@
       "DAT_0058c790": "0x0058c790",
       "g_useOwnerAllocator": "0x00554c14",
       "g_bePadManager_metaObject": "0x00588518"
-    },
-    "externals": {
-      "__dl__FPv": "0x00100610"
     },
     "symbol": "Gap__Bec__bePadManager__vfunc_21"
   },
@@ -31738,8 +31572,7 @@
       "__dt__9StringRefFv": "0x00130720"
     },
     "externals": {
-      "FUN_001ca620": "0x001ca620",
-      "__dl__FPv": "0x00100610"
+      "FUN_001ca620": "0x001ca620"
     },
     "symbol": "beMeterCtrlNode_TraversalFunction"
   },
@@ -31802,9 +31635,6 @@
       "g_useOwnerAllocator": "0x00554c14",
       "g_beLuaState_metaObject": "0x005891b0"
     },
-    "externals": {
-      "__dl__FPv": "0x00100610"
-    },
     "symbol": "Gap__Bec__beLuaState__vfunc_08"
   },
   "0x00389b90": {
@@ -31837,9 +31667,6 @@
     "duplicates": {
       "__dt__9LuaStrRefFv": "0x00130720"
     },
-    "externals": {
-      "__dl__FPv": "0x00100610"
-    },
     "symbol": "FUN_00389b90"
   },
   "0x00389080": {
@@ -31870,9 +31697,6 @@
     },
     "duplicates": {
       "__dt__3RefFv": "0x00229350"
-    },
-    "externals": {
-      "__dl__FPv": "0x00100610"
     },
     "symbol": "beLayerCtl__ReleaseLayerSwitch"
   },
@@ -31916,9 +31740,6 @@
     },
     "duplicates": {
       "__dt__25igSmartPointer<8igObject>Fv": "0x0019e3c0"
-    },
-    "externals": {
-      "__dl__FPv": "0x00100610"
     },
     "symbol": "FUN_00386030"
   },
@@ -32011,9 +31832,6 @@
       "__dt__25igSmartPointer<8igObject>Fv": "0x001363f0",
       "__dt__29igSmartPointer<11igStringObj>Fv": "0x001489a0"
     },
-    "externals": {
-      "__dl__FPv": "0x00100610"
-    },
     "symbol": "Gap__Bec__beFont__vfunc_23"
   },
   "0x0037f1b0": {
@@ -32069,9 +31887,6 @@
       "g_mdlEntity": "0x0058a1e0",
       "g_useOwnerAllocator": "0x00554c14",
       "g_beDemoManager_metaObject": "0x00589790"
-    },
-    "externals": {
-      "__dl__FPv": "0x00100610"
     },
     "symbol": "beDemoManager_SwitchSD"
   },
@@ -32156,9 +31971,6 @@
       "__dt__29igSmartPointer<11beCriHandle>Fv": "0x00367a20",
       "__dt__29igSmartPointer<11igStringObj>Fv": "0x001489a0"
     },
-    "externals": {
-      "__dl__FPv": "0x00100610"
-    },
     "symbol": "beCopyModelCtrl2_TraverseCallback"
   },
   "0x0037aac0": {
@@ -32236,9 +32048,6 @@
     "duplicates": {
       "__dt__11DataListRefFv": "0x0033e9c0",
       "__dt__13CameraModeRefFv": "0x003699a0"
-    },
-    "externals": {
-      "__dl__FPv": "0x00100610"
     },
     "symbol": "Gap__Bec__beCameraCtrl__vfunc_30"
   },
@@ -32578,7 +32387,6 @@
     },
     "externals": {
       "Matrix44_Copy": "0x001908f0",
-      "__dl__FPv": "0x00100610",
       "__throw": "0x00102550",
       "__ct__8LuaClassFPCcPCcPFP9lua_State_iPFP9lua_State_iPFP9lua_State_iPFP9lua_State_iPFP9lua_State_i": "0x00241930",
       "Memory_FreeBufferWithAllocator": "0x002ed4c0",
@@ -32632,9 +32440,6 @@
     "duplicates": {
       "__dt__19igSmartPointer<2RC>Fv": "0x00336440",
       "__dt__25igSmartPointer<8igObject>Fv": "0x00130140"
-    },
-    "externals": {
-      "__dl__FPv": "0x00100610"
     },
     "symbol": "FUN_00338f70"
   },
@@ -33553,9 +33358,6 @@
       "__dt__11BoolListRefFv": "0x00226990",
       "__dt__36igSmartPointer<18beBaseInfoDataList>Fv": "0x0033e9c0"
     },
-    "externals": {
-      "__dl__FPv": "0x00100610"
-    },
     "symbol": "beNDMWShinkaCtrl_Setup"
   },
   "0x0040dae0": {
@@ -33915,9 +33717,6 @@
       "__dt__9DeviceRefFv": "0x001363f0",
       "__dt__9StringRefFv": "0x00130720"
     },
-    "externals": {
-      "__dl__FPv": "0x00100610"
-    },
     "symbol": "Gap__Bec__beNDMWListCtrl__vfunc_22"
   },
   "0x00398e50": {
@@ -33980,9 +33779,6 @@
       "__dt__25igSmartPointer<8igObject>Fv": "0x0033e9c0",
       "__dt__24igSmartPointer<7igAABox>Fv": "0x00198190"
     },
-    "externals": {
-      "__dl__FPv": "0x00100610"
-    },
     "symbol": "beModelCtrlNode2_TraversalFunction"
   },
   "0x00375e00": {
@@ -34038,9 +33834,6 @@
       "__dt__10AttrRef<1>Fv": "0x001aaf00",
       "__dt__10AttrRef<2>Fv": "0x00239200",
       "__dt__10AttrRef<3>Fv": "0x001d21b0"
-    },
-    "externals": {
-      "__dl__FPv": "0x00100610"
     },
     "symbol": "beAction2_Prepare"
   },
@@ -34479,9 +34272,6 @@
     "duplicates": {
       "__dt__9StringRefFv": "0x00130720"
     },
-    "externals": {
-      "__dl__FPv": "0x00100610"
-    },
     "symbol": "igAdxAudio_Initialize"
   },
   "0x00331f30": {
@@ -34578,7 +34368,6 @@
       "FUN_00238d40": "0x00238d40",
       "__ct__11ViewerSetupFP8igObject": "0x00463560",
       "__ct__3AppFv": "0x00234900",
-      "__dl__FPv": "0x00100610",
       "__dt__11ViewerSetupFv": "0x00463910",
       "__dt__3AppFv": "0x00234b90"
     },
@@ -35597,7 +35386,6 @@
       "__ct__7LuaTypeFiiiPCc": "0x0023c9a0",
       "__ct__8LuaClassFPCcPCcPFP9lua_State_iPFP9lua_State_iPFP9lua_State_iPFP9lua_State_iPFP9lua_State_i": "0x00241930",
       "__ct__8LuaValueFP7LuaTypeP9lua_Statei": "0x0023d5f0",
-      "__dl__FPv": "0x00100610",
       "__dla__FPv": "0x001005f0",
       "__nwa__FUi": "0x001006d0",
       "_d_ulltod": "0x00100240",
@@ -35758,7 +35546,6 @@
       "LuaPropertyTable_Clear": "0x0023f9b0",
       "ThreadLocal_FreeSlot": "0x00246230",
       "ThreadLocal_SetForThread": "0x00245fa0",
-      "__dl__FPv": "0x00100610",
       "__dla__FPv": "0x001005f0",
       "__nw__FUi": "0x001007e0",
       "__nwa__FUi": "0x001006d0",
