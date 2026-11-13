@@ -11,8 +11,8 @@ extern "C" int igResource_StopAsyncLoading(...);
 extern "C" int igResource_LoadDirectory(...);
 extern "C" int igResource_IsDirectoryLoaded(...);
 extern "C" int igResource_UnloadDirectory(...);
-extern "C" int FUN_0030b3c0(...);
-extern "C" int FUN_0030b460(...);
+extern "C" int igStringObj_Set(...);
+extern "C" int igStringObj_Insert(...);
 extern "C" int igStringObj_Erase(...);
 extern "C" int FUN_003810c0(...);
 extern "C" int FUN_003817d0(...);
@@ -195,11 +195,11 @@ extern "C" void Gap__Bec__beFileListInfoManager__vfunc_27(beFileListInfoManager 
             igResource_StartAsyncLoading(DAT_00586dd0[0]);
             {
             igSmartPointer<igObject> stageObj((igObject *)((beSystem *)arg0->_system)->_globalStrObj, kRetainReference);
-            FUN_0030b3c0(stageObj.p, ((beSystem *)arg0->_system)->_stageName);
+            igStringObj_Set(stageObj.p, ((beSystem *)arg0->_system)->_stageName);
             igStringObj_Erase(stageObj.p, 0, 2);
-            t0 = (int *)stageObj.p; FUN_0030b460(t0, &DAT_0050e570[0], 0, strlen(&DAT_0050e570[0]));
-            { int *ta = (int *)stageObj.p; int xa = ta[3]; FUN_0030b460(ta, &DAT_0050e578[0], xa, strlen(&DAT_0050e578[0])); }
-            t0 = (int *)stageObj.p; FUN_0030b460(t0, &DAT_0050e580[0], 0, strlen(&DAT_0050e580[0]));
+            t0 = (int *)stageObj.p; igStringObj_Insert(t0, &DAT_0050e570[0], 0, strlen(&DAT_0050e570[0]));
+            { int *ta = (int *)stageObj.p; int xa = ta[3]; igStringObj_Insert(ta, &DAT_0050e578[0], xa, strlen(&DAT_0050e578[0])); }
+            t0 = (int *)stageObj.p; igStringObj_Insert(t0, &DAT_0050e580[0], 0, strlen(&DAT_0050e580[0]));
             {
                 int a1 = ((int *)stageObj.p)[2];
                 int r;
@@ -267,7 +267,7 @@ extern "C" void Gap__Bec__beFileListInfoManager__vfunc_27(beFileListInfoManager 
                     {
                     StringRef entryName((char *)tmp);
                     idx = -1;
-                    FUN_0030b3c0(stageObj.p, entryName.p);
+                    igStringObj_Set(stageObj.p, entryName.p);
                     {
                         volatile int *t = (int *)stageObj.p;
                         j = 0;

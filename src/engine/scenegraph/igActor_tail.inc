@@ -306,7 +306,7 @@ int FUN_001b9d90(LightTraversalView *o, LightSceneView *scene) {
         light->_worldPosition.y = position.y;
         light->_worldPosition.z = position.z;
         if (light->_type == 0 || light->_type == 2) {
-            FUN_00192f50(&direction, (char *)light + DAT_0055f0c0[0]->_offset, matrix);
+            Vec3f_TransformDirection(&direction, (char *)light + DAT_0055f0c0[0]->_offset, matrix);
             light->_worldDirection.x = direction.x;
             light->_worldDirection.y = direction.y;
             light->_worldDirection.z = direction.z;

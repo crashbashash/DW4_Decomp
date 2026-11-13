@@ -146,8 +146,8 @@ int StringPool_Construct(int);
 int StringPool_Intern(...);
 void StringChunk_ReleaseHeader(...);
 int igStringObj_Clear(...);
-int FUN_0030b460(igStringObj *, char *, int, int);
-void FUN_0030b3c0(void *, void *);
+int igStringObj_Insert(igStringObj *, char *, int, int);
+void igStringObj_Set(void *, void *);
 int beMessenger_RegisterReceiver(int, int, int *, int, int);
 int beMessenger_ResolveEnumValue(int, int, int);
 void beMessenger_SelectGroup(int, void *);
@@ -190,7 +190,7 @@ extern int g_emptyTextPlaceholder[4];
 extern char text_igStringObj[16];
 extern char text_beUnicodeObj[16];
 extern char ALL_3[];
-extern const char *DAT_004c22f0[4];
+extern const char *g_stringObjEmptyText[4];
 extern const SjisUnicodeTable g_sjisToUnicodeTable;
 extern int emptyString[4];
 extern int g_stringPool[4];
@@ -435,8 +435,8 @@ int Gap__Bec__beFont__vfunc_34(beFont *self, beBaseInfoRam *ram, beMessengerWork
             igSmartPointer<igObject> text((igObject *)0, kRetainReference);
             igSmartPointer<igStringObj> scratch((igStringObj *)((beSystem *)self->_system)->_globalStrObj, kRetainReference);
             if (beMessenger_GetStringCount(self->_messenger) > 2) {
-                if (beMessenger_GetString(self->_messenger, 2) != 0) { igStringObj *target = scratch.p; FUN_0030b3c0(target, (void *)beMessenger_GetString(self->_messenger, 2)); }
-                else FUN_0030b3c0(scratch.p, g_emptyTextPlaceholder);
+                if (beMessenger_GetString(self->_messenger, 2) != 0) { igStringObj *target = scratch.p; igStringObj_Set(target, (void *)beMessenger_GetString(self->_messenger, 2)); }
+                else igStringObj_Set(scratch.p, g_emptyTextPlaceholder);
                 text = scratch;
             } else if (beMessenger_GetIntCount(self->_messenger) > 0) {
                 int k = beMessenger_GetInt(self->_messenger, 0);
@@ -450,7 +450,7 @@ int Gap__Bec__beFont__vfunc_34(beFont *self, beBaseInfoRam *ram, beMessengerWork
                 if (g_beUnicodeObj_metaObject[0] == object->getMetaObject()) {
                     text = (igObject *)object;
                 } else {
-                    FUN_0030b3c0(scratch.p, g_emptyTextPlaceholder);
+                    igStringObj_Set(scratch.p, g_emptyTextPlaceholder);
                     text = scratch;
                 }
             }
@@ -682,9 +682,9 @@ igSmartPointer<beUnicodeObj> beFont_ConvertToUnicode(beFont *self, const char *t
             }
             igStringObj_Clear((igStringObj *)self->_convertData);
             lead = *p;
-            FUN_0030b460((igStringObj *)self->_convertData, &lead, ((igStringObj *)self->_convertData)->_length, 1);
+            igStringObj_Insert((igStringObj *)self->_convertData, &lead, ((igStringObj *)self->_convertData)->_length, 1);
             trail = *second;
-            FUN_0030b460((igStringObj *)self->_convertData, &trail, ((igStringObj *)self->_convertData)->_length, 1);
+            igStringObj_Insert((igStringObj *)self->_convertData, &trail, ((igStringObj *)self->_convertData)->_length, 1);
             i += 2;
         } else {
             unsigned char ch = c;
@@ -698,7 +698,7 @@ igSmartPointer<beUnicodeObj> beFont_ConvertToUnicode(beFont *self, const char *t
             }
             igStringObj_Clear((igStringObj *)self->_convertData);
             single = *p;
-            FUN_0030b460((igStringObj *)self->_convertData, &single, ((igStringObj *)self->_convertData)->_length, 1);
+            igStringObj_Insert((igStringObj *)self->_convertData, &single, ((igStringObj *)self->_convertData)->_length, 1);
             i++;
         }
     }
@@ -780,7 +780,7 @@ void beFont_SetText(beFont *self, beBaseInfoRam *ram, igNodeView *text, int inde
     if (strcmp((const char *)meta->_name, text_igStringObj) == 0) {
         const char *buffer = (const char *)((igStringObj *)text)->_buffer;
         const char *sjis;
-        if (buffer == 0) sjis = DAT_004c22f0[0]; else sjis = buffer;
+        if (buffer == 0) sjis = g_stringObjEmptyText[0]; else sjis = buffer;
         igSmartPointer<beUnicodeObj> converted(beFont_ConvertToUnicode(self, sjis));
         unicode = converted;
     } else if (strcmp((const char *)meta->_name, text_beUnicodeObj) == 0) {

@@ -111,7 +111,7 @@ void FUN_00460e00(int *a, void *arg1);
 
 int ObjectList_AppendRetained(...);
 
-extern float DAT_004e1098[4];
+extern float g_vec3ZAxis[4];
 extern float DAT_004e109c[4];
 extern float DAT_004e10a0[4];
 extern int g_vec4Zero[4];
@@ -535,7 +535,7 @@ void Gap__Viewer__igViewerRenderer__vfunc_13(P *arg0) {
     arg0->f36->v128(s0->eye);
     arg0->f36->v136(&g_vec4Zero[0]);
     arg0->f36->v132(s0->center);
-    sp58[0] = -DAT_004e1098[0];
+    sp58[0] = -g_vec3ZAxis[0];
     sp58[1] = -DAT_004e109c[0];
     sp58[2] = -DAT_004e10a0[0];
     arg0->f36->v144(sp58);

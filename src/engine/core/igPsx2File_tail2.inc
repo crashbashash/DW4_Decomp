@@ -332,7 +332,7 @@ void FUN_0032c0c0(void) {
 static inline void append_32c240(const igSmartPointer<Text> &ref, char *chars) {
     Text *text = ref.p;
     int length = text->length;
-    FUN_0030b460((IniStringView *)text, chars, (unsigned int)length, (unsigned int)(strlen(chars)));
+    igStringObj_Insert((IniStringView *)text, chars, (unsigned int)length, (unsigned int)(strlen(chars)));
 }
 
 StringRef_32c240 FUN_0032c240(char *prefix, char *path, int extra2) {
@@ -341,9 +341,9 @@ StringRef_32c240 FUN_0032c240(char *prefix, char *path, int extra2) {
     char c;
     igSmartPointer<Text> text(((Text *)FUN_002b9500(((int)Memory_GetAllocatorBySelector(DAT_00587048[0])))));
     if (prefix == 0) {
-        FUN_0030b3c0((int)(text.get()), (int)path);
+        igStringObj_Set((int)(text.get()), (int)path);
     } else if (*prefix == 0x63) {
-        FUN_0030b3c0((int)(text.get()), (int)prefix);
+        igStringObj_Set((int)(text.get()), (int)prefix);
         c = *path;
         if (c != 0x5C && c != 0x2F) {
             append_32c240(text, DAT_004ffbe8);
@@ -360,12 +360,12 @@ StringRef_32c240 FUN_0032c240(char *prefix, char *path, int extra2) {
             }
         }
     } else {
-        FUN_0030b3c0((int)(text.get()), (int)prefix);
+        igStringObj_Set((int)(text.get()), (int)prefix);
         append_32c240(text, path);
     }
     chars = text.get()->chars;
     if (chars == 0) {
-        chars = DAT_004c22f0[0];
+        chars = g_stringObjEmptyText[0];
     }
     StringRef_32c240 result(chars);
     return result;

@@ -11,7 +11,7 @@ void Vec3_Lerp(void *arg0, float fparg0, void *arg1, void *arg2) {
     *(float *)((char *)(arg0) + 8) = (float) (temp_f1_3 + (fparg0 * (*(float *)((char *)(arg2) + 8) - temp_f1_3)));
 }
 
-void FUN_00192f50(float *out, float *v, float *m) {
+void Vec3f_TransformDirection(float *out, float *v, float *m) {
     float x = v[0];
     float y = v[1];
     float z = v[2];

@@ -29,7 +29,7 @@ void FUN_002e3850(Named *self, int key) {
     char *text = h.p->text;
     char *v;
     char *old;
-    text = (text == 0) ? DAT_004c22f0[0] : text;
+    text = (text == 0) ? g_stringObjEmptyText[0] : text;
     v = ((char *)StringPool_Intern((StringPool *)(pool()), (const char *)text));
     old = self->name;
     if (old != 0) {

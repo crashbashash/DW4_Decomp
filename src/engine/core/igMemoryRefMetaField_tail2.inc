@@ -7,7 +7,7 @@ static inline void dropNames(AlignmentNameList *o) {
 
 static inline int countOf(AlignmentNameList *l) { if (l != 0) { return l->count; } return 0; }
 
-static inline char *textOf_2fb280(AlignmentName *s) { char *t = s->text; if (t == 0) { return (*(char * *)DAT_004c22f0); } return t; }
+static inline char *textOf_2fb280(AlignmentName *s) { char *t = s->text; if (t == 0) { return (*(char * *)g_stringObjEmptyText); } return t; }
 
 void igMemoryRefMetaField_SetAlignmentType(AlignmentFieldView *self, char *name) {
     AlignmentNameList *names;

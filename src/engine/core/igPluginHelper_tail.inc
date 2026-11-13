@@ -1,4 +1,4 @@
-static inline char *keyText(IniKeyText *s) { char *t = s->text; if (t == 0) { return (*(char * *)DAT_004c22f0); } return t; }
+static inline char *keyText(IniKeyText *s) { char *t = s->text; if (t == 0) { return (*(char * *)g_stringObjEmptyText); } return t; }
 
 static inline void dropKey(IniKeyText *o) {
     if (o != 0) {
@@ -34,7 +34,7 @@ void FUN_00304b10(void *self) {
             if (FUN_00306510(ini, section, i, &key) == 0) {
                 dropKey(key);
             } else {
-                *(IniValueList **)&values = ((IniValueList *)FUN_002b90e0(((int)igObject_GetAllocator((int)self))));
+                *(IniValueList **)&values = ((IniValueList *)igStringRefList_Create(((int)igObject_GetAllocator((int)self))));
                 held = values;
                 if (FUN_00306aa0(ini, section, keyText(key), (SL *)held, 0) == 0) {
                     dropValues_304b10(values);

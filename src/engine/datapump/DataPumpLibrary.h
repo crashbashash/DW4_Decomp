@@ -358,7 +358,7 @@ typedef struct Vector3f { float x, y, z; } Vector3f;
 extern "C" igObject *FUN_002b9500(int);
 extern "C" int fptodp(float);
 extern "C" int FUN_0030b7e0(...);
-extern "C" int DAT_004c22f0[16];
+extern "C" int g_stringObjEmptyText[16];
 
 extern "C" int FUN_001e6de0(int *result, Vector3f *value, int *format);
 struct QuadNamed : public igObject { int name; };

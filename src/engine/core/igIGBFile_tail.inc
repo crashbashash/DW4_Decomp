@@ -380,7 +380,7 @@ igResult_2e3a10 FUN_002e47f0(S11 *arg1) {
 
 static inline char *nameOf(const Ref12 &r, int i) {
     char *n = r.p->data[i]->name;
-    n = (n == 0) ? (*(char * *)DAT_004c22f0) : n;
+    n = (n == 0) ? (*(char * *)g_stringObjEmptyText) : n;
     return n;
 }
 
@@ -1198,7 +1198,7 @@ igResult_2e3a10 FUN_002e82a0(IgbTypeReader *self) {
         int j;
         for (j = 0; j < nameCount; j++) {
             char *n = ((ReflectedNameList *)names.p)->data[j]->name;
-            n = (n == 0) ? (*(char * *)DAT_004c22f0) : n;
+            n = (n == 0) ? (*(char * *)g_stringObjEmptyText) : n;
             if (strcmp(n, name) == 0) { found = true; break; }
         }
         if (found) { value = ((ReflectedValueList *)values.p)->data[j]; }

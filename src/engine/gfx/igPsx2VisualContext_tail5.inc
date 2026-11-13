@@ -618,13 +618,13 @@ void FUN_00179e00(StatContext *arg0) {
     Ref_1778e0 sp68((O_1778e0 *)FUN_002b9500(FUN_00165d00((int *)arg0)));
     s3 = ((G_1778e0 *)g_objectSystem[0])->f56;
     s2 = 0;
-    FUN_0030b3c0((O_1778e0 *)sp6C, DAT_004e07b0);
+    igStringObj_Set((O_1778e0 *)sp6C, DAT_004e07b0);
     FUN_0030b720(sp68, 0, DAT_004de6a8);
     { int y = sp68->f12; int x = sp6C->f12;
     a1 = sp68->f8;
-    if (a1 == 0) a1 = DAT_004c22f0[0];
-    FUN_0030b460(sp6C, a1, x, y); }
-    while ((idx = FUN_00306360(s3, sp6C->f8 == 0 ? DAT_004c22f0[0] : sp6C->f8, 0)) != -1) {
+    if (a1 == 0) a1 = g_stringObjEmptyText[0];
+    igStringObj_Insert(sp6C, a1, x, y); }
+    while ((idx = FUN_00306360(s3, sp6C->f8 == 0 ? g_stringObjEmptyText[0] : sp6C->f8, 0)) != -1) {
         n = (StatNode *)((StatAllocator *)FUN_00165d00((int *)arg0))->v52(960);
         if (n == 0) break;
         n->f16 = 1;
@@ -637,11 +637,11 @@ void FUN_00179e00(StatContext *arg0) {
         n->f952 = arg0->f1552;
         arg0->f1552 = n;
         FUN_0030b720(sp68, s2, DAT_004de6a8);
-        FUN_0030b3c0((O_1778e0 *)sp6C, DAT_004e07b0);
+        igStringObj_Set((O_1778e0 *)sp6C, DAT_004e07b0);
         { int y = sp68->f12; int x = sp6C->f12;
         a1 = sp68->f8;
-        if (a1 == 0) a1 = DAT_004c22f0[0];
-        FUN_0030b460(sp6C, a1, x, y); }
+        if (a1 == 0) a1 = g_stringObjEmptyText[0];
+        igStringObj_Insert(sp6C, a1, x, y); }
     }
 }
 

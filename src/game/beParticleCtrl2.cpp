@@ -38,7 +38,7 @@ extern "C" float DAT_004e105c[4];
 extern "C" float DAT_004e1060[4];
 extern "C" int DAT_004e1078[4];
 extern "C" int DAT_004e1088[4];
-extern "C" int DAT_004e1098[4];
+extern "C" int g_vec3ZAxis[4];
 extern "C" int DAT_0050f648[4];
 extern "C" int DAT_0050f658[4];
 extern "C" int DAT_0050f668[4];
@@ -254,7 +254,7 @@ int Gap__Bec__beParticleCtrl2__vfunc_34(beParticleCtrl2 *arg0, beParticleCtrl2In
                 FUN_00191670(spB0, DAT_004e1088, f21);
             }
             if (f20 != 0.0f) {
-                FUN_00191670(spB0, DAT_004e1098, f20);
+                FUN_00191670(spB0, g_vec3ZAxis, f20);
             }
             ((Mtx *)arg1->_transform)->put(spB0);
         } else {

@@ -136,7 +136,7 @@ MetaEnumView *igMetaEnum_Create(char *name, char **names, int *values, int count
     e->name = v;
     a = ((int)Memory_GetAllocatorBySelector((*(int *)g_metadataAllocatorKey)));
     dropNames_2fbc70(e->names);
-    e->names = ((MetaEnumNameList *)FUN_002b90e0(a));
+    e->names = ((MetaEnumNameList *)igStringRefList_Create(a));
     StringList_Resize((StringRefListView *)e->names, count);
     a = ((int)Memory_GetAllocatorBySelector((*(int *)g_metadataAllocatorKey)));
     dropValues(e->values);

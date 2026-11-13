@@ -144,9 +144,9 @@ int FUN_001c66c0(Node *self, int force)
     {
         Obj_1c66c0 *o40 = sp40.p;
         a = sp44.p->f8;
-        if (a == 0) a = DAT_004c22f0[0];
+        if (a == 0) a = g_stringObjEmptyText[0];
         b = o40->f8;
-        if (b == 0) b = DAT_004c22f0[0];
+        if (b == 0) b = g_stringObjEmptyText[0];
     }
     if (thunk_strcasecmp(a, b) == 0) {
         Obj_1c66c0 *par = self->f28;
@@ -307,7 +307,7 @@ igSmartPointer<ShaderObject_1ca6c0> FUN_001ca6c0(ShaderProcessorView *self, char
     if (object.p == 0) {
         return igSmartPointer<ShaderObject_1ca6c0>(0, kRetainReference);
     }
-    igSmartPointer<ShaderNameList> names(FUN_002b90e0(((void *)igObject_GetAllocator(self))));
+    igSmartPointer<ShaderNameList> names(igStringRefList_Create(((void *)igObject_GetAllocator(self))));
     FUN_00306aa0(self->ini, section, DAT_004e4700, names.p, 0);
     count = names.p->count;
     for (i = 0; i < count; i++) {

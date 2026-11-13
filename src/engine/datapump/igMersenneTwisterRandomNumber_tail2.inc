@@ -57,7 +57,7 @@ int FUN_001e6de0(int *result, Vector3f *value, int *format) {
     FUN_0030b7e0(formatted.p, format, x, y, fptodp(value->z));
     name = formatted.p->f8;
     if (name == 0) {
-        name = DAT_004c22f0[0];
+        name = g_stringObjEmptyText[0];
     }
     if (name == 0) {
         res = 0;
@@ -88,7 +88,7 @@ int FUN_001e6f10(int *result, Quad *quad, int *kind) {
     FUN_0030b7e0(named.p, kind, s3, s2, s1, fptodp(quad->w));
     name = named.get()->name;
     if (name == 0) {
-        name = DAT_004c22f0[0];
+        name = g_stringObjEmptyText[0];
     }
     if (name == 0) {
         res = 0;

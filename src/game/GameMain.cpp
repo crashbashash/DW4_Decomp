@@ -300,7 +300,7 @@ extern "C" void FUN_00259d40(NamedLists *arg0, int arg1);
 typedef struct CountedHeader { int w0; int refs; } CountedHeader;
 typedef igTDataList<int> NameList;
 typedef struct NamedLists { char pad[36]; NameList *_names; void *_name; } NamedLists;
-extern "C" CountedHeader *FUN_002b90e0(int);
+extern "C" CountedHeader *igStringRefList_Create(int);
 extern "C" NameList *igIntList_Create(int);
 extern "C" int DAT_00498728[4];
 extern "C" int g_stringPool[4];
@@ -874,7 +874,7 @@ static inline void releaseRef(CountedHeader *t) {
     }
 }
 
-static inline void resetName(NamedLists *o, AdoptReference) { releaseRef((CountedHeader *)o->_name); o->_name = FUN_002b90e0(0); }
+static inline void resetName(NamedLists *o, AdoptReference) { releaseRef((CountedHeader *)o->_name); o->_name = igStringRefList_Create(0); }
 
 static inline void resetList(NamedLists *o, AdoptReference) { releaseRef((CountedHeader *)o->_names); o->_names = igIntList_Create(0); }
 

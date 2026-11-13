@@ -4,7 +4,7 @@ struct S { char pad0[40]; struct B *f40; };
 int strlen(char *);
 int FUN_002da770();
 int FUN_002dacc0(struct S *, int, char *, int);
-int FUN_0030b460(struct B *, char *, int, int);
+int igStringObj_Insert(struct B *, char *, int, int);
 void FUN_002daac0(struct S *arg0, int arg1) {
     char buf[4096];
     char *p;
@@ -24,6 +24,6 @@ void FUN_002daac0(struct S *arg0, int arg1) {
         }
         b = arg0->f40;
         n = b->f12;
-        FUN_0030b460(b, buf, n, strlen(buf));
+        igStringObj_Insert(b, buf, n, strlen(buf));
     }
 }

@@ -42,7 +42,7 @@ int igInsightCore_FindManager(int insight, int meta);
 int FUN_00306360(int registry, const char *section, int create);
 int FUN_00306770(int registry, int section, const char *key, igSmartPointer<igStringObj> *value, const char *fallback, int flags);
 igStringObj *FUN_002b9500(void *allocator);
-void FUN_0030b3c0(...);
+void igStringObj_Set(...);
 int igStringObj_StripDirectory(igNamedObject *);
 int igStringObj_ToLower(igNamedObject *);
 int strcmp(...);
@@ -52,7 +52,7 @@ extern int g_ndmwAllocatorSelector[4];
 extern unsigned char g_useOwnerAllocator;
 extern int g_globalContext[4];
 extern int g_igMemoryRefMetaField_metaObject[4];
-extern char *DAT_004c22f0[4];
+extern char *g_stringObjEmptyText[4];
 extern char emptyString[];
 
 /* the ADX library */
@@ -415,12 +415,12 @@ void Gap__Bec__beCri__vfunc_21(beCri *self) {
     igSmartPointer<igStringObj> path(FUN_002b9500(allocator));
     if (FUN_00306770(registry, section, AdxModulePath, &path, g_adxModulePathDefault, 0) == 0) {
         if (strcmp(text_9_31s281, text_9_18) == 0)
-            FUN_0030b3c0((igStringObj *)path, C_cri_ps2_iop_modules);
+            igStringObj_Set((igStringObj *)path, C_cri_ps2_iop_modules);
         else
-            FUN_0030b3c0((igStringObj *)path, C_usr_local_cri_mwlib_iop_drv);
+            igStringObj_Set((igStringObj *)path, C_usr_local_cri_mwlib_iop_drv);
     }
     char *text = (char *)path->_buffer;
-    igAdx_SetModulePath(text == 0 ? DAT_004c22f0[0] : text);
+    igAdx_SetModulePath(text == 0 ? g_stringObjEmptyText[0] : text);
     g_adxUseFileInfoCache = 1;
     FUN_00332810(0);
     g_adxMediaMode[0] = 2;
@@ -715,7 +715,7 @@ long long beCri_PlayEffect(beCri *self, igObjectList *names, beSoundData *cue) {
         if (Banks(self)->_count <= 0) return 0;
         name = NameOf(((igNamedObject **)names->_data)[cue->_fnameIdx]->_name);
         igSmartPointer<igStringObj> bankName((igStringObj *)((beSystem *)self->_system)->_globalStrObj, kRetainReference);
-        FUN_0030b3c0(bankName.p, name);
+        igStringObj_Set(bankName.p, name);
         igStringObj_StripDirectory((igNamedObject *)bankName.p);
         igStringObj_ToLower((igNamedObject *)bankName.p);
         found = -1;
@@ -723,7 +723,7 @@ long long beCri_PlayEffect(beCri *self, igObjectList *names, beSoundData *cue) {
             bank = BankAt(Banks(self), i);
             name = NameOf(bank->_name);
             wanted = (char *)bankName.p->_buffer;
-            wanted = (wanted == 0) ? DAT_004c22f0[0] : wanted;
+            wanted = (wanted == 0) ? g_stringObjEmptyText[0] : wanted;
             if (strcmp(wanted, name) == 0) { found = i; break; }
         }
         if (found == -1) {

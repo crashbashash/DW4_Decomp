@@ -43,7 +43,7 @@ void FUN_001ccd10(IniShaderFactoryView *self, IniNodeList *list) {
                     IniEntry *e = entries->data[j];
                     if (FUN_0030ba90(e->name, DAT_004e46e0) != 0) {
                         char *s = e->value->text;
-                        s = (s == 0) ? DAT_004c22f0[0] : s;
+                        s = (s == 0) ? g_stringObjEmptyText[0] : s;
                         FUN_001cdbb0((IniFactoryView *)self, s);
                     }
                 }
@@ -72,7 +72,7 @@ void Gap__Sg__igIniShaderFactory__vfunc_27(IniShaderFactoryFields *self) {
             IniFactoryEntry *e = FUN_00307630(self->f28, i);
             if (e != 0 && e->f16 != 0 && e->f12 != 0 && FUN_0030ba90(e->f16, &DAT_004e46e0[0]) != 0) {
                 char *path;
-                if (e->f12->name == 0) path = DAT_004c22f0[0]; else path = e->f12->name;
+                if (e->f12->name == 0) path = g_stringObjEmptyText[0]; else path = e->f12->name;
                 FUN_001cdbb0((IniFactoryView *)self, path);
             }
         }
@@ -185,7 +185,7 @@ int FUN_001cd150(IniDocument **out, IniFactoryState *self, char *name) {
             SLOT(IniDocument, parsed) = FUN_002baff0(allocator);
             loading = parsed;
             text = path->text;
-            text = (text == 0) ? DAT_004c22f0[0] : text;
+            text = (text == 0) ? g_stringObjEmptyText[0] : text;
             if (FUN_00305d30(loading, text, DAT_004e4660) == 0) {
                 SET_OUT(0);
                 DROP(IniDocument, path);
@@ -229,7 +229,7 @@ SectionRef FUN_001cd9f0(IniShaderFactoryView *self, char *name) {
         FUN_003006a0(result.get(), ((IniTypeTable *)g_objectSystem[0])->meta);
         IniSectionObject *created = result.get();
         text = section.get()->text;
-        text = (text == 0) ? DAT_004c22f0[0] : text;
+        text = (text == 0) ? g_stringObjEmptyText[0] : text;
         if (FUN_002da710(created, text, name) == 0) {
             result.release();
             result.p = 0;
@@ -283,7 +283,7 @@ igSmartPointer<IniSectionText> FUN_001cdbb0(IniFactoryView *self, char *name) {
             igSmartPointer<IniFileHandle> file((IniFileHandle *)igFile_Create(((void *)igObject_GetAllocator(self))));
             text = path.p->text;
             opening = file.p;
-            text = (text == 0) ? DAT_004c22f0[0] : text;
+            text = (text == 0) ? g_stringObjEmptyText[0] : text;
             if (opening->open(text, DAT_004e47a8) == 0) {
                 return igSmartPointer<IniSectionText>((IniSectionText *)0, kRetainReference);
             }
@@ -294,7 +294,7 @@ igSmartPointer<IniSectionText> FUN_001cdbb0(IniFactoryView *self, char *name) {
             file.p->read(buffer, size, 1);
             file.p->close();
             buffer[size] = 0;
-            FUN_0030b3c0(result.p, buffer);
+            igStringObj_Set(result.p, buffer);
             FUN_00300f50(self, buffer);
             if (self->mode != 0) {
                 FUN_00303cd0(cache.p, name, result.p);

@@ -151,7 +151,7 @@ extern "C" int Matrix44_TranslateLocal(...);
 extern "C" int beBaseInfoRam_HasTimer(...);
 extern "C" void *beModelCtrlMoveObject_Create(...);
 extern "C" float atan2f(float, float);
-extern "C" int FUN_00192f50(...);
+extern "C" int Vec3f_TransformDirection(...);
 extern "C" void * StringPool_Intern(...);
 extern "C" int beMessenger_GetObjectCount(...);
 extern "C" void beModelCtrlInfoWork_SetSeqLabel(beModelCtrl *self, beBaseInfoRam *ram, beModelCtrlInfoWork *work, const char *seqName, const char *labelName);
@@ -295,7 +295,7 @@ extern "C" float beModelCtrlMoveObject_Step(beModelCtrlMoveObject *self, float f
 
 extern "C" char KEIKATIMER[];
 extern "C" void beModelCtrl_ApplyMoves(beModelCtrl *self, beBaseInfo *info, beBaseInfoRam *ram, beModelCtrlInfoWork *work);
-extern "C" int DAT_004e1098[4];
+extern "C" int g_vec3ZAxis[4];
 extern "C" char Stop[];
 extern "C" char Move[];
 extern "C" char Push[];
@@ -1330,7 +1330,7 @@ unsigned char beModelCtrl_RunMove(beModelCtrl *self, beBaseInfoRam *ram, beModel
             igObject *pool, *old;
             Locals::CreateDataList(ram, allocator, pool, old);
         }
-        FUN_00192f50(&forward[0], &DAT_004e1098[0], (char *)((beModelCtrlInfoRamData *)igProperty_FindByName((igObject *)ram->_dataList, g_propertyNameField[0], ONE_3))->_node + 32);
+        Vec3f_TransformDirection(&forward[0], &g_vec3ZAxis[0], (char *)((beModelCtrlInfoRamData *)igProperty_FindByName((igObject *)ram->_dataList, g_propertyNameField[0], ONE_3))->_node + 32);
         {
             float angle = atan2f(forward[0], forward[2]);
             work->_direction[1] = angle;
@@ -1516,7 +1516,7 @@ int beModelCtrl_RunPdMove(beModelCtrl *self, beBaseInfoRam *ram, beModelCtrlInfo
     return 1;
 }
 
-extern "C" void *FUN_002b90e0(int);
+extern "C" void *igStringRefList_Create(int);
 extern "C" void *igIntList_Create(int);
 extern "C" int FUN_001ca620(igStringRefList *, StringRef *);
 extern "C" int DAT_004c8fa8[4];
@@ -1550,7 +1550,7 @@ void beModelCtrlInfoWork_SetSeqLabel(beModelCtrl *self, beBaseInfoRam *ram, beMo
             released->_refCount = released->_refCount - 1;
             if ((released->_refCount & 0x7fffff) == 0) igObject_Destroy(released);
         }
-        listRef.p = (igObject *)FUN_002b90e0(allocator);
+        listRef.p = (igObject *)igStringRefList_Create(allocator);
         created = listRef.p;
         if (created != 0) created->_refCount = created->_refCount + 1;
         released = (igObject *)work->_labelSeqList;
@@ -1572,7 +1572,7 @@ void beModelCtrlInfoWork_SetSeqLabel(beModelCtrl *self, beBaseInfoRam *ram, beMo
             released->_refCount = released->_refCount - 1;
             if ((released->_refCount & 0x7fffff) == 0) igObject_Destroy(released);
         }
-        listRef.p = (igObject *)FUN_002b90e0(allocator);
+        listRef.p = (igObject *)igStringRefList_Create(allocator);
         created = listRef.p;
         if (created != 0) created->_refCount = created->_refCount + 1;
         released = (igObject *)work->_labelNameList;
@@ -2435,7 +2435,7 @@ int Gap__Bec__beModelCtrl__vfunc_33(beModelCtrl *self, beBaseInfoRam *ram, const
         beModelCtrlNode2 *modelNode = MODEL_NODE;
         RELEASE(modelNode->_bound)
         modelNode->_bound = 0;
-        FUN_00192f50(&startForward, ((float *)DAT_004e1098), MODEL_NODE->_m);
+        Vec3f_TransformDirection(&startForward, ((float *)g_vec3ZAxis), MODEL_NODE->_m);
         float ang = atan2f(startForward.x, startForward.z);
         started->_direction[1] = ang;
         started->_targetDirection[1] = ang;
@@ -2553,7 +2553,7 @@ int Gap__Bec__beModelCtrl__vfunc_33(beModelCtrl *self, beBaseInfoRam *ram, const
             beMessenger_GetMatrix(setMatrix, MESSENGER, 0);
             ((beModelCtrlNode2Slots *)ramData->_node)->vfunc_35(setMatrix);
             if (work != 0) {
-                FUN_00192f50(&setForward, ((float *)DAT_004e1098), setMatrix);
+                Vec3f_TransformDirection(&setForward, ((float *)g_vec3ZAxis), setMatrix);
                 float ang = atan2f(setForward.x, setForward.z);
                 work->_direction[1] = ang;
                 work->_targetDirection[1] = ang;
@@ -2647,7 +2647,7 @@ int Gap__Bec__beModelCtrl__vfunc_33(beModelCtrl *self, beBaseInfoRam *ram, const
             Matrix44_FromTranslation(moveMatrix, &movePosition);
             if (moveRotation.x != 0.0f) FUN_00191670(moveMatrix, DAT_004e1078, 0.017453292f * moveRotation.x);
             if (moveRotation.y != 0.0f) FUN_00191670(moveMatrix, DAT_004e1088, 0.017453292f * moveRotation.y);
-            { float rz = moveRotation.z; if (rz != 0.0f) FUN_00191670(moveMatrix, ((float *)DAT_004e1098), 0.017453292f * rz); }
+            { float rz = moveRotation.z; if (rz != 0.0f) FUN_00191670(moveMatrix, ((float *)g_vec3ZAxis), 0.017453292f * rz); }
             ((beModelCtrlNode2Slots *)ramData->_node)->vfunc_35(moveMatrix);
             work->_targetDirection[1] = 0.017453292f * moveRotation.y;
             beModelCtrl_UpdateDirection(self, info, ram, work, 1);

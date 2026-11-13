@@ -3,7 +3,7 @@ void *FUN_002b9500();
 void *FUN_002baff0();
 int FUN_00305d30();
 int FUN_003061c0();
-int FUN_0030b3c0();
+int igStringObj_Set();
 int FUN_0030b980();
 int igObject_Destroy();
 int igObject_GetAllocator();
@@ -39,7 +39,7 @@ if (open != '"' && open != '<') return; if ((open == '"' && close != '"') || (op
         *(IniIncludeObject **)&include = FUN_002baff0(igObject_GetAllocator(self));
         found = 0;
         *(IniIncludeText **)&dir = FUN_002b9500(igObject_GetAllocator(self));
-        FUN_0030b3c0(dir, file->dir);
+        igStringObj_Set(dir, file->dir);
         FUN_0030b980(dir);
         if (dir->length != 0) {
             held = include; found = FUN_00305d30(held, path, text(dir)) & 0xFF;

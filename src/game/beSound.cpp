@@ -47,8 +47,8 @@ int StringPool_Construct(int pool);
 char *StringPool_Intern(int pool, const char *text);
 int StringChunk_ReleaseHeader(int chunk, int *header);
 int strcmp(const char *left, const char *right);
-igStringRefList *FUN_002b90e0(void *allocator);
-void FUN_0030b3c0(igStringObj *string, const char *text);
+igStringRefList *igStringRefList_Create(void *allocator);
+void igStringObj_Set(igStringObj *string, const char *text);
 void igStringObj_ToLower(igStringObj *string);
 void igStringObj_KeepExtension(igStringObj *string);
 void igStringObj_StripDirectory(igStringObj *string);
@@ -485,15 +485,15 @@ int beSound_OnMessage(beSound *self, beBaseInfoRam *ram, beMessengerWork *messag
         fileNames = (igObjectList *)info->_fnameList;
         allocator = AllocatorFor(self);
         {
-            NameListRef banks(FUN_002b90e0(allocator));
+            NameListRef banks(igStringRefList_Create(allocator));
             GlobalStrRef scratch((igStringObj *)((beSystem *)self->_system)->_globalStrObj);
             for (fileIndex = 0; fileIndex < fileNames->_count; fileIndex++) {
-                FUN_0030b3c0(scratch.p, NameOf(((igNamedObject **)fileNames->_data)[fileIndex]->_name));
+                igStringObj_Set(scratch.p, NameOf(((igNamedObject **)fileNames->_data)[fileIndex]->_name));
                 igStringObj_KeepExtension(scratch.p);
                 igStringObj_Erase(scratch.p, 0, 1);
                 dataType = (char *)info->_dataType;
                 if (strcmp(dataType, TextOf(scratch.p)) == 0) {
-                    FUN_0030b3c0(scratch.p, NameOf(((igNamedObject **)fileNames->_data)[fileIndex]->_name));
+                    igStringObj_Set(scratch.p, NameOf(((igNamedObject **)fileNames->_data)[fileIndex]->_name));
                     igStringObj_StripDirectory(scratch.p);
                     igStringObj_ToLower(scratch.p);
                     known = false;

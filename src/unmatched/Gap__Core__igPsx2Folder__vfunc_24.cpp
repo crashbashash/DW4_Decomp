@@ -13,7 +13,7 @@ int StringPool_Allocate(int);
 int StringPool_Construct(int);
 char *StringPool_Intern(int, char *);
 void StringChunk_ReleaseHeader(int, int *);
-FolderObject *FUN_002b90e0(int);
+FolderObject *igStringRefList_Create(int);
 FolderPathText *FUN_002b9500(int);
 int FUN_0030b7e0(FolderPathText *, const char *, int, char *);
 int FUN_00110eb8(const char *, FolderFileStat *);
@@ -61,7 +61,7 @@ FolderObjectRef Gap__Core__igPsx2Folder__vfunc_24(FolderSelf *self) {
         return FolderObjectRef(0);
     }
     FolderObjectRef list;
-    list.obj = FUN_002b90e0(igObject_GetAllocator(self));
+    list.obj = igStringRefList_Create(igObject_GetAllocator(self));
     FolderObjectRef path;
     path.obj = FUN_002b9500(igObject_GetAllocator(self));
     while (FUN_00110d60(handle, &entry) != 0) {

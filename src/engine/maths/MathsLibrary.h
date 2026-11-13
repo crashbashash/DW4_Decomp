@@ -721,7 +721,7 @@ struct igVec3f {
     float dot(const float *o) const { return o[0] * x + o[1] * y + o[2] * z; }
 };
 
-void FUN_00192f50(float *out, float *v, float *m);
+void Vec3f_TransformDirection(float *out, float *v, float *m);
 void FUN_00192fc0(float *out, float *v, float *m);
 
 int FUN_00192e50(const float *normal);

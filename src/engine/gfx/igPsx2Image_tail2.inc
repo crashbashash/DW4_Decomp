@@ -138,7 +138,7 @@ int Gap__Gfx__igPsx2Image__vfunc_39(G *arg0, int arg1)
 block_4:
     {
       igSmartPointer<O0> name((O0 *)FUN_002b9500(igObject_GetAllocator(arg0)));
-      FUN_0030b3c0(name.p, arg1);
+      igStringObj_Set(name.p, arg1);
       LoaderRef loader((O1 *)FUN_00150060(igObject_GetAllocator(arg0)));
       var_s0 = loader.p->v21(name.p, arg0) & 0xFF;
       FUN_00156340((S0_156340 *)arg0, (void **)&PathText(arg1).text);

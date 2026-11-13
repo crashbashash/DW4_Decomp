@@ -21,12 +21,12 @@ void Gap__Bec__beCameraMode__vfunc_22(C *arg0, int *arg1);
 class C { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void v124(); virtual void v128(); };
 
 int FUN_00191f30(...);
-int FUN_00192f50(...);
+int Vec3f_TransformDirection(...);
 int FUN_004578c0(...);
 int Matrix44_GetTranslation(...);
 
 extern int DAT_004e1078[4];
-extern int DAT_004e1098[4];
+extern int g_vec3ZAxis[4];
 extern int DAT_0058cd78[4];
 typedef struct Ev { int id; void *obj; int data; } Ev;
 typedef struct Tg { char pad[92]; float f92; float f96; float f100; float f104; float f108; float f112; } Tg;
@@ -279,7 +279,7 @@ void FUN_004650d0(Ob *arg0) {
     e1.obj = arg0;
     e1.data = DAT_0058cd60[0];
     FUN_004578c0(temp_s0, &e1);
-    FUN_00192f50((char *)temp_s0 + 0x68, &DAT_004e1098[0], &arg0->mat);
+    Vec3f_TransformDirection((char *)temp_s0 + 0x68, &g_vec3ZAxis[0], &arg0->mat);
     temp_s0->f104 = -temp_s0->f104;
     temp_s0->f108 = -temp_s0->f108;
     temp_s0->f112 = -temp_s0->f112;
@@ -287,7 +287,7 @@ void FUN_004650d0(Ob *arg0) {
     e2.obj = arg0;
     e2.data = DAT_0058cd68[0];
     FUN_004578c0(temp_s0, &e2);
-    FUN_00192f50((char *)temp_s0 + 0x80, &DAT_004e1078[0], &arg0->mat);
+    Vec3f_TransformDirection((char *)temp_s0 + 0x80, &DAT_004e1078[0], &arg0->mat);
     e3.id = 2;
     e3.obj = arg0;
     e3.data = DAT_0058cd78[0];

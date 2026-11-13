@@ -4,7 +4,7 @@
 extern "C" void igInsightCore_AddToScheduler(int insight, beTargetObj *object);
 extern "C" void igInsightCore_RemoveFromScheduler(int insight, beTargetObj *object);
 extern "C" int igInsightCore_FindManager(int insight, int metaObject);
-extern "C" void FUN_00192f50(float *out, int *vector, float *matrix);
+extern "C" void Vec3f_TransformDirection(float *out, int *vector, float *matrix);
 extern "C" int List_Reserve(void *list, int count, int elementSize);
 extern "C" int List_Resize(void *list, int count, int elementSize);
 extern "C" void Matrix44_GetTranslation(float *matrix, float *out);
@@ -18,7 +18,7 @@ extern "C" int strcmp(const char *a, const char *b);
 extern "C" int g_beTargetObj_metaObject[4];
 extern "C" int g_beMessenger_metaObject[4];
 extern "C" float g_vec3Zero[4];
-extern "C" int DAT_004e1098[4];
+extern "C" int g_vec3ZAxis[4];
 extern "C" char PLAYER_5[];
 extern "C" char GETMATRIX_6[];
 extern "C" char ENEMY_2[];
@@ -374,7 +374,7 @@ extern "C" float beTargetObj_GetOriginHeading(beTargetObj *self)
     float forward[4];
 
     if (g_targetOriginHeading == TARGET_HEADING_UNSET) {
-        FUN_00192f50(forward, DAT_004e1098, g_targetOriginMatrix);
+        Vec3f_TransformDirection(forward, g_vec3ZAxis, g_targetOriginMatrix);
         g_targetOriginHeading = atan2f(forward[0], forward[2]);
     }
     return g_targetOriginHeading;

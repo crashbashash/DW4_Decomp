@@ -16,7 +16,7 @@ void Gap__Core__igDriverDatabase__vfunc_12(int self) {
 }
 
 void FUN_002d96f0(void *arg0, int arg1, int arg2) {
-    FUN_0030b3c0(*(int *)(*(int *)((char *)(*(int *)((char *)(arg0) + 8)) + 16) + (arg1 * 4)), arg2);
+    igStringObj_Set(*(int *)(*(int *)((char *)(*(int *)((char *)(arg0) + 8)) + 16) + (arg1 * 4)), arg2);
 }
 
 int FUN_002d9710(void *arg0, int arg1) {
@@ -24,7 +24,7 @@ int FUN_002d9710(void *arg0, int arg1) {
 
     var_v0 = *(int *)((char *)((*(int *)(*(int *)((char *)(*(int *)((char *)(arg0) + 8)) + 16) + (arg1 * 4)))) + 8);
     if (var_v0 == 0) {
-        var_v0 = ((int *)DAT_004c22f0)[0];
+        var_v0 = ((int *)g_stringObjEmptyText)[0];
     }
     return var_v0;
 }
@@ -67,7 +67,7 @@ int FUN_002d9cf0(igDriverDatabase *arg0, int arg1, int arg2) {
 
 static inline char *textOf(const igSmartPointer<ConfigPlatformText> &ref) {
     char *s = ref.get()->text;
-    s = (s == 0) ? DAT_004c22f0[0] : s;
+    s = (s == 0) ? g_stringObjEmptyText[0] : s;
     return s;
 }
 
@@ -94,7 +94,7 @@ void FUN_002da010(void *self, ConfigPlatformSourceList *list) {
 static inline int openPath(igDriverDatabase *database, const Mem &path) {
     O100 *file = (O100 *)database->_databaseFile;
     int text = path.p->f8;
-    if (text == 0) text = ((int *)DAT_004c22f0)[0];
+    if (text == 0) text = ((int *)g_stringObjEmptyText)[0];
     return file->vX((const char *)text, &DAT_004f96a8[0]);
 }
 
@@ -137,7 +137,7 @@ int FUN_002da1c0(igDriverDatabase *arg0, const char *arg1, const char *arg2) {
         arg0->_databaseFile = 0;
         return 0;
     }
-    FUN_0030b3c0(arg0->_databaseFileName, *(int *)((char *)s0 + 12));
+    igStringObj_Set(arg0->_databaseFileName, *(int *)((char *)s0 + 12));
     FUN_002daac0((S_2daac0 *)arg0, arg0->_databaseFile);
     ((O104 *)arg0->_databaseFile)->vX();
     release_2da1c0((T *)arg0->_databaseFile);
@@ -149,7 +149,7 @@ int FUN_002da710(void *arg0, int arg1, int arg2) {
     if (arg1 == 0) {
         return 0;
     }
-    FUN_0030b3c0(*(int *)((char *)arg0 + 36), arg2);
+    igStringObj_Set(*(int *)((char *)arg0 + 36), arg2);
     FUN_002dab80(arg0, arg1);
     return 1;
 }
@@ -171,7 +171,7 @@ struct L_2da780 *FUN_002da780(struct S_2da780 *s) {
     s->f44 = 1;
     v = s->src->c;
     if (v == 0) {
-        v = ((int *)DAT_004c22f0)[0];
+        v = ((int *)g_stringObjEmptyText)[0];
     }
     s->f52 = v;
     do {
@@ -271,22 +271,22 @@ void FUN_002dab80(void *arg0, int arg1) {
         }
         s2 = (char *)(*(int *)((char *)(arg0) + 40));
         s1 = *(int *)(s2 + 12);
-        FUN_0030b460((IniStringView *)s2, (char *)buf, s1, strlen(buf));
+        igStringObj_Insert((IniStringView *)s2, (char *)buf, s1, strlen(buf));
     }
 }
 
 int FUN_002dac30(void *arg0) {
-    FUN_0030b3c0((int)arg0, (int)&DAT_004f96b0[0]);
+    igStringObj_Set((int)arg0, (int)&DAT_004f96b0[0]);
     return 1;
 }
 
 int FUN_002dac60(void *arg0) {
-    FUN_0030b3c0((int)arg0, (int)&DAT_004f96b8[0]);
+    igStringObj_Set((int)arg0, (int)&DAT_004f96b8[0]);
     return 1;
 }
 
 int FUN_002dac90(void *arg0) {
-    FUN_0030b3c0((int)arg0, (int)&DAT_004f96b0[0]);
+    igStringObj_Set((int)arg0, (int)&DAT_004f96b0[0]);
     return 1;
 }
 
@@ -307,7 +307,7 @@ bool FUN_002dacc0(void *a0, S_2dacc0 *s, char *buf, int n) {
 static inline char *text(KeyValueText *s) {
     char *t = s->text;
     if (t == 0) {
-        t = DAT_004c22f0[0];
+        t = g_stringObjEmptyText[0];
     }
     return t;
 }
@@ -323,7 +323,7 @@ static inline void releaseValue(ConfigValueToken *t) {
 
 static inline char *textOf_2db2f0(ConfigValueToken *t) {
     char *s = t->text;
-    s = (s == 0) ? DAT_004c22f0[0] : s;
+    s = (s == 0) ? g_stringObjEmptyText[0] : s;
     return s;
 }
 
@@ -356,7 +356,7 @@ bool FUN_002db540(S_2db540 *arg0, int *arg1) {
     if (sscanf(arg0->f52, &DAT_004f96d0[0], sp40) == 1) {
         arg0->f52 = arg0->f52 + strlen(sp40);
         *arg1 = ((int)FUN_002b9500(((int)igObject_GetAllocator((int)arg0))));
-        FUN_0030b3c0(*arg1, (int)sp40);
+        igStringObj_Set(*arg1, (int)sp40);
         var_s0 = 1;
     }
     return var_s0;
@@ -372,7 +372,7 @@ bool FUN_002db5e0(char *arg0, int *arg1) {
         *(int *)(arg0 + 52) = *(int *)(arg0 + 52) + strlen(buf);
         FUN_002db4e0((int)arg0, (char *)buf);
         *arg1 = ((int)FUN_002b9500(((int)igObject_GetAllocator((int)arg0))));
-        FUN_0030b3c0(*arg1, (int)buf);
+        igStringObj_Set(*arg1, (int)buf);
         var_s0 = true;
     }
     return var_s0;
@@ -402,7 +402,7 @@ static inline void storeToken(int table, ConfigToken *n) {
     char *text = n->text;
     int kind = n->kind;
     int t = table;
-    text = (text == 0) ? DAT_004c22f0[0] : text;
+    text = (text == 0) ? g_stringObjEmptyText[0] : text;
     FUN_0030b320((struct S_30b320 *)t, (int)text, kind);
 }
 
@@ -423,7 +423,7 @@ static inline void append(ConfigChildList *l, int v) {
     l->data[i] = v;
 }
 
-static inline char *textOf_2dba50(ConfigToken *n) { char *t = n->text; return (t == 0) ? DAT_004c22f0[0] : t; }
+static inline char *textOf_2dba50(ConfigToken *n) { char *t = n->text; return (t == 0) ? g_stringObjEmptyText[0] : t; }
 
 int FUN_002dbca0(int arg0, int arg1) {
     switch (arg1) {

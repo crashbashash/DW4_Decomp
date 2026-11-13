@@ -595,11 +595,11 @@ extern "C" int FUN_0022c7f0(A_2 *arg0, int arg1, B_2 *arg2, int arg3) {
     for (; i < n; i++) {
         e = l->arr[i];
         nm = e->name;
-        FUN_0030b3c0(buffer.p, nm);
+        igStringObj_Set(buffer.p, nm);
         if (FUN_0022c150(arg1, arg2, buffer.p, arg3, e, arg0) != 0) {
             found = 1;
         } else if (*nm == 0x5f) {
-            FUN_0030b3c0(buffer.p, e->name + 1);
+            igStringObj_Set(buffer.p, e->name + 1);
             if (0 != FUN_0022c150(arg1, arg2, buffer.p, arg3, e, arg0)) found = 1;
         }
     }

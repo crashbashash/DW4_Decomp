@@ -359,7 +359,7 @@ void FUN_0030b320(struct S_30b320 *arg0, int arg1, int arg2) {
     }
 }
 
-void FUN_0030b3c0(int arg0, int arg1) {
+void igStringObj_Set(int arg0, int arg1) {
     if (arg1 != 0) {
         FUN_0030b320((struct S_30b320 *)arg0, arg1, strlen(arg1));
         return;
@@ -378,7 +378,7 @@ int igStringObj_Clear(S0_30b420 *arg0) {
     arg0->fC = 0;
 }
 
-void FUN_0030b460(IniStringView *self, char *insert, unsigned int at, unsigned int n) {
+void igStringObj_Insert(IniStringView *self, char *insert, unsigned int at, unsigned int n) {
     unsigned int total;
     char *buf;
     if (n == 0 || insert == 0) { return; }
@@ -421,17 +421,17 @@ int FUN_0030b5f0(void *arg0, int arg1) {
 
     var_a0 = *(int *)((char *)(arg0) + 8);
     if (var_a0 == 0) {
-        var_a0 = ((int *)DAT_004c22f0)[0];
+        var_a0 = ((int *)g_stringObjEmptyText)[0];
     }
     return sscanf(var_a0, &DAT_004f9730[0], arg1) == 1;
 }
 
-int FUN_0030b630(void *arg0, int arg1) {
+int igStringObj_ToFloat(void *arg0, int arg1) {
     int var_a0;
 
     var_a0 = *(int *)((char *)(arg0) + 8);
     if (var_a0 == 0) {
-        var_a0 = ((int *)DAT_004c22f0)[0];
+        var_a0 = ((int *)g_stringObjEmptyText)[0];
     }
     return sscanf(var_a0, &DAT_004f9738[0], arg1) == 1;
 }
@@ -462,7 +462,7 @@ void FUN_0030b770(int arg0, int arg1, int arg2) {
         } else {
             var_a1 = (int *)(&DAT_004fb438[0]);
         }
-        FUN_0030b3c0(arg0, (int)var_a1);
+        igStringObj_Set(arg0, (int)var_a1);
         return;
     }
     if (arg1 != 0) {
@@ -470,7 +470,7 @@ void FUN_0030b770(int arg0, int arg1, int arg2) {
     } else {
         var_a1_2 = (int *)(&DAT_004f9598[0]);
     }
-    FUN_0030b3c0(arg0, (int)var_a1_2);
+    igStringObj_Set(arg0, (int)var_a1_2);
 }
 
 int FUN_0030b7e0(int arg0, int arg1, ...) {
@@ -503,15 +503,15 @@ void igStringObj_KeepExtension(O_30b8a0 *o) {
     base = o->s;
     if (base != 0) {
         i = o->len - 1;
-        e = DAT_004c22f0[0];
+        e = g_stringObjEmptyText[0];
         for (; i != 0; i--) {
             if (pick(base, e)[i] == '.') {
-                t = ((O_30b8a0 *)o)->s; FUN_0030b3c0((int)o, (int)((t == 0 ? e : t) + i));
+                t = ((O_30b8a0 *)o)->s; igStringObj_Set((int)o, (int)((t == 0 ? e : t) + i));
                 return;
             }
             if (pick(base, e)[i] == '/' || pick(base, e)[i] == '\\') break;
         }
-        FUN_0030b3c0((int)o, (int)e);
+        igStringObj_Set((int)o, (int)e);
     }
 }
 
@@ -523,12 +523,12 @@ void FUN_0030b980(struct P_30b980 *p) {
         while (q--, base < q) {
             if (*q == 0x5C || *q == 0x2F) {
                 *q = 0;
-                FUN_0030b3c0((int)p, (int)p->path);
+                igStringObj_Set((int)p, (int)p->path);
                 break;
             }
         }
         if (q == p->path) {
-            FUN_0030b3c0((int)p, ((int *)DAT_004c22f0)[0]);
+            igStringObj_Set((int)p, ((int *)g_stringObjEmptyText)[0]);
         }
     }
 }
@@ -542,7 +542,7 @@ void igStringObj_StripDirectory(int *arg0) {
         while (--p, a3 < (unsigned int)p) {
             char c = *p;
             if (c == 0x5C || c == 0x2F) {
-                FUN_0030b3c0((int)arg0, (int)(p + 1));
+                igStringObj_Set((int)arg0, (int)(p + 1));
                 return;
             }
         }
@@ -598,7 +598,7 @@ int FUN_0030bb40(char *arg0, char *arg1) {
     }
 }
 
-static inline char *text_30bbf0(Str_30bbf0 *s) { char *t = s->text_30bbf0; if (t == 0) { return DAT_004c22f0[0]; } return t; }
+static inline char *text_30bbf0(Str_30bbf0 *s) { char *t = s->text_30bbf0; if (t == 0) { return g_stringObjEmptyText[0]; } return t; }
 
 int igStringObj_Erase(Str_30bbf0 *self, unsigned int pos, unsigned int len) {
     unsigned int end;
@@ -609,9 +609,9 @@ int igStringObj_Erase(Str_30bbf0 *self, unsigned int pos, unsigned int len) {
         return 0;
     }
     *(Str_30bbf0 **)&tmp = (Str_30bbf0 *)(FUN_002b9500(((int)igObject_GetAllocator((int)self))));
-    FUN_0030b3c0((int)tmp, (int)(self->text_30bbf0 + end));
-    FUN_0030b460((IniStringView *)tmp, self->text_30bbf0, 0, pos);
-    FUN_0030b3c0((int)self, (int)(text_30bbf0(tmp)));
+    igStringObj_Set((int)tmp, (int)(self->text_30bbf0 + end));
+    igStringObj_Insert((IniStringView *)tmp, self->text_30bbf0, 0, pos);
+    igStringObj_Set((int)self, (int)(text_30bbf0(tmp)));
     held = tmp;
     if (held != 0) {
         held->_refCount = held->_refCount - 1;
@@ -667,7 +667,7 @@ int thunk_strcasecmp(const char *s1, const char *s2)
     return strcasecmp(s1, s2);
 }
 
-static inline char *text_30bfa0(ShortStr_30bfa0 *s) { char *t = s->text_30bfa0; if (t == 0) { return DAT_004c22f0[0]; } return t; }
+static inline char *text_30bfa0(ShortStr_30bfa0 *s) { char *t = s->text_30bfa0; if (t == 0) { return g_stringObjEmptyText[0]; } return t; }
 
 int FUN_0030bfa0(L_30bfa0 *self, int key, int (*cmp)(char *, int)) {
     int lo;

@@ -11,7 +11,7 @@ extern "C" int igInsightCore_FindManager(int, int);
 extern "C" void *StringPool_Allocate(...);
 extern "C" igIntList *igIntList_Create(int);
 extern "C" int FUN_00191f30(void *, void *, int);
-extern "C" int FUN_00192f50(void *, void *, void *);
+extern "C" int Vec3f_TransformDirection(void *, void *, void *);
 extern "C" void beModelCtrl__OnGenerate(...);
 extern "C" int strcmp(...);
 extern "C" int memset(...);
@@ -71,7 +71,7 @@ extern "C" int g_defaultAllocatorSelector[4];
 extern "C" int g_stringPool[4];
 extern "C" unsigned char g_useOwnerAllocator;
 extern "C" int emptyString[4];
-extern "C" int DAT_004e1098[4];
+extern "C" int g_vec3ZAxis[4];
 
 /* Turn attacks: the stick direction (1..15) picks one of eight timers, -1 for none. */
 extern "C" int g_stickTurnAttackSlot[4];
@@ -355,7 +355,7 @@ void beNDMWMdlPlayer__UpdateControl(beNDMWMdlPlayer *self, beBaseInfoRam *ram) {
         if (running >= 8) turnTimersFull = 1;
         igMatrix44f_SetIdentity(cameraMatrix);
         Locals::Project(cameraMatrix, (int)&((igViewerParameters *)((igViewerSceneInfoManager *)self->_viewerSIManager)->_parameters)->_viewMatrix, Scratch());
-        FUN_00192f50(cameraForward, DAT_004e1098, cameraMatrix);
+        Vec3f_TransformDirection(cameraForward, g_vec3ZAxis, cameraMatrix);
         {
             float cameraYaw = atan2f(cameraForward[0], cameraForward[2]);
             *(float *)&work->_targetDirection[1] = cameraYaw + atan2f(stickX, -stickY);

@@ -51,7 +51,7 @@ void FUN_001dd250(A_1dd250 *arg0, int arg1, char *arg2) {
     f20 = v->z;
     if (arg0->f44 == 0.0f && arg0->f48 == 0.0f && arg0->f52 == 0.0f) {
     } else {
-        FUN_00192f50(&sp50, &arg0->f44, arg2);
+        Vec3f_TransformDirection(&sp50, &arg0->f44, arg2);
         f22 = f22 - sp50.x;
         f21 = f21 - sp50.y;
         f20 = f20 - sp50.z;

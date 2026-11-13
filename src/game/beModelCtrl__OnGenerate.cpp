@@ -14,9 +14,9 @@ int beMessenger_GetVec3(...);
 int beMessenger_GetVec3Count(...);
 int igObject_GetAllocator(...);
 struct Prop *igProperty_FindByName(...);
-extern int DAT_0050ef60[4];
-extern int DAT_00585be0[4];
-extern int DAT_00587110[4];
+extern int ONE_3[4];
+extern int g_propertyNameField[4];
+extern int g_defaultAllocatorSelector[4];
 extern unsigned char GPR_00554c14;
 }
 /* Owning stack reference to the freshly created data list (reference count in the low 23 bits of
@@ -37,7 +37,7 @@ void beModelCtrl__OnGenerate(beModelCtrl *arg0, beBaseInfoRam *arg1) {
         if (GPR_00554c14 != 0) {
             var_v0 = (int)var_v0;
         } else {
-            var_v0 = Memory_GetAllocatorBySelector(DAT_00587110[0]);
+            var_v0 = Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
         }
         {
             igSmartPointer<igObject> r(beBaseInfoDataList_Create(var_v0));
@@ -55,7 +55,7 @@ void beModelCtrl__OnGenerate(beModelCtrl *arg0, beBaseInfoRam *arg1) {
             arg1->_dataList = (int)s1;
         }
     }
-    prop = igProperty_FindByName((void *)arg1->_dataList, DAT_00585be0[0], &DAT_0050ef60[0]);
+    prop = igProperty_FindByName((void *)arg1->_dataList, g_propertyNameField[0], &ONE_3[0]);
     if (beMessenger_GetVec3Count(arg0->_messenger) != 0) {
         Matrix44_Copy(sp80, (char *)prop->f16 + 0x20);
         beMessenger_GetVec3(spC0, arg0->_messenger, 0);

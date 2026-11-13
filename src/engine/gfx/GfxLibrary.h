@@ -1449,10 +1449,10 @@ extern "C" int g_igMetaField_metaObject[4];
 extern "C" int FUN_00155490(void);
 struct Ref_1554a0 : public igObject { char *str; int len; };
 extern "C" Ref_1554a0* FUN_002b9500(...);
-extern "C" int FUN_0030b3c0(...);
+extern "C" int igStringObj_Set(...);
 extern "C" int igStringObj_ToLower(...);
 extern "C" int igStringObj_Erase(...);
-extern "C" int DAT_004c22f0[4];
+extern "C" int g_stringObjEmptyText[4];
 extern "C" int DAT_00587048[4];
 extern "C" StringRef FUN_001554a0(int arg1);
 extern "C" int g_igObject_metaObject[4];
@@ -2770,7 +2770,7 @@ struct V_165e50 { float x, y, z;
 struct Mat { float m[16]; };
 struct Self { char pad[72]; int matCount; char pad2[8]; Mat *mats; };
 extern "C" void FUN_00192fc0(...);
-extern "C" void FUN_00192f50(V_165e50 *, V_165e50 *, Mat *);
+extern "C" void Vec3f_TransformDirection(V_165e50 *, V_165e50 *, Mat *);
 extern "C" void *FUN_00165e50(Self *self, Obj_165e50 *src);
 /* Resets a visual context to its default render state; the flags select which state groups. Vtable
  * entries are 4 bytes starting at +8, so slot N is at offset 8 + 4*N; slots are named by index
@@ -4948,7 +4948,7 @@ struct StatNode { int f0; int f4; int f8; O_1778e0 *f12; char f16; char pad[935]
 struct StatContext { char pad[1552]; StatNode *f1552; };
 struct G_1778e0 { char pad[56]; int f56; };
 extern "C" void FUN_0030b720(O_1778e0 *, int, void *);
-extern "C" void FUN_0030b460(O_1778e0 *, int, int, int);
+extern "C" void igStringObj_Insert(O_1778e0 *, int, int, int);
 extern "C" int FUN_00306360(int, int, int);
 extern "C" int thunk_FUN_00306770(int, int, void *, void *, void *, int);
 extern "C" int DAT_004e07b0[4];

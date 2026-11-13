@@ -30,7 +30,7 @@ void Gap__Sg__igLightSet__vfunc_27(S_1d03b0 *arg0, int arg1) {
         o = (LS *)arg0->list->data[i];
         FUN_00192fc0(sp70, (char *)o + ((D_1d03b0 * *)DAT_0055f0a0)[0]->off, arg1);
         o->vA(sp70);
-        FUN_00192f50(sp60, (char *)o + ((D_1d03b0 * *)DAT_0055f0c0)[0]->off, arg1);
+        Vec3f_TransformDirection(sp60, (char *)o + ((D_1d03b0 * *)DAT_0055f0c0)[0]->off, arg1);
         o->vB(sp60);
     }
 }

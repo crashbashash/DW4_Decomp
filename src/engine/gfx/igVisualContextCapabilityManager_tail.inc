@@ -267,7 +267,7 @@ void *FUN_00165e50(Self *self, Obj_165e50 *src) {
             for (m = 0; m < nb; m++) {
                 float w = src->v184(m, k);
                 if (!(w <= 0.0f)) {
-                    FUN_00192f50(&nt, q, buf + (src->v196(m, k)));
+                    Vec3f_TransformDirection(&nt, q, buf + (src->v196(m, k)));
                     nt -= *q;
                     nt *= w;
                     nacc += nt;

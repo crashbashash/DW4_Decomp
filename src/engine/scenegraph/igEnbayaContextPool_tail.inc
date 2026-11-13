@@ -20,11 +20,11 @@ void Gap__Sg__igEnbayaContextPool__vfunc_13(int arg0) {
         if (FUN_00306510(temp_s2, 7, var_s1, &sp5C) != 0) {
             sp58 = 0;
             var_a2 = *(int *)((char *)(sp5C) + 8);
-            var_a2 = (var_a2 == 0) ? ((int *)DAT_004c22f0)[0] : var_a2;
+            var_a2 = (var_a2 == 0) ? ((int *)g_stringObjEmptyText)[0] : var_a2;
             if (FUN_003065f0(temp_s2, 7, var_a2, &sp58, 0, 0) != 0) {
                 sp54 = 0;
                 var_a0 = *(int *)((char *)(sp5C) + 8);
-                var_a0 = (var_a0 == 0) ? ((int *)DAT_004c22f0)[0] : var_a0;
+                var_a0 = (var_a0 == 0) ? ((int *)g_stringObjEmptyText)[0] : var_a0;
                 if ((sscanf(var_a0, &DAT_004e45e0[0], &sp54) == 1) && (sp54 >= 0) && (sp58 >= 0)) {
                     FUN_001c1a80((T_1c1a80 *)arg0, sp54, sp58);
                 }

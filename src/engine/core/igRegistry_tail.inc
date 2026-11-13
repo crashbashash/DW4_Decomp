@@ -33,7 +33,7 @@ static inline void dropPath(IniPathObject *o) {
     }
 }
 
-static inline char *pathText(IniPathObject *s) { char *t = s->text; if (t == 0) { return (*(char * *)DAT_004c22f0); } return t; }
+static inline char *pathText(IniPathObject *s) { char *t = s->text; if (t == 0) { return (*(char * *)g_stringObjEmptyText); } return t; }
 
 static inline int tryPath(IniReaderView *self, IniPathObject *base, char *name) {
     IniPathHandle joined = base->Join(name);
@@ -94,7 +94,7 @@ bool FUN_00305d30(IniReaderView *self, char *name, char *dir) {
     return true;
 }
 
-static inline char *textOf_3061c0(IniPairText *s) { char *t = s->text; if (t == 0) { return DAT_004c22f0[0]; } return t; }
+static inline char *textOf_3061c0(IniPairText *s) { char *t = s->text; if (t == 0) { return g_stringObjEmptyText[0]; } return t; }
 
 int FUN_003061c0(void *self, IniIncludeView *inc, int overwrite) {
     int i = 0;
@@ -114,7 +114,7 @@ int FUN_003061c0(void *self, IniIncludeView *inc, int overwrite) {
     return 1;
 }
 
-static inline char *text_306360(IniNameText *s) { char *t = s->text_306360; if (t == 0) { return DAT_004c22f0[0]; } return t; }
+static inline char *text_306360(IniNameText *s) { char *t = s->text_306360; if (t == 0) { return g_stringObjEmptyText[0]; } return t; }
 
 int FUN_003064b0(int arg0, int arg1) {
     int *e;
@@ -158,7 +158,7 @@ bool FUN_003066b0(int arg0, int arg1, const char *arg2, float *arg3, int arg4, f
 
     var_s0 = false;
     temp_v0 = (void *)(((void *)FUN_00307c10((igRegistry *)arg0, arg1, arg2, 0)));
-    if ((temp_v0 != 0) && (FUN_0030b630((void *)(*(int *)((char *)(temp_v0) + 12)), (int)arg3) != 0)) {
+    if ((temp_v0 != 0) && (igStringObj_ToFloat((void *)(*(int *)((char *)(temp_v0) + 12)), (int)arg3) != 0)) {
         var_s0 = true;
     }
     if (!var_s0) {
@@ -190,7 +190,7 @@ int FUN_00306770(int arg0, int arg1, const char *arg2, T_306770 **arg3, int arg4
         *arg3 = t;
     } else {
     h.ref = ((T_306770 *)FUN_002b9500(((int)igObject_GetAllocator(arg0))));
-    FUN_0030b3c0((int)h.ref, arg4);
+    igStringObj_Set((int)h.ref, arg4);
     t = h.ref;
     if (t) {
         ++t->references;
@@ -222,7 +222,7 @@ static inline int pool_306910(void) {
     return g_stringPool[0];
 }
 
-static inline char *text_306910(ShortStr *s) { char *t = s->text_306910; if (t == 0) { return DAT_004c22f0[0]; } return t; }
+static inline char *text_306910(ShortStr *s) { char *t = s->text_306910; if (t == 0) { return g_stringObjEmptyText[0]; } return t; }
 
 static inline void assign_306910(int **slot, char *s) {
     int *v = ((int *)StringPool_Intern((StringPool *)(pool_306910()), (const char *)s));
@@ -267,7 +267,7 @@ static inline int pool_306aa0(void) {
     return g_stringPool[0];
 }
 
-static inline char *text_306aa0(Str *s) { char *t = s->text_306aa0; if (t == 0) { return DAT_004c22f0[0]; } return t; }
+static inline char *text_306aa0(Str *s) { char *t = s->text_306aa0; if (t == 0) { return g_stringObjEmptyText[0]; } return t; }
 
 static inline int *intern(char *s) {
     if (s == 0) {
@@ -302,7 +302,7 @@ static inline void setAt_306aa0(SL *l, int i, int **v) {
     }
 }
 
-static inline void append_306aa0(Str *c, char *s) { int at = c->length; FUN_0030b460((IniStringView *)c, s, at, strlen(s)); }
+static inline void append_306aa0(Str *c, char *s) { int at = c->length; igStringObj_Insert((IniStringView *)c, s, at, strlen(s)); }
 
 int FUN_00306aa0(void *self, int section, const char *key, SL *list, int create) {
     Str *a;
@@ -321,7 +321,7 @@ int FUN_00306aa0(void *self, int section, const char *key, SL *list, int create)
         *(Str **)&a = (Str *)(FUN_002b9500(((int)igObject_GetAllocator((int)self))));
         for (i = 0; i < list->count; i++) {
             StringList_CopyRetained(&r1, list, i);
-            FUN_0030b3c0((int)a, (int)r1);
+            igStringObj_Set((int)a, (int)r1);
             releaseRef(r1);
             FUN_0030bee0((S_30bee0 *)a);
             *(int **)&tmp = intern(text_306aa0(a));
@@ -340,14 +340,14 @@ int FUN_00306aa0(void *self, int section, const char *key, SL *list, int create)
         n = list->count;
         if (n != 0) {
             StringList_CopyRetained(&r2, list, 0);
-            FUN_0030b3c0((int)b, (int)r2);
+            igStringObj_Set((int)b, (int)r2);
             releaseRef(r2);
         }
         for (j = 1; j < n; j++) {
             c = b; at = c->length;
-            FUN_0030b460((IniStringView *)c, (char *)DAT_004fb190, at, strlen(DAT_004fb190));
+            igStringObj_Insert((IniStringView *)c, (char *)DAT_004fb190, at, strlen(DAT_004fb190));
             StringList_CopyRetained(&r3, list, j);
-            c2 = b; s2 = (char *)r3; at2 = c2->length; FUN_0030b460((IniStringView *)c2, s2, at2, strlen(s2));
+            c2 = b; s2 = (char *)r3; at2 = c2->length; igStringObj_Insert((IniStringView *)c2, s2, at2, strlen(s2));
             releaseRef(r3);
         }
         FUN_00307700(self, section, saved, (int)(text_306aa0(b)));
@@ -366,7 +366,7 @@ static inline bool sameChar(int a, int b) { return (char)a == (char)b; }
 
 static inline int isSpaceChar(char c) { return _ctype_[c + 1] & 8; }
 
-static inline int pool_307470(void *o) { int a = *(int *)((char *)(*(int *)((char *)(o) + 12)) + 8); if (a == 0) { return ((int *)DAT_004c22f0)[0]; } return a; }
+static inline int pool_307470(void *o) { int a = *(int *)((char *)(*(int *)((char *)(o) + 12)) + 8); if (a == 0) { return ((int *)g_stringObjEmptyText)[0]; } return a; }
 
 int FUN_00307470(int arg0, int arg1, const char *arg2, int arg3, int *arg4, int arg5, int arg6) {
     void *temp_v0;
@@ -382,7 +382,7 @@ int FUN_00307470(int arg0, int arg1, const char *arg2, int arg3, int *arg4, int 
     return temp_v0 != 0;
 }
 
-static inline int pool_307550(void *o) { int a = *(int *)((char *)(*(int *)((char *)(o) + 12)) + 8); if (a == 0) { return ((int *)DAT_004c22f0)[0]; } return a; }
+static inline int pool_307550(void *o) { int a = *(int *)((char *)(*(int *)((char *)(o) + 12)) + 8); if (a == 0) { return ((int *)g_stringObjEmptyText)[0]; } return a; }
 
 int FUN_00307550(int arg0, int arg1, const char *arg2, int arg3, int *arg4, int arg5, int arg6) {
     void *temp_v0;
@@ -427,7 +427,7 @@ int FUN_00307700(void *arg0, int arg1, const char *arg2, int arg3) {
     void *temp_v0;
     temp_v0 = (void *)((void *)FUN_00307c10((igRegistry *)arg0, arg1, arg2, 1));
     if (temp_v0 == 0) return 0;
-    FUN_0030b3c0(*(int *)((char *)(temp_v0) + 12), arg3);
+    igStringObj_Set(*(int *)((char *)(temp_v0) + 12), arg3);
     return 1;
 }
 
@@ -528,13 +528,13 @@ igRegistryValue *FUN_00307c10(igRegistry *arg0, int arg1, const char *arg2, int 
         if (r.p != 0 && arg1 == r.p->_section) {
             int nm;
             if (arg0->_valueNameCaseSensitive != 0) {
-                nm = (((igStringObj *)r.p->_valueName)->_buffer == 0) ? ((int *)DAT_004c22f0)[0] : ((igStringObj *)r.p->_valueName)->_buffer;
+                nm = (((igStringObj *)r.p->_valueName)->_buffer == 0) ? ((int *)g_stringObjEmptyText)[0] : ((igStringObj *)r.p->_valueName)->_buffer;
                 if (strcmp(nm, arg2) == 0) {
                     igRegistryValue *ret = r.p;
                     return ret;
                 }
             } else {
-                nm = (((igStringObj *)r.p->_valueName)->_buffer == 0) ? ((int *)DAT_004c22f0)[0] : ((igStringObj *)r.p->_valueName)->_buffer;
+                nm = (((igStringObj *)r.p->_valueName)->_buffer == 0) ? ((int *)g_stringObjEmptyText)[0] : ((igStringObj *)r.p->_valueName)->_buffer;
                 if (thunk_strcasecmp((const char *)nm, arg2) == 0) {
                     igRegistryValue *ret = r.p;
                     return ret;
@@ -570,7 +570,7 @@ igRegistryValue *FUN_00307c10(igRegistry *arg0, int arg1, const char *arg2, int 
         }
         if (l->_count != 0 && s1 >= 0 && s1 < l->_count) ((igRegistryValue **)l->_data)[s1] = (igRegistryValue *)arg0;
         r.p->_section = arg1;
-        FUN_0030b3c0((int)(((igStringObj *)r.p->_valueName)), (int)arg2);
+        igStringObj_Set((int)(((igStringObj *)r.p->_valueName)), (int)arg2);
         {
             igRegistryValue *ret = r.p;
             return ret;
@@ -586,13 +586,13 @@ int FUN_00307f80(void *arg0, int arg1) {
         return ((int *)DAT_004fb160)[arg1];
     }
     var_v0 = *(int *)((char *)(*(int *)((char *)((*(int *)((char *)(*(int *)((char *)(arg0) + 16)) + 16) + (arg1 * 4))) - 44)) + 8);
-    if (var_v0 == 0) return ((int *)DAT_004c22f0)[0]; return var_v0;
+    if (var_v0 == 0) return ((int *)g_stringObjEmptyText)[0]; return var_v0;
 }
 
 static inline char *text_307fd0(IniIncludeText *s) {
     char *t = s->text_307fd0;
     if (t == 0) {
-        return (*(char * *)DAT_004c22f0);
+        return (*(char * *)g_stringObjEmptyText);
     }
     return t;
 }
@@ -688,7 +688,7 @@ static inline int allocator(void) {
 static inline char *text_3085c0(ShortStr_3085c0 *s) {
     char *t = s->text_3085c0;
     if (t == 0) {
-        return (*(char * *)DAT_004c22f0);
+        return (*(char * *)g_stringObjEmptyText);
     }
     return t;
 }
@@ -743,7 +743,7 @@ void FUN_00308860(Self_308860 *self, int name, int value) {
         setValues(self, MemberRef((Obj_308860 *)igIntList_Create((int)(((void *)igObject_GetAllocator((int)self))))));
     }
     igSmartPointer<Obj_308860> entry((Obj_308860 *)FUN_002b9500((int)(((void *)igObject_GetAllocator((int)self)))));
-    FUN_0030b3c0((int)entry.p, name);
+    igStringObj_Set((int)entry.p, name);
     ObjectList_AppendRetained((igObjectList *)self->names, (igObject *)entry.p);
     List_308860 *values = self->values;
     int top = countOf_308860(values);

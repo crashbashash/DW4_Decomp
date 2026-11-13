@@ -1,4 +1,4 @@
-void * FUN_002b90e0(int arg0) {
+void * igStringRefList_Create(int arg0) {
     FUN_002b9200();
     return (void *)(igMetaObject_CreateInstance((CreateMeta *)(*(int *)0x5858D8), (MemoryPool *)arg0));
 }

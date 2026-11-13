@@ -73,3 +73,8 @@
 0x003c7da0	beNDMWLoadCtrl2_CreateInstance	game
 0x003c9ca0	beNDMWGameRam_CreateInstance	game
 0x003cae00	beNDMWAfsSetup_CreateInstance	game
+0x00192f50	Vec3f_TransformDirection	engine
+0x002b90e0	igStringRefList_Create	engine
+0x0030b3c0	igStringObj_Set	engine
+0x0030b460	igStringObj_Insert	engine
+0x0030b630	igStringObj_ToFloat	engine

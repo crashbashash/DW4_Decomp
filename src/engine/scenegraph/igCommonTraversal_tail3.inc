@@ -230,11 +230,11 @@ void FUN_001b7740(void **arg0, void **arg1) {
 
     var_a0 = *(int *)((char *)((*arg0)) + 8);
     if (var_a0 == 0) {
-        var_a0 = ((int *)DAT_004c22f0)[0];
+        var_a0 = ((int *)g_stringObjEmptyText)[0];
     }
     var_a1 = *(int *)((char *)((*arg1)) + 8);
     if (var_a1 == 0) {
-        var_a1 = ((int *)DAT_004c22f0)[0];
+        var_a1 = ((int *)g_stringObjEmptyText)[0];
     }
     strcmp(var_a0, var_a1);
 }
@@ -252,7 +252,7 @@ void FUN_001b7770(igCommonTraversal *self, int name, int value) {
     int al = igObject_GetAllocator(self);
     al = GPR_00554c14 ? al : Memory_GetAllocatorBySelector(g_temporaryAllocatorSelector[0]);
     str = ((igObject *)FUN_002b9500(al));
-    FUN_0030b3c0(str, name);
+    igStringObj_Set(str, name);
     igStringObj_ToLower(str);
     { int first = self->_segmentOverrideNames; searchKey = str;
     index = List_BinarySearchWords(first, &searchKey, FUN_001b7740); }

@@ -93,15 +93,15 @@ extern "C" void *beNDMWShopCtrlDiskSell_Create(...);
 extern "C" void *beNDMWShopCtrlDeviceSell_Create(...);
 extern "C" void beNDMWShopCtrlSell_MoveRowCursor(int *, int);
 extern "C" int strlen(...);
-extern "C" int FUN_0030b3c0(...);
-extern "C" int FUN_0030b460(...);
+extern "C" int igStringObj_Set(...);
+extern "C" int igStringObj_Insert(...);
 extern "C" int beNDMWItemBase_GetRevisionColor(...);
 extern "C" int beNDMWItemRevisionPocketBase_GetPrice(...);
 extern "C" char * beNDMWItemBase_GetRecordString(...);
 extern "C" int beNDMWItemBase_GetRecordInt(...);
 extern "C" int beNDMWItemBaseList_Create(...);
 extern "C" void beNDMWShopCtrlSales_MoveRowCursor(int *, int);
-extern "C" int *FUN_002b90e0(...);
+extern "C" int *igStringRefList_Create(...);
 extern "C" int *beNDMWItemAbilityChip_Create(...);
 extern "C" int beNDMWItemAbilityChip_Set(...);
 extern "C" int beNDMWShopDevice_GetMeta(void);
@@ -5025,9 +5025,9 @@ void beNDMWShopCtrlDeviceSell_RefreshText(beNDMWShopCtrlDeviceSell *self, int dr
             if (index < devices->_count) {
                 void *status = igInsightCore_FindManager(self->_insight, g_beNDMWStatus_metaObject[0]);
                 beNDMWItemBase *device = ((beNDMWItemBase **)devices->_data)[index];
-                FUN_0030b3c0(text.p, beNDMWItemBase_GetRecordString(device, status, NAME_2));
-                if (device->_isEquip != 0) { igStringObj *name = text.p; FUN_0030b460(name, equippedMark_2, 0, strlen(equippedMark_2)); }
-                else { igStringObj *name = text.p; FUN_0030b460(name, unequippedMark_2, 0, strlen(unequippedMark_2)); }
+                igStringObj_Set(text.p, beNDMWItemBase_GetRecordString(device, status, NAME_2));
+                if (device->_isEquip != 0) { igStringObj *name = text.p; igStringObj_Insert(name, equippedMark_2, 0, strlen(equippedMark_2)); }
+                else { igStringObj *name = text.p; igStringObj_Insert(name, unequippedMark_2, 0, strlen(unequippedMark_2)); }
                 beMessenger_SelectGroup(self->_messenger, TEXTCTL_3);
                 beMessenger_AppendString(self->_messenger, STWINFONT14);
                 beMessenger_AppendString(self->_messenger, g_fontNames[row]);
@@ -5107,22 +5107,22 @@ void beNDMWShopCtrlDeviceSell_RefreshText(beNDMWShopCtrlDeviceSell *self, int dr
                 if (device->_recNo != 0x114) {
                     pocketText[1] = 0;
                     pocketText[0] = ((beNDMWItemRevisionPocketBase *)device)->_pocket + '0';
-                    FUN_0030b3c0(text.p, description);
+                    igStringObj_Set(text.p, description);
                     {
                         int described = (int)text.p;
                         int length = ((igStringObj *)described)->_length;
-                        FUN_0030b460((igStringObj *)described, pocketText, length, strlen(pocketText));
+                        igStringObj_Insert((igStringObj *)described, pocketText, length, strlen(pocketText));
                     }
                     { char *buffer = (char *)text.p->_buffer; description = (buffer == 0) ? g_stringObjEmptyText[0] : buffer; }
                 }
             } else if (kind == 1 && device->_recNo != 0x1f) {
                 chipPocketText[1] = 0;
                 chipPocketText[0] = ((beNDMWItemRevisionPocketBase *)device)->_pocket + '0';
-                FUN_0030b3c0(text.p, description);
+                igStringObj_Set(text.p, description);
                 {
                     int described = (int)text.p;
                     int length = ((igStringObj *)described)->_length;
-                    FUN_0030b460((igStringObj *)described, chipPocketText, length, strlen(chipPocketText));
+                    igStringObj_Insert((igStringObj *)described, chipPocketText, length, strlen(chipPocketText));
                 }
                 { char *buffer = (char *)text.p->_buffer; description = (buffer == 0) ? g_stringObjEmptyText[0] : buffer; }
             }
@@ -5596,10 +5596,10 @@ void beNDMWShopCtrlSales_RefreshText(beNDMWShopCtrlSales *self, int refreshRows,
                 pocket[1] = 0;
                 pocket[0] = '0' + item->_pocket;
                 igSmartPointer<igStringObj> label((igStringObj *)((beSystem *)igInsightCore_FindManager(self->_insight, g_beSystem_metaObject[0]))->_globalStrObj, kRetainReference);
-                FUN_0030b3c0(label.p, text);
+                igStringObj_Set(label.p, text);
                 igStringObj *labelText = label.p;
                 row = labelText->_length;
-                FUN_0030b460(labelText, pocket, row, strlen(pocket));
+                igStringObj_Insert(labelText, pocket, row, strlen(pocket));
                 text = (label.p->_buffer == 0) ? g_stringObjEmptyText[0] : (char *)label.p->_buffer;
             }
             SET_TEXT(self, STWINFONT29, g_fontNames[0], text)
@@ -6109,7 +6109,7 @@ void beNDMWShopCtrlXdataChip_Update(beNDMWShopCtrlXdataChip *self) {
                     beNDMWWindow_QueueText(infoWin.p, STWINFONT29, g_fontNames[2], space_2, LEFT_4);
                     {
                         PICK_ALLOCATOR(allocator, self)
-                        igSmartPointer<igStringRefList> statKeys((igStringRefList *)FUN_002b90e0(allocator));
+                        igSmartPointer<igStringRefList> statKeys((igStringRefList *)igStringRefList_Create(allocator));
                         APPEND_INTERNED(statKeys.p, TSUYOSA_4);
                         APPEND_INTERNED(statKeys.p, KASHIKOSA_4);
                         APPEND_INTERNED(statKeys.p, SEISHIN_4);

@@ -5,7 +5,7 @@ FolderObjectRef Gap__Core__igPsx2Folder__vfunc_26(FolderSelf *self) {
         return FolderObjectRef(0);
     }
     FolderObjectRef list;
-    list.obj = ((FolderObject *)FUN_002b90e0(((int)igObject_GetAllocator((int)self))));
+    list.obj = ((FolderObject *)igStringRefList_Create(((int)igObject_GetAllocator((int)self))));
     while (FUN_00110d60(handle, &entry) != 0) {
         char *name = (entry.bytes + 64);
         char *interned;
@@ -35,7 +35,7 @@ void FUN_0032cac0(struct S_32cac0 *arg0) {
 
     s = arg0->f8;
     if (s == 0) {
-        s = DAT_004c22f0[0];
+        s = g_stringObjEmptyText[0];
     }
     i = strlen(s) - 1;
     while ((c = s[i]) == 0x20 || c == 9) {

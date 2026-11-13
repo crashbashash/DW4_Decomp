@@ -11,7 +11,7 @@ then builds the loading filename in the mutable string at GameInfo `+0x48`:
 
 1. Copy the bare destination (`stagML11`).
 2. Erase its first two characters (`igStringObj_Erase`, index 0, count 2).
-3. Insert `ld` at index 0 (`FUN_0030b460`).
+3. Insert `ld` at index 0 (`igStringObj_Insert`).
 4. Append `.igb` and prepend `loadingUSA/`.
 5. Request `loadingUSA/ldagML11.igb` through `igResource_LoadDirectory`; retain the
    request in the manager's pending list `+0x2c`, and enter state 1.

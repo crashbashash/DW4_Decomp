@@ -28,7 +28,7 @@ void FUN_0018c820(igPlane *plane, const void *matrix) {
     point.x = d * plane->_norm[0];
     point.y = d * plane->_norm[1];
     point.z = d * plane->_norm[2];
-    FUN_00192f50(plane->_norm, plane->_norm, (float *)matrix);
+    Vec3f_TransformDirection(plane->_norm, plane->_norm, (float *)matrix);
     FUN_00192fc0((float *)&point, (float *)&point, (float *)matrix);
     scale = 1.0f / lengthOf(plane->_norm);
     plane->_norm[0] = plane->_norm[0] * scale;

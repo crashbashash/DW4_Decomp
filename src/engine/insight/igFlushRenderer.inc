@@ -480,7 +480,7 @@ struct FlushSettings *FUN_00234900(struct FlushSettings *s) {
     s->b228 = 0;
     s->b229 = 0;
     s->f232 = igIntList_Create(renderAllocator());
-    s->f236 = FUN_002b90e0(renderAllocator());
+    s->f236 = igStringRefList_Create(renderAllocator());
     if (DAT_0056dc50[0] == 0) {
         struct FlushShared *shared = FUN_001007e0(240);
         if (shared) {
@@ -587,7 +587,7 @@ void FUN_00234d70(int self, int count, int *names) {
     } else {
         allocator = Memory_GetAllocatorBySelector(g_temporaryAllocatorSelector[0]);
     }
-    igSmartPointer<InternedStringList> list(FUN_002b90e0(allocator));
+    igSmartPointer<InternedStringList> list(igStringRefList_Create(allocator));
     for (i = 0; i < count; i++) {
         int text = names[i];
         StringRef name(text);
@@ -855,7 +855,7 @@ void FUN_00236140(void) {
 
 static inline void describe(const igSmartPointer<TextValue> &text, int value) {
     if (value < 0) {
-        FUN_0030b3c0(text.p, DAT_004e9778);
+        igStringObj_Set(text.p, DAT_004e9778);
     } else {
         FUN_0030b720(text.p, value, DAT_004e9780);
     }
@@ -863,7 +863,7 @@ static inline void describe(const igSmartPointer<TextValue> &text, int value) {
 
 static inline const char *textOf(const TextValue *value) {
     const char *s = value->text;
-    s = (s == 0) ? DAT_004c22f0[0] : s;
+    s = (s == 0) ? g_stringObjEmptyText[0] : s;
     return s;
 }
 

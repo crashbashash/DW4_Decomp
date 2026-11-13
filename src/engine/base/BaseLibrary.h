@@ -521,7 +521,7 @@ typedef struct S_6 { char pad8[8]; int f8; int fC; unsigned int f10; } S_6;
 
 extern "C" {
 Rc_2 * FUN_002b9500(...);
-int FUN_0030b3c0(Rc_2 *, char *);
+int igStringObj_Set(Rc_2 *, char *);
 void BaseLibrary_MarkRegistered(void);
 void *FUN_00225790(struct S *arg0, short arg1);
 igMetaObject *igCompoundList_GetMetaObject(void);

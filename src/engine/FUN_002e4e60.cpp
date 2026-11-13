@@ -60,7 +60,7 @@ extern int D_004fb418[4];
 extern int DAT_004c2130[4];
 extern int DAT_004c2138[4];
 extern int DAT_004c2140[4];
-extern char *DAT_004c22f0;
+extern char *g_stringObjEmptyText;
 extern int DAT_004f7910[4];
 extern int DAT_004f9a80[4];
 extern int DAT_004f9ac8[4];
@@ -258,7 +258,7 @@ class IgbNameSwapper { public: virtual void p0(); virtual void p1(); virtual voi
 struct IgbNameWriter { char p0[168]; unsigned char swapped; char p169[35]; IgbNameSwapper *swapper; char p208[28]; int *block; int blockSize; char p244[4]; int count; char p252[28]; IgbNamePool *pool; };
 static inline char *nameOf(const Ref12 &r, int i) {
     char *n = r.p->data[i]->name;
-    n = (n == 0) ? DAT_004c22f0 : n;
+    n = (n == 0) ? g_stringObjEmptyText : n;
     return n;
 }
 extern "C" igResult FUN_002e4a40(IgbNameWriter *self);

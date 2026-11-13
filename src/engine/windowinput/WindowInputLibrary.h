@@ -293,7 +293,7 @@ extern "C" int ObjectList_AppendRetained(...);
 extern "C" void *igObject_GetAllocator(...);
 extern "C" int strcmp(...);
 extern "C" int sceMtapPortOpen(...);
-extern "C" char *DAT_004c22f0[4];
+extern "C" char *g_stringObjEmptyText[4];
 extern "C" int DAT_004d6cc8[4];
 extern "C" int DAT_004d6ce0[4];
 extern "C" int DAT_004d7020[4];

@@ -127,7 +127,7 @@ void Gap__Core__igPsx2Media__vfunc_24(MediaFields *media, int handle) {
 
 static inline void appendPath(const char *text, MediaPathBuffer *buffer) {
     int length = buffer->length;
-    FUN_0030b460((IniStringView *)buffer, (char *)text, (unsigned int)length, (unsigned int)(strlen(text)));
+    igStringObj_Insert((IniStringView *)buffer, (char *)text, (unsigned int)length, (unsigned int)(strlen(text)));
 }
 
 void FUN_0032e130(MediaPathFields *self, int index, char **path) {
@@ -161,7 +161,7 @@ void FUN_0032e130(MediaPathFields *self, int index, char **path) {
     }
     if (usePrefix) {
         if (isDisc) {
-            FUN_0030b3c0((int)self->conversion, (int)((*(char * *)&DAT_00587368)));
+            igStringObj_Set((int)self->conversion, (int)((*(char * *)&DAT_00587368)));
             if (**path != '\\' && **path != '/') {
                 appendPath(DAT_004ffbe8, self->conversion);
             }
@@ -177,13 +177,13 @@ void FUN_0032e130(MediaPathFields *self, int index, char **path) {
             }
             appendPath(DAT_004ffbf0, self->conversion);
         } else {
-            FUN_0030b3c0((int)self->conversion, (int)((*(char * *)&DAT_00587368)));
+            igStringObj_Set((int)self->conversion, (int)((*(char * *)&DAT_00587368)));
             appendPath(*path, self->conversion);
         }
         text = self->conversion->text;
-        text = (text == 0) ? (*(char * *)DAT_004c22f0) : text;
+        text = (text == 0) ? (*(char * *)g_stringObjEmptyText) : text;
     } else if (isDisc && strchr(*path, ';') == 0) {
-        FUN_0030b3c0((int)self->conversion, (int)(*path));
+        igStringObj_Set((int)self->conversion, (int)(*path));
         stop = strlen(*path);
         for (j = 6; j < stop; j++) {
             p = self->conversion->text + j;
@@ -195,7 +195,7 @@ void FUN_0032e130(MediaPathFields *self, int index, char **path) {
         }
         appendPath(DAT_004ffbf0, self->conversion);
         text = self->conversion->text;
-        text = (text == 0) ? (*(char * *)DAT_004c22f0) : text;
+        text = (text == 0) ? (*(char * *)g_stringObjEmptyText) : text;
     } else {
         text = *path;
     }

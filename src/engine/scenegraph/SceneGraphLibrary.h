@@ -1492,7 +1492,7 @@ extern long long DAT_0048d8c0;
 extern float DAT_0048d8c8;
 extern long long DAT_00562570;
 extern "C" long long __fixsfdi(float);
-extern char *DAT_004c22f0[4];
+extern char *g_stringObjEmptyText[4];
 struct AppearanceNameEntry { char pad[8]; int _string; };
 struct AppearanceNameList { char pad[8]; int _count; int _capacity; AppearanceNameEntry **_data; };
 struct AppearanceWordList { char pad[8]; int _count; int _capacity; int *_data; };
@@ -1878,7 +1878,7 @@ struct Mgr { int pad[4]; Tab *tab; int pad2[7]; int arg; int pad3[4]; int *idx; 
 /* matching construct: dummy-virtual view so ->f31() dispatches through vtable slot 31 of the traversal */
 struct TravView { virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void f31(); };
 extern "C" void *FUN_002b9500(...);
-extern "C" int FUN_0030b3c0(...);
+extern "C" int igStringObj_Set(...);
 extern "C" int igStringObj_ToLower(igObject *);
 extern "C" int List_BinarySearchWords(int, void *, void *);
 extern "C" int FUN_002d6e60(int, void *, void *);
@@ -2025,7 +2025,7 @@ typedef struct LightFieldMeta { int _pad0[2]; int _offset; } LightFieldMeta;
 typedef struct LightTraversalView { char _pad0[52]; CullAttrState *_state; char _pad38[12]; int _collector; char _pad48[92]; float _view[16]; } LightTraversalView;
 extern "C" LightFieldMeta *DAT_0055f0a0[4];
 extern "C" LightFieldMeta *DAT_0055f0c0[4];
-extern "C" int FUN_00192f50(...);
+extern "C" int Vec3f_TransformDirection(...);
 extern "C" int FUN_001be190(...);
 extern "C" int List_AppendWords(...);
 struct L_1b9fc0 { char p8[8]; int n; char p12[4]; int *data; };
@@ -2878,7 +2878,7 @@ struct ShaderProcessorView { char pad0[24]; int kind; int ini; char pad1[12]; in
 struct ShaderCacheView;
 extern "C" ShaderMetaView *FUN_002fe460(char *);
 extern "C" igSmartPointer<ShaderObject_1ca6c0> FUN_002fd6e0(ShaderMetaView *, int);
-extern "C" ShaderNameList *FUN_002b90e0(void *);
+extern "C" ShaderNameList *igStringRefList_Create(void *);
 extern "C" unsigned char FUN_00306aa0(int, int, void *, ShaderNameList *, int);
 extern "C" void *FUN_002fdf20(ShaderMetaView *, char *);
 extern "C" int FUN_001c7680(ShaderProcessorView *, int, char *, ShaderObject_1ca6c0 *, void *, unsigned char *);
@@ -5688,7 +5688,7 @@ public:
 struct ShaderStringObject : public igObject { char *text; int length; };
 extern "C" int FUN_001cb340(ShaderProcessorView *self, ShaderTarget *target, int arg);
 extern "C" igSmartPointer<igObject> FUN_001c8c80(ShaderProcessorView *self, int section, void *key, void *meta, ShaderNameList *shared);
-extern "C" void FUN_0030b460(ShaderStringObject *, void *, int, int);
+extern "C" void igStringObj_Insert(ShaderStringObject *, void *, int, int);
 extern "C" int DAT_004e4658[2];
 extern "C" int DAT_004e46c0[4];
 extern "C" int DAT_004e46e8[4];
@@ -6225,7 +6225,7 @@ static inline const char *nameOf(int name) {
 #undef CAST_INLINE
 static inline int overrideName(igAppearanceView *a, int i) {
     int s = a->_segmentOverrideNameList->_data[i]->_string;
-    s = s == 0 ? ((int)DAT_004c22f0[0]) : s;
+    s = s == 0 ? ((int)g_stringObjEmptyText[0]) : s;
     return s;
 }
 static inline int n_of(const struct L_1af920 *list) { return list->n; }

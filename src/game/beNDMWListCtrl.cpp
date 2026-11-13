@@ -137,15 +137,15 @@ extern "C" void * StringPool_Allocate(...);
 extern "C" void * StringPool_Construct(...);
 extern "C" const char * StringPool_Intern(...);
 extern "C" int igInsightCore_FindManager(...);
-extern "C" int FUN_002b90e0(...);
+extern "C" int igStringRefList_Create(...);
 extern "C" int igIntList_Create(...);
 extern "C" int beNDMWItemBase_GetRecordInt(...);
 extern "C" int beNDMWItemBase_GetRecordString(...);
 extern "C" void beNDMWWindow_PresentModelAtOrigin(...);
 extern "C" int beNDMWItemBase_GetRevisionColor(...);
 extern "C" int strlen(const void *);
-extern "C" int FUN_0030b3c0(void *, const char *);
-extern "C" int FUN_0030b460(void *, const void *, int, int);
+extern "C" int igStringObj_Set(void *, const char *);
+extern "C" int igStringObj_Insert(void *, const void *, int, int);
 extern "C" int FUN_00100610(...);
 extern "C" void beNDMWStatus_PreviewEquipment(...);
 extern "C" int ObjectList_FillRetained(...);
@@ -401,7 +401,7 @@ class S { public: virtual void d0(); virtual void d1(); virtual void d2(); virtu
 extern "C" void beNDMWStatusPowerSocket_RefreshSlotList(S *arg0);
 /* igObject-style string object: refcount, data pointer and length are not reflected fields */
 struct Str : public igObject { int data; int len; };
-extern "C" char *DAT_004c22f0[4];
+extern "C" char *g_stringObjEmptyText[4];
 extern "C" char TXT_2[];
 extern "C" int g_beSystem_metaObject[4];
 extern "C" void beNDMWStatusPowerSocket_ShowSlotDescription(beNDMWStatusPowerSocket *a);
@@ -1882,7 +1882,7 @@ void beNDMWStatus_AssignEquipment(StatusPanel *self, ItemList *slotList, int slo
                 alloc = igObject_GetAllocator(self);
                 alloc = g_useOwnerAllocator ? alloc : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
                 {
-                igSmartPointer<igObject> names((igObject *)FUN_002b90e0(alloc));
+                igSmartPointer<igObject> names((igObject *)igStringRefList_Create(alloc));
                 StringList_AppendRetained((int)names.p, StringRef(InternString(TSUYOSA_2)));
                 StringList_AppendRetained((int)names.p, StringRef(InternString(KASHIKOSA_2)));
                 StringList_AppendRetained((int)names.p, StringRef(InternString(SEISHIN_2)));
@@ -2109,13 +2109,13 @@ void beNDMWStatusPowerSocket_ShowSlotDescription(beNDMWStatusPowerSocket *a) {
         sp4C[0] = *(int *)(var_s1 + 24) + 0x30;
         {
         igSmartPointer<igStringObj> sp48((igStringObj *)(((beSystem *)igInsightCore_FindManager(a->_insight, g_beSystem_metaObject[0]))->_globalStrObj), kRetainReference);
-        FUN_0030b3c0(sp48.p, (const char *)temp_v0);
+        igStringObj_Set(sp48.p, (const char *)temp_v0);
         t2 = (Str *)sp48.p;
         temp_v0 = t2->len;
-        FUN_0030b460(t2, sp4C, temp_v0, strlen(sp4C));
+        igStringObj_Insert(t2, sp4C, temp_v0, strlen(sp4C));
         t3 = (Str *)sp48.p;
         temp_s1 = (int *)t3->data;
-        temp_s1 = (temp_s1 == 0) ? ((int * *)DAT_004c22f0)[0] : temp_s1;
+        temp_s1 = (temp_s1 == 0) ? ((int * *)g_stringObjEmptyText)[0] : temp_s1;
         }
         beMessenger_SelectGroup(a->_messenger, TEXTCTL_5);
         beMessenger_AppendString(a->_messenger, STWINFONT29_3);
@@ -2701,12 +2701,12 @@ void beNDMWStatusMainSlot_ShowSlotDescription(beNDMWStatusMainSlot *a) {
         buf[0] = s2->f24 + 0x30;
         {
         igSmartPointer<igStringObj> sp48((igStringObj *)(*(int *)((char *)((RefCountedHeader *)igInsightCore_FindManager(a->_insight, g_beSystem_metaObject[0])) + 72)), kRetainReference);
-        FUN_0030b3c0(sp48.p, (const char *)temp);
+        igStringObj_Set(sp48.p, (const char *)temp);
         q = (RefCountedHeader *)sp48.p;
         temp = q->w12;
-        FUN_0030b460(q, buf, temp, strlen(buf));
+        igStringObj_Insert(q, buf, temp, strlen(buf));
         p = (RefCountedHeader *)sp48.p;
-        str = (p->w8 == 0) ? DAT_004c22f0[0] : (char *)p->w8;
+        str = (p->w8 == 0) ? g_stringObjEmptyText[0] : (char *)p->w8;
         }
         beMessenger_SelectGroup(a->_messenger, TEXTCTL_5);
         beMessenger_AppendString(a->_messenger, STWINFONT29_3);
@@ -3709,18 +3709,18 @@ void beNDMWStatusCtrlD0_RefreshText(beNDMWStatusCtrlD0 *p0, int arg1, int arg2) 
             if (idx < folder->_count) {
                 item = *(beNDMWItemBase **)(folder->_data + idx * 4);
                 s = ((char *)beNDMWItemBase_GetRecordString(item, ctx, NAME_3));
-                FUN_0030b3c0(sp, s);
+                igStringObj_Set(sp, s);
                 if (item->_isEquip != 0) {
-                    FUN_0030b460(sp, equippedMark, 0, strlen(equippedMark));
+                    igStringObj_Insert(sp, equippedMark, 0, strlen(equippedMark));
                 } else {
-                    FUN_0030b460(sp, unequippedMark, 0, strlen(unequippedMark));
+                    igStringObj_Insert(sp, unequippedMark, 0, strlen(unequippedMark));
                 }
                 beMessenger_SelectGroup(self->_messenger, TEXTCTL_5);
                 beMessenger_AppendString(self->_messenger, STWINFONT14_2);
                 beMessenger_AppendString(self->_messenger, g_statusFontNames[i]);
                 mm = self->_messenger;
                 nm2 = (char *)sp.p->_buffer;
-                if (nm2 == 0) nm = DAT_004c22f0[0]; else nm = nm2;
+                if (nm2 == 0) nm = g_stringObjEmptyText[0]; else nm = nm2;
                 beMessenger_AppendString(mm, nm);
                 beMessenger_DispatchSelected(self->_messenger, TEXTSET_3);
                 beMessenger_SelectGroup(self->_messenger, TEXTCTL_5);
@@ -3788,22 +3788,22 @@ void beNDMWStatusCtrlD0_RefreshText(beNDMWStatusCtrlD0 *p0, int arg1, int arg2) 
                 if (item->_recNo != 0x114) {
                     buf2[1] = 0;
                     buf2[0] = ((beNDMWItemBlueArmor *)item)->_pocket + 48;
-                    FUN_0030b3c0(sp, s);
+                    igStringObj_Set(sp, s);
                     r = sp.p;
                     i = r->_length;
-                    FUN_0030b460(r, buf2, i, strlen(buf2));
+                    igStringObj_Insert(r, buf2, i, strlen(buf2));
                     s2 = (char *)sp.p->_buffer;
-                    s = s2 == 0 ? DAT_004c22f0[0] : s2;
+                    s = s2 == 0 ? g_stringObjEmptyText[0] : s2;
                 }
             } else if (item->_kindNo == 1 && item->_recNo != 0x1f) {
                 buf3[1] = 0;
                 buf3[0] = ((beNDMWItemBlueArmor *)item)->_pocket + 48;
-                FUN_0030b3c0(sp, s);
+                igStringObj_Set(sp, s);
                 r = sp.p;
                 idx = r->_length;
-                FUN_0030b460(r, buf3, idx, strlen(buf3));
+                igStringObj_Insert(r, buf3, idx, strlen(buf3));
                 s2 = (char *)sp.p->_buffer;
-                s = s2 == 0 ? DAT_004c22f0[0] : s2;
+                s = s2 == 0 ? g_stringObjEmptyText[0] : s2;
             }
             beMessenger_SelectGroup(self->_messenger, TEXTCTL_5);
             beMessenger_AppendString(self->_messenger, STWINFONT29_3);

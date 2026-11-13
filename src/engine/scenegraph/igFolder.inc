@@ -23,14 +23,14 @@ int FUN_001ce400(IniStringObject **out, char *path) {
         IniStringRef name = resolver->resolve(path);
         char *text = name.p->text;
         IniFileObject *opener = file.p;
-        text = (text == 0) ? DAT_004c22f0[0] : text;
+        text = (text == 0) ? g_stringObjEmptyText[0] : text;
         opened = opener->open(text, DAT_004e47b0);
     }
     if (opened != 0) {
         void *stringAllocator = ((void *)Memory_GetAllocatorBySelector(DAT_00587048[0]));
         release_1ce400(result.p);
         result.p = ((IniStringObject *)FUN_002b9500(stringAllocator));
-        FUN_0030b3c0(result.p, file->handle);
+        igStringObj_Set(result.p, file->handle);
         file->close();
     }
     *out = result.p;

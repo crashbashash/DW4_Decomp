@@ -283,10 +283,10 @@ void igMatrix44f_SetIdentity(float *matrix);
 void Matrix44_Copy(float *matrix, const float *source);
 void Matrix44_GetTranslation(const float *matrix, float *vector);
 void Matrix44_TranslateLocal(float *matrix, const float *offset);
-void FUN_00192f50(float *out, const float *vector, const float *matrix);
+void Vec3f_TransformDirection(float *out, const float *vector, const float *matrix);
 int Vec3f_FromString(const char *text, float *vector, const char *format);
-void FUN_0030b3c0(igStringObj *string, const char *text);
-void FUN_0030b630(igStringObj *string, float *value);
+void igStringObj_Set(igStringObj *string, const char *text);
+void igStringObj_ToFloat(igStringObj *string, float *value);
 void igStringObj_Erase(igStringObj *string, unsigned int position, unsigned int length);
 float atan2f(float y, float x);
 
@@ -1183,9 +1183,9 @@ void Lua_sd_OptionalArg(const char *args) {
                         break;
                     case 'F':
                         text = (igStringObj *)g_beSystem[0]->_globalStrObj;
-                        FUN_0030b3c0(text, part + 2);
+                        igStringObj_Set(text, part + 2);
                         igStringObj_Erase(text, text->_length - 1, 1);
-                        FUN_0030b630(text, &floatValue);
+                        igStringObj_ToFloat(text, &floatValue);
                         beMessenger_AppendFloat(g_beMessenger[0], floatValue);
                         break;
                     default:
@@ -1416,7 +1416,7 @@ char *MDLgetRotStr(float x, float y, float z) {
     float heading;
     igMatrix44f_SetIdentity(matrix);
     Matrix44_Copy(matrix, g_mdlMatrix[0]);
-    FUN_00192f50(forward, g_vec3ZAxis, matrix);
+    Vec3f_TransformDirection(forward, g_vec3ZAxis, matrix);
     heading = atan2f(forward[0], forward[2]);
     sprintf(g_mdlRotStrBuffer, V_f_f_f, x, RADIANS_TO_DEGREES * heading + y, z);
     return g_mdlRotStrBuffer;
@@ -1632,7 +1632,7 @@ char *PLAYERgetDataStr(int point, int index, float yaw) {
     beMessenger_DispatchSelected(g_beMessenger[0], GETMATRIXDIRECT);
     beMessenger_GetMatrix(matrix, g_beMessenger[0], 0);
     Matrix44_GetTranslation(matrix, position);
-    FUN_00192f50(forward, g_vec3ZAxis, matrix);
+    Vec3f_TransformDirection(forward, g_vec3ZAxis, matrix);
     heading = atan2f(forward[0], forward[2]);
     sprintf(g_playerDataStrBuffer, V_f_f_f_V_0_f_0, position[0], position[1], position[2], (RADIANS_TO_DEGREES * heading) + yaw);
     return g_playerDataStrBuffer;

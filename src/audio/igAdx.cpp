@@ -74,7 +74,7 @@ extern "C" void FUN_00332cd0(void);
 extern "C" int ADXM_ExecMain(...);
 extern "C" int FUN_00282038(...);
 extern "C" void igAdx_ExecServer(int);
-extern "C" void *FUN_002b90e0(int);
+extern "C" void *igStringRefList_Create(int);
 extern "C" void igAdx_SetPartitionCount(int arg0);
 extern "C" int StringPool_Allocate(int);
 extern "C" int List_Reserve(void *, int, int);
@@ -182,11 +182,11 @@ extern "C" ThreadManager *g_threadManager[4];
 struct TextBuffer { int vtable; unsigned int refCount; char *text; };
 struct PathEntry { int vtable; unsigned int refCount; char *name; int f12; short left; short right; };
 struct PathEntryList { int vtable; unsigned int refCount; int count; int capacity; PathEntry **data; };
-extern "C" void FUN_0030b3c0(TextBuffer *buffer, const char *text);
+extern "C" void igStringObj_Set(TextBuffer *buffer, const char *text);
 extern "C" void igStringObj_ToLower(TextBuffer *buffer);
 extern "C" void FUN_0030b5f0(TextBuffer *buffer, int *value);
 extern "C" void igNamedObject_SetName(PathEntry *object, const char *name);
-extern "C" char *DAT_004c22f0[4];
+extern "C" char *g_stringObjEmptyText[4];
 extern "C" TextBuffer *DAT_005875e0[4];
 typedef struct N { int p0; int p4; char *name; } N;
 typedef struct L_333630 { int p0; int p4; int count; int pc; N **data; } L_333630;
@@ -618,7 +618,7 @@ void igAdx_SetPartitionCount(int arg0) {
                 igObject_Destroy(object);
             }
         }
-        ((T_332d20 * *)DAT_00587608)[0] = (T_332d20 *)FUN_002b90e0(temp_s2);
+        ((T_332d20 * *)DAT_00587608)[0] = (T_332d20 *)igStringRefList_Create(temp_s2);
     }
 }
 
@@ -784,10 +784,10 @@ int FUN_00333440(const char *name) {
                 PathEntry *entry;
                 memset(digits, 0, 16);
                 strncpy(digits, name + 1, 1);
-                FUN_0030b3c0(DAT_005875e0[0], digits);
+                igStringObj_Set(DAT_005875e0[0], digits);
                 FUN_0030b5f0(DAT_005875e0[0], &left);
                 strncpy(digits, name + 3, close - 4);
-                FUN_0030b3c0(DAT_005875e0[0], digits);
+                igStringObj_Set(DAT_005875e0[0], digits);
                 FUN_0030b5f0(DAT_005875e0[0], &right);
                 entry = ((PathEntryList * *)DAT_00587620)[0]->data[0];
                 igNamedObject_SetName(entry, name);
@@ -797,12 +797,12 @@ int FUN_00333440(const char *name) {
             }
         }
         n = ((PathEntryList * *)DAT_00587620)[0]->count;
-        FUN_0030b3c0(DAT_005875e0[0], name);
+        igStringObj_Set(DAT_005875e0[0], name);
         igStringObj_ToLower(DAT_005875e0[0]);
         for (k = 1; k < n; k++) {
             FUN_00333630((S_333630 *)(((PathEntryList * *)DAT_00587620)[0]->data[k]), path);
             const char *text = DAT_005875e0[0]->text;
-            text = (text == 0) ? DAT_004c22f0[0] : text;
+            text = (text == 0) ? g_stringObjEmptyText[0] : text;
             if (strcmp(text, path) == 0) {
                 return k;
             }

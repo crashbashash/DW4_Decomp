@@ -9,7 +9,7 @@ extern "C" int Gap__Bec__beHitLandModel__vfunc_20(void);
 extern "C" void beMessenger_RegisterReceiver(int, int, char *, int, int);
 extern "C" void FUN_00388590(int arg0, float *arg1, float *arg2, int arg3);
 extern "C" bool FUN_003885e0(int arg0, float *arg1, float *arg2, float *arg3, float *arg4);
-extern "C" void FUN_00192f50(float *, float *, void *);
+extern "C" void Vec3f_TransformDirection(float *, float *, void *);
 extern "C" void *StringPool_Allocate(int);
 extern "C" void *StringPool_Construct(void *);
 extern "C" const char *StringPool_Intern(void *, const char *);
@@ -134,7 +134,7 @@ void Gap__Bec__beHitLandModelOrder__vfunc_22(beHitLandModelOrder *self, HitRecor
         igSmartPointer<beHitLandResultData> created(FUN_0035e400(alloc));
         ObjectList_AppendRetained(self->_hitdataList, (beHitLandResultData *)created);
     }
-    FUN_00192f50(hit->position, hit->position, hit->matrix);
+    Vec3f_TransformDirection(hit->position, hit->position, hit->matrix);
     FUN_00388e60(((ResultRecord *)((beHitLandResultData **)((igObjectList *)self->_hitdataList)->_data)[self->_hitdataCount])->hit, hit);
     result = ((beHitLandResultData **)((igObjectList *)self->_hitdataList)->_data)[self->_hitdataCount];
     name = (const char *)self->_infoName;
