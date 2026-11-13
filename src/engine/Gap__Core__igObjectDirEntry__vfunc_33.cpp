@@ -6,7 +6,7 @@ int Gap__Core__igObject__vfunc_10(...);
 int igObject_IsKindOf(void *object, int meta);
 void ObjectList_ResizeRetained(void *list, int count);
 void ObjectList_AppendRetained(void *list, void *object);
-int FUN_002eb010(...);
+int StringPool_Allocate(...);
 void *StringPool_Construct(...);
 char *StringPool_Intern(...);
 int StringChunk_ReleaseHeader(...);
@@ -99,7 +99,7 @@ struct SRel { static inline void go(char *s) {
 } };
 struct Pool { static inline void *get() {
     if (g_stringPool[0] == 0) {
-        void *p = (void *)FUN_002eb010(16);
+        void *p = (void *)StringPool_Allocate(16);
         if (p != 0) {
             p = StringPool_Construct(p);
         }

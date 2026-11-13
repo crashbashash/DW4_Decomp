@@ -8,7 +8,7 @@ int FUN_0010aee0(SemaParam *);
 int FUN_0010aef0(int);
 int FUN_0010af20(int);
 int FUN_0010d6c8(int, Pkt *, int, int, int, int);
-int FUN_0010e0d8(Client *cd, int rpc, int mode) {
+int sceSifBindRpc(Client *cd, int rpc, int mode) {
     SemaParam sp;
     Pkt *pkt;
     cd->command = 0;

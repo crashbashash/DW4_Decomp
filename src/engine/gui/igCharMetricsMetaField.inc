@@ -151,7 +151,7 @@ void FUN_00452ca0(int arg0) {
         var_v0 = (void *)(0);
     } else {
         if (g_stringPool[0] == 0) {
-            var_v0_2 = FUN_002eb010(0x10);
+            var_v0_2 = StringPool_Allocate(0x10);
             if (var_v0_2 != 0) {
                 var_v0_2 = StringPool_Construct(var_v0_2);
             }
@@ -181,7 +181,7 @@ void FUN_00452ca0(int arg0) {
         var_v0_3 = (void *)(0);
     } else {
         if (g_stringPool[0] == 0) {
-            var_v0_4 = FUN_002eb010(0x10);
+            var_v0_4 = StringPool_Allocate(0x10);
             if (var_v0_4 != 0) {
                 var_v0_4 = StringPool_Construct(var_v0_4);
             }
@@ -211,7 +211,7 @@ void FUN_00452ca0(int arg0) {
         var_v0_5 = (void *)(0);
     } else {
         if (g_stringPool[0] == 0) {
-            var_v0_6 = FUN_002eb010(0x10);
+            var_v0_6 = StringPool_Allocate(0x10);
             if (var_v0_6 != 0) {
                 var_v0_6 = StringPool_Construct(var_v0_6);
             }
@@ -241,7 +241,7 @@ void FUN_00452ca0(int arg0) {
         var_v0_7 = (void *)(0);
     } else {
         if (g_stringPool[0] == 0) {
-            var_v0_8 = FUN_002eb010(0x10);
+            var_v0_8 = StringPool_Allocate(0x10);
             if (var_v0_8 != 0) {
                 var_v0_8 = StringPool_Construct(var_v0_8);
             }
@@ -271,7 +271,7 @@ void FUN_00452ca0(int arg0) {
         var_v0_9 = (void *)(0);
     } else {
         if (g_stringPool[0] == 0) {
-            var_v0_10 = FUN_002eb010(0x10);
+            var_v0_10 = StringPool_Allocate(0x10);
             if (var_v0_10 != 0) {
                 var_v0_10 = StringPool_Construct(var_v0_10);
             }
@@ -301,7 +301,7 @@ void FUN_00452ca0(int arg0) {
         var_v0_11 = (void *)(0);
     } else {
         if (g_stringPool[0] == 0) {
-            var_v0_12 = FUN_002eb010(0x10);
+            var_v0_12 = StringPool_Allocate(0x10);
             if (var_v0_12 != 0) {
                 var_v0_12 = StringPool_Construct(var_v0_12);
             }

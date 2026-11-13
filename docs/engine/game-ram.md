@@ -63,8 +63,8 @@ attributes. The column names come from `g_attributeInitialFields` and `g_attribu
 
 ## Open questions
 
-- `FUN_00236f80` (find an insight's object by meta object), `FUN_002eb010` (allocate from the
-  string pool's allocator) and `FUN_002caa70` (create an int list) keep their address names; each
+- `igInsightCore_FindManager` (find an insight's object by meta object), `StringPool_Allocate` (allocate from the
+  string pool's allocator) and `igIntList_Create` (create an int list) keep their address names; each
   has callers in more than twenty files.
 - The base call in `beNDMWGameRam_Initialize` is the `beBaseInfoManager` slot 23 body, still
   named `Gap__Core__igObject__vfunc_23`.

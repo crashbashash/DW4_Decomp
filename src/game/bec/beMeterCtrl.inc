@@ -1,4 +1,4 @@
-void FUN_00357660(int arg0) {
+void beMeterCtrl_CreateInstance(int arg0) {
     FUN_00357820();
     igMetaObject_CreateInstance(*(int *)0x588F30, arg0);
 }

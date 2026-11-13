@@ -390,7 +390,7 @@ void igMallocMemoryPool_Dump(void *self, int a1, int a2, int a3, int t0) {
     FUN_00322820(self);
     g = &DAT_004ff1b0[0];
     if (t0 != 0) {
-        igSmartPointer<V> r((V *)FUN_002c4ca0((int)(((void *)igObject_GetAllocator((int)self)))));
+        igSmartPointer<V> r((V *)igFile_Create((int)(((void *)igObject_GetAllocator((int)self)))));
         if (r.p->v23(t0, &DAT_004f92f0[0]) == 0) {
             if (((M_3223d0 *)self)->f152 >= 2) {
                 FUN_00308390(DAT_004ff1f0, t0);

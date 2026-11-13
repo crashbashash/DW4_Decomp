@@ -7,7 +7,7 @@
 typedef struct QTbl { int *v[4]; } __attribute__((aligned(16))) QTbl;
 extern "C" {
 extern QTbl DAT_004cfac0;
-int FUN_002eb010(...);
+int StringPool_Allocate(...);
 int StringChunk_ReleaseHeader(...);
 int StringList_AppendRetained(...);
 int StringPool_Construct(...);
@@ -53,7 +53,7 @@ struct Str { static inline int intern(int *s) {
         ref = 0;
     } else {
         if (DAT_00586f20[0] == 0) {
-            pool = FUN_002eb010(16);
+            pool = StringPool_Allocate(16);
             if (pool)
                 pool = StringPool_Construct(pool);
             DAT_00586f20[0] = pool;
@@ -229,7 +229,7 @@ void Gap__Bec__beNDMWShopSelect02__vfunc_22(beNDMWShopSelect02 *arg0) {
         break;
     }
     if (DAT_00586f20[0] == 0) {
-        pool = FUN_002eb010(16);
+        pool = StringPool_Allocate(16);
         if (pool)
             pool = StringPool_Construct(pool);
         DAT_00586f20[0] = pool;

@@ -6,7 +6,7 @@ struct O { char p[12]; int f12; };
 struct igVec3f { float _v[3]; float operator[](int i) const { return _v[i]; } };
 
 extern "C" {
-void *FUN_00236f80(int, int);
+void *igInsightCore_FindManager(int, int);
 int igMatrix44f_SetIdentity(Mx *);
 int FUN_001906d0(Mx *, void *);
 int FUN_001c51b0(int, int, Mx *);
@@ -33,7 +33,7 @@ int Gap__Bec__beWaterPlain__vfunc_20(void);
 
 bool FUN_003a0570(O *o, int a1, int a2) {
     bool r = false;
-    T *t = (T *)(((int *)FUN_00236f80(o->f12, g_igViewerSceneInfoManager_metaObject[0]))[5]);
+    T *t = (T *)(((int *)igInsightCore_FindManager(o->f12, g_igViewerSceneInfoManager_metaObject[0]))[5]);
     Mx m;
     igMatrix44f_SetIdentity(&m);
     Mx *q = &m;

@@ -128,7 +128,7 @@ void FUN_002c8250(int arg0) {
         var_v0 = (void *)(0);
     } else {
         if (g_stringPool[0] == 0) {
-            var_v0_2 = ((int)FUN_002eb010(0x10));
+            var_v0_2 = ((int)StringPool_Allocate(0x10));
             if (var_v0_2 != 0) {
                 var_v0_2 = ((int)StringPool_Construct((S_2eadf0 *)var_v0_2));
             }
@@ -158,7 +158,7 @@ void FUN_002c8250(int arg0) {
         var_v0_3 = (void *)(0);
     } else {
         if (g_stringPool[0] == 0) {
-            var_v0_4 = ((int)FUN_002eb010(0x10));
+            var_v0_4 = ((int)StringPool_Allocate(0x10));
             if (var_v0_4 != 0) {
                 var_v0_4 = ((int)StringPool_Construct((S_2eadf0 *)var_v0_4));
             }

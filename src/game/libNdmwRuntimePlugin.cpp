@@ -8,27 +8,27 @@ extern "C" void igInsightCore_RemoveManager(igInsightCore *core, int manager);
 extern "C" unsigned char g_useOwnerAllocator;
 extern "C" int g_ndmwAllocatorSelector[4];
 extern "C" int g_libNdmwRuntimePlugin_metaObject[4];
-extern "C" int FUN_003cae00(int allocator);
-extern "C" int FUN_003bbda0(int allocator);
-extern "C" int FUN_003bee90(int allocator);
-extern "C" int FUN_003c2340(int allocator);
-extern "C" int FUN_003b28a0(int allocator);
-extern "C" int FUN_003c7da0(int allocator);
-extern "C" int FUN_003c4700(int allocator);
-extern "C" int FUN_003bd3f0(int allocator);
-extern "C" int FUN_003bcc80(int allocator);
-extern "C" int FUN_003c9ca0(int allocator);
-extern "C" int FUN_003bb790(int allocator);
-extern "C" int FUN_003bf890(int allocator);
-extern "C" int FUN_003bf1b0(int allocator);
-extern "C" int FUN_003c0960(int allocator);
-extern "C" int FUN_003c1720(int allocator);
-extern "C" int FUN_003c1ca0(int allocator);
-extern "C" int FUN_003c0b50(int allocator);
-extern "C" int FUN_003c1120(int allocator);
-extern "C" int FUN_003c1ab0(int allocator);
-extern "C" int FUN_003c0f30(int allocator);
-extern "C" int FUN_003c0d40(int allocator);
+extern "C" int beNDMWAfsSetup_CreateInstance(int allocator);
+extern "C" int beNDMWStageCtl_CreateInstance(int allocator);
+extern "C" int beNDMWPanelWaza_CreateInstance(int allocator);
+extern "C" int beNDMWLogo_CreateInstance(int allocator);
+extern "C" int beNDMWTitle2_CreateInstance(int allocator);
+extern "C" int beNDMWLoadCtrl2_CreateInstance(int allocator);
+extern "C" int beNDMWLoadIntf2_CreateInstance(int allocator);
+extern "C" int beNDMWSaveCtrl_CreateInstance(int allocator);
+extern "C" int beNDMWSaveIntf_CreateInstance(int allocator);
+extern "C" int beNDMWGameRam_CreateInstance(int allocator);
+extern "C" int beNDMWStatus_CreateInstance(int allocator);
+extern "C" int beNDMWMdlPlayer_CreateInstance(int allocator);
+extern "C" int beNDMWMdlPlayer2_CreateInstance(int allocator);
+extern "C" int beNDMWMdlPBullet_CreateInstance(int allocator);
+extern "C" int beNDMWMdlEnemy_CreateInstance(int allocator);
+extern "C" int beNDMWMdlEBullet_CreateInstance(int allocator);
+extern "C" int beNDMWMdlObject_CreateInstance(int allocator);
+extern "C" int beNDMWMdlItem_CreateInstance(int allocator);
+extern "C" int beNDMWMdlEffect_CreateInstance(int allocator);
+extern "C" int beNDMWMdlMapBase_CreateInstance(int allocator);
+extern "C" int beNDMWMdlMapCursor_CreateInstance(int allocator);
 
 /* vfunc_21 replaces every manager with a fresh instance, released through the refcount in the low
  * 23 bits of _refCount and allocated from the plugin's own allocator when g_useOwnerAllocator is set,
@@ -63,27 +63,27 @@ static inline void RemoveManager(igInsightCore *core, int manager) {
 #define REPLACE_MANAGER(field, create) { int allocator = PluginAllocator(plugin); ReleaseRef(plugin->field); plugin->field = create(allocator); }
 
 extern "C" void Gap__Bec__libNdmwRuntimePlugin__vfunc_21(libNdmwRuntimePlugin *plugin, igInsightCore *core) {
-    REPLACE_MANAGER(_afsSetup, FUN_003cae00)
-    REPLACE_MANAGER(_stageCtl, FUN_003bbda0)
-    REPLACE_MANAGER(_panelWaza, FUN_003bee90)
-    REPLACE_MANAGER(_logo, FUN_003c2340)
-    REPLACE_MANAGER(_title2, FUN_003b28a0)
-    REPLACE_MANAGER(_loadCtrl2, FUN_003c7da0)
-    REPLACE_MANAGER(_loadIntf2, FUN_003c4700)
-    REPLACE_MANAGER(_saveCtrl, FUN_003bd3f0)
-    REPLACE_MANAGER(_saveIntf, FUN_003bcc80)
-    REPLACE_MANAGER(_gameRam, FUN_003c9ca0)
-    REPLACE_MANAGER(_status, FUN_003bb790)
-    REPLACE_MANAGER(_mdlPlayer, FUN_003bf890)
-    REPLACE_MANAGER(_mdlPlayer2, FUN_003bf1b0)
-    REPLACE_MANAGER(_mdlPBullet, FUN_003c0960)
-    REPLACE_MANAGER(_mdlEnemy, FUN_003c1720)
-    REPLACE_MANAGER(_mdlEBullet, FUN_003c1ca0)
-    REPLACE_MANAGER(_mdlObject, FUN_003c0b50)
-    REPLACE_MANAGER(_mdlItem, FUN_003c1120)
-    REPLACE_MANAGER(_mdlEffect, FUN_003c1ab0)
-    REPLACE_MANAGER(_mdlMapBase, FUN_003c0f30)
-    REPLACE_MANAGER(_mdlMapCursor, FUN_003c0d40)
+    REPLACE_MANAGER(_afsSetup, beNDMWAfsSetup_CreateInstance)
+    REPLACE_MANAGER(_stageCtl, beNDMWStageCtl_CreateInstance)
+    REPLACE_MANAGER(_panelWaza, beNDMWPanelWaza_CreateInstance)
+    REPLACE_MANAGER(_logo, beNDMWLogo_CreateInstance)
+    REPLACE_MANAGER(_title2, beNDMWTitle2_CreateInstance)
+    REPLACE_MANAGER(_loadCtrl2, beNDMWLoadCtrl2_CreateInstance)
+    REPLACE_MANAGER(_loadIntf2, beNDMWLoadIntf2_CreateInstance)
+    REPLACE_MANAGER(_saveCtrl, beNDMWSaveCtrl_CreateInstance)
+    REPLACE_MANAGER(_saveIntf, beNDMWSaveIntf_CreateInstance)
+    REPLACE_MANAGER(_gameRam, beNDMWGameRam_CreateInstance)
+    REPLACE_MANAGER(_status, beNDMWStatus_CreateInstance)
+    REPLACE_MANAGER(_mdlPlayer, beNDMWMdlPlayer_CreateInstance)
+    REPLACE_MANAGER(_mdlPlayer2, beNDMWMdlPlayer2_CreateInstance)
+    REPLACE_MANAGER(_mdlPBullet, beNDMWMdlPBullet_CreateInstance)
+    REPLACE_MANAGER(_mdlEnemy, beNDMWMdlEnemy_CreateInstance)
+    REPLACE_MANAGER(_mdlEBullet, beNDMWMdlEBullet_CreateInstance)
+    REPLACE_MANAGER(_mdlObject, beNDMWMdlObject_CreateInstance)
+    REPLACE_MANAGER(_mdlItem, beNDMWMdlItem_CreateInstance)
+    REPLACE_MANAGER(_mdlEffect, beNDMWMdlEffect_CreateInstance)
+    REPLACE_MANAGER(_mdlMapBase, beNDMWMdlMapBase_CreateInstance)
+    REPLACE_MANAGER(_mdlMapCursor, beNDMWMdlMapCursor_CreateInstance)
 
     AddManager(core, plugin->_afsSetup);
     AddManager(core, plugin->_stageCtl);

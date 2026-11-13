@@ -3,7 +3,7 @@
 
 extern "C" int List_Reserve(...);
 extern "C" void igObject_Destroy(void *);
-extern "C" int FUN_002eb010(...);
+extern "C" int StringPool_Allocate(...);
 extern "C" int strcmp(...);
 extern "C" int beCri_SetSndfVolume(...);
 extern "C" int StringChunk_ReleaseHeader(...);
@@ -54,7 +54,7 @@ extern "C" int beMessenger_PrepareDelayedGroup(...);
 extern "C" unsigned int beMessenger_ResolveEnumValue(...);
 extern "C" void *igObject_GetAllocator(...);
 extern "C" int g_beCri_metaObject[4];
-extern "C" igObject *FUN_00236f80(int, int);
+extern "C" igObject *igInsightCore_FindManager(int, int);
 extern "C" void Gap__Bec__beSound__vfunc_32(beSound *arg0);
 typedef struct K { char pad[52]; int f52; char pad2[8]; int f64; } K;
 /* matching construct: pointer-typed view of beBaseInfoRam._parentInfo (+12) and beSoundInfo._dataType (+32); the matching compiler
@@ -106,7 +106,7 @@ extern "C" StringRef StringList_CopyRetained(void *list, int index);
 struct FloatBits { unsigned mantissa : 31; unsigned sign : 1; };
 struct U { static inline char *Intern(char *text) {
     if (g_stringPool[0] == 0) {
-        int pool = FUN_002eb010(0x10);
+        int pool = StringPool_Allocate(0x10);
         if (pool != 0) pool = StringPool_Construct(pool);
         g_stringPool[0] = pool;
     }
@@ -122,7 +122,7 @@ void Gap__Bec__beSound__vfunc_32(beSound *arg0) {
     igObject *o;
     igDataList *l2;
     if (arg0->_cri == 0) {
-        igObject *t = FUN_00236f80(arg0->_insight, g_beCri_metaObject[0]);
+        igObject *t = igInsightCore_FindManager(arg0->_insight, g_beCri_metaObject[0]);
         igObject *old;
         if (t != 0) {
             t->_refCount = (int)t->_refCount + 1;
@@ -174,7 +174,7 @@ void Gap__Bec__beSound__vfunc_29(beSound *arg0, SoundInfoPointerView *arg1) {
     beCri_SetSndfVolume(arg0->_cri, ((beSoundInfo *)arg1)->_sndfVolume);
     if (arg1->f32 == 0) {
         if (g_stringPool[0] == 0) {
-            var_v0 = FUN_002eb010(0x10);
+            var_v0 = StringPool_Allocate(0x10);
             if (var_v0 != 0) {
                 var_v0 = StringPool_Construct(var_v0);
             }

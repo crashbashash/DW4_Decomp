@@ -1,7 +1,7 @@
 #include "dw4/reflected.h"
 
 extern "C" int Gap__Core__igObject__vfunc_24(...);
-extern "C" int FUN_00236f80(int, int);
+extern "C" int igInsightCore_FindManager(int, int);
 extern "C" int Gap__Bec__beStaticInfoCtl__vfunc_30(void);
 extern "C" void Gap__Bec__beStaticInfoCtl__vfunc_31(void);
 extern "C" int Gap__Bec__beStaticInfoCtl__vfunc_20(void);
@@ -74,7 +74,7 @@ void Gap__Bec__beStaticInfoCtl__vfunc_24(beStaticInfoCtl *arg0) {
 
 void Gap__Bec__beStaticInfoCtl__vfunc_32(beStaticInfoCtl *arg0) {
     if (arg0->_messenger == 0) {
-        arg0->_messenger = FUN_00236f80(arg0->_insight, g_beMessenger_metaObject[0]);
+        arg0->_messenger = igInsightCore_FindManager(arg0->_insight, g_beMessenger_metaObject[0]);
     }
 }
 

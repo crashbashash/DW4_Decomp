@@ -8,44 +8,44 @@ extern "C" void igInsightCore_RemoveManager(igInsightCore *core, int manager);
 extern "C" unsigned char g_useOwnerAllocator;
 extern "C" int g_ndmwAllocatorSelector[4];
 extern "C" int g_libBecRuntimePlugin_metaObject[4];
-extern "C" int FUN_00342ca0(int allocator);
-extern "C" int FUN_0036dfa0(int allocator);
-extern "C" int FUN_003578d0(int allocator);
-extern "C" int FUN_00367860(int allocator);
-extern "C" int FUN_003627f0(int allocator);
-extern "C" int FUN_0034c8a0(int allocator);
-extern "C" int FUN_00343760(int allocator);
-extern "C" int FUN_003660d0(int allocator);
-extern "C" int FUN_0035b730(int allocator);
-extern "C" int FUN_00363210(int allocator);
-extern "C" int FUN_00369dc0(int allocator);
-extern "C" int FUN_003442b0(int allocator);
-extern "C" int FUN_003464f0(int allocator);
-extern "C" int FUN_00340cc0(int allocator);
-extern "C" int FUN_0035caa0(int allocator);
-extern "C" int FUN_00361e50(int allocator);
-extern "C" int FUN_0034ef30(int allocator);
-extern "C" int FUN_00346c80(int allocator);
-extern "C" int FUN_00368710(int allocator);
-extern "C" int FUN_0035d780(int allocator);
-extern "C" int FUN_0035eb90(int allocator);
-extern "C" int FUN_00345a00(int allocator);
-extern "C" int FUN_00357660(int allocator);
-extern "C" int FUN_00342970(int allocator);
-extern "C" int FUN_0036dd30(int allocator);
-extern "C" int FUN_0033f410(int allocator);
-extern "C" int FUN_00369820(int allocator);
-extern "C" int FUN_00344e40(int allocator);
-extern "C" int FUN_00360b70(int allocator);
-extern "C" int FUN_0034b9e0(int allocator);
-extern "C" int FUN_0035a710(int allocator);
-extern "C" int FUN_0036c030(int allocator);
-extern "C" int FUN_0034c630(int allocator);
-extern "C" int FUN_00343490(int allocator);
-extern "C" int FUN_0035c010(int allocator);
-extern "C" int FUN_0034e360(int allocator);
-extern "C" int FUN_00342310(int allocator);
-extern "C" int FUN_00341340(int allocator);
+extern "C" int beSystem_CreateInstance(int allocator);
+extern "C" int be_CreateInstance(int allocator);
+extern "C" int beMessenger_CreateInstance(int allocator);
+extern "C" int beCri_CreateInstance(int allocator);
+extern "C" int beFileListInfoManager_CreateInstance(int allocator);
+extern "C" int bePadManager_CreateInstance(int allocator);
+extern "C" int beStaticInfoCtl_CreateInstance(int allocator);
+extern "C" int beDBManager_CreateInstance(int allocator);
+extern "C" int beLua_CreateInstance(int allocator);
+extern "C" int beDemoManager_CreateInstance(int allocator);
+extern "C" int beBkColor_CreateInstance(int allocator);
+extern "C" int beSound_CreateInstance(int allocator);
+extern "C" int beSeCtl_CreateInstance(int allocator);
+extern "C" int beWaterPlain_CreateInstance(int allocator);
+extern "C" int beLayerCtl_CreateInstance(int allocator);
+extern "C" int beFont_CreateInstance(int allocator);
+extern "C" int beMovie_CreateInstance(int allocator);
+extern "C" int beSaveUtil_CreateInstance(int allocator);
+extern "C" int beChangePosTransform_CreateInstance(int allocator);
+extern "C" int beHitLandModel_CreateInstance(int allocator);
+extern "C" int beHitLandDeliv_CreateInstance(int allocator);
+extern "C" int beSelectCtrl_CreateInstance(int allocator);
+extern "C" int beMeterCtrl_CreateInstance(int allocator);
+extern "C" int beTargetObj_CreateInstance(int allocator);
+extern "C" int beAction2_CreateInstance(int allocator);
+extern "C" int beWeapon_CreateInstance(int allocator);
+extern "C" int beCameraCtrl_CreateInstance(int allocator);
+extern "C" int beShadow01_CreateInstance(int allocator);
+extern "C" int beGenerater_CreateInstance(int allocator);
+extern "C" int bePoint01_CreateInstance(int allocator);
+extern "C" int beMatCtrl_CreateInstance(int allocator);
+extern "C" int beActionStarter_CreateInstance(int allocator);
+extern "C" int beParticleCtrl2_CreateInstance(int allocator);
+extern "C" int beSwitchCtrl_CreateInstance(int allocator);
+extern "C" int beLightCtrl_CreateInstance(int allocator);
+extern "C" int beNumberCtrl_CreateInstance(int allocator);
+extern "C" int beTextureCtrl_CreateInstance(int allocator);
+extern "C" int beTimer_CreateInstance(int allocator);
 
 /* vfunc_21 replaces every manager with a fresh instance, released through the refcount in the low
  * 23 bits of _refCount and allocated from the plugin's own allocator when g_useOwnerAllocator is set,
@@ -80,44 +80,44 @@ static inline void RemoveManager(igInsightCore *core, int manager) {
 #define REPLACE_MANAGER(field, create) { int allocator = PluginAllocator(plugin); ReleaseRef(plugin->field); plugin->field = create(allocator); }
 
 extern "C" void Gap__Bec__libBecRuntimePlugin__vfunc_21(libBecRuntimePlugin *plugin, igInsightCore *core) {
-    REPLACE_MANAGER(_system, FUN_00342ca0)
-    REPLACE_MANAGER(_luaInterface, FUN_0036dfa0)
-    REPLACE_MANAGER(_messenger, FUN_003578d0)
-    REPLACE_MANAGER(_cri, FUN_00367860)
-    REPLACE_MANAGER(_fileList, FUN_003627f0)
-    REPLACE_MANAGER(_padManager, FUN_0034c8a0)
-    REPLACE_MANAGER(_staticInfoCtl, FUN_00343760)
-    REPLACE_MANAGER(_dbManager, FUN_003660d0)
-    REPLACE_MANAGER(_luaManager, FUN_0035b730)
-    REPLACE_MANAGER(_demoManager, FUN_00363210)
-    REPLACE_MANAGER(_bkColor, FUN_00369dc0)
-    REPLACE_MANAGER(_sound, FUN_003442b0)
-    REPLACE_MANAGER(_seCtl, FUN_003464f0)
-    REPLACE_MANAGER(_waterPlain, FUN_00340cc0)
-    REPLACE_MANAGER(_layerCtl, FUN_0035caa0)
-    REPLACE_MANAGER(_font, FUN_00361e50)
-    REPLACE_MANAGER(_movie, FUN_0034ef30)
-    REPLACE_MANAGER(_saveUtil, FUN_00346c80)
-    REPLACE_MANAGER(_cpTransform, FUN_00368710)
-    REPLACE_MANAGER(_hitLandModel, FUN_0035d780)
-    REPLACE_MANAGER(_hitLandDeliv, FUN_0035eb90)
-    REPLACE_MANAGER(_selectCtrl, FUN_00345a00)
-    REPLACE_MANAGER(_meterCtrl, FUN_00357660)
-    REPLACE_MANAGER(_targetObj, FUN_00342970)
-    REPLACE_MANAGER(_action2, FUN_0036dd30)
-    REPLACE_MANAGER(_weapon, FUN_0033f410)
-    REPLACE_MANAGER(_cameraCtrl, FUN_00369820)
-    REPLACE_MANAGER(_shadow01, FUN_00344e40)
-    REPLACE_MANAGER(_generater, FUN_00360b70)
-    REPLACE_MANAGER(_point01, FUN_0034b9e0)
-    REPLACE_MANAGER(_matCtrl, FUN_0035a710)
-    REPLACE_MANAGER(_actionStarter, FUN_0036c030)
-    REPLACE_MANAGER(_particleCtrl2, FUN_0034c630)
-    REPLACE_MANAGER(_switchCtrl, FUN_00343490)
-    REPLACE_MANAGER(_lightCtrl, FUN_0035c010)
-    REPLACE_MANAGER(_numberCtrl, FUN_0034e360)
-    REPLACE_MANAGER(_textureCtrl, FUN_00342310)
-    REPLACE_MANAGER(_timer, FUN_00341340)
+    REPLACE_MANAGER(_system, beSystem_CreateInstance)
+    REPLACE_MANAGER(_luaInterface, be_CreateInstance)
+    REPLACE_MANAGER(_messenger, beMessenger_CreateInstance)
+    REPLACE_MANAGER(_cri, beCri_CreateInstance)
+    REPLACE_MANAGER(_fileList, beFileListInfoManager_CreateInstance)
+    REPLACE_MANAGER(_padManager, bePadManager_CreateInstance)
+    REPLACE_MANAGER(_staticInfoCtl, beStaticInfoCtl_CreateInstance)
+    REPLACE_MANAGER(_dbManager, beDBManager_CreateInstance)
+    REPLACE_MANAGER(_luaManager, beLua_CreateInstance)
+    REPLACE_MANAGER(_demoManager, beDemoManager_CreateInstance)
+    REPLACE_MANAGER(_bkColor, beBkColor_CreateInstance)
+    REPLACE_MANAGER(_sound, beSound_CreateInstance)
+    REPLACE_MANAGER(_seCtl, beSeCtl_CreateInstance)
+    REPLACE_MANAGER(_waterPlain, beWaterPlain_CreateInstance)
+    REPLACE_MANAGER(_layerCtl, beLayerCtl_CreateInstance)
+    REPLACE_MANAGER(_font, beFont_CreateInstance)
+    REPLACE_MANAGER(_movie, beMovie_CreateInstance)
+    REPLACE_MANAGER(_saveUtil, beSaveUtil_CreateInstance)
+    REPLACE_MANAGER(_cpTransform, beChangePosTransform_CreateInstance)
+    REPLACE_MANAGER(_hitLandModel, beHitLandModel_CreateInstance)
+    REPLACE_MANAGER(_hitLandDeliv, beHitLandDeliv_CreateInstance)
+    REPLACE_MANAGER(_selectCtrl, beSelectCtrl_CreateInstance)
+    REPLACE_MANAGER(_meterCtrl, beMeterCtrl_CreateInstance)
+    REPLACE_MANAGER(_targetObj, beTargetObj_CreateInstance)
+    REPLACE_MANAGER(_action2, beAction2_CreateInstance)
+    REPLACE_MANAGER(_weapon, beWeapon_CreateInstance)
+    REPLACE_MANAGER(_cameraCtrl, beCameraCtrl_CreateInstance)
+    REPLACE_MANAGER(_shadow01, beShadow01_CreateInstance)
+    REPLACE_MANAGER(_generater, beGenerater_CreateInstance)
+    REPLACE_MANAGER(_point01, bePoint01_CreateInstance)
+    REPLACE_MANAGER(_matCtrl, beMatCtrl_CreateInstance)
+    REPLACE_MANAGER(_actionStarter, beActionStarter_CreateInstance)
+    REPLACE_MANAGER(_particleCtrl2, beParticleCtrl2_CreateInstance)
+    REPLACE_MANAGER(_switchCtrl, beSwitchCtrl_CreateInstance)
+    REPLACE_MANAGER(_lightCtrl, beLightCtrl_CreateInstance)
+    REPLACE_MANAGER(_numberCtrl, beNumberCtrl_CreateInstance)
+    REPLACE_MANAGER(_textureCtrl, beTextureCtrl_CreateInstance)
+    REPLACE_MANAGER(_timer, beTimer_CreateInstance)
 
     AddManager(core, plugin->_system);
     AddManager(core, plugin->_luaInterface);

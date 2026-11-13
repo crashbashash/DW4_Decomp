@@ -157,7 +157,7 @@ void FUN_002d78e0(void *arg0, int arg1) {
         var_v0 = (void *)(0);
     } else {
         if (g_stringPool[0] == 0) {
-            var_v0_2 = ((int)FUN_002eb010(0x10));
+            var_v0_2 = ((int)StringPool_Allocate(0x10));
             if (var_v0_2 != 0) {
                 var_v0_2 = ((int)StringPool_Construct((struct S_2eadf0 *)var_v0_2));
             }

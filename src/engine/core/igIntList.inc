@@ -2,7 +2,7 @@ igMetaObject *FUN_002caa60(void) {
     return g_igIntList_metaObject[0];
 }
 
-void * FUN_002caa70(int arg0) {
+void * igIntList_Create(int arg0) {
     igIntList_EnsureRegistered();
     return (void *)(igMetaObject_CreateInstance((CreateMeta *)(*(int *)0x586880), (MemoryPool *)arg0));
 }

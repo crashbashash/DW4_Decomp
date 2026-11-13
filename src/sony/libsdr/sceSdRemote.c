@@ -10,7 +10,7 @@ typedef struct {
 typedef struct {
     int words[10];
 } RpcClient;
-int FUN_0010e2a8(RpcClient *client, unsigned int command, unsigned int mode, void *send, int sendSize, void *recv,
+int sceSifCallRpc(RpcClient *client, unsigned int command, unsigned int mode, void *send, int sendSize, void *recv,
                  int recvSize, RpcEnd end, void *endArg);
 extern unsigned int DAT_0055d540[];
 extern RpcClient DAT_0055d580;
@@ -72,13 +72,13 @@ int sceSdRemote(int block, ...) {
     ret = 0;
     if (command == 0x8130 || command == 0x81a0 || command == 0x81b0) {
         if (end != 0) gp = swapGp(DAT_00485144);
-        FUN_0010e2a8(&DAT_0055d580, command | DAT_0055d540[1], mode, (void *)DAT_0055d540[2], 64, DAT_0055d540, 64,
+        sceSifCallRpc(&DAT_0055d580, command | DAT_0055d540[1], mode, (void *)DAT_0055d540[2], 64, DAT_0055d540, 64,
                      end, (void *)DAT_0055d540[0]);
         if (end != 0) (void)swapGp(gp);
         ret = DAT_0055d540[0];
     } else if (command == 0x8140) {
         if (end != 0) gp = swapGp(DAT_00485144);
-        FUN_0010e2a8(&DAT_0055d580, command | DAT_0055d540[1], mode, &DAT_0055d540[0], 64, (void *)DAT_0055d540[2],
+        sceSifCallRpc(&DAT_0055d580, command | DAT_0055d540[1], mode, &DAT_0055d540[0], 64, (void *)DAT_0055d540[2],
                      64, end, (void *)DAT_0055d540[2]);
         if (end != 0) (void)swapGp(gp);
     } else if (command == 0x81c0 || command == 0x81d0) {
@@ -98,7 +98,7 @@ int sceSdRemote(int block, ...) {
             resultsSize = 4;
         }
         if (end != 0) gp = swapGp(DAT_00485144);
-        FUN_0010e2a8(&DAT_0055d580, command, mode, (void *)DAT_0055d540[1],
+        sceSifCallRpc(&DAT_0055d580, command, mode, (void *)DAT_0055d540[1],
                      (int)(sizeof(SdBatch) * (DAT_0055d540[2] + 1)), (void *)results, resultsSize, end,
                      (void *)DAT_0055d540);
         if (end != 0) (void)swapGp(gp);
@@ -107,13 +107,13 @@ int sceSdRemote(int block, ...) {
         }
     } else if (command >= 0x9000 && command <= 0x90f0) {
         if (end != 0) gp = swapGp(DAT_00485144);
-        FUN_0010e2a8(&DAT_0055d580, command, mode, (void *)DAT_0055d540[1], (int)DAT_0055d540[2], &DAT_0055d540[0], 16,
+        sceSifCallRpc(&DAT_0055d580, command, mode, (void *)DAT_0055d540[1], (int)DAT_0055d540[2], &DAT_0055d540[0], 16,
                      end, &DAT_0055d540[0]);
         if (end != 0) (void)swapGp(gp);
         ret = DAT_0055d540[0];
     } else {
         if (end != 0) gp = swapGp(DAT_00485144);
-        FUN_0010e2a8(&DAT_0055d580, command, mode, &DAT_0055d540[0], 64, &DAT_0055d540[0], 16, end, &DAT_0055d540[0]);
+        sceSifCallRpc(&DAT_0055d580, command, mode, &DAT_0055d540[0], 64, &DAT_0055d540[0], 16, end, &DAT_0055d540[0]);
         if (end != 0) (void)swapGp(gp);
         ret = DAT_0055d540[0];
     }

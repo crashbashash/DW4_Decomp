@@ -64,6 +64,6 @@ void igLuaState_InitFields(void) {
 
     igMetaObject_CreateFields(meta, g_igLuaState_fieldConstructors, 2);
     memPool = (igObjectRefMetaField *)igMetaObject_GetFieldAt(meta, first + 1);
-    memPool->_metaObject = FUN_002c04a0();
+    memPool->_metaObject = igMemoryPool_GetOrCreateMetaObject();
     igMetaObject_NameFields(meta, g_igLuaState_fieldNames, g_igLuaState_fieldDescriptors, g_igLuaState_fieldOffsets, first);
 }

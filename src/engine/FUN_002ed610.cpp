@@ -53,13 +53,13 @@ void free(void *block);
 void FUN_0032f300(void);
 int FUN_00304430(...);   /* console printf */
 int FUN_00304680();      /* console flush after each print */
-void *FUN_002c4ca0(int);
+void *igFile_Create(int);
 void igObject_Destroy(void *);
 extern char DAT_004f92f0[], DAT_004f95c8[], DAT_004f9ca0[], DAT_004f9cb0[], DAT_004f9cc0[],
     DAT_004f9cc8[], DAT_004f9cd0[], DAT_004f9cd8[], DAT_004f9ce0[], DAT_004f9ce8[],
     DAT_004f9cf0[], DAT_004f9cf8[];
 extern unsigned char GPR_00554c14;
-extern int DAT_00587028[], DAT_00587060[];
+extern int DAT_00587028[], g_temporaryAllocatorSelector[];
 extern SystemAllocator *DAT_00587218[4];
 
 void *FUN_002ed1e0(int, unsigned int size, igMemoryPool *pool);
@@ -123,8 +123,8 @@ extern "C" void FUN_002ed610(unsigned int size, unsigned int perLine, unsigned i
     if (0 != name) {
         int alloc;
         if (GPR_00554c14) alloc = Memory_GetAllocatorBySelector(DAT_00587028[0]);
-        else alloc = Memory_GetAllocatorBySelector(DAT_00587060[0]);
-        file = (DumpFile *)FUN_002c4ca0(alloc);
+        else alloc = Memory_GetAllocatorBySelector(g_temporaryAllocatorSelector[0]);
+        file = (DumpFile *)igFile_Create(alloc);
         if (0 == file->Open(name, DAT_004f92f0)) goto done;
     }
     {

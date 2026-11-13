@@ -7,7 +7,7 @@ void igResource_StopAsyncLoading(PairOwnerView *arg0) {
         sp3C = arg0->f32->m104(0, 1);
         PairQueryTarget *z;
         q = arg0->f36;
-        z = ((PairQueryHost * *)DAT_005871d0)[0]->m92();
+        z = ((PairQueryHost * *)g_threadManager)[0]->m92();
         sp38 = z->m96(q);
         FUN_00305000((H_305000 *)arg0->f32);
         x = arg0->f32;
@@ -86,7 +86,7 @@ void *igResource_LoadDirectory(Item_3092f0 *arg0, int arg1) {
     ((Out_3092f0 *)sp5C.p)->f48 = 1;
     o = (Out_3092f0 *)sp5C.p;
     if (g_stringPool[0] == 0) {
-        v = ((int)FUN_002eb010(16));
+        v = ((int)StringPool_Allocate(16));
         if (v != 0) v = ((int)StringPool_Construct((S_2eadf0 *)v));
         g_stringPool[0] = v;
     }

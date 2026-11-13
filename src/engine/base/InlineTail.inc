@@ -114,7 +114,7 @@ extern "C" R_3 Gap__igItemInterface__vfunc_28(Obj_10 *arg1, void *arg2, int arg3
     int s = *(int *)((char *)(arg2) + 28);
     if (s == 0) { var_v0 = 0; } else {
         if (g_stringPool[0] == 0) {
-            int v = FUN_002eb010(0x10);
+            int v = StringPool_Allocate(0x10);
             if (v != 0) { v = StringPool_Construct(v); }
             g_stringPool[0] = v;
         }

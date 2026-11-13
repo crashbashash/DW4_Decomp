@@ -1,4 +1,4 @@
-void FUN_0035c010(int arg0) {
+void beLightCtrl_CreateInstance(int arg0) {
     FUN_0035c1d0();
     igMetaObject_CreateInstance(*(int *)0x589258, arg0);
 }

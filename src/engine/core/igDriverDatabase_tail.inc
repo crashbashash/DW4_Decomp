@@ -47,7 +47,7 @@ int FUN_002d9cf0(igDriverDatabase *arg0, int arg1, int arg2) {
         v = 0;
     } else {
         if (g_stringPool[0] == 0) {
-            int al = ((int)FUN_002eb010(16));
+            int al = ((int)StringPool_Allocate(16));
             if (al != 0) al = ((int)StringPool_Construct((struct S_2eadf0 *)al));
             g_stringPool[0] = al;
         }
@@ -118,7 +118,7 @@ int FUN_002da1c0(igDriverDatabase *arg0, const char *arg1, const char *arg2) {
     {
         int al = ((int)igObject_GetAllocator((int)arg0));
         release_2da1c0((T *)arg0->_databaseFile);
-        arg0->_databaseFile = (int)((T *)FUN_002c4ca0(al));
+        arg0->_databaseFile = (int)((T *)igFile_Create(al));
     }
     s0 = ((O100 *)arg0->_databaseFile)->vX(name.p, &DAT_004f96a8[0]);
     if (s0 == 0) {

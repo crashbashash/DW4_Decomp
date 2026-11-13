@@ -1,12 +1,12 @@
 #include "dw4/reflected.h"
-#define ENSURE_POOL() if (((int *)g_stringPool)[0] == 0) { v = ((int)FUN_002eb010(0x10)); if (v != 0) { v = ((int)StringPool_Construct(v)); } ((int *)g_stringPool)[0] = v; }
+#define ENSURE_POOL() if (((int *)g_stringPool)[0] == 0) { v = ((int)StringPool_Allocate(0x10)); if (v != 0) { v = ((int)StringPool_Construct(v)); } ((int *)g_stringPool)[0] = v; }
 #define INTERN_APPEND(field, text) { \
     const char *tok; \
     if ((text) == 0) { \
         tok = 0; \
     } else { \
         if (g_stringPool[0] == 0) { \
-            void *pool = FUN_002eb010(0x10); \
+            void *pool = StringPool_Allocate(0x10); \
             if (pool != 0) pool = StringPool_Construct(pool); \
             g_stringPool[0] = pool; \
         } \
@@ -21,7 +21,7 @@ extern "C" int beNDMWWindow_PollCloseComplete(...);
 extern "C" int beNDMWWindow_RequestChildrenClose(...);
 extern "C" int beNDMWWindow_PresentModelAtOrigin(...);
 extern "C" void Gap__Bec__beNDMWStatusTitle00__vfunc_22(int *arg0);
-extern "C" void * FUN_002eb010(...);
+extern "C" void * StringPool_Allocate(...);
 extern "C" void StringChunk_ReleaseHeader(int, int *);
 extern "C" void * StringPool_Construct(...);
 extern "C" const char * StringPool_Intern(...);
@@ -77,7 +77,7 @@ struct Rec { char pad[12]; unsigned int sel; };
 struct Str {
     static inline int *intern(const char *s) {
         if (((int *)g_stringPool)[0] == 0) {
-            int v = ((int)FUN_002eb010(0x10));
+            int v = ((int)StringPool_Allocate(0x10));
             if (v != 0) v = ((int)StringPool_Construct(v));
             ((int *)g_stringPool)[0] = v;
         }

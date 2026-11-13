@@ -202,7 +202,7 @@ void FUN_0032e130(MediaPathFields *self, int index, char **path) {
     {
         row = &self->handles->rows[index];
         if ((*(int *)g_stringPool) == 0) {
-            v = ((int)FUN_002eb010(16));
+            v = ((int)StringPool_Allocate(16));
             if (v != 0) {
                 v = ((int)StringPool_Construct((struct S_2eadf0 *)v));
             }

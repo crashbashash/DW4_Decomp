@@ -9,7 +9,7 @@ extern "C" int beMessenger_GetBool(int messenger, int index);
 extern "C" int beMessenger_GetInt(int messenger, int index);
 extern "C" int beMessenger_SelectReceivers(int messenger, const char *type, int name, int playerNo);
 extern "C" int beMessenger_SendNamed(int messenger, const char *type, int name, int playerNo, const char *message);
-extern "C" void *FUN_002eb010(int size);
+extern "C" void *StringPool_Allocate(int size);
 extern "C" void *StringPool_Construct(void *pool);
 extern "C" char *StringPool_Intern(void *pool, const char *text);
 extern "C" int StringChunk_ReleaseHeader(int chunk, int *header);
@@ -51,7 +51,7 @@ extern "C" int g_beNDMWWindowSelect_metaObject[4];
 /* The pooled-string singleton, created on first use. */
 static inline void *StringPool_Get(void) {
     if (g_stringPool[0] == 0) {
-        void *pool = FUN_002eb010(0x10);
+        void *pool = StringPool_Allocate(0x10);
         if (pool != 0) pool = StringPool_Construct(pool);
         g_stringPool[0] = pool;
     }

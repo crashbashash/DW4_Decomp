@@ -4,7 +4,7 @@
 #include "dw4/reflected.h"
 #include "dw4/igSmartPointer.h"
 #include "dw4/igTDataList.h"
-#define POOL() { if (((void * *)g_stringPool)[0] == 0) { void *pool = FUN_002eb010(0x10); if (pool != 0) pool = ((void *)StringPool_Construct((struct S_2eadf0 *)pool)); ((void * *)g_stringPool)[0] = pool; } }
+#define POOL() { if (((void * *)g_stringPool)[0] == 0) { void *pool = StringPool_Allocate(0x10); if (pool != 0) pool = ((void *)StringPool_Construct((struct S_2eadf0 *)pool)); ((void * *)g_stringPool)[0] = pool; } }
 #define BLOCK(ctor, strsrc) { \
     igSmartPointer<T> candidate((T *)ctor(((int)igObject_GetAllocator((int)arg0)))); \
     const char *src = strsrc; \
@@ -35,7 +35,7 @@
 #define ASSIGN_TOKEN(field, source)                                           \
     text = (source);                                                          \
     if ((*(void * *)g_stringPool) == 0) {                                               \
-        poolObj = FUN_002eb010(16);                                           \
+        poolObj = StringPool_Allocate(16);                                           \
         if (poolObj != 0) {                                                   \
             poolObj = ((void *)StringPool_Construct((struct S_2eadf0 *)poolObj));                          \
         }                                                                     \
@@ -54,7 +54,7 @@
     (field) = token
 #define ASSIGN_TOKEN_DIRECT(field, source)                                           \
     if ((*(void * *)g_stringPool) == 0) {                                               \
-        poolObj = FUN_002eb010(16);                                           \
+        poolObj = StringPool_Allocate(16);                                           \
         if (poolObj != 0) {                                                   \
             poolObj = ((void *)StringPool_Construct((struct S_2eadf0 *)poolObj));                          \
         }                                                                     \
@@ -80,7 +80,7 @@
 #define SETSTR(off) { \
     int v_; int s_; int old_; int *hd_; \
     if (g_stringPool[0] == 0) { \
-        v_ = ((int)FUN_002eb010(0x10)); \
+        v_ = ((int)StringPool_Allocate(0x10)); \
         if (v_ != 0) v_ = ((int)StringPool_Construct((struct S_2eadf0 *)v_)); \
         g_stringPool[0] = v_; \
     } \
@@ -110,7 +110,7 @@ extern "C" int FUN_001029d0(...);
 extern "C" int thunk_FUN_00100bc0(...);
 struct StringChunkOwnerView;
 extern "C" void StringChunk_ReleaseHeader(StringChunkOwnerView *self, int header);
-extern "C" void * FUN_002eb010(int arg0);
+extern "C" void * StringPool_Allocate(int arg0);
 extern "C" struct S_2eadf0 *StringPool_Construct(struct S_2eadf0 *arg0);
 extern "C" void FUN_002b5d50(void);
 extern "C" int igVirtualCFuncMetaField_GetVTable(void);
@@ -506,7 +506,7 @@ extern "C" void FUN_002c0360(void);
 extern "C" void igMemoryPoolContextInfo_Register(void);
 extern "C" void thunk_igMemoryPoolContextInfo_GetMetaObject(void);
 extern "C" void igMemoryPoolContextInfo_InitFields(void);
-extern "C" igMetaObject *FUN_002c04a0(void);
+extern "C" igMetaObject *igMemoryPool_GetOrCreateMetaObject(void);
 extern "C" void FUN_002c0540(void);
 extern "C" void igMemoryPool_Register(void);
 extern "C" void thunk_igMemoryPool_GetMetaObject(void);
@@ -692,7 +692,7 @@ extern "C" void igFloatArrayMetaField_InitFields(void);
 extern "C" void FUN_002c4b10(void);
 extern "C" int FUN_002c4be0(void);
 extern "C" int FUN_002c4c40(void);
-extern "C" void * FUN_002c4ca0(int arg0);
+extern "C" void * igFile_Create(int arg0);
 extern "C" igMetaObject *FUN_002c4ce0(void);
 extern "C" void FUN_002c4d80(void);
 extern "C" void igFile_Register(void);
@@ -936,7 +936,7 @@ extern "C" void FUN_002ca9d0(void);
 extern "C" void igIntListNoClean_Register(void);
 extern "C" void thunk_igIntListNoClean_GetMetaObject(void);
 extern "C" igMetaObject *FUN_002caa60(void);
-extern "C" void * FUN_002caa70(int arg0);
+extern "C" void * igIntList_Create(int arg0);
 extern "C" int igIntList_GetVTable(void);
 extern "C" void igIntList_EnsureRegistered(void);
 extern "C" void *igIntList_Register(void);
@@ -2014,8 +2014,8 @@ extern "C" int CreateSema(...);
 extern "C" void Gap__Core__igPsx2IopRpcConnection__vfunc_11(int *arg0);
 extern "C" int DeleteSema(...);
 extern "C" int WaitSema(...);
-extern "C" int FUN_0010e0d8(...);
-extern "C" int FUN_0010e2a8(...);
+extern "C" int sceSifBindRpc(...);
+extern "C" int sceSifCallRpc(...);
 extern "C" int SignalSema(...);
 extern "C" int FUN_0010b7d8(...);
 extern "C" int iSignalSema(...);
@@ -4318,7 +4318,7 @@ struct igString {
 };
 struct Pool { static inline void *get() {
     if (((void * *)g_stringPool)[0] == 0) {
-        void *p = (void *)FUN_002eb010(16);
+        void *p = (void *)StringPool_Allocate(16);
         if (p != 0) {
             p = ((void *)StringPool_Construct((struct S_2eadf0 *)p));
         }
@@ -5493,7 +5493,7 @@ class DW4VC_96_1 { public: virtual void d0(); virtual void d1(); virtual void d2
 extern "C" void Gap__Core__igExternalInfoEntry__vfunc_31(igExternalInfoEntry *self, igDirectory *directory);
 extern "C" int DAT_004c2128[4];
 extern "C" void **DAT_00586e18[4];
-extern "C" int DAT_00587060[4];
+extern "C" int g_temporaryAllocatorSelector[4];
 struct RC { char pad[4]; int rc; };
 class VC_216 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void d32(); virtual void d33(); virtual void d34(); virtual void d35(); virtual void d36(); virtual void d37(); virtual void d38(); virtual void d39(); virtual void d40(); virtual void d41(); virtual void d42(); virtual void d43(); virtual void d44(); virtual void d45(); virtual void d46(); virtual void d47(); virtual void d48(); virtual void d49(); virtual void d50(); virtual void d51();  virtual void **vX(int); };
 class VCa { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual int vX(); };
@@ -6452,7 +6452,7 @@ class DW4VC_264_1 { public: virtual void d0(); virtual void d1(); virtual void d
 extern "C" struct S_2eadf0 *StringPool_Construct(struct S_2eadf0 *arg0);
 extern "C" void StringPool_DestroyChunks(struct P_2eadf0 *arg0);
 extern "C" int StringPool_Intern(StringPool *pool, const char *name);
-extern "C" void * FUN_002eb010(int arg0);
+extern "C" void * StringPool_Allocate(int arg0);
 class A_2eb0b0 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void vX(int); };
 struct L_2eb150 { char pad[8]; int f8; int f12; };
 struct O_2eb150 { char pad[16]; struct L_2eb150 *f16; struct L_2eb150 *f20; int f24; int f28; };
@@ -8284,7 +8284,7 @@ class StringJoinView { public: virtual void d0(); virtual void d1(); virtual voi
 struct InternedStrings {
     static inline int get() {
         if (g_stringPool[0] == 0) {
-            int pool = ((int)FUN_002eb010(16));
+            int pool = ((int)StringPool_Allocate(16));
             if (pool != 0) {
                 pool = ((int)StringPool_Construct((S_2eadf0 *)pool));
             }
@@ -9278,7 +9278,7 @@ typedef struct O_308a90 { int w[3]; Hd *f12; } O_308a90;
 typedef struct Gl_308a90 { int w[2]; int f8; } Gl_308a90;
 extern "C" Gl_308a90 *_impure_ptr[4];
 extern "C" Hd *FUN_00308a90(O_308a90 *arg0);
-extern "C" int DAT_004c22e8[4];
+extern "C" int g_resourceLoaderStackSize[4];
 struct R_308c80 { int v; };
 struct RO_308c80 : public igObject { };
 class V92 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void vA(); };
@@ -11173,7 +11173,7 @@ struct StringRef_32c240 {
             interned = 0;
         } else {
             if (g_stringPool[0] == 0) {
-                int pool = ((int)FUN_002eb010(16));
+                int pool = ((int)StringPool_Allocate(16));
                 if (pool != 0) {
                     pool = ((int)StringPool_Construct((struct S_2eadf0 *)pool));
                 }
@@ -11503,7 +11503,7 @@ class C31_32f840;
 struct O41;
 struct T56 { char p[44]; unsigned char f44; char p2[11]; char f56; };
 extern "C" int _gp[4];
-extern "C" ThreadMgr *DAT_005871d0[4];
+extern "C" ThreadMgr *g_threadManager[4];
 class DW4VC_168_0 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void d32(); virtual void d33(); virtual void d34(); virtual void d35(); virtual void d36(); virtual void d37(); virtual void d38(); virtual void d39(); virtual int vX(); };
 class DW4VCSR_104_1 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual DW4SR4 vX(int); };
 class VC1_24 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual SR24 vX(int); };

@@ -92,7 +92,7 @@ int sprintf(...);
 int dpsub(...);
 int FUN_00308240(...);
 int FUN_00308320(...);
-void *FUN_002eb010(int);
+void *StringPool_Allocate(int);
 void *StringPool_Construct(void *);
 char *StringPool_Intern(void *, const char *);
 void StringChunk_ReleaseHeader(int, void *);
@@ -104,7 +104,7 @@ int igObject_WritePersistentFields(int, int, int, int, unsigned char);
 void *FUN_002bd680(int);
 void *FUN_002c72c0(int);
 void *FUN_002c9130(int);
-void *FUN_002caa70(...);
+void *igIntList_Create(...);
 void *FUN_002d7e90(...);
 void *thunk_FUN_002d7e90(...);
 void *FUN_002fc250(...);
@@ -150,7 +150,7 @@ class MediaStream { public:
 };
 struct StreamHolder { MediaStream *p; StreamHolder(MediaStream *v) { p = v; } ~StreamHolder(); };
 struct MediaStreamOwner { char pad[104]; MediaStream *stream; char pad108[172]; void *source; };
-extern "C" MediaStream *FUN_002c4ca0(void *);
+extern "C" MediaStream *igFile_Create(void *);
 extern "C" void FUN_002e30b0(MediaStream *, int);
 inline StreamHolder::~StreamHolder() {
     IG_OBJECT_RELEASE(p);
@@ -983,7 +983,7 @@ extern "C" igResult FUN_002e8d40(A46 *arg1);
 struct PooledStringHead { int chunk; int refs; };
 static inline void *stringPool() {
     if (g_stringPool == 0) {
-        void *p = FUN_002eb010(16);
+        void *p = StringPool_Allocate(16);
         if (p != 0) { p = StringPool_Construct(p); }
         g_stringPool = p;
     }

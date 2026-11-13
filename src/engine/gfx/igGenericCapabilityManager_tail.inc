@@ -99,7 +99,7 @@ StringRef FUN_001554a0(int arg1) {
         r = 0;
     } else {
         if (g_stringPool[0] == 0) {
-            r = FUN_002eb010(0x10);
+            r = StringPool_Allocate(0x10);
             if (r != 0) {
                 r = StringPool_Construct(r);
             }
@@ -589,7 +589,7 @@ int FUN_00158f50(S_158f50 *arg0, int arg1) {
         }
         return 1;
     }
-    igSmartPointer<VStream_158f50> sp40((VStream_158f50 *)FUN_002c4ca0(igObject_GetAllocator(arg0)));
+    igSmartPointer<VStream_158f50> sp40((VStream_158f50 *)igFile_Create(igObject_GetAllocator(arg0)));
     int sp3C;
     if (sp40.p->v23(arg1, &DAT_004de6c0[0]) == 0) {
         return 0;
@@ -692,7 +692,7 @@ void FUN_0015a030(struct A_15a030 *arg0) {
     tmp = arg0->f56;
     if (tmp != 0) {
         if (g_stringPool[0] == 0) {
-            var_v0 = FUN_002eb010(0x10);
+            var_v0 = StringPool_Allocate(0x10);
             if (var_v0 != 0) {
                 var_v0 = StringPool_Construct(var_v0);
             }

@@ -47,7 +47,7 @@ int beMessenger_GetInt(int, int);
 long long beMessenger_GetLong(int, int);
 int beMessenger_AppendLong(int, long long);
 int List_RemoveWordAt(...);
-int FUN_002eb010(...);
+int StringPool_Allocate(...);
 int ObjectList_AppendRetained(...);
 int StringChunk_ReleaseHeader(...);
 int StringPool_Construct(...);
@@ -592,7 +592,7 @@ static inline void setInternedString(int *field, int text) {
     int *header;
     int refs;
     if (g_stringPool[0] == 0) {
-        pool = FUN_002eb010(0x10);
+        pool = StringPool_Allocate(0x10);
         if (pool != 0) {
             pool = StringPool_Construct(pool);
         }
@@ -712,7 +712,7 @@ void beModelCtrlSubCom_AddSound(beModelCtrlSubCom *self, int sndName, float star
     igSmartPointer<beModelCtrlSCSound> command(beModelCtrlSCSound_Create(allocator));
     sound = command.p;
     if (g_stringPool[0] == 0) {
-        pool = FUN_002eb010(0x10);
+        pool = StringPool_Allocate(0x10);
         if (pool != 0) {
             pool = StringPool_Construct(pool);
         }

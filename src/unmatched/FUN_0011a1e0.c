@@ -21,7 +21,7 @@ extern int DAT_00485194;
 int FUN_0010af00(int sema);
 int FUN_0010af30(int sema);
 void FUN_0010b160(int mode);
-int FUN_0010e2a8(void *cd, int fno, int mode, void *send, int ssize, void *recv, int rsize, void (*end)(void *), void *arg);
+int sceSifCallRpc(void *cd, int fno, int mode, void *send, int ssize, void *recv, int rsize, void (*end)(void *), void *arg);
 void FUN_00119710(void *arg);
 typedef struct {
     int port;
@@ -50,7 +50,7 @@ int FUN_0011a1e0(int port, int slot, char *name, int mode, int maxent, void *tab
     FUN_0012ad58(DAT_0055d670.name, name, 1023);
     DAT_0055d670.name[1023] = 0;
     if (maxent >= 0) sceSifWriteBackDCache(table, maxent << 6);
-    r = FUN_0010e2a8(&DAT_0055d5c0, 13, 1, &DAT_0055d670, 1044, &DAT_0055eb80, 4, FUN_00119710, 0);
+    r = sceSifCallRpc(&DAT_0055d5c0, 13, 1, &DAT_0055d670, 1044, &DAT_0055eb80, 4, FUN_00119710, 0);
     if (r == 0) {
         DAT_00485190 = 13;
     } else {

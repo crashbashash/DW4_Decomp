@@ -94,7 +94,7 @@ Card requests go through `beNDMWMcUtilCtrl__Request`; the request kinds are 0 fi
 
 ## Open questions
 
-- `FUN_00236f80` (find an insight's object by meta object) and `FUN_002eb010` (string-pool
+- `igInsightCore_FindManager` (find an insight's object by meta object) and `StringPool_Allocate` (string-pool
   allocation) keep their address names; each has callers in more than forty files.
 - `InitFromId` (the item slot that takes the item id after creation), `GiveCtrlTo` and
   `IsRemoved` are best guesses from what the code does.

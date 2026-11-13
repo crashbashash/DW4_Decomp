@@ -763,7 +763,7 @@ void FUN_0017a300(Self_17a070 *self) {
         int *tok;
         b->f8 = 0;
         if (g_stringPool[0] == 0) {
-            int pool = FUN_002eb010(0x10);
+            int pool = StringPool_Allocate(0x10);
             if (pool != 0) pool = StringPool_Construct(pool);
             g_stringPool[0] = pool;
         }
@@ -794,7 +794,7 @@ void FUN_0017a300(Self_17a070 *self) {
         self->a564[i] = 0;
         i++;
     } while (i < 16);
-    o = (T *)FUN_002caa70(FUN_00165d10((int *)self));
+    o = (T *)igIntList_Create(FUN_00165d10((int *)self));
     if (o != 0) o->references = o->references + 1;
     {
         T *old2 = self->f332;
@@ -873,14 +873,14 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_117(struct TextureStateView117 *arg0, 
         j = 0;
     }
     p2CurrentProgram[0] = n;
-    DAT_0056ad80[0] = &DAT_00569340[j];
+    p2CurrentGsRegisters[0] = &p2GsRegisterSets[j];
     if (arg2 != 0) {
         p2EnableCapability(1, n);
     } else {
         p2DisableCapability(1, n);
     }
     p2CurrentProgram[0] = 0;
-    DAT_0056ad80[0] = DAT_00569340;
+    p2CurrentGsRegisters[0] = p2GsRegisterSets;
 }
 
 unsigned char Gap__Gfx__igPsx2VisualContext__vfunc_118(int arg0, int arg1) { int i = (arg1 < 15 ? arg1 : 15); return *(unsigned char *)(i + arg0 + 564); }
@@ -1342,9 +1342,9 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_148(VisualContextSlots *arg0, int arg1
     }
     arg0->slot[arg1] = arg2;
     a3 = arg1 > 1 ? arg1 - 1 : 0;
-p2CurrentProgram[0] = arg1; DAT_0056ad80[0] = &DAT_00569340[a3]; FUN_00208f70(DAT_0048acf0[arg2]);
+p2CurrentProgram[0] = arg1; p2CurrentGsRegisters[0] = &p2GsRegisterSets[a3]; FUN_00208f70(DAT_0048acf0[arg2]);
     p2CurrentProgram[0] = 0;
-    DAT_0056ad80[0] = DAT_00569340;
+    p2CurrentGsRegisters[0] = p2GsRegisterSets;
 }
 
 void FUN_0017c880(igPsx2VisualContext *arg0, int arg1, unsigned char arg2) {
@@ -1372,11 +1372,11 @@ void FUN_0017c8a0(igPsx2VisualContext *context, int stage, int function, unsigne
         j = 0;
     }
     p2CurrentProgram[0] = n;
-    DAT_0056ad80[0] = &DAT_00569340[j];
+    p2CurrentGsRegisters[0] = &p2GsRegisterSets[j];
     context->_bTextureColorComponent = colorComponent;
     FUN_00209090(DAT_0048acf0[function], colorComponent);
     p2CurrentProgram[0] = 0;
-    DAT_0056ad80[0] = DAT_00569340;
+    p2CurrentGsRegisters[0] = p2GsRegisterSets;
 }
 
 int Gap__Gfx__igPsx2VisualContext__vfunc_149(int arg0, int a1) {
@@ -1402,7 +1402,7 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_150(struct TextureStageView150 *p, int
         i = 0;
     }
     p2CurrentProgram[0] = n;
-    DAT_0056ad80[0] = &DAT_00569340[i];
+    p2CurrentGsRegisters[0] = &p2GsRegisterSets[i];
     switch (x) {
     case 0:
         p2DisableCapability(10);
@@ -1425,7 +1425,7 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_150(struct TextureStageView150 *p, int
         break;
     }
     p2CurrentProgram[0] = 0;
-    DAT_0056ad80[0] = &DAT_00569340[0];
+    p2CurrentGsRegisters[0] = &p2GsRegisterSets[0];
 }
 
 /* The base is kept in its own local rather than written back into the parameter; otherwise the add

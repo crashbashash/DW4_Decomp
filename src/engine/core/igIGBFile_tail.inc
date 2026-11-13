@@ -38,7 +38,7 @@ igResult_2e3a10 FUN_002e3a60(MediaStreamOwner *self, int data, int mode) {
     }
     if (self->stream == 0 && data != 0) {
         {
-            StreamHolder h(((MediaStream *)FUN_002c4ca0((int)self->source)));
+            StreamHolder h(((MediaStream *)igFile_Create((int)self->source)));
             assign(self, h);
         }
         if (self->stream == 0) {
@@ -49,7 +49,7 @@ igResult_2e3a10 FUN_002e3a60(MediaStreamOwner *self, int data, int mode) {
     }
     self->stream->Close();
     {
-        StreamHolder h(((MediaStream *)FUN_002c4ca0((int)self->source)));
+        StreamHolder h(((MediaStream *)igFile_Create((int)self->source)));
         assign(self, h);
     }
     FUN_002e30b0((int *)self->stream, data);
@@ -88,7 +88,7 @@ void FUN_002e3d30(int *arg0) {
             var_s0 = var_s0 - 1;
         }
         if (0 == (*(void * *)g_stringPool)) {
-            var_v0 = (int)FUN_002eb010(0x10);
+            var_v0 = (int)StringPool_Allocate(0x10);
             if (var_v0) {
                 var_v0 = (int)StringPool_Construct((struct S_2eadf0 *)((void *)var_v0));
             }
@@ -237,7 +237,7 @@ igResult_2e3a10 FUN_002e42d0(MetaTableWriter *self) {
     self->count = self->types->count;
     self->size = self->count * 24;
     {
-    Ref10 inherited((MetaTableWords *)FUN_002caa70((int)self->pool));
+    Ref10 inherited((MetaTableWords *)igIntList_Create((int)self->pool));
     fillWords(inherited.p, self->count, 0);
     {
         int n = inherited.p->count;
@@ -246,7 +246,7 @@ igResult_2e3a10 FUN_002e42d0(MetaTableWriter *self) {
         for (k = 0; k < n; k++) { d[k] = DAT_004c2130[0]; }
     }
     {
-    Ref10 persistent((MetaTableWords *)FUN_002caa70((int)self->pool));
+    Ref10 persistent((MetaTableWords *)igIntList_Create((int)self->pool));
     fillWords(persistent.p, self->count, 0);
     {
         int n = persistent.p->count;
@@ -1184,7 +1184,7 @@ igResult_2e3a10 FUN_002e82a0(IgbTypeReader *self) {
     nameCount = 0;
     if (names.p != 0) { nameCount = ((ReflectedNameList *)names.p)->count; }
     {
-        TypeListHolder h((ReflectedTypeList *)FUN_002caa70((int)self->pool));
+        TypeListHolder h((ReflectedTypeList *)igIntList_Create((int)self->pool));
         assignTypes(self, h);
     }
     {
@@ -1375,7 +1375,7 @@ igResult_2e3a10 FUN_002e8d40(A46 *arg1) {
 
 static inline void *stringPool() {
     if ((*(void * *)g_stringPool) == 0) {
-        void *p = FUN_002eb010(16);
+        void *p = StringPool_Allocate(16);
         if (p != 0) { p = ((void *)StringPool_Construct((struct S_2eadf0 *)p)); }
         (*(void * *)g_stringPool) = p;
     }
@@ -1453,7 +1453,7 @@ igResult_2e3a10 FUN_002e91e0(IgbNameReader *self) {
         IgbNameList *old = self->names;
         IgbPool *pool = self->pool;
         if (old != 0) { old->rc = old->rc - 1; if (((unsigned long long)((long long)(int)old->rc << 0x29) >> 0x29) == 0) igObject_Destroy(old); }
-        self->names = (IgbNameList *)FUN_002caa70((int)pool);
+        self->names = (IgbNameList *)igIntList_Create((int)pool);
     }
     name = buf;
     i = 0;

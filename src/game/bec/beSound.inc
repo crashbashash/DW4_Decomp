@@ -1,4 +1,4 @@
-void FUN_003442b0(int arg0) {
+void beSound_CreateInstance(int arg0) {
     FUN_003444c0();
     igMetaObject_CreateInstance(*(int *)0x587EA8, arg0);
 }

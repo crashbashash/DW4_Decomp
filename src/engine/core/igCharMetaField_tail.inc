@@ -20,7 +20,7 @@ void Gap__Core__igCharMetaField__vfunc_57(int *arg0, int arg1, char *arg2) {
         var_v1 = 0;
     } else {
         if (g_stringPool[0] == 0) {
-            var_v0 = ((int)FUN_002eb010(0x10));
+            var_v0 = ((int)StringPool_Allocate(0x10));
             if (var_v0 != 0) {
                 var_v0 = ((int)StringPool_Construct((S_2eadf0 *)var_v0));
             }
@@ -370,7 +370,7 @@ int FUN_002d5df0(RecoveryString *out, Ctx *ctx, int a2, int a3) {
     if (buf == 0) r = 0;
     else {
         if (g_stringPool[0] == 0) {
-            int v = ((int)FUN_002eb010(0x10));
+            int v = ((int)StringPool_Allocate(0x10));
             if (v != 0) v = ((int)StringPool_Construct((S_2eadf0 *)v));
             g_stringPool[0] = v;
         }
@@ -422,7 +422,7 @@ void FUN_002d60b0(igContext *arg0) {
             it->_pMeta = (int)nd;
             nm = nd->_name;
             if (g_stringPool[0] == 0) {
-                int al = ((int)FUN_002eb010(16));
+                int al = ((int)StringPool_Allocate(16));
                 if (al != 0) al = ((int)StringPool_Construct((struct S_2eadf0 *)al));
                 g_stringPool[0] = al;
             }

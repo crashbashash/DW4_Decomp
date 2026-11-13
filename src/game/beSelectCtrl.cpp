@@ -2,12 +2,12 @@
 #include "dw4/igSmartPointer.h"
 #define REL(o) { igObject *rr = (igObject *)(o); if (rr != 0) { rr->_refCount = (int)rr->_refCount - 1; if ((rr->_refCount & 0x7FFFFF) == 0) igObject_Destroy(rr); } }
 
-extern "C" int FUN_00236f80(int insight, int metaObject);
+extern "C" int igInsightCore_FindManager(int insight, int metaObject);
 extern "C" int Gap__Bec__beSelectCtrl__vfunc_30(void);
 extern "C" int Gap__Bec__beSelectCtrl__vfunc_20(void);
 extern "C" void beMessenger_RegisterReceiverFromInfo(int, int, const char *);
 extern "C" int sprintf(...);
-extern "C" int FUN_002eb010(...);
+extern "C" int StringPool_Allocate(...);
 extern "C" int Memory_GetAllocatorBySelector(...);
 extern "C" int StringChunk_ReleaseHeader(...);
 extern "C" int StringPool_Construct(...);
@@ -103,7 +103,7 @@ extern "C" int Gap__Bec__beSelectCtrl__vfunc_33(beSelectCtrl *arg0, beBaseInfoRa
 void beSelectCtrl_EnsurePadManager(beSelectCtrl *self)
 {
     if (self->_padManager == 0) {
-        self->_padManager = FUN_00236f80(self->_insight, D_00588518[0]);
+        self->_padManager = igInsightCore_FindManager(self->_insight, D_00588518[0]);
     }
 }
 
@@ -232,7 +232,7 @@ void Gap__Bec__beSelectCtrl__vfunc_31(beSelectCtrl *self, beBaseInfoRam *ram) {
                             moved = true;
                             sprintf(buf2, &DAT_0050f850[0], cur);
                             if (g_stringPool[0] == 0) {
-                                v = FUN_002eb010(0x10);
+                                v = StringPool_Allocate(0x10);
                                 if (v != 0) v = StringPool_Construct(v);
                                 g_stringPool[0] = v;
                             }
@@ -251,7 +251,7 @@ void Gap__Bec__beSelectCtrl__vfunc_31(beSelectCtrl *self, beBaseInfoRam *ram) {
                         moved = true;
                         sprintf(buf3, &DAT_0050f860[0], cur);
                         if (g_stringPool[0] == 0) {
-                            v = FUN_002eb010(0x10);
+                            v = StringPool_Allocate(0x10);
                             if (v != 0) v = StringPool_Construct(v);
                             g_stringPool[0] = v;
                         }
@@ -308,7 +308,7 @@ void Gap__Bec__beSelectCtrl__vfunc_31(beSelectCtrl *self, beBaseInfoRam *ram) {
                 }
                 sprintf(buf4, &DAT_0050f890[0], rd->_selectNo);
                 if (g_stringPool[0] == 0) {
-                    v = FUN_002eb010(0x10);
+                    v = StringPool_Allocate(0x10);
                     if (v != 0) v = StringPool_Construct(v);
                     g_stringPool[0] = v;
                 }
@@ -358,7 +358,7 @@ void Gap__Bec__beSelectCtrl__vfunc_31(beSelectCtrl *self, beBaseInfoRam *ram) {
             if (rd->_selectNo != -1) s = (int *)&DAT_0050f8a0[0];
             else s = (int *)DAT_0050f8b0;
             if (g_stringPool[0] == 0) {
-                v = FUN_002eb010(0x10);
+                v = StringPool_Allocate(0x10);
                 if (v != 0) v = StringPool_Construct(v);
                 g_stringPool[0] = v;
             }

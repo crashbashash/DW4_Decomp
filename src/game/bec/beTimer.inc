@@ -1,4 +1,4 @@
-void FUN_00341340(int arg0) {
+void beTimer_CreateInstance(int arg0) {
     FUN_00341500();
     igMetaObject_CreateInstance(*(int *)0x587C18, arg0);
 }

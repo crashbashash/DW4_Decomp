@@ -29,7 +29,7 @@ extern "C" int igObject_GetAllocator(...);
 extern "C" void *igProperty_FindByName(...);
 /* Header of every reference-counted engine object; the count is in the low 23 bits. */
 struct RefObject { int vtable; int refCount; };
-extern "C" RefObject * FUN_00236f80(...);
+extern "C" RefObject * igInsightCore_FindManager(...);
 extern "C" int g_bePadManager_metaObject[4];
 extern "C" void beNDMWSaveIntf_AcquirePadManager(beNDMWSaveIntf *self);
 extern "C" int g_beNDMWSaveIntfInfo_metaObject[4];
@@ -286,7 +286,7 @@ void beNDMWSaveIntf_AcquirePadManager(beNDMWSaveIntf *self) {
     RefObject *old;
 
     if (self->_padManager == 0) {
-        found = FUN_00236f80(self->_insight, g_bePadManager_metaObject[0]);
+        found = igInsightCore_FindManager(self->_insight, g_bePadManager_metaObject[0]);
         if (found != 0) {
             found->refCount = found->refCount + 1;
         }
@@ -1994,7 +1994,7 @@ int beNDMWSaveIntf_OnMessage(beNDMWSaveIntf *self, beBaseInfoRam *ram, MessageAr
             old = (RefObject *)ram->_dataList;
             if (old != 0) { old->refCount = old->refCount - 1; if (((unsigned long long)((long long)old->refCount << 0x29) >> 0x29) == 0) igObject_Destroy(old); }
             ram->_dataList = (int)created;
-            self->_system_ = ((int)FUN_00236f80(self->_insight, g_beSystem_metaObject[0]));
+            self->_system_ = ((int)igInsightCore_FindManager(self->_insight, g_beSystem_metaObject[0]));
             {
                 int allocator = AllocatorChoice::Select(&g_defaultAllocatorSelector[0], igObject_GetAllocator(self));
                 ChildRef<1> ctrlData((RefObject *)beNDMWSaveIntfCtrlData_Create(allocator));
@@ -2017,7 +2017,7 @@ int beNDMWSaveIntf_OnMessage(beNDMWSaveIntf *self, beBaseInfoRam *ram, MessageAr
                 ChildRef<2> textOrder((RefObject *)beNDMWLoadIntf2TextOrder_Create(allocator));
                 ((beNDMWLoadIntf2TextOrder *)textOrder.object)->_messenger = self->_messenger;
                 beNDMWLoadIntf2TextOrder *order = (beNDMWLoadIntf2TextOrder *)textOrder.object;
-                order->_lua = ((int)FUN_00236f80(self->_insight, g_beLua_metaObject[0]));
+                order->_lua = ((int)igInsightCore_FindManager(self->_insight, g_beLua_metaObject[0]));
                 ObjectList_AppendRetained(ram->_dataList, textOrder.object);
             }
             {
@@ -2040,7 +2040,7 @@ int beNDMWSaveIntf_OnMessage(beNDMWSaveIntf *self, beBaseInfoRam *ram, MessageAr
                 ChildRef<4> window((RefObject *)beNDMWLoadIntf2MesWin_Create(allocator));
                 ((beNDMWLoadIntf2MesWin *)window.object)->_ramNo = ram->_ramNo;
                 ((beNDMWLoadIntf2MesWin *)window.object)->_messenger = self->_messenger;
-                ((beNDMWLoadIntf2MesWin *)window.object)->_padManager = ((int)FUN_00236f80(self->_insight, g_bePadManager_metaObject[0]));
+                ((beNDMWLoadIntf2MesWin *)window.object)->_padManager = ((int)igInsightCore_FindManager(self->_insight, g_bePadManager_metaObject[0]));
                 ObjectList_AppendRetained(ram->_dataList, window.object);
                 DataListGuard::Ensure(ram);
                 ((beNDMWLoadIntf2MesWin *)window.object)->_textOrder = (int)igProperty_FindByName(ram->_dataList, g_propertyNameField[0], TEXTORDER_3);
@@ -2050,7 +2050,7 @@ int beNDMWSaveIntf_OnMessage(beNDMWSaveIntf *self, beBaseInfoRam *ram, MessageAr
                 ChildRef<5> slots((RefObject *)beNDMWLoadIntf2SelSlot_Create(allocator));
                 ((beNDMWLoadIntf2SelSlot *)slots.object)->_ramNo = ram->_ramNo;
                 ((beNDMWLoadIntf2SelSlot *)slots.object)->_messenger = self->_messenger;
-                ((beNDMWLoadIntf2SelSlot *)slots.object)->_padManager = ((int)FUN_00236f80(self->_insight, g_bePadManager_metaObject[0]));
+                ((beNDMWLoadIntf2SelSlot *)slots.object)->_padManager = ((int)igInsightCore_FindManager(self->_insight, g_bePadManager_metaObject[0]));
                 DataListGuard::Ensure(ram);
                 ((beNDMWLoadIntf2SelSlot *)slots.object)->_comMdlCtrl = (int)igProperty_FindByName(ram->_dataList, g_propertyNameField[0], COMMDLCTRL_3);
                 DataListGuard::Ensure(ram);
@@ -2089,7 +2089,7 @@ int beNDMWSaveIntf_OnMessage(beNDMWSaveIntf *self, beBaseInfoRam *ram, MessageAr
             {
                 int allocator = AllocatorChoice::Select(&g_defaultAllocatorSelector[0], igObject_GetAllocator(self));
                 ChildRef<8> dataSel((RefObject *)beNDMWLoadIntf2DataSelIntf_Create(allocator));
-                ((beNDMWLoadIntf2DataSelIntf *)dataSel.object)->_padManager = ((int)FUN_00236f80(self->_insight, g_bePadManager_metaObject[0]));
+                ((beNDMWLoadIntf2DataSelIntf *)dataSel.object)->_padManager = ((int)igInsightCore_FindManager(self->_insight, g_bePadManager_metaObject[0]));
                 DataListGuard::Ensure(ram);
                 ((beNDMWLoadIntf2DataSelIntf *)dataSel.object)->_comMdlCtrl = (int)igProperty_FindByName(ram->_dataList, g_propertyNameField[0], COMMDLCTRL_3);
                 DataListGuard::Ensure(ram);

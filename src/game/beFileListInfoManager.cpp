@@ -21,9 +21,9 @@
 
 extern "C" void Gap__Bec__beFileListInfoManager__vfunc_24(void);
 extern "C" int Gap__Bec__beFileListInfoManager__vfunc_20(void);
-extern "C" void * FUN_00236f80(...);
+extern "C" void * igInsightCore_FindManager(...);
 extern "C" void List_InsertWords(void *, int, int, void *);
-extern "C" int FUN_002eb010(int);
+extern "C" int StringPool_Allocate(int);
 extern "C" int List_Reserve(void *, int, int);
 extern "C" int StringChunk_ReleaseHeader(int, int *);
 extern "C" int StringPool_Construct(int);
@@ -34,8 +34,8 @@ class VA { public: virtual void d0(); virtual void d1(); virtual void d2(); virt
 class VB { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual int vY(); };
 struct S { int pad[2]; void *o; };
 extern "C" int FUN_0037f1b0(S *arg0, int arg1);
-extern "C" void FUN_00236be0(int, beFileListInfoManager *);
-extern "C" void FUN_00236c40(int, beFileListInfoManager *);
+extern "C" void igInsightCore_AddToScheduler(int, beFileListInfoManager *);
+extern "C" void igInsightCore_RemoveFromScheduler(int, beFileListInfoManager *);
 extern "C" void Gap__Bec__beFileListInfoManager__vfunc_21(beFileListInfoManager *self, int unusedArg);
 extern "C" void Gap__Bec__beFileListInfoManager__vfunc_22(beFileListInfoManager *self, int unusedArg);
 extern "C" int g_beSystem_metaObject[4];
@@ -64,27 +64,27 @@ int FUN_0037f1b0(S *arg0, int arg1) {
     return 0;
 }
 
-/* Hands the object to the insight core's helper FUN_00236be0, which asks the scheduler at +12 of
+/* Hands the object to the insight core's helper igInsightCore_AddToScheduler, which asks the scheduler at +12 of
  * the insight object (_insight) whether it already has the object (scheduler slot 26) and, if not,
  * calls scheduler slot 24 with it. Same body as beMessenger slot 21. The second argument is
  * unused. */
 void Gap__Bec__beFileListInfoManager__vfunc_21(beFileListInfoManager *self, int unusedArg)
 {
-    FUN_00236be0(self->_insight, self);
+    igInsightCore_AddToScheduler(self->_insight, self);
 }
 
-/* Counterpart of slot 21 through FUN_00236c40, which calls scheduler slot 25 with the object only
+/* Counterpart of slot 21 through igInsightCore_RemoveFromScheduler, which calls scheduler slot 25 with the object only
  * when scheduler slot 26 reports it present. Same body as beMessenger slot 22. The second argument
  * is unused. */
 void Gap__Bec__beFileListInfoManager__vfunc_22(beFileListInfoManager *self, int unusedArg)
 {
-    FUN_00236c40(self->_insight, self);
+    igInsightCore_RemoveFromScheduler(self->_insight, self);
 }
 
 void Gap__Bec__beFileListInfoManager__vfunc_23(beFileListInfoManager *arg0) {
-    arg0->_system = ((int)FUN_00236f80(arg0->_insight, g_beSystem_metaObject[0]));
-    arg0->_messenger = ((int)FUN_00236f80(arg0->_insight, g_beMessenger_metaObject[0]));
-    arg0->_sceneInfoManager = ((int)FUN_00236f80(arg0->_insight, g_igViewerSceneInfoManager_metaObject[0]));
+    arg0->_system = ((int)igInsightCore_FindManager(arg0->_insight, g_beSystem_metaObject[0]));
+    arg0->_messenger = ((int)igInsightCore_FindManager(arg0->_insight, g_beMessenger_metaObject[0]));
+    arg0->_sceneInfoManager = ((int)igInsightCore_FindManager(arg0->_insight, g_igViewerSceneInfoManager_metaObject[0]));
 }
 
 void Gap__Bec__beFileListInfoManager__vfunc_24(void)
@@ -114,7 +114,7 @@ int Gap__Bec__beFileListInfoManager__vfunc_25(beFileListInfoManager *self, igObj
         return 1;
     }
     if (g_igNamedObjectInfo_metaObject[0] == ((MetaVt *)info)->getMeta()) {
-        void *found = FUN_00236f80(self->_insight, g_beFont_metaObject[0]);
+        void *found = igInsightCore_FindManager(self->_insight, g_beFont_metaObject[0]);
         if (found == 0) return 0;
         FUN_00382df0(found, info);
         return 1;
@@ -141,7 +141,7 @@ void Gap__Bec__beFileListInfoManager__vfunc_26(beFileListInfoManager *arg0) {
         do {
             slot = (int **)((char *)s5->_data + off);
             if (g_stringPool[0] == 0) {
-                v = FUN_002eb010(0x10);
+                v = StringPool_Allocate(0x10);
                 if (v != 0) {
                     v = StringPool_Construct(v);
                 }

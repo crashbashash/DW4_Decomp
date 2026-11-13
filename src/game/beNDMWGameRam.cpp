@@ -47,7 +47,7 @@ extern "C" void * igProperty_GetRecordArray(...);
 extern "C" void beNDMWGameRam_Update(void);
 extern "C" int beNDMWGameRam_GetMeta(void);
 extern "C" int beNDMWGameRam_GetInfoMeta(void);
-extern "C" int FUN_002eb010(int);
+extern "C" int StringPool_Allocate(int);
 extern "C" int StringPool_Construct(int);
 extern "C" char * StringPool_Intern(...);
 extern "C" int g_stringPool[4];
@@ -56,7 +56,7 @@ struct SharedStringPool {
     static inline int get()
     {
         if (g_stringPool[0] == 0) {
-            int pool = FUN_002eb010(16);
+            int pool = StringPool_Allocate(16);
             if (pool != 0) pool = StringPool_Construct(pool);
             g_stringPool[0] = pool;
         }
@@ -70,7 +70,7 @@ extern "C" int beNDMWItemWeapon_Set(void *, int, int, int);
 extern "C" int beDataBase_GetRecordInt(...);
 extern "C" int beNDMWItemBase_GetRecordInt(...);
 extern "C" const char * beNDMWItemBase_GetRecordString(...);
-extern "C" int FUN_00236f80(int, int);
+extern "C" int igInsightCore_FindManager(int, int);
 extern "C" void beMessenger_SelectReceivers(int, const char *, const char *, int);
 extern "C" void beMessenger_AppendFloat(int, float);
 extern "C" void beMessenger_AppendInt(int, int);
@@ -394,7 +394,7 @@ struct Vector3 { float x,y,z; };
 struct Matrix44 { float m[16]; };
 struct IntList { int vtable_word, reference_word; int count; int capacity; int *data;
     int getCount() const { return count; } };
-extern "C" IntList *FUN_002caa70(int);
+extern "C" IntList *igIntList_Create(int);
 extern "C" void beMessenger_GetMatrix(Matrix44 *,int,int);
 extern "C" void Matrix44_GetTranslation(const Matrix44 *,Vector3 *);
 extern "C" char GETMATRIX[];
@@ -1336,7 +1336,7 @@ void beNDMWGameRam_JoinPlayerWithName(beNDMWGameRam *self, int index, void *mode
          * than by a destructor. */
         beUnicodeObj *converted;
         int text = (int)name.p;
-        int font = FUN_00236f80(self->_insight, g_beFont_metaObject[0]);
+        int font = igInsightCore_FindManager(self->_insight, g_beFont_metaObject[0]);
         beFont_ConvertToUnicode(&converted, font, text);
         k = 0;
         src = (unsigned short *)converted->_buffer;
@@ -1942,7 +1942,7 @@ NearbyListRef beNDMWGameRam_CollectNearbyNonzeroHp(beNDMWGameRam *self,const cha
     int append_index;
     IntList *list;
     int selfAllocator=igObject_GetAllocator(self);
-    NearbyListRef result(FUN_002caa70(g_useOwnerAllocator ? selfAllocator : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0])));
+    NearbyListRef result(igIntList_Create(g_useOwnerAllocator ? selfAllocator : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0])));
     beMessenger_SendGroup(self->_messenger,group,GETMATRIX);
     int count=beMessenger_GetIntCount(self->_messenger);
     Vector3 delta;
@@ -7566,7 +7566,7 @@ int StringPool_GetInstance(void) {
     int pool;
 
     if (g_stringPool[0] == 0) {
-        pool = FUN_002eb010(0x10);
+        pool = StringPool_Allocate(0x10);
         if (pool != 0) {
             pool = StringPool_Construct(pool);
         }

@@ -1,9 +1,9 @@
 #include "dw4/reflected.h"
 #include "dw4/igVec3f.h"
 
-extern "C" void FUN_00236be0(int insight, beTargetObj *object);
-extern "C" void FUN_00236c40(int insight, beTargetObj *object);
-extern "C" int FUN_00236f80(int insight, int metaObject);
+extern "C" void igInsightCore_AddToScheduler(int insight, beTargetObj *object);
+extern "C" void igInsightCore_RemoveFromScheduler(int insight, beTargetObj *object);
+extern "C" int igInsightCore_FindManager(int insight, int metaObject);
 extern "C" void FUN_00192f50(float *out, int *vector, float *matrix);
 extern "C" int List_Reserve(void *list, int count, int elementSize);
 extern "C" int List_Resize(void *list, int count, int elementSize);
@@ -44,18 +44,18 @@ extern "C" float beTargetObj_GetOriginHeading(beTargetObj *self);
 
 extern "C" void Gap__Bec__beTargetObj__vfunc_21(beTargetObj *self, int unused)
 {
-    FUN_00236be0(self->_insight, self);
+    igInsightCore_AddToScheduler(self->_insight, self);
 }
 
 extern "C" void Gap__Bec__beTargetObj__vfunc_22(beTargetObj *self, int unused)
 {
-    FUN_00236c40(self->_insight, self);
+    igInsightCore_RemoveFromScheduler(self->_insight, self);
 }
 
 extern "C" void Gap__Bec__beTargetObj__vfunc_23(beTargetObj *self)
 {
-    g_targetObj = (beTargetObj *)FUN_00236f80(self->_insight, g_beTargetObj_metaObject[0]);
-    g_targetMessenger = (beMessenger *)FUN_00236f80(self->_insight, g_beMessenger_metaObject[0]);
+    g_targetObj = (beTargetObj *)igInsightCore_FindManager(self->_insight, g_beTargetObj_metaObject[0]);
+    g_targetMessenger = (beMessenger *)igInsightCore_FindManager(self->_insight, g_beMessenger_metaObject[0]);
 }
 
 extern "C" void Gap__Bec__beTargetObj__vfunc_24(void)

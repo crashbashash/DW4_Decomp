@@ -9,7 +9,7 @@ extern int DAT_00586f20;
 int sceDopen(int);
 int FUN_00110bf8(int);
 int FUN_00110d60(int, FolderEntry *);
-int FUN_002eb010(int);
+int StringPool_Allocate(int);
 int StringPool_Construct(int);
 char *StringPool_Intern(int, char *);
 void StringChunk_ReleaseHeader(int, int *);
@@ -80,7 +80,7 @@ FolderObjectRef Gap__Core__igPsx2Folder__vfunc_24(FolderSelf *self) {
             interned = 0;
         } else {
             if (DAT_00586f20 == 0) {
-                int v = FUN_002eb010(16);
+                int v = StringPool_Allocate(16);
                 if (v != 0) {
                     v = StringPool_Construct(v);
                 }

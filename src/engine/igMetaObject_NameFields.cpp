@@ -39,7 +39,7 @@ void *ObjectPointerList_FindByStringField(void *list, igMetaField *stringMember,
 int MetaRefList_AppendRetained(void *, void *);
 void igObjectSystem_AppendMetaObject(void *, igMetaObject *);
 int igObjectSystem_FindMetaByName(void *objectSystem, const char *name);
-int FUN_002eb010(int);
+int StringPool_Allocate(int);
 int StringPool_Construct(int);
 int StringPool_Intern(int, int);
 int StringChunk_ReleaseHeader(int, void *);

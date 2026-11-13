@@ -358,5 +358,5 @@ fades go through `beCri_FadeByName` and `beCri_FadeByID`, `STOP` through `beCri_
 `SNDFVOLUME` (`beCri_SetSndfVolume`) sets the sound-bank master level once.
 
 Open questions: what type 4 cues are (only they follow the freeze); the insight calls of slots 21 and 22
-(`FUN_00236be0`, `FUN_00236c40`) are read as joining and leaving the insight from their pairing, not from
+(`igInsightCore_AddToScheduler`, `igInsightCore_RemoveFromScheduler`) are read as joining and leaving the insight from their pairing, not from
 their bodies.

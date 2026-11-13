@@ -3,11 +3,11 @@
 extern "C" void Gap__Bec__beBaseInfoManager__vfunc_21(void);
 extern "C" void Gap__Core__igObject__vfunc_22(void);
 extern "C" void Gap__Core__igObject__vfunc_24(void);
-extern "C" int FUN_00236f80(...);
-extern "C" int FUN_00236be0(...);
+extern "C" int igInsightCore_FindManager(...);
+extern "C" int igInsightCore_AddToScheduler(...);
 extern "C" int ObjectList_AppendRetained(...);
 extern "C" void FUN_003788c0(void);
-extern "C" int FUN_00236c40(...);
+extern "C" int igInsightCore_RemoveFromScheduler(...);
 extern "C" int List_Reserve(...);
 extern "C" int igObject_Destroy(...);
 extern "C" int beSystem_IsRunning(...);
@@ -75,8 +75,8 @@ void Gap__Core__igObject__vfunc_22(void)
 
 void Gap__Core__igObject__vfunc_23(A *arg0) {
     ((V136 *)arg0)->vX();
-    arg0->f10 = FUN_00236f80(arg0->fc, g_beSystem_metaObject[0]);
-    arg0->f14 = FUN_00236f80(arg0->fc, g_beMessenger_metaObject[0]);
+    arg0->f10 = igInsightCore_FindManager(arg0->fc, g_beSystem_metaObject[0]);
+    arg0->f14 = igInsightCore_FindManager(arg0->fc, g_beMessenger_metaObject[0]);
 }
 
 /* Slot 24 default: empty. */
@@ -105,7 +105,7 @@ int Gap__Core__igObject__vfunc_25(Obj *arg0, Obj *arg1) {
             it->_ramNo = i;
             arg0->v124(it);
         }
-        FUN_00236be0(mgr->_insight, arg0);
+        igInsightCore_AddToScheduler(mgr->_insight, arg0);
         mgr->_isUpdateRun = 1;
         return 1;
     }
@@ -162,7 +162,7 @@ void Gap__Core__igObject__vfunc_26(beBaseInfoManager *arg0) {
     if (ok == 0) {
         List_Reserve(S, 0, 4);
     }
-    FUN_00236c40(arg0->_insight, arg0);
+    igInsightCore_RemoveFromScheduler(arg0->_insight, arg0);
     arg0->_isUpdateRun = 0;
 }
 

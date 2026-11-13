@@ -21,7 +21,7 @@ extern int DAT_00485194;
 int FUN_0010af00(int sema);
 int FUN_0010af30(int sema);
 void FUN_0010b160(int mode);
-int FUN_0010e2a8(void *cd, int fno, int mode, void *send, int ssize, void *recv, int rsize, void (*end)(void *), void *arg);
+int sceSifCallRpc(void *cd, int fno, int mode, void *send, int ssize, void *recv, int rsize, void (*end)(void *), void *arg);
 void FUN_00119710(void *arg);
 typedef struct {
     int port;
@@ -46,7 +46,7 @@ int sceMcOpen(int port, int slot, char *name, int mode) {
     DAT_0055d670.f8 = mode;
     DAT_0055d670.slot = slot;
     DAT_0055d670.name[1023] = 0;
-    r = FUN_0010e2a8(&DAT_0055d5c0, 2, 1, &DAT_0055d670, 1044, &DAT_0055eb80, 4, FUN_00119710, 0);
+    r = sceSifCallRpc(&DAT_0055d5c0, 2, 1, &DAT_0055d670, 1044, &DAT_0055eb80, 4, FUN_00119710, 0);
     if (r == 0) {
         DAT_00485190 = 2;
     } else {

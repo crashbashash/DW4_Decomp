@@ -21,7 +21,7 @@ extern int DAT_00485194;
 int FUN_0010af00(int sema);
 int FUN_0010af30(int sema);
 void FUN_0010b160(int mode);
-int FUN_0010e2a8(void *cd, int fno, int mode, void *send, int ssize, void *recv, int rsize, void (*end)(void *), void *arg);
+int sceSifCallRpc(void *cd, int fno, int mode, void *send, int ssize, void *recv, int rsize, void (*end)(void *), void *arg);
 void FUN_00119710(void *arg);
 extern char DAT_0055dac0[192];
 void sceSifWriteBackDCache(void *p, int size);
@@ -36,7 +36,7 @@ int FUN_00119c40(int port, unsigned char *buf, int size) {
     DAT_0055d640.f28 = (int)DAT_0055dac0;
     sceSifWriteBackDCache(buf, size);
     sceSifWriteBackDCache(DAT_0055dac0, 192);
-    r = FUN_0010e2a8(&DAT_0055d5c0, 5, 1, &DAT_0055d640, 48, &DAT_0055eb80, 4, FUN_00119ba8, DAT_0055dac0);
+    r = sceSifCallRpc(&DAT_0055d5c0, 5, 1, &DAT_0055d640, 48, &DAT_0055eb80, 4, FUN_00119ba8, DAT_0055dac0);
     if (r == 0) {
         DAT_00485190 = 5;
     } else {

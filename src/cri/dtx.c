@@ -65,7 +65,7 @@ void FUN_002659a0(const char *format, ...);
 void FUN_0010b7d8(char *start, char *end);
 void FUN_0010b918(char *start, char *end);
 unsigned int sceSifSetDma(SifDmaData *sdd, int len);
-int FUN_0010e2a8(SifClientData *cd, int fno, int mode, void *send, int ssize, void *recv, int rsize,
+int sceSifCallRpc(SifClientData *cd, int fno, int mode, void *send, int ssize, void *recv, int rsize,
                  void *end, void *endarg);
 int GetThreadId(void);
 void sceSifSetRpcQueue(void *queue, int thread_id);
@@ -117,14 +117,14 @@ int FUN_002731a8(unsigned int id, char *eewk, int iopwk, int wklen)
     DAT_0056e580[1] = (int)eewk;
     DAT_0056e580[2] = iopwk;
     DAT_0056e580[3] = wklen;
-    FUN_0010e2a8(&DAT_004aa3b0, 2, 0, DAT_0056e580, 0x10, DAT_0056e680, 4, 0, 0);
+    sceSifCallRpc(&DAT_004aa3b0, 2, 0, DAT_0056e580, 0x10, DAT_0056e680, 4, 0, 0);
     return DAT_0056e680[0];
 }
 
 void FUN_00273218(int server)
 {
     DAT_0056e580[0] = server;
-    FUN_0010e2a8(&DAT_004aa3b0, 3, 0, DAT_0056e580, 4, DAT_0056e680, 0, 0, 0);
+    sceSifCallRpc(&DAT_004aa3b0, 3, 0, DAT_0056e580, 4, DAT_0056e680, 0, 0, 0);
 }
 
 void FUN_00273268(int obj, char *buf, int size)
@@ -282,7 +282,7 @@ int FUN_00273820(int fno, int *send, int nsend, int *recv, int nrecv)
     for (i = 0; i < nsend; i++) {
         DAT_0056e580[i] = send[i];
     }
-    FUN_0010e2a8(&DAT_004aa3b0, fno + 1024, 0, DAT_0056e580, nsend * 4, DAT_0056e680, nrecv * 4, 0, 0);
+    sceSifCallRpc(&DAT_004aa3b0, fno + 1024, 0, DAT_0056e580, nsend * 4, DAT_0056e680, nrecv * 4, 0, 0);
     for (i = 0; i < nrecv; i++) {
         recv[i] = DAT_0056e680[i];
     }

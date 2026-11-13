@@ -298,7 +298,7 @@ extern "C" void igBoolObject_InitFields(void);
 typedef struct Vec3fList { int _vtable; unsigned int _refCount; int _count; int _capacity; float (*_data)[3]; } Vec3fList;
 extern "C" void FUN_001e5de0(Vec3fList *list, unsigned short *out, float base, float range);
 extern "C" void FUN_001e6130(igQuaternionfList *list, short *quantized, float *minimum, float *range);
-extern "C" int FUN_002eb010(int n);
+extern "C" int StringPool_Allocate(int n);
 extern "C" int StringPool_Construct(int p);
 extern "C" int StringPool_Intern(int pool, int s);
 extern "C" int g_stringPool[4];

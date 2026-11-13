@@ -250,7 +250,7 @@ void FUN_001b7770(igCommonTraversal *self, int name, int value) {
     igObject *stack;
     int pos;
     int al = igObject_GetAllocator(self);
-    al = GPR_00554c14 ? al : Memory_GetAllocatorBySelector(DAT_00587060[0]);
+    al = GPR_00554c14 ? al : Memory_GetAllocatorBySelector(g_temporaryAllocatorSelector[0]);
     str = ((igObject *)FUN_002b9500(al));
     FUN_0030b3c0(str, name);
     FUN_0030b5c0(str);

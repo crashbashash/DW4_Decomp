@@ -5,7 +5,7 @@ extern "C" void Gap__Bec__beTimer__vfunc_22(void);
 extern "C" void Gap__Bec__beTimer__vfunc_24(void);
 extern "C" int Gap__Bec__beTimer__vfunc_25(void);
 extern "C" int Gap__Bec__beTimer__vfunc_20(void);
-extern "C" int FUN_00236f80(int, int);
+extern "C" int igInsightCore_FindManager(int, int);
 extern "C" int igObject_Destroy(...);
 extern "C" int beLua__RunNamedChunk(...);
 extern "C" int beSystem_IsRunning(...);
@@ -33,9 +33,9 @@ void Gap__Bec__beTimer__vfunc_22(void)
 }
 
 void Gap__Bec__beTimer__vfunc_23(beTimer *arg0) {
-    arg0->_system = FUN_00236f80(arg0->_insight, g_beSystem_metaObject[0]);
-    arg0->_padManager = FUN_00236f80(arg0->_insight, g_bePadManager_metaObject[0]);
-    arg0->_luaManager = FUN_00236f80(arg0->_insight, g_beLua_metaObject[0]);
+    arg0->_system = igInsightCore_FindManager(arg0->_insight, g_beSystem_metaObject[0]);
+    arg0->_padManager = igInsightCore_FindManager(arg0->_insight, g_bePadManager_metaObject[0]);
+    arg0->_luaManager = igInsightCore_FindManager(arg0->_insight, g_beLua_metaObject[0]);
 }
 
 void Gap__Bec__beTimer__vfunc_24(void)

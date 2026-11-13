@@ -25,7 +25,7 @@ int scePadSetButtonInfo(int port, int slot, int mode);
 int FUN_00118af8(int port, int slot);
 extern int DAT_0055d480[32];
 extern int DAT_0055d240;
-int FUN_0010e2a8(void *cd, int fno, int mode, void *send, int ssize, void *recv, int rsize, void (*end)(void *), void *arg);
+int sceSifCallRpc(void *cd, int fno, int mode, void *send, int ssize, void *recv, int rsize, void (*end)(void *), void *arg);
 extern int DAT_00485108;
 int FUN_00118440(int port, int slot, int v);
 int scePadSetActAlign(int port, int slot, unsigned char *data) {
@@ -38,7 +38,7 @@ int scePadSetActAlign(int port, int slot, unsigned char *data) {
     b[2] = slot;
     d = (unsigned char *)&b[3];
     for (i = 0; i < 6; i++) d[i] = data[i];
-    if (FUN_0010e2a8(&DAT_0055d240, 1, 0, b, 128, b, 128, 0, 0) < 0) return 0;
+    if (sceSifCallRpc(&DAT_0055d240, 1, 0, b, 128, b, 128, 0, 0) < 0) return 0;
     if (b[5] == 1) FUN_00118440(port, slot, 2);
     return b[5];
 }

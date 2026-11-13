@@ -76,7 +76,7 @@ int igArray_Construct(...);
 int ObjectPointerList_Append(...);
 void ObjectPointerList_EraseAt(void *,int);
 int ObjectPointerList_FindIndex(void *,void *);
-int FUN_002eb010(...);
+int StringPool_Allocate(...);
 int StringPool_Construct(...);
 void *StringPool_Intern(...);
 int StringChunk_ReleaseHeader(...);

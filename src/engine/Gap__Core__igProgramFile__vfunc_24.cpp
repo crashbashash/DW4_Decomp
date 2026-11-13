@@ -6,9 +6,9 @@ public:
     bool operator==(const R &o) const { return v == o.v; }
 };
 extern "C" {
-void *FUN_002c4ca0(int);
+void *igFile_Create(int);
 int FUN_002e30b0(void *, const char *);
-int FUN_002eb010(int);
+int StringPool_Allocate(int);
 int FUN_00304430(...);
 int FUN_00304680(...);
 int StringChunk_ReleaseHeader(int, void *);
@@ -44,7 +44,7 @@ R Gap__Core__igProgramFile__vfunc_24(void *arg1, void *arg2) {
     int temp_v0;
     ((VA *)arg1)->vX();
     if (g_stringPool[0] == 0) {
-        var_v0 = FUN_002eb010(0x10);
+        var_v0 = StringPool_Allocate(0x10);
         if (var_v0 != 0) {
             var_v0 = StringPool_Construct(var_v0);
         }
@@ -69,7 +69,7 @@ R Gap__Core__igProgramFile__vfunc_24(void *arg1, void *arg2) {
             igObject_Destroy(r);
         }
     }
-    p->f12 = (Rc *)FUN_002c4ca0(s0);
+    p->f12 = (Rc *)igFile_Create(s0);
     FUN_002e30b0(p->f12, p->f8);
     if (((VB *)p->f12)->vX(4) == g_allocatorFailureStatus) {
         FUN_00304430(&DAT_004ff4f0[0], (int)p->f8);

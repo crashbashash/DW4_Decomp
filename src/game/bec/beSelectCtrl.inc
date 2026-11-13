@@ -1,4 +1,4 @@
-void FUN_00345a00(int arg0) {
+void beSelectCtrl_CreateInstance(int arg0) {
     FUN_00345bc0();
     igMetaObject_CreateInstance(*(int *)0x587F98, arg0);
 }

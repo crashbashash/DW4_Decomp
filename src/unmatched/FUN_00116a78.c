@@ -17,7 +17,7 @@ int FUN_0010af30(int sema);
 int FUN_0010ade0(int id, void *info);
 int FUN_0010d108(const char *fmt, ...);
 void sceSifInitRpc(int mode);
-int FUN_0010e0d8(void *cd, unsigned int id, int mode);
+int sceSifBindRpc(void *cd, unsigned int id, int mode);
 int sceCdSync(int mode);
 int FUN_00116a78(int cmd) {
     int i;
@@ -35,7 +35,7 @@ int FUN_00116a78(int cmd) {
     sceSifInitRpc(0);
     if (DAT_0048357c >= 0) return 1;
     while (1) {
-        if (FUN_0010e0d8(&DAT_00484710, 0x80000595, 0) < 0) {
+        if (sceSifBindRpc(&DAT_00484710, 0x80000595, 0) < 0) {
             if (DAT_00483550 > 0) FUN_0010d108(DAT_004d2818);
             i = 0x100000;
             while (i--);

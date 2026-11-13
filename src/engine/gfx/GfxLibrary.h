@@ -204,7 +204,7 @@ extern "C" int g_igContext_metaObject[4];
 extern "C" int FUN_0014a170(void);
 extern "C" int FUN_001888e0(...);
 extern "C" int FUN_002b7a10(...);
-extern "C" int FUN_002c04a0(...);
+extern "C" int igMemoryPool_GetOrCreateMetaObject(...);
 extern "C" int FUN_002d3890(...);
 extern "C" int FUN_002dc7a0(...);
 extern "C" int FUN_002ea4b0(...);
@@ -732,7 +732,7 @@ extern "C" void FUN_0014e540(void);
 extern "C" int Gap__Gfx__igTrackedElementMetaField__vfunc_25(void);
 extern "C" void Gap__Gfx__igTrackedElementMetaField__vfunc_11(void *arg0);
 extern "C" void *FUN_002c5fb0(...);
-extern "C" int FUN_002eb010(...);
+extern "C" int StringPool_Allocate(...);
 extern "C" int ObjectList_AppendRetained(...);
 extern "C" int StringPool_Construct(...);
 extern "C" int* StringPool_Intern(...);
@@ -1398,10 +1398,10 @@ extern "C" int DAT_004de6b0[4];
 extern "C" int DAT_004de6b8[4];
 extern "C" int Gap__Gfx__igClut__vfunc_23(int arg0, int arg1);
 struct Arr { char pad[8]; int a8; int a12; int a16; void *a20; int a24; };
-extern "C" void *FUN_002c4ca0(...);
+extern "C" void *igFile_Create(...);
 extern "C" int igObject_GetAllocator(...);
 extern "C" int DAT_004de6c0[4];
-extern "C" int DAT_00587060[4];
+extern "C" int g_temporaryAllocatorSelector[4];
 extern "C" unsigned char GPR_00554c14;
 class DW4VC_100_2 : public igVirtualObject { public: virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual int vX(int, int); virtual int v24(); virtual int v25(int,int,int);
   };
@@ -1557,7 +1557,7 @@ struct ImageName {
             interned = 0;
         } else {
             if (g_stringPool[0] == 0) {
-                int v = FUN_002eb010(16);
+                int v = StringPool_Allocate(16);
                 if (v != 0) v = StringPool_Construct(v);
                 g_stringPool[0] = v;
             }
@@ -3009,7 +3009,7 @@ extern "C" int p2EndDisplayList(...);
 extern "C" int p2GetDisplayListBlendWeightCount(...);
 extern "C" int p2CallDisplayList(...);
 extern "C" int p2ReleaseDisplayList(...);
-extern "C" int FUN_002caa70(int);
+extern "C" int igIntList_Create(int);
 extern "C" int FUN_002d96f0(...);
 extern "C" void *FUN_002ed240(int, int);
 extern "C" void *FUN_002ed450(void *, int, int);
@@ -3494,7 +3494,7 @@ struct PathText {
             a = 0;
         } else {
             if (g_stringPool[0] == 0) {
-                int t = FUN_002eb010(0x10);
+                int t = StringPool_Allocate(0x10);
                 if (t != 0) t = StringPool_Construct(t);
                 g_stringPool[0] = t;
             }
@@ -3648,7 +3648,7 @@ extern "C" void FUN_00170210(void *arg0);
 extern "C" void Memory_FreeBufferAliasB(void *);
 extern "C" void*DAT_00560858[4];
 #define STR_RELEASE(s) if (s) { int *h_ = (int *)((char *)(s) - 8); if (--h_[1] == 0) StringChunk_ReleaseHeader((void *)h_[0], (int)h_); }
-#define POOL() if (!g_stringPool[0]) { int p_ = FUN_002eb010(16); if (p_) p_ = StringPool_Construct(p_); g_stringPool[0] = p_; }
+#define POOL() if (!g_stringPool[0]) { int p_ = StringPool_Allocate(16); if (p_) p_ = StringPool_Construct(p_); g_stringPool[0] = p_; }
 struct T_170510 {
     unsigned short count; unsigned short pad0; unsigned short n; unsigned short pad1; char *str; unsigned short *arr; void *buf;
     bool Wanted(int idx) {
@@ -5880,7 +5880,7 @@ struct PackedVertexWriter { virtual void a0(); virtual void a1(); virtual void a
 struct VertexArrayWriter { virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void d32(); virtual void d33();  virtual void v144(unsigned, int *); virtual void d35(); virtual void v152(unsigned, int); int pad[5]; PackedVertexWriter *f24; };
 extern "C" void FUN_00186660(int arg0, unsigned int arg1, int arg2, int arg3, PackedVertexWriter *arg4, VertexArrayWriter *arg5, float fparg0);
 extern "C" ManagerList *DAT_00560758;
-extern "C" StageState DAT_00569340[];
-extern "C" StageState *DAT_0056ad80[4];
+extern "C" StageState p2GsRegisterSets[];
+extern "C" StageState *p2CurrentGsRegisters[4];
 
 #endif

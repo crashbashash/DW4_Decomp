@@ -14,7 +14,7 @@ extern "C" void Gap__Bec__beDBManager__vfunc_32(void);
 extern "C" int Gap__Bec__beDBManager__vfunc_30(void);
 extern "C" int Gap__Bec__beDBManager__vfunc_20(void);
 extern "C" void beMessenger_RegisterReceiverFromInfo(int, int, char *);
-extern "C" void FUN_00236c40(int, void *);
+extern "C" void igInsightCore_RemoveFromScheduler(int, void *);
 extern "C" int FUN_00366070(...);
 extern "C" int beMessenger_AppendObject(int, int);
 extern "C" int beMessenger_ResolveEnumValue(int, int, int);
@@ -190,7 +190,7 @@ void Gap__Bec__beDBManager__vfunc_29(beDBManager *p0, int p1, char *p2)
 
 void Gap__Bec__beDBManager__vfunc_31(beDBManager *p0, int p1)
 {
-    FUN_00236c40(p0->_insight, p0);
+    igInsightCore_RemoveFromScheduler(p0->_insight, p0);
 }
 
 int Gap__Bec__beDBManager__vfunc_33(beDBManager *arg0, beBaseInfoRam *arg1, int arg2) {

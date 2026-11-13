@@ -13,7 +13,7 @@ FolderObjectRef Gap__Core__igPsx2Folder__vfunc_26(FolderSelf *self) {
             interned = 0;
         } else {
             if ((*(int *)g_stringPool) == 0) {
-                int v = ((int)FUN_002eb010(16));
+                int v = ((int)StringPool_Allocate(16));
                 if (v != 0) {
                     v = ((int)StringPool_Construct((struct S_2eadf0 *)v));
                 }
@@ -53,7 +53,7 @@ static inline FolderAllocator *currentAllocator(void) {
     if (GPR_00554c14 != 0) {
         return ((FolderAllocator *)Memory_GetAllocatorBySelector((*(int *)DAT_00587028)));
     }
-    return ((FolderAllocator *)Memory_GetAllocatorBySelector((*(int *)DAT_00587060)));
+    return ((FolderAllocator *)Memory_GetAllocatorBySelector((*(int *)g_temporaryAllocatorSelector)));
 }
 
 int FUN_0032cf50(int a, int b, int c, int d, int e) {
@@ -141,7 +141,7 @@ void FUN_0032d1f0(void) {
 
 static inline int internPool(void) {
     if (g_stringPool[0] == 0) {
-        int a = ((int)FUN_002eb010(0x10));
+        int a = ((int)StringPool_Allocate(0x10));
         if (a != 0) {
             a = ((int)StringPool_Construct((S_2eadf0 *)a));
         }

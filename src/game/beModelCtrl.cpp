@@ -107,7 +107,7 @@ extern "C" int thunk_FUN_0018ac80(...);
 extern "C" int Memory_GetAllocatorBySelector(...);
 extern "C" int igObject_GetAllocator(...);
 extern "C" int ObjectList_AppendRetained(...);
-extern "C" int FUN_00236f80(...);
+extern "C" int igInsightCore_FindManager(...);
 extern "C" int Gap__Core__igObject__vfunc_30(void);
 extern "C" void Gap__Core__igObject__vfunc_39(void);
 extern "C" void Gap__Core__igObject__vfunc_46(void);
@@ -123,7 +123,7 @@ extern "C" int Gap__Bec__beModelCtrl__vfunc_25(beModelCtrl *self, beModelCtrlInf
 extern "C" int beMessenger_RegisterReceiverFromInfo(...);
 extern "C" void * igProperty_FindByName(...);
 extern "C" void Gap__Bec__beNDMWMdlMapCursor__vfunc_37(void);
-extern "C" int FUN_002eb010(...);
+extern "C" int StringPool_Allocate(...);
 extern "C" int StringPool_Construct(...);
 extern "C" int StringChunk_ReleaseHeader(...);
 extern "C" int beBaseInfoRam_IsTimerExpired(void *, void *);
@@ -560,10 +560,10 @@ igAABoxList *beModelCtrlInfoHitBody_GetAABoxList(beModelCtrlInfoHitBody *body, b
 
 void beModelCtrl_ResolveManagers(beModelCtrl *self) {
     if (self->_luaManager == 0) {
-        self->_luaManager = FUN_00236f80(self->_insight, g_beLua_metaObject[0]);
+        self->_luaManager = igInsightCore_FindManager(self->_insight, g_beLua_metaObject[0]);
     }
     if (self->_targetObj == 0) {
-        self->_targetObj = FUN_00236f80(self->_insight, g_beTargetObj_metaObject[0]);
+        self->_targetObj = igInsightCore_FindManager(self->_insight, g_beTargetObj_metaObject[0]);
     }
 }
 
@@ -638,7 +638,7 @@ void beModelCtrl_UpdateMapAI(beModelCtrl *self, void *info, beBaseInfoRam *ram, 
         map = ((beModelCtrlAIMap **)((beModelCtrlAIMapList *)aim->_aIMapList)->_data)[ai->_mapNo];
         if ((char *)map->_targetType == 0) {
             if (g_stringPool[0] == 0) {
-                pool = FUN_002eb010(16);
+                pool = StringPool_Allocate(16);
                 if (pool != 0) {
                     pool = StringPool_Construct(pool);
                 }
@@ -699,7 +699,7 @@ void beModelCtrl_UpdateMapAI(beModelCtrl *self, void *info, beBaseInfoRam *ram, 
             text = (char *)&emptyString[0];
         }
         if (g_stringPool[0] == 0) {
-            pool = FUN_002eb010(16);
+            pool = StringPool_Allocate(16);
             if (pool != 0) {
                 pool = StringPool_Construct(pool);
             }
@@ -720,7 +720,7 @@ void beModelCtrl_UpdateMapAI(beModelCtrl *self, void *info, beBaseInfoRam *ram, 
     } else {
         text = (char *)ai->_seqName;
         if (g_stringPool[0] == 0) {
-            pool = FUN_002eb010(16);
+            pool = StringPool_Allocate(16);
             if (pool != 0) {
                 pool = StringPool_Construct(pool);
             }
@@ -741,7 +741,7 @@ void beModelCtrl_UpdateMapAI(beModelCtrl *self, void *info, beBaseInfoRam *ram, 
     work->_keyInput = strcmp(seqName.p, SQ_WALK) == 0;
     text = seqName.p;
     if (g_stringPool[0] == 0) {
-        pool = FUN_002eb010(16);
+        pool = StringPool_Allocate(16);
         if (pool != 0) {
             pool = StringPool_Construct(pool);
         }
@@ -760,7 +760,7 @@ void beModelCtrl_UpdateMapAI(beModelCtrl *self, void *info, beBaseInfoRam *ram, 
     work->_keyEventName = (int)token;
     text = seqName.p;
     if (g_stringPool[0] == 0) {
-        pool = FUN_002eb010(16);
+        pool = StringPool_Allocate(16);
         if (pool != 0) {
             pool = StringPool_Construct(pool);
         }
@@ -890,7 +890,7 @@ void beModelCtrl_UpdateKeyCtrl(beModelCtrl *self, beBaseInfo *info, beBaseInfoRa
             if (work->_keyInput == 1) {
                 char *token;
                 if (g_stringPool[0] == 0) {
-                    int pool = FUN_002eb010(16);
+                    int pool = StringPool_Allocate(16);
                     if (pool != 0) pool = StringPool_Construct(pool);
                     g_stringPool[0] = pool;
                 }
@@ -903,7 +903,7 @@ void beModelCtrl_UpdateKeyCtrl(beModelCtrl *self, beBaseInfo *info, beBaseInfoRa
             if (work->_keyInput == 0) {
                 char *token;
                 if (g_stringPool[0] == 0) {
-                    int pool = FUN_002eb010(16);
+                    int pool = StringPool_Allocate(16);
                     if (pool != 0) pool = StringPool_Construct(pool);
                     g_stringPool[0] = pool;
                 }
@@ -942,7 +942,7 @@ void beModelCtrlInfoRideOn_SetModel(beModelCtrlInfoRideOn *self, int modelName, 
     node = beMessenger_GetObject(messenger, 0);
     Matrix44_Copy(matrix, (char *)node + 32);
     if (g_stringPool[0] == 0) {
-        value = FUN_002eb010(16);
+        value = StringPool_Allocate(16);
         if (value != 0) {
             value = StringPool_Construct(value);
         }
@@ -1435,7 +1435,7 @@ unsigned char beModelCtrl_RunMove(beModelCtrl *self, beBaseInfoRam *ram, beModel
                 char *oldModelName, *oldBoneName;
                 modelName = (char *)m->_modelName;
                 if (g_stringPool[0] == 0) {
-                    int pool = FUN_002eb010(16);
+                    int pool = StringPool_Allocate(16);
                     if (pool != 0) pool = StringPool_Construct(pool);
                     g_stringPool[0] = pool;
                 }
@@ -1450,7 +1450,7 @@ unsigned char beModelCtrl_RunMove(beModelCtrl *self, beBaseInfoRam *ram, beModel
                 work->_posLockModelName = (int)modelName;
                 boneName = (char *)m->_boneName;
                 if (g_stringPool[0] == 0) {
-                    int pool = FUN_002eb010(16);
+                    int pool = StringPool_Allocate(16);
                     if (pool != 0) pool = StringPool_Construct(pool);
                     g_stringPool[0] = pool;
                 }
@@ -1517,7 +1517,7 @@ int beModelCtrl_RunPdMove(beModelCtrl *self, beBaseInfoRam *ram, beModelCtrlInfo
 }
 
 extern "C" void *FUN_002b90e0(int);
-extern "C" void *FUN_002caa70(int);
+extern "C" void *igIntList_Create(int);
 extern "C" int FUN_001ca620(igStringRefList *, StringRef *);
 extern "C" int DAT_004c8fa8[4];
 extern "C" int DAT_004c8fb0[4];
@@ -1594,7 +1594,7 @@ void beModelCtrlInfoWork_SetSeqLabel(beModelCtrl *self, beBaseInfoRam *ram, beMo
             released->_refCount = released->_refCount - 1;
             if ((released->_refCount & 0x7fffff) == 0) igObject_Destroy(released);
         }
-        intListRef.p = (igIntList *)FUN_002caa70(allocator);
+        intListRef.p = (igIntList *)igIntList_Create(allocator);
         created = intListRef.p;
         if (created != 0) created->_refCount = created->_refCount + 1;
         released = (igObject *)work->_labelOffsetList;
@@ -1609,7 +1609,7 @@ void beModelCtrlInfoWork_SetSeqLabel(beModelCtrl *self, beBaseInfoRam *ram, beMo
         token = 0;
     } else {
         if (g_stringPool[0] == 0) {
-            word = FUN_002eb010(16);
+            word = StringPool_Allocate(16);
             if (word != 0) word = StringPool_Construct(word);
             g_stringPool[0] = word;
         }
@@ -1624,7 +1624,7 @@ void beModelCtrlInfoWork_SetSeqLabel(beModelCtrl *self, beBaseInfoRam *ram, beMo
             token = 0;
         } else {
             if (g_stringPool[0] == 0) {
-                word = FUN_002eb010(16);
+                word = StringPool_Allocate(16);
                 if (word != 0) word = StringPool_Construct(word);
                 g_stringPool[0] = word;
             }
@@ -1651,7 +1651,7 @@ void beModelCtrlInfoWork_SetSeqLabel(beModelCtrl *self, beBaseInfoRam *ram, beMo
             token = 0;
         } else {
             if (g_stringPool[0] == 0) {
-                word = FUN_002eb010(16);
+                word = StringPool_Allocate(16);
                 if (word != 0) word = StringPool_Construct(word);
                 g_stringPool[0] = word;
             }
@@ -1683,7 +1683,7 @@ void beModelCtrlInfoWork_SetSeqLabel(beModelCtrl *self, beBaseInfoRam *ram, beMo
             token = 0;
         } else {
             if (g_stringPool[0] == 0) {
-                word = FUN_002eb010(16);
+                word = StringPool_Allocate(16);
                 if (word != 0) word = StringPool_Construct(word);
                 g_stringPool[0] = word;
             }
@@ -1697,7 +1697,7 @@ void beModelCtrlInfoWork_SetSeqLabel(beModelCtrl *self, beBaseInfoRam *ram, beMo
             token = 0;
         } else {
             if (g_stringPool[0] == 0) {
-                word = FUN_002eb010(16);
+                word = StringPool_Allocate(16);
                 if (word != 0) word = StringPool_Construct(word);
                 g_stringPool[0] = word;
             }
@@ -1789,7 +1789,7 @@ void beModelCtrl_CallLua(beModelCtrl *self, beBaseInfoRam *ram, const char *func
     token = (int *)command->_name; \
     if (token != 0) { token = (int *)token; } else { token = &emptyString[0]; } \
     if (g_stringPool[0] == 0) { \
-        int pool = FUN_002eb010(0x10); \
+        int pool = StringPool_Allocate(0x10); \
         if (pool != 0) pool = StringPool_Construct(pool); \
         g_stringPool[0] = pool; \
     } \
@@ -1893,7 +1893,7 @@ int beModelCtrl_StartWaitCheck(beModelCtrl *self, beModelCtrlInfoWork *work, beM
     name = (int *)command->_name;
     name = name != 0 ? name : (int *)(&emptyString[0]);
     if (g_stringPool[0] == 0) {
-        pool = FUN_002eb010(0x10);
+        pool = StringPool_Allocate(0x10);
         if (pool != 0) {
             pool = StringPool_Construct(pool);
         }
@@ -1915,7 +1915,7 @@ int beModelCtrl_StartWaitCheck(beModelCtrl *self, beModelCtrlInfoWork *work, beM
 
 #define END_WAIT() do { \
     int v; int token; int old; int *hd; \
-    if (g_stringPool[0] == 0) { v = FUN_002eb010(16); if (v != 0) v = StringPool_Construct(v); g_stringPool[0] = v; } \
+    if (g_stringPool[0] == 0) { v = StringPool_Allocate(16); if (v != 0) v = StringPool_Construct(v); g_stringPool[0] = v; } \
     token = ((int)StringPool_Intern(g_stringPool[0], 0)); \
     old = work->_wCheckName; \
     if (old != 0) { hd = (int *)(old - 8); v = *(int *)(old - 4) - 1; *(int *)(old - 4) = v; if (v == 0) StringChunk_ReleaseHeader(*hd, hd); } \
@@ -2211,7 +2211,7 @@ void Gap__Core__igObject__vfunc_31(beModelCtrl *self, beBaseInfoRam *ram) {
         }
         work->_keyInput = 0;
         if (g_stringPool[0] == 0) {
-            int pool = FUN_002eb010(16);
+            int pool = StringPool_Allocate(16);
             if (pool != 0) pool = StringPool_Construct(pool);
             g_stringPool[0] = pool;
         }
@@ -2304,7 +2304,7 @@ int beModelCtrlInfoWork_FindSeqLabel(beModelCtrl *self, beModelCtrlInfoWork *wor
             token = 0;
         } else {
             if (g_stringPool[0] == 0) {
-                int pool = FUN_002eb010(16);
+                int pool = StringPool_Allocate(16);
                 if (pool != 0) pool = StringPool_Construct(pool);
                 g_stringPool[0] = pool;
             }
@@ -2378,7 +2378,7 @@ void beModelCtrl_UpdateBound(beModelCtrl *self, beModelCtrlNode2 *node, igAABox 
 }
 
 #define ALLOCATOR(a, o) int a = igObject_GetAllocator(o); a = GPR_00554c14 ? a : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
-#define POOL() if (((void * *)g_stringPool)[0] == 0) { void *pl_ = ((void *)FUN_002eb010(0x10)); if (pl_ != 0) pl_ = ((void *)StringPool_Construct(pl_)); ((void * *)g_stringPool)[0] = pl_; }
+#define POOL() if (((void * *)g_stringPool)[0] == 0) { void *pl_ = ((void *)StringPool_Allocate(0x10)); if (pl_ != 0) pl_ = ((void *)StringPool_Construct(pl_)); ((void * *)g_stringPool)[0] = pl_; }
 #define RELEASE_STRING(old) if (old) { int *h_ = (int *)old - 2; int c_ = ((int *)old)[-1] - 1; ((int *)old)[-1] = c_; if (c_ == 0) StringChunk_ReleaseHeader(*h_, h_); }
 #define SET_WORK_STRING(fld, txt) { POOL() const char *tk_ = ((const char *)StringPool_Intern(((void * *)g_stringPool)[0], txt)); const char *old_ = (const char *)work->fld; RELEASE_STRING(old_) work->fld = (int)tk_; }
 #define INFO_NAME(b) const char *b; { const char *a_ = (const char *)info->_name; if (a_ != 0) b = a_; else b = ((char *)emptyString); }

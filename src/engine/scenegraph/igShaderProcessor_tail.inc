@@ -172,7 +172,7 @@ int FUN_001cb340(ShaderProcessorView *self, ShaderTarget *target, int arg) {
                     interned = 0;
                 } else {
                     if (g_stringPool[0] == 0) {
-                        int pool = FUN_002eb010(16);
+                        int pool = StringPool_Allocate(16);
                         if (pool != 0) {
                             pool = StringPool_Construct(pool);
                         }

@@ -251,7 +251,7 @@ int MetaRefList_AppendRetained(...);
 int igMetaField_FinalizeDescriptor(...);
 int FUN_002b9200(...);
 int FUN_002c8f30(...);
-int FUN_002eb010(...);
+int StringPool_Allocate(...);
 int ObjectList_AppendRetained(...);
 int StringPool_Construct(...);
 void * StringPool_Intern(...);

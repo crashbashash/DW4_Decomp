@@ -3,7 +3,7 @@ extern "C" {
 int strlen(int);
 int strncmp(int, int, unsigned);
 igPluginRepository *FUN_002bc930(int);
-int FUN_002eb010(int);
+int StringPool_Allocate(int);
 int ObjectList_AppendRetained(int, igPluginRepository *);
 int StringChunk_ReleaseHeader(int, int *);
 int StringPool_Construct(int);
@@ -25,7 +25,7 @@ static inline void setLocation(const igSmartPointer<igPluginRepository> &ref, in
     int old;
     int *header;
     if (DAT_00586f20[0] == 0) {
-        int pool = FUN_002eb010(16);
+        int pool = StringPool_Allocate(16);
         if (pool != 0) {
             pool = StringPool_Construct(pool);
         }
@@ -49,7 +49,7 @@ static inline void setLocation(const igSmartPointer<igPluginRepository> &ref, ch
     int old;
     int *header;
     if (DAT_00586f20[0] == 0) {
-        int pool = FUN_002eb010(16);
+        int pool = StringPool_Allocate(16);
         if (pool != 0) {
             pool = StringPool_Construct(pool);
         }

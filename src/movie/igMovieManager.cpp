@@ -36,7 +36,7 @@ extern "C" void *FUN_00335400(...);
 extern "C" void *FUN_00335da0(...);
 extern "C" void *FUN_00142f30(...);
 extern "C" void *FUN_0044c490(...);
-extern "C" int FUN_00236be0(...);
+extern "C" int igInsightCore_AddToScheduler(...);
 extern "C" int FUN_00236ee0(...);
 extern "C" int FUN_002d6f50(...);
 extern "C" int FUN_002d7690(...);
@@ -290,7 +290,7 @@ int Gap__igMovieManager__vfunc_25(igMovieManager *self, void *arg1) {
                 self->_movieList = (int)FUN_00335da0(a);
             }
             ObjectList_AppendRetained(self->_movieList, movie);
-            FUN_00236be0(self->_insight, self);
+            igInsightCore_AddToScheduler(self->_insight, self);
             {
                 MovieRenderer *rend = (MovieRenderer *)self->_movieRenderer;
                 if (self != 0) self->_refCount = self->_refCount + 1;

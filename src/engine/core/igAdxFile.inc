@@ -14,14 +14,14 @@ void ***FUN_002e2fb0(void) {
         if (GPR_00554c14 != 0) {
             a = al;
         } else {
-            a = (void **)Memory_GetAllocatorBySelector(DAT_00587060[0]);
+            a = (void **)Memory_GetAllocatorBySelector(g_temporaryAllocatorSelector[0]);
         }
         cell = t = (void **)((VC_216 *)a)->vX(4);
         if (t != 0) { *t = 0; }
         DAT_00586e18[0] = cell;
         name = DAT_004c2128[0];
         if (g_stringPool[0] == 0) {
-            pool = ((int)FUN_002eb010(16));
+            pool = ((int)StringPool_Allocate(16));
             if (pool != 0) {
                 pool = ((int)StringPool_Construct((S_2eadf0 *)pool));
             }
@@ -50,7 +50,7 @@ void FUN_002e30b0(int *arg0, int arg1) {
     void *temp_s0;
 
     if (g_stringPool[0] == 0) {
-        var_v0 = ((int)FUN_002eb010(0x10));
+        var_v0 = ((int)StringPool_Allocate(0x10));
         if (var_v0 != 0) {
             var_v0 = ((int)StringPool_Construct((S_2eadf0 *)var_v0));
         }
@@ -136,7 +136,7 @@ void FUN_002e3280(int arg0) {
     } else {
         temp_s1 = (void **)(*FUN_002e2fb0());
         if (g_stringPool[0] == 0) {
-            var_v0 = ((int)FUN_002eb010(0x10));
+            var_v0 = ((int)StringPool_Allocate(0x10));
             if (var_v0 != 0) {
                 var_v0 = ((int)StringPool_Construct((S_2eadf0 *)var_v0));
             }
@@ -212,7 +212,7 @@ int Gap__igAdxFile__vfunc_39(struct AX *arg0, int arg1) {
     int v;
     int obj;
     if (g_stringPool[0] == 0) {
-        obj = ((int)FUN_002eb010(0x10));
+        obj = ((int)StringPool_Allocate(0x10));
         if (obj != 0) {
             obj = ((int)StringPool_Construct((struct S_2eadf0 *)obj));
         }

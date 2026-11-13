@@ -30,13 +30,13 @@ extern "C" int ObjectList_AppendRetained(...);
 extern "C" beBaseInfoRamTimer *igProperty_FindByName(...);
 extern "C" void List_RemoveWordAt(...);
 extern "C" int List_Reserve(...);
-extern "C" void *FUN_00236f80(...);
+extern "C" void *igInsightCore_FindManager(...);
 extern "C" void beMessenger_RegisterReceiver(int messenger, int receiver, char *name, int, int);
 extern "C" bePadData *bePadManager_GetPadForPlayer(int padManager, int player);
 extern "C" int igObject_IsKindOf(void *object, int metaObject);
 extern "C" int beLua__RunNamedChunk(int lua, int name, int);
 extern "C" int strcmp(int *, int *);
-extern "C" int FUN_002eb010(int);
+extern "C" int StringPool_Allocate(int);
 extern "C" int StringPool_Construct(int);
 extern "C" int StringPool_Intern(int, int);
 extern "C" void StringChunk_ReleaseHeader(int owner, void *header);
@@ -680,7 +680,7 @@ void beBaseInfoRam_RemoveAllTimers(beBaseInfoRam *self) {
 
 /* Takes a reference to the insight's movie manager. */
 void Gap__Bec__beMovie__vfunc_32(beMovie *self) {
-    igObject *manager = (igObject *)FUN_00236f80(self->_insight, g_igMovieManager_metaObject[0]);
+    igObject *manager = (igObject *)igInsightCore_FindManager(self->_insight, g_igMovieManager_metaObject[0]);
     if (manager != 0) {
         manager->_refCount = manager->_refCount + 1;
     }
@@ -737,7 +737,7 @@ void Gap__Bec__beMovie__vfunc_31(beMovie *self, beBaseInfoRam *ram) {
     StringHeader *header;
     int refs;
     if (self->_playingName != 0) {
-        pad = bePadManager_GetPadForPlayer((int)FUN_00236f80(self->_insight, g_bePadManager_metaObject[0]), 0);
+        pad = bePadManager_GetPadForPlayer((int)igInsightCore_FindManager(self->_insight, g_bePadManager_metaObject[0]), 0);
         pressed = pad->_trigger;
         if ((pressed & kButtonStart) || (pressed & kButtonCross)) {
             player = (MoviePlayer *)self->_movie;
@@ -749,7 +749,7 @@ void Gap__Bec__beMovie__vfunc_31(beMovie *self, beBaseInfoRam *ram) {
             if (player->getState((int *)self->_playingName) == kMovieFinished) finished = true;
         } else finished = true;
         if (finished) {
-            lua = (int)FUN_00236f80(self->_insight, g_beLua_metaObject[0]);
+            lua = (int)igInsightCore_FindManager(self->_insight, g_beLua_metaObject[0]);
             list = (beBaseInfoDataList *)((beMovieInfo *)ram->_parentInfo)->_dataList;
             for (i = 0; i < list->_count; i++) {
                 entry = ((igObject **)list->_data)[i];
@@ -764,7 +764,7 @@ void Gap__Bec__beMovie__vfunc_31(beMovie *self, beBaseInfoRam *ram) {
                 }
             }
             if (g_stringPool[0] == 0) {
-                empty = FUN_002eb010(16);
+                empty = StringPool_Allocate(16);
                 if (empty) empty = StringPool_Construct(empty);
                 g_stringPool[0] = empty;
             }

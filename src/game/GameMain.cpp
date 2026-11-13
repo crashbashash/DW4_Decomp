@@ -191,12 +191,12 @@ extern "C" int FUN_00300db0(...);
 extern "C" int FUN_00300f50(...);
 extern "C" bool FUN_00259cd0(const char *path);
 extern "C" void FUN_00259d10(void);
-extern "C" int FUN_002eb010(...);
+extern "C" int StringPool_Allocate(...);
 extern "C" int FUN_00463c70(...);
 extern "C" int StringPool_Construct(...);
 extern "C" int StringPool_Intern(...);
 extern "C" void FUN_00259f80(int *arg0);
-extern "C" void *FUN_00236f80(...);
+extern "C" void *igInsightCore_FindManager(...);
 extern "C" int FUN_00239390(...);
 extern "C" int FUN_00238d40(...);
 extern "C" int FUN_003343a0(...);
@@ -292,7 +292,7 @@ public:
 };
 extern "C" igResult FUN_0032d4b0(const char *path);
 extern "C" bool GPR_00554bec;
-extern "C" void * DAT_005871d0[4];
+extern "C" void * g_threadManager[4];
 extern "C" unsigned char GPR_00554990;
 struct R_259d40 { int a; };
 class VC { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual R_259d40 vX(int); };
@@ -301,7 +301,7 @@ typedef struct CountedHeader { int w0; int refs; } CountedHeader;
 typedef igTDataList<int> NameList;
 typedef struct NamedLists { char pad[36]; NameList *_names; void *_name; } NamedLists;
 extern "C" CountedHeader *FUN_002b90e0(int);
-extern "C" NameList *FUN_002caa70(int);
+extern "C" NameList *igIntList_Create(int);
 extern "C" int DAT_00498728[4];
 extern "C" int g_stringPool[4];
 struct StringRef {
@@ -854,7 +854,7 @@ void FUN_00259d40(NamedLists *arg0, int arg1) {
 
     if ((*(unsigned char *)&GPR_00554bec) != 0) {
         if (arg1 != 0) {
-            temp_a1 = (VC *)(**(int **)((char *)(*(int *)((char *)(DAT_005871d0[0]) + 8)) + 16));
+            temp_a1 = (VC *)(**(int **)((char *)(*(int *)((char *)(g_threadManager[0]) + 8)) + 16));
             temp_a1->vX(0xF4240);
         }
         if ((*(unsigned char *)&GPR_00554be8) != 0) {
@@ -876,7 +876,7 @@ static inline void releaseRef(CountedHeader *t) {
 
 static inline void resetName(NamedLists *o, AdoptReference) { releaseRef((CountedHeader *)o->_name); o->_name = FUN_002b90e0(0); }
 
-static inline void resetList(NamedLists *o, AdoptReference) { releaseRef((CountedHeader *)o->_names); o->_names = FUN_002caa70(0); }
+static inline void resetList(NamedLists *o, AdoptReference) { releaseRef((CountedHeader *)o->_names); o->_names = igIntList_Create(0); }
 
 void FUN_00259dc0(NamedLists *arg0, int arg1, int arg2) {
     int var_v0;
@@ -891,7 +891,7 @@ void FUN_00259dc0(NamedLists *arg0, int arg1, int arg2) {
         var_v0 = 0;
     } else {
         if (g_stringPool[0] == 0) {
-            obj = FUN_002eb010(0x10);
+            obj = StringPool_Allocate(0x10);
             if (obj != 0) {
                 obj = StringPool_Construct(obj);
             }
@@ -953,7 +953,7 @@ void FUN_00259f90(struct A *arg0, struct R_259f90 *arg1, struct R_259f90 *arg2) 
 
 static inline int *internString(const char *s) {
     if (g_stringPool[0] == 0) {
-        int pool = FUN_002eb010(16);
+        int pool = StringPool_Allocate(16);
         if (pool != 0) pool = StringPool_Construct(pool);
         g_stringPool[0] = pool;
     }
@@ -1051,9 +1051,9 @@ void FUN_0025a580(A0 *arg0) {
         FUN_00463b30(arg0);
         FUN_00259f80((int *)arg0);
         FUN_00463c70(arg0);
-        s0 = (Rd *)FUN_00236f80(arg0->f0, g_beSystem_metaObject[0]);
+        s0 = (Rd *)igInsightCore_FindManager(arg0->f0, g_beSystem_metaObject[0]);
         if (g_stringPool[0] == 0) {
-            int v = FUN_002eb010(0x10);
+            int v = StringPool_Allocate(0x10);
             if (v != 0) {
                 v = StringPool_Construct(v);
             }
@@ -1231,7 +1231,7 @@ void FUN_0025ac60(S *arg0) {
                 strcpy(buf, s348.p);
                 buf[strlen(buf) - 2] = 0;
                 if (g_stringPool[0] == 0) {
-                    int v = FUN_002eb010(0x10);
+                    int v = StringPool_Allocate(0x10);
                     if (v != 0) v = StringPool_Construct(v);
                     g_stringPool[0] = v;
                 }
@@ -1287,7 +1287,7 @@ void FUN_0025afe0(Holder *arg0) {
     Pool *var_v0;
     void *var_s0;
     FUN_00463c80();
-    var_s0 = H::castit(FUN_00236f80(arg0->p, g_igViewerSceneInfoManager_metaObject[0]));
+    var_s0 = H::castit(igInsightCore_FindManager(arg0->p, g_igViewerSceneInfoManager_metaObject[0]));
     ((Ctl *)((igViewerRenderer *)((igViewerSceneInfoManager *)var_s0)->_viewerRenderer)->_sceneTraversal)->v124();
     ((Sub *)arg0->p->_visualContext)->v140();
     REL_25afe0(DAT_00562718[0]);

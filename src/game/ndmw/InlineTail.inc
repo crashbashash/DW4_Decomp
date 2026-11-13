@@ -477,7 +477,7 @@ void Gap__Bec__beNDMWPanelWazaInfoWork__vfunc_16(beNDMWPanelWazaInfoWork *arg0) 
 
     arg0->_retIsFire = 0;
     if (g_stringPool[0] == 0) {
-        var_v0 = FUN_002eb010(0x10);
+        var_v0 = StringPool_Allocate(0x10);
         if (var_v0 != 0) {
             var_v0 = StringPool_Construct(var_v0);
         }
@@ -533,7 +533,7 @@ void Gap__Bec__beNDMWPanelObjectStat__vfunc_16(beNDMWPanelObjectStat *arg0) {
         do {
             slot = (const char **)((char *)l->_data + off);
             if (((void * *)g_stringPool)[0] == 0) {
-                void *pool = ((void *)FUN_002eb010(0x10));
+                void *pool = ((void *)StringPool_Allocate(0x10));
                 if (pool != 0) pool = ((void *)StringPool_Construct(pool));
                 ((void * *)g_stringPool)[0] = pool;
             }
@@ -721,7 +721,7 @@ int *FUN_003cc550(int *arg0, int arg1) {
         var_v0 = 0;
     } else {
         if (g_stringPool[0] == 0) {
-            var_v0_2 = FUN_002eb010(0x10);
+            var_v0_2 = StringPool_Allocate(0x10);
             if (var_v0_2 != 0) {
                 var_v0_2 = StringPool_Construct(var_v0_2);
             }

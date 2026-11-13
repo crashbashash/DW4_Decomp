@@ -18,7 +18,7 @@ void Gap__Core__igUnsignedCharMetaField__vfunc_57(int *arg0, int arg1, unsigned 
         var_v1 = 0;
     } else {
         if (g_stringPool[0] == 0) {
-            var_v0 = ((int)FUN_002eb010(0x10));
+            var_v0 = ((int)StringPool_Allocate(0x10));
             if (var_v0 != 0) {
                 var_v0 = ((int)StringPool_Construct((S_2eadf0 *)var_v0));
             }

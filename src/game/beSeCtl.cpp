@@ -11,7 +11,7 @@ extern "C" void igTimeAttr_CreateInstance(void);
 extern "C" int igTraversal_RegisterFunction(int, int, void (*)(void));
 extern "C" int FUN_0034b4a0(...);
 extern "C" void FUN_0039c8c0(void);
-extern "C" int FUN_00236f80(int, int);
+extern "C" int igInsightCore_FindManager(int, int);
 extern "C" void beMessenger_RegisterReceiver(int, int, char *, int, int);
 extern "C" int Gap__Bec__beSeCtl__vfunc_30(void);
 extern "C" void Gap__Bec__beSeCtl__vfunc_31(void);
@@ -149,7 +149,7 @@ void FUN_0039c8c0(void) {
 
 void Gap__Bec__beSeCtl__vfunc_32(beSeCtl *arg0) {
     if (arg0->_sndMng == 0) {
-        arg0->_sndMng = FUN_00236f80(arg0->_insight, g_beSound_metaObject[0]);
+        arg0->_sndMng = igInsightCore_FindManager(arg0->_insight, g_beSound_metaObject[0]);
     }
 }
 

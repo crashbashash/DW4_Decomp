@@ -15,7 +15,7 @@ extern "C" int strcmp(...);
 extern "C" int TextOrder_ClearFont(...);
 extern "C" int TextOrder_PublishLineListOnly(...);
 extern "C" int beNDMWLoadIntf2MesWin__RequestMessage(...);
-extern "C" void *FUN_002eb010(...);
+extern "C" void *StringPool_Allocate(...);
 extern "C" int ObjectList_AppendRetained(...);
 extern "C" int StringChunk_ReleaseHeader(...);
 extern "C" void *StringPool_Construct(...);
@@ -206,7 +206,7 @@ extern "C" int beNDMWLoadIntf2ComMdlCtrl__IsRunning(beNDMWLoadIntf2ComMdlCtrl *s
 extern "C" int beNDMWLoadIntf2ComMdlCtrl__IsCloseQueueEmpty(beNDMWLoadIntf2ComMdlCtrl *self);
 extern "C" int List_RemoveWordAt(beLoadIntf2ComMdlDataList *list, int index);
 extern "C" void beNDMWLoadIntf2ComMdlCtrl__Poll(beNDMWLoadIntf2ComMdlCtrl *self);
-extern "C" igObject *FUN_00236f80(int, int);
+extern "C" igObject *igInsightCore_FindManager(int, int);
 extern "C" int g_bePadManager_metaObject[4];
 extern "C" void beNDMWLoadIntf2__ResolvePadManager(beNDMWLoadIntf2 *self);
 typedef struct ObjectRefTarget { int word0; int references; } ObjectRefTarget;
@@ -642,7 +642,7 @@ static inline beNDMWMcUtilCtrl *McUtil(beNDMWLoadCtrl2CommonIntf *common) {
 }
 /* The host player's pad, looked up through the insight's pad manager. */
 static inline bePadData *HostPad(beNDMWLoadIntf2 *self, beBaseInfoRam *host) {
-  igObject *manager = FUN_00236f80(self->_insight, g_bePadManager_metaObject[0]);
+  igObject *manager = igInsightCore_FindManager(self->_insight, g_bePadManager_metaObject[0]);
   return (bePadData *)bePadManager_GetPadForPlayer(manager, host->_ramNo);
 }
 /* The object's own allocator when g_useOwnerAllocator is set, else the selected one. */
@@ -1534,7 +1534,7 @@ extern "C" void beNDMWLoadIntf2__Update(beNDMWLoadIntf2 *self, beBaseInfoRam *ho
                 }
                 RequestGameRam(self, host, GETPLAYER);
                 int loadedPlayer = beMessenger_GetObject(self->_messenger, 0);
-                igObject *font = FUN_00236f80(self->_insight, g_beFont_metaObject[0]);
+                igObject *font = igInsightCore_FindManager(self->_insight, g_beFont_metaObject[0]);
                 beNDMWDegiData__StoreToProperties(PlayerDegiData(common, host), loadedPlayer, font);
                 int kindName = PlayerDegiData(common, host)->_dmkind;
                 beMessenger_SelectGroup(self->_messenger, GAMERAM_2);
@@ -1550,7 +1550,7 @@ extern "C" void beNDMWLoadIntf2__Update(beNDMWLoadIntf2 *self, beBaseInfoRam *ho
               common->_difficultMode = 0;
               self->_difficultMax = 0;
               g_mdlEntity[0] = 0;
-              beLua__RunNamedChunk(FUN_00236f80(self->_insight, g_beLua_metaObject[0]), hostLoad_lua, 0);
+              beLua__RunNamedChunk(igInsightCore_FindManager(self->_insight, g_beLua_metaObject[0]), hostLoad_lua, 0);
               switch (self->_difficultMax) {
               case 0:
                 break;
@@ -2522,7 +2522,7 @@ static inline void CloseSaveAreaWindows(beNDMWLoadIntf2DataSelIntf *self, beNDMW
 /* The string pool shared by every interned name, created on first use. */
 static inline void *SharedStringPool(void) {
     if (g_stringPool[0] == 0) {
-        void *pool = FUN_002eb010(16);
+        void *pool = StringPool_Allocate(16);
         if (pool != 0) {
             pool = StringPool_Construct(pool);
         }
@@ -4851,7 +4851,7 @@ void beNDMWLoadIntf2__ResolvePadManager(beNDMWLoadIntf2 *self) {
     igObject *previous;
 
     if (self->_padManager == 0) {
-        found = FUN_00236f80(self->_insight, g_bePadManager_metaObject[0]);
+        found = igInsightCore_FindManager(self->_insight, g_bePadManager_metaObject[0]);
         if (found != 0) {
             found->_refCount = (int)found->_refCount + 1;
         }
@@ -4997,7 +4997,7 @@ int beNDMWLoadIntf2__OnMessage(beNDMWLoadIntf2 *self, beBaseInfoRam *ram, beMess
         if (ram->_dataList == 0) {
             igSmartPointer<beBaseInfoDataList> dataList((beBaseInfoDataList *)beBaseInfoDataList_Create(OwnerAllocator(self)));
             SetDataList(ram, dataList.p);
-            self->_system_ = (int)FUN_00236f80(self->_insight, g_beSystem_metaObject[0]);
+            self->_system_ = (int)igInsightCore_FindManager(self->_insight, g_beSystem_metaObject[0]);
             {
                 igSmartPointer<beNDMWLoadIntf2CtrlData> ctrl(beNDMWLoadIntf2CtrlData_Create(OwnerAllocator(self)));
                 ObjectList_AppendRetained(ram->_dataList, ctrl.p);
@@ -5043,7 +5043,7 @@ int beNDMWLoadIntf2__OnMessage(beNDMWLoadIntf2 *self, beBaseInfoRam *ram, beMess
                 {
                     /* matching construct: hand search — the text order read once into a local */
                     beNDMWLoadIntf2TextOrder *order = text.p;
-                    order->_lua = (int)FUN_00236f80(self->_insight, g_beLua_metaObject[0]);
+                    order->_lua = (int)igInsightCore_FindManager(self->_insight, g_beLua_metaObject[0]);
                 }
                 ObjectList_AppendRetained(ram->_dataList, text.p);
             }
@@ -5051,7 +5051,7 @@ int beNDMWLoadIntf2__OnMessage(beNDMWLoadIntf2 *self, beBaseInfoRam *ram, beMess
                 igSmartPointer<beNDMWLoadIntf2SelSlot> slots(beNDMWLoadIntf2SelSlot_Create(OwnerAllocator(self)));
                 slots.p->_ramNo = ram->_ramNo;
                 slots.p->_messenger = self->_messenger;
-                slots.p->_padManager = (int)FUN_00236f80(self->_insight, g_bePadManager_metaObject[0]);
+                slots.p->_padManager = (int)igInsightCore_FindManager(self->_insight, g_bePadManager_metaObject[0]);
                 slots.p->_comMdlCtrl = (int)ChildList::Find(ram, COMMDLCTRL);
                 slots.p->_textOrder = (int)ChildList::Find(ram, TEXTORDER);
                 slots.p->_commonIntf = (int)ChildList::Find(ram, COMMONINTF);
@@ -5063,7 +5063,7 @@ int beNDMWLoadIntf2__OnMessage(beNDMWLoadIntf2 *self, beBaseInfoRam *ram, beMess
                 void *textOrder;
                 names.p->_ramNo = ram->_ramNo;
                 names.p->_messenger = self->_messenger;
-                names.p->_padManager = (int)FUN_00236f80(self->_insight, g_bePadManager_metaObject[0]);
+                names.p->_padManager = (int)igInsightCore_FindManager(self->_insight, g_bePadManager_metaObject[0]);
                 comMdlCtrl = ChildList::Find(ram, COMMDLCTRL);
                 textOrder = ChildList::Find(ram, TEXTORDER);
                 names.p->_comMdlCtrl = (int)comMdlCtrl;
@@ -5074,7 +5074,7 @@ int beNDMWLoadIntf2__OnMessage(beNDMWLoadIntf2 *self, beBaseInfoRam *ram, beMess
                 igSmartPointer<beNDMWLoadIntf2MesWin> window(beNDMWLoadIntf2MesWin_Create(OwnerAllocator(self)));
                 window.p->_ramNo = ram->_ramNo;
                 window.p->_messenger = self->_messenger;
-                window.p->_padManager = (int)FUN_00236f80(self->_insight, g_bePadManager_metaObject[0]);
+                window.p->_padManager = (int)igInsightCore_FindManager(self->_insight, g_bePadManager_metaObject[0]);
                 ObjectList_AppendRetained(ram->_dataList, window.p);
                 window.p->_textOrder = (int)ChildList::Find(ram, TEXTORDER);
             }
@@ -5102,7 +5102,7 @@ int beNDMWLoadIntf2__OnMessage(beNDMWLoadIntf2 *self, beBaseInfoRam *ram, beMess
             }
             {
                 igSmartPointer<beNDMWLoadIntf2DataSelIntf> dataSel(beNDMWLoadIntf2DataSelIntf_Create(OwnerAllocator(self)));
-                dataSel.p->_padManager = (int)FUN_00236f80(self->_insight, g_bePadManager_metaObject[0]);
+                dataSel.p->_padManager = (int)igInsightCore_FindManager(self->_insight, g_bePadManager_metaObject[0]);
                 dataSel.p->_comMdlCtrl = (int)ChildList::Find(ram, COMMDLCTRL);
                 dataSel.p->_textOrder = (int)ChildList::Find(ram, TEXTORDER);
                 dataSel.p->_commonIntf = (int)ChildList::Find(ram, COMMONINTF);
@@ -5112,7 +5112,7 @@ int beNDMWLoadIntf2__OnMessage(beNDMWLoadIntf2 *self, beBaseInfoRam *ram, beMess
             }
             {
                 igSmartPointer<beNDMWLoadIntf2Diffselect> difficulty(beNDMWLoadIntf2Diffselect_Create(OwnerAllocator(self)));
-                difficulty.p->_padManager = (int)FUN_00236f80(self->_insight, g_bePadManager_metaObject[0]);
+                difficulty.p->_padManager = (int)igInsightCore_FindManager(self->_insight, g_bePadManager_metaObject[0]);
                 difficulty.p->_comMdlCtrl = (int)ChildList::Find(ram, COMMDLCTRL);
                 difficulty.p->_textOrder = (int)ChildList::Find(ram, TEXTORDER);
                 difficulty.p->_commonIntf = (int)ChildList::Find(ram, COMMONINTF);

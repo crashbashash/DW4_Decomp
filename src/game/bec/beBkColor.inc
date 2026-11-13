@@ -1,4 +1,4 @@
-void FUN_00369dc0(int arg0) {
+void beBkColor_CreateInstance(int arg0) {
     FUN_00369f80();
     igMetaObject_CreateInstance(*(int *)0x589D10, arg0);
 }

@@ -7,7 +7,7 @@ struct O : public igVirtualObject {
   char pad8[64]; void *f72; };
 extern "C" {
 int FUN_002d01a0(...);
-int FUN_002eb010(...);
+int StringPool_Allocate(...);
 int FUN_002f8a20(...);
 int FUN_00304350(...);
 int FUN_003043c0(...);
@@ -30,7 +30,7 @@ extern unsigned char GPR_00554c14;
 
 static inline int internPool(void) {
     if (DAT_00586f20[0] == 0) {
-        int a = FUN_002eb010(0x10);
+        int a = StringPool_Allocate(0x10);
         if (a != 0) {
             a = StringPool_Construct(a);
         }

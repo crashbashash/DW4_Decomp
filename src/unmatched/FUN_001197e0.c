@@ -21,14 +21,14 @@ extern int DAT_00485194;
 int FUN_0010af00(int sema);
 int FUN_0010af30(int sema);
 void FUN_0010b160(int mode);
-int FUN_0010e2a8(void *cd, int fno, int mode, void *send, int ssize, void *recv, int rsize, void (*end)(void *), void *arg);
+int sceSifCallRpc(void *cd, int fno, int mode, void *send, int ssize, void *recv, int rsize, void (*end)(void *), void *arg);
 void FUN_00119710(void *arg);
 int FUN_001197e0(int a) {
     int r;
     if (DAT_0055d5c0.server == 0) return -100;
     if (FUN_0010af30(DAT_00485194) < 0) return -200;
     DAT_0055d640.f4 = a;
-    r = FUN_0010e2a8(&DAT_0055d5c0, 21, 0, &DAT_0055d640, 48, &DAT_0055eb80, 4, 0, 0);
+    r = sceSifCallRpc(&DAT_0055d5c0, 21, 0, &DAT_0055d640, 48, &DAT_0055eb80, 4, 0, 0);
     if (r != 0) {
         FUN_0010af00(DAT_00485194);
         return r;

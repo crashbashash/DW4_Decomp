@@ -21,7 +21,7 @@ extern int DAT_00485194;
 int FUN_0010af00(int sema);
 int FUN_0010af30(int sema);
 void FUN_0010b160(int mode);
-int FUN_0010e2a8(void *cd, int fno, int mode, void *send, int ssize, void *recv, int rsize, void (*end)(void *), void *arg);
+int sceSifCallRpc(void *cd, int fno, int mode, void *send, int ssize, void *recv, int rsize, void (*end)(void *), void *arg);
 void FUN_00119710(void *arg);
 typedef struct {
     int count;
@@ -38,7 +38,7 @@ extern int DAT_00485198;
 int FUN_0010aee0(Sema *s);
 int FUN_0010af20(int sema);
 void sceSifInitRpc(int mode);
-int FUN_0010e0d8(void *cd, unsigned int id, int mode);
+int sceSifBindRpc(void *cd, unsigned int id, int mode);
 int FUN_0010d108(const char *fmt, ...);
 int sceMcSync(int mode, int *cmd, int *result);
 int sceMcInit(void) {
@@ -59,7 +59,7 @@ int sceMcInit(void) {
     FUN_0010af20(DAT_00485194);
     sceSifInitRpc(0);
     while (1) {
-        if (FUN_0010e0d8(&DAT_0055d5c0, 0x80000400, 0) < 0) {
+        if (sceSifBindRpc(&DAT_0055d5c0, 0x80000400, 0) < 0) {
             FUN_0010d108(DAT_004d2ad0);
             while (1);
         }
@@ -67,7 +67,7 @@ int sceMcInit(void) {
         i = 0x100000;
         while (--i);
     }
-    r = FUN_0010e2a8(&DAT_0055d5c0, 254, 0, &DAT_0055d640, 48, DAT_0055eb80, 12, 0, 0);
+    r = sceSifCallRpc(&DAT_0055d5c0, 254, 0, &DAT_0055d640, 48, DAT_0055eb80, 12, 0, 0);
     FUN_0010af00(DAT_00485194);
     if (r < 0) {
         DAT_0055d5c0.server = 0;

@@ -1,7 +1,7 @@
 int p2GetTextureBase();
-extern long long DAT_00491680[4];
+extern long long p2FrameTimeMin[4];
 extern long long DAT_00562cc0[4];
-extern long long DAT_00562d38[4];
+extern long long p2StatFourWeightBlendVertices[4];
 extern int DAT_005690ac[4];
 extern int DAT_005690b0[4];
 extern long long DAT_00569148[4];
@@ -14,8 +14,8 @@ extern long long DAT_00569178[4];
 extern long long DAT_00569180[4];
 extern long long DAT_00569188[4];
 extern long long DAT_00569248[4];
-extern long long DAT_00569250[4];
-extern long long DAT_00569258[4];
+extern long long p2VertexCount[4];
+extern long long p2PrimitiveCount[4];
 extern long long DAT_00569260[4];
 extern long long DAT_00569268[4];
 extern long long DAT_00569270[4];
@@ -41,25 +41,25 @@ extern long long DAT_0056b5e0[4];
 extern long long DAT_0056b5e8[4];
 extern long long DAT_0056b5f0[4];
 extern long long DAT_0056bfa0[4];
-extern long long DAT_0056bfe8[4];
-extern long long DAT_0056bff0[4];
-extern long long DAT_0056bff8[4];
+extern long long p2FramesTimed[4];
+extern long long p2FrameTimeTotal[4];
+extern long long p2FrameTimeMax[4];
 extern long long DAT_0056c068[4];
 extern long long DAT_0056c070[4];
 extern int DAT_0056c150[4];
 extern int DAT_0056c154[4];
 extern int DAT_0056c158[4];
 extern int p2DmaWaitTime;
-extern int DAT_0056c160[4];
-extern int DAT_0056c164[4];
+extern int p2SwapWaitTime[4];
+extern int p2FinishWaitTime[4];
 extern int DAT_0056c168[4];
-extern int DAT_0056c16c[4];
+extern int p2SleepTime[4];
 typedef struct GsPacketBuffer { char pad0[40]; unsigned int *end; unsigned int pad44; unsigned int *cursor; } GsPacketBuffer;
 extern GsPacketBuffer *DAT_00568f04;
 extern GsPacketBuffer *DAT_00568f08;
 extern unsigned int DAT_00490f50, DAT_00490f54, DAT_00490f58, DAT_00490f5c, DAT_00490f60, DAT_00490f68, DAT_00490f70;
 extern unsigned int DAT_00569328;
-extern int DAT_00568e50;
+extern int p2DisplayListMode;
 void p2GrowDisplayList(void);
 void p2SubmitDmaPacket(int arg);
 int printf();
@@ -132,7 +132,7 @@ extern DmaTag DAT_00490f90;
 extern GifQuad DAT_00490f80;
 extern VifQuad DAT_0056aea0;
 extern VifQuad DAT_0056aeb0;
-extern unsigned long long *DAT_0056ad80;
+extern unsigned long long *p2CurrentGsRegisters;
 extern unsigned char DAT_0056ae50[];
 
 extern char text_p2readGSPrivRegister[];
@@ -175,8 +175,8 @@ void FUN_001f6f50(void *arg0) {
     int sp2C;
     int temp_a1;
 
-    *(long long *)((char *)arg0 + 0) = DAT_00569250[0];
-    *(long long *)((char *)arg0 + 8) = DAT_00569258[0];
+    *(long long *)((char *)arg0 + 0) = p2VertexCount[0];
+    *(long long *)((char *)arg0 + 8) = p2PrimitiveCount[0];
     *(long long *)((char *)arg0 + 384) = DAT_00569260[0];
     *(long long *)((char *)arg0 + 392) = DAT_00569268[0];
     *(long long *)((char *)arg0 + 16) = DAT_0056c068[0];
@@ -186,7 +186,7 @@ void FUN_001f6f50(void *arg0) {
     *(long long *)((char *)arg0 + 200) = DAT_005690ac[0];
     *(long long *)((char *)arg0 + 208) = DAT_005690b0[0];
     *(long long *)((char *)arg0 + 32) = (sp2C - DAT_0056c070[0]);
-    *(long long *)((char *)arg0 + 40) = DAT_0056bfe8[0];
+    *(long long *)((char *)arg0 + 40) = p2FramesTimed[0];
     *(long long *)((char *)arg0 + 48) = DAT_0056bfa0[0];
     *(long long *)((char *)arg0 + 56) = DAT_0056b5a8[0];
     *(long long *)((char *)arg0 + 64) = DAT_0056b5b0[0];
@@ -215,26 +215,26 @@ void FUN_001f6f50(void *arg0) {
     *(long long *)((char *)arg0 + 264) = DAT_00569178[0];
     *(long long *)((char *)arg0 + 272) = DAT_00569180[0];
     *(long long *)((char *)arg0 + 280) = DAT_00569188[0];
-    *(long long *)((char *)arg0 + 288) = DAT_0056bff0[0];
-    *(long long *)((char *)arg0 + 296) = DAT_00491680[0];
-    *(long long *)((char *)arg0 + 304) = DAT_0056bff8[0];
+    *(long long *)((char *)arg0 + 288) = p2FrameTimeTotal[0];
+    *(long long *)((char *)arg0 + 296) = p2FrameTimeMin[0];
+    *(long long *)((char *)arg0 + 304) = p2FrameTimeMax[0];
     *(long long *)((char *)arg0 + 312) = DAT_0056c150[0];
     *(long long *)((char *)arg0 + 320) = DAT_0056c154[0];
     *(long long *)((char *)arg0 + 328) = DAT_0056c158[0];
     *(long long *)((char *)arg0 + 336) = p2DmaWaitTime;
-    *(long long *)((char *)arg0 + 344) = DAT_0056c160[0];
-    *(long long *)((char *)arg0 + 352) = DAT_0056c164[0];
+    *(long long *)((char *)arg0 + 344) = p2SwapWaitTime[0];
+    *(long long *)((char *)arg0 + 352) = p2FinishWaitTime[0];
     *(long long *)((char *)arg0 + 360) = DAT_0056c168[0];
-    *(long long *)((char *)arg0 + 368) = DAT_0056c16c[0];
+    *(long long *)((char *)arg0 + 368) = p2SleepTime[0];
     *(long long *)((char *)arg0 + 400) = DAT_00569270[0];
     *(long long *)((char *)arg0 + 408) = DAT_00569278[0];
     *(long long *)((char *)arg0 + 416) = DAT_00569280[0];
     *(long long *)((char *)arg0 + 424) = DAT_00569288[0];
-    *(long long *)((char *)arg0 + 432) = DAT_00562d38[0];
+    *(long long *)((char *)arg0 + 432) = p2StatFourWeightBlendVertices[0];
     *(long long *)((char *)arg0 + 440) = DAT_00569290[0];
     *(long long *)((char *)arg0 + 448) = DAT_00569248[0];
-    DAT_00491680[0] = 0xFFFFFFFFLL;
-    DAT_0056bff8[0] = 0;
+    p2FrameTimeMin[0] = 0xFFFFFFFFLL;
+    p2FrameTimeMax[0] = 0;
 }
 
 void FUN_001f7330(void)
@@ -267,7 +267,7 @@ void FUN_001f7370(float value) {
     p[11] = DAT_00569328;
     DAT_00568f04->cursor = p + 12;
     if (DAT_00568f04->cursor >= DAT_00568f04->end) {
-        if (DAT_00568e50 != 0) {
+        if (p2DisplayListMode != 0) {
             p2GrowDisplayList();
         } else {
             p2SubmitDmaPacket(1);
@@ -331,7 +331,7 @@ typedef struct {
 extern tGS_CSR DAT_0056ada0;
 extern long long DAT_0056ade0;
 extern int DAT_0056ae90;
-extern int DAT_00568e38;
+extern int p2DisplayClosing;
 extern int DAT_0056ae30;
 extern int DAT_0056ae28;
 
@@ -346,7 +346,7 @@ int FUN_001f7530(int cause) {
     DAT_0056ada0.VSINT = (status & 8) ? 1 : 0;
     DAT_0056ada0.SIGNAL = (status & 1) ? 1 : 0;
     FUN_001f8190(0x40);
-    if (DAT_00568e38 == 0) {
+    if (p2DisplayClosing == 0) {
         if (status & 2) {
             p2FinishHandler();
         }
@@ -399,7 +399,7 @@ void FUN_001f76f0(int count, int *regs) {
             p++;
             for (i = 0; i < n; i++) {
                 int reg = *r++;
-                ad.f.data = DAT_0056ad80[reg];
+                ad.f.data = p2CurrentGsRegisters[reg];
                 ad.f.addr = DAT_0056ae50[reg];
                 *p = ad.q;
                 p++;
@@ -407,7 +407,7 @@ void FUN_001f76f0(int count, int *regs) {
             *p = DAT_0056aeb0.q;
             DAT_00568f04->cursor = (unsigned int *)(p + 1);
             if (DAT_00568f04->cursor >= DAT_00568f04->end) {
-                if (DAT_00568e50 != 0) {
+                if (p2DisplayListMode != 0) {
                     p2GrowDisplayList();
                 } else {
                     p2SubmitDmaPacket(1);
@@ -437,7 +437,7 @@ void FUN_001f7db0(unsigned int addr, int unused, int flush) {
     if (flush != 0) {
         p2SubmitDmaPacket(2);
     } else if (DAT_00568f08->cursor >= DAT_00568f08->end) {
-        if (DAT_00568e50 != 0) {
+        if (p2DisplayListMode != 0) {
             p2GrowDisplayList();
         } else {
             p2SubmitDmaPacket(2);

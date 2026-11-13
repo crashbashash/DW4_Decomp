@@ -68,7 +68,7 @@ void Gap__Core__igPsx2Thread__vfunc_44(int *arg0, igPsx2Thread *arg1) {
     if (s0 == GetThreadId()) {
         FUN_00330440(arg1, 0);
     }
-    DAT_005871d0[0]->v23(arg1);
+    g_threadManager[0]->v23(arg1);
     s1 = arg1->_threadID;
     s0b = TerminateThread(threadID(arg1));
     arg1->_threadID = -1;
@@ -137,7 +137,7 @@ void Gap__Core__igPsx2Thread__vfunc_45(int *arg0, O45 *arg1) {
     if (temp_s0 == GetThreadId()) {
         FUN_00330440((igPsx2Thread *)arg1, 0);
     }
-    DAT_005871d0[0]->v23(arg1);
+    g_threadManager[0]->v23(arg1);
     temp_s1 = view->f60;
     temp_s0_2 = TerminateThread(arg1->f60);
     arg1->f60 = -1;
@@ -205,7 +205,7 @@ void Gap__Core__igPsx2Thread__vfunc_30(int *out, Obj30 *o) {
     tp.w[3] = o->w36;
     tp.w[5] = o->w24 / 2;
     tp.w[4] = (int)&_gp[0];
-    DAT_005871d0[0]->v22(o);
+    g_threadManager[0]->v22(o);
     o->th = CreateThread(&tp);
     if (o->th < 0) {
         o->th = -1;
@@ -217,7 +217,7 @@ void Gap__Core__igPsx2Thread__vfunc_30(int *out, Obj30 *o) {
     t2 = o->sub->v21();
     o->th = _StartThread(o->th, o);
     if (o->th == -1) {
-        DAT_005871d0[0]->v23(o);
+        g_threadManager[0]->v23(o);
         t3 = o->sub->v22();
         { *out = g_allocatorFailureStatus.v; return; }
     }
@@ -277,6 +277,6 @@ void FUN_00330430(void *arg0) {
 
 void FUN_00330440(igPsx2Thread *arg0, int arg1) {
     arg0->_result = arg1;
-    FUN_003304e0((void **)DAT_005871d0[0], arg0);
+    FUN_003304e0((void **)g_threadManager[0], arg0);
 }
 

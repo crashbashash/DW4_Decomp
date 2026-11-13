@@ -331,7 +331,7 @@ int FUN_002346c0(igStringRefList *arg0, int *arg1, const char *arg2, void **arg3
     if (FUN_002345b0(arg0, arg1, arg2, &sp3C) != 0) {
         str = (int)sp3C;
         if (g_stringPool[0] == 0) {
-            var_v0 = FUN_002eb010(0x10);
+            var_v0 = StringPool_Allocate(0x10);
             if (var_v0 != 0) {
                 var_v0 = StringPool_Construct(var_v0);
             }
@@ -403,7 +403,7 @@ static inline int renderAllocator(void) {
     if (GPR_00554c14) {
         return Memory_GetAllocatorBySelector(DAT_00587028[0]);
     }
-    return Memory_GetAllocatorBySelector(DAT_00587060[0]);
+    return Memory_GetAllocatorBySelector(g_temporaryAllocatorSelector[0]);
 }
 
 struct FlushSettings *FUN_00234900(struct FlushSettings *s) {
@@ -479,7 +479,7 @@ struct FlushSettings *FUN_00234900(struct FlushSettings *s) {
     s->f224 = 30;
     s->b228 = 0;
     s->b229 = 0;
-    s->f232 = FUN_002caa70(renderAllocator());
+    s->f232 = igIntList_Create(renderAllocator());
     s->f236 = FUN_002b90e0(renderAllocator());
     if (DAT_0056dc50[0] == 0) {
         struct FlushShared *shared = FUN_001007e0(240);
@@ -585,7 +585,7 @@ void FUN_00234d70(int self, int count, int *names) {
     if (GPR_00554c14 != 0) {
         allocator = Memory_GetAllocatorBySelector(DAT_00587028[0]);
     } else {
-        allocator = Memory_GetAllocatorBySelector(DAT_00587060[0]);
+        allocator = Memory_GetAllocatorBySelector(g_temporaryAllocatorSelector[0]);
     }
     igSmartPointer<InternedStringList> list(FUN_002b90e0(allocator));
     for (i = 0; i < count; i++) {
@@ -828,7 +828,7 @@ void Gap__Insight__igFlushRenderer__vfunc_26(igFlushRendererView *self)
 
 static inline int internedPool(void) {
     if (g_stringPool[0] == 0) {
-        int v = FUN_002eb010(0x10);
+        int v = StringPool_Allocate(0x10);
         if (v != 0) { v = StringPool_Construct(v); }
         g_stringPool[0] = v;
     }

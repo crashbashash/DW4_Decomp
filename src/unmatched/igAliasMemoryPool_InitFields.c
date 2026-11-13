@@ -1,5 +1,5 @@
 int FUN_002ba690();
-int FUN_002c04a0();
+int igMemoryPool_GetOrCreateMetaObject();
 int FUN_002c57c0();
 int FUN_002ea4b0();
 int FUN_0030ec10();
@@ -34,7 +34,7 @@ void igAliasMemoryPool_InitFields(void) {
     temp_s1_2->f56 = FUN_002ba690();
     FUN_0030eda0(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 0xC), 8);
     temp_s1_3 = igMetaObject_GetFieldAt(temp_s0, temp_s2 + 0xD);
-    temp_s1_3->f56 = FUN_002c04a0();
+    temp_s1_3->f56 = igMemoryPool_GetOrCreateMetaObject();
     temp_s1_3->f52 = 0;
     temp_s1_3->f53 = 0;
     igMetaObject_NameFields(temp_s0, &DAT_004c15f0[0], &DAT_004c1630[0], &DAT_004c1670[0], temp_s2);

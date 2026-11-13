@@ -31,7 +31,7 @@ extern "C" int beMessenger_SendNamed(...);
 extern "C" int beMessenger_GetBool(int, int);
 extern "C" int beBaseInfoRam_StartTimer(int, const char *, unsigned long long);
 extern "C" int beBaseInfoRam_IsTimerExpired(int, const char *);
-extern "C" int FUN_00236f80(...);
+extern "C" int igInsightCore_FindManager(...);
 extern "C" int beFont_ConvertToUnicode(...);
 extern "C" void *beNDMWLoadSlotPlayer_Create(...);
 extern "C" void * beNDMWDegiData_Create(...);
@@ -46,7 +46,7 @@ extern "C" void strcpy(void *, void *);
 extern "C" void ObjectList_ResizeRetained(void *, int);
 extern "C" int Memory_GetAllocatorBySelector(...);
 extern "C" int igObject_GetAllocator(...);
-extern "C" void * FUN_002eb010(...);
+extern "C" void * StringPool_Allocate(...);
 extern "C" void * StringPool_Construct(...);
 extern "C" char * StringPool_Intern(...);
 extern "C" int beMessenger_GetBoolCount(int);
@@ -1101,7 +1101,7 @@ int beNDMWLoadCtrl2CommonIntf__StepReadMedia(beNDMWLoadCtrl2CommonIntf *intf, in
                         igObject *str; /* the unicode text beFont_ConvertToUnicode hands back (declared here: its slot sits below the record reference) */
                         digimonName = (unsigned short *)DEGI(degi.p)->_dmName;
                         {
-                            int insightEntry = FUN_00236f80(intf->_insight, g_beFont_metaObject[0]);
+                            int insightEntry = igInsightCore_FindManager(intf->_insight, g_beFont_metaObject[0]);
                             beFont_ConvertToUnicode(&str, insightEntry, digimonName);
                         }
                         unicodeText = (unsigned short *)((beUnicodeObj *)str)->_buffer;
@@ -1374,7 +1374,7 @@ void beNDMWDegiData__UpdateFieldsFromData(beNDMWDegiData *degi) {
     degi->_mp = record->mp;
     degi->_maxMp = record->maxMp;
     if (g_stringPool[0] == 0) {
-        v = ((int)FUN_002eb010(16));
+        v = ((int)StringPool_Allocate(16));
         if (v != 0) v = ((int)StringPool_Construct(v));
         g_stringPool[0] = v;
     }
@@ -1388,7 +1388,7 @@ void beNDMWDegiData__UpdateFieldsFromData(beNDMWDegiData *degi) {
     }
     degi->_dmkind = name;
     if (g_stringPool[0] == 0) {
-        v = ((int)FUN_002eb010(16));
+        v = ((int)StringPool_Allocate(16));
         if (v != 0) v = ((int)StringPool_Construct(v));
         g_stringPool[0] = v;
     }
@@ -1559,7 +1559,7 @@ void beNDMWDegiData__StoreToProperties(beNDMWDegiData *degi, void *props, int fo
     char *digimonName = record->digimonName;
     PropStringRecord *rs = igProperty_GetRecordString(props, DIGIMONNAME_3);
     if (((void * *)g_stringPool)[0] == 0) {
-        void *p = FUN_002eb010(16);
+        void *p = StringPool_Allocate(16);
         if (p != 0)
             p = StringPool_Construct(p);
         ((void * *)g_stringPool)[0] = p;
@@ -2059,7 +2059,7 @@ void beNDMWLoadCtrl2__ResolvePadManager(beNDMWLoadCtrl2 *self) {
     igObject *found;
     igObject *previous;
     if (self->_padManager == 0) {
-        found = (igObject *)FUN_00236f80(self->_insight, g_bePadManager_metaObject[0]);
+        found = (igObject *)igInsightCore_FindManager(self->_insight, g_bePadManager_metaObject[0]);
         if (found != 0) {
             found->_refCount = found->_refCount + 1;
         }
@@ -2309,7 +2309,7 @@ void beNDMWLoadCtrl2__Update(beNDMWLoadCtrl2 *self, beBaseInfoRam *ram) {
                         beMessenger_DispatchSelected(self->_messenger, SETGENERATEPOS);
                     } else {
                         g_mdlEntity[0] = 0;
-                        beLua__RunNamedChunk(FUN_00236f80(self->_insight, g_beLua_metaObject[0]), gameStart_lua, 0);
+                        beLua__RunNamedChunk(igInsightCore_FindManager(self->_insight, g_beLua_metaObject[0]), gameStart_lua, 0);
                         beMessenger_SelectReceivers(self->_messenger, PLAYERPOINT_2, 0, -1);
                         beMessenger_AppendInt(self->_messenger, 0);
                         beMessenger_DispatchSelected(self->_messenger, SETGENERATEPOS);
@@ -2405,7 +2405,7 @@ int beNDMWLoadCtrl2__OnMessage(beNDMWLoadCtrl2 *self, beBaseInfoRam *ram, beBase
             OWNER_ALLOCATOR(a, self);
             {
             CommonIntfRef common(beNDMWLoadCtrl2CommonIntf_Create(a));
-            ((beNDMWLoadCtrl2CommonIntf *)common.p)->_system = FUN_00236f80(self->_insight, g_beSystem_metaObject[0]);
+            ((beNDMWLoadCtrl2CommonIntf *)common.p)->_system = igInsightCore_FindManager(self->_insight, g_beSystem_metaObject[0]);
             ((beNDMWLoadCtrl2CommonIntf *)common.p)->_inforam = (int)ram;
             ((beNDMWLoadCtrl2CommonIntf *)common.p)->_insight = self->_insight;
             if (message == 1) {

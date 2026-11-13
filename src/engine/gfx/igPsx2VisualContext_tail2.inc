@@ -13,7 +13,7 @@ void FUN_00169260(igPsx2VisualContext *arg0, int arg1) {
         t = ((T260 *)arg0->_pBufList);
         if (t != 0) {
             if (g_stringPool[0] == 0) {
-                v = FUN_002eb010(16);
+                v = StringPool_Allocate(16);
                 if (v != 0) {
                     v = StringPool_Construct(v);
                 }
@@ -553,7 +553,7 @@ void FUN_0016a860(Arg *arg0) {
         n = sp5C;
         p->f8 = 0;
         if (g_stringPool[0] == 0) {
-            v = FUN_002eb010(16);
+            v = StringPool_Allocate(16);
             if (v != 0) {
                 v = StringPool_Construct(v);
             }
@@ -603,7 +603,7 @@ void FUN_0016a9f0(igPsx2VisualContext *arg0, int arg1) {
         t = (T9f0 *)arg0->_pClutList;
         if (t != 0) {
             if (g_stringPool[0] == 0) {
-                v = FUN_002eb010(16);
+                v = StringPool_Allocate(16);
                 if (v != 0) {
                     v = StringPool_Construct(v);
                 }
@@ -918,7 +918,7 @@ void FUN_0016c650(igPsx2VisualContext *arg0, int arg1) {
         t = (T650 *)arg0->_pDLists;
         if (t != 0) {
             if (g_stringPool[0] == 0) {
-                v = FUN_002eb010(16);
+                v = StringPool_Allocate(16);
                 if (v != 0) {
                     v = StringPool_Construct(v);
                 }
@@ -978,7 +978,7 @@ int Gap__Gfx__igPsx2VisualContext__vfunc_192(O192 *arg0) {
     s1->f4 = s1->f4 - 1;
     {
         Nd192 *n = new (FUN_00165cc0((int *)arg0)) Nd192;
-        int v = FUN_002caa70(FUN_00165cc0((int *)arg0));
+        int v = igIntList_Create(FUN_00165cc0((int *)arg0));
         arg0->f960->f16[s0] = (Ent192 *)n;
         n->a = v;
     }

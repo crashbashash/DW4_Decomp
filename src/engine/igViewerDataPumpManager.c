@@ -1,12 +1,12 @@
 #include "dw4/reflected.h"
 
 int FUN_001e68a0(...);
-int FUN_00236be0(...);
+int igInsightCore_AddToScheduler(...);
 int igObject_IsKindOf(...);
 
 extern int g_igDataPumpInfo_metaObject[4];
 
-int FUN_00236c40(...);
+int igInsightCore_RemoveFromScheduler(...);
 int igObject_Destroy(...);
 
 void FUN_001e67a0(int, long long);
@@ -16,7 +16,7 @@ extern int g_igViewerDataPumpManager_metaObject[4];
 int Gap__Viewer__igViewerDataPumpManager__vfunc_27(void *arg0, int arg1) {
     if (igObject_IsKindOf(arg1, g_igDataPumpInfo_metaObject[0]) != 0) {
         FUN_001e68a0(*(int *)((char *)(arg0) + 16), arg1);
-        FUN_00236be0(*(int *)((char *)(arg0) + 12), arg0);
+        igInsightCore_AddToScheduler(*(int *)((char *)(arg0) + 12), arg0);
         return 1;
     }
     return 0;
@@ -79,7 +79,7 @@ void Gap__Viewer__igViewerDataPumpManager__vfunc_28(igViewerDataPumpManager *arg
         }
     }
     l->_count = 0;
-    FUN_00236c40(arg0->_insight, arg0);
+    igInsightCore_RemoveFromScheduler(arg0->_insight, arg0);
 }
 
 void Gap__Viewer__igViewerDataPumpManager__vfunc_29(int arg0) {

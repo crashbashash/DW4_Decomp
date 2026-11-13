@@ -127,7 +127,7 @@ void igIniShaderFactory_InitFields(void) {
     FUN_002ea4b0(temp_v0_2, -1);
     ((igIntMetaField *)temp_v0_2)->_persistent = 0;
     temp_s2_4 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s1, temp_s0 + 6)));
-    ((igObjectRefMetaField *)temp_s2_4)->_metaObject = FUN_002c04a0();
+    ((igObjectRefMetaField *)temp_s2_4)->_metaObject = igMemoryPool_GetOrCreateMetaObject();
     ((igObjectRefMetaField *)temp_s2_4)->_persistent = 0;
     temp_s2_5 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s1, temp_s0 + 7)));
     ((igObjectRefMetaField *)temp_s2_5)->_metaObject = (int)FUN_0019ea00();

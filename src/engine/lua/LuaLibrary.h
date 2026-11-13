@@ -29,7 +29,7 @@ extern "C" void *igObject_Register(void);
 extern "C" void *igObject_GetMetaObject_ParentAccessor(void);
 extern "C" void *igNamedObject_Register(void);
 extern "C" void *igNamedObject_GetPublishedMetaObject(void);
-extern "C" int FUN_002c04a0(void);
+extern "C" int igMemoryPool_GetOrCreateMetaObject(void);
 
 extern "C" int g_igNamedObject_vtable[4];
 
@@ -149,7 +149,7 @@ public:
     virtual int seek(int offset, int origin);                  /* slot 36 */
     virtual int size();                                        /* slot 37 */
 };
-extern "C" igFileView *FUN_002c4ca0(int pool);
+extern "C" igFileView *igFile_Create(int pool);
 
 /* Stock Lua 4.0.1's API (lua.h, lualib.h), compiled as C++ like the rest of Lua. */
 class igMemoryPoolView;
@@ -566,7 +566,7 @@ extern "C" void List_InsertWords(LuaTagList *list, int index, int count, int *va
 inline void LuaTagList::insertSorted(int *tag) {
     List_InsertWords(this, FUN_001e3ab0(this, tag), 1, tag);
 }
-extern "C" LuaTagList *FUN_002caa70(igObject *pool);
+extern "C" LuaTagList *igIntList_Create(igObject *pool);
 
 /* The current memory context; slot 21 hands out a pool. */
 class LuaMemoryContext {

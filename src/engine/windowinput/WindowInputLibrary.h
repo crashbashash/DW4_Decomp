@@ -302,7 +302,7 @@ extern "C" int DAT_004d7040[4];
 extern "C" int DAT_004d7050[4];
 extern "C" int DAT_004d7058[4];
 extern "C" int DAT_004d7060[4];
-extern "C" int DAT_00587060[4];
+extern "C" int g_temporaryAllocatorSelector[4];
 extern "C" unsigned char GPR_00554b18;
 extern "C" unsigned char GPR_00554c14;
 struct PropertyText : igObject { char *chars; };
@@ -314,7 +314,7 @@ extern "C" void Gap__igPsx2Controller__vfunc_36(igPsx2Controller *self, igObject
 extern "C" void Gap__igPsx2Controller__vfunc_33(void *arg0, short arg1);
 extern "C" int Gap__igPsx2ControllerManager__vfunc_25(igPsx2ControllerManager *arg0);
 extern "C" void Gap__igPsx2ControllerManager__vfunc_10(void *arg0);
-extern "C" int FUN_002eb010(...);
+extern "C" int StringPool_Allocate(...);
 extern "C" int StringPool_Construct(...);
 extern "C" int *StringPool_Intern(...);
 extern "C" int g_stringPool[4];

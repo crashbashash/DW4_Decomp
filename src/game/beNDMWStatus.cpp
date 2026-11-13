@@ -31,7 +31,7 @@ extern "C" int Gap__Bec__beNDMWStatus__vfunc_20(void);
 extern "C" int beMessenger_RegisterReceiverFromInfo(int, void *, int *);
 extern "C" void * igObject_GetAllocator(...);
 extern "C" void * Memory_GetAllocatorBySelector(...);
-extern "C" int FUN_00236f80(int, int);
+extern "C" int igInsightCore_FindManager(int, int);
 extern "C" int beLua__RunNamedChunk(int, int *, int);
 extern "C" void beMessenger_SelectGroup(...);
 extern "C" void beMessenger_AppendString(...);
@@ -329,7 +329,7 @@ void Gap__Bec__beNDMWStatus__vfunc_31(beNDMWStatus *self, beNDMWStatusInfoRam *i
                 beMessenger_AppendString(self->_messenger, DAT_005168c8);
                 beMessenger_DispatchSelected(self->_messenger, DAT_005167d8);
                 if (self->_subWndNo != 0)
-                    beLua__RunNamedChunk(FUN_00236f80(self->_insight, g_beLua_metaObject[0]), DAT_005168d0, 0);
+                    beLua__RunNamedChunk(igInsightCore_FindManager(self->_insight, g_beLua_metaObject[0]), DAT_005168d0, 0);
             }
         }
     }

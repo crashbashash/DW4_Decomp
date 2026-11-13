@@ -1,4 +1,4 @@
-void FUN_0034c630(int arg0) {
+void beParticleCtrl2_CreateInstance(int arg0) {
     FUN_0034c7f0();
     igMetaObject_CreateInstance(*(int *)0x588510, arg0);
 }

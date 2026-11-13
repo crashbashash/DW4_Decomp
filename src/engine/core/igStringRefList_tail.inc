@@ -1,7 +1,7 @@
 static inline int pool_30cd10(void) {
     int p;
     if (g_stringPool[0] == 0) {
-        p = ((int)FUN_002eb010(0x10));
+        p = ((int)StringPool_Allocate(0x10));
         if (p != 0) {
             p = ((int)StringPool_Construct((S_2eadf0 *)p));
         }
@@ -58,7 +58,7 @@ void StringList_Resize(StringRefListView *arg0, int arg1) {
         for (i = arg1; i < n; i++) {
             slot = &arg0->data[i];
             if (g_stringPool[0] == 0) {
-                pool_30cd10 = ((int)FUN_002eb010(0x10));
+                pool_30cd10 = ((int)StringPool_Allocate(0x10));
                 if (pool_30cd10 != 0) {
                     pool_30cd10 = ((int)StringPool_Construct((S_2eadf0 *)pool_30cd10));
                 }

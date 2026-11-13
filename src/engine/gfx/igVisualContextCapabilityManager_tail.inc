@@ -63,7 +63,7 @@ void FUN_00164f50(igVisualContextCapabilityManager_164f50 *self)
     fill_pool_slot(self, &self->pool24, g_pool_00560760[0], DAT_005870b8);
     fill_pool_slot(self, &self->pool28, g_pool_00560768[0], DAT_00587068);
     fill_pool_slot_plain(self, &self->pool32, g_pool_00560770[0]);
-    fill_pool_slot(self, &self->pool36, g_pool_00560778[0], DAT_00587060);
+    fill_pool_slot(self, &self->pool36, g_pool_00560778[0], g_temporaryAllocatorSelector);
     fill_pool_slot(self, &self->pool40, g_pool_00560780[0], DAT_005870e8);
     fill_pool_slot(self, &self->pool44, g_pool_00560788[0], DAT_00587078);
     fill_pool_slot_plain(self, &self->pool48, g_pool_00560790[0]);
@@ -216,7 +216,7 @@ int FUN_00165e40(void *arg0) {
 static inline Obj_165e50 *getAlloc(void *o) {
     Obj_165e50 *a = (Obj_165e50 *)igObject_GetAllocator(o);
     if (GPR_00554c14 != 0) return a;
-    return (Obj_165e50 *)Memory_GetAllocatorBySelector(DAT_00587060[0]);
+    return (Obj_165e50 *)Memory_GetAllocatorBySelector(g_temporaryAllocatorSelector[0]);
 }
 
 void *FUN_00165e50(Self *self, Obj_165e50 *src) {

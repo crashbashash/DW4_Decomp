@@ -2,7 +2,7 @@
 struct R { char pad[4]; int f4; char pad2[12]; char f20; };
 struct S { char pad[8]; struct R *f8; };
 extern "C" int igInsightCore_AddManager(int, struct R *);
-extern "C" struct R *FUN_00336bd0(int);
+extern "C" struct R *igMovieManager_CreateInstance(int);
 extern "C" int Memory_GetAllocatorBySelector(int);
 extern "C" int igObject_Destroy(struct R *);
 extern "C" int igObject_GetAllocator(struct S *);
@@ -26,7 +26,7 @@ void Gap__igMoviePlugin__vfunc_21(struct S *arg0, int arg1) {
             igObject_Destroy(temp_a0);
         }
     }
-    arg0->f8 = FUN_00336bd0(var_v0);
+    arg0->f8 = igMovieManager_CreateInstance(var_v0);
     arg0->f8->f20 = 1;
     igInsightCore_AddManager(arg1, arg0->f8);
 }

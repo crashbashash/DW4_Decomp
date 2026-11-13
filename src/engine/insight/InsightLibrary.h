@@ -533,9 +533,9 @@ extern "C" float dptofp(long long);
 extern "C" struct FlushShared *FUN_001007e0(int size);
 extern "C" int FUN_001e6d30(...);
 extern "C" int FUN_001e6d80(...);
-extern "C" void *FUN_002caa70(int allocator);
+extern "C" void *igIntList_Create(int allocator);
 extern "C" InternedStringList *FUN_002b90e0(int allocator);
-extern "C" int FUN_002eb010(...);
+extern "C" int StringPool_Allocate(...);
 extern "C" int StringPool_Construct(...);
 extern "C" char *StringPool_Intern(...);
 extern "C" int StringList_CopyRetained(...);
@@ -544,7 +544,7 @@ extern "C" int List_Resize(IntList *list, int newCount, int elementSize);
 extern "C" unsigned char GPR_00554c14;
 extern "C" int g_stringPool[4];
 extern "C" int DAT_00587028[4];
-extern "C" int DAT_00587060[4];
+extern "C" int g_temporaryAllocatorSelector[4];
 extern "C" struct FlushShared *DAT_0056dc50[4];
 extern "C" int DAT_004e95d0[4];
 extern "C" int DAT_004e95f8[4];
@@ -681,7 +681,7 @@ struct StringRef {
             interned = 0;
         } else {
             if (g_stringPool[0] == 0) {
-                int pool = FUN_002eb010(0x10);
+                int pool = StringPool_Allocate(0x10);
                 if (pool != 0) {
                     pool = StringPool_Construct(pool);
                 }
@@ -809,11 +809,11 @@ extern "C" void igInsightCore_RemoveManager(void *arg0, void *arg1);
 struct S12 { char pad[12]; void *f12; };
 class DW4VC_96_1 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual int vX(int); };
 class DW4VC_104_0 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual int vX(); };
-extern "C" void FUN_00236be0(S12 *arg0, int arg1);
+extern "C" void igInsightCore_AddToScheduler(S12 *arg0, int arg1);
 struct S236;
 class DW4VC_100_1 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual int vX(int); };
 struct S236 { int a, b, c; void *p; };
-extern "C" void FUN_00236c40(S236 *arg0, int arg1);
+extern "C" void igInsightCore_RemoveFromScheduler(S236 *arg0, int arg1);
 struct Instance : public igObject { };
 extern "C" int igMetaObject_CountTree(int);
 extern "C" int FUN_002fe300(int, int);
@@ -836,7 +836,7 @@ struct Obj_236f80 { virtual int a0(); virtual int a1(); virtual int a2(); virtua
 struct List { int pad[2]; unsigned int count; int pad2; Obj_236f80 **arr; };
 struct Mid { int pad[2]; List *list; };
 struct Self { int pad[2]; Mid *mid; };
-extern "C" Obj_236f80 *FUN_00236f80(Self *arg0, int arg1);
+extern "C" Obj_236f80 *igInsightCore_FindManager(Self *arg0, int arg1);
 extern "C" int FUN_00237010(void);
 extern "C" int FUN_00237020(int *p);
 /* Dummy class with 25 virtual slots before vX, so that vX is the manager's
@@ -873,7 +873,7 @@ struct StringRef_237300 {
             interned = 0;
         } else {
             if (g_stringPool[0] == 0) {
-                int pool = FUN_002eb010(16);
+                int pool = StringPool_Allocate(16);
                 if (pool != 0) pool = StringPool_Construct(pool);
                 g_stringPool[0] = pool;
             }

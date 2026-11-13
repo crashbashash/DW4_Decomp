@@ -14,7 +14,7 @@ struct Enum *GameRamMessage_GetMetaEnum(void)
     return g_GameRamMessage_metaEnum[0];
 }
 
-void FUN_003c9ca0(int arg0) {
+void beNDMWGameRam_CreateInstance(int arg0) {
     FUN_003c9f70();
     igMetaObject_CreateInstance(*(int *)0x58C0A0, arg0);
 }

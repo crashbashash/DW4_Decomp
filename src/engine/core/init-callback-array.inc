@@ -131,7 +131,7 @@ void FUN_002d2e60(S_2d2e60 *arg0) {
         if ((o->refs & 0x7fffff) == 0) igObject_Destroy(o);
     }
     if (g_stringPool[0] == 0) {
-        v = ((int)FUN_002eb010(16));
+        v = ((int)StringPool_Allocate(16));
         if (v != 0) v = ((int)StringPool_Construct((S_2eadf0 *)v));
         g_stringPool[0] = v;
     }

@@ -22,7 +22,7 @@ extern "C" int FUN_001dc870(void *);
 extern "C" int FUN_001dc880(void *, int);
 extern "C" int FUN_001dc8d0(void *);
 extern "C" int FUN_001dc8e0(void *, void *);
-extern "C" void *FUN_00236f80(int, int);
+extern "C" void *igInsightCore_FindManager(int, int);
 extern "C" int FUN_0035c9e0(...);
 extern "C" int FUN_0035ca40(...);
 extern "C" void *Memory_GetAllocatorBySelector(int);
@@ -133,7 +133,7 @@ int Gap__Bec__beLayerCtl__vfunc_34(beLayerCtl *arg0, beLayerInfoRam *arg1, beMes
     v = beMessenger_ResolveEnumValue(arg0->_messenger, FUN_0035ca40(), (void *)arg2->_message);
     switch (v) {
     case 0: {
-        beLayerInfo *srcl = (beLayerInfo *)((InsightRec *)FUN_00236f80(arg0->_insight, g_igViewerSceneInfoManager_metaObject[0]))->cur->_parentInfo;
+        beLayerInfo *srcl = (beLayerInfo *)((InsightRec *)igInsightCore_FindManager(arg0->_insight, g_igViewerSceneInfoManager_metaObject[0]))->cur->_parentInfo;
         if (arg0->_isOrdered == 0) {
             void *al = igObject_GetAllocator(arg0);
             al = GPR_00554c14 ? al : Memory_GetAllocatorBySelector(g_ndmwAllocatorSelector[0]);

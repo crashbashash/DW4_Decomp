@@ -161,7 +161,7 @@ void FUN_001690d0(Arg0d0 *arg0) {
         n = sp5C;
         p->f8 = 0;
         if (g_stringPool[0] == 0) {
-            v = FUN_002eb010(16);
+            v = StringPool_Allocate(16);
             if (v != 0) {
                 v = StringPool_Construct(v);
             }

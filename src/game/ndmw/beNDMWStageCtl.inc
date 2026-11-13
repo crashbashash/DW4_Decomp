@@ -1,4 +1,4 @@
-void FUN_003bbda0(int arg0) {
+void beNDMWStageCtl_CreateInstance(int arg0) {
     FUN_003bbf60();
     igMetaObject_CreateInstance(*(int *)0x58B060, arg0);
 }

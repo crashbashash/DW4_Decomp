@@ -5,7 +5,7 @@
 #define SETP(T, panel, src, field) { igObject *c = (igObject *)(src); T *pp = (T *)(panel); if (c != 0) c->_refCount = c->_refCount + 1; { igObject *o = (igObject *)pp->field; REL(o) } pp->field = (int)c; }
 #define HOOK(T, panel) SETP(T, panel, work->_textSetList, _textSetList) SETP(T, panel, work->_textColorList, _textColorList) ((T *)(panel))->_playerNo = ram->_ramNo; ((T *)(panel))->_manager = (int)self; ((T *)(panel))->_messenger = self->_messenger;
 
-extern "C" int FUN_002eb010(...);
+extern "C" int StringPool_Allocate(...);
 extern "C" int StringChunk_ReleaseHeader(...);
 extern "C" int StringPool_Construct(...);
 extern "C" int StringPool_Intern(...);
@@ -29,7 +29,7 @@ extern "C" long long __divdi3(long long, int);
 extern "C" int beMessenger_AppendFloat(int, float);
 extern "C" int beMessenger_EnqueueSelected(int, int *, int);
 extern "C" int beMessenger_PrepareDelayedSelection(int, int *, int *, int);
-extern "C" int FUN_00236f80(int, int);
+extern "C" int igInsightCore_FindManager(int, int);
 extern "C" int Gap__Bec__beNDMWPanelWaza__vfunc_30(void);
 extern "C" int Gap__Bec__beNDMWPanelWaza__vfunc_20(void);
 extern "C" int beMessenger_RegisterReceiver(int, void *, int *, int, int);
@@ -162,7 +162,7 @@ static void SetLabel(beNDMWPanelWazaInfoWork *w, int str)
     int rc;
 
     if (g_stringPool[0] == 0) {
-        pool = FUN_002eb010(0x10);
+        pool = StringPool_Allocate(0x10);
         if (pool != 0) {
             pool = StringPool_Construct(pool);
         }
@@ -264,7 +264,7 @@ void FUN_003cdef0(beNDMWPanelObject *self, int g, int s, int *name, int val) {
                 ref = 0;
             } else {
                 if (g_stringPool[0] == 0) {
-                    pool = FUN_002eb010(16);
+                    pool = StringPool_Allocate(16);
                     if (pool != 0) pool = StringPool_Construct(pool);
                     g_stringPool[0] = pool;
                 }
@@ -576,7 +576,7 @@ void Gap__Bec__beNDMWPanelObjectWaza__vfunc_22(beNDMWPanelObjectWaza *arg0, int 
 
 void Gap__Bec__beNDMWPanelWaza__vfunc_32(beNDMWPanelWaza *arg0) {
     if (arg0->_padManager == 0) {
-        arg0->_padManager = FUN_00236f80(arg0->_insight, g_bePadManager_metaObject[0]);
+        arg0->_padManager = igInsightCore_FindManager(arg0->_insight, g_bePadManager_metaObject[0]);
     }
 }
 

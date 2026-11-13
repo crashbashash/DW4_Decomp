@@ -3,7 +3,7 @@ void Gap__Core__igExternalDirEntry__vfunc_31(O_2e25a0 *arg0, void *arg1) {
     int *hd;
     s2 = ((A_2e25a0 *)arg1)->f200;
     if (g_stringPool[0] == 0) {
-        v = ((int)FUN_002eb010(16));
+        v = ((int)StringPool_Allocate(16));
         if (v != 0) {
             v = ((int)StringPool_Construct((struct S_2eadf0 *)v));
         }
@@ -37,7 +37,7 @@ void FUN_002e26b0(struct O_2e26b0 *arg0, int arg1) {
     int *temp_a0;
     int *temp_s0;
     if (g_stringPool[0] == 0) {
-        var_v0 = ((int)FUN_002eb010(0x10));
+        var_v0 = ((int)StringPool_Allocate(0x10));
         if (var_v0 != 0) {
             var_v0 = ((int)StringPool_Construct((S_2eadf0 *)var_v0));
         }

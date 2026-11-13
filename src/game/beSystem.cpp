@@ -9,9 +9,9 @@ typedef struct StringTokenHeader {
 } StringTokenHeader;
 
 extern "C" {
-void FUN_00236be0(int insight, char *object);
-void FUN_00236c40(int insight, char *object);
-int FUN_002eb010(int size);
+void igInsightCore_AddToScheduler(int insight, char *object);
+void igInsightCore_RemoveFromScheduler(int insight, char *object);
+int StringPool_Allocate(int size);
 int StringPool_Construct(int pool);
 int *StringPool_Intern(int pool, const void *text);
 int StringChunk_ReleaseHeader(int owner, StringTokenHeader *header);
@@ -50,13 +50,13 @@ int beSystem_GetMetaObject_Virtual(void);
 /* Hands the system to the insight scheduler unless it already holds it. */
 void beSystem_AddToScheduler(beSystem *self, int unusedArg)
 {
-    FUN_00236be0(self->_insight, (char *)self); /* matching construct: char * parameter on FUN_00236*, receiver passed as a byte pointer */
+    igInsightCore_AddToScheduler(self->_insight, (char *)self); /* matching construct: char * parameter on FUN_00236*, receiver passed as a byte pointer */
 }
 
 /* Takes the system back out of the insight scheduler when it holds it. */
 void beSystem_RemoveFromScheduler(beSystem *self, int unusedArg)
 {
-    FUN_00236c40(self->_insight, (char *)self); /* matching construct: char * parameter on FUN_00236*, receiver passed as a byte pointer */
+    igInsightCore_RemoveFromScheduler(self->_insight, (char *)self); /* matching construct: char * parameter on FUN_00236*, receiver passed as a byte pointer */
 }
 
 /* Activates the system with the ndmw.igb boot scene queued as the next stage, the resource's
@@ -77,7 +77,7 @@ void beSystem_Start(beSystem *self)
     self->_isFirstTime = 0;
     self->_isActive = 1;
     if (g_stringPool[0] == 0) {
-        newPool = FUN_002eb010(16);
+        newPool = StringPool_Allocate(16);
         if (newPool != 0) {
             newPool = StringPool_Construct(newPool);
         }
@@ -220,7 +220,7 @@ void beSystem_Update(beSystem *self)
             igRelease((igObject *)self->_bootDirectory);
             self->_bootDirectory = (int)directory;
             if (g_stringPool[0] == 0) {
-                newPool = FUN_002eb010(16);
+                newPool = StringPool_Allocate(16);
                 if (newPool != 0) {
                     newPool = StringPool_Construct(newPool);
                 }
@@ -257,7 +257,7 @@ void beSystem_Update(beSystem *self)
         } else {
             /* Unreachable: entering the handshake needs _nextStage or _bootDirectory set. */
             if (g_stringPool[0] == 0) {
-                newPool = FUN_002eb010(16);
+                newPool = StringPool_Allocate(16);
                 if (newPool != 0) {
                     newPool = StringPool_Construct(newPool);
                 }

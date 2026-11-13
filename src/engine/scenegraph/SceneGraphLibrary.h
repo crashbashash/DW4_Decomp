@@ -598,7 +598,7 @@ extern "C" char igShaderFactory_GetPublishedMetaObject[];
 extern "C" char g_igIniShaderFactory_callbackList[];
 extern "C" char igIniShaderFactory_className[];
 extern "C" int FUN_002bb030(...);
-extern "C" int FUN_002c04a0(...);
+extern "C" int igMemoryPool_GetOrCreateMetaObject(...);
 extern "C" int igStringMetaField_SetDefaultText(...);
 extern "C" int DAT_0048bf20[4];
 extern "C" int DAT_0048bf50[4];
@@ -1882,7 +1882,7 @@ extern "C" int FUN_0030b3c0(...);
 extern "C" int FUN_0030b5c0(igObject *);
 extern "C" int List_BinarySearchWords(int, void *, void *);
 extern "C" int FUN_002d6e60(int, void *, void *);
-extern "C" int DAT_00587060[4];
+extern "C" int g_temporaryAllocatorSelector[4];
 struct SegmentOverrideRef { igObject *p; inline void retain() { if (p != 0) p->_refCount = p->_refCount + 1; } inline void set(igObject *o) { p = o; retain(); } };
 struct SegmentStackList { char pad8[8]; int _count; int _capacity; igObject **_data; int count() const { return _count; } };
 extern "C" int FUN_0030bfa0(...);
@@ -2730,7 +2730,7 @@ extern "C" int FUN_001c47f0(...);
 extern "C" float DAT_0048da28[4];
 typedef struct S0_1c5160 { char pad552[552]; float f552; float f556; } S0_1c5160;
 typedef struct ObjectRefFieldView { int _vtable; int _refCount; char _pad8[30]; unsigned char _flag38; char _pad27[13]; unsigned char _flag52; char _pad35[3]; int _metaObject; } ObjectRefFieldView;
-extern "C" int FUN_002eb010(int);
+extern "C" int StringPool_Allocate(int);
 extern "C" int FUN_002fe570(igMetaObject *, ObjectRefFieldView *);
 extern "C" int StringPool_Construct(int);
 extern "C" int StringPool_Intern(...);
@@ -2992,7 +2992,7 @@ public:
     virtual void seek(int, int);
     virtual int tell();
 };
-extern "C" void *FUN_002c4ca0(void *);
+extern "C" void *igFile_Create(void *);
 extern "C" char *FUN_00300d70(IniFactoryView *, int);
 extern "C" void *g_igStringObj_metaObject[4];
 extern "C" int DAT_004e47a8[2];
@@ -6460,7 +6460,7 @@ static inline char *internText(const char *text) {
     int pool;
     if (text == 0) return 0;
     if (g_stringPool[0] == 0) {
-        pool = FUN_002eb010(16);
+        pool = StringPool_Allocate(16);
         if (pool != 0) {
             pool = StringPool_Construct(pool);
         }

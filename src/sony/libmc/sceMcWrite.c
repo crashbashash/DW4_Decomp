@@ -21,7 +21,7 @@ extern int DAT_00485194;
 int FUN_0010af00(int sema);
 int FUN_0010af30(int sema);
 void FUN_0010b160(int mode);
-int FUN_0010e2a8(void *cd, int fno, int mode, void *send, int ssize, void *recv, int rsize, void (*end)(void *), void *arg);
+int sceSifCallRpc(void *cd, int fno, int mode, void *send, int ssize, void *recv, int rsize, void (*end)(void *), void *arg);
 void FUN_00119710(void *arg);
 int sceMcWrite(int port, unsigned char *buf, int size) {
     unsigned int n;
@@ -42,7 +42,7 @@ int sceMcWrite(int port, unsigned char *buf, int size) {
     }
     for (i = 0; i < DAT_0055d640.head; i++) DAT_0055d640.bytes[i] = buf[i];
     FUN_0010b160(0);
-    r = FUN_0010e2a8(&DAT_0055d5c0, 6, 1, &DAT_0055d640, 48, &DAT_0055eb80, 4, FUN_00119710, 0);
+    r = sceSifCallRpc(&DAT_0055d5c0, 6, 1, &DAT_0055d640, 48, &DAT_0055eb80, 4, FUN_00119710, 0);
     if (r == 0) {
         DAT_00485190 = 6;
     } else {

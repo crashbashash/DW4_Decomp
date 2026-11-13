@@ -52,7 +52,7 @@ extern Result g_statusSucceeded;
 extern Result g_allocatorFailureStatus;
 extern int _gp[4];
 extern unsigned char GPR_00554ddc;
-extern ThreadMgr *DAT_005871d0[4];
+extern ThreadMgr *g_threadManager[4];
 
 int Gap__Core__igPsx2Thread__vfunc_23(void *arg0, void *arg1);
 void Gap__Core__igPsx2Thread__vfunc_11(void *arg0);

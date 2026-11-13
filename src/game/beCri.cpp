@@ -36,9 +36,9 @@ int Memory_FreeBuffer(...);
 int igMetaObject_FindFieldByName(int meta, const char *name);
 int igMemoryRefMetaField_SetAlignmentType(int field, const char *name);
 int FUN_00308860(int context, const char *name, int alignment);
-void FUN_00236be0(int insight, beCri *component);
-int FUN_00236c40(...);
-int FUN_00236f80(int insight, int meta);
+void igInsightCore_AddToScheduler(int insight, beCri *component);
+int igInsightCore_RemoveFromScheduler(...);
+int igInsightCore_FindManager(int insight, int meta);
 int FUN_00306360(int registry, const char *section, int create);
 int FUN_00306770(int registry, int section, const char *key, igSmartPointer<igStringObj> *value, const char *fallback, int flags);
 igStringObj *FUN_002b9500(void *allocator);
@@ -405,7 +405,7 @@ void beCopyTransform_RegisterTraversal(void) {
 void Gap__Bec__beCri__vfunc_21(beCri *self) {
     int section;
     int registry;
-    FUN_00236be0(self->_insight, self);
+    igInsightCore_AddToScheduler(self->_insight, self);
     registry = g_objectSystem[0]->registry;
     if (registry == 0) return;
     section = FUN_00306360(registry, BECRUNTIME, 0);
@@ -438,7 +438,7 @@ int beCri_AdxFileProxy(void) {
 /* Detach: restores igFile's proxy and leaves the insight. */
 void Gap__Bec__beCri__vfunc_22(beCri *self) {
     g_igFile_metaObject[0]->_abstractProxy = g_savedIgFileAbstractProxy[0];
-    FUN_00236c40(self->_insight, self);
+    igInsightCore_RemoveFromScheduler(self->_insight, self);
 }
 
 /* Start: finds the beSystem, creates the BGM and ambience stream handles (two-channel ADX) and the
@@ -449,7 +449,7 @@ void Gap__Bec__beCri__vfunc_23(beCri *self) {
     beCriHandle *old;
     int i;
 
-    self->_system = FUN_00236f80(self->_insight, g_beSystem_metaObject[0]);
+    self->_system = igInsightCore_FindManager(self->_insight, g_beSystem_metaObject[0]);
     allocator = HandleAllocator(self);
     old = Bgm(self);
     igRelease(old);

@@ -1,5 +1,5 @@
 extern char DAT_004835c0[];
-int FUN_0010e2a8();
+int sceSifCallRpc();
 int FUN_00116a78();
 int SignalSema();
 extern int DAT_00483568[4];
@@ -10,7 +10,7 @@ int sceCdNcmdDiskReady(void) {
     if (FUN_00116a78(2) == 0) {
         return 0;
     }
-    if (FUN_0010e2a8(&DAT_00484710[0], 0xE, 0, 0, 0, DAT_004835c0, 4, 0, 0) < 0) {
+    if (sceSifCallRpc(&DAT_00484710[0], 0xE, 0, 0, 0, DAT_004835c0, 4, 0, 0) < 0) {
         SignalSema(DAT_00483568[0]);
         return 0;
     }

@@ -6,15 +6,15 @@ extern "C" int igTraversal_RegisterFunction(int, int, void (*)(void));
 extern "C" int FUN_0035cd40(...);
 extern "C" void FUN_00389fb0(void);
 extern "C" int sprintf(char *, const char *, ...);
-extern "C" int FUN_002eb010(int);
+extern "C" int StringPool_Allocate(int);
 extern "C" int StringPool_Construct(int);
 extern "C" int StringPool_Intern(int, const char *);
 extern "C" void StringChunk_ReleaseHeader(int, void *);
 extern "C" int strcmp(const char *, const char *);
 extern "C" int Memory_GetAllocatorBySelector(int);
-extern "C" void FUN_00236be0(int, char *);
-extern "C" void FUN_00236c40(int, char *);
-extern "C" int FUN_00236f80(int, int);
+extern "C" void igInsightCore_AddToScheduler(int, char *);
+extern "C" void igInsightCore_RemoveFromScheduler(int, char *);
+extern "C" int igInsightCore_FindManager(int, int);
 extern "C" int igObject_Destroy(...);
 extern "C" void Gap__Bec__beLua__vfunc_24(void);
 extern "C" void Gap__Bec__beLua__vfunc_27(void);
@@ -112,7 +112,7 @@ int beLua__RunNamedChunk(beLua *self, const char *name, const char *given)
     if (given == 0) {
         sprintf(buf1, DAT_0050ec80, (char *)((beSystem *)self->_system)->_stageName);
         if (g_stringPool[0] == 0) {
-            a = FUN_002eb010(16);
+            a = StringPool_Allocate(16);
             if (a) a = StringPool_Construct(a);
             g_stringPool[0] = a;
         }
@@ -127,7 +127,7 @@ int beLua__RunNamedChunk(beLua *self, const char *name, const char *given)
         ref.value = s;
     } else {
         if (g_stringPool[0] == 0) {
-            a = FUN_002eb010(16);
+            a = StringPool_Allocate(16);
             if (a) a = StringPool_Construct(a);
             g_stringPool[0] = a;
         }
@@ -185,26 +185,26 @@ void FUN_0038a2d0(beLua *arg0) {
     arg0->_luaState = (int)FUN_0035aa20(var_v0);
 }
 
-/* Hands the object to the insight core's helper FUN_00236be0, which asks the scheduler at +12 of
+/* Hands the object to the insight core's helper igInsightCore_AddToScheduler, which asks the scheduler at +12 of
  * the insight object (_insight) whether it already has the object (scheduler slot 26) and, if not,
  * calls scheduler slot 24 with it. Same body as beMessenger slot 21. The second argument is
  * unused. */
 void Gap__Bec__beLua__vfunc_21(beLua *self, int unusedArg)
 {
-    FUN_00236be0(self->_insight, (char *)self);
+    igInsightCore_AddToScheduler(self->_insight, (char *)self);
 }
 
-/* Counterpart of slot 21 through FUN_00236c40, which calls scheduler slot 25 with the object only
+/* Counterpart of slot 21 through igInsightCore_RemoveFromScheduler, which calls scheduler slot 25 with the object only
  * when scheduler slot 26 reports it present. Same body as beMessenger slot 22. The second argument
  * is unused. */
 void Gap__Bec__beLua__vfunc_22(beLua *self, int unusedArg)
 {
-    FUN_00236c40(self->_insight, (char *)self);
+    igInsightCore_RemoveFromScheduler(self->_insight, (char *)self);
 }
 
 void Gap__Bec__beLua__vfunc_23(beLua *arg0) {
     RefCountedHeader *temp_a0;
-    arg0->_system = FUN_00236f80(arg0->_insight, g_beSystem_metaObject[0]);
+    arg0->_system = igInsightCore_FindManager(arg0->_insight, g_beSystem_metaObject[0]);
     temp_a0 = (RefCountedHeader *)(arg0->_luaState);
     if (temp_a0 != 0) {
         temp_a0->f4 = (int)((int) (temp_a0->f4 - 1));

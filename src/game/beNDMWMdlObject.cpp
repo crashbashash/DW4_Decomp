@@ -4,7 +4,7 @@ extern "C" int strcmp(int, int *);
 extern "C" int Gap__Bec__beNDMWMdlObject__vfunc_35(int dummy0, int arg1);
 extern "C" void Gap__Bec__beNDMWMdlObject__vfunc_37(void);
 extern "C" int Gap__Bec__beNDMWMdlObject__vfunc_20(void);
-extern "C" int FUN_002eb010(...);
+extern "C" int StringPool_Allocate(...);
 extern "C" void *FUN_00350020(...);
 extern "C" void *beBaseInfoDataList_Create(...);
 extern "C" int FUN_00396740(...);
@@ -75,7 +75,7 @@ void Gap__Bec__beNDMWMdlObject__vfunc_36(beNDMWMdlObject *arg0, beBaseInfoRam *a
             int ns;
             beModelCtrlInfoWork *tg = (beModelCtrlInfoWork *)w.p;
             if (g_stringPool[0] == 0) {
-                int v = FUN_002eb010(16);
+                int v = StringPool_Allocate(16);
                 if (v != 0) v = StringPool_Construct(v);
                 g_stringPool[0] = v;
             }

@@ -1,8 +1,8 @@
 #include "dw4/reflected.h"
 
-extern "C" void FUN_00236be0(int, char *);
-extern "C" void FUN_00236c40(int, char *);
-extern "C" void *FUN_00236f80(...);
+extern "C" void igInsightCore_AddToScheduler(int, char *);
+extern "C" void igInsightCore_RemoveFromScheduler(int, char *);
+extern "C" void *igInsightCore_FindManager(...);
 extern "C" void *FUN_0034ce50(...);
 extern "C" int FUN_00454290(...);
 extern "C" int FUN_004542d0(...);
@@ -50,25 +50,25 @@ extern "C" int bePadData_UpdateRightStick(bePadData *, Vec2 *);
 extern "C" void Gap__Bec__bePadManager__vfunc_27(bePadManager *arg0);
 extern "C" int bePadManager_GetPadForPlayer(bePadManager *arg0, int arg1);
 
-/* Hands the object to the insight core's helper FUN_00236be0, which asks the scheduler at +12 of
+/* Hands the object to the insight core's helper igInsightCore_AddToScheduler, which asks the scheduler at +12 of
  * the insight object (_insight) whether it already has the object (scheduler slot 26) and, if not,
  * calls scheduler slot 24 with it. Same body as beMessenger slot 21. The second argument is
  * unused. */
 void Gap__Bec__bePadManager__vfunc_21(bePadManager *self, int unusedArg)
 {
-    FUN_00236be0(self->_insight, (char *)self);
+    igInsightCore_AddToScheduler(self->_insight, (char *)self);
 }
 
-/* Counterpart of slot 21 through FUN_00236c40, which calls scheduler slot 25 with the object only
+/* Counterpart of slot 21 through igInsightCore_RemoveFromScheduler, which calls scheduler slot 25 with the object only
  * when scheduler slot 26 reports it present. Same body as beMessenger slot 22. The second argument
  * is unused. */
 void Gap__Bec__bePadManager__vfunc_22(bePadManager *self, int unusedArg)
 {
-    FUN_00236c40(self->_insight, (char *)self);
+    igInsightCore_RemoveFromScheduler(self->_insight, (char *)self);
 }
 
 void Gap__Bec__bePadManager__vfunc_23(O *o) {
-    Rc *t0 = (Rc *)FUN_00236f80(o->f12, g_beSystem_metaObject[0]);
+    Rc *t0 = (Rc *)igInsightCore_FindManager(o->f12, g_beSystem_metaObject[0]);
     if (t0 != 0) t0->rc = t0->rc + 1;
     {
         Rc *a0 = o->f16;
@@ -87,7 +87,7 @@ void Gap__Bec__bePadManager__vfunc_23(O *o) {
     int s0 = m->f32;
     FUN_004542d0(s0, o->f24, m->f36);
     FUN_00454290(s0, o->f24);
-    char *v = (char *)FUN_00236f80(o->f12, g_igViewerSceneInfoManager_metaObject[0]);
+    char *v = (char *)igInsightCore_FindManager(o->f12, g_igViewerSceneInfoManager_metaObject[0]);
     int s = *(int *)(v + 132);
     FUN_004574f0(s, 15);
     FUN_004574f0(s, 3);

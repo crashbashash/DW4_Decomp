@@ -31,7 +31,7 @@ void *FUN_002c01f0(int);
 void *FUN_002bfed0(int);
 void FUN_002f8a80(...);
 void FUN_002f8b20(...);
-void *FUN_002eb010(int);
+void *StringPool_Allocate(int);
 void *StringPool_Construct(void *);
 char *StringPool_Intern(void *, const char *);
 void StringChunk_ReleaseHeader(int, void *);
@@ -303,7 +303,7 @@ extern char DAT_004fa3e0[];
 #define ASSIGN_TOKEN(field, source)                                           \
     text = (source);                                                          \
     if (g_stringPool == 0) {                                               \
-        poolObj = FUN_002eb010(16);                                           \
+        poolObj = StringPool_Allocate(16);                                           \
         if (poolObj != 0) {                                                   \
             poolObj = StringPool_Construct(poolObj);                          \
         }                                                                     \
@@ -322,7 +322,7 @@ extern char DAT_004fa3e0[];
     (field) = token
 #define ASSIGN_TOKEN_DIRECT(field, source)                                           \
     if (g_stringPool == 0) {                                               \
-        poolObj = FUN_002eb010(16);                                           \
+        poolObj = StringPool_Allocate(16);                                           \
         if (poolObj != 0) {                                                   \
             poolObj = StringPool_Construct(poolObj);                          \
         }                                                                     \
@@ -355,7 +355,7 @@ extern int g_allocatorSelector[4];
 struct PoolDescString { int chunk; int refs; };
 static inline void *descPool() {
     if (g_stringPool == 0) {
-        void *p = FUN_002eb010(16);
+        void *p = StringPool_Allocate(16);
         if (p != 0) { p = StringPool_Construct(p); }
         g_stringPool = p;
     }

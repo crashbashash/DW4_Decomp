@@ -1,6 +1,6 @@
 #include "dw4/reflected.h"
 #include "dw4/igSmartPointer.h"
-#define POOL(v) if (g_stringPool[0] == 0) { v = FUN_002eb010(16); if (v != 0) v = StringPool_Construct(v); g_stringPool[0] = v; }
+#define POOL(v) if (g_stringPool[0] == 0) { v = StringPool_Allocate(16); if (v != 0) v = StringPool_Construct(v); g_stringPool[0] = v; }
 #define SETSTR(fld, arg) { int *nw; beDemoKeepMes *c = e.p; POOL(v) nw = (int *)((void *)StringPool_Intern(g_stringPool[0], arg)); old = (int *)c->fld; if (old != 0) { hd = old - 2; r = old[-1] - 1; old[-1] = r; if (r == 0) StringChunk_ReleaseHeader(*hd, hd); } c->fld = (int)nw; }
 #define WORK(a, i) (((beDemoManagerWork **)((beDemoManagerWorkList *)(a)->_activeDataList)->_data)[i])
 #define ITEMO(a, i, o) (*((beDemoKeepMes **)((char *)((beDemoKeepMesList *)WORK(a, i)->_keepMesList)->_data + (o))))
@@ -9,11 +9,11 @@
 extern "C" int Memory_GetAllocatorBySelector(int);
 extern "C" int ObjectList_AppendRetained(...);
 extern "C" int igObject_GetAllocator(...);
-extern "C" int FUN_002eb010(int);
+extern "C" int StringPool_Allocate(int);
 extern "C" int StringPool_Construct(int);
 extern "C" void StringChunk_ReleaseHeader(...);
 extern "C" char * StringPool_Intern(...);
-extern "C" int FUN_00236f80(int, int);
+extern "C" int igInsightCore_FindManager(int, int);
 extern "C" void Gap__Bec__beDemoManager__vfunc_24(void);
 extern "C" int Gap__Bec__beDemoManager__vfunc_25(void);
 extern "C" int Gap__Bec__beDemoManager__vfunc_20(void);
@@ -40,8 +40,8 @@ extern "C" beDemoManagerWork * FUN_003637c0(...);
 extern "C" void FUN_0037e6e0(beDemoManager *arg0, int arg1);
 extern "C" void FUN_0037e890(beDemoManager *arg0, int arg1, int arg2);
 extern "C" void FUN_0037ea50(beDemoManager *arg0);
-extern "C" void FUN_00236be0(int, beDemoManager *);
-extern "C" void FUN_00236c40(int, beDemoManager *);
+extern "C" void igInsightCore_AddToScheduler(int, beDemoManager *);
+extern "C" void igInsightCore_RemoveFromScheduler(int, beDemoManager *);
 extern "C" void Gap__Bec__beDemoManager__vfunc_21(beDemoManager *self, int unusedArg);
 extern "C" void Gap__Bec__beDemoManager__vfunc_22(beDemoManager *self, int unusedArg);
 extern "C" int g_beMessenger_metaObject[4];
@@ -191,7 +191,7 @@ void FUN_0037e6e0(beDemoManager *arg0, int arg1) {
     mes.p->_kind = 7;
     s1 = mes.p;
     if (g_stringPool[0] == 0) {
-        var_v0_2 = FUN_002eb010(0x10);
+        var_v0_2 = StringPool_Allocate(0x10);
         if (var_v0_2 != 0) {
             var_v0_2 = StringPool_Construct(var_v0_2);
         }
@@ -255,7 +255,7 @@ void FUN_0037e890(beDemoManager *arg0, int arg1, int arg2) {
     mes.p->_kind = 6;
     s1 = mes.p;
     if (g_stringPool[0] == 0) {
-        var_v0_2 = FUN_002eb010(0x10);
+        var_v0_2 = StringPool_Allocate(0x10);
         if (var_v0_2 != 0) {
             var_v0_2 = StringPool_Construct(var_v0_2);
         }
@@ -295,26 +295,26 @@ void FUN_0037ea50(beDemoManager *arg0) {
     }
 }
 
-/* Hands the object to the insight core's helper FUN_00236be0, which asks the scheduler at +12 of
+/* Hands the object to the insight core's helper igInsightCore_AddToScheduler, which asks the scheduler at +12 of
  * the insight object (_insight) whether it already has the object (scheduler slot 26) and, if not,
  * calls scheduler slot 24 with it. Same body as beMessenger slot 21. The second argument is
  * unused. */
 void Gap__Bec__beDemoManager__vfunc_21(beDemoManager *self, int unusedArg)
 {
-    FUN_00236be0(self->_insight, self);
+    igInsightCore_AddToScheduler(self->_insight, self);
 }
 
-/* Counterpart of slot 21 through FUN_00236c40, which calls scheduler slot 25 with the object only
+/* Counterpart of slot 21 through igInsightCore_RemoveFromScheduler, which calls scheduler slot 25 with the object only
  * when scheduler slot 26 reports it present. Same body as beMessenger slot 22. The second argument
  * is unused. */
 void Gap__Bec__beDemoManager__vfunc_22(beDemoManager *self, int unusedArg)
 {
-    FUN_00236c40(self->_insight, self);
+    igInsightCore_RemoveFromScheduler(self->_insight, self);
 }
 
 void Gap__Bec__beDemoManager__vfunc_23(beDemoManager *arg0) {
-    arg0->_messenger = FUN_00236f80(arg0->_insight, g_beMessenger_metaObject[0]);
-    arg0->_lua = FUN_00236f80(arg0->_insight, g_beLua_metaObject[0]);
+    arg0->_messenger = igInsightCore_FindManager(arg0->_insight, g_beMessenger_metaObject[0]);
+    arg0->_lua = igInsightCore_FindManager(arg0->_insight, g_beLua_metaObject[0]);
 }
 
 void Gap__Bec__beDemoManager__vfunc_24(void)

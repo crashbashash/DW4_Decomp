@@ -11,7 +11,7 @@ typedef struct {
     int pad[5];
 } ConfigRequest;
 
-int FUN_0010e2a8(void *client, int rpc_number, int mode, void *send, int ssize, void *receive, int rsize, void *end_func, void *end_param);
+int sceSifCallRpc(void *client, int rpc_number, int mode, void *send, int ssize, void *receive, int rsize, void *end_func, void *end_param);
 int _lf_bind(void);
 extern char D_00559640[];
 extern ConfigRequest D_00559440;
@@ -26,7 +26,7 @@ int sceSifGetIopAddr(unsigned int id, void *value, unsigned int type)
     }
     D_00559440.head.w = id;
     D_00559440.type = type;
-    if (FUN_0010e2a8(D_00559640, 3, 0, &D_00559440, 32, &D_00559440, 32, 0, 0) < 0) {
+    if (sceSifCallRpc(D_00559640, 3, 0, &D_00559440, 32, &D_00559440, 32, 0, 0) < 0) {
         return 0xFFFEFFFF;
     }
     if (type == 0) {

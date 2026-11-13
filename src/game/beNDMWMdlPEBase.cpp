@@ -15,14 +15,14 @@
 #define FILLB(F, DAT) { BList *l = (BList *)w->F; int n = l->size; unsigned char *d = l->data; int j; for (j = 0; j < n; j++) d[j] = DAT; }
 #define VC(name) ((VC140 *)self)->vX(obj, name)
 
-extern "C" int FUN_00236f80(int, int);
+extern "C" int igInsightCore_FindManager(int, int);
 extern "C" int beMessenger_AppendInt(...);
 extern "C" int beMessenger_DispatchSelected(...);
 extern "C" void * beMessenger_GetObject(...);
 extern "C" int beMessenger_SelectGroup(...);
 extern "C" int beMessenger_SendNamed(...);
 extern "C" int FUN_00100610(void **);
-extern "C" int FUN_002eb010(int);
+extern "C" int StringPool_Allocate(int);
 extern "C" void * igProperty_GetRecordIntList(...);
 extern "C" int StringChunk_ReleaseHeader(int, int *);
 extern "C" int StringPool_Construct(int);
@@ -42,7 +42,7 @@ extern "C" long long __divdi3(...);
 extern "C" int FUN_003c03e0(...);
 extern "C" int strcmp(...);
 extern "C" int beMessenger_AppendFloat(int, float);
-extern "C" void * FUN_002caa70(...);
+extern "C" void * igIntList_Create(...);
 extern "C" int List_Reserve(...);
 extern "C" int List_Resize(...);
 extern "C" int beMessenger_PopArgContext(...);
@@ -298,8 +298,8 @@ void FUN_00443110(beNDMWShinkaCtrl *arg0, int arg1, int arg2) {
     igObject *t;
     igObject *a0;
     arg0->_playerNo = arg2;
-    arg0->_messenger = FUN_00236f80(arg1, g_beMessenger_metaObject[0]);
-    arg0->_gameRam = FUN_00236f80(arg1, g_beNDMWGameRam_metaObject[0]);
+    arg0->_messenger = igInsightCore_FindManager(arg1, g_beMessenger_metaObject[0]);
+    arg0->_gameRam = igInsightCore_FindManager(arg1, g_beNDMWGameRam_metaObject[0]);
     beMessenger_SendNamed(arg0->_messenger, DAT_0051d1a8, DAT_0051d1b8, 0, DAT_0051d1c0);
     t = (igObject *)((int *)beMessenger_GetObject(arg0->_messenger, 0));
     if (t != 0) {
@@ -424,7 +424,7 @@ void FUN_004435c0(beNDMWShinkaObject *out, beNDMWGameRam *ctx, int arg2, int arg
     }
     s = beDataBase_GetRecordString(ctx->_dBShinka, arg3, &DAT_0051d208[0]);
     if (g_stringPool[0] == 0) {
-        pool = FUN_002eb010(16);
+        pool = StringPool_Allocate(16);
         if (pool != 0)
             pool = StringPool_Construct(pool);
         g_stringPool[0] = pool;
@@ -874,7 +874,7 @@ void FUN_004456c0(beNDMWMdlPEBase *arg0, beBaseInfoRam *arg1, beNDMWMdlPEBaseInf
         igObject *old;
         alloc = igObject_GetAllocator(); /* matching construct: a0 still holds arg0, retail passes it without a move */
         /* The six-entry list is owned by the stack reference until the work record has taken its own. */
-        IntListRef created((List *)FUN_002caa70(GPR_00554c14 != 0 ? alloc : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0])));
+        IntListRef created((List *)igIntList_Create(GPR_00554c14 != 0 ? alloc : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0])));
         if (created.p->size < 7) List_Reserve(created.p, 6, 4);
         if (created.p->cap >= 6) created.p->size = 6;
         else List_Resize(created.p, 6, 4);
@@ -920,7 +920,7 @@ void FUN_00445990(beNDMWMdlPEBase *arg0, beBaseInfoRam *arg1, beNDMWMdlPEBaseInf
         igObject *old;
         alloc = igObject_GetAllocator(); /* matching construct: a0 still holds arg0, retail passes it without a move */
         /* The seven-entry list is owned by the stack reference until the work record has taken its own. */
-        IntListRef created((List *)FUN_002caa70(GPR_00554c14 != 0 ? alloc : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0])));
+        IntListRef created((List *)igIntList_Create(GPR_00554c14 != 0 ? alloc : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0])));
         if (created.p->size < 8) List_Reserve(created.p, 7, 4);
         if (created.p->cap >= 7) created.p->size = 7;
         else List_Resize(created.p, 7, 4);
@@ -963,13 +963,13 @@ int Gap__Bec__beNDMWMdlPEBase__vfunc_47(beNDMWMdlPEBase *self, Model *obj, int n
     if (w != 0 && w->_dispRamNoList == 0) {
         IntListRef h9C(0);
         BoolListRef h98(0);
-        MKLIST(h9C, _dispRamNoList, FUN_002caa70)
+        MKLIST(h9C, _dispRamNoList, igIntList_Create)
         SIZEIT(_dispRamNoList, 12, 4)
         FILLI(_dispRamNoList, DAT_004cfde8)
-        MKLIST(h9C, _dispPosNoList, FUN_002caa70)
+        MKLIST(h9C, _dispPosNoList, igIntList_Create)
         SIZEIT(_dispPosNoList, 12, 4)
         FILLI(_dispPosNoList, DAT_004cfdf0)
-        MKLIST(h9C, _timerList, FUN_002caa70)
+        MKLIST(h9C, _timerList, igIntList_Create)
         SIZEIT(_timerList, 12, 4)
         FILLI(_timerList, DAT_004cfdf8)
         MKLIST(h98, _isFirstList, igBoolList_Create)

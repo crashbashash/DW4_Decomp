@@ -450,7 +450,7 @@ void FUN_001c3ab0(int width, int height, int bpp, void *face1, void *face0, void
     if (GPR_00554c14 != 0) {
         a = ((SphereMapAllocator *)Memory_GetAllocatorBySelector(DAT_00587028[0]));
     } else {
-        a = ((SphereMapAllocator *)Memory_GetAllocatorBySelector(DAT_00587060[0]));
+        a = ((SphereMapAllocator *)Memory_GetAllocatorBySelector(g_temporaryAllocatorSelector[0]));
     }
     mask = a->alloc(width * height);
     memset(mask, 0, width * height);
@@ -535,7 +535,7 @@ void FUN_001c3ab0(int width, int height, int bpp, void *face1, void *face0, void
     if (GPR_00554c14 != 0) {
         a = ((SphereMapAllocator *)Memory_GetAllocatorBySelector(DAT_00587028[0]));
     } else {
-        a = ((SphereMapAllocator *)Memory_GetAllocatorBySelector(DAT_00587060[0]));
+        a = ((SphereMapAllocator *)Memory_GetAllocatorBySelector(g_temporaryAllocatorSelector[0]));
     }
     a->release(mask);
 }

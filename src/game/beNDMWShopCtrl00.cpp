@@ -1,5 +1,5 @@
 #include "dw4/reflected.h"
-#define APPENDSTR(list, text) { const char *tok; if ((text) == 0) { tok = 0; } else { if (g_stringPool[0] == 0) { int pool = FUN_002eb010(0x10); if (pool != 0) pool = StringPool_Construct(pool); g_stringPool[0] = pool; } tok = (const char *)StringPool_Intern(g_stringPool[0], (void *)(text)); } StringList_AppendRetained(list, StringRef(tok)); }
+#define APPENDSTR(list, text) { const char *tok; if ((text) == 0) { tok = 0; } else { if (g_stringPool[0] == 0) { int pool = StringPool_Allocate(0x10); if (pool != 0) pool = StringPool_Construct(pool); g_stringPool[0] = pool; } tok = (const char *)StringPool_Intern(g_stringPool[0], (void *)(text)); } StringList_AppendRetained(list, StringRef(tok)); }
 #define DEREF(o) if (o) { (o)->rc = (o)->rc - 1; if (((unsigned long long)((long long)(o)->rc << 0x29) >> 0x29) == 0) igObject_Destroy(o); }
 #define NEWWIN(kind, w, ctor, code) int alloc; int a; alloc = ((int)igObject_GetAllocator(self)); a = GPR_00554c14 != 0 ? alloc : ((int)Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0])); igSmartPointer<kind> w((kind *)ctor(a)); beNDMWWindow_BindContext(w.p, self, self->_insight, self->_playerNo, code); ObjectList_AppendRetained(self->_subWindow, w.p);
 #define INC(l, n) { int ix = n; int cnt; int *dp; int *pp; int nv; dp = (int *)(l)->_data; pp = &dp[ix]; cnt = (l)->_count; nv = *pp + 1; if (cnt != 0 && ix < cnt) *pp = nv; }
@@ -27,7 +27,7 @@
     int n = L->_count; int k = 0; \
     if (0 < n) { int off = 0; do { \
         char **e = (char **)((int)L->_data + off); \
-        if (g_stringPool[0] == 0) { int pool = FUN_002eb010(0x10); if (pool != 0) pool = StringPool_Construct(pool); g_stringPool[0] = pool; } \
+        if (g_stringPool[0] == 0) { int pool = StringPool_Allocate(0x10); if (pool != 0) pool = StringPool_Construct(pool); g_stringPool[0] = pool; } \
         char *nw = StringPool_Intern(g_stringPool[0], 0); char *old = *e; \
         if (old != 0) { int *hd = (int *)old - 2; int cnt = ((int *)old)[-1] - 1; ((int *)old)[-1] = cnt; if (cnt == 0) StringChunk_ReleaseHeader(*hd, hd); } \
         k += 1; *e = nw; off += 4; \
@@ -42,7 +42,7 @@
     n = L->_count; k = 0; \
     if (0 < n) { off = 0; do { \
         e = (char **)((int)L->_data + off); \
-        if (g_stringPool[0] == 0) { int pool = FUN_002eb010(0x10); if (pool != 0) pool = StringPool_Construct(pool); g_stringPool[0] = pool; } \
+        if (g_stringPool[0] == 0) { int pool = StringPool_Allocate(0x10); if (pool != 0) pool = StringPool_Construct(pool); g_stringPool[0] = pool; } \
         nw = StringPool_Intern(g_stringPool[0], 0); old = *e; \
         if (old != 0) { int *hd = (int *)old - 2; int cnt = ((int *)old)[-1] - 1; ((int *)old)[-1] = cnt; if (cnt == 0) StringChunk_ReleaseHeader(*hd, hd); } \
         k += 1; *e = nw; off += 4; \
@@ -50,9 +50,9 @@
 #define REL_42bc70(o) { Rc_42bc70 *rr = (o); if (rr != 0) { rr->_refCount = (int)rr->_refCount - 1; if (((unsigned long long)((long long)(int)rr->_refCount << 0x29) >> 0x29) == 0) { igObject_Destroy(rr); } } }
 #define PUSHB(lp, v) { igBoolList *L = (igBoolList *)(lp); int n = L->_count; if (n < L->_capacity) L->_count = n + 1; else List_Resize(L, n + 1, 1); n[(unsigned char *)L->_data] = (v); }
 #define REL_42eb80(o) { Rc_42eb80 *rr = (o); if (rr != 0) { rr->_refCount = rr->_refCount - 1; if ((rr->_refCount & 0x7FFFFF) == 0) { igObject_Destroy(rr); } } }
-#define CLEAR(L) { igStringRefList *l = (igStringRefList *)(L); int n = l->_count; int i; int *slot; int nw; for (i = 0; i < n; i++) { slot = (int *)l->_data + i; if (g_stringPool[0] == 0) { int v = FUN_002eb010(16); if (v != 0) v = StringPool_Construct(v); g_stringPool[0] = v; } nw = ((int)StringPool_Intern(g_stringPool[0], 0)); { int *old = (int *)*slot; if (old != 0) { int *hdr = old - 2; int c = hdr[1] - 1; hdr[1] = c; if (c == 0) StringChunk_ReleaseHeader(hdr[0], hdr); } } *slot = nw; } l->_count = 0; }
+#define CLEAR(L) { igStringRefList *l = (igStringRefList *)(L); int n = l->_count; int i; int *slot; int nw; for (i = 0; i < n; i++) { slot = (int *)l->_data + i; if (g_stringPool[0] == 0) { int v = StringPool_Allocate(16); if (v != 0) v = StringPool_Construct(v); g_stringPool[0] = v; } nw = ((int)StringPool_Intern(g_stringPool[0], 0)); { int *old = (int *)*slot; if (old != 0) { int *hdr = old - 2; int c = hdr[1] - 1; hdr[1] = c; if (c == 0) StringChunk_ReleaseHeader(hdr[0], hdr); } } *slot = nw; } l->_count = 0; }
 #define ALLOC_42f710(a, self) { a = igObject_GetAllocator(self); a = GPR_00554c14 ? a : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]); }
-#define APPENDSTR_42f710(list, text) { char *tok; if ((text) == 0) { tok = 0; } else { if (g_stringPool[0] == 0) { int pool = FUN_002eb010(0x10); if (pool != 0) pool = StringPool_Construct(pool); g_stringPool[0] = pool; } tok = StringPool_Intern(g_stringPool[0], (void *)(text)); } StringList_AppendRetained(list, StringRef(tok)); }
+#define APPENDSTR_42f710(list, text) { char *tok; if ((text) == 0) { tok = 0; } else { if (g_stringPool[0] == 0) { int pool = StringPool_Allocate(0x10); if (pool != 0) pool = StringPool_Construct(pool); g_stringPool[0] = pool; } tok = StringPool_Intern(g_stringPool[0], (void *)(text)); } StringList_AppendRetained(list, StringRef(tok)); }
 #define APPENDSTRV(list, text) { char *tx = (char *)(text); APPENDSTR_42f710(list, tx) }
 #define SLIST(self) ((beNDMWShinkaObjectList *)((beNDMWShinkaCtrl *)(self)->_shinkaCtrl)->_list)
 #define SUB(self) ((igObjectList *)(self)->_subWindow)
@@ -67,7 +67,7 @@
         tok = 0; \
     } else { \
         if (g_stringPool[0] == 0) { \
-            int pool = FUN_002eb010(0x10); \
+            int pool = StringPool_Allocate(0x10); \
             if (pool != 0) pool = StringPool_Construct(pool); \
             g_stringPool[0] = pool; \
         } \
@@ -93,7 +93,7 @@
         tok = 0; \
     } else { \
         if (g_stringPool[0] == 0) { \
-            int pool = FUN_002eb010(0x10); \
+            int pool = StringPool_Allocate(0x10); \
             if (pool != 0) pool = StringPool_Construct(pool); \
             g_stringPool[0] = pool; \
         } \
@@ -140,7 +140,7 @@ extern "C" int beNDMWWindow_PollCloseComplete(...);
 extern "C" int beNDMWWindow_RequestChildrenClose(...);
 extern "C" void * igObject_GetAllocator(...);
 extern "C" int FUN_00100610(...);
-extern "C" int FUN_002eb010(...);
+extern "C" int StringPool_Allocate(...);
 extern "C" int StringPool_Construct(...);
 extern "C" char * StringPool_Intern(...);
 extern "C" int StringChunk_ReleaseHeader(...);
@@ -162,7 +162,7 @@ extern "C" int beNDMWStatusCtrlD0_RefreshText(void *, int, int);
 struct igResult { int value; };
 extern "C" igResult ObjectList_RemoveFirstRetained(void *, void *, int);
 extern "C" int beDataBase_GetRecordInt(...);
-extern "C" void * FUN_00236f80(...);
+extern "C" void * igInsightCore_FindManager(...);
 extern "C" int beNDMWShopSelect52_Create(...);
 extern "C" int beNDMWStatusSelectE1_Create(...);
 extern "C" int beNDMWWindow_QueueNumberText(...);
@@ -194,7 +194,7 @@ extern "C" void *igProperty_GetRecordStringList(...);
 extern "C" void *FUN_003b8860(...);
 extern "C" void *beNDMWStatusCtrlEquip_Create(...);
 extern "C" int FUN_00425e60(...);
-extern "C" void * FUN_002caa70(...);
+extern "C" void * igIntList_Create(...);
 extern "C" void FUN_00433290(void *window);
 extern "C" int beNDMWShopSelect34_Create(...);
 extern "C" int FUN_00440110(...);
@@ -352,7 +352,7 @@ extern "C" int DAT_0051b6d0[4];
 struct U { static inline char *InternStr(char *text) {
     if (text == 0) return 0;
     if (g_stringPool[0] == 0) {
-        int pool = FUN_002eb010(0x10);
+        int pool = StringPool_Allocate(0x10);
         if (pool != 0) pool = StringPool_Construct(pool);
         g_stringPool[0] = pool;
     }
@@ -433,7 +433,7 @@ struct Str { static inline int intern(int *s) {
         ref = 0;
     } else {
         if (g_stringPool[0] == 0) {
-            pool = FUN_002eb010(16);
+            pool = StringPool_Allocate(16);
             if (pool)
                 pool = StringPool_Construct(pool);
             g_stringPool[0] = pool;
@@ -599,7 +599,7 @@ extern "C" void FUN_00438050(beNDMWShopCtrlDiskSell *arg0);
 struct ChipPriceText { char text[5]; } __attribute__((aligned(16)));
 extern "C" ChipPriceText DAT_0051bdc0;
 struct Vec3 { float x, y, z; } __attribute__((aligned(16)));
-struct Pool { static char *Intern(char *s) { if (g_stringPool[0] == 0) { int v = FUN_002eb010(16); if (v != 0) v = StringPool_Construct(v); g_stringPool[0] = v; } return StringPool_Intern(g_stringPool[0], s); } };
+struct Pool { static char *Intern(char *s) { if (g_stringPool[0] == 0) { int v = StringPool_Allocate(16); if (v != 0) v = StringPool_Construct(v); g_stringPool[0] = v; } return StringPool_Intern(g_stringPool[0], s); } };
 extern "C" void FUN_004393e0(beNDMWShopCtrlSales *arg0, int arg1, unsigned char arg2);
 extern "C" unsigned char GPR_00554a68;
 extern "C" unsigned char GPR_00554a6c;
@@ -619,7 +619,7 @@ struct SalesChk {
         int a, b;
         if (arg1 == 0) return false;
         if (arg1->_kindNo == 3) return true;
-        rec = ((int)FUN_00236f80(self->_insight, g_beNDMWStatus_metaObject[0]));
+        rec = ((int)igInsightCore_FindManager(self->_insight, g_beNDMWStatus_metaObject[0]));
         if (arg1->_kindNo == 0) {
             int sh = ((Rec_439d60 *)((void *)igProperty_GetRecord(obj, &DAT_0051bac0[0])))->f12;
             s3 = (1 << sh) & beNDMWItemBase_GetRecordInt(arg1, rec, &DAT_0051bdc8[0]);
@@ -1705,7 +1705,7 @@ void Gap__Bec__beNDMWShopCtrl40__vfunc_21(beNDMWShopCtrl40 *arg0) {
                             StringRef spB0(0);
                             if (it->f8 == 0) {
                                 if (g_stringPool[0] == 0) {
-                                    void *o = ((void *)FUN_002eb010(0x10));
+                                    void *o = ((void *)StringPool_Allocate(0x10));
                                     if (o != 0) o = ((void *)StringPool_Construct(o));
                                     g_stringPool[0] = (int)o;
                                 }
@@ -1714,7 +1714,7 @@ void Gap__Bec__beNDMWShopCtrl40__vfunc_21(beNDMWShopCtrl40 *arg0) {
                                   spB0.p = ns; }
                             } else if (it->f8 == 1) {
                                 if (g_stringPool[0] == 0) {
-                                    void *o = ((void *)FUN_002eb010(0x10));
+                                    void *o = ((void *)StringPool_Allocate(0x10));
                                     if (o != 0) o = ((void *)StringPool_Construct(o));
                                     g_stringPool[0] = (int)o;
                                 }
@@ -1723,7 +1723,7 @@ void Gap__Bec__beNDMWShopCtrl40__vfunc_21(beNDMWShopCtrl40 *arg0) {
                                   spB0.p = ns; }
                             } else if (it->f8 == 2) {
                                 if (g_stringPool[0] == 0) {
-                                    void *o = ((void *)FUN_002eb010(0x10));
+                                    void *o = ((void *)StringPool_Allocate(0x10));
                                     if (o != 0) o = ((void *)StringPool_Construct(o));
                                     g_stringPool[0] = (int)o;
                                 }
@@ -1735,7 +1735,7 @@ void Gap__Bec__beNDMWShopCtrl40__vfunc_21(beNDMWShopCtrl40 *arg0) {
                             db = ((void *)beMessenger_GetObject(arg0->_messenger, 0));
                             base = tier * 100;
                             cnt = beDataBase_GetRecordInt(db, base, &DAT_0051b5f8[0]);
-                            lim = (int)(((P1 *)FUN_00236f80(arg0->_insight, g_beNDMWStatus_metaObject[0]))->f16->f48->v22() % 10000U);
+                            lim = (int)(((P1 *)igInsightCore_FindManager(arg0->_insight, g_beNDMWStatus_metaObject[0]))->f16->f48->v22() % 10000U);
                             sum = 0;
                             j = 1;
                             if (cnt > 0) {
@@ -2468,7 +2468,7 @@ void Gap__Bec__beNDMWShopJunk__vfunc_21(beNDMWShopJunk *arg0) {
                             if (*p != -1) {
                                 do {
                                     if (arg0->_totalGift < *p && !(((int *)l->_data)[1] < *p)) {
-                                        beLua__RunNamedChunk(FUN_00236f80(arg0->_insight, g_beLua_metaObject[0]), DAT_0051b828, DAT_0051b838);
+                                        beLua__RunNamedChunk(igInsightCore_FindManager(arg0->_insight, g_beLua_metaObject[0]), DAT_0051b828, DAT_0051b838);
                                         arg0->_st1 = 3;
                                         arg0->_st3 = 0;
                                         arg0->_st2 = 0;
@@ -2678,7 +2678,7 @@ void Gap__Bec__beNDMWShopCtrlA0__vfunc_21(beNDMWShopCtrlA0 *arg0) {
                         arg0->_st3 = 0;
                         arg0->_st2 = 0;
                         arg0->_st1 = 0;
-                        ((beSystem *)FUN_00236f80(arg0->_insight, g_beSystem_metaObject[0]))->_isSResetEnable = 0;
+                        ((beSystem *)igInsightCore_FindManager(arg0->_insight, g_beSystem_metaObject[0]))->_isSResetEnable = 0;
                         return;
                     }
                 }
@@ -3204,7 +3204,7 @@ void FUN_0042e9e0(beNDMWShopCtrlA1 *arg0) {
         do {
             temp_s3 = (int **)(l2->_data + var_s1_2);
             if (g_stringPool[0] == 0) {
-                var_v0 = FUN_002eb010(0x10);
+                var_v0 = StringPool_Allocate(0x10);
                 if (var_v0 != 0) {
                     var_v0 = StringPool_Construct(var_v0);
                 }
@@ -3356,7 +3356,7 @@ void Gap__Bec__beNDMWShopCtrlA2__vfunc_21(beNDMWShopCtrlA2 *arg0) {
                 beMessenger_SendNamed(arg0->_messenger, DAT_0051b5d8, DAT_0051b918, 0, DAT_0051b5e8);
                 {
                 int db = beMessenger_GetObject(arg0->_messenger, 0);
-                ctx = (beNDMWStatus *)FUN_00236f80(arg0->_insight, g_beNDMWStatus_metaObject[0]);
+                ctx = (beNDMWStatus *)igInsightCore_FindManager(arg0->_insight, g_beNDMWStatus_metaObject[0]);
                 maxv = 0;
                 names1 = DAT_004cfa00;
                 names2 = DAT_004cfa10;
@@ -4443,7 +4443,7 @@ void Gap__Bec__beNDMWShopCtrlDigilabo__vfunc_21(beNDMWShopCtrlDigilabo *self) {
                     case 0:
                         self->_st2 = self->_st2 + 1;
                         self->_st3 = 0;
-                        ((beSystem *)FUN_00236f80(self->_insight, g_beSystem_metaObject[0]))->_isSResetEnable = 0;
+                        ((beSystem *)igInsightCore_FindManager(self->_insight, g_beSystem_metaObject[0]))->_isSResetEnable = 0;
                         break;
                     default:
                         self->_st1 = 5;
@@ -4475,7 +4475,7 @@ void Gap__Bec__beNDMWShopCtrlDigilabo__vfunc_21(beNDMWShopCtrlDigilabo *self) {
         self->_st2 = 0;
         self->_st1 = 0;
         if (self->_isDemoRun != 0) {
-            beLua__RunNamedChunk(FUN_00236f80(self->_insight, g_beLua_metaObject[0]), &DAT_0051bbd0[0], &DAT_0051bbe8[0]);
+            beLua__RunNamedChunk(igInsightCore_FindManager(self->_insight, g_beLua_metaObject[0]), &DAT_0051bbd0[0], &DAT_0051bbe8[0]);
             return;
         }
         break;
@@ -4536,7 +4536,7 @@ void FUN_004329d0(beNDMWShopCtrlDigilabo *self) {
             fold = igProperty_GetRecordFolder(obj, &DAT_0051bc48[0])->f12;
             alloc = igObject_GetAllocator(self);
             alloc = GPR_00554c14 ? alloc : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
-            igSmartPointer<igIntList> lst((igIntList *)((int)FUN_002caa70(alloc)));
+            igSmartPointer<igIntList> lst((igIntList *)((int)igIntList_Create(alloc)));
             j = 0;
             if (0 < fold->_count) {
                 idx = 0;
@@ -4626,7 +4626,7 @@ int FUN_00432d30(beNDMWShopCtrlDigilabo *arg0) {
                     al2 = ((int)Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]));
                 }
                 {
-                igSmartPointer<igIntList> sp((igIntList *)FUN_002caa70(al2));
+                igSmartPointer<igIntList> sp((igIntList *)igIntList_Create(al2));
                 v0 = 0;
                 if (0 < list->_count) {
                     o2 = 0;
@@ -5468,7 +5468,7 @@ void Gap__Bec__beNDMWShopCtrlDeviceSell__vfunc_21(beNDMWShopCtrlDeviceSell *self
                         fold = (igIntList *)igProperty_GetRecordFolder(obj, DAT_0051b528)->f12;
                         idx = self->_cursor + self->_nowPage * 12;
                         if (idx < fold->_count) {
-                            ins = (int)FUN_00236f80(self->_insight, g_beNDMWStatus_metaObject[0]);
+                            ins = (int)igInsightCore_FindManager(self->_insight, g_beNDMWStatus_metaObject[0]);
                             item = ((int *)fold->_data)[idx];
                             price = beNDMWItemRevisionPocketBase_GetPrice(item, ins, DAT_0051bd70);
                             money = igProperty_GetRecord(obj, DAT_0051b560)->f12;
@@ -5544,7 +5544,7 @@ void FUN_00436060(beNDMWShopCtrlDeviceSell *self, int full, unsigned char sel)
     beMessenger_AppendInt(self->_messenger, self->_playerNo);
     beMessenger_DispatchSelected(self->_messenger, &DAT_0051b3e8[0]);
     igDataList *folder = ((RecordFolder *)((char *)igProperty_GetRecordFolder(beMessenger_GetObject(self->_messenger, 0), &DAT_0051b528[0])))->list;
-    igSmartPointer<igStringObj> str((igStringObj *)((int *)FUN_00236f80(self->_insight, g_beSystem_metaObject[0]))[18]);
+    igSmartPointer<igStringObj> str((igStringObj *)((int *)igInsightCore_FindManager(self->_insight, g_beSystem_metaObject[0]))[18]);
     if (str.p != 0) str.p->_refCount = str.p->_refCount + 1;
     char numbuf[2];
     char nb2[2];
@@ -5558,7 +5558,7 @@ void FUN_00436060(beNDMWShopCtrlDeviceSell *self, int full, unsigned char sel)
             int idx = i + self->_nowPage * 12;
             const char *s;
             if (idx < folder->_count) {
-                void *c = FUN_00236f80(self->_insight, g_beNDMWStatus_metaObject[0]);
+                void *c = igInsightCore_FindManager(self->_insight, g_beNDMWStatus_metaObject[0]);
                 beNDMWItemBase *o = *(beNDMWItemBase **)(folder->_data + idx * 4);
                 FUN_0030b3c0(str.p, beNDMWItemBase_GetRecordString(o, c, NAME_2));
                 if (o->_isEquip != 0) { igStringObj *t = str.p; FUN_0030b460(t, &DAT_0051bd78[0], 0, strlen(&DAT_0051bd78[0])); }
@@ -5633,7 +5633,7 @@ void FUN_00436060(beNDMWShopCtrlDeviceSell *self, int full, unsigned char sel)
         const char *s;
         if (idx < folder->_count) {
             char *txt;
-            void *c2 = FUN_00236f80(self->_insight, g_beNDMWStatus_metaObject[0]);
+            void *c2 = igInsightCore_FindManager(self->_insight, g_beNDMWStatus_metaObject[0]);
             beNDMWItemBase *o = *(beNDMWItemBase **)(folder->_data + idx * 4);
             int kind;
             txt = beNDMWItemBase_GetRecordString(o, c2, TXT);
@@ -5694,7 +5694,7 @@ int FUN_004367c0(beNDMWShopCtrlDeviceSell *self) {
     do {
         idx = i + self->_nowPage * 12;
         if (idx < n) {
-            c = ((int)FUN_00236f80(self->_insight, g_beNDMWStatus_metaObject[0]));
+            c = ((int)igInsightCore_FindManager(self->_insight, g_beNDMWStatus_metaObject[0]));
             o = fold->items[idx];
             mark = true;
             if (o->flag != 0) mark = false;
@@ -6030,7 +6030,7 @@ void FUN_00437ae0(beNDMWShopCtrlDiskSell *arg0, int arg1, int arg2) {
     beMessenger_AppendInt(arg0->_messenger, arg0->_playerNo);
     beMessenger_DispatchSelected(arg0->_messenger, DAT_0051b3e8);
     temp_s6 = *(igObjectList **)((char *)((void *)igProperty_GetRecordFolder(beMessenger_GetObject(arg0->_messenger, 0), DAT_0051b6c0)) + 12);
-    temp_s7 = ((int)FUN_00236f80(arg0->_insight, g_beNDMWStatus_metaObject[0]));
+    temp_s7 = ((int)igInsightCore_FindManager(arg0->_insight, g_beNDMWStatus_metaObject[0]));
     if (arg1 != 0) {
         i = 0;
         if (i < temp_s6->_count) {
@@ -6149,7 +6149,7 @@ void FUN_004393e0(beNDMWShopCtrlSales *arg0, int arg1, unsigned char arg2) {
     int i;
     beNDMWItemRevisionPocketBase *it;
     char *name;
-    rec = ((int)FUN_00236f80(arg0->_insight, g_beNDMWStatus_metaObject[0]));
+    rec = ((int)igInsightCore_FindManager(arg0->_insight, g_beNDMWStatus_metaObject[0]));
     if (arg1 != 0) {
         i = 0;
         do {
@@ -6223,7 +6223,7 @@ void FUN_004393e0(beNDMWShopCtrlSales *arg0, int arg1, unsigned char arg2) {
                 char dig[2];
                 dig[1] = 0;
                 dig[0] = it->_pocket + 48;
-                igSmartPointer<igStringObj> rc((igStringObj *)(((beSystem *)((int)FUN_00236f80(arg0->_insight, g_beSystem_metaObject[0])))->_globalStrObj));
+                igSmartPointer<igStringObj> rc((igStringObj *)(((beSystem *)((int)igInsightCore_FindManager(arg0->_insight, g_beSystem_metaObject[0])))->_globalStrObj));
                 if (rc.p != 0) rc.p->_refCount = rc.p->_refCount + 1;
                 FUN_0030b3c0(rc.p, name);
                 igStringObj *t = rc.p;
@@ -6735,7 +6735,7 @@ void Gap__Bec__beNDMWShopCtrlXdataChip__vfunc_21(beNDMWShopCtrlXdataChip *arg0) 
             have = ((ChipRecord *)((int *)igProperty_GetRecord(beMessenger_GetObject(arg0->_messenger, 0), &DAT_0051b440[0])))->f12;
             pages = arg0->_nowPage;
             idx = arg0->_cursor + pages * 0xC;
-            ret = beNDMWItemBase_GetRecordInt(((int *)((igObjectList *)arg0->_itemBaseList)->_data)[idx], ((int)FUN_00236f80(arg0->_insight, g_beNDMWStatus_metaObject[0], pages)), NEXTX);
+            ret = beNDMWItemBase_GetRecordInt(((int *)((igObjectList *)arg0->_itemBaseList)->_data)[idx], ((int)igInsightCore_FindManager(arg0->_insight, g_beNDMWStatus_metaObject[0], pages)), NEXTX);
             if (ret == -1) {
                 arg0->_st1 = 0xB;
                 arg0->_st3 = 0;
@@ -6767,7 +6767,7 @@ void Gap__Bec__beNDMWShopCtrlXdataChip__vfunc_21(beNDMWShopCtrlXdataChip *arg0) 
                 ObjectList_AppendRetained((unsigned)arg0->_subWindow, infoWin.p);
                 int pages0 = arg0->_nowPage;
                 int idx0 = arg0->_cursor + pages0 * 0xC;
-                status = ((int)FUN_00236f80(arg0->_insight, g_beNDMWStatus_metaObject[0], pages0));
+                status = ((int)igInsightCore_FindManager(arg0->_insight, g_beNDMWStatus_metaObject[0], pages0));
                 chip = (beNDMWItemBase *)((int *)((igObjectList *)arg0->_itemBaseList)->_data)[idx0];
                 recNo = chip->_recNo;
                 if (chip->_isEquip != 0) {
@@ -6804,9 +6804,9 @@ void Gap__Bec__beNDMWShopCtrlXdataChip__vfunc_21(beNDMWShopCtrlXdataChip *arg0) 
                 INTERN_APPEND_43aae0((int)statNames.p, &DAT_0051be88[0])
                 INTERN_APPEND_43aae0((int)statNames.p, &DAT_0051be90[0])
                 INTERN_APPEND_43aae0((int)statNames.p, &DAT_0051be98[0])
-                s1i = ((int)FUN_00236f80(arg0->_insight, g_beNDMWStatus_metaObject[0]));
+                s1i = ((int)igInsightCore_FindManager(arg0->_insight, g_beNDMWStatus_metaObject[0]));
                 ALLOC_43aae0(al)
-                igSmartPointer<igIntList> costs = igSmartPointer<igIntList>((igIntList *)FUN_002caa70(al));
+                igSmartPointer<igIntList> costs = igSmartPointer<igIntList>((igIntList *)igIntList_Create(al));
                 slist = statNames.p;
                 li = 0;
                 if (0 < slist->_count) {
@@ -6859,7 +6859,7 @@ void Gap__Bec__beNDMWShopCtrlXdataChip__vfunc_21(beNDMWShopCtrlXdataChip *arg0) 
                             int cur2;
                             int pages2 = arg0->_nowPage;
                             int idx2 = arg0->_cursor + pages2 * 0xC;
-                            st2 = ((int)FUN_00236f80(arg0->_insight, g_beNDMWStatus_metaObject[0], pages2));
+                            st2 = ((int)igInsightCore_FindManager(arg0->_insight, g_beNDMWStatus_metaObject[0], pages2));
                             chip2 = (beNDMWItemBase *)((int *)((igObjectList *)arg0->_itemBaseList)->_data)[idx2];
                             MSG3(&DAT_0051b398[0], &DAT_0051b3e8[0])
                             sel2 = beMessenger_GetObject(arg0->_messenger, 0);
@@ -6896,7 +6896,7 @@ void Gap__Bec__beNDMWShopCtrlXdataChip__vfunc_21(beNDMWShopCtrlXdataChip *arg0) 
                 ObjectList_AppendRetained((unsigned)arg0->_subWindow, refusalWin.p);
                 beNDMWShopSelect00 *w = refusalWin.p;
                 if (g_stringPool[0] == 0) {
-                    int pool = FUN_002eb010(0x10);
+                    int pool = StringPool_Allocate(0x10);
                     if (pool != 0) pool = StringPool_Construct(pool);
                     g_stringPool[0] = pool;
                 }
@@ -7004,7 +7004,7 @@ void beNDMWShopCtrlXdataChip_RefreshText(beNDMWShopCtrlXdataChip *self, long lon
     char *description;
 
     /* Status is captured even when neither refresh flag is set. */
-    status = ((int)FUN_00236f80(self->_insight, g_beNDMWStatus_metaObject[0]));
+    status = ((int)igInsightCore_FindManager(self->_insight, g_beNDMWStatus_metaObject[0]));
     if (refreshRows != 0) {
         font = (char **)(g_fontNames);
         for (row = 0; row < CHIPS_PER_PAGE; row++, font++) {

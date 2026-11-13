@@ -15,8 +15,8 @@ int FUN_001ce400(IniStringObject **out, char *path) {
         retain_1ce400(*out);
         return;
     }
-    void *allocator = GPR_00554c14 != 0 ? ((void *)Memory_GetAllocatorBySelector(DAT_00587028[0])) : ((void *)Memory_GetAllocatorBySelector(DAT_00587060[0]));
-    igSmartPointer<IniFileObject> file(((IniFileObject *)FUN_002c4ca0(allocator)));
+    void *allocator = GPR_00554c14 != 0 ? ((void *)Memory_GetAllocatorBySelector(DAT_00587028[0])) : ((void *)Memory_GetAllocatorBySelector(g_temporaryAllocatorSelector[0]));
+    igSmartPointer<IniFileObject> file(((IniFileObject *)igFile_Create(allocator)));
     StringObjectRef result(0);
     int opened;
     {

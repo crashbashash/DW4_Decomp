@@ -4,8 +4,8 @@
 class StringRef;
 
 extern "C" {
-void FUN_00236be0(int, char *);
-void FUN_00236c40(int, char *);
+void igInsightCore_AddToScheduler(int, char *);
+void igInsightCore_RemoveFromScheduler(int, char *);
 void beMessenger_InitializeMemory(beMessenger *);
 void beMessenger_ResetMemory(beMessenger *);
 void beMessengerArgData_Clear(beMessengerArgData *);
@@ -27,7 +27,7 @@ void List_Resize(void *, int, int);
 void List_Reserve(void *, int, int);
 void List_RemoveWordAt(void *, int);
 void List_InsertWords(void *, int, int, void *);
-void *FUN_002eb010(int);
+void *StringPool_Allocate(int);
 void *StringPool_Construct(void *);
 const char *StringPool_Intern(void *, const char *);
 void StringChunk_ReleaseHeader(int, void *);
@@ -133,7 +133,7 @@ typedef igObject Obj;
 #define OBJ_RELEASE(o) if (o) { --(o)->_refCount; if (((o)->_refCount & 0x7fffff) == 0) igObject_Destroy(o); }
 /* Interned strings carry {owner, count} in the 8 bytes before the text. */
 #define STR_RELEASE(s) if (s) { int *h_ = (int *)((char *)(s) - 8); if (--h_[1] == 0) StringChunk_ReleaseHeader(h_[0], h_); }
-#define POOL() if (!g_stringPool[0]) { void *p_ = FUN_002eb010(16); if (p_) p_ = StringPool_Construct(p_); g_stringPool[0] = p_; }
+#define POOL() if (!g_stringPool[0]) { void *p_ = StringPool_Allocate(16); if (p_) p_ = StringPool_Construct(p_); g_stringPool[0] = p_; }
 
 typedef beMessengerWork Work;
 /* Stack reference to a work record: adopts or retains on construction, releases when it leaves scope. */
@@ -278,7 +278,7 @@ void beMessengerArgData_Clear(beMessengerArgData *arg0) {
 
     arg0->_isRunCheck = 0;
     if (g_stringPool[0] == 0) {
-        v = FUN_002eb010(0x10);
+        v = StringPool_Allocate(0x10);
         if (v != 0) {
             v = StringPool_Construct(v);
         }
@@ -322,7 +322,7 @@ void beMessengerArgData_Clear(beMessengerArgData *arg0) {
         int **slot = &((int **)sl->_data)[i1];
         int *rr;
         if (g_stringPool[0] == 0) {
-            v = FUN_002eb010(0x10);
+            v = StringPool_Allocate(0x10);
             if (v != 0) {
                 v = StringPool_Construct(v);
             }
@@ -378,7 +378,7 @@ void beMessengerDelay_Clear(beMessengerDelay *arg0) {
     arg0->_isUse = 0;
     arg0->_sendTime = 0;
     if (g_stringPool[0] == 0) {
-        v = FUN_002eb010(0x10);
+        v = StringPool_Allocate(0x10);
         if (v != 0) {
             v = StringPool_Construct(v);
         }
@@ -396,7 +396,7 @@ void beMessengerDelay_Clear(beMessengerDelay *arg0) {
     }
     arg0->_groupName = (int)s1;
     if (g_stringPool[0] == 0) {
-        v = FUN_002eb010(0x10);
+        v = StringPool_Allocate(0x10);
         if (v != 0) {
             v = StringPool_Construct(v);
         }
@@ -415,7 +415,7 @@ void beMessengerDelay_Clear(beMessengerDelay *arg0) {
     arg0->_infoName = (int)s1;
     arg0->_ramNo = 0;
     if (g_stringPool[0] == 0) {
-        v = FUN_002eb010(0x10);
+        v = StringPool_Allocate(0x10);
         if (v != 0) {
             v = StringPool_Construct(v);
         }
@@ -437,12 +437,12 @@ void beMessengerDelay_Clear(beMessengerDelay *arg0) {
 
 void Gap__Bec__beMessenger__vfunc_21(beMessenger *self, int unusedArg)
 {
-    FUN_00236be0(self->_insight, (char *)self); /* matching construct: char * parameter on FUN_00236*, receiver passed as a byte pointer */
+    igInsightCore_AddToScheduler(self->_insight, (char *)self); /* matching construct: char * parameter on FUN_00236*, receiver passed as a byte pointer */
 }
 
 void Gap__Bec__beMessenger__vfunc_22(beMessenger *self, int unusedArg)
 {
-    FUN_00236c40(self->_insight, (char *)self); /* matching construct: char * parameter on FUN_00236*, receiver passed as a byte pointer */
+    igInsightCore_RemoveFromScheduler(self->_insight, (char *)self); /* matching construct: char * parameter on FUN_00236*, receiver passed as a byte pointer */
 }
 
 void Gap__Bec__beMessenger__vfunc_23(void)
@@ -495,7 +495,7 @@ struct Str { static inline const char *intern(const char *text) {
         token = 0;
     } else {
         if (g_stringPool[0] == 0) {
-            void *pool = FUN_002eb010(0x10);
+            void *pool = StringPool_Allocate(0x10);
             if (pool != 0) pool = StringPool_Construct(pool);
             g_stringPool[0] = pool;
         }
@@ -766,7 +766,7 @@ void beMessenger_DispatchSelected(beMessenger *self, int name)
 
     work = (beMessengerWork *)((int *)((beMessengerWorkList *)self->_workStack)->_data)[0];
     if (g_stringPool[0] == 0) {
-        alloc = FUN_002eb010(16);
+        alloc = StringPool_Allocate(16);
         if (alloc) alloc = StringPool_Construct(alloc);
         g_stringPool[0] = alloc;
     }
@@ -846,7 +846,7 @@ void beMessenger_SendGroup(void *self,const char *category,const char *key){beMe
 #define SET_STRING(field, text) { \
     beMessengerDelay *r = (beMessengerDelay *)row.p; \
     if (g_stringPool[0] == 0) { \
-        void *pool = FUN_002eb010(0x10); \
+        void *pool = StringPool_Allocate(0x10); \
         if (pool != 0) pool = StringPool_Construct(pool); \
         g_stringPool[0] = pool; \
     } \
@@ -962,7 +962,7 @@ void beMessenger_EnqueueSelected(beMessenger *self, const char *text, long long 
     {
         beMessengerDelay *r = (beMessengerDelay *)row.p;
         if (g_stringPool[0] == 0) {
-            void *pool = FUN_002eb010(0x10);
+            void *pool = StringPool_Allocate(0x10);
             if (pool != 0) pool = StringPool_Construct(pool);
             g_stringPool[0] = pool;
         }
@@ -1348,7 +1348,7 @@ void beMessenger_AppendString(beMessenger *self, const char *text)
         token = 0;
     } else {
         if (g_stringPool[0] == 0) {
-            pool = FUN_002eb010(16);
+            pool = StringPool_Allocate(16);
             if (pool)
                 pool = StringPool_Construct(pool);
             g_stringPool[0] = pool;

@@ -1,4 +1,4 @@
-void FUN_00342310(int arg0) {
+void beTextureCtrl_CreateInstance(int arg0) {
     FUN_003424e0();
     igMetaObject_CreateInstance(*(int *)0x587CB8, arg0);
 }

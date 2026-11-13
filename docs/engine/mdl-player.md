@@ -90,7 +90,7 @@ it closes the panel (`NDMWPANEL REMOVE`).
 
 - The slot names are best guesses from the message each slot answers; slot 39's caller is not
   traced.
-- `FUN_00236f80`, `FUN_002eb010`, `FUN_002caa70` (`igIntList` creation), `FUN_00191f30`,
+- `igInsightCore_FindManager`, `StringPool_Allocate`, `igIntList_Create` (`igIntList` creation), `FUN_00191f30`,
   `FUN_00192f50` (matrix product and vector transform), `FUN_00396740` (applies the message's start
   position) and the zero vector `DAT_004e1098` keep their address names: each is used across many
   files.

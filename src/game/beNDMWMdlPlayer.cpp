@@ -7,9 +7,9 @@
  * work on GENERATE and close the status panel when control, freeze, erase or remove arrive. */
 
 extern "C" int Gap__Core__igObject__vfunc_23(...);
-extern "C" int FUN_00236f80(int, int);
-extern "C" void *FUN_002eb010(...);
-extern "C" igIntList *FUN_002caa70(int);
+extern "C" int igInsightCore_FindManager(int, int);
+extern "C" void *StringPool_Allocate(...);
+extern "C" igIntList *igIntList_Create(int);
 extern "C" int FUN_00191f30(void *, void *, int);
 extern "C" int FUN_00192f50(void *, void *, void *);
 extern "C" void FUN_00396740(...);
@@ -196,7 +196,7 @@ extern "C" int beNDMWMdlPlayer__GetMeta(void);
     const char *tok_; \
     int *old_; \
     if (((void * *)g_stringPool)[0] == 0) { \
-        void *pool_ = FUN_002eb010(0x10); \
+        void *pool_ = StringPool_Allocate(0x10); \
         if (pool_ != 0) pool_ = StringPool_Construct(pool_); \
         ((void * *)g_stringPool)[0] = pool_; \
     } \
@@ -299,9 +299,9 @@ struct MdlPlayerSlots { virtual void d0(); virtual void d1(); virtual void d2();
 
 void beNDMWMdlPlayer__ResolveManagers(beNDMWMdlPlayer *self) {
     Gap__Core__igObject__vfunc_23();
-    self->_gameRam = FUN_00236f80(self->_insight, g_beNDMWGameRam_metaObject[0]);
-    self->_padManager = FUN_00236f80(self->_insight, g_bePadManager_metaObject[0]);
-    self->_viewerSIManager = FUN_00236f80(self->_insight, g_igViewerSceneInfoManager_metaObject[0]);
+    self->_gameRam = igInsightCore_FindManager(self->_insight, g_beNDMWGameRam_metaObject[0]);
+    self->_padManager = igInsightCore_FindManager(self->_insight, g_bePadManager_metaObject[0]);
+    self->_viewerSIManager = igInsightCore_FindManager(self->_insight, g_igViewerSceneInfoManager_metaObject[0]);
 }
 
 int beNDMWMdlPlayer__IsKind(int self, int kind) {
@@ -515,7 +515,7 @@ void beNDMWMdlPlayer__UpdateControl(beNDMWMdlPlayer *self, beBaseInfoRam *ram) {
 /* Finish the pending wait check: clear the work's wait-check name to the pool's empty token. */
 #define CLEAR_WAIT_CHECK(work, token, old) { \
     if (g_stringPool[0] == 0) { \
-        int pool = ((int)FUN_002eb010(16)); \
+        int pool = ((int)StringPool_Allocate(16)); \
         if (pool != 0) pool = ((int)StringPool_Construct(pool)); \
         g_stringPool[0] = pool; \
     } \
@@ -656,7 +656,7 @@ void beNDMWMdlPlayer__OnGenerate(beNDMWMdlPlayer *self, beBaseInfoRam *ram) {
             } else {
                 alloc = Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
             }
-            IntListRef newTimers(FUN_002caa70(alloc));
+            IntListRef newTimers(igIntList_Create(alloc));
             {
                 igIntList *t = newTimers.p;
                 if (t->_count < 9) {

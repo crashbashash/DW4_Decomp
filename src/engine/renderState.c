@@ -4,7 +4,7 @@ extern int FUN_00200980();
 extern int FUN_00201a90();
 extern int FUN_00204ea0();
 extern int p2DirtyFlags[4];
-extern int DAT_00568e50[4];
+extern int p2DisplayListMode[4];
 extern int DAT_0056b3b0[4];
 extern int DAT_0056b3b4[4];
 extern int DAT_0056b3b8[4];
@@ -28,7 +28,7 @@ extern int DAT_0056ba20[4];
 struct P { long long m0; long long m8; int p16; struct P *next; int sh; int count; int tab[1]; };
 struct E { int w0; int w4; };
 extern long long p2VertexArrayMask[4];
-extern int DAT_00562da0[16];
+extern int p2VuPrograms[16];
 extern int DAT_0056b490[4];
 int p2GetVuProgramAddress();
 int p2FindVuProgramVariants(long long, int *, int);
@@ -133,7 +133,7 @@ extern int * DAT_0056b594[4];
 extern int DAT_0056b600[4];
 extern int DAT_0056b604[4];
 extern unsigned int p2ProgramFlags[4];
-extern int DAT_0056b058[4];
+extern int p2ExtraPassCount[4];
 extern int DAT_0056b4f8[4];
 extern int DAT_0056b530[4];
 extern int DAT_0056b568[4];
@@ -149,7 +149,7 @@ void FUN_001ff3b0(int arg0) {
     if (s != 0) {
         DAT_0056b5a8[0] += 1;
     }
-    if (DAT_00568e50[0] == 0) {
+    if (p2DisplayListMode[0] == 0) {
         if (s & 4) {
             DAT_0056b5c0[0] += 1;
             FUN_001f8b50();
@@ -169,7 +169,7 @@ void FUN_001ff3b0(int arg0) {
                     s = p2DirtyFlags[0] & arg0;
                 }
                 if (s & 2) {
-                    if (DAT_00568e50[0] == 0) {
+                    if (p2DisplayListMode[0] == 0) {
                         f = DAT_0056b480[0];
                         a = f & 0x10;
                         n = 0;
@@ -232,11 +232,11 @@ typedef struct GifTag {
 extern GsPacketBuffer *DAT_00568f04;
 void p2GrowDisplayList();
 void p2SubmitDmaPacket();
-extern int DAT_00491480;
+extern int p2CurrentPrimitive;
 extern int DAT_00490d38;
 extern int DAT_00569308;
 extern int p2CurrentProgram;
-extern char *DAT_0056ad80;
+extern char *p2CurrentGsRegisters;
 extern unsigned int DAT_004914f0, DAT_004914f4, DAT_004914f8, DAT_004914fc;
 extern VifCode DAT_00491500;
 extern GifTag DAT_00491510, DAT_00491520, DAT_00491530;
@@ -262,7 +262,7 @@ void FUN_001ffcf0(void) {
     int bits;
 
     p = DAT_00568f04->cursor;
-    prim = DAT_00491480;
+    prim = p2CurrentPrimitive;
     if (prim == 0) {
         texPrim = 0;
         prim = 0;
@@ -294,7 +294,7 @@ void FUN_001ffcf0(void) {
         tag = &DAT_00491530;
     }
     if (flag) {
-        bits = *(int *)(DAT_0056ad80 + 160) & 0x7F8;
+        bits = *(int *)(p2CurrentGsRegisters + 160) & 0x7F8;
         texPrim |= bits;
         prim |= bits;
     }
@@ -317,7 +317,7 @@ void FUN_001ffcf0(void) {
     DAT_0056b770 = ((__int128 *)p)[2];
     DAT_00568f04->cursor = p + 12;
     if (DAT_00568f04->cursor >= DAT_00568f04->end) {
-        if (DAT_00568e50[0] != 0) {
+        if (p2DisplayListMode[0] != 0) {
             p2GrowDisplayList();
         } else {
             p2SubmitDmaPacket(1);
@@ -355,7 +355,7 @@ int FUN_00200830(struct P *p, long long *out) {
                     e->w0 = w;
                     e->w4 = (int)p->tab;
                     *out &= ~p->m0 | (1LL << i);
-                    f = *(int *)((char *)DAT_00562da0 + (k << 6) + 40);
+                    f = *(int *)((char *)p2VuPrograms + (k << 6) + 40);
                     lo = f & 0x30;
                     if (lo != 0) {
                         DAT_0056b480[0] = (DAT_0056b480[0] & 0x1cc0) | lo;
@@ -691,7 +691,7 @@ void FUN_00202300(void) {
         var_s2 = 0;
         temp_s1 = (void **)((char *)DAT_0056b460 + (var_s0 * 4));
         while ((var_s3 = p2FindVuProgramByBitCount(var_s0 + 2, var_s3)) != 0) {
-            temp_s4 = (char *)DAT_00562da0 + (var_s3 << 6);
+            temp_s4 = (char *)p2VuPrograms + (var_s3 << 6);
             temp_s5 = FUN_00202fa0(*(long long *)((char *)(temp_s4) + 0));
             var_v0 = (void *)(FUN_00202f60(*temp_s1, *(long long *)((char *)(temp_s4) + 0)));
             if (var_v0 == 0) {
@@ -720,7 +720,7 @@ int FUN_00202e20(int arg0) {
     int var_v0;
 
     var_v0 = 0;
-    if (DAT_0056b058[0] < arg0) {
+    if (p2ExtraPassCount[0] < arg0) {
         return 0;
     }
     temp_a2 = ((unsigned int) p2ProgramFlags[0] >> 6) & 1;
@@ -746,7 +746,7 @@ block_6:
 
 int *FUN_00202f60(int *arg0, long long arg1) {
     for (; arg0 != 0; arg0 = (int *)arg0[5]) {
-        if (arg1 == *(long long *)((char *)DAT_00562da0 + (arg0[4] << 6))) break;
+        if (arg1 == *(long long *)((char *)p2VuPrograms + (arg0[4] << 6))) break;
     }
     return arg0;
 }
@@ -788,7 +788,7 @@ void *FUN_00203000(int index) {
     int prev;
 
     n = 0;
-    mask = *(long long *)((char *)DAT_00562da0 + (index << 6));
+    mask = *(long long *)((char *)p2VuPrograms + (index << 6));
     if (mask & 1) counts[n++] = 1;
     if (mask & 2) counts[n++] = 4;
     if (mask & 4) counts[n++] = 8;
@@ -828,7 +828,7 @@ void *FUN_00203000(int index) {
     p = FUN_00330730(total * 4 + 0x28, 0x14);
     if (p != 0) {
         p->next = 0;
-        p->m0 = *(long long *)((char *)DAT_00562da0 + (index << 6));
+        p->m0 = *(long long *)((char *)p2VuPrograms + (index << 6));
         p->m8 = 0;
         p->p16 = index;
         p->sh = sqrt(prev);

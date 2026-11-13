@@ -94,7 +94,7 @@ struct ThreadList { int _vtable; unsigned int _refCount; int _count; int _capaci
 struct ThreadManager { int _vtable; unsigned int _refCount; ThreadList *_threads; };
 
 extern "C" {
-extern ThreadManager *DAT_005871d0;
+extern ThreadManager *g_threadManager;
 extern igAdxAfsFileList *DAT_00587620[4]; /* the files the AFS partitions hold */
 
 void Gap__igAdxFile__vfunc_01(igAdxFile *self)
@@ -154,7 +154,7 @@ int igAdxFile_WaitForReadEnd(igAdxFile *self)
 {
     while (igAdxFile_GetReadStatus(self) != ADXF_STAT_READEND) {
         if (self->_bUseAsync && self->_bUseAlchemyAsync) {
-            DAT_005871d0->_threads->_data[0]->sleep(self->_lSleepTime);
+            g_threadManager->_threads->_data[0]->sleep(self->_lSleepTime);
         } else {
             FUN_00332cd0();
         }

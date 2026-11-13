@@ -5,7 +5,7 @@ typedef struct {
     char path[252];
 } NameRequest;
 
-int FUN_0010e2a8(void *client, int rpc_number, int mode, void *send, int ssize, void *receive, int rsize, void *end_func, void *end_param);
+int sceSifCallRpc(void *client, int rpc_number, int mode, void *send, int ssize, void *receive, int rsize, void *end_func, void *end_param);
 int _lf_bind(void);
 int FUN_00112738(void);
 char *strncpy(char *dst, const char *src, unsigned int size);
@@ -24,7 +24,7 @@ int _sceSifLoadElfPart(const char *name, const char *path, int *out, int rpc_num
     D_00559440.name[251] = 0;
     strncpy(D_00559440.path, path, 252);
     D_00559440.path[251] = 0;
-    if (FUN_0010e2a8(D_00559640, rpc_number, 0, &D_00559440, 512, &D_00559440, 16, 0, 0) < 0) {
+    if (sceSifCallRpc(D_00559640, rpc_number, 0, &D_00559440, 512, &D_00559440, 16, 0, 0) < 0) {
         return 0xFFFEFFFF;
     }
     if (D_00559440.result == 0) {

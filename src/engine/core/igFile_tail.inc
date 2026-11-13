@@ -12,7 +12,7 @@ int FUN_002c4c40(void) {
     return DAT_005863a8[0];
 }
 
-void * FUN_002c4ca0(int arg0) {
+void * igFile_Create(int arg0) {
     FUN_002c4d80();
     return (void *)(igMetaObject_CreateInstance((CreateMeta *)(*(int *)0x5863B0), (MemoryPool *)arg0));
 }

@@ -107,7 +107,7 @@ extern int DAT_00571750[];
 extern SndfStatus DAT_005717c0;
 extern SndfContext DAT_00572a00;
 
-int FUN_0010e2a8();
+int sceSifCallRpc();
 void memset();
 int FUN_00281a00(int cmd, int *args, int n, int size);
 void FUN_00280e38(void);
@@ -413,7 +413,7 @@ int FUN_00281a00(int cmd, int *args, int n, int size)
         for (i = 0; i < n; i++) {
             DAT_00570c00[i] = *args++;
         }
-        FUN_0010e2a8(DAT_00571750, cmd, 0, DAT_00570c00, n * 4, DAT_00570c00, size, 0, 0);
+        sceSifCallRpc(DAT_00571750, cmd, 0, DAT_00570c00, n * 4, DAT_00570c00, size, 0, 0);
         DAT_004bb100 = 0;
         return DAT_00570c00[0];
     }

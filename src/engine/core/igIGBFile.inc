@@ -233,11 +233,11 @@ void igIGBFile_InitFields(void) {
     FUN_002d3890((void **)(((igMetaField *)igMetaObject_GetFieldAt(meta, base + 0x36))), 1);
     FUN_002d3890((void **)(((igMetaField *)igMetaObject_GetFieldAt(meta, base + 0x37))), 1);
     field = ((igMetaField *)igMetaObject_GetFieldAt(meta, base + 0x39));
-    ((igObjectRefMetaField *)field)->_metaObject = (int)FUN_002c04a0();
+    ((igObjectRefMetaField *)field)->_metaObject = (int)igMemoryPool_GetOrCreateMetaObject();
     field = ((igMetaField *)igMetaObject_GetFieldAt(meta, base + 0x3A));
-    ((igObjectRefMetaField *)field)->_metaObject = (int)FUN_002c04a0();
+    ((igObjectRefMetaField *)field)->_metaObject = (int)igMemoryPool_GetOrCreateMetaObject();
     field = ((igMetaField *)igMetaObject_GetFieldAt(meta, base + 0x3B));
-    ((igObjectRefMetaField *)field)->_metaObject = (int)FUN_002c04a0();
+    ((igObjectRefMetaField *)field)->_metaObject = (int)igMemoryPool_GetOrCreateMetaObject();
     field = ((igMetaField *)igMetaObject_GetFieldAt(meta, base + 0x3C));
     ((igObjectRefMetaField *)field)->_metaObject = igObjectList_GetOrCreateMetaObject();
     field = ((igMetaField *)igMetaObject_GetFieldAt(meta, base + 0x3F));

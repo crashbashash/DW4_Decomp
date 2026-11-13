@@ -74,12 +74,12 @@ extern volatile p2DmaWatch p2DmaWatchFlags;
 extern int p2DmaHandlerIds[P2_DMA_CHANNEL_COUNT];
 extern struct SemaParam p2DmaWaitSemaParam;
 extern struct SemaParam DAT_00490d20;
-extern int DAT_00490b60;
-extern int DAT_00490c70;
+extern int p2FirstOpen;
+extern int p2DmaPacketSizeVif0;
 extern int DAT_00490c74;
-extern int DAT_00490c78;
+extern int p2DmaPacketSizeVif1;
 extern int DAT_00490c7c;
-extern int DAT_00490c80;
+extern int p2DmaPacketSizeGif;
 extern int DAT_00490c84;
 extern int DAT_00569090;
 extern int DAT_00569094;
@@ -130,7 +130,7 @@ void p2InitDmaChannels(void) {
     struct SemaParam wait = p2DmaWaitSemaParam;
     struct SemaParam lock = DAT_00490d20;
 
-    if (DAT_00490b60 != 0) {
+    if (p2FirstOpen != 0) {
         p2DmaWaitSema = CreateSema(&wait);
         DAT_00569090 = 0;
         DAT_00569094 = CreateSema(&lock);
@@ -143,14 +143,14 @@ void p2InitDmaChannels(void) {
     DAT_005690a0[P2_DMA_VIF0] = 0;
     DAT_005690a0[P2_DMA_VIF1] = 0;
     DAT_005690a0[P2_DMA_GIF] = 0;
-    if (DAT_00490c70 == -1) DAT_00490c70 = 256;
-    if (DAT_00490c78 == -1) DAT_00490c78 = 2048;
-    if (DAT_00490c80 == -1) DAT_00490c80 = 256;
+    if (p2DmaPacketSizeVif0 == -1) p2DmaPacketSizeVif0 = 256;
+    if (p2DmaPacketSizeVif1 == -1) p2DmaPacketSizeVif1 = 2048;
+    if (p2DmaPacketSizeGif == -1) p2DmaPacketSizeGif = 256;
     p2InitDmaPredicatePool();
     p2InitDmaCompletionPool();
     p2InitDmaChannel(P2_DMA_VIF1);
     p2InitDmaChannel(P2_DMA_GIF);
-    if (DAT_00490c70 != 0 && p2DmaPacketCount[P2_DMA_VIF0] != 0) {
+    if (p2DmaPacketSizeVif0 != 0 && p2DmaPacketCount[P2_DMA_VIF0] != 0) {
         p2InitDmaChannel(P2_DMA_VIF0);
     } else {
         p2DmaHandlerIds[P2_DMA_VIF0] = -1;
@@ -161,7 +161,7 @@ void p2InitDmaChannels(void) {
 void p2InitDmaPredicatePool(void) {
     p2DmaPredicatePool = 0;
     p2GrowPool(P2_POOL_DMA_PREDICATE, &p2DmaPredicatePool);
-    if (DAT_00490b60 != 0) {
+    if (p2FirstOpen != 0) {
         p2RegisterPredicateName(p2PreviousFinishFuncDonePredicate, DAT_004e4fe0);
     }
 }

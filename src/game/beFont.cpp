@@ -5,7 +5,7 @@
 #define RELH(h) { N *r_ = (h).p; REL(r_) }
 #define FAIL(m) { (m)->f24 = 10000; (m)->f36 = 0; (m)->f32 = 0; (m)->f28 = 0; { ret = 1; goto end; } }
 #define CNT(l) H::cnt(l)
-#define SETSTR(o, fld, srcnm) { const char *nm_ = (srcnm) ? (const char *)(srcnm) : (const char *)emptyString; int nw_; mem = (o); int old_; int *hd_; int rf_; if (g_stringPool[0] == 0) { int pl_ = FUN_002eb010(16); if (pl_) pl_ = StringPool_Construct(pl_); g_stringPool[0] = pl_; } nw_ = StringPool_Intern(g_stringPool[0], nm_); old_ = mem->fld; if (old_) { hd_ = (int *)(old_ - 8); rf_ = *(int *)(old_ - 4) - 1; *(int *)(old_ - 4) = rf_; if (rf_ == 0) StringChunk_ReleaseHeader(*hd_, hd_); } mem->fld = nw_; }
+#define SETSTR(o, fld, srcnm) { const char *nm_ = (srcnm) ? (const char *)(srcnm) : (const char *)emptyString; int nw_; mem = (o); int old_; int *hd_; int rf_; if (g_stringPool[0] == 0) { int pl_ = StringPool_Allocate(16); if (pl_) pl_ = StringPool_Construct(pl_); g_stringPool[0] = pl_; } nw_ = StringPool_Intern(g_stringPool[0], nm_); old_ = mem->fld; if (old_) { hd_ = (int *)(old_ - 8); rf_ = *(int *)(old_ - 4) - 1; *(int *)(old_ - 4) = rf_; if (rf_ == 0) StringChunk_ReleaseHeader(*hd_, hd_); } mem->fld = nw_; }
 #include "dw4/igSmartPointer.h"
 
 extern "C" void Gap__Core__igObject__vfunc_23(void);
@@ -38,7 +38,7 @@ extern "C" void * igObject_GetAllocator(...);
 extern "C" void * Memory_GetAllocatorBySelector(...);
 extern "C" void *FUN_003624f0(void *);
 extern "C" void *FUN_00137810(void *);
-extern "C" int FUN_002eb010(int);
+extern "C" int StringPool_Allocate(int);
 extern "C" int StringPool_Construct(int);
 extern "C" int StringPool_Intern(...);
 extern "C" void StringChunk_ReleaseHeader(...);
@@ -986,7 +986,7 @@ int FUN_003840a0(beFont *p0, int p1, int p2, int p3) {
     int temp_v1_2;
 
     if (g_stringPool[0] == 0) {
-        var_v0 = FUN_002eb010(0x10);
+        var_v0 = StringPool_Allocate(0x10);
         if (var_v0 != 0) {
             var_v0 = StringPool_Construct(var_v0);
         }
@@ -1004,7 +1004,7 @@ int FUN_003840a0(beFont *p0, int p1, int p2, int p3) {
     }
     arg0->_condition00 = arg2;
     if (g_stringPool[0] == 0) {
-        var_v0_2 = FUN_002eb010(0x10);
+        var_v0_2 = StringPool_Allocate(0x10);
         if (var_v0_2 != 0) {
             var_v0_2 = StringPool_Construct(var_v0_2);
         }

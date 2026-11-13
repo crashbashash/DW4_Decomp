@@ -1,4 +1,4 @@
-void FUN_003c1720(int arg0) {
+void beNDMWMdlEnemy_CreateInstance(int arg0) {
     FUN_003c1860();
     igMetaObject_CreateInstance(*(int *)0x58B508, arg0);
 }

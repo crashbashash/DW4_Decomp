@@ -504,7 +504,7 @@ void FUN_00304720(igPluginHelper *helper, int name, int location, int locationTy
     igNamedObject_SetName((N_2fecb0 *)repository.p, name);
     target = repository.p;
     if (g_stringPool[0] == 0) {
-        pool = ((int)FUN_002eb010(0x10));
+        pool = ((int)StringPool_Allocate(0x10));
         if (pool != 0) {
             pool = ((int)StringPool_Construct((S_2eadf0 *)pool));
         }
@@ -531,7 +531,7 @@ static inline void setLocation(const igSmartPointer<igPluginRepository> &ref, in
     int old;
     int *header;
     if (g_stringPool[0] == 0) {
-        int pool = ((int)FUN_002eb010(16));
+        int pool = ((int)StringPool_Allocate(16));
         if (pool != 0) {
             pool = ((int)StringPool_Construct((struct S_2eadf0 *)pool));
         }
@@ -556,7 +556,7 @@ static inline void setLocation(const igSmartPointer<igPluginRepository> &ref, ch
     int old;
     int *header;
     if (g_stringPool[0] == 0) {
-        int pool = ((int)FUN_002eb010(16));
+        int pool = ((int)StringPool_Allocate(16));
         if (pool != 0) {
             pool = ((int)StringPool_Construct((struct S_2eadf0 *)pool));
         }

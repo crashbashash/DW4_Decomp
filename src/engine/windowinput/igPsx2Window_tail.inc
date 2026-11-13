@@ -16,7 +16,7 @@ void Gap__igPsx2Window__vfunc_26(struct A_148b00 *arg0) {
     }
     arg0->f24 = 0;
     if (g_stringPool[0] == 0) {
-        var_v0 = FUN_002eb010(0x10);
+        var_v0 = StringPool_Allocate(0x10);
         if (var_v0 != 0) {
             var_v0 = StringPool_Construct(var_v0);
         }
@@ -63,7 +63,7 @@ void Gap__igPsx2Window__vfunc_25(igPsx2WindowView *self)
 
 static inline void setWindowName(igPsx2Window *self, const char *name) {
     if (g_stringPool[0] == 0) {
-        void *pool = (void *)FUN_002eb010(16);
+        void *pool = (void *)StringPool_Allocate(16);
         if (pool != 0) pool = (void *)StringPool_Construct(pool);
         g_stringPool[0] = (int)pool;
     }
@@ -140,7 +140,7 @@ void Gap__igPsx2Window__vfunc_27(int *arg0, char *arg1) {
     int v;
     if ((arg1 != 0) && (*arg1 != 0)) {
         if (g_stringPool[0] == 0) {
-            v = FUN_002eb010(0x10);
+            v = StringPool_Allocate(0x10);
             if (v != 0) {
                 v = StringPool_Construct(v);
             }

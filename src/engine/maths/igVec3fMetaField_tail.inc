@@ -20,7 +20,7 @@ void Gap__igVec3fMetaField__vfunc_57(char **out, int unused, float *v)
         s = 0;
     } else {
         if (g_stringPool[0] == 0) {
-            pool = FUN_002eb010(16);
+            pool = StringPool_Allocate(16);
             if (pool != 0)
                 pool = StringPool_Construct(pool);
             g_stringPool[0] = pool;

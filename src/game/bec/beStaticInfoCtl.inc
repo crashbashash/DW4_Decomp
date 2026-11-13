@@ -1,4 +1,4 @@
-void FUN_00343760(int arg0) {
+void beStaticInfoCtl_CreateInstance(int arg0) {
     FUN_003438b0();
     igMetaObject_CreateInstance(*(int *)0x587E10, arg0);
 }

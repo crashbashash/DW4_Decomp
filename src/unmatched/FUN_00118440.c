@@ -26,7 +26,7 @@ int scePadSetButtonInfo(int port, int slot, int mode);
 int FUN_00118af8(int port, int slot);
 extern int DAT_0055d480[32];
 extern int DAT_0055d240;
-int FUN_0010e2a8(void *cd, int fno, int mode, void *send, int ssize, void *recv, int rsize, void (*end)(void *), void *arg);
+int sceSifCallRpc(void *cd, int fno, int mode, void *send, int ssize, void *recv, int rsize, void (*end)(void *), void *arg);
 int FUN_00118440(int port, int slot, int v) {
     if (DAT_0055d290[port][slot].open == 0) return 0;
     FUN_00118178(port, slot)->b112[1] = v;

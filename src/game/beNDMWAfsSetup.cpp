@@ -6,8 +6,8 @@ extern "C" void Gap__Bec__beNDMWAfsSetup__vfunc_22(void);
 extern "C" void Gap__Bec__beNDMWAfsSetup__vfunc_23(void);
 extern "C" void Gap__Bec__beNDMWAfsSetup__vfunc_27(void);
 extern "C" int Gap__Bec__beNDMWAfsSetup__vfunc_20(void);
-extern "C" void * FUN_00236f80(...);
-extern "C" void *FUN_002eb010(int);
+extern "C" void * igInsightCore_FindManager(...);
+extern "C" void *StringPool_Allocate(int);
 extern "C" void *StringPool_Construct(void *);
 extern "C" const char *StringPool_Intern(void *, const char *);
 extern "C" void StringChunk_ReleaseHeader(int, int *);
@@ -17,7 +17,7 @@ extern "C" int g_beCri_metaObject[4];
 extern "C" int g_beNDMWAfsSetup_metaObject[4];
 extern "C" void Gap__Bec__beNDMWAfsSetup__vfunc_24(beNDMWAfsSetup *self);
 extern "C" int igObject_IsKindOf(igObject *, int);
-extern "C" void FUN_00236be0(int, beNDMWAfsSetup *);
+extern "C" void igInsightCore_AddToScheduler(int, beNDMWAfsSetup *);
 extern "C" void beCri_SetupPartitions(beCri *, int, int);
 extern "C" void beCri_LoadPartition(beCri *, int, const char *, int);
 extern "C" void ObjectList_AppendRetained(int, igObject *);
@@ -28,7 +28,7 @@ extern "C" int g_beSystem_metaObject[4];
 extern "C" char emptyString[];
 extern "C" char DAT_00515710[];
 extern "C" int Gap__Bec__beNDMWAfsSetup__vfunc_25(beNDMWAfsSetup *self, igObject *info);
-extern "C" int FUN_00236c40(int, beNDMWAfsSetup *);
+extern "C" int igInsightCore_RemoveFromScheduler(int, beNDMWAfsSetup *);
 extern "C" int List_Reserve(igDataList *, int, int);
 extern "C" int igObject_Destroy(igObject *);
 extern "C" void Gap__Bec__beNDMWAfsSetup__vfunc_26(beNDMWAfsSetup *arg0);
@@ -52,15 +52,15 @@ void Gap__Bec__beNDMWAfsSetup__vfunc_23(void)
 /* Finds the insight's beCri component (CRI sound middleware owner) and hands it to beCri_ReleasePartitions,
  * which tears down the global string/object lists. */
 void Gap__Bec__beNDMWAfsSetup__vfunc_24(beNDMWAfsSetup *self) {
-    beCri_ReleasePartitions(((int)FUN_00236f80(self->_insight, g_beCri_metaObject[0])));
+    beCri_ReleasePartitions(((int)igInsightCore_FindManager(self->_insight, g_beCri_metaObject[0])));
 }
 
 int Gap__Bec__beNDMWAfsSetup__vfunc_25(beNDMWAfsSetup *self, igObject *info) {
     if (igObject_IsKindOf(info, g_beNDMWAfsSetupInfo_metaObject[0])) {
-        beCri *cri = (beCri *)FUN_00236f80(self->_insight, g_beCri_metaObject[0]);
+        beCri *cri = (beCri *)igInsightCore_FindManager(self->_insight, g_beCri_metaObject[0]);
         if (cri == 0) return 0;
         ObjectList_AppendRetained(self->_infoList, info);
-        FUN_00236be0(self->_insight, self);
+        igInsightCore_AddToScheduler(self->_insight, self);
         beNDMWAfsSetupInfo *setup = (beNDMWAfsSetupInfo *)info;
         igObjectList *files = (igObjectList *)setup->_dataList;
         beCri_SetupPartitions(cri, files->_count, setup->_insideFiles);
@@ -70,9 +70,9 @@ int Gap__Bec__beNDMWAfsSetup__vfunc_25(beNDMWAfsSetup *self, igObject *info) {
             int count = data->_fileCount;
             beCri_LoadPartition(cri, i, data->_name ? (const char *)data->_name : emptyString, count);
         }
-        beSystem *system = (beSystem *)FUN_00236f80(self->_insight, g_beSystem_metaObject[0]);
+        beSystem *system = (beSystem *)igInsightCore_FindManager(self->_insight, g_beSystem_metaObject[0]);
         if (g_stringPool[0] == 0) {
-            void *pool = FUN_002eb010(16);
+            void *pool = StringPool_Allocate(16);
             if (pool != 0) pool = StringPool_Construct(pool);
             g_stringPool[0] = pool;
         }
@@ -118,7 +118,7 @@ void Gap__Bec__beNDMWAfsSetup__vfunc_26(beNDMWAfsSetup *arg0) {
     if (!(0 < ((igDataList *)arg0->_infoList)->_count)) {
         List_Reserve((igDataList *)arg0->_infoList, 0, 4);
     }
-    FUN_00236c40(arg0->_insight, arg0);
+    igInsightCore_RemoveFromScheduler(arg0->_insight, arg0);
 }
 
 /* Empty virtual slot 27 */

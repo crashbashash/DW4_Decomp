@@ -25,7 +25,7 @@
 extern "C" int beMessenger_SendGroup(...);
 extern "C" int beMessenger_GetObject(...);
 extern "C" void * igProperty_GetRecord(...);
-extern "C" int FUN_00236f80(...);
+extern "C" int igInsightCore_FindManager(...);
 extern "C" void *beBaseInfoDataList_Create(...);
 extern "C" void *FUN_003b2250(...);
 extern "C" void *FUN_003b2560(...);
@@ -215,7 +215,7 @@ void Gap__Bec__beNDMWTitle2__vfunc_32(beNDMWTitle2 *self) {
     igObject *padManager;
     igObject *held;
     if (self->_padManager == 0) {
-        padManager = (igObject *)FUN_00236f80(self->_insight, g_bePadManager_metaObject[0]);
+        padManager = (igObject *)igInsightCore_FindManager(self->_insight, g_bePadManager_metaObject[0]);
         if (padManager != 0) {
             padManager->_refCount = padManager->_refCount + 1;
         }
@@ -304,7 +304,7 @@ void Gap__Bec__beNDMWTitle2__vfunc_31(beNDMWTitle2 *self, beBaseInfoRam *infoRam
             TitleRef<TitleText> textRef(beNDMWLoadIntf2TextOrder_Create(allocator));
             ((beNDMWLoadIntf2TextOrder *)textRef.p)->_messenger = self->_messenger;
             beNDMWLoadIntf2TextOrder *textOrder = (beNDMWLoadIntf2TextOrder *)textRef.p;
-            textOrder->_lua = FUN_00236f80(self->_insight, g_beLua_metaObject[0]);
+            textOrder->_lua = igInsightCore_FindManager(self->_insight, g_beLua_metaObject[0]);
             ObjectList_AppendRetained(infoRam->_dataList, textRef.p);
         }
     }

@@ -1,4 +1,4 @@
-void FUN_003c0960(int arg0) {
+void beNDMWMdlPBullet_CreateInstance(int arg0) {
     FUN_003c0aa0();
     igMetaObject_CreateInstance(*(int *)0x58B488, arg0);
 }

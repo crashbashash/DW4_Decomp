@@ -1,4 +1,4 @@
-igMetaObject *FUN_002c04a0(void) {
+igMetaObject *igMemoryPool_GetOrCreateMetaObject(void) {
     if (g_igMemoryPool_metaObject[0] == 0) {
         g_igMemoryPool_metaObject[0] = (igMetaObject *)igMetaObject_Create(((int)Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0])));
     }

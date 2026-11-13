@@ -374,7 +374,7 @@ void igAliasMemoryPool_Dump(igAliasMemoryPool *self, int a1, int a2, int a3, int
     igAliasMemoryPool_Lock(self);
     g = &DAT_004f92b0[0];
     if (t0 != 0) {
-        igSmartPointer<V> r((V *)FUN_002c4ca0((int)(((void *)igObject_GetAllocator((int)self)))));
+        igSmartPointer<V> r((V *)igFile_Create((int)(((void *)igObject_GetAllocator((int)self)))));
         if (r.p->v23(t0, &DAT_004f92f0[0]) == 0) {
             igAliasMemoryPool_Unlock(self);
             return;

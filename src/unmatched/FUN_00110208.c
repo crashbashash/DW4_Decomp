@@ -34,7 +34,7 @@ int CreateSema(SemaParam *param);
 int DeleteSema(int sema);
 int WaitSema(int sema);
 void sceSifWriteBackDCache(void *p, int size);
-int FUN_0010e2a8(void *cd, int fno, int mode, void *send, int ssize, void *recv, int rsize, void (*end)(void *), void *arg);
+int sceSifCallRpc(void *cd, int fno, int mode, void *send, int ssize, void *recv, int rsize, void (*end)(void *), void *arg);
 int FUN_00110208(int fd, int request, void *arg, unsigned int argSize, void *buffer, unsigned int bufferSize) {
     FileIob *iob = get_iob(fd);
     Ioctl2Request *packet = &DAT_00557a80;
@@ -70,7 +70,7 @@ int FUN_00110208(int fd, int request, void *arg, unsigned int argSize, void *buf
     packet->buffer = buffer;
     packet->sema = sema;
     sceSifWriteBackDCache(&DAT_00557a80, 1056);
-    if (FUN_0010e2a8(DAT_00559180, 26, 0, &DAT_00557a80, 1056, DAT_005586c0, 4, 0, 0) < 0) {
+    if (sceSifCallRpc(DAT_00559180, 26, 0, &DAT_00557a80, 1056, DAT_005586c0, 4, 0, 0) < 0) {
         DeleteSema(sema);
         FUN_0010ef60();
         return -11;

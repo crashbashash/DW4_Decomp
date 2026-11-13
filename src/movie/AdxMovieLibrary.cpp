@@ -153,7 +153,7 @@ extern "C" void *igRenderer_Register(void);
 extern "C" void *igMovieRenderer_Register(void);
 extern "C" void igMovieRenderer_GetMetaObject(void);
 extern "C" void igMovieRenderer_InitFields(void);
-extern "C" void FUN_00336bd0(int arg0);
+extern "C" void igMovieManager_CreateInstance(int arg0);
 extern "C" igMetaObject *FUN_00336c10(void);
 extern "C" void *FUN_00336c60(void);
 extern "C" int FUN_00231030(char *, int);
@@ -1619,7 +1619,7 @@ void igMovieRenderer_InitFields(void) {
     igMetaObject_NameFields(temp_s0, &DAT_004c2b70[0], &DAT_004c2b78[0], &DAT_004c2b80[0], temp_s2);
 }
 
-void FUN_00336bd0(int arg0) {
+void igMovieManager_CreateInstance(int arg0) {
     FUN_00336f10();
     igMetaObject_CreateInstance(*(int *)0x587870, arg0);
 }

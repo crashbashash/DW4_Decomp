@@ -19,7 +19,7 @@ int FUN_001c6520(O_1c6520 *arg0, int arg1) {
         }
         arg0->f32 = 0;
         if (g_stringPool[0] == 0) {
-            v = FUN_002eb010(16);
+            v = StringPool_Allocate(16);
             if (v != 0) {
                 v = StringPool_Construct(v);
             }
@@ -90,7 +90,7 @@ int FUN_001c66c0(Node *self, int force)
     REL_OBJ(self->f32)
     self->f32 = 0;
     if (g_stringPool[0] == 0) {
-        int pool = FUN_002eb010(16);
+        int pool = StringPool_Allocate(16);
         if (pool != 0) pool = StringPool_Construct(pool);
         g_stringPool[0] = pool;
     }

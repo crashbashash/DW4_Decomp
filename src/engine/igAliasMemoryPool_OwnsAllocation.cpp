@@ -7,7 +7,7 @@ void *igObject_GetAllocator(void *);
 void Gap__Core__igObject__vfunc_00(void *);
 int FUN_002f0880(int *);
 void *FUN_002ba650(...);
-void *FUN_002c4ca0(void *);
+void *igFile_Create(void *);
 int *FUN_002f89a0(int);
 int FUN_00304430(const char *, ...);
 int FUN_00304680();

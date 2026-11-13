@@ -33,7 +33,7 @@ void FUN_0010ef60(void);
 int CreateSema(SemaParam *param);
 int DeleteSema(int sema);
 int WaitSema(int sema);
-int FUN_0010e2a8(void *client, int rpc_number, int mode, void *send, int ssize, void *receive, int rsize, void *end_func, void *end_param);
+int sceSifCallRpc(void *client, int rpc_number, int mode, void *send, int ssize, void *receive, int rsize, void *end_func, void *end_param);
 extern int D_00481efc;
 extern char D_00559180[];
 extern BufferRequest D_00557a80;
@@ -72,7 +72,7 @@ int FUN_00111f20(const char *name, void *buffer, unsigned int length)
     req->result = &result;
     req->sema = sema;
     req->result_size = 4;
-    if (FUN_0010e2a8(D_00559180, 25, 0, &D_00557a80, 2060, D_005586c0, 4, 0, 0) < 0) {
+    if (sceSifCallRpc(D_00559180, 25, 0, &D_00557a80, 2060, D_005586c0, 4, 0, 0) < 0) {
         DeleteSema(sema);
         FUN_0010ef60();
         return -11;

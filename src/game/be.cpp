@@ -39,8 +39,8 @@ extern "C" void Gap__Bec__be__vfunc_24(void);
 extern "C" int Gap__Bec__be__vfunc_25(void);
 extern "C" void Gap__Bec__be__vfunc_27(void);
 extern "C" int Gap__Bec__be__vfunc_20(void);
-extern "C" int FUN_00236f80(int, int);
-extern "C" int FUN_002eb010(int);
+extern "C" int igInsightCore_FindManager(int, int);
+extern "C" int StringPool_Allocate(int);
 extern "C" int List_Reserve(...);
 extern "C" int StringChunk_ReleaseHeader(int, int *);
 extern "C" int StringPool_Construct(int);
@@ -697,10 +697,10 @@ void Gap__Bec__be__vfunc_22(void)
 void Gap__Bec__be__vfunc_23(be *arg0) {
     int temp_v0;
 
-    g_beSystem[0] = (beSystem *)FUN_00236f80(arg0->_insight, g_beSystem_metaObject[0]);
-    g_beMessenger[0] = FUN_00236f80(arg0->_insight, g_beMessenger_metaObject[0]);
-    g_matCtrl[0] = (beMatCtrl *)FUN_00236f80(arg0->_insight, g_beMatCtrl_metaObject[0]);
-    temp_v0 = FUN_00236f80(arg0->_insight, g_beDemoManager_metaObject[0]);
+    g_beSystem[0] = (beSystem *)igInsightCore_FindManager(arg0->_insight, g_beSystem_metaObject[0]);
+    g_beMessenger[0] = igInsightCore_FindManager(arg0->_insight, g_beMessenger_metaObject[0]);
+    g_matCtrl[0] = (beMatCtrl *)igInsightCore_FindManager(arg0->_insight, g_beMatCtrl_metaObject[0]);
+    temp_v0 = igInsightCore_FindManager(arg0->_insight, g_beDemoManager_metaObject[0]);
     ((void * *)DAT_0058a1d8)[0] = (void *)(arg0);
     ((int *)DAT_0058a1d0)[0] = temp_v0;
 }
@@ -733,7 +733,7 @@ void Gap__Bec__be__vfunc_26(void) {
         do {
             slot = (int **)((char *)s5->_data + off);
             if (g_stringPool[0] == 0) {
-                v = FUN_002eb010(0x10);
+                v = StringPool_Allocate(0x10);
                 if (v != 0) {
                     v = StringPool_Construct(v);
                 }
@@ -863,7 +863,7 @@ void SYSsetGateStage(int *arg0, int arg1) {
     if (arg0 == 0) {
         rec = (R *)igProperty_GetRecordString(obj, GATESTAGENAME);
         if (g_stringPool[0] == 0) {
-            v = FUN_002eb010(0x10);
+            v = StringPool_Allocate(0x10);
             if (v != 0) {
                 v = StringPool_Construct(v);
             }
@@ -884,7 +884,7 @@ void SYSsetGateStage(int *arg0, int arg1) {
     }
     rec = (R *)igProperty_GetRecordString(obj, GATESTAGENAME);
     if (g_stringPool[0] == 0) {
-        v = FUN_002eb010(0x10);
+        v = StringPool_Allocate(0x10);
         if (v != 0) {
             v = StringPool_Construct(v);
         }
@@ -1057,7 +1057,7 @@ void CFLclear(void) {
         do {
             slot = (int **)((char *)s5->data + off);
             if (g_stringPool[0] == 0) {
-                v = FUN_002eb010(0x10);
+                v = StringPool_Allocate(0x10);
                 if (v != 0) {
                     v = StringPool_Construct(v);
                 }
@@ -1116,7 +1116,7 @@ void CFLsetName(int arg0) {
             v = 0;
         } else {
             if (g_stringPool[0] == 0) {
-                v2 = FUN_002eb010(16);
+                v2 = StringPool_Allocate(16);
                 if (v2 != 0) {
                     v2 = StringPool_Construct(v2);
                 }
@@ -1717,7 +1717,7 @@ void ShutDown(void) {
     s0->_isShutDown = 1;
     s0->_isStageLoop = 0;
     if (g_stringPool[0] == 0) {
-        obj = FUN_002eb010(0x10);
+        obj = StringPool_Allocate(0x10);
         if (obj != 0) {
             obj = StringPool_Construct(obj);
         }

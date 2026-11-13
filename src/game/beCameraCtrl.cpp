@@ -27,7 +27,7 @@ extern "C" void *igProperty_FindByName(...);
 extern "C" int Matrix44_SetTranslation(void *, void *);
 extern "C" int FUN_0018ab70(void *, int, float *);
 extern "C" int Matrix44_Copy(void *, void *);
-extern "C" void * FUN_00236f80(...);
+extern "C" void * igInsightCore_FindManager(...);
 extern "C" int FUN_00463fd0(...);
 extern "C" int beBaseInfoRam_RemoveTimer(...);
 extern "C" void *FUN_00192f00(float *, float, float *, float *);
@@ -42,7 +42,7 @@ extern "C" int __fixsfdi(float);
 extern "C" int ObjectList_RemoveFirstRetained(...);
 extern "C" int FUN_001b1cf0(...);
 extern "C" int FUN_001b1dc0(...);
-extern "C" int FUN_002eb010(...);
+extern "C" int StringPool_Allocate(...);
 extern "C" void *FUN_003694a0(...);
 extern "C" int FUN_003697c0(...);
 extern "C" int FUN_00462d20(...);
@@ -100,8 +100,8 @@ struct DataListInstall { static inline void go(beBaseInfoRam *act, const RPD &fr
 extern "C" void FUN_00378ed0(beCameraCtrl *self, beBaseInfoRam *act);
 
 extern "C" void FUN_00379a90(beCameraCtrl *self, beBaseInfoRam *act);
-extern "C" int FUN_00236be0(int, beCameraCtrl *);
-extern "C" int FUN_00236c40(int, beCameraCtrl *);
+extern "C" int igInsightCore_AddToScheduler(int, beCameraCtrl *);
+extern "C" int igInsightCore_RemoveFromScheduler(int, beCameraCtrl *);
 extern "C" void Gap__Bec__beCameraCtrl__vfunc_31(beCameraCtrl *arg0, beBaseInfoRam *arg1);
 extern "C" char emptyString[];
 extern "C" int g_stringPool[4];
@@ -310,7 +310,7 @@ void FUN_00378ed0(beCameraCtrl *self, beBaseInfoRam *act) {
                     Matrix44_Copy(self->_intMatrix, XFORM(sys->_intPosList, 0)->_m);
                     F(self->_cameraNowFrame) = 0.0f;
                     if (self->_viewerMang == 0) {
-                        igViewerSceneInfoManager *vm = (igViewerSceneInfoManager *)FUN_00236f80(self->_insight, g_igViewerSceneInfoManager_metaObject[0]);
+                        igViewerSceneInfoManager *vm = (igViewerSceneInfoManager *)igInsightCore_FindManager(self->_insight, g_igViewerSceneInfoManager_metaObject[0]);
                         self->_viewerPara = vm->_parameters;
                         self->_viewerMang = (int)vm;
                     }
@@ -438,7 +438,7 @@ void FUN_00379a90(beCameraCtrl *self, beBaseInfoRam *act) {
     switch (act->_st0) {
     case 0: {
         if (self->_viewerMang == 0) {
-            igViewerSceneInfoManager *vm = (igViewerSceneInfoManager *)FUN_00236f80(self->_insight, g_igViewerSceneInfoManager_metaObject[0]);
+            igViewerSceneInfoManager *vm = (igViewerSceneInfoManager *)igInsightCore_FindManager(self->_insight, g_igViewerSceneInfoManager_metaObject[0]);
             self->_viewerPara = vm->_parameters;
             self->_viewerMang = (int)vm;
         }
@@ -474,8 +474,8 @@ void FUN_00379a90(beCameraCtrl *self, beBaseInfoRam *act) {
 
 void Gap__Bec__beCameraCtrl__vfunc_31(beCameraCtrl *arg0, beBaseInfoRam *arg1) {
     if (arg0->_isFirst != 0) {
-        FUN_00236c40(arg0->_insight, arg0);
-        FUN_00236be0(arg0->_insight, arg0);
+        igInsightCore_RemoveFromScheduler(arg0->_insight, arg0);
+        igInsightCore_AddToScheduler(arg0->_insight, arg0);
         arg0->_isFirst = 0;
     }
     if (arg1->_isRun != 0) {
@@ -618,7 +618,7 @@ int Gap__Bec__beCameraCtrl__vfunc_33(beCameraCtrl *self, beBaseInfoRam *ram, int
             }
             nm = beMessenger_GetString(self->_messenger, 0);
             if (g_stringPool[0] == 0) {
-                int pool = FUN_002eb010(0x10);
+                int pool = StringPool_Allocate(0x10);
                 if (pool != 0) pool = StringPool_Construct(pool);
                 g_stringPool[0] = pool;
             }
@@ -664,7 +664,7 @@ int Gap__Bec__beCameraCtrl__vfunc_33(beCameraCtrl *self, beBaseInfoRam *ram, int
         if (FUN_00378e40(self, info) != 0) {
             FUN_00378ec0(self, ram, 1);
             if (self->_debugZoom == 1.0f) {
-                int snd = ((int)FUN_00236f80(self->_insight, g_igViewerSceneInfoManager_metaObject[0]));
+                int snd = ((int)igInsightCore_FindManager(self->_insight, g_igViewerSceneInfoManager_metaObject[0]));
                 int k = 0;
                 do {
                     FUN_00462d20(snd);

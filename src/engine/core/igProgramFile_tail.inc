@@ -7,7 +7,7 @@ void Gap__Core__igProgramFile__vfunc_23(igProgramFile *arg0) {
     char *temp_s1;
 
     if (g_stringPool[0] == 0) {
-        var_v0 = ((int)FUN_002eb010(0x10));
+        var_v0 = ((int)StringPool_Allocate(0x10));
         if (var_v0 != 0) {
             var_v0 = ((int)StringPool_Construct((struct S_2eadf0 *)var_v0));
         }

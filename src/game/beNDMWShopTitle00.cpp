@@ -4,7 +4,7 @@
         tok = 0; \
     } else { \
         if (g_stringPool[0] == 0) { \
-            void *pool = FUN_002eb010(0x10); \
+            void *pool = StringPool_Allocate(0x10); \
             if (pool != 0) pool = StringPool_Construct(pool); \
             g_stringPool[0] = pool; \
         } \
@@ -15,7 +15,7 @@
 
 extern "C" int beNDMWWindow_PresentModelAtOrigin(...);
 extern "C" void Gap__Bec__beNDMWShopTitle00__vfunc_22(int *arg0);
-extern "C" void *FUN_002eb010(int);
+extern "C" void *StringPool_Allocate(int);
 extern "C" void *StringPool_Construct(void *);
 extern "C" const char *StringPool_Intern(void *, const char *);
 extern "C" void StringChunk_ReleaseHeader(int, int *);

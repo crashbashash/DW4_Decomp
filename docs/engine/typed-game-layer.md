@@ -80,7 +80,7 @@ Evidence is the class's `_InitFields` metaobject getter (handle resolved through
 | `beDataObjStringList._data` | `igStringRefList` | field metaobject getter FUN_002b9120 loads handle 0x5858d8 |
 | `beDemoManager._lua` | `beLua` | handle 0x589208 in beDemoManager vfunc_23 |
 | `beDemoManager._messenger` | `beMessenger` | handle 0x588f38 in beDemoManager vfunc_23 |
-| `beFileListInfoManager._messenger` | `beMessenger` | class handle DAT_00588f38 (data/reflection.json) passed to FUN_00236f80 (vfunc_23) |
+| `beFileListInfoManager._messenger` | `beMessenger` | class handle DAT_00588f38 (data/reflection.json) passed to igInsightCore_FindManager (vfunc_23) |
 | `beFileListInfoManager._sceneInfoManager` | `igViewerSceneInfoManager` | class handle DAT_0058c790 |
 | `beFileListInfoManager._system` | `beSystem` | class handle DAT_00587d08 |
 | `beFont._root` | `igAttrSet` | (FUN_001a5d70); _fonts -> beFontImageList (FUN_00361750); _gaPairList -> beFontGeomAttrPairList (FUN_00362360); _lineFeedList -> igIntList; _alignList -> igFloa |
@@ -91,7 +91,7 @@ Evidence is the class's `_InitFields` metaobject getter (handle resolved through
 | `beHitLandModelOrder._hitdataList` | `beHitLandResultDataList` | InitFields field 8 getter FUN_0035e270 reads handle 0x5893e0 |
 | `beHitLandModelOrder._rayList` | `igRayList` | beHitLandModelOrder_InitFields field 6 metaobject getter FUN_001880b0 reads class handle 0x560fb8 (igRayList) |
 | `beLua._infoList` | `igInfoList` | igInfoManager list by name; beLua._luaState -> beLuaState: field/class name pairing, refcounted object released in vfunc_26 |
-| `beLua._system` | `beSystem` | set from FUN_00236f80(_insight, class handle 0x587d08); handle 0x587d08 is beSystem in data/reflection.json |
+| `beLua._system` | `beSystem` | set from igInsightCore_FindManager(_insight, class handle 0x587d08); handle 0x587d08 is beSystem in data/reflection.json |
 | `beMatCtrl._wkMatOnList` | `igDataList` (hypothesis) | of unsigned words (indexed by _wkChkMat; hypothesis for exact class) |
 | `beMessenger._argData` | `beMessengerArgData` | _objectList(+40)/_longList(+28) match the ClearObjects/AppendLong names; beMessengerArgData_Clear callee |
 | `beMessenger._workStack` | `beMessengerWorkList` | (elements beMessengerWork): field offsets in beMessenger_DispatchSelected |
@@ -105,7 +105,7 @@ Evidence is the class's `_InitFields` metaobject getter (handle resolved through
 | `beMessengerArgData._vec3fList` | `igVec3fList` | field name plus element size 12 |
 | `beMessengerDelay._argData` | `beMessengerArgData` | argument of beMessengerArgData_Clear |
 | `beMessengerWork._findRamNoList` | `igIntList` | ; beMessengerWork._findRamList -> igObjectList of beBaseInfoRam: beMessenger_DispatchSelected |
-| `beMovie._insight` | `object` | whose class handles are looked up by FUN_00236f80 (insight getter): DAT_00588518 bePadManager, DAT_00589208 beLua |
+| `beMovie._insight` | `object` | whose class handles are looked up by igInsightCore_FindManager (insight getter): DAT_00588518 bePadManager, DAT_00589208 beLua |
 | `beMovie._messenger` | `beMessenger` | beMessenger_RegisterReceiver callee |
 | `beNDMWGameRam._commonDataList` | `beDataObjList` | (FUN_00364090); _playerDataListList -> beDataObjListList (FUN_00363ec0); _dBShinka.._dBEneatk -> beDataBase (FUN_003658e0) |
 | `beNDMWGameRam._dBShinka` | `beDataBase` | first argument of beDataBase_GetRecordString in beNDMWGameRam_SelectSpecies, object obtained via beMessenger_GetObject |
@@ -123,7 +123,7 @@ Evidence is the class's `_InitFields` metaobject getter (handle resolved through
 | `beNDMWLoadCtrl2CommonIntf._slotSaveData` | `beNDMWLoadSlotPlayerList` | InitFields field 4 getter FUN_003c61d0 reads handle 0x58bcf8 |
 | `beNDMWLoadCtrl2CommonIntf._system` | `beSystem` | InitFields field 1 getter FUN_00342ce0 reads handle 0x587d08 |
 | `beNDMWLoadIntf2._messenger` | `beMessenger` | first argument of beMessenger_RegisterReceiver* |
-| `beNDMWLoadIntf2._padManager` | `bePadManager` | set from FUN_00236f80(insight, class handle 0x588518 = bePadManager) |
+| `beNDMWLoadIntf2._padManager` | `bePadManager` | set from igInsightCore_FindManager(insight, class handle 0x588518 = bePadManager) |
 | `beNDMWLoadSlotPlayer._accessPlList` | `igIntList` | InitFields field 2 igIntList_GetOrCreateMetaObject |
 | `beNDMWLoadSlotPlayer._saveDataList` | `beNDMWDegiDataList` | beNDMWLoadSlotPlayer_InitFields field 1 metaobject getter FUN_003c66a0 reads class handle 0x58bd20 (beNDMWDegiDataList) |
 | `beNDMWLogo._padManager` | `bePadManager` | set from lookup with handle 0x588518 |
@@ -146,7 +146,7 @@ Evidence is the class's `_InitFields` metaobject getter (handle resolved through
 | `beNDMWPanelObjectWaza._messenger` | `beMessenger` | arguments of beMessenger_* callees in Gap__Bec__beNDMWPanelObjectWaza__vfunc_22 |
 | `beNDMWSaveCtrl._messenger` | `beMessenger` | same call (vfunc_29) |
 | `beNDMWSaveCtrl._padManager` | `bePadManager` | handle 0x588518 in vfunc_32 |
-| `beNDMWSaveIntf._padManager` | `bePadManager` | FUN_00236f80(_insight, class handle 0x588518); the handle is bePadManager |
+| `beNDMWSaveIntf._padManager` | `bePadManager` | igInsightCore_FindManager(_insight, class handle 0x588518); the handle is bePadManager |
 | `beNDMWShopCtrlXdataChip._itemBaseList` | `beNDMWItemBaseList` | (FUN_003c9130) |
 | `beNDMWStageCtl._messenger` | `beMessenger` | beMessenger_RegisterReceiver callee |
 | `beNDMWStatus._windowPro` | `beNDMWWindow` | (FUN_003b1dd0) |
@@ -169,7 +169,7 @@ Evidence is the class's `_InitFields` metaobject getter (handle resolved through
 | `beNDMWWindow._modelCloseRamNoList` | `igIntList` | InitFields field 16 igIntList_GetOrCreateMetaObject |
 | `beNDMWWindow._modelCloseSeqNameList` | `igStringRefList` | InitFields field 17 getter FUN_002b9120 |
 | `beNDMWWindow._mother` | `beNDMWWindow` | metaObject FUN_003b1dd0 (handle beNDMWWindow) |
-| `beNDMWWindow._padManager` | `bePadManager` | handle 0x588518 passed to FUN_00236f80 in beNDMWWindow_BindContext |
+| `beNDMWWindow._padManager` | `bePadManager` | handle 0x588518 passed to igInsightCore_FindManager in beNDMWWindow_BindContext |
 | `beNDMWWindow._subWindow` | `beNDMWWindowList` | beNDMWWindow_InitFields field 11 metaObject FUN_003b1be0 returns handle 0x58a9a8 (beNDMWWindowList) |
 | `beNDMWWindow._textCloseNameList` | `igStringRefList` | beNDMWWindow_InitFields field 14 getter FUN_002b9120 |
 | `beNDMWWindow._textCloseTypeList` | `igStringRefList` | beNDMWWindow_InitFields field 13 metaobject getter FUN_002b9120 reads class handle 0x5858d8 (igStringRefList) |
@@ -192,7 +192,7 @@ Evidence is the class's `_InitFields` metaobject getter (handle resolved through
 | `beShadow01Info._projShadowShader` | `igProjectiveShadowShader` | eight offsets/widths match uniquely in beShadow01 vfunc_25 |
 | `beSound._cri` | `beCri` | beSound_InitFields field 0 metaobject getter FUN_003678a0 reads handle 0x589ad8 (beCri) |
 | `beSound._playSEs` | `bePlaySEList` | beSound_InitFields field 2 getter FUN_00344630 reads handle 0x587ec8 |
-| `beStaticInfoCtl._messenger` | `beMessenger` | set from FUN_00236f80(insight, class handle 0x588f38 = beMessenger) |
+| `beStaticInfoCtl._messenger` | `beMessenger` | set from igInsightCore_FindManager(insight, class handle 0x588f38 = beMessenger) |
 | `beSvDeliver._formatList` | `igIntList` | beSvDeliver_InitFields igIntList_GetOrCreateMetaObject (fields 12-15) |
 | `beSvDeliver._freeFileList` | `igIntList` | beSvDeliver_InitFields igIntList_GetOrCreateMetaObject (fields 12-15) |
 | `beSvDeliver._freeSizeList` | `igIntList` | beSvDeliver_InitFields igIntList_GetOrCreateMetaObject (fields 12-15) |
@@ -207,7 +207,7 @@ Evidence is the class's `_InitFields` metaobject getter (handle resolved through
 | `beTextureCtrl._work` | `beTextureCtrlWork` (hypothesis) | (hypothesis: offsets +8/+12 only; not applied) |
 | `beTimer._luaManager` | `beLua` | handle 0x589208 |
 | `beTimer._padManager` | `bePadManager` | handle 0x588518 |
-| `beTimer._system` | `beSystem` | handle 0x587d08 passed to FUN_00236f80 in beTimer vfunc_23 |
+| `beTimer._system` | `beSystem` | handle 0x587d08 passed to igInsightCore_FindManager in beTimer vfunc_23 |
 | `beWeapon._messenger` | `beMessenger` | beMessenger_RegisterReceiverFromInfo argument in Gap__Bec__beWeapon__vfunc_29 |
 | `igAttrSet._attributes` | `igAttrList` | igAttrSet_InitFields field 0 metaobject getter FUN_0013af00 reads class handle 0x55f460 (igAttrList) |
 | `igBitmapFont._charMetricsList` | `igCharMetricsList` | (FUN_00452790); _textureBind -> igTextureBindAttr (FUN_00132850) |

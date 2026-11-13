@@ -15,7 +15,7 @@ int Gap__Core__igFloatMetaField__vfunc_27(void) {
 
 static inline void *pool() {
     if (((void * *)g_stringPool)[0] == 0) {
-        void *o = FUN_002eb010(0x10);
+        void *o = StringPool_Allocate(0x10);
         if (o != 0) {
             o = ((void *)StringPool_Construct((struct S_2eadf0 *)o));
         }

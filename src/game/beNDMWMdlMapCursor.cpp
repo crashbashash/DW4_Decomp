@@ -7,7 +7,7 @@ extern "C" int Memory_GetAllocatorBySelector(...);
 extern "C" int StringChunk_ReleaseHeader(int, int *);
 extern "C" int StringPool_Construct(int);
 extern "C" void *StringPool_Intern(int, int);
-extern "C" int FUN_002eb010(int);
+extern "C" int StringPool_Allocate(int);
 extern "C" int FUN_00396740(void *, void *);
 extern "C" int beMessenger_GetInt(int, int);
 extern "C" int beMessenger_GetIntCount(int);
@@ -114,7 +114,7 @@ void Gap__Bec__beNDMWMdlMapCursor__vfunc_36(beNDMWMdlMapCursor *arg0, beBaseInfo
         s = beMessenger_GetString(arg0->_messenger, 0);
         t2 = value.p;
         if (g_stringPool[0] == 0) {
-            int pool = FUN_002eb010(16);
+            int pool = StringPool_Allocate(16);
             if (pool != 0) pool = StringPool_Construct(pool);
             g_stringPool[0] = pool;
         }

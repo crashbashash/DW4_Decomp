@@ -1,4 +1,4 @@
-void FUN_003660d0(int arg0) {
+void beDBManager_CreateInstance(int arg0) {
     FUN_00366290();
     igMetaObject_CreateInstance(*(int *)0x589958, arg0);
 }

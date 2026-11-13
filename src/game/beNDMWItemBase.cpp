@@ -45,7 +45,7 @@ extern "C" int beMessenger_DispatchSelected(...);
 extern "C" int beMessenger_SelectGroup(...);
 extern "C" int beMessenger_SendGroup(...);
 extern "C" int strcmp(const char *a, const char *b);
-extern "C" int FUN_00236f80(...);
+extern "C" int igInsightCore_FindManager(...);
 extern "C" int beLua__RunNamedChunk(...);
 extern "C" int beNDMWGameRam_ChangeHp(...);
 extern "C" int beNDMWGameRam_ChangeMp(...);
@@ -528,7 +528,7 @@ int Gap__Bec__beNDMWItemDisk__vfunc_22(beNDMWItemDisk *self, beNDMWGameRam *game
 
     switch (recNo) {
     case 9: {
-        int ram = FUN_00236f80(gameRam->_insight, g_beNDMWGameRam_metaObject[0]);
+        int ram = igInsightCore_FindManager(gameRam->_insight, g_beNDMWGameRam_metaObject[0]);
         beNDMWGameRam_ChangeHp(ram, playerNo, beNDMWItemBase_GetRecordInt((beNDMWItemBase *)self, (beNDMWStatus *)gameRam, HP_2), -1);
         beNDMWGameRam_ChangeMp(ram, playerNo, beNDMWItemBase_GetRecordInt((beNDMWItemBase *)self, (beNDMWStatus *)gameRam, MP_2));
         return 0;
@@ -537,14 +537,14 @@ int Gap__Bec__beNDMWItemDisk__vfunc_22(beNDMWItemDisk *self, beNDMWGameRam *game
     switch (recNo) {
     case 0: case 1: case 2: {
         int hp = beNDMWItemBase_GetRecordInt((beNDMWItemBase *)self, (beNDMWStatus *)gameRam, HP_2);
-        beNDMWGameRam_ChangeHp(FUN_00236f80(gameRam->_insight, g_beNDMWGameRam_metaObject[0]), playerNo, hp, -1);
+        beNDMWGameRam_ChangeHp(igInsightCore_FindManager(gameRam->_insight, g_beNDMWGameRam_metaObject[0]), playerNo, hp, -1);
         return 0;
     }
     }
     switch (recNo) {
     case 3: case 4: case 5: {
         int mp = beNDMWItemBase_GetRecordInt((beNDMWItemBase *)self, (beNDMWStatus *)gameRam, MP_2);
-        beNDMWGameRam_ChangeMp(FUN_00236f80(gameRam->_insight, g_beNDMWGameRam_metaObject[0]), playerNo, mp);
+        beNDMWGameRam_ChangeMp(igInsightCore_FindManager(gameRam->_insight, g_beNDMWGameRam_metaObject[0]), playerNo, mp);
         return 0;
     }
     }
@@ -573,7 +573,7 @@ int Gap__Bec__beNDMWItemDisk__vfunc_22(beNDMWItemDisk *self, beNDMWGameRam *game
         return 0;
     }
     case 8: {
-        int lua = FUN_00236f80(gameRam->_insight, g_beLua_metaObject[0]);
+        int lua = igInsightCore_FindManager(gameRam->_insight, g_beLua_metaObject[0]);
         SYSsetGateStage(Player, playerNo);
         beLua__RunNamedChunk(lua, gatedisc_lua, 0);
         return 1;

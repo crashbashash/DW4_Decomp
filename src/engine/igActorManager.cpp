@@ -4,14 +4,14 @@ extern "C" {
 
 class W { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void vX(int, int, int, int, float, float); };
 struct R { int w0; int rc; };
-R *FUN_00236f80(...);
+R *igInsightCore_FindManager(...);
 int igObject_Destroy(...);
 extern int g_igViewerSceneInfoManager_metaObject[4];
 void Gap__Viewer__igActorManager__vfunc_25(igActorManager *arg0);
 
-int FUN_00236be0(...);
+int igInsightCore_AddToScheduler(...);
 
-void FUN_00236c40(int, int);
+void igInsightCore_RemoveFromScheduler(int, int);
 
 typedef struct L { char pad[8]; int n; int p; int *arr; } L;
 typedef struct A { char pad[24]; L *f24; } A;
@@ -48,7 +48,7 @@ void Gap__Viewer__igActorManager__vfunc_25(igActorManager *arg0) {
     R *temp_v0;
     R *temp_a0;
 
-    temp_v0 = FUN_00236f80(arg0->_insight, g_igViewerSceneInfoManager_metaObject[0]);
+    temp_v0 = igInsightCore_FindManager(arg0->_insight, g_igViewerSceneInfoManager_metaObject[0]);
     if (temp_v0 != 0) {
         temp_v0->rc = temp_v0->rc + 1;
     }
@@ -69,11 +69,11 @@ void Gap__Viewer__igActorManager__vfunc_26(void) {
 }
 
 void Gap__Viewer__igActorManager__vfunc_23(int arg0) {
-    FUN_00236be0(*(int *)(arg0 + 12), arg0);
+    igInsightCore_AddToScheduler(*(int *)(arg0 + 12), arg0);
 }
 
 void Gap__Viewer__igActorManager__vfunc_24(int arg0) {
-    FUN_00236c40(*(int *)((char *)(arg0) + 12), arg0);
+    igInsightCore_RemoveFromScheduler(*(int *)((char *)(arg0) + 12), arg0);
 }
 
 /* The list pointer is re-read in the body and in the loop test, with a `0 < n` guard. */

@@ -56,5 +56,5 @@ entry's `_targetType` as the mode) and the player model (`beNDMWMdlPlayer2.cpp`)
 - The heading uses the vector at `0x4e1098` as the forward axis; it is zero in the image and is filled at
   run time. It is likely the unit Z axis (the model controller also rotates about it by a Z angle) but is
   shared by seven units and stays a `DAT_` name until that is confirmed.
-- `FUN_00236be0`, `FUN_00236c40` (slots 21/22) and `FUN_00236f80` (slot 23) are insight calls that
+- `igInsightCore_AddToScheduler`, `igInsightCore_RemoveFromScheduler` (slots 21/22) and `igInsightCore_FindManager` (slot 23) are insight calls that
   register, unregister and look up an object by meta-object; they belong to the insight's own unit.

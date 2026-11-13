@@ -1,6 +1,6 @@
 #include "dw4/reflected.h"
 
-extern "C" int FUN_00236f80(int, int);
+extern "C" int igInsightCore_FindManager(int, int);
 extern "C" int FUN_00100610(void *);
 extern "C" int igObject_Destroy(void *);
 extern "C" int beLua__RunNamedChunk(int, int *, int);
@@ -43,10 +43,10 @@ extern "C" int Gap__Bec__beNDMWLogo__vfunc_34(beNDMWLogo *arg0, beBaseInfoRam *a
 
 void Gap__Bec__beNDMWLogo__vfunc_32(beNDMWLogo *arg0) {
     if (arg0->_padManager == 0) {
-        arg0->_padManager = FUN_00236f80(arg0->_insight, g_bePadManager_metaObject[0]);
+        arg0->_padManager = igInsightCore_FindManager(arg0->_insight, g_bePadManager_metaObject[0]);
     }
     if (arg0->_system_ == 0) {
-        arg0->_system_ = FUN_00236f80(arg0->_insight, g_beSystem_metaObject[0]);
+        arg0->_system_ = igInsightCore_FindManager(arg0->_insight, g_beSystem_metaObject[0]);
     }
 }
 
@@ -66,7 +66,7 @@ void **FUN_0044a7f0(struct Ref **self, short flag) {
 void FUN_0044a870(beNDMWLogo *arg0, int arg1) {
     int temp_v0;
 
-    temp_v0 = FUN_00236f80(arg0->_insight, g_beLua_metaObject[0]);
+    temp_v0 = igInsightCore_FindManager(arg0->_insight, g_beLua_metaObject[0]);
     g_txtCallNo[0] = arg1;
     g_mdlEntity[0] = 0;
     beLua__RunNamedChunk(temp_v0, &DAT_0051dac0[0], 0);

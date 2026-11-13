@@ -1,4 +1,4 @@
-void FUN_0034b9e0(int arg0) {
+void bePoint01_CreateInstance(int arg0) {
     FUN_0034bba0();
     igMetaObject_CreateInstance(*(int *)0x588498, arg0);
 }

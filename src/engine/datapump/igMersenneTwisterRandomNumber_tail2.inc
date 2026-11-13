@@ -63,7 +63,7 @@ int FUN_001e6de0(int *result, Vector3f *value, int *format) {
         res = 0;
     } else {
         if (g_stringPool[0] == 0) {
-            pool = FUN_002eb010(0x10);
+            pool = StringPool_Allocate(0x10);
             if (pool != 0) {
                 pool = StringPool_Construct(pool);
             }
@@ -94,7 +94,7 @@ int FUN_001e6f10(int *result, Quad *quad, int *kind) {
         res = 0;
     } else {
         if (g_stringPool[0] == 0) {
-            obj = FUN_002eb010(0x10);
+            obj = StringPool_Allocate(0x10);
             if (obj != 0) {
                 obj = StringPool_Construct(obj);
             }

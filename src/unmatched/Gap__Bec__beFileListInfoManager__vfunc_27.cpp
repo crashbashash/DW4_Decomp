@@ -2,9 +2,9 @@
 extern "C" int sprintf(...);
 extern "C" int strlen(...);
 extern "C" int FUN_001c5d10(...);
-extern "C" int FUN_00236f80(...);
+extern "C" int igInsightCore_FindManager(...);
 extern "C" int igInsightCore_AddInfo(...);
-extern "C" int FUN_002eb010(...);
+extern "C" int StringPool_Allocate(...);
 extern "C" int igObject_IsKindOf(...);
 extern "C" int igResource_StartAsyncLoading(...);
 extern "C" int igResource_StopAsyncLoading(...);
@@ -122,7 +122,7 @@ extern "C" int StringList_AppendRetained(void *, const StringRef &);
     } }
 #define POOL() { \
     if (DAT_00586f20[0] == 0) { \
-        int pv = FUN_002eb010(0x10); \
+        int pv = StringPool_Allocate(0x10); \
         if (pv != 0) { pv = StringPool_Construct(pv); } \
         DAT_00586f20[0] = pv; \
     } }
@@ -383,7 +383,7 @@ extern "C" void Gap__Bec__beFileListInfoManager__vfunc_27(beFileListInfoManager 
             }
             break;
         case 3: {
-            int s0 = FUN_00236f80(arg0->_insight, DAT_00589208[0]);
+            int s0 = igInsightCore_FindManager(arg0->_insight, DAT_00589208[0]);
             if (s0 != 0) {
                 sprintf(spC0, &DAT_0050e5e8[0], ((beSystem *)arg0->_system)->_stageName);
                 FUN_0038a2d0(s0);
@@ -486,7 +486,7 @@ extern "C" void Gap__Bec__beFileListInfoManager__vfunc_27(beFileListInfoManager 
         case 7: {
             int s0;
             beMessenger_SendGroup(arg0->_messenger, &DAT_0050e650[0], &DAT_0050e658[0]);
-            s0 = FUN_00236f80(arg0->_insight, DAT_00589208[0]);
+            s0 = igInsightCore_FindManager(arg0->_insight, DAT_00589208[0]);
             if (s0 != 0) {
                 sprintf(spA0, &DAT_0050e5e8[0], ((beSystem *)arg0->_system)->_stageName);
                 beLua__RunNamedChunk(s0, &DAT_0050e668[0], spA0);
@@ -499,7 +499,7 @@ extern "C" void Gap__Bec__beFileListInfoManager__vfunc_27(beFileListInfoManager 
             arg0->_proc = 9;
             break;
         case 9: {
-            int s0 = FUN_00236f80(arg0->_insight, DAT_00589208[0]);
+            int s0 = igInsightCore_FindManager(arg0->_insight, DAT_00589208[0]);
             int *nm;
             int *rv;
             if (s0 != 0) {

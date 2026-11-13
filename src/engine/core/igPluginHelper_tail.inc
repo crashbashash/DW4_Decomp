@@ -123,7 +123,7 @@ int FUN_00305000(H_305000 *h) {
             sp5C = o->v42();
         }
         if (o->v30()) {
-            sp58 = ((Y_305000 * *)DAT_005871d0)[0]->v21()->v22(o);
+            sp58 = ((Y_305000 * *)g_threadManager)[0]->v21()->v22(o);
         }
         o->rc = o->rc - 1;
         if (((unsigned long long)((long long)o->rc << 0x29) >> 0x29) == 0) {

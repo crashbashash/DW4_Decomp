@@ -36,7 +36,7 @@ R_3286e0 Gap__Core__igStandardQueue__vfunc_26(Self_3286e0 *self, int val, int bl
         return R_3286e0(g_allocatorFailureStatus.v);
     }
     while (((self->v27() != 0) ^ 1) == 0 && self->v26() > self->f40) {
-        Q23 *t = (Q23 *)**(int **)(*(int *)((char *)((int * *)DAT_005871d0)[0] + 8) + 16);
+        Q23 *t = (Q23 *)**(int **)(*(int *)((char *)((int * *)g_threadManager)[0] + 8) + 16);
         t->v23(0x05F5E100);
     }
     int c = self->q12->v31(block).Code();

@@ -26,8 +26,8 @@ typedef struct sceSifClientData {
 #define LIBMTAP_VERSION_MINOR 0
 
 void sceSifInitRpc(unsigned int mode);
-int FUN_0010e0d8(sceSifClientData *client, unsigned int rpc_number, int mode);
-int FUN_0010e2a8(sceSifClientData *client, int rpc_number, int mode, void *send, int ssize, void *receive,
+int sceSifBindRpc(sceSifClientData *client, unsigned int rpc_number, int mode);
+int sceSifCallRpc(sceSifClientData *client, int rpc_number, int mode, void *send, int ssize, void *receive,
                  int rsize, void (*end_function)(void *), void *end_param);
 int FUN_0010d108(const char *format, ...);
 
@@ -51,7 +51,7 @@ int sceMtapInit(void)
 
     sceSifInitRpc(0);
     while (1) {
-        if (FUN_0010e0d8(&open_client, MTAP_PORT_OPEN, 0) < 0) {
+        if (sceSifBindRpc(&open_client, MTAP_PORT_OPEN, 0) < 0) {
             debug_printf("libmtap: bind failed\n");
             return 0;
         }
@@ -60,7 +60,7 @@ int sceMtapInit(void)
         while (i--);
     }
     while (1) {
-        if (FUN_0010e0d8(&close_client, MTAP_PORT_CLOSE, 0) < 0) {
+        if (sceSifBindRpc(&close_client, MTAP_PORT_CLOSE, 0) < 0) {
             debug_printf("libmtap: bind failed\n");
             return 0;
         }
@@ -69,7 +69,7 @@ int sceMtapInit(void)
         while (i--);
     }
     while (1) {
-        if (FUN_0010e0d8(&connection_client, MTAP_GET_CONNECTION, 0) < 0) {
+        if (sceSifBindRpc(&connection_client, MTAP_GET_CONNECTION, 0) < 0) {
             debug_printf("libmtap: bind failed\n");
             return 0;
         }
@@ -78,7 +78,7 @@ int sceMtapInit(void)
         while (i--);
     }
     while (1) {
-        if (FUN_0010e0d8(&priority_client, MTAP_CHANGE_THREAD_PRIORITY, 0) < 0) {
+        if (sceSifBindRpc(&priority_client, MTAP_CHANGE_THREAD_PRIORITY, 0) < 0) {
             debug_printf("libmtap: bind failed\n");
             return 0;
         }
@@ -87,7 +87,7 @@ int sceMtapInit(void)
         while (i--);
     }
     while (1) {
-        if (FUN_0010e0d8(&version_client, MTAP_GET_MOD_VERSION, 0) < 0) {
+        if (sceSifBindRpc(&version_client, MTAP_GET_MOD_VERSION, 0) < 0) {
             debug_printf("libmtap: bind failed\n");
             return 0;
         }
@@ -108,7 +108,7 @@ int sceMtapInit(void)
 int sceMtapPortOpen(int port)
 {
     rpc_buffer[0] = port;
-    if (FUN_0010e2a8(&open_client, 1, 0, rpc_buffer, sizeof(rpc_buffer), rpc_buffer, sizeof(rpc_buffer), 0, 0) < 0) {
+    if (sceSifCallRpc(&open_client, 1, 0, rpc_buffer, sizeof(rpc_buffer), rpc_buffer, sizeof(rpc_buffer), 0, 0) < 0) {
         debug_printf("sceMtapPortOpen: rpc error\n");
         return 0;
     }
@@ -118,7 +118,7 @@ int sceMtapPortOpen(int port)
 int sceMtapPortClose(int port)
 {
     rpc_buffer[0] = port;
-    if (FUN_0010e2a8(&close_client, 1, 0, rpc_buffer, sizeof(rpc_buffer), rpc_buffer, sizeof(rpc_buffer), 0, 0) < 0) {
+    if (sceSifCallRpc(&close_client, 1, 0, rpc_buffer, sizeof(rpc_buffer), rpc_buffer, sizeof(rpc_buffer), 0, 0) < 0) {
         debug_printf("sceMtapPortClose: rpc error\n");
         return 0;
     }
@@ -128,7 +128,7 @@ int sceMtapPortClose(int port)
 int sceMtapGetConnection(int port)
 {
     rpc_buffer[0] = port;
-    if (FUN_0010e2a8(&connection_client, 1, 0, rpc_buffer, sizeof(rpc_buffer), rpc_buffer, sizeof(rpc_buffer), 0,
+    if (sceSifCallRpc(&connection_client, 1, 0, rpc_buffer, sizeof(rpc_buffer), rpc_buffer, sizeof(rpc_buffer), 0,
                      0) < 0) {
         debug_printf("sceMtapGetConnection: rpc error\n");
         return 0;
@@ -140,7 +140,7 @@ int sceMtapChangeThreadPriority(int high_priority, int low_priority)
 {
     rpc_buffer[0] = high_priority;
     rpc_buffer[1] = low_priority;
-    if (FUN_0010e2a8(&priority_client, 1, 0, rpc_buffer, sizeof(rpc_buffer), rpc_buffer, sizeof(rpc_buffer), 0, 0)
+    if (sceSifCallRpc(&priority_client, 1, 0, rpc_buffer, sizeof(rpc_buffer), rpc_buffer, sizeof(rpc_buffer), 0, 0)
         < 0) {
         debug_printf("sceMtapChangeThreadPriority: rpc error\n");
         return 0;
@@ -150,7 +150,7 @@ int sceMtapChangeThreadPriority(int high_priority, int low_priority)
 
 int sceMtapGetModVersion(void)
 {
-    if (FUN_0010e2a8(&version_client, 1, 0, rpc_buffer, sizeof(rpc_buffer), rpc_buffer, sizeof(rpc_buffer), 0, 0)
+    if (sceSifCallRpc(&version_client, 1, 0, rpc_buffer, sizeof(rpc_buffer), rpc_buffer, sizeof(rpc_buffer), 0, 0)
         < 0) {
         debug_printf("sceMtapGetModVersion: rpc error\n");
         return 0;

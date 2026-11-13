@@ -1,4 +1,4 @@
-void FUN_00361e50(int arg0) {
+void beFont_CreateInstance(int arg0) {
     FUN_00362170();
     igMetaObject_CreateInstance(*(int *)0x589678, arg0);
 }

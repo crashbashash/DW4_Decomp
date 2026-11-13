@@ -19,7 +19,7 @@ void Gap__Core__igStringMetaField__vfunc_56(int arg0, int a1, int arg2) {
 
     arg1 = (void **)a1;
     if (g_stringPool[0] == 0) {
-        var_v0 = ((int)FUN_002eb010(0x10));
+        var_v0 = ((int)StringPool_Allocate(0x10));
         if (var_v0 != 0) {
             var_v0 = ((int)StringPool_Construct((S_2eadf0 *)var_v0));
         }
@@ -55,7 +55,7 @@ void igStringMetaField_AssignText(igStringMetaField *self, int object, int *text
         interned = 0;
     } else {
         if (g_stringPool[0] == 0) {
-            pool = ((int)FUN_002eb010(0x10));
+            pool = ((int)StringPool_Allocate(0x10));
             if (pool != 0) {
                 pool = ((int)StringPool_Construct((S_2eadf0 *)pool));
             }
@@ -103,7 +103,7 @@ void igStringMetaField_SetDefaultText(int *arg0, int arg1) {
 
     temp_s1 = (void **)arg0[8];
     if (g_stringPool[0] == 0) {
-        var_v0 = ((int)FUN_002eb010(0x10));
+        var_v0 = ((int)StringPool_Allocate(0x10));
         if (var_v0 != 0) {
             var_v0 = ((int)StringPool_Construct((S_2eadf0 *)var_v0));
         }
@@ -183,7 +183,7 @@ void igStringMetaField_ResetValue(int *arg0, int arg1) {
         t = 0;
     } else {
         if (g_stringPool[0] == 0) {
-            p = ((int)FUN_002eb010(16));
+            p = ((int)StringPool_Allocate(16));
             if (p != 0) {
                 p = ((int)StringPool_Construct((S_2eadf0 *)p));
             }
@@ -627,7 +627,7 @@ void FUN_0030bce0(SrcStr *src, long long delim, List_30bce0 *list) {
     for (int i = 0; i < n; i++) {
         void **slot = (void **)((char *)list->items + i * 4);
         if (g_stringPool[0] == 0) {
-            int v = ((int)FUN_002eb010(0x10));
+            int v = ((int)StringPool_Allocate(0x10));
             if (v != 0) v = ((int)StringPool_Construct((S_2eadf0 *)v));
             g_stringPool[0] = v;
         }
@@ -647,7 +647,7 @@ void FUN_0030bce0(SrcStr *src, long long delim, List_30bce0 *list) {
             if (p == 0) s = 0;
             else {
                 if (g_stringPool[0] == 0) {
-                    int v = ((int)FUN_002eb010(0x10));
+                    int v = ((int)StringPool_Allocate(0x10));
                     if (v != 0) v = ((int)StringPool_Construct((S_2eadf0 *)v));
                     g_stringPool[0] = v;
                 }

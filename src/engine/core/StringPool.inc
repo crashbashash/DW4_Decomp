@@ -66,7 +66,7 @@ int StringPool_Intern(StringPool *pool, const char *name)
     return copy;
 }
 
-void * FUN_002eb010(int arg0) {
+void * StringPool_Allocate(int arg0) {
     void **temp_v0;
 
     temp_v0 = (void **)(((void **)Memory_GetAllocatorBySelector(DAT_00587048[0])));

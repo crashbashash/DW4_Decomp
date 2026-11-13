@@ -10,7 +10,7 @@ extern "C" void beMessenger_RegisterReceiver(int, int, char *, int, int);
 extern "C" void FUN_00388590(int arg0, float *arg1, float *arg2, int arg3);
 extern "C" bool FUN_003885e0(int arg0, float *arg1, float *arg2, float *arg3, float *arg4);
 extern "C" void FUN_00192f50(float *, float *, void *);
-extern "C" void *FUN_002eb010(int);
+extern "C" void *StringPool_Allocate(int);
 extern "C" void *StringPool_Construct(void *);
 extern "C" const char *StringPool_Intern(void *, const char *);
 extern "C" void StringChunk_ReleaseHeader(int, int *);
@@ -139,7 +139,7 @@ void Gap__Bec__beHitLandModelOrder__vfunc_22(beHitLandModelOrder *self, HitRecor
     result = ((beHitLandResultData **)((igObjectList *)self->_hitdataList)->_data)[self->_hitdataCount];
     name = (const char *)self->_infoName;
     if (g_stringPool[0] == 0) {
-        void *pool = FUN_002eb010(16);
+        void *pool = StringPool_Allocate(16);
         if (pool != 0) pool = StringPool_Construct(pool);
         g_stringPool[0] = pool;
     }

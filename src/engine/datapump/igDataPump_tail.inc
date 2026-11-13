@@ -32,7 +32,7 @@ void FUN_001e6230(igDataPump *arg0, Src **arg1, int arg2) {
     arg0->_destMeta = (int)fld;
     name = ((igMetaObject *)((igMetaField *)arg0->_destMeta)->_parentMetaObject)->_name;
     if (g_stringPool[0] == 0) {
-        v = FUN_002eb010(16);
+        v = StringPool_Allocate(16);
         if (v != 0) {
             v = StringPool_Construct(v);
         }
@@ -51,7 +51,7 @@ void FUN_001e6230(igDataPump *arg0, Src **arg1, int arg2) {
     arg0->_destMetaClassName = newv;
     name = ((igMetaField *)arg0->_destMeta)->_fieldName;
     if (g_stringPool[0] == 0) {
-        v = FUN_002eb010(16);
+        v = StringPool_Allocate(16);
         if (v != 0) {
             v = StringPool_Construct(v);
         }

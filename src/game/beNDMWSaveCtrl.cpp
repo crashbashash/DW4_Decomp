@@ -14,7 +14,7 @@ extern "C" int beMessenger_AppendObject(...);
 extern "C" int beMessenger_GetObjectCount(...);
 extern "C" int beMessenger_ResolveEnumValue(...);
 extern "C" int igProperty_FindByName(...);
-extern "C" igObject * FUN_00236f80(...);
+extern "C" igObject * igInsightCore_FindManager(...);
 extern "C" int g_bePadManager_metaObject[4];
 extern "C" void Gap__Bec__beNDMWSaveCtrl__vfunc_32(beNDMWSaveCtrl *arg0);
 extern "C" int g_beNDMWSaveCtrlInfo_metaObject[4];
@@ -76,7 +76,7 @@ void Gap__Bec__beNDMWSaveCtrl__vfunc_32(beNDMWSaveCtrl *arg0) {
     igObject *temp_v0;
 
     if (arg0->_padManager == 0) {
-        temp_v0 = FUN_00236f80(arg0->_insight, g_bePadManager_metaObject[0]);
+        temp_v0 = igInsightCore_FindManager(arg0->_insight, g_bePadManager_metaObject[0]);
         if (temp_v0 != 0) {
             temp_v0->_refCount = temp_v0->_refCount + 1;
             ;
@@ -131,7 +131,7 @@ int Gap__Bec__beNDMWSaveCtrl__vfunc_34(beNDMWSaveCtrl *arg0, beBaseInfoRam *arg1
             ALLOC(a, arg0);
             {
             CommonIntfRef common(beNDMWLoadCtrl2CommonIntf_Create(a));
-            ((beNDMWLoadCtrl2CommonIntf *)common.p)->_system = ((int)FUN_00236f80(arg0->_insight, g_beSystem_metaObject[0]));
+            ((beNDMWLoadCtrl2CommonIntf *)common.p)->_system = ((int)igInsightCore_FindManager(arg0->_insight, g_beSystem_metaObject[0]));
             ((beNDMWLoadCtrl2CommonIntf *)common.p)->_inforam = (int)arg1;
             ((beNDMWLoadCtrl2CommonIntf *)common.p)->_insight = arg0->_insight;
             i = 0;

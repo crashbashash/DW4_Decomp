@@ -25,7 +25,7 @@ int scePadSetButtonInfo(int port, int slot, int mode);
 int FUN_00118af8(int port, int slot);
 extern int DAT_0055d480[32];
 extern int DAT_0055d240;
-int FUN_0010e2a8(void *cd, int fno, int mode, void *send, int ssize, void *recv, int rsize, void (*end)(void *), void *arg);
+int sceSifCallRpc(void *cd, int fno, int mode, void *send, int ssize, void *recv, int rsize, void (*end)(void *), void *arg);
 extern int DAT_00485108;
 int FUN_00118440(int port, int slot, int v);
 int scePadSetMainMode(int port, int slot, int a, int b) {
@@ -34,7 +34,7 @@ int scePadSetMainMode(int port, int slot, int a, int b) {
     DAT_0055d480[2] = slot;
     DAT_0055d480[3] = a;
     DAT_0055d480[4] = b;
-    if (FUN_0010e2a8(&DAT_0055d240, 1, 0, DAT_0055d480, 128, DAT_0055d480, 128, 0, 0) < 0) return 0;
+    if (sceSifCallRpc(&DAT_0055d240, 1, 0, DAT_0055d480, 128, DAT_0055d480, 128, 0, 0) < 0) return 0;
     if (DAT_0055d480[5] == 1) FUN_00118440(port, slot, 2);
     return DAT_0055d480[5];
 }

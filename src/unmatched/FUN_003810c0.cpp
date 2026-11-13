@@ -1,7 +1,7 @@
 #include "dw4/reflected.h"
 extern "C" {
 int igInsightCore_AddInfo(...);
-int FUN_002eb010(...);
+int StringPool_Allocate(...);
 int igObject_IsKindOf(...);
 int igResource_LoadDirectory(...);
 int igResource_IsDirectoryLoaded(...);
@@ -73,7 +73,7 @@ int FUN_003810c0(beFileListInfoManager *arg0, igStringRefList *arg1) {
                 nm = 0;
             } else {
                 if (DAT_00586f20[0] == 0) {
-                    int pv = FUN_002eb010(0x10);
+                    int pv = StringPool_Allocate(0x10);
                     if (pv != 0) { pv = StringPool_Construct(pv); }
                     DAT_00586f20[0] = pv;
                 }

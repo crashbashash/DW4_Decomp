@@ -1209,10 +1209,10 @@ void FUN_00174510(struct R_174510 *arg0, int arg1, int arg2, int arg3, int arg4,
         j = 0;
     }
     p2CurrentProgram[0] = n;
-    DAT_0056ad80[0] = (StageState *)((int *)DAT_00569340 + j * 112);
+    p2CurrentGsRegisters[0] = (StageState *)((int *)p2GsRegisterSets + j * 112);
     FUN_00174640((int)arg0, n);
     p2CurrentProgram[0] = 0;
-    DAT_0056ad80[0] = DAT_00569340;
+    p2CurrentGsRegisters[0] = p2GsRegisterSets;
 }
 
 void FUN_00174640(int arg0, int arg1) {

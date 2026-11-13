@@ -19,7 +19,7 @@ void FUN_001f7500(void);
 
 extern int p2BlockedSema;
 extern long long DAT_0056b020[4];
-extern int DAT_0056c020[4];
+extern int p2TextureCombineMode[4];
 extern int p2ProgramFlags[4];
 extern long long DAT_0056c068;
 extern short DAT_00568e08[8];
@@ -28,7 +28,7 @@ extern short DAT_00568e12[8];
 extern short DAT_00568e1c[4];
 extern short DAT_00568e22[8];
 extern short DAT_00568e24[8];
-extern int DAT_00490b60[4];
+extern int p2FirstOpen[4];
 extern int DAT_004e5370[4];
 extern int DAT_004e5390[4];
 extern int DAT_0056c060[4];
@@ -53,7 +53,7 @@ void FUN_00208170(int arg0) {
     long long b64;
 
     idx = p2CurrentProgram[0] * 4;
-    *(int *)((char *)DAT_0056c020 + idx) = arg0;
+    *(int *)((char *)p2TextureCombineMode + idx) = arg0;
     v = DAT_0056b020[0] & ~((long long)0xF << idx);
     DAT_0056b020[0] = v;
     bits = ((arg0 * 2) | ((*(unsigned int *)((char *)p2ProgramFlags + idx) >> 0xA) & 1)) & 0xF;
@@ -72,13 +72,13 @@ struct N_208210 {
     char lo:7; char flag:1; char f71; char f72;
 };
 struct N_208210 *FUN_00208210(void) {
-    extern struct N_208210 *DAT_0056c0c8[4];
+    extern struct N_208210 *p2FreeTextures[4];
     struct N_208210 *o;
-    if (DAT_0056c0c8[0] == 0) {
-        p2GrowPool(0xA, &DAT_0056c0c8[0]);
+    if (p2FreeTextures[0] == 0) {
+        p2GrowPool(0xA, &p2FreeTextures[0]);
     }
-    o = DAT_0056c0c8[0];
-    DAT_0056c0c8[0] = o->next;
+    o = p2FreeTextures[0];
+    p2FreeTextures[0] = o->next;
     o->lo = 0;
     o->q8 = 0;
     o->q0 = 0;
@@ -102,21 +102,21 @@ typedef struct O {
     unsigned char hi : 1;
 } O;
 static void FUN_002082b0(O *arg0) {
-    extern void * DAT_0056c0c8[4];
+    extern void * p2FreeTextures[4];
     arg0->lo = 0;
     arg0->f8 = 0;
     arg0->f0 = 0;
-    arg0->f24 = DAT_0056c0c8[0];
+    arg0->f24 = p2FreeTextures[0];
     arg0->f28 = 0;
-    DAT_0056c0c8[0] = arg0;
+    p2FreeTextures[0] = arg0;
 }
 
 struct B_2082f0 { char pad[24]; int f24; int f28; char pad2[24]; int f56; short s60; short s62; short f64; };
 void FUN_002082f0(void) {
     struct B_2082f0 *FUN_00208210();
     int FUN_00209780();
-    extern int DAT_0056c080[16];
-    extern int DAT_0056c0c8[4];
+    extern int p2TextureFunction[16];
+    extern int p2FreeTextures[4];
     extern struct B_2082f0 * DAT_0056c0d0[4];
     extern struct B_2082f0 * DAT_0056c0d8[4];
     extern int DAT_0056c0e0[17];
@@ -126,14 +126,14 @@ void FUN_002082f0(void) {
     struct B_2082f0 *temp_v0_2;
 
     i = 0;
-    DAT_0056c0c8[0] = 0;
+    p2FreeTextures[0] = 0;
     DAT_0056c060[0] = 0x4000;
     do {
         DAT_0056c0e0[i] = 0;
         i += 1;
     } while (i < 0x11U);
     DAT_0056c128[0] = 0;
-    p2GrowPool(0xA, &DAT_0056c0c8[0]);
+    p2GrowPool(0xA, &p2FreeTextures[0]);
     temp_v0_2 = FUN_00208210();
     DAT_0056c0d0[0] = temp_v0_2;
     temp_v0_2->f24 = 0;
@@ -142,13 +142,13 @@ void FUN_002082f0(void) {
     temp_v0_2->f64 = DAT_0056c060[0] - temp_v0_2->f56;
     DAT_0056c0d8[0] = DAT_0056c0d0[0];
     DAT_0056c078[0] = temp_v0_2->f56;
-    if (DAT_00490b60[0] != 0) {
+    if (p2FirstOpen[0] != 0) {
         p2RegisterPredicateName(textureLoadedPredicate, &DAT_004e5370[0]);
         p2RegisterPredicateName(textureDeferredPredicate, &DAT_004e5390[0]);
     }
     j = 0;
     do {
-        DAT_0056c080[j] = 0;
+        p2TextureFunction[j] = 0;
         j += 1;
     } while (j < 0x10U);
     FUN_00209780(0, 0x80, 0);
@@ -211,9 +211,9 @@ typedef struct Texture {
 
 void FUN_002084e0(Texture *texture) {
     extern int p2CurrentProgram;
-    extern GsSyncState *DAT_0056ad80;
+    extern GsSyncState *p2CurrentGsRegisters;
     extern int p2DirtyFlags;
-    extern long long DAT_0056ae48;
+    extern long long p2GsDirtyRegisters;
     void FUN_001fcb00(void);
     if (texture == 0) return;
     if (texture->clut != 0) {
@@ -221,7 +221,7 @@ void FUN_002084e0(Texture *texture) {
         return;
     }
     DAT_0056c068++;
-    DAT_0056ad80->textureFunction = texture->function;
+    p2CurrentGsRegisters->textureFunction = texture->function;
     if (texture->bufferMode != 0) {
         if (texture->bufferMode == 1) {
             texture->address = DAT_00568e12[0] ? 0 : DAT_00568e1c[0];
@@ -235,21 +235,21 @@ void FUN_002084e0(Texture *texture) {
         texture->address = texture->address << 5;
     }
     if (p2CurrentProgram == 0) {
-        DAT_0056ad80->tex0_1.tbp0 = texture->address;
-        DAT_0056ad80->tex0_1.tbw = texture->tex0.tbw;
-        DAT_0056ad80->tex0_1.psm = texture->tex0.psm;
-        DAT_0056ad80->tex0_1.tw = texture->tex0.tw;
-        DAT_0056ad80->tex0_1.th = texture->tex0.th;
+        p2CurrentGsRegisters->tex0_1.tbp0 = texture->address;
+        p2CurrentGsRegisters->tex0_1.tbw = texture->tex0.tbw;
+        p2CurrentGsRegisters->tex0_1.psm = texture->tex0.psm;
+        p2CurrentGsRegisters->tex0_1.tw = texture->tex0.tw;
+        p2CurrentGsRegisters->tex0_1.th = texture->tex0.th;
         p2DirtyFlags |= 0x40;
-        DAT_0056ae48 |= 0x48000040LL;
+        p2GsDirtyRegisters |= 0x48000040LL;
     } else {
-        DAT_0056ad80->tex0_2.tbp0 = texture->address;
-        DAT_0056ad80->tex0_2.tbw = texture->tex0.tbw;
-        DAT_0056ad80->tex0_2.psm = texture->tex0.psm;
-        DAT_0056ad80->tex0_2.tw = texture->tex0.tw;
-        DAT_0056ad80->tex0_2.th = texture->tex0.th;
+        p2CurrentGsRegisters->tex0_2.tbp0 = texture->address;
+        p2CurrentGsRegisters->tex0_2.tbw = texture->tex0.tbw;
+        p2CurrentGsRegisters->tex0_2.psm = texture->tex0.psm;
+        p2CurrentGsRegisters->tex0_2.tw = texture->tex0.tw;
+        p2CurrentGsRegisters->tex0_2.th = texture->tex0.th;
         p2DirtyFlags |= 0x40;
-        DAT_0056ae48 |= 0x48000080LL;
+        p2GsDirtyRegisters |= 0x48000080LL;
         if (p2CurrentProgram == 1 && texture->bufferMode == 0) FUN_001fcb00();
     }
 }
@@ -265,27 +265,27 @@ void FUN_00208f20(int arg0) {
 typedef struct P_208f70 { char pad[52]; unsigned char b0:3; unsigned char mode:2; unsigned char b5:3; char pad2[7]; unsigned char c0:3; unsigned char cmode:2; unsigned char c5:3; } P_208f70;
 void FUN_00208f70(int arg0) {
     int FUN_00208f20();
-    extern long long DAT_0056ae48[4];
+    extern long long p2GsDirtyRegisters[4];
     extern int p2DirtyFlags[4];
     extern int p2CurrentProgram[4];
-    extern P_208f70 *DAT_0056ad80[4];
-    extern int DAT_0056c080[4];
+    extern P_208f70 *p2CurrentGsRegisters[4];
+    extern int p2TextureFunction[4];
     int temp_a2;
     long long temp_a1;
 
     FUN_00208f20();
     if (p2CurrentProgram[0] == 0) {
-        DAT_0056c080[p2CurrentProgram[0]] = arg0;
-        DAT_0056ad80[0]->mode = arg0;
+        p2TextureFunction[p2CurrentProgram[0]] = arg0;
+        p2CurrentGsRegisters[0]->mode = arg0;
         p2DirtyFlags[0] |= 0x40;
-        DAT_0056ae48[0] |= 0x40;
+        p2GsDirtyRegisters[0] |= 0x40;
     } else {
-        DAT_0056c080[p2CurrentProgram[0]] = arg0;
-        DAT_0056ad80[0]->cmode = arg0;
+        p2TextureFunction[p2CurrentProgram[0]] = arg0;
+        p2CurrentGsRegisters[0]->cmode = arg0;
         temp_a2 = p2DirtyFlags[0] | 0x40;
-        temp_a1 = DAT_0056ae48[0] | 0x80;
+        temp_a1 = p2GsDirtyRegisters[0] | 0x80;
         p2DirtyFlags[0] = temp_a2;
-        DAT_0056ae48[0] = temp_a1;
+        p2GsDirtyRegisters[0] = temp_a1;
         if (p2CurrentProgram[0] == 1) {
             FUN_001fcb00();
         }
@@ -296,24 +296,24 @@ void FUN_00208f70(int arg0) {
 typedef struct Obj_209090 { char pad[52]; unsigned char a52 : 2; unsigned char b52 : 1; unsigned char c52 : 2; unsigned char r52 : 3; char pad2[7]; unsigned char a60 : 2; unsigned char b60 : 1; unsigned char c60 : 2; unsigned char r60 : 3; } Obj_209090;
 void FUN_00209090(int arg0, int arg1) {
     int FUN_00208f20();
-    extern long long DAT_0056ae48[4];
+    extern long long p2GsDirtyRegisters[4];
     extern int p2DirtyFlags[4];
     extern int p2CurrentProgram[4];
-    extern Obj_209090 *DAT_0056ad80[4];
-    extern int DAT_0056c080[4];
+    extern Obj_209090 *p2CurrentGsRegisters[4];
+    extern int p2TextureFunction[4];
     FUN_00208f20();
     if (p2CurrentProgram[0] == 0) {
-        *(int *)((char *)DAT_0056c080 + p2CurrentProgram[0] * 4) = arg0;
-        DAT_0056ad80[0]->c52 = arg0;
-        DAT_0056ad80[0]->b52 = arg1;
+        *(int *)((char *)p2TextureFunction + p2CurrentProgram[0] * 4) = arg0;
+        p2CurrentGsRegisters[0]->c52 = arg0;
+        p2CurrentGsRegisters[0]->b52 = arg1;
         p2DirtyFlags[0] |= 0x40;
-        DAT_0056ae48[0] |= 0x40;
+        p2GsDirtyRegisters[0] |= 0x40;
     } else {
-        *(int *)((char *)DAT_0056c080 + p2CurrentProgram[0] * 4) = arg0;
-        DAT_0056ad80[0]->c60 = arg0;
-        DAT_0056ad80[0]->b60 = arg1;
+        *(int *)((char *)p2TextureFunction + p2CurrentProgram[0] * 4) = arg0;
+        p2CurrentGsRegisters[0]->c60 = arg0;
+        p2CurrentGsRegisters[0]->b60 = arg1;
         p2DirtyFlags[0] |= 0x40;
-        DAT_0056ae48[0] |= 0x80;
+        p2GsDirtyRegisters[0] |= 0x80;
         if (p2CurrentProgram[0] == 1) {
             FUN_001fcb00();
         }
@@ -324,37 +324,37 @@ void FUN_00209090(int arg0, int arg1) {
 typedef struct R { unsigned char a : 2; unsigned char b : 2; unsigned short c : 10; unsigned long long d : 10; unsigned long long e : 10; unsigned short f : 10; } R;
 typedef struct P_209210 { char pad[52]; unsigned char x0 : 2; unsigned char fl : 1; unsigned char r : 5; char pad2[7]; unsigned char y0 : 2; unsigned char fl2 : 1; unsigned char r2 : 5; char pad3[3]; R r64; R r72; } P_209210;
 void FUN_00209210(int arg0, int arg1, int arg2, long long arg3, long long arg4, int arg5, int arg6) {
-    extern long long DAT_0056ae48[4];
+    extern long long p2GsDirtyRegisters[4];
     extern int p2DirtyFlags[4];
     extern int p2CurrentProgram[4];
-    extern P_209210 *DAT_0056ad80[4];
+    extern P_209210 *p2CurrentGsRegisters[4];
     int temp_a2;
     R *q;
     long long temp_a1;
     if (p2CurrentProgram[0] == 0) {
-        DAT_0056ad80[0]->fl = arg6;
-        DAT_0056ad80[0]->r64.a = arg0;
-        DAT_0056ad80[0]->r64.b = arg1;
-        DAT_0056ad80[0]->r64.c = arg2;
-        q = &DAT_0056ad80[0]->r64;
+        p2CurrentGsRegisters[0]->fl = arg6;
+        p2CurrentGsRegisters[0]->r64.a = arg0;
+        p2CurrentGsRegisters[0]->r64.b = arg1;
+        p2CurrentGsRegisters[0]->r64.c = arg2;
+        q = &p2CurrentGsRegisters[0]->r64;
         q->d = (int)arg3;
         q->e = (int)arg4;
         q->f = arg5;
         p2DirtyFlags[0] |= 0x40;
-        DAT_0056ae48[0] |= 0x140;
+        p2GsDirtyRegisters[0] |= 0x140;
     } else {
-        DAT_0056ad80[0]->fl2 = arg6;
-        DAT_0056ad80[0]->r72.a = arg0;
-        DAT_0056ad80[0]->r72.b = arg1;
-        DAT_0056ad80[0]->r72.c = arg2;
-        q = &DAT_0056ad80[0]->r72;
+        p2CurrentGsRegisters[0]->fl2 = arg6;
+        p2CurrentGsRegisters[0]->r72.a = arg0;
+        p2CurrentGsRegisters[0]->r72.b = arg1;
+        p2CurrentGsRegisters[0]->r72.c = arg2;
+        q = &p2CurrentGsRegisters[0]->r72;
         q->d = (int)arg3;
         q->e = (int)arg4;
         q->f = arg5;
         temp_a2 = p2DirtyFlags[0] | 0x40;
-        temp_a1 = DAT_0056ae48[0] | 0x280;
+        temp_a1 = p2GsDirtyRegisters[0] | 0x280;
         p2DirtyFlags[0] = temp_a2;
-        DAT_0056ae48[0] = temp_a1;
+        p2GsDirtyRegisters[0] = temp_a1;
         if (p2CurrentProgram[0] == 1) {
             FUN_001fcb00();
         }
@@ -370,26 +370,26 @@ typedef struct B_2094c0 {
 } B_2094c0;
 typedef struct P_2094c0 { char pad[104]; B_2094c0 b104; char pad2[6]; B_2094c0 b112; } P_2094c0;
 void FUN_002094c0(int arg0, int arg1) {
-    extern long long DAT_0056ae48[4];
+    extern long long p2GsDirtyRegisters[4];
     extern int p2CurrentProgram[4];
-    extern P_2094c0 *DAT_0056ad80[4];
+    extern P_2094c0 *p2CurrentGsRegisters[4];
     extern int p2DirtyFlags[4];
     if (p2CurrentProgram[0] == 0) {
-        DAT_0056ad80[0]->b104.f = arg0;
-        DAT_0056ad80[0]->b104.c = arg1;
-        if (DAT_0056ad80[0]->b104.c == 1 || DAT_0056ad80[0]->b104.c == 0) {
-            DAT_0056ad80[0]->b104.m = 0;
+        p2CurrentGsRegisters[0]->b104.f = arg0;
+        p2CurrentGsRegisters[0]->b104.c = arg1;
+        if (p2CurrentGsRegisters[0]->b104.c == 1 || p2CurrentGsRegisters[0]->b104.c == 0) {
+            p2CurrentGsRegisters[0]->b104.m = 0;
         }
         p2DirtyFlags[0] |= 0x40;
-        DAT_0056ae48[0] |= 0x2000;
+        p2GsDirtyRegisters[0] |= 0x2000;
     } else {
-        DAT_0056ad80[0]->b112.f = arg0;
-        DAT_0056ad80[0]->b112.c = arg1;
-        if (DAT_0056ad80[0]->b112.c == 1 || DAT_0056ad80[0]->b112.c == 0) {
-            DAT_0056ad80[0]->b112.m = 0;
+        p2CurrentGsRegisters[0]->b112.f = arg0;
+        p2CurrentGsRegisters[0]->b112.c = arg1;
+        if (p2CurrentGsRegisters[0]->b112.c == 1 || p2CurrentGsRegisters[0]->b112.c == 0) {
+            p2CurrentGsRegisters[0]->b112.m = 0;
         }
         p2DirtyFlags[0] |= 0x40;
-        DAT_0056ae48[0] |= 0x4000;
+        p2GsDirtyRegisters[0] |= 0x4000;
     }
 }
 
@@ -408,22 +408,22 @@ typedef struct Obj_209650 {
     unsigned short d116 : 12; unsigned short r116 : 4;
 } Obj_209650;
 void FUN_00209650(int arg0, int arg1, int arg2) {
-    extern long long DAT_0056ae48[4];
+    extern long long p2GsDirtyRegisters[4];
     extern int p2DirtyFlags[4];
     extern int p2CurrentProgram[4];
-    extern Obj_209650 *DAT_0056ad80[4];
+    extern Obj_209650 *p2CurrentGsRegisters[4];
     if (p2CurrentProgram[0] == 0) {
-        DAT_0056ad80[0]->a104 = arg0;
-        DAT_0056ad80[0]->c106 = arg1;
-        DAT_0056ad80[0]->d108 = arg2;
+        p2CurrentGsRegisters[0]->a104 = arg0;
+        p2CurrentGsRegisters[0]->c106 = arg1;
+        p2CurrentGsRegisters[0]->d108 = arg2;
         p2DirtyFlags[0] |= 0x40;
-        DAT_0056ae48[0] |= 0x2000;
+        p2GsDirtyRegisters[0] |= 0x2000;
     } else {
-        DAT_0056ad80[0]->a112 = arg0;
-        DAT_0056ad80[0]->c114 = arg1;
-        DAT_0056ad80[0]->d116 = arg2;
+        p2CurrentGsRegisters[0]->a112 = arg0;
+        p2CurrentGsRegisters[0]->c114 = arg1;
+        p2CurrentGsRegisters[0]->d116 = arg2;
         p2DirtyFlags[0] |= 0x40;
-        DAT_0056ae48[0] |= 0x4000;
+        p2GsDirtyRegisters[0] |= 0x4000;
     }
 }
 
@@ -442,14 +442,14 @@ struct S_209780 {
     char f220;
 };
 void FUN_00209780(char arg0, char arg1, int arg2) {
-    extern long long DAT_0056ae48[4];
+    extern long long p2GsDirtyRegisters[4];
     extern int p2DirtyFlags[4];
-    extern struct S_209780 * DAT_0056ad80[4];
-    DAT_0056ad80[0]->f216 = arg0;
-    DAT_0056ad80[0]->f220 = arg1;
-    DAT_0056ad80[0]->b7 = arg2;
+    extern struct S_209780 * p2CurrentGsRegisters[4];
+    p2CurrentGsRegisters[0]->f216 = arg0;
+    p2CurrentGsRegisters[0]->f220 = arg1;
+    p2CurrentGsRegisters[0]->b7 = arg2;
     p2DirtyFlags[0] |= 0x40;
-    DAT_0056ae48[0] |= 0x08000000;
+    p2GsDirtyRegisters[0] |= 0x08000000;
 }
 
 struct G_20a590 {
@@ -483,7 +483,7 @@ void FUN_002097f0(struct Tex_2097f0 **list, int count) {
     int FUN_001f7e90();
     int p2AddDmaCompletion();
     void FUN_002084a0();
-    extern struct G_20a590 *DAT_0056ad80[4];
+    extern struct G_20a590 *p2CurrentGsRegisters[4];
     extern struct Ch_2097f0 *DAT_00568f08[4];
     extern struct Ch_2097f0 *DAT_00568f38[4];
     extern int DAT_00569128[4];
@@ -530,10 +530,10 @@ void FUN_002097f0(struct Tex_2097f0 **list, int count) {
     }
     FUN_00113f78();
     do {
-        DAT_0056ad80[0]->x391 = DAT_004917b0[(*list)->format];
-        DAT_0056ad80[0]->x390 = ((*list)->width + 63) / 64;
-        DAT_0056ad80[0]->x400 = (*list)->width;
-        DAT_0056ad80[0]->x408 = 0;
+        p2CurrentGsRegisters[0]->x391 = DAT_004917b0[(*list)->format];
+        p2CurrentGsRegisters[0]->x390 = ((*list)->width + 63) / 64;
+        p2CurrentGsRegisters[0]->x400 = (*list)->width;
+        p2CurrentGsRegisters[0]->x408 = 0;
         t = *list;
         fmt = t->format;
         w = t->width;
@@ -545,10 +545,10 @@ void FUN_002097f0(struct Tex_2097f0 **list, int count) {
             h = rows < max ? rows : max;
             /* matching construct: permuter — qwc computed before the transfer-register stores */
             qwc = (DAT_00491730[fmt] * (w * h) + 31) >> 5;
-            DAT_0056ad80[0]->x388 = t->tbp;
-            DAT_0056ad80[0]->x396 = 0;
-            DAT_0056ad80[0]->x398 = y;
-            DAT_0056ad80[0]->x404 = h;
+            p2CurrentGsRegisters[0]->x388 = t->tbp;
+            p2CurrentGsRegisters[0]->x396 = 0;
+            p2CurrentGsRegisters[0]->x398 = y;
+            p2CurrentGsRegisters[0]->x404 = h;
             FUN_001f7e90(4, DAT_00491820, 0);
             /* matching construct: statement-order search — y += h placed before the GIF tag NLOOP store */
             y += h;
@@ -596,7 +596,7 @@ int FUN_00209cc0(int a) {
 struct A0_20a590 { char p0[56]; int f56; unsigned short f60; char p1[4]; unsigned short f66; char p2[2]; signed char f70:7; char p3; char f72; };
 void FUN_0020a590(struct A0_20a590 *arg0, int arg1, int arg2, int arg3, int arg4, int arg5, int arg6, int arg7) {
     int FUN_0020b7f0();
-    extern struct G_20a590 *DAT_0056ad80[4];
+    extern struct G_20a590 *p2CurrentGsRegisters[4];
     int sp0;
     int s0;
     int v;
@@ -605,7 +605,7 @@ void FUN_0020a590(struct A0_20a590 *arg0, int arg1, int arg2, int arg3, int arg4
     short m;
     int pr;
     int t;
-    sp0 = DAT_0056ad80[0]->x355;
+    sp0 = p2CurrentGsRegisters[0]->x355;
     s0 = (p2GetDisplayFlags() & 2) != 0;
     arg0->f72 = 1;
     switch (arg0->f70) {
@@ -619,31 +619,31 @@ void FUN_0020a590(struct A0_20a590 *arg0, int arg1, int arg2, int arg3, int arg4
         arg0->f70 = 3;
         break;
     }
-    DAT_0056ad80[0]->x391 = DAT_004917b0[arg0->f66];
-    DAT_0056ad80[0]->x388 = arg0->f56;
-    DAT_0056ad80[0]->x390 = (arg0->f60 + 63) / 64;
-    DAT_0056ad80[0]->x387 = sp0;
+    p2CurrentGsRegisters[0]->x391 = DAT_004917b0[arg0->f66];
+    p2CurrentGsRegisters[0]->x388 = arg0->f56;
+    p2CurrentGsRegisters[0]->x390 = (arg0->f60 + 63) / 64;
+    p2CurrentGsRegisters[0]->x387 = sp0;
     if (arg7 != 0) {
-        DAT_0056ad80[0]->x384 = DAT_0056ad80[0]->x368 << 5;
+        p2CurrentGsRegisters[0]->x384 = p2CurrentGsRegisters[0]->x368 << 5;
     } else {
-        DAT_0056ad80[0]->x384 = (DAT_00568e12[0] != 0 && !s0) ? (DAT_00568e08[0] * DAT_00568e0a[0]) / 64 : 0;
+        p2CurrentGsRegisters[0]->x384 = (DAT_00568e12[0] != 0 && !s0) ? (DAT_00568e08[0] * DAT_00568e0a[0]) / 64 : 0;
     }
     if (s0 != 0) u = DAT_00568e22[0]; else u = DAT_00568e08[0];
-    DAT_0056ad80[0]->x386 = u / 64;
-    DAT_0056ad80[0]->x396 = arg3;
-    DAT_0056ad80[0]->x398 = arg4;
-    DAT_0056ad80[0]->x392 = arg1;
+    p2CurrentGsRegisters[0]->x386 = u / 64;
+    p2CurrentGsRegisters[0]->x396 = arg3;
+    p2CurrentGsRegisters[0]->x398 = arg4;
+    p2CurrentGsRegisters[0]->x392 = arg1;
     if (s0 != 0) m = DAT_00568e24[0]; else m = DAT_00568e0a[0];
-    DAT_0056ad80[0]->x394 = m - (arg6 + arg2);
-    DAT_0056ad80[0]->x399 = 0;
-    DAT_0056ad80[0]->x400 = arg5;
-    DAT_0056ad80[0]->x404 = arg6;
-    DAT_0056ad80[0]->x408 = 2;
+    p2CurrentGsRegisters[0]->x394 = m - (arg6 + arg2);
+    p2CurrentGsRegisters[0]->x399 = 0;
+    p2CurrentGsRegisters[0]->x400 = arg5;
+    p2CurrentGsRegisters[0]->x404 = arg6;
+    p2CurrentGsRegisters[0]->x408 = 2;
     FUN_001f76f0(4, &DAT_00491860[0]);
 }
 
 void FUN_0020a990(void *srcTexture, int srcX, int srcY, void *dstTexture, int dstX, int dstY, int width, int height) {
-    extern struct G_20a590 *DAT_0056ad80[4];
+    extern struct G_20a590 *p2CurrentGsRegisters[4];
     int FUN_0020b7f0();
     extern int DAT_00491870[4];
     int xdir;
@@ -678,20 +678,20 @@ void FUN_0020a990(void *srcTexture, int srcX, int srcY, void *dstTexture, int ds
         src->f70 = 3;
         break;
     }
-    DAT_0056ad80[0]->x387 = DAT_004917b0[src->f66];
-    DAT_0056ad80[0]->x384 = src->f56;
-    DAT_0056ad80[0]->x386 = (src->f60 + 63) / 64;
-    DAT_0056ad80[0]->x391 = DAT_004917b0[dst->f66];
-    DAT_0056ad80[0]->x388 = dst->f56;
-    DAT_0056ad80[0]->x390 = (dst->f60 + 63) / 64;
-    DAT_0056ad80[0]->x396 = dstX;
-    DAT_0056ad80[0]->x398 = dstY;
-    DAT_0056ad80[0]->x392 = srcX;
-    DAT_0056ad80[0]->x394 = srcY;
-    DAT_0056ad80[0]->x399 = (xdir << 1) + ydir;
-    DAT_0056ad80[0]->x400 = width;
-    DAT_0056ad80[0]->x404 = height;
-    DAT_0056ad80[0]->x408 = 2;
+    p2CurrentGsRegisters[0]->x387 = DAT_004917b0[src->f66];
+    p2CurrentGsRegisters[0]->x384 = src->f56;
+    p2CurrentGsRegisters[0]->x386 = (src->f60 + 63) / 64;
+    p2CurrentGsRegisters[0]->x391 = DAT_004917b0[dst->f66];
+    p2CurrentGsRegisters[0]->x388 = dst->f56;
+    p2CurrentGsRegisters[0]->x390 = (dst->f60 + 63) / 64;
+    p2CurrentGsRegisters[0]->x396 = dstX;
+    p2CurrentGsRegisters[0]->x398 = dstY;
+    p2CurrentGsRegisters[0]->x392 = srcX;
+    p2CurrentGsRegisters[0]->x394 = srcY;
+    p2CurrentGsRegisters[0]->x399 = (xdir << 1) + ydir;
+    p2CurrentGsRegisters[0]->x400 = width;
+    p2CurrentGsRegisters[0]->x404 = height;
+    p2CurrentGsRegisters[0]->x408 = 2;
     FUN_001f76f0(4, &DAT_00491870[0]);
 }
 
@@ -726,7 +726,7 @@ typedef struct RT_20ad60 {
 int FUN_0020ad60(T_20ad60 *color, T_20ad60 *depth) {
     int FUN_0020b7f0();
     extern int p2CurrentProgram[4];
-    extern RT_20ad60 *DAT_0056ad80[4];
+    extern RT_20ad60 *p2CurrentGsRegisters[4];
     extern int DAT_00491880[4];
     extern int DAT_00491890[4];
     int s0;
@@ -752,32 +752,32 @@ int FUN_0020ad60(T_20ad60 *color, T_20ad60 *depth) {
     default:
         return 0;
     }
-    DAT_0056ad80[0]->u136.h.a = (0x800 - (color->f60 >> 1)) * 0x10;
-    DAT_0056ad80[0]->u136.h.b = (0x800 - (color->f62 >> 1)) * 0x10;
+    p2CurrentGsRegisters[0]->u136.h.a = (0x800 - (color->f60 >> 1)) * 0x10;
+    p2CurrentGsRegisters[0]->u136.h.b = (0x800 - (color->f62 >> 1)) * 0x10;
     if (DAT_00568e28[0] == -1) {
         DAT_00568e28[0] = (int)color;
-        DAT_0056c138[0] = DAT_0056ad80[0]->u352.i;
-        DAT_0056c140[0] = DAT_0056ad80[0]->u368.i;
-        DAT_0056c148[0] = DAT_0056ad80[0]->u176.q;
+        DAT_0056c138[0] = p2CurrentGsRegisters[0]->u352.i;
+        DAT_0056c140[0] = p2CurrentGsRegisters[0]->u368.i;
+        DAT_0056c148[0] = p2CurrentGsRegisters[0]->u176.q;
     }
     if (depth != 0) {
         DAT_00568e30[0] = (int)depth;
-        DAT_0056ad80[0]->u368.z.zbp = ((depth->f56 << 9) / 8) / 2048;
+        p2CurrentGsRegisters[0]->u368.z.zbp = ((depth->f56 << 9) / 8) / 2048;
         if (depth->f66 == 12 && color->f66 == 3) {
             depth->f66 = 11;
             color->f66 = 2;
             color->psm18 = DAT_004917b0[2];
         }
-        DAT_0056ad80[0]->u368.z.zpsm = DAT_004917b0[depth->f66] & 0xF;
+        p2CurrentGsRegisters[0]->u368.z.zpsm = DAT_004917b0[depth->f66] & 0xF;
     } else {
         DAT_00568e30[0] = -1;
     }
-    DAT_0056ad80[0]->u352.f.fbp = ((color->f56 << 9) / 8) / 2048;
-    DAT_0056ad80[0]->u352.f.fbw = (unsigned int)color->f60 >> 6;
-    DAT_0056ad80[0]->u352.f.psm = DAT_004917b0[color->f66];
-    DAT_0056ad80[0]->u176.b.x = 0;
+    p2CurrentGsRegisters[0]->u352.f.fbp = ((color->f56 << 9) / 8) / 2048;
+    p2CurrentGsRegisters[0]->u352.f.fbw = (unsigned int)color->f60 >> 6;
+    p2CurrentGsRegisters[0]->u352.f.psm = DAT_004917b0[color->f66];
+    p2CurrentGsRegisters[0]->u176.b.x = 0;
     if (s0 != 0) {
-        p = DAT_0056ad80[0];
+        p = p2CurrentGsRegisters[0];
         p->q360 = p->u352.q;
         p->q144 = p->u136.q;
         p->q376 = p->u368.q;
@@ -793,7 +793,7 @@ typedef struct S_20b110 {
 } S_20b110;
 void FUN_0020b110(void) {
     extern int p2CurrentProgram[4];
-    extern S_20b110 *DAT_0056ad80[4];
+    extern S_20b110 *p2CurrentGsRegisters[4];
     short v;
     int a1;
     int s0;
@@ -802,16 +802,16 @@ void FUN_0020b110(void) {
     s0 = ((unsigned int) p2ProgramFlags[p2CurrentProgram[0]] >> 0x17) & 1;
     a1 = (p2GetDisplayFlags() & 2) != 0;
     if (DAT_00568e28[0] != -1) {
-        DAT_0056ad80[0]->u352.i = DAT_0056c138[0];
-        DAT_0056ad80[0]->u368.i = DAT_0056c140[0];
-        p = DAT_0056ad80[0];
+        p2CurrentGsRegisters[0]->u352.i = DAT_0056c138[0];
+        p2CurrentGsRegisters[0]->u368.i = DAT_0056c140[0];
+        p = p2CurrentGsRegisters[0];
         p->q176 = DAT_0056c148[0];
         if (a1 != 0) v = DAT_00568e22[0]; else v = DAT_00568e08[0];
         p->u136.h.a = (0x800 - (v >> 1)) * 0x10;
         if (a1 != 0) v = DAT_00568e24[0]; else v = DAT_00568e0a[0];
-        DAT_0056ad80[0]->u136.h.b = (0x800 - (v >> 1)) * 0x10;
+        p2CurrentGsRegisters[0]->u136.h.b = (0x800 - (v >> 1)) * 0x10;
         if (s0 != 0) {
-            p = DAT_0056ad80[0];
+            p = p2CurrentGsRegisters[0];
             p->q360 = p->u352.q;
             p->q144 = p->u136.q;
             p->q376 = p->u368.q;

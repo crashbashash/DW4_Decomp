@@ -132,7 +132,7 @@ column count is zero.
   records are is not established.
 - `vfunc_22` passes its second argument both as the `GAMERAM` object (insight, system and messenger)
   and as the status the record getters take; which class callers pass is not established.
-- The callees `FUN_00236f80` (find an object by metaobject in an insight), `FUN_00447b00` and `FUN_00447b40`
+- The callees `igInsightCore_FindManager` (find an object by metaobject in an insight), `FUN_00447b00` and `FUN_00447b40`
   (test and clear the model work's first timer) belong to other units and keep their placeholders;
   `beNDMWGameRam_ChangeHp`, `beNDMWGameRam_ChangeMp` (add HP and MP) and `igProperty_GetRecordIntList`
   (find a list property by name) are named.

@@ -118,7 +118,7 @@ igObject *FUN_0045dbe0(int);
 int FUN_00237020(...);
 int FUN_00236ee0(...);
 int igInsightCore_AddManager(...);
-int FUN_002eb010(...);
+int StringPool_Allocate(...);
 int StringPool_Construct(...);
 void *StringPool_Intern(...);
 int igNamedObject_SetName(...);
@@ -136,7 +136,7 @@ static inline void releaseString(void *p) {
 static inline void *intern(const char *s) {
     if (s == 0) return 0;
     if (g_stringPool[0] == 0) {
-        int pool = FUN_002eb010(16);
+        int pool = StringPool_Allocate(16);
         if (pool != 0) pool = StringPool_Construct(pool);
         g_stringPool[0] = pool;
     }

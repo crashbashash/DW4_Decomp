@@ -1,6 +1,6 @@
 #include "dw4/reflected.h"
 
-extern "C" int FUN_00236f80(int, int);
+extern "C" int igInsightCore_FindManager(int, int);
 extern "C" int Gap__Bec__beMatCtrl__vfunc_30(void);
 extern "C" int Gap__Bec__beMatCtrl__vfunc_20(void);
 extern "C" int beMessenger_RegisterReceiver(int, int, int, int, int);
@@ -134,7 +134,7 @@ void Gap__Bec__beMatCtrl__vfunc_32(beMatCtrl *arg0) {
     igDataList *temp_v1;
     igDataList *temp_v1_2;
 
-    arg0->_lua = FUN_00236f80(arg0->_insight, g_beLua_metaObject[0]);
+    arg0->_lua = igInsightCore_FindManager(arg0->_insight, g_beLua_metaObject[0]);
     temp_v1 = (igDataList *)(arg0->_wkMatOnList);
     if (temp_v1 != 0) {
         temp_v1->_count = 0;

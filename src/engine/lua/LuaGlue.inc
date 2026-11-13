@@ -52,7 +52,7 @@ void LuaGlue_Initialize(void) {
             LuaDoubleArray_Delete, LuaDoubleArray_Get, LuaDoubleArray_Set, LuaDoubleArray_New);
         g_luaArrayClasses[LUA_KIND_ENUM] = g_luaArrayClasses[LUA_KIND_INT];
         if (g_luaObjectTags == 0) {
-            g_luaObjectTags = FUN_002caa70(g_luaGluePool);
+            g_luaObjectTags = igIntList_Create(g_luaGluePool);
         }
         for (hook = g_luaStartupHooks; hook != 0; hook = hook->next) {
             if (hook->phase == 0) hook->luaClass = hook->create();

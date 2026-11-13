@@ -76,7 +76,7 @@ extern "C" int FUN_00282038(...);
 extern "C" void igAdx_ExecServer(int);
 extern "C" void *FUN_002b90e0(int);
 extern "C" void igAdx_SetPartitionCount(int arg0);
-extern "C" int FUN_002eb010(int);
+extern "C" int StringPool_Allocate(int);
 extern "C" int List_Reserve(void *, int, int);
 extern "C" int StringChunk_ReleaseHeader(int, int *);
 extern "C" int StringPool_Construct(int);
@@ -178,7 +178,7 @@ public:
 };
 struct ThreadList { char pad[16]; AdxThread **data; };
 struct ThreadManager { char pad[8]; ThreadList *threads; };
-extern "C" ThreadManager *DAT_005871d0[4];
+extern "C" ThreadManager *g_threadManager[4];
 struct TextBuffer { int vtable; unsigned int refCount; char *text; };
 struct PathEntry { int vtable; unsigned int refCount; char *name; int f12; short left; short right; };
 struct PathEntryList { int vtable; unsigned int refCount; int count; int capacity; PathEntry **data; };
@@ -633,7 +633,7 @@ void igAdx_AddPartitionName(int arg0, char *arg1) {
             r = 0;
         } else {
             if (g_stringPool[0] == 0) {
-                v = FUN_002eb010(16);
+                v = StringPool_Allocate(16);
                 if (v != 0) v = StringPool_Construct(v);
                 g_stringPool[0] = v;
             }
@@ -657,7 +657,7 @@ void igAdx_AddPartitionName(int arg0, char *arg1) {
             do {
                 p = &l->data[i];
                 if (g_stringPool[0] == 0) {
-                    v = FUN_002eb010(16);
+                    v = StringPool_Allocate(16);
                     if (v != 0) v = StringPool_Construct(v);
                     g_stringPool[0] = v;
                 }
@@ -757,7 +757,7 @@ int igAdx_LoadPartition(int stream, const char *path, int mode, int length)
             igAdx_ExecServer(0);
             break;
         }
-        DAT_005871d0[0]->threads->data[0]->sleep(3333333);
+        g_threadManager[0]->threads->data[0]->sleep(3333333);
     } while (waiting);
     return 1;
 }

@@ -1,4 +1,4 @@
-void FUN_003c1ab0(int arg0) {
+void beNDMWMdlEffect_CreateInstance(int arg0) {
     FUN_003c1bf0();
     igMetaObject_CreateInstance(*(int *)0x58B518, arg0);
 }

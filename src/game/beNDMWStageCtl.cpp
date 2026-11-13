@@ -1,6 +1,6 @@
 #include "dw4/reflected.h"
 #define STR_RELEASE(s) if (s) { int *h_ = (int *)((char *)(s) - 8); if (--h_[1] == 0) StringChunk_ReleaseHeader((void *)h_[0], (int)h_); }
-#define POOL() if (!g_stringPool[0]) { int p_ = FUN_002eb010(16); if (p_) p_ = StringPool_Construct(p_); g_stringPool[0] = p_; }
+#define POOL() if (!g_stringPool[0]) { int p_ = StringPool_Allocate(16); if (p_) p_ = StringPool_Construct(p_); g_stringPool[0] = p_; }
 
 extern "C" void Gap__Bec__beNDMWStageCtl__vfunc_32(void);
 extern "C" int Gap__Bec__beNDMWStageCtl__vfunc_30(void);
@@ -13,8 +13,8 @@ extern "C" int beMessenger_SelectGroup(...);
 extern "C" int beMessenger_SendGroup(...);
 extern "C" int beMessenger_SetFreezeTime(...);
 extern "C" int strlen(void *);
-extern "C" void * FUN_00236f80(...);
-extern "C" int FUN_002eb010(int);
+extern "C" void * igInsightCore_FindManager(...);
+extern "C" int StringPool_Allocate(int);
 extern "C" int FUN_0030b3c0(void *, int);
 extern "C" int FUN_0030b460(void *, void *, int, int);
 extern "C" int FUN_003bbd40(void);
@@ -94,7 +94,7 @@ void Gap__Bec__beNDMWStageCtl__vfunc_31(beNDMWStageCtl *arg0, beNDMWStageCtlInfo
     switch (arg1->_st0) {
     case 0:
         if (((beSystem *)arg0->_system)->_isSResetEnable == 0) return;
-        pad = bePadManager_GetPadForPlayer(((int)FUN_00236f80(arg0->_insight, g_bePadManager_metaObject[0])), 0);
+        pad = bePadManager_GetPadForPlayer(((int)igInsightCore_FindManager(arg0->_insight, g_bePadManager_metaObject[0])), 0);
         int a = pad->_trigger;
         int b = pad->_button;
         ok = (a & 8) != 0 && (b & 1) != 0;
@@ -173,7 +173,7 @@ int Gap__Bec__beNDMWStageCtl__vfunc_34(beNDMWStageCtl *arg0, beNDMWStageCtlInfoR
     case 1:
         if (beMessenger_GetStringCount(arg0->_messenger) > 0) {
             int temp_s2_2 = beMessenger_GetString(arg0->_messenger, 0);
-            bePadManager *temp_s0_3 = (bePadManager *)FUN_00236f80(arg0->_insight, g_bePadManager_metaObject[0]);
+            bePadManager *temp_s0_3 = (bePadManager *)igInsightCore_FindManager(arg0->_insight, g_bePadManager_metaObject[0]);
             if (strcmp(temp_s2_2, &DAT_005156a0[0]) == 0) {
                 temp_s0_3->_isPadDisable = 0;
             } else if (strcmp(temp_s2_2, &DAT_005156a8[0]) == 0) {

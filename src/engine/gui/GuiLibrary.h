@@ -840,7 +840,7 @@ extern "C" void Gap__Gui__igCharMetricsMetaField__vfunc_11(void *arg0);
 extern "C" void *FUN_00187b50(...);
 extern "C" void *FUN_002b5fe0(...);
 extern "C" void *FUN_002c45f0(...);
-extern "C" int FUN_002eb010(...);
+extern "C" int StringPool_Allocate(...);
 extern "C" int ObjectList_AppendRetained(...);
 extern "C" int StringPool_Construct(...);
 extern "C" void *StringPool_Intern(...);

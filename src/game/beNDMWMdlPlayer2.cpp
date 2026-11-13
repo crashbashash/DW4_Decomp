@@ -1,7 +1,7 @@
 #include "dw4/reflected.h"
 #include "dw4/igSmartPointer.h"
 
-extern "C" int FUN_00236f80(int, int);
+extern "C" int igInsightCore_FindManager(int, int);
 extern "C" int Gap__Core__igObject__vfunc_23(...);
 extern "C" int Gap__Bec__beNDMWMdlPlayer2__vfunc_20(void);
 extern "C" int strcmp(int, int *);
@@ -15,7 +15,7 @@ extern "C" int beMessenger_GetObject(...);
 extern "C" int StringChunk_ReleaseHeader(...);
 extern "C" int StringPool_Construct(...);
 extern "C" int StringPool_Intern(...);
-extern "C" int FUN_002eb010(...);
+extern "C" int StringPool_Allocate(...);
 extern "C" int Matrix44_GetTranslation(...);
 extern "C" int bePadManager_GetPadForPlayer(int, int);
 extern "C" int beTargetObj_SelectTarget(int, int *, int *);
@@ -56,7 +56,7 @@ struct Str { static inline int *intern(int s) {
         ref = 0;
     } else {
         if (g_stringPool[0] == 0) {
-            int pool = FUN_002eb010(16);
+            int pool = StringPool_Allocate(16);
             if (pool != 0) pool = StringPool_Construct(pool);
             g_stringPool[0] = pool;
         }
@@ -130,7 +130,7 @@ extern "C" void Gap__Bec__beNDMWMdlPlayer2__vfunc_38(MdlPlayer2VirtualShim *arg0
  * 23. */
 void Gap__Bec__beNDMWMdlPlayer2__vfunc_23(beNDMWMdlPlayer2 *self) {
     Gap__Core__igObject__vfunc_23();
-    self->_padManager = FUN_00236f80(self->_insight, g_bePadManager_metaObject[0]);
+    self->_padManager = igInsightCore_FindManager(self->_insight, g_bePadManager_metaObject[0]);
 }
 
 int Gap__Bec__beNDMWMdlPlayer2__vfunc_35(int dummy0, int arg1) {

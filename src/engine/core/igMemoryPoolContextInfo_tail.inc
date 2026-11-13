@@ -356,7 +356,7 @@ void FUN_002f31b0(int *result, PoolTable *table, int index, PoolHandle *handle)
 
 static inline void *descPool() {
     if ((*(void * *)g_stringPool) == 0) {
-        void *p = FUN_002eb010(16);
+        void *p = StringPool_Allocate(16);
         if (p != 0) { p = ((void *)StringPool_Construct((struct S_2eadf0 *)p)); }
         (*(void * *)g_stringPool) = p;
     }

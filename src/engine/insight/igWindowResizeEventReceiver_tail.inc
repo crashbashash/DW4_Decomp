@@ -32,13 +32,13 @@ void igInsightCore_RemoveManager(void *arg0, void *arg1) {
     }
 }
 
-void FUN_00236be0(S12 *arg0, int arg1) {
+void igInsightCore_AddToScheduler(S12 *arg0, int arg1) {
     if (((DW4VC_104_0 *)(arg0->f12))->vX() == 0) {
         ((DW4VC_96_1 *)(arg0->f12))->vX(arg1);
     }
 }
 
-void FUN_00236c40(S236 *arg0, int arg1) {
+void igInsightCore_RemoveFromScheduler(S236 *arg0, int arg1) {
     if (((DW4VC_104_0 *)arg0->p)->vX() != 0) {
         ((DW4VC_100_1 *)arg0->p)->vX((int)(arg1));
     }
@@ -91,7 +91,7 @@ void FUN_00236f30(Obj_236f30 *arg0, int arg1) {
     }
 }
 
-Obj_236f80 *FUN_00236f80(Self *arg0, int arg1) {
+Obj_236f80 *igInsightCore_FindManager(Self *arg0, int arg1) {
     unsigned int i;
     for (i = 0; i < arg0->mid->list->count; i++) {
         Obj_236f80 *o = arg0->mid->list->arr[i];

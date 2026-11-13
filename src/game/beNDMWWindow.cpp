@@ -5,7 +5,7 @@
         tok = 0; \
     } else { \
         if (g_stringPool[0] == 0) { \
-            void *pool = FUN_002eb010(0x10); \
+            void *pool = StringPool_Allocate(0x10); \
             if (pool != 0) pool = StringPool_Construct(pool); \
             g_stringPool[0] = pool; \
         } \
@@ -15,7 +15,7 @@
     StringList_AppendRetained(field, &held); }
 #define STR_RELEASE(s) if (s) { int *h_ = (int *)((s) - 8); if (--h_[1] == 0) StringChunk_ReleaseHeader(h_[0], h_); }
 
-extern "C" void * FUN_002eb010(...);
+extern "C" void * StringPool_Allocate(...);
 extern "C" void * StringPool_Construct(...);
 extern "C" const char * StringPool_Intern(...);
 extern "C" void StringChunk_ReleaseHeader(...);
@@ -25,7 +25,7 @@ extern "C" int beMessenger_SelectReceivers(...);
 extern "C" int sprintf(char *, const char *, int);
 extern "C" void beNDMWWindow_QueueNumberText(beNDMWWindow *self, const char *textType, const char *textName, int number, const char *align);
 extern "C" int beMessenger_AppendObject(int, int);
-extern "C" int FUN_00236f80(int, int);
+extern "C" int igInsightCore_FindManager(int, int);
 extern "C" int igObject_IsKindOf(int, int);
 extern "C" int beLua__RunNamedChunk(int, int, int);
 extern "C" void beNDMWWindow_RunMessageScript(beNDMWWindow *self, int chunk, int callNo);
@@ -65,7 +65,7 @@ struct Clr { static inline void ClearList(igStringRefList *l) {
     for (i = 0; i < n; i++) {
         slot = &((int **)l->_data)[i];
         if (((int *)g_stringPool)[0] == 0) {
-            pool = ((int)FUN_002eb010(16));
+            pool = ((int)StringPool_Allocate(16));
             if (pool) pool = ((int)StringPool_Construct(pool));
             ((int *)g_stringPool)[0] = pool;
         }
@@ -149,7 +149,7 @@ static inline int castToLuaManager(int object) {
 }
 
 void beNDMWWindow_RunMessageScript(beNDMWWindow *self, int chunk, int callNo) {
-    int manager = castToLuaManager(FUN_00236f80(self->_insight, g_beLua_metaObject[0]));
+    int manager = castToLuaManager(igInsightCore_FindManager(self->_insight, g_beLua_metaObject[0]));
     g_txtCallNo[0] = callNo;
     beLua__RunNamedChunk(manager, chunk, 0);
 }
@@ -312,8 +312,8 @@ void beNDMWWindow_BindContext(beNDMWWindow *self, igObject *mother, int insight,
     }
     self->_mother = (int)mother;
     self->_insight = insight;
-    self->_messenger = FUN_00236f80(insight, g_beMessenger_metaObject[0]);
-    self->_padManager = FUN_00236f80(insight, g_bePadManager_metaObject[0]);
+    self->_messenger = igInsightCore_FindManager(insight, g_beMessenger_metaObject[0]);
+    self->_padManager = igInsightCore_FindManager(insight, g_bePadManager_metaObject[0]);
     self->_playerNo = playerNo;
     self->_entCode = entCode;
 }

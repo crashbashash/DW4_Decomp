@@ -86,7 +86,7 @@ int igMetaEnum_GetValueAt(void *arg0, int arg1)
 
 static inline int pool_2fbc70(void) {
     if ((*(int *)g_stringPool) == 0) {
-        int p = ((int)FUN_002eb010(0x10));
+        int p = ((int)StringPool_Allocate(0x10));
         if (p != 0) { p = ((int)StringPool_Construct((struct S_2eadf0 *)p)); }
         (*(int *)g_stringPool) = p;
     }
@@ -140,7 +140,7 @@ MetaEnumView *igMetaEnum_Create(char *name, char **names, int *values, int count
     StringList_Resize((StringRefListView *)e->names, count);
     a = ((int)Memory_GetAllocatorBySelector((*(int *)g_metadataAllocatorKey)));
     dropValues(e->values);
-    e->values = ((MetaEnumValueList *)FUN_002caa70(a));
+    e->values = ((MetaEnumValueList *)igIntList_Create(a));
     vl = e->values;
     if (count >= 0) {
         if (!(count > vl->capacity)) {

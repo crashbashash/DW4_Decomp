@@ -27,7 +27,7 @@ void FUN_0016fea0(A_16fea0 *arg0, int arg1, int arg2, int arg3) {
         var_a0 = 0;
     }
     p2CurrentProgram[0] = arg1;
-    DAT_0056ad80[0] = &DAT_00569340[0] + var_a0;
+    p2CurrentGsRegisters[0] = &p2GsRegisterSets[0] + var_a0;
     if (arg0->f28 != 0) {
         FUN_001e81f0(arg0->f32, arg0->f36, arg0->f40, arg0->f44, arg0->f48);
     } else {
@@ -72,6 +72,6 @@ void FUN_0016fea0(A_16fea0 *arg0, int arg1, int arg2, int arg3) {
         }
     }
     p2CurrentProgram[0] = 0;
-    DAT_0056ad80[0] = &DAT_00569340[0];
+    p2CurrentGsRegisters[0] = &p2GsRegisterSets[0];
 }
 

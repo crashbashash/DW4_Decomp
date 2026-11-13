@@ -15,7 +15,7 @@ extern "C" int beMessenger_PrepareDelayedSelection(int, int *, int, int);
 extern "C" int strcmp(...);
 extern "C" int Gap__Bec__beNDMWMdlItem__vfunc_35(int dummy0, int arg1);
 extern "C" int beMessenger_RegisterReceiverFromInfo(int, int, char *);
-extern "C" int FUN_00236f80(int, int);
+extern "C" int igInsightCore_FindManager(int, int);
 extern "C" int Gap__Core__igObject__vfunc_23(...);
 extern "C" int Gap__Bec__beNDMWMdlItem__vfunc_20(void);
 extern "C" int beNDMWItemWeapon_SetRandom(...);
@@ -173,7 +173,7 @@ void Gap__Bec__beNDMWMdlItem__vfunc_37(beNDMWMdlItem *p0, int a1)
  * other managers' slot 23. */
 void Gap__Bec__beNDMWMdlItem__vfunc_23(beNDMWMdlItem *self) {
     Gap__Core__igObject__vfunc_23();
-    self->_viewerSIManager = FUN_00236f80(self->_insight, g_igViewerSceneInfoManager_metaObject[0]);
+    self->_viewerSIManager = igInsightCore_FindManager(self->_insight, g_igViewerSceneInfoManager_metaObject[0]);
 }
 
 void Gap__Bec__beNDMWMdlItem__vfunc_32(beNDMWMdlItem *arg0) {

@@ -1,6 +1,6 @@
 #include "dw4/reflected.h"
 
-extern "C" int FUN_00236f80(int, int);
+extern "C" int igInsightCore_FindManager(int, int);
 extern "C" int Gap__Bec__beGenerater__vfunc_30(void);
 extern "C" int Gap__Bec__beGenerater__vfunc_20(void);
 extern "C" int beMessenger_RegisterReceiver(...);
@@ -16,7 +16,7 @@ typedef struct MessageArgsView { char pad8[8]; int f8; int *f12; } MessageArgsVi
 
 void Gap__Bec__beGenerater__vfunc_32(beGenerater *arg0) {
     if (arg0->_luaManager == 0) {
-        arg0->_luaManager = FUN_00236f80(arg0->_insight, g_beLua_metaObject[0]);
+        arg0->_luaManager = igInsightCore_FindManager(arg0->_insight, g_beLua_metaObject[0]);
     }
 }
 

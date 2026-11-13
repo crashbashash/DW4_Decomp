@@ -1,5 +1,5 @@
 extern char DAT_00484740[];
-int FUN_0010e2a8();
+int sceSifCallRpc();
 int FUN_00116d90();
 int SignalSema();
 extern int DAT_0048356c[4];
@@ -10,7 +10,7 @@ int sceCdGetError(void) {
     if (FUN_00116d90(3) == 0) {
         return -1;
     }
-    if (FUN_0010e2a8(&DAT_004850c0[0], 4, 0, 0, 0, DAT_00484740, 4, 0, 0) < 0) {
+    if (sceSifCallRpc(&DAT_004850c0[0], 4, 0, 0, 0, DAT_00484740, 4, 0, 0) < 0) {
         SignalSema(DAT_0048356c[0]);
         return -1;
     }

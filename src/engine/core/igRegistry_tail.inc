@@ -5,7 +5,7 @@ void Gap__Core__igRegistry__vfunc_11(void *arg0) {
 
 static inline int pool_305d30() {
     if ((*(int *)g_stringPool) == 0) {
-        int p = ((int)FUN_002eb010(0x10));
+        int p = ((int)StringPool_Allocate(0x10));
         if (p != 0) { p = ((int)StringPool_Construct((struct S_2eadf0 *)p)); }
         (*(int *)g_stringPool) = p;
     }
@@ -213,7 +213,7 @@ int FUN_00306770(int arg0, int arg1, const char *arg2, T_306770 **arg3, int arg4
 static inline int pool_306910(void) {
     int p;
     if (g_stringPool[0] == 0) {
-        p = ((int)FUN_002eb010(0x10));
+        p = ((int)StringPool_Allocate(0x10));
         if (p != 0) {
             p = ((int)StringPool_Construct((S_2eadf0 *)p));
         }
@@ -258,7 +258,7 @@ int FUN_00306910(int arg0, int arg1, const char *arg2, int **out, char *def, int
 static inline int pool_306aa0(void) {
     int p;
     if (g_stringPool[0] == 0) {
-        p = ((int)FUN_002eb010(0x10));
+        p = ((int)StringPool_Allocate(0x10));
         if (p != 0) {
             p = ((int)StringPool_Construct((S_2eadf0 *)p));
         }
@@ -740,7 +740,7 @@ static inline void setValues(Self_308860 *self, const MemberRef &value) {
 void FUN_00308860(Self_308860 *self, int name, int value) {
     if (self->names == 0) {
         setNames(self, MemberRef((Obj_308860 *)FUN_002b9350((int)(((void *)igObject_GetAllocator((int)self))))));
-        setValues(self, MemberRef((Obj_308860 *)FUN_002caa70((int)(((void *)igObject_GetAllocator((int)self))))));
+        setValues(self, MemberRef((Obj_308860 *)igIntList_Create((int)(((void *)igObject_GetAllocator((int)self))))));
     }
     igSmartPointer<Obj_308860> entry((Obj_308860 *)FUN_002b9500((int)(((void *)igObject_GetAllocator((int)self)))));
     FUN_0030b3c0((int)entry.p, name);
@@ -777,7 +777,7 @@ Hd *FUN_00308a90(O_308a90 *arg0) {
         setHeader(arg0, igSmartPointer<Ob_308a90>(((Ob_308a90 *)FUN_002c72c0(FUN_00301000()))));
         s0 = arg0->f12;
         if (0 == g_stringPool[0]) {
-            v = ((int)FUN_002eb010(16));
+            v = ((int)StringPool_Allocate(16));
             if (v != 0) {
                 v = ((int)StringPool_Construct((struct S_2eadf0 *)v));
             }

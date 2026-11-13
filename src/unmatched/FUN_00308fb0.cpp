@@ -14,7 +14,7 @@ void *FUN_002c37e0(void *);
 int FUN_00308850(W *, void *);
 void *FUN_00309640(W *, void *);
 void *igObject_GetAllocator(W *);
-int FUN_002eb010(int);
+int StringPool_Allocate(int);
 int StringPool_Construct(int);
 int StringPool_Intern(int, int);
 int StringChunk_ReleaseHeader(int, int *);
@@ -78,7 +78,7 @@ extern "C" void *FUN_00308fb0(W *arg0, int arg1) {
     created.get()->f48 = 1;
     r = created.get();
     if (DAT_00586f20[0] == 0) {
-        pool = FUN_002eb010(16);
+        pool = StringPool_Allocate(16);
         if (pool != 0) pool = StringPool_Construct(pool);
         DAT_00586f20[0] = pool;
     }

@@ -794,7 +794,7 @@ int FUN_0018d630(...);
 void igVec2fMetaField_SwapBytes(igVec2fMetaField *arg0, int arg1, int arg2);
 int sprintf(...);
 
-void *FUN_002eb010(int size);
+void *StringPool_Allocate(int size);
 void *StringPool_Construct(void *pool);
 
 int StringPool_Intern(void *pool, const char *text);
@@ -806,7 +806,7 @@ static inline int internString(const char *text) {
         return 0;
     }
     if (g_stringPool[0] == 0) {
-        void *pool = FUN_002eb010(16);
+        void *pool = StringPool_Allocate(16);
         if (pool != 0) {
             pool = StringPool_Construct(pool);
         }

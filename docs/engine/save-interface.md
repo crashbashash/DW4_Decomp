@@ -71,5 +71,5 @@ Message numbers are `(player << 16) | text`; texts that depend on the console ad
   what the kind means to the player is not described.
 - Calls whose callee returns a flag compare `(f(...) & 0xFF) == 1`: retail masks the result in
   the caller, which a `bool` or `unsigned char` prototype does not reproduce.
-- `FUN_00236f80`, which finds an insight's object by meta object, keeps its address name; it has
+- `igInsightCore_FindManager`, which finds an insight's object by meta object, keeps its address name; it has
   callers in some forty files.
