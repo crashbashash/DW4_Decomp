@@ -8,7 +8,7 @@ int FUN_002377c0(...);
 int FUN_00462ac0(...);
 int FUN_002370c0(...);
 
-int FUN_00100610(...);
+int __dl__FPv(...);
 
 extern "C" int igInsightCore_RemoveManager(void *, void *);
 
@@ -174,7 +174,7 @@ ViewerSetup::ViewerSetup(igObject *w)
                 if (s1 != 0) {
                     if (&s1->f236) releaseString(s1->f236);
                     if (s1 != 0) releaseString(s1->f0);
-                    FUN_00100610(s1);
+                    __dl__FPv(s1);
                 }
                 DAT_0056dc50[0] = 0;
             }
@@ -371,7 +371,7 @@ void FUN_00464540(Arg *arg0, int arg1) {
                         }
                     }
                 }
-                FUN_00100610(f);
+                __dl__FPv(f);
             }
             DAT_0056dc50[0] = 0;
         }

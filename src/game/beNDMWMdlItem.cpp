@@ -1,7 +1,7 @@
 #include "dw4/reflected.h"
 #include "dw4/igSmartPointer.h"
 #define HOLDER_BODY { igObject *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
-#define ALLOC_OF(owner, a, sel) { a = igObject_GetAllocator(owner); a = GPR_00554c14 ? a : Memory_GetAllocatorBySelector(sel[0]); }
+#define ALLOC_OF(owner, a, sel) { a = igObject_GetAllocator(owner); a = g_useOwnerAllocator ? a : Memory_GetAllocatorBySelector(sel[0]); }
 #define ALLOC(a, sel) ALLOC_OF(self, a, sel)
 #define REL(o) { igObject *rr = (o); if (rr != 0) { rr->_refCount = rr->_refCount - 1; if ((rr->_refCount & 0x7FFFFF) == 0) { igObject_Destroy(rr); } } }
 #define STORE_REF(slot, fresh) { igObject *held2 = fresh; if (held2 != 0) held2->_refCount = held2->_refCount + 1; REL((igObject *)slot) slot = (int)held2; }
@@ -83,7 +83,7 @@ extern "C" int DAT_0051cf78[4];
 extern "C" int g_propertyNameField[4];
 extern "C" int g_ndmwAllocatorSelector[4];
 extern "C" int g_defaultAllocatorSelector[4];
-extern "C" unsigned char GPR_00554c14;
+extern "C" unsigned char g_useOwnerAllocator;
 struct ObjectRef { igObject *p; ObjectRef(igObject *o) : p(o) {} ~ObjectRef() HOLDER_BODY };
 struct ItemRef { igObject *p; ItemRef(igObject *o) : p(o) {} ~ItemRef() HOLDER_BODY };
 struct ItemRefB { igObject *p; ItemRefB(igObject *o) : p(o) {} ~ItemRefB() HOLDER_BODY };
@@ -326,7 +326,7 @@ void Gap__Bec__beNDMWMdlItem__vfunc_43(beNDMWMdlItem *arg0, beBaseInfoRam *arg1)
     if (arg1->_dataList == 0) {
         int alloc = ((int)igObject_GetAllocator(arg1));
         int a;
-        if (GPR_00554c14 != 0) {
+        if (g_useOwnerAllocator != 0) {
             a = alloc;
         } else {
             a = ((int)Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]));
@@ -375,7 +375,7 @@ static inline void adoptDataList(beBaseInfoRam *ram, igObject *created) {
 void Gap__Bec__beNDMWMdlItem__vfunc_44(beNDMWMdlItem *self, beBaseInfoRam *ram) {
     if (ram->_dataList == 0) {
         void *a = igObject_GetAllocator(ram);
-        void *al = GPR_00554c14 != 0 ? a : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
+        void *al = g_useOwnerAllocator != 0 ? a : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
         igObject *created = (igObject *)((void *)beBaseInfoDataList_Create(al));
         adoptDataList(ram, created);
     }
@@ -394,7 +394,7 @@ void Gap__Bec__beNDMWMdlItem__vfunc_45(MdlItemVirtual *arg0, beNDMWGameRamInfoRa
     if (arg1->_dataList == 0) {
         int alloc = ((int)igObject_GetAllocator(arg1));
         int a;
-        if (GPR_00554c14 != 0) {
+        if (g_useOwnerAllocator != 0) {
             a = alloc;
         } else {
             a = ((int)Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]));

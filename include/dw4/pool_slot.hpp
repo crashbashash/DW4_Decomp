@@ -13,7 +13,7 @@ public:
 };
 
 extern "C" {
-extern unsigned char GPR_00554c14;
+extern unsigned char g_useOwnerAllocator;
 extern int DAT_00587020[4];
 extern void igObject_Destroy(igObjectSlotView *o);
 extern igObjectSlotView *igObject_GetAllocator(void *self);
@@ -42,10 +42,10 @@ static inline void fill_pool_slot(void *self, igObjectSlotView **slot, igObjectS
         *slot = p;
     } else {
         igObjectSlotView *a = igObject_GetAllocator(self);
-        a = GPR_00554c14 != 0 ? a : Memory_GetAllocatorBySelector(selector[0]);
+        a = g_useOwnerAllocator != 0 ? a : Memory_GetAllocatorBySelector(selector[0]);
         if (a != Memory_GetAllocatorBySelector(DAT_00587020[0])) {
             p = igObject_GetAllocator(self);
-            p = GPR_00554c14 != 0 ? p : Memory_GetAllocatorBySelector(selector[0]);
+            p = g_useOwnerAllocator != 0 ? p : Memory_GetAllocatorBySelector(selector[0]);
             retain(p);
             release(*slot);
             *slot = p;

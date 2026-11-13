@@ -41,7 +41,7 @@ extern "C" int DAT_005165f8[4];
 extern "C" int g_propertyNameField[4];
 extern "C" int g_stringPool[4];
 extern "C" int g_defaultAllocatorSelector[4];
-extern "C" unsigned char GPR_00554c14;
+extern "C" unsigned char g_useOwnerAllocator;
 /* matching construct: Rel::go and Str::release inline the retail refcount releases */
 struct Rel { static inline void go(igObject *object) {
     if (object) {
@@ -94,7 +94,7 @@ struct RamDataList { static inline void Ensure(beBaseInfoRam *ram) {
     if (ram->_dataList == 0) {
         int alloc = igObject_GetAllocator(ram);
         int a;
-        if (GPR_00554c14 != 0) {
+        if (g_useOwnerAllocator != 0) {
             a = alloc;
         } else {
             a = Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
@@ -155,7 +155,7 @@ void Gap__Bec__beNDMWMdlPlayer2__vfunc_36(beNDMWMdlPlayer2 *arg0, beBaseInfoRam 
     {
         int alloc = igObject_GetAllocator(arg0);
         int a;
-        if (GPR_00554c14 != 0) {
+        if (g_useOwnerAllocator != 0) {
             a = alloc;
         } else {
             a = Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
@@ -229,7 +229,7 @@ void Gap__Bec__beNDMWMdlPlayer2__vfunc_38(MdlPlayer2VirtualShim *arg0, beBaseInf
     if (arg1->_dataList == 0) {
         int alloc = igObject_GetAllocator(arg1);
         int a;
-        if (GPR_00554c14 != 0) {
+        if (g_useOwnerAllocator != 0) {
             a = alloc;
         } else {
             a = Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);

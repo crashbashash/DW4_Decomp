@@ -19,7 +19,7 @@ extern "C" int StringRef_Destruct_00130720(...);
 extern "C" int DAT_0052d130[4];
 extern "C" void * g_objectSystem[4];
 extern "C" int igCreateCollisionDatabase_GetVTable(void);
-extern "C" int FUN_00100610(void *);
+extern "C" int __dl__FPv(void *);
 struct S_temp_a0 { char pad4[4]; int f4; };
 struct O { S_temp_a0 *m; };
 extern "C" O *FUN_00239530(O *arg0, short arg1);

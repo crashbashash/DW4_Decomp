@@ -43,7 +43,7 @@ extern "C" int DAT_0050f648[4];
 extern "C" int DAT_0050f658[4];
 extern "C" int DAT_0050f668[4];
 extern "C" int g_defaultAllocatorSelector[4];
-extern "C" unsigned char GPR_00554c14;
+extern "C" unsigned char g_useOwnerAllocator;
 struct Rel { static inline void go(igObject *object) {
     if (object) {
         --object->_refCount;
@@ -221,7 +221,7 @@ int Gap__Bec__beParticleCtrl2__vfunc_34(beParticleCtrl2 *arg0, beParticleCtrl2In
             if (s1) {
                 int alloc = igObject_GetAllocator(arg0);
                 int a;
-                if (GPR_00554c14 != 0) {
+                if (g_useOwnerAllocator != 0) {
                     a = alloc;
                 } else {
                     a = Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);

@@ -224,7 +224,7 @@ int Memory_GetAllocatorBySelector(...);
 int FUN_0013a880(...);
 int FUN_001d35d0(...);
 void StringRef_Destruct_00130720(...);
-int FUN_00100610(...);
+int __dl__FPv(...);
 int FUN_002c3440(...);
 int FUN_002c8e50(...);
 int igStringMetaField_SetDefaultText(...);

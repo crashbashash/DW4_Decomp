@@ -17,7 +17,7 @@ static inline int isValid(igMetaObject *m) { return (m->_validity & 4) != 0; }
 extern "C" void FUN_0033bf50(void);
 extern "C" void BecLibrary_MarkRegistered(void);
 extern "C" void *FUN_0033c900(void);
-extern "C" int FUN_00100610(...);
+extern "C" int __dl__FPv(...);
 extern "C" int igObject_Destroy(...);
 extern "C" void **FUN_0033cda0(void **arg0, short arg1);
 extern "C" void **FUN_0033cf20(void **arg0, long long arg1);
@@ -5885,7 +5885,7 @@ extern "C" int g_igFont_metaObject[4];
 extern "C" int g_igLightSet_metaObject[4];
 extern "C" void Gap__Bec__beLuaDataObject__vfunc_08(beLuaDataObject *arg0);
 struct T_36f970 { int word0; int references; };
-extern "C" unsigned char GPR_00554c14;
+extern "C" unsigned char g_useOwnerAllocator;
 extern "C" int g_defaultAllocatorSelector[4];
 struct Rel { static inline void go(T_36f970 *object) {
     if (object) {

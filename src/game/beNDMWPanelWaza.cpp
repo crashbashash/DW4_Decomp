@@ -224,7 +224,7 @@ extern "C" int DAT_00515bd8[4];
 extern "C" int DAT_00515be0[4];
 extern "C" int DAT_00515be8[4];
 extern "C" int g_defaultAllocatorSelector[4];
-extern "C" unsigned char GPR_00554c14;
+extern "C" unsigned char g_useOwnerAllocator;
 extern "C" int Gap__Bec__beNDMWPanelWaza__vfunc_34(beNDMWPanelWaza *self, beNDMWPanelWazaInfoRam *ram, beMessengerWork *arg2);
 extern "C" int g_beNDMWPanelObjectStat_metaObject[4];
 extern "C" int g_beNDMWPanelObjectItem_metaObject[4];
@@ -972,7 +972,7 @@ int Gap__Bec__beNDMWPanelWaza__vfunc_34(beNDMWPanelWaza *self, beNDMWPanelWazaIn
     work = (beNDMWPanelWazaInfoWork *)ram->_work;
     if (work == 0) {
         alloc = igObject_GetAllocator(self);
-        alloc = GPR_00554c14 ? alloc : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
+        alloc = g_useOwnerAllocator ? alloc : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
         igSmartPointer<igObject> created((igObject *)FUN_003bdb10(alloc));
         { igObject *n = created.p; RET(n) { igObject *o = (igObject *)ram->_work; REL(o) } ram->_work = (int)n; }
         work = (beNDMWPanelWazaInfoWork *)created.p;

@@ -66,7 +66,7 @@ extern "C" int igObject_Destroy(...);
 extern "C" int igObject_GetAllocator(...);
 extern "C" int DAT_00562498[4];
 extern "C" int DAT_005624a0[4];
-extern "C" int FUN_00100610(...);
+extern "C" int __dl__FPv(...);
 
 struct RefCounted { int w0; int refs; int w8; class SceneSource *source; };
 class SceneSource {

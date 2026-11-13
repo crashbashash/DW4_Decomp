@@ -66,7 +66,7 @@ Reading the image from the front (the order a static link lays down), the first 
 anonymous and contiguous**: `0x100008`..`0x10aaa8`, 41,432 bytes (1.2 % of the code). 24 of the 56
 MMIO-touching functions are inside it and nothing inside it has a recovered name; **756 `jal` sites
 from 633 functions outside** enter it, reaching **33 entry points** (the other 99 distinct targets are
-only reached from *inside* the block). One entry alone, `FUN_00100610`, a lock-guarded list walk,
+only reached from *inside* the block). One entry alone, `__dl__FPv`, a lock-guarded list walk,
 is called from 548 places.
 
 The block is not the whole SDK, and its end is not a boundary with game code: the very next function

@@ -64,7 +64,7 @@ int FUN_004578c0(...);
 
 int Gap__Core__igObject__vfunc_11(...);
 
-int FUN_00100610(...);
+int __dl__FPv(...);
 void **FUN_001007e0(...);
 
 int FUN_001b1e50(...);
@@ -480,7 +480,7 @@ void Gap__Viewer__igViewerSceneInfoManager__vfunc_13(igViewerSceneInfoManager *a
                         }
                     }
                 }
-                FUN_00100610(f);
+                __dl__FPv(f);
             }
             DAT_0056dc50[0] = 0;
         }
@@ -746,7 +746,7 @@ int Gap__Viewer__igViewerSceneInfoManager__vfunc_27(igViewerSceneInfoManager *ar
                             }
                         }
                     }
-                    FUN_00100610(f);
+                    __dl__FPv(f);
                 }
                 DAT_0056dc50[0] = 0;
             }
@@ -873,7 +873,7 @@ void FUN_00462ac0(igViewerSceneInfoManager *arg0) {
                         }
                     }
                 }
-                FUN_00100610(f);
+                __dl__FPv(f);
             }
             DAT_0056dc50[0] = 0;
         }

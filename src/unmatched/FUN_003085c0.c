@@ -20,11 +20,11 @@ typedef struct Root { char pad[56]; void *cur; } Root;
 extern Root *DAT_00586dc8;
 extern int DAT_00587048;
 extern unsigned char GPR_005549b0;
-extern unsigned char GPR_00554c14;
+extern unsigned char g_useOwnerAllocator;
 extern char GPR_00554c30;
 static inline int allocator(void) {
     int a = FUN_002f8a20();
-    if (GPR_00554c14 != 0) {
+    if (g_useOwnerAllocator != 0) {
         return a;
     }
     return Memory_GetAllocatorBySelector(DAT_00587048);

@@ -1,11 +1,11 @@
-/* Deleting destructor. Sets the vtable to its own image, then calls FUN_00100610 when the signed
- * low 16 bits of the delete flag are positive. FUN_00100610 never returns (it ends in an endless
+/* Deleting destructor. Sets the vtable to its own image, then calls __dl__FPv when the signed
+ * low 16 bits of the delete flag are positive. __dl__FPv never returns (it ends in an endless
  * loop). */
 igObject *FUN_00328e00(igObject *self, long long deleteFlags) {
     if (self != 0) {
         self->_vtable = (int)&g_vtable[0];
         if (((long long) (deleteFlags << 0x30) >> 0x30) > 0) {
-            FUN_00100610();
+            __dl__FPv();
         }
     }
     return self;

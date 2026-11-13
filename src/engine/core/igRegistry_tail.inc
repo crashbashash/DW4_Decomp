@@ -679,7 +679,7 @@ int FUN_00308540(int arg0, const char *arg1, int arg2) {
 
 static inline int allocator(void) {
     int a = ((int)FUN_002f8a20());
-    if (GPR_00554c14 != 0) {
+    if (g_useOwnerAllocator != 0) {
         return a;
     }
     return ((int)Memory_GetAllocatorBySelector((*(int *)DAT_00587048)));

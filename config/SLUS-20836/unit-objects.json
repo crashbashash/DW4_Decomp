@@ -173,7 +173,7 @@
       "GPR_00554a68": "0x00554a68",
       "GPR_00554a6c": "0x00554a6c",
       "GPR_00554a70": "0x00554a70",
-      "GPR_00554c14": "0x00554c14",
+      "g_useOwnerAllocator": "0x00554c14",
       "HANBAI_2": "0x0051b690",
       "HPDRAIN_3": "0x0051be88",
       "HP_6": "0x0051b488",
@@ -475,7 +475,7 @@
       "DAT_00587110": "0x00587110",
       "DAT_00588518": "0x00588518",
       "DAT_0058c180": "0x0058c180",
-      "GPR_00554c14": "0x00554c14",
+      "g_useOwnerAllocator": "0x00554c14",
       "GPR_00554e6c": "0x00554e6c",
       "g_beNDMWPanelObjectItem_metaObject": "0x0058b288",
       "g_beNDMWPanelObjectStat_metaObject": "0x0058b260",
@@ -740,7 +740,7 @@
       "DAT_0058a530": "0x0058a530",
       "GPR_005549d4": "0x005549d4",
       "GPR_005549d8": "0x005549d8",
-      "GPR_00554c14": "0x00554c14",
+      "g_useOwnerAllocator": "0x00554c14",
       "g_beMessenger_metaObject": "0x00588f38",
       "g_stringPool": "0x00586f20"
     },
@@ -1045,7 +1045,7 @@
       "GPR_005549ec": "0x005549ec",
       "GPR_005549f0": "0x005549f0",
       "GPR_005549f4": "0x005549f4",
-      "GPR_00554c14": "0x00554c14",
+      "g_useOwnerAllocator": "0x00554c14",
       "HP": "0x00518890",
       "LEVEL_2": "0x00518858",
       "METERCTRL": "0x00518c28",
@@ -5419,7 +5419,7 @@
     "data": {
       "DAT_0050fbf0": "0x0050fbf0",
       "DAT_00587110": "0x00587110",
-      "GPR_00554c14": "0x00554c14",
+      "g_useOwnerAllocator": "0x00554c14",
       "g_beWeaponInfo_metaObject": "0x00587a28",
       "g_beWeapon_metaObject": "0x00587a68"
     },
@@ -6058,7 +6058,7 @@
       "DAT_00587040": "0x00587040",
       "DAT_00587060": "0x00587060",
       "GPR_00554b18": "0x00554b18",
-      "GPR_00554c14": "0x00554c14",
+      "g_useOwnerAllocator": "0x00554c14",
       "g_WindowInputLibrary_registered": "0x00554b14",
       "g_allocatorFailureStatus": "0x004fb418",
       "g_igControllerList_callbackList": "0x00487158",
@@ -6524,7 +6524,7 @@
       "DAT_00587198": "0x00587198",
       "DAT_0058c208": "0x0058c208",
       "DAT_0058c570": "0x0058c570",
-      "GPR_00554c14": "0x00554c14",
+      "g_useOwnerAllocator": "0x00554c14",
       "allocateVisualContextInScratchpad": "0x004e9560",
       "allocate_visual_context_from_scrat": "0x004e9590",
       "alphaBits": "0x004e9240",
@@ -7296,7 +7296,7 @@
     },
     "data": {
       "DAT_00587108": "0x00587108",
-      "GPR_00554c14": "0x00554c14",
+      "g_useOwnerAllocator": "0x00554c14",
       "g_igMoviePlugin_metaObject": "0x005878a8"
     },
     "symbol": "Gap__igMoviePlugin__vfunc_21"
@@ -10876,7 +10876,7 @@
       "GPR_00554b68": "0x00554b68",
       "GPR_00554b6c": "0x00554b6c",
       "GPR_00554b78": "0x00554b78",
-      "GPR_00554c14": "0x00554c14",
+      "g_useOwnerAllocator": "0x00554c14",
       "X0_0014d010": "0x0014d010",
       "X1_0014d010": "0x0014d010",
       "X2_0014d010": "0x0014d010",
@@ -15428,7 +15428,7 @@
       "GPR_00554c04": "0x00554c04",
       "GPR_00554c08": "0x00554c08",
       "GPR_00554c0c": "0x00554c0c",
-      "GPR_00554c14": "0x00554c14",
+      "g_useOwnerAllocator": "0x00554c14",
       "GPR_00554c28": "0x00554c28",
       "GPR_00554c2c": "0x00554c2c",
       "GPR_00554c30": "0x00554c30",
@@ -15781,7 +15781,6 @@
       "g_secondaryAllocatorList": "0x00586f60",
       "g_statusSucceeded": "0x004fb410",
       "g_stringPool": "0x00586f20",
-      "g_useOwnerAllocator": "0x00554c14",
       "g_vtable": "0x0052dd30",
       "igAliasMemoryPool_className": "0x004f8830",
       "igArenaMemoryPool_className": "0x004f8b50",
@@ -17500,7 +17499,7 @@
       "GPR_00554b04": "0x00554b04",
       "GPR_00554b08": "0x00554b08",
       "GPR_00554b0c": "0x00554b0c",
-      "GPR_00554c14": "0x00554c14",
+      "g_useOwnerAllocator": "0x00554c14",
       "g_004e1170": "0x004e1170",
       "g_004e1180": "0x004e1180",
       "g_AttrsLibrary_registered": "0x00554b00",
@@ -20248,7 +20247,7 @@
       "GPR_00554b9c": "0x00554b9c",
       "GPR_00554bac": "0x00554bac",
       "GPR_00554bb0": "0x00554bb0",
-      "GPR_00554c14": "0x00554c14",
+      "g_useOwnerAllocator": "0x00554c14",
       "g_SceneGraphLibrary_registered": "0x00554b80",
       "g_igActorInfo_callbackList": "0x0048d6b0",
       "g_igActorInfo_metaObject": "0x00562450",
@@ -25742,7 +25741,7 @@
       "DAT_0058a0e0": "0x0058a0e0",
       "DAT_0058c620": "0x0058c620",
       "DAT_0058ccf8": "0x0058ccf8",
-      "GPR_00554c14": "0x00554c14",
+      "g_useOwnerAllocator": "0x00554c14",
       "ParticleArray_className": "0x00506370",
       "ParticleInfo_className": "0x00506690",
       "ParticleTimer_className": "0x00506448",
@@ -28709,7 +28708,7 @@
       "DAT_0058c158": "0x0058c158",
       "DAT_0058c658": "0x0058c658",
       "FightCom": "0x005135f0",
-      "GPR_00554c14": "0x00554c14",
+      "g_useOwnerAllocator": "0x00554c14",
       "Message": "0x00510d58",
       "beBaseInfoData_GetPublishedMetaObject": "0x00343c80",
       "beBaseInfoManager_GetPublishedMetaObject": "0x0033f810",
@@ -29202,7 +29201,7 @@
       "DAT_00585be0": "0x00585be0",
       "DAT_00586f20": "0x00586f20",
       "DAT_00587110": "0x00587110",
-      "GPR_00554c14": "0x00554c14",
+      "g_useOwnerAllocator": "0x00554c14",
       "g_beNDMWMdlMapCursor_metaObject": "0x0058b498"
     },
     "duplicates": {
@@ -29234,7 +29233,7 @@
       "DAT_00585be0": "0x00585be0",
       "DAT_00586f20": "0x00586f20",
       "DAT_00587110": "0x00587110",
-      "GPR_00554c14": "0x00554c14",
+      "g_useOwnerAllocator": "0x00554c14",
       "g_beNDMWMdlMapBase_metaObject": "0x0058b4a0"
     },
     "duplicates": {
@@ -29432,7 +29431,7 @@
       "DAT_00587108": "0x00587108",
       "DAT_00587110": "0x00587110",
       "GPR_00554a74": "0x00554a74",
-      "GPR_00554c14": "0x00554c14",
+      "g_useOwnerAllocator": "0x00554c14",
       "g_beNDMWMdlItem_metaObject": "0x0058b4a8",
       "g_igViewerSceneInfoManager_metaObject": "0x0058c790"
     },
@@ -29666,7 +29665,7 @@
       "GAMESTART_2": "0x00519720",
       "GETCOMMON_4": "0x00519938",
       "GETPLAYER_3": "0x005196e8",
-      "GPR_00554c14": "0x00554c14",
+      "g_useOwnerAllocator": "0x00554c14",
       "ISUSE_3": "0x005196f8",
       "MESWIN_2": "0x00519688",
       "SAVECTRL": "0x00519928",
@@ -29720,7 +29719,7 @@
       "DAT_00587110": "0x00587110",
       "DAT_00587d08": "0x00587d08",
       "DAT_00588518": "0x00588518",
-      "GPR_00554c14": "0x00554c14",
+      "g_useOwnerAllocator": "0x00554c14",
       "g_beNDMWSaveCtrlInfo_metaObject": "0x0058b180",
       "g_beNDMWSaveCtrl_metaObject": "0x0058b1d8"
     },
@@ -30454,7 +30453,7 @@
       "DAT_00585be0": "0x00585be0",
       "DAT_00586f20": "0x00586f20",
       "DAT_00587110": "0x00587110",
-      "GPR_00554c14": "0x00554c14",
+      "g_useOwnerAllocator": "0x00554c14",
       "g_beNDMWMdlPlayer2_metaObject": "0x0058b368",
       "g_bePadManager_metaObject": "0x00588518"
     },
@@ -30599,7 +30598,7 @@
       "DAT_00515fc8": "0x00515fc8",
       "DAT_00585be0": "0x00585be0",
       "DAT_00587110": "0x00587110",
-      "GPR_00554c14": "0x00554c14",
+      "g_useOwnerAllocator": "0x00554c14",
       "g_beNDMWMdlPBullet_metaObject": "0x0058b488"
     },
     "duplicates": {
@@ -30624,7 +30623,7 @@
       "DAT_00585be0": "0x00585be0",
       "DAT_00586f20": "0x00586f20",
       "DAT_00587110": "0x00587110",
-      "GPR_00554c14": "0x00554c14",
+      "g_useOwnerAllocator": "0x00554c14",
       "g_beNDMWMdlObject_metaObject": "0x0058b490"
     },
     "duplicates": {
@@ -30680,7 +30679,7 @@
       "DAT_00515db8": "0x00515db8",
       "DAT_00585be0": "0x00585be0",
       "DAT_00587110": "0x00587110",
-      "GPR_00554c14": "0x00554c14",
+      "g_useOwnerAllocator": "0x00554c14",
       "g_beNDMWMdlEffect_metaObject": "0x0058b518"
     },
     "duplicates": {
@@ -30704,7 +30703,7 @@
       "DAT_00515d40": "0x00515d40",
       "DAT_00585be0": "0x00585be0",
       "DAT_00587110": "0x00587110",
-      "GPR_00554c14": "0x00554c14",
+      "g_useOwnerAllocator": "0x00554c14",
       "g_beNDMWMdlEBullet_metaObject": "0x0058b520"
     },
     "duplicates": {
@@ -30814,7 +30813,7 @@
       "DAT_0055ed88": "0x0055ed88",
       "DAT_00585be0": "0x00585be0",
       "DAT_00587110": "0x00587110",
-      "GPR_00554c14": "0x00554c14",
+      "g_useOwnerAllocator": "0x00554c14",
       "g_beTextureCtrlInfo_metaObject": "0x00587c80",
       "g_beTextureCtrl_metaObject": "0x00587cb8"
     },
@@ -30882,7 +30881,7 @@
       "@607": "0x00510750",
       "DAT_00510738": "0x00510738",
       "DAT_00587110": "0x00587110",
-      "GPR_00554c14": "0x00554c14",
+      "g_useOwnerAllocator": "0x00554c14",
       "g_beSaveUtilInfo_metaObject": "0x00588010",
       "g_beSaveUtil_metaObject": "0x00588020"
     },
@@ -31092,7 +31091,7 @@
       "DAT_00588760": "0x00588760",
       "DAT_00589208": "0x00589208",
       "DAT_00589d78": "0x00589d78",
-      "GPR_00554c14": "0x00554c14",
+      "g_useOwnerAllocator": "0x00554c14",
       "g_beMovieInfo_metaObject": "0x00588758",
       "g_beMovie_metaObject": "0x00588788"
     },
@@ -31210,7 +31209,7 @@
       "DAT_004e0858": "0x004e0858",
       "DAT_0050feb0": "0x0050feb0",
       "DAT_00587110": "0x00587110",
-      "GPR_00554c14": "0x00554c14",
+      "g_useOwnerAllocator": "0x00554c14",
       "g_beNumberCtrlInfo_metaObject": "0x005886d0",
       "g_beNumberCtrl_metaObject": "0x005886e0"
     },
@@ -31274,7 +31273,7 @@
       "DAT_00586f20": "0x00586f20",
       "DAT_00587060": "0x00587060",
       "DAT_00587108": "0x00587108",
-      "GPR_00554c14": "0x00554c14",
+      "g_useOwnerAllocator": "0x00554c14",
       "g_beSystem_metaObject": "0x00587d08",
       "g_defaultAllocatorSelector": "0x00587110",
       "g_globalContext": "0x00586dd0",
@@ -31472,7 +31471,7 @@
       "DAT_0050f658": "0x0050f658",
       "DAT_0050f668": "0x0050f668",
       "DAT_00587110": "0x00587110",
-      "GPR_00554c14": "0x00554c14",
+      "g_useOwnerAllocator": "0x00554c14",
       "g_beParticleCtrl2Info_metaObject": "0x005884e0",
       "g_beParticleCtrl2_metaObject": "0x00588510"
     },
@@ -31501,7 +31500,7 @@
       "DAT_00587108": "0x00587108",
       "DAT_00587d08": "0x00587d08",
       "DAT_0058c790": "0x0058c790",
-      "GPR_00554c14": "0x00554c14",
+      "g_useOwnerAllocator": "0x00554c14",
       "g_bePadManager_metaObject": "0x00588518"
     },
     "externals": {
@@ -31715,7 +31714,7 @@
       "g_mdlCallName": "0x0058a214",
       "g_mdlWorldPosTarget": "0x0058a218",
       "D_004c8fa0": "0x004c8fa0",
-      "GPR_00554c14": "0x00554c14",
+      "g_useOwnerAllocator": "0x00554c14",
       "g_beModelCtrlInfoRideOn2_metaObject": "0x00588a90",
       "g_beModelCtrlInfoRideOn3_metaObject": "0x00588a58",
       "g_beModelCtrlInfoRideOn4_metaObject": "0x00588a20",
@@ -31800,7 +31799,7 @@
     "data": {
       "DAT_0050ecc8": "0x0050ecc8",
       "DAT_00587110": "0x00587110",
-      "GPR_00554c14": "0x00554c14",
+      "g_useOwnerAllocator": "0x00554c14",
       "g_beLuaState_metaObject": "0x005891b0"
     },
     "externals": {
@@ -31832,7 +31831,7 @@
       "DAT_00587110": "0x00587110",
       "DAT_00587d08": "0x00587d08",
       "DAT_005891c0": "0x005891c0",
-      "GPR_00554c14": "0x00554c14",
+      "g_useOwnerAllocator": "0x00554c14",
       "g_beLua_metaObject": "0x00589208"
     },
     "duplicates": {
@@ -31910,7 +31909,7 @@
       "DAT_0050eae0": "0x0050eae0",
       "DAT_00586f20": "0x00586f20",
       "DAT_00587110": "0x00587110",
-      "GPR_00554c14": "0x00554c14",
+      "g_useOwnerAllocator": "0x00554c14",
       "g_beHitLandModelInfo_metaObject": "0x00589320",
       "g_beHitLandModelOrder_metaObject": "0x00589390",
       "g_beHitLandModel_metaObject": "0x00589350"
@@ -32619,7 +32618,7 @@
       "DAT_00587110": "0x00587110",
       "DAT_00587738": "0x00587738",
       "DAT_005877b0": "0x005877b0",
-      "GPR_00554c14": "0x00554c14",
+      "g_useOwnerAllocator": "0x00554c14",
       "GPR_00554e30": "0x00554e30",
       "GPR_00554e34": "0x00554e34",
       "GPR_00554e38": "0x00554e38",
@@ -33969,7 +33968,7 @@
       "DAT_00587110": "0x00587110",
       "DAT_00588800": "0x00588800",
       "DAT_0058a540": "0x0058a540",
-      "GPR_00554c14": "0x00554c14",
+      "g_useOwnerAllocator": "0x00554c14",
       "GPR_00554e54": "0x00554e54",
       "g_beModelCtrlSCEffect_metaObject": "0x00588800",
       "g_beModelCtrlSCHitBox_metaObject": "0x005887c8",
@@ -34562,7 +34561,7 @@
       "GPR_00554be8": "0x00554be8",
       "GPR_00554bec": "0x00554bec",
       "GPR_00554bf0": "0x00554bf0",
-      "GPR_00554c14": "0x00554c14"
+      "g_useOwnerAllocator": "0x00554c14"
     },
     "duplicates": {
       "__dt__25igSmartPointer<8igFolder>Fv": "0x001ce350",

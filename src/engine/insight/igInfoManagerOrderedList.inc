@@ -37,7 +37,7 @@ ObjectRefWord *FUN_00233590(ObjectRefWord *self,int delete_storage) {
             if(((unsigned long long)(long long)object->references & 0x7fffffULL)==0)
                 igObject_Destroy(object);
         }
-        if((short)delete_storage>0) FUN_00100610(self);
+        if((short)delete_storage>0) __dl__FPv(self);
     }
     return self;
 }

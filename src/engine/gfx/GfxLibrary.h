@@ -303,7 +303,7 @@ struct Obj_14a910 {
 };
 extern "C" Obj_14a910 *FUN_0014a910(Obj_14a910 *arg0, short arg1);
 typedef struct S_temp_a0 { char pad4[4]; int f4; } S_temp_a0;
-extern "C" void FUN_00100610(...);
+extern "C" void __dl__FPv(...);
 extern "C" void **FUN_0014aa70(void **arg0, short arg1);
 /* Deleting destructor; the deletion flag is a signed short. */
 typedef struct ObjectRefTarget { int word0; int references; } ObjectRefTarget;
@@ -1402,7 +1402,7 @@ extern "C" void *igFile_Create(...);
 extern "C" int igObject_GetAllocator(...);
 extern "C" int DAT_004de6c0[4];
 extern "C" int g_temporaryAllocatorSelector[4];
-extern "C" unsigned char GPR_00554c14;
+extern "C" unsigned char g_useOwnerAllocator;
 class DW4VC_100_2 : public igVirtualObject { public: virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual int vX(int, int); virtual int v24(); virtual int v25(int,int,int);
   };
 extern "C" int FUN_00154f30(Arr *self, int arg1);

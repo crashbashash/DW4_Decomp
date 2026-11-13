@@ -86,7 +86,7 @@ state on the frame object.  The frame object global is `*(0x56dc50)` and the app
 The frame object is 0xF0 bytes, created on demand.  `+0xe8` is its context reference count, not a
 frame counter.  `main` holds one count across the call to the frame function, and `FUN_0025a580`
 takes another around the per-frame fields.  Each holder decrements it and at <= 0 releases the `+0xec`
-and `+0` references (refcount at -4, handle at -8), frees the object through `FUN_00100610` and clears
+and `+0` references (refcount at -4, handle at -8), frees the object through `__dl__FPv` and clears
 the global.
 
 **Both contain lifecycle setup, update/render repetition and teardown.**

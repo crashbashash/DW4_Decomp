@@ -58,7 +58,7 @@ void igObject_Destroy(void *);
 extern char DAT_004f92f0[], DAT_004f95c8[], DAT_004f9ca0[], DAT_004f9cb0[], DAT_004f9cc0[],
     DAT_004f9cc8[], DAT_004f9cd0[], DAT_004f9cd8[], DAT_004f9ce0[], DAT_004f9ce8[],
     DAT_004f9cf0[], DAT_004f9cf8[];
-extern unsigned char GPR_00554c14;
+extern unsigned char g_useOwnerAllocator;
 extern int DAT_00587028[], g_temporaryAllocatorSelector[];
 extern SystemAllocator *DAT_00587218[4];
 
@@ -122,7 +122,7 @@ extern "C" void FUN_002ed610(unsigned int size, unsigned int perLine, unsigned i
     else if (size > 8) size = 8;
     if (0 != name) {
         int alloc;
-        if (GPR_00554c14) alloc = Memory_GetAllocatorBySelector(DAT_00587028[0]);
+        if (g_useOwnerAllocator) alloc = Memory_GetAllocatorBySelector(DAT_00587028[0]);
         else alloc = Memory_GetAllocatorBySelector(g_temporaryAllocatorSelector[0]);
         file = (DumpFile *)igFile_Create(alloc);
         if (0 == file->Open(name, DAT_004f92f0)) goto done;

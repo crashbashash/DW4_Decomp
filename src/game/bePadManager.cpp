@@ -24,7 +24,7 @@ struct Rc { int vt; int rc; };
 extern "C" int g_ndmwAllocatorSelector[4];
 extern "C" int g_beSystem_metaObject[4];
 extern "C" int g_igViewerSceneInfoManager_metaObject[4];
-extern "C" unsigned char GPR_00554c14;
+extern "C" unsigned char g_useOwnerAllocator;
 struct Ref {
     Rc *p;
     Ref(Rc *x) : p(x) {}
@@ -80,7 +80,7 @@ void Gap__Bec__bePadManager__vfunc_23(O *o) {
     o->f16 = t0;
     for (int i = 0; i < 5; i++) {
         int v0 = igObject_GetAllocator(o);
-        Ref sp3C((Rc *)FUN_0034ce50(GPR_00554c14 != 0 ? v0 : Memory_GetAllocatorBySelector(g_ndmwAllocatorSelector[0])));
+        Ref sp3C((Rc *)FUN_0034ce50(g_useOwnerAllocator != 0 ? v0 : Memory_GetAllocatorBySelector(g_ndmwAllocatorSelector[0])));
         ObjectList_AppendRetained(o->f20, sp3C.p);
     }
     M *m = o->f12;

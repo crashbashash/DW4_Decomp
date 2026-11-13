@@ -94,7 +94,7 @@ extern "C" void *igMovieCodec_Register(void);
 extern "C" void igMovieCodec_GetMetaObject(void);
 extern "C" int FUN_00130140(int *, int);
 extern "C" int igCriMovieCodec_GetVTable(void);
-extern "C" int FUN_00100610(...);
+extern "C" int __dl__FPv(...);
 extern "C" void FUN_003359b0(void);
 extern "C" void *igCriMovieCodec_Register(void);
 extern "C" void igCriMovieCodec_GetMetaObject(void);
@@ -1107,7 +1107,7 @@ struct R **FUN_00335930(struct R **arg0, short arg1) {
             }
         }
         if (arg1 > 0) {
-            FUN_00100610(arg0);
+            __dl__FPv(arg0);
         }
     }
     return arg0;
@@ -1415,7 +1415,7 @@ void **FUN_003363c0(void **arg0, long long arg1) {
             }
         }
         if ((short)arg1 > 0) {
-            FUN_00100610(arg0);
+            __dl__FPv(arg0);
         }
     }
     return arg0;
@@ -1433,7 +1433,7 @@ void **FUN_00336440(void **arg0, int arg1) {
             }
         }
         if ((short)arg1 > 0) {
-            FUN_00100610(arg0);
+            __dl__FPv(arg0);
         }
     }
     return arg0;
@@ -1572,7 +1572,7 @@ void **FUN_003369f0(void **arg0, short arg1) {
             }
         }
         if (arg1 > 0) {
-            FUN_00100610(arg0);
+            __dl__FPv(arg0);
         }
     }
     return arg0;
@@ -1673,7 +1673,7 @@ void **FUN_00336d90(struct Ref **self, short flag) {
             p->u.w = p->u.w - 1;
             if (p->u.b.cnt == 0) igObject_Destroy(p);
         }
-        if (flag > 0) FUN_00100610(self);
+        if (flag > 0) __dl__FPv(self);
     }
     return (void **)self;
 }
@@ -1690,7 +1690,7 @@ void **FUN_00336e10(void **arg0, long long arg1) {
             }
         }
         if ((short)arg1 > 0) {
-            FUN_00100610(arg0);
+            __dl__FPv(arg0);
         }
     }
     return arg0;
@@ -1700,7 +1700,7 @@ O_336e90 *FUN_00336e90(O_336e90 *arg0, short arg1) {
     if (arg0) {
         S_temp_a0 *t = arg0->m;
         if (t) { t->f4 -= 1; if ((t->f4 & 0x7fffff) == 0) igObject_Destroy(t); }
-        if (arg1 > 0) FUN_00100610(arg0);
+        if (arg1 > 0) __dl__FPv(arg0);
     }
     return arg0;
 }

@@ -23,7 +23,7 @@ extern "C" int igViewerStatisticsManager_GetVTable(void);
 typedef struct ObjectRefTarget { int word0; int references; } ObjectRefTarget;
 typedef struct ObjectRefWord { ObjectRefTarget *value; } ObjectRefWord;
 extern "C" int igObject_Destroy(...);
-extern "C" int FUN_00100610(...);
+extern "C" int __dl__FPv(...);
 extern "C" ObjectRefWord *FUN_00458860(ObjectRefWord *self,int delete_storage);
 extern "C" void FUN_004588e0(void);
 extern "C" char igObject_GetMetaObject_ParentAccessor[];

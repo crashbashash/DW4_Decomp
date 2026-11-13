@@ -14,7 +14,7 @@ void **FUN_00229460(void **arg0, short arg1) {
             }
         }
         if (arg1 > 0) {
-            FUN_00100610(arg0);
+            __dl__FPv(arg0);
         }
     }
     return arg0;
@@ -1315,7 +1315,7 @@ void **FUN_0022e3c0(struct Ref **self, short flag) {
             p->u.w = p->u.w - 1;
             if (p->u.b.cnt == 0) igObject_Destroy(p);
         }
-        if (flag > 0) FUN_00100610(self);
+        if (flag > 0) __dl__FPv(self);
     }
     return (void **)self;
 }

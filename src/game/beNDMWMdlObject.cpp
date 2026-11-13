@@ -23,7 +23,7 @@ extern "C" int DAT_00515f50[4];
 extern "C" int g_propertyNameField[4];
 extern "C" int g_stringPool[4];
 extern "C" int g_defaultAllocatorSelector[4];
-extern "C" unsigned char GPR_00554c14;
+extern "C" unsigned char g_useOwnerAllocator;
 /* Property record: reference at +20. */
 struct OneProperty { char pad[20]; igObject *f20; };
 struct RefRelease { static inline void go(igObject *o) { igObject *t = o; if (t != 0) { --t->_refCount; if ((t->_refCount & 0x7fffff) == 0) igObject_Destroy(t); } } };
@@ -55,7 +55,7 @@ void Gap__Bec__beNDMWMdlObject__vfunc_37(void)
 void Gap__Bec__beNDMWMdlObject__vfunc_36(beNDMWMdlObject *arg0, beBaseInfoRam *arg1) {
     if (arg1->_dataList == 0) {
         int a = igObject_GetAllocator(arg1);
-        int al = GPR_00554c14 != 0 ? a : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
+        int al = g_useOwnerAllocator != 0 ? a : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
         igObject *created = (igObject *)beBaseInfoDataList_Create(al);
         /* matching construct: the new list is a temporary bound to the setter's reference parameter (it
          * takes the stack slot below the named info-work reference, as retail's +0x58 does) */
@@ -64,7 +64,7 @@ void Gap__Bec__beNDMWMdlObject__vfunc_36(beNDMWMdlObject *arg0, beBaseInfoRam *a
     OneProperty *s3 = (OneProperty *)igProperty_FindByName(arg1->_dataList, g_propertyNameField[0], DAT_00515f50);
     {
         int a2 = igObject_GetAllocator(arg0);
-        int al2 = GPR_00554c14 != 0 ? a2 : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
+        int al2 = g_useOwnerAllocator != 0 ? a2 : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
         InfoWorkRef w((igObject *)FUN_00350020(al2));
         igObject *t2 = w.p;
         if (t2 != 0) t2->_refCount = t2->_refCount + 1;

@@ -501,7 +501,7 @@ void *FUN_002dc2a0(void *arg0) {
     *(int *)((char *)(arg0) + 4) = (int)(&DAT_00530618[0]);
     *(int *)((char *)(arg0) + 0) = 1;
     *(int *)((char *)(arg0) + 4) = (int)(&DAT_005305f8[0]);
-    if (GPR_00554c14 != 0) {
+    if (g_useOwnerAllocator != 0) {
         var_v0 = ((int)Memory_GetAllocatorBySelector(DAT_00587028[0]));
     } else {
         var_v0 = ((int)Memory_GetAllocatorBySelector(DAT_00587058[0]));
@@ -560,7 +560,7 @@ void *FUN_002dc490(void *arg0, int arg1) {
     *(int *)((char *)(arg0) + 20) = 0;
     *(int *)((char *)(arg0) + 24) = 0;
     *(int *)((char *)(arg0) + 12) = ((int)FUN_002b9500(((int)Memory_GetAllocatorBySelector(DAT_00587048[0]))));
-    if (GPR_00554c14 != 0) {
+    if (g_useOwnerAllocator != 0) {
         var_v0 = ((int)Memory_GetAllocatorBySelector(DAT_00587028[0]));
     } else {
         var_v0 = ((int)Memory_GetAllocatorBySelector(DAT_00587058[0]));

@@ -17,7 +17,7 @@ struct Prop *igProperty_FindByName(...);
 extern int ONE_3[4];
 extern int g_propertyNameField[4];
 extern int g_defaultAllocatorSelector[4];
-extern unsigned char GPR_00554c14;
+extern unsigned char g_useOwnerAllocator;
 }
 /* Owning stack reference to the freshly created data list (reference count in the low 23 bits of
  * _refCount); released on scope exit. */
@@ -34,7 +34,7 @@ void beModelCtrl__OnGenerate(beModelCtrl *arg0, beBaseInfoRam *arg1) {
     struct Prop *prop;
     if (arg1->_dataList == 0) {
         var_v0 = igObject_GetAllocator(arg1);
-        if (GPR_00554c14 != 0) {
+        if (g_useOwnerAllocator != 0) {
             var_v0 = (int)var_v0;
         } else {
             var_v0 = Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);

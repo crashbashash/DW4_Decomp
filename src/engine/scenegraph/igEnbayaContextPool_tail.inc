@@ -12,7 +12,7 @@ void Gap__Sg__igEnbayaContextPool__vfunc_13(int arg0) {
     Gap__Core__igObject__vfunc_11();
     temp_s2 = *(int *)((char *)(g_objectSystem[0]) + 56);
     var_v0 = igObject_GetAllocator(arg0);
-    var_v0 = GPR_00554c14 != 0 ? var_v0 : Memory_GetAllocatorBySelector(g_temporaryAllocatorSelector[0]);
+    var_v0 = g_useOwnerAllocator != 0 ? var_v0 : Memory_GetAllocatorBySelector(g_temporaryAllocatorSelector[0]);
     sp5C = (void *)(FUN_002b9500(var_v0));
     temp_s0 = FUN_003064b0(temp_s2, 7);
     var_s1 = 0;

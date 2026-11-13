@@ -1,6 +1,6 @@
 #include "dw4/reflected.h"
 #include "dw4/igSmartPointer.h"
-#define ALLOC(dst, obj) { int alloc = igObject_GetAllocator(obj); if (GPR_00554c14 != 0) { dst = alloc; } else { dst = Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]); } }
+#define ALLOC(dst, obj) { int alloc = igObject_GetAllocator(obj); if (g_useOwnerAllocator != 0) { dst = alloc; } else { dst = Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]); } }
 
 extern "C" int Gap__Bec__beNDMWSaveCtrl__vfunc_30(void);
 extern "C" int Gap__Bec__beNDMWSaveCtrl__vfunc_20(void);
@@ -31,7 +31,7 @@ extern "C" int DAT_005194e8[4];
 extern "C" int g_propertyNameField[4];
 extern "C" int g_defaultAllocatorSelector[4];
 extern "C" int g_beSystem_metaObject[4];
-extern "C" unsigned char GPR_00554c14;
+extern "C" unsigned char g_useOwnerAllocator;
 /* The incoming message: its +20 word is the enum name. */
 struct A2 { char p[20]; int f20; };
 /* Owning stack references while the controller list is wired up; each releases its object on scope

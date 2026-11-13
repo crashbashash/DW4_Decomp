@@ -67,7 +67,7 @@ extern "C" int g_propertyNameField[4];
 extern "C" int g_defaultAllocatorSelector[4];
 extern "C" int g_beSystem_metaObject[4];
 extern "C" int g_beLua_metaObject[4];
-extern "C" unsigned char GPR_00554c14;
+extern "C" unsigned char g_useOwnerAllocator;
 /* Owning stack reference to a newly created child object; one instantiation per child class (0 the
  * data list, 1 the control data, 2 text order, 3 model control, 4 message window, 5 slot selector,
  * 6 state control, 7 state data, 8 data selector), so each gets its own out-of-line destructor. */
@@ -80,7 +80,7 @@ template <int kind> struct ChildRef {
 struct DataListGuard {
     static inline void Ensure(beBaseInfoRam *ram) {
     if (ram->_dataList == 0) {
-        int own = igObject_GetAllocator(ram); int allocator; if (GPR_00554c14 != 0) { allocator = own; } else { allocator = Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]); }
+        int own = igObject_GetAllocator(ram); int allocator; if (g_useOwnerAllocator != 0) { allocator = own; } else { allocator = Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]); }
         ChildRef<0> list((RefObject *)beBaseInfoDataList_Create(allocator)); RefObject *created; RefObject *old;
         created = list.object; if (created != 0) created->refCount = created->refCount + 1;
         old = (RefObject *)ram->_dataList;
@@ -193,7 +193,7 @@ struct AccessList {
     int getCount() const { return count; }
 };
 struct AllocatorChoice {
-    static int Select(const int *selector, int own) { if (GPR_00554c14) return own; else return Memory_GetAllocatorBySelector(*selector); }
+    static int Select(const int *selector, int own) { if (g_useOwnerAllocator) return own; else return Memory_GetAllocatorBySelector(*selector); }
 };
 struct ModelPos {
     float x, y, z, w;

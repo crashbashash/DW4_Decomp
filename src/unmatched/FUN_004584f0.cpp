@@ -1,6 +1,6 @@
 extern "C" {
 typedef struct S_temp_a0 { char pad4[4]; int f4; } S_temp_a0;
-int FUN_00100610(void **);
+int __dl__FPv(void **);
 int igObject_Destroy(S_temp_a0 *);
 
 void **FUN_004584f0(void **arg0, short arg1) {
@@ -15,7 +15,7 @@ void **FUN_004584f0(void **arg0, short arg1) {
             }
         }
         if (arg1 > 0) {
-            FUN_00100610(arg0);
+            __dl__FPv(arg0);
         }
     }
     return arg0;

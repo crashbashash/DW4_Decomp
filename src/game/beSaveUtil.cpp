@@ -4,7 +4,7 @@ extern "C" int igObject_Destroy(...);
 extern "C" int beSvConnectCheck_PollMultitap(int, int);
 extern "C" int beSvConnectCheck_Poll(int);
 extern "C" int beSvConnectCheck_FillDeliver(int, int);
-extern "C" void FUN_00100610(...);
+extern "C" void __dl__FPv(...);
 extern "C" void **FUN_003af090(void **arg0, short arg1);
 extern "C" int Gap__Bec__beSaveUtil__vfunc_30(void);
 extern "C" int Gap__Bec__beSaveUtil__vfunc_20(void);
@@ -47,7 +47,7 @@ extern "C" int g_beSaveUtil_metaObject[4];
 extern "C" char DAT_00510738[];
 extern "C" void Gap__Bec__beSaveUtil__vfunc_29(beSaveUtil * p0, int p1, char * p2);
 extern "C" int g_defaultAllocatorSelector[4];
-extern "C" unsigned char GPR_00554c14;
+extern "C" unsigned char g_useOwnerAllocator;
 /* reference-counted engine object header: refcount word at +4 */
 struct RC { int vt; int rc; };
 /* Owning stack reference to a request object; one instantiation per request kind (case), so each
@@ -151,7 +151,7 @@ ObjectRefWord *FUN_003af010(ObjectRefWord *self,int delete_storage) {
             if(((unsigned long long)(long long)object->references & 0x7fffffULL)==0)
                 igObject_Destroy(object);
         }
-        if((short)delete_storage>0) FUN_00100610(self);
+        if((short)delete_storage>0) __dl__FPv(self);
     }
     return self;
 }
@@ -168,7 +168,7 @@ void **FUN_003af090(void **arg0, short arg1) {
             }
         }
         if (arg1 > 0) {
-            FUN_00100610(arg0);
+            __dl__FPv(arg0);
         }
     }
     return arg0;
@@ -185,7 +185,7 @@ void Gap__Bec__beSaveUtil__vfunc_29(beSaveUtil * p0, int p1, char * p2)
 }
 
 #define DELIVER(r) ((Deliver *)(r)->_deliver)
-#define ALLOC(a, self) { int base_ = igObject_GetAllocator(self); if (GPR_00554c14 != 0) { a = base_; } else { a = Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]); } }
+#define ALLOC(a, self) { int base_ = igObject_GetAllocator(self); if (g_useOwnerAllocator != 0) { a = base_; } else { a = Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]); } }
 #define NEW_REQUEST(r, kind, create) ALLOC(a, self); RP<kind> r((RC *)create(a));
 #define TAKE_SLOT_ARGUMENT(self, info) \
     DELIVER(info)->slot = -1; \

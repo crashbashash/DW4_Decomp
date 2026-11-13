@@ -130,7 +130,7 @@ int **FUN_0032f2a0(int **arg0, long long arg1) {
         *arg0 = &DAT_0052d8b0[0];
         FUN_00328e00((igObject *)arg0, 0);
         if (((long long) (arg1 << 0x30) >> 0x30) > 0) {
-            FUN_00100610(arg0);
+            __dl__FPv(arg0);
         }
     }
     return arg0;

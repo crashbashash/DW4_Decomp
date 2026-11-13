@@ -8,7 +8,7 @@ void FUN_0013f670(void) {
 
 X_13f680 *FUN_0013f680(void) { int s0, r1, r2; X_13f680 *t;
     if (DAT_0055f508[0] == 0) {
-        if (GPR_00554c14 != 0) { r1 = Memory_GetAllocatorBySelector(DAT_00587028[0]); s0 = r1; } else { r2 = Memory_GetAllocatorBySelector(DAT_005870f8[0]); s0 = r2; }
+        if (g_useOwnerAllocator != 0) { r1 = Memory_GetAllocatorBySelector(DAT_00587028[0]); s0 = r1; } else { r2 = Memory_GetAllocatorBySelector(DAT_005870f8[0]); s0 = r2; }
         t = DAT_0055f508[0];
         if (t != 0) {
             t->f4 = t->f4 - 1;

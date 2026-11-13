@@ -25,7 +25,7 @@ extern int DAT_00586f20[4];
 extern int DAT_00587038[4];
 extern int DAT_00587338[4];
 extern int DAT_00587358[4];
-extern unsigned char GPR_00554c14;
+extern unsigned char g_useOwnerAllocator;
 }
 
 static inline int internPool(void) {
@@ -52,7 +52,7 @@ static inline void setName(O *object, int name) {
 }
 static inline int fileAllocator(void) {
     int a = FUN_002f8a20();
-    return GPR_00554c14 != 0 ? a : Memory_GetAllocatorBySelector(DAT_00587038[0]);
+    return g_useOwnerAllocator != 0 ? a : Memory_GetAllocatorBySelector(DAT_00587038[0]);
 }
 extern "C" void FUN_0032d220(void) {
     unsigned char enabled;

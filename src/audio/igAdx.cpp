@@ -89,7 +89,7 @@ extern "C" unsigned int strlen(const char *);
 extern "C" char *strncpy(char *, const char *, unsigned int);
 extern "C" int FUN_00333440(const char *name);
 extern "C" int strcat(char *, void *);
-extern "C" void FUN_00100610(void *);
+extern "C" void __dl__FPv(void *);
 extern "C" void FUN_003337e0(void);
 extern "C" void FUN_003337f0(void);
 struct S { char pad[8]; int f8; int f12; int pad2; int f20; int f24; int f28; int f32; unsigned char f36; };
@@ -843,7 +843,7 @@ ObjectRefWord *FUN_00333760(ObjectRefWord *self,int delete_storage) {
             if(((unsigned long long)(long long)object->references & 0x7fffffULL)==0)
                 igObject_Destroy(object);
         }
-        if((short)delete_storage>0) FUN_00100610(self);
+        if((short)delete_storage>0) __dl__FPv(self);
     }
     return self;
 }

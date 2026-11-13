@@ -17,7 +17,7 @@ extern "C" PropertyRecordRef *igProperty_FindByName(...);
 extern "C" int DAT_00515db8[4];
 extern "C" int g_propertyNameField[4];
 extern "C" int g_defaultAllocatorSelector[4];
-extern "C" unsigned char GPR_00554c14;
+extern "C" unsigned char g_useOwnerAllocator;
 /* matching construct: inline static helper reproduces the retail release sequence */
 struct ReleaseRef { static inline void go(igObject *object) {
     if (object) {
@@ -71,7 +71,7 @@ void Gap__Bec__beNDMWMdlEffect__vfunc_36(EffectReceiverShim *arg0, beBaseInfoRam
     int a;
     if (arg1->_dataList == 0) {
         alloc = igObject_GetAllocator(arg1);
-        if (GPR_00554c14 != 0) {
+        if (g_useOwnerAllocator != 0) {
             a = alloc;
         } else {
             a = Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
@@ -80,7 +80,7 @@ void Gap__Bec__beNDMWMdlEffect__vfunc_36(EffectReceiverShim *arg0, beBaseInfoRam
     }
     s1 = igProperty_FindByName(arg1->_dataList, g_propertyNameField[0], DAT_00515db8);
     alloc = igObject_GetAllocator(arg0);
-    if (GPR_00554c14 != 0) {
+    if (g_useOwnerAllocator != 0) {
         a = alloc;
     } else {
         a = Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);

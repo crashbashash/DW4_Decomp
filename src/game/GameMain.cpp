@@ -170,7 +170,7 @@ extern "C" int FUN_002cb1f0(...);
 extern "C" int FUN_002ccf60(...);
 extern "C" int FUN_002ce6d0(...);
 extern "C" void FUN_002590c0(void);
-extern "C" int FUN_00100610(...);
+extern "C" int __dl__FPv(...);
 extern "C" int FUN_00165d20(int);
 extern "C" int FUN_002d16a0(int);
 extern "C" int FUN_002d1770(...);
@@ -243,11 +243,11 @@ extern "C" int *DAT_00587340[4];
 extern "C" char GPR_0055499c;
 extern "C" char GPR_005549a0;
 extern "C" char GPR_005549b8;
-extern "C" unsigned char GPR_00554c14;
+extern "C" unsigned char g_useOwnerAllocator;
 struct Guard { ~Guard() { FUN_002d1770(); } };
 struct U {
     static inline int alloc(int fallback) {
-        if (GPR_00554c14) return fallback;
+        if (g_useOwnerAllocator) return fallback;
         else return ((int)Memory_GetAllocatorBySelector(g_ndmwAllocatorSelector[0]));
     }
     static inline void relg(Obj **g) {
@@ -753,7 +753,7 @@ int FUN_002595e0(int arg0, int *arg1) {
             if (s0 != 0) {
                 U::relstr(&s0->f236);
                 U::relstr((int *)s0);
-                FUN_00100610(s0);
+                __dl__FPv(s0);
             }
             DAT_0056dc50[0] = 0;
         }
@@ -1037,7 +1037,7 @@ void FUN_0025a580(A0 *arg0) {
                             }
                         }
                     }
-                    FUN_00100610(f);
+                    __dl__FPv(f);
                 }
                 ((struct Fr * *)DAT_0056dc50)[0] = 0;
             }
@@ -1168,7 +1168,7 @@ void FUN_0025a8c0(App_25a8c0 *arg0) {
                             if (rc == 0) StringChunk_ReleaseHeader(*h, h);
                         }
                     }
-                    FUN_00100610(f);
+                    __dl__FPv(f);
                 }
                 ((Frame * *)DAT_0056dc50)[0] = 0;
             }
@@ -1292,17 +1292,17 @@ void FUN_0025afe0(Holder *arg0) {
     ((Sub *)arg0->p->_visualContext)->v140();
     REL_25afe0(DAT_00562718[0]);
     DAT_00562718[0] = 0;
-    { Pool *a_ = FUN_002f8a20(); var_v0 = GPR_00554c14 != 0 ? a_ : Memory_GetAllocatorBySelector(g_ndmwAllocatorSelector[0]); }
+    { Pool *a_ = FUN_002f8a20(); var_v0 = g_useOwnerAllocator != 0 ? a_ : Memory_GetAllocatorBySelector(g_ndmwAllocatorSelector[0]); }
     REL_25afe0(DAT_00562718[0]);
     DAT_00562718[0] = (igEnbayaContextPool *)((void *)igEnbayaContextPool_Create(var_v0));
-    { Pool *a_ = FUN_002f8a20(); var_v0 = GPR_00554c14 != 0 ? a_ : Memory_GetAllocatorBySelector(g_ndmwAllocatorSelector[0]); }
+    { Pool *a_ = FUN_002f8a20(); var_v0 = g_useOwnerAllocator != 0 ? a_ : Memory_GetAllocatorBySelector(g_ndmwAllocatorSelector[0]); }
     REL_25afe0(DAT_00562528[0]);
     DAT_00562528[0] = (igAnimationCombinerBoneInfoPool *)((void *)igAnimationCombinerBoneInfoPool_Create(var_v0));
     DAT_00562528[0]->_resetMode = 0;
-    { Pool *a_ = FUN_002f8a20(); var_v0 = GPR_00554c14 != 0 ? a_ : Memory_GetAllocatorBySelector(g_ndmwAllocatorSelector[0]); }
+    { Pool *a_ = FUN_002f8a20(); var_v0 = g_useOwnerAllocator != 0 ? a_ : Memory_GetAllocatorBySelector(g_ndmwAllocatorSelector[0]); }
     REL_25afe0(DAT_00562540[0]);
     DAT_00562540[0] = (igAnimationStatePool *)((void *)igAnimationStatePool_Create(var_v0));
-    { Pool *a_ = FUN_002f8a20(); var_a0 = GPR_00554c14 != 0 ? a_ : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]); }
+    { Pool *a_ = FUN_002f8a20(); var_a0 = g_useOwnerAllocator != 0 ? a_ : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]); }
     if (var_a0 != 0) {
         var_a0->v108(0);
     }

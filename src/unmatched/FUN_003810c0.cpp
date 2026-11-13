@@ -22,7 +22,7 @@ extern int DAT_00586f20[4];
 extern int DAT_00587108[4];
 extern int DAT_00587110[4];
 extern int DAT_005891c0[4];
-extern unsigned char GPR_00554c14;
+extern unsigned char g_useOwnerAllocator;
 int FUN_003810c0(beFileListInfoManager *arg0, igStringRefList *arg1);
 }
 struct VO {
@@ -164,7 +164,7 @@ int FUN_003810c0(beFileListInfoManager *arg0, igStringRefList *arg1) {
                 int a;
                 int base = igObject_GetAllocator();
                 igObject *old;
-                if (GPR_00554c14 != 0) { a = base; } else { a = Memory_GetAllocatorBySelector(DAT_00587108[0]); }
+                if (g_useOwnerAllocator != 0) { a = base; } else { a = Memory_GetAllocatorBySelector(DAT_00587108[0]); }
                 sy = (igResource *)DAT_00586dd0[0];
                 if (a != 0) ((igObject *)a)->_refCount = ((igObject *)a)->_refCount + 1;
                 old = (igObject *)sy->_objectMemoryPool;
@@ -178,7 +178,7 @@ int FUN_003810c0(beFileListInfoManager *arg0, igStringRefList *arg1) {
                 int a2;
                 int base2 = igObject_GetAllocator(arg0);
                 igObject *old2;
-                if (GPR_00554c14 != 0) { a2 = base2; } else { a2 = Memory_GetAllocatorBySelector(DAT_00587108[0]); }
+                if (g_useOwnerAllocator != 0) { a2 = base2; } else { a2 = Memory_GetAllocatorBySelector(DAT_00587108[0]); }
                 sy2 = (igResource *)DAT_00586dd0[0];
                 if (a2 != 0) ((igObject *)a2)->_refCount = ((igObject *)a2)->_refCount + 1;
                 old2 = (igObject *)sy2->_dataMemoryPool;
@@ -193,7 +193,7 @@ int FUN_003810c0(beFileListInfoManager *arg0, igStringRefList *arg1) {
                 int a;
                 int base = igObject_GetAllocator();
                 igObject *old;
-                if (GPR_00554c14 != 0) { a = base; } else { a = Memory_GetAllocatorBySelector(DAT_00587110[0]); }
+                if (g_useOwnerAllocator != 0) { a = base; } else { a = Memory_GetAllocatorBySelector(DAT_00587110[0]); }
                 sy = (igResource *)DAT_00586dd0[0];
                 if (a != 0) ((igObject *)a)->_refCount = ((igObject *)a)->_refCount + 1;
                 old = (igObject *)sy->_objectMemoryPool;
@@ -207,7 +207,7 @@ int FUN_003810c0(beFileListInfoManager *arg0, igStringRefList *arg1) {
                 int a2;
                 int base2 = igObject_GetAllocator(arg0);
                 igObject *old2;
-                if (GPR_00554c14 != 0) { a2 = base2; } else { a2 = Memory_GetAllocatorBySelector(DAT_00587110[0]); }
+                if (g_useOwnerAllocator != 0) { a2 = base2; } else { a2 = Memory_GetAllocatorBySelector(DAT_00587110[0]); }
                 sy2 = (igResource *)DAT_00586dd0[0];
                 if (a2 != 0) ((igObject *)a2)->_refCount = ((igObject *)a2)->_refCount + 1;
                 old2 = (igObject *)sy2->_dataMemoryPool;

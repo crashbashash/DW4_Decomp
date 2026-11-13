@@ -158,7 +158,7 @@ void **FUN_00239200(void **ref, short flags) {
             }
         }
         if (flags > 0) {
-            FUN_00100610(ref);
+            __dl__FPv(ref);
         }
     }
     return ref;
@@ -176,7 +176,7 @@ void **FUN_00239280(void **ref, short flags) {
             }
         }
         if (flags > 0) {
-            FUN_00100610(ref);
+            __dl__FPv(ref);
         }
     }
     return ref;
@@ -194,7 +194,7 @@ void **FUN_00239300(void **ref, short flags) {
             }
         }
         if (flags > 0) {
-            FUN_00100610(ref);
+            __dl__FPv(ref);
         }
     }
     return ref;

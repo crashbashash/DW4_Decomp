@@ -62,7 +62,7 @@ struct Obj {
 };
 extern "C" int igObject_InitHeader(...);
 extern "C" int igSerialScheduler_GetVTable(void);
-extern "C" int FUN_00100610(...);
+extern "C" int __dl__FPv(...);
 extern "C" void **FUN_00231210(void **arg0, long long arg1);
 extern "C" void FUN_00231290(void);
 extern "C" char igInsightScheduler_GetPublishedMetaObject[];
@@ -541,7 +541,7 @@ extern "C" char *StringPool_Intern(...);
 extern "C" int StringList_CopyRetained(...);
 extern "C" int StringList_AppendRetained(...);
 extern "C" int List_Resize(IntList *list, int newCount, int elementSize);
-extern "C" unsigned char GPR_00554c14;
+extern "C" unsigned char g_useOwnerAllocator;
 extern "C" int g_stringPool[4];
 extern "C" int DAT_00587028[4];
 extern "C" int g_temporaryAllocatorSelector[4];

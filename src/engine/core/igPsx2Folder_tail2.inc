@@ -50,7 +50,7 @@ void FUN_0032cac0(struct S_32cac0 *arg0) {
 }
 
 static inline FolderAllocator *currentAllocator(void) {
-    if (GPR_00554c14 != 0) {
+    if (g_useOwnerAllocator != 0) {
         return ((FolderAllocator *)Memory_GetAllocatorBySelector((*(int *)DAT_00587028)));
     }
     return ((FolderAllocator *)Memory_GetAllocatorBySelector((*(int *)g_temporaryAllocatorSelector)));
@@ -165,7 +165,7 @@ static inline void setName(O_32d220 *object, int name) {
 
 static inline int fileAllocator(void) {
     int a = ((int)FUN_002f8a20());
-    return GPR_00554c14 != 0 ? a : ((int)Memory_GetAllocatorBySelector(DAT_00587038[0]));
+    return g_useOwnerAllocator != 0 ? a : ((int)Memory_GetAllocatorBySelector(DAT_00587038[0]));
 }
 
 void FUN_0032d4b0(int *arg0, char *arg1) {

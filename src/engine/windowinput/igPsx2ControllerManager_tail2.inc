@@ -19,7 +19,7 @@ void Gap__igPsx2ControllerManager__vfunc_24(igPsx2ControllerManager *arg0, int a
         }
         FUN_00117c78(0);
         base = igObject_GetAllocator(arg0);
-        if (GPR_00554c14 != 0) {
+        if (g_useOwnerAllocator != 0) {
             al = base;
         } else {
             al = Memory_GetAllocatorBySelector(g_temporaryAllocatorSelector[0]);
@@ -61,7 +61,7 @@ void Gap__igPsx2ControllerManager__vfunc_24(igPsx2ControllerManager *arg0, int a
             { unsigned m = arg0->_multitap; s2 = !(m & (1u << s3)) ? 1 : 4; }
             for (; s1 < s2; s1++) {
                 base = igObject_GetAllocator(arg0);
-                if (GPR_00554c14 != 0) {
+                if (g_useOwnerAllocator != 0) {
                     al2 = (Al *)base;
                 } else {
                     al2 = (Al *)Memory_GetAllocatorBySelector(g_temporaryAllocatorSelector[0]);
@@ -101,7 +101,7 @@ void **FUN_001489a0(void **arg0, short arg1) {
             }
         }
         if (arg1 > 0) {
-            FUN_00100610(arg0);
+            __dl__FPv(arg0);
         }
     }
     return arg0;

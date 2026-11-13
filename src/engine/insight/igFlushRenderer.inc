@@ -400,7 +400,7 @@ int FUN_002348b0(igStringRefList *arg0, int *arg1, const char *arg2, float *arg3
 }
 
 static inline int renderAllocator(void) {
-    if (GPR_00554c14) {
+    if (g_useOwnerAllocator) {
         return Memory_GetAllocatorBySelector(DAT_00587028[0]);
     }
     return Memory_GetAllocatorBySelector(g_temporaryAllocatorSelector[0]);
@@ -534,7 +534,7 @@ void *FUN_00234b90(struct App *arg0, short arg1) {
             }
         }
         if (arg1 > 0) {
-            FUN_00100610(arg0);
+            __dl__FPv(arg0);
         }
     }
     return arg0;
@@ -572,7 +572,7 @@ void FUN_00234ca0(void) {
                         }
                     }
                 }
-                FUN_00100610(f);
+                __dl__FPv(f);
             }
             DAT_0056dc50[0] = 0;
         }
@@ -582,7 +582,7 @@ void FUN_00234ca0(void) {
 void FUN_00234d70(int self, int count, int *names) {
     int allocator;
     int i;
-    if (GPR_00554c14 != 0) {
+    if (g_useOwnerAllocator != 0) {
         allocator = Memory_GetAllocatorBySelector(DAT_00587028[0]);
     } else {
         allocator = Memory_GetAllocatorBySelector(g_temporaryAllocatorSelector[0]);

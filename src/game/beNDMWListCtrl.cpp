@@ -146,7 +146,7 @@ extern "C" int beNDMWItemBase_GetRevisionColor(...);
 extern "C" int strlen(const void *);
 extern "C" int igStringObj_Set(void *, const char *);
 extern "C" int igStringObj_Insert(void *, const void *, int, int);
-extern "C" int FUN_00100610(...);
+extern "C" int __dl__FPv(...);
 extern "C" void beNDMWStatus_PreviewEquipment(...);
 extern "C" int ObjectList_FillRetained(...);
 extern "C" int beNDMWStatusMainSlot_GetMeta(void);

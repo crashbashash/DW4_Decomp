@@ -16,7 +16,7 @@ extern "C" PropertyRecord *igProperty_FindByName(...);
 extern "C" int DAT_00515fc8[4];
 extern "C" int g_propertyNameField[4];
 extern "C" int g_defaultAllocatorSelector[4];
-extern "C" unsigned char GPR_00554c14;
+extern "C" unsigned char g_useOwnerAllocator;
 /* matching construct: inline release helper reproduces the retail release sequence */
 struct ReleaseRef { static inline void go(igObject *object) {
     if (object) {
@@ -43,7 +43,7 @@ struct RamDataList { static inline void Ensure(beBaseInfoRam *ram) {
     if (ram->_dataList == 0) {
         int alloc = igObject_GetAllocator(ram);
         int a;
-        if (GPR_00554c14 != 0) {
+        if (g_useOwnerAllocator != 0) {
             a = alloc;
         } else {
             a = Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
@@ -75,7 +75,7 @@ void Gap__Bec__beNDMWMdlPBullet__vfunc_36(beNDMWMdlPBullet *arg0, beBaseInfoRam 
     RamDataList::Ensure(arg1);
     s1 = igProperty_FindByName((void *)arg1->_dataList, g_propertyNameField[0], DAT_00515fc8);
     alloc = igObject_GetAllocator(arg0);
-    if (GPR_00554c14 != 0) {
+    if (g_useOwnerAllocator != 0) {
         a = alloc;
     } else {
         a = Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);

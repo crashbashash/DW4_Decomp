@@ -890,7 +890,7 @@ struct InstanceNode : public igObject { };
 unsigned FUN_002fe2c0(int);
 int FUN_002fe2e0(int, unsigned);
 int FUN_00301ee0(InstanceNode *, unsigned);
-int FUN_00100610(void *);
+int __dl__FPv(void *);
 extern int DAT_00587038[4];
 extern OpTable *DAT_00561118;
 extern OpTable *DAT_00561120;

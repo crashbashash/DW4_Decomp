@@ -79,3 +79,4 @@
 0x0030b460	igStringObj_Insert	engine
 0x0030b630	igStringObj_ToFloat	engine
 0x001c5d10	igGroup_AppendChild	engine
+0x00100610	__dl__FPv	engine

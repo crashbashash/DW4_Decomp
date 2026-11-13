@@ -68,7 +68,7 @@ struct R **FUN_0019c840(struct R **arg0, short arg1) {
             }
         }
         if (arg1 > 0) {
-            FUN_00100610(arg0);
+            __dl__FPv(arg0);
         }
     }
     return arg0;

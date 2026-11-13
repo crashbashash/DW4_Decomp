@@ -1,5 +1,5 @@
 extern "C" {
-int FUN_00100610(void **);
+int __dl__FPv(void **);
 int igObject_Destroy(char *);
 
 void **FUN_004583f0(void **arg0, long long arg1) {
@@ -14,7 +14,7 @@ void **FUN_004583f0(void **arg0, long long arg1) {
             }
         }
         if ((short)arg1 > 0) {
-            FUN_00100610(arg0);
+            __dl__FPv(arg0);
         }
     }
     return arg0;

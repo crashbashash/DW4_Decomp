@@ -447,7 +447,7 @@ void FUN_001c3ab0(int width, int height, int bpp, void *face1, void *face0, void
     int nb[4];
     float acc[4];
     total = bpp * (width * height);
-    if (GPR_00554c14 != 0) {
+    if (g_useOwnerAllocator != 0) {
         a = ((SphereMapAllocator *)Memory_GetAllocatorBySelector(DAT_00587028[0]));
     } else {
         a = ((SphereMapAllocator *)Memory_GetAllocatorBySelector(g_temporaryAllocatorSelector[0]));
@@ -532,7 +532,7 @@ void FUN_001c3ab0(int width, int height, int bpp, void *face1, void *face0, void
             }
         }
     }
-    if (GPR_00554c14 != 0) {
+    if (g_useOwnerAllocator != 0) {
         a = ((SphereMapAllocator *)Memory_GetAllocatorBySelector(DAT_00587028[0]));
     } else {
         a = ((SphereMapAllocator *)Memory_GetAllocatorBySelector(g_temporaryAllocatorSelector[0]));

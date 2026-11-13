@@ -113,7 +113,7 @@ void **FUN_003484b0(struct Ref **self, short flag) {
             p->u.w = p->u.w - 1;
             if (p->u.b.cnt == 0) igObject_Destroy(p);
         }
-        if (flag > 0) FUN_00100610(self);
+        if (flag > 0) __dl__FPv(self);
     }
     return (void **)self;
 }

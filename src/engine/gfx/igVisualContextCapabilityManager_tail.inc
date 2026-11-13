@@ -21,10 +21,10 @@ static inline void fill_pool_slot(void *self, igObjectSlotView **slot, igObjectS
         *slot = p;
     } else {
         igObjectSlotView *a = (igObjectSlotView *)igObject_GetAllocator(self);
-        a = GPR_00554c14 != 0 ? a : (igObjectSlotView *)Memory_GetAllocatorBySelector(selector[0]);
+        a = g_useOwnerAllocator != 0 ? a : (igObjectSlotView *)Memory_GetAllocatorBySelector(selector[0]);
         if (a != (igObjectSlotView *)Memory_GetAllocatorBySelector(DAT_00587020[0])) {
             p = (igObjectSlotView *)igObject_GetAllocator(self);
-            p = GPR_00554c14 != 0 ? p : (igObjectSlotView *)Memory_GetAllocatorBySelector(selector[0]);
+            p = g_useOwnerAllocator != 0 ? p : (igObjectSlotView *)Memory_GetAllocatorBySelector(selector[0]);
             retain(p);
             release_164f50(*slot);
             *slot = p;
@@ -215,7 +215,7 @@ int FUN_00165e40(void *arg0) {
 
 static inline Obj_165e50 *getAlloc(void *o) {
     Obj_165e50 *a = (Obj_165e50 *)igObject_GetAllocator(o);
-    if (GPR_00554c14 != 0) return a;
+    if (g_useOwnerAllocator != 0) return a;
     return (Obj_165e50 *)Memory_GetAllocatorBySelector(g_temporaryAllocatorSelector[0]);
 }
 

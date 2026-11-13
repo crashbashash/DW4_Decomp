@@ -886,7 +886,7 @@ void Gap__Bec__beNumVerData__vfunc_07(Obj_36f970 *arg0, int arg1) {
         i = 0;
         do {
             alloc = igObject_GetAllocator(arg0);
-            alloc = (GPR_00554c14 != 0) ? alloc : ((void *)Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]));
+            alloc = (g_useOwnerAllocator != 0) ? alloc : ((void *)Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]));
             { Ref_36f970 sp3C(((T_36f970 *)FUN_0034de60((int)alloc)));
             ObjectList_AppendRetained(arg0->list, sp3C.p); }
             i += 1;

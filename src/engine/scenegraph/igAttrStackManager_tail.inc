@@ -28,7 +28,7 @@ void Gap__Sg__igAttrStackManager__vfunc_09(unsigned char *arg0, int arg1) {
     if (arg1 == 0) {
         if (DAT_00562580[0] == 0) {
             al = igObject_GetAllocator(arg0);
-            al = GPR_00554c14 != 0 ? al : Memory_GetAllocatorBySelector(DAT_005870f8[0]);
+            al = g_useOwnerAllocator != 0 ? al : Memory_GetAllocatorBySelector(DAT_005870f8[0]);
             DAT_00562580[0] = ((struct L_1af920 *)FUN_001a51d0(al));
         }
         l = DAT_00562580[0];

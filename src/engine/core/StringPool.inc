@@ -8,7 +8,7 @@ struct S_2eadf0 *StringPool_Construct(struct S_2eadf0 *arg0) {
     arg0->f8 = 0x4000;
     arg0->f12 = 0;
     var_v0 = arg0->f12;
-    var_v0 = GPR_00554c14 != 0 ? var_v0 : (int)((void **)Memory_GetAllocatorBySelector(DAT_00587048[0]));
+    var_v0 = g_useOwnerAllocator != 0 ? var_v0 : (int)((void **)Memory_GetAllocatorBySelector(DAT_00587048[0]));
     arg0->f12 = var_v0;
     if (arg0->f12 == 0) {
         arg0->f12 = ((int)Memory_GetDefaultAllocator());

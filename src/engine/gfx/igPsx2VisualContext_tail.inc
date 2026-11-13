@@ -87,7 +87,7 @@ void **FUN_001509f0(struct Ref **self, short flag) {
             p->u.w = p->u.w - 1;
             if (p->u.b.cnt == 0) igObject_Destroy(p);
         }
-        if (flag > 0) FUN_00100610(self);
+        if (flag > 0) __dl__FPv(self);
     }
     return (void **)self;
 }
@@ -104,7 +104,7 @@ void **FUN_00150a70(void **arg0, long long arg1) {
             }
         }
         if ((short)arg1 > 0) {
-            FUN_00100610(arg0);
+            __dl__FPv(arg0);
         }
     }
     return arg0;
@@ -145,7 +145,7 @@ ObjectRefWord *ObjectRef_Destruct_00150eb0(ObjectRefWord *self,int delete_storag
             if(((unsigned long long)(long long)object->references & 0x7fffffULL)==0)
                 igObject_Destroy(object);
         }
-        if((short)delete_storage>0) FUN_00100610(self);
+        if((short)delete_storage>0) __dl__FPv(self);
     }
     return self;
 }
@@ -154,7 +154,7 @@ O_1506b0 *FUN_00150f30(O_1506b0 *arg0, short arg1) {
     if (arg0) {
         S_temp_a0_1506b0 *t = arg0->m;
         if (t) { t->f4 -= 1; if ((t->f4 & 0x7fffff) == 0) igObject_Destroy(t); }
-        if (arg1 > 0) FUN_00100610(arg0);
+        if (arg1 > 0) __dl__FPv(arg0);
     }
     return arg0;
 }
@@ -167,7 +167,7 @@ ObjectRefWord *FUN_00150fb0(ObjectRefWord *self,int delete_storage) {
             if(((unsigned long long)(long long)object->references & 0x7fffffULL)==0)
                 igObject_Destroy(object);
         }
-        if((short)delete_storage>0) FUN_00100610(self);
+        if((short)delete_storage>0) __dl__FPv(self);
     }
     return self;
 }

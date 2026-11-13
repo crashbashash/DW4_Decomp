@@ -75,7 +75,7 @@ extern "C" int igTextElement_GetVTable(void);
 extern "C" int thunk_FUN_002ed460__002ff810(...);
 extern "C" int DAT_00541e90[4];
 extern "C" void *FUN_0044be30(igGeometryElement *arg0, short arg1);
-extern "C" int FUN_00100610(...);
+extern "C" int __dl__FPv(...);
 extern "C" void **FUN_0044bf10(void **arg0, long long arg1);
 extern "C" void igTextElement_EnsureRegistered(void);
 extern "C" char igGeometryElement_GetPublishedMetaObject[];

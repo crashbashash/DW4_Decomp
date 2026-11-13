@@ -540,14 +540,14 @@ void FUN_002f43a0(PoolSlotTable *self) {
             NEW_POOL(p)
             break;
         case 4: case 5: case 6:
-            if (GPR_00554c14 != 0) { p = self->first; } else { NEW_POOL(p) }
+            if (g_useOwnerAllocator != 0) { p = self->first; } else { NEW_POOL(p) }
             break;
         default:
             p = self->first;
             break;
         }
         *(PoolObject **)((char *)self + i * 144 + 20) = p;
-        if (GPR_00554c14 != 0) {
+        if (g_useOwnerAllocator != 0) {
             switch (i) {
             case 0:
                 p->prepare();
@@ -610,7 +610,7 @@ void FUN_002f48d0(char *arg0) {
     }
     *(int *)((char *)(*(void * *)g_objectSystem) + 52) = 0;
     i = 6;
-    if (GPR_00554c14 == 0) {
+    if (g_useOwnerAllocator == 0) {
         do {
             pp = (V_2f25d0 ***)(arg0 + i * 0x90 + 20);
             obj = (V_2f25d0 *)*pp;

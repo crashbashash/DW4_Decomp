@@ -15,7 +15,7 @@ O *FUN_00341160(O *arg0, short arg1) {
     if (arg0) {
         S_temp_a0 *t = arg0->m;
         if (t) { t->f4 -= 1; if ((t->f4 & 0x7fffff) == 0) igObject_Destroy(t); }
-        if (arg1 > 0) FUN_00100610(arg0);
+        if (arg1 > 0) __dl__FPv(arg0);
     }
     return arg0;
 }

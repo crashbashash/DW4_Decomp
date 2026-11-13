@@ -51,7 +51,7 @@ void beMessenger_SelectReceivers(int, const char *, const char *, int);
 void beMessenger_AppendMatrix(int, float *);
 void beMessenger_SendDelayedNamed(int, const char *, int, int, const char *, int);
 
-extern unsigned char GPR_00554c14;
+extern unsigned char g_useOwnerAllocator;
 extern char DAT_005165c0[], DAT_005165c8[], DAT_005165d0[], DAT_005165d8[], DAT_005165e8[], DAT_005165f8[];
 extern char DAT_00516608[], DAT_00516648[], DAT_00516658[], DAT_00516660[], DAT_00516670[], DAT_00516680[];
 extern char DAT_00516690[], DAT_005166a0[], DAT_005166a8[], DAT_005166b0[], DAT_005166c0[], DAT_005166c8[];
@@ -145,7 +145,7 @@ extern "C" int Gap__Bec__beNDMWMdlPlayer2__vfunc_47(beNDMWMdlPlayer2 *self, Msg 
         if (msg->cache == 0) {
             void *al = igObject_GetAllocator((Msg *)msg);
             void *al2;
-            if (GPR_00554c14 != 0) {
+            if (g_useOwnerAllocator != 0) {
                 al2 = al;
             } else {
                 al2 = Memory_GetAllocatorBySelector(DAT_00587110[0]);

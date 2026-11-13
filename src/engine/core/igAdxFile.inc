@@ -11,7 +11,7 @@ void ***FUN_002e2fb0(void) {
     int c;
     if (DAT_00586e18[0] == 0) {
         al = (void **)FUN_002f8a20();
-        if (GPR_00554c14 != 0) {
+        if (g_useOwnerAllocator != 0) {
             a = al;
         } else {
             a = (void **)Memory_GetAllocatorBySelector(g_temporaryAllocatorSelector[0]);

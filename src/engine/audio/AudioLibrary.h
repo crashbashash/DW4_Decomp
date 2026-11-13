@@ -274,7 +274,7 @@ void *igMetaObject_GetFieldAt(...);
 int igMetaObject_GetFieldCount(...);
 int igMetaObject_NameFields(...);
 int igObject_InitHeader(...);
-int FUN_00100610(...);
+int __dl__FPv(...);
 int FUN_002d3890(...);
 int FUN_00145d40(...);
 int igUnsignedIntMetaField_GetDefaultDescriptor(...);

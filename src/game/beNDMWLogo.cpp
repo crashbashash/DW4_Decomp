@@ -1,7 +1,7 @@
 #include "dw4/reflected.h"
 
 extern "C" int igInsightCore_FindManager(int, int);
-extern "C" int FUN_00100610(void *);
+extern "C" int __dl__FPv(void *);
 extern "C" int igObject_Destroy(void *);
 extern "C" int beLua__RunNamedChunk(int, int *, int);
 extern "C" void beMessenger_SelectReceivers(int, const char *, const char *, int);
@@ -58,7 +58,7 @@ void **FUN_0044a7f0(struct Ref **self, short flag) {
             p->u.w = p->u.w - 1;
             if (p->u.b.cnt == 0) igObject_Destroy(p);
         }
-        if (flag > 0) FUN_00100610(self);
+        if (flag > 0) __dl__FPv(self);
     }
     return (void **)self;
 }

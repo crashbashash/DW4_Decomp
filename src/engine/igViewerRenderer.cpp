@@ -51,7 +51,7 @@ void FUN_00460ac0(OptionPanelView *arg0);
 extern int DAT_0051faa8[4];
 void Gap__Viewer__igViewerRenderer__vfunc_23(Q2 *arg0);
 
-int FUN_00100610(...);
+int __dl__FPv(...);
 void *FUN_001007e0(...);
 void *FUN_00238110(...);
 int FUN_004578c0(...);
@@ -507,7 +507,7 @@ void FUN_0045f930(Arg *arg0) {
                         }
                     }
                 }
-                FUN_00100610(f);
+                __dl__FPv(f);
             }
             DAT_0056dc50[0] = 0;
         }
@@ -583,7 +583,7 @@ void Gap__Viewer__igViewerRenderer__vfunc_13(P *arg0) {
                         }
                     }
                 }
-                FUN_00100610(s0c);
+                __dl__FPv(s0c);
             }
             DAT_0056dc50[0] = 0;
         }
@@ -787,7 +787,7 @@ void FUN_004608a0(igViewerRenderer *arg0) {
                                 }
                             }
                         }
-                        FUN_00100610(s1);
+                        __dl__FPv(s1);
                     }
                     DAT_0056dc50[0] = 0;
                 }

@@ -15,7 +15,7 @@ void **FUN_0013bfe0(void **arg0, short arg1) {
             }
         }
         if (arg1 > 0) {
-            FUN_00100610(arg0);
+            __dl__FPv(arg0);
         }
     }
     return arg0;
@@ -25,7 +25,7 @@ struct Ref *FUN_0013c060(void) {
     int a;
     struct Ref *p;
     if (DAT_0055f4b8[0] == 0) {
-        if (GPR_00554c14 != 0) { int x = Memory_GetAllocatorBySelector(DAT_00587028[0]); a = x; } else { int y = Memory_GetAllocatorBySelector(DAT_005870f8[0]); a = y; }
+        if (g_useOwnerAllocator != 0) { int x = Memory_GetAllocatorBySelector(DAT_00587028[0]); a = x; } else { int y = Memory_GetAllocatorBySelector(DAT_005870f8[0]); a = y; }
         p = DAT_0055f4b8[0];
         if (p != 0) {
             p->u.w = p->u.w - 1;

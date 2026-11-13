@@ -93,7 +93,7 @@ StringRefWord *StringRef_Destruct_00130720(StringRefWord *self,int delete_storag
             int *header=(int *)(value-8);
             if(--header[1]==0) StringChunk_ReleaseHeader((void *)header[0], (int)header);
         }
-        if((short)delete_storage>0) FUN_00100610(self);
+        if((short)delete_storage>0) __dl__FPv(self);
     }
     return self;
 }

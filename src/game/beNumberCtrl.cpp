@@ -26,7 +26,7 @@ extern "C" void Gap__Bec__beNumberCtrl__vfunc_29(beNumberCtrl *arg0, Unidentifie
 /* unreflected message argument: only the command word at +20 is read */
 struct MessageCommandArg { char p0[20]; int command; };
 extern "C" int g_defaultAllocatorSelector[4];
-extern "C" unsigned char GPR_00554c14;
+extern "C" unsigned char g_useOwnerAllocator;
 /* matching construct: stack smart pointer whose destructor releases the object, reproduces the retail cleanup path */
 struct Ref {
     igObject *p;
@@ -98,7 +98,7 @@ int Gap__Bec__beNumberCtrl__vfunc_34(beNumberCtrl *arg0, beNumberCtrlInfoRam *ar
             igObject *o;
             int var;
             var = igObject_GetAllocator(arg0);
-            var = GPR_00554c14 != 0 ? var : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
+            var = g_useOwnerAllocator != 0 ? var : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
             Ref r((igObject *)FUN_0034d2b0(var));
             s0 = (beNumberCtrlInfoWork *)r.p;
             if (s0 != 0) ((igObject *)s0)->_refCount = ((igObject *)s0)->_refCount + 1;
@@ -124,7 +124,7 @@ int Gap__Bec__beNumberCtrl__vfunc_34(beNumberCtrl *arg0, beNumberCtrlInfoRam *ar
             igObject *o;
             int var;
             var = igObject_GetAllocator(arg0);
-            var = GPR_00554c14 != 0 ? var : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
+            var = g_useOwnerAllocator != 0 ? var : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
             Ref r((igObject *)FUN_0034d2b0(var));
             s0 = (beNumberCtrlInfoWork *)r.p;
             if (s0 != 0) ((igObject *)s0)->_refCount = ((igObject *)s0)->_refCount + 1;

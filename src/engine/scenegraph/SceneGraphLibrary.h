@@ -44,7 +44,7 @@ extern "C" int DAT_0052b870[4];
 extern "C" int FUN_0013a800(...);
 extern "C" int DAT_00528870[4];
 struct Ref { int pad; union { int w; struct { unsigned cnt:23; unsigned f:9; } b; } u; };
-extern "C" int FUN_00100610(...);
+extern "C" int __dl__FPv(...);
 struct T { int word0; int references; };
 struct Obj_194930 {
     int *vt; char p4[4]; T *m8; T *m12; T *m16; T *m20;
@@ -1517,7 +1517,7 @@ extern "C" int Gap__Core__igObject__vfunc_07(...);
 extern "C" int DAT_004e4520[4];
 extern "C" struct L_1af920 *DAT_00562580[4];
 extern "C" int DAT_005870f8[4];
-extern "C" unsigned char GPR_00554c14;
+extern "C" unsigned char g_useOwnerAllocator;
 extern "C" void FUN_002ed5c0(void *);
 struct K { void *p; K(void *x) { p = x; } ~K() { } static void operator delete(void *q) { FUN_002ed5c0(q); } };
 struct AttrStackList {

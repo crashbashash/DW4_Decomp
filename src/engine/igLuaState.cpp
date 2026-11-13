@@ -4,7 +4,7 @@ class DW4VC_12_1 { public: virtual void d0(); virtual int vX(int); };
 
 extern "C" {
 
-int FUN_00100610();
+int __dl__FPv();
 int malloc(...);
 int free(...);
 int realloc(...);
@@ -29,14 +29,14 @@ void *FUN_00280810(void *arg0) {
 }
 
 /* Deleting destructor of the 0x50-byte object built by FUN_00280810 (see FUN_00280890). Sets only the
- * base vtable, then calls FUN_00100610 when the signed low 16 bits of the delete flag are
- * positive; FUN_00280890 calls the bare-return FUN_002809e0 at the same point. FUN_00100610 never
+ * base vtable, then calls __dl__FPv when the signed low 16 bits of the delete flag are
+ * positive; FUN_00280890 calls the bare-return FUN_002809e0 at the same point. __dl__FPv never
  * returns (it ends in an endless loop). */
 igObject *FUN_00280840(igObject *self, long long deleteFlags) {
     if (self != 0) {
         self->_vtable = (int)&g_baseVtable_0052d6f0[0];
         if (((long long) (deleteFlags << 0x30) >> 0x30) > 0) {
-            FUN_00100610();
+            __dl__FPv();
         }
     }
     return self;
@@ -128,13 +128,13 @@ void FUN_00280a70(int ***arg0, int **arg1) {
 
 /* Deleting destructor of the 4-byte, vtable-only object that FUN_00280a70 builds. Resets the
  * vtable to the base-class image (the constructor writes the base image, then the derived one),
- * then calls FUN_00100610 when the signed low 16 bits of the delete flag are positive (same flag
- * test as FUN_00280890 / FUN_00280840). FUN_00100610 never returns, so retail has no working release here. */
+ * then calls __dl__FPv when the signed low 16 bits of the delete flag are positive (same flag
+ * test as FUN_00280890 / FUN_00280840). __dl__FPv never returns, so retail has no working release here. */
 igObject *FUN_00280ad0(igObject *self, long long deleteFlags) {
     if (self != 0) {
         self->_vtable = (int)&g_baseVtable_0052d730[0];
         if (((long long) (deleteFlags << 0x30) >> 0x30) > 0) {
-            FUN_00100610();
+            __dl__FPv();
         }
     }
     return self;

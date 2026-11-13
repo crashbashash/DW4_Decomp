@@ -304,7 +304,7 @@ void FUN_001566c0(S_1566c0 *arg0, S_1566c0 *arg1, int arg2, int arg3, int arg4, 
     {
         void **alloc = (void **)igObject_GetAllocator(arg0);
         void **v;
-        if (GPR_00554c14 != 0) {
+        if (g_useOwnerAllocator != 0) {
             v = alloc;
         } else {
             v = (void **)Memory_GetAllocatorBySelector(DAT_005870e8[0]);
@@ -499,7 +499,7 @@ void FUN_001585d0(S_1585d0 *arg0) {
     }
     FUN_00158480((igImage *)arg0);
     var_v0 = (void **)(igObject_GetAllocator(arg0));
-    var_v0 = (GPR_00554c14 != 0) ? var_v0 : (void **)(Memory_GetAllocatorBySelector(DAT_005870e8[0]));
+    var_v0 = (g_useOwnerAllocator != 0) ? var_v0 : (void **)(Memory_GetAllocatorBySelector(DAT_005870e8[0]));
     arg0->f34 = ((DW4VC_220_2 *)(var_v0))->vX((int)(arg0->f30), (int)(0x80));
     arg0->f3c = 1;
 }
@@ -534,7 +534,7 @@ int FUN_00158cc0(S_158cc0 *arg0, void **arg1) {
         st->v25(&sp5C, 4, 1);
         st->v25(&sp5C, 4, 1);
         var_v0 = (void **)igObject_GetAllocator(arg0);
-        var_v0 = (GPR_00554c14 != 0) ? var_v0 : Memory_GetAllocatorBySelector(DAT_005870e8[0]);
+        var_v0 = (g_useOwnerAllocator != 0) ? var_v0 : Memory_GetAllocatorBySelector(DAT_005870e8[0]);
         arg0->f52 = ((VAlloc *)var_v0)->v53(arg0->f48, 0x80);
         arg0->f60 = 1;
         st->v25(arg0->f52, 1, arg0->f48);
@@ -736,7 +736,7 @@ void FUN_0015a100(S_15a100 *arg0) {
     FUN_00158480((igImage *)arg0);
     if (arg0->f52 != 0 && n != arg0->f76) {
         al = (A_15a100 *)igObject_GetAllocator(arg0);
-        al = (GPR_00554c14 != 0) ? al : (A_15a100 *)Memory_GetAllocatorBySelector(DAT_005870e8[0]);
+        al = (g_useOwnerAllocator != 0) ? al : (A_15a100 *)Memory_GetAllocatorBySelector(DAT_005870e8[0]);
         buf = al->vX(arg0->f48, 0x80);
         src = arg0->f52;
         dst = buf;

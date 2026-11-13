@@ -74,7 +74,7 @@ extern "C" int beLua__RunNamedChunk(beLua *self, const char *name, const char *g
 extern "C" igObject *FUN_0035aa20(int);
 extern "C" int igObject_GetAllocator(beLua *);
 extern "C" int g_defaultAllocatorSelector[4];
-extern "C" unsigned char GPR_00554c14;
+extern "C" unsigned char g_useOwnerAllocator;
 extern "C" void FUN_0038a2d0(beLua *arg0);
 extern "C" void Gap__Bec__beLua__vfunc_21(beLua *self, int unusedArg);
 extern "C" void Gap__Bec__beLua__vfunc_22(beLua *self, int unusedArg);
@@ -170,7 +170,7 @@ void FUN_0038a2d0(beLua *arg0) {
     igObject *temp_a0;
 
     alloc = igObject_GetAllocator(arg0);
-    if (GPR_00554c14 != 0) {
+    if (g_useOwnerAllocator != 0) {
         var_v0 = alloc;
     } else {
         var_v0 = Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);

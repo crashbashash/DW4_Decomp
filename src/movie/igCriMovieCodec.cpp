@@ -75,7 +75,7 @@ igMemoryPoolView *igObject_GetAllocator(void *object);
 igMemoryPoolView *Memory_GetAllocatorBySelector(int selector);
 void *Memory_AllocateAlignedWithAllocator(unsigned int size, unsigned int alignment, igMemoryPoolView *pool);
 int Memory_FreeBufferWithAllocator(void *block, igMemoryPoolView *pool);
-void FUN_00100610(void *storage);
+void __dl__FPv(void *storage);
 int FUN_00308320(const char *format, ...);
 void igPsx2VisualContext_CallDmaChain(igObject *self, void *packet, int size, int flush);
 int igPsx2VisualContext_IsDisplayingFirstBuffer(igObject *self);
@@ -250,7 +250,7 @@ igObjectRef *CriMovie_DestroyObjectRef(igObjectRef *ref, int deleteStorage) {
             if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
                 igObject_Destroy(object);
         }
-        if ((short)deleteStorage > 0) FUN_00100610(ref);
+        if ((short)deleteStorage > 0) __dl__FPv(ref);
     }
     return ref;
 }
