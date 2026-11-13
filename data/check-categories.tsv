@@ -5492,7 +5492,7 @@
 001e6b20	Gap__igMersenneTwisterRandomNumber__vfunc_23	match	-
 001e6b80	Gap__igMersenneTwisterRandomNumber__vfunc_13	match	-
 001e6bc0	FUN_001e6bc0	match	-
-001e6d30	FUN_001e6d30	match	-
+001e6d30	Vec3f_FromString	match	-
 001e6d80	FUN_001e6d80	match	-
 001e6de0	FUN_001e6de0	match	-
 001e6f10	FUN_001e6f10	match	-
@@ -13822,7 +13822,7 @@
 003454b0	beSelectCtrlInfoRamData_Register	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
 00345530	beSelectCtrlInfoRamData_GetMetaObject	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
 00345550	beSelectCtrlInfoRamData_InitFields	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
-00345680	FUN_00345680	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
+00345680	beSelectCtrlInfoWork_Create	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
 003456c0	FUN_003456c0	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
 00345710	FUN_00345710	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
 00345760	beSelectCtrlInfoWork_GetVTable	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
@@ -13830,7 +13830,7 @@
 00345850	beSelectCtrlInfoWork_Register	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
 003458d0	beSelectCtrlInfoWork_GetMetaObject	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
 003458f0	beSelectCtrlInfoWork_InitFields	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
-003459a0	FUN_003459a0	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
+003459a0	beSelectCtrl_GetMessageEnum	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
 00345a00	beSelectCtrl_CreateInstance	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
 00345a40	FUN_00345a40	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
 00345a90	FUN_00345a90	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
@@ -15576,7 +15576,7 @@
 0036dfe0	FUN_0036dfe0	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
 0036e030	FUN_0036e030	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
 0036e080	be_GetVTable	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
-0036e160	FUN_0036e160	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
+0036e160	be_EnsureRegistered	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
 0036e180	be_Register	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
 0036e200	be_GetMetaObject	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
 0036e220	be_InitFields	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
@@ -15909,18 +15909,18 @@
 00370760	Gap__Bec__beBaseInfoList__vfunc_22	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
 00370770	Gap__Bec__beBaseInfoDataList__vfunc_22	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
 00370780	LuaAPI_Dispatch	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-003717e0	FUN_003717e0	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-00371840	FUN_00371840	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-003718d0	FUN_003718d0	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-003719c0	FUN_003719c0	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
+003717e0	LuaAPIClass_Construct	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
+00371840	LuaAPIClass_Create	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
+003718d0	BecLuaClass_Construct	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
+003719c0	LuaAPI_RegisterClasses	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
 003719d0	LuaAPI_Register	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-00371a10	Gap__Bec__be__vfunc_21	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-00371a20	Gap__Bec__be__vfunc_22	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-00371a30	Gap__Bec__be__vfunc_23	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-00371ac0	Gap__Bec__be__vfunc_24	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-00371ad0	Gap__Bec__be__vfunc_25	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-00371ae0	Gap__Bec__be__vfunc_26	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-00371c00	Gap__Bec__be__vfunc_27	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
+00371a10	be_AddToScheduler	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
+00371a20	be_RemoveFromScheduler	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
+00371a30	be_Start	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
+00371ac0	be_Stop	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
+00371ad0	be_AcceptInfo	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
+00371ae0	be_Reset	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
+00371c00	be_Update	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
 00371c10	bePlayer_GetStruct	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
 00371c70	SYSisJoinPlayer	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
 00371ca0	SYSgetPlayerName	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
@@ -16040,7 +16040,7 @@
 00375c30	BLPgetPowerDownTime	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
 00375cf0	BLPcalcKoukaMagic	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
 00375d90	LISsetDifficultMax	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-00375df0	Gap__Bec__be__vfunc_20	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
+00375df0	be_GetMetaObject_Virtual	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
 00375e00	beAction2_Prepare	match	DEFERRED duplicate 0x19ab10 __dt__10AttrRef<0>Fv 128B (compared under the profile of its retail unit)
 00375e10	beAction2_GetInfoMeta	match	DEFERRED duplicate 0x19ab10 __dt__10AttrRef<0>Fv 128B (compared under the profile of its retail unit)
 00375e20	beAction2_RegisterReceiver	match	DEFERRED duplicate 0x19ab10 __dt__10AttrRef<0>Fv 128B (compared under the profile of its retail unit)
@@ -16143,14 +16143,14 @@
 0037e020	beCri_SetSndfVolume	match	DEFERRED duplicate 0x1489a0 __dt__29igSmartPointer<11igStringObj>Fv 128B (compared under the profile of its retail unit)
 0037e070	beCriSfpData_SetupBufferAlignment	match	DEFERRED duplicate 0x1489a0 __dt__29igSmartPointer<11igStringObj>Fv 128B (compared under the profile of its retail unit)
 0037e100	Gap__Bec__beCri__vfunc_20	match	DEFERRED duplicate 0x1489a0 __dt__29igSmartPointer<11igStringObj>Fv 128B (compared under the profile of its retail unit)
-0037e110	FUN_0037e110	match	-
-0037e180	FUN_0037e180	match	-
+0037e110	beDemoManager_SwitchSD	match	-
+0037e180	beDemoManager_SwitchEnd	match	-
 0037e250	FUN_0037e250	match	-
-0037e2d0	FUN_0037e2d0	match	-
-0037e3a0	FUN_0037e3a0	match	-
-0037e6e0	FUN_0037e6e0	match	-
-0037e890	FUN_0037e890	match	-
-0037ea50	FUN_0037ea50	match	-
+0037e2d0	beDemoManager_Case	match	-
+0037e3a0	beDemoManager_AddKeepMes	match	-
+0037e6e0	beDemoManager_SetLua	match	-
+0037e890	beDemoManager_MsgBox	match	-
+0037ea50	beDemoManager_Run	match	-
 0037ead0	Gap__Bec__beDemoManager__vfunc_21	match	-
 0037eaf0	Gap__Bec__beDemoManager__vfunc_22	match	-
 0037eb10	Gap__Bec__beDemoManager__vfunc_23	match	-
@@ -16374,7 +16374,7 @@
 00395b50	Gap__Core__igObject__vfunc_31	match	DEFERRED duplicate 0x1c6460 __dt__12LabelListRefFv 128B (compared under the profile of its retail unit)
 003960e0	Gap__Core__igObject__vfunc_46	match	DEFERRED duplicate 0x1c6460 __dt__12LabelListRefFv 128B (compared under the profile of its retail unit)
 003960f0	beModelCtrlInfoWork_FindSeqLabel	match	DEFERRED duplicate 0x1c6460 __dt__12LabelListRefFv 128B (compared under the profile of its retail unit)
-00396740	FUN_00396740	unapproved	unapproved: 1 volatile without an approval row
+00396740	beModelCtrl__OnGenerate	unapproved	unapproved: 1 volatile without an approval row
 00396940	beModelCtrl_UpdateBound	match	DEFERRED duplicate 0x1c6460 __dt__12LabelListRefFv 128B (compared under the profile of its retail unit)
 00396a80	Gap__Bec__beModelCtrl__vfunc_33	match	DEFERRED duplicate 0x1c6460 __dt__12LabelListRefFv 128B (compared under the profile of its retail unit)
 00398c20	FUN_00398c20	match	DEFERRED duplicate 0x1c6460 __dt__12LabelListRefFv 128B (compared under the profile of its retail unit)
@@ -16462,11 +16462,11 @@
 0039c990	Gap__Bec__beSeCtl__vfunc_34	match	-
 0039cb60	Gap__Bec__beSeCtl__vfunc_20	match	-
 0039cb70	beSelectCtrl_EnsurePadManager	match	DEFERRED duplicate 0x226990 __dt__11BoolListRefFv 128B (compared under the profile of its retail unit)
-0039cbb0	Gap__Bec__beSelectCtrl__vfunc_30	match	DEFERRED duplicate 0x226990 __dt__11BoolListRefFv 128B (compared under the profile of its retail unit)
+0039cbb0	beSelectCtrl_GetInfoMeta	match	DEFERRED duplicate 0x226990 __dt__11BoolListRefFv 128B (compared under the profile of its retail unit)
 0039cbc0	beSelectCtrl_RegisterReceiver	match	DEFERRED duplicate 0x226990 __dt__11BoolListRefFv 128B (compared under the profile of its retail unit)
-0039cbf0	Gap__Bec__beSelectCtrl__vfunc_31	match	DEFERRED duplicate 0x226990 __dt__11BoolListRefFv 128B (compared under the profile of its retail unit)
-0039d720	Gap__Bec__beSelectCtrl__vfunc_33	match	DEFERRED duplicate 0x226990 __dt__11BoolListRefFv 128B (compared under the profile of its retail unit)
-0039ded0	Gap__Bec__beSelectCtrl__vfunc_20	match	DEFERRED duplicate 0x226990 __dt__11BoolListRefFv 128B (compared under the profile of its retail unit)
+0039cbf0	beSelectCtrl_Update	match	DEFERRED duplicate 0x226990 __dt__11BoolListRefFv 128B (compared under the profile of its retail unit)
+0039d720	beSelectCtrl_OnMessage	match	DEFERRED duplicate 0x226990 __dt__11BoolListRefFv 128B (compared under the profile of its retail unit)
+0039ded0	beSelectCtrl_GetMeta	match	DEFERRED duplicate 0x226990 __dt__11BoolListRefFv 128B (compared under the profile of its retail unit)
 0039dee0	Gap__Bec__beShadow01__vfunc_32	match	-
 0039e080	Gap__Bec__beShadow01__vfunc_30	match	-
 0039e090	FUN_0039e090	match	-
@@ -17472,7 +17472,7 @@
 003c1860	FUN_003c1860	match	DEFERRED duplicate 0x130720 __dt__16StringRef_3cbb60Fv 120B (compared under the profile of its retail unit)
 003c1880	beNDMWMdlEnemy_Register	match	DEFERRED duplicate 0x130720 __dt__16StringRef_3cbb60Fv 120B (compared under the profile of its retail unit)
 003c18f0	beNDMWMdlEnemy_GetMetaObject	match	DEFERRED duplicate 0x130720 __dt__16StringRef_3cbb60Fv 120B (compared under the profile of its retail unit)
-003c1910	FUN_003c1910	match	DEFERRED duplicate 0x130720 __dt__16StringRef_3cbb60Fv 120B (compared under the profile of its retail unit)
+003c1910	beNDMWMdlEnemyInfoWork_Create	match	DEFERRED duplicate 0x130720 __dt__16StringRef_3cbb60Fv 120B (compared under the profile of its retail unit)
 003c1950	beNDMWMdlEnemyInfoWork_GetReadyMetaObject	match	DEFERRED duplicate 0x130720 __dt__16StringRef_3cbb60Fv 120B (compared under the profile of its retail unit)
 003c19a0	beNDMWMdlEnemyInfoWork_GetVTable	match	DEFERRED duplicate 0x130720 __dt__16StringRef_3cbb60Fv 120B (compared under the profile of its retail unit)
 003c1a00	FUN_003c1a00	match	DEFERRED duplicate 0x130720 __dt__16StringRef_3cbb60Fv 120B (compared under the profile of its retail unit)
@@ -18050,12 +18050,12 @@
 003d16f0	Gap__Bec__beNDMWMdlEffect__vfunc_37	match	-
 003d1700	Gap__Bec__beNDMWMdlEffect__vfunc_36	match	-
 003d18f0	Gap__Bec__beNDMWMdlEffect__vfunc_20	match	-
-003d1900	Gap__Bec__beNDMWMdlEnemy__vfunc_35	match	-
-003d1930	Gap__Bec__beNDMWMdlEnemy__vfunc_37	match	-
-003d1960	Gap__Bec__beNDMWMdlEnemy__vfunc_36	match	-
+003d1900	beNDMWMdlEnemy__IsKind	match	-
+003d1930	beNDMWMdlEnemy__RegisterReceiver	match	-
+003d1960	beNDMWMdlEnemy__OnGenerate	match	-
 003d1c60	FUN_003d1c60	match	-
-003d1ce0	Gap__Bec__beNDMWMdlEnemy__vfunc_44	match	-
-003d1d00	Gap__Bec__beNDMWMdlEnemy__vfunc_20	match	-
+003d1ce0	beNDMWMdlEnemy__OnSequenceChange	match	-
+003d1d00	beNDMWMdlEnemy__GetMeta	match	-
 003d1d10	Gap__Bec__beNDMWMdlObject__vfunc_35	match	-
 003d1d40	Gap__Bec__beNDMWMdlObject__vfunc_37	match	-
 003d1d50	Gap__Bec__beNDMWMdlObject__vfunc_36	match	-
