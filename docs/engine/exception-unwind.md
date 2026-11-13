@@ -161,15 +161,16 @@ Seven retail records have a packed summary of `0`: the function has no frame and
 no saved registers, yet the record exists. The compiler keeps one for a leaf when
 its source had, before optimisation, an int/float conversion, a `double`
 operation, an inlined copy constructor or copy assignment of a class, an inlined
-`const` member returning a `float` that is used as a value, or a local of a class
-with a destructor, even when the final code has no frame and no call. A function
-that only stores constants, or copies plain structs, gets none.
+`const` member returning a `float` that is used as a value, an inlined member
+that compound-assigns floats from a class passed by `const` reference (a vector
+`operator+=` doing `x += other.x; ...`), or a local of a class with a destructor,
+even when the final code has no frame and no call. A function that only stores
+constants, or copies plain structs, gets none; nor does the same `operator+=`
+spelled `x = x + other.x`, taking its argument by value, or an inlined free
+function doing `*d += s`.
 `beNDMWItemBase_GetRevisionColor` keeps its record because it returns an `igVec3f`
 whose copy constructor runs on `return`; the same body returning a plain struct
-compiles to the same instructions without the record.
-
-## Open questions
-
-- `beFont_AlignLines` keeps a retail record with a packed summary of `0`, but the compiler
-  emits none for its current C or C++ spellings. None of the constructs above has
-  been tried on it.
+compiles to the same instructions without the record. `beFont_AlignLines` keeps
+its record because it moves every vertex with `*vertex += shift`, an `igVec3f`
+whose `operator+=` is inlined; adding the three floats directly gives the same
+instructions without it.

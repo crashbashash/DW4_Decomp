@@ -210,7 +210,9 @@ int CriMovie_SubmitFrame(igMovieInfo *movie, void *image) {
     height = movie->_height;
     if (g_criMovieUploadPacket == 0 && g_criMovieDmaWarningMuted == 0) {
         answer = FUN_00308320(You_probably_didn_t_open_the_DMA);
-        if (answer != 1 && answer == 2) {
+        /* 1 has no action in this build; only 2 mutes the warning, and the empty arm keeps its compare. */
+        if (answer == 1) {
+        } else if (answer == 2) {
             g_criMovieDmaWarningMuted = 1;
         }
     }

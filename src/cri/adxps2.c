@@ -1,33 +1,4 @@
-typedef struct ThreadStatus {
-    int status;
-    void *entry;
-    void *stack;
-    int stackSize;
-    void *globalPointer;
-    int initialPriority;
-    int currentPriority;
-    unsigned int attributes;
-    unsigned int options;
-    unsigned int waitType;
-    unsigned int waitId;
-    unsigned int wakeupCount;
-} ThreadStatus;
-
-typedef struct ThreadParam {
-    int status;
-    void (*entry)(void);
-    void *stack;
-    int stackSize;
-    void *globalPointer;
-    int initialPriority;
-    int currentPriority;
-    unsigned int attributes;
-    unsigned int options;
-} ThreadParam;
-
-#define THREAD_WAITING 0x04
-#define THREAD_SUSPENDED 0x08
-#define THREAD_WAIT_SUSPENDED 0x0c
+#include "dw4/eekernel.h"
 
 typedef struct AdxmCallback {
     void (*func)(void *arg);
@@ -125,18 +96,6 @@ extern char _gp[];
 extern AdxmCallback adxm_vsync_frame_cb;
 extern AdxmCallback adxm_mwidle_sleep_cb;
 
-int GetThreadId(void);
-int ChangeThreadPriority(int threadId, int priority);
-int ReferThreadStatus(int threadId, ThreadStatus *status);
-int iReferThreadStatus(int threadId, ThreadStatus *status);
-int WakeupThread(int threadId);
-int iWakeupThread(int threadId);
-int ResumeThread(int threadId);
-int SuspendThread(int threadId);
-int SleepThread();
-int CreateThread(ThreadParam *param);
-int _StartThread(int threadId, void *argument);
-void ExitDeleteThread(void);
 int FUN_0027e8e0();
 void FUN_0027e8f8(int a, int b);
 int FUN_0027ec50();
@@ -229,7 +188,7 @@ void adxm_safe_count_up(void) {
     adxm_safe_loop_count += 1;
 }
 
-void adxm_safe_thrd(void) {
+void adxm_safe_thrd(void *arg) {
     while (adxm_safe_exit_request == 0) {
         adxm_safe_count_up();
     }
@@ -237,7 +196,7 @@ void adxm_safe_thrd(void) {
     ExitDeleteThread();
 }
 
-void adxm_usrvsync_thrd(void) {
+void adxm_usrvsync_thrd(void *arg) {
     while (adxm_usrvsync_exit_request == 0) {
         adxm_usrvsync_count++;
         adxm_usrvsync_busy = 1;
@@ -249,7 +208,7 @@ void adxm_usrvsync_thrd(void) {
     ExitDeleteThread();
 }
 
-void adxm_vsync_thrd(void)
+void adxm_vsync_thrd(void *arg)
 {
     while (adxm_vsync_exit_request == 0) {
         adxm_vsync_count++;
@@ -271,7 +230,7 @@ void adxm_vsync_thrd(void)
     ExitDeleteThread();
 }
 
-void adxm_fs_thrd(void)
+void adxm_fs_thrd(void *arg)
 {
     while (adxm_fs_exit_request == 0) {
         adxm_fs_count++;
@@ -290,7 +249,7 @@ void adxm_fs_thrd(void)
     ExitDeleteThread();
 }
 
-void adxm_mwidle_thrd(void)
+void adxm_mwidle_thrd(void *arg)
 {
     int busy;
     while (adxm_mwidle_exit_request == 0) {
@@ -319,7 +278,7 @@ void adxm_mwidle_thrd(void)
     ExitDeleteThread();
 }
 
-void adxm_usridle_thrd(void)
+void adxm_usridle_thrd(void *arg)
 {
     int busy;
     while (adxm_usridle_exit_request == 0) {
@@ -340,7 +299,7 @@ void adxm_usridle_thrd(void)
 }
 
 void adxm_iwakeup_thrd(int threadId) {
-    ThreadStatus status;
+    struct ThreadParam status;
     if (threadId != 0) {
         iReferThreadStatus(threadId, &status);
         if (status.status == THREAD_WAITING || status.status == THREAD_WAIT_SUSPENDED) {
@@ -350,7 +309,7 @@ void adxm_iwakeup_thrd(int threadId) {
 }
 
 void adxm_wakeup_thrd(int threadId) {
-    ThreadStatus status;
+    struct ThreadParam status;
     if (threadId != 0) {
         ReferThreadStatus(threadId, &status);
         if (status.status == THREAD_WAITING || status.status == THREAD_WAIT_SUSPENDED) {
@@ -364,7 +323,7 @@ void adxm_sleep_thrd(void) {
 }
 
 int adxm_resume_thrd(int threadId) {
-    ThreadStatus status;
+    struct ThreadParam status;
     int result = 0;
     if (threadId != 0) {
         ReferThreadStatus(threadId, &status);
@@ -376,7 +335,7 @@ int adxm_resume_thrd(int threadId) {
 }
 
 int adxm_suspend_thrd(int threadId) {
-    ThreadStatus status;
+    struct ThreadParam status;
     int result = 0;
     if (threadId != 0) {
         ReferThreadStatus(threadId, &status);
@@ -388,12 +347,12 @@ int adxm_suspend_thrd(int threadId) {
 }
 
 void adxm_create_safe_thrd(void) {
-    ThreadParam param;
+    struct ThreadParam param;
     param.entry = adxm_safe_thrd;
     param.stack = adxm_safe_stack;
     param.stackSize = 2048;
-    param.initialPriority = adxm_main_init_prio;
-    param.globalPointer = _gp;
+    param.initPriority = adxm_main_init_prio;
+    param.gpReg = _gp;
     adxm_safe_thid = CreateThread(&param);
     adxm_safe_thid; /* matching construct: retail re-reads the thread id after each use (dead load) */
     _StartThread(adxm_safe_thid, 0);
@@ -405,7 +364,7 @@ void adxm_create_safe_thrd(void) {
 }
 
 void adxm_create_usrvsync_thrd(void *stack, int stackSize) {
-    ThreadParam param;
+    struct ThreadParam param;
     param.entry = adxm_usrvsync_thrd;
     if (stack == 0) {
         param.stack = adxm_usrvsync_stack;
@@ -415,8 +374,8 @@ void adxm_create_usrvsync_thrd(void *stack, int stackSize) {
         param.stackSize = stackSize;
         FUN_002659a0(ADXM_UsrVsyncThread_Stack_pointe, stack, stackSize);
     }
-    param.initialPriority = adxm_main_init_prio;
-    param.globalPointer = _gp;
+    param.initPriority = adxm_main_init_prio;
+    param.gpReg = _gp;
     adxm_usrvsync_thid = CreateThread(&param);
     adxm_usrvsync_thid; /* matching construct: retail re-reads the thread id after each use (dead load) */
     _StartThread(adxm_usrvsync_thid, 0);
@@ -424,12 +383,12 @@ void adxm_create_usrvsync_thrd(void *stack, int stackSize) {
 }
 
 void adxm_create_vsync_thrd(void) {
-    ThreadParam param;
+    struct ThreadParam param;
     param.entry = adxm_vsync_thrd;
     param.stack = adxm_vsync_stack;
     param.stackSize = 4096;
-    param.initialPriority = adxm_main_init_prio;
-    param.globalPointer = _gp;
+    param.initPriority = adxm_main_init_prio;
+    param.gpReg = _gp;
     adxm_vsync_thid = CreateThread(&param);
     adxm_vsync_thid; /* matching construct: retail re-reads the thread id after each use (dead load) */
     _StartThread(adxm_vsync_thid, 0);
@@ -437,12 +396,12 @@ void adxm_create_vsync_thrd(void) {
 }
 
 void adxm_create_fs_thrd(void) {
-    ThreadParam param;
+    struct ThreadParam param;
     param.entry = adxm_fs_thrd;
     param.stack = adxm_fs_stack;
     param.stackSize = 4096;
-    param.initialPriority = adxm_main_init_prio;
-    param.globalPointer = _gp;
+    param.initPriority = adxm_main_init_prio;
+    param.gpReg = _gp;
     adxm_fs_thid = CreateThread(&param);
     adxm_fs_thid; /* matching construct: retail re-reads the thread id after each use (dead load) */
     _StartThread(adxm_fs_thid, 0);
@@ -450,12 +409,12 @@ void adxm_create_fs_thrd(void) {
 }
 
 void adxm_create_mwidle_thrd(void) {
-    ThreadParam param;
+    struct ThreadParam param;
     param.entry = adxm_mwidle_thrd;
     param.stack = adxm_mwidle_stack;
     param.stackSize = 8192;
-    param.initialPriority = adxm_main_init_prio;
-    param.globalPointer = _gp;
+    param.initPriority = adxm_main_init_prio;
+    param.gpReg = _gp;
     adxm_mwidle_thid = CreateThread(&param);
     adxm_mwidle_thid; /* matching construct: retail re-reads the thread id after each use (dead load) */
     _StartThread(adxm_mwidle_thid, 0);
@@ -465,7 +424,7 @@ void adxm_create_mwidle_thrd(void) {
 }
 
 void adxm_create_usridle_thrd(void *stack, int stackSize) {
-    ThreadParam param;
+    struct ThreadParam param;
     param.entry = adxm_usridle_thrd;
     if (stack == 0) {
         param.stack = adxm_usridle_stack;
@@ -475,8 +434,8 @@ void adxm_create_usridle_thrd(void *stack, int stackSize) {
         param.stackSize = stackSize;
         FUN_002659a0(ADXM_UsrIdleThread_Stack_pointer, stack, stackSize);
     }
-    param.initialPriority = adxm_main_init_prio;
-    param.globalPointer = _gp;
+    param.initPriority = adxm_main_init_prio;
+    param.gpReg = _gp;
     adxm_usridle_thid = CreateThread(&param);
     adxm_usridle_thid; /* matching construct: retail re-reads the thread id after each use (dead load) */
     _StartThread(adxm_usridle_thid, 0);
@@ -655,7 +614,7 @@ void adxm_wakeup_idle_thrds(void) {
 }
 
 void adxm_wakeup_vsync_waiter(void) {
-    ThreadStatus info;
+    struct ThreadParam info;
     if (adxm_vsync_waiting == 1) {
         ReferThreadStatus(adxm_main_thid, &info);
         if (info.status == THREAD_WAITING || info.status == THREAD_WAIT_SUSPENDED) {

@@ -143,10 +143,16 @@ all ignored).
 `beAction2JOINTSET_Start` gets retail's integer register allocation only when the bias goes through a
 `long long` temporary for the start time:
 `long long st = work->_jointStartTimeL; node->_timeBias = st - (__fixsfdi(conv * node->_timeScale) << 18);`.
-`beAction2JOINTSET_Update` needs its two-`goto` state guard: a `switch` or a combined `&&` test
-leaves it 8 or 16 bytes short. `beAction2FADESET_Update` loads the fade limit after the alpha only
-when it reads `_fadeLimitValue` through a `float *` cast; a plain member read, `*&` or `(&…)[0]`
-swaps `f0`/`f1`.
+`beAction2JOINTSET_Update` is a `switch` on the joint state with an explicit `case 0: break;` (the shape
+`beAction2FLASHSET_Update` has): it compiles to retail's `2`, `1`, `0` compare chain. Without the
+`case 0` the guard is 8 bytes short; with `case 0: return;` it is 8 bytes long. The loop is a plain
+`while (now > end)` that re-reads `_jointSt0`; the compiler hoists the read out of the loop.
+`beAction2FADESET_Update` reads the fade limit through a `const beAction2InfoWork *` getter
+(`fadeLimit`). Any conversion on the limit operand (the getter's const conversion of `work`, or a
+cast) makes the compiler evaluate it before the alpha, which puts the alpha in `f0` and the limit in
+`f1` as retail has them. A plain member read, a non-const getter, `*&` or `(&…)[0]` leaves the two
+registers swapped; writing the limit on the left (`limit <= alpha`) gets the registers right but
+compiles to `c.le.s` instead of retail's `c.lt.s`.
 
 ## What didn't work
 

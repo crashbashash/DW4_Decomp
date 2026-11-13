@@ -310,7 +310,10 @@ FinishSequence 3, TextureUnbind 4, DMAVIF0 5, DMAVIF1 6, DMAGIF 7, VSync 8, VU0U
 10. Every four seconds the watchdog thread copies `busy` into `seen`. If a bit it copied the previous
 time is still set, it prints the VU program tables and the timed-out waits, then aborts. It also gives
 up when `p2WatchdogTicks`, which is reset every frame, reaches 60. `p2WatchdogDisabled`
-(`0x4965c0`) starts at 1 and nothing clears it.
+(`0x4965c0`) starts at 1 and nothing clears it. `p2StartWatchdog` copies its thread block from a
+48-byte initializer at `0x4965d0` (twelve words, the last six zero): Sony's `struct ThreadParam` is
+twelve words, of which `CreateThread` reads the first nine and `ReferThreadStatus` fills all twelve.
+ADXPS2 (`src/cri/adxps2.c`) takes the same declaration from `include/dw4/eekernel.h`.
 
 **Multipass.** With capability 23 on, each texture stage beyond the first draws as a pass of its
 own in GS context 2. `p2WritePassPacket` writes a pass's ALPHA/TEX0/TEX1 (from stage pass-1's

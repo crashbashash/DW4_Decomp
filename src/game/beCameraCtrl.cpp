@@ -97,7 +97,6 @@ int StringPool_Construct(...);
 char *StringPool_Intern(...);
 int StringChunk_ReleaseHeader(...);
 int strcmp(...);
-int __fixsfdi(float);
 
 extern int g_beCameraCtrlInfo_metaObject[4];
 extern int g_beCameraCtrl_metaObject[4];
@@ -121,6 +120,13 @@ extern int SHAKEALL[4];
 extern float g_cameraShakeOffsetX[4];
 extern float g_cameraShakeOffsetY[4];
 }
+
+/* Read-only parameters are const. b52 binds an inlined function's const parameter to its argument before the
+ * body, so the field is loaded ahead of the body's other operands; a plain parameter is folded into the body. */
+/* frames at 60 per second -> timer nanoseconds */
+static inline long long FramesToTime(const float frames) { return (long long)(1e9f * frames / 60.0f); }
+/* moves one coordinate by a shake step: the step's table direction times the shake's value */
+static inline void AddShakeOffset(float *coord, const float *direction, const float value) { *coord += *direction * value; }
 
 /* Strong references to a newly created object, one class per emitted destructor copy. The exception range
  * starts where each one is constructed, so only the calls after construction are covered. */
@@ -417,13 +423,8 @@ void beCameraCtrl_UpdateBoxCamera(beCameraCtrl *self, beBaseInfoRam *ram) {
                             shake->_svIntPos[1] = shakePos[1];
                             shake->_svIntPos[2] = shakePos[2];
                         }
-                        /* matching construct: hand-written — the self-assignments order the float loads as retail does */
-                        float scaleX = shake->_value;
-                        scaleX = scaleX;
-                        shakePos[0] = *offsetX * scaleX + shakePos[0];
-                        float scaleY = shake->_value;
-                        scaleY = scaleY;
-                        shakePos[1] = *offsetY * scaleY + shakePos[1];
+                        AddShakeOffset(&shakePos[0], offsetX, shake->_value);
+                        AddShakeOffset(&shakePos[1], offsetY, shake->_value);
                         Matrix44_SetTranslation(matrix44, shakePos);
                         k += 1;
                     } while (k < 2);
@@ -431,9 +432,7 @@ void beCameraCtrl_UpdateBoxCamera(beCameraCtrl *self, beBaseInfoRam *ram) {
                         int next = shake->_movePoint + 1;
                         if (((char *)(next + shake->_moveCode))[0] == 0) next = 0;
                         shake->_movePoint = next;
-                        float seconds = shake->_oneTime;
-                        seconds = seconds; /* matching construct: hand-written — orders the float loads */
-                        beBaseInfoRam_StartTimer(ram, SHAKEONE, __fixsfdi((1e9f * seconds) / 60.0f));
+                        beBaseInfoRam_StartTimer(ram, SHAKEONE, FramesToTime(shake->_oneTime));
                     }
                     if (beBaseInfoRam_IsTimerExpired(ram, SHAKEALL) != 0) {
                         int removed;
@@ -654,9 +653,7 @@ int Gap__Bec__beCameraCtrl__vfunc_33(beCameraCtrl *self, beBaseInfoRam *ram, int
             shake->_oneTime = beMessenger_GetFloat(self->_messenger, 1);
             shake->_endTime = beMessenger_GetFloat(self->_messenger, 2);
             shake->_movePoint = 0;
-            /* seconds -> nanoseconds at 60 frames per second; matching construct: hand-written — the self-assignment
-             * and the dead store order the float loads */
-            { float seconds = shake->_endTime; seconds = seconds; beBaseInfoRam_StartTimer(ram, SHAKEALL, __fixsfdi((1e9f * seconds) / 60.0f)); seconds = 0.0f; }
+            beBaseInfoRam_StartTimer(ram, SHAKEALL, FramesToTime(shake->_endTime));
             beBaseInfoRam_RemoveTimer(ram, SHAKEONE);
             shake->_isFirst = 1;
         }

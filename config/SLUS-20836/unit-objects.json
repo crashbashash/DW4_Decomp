@@ -29500,7 +29500,7 @@
       "Gap__Bec__beNDMWWindowTitle__vfunc_20": "0x004267a0"
     },
     "data": {
-      "@607": "0x0051aed0",
+      "@632": "0x0051aed0",
       "g_statusLayoutFontNames": "0x004cf7a0",
       "g_shopLayoutFontNames": "0x004cf820",
       "i_stback_2": "0x0051abf8",
@@ -31971,6 +31971,7 @@
       "beFont_ReplaceVertexArray": "0x00383910",
       "beFont_PrepareGeometry": "0x00383ab0",
       "beFont_LayoutLines": "0x00383bf0",
+      "beFont_AlignLines": "0x00383ed0",
       "beFont_LockVertexArray": "0x00384010",
       "beFont_FindFirstLayoutEntry": "0x003840a0",
       "beFont_FindNextLayoutEntry": "0x003841d0",
@@ -31980,7 +31981,7 @@
       "Gap__Bec__beFont__vfunc_20": "0x00384490"
     },
     "data": {
-      "@1055": "0x0050e770",
+      "@1067": "0x0050e770",
       "g_sjisToUnicodeTable": "0x004c8880",
       "DAT_004e0858": "0x004e0858",
       "LAYERCTL_2": "0x0050e730",
@@ -32060,7 +32061,7 @@
       "beDemoManager_GetMetaObject_Virtual": "0x0037f1a0"
     },
     "data": {
-      "@804": "0x0050e4f0",
+      "@847": "0x0050e4f0",
       "g_stringPool": "0x00586f20",
       "g_defaultAllocatorSelector": "0x00587110",
       "g_beMessenger_metaObject": "0x00588f38",
@@ -32210,7 +32211,7 @@
       "beCameraMode_SetCameraPath": "0x0037a690"
     },
     "data": {
-      "@808": "0x0050e250",
+      "@824": "0x0050e250",
       "g_cameraShakeOffsetX": "0x004c8820",
       "g_cameraShakeOffsetY": "0x004c8850",
       "emptyString": "0x004e0858",
@@ -32300,6 +32301,7 @@
       "__ct__11LuaAPIClassFv": "0x003717e0",
       "LuaAPIClass_Create": "0x00371840",
       "__ct__11BecLuaClassFv": "0x003718d0",
+      "BecLuaClass_Create": "0x00371930",
       "LuaAPI_RegisterClasses": "0x003719c0",
       "LuaAPI_Register": "0x003719d0",
       "be_AddToScheduler": "0x00371a10",
@@ -32431,7 +32433,7 @@
       "be_GetMetaObject_Virtual": "0x00375df0"
     },
     "data": {
-      "@349": "0x0050d620",
+      "@359": "0x0050d620",
       "BIT": "0x0050d9f8",
       "CAMERAMODE": "0x0050d988",
       "CTRLITEM": "0x0050d9d8",
@@ -34006,7 +34008,7 @@
       "Gap__Core__igObject__vfunc_34": "0x00378410"
     },
     "data": {
-      "@1306": "0x0050e050",
+      "@1307": "0x0050e050",
       "DAT_004e0858": "0x004e0858",
       "ACTION": "0x0050dfc8",
       "FLASH": "0x0050dfd0",
@@ -35682,19 +35684,19 @@
       "Gap__Lua__igLuaState__vfunc_22": "0x00246830"
     },
     "data": {
-      "@1032": "0x004eaa20",
-      "@1042": "0x004eaa50",
-      "@1054": "0x004eaa80",
+      "@1039": "0x004eaa20",
+      "@1049": "0x004eaa50",
+      "@1061": "0x004eaa80",
       "@161": "0x004ea9a0",
       "@162": "0x004ea980",
-      "@275": "0x004ea530",
-      "@297": "0x004ea840",
-      "@298": "0x004ea630",
-      "@299": "0x004ea880",
-      "@300": "0x004ea660",
-      "@301": "0x004ea8e0",
-      "@345": "0x004ea910",
-      "@346": "0x004ea940",
+      "@282": "0x004ea530",
+      "@304": "0x004ea840",
+      "@305": "0x004ea630",
+      "@306": "0x004ea880",
+      "@307": "0x004ea660",
+      "@308": "0x004ea8e0",
+      "@352": "0x004ea910",
+      "@353": "0x004ea940",
       "g_currentLuaState": "0x0056df40",
       "g_defaultAllocatorKey": "0x00587098",
       "g_igLuaState_metaObject": "0x0056de10",

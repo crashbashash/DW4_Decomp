@@ -97,6 +97,8 @@ struct LuaAPIClass : LuaClass {
 
 /* The Lua class `Bec`, the namespace the game's classes are bound under. */
 struct BecLuaClass : LuaClass {
+    static void *operator new(unsigned int size, igObject *pool) { return Memory_AllocateBufferDirect(size, pool); }
+    static void operator delete(void *memory, igObject *) { Memory_FreeBufferWithAllocator(memory, g_luaGluePool); }
     BecLuaClass();
 };
 
@@ -104,6 +106,7 @@ extern "C" {
 /* This file. */
 int LuaAPI_Dispatch(lua_State *L);
 LuaClass *LuaAPIClass_Create(void);
+LuaClass *BecLuaClass_Create(void);
 void LuaAPI_RegisterClasses(void);
 void LuaAPI_Register(LuaClass *luaClass);
 int be_GetMetaObject_Virtual(void);
@@ -749,6 +752,11 @@ LuaClass *LuaAPIClass_Create(void) {
 
 BecLuaClass::BecLuaClass() : LuaClass(Bec, 0, 0, 0, 0, 0, 0) {
     vtable = g_BecLuaClass_vtable;
+}
+
+/* The start-up hook's factory for the `Bec` class. */
+LuaClass *BecLuaClass_Create(void) {
+    return new (g_luaGluePool) BecLuaClass;
 }
 
 /* The game's per-library class registration; this file registers no reflected class. */

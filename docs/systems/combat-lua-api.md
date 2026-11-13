@@ -77,9 +77,13 @@ Lua API closes the calculation dispatcher. The callback itself is
 The file is the Lua class `be`: `LuaAPIClass` (name `be`, meta name `igInfoManager`) whose
 registerFunctions slot `LuaAPI_Register` binds the 116 names in `g_luaApiFunctionNames` with the
 type codes in `g_luaApiFunctionCodes` to `LuaAPI_Dispatch`, and the namespace class `BecLuaClass`
-(`Bec`). A code's low byte is the binding kind plus 512: 5 int, 9 bool, 11 float, 13 string, 7
-long, 15 void. The dispatcher reads each argument from the `LuaValue` array; a bool result is
-pushed through an unsigned conversion, an int result through a signed one. The C++ class `be`
+(`Bec`). Their start-up hooks' factories, `LuaAPIClass_Create` (after `be_EnsureRegistered`) and
+`BecLuaClass_Create`, allocate the class from `g_luaGluePool` through a class-scope placement
+`operator new`; the matching placement `operator delete` frees it again if the constructor throws,
+which is the cleanup each factory's exception table records. A code's low byte is the binding kind
+plus 512: 5 int, 9 bool, 11 float, 13 string, 7 long, 15 void. The dispatcher reads each argument
+from the `LuaValue` array; a bool result is pushed through an unsigned conversion, an int result
+through a signed one. The C++ class `be`
 is an insight manager: `be_Start` finds the system, messenger, material controller and demo
 manager into `g_beSystem`, `g_beMessenger`, `g_matCtrl` and `g_beDemoManager` and stores itself in
 `g_be`; `be_Reset` empties its string list. The DM functions queue keep-messages on the demo

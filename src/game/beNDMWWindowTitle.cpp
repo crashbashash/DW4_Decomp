@@ -129,6 +129,19 @@ static inline void AppendInterned(const int &list, const char *text) {
     StringList_AppendRetained(list, &held);
 }
 
+/* Empties a string list: every slot is pointed at the pooled empty string, releasing the string it
+ * held. */
+static inline void ClearStringList(igStringRefList *list) {
+    int count = list->_count;
+    for (int i = 0; i < count; i++) {
+        int **slot = &((int **)list->_data)[i];
+        int *blank = (int *)StringPool_Intern(SharedStringPool(), 0);
+        ReleaseToken(*slot);
+        *slot = blank;
+    }
+    list->_count = 0;
+}
+
 /* Shared title update: st0 0 runs the title's Setup, 2 plays the queued closes and asks the children
  * to close, 3 waits for the close to finish and ends the run. */
 extern "C" void Gap__Bec__beNDMWWindowTitle__vfunc_21(beNDMWWindowTitle *self) {
@@ -170,63 +183,13 @@ extern "C" void Gap__Bec__beNDMWStatusTitle00__vfunc_22(beNDMWStatusTitle00 *sel
  * i_stdigiface opening on the sequence of that Digimon (DIGIMONNO 0..15; anything else Agumon). */
 extern "C" void beNDMWStatusTitle01_ShowDigimonFace(beNDMWWindow *self) {
     float position[3];
-    igStringRefList *infoNames;
-    igStringRefList *seqNames;
-    int infoCount, seqCount, seqIndex, pool, seqOffset;
-    int *old, *seqBlank;
-    int infoIndex;
-    int **infoSlot;
-    int *infoBlank;
-    int infoOffset;
-    int **seqSlot;
     unsigned int digimonNo;
     int player;
 
     beNDMWWindow_PlayQueuedModelClose(self);
-    /* The two loops open-code SharedStringPool: the inline helper changes their register allocation. */
-    infoNames = (igStringRefList *)self->_modelCloseInfoNameList;
-    infoCount = infoNames->_count;
-    infoIndex = 0;
-    if (infoIndex < infoCount) {
-        infoOffset = 0;
-        do {
-            infoSlot = (int **)((char *)infoNames->_data + infoOffset);
-            if (((int *)g_stringPool)[0] == 0) {
-                pool = (int)StringPool_Allocate(0x10);
-                if (pool != 0) pool = (int)StringPool_Construct((void *)pool);
-                ((int *)g_stringPool)[0] = pool;
-            }
-            infoBlank = (int *)StringPool_Intern((void *)((int *)g_stringPool)[0], 0);
-            old = *infoSlot;
-            ReleaseToken(old);
-            infoIndex += 1;
-            *infoSlot = infoBlank;
-            infoOffset += 4;
-        } while (infoIndex < infoCount);
-    }
-    infoNames->_count = 0;
+    ClearStringList((igStringRefList *)self->_modelCloseInfoNameList);
     ((igIntList *)self->_modelCloseRamNoList)->_count = 0;
-    seqNames = (igStringRefList *)self->_modelCloseSeqNameList;
-    seqCount = seqNames->_count;
-    seqIndex = 0;
-    if (seqIndex < seqCount) {
-        seqOffset = 0;
-        do {
-            seqSlot = (int **)((char *)seqNames->_data + seqOffset);
-            if (((int *)g_stringPool)[0] == 0) {
-                pool = (int)StringPool_Allocate(0x10);
-                if (pool != 0) pool = (int)StringPool_Construct((void *)pool);
-                ((int *)g_stringPool)[0] = pool;
-            }
-            seqBlank = (int *)StringPool_Intern((void *)((int *)g_stringPool)[0], 0);
-            old = *seqSlot;
-            ReleaseToken(old);
-            seqIndex += 1;
-            *seqSlot = seqBlank;
-            seqOffset += 4;
-        } while (seqIndex < seqCount);
-    }
-    seqNames->_count = 0;
+    ClearStringList((igStringRefList *)self->_modelCloseSeqNameList);
     beMessenger_SelectGroup(self->_messenger, SUBWND_4);
     beMessenger_AppendInt(self->_messenger, self->_playerNo);
     beMessenger_DispatchSelected(self->_messenger, UPDATE_2);

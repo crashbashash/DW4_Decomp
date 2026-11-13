@@ -331,9 +331,14 @@ Retail shapes that only one spelling reproduces:
   writing `asm { nop }`.
 * **A GCC wrapper that keeps its frame around one call** is not a tail call: `ee-gcc -O2` emits `j` for
   `void f(void) { g(); }`. On the 2.9-ee releases `int r = g(); return r;` keeps `jal` and the frame. On
-  2.96 that still gives `j`, and an empty macro after the call does it: `g(); EMPTY();`, where `EMPTY()`
-  is `do { } while (0)`. Neither `((void)0)` nor an empty block has that effect. A result that changes
-  type with no conversion, such as `short g(); int f(void) { return g(); }`, also keeps the frame on both.
+  2.96 that still gives `j`; what keeps `jal` there is a loop statement, and the usual source of one is a
+  statement macro: the call wrapped in it, `#define LOCK() do { g(); } while (0)`, or an empty macro
+  after it, `g(); EMPTY();`, where `EMPTY()` is `do { } while (0)`. Neither `((void)0)` nor an empty
+  block has that effect. A result that changes type with no conversion, such as
+  `short g(); int f(void) { return g(); }`, also keeps the frame on both.
+* **An MWCC test that looks redundant, `x != 1 && x == 2`** (`beq x,1` past the arm, then `bne x,2`),
+  is an `if (x == 1) { } else if (x == 2) { ... }` chain whose first arm is empty in this build: MWCC
+  keeps the empty arm's compare, which plain `if (x == 2)` drops.
 * **An empty GCC delay loop survives on its test.** `for (i = 0x1FFF; i > -1; i -= 32) { }` is kept with
   r5900 short-loop pad nops; the same loop tested with `i >= 0` is deleted.
 * **A copy that hoists into an earlier delay slot** stays behind the read before it when it is written
@@ -467,8 +472,10 @@ Retail shapes that only one spelling reproduces:
   releasing destructors, scoped per block and closed where the release happened. An empty
   destructor with hand releases gives one range. Each retail destructor address is one holder
   class; holders that share an address are one class with several constructors.
-* **A loaded value kept as the second operand of a multiply** is a local copied to itself before
-  use, `x = p->v; x = x;`, which stops the load being folded back into the expression.
+* **A loaded value kept as the second operand of a multiply** is a `const` local or the `const`
+  parameter of an inlined helper (`static inline long long FramesToTime(const float frames)`): b52
+  binds it before the expression, where a plain local or parameter is folded back into it. The
+  older spelling, a local copied to itself (`x = p->v; x = x;`), gives the same code.
 * **A macro that declares a class** leaves the trailing `;` to its call, `REF(Name);`. A call
   without one runs into the next declaration, and the source scanner then reads the macro as a
   function definition and drops the classes.

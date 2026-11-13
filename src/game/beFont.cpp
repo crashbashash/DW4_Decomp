@@ -96,6 +96,12 @@ public:
 };
 
 struct igColor4f { float r; float g; float b; float a; };
+/* Alchemy's three-float vector, with the members beFont_AlignLines uses. */
+struct igVec3f {
+    float x, y, z;
+    igVec3f(float x_, float y_, float z_) { x = x_; y = y_; z = z_; }
+    igVec3f &operator+=(const igVec3f &other) { x += other.x; y += other.y; z += other.z; return *this; }
+};
 
 /* One row of the Shift-JIS to UTF-16 table; a row of 0xffff ends it. */
 struct SjisUnicodePair { unsigned short unicode; unsigned short sjis; };
@@ -121,7 +127,7 @@ void beFont_SetText(beFont *self, beBaseInfoRam *ram, igNodeView *text, int inde
 void beFont_ReplaceVertexArray(beFont *self, igGeometryAttr *geometry, int fontIndex, int vertexCount);
 void beFont_PrepareGeometry(beFont *self, igGeometryAttr *geometry, int text, int wide);
 void beFont_LayoutLines(beFont *self, unsigned short *text, int entry, igVertexArrayLock *positions);
-void beFont_AlignLines(beFont *self, int text, void *entry, void *positions);
+void beFont_AlignLines(beFont *self, int text, beFontInfoData *entry, igVertexArrayLock *positions);
 void beFont_LockVertexArray(beFont *self, igVertexArrayView *vertices, igVertexArrayLock *positions, igVertexArrayLock *texCoords);
 int beFont_FindFirstLayoutEntry(beFont *self, beBaseInfoRam *ram, int dataName, int setName);
 int beFont_FindNextLayoutEntry(beFont *self, beBaseInfoRam *ram);
@@ -998,6 +1004,39 @@ void beFont_LayoutLines(beFont *self, unsigned short *text, int entry, igVertexA
     lastWidth = lineWidths->count;
     if (lastWidth < lineWidths->capacity) lineWidths->count = lineWidths->getCount() + 1; else List_Resize(lineWidths, lastWidth + 1, 4);
     lineWidths->data[lastWidth] = *vertex;
+}
+
+/* Shifts each line's glyph quads right by the line's spare width (alignment 1) or half of it
+ * (alignment 2). The shift is an igVec3f added with its inline operator+=; that inlined member is why
+ * retail keeps an exception record for this frameless function. */
+void beFont_AlignLines(beFont *self, int text, beFontInfoData *entry, igVertexArrayLock *positions) {
+    float width = entry->_width;
+    int align = entry->_align;
+    igVec3f shift(0.0f, 0.0f, 0.0f);
+    char *base = positions->data;
+    unsigned vertexIndex = 0;
+    int line;
+    igVec3f *vertex;
+    unsigned end;
+    unsigned i;
+    for (line = 0; line < ((UnsignedIntListView *)self->_lineFeedList)->count; line++) {
+        end = ((UnsignedIntListView *)self->_lineFeedList)->data[line];
+        switch (align) {
+        case 1:
+            shift.x = width - ((FloatListView *)self->_alignList)->data[line];
+            break;
+        case 2:
+            shift.x = (width - ((FloatListView *)self->_alignList)->data[line]) / 2.0f;
+            break;
+        }
+        while (vertexIndex < end) {
+            for (i = vertexIndex; i < vertexIndex + 6; i++) {
+                vertex = (igVec3f *)(base + positions->stride * i);
+                *vertex += shift;
+            }
+            vertexIndex += 6;
+        }
+    }
 }
 
 /* Locks the positions (component 0) and the first texture-coordinate set (component 3) of every

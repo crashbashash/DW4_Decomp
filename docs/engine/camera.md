@@ -78,8 +78,8 @@ rotations through `Matrix44_GetQuaternion`, `Quaternion_Lerp` and `Matrix44_SetQ
 
 A shake is a `beCameraCtrlInfoRamShake` (`SHK`) in the ram's data list. Each frame offsets the eye and interest
 positions by `_value` times the entries of `g_cameraShakeOffsetX`/`g_cameraShakeOffsetY` picked by the current digit
-of `_moveCode`; the SHAKEONE timer (`_oneTime` seconds) steps `_movePoint`, and the SHAKEALL timer (`_endTime`) restores
-the saved positions and removes the shake.
+of `_moveCode`; the SHAKEONE timer (`_oneTime` frames at 60 per second) steps `_movePoint`, and the SHAKEALL timer
+(`_endTime` frames) restores the saved positions and removes the shake.
 
 `beCameraCtrl_GetMessageEnum` names the 15 messages `beCameraCtrl::vfunc_33` answers (SHOWPOLYGON ... DBGZOOMOUT,
 enum `beCameraCtrlMessage` in the source). SHOWPOLYGON and HIDEPOLYGON set or clear the box switch's child mask

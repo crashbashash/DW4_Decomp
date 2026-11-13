@@ -6,7 +6,7 @@ extern "C" {
 int Memory_GetAllocatorBySelector(int selector);
 int igObject_GetAllocator(void *object);
 void ObjectList_AppendRetained(void *list, void *object);
-int List_Reserve(igObjectList *list, int count, int capacity);
+int List_Reserve(igObjectList *list, int capacity, int elementSize);
 void List_RemoveWordAt(void *list, int index);
 void *StringPool_Allocate(int size);
 void *StringPool_Construct(void *pool);
@@ -90,7 +90,7 @@ static inline void setKeepMesString(beDemoKeepMes *mes, int beDemoKeepMes::*fiel
     mes->*field = (int)token;
 }
 
-/* The build data the DM* calls append keep-messages to, created on first use. */
+/* Creates the build data the DM* calls append keep-messages to, if there is none yet. */
 static inline void ensureBuildData(beDemoManager *self) {
     if (self->_buildData == 0) {
         int allocator = allocatorFor(self);
@@ -98,6 +98,12 @@ static inline void ensureBuildData(beDemoManager *self) {
         self->_buildData = (int)beDemoManagerWork_CreateInstance(allocator);
         self->_turningOK = 0;
     }
+}
+
+/* The build data, created on first use. */
+static inline beDemoManagerWork *buildData(beDemoManager *self) {
+    ensureBuildData(self);
+    return (beDemoManagerWork *)self->_buildData;
 }
 
 static inline beDemoManagerWork *activeWork(beDemoManager *self, int index) {
@@ -153,8 +159,7 @@ void beDemoManager_Case(beDemoManager *self, int ramNo) {
 }
 
 void beDemoManager_AddKeepMes(beDemoManager *self, int kind, const char *group, const char *infoName, int ramNo, const char *message, const char *param, long long sendTime) {
-    ensureBuildData(self);
-    beDemoManagerWork *work = (beDemoManagerWork *)self->_buildData;
+    beDemoManagerWork *work = buildData(self);
     int allocator = allocatorFor(self);
     igSmartPointer<beDemoKeepMes> mes(beDemoKeepMes_CreateInstance(allocator));
     mes->_kind = kind;
@@ -183,18 +188,10 @@ void beDemoManager_SetLua(beDemoManager *self, const char *chunk) {
 }
 
 void beDemoManager_MsgBox(beDemoManager *self, const char *text, int ramNo) {
-    /* matching construct: declaration-order search — the order of the locals picks their registers */
-    char *token;
-    beDemoManagerWork *work;
-    beDemoKeepMes *target;
-    ensureBuildData(self);
-    work = (beDemoManagerWork *)self->_buildData;
+    beDemoManagerWork *work = buildData(self);
     igSmartPointer<beDemoKeepMes> mes(beDemoKeepMes_CreateInstance(allocatorFor(self)));
     mes->_kind = DEMO_MES_MSGBOX;
-    target = mes.p;
-    token = StringPool_Intern(stringPool(), text);
-    releaseString((char *)target->_mesParam);
-    target->_mesParam = (int)token;
+    setKeepMesString(mes, &beDemoKeepMes::_mesParam, text);
     mes->_ramNo = ramNo;
     ObjectList_AppendRetained((void *)work->_keepMesList, mes.p);
 }
@@ -233,36 +230,41 @@ int beDemoManager_AcceptInfo(void) {
     return 0;
 }
 
+/* Zeroes every slot of the list and empties it. */
+static inline void removeAll(igObjectList *list) {
+    int count = list->_count;
+    int i;
+    for (i = 0; i < count; i++) {
+        ((igObject **)list->_data)[i] = 0;
+    }
+    list->_count = 0;
+}
+
+/* Drops the list's share of every object it holds and empties it. */
+static inline void releaseAll(igObjectList *list) {
+    int count = list->_count;
+    int i;
+    for (i = 0; i < count; i++) {
+        igRelease(((igObject **)list->_data)[i]);
+    }
+    removeAll(list);
+}
+
+/* Resizes the list's storage to `capacity` items, unless it holds more than that. */
+static inline void setCapacity(igObjectList *list, int capacity) {
+    if (capacity >= list->_count) {
+        List_Reserve(list, capacity, 4);
+    }
+}
+
 /* Drops every playing and building demo. Called while an update plays, it waits for the update's end. */
 void beDemoManager_Reset(beDemoManager *self) {
-    igObjectList *list;
-    int count;
-    int i;
-    igObjectList *active;
     if (self->_disableRemoveAll == 1) {
         self->_calledRemoveAll = 1;
         return;
     }
-    list = (igObjectList *)self->_activeDataList;
-    count = list->_count;
-    for (i = 0; i < count; i++) {
-        igRelease(((igObject **)list->_data)[i]);
-    }
-    {
-        /* matching construct: block-local zero loop */
-        int clearCount = list->_count;
-        int j;
-        for (j = 0; j < clearCount; j++) {
-            ((igObject **)list->_data)[j] = 0;
-        }
-    }
-    list->_count = 0;
-    active = (igObjectList *)self->_activeDataList;
-    /* matching construct: empty then-branch reproduces the retail branch layout */
-    if (0 < active->_count) {
-    } else {
-        List_Reserve(active, 0, 4);
-    }
+    releaseAll((igObjectList *)self->_activeDataList);
+    setCapacity((igObjectList *)self->_activeDataList, 0);
     igRelease((igObject *)self->_buildData);
     self->_buildData = 0;
     self->_turningOK = 0;

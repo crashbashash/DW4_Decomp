@@ -61,15 +61,19 @@ int LuaFieldWalker::isValid() {
 LuaFieldEntry::~LuaFieldEntry() {
 }
 
-LuaFieldWalker &LuaFieldWalker::operator++(int) {
+/* Steps to the next entry: along the bucket's chain, else to the head of the next non-empty bucket. */
+inline void LuaFieldWalker::advance() {
     node = (LuaFieldEntry *)node->link.next;
     if (node != 0) {
-        /* the next entry of the same bucket */
-    } else {
-        while (node == 0 && bucket < g_luaFieldBucketCount) {
-            node = (LuaFieldEntry *)g_luaFieldBuckets[bucket++];
-        }
+        return;
     }
+    while (node == 0 && bucket < g_luaFieldBucketCount) {
+        node = (LuaFieldEntry *)g_luaFieldBuckets[bucket++];
+    }
+}
+
+LuaFieldWalker &LuaFieldWalker::operator++(int) {
+    advance();
     return *this;
 }
 

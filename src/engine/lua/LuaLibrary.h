@@ -731,6 +731,7 @@ struct LuaFieldWalker {
     int isValid();
     LuaFieldWalker &operator++(int);
     LuaFieldEntry *get();
+    void advance();
 };
 
 /* An Alchemy result code, returned by value. */

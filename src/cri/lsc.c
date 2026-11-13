@@ -432,12 +432,14 @@ void FUN_00277768(LscObj *lsc, int loop)
     lsc->loop = loop;
 }
 
+/* The lock is a statement macro. GCC 2.96 does not make a call inside a loop statement, even
+ * do-while(0), a sibling call, so lsc_Lock keeps its frame and jal while lsc_Unlock's bare call
+ * becomes a jump. */
+#define LSC_LOCK() do { FUN_0027b2b0(); } while (0)
+
 void lsc_Lock(LscCrs *crs)
 {
-    FUN_0027b2b0();
-    /* matching construct: hand search — an empty statement after the call keeps it from being a tail call */
-    do {
-    } while (0);
+    LSC_LOCK();
 }
 
 void lsc_Unlock(LscCrs *crs)

@@ -397,13 +397,17 @@ int beAction2WAITCHECK_Start(beAction2 *manager, beAction2InfoRam *ram, beAction
     return 0;
 }
 
+/* The work record's fade limit, read as its class's const getter reads it. Converting work to a
+ * pointer to const makes the limit an operand the compiler evaluates before the faded alpha, which
+ * gives retail's register order for the comparison. */
+static inline float fadeLimit(const beAction2InfoWork *work) { return work->_fadeLimitValue; }
+
 /* Steps the fade by the frames the FADE timer advanced: state 1 fades in up to the limit, then
  * takes the override attributes off the node; state 2 fades out to zero. Both end in state 3. */
 void beAction2FADESET_Update(beAction2 *manager, beAction2InfoRam *ram) {
     beAction2InfoWork *work = (beAction2InfoWork *)ram->_work;
     switch (work->_fadeSt0) {
     case 1: {
-        float limit;
         float frames;
         Color4f color;
         float *alpha;
@@ -417,8 +421,7 @@ void beAction2FADESET_Update(beAction2 *manager, beAction2InfoRam *ram) {
             *alpha = work->_fadeValue + frames * work->_fadeAddValue;
             ((OverrideAttr *)work->_colorAttr)->SetValue(&color);
             work->_fadeValue = *alpha;
-            limit = *(float *)&work->_fadeLimitValue; /* matching construct: hand search — the read through a cast pointer loads the limit after the alpha, into f1 */
-            if (!(*alpha < limit)) {
+            if (*alpha >= fadeLimit(work)) {
                 list = ((beModelCtrlNode2 *)ram->_node)->_overrideAttrList;
                 if (work->_textureStateAttr == 0) {
                     ObjectList_RemoveFirstRetained(&removed0, list, work->_colorAttr, 0);
@@ -549,48 +552,36 @@ int beAction2FADESET_Start(beAction2 *manager, beAction2InfoRam *ram, beAction2F
 /* Past the end of the joint range, loops back by the range (state 1) or holds at its end (state 2),
  * rebasing the node clock to the new time and flagging the end. */
 void beAction2JOINTSET_Update(beAction2 *manager, beAction2InfoRam *ram) {
-    beAction2InfoWork *work;
-    long long now;
-    long long end;
-    bool changed;
-    int state;
-    beModelCtrlNode2 *node;
-    float ticks;
-
-    work = (beAction2InfoWork *)ram->_work;
-    state = work->_jointSt0;
-    /* matching construct: hand search — the goto guard keeps retail's compare order */
-    if (state == 2) goto run;
-    if (state == 1) goto run;
-    if (state == 0) return;
-    return;
-run:
-    {
-        now = beModelCtrlNode2_LocalTime(ram->_node, ((igInsightCore *)manager->_insight)->_worldTime);
-        end = work->_jointEndTimeL;
-        changed = false;
-        if (end < now) {
-            state = work->_jointSt0;
-            do {
-                switch (state) {
-                case 1:
-                    changed = true;
-                    now += work->_jointStartTimeL - end;
-                    break;
-                case 2:
-                    now = end;
-                    changed = true;
-                    break;
-                }
-            } while (now > end);
+    beAction2InfoWork *work = (beAction2InfoWork *)ram->_work;
+    switch (work->_jointSt0) {
+    case 0:
+        break;
+    case 1:
+    case 2: {
+        long long now = beModelCtrlNode2_LocalTime(ram->_node, ((igInsightCore *)manager->_insight)->_worldTime);
+        long long end = work->_jointEndTimeL;
+        bool changed = false;
+        while (now > end) {
+            switch (work->_jointSt0) {
+            case 1:
+                changed = true;
+                now += work->_jointStartTimeL - end;
+                break;
+            case 2:
+                now = end;
+                changed = true;
+                break;
+            }
         }
         if (changed) {
-            node = (beModelCtrlNode2 *)ram->_node;
-            ticks = (float)(unsigned int)(int)(((igInsightCore *)manager->_insight)->_worldTime >> 18);
+            beModelCtrlNode2 *node = (beModelCtrlNode2 *)ram->_node;
+            float ticks = (float)(unsigned int)(int)(((igInsightCore *)manager->_insight)->_worldTime >> 18);
             ticks = ticks * node->_timeScale;
             node->_timeBias = now - (__fixsfdi(ticks) << 18);
             work->_jointIsEnd = 1;
         }
+        break;
+    }
     }
 }
 
