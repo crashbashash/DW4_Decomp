@@ -4043,7 +4043,7 @@
 001967d0 00006c igObjectPool_Register
 00196840 000008 thunk_igObjectPool_GetMetaObject
 00196850 0000a0 igObjectPool_InitFields
-001968f0 000034 FUN_001968f0
+001968f0 000034 igSwitch_CreateInstance
 00196930 000048 FUN_00196930
 00196980 000048 igSwitch_GetMetaObject
 001969d0 000078 igSwitch_GetVTable
@@ -4415,7 +4415,7 @@
 0019f040 000008 thunk_igIniShaderFactory_GetMetaObject
 0019f050 00000c FUN_0019f050
 0019f060 00016c igIniShaderFactory_InitFields
-0019f1d0 000034 FUN_0019f1d0
+0019f1d0 000034 igGroup_CreateInstance
 0019f210 000048 FUN_0019f210
 0019f260 000048 igGroup_GetMetaObject
 0019f2b0 000074 igGroup_GetVTable
@@ -5248,7 +5248,7 @@
 001c5d70 0000a4 FUN_001c5d70
 001c5e20 000088 FUN_001c5e20
 001c5eb0 000198 FUN_001c5eb0
-001c6050 0000c0 FUN_001c6050
+001c6050 0000c0 igGroup_RemoveChild
 001c6110 000120 FUN_001c6110
 001c6230 000030 FUN_001c6230
 001c6260 0000ac Gap__Sg__igGroup__vfunc_26 Gap::Sg::igGroup::vfunc_26
@@ -5445,12 +5445,12 @@
 001dc500 000108 FUN_001dc500
 001dc610 000204 FUN_001dc610
 001dc820 00004c igSwitch_EnableChild
-001dc870 000008 FUN_001dc870
+001dc870 000008 igSwitch_EnableAllChildren
 001dc880 000050 igSwitch_DisableChild
-001dc8d0 000008 FUN_001dc8d0
-001dc8e0 000054 FUN_001dc8e0
+001dc8d0 000008 igSwitch_DisableAllChildren
+001dc8e0 000054 igSwitch_AppendChild
 001dc940 000054 Gap__Sg__igSwitch__vfunc_35 Gap::Sg::igSwitch::vfunc_35
-001dc9a0 000094 FUN_001dc9a0
+001dc9a0 000094 igSwitch_RemoveChildAt
 001dca40 00013c igObjectPool_Grow
 001dcb80 0000f4 FUN_001dcb80
 001dcc80 0001e8 FUN_001dcc80
@@ -15665,8 +15665,8 @@
 0035c930 000020 FUN_0035c930
 0035c950 000064 beLayerGroup_Register
 0035c9c0 00001c beLayerGroup_GetMetaObject
-0035c9e0 000054 FUN_0035c9e0
-0035ca40 000054 FUN_0035ca40
+0035c9e0 000054 beLayerCtl_GetSwtCtlEnum
+0035ca40 000054 beLayerCtl_GetMessageEnum
 0035caa0 000034 beLayerCtl_CreateInstance
 0035cae0 000044 FUN_0035cae0
 0035cb30 00004c FUN_0035cb30
@@ -17092,12 +17092,12 @@
 00389040 00001c Gap__Bec__beKeyboardReceiver__vfunc_08 Gap::Bec::beKeyboardReceiver::vfunc_08
 00389060 000008 Gap__Bec__beKeyboardReceiver__vfunc_21 Gap::Bec::beKeyboardReceiver::vfunc_21
 00389070 00000c Gap__Bec__beKeyboardReceiver__vfunc_20 Gap::Bec::beKeyboardReceiver::vfunc_20
-00389080 0000a0 Gap__Bec__beLayerCtl__vfunc_32 Gap::Bec::beLayerCtl::vfunc_32
-00389120 00002c Gap__Bec__beLayerCtl__vfunc_29 Gap::Bec::beLayerCtl::vfunc_29
-00389150 00000c Gap__Bec__beLayerCtl__vfunc_30 Gap::Bec::beLayerCtl::vfunc_30
-00389160 000008 Gap__Bec__beLayerCtl__vfunc_31 Gap::Bec::beLayerCtl::vfunc_31
-00389170 000a10 Gap__Bec__beLayerCtl__vfunc_34 Gap::Bec::beLayerCtl::vfunc_34
-00389b80 00000c Gap__Bec__beLayerCtl__vfunc_20 Gap::Bec::beLayerCtl::vfunc_20
+00389080 0000a0 beLayerCtl__ReleaseLayerSwitch beLayerCtl::ReleaseLayerSwitch
+00389120 00002c beLayerCtl__RegisterReceiver beLayerCtl::RegisterReceiver
+00389150 00000c beLayerCtl__GetInfoMeta beLayerCtl::GetInfoMeta
+00389160 000008 beLayerCtl__Update beLayerCtl::Update
+00389170 000a10 beLayerCtl__OnMessage beLayerCtl::OnMessage
+00389b80 00000c beLayerCtl__GetMeta beLayerCtl::GetMeta
 00389b90 000024 FUN_00389b90
 00389bc0 0003e8 FUN_00389bc0
 00389fb0 000034 FUN_00389fb0

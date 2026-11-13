@@ -19,7 +19,7 @@ void FUN_001d3410(NodeSlots *o, void *with) {
         NodeParentListView *l = c->_parents;
         NodeSlots *self = o;
         c->replaceChild(findParent(l, (int *)&self), with);
-        FUN_001c6050((S_1c5eb0 *)c, (Obj_1c5eb0 *)o);
+        igGroup_RemoveChild((S_1c5eb0 *)c, (Obj_1c5eb0 *)o);
         i--;
     }
     FUN_001c5d10(with, (int)(o));

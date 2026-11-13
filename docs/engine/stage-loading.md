@@ -25,7 +25,7 @@ State 6 orders layers, then sends `LAYERCTL`, `LOADING`, `SET`, `SWITCH` before
 attaching layer nodes. These calls and constants were cross-checked against
 retail `mipsel-linux-gnu-objdump` output, not inferred solely from decompiler C.
 
-The layer dispatcher (`beLayerCtl::vfunc_34`, `0x00389170`) resolves the named
+The layer dispatcher (`beLayerCtl::OnMessage`; [layer control](layer-control.md)) resolves the named
 layer in its `igSwitch`; `SET` enables its mask bit. `LOADING` is the authored
 scene root, not a font-generated replacement.
 

@@ -1,7 +1,7 @@
 #include "dw4/reflected.h"
 #include "dw4/igSmartPointer.h"
 
-extern "C" void FUN_001dc8d0(int);
+extern "C" void igSwitch_DisableAllChildren(int);
 extern "C" void igObject_Destroy(void *);
 extern "C" int Gap__Bec__beParticleCtrl2__vfunc_30(void);
 extern "C" int Gap__Bec__beParticleCtrl2__vfunc_20(void);
@@ -138,8 +138,8 @@ void Gap__Bec__beParticleCtrl2__vfunc_32(beParticleCtrl2 *arg0) {
         o1 = 0;
         do {
             g = *(beParticleCtrl2Info **)((char *)((igObjectList *)arg0->_infoList)->_data + o1);
-            FUN_001dc8d0(g->_mainSwitch);
-            FUN_001dc8d0(g->_subSwitch);
+            igSwitch_DisableAllChildren(g->_mainSwitch);
+            igSwitch_DisableAllChildren(g->_subSwitch);
             n2 = ((igObjectList *)g->_ramList)->_count;
             j = 0;
             if (0 < n2) {

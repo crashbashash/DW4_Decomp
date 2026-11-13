@@ -4,8 +4,8 @@ extern "C" int igInsightCore_FindManager(int, int);
 extern "C" int Gap__Bec__beMatCtrl__vfunc_30(void);
 extern "C" int Gap__Bec__beMatCtrl__vfunc_20(void);
 extern "C" int beMessenger_RegisterReceiver(int, int, int, int, int);
-extern "C" int FUN_001dc870(int);
-extern "C" int FUN_001dc8d0(int);
+extern "C" int igSwitch_EnableAllChildren(int);
+extern "C" int igSwitch_DisableAllChildren(int);
 extern "C" int FUN_0035a6b0(...);
 extern "C" unsigned int beMessenger_ResolveEnumValue(int, int, int);
 extern "C" bool beMatCtrl_IsPlayer(beMatCtrl *arg0);
@@ -202,10 +202,10 @@ int Gap__Bec__beMatCtrl__vfunc_34(beMatCtrl *arg0, beMatCtrlInfoRam *arg1, beMat
     temp_v0 = beMessenger_ResolveEnumValue(arg0->_messenger, FUN_0035a6b0(), arg2->_dataList);
     switch (temp_v0) {
     case 0:
-        FUN_001dc870(temp_s0->_switchgraph);
+        igSwitch_EnableAllChildren(temp_s0->_switchgraph);
         goto L;
     case 1:
-        FUN_001dc8d0(temp_s0->_switchgraph);
+        igSwitch_DisableAllChildren(temp_s0->_switchgraph);
         goto L;
     case 2:
         arg0->_isLuaCallDisp = 1;

@@ -236,7 +236,7 @@ void igSwitch_EnableChild(void *arg0, unsigned int arg1) {
     }
 }
 
-void FUN_001dc870(int *p)
+void igSwitch_EnableAllChildren(int *p)
 {
     igBitMask_SetAll((igDataList *)(*(int *)((char *)p + 32)));
 }
@@ -258,12 +258,12 @@ void igSwitch_DisableChild(void *arg0, unsigned int arg1) {
     }
 }
 
-void FUN_001dc8d0(int *p)
+void igSwitch_DisableAllChildren(int *p)
 {
     igBitMask_ClearAll((igDataList *)(*(int *)((char *)p + 32)));
 }
 
-int FUN_001dc8e0(void *arg0, int arg1) {
+int igSwitch_AppendChild(void *arg0, int arg1) {
     int temp_s0;
     int var_a1;
     int a0v;

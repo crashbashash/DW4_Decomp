@@ -4543,6 +4543,12 @@
 0x0050e798	text_igStringObj	string-literal
 0x0050e7a8	text_beUnicodeObj	string-literal
 0x0050e7b8	ALL_3	string-literal
+0x0050ebc0	LAYERCTL_3	string-literal
+0x0050ebd0	LayerSwt	string-literal
+0x0050ebe0	LAYERPARENT	string-literal
+0x0050ebf0	NONE_2	string-literal
+0x0050ebf8	ROOTATTR	string-literal
+0x0050ec08	ALL_4	string-literal
 0x0050ed58	MATCTRL	string-literal
 0x0050ef10	HIT	string-literal
 0x0050ef18	MODELCTRL_7	string-literal

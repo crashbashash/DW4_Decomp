@@ -1,4 +1,4 @@
-void FUN_001968f0(int arg0) {
+void igSwitch_CreateInstance(int arg0) {
     FUN_00196ad0();
     igMetaObject_CreateInstance(*(int *)0x561308, arg0);
 }

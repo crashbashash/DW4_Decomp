@@ -129,6 +129,7 @@ Related: game systems and data are in [`../systems/`](../systems); the analysis 
 - [System clock investigation](system-clock.md): verified logo WAIT duration, timer lifecycle and normal Action2 scheduling; raw cadence and game-pause/stage routing remain open.
 
 - [Stage loading cards and node animation](stage-loading.md): localized preview/title selection and the complete nine-body runtime, verified against retail instructions.
+- [Layer control](layer-control.md): `beLayerCtl` sorts the scene root's children into a named-layer `igSwitch` (ORDER) and shows, hides, removes and fetches layers by name.
 
 - [Hard/Soft lighting](light-modes.md): LIGHTMODE handoff, authored versus overridden rigs, paired texture packs and unchanged Main Lobby shadows, verified against both retail modes.
 - [Register allocation](register-allocation.md): how the pinned MWCC colours registers (simplify/select, vreg ids from declaration order), the trace/replay tools, and the source forms that move a colour.

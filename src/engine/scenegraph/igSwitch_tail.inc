@@ -16,7 +16,7 @@ int Gap__Sg__igSwitch__vfunc_35(S_1dc940 *arg0, int arg1, void *arg2) {
     return temp_s0;
 }
 
-Obj_1c5eb0 *FUN_001dc9a0(S_1dc940 *arg0, int arg1) {
+Obj_1c5eb0 *igSwitch_RemoveChildAt(S_1dc940 *arg0, int arg1) {
     Obj_1c5eb0 *removed;
     int var_a1;
 

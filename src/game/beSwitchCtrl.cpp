@@ -5,8 +5,8 @@ extern "C" int Gap__Bec__beSwitchCtrl__vfunc_30(void);
 extern "C" void Gap__Bec__beSwitchCtrl__vfunc_31(void);
 extern "C" int Gap__Bec__beSwitchCtrl__vfunc_20(void);
 extern "C" void beMessenger_RegisterReceiverFromInfo(int, int, char *);
-extern "C" int FUN_001dc870(int);
-extern "C" int FUN_001dc8d0(int);
+extern "C" int igSwitch_EnableAllChildren(int);
+extern "C" int igSwitch_DisableAllChildren(int);
 extern "C" int FUN_00343430(...);
 extern "C" int beMessenger_ResolveEnumValue(int, int, int);
 extern "C" int g_beSwitchCtrlInfo_metaObject[4];
@@ -41,10 +41,10 @@ int Gap__Bec__beSwitchCtrl__vfunc_33(beSwitchCtrl *arg0, beBaseInfoRam *arg1, in
     temp_v0 = beMessenger_ResolveEnumValue(arg0->_messenger, FUN_00343430(), arg2);
     switch (temp_v0) {
     case 0:
-        FUN_001dc870(*(int *)((char *)(temp_s0) + 28));
+        igSwitch_EnableAllChildren(*(int *)((char *)(temp_s0) + 28));
         return 1;
     case 1:
-        FUN_001dc8d0(*(int *)((char *)(temp_s0) + 28));
+        igSwitch_DisableAllChildren(*(int *)((char *)(temp_s0) + 28));
         return 1;
     default:
         return 0;

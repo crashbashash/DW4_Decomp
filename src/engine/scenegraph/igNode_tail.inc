@@ -126,7 +126,7 @@ Ref_1c5eb0 FUN_001c5eb0(S_1c5eb0 *host, int idx) {
     return Ref_1c5eb0(0);
 }
 
-unsigned int FUN_001c6050(S_1c5eb0 *host, Obj_1c5eb0 *child) {
+unsigned int igGroup_RemoveChild(S_1c5eb0 *host, Obj_1c5eb0 *child) {
     List_1c5eb0 *l;
     unsigned int n;
     unsigned int i;
