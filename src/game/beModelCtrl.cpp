@@ -426,8 +426,8 @@ extern "C" void Matrix44_FromTranslation(void *, Vec3 *);
 extern "C" void beMessenger_GetVec3(Vec3 *, int, int);
 extern "C" float DAT_004c8fb8[4];
 extern "C" float DAT_004e0ef0[4];
-extern "C" float DAT_004e1078[4];
-extern "C" float DAT_004e1088[4];
+extern "C" float g_vec3XAxis[4];
+extern "C" float g_vec3YAxis[4];
 extern "C" char SQ_WAIT_2[];
 extern "C" char NDSP_2[];
 extern "C" char SEQ[];
@@ -2645,8 +2645,8 @@ int Gap__Bec__beModelCtrl__vfunc_33(beModelCtrl *self, beBaseInfoRam *ram, const
             beMessenger_GetVec3(&moveRotation, MESSENGER, 1);
             igMatrix44f_SetIdentity(moveMatrix);
             Matrix44_FromTranslation(moveMatrix, &movePosition);
-            if (moveRotation.x != 0.0f) FUN_00191670(moveMatrix, DAT_004e1078, 0.017453292f * moveRotation.x);
-            if (moveRotation.y != 0.0f) FUN_00191670(moveMatrix, DAT_004e1088, 0.017453292f * moveRotation.y);
+            if (moveRotation.x != 0.0f) FUN_00191670(moveMatrix, g_vec3XAxis, 0.017453292f * moveRotation.x);
+            if (moveRotation.y != 0.0f) FUN_00191670(moveMatrix, g_vec3YAxis, 0.017453292f * moveRotation.y);
             { float rz = moveRotation.z; if (rz != 0.0f) FUN_00191670(moveMatrix, ((float *)g_vec3ZAxis), 0.017453292f * rz); }
             ((beModelCtrlNode2Slots *)ramData->_node)->vfunc_35(moveMatrix);
             work->_targetDirection[1] = 0.017453292f * moveRotation.y;

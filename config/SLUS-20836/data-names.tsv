@@ -3495,6 +3495,9 @@
 0x004e0cf8	igAABoxList_className	class-name
 0x004e0d08	igAABox_className	class-name
 0x004e1058	g_vec3Zero	recovered-global
+0x004e1068	g_vec3One	recovered-global
+0x004e1078	g_vec3XAxis	recovered-global
+0x004e1088	g_vec3YAxis	recovered-global
 0x004e1098	g_vec3ZAxis	recovered-global
 0x004e1170	g_vec4Zero	recovered-global
 0x004e1210	igTraversal_className	class-name

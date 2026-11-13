@@ -13,17 +13,17 @@ int StringList_AppendRetained(...);
 int StringPool_Construct(...);
 int StringPool_Intern(...);
 int beNDMWWindow_RunMessageScript(...);
-extern int DAT_0051c4a0[4];
+extern int txt_shop_lua_3[4];
 extern int DAT_0051c4e0[4];
 extern int DAT_0051c4e8[4];
 extern int DAT_0051c4f0[4];
 extern int DAT_0051c4f8[4];
-extern int DAT_0051c500[4];
-extern int DAT_0051c508[4];
+extern int GAMERAM_10[4];
+extern int GETPLAYER_7[4];
 extern int DAT_0051c518[4];
 extern int DAT_0051c520[4];
-extern int DAT_0051c530[4];
-extern int DAT_0051c540[4];
+extern int TALKFONT01_2[4];
+extern int LEFT_5[4];
 extern int DAT_0051c548[4];
 extern int DAT_0051c558[4];
 extern int DAT_0051c560[4];
@@ -31,7 +31,7 @@ extern int DAT_0051c570[4];
 extern int DAT_0051c580[4];
 extern int DAT_0051c588[4];
 extern int DAT_0051c598[4];
-extern int DAT_00586f20[4];
+extern int g_stringPool[4];
 int beMessenger_SelectGroup(...);
 int beMessenger_AppendInt(...);
 int beMessenger_DispatchSelected(...);
@@ -52,13 +52,13 @@ struct Str { static inline int intern(int *s) {
     if (s == 0) {
         ref = 0;
     } else {
-        if (DAT_00586f20[0] == 0) {
+        if (g_stringPool[0] == 0) {
             pool = StringPool_Allocate(16);
             if (pool)
                 pool = StringPool_Construct(pool);
-            DAT_00586f20[0] = pool;
+            g_stringPool[0] = pool;
         }
-        ref = StringPool_Intern(DAT_00586f20[0], s);
+        ref = StringPool_Intern(g_stringPool[0], s);
     }
     return ref;
 }
@@ -117,9 +117,9 @@ void beNDMWShopSelect02_Setup(beNDMWShopSelect02 *arg0) {
         off = 0;
         do {
             pno = *(int *)(lst->_data + off);
-            beMessenger_SelectGroup(arg0->_messenger, &DAT_0051c500[0]);
+            beMessenger_SelectGroup(arg0->_messenger, &GAMERAM_10[0]);
             beMessenger_AppendInt(arg0->_messenger, pno);
-            beMessenger_DispatchSelected(arg0->_messenger, &DAT_0051c508[0]);
+            beMessenger_DispatchSelected(arg0->_messenger, &GETPLAYER_7[0]);
             obj = beMessenger_GetObject(arg0->_messenger, 0);
             igProperty_GetRecordByte(obj, &DAT_0051c518[0]);
             fld = (igIntList *)*(int *)(igProperty_GetRecordFolder(obj, &DAT_0051c520[0]) + 12);
@@ -130,7 +130,7 @@ void beNDMWShopSelect02_Setup(beNDMWShopSelect02 *arg0) {
                 b = a;
                 tt = (igObject *)b;
                 if (tt) tt->_refCount = tt->_refCount + 1;
-                beNDMWWindow_QueueObjectText(arg0, &DAT_0051c530[0], (int)*p, (int *)&b, &DAT_0051c540[0]);
+                beNDMWWindow_QueueObjectText(arg0, &TALKFONT01_2[0], (int)*p, (int *)&b, &LEFT_5[0]);
                 tt = (igObject *)b;
                 if (tt) {
                     tt->_refCount = tt->_refCount - 1;
@@ -146,7 +146,7 @@ void beNDMWShopSelect02_Setup(beNDMWShopSelect02 *arg0) {
                 }
             }
             beMessenger_SendNamed(arg0->_messenger, &DAT_0051c548[0], &DAT_0051c558[0], 0, &DAT_0051c560[0]);
-            beNDMWWindow_QueueText(arg0, &DAT_0051c588[0], (int)*p, beDataBase_GetRecordString(beMessenger_GetObject(arg0->_messenger, 0), *(int *)(igProperty_GetRecord(obj, &DAT_0051c570[0]) + 12), &DAT_0051c580[0]), &DAT_0051c540[0]);
+            beNDMWWindow_QueueText(arg0, &DAT_0051c588[0], (int)*p, beDataBase_GetRecordString(beMessenger_GetObject(arg0->_messenger, 0), *(int *)(igProperty_GetRecord(obj, &DAT_0051c570[0]) + 12), &DAT_0051c580[0]), &LEFT_5[0]);
             lst = (igIntList *)arg0->_playerNoList;
             i++;
             off += 4;
@@ -160,81 +160,81 @@ void beNDMWShopSelect02_Setup(beNDMWShopSelect02 *arg0) {
     case 2003:
     case 2005:
     case 2008:
-        slot1 = Str::intern(&DAT_0051c530[0]);
+        slot1 = Str::intern(&TALKFONT01_2[0]);
         StringList_AppendRetained(arg0->_textCloseTypeList, &slot1);
         Str::release(slot1);
         slot2 = Str::intern(&DAT_0051c4e0[0]);
         StringList_AppendRetained(arg0->_textCloseNameList, &slot2);
         Str::release(slot2);
-        slot3 = Str::intern(&DAT_0051c530[0]);
+        slot3 = Str::intern(&TALKFONT01_2[0]);
         StringList_AppendRetained(arg0->_textCloseTypeList, &slot3);
         Str::release(slot3);
         slot4 = Str::intern(&DAT_0051c4e8[0]);
         StringList_AppendRetained(arg0->_textCloseNameList, &slot4);
         Str::release(slot4);
-        beNDMWWindow_RunMessageScript(arg0, &DAT_0051c4a0[0], arg0->_entCode);
+        beNDMWWindow_RunMessageScript(arg0, &txt_shop_lua_3[0], arg0->_entCode);
         arg0->_selectMax = 2;
         break;
     case 2:
     case 3:
     case 4:
         arg0->_selectMax = 4;
-        slot5 = Str::intern(&DAT_0051c530[0]);
+        slot5 = Str::intern(&TALKFONT01_2[0]);
         StringList_AppendRetained(arg0->_textCloseTypeList, &slot5);
         Str::release(slot5);
         slot6 = Str::intern(&DAT_0051c4e0[0]);
         StringList_AppendRetained(arg0->_textCloseNameList, &slot6);
         Str::release(slot6);
-        slot7 = Str::intern(&DAT_0051c530[0]);
+        slot7 = Str::intern(&TALKFONT01_2[0]);
         StringList_AppendRetained(arg0->_textCloseTypeList, &slot7);
         Str::release(slot7);
         slot8 = Str::intern(&DAT_0051c4e8[0]);
         StringList_AppendRetained(arg0->_textCloseNameList, &slot8);
         Str::release(slot8);
-        slot9 = Str::intern(&DAT_0051c530[0]);
+        slot9 = Str::intern(&TALKFONT01_2[0]);
         StringList_AppendRetained(arg0->_textCloseTypeList, &slot9);
         Str::release(slot9);
         slot10 = Str::intern(&DAT_0051c4f0[0]);
         StringList_AppendRetained(arg0->_textCloseNameList, &slot10);
         Str::release(slot10);
-        slot11 = Str::intern(&DAT_0051c530[0]);
+        slot11 = Str::intern(&TALKFONT01_2[0]);
         StringList_AppendRetained(arg0->_textCloseTypeList, &slot11);
         Str::release(slot11);
         slot12 = Str::intern(&DAT_0051c4f8[0]);
         StringList_AppendRetained(arg0->_textCloseNameList, &slot12);
         Str::release(slot12);
-        beNDMWWindow_RunMessageScript(arg0, &DAT_0051c4a0[0], 0x7EE);
+        beNDMWWindow_RunMessageScript(arg0, &txt_shop_lua_3[0], 0x7EE);
         break;
     case 1:
         arg0->_selectMax = 3;
-        slot13 = Str::intern(&DAT_0051c530[0]);
+        slot13 = Str::intern(&TALKFONT01_2[0]);
         StringList_AppendRetained(arg0->_textCloseTypeList, &slot13);
         Str::release(slot13);
         slot14 = Str::intern(&DAT_0051c4e0[0]);
         StringList_AppendRetained(arg0->_textCloseNameList, &slot14);
         Str::release(slot14);
-        slot15 = Str::intern(&DAT_0051c530[0]);
+        slot15 = Str::intern(&TALKFONT01_2[0]);
         StringList_AppendRetained(arg0->_textCloseTypeList, &slot15);
         Str::release(slot15);
         slot16 = Str::intern(&DAT_0051c4e8[0]);
         StringList_AppendRetained(arg0->_textCloseNameList, &slot16);
         Str::release(slot16);
-        slot17 = Str::intern(&DAT_0051c530[0]);
+        slot17 = Str::intern(&TALKFONT01_2[0]);
         StringList_AppendRetained(arg0->_textCloseTypeList, &slot17);
         Str::release(slot17);
         slot18 = Str::intern(&DAT_0051c4f0[0]);
         StringList_AppendRetained(arg0->_textCloseNameList, &slot18);
         Str::release(slot18);
-        beNDMWWindow_RunMessageScript(arg0, &DAT_0051c4a0[0], 0x7F2);
+        beNDMWWindow_RunMessageScript(arg0, &txt_shop_lua_3[0], 0x7F2);
         break;
     }
-    if (DAT_00586f20[0] == 0) {
+    if (g_stringPool[0] == 0) {
         pool = StringPool_Allocate(16);
         if (pool)
             pool = StringPool_Construct(pool);
-        DAT_00586f20[0] = pool;
+        g_stringPool[0] = pool;
     }
-    ref = StringPool_Intern(DAT_00586f20[0], &DAT_0051c598[0]);
+    ref = StringPool_Intern(g_stringPool[0], &DAT_0051c598[0]);
     old = arg0->_infoName;
     Str::release(old);
     arg0->_infoName = ref;

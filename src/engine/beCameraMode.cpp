@@ -25,7 +25,7 @@ int Vec3f_TransformDirection(...);
 int FUN_004578c0(...);
 int Matrix44_GetTranslation(...);
 
-extern int DAT_004e1078[4];
+extern int g_vec3XAxis[4];
 extern int g_vec3ZAxis[4];
 extern int DAT_0058cd78[4];
 typedef struct Ev { int id; void *obj; int data; } Ev;
@@ -287,7 +287,7 @@ void FUN_004650d0(Ob *arg0) {
     e2.obj = arg0;
     e2.data = DAT_0058cd68[0];
     FUN_004578c0(temp_s0, &e2);
-    Vec3f_TransformDirection((char *)temp_s0 + 0x80, &DAT_004e1078[0], &arg0->mat);
+    Vec3f_TransformDirection((char *)temp_s0 + 0x80, &g_vec3XAxis[0], &arg0->mat);
     e3.id = 2;
     e3.obj = arg0;
     e3.data = DAT_0058cd78[0];
