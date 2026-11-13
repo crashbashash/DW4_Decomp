@@ -121,10 +121,10 @@ void Gap__Bec__beFontImage__vfunc_11(FontImage *self, int enable) {
     Gap__Core__igObject__vfunc_11(self);
     if (enable != 0) {
         ObjectList_AppendRetained((unsigned)self->layers, (void *)self->base);
-        igSmartPointer<FillLayer> first((FillLayer *)FUN_00139600(igObject_GetAllocator(self)));
+        igSmartPointer<FillLayer> first((FillLayer *)igBlendStateAttr_CreateInstance(igObject_GetAllocator(self)));
         first.get()->setEnabled(1);
         ObjectList_AppendRetained((unsigned)self->layers, first.get());
-        igSmartPointer<OutlineLayer> second((OutlineLayer *)FUN_00131390(igObject_GetAllocator(self)));
+        igSmartPointer<OutlineLayer> second((OutlineLayer *)igTextureStateAttr_CreateInstance(igObject_GetAllocator(self)));
         second.get()->setEnabled(1);
         ObjectList_AppendRetained((unsigned)self->layers, second.get());
         self->state = 0x10001;

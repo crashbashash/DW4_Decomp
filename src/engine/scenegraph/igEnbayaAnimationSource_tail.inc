@@ -46,7 +46,7 @@ int Gap__Sg__igEnbayaAnimationSource__vfunc_25(EnbayaSourceView *o, float *out, 
             duration = 0.05000000447034836f;
         }
         switch (o->_playMode) {
-        case 4: duration += DAT_005626e0[0]; case 1: if (t > duration) { r = duration; } else if (t < 0.0f) { r = 0.0f; } else { FUN_001c0ae0(&r, t, duration); } break;
+        case 4: duration += g_enbayaPlayOnceEndOffset[0]; case 1: if (t > duration) { r = duration; } else if (t < 0.0f) { r = 0.0f; } else { FUN_001c0ae0(&r, t, duration); } break;
         case 3: case 0: FUN_001c0ae0(&r, t, duration); break;
         case 2: if (FUN_001c0ae0(&r, t, duration) & 1) { r = duration - r; } break;
         default: r = 0.0f; break;
@@ -116,7 +116,7 @@ int Gap__Sg__igEnbayaAnimationSource__vfunc_27(EnbayaSourceView *o, float *out, 
             duration = 0.05000000447034836f;
         }
         switch (o->_playMode) {
-        case 4: duration += DAT_005626e0[0]; case 1: if (t > duration) { r = duration; } else if (t < 0.0f) { r = 0.0f; } else { FUN_001c0ae0(&r, t, duration); } break;
+        case 4: duration += g_enbayaPlayOnceEndOffset[0]; case 1: if (t > duration) { r = duration; } else if (t < 0.0f) { r = 0.0f; } else { FUN_001c0ae0(&r, t, duration); } break;
         case 3: case 0: FUN_001c0ae0(&r, t, duration); break;
         case 2: if (FUN_001c0ae0(&r, t, duration) & 1) { r = duration - r; } break;
         default: r = 0.0f; break;

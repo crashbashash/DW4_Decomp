@@ -11,3 +11,11 @@
 0x00377090	beAction2MOTIONSET_Update	game
 0x00377340	beAction2MOTIONSET_Start	game
 0x00377700	beAction2_StartComponents	game
+0x00375e00	beAction2_Prepare	game
+0x00375e10	beAction2_GetInfoMeta	game
+0x00375e20	beAction2_RegisterReceiver	game
+0x003778d0	beAction2_Update	game
+0x00377990	beAction2_OnMessage	game
+0x003783f0	beAction2_GetMeta	game
+0x0036dcd0	beAction2_GetMessageEnum	game
+0x0036c2a0	beAction2InfoWork_CreateInstance	game

@@ -48,7 +48,7 @@ struct FontLayout;
 extern "C" void FUN_00383420(beFont *self, FontLayout *layout, N *src, int idx);
 extern "C" void FUN_001dc820(void *, int);
 extern "C" void FUN_001dc880(void *, int);
-extern "C" void FUN_00193540(void *, int, int);
+extern "C" void Color4f_Unpack(void *, int, int);
 extern "C" void Matrix44_SetTranslation(void *, void *);
 extern "C" unsigned int Memory_GetBufferSize(...);
 extern "C" int FUN_00301e30(int, void *);
@@ -530,7 +530,7 @@ int Gap__Bec__beFont__vfunc_34(beFont *arg0, N *arg1, N *arg2) {
                         w = LD(ll)[q];
                         if (g_igColorAttr_metaObject[0] == w->Meta()) {
                             Vec cc;
-                            FUN_00193540(&cc, 1, (int)w->f28);
+                            Color4f_Unpack(&cc, 1, (int)w->f28);
                             cc.x = f22;
                             cc.y = f21;
                             cc.z = f20;

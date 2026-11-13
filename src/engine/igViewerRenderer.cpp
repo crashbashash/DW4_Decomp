@@ -100,7 +100,7 @@ struct Q3 { char pad[16]; igObject *f16; };
 struct Z { char pad[8]; char b8; char pad1[3]; int f12; char pad2[8]; char b24; };
 struct Y { char pad[24]; char b24; };
 struct P { char pad[16]; int f16; int f20; int f24; int f28; int f32; C2 *f36; Q3 *f40; int f44; int f48; int f52; N *f56; char pad3[12]; Z *f72; int pad4; igObject *f80; };
-void *FUN_00138ee0(...);
+void *igColorAttr_CreateInstance(...);
 void *FUN_0013b490(...);
 void *FUN_0019fde0(...);
 int FUN_001c5160(void *, float);
@@ -119,7 +119,7 @@ void Gap__Viewer__igViewerRenderer__vfunc_13(P *arg0);
 struct Tag { };
 static inline void *createFirst() {
     Tag tag = Tag();
-    return FUN_00138ee0(0);
+    return igColorAttr_CreateInstance(0);
 }
 static inline void *createSecond() {
     Tag tag = Tag();

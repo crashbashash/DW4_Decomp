@@ -5,11 +5,11 @@ void Gap__Sg__igPlanarShadowShader__vfunc_09(void **arg0, int arg1) {
         DAT_005627a0[0] = (void **)(((void * *)FUN_00139ed0(Memory_GetAllocatorBySelector(DAT_00587038[0]))));
         ((DW4VC_128_1 *)(DAT_005627a0[0]))->vX((int)(0));
         ((DW4VC_132_1 *)(DAT_005627a0[0]))->vX((int)(0));
-        DAT_005627a8[0] = (void **)(((void * *)FUN_00139600(Memory_GetAllocatorBySelector(DAT_00587038[0]))));
+        DAT_005627a8[0] = (void **)(((void * *)igBlendStateAttr_CreateInstance(Memory_GetAllocatorBySelector(DAT_00587038[0]))));
         ((DW4VC_128_1 *)(DAT_005627a8[0]))->vX((int)(1));
-        DAT_005627b0[0] = (void **)(((void * *)FUN_00135e20(Memory_GetAllocatorBySelector(DAT_00587038[0]))));
+        DAT_005627b0[0] = (void **)(((void * *)igLightingStateAttr_CreateInstance(Memory_GetAllocatorBySelector(DAT_00587038[0]))));
         ((DW4VC_128_1 *)(DAT_005627b0[0]))->vX((int)(0));
-        DAT_005627b8[0] = (void **)(((void * *)FUN_00131390(Memory_GetAllocatorBySelector(DAT_00587038[0]))));
+        DAT_005627b8[0] = (void **)(((void * *)igTextureStateAttr_CreateInstance(Memory_GetAllocatorBySelector(DAT_00587038[0]))));
         ((DW4VC_128_1 *)(DAT_005627b8[0]))->vX((int)(0));
         DAT_005627c8[0] = (void **)(((void * *)FUN_0013b270(Memory_GetAllocatorBySelector(DAT_00587038[0]))));
         ((DW4VC_128_1 *)(DAT_005627c8[0]))->vX((int)(0));

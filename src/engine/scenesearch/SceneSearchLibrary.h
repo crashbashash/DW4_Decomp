@@ -58,7 +58,7 @@ extern "C" int DAT_004982d0[4];
 extern "C" int DAT_004982e0[4];
 extern "C" int DAT_004e9da0[4];
 
-/* The searched scene and the two matrix arrays sized from it (FUN_00239070). */
+/* The searched scene and the two matrix arrays sized from it (igActor_SetAnimationSystem). */
 extern "C" int igMatrix44f_SetIdentity(...);
 extern "C" int Memory_FreeBuffer(...);
 extern "C" int igMetaField_AllocateArray(...);
@@ -79,7 +79,7 @@ public:
     virtual int firstMatrixCount();
     virtual int secondMatrixCount();
 };
-extern "C" void FUN_00239070(int *self, RefCounted *scene);
+extern "C" void igActor_SetAnimationSystem(int *self, RefCounted *scene);
 
 extern "C" void **FUN_00239200(void **ref, short flags);
 extern "C" void **FUN_00239280(void **ref, short flags);

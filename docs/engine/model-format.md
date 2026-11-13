@@ -283,7 +283,7 @@ word (`0x26f0` = 2*4980 + 8) just before the UVs, and the inline image's index b
 `beModelCtrlNode2` vtable (`0x537f40`), `Gap__Core__igObject__vfunc_37`, sets it: when `_transformInput` (+0x68) is
 non-NULL it passes `node+0x20` and the source matrix to that object's `vfunc_0x5c`.  `SETMATRIX` and
 `MOVETRANS` call this slot.  A skinned actor's bone matrices are `igActor._boneMatrixCacheArray` and
-`_blendMatrixCacheArray`, reset on action start by `beAction2::vfunc_33`.  The runtime bone array is
+`_blendMatrixCacheArray`, reset on action start by `beAction2_OnMessage`.  The runtime bone array is
 `igAnimationState+0x54`, stride 0x40 (getters `0x1e34c0`/`0x1e34d0`).  `GETBONEMATRIX` resolves a joint
 name through the model at action+0x34 and pushes a 0x40-byte matrix.  `beModelCtrlNode2_Traverse` is the
 per-frame walk: it writes `node._time` and composes parent * local.

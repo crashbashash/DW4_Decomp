@@ -2345,7 +2345,7 @@ extern "C" void *FUN_0018a2d0(...);
 extern "C" void *FUN_002c9740(...);
 extern "C" void *FUN_002c99b0(...);
 extern "C" int FUN_001931b0(...);
-extern "C" int FUN_00193540(...);
+extern "C" int Color4f_Unpack(...);
 extern "C" int g_igVec4ucList_metaObject[4];
 extern "C" int DAT_005610b0[4];
 extern "C" int g_igVec2fList_metaObject[4];

@@ -103,7 +103,7 @@ void FUN_001dd3e0(void *arg0, int arg1) {
     }
 }
 
-int FUN_001dd4b0(long long arg0, long long arg1, long long *arg2) {
+int UnsignedDivMod64_Cached(long long arg0, long long arg1, long long *arg2) {
     long long r, v;
     if (DAT_00562a18[0] == arg0 && arg1 == DAT_00562a20[0]) {
         *arg2 = DAT_00562a30[0];

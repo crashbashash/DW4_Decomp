@@ -22,8 +22,8 @@ sequence layer polls.
 | `0x00376de0` | 332 | `a2_jointset_update(mgr, act)` | `beAction2JOINTSET_Update` |
 | `0x00376f40` | 324 | `a2_jointset_start(mgr, act, comp)` | `beAction2JOINTSET_Start`; returns 1 |
 | `0x00377700` | 456 | `a2_start_components(mgr, act)` | `beAction2_StartComponents` |
-| `0x003778d0` | 192 | `a2_update(mgr, act)` | `Gap::Bec::beAction2::vfunc_31`, the per-frame driver |
-| `0x00377990` | - | `a2_msg_iscomend(mgr, act, msg)` | the `ISCOMEND` case of `vfunc_33` only; any other resolved case returns −1 |
+| `0x003778d0` | 192 | `a2_update(mgr, act)` | `beAction2_Update`, the per-frame driver |
+| `0x00377990` | - | `a2_msg_iscomend(mgr, act, msg)` | the `ISCOMEND` case of `beAction2_OnMessage` only; any other resolved case returns −1 |
 
 Signatures come from the call sites, not from guesses. Every handler's first argument
 is the `Gap::Bec::beAction2` manager (`mgr`) and its second the playing-action object
@@ -33,8 +33,7 @@ is the `Gap::Bec::beAction2` manager (`mgr`) and its second the playing-action o
 driver calls `*_Update` with exactly `(mgr, act)`. `mgr+0xc` is the engine system whose
 int64 clock is at `+0x50`; `mgr+0x14` is the messenger. The timer functions take any `beBaseInfoRam` (the playing action is
 one); the other `a2_*` names are descriptive labels, not committed symbols: no retail name for them or the
-conversion has evidence beyond the property names `WAIT` (`0x50dfd8`) and `FADE`
-(`0x50dfe0`), so they remain hypotheses.
+conversion has evidence beyond the timer names `WAIT` and `FADE`, so they remain hypotheses.
 
 ## The time model
 
@@ -111,7 +110,7 @@ component's type string (a null string reads as empty):
 | `J…` (`Joint`) | 3 | state only | 0 |
 | `M…` (`Motion`) | 2 | state only | 0 |
 | `F…` (`Frame`) | 1 | arm timer `WAIT` for `(int64)(1e9f · secs / 60.0f)`, then set state | 0 |
-| `R…`, `name[3]=='S'` | - | store `secs` in the f32 global `0x58a348` | 1 |
+| `R…`, `name[3]=='S'` | - | store `secs` in `g_randomWaitMinimum` | 1 |
 | `R…` otherwise | 1 | `secs' = global + (float)(r) / 100`, where `r` is a virtual query on `mgr+0x10→+0x30` taken modulo `trunc(100·secs − 100·global)` (unsigned; a zero divisor leaves the dividend), then as `Frame` | 0 |
 | anything else | - | nothing | 0 |
 
@@ -120,7 +119,7 @@ resumes `a2_start_components`** (the store happens before the call):
 
 - **Joint** completes when the low **byte** of `work+0x30` (`_jointIsEnd`) is nonzero.
 - **Frame** completes when `beBaseInfoRam_IsTimerExpired(act, "WAIT")`.
-- **Motion** consults the motion object's clock (`0x001dd4b0`, `0x001af510` are leaves)
+- **Motion** consults the motion object's clock (`UnsignedDivMod64_Cached`, `igAnimationState_UpdateLocalTime` are leaves)
   and completes when its updated position is not unsigned-below the end time; a zero
   end time completes at once; the guard `work+8 != 1` of the controlling element
   suppresses the check entirely.
@@ -152,7 +151,7 @@ WAITCHECK**, FLASHSET, each gated on its own state slot. JOINTSET therefore upda
 before WAITCHECK within one frame: a one-shot that ends this frame completes its
 `WAITCHECK Joint` in the same frame.
 
-`ISCOMEND` (message case 0 of `vfunc_33`) answers true when **`work+0x44 == 0` and
+`ISCOMEND` (message case 0 of `beAction2_OnMessage`) answers true when **`work+0x44 == 0` and
 `_comIndex == component count`**.
 
 ## The logo programs
@@ -192,8 +191,8 @@ These are conditional clock-model results, not measured console timings.
   remains only partly measured. Both logo states contain WAIT duration 499,999,968,
   confirming that result, not every arithmetic operation or exceptional case.
 - **Leaf behavior.** Property-list lookup/insert, allocation, string interning, the
-  FADESET/MOTIONSET/FLASHSET handlers, the motion clock `0x001dd4b0`/`0x001af510`, the
-  messenger, and `vfunc_33`'s other message cases are not established here. `FADESET`
+  FADESET/MOTIONSET/FLASHSET handlers, the motion clock `UnsignedDivMod64_Cached`/`igAnimationState_UpdateLocalTime`, the
+  messenger, and `beAction2_OnMessage`'s other message cases are not established here. `FADESET`
   completion does not gate an action.
 - **The node's `_timeScale`** is read, not set, here; actions are assumed to run at 1.0
   unless another writer says otherwise.

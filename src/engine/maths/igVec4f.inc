@@ -26,7 +26,7 @@ if (a < DAT_004e117c[0]) a = DAT_004e117c[0];
 /* Unpacks a packed 32-bit colour into a 4-float vector, selected by pixel format: each case
  * converts the four bytes of arg2 with (float)(byte) / 255.0f and stores x,y,z,w. Formats: 0 RGBA,
  * 1 ABGR, 2 BGRA, 3 RGB (w=0), 4 BGR (w=0), 6 ARGB; 5 is not handled (no-op). */
-void FUN_00193540(Color4f *out, unsigned int format, unsigned int packed)
+void Color4f_Unpack(Color4f *out, unsigned int format, unsigned int packed)
 {
     switch (format) {
     case 2:

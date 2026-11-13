@@ -1,137 +1,36 @@
 #include "dw4/reflected.h"
 #include "dw4/igobject_release.h"
-#define REL(o) { Rc *rr = (o); if (rr != 0) { rr->references = rr->references - 1; if (((unsigned long long)((long long)rr->references << 0x29) >> 0x29) == 0) { igObject_Destroy(rr); } } }
-#define LDATA(l) ((int *)(l)->_data)
-#define BITCLR(n) { unsigned int w = (n) >> 5; int bit = 1 << ((n) & 0x1F); int *pw = LDATA(sw) + w; int cnt = sw->_count; int cur = *pw; int nv = ~bit & cur; if (cnt != 0 && (int)w >= 0 && (int)w < cnt) { *pw = nv; } }
-#define BITSET(n) { unsigned int w = (n) >> 5; int bit = 1 << ((n) & 0x1F); int *pw = LDATA(sw) + w; int cnt = sw->_count; int cur = *pw; int nv = bit | cur; if (cnt != 0 && (int)w >= 0 && (int)w < cnt) { *pw = nv; } }
 
-extern "C" void Gap__Bec__beAction2__vfunc_32(void);
-extern "C" int Gap__Bec__beAction2__vfunc_30(void);
-extern "C" int Gap__Bec__beAction2__vfunc_20(void);
-extern "C" int beMessenger_RegisterReceiverFromInfo(int, char *, int *);
-extern "C" int beBaseInfoRam_IsTimerExpired(...);
-extern "C" int beBaseInfoRam_RemoveTimer(...);
-extern "C" int ObjectList_RemoveFirstRetained(...);
-extern "C" int igObject_Destroy(...);
-extern "C" int FUN_00193540(...);
-extern "C" void *FUN_00131390(...);
-extern "C" void *FUN_00135e20(...);
-extern "C" void *FUN_00138ee0(...);
-extern "C" int beBaseInfoRam_StartTimer(...);
-extern "C" int Memory_GetAllocatorBySelector(...);
-extern "C" int ObjectList_AppendRetained(...);
-extern "C" int igObject_GetAllocator(...);
-extern "C" long long beModelCtrlNode2_LocalTime(int, long long);
-extern "C" int FUN_001dd4b0(long long, long long, long long *);
-extern "C" void FUN_001af510(void *, long long);
-extern "C" long long __fixsfdi(float);
-extern "C" float beBaseInfoRam_GetTimerFrameDelta(...);
-extern "C" void *FUN_00139600(...);
-extern "C" int FUN_001ac140(...);
-extern "C" void * igProperty_FindByName(...);
-extern "C" int FUN_001ae660(void *, void *, int, int, int, int *, int, long long, float, float, int);
-extern "C" int FUN_001ae780(...);
-extern "C" int igObject_IsKindOf(...);
-extern "C" void beAction2_StartComponents(int manager, void *info);
-extern "C" int FUN_0036dcd0(...);
-extern "C" unsigned int beMessenger_ResolveEnumValue(int, int, void *);
-extern "C" void beMessenger_AppendBool(int, unsigned char);
-extern "C" int beMessenger_AppendObject(int, int);
-extern "C" int beMessenger_AppendMatrix(int, int);
-extern "C" int beMessenger_AppendString(int, void *);
-extern "C" int beMessenger_GetString(int, int);
-extern "C" int beBaseInfoRam_SetAllTimerScales(void *, float);
-extern "C" int strcmp(void *, void *);
-extern "C" int List_Reserve(void *, int, int);
-extern "C" int beBaseInfoRam_RemoveAllTimers(void *);
-extern "C" int FUN_001adf70(int);
-extern "C" void *igMetaObject_FindFieldByName(int, void *);
-extern "C" void Memory_FreeBuffer(int);
-extern "C" void *FUN_0036c2a0(void *);
-extern "C" int FUN_00239070(void *, void *);
-extern "C" int FUN_001ae750(void *, int, int, int, int);
-extern "C" int beMessenger_SendNamed(int, void *, void *, int, void *);
-extern "C" void Gap__Core__igObject__vfunc_28(void);
-extern "C" int Gap__Core__igObject__vfunc_34(void);
-extern "C" int g_beAction2Info_metaObject[4];
-extern "C" int g_beAction2_metaObject[4];
-extern "C" int DAT_0050dfc8[4];
-extern "C" int DAT_005626e0[4];
-extern "C" void Gap__Bec__beAction2__vfunc_29(beAction2 *arg0, char *arg1);
-/* The info's _node target: only its list handle at +136 is read. */
+/* An RGBA colour in floats, as Color4f_Unpack writes it. */
+struct Color4f { float x, y, z, w; };
 
-typedef struct Action2NodeList136 { char pad[136]; int list; } Action2NodeList136;
-extern "C" int DAT_0050dfd0[4];
-extern "C" void beAction2FLASHSET_Update(void *arg0, beAction2InfoRam *arg1);
-/* matching construct: dummy-virtual class so ->vX() dispatches through the attribute object's vtable slot */
-struct AttrObjView { virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void vX(void *); char pad[24]; int f28; };
-extern "C" int g_defaultAllocatorSelector[4];
-extern "C" unsigned char GPR_00554c14;
-extern "C" int beAction2FLASHSET_Start(int arg0, beAction2InfoRam *arg1, beAction2FLASHSET *arg2);
-extern "C" int DAT_0050dfd8[4];
-struct WcClock { char p[80]; long long time; };
-extern "C" void beAction2WAITCHECK_Update(beAction2 *arg0, beAction2InfoRam *arg1);
-/* matching construct: dummy-virtual class supplies the retail vtable slot offsets for the virtual calls */
-class RandomSourceVirtual {
+/* The override attributes FLASHSET and FADESET put on a node (igColorAttr, igBlendStateAttr,
+ * igTextureStateAttr, igLightingStateAttr) all take their value through slot 30. */
+class OverrideAttr {
 public:
-    virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3();
-    virtual void v4(); virtual void v5(); virtual void v6(); virtual void v7();
-    virtual void v8(); virtual void v9(); virtual void v10(); virtual void v11();
-    virtual void v12(); virtual void v13(); virtual void v14(); virtual void v15();
-    virtual void v16(); virtual void v17(); virtual void v18(); virtual void v19();
-    virtual void v20(); virtual void v21();
-    virtual unsigned Query();
+    virtual void vfunc_00(); virtual void vfunc_01(); virtual void vfunc_02(); virtual void vfunc_03();
+    virtual void vfunc_04(); virtual void vfunc_05(); virtual void vfunc_06(); virtual void vfunc_07();
+    virtual void vfunc_08(); virtual void vfunc_09(); virtual void vfunc_10(); virtual void vfunc_11();
+    virtual void vfunc_12(); virtual void vfunc_13(); virtual void vfunc_14(); virtual void vfunc_15();
+    virtual void vfunc_16(); virtual void vfunc_17(); virtual void vfunc_18(); virtual void vfunc_19();
+    virtual void vfunc_20(); virtual void vfunc_21(); virtual void vfunc_22(); virtual void vfunc_23();
+    virtual void vfunc_24(); virtual void vfunc_25(); virtual void vfunc_26(); virtual void vfunc_27();
+    virtual void vfunc_28(); virtual void vfunc_29();
+    virtual void SetValue(void *value);
 };
-extern "C" float DAT_0058a348[4];
-extern "C" int beAction2WAITCHECK_Start(beAction2 *mgr, beAction2InfoRam *act, beAction2WAITCHECK *comp);
-struct RefCountedObject { int vt; int rc; };
-/* matching construct: dummy virtual slots so the vX() call dispatches through the retail vtable offset 128 */
-struct DummyVirtualComponent { virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void vX(void *); char pad[24]; int f28; };
-struct FadeColor { int x, y, z; float w; };
-extern "C" int DAT_0050dfe0[4];
-extern "C" void beAction2FADESET_Update(void *arg0, beAction2InfoRam *arg1);
-struct Action2SwitchBits { char pad32[32]; igUnsignedIntList *f32; };
-extern "C" int emptyString[4];
-/* Owning stack reference to the freshly created attribute (colour 0, blend state 1, lighting state
- * 2, texture state 3); one class per kind so each gets its own out-of-line destructor. */
-template <int kind> struct Ref {
-    igObject *p;
-    Ref(igObject *o) : p(o) {}
-    ~Ref() {
-        igObject *object = p;
-        if (object) {
-            --object->_refCount;
-            if (((unsigned long long)(long long)object->_refCount & 0x7fffffULL) == 0)
-                igObject_Destroy(object);
-        }
-    }
+
+/* The system's random source; slot 22 returns the next number. */
+class RandomSource {
+public:
+    virtual void vfunc_00(); virtual void vfunc_01(); virtual void vfunc_02(); virtual void vfunc_03();
+    virtual void vfunc_04(); virtual void vfunc_05(); virtual void vfunc_06(); virtual void vfunc_07();
+    virtual void vfunc_08(); virtual void vfunc_09(); virtual void vfunc_10(); virtual void vfunc_11();
+    virtual void vfunc_12(); virtual void vfunc_13(); virtual void vfunc_14(); virtual void vfunc_15();
+    virtual void vfunc_16(); virtual void vfunc_17(); virtual void vfunc_18(); virtual void vfunc_19();
+    virtual void vfunc_20(); virtual void vfunc_21();
+    virtual unsigned Next();
 };
-extern "C" int beAction2FADESET_Start(int arg0, beAction2InfoRam *arg1, beAction2FADESET *arg2);
-typedef struct Clock { char p[80]; long long time; } Clock;
-typedef struct Node { char p[120]; float scale; char q[4]; long long bias; } Node;
-typedef struct Work { char p[28]; int state; long long start; long long end; char isEnd; } Work;
-typedef struct Owner { char p[12]; Clock *clock; } Owner;
-typedef struct Act { char p[44]; Node *node; char q[8]; Work *work; } Act;
-extern "C" void beAction2JOINTSET_Update(Owner *arg0, Act *arg1);
-extern "C" int beAction2JOINTSET_Start(Owner *arg0, beAction2InfoRam *arg1, beAction2JOINTSET *arg2);
-typedef struct Node_377090 { char p[120]; float scale; } Node_377090;
-typedef struct Work_377090 { char p[20]; int state; } Work_377090;
-typedef struct Piece { char p[28]; char flag; char q[27]; float rate; char r[4]; long long pos; } Piece;
-typedef struct Pieces { char p[8]; int count; char q[4]; Piece **items; } Pieces;
-typedef struct Track { char p[56]; Pieces *pieces; } Track;
-typedef struct Tracks { char p[16]; Track **items; } Tracks;
-typedef struct Sys { char p[36]; Tracks *tracks; } Sys;
-typedef struct Ctx { char p[32]; Sys *sys; } Ctx;
-typedef struct Act_377090 { char p[8]; int index; Ctx *ctx; char q[28]; Node_377090 *node; char r[8]; Work_377090 *work; } Act_377090;
-extern "C" void beAction2MOTIONSET_Update(Owner *arg0, Act_377090 *arg1);
-extern "C" int g_igEnbayaTransformSource_metaObject[4];
-extern "C" int g_propertyNameField[4];
-extern "C" int beAction2MOTIONSET_Start(beAction2 *arg0, beAction2InfoRam *arg1, beAction2MOTIONSET *arg2);
-extern "C" int g_beAction2FLASHSET_metaObject[4];
-extern "C" int g_beAction2WAITCHECK_metaObject[4];
-extern "C" int g_beAction2FADESET_metaObject[4];
-extern "C" int g_beAction2JOINTSET_metaObject[4];
-extern "C" int g_beAction2MOTIONSET_metaObject[4];
+
 /* matching construct: igObjectList-shaped component list with a pointer-typed buffer; reflected
  * igObjectList._data (int) changes retail register allocation */
 struct Action2ComponentList {
@@ -140,250 +39,357 @@ struct Action2ComponentList {
     int _capacity;
     struct Action2Component **_data;
 };
-/* matching construct: dummy-virtual component class; only slot 20 (GetMetaObject) is called */
+
+/* A beAction2Data component; only slot 20 (GetMetaObject) is called. */
 class Action2Component {
 public:
-    virtual void vfunc_00();
-    virtual void vfunc_01();
-    virtual void vfunc_02();
-    virtual void vfunc_03();
-    virtual void vfunc_04();
-    virtual void vfunc_05();
-    virtual void vfunc_06();
-    virtual void vfunc_07();
-    virtual void vfunc_08();
-    virtual void vfunc_09();
-    virtual void vfunc_10();
-    virtual void vfunc_11();
-    virtual void vfunc_12();
-    virtual void vfunc_13();
-    virtual void vfunc_14();
-    virtual void vfunc_15();
-    virtual void vfunc_16();
-    virtual void vfunc_17();
-    virtual void vfunc_18();
-    virtual void vfunc_19();
+    virtual void vfunc_00(); virtual void vfunc_01(); virtual void vfunc_02(); virtual void vfunc_03();
+    virtual void vfunc_04(); virtual void vfunc_05(); virtual void vfunc_06(); virtual void vfunc_07();
+    virtual void vfunc_08(); virtual void vfunc_09(); virtual void vfunc_10(); virtual void vfunc_11();
+    virtual void vfunc_12(); virtual void vfunc_13(); virtual void vfunc_14(); virtual void vfunc_15();
+    virtual void vfunc_16(); virtual void vfunc_17(); virtual void vfunc_18(); virtual void vfunc_19();
     virtual int GetMetaObject();
 };
+
 /* matching construct: the guard reads the list through its own view, so its load stays apart from
  * the loads in the loop. */
 struct Action2DataGuardView : beAction2Data {};
-extern "C" void Gap__Bec__beAction2__vfunc_31(void *self, beAction2InfoRam *info);
-extern "C" int DAT_0050dfe8[4];
-extern "C" int DAT_0050dff0[4];
-extern "C" int DAT_0050e010[4];
-extern "C" int DAT_0050e030[4];
-/* Owning reference held in the frame; its release is inlined at each return. */
-struct Rc { int w0; int references; };
-struct RP { Rc *p; inline ~RP(); };
-/* matching construct: dummy virtual slots so the calls dispatch through the retail vtable offsets */
-struct V {
-    virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5();
-    virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11();
-    virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17();
-    virtual void d18(); virtual void d19();
-    virtual int v22();
-    virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26();
-    virtual int v27(int);
-    virtual int v28(int);
-};
-extern "C" int Gap__Bec__beAction2__vfunc_33(beAction2 *arg0, beAction2InfoRam *arg1, void *arg2);
 
-void Gap__Bec__beAction2__vfunc_32(void)
+/* igObject and igActor calls the message handler makes through their vtables. */
+class VirtualObject {
+public:
+    virtual void vfunc_00(); virtual void vfunc_01(); virtual void vfunc_02(); virtual void vfunc_03();
+    virtual void vfunc_04(); virtual void vfunc_05(); virtual void vfunc_06(); virtual void vfunc_07();
+    virtual void vfunc_08(); virtual void vfunc_09(); virtual void vfunc_10(); virtual void vfunc_11();
+    virtual void vfunc_12(); virtual void vfunc_13(); virtual void vfunc_14(); virtual void vfunc_15();
+    virtual void vfunc_16(); virtual void vfunc_17(); virtual void vfunc_18(); virtual void vfunc_19();
+    virtual int GetMetaObject();
+    virtual void vfunc_21(); virtual void vfunc_22(); virtual void vfunc_23(); virtual void vfunc_24();
+    virtual int FindBoneIndex(int name);
+    virtual int GetBoneMatrix(int index);
+};
+
+/* Owning stack reference to a freshly created override attribute (colour 0, blend state 1,
+ * lighting state 2, texture state 3); one class per kind so each gets its own out-of-line
+ * destructor. */
+template <int kind> struct AttrRef {
+    igObject *p;
+    AttrRef(igObject *o) : p(o) {}
+    ~AttrRef() {
+        igObject *object = p;
+        if (object) {
+            --object->_refCount;
+            if (((unsigned long long)(long long)object->_refCount & 0x7fffffULL) == 0)
+                igObject_Destroy(object);
+        }
+    }
+};
+
+/* The message handler's owning reference to the action's work record; its release is inlined at
+ * each return. */
+struct WorkRef {
+    beAction2InfoWork *p;
+    inline ~WorkRef();
+};
+
+/* Clears or sets bit n of a bit mask, ignoring a word outside the mask. */
+static inline void ClearMaskBit(igBitMask *mask, unsigned int n) {
+    unsigned int word = n >> 5;
+    int bit = 1 << (n & 0x1F);
+    int *pw = (int *)mask->_data + word;
+    int count = mask->_count;
+    int next = ~bit & *pw;
+    if (count != 0 && (int)word >= 0 && (int)word < count) {
+        *pw = next;
+    }
+}
+
+static inline void SetMaskBit(igBitMask *mask, unsigned int n) {
+    unsigned int word = n >> 5;
+    int bit = 1 << (n & 0x1F);
+    int *pw = (int *)mask->_data + word;
+    int count = mask->_count;
+    int next = bit | *pw;
+    if (count != 0 && (int)word >= 0 && (int)word < count) {
+        *pw = next;
+    }
+}
+
+extern "C" {
+int beMessenger_RegisterReceiverFromInfo(int messenger, beAction2InfoRam *ram, int *name);
+int beBaseInfoRam_IsTimerExpired(beAction2InfoRam *ram, int *name);
+int beBaseInfoRam_RemoveTimer(beAction2InfoRam *ram, int *name);
+int beBaseInfoRam_StartTimer(beAction2InfoRam *ram, int *name, long long duration);
+float beBaseInfoRam_GetTimerFrameDelta(beAction2InfoRam *ram, int *name);
+int beBaseInfoRam_SetAllTimerScales(beAction2InfoRam *ram, float scale);
+int beBaseInfoRam_RemoveAllTimers(beAction2InfoRam *ram);
+int ObjectList_RemoveFirstRetained(int *result, int list, int object, int start);
+int ObjectList_AppendRetained(int list, igObject *object);
+int igObject_Destroy(void *object);
+int igObject_GetAllocator(void *object);
+int igObject_IsKindOf(void *object, int meta);
+int Memory_GetAllocatorBySelector(int selector);
+void Memory_FreeBuffer(int buffer);
+void Color4f_Unpack(Color4f *out, unsigned int format, unsigned int packed);
+void *igTextureStateAttr_CreateInstance(int allocator);
+void *igLightingStateAttr_CreateInstance(int allocator);
+void *igColorAttr_CreateInstance(int allocator);
+void *igBlendStateAttr_CreateInstance(int allocator);
+void *beAction2InfoWork_CreateInstance(void *allocator);
+long long beModelCtrlNode2_LocalTime(int node, long long now);
+int UnsignedDivMod64_Cached(long long dividend, long long divisor, long long *remainder);
+void igAnimationState_UpdateLocalTime(void *state, long long now);
+long long __fixsfdi(float);
+int igAnimationCombiner_Update(void *combiner, long long now);
+void *igProperty_FindByName(int list, int field, int name);
+int igAnimationCombiner_AddAnimationBlend(void *combiner, void *animation, int combineMode, int transitionMode, int status, int *priority, int perBone, long long transitionTime, float startRatio, float endRatio, int startTime);
+int igAnimationCombiner_ResetToPose(void *combiner, void *from);
+int igAnimationCombiner_RemoveAllStates(int combiner);
+int igAnimationCombiner_AddAnimation(void *combiner, int animation, int combineMode, int transitionMode, int status);
+int igActor_SetAnimationSystem(void *actor, void *combiner);
+int beAction2_GetMessageEnum(void);
+unsigned int beMessenger_ResolveEnumValue(int messenger, int enumeration, void *name);
+void beMessenger_AppendBool(int messenger, unsigned char value);
+int beMessenger_AppendObject(int messenger, int object);
+int beMessenger_AppendMatrix(int messenger, int matrix);
+int beMessenger_AppendString(int messenger, void *text);
+int beMessenger_GetString(int messenger, int index);
+int beMessenger_SendNamed(int messenger, void *message, void *sender, int ramNo, void *name);
+int strcmp(void *, void *);
+int List_Reserve(void *list, int count, int capacity);
+void *igMetaObject_FindFieldByName(int meta, void *name);
+
+void beAction2_Prepare(void);
+int beAction2_GetInfoMeta(void);
+void beAction2_RegisterReceiver(beAction2 *self, beAction2InfoRam *ram);
+void beAction2FLASHSET_Update(beAction2 *manager, beAction2InfoRam *ram);
+int beAction2FLASHSET_Start(beAction2 *manager, beAction2InfoRam *ram, beAction2FLASHSET *component);
+void beAction2WAITCHECK_Update(beAction2 *manager, beAction2InfoRam *ram);
+int beAction2WAITCHECK_Start(beAction2 *manager, beAction2InfoRam *ram, beAction2WAITCHECK *component);
+void beAction2FADESET_Update(beAction2 *manager, beAction2InfoRam *ram);
+int beAction2FADESET_Start(beAction2 *manager, beAction2InfoRam *ram, beAction2FADESET *component);
+void beAction2JOINTSET_Update(beAction2 *manager, beAction2InfoRam *ram);
+int beAction2JOINTSET_Start(beAction2 *manager, beAction2InfoRam *ram, beAction2JOINTSET *component);
+void beAction2MOTIONSET_Update(beAction2 *manager, beAction2InfoRam *ram);
+int beAction2MOTIONSET_Start(beAction2 *manager, beAction2InfoRam *ram, beAction2MOTIONSET *component);
+void beAction2_StartComponents(beAction2 *manager, beAction2InfoRam *ram);
+void beAction2_Update(beAction2 *self, beAction2InfoRam *ram);
+int beAction2_OnMessage(beAction2 *self, beAction2InfoRam *ram, void *name);
+int beAction2_GetMeta(void);
+void Gap__Core__igObject__vfunc_28(void);
+int Gap__Core__igObject__vfunc_34(void);
+
+extern int g_beAction2Info_metaObject[4];
+extern int g_beAction2_metaObject[4];
+extern int g_beAction2FLASHSET_metaObject[4];
+extern int g_beAction2WAITCHECK_metaObject[4];
+extern int g_beAction2FADESET_metaObject[4];
+extern int g_beAction2JOINTSET_metaObject[4];
+extern int g_beAction2MOTIONSET_metaObject[4];
+extern int g_igEnbayaTransformSource_metaObject[4];
+extern int g_propertyNameField[4];
+extern int g_defaultAllocatorSelector[4];
+extern unsigned char g_useOwnerAllocator;
+extern float g_enbayaPlayOnceEndOffset[4];
+extern float g_randomWaitMinimum[4];
+extern int emptyString[4];
+extern int ACTION[4];
+extern int FLASH[4];
+extern int WAIT[4];
+extern int FADE[4];
+extern int NDSP[4];
+extern int boneMatrixCacheArray[4];
+extern int blendMatrixCacheArray[4];
+extern int ACTION_BROADCAST[4];
+}
+
+/* Slot 32, called before the manager starts and before it drops its infos: nothing to do here. */
+void beAction2_Prepare(void)
 {
 }
 
-int Gap__Bec__beAction2__vfunc_30(void)
+int beAction2_GetInfoMeta(void)
 {
     return g_beAction2Info_metaObject[0];
 }
 
-void Gap__Bec__beAction2__vfunc_29(beAction2 *arg0, char *arg1) {
-    beMessenger_RegisterReceiverFromInfo(arg0->_messenger, arg1, &DAT_0050dfc8[0]);
-    arg1[20] = 0;
-    DAT_005626e0[0] = 0xBD088889;
+/* Registers the ram as the receiver of ACTION messages and clears its running flag. */
+void beAction2_RegisterReceiver(beAction2 *self, beAction2InfoRam *ram) {
+    beMessenger_RegisterReceiverFromInfo(self->_messenger, ram, ACTION);
+    ram->_isRun = 0;
+    g_enbayaPlayOnceEndOffset[0] = -1.0f / 30.0f;
 }
 
-void beAction2FLASHSET_Update(void *arg0, beAction2InfoRam *arg1) {
-    int sp4C;
-    int sp48;
-    int sp44;
-    beAction2InfoWork *s1;
-    int s0;
-    igObject *a0;
-    s1 = (beAction2InfoWork *)arg1->_work;
-    switch (s1->_flashSt0) {
+/* When the FLASH timer runs out, takes the flash's override attributes back off the node. */
+void beAction2FLASHSET_Update(beAction2 *manager, beAction2InfoRam *ram) {
+    int removed2;
+    int removed1;
+    int removed0;
+    beAction2InfoWork *work;
+    int list;
+    igObject *attr;
+    work = (beAction2InfoWork *)ram->_work;
+    switch (work->_flashSt0) {
     case 0:
         break;
     case 1:
-        if (beBaseInfoRam_IsTimerExpired(arg1, &DAT_0050dfd0[0]) != 0) {
-            s0 = ((Action2NodeList136 *)arg1->_node)->list;
-            if (s1->_blendStateAttr == 0) {
-                ObjectList_RemoveFirstRetained(&sp4C, s0, s1->_colorAttr, 0);
-                a0 = (igObject *)s1->_colorAttr;
-                if (a0 != 0) {
-                    a0->_refCount = (int)a0->_refCount - 1;
-                    if (((unsigned long long)((long long)(int)a0->_refCount << 0x29) >> 0x29) == 0) {
-                        igObject_Destroy(a0);
-                    }
-                }
-                s1->_colorAttr = 0;
-                ObjectList_RemoveFirstRetained(&sp48, s0, s1->_lightingStateAttr, 0);
-                a0 = (igObject *)s1->_lightingStateAttr;
-                if (a0 != 0) {
-                    a0->_refCount = (int)a0->_refCount - 1;
-                    if (((unsigned long long)((long long)(int)a0->_refCount << 0x29) >> 0x29) == 0) {
-                        igObject_Destroy(a0);
-                    }
-                }
-                s1->_lightingStateAttr = 0;
+        if (beBaseInfoRam_IsTimerExpired(ram, &FLASH[0]) != 0) {
+            list = ((beModelCtrlNode2 *)ram->_node)->_overrideAttrList;
+            if (work->_blendStateAttr == 0) {
+                ObjectList_RemoveFirstRetained(&removed2, list, work->_colorAttr, 0);
+                attr = (igObject *)work->_colorAttr;
+                IG_OBJECT_RELEASE(attr);
+                work->_colorAttr = 0;
+                ObjectList_RemoveFirstRetained(&removed1, list, work->_lightingStateAttr, 0);
+                attr = (igObject *)work->_lightingStateAttr;
+                IG_OBJECT_RELEASE(attr);
+                work->_lightingStateAttr = 0;
             }
-            ObjectList_RemoveFirstRetained(&sp44, s0, s1->_textureStateAttr, 0);
-            a0 = (igObject *)s1->_textureStateAttr;
-            if (a0 != 0) {
-                a0->_refCount = (int)a0->_refCount - 1;
-                if (((unsigned long long)((long long)(int)a0->_refCount << 0x29) >> 0x29) == 0) {
-                    igObject_Destroy(a0);
-                }
-            }
-            s1->_textureStateAttr = 0;
-            beBaseInfoRam_RemoveTimer(arg1, &DAT_0050dfd0[0]);
-            s1->_flashSt0 = 0;
+            ObjectList_RemoveFirstRetained(&removed0, list, work->_textureStateAttr, 0);
+            attr = (igObject *)work->_textureStateAttr;
+            IG_OBJECT_RELEASE(attr);
+            work->_textureStateAttr = 0;
+            beBaseInfoRam_RemoveTimer(ram, &FLASH[0]);
+            work->_flashSt0 = 0;
         }
     }
 }
 
-int beAction2FLASHSET_Start(int arg0, beAction2InfoRam *arg1, beAction2FLASHSET *arg2) {
-    beAction2InfoWork *c = (beAction2InfoWork *)arg1->_work;
-    int list = ((beModelCtrlNode2 *)arg1->_node)->_overrideAttrList;
-    if (c->_colorAttr == 0) {
-        int base = igObject_GetAllocator(arg0);
-        int a;
-        if (GPR_00554c14 != 0) { a = base; } else { a = Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]); }
-        Ref<0> r((igObject *)FUN_00138ee0(a));
-        igObject *o;
+/* Puts colour, texture-state and lighting-state overrides on the node (creating the missing ones),
+ * sets the colour's red and green to full with texturing and lighting off, and flashes for four
+ * frames. */
+int beAction2FLASHSET_Start(beAction2 *manager, beAction2InfoRam *ram, beAction2FLASHSET *component) {
+    beAction2InfoWork *work = (beAction2InfoWork *)ram->_work;
+    int list = ((beModelCtrlNode2 *)ram->_node)->_overrideAttrList;
+    if (work->_colorAttr == 0) {
+        int ownerAllocator = igObject_GetAllocator(manager);
+        int allocator = g_useOwnerAllocator ? ownerAllocator : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
+        AttrRef<0> created((igObject *)igColorAttr_CreateInstance(allocator));
+        igObject *attr;
         igObject *old;
-        ObjectList_AppendRetained(list, r.p);
-        o = r.p;
-        if (o != 0) o->_refCount = o->_refCount + 1;
-        old = (igObject *)c->_colorAttr;
+        ObjectList_AppendRetained(list, created.p);
+        attr = created.p;
+        if (attr != 0) attr->_refCount = attr->_refCount + 1;
+        old = (igObject *)work->_colorAttr;
         IG_OBJECT_RELEASE(old);
-        c->_colorAttr = (int)o;
+        work->_colorAttr = (int)attr;
     }
-    if (c->_textureStateAttr == 0) {
-        int base = igObject_GetAllocator(arg0);
-        int a;
-        if (GPR_00554c14 != 0) { a = base; } else { a = Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]); }
-        Ref<3> r((igObject *)FUN_00131390(a));
-        igObject *o;
+    if (work->_textureStateAttr == 0) {
+        int ownerAllocator = igObject_GetAllocator(manager);
+        int allocator = g_useOwnerAllocator ? ownerAllocator : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
+        AttrRef<3> created((igObject *)igTextureStateAttr_CreateInstance(allocator));
+        igObject *attr;
         igObject *old;
-        ObjectList_AppendRetained(list, r.p);
-        o = r.p;
-        if (o != 0) o->_refCount = o->_refCount + 1;
-        old = (igObject *)c->_textureStateAttr;
+        ObjectList_AppendRetained(list, created.p);
+        attr = created.p;
+        if (attr != 0) attr->_refCount = attr->_refCount + 1;
+        old = (igObject *)work->_textureStateAttr;
         IG_OBJECT_RELEASE(old);
-        c->_textureStateAttr = (int)o;
+        work->_textureStateAttr = (int)attr;
     }
-    if (c->_lightingStateAttr == 0) {
-        int base = igObject_GetAllocator(arg0);
-        int a;
-        if (GPR_00554c14 != 0) { a = base; } else { a = Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]); }
-        Ref<2> r((igObject *)FUN_00135e20(a));
-        igObject *o;
+    if (work->_lightingStateAttr == 0) {
+        int ownerAllocator = igObject_GetAllocator(manager);
+        int allocator = g_useOwnerAllocator ? ownerAllocator : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
+        AttrRef<2> created((igObject *)igLightingStateAttr_CreateInstance(allocator));
+        igObject *attr;
         igObject *old;
-        ObjectList_AppendRetained(list, r.p);
-        o = r.p;
-        if (o != 0) o->_refCount = o->_refCount + 1;
-        old = (igObject *)c->_lightingStateAttr;
+        ObjectList_AppendRetained(list, created.p);
+        attr = created.p;
+        if (attr != 0) attr->_refCount = attr->_refCount + 1;
+        old = (igObject *)work->_lightingStateAttr;
         IG_OBJECT_RELEASE(old);
-        c->_lightingStateAttr = (int)o;
+        work->_lightingStateAttr = (int)attr;
     }
-    struct { int x, y, z, w; } v3;
-    FUN_00193540(&v3, 1, ((AttrObjView *)c->_colorAttr)->f28);
-    v3.y = 0x3F800000;
-    v3.x = 0x3F800000;
-    ((AttrObjView *)c->_colorAttr)->vX(&v3);
-    ((AttrObjView *)c->_textureStateAttr)->vX(0);
-    ((AttrObjView *)c->_lightingStateAttr)->vX(0);
-    c->_flashSt0 = 1;
-    beBaseInfoRam_StartTimer(arg1, &DAT_0050dfd0[0], 0x03F940AC);
+    Color4f color;
+    Color4f_Unpack(&color, 1, ((igColorAttr *)work->_colorAttr)->_colorPacked);
+    color.y = 1.0f;
+    color.x = 1.0f;
+    ((OverrideAttr *)work->_colorAttr)->SetValue(&color);
+    ((OverrideAttr *)work->_textureStateAttr)->SetValue(0);
+    ((OverrideAttr *)work->_lightingStateAttr)->SetValue(0);
+    work->_flashSt0 = 1;
+    beBaseInfoRam_StartTimer(ram, &FLASH[0], 66666668);
     return 1;
 }
 
-/* matching construct: the reflected reference fields are 4-byte ints; the casts give the typed views (no layout effect) */
-void beAction2WAITCHECK_Update(beAction2 *arg0, beAction2InfoRam *arg1) {
-    unsigned long long b;
+/* Waits for the pending WAITCHECK condition (1 the WAIT timer, 2 the motion's end, 3 the JOINTSET
+ * end), then clears it and resumes the component list. */
+void beAction2WAITCHECK_Update(beAction2 *manager, beAction2InfoRam *ram) {
+    unsigned long long duration;
     beAction2InfoWork *work;
-    igAnimationState *obj;
-    long long a;
-    long long d;
-    igAnimation *info;
-    beAction2Info *ctx;
-    igAnimationStateList *ew;
-    work = (beAction2InfoWork *)arg1->_work;
-    ctx = (beAction2Info *)arg1->_parentInfo;
+    igAnimationState *state;
+    long long startTime;
+    long long offset;
+    igAnimation *animation;
+    beAction2Info *info;
+    igAnimationStateList *states;
+    work = (beAction2InfoWork *)ram->_work;
+    info = (beAction2Info *)ram->_parentInfo;
     switch (work->_waitSt0) {
     case 1:
-        if (beBaseInfoRam_IsTimerExpired(arg1, &DAT_0050dfd8[0]) != 0) {
+        if (beBaseInfoRam_IsTimerExpired(ram, &WAIT[0]) != 0) {
             work->_waitSt0 = 0;
-            beAction2_StartComponents((int)arg0, arg1);
+            beAction2_StartComponents(manager, ram);
         }
         break;
     case 2:
-        ew = (igAnimationStateList *)((igAnimationCombiner *)((int *)((igObjectList *)((igAnimationDatabase *)ctx->_animationDatabase)->_combinerList)->_data)[arg1->_ramNo])->_animationStateList;
-        if (ew->_count == 1) {
-            obj = (igAnimationState *)((int *)ew->_data)[0];
-            info = (igAnimation *)obj->_animation;
-            d = obj->_localTime - info->_keyFrameTimeOffset;
-            b = info->_duration;
-            a = info->_startTime;
-            if (b != 0) {
-                long long t;
-                FUN_001dd4b0(d - a, b, &t);
-                t += a;
+        states = (igAnimationStateList *)((igAnimationCombiner *)((int *)((igObjectList *)((igAnimationDatabase *)info->_animationDatabase)->_combinerList)->_data)[ram->_ramNo])->_animationStateList;
+        if (states->_count == 1) {
+            state = (igAnimationState *)((int *)states->_data)[0];
+            animation = (igAnimation *)state->_animation;
+            offset = state->_localTime - animation->_keyFrameTimeOffset;
+            duration = animation->_duration;
+            startTime = animation->_startTime;
+            if (duration != 0) {
+                long long remainder;
+                UnsignedDivMod64_Cached(offset - startTime, duration, &remainder);
+                remainder += startTime;
             }
-            FUN_001af510(obj, beModelCtrlNode2_LocalTime(arg1->_node, ((WcClock *)arg0->_insight)->time));
-            if (b <= obj->_localTime) {
+            igAnimationState_UpdateLocalTime(state, beModelCtrlNode2_LocalTime(ram->_node, ((igInsightCore *)manager->_insight)->_worldTime));
+            if (duration <= state->_localTime) {
                 work->_waitSt0 = 0;
-                beAction2_StartComponents((int)arg0, arg1);
+                beAction2_StartComponents(manager, ram);
             }
         }
         break;
     case 3:
         if (work->_jointIsEnd != 0) {
             work->_waitSt0 = 0;
-            beAction2_StartComponents((int)arg0, arg1);
+            beAction2_StartComponents(manager, ram);
         }
         break;
     }
 }
 
-int beAction2WAITCHECK_Start(beAction2 *mgr, beAction2InfoRam *act, beAction2WAITCHECK *comp) {
-    beAction2InfoWork *w = (beAction2InfoWork *)act->_work;
-    const char *name = (const char *)comp->_name;
-    float secs = comp->_waitTime;
-    const char *s = name ? name : ((char *)emptyString);
-    switch (*s) {
+/* Arms the wait the component's type names: Frame (a WAIT timer of the given frames), Motion, Joint,
+ * or Random (a timer of a random length between the stored minimum and the given frames; RandomSet
+ * stores the minimum and lets the list continue). */
+int beAction2WAITCHECK_Start(beAction2 *manager, beAction2InfoRam *ram, beAction2WAITCHECK *component) {
+    beAction2InfoWork *work = (beAction2InfoWork *)ram->_work;
+    const char *name = (const char *)component->_name;
+    float frames = component->_waitTime;
+    const char *type = name ? name : ((char *)emptyString);
+    switch (*type) {
     case 'R': {
-        const char *s2 = name ? name : ((char *)emptyString);
-        unsigned r, d;
-        if (s2[3] == 'S') {
-            DAT_0058a348[0] = secs;
+        const char *random = name ? name : ((char *)emptyString);
+        unsigned r, range;
+        if (random[3] == 'S') {
+            g_randomWaitMinimum[0] = frames;
             return 1;
         }
-        d = (int)(100.0f * secs - 100.0f * DAT_0058a348[0]);
-        r = ((RandomSourceVirtual *)((beSystem *)mgr->_system)->_random)->Query() % d;
-        secs = DAT_0058a348[0] + (float)r / 100.0f;
+        range = (int)(100.0f * frames - 100.0f * g_randomWaitMinimum[0]);
+        r = ((RandomSource *)((beSystem *)manager->_system)->_random)->Next() % range;
+        frames = g_randomWaitMinimum[0] + (float)r / 100.0f;
     }
     case 'F':
-        beBaseInfoRam_StartTimer(act, DAT_0050dfd8, __fixsfdi(1e9f * secs / 60.0f));
-        w->_waitSt0 = 1;
+        beBaseInfoRam_StartTimer(ram, WAIT, __fixsfdi(1e9f * frames / 60.0f));
+        work->_waitSt0 = 1;
         break;
     case 'M':
-        w->_waitSt0 = 2;
+        work->_waitSt0 = 2;
         break;
     case 'J':
-        w->_waitSt0 = 3;
+        work->_waitSt0 = 3;
         break;
     default:
         break;
@@ -391,73 +397,66 @@ int beAction2WAITCHECK_Start(beAction2 *mgr, beAction2InfoRam *act, beAction2WAI
     return 0;
 }
 
-void beAction2FADESET_Update(void *arg0, beAction2InfoRam *arg1) {
-    beAction2InfoWork *c = (beAction2InfoWork *)arg1->_work;
-    switch (c->_fadeSt0) {
+/* Steps the fade by the frames the FADE timer advanced: state 1 fades in up to the limit, then
+ * takes the override attributes off the node; state 2 fades out to zero. Both end in state 3. */
+void beAction2FADESET_Update(beAction2 *manager, beAction2InfoRam *ram) {
+    beAction2InfoWork *work = (beAction2InfoWork *)ram->_work;
+    switch (work->_fadeSt0) {
     case 1: {
-        float lim;
-        float dt;
-        FadeColor v;
-        float *pw;
+        float limit;
+        float frames;
+        Color4f color;
+        float *alpha;
         int list;
-        int s1, s2, s3;
-        RefCountedObject *a0;
-        dt = beBaseInfoRam_GetTimerFrameDelta(arg1, &DAT_0050dfe0[0]);
-        if (dt != 0.0f) {
-            FUN_00193540(&v, 1, ((DummyVirtualComponent *)c->_colorAttr)->f28);
-            pw = &v.w;
-            *pw = c->_fadeValue + dt * c->_fadeAddValue;
-            ((DummyVirtualComponent *)c->_colorAttr)->vX(&v);
-            c->_fadeValue = *pw;
-            lim = *(float *)&c->_fadeLimitValue;
-            if (!(*pw < lim)) {
-                list = ((beModelCtrlNode2 *)arg1->_node)->_overrideAttrList;
-                if (c->_textureStateAttr == 0) {
-                    ObjectList_RemoveFirstRetained(&s1, list, c->_colorAttr, 0);
-                    a0 = (RefCountedObject *)c->_colorAttr;
-                    if (a0 != 0) {
-                        a0->rc = a0->rc - 1;
-                        if (((unsigned long long)((long long)a0->rc << 0x29) >> 0x29) == 0) igObject_Destroy(a0);
-                    }
-                    c->_colorAttr = 0;
-                    ObjectList_RemoveFirstRetained(&s2, list, c->_lightingStateAttr, 0);
-                    a0 = (RefCountedObject *)c->_lightingStateAttr;
-                    if (a0 != 0) {
-                        a0->rc = a0->rc - 1;
-                        if (((unsigned long long)((long long)a0->rc << 0x29) >> 0x29) == 0) igObject_Destroy(a0);
-                    }
-                    c->_lightingStateAttr = 0;
+        int removed0, removed1, removed2;
+        igObject *attr;
+        frames = beBaseInfoRam_GetTimerFrameDelta(ram, &FADE[0]);
+        if (frames != 0.0f) {
+            Color4f_Unpack(&color, 1, ((igColorAttr *)work->_colorAttr)->_colorPacked);
+            alpha = &color.w;
+            *alpha = work->_fadeValue + frames * work->_fadeAddValue;
+            ((OverrideAttr *)work->_colorAttr)->SetValue(&color);
+            work->_fadeValue = *alpha;
+            limit = *(float *)&work->_fadeLimitValue; /* matching construct: hand search — the read through a cast pointer loads the limit after the alpha, into f1 */
+            if (!(*alpha < limit)) {
+                list = ((beModelCtrlNode2 *)ram->_node)->_overrideAttrList;
+                if (work->_textureStateAttr == 0) {
+                    ObjectList_RemoveFirstRetained(&removed0, list, work->_colorAttr, 0);
+                    attr = (igObject *)work->_colorAttr;
+                    IG_OBJECT_RELEASE(attr);
+                    work->_colorAttr = 0;
+                    ObjectList_RemoveFirstRetained(&removed1, list, work->_lightingStateAttr, 0);
+                    attr = (igObject *)work->_lightingStateAttr;
+                    IG_OBJECT_RELEASE(attr);
+                    work->_lightingStateAttr = 0;
                 }
-                ObjectList_RemoveFirstRetained(&s3, list, c->_blendStateAttr, 0);
-                a0 = (RefCountedObject *)c->_blendStateAttr;
-                if (a0 != 0) {
-                    a0->rc = a0->rc - 1;
-                    if (((unsigned long long)((long long)a0->rc << 0x29) >> 0x29) == 0) igObject_Destroy(a0);
-                }
-                c->_blendStateAttr = 0;
-                beBaseInfoRam_RemoveTimer(arg1, &DAT_0050dfe0[0]);
-                c->_fadeSt0 = 3;
+                ObjectList_RemoveFirstRetained(&removed2, list, work->_blendStateAttr, 0);
+                attr = (igObject *)work->_blendStateAttr;
+                IG_OBJECT_RELEASE(attr);
+                work->_blendStateAttr = 0;
+                beBaseInfoRam_RemoveTimer(ram, &FADE[0]);
+                work->_fadeSt0 = 3;
             }
         }
         break;
     }
     case 2: {
-        float dt;
-        FadeColor v;
-        float *pw;
-        float nv;
-        dt = beBaseInfoRam_GetTimerFrameDelta(arg1, &DAT_0050dfe0[0]);
-        if (dt != 0.0f) {
-            FUN_00193540(&v, 1, ((DummyVirtualComponent *)c->_colorAttr)->f28);
-            nv = c->_fadeValue - dt * c->_fadeAddValue;
-            pw = &v.w;
-            *pw = nv;
-            if (nv < 0.0f) *pw = 0.0f;
-            ((DummyVirtualComponent *)c->_colorAttr)->vX(&v);
-            c->_fadeValue = *pw;
-            if (*pw <= 0.0f) {
-                beBaseInfoRam_RemoveTimer(arg1, &DAT_0050dfe0[0]);
-                c->_fadeSt0 = 3;
+        float frames;
+        Color4f color;
+        float *alpha;
+        float next;
+        frames = beBaseInfoRam_GetTimerFrameDelta(ram, &FADE[0]);
+        if (frames != 0.0f) {
+            Color4f_Unpack(&color, 1, ((igColorAttr *)work->_colorAttr)->_colorPacked);
+            next = work->_fadeValue - frames * work->_fadeAddValue;
+            alpha = &color.w;
+            *alpha = next;
+            if (next < 0.0f) *alpha = 0.0f;
+            ((OverrideAttr *)work->_colorAttr)->SetValue(&color);
+            work->_fadeValue = *alpha;
+            if (*alpha <= 0.0f) {
+                beBaseInfoRam_RemoveTimer(ram, &FADE[0]);
+                work->_fadeSt0 = 3;
             }
         }
         break;
@@ -465,133 +464,118 @@ void beAction2FADESET_Update(void *arg0, beAction2InfoRam *arg1) {
     }
 }
 
-/* matching construct: the (igObject *)/(int) casts on _colorAttr/_blendStateAttr/_lightingStateAttr stand in for 4-byte reference fields */
-int beAction2FADESET_Start(int arg0, beAction2InfoRam *arg1, beAction2FADESET *arg2) {
-    beAction2InfoWork *c = (beAction2InfoWork *)arg1->_work;
-    int list = ((beModelCtrlNode2 *)arg1->_node)->_overrideAttrList;
-    char *nm = (char *)arg2->_name;
-    nm = nm != 0 ? nm : (char *)emptyString;
-    if (*nm == 0x48) {
-        unsigned bit;
-        unsigned i;
-        igUnsignedIntList *l;
-        unsigned *p;
-        int cnt;
-        int v;
-        int m;
-        /* matching construct: cast from the 4-byte reference field (int) to the typed pointer; no layout effect */
-        beAction2Info *pi = (beAction2Info *)arg1->_parentInfo;
-        l = ((Action2SwitchBits *)pi->_switch)->f32;
-        bit = arg1->_ramNo;
-        i = bit >> 5;
-        m = 1 << (bit & 0x1F);
-        p = (unsigned *)l->_data + i;
-        cnt = l->_count;
-        v = ~m & *p;
-        if (cnt != 0 && (int)i >= 0 && (int)i < cnt) {
-            *p = v;
-        }
+/* A name starting with H hides the ram's child of the info's switch. Otherwise puts colour,
+ * blend-state and lighting-state overrides on the node and starts a fade over the given frames:
+ * In fades the alpha up from zero to the given value, anything else fades it down from it. */
+int beAction2FADESET_Start(beAction2 *manager, beAction2InfoRam *ram, beAction2FADESET *component) {
+    beAction2InfoWork *work = (beAction2InfoWork *)ram->_work;
+    int list = ((beModelCtrlNode2 *)ram->_node)->_overrideAttrList;
+    char *name = (char *)component->_name;
+    name = name != 0 ? name : (char *)emptyString;
+    if (*name == 'H') {
+        beAction2Info *info = (beAction2Info *)ram->_parentInfo;
+        igBitMask *mask = (igBitMask *)((igSwitch *)info->_switch)->_childMask;
+        ClearMaskBit(mask, ram->_ramNo);
     } else {
-    if (c->_colorAttr == 0) {
-        int base = igObject_GetAllocator(arg0);
-        int a;
-        if (GPR_00554c14 != 0) { a = base; } else { a = Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]); }
-                igObject *o;
-        igObject *old;
-        Ref<0> r((igObject *)FUN_00138ee0(a));
-        ObjectList_AppendRetained(list, r.p);
-        o = r.p;
-        if (o != 0) o->_refCount = o->_refCount + 1;
-        old = (igObject *)c->_colorAttr;
-        IG_OBJECT_RELEASE(old);
-        c->_colorAttr = (int)o;
-    }
-    if (c->_blendStateAttr == 0) {
-        int base = igObject_GetAllocator(arg0);
-        int a;
-        if (GPR_00554c14 != 0) { a = base; } else { a = Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]); }
-                igObject *o;
-        igObject *old;
-        Ref<1> r((igObject *)FUN_00139600(a));
-        ObjectList_AppendRetained(list, r.p);
-        o = r.p;
-        if (o != 0) o->_refCount = o->_refCount + 1;
-        old = (igObject *)c->_blendStateAttr;
-        IG_OBJECT_RELEASE(old);
-        c->_blendStateAttr = (int)o;
-    }
-    if (c->_lightingStateAttr == 0) {
-        int base = igObject_GetAllocator(arg0);
-        int a;
-        if (GPR_00554c14 != 0) { a = base; } else { a = Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]); }
-                igObject *o;
-        igObject *old;
-        Ref<2> r((igObject *)FUN_00135e20(a));
-        ObjectList_AppendRetained(list, r.p);
-        o = r.p;
-        if (o != 0) o->_refCount = o->_refCount + 1;
-        old = (igObject *)c->_lightingStateAttr;
-        IG_OBJECT_RELEASE(old);
-        c->_lightingStateAttr = (int)o;
-    }
-        char *nm2 = (char *)arg2->_name;
-        nm2 = nm2 != 0 ? nm2 : (char *)emptyString;
-        if (*nm2 == 0x49) {
-            struct { int x, y, z, w; } v3;
-            FUN_00193540(&v3, 1, ((igColorAttr *)c->_colorAttr)->_colorPacked);
-            v3.w = 0;
-            ((DummyVirtualComponent *)c->_colorAttr)->vX(&v3);
-            ((DummyVirtualComponent *)c->_blendStateAttr)->vX((void *)1);
-            ((DummyVirtualComponent *)c->_lightingStateAttr)->vX((void *)0);
-            c->_fadeValue = 0.0f;
-            c->_fadeLimitValue = arg2->_fadeValue;
-            c->_fadeAddValue = arg2->_fadeValue / arg2->_fadeTime;
-            c->_fadeSt0 = 1;
-        } else {
-            struct { int x, y, z; float w; } v3;
-            FUN_00193540(&v3, 1, ((igColorAttr *)c->_colorAttr)->_colorPacked);
-            v3.w = arg2->_fadeValue;
-            ((DummyVirtualComponent *)c->_colorAttr)->vX(&v3);
-            ((DummyVirtualComponent *)c->_blendStateAttr)->vX((void *)1);
-            ((DummyVirtualComponent *)c->_lightingStateAttr)->vX((void *)0);
-            c->_fadeValue = arg2->_fadeValue;
-            c->_fadeLimitValue = arg2->_fadeValue;
-            c->_fadeAddValue = arg2->_fadeValue / arg2->_fadeTime;
-            c->_fadeSt0 = 2;
+        if (work->_colorAttr == 0) {
+            int ownerAllocator = igObject_GetAllocator(manager);
+            int allocator = g_useOwnerAllocator ? ownerAllocator : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
+            igObject *attr;
+            igObject *old;
+            AttrRef<0> created((igObject *)igColorAttr_CreateInstance(allocator));
+            ObjectList_AppendRetained(list, created.p);
+            attr = created.p;
+            if (attr != 0) attr->_refCount = attr->_refCount + 1;
+            old = (igObject *)work->_colorAttr;
+            IG_OBJECT_RELEASE(old);
+            work->_colorAttr = (int)attr;
         }
-        beBaseInfoRam_StartTimer(arg1, &DAT_0050dfe0[0], 0);
+        if (work->_blendStateAttr == 0) {
+            int ownerAllocator = igObject_GetAllocator(manager);
+            int allocator = g_useOwnerAllocator ? ownerAllocator : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
+            igObject *attr;
+            igObject *old;
+            AttrRef<1> created((igObject *)igBlendStateAttr_CreateInstance(allocator));
+            ObjectList_AppendRetained(list, created.p);
+            attr = created.p;
+            if (attr != 0) attr->_refCount = attr->_refCount + 1;
+            old = (igObject *)work->_blendStateAttr;
+            IG_OBJECT_RELEASE(old);
+            work->_blendStateAttr = (int)attr;
+        }
+        if (work->_lightingStateAttr == 0) {
+            int ownerAllocator = igObject_GetAllocator(manager);
+            int allocator = g_useOwnerAllocator ? ownerAllocator : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
+            igObject *attr;
+            igObject *old;
+            AttrRef<2> created((igObject *)igLightingStateAttr_CreateInstance(allocator));
+            ObjectList_AppendRetained(list, created.p);
+            attr = created.p;
+            if (attr != 0) attr->_refCount = attr->_refCount + 1;
+            old = (igObject *)work->_lightingStateAttr;
+            IG_OBJECT_RELEASE(old);
+            work->_lightingStateAttr = (int)attr;
+        }
+        char *mode = (char *)component->_name;
+        mode = mode != 0 ? mode : (char *)emptyString;
+        if (*mode == 'I') {
+            Color4f color;
+            Color4f_Unpack(&color, 1, ((igColorAttr *)work->_colorAttr)->_colorPacked);
+            color.w = 0.0f;
+            ((OverrideAttr *)work->_colorAttr)->SetValue(&color);
+            ((OverrideAttr *)work->_blendStateAttr)->SetValue((void *)1);
+            ((OverrideAttr *)work->_lightingStateAttr)->SetValue((void *)0);
+            work->_fadeValue = 0.0f;
+            work->_fadeLimitValue = component->_fadeValue;
+            work->_fadeAddValue = component->_fadeValue / component->_fadeTime;
+            work->_fadeSt0 = 1;
+        } else {
+            Color4f color;
+            Color4f_Unpack(&color, 1, ((igColorAttr *)work->_colorAttr)->_colorPacked);
+            color.w = component->_fadeValue;
+            ((OverrideAttr *)work->_colorAttr)->SetValue(&color);
+            ((OverrideAttr *)work->_blendStateAttr)->SetValue((void *)1);
+            ((OverrideAttr *)work->_lightingStateAttr)->SetValue((void *)0);
+            work->_fadeValue = component->_fadeValue;
+            work->_fadeLimitValue = component->_fadeValue;
+            work->_fadeAddValue = component->_fadeValue / component->_fadeTime;
+            work->_fadeSt0 = 2;
+        }
+        beBaseInfoRam_StartTimer(ram, &FADE[0], 0);
     }
     return 1;
 }
 
-void beAction2JOINTSET_Update(Owner *arg0, Act *arg1) {
-    Work *work;
+/* Past the end of the joint range, loops back by the range (state 1) or holds at its end (state 2),
+ * rebasing the node clock to the new time and flagging the end. */
+void beAction2JOINTSET_Update(beAction2 *manager, beAction2InfoRam *ram) {
+    beAction2InfoWork *work;
     long long now;
     long long end;
     bool changed;
     int state;
-    long long t;
-    Node *node;
-    float f;
+    beModelCtrlNode2 *node;
+    float ticks;
 
-    work = arg1->work;
-    state = work->state;
-    if (state == 2) goto body;
-    if (state == 1) goto body;
+    work = (beAction2InfoWork *)ram->_work;
+    state = work->_jointSt0;
+    /* matching construct: hand search — the goto guard keeps retail's compare order */
+    if (state == 2) goto run;
+    if (state == 1) goto run;
     if (state == 0) return;
     return;
-    body:
+run:
     {
-        now = beModelCtrlNode2_LocalTime((int)arg1->node, arg0->clock->time);
-        end = work->end;
+        now = beModelCtrlNode2_LocalTime(ram->_node, ((igInsightCore *)manager->_insight)->_worldTime);
+        end = work->_jointEndTimeL;
         changed = false;
         if (end < now) {
-            state = work->state;
+            state = work->_jointSt0;
             do {
                 switch (state) {
                 case 1:
                     changed = true;
-                    now += work->start - end;
+                    now += work->_jointStartTimeL - end;
                     break;
                 case 2:
                     now = end;
@@ -601,161 +585,168 @@ void beAction2JOINTSET_Update(Owner *arg0, Act *arg1) {
             } while (now > end);
         }
         if (changed) {
-            node = arg1->node;
-            f = (float)(unsigned int)(int)(arg0->clock->time >> 18);
-            f = f * node->scale;
-            node->bias = now - (__fixsfdi(f) << 18);
-            work->isEnd = 1;
+            node = (beModelCtrlNode2 *)ram->_node;
+            ticks = (float)(unsigned int)(int)(((igInsightCore *)manager->_insight)->_worldTime >> 18);
+            ticks = ticks * node->_timeScale;
+            node->_timeBias = now - (__fixsfdi(ticks) << 18);
+            work->_jointIsEnd = 1;
         }
     }
 }
 
-/* matching construct: _work/_node/_loopMode are 4-byte reference fields in the reflected structs; the casts give the typed views (no layout effect) */
-int beAction2JOINTSET_Start(Owner *arg0, beAction2InfoRam *arg1, beAction2JOINTSET *arg2) {
+/* Converts the component's frame range to nanoseconds, picks loop (L) or one-shot, and rebases the
+ * node clock so it reads the start of the range now. */
+int beAction2JOINTSET_Start(beAction2 *manager, beAction2InfoRam *ram, beAction2JOINTSET *component) {
     long long start;
-    Work *work;
-    Node *node;
-    long long t;
-    float f;
+    beAction2InfoWork *work;
+    beModelCtrlNode2 *node;
+    long long clockTicks;
+    float ticks;
 
-    work = (Work *)arg1->_work;
-    if (*(char *)arg2->_loopMode == 0x4C) {
-        work->state = 1;
+    work = (beAction2InfoWork *)ram->_work;
+    if (*(char *)component->_loopMode == 'L') {
+        work->_jointSt0 = 1;
     } else {
-        work->state = 2;
+        work->_jointSt0 = 2;
     }
-    float m = arg2->_startTime;
-    float n = 1e9f * m;
-    work->start = __fixsfdi(n / 60.0f);
-    m = arg2->_endTime;
-    n = 1e9f * m;
-    m = n / 60.0f;
-    work->end = __fixsfdi(m);
-    t = (int)(arg0->clock->time >> 18);
-    node = (Node *)arg1->_node;
-    f = (float)(unsigned int)(int)t;
-    f = f * node->scale;
-    start = work->start;
-    node->bias = start - (__fixsfdi(f) << 18);
-    work->isEnd = 0;
+    float seconds = component->_startTime;
+    float scaled = 1e9f * seconds;
+    work->_jointStartTimeL = __fixsfdi(scaled / 60.0f);
+    seconds = component->_endTime;
+    scaled = 1e9f * seconds;
+    seconds = scaled / 60.0f;
+    work->_jointEndTimeL = __fixsfdi(seconds);
+    clockTicks = (int)(((igInsightCore *)manager->_insight)->_worldTime >> 18);
+    node = (beModelCtrlNode2 *)ram->_node;
+    ticks = (float)(unsigned int)(int)clockTicks;
+    ticks = ticks * node->_timeScale;
+    start = work->_jointStartTimeL;
+    node->_timeBias = start - (__fixsfdi(ticks) << 18);
+    work->_jointIsEnd = 0;
     return 1;
 }
 
-void beAction2MOTIONSET_Update(Owner *arg0, Act_377090 *arg1) {
-    Track *track;
-    int n;
+/* State 1 waits one frame. State 2 brings the combiner up to the node's time while the transition
+ * has more than one state, then, with one state left, moves that state onto the node's time scale
+ * without a jump and ends. */
+void beAction2MOTIONSET_Update(beAction2 *manager, beAction2InfoRam *ram) {
+    igAnimationCombiner *combiner;
+    int count;
     int i;
-    Work_377090 *work;
-    Pieces *pieces;
-    Piece *first;
-    float f;
-    float rate;
-    Node_377090 *node;
-    long long v;
-    long long d;
-    long p; /* matching construct: decomp-permuter — the saved time bias is a `long` (igLong, 64-bit under mwccps2), not `long long` */
+    beAction2InfoWork *work;
+    igAnimationStateList *states;
+    igAnimationState *first;
+    float ticks;
+    float scale;
+    beModelCtrlNode2 *node;
+    long long now;
+    long long scaled;
+    long bias; /* matching construct: decomp-permuter — the saved time bias is a `long` (igLong, 64-bit under mwccps2), not `long long` */
 
-    work = arg1->work;
-    switch (work->state) {
+    work = (beAction2InfoWork *)ram->_work;
+    switch (work->_motionSt0) {
     case 1:
-        work->state = 2;
+        work->_motionSt0 = 2;
         return;
     case 2:
-        track = arg1->ctx->sys->tracks->items[arg1->index];
-        pieces = track->pieces;
-        if (pieces->count != 1) {
-            v = beModelCtrlNode2_LocalTime((int)arg1->node, arg0->clock->time);
-            FUN_001ac140((int)track, v);
-            n = track->pieces->count;
+        combiner = ((igAnimationCombiner **)((igObjectList *)((igAnimationDatabase *)((beAction2Info *)ram->_parentInfo)->_animationDatabase)->_combinerList)->_data)[ram->_ramNo];
+        states = (igAnimationStateList *)combiner->_animationStateList;
+        if (states->_count != 1) {
+            now = beModelCtrlNode2_LocalTime(ram->_node, ((igInsightCore *)manager->_insight)->_worldTime);
+            igAnimationCombiner_Update(combiner, now);
+            count = ((igAnimationStateList *)combiner->_animationStateList)->_count;
             i = 0;
-            while (i < n) {
-                track->pieces->items[i]->flag = 0;
+            while (i < count) {
+                ((igAnimationState **)((igAnimationStateList *)combiner->_animationStateList)->_data)[i]->_new = 0;
                 i++;
             }
         }
-        if (pieces->count == 1) {
-            if (pieces->items[0]->rate != arg1->node->scale) {
-                v = beModelCtrlNode2_LocalTime((int)arg1->node, arg0->clock->time);
-                node = arg1->node;
-                rate = node->scale;
-                first = pieces->items[0];
-                f = (float)(unsigned int)(int)(v >> 18);
-                d = __fixsfdi(f * first->rate);
-                p = first->pos;
-                first->pos = (d << 18) + p;
-                first->pos = first->pos - (__fixsfdi(f * rate) << 18);
-                first->rate = rate;
+        if (states->_count == 1) {
+            if (((igAnimationState **)states->_data)[0]->_timeScale != ((beModelCtrlNode2 *)ram->_node)->_timeScale) {
+                now = beModelCtrlNode2_LocalTime(ram->_node, ((igInsightCore *)manager->_insight)->_worldTime);
+                node = (beModelCtrlNode2 *)ram->_node;
+                scale = node->_timeScale;
+                first = ((igAnimationState **)states->_data)[0];
+                ticks = (float)(unsigned int)(int)(now >> 18);
+                scaled = __fixsfdi(ticks * first->_timeScale);
+                bias = first->_timeBias;
+                first->_timeBias = (scaled << 18) + bias;
+                first->_timeBias = first->_timeBias - (__fixsfdi(ticks * scale) << 18);
+                first->_timeScale = scale;
             }
-            work->state = 0;
+            work->_motionSt0 = 0;
         }
         break;
     }
 }
 
-int beAction2MOTIONSET_Start(beAction2 *arg0, beAction2InfoRam *arg1, beAction2MOTIONSET *arg2) {
-    beAction2Info *info = (beAction2Info *)arg1->_parentInfo;
-    beAction2InfoWork *work = (beAction2InfoWork *)arg1->_work;
-    int names = ((igAnimationDatabase *)info->_animationDatabase)->_animationList;
-    int name = arg2->_name;
+/* Plays the named animation on the ram's combiner, blending in over the hokan (transition) frames
+ * unless the ram asked for no transition. Hokan mode S at [0]/[1] freezes the outgoing/incoming
+ * state; loop mode L loops the animation's sources, anything else plays them once. */
+int beAction2MOTIONSET_Start(beAction2 *manager, beAction2InfoRam *ram, beAction2MOTIONSET *component) {
+    beAction2Info *info = (beAction2Info *)ram->_parentInfo;
+    beAction2InfoWork *work = (beAction2InfoWork *)ram->_work;
+    int animations = ((igAnimationDatabase *)info->_animationDatabase)->_animationList;
+    int name = component->_name;
     int nameOrEmpty;
     if (name != 0) nameOrEmpty = name; else nameOrEmpty = (int)emptyString;
-    igAnimation *res = (igAnimation *)igProperty_FindByName(names, g_propertyNameField[0], nameOrEmpty);
-    igAnimationCombiner *anim = ((igAnimationCombiner **)((igAnimationCombinerList *)((igAnimationDatabase *)info->_animationDatabase)->_combinerList)->_data)[arg1->_ramNo];
+    igAnimation *animation = (igAnimation *)igProperty_FindByName(animations, g_propertyNameField[0], nameOrEmpty);
+    igAnimationCombiner *combiner = ((igAnimationCombiner **)((igAnimationCombinerList *)((igAnimationDatabase *)info->_animationDatabase)->_combinerList)->_data)[ram->_ramNo];
     long biasOld; /* matching construct: decomp-permuter (found on beAction2MOTIONSET_Update) — the saved time bias is a `long` (igLong, 64-bit under mwccps2), not `long long` */
     float zero = 0.0f;
     float blend;
-    long long hokanTicks;
-    if (work->_isNoHokan != 0 || arg2->_hokanTime == 0.0f) {
+    long long transitionTime;
+    if (work->_isNoHokan != 0 || component->_hokanTime == 0.0f) {
         blend = 1.0f;
         work->_isNoHokan = 0;
-        hokanTicks = 1;
+        transitionTime = 1;
     } else {
-        hokanTicks = __fixsfdi(1e9f * arg2->_hokanTime / 60.0f);
+        transitionTime = __fixsfdi(1e9f * component->_hokanTime / 60.0f);
         blend = 0.0f;
     }
-    if (((igAnimationStateList *)anim->_animationStateList)->_count >= 2) FUN_001ae780(anim, 0);
-    int value = res->_priority;
-    FUN_001ae660(anim, res, 1, 1, 1, &value, 0, hokanTicks, blend, 1.0f, 0);
-    long long cur = beModelCtrlNode2_LocalTime(arg1->_node, ((igInsightCore *)arg0->_insight)->_worldTime);
-    FUN_001ac140(anim, cur);
-    if (((char *)arg2->_hokanMode)[0] == 'S') {
-        igAnimationState *tr = ((igAnimationState **)((igAnimationStateList *)anim->_animationStateList)->_data)[0];
-        float f = (float)(unsigned int)(int)(((igInsightCore *)arg0->_insight)->_worldTime >> 18);
-        long long ticks = __fixsfdi(f * tr->_timeScale);
-        biasOld = tr->_timeBias;
-        tr->_timeBias = (ticks << 18) + biasOld;
-        tr->_timeBias -= __fixsfdi(f * zero) << 18;
-        tr->_timeScale = zero;
+    if (((igAnimationStateList *)combiner->_animationStateList)->_count >= 2) igAnimationCombiner_ResetToPose(combiner, 0);
+    int priority = animation->_priority;
+    igAnimationCombiner_AddAnimationBlend(combiner, animation, 1, 1, 1, &priority, 0, transitionTime, blend, 1.0f, 0);
+    long long now = beModelCtrlNode2_LocalTime(ram->_node, ((igInsightCore *)manager->_insight)->_worldTime);
+    igAnimationCombiner_Update(combiner, now);
+    if (((char *)component->_hokanMode)[0] == 'S') {
+        igAnimationState *state = ((igAnimationState **)((igAnimationStateList *)combiner->_animationStateList)->_data)[0];
+        float ticks = (float)(unsigned int)(int)(((igInsightCore *)manager->_insight)->_worldTime >> 18);
+        long long scaled = __fixsfdi(ticks * state->_timeScale);
+        biasOld = state->_timeBias;
+        state->_timeBias = (scaled << 18) + biasOld;
+        state->_timeBias -= __fixsfdi(ticks * zero) << 18;
+        state->_timeScale = zero;
     }
-    if (((char *)arg2->_hokanMode)[1] == 'S') {
-        igAnimationStateList *sl = (igAnimationStateList *)anim->_animationStateList;
-        int idx = sl->_count - 1;
-        igAnimationState *tr = ((igAnimationState **)sl->_data)[idx];
-        float f = (float)(unsigned int)(int)(((igInsightCore *)arg0->_insight)->_worldTime >> 18);
-        long long ticks = __fixsfdi(f * tr->_timeScale);
-        biasOld = tr->_timeBias;
-        tr->_timeBias = (ticks << 18) + biasOld;
-        tr->_timeBias -= __fixsfdi(f * zero) << 18;
-        tr->_timeScale = zero;
+    if (((char *)component->_hokanMode)[1] == 'S') {
+        igAnimationStateList *states = (igAnimationStateList *)combiner->_animationStateList;
+        int last = states->_count - 1;
+        igAnimationState *state = ((igAnimationState **)states->_data)[last];
+        float ticks = (float)(unsigned int)(int)(((igInsightCore *)manager->_insight)->_worldTime >> 18);
+        long long scaled = __fixsfdi(ticks * state->_timeScale);
+        biasOld = state->_timeBias;
+        state->_timeBias = (scaled << 18) + biasOld;
+        state->_timeBias -= __fixsfdi(ticks * zero) << 18;
+        state->_timeScale = zero;
     }
-    igAnimationTrackList *bl = (igAnimationTrackList *)res->_trackList;
-    int isLoop = ((char *)arg2->_loopMode)[0] == 'L';
+    igAnimationTrackList *tracks = (igAnimationTrackList *)animation->_trackList;
+    int isLoop = ((char *)component->_loopMode)[0] == 'L';
     int j;
-    for (j = 0; j < bl->_count; j++) {
-        void *tg = (void *)((igAnimationTrack **)bl->_data)[j]->_source;
-        if (tg != 0) {
-            if (igObject_IsKindOf(tg, g_igEnbayaTransformSource_metaObject[0]) != 0) {
-                igEnbayaAnimationSource *m = (igEnbayaAnimationSource *)((igEnbayaTransformSource *)tg)->_enbayaAnimationSource;
-                if (isLoop) m->_playMode = 0; else m->_playMode = 4;
+    for (j = 0; j < tracks->_count; j++) {
+        void *source = (void *)((igAnimationTrack **)tracks->_data)[j]->_source;
+        if (source != 0) {
+            if (igObject_IsKindOf(source, g_igEnbayaTransformSource_metaObject[0]) != 0) {
+                igEnbayaAnimationSource *enbaya = (igEnbayaAnimationSource *)((igEnbayaTransformSource *)source)->_enbayaAnimationSource;
+                if (isLoop) enbaya->_playMode = 0; else enbaya->_playMode = 4;
                 break;
             } else if (isLoop) {
-                igCompressedAnimationSequenceQS *sq = (igCompressedAnimationSequenceQS *)tg;
-                if (sq->_playMode == 3) break;
-                sq->_playMode = 3;
+                igCompressedAnimationSequenceQS *sequence = (igCompressedAnimationSequenceQS *)source;
+                if (sequence->_playMode == 3) break;
+                sequence->_playMode = 3;
             } else {
-                igCompressedAnimationSequenceQS *sq = (igCompressedAnimationSequenceQS *)tg;
-                if (sq->_playMode == 1) break;
-                sq->_playMode = 1;
+                igCompressedAnimationSequenceQS *sequence = (igCompressedAnimationSequenceQS *)source;
+                if (sequence->_playMode == 1) break;
+                sequence->_playMode = 1;
             }
         }
     }
@@ -768,7 +759,7 @@ int beAction2MOTIONSET_Start(beAction2 *arg0, beAction2InfoRam *arg1, beAction2M
  * exhausted, then saves the position back into work._comIndex. The component kind is identified by
  * comparing its virtual GetMetaObject() result with the published metadata handle of each *_Start
  * handler's class. */
-void beAction2_StartComponents(int manager, void *info)
+void beAction2_StartComponents(beAction2 *manager, beAction2InfoRam *ram)
 {
     beAction2Data *data;
     beAction2InfoWork *work;
@@ -776,7 +767,7 @@ void beAction2_StartComponents(int manager, void *info)
     unsigned char keepGoing;
     Action2Component *component;
 
-    work = (beAction2InfoWork *)((beAction2InfoRam *)info)->_work;
+    work = (beAction2InfoWork *)ram->_work;
     data = (beAction2Data *)work->_comData;
     index = work->_comIndex;
     if (index != ((Action2ComponentList *)((Action2DataGuardView *)data)->_comList)->_count) {
@@ -784,19 +775,19 @@ void beAction2_StartComponents(int manager, void *info)
             keepGoing = true;
             component = (((Action2ComponentList *)data->_comList)->_data)[index];
             if (g_beAction2MOTIONSET_metaObject[0] == component->GetMetaObject()) {
-                keepGoing = beAction2MOTIONSET_Start((beAction2 *)manager, (beAction2InfoRam *)info, (beAction2MOTIONSET *)component) & 0xFF;
+                keepGoing = beAction2MOTIONSET_Start(manager, ram, (beAction2MOTIONSET *)component) & 0xFF;
                 index += 1;
             } else if (g_beAction2JOINTSET_metaObject[0] == component->GetMetaObject()) {
-                keepGoing = beAction2JOINTSET_Start((Owner *)manager, (beAction2InfoRam *)info, (beAction2JOINTSET *)component) & 0xFF;
+                keepGoing = beAction2JOINTSET_Start(manager, ram, (beAction2JOINTSET *)component) & 0xFF;
                 index += 1;
             } else if (g_beAction2FADESET_metaObject[0] == component->GetMetaObject()) {
-                keepGoing = beAction2FADESET_Start(manager, (beAction2InfoRam *)info, (beAction2FADESET *)component) & 0xFF;
+                keepGoing = beAction2FADESET_Start(manager, ram, (beAction2FADESET *)component) & 0xFF;
                 index += 1;
             } else if (g_beAction2WAITCHECK_metaObject[0] == component->GetMetaObject()) {
-                keepGoing = beAction2WAITCHECK_Start((beAction2 *)manager, (beAction2InfoRam *)info, (beAction2WAITCHECK *)component) & 0xFF;
+                keepGoing = beAction2WAITCHECK_Start(manager, ram, (beAction2WAITCHECK *)component) & 0xFF;
                 index += 1;
             } else if (g_beAction2FLASHSET_metaObject[0] == component->GetMetaObject()) {
-                keepGoing = beAction2FLASHSET_Start(manager, (beAction2InfoRam *)info, (beAction2FLASHSET *)component) & 0xFF;
+                keepGoing = beAction2FLASHSET_Start(manager, ram, (beAction2FLASHSET *)component) & 0xFF;
                 index += 1;
             }
         } while ((keepGoing & 0xFF) && index != ((Action2ComponentList *)data->_comList)->_count);
@@ -804,255 +795,258 @@ void beAction2_StartComponents(int manager, void *info)
     work->_comIndex = index;
 }
 
-void Gap__Bec__beAction2__vfunc_31(void *self, beAction2InfoRam *info) {
+/* Slot 31, per frame for each running, unfrozen ram: updates each active component kind. */
+void beAction2_Update(beAction2 *self, beAction2InfoRam *ram) {
     beAction2InfoWork *work;
 
-    if (info->_isRun == 0) {
+    if (ram->_isRun == 0) {
         return;
     }
-    work = (beAction2InfoWork *)info->_work;
+    work = (beAction2InfoWork *)ram->_work;
     if (work->_isFreeze != 0) {
         return;
     }
     if (work->_motionSt0 != 0) {
-        beAction2MOTIONSET_Update((Owner *)self, (Act_377090 *)info);
+        beAction2MOTIONSET_Update(self, ram);
     }
     if (work->_jointSt0 != 0) {
-        beAction2JOINTSET_Update((Owner *)self, (Act *)info);
+        beAction2JOINTSET_Update(self, ram);
     }
     if (work->_fadeSt0 != 0) {
-        beAction2FADESET_Update(self, (beAction2InfoRam *)info);
+        beAction2FADESET_Update(self, ram);
     }
     if (work->_waitSt0 != 0) {
-        beAction2WAITCHECK_Update((beAction2 *)self, (beAction2InfoRam *)info);
+        beAction2WAITCHECK_Update(self, ram);
     }
     if (work->_flashSt0 != 0) {
-        beAction2FLASHSET_Update(self, (beAction2InfoRam *)info);
+        beAction2FLASHSET_Update(self, ram);
     }
 }
 
-inline RP::~RP() { Rc *rr = p; if (rr != 0) { rr->references = rr->references - 1; if ((rr->references & 0x7FFFFF) == 0) { igObject_Destroy(rr); } } }
+inline WorkRef::~WorkRef() {
+    beAction2InfoWork *held = p;
+    if (held != 0) {
+        held->_refCount = held->_refCount - 1;
+        if ((held->_refCount & 0x7FFFFF) == 0) {
+            igObject_Destroy(held);
+        }
+    }
+}
 
-/* the object lists hold 4-byte arena handles: _data is a memory ref */
-
-
-
-
-
-int Gap__Bec__beAction2__vfunc_33(beAction2 *arg0, beAction2InfoRam *arg1, void *arg2)
+/* Slot 33: answers ISCOMEND, ISRUN, GETNAMELIST, GETAPPEARANCELIST and GETBONEMATRIX, freezes and
+ * unfreezes the action on ONFREEZE and OFFREEZE, stops it on NDSP and starts any other name as the
+ * action's data. */
+int beAction2_OnMessage(beAction2 *self, beAction2InfoRam *ram, void *name)
 {
-    RP spBC;
+    WorkRef workRef;
     beAction2Info *info;
     unsigned int ramNo;
-    igBitMask *sw;
-    beAction2InfoWork *w;
+    igBitMask *mask;
 
-    spBC.p = (Rc *)arg1->_work;
-    if (spBC.p != 0) {
-        spBC.p->references = spBC.p->references + 1;
+    workRef.p = (beAction2InfoWork *)ram->_work;
+    if (workRef.p != 0) {
+        workRef.p->_refCount = workRef.p->_refCount + 1;
     }
-    info = (beAction2Info *)arg1->_parentInfo;
-    ramNo = arg1->_ramNo;
-    switch (beMessenger_ResolveEnumValue(arg0->_messenger, FUN_0036dcd0(), arg2)) {
-    case 1:
-        beMessenger_AppendBool(arg0->_messenger, arg1->_isRun);
+    info = (beAction2Info *)ram->_parentInfo;
+    ramNo = ram->_ramNo;
+    switch (beMessenger_ResolveEnumValue(self->_messenger, beAction2_GetMessageEnum(), name)) {
+    case 1: /* ISRUN */
+        beMessenger_AppendBool(self->_messenger, ram->_isRun);
         break;
-    case 0: {
-        beAction2InfoWork *ww = (beAction2InfoWork *)spBC.p;
-        beAction2Data *cd = (beAction2Data *)ww->_comData;
-        int ci = ww->_comIndex;
-        if (ww->_waitSt0 == 0 && ci == ((igObjectList *)cd->_comList)->_count) {
-            beMessenger_AppendBool(arg0->_messenger, 1);
+    case 0: { /* ISCOMEND */
+        beAction2InfoWork *work = workRef.p;
+        beAction2Data *data = (beAction2Data *)work->_comData;
+        int index = work->_comIndex;
+        if (work->_waitSt0 == 0 && index == ((igObjectList *)data->_comList)->_count) {
+            beMessenger_AppendBool(self->_messenger, 1);
         } else {
-            beMessenger_AppendBool(arg0->_messenger, 0);
+            beMessenger_AppendBool(self->_messenger, 0);
         }
         break;
     }
-    case 3:
-        if (arg1->_isRun != 0) {
-            beMessenger_AppendObject(arg0->_messenger, arg1->_appearanceList);
-            beMessenger_AppendObject(arg0->_messenger, LDATA((igObjectList *)((igAnimationDatabase *)info->_animationDatabase)->_skeletonList)[0]);
+    case 3: /* GETAPPEARANCELIST */
+        if (ram->_isRun != 0) {
+            beMessenger_AppendObject(self->_messenger, ram->_appearanceList);
+            beMessenger_AppendObject(self->_messenger, ((int *)((igObjectList *)((igAnimationDatabase *)info->_animationDatabase)->_skeletonList)->_data)[0]);
         }
         break;
-    case 4:
-        if (arg1->_isRun != 0) {
-            int nm = beMessenger_GetString(arg0->_messenger, 0);
-            igActor *a = (igActor *)LDATA((igObjectList *)arg1->_actorList)[0];
-            int idx = ((V *)((int *)a->_animationSystem)[3])->v27(nm);
-            int m;
-            if (a->_actorCacheUsed != 0) {
-                m = a->_boneMatrixCacheArray + (idx << 6);
+    case 4: /* GETBONEMATRIX */
+        if (ram->_isRun != 0) {
+            int boneName = beMessenger_GetString(self->_messenger, 0);
+            igActor *actor = (igActor *)((int *)((igObjectList *)ram->_actorList)->_data)[0];
+            int bone = ((VirtualObject *)((igAnimationCombiner *)actor->_animationSystem)->_animHierarchy)->FindBoneIndex(boneName);
+            int matrix;
+            if (actor->_actorCacheUsed != 0) {
+                matrix = actor->_boneMatrixCacheArray + (bone << 6);
             } else {
-                m = ((V *)a->_animationSystem)->v28(idx);
+                matrix = ((VirtualObject *)actor->_animationSystem)->GetBoneMatrix(bone);
             }
-            beMessenger_AppendMatrix(arg0->_messenger, m);
+            beMessenger_AppendMatrix(self->_messenger, matrix);
         }
         break;
-    case 2: {
-        igObjectList *l = (igObjectList *)info->_dataList_;
-        int n = l->_count;
+    case 2: { /* GETNAMELIST */
+        igObjectList *list = (igObjectList *)info->_dataList_;
+        int count = list->_count;
         int i;
-        for (i = 0; i < n; i++) {
-            void *nm = (void *)((int *)LDATA(l)[i])[2];
-            void *nm2;
-            if (nm != 0) nm2 = nm; else nm2 = &emptyString[0];
-            beMessenger_AppendString(arg0->_messenger, nm2);
+        for (i = 0; i < count; i++) {
+            void *dataName = (void *)((beAction2Data *)((int *)list->_data)[i])->_name;
+            void *text;
+            if (dataName != 0) text = dataName; else text = &emptyString[0];
+            beMessenger_AppendString(self->_messenger, text);
         }
         break;
     }
-    case 5:
-        if (spBC.p != 0) {
-            beModelCtrlNode2 *nd;
-            float f20;
-            int tt;
-            float k = 0.0f;
-            beBaseInfoRam_SetAllTimerScales(arg1, k);
-            tt = (int)(((igInsightCore *)arg0->_insight)->_worldTime >> 0x12);
-            nd = (beModelCtrlNode2 *)arg1->_node;
-            f20 = (float)(unsigned int)tt;
+    case 5: /* ONFREEZE */
+        if (workRef.p != 0) {
+            beModelCtrlNode2 *node;
+            float ticks;
+            int clockTicks;
+            float scale = 0.0f;
+            beBaseInfoRam_SetAllTimerScales(ram, scale);
+            clockTicks = (int)(((igInsightCore *)self->_insight)->_worldTime >> 0x12);
+            node = (beModelCtrlNode2 *)ram->_node;
+            ticks = (float)(unsigned int)clockTicks;
             {
-                long long bias = __fixsfdi(f20 * nd->_timeScale);
+                long long bias = __fixsfdi(ticks * node->_timeScale);
                 bias <<= 18;
-                bias += nd->_timeBias;
-                nd->_timeBias = bias;
+                bias += node->_timeBias;
+                node->_timeBias = bias;
             }
-            nd->_timeBias -= __fixsfdi(f20 * k) << 18;
-            nd->_timeScale = k;
-            ((beAction2InfoWork *)spBC.p)->_isFreeze = 1;
+            node->_timeBias -= __fixsfdi(ticks * scale) << 18;
+            node->_timeScale = scale;
+            workRef.p->_isFreeze = 1;
         }
         break;
-    case 6:
-        if (spBC.p != 0) {
-            beModelCtrlNode2 *nd;
-            float f20;
-            int tt;
-            float k = 1.0f;
-            beBaseInfoRam_SetAllTimerScales(arg1, k);
-            tt = (int)(((igInsightCore *)arg0->_insight)->_worldTime >> 0x12);
-            nd = (beModelCtrlNode2 *)arg1->_node;
-            f20 = (float)(unsigned int)tt;
+    case 6: /* OFFREEZE */
+        if (workRef.p != 0) {
+            beModelCtrlNode2 *node;
+            float ticks;
+            int clockTicks;
+            float scale = 1.0f;
+            beBaseInfoRam_SetAllTimerScales(ram, scale);
+            clockTicks = (int)(((igInsightCore *)self->_insight)->_worldTime >> 0x12);
+            node = (beModelCtrlNode2 *)ram->_node;
+            ticks = (float)(unsigned int)clockTicks;
             {
-                long long bias = __fixsfdi(f20 * nd->_timeScale);
+                long long bias = __fixsfdi(ticks * node->_timeScale);
                 bias <<= 18;
-                bias += nd->_timeBias;
-                nd->_timeBias = bias;
+                bias += node->_timeBias;
+                node->_timeBias = bias;
             }
-            nd->_timeBias -= __fixsfdi(f20 * k) << 18;
-            nd->_timeScale = k;
-            ((beAction2InfoWork *)spBC.p)->_isFreeze = 0;
+            node->_timeBias -= __fixsfdi(ticks * scale) << 18;
+            node->_timeScale = scale;
+            workRef.p->_isFreeze = 0;
         }
         break;
     default:
-        sw = (igBitMask *)((int *)info->_switch)[8];
-        if (strcmp(arg2, &DAT_0050dfe8[0]) == 0) {
-            igObjectList *l = (igObjectList *)((beModelCtrlNode2 *)arg1->_node)->_overrideAttrList;
-            int n = l->_count;
+        mask = (igBitMask *)((igSwitch *)info->_switch)->_childMask;
+        if (strcmp(name, &NDSP[0]) == 0) {
+            igObjectList *list = (igObjectList *)((beModelCtrlNode2 *)ram->_node)->_overrideAttrList;
+            int count = list->_count;
             int i;
-            int n2;
+            int count2;
             int j;
-            for (i = 0; i < n; i++) {
-                Rc *o = (Rc *)LDATA(l)[i];
-                REL(o)
+            for (i = 0; i < count; i++) {
+                { igObject *held = (igObject *)((int *)list->_data)[i]; IG_OBJECT_RELEASE(held); }
             }
             j = 0;
-            n2 = l->_count;
-            for (; j < n2; j++) {
-                LDATA(l)[j] = 0;
+            count2 = list->_count;
+            for (; j < count2; j++) {
+                ((int *)list->_data)[j] = 0;
             }
-            l->_count = 0;
-            int pos = ((igObjectList *)((beModelCtrlNode2 *)arg1->_node)->_overrideAttrList)->_count > 0;
-            if (!pos) {
-                List_Reserve((void *)((beModelCtrlNode2 *)arg1->_node)->_overrideAttrList, 0, 4);
+            list->_count = 0;
+            int nonEmpty = ((igObjectList *)((beModelCtrlNode2 *)ram->_node)->_overrideAttrList)->_count > 0;
+            if (!nonEmpty) {
+                List_Reserve((void *)((beModelCtrlNode2 *)ram->_node)->_overrideAttrList, 0, 4);
             }
-            BITCLR(ramNo)
-            { Rc *o = (Rc *)arg1->_work; REL(o) }
-            arg1->_work = 0;
-            beBaseInfoRam_RemoveAllTimers(arg1);
-            arg1->_isRun = 0;
+            ClearMaskBit(mask, ramNo);
+            { igObject *held = (igObject *)ram->_work; IG_OBJECT_RELEASE(held); }
+            ram->_work = 0;
+            beBaseInfoRam_RemoveAllTimers(ram);
+            ram->_isRun = 0;
             if (info->_animationDatabase != 0) {
-                igObjectList *dl = (igObjectList *)((igAnimationDatabase *)info->_animationDatabase)->_combinerList;
-                int an;
+                igObjectList *combiners = (igObjectList *)((igAnimationDatabase *)info->_animationDatabase)->_combinerList;
+                int actorCount;
                 int k;
-                igMetaField *fl;
-                igMetaField *fl2;
-                V *ac;
-                int pv;
-                int pv2;
-                if (dl != 0) {
-                    FUN_001adf70(LDATA(dl)[arg1->_ramNo]);
+                igMetaField *field;
+                igMetaField *field2;
+                VirtualObject *actor;
+                int buffer;
+                int buffer2;
+                if (combiners != 0) {
+                    igAnimationCombiner_RemoveAllStates(((int *)combiners->_data)[ram->_ramNo]);
                 }
-                an = ((igObjectList *)arg1->_actorList)->_count;
-                for (k = 0; k < an; k++) {
-                    ac = (V *)LDATA((igObjectList *)arg1->_actorList)[k];
-                    fl = (igMetaField *)igMetaObject_FindFieldByName(ac->v22(), &DAT_0050dff0[0]);
-                    pv = *(int *)((char *)ac + fl->_offset);
-                    if (pv != 0) {
-                        Memory_FreeBuffer(pv);
-                        *(int *)((char *)ac + fl->_offset) = 0;
+                actorCount = ((igObjectList *)ram->_actorList)->_count;
+                for (k = 0; k < actorCount; k++) {
+                    actor = (VirtualObject *)((int *)((igObjectList *)ram->_actorList)->_data)[k];
+                    field = (igMetaField *)igMetaObject_FindFieldByName(actor->GetMetaObject(), &boneMatrixCacheArray[0]);
+                    buffer = *(int *)((char *)actor + field->_offset);
+                    if (buffer != 0) {
+                        Memory_FreeBuffer(buffer);
+                        *(int *)((char *)actor + field->_offset) = 0;
                     }
-                    fl2 = (igMetaField *)igMetaObject_FindFieldByName(ac->v22(), &DAT_0050e010[0]);
-                    pv2 = *(int *)((char *)ac + fl2->_offset);
-                    if (pv2 != 0) {
-                        Memory_FreeBuffer(pv2);
-                        *(int *)((char *)ac + fl2->_offset) = 0;
+                    field2 = (igMetaField *)igMetaObject_FindFieldByName(actor->GetMetaObject(), &blendMatrixCacheArray[0]);
+                    buffer2 = *(int *)((char *)actor + field2->_offset);
+                    if (buffer2 != 0) {
+                        Memory_FreeBuffer(buffer2);
+                        *(int *)((char *)actor + field2->_offset) = 0;
                     }
                 }
             }
             return 1;
         }
-        if (spBC.p == 0) {
-            void *alloc = ((void *)igObject_GetAllocator(arg0));
-            Rc *t;
-            alloc = GPR_00554c14 ? alloc : ((void *)Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]));
-            { Rc *o = spBC.p; REL(o) }
-            spBC.p = (Rc *)FUN_0036c2a0(alloc);
-            t = spBC.p;
-            if (t != 0) t->references = t->references + 1;
-            { Rc *o = (Rc *)arg1->_work; REL(o) }
-            arg1->_work = (int)t;
+        if (workRef.p == 0) {
+            void *allocator = ((void *)igObject_GetAllocator(self));
+            beAction2InfoWork *created;
+            allocator = g_useOwnerAllocator ? allocator : ((void *)Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]));
+            { beAction2InfoWork *held = workRef.p; IG_OBJECT_RELEASE(held); }
+            workRef.p = (beAction2InfoWork *)beAction2InfoWork_CreateInstance(allocator);
+            created = workRef.p;
+            if (created != 0) created->_refCount = created->_refCount + 1;
+            { igObject *held = (igObject *)ram->_work; IG_OBJECT_RELEASE(held); }
+            ram->_work = (int)created;
         }
-        if (arg1->_isRun == 0) {
-            beAction2InfoWork *ww;
-            arg1->_isRun = 1;
-            ww = (beAction2InfoWork *)spBC.p; ww->_motionSt0 = 0;
-            ww = (beAction2InfoWork *)spBC.p; ww->_fadeSt0 = 0;
-            ww = (beAction2InfoWork *)spBC.p; ww->_waitSt0 = 0;
-            BITSET(ramNo)
-            ((beAction2InfoWork *)spBC.p)->_isNoHokan = 1;
+        if (ram->_isRun == 0) {
+            ram->_isRun = 1;
+            workRef.p->_motionSt0 = 0;
+            workRef.p->_fadeSt0 = 0;
+            workRef.p->_waitSt0 = 0;
+            SetMaskBit(mask, ramNo);
+            workRef.p->_isNoHokan = 1;
             if (info->_animationDatabase != 0) {
-                igObjectList *dl = (igObjectList *)((igAnimationDatabase *)info->_animationDatabase)->_combinerList;
-                if (dl != 0) {
-                    igAnimationCombiner *s5 = (igAnimationCombiner *)LDATA(dl)[arg1->_ramNo];
-                    int an;
+                igObjectList *combiners = (igObjectList *)((igAnimationDatabase *)info->_animationDatabase)->_combinerList;
+                if (combiners != 0) {
+                    igAnimationCombiner *combiner = (igAnimationCombiner *)((int *)combiners->_data)[ram->_ramNo];
+                    int actorCount;
                     int k;
-                    s5->_animationStateTime = 0x05F5E100;
-                    an = ((igObjectList *)arg1->_actorList)->_count;
-                    for (k = 0; k < an; k++) {
-                        igActor *ac = (igActor *)LDATA((igObjectList *)arg1->_actorList)[k];
-                        int nz = ac->_boneMatrixCacheArray != 0;
-                        if (nz) break;
-                        FUN_00239070(ac, s5);
+                    combiner->_animationStateTime = 100000000;
+                    actorCount = ((igObjectList *)ram->_actorList)->_count;
+                    for (k = 0; k < actorCount; k++) {
+                        igActor *actor = (igActor *)((int *)((igObjectList *)ram->_actorList)->_data)[k];
+                        int hasCache = actor->_boneMatrixCacheArray != 0;
+                        if (hasCache) break;
+                        igActor_SetAnimationSystem(actor, combiner);
                     }
-                    FUN_001ae750(s5, LDATA((igObjectList *)((igAnimationDatabase *)info->_animationDatabase)->_animationList)[0], 0, 4, 0);
+                    igAnimationCombiner_AddAnimation(combiner, ((int *)((igObjectList *)((igAnimationDatabase *)info->_animationDatabase)->_animationList)->_data)[0], 0, 4, 0);
                 }
             }
         } else {
-            BITSET(ramNo)
-            ((beAction2InfoWork *)spBC.p)->_isNoHokan = 0;
+            SetMaskBit(mask, ramNo);
+            workRef.p->_isNoHokan = 0;
         }
         {
-            int prop = (int)igProperty_FindByName(info->_dataList_, g_propertyNameField[0], arg2);
-            beAction2InfoWork *cur = (beAction2InfoWork *)spBC.p;
-            if (cur->_comData != prop) {
-                if (prop != 0) ((Rc *)prop)->references = ((Rc *)prop)->references + 1;
-                { Rc *o = (Rc *)cur->_comData; REL(o) }
-                cur->_comData = prop;
-                ((beAction2InfoWork *)spBC.p)->_comIndex = 0;
-                beAction2_StartComponents((int)arg0, arg1);
-                int rn = arg1->_ramNo;
-                void *pn;
-                if (info->_name != 0) pn = (void *)info->_name; else pn = &emptyString[0];
-                beMessenger_SendNamed(arg0->_messenger, &DAT_0050e030[0], pn, rn, arg2);
+            int data = (int)igProperty_FindByName(info->_dataList_, g_propertyNameField[0], (int)name);
+            beAction2InfoWork *work = workRef.p;
+            if (work->_comData != data) {
+                if (data != 0) ((igObject *)data)->_refCount = ((igObject *)data)->_refCount + 1;
+                { igObject *held = (igObject *)work->_comData; IG_OBJECT_RELEASE(held); }
+                work->_comData = data;
+                workRef.p->_comIndex = 0;
+                beAction2_StartComponents(self, ram);
+                int ramNumber = ram->_ramNo;
+                void *infoName;
+                if (info->_name != 0) infoName = (void *)info->_name; else infoName = &emptyString[0];
+                beMessenger_SendNamed(self->_messenger, &ACTION_BROADCAST[0], infoName, ramNumber, name);
             }
         }
         break;
@@ -1060,7 +1054,7 @@ int Gap__Bec__beAction2__vfunc_33(beAction2 *arg0, beAction2InfoRam *arg1, void 
     return 1;
 }
 
-int Gap__Bec__beAction2__vfunc_20(void)
+int beAction2_GetMeta(void)
 {
     return g_beAction2_metaObject[0];
 }

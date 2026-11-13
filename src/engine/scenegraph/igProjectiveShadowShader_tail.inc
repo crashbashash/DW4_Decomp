@@ -1,13 +1,13 @@
 void FUN_001d4180(void) {
     DAT_005628d8[0] = FUN_00132810(Memory_GetAllocatorBySelector(DAT_00587038[0]));
-    DAT_005627e8[0] = FUN_00131390(Memory_GetAllocatorBySelector(DAT_00587038[0]));
-    DAT_005627f0[0] = FUN_00131390(Memory_GetAllocatorBySelector(DAT_00587038[0]));
-    DAT_005627f8[0] = FUN_00131390(Memory_GetAllocatorBySelector(DAT_00587038[0]));
+    DAT_005627e8[0] = igTextureStateAttr_CreateInstance(Memory_GetAllocatorBySelector(DAT_00587038[0]));
+    DAT_005627f0[0] = igTextureStateAttr_CreateInstance(Memory_GetAllocatorBySelector(DAT_00587038[0]));
+    DAT_005627f8[0] = igTextureStateAttr_CreateInstance(Memory_GetAllocatorBySelector(DAT_00587038[0]));
     DAT_00562800[0] = FUN_00139ed0(Memory_GetAllocatorBySelector(DAT_00587038[0]));
     DAT_00562808[0] = FUN_00139ed0(Memory_GetAllocatorBySelector(DAT_00587038[0]));
-    DAT_00562810[0] = FUN_00139600(Memory_GetAllocatorBySelector(DAT_00587038[0]));
-    DAT_00562818[0] = FUN_00139600(Memory_GetAllocatorBySelector(DAT_00587038[0]));
-    DAT_00562820[0] = FUN_00135e20(Memory_GetAllocatorBySelector(DAT_00587038[0]));
+    DAT_00562810[0] = igBlendStateAttr_CreateInstance(Memory_GetAllocatorBySelector(DAT_00587038[0]));
+    DAT_00562818[0] = igBlendStateAttr_CreateInstance(Memory_GetAllocatorBySelector(DAT_00587038[0]));
+    DAT_00562820[0] = igLightingStateAttr_CreateInstance(Memory_GetAllocatorBySelector(DAT_00587038[0]));
     DAT_00562838[0] = FUN_00139370(Memory_GetAllocatorBySelector(DAT_00587038[0]));
     DAT_00562840[0] = FUN_00139370(Memory_GetAllocatorBySelector(DAT_00587038[0]));
     DAT_00562848[0] = FUN_00139370(Memory_GetAllocatorBySelector(DAT_00587038[0]));

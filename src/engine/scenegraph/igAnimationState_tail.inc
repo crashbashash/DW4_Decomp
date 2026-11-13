@@ -1,6 +1,6 @@
 #undef CAST_INLINE
 
-void FUN_001af510(igAnimationState *s, long long t) {
+void igAnimationState_UpdateLocalTime(igAnimationState *s, long long t) {
     long long r; float x;
     if (DAT_0048d8c0 != t || DAT_0048d8c8 != s->_timeScale) {
         x = (float)(unsigned int)(int)(t >> 18);

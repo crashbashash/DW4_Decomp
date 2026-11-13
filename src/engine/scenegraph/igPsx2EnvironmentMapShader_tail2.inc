@@ -51,28 +51,28 @@ void Gap__Sg__igPsx2EnvironmentMapShader__vfunc_49(void) {
     if (((T_1e08b0 * *)DAT_00562a98)[0] == 0) {
         temp_s0_5 = Memory_GetAllocatorBySelector(DAT_00587038[0]);
         Rel::go(((T_1e08b0 * *)DAT_00562a98)[0]);
-        ((T_1e08b0 * *)DAT_00562a98)[0] = (T_1e08b0 *)(((T_1e08b0 *)FUN_00131390(temp_s0_5)));
+        ((T_1e08b0 * *)DAT_00562a98)[0] = (T_1e08b0 *)(((T_1e08b0 *)igTextureStateAttr_CreateInstance(temp_s0_5)));
         ((DW4VC_128_1 *)((T_1e08b0 * *)DAT_00562a98)[0])->vX(1);
         ((DW4VC_100_1 *)((T_1e08b0 * *)DAT_00562a98)[0])->vX(1);
     }
     if (DAT_00562ab0[0] == 0) {
         temp_s0_6 = Memory_GetAllocatorBySelector(DAT_00587038[0]);
         Rel::go(DAT_00562ab0[0]);
-        DAT_00562ab0[0] = (T_1e08b0 *)(((T_1e08b0 *)FUN_00131390(temp_s0_6)));
+        DAT_00562ab0[0] = (T_1e08b0 *)(((T_1e08b0 *)igTextureStateAttr_CreateInstance(temp_s0_6)));
         ((DW4VC_128_1 *)DAT_00562ab0[0])->vX(1);
         ((DW4VC_100_1 *)DAT_00562ab0[0])->vX(2);
     }
     if (((T_1e08b0 * *)DAT_00562ac8)[0] == 0) {
         temp_s0_7 = Memory_GetAllocatorBySelector(DAT_00587038[0]);
         Rel::go(((T_1e08b0 * *)DAT_00562ac8)[0]);
-        ((T_1e08b0 * *)DAT_00562ac8)[0] = (T_1e08b0 *)(((T_1e08b0 *)FUN_00131390(temp_s0_7)));
+        ((T_1e08b0 * *)DAT_00562ac8)[0] = (T_1e08b0 *)(((T_1e08b0 *)igTextureStateAttr_CreateInstance(temp_s0_7)));
         ((DW4VC_128_1 *)((T_1e08b0 * *)DAT_00562ac8)[0])->vX(0);
         ((DW4VC_100_1 *)((T_1e08b0 * *)DAT_00562ac8)[0])->vX(1);
     }
     if (DAT_00562ae0[0] == 0) {
         temp_s0_8 = Memory_GetAllocatorBySelector(DAT_00587038[0]);
         Rel::go(DAT_00562ae0[0]);
-        DAT_00562ae0[0] = (T_1e08b0 *)(((T_1e08b0 *)FUN_00131390(temp_s0_8)));
+        DAT_00562ae0[0] = (T_1e08b0 *)(((T_1e08b0 *)igTextureStateAttr_CreateInstance(temp_s0_8)));
         ((DW4VC_128_1 *)DAT_00562ae0[0])->vX(0);
         ((DW4VC_100_1 *)DAT_00562ae0[0])->vX(2);
     }

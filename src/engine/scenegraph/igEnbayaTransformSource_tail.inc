@@ -88,16 +88,16 @@ void FUN_001c1e10(void) {
     int temp_s0;
 
     if (((void * * *)DAT_00562730)[0] == 0) {
-        ((void * * *)DAT_00562730)[0] = (void **)(((void * *)FUN_00131390(Memory_GetAllocatorBySelector(DAT_00587038[0]))));
+        ((void * * *)DAT_00562730)[0] = (void **)(((void * *)igTextureStateAttr_CreateInstance(Memory_GetAllocatorBySelector(DAT_00587038[0]))));
         ((DW4VC_128_1 *)(((void * * *)DAT_00562730)[0]))->vX((int)(1));
         ((DW4VC_100_1 *)(((void * * *)DAT_00562730)[0]))->vX((int)(0));
     }
     if (((void * * *)DAT_00562738)[0] == 0) {
-        ((void * * *)DAT_00562738)[0] = (void **)(((void * *)FUN_00139600(Memory_GetAllocatorBySelector(DAT_00587038[0]))));
+        ((void * * *)DAT_00562738)[0] = (void **)(((void * *)igBlendStateAttr_CreateInstance(Memory_GetAllocatorBySelector(DAT_00587038[0]))));
         ((DW4VC_128_1 *)(((void * * *)DAT_00562738)[0]))->vX((int)(1));
     }
     if (DAT_00562740[0] == 0) {
-        DAT_00562740[0] = (void **)(((void * *)FUN_00139600(Memory_GetAllocatorBySelector(DAT_00587038[0]))));
+        DAT_00562740[0] = (void **)(((void * *)igBlendStateAttr_CreateInstance(Memory_GetAllocatorBySelector(DAT_00587038[0]))));
         ((DW4VC_128_1 *)(DAT_00562740[0]))->vX((int)(0));
     }
     if (((T_1c1e10 * *)DAT_00562758)[0] == 0) {

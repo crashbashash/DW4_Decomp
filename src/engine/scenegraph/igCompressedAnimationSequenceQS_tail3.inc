@@ -36,8 +36,8 @@ void FUN_001bf7d0(QSSequenceView *o, unsigned char *before, unsigned char *after
     if (end < time) {
         switch (o->_playMode) {
         case 1: *after = 1; return;
-        case 3: case 0: FUN_001dd4b0(time - first, o->_animationDuration, &rem); time = first + rem; if (o->_lastTime != 1 && time < o->keyTime(o->_lastTime - 1)) { o->_lastTime = 1; } break;
-        case 2: { unsigned long long cycle = (unsigned long long)(unsigned int)FUN_001dd4b0(time - first, o->_animationDuration, &rem); if ((int)cycle & 1) { time = end - rem; } else { time = first + rem; } } break;
+        case 3: case 0: UnsignedDivMod64_Cached(time - first, o->_animationDuration, &rem); time = first + rem; if (o->_lastTime != 1 && time < o->keyTime(o->_lastTime - 1)) { o->_lastTime = 1; } break;
+        case 2: { unsigned long long cycle = (unsigned long long)(unsigned int)UnsignedDivMod64_Cached(time - first, o->_animationDuration, &rem); if ((int)cycle & 1) { time = end - rem; } else { time = first + rem; } } break;
         default: *before = 1; return;
         }
     } else if (time < first) {

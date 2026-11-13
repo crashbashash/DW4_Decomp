@@ -999,7 +999,7 @@
 00131250 000074 igTextureUnloadAttr_Register
 001312d0 000008 thunk_igTextureUnloadAttr_GetMetaObject
 001312e0 0000ac igTextureUnloadAttr_InitFields
-00131390 000034 FUN_00131390
+00131390 000034 igTextureStateAttr_CreateInstance
 001313d0 000048 FUN_001313d0
 00131420 000048 igTextureStateAttr_GetMetaObject
 00131470 00003c igTextureStateAttr_GetVTable
@@ -1213,7 +1213,7 @@
 00135c80 00006c igMaterialAttr_Register
 00135cf0 000008 thunk_igMaterialAttr_GetMetaObject
 00135d00 000120 igMaterialAttr_InitFields
-00135e20 000034 FUN_00135e20
+00135e20 000034 igLightingStateAttr_CreateInstance
 00135e60 000048 FUN_00135e60
 00135eb0 000048 igLightingStateAttr_GetMetaObject
 00135f00 00003c igLightingStateAttr_GetVTable
@@ -1347,7 +1347,7 @@
 00138d90 00006c igColorMaskAttr_Register
 00138e00 000008 thunk_igColorMaskAttr_GetMetaObject
 00138e10 0000d0 igColorMaskAttr_InitFields
-00138ee0 000034 FUN_00138ee0
+00138ee0 000034 igColorAttr_CreateInstance
 00138f20 000048 FUN_00138f20
 00138f70 000048 igColorAttr_GetMetaObject
 00138fc0 00003c igColorAttr_GetVTable
@@ -1369,7 +1369,7 @@
 00139450 00006c igClearAttr_Register
 001394c0 000008 thunk_igClearAttr_GetMetaObject
 001394d0 00012c igClearAttr_InitFields
-00139600 000034 FUN_00139600
+00139600 000034 igBlendStateAttr_CreateInstance
 00139640 000048 FUN_00139640
 00139690 000048 igBlendStateAttr_GetMetaObject
 001396e0 00003c igBlendStateAttr_GetVTable
@@ -3879,7 +3879,7 @@
 00192fc0 000128 FUN_00192fc0
 001930f0 0000bc FUN_001930f0
 001931b0 000390 FUN_001931b0
-00193540 000708 FUN_00193540
+00193540 000708 Color4f_Unpack
 00193c50 0000b0 FUN_00193c50
 00193d00 00000c Gap__igVec4ucMetaField__vfunc_22 Gap::igVec4ucMetaField::vfunc_22
 00193d10 00000c Gap__igVec4ucMetaField__vfunc_23 Gap::igVec4ucMetaField::vfunc_23
@@ -4937,7 +4937,7 @@
 001abdf0 0000d4 FUN_001abdf0
 001abed0 000170 FUN_001abed0
 001ac040 000100 FUN_001ac040
-001ac140 0009c8 FUN_001ac140
+001ac140 0009c8 igAnimationCombiner_Update
 001acb10 000040 FUN_001acb10
 001acb50 0001d0 FUN_001acb50
 001acd20 0005d4 Gap__Sg__igAnimationCombiner__vfunc_24 Gap::Sg::igAnimationCombiner::vfunc_24
@@ -4951,21 +4951,21 @@
 001ad860 00012c FUN_001ad860
 001ad990 000528 FUN_001ad990
 001adec0 0000a4 FUN_001adec0
-001adf70 00022c FUN_001adf70
+001adf70 00022c igAnimationCombiner_RemoveAllStates
 001ae1a0 000010 FUN_001ae1a0
 001ae1b0 000014 FUN_001ae1b0
 001ae1d0 000078 FUN_001ae1d0
 001ae250 000078 FUN_001ae250
 001ae2d0 000384 FUN_001ae2d0
-001ae660 000088 FUN_001ae660
+001ae660 000088 igAnimationCombiner_AddAnimationBlend
 001ae6f0 000044 Gap__Sg__igAnimationCombiner__vfunc_10 Gap::Sg::igAnimationCombiner::vfunc_10
 001ae740 00000c Gap__Sg__igAnimationCombiner__vfunc_23 Gap::Sg::igAnimationCombiner::vfunc_23
-001ae750 000028 FUN_001ae750
-001ae780 0002dc FUN_001ae780
+001ae750 000028 igAnimationCombiner_AddAnimation
+001ae780 0002dc igAnimationCombiner_ResetToPose
 001aea60 000368 Gap__Sg__igAnimationDatabase__vfunc_24 Gap::Sg::igAnimationDatabase::vfunc_24
 001aedd0 000208 FUN_001aedd0
 001aefe0 00052c Gap__Sg__igAnimationDatabase__vfunc_23 Gap::Sg::igAnimationDatabase::vfunc_23
-001af510 0000c8 FUN_001af510
+001af510 0000c8 igAnimationState_UpdateLocalTime
 001af5e0 000008 Gap__Sg__igAnimationState__vfunc_23 Gap::Sg::igAnimationState::vfunc_23
 001af5f0 000008 Gap__Sg__igAnimationState__vfunc_24 Gap::Sg::igAnimationState::vfunc_24
 001af600 000008 Gap__Sg__igAnimationState__vfunc_25 Gap::Sg::igAnimationState::vfunc_25
@@ -5467,7 +5467,7 @@
 001dd250 00011c FUN_001dd250
 001dd370 000064 FUN_001dd370
 001dd3e0 0000d0 FUN_001dd3e0
-001dd4b0 0000c0 FUN_001dd4b0
+001dd4b0 0000c0 UnsignedDivMod64_Cached
 001dd570 00011c Gap__Sg__igTransformSequence1_5__vfunc_66 Gap::Sg::igTransformSequence1_5::vfunc_66
 001dd690 000028 Gap__Sg__igTransformSequence1_5__vfunc_45 Gap::Sg::igTransformSequence1_5::vfunc_45
 001dd6c0 000158 Gap__Sg__igTransformSequence1_5__vfunc_20 Gap::Sg::igTransformSequence1_5::vfunc_20
@@ -6979,7 +6979,7 @@
 00238ee0 000074 igSearchSceneGraph_Register
 00238f60 000008 thunk_igSearchSceneGraph_GetMetaObject
 00238f70 0000f8 igSearchSceneGraph_InitFields
-00239070 000188 FUN_00239070
+00239070 000188 igActor_SetAnimationSystem
 00239200 000080 FUN_00239200
 00239280 000080 FUN_00239280
 00239300 000080 FUN_00239300
@@ -16353,7 +16353,7 @@
 0036c1f0 000020 FUN_0036c1f0
 0036c210 000064 beActionStarter_Register
 0036c280 00001c beActionStarter_GetMetaObject
-0036c2a0 000034 FUN_0036c2a0
+0036c2a0 000034 beAction2InfoWork_CreateInstance
 0036c2e0 000044 FUN_0036c2e0
 0036c330 00004c FUN_0036c330
 0036c380 0000cc beAction2InfoWork_GetVTable
@@ -16423,7 +16423,7 @@
 0036db90 000074 beAction2Data_Register
 0036dc10 00001c beAction2Data_GetMetaObject
 0036dc30 000098 beAction2Data_InitFields
-0036dcd0 000054 FUN_0036dcd0
+0036dcd0 000054 beAction2_GetMessageEnum
 0036dd30 000034 FUN_0036dd30
 0036dd70 000044 FUN_0036dd70
 0036ddc0 00004c FUN_0036ddc0
@@ -16901,9 +16901,9 @@
 00375cf0 00009c BLPcalcKoukaMagic
 00375d90 000060 LISsetDifficultMax
 00375df0 00000c Gap__Bec__be__vfunc_20 Gap::Bec::be::vfunc_20
-00375e00 000008 Gap__Bec__beAction2__vfunc_32 Gap::Bec::beAction2::vfunc_32
-00375e10 00000c Gap__Bec__beAction2__vfunc_30 Gap::Bec::beAction2::vfunc_30
-00375e20 000044 Gap__Bec__beAction2__vfunc_29 Gap::Bec::beAction2::vfunc_29
+00375e00 000008 beAction2_Prepare
+00375e10 00000c beAction2_GetInfoMeta
+00375e20 000044 beAction2_RegisterReceiver
 00375e70 000178 beAction2FLASHSET_Update
 00375ff0 000350 beAction2FLASHSET_Start
 00376340 000174 beAction2WAITCHECK_Update
@@ -16915,9 +16915,9 @@
 00377090 0002a8 beAction2MOTIONSET_Update
 00377340 0003c0 beAction2MOTIONSET_Start
 00377700 0001c8 beAction2_StartComponents
-003778d0 0000c0 Gap__Bec__beAction2__vfunc_31 Gap::Bec::beAction2::vfunc_31
-00377990 000a54 Gap__Bec__beAction2__vfunc_33 Gap::Bec::beAction2::vfunc_33
-003783f0 00000c Gap__Bec__beAction2__vfunc_20 Gap::Bec::beAction2::vfunc_20
+003778d0 0000c0 beAction2_Update
+00377990 000a54 beAction2_OnMessage
+003783f0 00000c beAction2_GetMeta
 00378400 000008 Gap__Core__igObject__vfunc_28 Gap::Core::igObject::vfunc_28
 00378410 000008 Gap__Core__igObject__vfunc_34 Gap::Core::igObject::vfunc_34
 00378420 000008 Gap__Bec__beActionStarter__vfunc_32 Gap::Bec::beActionStarter::vfunc_32

@@ -4432,6 +4432,14 @@
 0x0050df60	P2PKOUKAMAGIC	string-literal
 0x0050df70	LOADINTF2	string-literal
 0x0050df80	SETDIFFICULTMAX	string-literal
+0x0050dfc8	ACTION	string-literal
+0x0050dfd0	FLASH	string-literal
+0x0050dfd8	WAIT	string-literal
+0x0050dfe0	FADE	string-literal
+0x0050dfe8	NDSP	string-literal
+0x0050dff0	boneMatrixCacheArray	string-literal
+0x0050e010	blendMatrixCacheArray	string-literal
+0x0050e030	ACTION_BROADCAST	string-literal
 0x0050e400	BECRUNTIME	string-literal
 0x0050e410	AdxModulePath	string-literal
 0x0050e420	g_adxModulePathDefault	recovered-global
@@ -5477,6 +5485,7 @@
 0x00562480	g_igActorList_metaObject	class-handle
 0x00562488	g_igActor_metaObject	class-handle
 0x005624f8	g_igPsx2EnvironmentMapShader_metaObject	class-handle
+0x005626e0	g_enbayaPlayOnceEndOffset	recovered-global
 0x00562b60	g_igLongStack_metaObject	class-handle
 0x00562b70	g_igRandomNumber_metaObject	class-handle
 0x00562b78	g_igNonRefCountedObjectStack_metaObject	class-handle
@@ -6288,6 +6297,7 @@
 0x0058a330	g_damageResult	recovered-global
 0x0058a338	g_attackZokusei	recovered-global
 0x0058a340	g_damageFlag	recovered-global
+0x0058a348	g_randomWaitMinimum	recovered-global
 0x0058a350	g_savedIgFileAbstractProxy	recovered-global
 0x0058a360	g_sfpPortSizes	recovered-global
 0x0058a460	g_sfpTransferState	recovered-global

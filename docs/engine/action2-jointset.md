@@ -1,17 +1,51 @@
-# `beAction2` JOINTSET handlers
+# `beAction2`: action components and messages
 
-The `beAction2` component block contains paired `JOINTSET` start/update handlers at
-`0x00376f40` and `0x00376de0`. Their data layout is recovered from the reflection records and
-the retail field accesses; the handlers are the reference semantics for the other component
-types.
+`beAction2` plays a model's actions: each running `beAction2InfoRam` walks the components of one
+`beAction2Data` (MOTIONSET, JOINTSET, FADESET, WAITCHECK, FLASHSET) and updates the started ones every
+frame. The paired `JOINTSET` start/update handlers at `0x00376f40` and `0x00376de0` are the reference
+semantics for the other component types.
 
-`beAction2JOINTSET` stores a time range in seconds (`_startTime` at `+0x0c`, `_endTime` at
+## Source
+
+`src/game/beAction2.cpp` is one translation unit, `bec_beAction2` (`0x00375e00`–`0x00378420`),
+compiled whole under the `-O4,p -inline level=8,bottomup` profile.
+
+| Start | Bytes | Symbol | Role |
+|---|---:|---|---|
+| `0x00375e00` | 8 | `beAction2_Prepare` | empty (slot 32, which `beBaseInfoManager` calls before it starts and before it drops its infos) |
+| `0x00375e10` | 12 | `beAction2_GetInfoMeta` | returns the `beAction2Info` meta object (slot 30) |
+| `0x00375e20` | 68 | `beAction2_RegisterReceiver` | registers the ram as receiver of `ACTION`, clears `_isRun`, sets `g_enbayaPlayOnceEndOffset` to −1/30 (slot 29) |
+| `0x00375e70` | 376 | `beAction2FLASHSET_Update` | when the `FLASH` timer expires, removes the flash's override attributes from the node |
+| `0x00375ff0` | 848 | `beAction2FLASHSET_Start` | colour, texture-state and lighting-state overrides; red and green to 1.0, texturing and lighting off, a four-frame `FLASH` timer |
+| `0x00376340` | 372 | `beAction2WAITCHECK_Update` | see [timing](action2-timing.md#waitcheck) |
+| `0x003764c0` | 448 | `beAction2WAITCHECK_Start` | see [timing](action2-timing.md#waitcheck) |
+| `0x00376680` | 684 | `beAction2FADESET_Update` | steps the alpha by the `FADE` timer's frame delta: in up to the limit (then removes the overrides), or out to zero |
+| `0x00376930` | 1,200 | `beAction2FADESET_Start` | `H…` clears the ram's bit in the info switch's `_childMask`; otherwise colour, blend-state and lighting-state overrides and a fade in (`I…`) or out |
+| `0x00376de0` | 340 | `beAction2JOINTSET_Update` | below |
+| `0x00376f40` | 324 | `beAction2JOINTSET_Start` | below |
+| `0x00377090` | 680 | `beAction2MOTIONSET_Update` | waits a frame, updates the combiner while it blends, then moves the remaining state onto the node's time scale |
+| `0x00377340` | 960 | `beAction2MOTIONSET_Start` | plays the named animation on the ram's combiner with a hokan (transition) blend; hokan mode `S` freezes the outgoing/incoming state, loop mode `L` loops |
+| `0x00377700` | 456 | `beAction2_StartComponents` | the component walker |
+| `0x003778d0` | 192 | `beAction2_Update` | the per-frame driver (slot 31) |
+| `0x00377990` | 2,644 | `beAction2_OnMessage` | message handler (slot 33) |
+| `0x003783f0` | 12 | `beAction2_GetMeta` | returns the `beAction2` meta object (slot 20) |
+| `0x00378400` | 8 | `Gap::Core::igObject::vfunc_28` | shared empty default |
+| `0x00378410` | 8 | `Gap::Core::igObject::vfunc_34` | shared default returning 0 |
+
+The attribute objects come from `igColorAttr_CreateInstance`, `igBlendStateAttr_CreateInstance`,
+`igTextureStateAttr_CreateInstance` and `igLightingStateAttr_CreateInstance`, and each takes its value
+through its slot 30. The stack references to them are `AttrRef<kind>`, whose destructors retail keeps from
+other units (`config/SLUS-20836/unit-objects.json`, `duplicates`).
+
+## JOINTSET
+
+`beAction2JOINTSET` stores a range in 60 fps frames (`_startTime` at `+0x0c`, `_endTime` at
 `+0x10`) and a loop-mode string reference at `+0x14`. `beAction2InfoWork` receives the range in
 nanoseconds: `_jointStartTimeL` at `+0x20`, `_jointEndTimeL` at `+0x28`, and the state at
 `_jointSt0` (`+0x1c`). The conversion is:
 
 ```
-nanoseconds = (int64)(seconds * 1,000,000,000 / 60)
+nanoseconds = (int64)(frames * 1,000,000,000 / 60)
 ```
 
 The start handler selects state 1 when the loop-mode string begins with `L`, otherwise state 2.
@@ -41,31 +75,21 @@ consume the JOINTSET end flag are now behaviorally recovered and retail-verified
 [`action2-timing.md`](action2-timing.md) records the time model (including the EE's
 round-toward-zero arithmetic, which makes 30 frames 499,999,968 ns rather than 500,000,000 ns).
 
-## The component dispatch pair
+## The component drivers
 
-The block has two drivers:
-
-- `beAction2_StartComponents` (`0x00377700`, 456 B) is the per-object Start driver. It walks the
+- `beAction2_StartComponents` (`0x00377700`, 456 B) is the per-ram Start driver. It walks the
   `beAction2Data`'s component list (an `igObjectList`-shaped `{_count, _capacity, _data}` struct at
   `_comList`) and calls each component's virtual `GetMetaObject()` to route it to one of the five
   `*_Start` handlers, advancing `_comIndex` and stopping at the first handler that returns false.
-- `Gap::Bec::beAction2::vfunc_31` (`0x003778d0`, 192 B) is the per-frame Update driver. After the
-  info's `+0x14` gate and the work's `+0x4c` gate it calls each active component's `*_Update` in type
+- `beAction2_Update` (`0x003778d0`, 192 B) is the per-frame Update driver. After the ram's
+  `_isRun` gate and the work's `_isFreeze` gate it calls each active component's `*_Update` in type
   order (MOTIONSET, JOINTSET, FADESET, WAITCHECK, FLASHSET), keyed on the work's
-  `+0x14`/`+0x1c`/`+0x34`/`+0x44`/`+0x48` "started" slots.
+  `_motionSt0`/`_jointSt0`/`_fadeSt0`/`_waitSt0`/`_flashSt0` state slots.
 
-What made the Start driver match was recovering the original **pointer-typed list layout** and
-expressing the dispatch as a real C++ virtual call (`component->GetMetaObject()`), not an offset cast:
-the untyped draft would not allocate retail's registers. The Start driver's guard reads the list through its own struct view, because
-the compiler would otherwise merge that load with the ones in the loop, where retail reloads the list for the
-guard, the body and the latch. The `nop`s after each `*_Update` `jal`, after the FLASHSET branch and at the loop
-exit are ordinary output of the unit's `b52 -O3,p` profile, not padding the source spells.
-
-All five handler pairs match retail: they verify byte-identical from `src/unmatched/` with `-O3,p`
-under the alternate compiler (the `combat` profile in `config/SLUS-20836/units.tsv`). A C++ **typed work
-struct** (base+offset member access instead of `(char *)work + const`) is necessary: it removes a
-spurious saved address register and restores retail's frame size. For FLASHSET a two-case `switch`
-reproduces retail's `beq case1 / beqz case0` dispatch.
+The Start driver matches only with the **pointer-typed list layout** and the dispatch written as a real
+C++ virtual call (`component->GetMetaObject()`). Its guard reads the list through its own struct view,
+because the compiler would otherwise merge that load with the ones in the loop, where retail reloads the
+list for the guard, the body and the latch.
 
 ## Message handling
 
@@ -85,11 +109,23 @@ holds the controller's message handling and resolves string-keyed ids through
 | 25-27 | `SETCONVEYOR`, `SETQUICKSAND`, `SETSLIPPEDFLOOR` |
 | 28-32 | `ISRUN`, `ISSEQNAME`, `ONHITBULLETBOX`, `OFHITBULLETBOX`, `GETSEQNAMELIST` |
 
-`beAction2::vfunc_33` (`0x377990`) uses a 7-entry table at `0x4c81f0`, built by `FUN_0036dcd0`: 0 `ISCOMEND`,
-1 `ISRUN`, 2 `GETNAMELIST`, 3 `GETAPPEARANCELIST`, 4 `GETBONEMATRIX`, 5 `ONFREEZE`, 6 `OFFREEZE`. Any other
-name starts or stops the action, stopping only for `NDSP`.
+`beAction2_OnMessage` (`0x377990`) uses a 7-entry table at `0x4c81f0`, built by `beAction2_GetMessageEnum`:
+0 `ISCOMEND`, 1 `ISRUN`, 2 `GETNAMELIST`, 3 `GETAPPEARANCELIST`, 4 `GETBONEMATRIX`, 5 `ONFREEZE`,
+6 `OFFREEZE`. `ONFREEZE`/`OFFREEZE` set every timer's scale and the node's `_timeScale` to 0 or 1
+without a jump in node time, and set `_isFreeze`. Any other name is an action:
 
-`beAction2InfoWork` is created lazily by `FUN_0036c2a0` and sits at `beAction2+0x38`. A controller
+- `NDSP` stops the ram: it releases and empties the node's override attribute list, clears the ram's
+  bit in the info switch's `_childMask`, drops the work record and every timer, clears `_isRun`, removes
+  every state from the ram's combiner and frees each actor's `_boneMatrixCacheArray` and
+  `_blendMatrixCacheArray` (found by name through the actor's meta object).
+- any other name starts the `beAction2Data` of that name. The work record is created on first use by
+  `beAction2InfoWork_CreateInstance`. A ram that was not running clears its motion, fade and wait states, asks for
+  no transition (`_isNoHokan`), sets the combiner's `_animationStateTime` to 100,000,000 ns, gives the
+  combiner to each actor that has no bone matrix cache (`igActor_SetAnimationSystem`) and adds the
+  database's first animation. A changed data restarts the component walk at 0 and sends
+  `ACTION_BROADCAST` with the info's name, the ram number and the action name.
+
+A controller
 message's argument bag is `S = beModelCtrl+0x14`, `W = S+0x10`, with typed parallel lists at `W+0x10`
 (bytes), `+0x14` and `+0x18` (int), `+0x1c` (long), `+0x20` (vec3, stride 0xc), `+0x24` (mat4, stride 0x40),
 `+0x28` (object refs) and `+0x2c` (strings). `beMessengerArgData_Clear` (`0x38ca40`) clears them; the
@@ -98,54 +134,38 @@ accessors are `beMessenger_AppendBool`, `AppendInt`, `GetInt`, `GetFloat`, `GetV
 
 ## Compiler profile
 
-Both JOINTSET handlers build under the `combat` profile (`-O3,p`).
+The unit builds under `-O4,p`. The peephole sub-flag `p` matters: under `-O3` MWCC materialises an
+integral `1e9f` literal as an integer + `cvt.s.w`; with any level that carries `,p` it loads the IEEE-754
+bits `0x4e6e6b28` directly (`lui 0x4e6e; ori 0x6b28; mtc1`), which is what retail does. The sub-flag has
+no source-level equivalent (`#pragma peephole`, `#pragma opt_peephole`, `#pragma optimization_level` are
+all ignored).
 
-`beAction2JOINTSET_Start` gets retail's integer register allocation (`work->_jointSt0` in `s1`, params in
-`s0`, node reusing `s0`) only when the bias goes through a `long long` temporary for the start time:
+`beAction2JOINTSET_Start` gets retail's integer register allocation only when the bias goes through a
+`long long` temporary for the start time:
 `long long st = work->_jointStartTimeL; node->_timeBias = st - (__fixsfdi(conv * node->_timeScale) << 18);`.
-The literal's spelling does not matter: `1e9f` and `1000000000.0f` fold identically.
-
-The optimisation **sub-flag** `p` (peephole) matters here: the retail ELF was built with **per-file**
-flags. Under `-O3` MWCC materialises an integral `1e9f` literal as an integer + `cvt.s.w`; with any level
-that carries `,p` (`-O2,p`/`-O3,p`/`-O4,p`) it loads the IEEE-754 bits `0x4e6e6b28` directly
-(`lui 0x4e6e; ori 0x6b28; mtc1`), which is what retail does. The sub-flag has no source-level
-equivalent (`#pragma peephole`, `#pragma opt_peephole`, `#pragma optimization_level` are all
-ignored), and the neighbouring `FUN_0015e130` popcount matches only *without* `,p`.
-
-A unit's flags are its profile in `config/SLUS-20836/units.tsv`. `config/SLUS-20836/unit-flags.tsv`, keyed
-by function VA and consulted through `tools/unitflags.py` by both `tools/verify.py` and
-`tools/linkgen.py`, holds per-function overrides. A `--unit-flags PATH` argument (or `/dev/null`) lets a
-sweep disable the table; the table is a committed hand-authored overlay like
-`config/SLUS-20836/names/*.tsv`.
-
-`beAction2JOINTSET_Update` calls `beModelCtrlNode2_LocalTime` (node-time helper) plus `__fixsfdi`
-(float→nanosecond conversion).
+`beAction2JOINTSET_Update` needs its two-`goto` state guard: a `switch` or a combined `&&` test
+leaves it 8 or 16 bytes short. `beAction2FADESET_Update` loads the fade limit after the alpha only
+when it reads `_fadeLimitValue` through a `float *` cast; a plain member read, `*&` or `(&…)[0]`
+swaps `f0`/`f1`.
 
 ## What didn't work
 
-Everything here was measured under the default compiler. The differences are that compiler's, not a
-limit of the source: the same handlers match under the `combat` profile.
+Under the earlier per-function profiles (`-O3,p`, before the unit was compiled whole):
 
-- `-O3,p` with the source idioms applied leaves `beAction2JOINTSET_Start` at 316/324 bytes: instructions
-  0..16 match, but two scheduler `nop`s never appear (one after the state branch's delay slot, one after
-  the `mtc1` of `60.0f` in the first conversion), and the float register allocation differs (retail
-  keeps the `1e9f` constant in `f1`, the loaded time in `f2`, `60.0f` in `f0`; every tested spelling of
-  the conversion (operand order, integer-cast constant, explicit float temp) places them differently,
-  and no `-O` level from `-O2` to `-O4` changes it). `beAction2JOINTSET_Update` is 332 B retail vs ~320 B,
-  with the state guard's compare order and `work`'s `s`-register differing.
-- `beAction2WAITCHECK_Update` stays at 380/372 B (the scheduler keeps an `s1+40` address live where retail
-  reloads `40(s1)`; the compare lands in `v1`, not `at`), and `beAction2FLASHSET_Update` at 364/376 B
-  (work and the `+0x88` object swap between `s0`/`s1`, and the DAT address `lui` is scheduled into a
-  branch-delay slot retail pads with a `nop`).
-- decomp-permuter, pointed at `beAction2FLASHSET_Update` from the typed source, ran ~68k candidates and
-  never scored below 585 (a match is 0), and from the plain m2c draft it found no verified match
-  either. The harness itself is sound: the same project built from an already-matched unit
-  (`Gap::Bec::beBaseInfoManager::vfunc_21`) reports `base score = 0` and exits.
-- A two-flag sweep of all 2,954 near-miss draft candidates in `build/m2c` under `-O3` and `-O3,p` found no
-  `,p`-only match: the 130 that match do so under both.
+- `beAction2JOINTSET_Start` stayed at 316/324 bytes: two scheduler `nop`s never appeared and the float
+  register allocation differed under every tested spelling of the conversion and every `-O` level from
+  `-O2` to `-O4`.
+- `beAction2WAITCHECK_Update` stayed at 380/372 B and `beAction2FLASHSET_Update` at 364/376 B.
+- decomp-permuter, pointed at `beAction2FLASHSET_Update`, ran ~68k candidates and never scored below
+  585 (a match is 0).
 
 ## Open questions
 
+- Slot 32 (`beAction2_Prepare`) is called by `beBaseInfoManager`'s start (slot 23) and by its info
+  clear (slot 26); the subclasses that fill it acquire a pad manager or release cached databases, so its
+  role is only partly established.
+- `igAnimationCombiner_Update`, `igAnimationCombiner_ResetToPose` and `igAnimationCombiner_AddAnimationBlend` are named from
+  their use here and their bodies; the Alchemy method names are not recovered.
 - Unproven beyond `j_startback` (`AREA.AFS` entry 620): a model has two parallel registries.
   `beModelCtrlInfo` holds the sequences (`beModelCtrlInfoDataSeq`, `SQ_*` as `beModelCtrlData`) and
   `beAction2Info` holds the actions (`beAction2Data`). `beModelCtrlACTION`, `JUMP` and `WCHECK` records carry

@@ -95,7 +95,7 @@ void igSearchSceneGraph_InitFields(void) {
 
 /* Sets the searched scene (self[8], ref-counted) and reallocates both identity-filled matrix arrays
    (self[9], self[10]) to the counts the scene reports. */
-void FUN_00239070(int *self, RefCounted *scene) {
+void igActor_SetAnimationSystem(int *self, RefCounted *scene) {
     int firstArray;
     int secondArray;
     int firstCount;

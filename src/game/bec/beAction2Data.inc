@@ -96,7 +96,7 @@ void beAction2Data_InitFields(void) {
     igMetaObject_NameFields(temp_s0, &DAT_004c81d8[0], &DAT_004c81e0[0], &DAT_004c81e8[0], temp_s2);
 }
 
-int FUN_0036dcd0(void) {
+int beAction2_GetMessageEnum(void) {
     if (DAT_0058a020[0] == 0) {
         DAT_0058a020[0] = igMetaEnum_Create(&DAT_005016f0[0], &DAT_004c81f0[0], &DAT_004c8210[0], 7);
     }
