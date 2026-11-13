@@ -21,7 +21,7 @@ extern "C" int beMessenger_SelectReceivers(...);
 extern "C" int beMessenger_SendNamed(...);
 extern "C" int *bePadManager_GetPadForPlayer(...);
 extern "C" int igObject_GetAllocator(...);
-extern "C" int FUN_002cb0d0(int);
+extern "C" int igBoolList_Create(int);
 extern "C" int FUN_00345680(int);
 extern "C" int FUN_003459a0(...);
 extern "C" int beMessenger_AppendBool(int, int);
@@ -496,7 +496,7 @@ int Gap__Bec__beSelectCtrl__vfunc_33(beSelectCtrl *arg0, beBaseInfoRam *arg1, in
         if (n != 0 && n == u->_selectMax) {
             a = igObject_GetAllocator(arg0);
             a = (GPR_00554c14 != 0) ? a : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
-            BoolListRef decide((igObject *)FUN_002cb0d0(a));
+            BoolListRef decide((igObject *)igBoolList_Create(a));
             t = decide.p;
             if (t != 0) t->_refCount = (int)t->_refCount + 1;
             REL(u->_decideList)
@@ -555,7 +555,7 @@ int Gap__Bec__beSelectCtrl__vfunc_33(beSelectCtrl *arg0, beBaseInfoRam *arg1, in
                 if (n != 0 && n == s2->_selectMax) {
                     a = igObject_GetAllocator(arg0);
                     a = (GPR_00554c14 != 0) ? a : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
-                    BoolListRef decide((igObject *)FUN_002cb0d0(a));
+                    BoolListRef decide((igObject *)igBoolList_Create(a));
                     t = decide.p;
                     if (t != 0) t->_refCount = (int)t->_refCount + 1;
                     REL(s2->_decideList)

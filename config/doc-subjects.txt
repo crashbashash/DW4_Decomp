@@ -47,6 +47,7 @@ docs/engine/shop-selectors.md
 docs/engine/sound-format.md
 docs/engine/stage-loading.md
 docs/engine/stage-materials.md
+docs/engine/status-list-windows.md
 docs/engine/subwindow-command.md
 docs/engine/subwindow-preparation.md
 docs/engine/system-clock.md

@@ -1,4 +1,4 @@
-void FUN_003baf10(int arg0) {
+void beNDMWStatusCtrlD0_Create(int arg0) {
     FUN_003bb040();
     igMetaObject_CreateInstance(*(int *)0x58AF98, arg0);
 }

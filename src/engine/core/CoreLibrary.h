@@ -955,7 +955,7 @@ extern "C" void FUN_002caf80(void);
 extern "C" void igCharList_Register(void);
 extern "C" void thunk_igCharList_GetMetaObject(void);
 extern "C" void FUN_002cb010(void);
-extern "C" void FUN_002cb0d0(int arg0);
+extern "C" void igBoolList_Create(int arg0);
 extern "C" igMetaObject *FUN_002cb110(void);
 extern "C" int igBoolList_GetVTable(void);
 extern "C" void FUN_002cb1f0(void);

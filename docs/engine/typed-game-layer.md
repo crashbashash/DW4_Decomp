@@ -219,7 +219,7 @@ Evidence is the class's `_InitFields` metaobject getter (handle resolved through
 * DISKFOLDER igObjectList elements -> beNDMWItemDisk: beNDMWGameRam_ResetPlayer creates and initialises them with beNDMWItemDisk_Set(beNDMWItemDisk *)
 * beActionStarter._messenger, beLightCtrl._messenger, beNDMWMdlMapBase._messenger, beSeCtl._messenger -> beMessenger: first argument of beMessenger_RegisterReceiver/FromInfo in their vfunc_29/37
 * beBaseInfoRam._dataList (context +40) -> container of RamData records searched by name (e.g. beSelectCtrlInfoRamData): hypothesis, from selectctrl.md and the shared igProperty_FindByName(DAT_00585be0) key
-* window object built by FUN_003baf10 in beNDMWStatusSubSlot vfunc_29 is a beNDMWWindow subclass: callees beNDMWWindow_BindContext/RunMessageScript; fields _textCloseTypeList/_textCloseNameList at +60/+64
+* window object built by beNDMWStatusCtrlD0_Create in beNDMWStatusSubSlot vfunc_29 is a beNDMWWindow subclass: callees beNDMWWindow_BindContext/RunMessageScript; fields _textCloseTypeList/_textCloseNameList at +60/+64
 * beNDMWStatusPowerSocket._messenger / beActionStarter._messenger / beCameraCtrl._messenger / beMeterCtrl._messenger / beSwitchCtrl._messenger / beNDMWMdlPlayer2._messenger / beNumberCtrl._messenger -> beMessenger: passed 
 * beNDMWWindow._textCloseTypeList/_textCloseNameList/_modelCloseInfoNameList/_modelCloseSeqNameList -> igStringRefList: metaObject FUN_002b9120 (handle 0x5858d8)
 * beMatCtrl._wkMatOnList/_wkMatOldOnList -> igIntList; _lua (+36) -> beLua (FUN_0035b770): beMatCtrl_InitFields

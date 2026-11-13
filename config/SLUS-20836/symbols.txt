@@ -11699,7 +11699,7 @@
 002caf90 00006c igCharList_Register
 002cb000 000008 thunk_igCharList_GetMetaObject
 002cb010 0000c0 FUN_002cb010
-002cb0d0 000034 FUN_002cb0d0
+002cb0d0 000034 igBoolList_Create
 002cb110 000048 FUN_002cb110
 002cb160 000048 igBoolList_GetMetaObject
 002cb1b0 00003c igBoolList_GetVTable
@@ -17732,32 +17732,32 @@
 003b3480 000020 FUN_003b3480
 003b34a0 000064 beNDMWShopTitle00_Register
 003b3510 00001c beNDMWShopTitle00_GetMetaObject
-003b3530 000034 FUN_003b3530
+003b3530 000034 beNDMWStatusTitle04_Create
 003b3570 00004c FUN_003b3570
 003b35c0 000074 beNDMWStatusTitle04_GetVTable
 003b3640 000020 FUN_003b3640
 003b3660 000064 beNDMWStatusTitle04_Register
 003b36d0 00001c beNDMWStatusTitle04_GetMetaObject
-003b36f0 000034 FUN_003b36f0
+003b36f0 000034 beNDMWStatusTitle03_Create
 003b3730 000044 FUN_003b3730
 003b3780 00004c FUN_003b3780
 003b37d0 000074 beNDMWStatusTitle03_GetVTable
 003b3850 000020 FUN_003b3850
 003b3870 000064 beNDMWStatusTitle03_Register
 003b38e0 00001c beNDMWStatusTitle03_GetMetaObject
-003b3900 000034 FUN_003b3900
+003b3900 000034 beNDMWStatusTitle02_Create
 003b3940 00004c FUN_003b3940
 003b3990 000074 beNDMWStatusTitle02_GetVTable
 003b3a10 000020 FUN_003b3a10
 003b3a30 000064 beNDMWStatusTitle02_Register
 003b3aa0 00001c beNDMWStatusTitle02_GetMetaObject
-003b3ac0 000034 FUN_003b3ac0
+003b3ac0 000034 beNDMWStatusTitle01_Create
 003b3b00 00004c FUN_003b3b00
 003b3b50 000074 beNDMWStatusTitle01_GetVTable
 003b3bd0 000020 FUN_003b3bd0
 003b3bf0 000064 beNDMWStatusTitle01_Register
 003b3c60 00001c beNDMWStatusTitle01_GetMetaObject
-003b3c80 000034 FUN_003b3c80
+003b3c80 000034 beNDMWStatusTitle00_Create
 003b3cc0 00004c FUN_003b3cc0
 003b3d10 000074 beNDMWStatusTitle00_GetVTable
 003b3d90 000020 FUN_003b3d90
@@ -17782,13 +17782,13 @@
 003b4360 000020 FUN_003b4360
 003b4380 000064 beNDMWShopSelectA0_Register
 003b43f0 00001c beNDMWShopSelectA0_GetMetaObject
-003b4410 000034 FUN_003b4410
+003b4410 000034 beNDMWShopSelect52_Create
 003b4450 00004c FUN_003b4450
 003b44a0 00007c beNDMWShopSelect52_GetVTable
 003b4520 000020 FUN_003b4520
 003b4540 000064 beNDMWShopSelect52_Register
 003b45b0 00001c beNDMWShopSelect52_GetMetaObject
-003b45d0 000034 FUN_003b45d0
+003b45d0 000034 beNDMWShopSelect34_Create
 003b4610 00004c FUN_003b4610
 003b4660 00007c beNDMWShopSelect34_GetVTable
 003b46e0 000020 FUN_003b46e0
@@ -17819,32 +17819,32 @@
 003b4ea0 000020 FUN_003b4ea0
 003b4ec0 000064 beNDMWShopSelect01_Register
 003b4f30 00001c beNDMWShopSelect01_GetMetaObject
-003b4f50 000034 FUN_003b4f50
+003b4f50 000034 beNDMWShopSelect00_Create
 003b4f90 00004c FUN_003b4f90
 003b4fe0 00008c beNDMWShopSelect00_GetVTable
 003b5070 000020 FUN_003b5070
 003b5090 00006c beNDMWShopSelect00_Register
 003b5100 00001c beNDMWShopSelect00_GetMetaObject
 003b5120 000088 beNDMWShopSelect00_InitFields
-003b51b0 000034 FUN_003b51b0
+003b51b0 000034 beNDMWStatusSelectE1_Create
 003b51f0 00004c FUN_003b51f0
 003b5240 00007c beNDMWStatusSelectE1_GetVTable
 003b52c0 000020 FUN_003b52c0
 003b52e0 000064 beNDMWStatusSelectE1_Register
 003b5350 00001c beNDMWStatusSelectE1_GetMetaObject
-003b5370 000034 FUN_003b5370
+003b5370 000034 beNDMWStatusSelectE0_Create
 003b53b0 00004c FUN_003b53b0
 003b5400 00007c beNDMWStatusSelectE0_GetVTable
 003b5480 000020 FUN_003b5480
 003b54a0 000064 beNDMWStatusSelectE0_Register
 003b5510 00001c beNDMWStatusSelectE0_GetMetaObject
-003b5530 000034 FUN_003b5530
+003b5530 000034 beNDMWStatusSelect01_Create
 003b5570 00004c FUN_003b5570
 003b55c0 00007c beNDMWStatusSelect01_GetVTable
 003b5640 000020 FUN_003b5640
 003b5660 000064 beNDMWStatusSelect01_Register
 003b56d0 00001c beNDMWStatusSelect01_GetMetaObject
-003b56f0 000034 FUN_003b56f0
+003b56f0 000034 beNDMWStatusSelect00_Create
 003b5730 00004c FUN_003b5730
 003b5780 00007c beNDMWStatusSelect00_GetVTable
 003b5800 000020 FUN_003b5800
@@ -18005,7 +18005,7 @@
 003b8ea0 000020 beNDMWShopCtrl00_EnsureRegistered
 003b8ec0 000064 beNDMWShopCtrl00_Register
 003b8f30 00001c beNDMWShopCtrl00_GetMetaObject
-003b8f50 000034 FUN_003b8f50
+003b8f50 000034 beNDMWStatusSubMenu_Create
 003b8f90 00004c FUN_003b8f90
 003b8fe0 0000bc beNDMWStatusSubMenu_GetVTable
 003b90a0 000080 FUN_003b90a0
@@ -18013,28 +18013,28 @@
 003b9140 000074 beNDMWStatusSubMenu_Register
 003b91c0 00001c beNDMWStatusSubMenu_GetMetaObject
 003b91e0 0000d0 beNDMWStatusSubMenu_InitFields
-003b92b0 000034 FUN_003b92b0
+003b92b0 000034 beNDMWStatusCtrlSkill_Create
 003b92f0 00004c FUN_003b92f0
 003b9340 0000a0 beNDMWStatusCtrlSkill_GetVTable
 003b93e0 000020 FUN_003b93e0
 003b9400 000074 beNDMWStatusCtrlSkill_Register
 003b9480 00001c beNDMWStatusCtrlSkill_GetMetaObject
 003b94a0 0000b8 beNDMWStatusCtrlSkill_InitFields
-003b9560 000034 FUN_003b9560
+003b9560 000034 beNDMWStatusCtrlSendBit_Create
 003b95a0 00004c FUN_003b95a0
 003b95f0 000084 beNDMWStatusCtrlSendBit_GetVTable
 003b9680 000020 FUN_003b9680
 003b96a0 000074 beNDMWStatusCtrlSendBit_Register
 003b9720 00001c beNDMWStatusCtrlSendBit_GetMetaObject
 003b9740 000090 beNDMWStatusCtrlSendBit_InitFields
-003b97d0 000034 FUN_003b97d0
+003b97d0 000034 beNDMWStatusCtrlBit_Create
 003b9810 00004c FUN_003b9810
 003b9860 000084 beNDMWStatusCtrlBit_GetVTable
 003b98f0 000020 FUN_003b98f0
 003b9910 000074 beNDMWStatusCtrlBit_Register
 003b9990 00001c beNDMWStatusCtrlBit_GetMetaObject
 003b99b0 000098 beNDMWStatusCtrlBit_InitFields
-003b9a50 000034 FUN_003b9a50
+003b9a50 000034 beNDMWStatusCtrlDisk_Create
 003b9a90 00004c FUN_003b9a90
 003b9ae0 0000bc beNDMWStatusCtrlDisk_GetVTable
 003b9ba0 000080 FUN_003b9ba0
@@ -18042,21 +18042,21 @@
 003b9c40 000074 beNDMWStatusCtrlDisk_Register
 003b9cc0 00001c beNDMWStatusCtrlDisk_GetMetaObject
 003b9ce0 0000d0 beNDMWStatusCtrlDisk_InitFields
-003b9db0 000034 FUN_003b9db0
+003b9db0 000034 beNDMWStatusCtrlFlag_Create
 003b9df0 00004c FUN_003b9df0
 003b9e40 000084 beNDMWStatusCtrlFlag_GetVTable
 003b9ed0 000020 FUN_003b9ed0
 003b9ef0 000074 beNDMWStatusCtrlFlag_Register
 003b9f70 00001c beNDMWStatusCtrlFlag_GetMetaObject
 003b9f90 000098 beNDMWStatusCtrlFlag_InitFields
-003ba030 000034 FUN_003ba030
+003ba030 000034 beNDMWStatusCtrlFolder_Create
 003ba070 00004c FUN_003ba070
 003ba0c0 000074 beNDMWStatusCtrlFolder_GetVTable
 003ba140 000020 FUN_003ba140
 003ba160 00006c beNDMWStatusCtrlFolder_Register
 003ba1d0 00001c beNDMWStatusCtrlFolder_GetMetaObject
 003ba1f0 000070 beNDMWStatusCtrlFolder_InitFields
-003ba260 000034 FUN_003ba260
+003ba260 000034 beNDMWStatusSubSlot_Create
 003ba2a0 00004c FUN_003ba2a0
 003ba2f0 000058 beNDMWStatusSubSlot_GetVTable
 003ba350 000080 FUN_003ba350
@@ -18066,13 +18066,13 @@
 003ba6c0 000064 beNDMWStatusSubSlot_Register
 003ba730 00001c beNDMWStatusSubSlot_GetMetaObject
 003ba750 00000c FUN_003ba750
-003ba760 000034 FUN_003ba760
+003ba760 000034 beNDMWStatusMainSlot_Create
 003ba7a0 00004c FUN_003ba7a0
 003ba7f0 000058 beNDMWStatusMainSlot_GetVTable
 003ba850 000020 FUN_003ba850
 003ba870 000064 beNDMWStatusMainSlot_Register
 003ba8e0 00001c beNDMWStatusMainSlot_GetMetaObject
-003ba900 000034 FUN_003ba900
+003ba900 000034 beNDMWStatusPowerSocket_Create
 003ba940 00004c FUN_003ba940
 003ba990 000058 beNDMWStatusPowerSocket_GetVTable
 003ba9f0 000020 FUN_003ba9f0
@@ -18083,14 +18083,14 @@
 003bab10 000070 beNDMWStatusCtrlBaseEquip_Register
 003bab80 00001c beNDMWStatusCtrlBaseEquip_GetMetaObject
 003baba0 000138 beNDMWStatusCtrlBaseEquip_InitFields
-003bace0 000034 FUN_003bace0
+003bace0 000034 beNDMWStatusCtrlEquip_Create
 003bad20 00004c FUN_003bad20
 003bad70 000074 beNDMWStatusCtrlEquip_GetVTable
 003badf0 000020 FUN_003badf0
 003bae10 00006c beNDMWStatusCtrlEquip_Register
 003bae80 00001c beNDMWStatusCtrlEquip_GetMetaObject
 003baea0 000070 beNDMWStatusCtrlEquip_InitFields
-003baf10 000034 FUN_003baf10
+003baf10 000034 beNDMWStatusCtrlD0_Create
 003baf50 00004c FUN_003baf50
 003bafa0 0000a0 beNDMWStatusCtrlD0_GetVTable
 003bb040 000020 FUN_003bb040
@@ -18712,7 +18712,7 @@
 003c8ff0 000068 beNDMWItemRevisionBase_Register
 003c9060 00001c beNDMWItemRevisionBase_GetMetaObject
 003c9080 000070 beNDMWItemRevisionBase_InitFields
-003c90f0 000034 FUN_003c90f0
+003c90f0 000034 beNDMWItemBaseList_Create
 003c9130 000044 FUN_003c9130
 003c9180 00004c beNDMWItemBaseList_GetReadyMetaObject
 003c91d0 00003c beNDMWItemBaseList_GetVTable
@@ -19247,121 +19247,121 @@
 0040dae0 000104 Gap__Bec__beNDMWListCtrl__vfunc_22 Gap::Bec::beNDMWListCtrl::vfunc_22
 0040dbf0 000140 Gap__Bec__beNDMWListCtrl__vfunc_23 Gap::Bec::beNDMWListCtrl::vfunc_23
 0040dd30 000150 Gap__Bec__beNDMWListCtrl__vfunc_24 Gap::Bec::beNDMWListCtrl::vfunc_24
-0040de80 000c58 Gap__Bec__beNDMWStatusCtrl00__vfunc_21 Gap::Bec::beNDMWStatusCtrl00::vfunc_21
-0040eae0 000080 FUN_0040eae0
-0040eb60 000080 FUN_0040eb60
-0040ebe0 000080 FUN_0040ebe0
-0040ec60 000080 FUN_0040ec60
-0040ece0 000080 FUN_0040ece0
-0040ed60 000080 FUN_0040ed60
-0040ede0 000080 FUN_0040ede0
-0040ee60 00073c Gap__Bec__beNDMWStatusCtrlEquip__vfunc_21 Gap::Bec::beNDMWStatusCtrlEquip::vfunc_21
-0040f5a0 000080 FUN_0040f5a0
-0040f620 000080 FUN_0040f620
-0040f6a0 000080 FUN_0040f6a0
+0040de80 000c58 beNDMWStatusCtrl00_Update
+0040eae0 000080 igSmartPointer_beNDMWStatusCtrlSkill_Destruct
+0040eb60 000080 igSmartPointer_beNDMWStatusCtrlFolder_Destruct
+0040ebe0 000080 igSmartPointer_beNDMWStatusCtrlEquip_Destruct
+0040ec60 000080 igSmartPointer_beNDMWStatusSelect00_Destruct
+0040ece0 000080 igSmartPointer_beNDMWStatusTitle02_Destruct
+0040ed60 000080 igSmartPointer_beNDMWStatusTitle01_Destruct
+0040ede0 000080 igSmartPointer_beNDMWStatusTitle00_Destruct
+0040ee60 00073c beNDMWStatusCtrlEquip_Update
+0040f5a0 000080 igSmartPointer_beNDMWStatusCtrlBaseEquip_Destruct
+0040f620 000080 igSmartPointer_beNDMWStatusSelect01_Destruct
+0040f6a0 000080 igSmartPointer_beNDMWStatusTitle04_Destruct
 0040f720 001954 Gap__Bec__beNDMWStatusCtrlBaseEquip__vfunc_21 Gap::Bec::beNDMWStatusCtrlBaseEquip::vfunc_21
-00411080 000080 FUN_00411080
-00411100 000080 FUN_00411100
-00411180 000438 FUN_00411180
-004115c0 00018c FUN_004115c0
-00411750 0001fc FUN_00411750
+00411080 000080 igSmartPointer_beNDMWShopSelect00_Destruct
+00411100 000080 igSmartPointer_beNDMWStatusSelectE1_Destruct
+00411180 000438 beNDMWStatusCtrlBaseEquip_PreviewSocketSwap
+004115c0 00018c beNDMWStatusCtrlBaseEquip_ShowKindCursor
+00411750 0001fc beNDMWStatusCtrlBaseEquip_QueuePanelText
 00411950 000cb0 beNDMWStatus_AssignEquipment
-00412600 0006b4 FUN_00412600
-00412cc0 000558 Gap__Bec__beNDMWStatusPowerSocket__vfunc_23 Gap::Bec::beNDMWStatusPowerSocket::vfunc_23
-00413220 000258 Gap__Bec__beNDMWStatusPowerSocket__vfunc_24 Gap::Bec::beNDMWStatusPowerSocket::vfunc_24
-00413480 0001ec Gap__Bec__beNDMWStatusPowerSocket__vfunc_26 Gap::Bec::beNDMWStatusPowerSocket::vfunc_26
-00413670 000058 Gap__Bec__beNDMWStatusPowerSocket__vfunc_25 Gap::Bec::beNDMWStatusPowerSocket::vfunc_25
-004136d0 00054c Gap__Bec__beNDMWStatusPowerSocket__vfunc_22 Gap::Bec::beNDMWStatusPowerSocket::vfunc_22
-00413c20 0003b0 Gap__Bec__beNDMWStatusPowerSocket__vfunc_27 Gap::Bec::beNDMWStatusPowerSocket::vfunc_27
-00413fd0 000080 FUN_00413fd0
-00414050 000150 Gap__Bec__beNDMWStatusPowerSocket__vfunc_28 Gap::Bec::beNDMWStatusPowerSocket::vfunc_28
-004141a0 000274 Gap__Bec__beNDMWStatusPowerSocket__vfunc_29 Gap::Bec::beNDMWStatusPowerSocket::vfunc_29
-00414420 000080 FUN_00414420
-004144a0 00010c Gap__Bec__beNDMWStatusPowerSocket__vfunc_30 Gap::Bec::beNDMWStatusPowerSocket::vfunc_30
-004145b0 000060 Gap__Bec__beNDMWStatusPowerSocket__vfunc_31 Gap::Bec::beNDMWStatusPowerSocket::vfunc_31
-00414610 000024 Gap__Bec__beNDMWStatusPowerSocket__vfunc_39 Gap::Bec::beNDMWStatusPowerSocket::vfunc_39
-00414640 00002c Gap__Bec__beNDMWStatusPowerSocket__vfunc_32 Gap::Bec::beNDMWStatusPowerSocket::vfunc_32
-00414670 000260 Gap__Bec__beNDMWStatusPowerSocket__vfunc_33 Gap::Bec::beNDMWStatusPowerSocket::vfunc_33
-004148d0 000128 Gap__Bec__beNDMWStatusPowerSocket__vfunc_34 Gap::Bec::beNDMWStatusPowerSocket::vfunc_34
-00414a00 000308 Gap__Bec__beNDMWStatusPowerSocket__vfunc_35 Gap::Bec::beNDMWStatusPowerSocket::vfunc_35
-00414d10 000124 Gap__Bec__beNDMWStatusPowerSocket__vfunc_36 Gap::Bec::beNDMWStatusPowerSocket::vfunc_36
-00414e40 000024 Gap__Bec__beNDMWStatusPowerSocket__vfunc_37 Gap::Bec::beNDMWStatusPowerSocket::vfunc_37
-00414e70 000070 Gap__Bec__beNDMWStatusPowerSocket__vfunc_38 Gap::Bec::beNDMWStatusPowerSocket::vfunc_38
-00414ee0 000558 Gap__Bec__beNDMWStatusMainSlot__vfunc_23 Gap::Bec::beNDMWStatusMainSlot::vfunc_23
-00415440 000238 Gap__Bec__beNDMWStatusMainSlot__vfunc_24 Gap::Bec::beNDMWStatusMainSlot::vfunc_24
-00415680 0001ec Gap__Bec__beNDMWStatusMainSlot__vfunc_26 Gap::Bec::beNDMWStatusMainSlot::vfunc_26
-00415870 000014 Gap__Bec__beNDMWStatusMainSlot__vfunc_25 Gap::Bec::beNDMWStatusMainSlot::vfunc_25
-00415890 00054c Gap__Bec__beNDMWStatusMainSlot__vfunc_22 Gap::Bec::beNDMWStatusMainSlot::vfunc_22
-00415de0 000350 Gap__Bec__beNDMWStatusMainSlot__vfunc_27 Gap::Bec::beNDMWStatusMainSlot::vfunc_27
-00416130 000120 Gap__Bec__beNDMWStatusMainSlot__vfunc_28 Gap::Bec::beNDMWStatusMainSlot::vfunc_28
-00416250 000274 Gap__Bec__beNDMWStatusMainSlot__vfunc_29 Gap::Bec::beNDMWStatusMainSlot::vfunc_29
-004164d0 000080 Gap__Bec__beNDMWStatusMainSlot__vfunc_30 Gap::Bec::beNDMWStatusMainSlot::vfunc_30
-00416550 000050 Gap__Bec__beNDMWStatusMainSlot__vfunc_31 Gap::Bec::beNDMWStatusMainSlot::vfunc_31
-004165a0 000024 Gap__Bec__beNDMWStatusMainSlot__vfunc_39 Gap::Bec::beNDMWStatusMainSlot::vfunc_39
-004165d0 000318 Gap__Bec__beNDMWStatusMainSlot__vfunc_32 Gap::Bec::beNDMWStatusMainSlot::vfunc_32
-004168f0 000260 Gap__Bec__beNDMWStatusMainSlot__vfunc_33 Gap::Bec::beNDMWStatusMainSlot::vfunc_33
-00416b50 000128 Gap__Bec__beNDMWStatusMainSlot__vfunc_34 Gap::Bec::beNDMWStatusMainSlot::vfunc_34
-00416c80 000308 Gap__Bec__beNDMWStatusMainSlot__vfunc_35 Gap::Bec::beNDMWStatusMainSlot::vfunc_35
-00416f90 000124 Gap__Bec__beNDMWStatusMainSlot__vfunc_36 Gap::Bec::beNDMWStatusMainSlot::vfunc_36
-004170c0 000024 Gap__Bec__beNDMWStatusMainSlot__vfunc_37 Gap::Bec::beNDMWStatusMainSlot::vfunc_37
-004170f0 000070 Gap__Bec__beNDMWStatusMainSlot__vfunc_38 Gap::Bec::beNDMWStatusMainSlot::vfunc_38
-00417160 0001e8 Gap__Bec__beNDMWStatusSubSlot__vfunc_23 Gap::Bec::beNDMWStatusSubSlot::vfunc_23
-00417350 000228 Gap__Bec__beNDMWStatusSubSlot__vfunc_24 Gap::Bec::beNDMWStatusSubSlot::vfunc_24
-00417580 000128 Gap__Bec__beNDMWStatusSubSlot__vfunc_26 Gap::Bec::beNDMWStatusSubSlot::vfunc_26
-004176b0 000018 Gap__Bec__beNDMWStatusSubSlot__vfunc_25 Gap::Bec::beNDMWStatusSubSlot::vfunc_25
-004176d0 0001a8 Gap__Bec__beNDMWStatusSubSlot__vfunc_22 Gap::Bec::beNDMWStatusSubSlot::vfunc_22
-00417880 00031c Gap__Bec__beNDMWStatusSubSlot__vfunc_27 Gap::Bec::beNDMWStatusSubSlot::vfunc_27
-00417ba0 000120 Gap__Bec__beNDMWStatusSubSlot__vfunc_28 Gap::Bec::beNDMWStatusSubSlot::vfunc_28
-00417cc0 000274 Gap__Bec__beNDMWStatusSubSlot__vfunc_29 Gap::Bec::beNDMWStatusSubSlot::vfunc_29
-00417f40 000080 Gap__Bec__beNDMWStatusSubSlot__vfunc_30 Gap::Bec::beNDMWStatusSubSlot::vfunc_30
-00417fc0 000024 Gap__Bec__beNDMWStatusSubSlot__vfunc_31 Gap::Bec::beNDMWStatusSubSlot::vfunc_31
-00417ff0 000008 Gap__Bec__beNDMWStatusSubSlot__vfunc_39 Gap::Bec::beNDMWStatusSubSlot::vfunc_39
-00418000 000024 Gap__Bec__beNDMWStatusSubSlot__vfunc_32 Gap::Bec::beNDMWStatusSubSlot::vfunc_32
-00418030 000008 Gap__Bec__beNDMWStatusSubSlot__vfunc_33 Gap::Bec::beNDMWStatusSubSlot::vfunc_33
-00418040 000008 Gap__Bec__beNDMWStatusSubSlot__vfunc_34 Gap::Bec::beNDMWStatusSubSlot::vfunc_34
-00418050 000008 Gap__Bec__beNDMWStatusSubSlot__vfunc_35 Gap::Bec::beNDMWStatusSubSlot::vfunc_35
-00418060 000008 Gap__Bec__beNDMWStatusSubSlot__vfunc_36 Gap::Bec::beNDMWStatusSubSlot::vfunc_36
-00418070 000008 Gap__Bec__beNDMWStatusSubSlot__vfunc_37 Gap::Bec::beNDMWStatusSubSlot::vfunc_37
-00418080 000008 Gap__Bec__beNDMWStatusSubSlot__vfunc_38 Gap::Bec::beNDMWStatusSubSlot::vfunc_38
-00418090 000a28 Gap__Bec__beNDMWStatusCtrlD0__vfunc_21 Gap::Bec::beNDMWStatusCtrlD0::vfunc_21
-00418ac0 000724 FUN_00418ac0
-004191f0 000484 FUN_004191f0
-00419680 000034 FUN_00419680
-004196c0 000cb8 Gap__Bec__beNDMWStatusCtrlFolder__vfunc_21 Gap::Bec::beNDMWStatusCtrlFolder::vfunc_21
-0041a380 000080 FUN_0041a380
-0041a400 000698 Gap__Bec__beNDMWStatusCtrlFlag__vfunc_21 Gap::Bec::beNDMWStatusCtrlFlag::vfunc_21
-0041aaa0 000248 FUN_0041aaa0
-0041acf0 002544 Gap__Bec__beNDMWStatusCtrlDisk__vfunc_21 Gap::Bec::beNDMWStatusCtrlDisk::vfunc_21
-0041d240 000080 FUN_0041d240
-0041d2c0 0000e4 FUN_0041d2c0
-0041d3b0 000038 FUN_0041d3b0
-0041d3f0 00009c FUN_0041d3f0
-0041d490 00007c FUN_0041d490
-0041d510 000300 FUN_0041d510
-0041d810 0005ac Gap__Bec__beNDMWStatusCtrlBit__vfunc_21 Gap::Bec::beNDMWStatusCtrlBit::vfunc_21
-0041ddc0 000080 FUN_0041ddc0
-0041de40 0012d0 Gap__Bec__beNDMWStatusCtrlSendBit__vfunc_21 Gap::Bec::beNDMWStatusCtrlSendBit::vfunc_21
-0041f110 000080 FUN_0041f110
-0041f190 0010a0 Gap__Bec__beNDMWStatusCtrlSkill__vfunc_21 Gap::Bec::beNDMWStatusCtrlSkill::vfunc_21
-00420230 000568 FUN_00420230
-004207a0 002458 Gap__Bec__beNDMWStatusSubMenu__vfunc_21 Gap::Bec::beNDMWStatusSubMenu::vfunc_21
-00422c00 000400 FUN_00422c00
-00423000 0002f8 FUN_00423000
-00423300 00000c Gap__Bec__beNDMWStatusSubMenu__vfunc_20 Gap::Bec::beNDMWStatusSubMenu::vfunc_20
-00423310 00000c Gap__Bec__beNDMWStatusCtrlSkill__vfunc_20 Gap::Bec::beNDMWStatusCtrlSkill::vfunc_20
-00423320 00000c Gap__Bec__beNDMWStatusCtrlSendBit__vfunc_20 Gap::Bec::beNDMWStatusCtrlSendBit::vfunc_20
-00423330 00000c Gap__Bec__beNDMWStatusCtrlBit__vfunc_20 Gap::Bec::beNDMWStatusCtrlBit::vfunc_20
-00423340 00000c Gap__Bec__beNDMWStatusCtrlDisk__vfunc_20 Gap::Bec::beNDMWStatusCtrlDisk::vfunc_20
-00423350 00000c Gap__Bec__beNDMWStatusCtrlFlag__vfunc_20 Gap::Bec::beNDMWStatusCtrlFlag::vfunc_20
-00423360 00000c Gap__Bec__beNDMWStatusCtrlFolder__vfunc_20 Gap::Bec::beNDMWStatusCtrlFolder::vfunc_20
-00423370 00000c Gap__Bec__beNDMWStatusCtrlD0__vfunc_20 Gap::Bec::beNDMWStatusCtrlD0::vfunc_20
-00423380 00000c Gap__Bec__beNDMWStatusSubSlot__vfunc_20 Gap::Bec::beNDMWStatusSubSlot::vfunc_20
-00423390 00000c Gap__Bec__beNDMWStatusMainSlot__vfunc_20 Gap::Bec::beNDMWStatusMainSlot::vfunc_20
-004233a0 00000c Gap__Bec__beNDMWStatusPowerSocket__vfunc_20 Gap::Bec::beNDMWStatusPowerSocket::vfunc_20
-004233b0 00000c Gap__Bec__beNDMWStatusCtrlBaseEquip__vfunc_20 Gap::Bec::beNDMWStatusCtrlBaseEquip::vfunc_20
-004233c0 00000c Gap__Bec__beNDMWStatusCtrlEquip__vfunc_20 Gap::Bec::beNDMWStatusCtrlEquip::vfunc_20
-004233d0 00000c Gap__Bec__beNDMWStatusCtrl00__vfunc_20 Gap::Bec::beNDMWStatusCtrl00::vfunc_20
-004233e0 00000c Gap__Bec__beNDMWListCtrl__vfunc_20 Gap::Bec::beNDMWListCtrl::vfunc_20
+00412600 0006b4 beNDMWStatus_PreviewEquipment
+00412cc0 000558 beNDMWStatusPowerSocket_PresentPanel
+00413220 000258 beNDMWStatusPowerSocket_RefreshSlotList
+00413480 0001ec beNDMWStatusPowerSocket_ShowSlotDescription
+00413670 000058 beNDMWStatusPowerSocket_OpenSlotList
+004136d0 00054c beNDMWStatusPowerSocket_RefreshPocket
+00413c20 0003b0 beNDMWStatusPowerSocket_OpenSlotMenu
+00413fd0 000080 igSmartPointer_beNDMWStatusSelectE0_Destruct
+00414050 000150 beNDMWStatusPowerSocket_OnSlotMenuDecided
+004141a0 000274 beNDMWStatusPowerSocket_OpenDeviceFolder
+00414420 000080 igSmartPointer_beNDMWStatusCtrlD0_Destruct
+004144a0 00010c beNDMWStatusPowerSocket_CanEquip
+004145b0 000060 beNDMWStatusPowerSocket_EquipSelected
+00414610 000024 beNDMWStatusPowerSocket_PreviewPocketDevice
+00414640 00002c beNDMWStatusPowerSocket_PreviewSlotDevice
+00414670 000260 beNDMWStatusPowerSocket_OpenPocketList
+004148d0 000128 beNDMWStatusPowerSocket_ShowPocketDescription
+00414a00 000308 beNDMWStatusPowerSocket_OpenPocketMenu
+00414d10 000124 beNDMWStatusPowerSocket_OpenPocketFolder
+00414e40 000024 beNDMWStatusPowerSocket_EquipPocket
+00414e70 000070 beNDMWStatusPowerSocket_ClearPocket
+00414ee0 000558 beNDMWStatusMainSlot_PresentPanel
+00415440 000238 beNDMWStatusMainSlot_RefreshSlotList
+00415680 0001ec beNDMWStatusMainSlot_ShowSlotDescription
+00415870 000014 beNDMWStatusMainSlot_OpenSlotList
+00415890 00054c beNDMWStatusMainSlot_RefreshPocket
+00415de0 000350 beNDMWStatusMainSlot_OpenSlotMenu
+00416130 000120 beNDMWStatusMainSlot_OnSlotMenuDecided
+00416250 000274 beNDMWStatusMainSlot_OpenDeviceFolder
+004164d0 000080 beNDMWStatusMainSlot_CanEquip
+00416550 000050 beNDMWStatusMainSlot_EquipSelected
+004165a0 000024 beNDMWStatusMainSlot_PreviewPocketDevice
+004165d0 000318 beNDMWStatusMainSlot_PreviewSlotDevice
+004168f0 000260 beNDMWStatusMainSlot_OpenPocketList
+00416b50 000128 beNDMWStatusMainSlot_ShowPocketDescription
+00416c80 000308 beNDMWStatusMainSlot_OpenPocketMenu
+00416f90 000124 beNDMWStatusMainSlot_OpenPocketFolder
+004170c0 000024 beNDMWStatusMainSlot_EquipPocket
+004170f0 000070 beNDMWStatusMainSlot_ClearPocket
+00417160 0001e8 beNDMWStatusSubSlot_PresentPanel
+00417350 000228 beNDMWStatusSubSlot_RefreshSlotList
+00417580 000128 beNDMWStatusSubSlot_ShowSlotDescription
+004176b0 000018 beNDMWStatusSubSlot_OpenSlotList
+004176d0 0001a8 beNDMWStatusSubSlot_RefreshPocket
+00417880 00031c beNDMWStatusSubSlot_OpenSlotMenu
+00417ba0 000120 beNDMWStatusSubSlot_OnSlotMenuDecided
+00417cc0 000274 beNDMWStatusSubSlot_OpenDeviceFolder
+00417f40 000080 beNDMWStatusSubSlot_CanEquip
+00417fc0 000024 beNDMWStatusSubSlot_EquipSelected
+00417ff0 000008 beNDMWStatusSubSlot_PreviewPocketDevice
+00418000 000024 beNDMWStatusSubSlot_PreviewSlotDevice
+00418030 000008 beNDMWStatusSubSlot_OpenPocketList
+00418040 000008 beNDMWStatusSubSlot_ShowPocketDescription
+00418050 000008 beNDMWStatusSubSlot_OpenPocketMenu
+00418060 000008 beNDMWStatusSubSlot_OpenPocketFolder
+00418070 000008 beNDMWStatusSubSlot_EquipPocket
+00418080 000008 beNDMWStatusSubSlot_ClearPocket
+00418090 000a28 beNDMWStatusCtrlD0_Update
+00418ac0 000724 beNDMWStatusCtrlD0_RefreshText
+004191f0 000484 beNDMWStatusCtrlD0_UpdatePageCount
+00419680 000034 beNDMWStatusCtrlD0_GetSelectedIndex
+004196c0 000cb8 beNDMWStatusCtrlFolder_Update
+0041a380 000080 igSmartPointer_beNDMWStatusSubMenu_Destruct
+0041a400 000698 beNDMWStatusCtrlFlag_Update
+0041aaa0 000248 beNDMWStatusCtrlFlag_RefreshText
+0041acf0 002544 beNDMWStatusCtrlDisk_Update
+0041d240 000080 igSmartPointer_beNDMWShopSelect52_Destruct
+0041d2c0 0000e4 StringRefList_ResetRange
+0041d3b0 000038 ObjectList_ZeroRange
+0041d3f0 00009c ObjectList_ReleaseRange
+0041d490 00007c ObjectRef_AssignRetained
+0041d510 000300 beNDMWStatusCtrlDisk_RefreshText
+0041d810 0005ac beNDMWStatusCtrlBit_Update
+0041ddc0 000080 igSmartPointer_beNDMWStatusCtrlSendBit_Destruct
+0041de40 0012d0 beNDMWStatusCtrlSendBit_Update
+0041f110 000080 igSmartPointer_beNDMWShopSelect34_Destruct
+0041f190 0010a0 beNDMWStatusCtrlSkill_Update
+00420230 000568 beNDMWStatusCtrlSkill_RefreshText
+004207a0 002458 beNDMWStatusSubMenu_Update
+00422c00 000400 beNDMWStatusSubMenu_SortByRevision
+00423000 0002f8 beNDMWStatusSubMenu_SortByRecordNo
+00423300 00000c beNDMWStatusSubMenu_GetMeta
+00423310 00000c beNDMWStatusCtrlSkill_GetMeta
+00423320 00000c beNDMWStatusCtrlSendBit_GetMeta
+00423330 00000c beNDMWStatusCtrlBit_GetMeta
+00423340 00000c beNDMWStatusCtrlDisk_GetMeta
+00423350 00000c beNDMWStatusCtrlFlag_GetMeta
+00423360 00000c beNDMWStatusCtrlFolder_GetMeta
+00423370 00000c beNDMWStatusCtrlD0_GetMeta
+00423380 00000c beNDMWStatusSubSlot_GetMeta
+00423390 00000c beNDMWStatusMainSlot_GetMeta
+004233a0 00000c beNDMWStatusPowerSocket_GetMeta
+004233b0 00000c beNDMWStatusCtrlBaseEquip_GetMeta
+004233c0 00000c beNDMWStatusCtrlEquip_GetMeta
+004233d0 00000c beNDMWStatusCtrl00_GetMeta
+004233e0 00000c beNDMWListCtrl_GetMeta
 004233f0 000304 beNDMWWindowSelect_Update
 00423700 000054 beNDMWWindowSelect_CanRequestFO2TOP
 00423760 000488 beNDMWStatusSelect00_Setup

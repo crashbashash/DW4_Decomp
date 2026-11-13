@@ -1,4 +1,4 @@
-void FUN_002cb0d0(int arg0) {
+void igBoolList_Create(int arg0) {
     FUN_002cb1f0();
     igMetaObject_CreateInstance((CreateMeta *)(*(int *)0x5868A8), (MemoryPool *)arg0);
 }

@@ -47,7 +47,7 @@ extern "C" int List_Reserve(...);
 extern "C" int List_Resize(...);
 extern "C" int beMessenger_PopArgContext(...);
 extern "C" int beMessenger_PushArgContext(...);
-extern "C" void *FUN_002cb0d0(...);
+extern "C" void *igBoolList_Create(...);
 extern "C" int FUN_003c04a0(...);
 extern "C" int FUN_003c0440(...);
 extern "C" int beMessenger_ResolveEnumValue(...);
@@ -972,7 +972,7 @@ int Gap__Bec__beNDMWMdlPEBase__vfunc_47(beNDMWMdlPEBase *self, Model *obj, int n
         MKLIST(h9C, _timerList, FUN_002caa70)
         SIZEIT(_timerList, 12, 4)
         FILLI(_timerList, DAT_004cfdf8)
-        MKLIST(h98, _isFirstList, FUN_002cb0d0)
+        MKLIST(h98, _isFirstList, igBoolList_Create)
         SIZEIT(_isFirstList, 11, 1)
         FILLB(_isFirstList, GPR_00554aa8)
     }

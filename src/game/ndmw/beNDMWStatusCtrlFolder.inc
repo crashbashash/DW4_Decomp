@@ -1,4 +1,4 @@
-void FUN_003ba030(int arg0) {
+void beNDMWStatusCtrlFolder_Create(int arg0) {
     FUN_003ba140();
     igMetaObject_CreateInstance(*(int *)0x58AF08, arg0);
 }

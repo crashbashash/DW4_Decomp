@@ -1,4 +1,4 @@
-void FUN_003b4410(int arg0) {
+void beNDMWShopSelect52_Create(int arg0) {
     FUN_003b4520();
     igMetaObject_CreateInstance(*(int *)0x58AB90, arg0);
 }

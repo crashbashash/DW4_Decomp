@@ -117,9 +117,9 @@
 
 extern "C" void *FUN_003b31b0(...);
 extern "C" void *FUN_003b3370(...);
-extern "C" void *FUN_003b36f0(...);
-extern "C" void *FUN_003b3900(...);
-extern "C" void * FUN_003b3ac0(...);
+extern "C" void *beNDMWStatusTitle03_Create(...);
+extern "C" void *beNDMWStatusTitle02_Create(...);
+extern "C" void * beNDMWStatusTitle01_Create(...);
 extern "C" void *FUN_003b6310(...);
 extern "C" void *FUN_003b6650(...);
 extern "C" void *FUN_003b81d0(...);
@@ -148,7 +148,7 @@ extern "C" int beNDMWWindow_RunMessageScript(...);
 extern "C" int beNDMWWindow_QueueText(...);
 extern "C" void * FUN_003b4d90(...);
 extern "C" void *FUN_003b4790(int);
-extern "C" void * FUN_003b4f50(...);
+extern "C" void * beNDMWShopSelect00_Create(...);
 extern "C" void *FUN_003b6940(int);
 extern "C" int beMessenger_SelectGroup(...);
 extern "C" int beMessenger_AppendInt(...);
@@ -156,15 +156,15 @@ extern "C" void beMessenger_AppendBool(int, int);
 extern "C" int beMessenger_GetObject(...);
 extern "C" int sprintf(...);
 extern "C" int igObject_IsKindOf(...);
-extern "C" void *FUN_003baf10(void *);
+extern "C" void *beNDMWStatusCtrlD0_Create(void *);
 extern "C" void *FUN_003b7520(void *);
-extern "C" int FUN_00418ac0(void *, int, int);
+extern "C" int beNDMWStatusCtrlD0_RefreshText(void *, int, int);
 struct igResult { int value; };
 extern "C" igResult ObjectList_RemoveFirstRetained(void *, void *, int);
 extern "C" int beDataBase_GetRecordInt(...);
 extern "C" void * FUN_00236f80(...);
-extern "C" int FUN_003b4410(...);
-extern "C" int FUN_003b51b0(...);
+extern "C" int beNDMWShopSelect52_Create(...);
+extern "C" int beNDMWStatusSelectE1_Create(...);
 extern "C" int beNDMWWindow_QueueNumberText(...);
 extern "C" char * beDataBase_GetRecordString(...);
 extern "C" int beNDMWWindow_PresentModel(...);
@@ -172,7 +172,7 @@ extern "C" int beNDMWWindow_PresentModelAtOrigin(...);
 extern "C" void beMessenger_AppendVec3(int, float *);
 extern "C" void FUN_0042bae0(int *arg0, int arg1);
 extern "C" void * FUN_003b6bc0(...);
-extern "C" void * FUN_002cb0d0(...);
+extern "C" void * igBoolList_Create(...);
 extern "C" int beLua__RunNamedChunk(...);
 extern "C" int List_Resize(...);
 extern "C" int beMessenger_GetObjectCount(...);
@@ -192,11 +192,11 @@ extern "C" int FUN_00443110(...);
 extern "C" int beNDMWWindowSelect_CanRequestFO2TOP(...);
 extern "C" void *igProperty_GetRecordStringList(...);
 extern "C" void *FUN_003b8860(...);
-extern "C" void *FUN_003bace0(...);
+extern "C" void *beNDMWStatusCtrlEquip_Create(...);
 extern "C" int FUN_00425e60(...);
 extern "C" void * FUN_002caa70(...);
 extern "C" void FUN_00433290(void *window);
-extern "C" int FUN_003b45d0(...);
+extern "C" int beNDMWShopSelect34_Create(...);
 extern "C" int FUN_00440110(...);
 extern "C" int FUN_004402e0(...);
 extern "C" void *FUN_003b3f40(...);
@@ -210,7 +210,7 @@ extern "C" int beNDMWItemBase_GetRevisionColor(...);
 extern "C" int beNDMWItemRevisionPocketBase_GetPrice(...);
 extern "C" char * beNDMWItemBase_GetRecordString(...);
 extern "C" int beNDMWItemBase_GetRecordInt(...);
-extern "C" int FUN_003c90f0(...);
+extern "C" int beNDMWItemBaseList_Create(...);
 extern "C" void FUN_0043a950(int *arg0, int arg1);
 extern "C" int *FUN_002b90e0(...);
 extern "C" int *beNDMWItemAbilityChip_Create(...);
@@ -734,17 +734,17 @@ void Gap__Bec__beNDMWShopCtrl00__vfunc_21(beNDMWShopCtrl00 *arg0) {
         ObjectList_AppendRetained(arg0->_subWindow, r1.p);
         }
         x = ((int)igObject_GetAllocator(arg0));
-        { igSmartPointer<beNDMWStatusTitle01> r2((beNDMWStatusTitle01 *)FUN_003b3ac0(GPR_00554c14 != 0 ? x : ((int)Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]))));
+        { igSmartPointer<beNDMWStatusTitle01> r2((beNDMWStatusTitle01 *)beNDMWStatusTitle01_Create(GPR_00554c14 != 0 ? x : ((int)Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]))));
         beNDMWWindow_BindContext(r2.p, arg0, arg0->_insight, arg0->_playerNo, 0);
         ObjectList_AppendRetained(arg0->_subWindow, r2.p);
         }
         x = ((int)igObject_GetAllocator(arg0));
-        { igSmartPointer<beNDMWStatusTitle02> r3((beNDMWStatusTitle02 *)FUN_003b3900(GPR_00554c14 != 0 ? x : ((int)Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]))));
+        { igSmartPointer<beNDMWStatusTitle02> r3((beNDMWStatusTitle02 *)beNDMWStatusTitle02_Create(GPR_00554c14 != 0 ? x : ((int)Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]))));
         beNDMWWindow_BindContext(r3.p, arg0, arg0->_insight, arg0->_playerNo, 0);
         ObjectList_AppendRetained(arg0->_subWindow, r3.p);
         }
         x = ((int)igObject_GetAllocator(arg0));
-        { igSmartPointer<beNDMWStatusTitle03> r4((beNDMWStatusTitle03 *)FUN_003b36f0(GPR_00554c14 != 0 ? x : ((int)Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]))));
+        { igSmartPointer<beNDMWStatusTitle03> r4((beNDMWStatusTitle03 *)beNDMWStatusTitle03_Create(GPR_00554c14 != 0 ? x : ((int)Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]))));
         beNDMWWindow_BindContext(r4.p, arg0, arg0->_insight, arg0->_playerNo, 0);
         ObjectList_AppendRetained(arg0->_subWindow, r4.p);
         }
@@ -1022,7 +1022,7 @@ void Gap__Bec__beNDMWShopCtrl10__vfunc_21(beNDMWShopCtrl10 *self)
                     need = need > 400 ? 400 : (need < 0 ? 1 : need);
                     self->_parameter = self->_retCode;
                     {
-                    NEWWIN(beNDMWShopSelect00, w356, FUN_003b4f50, 0)
+                    NEWWIN(beNDMWShopSelect00, w356, beNDMWShopSelect00_Create, 0)
                     self->_st2 = self->_st2 + 1;
                     self->_st3 = 0;
                     have = *(int *)(((int)igProperty_GetRecord(obj, ((char *)DAT_0051b440))) + 12);
@@ -1122,7 +1122,7 @@ switch (self->_st3) { case 0: default: { self->_st1 = 1; self->_st3 = 0; self->_
                         beMessenger_AppendInt(self->_messenger, self->_playerNo);
                         beMessenger_DispatchSelected(self->_messenger, ((char *)DAT_0051b4a0));
                         {
-                        NEWWIN(beNDMWShopSelect00, w348, FUN_003b4f50, 1165)
+                        NEWWIN(beNDMWShopSelect00, w348, beNDMWShopSelect00_Create, 1165)
                         }
                         self->_nowProcKazu = CNT;
                         self->_st2 = self->_st2 + 1;
@@ -1353,7 +1353,7 @@ void Gap__Bec__beNDMWShopCtrl30__vfunc_21(beNDMWShopCtrl30 *arg0) {
                 alloc = igObject_GetAllocator(arg0);
                 alloc = GPR_00554c14 ? alloc : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
                 {
-                igSmartPointer<beNDMWStatusCtrlD0> win((beNDMWStatusCtrlD0 *)FUN_003baf10(alloc));
+                igSmartPointer<beNDMWStatusCtrlD0> win((beNDMWStatusCtrlD0 *)beNDMWStatusCtrlD0_Create(alloc));
                 beNDMWWindow_BindContext(win.p, arg0, arg0->_insight, arg0->_playerNo, 0);
                 ObjectList_AppendRetained((void *)arg0->_subWindow, win.p);
                 ((beNDMWStatusCtrlD0 *)win.p)->_isAutoClose = 0;
@@ -1435,7 +1435,7 @@ void Gap__Bec__beNDMWShopCtrl30__vfunc_21(beNDMWShopCtrl30 *arg0) {
                                 arg0->_st2 = 2;
                                 arg0->_st3 = 0;
                                 arg0->_st3 = 0x55E;
-                                FUN_00418ac0(wa, 1, 0);
+                                beNDMWStatusCtrlD0_RefreshText(wa, 1, 0);
                                 return;
                             }
                             wa->_st2 = 1;
@@ -1454,7 +1454,7 @@ void Gap__Bec__beNDMWShopCtrl30__vfunc_21(beNDMWShopCtrl30 *arg0) {
                 alloc = igObject_GetAllocator(arg0);
                 alloc = GPR_00554c14 ? alloc : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
                 {
-                igSmartPointer<beNDMWShopSelect00> win((beNDMWShopSelect00 *)FUN_003b4f50(alloc));
+                igSmartPointer<beNDMWShopSelect00> win((beNDMWShopSelect00 *)beNDMWShopSelect00_Create(alloc));
                 beNDMWWindow_BindContext(win.p, arg0, arg0->_insight, arg0->_playerNo, arg0->_st3);
                 ObjectList_AppendRetained((void *)arg0->_subWindow, win.p);
                 }
@@ -1541,7 +1541,7 @@ void Gap__Bec__beNDMWShopCtrl30__vfunc_21(beNDMWShopCtrl30 *arg0) {
                 alloc = igObject_GetAllocator(arg0);
                 alloc = GPR_00554c14 ? alloc : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
                 {
-                igSmartPointer<beNDMWShopSelect00> win((beNDMWShopSelect00 *)FUN_003b4f50(alloc));
+                igSmartPointer<beNDMWShopSelect00> win((beNDMWShopSelect00 *)beNDMWShopSelect00_Create(alloc));
                 beNDMWWindow_BindContext(win.p, arg0, arg0->_insight, arg0->_playerNo, arg0->_st3);
                 ObjectList_AppendRetained((void *)arg0->_subWindow, win.p);
                 }
@@ -1600,7 +1600,7 @@ void Gap__Bec__beNDMWShopCtrl40__vfunc_21(beNDMWShopCtrl40 *arg0) {
                 alloc = igObject_GetAllocator(arg0);
                 alloc = GPR_00554c14 ? alloc : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
                 {
-                    igSmartPointer<beNDMWStatusCtrlD0> spBC((beNDMWStatusCtrlD0 *)FUN_003baf10(alloc));
+                    igSmartPointer<beNDMWStatusCtrlD0> spBC((beNDMWStatusCtrlD0 *)beNDMWStatusCtrlD0_Create(alloc));
                     beNDMWWindow_BindContext(spBC.p, arg0, arg0->_insight, arg0->_playerNo, 0);
                     ObjectList_AppendRetained((void *)arg0->_subWindow, spBC.p);
                     ((Rc *)spBC.p)->f111 = 0;
@@ -1651,7 +1651,7 @@ void Gap__Bec__beNDMWShopCtrl40__vfunc_21(beNDMWShopCtrl40 *arg0) {
                 alloc = igObject_GetAllocator(arg0);
                 alloc = GPR_00554c14 ? alloc : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
                 {
-                    igSmartPointer<beNDMWShopSelect00> spB8((beNDMWShopSelect00 *)FUN_003b4f50(alloc));
+                    igSmartPointer<beNDMWShopSelect00> spB8((beNDMWShopSelect00 *)beNDMWShopSelect00_Create(alloc));
                     beNDMWWindow_BindContext(spB8.p, arg0, arg0->_insight, arg0->_playerNo, 0x5AC);
                     ObjectList_AppendRetained((void *)arg0->_subWindow, spB8.p);
                 }
@@ -1780,7 +1780,7 @@ void Gap__Bec__beNDMWShopCtrl40__vfunc_21(beNDMWShopCtrl40 *arg0) {
                 alloc = igObject_GetAllocator(arg0);
                 alloc = GPR_00554c14 ? alloc : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
                 {
-                    igSmartPointer<beNDMWShopSelect00> spAC((beNDMWShopSelect00 *)FUN_003b4f50(alloc));
+                    igSmartPointer<beNDMWShopSelect00> spAC((beNDMWShopSelect00 *)beNDMWShopSelect00_Create(alloc));
                     beNDMWWindow_BindContext(spAC.p, arg0, arg0->_insight, arg0->_playerNo, 0x5AB);
                     ObjectList_AppendRetained((void *)arg0->_subWindow, spAC.p);
                 }
@@ -1956,7 +1956,7 @@ void Gap__Bec__beNDMWShopCtrl50__vfunc_21(beNDMWShopCtrl50 *self) {
                 beMessenger_SendNamed(self->_messenger, &DAT_0051b308[0], &DAT_0051b610[0], 0, &DAT_0051b698[0]);
                 ALLOC(alloc, self)
                 {
-                igSmartPointer<beNDMWStatusSelectE1> spC8((beNDMWStatusSelectE1 *)FUN_003b51b0(alloc));
+                igSmartPointer<beNDMWStatusSelectE1> spC8((beNDMWStatusSelectE1 *)beNDMWStatusSelectE1_Create(alloc));
                 beNDMWWindow_BindContext(spC8.p, self, self->_insight, self->_playerNo, 0);
                 ObjectList_AppendRetained(self->_subWindow, spC8.p);
                 { beNDMWWindowSelect *w = (beNDMWWindowSelect *)spC8.p; w->_offsetPos[0] = -121.0f; w->_offsetPos[1] = 128.0f; w->_offsetPos[2] = 0.0f; }
@@ -2046,7 +2046,7 @@ void Gap__Bec__beNDMWShopCtrl50__vfunc_21(beNDMWShopCtrl50 *self) {
                 beMessenger_SendNamed(self->_messenger, &DAT_0051b308[0], &DAT_0051b610[0], 0, &DAT_0051b6d0[0]);
                 ALLOC(alloc, self)
                 {
-                igSmartPointer<beNDMWShopSelect52> spC4((beNDMWShopSelect52 *)FUN_003b4410(alloc));
+                igSmartPointer<beNDMWShopSelect52> spC4((beNDMWShopSelect52 *)beNDMWShopSelect52_Create(alloc));
                 beNDMWWindow_BindContext(spC4.p, self, self->_insight, self->_playerNo, 9 - self->_diskCnt);
                 ObjectList_AppendRetained(self->_subWindow, spC4.p);
                 { beNDMWWindowSelect *w = (beNDMWWindowSelect *)spC4.p; w->_offsetPos[0] = 52.0f; w->_offsetPos[1] = -69.0f; w->_offsetPos[2] = 0.0f; }
@@ -2113,7 +2113,7 @@ void Gap__Bec__beNDMWShopCtrl50__vfunc_21(beNDMWShopCtrl50 *self) {
             case 1:
                 ALLOC(alloc, self)
                 {
-                igSmartPointer<beNDMWShopSelect00> spC0((beNDMWShopSelect00 *)FUN_003b4f50(alloc));
+                igSmartPointer<beNDMWShopSelect00> spC0((beNDMWShopSelect00 *)beNDMWShopSelect00_Create(alloc));
                 beNDMWWindow_BindContext(spC0.p, self, self->_insight, self->_playerNo, 0x613);
                 ObjectList_AppendRetained(self->_subWindow, spC0.p);
                 }
@@ -2181,7 +2181,7 @@ void Gap__Bec__beNDMWShopCtrl50__vfunc_21(beNDMWShopCtrl50 *self) {
             case 0:
                 ALLOC(alloc, self)
                 {
-                igSmartPointer<beNDMWShopSelect00> spB8((beNDMWShopSelect00 *)FUN_003b4f50(alloc));
+                igSmartPointer<beNDMWShopSelect00> spB8((beNDMWShopSelect00 *)beNDMWShopSelect00_Create(alloc));
                 beNDMWWindow_BindContext(spB8.p, self, self->_insight, self->_playerNo, self->_st3);
                 ObjectList_AppendRetained(self->_subWindow, spB8.p);
                 }
@@ -2346,7 +2346,7 @@ void Gap__Bec__beNDMWShopJunk__vfunc_21(beNDMWShopJunk *arg0) {
                 ((beNDMWShopSelect01 *)sp8C.p)->_startPoint = arg0->_junkMenu;
                 alloc = igObject_GetAllocator(arg0);
                 alloc = GPR_00554c14 ? alloc : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
-                igSmartPointer<igBoolList> sp88((igBoolList *)FUN_002cb0d0(alloc));
+                igSmartPointer<igBoolList> sp88((igBoolList *)igBoolList_Create(alloc));
 
                 if (arg0->_totalGift >= 3956000) {
                     PUSHB(sp88.p, GPR_00554a38)
@@ -2517,7 +2517,7 @@ void Gap__Bec__beNDMWShopJunk__vfunc_21(beNDMWShopJunk *arg0) {
                 alloc = igObject_GetAllocator(arg0);
                 alloc = GPR_00554c14 ? alloc : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
                 {
-                igSmartPointer<beNDMWShopSelect00> sp7C((beNDMWShopSelect00 *)FUN_003b4f50(alloc));
+                igSmartPointer<beNDMWShopSelect00> sp7C((beNDMWShopSelect00 *)beNDMWShopSelect00_Create(alloc));
                 beNDMWWindow_BindContext(sp7C.p, arg0, arg0->_insight, arg0->_playerNo, 0x7b2);
                 ObjectList_AppendRetained((unsigned)arg0->_subWindow, sp7C.p);
                 }
@@ -2583,7 +2583,7 @@ void Gap__Bec__beNDMWShopCtrlA0__vfunc_21(beNDMWShopCtrlA0 *arg0) {
                 ObjectList_AppendRetained(arg0->_subWindow, r1.p);
                 }  
                 x = ((int)igObject_GetAllocator(arg0));
-                { igSmartPointer<beNDMWStatusTitle03> r2((beNDMWStatusTitle03 *)FUN_003b36f0(GPR_00554c14 != 0 ? x : ((int)Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]))));
+                { igSmartPointer<beNDMWStatusTitle03> r2((beNDMWStatusTitle03 *)beNDMWStatusTitle03_Create(GPR_00554c14 != 0 ? x : ((int)Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]))));
                 beNDMWWindow_BindContext(r2.p, arg0, arg0->_insight, arg0->_playerNo, 0);
                 ObjectList_AppendRetained(arg0->_subWindow, r2.p);
                 {
@@ -2625,7 +2625,7 @@ void Gap__Bec__beNDMWShopCtrlA0__vfunc_21(beNDMWShopCtrlA0 *arg0) {
                     i += 1;
                 } while (i < 4);
                 x = ((int)igObject_GetAllocator(arg0));
-                { igSmartPointer<beNDMWStatusTitle01> r4((beNDMWStatusTitle01 *)FUN_003b3ac0(GPR_00554c14 != 0 ? x : ((int)Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]))));
+                { igSmartPointer<beNDMWStatusTitle01> r4((beNDMWStatusTitle01 *)beNDMWStatusTitle01_Create(GPR_00554c14 != 0 ? x : ((int)Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]))));
                 beNDMWWindow_BindContext(r4.p, arg0, arg0->_insight, arg0->_playerNo, 1);
                 ObjectList_AppendRetained(arg0->_subWindow, r4.p);
                 }  
@@ -3537,7 +3537,7 @@ void Gap__Bec__beNDMWShopCtrlEvolve__vfunc_21(beNDMWShopCtrlEvolve *self) {
         case 0:
             ALLOC_42f710(alloc, self)
             {
-            igSmartPointer<beNDMWStatusSelectE1> win((beNDMWStatusSelectE1 *)FUN_003b51b0(alloc));
+            igSmartPointer<beNDMWStatusSelectE1> win((beNDMWStatusSelectE1 *)beNDMWStatusSelectE1_Create(alloc));
             beNDMWWindow_BindContext(win.p, self, self->_insight, self->_playerNo, 0);
             ObjectList_AppendRetained(self->_subWindow, win.p);
             {
@@ -3723,7 +3723,7 @@ void Gap__Bec__beNDMWShopCtrlEvolve__vfunc_21(beNDMWShopCtrlEvolve *self) {
             case 2:
                 ALLOC_42f710(alloc, self)
                 {
-                igSmartPointer<beNDMWShopSelect00> win((beNDMWShopSelect00 *)FUN_003b4f50(alloc));
+                igSmartPointer<beNDMWShopSelect00> win((beNDMWShopSelect00 *)beNDMWShopSelect00_Create(alloc));
                 beNDMWWindow_BindContext(win.p, self, self->_insight, self->_playerNo, 0x4E9);
                 ObjectList_AppendRetained(self->_subWindow, win.p);
                 }
@@ -3766,7 +3766,7 @@ void Gap__Bec__beNDMWShopCtrlEvolve__vfunc_21(beNDMWShopCtrlEvolve *self) {
                 int idx;
                 ALLOC_42f710(alloc, self)
                 {
-                igSmartPointer<beNDMWShopSelect00> win((beNDMWShopSelect00 *)FUN_003b4f50(alloc));
+                igSmartPointer<beNDMWShopSelect00> win((beNDMWShopSelect00 *)beNDMWShopSelect00_Create(alloc));
                 beNDMWWindow_BindContext(win.p, self, self->_insight, self->_playerNo, 0);
                 ObjectList_AppendRetained(self->_subWindow, win.p);
                 APPENDSTR_42f710(((beNDMWWindowSelect *)win.p)->_textCloseTypeList, STWINFONT29)
@@ -3814,7 +3814,7 @@ void Gap__Bec__beNDMWShopCtrlEvolve__vfunc_21(beNDMWShopCtrlEvolve *self) {
             case 0:
                 ALLOC_42f710(alloc, self)
                 {
-                igSmartPointer<beNDMWShopSelect00> win((beNDMWShopSelect00 *)FUN_003b4f50(alloc));
+                igSmartPointer<beNDMWShopSelect00> win((beNDMWShopSelect00 *)beNDMWShopSelect00_Create(alloc));
                 beNDMWWindow_BindContext(win.p, self, self->_insight, self->_playerNo, 0);
                 ObjectList_AppendRetained(self->_subWindow, win.p);
                 APPENDSTR_42f710(((beNDMWWindowSelect *)win.p)->_textCloseTypeList, STWINFONT29)
@@ -4097,7 +4097,7 @@ void Gap__Bec__beNDMWShopCtrlDigilabo__vfunc_21(beNDMWShopCtrlDigilabo *self) {
         }
         ALLOC_42f710(alloc, self)
         {
-            igSmartPointer<beNDMWStatusTitle03> spA8((beNDMWStatusTitle03 *)FUN_003b36f0(alloc));
+            igSmartPointer<beNDMWStatusTitle03> spA8((beNDMWStatusTitle03 *)beNDMWStatusTitle03_Create(alloc));
         beNDMWWindow_BindContext(spA8.p, self, self->_insight, self->_playerNo, 0);
         ObjectList_AppendRetained(self->_subWindow, spA8.p);
         }
@@ -4234,7 +4234,7 @@ void Gap__Bec__beNDMWShopCtrlDigilabo__vfunc_21(beNDMWShopCtrlDigilabo *self) {
             case 1:
                 ALLOC_42f710(alloc, self)
                 {
-                    igSmartPointer<beNDMWStatusCtrlEquip> sp98((beNDMWStatusCtrlEquip *)FUN_003bace0(alloc));
+                    igSmartPointer<beNDMWStatusCtrlEquip> sp98((beNDMWStatusCtrlEquip *)beNDMWStatusCtrlEquip_Create(alloc));
                 beNDMWWindow_BindContext(sp98.p, self, self->_insight, self->_playerNo, 1);
                 ObjectList_AppendRetained(self->_subWindow, sp98.p);
                 beNDMWWindow_PresentModelAtOrigin(sp98.p, &DAT_0051b318[0], 0, &DAT_0051b328[0], &DAT_0051ba28[0]);
@@ -4736,7 +4736,7 @@ void FUN_00433120(beNDMWWindow *arg0, int arg1, int arg2) {
             w = ((int)Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]));
         }
         /* The new window is owned by the stack reference until the sub-window list has taken its own. */
-        igSmartPointer<beNDMWStatusTitle01> created((beNDMWStatusTitle01 *)FUN_003b3ac0(w));
+        igSmartPointer<beNDMWStatusTitle01> created((beNDMWStatusTitle01 *)beNDMWStatusTitle01_Create(w));
         beNDMWWindow_BindContext(created.p, arg0, arg0->_insight, arg1, 1);
         ObjectList_AppendRetained(arg0->_subWindow, (igObject *)created.p);
     } else {
@@ -4817,7 +4817,7 @@ void Gap__Bec__beNDMWShopCtrlEditBit__vfunc_21(beNDMWShopCtrlEditBit *self) {
         case 0:
             ALLOC(alloc, self)
             {
-            igSmartPointer<beNDMWShopSelect34> spAC((beNDMWShopSelect34 *)FUN_003b45d0(alloc));
+            igSmartPointer<beNDMWShopSelect34> spAC((beNDMWShopSelect34 *)beNDMWShopSelect34_Create(alloc));
             beNDMWWindow_BindContext(spAC.p, self, self->_insight, self->_playerNo, self->_entCode);
             ObjectList_AppendRetained(self->_subWindow, spAC.p);
             }
@@ -4946,7 +4946,7 @@ void Gap__Bec__beNDMWShopCtrlEditBit__vfunc_21(beNDMWShopCtrlEditBit *self) {
         case 3:
             ALLOC(alloc, self)
             {
-            igSmartPointer<beNDMWShopSelect00> spA8((beNDMWShopSelect00 *)FUN_003b4f50(alloc));
+            igSmartPointer<beNDMWShopSelect00> spA8((beNDMWShopSelect00 *)beNDMWShopSelect00_Create(alloc));
             beNDMWWindow_BindContext(spA8.p, self, self->_insight, self->_playerNo, 0);
             ObjectList_AppendRetained(self->_subWindow, spA8.p);
             switch (self->_entCode) {
@@ -5106,7 +5106,7 @@ void Gap__Bec__beNDMWShopCtrlSell__vfunc_21(beNDMWShopCtrlSell *self) {
                 switch (self->_st3) {
                 case 1: {
                     ALLOC(alloc, self)
-                    igSmartPointer<igBoolList> sp58((igBoolList *)FUN_002cb0d0(alloc));
+                    igSmartPointer<igBoolList> sp58((igBoolList *)igBoolList_Create(alloc));
                     { igBoolList *l = (igBoolList *)sp58.p; PUSH_BOOL(l, GPR_00554a50) }
                     { igBoolList *l = (igBoolList *)sp58.p; PUSH_BOOL(l, GPR_00554a54) }
                     {
@@ -5125,7 +5125,7 @@ void Gap__Bec__beNDMWShopCtrlSell__vfunc_21(beNDMWShopCtrlSell *self) {
                 }
                 case 2: {
                     ALLOC(alloc, self)
-                    igSmartPointer<igBoolList> sp54((igBoolList *)FUN_002cb0d0(alloc));
+                    igSmartPointer<igBoolList> sp54((igBoolList *)igBoolList_Create(alloc));
                     { igBoolList *l = (igBoolList *)sp54.p; PUSH_BOOL(l, GPR_00554a58) }
                     { igBoolList *l = (igBoolList *)sp54.p; PUSH_BOOL(l, GPR_00554a5c) }
                     {
@@ -5213,7 +5213,7 @@ void Gap__Bec__beNDMWShopCtrlSell__vfunc_21(beNDMWShopCtrlSell *self) {
             case 0:
                 ALLOC(alloc, self)
                 {
-                igSmartPointer<beNDMWShopSelect00> sp48((beNDMWShopSelect00 *)FUN_003b4f50(alloc));
+                igSmartPointer<beNDMWShopSelect00> sp48((beNDMWShopSelect00 *)beNDMWShopSelect00_Create(alloc));
                 beNDMWWindow_BindContext(sp48.p, self, self->_insight, self->_playerNo, 0x628);
                 ObjectList_AppendRetained(self->_subWindow, sp48.p);
                 }
@@ -5331,7 +5331,7 @@ void Gap__Bec__beNDMWShopCtrlDeviceSell__vfunc_21(beNDMWShopCtrlDeviceSell *self
                 void *alloc;
                 ALLOC(alloc, self)
                 {
-                    igSmartPointer<beNDMWStatusSelectE1> selectWin((beNDMWStatusSelectE1 *)FUN_003b51b0(alloc));
+                    igSmartPointer<beNDMWStatusSelectE1> selectWin((beNDMWStatusSelectE1 *)beNDMWStatusSelectE1_Create(alloc));
                     self->_retCode = self->_cursor;
                     beNDMWWindow_BindContext(selectWin.p, self, self->_insight, self->_playerNo, 0);
                     ObjectList_AppendRetained(self->_subWindow, selectWin.p);
@@ -5425,7 +5425,7 @@ void Gap__Bec__beNDMWShopCtrlDeviceSell__vfunc_21(beNDMWShopCtrlDeviceSell *self
                 void *alloc;
                 ALLOC(alloc, self)
                 {
-                    igSmartPointer<beNDMWShopSelect00> confirmWin((beNDMWShopSelect00 *)FUN_003b4f50(alloc));
+                    igSmartPointer<beNDMWShopSelect00> confirmWin((beNDMWShopSelect00 *)beNDMWShopSelect00_Create(alloc));
                     beNDMWWindow_BindContext(confirmWin.p, self, self->_insight, self->_playerNo, 0x619);
                     ObjectList_AppendRetained(self->_subWindow, confirmWin.p);
                 }
@@ -5796,7 +5796,7 @@ void Gap__Bec__beNDMWShopCtrlDiskSell__vfunc_21(beNDMWShopCtrlDiskSell *self) {
                 FUN_00435250((int *)self->_mother, -1);
                 ALLOC(alloc, self)
                 {
-                igSmartPointer<beNDMWStatusSelectE1> spBC((beNDMWStatusSelectE1 *)FUN_003b51b0(alloc));
+                igSmartPointer<beNDMWStatusSelectE1> spBC((beNDMWStatusSelectE1 *)beNDMWStatusSelectE1_Create(alloc));
                 self->_retCode = self->_cursor;
                 beNDMWWindow_BindContext(spBC.p, self, self->_insight, self->_playerNo, 0);
                 ObjectList_AppendRetained(self->_subWindow, spBC.p);
@@ -5809,7 +5809,7 @@ void Gap__Bec__beNDMWShopCtrlDiskSell__vfunc_21(beNDMWShopCtrlDiskSell *self) {
                 fa = igProperty_GetRecordFolder(beMessenger_GetObject(self->_messenger, 0), &DAT_0051b6c0[0])->f12;
                 ((beNDMWStatusSelectE1 *)spBC.p)->_selectMax = fa->_count;
                 ALLOC(alloc, self)
-                igSmartPointer<igBoolList> spB8((igBoolList *)FUN_002cb0d0(alloc));
+                igSmartPointer<igBoolList> spB8((igBoolList *)igBoolList_Create(alloc));
                 j = 0;
                 if (0 < fa->_count) {
                     do {
@@ -5896,7 +5896,7 @@ void Gap__Bec__beNDMWShopCtrlDiskSell__vfunc_21(beNDMWShopCtrlDiskSell *self) {
                 beMessenger_SendNamed(self->_messenger, &DAT_0051b308[0], &DAT_0051b610[0], 0, &DAT_0051bdb0[0]);
                 ALLOC(alloc, self)
                 {
-                igSmartPointer<beNDMWShopSelect52> spB4((beNDMWShopSelect52 *)FUN_003b4410(alloc));
+                igSmartPointer<beNDMWShopSelect52> spB4((beNDMWShopSelect52 *)beNDMWShopSelect52_Create(alloc));
                 beNDMWWindow_BindContext(spB4.p, self, self->_insight, self->_playerNo, self->_maxSell);
                 ObjectList_AppendRetained(self->_subWindow, spB4.p);
                 { beNDMWShopSelect52 *w = (beNDMWShopSelect52 *)spB4.p; w->_offsetPos[0] = 52.0f; w->_offsetPos[1] = -104.0f; w->_offsetPos[2] = 0.0f; }
@@ -5941,7 +5941,7 @@ void Gap__Bec__beNDMWShopCtrlDiskSell__vfunc_21(beNDMWShopCtrlDiskSell *self) {
             case 0:
                 ALLOC(alloc, self)
                 {
-                igSmartPointer<beNDMWShopSelect00> spB0((beNDMWShopSelect00 *)FUN_003b4f50(alloc));
+                igSmartPointer<beNDMWShopSelect00> spB0((beNDMWShopSelect00 *)beNDMWShopSelect00_Create(alloc));
                 beNDMWWindow_BindContext(spB0.p, self, self->_insight, self->_playerNo, 0x619);
                 ObjectList_AppendRetained(self->_subWindow, spB0.p);
                 }
@@ -6354,8 +6354,8 @@ void FUN_00439f30(beNDMWShopCtrlSales *arg0, int arg1) {
         l1 = (igObjectList *)((Rec_439d60 *)igProperty_GetRecordFolder(obj, &DAT_0051bb78[0]))->f12;
         m1 = (igObjectList *)((Rec_439d60 *)igProperty_GetRecordFolder(obj, &DAT_0051bba0[0]))->f12;
         l2 = (igObjectList *)((Rec_439d60 *)igProperty_GetRecordFolder(obj, &DAT_0051bb88[0]))->f12;
-        igSmartPointer<beNDMWItemBaseList> a((beNDMWItemBaseList *)FUN_003c90f0(ShopAlloc::Pool(arg0)));
-        igSmartPointer<beNDMWItemBaseList> b((beNDMWItemBaseList *)FUN_003c90f0(ShopAlloc::Pool(arg0)));
+        igSmartPointer<beNDMWItemBaseList> a((beNDMWItemBaseList *)beNDMWItemBaseList_Create(ShopAlloc::Pool(arg0)));
+        igSmartPointer<beNDMWItemBaseList> b((beNDMWItemBaseList *)beNDMWItemBaseList_Create(ShopAlloc::Pool(arg0)));
         kind = item->_kindNo;
         if (kind == 0) {
             FUN_0043a450(arg0, (OL *)l0, (OL *)a.p, (OL *)m0, (OL *)b.p);
@@ -6657,7 +6657,7 @@ void Gap__Bec__beNDMWShopCtrlXdataChip__vfunc_21(beNDMWShopCtrlXdataChip *arg0) 
             }
             ALLOC_43aae0(al)
             {
-            igSmartPointer<beNDMWStatusSelectE1> pageWin((beNDMWStatusSelectE1 *)FUN_003b51b0(al));
+            igSmartPointer<beNDMWStatusSelectE1> pageWin((beNDMWStatusSelectE1 *)beNDMWStatusSelectE1_Create(al));
             beNDMWWindow_BindContext(pageWin.p, arg0, arg0->_insight, arg0->_playerNo, 0);
             ObjectList_AppendRetained((unsigned)arg0->_subWindow, pageWin.p);
             {
@@ -6762,7 +6762,7 @@ void Gap__Bec__beNDMWShopCtrlXdataChip__vfunc_21(beNDMWShopCtrlXdataChip *arg0) 
                 int recNo;
                 {
                 ALLOC_43aae0(al)
-                igSmartPointer<beNDMWShopSelect00> infoWin((beNDMWShopSelect00 *)FUN_003b4f50(al));
+                igSmartPointer<beNDMWShopSelect00> infoWin((beNDMWShopSelect00 *)beNDMWShopSelect00_Create(al));
                 beNDMWWindow_BindContext(infoWin.p, arg0, arg0->_insight, arg0->_playerNo, 0);
                 ObjectList_AppendRetained((unsigned)arg0->_subWindow, infoWin.p);
                 int pages0 = arg0->_nowPage;
@@ -6891,7 +6891,7 @@ void Gap__Bec__beNDMWShopCtrlXdataChip__vfunc_21(beNDMWShopCtrlXdataChip *arg0) 
             case 0:
                 ALLOC_43aae0(al)
                 {
-                igSmartPointer<beNDMWShopSelect00> refusalWin((beNDMWShopSelect00 *)FUN_003b4f50(al));
+                igSmartPointer<beNDMWShopSelect00> refusalWin((beNDMWShopSelect00 *)beNDMWShopSelect00_Create(al));
                 beNDMWWindow_BindContext(refusalWin.p, arg0, arg0->_insight, arg0->_playerNo, arg0->_st3);
                 ObjectList_AppendRetained((unsigned)arg0->_subWindow, refusalWin.p);
                 beNDMWShopSelect00 *w = refusalWin.p;
@@ -6931,7 +6931,7 @@ void Gap__Bec__beNDMWShopCtrlXdataChip__vfunc_21(beNDMWShopCtrlXdataChip *arg0) 
             case 0:
                 ALLOC_43aae0(al)
                 {
-                igSmartPointer<beNDMWShopSelect00> shortageWin((beNDMWShopSelect00 *)FUN_003b4f50(al));
+                igSmartPointer<beNDMWShopSelect00> shortageWin((beNDMWShopSelect00 *)beNDMWShopSelect00_Create(al));
                 beNDMWWindow_BindContext(shortageWin.p, arg0, arg0->_insight, arg0->_playerNo, arg0->_st3);
                 ObjectList_AppendRetained((unsigned)arg0->_subWindow, shortageWin.p);
                 }
