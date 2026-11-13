@@ -12319,7 +12319,7 @@
 0030b3c0	FUN_0030b3c0	match	-
 0030b420	igStringObj_Clear	match	-
 0030b460	FUN_0030b460	match	-
-0030b5c0	FUN_0030b5c0	match	-
+0030b5c0	igStringObj_ToLower	match	-
 0030b5f0	FUN_0030b5f0	match	-
 0030b630	FUN_0030b630	match	-
 0030b670	FUN_0030b670	match	-
@@ -12328,12 +12328,12 @@
 0030b770	FUN_0030b770	match	-
 0030b7e0	FUN_0030b7e0	match	-
 0030b840	FUN_0030b840	match	-
-0030b8a0	FUN_0030b8a0	match	-
+0030b8a0	igStringObj_KeepExtension	match	-
 0030b980	FUN_0030b980	match	-
-0030ba20	FUN_0030ba20	match	-
+0030ba20	igStringObj_StripDirectory	match	-
 0030ba90	FUN_0030ba90	match	-
 0030bb40	FUN_0030bb40	match	-
-0030bbf0	FUN_0030bbf0	match	-
+0030bbf0	igStringObj_Erase	match	-
 0030bce0	FUN_0030bce0	match	-
 0030bed0	thunk_strcasecmp	match	-
 0030bee0	FUN_0030bee0	match	-
@@ -13765,7 +13765,7 @@
 003440f0	beSoundData_Register	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
 00344160	beSoundData_GetMetaObject	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
 00344180	beSoundData_InitFields	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
-00344250	FUN_00344250	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
+00344250	beSound_GetMessageEnum	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
 003442b0	beSound_CreateInstance	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
 003442f0	FUN_003442f0	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
 00344340	FUN_00344340	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
@@ -13781,7 +13781,7 @@
 00344710	FUN_00344710	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
 00344730	bePlaySEList_Register	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
 003447a0	bePlaySEList_GetMetaObject	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
-003447c0	FUN_003447c0	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
+003447c0	bePlaySE_CreateInstance	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
 00344800	FUN_00344800	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
 00344850	bePlaySE_GetVTable	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
 00344890	FUN_00344890	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
@@ -16472,14 +16472,14 @@
 0039e090	FUN_0039e090	match	-
 0039e290	Gap__Bec__beShadow01__vfunc_25	match	-
 0039e530	Gap__Bec__beShadow01__vfunc_20	match	-
-0039e540	Gap__Bec__beSound__vfunc_32	match	DEFERRED duplicate 0x1c6460 __dt__11NameListRefFv 128B (compared under the profile of its retail unit)
-0039e740	Gap__Bec__beSound__vfunc_29	match	DEFERRED duplicate 0x1c6460 __dt__11NameListRefFv 128B (compared under the profile of its retail unit)
-0039e860	Gap__Bec__beSound__vfunc_30	match	DEFERRED duplicate 0x1c6460 __dt__11NameListRefFv 128B (compared under the profile of its retail unit)
-0039e870	Gap__Bec__beSound__vfunc_31	match	DEFERRED duplicate 0x1c6460 __dt__11NameListRefFv 128B (compared under the profile of its retail unit)
-0039ec10	Gap__Bec__beSound__vfunc_34	match	DEFERRED duplicate 0x1c6460 __dt__11NameListRefFv 128B (compared under the profile of its retail unit)
-0039fae0	FUN_0039fae0	match	DEFERRED duplicate 0x1c6460 __dt__11NameListRefFv 128B (compared under the profile of its retail unit)
-0039fb60	FUN_0039fb60	match	DEFERRED duplicate 0x1c6460 __dt__11NameListRefFv 128B (compared under the profile of its retail unit)
-0039fc20	Gap__Bec__beSound__vfunc_20	match	DEFERRED duplicate 0x1c6460 __dt__11NameListRefFv 128B (compared under the profile of its retail unit)
+0039e540	beSound_Prepare	match	DEFERRED duplicate 0x1c6460 __dt__11NameListRefFv 128B (compared under the profile of its retail unit)
+0039e740	beSound_RegisterReceiver	match	DEFERRED duplicate 0x1c6460 __dt__11NameListRefFv 128B (compared under the profile of its retail unit)
+0039e860	beSound_GetInfoMeta	match	DEFERRED duplicate 0x1c6460 __dt__11NameListRefFv 128B (compared under the profile of its retail unit)
+0039e870	beSound_Update	match	DEFERRED duplicate 0x1c6460 __dt__11NameListRefFv 128B (compared under the profile of its retail unit)
+0039ec10	beSound_OnMessage	match	DEFERRED duplicate 0x1c6460 __dt__11NameListRefFv 128B (compared under the profile of its retail unit)
+0039fae0	igSmartPointer_bePlaySE_Destruct	match	DEFERRED duplicate 0x1c6460 __dt__11NameListRefFv 128B (compared under the profile of its retail unit)
+0039fb60	beSound_FindData	match	DEFERRED duplicate 0x1c6460 __dt__11NameListRefFv 128B (compared under the profile of its retail unit)
+0039fc20	beSound_GetMeta	match	DEFERRED duplicate 0x1c6460 __dt__11NameListRefFv 128B (compared under the profile of its retail unit)
 0039fc30	Gap__Bec__beSwitchCtrl__vfunc_32	match	-
 0039fc40	Gap__Bec__beSwitchCtrl__vfunc_30	match	-
 0039fc50	Gap__Bec__beSwitchCtrl__vfunc_29	match	-
