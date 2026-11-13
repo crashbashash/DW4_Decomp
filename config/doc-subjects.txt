@@ -43,6 +43,7 @@ docs/engine/stage-materials.md
 docs/engine/subwindow-command.md
 docs/engine/subwindow-preparation.md
 docs/engine/system-clock.md
+docs/engine/target-object.md
 docs/engine/title-menu-controller.md
 docs/engine/typed-game-layer.md
 docs/engine/window-presentation.md

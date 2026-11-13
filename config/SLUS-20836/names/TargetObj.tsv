@@ -1,0 +1,14 @@
+0x003a5b40	beTargetObj_GatherPositions	game
+0x003a5cc0	beTargetObj_FindNearest	game
+0x003a5d70	beTargetObj_FindFacing	game
+0x003a5f60	beTargetObj_GetPlayerCentre	game
+0x003a63b0	beTargetObj_TargetPlayer	game
+0x003a64d0	beTargetObj_TargetEnemy	game
+0x003a65f0	beTargetObj_SelectTarget	game
+0x003a6750	beTargetObj_SetTarget	game
+0x003a6840	beTargetObj_GetOrigin	game
+0x003a6850	beTargetObj_GetOriginHeading	game
+0x003a68c0	beTargetObj_GetTargetPosition	game
+0x003a68d0	beTargetObj_GetTargetDistanceSq	game
+0x003a68e0	beTargetObj_GetTargetBearing	game
+0x003a6930	beTargetObj_GetTargetRamNo	game

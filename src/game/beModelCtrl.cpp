@@ -33,10 +33,10 @@ extern "C" int FUN_002eb010(...);
 extern "C" int StringPool_Construct(...);
 extern "C" int StringChunk_ReleaseHeader(...);
 extern "C" int FUN_003a7e90(void *, void *);
-extern "C" int FUN_003a6750(void *, void *);
-extern "C" int FUN_003a65f0(void *, void *, void *);
-extern "C" float FUN_003a68d0(...);
-extern "C" float FUN_003a68e0(int, int, int, float);
+extern "C" int beTargetObj_SetTarget(void *, void *);
+extern "C" int beTargetObj_SelectTarget(void *, void *, void *);
+extern "C" float beTargetObj_GetTargetDistanceSq(...);
+extern "C" float beTargetObj_GetTargetBearing(int, int, int, float);
 extern "C" int FUN_003a7a20(...);
 extern "C" int __fixsfdi(float);
 extern "C" int strcmp(...);
@@ -837,15 +837,15 @@ void FUN_00390f80(beModelCtrl *arg0, void *arg1, beBaseInfoRam *arg2, beModelCtr
             vec[0] = ((float *)c2->_worldPos)[0];
             vec[1] = ((float *)c2->_worldPos)[1];
             vec[2] = ((float *)c2->_worldPos)[2];
-            if ((FUN_003a6750((char *)prop->_node + 32, vec) & 0xff) == 0) {
+            if ((beTargetObj_SetTarget((char *)prop->_node + 32, vec) & 0xff) == 0) {
                 return;
             }
         } else {
-            if ((FUN_003a65f0((char *)prop->_node + 32, &DAT_0050ef80[0], (char *)e->_targetType) & 0xff) == 0) {
+            if ((beTargetObj_SelectTarget((char *)prop->_node + 32, &DAT_0050ef80[0], (char *)e->_targetType) & 0xff) == 0) {
                 return;
             }
         }
-        fv = FUN_003a68d0();
+        fv = beTargetObj_GetTargetDistanceSq();
         ((float *)arg3->_directionLimiter)[1] = e->_rotLimiter;
         if (!(e->_x1Square <= fv)) {
             lst = (beModelCtrlAIDataList *)e->_zoneA;
@@ -867,7 +867,7 @@ void FUN_00390f80(beModelCtrl *arg0, void *arg1, beBaseInfoRam *arg2, beModelCtr
                 pp = pp + 1;
             } while (++i < cnt);
         }
-        ((float *)arg3->_targetDirection)[1] = FUN_003a68e0(cnt, i, sel, seg->_dirRadian);
+        ((float *)arg3->_targetDirection)[1] = beTargetObj_GetTargetBearing(cnt, i, sel, seg->_dirRadian);
         nm2 = (char *)seg->_name;
         if (nm2 != 0) {
             nm = nm2;

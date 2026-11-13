@@ -17440,20 +17440,20 @@
 003a5a70 000008 Gap__Bec__beTargetObj__vfunc_25 Gap::Bec::beTargetObj::vfunc_25
 003a5a80 000098 Gap__Bec__beTargetObj__vfunc_26 Gap::Bec::beTargetObj::vfunc_26
 003a5b20 00001c Gap__Bec__beTargetObj__vfunc_27 Gap::Bec::beTargetObj::vfunc_27
-003a5b40 00017c FUN_003a5b40
-003a5cc0 0000b0 FUN_003a5cc0
-003a5d70 0001e8 FUN_003a5d70
-003a5f60 000450 FUN_003a5f60
-003a63b0 000120 FUN_003a63b0
-003a64d0 000120 FUN_003a64d0
-003a65f0 000154 FUN_003a65f0
-003a6750 0000f0 FUN_003a6750
-003a6840 00000c FUN_003a6840
-003a6850 000064 FUN_003a6850
-003a68c0 00000c FUN_003a68c0
-003a68d0 00000c FUN_003a68d0
-003a68e0 000050 FUN_003a68e0
-003a6930 00000c FUN_003a6930
+003a5b40 00017c beTargetObj_GatherPositions
+003a5cc0 0000b0 beTargetObj_FindNearest
+003a5d70 0001e8 beTargetObj_FindFacing
+003a5f60 000450 beTargetObj_GetPlayerCentre
+003a63b0 000120 beTargetObj_TargetPlayer
+003a64d0 000120 beTargetObj_TargetEnemy
+003a65f0 000154 beTargetObj_SelectTarget
+003a6750 0000f0 beTargetObj_SetTarget
+003a6840 00000c beTargetObj_GetOrigin
+003a6850 000064 beTargetObj_GetOriginHeading
+003a68c0 00000c beTargetObj_GetTargetPosition
+003a68d0 00000c beTargetObj_GetTargetDistanceSq
+003a68e0 000050 beTargetObj_GetTargetBearing
+003a6930 00000c beTargetObj_GetTargetRamNo
 003a6940 00000c Gap__Bec__beTargetObj__vfunc_20 Gap::Bec::beTargetObj::vfunc_20
 003a6950 000200 FUN_003a6950
 003a6b50 0000ac FUN_003a6b50

@@ -4333,6 +4333,11 @@
 0x0050f4b0	DOWN	string-literal
 0x0050f4b8	VOLUMECTL	string-literal
 0x0050fb10	ndmw_igb	string-literal
+0x0050ffd0	PLAYER_5	string-literal
+0x0050ffd8	GETMATRIX_6	string-literal
+0x0050ffe8	ENEMY_2	string-literal
+0x0050fff0	GETMATRIX_ACTIVE	string-literal
+0x00510008	NEAR_2	string-literal
 0x005108f0	libNdmwRuntimePlugin_className	class-name
 0x00510a40	beNDMWWindowList_className	class-name
 0x00510ab8	beNDMWWindow_className	class-name
@@ -5787,6 +5792,14 @@
 0x0058a338	g_attackZokusei	recovered-global
 0x0058a340	g_damageFlag	recovered-global
 0x0058a540	g_hitBoxDebugColors	recovered-global
+0x0058a570	g_targetObj	recovered-global
+0x0058a578	g_targetMessenger	recovered-global
+0x0058a580	g_targetOrigin	recovered-global
+0x0058a590	g_targetOriginHeading	recovered-global
+0x0058a5a0	g_targetOriginMatrix	recovered-global
+0x0058a5e0	g_targetPosition	recovered-global
+0x0058a5f0	g_targetDistanceSq	recovered-global
+0x0058a5f8	g_targetRamNo	recovered-global
 0x0058a8f8	g_libNdmwRuntimePlugin_metaObject	class-handle
 0x0058a9a8	g_beNDMWWindowList_metaObject	class-handle
 0x0058a9b8	g_beNDMWWindow_metaObject	class-handle

@@ -18,8 +18,8 @@ extern "C" int StringPool_Intern(...);
 extern "C" int FUN_002eb010(...);
 extern "C" int Matrix44_GetTranslation(...);
 extern "C" int bePadManager_GetPadForPlayer(int, int);
-extern "C" int FUN_003a65f0(int, int *, int *);
-extern "C" float FUN_003a68d0(...);
+extern "C" int beTargetObj_SelectTarget(int, int *, int *);
+extern "C" float beTargetObj_GetTargetDistanceSq(...);
 extern "C" int beLua__RunNamedChunk(int, int *, int);
 extern "C" int g_bePadManager_metaObject[4];
 extern "C" int g_beNDMWMdlPlayer2_metaObject[4];
@@ -252,8 +252,8 @@ void Gap__Bec__beNDMWMdlPlayer2__vfunc_38(MdlPlayer2VirtualShim *arg0, beBaseInf
         q->f240 = q->f240 + 1;
     }
     bePadManager_GetPadForPlayer(((beNDMWMdlPlayer2 *)arg0)->_padManager, arg1->_ramNo);
-    if (FUN_003a65f0(prop->f16 + 32, DAT_00516608, DAT_00516610) != 0) {
-        f = FUN_003a68d0();
+    if (beTargetObj_SelectTarget(prop->f16 + 32, DAT_00516608, DAT_00516610) != 0) {
+        f = beTargetObj_GetTargetDistanceSq();
         if (q->f236 == 0) {
             if (f < 900.0f) {
                 q->f236 = 1;
