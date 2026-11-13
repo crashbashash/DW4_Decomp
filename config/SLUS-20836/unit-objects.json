@@ -35835,5 +35835,188 @@
       "lua_type__FP9lua_Statei": "0x00246f70"
     },
     "symbol": "LuaBoolArray_Set"
+  },
+  "0x0026f338": {
+    "whole_file": true,
+    "emitted": {
+      "cricfg_SearchFreeEntry": "0x0026f350",
+      "cricfg_SearchEntry": "0x0026f3a0",
+      "CRICFG_Write": "0x0026f438",
+      "FUN_0026f4b0": "0x0026f4b0"
+    },
+    "data": {
+      "cricfg_count": "0x0056dfd8",
+      "cricfg_table": "0x0056dfd4"
+    }
+  },
+  "0x0025f2c0": {
+    "whole_file": true,
+    "emitted": {
+      "FUN_0025f2d0": "0x0025f2d0",
+      "FUN_0025f2e8": "0x0025f2e8"
+    },
+    "data": {
+      "adxcrs_lock_cnt": "0x00499cc8"
+    }
+  },
+  "0x00265f28": {
+    "whole_file": true,
+    "emitted": {
+      "FUN_00265f40": "0x00265f40",
+      "FUN_00265f58": "0x00265f58",
+      "FUN_00265f88": "0x00265f88",
+      "FUN_00265fb0": "0x00265fb0",
+      "FUN_00265ff0": "0x00265ff0",
+      "FUN_00266170": "0x00266170",
+      "FUN_002661d0": "0x002661d0",
+      "FUN_002661d8": "0x002661d8",
+      "FUN_00266218": "0x00266218",
+      "FUN_00266228": "0x00266228",
+      "FUN_00266268": "0x00266268",
+      "FUN_00266298": "0x00266298",
+      "FUN_002662c8": "0x002662c8",
+      "FUN_00266be0": "0x00266be0",
+      "FUN_00266c70": "0x00266c70",
+      "FUN_00266d20": "0x00266d20",
+      "FUN_00266dc8": "0x00266dc8",
+      "FUN_00266f18": "0x00266f18",
+      "FUN_00267058": "0x00267058",
+      "FUN_002670b8": "0x002670b8",
+      "FUN_002670c0": "0x002670c0",
+      "FUN_002670c8": "0x002670c8",
+      "FUN_002670e0": "0x002670e0",
+      "FUN_002670e8": "0x002670e8",
+      "FUN_002670f0": "0x002670f0",
+      "FUN_002670f8": "0x002670f8",
+      "FUN_00267100": "0x00267100",
+      "FUN_00267118": "0x00267118",
+      "FUN_00267130": "0x00267130",
+      "FUN_00267148": "0x00267148",
+      "FUN_002671a8": "0x002671a8",
+      "FUN_002671b8": "0x002671b8",
+      "FUN_002671c8": "0x002671c8",
+      "FUN_002671d0": "0x002671d0",
+      "FUN_002671d8": "0x002671d8",
+      "FUN_002671e0": "0x002671e0",
+      "FUN_002671e8": "0x002671e8",
+      "FUN_002671f0": "0x002671f0",
+      "FUN_002671f8": "0x002671f8",
+      "FUN_00267210": "0x00267210",
+      "FUN_00267228": "0x00267228",
+      "FUN_00267240": "0x00267240",
+      "FUN_00267258": "0x00267258",
+      "FUN_00267270": "0x00267270",
+      "FUN_00267288": "0x00267288",
+      "FUN_002672a0": "0x002672a0",
+      "FUN_002672b8": "0x002672b8",
+      "FUN_002672d0": "0x002672d0",
+      "FUN_002672e8": "0x002672e8",
+      "FUN_00267300": "0x00267300",
+      "FUN_00267330": "0x00267330",
+      "FUN_00267348": "0x00267348",
+      "FUN_00267360": "0x00267360",
+      "FUN_00267378": "0x00267378",
+      "FUN_002673d0": "0x002673d0",
+      "FUN_00267438": "0x00267438",
+      "FUN_00267490": "0x00267490",
+      "FUN_00267498": "0x00267498",
+      "FUN_002674b0": "0x002674b0",
+      "FUN_002674b8": "0x002674b8",
+      "FUN_002674d0": "0x002674d0"
+    },
+    "data": {
+      "adxsjd_objs": "0x004a52d8",
+      "adxsjd_use_cnt": "0x004a52c8"
+    }
+  },
+  "0x0025e668": {
+    "whole_file": true,
+    "emitted": {
+      "ADXB_ExecOneSpsd": "0x0025e880",
+      "ADXB_CheckSpsd": "0x0025e9f8"
+    },
+    "data": {
+      "SPSD": "0x004ed850"
+    }
+  },
+  "0x0025ed50": {
+    "whole_file": true,
+    "emitted": {
+      "ADXB_ExecOneWav8": "0x0025eec8",
+      "ADXB_ExecOneWav16Le": "0x0025f060",
+      "ADXB_CheckWav": "0x0025f200",
+      "ADXB_ExecOneWav": "0x0025f268"
+    },
+    "data": {
+      "RIFF": "0x004ed868",
+      "WAVE": "0x004ed870"
+    }
+  },
+  "0x00276e50": {
+    "whole_file": true,
+    "emitted": {
+      "LSC_Create": "0x00276eb0",
+      "FUN_00276fb8": "0x00276fb8",
+      "LSC_SetStmHndl": "0x00277008",
+      "FUN_00277010": "0x00277010",
+      "FUN_00277038": "0x00277038",
+      "LSC_ResetEntry": "0x002771d0",
+      "FUN_00277210": "0x00277210",
+      "FUN_00277278": "0x00277278",
+      "LSC_Pause": "0x00277300",
+      "LSC_ExecServer": "0x00277340",
+      "FUN_002773a0": "0x002773a0",
+      "FUN_002773d0": "0x002773d0",
+      "FUN_00277400": "0x00277400",
+      "FUN_00277490": "0x00277490",
+      "FUN_00277528": "0x00277528",
+      "FUN_002775c0": "0x002775c0",
+      "FUN_00277658": "0x00277658",
+      "FUN_002776c0": "0x002776c0",
+      "LSC_EntryChgStatFunc": "0x002776f0",
+      "lsc_CallStatFunc": "0x00277730",
+      "FUN_00277768": "0x00277768",
+      "lsc_Lock": "0x00277798",
+      "lsc_Unlock": "0x002777b8",
+      "LSC_EntryErrFunc": "0x002777d0",
+      "lsc_CallErrFunc": "0x002777f8",
+      "lsc_InitHook": "0x00277888",
+      "lsc_FinishHook": "0x00277890",
+      "LSC_Init": "0x00277898",
+      "FUN_00277918": "0x00277918",
+      "lsc_StartStm": "0x002779d8",
+      "lsc_StatRead": "0x00277b00",
+      "lsc_EndStm": "0x00277bc8",
+      "lsc_ExecHndl": "0x00277cd0"
+    },
+    "data": {
+      "E0001_Illigal_parameter_sj_LSC_Create": "0x004f0aa8",
+      "E0002_Not_enough_instance_LSC_Create": "0x004f0ad8",
+      "E0003_Illigal_parameter_lsc_NULL": "0x004f0b08",
+      "E0007_lsc_fp_NULL": "0x004f0c38",
+      "E0009_Illigal_parameter_no_d": "0x004f0b58",
+      "E0010_Illigal_parameter_min_val_d": "0x004f0ba0",
+      "E0011_Illigal_parameter_fname_s": "0x004f0b30",
+      "E0012_Can_not_find_stream_ID_d": "0x004f0b78",
+      "E0013_s_is_different_from_entry_file_name_LSC_ExecServer": "0x004f0bf8",
+      "lsc_build": "0x004abc50",
+      "lsc_err_func": "0x004abb48",
+      "lsc_err_msg": "0x004abb50",
+      "lsc_err_obj": "0x004abb4c",
+      "lsc_init_cnt": "0x004abc68",
+      "lsc_objs": "0x004abc70",
+      "lsc_stat_func": "0x004abb38",
+      "lsc_stat_obj": "0x004abb3c",
+      "lsc_stat_usr": "0x004abb40"
+    }
+  },
+  "0x00262950": {
+    "whole_file": true,
+    "emitted": {
+      "ADXT_ExecFsServer": "0x00262a00"
+    },
+    "data": {
+      "adxt_fssvr_step": "0x0049c8c0"
+    }
   }
 }

@@ -1,0 +1,22 @@
+# CRI LSC (LSC/PS2EE Ver.2.18): the link stream controller. LSC_Create and LSC_ExecServer are named by
+# the module's messages; the rest from what each function does, in the LSC_ API style the messages use.
+# <va>	<name>	<module>
+0x00276e50	lsc_SearchFreeObj	cri
+0x00276eb0	LSC_Create	cri
+0x00277008	LSC_SetStmHndl	cri
+0x002771d0	LSC_ResetEntry	cri
+0x00277300	LSC_Pause	cri
+0x00277340	LSC_ExecServer	cri
+0x002776f0	LSC_EntryChgStatFunc	cri
+0x00277730	lsc_CallStatFunc	cri
+0x00277798	lsc_Lock	cri
+0x002777b8	lsc_Unlock	cri
+0x002777d0	LSC_EntryErrFunc	cri
+0x002777f8	lsc_CallErrFunc	cri
+0x00277888	lsc_InitHook	cri
+0x00277890	lsc_FinishHook	cri
+0x00277898	LSC_Init	cri
+0x002779d8	lsc_StartStm	cri
+0x00277b00	lsc_StatRead	cri
+0x00277bc8	lsc_EndStm	cri
+0x00277cd0	lsc_ExecHndl	cri

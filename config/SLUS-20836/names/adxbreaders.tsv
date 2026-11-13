@@ -1,0 +1,16 @@
+# CRI ADXB's SPSD and WAV readers (the header check, header decode and per-format decode step ADXB's
+# header dispatch and server call) and ADXCRS's init. Named from what each function does, in the ADXB
+# API style of ADXB_DecodeHeaderAdx.
+# <va>	<name>	<module>
+0x0025e668	adxb_GetSpsdInfo	cri
+0x0025e788	ADXB_DecodeHeaderSpsd	cri
+0x0025e880	ADXB_ExecOneSpsd	cri
+0x0025e9f8	ADXB_CheckSpsd	cri
+0x0025ea20	adxb_GetWavInfo	cri
+0x0025ec50	ADXB_DecodeHeaderWav	cri
+0x0025ed50	ADXB_ExecOneWav16	cri
+0x0025eec8	ADXB_ExecOneWav8	cri
+0x0025f060	ADXB_ExecOneWav16Le	cri
+0x0025f200	ADXB_CheckWav	cri
+0x0025f268	ADXB_ExecOneWav	cri
+0x0025f2c0	ADXCRS_Init	cri

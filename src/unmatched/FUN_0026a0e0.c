@@ -1,4 +1,4 @@
-/* Calls FUN_0026a2a0 and FUN_0026a0a0, then polls FUN_00262950 while byte 73 is set. */
+/* Calls FUN_0026a2a0 and FUN_0026a0a0, then polls ADXT_ExecFsSvr while byte 73 is set. */
 /* Request layout shared by FUN_00269ff0 through FUN_0026a300. */
 typedef struct Request_269ff0 {
     char used;          /* 0x00: entries of DAT_004a7f10 with used == 1 are serviced by FUN_0026a908 */
@@ -30,12 +30,12 @@ typedef struct Request_269ff0 {
 } Request_269ff0;    /* 0x60 bytes: the DAT_004a7f10 entry stride */
 void FUN_0026a2a0(Request_269ff0 *request);
 void FUN_0026a0a0(Request_269ff0 *request);
-void FUN_00262950(void);
+void ADXT_ExecFsSvr(void);
 
 void FUN_0026a0e0(Request_269ff0 *request) {
     FUN_0026a2a0(request);
     FUN_0026a0a0(request);
     while (request->f73 != 0) {
-        FUN_00262950();
+        ADXT_ExecFsSvr();
     }
 }

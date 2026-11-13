@@ -77,7 +77,7 @@ volatile	FUN_002a9210	1	#sony-hardware-registers
 volatile	FUN_00271640	1	#build-string-reads
 volatile	FUN_00273988	1	#build-string-reads
 volatile	FUN_00275370	1	#build-string-reads
-volatile	FUN_00277898	1	#build-string-reads
+volatile	LSC_Init	1	#build-string-reads
 volatile	FUN_0027db18	1	#build-string-reads
 volatile	cvFsAddDev	1	#build-string-reads
 volatile	FUN_00272228	1	#srd-spin-counter

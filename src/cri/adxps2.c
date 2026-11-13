@@ -155,7 +155,7 @@ int FUN_0027eb28();
 int FUN_0027ed80();
 int FUN_0027edb0();
 int FUN_0026cbd8();
-int FUN_00262950();
+int ADXT_ExecFsSvr();
 void FUN_002659a0(const char *format, ...);
 
 void adxm_wakeup_thrd(int threadId);
@@ -687,7 +687,7 @@ int ADXPS2_ExecServer(void) {
     if (adxps2_server_busy == 0) {
         adxps2_server_busy = 1;
         FUN_0026cbd8();
-        FUN_00262950();
+        ADXT_ExecFsSvr();
         adxps2_server_busy = 0;
     }
     return 0;
@@ -721,7 +721,7 @@ void ADXPS2_ExecServerLocked(void) {
         adxps2_server_busy = 1;
         ADXM_Unlock();
         FUN_0026cbd8();
-        FUN_00262950();
+        ADXT_ExecFsSvr();
         adxps2_server_busy = 0;
     } else {
         ADXM_Unlock();

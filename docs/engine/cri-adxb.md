@@ -21,9 +21,9 @@ likely form.
 
 ## Layout
 
-A handle (`AdxbObj`, 260 bytes) holds its in-use word, the ADXPD handle at +8, a 44-byte buffer block
-(`AdxbBuf`) at +72, a callback at +120, and the three decryption key values at +160, +162 and +164 as
-16-bit words.
+A handle (`AdxbObj`, 260 bytes, declared in `include/dw4/cri/adxb.h` for ADXB and the SPSD and WAV
+readers) holds its in-use word, the ADXPD handle at +8, a 44-byte buffer block (`AdxbBuf`) at +72, a
+callback at +120, and the three decryption key values at +160, +162 and +164 as 16-bit words.
 
 ## Open questions
 

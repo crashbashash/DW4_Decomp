@@ -1,0 +1,6 @@
+# CRI ADX file-system server: the pass the ADXM file-system thread runs over SRD, cvFs, the stream
+# layer and ADXF. Named from what each function does, in the ADXT API style.
+# <va>	<name>	<module>
+0x00262950	ADXT_ExecFsSvr	cri
+0x00262a00	ADXT_ExecFsServer	cri
+0x00262a18	ADXT_IsActiveFsSvr	cri

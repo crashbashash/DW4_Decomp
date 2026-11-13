@@ -137,10 +137,13 @@ Related: game systems and data are in [`../systems/`](../systems); the analysis 
 - [CRI SNDF and CFT](cri-sndf-cft.md): the sound driver's EE side and the colour-conversion tables; their extents and open questions.
 - [CRI SFX and SUD](cri-sfx-sud.md): the frame-conversion and user-data/timer modules; their extents, the owner-approved `int`-typed plane address, and open questions.
 - [CRI ADXB](cri-adxb.md): the ADX decoder core; its extent, the 260-byte handle, why it compiles whole, and what is still unknown.
+- [CRI ADX small files](cri-adx-small-files.md): the SPSD and WAV readers, ADXCRS, the file-system server pass and CRI CFG; their extents, evidence and open questions.
+- [CRI ADXSJD](cri-adxsjd.md): the ADX stream-joint decoder between ADXT and ADXB; its extent, the 168-byte object, and what is still unknown.
 - [CRI ADXENC](cri-adxenc.md): the ADX encoder; its extent, the encoder, predictor and filter tables, why it compiles whole, and what is still unknown.
 - [CRI conversion-job table](cri-convjobs.md): the 16-entry job table between ADXT and CRI CFG; its extent, the job layout, why it compiles as one file, and what is still unknown about its library and names.
 - [CRI SRD](cri-srd.md): CRI's sector read driver under cvFs; its extent, the request object and module words, which words are `volatile`, and what is still unknown.
 - [CRI HTCI](cri-htci.md): the host-file device; its extent, why its messages are literals, the handle and file-list layouts, the owner-approved `int`-typed list pointer, and what is still unknown.
+- [CRI LSC](cri-lsc.md): the link stream controller that queues file ranges into one SJ; its extent, the object and entry layouts, and the pending renames.
 - [CRI MFCI](cri-mfci.md): the memory-file device; its extent, the `address.size` file names, the handle layout, and what is still unknown.
 - [CRI SFD files](cri-sfd-files.md): the Sofdec player library's twelve whole files; their extents and evidence, the shared types, and open questions.
 - [CRI MPEG start-code scanner](cri-startcode.md): the Sofdec file that classifies and finds MPEG start codes; its extent, why it compiles whole, and what is still unknown.

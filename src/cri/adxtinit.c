@@ -34,8 +34,8 @@ extern int DAT_004a9b1c;
 
 void FUN_002607e8(const char *message);
 int FUN_0026cbd8();
-int FUN_00262950();
-int FUN_00277340();
+int ADXT_ExecFsSvr();
+int LSC_ExecServer();
 void *memcpy(void *dst, const void *src, unsigned int n);
 void FUN_002632c0(void);
 void FUN_0026b900(void);
@@ -68,7 +68,7 @@ extern char DAT_004ee080[];
 extern int DAT_0049c8e8;
 extern char DAT_0049c8f8[];
 void *memset(void *dst, int value, unsigned int size);
-int FUN_0025f2c0();
+int ADXCRS_Init();
 int FUN_0027c798();
 int FUN_0027bc58();
 int FUN_0027b318();
@@ -77,10 +77,10 @@ int FUN_00269c60();
 int FUN_00265f58();
 int FUN_00260a60();
 int FUN_00265c00();
-int FUN_00277898();
+int LSC_Init();
 int FUN_0027ec10();
 int FUN_00265c30();
-int FUN_002777d0();
+int LSC_EntryErrFunc();
 int ADXM_IsSetupThrd();
 int FUN_0027e748();
 int FUN_0027e600();
@@ -103,7 +103,7 @@ void FUN_00263208(void) {
 }
 
 int FUN_00263230(void *arg) {
-    FUN_00277340();
+    LSC_ExecServer();
     return 0;
 }
 
@@ -123,7 +123,7 @@ int FUN_00263280(void *arg) {
 }
 
 int FUN_002632a0(void *arg) {
-    FUN_00262950();
+    ADXT_ExecFsSvr();
     return 0;
 }
 
@@ -131,7 +131,7 @@ void FUN_002632c0(void)
 {
     DAT_0056dfa8 = DAT_004ee080;
     if (DAT_0049c8d8 == 0) {
-        FUN_0025f2c0();
+        ADXCRS_Init();
         FUN_0025f2d0();
         FUN_0027c798();
         FUN_0027bc58();
@@ -141,10 +141,10 @@ void FUN_002632c0(void)
         FUN_00265f58();
         FUN_00260a60();
         FUN_00265c00();
-        FUN_00277898();
+        LSC_Init();
         FUN_0027ec10();
         FUN_00265c30(FUN_002631d8, 0);
-        FUN_002777d0(FUN_002631f0, 0);
+        LSC_EntryErrFunc(FUN_002631f0, 0);
         memset(DAT_0049c8f8, 0, 3136);
         if (ADXM_IsSetupThrd() == 1 && DAT_0049c8e4 == 1) {
             FUN_0027e748(2, 1, FUN_00263280, 0);

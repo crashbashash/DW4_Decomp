@@ -1,0 +1,8 @@
+# CRI CFG (CRI CFG/PS2EE Ver.1.002): a table of named integer settings. Named from what each function
+# does, in the CRI API style.
+# <va>	<name>	<module>
+0x0026f2b8	CRICFG_Init	cri
+0x0026f338	CRICFG_Finish	cri
+0x0026f350	cricfg_SearchFreeEntry	cri
+0x0026f3a0	cricfg_SearchEntry	cri
+0x0026f438	CRICFG_Write	cri

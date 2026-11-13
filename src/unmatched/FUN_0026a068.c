@@ -1,4 +1,4 @@
-/* Starts a request with FUN_00269ff0 and polls FUN_00262950 until it is no longer busy. */
+/* Starts a request with FUN_00269ff0 and polls ADXT_ExecFsSvr until it is no longer busy. */
 /* Request layout shared by FUN_00269ff0 through FUN_0026a300. */
 typedef struct Request_269ff0 {
     char used;          /* 0x00: entries of DAT_004a7f10 with used == 1 are serviced by FUN_0026a908 */
@@ -29,11 +29,11 @@ typedef struct Request_269ff0 {
     int f92;            /* 0x5c */
 } Request_269ff0;    /* 0x60 bytes: the DAT_004a7f10 entry stride */
 void FUN_00269ff0(Request_269ff0 *request, int f80, int f84, int f12, int sectors);
-void FUN_00262950(void);
+void ADXT_ExecFsSvr(void);
 
 void FUN_0026a068(Request_269ff0 *request, int f80, int f84, int f12, int sectors) {
     FUN_00269ff0(request, f80, f84, f12, sectors);
     do {
-        FUN_00262950();
+        ADXT_ExecFsSvr();
     } while (request->busy != 0);
 }

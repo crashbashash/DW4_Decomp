@@ -36,7 +36,7 @@ int FUN_00277038(void *stm, const char *name, int ofst, int first, int last);
 void FUN_00277278(void *stm);
 void FUN_00277768(void *stm, int enable);
 int FUN_002773d0(void *stm);
-void FUN_002771d0(void *stm);
+void LSC_ResetEntry(void *stm);
 void FUN_00277210(void *stm);
 void FUN_00277658(void *stm, int bytes);
 void FUN_0026bbc0(void);
@@ -144,5 +144,5 @@ void FUN_00263b40(AdxtHandle *adxt) {
     if (adxt->f1 != 0) {
         return;
     }
-    FUN_002771d0(adxt->stm);
+    LSC_ResetEntry(adxt->stm);
 }

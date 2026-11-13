@@ -1,81 +1,4 @@
-#include "dw4/cri/adxpd.h"
-
-typedef struct AdxbBuf {
-    int f0;
-    int len;
-    int nch;
-    int f12;
-    int blk;
-    int f20;
-    int top;
-    int f28;
-    int pos;
-    int lim;
-    int end;
-} AdxbBuf;
-
-typedef struct AdxbObj AdxbObj;
-struct AdxbObj {
-    short used;
-    short f2;
-    int stat;
-    AdxPdObj *rna;
-    signed char f12;
-    signed char f13;
-    signed char f14;
-    signed char f15;
-    int f16;
-    int f20;
-    int f24;
-    short f28;
-    short f30;
-    int f32;
-    short f36;
-    short f38;
-    int f40;
-    int f44;
-    int f48;
-    int f52;
-    int f56;
-    int f60;
-    int f64;
-    int f68;
-    AdxbBuf buf;
-    int f116;
-    int (*cb120)(AdxbObj *obj, int *a, int *b, int *c);
-    AdxbObj *obj124;
-    void (*cb128)(AdxbObj *obj, int a, int b);
-    AdxbObj *obj132;
-    int f136;
-    int f140;
-    int f144;
-    int f148;
-    short f152;
-    unsigned short f154;
-    short f156;
-    short f158;
-    short f160;
-    short f162;
-    short f164;
-    unsigned short f166;
-    unsigned short f168;
-    unsigned short f170;
-    unsigned short dly1[2];
-    unsigned short dly2[2];
-    int f180;
-    char pad184[20];
-    int f204;
-    char f208[16];
-    short f224;
-    short f226[2];
-    char pad230[2];
-    int f232;
-    char pad236[8];
-    int f244;
-    int f248;
-    void (*f252)(void *context, int count, int bytes);
-    void *f256;
-};
+#include "dw4/cri/adxb.h"
 
 extern void (*DAT_00498c6c)(AdxbObj *obj, int v, short *src, short *dst);
 extern void (*DAT_00498c70)(void);
@@ -109,10 +32,10 @@ extern char DAT_004ed820[];
 void FUN_0025f2d0(void);
 void FUN_0025f2e8(void);
 
-int FUN_0025e9f8(unsigned short *hdr);
-int FUN_0025e788(AdxbObj *dec, unsigned short *hdr, int size);
-int FUN_0025f200(unsigned short *hdr);
-int FUN_0025ec50(AdxbObj *dec, unsigned short *hdr, int size);
+int ADXB_CheckSpsd(unsigned short *hdr);
+int ADXB_DecodeHeaderSpsd(AdxbObj *dec, unsigned short *hdr, int size);
+int ADXB_CheckWav(unsigned short *hdr);
+int ADXB_DecodeHeaderWav(AdxbObj *dec, unsigned short *hdr, int size);
 int FUN_0025bfd0(unsigned short *hdr);
 int FUN_0025c148(AdxbObj *dec, unsigned short *hdr, int size);
 int FUN_0025c8b8(unsigned short *hdr);
@@ -121,10 +44,10 @@ int FUN_0025bac8(unsigned short *hdr);
 int FUN_0025ba18(AdxbObj *dec, unsigned short *hdr, int size);
 
 void FUN_0025bbe8(AdxbObj *obj);
-void FUN_0025e880(AdxbObj *obj);
+void ADXB_ExecOneSpsd(AdxbObj *obj);
 void FUN_0025c578(AdxbObj *obj);
 void FUN_0025cfe0(AdxbObj *obj);
-void FUN_0025f268(AdxbObj *obj);
+void ADXB_ExecOneWav(AdxbObj *obj);
 void FUN_0025b9e8(AdxbObj *obj);
 
 int FUN_0025d370(AdxbObj *obj, int *a, int *b, int *c);
@@ -315,11 +238,11 @@ int FUN_0025d8d8(AdxbObj *dec, unsigned short *hdr, int size)
     if (SWAP16(*hdr) == 0x8000) {
         return FUN_0025d540(dec, hdr, size);
     }
-    if (FUN_0025e9f8(hdr) != 0) {
-        return FUN_0025e788(dec, hdr, size);
+    if (ADXB_CheckSpsd(hdr) != 0) {
+        return ADXB_DecodeHeaderSpsd(dec, hdr, size);
     }
-    if (FUN_0025f200(hdr) != 0) {
-        return FUN_0025ec50(dec, hdr, size);
+    if (ADXB_CheckWav(hdr) != 0) {
+        return ADXB_DecodeHeaderWav(dec, hdr, size);
     }
     if (FUN_0025bfd0(hdr) != 0) {
         return FUN_0025c148(dec, hdr, size);
@@ -732,13 +655,13 @@ void FUN_0025e4b8(AdxbObj *v)
     } else if (v->f152 == 10) {
         FUN_0025bbe8(v);
     } else if (v->f152 == 2) {
-        FUN_0025e880(v);
+        ADXB_ExecOneSpsd(v);
     } else if (v->f152 == 3) {
         FUN_0025c578(v);
     } else if (v->f152 == 4) {
         FUN_0025cfe0(v);
     } else if (v->f152 == 1) {
-        FUN_0025f268(v);
+        ADXB_ExecOneWav(v);
     } else if (v->f152 == 15) {
         FUN_0025b9e8(v);
     }
