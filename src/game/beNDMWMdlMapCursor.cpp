@@ -8,7 +8,7 @@ extern "C" int StringChunk_ReleaseHeader(int, int *);
 extern "C" int StringPool_Construct(int);
 extern "C" void *StringPool_Intern(int, int);
 extern "C" int StringPool_Allocate(int);
-extern "C" int FUN_00396740(void *, void *);
+extern "C" int beModelCtrl__OnGenerate(void *, void *);
 extern "C" int beMessenger_GetInt(int, int);
 extern "C" int beMessenger_GetIntCount(int);
 extern "C" int beMessenger_GetString(int, int);
@@ -130,7 +130,7 @@ void Gap__Bec__beNDMWMdlMapCursor__vfunc_36(beNDMWMdlMapCursor *arg0, beBaseInfo
         value.p->f224 = beMessenger_GetInt(arg0->_messenger, 0);
     }
     }
-    FUN_00396740(arg0, arg1);
+    beModelCtrl__OnGenerate(arg0, arg1);
 }
 
 void Gap__Bec__beNDMWMdlMapCursor__vfunc_46(beNDMWMdlMapCursor *arg0, beBaseInfoRam *arg1) {

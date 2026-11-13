@@ -210,12 +210,21 @@ Lua sd("GENERATER",…,"START","GENE-xx")
             ├─ fill modes : 't' timer ('GENE_TIMER') / 'a' add / 'w' wipeout
             ├─ FUN_00384800        drop pass for the dead
             └─ FUN_00384540        spawn: position + facing + the MODELCTRL command
-                 └─ Gap__Bec__beNDMWMdlEnemy__vfunc_36   enemy model generate
-                      DATABASE 'enemy' → MODEL/HPMAX from the row
-                      → row RARITY → SETRAREICON(rank,60)   (crown icon only)
-                      → FUN_00396740 (base generate)
+                 └─ beNDMWMdlEnemy__OnGenerate   enemy model GENERATE
+                      message ints: row → _recNo, HPMAX → _mHp and _hp
+                      DATABASE 'enemy' GETDATABASE → row RARITY
+                      → RARITY ≠ 0: SETRAREICON(rarity) to the ENEMY info, delay 60
+                      → beModelCtrl__OnGenerate (base generate: start position)
 ```
 
+`beNDMWMdlEnemy` is the enemy's model controller. Besides `OnGenerate` it overrides
+`IsKind` (slot 35, `KIND_ENEMY`), `RegisterReceiver` (slot 37, receiver group `ENEMY`),
+`OnSequenceChange` (slot 44, straight to `beNDMWMdlPEBase_OnSequenceChange`) and
+`GetMeta` (slot 20). `OnGenerate` (slot 36) creates the `beNDMWMdlEnemyInfoWork`
+(`beNDMWMdlEnemyInfoWork_Create`) in the info RAM's `ONE` record, fills it from the
+message when the message carries ints, and always finishes with the base
+`beModelCtrl__OnGenerate`, which places the model from the message's position and
+rotation (or matrix).
 `beGeneraterInfoWork`'s **per-player state object** (pointer at `+0x2c`, created on
 the generator's first frame) is where the live fields sit (they are
 not on the InfoWork itself): `+0x0c` the 1-based
@@ -381,7 +390,7 @@ way: 380/383/386/389/392 in 622, 379/382/385/388/391 in 623, 381/384/387/390/393
   `g_000bcaps` **checkpoint-capsule** command handler (`GENERATE` / `GENESTAGE` /
   `RAISE`, using `GAMERAM::GETCOMMON`, `BKCHIPSTAGE`, `BKCHIPPOS`, `SQ_ENTR%dP`;
   sibling `Gap__Bec__beNDMWMdlPlayer2__vfunc_36` writes the checkpoint, `Gap__Bec__beNDMWMdlPlayer2__vfunc_38` is its proximity
-  switch). Enemy generate is `Gap__Bec__beNDMWMdlEnemy__vfunc_36` (vtable slot `0x53e448`). (The *spawn*
+  switch). Enemy generate is `beNDMWMdlEnemy__OnGenerate` (vtable slot `0x53e448`). (The *spawn*
   command **is** issued through the `MODELCTRL` interface (`FIND_SPACE` →
   position/facing → `GENERATE`), so "MODELCTRL is not involved" is too strong;
   what is refuted is only `Gap__Bec__beNDMWMdlPlayer2__vfunc_47` being the spawner.)

@@ -12,7 +12,7 @@ extern "C" void *StringPool_Allocate(...);
 extern "C" igIntList *igIntList_Create(int);
 extern "C" int FUN_00191f30(void *, void *, int);
 extern "C" int FUN_00192f50(void *, void *, void *);
-extern "C" void FUN_00396740(...);
+extern "C" void beModelCtrl__OnGenerate(...);
 extern "C" int strcmp(...);
 extern "C" int memset(...);
 extern "C" void sprintf(char *, const char *, int);
@@ -697,7 +697,7 @@ void beNDMWMdlPlayer__OnGenerate(beNDMWMdlPlayer *self, beBaseInfoRam *ram) {
         beMessenger_PopArgContext(self->_messenger);
         beMessenger_AppendMatrix(self->_messenger, startMatrix);
     }
-    FUN_00396740(self, ram);
+    beModelCtrl__OnGenerate(self, ram);
     beMessenger_SelectGroup(self->_messenger, GAMERAM_8);
     beMessenger_AppendInt(self->_messenger, ram->_ramNo);
     beMessenger_DispatchSelected(self->_messenger, GETPLAYER_5);

@@ -759,7 +759,7 @@ extern "C" int beNDMWMdlEnemy_GetVTable(void);
 extern "C" void FUN_003c1860(void);
 extern "C" void *beNDMWMdlEnemy_Register(void);
 extern "C" void beNDMWMdlEnemy_GetMetaObject(void);
-extern "C" void FUN_003c1910(int arg0);
+extern "C" void beNDMWMdlEnemyInfoWork_Create(int arg0);
 extern "C" void *beNDMWMdlEnemyInfoWork_GetReadyMetaObject(void);
 extern "C" int beNDMWMdlEnemyInfoWork_GetVTable(void);
 extern "C" void FUN_003c1a00(void);

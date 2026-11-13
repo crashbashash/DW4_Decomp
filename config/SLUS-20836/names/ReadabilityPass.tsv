@@ -940,3 +940,10 @@
 0x003d60e0	beNDMWStatus::OnMessage	game
 0x003d8740	beNDMWStatus::PrepareWork	game
 0x003d9dd0	beNDMWStatus::GetMeta	game
+0x00396740	beModelCtrl::OnGenerate	game
+0x003c1910	beNDMWMdlEnemyInfoWork_Create	game
+0x003d1900	beNDMWMdlEnemy::IsKind	game
+0x003d1930	beNDMWMdlEnemy::RegisterReceiver	game
+0x003d1960	beNDMWMdlEnemy::OnGenerate	game
+0x003d1ce0	beNDMWMdlEnemy::OnSequenceChange	game
+0x003d1d00	beNDMWMdlEnemy::GetMeta	game

@@ -7,7 +7,7 @@ extern "C" int Gap__Bec__beNDMWMdlObject__vfunc_20(void);
 extern "C" int StringPool_Allocate(...);
 extern "C" void *FUN_00350020(...);
 extern "C" void *beBaseInfoDataList_Create(...);
-extern "C" int FUN_00396740(...);
+extern "C" int beModelCtrl__OnGenerate(...);
 extern "C" int Memory_GetAllocatorBySelector(int);
 extern "C" int StringChunk_ReleaseHeader(...);
 extern "C" int StringPool_Construct(...);
@@ -91,7 +91,7 @@ void Gap__Bec__beNDMWMdlObject__vfunc_36(beNDMWMdlObject *arg0, beBaseInfoRam *a
             ((beModelCtrlInfoWork *)w.p)->_hitParentRamNo = beMessenger_GetInt(arg0->_messenger, 0);
         }
     }
-    FUN_00396740(arg0, arg1);
+    beModelCtrl__OnGenerate(arg0, arg1);
 }
 
 int Gap__Bec__beNDMWMdlObject__vfunc_20(void)

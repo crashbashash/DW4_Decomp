@@ -4751,6 +4751,14 @@
 0x005138c0	beNDMWAfsSetupData_className	class-name
 0x005138f0	beNDMWAfsStageLoad_className	class-name
 0x00513910	beNDMWAfsSetup_className	class-name
+0x00515e18	KIND_ENEMY	string-literal
+0x00515e28	ENEMY_3	string-literal
+0x00515e30	ONE_5	string-literal
+0x00515e38	DATABASE_8	string-literal
+0x00515e48	enemy_2	string-literal
+0x00515e50	GETDATABASE_8	string-literal
+0x00515e60	RARITY	string-literal
+0x00515e68	SETRAREICON	string-literal
 0x00516028	KIND_PLAYER	string-literal
 0x00516038	PLAYER_4	string-literal
 0x00516110	ONE_4	string-literal

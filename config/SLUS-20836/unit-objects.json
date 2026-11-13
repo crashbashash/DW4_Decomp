@@ -27349,7 +27349,7 @@
       "FUN_003c1860": "0x003c1860",
       "beNDMWMdlEnemy_Register": "0x003c1880",
       "beNDMWMdlEnemy_GetMetaObject": "0x003c18f0",
-      "FUN_003c1910": "0x003c1910",
+      "beNDMWMdlEnemyInfoWork_Create": "0x003c1910",
       "beNDMWMdlEnemyInfoWork_GetReadyMetaObject": "0x003c1950",
       "beNDMWMdlEnemyInfoWork_GetVTable": "0x003c19a0",
       "FUN_003c1a00": "0x003c1a00",
@@ -30655,25 +30655,25 @@
   "0x003d1900": {
     "whole_file": true,
     "emitted": {
-      "Gap__Bec__beNDMWMdlEnemy__vfunc_37": "0x003d1930",
-      "Gap__Bec__beNDMWMdlEnemy__vfunc_36": "0x003d1960",
+      "beNDMWMdlEnemy__RegisterReceiver": "0x003d1930",
+      "beNDMWMdlEnemy__OnGenerate": "0x003d1960",
       "__dt__11InfoWorkRefFv": "0x003d1c60",
-      "Gap__Bec__beNDMWMdlEnemy__vfunc_44": "0x003d1ce0",
-      "Gap__Bec__beNDMWMdlEnemy__vfunc_20": "0x003d1d00"
+      "beNDMWMdlEnemy__OnSequenceChange": "0x003d1ce0",
+      "beNDMWMdlEnemy__GetMeta": "0x003d1d00"
     },
     "data": {
-      "DAT_004e0858": "0x004e0858",
-      "DAT_00515e18": "0x00515e18",
-      "DAT_00515e28": "0x00515e28",
-      "DAT_00515e30": "0x00515e30",
-      "DAT_00515e38": "0x00515e38",
-      "DAT_00515e48": "0x00515e48",
-      "DAT_00515e50": "0x00515e50",
-      "DAT_00515e60": "0x00515e60",
-      "DAT_00515e68": "0x00515e68",
-      "DAT_00585be0": "0x00585be0",
-      "DAT_00587110": "0x00587110",
-      "GPR_00554c14": "0x00554c14",
+      "emptyString": "0x004e0858",
+      "KIND_ENEMY": "0x00515e18",
+      "ENEMY_3": "0x00515e28",
+      "ONE_5": "0x00515e30",
+      "DATABASE_8": "0x00515e38",
+      "enemy_2": "0x00515e48",
+      "GETDATABASE_8": "0x00515e50",
+      "RARITY": "0x00515e60",
+      "SETRAREICON": "0x00515e68",
+      "g_propertyNameField": "0x00585be0",
+      "g_defaultAllocatorSelector": "0x00587110",
+      "g_useOwnerAllocator": "0x00554c14",
       "g_beNDMWMdlEnemy_metaObject": "0x0058b508"
     },
     "duplicates": {
@@ -30682,7 +30682,7 @@
     "externals": {
       "__dl__FPv": "0x00100610"
     },
-    "symbol": "Gap__Bec__beNDMWMdlEnemy__vfunc_35"
+    "symbol": "beNDMWMdlEnemy__IsKind"
   },
   "0x003d16c0": {
     "whole_file": true,

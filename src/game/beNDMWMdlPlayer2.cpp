@@ -9,7 +9,7 @@ extern "C" int Gap__Bec__beNDMWMdlPlayer2__vfunc_35(int dummy0, int arg1);
 extern "C" void beMessenger_RegisterReceiverFromInfo(int, int, char *);
 extern "C" int Memory_GetAllocatorBySelector(...);
 extern "C" int igObject_GetAllocator(...);
-extern "C" int FUN_00396740(...);
+extern "C" int beModelCtrl__OnGenerate(...);
 extern "C" int beMessenger_SendGroup(...);
 extern "C" int beMessenger_GetObject(...);
 extern "C" int StringChunk_ReleaseHeader(...);
@@ -168,7 +168,7 @@ void Gap__Bec__beNDMWMdlPlayer2__vfunc_36(beNDMWMdlPlayer2 *arg0, beBaseInfoRam 
         Rel::go(r->f20);
         r->f20 = n;
     }
-    FUN_00396740(arg0, arg1);
+    beModelCtrl__OnGenerate(arg0, arg1);
     beMessenger_SendGroup(arg0->_messenger, DAT_005165d0, DAT_005165d8);
     {
         int o = beMessenger_GetObject(arg0->_messenger, 0);

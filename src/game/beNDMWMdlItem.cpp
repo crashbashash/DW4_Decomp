@@ -25,7 +25,7 @@ extern "C" int beNDMWItemAbilityChip_Set(...);
 extern "C" int beNDMWItemDisk_Set(...);
 extern "C" int beNDMWItemInstant_Set(...);
 extern "C" int beNDMWItemImportant_Set(...);
-extern "C" int FUN_00396740(...);
+extern "C" int beModelCtrl__OnGenerate(...);
 extern "C" void * Memory_GetAllocatorBySelector(...);
 extern "C" int beMessenger_GetInt(...);
 extern "C" int beMessenger_GetIntCount(...);
@@ -314,7 +314,7 @@ void Gap__Bec__beNDMWMdlItem__vfunc_36(beNDMWMdlItem *self, beBaseInfoRam *info)
         break;
     }
     }
-    FUN_00396740(self, info);
+    beModelCtrl__OnGenerate(self, info);
 }
 
 void Gap__Bec__beNDMWMdlItem__vfunc_43(beNDMWMdlItem *arg0, beBaseInfoRam *arg1) {

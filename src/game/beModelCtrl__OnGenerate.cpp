@@ -22,8 +22,8 @@ extern unsigned char GPR_00554c14;
 /* Owning stack reference to the freshly created data list (reference count in the low 23 bits of
  * _refCount); released on scope exit. */
 
-extern "C" void FUN_00396740(beModelCtrl *arg0, beBaseInfoRam *arg1);
-void FUN_00396740(beModelCtrl *arg0, beBaseInfoRam *arg1) {
+extern "C" void beModelCtrl__OnGenerate(beModelCtrl *arg0, beBaseInfoRam *arg1);
+void beModelCtrl__OnGenerate(beModelCtrl *arg0, beBaseInfoRam *arg1) {
     volatile float spD0[3];
     float spC0[4];
     float sp80[16];

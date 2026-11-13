@@ -7,7 +7,7 @@ extern "C" void beMessenger_RegisterReceiverFromInfo(int, int, char *);
 extern "C" int StringPool_Allocate(...);
 extern "C" void *FUN_00350020(...);
 extern "C" void * beBaseInfoDataList_Create(...);
-extern "C" int FUN_00396740(...);
+extern "C" int beModelCtrl__OnGenerate(...);
 extern "C" int Memory_GetAllocatorBySelector(...);
 extern "C" int StringChunk_ReleaseHeader(...);
 extern "C" int StringPool_Construct(...);
@@ -116,7 +116,7 @@ void Gap__Bec__beNDMWMdlMapBase__vfunc_36(beNDMWMdlMapBase *arg0, beBaseInfoRam 
             ((Tgt *)w.p)->f224 = beMessenger_GetInt(arg0->_messenger, 0);
         }
     }
-    FUN_00396740(arg0, arg1);
+    beModelCtrl__OnGenerate(arg0, arg1);
 }
 
 void Gap__Bec__beNDMWMdlMapBase__vfunc_46(beNDMWMdlMapBase *arg0, RamInfoArg *arg1) {

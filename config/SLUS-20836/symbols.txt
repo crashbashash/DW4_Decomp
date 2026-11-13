@@ -17254,7 +17254,7 @@
 003960e0 000008 Gap__Core__igObject__vfunc_46 Gap::Core::igObject::vfunc_46
 003960f0 000244 beModelCtrlInfoWork_FindSeqLabel
 00396340 0003fc FUN_00396340
-00396740 000200 FUN_00396740
+00396740 000200 beModelCtrl__OnGenerate beModelCtrl::OnGenerate
 00396940 00013c beModelCtrl_UpdateBound
 00396a80 00219c Gap__Bec__beModelCtrl__vfunc_33 Gap::Bec::beModelCtrl::vfunc_33
 00398c20 000080 FUN_00398c20
@@ -18372,7 +18372,7 @@
 003c1860 000020 FUN_003c1860
 003c1880 000064 beNDMWMdlEnemy_Register
 003c18f0 00001c beNDMWMdlEnemy_GetMetaObject
-003c1910 000034 FUN_003c1910
+003c1910 000034 beNDMWMdlEnemyInfoWork_Create
 003c1950 00004c beNDMWMdlEnemyInfoWork_GetReadyMetaObject
 003c19a0 000058 beNDMWMdlEnemyInfoWork_GetVTable
 003c1a00 000020 FUN_003c1a00
@@ -18953,12 +18953,12 @@
 003d16f0 000008 Gap__Bec__beNDMWMdlEffect__vfunc_37 Gap::Bec::beNDMWMdlEffect::vfunc_37
 003d1700 0001ec Gap__Bec__beNDMWMdlEffect__vfunc_36 Gap::Bec::beNDMWMdlEffect::vfunc_36
 003d18f0 00000c Gap__Bec__beNDMWMdlEffect__vfunc_20 Gap::Bec::beNDMWMdlEffect::vfunc_20
-003d1900 00002c Gap__Bec__beNDMWMdlEnemy__vfunc_35 Gap::Bec::beNDMWMdlEnemy::vfunc_35
-003d1930 000024 Gap__Bec__beNDMWMdlEnemy__vfunc_37 Gap::Bec::beNDMWMdlEnemy::vfunc_37
-003d1960 0002fc Gap__Bec__beNDMWMdlEnemy__vfunc_36 Gap::Bec::beNDMWMdlEnemy::vfunc_36
+003d1900 00002c beNDMWMdlEnemy__IsKind beNDMWMdlEnemy::IsKind
+003d1930 000024 beNDMWMdlEnemy__RegisterReceiver beNDMWMdlEnemy::RegisterReceiver
+003d1960 0002fc beNDMWMdlEnemy__OnGenerate beNDMWMdlEnemy::OnGenerate
 003d1c60 000080 FUN_003d1c60
-003d1ce0 00001c Gap__Bec__beNDMWMdlEnemy__vfunc_44 Gap::Bec::beNDMWMdlEnemy::vfunc_44
-003d1d00 00000c Gap__Bec__beNDMWMdlEnemy__vfunc_20 Gap::Bec::beNDMWMdlEnemy::vfunc_20
+003d1ce0 00001c beNDMWMdlEnemy__OnSequenceChange beNDMWMdlEnemy::OnSequenceChange
+003d1d00 00000c beNDMWMdlEnemy__GetMeta beNDMWMdlEnemy::GetMeta
 003d1d10 00002c Gap__Bec__beNDMWMdlObject__vfunc_35 Gap::Bec::beNDMWMdlObject::vfunc_35
 003d1d40 000008 Gap__Bec__beNDMWMdlObject__vfunc_37 Gap::Bec::beNDMWMdlObject::vfunc_37
 003d1d50 000290 Gap__Bec__beNDMWMdlObject__vfunc_36 Gap::Bec::beNDMWMdlObject::vfunc_36
