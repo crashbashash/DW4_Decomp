@@ -102,7 +102,7 @@ int FUN_003061c0(void *self, IniIncludeView *inc, int overwrite) {
     for (; i < inc->pairs->count; i++) {
         cur = inc->pairs->data[i];
         if (cur.p != 0) {
-            int section = FUN_00306360((IniSectionsView *)self, (char *)(FUN_00307f80(inc, cur.p->section)), 1);
+            int section = FUN_00306360((igRegistry *)self, (char *)(FUN_00307f80(inc, cur.p->section)), 1);
             if (overwrite == 0 && ((int)FUN_00307c10((igRegistry *)self, section, textOf_3061c0(cur.p->key), 0)) != 0) {
                 continue;
             }
@@ -317,7 +317,7 @@ static inline void setAt_306aa0(igStringRefList *l, int i, int **v) {
     }
 }
 
-static inline void append_306aa0(Str *c, char *s) { int at = c->length; igStringObj_Insert((IniStringView *)c, s, at, strlen(s)); }
+static inline void append_306aa0(Str *c, char *s) { int at = c->length; igStringObj_Insert((igStringObj *)c, s, at, strlen(s)); }
 
 int FUN_00306aa0(void *self, int section, const char *key, igStringRefList *list, int create) {
     Str *a;
@@ -360,9 +360,9 @@ int FUN_00306aa0(void *self, int section, const char *key, igStringRefList *list
         }
         for (j = 1; j < n; j++) {
             c = b; at = c->length;
-            igStringObj_Insert((IniStringView *)c, (char *)DAT_004fb190, at, strlen(DAT_004fb190));
+            igStringObj_Insert((igStringObj *)c, (char *)DAT_004fb190, at, strlen(DAT_004fb190));
             StringList_CopyRetained(&r3, list, j);
-            c2 = b; s2 = (char *)r3; at2 = c2->length; igStringObj_Insert((IniStringView *)c2, s2, at2, strlen(s2));
+            c2 = b; s2 = (char *)r3; at2 = c2->length; igStringObj_Insert((igStringObj *)c2, s2, at2, strlen(s2));
             releaseRef(r3);
         }
         FUN_00307700(self, section, saved, (int)(text_306aa0(b)));

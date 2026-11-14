@@ -240,7 +240,7 @@ igResult Gap__Core__igArenaMemoryPool__vfunc_45(igArenaMemoryPool *pool, igMemor
         if (pool == ((struct CoreGlobals * *)g_objectSystem)[0]->defaultPool && (flags & 1) != (pool->_poolOptionFlags & 1)) {
             flags ^= 1;
         }
-        igArenaMemoryPool_SetPoolOptionFlags((SetFlagsPool *)pool, flags);
+        igArenaMemoryPool_SetPoolOptionFlags(pool, flags);
     }
     if (integrityCheck) {
         int level = pool->_heapIntegrityCheckLevel;
@@ -369,7 +369,7 @@ void Gap__Core__igArenaMemoryPool__vfunc_34(int *ret, igArenaMemoryPool *p, int 
     } else {
         fl = p->_poolOptionFlags & ~8;
     }
-    igArenaMemoryPool_SetPoolOptionFlags((SetFlagsPool *)p, fl);
+    igArenaMemoryPool_SetPoolOptionFlags(p, fl);
     if ((unsigned char)flag == 0) {
         igSmartPointer<igSemaphoreView> lock((igSemaphoreView *)p->_allocationLock, kRetainReference);
         releaseAllocationLock(p);
@@ -849,11 +849,11 @@ int Gap__Core__igArenaMemoryPool__vfunc_84(int arg0, unsigned char *p) {
     return h->sz + (h->ext << 19);
 }
 
-void igArenaMemoryPool_SetPoolOptionFlags(SetFlagsPool *p, int f) {
+void igArenaMemoryPool_SetPoolOptionFlags(igArenaMemoryPool *p, int f) {
     int r;
-    if ((f & 1) != (p->flags & 1)) {
-        if (p->vX(f & 1) != 0) {
-            if (p->cnt > 0) {
+    if ((f & 1) != (p->_poolOptionFlags & 1)) {
+        if (((igMemoryPoolView *)p)->isActive() != 0) {
+            if (p->_messageLevel > 0) {
                 Memory_PrintPoolStatistics(0, p);
                 if (GPR_00554d78 == 0) {
                     r = igReportNotice(DAT_004fd7a0);
@@ -863,7 +863,7 @@ void igArenaMemoryPool_SetPoolOptionFlags(SetFlagsPool *p, int f) {
             return;
         }
     }
-    p->flags = f;
+    p->_poolOptionFlags = f;
 }
 
 int Gap__Core__igArenaMemoryPool__vfunc_89(void *arg0) {
@@ -988,7 +988,7 @@ void Gap__Core__igArenaMemoryPool__vfunc_03(Pool03 *arg0, int arg1) {
 }
 
 void Gap__Core__igArenaMemoryPool__vfunc_04(igArenaMemoryPool *self) {
-    ((ArenaPoolSlot392View *)self)->Slot392();
+    ((igMemoryPoolView *)self)->vfunc_98();
     Gap__Core__igObject__destructFields((int)self);
 }
 

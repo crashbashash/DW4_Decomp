@@ -110,12 +110,12 @@ void FUN_002f0370(void **arg0) {
         idx = list->count;
     }
     if (idx < 0x1F) {
-        igMemoryPoolInfoList_Append((RegistryList *)list, (void *)arg0);
+        igMemoryPoolInfoList_Append(list, (igMemoryPoolView *)arg0);
     } else {
-        idx = igMemoryPoolInfoList_IndexOf((AllocatorRegistry *)list, (igMemoryPoolView *)0);
+        idx = igMemoryPoolInfoList_IndexOf(list, (igMemoryPoolView *)0);
         if (idx == -1) {
             idx = list->count;
-            igMemoryPoolInfoList_Append((RegistryList *)list, (void *)arg0);
+            igMemoryPoolInfoList_Append(list, (igMemoryPoolView *)arg0);
         } else {
             list->data[idx] = (igMemoryPoolView *)arg0;
         }

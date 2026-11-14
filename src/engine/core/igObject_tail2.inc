@@ -616,50 +616,50 @@ void FUN_00300490(void **arg0, int arg1, int arg2) {
 }
 
 void FUN_00300600(ShallowObject *self, int source) {
-    ShallowFields *meta = self->v20()->meta;
-    int n = meta->count;
+    __internalObjectList *meta = (__internalObjectList *)self->v20()->_metaFields;
+    int n = meta->_count;
     for (int i = igMetaObject_GetFieldCount(g_igObject_metaObject[0]); i < n; i++) {
-        igMetaField_ConstructCopy(meta->arr[i], (int)self, source);
+        igMetaField_ConstructCopy(((int *)meta->_data)[i], (int)self, source);
     }
 }
 
 void FUN_003006a0(ShallowObject *self, ShallowObject *source) {
-    ShallowHolder *holder;
-    ShallowFields *meta;
+    igMetaObject *holder;
+    __internalObjectList *meta;
     int n;
     int i;
 
     holder = self->v20();
     self->v16();
     source->v16();
-    meta = holder->meta;
-    n = meta->count;
+    meta = (__internalObjectList *)holder->_metaFields;
+    n = meta->_count;
     for (i = igMetaObject_GetFieldCount(g_igObject_metaObject[0]); i < n; i++) {
-        igMetaField_DeepCopy(meta->arr[i], (int)self, (int)source);
+        igMetaField_DeepCopy(((int *)meta->_data)[i], (int)self, (int)source);
     }
     self->v3(source);
 }
 
 void FUN_00300770(ShallowObject *self, int source) {
-    ShallowFields *m = self->v20()->meta;
-    int n = m->count;
+    __internalObjectList *m = (__internalObjectList *)self->v20()->_metaFields;
+    int n = m->_count;
     int i;
     for (i = igMetaObject_GetFieldCount(g_igObject_metaObject[0]); i < n; i++) {
-        igMetaField_ShallowCopy(m->arr[i], (int)self, source);
+        igMetaField_ShallowCopy(((int *)m->_data)[i], (int)self, source);
     }
     self->v4(source);
 }
 
 int igObject_IsAlikeDeep(DeepObject *a, DeepObject *b) {
     int i;
-    DeepFieldList *fl;
+    __internalObjectList *fl;
     int n;
     if (b->v20() != a->v20()) return 0;
-    fl = a->v20()->fields;
-    n = fl->count;
+    fl = (__internalObjectList *)a->v20()->_metaFields;
+    n = fl->_count;
     i = igMetaObject_GetFieldCount(g_igObject_metaObject[0]);
     for (; i < n; i++) {
-        if (igMetaField_IsAlikeDeep(fl->items[i], (int)a, (int)b) == 0) return 0;
+        if (igMetaField_IsAlikeDeep(((int *)fl->_data)[i], (int)a, (int)b) == 0) return 0;
     }
     return a->v5(b);
 }
@@ -667,16 +667,16 @@ int igObject_IsAlikeDeep(DeepObject *a, DeepObject *b) {
 int igObject_IsAlikeShallow(igObjectDispatchView *arg0, igObjectDispatchView *arg1) {
     igMetaObject *meta;
     int i;
-    DeepFieldList *fields;
+    __internalObjectList *fields;
     int count;
     meta = arg1->getMeta();
     if (meta != arg0->getMeta()) {
         return 0;
     }
-    fields = (DeepFieldList *)arg0->getMeta()->_metaFields;
-    count = fields->count;
+    fields = (__internalObjectList *)arg0->getMeta()->_metaFields;
+    count = fields->_count;
     for (i = igMetaObject_GetFieldCount(g_igObject_metaObject[0]); i < count; i++) {
-        if (igMetaField_IsAlikeShallow(fields->items[i], (int)arg0, (int)arg1) == 0) {
+        if (igMetaField_IsAlikeShallow(((int *)fields->_data)[i], (int)arg0, (int)arg1) == 0) {
             return 0;
         }
     }
@@ -686,17 +686,17 @@ int igObject_IsAlikeShallow(igObjectDispatchView *arg0, igObjectDispatchView *ar
 int igObject_IsAlikeExactly(void *arg0, void *arg1) {
     int meta;
     int i;
-    DeepFieldList *fields;
+    __internalObjectList *fields;
     int count;
 
     meta = (int)((igObjectDispatchView *)arg1)->getMeta();
     if (meta != (int)((igObjectDispatchView *)arg0)->getMeta()) {
         return 0;
     }
-    fields = (DeepFieldList *)((igObjectDispatchView *)arg0)->getMeta()->_metaFields;
-    count = fields->count;
+    fields = (__internalObjectList *)((igObjectDispatchView *)arg0)->getMeta()->_metaFields;
+    count = fields->_count;
     for (i = igMetaObject_GetFieldCount(g_igObject_metaObject[0]); i < count; i++) {
-        if (igMetaField_IsAlikeExactly(fields->items[i], (int)arg0, (int)arg1) == 0) {
+        if (igMetaField_IsAlikeExactly(((int *)fields->_data)[i], (int)arg0, (int)arg1) == 0) {
             return 0;
         }
     }
@@ -704,16 +704,16 @@ int igObject_IsAlikeExactly(void *arg0, void *arg1) {
 }
 
 void igObject_VisitFields(VisitorObjectView *object,Visitor callback,void *context){
-    FieldVector *fields;
+    __internalObjectList *fields;
     int count;
     int i;
     VisitorFieldView *field;
     if(callback(object,0,context)==1)return;
     object->Prepare();
-    fields=(FieldVector *)object->Meta()->_metaFields;
-    count=fields->count;
+    fields=(__internalObjectList *)object->Meta()->_metaFields;
+    count=fields->_count;
     for(i=igMetaObject_GetFieldCount((igMetaObject *)g_igObject_metaObject[0]);i<count;++i){
-        field=fields->data[i];
+        field=((VisitorFieldView **)fields->_data)[i];
         if(callback(object,field,context)!=1)field->Visit(object,callback,context);
     }
 }

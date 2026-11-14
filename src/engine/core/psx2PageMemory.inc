@@ -578,19 +578,19 @@ void FUN_0032a280(SystemAllocator *self, char *title, char *path, int a, int b, 
     }
     count = list->_count;
     if (path != 0 && count != 0) {
-        igSmartPointer<EventTrackerDump> tracker((EventTrackerDump *)FUN_002c5780((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleNonTracked)));
+        igSmartPointer<igEventTrackerView> tracker((igEventTrackerView *)FUN_002c5780((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleNonTracked)));
         FUN_002dcc40((int)tracker.p, list->_count);
         tracker->_flags |= 0x10;
         tracker->_memoryFieldFilterFlags = ~0x20;
-        tracker->Begin();
+        tracker->vfunc_23();
         for (i = 0; i < count; i++) {
             DumpRegion *e = ((DumpRegion **)list->_data)[i];
             FUN_002e2190(region, 1, (void *)e->start, e->size, 0, 0, 0, 0, (int)e->annotation, 0, 0, (int)e->poolName);
-            tracker->Add(region, 0);
+            tracker->vfunc_26((EventRecordInfo *)region, 0);
             FUN_002e2300(region, -1);
         }
-        tracker->Write(path);
-        tracker->End();
+        tracker->vfunc_44(path);
+        tracker->vfunc_24();
     }
     FUN_00304430(DAT_004ffa10, text_Start, text_End, text_Size, text_Pool_Name, text_Annotation);
     FUN_00304680();

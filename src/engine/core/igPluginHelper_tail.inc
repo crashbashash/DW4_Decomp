@@ -26,7 +26,7 @@ void FUN_00304b10(void *self) {
     char *text;
     IniValueList *held;
     ini = (*(IniSystemTables * *)g_objectSystem)->ini;
-    section = FUN_00306360((IniSectionsView *)ini, PLUGINS, 1);
+    section = FUN_00306360((igRegistry *)ini, PLUGINS, 1);
     if (section >= 0) {
         n = ((unsigned int)FUN_003064b0((int)ini, section));
         for (i = 0; i < n; i++) {

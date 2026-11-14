@@ -167,7 +167,7 @@ static inline void setMeta(DirEntrySelf *self, DirEntryCounted *m) {
     self->typeMeta = m;
 }
 
-void Gap__Core__igObjectDirEntry__vfunc_31(DirEntrySelf *self, DirEntryFileView *file) {
+void Gap__Core__igObjectDirEntry__vfunc_31(DirEntrySelf *self, igIGBFileView *file) {
     int index;
     DirEntryCounted *m;
     DirEntryCounted *obj;
@@ -177,21 +177,21 @@ void Gap__Core__igObjectDirEntry__vfunc_31(DirEntrySelf *self, DirEntryFileView 
     if (index == -1) {
         setMeta(self, ((DirEntryCounted *)igObjectSystem_FindMetaByNameDefault((const char *)self->typeMetaName)));
     } else {
-        setMeta(self, file->metas->data[index]);
+        setMeta(self, ((DirEntryCounted **)file->_metaObjectListInFile->_data)[index]);
     }
     if (self->typeMeta != 0) {
         sel = self->pool;
         if (sel == -1 || sel == 1 || sel == 2) {
-            pool = file->pool;
+            pool = (int)file->_objectMemoryPool;
         } else {
             pool = ((int)Memory_GetAllocatorBySelector(sel));
             if (pool == 0) {
-                pool = file->pool;
+                pool = (int)file->_objectMemoryPool;
             }
         }
         obj = ((DirEntryCounted *)igMetaObject_CreateInstanceWithPool((PooledMeta *)self->typeMeta, (MemoryPool *)pool));
         if (obj == 0) {
-            file->failed = 1;
+            file->_hasCriticalFailure = 1;
             FUN_002d7da0((A7da0 *)file, self->index, (int)0);
             return;
         }

@@ -157,7 +157,7 @@ void FUN_002ed610(unsigned int size, unsigned int perLine, unsigned int digits,
 {
     bool showAddr = digits;
     unsigned char more = 1;
-    DumpFile *file = 0;
+    igFileView *file = 0;
     unsigned long long end;
     if (!size) size = 1;
     else if (size > 8) size = 8;
@@ -165,7 +165,7 @@ void FUN_002ed610(unsigned int size, unsigned int perLine, unsigned int digits,
         int alloc;
         if (g_useOwnerAllocator) alloc = (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleCurrent);
         else alloc = (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleTemporary);
-        file = (DumpFile *)igFile_Create(alloc);
+        file = (igFileView *)igFile_Create(alloc);
         if (0 == file->Open(name, (const char *)DAT_004f92f0)) goto done;
     }
     {
@@ -185,7 +185,7 @@ void FUN_002ed610(unsigned int size, unsigned int perLine, unsigned int digits,
     }
     if (file) {
         file->Close();
-        if (--file->refs, 0 == (0x7FFFFF & file->refs)) igObject_Destroy(file);
+        if (--file->_refCount, 0 == (0x7FFFFF & file->_refCount)) igObject_Destroy(file);
     }
 done:;
 }

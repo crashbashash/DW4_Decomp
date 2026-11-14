@@ -622,10 +622,10 @@
  ],
  "typed": {
   "error": null,
-  "offset_casts": 5162,
-  "pct": 41.35,
-  "recovered": 26970,
-  "synthetic": 6468,
+  "offset_casts": 5160,
+  "pct": 41.55,
+  "recovered": 27099,
+  "synthetic": 6377,
   "total": 65217,
   "typeable": 362,
   "typeable_pct": 0.56

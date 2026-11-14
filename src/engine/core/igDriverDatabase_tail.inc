@@ -156,7 +156,7 @@ int FUN_002da710(void *arg0, int arg1, int arg2) {
 
 int FUN_002da770(int *p)
 {
-    return igStringObj_Clear((IniStringView *)(*(int *)((char *)p + 40)));
+    return igStringObj_Clear((igStringObj *)(*(int *)((char *)p + 40)));
 }
 
 static inline int n_of(const TrackedEntryList *list) { return list->count; }
@@ -271,7 +271,7 @@ void FUN_002dab80(void *arg0, int arg1) {
         }
         s2 = (char *)(*(int *)((char *)(arg0) + 40));
         s1 = *(int *)(s2 + 12);
-        igStringObj_Insert((IniStringView *)s2, (char *)buf, s1, strlen(buf));
+        igStringObj_Insert((igStringObj *)s2, (char *)buf, s1, strlen(buf));
     }
 }
 
@@ -403,7 +403,7 @@ static inline void storeToken(int table, ConfigToken *n) {
     int kind = n->kind;
     int t = table;
     text = (text == 0) ? g_stringObjEmptyText[0] : text;
-    FUN_0030b320((IniStringView *)t, (int)text, kind);
+    FUN_0030b320((igStringObj *)t, (int)text, kind);
 }
 
 static inline void releaseToken(ConfigToken *n) {

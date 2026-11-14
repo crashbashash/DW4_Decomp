@@ -125,9 +125,9 @@ void Gap__Core__igPsx2Media__vfunc_24(igPsx2MediaView *media, int handle) {
     media->_sema->signal();
 }
 
-static inline void appendPath(const char *text, MediaPathBuffer *buffer) {
-    int length = buffer->length;
-    igStringObj_Insert((IniStringView *)buffer, (char *)text, (unsigned int)length, (unsigned int)(strlen(text)));
+static inline void appendPath(const char *text, igStringObj *buffer) {
+    int length = buffer->_length;
+    igStringObj_Insert(buffer, (char *)text, (unsigned int)length, (unsigned int)(strlen(text)));
 }
 
 void FUN_0032e130(igPsx2MediaView *self, int index, char **path) {
@@ -168,7 +168,7 @@ void FUN_0032e130(igPsx2MediaView *self, int index, char **path) {
             appendPath(*path, self->_conversionString);
             end = strlen(*path) + 6;
             for (i = 6; i < end; i++) {
-                p = self->_conversionString->text + i;
+                p = (char *)self->_conversionString->_buffer + i;
                 if (*p == '/') {
                     *p = '\\';
                 } else {
@@ -180,13 +180,13 @@ void FUN_0032e130(igPsx2MediaView *self, int index, char **path) {
             igStringObj_Set((int)self->_conversionString, (int)((*(char * *)&DAT_00587368)));
             appendPath(*path, self->_conversionString);
         }
-        text = self->_conversionString->text;
+        text = (char *)self->_conversionString->_buffer;
         text = (text == 0) ? (*(char * *)g_stringObjEmptyText) : text;
     } else if (isDisc && strchr(*path, ';') == 0) {
         igStringObj_Set((int)self->_conversionString, (int)(*path));
         stop = strlen(*path);
         for (j = 6; j < stop; j++) {
-            p = self->_conversionString->text + j;
+            p = (char *)self->_conversionString->_buffer + j;
             if (*p == '/') {
                 *p = '\\';
             } else {
@@ -194,7 +194,7 @@ void FUN_0032e130(igPsx2MediaView *self, int index, char **path) {
             }
         }
         appendPath(DAT_004ffbf0, self->_conversionString);
-        text = self->_conversionString->text;
+        text = (char *)self->_conversionString->_buffer;
         text = (text == 0) ? (*(char * *)g_stringObjEmptyText) : text;
     } else {
         text = *path;
@@ -219,7 +219,7 @@ void FUN_0032e130(igPsx2MediaView *self, int index, char **path) {
         }
         row->name = interned;
     }
-    igStringObj_Clear((IniStringView *)self->_conversionString);
+    igStringObj_Clear(self->_conversionString);
 }
 
 /* Opens handle `slot` of the media on the IOP: names it, sends the open command with the mode's

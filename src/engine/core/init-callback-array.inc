@@ -8,7 +8,7 @@ void FUN_002d1a00(ObjectSystemView *self) {
     self->vtableProbeOffset = 0;
     if (((MemoryContext * *)DAT_00586fd0)[0] == 0) {
         m = FUN_002f87f0(0x19F4);
-        if (m != 0) m = ((MemoryContext *)igMemoryPoolContextInfo_Construct((ContextView *)m));
+        if (m != 0) m = igMemoryPoolContextInfo_Construct((MemoryContext *)m);
         ((MemoryContext * *)DAT_00586fd0)[0] = (MemoryContext *)m;
     }
     ((MemoryContext * *)DAT_00586fd0)[0]->vfunc_42();
@@ -148,7 +148,7 @@ void FUN_002d2e60(ObjectSystemView *arg0) {
 
 /* Register a metaobject in the object system's registry, retaining it. */
 void igObjectSystem_AppendMetaObject(void *system,igMetaObject *meta){
-    MetaRefList_AppendRetained((PointerList *)((void *)((ObjectSystemRecord *)system)->metaRegistry), (RefHeader *)meta);
+    MetaRefList_AppendRetained((PointerList *)((ObjectSystemView *)system)->metaRegistry, (RefHeader *)meta);
 }
 
 int igObjectSystem_FindMetaByName(ObjectSystemView *objectSystem, const char *className) {

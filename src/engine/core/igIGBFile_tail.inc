@@ -209,10 +209,10 @@ igResult FUN_002e4240(igIGBFile *arg1) {
     return g_resultSuccess;
 }
 
-static inline void bump(const IntListHolder &r, int off) { int *c = (int *)((char *)r.p->data + off); *c = *c + 1; }
+static inline void bump(const IntListHolder &r, int off) { int *c = (int *)((char *)r.p->_data + off); *c = *c + 1; }
 
-static inline void fillWords(MetaTableWords *l, int c, int *value) {
-    if (c >= 0) { if (c <= l->cap) { l->count = c; } else { List_Resize(l, c, 4); } }
+static inline void fillWords(igTDataList<int> *l, int c, int *value) {
+    if (c >= 0) { if (c <= l->_capacity) { l->_count = c; } else { List_Resize(l, c, 4); } }
 }
 
 static inline int indexOfParent(igObjectList *l, const MetaTableKey &key) {
@@ -230,50 +230,50 @@ igResult FUN_002e42d0(igIGBFileView *self) {
     self->_metaObjectCount = self->_metaObjectListInFile->_count;
     self->_metaObjectBufferSize = self->_metaObjectCount * 24;
     {
-    IntListHolder inherited((MetaTableWords *)igIntList_Create((int)self->_temporaryMemoryPool));
+    IntListHolder inherited((igTDataList<int> *)igIntList_Create((int)self->_temporaryMemoryPool));
     fillWords(inherited.p, self->_metaObjectCount, 0);
     {
-        int n = inherited.p->count;
-        int *d = inherited.p->data;
+        int n = inherited.p->_count;
+        int *d = inherited.p->_data;
         int k;
         for (k = 0; k < n; k++) { d[k] = DAT_004c2130[0]; }
     }
     {
-    IntListHolder persistent((MetaTableWords *)igIntList_Create((int)self->_temporaryMemoryPool));
+    IntListHolder persistent((igTDataList<int> *)igIntList_Create((int)self->_temporaryMemoryPool));
     fillWords(persistent.p, self->_metaObjectCount, 0);
     {
-        int n = persistent.p->count;
-        int *d = persistent.p->data;
+        int n = persistent.p->_count;
+        int *d = persistent.p->_data;
         int k;
         for (k = 0; k < n; k++) { d[k] = DAT_004c2138[0]; }
     }
     base = igMetaObject_GetFieldCount((igMetaObject *)g_igObject_metaObject[0]);
     for (i = 0; i < self->_metaObjectCount; i++) {
         int j;
-        MetaTableFieldList *fields;
+        __internalObjectList *fields;
         int n;
-        MetaTableType *t;
+        igMetaObject *t;
         int off;
         off = i * 4;
-        t = *(MetaTableType **)((char *)self->_metaObjectListInFile->_data + off);
-        fields = t->fields;
-        n = fields->count;
+        t = *(igMetaObject **)((char *)self->_metaObjectListInFile->_data + off);
+        fields = (__internalObjectList *)t->_metaFields;
+        n = fields->_count;
         for (j = base; j < n; j++) {
-            MetaTableField *f = fields->data[j];
-            if (f->inherited == 0) {
-                if (f->persistent != 0) {
+            igMetaField *f = ((igMetaField **)fields->_data)[j];
+            if (f->_isRunTime == 0) {
+                if (f->_persistent != 0) {
                     self->_metaObjectBufferSize = self->_metaObjectBufferSize + 6;
                     bump(inherited, off);
                 }
                 bump(persistent, off);
             }
         }
-        self->_metaObjectBufferSize = self->_metaObjectBufferSize + (strlen(t->name) + 1);
+        self->_metaObjectBufferSize = self->_metaObjectBufferSize + (strlen((char *)t->_name) + 1);
         self->_metaObjectBufferSize = (self->_metaObjectBufferSize + 1) & ~1;
     }
     self->_metaObjectBuffer = self->_temporaryMemoryPool->AllocateAligned(self->_metaObjectBufferSize, 16);
     {
-        MetaTableType *t;
+        igMetaObject *t;
         int off;
         int k;
         MetaTableRecord *rec = (MetaTableRecord *)self->_metaObjectBuffer;
@@ -281,18 +281,18 @@ igResult FUN_002e42d0(igIGBFileView *self) {
             MetaTableKey key;
             int len;
             off = k * 4;
-            t = *(MetaTableType **)((char *)self->_metaObjectListInFile->_data + off);
-            len = strlen(t->name) + 1;
+            t = *(igMetaObject **)((char *)self->_metaObjectListInFile->_data + off);
+            len = strlen((char *)t->_name) + 1;
             rec->nameSize = (len + 1) & ~1;
-            rec->a4 = t->a16;
-            rec->a8 = t->a20;
-            rec->fieldCount = *(int *)((char *)inherited.p->data + off);
+            rec->majorVersion = t->_majorVersion;
+            rec->minorVersion = t->_minorVersion;
+            rec->fieldCount = *(int *)((char *)inherited.p->_data + off);
             {
                 igObjectList *l = self->_metaObjectListInFile;
-                *(int *)&key = t->parent;
-                rec->parent = indexOfParent(l, key);
+                *(int *)&key = t->_parent;
+                rec->parentIndex = indexOfParent(l, key);
             }
-            rec->persistCount = base + *(int *)((char *)persistent.p->data + off);
+            rec->persistCount = base + *(int *)((char *)persistent.p->_data + off);
             rec++;
         }
     }
@@ -300,34 +300,34 @@ igResult FUN_002e42d0(igIGBFileView *self) {
         char *out = (char *)((MetaTableRecord *)self->_metaObjectBuffer + self->_metaObjectCount);
         igMetaFieldView *desc;
         short *p;
-        MetaTableField *f;
+        igMetaField *f;
         int k;
         int j;
         int n;
         int off;
-        MetaTableType *t;
-        MetaTableFieldList *fields;
+        igMetaObject *t;
+        __internalObjectList *fields;
         desc = (igMetaFieldView *)((void *)igShortMetaField_GetDefaultDescriptor());
         for (k = 0; k < self->_metaObjectCount; k++) {
             off = k * 4;
-            t = *(MetaTableType **)((char *)self->_metaObjectListInFile->_data + off);
-            strcpy(out, t->name);
-            fields = t->fields;
+            t = *(igMetaObject **)((char *)self->_metaObjectListInFile->_data + off);
+            strcpy(out, (char *)t->_name);
+            fields = (__internalObjectList *)t->_metaFields;
             j = base;
-            n = fields->count;
+            n = fields->_count;
             out += ((MetaTableRecord *)self->_metaObjectBuffer)[k].nameSize;
             p = (short *)out;
             for (; j < n; j++) {
-                f = fields->data[j];
-                if (f->persistent != 0 && f->inherited == 0) {
+                f = ((igMetaField **)fields->_data)[j];
+                if (f->_persistent != 0 && f->_isRunTime == 0) {
                     p[0] = igMetaField_GetTypeIndex((TypeIndexView *)f);
-                    p[1] = f->size;
-                    p[2] = f->offset;
+                    p[1] = f->_internalIndex;
+                    p[2] = f->_size;
                     p += 3;
                 }
             }
             if (self->_endianSwap != 0) {
-                desc->SwapBytes(out, *(int *)((char *)inherited.p->data + off) * 3);
+                desc->SwapBytes(out, *(int *)((char *)inherited.p->_data + off) * 3);
             }
             out = (char *)p;
         }
@@ -1188,19 +1188,19 @@ void Gap__Core__igIGBFile__vfunc_13(igIGBFileView *arg0) {
 }
 
 static inline void assignTypes(igIGBFileView *self, const TypeListHolder &h) {
-    ReflectedTypeList *v = h.p;
-    ReflectedTypeList *old;
-    if (v != 0) { v->rc = v->rc + 1; }
-    old = (ReflectedTypeList *)self->_alignmentListInFile;
-    if (old != 0) { old->rc = old->rc - 1; if (((unsigned long long)((long long)(int)old->rc << 0x29) >> 0x29) == 0) igObject_Destroy(old); }
+    igTDataList<int> *v = h.p;
+    igTDataList<int> *old;
+    if (v != 0) { v->_refCount = v->_refCount + 1; }
+    old = (igTDataList<int> *)self->_alignmentListInFile;
+    if (old != 0) { old->_refCount = old->_refCount - 1; if (((unsigned long long)((long long)(int)old->_refCount << 0x29) >> 0x29) == 0) igObject_Destroy(old); }
     self->_alignmentListInFile = (igIntList *)v;
 }
 
-static inline void addType(ReflectedTypeList *l, int v) {
+static inline void addType(igTDataList<int> *l, int v) {
     int idx;
-    idx = l->count;
-    if (l->cap > idx) { l->count = l->getCount() + 1; } else { List_Resize(l, idx + 1, 4); }
-    l->data[idx] = v;
+    idx = l->_count;
+    if (l->_capacity > idx) { l->_count = l->getCount() + 1; } else { List_Resize(l, idx + 1, 4); }
+    l->_data[idx] = v;
 }
 
 igResult FUN_002e82a0(igIGBFileView *self) {
@@ -1226,13 +1226,13 @@ igResult FUN_002e82a0(igIGBFileView *self) {
     nameCount = 0;
     if (names.p != 0) { nameCount = ((ReflectedNameList *)names.p)->count; }
     {
-        TypeListHolder h((ReflectedTypeList *)igIntList_Create((int)self->_temporaryMemoryPool));
+        TypeListHolder h((igTDataList<int> *)igIntList_Create((int)self->_temporaryMemoryPool));
         assignTypes(self, h);
     }
     {
-        ReflectedTypeList *l = (ReflectedTypeList *)self->_alignmentListInFile;
+        igTDataList<int> *l = (igTDataList<int> *)self->_alignmentListInFile;
         int want = self->_alignmentCount;
-        if (want >= l->count) { List_Reserve((igDataList *)l, want, 4); }
+        if (want >= l->_count) { List_Reserve((igDataList *)l, want, 4); }
     }
     for (i = 0; i < self->_alignmentCount; i++) {
         bool found = false;
@@ -1243,8 +1243,8 @@ igResult FUN_002e82a0(igIGBFileView *self) {
             n = (n == 0) ? (*(char * *)g_stringObjEmptyText) : n;
             if (strcmp(n, name) == 0) { found = true; break; }
         }
-        if (found) { value = ((ReflectedValueList *)values.p)->data[j]; }
-        addType((ReflectedTypeList *)self->_alignmentListInFile, value);
+        if (found) { value = ((igTDataList<int> *)values.p)->_data[j]; }
+        addType((igTDataList<int> *)self->_alignmentListInFile, value);
         name += sizes[i];
     }
     self->_alignmentBuffer = 0;
@@ -1437,10 +1437,10 @@ igResult FUN_002e8e50(igIGBFileView *self) {
     return g_resultSuccess;
 }
 
-static inline void addName(IgbNameList *l, const int &v) {
-    int idx = l->count;
-    if (l->cap > idx) { l->count = l->getCount() + 1; } else { List_Resize(l, idx + 1, 4); }
-    l->data[idx] = v;
+static inline void addName(igTDataList<int> *l, const int &v) {
+    int idx = l->_count;
+    if (l->_capacity > idx) { l->_count = l->getCount() + 1; } else { List_Resize(l, idx + 1, 4); }
+    l->_data[idx] = v;
 }
 
 igResult FUN_002e91e0(igIGBFileView *self) {
@@ -1464,13 +1464,13 @@ igResult FUN_002e91e0(igIGBFileView *self) {
     name = buf;
     i = 0;
     while (hdr.count-- > 0) {
-        addName((IgbNameList *)self->_memoryPoolHandles, FUN_002f89e0((int)name));
+        addName((igTDataList<int> *)self->_memoryPoolHandles, FUN_002f89e0((int)name));
         { int len = strlen(name) + 1; i++; name += len; }
     }
     for (; i < 46; i++) {
-        int idx; IgbNameList *l; l = (IgbNameList *)self->_memoryPoolHandles; idx = l->count;
-        if (l->cap > idx) { l->count = l->getCount() + 1; } else { List_Resize(l, idx + 1, 4); }
-        l->data[idx] = DAT_004c2140[0];
+        int idx; igTDataList<int> *l; l = (igTDataList<int> *)self->_memoryPoolHandles; idx = l->_count;
+        if (l->_capacity > idx) { l->_count = l->getCount() + 1; } else { List_Resize(l, idx + 1, 4); }
+        l->_data[idx] = DAT_004c2140[0];
     }
     self->_temporaryMemoryPool->Free(buf);
     return g_resultSuccess;

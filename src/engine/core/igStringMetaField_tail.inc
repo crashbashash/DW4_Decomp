@@ -341,18 +341,18 @@ void Gap__Core__igStringMetaField__vfunc_02(void) {
     igRefMetaField_Destruct();
 }
 
-void FUN_0030b320(IniStringView *arg0, int arg1, int arg2) {
+void FUN_0030b320(igStringObj *arg0, int arg1, int arg2) {
     char *temp_s0;
 
-    temp_s0 = arg0->text;
+    temp_s0 = (char *)arg0->_buffer;
     if ((arg1 == 0) || (arg2 == 0)) {
-        arg0->text = 0;
-        arg0->length = 0;
+        arg0->_buffer = 0;
+        arg0->_length = 0;
     } else {
-        arg0->text = (char *)igObject_AllocateStorage((int)arg0, arg2 + 1);
-        memcpy(arg0->text, arg1, arg2);
-        arg0->text[arg2] = 0;
-        arg0->length = arg2;
+        arg0->_buffer = (int)igObject_AllocateStorage((int)arg0, arg2 + 1);
+        memcpy((char *)arg0->_buffer, arg1, arg2);
+        *(char *)(arg0->_buffer + arg2) = 0;
+        arg0->_length = arg2;
     }
     if (temp_s0 != 0) {
         FUN_00300f50((int)arg0, (int)temp_s0);
@@ -361,49 +361,49 @@ void FUN_0030b320(IniStringView *arg0, int arg1, int arg2) {
 
 void igStringObj_Set(int arg0, int arg1) {
     if (arg1 != 0) {
-        FUN_0030b320((IniStringView *)arg0, arg1, strlen(arg1));
+        FUN_0030b320((igStringObj *)arg0, arg1, strlen(arg1));
         return;
     }
-    igStringObj_Clear((IniStringView *)arg0);
+    igStringObj_Clear((igStringObj *)arg0);
 }
 
-int igStringObj_Clear(IniStringView *arg0) {
+int igStringObj_Clear(igStringObj *arg0) {
     int temp_a1;
 
-    temp_a1 = (int)arg0->text;
+    temp_a1 = arg0->_buffer;
     if (temp_a1 != 0) {
         FUN_00300f50((int)arg0, temp_a1);
     }
-    arg0->text = 0;
-    arg0->length = 0;
+    arg0->_buffer = 0;
+    arg0->_length = 0;
 }
 
-void igStringObj_Insert(IniStringView *self, char *insert, unsigned int at, unsigned int n) {
+void igStringObj_Insert(igStringObj *self, char *insert, unsigned int at, unsigned int n) {
     unsigned int total;
     char *buf;
     if (n == 0 || insert == 0) { return; }
-    if (self->length == 0) {
+    if (self->_length == 0) {
         FUN_0030b320(self, (int)insert, (int)n);
     } else {
-    total = n + self->length;
+    total = n + self->_length;
     buf = FUN_00300d70(self, total + 1);
-    if (at >= self->length) {
-        memcpy(buf, self->text, self->length);
-        memcpy(buf + self->length, insert, n);
+    if (at >= self->_length) {
+        memcpy(buf, (char *)self->_buffer, self->_length);
+        memcpy(buf + self->_length, insert, n);
         buf[total] = 0;
     } else if (at == 0) {
         memcpy(buf, insert, n);
-        memcpy(buf + n, self->text, self->length + 1);
+        memcpy(buf + n, (char *)self->_buffer, self->_length + 1);
     } else {
-        memcpy(buf, self->text, at);
+        memcpy(buf, (char *)self->_buffer, at);
         memcpy(buf + at, insert, n);
-        memcpy(buf + (at + n), self->text + at, (self->length - at) + 1);
+        memcpy(buf + (at + n), (char *)self->_buffer + at, (self->_length - at) + 1);
     }
-    if (self->text != 0) {
-        FUN_00300f50((int)self, (int)self->text);
+    if (self->_buffer != 0) {
+        FUN_00300f50((int)self, self->_buffer);
     }
-    self->text = buf;
-    self->length = total;
+    self->_buffer = (int)buf;
+    self->_length = total;
     }
 }
 
@@ -488,7 +488,7 @@ int FUN_0030b840(int arg0, int extra1, int extra2) {
     if (var_s0 > 0x7FF) {
         var_s0 = -1;
     } else {
-        FUN_0030b320((IniStringView *)arg0, (int)buf, var_s0);
+        FUN_0030b320((igStringObj *)arg0, (int)buf, var_s0);
     }
     return var_s0;
 }
@@ -611,7 +611,7 @@ int igStringObj_Erase(igStringObj *self, unsigned int pos, unsigned int len) {
     }
     *(igStringObj **)&tmp = (igStringObj *)(igStringObj_Create(((int)igObject_GetAllocator((int)self))));
     igStringObj_Set((int)tmp, (int)((char *)self->_buffer + end));
-    igStringObj_Insert((IniStringView *)tmp, (char *)self->_buffer, 0, pos);
+    igStringObj_Insert((igStringObj *)tmp, (char *)self->_buffer, 0, pos);
     igStringObj_Set((int)self, (int)(igStringObj_Text(tmp)));
     held = tmp;
     if (held != 0) {

@@ -431,17 +431,17 @@ char *FUN_0032c110(char *path) {
     return (char *)FUN_002ed5a0(text.p, (igMemoryPoolView *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleString));
 }
 
-static inline void append_32c240(const igSmartPointer<Text> &ref, char *chars) {
-    Text *text = ref.p;
-    int length = text->length;
-    igStringObj_Insert((IniStringView *)text, chars, (unsigned int)length, (unsigned int)(strlen(chars)));
+static inline void append_32c240(const igSmartPointer<igStringObj> &ref, char *chars) {
+    igStringObj *text = ref.p;
+    int length = text->_length;
+    igStringObj_Insert(text, chars, (unsigned int)length, (unsigned int)(strlen(chars)));
 }
 
 InternedString FUN_0032c240(char *prefix, char *path) {
     char *chars;
     int limit, i;
     char c;
-    igSmartPointer<Text> text(((Text *)igStringObj_Create(((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleString)))));
+    igSmartPointer<igStringObj> text(((igStringObj *)igStringObj_Create(((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleString)))));
     if (prefix == 0) {
         igStringObj_Set((int)(text.get()), (int)path);
     } else if (*prefix == 0x63) {
@@ -454,7 +454,7 @@ InternedString FUN_0032c240(char *prefix, char *path) {
         append_32c240(text, DAT_004ffbf0);
         limit = strlen(path) + 8;
         for (i = 7; i < limit; i++) {
-            chars = text.get()->chars + i;
+            chars = (char *)text.get()->_buffer + i;
             if (*chars == 0x2F) {
                 *chars = 0x5C;
             } else {
@@ -465,7 +465,7 @@ InternedString FUN_0032c240(char *prefix, char *path) {
         igStringObj_Set((int)(text.get()), (int)prefix);
         append_32c240(text, path);
     }
-    chars = text.get()->chars;
+    chars = (char *)text.get()->_buffer;
     if (chars == 0) {
         chars = g_stringObjEmptyText[0];
     }

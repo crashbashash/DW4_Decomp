@@ -49,17 +49,17 @@ bool FUN_002f0b50(int arg0, int arg1) {
     igMemoryPoolView *q;
     bool s0;
     s0 = false;
-    s1 = ((RegistryList * *)g_secondaryAllocatorList)[0]->count - 1;
+    s1 = g_secondaryAllocatorList[0]->count - 1;
     while (s1 >= 0) {
-        o = (igMemoryPoolView *)((RegistryList * *)g_secondaryAllocatorList)[0]->data[s1];
+        o = g_secondaryAllocatorList[0]->data[s1];
         if (o != 0 && o->isActive() != 0 && o->Trim(arg1) != 0) {
             s0 = true;
         }
         s1--;
     }
-    s2 = ((RegistryList * *)g_primaryAllocatorList)[0]->count - 1;
+    s2 = g_primaryAllocatorList[0]->count - 1;
     while (s2 >= 0) {
-        q = (igMemoryPoolView *)((RegistryList * *)g_primaryAllocatorList)[0]->data[s2];
+        q = g_primaryAllocatorList[0]->data[s2];
         if (q != 0 && q->isActive() != 0 && q->Trim(arg1) != 0) {
             s0 = true;
         }
@@ -213,21 +213,21 @@ void Memory_InitializeAllocatorRegistries(igObject *rootAllocator) {
 
     primaryList = ((int)igMemoryPoolInfoList_Allocate(0xC));
     if (primaryList != 0) {
-        primaryList = ((int)igMemoryPoolInfoList_Init((RegistryList *)primaryList));
+        primaryList = ((int)igMemoryPoolInfoList_Init((AllocatorRegistry *)primaryList));
     }
     ((int *)g_primaryAllocatorList)[0] = primaryList;
-    igMemoryPoolInfoList_Append((RegistryList *)primaryList, (void *)rootAllocator);
+    igMemoryPoolInfoList_Append((AllocatorRegistry *)primaryList, (igMemoryPoolView *)rootAllocator);
     ((char *)&rootAllocator->_refCount)[3] = 0;
     secondaryList = ((int)igMemoryPoolInfoList_Allocate(0xC));
     if (secondaryList != 0) {
-        secondaryList = ((int)igMemoryPoolInfoList_Init((RegistryList *)secondaryList));
+        secondaryList = ((int)igMemoryPoolInfoList_Init((AllocatorRegistry *)secondaryList));
     }
     ((int *)g_secondaryAllocatorList)[0] = secondaryList;
 }
 
 void Memory_ShutdownAllocatorRegistries(void **rootAllocator) {
-    igMemoryPoolInfoList_Release((RegistryList *)(((int *)g_primaryAllocatorList)[0]), 1);
-    igMemoryPoolInfoList_Release((RegistryList *)(((int *)g_secondaryAllocatorList)[0]), 1);
+    igMemoryPoolInfoList_Release(g_primaryAllocatorList[0], 1);
+    igMemoryPoolInfoList_Release(g_secondaryAllocatorList[0], 1);
     ((int *)g_primaryAllocatorList)[0] = 0;
     ((int *)g_secondaryAllocatorList)[0] = 0;
     ((RootAllocatorVtable *)(rootAllocator))->afterRegistriesCleared();

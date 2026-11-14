@@ -1,19 +1,19 @@
-/* Constructor: 30 records in use, no flags, an empty parent reference (its smart-pointer
+/* Constructor: 30 records in use, no flags, an empty context-info reference (its smart-pointer
  * constructor retains what it is given), a reference count of one in the low 23 bits of the
  * reference word, the records cleared and then named. */
-ContextView *igMemoryPoolContextInfo_Construct(ContextView *self) {
+MemoryContext *igMemoryPoolContextInfo_Construct(MemoryContext *self) {
     igObject_InitHeader((struct ObjectHeader *)self);
-    self->_vtable = (int)g_igMemoryPoolContextInfo_vtable;
+    *(char **)self = g_igMemoryPoolContextInfo_vtable;
     self->usedRecords = 30;
     self->flags = 0;
-    self->parent = 0;
-    if (self->parent != 0) {
-        self->parent->_refCount += 1;
+    self->contextInfo = 0;
+    if (self->contextInfo != 0) {
+        self->contextInfo->_refCount += 1;
     }
     self->_refCount = 0;
     ((RefCount *)&self->_refCount)->u.b.cnt = 1;
     memset(self->records, 0, sizeof(self->records));
-    ((MemoryContext *)self)->InitializeRecordNames();
+    self->InitializeRecordNames();
     return self;
 }
 
@@ -22,20 +22,20 @@ ContextView *igMemoryPoolContextInfo_Construct(ContextView *self) {
  * destructor). Each record is the allocator bound to that slot, a 128-byte inline name, a
  * descriptor and flag words. The object header is the igObject vtable word and reference word,
  * followed by a count at +8 (30 after construction, then the highest populated slot + 1), a flag
- * word at +12 and a parent object at +16 that the destructor releases with the igObject reference-
+ * word at +12 and the context info at +16 that the destructor releases with the igObject reference-
  * count idiom. The views below describe the observed 32-bit layout, not the original C++ spelling. */
 /* Destructor: republish the vtable, clear the reference word and all records, rebuild the 46
- * record names, release the parent, and free the allocation when the low 16 bits of `deleteFlags`
- * are positive (deleting destructor). The parent word is left in place. */
-void *igMemoryPoolContextInfo_Destruct(ContextView *self, long long deleteFlags) {
+ * record names, release the context info, and free the allocation when the low 16 bits of `deleteFlags`
+ * are positive (deleting destructor). The context-info word is left in place. */
+void *igMemoryPoolContextInfo_Destruct(MemoryContext *self, long long deleteFlags) {
     if (self) {
-        self->_vtable = (int)g_igMemoryPoolContextInfo_vtable; self->_refCount = 0;
-        memset(self->records, 0, 6624); ((MemoryContext *)self)->InitializeRecordNames();
+        *(char **)self = g_igMemoryPoolContextInfo_vtable; self->_refCount = 0;
+        memset(self->records, 0, 6624); self->InitializeRecordNames();
         if ((char *)self + 16) {
-            igObject *parent = self->parent;
+            igMemoryPoolContextInfoView *parent = self->contextInfo;
             if (parent) {
                 --parent->_refCount;
-                if (!(parent->_refCount & 0x7fffff)) igObject_Destroy(parent);
+                if (!(parent->_refCount & 0x7fffff)) igObject_Destroy((igObject *)parent);
             }
         }
         if ((short)deleteFlags > 0) igMemoryPoolContextInfo_DeleteAllocation(self);
@@ -91,7 +91,7 @@ void *FUN_002f2830(MemoryContext *self, const char *name) {
 /* (vtable offset 100) Bind `value` to record `index` (0..45). Re-binding the same object is a no-
  * op; a different old binding is released through Clear first. The new object is retained, and a
  * non-null binding raises the used-record count. */
-void FUN_002f28d0(ContextView *self, int index, igObject *value) {
+void FUN_002f28d0(MemoryContext *self, int index, igObject *value) {
     if (index >= 0 && index < 46) {
         /* record address spelled as index * 144 + self (+ 20 for the allocator word); the
          * typed spelling &self->records[index] changes the bytes */
@@ -99,7 +99,7 @@ void FUN_002f28d0(ContextView *self, int index, igObject *value) {
         igObject **slot = (igObject **)(address + 20);
         igObject *previous = *slot;
         if (!previous || previous != value) {
-            if (previous) ((MemoryContext *)self)->RemoveAllocator(index);
+            if (previous) self->RemoveAllocator(index);
             *slot = value;
             if (value) {
                 ++value->_refCount;
@@ -215,7 +215,7 @@ igResult FUN_002f2d20(MemoryContext *self, int config, int section) {
     if (config == 0) {
         config = (int)((ObjectSystemView *)(*(void * *)g_objectSystem))->configRegistry;
     }
-    igResult sp6C = self->contextInfo->vfunc_25((IniSectionsView *)config, (char *)section);
+    igResult sp6C = self->contextInfo->vfunc_25((igRegistry *)config, (char *)section);
     if (sp6C.v == g_resultSuccess.v) {
         igResult sp68 = self->vfunc_35((int)self->contextInfo, 1);
         sp6C = sp68;
@@ -238,7 +238,7 @@ igResult FUN_002f2e30(MemoryContext *self, int config, int index) {
     if (config == 0) {
         config = (int)((ObjectSystemView *)(*(void * *)g_objectSystem))->configRegistry;
     }
-    igResult sp6C = self->contextInfo->vfunc_26((IniSectionsView *)config, index);
+    igResult sp6C = self->contextInfo->vfunc_26((igRegistry *)config, index);
     if (sp6C.v == g_resultSuccess.v) {
         igResult sp68 = self->vfunc_35((int)self->contextInfo, 1);
         sp6C = sp68;
@@ -246,17 +246,17 @@ igResult FUN_002f2e30(MemoryContext *self, int config, int index) {
     return sp6C;
 }
 
-igResult FUN_002f2f40(SlotReadTable *self, int file) {
+igResult FUN_002f2f40(MemoryContext *self, int file) {
     igResult result = g_resultSuccess;
     int i;
     FUN_002f8b20((void *)file);
     for (i = 0; i < 46; i++) {
-        if (*(int *)((char *)self + i * 144 + 152) != 0) {
-            igRefHead *o = (igRefHead *)FUN_002bfed0(((int)igObject_GetAllocator(file)));
-            if (self->readOne(i, o) == g_resultFailure) {
+        if (self->records[i].descriptor != 0) {
+            igMemoryPoolInfo *o = (igMemoryPoolInfo *)FUN_002bfed0(((int)igObject_GetAllocator(file)));
+            if (self->vfunc_36(i, o) == g_resultFailure) {
                 result = g_resultFailure;
-                o->rc = o->rc - 1;
-                if (((unsigned long long)((long long)(int)o->rc << 0x29) >> 0x29) == 0) igObject_Destroy(o);
+                o->_refCount = o->_refCount - 1;
+                if (((unsigned long long)((long long)(int)o->_refCount << 0x29) >> 0x29) == 0) igObject_Destroy(o);
             } else {
                 FUN_002f8a80((void *)file, (void *)o);
             }
@@ -265,20 +265,20 @@ igResult FUN_002f2f40(SlotReadTable *self, int file) {
     return result;
 }
 
-igResult FUN_002f3060(DirSlotTable *self, int file, int arg) {
+igResult FUN_002f3060(MemoryContext *self, int file, int arg) {
     int count = FUN_002f8a50((void *)file);
     igResult result = g_resultSuccess;
     int i;
-    if (self->slots == 0) {
+    if (self->contextInfo == 0) {
         int allocator = ((int)igObject_GetAllocator((int)self));
-        DirSlotObject *old = self->slots;
-        if (old != 0) { old->rc = old->rc - 1; if (((unsigned long long)((long long)(int)old->rc << 0x29) >> 0x29) == 0) igObject_Destroy(old); }
-        self->slots = (DirSlotObject *)FUN_002c01f0(allocator);
+        igMemoryPoolContextInfoView *old = self->contextInfo;
+        if (old != 0) { old->_refCount = old->_refCount - 1; if (((unsigned long long)((long long)(int)old->_refCount << 0x29) >> 0x29) == 0) igObject_Destroy(old); }
+        self->contextInfo = (igMemoryPoolContextInfoView *)FUN_002c01f0(allocator);
     }
     for (i = 0; i < count; i++) {
-        DirSourceRecord *r;
-        if ((r = (DirSourceRecord *)((void *)FUN_002f8a60((void *)file, i))) != 0) {
-            if (self->fillSlot(self->slotFor(r->id), r, arg) == g_resultFailure) {
+        igMemoryPoolInfo *r;
+        if ((r = (igMemoryPoolInfo *)((void *)FUN_002f8a60((void *)file, i))) != 0) {
+            if (self->vfunc_37(self->vfunc_30(r->_handleName), r, arg) == g_resultFailure) {
                 result = g_resultFailure;
             }
         }
@@ -359,61 +359,62 @@ static inline void *descPool() {
     return (*(void * *)g_stringPool);
 }
 
-static inline void setDescString(char **dst, char *src) {
+/* Interns `src` into a reflected igStringMetaField word, releasing the previous token. */
+static inline void setDescString(int *dst, char *src) {
     char *v = ((char *)StringPool_Intern((StringPool *)(descPool()), src));
-    char *old = *dst;
+    char *old = (char *)*dst;
     if (old != 0) {
         PoolDescString *h = (PoolDescString *)(old - 8);
         int n = h->refs - 1;
         h->refs = n;
         if (n == 0) { StringChunk_ReleaseHeader((StringChunkOwnerView *)h->chunk, (int)h); }
     }
-    *dst = v;
+    *dst = (int)v;
 }
 
-static inline char *descName(PoolDescRecord *r) { char *n = r->name; if (n != 0) { return n; } return ((char *)emptyString); }
+static inline char *descName(igMemoryPoolInfo *r) { char *n = (char *)r->_name; if (n != 0) { return n; } return ((char *)emptyString); }
 
-igResult FUN_002f3910(PoolDescManager *self, int index, PoolDescRecord *desc, int build) {
+igResult FUN_002f3910(MemoryContext *self, int index, igMemoryPoolInfo *desc, int build) {
     igResult result = g_resultSuccess;
-    PoolDescSlot *slot;
+    ContextRecord *slot;
     if (index == -1) {
-        index = self->nextSlot;
+        index = self->usedRecords;
         if (index < 46) {
-            setDescString(&desc->alias, g_memoryContextNames[index]);
-            self->nextSlot = self->nextSlot + 1;
+            setDescString(&desc->_handleName, g_memoryContextNames[index]);
+            self->usedRecords = self->usedRecords + 1;
         }
-    } else if (index >= self->nextSlot) {
-        self->nextSlot = index + 1;
+    } else if (index >= self->usedRecords) {
+        self->usedRecords = index + 1;
     }
     if (index >= 0 && index < 46) {
-        slot = (PoolDescSlot *)((char *)self + index * 0x90 + 0x14);
+        slot = &self->records[index];
         strncpy(slot->name, descName(desc), 0x7f);
         slot->name[127] = 0;
-        slot->record = ((PoolDescRecord *)FUN_002f8be0((igMemoryPoolContextInfo *)self->table, (int)(descName(desc))));
-        if (slot->record == 0) { slot->record = ((PoolDescRecord *)FUN_002f8ca0((igMemoryPoolContextInfo *)self->table, desc->alias)); }
-        if (slot->record == 0) {
-            slot->record = (PoolDescRecord *)FUN_002bfed0((int)((igMemoryPool *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleBootstrap)));
-            FUN_002f8a80((void *)self->table, (void *)slot->record);
+        slot->descriptor = ((igMemoryPoolInfo *)FUN_002f8be0((igMemoryPoolContextInfo *)self->contextInfo, (int)(descName(desc))));
+        if (slot->descriptor == 0) { slot->descriptor = FUN_002f8ca0((igMemoryPoolContextInfo *)self->contextInfo, (char *)desc->_handleName); }
+        if (slot->descriptor == 0) {
+            slot->descriptor = (igMemoryPoolInfo *)FUN_002bfed0((int)((igMemoryPool *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleBootstrap)));
+            FUN_002f8a80((void *)self->contextInfo, (void *)slot->descriptor);
         }
-        if (slot->record != desc) {
-            { PoolDescRecord *d; char *src; src = desc->s24; d = slot->record; setDescString(&d->s24, src); }
-            slot->record->a28 = desc->a28;
-            slot->record->a32 = desc->a32;
-            slot->record->a36 = desc->a36;
-            { PoolDescRecord *d; char *src; src = desc->s40; d = slot->record; setDescString(&d->s40, src); }
-            { PoolDescRecord *d; char *src; src = desc->s44; d = slot->record; setDescString(&d->s44, src); }
-            { PoolDescRecord *d; char *src; src = desc->s48; d = slot->record; setDescString(&d->s48, src); }
-            { PoolDescRecord *d; char *src; src = desc->s52; d = slot->record; setDescString(&d->s52, src); }
-            { PoolDescRecord *d; char *src; src = desc->s56; d = slot->record; setDescString(&d->s56, src); }
-            { PoolDescRecord *d; char *src; src = desc->s60; d = slot->record; setDescString(&d->s60, src); }
-            { PoolDescRecord *d; char *src; src = desc->s64; d = slot->record; setDescString(&d->s64, src); }
-            { PoolDescRecord *d; char *src; src = desc->s68; d = slot->record; setDescString(&d->s68, src); }
-            { PoolDescRecord *d; char *src; src = desc->s72; d = slot->record; setDescString(&d->s72, src); }
-            { PoolDescRecord *d; char *src; src = desc->s76; d = slot->record; setDescString(&d->s76, src); }
-            slot->record->a80 = desc->a80;
+        if (slot->descriptor != desc) {
+            { igMemoryPoolInfo *d; char *src; src = (char *)desc->_aliasedTo; d = slot->descriptor; setDescString(&d->_aliasedTo, src); }
+            slot->descriptor->_size = desc->_size;
+            slot->descriptor->_maxSize = desc->_maxSize;
+            slot->descriptor->_address = desc->_address;
+            { igMemoryPoolInfo *d; char *src; src = (char *)desc->_class; d = slot->descriptor; setDescString(&d->_class, src); }
+            { igMemoryPoolInfo *d; char *src; src = (char *)desc->_arenaType; d = slot->descriptor; setDescString(&d->_arenaType, src); }
+            { igMemoryPoolInfo *d; char *src; src = (char *)desc->_source; d = slot->descriptor; setDescString(&d->_source, src); }
+            { igMemoryPoolInfo *d; char *src; src = (char *)desc->_scope; d = slot->descriptor; setDescString(&d->_scope, src); }
+            { igMemoryPoolInfo *d; char *src; src = (char *)desc->_debugOptions; d = slot->descriptor; setDescString(&d->_debugOptions, src); }
+            { igMemoryPoolInfo *d; char *src; src = (char *)desc->_releaseOptions; d = slot->descriptor; setDescString(&d->_releaseOptions, src); }
+            { igMemoryPoolInfo *d; char *src; src = (char *)desc->_debugChecking; d = slot->descriptor; setDescString(&d->_debugChecking, src); }
+            { igMemoryPoolInfo *d; char *src; src = (char *)desc->_releaseChecking; d = slot->descriptor; setDescString(&d->_releaseChecking, src); }
+            { igMemoryPoolInfo *d; char *src; src = (char *)desc->_debugMessages; d = slot->descriptor; setDescString(&d->_debugMessages, src); }
+            { igMemoryPoolInfo *d; char *src; src = (char *)desc->_releaseMessages; d = slot->descriptor; setDescString(&d->_releaseMessages, src); }
+            slot->descriptor->_eventTrackerCapacity = desc->_eventTrackerCapacity;
         }
         if (build != 0) {
-            if (self->build(index, 0) == g_resultFailure) { result = g_resultFailure; }
+            if (self->BuildAllocator(index, 0) == g_resultFailure) { result = g_resultFailure; }
         }
     } else {
         result = g_resultFailure;
@@ -425,7 +426,7 @@ void FUN_002f4060(void *arg0, int arg1) {
     *(int *)((char *)(arg0) + 12) = arg1;
 }
 
-void FUN_002f4070(ContextView *self) {
+void FUN_002f4070(MemoryContext *self) {
     ContextRecord *record = self->records;
     for (int i = 0; i < 46; i++) {
         if (record->allocator != 0 && !((igMemoryPoolView *)record->allocator)->isActive()) {
@@ -433,7 +434,7 @@ void FUN_002f4070(ContextView *self) {
         }
         record++;
     }
-    ((MemoryContext *)self)->setFlags(self->flags | 8);
+    self->setFlags(self->flags | 8);
 }
 
 void FUN_002f4110(MemoryContext *arg0) {
@@ -635,7 +636,7 @@ void igMemoryPoolContextInfo_InitializeRecordNames(igMemoryPoolContextInfo *self
     } while (index < CONTEXT_RECORD_COUNT);
 }
 
-igResult FUN_002f4a60(PoolConfigManager *self) {
+igResult FUN_002f4a60(MemoryContext *self) {
     unsigned char useFlag;
     unsigned char lockFlag;
     unsigned char optFlag;
@@ -644,14 +645,14 @@ igResult FUN_002f4a60(PoolConfigManager *self) {
     int optC;
     int mainSize;
     int nextSize;
-    PoolConfigObject *mainPool;
+    igMemoryPoolView *mainPool;
     int i;
     int config;
-    PoolConfigObject *o;
-    PoolConfigObject *second;
-    config = ((PoolConfigContext *)g_objectSystem[0])->config;
-    mainPool = ((PoolConfigContext *)g_objectSystem[0])->main;
-    second = ((PoolConfigContext *)g_objectSystem[0])->second;
+    igMemoryPoolView *o;
+    igMemoryPoolView *second;
+    config = (int)((ObjectSystemView *)g_objectSystem[0])->configRegistry;
+    mainPool = ((ObjectSystemView *)g_objectSystem[0])->bootstrapPool;
+    second = ((ObjectSystemView *)g_objectSystem[0])->systemPool;
     options = DAT_004c2370[0];
     mainSize = 0;
     nextSize = 0;
@@ -661,7 +662,7 @@ igResult FUN_002f4a60(PoolConfigManager *self) {
     useFlag = (self->flags & 4) != 0;
     lockFlag = GPR_00554994;
     FUN_003065f0(config, 2, text_bootstrapPoolPreSize, &mainSize, 0, 0);
-    if (mainSize > 0) { mainPool->setName(mainSize); }
+    if (mainSize > 0) { mainPool->vfunc_43(mainSize); }
     FUN_00306e50(config, 2, text_updatePoolStatistics, (char *)&lockFlag, lockFlag, 0);
     GPR_00554994 = lockFlag;
     FUN_00306e50(config, 2, text_useAliasMemoryPoolRelease, (char *)&useFlag, useFlag, 0);
@@ -679,59 +680,59 @@ igResult FUN_002f4a60(PoolConfigManager *self) {
     DAT_004c2368[0] = optB;
     DAT_005871f8[0] = optC;
     for (i = 0; i < 46; i++) {
-        o = *(PoolConfigObject **)((char *)self + i * 144 + 20);
+        o = (igMemoryPoolView *)self->records[i].allocator;
         if (o != 0 && igObject_IsKindOf(o, g_igArenaMemoryPool_metaObject[0]) != 0) {
-            igArenaMemoryPool_SetPoolOptionFlags((SetFlagsPool *)o, (options & ~1) | (o->options & 1));
+            igArenaMemoryPool_SetPoolOptionFlags((igArenaMemoryPool *)o, (options & ~1) | (((igArenaMemoryPool *)o)->_poolOptionFlags & 1));
         }
     }
     FUN_003065f0(config, 2, text_nonTrackedPoolPreSize, &nextSize, 0, 0);
-    PoolConfigManager *top = (PoolConfigManager *)(*(void **)DAT_00586fd0);
-    PoolConfigObject *fb = self->fallback;
+    MemoryContext *top = DAT_00586fd0[0];
+    igMemoryPoolView *fb = (igMemoryPoolView *)self->records[3].allocator;
     if (self == top && fb == mainPool) {
-        o = (PoolConfigObject *)FUN_002cdab0((int)mainPool);
-        if (nextSize > 0) { o->setName(nextSize); }
-        o->finish();
-        self->setPool(3, o);
-        o->rc = o->rc - 1;
-        if (((unsigned long long)((long long)(int)o->rc << 0x29) >> 0x29) == 0) igObject_Destroy(o);
+        o = (igMemoryPoolView *)FUN_002cdab0((int)mainPool);
+        if (nextSize > 0) { o->vfunc_43(nextSize); }
+        o->activate();
+        self->vfunc_25(3, (igObject *)o);
+        ((igObject *)o)->_refCount = ((igObject *)o)->_refCount - 1;
+        if (((unsigned long long)((long long)(int)((igObject *)o)->_refCount << 0x29) >> 0x29) == 0) igObject_Destroy(o);
     }
-    if (self->readConfig(config, (int)DAT_004c2228[0]) == g_resultFailure) { result = g_resultFailure; }
-    if (self->setDefault(self->defaultSize, 0) == g_resultFailure) { result = g_resultFailure; }
-    if (self->apply() == g_resultFailure) { result = g_resultFailure; }
+    if (self->vfunc_48(config, DAT_004c2228[0]) == g_resultFailure) { result = g_resultFailure; }
+    if (self->vfunc_35((int)self->contextInfo, 0) == g_resultFailure) { result = g_resultFailure; }
+    if (self->vfunc_50() == g_resultFailure) { result = g_resultFailure; }
     if (g_useOwnerAllocator == 0) {
         for (i = 0; i < 46; i++) {
             if (i != 0) {
-                PoolConfigObject **slot = (PoolConfigObject **)((char *)self + i * 144 + 20);
-                PoolConfigObject *p = *slot;
+                igMemoryPoolView **slot = (igMemoryPoolView **)&self->records[i].allocator;
+                igMemoryPoolView *p = *slot;
                 if (p == mainPool) {
-                    p->rc = p->rc - 1;
-                    if (((unsigned long long)((long long)(int)p->rc << 0x29) >> 0x29) == 0) igObject_Destroy(p);
+                    ((igObject *)p)->_refCount = ((igObject *)p)->_refCount - 1;
+                    if (((unsigned long long)((long long)(int)((igObject *)p)->_refCount << 0x29) >> 0x29) == 0) igObject_Destroy(p);
                     *slot = 0;
                 }
             }
         }
         for (i = 0; i < 46; i++) {
             if (i == 2) {
-                self->setPool(i, self->third);
+                self->vfunc_25(i, (igObject *)self->records[1].allocator);
             } else {
-                if (self->build(i, 0) == g_resultFailure) { result = g_resultFailure; }
+                if (self->BuildAllocator(i, 0) == g_resultFailure) { result = g_resultFailure; }
             }
         }
     } else {
-        self->setPool(2, self->third);
+        self->vfunc_25(2, (igObject *)self->records[1].allocator);
     }
-    self->finish();
-    o = self->poolFor(20);
-    if (o != mainPool && o != second) { ((PoolConfigContext *)g_objectSystem[0])->a88 = o; }
-    o = self->poolFor(7);
-    if (o != mainPool && o != second) { ((PoolConfigContext *)g_objectSystem[0])->a96 = o; }
+    self->vfunc_54();
+    o = self->getAllocatorBySelector(20);
+    if (o != mainPool && o != second) { ((ObjectSystemView *)g_objectSystem[0])->driverDataPool = o; }
+    o = self->getAllocatorBySelector(7);
+    if (o != mainPool && o != second) { ((ObjectSystemView *)g_objectSystem[0])->fastPool = o; }
     for (i = 0; i < 46; i++) {
-        o = *(PoolConfigObject **)((char *)self + i * 144 + 20);
-        if (o != 0 && o->inUse() == 0) { o->finish(); }
+        o = (igMemoryPoolView *)self->records[i].allocator;
+        if (o != 0 && o->isActive() == 0) { o->activate(); }
     }
     if (DAT_004c2370[0] & 8) {
-        mainPool->lock(1);
-        if (second != mainPool) { second->lock(1); }
+        mainPool->vfunc_34(1);
+        if (second != mainPool) { second->vfunc_34(1); }
     }
     if (result == g_resultSuccess) { self->setFlags(self->flags | 8); }
     return result;
@@ -778,44 +779,44 @@ igMetaObject *FUN_002f5220(void) {
     return g_igMemoryPool_metaObject[0];
 }
 
-static inline void releaseTable(PoolDescTable *t) {
+static inline void releaseTable(igMemoryPoolContextInfoView *t) {
     if (t != 0) {
-        t->rc = t->rc - 1;
-        if (((unsigned long long)((long long)(int)t->rc << 0x29) >> 0x29) == 0) igObject_Destroy(t);
+        t->_refCount = t->_refCount - 1;
+        if (((unsigned long long)((long long)(int)t->_refCount << 0x29) >> 0x29) == 0) igObject_Destroy(t);
     }
 }
 
-void FUN_002f5230(int *out, PoolDescSetup *self, int config, char *name) {
+void FUN_002f5230(int *out, MemoryContext *self, int config, char *name) {
     int defaultSize;
     int systemSize;
     int scratchSize;
     int driverSize;
     char buf[256];
     int i;
-    PoolDescRecord *rec;
-    PoolDescSlot *slot;
+    igMemoryPoolInfo *rec;
+    ContextRecord *slot;
     int ctxConfig;
-    ctxConfig = ((PoolDescContext *)(*(void * *)g_objectSystem))->config;
-    slot = self->slots;
-    if (self->table != 0) {
-        FUN_002f8b20(self->table);
-        releaseTable(self->table);
-        self->table = 0;
+    ctxConfig = (int)((ObjectSystemView *)(*(void * *)g_objectSystem))->configRegistry;
+    slot = self->records;
+    if (self->contextInfo != 0) {
+        FUN_002f8b20(self->contextInfo);
+        releaseTable(self->contextInfo);
+        self->contextInfo = 0;
     }
     {
         int alloc = (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleBootstrap);
-        releaseTable(self->table);
-        self->table = (PoolDescTable *)FUN_002c01f0(alloc);
+        releaseTable(self->contextInfo);
+        self->contextInfo = (igMemoryPoolContextInfoView *)FUN_002c01f0(alloc);
     }
     i = 0;
     do {
-        rec = (PoolDescRecord *)FUN_002bfed0((int)((igMemoryPool *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleBootstrap)));
-        igNamedObject_SetName((igNamedObject *)rec, (int)(self->recordName(i)));
-        setDescString(&rec->alias, g_memoryContextNames[i]);
+        rec = (igMemoryPoolInfo *)FUN_002bfed0((int)((igMemoryPool *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleBootstrap)));
+        igNamedObject_SetName((igNamedObject *)rec, self->vfunc_26(i));
+        setDescString(&rec->_handleName, g_memoryContextNames[i]);
         switch (i) {
         case 0:
-            if (rec->s60 != 0 && *rec->s60 != 0) {
-                strncpy(buf, rec->s60, 255);
+            if (rec->_releaseOptions != 0 && *(char *)rec->_releaseOptions != 0) {
+                strncpy(buf, (char *)rec->_releaseOptions, 255);
                 buf[255] = 0;
             } else {
                 buf[0] = 0;
@@ -826,7 +827,7 @@ void FUN_002f5230(int *out, PoolDescSetup *self, int config, char *name) {
                 } else {
                     strncpy(buf, text_InhibitEventTracker, 255);
                 }
-                setDescString(&rec->s60, buf);
+                setDescString(&rec->_releaseOptions, buf);
             }
             break;
         case 1:
@@ -834,9 +835,9 @@ void FUN_002f5230(int *out, PoolDescSetup *self, int config, char *name) {
                 defaultSize = 0;
                 FUN_003065f0(config, 2, text_defaultPoolPreSize, &defaultSize, 0, 0);
                 if (defaultSize > 0) {
-                    rec->a28 = defaultSize;
+                    rec->_size = defaultSize;
                     char *n = DAT_00586de8;
-                    if (n != 0) { setDescString(&rec->s40, n); }
+                    if (n != 0) { setDescString(&rec->_class, n); }
                 }
             }
             break;
@@ -847,9 +848,9 @@ void FUN_002f5230(int *out, PoolDescSetup *self, int config, char *name) {
                 systemSize = 0;
                 FUN_003065f0(config, 2, text_systemPoolPreSize, &systemSize, 0, 0);
                 if (systemSize > 0) {
-                    rec->a28 = systemSize;
+                    rec->_size = systemSize;
                     char *n = DAT_00586de8;
-                    if (n != 0) { setDescString(&rec->s40, n); }
+                    if (n != 0) { setDescString(&rec->_class, n); }
                 }
             }
             break;
@@ -861,43 +862,43 @@ void FUN_002f5230(int *out, PoolDescSetup *self, int config, char *name) {
             FUN_003065f0(ctxConfig, 2, text_scratchPadPoolSize, &scratchSize, scratchSize, 0);
             if (scratchSize != 0) {
                 if (scratchSize > 16384) { scratchSize = 16384; }
-                rec->a36 = 0x70000000;
-                rec->a28 = 16384;
-                setDescString(&rec->s44, text_Fixed);
-                setDescString(&rec->s48, text_HighSpeed);
-                rec->a28 = scratchSize;
+                rec->_address = 0x70000000;
+                rec->_size = 16384;
+                setDescString(&rec->_arenaType, text_Fixed);
+                setDescString(&rec->_source, text_HighSpeed);
+                rec->_size = scratchSize;
             } else {
-                setDescString(&rec->s24, g_memoryContextNames[1]);
+                setDescString(&rec->_aliasedTo, g_memoryContextNames[1]);
             }
-            if (rec->s52 == 0 || *rec->s52 == 0) { setDescString(&rec->s52, text_OnDemand); }
+            if (rec->_scope == 0 || *(char *)rec->_scope == 0) { setDescString(&rec->_scope, text_OnDemand); }
             break;
         case 20:
             if (self == (*(void * *)DAT_00586fd0)) {
                 driverSize = 0;
                 FUN_003065f0(config, 2, text_driverPoolSize, &driverSize, 0, 0);
                 if (driverSize != 0) {
-                    rec = self->slots[20].record;
-                    rec->a28 = driverSize;
+                    rec = self->records[20].descriptor;
+                    rec->_size = driverSize;
                 } else {
-                    setDescString(&rec->s24, g_memoryContextNames[1]);
+                    setDescString(&rec->_aliasedTo, g_memoryContextNames[1]);
                 }
             } else {
-                setDescString(&rec->s24, g_memoryContextNames[1]);
+                setDescString(&rec->_aliasedTo, g_memoryContextNames[1]);
             }
-            if (rec->s52 == 0 || *rec->s52 == 0) { setDescString(&rec->s52, text_OnDemand); }
+            if (rec->_scope == 0 || *(char *)rec->_scope == 0) { setDescString(&rec->_scope, text_OnDemand); }
             break;
         default:
-            if (rec->s52 == 0 || *rec->s52 == 0) { setDescString(&rec->s52, text_OnDemand); }
-            setDescString(&rec->s24, g_memoryContextNames[1]);
+            if (rec->_scope == 0 || *(char *)rec->_scope == 0) { setDescString(&rec->_scope, text_OnDemand); }
+            setDescString(&rec->_aliasedTo, g_memoryContextNames[1]);
             break;
         }
-        FUN_002f8a80(self->table, rec);
+        FUN_002f8a80(self->contextInfo, rec);
         i++;
-        slot->record = rec;
+        slot->descriptor = rec;
         slot++;
     } while (i < 30);
     if (config != 0 && name != 0 && *name != 0) {
-        self->table->load(config, name);
+        self->contextInfo->vfunc_25((igRegistry *)config, name);
     }
     *out = g_resultSuccess.v;
 }
@@ -1576,7 +1577,7 @@ void FUN_002f7bc0(ContextRecordStride *arg0, int arg1) {
     }
 }
 
-void FUN_002f7cc0(ContextView *self, int arg1, int *out, int n) {
+void FUN_002f7cc0(MemoryContext *self, int arg1, int *out, int n) {
     int i, j, found;
     char *tracker;
     for (i = 0; i < 46; i++) {
@@ -1602,7 +1603,7 @@ void FUN_002f7cc0(ContextView *self, int arg1, int *out, int n) {
     }
 }
 
-void FUN_002f7e00(ContextView *self, int *paths, int n) {
+void FUN_002f7e00(MemoryContext *self, int *paths, int n) {
     int i, j, found;
     char *tracker;
     for (i = 0; i < 46; i++) {
@@ -1627,7 +1628,7 @@ void FUN_002f7e00(ContextView *self, int *paths, int n) {
     }
 }
 
-void FUN_002f7f20(ContextView *self, int arg1) {
+void FUN_002f7f20(MemoryContext *self, int arg1) {
     int i, j, found;
     char *tracker;
     for (i = 0; i < 46; i++) {
@@ -2033,11 +2034,11 @@ igMemoryPoolInfo *FUN_002f8ca0(igMemoryPoolContextInfo *arg0, char *arg1) {
 
 /* The smart pointer is declared and never assigned: retail clears its slot on entry and releases it on
  * every return, so the source had the local with its use compiled out. */
-igResult Gap__Core__igMemoryPoolContextInfo__vfunc_25(igMemoryPoolContextInfoView *self, IniSectionsView *ini, char *section) {
+igResult Gap__Core__igMemoryPoolContextInfo__vfunc_25(igMemoryPoolContextInfoView *self, igRegistry *ini, char *section) {
     igSmartPointer<igObject> unused;
     int index;
     if (ini == 0) {
-        ini = (IniSectionsView *)((ObjectSystemView *)g_objectSystem[0])->configRegistry;
+        ini = ((ObjectSystemView *)g_objectSystem[0])->configRegistry;
     }
     if (ini == 0) {
         return g_resultFailure;

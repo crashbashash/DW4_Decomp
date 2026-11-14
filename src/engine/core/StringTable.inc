@@ -222,7 +222,7 @@ void *StringChunk_Construct(StringChunk *chunk, int previous, int table, int cap
     chunk->freeHead = 0;
     chunk->largestFree = -1;
     chunk->isEmpty = 1;
-    StringChunk_InitializeStorage((StringChunkStorageView *)chunk);
+    StringChunk_InitializeStorage(chunk);
     return chunk;
 }
 
@@ -284,14 +284,14 @@ void StringChunk_ReleaseHeader(StringChunkOwnerView *self, int header) {
     }
 }
 
-void StringChunk_InitializeStorage(StringChunkStorageView *chunk) {
+void StringChunk_InitializeStorage(StringChunk *chunk) {
     igMemoryPoolView *pool = (igMemoryPoolView *)*(int *)((char *)*(int *)chunk->table+12);
-    chunk->storage=(int)pool->Allocate(chunk->size);
-    chunk->head=chunk->storage+chunk->size;
-    chunk->end=chunk->storage+chunk->size;
+    chunk->storage=(int)pool->Allocate(chunk->capacity);
+    chunk->freeHead=chunk->storage+chunk->capacity;
+    chunk->storageEnd=chunk->storage+chunk->capacity;
     {
-        unsigned short *footer_end=(unsigned short *)chunk->head;
-        footer_end[-1]=((unsigned)chunk->size)>>2;
+        unsigned short *footer_end=(unsigned short *)chunk->freeHead;
+        footer_end[-1]=((unsigned)chunk->capacity)>>2;
         footer_end[-2]=0;
     }
 }
