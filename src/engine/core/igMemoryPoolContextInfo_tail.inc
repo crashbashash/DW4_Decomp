@@ -1179,7 +1179,7 @@ void MemoryContext_RemoveAllocator(void *arg0, int arg1) {
                         slot->storageFlags = fl & ~2;
                         a = ((igMemoryPoolView *)o)->vfunc_26(fl);
                         if (a != 0) {
-                            long long b = (long long)((igMemoryPoolView *)o)->vfunc_36();
+                            long long b = (int)((igMemoryPoolView *)o)->vfunc_36();
                             sp68 = ((igMemoryPoolView *)o)->vfunc_24(0, 0, 0);
                             sp64 = g_activeSystemAllocator[0]->vfunc_18(a, b);
                         }

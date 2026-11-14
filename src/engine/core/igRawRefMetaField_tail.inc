@@ -6,7 +6,7 @@ void Gap__Core__igRawRefMetaField__vfunc_41(igRawRefMetaField *self, char *objec
 
 int Gap__Core__igRawRefMetaField__vfunc_43(igRawRefArrayMetaField *arg0, int arg1, int arg2) {
     if (arg0->_persistent == 1) {
-        return FUN_002d8d00((Lst8d00 *)arg2, *(int *)(arg1 + arg0->_offset), 0, 0);
+        return FUN_002d8d00((igDirectoryView *)arg2, *(int *)(arg1 + arg0->_offset), 0, 0);
     }
     return -1;
 }

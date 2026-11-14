@@ -42,18 +42,18 @@ int igMemoryRefMetaField_Write(igMemoryRefMetaField *f, int off, int a2) {
     if (p == 0) return -1;
     if (igObject_IsKindOf((void *)f->_memType, (igMetaObject *)(((int *)g_igMemoryRefMetaField_metaObject)[0])) != 0) {
         n = Memory_GetBufferSize((void *)p) >> 2;
-        s1 = FUN_002d8a80((L8a80 *)a2, (int)f, p, f->_memType, f->_alignmentType, 0, 0, 1);
+        s1 = FUN_002d8a80((igDirectoryView *)a2, (int)f, p, f->_memType, f->_alignmentType, 0, 0, 1);
         for (s0 = 0; s0 < (int)n; s0++) {
             int e = *(int *)(p + s0 * 4);
-            if (e != 0) FUN_002d8a80((L8a80 *)a2, (int)f, e, 0, f->_alignmentType, 0, 0, 1);
+            if (e != 0) FUN_002d8a80((igDirectoryView *)a2, (int)f, e, 0, f->_alignmentType, 0, 0, 1);
         }
         return s1;
     }
     if (igObject_IsKindOf((void *)f->_memType, (igMetaObject *)g_igObjectRefMetaField_metaObject[0]) != 0) {
-        s1 = FUN_002d8a80((L8a80 *)a2, (int)f, p, f->_memType, f->_alignmentType, 0, 0, f->_refCounted);
+        s1 = FUN_002d8a80((igDirectoryView *)a2, (int)f, p, f->_memType, f->_alignmentType, 0, 0, f->_refCounted);
         return s1;
     }
-    return FUN_002d8a80((L8a80 *)a2, (int)f, p, f->_memType, f->_alignmentType, 0, 0, 1);
+    return FUN_002d8a80((igDirectoryView *)a2, (int)f, p, f->_memType, f->_alignmentType, 0, 0, 1);
 }
 
 int Gap__Core__igMemoryRefMetaField__vfunc_45(igMemoryRefMetaField *arg0, int arg1, int arg2) {

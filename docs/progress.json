@@ -459,8 +459,8 @@
     "functions": 7068
    },
    "fields": {
-    "bytes": 172448,
-    "functions": 536
+    "bytes": 171972,
+    "functions": 535
    },
    "idioms": {
     "bytes": 182276,
@@ -483,8 +483,8 @@
     "functions": 266
    },
    "virtuals": {
-    "bytes": 116764,
-    "functions": 210
+    "bytes": 116288,
+    "functions": 209
    }
   },
   "functions": 8763,
@@ -623,10 +623,10 @@
  "typed": {
   "error": null,
   "offset_casts": 5160,
-  "pct": 41.55,
-  "recovered": 27099,
-  "synthetic": 6377,
-  "total": 65217,
+  "pct": 41.73,
+  "recovered": 27217,
+  "synthetic": 6359,
+  "total": 65219,
   "typeable": 362,
   "typeable_pct": 0.56
  }

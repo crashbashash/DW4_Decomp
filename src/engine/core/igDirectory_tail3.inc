@@ -9,8 +9,8 @@ int FUN_002d8e70(int arg0, int arg1) {
 }
 
 int FUN_002d8eb0(int arg0, int arg1) {
-    struct P8eb0 *s0;
-    s0 = (struct P8eb0 *)((void *)igProperty_FindByName((igObjectList *)arg0, (igMetaField *)g_propertyNameField[0], arg1)); if (s0 == 0) return 0; if (igObject_IsKindOf(s0, (igMetaObject *)g_igObjectDirEntry_metaObject[0]) != 0) return s0->val; return 0;
+    igObjectDirEntry *s0;
+    s0 = (igObjectDirEntry *)((void *)igProperty_FindByName((igObjectList *)arg0, (igMetaField *)g_propertyNameField[0], arg1)); if (s0 == 0) return 0; if (igObject_IsKindOf(s0, (igMetaObject *)g_igObjectDirEntry_metaObject[0]) != 0) return s0->_ref; return 0;
 }
 
 void *FUN_002d8f10(int arg0, int arg1) {
@@ -37,7 +37,7 @@ void FUN_002d8f20(Coll *arg0) {
     }
 }
 
-void FUN_002d8fe0(A8fe0 *arg0, int arg1) {
+void FUN_002d8fe0(igDirectoryView *arg0, int arg1) {
     int *temp_a1;
     int temp_v1;
     int var_v0;
@@ -52,7 +52,7 @@ void FUN_002d8fe0(A8fe0 *arg0, int arg1) {
         g_stringPool[0] = var_v0;
     }
     temp_s0 = (int *)StringPool_Intern((StringPool *)g_stringPool[0], (const char *)arg1);
-    temp_a0 = arg0->f20;
+    temp_a0 = (int *)arg0->_name;
     if (temp_a0 != 0) {
         temp_a1 = temp_a0 - 2;
         temp_v1 = temp_a0[-1] - 1;
@@ -61,7 +61,7 @@ void FUN_002d8fe0(A8fe0 *arg0, int arg1) {
             StringChunk_ReleaseHeader((StringChunkOwnerView *)(*temp_a1), (int)temp_a1);
         }
     }
-    arg0->f20 = temp_s0;
+    arg0->_name = (int)temp_s0;
 }
 
 int Gap__Core__igDirectory__vfunc_25(Cont *c, igExternalDirEntryView *o) {

@@ -51,8 +51,8 @@ Matching proves the bytes; it does not make the source readable. A matched funct
 | it sits in its class or module file, not `src/unmatched/` | 175 | 47,336 |
 | what it calls and reads is named: no `FUN_`/`DAT_` references | 1,266 | 344,876 |
 | no decompiler leftovers: `temp_*`, `var_*`, `argN`, stack-offset locals such as `sp5C` | 466 | 182,276 |
-| fields are reached through named struct members: no `fNN`/`unkNN` members, no cast of a pointer plus an offset | 536 | 172,448 |
-| virtual calls go through a named method, not a slot number such as `v216` or a cast function pointer | 210 | 116,764 |
+| fields are reached through named struct members: no `fNN`/`unkNN` members, no cast of a pointer plus an offset | 535 | 171,972 |
+| virtual calls go through a named method, not a slot number such as `v216` or a cast function pointer | 209 | 116,288 |
 
 ## Debt
 
@@ -178,7 +178,7 @@ The section in 16 equal parts. `0x00100000` is the start of everything.
 | reflection fields with offset and type | 3,680 |
 | switch jump tables recovered | 209 tables, 4,147 entries, in 172 functions |
 | Lua chunks decompiled | 5,291 |
-| field accesses using a **recovered** type (not an offset cast) | 27,099 of 65,217 (41.55 %) |
+| field accesses using a **recovered** type (not an offset cast) | 27,217 of 65,219 (41.73 %) |
 | functions in the retail split (`asm/`, generated) | 20,575 |
 
 ## How these numbers are produced

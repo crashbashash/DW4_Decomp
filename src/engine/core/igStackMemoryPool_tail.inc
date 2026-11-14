@@ -22,7 +22,7 @@ void Gap__Core__igStackMemoryPool__vfunc_31(igStackMemoryPool *s) {
 }
 
 void Gap__Core__igStackMemoryPool__vfunc_32(igStackMemoryPool *self) {
-    ((StackPoolSlot124View *)self)->Reset();
+    ((igMemoryPoolView *)self)->vfunc_31();
     self->_isActive = 0;
 }
 
@@ -429,29 +429,29 @@ bool Gap__Core__igStackMemoryPool__vfunc_85(igStackMemoryPool *s, unsigned a) {
     return r;
 }
 
-void Gap__Core__igStackMemoryPool__vfunc_64(Stack64 *self, unsigned count, unsigned *ptrs) {
+void Gap__Core__igStackMemoryPool__vfunc_64(igStackMemoryPool *self, unsigned count, unsigned *ptrs) {
     unsigned last;
     unsigned *end;
     unsigned top;
     unsigned avail;
     unsigned *e;
     unsigned i;
-    end = self->end;
+    end = (unsigned *)self->_nextInt;
     last = ptrs[count - 1];
-    top = self->top;
+    top = self->_stackPtr;
     avail = top - end[1];
     e = end + 1;
     if (!(avail > last)) {
-        self->top = avail;
+        self->_stackPtr = avail;
         for (i = 0; i < count - 1; i++) {
             e++;
-            self->top = self->top - (*e & 0x7fffffff);
+            self->_stackPtr = self->_stackPtr - (*e & 0x7fffffff);
         }
-        while (self->top != self->base && (*e & 0x80000000)) {
-            self->top = self->top - (*e & 0x7fffffff);
+        while (self->_stackPtr != (unsigned)self->_rawMemory && (*e & 0x80000000)) {
+            self->_stackPtr = self->_stackPtr - (*e & 0x7fffffff);
             e++;
         }
-        self->end = e - 1;
+        self->_nextInt = (unsigned)(e - 1);
         return;
     }
     e++;
@@ -466,29 +466,29 @@ void Gap__Core__igStackMemoryPool__vfunc_64(Stack64 *self, unsigned count, unsig
     }
 }
 
-void Gap__Core__igStackMemoryPool__vfunc_66(Stack66 *self, unsigned size) {
+void Gap__Core__igStackMemoryPool__vfunc_66(igStackMemoryPool *self, unsigned block) {
     unsigned *e;
     unsigned avail;
     unsigned top;
     unsigned v;
-    if (size != 0 && self->Owns() != 0) {
-        e = self->end + 1;
-        top = self->top;
+    if (block != 0 && ((igMemoryPoolView *)self)->OwnsAllocation((void *)block) != 0) {
+        e = (unsigned *)self->_nextInt + 1;
+        top = self->_stackPtr;
         v = *e;
         avail = top - v;
-        if (!(avail > size)) {
+        if (!(avail > block)) {
             e++;
-            self->top = top - (v & 0x7fffffff);
-            while (self->top != self->base && (*e & 0x80000000)) {
-                self->top = self->top - (*e & 0x7fffffff);
+            self->_stackPtr = top - (v & 0x7fffffff);
+            while (self->_stackPtr != (unsigned)self->_rawMemory && (*e & 0x80000000)) {
+                self->_stackPtr = self->_stackPtr - (*e & 0x7fffffff);
                 e++;
             }
-            self->end = e - 1;
+            self->_nextInt = (unsigned)(e - 1);
             return;
         }
         e++;
         avail = avail - (*e & 0x7fffffff);
-        while (avail > size) {
+        while (avail > block) {
             e++;
             avail = avail - (*e & 0x7fffffff);
         }

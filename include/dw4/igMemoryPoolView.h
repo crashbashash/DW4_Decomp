@@ -31,7 +31,11 @@ public:
     virtual int isActive();                                                      /* slot 31, byte 132 */
     virtual igResult vfunc_34(int);                                              /* slot 32, byte 136 */
     virtual void d33();
-    virtual int vfunc_36();                                                      /* slot 34, byte 144 */
+#ifndef long
+    virtual long long vfunc_36();                                                /* slot 34, byte 144 */
+#else
+    virtual void vfunc_36();
+#endif
     virtual void d35();
     virtual unsigned short vfunc_38();                                           /* slot 36, byte 152 */
     virtual void d37(); virtual void d38();

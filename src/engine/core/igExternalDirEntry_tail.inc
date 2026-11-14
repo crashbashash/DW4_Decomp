@@ -27,7 +27,7 @@ void Gap__Core__igExternalDirEntry__vfunc_31(igExternalDirEntryView *arg0, void 
             GPR_00554c00 = 1;
         }
     }
-    FUN_002d7da0((A7da0 *)arg1, arg0->_index, arg0->_ref);
+    FUN_002d7da0((igDirectoryView *)arg1, arg0->_index, arg0->_ref);
 }
 
 void FUN_002e26b0(igExternalDirEntry *arg0, int arg1) {

@@ -264,7 +264,7 @@ void *FUN_00323600(igMallocMemoryPool *arg0, int extra1) {
 }
 
 void Gap__Core__igMallocMemoryPool__vfunc_02(igMallocMemoryPool *self) {
-    ((MallocPoolSlot392View *)self)->Slot392();
+    ((igMemoryPoolView *)self)->vfunc_98();
     Gap__Core__igObject__vfunc_00((int)self);
 }
 
@@ -316,7 +316,7 @@ unsigned int Gap__Core__igMallocMemoryPool__vfunc_84(int arg0, char *arg1) {
     return hdr->size + (hdr->sizeHigh << 0x13);
 }
 
-void Gap__Core__igMallocMemoryPool__vfunc_87(Pool87 *self, char *title) {
+void Gap__Core__igMallocMemoryPool__vfunc_87(igMallocMemoryPool *self, char *title) {
     char buf[64];
     char *name;
     if (title != 0 && title[0] != 0) {
@@ -324,24 +324,24 @@ void Gap__Core__igMallocMemoryPool__vfunc_87(Pool87 *self, char *title) {
         FUN_00304680();
     }
     if (((struct Ctx { char p[36]; int on; } * *)g_objectSystem)[0]->on != 0) {
-        name = FUN_00312140(buf, 64, self->name, FUN_002ce1b0());
+        name = FUN_00312140(buf, 64, self->_messageLevel, FUN_002ce1b0());
     } else {
         name = ((char *)DAT_004f7910);
     }
     {
-        long long v96 = self->s96;
-        long long v88 = self->s88;
-        long long v80 = self->s80;
-        long long v72 = self->s72;
-        long long v64 = self->s64;
-        long long v56 = self->s56;
-        long long v48 = self->s48;
-        long long v40 = self->s40;
-        long long v32 = self->s32;
-        long long v24 = self->s24;
-        long long v16 = self->s16;
-        long long v8 = self->s8;
-        FUN_00304430(DAT_004fef30, (int)v8, (int)v16, (int)v24, (int)v32, (int)v40, (int)v48, (int)v56, (int)v64, (int)v72, (int)v80, (int)v88, (int)v96, (int)self->Used(), name);
+        long long netCountHigh = self->_localNetAllocationCountHigh;
+        long long netCount = self->_localNetAllocationCount;
+        long long freeCount = self->_localFreeCount;
+        long long allocationCount = self->_localAllocationCount;
+        long long netWithOverheadHigh = self->_localNetAllocatedWithOverheadHigh;
+        long long netWithOverhead = self->_localNetAllocatedWithOverhead;
+        long long freedWithOverhead = self->_localFreedWithOverhead;
+        long long allocatedWithOverhead = self->_localAllocatedWithOverhead;
+        long long netAllocatedHigh = self->_localNetAllocatedHigh;
+        long long netAllocated = self->_localNetAllocated;
+        long long freed = self->_localFreed;
+        long long allocated = self->_localAllocated;
+        FUN_00304430(DAT_004fef30, (int)allocated, (int)freed, (int)netAllocated, (int)netAllocatedHigh, (int)allocatedWithOverhead, (int)freedWithOverhead, (int)netWithOverhead, (int)netWithOverheadHigh, (int)allocationCount, (int)freeCount, (int)netCount, (int)netCountHigh, (int)((igMemoryPoolView *)self)->vfunc_36(), name);
     }
     FUN_00304680();
 }

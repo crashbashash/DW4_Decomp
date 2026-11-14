@@ -25,9 +25,9 @@ void Gap__Core__igMemoryDirEntry__vfunc_31(igMemoryDirEntry *self, igIGBFile *fi
         }
     }
     if (align < 5) {
-        FUN_002d7da0((A7da0 *)file, self->_index, (int)pool->Allocate(self->_memSize));
+        FUN_002d7da0((igDirectoryView *)file, self->_index, (int)pool->Allocate(self->_memSize));
     } else {
-        FUN_002d7da0((A7da0 *)file, self->_index, (int)pool->AllocateAligned(self->_memSize, align & 0xFFFF));
+        FUN_002d7da0((igDirectoryView *)file, self->_index, (int)pool->AllocateAligned(self->_memSize, align & 0xFFFF));
     }
 }
 
@@ -193,9 +193,9 @@ void Gap__Core__igMemoryDirEntry__vfunc_35(igMemoryDirEntry *arg0, igIGBFile *ar
 void Gap__Core__igMemoryDirEntry__vfunc_36(void) {
 }
 
-void Gap__Core__igMemoryDirEntry__vfunc_33(igMemoryDirEntryView *self)
+void Gap__Core__igMemoryDirEntry__vfunc_33(igMemoryDirEntryView *self, igIGBFileView *file)
 {
-    self->vfunc_32();
+    self->vfunc_34(file);
 }
 
 void Gap__Core__igMemoryDirEntry__vfunc_34(MemoryDirEntryView *self, MemoryDirReader *r) {

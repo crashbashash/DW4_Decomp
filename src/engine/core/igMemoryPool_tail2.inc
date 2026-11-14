@@ -20,7 +20,7 @@ void FUN_002f08d0(igMemoryPool *arg0, char *arg1) {
     sp110 = arg0->_localNetAllocated;
     sp100 = arg0->_localFreed;
     spF0 = arg0->_localAllocated;
-    spE0 = o->vfunc_36();
+    spE0 = (int)o->vfunc_36();
     FUN_00304430(DAT_004f9d60, (int)spF0, (int)sp100, (int)sp110, (int)sp120, (long long)(int)s8, (long long)(int)s7, (long long)(int)s6, (long long)(int)s0, (long long)(int)s1, (long long)(int)s2, (long long)(int)s3, (long long)(int)s4, (long long)spE0, (long long)o->vfunc_42());
     FUN_00304680();
 }

@@ -447,13 +447,13 @@ int igMetaField_Write(igMetaField *arg0) {
 int igMetaField_IsAlikeByTechnique(void **arg0, int arg1, int arg2, int arg3) {
     switch (arg3) {
     case 0:
-        return ((IsAlikeExactlyView *)(arg0))->vX();
+        return ((igMetaFieldView *)arg0)->vfunc_45(arg1, arg2);
     case 1:
-        return ((IsAlikeDeepView *)(arg0))->vX();
+        return ((igMetaFieldView *)arg0)->IsAlikeDeep(arg1, arg2);
     case 2:
-        return ((IsAlikeShallowView *)(arg0))->vX();
+        return ((igMetaFieldView *)arg0)->IsAlikeShallow(arg1, arg2);
     case 3:
-        return ((IsAlikeSlot46View *)(arg0))->vX();
+        return ((igMetaFieldView *)arg0)->vfunc_48(arg1, arg2);
     default:
         return 0;
     }

@@ -192,13 +192,13 @@ void Gap__Core__igObjectDirEntry__vfunc_31(DirEntrySelf *self, igIGBFileView *fi
         obj = ((DirEntryCounted *)igMetaObject_CreateInstanceWithPool((PooledMeta *)self->typeMeta, (MemoryPool *)pool));
         if (obj == 0) {
             file->_hasCriticalFailure = 1;
-            FUN_002d7da0((A7da0 *)file, self->index, (int)0);
+            FUN_002d7da0((igDirectoryView *)file, self->index, (int)0);
             return;
         }
-        FUN_002d7da0((A7da0 *)file, self->index, (int)obj);
+        FUN_002d7da0((igDirectoryView *)file, self->index, (int)obj);
         dropRef(obj);
     } else {
-        FUN_002d7da0((A7da0 *)file, self->index, (int)0);
+        FUN_002d7da0((igDirectoryView *)file, self->index, (int)0);
     }
 }
 
