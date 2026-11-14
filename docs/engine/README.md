@@ -45,6 +45,7 @@ Index: [`../README.md`](../README.md).
 | [ListCtrl and chip-list view](list-controller-chip-view.md) | Five complete paging/text helpers, 2,196 bytes; 3,149 original-instruction cases and caller ABI boundaries |
 | [Shop selector widgets](shop-selectors.md) | Full selector publication/focus/close loop, XDATA one/two/three/seven-choice initialization, stat costs and exact focus predicate |
 | [SELECTCTRL manager](selectctrl.md) | Pad-manager acquisition/registration plus full update/general receiver behavioral recovery and 4,089 manager cases plus real pad-record selection, 4,506 total comparisons. |
+| [Alchemy core library](core-library.md) | The whole-file core unit `CoreLibrary.cpp` (`0x2b5d50..0x331f30`): fragment layout in retail order, how a change is proved, the class families and their shared views, naming, and the functions still without source |
 | [Context lifecycle and tracker delegation](context-lifecycle.md) | Original context construction/names, retained slots and special delegation/removal |
 | [Registry bootstrap and context lookup](registry-bootstrap.md) | Original list lifetime/publication, context dispatch and concrete selector/name lookup |
 | [Allocator registries](allocator-registry.md) | Original owner search, encoded indices, list lookup and complete allocation wrappers |
