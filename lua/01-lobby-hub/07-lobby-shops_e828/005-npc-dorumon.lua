@@ -10,8 +10,7 @@ if be:FLGisOn(1) == 1 then
     else
         be:MsgBox("fobOFïbÌ§äÉ²¯ª èÜ·")
     end
-end
-if be:FLGisOn(2) == 1 then
+elseif be:FLGisOn(2) == 1 then
     if be:FLGisOn(20) == 0 then
         funcOpenMessage("talk", "n_dorumon", "h")
         mswk11348 = "TALKFONT02/font00/I<181>"
@@ -31,8 +30,7 @@ if be:FLGisOn(2) == 1 then
     else
         be:MsgBox("fobOFïbÌ§äÉ²¯ª èÜ·")
     end
-end
-if be:FLGisOn(3) == 1 then
+elseif be:FLGisOn(3) == 1 then
     if 1 == 1 then
         funcOpenMessage("talk", "n_dorumon", "h")
         mswk11352 = "TALKFONT02/font00/I<185>"
@@ -42,8 +40,7 @@ if be:FLGisOn(3) == 1 then
     else
         be:MsgBox("fobOFïbÌ§äÉ²¯ª èÜ·")
     end
-end
-if be:FLGisOn(4) == 1 then
+elseif be:FLGisOn(4) == 1 then
     if 1 == 1 then
         funcOpenMessage("talk", "n_dorumon", "h")
         mswk11353 = "TALKFONT02/font00/I<186>"
@@ -55,8 +52,7 @@ if be:FLGisOn(4) == 1 then
     else
         be:MsgBox("fobOFïbÌ§äÉ²¯ª èÜ·")
     end
-end
-if be:FLGisOn(5) == 1 then
+elseif be:FLGisOn(5) == 1 then
     if 1 == 1 then
         funcOpenMessage("talk", "n_dorumon", "h")
         mswk11355 = "TALKFONT02/font00/I<188>"
@@ -68,8 +64,7 @@ if be:FLGisOn(5) == 1 then
     else
         be:MsgBox("fobOFïbÌ§äÉ²¯ª èÜ·")
     end
-end
-if be:FLGisOn(6) == 1 then
+elseif be:FLGisOn(6) == 1 then
     if 1 == 1 then
         funcOpenMessage("talk", "n_dorumon", "h")
         mswk11357 = "TALKFONT02/font00/I<190>"
@@ -81,8 +76,7 @@ if be:FLGisOn(6) == 1 then
     else
         be:MsgBox("fobOFïbÌ§äÉ²¯ª èÜ·")
     end
-end
-if be:FLGisOn(86) == 1 then
+elseif be:FLGisOn(86) == 1 then
     if 1 == 1 then
         funcOpenMessage("talk", "n_dorumon", "h")
         mswk11359 = "TALKFONT02/font00/I<192>"

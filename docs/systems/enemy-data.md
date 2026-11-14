@@ -331,7 +331,7 @@ Rows 638 to 645 are the practice stage's own block, between the `e_nume` rows 63
 
 The practice generators (`NDMW.AFS` entry 608) carry these rows: `GENE-a00..a06` = 638, 640, 642, 642, 638, 640, 644 and
 `GENE-b00..b06` = 639, 641, 643, 643, 639, 641, 645. Lessons 1 to 3 start one enemy each, using the b group when flag 382
-is set. The arena step (`lua/14-misc/02-stage-clear-sequence_e607/019-camera-5.lua`) branches on `SYSgetPlayerNinzu()`:
+is set. The arena step (`lua/14-misc/02-stage-clear-sequence_e607/019-camera-msg-67119.lua`) branches on `SYSgetPlayerNinzu()`:
 `<= 2` starts x03 and x04, `>= 3` starts x05 and x06. So the `e_cockatri` rows are reached only with three or more players.
 That follows from the script; a solo run spawning 642 and 638 is the only part seen live.
 

@@ -2,83 +2,104 @@ if be:MDLgetBulletName() == "PCBA" then
     be:MDLsetSeq("SQ_PUSHED")
 elseif be:BLTisHitCheck() == 0 then
     be:MDLsetSeq("SQ_GUARD")
-elseif local_1 == 0 then
-    if local_2 == 0 and local_2 > 0 then
-        be:MDLsetSD("SETSLEEP", "I<" .. local_2 .. ">")
-    end
-    if local_2 == 0 and local_2 > 0 then
-        be:MDLsetSD("SETBIND", "I<" .. local_2 .. ">")
-        be:MDLsetSeq("SQ_BIND")
-    end
-    if local_2 == 0 and local_2 > 0 then
-        be:MDLsetSD("SETATTACKDOWN", "I<" .. local_2 .. ">/I<" .. local_3 .. ">/I<" .. local_4 .. ">/I<" .. local_5 .. ">/I<" .. local_6 .. ">")
-    end
-    if local_2 == 0 and local_2 > 0 then
-        be:MDLsetSD("SETPOWERDOWN", "I<" .. local_2 .. ">/I<" .. local_3 .. ">/I<" .. local_4 .. ">")
-    end
-    if local_2 == 0 then
-        be:MDLsetSeq("SQ_GUARD")
-        be:BLTcalcSkillUp(0, 0)
-    elseif local_2 < 0 then
-        be:MDLsetDMGTurn(0)
-        be:BLTcalcSkillUp(0, 0)
-    else
-        be:MDLsetDMGTurn(0)
-        be:BLTcalcSkillUp(1, 0)
-    end
 else
-    be:BLTcalcSkillUp(1, local_0)
-    be:MDLaddHp(-local_1)
-    be:MDLdspDamage(local_1)
-    if local_2 < 3 and be:MDLisStatus(be:MDLgetInfoName(), be:MDLgetRamNo(), "BIND") == 1 then
-        if be:MDLgetHp() < be:MDLgetMHp() * 0.5 and be:MDLgetHp() + local_1 >= be:MDLgetMHp() * 0.5 then
-            be:MDLsetSD("SETLABEL", "SQ_SDMG/" .. be:BLTgetAttributeStr())
-            be:MDLsetSeq("SQ_SCALL")
-        else
-            be:MDLsetSD("SETLABEL", "SQ_SDMG/" .. be:BLTgetAttributeStr())
-            be:MDLsetSeq("SQ_SDMG")
-        end
-    end
-    if local_2 < 3 and be:MDLgetHp() < be:MDLgetMHp() * 0.5 and be:MDLgetHp() + local_1 >= be:MDLgetMHp() * 0.5 then
-        if local_2 == 0 then
-            be:MDLsetSD("SETLABEL", "SQ_SDMG/" .. be:BLTgetAttributeStr())
-            be:MDLsetSeq("SQ_SCALL")
-        elseif local_2 == 1 then
-            be:MDLsetSD("SETLABEL", "SQ_MDMG/" .. be:BLTgetAttributeStr())
-            be:MDLsetSeq("SQ_MCALL")
-        elseif local_2 == 2 then
-            be:MDLsetSD("SETLABEL", "SQ_LDMG/" .. be:BLTgetAttributeStr())
-            be:MDLsetSeq("SQ_LCALL")
-        else
-        end
-    end
-    if local_2 == 0 then
-        be:MDLsetSD("SETLABEL", "SQ_SDMG/" .. be:BLTgetAttributeStr())
-        be:MDLsetSeq("SQ_SDMG")
-    elseif local_2 == 1 then
-        be:MDLsetSD("SETLABEL", "SQ_MDMG/" .. be:BLTgetAttributeStr())
-        be:MDLsetSeq("SQ_MDMG")
-    elseif local_2 == 2 then
-        be:MDLsetSD("SETLABEL", "SQ_LDMG/" .. be:BLTgetAttributeStr())
-        be:MDLsetSeq("SQ_LDMG")
-    elseif local_2 == 3 then
-        be:MDLsetSD("SETLABEL", "SQ_DDMG/" .. be:BLTgetAttributeStr())
-        be:MDLsetSeq("SQ_DDMG")
-        be:MDLdspExp(be:BLTcalcEXPUp())
-    end
-    if local_2 ~= 1 then
-        if local_2 == 2 then
-            if local_3 > 0 then
-                be:MDLsetSD("SETSTUN", "I<" .. local_3 .. ">")
+    local isCritical = be:BLTisCritical()
+    local damageValue = be:BLTgetDamageValue(isCritical)
+    if damageValue == 0 then
+        local time = 0
+        if time == 0 then
+            time = be:BLTgetSleepTime()
+            if time > 0 then
+                be:MDLsetSD("SETSLEEP", "I<" .. time .. ">")
             end
         end
-    end
-    if local_3 > 0 then
-        be:MDLsetSD("SETSTUN", "I<" .. local_3 .. ">")
-    end
-    if local_2 ~= 3 then
-        if local_3 > 0 then
-            be:MDLsetSD("SETPOISON", "I<" .. local_3 .. ">/I<" .. local_4 .. ">")
+        if time == 0 then
+            time = be:BLTgetBindTime()
+            if time > 0 then
+                be:MDLsetSD("SETBIND", "I<" .. time .. ">")
+                be:MDLsetSeq("SQ_BIND")
+            end
+        end
+        if time == 0 then
+            time = be:BLTgetAttackDownTime("TIME")
+            if time > 0 then
+                local attackDownTime = be:BLTgetAttackDownTime("SUBAYASA")
+                local attackDownTime2 = be:BLTgetAttackDownTime("CHIMEIRITSU")
+                local attackDownTime3 = be:BLTgetAttackDownTime("MAHIRITSU")
+                local attackDownTime4 = be:BLTgetAttackDownTime("KAIHIRITSU")
+                be:MDLsetSD("SETATTACKDOWN", "I<" .. time .. ">/I<" .. attackDownTime .. ">/I<" .. attackDownTime2 .. ">/I<" .. attackDownTime3 .. ">/I<" .. attackDownTime4 .. ">")
+            end
+        end
+        if time == 0 then
+            time = be:BLTgetPowerDownTime("TIME")
+            if time > 0 then
+                local powerDownTime = be:BLTgetPowerDownTime("TSUYOSA")
+                local powerDownTime2 = be:BLTgetPowerDownTime("MAMORI")
+                be:MDLsetSD("SETPOWERDOWN", "I<" .. time .. ">/I<" .. powerDownTime .. ">/I<" .. powerDownTime2 .. ">")
+            end
+        end
+        if time == 0 then
+            be:MDLsetSeq("SQ_GUARD")
+            be:BLTcalcSkillUp(0, 0)
+        elseif time < 0 then
+            be:MDLsetDMGTurn(0)
+            be:BLTcalcSkillUp(0, 0)
+        else
+            be:MDLsetDMGTurn(0)
+            be:BLTcalcSkillUp(1, 0)
+        end
+    else
+        be:BLTcalcSkillUp(1, isCritical)
+        be:MDLaddHp(-damageValue)
+        be:MDLdspDamage(damageValue)
+        local damageRank = be:BLTgetDamageRank(be:MDLgetHp(), isCritical)
+        if damageRank < 3 and be:MDLisStatus(be:MDLgetInfoName(), be:MDLgetRamNo(), "BIND") == 1 then
+            if be:MDLgetHp() < be:MDLgetMHp() * 0.5 and be:MDLgetHp() + damageValue >= be:MDLgetMHp() * 0.5 then
+                be:MDLsetSD("SETLABEL", "SQ_SDMG/" .. be:BLTgetAttributeStr())
+                be:MDLsetSeq("SQ_SCALL")
+            else
+                be:MDLsetSD("SETLABEL", "SQ_SDMG/" .. be:BLTgetAttributeStr())
+                be:MDLsetSeq("SQ_SDMG")
+            end
+        elseif damageRank < 3 and be:MDLgetHp() < be:MDLgetMHp() * 0.5 and be:MDLgetHp() + damageValue >= be:MDLgetMHp() * 0.5 then
+            if damageRank == 0 then
+                be:MDLsetSD("SETLABEL", "SQ_SDMG/" .. be:BLTgetAttributeStr())
+                be:MDLsetSeq("SQ_SCALL")
+            elseif damageRank == 1 then
+                be:MDLsetSD("SETLABEL", "SQ_MDMG/" .. be:BLTgetAttributeStr())
+                be:MDLsetSeq("SQ_MCALL")
+            elseif damageRank == 2 then
+                be:MDLsetSD("SETLABEL", "SQ_LDMG/" .. be:BLTgetAttributeStr())
+                be:MDLsetSeq("SQ_LCALL")
+            end
+        elseif damageRank == 0 then
+            be:MDLsetSD("SETLABEL", "SQ_SDMG/" .. be:BLTgetAttributeStr())
+            be:MDLsetSeq("SQ_SDMG")
+        elseif damageRank == 1 then
+            be:MDLsetSD("SETLABEL", "SQ_MDMG/" .. be:BLTgetAttributeStr())
+            be:MDLsetSeq("SQ_MDMG")
+        elseif damageRank == 2 then
+            be:MDLsetSD("SETLABEL", "SQ_LDMG/" .. be:BLTgetAttributeStr())
+            be:MDLsetSeq("SQ_LDMG")
+        elseif damageRank == 3 then
+            be:MDLsetSD("SETLABEL", "SQ_DDMG/" .. be:BLTgetAttributeStr())
+            be:MDLsetSeq("SQ_DDMG")
+            be:MDLdspExp(be:BLTcalcEXPUp())
+        end
+        if damageRank ~= 1 then
+            if damageRank == 2 then
+            end
+        end
+        local stunTime = be:BLTgetStunTime(damageValue, isCritical)
+        if stunTime > 0 then
+            be:MDLsetSD("SETSTUN", "I<" .. stunTime .. ">")
+        end
+        if damageRank ~= 3 then
+            local poisonTime = be:BLTgetPoisonTime("TIME")
+            if poisonTime > 0 then
+                local poisonTime2 = be:BLTgetPoisonTime("DAMAGE")
+                be:MDLsetSD("SETPOISON", "I<" .. poisonTime .. ">/I<" .. poisonTime2 .. ">")
+            end
         end
     end
 end

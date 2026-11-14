@@ -1,15 +1,17 @@
-if local_0 == 0 then
+local ramNo = be:MDLgetRamNo()
+local isCritical = be:BLTisCritical()
+if ramNo == 0 then
     be:BLTcalcEXPUp()
-    for local_2 = 0, 40 do
-        be:BLTcalcSkillUp(1, local_1)
+    for i = 0, 40 do
+        be:BLTcalcSkillUp(1, isCritical)
     end
 end
-if local_0 == 1 then
-    for local_2 = 0, 500 do
-        be:BLTcalcSkillUp(1, local_1)
+if ramNo == 1 then
+    for i = 0, 500 do
+        be:BLTcalcSkillUp(1, isCritical)
     end
 end
-be:DMsetSD("MODELCTRL", "e_goburi", local_0, "SQ_MDMG")
-be:DMchkSD("MODELCTRL", "e_goburi", local_0, "ISSEQNAME", "SQ_MDMG", "!=0")
-be:DMsetSD("MODELCTRL", "e_goburi", local_0, "SQ_SLEP")
+be:DMsetSD("MODELCTRL", "e_goburi", ramNo, "SQ_MDMG")
+be:DMchkSD("MODELCTRL", "e_goburi", ramNo, "ISSEQNAME", "SQ_MDMG", "!=0")
+be:DMsetSD("MODELCTRL", "e_goburi", ramNo, "SQ_SLEP")
 be:DMrun()

@@ -10,8 +10,7 @@ if be:FLGisOn(2) == 1 and be:FLGisOn(20) == 1 then
     else
         be:MsgBox("fobOFïbÌ§äÉ²¯ª èÜ·")
     end
-end
-if be:FLGisOn(3) == 1 then
+elseif be:FLGisOn(3) == 1 then
     if 1 == 1 then
         funcOpenMessage("talk", "n_leomon", "I")
         mswk10407 = "TALKFONT02/font00/I<246>"
@@ -25,8 +24,7 @@ if be:FLGisOn(3) == 1 then
     else
         be:MsgBox("fobOFïbÌ§äÉ²¯ª èÜ·")
     end
-end
-if be:FLGisOn(4) == 1 and be:FLGisOn(82) == 0 then
+elseif be:FLGisOn(4) == 1 and be:FLGisOn(82) == 0 then
     if be:FLGisOn(611) == 0 then
         funcOpenMessage("talk", "n_leomon", "I")
         mswk10410 = "TALKFONT02/font00/I<249>"

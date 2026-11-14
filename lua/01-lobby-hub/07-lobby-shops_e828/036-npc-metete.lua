@@ -25,8 +25,7 @@ if be:FLGisOn(594) == 0 then
     else
         be:MsgBox("fobOFïbÌ§äÉ²¯ª èÜ·")
     end
-end
-if be:FLGisOn(594) == 1 then
+elseif be:FLGisOn(594) == 1 then
     if 1 == 1 then
         funcOpenMessage("talk", "n_metete", "^Ge")
         mswk11196 = "TALKFONT02/font00/I<214>"

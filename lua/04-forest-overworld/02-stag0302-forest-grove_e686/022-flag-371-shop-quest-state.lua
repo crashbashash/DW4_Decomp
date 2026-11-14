@@ -1,0 +1,79 @@
+mswk60002 = "TALKFONT01/font00/I<14>"
+local local_0
+local total = 0
+for playerIndex = 0, 3 do
+    if be:SYSisJoinPlayer(playerIndex) == 1 then
+        total = total + be:SYSctlPlayer("HP", "GETHP", playerIndex, 0)
+    end
+end
+if g_IFLG00 ~= 1 and total ~= 0 and be:DMgetCount() <= 0 then
+    if be:DMgetCount() == -1 then
+        be:sd("SUBWND", nil, -1, "REMOVE")
+        be:DMchkSD("SUBWND", nil, -1, "ISRUN", "!=0")
+    end
+    be:sd("LAYERCTL", nil, -1, "SWITCH", "WN01/CLR", 10)
+    be:sd("LAYERCTL", nil, -1, "SWITCH", "WN00/CLR", 10)
+    be:sd("PLAYER", nil, -1, "OFCTRL")
+    be:sd("ENEMY", nil, -1, "OFCTRL")
+    if be:FLGisOn(371) == 0 then
+        be:FLGset(371, 1)
+    elseif be:FLGisOn(372) == 0 and be:FLGisOn(371) == 1 then
+        be:FLGset(372, 1)
+    elseif be:FLGisOn(373) == 0 and be:FLGisOn(372) == 1 and be:FLGisOn(371) == 1 then
+        be:FLGset(373, 1)
+    end
+    be:DMsetSD("MODELCTRL", "n_gekoa", 1, "SQ_WAIT02", 15)
+    be:DMsetSD("MODELCTRL", "n_gekoa", 2, "SQ_WAIT02", 15)
+    be:DMsetSD("MODELCTRL", "n_gekoa", 3, "SQ_WAIT02", 15)
+    be:DMsetSD("MODELCTRL", "n_gekoa", 4, "SQ_WAIT02", 15)
+    be:DMsetSD("MODELCTRL", "n_gekoa", 5, "SQ_WAIT02", 15)
+    be:DMsetSD("MODELCTRL", "n_gekoa", 6, "SQ_WAIT02", 15)
+    be:DMsetSD("MODELCTRL", "n_gekoa", 7, "SQ_WAIT02", 15)
+    be:DMsetSD("MODELCTRL", "n_gekoa", 8, "SQ_WAIT02", 15)
+    be:DMchkSD("MODELCTRL", "n_gekoa", 8, "ISSEQNAME", "SQ_WAIT02", "==0")
+    be:DMsetSD("MODELCTRL", "g_orb2z03", 0, "SQ_WIN", 45)
+    be:DMsetSD("MODELCTRL", "g_orbz03", 0, "SQ_WIN", 45)
+    be:DMsetSD("MODELCTRL", "n_gekoa", 1, "SQ_CRED", 35)
+    be:DMsetSD("MODELCTRL", "n_gekoa", 2, "SQ_CRED", 35)
+    be:DMsetSD("MODELCTRL", "n_gekoa", 3, "SQ_CRED", 35)
+    be:DMsetSD("MODELCTRL", "n_gekoa", 4, "SQ_CRED", 35)
+    be:DMsetSD("MODELCTRL", "n_gekoa", 5, "SQ_CRED", 35)
+    be:DMsetSD("MODELCTRL", "n_gekoa", 6, "SQ_CRED", 35)
+    be:DMsetSD("MODELCTRL", "n_gekoa", 7, "SQ_CRED", 35)
+    be:DMsetSD("MODELCTRL", "n_gekoa", 8, "SQ_CRED", 35)
+    be:DMchkSD("MODELCTRL", "n_gekoa", 8, "ISSEQNAME", "SQ_CRED", "==0")
+    funcOpenMessage("mess")
+    funcOneMessage(mswk60002)
+    funcCloseMessage("mess", "demo")
+    be:DMsetSD("LAYERCTL", nil, -1, "SWITCH", "WN01/SET")
+    be:DMsetSD("SOUND", nil, -1, "PLAY", "BT_WIN03", 5)
+    be:DMsetSD("MODELCTRL", "n_gekoa", 1, "SQ_WAIT02", 270)
+    be:DMsetSD("MODELCTRL", "n_gekoa", 2, "SQ_WAIT02", 270)
+    be:DMsetSD("MODELCTRL", "n_gekoa", 3, "SQ_WAIT02", 270)
+    be:DMsetSD("MODELCTRL", "n_gekoa", 4, "SQ_WAIT02", 270)
+    be:DMsetSD("MODELCTRL", "n_gekoa", 5, "SQ_WAIT02", 270)
+    be:DMsetSD("MODELCTRL", "n_gekoa", 6, "SQ_WAIT02", 270)
+    be:DMsetSD("MODELCTRL", "n_gekoa", 7, "SQ_WAIT02", 270)
+    be:DMsetSD("MODELCTRL", "n_gekoa", 8, "SQ_WAIT02", 270)
+    be:DMchkSD("MODELCTRL", "n_gekoa", 8, "ISSEQNAME", "SQ_WAIT02", "==0")
+    be:DMsetSD("MODELCTRL", "n_gekoa", 1, "SQ_EXIT", 5)
+    be:DMsetSD("MODELCTRL", "n_gekoa", 2, "SQ_EXIT", 75)
+    be:DMsetSD("MODELCTRL", "n_gekoa", 3, "SQ_EXIT", 5)
+    be:DMsetSD("MODELCTRL", "n_gekoa", 4, "SQ_EXIT", 75)
+    be:DMsetSD("MODELCTRL", "n_gekoa", 5, "SQ_EXIT", 5)
+    be:DMsetSD("MODELCTRL", "n_gekoa", 6, "SQ_EXIT", 75)
+    be:DMsetSD("MODELCTRL", "n_gekoa", 7, "SQ_EXIT", 5)
+    be:DMsetSD("MODELCTRL", "n_gekoa", 8, "SQ_EXIT", 75)
+    be:DMchkSD("MODELCTRL", "n_gekoa", 8, "ISSEQNAME", "SQ_EXIT", "==0")
+    be:DMsetSD("GENERATER", nil, -1, "START", "GBOX-02", 80)
+    be:DMsetSD("SOUND", nil, -1, "PLAY", "ST_VENOM", 85)
+    be:DMsetSD("SOUND", nil, -1, "PLAY", "AM_FORR1", 85)
+    be:DMsetSD("MODELCTRL", "g_orb2z03", 0, "SQ_POWEROF", 85)
+    be:DMsetSD("MODELCTRL", "g_orbz03", 0, "SQ_POWEROF", 85)
+    be:DMsetSD("MODELCTRL", "g_circlegatez03", 0, "SQ_SWON", 90)
+    be:DMsetSD("HITLANDMODEL", "hitcirclegatez03", 0, "OFFHIT", 90)
+    be:DMsetSD("LAYERCTL", nil, -1, "SWITCH", "WN00/SET", 90)
+    be:DMsetSD("MODELCTRL", nil, -1, "ONCTRL", 105)
+    be:DMrun()
+else
+end

@@ -1,10 +1,12 @@
 mswk60003 = "TALKFONT01/font00/I<29>"
-for local_2 = 0, 3 do
-    if be:SYSisJoinPlayer(local_2) == 1 then
-        local_1 = local_1 + be:SYSctlPlayer("HP", "GETHP", local_2, 0)
+local local_0
+local total = 0
+for playerIndex = 0, 3 do
+    if be:SYSisJoinPlayer(playerIndex) == 1 then
+        total = total + be:SYSctlPlayer("HP", "GETHP", playerIndex, 0)
     end
 end
-if be:DMgetCount() == 0 and local_1 ~= 0 then
+if be:DMgetCount() == 0 and total ~= 0 then
     g_IFLG00 = 1
     be:sd("LAYERCTL", nil, -1, "SWITCH", "WN01/CLR", 10)
     be:sd("LAYERCTL", nil, -1, "SWITCH", "WN00/CLR", 10)

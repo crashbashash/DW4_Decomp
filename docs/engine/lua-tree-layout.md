@@ -179,13 +179,18 @@
 
 ## Chunk naming
 
-Each chunk is named by what it does, e.g.:
-- `000-layer-setup.lua`: `funcStartLayerSet` / `funcFirstLayerSet`
-- `012-exit-to-dng204b2.lua`: `funcStageChange("dng204b2", ...)`
-- `005-npc-agumon.lua`: an NPC (`n_agumon`) talk/interaction script
-- `003-enemy-mammos.lua` / `004-boss-devimon-1.lua`: enemy / boss behavior
-- `007-flag-123.lua`: `be:FLGset(123, 0)` (flag reset) + related logic
-- `002-door-d1.lua`, `006-heal-hp.lua`, `009-security-gate.lua`, ...
+Each chunk is named by what it does (`chunk_name` in `scripts/build_lua_tree.py`), e.g.:
+- `layer-setup`: `funcStartLayerSet` / `funcFirstLayerSet`; `function-library`: the chunk that defines the stage's `func*` globals
+- `exit-to-dng204b2`: `funcStageChange("dng204b2", ...)`
+- `npc-agumon`: an NPC (`n_agumon`) talk/interaction script
+- `enemy-mammos` / `boss-devl1`: enemy / boss behavior
+- `flag-110-set`: the first literal `be:FLGset(110, 1)` (`clear` for a 0), or the flag's curated meaning from `scripts/flag_meanings.py` when it has one (`flag-409-quest-act-in-progress-marker`)
+- `generator-gene-04`, `model-g-ddamagefloor`, `sets-fall0`: for a chunk no named rule covers, the generator it starts, the model it drives, the native command it sends or the global it sets
+- `door-d1`, `heal-hp`, `security-gate`, `damage-calc`, `bullet-hit`, ...
 
-The numeric prefix keeps the original concatenation order. Each stage folder also has a `_origin.txt` with the original `entry_NNNN` it came from.
+Chunks of one stage that share a name get the first detail that no other chunk of the group has: their first message work global (`npc-agumon-msg-61240` / `npc-agumon-msg-61618`), stage target, main sequence (`layer-setup-sq-clear`), model, flag, counter test, native command or controller, then any string. A chunk with no such detail keeps the bare name; the numeric prefix keeps the original concatenation order and the files apart. Each stage folder also has a `_origin.txt` with its pack entry, stage and chunk count.
+
+## Local names
+
+The chunks carry no local names, so a local is named from how the bytecode uses it (`scripts/lua_names.py`): a closure by its body (`showText`), a value by the native getter it comes from (`ramNo`, `isCritical`), a counter (`count`), an argument by the engine's parameter name (`playerIndex`, `flagNo`), a numeric-for variable `i` / `j` / `k`. These names are inferred, not recovered; a local with no such use keeps its slot name `local_N` (parameters `arg_N`). Globals, methods and strings are the bytecode's own.
 

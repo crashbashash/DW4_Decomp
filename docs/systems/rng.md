@@ -212,10 +212,10 @@ Notes:
   area load costs **1 draw per enemy group (2–3 draws)**, which is exactly the
   `_mti 318 → 321` measurement.
 - The moduli here are decoded with the signed bias of
-  [the Lua numeric audit](../engine/lua-numeric-audit.md). Several draws store
-  their result in a local that the decompiled `lua/` tree omits: the crown rolls
-  show only their `local_0 >= N` branches, and `funcRandom` prints with an empty
-  body. Read those sites from the bytecode.
+  [the Lua numeric audit](../engine/lua-numeric-audit.md). The decompiled `lua/`
+  tree shows each draw's local: a crown roll reads
+  `local random = be:SYSgetRandom(300)` followed by its `random >= N` branches,
+  and `funcRandom` draws `be:SYSgetRandom(2)` the same way.
 - The per-entry table with every call (`entry/chunk/proto/pc/modulus`) is
   auto-generated to [`rng-sites.tsv`](rng-sites.tsv) by
   `dw4_rng.py sites --tsv`.

@@ -15,6 +15,7 @@ sys.path.insert(0,str(ROOT/'scripts'))
 import igb_ids
 import igb_inst
 import lua_dump
+import lua_tree
 
 
 class SaveKeeperOwnership(unittest.TestCase):
@@ -68,7 +69,7 @@ class SaveKeeperOwnership(unittest.TestCase):
         self.assertEqual((code[57]>>6)-lua_dump.MAXARG_S,-1)
         self.assertEqual((code[60]>>6)-lua_dump.MAXARG_S,90)
         self.assertEqual((code[61]>>15,(code[61]>>6)&511),(0,0))
-        text=(ROOT/'lua/01-lobby-hub/06-lobby-quest-board_e824/073-msg-20003.lua').read_text()
+        text=Path(lua_tree.chunk_path(824,73)).read_text()
         self.assertIn('be:DMsetLua("saveshop.lua")',text)
 
 

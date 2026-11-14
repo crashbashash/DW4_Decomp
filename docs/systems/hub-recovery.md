@@ -51,7 +51,7 @@ branch. An offline read of the private pack's validated object/remap/pool graph
 resolves that name through **beLuaInfo3100 → beLuaDataList9257, position112 →
 beLuaData9523 → beLuaDataObject9524 → memory9546**. The655-byte payload begins at
 pack offset2,482,480 and is decompiled as
-[`entry0824/chunk0108`](../../lua/01-lobby-hub/06-lobby-quest-board_e824/108-dm-run-6.lua).
+[`entry0824/chunk0108`](../../lua/01-lobby-hub/06-lobby-quest-board_e824/108-dm-run-to-stagis12.lua).
 
 Its original bytecode contains the exact call
 `DMsetSD("STAGECTL", nil, -1, "NEXTSTAGE", "stagIS12", 90)` followed by DMrun.

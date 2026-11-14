@@ -3,42 +3,45 @@ if not g_dmgf then
 end
 if be:MDLgetBulletName() == "PCBA" then
     be:MDLsetDMGTurn(0)
-    be:sd("PLAYER", be:SYSgetPlayerName(local_0), local_0, "SQ_GUARDR", 0)
+    local shootRamNo = be:BLTgetShootRamNo()
+    be:sd("PLAYER", be:SYSgetPlayerName(shootRamNo), shootRamNo, "SQ_GUARDR", 0)
 elseif be:BLTisHitCheck() == 0 then
     be:MDLsetSeq("SQ_GUARD")
-elseif local_1 == 0 then
-    if local_2 == 0 then
-        be:MDLsetSeq("SQ_GUARD")
-        be:BLTcalcSkillUp(0, 0)
-    elseif local_2 < 0 then
-        be:MDLsetDMGTurn(0)
-        be:BLTcalcSkillUp(0, 0)
-    else
-        be:MDLsetDMGTurn(0)
-        be:BLTcalcSkillUp(1, 0)
-    end
 else
-    be:BLTcalcSkillUp(1, local_0)
-    be:MDLaddHp(-local_1)
-    be:MDLdspDamage(local_1)
-    if local_2 == 0 then
-        be:MDLsetSeq("SQ_DAMAGE")
-        if be:SYSgetRandom(2) == 0 and g_Ground ~= 1 then
-            g_dmgf = 1
+    local isCritical = be:BLTisCritical()
+    local damageValue = be:BLTgetDamageValue(isCritical)
+    if damageValue == 0 then
+        local local_2 = 0
+        if local_2 == 0 then
+            be:MDLsetSeq("SQ_GUARD")
+            be:BLTcalcSkillUp(0, 0)
+        elseif local_2 < 0 then
+            be:MDLsetDMGTurn(0)
+            be:BLTcalcSkillUp(0, 0)
         else
+            be:MDLsetDMGTurn(0)
+            be:BLTcalcSkillUp(1, 0)
         end
-    end
-    if local_2 == 1 then
-        be:MDLsetSeq("SQ_DAMAGE")
-        if be:SYSgetRandom(2) == 1 and g_Ground ~= 1 then
-            g_dmgf = 1
-        else
+    else
+        be:BLTcalcSkillUp(1, isCritical)
+        be:MDLaddHp(-damageValue)
+        be:MDLdspDamage(damageValue)
+        local damageRank = be:BLTgetDamageRank(be:MDLgetHp(), isCritical)
+        if damageRank == 0 then
+            be:MDLsetSeq("SQ_DAMAGE")
+            if be:SYSgetRandom(2) == 0 and g_Ground ~= 1 then
+                g_dmgf = 1
+            end
+        elseif damageRank == 1 then
+            be:MDLsetSeq("SQ_DAMAGE")
+            if be:SYSgetRandom(2) == 1 and g_Ground ~= 1 then
+                g_dmgf = 1
+            end
+        elseif damageRank == 2 then
+            be:MDLsetSeq("SQ_DAMAGE")
+        elseif damageRank == 3 then
+            be:MDLsetSeq("SQ_EXIT")
+            be:BLTcalcEXPUp()
         end
-    end
-    if local_2 == 2 then
-        be:MDLsetSeq("SQ_DAMAGE")
-    elseif local_2 == 3 then
-        be:MDLsetSeq("SQ_EXIT")
-        be:BLTcalcEXPUp()
     end
 end

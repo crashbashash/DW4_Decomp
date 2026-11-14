@@ -10,12 +10,12 @@ are not automatically attributed to the hub.
 
 | Pack | Area | Chunks | be call sites | Subwindow modes |
 | --- | --- | ---: | ---: | --- |
-| 816 | Commander Room | 155 | 1312 |  |
-| 820 | Terminal Area | 64 | 5735 |  |
-| 824 | Central Areas | 114 | 4315 | BANK, CNOS, LABO, XDATA |
-| 828 | Shop Area | 60 | 1753 | APU, BANK, CHIP, DISK, JUNK, WPU |
+| 816 | Commander Room | 155 | 1805 |  |
+| 820 | Terminal Area | 64 | 4900 |  |
+| 824 | Central Areas | 114 | 4689 | BANK, CNOS, LABO, XDATA |
+| 828 | Shop Area | 60 | 2207 | APU, BANK, CHIP, DISK, JUNK, WPU |
 
-**49 bound APIs**, plus registration/dispatch, reach
+**60 bound APIs**, plus registration/dispatch, reach
 **508 functions / 117,380 bytes** through known direct edges.
 **6 functions / 3,656 bytes** lack source definitions.
 The reached bodies contain **110 unresolved register-transfer sites**.

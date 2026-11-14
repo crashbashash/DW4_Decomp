@@ -28,7 +28,7 @@ if be:MATisPlayer() == 1 then
         be:DMsetSD("ENEMY", "e_pharaoh", -1, "ONCTRL")
         be:DMsetSD("ENEMY", nil, -1, "OFFREEZE")
         be:DMrun()
-    else
     end
+else
+    be:sd("GENERATER", nil, -1, "STOP", "GENE-06")
 end
-be:sd("GENERATER", nil, -1, "STOP", "GENE-06")

@@ -32,10 +32,46 @@ Tree builder: `scripts/build_lua_tree.py` (index: [lua-tree-layout](lua-tree-lay
   `and`/`or` short-circuit**.
 - `a and b` is compiled as **nested `if`s sharing one else target**; the
   decompiler flattens these into `a and b and c`.
-- Local-variable names and line info are **stripped** (`nlocvars == 0`);
-  locals are named `local_0`, `local_1`, … and closure params `arg_0`, ….
+- Local-variable names and line info are **stripped** (`nlocvars == 0`).
+  The decompiler runs each prototype twice: the first pass records how every
+  local binding is used, `scripts/lua_names.py` names it from that use
+  (`showText`, `ramNo`, `playerIndex`, `count`, `i`; the rules are in its
+  docstring and [lua-tree-layout](lua-tree-layout.md#local-names)), and the
+  second pass renders with those names. A local with no qualifying use stays
+  `local_N` (closure params `arg_N`, a vararg function's table `arg`).
 - Numeric-for loops use normal step 1. The old decoded step 0 was the
   signed-bias error, not a game-specific sentinel.
+
+## How the source is rebuilt
+
+- A value left on the stack across a statement is a local: Lua 4 keeps every
+  local in the slot its initial value was pushed to and leaves nothing else
+  there between statements. Before each statement (call, assignment, `if`,
+  `while`, `for`, `return`, block-end `POP`) the decompiler emits
+  `local NAME = expr` for any such value not yet declared, so declarations land
+  between the statements their values were computed between. This includes
+  local functions (`local showText = function(text, ...)`).
+- `OP_CLOSURE A B` takes prototype `A` (`ins >> 15`) and closes over the `B`
+  values on top of the stack; the scripts never use upvalues (`B` is always 0).
+  A vararg function prints as `function(...)` and its slot after the
+  parameters is Lua 4's `arg` table.
+- `OP_RETURN U` returns the values from slot `U` up; the slots below are the
+  function's locals, so a bare early `return` prints as `return`.
+- Two conditions join with `and` only when the second is a pure expression
+  jumping to the same target; a statement or declaration between them keeps
+  the nested `if`.
+- Lua threads a jump to the end of a block straight to that block's exit. A
+  conditional or `else` jump past the end of the enclosing block therefore
+  means "to the end of this block", which keeps an `if` that ends a `then`
+  part inside it rather than swallowing the outer `else`.
+- Table constructors print their list part and record part separated by `;`
+  (`SETLIST B` and `SETMAP U` consume `B` items and `U` pairs).
+
+Recompiling the rebuilt text with stock Lua 4.0.1 `luac -s` reproduces 4,183
+of the 5,291 chunks exactly (instruction words, constant tables, parameters,
+vararg flag and stack size, in every nested prototype); 69 more differ only in
+operands, 435 more only inside equal-length code. The rest recompile to
+different control flow, so the original bytecode stays the authority.
 
 ## Script-API recap (the `be:` object)
 
@@ -75,7 +111,8 @@ triggers); a few are large level-init scripts (the `funcStartLayerSet`,
   Numeric loops pair by their back edge, including nested loops and threaded
   empty-loop branches. Source reconstruction remains best-effort; execute
   original bytecode. See the [numeric documentation audit](lua-numeric-audit.md).
-- `local_N` are unnamed locals; the original names were stripped at build time.
+- Inferred local names are readability aids, not the original names; `local_N`
+  is a local no naming rule covers.
 - The enemy/item stats are not in these scripts. They live in the
   igBinary `beBaseInfoData`/`beNDMWStatusInfo` objects (see `docs/systems/enemy-data.md`).
   The Lua only references them by name (`MDLgetHp`, `BLTgetDamageValue`, …).

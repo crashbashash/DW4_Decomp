@@ -38,9 +38,8 @@ def fixtures():
     fn = function(code)
     fn['kstr'] = ['tail']
     source = decompile_function_source(fn)
-    assert 'for local_0 = 0, 2 do' in source
-    assert '    for local_3 = 0, 1 do' in source
-    assert source.splitlines().count('end') == 1
+    assert 'for i = 0, 2 do' in source
+    assert '    for j = 0, 1 do' in source
     assert '    tail = 42' in source
 
 

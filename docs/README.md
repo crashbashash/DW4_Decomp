@@ -134,7 +134,7 @@ retail. Both take `--help`.
 | `decompile_funcs.py` | Ghidra's decompiler, by address |
 | `find_table_refs.py` | Find the instructions that reference an address range (locating data tables) |
 | `igb_parse.py`, `igb_dir.py`, `igb_inst.py` | igBinary (`be*`) headers; the type-directory / `{type_id, ordinal, size}` descriptor chain; and the **instance records** (`{classIndex, recordSize, nameLen}{name}{fields}`, size-verified), which read a stage's generator and drop rows offline |
-| `lua_extract.py`, `lua_dump.py`, `lua_decompile.py`, `build_lua_tree.py`, `lua_tree.py` | Lua 4.0.1 chunk extraction, bytecode parsing, decompilation, and the `lua/` tree |
+| `lua_extract.py`, `lua_dump.py`, `lua_decompile.py`, `lua_names.py`, `build_lua_tree.py`, `lua_tree.py` | Lua 4.0.1 chunk extraction, bytecode parsing, decompilation, local naming from use, and the `lua/` tree |
 | `flag_xref.py`, `flag_meanings.py` | Every flag operation in the decompiled Lua → `systems/flags/` |
 | `dw4_rng.py`, `p2s_ram.py` | MT19937 identification and draw sites; reading a savestate's RAM without the emulator |
 | `match_func.py` | One-off matching harness: compile a candidate, diff it against the target |
@@ -173,7 +173,7 @@ Committed files, and the gitignored working directories the analysis writes to. 
 
 | Path | What | Produced by |
 |---|---|---|
-| [`../lua/`](../lua) | Every game Lua chunk decompiled, filed by stage with descriptive names; a stage folder's `_e<N>` is the pack entry and a file's numeric prefix its chunk index (`scripts/lua_tree.py`). Index: [`engine/lua-tree-layout.md`](engine/lua-tree-layout.md) | `scripts/lua_decompile.py`, `build_lua_tree.py` |
+| [`../lua/`](../lua) | Every game Lua chunk decompiled, filed by stage with descriptive names; a stage folder's `_e<N>` is the pack entry and a file's numeric prefix its chunk index (`scripts/lua_tree.py`). Index: [`engine/lua-tree-layout.md`](engine/lua-tree-layout.md) | `scripts/lua_decompile.py` (with `lua_names.py`), `build_lua_tree.py` |
 | [`../data/`](../data) | A snapshot of the Ghidra dumps and derived tables (`functions.json`, `strings.json`, `vtables.json`, `script_api.json`, item and enemy tables) | `scripts/dump_*.py`, refreshed by `scripts/sync_data.sh` |
 | `../config/*.txt` | The build's generated tables: `symbols.txt` (the split), `layout.txt`, `jumptables.txt` (the `switch` tables), `syscalls.txt` (the 80 kernel syscall stubs and their numbers) | `tools/{split,layout,jumptables,syscalls}.py` |
 | `../local/` *(local)* | Your copies of what cannot be committed: `wibo`, `mwcps2/`, `m2c/`, `decomp-permuter/`, `permuter-venv/`. The `DW4_*` variables default here | you |

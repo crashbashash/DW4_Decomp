@@ -24,7 +24,7 @@ it rests on the old decoder's `0`/`-1` values.
 The observation it was built on (the Apocalymon flag, written in exactly one gameplay
 location):
 
-- `boss01-apocalymon` (`lua/11-bosses/01-boss01-apocalymon_e730/006-boss-bit.lua:87`) writes the
+- `boss01-apocalymon` (`lua/11-bosses/01-boss01-apocalymon_e730/006-boss-bit-sq-ddmg.lua:113`) writes the
   flag inside the boss-death sequence (return gate spawned, victory sound): `be:FLGset(66, 0)`
   in the old decoder's text, **flag 67 = 1** in the original.
 - Diff `Mcd001_op_base.ps2 → prog_world1.ps2`: `flags[66] 0x00 → 0x01`.
@@ -84,13 +84,13 @@ The World-4 checkpoints (`prog_mecha_nest`, `prog_electro_mine`, `prog_world4`) 
 
 | id | boss | Lua writer (on death) | first set in diffs |
 | --- | --- | --- | --- |
-| 67 | Apocalymon | `entry_0730/chunk_0006:87` | `prog_world1` (W1) |
-| 68 | BelialVamdemon | `entry_0737/chunk_0000:86` | `prog_world2` (W2) |
+| 67 | Apocalymon | `entry_0730/chunk_0006:113` | `prog_world1` (W1) |
+| 68 | BelialVamdemon | `entry_0737/chunk_0000:112` | `prog_world2` (W2) |
 | 69 | Lucemon | `entry_0744` | `prog_world3` (W3) |
-| 83 | LordKnightmon (`dng412b4`) | `entry_0425/chunk_0076:29` | `prog_electro_mine` (§9) |
-| 70 | Devimon (form 3 / final) | `entry_0765/chunk_0005:105` | `prog_world4` (§9) |
-| 86 | story cleared | `entry_0765/chunk_0005:107` (Hard/Very Hard only), `entry_0820/chunk_0009:30` (when flag 70 is on) | `prog_world4` (§9) |
-| 610 | final scene (Hard/Very Hard only) | `entry_0765/chunk_0005:108` | *(still 0, not reached)* |
+| 83 | LordKnightmon (`dng412b4`) | `entry_0425/chunk_0076:31` | `prog_electro_mine` (§9) |
+| 70 | Devimon (form 3 / final) | `entry_0765/chunk_0005:132` | `prog_world4` (§9) |
+| 86 | story cleared | `entry_0765/chunk_0005:134` (Hard/Very Hard only), `entry_0820/chunk_0009:30` (when flag 70 is on) | `prog_world4` (§9) |
+| 610 | final scene (Hard/Very Hard only) | `entry_0765/chunk_0005:135` | *(still 0, not reached)* |
 
 Notes:
 
@@ -128,7 +128,7 @@ Folders are the `impItem` records: the important-item page lists them, and scrip
 both flip) but **no** folder; folder 2 is the earlier Boat Key.)*
 
 **Flag 905 needs folders 9 and 10 SET.**
-`lua/05-city-overworld/01-stag0403-city-quest-hub_e709/034-layer-setup-2.lua:102`:
+`lua/05-city-overworld/01-stag0403-city-quest-hub_e709/034-layer-setup-msg-61097.lua:102`:
 ```lua
 if be:SYSctlFlagFolder("IS", 9) == 1 and be:SYSctlFlagFolder("IS", 10) == 1 then
     be:FLGset(905, 1)
@@ -136,12 +136,12 @@ if be:SYSctlFlagFolder("IS", 9) == 1 and be:SYSctlFlagFolder("IS", 10) == 1 then
 end
 ```
 
-So flag 905 is set when both folders are set, in the stage's layer setup and in `026-flag-905.lua`,
+So flag 905 is set when both folders are set, in the stage's layer setup and in `026-flag-905-city-entryway-state.lua`,
 which plays its sequence while 905 is clear. The chunk does not write flag 904, and 905 is not a
 gate-closed marker; an `IS 8`/`IS 9`, `FLGset(904, 0)` reading is the old decoder's off-by-one. Script
 folders 9 and 10 are the same folders as the table: MRE05 ID and LordKnight ID.
 
-The game's own "everything done" snapshot (`lua/14-misc/01-stage-select-list_e603/075-flag-1-7.lua`) sets
+The game's own "everything done" snapshot (`lua/14-misc/01-stage-select-list_e603/075-flag-1-intro-step-0-msg-80024.lua`) sets
 **folders 0–10** and the flags 67,68,69,70,83,86 to `1`. That is the post-game
 state; **final-boss-READY = folders 0–10 set but flag 610 still `0`** (see §9
 below for the observed World-4 end state).
@@ -157,8 +157,8 @@ below for the observed World-4 end state).
   same bytes; §7's table is the authoritative interpretation.
 - **1–6 = chapter one-hot, then 86** (NOT a 0→1→2… sequence):
   - flag **1** = tutorial in progress, the fresh state.
-    `lua/01-lobby-hub/04-lobby-ofanimon-seraphimon_e816/096-layer-setup-3.lua` and the Terminal's
-    `lua/01-lobby-hub/05-lobby-quests_e820/009-layer-setup.lua` set it on arrival when flags 2–6 and 86
+    `lua/01-lobby-hub/04-lobby-ofanimon-seraphimon_e816/096-layer-setup-sq-hide.lua` and the Terminal's
+    `lua/01-lobby-hub/05-lobby-quests_e820/009-layer-setup-sq-demowait.lua` set it on arrival when flags 2–6 and 86
     are all clear, so a state with no chapter flag does not last past those stages.
   - flags **2–6** = the current chapter, one at a time: 2 (W1) → 3 (post-W1 key) → 4 (W2) → 5 (W3) →
     6 (W4). Ophanimon sets 2 and moves 2 → 3 (flags 20 and 67), Seraphimon moves 3 → 4 (flag 324) and
@@ -192,7 +192,7 @@ below for the observed World-4 end state).
 
 ## 7. The mirror/restore system (why there are 700–811 "backup" flags)
 
-`lua/00-title-menus/04-title-screen_e806/006-flag-82.lua` (title screen / new game / load) clears folders and
+`lua/00-title-menus/04-title-screen_e806/006-flag-82-clear.lua` (title screen / new game / load) clears folders and
 a big flag range (`FLGset(N,0)` → save `0x00`), then restores the active story
 flags from **per-difficulty mirror flags**.
 

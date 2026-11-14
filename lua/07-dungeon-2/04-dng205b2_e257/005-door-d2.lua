@@ -1,4 +1,5 @@
 be:MDLsetDMGTurn(0)
+local local_0 = 0
 if be:MDLgetRamNo() == 0 and be:FLGisOn(160) == 0 then
     local_0 = 1
     be:FLGset(160, 1)

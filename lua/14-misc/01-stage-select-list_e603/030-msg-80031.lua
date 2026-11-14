@@ -1,7 +1,9 @@
-for local_2 = 0, 3 do
-    if be:SYSisJoinPlayer(local_2) == 1 then
-        for local_5 = 0, 15 do
-            be:SYSctlShinka("SETSHINKA", local_2, local_5)
+local local_0
+local local_1
+for playerIndex = 0, 3 do
+    if be:SYSisJoinPlayer(playerIndex) == 1 then
+        for species = 0, 15 do
+            be:SYSctlShinka("SETSHINKA", playerIndex, species)
         end
     end
 end

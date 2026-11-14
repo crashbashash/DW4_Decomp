@@ -1,0 +1,31 @@
+be:DMsetSD("TEXTCTL", nil, -1, "TEXTSET", mswk67133)
+be:DMsetSD("TEXTCTL", nil, -1, "SWITCH", "TALKFONT02/font01/SET", 10)
+be:DMsetSD("TEXTCTL", nil, -1, "TEXTSET", mswk67134)
+be:DMsetSD("TEXTCTL", nil, -1, "SWITCH", "TALKFONT02/font02/SET", 10)
+be:DMsetSD("SELECTCTRL", "i_messcr", g_messPlayerNo, "GENERATE", "NOCANCEL/I<2>/V<80,-2,0>", 10)
+be:DMchkSD("SELECTCTRL", "i_messcr", g_messPlayerNo, "ISEND", "!=0")
+be:DMchkSD("SELECTCTRL", "i_messcr", g_messPlayerNo, "ISEND", "==0")
+be:DMsetSD("TEXTCTL", nil, -1, "SWITCH", "TALKFONT02/font01/CLR")
+be:DMsetSD("TEXTCTL", nil, -1, "SWITCH", "TALKFONT02/font02/CLR")
+be:DMswtSD("SELECTCTRL", "i_messcr", g_messPlayerNo, "GETSELECT")
+be:DMcase(0)
+be:DMsetLua("restart.lua")
+be:DMcase(1)
+be:DMsetSD("MODELCTRL", "i_messwnsp", 0, "SQ_CLOSE")
+be:DMchkSD("MODELCTRL", "i_messwnsp", 0, "ISRUN", "!=0")
+local local_0
+be:DMsetSD("MODELCTRL", "i_stpnl00", 0, "SQ_OPEN")
+for playerIndex = 0, 3 do
+    if be:SYSisJoinPlayer(playerIndex) == 1 then
+        be:DMsetSD("MODELCTRL", "i_stpnl01", playerIndex, "SQ_OPEN")
+        be:DMsetSD("MODELCTRL", "i_stpnl02", playerIndex, be:SYSgetPlayerName(playerIndex))
+        be:DMsetSD("MODELCTRL", "i_stpnl03", playerIndex, "SQ_OPENWN")
+        be:DMsetSD("MODELCTRL", "i_stpnl04", playerIndex, "SQ_OPENWN")
+    end
+end
+be:DMsetSD("LAYERCTL", nil, -1, "SWITCH", "WN00/SET")
+be:DMsetSD("LAYERCTL", nil, -1, "SWITCH", "WN01/SET")
+be:DMsetSD("ENEMY", nil, -1, "ONCTRL", 10)
+be:DMsetSD("PLAYER", nil, -1, "ONCTRL", 10)
+be:DMswtEnd()
+be:DMrun()

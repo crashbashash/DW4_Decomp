@@ -43,43 +43,50 @@ end
 if be:MDLisCallName("stset") == 1 then
     if g_switch == 1 then
         g_switch = 0
-    else
     end
-end
-if be:MDLisCallName("check") == 1 then
-    for local_2 = 0, 11 do
-        if be:MDLisLive("e_mummy", local_2) == 1 then
-            local_0 = local_0 + 1
+elseif be:MDLisCallName("check") == 1 then
+    local count = 0
+    local local_1
+    for ramNo = 0, 11 do
+        if be:MDLisLive("e_mummy", ramNo) == 1 then
+            count = count + 1
         end
     end
-    if local_0 ~= 12 then
+    if count ~= 12 then
         be:sd("MODELCTRL", "e_pharaoh", be:MDLgetRamNo(), "SQ_ITEM1", 0)
-    elseif local_0 == 12 then
+    elseif count == 12 then
         be:sd("MODELCTRL", "e_pharaoh", be:MDLgetRamNo(), "SQ_ITEM3", 0)
     end
 elseif be:MDLisCallName("gen") == 1 then
-    for local_1 = 0, 11 do
-        if be:MDLisLive("e_mummy", local_1) == 0 then
+    local local_0
+    for ramNo = 0, 11 do
+        if be:MDLisLive("e_mummy", ramNo) == 0 then
             if be:SYSgetDifficulty() == 0 then
-                be:sd("MODELCTRL", "e_mummy", local_1, "GENERATE", "SQ_NENTR/I<116>/I<149>/" .. be:MDLgetPosStr(0, 0, 0) .. "/" .. be:MDLgetRotStr(0, 0, 0))
+                be:sd("MODELCTRL", "e_mummy", ramNo, "GENERATE", "SQ_NENTR/I<116>/I<149>/" .. be:MDLgetPosStr(0, 0, 0) .. "/" .. be:MDLgetRotStr(0, 0, 0))
             elseif be:SYSgetDifficulty() == 1 then
-                be:sd("MODELCTRL", "e_mummy", local_1, "GENERATE", "SQ_NENTR/I<120>/I<896>/" .. be:MDLgetPosStr(0, 0, 0) .. "/" .. be:MDLgetRotStr(0, 0, 0))
+                be:sd("MODELCTRL", "e_mummy", ramNo, "GENERATE", "SQ_NENTR/I<120>/I<896>/" .. be:MDLgetPosStr(0, 0, 0) .. "/" .. be:MDLgetRotStr(0, 0, 0))
             elseif be:SYSgetDifficulty() == 2 then
-                be:sd("MODELCTRL", "e_mummy", local_1, "GENERATE", "SQ_NENTR/I<124>/I<2738>/" .. be:MDLgetPosStr(0, 0, 0) .. "/" .. be:MDLgetRotStr(0, 0, 0))
+                be:sd("MODELCTRL", "e_mummy", ramNo, "GENERATE", "SQ_NENTR/I<124>/I<2738>/" .. be:MDLgetPosStr(0, 0, 0) .. "/" .. be:MDLgetRotStr(0, 0, 0))
             end
         else
         end
     end
 elseif be:MDLisCallName("mck") == 1 then
-    for local_3 = 0, 11 do
-        if be:MDLisLive("e_mummy", local_3) == 1 and g_magic == 1 and g_switch == 0 then
-            local_1 = 1
+    local count = 0
+    local local_1 = 0
+    local local_2
+    for ramNo = 0, 11 do
+        if be:MDLisLive("e_mummy", ramNo) == 1 then
+            count = count + 1
+            if g_magic == 1 and g_switch == 0 then
+                local_1 = 1
+            end
         end
     end
-    if local_0 ~= 12 and local_1 == 1 then
+    if count ~= 12 and local_1 == 1 then
         g_switch = 1
         be:sd("MODELCTRL", "e_pharaoh", be:MDLgetRamNo(), "SQ_ITEM6", 0)
-    elseif local_0 ~= 12 then
+    elseif count ~= 12 then
         be:sd("MODELCTRL", "e_pharaoh", be:MDLgetRamNo(), "SQ_ITEM5", 0)
     elseif local_1 == 1 then
         g_switch = 1
@@ -88,8 +95,9 @@ elseif be:MDLisCallName("mck") == 1 then
         be:sd("MODELCTRL", "e_pharaoh", be:MDLgetRamNo(), "SQ_WAIT", 0)
     end
 elseif be:MDLisCallName("magic") == 1 then
-    for local_1 = 0, 11 do
-        if be:MDLisLive("e_mummy", local_1) == 1 and g_magic == 1 and g_switch == 0 then
+    local local_0
+    for ramNo = 0, 11 do
+        if be:MDLisLive("e_mummy", ramNo) == 1 and g_magic == 1 and g_switch == 0 then
             g_switch = 1
             be:sd("MODELCTRL", "e_pharaoh", be:MDLgetRamNo(), "SQ_MAGC", 0)
         else

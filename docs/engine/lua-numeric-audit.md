@@ -32,13 +32,13 @@ control-flow heuristic.
 
 | Evidence | Off-by-one decoding (wrong) | Correct decoding |
 | --- | --- | --- |
-| Title `lua/00-title-menus/04-title-screen_e806/004-layer-setup-2.lua`, delayed PAUSEOFF | 239 | 240 |
+| Title `lua/00-title-menus/04-title-screen_e806/004-layer-setup-sq-open.lua`, delayed PAUSEOFF | 239 | 240 |
 | Title `chunk_0006.lua`, scratch loop | 99..318, step 0, writes -1 | 100..319, step 1, writes 0 |
-| Shops `lua/01-lobby-hub/07-lobby-shops_e828/004-npc-digilfm.lua`, level predicates | flags 907/908/909, levels 15/45/75 | flags 908/909/910, levels 16/46/76 |
-| City `lua/05-city-overworld/01-stag0403-city-quest-hub_e709/034-layer-setup-2.lua:122` | 375..379 !=0 and 380 ==0 | 376..380 !=1 and 381 ==1 |
-| Final phase `lua/11-bosses/06-boss06-devimon-3_e765/005-boss-devl31.lua` | writes 69/85/609 =0 | writes 70/86/610 =1 |
-| Reward `lua/01-lobby-hub/05-lobby-quests_e820/011-npc-digilfm-9.lua` | thresholds 278/301, difficulty -1/0/1 | thresholds 279/302, difficulty 0/1/2 |
-| Quest board `lua/01-lobby-hub/06-lobby-quest-board_e824/104-npc-digilfm-16.lua` | persistent folder 10 | persistent folder 11 |
+| Shops `lua/01-lobby-hub/07-lobby-shops_e828/004-npc-digilfm-msg-11091.lua`, level predicates | flags 907/908/909, levels 15/45/75 | flags 908/909/910, levels 16/46/76 |
+| City `lua/05-city-overworld/01-stag0403-city-quest-hub_e709/034-layer-setup-msg-61097.lua:122` | 375..379 !=0 and 380 ==0 | 376..380 !=1 and 381 ==1 |
+| Final phase `lua/11-bosses/06-boss06-devimon-3_e765/005-boss-devl31-sq-sdmg.lua` | writes 69/85/609 =0 | writes 70/86/610 =1 |
+| Reward `lua/01-lobby-hub/05-lobby-quests_e820/011-npc-digilfm-msg-25148.lua` | thresholds 278/301, difficulty -1/0/1 | thresholds 279/302, difficulty 0/1/2 |
+| Quest board `lua/01-lobby-hub/06-lobby-quest-board_e824/104-npc-digilfm-msg-25075.lua` | persistent folder 10 | persistent folder 11 |
 
 The [critical-path page](../systems/critical-path.md),
 [digivolution page](../systems/digivolution-and-sidequests.md), and

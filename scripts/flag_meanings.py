@@ -206,7 +206,7 @@ def main():
             devs = Counter()
             for o in olist:
                 if o["op"] == "set":
-                    for t in o["tokens"]:
+                    for t in sorted(o["tokens"]):  # sorted: ties go the same way every run
                         if t.startswith("g_"):
                             devs[t] += 1
             if devs:

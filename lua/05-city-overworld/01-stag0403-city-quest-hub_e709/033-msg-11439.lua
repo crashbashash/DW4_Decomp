@@ -10,8 +10,7 @@ if be:FLGisOn(376) == 1 then
     else
         be:MsgBox("fobOFïbÌ§äÉ²¯ª èÜ·")
     end
-end
-if be:FLGisOn(379) == 1 then
+elseif be:FLGisOn(379) == 1 then
     if 1 == 1 then
         funcOpenMessage("mess", "n_recorder")
         mswk11441 = "TALKFONT01/font00/I<40>"

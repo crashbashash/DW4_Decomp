@@ -256,7 +256,7 @@ every one of them resolves to `nZ1gobr3`/`hZ1gobr3`/`vZ1gobr3`, and each table's
 content is identical across all of them, so *which* Goburimon dies cannot matter).
 The one exception is **`GENE-19`**, whose three lists are all `comonNOTG01`: **0
 entries, i.e. it can never drop anything** (that is the 14-enemy wave the stage script
-starts after the breakable gate is cracked, `01-fortress-gate_e772/017-damage-calc-3.lua`).
+starts after the breakable gate is cracked, `01-fortress-gate_e772/017-damage-calc-g-breakinggatez05.lua`).
 Rows 0 and 2 (`_geneEnemyId`) are both ordinary `e_goburi` rows.
 
 The live split of the three lists is 11 / 25 / 21 = 57 references.

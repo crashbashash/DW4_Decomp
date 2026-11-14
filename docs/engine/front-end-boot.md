@@ -81,7 +81,7 @@ MWCC's C front end tail-calls the helper, while retail keeps a framed call.
 ## The title screen itself
 
 The title entry (806) is a normal stage script: `funcStartLayerSet` / `funcFirstLayerSet`, the
-layer/`CFLclear` camera setup, then the `dm-run` template with `NEXTSTAGE stagML11`. Its `layer-setup-2`
+layer/`CFLclear` camera setup, then the `dm-run` template with `NEXTSTAGE stagML11`. Its `layer-setup-sq-open`
 chunk is where the title becomes live: `SETDEMOCAMERA entry`, `PLAY "AM_TITLE"` (or `AM_TITLE2` when
 `SYSgetArea() != -1`, i.e. resuming inside the game), `MODELCTRL j_startback GENERATE SQ_OPEN`,
 `TITLE2 RUN`, then `funcFirstLayerSet()`, `SWITCHCTRL ALLON` and the input gate
@@ -167,7 +167,7 @@ after closing; Circle accepts those changes.
   `beNDMWLoadIntf2ComMdlCtrl__IsOpenQueueEmpty` reports the open queue empty for the logo's and
   `j_startmenu01`'s `SQ_OPEN` starts, so no button is read earlier.
   The stage script agrees
-  (`lua/00-title-menus/04-title-screen_e806/004-layer-setup-2.lua`): it generates `j_startback`
+  (`lua/00-title-menus/04-title-screen_e806/004-layer-setup-sq-open.lua`): it generates `j_startback`
   `SQ_OPEN`, waits for that sequence to finish, plays the white fade, and only then sends `TITLE2 RUN` (the
   controller's `_st0=0` gate) and `STAGECTL PADINPUT ENABLE 30`. Not yet confirmed by a live retail run. Presses during the blue-trace opening are ignored until `SQ_OPEN` ends and the
   "Press START button" screen is up. (The opening FMV before it remains
@@ -270,7 +270,7 @@ rest are the same pair at 0/30/60 frames (`BLOUT00/30/60`, `BLIN60`, `WTOUT00/60
 `BHLFIN30`/`BHLFOUT30` at 20 frames.
 
 The title stage's own Lua (`lua/00-title-menus/04-title-screen_e806/`) is the driver and should be
-read before the controller: `004-layer-setup-2.lua` runs `SQ_BLIN30` (the fade the title
+read before the controller: `004-layer-setup-sq-open.lua` runs `SQ_BLIN30` (the fade the title
 fades in from), `SETDEMOCAMERA "entry"`, `j_startback GENERATE SQ_OPEN`, waits on
 `ISSEQNAME SQ_OPEN ==0`, then `SQ_WTIN60` and `TITLE2 RUN`; `003-camera.lua` names the graphs the
 stage loads (`FontTree DBBase mainstatuswin savecheckwin startback startlogo startmenu01

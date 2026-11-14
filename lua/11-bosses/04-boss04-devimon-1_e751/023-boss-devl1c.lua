@@ -23,13 +23,6 @@ g_DmgChk1 = 0
 g_DmgChk2 = 0
 if g_f_devl1Pos ~= 0 and g_f_devl1Pos ~= 2 then
     if g_f_devl1Pos == 4 then
-        be:sd("GENERATER", nil, -1, "RESTART", "GENE-05")
-        be:sd("GENERATER", nil, -1, "RESTART", "GENE-07")
-        be:sd("GENERATER", nil, -1, "RESTART", "GENE-09")
-    else
-        be:sd("GENERATER", nil, -1, "RESTART", "GENE-06")
-        be:sd("GENERATER", nil, -1, "RESTART", "GENE-08")
-        be:sd("GENERATER", nil, -1, "RESTART", "GENE-10")
     end
 end
 be:sd("GENERATER", nil, -1, "RESTART", "GENE-05")

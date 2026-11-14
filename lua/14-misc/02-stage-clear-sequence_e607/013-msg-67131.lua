@@ -12,6 +12,8 @@ if be:MATisAllPlayer() == 1 and be:DMgetCount() == 0 then
     be:DMsetSD("MODELCTRL", "i_messwnsp", 0, "GENERATE", "SQ_OPEN")
     be:DMchkSD("MODELCTRL", "i_messwnsp", 0, "ISSEQNAME", "SQ_OPEN", "==0")
     be:DMchkSD("MODELCTRL", "i_messwnsp", 0, "ISSEQNAME", "SQ_OPEN", "!=0")
+    local local_0
+    local offset = 40
     if be:COUNTERget(7) == 10 then
         be:DMsetSD("TEXTCTL", nil, -1, "TEXTSET", mswk67131)
         be:DMsetSD("TEXTCTL", nil, -1, "SWITCH", "TALKFONT02/font01/SET", 10)
@@ -24,23 +26,23 @@ if be:MATisAllPlayer() == 1 and be:DMgetCount() == 0 then
         be:DMsetSD("MODELCTRL", "i_messwnsp", 0, "SQ_CLOSE")
         be:DMchkSD("MODELCTRL", "i_messwnsp", 0, "ISRUN", "!=0")
         be:DMsetSD("NDMWPANEL", nil, -1, "NOGATEDISK", "I<0>")
-        for local_2 = 0, 3 do
-            if be:SYSisJoinPlayer(local_2) == 1 then
-                be:DMsetSD("MODELCTRL", "i_stpnl01", local_2, "SQ_OPEN")
-                be:DMsetSD("MODELCTRL", "i_stpnl02", local_2, be:SYSgetPlayerName(local_2))
-                be:DMsetSD("MODELCTRL", "i_stpnl03", local_2, "SQ_OPENWN")
-                be:DMsetSD("MODELCTRL", "i_stpnl04", local_2, "SQ_OPENWN")
+        for playerIndex = 0, 3 do
+            if be:SYSisJoinPlayer(playerIndex) == 1 then
+                be:DMsetSD("MODELCTRL", "i_stpnl01", playerIndex, "SQ_OPEN")
+                be:DMsetSD("MODELCTRL", "i_stpnl02", playerIndex, be:SYSgetPlayerName(playerIndex))
+                be:DMsetSD("MODELCTRL", "i_stpnl03", playerIndex, "SQ_OPENWN")
+                be:DMsetSD("MODELCTRL", "i_stpnl04", playerIndex, "SQ_OPENWN")
             end
         end
         be:DMsetSD("MATCTRL", nil, -1, "PAUSE")
         be:DMsetSD("PLAYER", nil, -1, "SQ_DEMOWAIT")
-        for local_2 = 0, 3 do
-            if be:SYSisJoinPlayer(local_2) == 1 then
-                be:DMsetSD("PLAYER", be:SYSgetPlayerName(local_2), local_2, "SQ_EXIT", local_1)
-                local_1 = local_1 + 20
+        for playerIndex = 0, 3 do
+            if be:SYSisJoinPlayer(playerIndex) == 1 then
+                be:DMsetSD("PLAYER", be:SYSgetPlayerName(playerIndex), playerIndex, "SQ_EXIT", offset)
+                offset = offset + 20
             end
         end
-        be:DMsetSD("MODELCTRL", "i_fadewn01", 0, "GENERATE", "SQ_STCHANGE01", local_1)
+        be:DMsetSD("MODELCTRL", "i_fadewn01", 0, "GENERATE", "SQ_STCHANGE01", offset)
         be:DMchkSD("MODELCTRL", "i_fadewn01", 0, "ISRUN", "==0")
         be:DMchkSD("MODELCTRL", "i_fadewn01", 0, "ISSEQNAME", "SQ_STCHANGELP", "==0")
         be:DMsetSD("PLAYERPOINT", nil, -1, "SETGENERATEPOS", "I<0>", 10)

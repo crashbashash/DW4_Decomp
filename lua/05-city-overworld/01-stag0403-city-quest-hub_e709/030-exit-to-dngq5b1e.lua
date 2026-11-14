@@ -8,4 +8,5 @@ if be:MATisAllPlayer() == 1 and be:DMgetCount() == 0 then
     else
         funcStageChange("dngq5b1v", 0, mswk70045, 10)
     end
+else
 end

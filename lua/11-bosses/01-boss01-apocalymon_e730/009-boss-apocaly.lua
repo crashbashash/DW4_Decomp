@@ -7,25 +7,25 @@ else
     else
         be:MDLsetSeq("SQ_DDMG")
         i = be:MDLgetRamNo() + 1
-        rTbl = {???, ???, ???, ???, ???}
-        rSet = {???, ???, ???, ???, ???}
+        rTbl = {4, 0, 1, 2, 3}
+        rSet = {1, 0, 4, 3, 2}
         if be:MDLisLive("g_b01cpole", rTbl[i]) == 0 then
             be:sd("MODELCTRL", "g_b01dmgf1", rSet[i], "SQ_ATCK2")
         end
-        lTbl = {???, ???, ???, ???, ???}
-        lSet = {???, ???, ???, ???, ???}
+        lTbl = {1, 2, 3, 4, 0}
+        lSet = {0, 4, 3, 2, 1}
         if be:MDLisLive("g_b01cpole", lTbl[i]) == 0 then
             be:sd("MODELCTRL", "g_b01dmgf1", lSet[i], "SQ_ATCK2")
         end
         all = 1
-        for local_0 = 0, 4 do
-            if be:MDLisLive("g_b01cpole", local_0) == 1 and local_0 ~= be:MDLgetRamNo() then
+        for ramNo = 0, 4 do
+            if be:MDLisLive("g_b01cpole", ramNo) == 1 and ramNo ~= be:MDLgetRamNo() then
                 all = 0
             end
         end
         if all == 1 then
-            for local_0 = 0, 4 do
-                be:sd("MODELCTRL", "g_b01dmgf1", local_0, "SQ_SWOF")
+            for ramNo = 0, 4 do
+                be:sd("MODELCTRL", "g_b01dmgf1", ramNo, "SQ_SWOF")
             end
             be:sd("MODELCTRL", "f_apocaly", 0, "SQ_PHASE2")
             if be:MDLisLive("f_bit", 0) == 0 then

@@ -80,7 +80,7 @@ branch. Every other mode switches WN01 and WN00 back on (**DISPON**); a mode oth
 then runs **shopexit.lua** through the Lua manager with a final argument of 0.
 
 A direct literal CARD caller is
-[`entry0808/chunk0004`](../../lua/00-title-menus/05-character-select-1_e808/004-layer-setup-2.lua), after the
+[`entry0808/chunk0004`](../../lua/00-title-menus/05-character-select-1_e808/004-layer-setup-camera.lua), after the
 entry-camera handoff in the character-select pack, so the card window is the front end's way back
 to the central area. The enumeration alone does not identify the hub's Booster Pack/album or Save
 Keeper implementations.

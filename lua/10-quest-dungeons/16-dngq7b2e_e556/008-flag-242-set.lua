@@ -1,0 +1,5 @@
+be:FLGset(242, 1)
+local local_0 = 0
+be:COUNTERset(3, 0)
+be:COUNTERset(3, be:COUNTERget(3) + local_0)
+be:sd("NUMBERCTRL", "questnm1", 0, "SETVALUE", "I<" .. be:COUNTERget(3) .. ">")

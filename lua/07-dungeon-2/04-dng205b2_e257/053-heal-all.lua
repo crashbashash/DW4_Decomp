@@ -1,9 +1,10 @@
 funcHealGate("ALL", "g_dallhealeffect", 0)
-for local_1 = 0, 3 do
-    if be:MATisRidePlayer(local_1) == 1 then
-        be:sd("PLAYER", be:SYSgetPlayerName(local_1), local_1, "CLEARMETAL")
+local local_0
+for playerIndex = 0, 3 do
+    if be:MATisRidePlayer(playerIndex) == 1 then
+        be:sd("PLAYER", be:SYSgetPlayerName(playerIndex), playerIndex, "CLEARMETAL")
     end
-    if be:MATisRideOffPlayer(local_1) == 1 then
-        be:sd("PLAYER", be:SYSgetPlayerName(local_1), local_1, "SETMETAL")
+    if be:MATisRideOffPlayer(playerIndex) == 1 then
+        be:sd("PLAYER", be:SYSgetPlayerName(playerIndex), playerIndex, "SETMETAL")
     end
 end

@@ -1,11 +1,13 @@
 if be:MATisAllPlayer() == 1 then
-    for local_2 = 0, 3 do
-        if be:SYSisJoinPlayer(local_2) == 1 then
-            local_1 = local_1 + be:SYSctlPlayer("HP", "GETHP", local_2, 0)
+    local local_0
+    local total = 0
+    for playerIndex = 0, 3 do
+        if be:SYSisJoinPlayer(playerIndex) == 1 then
+            total = total + be:SYSctlPlayer("HP", "GETHP", playerIndex, 0)
         end
     end
-    if local_1 == 0 then
-        return nil, 0
+    if total == 0 then
+        return
     end
     if be:FLGisOn(189) ~= 1 then
         be:sd("PLAYER", nil, -1, "OFCTRL")

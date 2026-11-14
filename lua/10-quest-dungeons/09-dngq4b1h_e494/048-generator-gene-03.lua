@@ -1,0 +1,9 @@
+if be:MATisPlayer() == 1 then
+    if be:FLGisOn(102) ~= 1 then
+        be:sd("GENERATER", nil, -1, "START", "GENE-03")
+    else
+        be:MATsetRun(0)
+    end
+else
+    be:sd("GENERATER", nil, -1, "STOP", "GENE-03")
+end

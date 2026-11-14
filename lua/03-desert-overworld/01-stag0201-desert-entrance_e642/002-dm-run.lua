@@ -10,13 +10,15 @@ if g_GateOn == 1 then
 else
     be:SYSsetGateStage("GateOff", -1)
 end
-for local_2 = 0, 3 do
-    if be:SYSisJoinPlayer(local_2) == 1 then
-        be:DMsetSD("PLAYER", be:SYSgetPlayerName(local_2), local_2, "SQ_EXIT", local_1)
-        local_1 = local_1 + 20
+local local_0
+local offset = 40
+for playerIndex = 0, 3 do
+    if be:SYSisJoinPlayer(playerIndex) == 1 then
+        be:DMsetSD("PLAYER", be:SYSgetPlayerName(playerIndex), playerIndex, "SQ_EXIT", offset)
+        offset = offset + 20
     end
 end
-be:DMsetSD("MODELCTRL", "i_fadewn01", 0, "GENERATE", "SQ_STCHANGE01", local_1 + 40)
+be:DMsetSD("MODELCTRL", "i_fadewn01", 0, "GENERATE", "SQ_STCHANGE01", offset + 40)
 be:DMchkSD("MODELCTRL", "i_fadewn01", 0, "ISRUN", "!=0")
 be:DMchkSD("MODELCTRL", "i_fadewn01", 0, "ISRUN", "==0")
 be:DMchkSD("MODELCTRL", "i_fadewn01", 0, "ISSEQNAME", "SQ_STCHANGELP", "==0")

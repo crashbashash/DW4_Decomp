@@ -66,7 +66,7 @@ point, 0–4 in this stage), `be:SYSgetPlayerNinzu()` (1P vs 2P+), `be:SYSctlDev
 (difficulty / equipped device), and `be:DMsetSD(..., <frame time>)` + `DMrun()`
 scheduling.
 
-Worked example, `02-valley-overworld/02-stag0102-valley-crossroads_e621/022-layer-setup-3.lua`:
+Worked example, `02-valley-overworld/02-stag0102-valley-crossroads_e621/022-layer-setup-msg-63024.lua`:
 
 ```lua
 if be:FLGisOn(356) == 0 then               -- first visit only
@@ -79,17 +79,18 @@ if be:FLGisOn(356) == 0 then               -- first visit only
 end
 ...
 if be:SYSctlDeviceFolder("ISEQUIP", 0, "armor2", 27, 0, 0) == 1 then
-    if     local_0 >= 61 then be:sd("GENERATER", nil, -1, "START", "GENE-a00")  -- row 5
-    elseif local_0 >= 41 then ... GENE-a01 ...                                 -- row 380
-    elseif local_0 >= 25 then ... GENE-a02 ...                                 -- row 383
-    elseif local_0 >= 13 then ... GENE-a03 ...                                 -- row 386 pink
+    local random = be:SYSgetRandom(300)
+    if     random >= 61 then be:sd("GENERATER", nil, -1, "START", "GENE-a00")   -- row 5
+    elseif random >= 41 then ... GENE-a01 ...                                  -- row 380
+    elseif random >= 25 then ... GENE-a02 ...                                  -- row 383
+    elseif random >= 13 then ... GENE-a03 ...                                  -- row 386 pink
     ... end
 end
 ```
 
-The `local_0` compare chain is the crown roll (§5c).
+The `random` compare chain is the crown roll (§5c).
 
-`004-chunk.lua` starts `GENE-47/48/49/50` unconditionally; `012-enemy-blosso.lua`
+`004-generator-gene-47-gene-48-gene-49.lua` starts `GENE-47/48/49/50` unconditionally; `012-enemy-blosso.lua`
 starts `GENE-38` (row 78 `e_blosso`) behind a flag.
 
 **(b) Engine, per-entry start mode `_startModeStr`.**
@@ -184,9 +185,9 @@ generator, not an enemy one: it is the only entry pointing at the object pool
 `Z1obje1` (see `docs/systems/drop-tables.md` §5).
 
 **The combat wiring** (`lua/12-goblimon-fortress/01-fortress-gate_e772/`):
-`000-dm-run.lua` takes control off the player (`PLAYER`/`ENEMY` `OFCTRL`), switches the
+`000-dm-run-sq-swof.lua` takes control off the player (`PLAYER`/`ENEMY` `OFCTRL`), switches the
 breakable gates on and `START`s **GENE-23** (the room fight, 12 Goburimon);
-`017-damage-calc-3.lua` fires when a gate is cracked, `STOP`s GENE-23 and `START`s
+`017-damage-calc-g-breakinggatez05.lua` fires when a gate is cracked, `STOP`s GENE-23 and `START`s
 **GENE-00** (12 more Goburimon) and **GENE-19** (14 more, no drop list). The trailing
 number in `START "GENE-xx", N` is a frame delay, not a count (the same slot is used
 for `ONCTRL`, 60); the enemy total comes from `_geneCount`.
@@ -270,7 +271,7 @@ shared instance pool.
 ### 5c. Crowns
 
 The crown roll is Lua, not native. Seven stage chunks (for example
-`lua/02-valley-overworld/02-stag0102-valley-crossroads_e621/022-layer-setup-3.lua`, §3)
+`lua/02-valley-overworld/02-stag0102-valley-crossroads_e621/022-layer-setup-msg-63024.lua`, §3)
 draw one `SYSgetRandom` per enemy group at load, then pick a generator by a compare
 chain, repeated per `armor2` branch (`ISEQUIP` 27, 28, 29 or none). Groups a and b use
 `>= 61/41/25/13/5/0` and group c uses `>= 27/20/14/9/5/0`, selecting `GENE-x00` to

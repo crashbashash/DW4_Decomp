@@ -1,11 +1,13 @@
 mswk60000 = "TALKFONT01/font00/I<17>"
 mswk60001 = "TALKFONT01/font00/I<18>"
-for local_2 = 0, 3 do
-    if be:SYSisJoinPlayer(local_2) == 1 then
-        local_1 = local_1 + be:SYSctlPlayer("HP", "GETHP", local_2, 0)
+local local_0
+local total = 0
+for playerIndex = 0, 3 do
+    if be:SYSisJoinPlayer(playerIndex) == 1 then
+        total = total + be:SYSctlPlayer("HP", "GETHP", playerIndex, 0)
     end
 end
-if be:MATisAllPlayer() == 1 and local_1 ~= 0 and be:FLGisOn(64) == 1 and be:DMgetCount() <= 0 then
+if be:MATisAllPlayer() == 1 and total ~= 0 and be:FLGisOn(64) == 1 and be:DMgetCount() <= 0 then
     if be:DMgetCount() == -1 then
         be:sd("SUBWND", nil, -1, "REMOVE")
         be:DMchkSD("SUBWND", nil, -1, "ISRUN", "!=0")

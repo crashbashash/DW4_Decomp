@@ -229,6 +229,10 @@ state load op-ready
   `0x0050da58` = `BASE_EXP`, `0x0050da68` = `GETLEVEL`, `0x0050da78` =
   `BASE_LEVEL`, `0x0050da88` = `SETSHINKA` (note: `.rodata` VA = file offset +
   `0xFFF80`, not `+0x100000`).
-- Lua: `lua/01-lobby-hub/05-lobby-quests_e820/chunk_001{0,1,2,3}.lua`,
-  `lua/01-lobby-hub/06-lobby-quest-board_e824/029-npc-digilfm-5.lua`, `entry_0603/chunk_0030…0046.lua`.
+- Lua: `lua/01-lobby-hub/05-lobby-quests_e820/010-npc-digilfm-msg-25092.lua`,
+  `lua/01-lobby-hub/05-lobby-quests_e820/011-npc-digilfm-msg-25148.lua`,
+  `lua/01-lobby-hub/05-lobby-quests_e820/012-npc-digilfm-msg-25176.lua`,
+  `lua/01-lobby-hub/05-lobby-quests_e820/013-npc-digilfm-msg-25204.lua`,
+  `lua/01-lobby-hub/06-lobby-quest-board_e824/029-npc-digilfm-msg-25316.lua`, and chunks 030–046
+  of `lua/14-misc/01-stage-select-list_e603/`.
 - Saves: the three in the table above, byte range `+0x76c … +0x77c`.
